@@ -27,12 +27,14 @@ starting by the windows, followed by the bars and the functions they provide.
 <H3><A NAME="ss5.1">5.1 Main Window</A>
 </H3>
 
-<P>The main window consists of four tabulators for which the left two are for editing purpose. First comes the Header-/Resource
-window for headers and any other text files like the documentation SGML's, then the C/C++ window for sourcecodes. These are
-followed by the Documentation window displaying in HTML-format. At last is the Tools window for external programs like KIconEdit
-and KDbg which are embedded into the IDE. Any Tool that is registered can be accessed via the Tools-menu; whereas the registration
-of third-party programs can easily be done by a configuration dialog (see 
-<A HREF="index-14.html#General Configuration">General Configuration</A>). For a description of the Editor windows functionality, see chapter 
+<P>The Main Window has three different modes.
+<P>In the <B>Childframe Mode</B> KDevelop will be one big window that can contain multiple child windows. These child windows can be either
+editable files or the help-browser. You can switch between the files by either pressing the corresponding button in the MDI-View-Taskbar
+or by pressing ALT-PgUp or ALT-PgDown.
+<P>In <B>Toplevel Mode</B> KDevelop itself will shrink to a small window just containing the menu and the toolbars. All child windows are
+floating on your desktop like any KDE App.
+<P>The <B>Tab page mode</B> looks similar to the Childframe Mode, but will display all childwindows in a tabset.
+<P>For a description of the Editor windows functionality, see chapter 
 <A HREF="index-7.html#Working with the Editor">Working with the Editor</A>, and for the Helpbrowser, you should look at section 
 <A HREF="index-6.html#Using the Documentation Browser">Using the Documentation Browser</A>.
 <P>
@@ -163,9 +165,11 @@ or F3 and signed as marked.<P>
 text with a new expression.<P>
 <P>
 </LI>
-<LI><B>Search in files...               Ctrl+Alt+F</B>Displays the "Search in files..." dialog, that handles <CODE>grep</CODE> on whole directories with
+<LI><B>Search in files...               F2</B>Displays the "Search in files..." dialog, that handles <CODE>grep</CODE> on whole directories with
 wildcards. Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file
 and the cursor is set to the line of the search result<P>
+</LI>
+<LI><B>Switch Header</B>Source...       F12/Switches between corresponding header and source files<P>
 </LI>
 <LI><B>Select All  Ctrl+A</B> Selects the whole text of the file currently opened in the top editing window<P>
 </LI>
@@ -759,6 +763,7 @@ Symbol "Search Marked Text"                      F2
 <PRE>
 Goto Next Window                                 ALT+PgUp
 Goto Next Window                                 ALT+PgDown
+Switch between Header/Source                     F12
 </PRE>
 <HR>
 <P>Press F12 to switch between corresponding header and source files

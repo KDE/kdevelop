@@ -59,8 +59,8 @@ anywhere within the IDE.
 
 <sect>Changes
 <p>
-Version 1.4 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
-the project made great improvements since the 1.0 final release, followed by the release of version 1.1 and 1.2., the version line based on the KDE 1.x and Qt 1.4x libraries
+Version 2.0 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+the project made great improvements since the 1.0 final release, followed by the release of version 1.1, and 1.2., the version line based on the KDE 1.x and Qt 1.4x libraries
 finished with version 1.3 in late December of 2000. The current version is a port of version 1.3 to KDE 2.1 with enhanced features.
 
 Improvements were made in the following sections:
@@ -326,7 +326,7 @@ If your system's <idx/make-command/ is <tt/gmake/, type <tt/gmake/ instead of <t
 <sect>Starting KDevelop
 <p>
 If you use <idx/KDE/ as your window manager, KDevelop can be started by choosing
-"K"&rarr"Development"&rarr"KDevelop 1.4". As KDevelop supports <idx/KDE/-Mime-types, you can
+"K"&rarr"Development"&rarr"KDevelop 2.0". As KDevelop supports <idx/KDE/-Mime-types, you can
 also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the
 <idx/KDE/ File Manager which will start KDevelop and load the project.
 Under other window managers, open a console and type:
@@ -958,12 +958,18 @@ starting by the windows, followed by the bars and the functions they provide.
 
 <sect>Main Window
 <p>
-The main window consists of four tabulators for which the left two are for editing purpose. First comes the Header-/Resource
-window for headers and any other text files like the documentation <idx/SGML/'s, then the C/C++ window for sourcecodes. These are
-followed by the Documentation window displaying in <idx/HTML/-format. At last is the <idx/Tools/ window for external programs like <idx/KIconEdit/
-and <idx/KDbg/ which are embedded into the IDE. Any Tool that is registered can be accessed via the <idx/Tools/-menu; whereas the registration
-of third-party programs can easily be done by a <idx/configuration dialog/ (see <ref id="General Configuration" name="General
-Configuration">). For a description of the Editor windows functionality, see chapter <ref id="Working with the Editor" name="Working
+The Main Window has three different modes.
+<p>
+In the <bf/Childframe Mode/ KDevelop will be one big window that can contain multiple child windows. These child windows can be either
+editable files or the help-browser. You can switch between the files by either pressing the corresponding button in the MDI-View-Taskbar
+or by pressing ALT-PgUp or ALT-PgDown.
+<p>
+In <bf/Toplevel Mode/ KDevelop itself will shrink to a small window just containing the menu and the toolbars. All child windows are
+floating on your desktop like any KDE App.
+<p>
+The <bf/Tab page mode/ looks similar to the Childframe Mode, but will display all childwindows in a tabset.
+<p>
+For a description of the Editor windows functionality, see chapter <ref id="Working with the Editor" name="Working
 with the Editor">, and for the <idx/Helpbrowser/, you should look at section <ref id="Using the Documentation Browser" name="Using the
 Documentation Browser">.
 
@@ -1062,9 +1068,10 @@ or F3 and signed as marked.<p>
 <item><bf/Replace...		Ctrl+R/ Opens the "Search and Replace" dialog that allows the search for an expression and replaces the found
 text with a new expression.<p>
 
-<item><bf/Search in files...		Ctrl+Alt+F/Displays the "Search in files..." dialog, that handles <tt/<idx/grep// on whole directories with
+<item><bf/Search in files...		F2/Displays the "Search in files..." dialog, that handles <tt/<idx/grep// on whole directories with
 wildcards. Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file
 and the cursor is set to the line of the <idx/search result/<p>
+<item><bf/Switch Header/Source...       F12/Switches between corresponding header and source files<p>
 <item><bf/Select All  Ctrl+A/ Selects the whole text of the file currently opened in the top editing window<p>
 <item><bf/Deselect All/ Deselects the whole text of the current file. This is often used for multiple selections so you don't have
 to deselect each one separately<p>
@@ -1473,6 +1480,7 @@ Symbol "Search Marked Text"                      F2
 <code>
 Goto Next Window                                 ALT+PgUp
 Goto Next Window                                 ALT+PgDown
+Switch between Header/Source                     F12
 </code>
 <p>Press F12 to switch between corresponding header and source files
 <p>To switch to a certain menu, press ALT plus the underlined letter in the menu title, e.g. <idx/Tools/ would be Alt+T
@@ -1732,7 +1740,7 @@ saves the currently opened source file visible in the source <idx/editor/ window
 <sect1>Opening and Closing Files
 <p>
 To open a source file, you have a lot of options as well. One way could be, as the standard for editors, to select "Open" from the
-File-menu. You will be presented an "Open File" dialog, which allows you to choose the file you want to edit. Another, probably
+File-menu. You will be presented an "Open File" dialog, which allows you to choose one ore more files you want to edit. Another, probably
 more frequently used way is to select the file from the <idx/LFV/, the Logical File Viewer, or the <idx/RFV/, the Real File Viewer (see <ref
 id="Overview">). The advantage of the file trees is that they provide a quick visual access to your files, especially the <idx/LFV/,
 which only displays your <idx/project files/ by their type, collected into folders. You can as well configure the <idx/LFV/ towards sorting
@@ -2233,7 +2241,7 @@ remove the "Hello World" line in main() and construct your <idx/classes/ the sam
 Further, KDevelop allows you to create projects for KDE 2 and Qt 2.x. These projects require installing the
 required libraries as well as setting the according installation path in the KDevelop Setup dialog (see <ref
 id="General Configuration" name="General Configuration">) before generating a project to ensure everything
-will work automatically. The KDevelop 1.4 Appwizard adds a GNOME-template so that developers wanting
+will work automatically. The KDevelop 2.0 Appwizard adds a GNOME-template so that developers wanting
 to use KDevelop to create GTK+-based applications can do so as well.
 
 Additionally, KDevelop enables you to work with already existing projects. Those can have any options set by the programmer himself by
@@ -2519,7 +2527,7 @@ Makefile.am in this section, there are already comments in it what to change whe
 <sect2>Internationalization of Qt 2.2.x applications
 <p>
 Since Qt includes the tr() method together with the QTranslator class in Qt 2.x, you can easily
-internationalize your Qt-only project as well. KDevelop 1.4 supports this by using the tools that
+internationalize your Qt-only project as well. KDevelop supports this by using the tools that
 come with Qt´s Linguist: lupdate and lrelease. The strings used with tr() are read into
 language-dependent *.ts files by lupdate; lrelease then converts the translated XML file to a file
 *.qm which stores the translations as binary information. You can add each language automatically
@@ -2605,7 +2613,7 @@ worry about that.
 
 <sect1>Converting *.kdevdlg files
 <p>
-KDevelop 1.4 comes with a converter script <tt>kdevdlg2ui</tt> to turn already constructed dialogs
+KDevelop comes with a converter script <tt>kdevdlg2ui</tt> to turn already constructed dialogs
 with it´s internal dialogeditor into a *.ui file. However, you should be aware that you may have
 to re-inherit from your class that is generated by Qt´s uic and add your implementations from your
 former KDevelop dialog there. The converter script is mainly used to convert the dialogs´ user
