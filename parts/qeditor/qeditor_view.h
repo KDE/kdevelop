@@ -113,7 +113,7 @@ protected:
     void internalEnsureVisibleBlock( QTextParagraph* );
     void internalExpandBlock( QTextParagraph* );
     void internalCollapseBlock( QTextParagraph* );
-    
+
 private:
     void setupActions();
 
@@ -272,6 +272,8 @@ signals:
      * function, if you support it, declare it as a signal
      */
     void filterInsertString(KTextEditor::CompletionEntry*,QString*);
+
+    void aboutToShowCompletionBox();
 
 public:
     QString computeTextHint( int line, int column );

@@ -314,6 +314,7 @@ void QEditorView::showCompletionBox(QValueList<KTextEditor::CompletionEntry> com
                                     int offset,
                                     bool casesensitive )
 {
+    emit aboutToShowCompletionBox();
     m_pCodeCompletion->showCompletionBox( complList, offset, casesensitive );
 }
 
