@@ -22,8 +22,12 @@
 
 #include "propertywidget.h"
 
+#ifndef PURE_QT
 class KColorButton;
-
+#else
+class QPushButton;
+#include <qcolor.h>
+#endif
 namespace PropertyLib{
 
 /**
@@ -42,8 +46,15 @@ public:
 protected slots:
     void updateProperty(const QColor& color);
 
+    void changeColor();
+
 private:
+#ifndef PURE_QT
     KColorButton *m_edit;
+#else
+    QPushButton *m_edit;
+    QColor m_color;
+#endif
 };
 
 }

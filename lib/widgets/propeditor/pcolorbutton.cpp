@@ -22,7 +22,11 @@
 #include <qlayout.h>
 #include <qpainter.h>
 
+#ifndef PURE_QT
 #include <kcolorbutton.h>
+#else
+#include <qpushbutton.h>
+#endif
 
 namespace PropertyLib {
 
@@ -30,16 +34,25 @@ PColorButton::PColorButton(MultiProperty* property, QWidget* parent, const char*
     :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+#ifndef PURE_QT
     m_edit = new KColorButton(this);
+    connect(m_edit, SIGNAL(changed(const QColor&)), this, SLOT(updateProperty(const QColor&)));
+#else
+    m_edit = new QPushButton(this);
+    connect(m_edit, SIGNAL(clicked()), this, SLOT(changeColor()));
+#endif
+
     m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
-
-    connect(m_edit, SIGNAL(changed(const QColor&)), this, SLOT(updateProperty(const QColor&)));
 }
 
 QVariant PColorButton::value() const
 {
+#ifndef PURE_QT
     return QVariant(m_edit->color());
+#else
+    return QVariant(m_color);
+#endif
 }
 
 void PColorButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
@@ -61,11 +74,16 @@ void PColorButton::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r
 
 void PColorButton::setValue(const QVariant& value, bool emitChange)
 {
+#ifndef PURE_QT
     disconnect(m_edit, SIGNAL(changed(const QColor&)), this, SLOT(updateProperty(const QColor&)));
     m_edit->setColor(value.toColor());
     connect(m_edit, SIGNAL(changed(const QColor&)), this, SLOT(updateProperty(const QColor&)));
+#else
+    m_color = value.toColor();
+#endif
     if (emitChange)
         emit propertyChanged(m_property, value);
+
 }
 
 void PColorButton::updateProperty(const QColor &color)
@@ -73,6 +91,12 @@ void PColorButton::updateProperty(const QColor &color)
     emit propertyChanged(m_property, value());
 }
 
+}
+
+void PColorButton::changeColor()
+{
+   QColor color = QColorDialog::getColor(m_color,this);
+   updateProperty(color);
 }
 
 #ifndef PURE_QT
