@@ -1,7 +1,7 @@
 <!DOCTYPE kdeveloptoc>
 <kdeveloptoc>
 <title>KDevelop API Documentation</title>
-<base href="http://ng-project.org/~kdevelop/apidocs/html"/>
+<base href="http://www.kdevelop.org/HEAD/doc/api/html"/>
 <tocsect1 name="Overview" url="index.html">
 	<tocsect2 name="KDevelop 3 Architecture" url="KDev3Arch.html"/>
 	<tocsect2 name="Programming Languages Status" url="LangSupportStatus.html"/>
