@@ -61,7 +61,7 @@ class QListViewItem;
 #include "cdoctree.h"
 #include "structdef.h"
 #include "resource.h"
-#include "cprintdlg.h"
+#include "./print/cprintdlg.h"
 #include "./classparser/ParsedClass.h"
 
 #include "./kdlgedit/kdlgedit.h"
