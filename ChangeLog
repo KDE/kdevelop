@@ -1,3 +1,12 @@
+2003-11-13 Amilcar Lucas <a.lucas@tu-bs.de>
+    * Readded a even cleaner kdevelop.kdevelop file.
+    PLEASE do _not_ commit changes to this file.
+    We have until mid January 2004 to make the necessary code changes that create a more "cvs friendly" file by moving some of the options to the .kdevses file.
+    For info on how to do it, read:
+    http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/howToAddPlugins.html
+    I think this is very important fo the success of KDevelop3 in for developer teams (no man is an island!).
+    Alexander and F@lk seam to agree with me on this one.
+
 2003-11-09 F@lk Brettschneider <falkbr@kdevelop.org>
     * as planned and decided months ago, now I
       removed KDevelop's own special implementation of IDEAl UI mode.
