@@ -61,6 +61,7 @@ private slots:
     void slotRun();
     void slotExamineCore();
     void slotAttachProcess();
+    void slotStopDebugger();
     void slotStop(KDevPlugin* which = 0);
     void slotPause();
     void slotRunToCursor();
@@ -78,7 +79,6 @@ private slots:
 
 private:
     void startDebugger();
-    void stopDebugger();
     void setupController();
 
     QGuardedPtr<VariableWidget> variableWidget;

@@ -4,6 +4,7 @@
  <Menu name="debug">
   <text>&amp;Debug</text>
   <Action name="debug_run"/>
+  <Action name="debug_stop"/>
   <Action name="debug_pause"/>
   <Action name="debug_runtocursor"/>
   <Separator/>
@@ -37,6 +38,7 @@
     <Action name="debug_attach"/>
   </enable>
   <disable>
+    <Action name="debug_stop"/>
     <Action name="debug_pause"/>
     <Action name="debug_runtocursor"/>
     <Action name="debug_stepover"/>
@@ -50,6 +52,7 @@
 <State name="paused">
   <enable>
     <Action name="debug_run"/>
+    <Action name="debug_stop"/>
     <Action name="debug_runtocursor"/>
     <Action name="debug_stepover"/>
     <Action name="debug_stepoverinst"/>
@@ -67,6 +70,7 @@
 <State name="active">
   <enable>
     <Action name="debug_pause"/>
+    <Action name="debug_stop"/>
   </enable>
   <disable>
     <Action name="debug_run"/>

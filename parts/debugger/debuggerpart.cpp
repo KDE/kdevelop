@@ -168,6 +168,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
 
+    action = new KAction(i18n("Sto&p"), "stop", 0,
+                         this, SLOT(slotStop()),
+                         actionCollection(), "debug_stop");
+    action->setStatusText( i18n("Kills the executable and exits the debugger") );
+
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
@@ -269,6 +274,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
+
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStop(KDevPlugin*)) );
     connect( core(), SIGNAL(projectClosed()),
@@ -514,7 +520,7 @@ void DebuggerPart::startDebugger()
     controller->slotStart(shell, program);
 }
 
-void DebuggerPart::stopDebugger()
+void DebuggerPart::slotStopDebugger()
 {
     controller->slotStopDebugger();
     debugger()->clearExecutionPoint();
@@ -556,7 +562,7 @@ void DebuggerPart::stopDebugger()
 
 void DebuggerPart::projectClosed()
 {
-    stopDebugger();
+    slotStopDebugger();
 }
 
 void DebuggerPart::slotRun()
@@ -613,7 +619,7 @@ void DebuggerPart::slotStop(KDevPlugin* which)
         return;
 
 //    if( !controller->stateIsOn( s_dbgNotStarted ) && !controller->stateIsOn( s_shuttingDown ) )
-        stopDebugger();
+        slotStopDebugger();
 }
 
 
