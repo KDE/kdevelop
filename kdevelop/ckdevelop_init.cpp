@@ -159,12 +159,11 @@ void CKDevelop::init(){
   t_tab_view->addTab(real_file_tree,i18n("RFV"));
   t_tab_view->addTab(doc_tree,i18n("DOC"));
 
-  connect(class_tree, SIGNAL(selectionChanged()), SLOT(slotClassTreeSelected()));
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
   connect(class_tree, SIGNAL(selectedClassNew()), SLOT(slotProjectNewClass()));
   connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
-  connect(class_tree, SIGNAL(selectedViewDeclaration()), SLOT(slotCVViewDeclaration()));
-  connect(class_tree, SIGNAL(selectedViewDefinition()), SLOT(slotCVViewDefinition()));
+  connect(class_tree, SIGNAL(selectedViewDeclaration(const char *, const char *,THType)), SLOT(slotCVViewDeclaration(const char *, const char *,THType)));
+  connect(class_tree, SIGNAL(selectedViewDefinition(const char *, const char *,THType)), SLOT(slotCVViewDefinition(const char *, const char *,THType)));
   connect(class_tree, SIGNAL(signalAddMethod( CParsedMethod *)), SLOT(slotCVAddMethod( CParsedMethod * )));
   connect(class_tree, SIGNAL(signalAddAttribute( CParsedAttribute *)), SLOT(slotCVAddAttribute( CParsedAttribute * )));
 
