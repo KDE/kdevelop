@@ -1,3 +1,6 @@
+2001-12-17  Roland Krause  <rokrau@yahoo.com>
+    * Implemented make for a single directory, through RFV.
+
 2001-12-14  Roland Krause  <rokrau@yahoo.com>
     * Applied Jostein Christoffer Andersen's perl and bash 
       syntax highlighting patch

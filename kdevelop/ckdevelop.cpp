@@ -1902,16 +1902,17 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
    	QDir::setCurrent(prj->getProjectDir());
   }
 	// here comes the interesting stuff...
-  else {
-    if(conf==i18n("(Default)")){
-      makefile=prj->getTopMakefile();
-      /* it is possible that we dont have a makefile
-         right away, then we make an extra pass at
-         finding and setting one */
-      if (makefile.isNull()) {
-        prj->setTopMakefile();
-        makefile=prj->getTopMakefile();
-      }
+	else {
+		// regular project means we are compiling a subdirectory
+		if ((type!=CMakefile::regular)&&(conf==i18n("(Default)"))){
+			makefile=prj->getTopMakefile();
+			/* it is possible that we dont have a makefile
+			   right away, then we make an extra pass at
+			   finding and setting one */
+			if (makefile.isNull()) {
+				prj->setTopMakefile();
+				makefile=prj->getTopMakefile();
+			}
 		}
 		else
 			if(QFileInfo("Makefile").exists())
@@ -1967,7 +1968,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 }
 void CKDevelop::slotBuildMake()
 {
-  debug("slotBuildMake\n");
+  //DELETE ME debug("slotBuildMake\n");
   slotStatusMsg(i18n("Running make..."));
   RunMake(CMakefile::toplevel,"");
 }
@@ -1975,6 +1976,11 @@ void CKDevelop::slotBuildMakeClean()
 {
   slotStatusMsg(i18n("Running make clean..."));
   RunMake(CMakefile::toplevel,"clean");
+}
+void CKDevelop::slotBuildCompileDir(const QString& target)
+{
+  slotStatusMsg(i18n("Running make..."));
+  RunMake(CMakefile::regular,target);
 }
 void CKDevelop::slotBuildRebuildAll()
 {

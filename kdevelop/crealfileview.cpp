@@ -341,6 +341,10 @@ KPopupMenu *CRealFileView::getCurrentPopup()
 //    popup->insertItem(i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
     popup->insertSeparator();
     popup->insertItem(i18n("Update Makefile.am"), this, SLOT(slotUpdateMakefileAm()), 0, ID_PROJECT_UPDATE_AM);
+
+    popup->insertItem(i18n("Make"), this, SLOT(slotMakeDir()), 0, ID_PROJECT_MAKE_DIR);
+    popup->setItemEnabled(ID_PROJECT_MAKE_DIR,
+      project->getProjectType() != "normal_empty" && QFileInfo(dir_name+"/Makefile").exists());
 //    popup->insertItem(i18n("Change to static lib"), this, SLOT(slotChangeToStatic()), 0, ID_PROJECT_CHANGE_TO_STATIC);
 //    popup->insertItem(i18n("Change to shared lib"), this, SLOT(slotChangeToShared()), 0, ID_PROJECT_CHANGE_TO_SHARED);
     popup->insertItem(i18n("Properties..."), this, SLOT(slotLibProperties()), 0, ID_PROJECT_LIB_PROPERTIES);
@@ -590,6 +594,16 @@ void CRealFileView::slotUpdateMakefileAm()
      project->updateMakefilesAm();
     else
      project->updateMakefileAm(reldir_name+"/Makefile.am");
+  }
+}
+
+void CRealFileView::slotMakeDir()
+{
+  QString dir_name = getFullFilename(currentItem());
+  QString reldir_name = getRelFilename(currentItem());
+  if (QFileInfo(dir_name+"/Makefile").exists())
+  {
+    emit (makeDir(reldir_name));
   }
 }
 

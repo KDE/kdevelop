@@ -404,6 +404,7 @@ public:
   void slotBuildMake();
   void slotBuildMakeClean();
   void slotBuildCompileFile();
+  void slotBuildCompileDir(const QString& target);
   void slotBuildRebuildAll();
   void slotBuildDistClean();
   void slotBuildAutoconf();

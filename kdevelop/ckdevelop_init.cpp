@@ -1018,6 +1018,7 @@ void CKDevelop::initConnections()
   connect(real_file_tree, SIGNAL(menuItemHighlighted(int)), SLOT(statusCallback(int)));
   connect(real_file_tree, SIGNAL(selectedFileNew(const char*)), SLOT(slotFileNew(const char*)));
   connect(real_file_tree, SIGNAL(selectedClassNew(const char*)), SLOT(slotProjectNewClass(const char*)));
+  connect(real_file_tree, SIGNAL(makeDir(const QString&)), SLOT(slotBuildCompileDir(const QString&)));
 
 
   connect(doc_tree, SIGNAL(fileSelected(QString)), SLOT(slotDocTreeSelected(QString)));
