@@ -40,7 +40,8 @@ public:
      * Tells whether the given file is registered
      * in the version control system.
      */
-    virtual State registeredState(const QString &fileName) = 0;
+     //    This will be replaced by a smarter solution
+     //    virtual State registeredState(const QString &fileName) = 0;
 };
 
 #endif

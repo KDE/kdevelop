@@ -31,7 +31,7 @@ protected:
     virtual void removeFromRepositoryRequested(const QString &fileName);
     virtual void updateFromRepositoryRequested(const QString &fileName);
     virtual void commitToRepositoryRequested(const QString &fileName);
-    virtual KDevVersionControl::State registeredState(const QString &fileName);
+    // virtual KDevVersionControl::State registeredState(const QString &fileName);
 
 private:
     QString m_projectpath;

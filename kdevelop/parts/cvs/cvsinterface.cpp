@@ -86,9 +86,9 @@ void CvsInterface::commitToRepositoryRequested(const QString &fileName)
 }
 
 
+#if 0
 KDevVersionControl::State CvsInterface::registeredState(const QString &fileName)
 {
-#if 0
     char buf[512];
     State state;
     
@@ -120,7 +120,7 @@ KDevVersionControl::State CvsInterface::registeredState(const QString &fileName)
 	}
     fclose(f);
     return state;
-#endif
     return canBeAdded;
 }
+#endif
     
