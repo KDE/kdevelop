@@ -207,12 +207,10 @@ public:
     void setReportMessages( bool enable );
 
     bool skipWordsEnabled() const;
-    void enableSkipWords();
-    void disableSkipWords();
+    void setSkipWordsEnabled( bool enabled );
 
     bool preprocessorEnabled() const;
-    void enablePreprocessor();
-    void disablePreprocessor();
+    void setPreprocessorEnabled( bool enabled );
     
     void resetSkipWords();
     void addSkipWord( const QString& word, SkipType skipType=SkipWord, const QString& str = QString::null );
@@ -738,14 +736,9 @@ inline bool Lexer::skipWordsEnabled() const
     return m_skipWordsEnabled;
 }
 
-inline void Lexer::enableSkipWords()
+inline void Lexer::setSkipWordsEnabled( bool enabled )
 {
-    m_skipWordsEnabled = true;
-}
-
-inline void Lexer::disableSkipWords()
-{
-    m_skipWordsEnabled = false;
+    m_skipWordsEnabled = enabled;
 }
 
 inline bool Lexer::preprocessorEnabled() const
@@ -753,14 +746,9 @@ inline bool Lexer::preprocessorEnabled() const
     return m_preprocessorEnabled;
 }
 
-inline void Lexer::enablePreprocessor()
+inline void Lexer::setPreprocessorEnabled( bool enabled )
 {
-    m_preprocessorEnabled = true;
-}
-
-inline void Lexer::disablePreprocessor()
-{
-    m_preprocessorEnabled = false;
+    m_preprocessorEnabled = enabled;
 }
 
 inline QString Lexer::toString( const Token& token ) const

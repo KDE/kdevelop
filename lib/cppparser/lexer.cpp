@@ -197,14 +197,14 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
     } else if( m_startLine && m_skipping[ m_ifLevel ] ){
 	// skip line and continue
         m_startLine = false;
-        int d = m_preprocessorEnabled;
-        disablePreprocessor();
+        int d = preprocessorEnabled();
+	setPreprocessorEnabled( false );
 	while( currentChar() && currentChar() != '\n' ){
             Token tok;
             nextToken( tok, true );
         }
         m_startLine = true;
-        m_preprocessorEnabled = d;
+        setPreprocessorEnabled( d );
         return;
     } else if( ch == '/' && ch1 == '/' ){
 	int start = currentPosition();
@@ -535,8 +535,8 @@ void Lexer::handleDirective( const QString& directive )
     bool skip = skipWordsEnabled();
     bool preproc = preprocessorEnabled();
 
-    disableSkipWords();
-    disablePreprocessor();
+    setSkipWordsEnabled( false );
+    setPreprocessorEnabled( false );
 
     if( directive == "define" ){
 	if( !m_skipping[ m_ifLevel ] ){
@@ -571,8 +571,8 @@ void Lexer::handleDirective( const QString& directive )
         nextToken( tk, true );
     }
 
-    m_skipWordsEnabled = skip;
-    m_preprocessorEnabled = preproc;
+    setSkipWordsEnabled( skip );
+    setPreprocessorEnabled( preproc );
 
     m_inPreproc = false;
 }
@@ -637,7 +637,7 @@ void Lexer::processDefine( Macro& m )
 	    nextChar(); // skip ')'
     }
 
-    enablePreprocessor();
+    setPreprocessorEnabled( true );
 
     QString body;
     while( currentChar() && currentChar() != '\n' ){
