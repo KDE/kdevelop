@@ -46,3 +46,8 @@ shellinclude_HEADERS = api.h core.h documentationpart.h editorproxy.h\
 	projectmanager.h projectsession.h settingswidget.ui.h shellextension.h\
 	splashscreen.h statusbar.h toplevel.h generalinfowidgetbase.h\
 	mimewarningdialog.h settingswidget.h
+
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kmdi kio kjs kparts kutils kdevutil kdevinterfaces kdevextensions
+DOXYGEN_PROJECTNAME = KDevelop Generic Shell
+DOXYGEN_DOCDIRPREFIX = kdevshell
+include ../Doxyfile.am

@@ -35,6 +35,11 @@ public:
     QMap<QString, Profile*> profiles;
 };
 
+/**
+Profile engine.
+
+Uses KDevelop profiles to form lists of plugin offers.
+*/
 class ProfileEngine {
 public:
     ProfileEngine();
@@ -42,7 +47,9 @@ public:
 
     enum OfferType { Global, Project, Core };
     
+    /**@return The list of plugin offers for given profile and type.*/
     KTrader::OfferList offers(const QString &profileName, OfferType offerType);
+    /**@return The list of all plugin offers for given type.*/
     KTrader::OfferList allOffers(OfferType offerType);
 
     Profile *rootProfile() const { return m_rootProfile; }

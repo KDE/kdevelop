@@ -24,15 +24,34 @@
 
 class KDialogBase;
 
+/**
+Shell extension.
+Provides application-dependent and shell-independent functionality.
+Shell uses extensions to perform application dependent actions.
+*/
 class ShellExtension {
 public:
+    /**Returns an instance of a shell. Subclasses must create an instance of a shell
+    by themselves. For example they could provide static init() method like:
+    @code
+    static void init()
+    {
+        s_instance = new MyExtension();
+    }
+    @endcode*/
     static ShellExtension *getInstance() { return s_instance; }
     
+    /**Reimplement to create global settings page in the dialog @p dlg.*/
     virtual void createGlobalSettingsPage(KDialogBase *dlg) = 0;
+    /**Reimplement to perform actions when the global settings page in the
+    dialog @p dlg is accepted (user clicked "Ok").*/
     virtual void acceptGlobalSettingsPage(KDialogBase *dlg) = 0;
     
+    /**Reimplement to return the name of KXMLGUI resource file for an application.*/
     virtual QString xmlFile() = 0;
     
+    /**Reimplement to set a default profile for the shell. Default profile
+    will be used by a shell if no --profile argument is specified.*/
     virtual QString defaultProfile() = 0;
 
 protected:

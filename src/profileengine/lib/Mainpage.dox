@@ -1,0 +1,10 @@
+/**
+@mainpage The KDevelop Shell Profiles Library
+
+This library contains plugin profiles engine for KDevelop shell.
+
+<b>Link with</b>: -lprofileengine
+
+<b>Include path</b>: -I\$(kde_includes)/kdevelop/shell/profileengine
+*/
+

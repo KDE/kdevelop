@@ -30,7 +30,10 @@ public:
   QString sessionFile() const;
 };
 
-
+/**
+Project manager.
+Loads and unloads projects.
+*/
 class ProjectManager : public QObject, public KXMLGUIClient
 {
   Q_OBJECT

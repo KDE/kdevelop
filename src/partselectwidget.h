@@ -19,7 +19,9 @@
 class QListView;
 class KURLLabel;
 
-
+/**
+Plugin selection widget.
+*/
 class PartSelectWidget : public QWidget
 {
     Q_OBJECT

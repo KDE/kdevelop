@@ -18,6 +18,9 @@
 
 class QDomDocument;
 
+/**
+General project information widget.
+*/
 class GeneralInfoWidget : public GeneralInfoWidgetBase {
     Q_OBJECT
 

@@ -30,6 +30,9 @@
 
 class MainWindowShare;
 
+/**
+Main window implementation.
+*/
 class NewMainWindow : public KMdiMainFrm, public KDevMainWindow
 {
   Q_OBJECT

@@ -17,6 +17,10 @@ class KDevPlugin;
 class KDialogBase;
 class ProjectInfo;
 
+/**
+Plugin controller implementation.
+Loads and unloads plugins.
+*/
 class PluginController : public QObject, public KDevPluginController
 {
   Q_OBJECT

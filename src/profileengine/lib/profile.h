@@ -37,7 +37,12 @@ public:
     };
     typedef QValueList<Entry> EntryList;
     
-    enum List { Properties, ExplicitEnable, ExplicitDisable };
+    /**Lists which are held by a profile.*/
+    enum List { 
+        Properties        /**<X-KDevelop-Properties defined for this profile.*/,
+        ExplicitEnable    /**<A list of explicitly enabled plugins (names).*/,
+        ExplicitDisable   /**<A list of explicitly disabled plugins (names).*/
+    };
 
     Profile(Profile *parent, const QString &name);
     Profile(Profile *parent, const QString &name, const QString &genericName, const QString &description);

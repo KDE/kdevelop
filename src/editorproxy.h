@@ -15,6 +15,9 @@ class QPopupMenu;
 
 #include <qwidgetstack.h>
 
+/**
+Editor proxy for delayed loading of editor parts.
+*/
 class EditorWrapper : public QWidgetStack
 {
   Q_OBJECT

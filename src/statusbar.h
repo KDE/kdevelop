@@ -21,6 +21,9 @@ namespace KTextEditor { class ViewStatusMsgInterface; }
 namespace KTextEditor { class ViewCursorInterface; }
 namespace KParts { class Part; }
 
+/**
+Status bar.
+*/
 class KDevStatusBar : public KStatusBar
 {
     Q_OBJECT

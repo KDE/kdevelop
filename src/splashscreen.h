@@ -8,6 +8,9 @@
 
 class QPixmap;
 
+/**
+Splash screen.
+*/
 class SplashScreen : public QSplashScreen
 {
 Q_OBJECT

@@ -13,6 +13,9 @@ namespace MainWindowUtils{
 QString beautifyToolTip(const QString& text);
 }
 
+/**
+Core implementation.
+*/
 class Core : public KDevCore
 {
   Q_OBJECT

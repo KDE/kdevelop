@@ -36,6 +36,9 @@ class HTMLDocumentationPart;
 class HistoryEntry;
 class KDirWatch;
 
+/**
+Part controler implementation.
+*/
 class PartController : public KDevPartController
 {
   Q_OBJECT

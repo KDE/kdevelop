@@ -7,7 +7,9 @@
 
 class CodeModel;
 
-
+/**
+API implementation.
+*/
 class API : public KDevApi
 {
 public:

@@ -24,7 +24,9 @@ class KToggleAction;
 namespace KParts {
   class MainWindow;
 }
-
+/**
+Shared main window functionality.
+*/
 class MainWindowShare : public QObject
 {
   Q_OBJECT
