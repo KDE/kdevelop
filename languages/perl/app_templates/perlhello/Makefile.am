@@ -1,4 +1,4 @@
-dataFiles = app.pl app.kdevelop camel.png
+dataFiles = app.pl app.kdevelop 
 templateName = perlhello
 
 ### no need to change below:
