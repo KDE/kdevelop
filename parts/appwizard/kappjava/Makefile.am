@@ -1,12 +1,12 @@
-gideondatadir = ${kde_datadir}/gideon
-commondatadir = ${gideondatadir}/template-common
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+commondatadir = ${appwizarddatadir}/template-common
+kappjavadir = ${appwizarddatadir}/template-kappjava
+templatedir = ${appwizarddatadir}/templates
 
-kappjavadatadir = ${kde_datadir}/gideon/template-kappjava
-kappjavadata_DATA = app.java pref.java appview.java \
-		app_client.java appui.rc src-Makefile.am
-
-templatedatadir = ${gideondatadir}/templates
-templatedata_DATA = kappjava
+kappjava_DATA = app.java pref.java appview.java \
+                app_client.java appui.rc src-Makefile.am \
+                kappjava.png
+template_DATA = kappjava
 
 BUILT_SOURCES = script.local
 
@@ -17,5 +17,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(kappjavadatadir)/script
+	$(INSTALL_DATA) script.local $(kappjavadir)/script
 

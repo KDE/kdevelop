@@ -1,12 +1,12 @@
-gideondatadir = ${kde_datadir}/gideon
-commondatadir = ${gideondatadir}/template-common
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+commondatadir = ${appwizarddatadir}/template-common
+kappdir = ${appwizarddatadir}/template-kapp
+templatedir = ${appwizarddatadir}/templates
 
-kappdatadir = ${kde_datadir}/gideon/template-kapp
-kappdata_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
-		appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am
-
-templatedatadir = ${gideondatadir}/templates
-templatedata_DATA = kapp
+kapp_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
+            appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am \
+            kapp.png
+template_DATA = kapp
 
 BUILT_SOURCES = script.local
 
@@ -17,5 +17,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(kappdatadir)/script
+	$(INSTALL_DATA) script.local $(kappdir)/script
 

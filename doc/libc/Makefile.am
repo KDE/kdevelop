@@ -1,5 +1,5 @@
-htmldir = $(kde_htmldir)/en/gideon/libc
-indexdir = ${kde_datadir}/gideon/docindices
+htmldir = $(kde_htmldir)/en/kdevdoctreeview/libc
+indexdir = ${kde_datadir}/kdevdoctreeview/docindices
 index_DATA = libc.index
 
 libc.index:

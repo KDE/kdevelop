@@ -28,9 +28,11 @@ public:
   QString templateName;
   QString name;
   QString comment;
+  QString icon;
   QString category;
   QListViewItem* pItem; // item pointer to the listview
 };
+
 
 class AppWizardDialog : public AppWizardDialogBase
 {

@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=KIO slave
+Icon=kioslave.png
+Category=C++/KDE
+Comment=Generates a framework for an IO slave

@@ -15,12 +15,14 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kinstance.h>
 #include <kpopupmenu.h>
 
 #include "kdevlanguagesupport.h"
 
 #include "classstore.h"
 #include "classtooldlg.h"
+#include "classviewfactory.h"
 #include "classviewwidget.h"
 
 
@@ -47,7 +49,7 @@ KPopupMenu *ClassViewWidget::createPopup()
     popup->setCheckable(true);
     int id1 = popup->insertItem( i18n("List by namespaces"), this, SLOT(slotTreeModeChanged()) );
     int id2 = popup->insertItem( i18n("Full identifier scopes"), this, SLOT(slotScopeModeChanged()) );
-    KConfig *config = KGlobal::config();
+    KConfig *config = ClassViewFactory::instance()->config();
     config->setGroup("General");
     bool byNamespace = config->readBoolEntry("ListByNamespace", false);
     popup->setItemChecked(id1, byNamespace);
@@ -69,7 +71,7 @@ void ClassViewWidget::setLanguageSupport(KDevLanguageSupport *ls)
 
 void ClassViewWidget::slotTreeModeChanged()
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = ClassViewFactory::instance()->config();
     config->setGroup("General");
     config->writeEntry("ListByNamespace", !config->readBoolEntry("ListByNamespace"));
     buildTree(true);
@@ -78,7 +80,7 @@ void ClassViewWidget::slotTreeModeChanged()
 
 void ClassViewWidget::slotScopeModeChanged()
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = ClassViewFactory::instance()->config();
     config->setGroup("General");
     config->writeEntry("FullIdentifierScopes", !config->readBoolEntry("FullIdentifierScopes"));
     buildTree(false);
@@ -96,7 +98,7 @@ void ClassViewWidget::buildTree(bool fromScratch)
     if (!m_part->languageSupport())
         return;
     
-    KConfig *config = KGlobal::config();
+    KConfig *config = ClassViewFactory::instance()->config();
     config->setGroup("General");
     if (config->readBoolEntry("ListByNamespace", false))
         buildTreeByNamespace(fromScratch);

@@ -40,6 +40,8 @@
 #include <kfiledialog.h>
 
 #include "kdevmakefrontend.h"
+
+#include "appwizardfactory.h"
 #include "appwizardpart.h"
 #include "appwizarddlg.h"
 #include "filepropspage.h"
@@ -65,8 +67,11 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     : AppWizardDialogBase(parent, name)
 {
   templates_listview->header()->hide();
-  KGlobal::dirs()->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "gideon/templates/");
-  m_templateNames = KGlobal::dirs()->findAllResources("apptemplates", QString::null, false, true);
+
+  KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
+  dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
+  m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
+  
   kdDebug(9010) << "Templates: " << endl;
   QString category;
   QStringList categories;
@@ -78,6 +83,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     config.setGroup("General");
     pInfo->templateName = (*it);
     pInfo->name = config.readEntry("Name");
+    pInfo->icon = config.readEntry("Icon");
     pInfo->comment = config.readEntry("Comment");
     category = config.readEntry("Category");
     // format category to a unique status
@@ -176,6 +182,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     tempFile = 0;
     m_part = part;
 }
+
+
 AppWizardDialog::~AppWizardDialog()
 {
     delete tempFile;
@@ -277,13 +285,13 @@ void AppWizardDialog::accept()
       dest_edit->setFocus();
       return;
     }
-
+    
     QString appname = appname_edit->text();
     for (uint i=0; i < appname.length(); ++i)
         if (!appname[i].isLetterOrNumber()) {
-	  KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers,\n"
-					"as it will be used as toplevel directory name."));
-	  showPage(generalPage);
+            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers,\n"
+                                          "as it will be used as toplevel directory name."));
+            showPage(generalPage);
             appname_edit->setFocus();
             return;
         }
@@ -293,19 +301,19 @@ void AppWizardDialog::accept()
         KMessageBox::sorry(0, i18n("There is currently a job running."));
         return;
     }
-
-      QString source, script;
-      QFileInfo finfo(m_pCurrentAppInfo->templateName);
-      QDir dir(finfo.dir());
-      dir.cdUp();
-      source = dir.absPath();
-      script = dir.filePath("template-" + finfo.fileName() + "/script");
-      
-      QString license =
+    
+    QString source, script;
+    QFileInfo finfo(m_pCurrentAppInfo->templateName);
+    QDir dir(finfo.dir());
+    dir.cdUp();
+    source = dir.absPath();
+    script = dir.filePath("template-" + finfo.fileName() + "/script");
+    
+    QString license =
         (license_combo->currentItem()<4)? license_combo->currentText() : QString("Custom");
-      
-      QString licensefile;
-      switch (license_combo->currentItem())
+    
+    QString licensefile;
+    switch (license_combo->currentItem())
         {
         case 0: licensefile = "LICENSE.BSD"; break;
         case 1: licensefile = "LICENSE.QPL"; break;
@@ -313,7 +321,7 @@ void AppWizardDialog::accept()
         case 3: licensefile = "COPYING.LIB"; break;
         default: ;
         }
-
+    
     if (!tempFile) {
         tempFile = new KTempFile();
         tempFile->setAutoDelete(true);
@@ -385,10 +393,23 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem* pItem){
   ApplicationInfo* pInfo=0;
   for(pInfo=m_appsInfo.first();pInfo!=0;pInfo=m_appsInfo.next()){
     if(pInfo->pItem == pItem){
+      if (!pInfo->icon.isEmpty()) {
+        QFileInfo fi(pInfo->templateName);
+        QDir dir(fi.dir());
+        dir.cdUp();
+        QPixmap pm;
+        pm.load(dir.filePath("template-" + fi.fileName() + "/" + pInfo->icon));
+        icon_label->setPixmap(pm);
+      } else {
+        icon_label->clear();
+      }
       desc_textview->setText(pInfo->comment);
       m_pCurrentAppInfo = pInfo;
+      return;
     }
   }
+  icon_label->setPixmap(QPixmap());
+  desc_textview->setText(QString());
 }
 
 

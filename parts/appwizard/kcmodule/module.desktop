@@ -1,0 +1,12 @@
+[Desktop Entry]
+Comment=|APPNAME| - a kcontol module
+Exec=kcmshell |APPNAMELC|
+Keywords=|APPNAME|,|APPNAMELC|
+Name=The |APPNAME| applet
+Terminal=false
+Type=Application
+X-KDE-FactoryName=kcm|APPNAMELC|
+X-KDE-Library=kcm|APPNAMELC|
+X-KDE-ModuleType=Library
+X-KDE-SubstituteUID=false
+X-KDE-Username=

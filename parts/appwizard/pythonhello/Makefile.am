@@ -1,11 +1,10 @@
-gideondatadir = ${kde_datadir}/gideon
-commondatadir = ${gideondatadir}/template-common
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+commondatadir = ${appwizarddatadir}/template-common
+pythonhellodir = ${appwizarddatadir}/template-pythonhello
+templatedir = ${appwizarddatadir}/templates
 
-pythonhellodatadir = ${kde_datadir}/gideon/template-pythonhello
-pythonhellodata_DATA = app.py app.kdevelop script
-
-templatedatadir = ${gideondatadir}/templates
-templatedata_DATA = pythonhello
+pythonhello_DATA = app.py app.kdevelop script
+template_DATA = pythonhello
 
 BUILT_SOURCES = script.local
 
@@ -16,5 +15,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(pythonhellodatadir)/script
+	$(INSTALL_DATA) script.local $(pythonhellodir)/script
 

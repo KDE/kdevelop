@@ -1,0 +1,4 @@
+[Desktop Entry]
+Comment=A panel applet called |NAME|
+Name=|NAMELITTLE|
+X-KDE-Library=lib|NAMELITTLE|

@@ -1,6 +1,7 @@
 # Here resides the app wizard part.
 
-SUBDIRS = common kapp kpartapp kpartplugin kappjava kdevpart pythonhello
+SUBDIRS = common kapp kpartapp kpartplugin kappjava kcmodule kicker kioslave \
+	  kdevpart pythonhello
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
@@ -20,5 +21,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevappwizard.desktop
 
-rcdir = $(kde_datadir)/gideon
+rcdir = $(kde_datadir)/kdevappwizard
 rc_DATA = kdevappwizard.rc

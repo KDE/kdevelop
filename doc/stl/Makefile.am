@@ -1,5 +1,5 @@
-htmldir = $(kde_htmldir)/en/gideon/stl
-indexdir = ${kde_datadir}/gideon/docindices
+htmldir = $(kde_htmldir)/en/kdevdoctreeview/stl
+indexdir = ${kde_datadir}/kdevdoctreeview/docindices
 index_DATA = stl.index
 
 stl.index: stl.index.in

@@ -1,12 +1,11 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
-kdevpartdir = ${appwizarddatadir}/template-kdevpart
+kcmoduledir = ${appwizarddatadir}/template-kcmodule
 templatedir = ${appwizarddatadir}/templates
 
-kdevpart_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h \
-		kdevpart_factory.h kdevpart_factory.cpp kdevpart_widget.h kdevpart_widget.cpp \
-		kdevpart_part.rc kdevpart.desktop
-template_DATA = kdevpart
+kcmodule_DATA = module.cpp module.h module.desktop src-Makefile.am \
+                kcmodule.png
+template_DATA = kcmodule
 
 BUILT_SOURCES = script.local
 
@@ -17,4 +16,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(kdevpartdir)/script
+	$(INSTALL_DATA) script.local $(kcmoduledir)/script
+

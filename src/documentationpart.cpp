@@ -293,5 +293,4 @@ void DocumentationPart::slotFind()
     htmlPart->actionCollection()->action("find")->activate();
 }
 
-
 #include "documentationpart.moc"

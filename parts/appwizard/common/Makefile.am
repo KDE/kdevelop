@@ -1,4 +1,5 @@
-commondatadir = ${kde_datadir}/gideon/template-common
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+commondatadir = ${appwizarddatadir}/template-common
 commondata_DATA = admin.tar.gz gnu.tar.gz app.desktop kde-app_part.desktop app.lsm \
 		  kde-Makefile.am kde-Makefile.cvs kde-configure.in.in kde-index.docbook \
 		  kde-po-Makefile.am kde-doc-Makefile.am kde-doc-en-Makefile.am \

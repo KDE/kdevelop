@@ -17,6 +17,7 @@
 
 #include "jdbcontroller.h"
 
+#include "javadebuggerfactory.h"
 #include "breakpoint.h"
 #include "framestackwidget.h"
 #include "variablewidget.h"
@@ -106,7 +107,7 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
       config_dbgTerminal_(false),
       config_jdbPath_()
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = JavaDebuggerFactory::instance()->config();
     config->setGroup("Debug");
     ASSERT(!config->readBoolEntry("Use external debugger", false));
     
@@ -179,7 +180,7 @@ JDBController::~JDBController()
 
 void JDBController::reConfig()
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = JavaDebuggerFactory::instance()->config();
     config->setGroup("Debug");
     ASSERT(!config->readBoolEntry("Use external debugger", false));
 

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=KHTMLPart plugin
+Icon=kpartplugin.png
 Category=C++/KDE
-Comment=This generates a plugin for the KHTML part.
+Comment=Generates a plugin for the KHTML part.
 

@@ -24,6 +24,7 @@
 #include "kdevlanguagesupport.h"
 #include "classstore.h"
 
+#include "classviewfactory.h"
 #include "classviewpart.h"
 #include "classtooldlg.h"
 #include "classtreebase.h"
@@ -32,7 +33,7 @@
 void ClassTreeItem::init(const QString &text)
 {
     if (m_item) {
-        KConfig *config = KGlobal::config();
+        KConfig *config = ClassViewFactory::instance()->config();
         config->setGroup("General");
         bool showScoped = config->readBoolEntry("FullIdentifierScopes", false);
         setText(0, showScoped? scopedText() : m_item->asString());
@@ -137,7 +138,7 @@ void ClassTreeOrganizerItem::init()
 void ClassTreeScopeItem::init()
 {
     setExpandable(true);
-    setPixmap(0, UserIcon("CVnamespace"));
+    setPixmap(0, UserIcon("CVnamespace", KIcon::DefaultState, ClassViewFactory::instance()));
 }
 
 
@@ -214,7 +215,7 @@ void ClassTreeScopeItem::setOpen(bool o)
 void ClassTreeClassItem::init()
 {
     setExpandable(true);
-    setPixmap(0, UserIcon("CVclass"));
+    setPixmap(0, UserIcon("CVclass", KIcon::DefaultState, ClassViewFactory::instance()));
 }
 
 
@@ -290,7 +291,7 @@ ClassTreeStructItem::ClassTreeStructItem(ClassTreeItem *parent, ClassTreeItem *l
     : ClassTreeItem(parent, lastSibling, parsedStruct)
 {
     setExpandable(true);
-    setPixmap(0, UserIcon("CVstruct"));
+    setPixmap(0, UserIcon("CVstruct", KIcon::DefaultState, ClassViewFactory::instance()));
 }
 
 
@@ -342,7 +343,7 @@ ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *l
     else
         icon = "CVglobal_meth";
 
-    setPixmap(0, UserIcon(icon));
+    setPixmap(0, UserIcon(icon, KIcon::DefaultState, ClassViewFactory::instance()));
 }
 
 QString ClassTreeMethodItem::scopedText() const
@@ -371,7 +372,7 @@ ClassTreeAttrItem::ClassTreeAttrItem(ClassTreeItem *parent, ClassTreeItem *lastS
     else
         icon = "CVglobal_var";
 
-    setPixmap(0, UserIcon(icon));
+    setPixmap(0, UserIcon(icon, KIcon::DefaultState, ClassViewFactory::instance()));
 }
 
 

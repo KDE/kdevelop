@@ -13,14 +13,29 @@
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
+#include <kinstance.h>
 #include <klocale.h>
+
+#ifndef INDEXER
+#include "doctreeviewfactory.h"
+#endif
 #include "misc.h"
 #include "../../config.h"
 
 
+static KConfig *instanceConfig()
+{
+#ifdef INDEXER
+    return KGlobal::config();
+#else
+    return DocTreeViewFactory::instance()->config();
+#endif
+}
+
+
 void DocTreeViewTool::getAllLibraries(QStringList *itemNames, QStringList *fileNames)
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     QString idx_path = config->readEntry("KDEDocDir", KDELIBS_DOCDIR) + "/kdoc-reference";
 
@@ -45,7 +60,7 @@ void DocTreeViewTool::getAllLibraries(QStringList *itemNames, QStringList *fileN
 
 void DocTreeViewTool::getHiddenLibraries(QStringList *hiddenNames)
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     *hiddenNames = config->readListEntry("LibrariesHidden");
 };
@@ -53,7 +68,7 @@ void DocTreeViewTool::getHiddenLibraries(QStringList *hiddenNames)
 
 void DocTreeViewTool::setHiddenLibraries(const QStringList &hiddenNames)
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     config->writeEntry("LibrariesHidden", hiddenNames);
 };
@@ -61,7 +76,7 @@ void DocTreeViewTool::setHiddenLibraries(const QStringList &hiddenNames)
 
 void DocTreeViewTool::getBookmarks(QStringList *itemNames, QStringList *fileNames)
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     *itemNames = config->readListEntry("BookmarksTitle");
     *fileNames = config->readListEntry("BookmarksURL");
@@ -70,7 +85,7 @@ void DocTreeViewTool::getBookmarks(QStringList *itemNames, QStringList *fileName
 
 void DocTreeViewTool::setBookmarks(const QStringList &itemNames, const QStringList &fileNames)
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     config->writeEntry("BookmarksTitle", itemNames);
     config->writeEntry("BookmarksURL", fileNames);
@@ -79,7 +94,7 @@ void DocTreeViewTool::setBookmarks(const QStringList &itemNames, const QStringLi
 
 void DocTreeViewTool::setIndexOptions(bool shownlibs, bool hiddenlibs, bool others)
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     config->writeEntry("IndexShownLibraries", shownlibs);
     config->writeEntry("IndexHiddenLibraries", hiddenlibs);
@@ -89,7 +104,7 @@ void DocTreeViewTool::setIndexOptions(bool shownlibs, bool hiddenlibs, bool othe
 
 void DocTreeViewTool::getIndexOptions(bool *shownlibs, bool *hiddenlibs, bool *others)
 {
-    KConfig *config = KGlobal::config();
+    KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     *shownlibs = config->readBoolEntry("IndexShownLibraries", true);
     *hiddenlibs = config->readBoolEntry("IndexHiddenLibraries", true);

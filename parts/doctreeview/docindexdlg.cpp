@@ -20,11 +20,14 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
+#include <kinstance.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstddirs.h>
 
 #include "kdevcore.h"
+
+#include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
 #include "docindexdlg.h"
 
@@ -41,8 +44,9 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     QFontMetrics fm(fontMetrics());
     term_combo->setMinimumWidth(fm.width('X')*40);
 
-    KGlobal::dirs()->addResourceType("docindices", KStandardDirs::kde_default("data") + "gideon/docindices/");
-    QStringList books = KGlobal::dirs()->findAllResources("docindices", QString::null, false, true);
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+    dirs->addResourceType("docindices", KStandardDirs::kde_default("data") + "kdevdoctreeview/docindices/");
+    QStringList books = dirs->findAllResources("docindices", QString::null, false, true);
 
     QStringList::Iterator bit;
     for (bit = books.begin(); bit != books.end(); ++bit)

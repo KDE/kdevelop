@@ -19,6 +19,7 @@
 #include <qvbox.h>
 #include <kdebug.h>
 #include <kdialog.h>
+#include <kinstance.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -27,6 +28,7 @@
 
 #include "adddocitemdlg.h"
 #include "misc.h"
+#include "doctreeviewfactory.h"
 #include "doctreeviewwidget.h"
 #include "doctreeconfigwidget.h"
 
@@ -334,7 +336,7 @@ void DocTreeConfigWidget::updateIndexClicked()
     // with user interface guides, but I see no easy way around
     storeConfig();
     
-    KGlobal::config()->sync();
+    DocTreeViewFactory::instance()->config()->sync();
     KProcess proc;
     proc << "gideon-index";
     proc.start(KProcess::DontCare);

@@ -1,5 +1,5 @@
-htmldir = $(kde_htmldir)/en/gideon/kde2book
-indexdir = ${kde_datadir}/gideon/docindices
+htmldir = $(kde_htmldir)/en/kdevdoctreeview/kde2book
+indexdir = ${kde_datadir}/kdevdoctreeview/docindices
 index_DATA = kde2book.index
 
 kde2book.index:

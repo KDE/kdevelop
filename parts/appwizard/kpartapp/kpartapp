@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Application framework (KParts)
+Icon=kpartapp.png
 Category=C++/KDE
-Comment=This generates a complex KDE application with a KParts shell and a KPart component.
+Comment=Generates a complex KDE application with a KParts shell and a KPart component.
 

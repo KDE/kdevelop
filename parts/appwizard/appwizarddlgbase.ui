@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>556</width>
+            <width>544</width>
             <height>551</height>
         </rect>
     </property>
@@ -272,7 +272,7 @@
                 <class>QLabel</class>
                 <property stdset="1">
                     <name>name</name>
-                    <cstring>PixmapLabel1</cstring>
+                    <cstring>icon_label</cstring>
                 </property>
                 <property stdset="1">
                     <name>minimumSize</name>
@@ -290,7 +290,22 @@
                 </property>
                 <property stdset="1">
                     <name>scaledContents</name>
-                    <bool>true</bool>
+                    <bool>false</bool>
+                </property>
+                <property stdset="1">
+                    <name>frameShape</name>
+                    <enum>WinPanel</enum>
+                </property>
+                <property stdset="1">
+                    <name>frameShadow</name>
+                    <enum>Sunken</enum>
+                </property>
+                <property stdset="1">
+                    <name>alignment</name>
+                    <set>AlignCenter</set>
+                </property>
+                <property>
+                    <name>hAlign</name>
                 </property>
             </widget>
             <widget row="1"  column="1" >

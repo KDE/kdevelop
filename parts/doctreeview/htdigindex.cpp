@@ -25,7 +25,8 @@
 #include <klocale.h>
 #include <kstddirs.h>
 
-#include "misc.h"
+#define INDEXER
+#include "misc.cpp"
 #include "htdigindex.moc"
 
 
@@ -398,7 +399,7 @@ int main(int argc, char *argv[])
     };
 #endif
     
-    KAboutData aboutData("gideon", I18N_NOOP("Gideon"),
+    KAboutData aboutData("kdevdoctreeview", I18N_NOOP("Gideon"),
                          "0.1", I18N_NOOP("KDE Index generator for help files."));
     
     KCmdLineArgs::init(argc, argv, &aboutData);

@@ -1,12 +1,11 @@
-gideondatadir = ${kde_datadir}/gideon
-commondatadir = ${gideondatadir}/template-common
+appwizarddatadir = ${kde_datadir}/kdevappwizard
+commondatadir = ${appwizarddatadir}/template-common
+kpartappdir = ${appwizarddatadir}/template-kpartapp
+templatedir = ${appwizarddatadir}/templates
 
-kpartappdatadir = ${kde_datadir}/gideon/template-kpartapp
-kpartappdata_DATA = src-Makefile.am app.cpp app.h app_part.cpp app_part.h main.cpp \
-		    app_part.rc app_shell.rc
-
-templatedatadir = ${gideondatadir}/templates
-templatedata_DATA = kpartapp
+kpartapp_DATA = src-Makefile.am app.cpp app.h app_part.cpp app_part.h main.cpp \
+                app_part.rc app_shell.rc kpartapp.png
+template_DATA = kpartapp
 
 BUILT_SOURCES = script.local
 
@@ -17,4 +16,4 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(kpartappdatadir)/script
+	$(INSTALL_DATA) script.local $(kpartappdir)/script

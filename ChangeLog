@@ -1,7 +1,14 @@
+2001-05-19  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added kicker, kioslave and kcmodule templates
+	* Each template can define an icon which is
+	  shown in the app wizard
+	* The Big KInstance Cleanup
+
 2001-05-19  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
 	* Added a plugin to provide and configure a 
-      Tools menu.
+	  Tools menu.
 
 2001-05-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

@@ -16,7 +16,8 @@ libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp \
 				misc.cpp
 
 bin_PROGRAMS = gideon-index
-gideon_index_SOURCES = htdigindex.cpp misc.cpp
+gideon_index_SOURCES = htdigindex.cpp
+gideon_index_CXXFLAGS = -DINDEXER
 gideon_index_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 gideon_index_LDADD = $(LIB_KDEUI)
 

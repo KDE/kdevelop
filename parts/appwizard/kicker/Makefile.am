@@ -1,12 +1,10 @@
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
-kdevpartdir = ${appwizarddatadir}/template-kdevpart
+kickerdir = ${appwizarddatadir}/template-kicker
 templatedir = ${appwizarddatadir}/templates
 
-kdevpart_DATA = src-Makefile.am kdevpart_part.cpp kdevpart_part.h \
-		kdevpart_factory.h kdevpart_factory.cpp kdevpart_widget.h kdevpart_widget.cpp \
-		kdevpart_part.rc kdevpart.desktop
-template_DATA = kdevpart
+kicker_DATA = applet.cpp applet.h applet.desktop src-Makefile.am kicker.png
+template_DATA = kicker
 
 BUILT_SOURCES = script.local
 
@@ -17,4 +15,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local:
-	$(INSTALL_DATA) script.local $(kdevpartdir)/script
+	$(INSTALL_DATA) script.local $(kickerdir)/script
+
