@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop</application>">
-  <!ENTITY kdevrelease "3.0.90-CVS">
+  <!ENTITY kdevrelease "3.0.2">
   <!ENTITY apache "<application>Apache</application>">
   <!ENTITY appwizard "Application Wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
@@ -45,7 +45,7 @@ Entries which require special treatment are marked with comments starting with '
   <title>&kdevelop; User Manual</title>
 
   <date>2004-02-23</date>
-  <releaseinfo>3.0.90-CVS</releaseinfo>
+  <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
     <author>
