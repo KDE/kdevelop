@@ -13,4 +13,12 @@
   <general>
   </general>
  </kdevscriptproject>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
 </kdevelop>

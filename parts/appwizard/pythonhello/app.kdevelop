@@ -3,10 +3,23 @@
  <general>
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>Python</primarylanguage>
+  <ignoreparts>
+   <part>KDevDebugger</part>
+   <part>KDevJavaDebugger</part>
+   <part>KDevFileView</part>
+  </ignoreparts>
  </general>
  <kdevscriptproject>
   <run>
    <mainprogram>$APPNAMELC$.py</mainprogram>
   </run>
  </kdevscriptproject>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
 </kdevelop>

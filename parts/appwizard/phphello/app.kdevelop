@@ -3,9 +3,22 @@
  <general>
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>PHP</primarylanguage>
+  <ignoreparts>
+   <part>KDevDebugger</part>
+   <part>KDevJavaDebugger</part>
+   <part>KDevFileView</part>
+  </ignoreparts>
  </general>
  <kdevscriptproject>
   <general>
   </general>
  </kdevscriptproject>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
 </kdevelop>

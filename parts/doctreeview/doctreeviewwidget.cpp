@@ -259,12 +259,21 @@ class DocTreeTocFolder : public DocTreeItem
 public:
     DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fileName);
     ~DocTreeTocFolder();
+
+    QString tocName() const
+    { return toc_name; }
+
+private:
+    QString toc_name;
 };
 
 
 DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fileName)
     : DocTreeItem(parent, Folder, fileName)
 {
+    QFileInfo fi(fileName);
+    toc_name = fi.baseName();
+    
     QFile f(fileName);
     if (!f.open(IO_ReadOnly)) {
         kdDebug(9002) << "Could not read doc toc: " << fileName << endl;
@@ -518,7 +527,7 @@ void DocTreeProjectFolder::refresh()
 
 
 /**************************************/
-/* The DocTreeViewWidget itself           */
+/* The DocTreeViewWidget itself       */
 /**************************************/
 
 
@@ -544,7 +553,7 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
     QStringList::Iterator tit;
     for (tit = tocs.begin(); tit != tocs.end(); ++tit)
-        new DocTreeTocFolder(this, *tit);
+        folder_toc.append(new DocTreeTocFolder(this, *tit));
 
     folder_kdelibs   = new DocTreeKDELibsFolder(this);
     folder_kdelibs->refresh();
@@ -626,6 +635,47 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
 {
     folder_project->setProject(project);
     folder_project->refresh();
+
+    // Remove all...
+    takeItem(folder_bookmarks);
+    takeItem(folder_project);
+#ifdef WITH_DOCBASE
+    takeItem(folder_docbase);
+#endif
+    QListIterator<DocTreeTocFolder> it1(folder_toc);
+    for (; it1.current(); ++it1)
+        takeItem(it1.current());
+    takeItem(folder_kdelibs);
+
+    // .. and insert all again except for ignored items
+    QDomElement docEl = m_part->projectDom()->documentElement();
+    QDomElement doctreeviewEl = docEl.namedItem("kdevdoctreeview").toElement();
+
+    QStringList ignoretocs;
+    if (project) {
+        QDomElement ignoretocsEl = doctreeviewEl.namedItem("ignoretocs").toElement();
+        QDomElement tocEl = ignoretocsEl.firstChild().toElement();
+        while (!tocEl.isNull()) {
+            if (tocEl.tagName() == "toc")
+                ignoretocs << tocEl.firstChild().toText().data();
+            tocEl = tocEl.nextSibling().toElement();
+        }
+    }
+    
+    insertItem(folder_bookmarks);
+    insertItem(folder_project);
+#ifdef WITH_DOCBASE
+    insertItem(folder_docbase);
+#endif
+    QListIterator<DocTreeTocFolder> it2(folder_toc);
+    for (; it2.current(); ++it2) {
+        if (!ignoretocs.contains(it2.current()->tocName()))
+            insertItem(it2.current());
+    }
+    if (!ignoretocs.contains("kde"))
+        insertItem(folder_kdelibs);
+
+    triggerUpdate();
 }
 
 

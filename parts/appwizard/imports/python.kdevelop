@@ -14,4 +14,12 @@
    <mainprogram>$APPNAMELC$.py</mainprogram>
   </run>
  </kdevscriptproject>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>gtk</toc>
+   <toc>gnustep</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
 </kdevelop>

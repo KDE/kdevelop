@@ -20,8 +20,8 @@
 	<affiliation><address><email>$EMAIL$</email></address></affiliation>
       </author>
     </authorgroup>
-    <date>`date "+%Y-%m-%d"`</date>
-    <releaseinfo>$APP_VERSION</releaseinfo>
+    <date>date</date>
+    <releaseinfo>$VERSION$</releaseinfo>
     <abstract>
       <para>SHORT DESCRIPTION GOES HERE</para>
     </abstract>

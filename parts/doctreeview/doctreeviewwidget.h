@@ -19,6 +19,7 @@ class DocTreeKDELibsFolder;
 class DocTreeBookmarksFolder;
 class DocTreeProjectFolder;
 class DocTreeDocbaseFolder;
+class DocTreeTocFolder;
 class DocTreeViewPart;
 class KDevProject;
 class CustomizeDialog;
@@ -49,6 +50,7 @@ private:
     DocTreeBookmarksFolder *folder_bookmarks;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
+    QList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;
 };
 #endif

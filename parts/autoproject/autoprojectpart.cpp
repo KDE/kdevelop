@@ -66,7 +66,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
                           this, SLOT(slotConfigure()),
                           actionCollection(), "build_configure" );
 
-    action = new KAction( i18n("Run automake & friends"), 0,
+    action = new KAction( i18n("Run automake && friends"), 0,
                           this, SLOT(slotMakefilecvs()),
                           actionCollection(), "build_makefilecvs" );
 
@@ -82,7 +82,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
                           this, SLOT(slotDistClean()),
                           actionCollection(), "build_distclean" );
 
-    action = new KAction( i18n("Make messages & and merge"), 0,
+    action = new KAction( i18n("Make messages && merge"), 0,
                           this, SLOT(slotMakeMessages()),
                           actionCollection(), "build_messages" );
     if (!kde)

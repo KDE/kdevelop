@@ -21,6 +21,15 @@
    <group pattern="*" name="Others" />
   </groups>
  </kdevfileview>
+ <kdevdoctreeview>
+  <ignoretocs>
+   <toc>kde</toc>
+   <toc>gnustep</toc>
+   <toc>python</toc>
+   <toc>php</toc>
+   <toc>perl</toc>
+  </ignoretocs>
+ </kdevdoctreeview>
  <kdevdebugger>
   <general>
    <dbgshell>libtool</dbgshell>
