@@ -253,7 +253,24 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="0" column="0">
+                    <spacer row="2" column="0">
+                        <property name="name">
+                            <cstring>spacer4</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>130</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
                             <cstring>buttonGroup1</cstring>
                         </property>
@@ -306,23 +323,14 @@
                             </widget>
                         </grid>
                     </widget>
-                    <spacer row="1" column="0">
+                    <widget class="QCheckBox" row="0" column="0">
                         <property name="name">
-                            <cstring>spacer4</cstring>
+                            <cstring>useAssistant_box</cstring>
                         </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
+                        <property name="text">
+                            <string>Use KDevelop &amp;Assistant to browse documentation</string>
                         </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>40</height>
-                            </size>
-                        </property>
-                    </spacer>
+                    </widget>
                 </grid>
             </widget>
         </widget>
@@ -365,6 +373,12 @@
     <tabstop>htdigbinEdit</tabstop>
     <tabstop>htmergebinEdit</tabstop>
     <tabstop>htsearchbinEdit</tabstop>
+    <tabstop>useAssistant_box</tabstop>
+    <tabstop>find_box</tabstop>
+    <tabstop>index_box</tabstop>
+    <tabstop>search_box</tabstop>
+    <tabstop>info_box</tabstop>
+    <tabstop>man_box</tabstop>
 </tabstops>
 <slots>
     <slot>addCollectionButtonClicked()</slot>
@@ -376,16 +390,12 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
 </includehints>

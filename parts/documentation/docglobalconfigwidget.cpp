@@ -97,6 +97,8 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
     search_box->setChecked(m_part->hasContextFeature(DocumentationPart::FullTextSearch));
     man_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoMan));
     info_box->setChecked(m_part->hasContextFeature(DocumentationPart::GotoInfo));
+    
+    useAssistant_box->setChecked(m_part->isAssistantUsed());
 }
 
 DocGlobalConfigWidget::~DocGlobalConfigWidget()
@@ -194,6 +196,8 @@ void DocGlobalConfigWidget::accept()
     m_part->setContextFeature(DocumentationPart::FullTextSearch, search_box->isChecked());
     m_part->setContextFeature(DocumentationPart::GotoMan, man_box->isChecked());
     m_part->setContextFeature(DocumentationPart::GotoInfo, info_box->isChecked());
+    
+    m_part->setAssistantUsed(useAssistant_box->isChecked());
     
     config->sync();
     

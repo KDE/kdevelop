@@ -45,4 +45,34 @@ void KDevDocumentationIface::searchInDocumentation(QString term)
     m_part->searchInDocumentation(term);
 }
 
+void KDevDocumentationIface::lookupInIndex()
+{
+    m_part->lookInDocumentationIndex();
+}
+
+void KDevDocumentationIface::searchInDocumentation()
+{
+    m_part->searchInDocumentation();
+}
+
+void KDevDocumentationIface::manPage(QString term)
+{
+    m_part->manPage(term);
+}
+
+void KDevDocumentationIface::infoPage(QString term)
+{
+    m_part->infoPage(term);
+}
+
+void KDevDocumentationIface::manPage()
+{
+    m_part->manPage();
+}
+
+void KDevDocumentationIface::infoPage()
+{
+    m_part->infoPage();
+}
+
 #include "KDevDocumentationIface.moc"

@@ -19,6 +19,8 @@
  ***************************************************************************/
 #include "documentation_part.h"
 
+#include <unistd.h>
+
 #include <qdir.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
@@ -26,6 +28,8 @@
 #include <qtabwidget.h>
 #include <qapplication.h>
 
+#include <kapplication.h>
+#include <dcopclient.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -41,6 +45,7 @@
 #include <kinputdialog.h>
 #include <kstringhandler.h>
 #include <kconfig.h>
+#include <kwin.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -98,6 +103,10 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
         i18n("Documentation browser"));
     
     setupActions();
+    
+    KConfig *config = kapp->config();
+    config->setGroup("Documentation");
+    m_assistantUsed = config->readBoolEntry("UseAssistant", false);
     
     loadDocumentationPlugins();
     
@@ -236,8 +245,13 @@ void DocumentationPart::emitBookmarkLocation(const QString &title, const KURL &u
 
 void DocumentationPart::searchInDocumentation()
 {
-    mainWindow()->raiseView(m_widget);
-    m_widget->searchInDocumentation();
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "searchInDocumentation()");
+    else    
+    {
+        mainWindow()->raiseView(m_widget);
+        m_widget->searchInDocumentation();
+    }
 }
 
 void DocumentationPart::searchInDocumentation(const QString &term)
@@ -248,24 +262,36 @@ void DocumentationPart::searchInDocumentation(const QString &term)
 
 void DocumentationPart::contextSearchInDocumentation()
 {
-    mainWindow()->raiseView(m_widget);
-    searchInDocumentation(m_contextStr);
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "searchInDocumentation(QString)", m_contextStr);
+    else
+        searchInDocumentation(m_contextStr);
 }
 
 void DocumentationPart::manPage()
 {
-    bool ok;
-    QString manpage = KInputDialog::getText(i18n("Show Manual Page"), i18n("Show manpage on:"), "", &ok, 0);
-    if (ok && !manpage.isEmpty())
-        manPage(manpage);
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "manPage()");
+    else    
+    {
+        bool ok;
+        QString manpage = KInputDialog::getText(i18n("Show Manual Page"), i18n("Show manpage on:"), "", &ok, 0);
+        if (ok && !manpage.isEmpty())
+            manPage(manpage);
+    }
 }
 
 void DocumentationPart::infoPage()
 {
-    bool ok;
-    QString infopage = KInputDialog::getText(i18n("Show Info Page"), i18n("Show infopage on:"), "", &ok, 0);
-    if (ok && !infopage.isEmpty())
-        infoPage(infopage);
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "infoPage()");
+    else    
+    {
+        bool ok;
+        QString infopage = KInputDialog::getText(i18n("Show Info Page"), i18n("Show infopage on:"), "", &ok, 0);
+        if (ok && !infopage.isEmpty())
+            infoPage(infopage);
+    }
 }
 
 void DocumentationPart::manPage(const QString &term)
@@ -282,18 +308,26 @@ void DocumentationPart::infoPage(const QString &term)
 
 void DocumentationPart::contextManPage()
 {
-    manPage(m_contextStr);
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "manPage(QString)", m_contextStr);
+    else
+        manPage(m_contextStr);
 }
 
 void DocumentationPart::contextInfoPage()
 {
-    infoPage(m_contextStr);
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "infoPage(QString)", m_contextStr);
+    else
+        infoPage(m_contextStr);
 }
 
 void DocumentationPart::contextFindDocumentation()
-{ 
-    mainWindow()->raiseView(m_widget);
-    m_widget->findInDocumentation(m_contextStr);
+{
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "findInFinder(QString)", m_contextStr);
+    else
+        findInDocumentation(m_contextStr);
 }
 
 void DocumentationPart::findInDocumentation(const QString &term)
@@ -413,8 +447,13 @@ void DocumentationPart::setContextFeature(ContextFeature feature, bool b)
 
 void DocumentationPart::lookInDocumentationIndex()
 {
-    mainWindow()->raiseView(m_widget);
-    m_widget->lookInDocumentationIndex();
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "lookupInIndex()");
+    else    
+    {
+        mainWindow()->raiseView(m_widget);
+        m_widget->lookInDocumentationIndex();
+    }
 }
 
 void DocumentationPart::lookInDocumentationIndex(const QString &term)
@@ -425,7 +464,10 @@ void DocumentationPart::lookInDocumentationIndex(const QString &term)
 
 void DocumentationPart::contextLookInDocumentationIndex()
 {
-    lookInDocumentationIndex(m_contextStr);
+    if (isAssistantUsed())
+        callAssistant("KDevDocumentation", "lookupInIndex(QString)", m_contextStr);
+    else
+        lookInDocumentationIndex(m_contextStr);
 }
 
 void DocumentationPart::projectOpened()
@@ -484,5 +526,120 @@ void DocumentationPart::saveProjectDocumentationInfo()
     else
         DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/usermanualurl", "");
 }
+
+QCString DocumentationPart::startAssistant()
+{
+    static QCString lastAssistant = "";
+    
+    if (!lastAssistant.isEmpty() && KApplication::dcopClient()->isApplicationRegistered(lastAssistant))
+        return lastAssistant;
+    
+    const char *function = 0;
+    QString app = "kdevassistant";
+    function = "start_service_by_desktop_name(QString,QStringList)";
+    QStringList URLs;
+
+    QByteArray data, replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+    arg << app << URLs;
+
+    if (!KApplication::dcopClient()->call("klauncher", "klauncher", function,  data, replyType, replyData))
+    {
+        kdDebug() << "call failed" << endl;
+        lastAssistant = "";
+    } 
+    else 
+    {
+        QDataStream reply(replyData, IO_ReadOnly);
+
+        if ( replyType != "serviceResult" )
+        {
+            kdDebug() << "unexpected result: " << replyType.data() << endl;
+            lastAssistant = "";
+        }
+        int result;
+        QCString dcopName;
+        QString error;
+        reply >> result >> dcopName >> error;
+        if (result != 0)
+        {
+            kdDebug() << "Error: " << error << endl;
+            lastAssistant = "";
+        }
+        if (!dcopName.isEmpty())
+        {
+            lastAssistant = dcopName;
+            kdDebug() << dcopName.data() << endl;
+            
+            //@fixme: is there another way to wait for the remote object to be loaded
+            while (!KApplication::dcopClient()->remoteObjects(dcopName).contains("KDevDocumentation"))
+                usleep(500);
+        }
+    }
+    return lastAssistant;
+}
+
+bool DocumentationPart::isAssistantUsed() const
+{
+    return m_assistantUsed;
+}
+
+void DocumentationPart::setAssistantUsed(bool b)
+{
+    m_assistantUsed = b;
+    //use global config to store different settings for kdevassistant and kdevelop
+    KConfig *config = kapp->config();
+    config->setGroup("Documentation");
+    config->writeEntry("UseAssistant", isAssistantUsed());
+}
+
+void DocumentationPart::activateAssistantWindow(const QCString &ref)
+{
+    kdDebug() << "DocumentationPart::activateAssistantWindow" << endl;
+    QByteArray data, replyData;
+    QCString replyType;
+    if (KApplication::dcopClient()->call(ref, "MainWindow", "getWinID()", data, replyType, replyData))
+    {
+        kdDebug() << "    call successful " << endl;
+        QDataStream reply(replyData, IO_ReadOnly);
+        
+        int result;
+        int winId;
+        QString error;
+        reply >> result >> winId >> error;
+        if (result == 0)
+        {
+            kdDebug() << "Win ID: " << winId << endl;
+            KWin::forceActiveWindow(winId);
+            //KWin::activateWindow(winId);
+            
+            KApplication::dcopClient()->send(ref, "MainWindow", "show()", QByteArray());
+        }
+    }
+}
+
+void DocumentationPart::callAssistant(const QCString &interface, const QCString &method)
+{
+    QCString ref = startAssistant();
+    QByteArray data;
+    if (KApplication::dcopClient()->send(ref, interface, method, data))
+        activateAssistantWindow(ref);
+    else
+        kdDebug() << "problem communicating with: " << ref;
+}
+
+void DocumentationPart::callAssistant(const QCString &interface, const QCString &method, const QString &dataStr)
+{
+    QCString ref = startAssistant();
+    QByteArray data;
+    QDataStream arg(data, IO_WriteOnly);
+    arg << dataStr;
+    if (KApplication::dcopClient()->send(ref, interface, method, data))
+        activateAssistantWindow(ref);
+    else
+        kdDebug() << "problem communicating with: " << ref;
+}
+
 
 #include "documentation_part.moc"

@@ -36,6 +36,13 @@ k_dcop:
     void lookupInIndex(QString term);
     void findInFinder(QString term);
     void searchInDocumentation(QString term);
+    void manPage(QString term);
+    void infoPage(QString term);
+
+    void lookupInIndex();
+    void searchInDocumentation();
+    void manPage();
+    void infoPage();
     
 private:
     DocumentationPart *m_part;

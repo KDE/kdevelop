@@ -54,6 +54,9 @@ public:
     
     bool hasContextFeature(ContextFeature feature);
     void setContextFeature(ContextFeature feature, bool b);
+    
+    bool isAssistantUsed() const;
+    void setAssistantUsed(bool b);
 
 public slots:
     void lookInDocumentationIndex();
@@ -83,6 +86,11 @@ protected:
     void setupActions();
     void saveProjectDocumentationInfo();
     
+    QCString startAssistant();
+    void activateAssistantWindow(const QCString &ref);
+    void callAssistant(const QCString &interface, const QCString &method);
+    void callAssistant(const QCString &interface, const QCString &method, const QString &dataStr);
+    
 protected slots:
     void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
     void contextMenu(QPopupMenu *popup, const Context *context);
@@ -97,6 +105,7 @@ private:
     
     QString m_contextStr;
     bool m_hasIndex;
+    bool m_assistantUsed;
     
 friend class DocGlobalConfigWidget;
 friend class DocProjectConfigWidget;
