@@ -176,7 +176,12 @@ void $APPNAME$::fileOpen()
     // this slot is called whenever the File->Open menu is selected,
     // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
     // button is clicked
+/*
+    // this brings up the generic open dialog
     KURL url = KURLRequesterDlg::getURL(QString::null, this, i18n("Open Location") );
+*/
+    // standard filedialog
+    KURL url = KFileDialog::getOpenURL(QString::null, QString::null, this, i18n("Open Location"));
     if (!url.isEmpty())
         m_view->openURL(url);
 }
