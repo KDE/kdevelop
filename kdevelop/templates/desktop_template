@@ -1,5 +1,5 @@
 # KDE Config File  
-[KDE Desktop Entry]
+[Desktop Entry]
 Type=Application
 Exec=|NAMELITTLE| -caption "%c" %i %m  
 Icon=|NAMELITTLE|.xpm
