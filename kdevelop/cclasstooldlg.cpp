@@ -48,10 +48,13 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
     classTree( this, "classTree" )
 {
   currentOperation = CTNONE;
-  export = 0;
+  comboExport = CTHALL;
   onlyVirtual = false;
   store = NULL;
+
   setCaption( "Class Tool" );
+
+  treeH.setTree( &classTree );
 
   setWidgetValues();
   readIcons();
@@ -210,8 +213,6 @@ void CClassToolDlg::readIcons()
 
   pm.load( pixDir + "CTvirtuals.xpm" );
   virtualsBtn.setPixmap( pm );
-
-  classPm = new QPixmap( pixDir + "CVclass.xpm" );
 }
 
 void CClassToolDlg::setTooltips()
@@ -261,13 +262,20 @@ void CClassToolDlg::setStore( CClassStore *aStore )
 {
   assert( aStore != NULL );
 
+  QListBox *lb;
+
   store = aStore;
 
-  // Add all classnames.
+  // Set the store in the treehandler as weel.
+  treeH.setStore( store );
+
+  lb = classCombo.listBox();
+
+  // Add all classnames in sorted order.
   for( store->classIterator.toFirst();
        store->classIterator.current();
        ++(store->classIterator) )
-    classCombo.insertItem( store->classIterator.current()->name );
+    lb->inSort( store->classIterator.current()->name );
 }
 
 void CClassToolDlg::setClass( const char *aName )
@@ -287,48 +295,49 @@ void CClassToolDlg::setClass( CParsedClass *aClass )
   currentClass = aClass;
 }
 
+void CClassToolDlg::addClasses( QList<CParsedClass> *list )
+{
+  CParsedClass *aClass;
+  KPath classPath;
+
+  // Clear all previous items in the tree.
+  classTree.clear();
+
+  // Insert root item(the current class);
+  classTree.insertItem( currentClass->name, treeH.getIcon( CVCLASS ) );
+  classPath.push( &currentClass->name );
+
+  for( aClass = list->first();
+       aClass != NULL;
+       aClass = list->next() )
+  {
+    treeH.addClass( aClass, classPath );
+  }
+
+  // View one level deep.
+  classTree.setExpandLevel( 1 );
+}
+
 void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
 {
-  CParsedAttribute *aAttr;
   KPath classPath;
   
   // Insert root item(the current class);
-  classTree.insertItem( aClass->name, classPm );
+  classTree.insertItem( aClass->name, treeH.getIcon( CVCLASS ) );
   classPath.push( &aClass->name );
 
-  for( aClass->attributeIterator.toFirst();
-       aClass->attributeIterator.current();
-       ++aClass->attributeIterator )
-  {
-    aAttr = aClass->attributeIterator.current();
-    if( export == 0 || export == aAttr->export )
-      classTree.addChildItem( aAttr->name, classPm, &classPath );
-  }
+  treeH.addAttributesFromClass( aClass, classPath, comboExport );
 }
 
 void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
 {
-  CParsedMethod *aMethod;
-  QList<CParsedMethod> *list;
   KPath classPath;
-  QString str;
   
   // Insert root item(the current class);
-  classTree.insertItem( aClass->name, classPm );
+  classTree.insertItem( aClass->name, treeH.getIcon( CVCLASS ) );
   classPath.push( &aClass->name );
 
-  list = aClass->getMethods();
-  for( aMethod = list->first();
-       aMethod != NULL;
-       aMethod = list->next() )
-  {
-    if( ( export == 0 || export == aMethod->export ) &&
-        onlyVirtual == aMethod->isVirtual )
-    {
-      aMethod->toString( str );
-      classTree.addChildItem( str, classPm, &classPath );
-    }
-  }
+  treeH.addMethodsFromClass( aClass, classPath, comboExport );
 }
 
 void CClassToolDlg::addAllClassMethods()
@@ -356,15 +365,28 @@ void CClassToolDlg::addAllClassMethods()
   classTree.setExpandLevel( 1 );
 }
 
-void CClassToolDlg::addRoot( KPath &classPath )
+void CClassToolDlg::addAllClassAttributes()
 {
-  QString root = currentClass->name;
+  CParsedParent *aParent;
+  CParsedClass *aClass;
 
+  // Clear all previous items in the tree.
   classTree.clear();
   
-  // Insert root item(the current class);
-  classTree.insertItem( root, classPm );
-  classPath.push( &root );
+  // First treat all parents.
+  for( aParent = currentClass->parents.first();
+       aParent != NULL;
+       aParent = currentClass->parents.next() )
+  {
+    aClass = store->getClassByName( aParent->name );
+    if( aClass != NULL )
+      addClassAndAttributes( aClass );
+  }
+
+  // Add the current class
+  addClassAndAttributes( currentClass );
+
+  classTree.setExpandLevel( 1 );
 }
 
 /** Change the caption depending on the current operation. */
@@ -421,13 +443,19 @@ void CClassToolDlg::viewParents()
   currentOperation = CTPARENT;
 
   changeCaption();
-  addRoot( classPath );
+
+  classTree.clear();
+  
+  // Insert root item(the current class);
+  classTree.insertItem( currentClass->name, treeH.getIcon( CVCLASS ) );
+  classPath.push( &currentClass->name );
 
   for( aParent = currentClass->parents.first();
        aParent != NULL;
        aParent = currentClass->parents.next() )
   {
-    classTree.addChildItem( aParent->name, classPm, &classPath );
+    classTree.addChildItem( aParent->name, treeH.getIcon( CVCLASS ),
+                            &classPath );
   }
 
   classTree.setExpandLevel( 1 );
@@ -439,24 +467,13 @@ void CClassToolDlg::viewChildren()
   assert( currentClass != NULL );
 
   QList<CParsedClass> *list;
-  CParsedClass *aClass;
-  KPath classPath;
   
   currentOperation = CTCHILD;
-
   changeCaption();
-  addRoot( classPath );
 
   list = store->getClassesByParent( currentClass->name );
-
-  for( aClass = list->first();
-       aClass != NULL;
-       aClass = list->next() )
-    classTree.addChildItem( aClass->name, classPm, &classPath );
-
+  addClasses( list );
   delete list;
-
-  classTree.setExpandLevel( 1 );
 }
 
 /** View all classes that has this class as an attribute. */
@@ -465,35 +482,28 @@ void CClassToolDlg::viewClients()
   assert( currentClass != NULL );
 
   QList<CParsedClass> *list;
-  CParsedClass *aClass;
-  KPath classPath;
   
   currentOperation = CTCLIENT;
-
   changeCaption();
-  addRoot( classPath );
 
   list = store->getClassClients( currentClass->name );
-
-  for( aClass = list->first();
-       aClass != NULL;
-       aClass = list->next() )
-    classTree.addChildItem( aClass->name, classPm, &classPath );
-
+  addClasses( list );
   delete list;
-
-  classTree.setExpandLevel( 1 );
 }
 
 /** View all classes that this class has as attributes. */
 void CClassToolDlg::viewSuppliers()
 {
-  KPath classPath;
+  assert( currentClass != NULL );
+
+  QList<CParsedClass> *list;
 
   currentOperation = CTSUPP;
-
   changeCaption();
-  addRoot( classPath );
+
+  list = store->getClassSuppliers( currentClass->name );
+  addClasses( list );
+  delete list;
 }
 
 /** View methods in this class and parents. */
@@ -512,29 +522,10 @@ void CClassToolDlg::viewAttributes()
 {
   assert( currentClass != NULL );
 
-  CParsedParent *aParent;
-  CParsedClass *aClass;
-  QString caption;
-
   currentOperation = CTATTR;
 
   changeCaption();
-  classTree.clear();
-  
-  // First treat all parents.
-  for( aParent = currentClass->parents.first();
-       aParent != NULL;
-       aParent = currentClass->parents.next() )
-  {
-    aClass = store->getClassByName( aParent->name );
-    if( aClass != NULL )
-      addClassAndAttributes( aClass );
-  }
-
-  // Add the current class
-  addClassAndAttributes( currentClass );
-
-  classTree.setExpandLevel( 1 );
+  addAllClassAttributes();
 }
 
 void CClassToolDlg::viewVirtuals()
@@ -600,13 +591,13 @@ void CClassToolDlg::slotExportComboChoice(int idx)
 
   //Check exporttype
   if( str == "All" )
-    export = 0;
+    comboExport = CTHALL;
   else if( str == "Public" )
-    export = PUBLIC;
+    comboExport = CTHPUBLIC;
   else if( str == "Protected" )
-    export = PROTECTED;
+    comboExport = CTHPROTECTED;
   else if( str == "Private" )
-    export = PRIVATE;
+    comboExport = CTHPRIVATE;
 
   // Update the view if the choice affected the data.
   switch( currentOperation )

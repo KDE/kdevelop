@@ -27,7 +27,8 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include "ClassStore.h"
+#include "./classparser/ClassStore.h"
+#include "cclasstreehandler.h"
 
 enum{ CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTNONE };
 
@@ -84,8 +85,6 @@ protected: // Private widgets
  QComboBox exportCombo;
  KTreeList classTree;
 
- QPixmap *classPm;
-
  protected slots:
 
   void slotParents();
@@ -108,13 +107,16 @@ private: // Private attribues
  CParsedClass *currentClass;
 
  /** The current exportstatus selected in the combo. */
- int export;
+ CTHFilter comboExport;
 
  /** Tells if we only should view virtual methods. */
  bool onlyVirtual;
 
  /** Stores what operation the user selected last. */
  int currentOperation;
+
+ /** Handler to view things in the tree. */
+ CClassTreeHandler treeH;
 
 private: // Private methods
 
@@ -124,10 +126,11 @@ private: // Private methods
   void setTooltips();
   void setActiveClass( const char *aName );
 
+  void addClasses( QList<CParsedClass> *list );
   void addClassAndAttributes( CParsedClass *aClass );
   void addClassAndMethods( CParsedClass *aClass );
   void addAllClassMethods();
-  void addRoot( KPath &classPath );
+  void addAllClassAttributes();
 
   /** Change the caption depending on the current operation. */
   void changeCaption();

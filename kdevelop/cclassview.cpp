@@ -50,7 +50,6 @@ QString CClassView::GLOBALROOTNAME = "Global";
 CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   : KTreeList (parent, name)
 {
-  readIcons();
   initPopups();
 
   // Add callback for clicks in the listview.
@@ -60,6 +59,10 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
 
   // Set the store.
   store = &cp.store;
+
+  // Initialize the treehandler.
+  treeH.setTree( this );
+  treeH.setStore( store );
 }
 
 /*------------------------------------------ CClassView::~CClassView()
@@ -73,10 +76,6 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
  *-----------------------------------------------------------------*/
 CClassView::~CClassView()
 {
-  for( int i=0; i<END_POS; i++ )
-    delete icons[ i ];
-
-  delete []icons;
 }
 
 /*********************************************************************
@@ -145,6 +144,7 @@ void CClassView::refresh( CProject *proj )
  *-----------------------------------------------------------------*/
 void CClassView::refresh()
 {
+  QList<CParsedClass> *list;
   CParsedClass *aPC;
   QString cstr;
   QString gstr;
@@ -155,51 +155,37 @@ void CClassView::refresh()
 
   // Insert root item
   cstr = i18n( CLASSROOTNAME );
-  insertItem( cstr, icons[ PROJECT ] );
+  insertItem( cstr, treeH.getIcon( PROJECT ) );
 
   classPath.push( &cstr );
 
-  // Add all parsed classes to the view
-  for( store->classIterator.toFirst(); 
-       store->classIterator.current(); 
-       ++store->classIterator )
-  {
-    aPC = store->classIterator.current();
+  list = store->getSortedClasslist();
 
+  // Add all parsed classes to the view
+  for( aPC = list->first();
+       aPC != NULL;
+       aPC = list->next() )
+  {
     // Add the class.
-    addChildItem( aPC->name, icons[ CVCLASS ], &classPath );
+    addChildItem( aPC->name, treeH.getIcon( CVCLASS ), &classPath );
     classPath.push( &aPC->name );
 
-    updateClass( aPC, &classPath );
+    treeH.updateClass( aPC, &classPath );
     
     classPath.pop();
   }
 
   // Add all global functions and variables
   gstr = i18n( GLOBALROOTNAME );
-  insertItem( gstr, icons[ PROJECT ] );
+  insertItem( gstr, treeH.getIcon( PROJECT ) );
   globalPath.push( &gstr );
-  addMethods( store->getGlobalFunctions(), globalPath );
-  addAttributes( store->gvIterator, globalPath );
+  treeH.addMethods( store->getGlobalFunctions(), globalPath );
+  //  addAttributes( store->gvIterator, globalPath );
 
   // Redraw the view.
   setExpandLevel( 1 );
   setUpdatesEnabled( true );
   repaint();
-}
-
-/*------------------------------------- CClassView::refreshClassById()
- * refreshClassById()
- *   Reparse and redraw a class by using its' menuid.
- *
- * Parameters:
- *   aID             The menuid.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::refreshClassById( int aID )
-{
 }
 
 /*-------------------------------------- CClassView::refreshClassById()
@@ -273,42 +259,6 @@ int CClassView::indexType( int aIdx )
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------------------ CClassView::readIcons()
- * readIcons()
- *   Read the icons from disk and store them in the class.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::readIcons()
-{
-  QString PIXPREFIX = "/kdevelop/pics/mini/";
-  QString projIcon = "folder.xpm";
-  QString pixDir;
-  KIconLoader *il;
-
-  // Allocate the array.
-  icons = new QPixmap *[ END_POS ];
-
-  pixDir = KApplication::kde_datadir () + PIXPREFIX;
-  debug( "Fetching pixmaps from: %s", pixDir.data() );
-
-  il = KApplication::getKApplication()->getIconLoader();
-
-  // Load the icons
-  icons[ PROJECT ] = new QPixmap( il->loadMiniIcon( "folder.xpm" ) );
-  icons[ CVCLASS ] = new QPixmap(pixDir + "CVclass.xpm");
-  icons[ STRUCT ] = new QPixmap(pixDir + "CVstruct.xpm");
-  icons[ PUBLIC_ATTR ] = new QPixmap(pixDir + "CVpublic_var.xpm");
-  icons[ PROTECTED_ATTR ] = new QPixmap(pixDir + "CVprotected_var.xpm");
-  icons[ PRIVATE_ATTR ] = new QPixmap(pixDir + "CVprivate_var.xpm");
-  icons[ PUBLIC_METHOD ] = new QPixmap(pixDir + "CVpublic_meth.xpm");
-  icons[ PROTECTED_METHOD ] = new QPixmap(pixDir + "CVprotected_meth.xpm");
-  icons[ PRIVATE_METHOD ] = new QPixmap(pixDir + "CVprivate_meth.xpm");
-}
-
 /*------------------------------------------ CClassView::initPopups()
  * initPopups()
  *   Initialze all popupmenus.
@@ -359,145 +309,6 @@ void  CClassView::initPopups()
   attributePopup.insertSeparator();
   id = attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
   attributePopup.setItemEnabled( id, false );
-}
-
-void CClassView::updateClass( CParsedClass *aClass, KPath *aPath )
-{
-  KTreeListItem *top;
-  KTreeListItem *current;
-  KTreeListItem *next;
-  
-  top = itemAt( aPath );
-  current = top->getChild();
-  
-  while( current != NULL )
-  {
-    next = current->getSibling();
-    top->removeChild( current );
-    current = next;
-  }
-
-  // Add parts of the class
-  addMethods( aClass->getMethods(), *aPath );
-  addAttributes( aClass->attributeIterator, *aPath );
-  addSlots( aClass, *aPath );
-  addSignals( aClass, *aPath );
-}
-
-/*------------------------------------------ CClassView::addMethods()
- * addMethods()
- *   Add all methods from a class to the view.
- *
- * Parameters:
- *   aPC             Class that holds the data.
- *   path            Current path in the view.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::addMethods( QList<CParsedMethod> *list, KPath &path )
-{
-  CParsedMethod *aMethod;
-  QPixmap *icon;
-  QString str;
-
-  // Add the methods
-  for( aMethod = list->first();
-       aMethod != NULL;
-       aMethod = list->next() )
-  {
-    if( aMethod->isPublic() )
-      icon = icons[ PUBLIC_METHOD ];
-    else if( aMethod->isProtected() )
-      icon = icons[ PROTECTED_METHOD ];
-    else if( aMethod->isPrivate() )
-      icon = icons[ PRIVATE_METHOD ];
-    else // Global
-      icon = icons[ PUBLIC_METHOD ];
-    
-    aMethod->toString( str );
-    addChildItem( str, icon, &path );
-  }
-}
-
-/*------------------------------------------ CClassView::addAttributes()
- * addAttributes()
- *   Add all attributes from a class to the view.
- *
- * Parameters:
- *   aPC             Class that holds the data.
- *   path            Current path in the view.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::addAttributes( QDictIterator<CParsedAttribute> &iter,
-                                KPath &path )
-{
-  QPixmap *icon;
-  CParsedAttribute *aAttr;
-
-  // Add the methods
-  for( iter.toFirst();
-       iter.current();
-       ++iter )
-  {
-    aAttr = iter.current();
-    if( aAttr->isPublic() )
-      icon = icons[ PUBLIC_ATTR ];
-    else if( aAttr->isProtected() )
-      icon = icons[ PROTECTED_ATTR ];
-    else if( aAttr->isPrivate() )
-      icon = icons[ PRIVATE_ATTR ];
-    else // Global
-      icon = icons[ PUBLIC_ATTR ];
-    
-    addChildItem( aAttr->name, icon, &path );
-  }
-}
-
-/*------------------------------------------ CClassView::addSlots()
- * addSlots()
- *   Add all slots from a class to the view.
- *
- * Parameters:
- *   aPC             Class that holds the data.
- *   path            Current path in the view.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::addSlots( CParsedClass *aPC, KPath &path )
-{
-  CParsedMethod *aMethod;
-
-  // Add the methods
-  for( aMethod = aPC->slotList.first();
-       aMethod != NULL;
-       aMethod = aPC->slotList.next() )
-    addChildItem( aMethod->name, icons[ STRUCT ], &path );
-}
-
-/*------------------------------------------ CClassView::addSignals()
- * addSignals()
- *   Add all signals from a class to the view.
- *
- * Parameters:
- *   aPC             Class that holds the data.
- *   path            Current path in the view.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::addSignals( CParsedClass *aPC, KPath &path )
-{
-  CParsedMethod *aMethod;
-
-  // Add the methods
-  for( aMethod = aPC->signalList.first();
-       aMethod != NULL;
-       aMethod = aPC->signalList.next() )
-    addChildItem( aMethod->name, icons[ STRUCT ], &path );
 }
 
 /*********************************************************************
@@ -635,7 +446,7 @@ void CClassView::slotMethodNew()
     if( aClass )
     {
       aClass->addMethod( aMethod );
-      updateClass( aClass, itemPath( currentItem() ) );
+      treeH.updateClass( aClass, itemPath( currentItem() ) );
     }
 
     emit signalAddMethod( aMethod );
@@ -669,7 +480,7 @@ void CClassView::slotAttributeNew()
     if( aClass )
     {
       aClass->addAttribute( aAttr );
-      updateClass( aClass, itemPath( currentItem() ) );
+      treeH.updateClass( aClass, itemPath( currentItem() ) );
     }
 
     emit signalAddAttribute( aAttr );

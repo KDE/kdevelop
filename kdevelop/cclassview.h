@@ -1,9 +1,9 @@
 /***************************************************************************
-                          cclassview.h  -  description                              
-                             -------------------                                         
-    begin                : Fri Mar 19 1999                                           
-    copyright            : (C) 1999 by Jonas Nordin                         
-    email                : jonas.nordin@cenacle.se                                     
+                          cclassview.h  -  description
+                             -------------------
+    begin                : Fri Mar 19 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,19 +26,9 @@
 #include <qpixmap.h> 
 #include <ktreelist.h>
 #include <kpopmenu.h>
-#include "ClassParser.h"
+#include "./classparser/ClassParser.h"
 #include "cproject.h"
-
-class CClassView; 
-
-enum
-{ 
-  PROJECT, CVCLASS, METHOD, ATTRIBUTE, 
-  CVGLOBAL_FUNCTION, CVGLOBAL_VARIABLE,
-  PUBLIC_METHOD, PROTECTED_METHOD, PRIVATE_METHOD, 
-  PUBLIC_ATTR, PROTECTED_ATTR, PRIVATE_ATTR,
-  STRUCT, END_POS
-};
+#include "cclasstreehandler.h"
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
@@ -81,9 +71,6 @@ public: // Public refreshmethods
 
   /** Refresh the whole view. */
   void refresh();
-
-  /** Refresh a class by using its' menu ID. */
-  void refreshClassById( int aID );
 
   /** Refresh a class by using its' name. */
   void refreshClassByName( QString &aName );
@@ -136,11 +123,11 @@ private: // Private attributes
   /** The position at the last mousepress-event. */
   QPoint mousePos;
 
-  /** Array containing all pixmaps used */
-  QPixmap **icons;
-
   /** The classparser. */	
   CClassParser cp;
+
+  /** The utilityclass to draw the tree. */
+  CClassTreeHandler treeH;
 
 private: // Private methods
 
@@ -153,24 +140,6 @@ private: // Private methods
   /** Initialize popupmenus. */
   void initPopups();
   
-  /** Initalize the icon array and read the icons from disk. */
-  void readIcons();
-
-  /** Update methods/attr... of a certain class. */
-  void updateClass( CParsedClass *aClass, KPath *aPath );
-
-  /** Add all methods to the view. */
-  void addMethods( QList<CParsedMethod> *list, KPath &path );
-
-  /** Add all signals to the view. */
-  void addAttributes( QDictIterator<CParsedAttribute> &iter, KPath &path );
-
-  /** Add all signals to the view. */
-  void addSlots( CParsedClass *aPC, KPath &path );
-
-  /** Add all signals to the view. */
-  void addSignals( CParsedClass *aPC, KPath &path );
-
 };
 
 #endif
