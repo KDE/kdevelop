@@ -57,7 +57,7 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildArea : public QFrame
 // attributes
 public:
    /**
-   * Z Order stack of @ref KMdiChildFrm childframe windows (top=last)
+   * Z Order stack of KMdiChildFrm childframe windows (top=last)
    */
    QPtrList<KMdiChildFrm> *m_pZ; //Auto delete enabled
    /**
@@ -94,7 +94,7 @@ protected:
 // methods
 public:
    /**
-   * Consruction. Note: This class needn't to know about @ref KMdiMainFrm .
+   * Consruction. Note: This class needn't to know about KMdiMainFrm .
    */
    KMdiChildArea(QWidget *parent);
    /**

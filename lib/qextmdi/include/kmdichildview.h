@@ -47,7 +47,7 @@
   *
   * All such windows 'lives' attached to a KMdiChildFrm widget
   * managed by KMdiChildArea, or detached (managed by the window manager.)
-  * So remember that the @ref KMdiChildView::parent pointer may change, and may be 0L, too.
+  * So remember that the KMdiChildView::parent pointer may change, and may be 0L, too.
   *
   * There are 2 possibilities for you to put your widgets under MDI control:
   *
@@ -112,23 +112,23 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildView : public QWidget
 // attributes
 protected:
    /** 
-   * See @ref KMdiChildView::caption
+   * See KMdiChildView::caption
    */
    QString     m_szCaption;
    /** 
-   * See @ref KMdiChildView::tabCaption
+   * See KMdiChildView::tabCaption
    */
    QString     m_sTabCaption;
    /** 
-   * See @ref KMdiChildView::focusedChildWidget
+   * See KMdiChildView::focusedChildWidget
    */
    QWidget*    m_focusedChildWidget;
    /**  
-   * See @ref KMdiChildView::setFirstFocusableChildWidget
+   * See KMdiChildView::setFirstFocusableChildWidget
    */
    QWidget*    m_firstFocusableChildWidget;
    /**  
-   * See @ref KMdiChildView::setLastFocusableChildWidget
+   * See KMdiChildView::setLastFocusableChildWidget
    */
    QWidget*    m_lastFocusableChildWidget;
    /**
@@ -341,13 +341,13 @@ public slots:
    /** 
    * Mimimizes the MDI view. If attached, the covering childframe widget is minimized (only a mini widget
    * showing the caption bar and the system buttons will remain visible). If detached, it will use the
-   * minimize of the underlying system ( @ref QWidget::showMinimized ).
+   * minimize of the underlying system ( QWidget::showMinimized ).
    */
    virtual void minimize();
    /** 
    * Maximizes the MDI view. If attached, this widget will fill the whole MDI view area widget. The system buttons
-   * move to the main menubar (if set by @ref KMdiMainFrm::setMenuForSDIModeSysButtons ).
-   * If detached, it will use the minimize of the underlying system (@ref QWidget::showMaximized ).
+   * move to the main menubar (if set by KMdiMainFrm::setMenuForSDIModeSysButtons ).
+   * If detached, it will use the minimize of the underlying system ( QWidget::showMaximized ).
    */
    virtual void maximize();
    /**
@@ -355,12 +355,12 @@ public slots:
    */
    virtual void restore();
    /** 
-   * Internally called, if @ref KMdiMainFrm::attach is called.
+   * Internally called, if KMdiMainFrm::attach is called.
    * Actually, only the caption of the covering childframe is set.
    */
    virtual void youAreAttached(KMdiChildFrm *lpC);
    /** 
-   * Internally called, if @ref KMdiMainFrm::detach is called.
+   * Internally called, if KMdiMainFrm::detach is called.
    * Some things for going toplevel will be done here.
    */
    virtual void youAreDetached();
@@ -385,38 +385,38 @@ public slots:
    */
    virtual void raise();
    /** 
-   * Overridden from its base class method. Emits a signal @ref KMdiChildView::isMinimizedNow , additionally.
+   * Overridden from its base class method. Emits a signal KMdiChildView::isMinimizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system minimizing.
    */
    virtual void showMinimized();
    /** 
-   * Overridden from its base class method. Emits a signal @ref KMdiChildView::isMaximizedNow , additionally.
+   * Overridden from its base class method. Emits a signal KMdiChildView::isMaximizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system maximizing.
    */
    virtual void showMaximized();
    /** 
-   * Overridden from its base class method. Emits a signal @ref KMdiChildView::isRestoredNow , additionally.
+   * Overridden from its base class method. Emits a signal KMdiChildView::isRestoredNow , additionally.
    * Note that this method is not used by an external windows manager call on system normalizing.
    */
    virtual void showNormal();
 
 protected:
    /**
-    * Ignores the event and calls @ref KMdiMainFrm::childWindowCloseRequest instead. This is because the
+    * Ignores the event and calls KMdiMainFrm::childWindowCloseRequest instead. This is because the
     * mainframe has control over the views. Therefore the MDI view has to request the mainframe for a close.
     */
    virtual void closeEvent(QCloseEvent *e);
    /** 
-   * It only catches @ref QEvent::KeyPress events there. If a Qt::Key_Tab is pressed, the internal MDI focus
+   * It only catches QEvent::KeyPress events there. If a Qt::Key_Tab is pressed, the internal MDI focus
    * handling is called. That means if the last focusable child widget of this is called, it will jump to the
    * first focusable child widget of this.
-   * See @ref KMdiChildView::setFirstFocusableChildWidget and @ref KMdiChildView::lastFirstFocusableChildWidget
+   * See KMdiChildView::setFirstFocusableChildWidget and KMdiChildView::lastFirstFocusableChildWidget
    */
    virtual bool eventFilter(QObject *obj, QEvent *e);
    /** 
    * If attached, the childframe will be activated and the MDI taskbar button will be pressed. Additionally, the
    * memorized old focused child widget of this is focused again.
-   * Sends the focusInEventOccurs signal befor changing the focus and the 
+   * Sends the focusInEventOccurs signal before changing the focus and the 
    * gotFocus signal after changing the focus.
    */
    virtual void focusInEvent(QFocusEvent *e);
@@ -434,48 +434,48 @@ protected slots:
 
 signals:
    /** 
-   * Internally used by @ref KMdiChildView::attach to send it as command to the mainframe.
+   * Internally used by KMdiChildView::attach to send it as command to the mainframe.
    */
    void attachWindow( KMdiChildView*,bool);
    /** 
-   * Internally used by @ref KMdiChildView::detach to send it as command to the mainframe.
+   * Internally used by KMdiChildView::detach to send it as command to the mainframe.
    */
    void detachWindow( KMdiChildView*,bool);
    /** 
    * Is sent when this MDI child view is going to receive focus (before actually changing the focus).
    * Internally used to send information to the mainframe that this MDI child view is focused.
-   * See @ref KMdiChildView::focusInEvent
+   * See KMdiChildView::focusInEvent
    */
    void focusInEventOccurs( KMdiChildView*);
    /**
    * Is sent when this MDI child has received the focus (after actually changing the focus).
-   * See @ref KMdiChildView::focusInEvent
+   * See KMdiChildView::focusInEvent
    */
    void gotFocus( KMdiChildView*);
    /**
    * Is sent when this MDI child was set to the activate view of all MDI views (after actually changing the focus).
-   * See @ref KMdiChildView::activate
+   * See KMdiChildView::activate
    */
    void activated( KMdiChildView*);
    /** Is sent when this MDI child view has lost the focus (after actually changing the focus).
-    *  See @ref KMdiChildView::focusOutEvent
+    *  See KMdiChildView::focusOutEvent
     */
    void lostFocus( KMdiChildView*);
    /** Is sent when this MDI child view was deactivated (after actually changing the focus).
-    *  See @ref KMdiChildView::focusOutEvent
+    *  See KMdiChildView::focusOutEvent
     */
    void deactivated( KMdiChildView*);
    /**
    * Internally used to send information to the mainframe that this MDI child view wants to be closed.
-   * See @ref KMdiChildView::closeEvent and @ref KMdiMainFrm::closeWindow
+   * See KMdiChildView::closeEvent and KMdiMainFrm::closeWindow
    */
    void childWindowCloseRequest( KMdiChildView*);
    /** 
-   * Emitted when the window caption is changed via @ref KMdiChildView::setCaption or @ref KMdiChildView::setMDICaption 
+   * Emitted when the window caption is changed via KMdiChildView::setCaption or KMdiChildView::setMDICaption 
    */
    void windowCaptionChanged( const QString&);
    /** 
-   * Emitted  when the window caption is changed via @ref KMdiChildView::setTabCaption or @ref KMdiChildView::setMDICaption 
+   * Emitted  when the window caption is changed via KMdiChildView::setTabCaption or KMdiChildView::setMDICaption 
    */
    void tabCaptionChanged( const QString&);
    /** 

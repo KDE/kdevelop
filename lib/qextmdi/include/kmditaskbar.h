@@ -81,15 +81,15 @@ signals:
    */
    void clicked(KMdiChildView*);
    /**
-   * Internally connected with @ref KMdiMainFrm::activateView
+   * Internally connected with KMdiMainFrm::activateView
    */
    void leftMouseButtonClicked(KMdiChildView*);
    /**
-   * Internally connected with @ref KMdiMainFrm::taskbarButtonRightClicked
+   * Internally connected with KMdiMainFrm::taskbarButtonRightClicked
    */
    void rightMouseButtonClicked(KMdiChildView*);
    /**
-   * Emitted when the button text has changed. Internally connected with @ref KMdiTaskBar::layoutTaskBar
+   * Emitted when the button text has changed. Internally connected with KMdiTaskBar::layoutTaskBar
    */
    void buttonTextChanged(int);
 public slots:
@@ -136,13 +136,13 @@ public:
    */
    ~KMdiTaskBar();
    /**
-   *Add a new @ref KMdiTaskBarButton . The width doesn't change.
+   *Add a new KMdiTaskBarButton . The width doesn't change.
    * If there's not enough space, all taskbar buttons will be resized to a new smaller size.
    * Probably button texts must be abbreviated now.
    */
    KMdiTaskBarButton * addWinButton(KMdiChildView *win_ptr);
    /**
-   * Removes a @ref KMdiTaskBarButton and deletes it. If the rest of the buttons are smaller
+   * Removes a KMdiTaskBarButton and deletes it. If the rest of the buttons are smaller
    * than they usually are, all those buttons will be resized in a way that the new free size is used as well.
    */
    void removeWinButton(KMdiChildView *win_ptr, bool haveToLayoutTaskBar = TRUE);

@@ -296,7 +296,7 @@ public slots:
 protected:
    /** Reimplemented from its base class.
    * Resizes the captionbar, relayouts the position of the system buttons,
-   * and calls resize for its embedded client @ref KMdiChildView with the proper size
+   * and calls resize for its embedded client KMdiChildView with the proper size
    */
    virtual void resizeEvent(QResizeEvent *);
    /** Reimplemented from its base class.
@@ -315,7 +315,7 @@ protected:
    virtual void mouseReleaseEvent(QMouseEvent *);
    /** Reimplemented from its base class.
    * give its child view the chance to notify a childframe move... that's why it sends
-   * a @ref KMdiChildMovedEvent to the embedded @ref KMdiChildView .
+   * a KMdiChildMovedEvent to the embedded KMdiChildView .
    */
    virtual void moveEvent(QMoveEvent* me);
    /**
@@ -377,11 +377,11 @@ protected slots:
 
 protected:
    /** Restore the focus policies for _all_ widgets in the view using the list given as parameter.
-   * Install the event filter for all direct child widgets of this. (See @ref KMdiChildFrm::eventFilter )
+   * Install the event filter for all direct child widgets of this. (See KMdiChildFrm::eventFilter )
    */
    void linkChildren( QDict<FocusPolicy>* pFocPolDict);
    /** Backups all focus policies of _all_ child widgets in the MDI childview since they get lost during a reparent.
-   * Remove all event filters for all direct child widgets of this. (See @ref KMdiChildFrm::eventFilter )
+   * Remove all event filters for all direct child widgets of this. (See KMdiChildFrm::eventFilter )
    */
    QDict<QWidget::FocusPolicy>* unlinkChildren();
    /** Calculates the corner id for the resize cursor. The return value can be tested for:

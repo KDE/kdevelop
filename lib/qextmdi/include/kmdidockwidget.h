@@ -11,8 +11,6 @@
 #   define OLDER_THAN_KDE_3_2
 #  endif
 # endif
-#else
-# define OLDER_THAN_KDE_3_2
 #endif
 
 #if defined(NO_KDE) || defined(OLDER_THAN_KDE_3_2)

@@ -75,11 +75,11 @@ protected:
    */
    virtual void paintEvent(QPaintEvent *e);
    /** 
-   * The same as @ref KMdiChildFrmCaption::slot_moveViaSystemMenu 
+   * The same as KMdiChildFrmCaption::slot_moveViaSystemMenu 
    */
    virtual void mousePressEvent(QMouseEvent *);
    /** 
-   * Calls maximizePressed of the parent widget (@ref KMdiChildFrm ) 
+   * Calls maximizePressed of the parent widget ( KMdiChildFrm ) 
    */
    virtual void mouseDoubleClickEvent(QMouseEvent *);
    /** 
@@ -87,7 +87,7 @@ protected:
    */
    virtual void mouseReleaseEvent(QMouseEvent *);
    /** 
-   * Checks if out of move range of the @ref KMdiChildArea and calls @ref KMdiChildFrm::move 
+   * Checks if out of move range of the KMdiChildArea and calls KMdiChildFrm::move 
    */
    virtual void mouseMoveEvent(QMouseEvent *e);
    /** 

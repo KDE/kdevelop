@@ -8,7 +8,8 @@ libkdevelopqextmdi_la_LIBADD = $(LIB_KPARTS)
 
 libkdevelopqextmdi_la_SOURCES = kmdichildarea.cpp kmdichildfrm.cpp kmdichildfrmcaption.cpp \
 				kmdichildview.cpp kmdimainfrm.cpp kmditaskbar.cpp kmdidockcontainer.cpp \
-				kdockwidget_compat.cpp kmultitabbar.cpp
+				kdockwidget_compat.cpp kmultitabbar.cpp \
+				kmditoolviewaccessor.cpp
 
 KDE_OPTIONS = nofinal
 METASOURCES = AUTO
