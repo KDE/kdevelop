@@ -53,7 +53,6 @@ public:		// Fields
 	* Z Order stack (top=last)
 	*/
 	QList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
-	QPopupMenu *m_pWindowMenu;
 private:
 	QFont m_captionFont;
 	QColor m_captionActiveBackColor;
@@ -83,11 +82,6 @@ public:		// Methods
 	* otherwise is raised only
 	*/
 	void setTopChild(QextMdiChildFrm *lpC,bool bSetFocus=FALSE);
-	/**
-	* Returns the window menu..the menu is filled by this manager
-	* Be sure to not delete it :)
-	*/
-	inline QPopupMenu *getWindowMenu(){ return m_pWindowMenu; };
 	/**
 	* Returns the topmost child (the active one) or 0 if there are no children.
 	* Note that the topmost child may be also hidded , if ALL the windows are minimized.
@@ -121,10 +115,6 @@ public slots:
 	*/
 	void focusTopChild();
 	/**
-	* Forces the update of the window menu.
-	*/
-	void fillWindowMenu();
-	/**
 	* Tile Pragma
 	*/
 	void tilePragma();
@@ -150,21 +140,15 @@ protected:	// Protected methods
 	void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
 	
 	void undockWindow(QWidget *lpC);
-protected slots:
-	void menuActivated(int id);
 
 signals: // Signals
    void topChildChanged(QextMdiChildView*);
-	void closeActiveView();
-	void closeAllViews();
-	void iconifyAllViews();
-	void switchToToplevelMode();
-	void switchToChildframeMode();
    /** signalizes that the child frames are no longer maximized */
    void noLongerMaximized(QextMdiChildFrm*);
    /** signalizes that the child frames are maximized now*/
    void nowMaximized();
    void sysButtonConnectionsMustChange(QextMdiChildFrm*, QextMdiChildFrm*);
+   void popupWindowMenu( QPoint);
 };
 
 #endif   // _QEXTMDICHILDAREA_H_

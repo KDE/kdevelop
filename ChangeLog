@@ -1,3 +1,6 @@
+2000-03-03 Falk Brettschneider <gigafalk@yahoo.com>
+	* Windows menu contains also undocked MDI views now, change of the window-menu management 
+
 2000-02-23 Falk Brettschneider <gigafalk@yahoo.com>
 	* all QextMDI classes updated again with current cvs version (bugfixes, optimizations) 
 

@@ -59,9 +59,18 @@ QextMdiChildView::~QextMdiChildView()
 {
 }
 
+//============== external geometry ==============//
+
 QRect QextMdiChildView::externalGeometry()
 {
-	return mdiParent() ? mdiParent()->geometry() : geometry();
+   return mdiParent() ? mdiParent()->geometry() : geometry();
+}
+
+//============== set external geometry ==============//
+
+void QextMdiChildView::setExternalGeometry(const QRect& newGeomety)
+{
+   mdiParent() ? mdiParent()->setGeometry(newGeomety) : setGeometry(newGeomety);
 }
 
 //============== minimize ==============//
@@ -110,7 +119,7 @@ void QextMdiChildView::detach()
 bool QextMdiChildView::isMinimized()
 {
 	if(mdiParent())return (mdiParent()->state() == QextMdiChildFrm::Minimized);
-	else return isMinimized();
+   else return QWidget::isMinimized();
 }
 
 //============== isMaximized ? ==================//
@@ -181,34 +190,6 @@ QPixmap * QextMdiChildView::myIconPtr()
 {
 	return 0;
 }
-
-////================ applyOptions =================//
-//
-//void QextMdiChildView::applyOptions()
-//{
-//	//Nothing here
-//}
-//
-//=============== highlight =================//
-//
-//void QextMdiChildView::highlight()
-//{
-//F.B.	if(m_pTaskBarButton)m_pTaskBarButton->highlight();
-//}
-//
-//============ setProgress ==============//
-//
-//void QextMdiChildView::setProgress(int progress)
-//{
-//F.B.	if(m_pTaskBarButton)m_pTaskBarButton->setProgress(progress);
-//}
-//void QextMdiChildView::setProperties(QextMdiChildViewProperty *)
-//{
-//}
-//
-//void QextMdiChildView::saveProperties()
-//{
-//}
 
 //============= focusInEvent ===============//
 
@@ -356,3 +337,18 @@ void QextMdiChildView::setMDICaption (const QString& caption) {
   setCaption(caption);
   setTabCaption(caption);
 }
+
+/** sets an ID  */
+void QextMdiChildView::setWindowMenuID( int id)
+{
+	m_windowMenuID = id;
+}
+
+//============= slot_clickedInWindowMenu ===============//
+
+/** called if someone click on the "Window" menu item for this child frame window */
+void QextMdiChildView::slot_clickedInWindowMenu()
+{
+	emit clickedInWindowMenu( m_windowMenuID);
+}
+

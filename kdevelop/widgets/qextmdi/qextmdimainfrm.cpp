@@ -48,17 +48,12 @@
  #include "kde_closebutton.xpm"
 #endif
 
-//###########################################
-//
-// CREATION PROCESS
-//
-//###########################################
-
 //============ constructor ============//
 
 QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
 : QMainWindow( parentWidget, name, flags)
 	,m_pMdi(0)
+   ,m_pWindowMenu(0)
    ,m_pTaskBar(0)
 	,m_pWinList(0)
 	,m_pCurrentWindow(0)
@@ -81,30 +76,18 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
 	// Apply options for the MDI manager
 	applyOptions();
 
-	// No active window yet (when shown , the console should be the active one)
-//F.B.	updateCaption();
+	m_pTaskBarPopup=new QPopupMenu();
+	m_pWindowPopup=new QPopupMenu();
 
-	// Set the geometry
-//F.B.	setGeometry(g_pOptions->m_rectFrameGeometry); //does not work with KWM... ???
-
-	m_pTaskBarPopup=new QPopupMenu();   //F.B.
-	m_pWindowPopup=new QPopupMenu();    //F.B.
+	m_pWindowMenu = new QPopupMenu();
+	m_pWindowMenu->setCheckable( TRUE);
+	fillWindowMenu();
 }
 
 //============ applyOptions ============//
 void QextMdiMainFrm::applyOptions()
 {
-//F.B.	m_pMdi->setMdiCaptionInactiveBackColor(g_pOptions->m_clrMdiCaptionInactiveBack);
-//F.B.	m_pMdi->setMdiCaptionInactiveForeColor(g_pOptions->m_clrMdiCaptionInactiveFore);
-//F.B.	m_pMdi->setMdiCaptionActiveBackColor(g_pOptions->m_clrMdiCaptionActiveBack);
-//F.B.	m_pMdi->setMdiCaptionActiveForeColor(g_pOptions->m_clrMdiCaptionActiveFore);
-//F.B.	m_pMdi->setMdiCaptionFont(g_pOptions->m_fntMdiCaption);
-
-//F.B.	if(!g_pOptions->m_pixMdiBack->isNull())m_pMdi->setBackgroundPixmap(*(g_pOptions->m_pixMdiBack));
-//F.B.	else m_pMdi->setBackgroundColor(g_pOptions->m_clrMdiBack);
-
 	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
-//F.B.		w->applyOptions();
 		QWidget *wdgt = w;
 		if(w->mdiParent())wdgt =w->mdiParent();
 		// Really ugly hack to FORCE the resize event
@@ -119,52 +102,38 @@ void QextMdiMainFrm::createMdiManager()
 {
 	m_pMdi=new QextMdiChildArea(this);
 	setCentralWidget(m_pMdi);
-//	QObject::connect( m_pMdi, SIGNAL(topChildChanged(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
-	QObject::connect( m_pMdi, SIGNAL(closeActiveView()), this, SLOT(closeActiveView()) );
-	QObject::connect( m_pMdi, SIGNAL(closeAllViews()), this, SLOT(closeAllViews()) );
-	QObject::connect( m_pMdi, SIGNAL(iconifyAllViews()), this, SLOT(iconifyAllViews()) );
-	QObject::connect( m_pMdi, SIGNAL(switchToToplevelMode()), this, SLOT(switchToToplevelMode()) );
-	QObject::connect( m_pMdi, SIGNAL(switchToChildframeMode()), this, SLOT(switchToChildframeMode()) );
    QObject::connect( m_pMdi, SIGNAL(nowMaximized()), this, SLOT(setMaximizeModeOn()) );
    QObject::connect( m_pMdi, SIGNAL(noLongerMaximized(QextMdiChildFrm*)), this, SLOT(setMaximizeModeOff(QextMdiChildFrm*)) );
    QObject::connect( m_pMdi, SIGNAL(sysButtonConnectionsMustChange(QextMdiChildFrm*,QextMdiChildFrm*)), this, SLOT(updateSysButtonConnections(QextMdiChildFrm*,QextMdiChildFrm*)) );
+   QObject::connect( m_pMdi, SIGNAL(popupWindowMenu(QPoint)), this, SLOT(popupWindowMenu(QPoint)) );
 }
 
 //============ createTaskBar ==============//
 void QextMdiMainFrm::createTaskBar()
 {
-	m_pTaskBar = new QextMdiTaskBar(this,QMainWindow::Bottom);
-//F.B.	if(!g_pOptions->m_bTaskBarVisible)m_pTaskBar->hide();
-  m_pTaskBar->show();
+   m_pTaskBar = new QextMdiTaskBar(this,QMainWindow::Bottom);
+   m_pTaskBar->show();
 }
 
 void QextMdiMainFrm::slot_toggleTaskBar()
 {
 	if(m_pTaskBar->isVisible()){
 		m_pTaskBar->hide();
-//F.B.		g_pOptions->m_bTaskBarVisible = FALSE;
 	} else {
 		m_pTaskBar->show();
-//F.B.		g_pOptions->m_bTaskBarVisible = TRUE;
-	}
+   }
 }
 
 //============ ~QextMdiMainFrm ============//
 QextMdiMainFrm::~QextMdiMainFrm()
 {
-/*F.B.	// Save the last geometry
-	if(g_pOptions->m_bUseHackedFrameGeometry){
-		g_pOptions->m_rectFrameGeometry.moveTopLeft(frameGeometry().topLeft());
-		g_pOptions->m_rectFrameGeometry.setSize(size());
-	} else g_pOptions->m_rectFrameGeometry = geometry();
-F.B.*/
-	
 	// safely close the windows so properties are saved...
 	QextMdiChildView *pWnd = 0;
 	while((pWnd = m_pWinList->first()))closeWindow(pWnd, FALSE); // without re-layout taskbar!
 	delete m_pWinList;
    delete m_pTaskBarPopup;
    delete m_pWindowPopup;
+	delete m_pWindowMenu;
 }
 
 //============ closeEvent ============//
@@ -177,24 +146,26 @@ void QextMdiMainFrm::closeEvent(QCloseEvent *e)
 //================ addWindow ================//
 void QextMdiMainFrm::addWindow(QextMdiChildView *pWnd,bool bShow,bool bAttach)
 {
-  QObject::connect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool)), this, SLOT(attachWindow(QextMdiChildView*,bool)) );
-  QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
-  QObject::connect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
-  QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
-  
-  //The window can be added only once :)
-  m_pWinList->append(pWnd);
-  QextMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
-  // changed signal (mmorin)
-  QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
-  
-  if( bAttach) {
-    attachWindow( pWnd, bShow );
-  } else {
-    detachWindow( pWnd, bShow);
-  }			
-}
+   QObject::connect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool)), this, SLOT(attachWindow(QextMdiChildView*,bool)) );
+   QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
+   QObject::connect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
+   QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
+	QObject::connect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(menuActivated(int)) );
 
+   //The window can be added only once :)
+   m_pWinList->append(pWnd);
+   QextMdiTaskBarButton* but = m_pTaskBar->addWinButton(pWnd);
+   // changed signal (mmorin)
+   QObject::connect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
+  
+   if( bAttach) {
+      attachWindow( pWnd, bShow );
+      } else {
+      detachWindow( pWnd, bShow);
+   }
+   fillWindowMenu();
+}
+	
 //============ attachWindow ============//
 void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 {
@@ -267,9 +238,9 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 	QObject::disconnect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
 	QObject::disconnect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
 	QObject::disconnect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
+	QObject::disconnect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(menuActivated(int)) );
 	
 	//Closes a child window. sends no close event : simply deletes it
-//F.B.	pWnd->saveProperties();
 	m_pWinList->removeRef(pWnd);
 	
 	QextMdiTaskBarButton* but = m_pTaskBar->getButton(pWnd);
@@ -278,6 +249,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 	m_pTaskBar->removeWinButton(pWnd);
 	
 	if(pWnd->isAttached())m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
+	fillWindowMenu();
 }
 
 //============== closeWindow ==============//
@@ -289,7 +261,6 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 	QObject::disconnect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
 	
 	//Closes a child window. sends no close event : simply deletes it
-//F.B.	pWnd->saveProperties();
 	m_pWinList->removeRef(pWnd);
 	if( m_pWinList->count() == 0)
 		m_pCurrentWindow = 0;
@@ -301,6 +272,7 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 	
 	if(pWnd->isAttached())m_pMdi->destroyChild(pWnd->mdiParent());
 	else delete pWnd;
+	fillWindowMenu();
 }
 
 //================== findWindow =================//
@@ -317,6 +289,7 @@ QextMdiChildView * QextMdiMainFrm::activeWindow()
 {
 	return m_pCurrentWindow;
 }
+
 //================== windowExists ? =================//
 bool QextMdiMainFrm::windowExists(QextMdiChildView *pWnd)
 {
@@ -351,11 +324,9 @@ QPopupMenu * QextMdiMainFrm::taskBarPopup(QextMdiChildView *pWnd,bool bIncludeWi
 	} else m_pTaskBarPopup->insertItem(tr("Dock"),pWnd,SLOT(attach()));
 	m_pTaskBarPopup->insertSeparator();
 	m_pTaskBarPopup->insertItem(tr("Close"),pWnd,SLOT(close()));
-//F.B.	if(pWnd->m_pView && bIncludeWindowPopup){
-		// the window has a view...get the window popup
-		m_pTaskBarPopup->insertSeparator();
-		m_pTaskBarPopup->insertItem(tr("Operations"),windowPopup(pWnd,FALSE));  //alvoid recursion
-//F.B.	}
+   // the window has a view...get the window popup
+	m_pTaskBarPopup->insertSeparator();
+	m_pTaskBarPopup->insertItem(tr("Operations"),windowPopup(pWnd,FALSE));  //alvoid recursion
 	return m_pTaskBarPopup;
 	bIncludeWindowPopup = FALSE; // dummy!, only to avoid "unused parameter"
 }
@@ -369,38 +340,32 @@ void QextMdiMainFrm::switchWindows(bool bRight)
 	bRight = FALSE; // dummy!, only to avoid "unused parameter"
 }
 
-//void QextMdiMainFrm::pushNewTaskBarButton( QextMdiChildView* pWnd)
-//{
-//// TODO: if maximised --> exchange sys menu buttons
-//   m_pCurrentWindow = pWnd;
-//   taskbarButtonLeftClicked( m_pCurrentWindow);
-//}
-
 void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
 {
-  // these showld go first
-  m_pCurrentWindow = pWnd;
-  m_pTaskBar->setActiveButton(pWnd);
+   // these showld go first
+   m_pCurrentWindow = pWnd;
+   m_pTaskBar->setActiveButton(pWnd);
 
-  if(pWnd->isAttached()){
-    if( !(pWnd->hasFocus()) ) {
-      // this should go out of here
-      // (mmorin)
-      if( m_pCurrentWindow->isMaximized()) {
-	updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
+   if(pWnd->isAttached()){
+      if( !(pWnd->hasFocus()) ) {
+         // this should go out of here
+         // (mmorin)
+         if( m_pCurrentWindow->isMaximized()) {
+            updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
+         }
       }
-      pWnd->setFocus();
-    }
-  }
-  else {
-    // this was the one not too cool
-    // see here you are not doing anything if it is maximize...
-    if(!pWnd->hasFocus() || !pWnd->isActiveWindow()) {
-      pWnd->show();
-      pWnd->raise();
-      pWnd->setActiveWindow();
-    }
-  }	
+   }
+   else {
+      // this was the one not too cool
+      // see here you are not doing anything if it is maximize...
+      if(!pWnd->hasFocus() || !pWnd->isActiveWindow()) {
+         pWnd->show();
+         pWnd->raise();
+         pWnd->setActiveWindow();
+      }
+   }	
+   fillWindowMenu();
+   pWnd->setFocus();
 }
 
 void QextMdiMainFrm::taskbarButtonRightClicked(QextMdiChildView *pWnd)
@@ -640,4 +605,84 @@ void QextMdiMainFrm::showViewTaskBar()
 void QextMdiMainFrm::hideViewTaskBar()
 {
    m_pTaskBar->hide();
+}
+
+//=============== fillWindowMenu ===============//
+void QextMdiMainFrm::fillWindowMenu()
+{
+	m_pWindowMenu->clear();
+	m_pWindowMenu->insertItem(tr("&Close"), this, SLOT(closeActiveView()));
+	m_pWindowMenu->insertItem(tr("Close &All"), this, SLOT(closeAllViews()));
+	m_pWindowMenu->insertItem(tr("&Iconify All"), this, SLOT(iconifyAllViews()));
+	m_pWindowMenu->insertSeparator();
+	m_pWindowMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
+	m_pWindowMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
+	m_pWindowMenu->insertItem(tr("Expand &vertical"), m_pMdi,SLOT(expandVertical()));
+	m_pWindowMenu->insertItem(tr("Expand &horizontal"), m_pMdi,SLOT(expandHorizontal()));
+	m_pWindowMenu->insertItem(tr("A&nodine's tile"), m_pMdi,SLOT(tileAnodine()));
+	m_pWindowMenu->insertItem(tr("&Pragma's tile"), m_pMdi,SLOT(tilePragma()));
+	m_pWindowMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+	m_pWindowMenu->insertSeparator();
+	m_pWindowMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
+	m_pWindowMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
+	m_pWindowMenu->insertSeparator();
+
+	// for all child frame windows: give an ID to every window and connect them in the end with menuActivated()
+	int i=100;
+	for(QextMdiChildView *pView=m_pWinList->first();pView;pView=m_pWinList->next())
+	{
+      QString item;
+      // set titles of minimized windows in brackets
+      if( pView->isMinimized()) {
+         item += "(";
+         item += pView->caption();
+         item += ")";
+		}
+		else {
+         item += " ";
+         item += pView->caption();
+       }
+
+      // insert the window entry sorted in alphabetical order
+      unsigned int indx;
+      unsigned int windowItemCount = m_pWindowMenu->count() - 15;
+      bool inserted = FALSE;
+      QString tmpString;
+      for( indx = 0; indx <= windowItemCount; indx++) {
+         tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+15));
+         if( tmpString.right( tmpString.length()-2) > item.right( item.length()-2)) {
+            m_pWindowMenu->insertItem( item, pView, SLOT( slot_clickedInWindowMenu()), 0, -1, indx+15);
+            if( pView == m_pCurrentWindow)
+               m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+15), TRUE);
+            pView->setWindowMenuID( i);
+            inserted = TRUE;
+            indx = windowItemCount+1;	// break the loop
+         }
+      }
+      if( !inserted) {	// append it
+         m_pWindowMenu->insertItem( item, pView, SLOT( slot_clickedInWindowMenu()), 0, -1, windowItemCount+15);
+     	   if( pView == m_pCurrentWindow)
+            m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+15), TRUE);
+         pView->setWindowMenuID( i);
+      }
+      i++;
+   }
+}
+
+//================ menuActivated ===============//
+
+void QextMdiMainFrm::menuActivated(int id)
+{
+	if( id < 100) return;
+	id -= 100;
+	QextMdiChildView *pView = m_pWinList->at( id);
+	if( !pView) return;
+	if( pView->isMinimized()) pView->minimize();
+	if( (pView == m_pWinList->last()) && pView->isAttached()) return;
+	activateView( pView);
+}
+
+void QextMdiMainFrm::popupWindowMenu(QPoint p)
+{
+   m_pWindowMenu->popup( p);
 }

@@ -69,6 +69,7 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public QMainWindow
 // attributes
 public:
 	QextMdiChildArea        *m_pMdi;
+	QPopupMenu              *m_pWindowMenu;
 
 protected:	
 	QextMdiTaskBar          *m_pTaskBar;
@@ -120,6 +121,12 @@ public:
     }
   }
 
+   /**
+    * Returns a popup menu that contains the MDI controlled view list.
+    * Additionally, this menu provides some placing actions for these views.
+    */
+   QPopupMenu* windowMenu() { return m_pWindowMenu; };
+
 public slots:
    /**
     * One of the most important methods at all!
@@ -153,8 +160,6 @@ public slots:
     */
 	virtual void detachWindow(QextMdiChildView *pWnd,bool bShow=TRUE);
 	virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
-	/** ... */
-///	virtual void childWindowGainFocus(QextMdiChildView *pWnd);
    /** close all views */
    virtual void closeAllViews();
    /** iconfiy all views */
@@ -172,10 +177,14 @@ public slots:
      * at the upper right-hand side of the main widget.
      */
    virtual void setMenuForSDIModeSysButtons( QMenuBar* = 0);
-  /** Shows the view taskbar. This should be connected with your "View" menu. */
-  void showViewTaskBar();
-  /** Hides the view taskbar. This should be connected with your "View" menu. */
-  void hideViewTaskBar();
+   /** Shows the view taskbar. This should be connected with your "View" menu. */
+   void showViewTaskBar();
+   /** Hides the view taskbar. This should be connected with your "View" menu. */
+   void hideViewTaskBar();
+   /**
+   * Forces the update of the window menu.
+   */
+   void fillWindowMenu();
 
 protected:
 	virtual void closeEvent(QCloseEvent *e);
@@ -183,26 +192,17 @@ protected:
 	virtual void createTaskBar();
 	virtual void createMdiManager();
 
-   /**
-    * Returns a popup menu that contains the MDI controlled view list.
-    * Additionally, this menu provides some placing actions for these views.
-    */
-   QPopupMenu* windowMenu() { return m_pMdi->m_pWindowMenu; };
-
 protected slots: // Protected slots
 	virtual void activateView(QextMdiChildView *pWnd);
 	virtual void taskbarButtonRightClicked(QextMdiChildView *pWnd);
-   /**
-    * For internal use. Called when a taskbar button must be pushed.
-    * Usually, if its view raises.
-    */
-	//virtual void pushNewTaskBarButton(QextMdiChildView* pWnd);
    /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
    void setMaximizeModeOn();
    /** turns the system buttons for maximize mode (SDI mode) off, and disconnects them */
    void setMaximizeModeOff( QextMdiChildFrm* oldChild);
    /** reconnects the system buttons form maximize mode (SDI mode) with the new child frame */
    void updateSysButtonConnections( QextMdiChildFrm* oldChild, QextMdiChildFrm* newChild);
+   void menuActivated(int id);
+   void popupWindowMenu(QPoint p);
 };
 
 #endif //_QEXTMDIMAINFRM_H_

@@ -57,6 +57,8 @@ protected:		// Fields
 	QWidget*    m_focusedChildWidget;
 	QWidget*    m_firstFocusableChildWidget;
 	QWidget*    m_lastFocusableChildWidget;
+   /** every child view window has an temporary ID in the Window menu of the main frame. */
+   int 				m_windowMenuID;
 
 public:     // Methods
 	/**
@@ -113,6 +115,10 @@ public:     // Methods
 	 * Returns the geometry of this window or of the parent if there is any...
 	 */
 	QRect externalGeometry();
+	/**
+	 * Sets the geometry of this window or of the parent if there is any...
+	 */
+	void setExternalGeometry(const QRect& newGeomety);
 	//Methods to override ABSOLUTELY
 	/**
 	 * You SHOULD override this function in the derived class<br>
@@ -137,7 +143,8 @@ public:     // Methods
      * Switches interposing in event loop of all current child widgets off.
      */
    void removeEventFilterForAllChildren();
-	
+   /** sets an ID  */
+   void setWindowMenuID( int id);
 public slots:
 	/**
 	 * Attaches this window to the Mdi manager.<br>
@@ -162,8 +169,10 @@ public slots:
 	virtual void restore();    //Useful only when attached
 	virtual void youAreAttached(QextMdiChildFrm *lpC);
 	virtual void youAreDetached();
+   /** called if someone click on the "Window" menu item for this child frame window */
+   void slot_clickedInWindowMenu();
 
- protected:	// Protected methods
+protected:	// Protected methods
 	/**
 	 * Ignores the event and calls QextMdiMainFrm::childWindowCloseRequest
 	 * @see QextMdiMainFrm::childWindowCloseRequest
@@ -172,20 +181,22 @@ public slots:
    virtual bool eventFilter(QObject *obj, QEvent *e);
    virtual void focusInEvent(QFocusEvent *);
 	
- signals:
-	void attachWindow( QextMdiChildView*,bool);
-	void detachWindow( QextMdiChildView*,bool);
-	void focusInEventOccurs( QextMdiChildView*);
-	void childWindowCloseRequest( QextMdiChildView*);
+signals:
+   void attachWindow( QextMdiChildView*,bool);
+   void detachWindow( QextMdiChildView*,bool);
+   void focusInEventOccurs( QextMdiChildView*);
+   void childWindowCloseRequest( QextMdiChildView*);
 	
-  /** signal emitted when the window caption is changed via setCaption() or setMDICaption() */
-  void windowCaptionChanged( const QString&);
+   /** signal emitted when the window caption is changed via setCaption() or setMDICaption() */
+   void windowCaptionChanged( const QString&);
 
-  /** signal emitted  when the window caption is changed via setTabCaption() or setMDICaption() */
-  void tabCaptionChanged( const QString&);
+   /** signal emitted  when the window caption is changed via setTabCaption() or setMDICaption() */
+   void tabCaptionChanged( const QString&);
   
-	void mdiParentNowMaximized();
-	void mdiParentNoLongerMaximized(QextMdiChildFrm*);
+   void mdiParentNowMaximized();
+   void mdiParentNoLongerMaximized(QextMdiChildFrm*);
+   /** is automatically emitted when slot_clickedInWindowMenu is called */
+   void clickedInWindowMenu(int);
 };
 
 inline bool QextMdiChildView::isAttached(){ return (parent() != 0); }

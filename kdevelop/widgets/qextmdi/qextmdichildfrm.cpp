@@ -155,9 +155,6 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    setMouseTracking(TRUE);
    setMinimumSize(QSize(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH,QEXTMDI_MDI_CHILDFRM_MIN_HEIGHT));
 
-	QObject::connect( this, SIGNAL(clickedInWindowMenu(int)),
-                     m_pManager, SLOT(menuActivated(int)) );
-
    m_pSystemMenu = new QPopupMenu();
 }
 
@@ -511,7 +508,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
 void QextMdiChildFrm::setCaption(const QString& text)
 {
 	m_pCaption->setCaption(text);
-	m_pManager->fillWindowMenu();
+//!!!!   m_pManager->fillWindowMenu();
 }
 
 //============ enableClose ==============//
@@ -816,20 +813,6 @@ void QextMdiChildFrm::raiseAndActivate()
    //qDebug("ChildFrm::raiseAndActivate");
    m_pCaption->setActive(TRUE);
    m_pManager->setTopChild(this,FALSE); //Do not focus by now...
-}
-
-//============= slot_clickedInWindowMenu ===============//
-
-/** called if someone click on the "Window" menu item for this child frame window */
-void QextMdiChildFrm::slot_clickedInWindowMenu()
-{
-	emit clickedInWindowMenu( m_windowMenuID);
-}
-
-/** sets an ID that is submitted to QextMdiChildArea::activate( int) when the menu item for this child frame was clicked */
-void QextMdiChildFrm::setWindowMenuID( int id)
-{
-	m_windowMenuID = id;
 }
 
 QPopupMenu* QextMdiChildFrm::systemMenu()

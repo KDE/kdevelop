@@ -50,10 +50,6 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
 	m_pZ = new QList<QextMdiChildFrm>;
 	m_pZ->setAutoDelete(TRUE);
 	setFocusPolicy(ClickFocus);
-	m_pWindowMenu = new QPopupMenu();
-	m_pWindowMenu->setCheckable( TRUE);
-	//QObject::connect(m_pWindowMenu,SIGNAL(activated(int)),this,SLOT(menuActivated(int)));
-	fillWindowMenu();
 }
 
 void QextMdiChildArea::setMdiCaptionFont(const QFont &fnt)
@@ -75,7 +71,6 @@ void QextMdiChildArea::setMdiCaptionInactiveBackColor(const QColor &clr)
 
 QextMdiChildArea::~QextMdiChildArea()
 {
-	delete m_pWindowMenu;
 	delete m_pZ; //This will destroy all the widgets inside.
 }
 
@@ -100,7 +95,6 @@ void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade
 		}
 		lpC->show();
 	}
-	fillWindowMenu();
 	focusTopChild();  //F.B.
 	//if(bShow) lpC->setFocus();
 }
@@ -132,7 +126,6 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 	QextMdiChildFrm* pTopChild = 0;
 	if( bWasMaximized && (pTopChild = topChild()) )
       emit nowMaximized();	
-	fillWindowMenu();
 }
 
 //============ destroyChildButNotItsView ============//
@@ -158,7 +151,6 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
 	QextMdiChildFrm* pTopChild = 0;
 	if( bWasMaximized && (pTopChild = topChild()) )
       emit nowMaximized();	
-	fillWindowMenu();
 }
 
 //============= setTopChlid ============//
@@ -185,7 +177,6 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
 		if(bSetFocus){
 			if(!lpC->hasFocus())lpC->setFocus();
 		}
-		fillWindowMenu();
 		///emit topChildChanged( lpC->m_pClient);
 		lpC->m_pClient->setFocus();
 	}
@@ -212,7 +203,8 @@ void QextMdiChildArea::resizeEvent(QResizeEvent *e)
 void QextMdiChildArea::mousePressEvent(QMouseEvent *e)
 {
 	//Popup the window menu
-	if(e->button() & RightButton)m_pWindowMenu->popup(mapToGlobal(e->pos()));
+	if(e->button() & RightButton)
+      emit popupWindowMenu( mapToGlobal( e->pos()));
 }
 
 //=============== getCascadePoint ============//
@@ -238,91 +230,6 @@ QPoint QextMdiChildArea::getCascadePoint(int indexOfWindow)
 	return pnt;
 }
 
-//=============== fillWindowMenu ===============//
-#include "iostream.h"
-void QextMdiChildArea::fillWindowMenu()
-{
-	m_pWindowMenu->clear();
-	m_pWindowMenu->insertItem(tr("&Close"),this, SIGNAL(closeActiveView()));
-	m_pWindowMenu->insertItem(tr("Close &All"), this, SIGNAL(closeAllViews()));
-	m_pWindowMenu->insertItem(tr("&Iconify All"), this, SIGNAL(iconifyAllViews()));
-	m_pWindowMenu->insertSeparator();
-	m_pWindowMenu->insertItem(tr("Ca&scade windows"),this,SLOT(cascadeWindows()));
-	m_pWindowMenu->insertItem(tr("Cascade &maximized"),this,SLOT(cascadeMaximized()));
-	m_pWindowMenu->insertItem(tr("Expand &vertical"),this,SLOT(expandVertical()));
-	m_pWindowMenu->insertItem(tr("Expand &horizontal"),this,SLOT(expandHorizontal()));
-	m_pWindowMenu->insertItem(tr("A&nodine's tile"),this,SLOT(tileAnodine()));
-	m_pWindowMenu->insertItem(tr("&Pragma's tile"),this,SLOT(tilePragma()));
-	m_pWindowMenu->insertItem(tr("Tile v&ertically"),this,SLOT(tileVertically()));
-	m_pWindowMenu->insertSeparator();
-	m_pWindowMenu->insertItem(tr("&Toplevel mode"),this, SIGNAL(switchToToplevelMode()));
-	m_pWindowMenu->insertItem(tr("C&hildframe mode"), this, SIGNAL(switchToChildframeMode()));
-	m_pWindowMenu->insertSeparator();
-
-	// for all child frame windows: give an ID to every window and connect them in the end with menuActivated()
-	int i=100;
-	bool isTheActiveOne;
-	for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next())
-	{
-	   isTheActiveOne = FALSE;
-		QString szItem;
-		//szItem.setNum(((uint)i)-99);
-		//szItem+=". ";
-		if(lpC->m_state==QextMdiChildFrm::Minimized){
-			szItem+="(";
-			szItem+=lpC->caption();
-			szItem+=")";
-		}
-		else
-			if(((uint)i)==(m_pZ->count()+99)){ //Active item :)
-				szItem+=" ";
-				szItem+=lpC->caption();
-				isTheActiveOne = TRUE;
-			}
-			else {
-				szItem+=" ";
-				szItem+=lpC->caption();
-			}
-
-		// insert the window entry sorted in alphabetical order
-		unsigned int indx;
-		unsigned int windowItemCount = m_pWindowMenu->count() - 15;
-		bool inserted = FALSE;
-		QString tmpString;
-		for( indx = 0; indx <= windowItemCount; indx++) {
-			tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+15));
-			if( tmpString.right( tmpString.length()-2) > szItem.right( szItem.length()-2)) {
-				m_pWindowMenu->insertItem(szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,indx+15);
-      		if( isTheActiveOne)
-      		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+15), TRUE);
-				lpC->setWindowMenuID( i);
-				inserted = TRUE;
-				indx = windowItemCount+1;	// break the loop
-			}
-		}
-		if( !inserted) {	// append it
-			m_pWindowMenu->insertItem( szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,windowItemCount+15);
-     		if( isTheActiveOne)
-     		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+15), TRUE);
-			lpC->setWindowMenuID( i);
-		}
-		i++;
-	}
-}
-
-//================ menuActivated ===============//
-
-void QextMdiChildArea::menuActivated(int id)
-{
-	if(id<100)return;
-	id-=100;
-	QextMdiChildFrm *lpC=m_pZ->at(id);
-	if(!lpC)return;
-	if(lpC->m_state==QextMdiChildFrm::Minimized)lpC->minimizePressed();
-	if(lpC==m_pZ->last())return;
-	setTopChild(lpC,TRUE);
-}
-
 //================ childMinimized ===============//
 
 void QextMdiChildArea::childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized)
@@ -344,7 +251,6 @@ void QextMdiChildArea::childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized)
 	} else {
 		setFocus(); //Remove focus from the child
 	}
-	fillWindowMenu();
 }
 
 //============= focusTopChild ===============//

@@ -101,7 +101,7 @@ protected:
    QPixmap        *m_pRestoreButtonPixmap;
    QPixmap        *m_pCloseButtonPixmap;
    QPixmap        *m_pUndockButtonPixmap;
-   /** every child frame window has an temporary ID in the Window menu of the main frame. */
+   /** every child frame window has an temporary ID in the Window menu of the child area. */
    int 				m_windowMenuID;
    /** imitates a system menu for child frame windows */
    QPopupMenu     *m_pSystemMenu;
@@ -160,21 +160,15 @@ public:
 	* Cool to have it inline...
 	*/
 	inline MdiWindowState state(){ return m_state; };
-//	virtual void hide(){ setState(Minimized,FALSE); };
-//	virtual void show(){ setState(Normal,FALSE); };
 	/**
 	* Forces updating the rects of the caption and so...
 	* It may be useful when setting the mdiCaptionFont of the MdiManager
 	*/
 	void updateRects(){ resizeEvent(0); };
-   /** sets an ID that is submitted to QextMdiChildArea::menuActivated( int) when the menu item for this child frame was clicked */
-   void setWindowMenuID( int id);
    /** Returns the system menu. */
    QPopupMenu* systemMenu();
 
 public slots: // Public slots
-   /** called if someone click on the "Window" menu item for this child frame window */
-   void slot_clickedInWindowMenu();
    void slot_resizeViaSystemMenu();
 
 protected:
@@ -203,10 +197,6 @@ private:
 	void linkChildren( QDict<FocusPolicy>* pFocPolDict);
 	QDict<QWidget::FocusPolicy>* unlinkChildren();
 	int getResizeCorner(int ax,int ay);
-
-signals: // Signals
-   /** is automatically emitted when slot_clickedInWindowMenu is called */
-   void clickedInWindowMenu(int);
 };
 
 
