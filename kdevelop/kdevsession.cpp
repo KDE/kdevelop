@@ -271,7 +271,7 @@ void KDevSession::recreateDocs(QDomElement& el){
 //          }
           // views
           recreateViews( pDoc, docEl);
-          if (pDoc->getViewCount() == 0)
+          if (pDoc->views().count() == 0)
             m_pDocViewMan->closeKWriteDoc(pDoc);
         }
       }
@@ -348,7 +348,7 @@ void KDevSession::recreateViews( QObject* pDoc, QDomElement docEl)
     int line = docEl.attribute( "CursorPosLine", "-1").toInt();
     int col  = docEl.attribute( "CursorPosCol", "0").toInt();
     if (pDoc && (line != -1)) {
-      Kate::View* pKWrite = ((Kate::Document*)pDoc)->getFirstView();
+      Kate::View* pKWrite = dynamic_cast<Kate::View*>(((Kate::Document*)pDoc)->views().getFirst());
       if (pKWrite) {
          pKWrite->setCursorPosition(line, col);
       }
@@ -505,15 +505,15 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
           docsAndViewsEl.clear();
         
   if (m_pDocViewMan->docCount() > 0) {
-    QList<KWriteDoc> kWriteDocList = m_pDocViewMan->getKWriteDocList();
+    QList<Kate::Document> kWriteDocList = m_pDocViewMan->getKWriteDocList();
     for (kWriteDocList.first(); kWriteDocList.current() != 0; kWriteDocList.next()) {
-      KWriteDoc* pDoc = kWriteDocList.current();
-      if (!pDoc->fileName()) {
+      Kate::Document* pDoc = kWriteDocList.current();
+      if (!pDoc->docName()) {
         // TODO: ask for filename
       }
       docIdStr.setNum(nDocs);
       QDomElement docEl = domdoc.createElement("Doc" + docIdStr);
-      docEl.setAttribute( "FileName", pDoc->fileName());
+      docEl.setAttribute( "FileName", pDoc->docName());
       docsAndViewsEl.appendChild( docEl);
       // save the document itself
 //???         if (pDoc->bIsModified())
@@ -521,21 +521,21 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
 //???            pDoc->saveFile(docFileName, 0L, "Synchronization");
       docEl.setAttribute( "Type", "KWriteDoc");
       // get the view list
-      QList<KWriteView> viewList = pDoc->viewList();
+      QPtrList<KTextEditor::View> viewList = pDoc->views();
       // write the number of views
       docEl.setAttribute( "NumberOfViews", viewList.count());
       // loop over all views of this document
       int nView;
-      KWriteView* pView = 0L;
+      Kate::View* pView = 0L;
       QString viewIdStr;
       for (viewList.first(), nView = 0; viewList.current() != 0; viewList.next(), nView++) {
-        pView = viewList.current();
+        pView = dynamic_cast<Kate::View*>(viewList.current());
         if (pView != 0L) {
           viewIdStr.setNum( nView);
           QDomElement viewEl = domdoc.createElement( "View"+viewIdStr);
           docEl.appendChild( viewEl);
           // focus?
-          viewEl.setAttribute("Focus", (((CEditWidget*)pView->parentWidget()) == m_pDocViewMan->currentEditView()));
+          viewEl.setAttribute("Focus", (((Kate::View*)pView->parentWidget()) == m_pDocViewMan->currentEditView()));
           viewEl.setAttribute("Type", "KWriteView");
           // save geometry of current view
           saveViewGeometry( pView->parentWidget(), viewEl);
@@ -543,9 +543,11 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
       }
       // save cursor position of current view
       if (pView) {
-        QPoint cursorPos(pView->cursorPosition());
-        docEl.setAttribute("CursorPosCol", cursorPos.x());
-        docEl.setAttribute("CursorPosLine", cursorPos.y());
+        uint cursorPosX, cursorPosY;
+        pView->cursorPosition(&cursorPosX, &cursorPosY);
+        //QPoint cursorPos(pView->cursorPosition());
+        docEl.setAttribute("CursorPosCol", cursorPosX);
+        docEl.setAttribute("CursorPosLine", cursorPosY);
       }
     }
     QList<CDocBrowser> kDocBrowserList = m_pDocViewMan->getDocBrowserList();
