@@ -59,18 +59,90 @@ QextMdiChildView::~QextMdiChildView()
 {
 }
 
+//============== internal geometry ==============//
+
+QRect QextMdiChildView::internalGeometry()
+{
+   if (mdiParent()) {
+      // get the client area coordinates inside the MDI child frame
+      QRect    posInFrame = geometry();
+      // map these values to the parent of the MDI child frame 
+      // (this usually is the MDI child area) and return
+      QPoint   ptTopLeft     = mdiParent()->mapToParent(posInFrame.topLeft());
+      QPoint   ptBottomRight = mdiParent()->mapToParent(posInFrame.bottomRight());
+      return QRect(ptTopLeft, ptBottomRight);
+   }
+   else {
+      return geometry();
+   }
+}
+
+//============== set internal geometry ==============//
+
+void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
+{
+   if (mdiParent()) {
+      // retrieve the frame size
+      QRect    geo      = internalGeometry();
+      QRect    frameGeo = externalGeometry();
+      int      nFrameSizeTop  = geo.y() - frameGeo.y();
+      int      nFrameSizeLeft = geo.x() - frameGeo.x();
+
+      // create the new geometry that is accepted by the QWidget::setGeometry() method
+      QRect    newGeoQt;
+      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
+      newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
+      newGeoQt.setWidth(newGeometry.width()+frameGeo.width()-geo.width());
+      newGeoQt.setHeight(newGeometry.height()+frameGeo.height()-geo.height());
+
+      // set the geometry
+      mdiParent()->setGeometry(newGeoQt);
+   }
+   else {
+      // retrieve the frame size
+      QRect    geo      = internalGeometry();
+      QRect    frameGeo = externalGeometry();
+      int      nFrameSizeTop  = geo.y() - frameGeo.y();
+      int      nFrameSizeLeft = geo.x() - frameGeo.x();
+
+      // create the new geometry that is accepted by the QWidget::setGeometry() method
+      QRect    newGeoQt;
+      newGeoQt.setX(newGeometry.x()-nFrameSizeLeft);
+      newGeoQt.setY(newGeometry.y()-nFrameSizeTop);
+      newGeoQt.setWidth(newGeometry.width());
+      newGeoQt.setHeight(newGeometry.height());
+
+      // set the geometry
+      setGeometry(newGeoQt);
+   }
+}
+
 //============== external geometry ==============//
 
 QRect QextMdiChildView::externalGeometry()
 {
-   return mdiParent() ? mdiParent()->geometry() : geometry();
+   return mdiParent() ? mdiParent()->frameGeometry() : frameGeometry();
 }
 
 //============== set external geometry ==============//
 
-void QextMdiChildView::setExternalGeometry(const QRect& newGeomety)
+void QextMdiChildView::setExternalGeometry(const QRect& newGeometry)
 {
-   mdiParent() ? mdiParent()->setGeometry(newGeomety) : setGeometry(newGeomety);
+   // retrieve the frame size
+   QRect    geo      = internalGeometry();
+   QRect    frameGeo = externalGeometry();
+   int      nTotalFrameWidth = frameGeo.width() - geo.width();
+   int      nTotalFrameHeight = frameGeo.height() - geo.height();
+
+   // create the new geometry that is accepted by the QWidget::setGeometry() method
+   QRect    newGeoQt;
+   newGeoQt.setX(newGeometry.x());
+   newGeoQt.setY(newGeometry.y());
+   newGeoQt.setWidth(newGeometry.width()-nTotalFrameWidth);
+   newGeoQt.setHeight(newGeometry.height()-nTotalFrameHeight);
+
+   // set the geometry
+   mdiParent() ? mdiParent()->setGeometry(newGeoQt) : setGeometry(newGeoQt);
 }
 
 //============== minimize ==============//
@@ -382,4 +454,13 @@ void QextMdiChildView::setMaximumSize( int maxw, int maxh)
                                    maxh + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER
                                         + QEXTMDI_MDI_CHILDFRM_SEPARATOR
                                         + mdiParent()->captionHeight());
+}
+
+//============= show ===============//
+
+void QextMdiChildView::show()
+{
+   if( mdiParent() != 0L)
+      mdiParent()->show();
+   QWidget::show();
 }
