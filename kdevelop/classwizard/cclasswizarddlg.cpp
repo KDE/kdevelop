@@ -89,7 +89,8 @@ void CClassWizardDlg::setInitialClass( const char *aClassName )
 {
   assert( aClassName != NULL && strlen( aClassName ) > 0 );
 
-  initialClass = aClassName;
+	// Jonas- commented this as initialClass is not declared -Ralf
+//  initialClass = aClassName;
 }
 
 /*********************************************************************
@@ -104,3 +105,5 @@ void CClassWizardDlg::slotAddMethod( const char *aClassName,
 {
   emit addMethod( aClassName, aMethod );
 }
+
+

@@ -59,12 +59,12 @@ dist=true
 install=false
 type=SOURCE
 [Workspace_1]
-openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/docs/en/Makefile.am,
-show_outputview=false
+openfiles=Untitled.h,Untitled.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/coutputwidget.h,
+show_outputview=true
 show_treeview=true
-header_file=/home/rnolden/Development/kdevelop/kdevelop/docs/en/Makefile.am
+header_file=/home/rnolden/Development/kdevelop/kdevelop/coutputwidget.h
 cpp_file=/home/rnolden/Development/kdevelop/kdevelop/main.cpp
-browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/tutorial.html
+browser_file=file:/home/rnolden/Development/Qt2/qt/html/index.html
 [kdevelop/kwrite/kwdoc.cpp]
 install_location=
 dist=true
