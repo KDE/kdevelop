@@ -48,7 +48,7 @@ CopyToPart::CopyToPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin("copyto", "copyto", parent, name ? name : "CopyToPart" )
 {
 	setInstance(CopyToFactory::instance());
-	setXMLFile("kdevpart_copyto.rc");
+//	setXMLFile("kdevpart_copyto.rc");
 
 	connect( core(), SIGNAL(contextMenu(QPopupMenu*, const Context* )), this, SLOT(contextMenu(QPopupMenu*, const Context* )) );  
 }
