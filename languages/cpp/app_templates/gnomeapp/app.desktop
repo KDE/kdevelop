@@ -5,6 +5,6 @@ Name[xx]=xx%{APPNAME}xx
 Comment=
 Comment[xx]=xxxx
 Exec=%{APPNAMELC}
-Icon=%{APPNAMELC}-logo.png
+Icon=%{APPNAMELC}-logo
 Terminal=0
 Type=Application

@@ -2310,19 +2310,19 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         if (!fitem->uiFileLink.isEmpty())
         {
-          idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-Subclass..."));
+          idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Edit ui-Subclass..."));
           popup.setWhatsThis(idUpdateWidgetclass, i18n("<b>Edit ui-subclass</b><p>Launches <b>Subclassing</b> wizard "
                            "and prompts to implement missing in childclass slots and functions."));
         }
         if(fitem->name.contains(".ui"))
         {
-	  idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass Widget..."));
+	  idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclass Widget..."));
           popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));
-	  idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
+	  idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h"),i18n("Open ui.h File"));
           popup.setWhatsThis(idViewUIH, i18n("<b>Open ui.h file</b><p>Opens .ui.h file associated with the selected .ui."));
-	  idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
+	  idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("List of Subclasses..."));
           popup.setWhatsThis(idUISubclasses, i18n("<b>List of subclasses</b><p>Shows subclasses list editor. "
                            "There is possibility to add or remove subclasses from the list."));
         }
@@ -3305,7 +3305,7 @@ void TrollProjectWidget::focusInEvent( QFocusEvent */*e*/ )
         case SubprojectView:
         default:
             overview->setFocus();
-    }    
+    }
 }
 
 void TrollProjectWidget::setLastFocusedView( TrollProjectView view )
