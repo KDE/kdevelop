@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "specsupport.h"
-#include "specsupport.moc"
 #include "kdevproject.h"
 #include "kdevmakefrontend.h"
 #include "distpart_widget.h"
