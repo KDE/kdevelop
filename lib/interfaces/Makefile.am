@@ -17,4 +17,4 @@ EXTRA_DIST = newlanguage.dox.h
 
 METASOURCES = AUTO
 
-libkdevinterfaces_la_LIBADD = $(top_builddir)/lib/widgets/propeditor/libpropertyeditor.la
+

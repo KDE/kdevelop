@@ -1,58 +1,101 @@
-/* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
-
+/***************************************************************************
+ *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   cloudtemple@mskat.net                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #ifndef PROPERTYEDITOR_H
 #define PROPERTYEDITOR_H
 
-#include <qwidget.h>
-#include <qstring.h>
-#include <qmap.h>
+#include <qlistview.h>
 
-#include "property.h"
+class PropertyAccessor;
+class PropertyItem;
+class PropertyGroupItem;
+class PropertyWidget;
+class Property;
+struct Machine;
 
-class QWidget;
-class QTable;
-class QString;
+/** @file propertyeditor.h
+@short Contains @ref PropertyEditor class.
+*/
+
 /**
-  *@author Alexander Dymo
-  Docked window that contains property editor - QTable with customized editors
-  */
+@short %Property editor.
 
-class PropertyEditor : public QWidget  {
+Displays a list of properties in a table form. Also performs grouping and
+creation of property widgets from the machine factory.
+@see PropertyWidget
+@see Machine
+@see PropertyMachineFactory
+*/
+class PropertyEditor: public QListView{
    Q_OBJECT
 public:
-    PropertyEditor( QWidget * parent = 0, const char * name = 0, WFlags f = 0 );
+    /**Constructs the property editor.*/
+    PropertyEditor(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
     ~PropertyEditor();
-
+    
+    /**@return @ref Machine for given property name.
+    Uses cache to store created machines. 
+    Cache will be cleared only with @ref clearMachineCache.*/
+    Machine *machine(const QString &name);
+    
 public slots:
-    void populateProperties(QMap<QString, PropPtr> *v_props);
+    /**Shows properties from accessor.*/
+    void populateProperties(PropertyAccessor *accessor);
+    /**Clears property list, disconnects accessor from the editor and deletes it.*/
     void clearProperties();
+    /**Deletes cached machines.*/
+    void clearMachineCache();
 
-    void emitPropertyChange(QString name, QVariant newValue);
+protected slots:
+    /**Updates property widget in the editor.*/
+    void propertyValueChanged(Property* property);
+    /**Updates accessor when new value is selected in the editor.*/
+    void propertyChanged(const QString &name, const QVariant &value);
 
+    /**Shows property editor.*/
+    void slotClicked(QListViewItem* item);
+    void updateEditorSize();
+    
+protected:
+    void editItem(QListViewItem*, int);
+    void hideEditor();
+    void showEditor(PropertyItem *item);
+    void placeEditor(PropertyItem *item);
+    PropertyWidget *prepareEditor(PropertyItem *item);
+
+    void addGroup(const QString &name);
+    void addProperty(PropertyGroupItem *group, const QString &name);
+    void addProperty(const QString &name);
+    
 private:
-    QTable *table;
-    QMap<QString, PropPtr> *props;
+    PropertyAccessor *m_accessor;
 
-signals:
-    /**Signals the change of "name" property value to "newValue" */
-    void propertyChanged(QString name, QVariant newValue);
+    //machines cache for property types, machines will be deleted
+    QMap<int, Machine* > m_registeredForType;
+
+    PropertyItem *m_currentEditItem;
+    PropertyWidget *m_currentEditWidget;
+    
+    bool m_doubleClickForEdit;
+    QListViewItem* m_lastClickedItem;
+    
+friend class PropertyItem;
 };
 
 #endif

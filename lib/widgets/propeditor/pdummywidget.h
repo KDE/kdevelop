@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,34 +17,33 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PCHECKBOX_H
-#define PCHECKBOX_H
+#ifndef PDUMMYWIDGET_H
+#define PDUMMYWIDGET_H
 
-#include "propertywidget.h"
-
-class QCheckBox;
+#include <propertywidget.h>
 
 /**
-@short %Property editor with checkbox.
+@short %Property editor with empty widget.
+
+This is usefull for properties which can't be edited in a generic way
+like QValueList's or QMap's stored in a variant.
 */
-class PCheckBox: public PropertyWidget{
+class PDummyWidget: public PropertyWidget
+{
     Q_OBJECT
 public:
-    PCheckBox(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PDummyWidget(const QString& propertyName, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;
     /**Sets the value shown in the editor widget. Set emitChange to false
     if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant& value, bool emitChange);
     /**Function to draw a property viewer when the editor isn't shown.*/
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-private slots:
-    void updateProperty(bool val);
     
 private:
-    QCheckBox *m_edit;
+    QVariant m_value;
 };
 
 #endif

@@ -1,29 +1,49 @@
-/* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
+/***************************************************************************
+ *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   cloudtemple@mskat.net                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "propertywidget.h"
 
-QString PropertyWidget::pname() const
+#include <qpainter.h>
+
+PropertyWidget::PropertyWidget(const QString &propertyName, QWidget *parent, const char *name)
+    :QWidget(parent, name), m_propertyName(propertyName)
 {
-    return m_name;
 }
 
-void PropertyWidget::setPName(const QString pname)
+QString PropertyWidget::propertyName() const
 {
-    m_name = pname;
+    return m_propertyName;
 }
+
+void PropertyWidget::setPropertyName(const QString &propertyName)
+{
+    m_propertyName = propertyName;
+}
+
+void PropertyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+{
+    p->setPen(Qt::NoPen);
+    p->setBrush(cg.background());
+    p->drawRect(r);
+    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, value.toString());
+}
+
+#ifndef PURE_QT
+#include "propertywidget.moc"
+#endif

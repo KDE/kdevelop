@@ -1,63 +1,67 @@
-/* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
-
+/***************************************************************************
+ *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   cloudtemple@mskat.net                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "pcombobox.h"
-#include "propertyeditor.h"
 
-PComboBox::PComboBox ( const PropertyEditor *editor, const QString pname, const QVariant value, QMap<QString, QString> *v_corresp, QWidget * parent, const char * name):
-    QComboBox(parent, name), corresp(v_corresp)
+#include <qcombobox.h>
+#include <qlayout.h>
+
+PComboBox::PComboBox(const QString &propertyName, const QMap<QString, QVariant> &list, QWidget *parent, const char *name)
+    :PropertyWidget(propertyName, parent, name), m_valueList(list)
 {
-    init(editor, pname, value);
+    init(false);
 }
 
-PComboBox::PComboBox ( const PropertyEditor *editor, const QString pname, const QVariant value, QMap<QString, QString> *v_corresp,  bool rw, QWidget * parent, const char * name):
-        QComboBox(rw, parent, name), corresp(v_corresp)
+PComboBox::PComboBox(const QString &propertyName, const QMap<QString, QVariant> &list, bool rw, QWidget *parent, const char *name)
+    :PropertyWidget(propertyName, parent, name), m_valueList(list)
 {
-    init(editor, pname, value);
+    init(rw);
 }
 
-void PComboBox::init( const PropertyEditor *editor, const QString & pname, const QVariant & value )
+void PComboBox::init(bool rw)
 {
+    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new QComboBox(rw, this);
+    l->addWidget(m_edit);
+    
     fillBox();
-    setValue(value, false);
-    setPName(pname);
-    connect(this, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
-    connect(this, SIGNAL(propertyChanged(QString, QString)), editor, SLOT(emitPropertyChange(QString, QString)));
+    
+    connect(m_edit, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
 }
 
 void PComboBox::fillBox()
 {
-    for (QMap<QString, QString>::const_iterator it = corresp->begin(); it != corresp->end(); it++)
+    for (QMap<QString, QVariant>::const_iterator it = m_valueList.begin(); it != m_valueList.end(); it++)
     {
-        insertItem(it.key());
-        r_corresp[it.data()] = it.key();
+        m_edit->insertItem(it.key());
     }
 }
 
 QVariant PComboBox::value() const
 {
-    QMap<QString, QString>::const_iterator it = corresp->find(currentText());
-    if (it==corresp->end()) return QVariant("");
+    QMap<QString, QVariant>::const_iterator it = m_valueList.find(m_edit->currentText());
+    if (it == m_valueList.end())
+        return QVariant("");
     return QVariant(it.data());
 }
 
-void PComboBox::setValue(const QVariant value, bool emitChange)
+void PComboBox::setValue(const QVariant &value, bool emitChange)
 {
 #if QT_VERSION >= 0x030100
     if (!value.isNull())
@@ -65,15 +69,27 @@ void PComboBox::setValue(const QVariant value, bool emitChange)
     if (value.canCast(QVariant::String))
 #endif
     {
-        setCurrentText(r_corresp[value.toString()]);
+        disconnect(m_edit, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
+        m_edit->setCurrentText(findDescription(value));
+        connect(m_edit, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
         if (emitChange)
-            emit propertyChanged(pname(), value);
+            emit propertyChanged(propertyName(), value);
     }
 }
 
 void PComboBox::updateProperty(int /*val*/)
 {
-    emit propertyChanged(pname(), value());
+    emit propertyChanged(propertyName(), value());
+}
+
+QString PComboBox::findDescription(const QVariant &value)
+{
+    for (QMap<QString, QVariant>::const_iterator it = m_valueList.begin(); it != m_valueList.end(); ++ it)
+    {
+        if (it.data() == value)
+            return it.key();
+    }
+    return "";
 }
 
 #ifndef PURE_QT

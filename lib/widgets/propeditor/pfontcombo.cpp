@@ -1,93 +1,77 @@
-/* This file is part of the KDE project
-   Copyright (C) 2002 Alexander Dymo <cloudtemple@mksat.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
-
+/***************************************************************************
+ *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   cloudtemple@mskat.net                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "pfontcombo.h"
-#include "propertyeditor.h"
+
+#ifndef PURE_QT
+#include <kfontcombo.h>
+#else
+#include <qcombobox.h>
+#endif
+
+#include <qlayout.h>
 
 #ifdef PURE_QT
 #include <qfontdatabase.h>
 #endif
 
-PFontCombo::PFontCombo (const PropertyEditor *editor, const QString pname, const QVariant value, QWidget *parent, const char *name):
-#ifndef PURE_QT
-    KFontCombo(parent, name)
-#else
-    QComboBox(parent, name)
-#endif
+PFontCombo::PFontCombo(const QString &propertyName, QWidget *parent, const char *name)
+    :PropertyWidget(propertyName, parent, name)
 {
-    //AD: KFontCombo seems to have a bug: when it is not editable, the signals
-    //activated(int) and textChanged(const QString &) are not emitted
-//    setEditable(false);
+    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new KFontCombo(this);
+    l->addWidget(m_edit);
+    
+    /*adymo: KFontCombo seems to have a bug: when it is not editable, the signals
+    activated(int) and textChanged(const QString &) are not emitted*/
 #ifdef PURE_QT
     QFontDatabase fonts;
-    insertStringList( fonts.families() );
+    insertStringList(fonts.families());
 #endif
-
-    setPName(pname);
-    setValue(value, false);
-    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
-    connect(this, SIGNAL(propertyChanged(QString, QVariant)), editor, SLOT(emitPropertyChange(QString, QVariant)));
-}
-
-PFontCombo::PFontCombo (const PropertyEditor *editor, const QString pname, const QVariant value, const QStringList &fonts, QWidget *parent, const char *name):
-#ifndef PURE_QT
-    KFontCombo(fonts, parent, name)
-#else
-    QComboBox(parent, name)
-#endif
-{
-    //AD: KFontCombo seems to have a bug: when it is not editable, the signals
-    //activated(int) and textChanged(const QString &) are not emitted
-//    setEditable(false);
-#ifdef PURE_QT
-    insertStringList( fonts );
-#endif
-
-    setValue(value, false);
-    setPName(pname);
-    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
-    connect(this, SIGNAL(propertyChanged(QString, QVariant)), editor, SLOT(emitPropertyChange(QString, QVariant)));
+    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
 }
 
 QVariant PFontCombo::value() const
 {
 #ifndef PURE_QT
-    return QVariant(currentFont());
+    return QVariant(m_edit->currentFont());
 #else
-    return QVariant(currentText());
+    return QVariant(m_edit->currentText());
 #endif
 }
 
-void PFontCombo::setValue(const QVariant value, bool emitChange)
+void PFontCombo::setValue(const QVariant &value, bool emitChange)
 {
+    disconnect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
 #ifndef PURE_QT
-    setCurrentFont(value.toString());
+    m_edit->setCurrentFont(value.toString());
 #else
-    setCurrentText(value.toString());
+    m_edit->setCurrentText(value.toString());
 #endif
+    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
     if (emitChange)
-        emit propertyChanged(pname(), value);
+        emit propertyChanged(propertyName(), value);
 }
 
 void PFontCombo::updateProperty(const QString &val)
 {
-    emit propertyChanged(pname(), QVariant(val));
+    emit propertyChanged(propertyName(), QVariant(val));
 }
 
 #ifndef PURE_QT

@@ -1,48 +1,62 @@
-/* This file is part of the KDE project
-   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-*/
+/***************************************************************************
+ *   Copyright (C) 2003-2004 by Alexander Dymo                             *
+ *   cloudtemple@mskat.net                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
 #include "pdoublenuminput.h"
-#include "propertyeditor.h"
 
-PDoubleNumInput::PDoubleNumInput( const PropertyEditor * editor, const QString pname, const QVariant value, QWidget * parent, const char * name )
-    :KDoubleNumInput(parent, name)
-{
-    setValue(value, false);
-    setPName(pname);
-    connect(this, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
-    connect(this, SIGNAL(propertyChanged(QString, QVariant)), editor, SLOT(emitPropertyChange(QString, QVariant)));
+#include <limits.h>
+
+#include <qlayout.h>
+#include <knuminput.h>
+
+PDoubleNumInput::PDoubleNumInput(const QString &propertyName, QWidget *parent, const char *name)
+    :PropertyWidget(propertyName, parent, name)
+{    
+    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new KDoubleNumInput(-999999.0, 999999.0, 0.0, 0.01, 2, this);
+/*    m_edit->setMinValue(-999999999);
+    m_edit->setMaxValue(+999999999);
+    m_edit->setPrecision(2);*/
+    m_edit->setLabel(QString::null);
+    l->addWidget(m_edit);
+    
+    connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
 }
 
 QVariant PDoubleNumInput::value() const
 {
-    return QVariant(KDoubleNumInput::value());
+    return QVariant(m_edit->value());
 }
 
-void PDoubleNumInput::setValue(const QVariant value, bool emitChange)
+void PDoubleNumInput::setValue(const QVariant &value, bool emitChange)
 {
-    KDoubleNumInput::setValue(value.toDouble());
+    disconnect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
+    m_edit->setValue(value.toDouble());
+    connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
     if (emitChange)
-        emit propertyChanged(pname(), value);
+        emit propertyChanged(propertyName(), value);
 }
 
-void PDoubleNumInput::updateProperty( double val )
+void PDoubleNumInput::updateProperty(double val)
 {
-    emit propertyChanged(pname(), QVariant(val));
+    emit propertyChanged(propertyName(), QVariant(val));
 }
 
+#ifndef PURE_QT
 #include "pdoublenuminput.moc"
+#endif

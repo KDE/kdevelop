@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2003-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,34 +17,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PCHECKBOX_H
-#define PCHECKBOX_H
+#include "pdummywidget.h"
 
-#include "propertywidget.h"
+#include <qpainter.h>
 
-class QCheckBox;
+PDummyWidget::PDummyWidget(const QString &propertyName, QWidget *parent, const char *name)
+    :PropertyWidget(propertyName, parent, name)
+{
+}
 
-/**
-@short %Property editor with checkbox.
-*/
-class PCheckBox: public PropertyWidget{
-    Q_OBJECT
-public:
-    PCheckBox(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+QVariant PDummyWidget::value() const
+{
+    return m_value;
+}
 
-    /**@return the value currently entered in the editor widget.*/
-    virtual QVariant value() const;
-    /**Sets the value shown in the editor widget. Set emitChange to false
-    if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true);
-    /**Function to draw a property viewer when the editor isn't shown.*/
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+void PDummyWidget::setValue(const QVariant &value, bool emitChange)
+{
+    m_value = value;
+    if (emitChange)
+        emit propertyChanged(propertyName(), value);
+}
 
-private slots:
-    void updateProperty(bool val);
-    
-private:
-    QCheckBox *m_edit;
-};
+void PDummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+{
+    p->setBrush(cg.background());
+    p->setPen(Qt::NoPen);
+    p->drawRect(r);
+}
 
+#ifndef PURE_QT
+#include "pdummywidget.moc"
 #endif
