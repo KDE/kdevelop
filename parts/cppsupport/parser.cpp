@@ -2967,6 +2967,8 @@ start_decl:
 	    {
 		lex->nextToken();
 		SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
+		ast->setStorageSpecifier( storageSpec );
+		ast->setFunctionSpecifier( funSpec );
 		ast->setText( toString(start, endSignature) );
 		ast->setTypeSpec( spec );
 		ast->setInitDeclaratorList( declarators );
