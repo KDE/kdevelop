@@ -1,34 +1,45 @@
 %{H_TEMPLATE}
+#ifndef KDEV%{APPNAMEUC}_H
+#define KDEV%{APPNAMEUC}_H
 
-#ifndef __KDEVPART_%{APPNAMEUC}_H__
-#define __KDEVPART_%{APPNAMEUC}_H__
-
+#include <kdevplugin.h>
 
 #include <qguardedptr.h>
-#include <kdevelop/kdevplugin.h>
 
-
+class QPopupMenu;
+class KAction;
+class KDialogBase;
+class Context;
+class ConfigWidgetProxy;
 class %{APPNAME}Widget;
 
-
-/*
- Please read the README.dox file for more info about this part
- */
-class %{APPNAME}Part : public KDevPlugin
+/**
+Please read the README.dox file for more info about this part
+*/
+class %{APPNAME}Part: public KDevPlugin
 {
-  Q_OBJECT
-
+    Q_OBJECT
 public:
-   
-  %{APPNAME}Part(QObject *parent, const char *name, const QStringList &);
-  ~%{APPNAME}Part();
-
+    %{APPNAME}Part(QObject *parent, const char *name, const QStringList &args);
+    ~%{APPNAME}Part();
   
-private:
+private slots:
+    void init();
     
-  QGuardedPtr<%{APPNAME}Widget> m_widget;
+    void insertConfigWidget(const KDialogBase *dlg, QWidget *page, unsigned int pageNo);
+    void contextMenu(QPopupMenu *popup, const Context *context);
+    void projectOpened();
+    void projectClosed();
+    
+    void doSomething();
 
+private:
+    void setupActions();
+    
+    KAction *action;
+    
+    QGuardedPtr<%{APPNAME}Widget> m_widget;
+    ConfigWidgetProxy *m_configProxy;
 };
-
 
 #endif

@@ -1,7 +1,9 @@
 dataFiles = src-Makefile.am kdevpart_part.cpp kdevpart_part.h\
 	kdevpart_widget.h kdevpart_widget.cpp \
 	kdevpart_part.rc kdevpart.desktop app.kdevelop \
-	kdevpart-configure.in.in README.dox subdirs
+	kdevpart-configure.in.in README.dox subdirs globalconfigbase.ui globalconfig.h \
+	globalconfig.cpp projectconfigbase.ui projectconfig.h projectconfig.cpp
+
 templateName = kdevpart2
 
 ### no need to change below:

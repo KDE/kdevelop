@@ -1,13 +1,25 @@
 # KDE Config File
 [General]
-Name=KDevelop Part (Standalone build)
-Name[fr]=Un composant logiciel pour KDevelop (indépendant de KDevelop)
+Name=KDevelop Plugin (Standalone build)
 Category=C++/KDevelop/
 Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
-Comment[fr]=Génère un composant logiciel du type « KPart » pour KDevelop, qui devra être compilé en dehors de l'arborescence des sources de KDevelop.
 FileTemplates=h,CStyle,cpp,CStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}_part.cpp
 Archive=kdevpart2.tar.gz
+
+[SCOPE]
+Type = value
+ValueType=QString
+Value= SCOPE
+Comment= The scope of a plugin (Global, Project, Core)
+Default= Global
+
+[PROPS]
+Type = value
+ValueType=QString
+Value= PROPS
+Comment= The list of supported KDevelop properties
+Default=
 
 [ADMIN]
 Type=include
@@ -55,33 +67,65 @@ Dest=%{dest}/src/Makefile.am
 [FILE7]
 Type=install
 Source=%{src}/kdevpart_part.cpp
-Dest=%{dest}/src/%{APPNAMELC}_part.cpp
+Dest=%{dest}/src/%{APPNAMELC}part.cpp
+
+[FILE71]
+Type=install
+EscapeXML=true
+Source=%{src}/globalconfigbase.ui
+Dest=%{dest}/src/%{APPNAMELC}globalconfigbase.ui
+
+[FILE711]
+Type=install
+Source=%{src}/globalconfig.h
+Dest=%{dest}/src/%{APPNAMELC}globalconfig.h
+
+[FILE712]
+Type=install
+Source=%{src}/globalconfig.cpp
+Dest=%{dest}/src/%{APPNAMELC}globalconfig.cpp
+
+[FILE72]
+Type=install
+EscapeXML=true
+Source=%{src}/projectconfigbase.ui
+Dest=%{dest}/src/%{APPNAMELC}projectconfigbase.ui
+
+[FILE721]
+Type=install
+Source=%{src}/projectconfig.h
+Dest=%{dest}/src/%{APPNAMELC}projectconfig.h
+
+[FILE722]
+Type=install
+Source=%{src}/projectconfig.cpp
+Dest=%{dest}/src/%{APPNAMELC}projectconfig.cpp
 
 [FILE8]
 Type=install
 Source=%{src}/kdevpart_part.h
-Dest=%{dest}/src/%{APPNAMELC}_part.h
+Dest=%{dest}/src/%{APPNAMELC}part.h
 
 [FILE9]
 Type=install
 Source=%{src}/kdevpart_widget.cpp
-Dest=%{dest}/src/%{APPNAMELC}_widget.cpp
+Dest=%{dest}/src/%{APPNAMELC}widget.cpp
 
 [FILE10]
 Type=install
 Source=%{src}/kdevpart_widget.h
-Dest=%{dest}/src/%{APPNAMELC}_widget.h
+Dest=%{dest}/src/%{APPNAMELC}widget.h
 
 [FILE11]
 Type=install
 EscapeXML=true
 Source=%{src}/kdevpart_part.rc
-Dest=%{dest}/src/kdevpart_%{APPNAMELC}.rc
+Dest=%{dest}/src/kdev%{APPNAMELC}.rc
 
 [FILE12]
 Type=install
 Source=%{src}/kdevpart.desktop
-Dest=%{dest}/src/kdevpart_%{APPNAMELC}.desktop
+Dest=%{dest}/src/kdev%{APPNAMELC}.desktop
 
 [FILE13]
 Type=install
@@ -90,4 +134,4 @@ Dest=%{dest}/src/README.dox
 
 [MSG]
 Type=message
-Comment=A KDevelop part was created in %{dest}
+Comment=A KDevelop plugin was created in %{dest}
