@@ -584,7 +584,7 @@
                     <widget class="QListView" row="3" column="0">
                         <column>
                             <property name="text">
-                                <string>Directories outside project:</string>
+                                <string>Directories Outside Project</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -603,7 +603,7 @@
                     <widget class="QListView" row="1" column="0">
                         <column>
                             <property name="text">
-                                <string>Directories inside project:</string>
+                                <string>Directories Inside Project</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -719,7 +719,7 @@
                     <widget class="QListView" row="4" column="0">
                         <column>
                             <property name="text">
-                                <string>Link libraries outside project:</string>
+                                <string>Link Libraries Outside Project</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -801,7 +801,7 @@
                     <widget class="QListView" row="1" column="0">
                         <column>
                             <property name="text">
-                                <string>Link convenience libraries inside project:</string>
+                                <string>Link Convenience Libraries Inside Project</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -917,7 +917,7 @@
                     <widget class="QListView" row="3" column="0">
                         <column>
                             <property name="text">
-                                <string>Library directories outside project:</string>
+                                <string>Library Directories Outside Project</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -1033,7 +1033,7 @@
                     <widget class="QListView" row="1" column="0">
                         <column>
                             <property name="text">
-                                <string>Targets in project:</string>
+                                <string>Targets in Project</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -1115,7 +1115,7 @@
                     <widget class="QListView" row="3" column="0">
                         <column>
                             <property name="text">
-                                <string>Miscellaneous targets:</string>
+                                <string>Miscellaneous Targets</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
@@ -1395,7 +1395,7 @@
                     <widget class="QListView" row="1" column="0">
                         <column>
                             <property name="text">
-                                <string>Order in which sub projects are built:</string>
+                                <string>Order in Which Sub Projects Are Built</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
