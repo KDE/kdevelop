@@ -46,7 +46,7 @@ public:
     
     void emitIndexSelected(KListBox *indexBox);
     void emitBookmarkLocation(const QString &title, const KURL &url);
-    bool configure();
+    bool configure(int page = 0);
 
 public slots:
     void lookInDocumentationIndex();

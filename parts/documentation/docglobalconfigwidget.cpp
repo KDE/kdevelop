@@ -84,7 +84,6 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
             else
                 htsearchbinEdit->setURL("/usr/lib/cgi-bin/htsearch");
         }
-        config->writeEntry("IsSetup", true);
     }
 }
 

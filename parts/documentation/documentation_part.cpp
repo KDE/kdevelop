@@ -22,6 +22,7 @@
 #include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qpopupmenu.h>
+#include <qtabwidget.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -155,7 +156,7 @@ KConfig *DocumentationPart::config()
     return DocumentationFactory::instance()->config();
 }
 
-bool DocumentationPart::configure()
+bool DocumentationPart::configure(int page)
 {
     KDialogBase dlg(KDialogBase::Plain, i18n("Documentation Settings"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_widget,
@@ -164,6 +165,7 @@ bool DocumentationPart::configure()
     QVBoxLayout *l = new QVBoxLayout(dlg.plainPage(), 0, 0);
     DocGlobalConfigWidget *w1 = new DocGlobalConfigWidget(this, m_widget, dlg.plainPage());
     l->addWidget(w1);
+    w1->docTab->setCurrentPage(page);
     connect(&dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
     return (dlg.exec() == QDialog::Accepted);
 }

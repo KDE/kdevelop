@@ -141,8 +141,12 @@ void SearchView::search()
     if (config->readBoolEntry("IsSetup", false) == false)
     {
         KMessageBox::information(this, i18n("Full text search has to be set up before usage."));
-        if (!m_part->configure())
+        if (!m_part->configure(1))
             return;
+        config->writeEntry("IsSetup", true);
+        KMessageBox::information(this, i18n("Now full text search database will be created.\nWait for database creation to finish and then repeat search."));
+        updateIndex();
+        return;
     }
     QString exe = config->readPathEntry("htsearchbin", kapp->dirs()->findExe("htsearch"));
     if (exe.isEmpty())
