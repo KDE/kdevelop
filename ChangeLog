@@ -1,6 +1,9 @@
 1999-09-14 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bug-fix: empty ClassView caused segfault on
 	  on asking for ToolTip 
+	* AppWizard: returning to page one and changing
+	  from C project to another didn´t reset the
+	  title of page 3
 
 1999-09-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Use /bin/sh in GrepDialog and use backticks
