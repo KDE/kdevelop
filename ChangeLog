@@ -1,7 +1,11 @@
+2002-10-08 Harald Fernengel <harry@kdevelop.org>
+	* compile qEditor only if Qt >= 3.0.5
+	* don't build sourcenav since it is obsoleted by history part
+
 2002-10-07 F@lk Brettschneider <falk@kdevelop.org>
         * applied patch of Heinz Hornung <Hornung-Heinz@t-online.de>
 	  improved window menu, old windowmenu part removed
-	  
+
 2002-09-25 Yann Hodique <Yann.Hodique@lifl.fr>
 	* Implemented some features in distpart
 	* Fixed a few bugs
@@ -14,7 +18,7 @@
 
 2002-09-17 Roberto Raggi <raggi@cli.di.unipi.it>
 	* Added problem reporter to c++ support
-	
+
 2002-09-05 Harald Fernengel <harry@kdevelop.org>
 	* Added notification configuration dialog and notifications
 	  for finished processes (off by default)

@@ -19,7 +19,7 @@ void UIChooserWidget::load()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  if (config->readEntry("MajorUIMode", "mdi") == "sdi")
+  if (config->readEntry("MajorUIMode", "sdi") == "sdi")
   {
     modeIDEA->setChecked(true);
     return;

@@ -59,4 +59,4 @@ KDevScripting=false
 
 [UI]
 MDI mode=1
-MajorUIMode=mdi
+MajorUIMode=sdi

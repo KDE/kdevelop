@@ -25,7 +25,7 @@ KDevTopLevel *TopLevel::getInstance()
     KConfig *config = kapp->config();
     config->setGroup("UI");
 
-    if (config->readEntry("MajorUIMode", "mdi") == "mdi")
+    if (config->readEntry("MajorUIMode", "sdi") == "mdi")
     {
       TopLevelMDI *mdi = new TopLevelMDI;
       s_instance = mdi;

@@ -155,7 +155,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
   {
     KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), 0, 0, 0, className));
     KParts::BrowserExtension *extension = KParts::BrowserExtension::childObject(part);
-    kdDebug() << "Encoding: " << encoding << ", extension: " << extension << endl;
+    kdDebug(9000) << "Encoding: " << encoding << ", extension: " << extension << endl;
     if (extension && !encoding.isNull())
     {
       KParts::URLArgs args;
@@ -209,7 +209,6 @@ DocumentationPart *PartController::findDocPart(const QString &context)
 
 KParts::Factory *PartController::findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName)
 {
-  kdDebug(9000) << "Preferred Name: " << preferredName << endl;
   KTrader::OfferList offers = KTrader::self()->query(mimeType, QString("'%1' in ServiceTypes").arg(partType));
 
   if (offers.count() > 0)
@@ -219,7 +218,6 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
     if ( !preferredName.isEmpty() ) {
       KTrader::OfferList::Iterator it;
       for (it = offers.begin(); it != offers.end(); ++it) {
-        kdDebug(9000) << "Offer: " << (*it)->name() << endl;
         if ((*it)->name() == preferredName) {
           ptr = (*it);
         }
