@@ -448,7 +448,8 @@ void CClassParser::parseTemplate()
 bool CClassParser::isEndOfVarDecl()
 {
   return ( lexem == ';' || lexem == ',' || lexem == ')' || 
-           lexem == '}' || lexem == 0 );
+          // lexem == '}' ||
+	   lexem == 0 );
 }
 
 /*------------------------------ CClassParser::fillInParsedVariable()
@@ -473,6 +474,7 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
   {
     int depth=0;
     bool nextIsVarName=false;
+    bool skipText=false;
 
     exit = false;
     while( !exit )
@@ -487,8 +489,11 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
       }
 
       // check if the next parsed entry could be the var name
-      //
-      if (thisIsVarName)
+      // or all inside [ ]
+      if (aLexem->type=='[')
+        skipText=false;
+
+      if (thisIsVarName || skipText)
       {
         nextIsVarName=false;
       }
@@ -502,11 +507,18 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
       }
 
       // save everything but the var names or single "void" combination
-      if (!thisIsVarName)
-       addDecl = aLexem->text + addDecl;
+      if (!thisIsVarName && !skipText)
+      {
+        if (aLexem->type=='(')
+          addDecl = aLexem->text + addDecl;
+        else
+          addDecl = aLexem->text + " " +addDecl;
+      }
 
       if (aLexem->type == '(')
         depth--;
+      if (aLexem->type==']')
+        skipText=true;
       exit = ( lexemStack.isEmpty() || depth<=0 );
       delete aLexem;
     }
