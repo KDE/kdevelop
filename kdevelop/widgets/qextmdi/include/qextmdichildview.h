@@ -181,7 +181,7 @@ public:
    /**
     * Returns the geometry of this MDI child window as QWidget::geometry() does.
     */
-   QRect internalGeometry();
+   QRect internalGeometry() const;
    /**
    * Sets the geometry of the client area of this MDI child window. The 
    * top left position of the argument is the position of the top left point
@@ -193,7 +193,7 @@ public:
    /**
    * Returns the frame geometry of this window or of the parent if there is any...
    */
-   QRect externalGeometry();
+   QRect externalGeometry() const;
    /**
    * Sets the geometry of the frame of this MDI child window. The top left 
    * position of the argument is the position of the top left point of the 
@@ -205,7 +205,7 @@ public:
    /**
    * You should override this function in the derived class.
    */
-   virtual QPixmap * myIconPtr();
+   virtual QPixmap* myIconPtr();
    /**
    * Minimizes this window when it is attached to the Mdi manager.
    * Otherwise has no effect

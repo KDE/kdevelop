@@ -190,7 +190,9 @@ void QextMdiTaskBar::removeWinButton(QextMdiChildView *win_ptr, bool haveToLayou
       if( haveToLayoutTaskBar) layoutTaskBar();
    }
    if (m_pButtonList->count() == 0) {
-      m_pStretchSpace->hide();
+      if (m_pStretchSpace != 0L) {
+         m_pStretchSpace->hide();
+      }
    }
 }
 

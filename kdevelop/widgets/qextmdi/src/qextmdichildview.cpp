@@ -85,7 +85,7 @@ QextMdiChildView::~QextMdiChildView()
 
 //============== internal geometry ==============//
 
-QRect QextMdiChildView::internalGeometry() //XXX const
+QRect QextMdiChildView::internalGeometry() const
 {
    if(mdiParent()) {
       // get the client area coordinates inside the MDI child frame
@@ -143,7 +143,7 @@ void QextMdiChildView::setInternalGeometry(const QRect& newGeometry)
 
 //============== external geometry ==============//
 
-QRect QextMdiChildView::externalGeometry() //XXX const
+QRect QextMdiChildView::externalGeometry() const
 {
    return mdiParent() ? mdiParent()->frameGeometry() : frameGeometry();
 }
@@ -349,7 +349,7 @@ void QextMdiChildView::closeEvent(QCloseEvent *e)
 
 //================ myIconPtr =================//
 
-QPixmap * QextMdiChildView::myIconPtr() //XXX const
+QPixmap* QextMdiChildView::myIconPtr()
 {
    return 0;
 }
