@@ -514,6 +514,7 @@ class KWrite : public QWidget {
     void exposeFound(PointStruc &cursor, int slen, int flags, bool replace);
     void deleteReplacePrompt();
     bool askReplaceEnd();
+		void gotoPos(int cursorXPos, int cursorYPos);
   protected slots:
     void replaceSlot();
   protected:
