@@ -1,3 +1,6 @@
+2003-02-23 Caleb Tennis <caleb@aei-tech.com>
+	* Bug and Compilation Fixes
+
 2003-02-21 Alexander Dymo <cloudtemple@mksat.net>
 	* Subclassing widgets based on ui-files is now available in automake project manager too.
 	* Iterative subclassing for existing subclasses is available too.
