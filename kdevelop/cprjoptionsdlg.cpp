@@ -804,6 +804,19 @@ void CPrjOptionsDlg::setupTab4()
   }
   QWhatsThis::add(l_kab, i18n("KDE addressbook"));
  
+  l_math=new QCheckBox(w4,"l_math");
+  l_math->setGeometry(380,140,105,20);
+  l_math->setText("math");
+  if (ldadd.contains("-lm")) {
+    l_math->setChecked(true);
+    pos=ldadd.find(" -lm");
+    ldadd.remove(pos,4);
+    //    cerr << "-lm OK" << endl;
+  } else {
+    l_kspell->setChecked(false);
+  }
+  QWhatsThis::add(l_kspell, i18n("Math library"));
+
   QLabel* addit_ldadd_label;
   addit_ldadd_label=new QLabel(w4,"addit_ldadd_label");
   addit_ldadd_label->setGeometry(20,230,110,30);
@@ -1273,6 +1286,9 @@ void CPrjOptionsDlg::ok4()
   
   text= addit_ldadd->text();
 
+  if (l_math->isChecked()) {
+    text+=" -lm";
+  }
   if (l_kab->isChecked()) {
     text+=" -lkab";
   }
