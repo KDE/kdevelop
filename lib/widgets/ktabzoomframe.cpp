@@ -300,29 +300,25 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
   {
   case KTabZoomPosition::Left:
     extend = ev->globalPos().x() - d->m_slideStart.x() + d->m_initialSize;
-    if (extend < 250)
-      extend = 250;
+    if (extend < 250) extend = 250;  else if(extend > 600) extend = 600;
     resize(extend, height());
     break;
 
   case KTabZoomPosition::Right:
     extend = d->m_slideStart.x() - ev->globalPos().x() + d->m_initialSize;
-    if (extend < 250)
-      extend = 250;
+    if (extend < 250) extend = 250; else if(extend > 600) extend = 600;
     setGeometry(d->m_initialPos - extend, y(), extend, height());
     break;
 
   case KTabZoomPosition::Top:
     extend = ev->globalPos().y() - d->m_slideStart.y() + d->m_initialSize;
-    if (extend < 125)
-      extend = 125;
+    if (extend < 125) extend = 125;  else if(extend > 500) extend = 500;
     resize(width(), extend);
     break;
 
   case KTabZoomPosition::Bottom:
     extend = d->m_slideStart.y() - ev->globalPos().y() + d->m_initialSize;
-    if (extend < 125)
-      extend = 125;
+    if (extend < 125) extend = 125;  else if(extend > 500) extend = 500;
     setGeometry(x(), d->m_initialPos - extend, width(), extend);
     break;
   }
