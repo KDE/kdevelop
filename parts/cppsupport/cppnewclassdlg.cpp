@@ -1043,6 +1043,19 @@ bool CppNewClassDialog::ClassGenerator::generate()
   if (!validateInput())
     return false;
 
+  project = dlg.m_part->project();
+  subDir = project->projectDirectory() + "/";
+  if (!project->activeDirectory().isEmpty())
+    subDir += project->activeDirectory() + "/";
+  headerPath = subDir + header;
+  implementationPath = subDir + implementation;
+
+  if (QFileInfo(headerPath).exists() || QFileInfo(implementationPath).exists()) {
+    KMessageBox::error(&dlg, i18n("KDevelop is not able to add classes "
+                    "to existing header or implementation files."));
+    return false;
+  }
+
   common_text();
 
   gen_implementation();
@@ -1056,19 +1069,6 @@ void CppNewClassDialog::ClassGenerator::common_text()
 {
 
   // common
-
-  project = dlg.m_part->project();
-  subDir = project->projectDirectory() + "/";
-  if (!project->activeDirectory().isEmpty())
-    subDir += project->activeDirectory() + "/";
-  headerPath = subDir + header;
-  implementationPath = subDir + implementation;
-
-  if (QFileInfo(headerPath).exists() || QFileInfo(implementationPath).exists()) {
-    KMessageBox::error(&dlg, i18n("KDevelop is not able to add classes "
-				  "to existing header or implementation files."));
-    return;
-  }
 
   namespaceStr = dlg.namespace_edit->text();
   namespaces = QStringList::split(QString("::"), namespaceStr);

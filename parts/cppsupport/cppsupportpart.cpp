@@ -469,8 +469,14 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
-	QFileInfo fileInfo( d, *it );
-	kdDebug(9007) << "addedFilesToProject(): " << fileInfo.absFilePath() << endl;
+//	QFileInfo fileInfo( d, *it );
+        QString fullPath = *it;
+        if (!fullPath.contains(project()->projectDirectory()))
+            fullPath.prepend(project()->projectDirectory() + "/");
+        fullPath = QDir::cleanDirPath(fullPath);
+        QFileInfo fileInfo(fullPath);
+	kdDebug(9007) << "addedFilesToProject(): " << fileInfo.absFilePath()
+        << " origin: " << *it << endl;
 
 	// changed - daniel
 	QString path = fileInfo.absFilePath();
