@@ -591,44 +591,39 @@ void CustomProjectPart::slotExecute()
         return;
     }
 
-    QString directory;
-    QString program = project()->mainProgram();
-    int pos = program.findRev('/');
-    if (pos != -1) {
-        // Directory where the executable is
-        directory = program.left(pos+1);
-        // Executable name with a "./" prepended for execution with bash shells
-        program   = "./" + (project()->mainProgram()).mid(pos+1);
-    }
-
-    program += " " + DomUtil::readEntry(*projectDom(), "/kdevcustomproject/run/programargs");
-
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE"
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
-    DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/run/envvars", "envvar", "name", "value");
-
+    DomUtil::PairList envvars = runEnvironmentVars();
     QString environstr;
     DomUtil::PairList::ConstIterator it;
     for (it = envvars.begin(); it != envvars.end(); ++it) {
         environstr += (*it).first;
         environstr += "=";
-/*
-#if (KDE_VERSION > 305)
-        environstr += KProcess::quote((*it).second);
-#else
-        environstr += KShellProcess::quote((*it).second);
-#endif
-*/
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
-    program.prepend(environstr);
+
+    if (mainProgram(true).isEmpty())
+    // Do not execute non executable targets
+        return;
+
+    QString program = environstr;
+    // Adds the ./ that is necessary to execute the program in bash shells
+    if (!mainProgram(true).startsWith("/"))
+        program += "./";
+    program += mainProgram(true);
+    program += " " + runArguments();
 
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/terminal");
-    appFrontend()->startAppCommand(directory, program, inTerminal);
+
+    kdDebug(9025) << "runDirectory: <" << runDirectory() << ">" <<endl;
+    kdDebug(9025) << "environstr  : <" << environstr << ">" <<endl;
+    kdDebug(9025) << "mainProgram : <" << mainProgram(true) << ">" <<endl;
+    kdDebug(9025) << "runArguments: <" << runArguments() << ">" <<endl;
+
+    appFrontend()->startAppCommand(runDirectory(), program, inTerminal);
 }
 
 
