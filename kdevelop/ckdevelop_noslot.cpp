@@ -1313,7 +1313,10 @@ void CKDevelop::saveProperties(KConfig* sess_config){
     TEditInfo* info;
     for(info=edit_infos.first();info != 0;info=edit_infos.next()){
       if(info->modified){
-	setUnsavedData ( true );
+
+	// uncommented 25.09.99
+	//	setUnsavedData ( true );
+
 	break;
       }
     }

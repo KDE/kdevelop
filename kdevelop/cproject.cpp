@@ -658,7 +658,14 @@ void CProject::updateMakefileAm(QString makefile){
 	  else{
 	    stream << "\n";
 	  }
-	  
+#warning updateMakefileAm deletes LDFLAGS etc.
+	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
+	    stream << "\nINCLUDES = $(all_includes)\n\n";
+	    stream << getBinPROGRAM() << "_METASOURCES = USE_AUTOMOC\n\n";
+	    stream << getBinPROGRAM() << "_LDFLAGS = $(all_libraries) $(KDE_RPATH)\n\n";
+	    stream << "DISTCLEANFILES = $(" << getBinPROGRAM() << "_METASOURCES)\n\n";
+	  }
+	
 	}
 	//***************************generate needed things for static_library*********
 	config.setGroup(makefile);
