@@ -317,8 +317,9 @@ void FileTreeWidget::slotImplementationInvalidated()
     m_rootBranch = 0; // avoid openDirectory() trying to release the branch
 
     // Restore a clean situation for an eventual new & different implementation
-    /// \FIXME this for-loop should really go in ~FileTreeViewWidgetImpl() but
-    /// it crashes there: here it works :-/
+    /** \FIXME this for-loop should really go in ~FileTreeViewWidgetImpl() but
+      * it crashes there: here it works :-/
+      */
     for (int i=columns()-1; i>=0; --i)
     {
         kdDebug(9017) << "Removing column: " << i << endl;

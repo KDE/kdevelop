@@ -581,8 +581,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem)
 {
     QString varname;
-    /// \FIXME a quick hack to prevent adding header files to _SOURCES
-    ///  and display them in noinst_HEADERS
+    /// \FIXME a quick hack to prevent adding header files to _SOURCES and display them in noinst_HEADERS
     if (AutoProjectPrivate::isHeader(fileName) &&
         ( titem->primary == "PROGRAMS" || titem->primary == "LIBRARIES" ||  titem->primary == "LTLIBRARIES" ) )
     {

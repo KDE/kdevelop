@@ -144,9 +144,10 @@ public:
     * @param dirName path to project directory on local system
     * @param cvsRsh value for the CVS_RSH env var (for accessing :ext:
     *        repositories)
+    * @param location [marios] you should fix this :)
     * @param message an initial creation message for the project
     * @param module the module into repository where to put this source tree
-    * @param vendor  vendor string
+    * @param vendor vendor string
     * @param release release tag
     * @param mustInitRoot if true will attempt to initialize $CVSROOT if not already prepared
     */

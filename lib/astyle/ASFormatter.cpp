@@ -938,7 +938,7 @@ void ASFormatter::setBracketFormatMode(BracketMode mode) {
  *             will be broken, even if standard brackets are attached.
  *    false    closing header brackets will be treated as standard brackets.
  *
- * @param mode         the closing header bracket breaking mode.
+ * @param state         the closing header bracket breaking mode.
  */
 void ASFormatter::setBreakClosingHeaderBracketsMode(bool state) {
     shouldBreakClosingHeaderBrackets = state;
@@ -950,7 +950,7 @@ void ASFormatter::setBreakClosingHeaderBracketsMode(bool state) {
  *    true     'else' headers will be broken from their succeeding 'if' headers.
  *    false    'else' headers will be attached to their succeeding 'if' headers.
  *
- * @param mode         the 'else if()' breaking mode.
+ * @param state         the 'else if()' breaking mode.
  */
 void ASFormatter::setBreakElseIfsMode(bool state) {
     shouldBreakElseIfs = state;
@@ -962,7 +962,7 @@ void ASFormatter::setBreakElseIfsMode(bool state) {
  *    true     statement operators will be padded with spaces around them.
  *    false    statement operators will not be padded.
  *
- * @param mode         the padding mode.
+ * @param state         the padding mode.
  */
 void ASFormatter::setOperatorPaddingMode(bool state) {
     shouldPadOperators = state;
@@ -974,7 +974,7 @@ void ASFormatter::setOperatorPaddingMode(bool state) {
 *    true     statement parenthesies will be padded with spaces around them.
 *    false    statement parenthesies will not be padded.
 *
-* @param mode         the padding mode.
+* @param state         the padding mode.
 */
 void ASFormatter::setParenthesisPaddingMode(bool state) {
     shouldPadParenthesies = state;
@@ -1369,8 +1369,8 @@ bool ASFormatter::isInExponent() const {
 /**
  * check if a one-line bracket has been reached,
  * i.e. if the currently reached '{' character is closed
- * with a complimentry '}' elsewhere on the current line,
- *.
+ * with a complimentry '}' elsewhere on the current line.
+ *
  * @return        has a one-line bracket been reached?
  */
 bool ASFormatter::isOneLineBlockReached() const {

@@ -288,7 +288,7 @@ public:
 	}
 
 	/** Used to keep track of line breaks, needs to be called from
-	 * within generated lexers when a \n \r is encountered.
+	 * within generated lexers when a "\n \r" is encountered.
 	 */
 	virtual void newline()
 	{

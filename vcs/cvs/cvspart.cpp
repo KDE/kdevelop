@@ -296,8 +296,9 @@ void CvsPart::createNewProject( const QString& dirName )
         return;
     QString init("");
 
-    /// \FIXME Store rsh setting. Here doesn't store it in CvsOptions because:
-    /// createNewProject() is called _before_ projectOpened() signal is emitted.
+    /** \FIXME Store rsh setting. Here doesn't store it in CvsOptions because:
+      * createNewProject() is called _before_ projectOpened() signal is emitted.
+      */
     g_tempEnvRsh = m_cvsConfigurationForm->cvs_rsh->text();
     QString rsh;
     if ( !g_tempEnvRsh.isEmpty() )
