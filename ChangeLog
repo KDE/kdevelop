@@ -1,3 +1,7 @@
+2002-12-23 Caleb Tennis <caleb@aei-tech.com>
+	* Fixed bugs with python support; patches by Julian Rockney
+	  (linux@jrockney.com)
+
 2002-12-22 F@lk Brettschneider <falk@kdevelop.org>
 	* QEditor: double click selection improved
 	* renaming of main window classes, the names were confusing
