@@ -72,6 +72,9 @@ private:
     void queueCmd(const QString &dir, const QString &cmd);
     QString makeEnvironment();
 
+    bool isValidQtDir( const QString& path ) const;
+    QStringList availableQtDirList() const;
+
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_qmakeHeader;
     QString m_projectName;
@@ -80,6 +83,8 @@ private:
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;
     QString m_buildCommand;
+    QString m_defaultQtDir;
+    QStringList m_availableQtDirList;
 
     friend class TrollProjectWidget;
     friend class ProjectRunOptionsDlg;

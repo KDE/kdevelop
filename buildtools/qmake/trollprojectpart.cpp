@@ -163,6 +163,11 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                          "# ------------------------------------------- \n"
                          "# Subdir relative project main directory: %s\n"
                          "# Target is %s %s\n");
+
+    m_availableQtDirList = availableQtDirList();
+    m_defaultQtDir = ::getenv( "QTDIR" );
+    if( m_defaultQtDir.isEmpty() && !m_availableQtDirList.isEmpty() )
+        m_defaultQtDir = m_availableQtDirList.front();
 }
 
 
@@ -184,7 +189,11 @@ QString TrollProjectPart::makeEnvironment()
 
     QString environstr;
     DomUtil::PairList::ConstIterator it;
+    bool hasQtDir = false;
     for (it = envvars.begin(); it != envvars.end(); ++it) {
+        if( (*it).first == "QTDIR" )
+	    hasQtDir = true;
+
         environstr += (*it).first;
         environstr += "=";
 /*
@@ -197,6 +206,14 @@ QString TrollProjectPart::makeEnvironment()
         environstr += EnvVarTools::quote((*it).second);
         environstr += " ";
     }
+
+    if( !hasQtDir && !m_defaultQtDir.isEmpty() )
+    {
+        QStringList lst = availableQtDirList();
+	if( !lst.isEmpty() )
+            environstr += QString( "QTDIR=" ) + EnvVarTools::quote( m_defaultQtDir ) + QString( " " );
+    }
+
     return environstr;
 }
 
@@ -515,6 +532,26 @@ KDevProject::Options TrollProjectPart::options( )
     return UsesQMakeBuildSystem;
 }
 
+bool TrollProjectPart::isValidQtDir( const QString& path ) const
+{
+    return QFile::exists( path + "/include/qt.h" );
+}
 
+QStringList TrollProjectPart::availableQtDirList() const
+{
+    QStringList qtdirs, lst;
+    qtdirs.push_back( ::getenv("QTDIR") );
+    qtdirs.push_back( "/usr/lib/qt3" );
+    qtdirs.push_back( "/usr/lib/qt" );
+    qtdirs.push_back( "/usr/share/qt3" );
+
+    for( QStringList::Iterator it=qtdirs.begin(); it!=qtdirs.end(); ++it )
+    {
+        QString qtdir = *it;
+        if( !qtdir.isEmpty() && isValidQtDir(qtdir) )
+	    lst.push_back( qtdir );
+    }
+    return lst;
+}
 
 #include "trollprojectpart.moc"
