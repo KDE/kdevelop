@@ -608,7 +608,7 @@ void CppSupportPart::addMethod(const QString &className)
 
     editiface = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
-        editiface->insertLine(atLine, headerCode);
+        editiface->insertText(atLine, 0, headerCode);
     else
         kdDebug(9007) << "no edit" << endl;
 
@@ -619,7 +619,7 @@ void CppSupportPart::addMethod(const QString &className)
 
     editiface = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
-        editiface->insertLine(editiface->numLines(), cppCode);
+        editiface->insertText(editiface->numLines()-1, 0, cppCode);
     else
         kdDebug(9007) << "no edit" << endl;
 
@@ -669,7 +669,7 @@ void CppSupportPart::addAttribute(const QString &className)
     KTextEditor::EditInterface *editiface
         = dynamic_cast<KTextEditor::EditInterface*>(partController()->activePart());
     if (editiface)
-        editiface->insertLine(atLine, headerCode);
+        editiface->insertText(atLine, 0, headerCode);
     else
         kdDebug(9007) << "no edit" << endl;
 
@@ -679,9 +679,15 @@ void CppSupportPart::addAttribute(const QString &className)
 
 QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
 {
-    QString str = "\n\t";
-    str += pm->comment();
-    str += "\n\t";
+    QString str;
+    
+    if( !pm->comment().isEmpty() ) {
+        str += "\t/**\n\t";
+        str += pm->comment().replace( QRegExp("\n"), "\n\t" );
+        str += "\n\t*/\n";
+    }
+        
+    str += "\t";
 
     if (pm->isVirtual())
         str += "virtual ";
@@ -700,7 +706,7 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
         str += " = 0";
 
     str += ";\n";
-
+    
     return str;
 }
 
@@ -711,17 +717,22 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
         return QString();
 
     QString str = "\n";
-    str += pm->comment();
-    str += "\n";
+    
+    if( !pm->comment().isEmpty() )
+        str += "/**\n" + pm->comment() + "\n*/\n";
 
     str += pm->type();
     str += " ";
-    str += formatClassName(pm->path());
+    if( !pm->declaredInScope().isEmpty() ) {
+        str += pm->declaredInScope();
+        str += "::";
+    }
+    str += pm->name();
 
     if (pm->isConst())
         str += " const";
 
-    str += "{\n}\n\n";
+    str += "\n{\n}\n";
 
     return str;
 }
@@ -729,9 +740,15 @@ QString CppSupportPart::asCppCode(ParsedMethod *pm)
 
 QString CppSupportPart::asHeaderCode(ParsedAttribute *pa)
 {
-    QString str = "\n\t";
-    str += pa->comment();
-    str += "\n\t";
+    QString str;
+    
+    if( !pa->comment().isEmpty() ) {
+        str += "\t/**\n\t";
+        str += pa->comment().replace( QRegExp("\n"), "\n\t" );
+        str += "\n\t*/\n";
+    }
+        
+    str += "\t";
 
     if (pa->isConst())
         str += "const ";

@@ -81,9 +81,7 @@ CppAddMethodDialog::~CppAddMethodDialog(){
 
 ParsedMethod *CppAddMethodDialog::asSystemObj()
 {
-    QString decl;
     ParsedMethod *aMethod = new ParsedMethod();
-    QString comment;
     
     // return type
     aMethod->setType( edType->text() );
@@ -322,7 +320,7 @@ QString CppAddMethodDialog::getDecl(){
 /** return documentation string */
 QString CppAddMethodDialog::getDocu()
 {
-  QString docu = "/** " +edDocs->text();
+  QString docu = edDocs->text();
   for(QListBoxItem* i = lbPara->firstItem(); i != 0; i=i->next()) {
      QString txt = i->text();
      int docupos = txt.find(COMM);
@@ -332,10 +330,9 @@ QString CppAddMethodDialog::getDocu()
         if (defpos != -1)
           name.truncate(defpos);
         int namepos = name.findRev(" ");
-        docu += "\n *  @param " + name.mid(namepos+1) + " " + txt.mid(docupos+COMMLEN);
+        docu += "\n\t@param " + name.mid(namepos+1) + " " + txt.mid(docupos+COMMLEN);
      }
   }
-  docu += "\n\t*/";
   return docu;
 }
 

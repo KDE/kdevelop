@@ -175,7 +175,6 @@ void AddClassAttributeDialog::setCallbacks()
 ParsedAttribute *AddClassAttributeDialog::asSystemObj()
 {
     ParsedAttribute *aAttr = new ParsedAttribute();
-    QString comment;
     
     aAttr->setType( typeEdit.text() );
     aAttr->setName( nameEdit.text() );
@@ -193,8 +192,7 @@ ParsedAttribute *AddClassAttributeDialog::asSystemObj()
     aAttr->setIsConst( constCb.isChecked() );
     
     // Set comment
-    comment = "/** " + docEdit.text() + " */";
-    aAttr->setComment( comment );
+    aAttr->setComment( docEdit.text() );
     
     return aAttr;
 }
