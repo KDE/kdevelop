@@ -36,11 +36,11 @@
     <property name="caption">
         <string>Prepare for Release</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget">
+        <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>Layout30</cstring>
             </property>
@@ -123,7 +123,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QTabWidget">
+        <widget class="QTabWidget" row="1" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>actions_box</cstring>
             </property>
@@ -924,56 +924,43 @@
                 </vbox>
             </widget>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QPushButton" row="2" column="1">
             <property name="name">
-                <cstring>Layout24</cstring>
+                <cstring>okayPushButton</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>okayPushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>cancelPushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                </spacer>
-            </hbox>
+            <property name="text">
+                <string>&amp;OK</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
         </widget>
-    </vbox>
+        <widget class="QPushButton" row="2" column="2">
+            <property name="name">
+                <cstring>cancelPushButton</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Cancel</string>
+            </property>
+        </widget>
+        <spacer row="2" column="0">
+            <property name="name">
+                <cstring>Spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>460</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <images>
     <image name="image0">
