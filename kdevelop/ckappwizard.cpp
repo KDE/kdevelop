@@ -71,6 +71,7 @@ void CKAppWizard::initPages(){
   widget0 = new QWidget(this);
   page0->w = widget0;
   page0->title = (i18n("Applications"));
+  page0->enabled = true;
   addPage(page0);
   
   QPixmap iconpm;    
@@ -184,6 +185,7 @@ void CKAppWizard::initPages(){
   widget1 = new QWidget(this);
   page1->w = widget1;
   page1->title = (i18n("Generate settings"));
+  page1->enabled = true;
   addPage(page1);  
   
   directoryload = new QPushButton( widget1, "directoryload" );
@@ -516,6 +518,7 @@ void CKAppWizard::initPages(){
   widget2 = new QWidget(this);
   page2->w = widget2;
   page2->title = (i18n("Headertemplate for .h-files"));
+  page2->enabled = true;
   addPage(page2);
   
   hload = new QPushButton( widget2, "hload" );
@@ -587,6 +590,7 @@ void CKAppWizard::initPages(){
   widget3 = new QWidget(this);
   page3->w = widget3;
   page3->title = (i18n("Headertemplate for .cpp-files"));
+  page3->enabled = true;
   addPage(page3);
   
   cppnew = new QPushButton( widget3, "cppnew" );
@@ -656,6 +660,7 @@ void CKAppWizard::initPages(){
   widget4 = new QWidget(this);
   page4->w = widget4;
   page4->title = (i18n("Processes"));
+  page4->enabled = true;
   addPage(page4);
   
   // create a MultiLineEdit for the processes of kAppWizard

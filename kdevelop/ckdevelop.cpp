@@ -1590,7 +1590,15 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   setToolMenuProcess(true);
   slotStatusMsg(IDS_DEFAULT);
   bool ready = true;
-  if (process.normalExit()) {
+  QString result="";
+  if (proc->normalExit()) {
+    
+    result= ((proc->exitStatus()) ? i18n("*** failed ***\n") : 
+          i18n("*** success ***\n"));
+    if ( proc== &appl_process)
+      result.sprintf(i18n("*** exit-code: %i ***\n"), 
+		     proc->exitStatus());
+    
     if (next_job == make_cmd){ // rest from the rebuild all
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
       process.clearArguments();
@@ -1605,84 +1613,70 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job = "";
       ready=false;
     }
-    if (next_job == "run" && process.exitStatus() == 0){ // rest from the buildRun
+    if (next_job == "run"  || next_job == "run_with_args" && process.exitStatus() == 0){ 
+      // rest from the buildRun
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
       stdin_stdout_widget->clear();
       stderr_widget->clear();
-      if(prj->getProjectType() == "normal_cpp"){
-      	o_tab_view->setCurrentTab(STDINSTDOUT);
+      QString args = prj->getExecuteArgs();
+      QString program;
+      if(args.isEmpty()){
+	program = prj->getBinPROGRAM().lower();
       }
       else{
-      	o_tab_view->setCurrentTab(STDERR);
+	program = prj->getBinPROGRAM().lower() + " "+args;
       }
 
-      appl_process.clearArguments();
       // Warning: not every user has the current directory in his path !
       if(prj->getProjectType() == "normal_cpp"){
+	o_tab_view->setCurrentTab(STDINSTDOUT);
 	QString term = "xterm";
-	QString exec_str = term + " -e sh -c './" + prj->getBinPROGRAM().lower() + "'";
+	QString exec_str = term + " -e sh -c './" +  program + "'";
 	
 	if(CToolClass::searchInstProgram("konsole")){
 	  term = "konsole";
 	}
 	if(CToolClass::searchInstProgram("ksh")){
-	  exec_str = term + " -e ksh -c './" + prj->getBinPROGRAM().lower() + 
+	  exec_str = term + " -e ksh -c './" + program + 
 	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
 	}
 	if(CToolClass::searchInstProgram("csh")){
-	  exec_str = term +" -e csh -c './" + prj->getBinPROGRAM().lower() + 
+	  exec_str = term +" -e csh -c './" + program + 
 	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
 	}
 	if(CToolClass::searchInstProgram("tcsh")){
-	  exec_str =  term +" -e tcsh -c './" + prj->getBinPROGRAM().lower() + 
+	  exec_str =  term +" -e tcsh -c './" + program + 
 	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
 	}
 	if(CToolClass::searchInstProgram("bash")){
-	  exec_str =  term +" -e bash -c './" + prj->getBinPROGRAM().lower() + 
+	  exec_str =  term +" -e bash -c './" + program + 
 	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
 	}
 	appl_process << exec_str;
 	cout << exec_str;
       }
       else{
-	appl_process << "./" + prj->getBinPROGRAM().lower();
+	appl_process << "./" + program;
+	o_tab_view->setCurrentTab(STDERR);
       }
       setToolMenuProcess(false);
       appl_process.start(KProcess::NotifyOnExit,KProcess::All);
       next_job = "";
       ready = false;
     }
-    if (next_job == "run_with_args" && process.exitStatus() == 0){ // rest from the buildRun
-      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-      stdin_stdout_widget->clear();
-      stderr_widget->clear();
-      if(prj->getProjectType() == "normal_cpp"){
-      	o_tab_view->setCurrentTab(STDINSTDOUT);
-      }
-      else{
-      	o_tab_view->setCurrentTab(STDERR);
-      }
-
-      appl_process.clearArguments();
-      cerr<<"running with arguments"<< prj->getExecuteArgs()<<endl;
-      // Warning: not every user has the current directory in his path !
-      //      appl_process << "./" + prj->getBinPROGRAM().lower()+" "+prj->getExecuteArgs();
-      QString args=prj->getExecuteArgs();
-      if(args.isEmpty())
-      	appl_process << "./" + prj->getBinPROGRAM().lower();
-      else
-      	appl_process << "./" + prj->getBinPROGRAM().lower() <<args;				
-      setToolMenuProcess(false);
-      appl_process.start(KProcess::NotifyOnExit,KProcess::All);
-      next_job = "";
-      ready = false;
-    }
+      
     if (next_job == "refresh"){ // rest from the add projectfile
       refreshTrees();
     }
   }
   else {
-    KDEBUG(KDEBUG_WARN,CKDEVELOP,"process exited with error(s)...");
+    result= i18n("*** process exited with error(s) ***\n");
+  }
+  if (!result.isEmpty())
+  {
+     int x,y;
+     messages_widget->cursorPosition(&x,&y);
+    messages_widget->insertAt(result, x, y);
   }
   if(beep && ready){
     XBell(kapp->getDisplay(),100); //beep :-)

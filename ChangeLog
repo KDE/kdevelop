@@ -1,3 +1,8 @@
+1999-05-12  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* commit patch by Walter Tasin <tasin@e-technik.fh-muenchen.de>
+        ( the message window shows the exit code from the application)
+	* terminal application should now work with given arguments on startup
+
 1999-05-11 Jonas Nordin <jonas.nordin@cenacle.se>
 	* added parsing of operators.
 	* started adding support for multiple variable declaration.
