@@ -384,7 +384,6 @@ QString CppCodeCompletion::createTmpFileForParser (int iLine)
 //	QDataStream *pDataStream = tmpFile.dataStream();
 	//DataStream << strCopy;
 
-        #warning Doesnt make sense as strCopy is a QString - FIXME
 	pFile->writeBlock (strCopy.latin1(), strCopy.length());
 
 	pFile->flush();
