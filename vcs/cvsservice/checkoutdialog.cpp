@@ -15,6 +15,7 @@
 #include <qcombobox.h>
 
 #include <klistview.h>
+#include <kurlrequester.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
@@ -75,13 +76,12 @@ CheckoutDialog::CheckoutDialog( CvsService_stub *cvsService,
 
     connect( m_base->fetchModulesButton, SIGNAL(clicked()),
         this, SLOT(slotFetchModulesList()) );
-    connect( m_base->chooseWorkDirButton, SIGNAL(clicked()),
-        this, SLOT(slotSelectWorkDirList()) );
     connect( m_base->modulesListView, SIGNAL(executed(QListViewItem*)),
         this, SLOT(slotModuleSelected(QListViewItem*)) );
-    // DEBUG-LAZINESS here ;-)
-    setServerPath( ":pserver:marios@cvs.kde.org:/home/kde" );
-    setWorkDir( "/home/mario/src/test/prova_checkout" );
+
+    // Avoid displaying 'file:/' when displaying the file
+    m_base->workURLRequester->setShowLocalProtocol( false );
+    m_base->workURLRequester->setMode( KFile::Directory );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -116,14 +116,14 @@ void CheckoutDialog::setServerPath( const QString &aPath )
 
 QString CheckoutDialog::workDir() const
 {
-    return m_base->workDirEdit->text();
+    return m_base->workURLRequester->url();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 void CheckoutDialog::setWorkDir( const QString &aDir )
 {
-    m_base->workDirEdit->setText( aDir );
+    m_base->workURLRequester->setURL( aDir );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -207,20 +207,6 @@ void CheckoutDialog::slotReceivedOutput( QString someOutput )
 void CheckoutDialog::slotReceivedErrors( QString someErrors )
 {
     kdDebug( 9000 ) << " Received errors: " << someErrors << endl;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void CheckoutDialog::slotSelectWorkDirList()
-{
-    kdDebug(9000) << "CheckoutDialog::slotSelectWorkDirList() here!" << endl;
-
-    QString workDir = KFileDialog::getExistingDirectory(
-        QString::null, this, "filedialog"
-    );
-    if (workDir.isEmpty())
-        return;
-    setWorkDir( workDir );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

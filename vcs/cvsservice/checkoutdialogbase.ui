@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>CheckoutDialogBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>651</width>
-            <height>464</height>
+            <height>466</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -38,78 +38,21 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLayoutWidget">
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>layout9</cstring>
+                        <cstring>textLabel1_2</cstring>
                     </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer row="1" column="1">
-                            <property name="name">
-                                <cstring>spacer3</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Fixed</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>21</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QPushButton" row="1" column="2">
-                            <property name="name">
-                                <cstring>chooseWorkDirButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string>...</string>
-                            </property>
-                            <property name="autoDefault">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Select a path!</string>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit" row="1" column="0">
-                            <property name="name">
-                                <cstring>workDirEdit</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>3</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>textLabel1_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Local destination &amp;directory:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>workDirEdit</cstring>
-                            </property>
-                        </widget>
-                    </grid>
+                    <property name="text">
+                        <string>Local destination &amp;directory:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>workDirEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>workURLRequester</cstring>
+                    </property>
                 </widget>
                 <widget class="QLayoutWidget">
                     <property name="name">
@@ -379,8 +322,6 @@
 <customwidgets>
 </customwidgets>
 <tabstops>
-    <tabstop>workDirEdit</tabstop>
-    <tabstop>chooseWorkDirButton</tabstop>
     <tabstop>cvsRshEdit</tabstop>
     <tabstop>serverPathLineEdit</tabstop>
     <tabstop>moduleEdit</tabstop>
@@ -391,6 +332,8 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
 </includehints>
 </UI>

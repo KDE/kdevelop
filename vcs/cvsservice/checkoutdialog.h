@@ -70,7 +70,6 @@ public:
 private slots:
     void slotModuleSelected( QListViewItem *item );
     void slotFetchModulesList();
-    void slotSelectWorkDirList();
     // DCOP Iface
     virtual void slotJobExited( bool normalExit, int exitStatus );
     virtual void slotReceivedOutput( QString someOutput );
