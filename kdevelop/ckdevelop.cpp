@@ -227,16 +227,22 @@ void CKDevelop::slotFileSaveAll()
   m_docViewManager->saveModifiedFiles();
 
   if (!m_docViewManager->curDocIsBrowser()) {
-      setMainCaption();
       QWidget* pWdg = m_docViewManager->currentEditView();
-      if (pWdg)
-        pWdg->setFocus();
+      if (pWdg) {
+        pWdg->setFocus();  // sets the main caption anyway
+      }
+      else {
+        setMainCaption();
+      }
   }
   else {
-      setMainCaption(BROWSER);
       QWidget* pWdg = m_docViewManager->currentBrowserView();
-      if (pWdg)
-        pWdg->setFocus();
+      if (pWdg) {
+        pWdg->setFocus();  // sets the main caption anyway
+      }
+      else {
+        setMainCaption(BROWSER);
+      }
   }
 
   //  mainSplitter->setUpdatesEnabled(true);
