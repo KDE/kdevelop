@@ -30,10 +30,7 @@
 StatusBar::StatusBar(QWidget *parent, const char *name)
     : KStatusBar(parent, name), m_cursorIface(0), m_activePart(0)
 {
-  QLineEdit *le = new QLineEdit(this);
-  //    le->setFont(KGlobalSettings::fixedFont());
-  setFixedHeight(le->sizeHint().height());
-  delete le;
+  //setFixedHeight(le->sizeHint().height()+4);
 
   // stretcher
   addWidget(new QWidget(this), 1);
@@ -129,6 +126,14 @@ void StatusBar::setCursorPosition(int line, int col)
 void StatusBar::setModified(bool isModified)
 {
   _modified->setText(isModified? "*" : "");
+}
+
+void StatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
+{
+  KStatusBar::addWidget(widget,stretch,permanent);
+
+  if(widget->sizeHint().height() + 4 > height())
+    setFixedHeight(widget->sizeHint().height() + 4);
 }
 
 #include "statusbar.moc"

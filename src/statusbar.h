@@ -26,6 +26,7 @@ class StatusBar : public KStatusBar
 public:
     StatusBar( QWidget *parent=0, const char *name=0 );
     ~StatusBar();
+    void addWidget ( QWidget *widget, int stretch = 0, bool permanent = FALSE );
 
 public slots:
     void setEditorStatusVisible(bool visible);

@@ -208,6 +208,7 @@ KMainWindow *MainWindowIDEAl::main() {
 
 void MainWindowIDEAl::createStatusBar() {
     (void) new StatusBar(this);
+    QMainWindow::statusBar();
 }
 
 
