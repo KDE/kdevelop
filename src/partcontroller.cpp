@@ -1265,7 +1265,7 @@ bool PartController::reactToDirty( KURL const & url, unsigned char reason )
 	if ( isModified )
 	{
 		KMessageBox::sorry( TopLevel::getInstance()->main(), 
-			i18n("Conflict: The file \"%1\" has changed on disc while being modified in memory.\n\n"
+			i18n("Conflict: The file \"%1\" has changed on disk while being modified in memory.\n\n"
 					"You should investigate before saving to make sure you are not losing data.").arg( url.path() ),
 			i18n("Conflict") );
 		return false;
@@ -1274,7 +1274,7 @@ bool PartController::reactToDirty( KURL const & url, unsigned char reason )
 	if ( reason == 3 ) // means the file was deleted
 	{
 		KMessageBox::sorry( TopLevel::getInstance()->main(), 
-			i18n("Warning: The file \"%1\" has been deleted on disc.\n\n"
+			i18n("Warning: The file \"%1\" has been deleted on disk.\n\n"
 					"If this was not your intention, make sure to save this file now.").arg( url.path() ),
 			i18n("File Deleted") );
 		return false;
