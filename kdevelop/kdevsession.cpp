@@ -37,14 +37,16 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
 {
   QString section, keyword;
 
-  QDomDocument* pOutFile = new QDomDocument( "KDevelopSession");
+  QDomDocument* pOutFile = new QDomDocument( "KDevPrjSession");
   pOutFile->appendChild( pOutFile->createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-  QDomElement session = pOutFile->createElement("KDevelopSession");
+  QDomElement session = pOutFile->createElement("KDevPrjSession");
   pOutFile->appendChild( session);
 
   int nDocs = 0;
   QString docIdStr;
 
+  QDomElement docsAndViewsEl = pOutFile->createElement("DocsAndViews");
+  session.appendChild( docsAndViewsEl);
   if (m_pDocViewMan->docCount() > 0) {
     QList<KWriteDoc> kWriteDocList = m_pDocViewMan->getKWriteDocList();
     for (kWriteDocList.first(); kWriteDocList.current() != 0; kWriteDocList.next()) {
@@ -55,7 +57,7 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
       docIdStr.setNum(nDocs);
       QDomElement docEl = pOutFile->createElement("Doc" + docIdStr);
       docEl.setAttribute( "FileName", pDoc->fileName());
-      session.appendChild( docEl);
+      docsAndViewsEl.appendChild( docEl);
       // save the document itself
 //???         if (pDoc->bIsModified())
       nDocs++;
@@ -92,7 +94,7 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
       docIdStr.setNum(nDocs);
       QDomElement docEl = pOutFile->createElement("Doc" + docIdStr);
       docEl.setAttribute( "FileName", pDoc->currentURL());
-      session.appendChild( docEl);
+      docsAndViewsEl.appendChild( docEl);
       // save the document itself
 //???         if (pDoc->bIsModified())
       nDocs++;
@@ -112,7 +114,7 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
     }
   }
 
-  session.setAttribute( "NumberOfDocuments", nDocs);
+  docsAndViewsEl.setAttribute( "NumberOfDocuments", nDocs);
 
   // Write it out to a tmp file
   QFile f(sessionFileName);
@@ -128,8 +130,7 @@ bool KDevSession::saveToFile(const QString& sessionFileName)
 //------------------------------------------------------------------------------
 bool KDevSession::restoreFromFile(const QString& sessionFileName)
 {
-  // create a config file manager
-  QDomDocument* pInFile = new QDomDocument( "KDevelopSession");
+  QDomDocument* pInFile = new QDomDocument( "KDevPrjSession");
 
   // Write it out to a tmp file
   QFile f(sessionFileName);
@@ -145,22 +146,22 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
   }
 
   // Check for proper document type.
-  if (pInFile->doctype().name() != "KDevelopSession") {
+  if (pInFile->doctype().name() != "KDevPrjSession") {
     KMessageBox::sorry(0L,
-    i18n("The file %1 does not contain a valid KDevelop session ('KDevelopSession').\n").arg(sessionFileName)
+    i18n("The file %1 does not contain a valid KDevelop project session ('KDevPrjSession').\n").arg(sessionFileName)
     + i18n("The document type seems to be: '%1'.").arg(pInFile->doctype().name()));
     return false;
   }
 
-  bool bFound = false;
   QDomElement session = pInFile->documentElement();
-  // read the information about the documents
 
-  int nNrOfDocs = session.attribute("NumberOfDocuments", "0").toInt();
+  // read the information about the documents
+  QDomElement docsAndViewsEl = session.namedItem("DocsAndViews").toElement();
+  int nNrOfDocs = docsAndViewsEl.attribute("NumberOfDocuments", "0").toInt();
   // loop over all docs
   int   nDoc;
   QDomElement docEl;
-  for (docEl = session.firstChild().toElement(), nDoc = 0; nDoc < nNrOfDocs; nDoc++, docEl = docEl.nextSibling().toElement()) {
+  for (docEl = docsAndViewsEl.firstChild().toElement(), nDoc = 0; nDoc < nNrOfDocs; nDoc++, docEl = docEl.nextSibling().toElement()) {
     // read the document name and type
     QString docName = docEl.attribute( "FileName", "");
     QString docType = docEl.attribute( "Type", "Unknown");
@@ -179,8 +180,8 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
           }
           // views
           recreateViews( pDoc, docEl);
-//???        pDoc->setModified(false);
-          bFound = true;
+          if (pDoc->viewCount() == 0)
+            m_pDocViewMan->closeKWriteDoc(pDoc);
         }
       }
       else if (docType == QString("CDocBrowser")) {
@@ -188,14 +189,10 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
         if (pDoc) {
           // views
           recreateViews( pDoc, docEl);
-//???        pDoc->setModified(false);
-          bFound = true;
         }
       }
     }
   }
-  if (bFound == false)
-    return false;
 
   return true;
 }
