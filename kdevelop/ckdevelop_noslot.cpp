@@ -31,7 +31,7 @@ void CKDevelop::refreshTrees(){
     return; // no project
   }
   class_tree->refresh(prj);
-  refreshClassCombos();
+  refreshClassCombo();
   log_file_tree->refresh(prj);
   real_file_tree->refresh(prj->getProjectDir());
   real_file_tree->setExpandLevel(1);
@@ -161,6 +161,11 @@ void CKDevelop::switchToFile(QString filename){
     setCaption("KDevelop " + version + ": "+ filename);
   }
 
+}
+
+void CKDevelop::switchToFile(QString filename, int lineNo){
+  switchToFile( filename );
+  edit_widget->setCursorPosition( lineNo, 0 );
 }
 
 void CKDevelop::switchToKDevelop(){
