@@ -322,6 +322,8 @@ void CClassParser::parseNamespace()
 
   while(lexem != 0 && lexem != '}') {
     parseTopLevelLexem();
+    if (lexem == ';')
+      getNextLexem();
   }
 
   namespace_stack.pop_back();
