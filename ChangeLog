@@ -1,3 +1,8 @@
+2001-06-17  F@lk Brettschneider <falk@kdevelop.org>
+   * start kdevelop after its initial setup has finished
+   * creation of KDE docu outputs to user now
+   * and some bugfixes concerning to that issues
+
 2001-06-15  rokrau@yahoo.com
    * bugfix: another attempt to fix the mysterious crash 
      CKDevelop::setMainCaption
