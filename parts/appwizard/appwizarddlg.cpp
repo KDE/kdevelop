@@ -536,6 +536,21 @@ void AppWizardDialog::destButtonClicked()
         if ( !dir.endsWith( "/" ) )
             dir += "/";
         dest_edit->setText(dir);
+
+        // set new location as default project dir?
+        KConfig *config = kapp->config();
+        config->setGroup("General Options");
+        QDir defPrjDir( config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()) );
+        QDir newDir (dest_edit->text());
+        kdDebug(9010) << "DevPrjDir == newdir?: " << defPrjDir.absPath() << " == " << newDir.absPath() << endl;
+        if (defPrjDir != newDir) {
+            if (KMessageBox::questionYesNo(this, i18n("Set default project location to: ") + newDir.absPath() + "?",
+                                           i18n("New Project")) == KMessageBox::Yes)
+            {
+                config->writePathEntry("DefaultProjectsDir", newDir.absPath() + "/");
+                config->sync();
+            }
+        }
     }
 }
 
