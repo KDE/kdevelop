@@ -114,14 +114,12 @@ void LanguageSelectWidget::readProjectConfig()
     QString language = DomUtil::readEntry(m_projectDom, "/general/primarylanguage");
     _currentLanguage->setText(i18n("Primary language is '%1'. Please select additional languages the project might contain.").arg(language));
 
-    qDebug("***** %s", languages.join(" ").ascii());
     for (KTrader::OfferList::ConstIterator it = languageSupportOffers.begin(); it != languageSupportOffers.end(); ++it)
     {
         QString la = (*it)->property("X-KDevelop-Language").toString();
         if (la == language)
             continue;
         LangPluginItem *item = new LangPluginItem( _pluginList, (*it)->property("X-KDevelop-Language").toString(), (*it)->genericName(), (*it)->comment() );
-        qDebug(" *** setOn: %s", (*it)->name().ascii());
         item->setOn(languages.contains(la));
     }
 
