@@ -96,10 +96,12 @@ void TargetOptionsDialog::readConfig()
     QString addstr = (target->primary == "PROGRAMS")? target->ldadd : target->libadd;
     QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr);
 
+    bool inlistItem;
     QListViewItem *lastItem = 0;
     QStringList::Iterator l2it;
     QCheckListItem *flitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
     for (l2it = l2.begin(); l2it != l2.end(); ++l2it) {
+        inlistItem = false;
         QCheckListItem *clitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
         if (flitem) {
             while (clitem) {
@@ -110,12 +112,13 @@ void TargetOptionsDialog::readConfig()
                       clitem->moveItem(flitem);
                     // move the "top of the list" one item down
                     flitem = static_cast<QCheckListItem*>(flitem->nextSibling());
+                    inlistItem = true;
                     break;
                 }
                 clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
             }
         }
-        if (!clitem) {
+        if ( inlistItem == false ) {
             QListViewItem *item = new QListViewItem(outsidelib_listview, *l2it);
             if (lastItem)
                 item->moveItem(lastItem);
