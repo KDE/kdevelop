@@ -36,6 +36,8 @@
 #include "vcscolorsconfigwidget.h"
 #include "kdevversioncontrol.h"
 
+#define FILETREE_OPTIONS 1
+
 ///////////////////////////////////////////////////////////////////////////////
 // static members
 ///////////////////////////////////////////////////////////////////////////////
@@ -65,7 +67,10 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     m_widget->setIcon( SmallIcon("folder") );
     mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
 
-    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
+	_configProxy = new ConfigWidgetProxy( core() );
+	_configProxy->createProjectConfigPage( i18n("File Tree"), FILETREE_OPTIONS );
+	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
+		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
     loadSettings();
 
@@ -81,15 +86,8 @@ FileViewPart::~FileViewPart()
     delete m_widget;
 
     storeSettings();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void FileViewPart::projectConfigWidget( KDialogBase *dlg )
-{
-    QVBox *vbox = dlg->addVBoxPage( i18n("File Tree") );
-    VCSColorsConfigWidget *w = new VCSColorsConfigWidget( this, vcsColors, vbox, "vcscolorsconfigwidget" );
-    connect( dlg, SIGNAL(okClicked()), w, SLOT(slotAccept()) );
+	
+	delete _configProxy;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,6 +134,15 @@ void FileViewPart::storeSettings()
     cfg->writeEntry( "FileNeedsCheckoutColor", vcsColors.needsCheckout );
     cfg->writeEntry( "FileUnknownColor", vcsColors.unknown );
     cfg->writeEntry( "DefaultColor", vcsColors.defaultColor );
+}
+
+void FileViewPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int pagenumber )
+{
+	if ( pagenumber == FILETREE_OPTIONS )
+	{
+		VCSColorsConfigWidget *w = new VCSColorsConfigWidget( this, vcsColors, page, "vcscolorsconfigwidget" );
+		connect( dlg, SIGNAL(okClicked()), w, SLOT(slotAccept()) );
+	}
 }
 
 #include "fileviewpart.moc"

@@ -13,10 +13,12 @@
 #define _FILEGROUPSPART_H_
 
 #include <qguardedptr.h>
-#include <kdialogbase.h>
+//#include <kdialogbase.h>
+#include <configwidgetproxy.h>
 #include "kdevplugin.h"
 
 class FileGroupsWidget;
+class KDialogBase;
 
 class FileGroupsPart : public KDevPlugin
 {
@@ -30,11 +32,12 @@ public slots:
     void refresh();
 
 private slots:
-    void projectConfigWidget(KDialogBase *dlg);
+	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
 
 private:
     QGuardedPtr<FileGroupsWidget> m_filegroups;
     bool deleteRequested;
+	ConfigWidgetProxy * _configProxy;
 };
 
 #endif

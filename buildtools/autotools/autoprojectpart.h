@@ -29,6 +29,7 @@ class KDialogBase;
 class AutoProjectWidget;
 class KSelectAction;
 class TargetItem;
+class ConfigWidgetProxy;
 
 
 class AutoProjectPart : public KDevProject
@@ -85,7 +86,7 @@ protected:
     virtual void closeProject();
 
 private slots:
-    void projectConfigWidget(KDialogBase *dlg);
+//    void projectConfigWidget(KDialogBase *dlg);
     void slotAddTranslation();
     void slotBuild();
     void slotBuildActiveTarget();
@@ -104,6 +105,7 @@ private slots:
     void slotCommandFinished( const QString& command );
     void slotCommandFailed( const QString& command );
     //void slotImportExisting();
+	void insertConfigWidget( const KDialogBase* dlg, QWidget * page, unsigned int );
 
 private:
     QGuardedPtr<AutoProjectWidget> m_widget;
@@ -122,6 +124,8 @@ private:
     bool m_needMakefileCvs;
     bool m_lastCompilationFailed;
     bool m_isKDE;
+
+	ConfigWidgetProxy * _configProxy;
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;
