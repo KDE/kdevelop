@@ -142,6 +142,7 @@ void KDevDesignerPart::setupActions( )
     toggle = new KRadioAction(i18n("Set &Buddy"), createPartIconSet("designer_setbuddy.png"), Key_F12, actionCollection(), "tools_setbuddy");
     setupToolsAction(toggle, m_widget->actionBuddyTool);
     new KAction(i18n("Configure Toolbox..."), 0, this, SLOT(toolsConfigureToolbox()), actionCollection(), "tools_toolbox");
+    new KAction(i18n("Edit &Custom Widgets..."), 0, this, SLOT(toolsEditCustomWidgets()), actionCollection(), "tools_editcustomwidgets");
 
     action = new KAction(i18n("Adjust &Size"), createPartIconSet("designer_adjustsize.png"), CTRL + Key_J, this, SLOT(layoutAdjustSize()), actionCollection(), "layout_adjustsize");
     stateSync(action, m_widget->actionEditAdjustSize);
@@ -554,6 +555,11 @@ void KDevDesignerPart::emitEditSource(const QString &formName)
 void KDevDesignerPart::emitNewStatus(const QString &formName, int status)
 {
     emit newStatus(formName, status);
+}
+
+void KDevDesignerPart::toolsEditCustomWidgets( )
+{
+    m_widget->toolsCustomWidget();
 }
 
 #include "kdevdesigner_part.moc"

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kdevdesigner_part" version="3">
+<kpartgui name="kdevdesigner_part" version="4">
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <Action name="file_new" group="new_merge"/>
@@ -46,6 +46,8 @@
     <Action name="tools_connect" group="tools_operations"/>
     <Action name="tools_taborder" group="tools_operations"/>
     <Action name="tools_setbuddy" group="tools_operations"/>
+    <Action name="tools_toolbox" group="tools_operations"/>
+    <Action name="tools_editcustomwidgets" group="tools_operations"/>
 <!--    <Separator/>
     <Action name="tools_toolbox"/>-->
   </Menu>

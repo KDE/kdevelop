@@ -101,6 +101,7 @@ protected slots:
     void projectSettings();
     
     void toolsConfigureToolbox();
+    void toolsEditCustomWidgets();
     
     void layoutAdjustSize();
     void layoutHLayout();
