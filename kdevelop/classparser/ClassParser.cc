@@ -34,12 +34,14 @@
 #include "ClassParser.h"
 
 #define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
-#define CP_IS_OTHER 0
-#define CP_IS_ATTRIBUTE 1
-#define CP_IS_METHOD 2
-#define CP_IS_METHOD_IMPL 3
-#define CP_IS_ATTR_IMPL 4
-#define CP_IS_STRUCT 5
+enum
+{ 
+  CP_IS_OTHER, 
+  CP_IS_OPERATOR, CP_IS_OPERATOR_IMPL,
+  CP_IS_ATTRIBUTE, CP_IS_ATTR_IMPL,
+  CP_IS_MULTI_ATTRIBUTE, CP_IS_MULTI_ATTR_IMPL,
+  CP_IS_METHOD, CP_IS_METHOD_IMPL, CP_IS_STRUCT
+};
 
 /*********************************************************************
  *                                                                   *
@@ -291,6 +293,7 @@ bool CClassParser::isEndOfVarDecl()
  *-----------------------------------------------------------------*/
 void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
 {
+  QStrList names;
   CParsedLexem *aLexem;
   QString type;
   QString arrayDecl;
@@ -427,16 +430,36 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::fillInParsedMethod(CParsedMethod *aMethod)
+void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
 {
+  QString name;
   CParsedLexem *aLexem;
   QString type;
 
-  // Set the method name
-  aLexem = lexemStack.pop();
-  aMethod->setName( aLexem->text );
-  delete aLexem;
+  // Set the method name, depending on if it's a operator or not.
+  if( !isOperator )
+  {
+    aLexem = lexemStack.pop();
+    name = aLexem->text;
+    delete aLexem;
+  }
+  else
+  {
+    // Make the name of all symbols until the operator keyword.
+    while( lexemStack.top()->type != CPOPERATOR )
+    {
+      aLexem = lexemStack.pop();
+      name = aLexem->text + name;
+      delete aLexem;
+    }
 
+    // Delete the operator symbol.
+    delete lexemStack.pop();
+  }
+
+  // Set the operator name
+  aMethod->setName( name );
+  
   // Set the type of the method.
   fillInParsedType( type );
   aMethod->setType( type );
@@ -510,7 +533,7 @@ CParsedMethod *CClassParser::parseMethodDeclaration()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseMethodImpl()
+void CClassParser::parseMethodImpl(bool isOperator)
 {
   CParsedClass *aClass;
   CParsedLexem *aLexem;
@@ -523,11 +546,27 @@ void CClassParser::parseMethodImpl()
   // The two first objects on the stack is the name and then the class.
 
   // Get the method name.
-  aLexem = lexemStack.pop();
-  name = aLexem->text;
-  delete aLexem;
+  if( !isOperator )
+  {
+    aLexem = lexemStack.pop();
+    name = aLexem->text;
+    delete aLexem;
+  }
+  else
+  {
+    while( lexemStack.top()->type != CPOPERATOR )
+    {
+      aLexem = lexemStack.pop();
+      name = aLexem->text + name;
+      delete aLexem;
+    }
+
+    // Remove the operator lexem from the stack.
+    delete lexemStack.pop();
+  }
 
   // Delete '::'
+  assert( lexemStack.top()->type == CLCL );
   aLexem = lexemStack.pop();
   delete aLexem;
 
@@ -592,18 +631,50 @@ void CClassParser::parseMethodImpl()
 int CClassParser::checkClassDecl()
 {
   bool isImpl = false;
+  bool isOperator = false;
+  bool isMultiDecl = false;
+  int retVal;
+  bool exit = false;
 
-  while( lexem != '(' && lexem != ';' && lexem != '=' )
+  while( !exit )
   {
-    if( lexem == CLCL )
-      isImpl = true;
+    switch( lexem )
+    {
+      case CLCL:
+        isImpl = true;
+        break;
+      case CPOPERATOR:
+        isOperator = true;
+        break;
+      case ',':
+        isMultiDecl = true;
+        break;
+    }
+
     PUSH_LEXEM();
     getNextLexem();
+
+    exit = ( ( isOperator && lexem == '(' ) || 
+             ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' )) ); 
   }
 
-  return ( lexem == '(' ? 
-           ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD ) :
-           ( isImpl ? CP_IS_ATTR_IMPL : CP_IS_ATTRIBUTE ) );
+  // If we find a '(' it's a function of some sort.
+  if( lexem == '(' )
+  {
+    if( isOperator )
+      retVal = ( isImpl ? CP_IS_OPERATOR_IMPL : CP_IS_OPERATOR );
+    else
+      retVal = ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
+  }
+  else // Attribute
+  {
+    if( isMultiDecl )
+      retVal = ( isImpl ? CP_IS_MULTI_ATTR_IMPL : CP_IS_MULTI_ATTRIBUTE );
+    else
+      retVal = ( isImpl ? CP_IS_ATTR_IMPL : CP_IS_ATTRIBUTE );
+  }
+
+  return retVal;
 }
 
 /*----------------------------- CClassParser::parseClassInheritance()
@@ -708,6 +779,7 @@ CParsedClass *CClassParser::parseClassHeader()
  *-----------------------------------------------------------------*/
 void CClassParser::parseClassDeclarations( CParsedClass *aClass )
 {
+  int declType;
   CParsedClass *childClass;
   CParsedStruct *aStruct;
   CParsedAttribute *anAttr;
@@ -786,7 +858,8 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
               aClass->addSlot( aMethod );
           }
           else
-            switch( checkClassDecl() )
+            declType = checkClassDecl();
+            switch( declType )
             {
               case CP_IS_ATTRIBUTE:
                 anAttr = new CParsedAttribute();
@@ -796,13 +869,17 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
                 else
                   delete anAttr;
                 break;
+              case CP_IS_OPERATOR:
               case CP_IS_METHOD:
                 aMethod = new CParsedMethod();
-                fillInParsedMethod( aMethod );
+                fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
                 if( !aMethod->name.isEmpty() )
                   aClass->addMethod( aMethod );
                 else 
                   delete aMethod;
+                break;
+              case CP_IS_MULTI_ATTRIBUTE:
+                debug( "Found multi value attribute declaration" );
                 break;
             }
         }
@@ -863,6 +940,7 @@ void CClassParser::parseToplevel()
   CParsedStruct *aStruct;
   CParsedAttribute *anAttr;
   CParsedMethod *aMethod;
+  int declType;
 
   // Ok... Here we go.
   lexem = -1;
@@ -928,14 +1006,16 @@ void CClassParser::parseToplevel()
           break;
       case CONST:
       case ID:
-        switch( checkClassDecl() )
+        declType = checkClassDecl();
+        switch( declType )
         {
           case CP_IS_ATTR_IMPL:
             // Empty the stack
             emptyStack();
             break;
+          case CP_IS_OPERATOR_IMPL:
           case CP_IS_METHOD_IMPL:
-            parseMethodImpl();
+            parseMethodImpl( declType == CP_IS_OPERATOR_IMPL );
             break;
           case CP_IS_ATTRIBUTE:
             anAttr = new CParsedAttribute();
@@ -952,6 +1032,15 @@ void CClassParser::parseToplevel()
               store.addGlobalFunction( aMethod );
             else
               delete aMethod;
+            break;
+          case CP_IS_MULTI_ATTR_IMPL:
+            debug( "Found multi attr implementation." );
+            break;
+          case CP_IS_MULTI_ATTRIBUTE:
+            debug( "Found multi value attribute declaration" );
+            break;
+          case CP_IS_OPERATOR:
+            debug( "Found operator declaration." );
             break;
         }
         break;
