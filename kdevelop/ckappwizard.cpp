@@ -169,8 +169,8 @@ void CKAppWizard::initPages(){
   qtentry->setOpen (TRUE);
   qtentry->sortChildItems (0,FALSE);
   qextmdiitem = new QListViewItem( qtentry, i18n("QextMDI"));
-  qt2mdiitem = new QListViewItem( qtentry, i18n("Qt 2.1 MDI"));
-  qt2normalitem = new QListViewItem( qtentry, i18n("Qt 2.x SDI"));
+  qt2mdiitem = new QListViewItem( qtentry, i18n("Qt 2.2 MDI"));
+  qt2normalitem = new QListViewItem( qtentry, i18n("Qt 2.2 SDI"));
   qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
 
   gnomeentry = new QListViewItem (applications, "GNOME");

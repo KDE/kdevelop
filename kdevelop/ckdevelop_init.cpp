@@ -340,7 +340,7 @@ void CKDevelop::initKeyAccel(){
 
   accel->connectItem( KAccel::Replace, this, SLOT(slotEditReplace() ), true, ID_EDIT_REPLACE );
 
-  accel->insertItem( i18n("Search in Files"), "Grep", (unsigned int) 0);
+  accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_GREP_IN_FILES );
   accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ), true, ID_EDIT_SEARCH_IN_FILES );
 
   accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_GREP_IN_FILES );

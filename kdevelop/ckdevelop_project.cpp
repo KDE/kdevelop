@@ -796,7 +796,10 @@ void CKDevelop::slotProjectMessages(){
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
-  slotStatusMsg(i18n("Creating pot-file in /po..."));
+  if(!prj->isQt2Project())
+    slotStatusMsg(i18n("Creating pot-file in /po..."));
+  else
+    slotStatusMsg(i18n("Updating translation files..."));
   messages_widget->clear();
   error_parser->toogleOff();
   shell_process.clearArguments();

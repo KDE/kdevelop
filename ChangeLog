@@ -1,5 +1,9 @@
 2000-10-19 Ralf Nolden <nolden@kde.org>
   * added check for a Makefile in make clean in the base project dir, otherwise use subdir
+  * added support for subdir sources translation in linugist as well as INTERFACES line (although it seems linguist
+    doesn´t support that right now - or am I wrong here ?)
+  * updated Qt 2.2 templates and KDE MDI template -- the mdi templates still crash on exiting the app in the eventFilter() so if
+    someone has a useful idea how to fix that...
 
 2000-10-18 Ralf Nolden <nolden@kde.org>
   * updated installer for linguist, gimp, kbabel (preferred over ktranslator if found)

@@ -577,6 +577,11 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
 
   config.sync();
   setSourcesHeaders();
+  // For Qt 2 projects:
+  // update the projectdir/Makefile.am to add sources to the SOURCES line
+  if(isQt2Project())
+    updateMakefilesAm();
+  ///////////
   return new_subdir;
 }
 
@@ -685,8 +690,20 @@ void CProject::updateMakefileAm(QString makefile){
 	  stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
     /********************* QT 2 INTERNATIONALIZATION **************/	
 	  if(isQt2Project()){
-	    // add a separate SOURCES line for lupdate to get translations
-  	  stream << "SOURCES = " << sources << "\n";
+	    QString all_srces;
+	    QString uifiles;
+	    QStrList src_list=getSources();
+  	  for(str= src_list.first();str !=0;str = src_list.next()){
+        str.replace( QRegExp(getProjectDir()+getSubDir()), "" );
+  	    if(str.right(3)==".ui")
+  	      uifiles = str + " " + uifiles;
+  	    else
+    	    all_srces =  str + " " + all_srces ;
+  	  }
+	
+	    // add a separate SOURCES and INTERFACES line for lupdate to get translations
+  	  stream << "SOURCES = " << all_srces  << "\n";
+      stream << "INTERFACES = " << uifiles << "\n";
       // add a TRANSLATIONS line for lupdate/lrelease containing all .ts files
       QStrList ts_files;
       getTSFiles(makefile,ts_files);
