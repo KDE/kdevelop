@@ -57,8 +57,14 @@ Position=Top
 KDevScripting=false
 
 [UI]
-MDIStyle=1
+MDIStyle=3
 MDIMode=4
+TabVisibility=0
+CloseOnHover=false
+CloseOnHoverDelay=false
+OpenNewTabAfterCurrent=true
+ShowCloseTabsButton=true
+ShowTabIcons=false
 
 [Kate View Defaults]
 Icon Bar=true
