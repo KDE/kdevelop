@@ -193,7 +193,9 @@ void GrepViewWidget::searchActivated()
 {
 	if ( grepdlg->keepOutputFlag() )
 		slotKeepOutput();
-	
+		
+	m_tabWidget->showPage( m_curOutput );
+
 	m_curOutput->setLastFileName("");
 	m_curOutput->setMatchCount( 0 );
 
@@ -339,8 +341,6 @@ void GrepViewWidget::slotKeepOutput( )
 	connect( m_curOutput, SIGNAL(returnPressed(QListBoxItem*)), this, SLOT(slotExecuted(QListBoxItem*)) );
 	connect( m_curOutput, SIGNAL(processExited(KProcess* )), this, SLOT(slotSearchProcessExited()) );
 	connect( m_curOutput, SIGNAL(contextMenuRequested( QListBoxItem*, const QPoint&)), this, SLOT(popupMenu(QListBoxItem*, const QPoint&)));
-	
-	m_tabWidget->showPage( m_curOutput );
 }
 
 void GrepViewWidget::slotCloseCurrentOutput( )
