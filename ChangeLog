@@ -2,7 +2,7 @@
 	* enhanced grepview, there is no need to display the filename in each line
 
 2003-03-06 Roberto Raggi <roberto@kdevelop.org>
-	* Addded support for tmake projects
+	* Added support for tmake projects
 	* Added template for QTopia 1.6
 
 2003-03-05 Alexander Dymo <cloudtemple@mksat.net>
