@@ -1,3 +1,6 @@
+2000-05-04 KDevelop Team <kdevelop-team@barney.cs.uni-potsdam.de>
+	* KDevelop 1.2 released
+
 2000-05-02 Walter Tasin  <tasin@kdevelop.de>
 	* segfault fix, if kdlgloader.so is not present and starting
 	  preview dialog
