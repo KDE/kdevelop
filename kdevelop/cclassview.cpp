@@ -1,12 +1,11 @@
 /***************************************************************************
-                 classview.cpp - the classview for kdevelop
-                             -------------------                                         
-
-    version              :                                   
-    begin                : 13 Aug 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de
-    some bugfixes        : Jost Schenk
+                          cclassview.cpp  -  description
+                             -------------------
+    begin                : Fri Mar 19 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+    based on             : cclassview.cpp by Sandy Meier
+   
  ***************************************************************************/
 
 /***************************************************************************
@@ -19,569 +18,629 @@
  ***************************************************************************/
 
 #include "cclassview.h"
-#include "ckdevelop.h"
-#include <qstrlist.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <iostream.h>
-#include <qregexp.h>
-#include "debug.h"
+#include <assert.h>
+#include <kiconloader.h>
+#include <kmsgbox.h>
 
-CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name){
-  streamed_files = new QList<TStreamedFile>;
-  streamed_files->setAutoDelete(true);
-  class_infos = new QList<TClassInfo>;
-  class_infos->setAutoDelete(true);
+// Initialize static members
+QString CClassView::CLASSROOTNAME = "Classes";
+QString CClassView::GLOBALROOTNAME = "Global";
 
-  icon_loader = KApplication::getKApplication()->getIconLoader();
-  left_button = true;
-  right_button = false;
-  class_pop = new KPopupMenu();
-  class_pop->setTitle(i18n("Class:"));
-  class_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
-  class_pop->insertSeparator();
-  class_pop->insertItem(i18n("New Class..."),this,SLOT(slotClassNew()));
-  //  class_pop->insertItem(i18n("Remove Class "),this,SLOT(slotClassRemove())); I think it is not
-  // usefull, or? -Sandy
-  // class_pop->insertItem(i18n("Delete Class..."),this,SLOT(slotClassDelete()));
-  //  class_pop->insertSeparator();
-  // class_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
-  // class_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
+/*********************************************************************
+ *                                                                   *
+ *                     CREATION RELATED METHODS                      *
+ *                                                                   *
+ ********************************************************************/
 
+/*------------------------------------------- CClassView::CClassView()
+ * CClassView()
+ *   Constructor.
+ *
+ * Parameters:
+ *   parent         Parent widget.
+ *   name           The name of this widget.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
+  : KTreeList (parent, name)
+{
+  readIcons();
+  initPopups();
 
-  member_pop = new KPopupMenu();
-  member_pop->setTitle(i18n("Method:"));
-  //member_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
-  member_pop->insertItem(i18n("Definition"),this,SLOT(slotViewDefinition()));
-  //member_pop->insertSeparator();
-  //member_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
-  //member_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
+  // Add callback for clicks in the listview.
+  connect( this, 
+           SIGNAL( singleSelected( int ) ), 
+           SLOT( slotSingleSelected( int ) ) );
 
-  project_pop = new KPopupMenu();
-  project_pop->setTitle(i18n("Project:"));
-  project_pop->insertItem(i18n("New File..."),this,SLOT(slotFileNew()));
-  project_pop->insertItem(i18n("New Class..."),this,SLOT(slotClassNew()));
-  project_pop->insertSeparator();
-  project_pop->insertItem(i18n("Options..."),this,SLOT(slotProjectOptions()));
+  // Set the store.
+  store = &cp.store;
+}
 
-  connect(this,SIGNAL(singleSelected(int)),SLOT(slotSingleSelected(int)));
+/*------------------------------------------ CClassView::~CClassView()
+ * ~CClassView()
+ *   Destructor.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CClassView::~CClassView()
+{
+  for( int i=0; i<END_POS; i++ )
+    delete icons[ i ];
+
+  delete []icons;
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                          PUBLIC METHODS                           *
+ *                                                                   *
+ ********************************************************************/
+
+/*------------------------------------------ CClassView::addClass()
+ * addClass()
+ *   Add a class to be shown in the view.
+ *
+ * Parameters:
+ *   aClass         The classdefintion.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::addClass( CCVClass *aClass )
+{
+  assert( aClass != NULL && !hasClass( aClass->name ) );
+
+  classes.append( aClass );
+}
+
+/*---------------------------------------------- CClassView::refresh()
+ * refresh()
+ *   Add all classes from the project. Reparse and redraw all classes 
+ *   in the view.
+ *
+ * Parameters:
+ *   proj          The project specification.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::refresh( CProject *proj )
+{
+  QStrList list;
+  QStrList src;
+  QStrList header;
+  char *str;
+  char *s1;
+  QString projDir;
+
+  debug( "CClassView::refresh( proj )" );
+
+  // Reset the classparser.
+  cp.wipeout();
+
+  projDir = proj->getProjectDir();
   
-}
-CClassView::~CClassView(){
-}
+  // Get the lists containing the files for the project.
+  proj->getAllFiles( list );
+  src = proj->getSources();
+  header = proj->getHeaders();
 
-/** read all headers and sources and put it into a variables 'streamed files'
-  */
-void CClassView::CVReadAllFiles(){
-  QFile file;
-  QTextStream in_stream(&file);
-  QString filename;
-  TStreamedFile* stream_info;
-  streamed_files->clear();
-  //read the headers
-  if (!prj_info->getHeaders().isEmpty()){
-    QStrList headers = prj_info->getHeaders();
-    for(filename = headers.first();filename != 0;filename = headers.next()){
-      stream_info = new TStreamedFile;
+  // Parse headerfiles.
+  for( str = header.first(); str != NULL; str = header.next() )
+  {
+    // Find a fullpath containing the filename.
+    for( s1 = list.first(); 
+         s1 != NULL && strstr( s1, str ) == NULL; 
+         s1 = list.next() )
+      ;
 
-      file.setName(filename);
-      stream_info->filename = filename;
-      if (file.exists()){
-	file.open(IO_ReadOnly);
-	stream_info->stream.resize(file.size()+1);
-	file.readBlock(stream_info->stream.data(),file.size());
-	file.close();
-	CVRemoveAllComments(&stream_info->stream);
-	streamed_files->append(stream_info); // add it to the classfiles
-      }
-    }
+    debug( "  parsing:[%s%s]", projDir.data(), s1 );
+    cp.parse( projDir + s1 );
   }
-  // // //read the sources
-//   if (!prj_info->getSources().isEmpty()){
-//     for(filename = prj_info->getSources().first();filename != 0;filename = prj_info->getSources().next()){
-//       stream_info = new TStreamedFile;
-//       file.setName(prj_info->getProjectDir() + prj_info->getSubDir() + filename);
-//       stream_info->filename = filename;
-//       if (file.exists()){
-// 	file.open(IO_ReadOnly);
-// 	//cerr << "LESE CPPDATEI" << endl;
-// 	 // while(!in_stream.eof()){
-// // 	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
-// // 	}
-// 	stream_info->stream.resize(file.size()+1);
-// 	file.readBlock(stream_info->stream,file.size());
-// 	file.close();
-// 	CVRemoveAllComments(&stream_info->stream);
-// 	streamed_files->append(stream_info); // add it to the classfiles
-//       }
-//     }
-//   }
 
+  // Parse sourcefiles.
+  for( str = src.first(); str != NULL; str = src.next() )
+  {
+    // Find a fullpath containing the filename.
+    for( s1 = list.first(); 
+         s1 != NULL && strstr( s1, str ) == NULL; 
+         s1 = list.next() )
+      ;
+
+    debug( "  parsing:[%s%s]", projDir.data(), s1 );
+    cp.parse( projDir + s1 );
+  }
+
+  refresh();
 }
 
-void CClassView::refresh(CProject* prj){
-  prj_info = prj;
-  KPath path;
-  TClassInfo* class_info;
-  TVarInfo* var_info;
-  TMethodInfo* method_info;
-  QString pix_dir;
-  CVReadAllFiles();
-  CVFindTheClasses();
-  CVFindTheMethodsAndVars();
-  KPath* saved_item_path;
+/*---------------------------------------------- CClassView::refresh()
+ * refresh()
+ *   Reparse and redraw all classes in the view.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::refresh()
+{
+  CParsedClass *aPC;
+  QString cstr;
+  QString gstr;
+  KPath classPath;
+  KPath globalPath;
 
-  
-
-  // let the show begin
-  // save the current item;
-  saved_item_path = itemPath(currentItem());
-  //cerr << "ITEM_PATH:" << saved_item_path << endl;
-  
-  pix_dir = KApplication::kde_datadir() + "/kdevelop/pics/mini/";
-  QPixmap class_pix(pix_dir + "CVclass.xpm");
-  QPixmap struct_pix(pix_dir + "CVstruct.xpm");
-  QPixmap public_var_pix(pix_dir + "CVpublic_var.xpm");
-  QPixmap protected_var_pix(pix_dir + "CVprotected_var.xpm");
-  QPixmap private_var_pix(pix_dir + "CVprivate_var.xpm");
-  QPixmap public_meth_pix(pix_dir + "CVpublic_meth.xpm");
-  QPixmap protected_meth_pix(pix_dir + "CVprotected_meth.xpm");
-  QPixmap private_meth_pix(pix_dir + "CVprivate_meth.xpm");
-  QPixmap kwm_pix = icon_loader->loadMiniIcon("kwm.xpm");
-  
   setUpdatesEnabled( false );
 
-  clear();
-  QString* p_str = new QString;
-  *p_str = prj_info->getProjectName();
-  //  path.push(&prj_info->getProjectName());  
-  path.push(p_str);
-  //  insertItem(prj_info->getProjectName(),&icon_loader->loadMiniIcon("kwm.xpm"));
-  insertItem(*p_str,&kwm_pix);
-  if (class_infos->isEmpty()) return; // no classes
-  
-  for(class_info = class_infos->first();class_info != 0;class_info = class_infos->next()){
-    if (class_info->type == "class"){
-    addChildItem(class_info->classname,&class_pix,&path);
-    }
-    else{
-      addChildItem(class_info->classname,&struct_pix,&path);
-    }
-    path.push(&class_info->classname);
+  // Insert root item
+  cstr = i18n( CLASSROOTNAME );
+  insertItem( cstr, icons[ PROJECT ] );
+
+  classPath.push( &cstr );
+
+  // Add all parsed classes to the view
+  for( store->classIterator.toFirst(); 
+       store->classIterator.current(); 
+       ++store->classIterator )
+  {
+    aPC = store->classIterator.current();
+
+    // Add the class.
+    addChildItem( aPC->name, icons[ CVCLASS ], &classPath );
+    classPath.push( &aPC->name );
+
+    debug( "  Added class %s", aPC->name.data() );
+
+    // Add parts of the class
+    addMethods( aPC->getMethods(), classPath );
+    addAttributes( aPC->attributeIterator, classPath );
+    addSlots( aPC, classPath );
+    addSignals( aPC, classPath );
     
-    // add the methods
-    if(!class_info->method_infos.isEmpty()){
-      
-      for(method_info = class_info->method_infos.first();method_info != 0;
- 	  method_info = class_info->method_infos.next()){
-	if (method_info->visibility == "public"){
-	addChildItem(method_info->name,&public_meth_pix,&path);
-	}
-	if (method_info->visibility == "protected"){
-	  addChildItem(method_info->name,&protected_meth_pix,&path);
-	}
-	if (method_info->visibility == "private"){
-	  addChildItem(method_info->name,&private_meth_pix,&path);
-	}
-      }
-    }
-    
-    // add the variables
-    if(!class_info->variable_infos.isEmpty()){
-      
-      for(var_info = class_info->variable_infos.first();var_info != 0;
- 	  var_info = class_info->variable_infos.next()){
-	if (var_info->visibility == "public"){
-	  addChildItem(var_info->name,&public_var_pix,&path);
-	}
-	if (var_info->visibility == "protected"){
-	  addChildItem(var_info->name,&protected_var_pix,&path);
-	}
-	if (var_info->visibility == "private"){
-	  addChildItem(var_info->name,&private_var_pix,&path);
-	}
-      } // end for
-    }
-    
-     path.pop();
-   }
-  setExpandLevel(1);
-  setUpdatesEnabled( TRUE );
+    classPath.pop();
+  }
+
+  // Add all global functions and variables
+  gstr = i18n( GLOBALROOTNAME );
+  insertItem( gstr, icons[ PROJECT ] );
+  globalPath.push( &gstr );
+  addMethods( store->getGlobalFunctions(), globalPath );
+  addAttributes( store->gvIterator, globalPath );
+
+  // Redraw the view.
+  setExpandLevel( 1 );
+  setUpdatesEnabled( true );
   repaint();
-
- //  if(saved_item_path != 0){
-//     QString* item_name = saved_item_path->pop();
-//     int parent_index = itemIndex(itemAt(saved_item_path));
-//     cerr << "ParentIndex:" << parent_index;
-//     setExpandLevel(0);
-//     expandItem(parent_index);
-//     //    setCurrentItem(item_index);
-//   }
-
-   // refresh the comboboxes in the toolbar
-  
-
- 
 }
 
-bool CClassView::leftButton(){
-  return left_button;
+/*------------------------------------- CClassView::refreshClassById()
+ * refreshClassById()
+ *   Reparse and redraw a class by using its' menuid.
+ *
+ * Parameters:
+ *   aID             The menuid.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::refreshClassById( int aID )
+{
 }
-bool CClassView::rightButton(){
-  return right_button;
+
+/*-------------------------------------- CClassView::refreshClassById()
+ * refreshClassById()
+ *   Reparse and redraw a classes by using its' name.
+ *
+ * Parameters:
+ *   aName          The classname
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::refreshClassByName( QString &aName )
+{
 }
-void CClassView::mousePressEvent(QMouseEvent* event){
-  if(event->button() == RightButton){    
-    left_button = false;
-    right_button = true;
+
+/*********************************************************************
+ *                                                                   *
+ *                          PUBLIC QUERIES                           *
+ *                                                                   *
+ ********************************************************************/
+
+/*------------------------------------------ CClassView::hasClass()
+ * hasClass()
+ *   Check if a class has been added to the view
+ *
+ * Parameters:
+ *   aName          Name of the class to check for.
+ *
+ * Returns:
+ *   bool           If the class exists or not.
+ *-----------------------------------------------------------------*/
+bool CClassView::hasClass( QString &aName )
+{
+  CCVClass *aClass;
+
+  for( aClass = classes.first();
+       aClass != NULL && aClass->name != aName;
+       aClass = classes.next() )
+    ;
+
+  return aClass != NULL;
+}
+
+/*------------------------------------------ CClassView::indexType()
+ * indexType()
+ *   Return the type of a certain index.
+ *
+ * Parameters:
+ *   aPC             Class that holds the data.
+ *   path            Current path in the view.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+int CClassView::indexType( int aIdx )
+{
+  KTreeListItem *item;
+  KTreeListItem *parent;
+  CParsedClass *aClass;
+  int retVal = -1;
+
+  item = itemAt( aIdx );
+
+  // Should add cases for global functions and variables.
+  if( strcmp( item->getText(), i18n( "Classes" ) ) == 0 ) // Root
+    retVal = PROJECT;
+  else if( cp.store.getClassByName( item->getText() ) )
+    retVal = CVCLASS;
+  else // Check for methods and attributes.
+  {
+    parent = item->getParent();
+    aClass = cp.store.getClassByName( parent->getText() );
+    if( aClass && aClass->getMethodByNameAndArg( item->getText() ) )
+      retVal = METHOD;
+    else if( aClass && aClass->getAttributeByName( item->getText() ) )
+      retVal = ATTRIBUTE;
   }
-  if(event->button() == LeftButton){
-    left_button = true;
-    right_button = false;
-  }
-  mouse_pos.setX(event->pos().x());
-  mouse_pos.setY(event->pos().y());
-  KTreeList::mousePressEvent(event); 
+
+  // Check for globals if nothing else has worked.
+  if( retVal == -1 )
+    if( store->getGlobalFunctionByNameAndArg( item->getText() ) != NULL )
+      retVal = CVGLOBAL_FUNCTION;
+    else if( store->getGlobalVarByName( item->getText() ) != NULL )
+      retVal = CVGLOBAL_VARIABLE;
+
+  return retVal;
 }
 
-void CClassView::slotSingleSelected(int index){
-  if(rightButton()){
-    if(isMethod(index)){
-      member_pop->popup(this->mapToGlobal(mouse_pos));
-    } 
-    else if(isClass(index)){
-      class_pop->popup(this->mapToGlobal(mouse_pos));
+/*********************************************************************
+ *                                                                   *
+ *                          PRIVATE METHODS                          *
+ *                                                                   *
+ ********************************************************************/
 
-    }
-    else{
-      project_pop->popup(this->mapToGlobal(mouse_pos));
-    }
-  }
-}
+/*------------------------------------------ CClassView::readIcons()
+ * readIcons()
+ *   Read the icons from disk and store them in the class.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::readIcons()
+{
+  QString projIcon = "folder.xpm";
+  QString pixDir;
+  KIconLoader *il;
 
-bool CClassView::isClass(int index){
-  KTreeListItem* current = itemAt(index);
-  if(current == 0) return false;
-  KTreeListItem* parent = current->getParent();
-  if(parent == 0) return false;
-  KTreeListItem* pparent = parent->getParent();
-  if(pparent == 0) return false;  
-  KTreeListItem* ppparent = pparent->getParent();
-  if(ppparent == 0) return true;
-  return false;
-}
+  // Allocate the array.
+  icons = new QPixmap *[ END_POS ];
 
-bool CClassView::isMethod(int index){
-  KTreeListItem* current = itemAt(index);
-  if(current == 0) return false;
-  KTreeListItem* parent = current->getParent();
-  if(parent == 0) return false;
-  KTreeListItem* pparent = parent->getParent();
-  if(pparent == 0) return false;  
-  KTreeListItem* ppparent = pparent->getParent();
-  if(ppparent == 0) return false;
-  return true;
-}
+  pixDir = KApplication::kde_datadir () + PIXPREFIX;
+  debug( "Fetching pixmaps from: %s", pixDir.data() );
 
-void CClassView::slotProjectOptions(){
-  emit selectedProjectOptions();
-}
-void CClassView::slotFileNew(){
-  emit selectedFileNew();
-}
-void CClassView::slotClassNew(){
-  emit selectedClassNew();
-}
-void CClassView::slotClassRemove(){
-}
-void CClassView::slotClassDelete(){
-}
-void CClassView::slotMethodNew(){
-}
-void CClassView::slotVariableNew(){
-}
-void CClassView::slotViewDeclaration(){
-  int index=currentItem();
-  emit selectedViewDeclaration(index);
-}
-void CClassView::slotViewDefinition(){
-  int index=currentItem();
-  emit selectedViewDefinition(index);
+  il = KApplication::getKApplication()->getIconLoader();
+
+  // Load the icons
+  icons[ PROJECT ] = new QPixmap( il->loadMiniIcon( "folder.xpm" ) );
+  icons[ CVCLASS ] = new QPixmap(pixDir + "CVclass.xpm");
+  icons[ STRUCT ] = new QPixmap(pixDir + "CVstruct.xpm");
+  icons[ PUBLIC_ATTR ] = new QPixmap(pixDir + "CVpublic_var.xpm");
+  icons[ PROTECTED_ATTR ] = new QPixmap(pixDir + "CVprotected_var.xpm");
+  icons[ PRIVATE_ATTR ] = new QPixmap(pixDir + "CVprivate_var.xpm");
+  icons[ PUBLIC_METHOD ] = new QPixmap(pixDir + "CVpublic_meth.xpm");
+  icons[ PROTECTED_METHOD ] = new QPixmap(pixDir + "CVprotected_meth.xpm");
+  icons[ PRIVATE_METHOD ] = new QPixmap(pixDir + "CVprivate_meth.xpm");
 }
 
-void CClassView::CVFindTheClasses(){
+/*------------------------------------------ CClassView::initPopups()
+ * initPopups()
+ *   Initialze all popupmenus.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void  CClassView::initPopups()
+{
+  int id;
+  // Project popup
+  projectPopup.setTitle(i18n ("Project"));
+  projectPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()));
+  projectPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()));
+  id = projectPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
+  projectPopup.setItemEnabled(id, false );
+  projectPopup.insertSeparator();
+  projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()));
 
+  // Class popup
+  classPopup.setTitle( i18n("Class"));
+  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotClassDefinition()));
+  classPopup.insertItem( i18n("Add member method..."), this, SLOT(slotMethodNew()));
+  classPopup.insertItem( i18n("Add member attribute..."), this, SLOT(slotAttributeNew()));
+  classPopup.insertSeparator();
+  id = classPopup.insertItem( i18n("Base classes..."), this, SLOT(slotClassBaseClasses()));
+  classPopup.setItemEnabled(id, false );
+  classPopup.insertItem( i18n("Derived classes..."), this, SLOT(slotClassDerivedClasses()));
+  classPopup.insertSeparator();
+  classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
+  classPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
 
-  class_infos->clear();
-  //cerr << endl <<"BEGINNE MIT DER ANALYSE";
-  TClassInfo* class_info;
-  int act_pos = 0;
-  int pos1 =0;
-  int num_classes=0; //number of classes in the actual file
-  QRegExp regexp;
-  
-  QString stream; // the actual stream string
-  TStreamedFile* stream_info; 
-  if (streamed_files->isEmpty()) return; // no file, no class
-  
-  // scan all the streamed files
-  for(stream_info = streamed_files->first();stream_info != 0;stream_info = streamed_files->next()){
-    stream = stream_info->stream; // set the actual stream
-    act_pos=0;
-    // first find the classes
-    num_classes = stream.contains("class ");
-    // cerr << endl << "Gefunden KLASSEN in " << stream_info->filename << ": " << num_classes ;
-    while(num_classes != 0){
-      class_info = new TClassInfo;
-      class_info->filename = stream_info->filename;
-      class_info->type = "class";
-      regexp = "class ";
-      act_pos = stream.find(regexp,act_pos); // find the class token
-      regexp = " [a-zA-Z]";
-      act_pos = stream.find(regexp,act_pos) +1; // find the begin of the classname
-      regexp = "[{;]";
-      pos1 = stream.find(regexp, act_pos);    // test for forward declarations
-      if ( stream.mid(pos1, 1) == "{" )
-      {
-        regexp = "[;{ \t\n]";
-        pos1 = stream.find(regexp,act_pos); // find the end of the classname
-        class_info->classname = stream.mid(act_pos,(pos1-act_pos)); // get the classname
-        act_pos = stream.find('{',act_pos);
-        class_info->begin = act_pos;
-        class_info->end = CVFindClassDecEnd(stream,act_pos);
-      
+  // Method popup
+  methodPopup.setTitle( i18n( "Method" ) );
+  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotMethodDefinition()));
+  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotMethodDeclaration()));
+  methodPopup.insertSeparator();
+  methodPopup.insertItem( i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
 
-        //cerr << endl <<"KLASSENAME:" << class_info->classname << ":" << endl;
-        //cerr << "Begin:" << class_info->begin << ":" << endl;
-        //cerr << "Ende:" << class_info->end << ":" << endl;
-        class_infos->append(class_info);
-      }
-      else
-        act_pos = pos1;
-      num_classes--; 
-    }
+  // Attribute popup
+  attributePopup.setTitle( i18n( "Attribute" ) );
+  attributePopup.insertItem( i18n("Go to definition" ), this, SLOT( slotAttributeDefinition()));
+  attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
+}
 
-    // and now the structures
-    act_pos=0;
-    num_classes = stream.contains("struct ");
-    //cerr << endl << "Gefunden STRUCTUREN in " << stream_info->filename << ": " << num_classes ;
-    while(num_classes != 0){
-      class_info = new TClassInfo;
-      class_info->filename = stream_info->filename;
-      class_info->type = "struct";
-      regexp = "struct ";
-      act_pos = stream.find(regexp,act_pos); // find the struct token
-      regexp = " [a-zA-Z]";
-      act_pos = stream.find(regexp,act_pos) +1; // find the begin of the structname
-      regexp = "[{;]";
-      pos1 = stream.find(regexp, act_pos);     // test for forward declarations
-      if ( stream.mid(pos1, 1) == "{" )
-      {
-        regexp = "[{ ]";
-        pos1 = stream.find(regexp,act_pos); // find the end of the structname
-        class_info->classname = stream.mid(act_pos,pos1-act_pos); // get the structname
-        act_pos = stream.find('{',act_pos);
-        class_info->begin = act_pos;
-        class_info->end = CVFindClassDecEnd(stream,act_pos);
-      
-        //cerr << endl <<"STRUCTNAMENAME:" << class_info->classname << ":" << endl;
-        //cerr << "Begin:" << class_info->begin << ":" << endl;
-        //cerr << "Ende:" << class_info->end << ":" << endl;
-        class_infos->append(class_info);
-      }
-      else
-        act_pos = pos1;
-      num_classes--; 
-    }
+/*------------------------------------------ CClassView::addMethods()
+ * addMethods()
+ *   Add all methods from a class to the view.
+ *
+ * Parameters:
+ *   aPC             Class that holds the data.
+ *   path            Current path in the view.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::addMethods( QList<CParsedMethod> *list, KPath &path )
+{
+  CParsedMethod *aMethod;
+  QPixmap *icon;
+  QString str;
+
+  // Add the methods
+  for( aMethod = list->first();
+       aMethod != NULL;
+       aMethod = list->next() )
+  {
+    if( aMethod->isPublic() )
+      icon = icons[ PUBLIC_METHOD ];
+    else if( aMethod->isProtected() )
+      icon = icons[ PROTECTED_METHOD ];
+    else if( aMethod->isPrivate() )
+      icon = icons[ PRIVATE_METHOD ];
+    else // Global
+      icon = icons[ PUBLIC_METHOD ];
     
+    aMethod->toString( str );
+    addChildItem( str, icon, &path );
   }
- 
 }
 
-int CClassView::CVFindClassDecEnd(QString stream,int startpos){
-  int num =1;
-  int act_pos = startpos;
-  while (num !=0){
-    act_pos++;
-    if(act_pos == (int)stream.size()){
-      KDEBUG(KDEBUG_ERROR,CCLASSVIEW,"FIXME: Error by parsing,coundn't find a class-end definition");
-      return act_pos;
-    }
-    if (stream[act_pos] == '{') num++;
-    if (stream[act_pos] == '}') num--;
-  }
-  return act_pos;
-}
+/*------------------------------------------ CClassView::addAttributes()
+ * addAttributes()
+ *   Add all attributes from a class to the view.
+ *
+ * Parameters:
+ *   aPC             Class that holds the data.
+ *   path            Current path in the view.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::addAttributes( QDictIterator<CParsedAttribute> &iter,
+                                KPath &path )
+{
+  QPixmap *icon;
+  CParsedAttribute *aAttr;
 
-void CClassView::CVFindTheMethodsAndVars(){
-  int begin,end,act_pos,prev_pos;
-  QString stream,str,name,temp;
-  TClassInfo* class_info;
-  TStreamedFile* streamed_file;
-  TMethodInfo* method_info;
-  TVarInfo* var_info;
-  QString visibility;
-  if(class_infos->isEmpty()) return; // no classes no Methods and no Vars
-  
-  // iterate all classes
-  for(class_info = class_infos->first();class_info != 0;class_info = class_infos->next()){
-    begin = class_info->begin;
-    end = class_info->end;
-    act_pos=begin;prev_pos=begin;
-
-    for(streamed_file = streamed_files->first();streamed_file != 0;
-	streamed_file = streamed_files->next()){
-      if (streamed_file->filename == class_info->filename){
-	stream = streamed_file->stream; // the correct stream for the class found
-      }
-    }
+  // Add the methods
+  for( iter.toFirst();
+       iter.current();
+       ++iter )
+  {
+    aAttr = iter.current();
+    if( aAttr->isPublic() )
+      icon = icons[ PUBLIC_ATTR ];
+    else if( aAttr->isProtected() )
+      icon = icons[ PROTECTED_ATTR ];
+    else if( aAttr->isPrivate() )
+      icon = icons[ PRIVATE_ATTR ];
+    else // Global
+      icon = icons[ PUBLIC_ATTR ];
     
-    if (class_info->type == "struct") {visibility = "public";}
-    else {visibility = "private";}
-    act_pos = stream.find(';',prev_pos+1);
-    while((act_pos <= end) && act_pos != -1 ){
-      
-      str = stream.mid(prev_pos,act_pos-prev_pos);
-      temp = CVGetVisibility(str);
-      if (temp  != "nothing" ) {
-	visibility = temp;
-      }
-      // get the methods
-      if (CVIsItAMethod(str)){
-	name = CVGetMethod(str);
-	method_info = new TMethodInfo;
-	method_info->name = name;
-	method_info->visibility = visibility;
-	class_info->method_infos.append(method_info); // a new method
-	//	cerr << "METH:" << name;
-	//cerr << "Visibility:" << visibility  << endl;
-      }
-      // get the variables
-      if (CVIsItAVariable(str)){
-	name = CVGetVariable(str);
-	var_info = new TVarInfo;
-	var_info->name = name;
-	var_info->visibility = visibility;
-	class_info->variable_infos.append(var_info); // a new method
-	//	cerr << "VAR:" << name << endl;
-	//	cerr << "Visibility:" << visibility  << endl;
-      }
-      
-      prev_pos = act_pos; // and now the next please
-      act_pos = stream.find(';',prev_pos+1);
-    }
-    
-  }// end iterate all classes
+    addChildItem( aAttr->name, icon, &path );
+  }
 }
 
+/*------------------------------------------ CClassView::addSlots()
+ * addSlots()
+ *   Add all slots from a class to the view.
+ *
+ * Parameters:
+ *   aPC             Class that holds the data.
+ *   path            Current path in the view.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::addSlots( CParsedClass *aPC, KPath &path )
+{
+  CParsedMethod *aMethod;
 
-bool CClassView::CVIsItAMethod(QString str){
-  if ((str.contains(')') == 1) && str.contains('(') == 1) return true;
-  return false;
-}
-bool CClassView::CVIsItAVariable(QString str){
-  return (!CVIsItAMethod(str));
-}
-void CClassView::CVRemoveAllComments(QString* str){
-  //  return;
-  int begin;
-  int end;
-  int i=0;
-  while ((begin = str->find("/*")) != -1){
-    end = str->find("*/",begin+2);
-    if(end == -1){
-      end = str->length();
-    }
-    for(i=begin;i<=end;i++){
-      if ((*str)[i] != '\n'){
-	(*str)[i] = '_'; // remove the complete comment
-      }
-    }
-  }
-  while ((begin = str->find("//")) != -1){
-    if (str->find("\n",begin) != -1){
-      end = str->find("\n",begin);
-    }
-    else{
-      end = str->find("\0", begin);
-    }
-    i=0;
-    if(begin != 0){
-      i = begin-1;
-    }
-    for(;i<=end;i++){
-      if ((*str)[i] != '\n'){
-	(*str)[i] = '_'; // remove the complete comment
-      }
-    }
-  }
-  // cerr << endl << *str;
+  // Add the methods
+  for( aMethod = aPC->slotList.first();
+       aMethod != NULL;
+       aMethod = aPC->slotList.next() )
+    addChildItem( aMethod->name, icons[ STRUCT ], &path );
 }
 
+/*------------------------------------------ CClassView::addSignals()
+ * addSignals()
+ *   Add all signals from a class to the view.
+ *
+ * Parameters:
+ *   aPC             Class that holds the data.
+ *   path            Current path in the view.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::addSignals( CParsedClass *aPC, KPath &path )
+{
+  CParsedMethod *aMethod;
 
-QString CClassView::CVGetVisibility(QString str){
-  QString visi_str;
-  QRegExp regexp;
-  int end = str.length()-1;
-  int begin =-1;
-  int len;
-  end = str.findRev(':',end);
-  if (end == -1) {
-    //cerr << endl << "VIS: no change" << endl;
-    return "nothing"; // no visibility change
-    
-  }
-  regexp = "[a-zA-Z]";
-  end = str.findRev(regexp,end);
-  regexp = "[ \n]";
-  begin = str.findRev(regexp,end);
-  if (begin == -1 || end == -1){
-    return "nothing";
-  }
-  len = end-begin;
-  visi_str = str.mid(begin+1,len);
-  visi_str = visi_str.stripWhiteSpace();
-  
-  
-  if (visi_str == "signals") return "public";
-  if (visi_str != "slots" && visi_str != "public" 
-      && visi_str != "protected" && visi_str != "private"){
-    return "nothing";
-    
-  }
-  if (visi_str == "slots"){
-    regexp = "[a-zA-Z]";
-    end = str.findRev(regexp,begin);
-    regexp = "[ \n]";
-    begin = str.findRev(regexp,end);
-    visi_str = str.mid(begin+1,end-begin);
-    visi_str = visi_str.stripWhiteSpace(); 
-  }
-  return visi_str;
-}
-QString CClassView::CVGetMethod(QString str){
-  int begin,end;
-  QRegExp regexp;
-  
-  end = str.findRev(')',str.size()-1); // find the end
-  begin = str.findRev('(',end);
-  regexp = "[a-zA-Z]";
-  begin = str.findRev(regexp,begin);
-  regexp = "[ \t:;*]";
-  begin = str.findRev(regexp,begin);
-  return str.mid(begin+1,end-begin);
-}
-QString CClassView::CVGetVariable(QString str){
-  int begin,end;
-  QRegExp regexp;
-  regexp = "[a-zA-Z]";
-  end = str.findRev(regexp,str.size()-1); // find the last letter of the name
-  regexp = "[ \t*]";
-  begin = str.findRev(regexp,end); // find the first letter
-  if((end-begin+1) <0){
-    return "error";
-  }
-  return str.mid(begin+1,end-begin+1);
+  // Add the methods
+  for( aMethod = aPC->signalList.first();
+       aMethod != NULL;
+       aMethod = aPC->signalList.next() )
+    addChildItem( aMethod->name, icons[ STRUCT ], &path );
 }
 
+/*********************************************************************
+ *                                                                   *
+ *                              EVENTS                               *
+ *                                                                   *
+ ********************************************************************/
 
+/*------------------------------------- CClassView::mousePressEvent()
+ * mousePressEvent()
+ *   Handles mousepressevents(duh!). If the left or right mouse 
+ *   button is pressed the coordinate and the mousebutton is saved.
+ *
+ * Parameters:
+ *   event           The event.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::mousePressEvent(QMouseEvent * event)
+{
+  // Save the mousebutton.
+  mouseBtn = event->button();
+
+  if( mouseBtn == LeftButton || mouseBtn == RightButton )
+    mousePos = event->pos();
+
+  KTreeList::mousePressEvent( event );
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                              SLOTS                                *
+ *                                                                   *
+ ********************************************************************/
+
+void CClassView::slotSingleSelected (int index)
+{
+  KPopupMenu *popup;
+
+  if( mouseBtn == RightButton )
+  {
+    switch( indexType( index ) )
+    {
+      case PROJECT:
+        popup = &projectPopup;
+        break;
+      case CVCLASS:
+        popup = &classPopup;
+        break;
+      case METHOD:
+        popup = &methodPopup;
+        break;
+      case ATTRIBUTE:
+        popup = &attributePopup;
+        break;
+      default:
+        popup = NULL;
+        break;
+    }
+
+    if( popup )
+      popup->popup( this->mapToGlobal( mousePos ) );
+  }
+}
+
+void CClassView::slotProjectOptions ()
+{
+  emit selectedProjectOptions ();
+}
+
+void CClassView::slotFileNew ()
+{
+  emit selectedFileNew ();
+}
+
+void CClassView::slotClassNew ()
+{
+  emit selectedClassNew ();
+}
+
+void CClassView::slotClassDelete ()
+{
+  if( KMsgBox::yesNo( this, "Delete class", 
+                      "Are you sure you want to delete this class?",
+                      KMsgBox::QUESTION ) == 1 )
+  {
+    KMsgBox::message( this, "Not implemented",
+                      "This function isn't implemented yet." );
+  }
+                      
+}
+
+void CClassView::slotMethodNew()
+{
+}
+
+void CClassView::slotMethodDelete()
+{
+  if( KMsgBox::yesNo( this, "Delete method", 
+                      "Are you sure you want to delete this method?",
+                      KMsgBox::QUESTION ) == 1 )
+  {
+    KMsgBox::message( this, "Not implemented",
+                      "This function isn't implemented yet." );
+  }
+}
+
+void CClassView::slotAttributeNew()
+{
+}
+
+void CClassView::slotAttributeDelete()
+{
+  if( KMsgBox::yesNo( this, "Delete attribute", 
+                      "Are you sure you want to delete this attribute?",
+                      KMsgBox::QUESTION ) == 1 )
+  {
+    KMsgBox::message( this, "Not implemented",
+                      "This function isn't implemented yet." );
+  }
+}
