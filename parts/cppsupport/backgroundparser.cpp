@@ -14,9 +14,6 @@
 #include "cppsupport_events.h"
 
 #include "driver.h"
-#include "lexer.h"
-#include "parser.h"
-#include "ast.h"
 #include "ast_utils.h"
 
 #include <kparts/part.h>
@@ -49,6 +46,7 @@ void BackgroundParser::removeAllFiles()
 {
     lock();
     m_unitDict.clear();
+    m_driver.reset();
     unlock();
 }
 
@@ -56,73 +54,18 @@ void BackgroundParser::removeFile( const QString& fileName )
 {
     lock();
     m_unitDict.remove( fileName );
+    m_driver.clear( fileName );
     unlock();
 }
 
 Unit* BackgroundParser::parseFile( const QString& fileName, const QString& contents )
 {
-    Driver driver;
-    Lexer lexer;
-
-    // TODO: remove hard coded special words
-
-    // stl
-    lexer.addSkipWord( "__STL_BEGIN_NAMESPACE" );
-    lexer.addSkipWord( "__STL_END_NAMESPACE" );
-    lexer.addSkipWord( "__STL_BEGIN_RELOPS_NAMESPACE" );
-    lexer.addSkipWord( "__STL_END_RELOPS_NAMESPACE" );
-    lexer.addSkipWord( "__STL_TEMPLATE_NULL" );
-    lexer.addSkipWord( "__STL_TRY" );
-    lexer.addSkipWord( "__STL_UNWIND" );
-    lexer.addSkipWord( "__STL_NOTHROW" );
-    lexer.addSkipWord( "__STL_NULL_TMPL_ARGS" );
-    lexer.addSkipWord( "__GC_CONST" );
-    lexer.addSkipWord( "__HASH_ALLOC_INIT", SkipWordAndArguments );
-    lexer.addSkipWord( "_ROPE_SWAP_SPECIALIZATION", SkipWordAndArguments );
-    lexer.addSkipWord( "__ROPE_DEFINE_ALLOCS", SkipWordAndArguments );
-    
-    // antlr
-    lexer.addSkipWord( "ANTLR_USE_NAMESPACE", SkipWordAndArguments );
-    lexer.addSkipWord( "ANTLR_USING_NAMESPACE", SkipWordAndArguments );
-
-    // gnu
-    lexer.addSkipWord( "__extension__" );
-    lexer.addSkipWord( "__attribute__", SkipWordAndArguments );
-    
-    // kde
-    lexer.addSkipWord( "K_SYCOCATYPE", SkipWordAndArguments );
-    lexer.addSkipWord( "EXPORT_DOCKCLASS" );
-    lexer.addSkipWord( "K_EXPORT_COMPONENT_FACTORY", SkipWordAndArguments );
-    
-    // qt
-    lexer.addSkipWord( "Q_OVERRIDE", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_ENUMS", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_PROPERTY", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_CLASSINFO", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_SETS", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_UNUSED", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_CREATE_INSTANCE", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_DUMMY_COMPARISON_OPERATOR", SkipWordAndArguments );
-    lexer.addSkipWord( "ACTIVATE_SIGNAL_WITH_PARAM", SkipWordAndArguments );
-    lexer.addSkipWord( "Q_INLINE_TEMPLATES" );
-    lexer.addSkipWord( "Q_TEMPLATE_EXTERN" );
-    lexer.addSkipWord( "Q_TYPENAME" );
-    lexer.addSkipWord( "Q_REFCOUNT" );
-    lexer.addSkipWord( "Q_EXPLICIT" );
-    lexer.addSkipWord( "QMAC_PASCAL" );
-    lexer.addSkipWord( "__cdecl" );
-    
-    lexer.setSource( contents );
-    Parser parser( &driver,  &lexer );
-    parser.setFileName( fileName );
-    
-    TranslationUnitAST::Node translationUnit;
-    parser.parseTranslationUnit( translationUnit );
+    TranslationUnitAST::Node translationUnit = m_driver.parseFile( fileName, contents );
  
     Unit* unit = new Unit;
     unit->fileName = fileName;
     unit->translationUnit = translationUnit.release();
-    unit->problems = parser.problems();
+    unit->problems = m_driver.problems( fileName );
 
     return unit;
 }

@@ -12,7 +12,7 @@
 #ifndef BACKGROUNDPARSER_H
 #define BACKGROUNDPARSER_H
 
-#include "parser.h"
+#include "driver.h"
 #include "ast.h"
 
 #include <qthread.h>
@@ -65,6 +65,7 @@ protected:
     Unit* parseFile( const QString& fileName, const QString& contents );    
     
 private:
+    Driver m_driver;
     QWaitCondition m_changed;
     QMutex m_mutex;
     

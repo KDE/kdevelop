@@ -26,49 +26,12 @@ class Lexer;
 class Token;
 class Error;
 
-class Problem
-{
-public:
-    Problem() {}
-    Problem( const Problem& source )
-	: m_text( source.m_text ), m_line( source.m_line ), m_column( source.m_column ) {}
-    Problem( const QString& text, int line, int column )
-	: m_text( text ), m_line( line ), m_column( column ) {}
-    
-    Problem& operator = ( const Problem& source )
-    {
-	m_text = source.m_text;
-	m_line = source.m_line;
-	m_column = source.m_column;
-	return( *this );
-    }
-    
-    bool operator == ( const Problem& p ) const
-    {
-	return m_text == p.m_text && m_line == p.m_line && m_column == p.m_column;
-    }
-
-    QString text() const { return m_text; }
-    int line() const { return m_line; }
-    int column() const { return m_column; }
-    
-private:
-    QString m_text;
-    int m_line;
-    int m_column;
-};
-
 class Parser
 {
 public:
-    Parser( Driver* drv, Lexer* lexer );
+    Parser( Driver* driver, Lexer* lexer );
     virtual ~Parser();
 
-    QString fileName() const;
-    void setFileName( const QString& fileName );
-
-    QValueList<Problem> problems() const { return m_problems; }
-    
 private:
     virtual bool reportError( const Error& err );
     /*TODO: remove*/ virtual bool reportError( const QString& msg );
@@ -196,17 +159,11 @@ public /*rules*/ :
 
 private:
     ParserPrivateData* d;
-    Driver* driver;
+    Driver* m_driver;
     Lexer* lex;
-    QString m_fileName;
-    QValueList<Problem> m_problems;
+    int m_problems;
     int m_maxProblems;
 };
-
-inline QString Parser::fileName() const
-{
-    return m_fileName;
-}
 
 
 #endif

@@ -158,8 +158,9 @@ enum PreProcessorState
 };
 
 
-Lexer::Lexer()
-    : m_recordComments( false ),
+Lexer::Lexer( Driver* driver )
+    : m_driver( driver ),
+      m_recordComments( false ),
       m_recordWhiteSpaces( false )
 {
     reset();
@@ -230,28 +231,28 @@ void Lexer::tokenize()
     QMap< QString, int >::Iterator op_it;
     QRegExp qt_rx( "Q[A-Z]{1,2}_[A-Z_]+" );
     QRegExp typelist_rx( "K_TYPELIST_[0-9]+" );
-    
+
     m_startLine = true;
-    
+
     m_size = 0;
     while( ptr < m_endPtr ){
-	
+
 	int preproc_state = PreProc_none;
-	
+
 	if( m_directiveStack.size() ){
 	    preproc_state = m_directiveStack.top();
 	}
-	
+
 	if( m_size == (int)m_tokens.size() ){
 	    m_tokens.resize( m_tokens.size() + 5000 );
 	}
-	
+
 	ptr = readWhiteSpaces( ptr );
-	
+
 	int len = ptr - m_buffer;
 	QString ch2( ptr, QMIN(len,2) );
 	QString ch3( ptr, QMIN(len,3) );
-	
+
 	int startLine = m_currentLine;
 	int startColumn = m_currentColumn;
 	
@@ -320,7 +321,7 @@ void Lexer::tokenize()
 		    if( *pos == SkipWordAndArguments ){
 			end = skip( readWhiteSpaces(end, false), '(', ')' );
 		    }
-		} else if( qt_rx.exactMatch(ide) || ide.endsWith("EXPORT") || ide.startsWith("Q_EXPORT") ){
+		} else if( /*qt_rx.exactMatch(ide) ||*/ ide.endsWith("EXPORT") || ide.startsWith("Q_EXPORT") || ide.startsWith("QM_EXPORT") || ide.startsWith("QM_TEMPLATE")){
 		    end = skip( readWhiteSpaces(end, false), '(', ')' );
 		} else if( typelist_rx.exactMatch(ide) ){
 		    Token tk = Token( Token_identifier, ptr, end - ptr );
@@ -333,7 +334,7 @@ void Lexer::tokenize()
 		    tk.setStartPosition( startLine, startColumn );
 		    tk.setEndPosition( m_currentLine, m_currentColumn );
 		    m_tokens[ m_size++ ] = tk;
-		}		
+		}
 	    }
 	    ptr = end;
 	} else if( ptr->isNumber() ){

@@ -12,6 +12,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include "driver.h"
+
 #include <qstring.h>
 #include <qmemarray.h>
 #include <qmap.h>
@@ -175,7 +177,7 @@ private:
 
 class Lexer {
 public:
-    Lexer();
+    Lexer( Driver* driver );
     ~Lexer();
 
     bool recordComments() const;
@@ -216,6 +218,7 @@ private:
     const QChar* handleDirective( const QString& directive, const QChar* ptr );
 
 private:
+    Driver* m_driver;
     QMemArray< Token > m_tokens;
     int m_size;
     QMemArray< const QChar* > m_startLineVector;

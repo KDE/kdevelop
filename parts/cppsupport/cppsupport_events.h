@@ -12,7 +12,7 @@
 #ifndef __cppsupport_events_h
 #define __cppsupport_events_h
 
-#include "parser.h"
+#include "driver.h"
 
 #include <qevent.h>
 #include <qvaluelist.h>

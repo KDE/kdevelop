@@ -61,15 +61,13 @@ struct ParserPrivateData
         {}
 };
 
-Parser::Parser( Driver* drv, Lexer* lexer )
-    : driver( drv ),
+Parser::Parser( Driver* driver, Lexer* lexer )
+    : m_driver( driver ),
       lex( lexer )
 {
     d = new ParserPrivateData();
-    m_fileName = "<stdin>";
 
     m_maxProblems = 5;
-    m_problems.clear();
 }
 
 Parser::~Parser()
@@ -78,15 +76,11 @@ Parser::~Parser()
     d = 0;
 }
 
-void Parser::setFileName( const QString& fileName )
-{
-    m_fileName = fileName;
-}
-
 bool Parser::reportError( const Error& err )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
-    if( (int)m_problems.size() < m_maxProblems ){
+    if( m_problems < m_maxProblems ){
+	++m_problems;
 	int line=0, col=0;
 	const Token& token = lex->lookAhead( 0 );
 	lex->getTokenPosition( token, &line, &col );
@@ -96,7 +90,7 @@ bool Parser::reportError( const Error& err )
 	if( s.isEmpty() )
 	    s = i18n( "<eof>" );
 	
-	m_problems << Problem( err.text.arg(s), line, col );
+	m_driver->addProblem( m_driver->currentFileName(), Problem(err.text.arg(s), line, col) );
     }
         
     return true;
@@ -105,12 +99,13 @@ bool Parser::reportError( const Error& err )
 bool Parser::reportError( const QString& msg )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::reportError()" << endl;
-    if( (int)m_problems.size() < m_maxProblems ){
+    if( m_problems < m_maxProblems ){
+	++m_problems;
 	int line=0, col=0;
 	const Token& token = lex->lookAhead( 0 );
 	lex->getTokenPosition( token, &line, &col );
 
-	m_problems << Problem( msg, line, col );
+	m_driver->addProblem( m_driver->currentFileName(), Problem(msg, line, col) );
     }
     
     return true;
@@ -302,8 +297,7 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
 
     int start = lex->index();
 
-    m_problems.clear();
-
+    m_problems = 0;
     TranslationUnitAST::Node tun = CreateNode<TranslationUnitAST>();
     node = tun;
     while( !lex->lookAhead(0).isNull() ){
@@ -323,7 +317,7 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
     // force (0,0) as start position
     node->setStartPosition( 0, 0 );
 
-    return m_problems.size() == 0;
+    return m_problems == 0;
 }
 
 bool Parser::parseDefinition( DeclarationAST::Node& node )
@@ -1514,7 +1508,17 @@ bool Parser::skipConstantExpression( AST::Node& node )
 		return false;
 	    }
 	    lex->nextToken();
-	} else if( tk == ',' || tk == ';' || tk == '<' ||
+	} else if( tk == '[' ){
+	    if( !skip('[', ']') ){
+		return false;
+	    }
+	    lex->nextToken();
+	} else if( tk == '<' ){
+	    if( !skip('<', '>') ){
+		return false;
+	    }
+	    lex->nextToken();
+	} else if( tk == ',' || tk == ';' || tk == '>' ||
 		   tk == Token_assign || tk == ']' ||
 		   tk == ')' || tk == '}' || tk == ':' ){
 	    break;
@@ -2767,14 +2771,14 @@ bool Parser::parseLabeledStatement( StatementAST::Node& /*node*/ )
 	if( lex->lookAhead(1) == ':' ){
 	    lex->nextToken();
 	    lex->nextToken();
-	    
+
 	    StatementAST::Node stmt;
 	    if( parseStatement(stmt) ){
 	        return true;
 	    }
 	}
 	break;
-	
+
     case Token_case:
     {
 	lex->nextToken();
