@@ -61,7 +61,7 @@ ToggleToolViewAction::ToggleToolViewAction( const QString& text, const KShortcut
 	if (m_dw) {
 		connect(this,SIGNAL(toggled(bool)),this,SLOT(slotToggled(bool)));
 		connect(m_dw->dockManager(),SIGNAL(change()),this,SLOT(anDWChanged()));
-//		connect(m_dw,SIGNAL(destroyed()),this,SLOT(slotWidgetDestroyed()));
+		connect(m_dw,SIGNAL(destroyed()),this,SLOT(slotWidgetDestroyed()));
 		setChecked(m_dw->mayBeHide());
 	}
 }
