@@ -124,7 +124,7 @@ void WizardQtDocPage::showEvent(QShowEvent*)
 
     QWidget* w1 = new QWidget(m_vbox);
     QVBoxLayout* vl = new QVBoxLayout(w1, 15, 7);
-    QLabel* qt_label = new QLabel( i18n("Qt-Documentation Path:"), w1 );
+    QLabel* qt_label = new QLabel( i18n("Qt documentation path:"), w1 );
 
     QWidget* w2 = new QWidget(w1);
     vl->addWidget(qt_label);

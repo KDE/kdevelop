@@ -550,7 +550,7 @@ CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
 //FB  connect( colorBtn, SIGNAL( changed( const QColor & ) ),
 //FB    SLOT( slotBgColorChanged( const QColor & ) ) );
 
-  label = new QLabel( i18n("Normal Text Color:"), this );
+  label = new QLabel( i18n("Normal text color:"), this );
   grid1->addWidget(label,1,0);
 
   colorBtn = new KColorButton( textColor, this );
@@ -558,7 +558,7 @@ CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
   connect( colorBtn, SIGNAL( changed( const QColor & ) ),
     SLOT( slotTextColorChanged( const QColor & ) ) );
 
-  label = new QLabel( i18n("URL Link Color:"), this );
+  label = new QLabel( i18n("URL link color:"), this );
   grid1->addWidget(label,2,0);
 
   colorBtn = new KColorButton( linkColor, this );
@@ -567,7 +567,7 @@ CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
   connect( colorBtn, SIGNAL( changed( const QColor & ) ),
     SLOT( slotLinkColorChanged( const QColor & ) ) );
 
-  label = new QLabel( i18n("Followed Link Color:"), this );
+  label = new QLabel( i18n("Followed link color:"), this );
   grid1->addWidget(label,3,0);
 
   colorBtn = new KColorButton( vLinkColor, this );

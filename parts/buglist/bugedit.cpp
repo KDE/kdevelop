@@ -273,7 +273,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
     new QWidget (GeneralLayout);
 
     // LABEL: ReportDate
-    QLabel *lblReportDate = new QLabel (i18n ("Reported On:"), GeneralLayout);
+    QLabel *lblReportDate = new QLabel (i18n ("Reported on:"), GeneralLayout);
 
     // LINEEDIT: ReportDate
     editReportDate = new QLineEdit(GeneralLayout);
@@ -284,7 +284,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 	    i18n("Enter the date this bug was reported."));
 
     // LABEL: ReportUserName
-    QLabel *lblReportUserName = new QLabel (i18n ("Reported By:"), GeneralLayout);
+    QLabel *lblReportUserName = new QLabel (i18n ("Reported by:"), GeneralLayout);
 
     // LINEEDIT: ReportUserName
     editReportUserName = new QLineEdit(GeneralLayout);
@@ -295,7 +295,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 			 "who reported this bug."));
 
     // LABEL: ReportEMail
-    QLabel *lblReportEMail = new QLabel (i18n ("Reported By (EMail):"), GeneralLayout);
+    QLabel *lblReportEMail = new QLabel (i18n ("Reported by (EMail):"), GeneralLayout);
 
     // LINEEDIT: ReportEMail
     editReportEMail = new QLineEdit(GeneralLayout);
@@ -310,7 +310,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
     new QWidget (GeneralLayout);
 
     // LABEL: AssignedDate
-    QLabel *lblAssignedDate = new QLabel (i18n ("Assigned On:"), GeneralLayout);
+    QLabel *lblAssignedDate = new QLabel (i18n ("Assigned on:"), GeneralLayout);
 
     // LINEEDIT: AssignedDate
     editAssignedDate = new QLineEdit(GeneralLayout);
@@ -322,7 +322,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 			 "assigned to a person for repair."));
 
     // LABEL: AssignedTo
-    QLabel *lblAssignedTo = new QLabel (i18n ("Assigned To:"), GeneralLayout);
+    QLabel *lblAssignedTo = new QLabel (i18n ("Assigned to:"), GeneralLayout);
 
     // LINEEDIT: AssignedTo
     editAssignedTo = new QLineEdit(GeneralLayout);
@@ -333,7 +333,7 @@ BugEdit::BugEdit (QWidget * parent, const char * name, Bug * pBug, bool AddItem,
 			 "wish to assign this bug to."));
 
     // LABEL: AssignedEMail
-    QLabel *lblAssignedEMail = new QLabel (i18n ("Assigned To (EMail):"), GeneralLayout);
+    QLabel *lblAssignedEMail = new QLabel (i18n ("Assigned to (EMail):"), GeneralLayout);
 
     // LINEEDIT: AssignedEMail
     editAssignedEMail = new QLineEdit(GeneralLayout);

@@ -42,7 +42,7 @@ SearchDialog::SearchDialog( QWidget *parent, QStringList &searchFor, QStringList
   m_search->insertStringList( searchFor );
   m_search->setMinimumWidth( m_search->sizeHint().width() );
   m_search->lineEdit()->selectAll();
-  QLabel *label = new QLabel( m_search, i18n( "&Text To Find:" ), page );
+  QLabel *label = new QLabel( m_search, i18n( "&Text to find:" ), page );
   m_optRegExp = new QCheckBox( i18n( "Regular expression" ), page );
   topLayout->addWidget( label );
   topLayout->addWidget( m_search );
@@ -55,7 +55,7 @@ SearchDialog::SearchDialog( QWidget *parent, QStringList &searchFor, QStringList
     m_replace = new QComboBox( true, page );
     m_replace->insertStringList( replaceWith );
     m_replace->setMinimumWidth( m_search->sizeHint().width() );
-    label = new QLabel( m_replace, i18n( "&Replace With:" ), page );
+    label = new QLabel( m_replace, i18n( "&Replace with:" ), page );
     //m_optPlaceholders = new QCheckBox( i18n( "&Use placeholders" ), page );
     topLayout->addWidget( label );
     topLayout->addWidget( m_replace );
@@ -198,7 +198,7 @@ GotoLineDialog::GotoLineDialog(QWidget *parent, int line, int max)
   e1->setRange(1, max);
   e1->setEditFocus(true);
 
-  QLabel *label = new QLabel( e1,i18n("&Goto Line:"), page );
+  QLabel *label = new QLabel( e1,i18n("&Goto line:"), page );
   topLayout->addWidget(label);
   topLayout->addWidget(e1);
   topLayout->addSpacing(spacingHint()); // A little bit extra space
@@ -381,11 +381,11 @@ EditConfigTab::EditConfigTab(QWidget *parent, KWrite *kWrite)
 
   e1 = new KIntNumInput(kWrite->wordWrapAt(), this);
   e1->setRange(20, 200, 1, false);
-  e1->setLabel(i18n("Wrap Words At:"));
+  e1->setLabel(i18n("Wrap words at:"));
 
   e2 = new KIntNumInput(e1, kWrite->tabWidth(), this);
   e2->setRange(1, 16, 1, false);
-  e2->setLabel(i18n("Tab Width:"));
+  e2->setLabel(i18n("Tab width:"));
 
   e3 = new KIntNumInput(e2, kWrite->undoSteps(), this);
   e3->setRange(5, 30000, 1, false);
@@ -488,11 +488,11 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
 
 
   e1 = new KIntLineEdit(wrapAt, this, 20, 200);
-  label1 = new QLabel(e1,i18n("Wrap Words At:"),this);
+  label1 = new QLabel(e1,i18n("Wrap words at:"),this);
   int max = label1->sizeHint().width();
 
   e2 = new KIntLineEdit(tabWidth, this, 1, 16);
-  label2 = new QLabel(e2,i18n("Tab Width:"),this);
+  label2 = new QLabel(e2,i18n("Tab width:"),this);
   if (label2->sizeHint().width()>max)
     max = label2->sizeHint().width();
 
@@ -626,7 +626,7 @@ ColorConfig::ColorConfig( QWidget *parent, char *name )
   glay->addWidget( label, 0, 0 );
   glay->addWidget( m_back, 0, 1 );
 
-  label = new QLabel( i18n("Text Background:"), this);
+  label = new QLabel( i18n("Text background:"), this);
   label->setAlignment( AlignRight|AlignVCenter );
   m_textBack = new KColorButton( this );
   glay->addWidget( label, 1, 0 );
@@ -644,7 +644,7 @@ ColorConfig::ColorConfig( QWidget *parent, char *name )
   glay->addWidget( label, 3, 0 );
   glay->addWidget( m_found, 3, 1 );
 
-  label = new QLabel( i18n("Selected + Found:"), this);
+  label = new QLabel( i18n("Selected + found:"), this);
   label->setAlignment( AlignRight|AlignVCenter );
   m_selFound = new KColorButton( this );
   glay->addWidget( label, 4, 0 );

@@ -151,7 +151,7 @@ void CPrjOptionsDlg::addGeneralPage()
   modifymakefiles_checkbox->setChecked(prj_info->getModifyMakefiles());
 
   QLabel *vcsystem_label
-    = new QLabel( i18n("Version Control:"), generalPage, "vcsystem_label" );
+    = new QLabel( i18n("Version control:"), generalPage, "vcsystem_label" );
   grid->addWidget(vcsystem_label,7,0);
 
   vcsystem_combo = new QComboBox( false, generalPage );
