@@ -50,9 +50,10 @@
 #include "ParsedMethod.h"
 #include "ParsedSignalSlot.h"
 #include "ParsedContainer.h"
+#include "ParsedClassItem.h"
 
 /** This is the representation of a class that has been parsed by the classparser.*/
-class CParsedClass : public CParsedItem, public CParsedContainer
+class CParsedClass : public CParsedItem, public CParsedContainer, public CParsedClassItem
 {
 public: // Constructor & Destructor
 
@@ -95,19 +96,29 @@ public: // Public attributes
   
 public: // Metods to set attribute values
 
-  /** Add a parent. */
+  /** Add a parent. 
+   * @param aParent A parent of this class.
+   */
   void addParent( CParsedParent *aParent );
 
-  /** Add a friend. */
+  /** Add a friend. 
+   * @param aName A friendclass of this class.
+   */
   void addFriend( const char *aName )      { friends.append( aName ); }
 
-  /** Add a childclass. */
+  /** Add a childclass. 
+   * @param aName Name of a class declared in this class.
+   */
   void addChildClass( const char *aName )  { childClasses.append( aName ); }
 
-  /** Add a signal. */
+  /** Add a signal. 
+   * @param aMethod The signal to add.
+   */
   void addSignal( CParsedMethod *aMethod );
 
-  /** Add a slot. */
+  /** Add a slot. 
+   * @param aMethod The slot to add.
+   */
   void addSlot( CParsedMethod *aMethod );
 
   /** Add a signal->slot mapping. */
@@ -138,6 +149,9 @@ public: // Public queries
 
   /** Check if the class has any virtual methods. */
   bool hasVirtual();
+
+  /** Check if this class is declared in another class. */
+  bool isSubClass() { return !declaredInClass.isEmpty(); }
 
 public: // Implementation of virtual methods
 
