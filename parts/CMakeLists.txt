@@ -1,7 +1,7 @@
 
-SUBDIRS(abbrev appwizard annotation astyle bookmarks)
+SUBDIRS(abbrev appwizard annotation astyle bookmarks classview diff)
 
-SET(XXX classview diff filecreate fileview
+SET(XXX filecreate fileview
 fullscreen outputviews grepview valgrind distpart konsole tools regexptest doxygen
 fileselector tipofday filter uimode openwith texttools replace partexplorer
 quickopen filelist ctags2 documentation)
