@@ -42,6 +42,7 @@ class CKDevelop;
 #include <knewpanner.h>
 #include <kfiledialog.h>
 #include <kmsgbox.h>
+#include <kaccel.h>
 
 #include "caddexistingfiledlg.h"
 #include "cdocbrowser.h"
@@ -77,6 +78,7 @@ public:
   ~CKDevelop(){};
   void init();
   void initConnections();
+  void initKeyAccel();
   void initMenu();
   void initToolbar();
   void initStatusBar();
@@ -102,11 +104,9 @@ public:
     */
   void setToolMenuProcess(bool enable);
 
-
-
  public slots:
   /** generate a new file*/
-  void slotFileNewFile();
+  void slotFileNew();
   /**open a file*/
   void slotFileOpenFile();
   /** save the current file,if Untitled a dialog ask for a valid name*/
@@ -138,23 +138,23 @@ public:
   void slotBookmarksEdit();
 
 
-  void slotEditGotoLine();
+  void slotViewGotoLine();
 
-  void slotOptionsTTreeView();
-  void slotOptionsTOutputView();
+  void slotViewTTreeView();
+  void slotViewTOutputView();
 
-  void slotOptionsTStdToolbar();
-  void slotOptionsTBrowserToolbar();
-  void slotOptionsTStatusbar();
+  void slotViewTStdToolbar();
+  void slotViewTBrowserToolbar();
+  void slotViewTStatusbar();
   /** refresh all trees and other widgets*/
-  void slotOptionsRefresh();
+  void slotViewRefresh();
 
  /** generate a new project with KAppWizard*/
-  void slotFileNewAppl();
+  void slotProjectNewAppl();
   /** generat a new project file */
   void slotProjectNew();
   /** open a projectfile and close the old one*/
-  void slotFileOpenPrj();
+  void slotProjectOpen();
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
   void slotProjectAddNewFile();
@@ -186,6 +186,7 @@ public:
   void slotOptionsEditorColors();
   void slotOptionsSyntaxHighlightingDefaults();
   void slotOptionsSyntaxHighlighting();
+  void slotOptionsKeys();
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
   void slotOptionsDocBrowser();
@@ -268,6 +269,7 @@ public:
   QString searchToolGetURL(QString str);
   void  slotCreateSearchDatabase();
   void refreshClassCombos();
+  
 protected:
   virtual void closeEvent(QCloseEvent* e);
  
@@ -295,6 +297,7 @@ private:
   KShellProcess shell_process;
   CProject* prj; // at the moment only one project at the same time
 
+  KAccel *accel;
   KConfig* config;
   int act_outbuffer_len;
   //  int s_tab_current; // actual Tab in the s_tab_view 
@@ -302,7 +305,6 @@ private:
   // for the browser
   QStrList history_list;
   
-
   
   QList<TEditInfo> edit_infos;
   //some widgets for the mainview
@@ -338,9 +340,6 @@ private:
   bool bViewStatusbar;
 
   bool  prev_was_search_result;
-
-  
-
 
   //some vars for the searchengine
   KShellProcess search_process;

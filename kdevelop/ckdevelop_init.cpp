@@ -20,11 +20,14 @@
 #include <kmsgbox.h>
 #include "./kwrite/kwdoc.h"
 #include "ctoolclass.h"
+#include <kaccel.h>
 			
 CKDevelop::CKDevelop(){
   QString filename;
   version = VERSION;
   project=false;// no project
+  
+
   init();
   initConnections();
   initProject(); 
@@ -45,7 +48,10 @@ CKDevelop::CKDevelop(){
   config->setGroup("General Options");
   bool showOutput=config->readBoolEntry("show_output_view",false);
   if(showOutput)
-      { slotOptionsTOutputView();}
+      { slotViewTOutputView();}
+
+ 
+  
   
 }
 
@@ -270,6 +276,7 @@ void CKDevelop::init(){
 
   // set the mainwidget
   setView(view);
+  initKeyAccel();
   initMenu();
   initToolbar();
   initStatusBar();
@@ -302,6 +309,42 @@ void CKDevelop::init(){
   edit_infos.append(edit1);
   edit_infos.append(edit2);
 }
+void CKDevelop::initKeyAccel(){
+  accel = new KAccel( this );
+  
+  //edit menu
+  accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
+  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ) );
+  
+  //view menu
+  accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
+  accel->connectItem( "GotoLine", this, SLOT( slotViewGotoLine()) );
+
+  accel->insertItem( i18n("Toogle Tree-View"), "Tree-View",IDK_VIEW_TREEVIEW);
+  accel->connectItem( "Tree-View", this, SLOT(slotViewTTreeView()) );
+  
+  accel->insertItem( i18n("Toogle Output-View"), "Output-View",IDK_VIEW_OUTPUTVIEW);
+  accel->connectItem( "Output-View", this, SLOT(slotViewTOutputView()) );
+  
+  accel->insertItem( i18n("Toogle Statusbar"), "Statusbar",IDK_VIEW_STATUSBAR);
+  accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()) );
+   
+  //build menu 
+  accel->insertItem( i18n("Compile File"), "CompileFile", IDK_BUILD_COMPILE_FILE );
+  accel->connectItem( "CompileFile", this, SLOT( slotBuildCompileFile()) );
+
+  accel->insertItem( i18n("Make"), "Make", IDK_BUILD_MAKE );
+  accel->connectItem( "Make", this, SLOT(slotBuildMake() ) );
+
+  accel->insertItem( i18n("Run"), "Run", IDK_BUILD_RUN);
+  accel->connectItem( "Run", this, SLOT(slotBuildRun() ) );
+
+  //doc menu
+  accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_DOC_SEARCH_TEXT);
+  accel->connectItem( "SearchMarkedText", this, SLOT(slotDocSText() ) );
+  
+  accel->readSettings();
+}
 void CKDevelop::initMenu(){
 
 ///////////////////////////////////////////////////////////////////
@@ -310,8 +353,7 @@ void CKDevelop::initMenu(){
   QPixmap pix;
   file_menu = new QPopupMenu;
  
-  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"), this, SLOT(slotFileNewFile()),
-			IDK_FILE_NEW,ID_FILE_NEW);
+  file_menu->insertItem(Icon("filenew.xpm"),i18n("&New"),this,SLOT(slotFileNew()),IDK_FILE_NEW,ID_FILE_NEW);
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   file_menu->insertItem(pix,i18n("&Open..."), this, SLOT(slotFileOpenFile()),
@@ -352,7 +394,10 @@ void CKDevelop::initMenu(){
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Search..."), this, SLOT(slotEditSearch()),IDK_EDIT_SEARCH,ID_EDIT_SEARCH);
   edit_menu->insertItem(i18n("&Repeat Search..."), this, 
-			SLOT(slotEditRepeatSearch()),IDK_EDIT_REPEAT_SEARCH,ID_EDIT_REPEAT_SEARCH);
+			SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
+  accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
+  
+  
   edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),IDK_EDIT_REPLACE,ID_EDIT_REPLACE);
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
@@ -372,31 +417,39 @@ void CKDevelop::initMenu(){
   bViewStatusbar = config->readBoolEntry("show_statusbar",true);
 
   view_menu = new QPopupMenu;
-  view_menu->insertItem(i18n("&Goto Line..."), this, SLOT(slotEditGotoLine()),IDK_VIEW_GOTO_LINE,ID_VIEW_GOTO_LINE);
+  view_menu->insertItem(i18n("&Goto Line..."), this,
+			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
+  accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+
   view_menu->insertSeparator();
-  view_menu->insertItem(i18n("&Tree-View"),this, SLOT(slotOptionsTTreeView()),
- 			   IDK_VIEW_TREEVIEW,ID_VIEW_TREEVIEW);
+  view_menu->insertItem(i18n("&Tree-View"),this, 
+			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
+  accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
   view_menu->setItemChecked(ID_VIEW_TREEVIEW,config->readBoolEntry("show_tree_view",true));
 
-  view_menu->insertItem(i18n("&Output-View"),this, SLOT(slotOptionsTOutputView()),IDK_VIEW_OUTPUTVIEW,ID_VIEW_OUTPUTVIEW);
+  view_menu->insertItem(i18n("&Output-View"),this,
+			SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
+  accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
   view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,config->readBoolEntry("show_output_view",true));
 
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Toolbar"),this,
-			   SLOT(slotOptionsTStdToolbar()),0,ID_VIEW_TOOLBAR);
+			   SLOT(slotViewTStdToolbar()),0,ID_VIEW_TOOLBAR);
   view_menu->setItemChecked(ID_VIEW_TOOLBAR,config->readBoolEntry("show_std_toolbar", true));
 
   view_menu->insertItem(i18n("&Browser-Toolbar"),this,
-			   SLOT(slotOptionsTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
+			   SLOT(slotViewTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
   view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,config->readBoolEntry("show_browser_toolbar",true));
 
   view_menu->insertItem(i18n("Status&bar"),this,
-			   SLOT(slotOptionsTStatusbar()),IDK_VIEW_STATUSBAR,ID_VIEW_STATUSBAR);
+			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
+  accel->changeMenuAccel(view_menu,ID_VIEW_STATUSBAR,"Statusbar");
+
   view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
 
   view_menu->insertSeparator();
   view_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),this,
-			   SLOT(slotOptionsRefresh()),0,ID_VIEW_REFRESH);
+			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
 
   menuBar()->insertItem(i18n("&View"), view_menu);
   
@@ -420,9 +473,9 @@ void CKDevelop::initMenu(){
 
   // project-menu
   project_menu = new QPopupMenu;
-  project_menu->insertItem(i18n("KAppWizard..."), this, SLOT(slotFileNewAppl()),0,ID_PROJECT_KAPPWIZARD);
+  project_menu->insertItem(i18n("KAppWizard..."), this, SLOT(slotProjectNewAppl()),0,ID_PROJECT_KAPPWIZARD);
   project_menu->insertItem(i18n("New"), this, SLOT(slotProjectNew()),0, ID_PROJECT_NEW);
-  project_menu->insertItem(i18n("&Open..."), this, SLOT(slotFileOpenPrj()),0,ID_PROJECT_OPEN);
+  project_menu->insertItem(i18n("&Open..."), this, SLOT(slotProjectOpen()),0,ID_PROJECT_OPEN);
   project_menu->insertItem(i18n("C&lose"),this, SLOT(slotProjectClose()),0,ID_PROJECT_CLOSE);
   project_menu->insertSeparator();		
   
@@ -454,20 +507,26 @@ void CKDevelop::initMenu(){
 // Build-menu entries
 
   build_menu = new QPopupMenu;
-  build_menu->insertItem(Icon("compfile.xpm"),i18n("Compile File "),this, SLOT(slotBuildCompileFile()),IDK_BUILD_COMPILE_FILE,ID_BUILD_COMPILE_FILE);
+  build_menu->insertItem(Icon("compfile.xpm"),i18n("Compile File"),
+			 this,SLOT(slotBuildCompileFile()),0,ID_BUILD_COMPILE_FILE);
+  accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
 
-  build_menu->insertItem(Icon("make.xpm"),i18n("&Make"), this, 
-			 SLOT(slotBuildMake()),IDK_BUILD_MAKE,ID_BUILD_MAKE);
+  build_menu->insertItem(Icon("make.xpm"),i18n("&Make"),this,
+			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
+  accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
 
-  build_menu->insertItem(i18n("&Rebuild all"), this, 
+  build_menu->insertItem(i18n("&Rebuild all"), this,
 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
+
   build_menu->insertItem(i18n("&Clean/Rebuild all"), this, 
 			 SLOT(slotBuildCleanRebuildAll()),0,ID_BUILD_CLEAN_REBUILD_ALL);
   build_menu->insertSeparator();
   build_menu->insertItem(Icon("stop.xpm"),i18n("&Stop Build"), this, SLOT(slotBuildStop()),0,ID_BUILD_STOP);
   build_menu->insertSeparator();
-  build_menu->insertItem(Icon("run.xpm"),i18n("&Run"), this, 
-			 SLOT(slotBuildRun()),IDK_BUILD_RUN,ID_BUILD_RUN);
+
+  build_menu->insertItem(Icon("run.xpm"),i18n("&Run"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
+  accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
+
   build_menu->insertItem(i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
@@ -519,6 +578,11 @@ void CKDevelop::initMenu(){
   options_menu->insertItem(i18n("&Syntax Highlighting..."),this,
 			   SLOT(slotOptionsSyntaxHighlighting()),0,ID_OPTIONS_SYNTAX_HIGHLIGHTING);
   options_menu->insertSeparator();
+
+  options_menu->insertItem(i18n("&Keys..."),this,
+			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
+  options_menu->insertSeparator();
+  
   options_menu->insertItem(i18n("Documentation &Browser..."),this,
 		SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
   options_menu->insertItem(i18n("&Documentation Path..."),this,
@@ -564,7 +628,8 @@ void CKDevelop::initMenu(){
   documentation_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
   documentation_menu->insertSeparator();
   documentation_menu->insertItem(i18n("&Search Marked Text"),this,
-				 SLOT(slotDocSText()),IDK_DOC_SEARCH_TEXT,ID_DOC_SEARCH_TEXT);
+				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
+  accel->changeMenuAccel(documentation_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
   documentation_menu->insertSeparator();
   documentation_menu->insertItem(i18n("&Qt-Library"),this, SLOT(slotDocQtLib()),0,ID_DOC_QT_LIBRARY);
   documentation_menu->insertItem(i18n("KDE-&Core-Library"),this,
@@ -593,7 +658,8 @@ void CKDevelop::initMenu(){
 ///////////////////////////////////////////////////////////////////
 // Help-menu entries
   QPopupMenu* help_menu = new QPopupMenu();
-  help_menu->insertItem(i18n("Contents"),this, SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
+  help_menu->insertItem(i18n("Contents"),this,SLOT(slotHelpContent()),IDK_HELP_CONTENT,ID_HELP_CONTENT);
+
   //  help_menu->insertItem(i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("About KDevelop..."),this, SLOT(slotHelpAbout()),0,ID_HELP_ABOUT);

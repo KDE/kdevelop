@@ -20,7 +20,6 @@
 #include <iostream.h>
 #include <kmsgbox.h>
 
-
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
   if (!project){
@@ -36,7 +35,6 @@ void CKDevelop::refreshTrees(){
  
 
 int CKDevelop::getTabLocation(QString filename){
-  
   if(filename.right(4) == ".cpp" || filename.right(3) == ".cc" || filename.right(2) == ".C"
      || filename.right(2) == ".c"){
     return CPP;

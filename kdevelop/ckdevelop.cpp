@@ -28,46 +28,17 @@
 #include <ktabctl.h>
 #include <qregexp.h>
 #include "ckdevsetupdlg.h"
-#include "ckappwizard.h"
+
 #include "cupdatekdedocdlg.h"
 #include <kdebug.h>
+#include <kkeydialog.h>
 #include "./kwrite/kwdoc.h"
 #include "ccreatedocdatabasedlg.h"
 #include "ctoolclass.h"
 #include "cprintdlg.h"
 
-void CKDevelop::slotFileNewAppl(){
-  QString old_project="";
-  if(!CToolClass::searchProgram("perl")){
-    return;
-  }
-  if(!CToolClass::searchProgram("autoconf")){
-    return;
-  }
-  if(!CToolClass::searchProgram("automake")){
-    return;
-  }
-  if(project){
-    old_project = prj->getProjectFile();
-    slotProjectClose();
-  }
-  
-  slotStatusMsg(i18n("Creating a new frame application..."));
-  CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
-  kappw->exec();
-  QString file = kappw->getProjectFile();
-  
-  if(kappw->generatedProject()){
-    readProjectFile(file);
-  }
-  else if (old_project != ""){ // if cancel load the old project again
-    readProjectFile(old_project);
-  }
-  
-  //cerr << kappw->getProjectFile();
-  slotStatusMsg(IDS_DEFAULT); 
-}
-void CKDevelop::slotFileNewFile(){
+
+void CKDevelop::slotFileNew(){
   
   slotStatusMsg(i18n("Creating new file..."));
   newFile(false);
@@ -92,26 +63,7 @@ void CKDevelop::slotFileOpenFile(){
   slotStatusMsg(IDS_DEFAULT); 
   
 }
-void CKDevelop::slotFileOpenPrj(){
-  if(project)
-    slotProjectClose();
-  
-  slotStatusMsg(i18n("Opening project..."));
-  QString str;
-  str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
-  if (str.isEmpty()) return; //cancel
-  QFileInfo info(str);
-  
-  if (info.isFile()){
-    if(!(readProjectFile(str))){
-      KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
-    }
-    
-    slotStatusMsg(IDS_DEFAULT);
-  }	
-  
-  
-}
+
 
 void CKDevelop::slotFileSave(){
 
@@ -125,7 +77,7 @@ void CKDevelop::slotFileSave(){
     edit_widget->doSave();
     // only refresh if header file changed
     if(getTabLocation(filename)==HEADER){
-    slotOptionsRefresh();
+    slotViewRefresh();
     }
   }
   slotStatusMsg(IDS_DEFAULT);
@@ -177,7 +129,7 @@ void CKDevelop::slotFileSaveAll(){
     }
   }
   if(mod){
-    slotOptionsRefresh();
+    slotViewRefresh();
   }
   slotStatusMsg(IDS_DEFAULT); 
 }
@@ -276,9 +228,10 @@ void CKDevelop::slotFileClose(){
     actual_info->filename = "Untitled.cpp";
   }
   edit_infos.append(actual_info);
-  edit_widget->setName(actual_info->filename);
+  
   edit_widget->clear();
-  setCaption(actual_info->filename);
+  edit_widget->setName(actual_info->filename);
+  setCaption(edit_widget->getName());
   
   slotStatusMsg(IDS_DEFAULT); 
 }
@@ -396,12 +349,12 @@ void CKDevelop::slotEditReplace(){
   edit_widget->replace();
   slotStatusMsg(IDS_DEFAULT); 
 }
-void CKDevelop::slotEditGotoLine(){
+void CKDevelop::slotViewGotoLine(){
   slotStatusMsg(i18n("Switching to selected line..."));
   edit_widget->gotoLine();
   slotStatusMsg(IDS_DEFAULT); 
 }
-void CKDevelop::slotOptionsTStdToolbar(){
+void CKDevelop::slotViewTStdToolbar(){
  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
    view_menu->setItemChecked(ID_VIEW_TOOLBAR,false);
     enableToolBar(KToolBar::Hide);
@@ -412,7 +365,7 @@ void CKDevelop::slotOptionsTStdToolbar(){
   }
 
 }
-void CKDevelop::slotOptionsTBrowserToolbar(){
+void CKDevelop::slotViewTBrowserToolbar(){
   if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR)){
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,false);
     enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
@@ -423,14 +376,14 @@ void CKDevelop::slotOptionsTBrowserToolbar(){
   }
 }
 
-void CKDevelop::slotOptionsTStatusbar(){
+void CKDevelop::slotViewTStatusbar(){
   
   bViewStatusbar=!bViewStatusbar;
   view_menu->setItemChecked(ID_VIEW_STATUSBAR,bViewStatusbar);
   enableStatusBar();
   
 }
-void CKDevelop::slotOptionsTTreeView(){
+void CKDevelop::slotViewTTreeView(){
 
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
@@ -446,7 +399,7 @@ void CKDevelop::slotOptionsTTreeView(){
   top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
   
 }
-void CKDevelop::slotOptionsTOutputView(){
+void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     output_view_pos=view->separatorPos();
@@ -461,7 +414,7 @@ void CKDevelop::slotOptionsTOutputView(){
   view->resize(rMainGeom.width()+1,rMainGeom.height());
 }
 
-void CKDevelop::slotOptionsRefresh(){
+void CKDevelop::slotViewRefresh(){
   refreshTrees();
 }
 void CKDevelop::slotOptionsEditor(){
@@ -483,6 +436,10 @@ void CKDevelop::slotOptionsEditorColors(){
   edit_widget->doc()->writeConfig(config);
   slotStatusMsg(IDS_DEFAULT);
 
+}
+void CKDevelop::slotOptionsKeys(){
+  if( KKeyDialog::configureKeys( accel ) ) {
+  }
 }
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
   slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
@@ -611,7 +568,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   }
   if (list.isEmpty()){
 
-     KMsgBox::message(0,"Information","\"" + doc_search_text + "\" not found in documenation!",KMsgBox::INFORMATION);
+     KMsgBox::message(0,"Not found!","\"" + doc_search_text + "\" not found in documenation!",KMsgBox::INFORMATION);
     return;
   }
   
@@ -915,7 +872,6 @@ void CKDevelop::slotBuildDistClean(){
   process << make_cmd;
   process << "distclean";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-
 }
 void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("automake")){
@@ -1522,8 +1478,8 @@ void CKDevelop::slotToolbarClicked(int item){
     break;
 */
   case ID_PROJECT_OPEN:
-  	slotFileOpenPrj();
-  	break;
+    slotProjectOpen();
+    break;
   case ID_FILE_OPEN:
     slotFileOpenFile();
     break;
@@ -1533,12 +1489,12 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
-	case ID_EDIT_UNDO:
-		slotEditUndo();
-		break;
-	case ID_EDIT_REDO:
-		slotEditRedo();
-		break;
+  case ID_EDIT_UNDO:
+    slotEditUndo();
+    break;
+  case ID_EDIT_REDO:
+    slotEditRedo();
+    break;
   case ID_EDIT_COPY:
     slotEditCopy();
     break;
@@ -1549,7 +1505,7 @@ void CKDevelop::slotToolbarClicked(int item){
     slotEditCut();
     break;
   case ID_VIEW_REFRESH:
-    slotOptionsRefresh();
+    slotViewRefresh();
     break;
   case ID_BUILD_COMPILE_FILE:
   	slotBuildCompileFile();
@@ -1577,7 +1533,7 @@ void CKDevelop::slotToolbarClicked(int item){
 
 
 BEGIN_STATUS_MSG(CKDevelop)
-  ON_STATUS_MSG(ID_FILE_NEW,    							i18n("Creates a new file"))
+  ON_STATUS_MSG(ID_FILE_NEW,                                                   i18n("Creates a new file"))
   ON_STATUS_MSG(ID_FILE_OPEN,   							i18n("Opens an existing file"))
 
   ON_STATUS_MSG(ID_FILE_SAVE,        						i18n("Save the actual document"))
@@ -1650,6 +1606,7 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			i18n("Sets the Editor's colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS, 			i18n("Sets the highlighting default colors"))
   ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			i18n("Sets the highlighting colors"))
+  ON_STATUS_MSG(ID_OPTIONS_KEYS, 			i18n("Sets the keyboard accelerators"))
   ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              			i18n("Set up the KDevelop environment"))
   ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				i18n("Configures the Browser options"))
   ON_STATUS_MSG(ID_OPTIONS_UPDATE_KDE_DOCUMENTATION,  		i18n("Update your KDE-Libs Documentation"))

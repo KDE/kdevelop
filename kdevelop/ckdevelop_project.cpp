@@ -16,7 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 #include "ckdevelop.h"
-
+#include "ctoolclass.h"
+#include "ckappwizard.h"
 
 void CKDevelop::slotProjectNew(){
 	// Currently a project open ?
@@ -29,8 +30,12 @@ void CKDevelop::slotProjectNew(){
   Then create directory and project file
   - then call slotProjectAddExistingFiles to add all files needed by the new app.
   Makefile.am - don't know yet how to create it for the project Type. Maybe Prototypes ?
-  Ralf */
-			
+  Ralf 
+
+  I don't like the idea. A projectframework is too complicated( configure.in,Makefiles.am,aclocal.m4,subdirs,templates ...) for creating on the fly.
+  Sandy
+*/
+  		
 
 }
 
@@ -418,7 +423,7 @@ bool CKDevelop::readProjectFile(QString file){
 
   enableCommand(ID_BUILD_AUTOCONF);
   project=true;
-  slotOptionsRefresh();
+  slotViewRefresh();
   return true;
 }
 
@@ -449,7 +454,7 @@ void CKDevelop::slotProjectNewClass(){
     prj->writeFileInfo(file_info);
     
     prj->updateMakefilesAm();
-    slotOptionsRefresh();
+    slotViewRefresh();
   }
 }
 
@@ -460,9 +465,70 @@ void CKDevelop::slotProjectFileProperties(){
 
 
 
+void CKDevelop::slotProjectOpen(){
+  QString old_project = "";
 
+  if(project){
+    old_project = prj->getProjectFile();
+    if(!slotProjectClose()){
+      return;
+    }
+  }
+  slotStatusMsg(i18n("Opening project..."));
+  QString str;
+  str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
+  if (str.isEmpty() && old_project != ""){
+    readProjectFile(old_project);
+    return; //cancel
+  }
+ 
+ 
+  QFileInfo info(str);
+  
+  if (info.isFile()){
+    if(!(readProjectFile(str))){
+      KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+    }
+    
+    slotStatusMsg(IDS_DEFAULT);
+  }	
+  
+  
+}
 
-
+void CKDevelop::slotProjectNewAppl(){
+  QString old_project="";
+  if(!CToolClass::searchProgram("perl")){
+    return;
+  }
+  if(!CToolClass::searchProgram("autoconf")){
+    return;
+  }
+  if(!CToolClass::searchProgram("automake")){
+    return;
+  }
+  if(project){
+    old_project = prj->getProjectFile();
+    if(!slotProjectClose()){
+      return;
+    }
+  }
+  
+  slotStatusMsg(i18n("Creating a new frame application..."));
+  CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
+  kappw->exec();
+  QString file = kappw->getProjectFile();
+  
+  if(kappw->generatedProject()){
+    readProjectFile(file);
+  }
+  else if (old_project != ""){ // if cancel load the old project again
+    readProjectFile(old_project);
+  }
+  
+  //cerr << kappw->getProjectFile();
+  slotStatusMsg(IDS_DEFAULT); 
+}
 
 
 

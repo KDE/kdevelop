@@ -1,3 +1,11 @@
+1999-02-14  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* keyboard accelerations are now handled by KAccel ( not completed)
+	 see CKDevelop::initKeyAccel() and CKDevelop::initMenu() for details
+	* added CKDevelop::slotOptionsKeys();
+	* fixed the segfault by closing the last file
+	* rename several methods to fit better to the new menu-structure 
+	
 
 1999-02-13  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added Make-Command selection functionality to decide if

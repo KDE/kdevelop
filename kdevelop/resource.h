@@ -128,7 +128,8 @@
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS	     16025
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING 	  	     16030
 
-#define ID_OPTIONS_KDEVELOP  			               16040
+#define ID_OPTIONS_KEYS               	  	     16035
+#define ID_OPTIONS_KDEVELOP  			     16040
 #define ID_OPTIONS_DOCBROWSER			               16050
 
 #define ID_OPTIONS_UPDATE_KDE_DOCUMENTATION 	   16060
@@ -202,25 +203,25 @@
 
 ///////////////////////////////////////////////////////////////////
 // File-menu entries
-#define IDK_FILE_NEW						 		CTRL+Key_N
-#define IDK_FILE_OPEN							  CTRL+Key_O
-#define IDK_FILE_SAVE								CTRL+Key_S
-#define IDK_FILE_PRINT              CTRL+Key_P
-#define IDK_FILE_CLOSE							CTRL+Key_W
-#define IDK_FILE_QUIT								CTRL+Key_Q
+#define IDK_FILE_NEW	       CTRL+Key_N
+#define IDK_FILE_OPEN	       CTRL+Key_O
+#define IDK_FILE_SAVE	       CTRL+Key_S
+#define IDK_FILE_PRINT         CTRL+Key_P
+#define IDK_FILE_CLOSE	       CTRL+Key_W
+#define IDK_FILE_QUIT	       CTRL+Key_Q
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
-#define IDK_EDIT_UNDO				    		CTRL+Key_Z
-#define IDK_EDIT_REDO								CTRL+Key_Y
+#define IDK_EDIT_UNDO	       CTRL+Key_Z
+#define IDK_EDIT_REDO	       CTRL+Key_Y
 
-#define IDK_EDIT_CUT								CTRL+Key_X
-#define IDK_EDIT_COPY								CTRL+Key_C
-#define IDK_EDIT_PASTE							CTRL+Key_V
+#define IDK_EDIT_CUT	       CTRL+Key_X
+#define IDK_EDIT_COPY	       CTRL+Key_C
+#define IDK_EDIT_PASTE	       CTRL+Key_V
 
-#define IDK_EDIT_SEARCH							CTRL+Key_F
-#define IDK_EDIT_REPEAT_SEARCH			Key_F3
-#define IDK_EDIT_REPLACE						CTRL+Key_R
+#define IDK_EDIT_SEARCH	       CTRL+Key_F
+#define IDK_EDIT_REPEAT_SEARCH Key_F3
+#define IDK_EDIT_REPLACE       CTRL+Key_R
 ///////////////////////////////////////////////////////////////////
 // View-menu entries
 #define IDK_VIEW_GOTO_LINE					CTRL+Key_L
