@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 pyqtdir = ${appwizarddatadir}/template-pyqt
 templatedir = ${appwizarddatadir}/templates
 
-pyqt_DATA = app.py app.kdevelop fileopen.pyxpm fileprint.pyxpm filesave.pyxpm app-Makefile.am app-autogen.sh app-configure.ac documentdetails.ui missing install-sh mkinstalldirs pyqt-am-preproc.py templates-ui-dialog templates-ui-mainwin
+pyqt_DATA = app.py app.kdevelop fileopen.pyxpm fileprint.pyxpm filesave.pyxpm app-Makefile.am app-autogen.sh app-configure.ac documentdetails.ui missing install-sh mkinstalldirs pyqt-am-preproc.py templates-ui-dialog templates-ui-mainwin pyqt.png
 template_DATA = pyqt
 
 DISTCLEANFILES = script.local

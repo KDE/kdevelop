@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 pythonhellodir = ${appwizarddatadir}/template-pythonhello
 templatedir = ${appwizarddatadir}/templates
 
-pythonhello_DATA = app.py app.kdevelop
+pythonhello_DATA = app.py app.kdevelop pythonhello.png
 template_DATA = pythonhello
 
 DISTCLEANFILES = script.local

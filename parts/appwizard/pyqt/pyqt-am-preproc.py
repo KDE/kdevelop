@@ -7,9 +7,9 @@
 #   Test real_lines properly
 #   Process Makefile.am's in sub-directories
 
+from __future__ import generators
 import sys
 import re
-from __future__ import generators
 
 # function to convert list of lists with continuation chars
 # (bashslashes) to list of actual lines

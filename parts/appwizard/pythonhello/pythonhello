@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Python script
+Icon=pythonhello.png
 Category=Python
 Comment=This generates a simplistic Hello world program in Python using Tkinter
 FileTemplates=py,ShellStyle
