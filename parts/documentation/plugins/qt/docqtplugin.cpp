@@ -137,6 +137,10 @@ void DocQtPlugin::autoSetupPlugin()
     }
     if (!qtDocDir.isEmpty())
     {
+        config->setGroup("Search Settings");
+        config->writeEntry("Qt Reference Documentation", true);
+        config->setGroup("Index Settings");
+        config->writeEntry("Qt Reference Documentation", true);
         config->setGroup("Locations");
         config->writePathEntry("Qt Reference Documentation", qtDocDir + QString("/qt.dcf"));
         config->writePathEntry("Qt Assistant Manual", qtDocDir + QString("/assistant.dcf"));
