@@ -154,8 +154,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	readIdentifier();
 	QString ide = m_source.mid( start, currentPosition() - start );
 	int k = Lookup::find( &keyword, ide );
-	if( m_preprocessorEnabled && m_driver->macros().contains(ide) ){
-
+	if( m_preprocessorEnabled && m_driver->macros().contains(ide) &&
+	    (k == -1 || !m_driver->macros()[ide].body().isEmpty()) ){
 	    QMap<QString, QString> map;
 
 	    int svLine = currentLine();
