@@ -64,7 +64,7 @@ EditorManager::EditorManager(QObject* parent, const char* name) :
   assert(parent && parent->isWidgetType());
 
   setInstance(EditorFactory::instance());
-  setXMLFile( "kdeveditorpart.rc" );
+  setXMLFile( "kdeveditorpartui.rc" );
 
   // Get the factory that spits out the right ktexteditor parts
   // TODO: just take the first one at the moment.
