@@ -117,6 +117,7 @@ void CvsServiceImpl::checkout()
 void CvsServiceImpl::commit( const KURL::List& urlList )
 {
     kdDebug(9000) << "CvsServiceImpl::commit() here!" << endl;
+	kdDebug(9000) << "Commit requested for " << urlList.count() << " file(s)." << endl;
 
     if (!prepareOperation( urlList, opCommit ))
         return;
