@@ -16,10 +16,11 @@ DefaultDestinatonDir:
 FileTemplates:
            a list of pairs of strings, where the first element is the
            name a file template to be created, and the second element
-           is either CStyle, ShellStyle, or None. With CStyle, the
+           is either CStyle, PStyle, ShellStyle, or None. With CStyle, the
            application wizard proposes a file header in C comment style.
-           With ShellStyle, the application wizard creates a header
-           in shell comment style.
+           With PStyle the application wizard creates a header
+           in Pascal comment style. With ShellStyle, the application
+           wizard creates a header in shell comment style.
 
 an example for a php template:
 
@@ -40,6 +41,7 @@ The following keywords are currently used:
 C         C language
 C++       C++ language
 Java      Java language
+Pascal    Pascal language
 Python    Python language
 PHP       PHP language
 Perl      Perl language

@@ -279,6 +279,11 @@ void AppWizardDialog::licenseChanged()
         QString text;
         if (style == "CStyle") {
             text = str;
+        } else if (style == "PStyle") {
+            text = str;
+            text.replace(QRegExp("/\\**\n \\*"), "{\n  ");
+            text.replace(QRegExp("\\*\n \\*"), " \n  ");
+            text.replace(QRegExp(" *\\**/\n"), "}\n");
         } else if (style == "ShellStyle") {
             text = str;
             text.replace(QRegExp("\\*|/"), "#");
