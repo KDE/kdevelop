@@ -197,7 +197,7 @@ void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
 
   openCreatedFile(createdFile);
 
-  mainWindow()->lowerView( typeChooserWidgetAsQWidget() );
+//  mainWindow()->lowerView( typeChooserWidgetAsQWidget() );
 }
 
 void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) {
@@ -312,6 +312,13 @@ FileType * FileCreatePart::getEnabledType(const QString & ex, const QString subt
 KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString dir, QString name, QString subtype)
 {
   KDevCreateFile::CreatedFile result;
+  
+  if ( !project() )
+  {
+    result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
+    return result;
+  } 
+
   KURL projectURL( project()->projectDirectory() );
   KURL selectedURL;
 

@@ -161,6 +161,7 @@ void PluginController::loadDefaultParts()
   KDevCreateFile * createFile = loadDefaultPart<KDevCreateFile>( "KDevelop/CreateFile" );
   if ( createFile ) {
     API::getInstance()->setCreateFile( createFile );
+    integratePart( createFile );
   } else {
     kdDebug( 9000 ) << "Could not load CreateFile plugin" << endl;
   }
