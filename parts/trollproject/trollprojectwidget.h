@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
+ *   jakob@jsg.dk                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,6 +75,7 @@ public:
 
     FileBuffer m_FileBuffer;
     FileBuffer *m_RootBuffer;
+    bool isScope;
 
 private:
     void init();

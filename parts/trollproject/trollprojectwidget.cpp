@@ -3,6 +3,8 @@
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2000-2001 by Trolltech AS.                              *
  *   info@trolltech.com                                                    *
+ *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
+ *   jakob@jsg.dk                                                          *
  *                                                                         *
  *   Part of this file is taken from Qt Designer.                          *
  *                                                                         *
@@ -80,8 +82,17 @@ SubprojectItem::~SubprojectItem()
 
 void SubprojectItem::init()
 {
-    groups.setAutoDelete(true);
+  groups.setAutoDelete(true);
+  if (scopeString=="")
+  {
+    isScope = false;
     setPixmap(0, SmallIcon("folder"));
+  }
+  else
+  {
+    isScope = true;
+    setPixmap(0, SmallIcon("qmake_scope.png"));
+  }
 }
 
 
@@ -328,10 +339,13 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 
     SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
 
+    if (spitem->isScope)
+      return;
     KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
     int idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
     int idBuild = popup.insertItem(SmallIcon("launch"),i18n("Build"));
     int idQmake = popup.insertItem(SmallIcon("launch"),i18n("Run qmake"));
+    int idViewProjectFile = popup.insertItem(SmallIcon("document"),i18n("View "+QString(spitem->subdir)+".pro file"));
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
@@ -373,6 +387,14 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
         m_part->startQMakeCommand(projectDirectory() + relpath);
         m_part->topLevel()->lowerView(this);
     }
+    else if (r == idViewProjectFile)
+    {
+      QString dirName = spitem->path;
+      m_part->partController()->showDocument(KURL(dirName + "/" + QString(spitem->subdir)+".pro"));
+      m_part->topLevel()->lowerView(this);
+    }
+
+
 }
 
 void TrollProjectWidget::updateProjectFile(QListViewItem *item)
