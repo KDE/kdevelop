@@ -802,7 +802,35 @@ EOHELP
   def trace_func(event, file, line, id, binding, klass)
 	Tracer.trace_func(event, file, line, id, binding, klass) if trace?
     context(Thread.current).check_suspend
-    @file = file
+  
+	if file =~ /qtruby.rb|korundum.rb/
+    	case event
+    	when 'line'
+      		frame_set_pos(file, line)
+			
+		when 'call'
+       		@frames.unshift [binding, file, line, id]
+		
+    	when 'c-call'
+      		frame_set_pos(file, line)
+    
+		when 'class'
+      		@frames.unshift [binding, file, line, id]
+			
+    	when 'return', 'end'
+      		@frames.shift
+
+    	when 'end'
+      		@frames.shift
+
+    	when 'raise' 
+      		excn_handle(file, line, id, binding)
+			
+		end
+		return
+	end
+    
+	@file = file
     @line = line
     case event
     when 'line'
@@ -832,8 +860,8 @@ EOHELP
 	  #end
       end
 
-    when 'call'
-      @frames.unshift [binding, file, line, id]
+   when 'call'
+       @frames.unshift [binding, file, line, id]
       if check_break_points(file, klass, id.id2name, binding, id)
 	suspend_all
 	debug_command(file, line, id, binding)
@@ -1125,7 +1153,7 @@ path = $stdin.gets.chomp
 DEBUGGER__.set_client( Client.new(path) )
 
 set_trace_func proc { |event, file, line, id, binding, klass, *rest|
-  
+	
     # LJ make sure the file path is always absolute. It is needed by
     # the Debugger plugin in KDevelop and can only be determined here
     # in the context of the debugged process
