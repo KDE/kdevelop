@@ -239,7 +239,7 @@ class ASFormatter : public ASBeautifier
         void trimNewLine();
         BracketType getBracketType() const;
         bool isPointerOrReference() const;
-        bool isUrinaryMinus() const;
+        bool isUnaryMinus() const;
         bool isInExponent() const;
         bool isOneLineBlockReached() const;
         void appendChar(char ch, bool canBreakLine = true);

@@ -835,8 +835,8 @@ string ASFormatter::nextLine() {
 
                 currentChar = (*newHeader)[newHeader->length() - 1];
                 // pad after operator
-                // but do not pad after a '-' that is a urinary-minus.
-                if ( shouldPad && !(newHeader == &AS_MINUS && isUrinaryMinus()) )
+                // but do not pad after a '-' that is a unary-minus.
+                if ( shouldPad && !(newHeader == &AS_MINUS && isUnaryMinus()) )
                     appendSpacePad();
 
                 previousOperator = newHeader;
@@ -1332,13 +1332,13 @@ bool ASFormatter::isPointerOrReference() const {
 
 /**
  * check if the currently reached '-' character is
- * a urinary minus
+ * a unary minus
  * this method takes for granted that the current character
  * is a '-'.
  *
- * @return        whether the current '-' is a urinary minus.
+ * @return        whether the current '-' is a unary minus.
  */
-bool ASFormatter::isUrinaryMinus() const {
+bool ASFormatter::isUnaryMinus() const {
     return ( (previousOperator == &AS_RETURN || !isalnum(previousCommandChar))
              && previousCommandChar != '.'
              && previousCommandChar != ')'
