@@ -180,12 +180,14 @@ void CLogFileView::refresh(CProject* prj)
       temp_files.clear();
     }
 
-    treeH->setLastItem( lastGrp );
-    if(opengroups.contains(lastGrp->text(0)) > 0){
-      setOpen( lastGrp, true );
-    }
-    if(allgroups_opened){
-      setOpen( lastGrp, true );
+    if (lastGrp) {
+      treeH->setLastItem(lastGrp);
+      if(opengroups.contains(lastGrp->text(0)) > 0){
+        setOpen(lastGrp, true);
+      }
+      if(allgroups_opened){
+        setOpen(lastGrp, true);
+      }
     }
   }
 

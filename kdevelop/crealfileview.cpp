@@ -236,9 +236,14 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   QStringList::Iterator it = dirList.begin();
   it = dirList.remove(it);
   it = dirList.remove(it);
+  it = dirList.end();
+  it--;
+
+  // Add files in THIS directory as well.
+  addFilesFromDir( directory, parent );
 
   // Recurse through all directories
-  while( it != dirList.end())
+  while( it != dirList.begin())
   {
     lastFolder = treeH->addItem( (*it).latin1(), THFOLDER, parent );
     lastFolder->setOpen( false );
@@ -252,11 +257,8 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
     
     treeH->setLastItem( lastFolder );
     
-    it++;
+    it--;
   } 
-  
-  // Add files in THIS directory as well.
-  addFilesFromDir( directory, parent );
 }
 
 /*----------------------------------- CRealFileView::getCurrentPopup()
