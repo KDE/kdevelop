@@ -115,7 +115,21 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 
 
 PHPSupportPart::~PHPSupportPart()
-{}
+{    
+    delete( m_parser );
+    delete( m_codeCompletion );
+    delete( configData );
+    
+    if( m_htmlView ){
+	mainWindow()->removeView( m_htmlView->view() );
+	delete( m_htmlView );
+	m_htmlView = 0;
+    }
+    
+    delete( phpExeProc );
+    delete( m_phpErrorView );
+    mainWindow()->removeView( m_phpErrorView );
+}
 
 void PHPSupportPart::slotActivePartChanged(KParts::Part *part){
   kdDebug(9018) << "enter slotActivePartChanged" << endl;
