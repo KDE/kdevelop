@@ -1663,8 +1663,9 @@ void DocViewMan::readBookmarkConfig(KConfig* theConfig)
   theConfig->readListEntry("doc_bookmarks_title",m_docBookmarksTitleList);
   for ( uint i =0 ; i < m_docBookmarksTitleList.count(); i++)
     {
-      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"),
-                                      m_docBookmarksTitleList.at(i));
+      QString bmTitle = QString ("&%1 %2").arg(i + 1)
+        .arg(m_docBookmarksTitleList.at(i));
+      m_pDocBookmarksMenu->insertItem(SmallIconSet("html"),bmTitle);
     }
 }
 
