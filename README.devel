@@ -8,3 +8,12 @@ KDevViewHandler instead of Kdevviewhandler.
 - tab space = 4
 - tabs replaced by spaces
 - no prefix "get" at the beginning of a get function.
+
+KDevelop Component architecture: (only some short hints at the moment :-( )
+
+- every component should be derived from KDevComponent as defined in kdevelop/lib/general/kdevcomponent.h
+- events betweens component are handled by Qt signals, the class KDevelopCore (kdevelop/kdevelopcore.h) is the dispatcher
+-there are different types of component: languagesupport,viewhandler,processview... (all defined in kdevelop/lib/general/
+-all projectmangement related interfaces are defined in kdevelop/lib/projectmanagement/
+-implementations of components are located at kdevelop/parts/ (grepview/projectview are a good examples)
+-small plugins (for projectmanagement..) are located in kdevelop/plugin
