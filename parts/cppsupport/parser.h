@@ -68,11 +68,11 @@ public /*rules*/ :
     bool parseTemplateArgumentList( TemplateArgumentListAST::Node& node );
     bool parseOperator( AST::Node& node );
     bool parseCvQualify( AST::Node& node );
-    bool parseSimpleTypeSpecifier( AST::Node& node );
+    bool parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node );
     bool parsePtrOperator( AST::Node& node );
     bool parseTemplateArgument( AST::Node& node );
-    bool parseTypeSpecifier( AST::Node& node );
-    bool parseTypeSpecifierOrClassSpec( AST::Node& node );
+    bool parseTypeSpecifier( TypeSpecifierAST::Node& node );
+    bool parseTypeSpecifierOrClassSpec( TypeSpecifierAST::Node& node );
     bool parseDeclarator( AST::Node& node );
     bool parseTemplateParameterList( AST::Node& node );
     bool parseTemplateParameter( AST::Node& node );
@@ -83,9 +83,9 @@ public /*rules*/ :
     bool parseParameterDeclarationClause( AST::Node& node );
     bool parseCtorInitializer( AST::Node& node );
     bool parsePtrToMember( AST::Node& node );
-    bool parseEnumSpecifier( AST::Node& node );
-    bool parseClassSpecifier( AST::Node& node );
-    bool parseElaboratedTypeSpecifier( AST::Node& node );
+    bool parseEnumSpecifier( TypeSpecifierAST::Node& node );
+    bool parseClassSpecifier( TypeSpecifierAST::Node& node );
+    bool parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node );
     bool parseDeclaratorId( NameAST::Node& node );
     bool parseExceptionSpecification( AST::Node& node );
     bool parseEnumeratorList( AST::Node& node );
@@ -146,17 +146,17 @@ public /*rules*/ :
 
     // statement
     bool parseCondition( AST::Node& node );
-    bool parseStatement( AST::Node& node );
-    bool parseWhileStatement( AST::Node& node );
-    bool parseDoStatement( AST::Node& node );
-    bool parseForStatement( AST::Node& node );
-    bool parseCompoundStatement( AST::Node& node );
-    bool parseForInitStatement( AST::Node& node );
-    bool parseIfStatement( AST::Node& node );
-    bool parseSwitchStatement( AST::Node& node );
-    bool parseLabeledStatement( AST::Node& node );
-    bool parseDeclarationStatement( AST::Node& node );
-    bool parseTryBlockStatement( AST::Node& node );
+    bool parseStatement( StatementAST::Node& node );
+    bool parseWhileStatement( StatementAST::Node& node );
+    bool parseDoStatement( StatementAST::Node& node );
+    bool parseForStatement( StatementAST::Node& node );
+    bool parseCompoundStatement( StatementAST::Node& node );
+    bool parseForInitStatement( StatementAST::Node& node );
+    bool parseIfStatement( StatementAST::Node& node );
+    bool parseSwitchStatement( StatementAST::Node& node );
+    bool parseLabeledStatement( StatementAST::Node& node );
+    bool parseDeclarationStatement( StatementAST::Node& node );
+    bool parseTryBlockStatement( StatementAST::Node& node );
 
     bool skipUntil( int token );
     bool skipUntilDeclaration();

@@ -159,6 +159,80 @@ private:
     void operator = ( const DeclarationAST& source );
 };
 
+// type-specifier
+//   simple-type-specifier
+//   class-specifier
+//   enum-specifier
+//   elaborated-type-specifier
+//   cv-qualifier
+
+class TypeSpecifierAST: public AST
+{
+public:
+    typedef std::auto_ptr<TypeSpecifierAST> Node;
+    
+public:
+    TypeSpecifierAST();
+    virtual ~TypeSpecifierAST();
+    
+private:
+    TypeSpecifierAST( const TypeSpecifierAST& source );
+    void operator = ( const TypeSpecifierAST& source );
+};
+
+class ClassSpecifierAST: public TypeSpecifierAST
+{
+public:
+    typedef std::auto_ptr<ClassSpecifierAST> Node;
+    
+public:
+    ClassSpecifierAST();
+    virtual ~ClassSpecifierAST();    
+    
+private:
+    ClassSpecifierAST( const ClassSpecifierAST& source );
+    void operator = ( const ClassSpecifierAST& source );
+};
+
+class EnumSpecifierAST: public TypeSpecifierAST
+{
+public:
+    typedef std::auto_ptr<EnumSpecifierAST> Node;
+    
+public:
+    EnumSpecifierAST();
+    virtual ~EnumSpecifierAST();
+    
+private:
+    EnumSpecifierAST( const EnumSpecifierAST& source );
+    void operator = ( const EnumSpecifierAST& source );
+};
+
+class ElaboratedTypeSpecifierAST: public TypeSpecifierAST
+{
+public:
+    typedef std::auto_ptr<ElaboratedTypeSpecifierAST> Node;
+    
+public:
+    ElaboratedTypeSpecifierAST();
+    virtual ~ElaboratedTypeSpecifierAST();
+    
+    AST* kind();
+    void setKind( AST::Node& kind );
+    
+    NameAST* name();
+    void setName( NameAST::Node& name );
+        
+private:
+    AST::Node m_kind;
+    NameAST::Node m_name;
+    
+private:
+    ElaboratedTypeSpecifierAST( const ElaboratedTypeSpecifierAST& source );
+    void operator = ( const ElaboratedTypeSpecifierAST& source );
+};
+
+
 class LinkageBodyAST: public AST
 {
 public:
@@ -308,14 +382,14 @@ public:
     TypedefAST();
     virtual ~TypedefAST();
     
-    AST* typeSpec();
-    void setTypeSpec( AST::Node& typeSpec );
+    TypeSpecifierAST* typeSpec();
+    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
     
     AST* initDeclaratorList();
     void setInitDeclaratorList( AST::Node& initDeclaratorList );
     
 private:
-    AST::Node m_typeSpec;
+    TypeSpecifierAST::Node m_typeSpec;
     AST::Node m_initDeclaratorList;
     
 private:
@@ -349,6 +423,20 @@ private:
 private:
     TemplateDeclarationAST( const TemplateDeclarationAST& source );
     void operator = ( const TemplateDeclarationAST& source );
+};
+
+class StatementAST: public AST
+{
+public:
+    typedef std::auto_ptr<StatementAST> Node;
+    
+public:
+    StatementAST();
+    virtual ~StatementAST();
+    
+private:
+    StatementAST( const StatementAST& source );
+    void operator = ( const StatementAST& source );
 };
 
 class TranslationUnitAST: public AST

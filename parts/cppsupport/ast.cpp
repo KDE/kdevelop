@@ -293,12 +293,12 @@ TypedefAST::~TypedefAST()
 {
 }
 
-AST* TypedefAST::typeSpec()
+TypeSpecifierAST* TypedefAST::typeSpec()
 {
     return m_typeSpec.get();
 }
 
-void TypedefAST::setTypeSpec( AST::Node& typeSpec )
+void TypedefAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
 {
     m_typeSpec = typeSpec;
 }
@@ -416,5 +416,74 @@ void NestedNameSpecifierAST::addClassOrNamespaceName( ClassOrNamespaceNameAST::N
         return;
 	
     m_classOrNamespaceNameList.append( classOrNamespaceName.release() );
+}
+
+
+// ------------------------------------------------------------------------
+TypeSpecifierAST::TypeSpecifierAST()
+{
+}
+
+TypeSpecifierAST::~TypeSpecifierAST()
+{
+}
+
+
+// ------------------------------------------------------------------------
+ClassSpecifierAST::ClassSpecifierAST()
+{
+}
+
+ClassSpecifierAST::~ClassSpecifierAST()
+{
+}
+
+
+// ------------------------------------------------------------------------
+EnumSpecifierAST::EnumSpecifierAST()
+{
+}
+
+EnumSpecifierAST::~EnumSpecifierAST()
+{
+}
+
+
+// ------------------------------------------------------------------------
+ElaboratedTypeSpecifierAST::ElaboratedTypeSpecifierAST()
+{
+}
+
+ElaboratedTypeSpecifierAST::~ElaboratedTypeSpecifierAST()
+{
+}
+
+AST* ElaboratedTypeSpecifierAST::kind()
+{
+    return m_kind.get();
+}
+
+void ElaboratedTypeSpecifierAST::setKind( AST::Node& kind )
+{
+    m_kind = kind;
+}
+
+NameAST* ElaboratedTypeSpecifierAST::name()
+{
+    return m_name.get();
+}
+
+void ElaboratedTypeSpecifierAST::setName( NameAST::Node& name )
+{
+    m_name = name;
+}
+        
+// ------------------------------------------------------------------------
+StatementAST::StatementAST()
+{
+}
+
+StatementAST::~StatementAST()
+{
 }
 
