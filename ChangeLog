@@ -1,3 +1,10 @@
+2003-04-18 Oliver Kellogg <okellogg@users.sourceforge.net>
+    * Implemented Ada language support including adasupport part, adaproject
+      part, filecreate templates, application wizard template, syntax
+      highlighting and indentation in qeditor.
+      Kudos to Alex Dymo (pascalsupport) and Robe Raggi (javasupport), on
+      whose work this is based.
+
 2003-05-01 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Changed closerpart to work on KURLs. Also moved it into Core scope.
 
