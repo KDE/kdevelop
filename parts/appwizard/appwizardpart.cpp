@@ -27,6 +27,8 @@
 #include "appwizardfactory.h"
 #include <kdevmakefrontend.h>
 #include <kdevpartcontroller.h>
+#include <kdevlanguagesupport.h>
+#include <codemodel.h>
 
 AppWizardPart::AppWizardPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("AppWizard", "appwizard", parent, name ? name : "AppWizardPart")
@@ -66,7 +68,6 @@ void AppWizardPart::slotNewProject()
     if (dlg.exec()) {
         m_creationCommand = dlg.getCommandLine();
         m_projectFileName = dlg.getProjectLocation() + "/" + dlg.getProjectName().lower() + ".kdevelop";
-        m_showFileAfterGeneration = dlg.getShowFileAfterGeneration();
     } else {
       disconnect(makeFrontend(), 0, this, 0);
     }
@@ -79,17 +80,43 @@ void AppWizardPart::slotImportProject()
     dlg.exec();
 }
 
+void AppWizardPart::openMainFile()
+{
+#if 0
+    return;
+
+    if (!languageSupport())
+        return;
+
+    CodeModel *model = languageSupport()->codeModel();
+    if (!model)
+        return;
+    NamespaceDom ns = model->globalNamespace();
+    if (!ns)
+        return;
+/*
+    FunctionList list = ns->functionByName(QString::fromLatin1("main(int, char *[])"));
+    if (list.count()) {
+        KURL url;
+        url.setPath(list.front()->fileName());
+        partController()->editDocument(url);
+    }
+*/
+    qDebug("**************************** openMainFile()");
+    FunctionList list = ns->functionList();
+    for (int i = 0; i < (int)list.count(); ++i)
+       qDebug("******** %s", list[i]->name().ascii());
+#endif
+}
 
 void AppWizardPart::slotCommandFinished(const QString &command)
 {
     if (m_creationCommand == command){
         // load the created project and maybe the first file (README...)
         core()->openProject(m_projectFileName);  // opens the project
-        if (!m_showFileAfterGeneration.isEmpty()) {
-            KURL u;
-            u.setPath(m_showFileAfterGeneration);
-            partController()->editDocument(u);
-        }
+
+        openMainFile();
+
         disconnect(makeFrontend(), 0, this, 0);
     }
 }

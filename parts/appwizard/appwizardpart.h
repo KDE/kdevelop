@@ -31,12 +31,13 @@ private slots:
     void slotNewProject();
     void slotImportProject();
     void slotCommandFinished(const QString &command);
-    
+
 private:
+    // opens the file where the "main" function is in
+    void openMainFile();
     AppWizardDialog *m_dialog;
     QString m_creationCommand;
     QString m_projectFileName;
-    QString m_showFileAfterGeneration;
 };
 
 #endif

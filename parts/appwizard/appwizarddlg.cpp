@@ -92,7 +92,6 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         info->name = config.readEntry("Name");
         info->icon = config.readEntry("Icon");
         info->comment = config.readEntry("Comment");
-        info->showFileAfterGeneration = config.readEntry("ShowFileAfterGeneration");
         info->fileTemplates = config.readEntry("FileTemplates");
         QString destDir = config.readPathEntry("DefaultDestinatonDir", defaultProjectsDir);
         destDir.replace(QRegExp("HOMEDIR"), QDir::homeDirPath());
@@ -575,15 +574,6 @@ ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
             return it.current();
 
     return 0;
-}
-
-
-QString AppWizardDialog::getShowFileAfterGeneration()
-{
-    if (m_pCurrentAppInfo && !m_pCurrentAppInfo->showFileAfterGeneration.isEmpty())
-        return finalLoc_label->text() + "/" + m_pCurrentAppInfo->showFileAfterGeneration;
-
-    return QString();
 }
 
 #include "appwizarddlg.moc"

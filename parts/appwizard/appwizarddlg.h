@@ -39,7 +39,6 @@ struct ApplicationInfo
     QString icon;
     QString category;
     QString defaultDestDir;
-    QString showFileAfterGeneration;
     QString fileTemplates;
 
     QListViewItem *item; // item pointer to the listview
@@ -72,7 +71,6 @@ public:
     QString getProjectName() { return appname_edit->text(); }
     QString getProjectLocation() { return finalLoc_label->text(); }
     QString getCommandLine() { return m_cmdline; }
-    QString getShowFileAfterGeneration();
 
 protected:
     virtual void templatesTreeViewClicked(QListViewItem*);
