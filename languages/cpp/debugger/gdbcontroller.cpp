@@ -563,8 +563,12 @@ void GDBController::parseLine(char* buf)
 
     if ( strncmp(buf, "[New Thread", 11)==0)
     {
-//        kdDebug(9012) << "Parsed (START_[New)<" << buf << ">" << endl;
-        setStateOn(s_viewThreads);
+        if (!stateIsOn(s_viewThreads))
+        {
+            setStateOn(s_viewThreads);
+            queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, INFOTHREAD),
+                                        true);
+        }
         return;
     }
 
@@ -1409,17 +1413,18 @@ void GDBController::slotCoreFile(const QString &coreFile)
 
     queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD,
                                 NOTINFOCMD, 0));
-//    if (stateIsOn(s_viewThreads))
-//        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD,
-//                                INFOTHREAD),true);
 
+    // We don't know at this point whether this executable is a threaded
+    // program. Maybe the backtrace command will force gdb to tell us by
+    // sending us "[New Thread" lines. At that point we issue the "info thread"
+    // command
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
 
-//    if (stateIsOn(s_viewLocals))
-//    {
-//        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
-//        queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
-//    }
+    if (stateIsOn(s_viewLocals))
+    {
+        queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+        queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+    }
 }
 
 // **************************************************************************
@@ -1431,10 +1436,10 @@ void GDBController::slotAttachTo(int pid)
     queueCmd(new GDBCommand(
         QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
 
-    if (stateIsOn(s_viewThreads))
-        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, INFOTHREAD),
-                                        true);
-
+    // We don't know at this point whether this executable is a threaded
+    // program. Msybe the backtrace command will force gdb to tell us by
+    // sending us "[New Thread" lines. At that point we issue the "info thread"
+    // command
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
 
     if (stateIsOn(s_viewLocals))
