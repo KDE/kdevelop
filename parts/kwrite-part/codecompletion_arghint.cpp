@@ -100,7 +100,7 @@ KDevArgHint::KDevArgHint ( QWidget *parent ) : QFrame ( parent, 0,  WType_Popup 
 	hbox->addWidget ( ( m_pNext = new ArgHintArrow ( this, ArgHintArrow::Right ) ) );
 	hbox->addWidget ( ( m_pFuncLabel = new QLabel ( this ) ) );
 
-	setFocusPolicy ( ClickFocus );
+	setFocusPolicy ( StrongFocus );
 	setFocusProxy ( parent );
 
 	m_pStateLabel->setBackgroundColor ( QColor ( 255, 255, 238 ) );
@@ -115,9 +115,11 @@ KDevArgHint::KDevArgHint ( QWidget *parent ) : QFrame ( parent, 0,  WType_Popup 
 	connect ( m_pPrev, SIGNAL ( clicked() ), this, SLOT ( gotoPrev() ) );
 	connect ( m_pNext, SIGNAL ( clicked() ), this, SLOT ( gotoNext() ) );
 
-	m_nNumFunc = m_nCurFunc = 0;
+	m_nNumFunc = m_nCurFunc = m_nCurLine = 0;
 
 	m_nCurArg = 1;
+
+	m_bMarkingEnabled = false;
 
 	updateState();
 }
@@ -161,13 +163,26 @@ void KDevArgHint::updateState()
 	m_pStateLabel->setText ( strState );
 
 	m_pFuncLabel->setText ( markCurArg() );
+
+	if ( m_nNumFunc <= 1 )
+	{
+		m_pPrev->hide();
+		m_pNext->hide();
+		m_pStateLabel->hide();
+	}
+	else
+	{
+		m_pPrev->show();
+		m_pNext->show();
+		m_pStateLabel->show();
+	}
 }
 
-void KDevArgHint::removeFunctions()
+void KDevArgHint::reset()
 {
 	m_funcList.clear();
 
-	m_nNumFunc = m_nCurFunc = 0;
+	m_nNumFunc = m_nCurFunc = m_nCurLine = 0;
 	m_nCurArg = 1;
 
 	updateState();
@@ -175,6 +190,17 @@ void KDevArgHint::removeFunctions()
 
 void KDevArgHint::cursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol )
 {
+	if ( m_nCurLine == 0 )
+		m_nCurLine = nLine;
+
+	if ( m_nCurLine > 0 && m_nCurLine != nLine)
+	{
+		hide();
+		return;
+	}
+	else if ( m_nCurLine == nLine )
+		show();
+
 	KEditor::EditDocumentIface* pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
 	if ( !pEditIface )
 	{
@@ -223,8 +249,12 @@ void KDevArgHint::setFunctionText ( int nFunc, const QString& strText )
 
 void KDevArgHint::setArgMarkInfos ( QString strWrapping, QString strDelimiter )
 {
+	if ( strWrapping.isEmpty() || strDelimiter.isEmpty() )
+		return;
+
 	m_strArgWrapping = strWrapping;
 	m_strArgDelimiter = strDelimiter;
+	m_bMarkingEnabled = true;
 }
 
 void KDevArgHint::nextArg()
@@ -255,10 +285,13 @@ QString KDevArgHint::markCurArg()
 {
 	QString strFuncText = m_funcList [ m_nCurFunc ];
 
+	if ( !m_bMarkingEnabled )
+		return strFuncText;
+
 	if ( strFuncText.isEmpty() )
 		return "\0";
 
-	strFuncText = strFuncText.prepend ( "<qt>" );
+	strFuncText = strFuncText.prepend ( "<qt>&nbsp;" );
 	strFuncText = strFuncText.append ( "</qt>" );
 
 	int nBegin = strFuncText.find ( m_strArgWrapping[0] ) + 1;

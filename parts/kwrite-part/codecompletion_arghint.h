@@ -62,7 +62,7 @@ class KDevArgHint : public QFrame
 	public:
 		void setFunctionText ( int nFunc, const QString& strText );
 		void setArgMarkInfos ( QString strWrapping, QString strDelimiter );
-		void removeFunctions();
+		void reset();
 		void nextArg();
 		void prevArg();
 		void setCurArg ( int nCurArg );
@@ -78,6 +78,7 @@ class KDevArgHint : public QFrame
 		int m_nCurFunc;
 		int m_nNumFunc;
 		int m_nCurArg;
+		int m_nCurLine;
 
 		bool m_bMarkingEnabled;
 

@@ -173,25 +173,26 @@ void CodeCompletionIfaceImpl::updateBox(bool newCoordinate){
   m_completionPopup->show();
 }
 
-void CodeCompletionIfaceImpl::showArgHint ( QValueList <QString> functionList, QString strWrapping, QString strDelimiter )
+void CodeCompletionIfaceImpl::showArgHint ( QStringList functionList, QString strWrapping, QString strDelimiter )
 {
-	m_pArgHint->removeFunctions();
+	m_pArgHint->reset();
 
 	m_pArgHint->setArgMarkInfos ( strWrapping, strDelimiter );
 
-	QValueList <QString>::Iterator it;
+	QStringList::Iterator it;
 
 	int nNum = 0;
 
 	for( it = functionList.begin(); it != functionList.end(); it++ )
 	{
-		cerr << "insert function text" << endl;
+		cerr << "Insert function text: " << *it << endl;
 
 		m_pArgHint->setFunctionText ( nNum, ( *it ) );
 
 		nNum++;
 	}
 
+	m_pArgHint->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
 	m_pArgHint->show();
 
 }
