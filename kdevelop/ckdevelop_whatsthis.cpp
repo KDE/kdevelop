@@ -249,7 +249,7 @@ void CKDevelop::initWhatsThis(){
 	                                  "documentation and the KDevelop manuals. Can be "
 	                                  "configured individually by right-button menu."));
 	
-	whats_this->add((QWidget*)kdlg_widgets_view, i18n("Widgets\n\n"
+  whats_this->add((QWidget*)kdlg_widgets_view, i18n("Widgets\n\n"
 																		"Here, you can select a widget item to add to "
 																		"the dialog you're working on. More information "
 																		"about the widget items can be found by What's this "
@@ -305,22 +305,48 @@ void CKDevelop::initWhatsThis(){
 		"for terminal-based application communication. Running "
 		"terminal applications are using this instead of a terminal window."));
 	*/
-whats_this->add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
+  whats_this->add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
+
+	if (var_viewer)
+  	whats_this->add((QWidget*)var_viewer, i18n("Variable Tree\n\n"
+	                                  "The variable tree allows you to see "
+	                                  "the variable values as you step "
+	                                  "through your program using the internal "
+	                                  "debugger. Click the RMB on items in "
+	                                  "this view to get a popup menu.\n"
+	                                  "To speed up stepping through your code "
+	                                  "leave the tree items closed and add the "
+	                                  "variable(s) to the watch section.\n"
+	                                  "To change a variable value in your running app "
+	                                  "use a watch variable (eg a=5)."));
+	
+  if (brkptManager)
+	  whats_this->add((QWidget*)brkptManager, i18n("Breakpoint list\n\n"
+	                                  "Displays a list of breakpoints with "
+	                                  "their current status. Clicking on a "
+	                                  "breakpoint item with the RMB displays "
+	                                  "a popupmenu so you may manipulate the "
+	                                  "breakpoint. Double clicking will take "
+	                                  "to the source in the editor window."));
 	                                  																												
+  if (frameStack)
+	  whats_this->add((QWidget*)frameStack, i18n("Frame stack display\n\n"
+	                                  "Often referred to as the \"call stack\", "
+	                                  "this is a list showing what function "
+	                                  "is currently active and who called "
+	                                  "each function to get to this point in your "
+	                                  "program. By clicking on an item "
+	                                  "you can see the values in any of the "
+	                                  "previous calling functions "
+	                                  "See the VAR tab for these frame "
+	                                  "variables."));
+
+  if (disassemble)
+	  whats_this->add((QWidget*)disassemble, i18n("Machine code display\n\n"
+	                                  "A machine code view into your running "
+	                                  "executable with the current instruction "
+	                                  "highlighted. You can step instruction by "
+	                                  "instruction using the debuggers toolbar "
+	                                  "buttons of \"step over\" instruction and "
+	                                  "\"step into\" instruction."));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
