@@ -2520,9 +2520,9 @@ void KWriteDoc::setModified(bool m) {
   }
 }
 
-//bool KWriteDoc::isModified() {
-//  return modified;
-//}
+bool KWriteDoc::isModified() {
+  return modified;
+}
 
 bool KWriteDoc::isLastView(int numViews) {
   return ((int) views.count() == numViews);
@@ -3205,4 +3205,21 @@ void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
     if(started) recordEnd(view,c);
   }
 }
+
+void KWriteDoc::clearBookmarks() {
+
+	for(int line = 0; line < getTextLineCount(); line++)
+	{
+		TextLine* textline = textLine(line);
+		if(textline != NULL)
+			if(textline->isBookmarked())
+			{
+				textline->toggleBookmark();	
+  			tagLines(line, line);
+			}
+	}
+	
+  updateViews();
+}
+
 #include "kwdoc.moc"

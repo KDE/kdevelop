@@ -178,6 +178,11 @@ class KWriteDoc : public QObject {
     void writeFile(QIODevice &);
     void updateViews(KWriteView *exclude = 0L);
     QString fileName();
+    void setFileName(const QString&);
+    void setModified(bool);
+    void setText(const char *);
+    bool isModified();
+    void clearBookmarks();
 
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);
@@ -241,7 +246,6 @@ class KWriteDoc : public QObject {
 
     QCString text();
     QString getWord(PointStruc &cursor);
-    void setText(const char *);
     bool hasMarkedText() {return (selectEnd >= selectStart);}
     QString markedText(int flags);
     void delMarkedText(KWriteView *, VConfig &);
@@ -250,12 +254,9 @@ class KWriteDoc : public QObject {
     void paintTextLine(QPainter &, int line, int xStart, int xEnd, bool showTabs);
     void printTextLine(QPainter &, int line, int xEnd, int y);
 
-    void setModified(bool);
-//    bool isModified();
     bool isLastView(int numViews);
 
     bool hasFileName();
-    void setFileName(const QString&);
     void clearFileName();
 
     bool doSearch(SConfig &s, const char *searchFor);

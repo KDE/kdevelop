@@ -2599,32 +2599,9 @@ void KWrite::gotoBookmark(int n) {
 */
 }
 
-void KWrite::clearBookmarks() {
-
-	for(int line = 0; line < kWriteDoc->getTextLineCount(); line++)
-	{
-		TextLine* textline = kWriteDoc->textLine(line);
-		if(textline != NULL)
-			if(textline->isBookmarked())
-			{
-				textline->toggleBookmark();	
-  			kWriteDoc->tagLines(line, line);
-			}
-	}
-	
-/*
-  for (int z = 0; z < (int) bookmarks.count(); z++)
-  {
-    KWBookmark *b = bookmarks.at(z);
-    if (b->cursor.y >= 0)
-    {
-      int line = b->cursor.y;
-      kWriteDoc->tagLines( line, line );
-    }
-  }
-  bookmarks.clear();
-*/
-  kWriteDoc->updateViews();
+void KWrite::clearBookmarks()
+{
+  kWriteDoc->clearBookmarks();
 }
 
 void KWrite::updateBMPopup() {
