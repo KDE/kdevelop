@@ -30,6 +30,8 @@
 #include <klocale.h>
 
 #include <qpoint.h>
+#include <qclipboard.h>
+#include <kapplication.h>
 
 // **************************************************************************
 // **************************************************************************
@@ -173,11 +175,19 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
         if (dynamic_cast<WatchRoot*>(findRoot(item)))
             idRemoveWatch = popup.insertItem( i18n("Remove Watch Variable") );
         int idToggleWatch = popup.insertItem( i18n("Toggle Watchpoint") );
+        int	idCopyToClipboard = popup.insertItem( i18n("Copy to clipboard") );
 
         int res = popup.exec(QCursor::pos());
 
         if (res == idRemoveWatch)
             delete item;
+		else if (res == idCopyToClipboard) {
+            QClipboard *qb = KApplication::clipboard();
+            QString text = "{ \"" + item->text( 0 ) + "\", " + // name
+                "\"" + item->text( 2 ) + "\", " + // type
+                "\"" + item->text( 1 ) + "\" }";  // value
+			qb->setText( text, QClipboard::Clipboard );
+		}
         else if (res == idToggleWatch) {
             if (VarItem *item = dynamic_cast<VarItem*>(currentItem()))
                 emit toggleWatchpoint(item->fullName());
