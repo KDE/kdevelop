@@ -122,7 +122,8 @@ SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   connect(button2,SIGNAL(clicked()),this,SLOT(reject()));//SIGNAL(doneSearch()));
 
   mainLayout->activate();
-  resize(minimumSize());
+  mainLayout->freeze();
+//  resize(minimumSize());
   
   search->setFocus();
 }
@@ -200,7 +201,8 @@ ReplacePrompt::ReplacePrompt(QWidget *parent, const char *name)
   connect(button4,SIGNAL(clicked()),this,SLOT(reject()));
 
   mainLayout->activate();
-  resize(minimumSize());
+  mainLayout->freeze();
+//  resize(minimumSize());
 
 //  if (parent) {
 //    QWidget *w;
@@ -274,7 +276,8 @@ GotoLineDialog::GotoLineDialog(int line, QWidget *parent, const char *name)
   e1->setMinimumWidth(minimumSize().width());
 
   mainLayout->activate();
-  resize(minimumSize());
+  mainLayout->freeze();
+//  resize(minimumSize());
   
   e1->setFocus();
 }
@@ -335,7 +338,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt13 = new QCheckBox(i18n("A&uto Copy"),g2);
   opt13->setFixedSize( opt13->sizeHint() );
 
-  g2->setMinimumHeight(8+8+8+4*4+6*(opt8->sizeHint().height()));
+  g2->setMinimumHeight(8+8+8+6*4+6*(opt8->sizeHint().height()));
 
   opt8->setChecked(flags & cfPersistent);
   opt9->setChecked(flags & cfKeepSelection);
@@ -385,17 +388,14 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
 
   QVBoxLayout *mainLayout = new QVBoxLayout(this, 8, 4);
 
-  
   QHBoxLayout *vbl6 = new QHBoxLayout();
   mainLayout->addLayout( vbl6 );
 
   QVBoxLayout *vbl3 = new QVBoxLayout();
   vbl6->addLayout( vbl3 );
-    
+
   vbl3->addWidget( g1 );
-  vbl3->addSpacing( 10 );
-  vbl3->addWidget( g2 );
-  
+
   QVBoxLayout *vbl1 = new QVBoxLayout(g1, 8, 4);
   vbl1->addSpacing(8);
   vbl1->addWidget( opt1,0,AlignLeft );
@@ -406,7 +406,9 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   vbl1->addWidget( opt6,0,AlignLeft );
   vbl1->addWidget( opt7,0,AlignLeft );
 
- 
+  vbl3->addSpacing( 10 );
+  vbl3->addWidget( g2 );
+
   QVBoxLayout *vbl2 = new QVBoxLayout(g2, 8, 4);
   vbl2->addSpacing(8);
   vbl2->addWidget( opt8,0,AlignLeft );
@@ -441,6 +443,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
 
   mainLayout->activate();
   resize(minimumSize());
+
 }
 
 int SettingsDialog::getFlags() {
@@ -539,7 +542,9 @@ ColorDialog::ColorDialog(QColor *colors, QWidget *parent, const char *name)
   connect(button,SIGNAL(clicked()),this,SLOT(reject()));
 
   mainLayout->activate();
-  resize(minimumSize());
+  mainLayout->freeze();
+  
+//  resize(minimumSize());
 }
 
 void ColorDialog::getColors(QColor *colors) {
