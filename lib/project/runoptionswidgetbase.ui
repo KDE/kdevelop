@@ -44,7 +44,6 @@
                         <number>0</number>
                     </property>
                 </widget>
-
                 <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="4">
                     <property name="name">
                         <cstring>layout2</cstring>
@@ -53,31 +52,30 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>buildDirectory_radio</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Run from the &amp;BUILD directory:</string>
-                    </property>
-                    <property name="buttonGroupId">
-                        <number>1</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>The build directory depends on the currenty selected configuration (in Configure Options page)</string>
-                    </property>
-                </widget>
-                <widget class="KSqueezedTextLabel">
-                    <property name="name">
-                        <cstring>buildDirectory_label</cstring>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>buildDirectory_radio</cstring>
-                    </property>
-                </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>buildDirectory_radio</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Run from the &amp;BUILD directory:</string>
+                            </property>
+                            <property name="buttonGroupId">
+                                <number>1</number>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>The build directory depends on the currenty selected configuration (in Configure Options page)</string>
+                            </property>
+                        </widget>
+                        <widget class="KSqueezedTextLabel">
+                            <property name="name">
+                                <cstring>buildDirectory_label</cstring>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>buildDirectory_radio</cstring>
+                            </property>
+                        </widget>
                     </hbox>
                 </widget>
-
                 <widget class="QRadioButton" row="2" column="0">
                     <property name="name">
                         <cstring>customDirectory_radio</cstring>
