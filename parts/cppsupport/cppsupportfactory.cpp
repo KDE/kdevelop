@@ -24,7 +24,9 @@ KInstance *CppSupportFactory::createInstance()
 {
     KInstance *instance = KGenericFactory<CppSupportPart>::createInstance();
     KStandardDirs *dirs = instance->dirs();
-    dirs->addResourceType("newclasstemplates", KStandardDirs::kde_default("data") + "kdevcppsupport/newclass/");
+    dirs->addResourceType( "newclasstemplates", KStandardDirs::kde_default("data") + "kdevcppsupport/newclass/" );
+    dirs->addResourceType( "pcs", KStandardDirs::kde_default( "data" ) + "kdevcppsupport/pcs/" );
+
     return instance;
 }
 

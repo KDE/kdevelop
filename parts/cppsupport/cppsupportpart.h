@@ -59,7 +59,7 @@ public:
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
 
-    Catalog* catalog() { return m_catalog; }
+    const QPtrList<Catalog>& catalogList() { return m_catalogList; }
 
     QStringList fileExtensions( ) const;
 
@@ -163,7 +163,7 @@ private:
     QMap<QString, QDateTime> m_timestamp;
     bool m_valid;
 
-    Catalog* m_catalog;
+    QPtrList<Catalog> m_catalogList;
 
     friend class KDevCppSupportIface;
 };

@@ -59,6 +59,7 @@
 #include <kstatusbar.h>
 #include <kconfig.h>
 #include <kdeversion.h>
+#include <kstandarddirs.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -110,8 +111,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     setXMLFile("kdevcppsupport.rc");
 
+    m_catalogList.setAutoDelete( true );
     m_backgroundParser = 0;
-    m_catalog = new Catalog();
     setupCatalog();
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
@@ -217,7 +218,6 @@ CppSupportPart::~CppSupportPart()
     delete m_structureView;
 #endif
     delete m_problemReporter;
-    delete m_catalog;
 }
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
@@ -1029,11 +1029,22 @@ KTextEditor::Document * CppSupportPart::findDocument( const KURL & url )
 
 void CppSupportPart::setupCatalog( )
 {
+    kdDebug(9007) << "CppSupportPart::setupCatalog()" << endl;
+    
+    KStandardDirs *dirs = CppSupportFactory::instance()->dirs();
+    QStringList pcsList = dirs->findAllResources( "pcs", "*.db", false, true );
+    QStringList::Iterator it = pcsList.begin();
+    while( it != pcsList.end() ){
+        Catalog* catalog = new Catalog();
+        catalog->open( *it );
+        catalog->addIndex( "kind" );
+        catalog->addIndex( "name" );
+        catalog->addIndex( "scope" );
+        catalog->addIndex( "fileName" );
+
+        m_catalogList.append( catalog );
+        ++it;
+    }
 }
-
-
-
-
-
 
 #include "cppsupportpart.moc"
