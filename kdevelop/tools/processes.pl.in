@@ -75,6 +75,9 @@ else {
   				$processes{APPLICATION} eq "qt2mdi") {
     changeQtApp();
   }
+  elsif ($processes{APPLICATION} eq "qextmdi") {
+    changeQextMdiApp();
+  }
   elsif ($processes{APPLICATION} eq "cpp") {
     changeTerminalCPPApp();
   }

@@ -35,6 +35,7 @@ else {
   printflush (STDOUT,"make configure...\n");
   chdir ($overDirectory);
        if ($processes{APPLICATION} eq "qt2normal" || $processes{APPLICATION} eq "qt2mdi" ||
+        $processes{APPLICATION} eq "qextmdi" ||
        	$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
        	$processes{APPLICATION} eq "kde2mdi")
        {
