@@ -705,6 +705,11 @@ public:
                              THType parentType,
                              THType itemType );
 
+  /** Reimplemented from base class QextMdiMainFrm.
+   *  Dispatches this 'event' to m_docViewMan which will delete the closed view
+   */
+  virtual void closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar = true);
+
 protected: // Protected methods
 
   /** The user selected a class in the classcombo.
@@ -890,7 +895,6 @@ private:
   KDockWidget* outputdock;
   KDockWidget* maindock;
 
-  CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources
   CEditWidget* cpp_widget;    //  the editwidget for cpp files
   CDocBrowser* browser_widget;

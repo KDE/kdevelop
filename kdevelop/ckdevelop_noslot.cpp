@@ -31,6 +31,7 @@
 #include "./dbg/brkptmanager.h"
 #include "ckonsolewidget.h"
 #include "docviewman.h"
+#include "kwdoc.h"
 
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -320,9 +321,9 @@ void CKDevelop::setMainCaption(int tab_item)
       break;
 
     default:
-      capt=(project) ? (prj->getProjectName()+" - "+QFileInfo(edit_widget->getName()).fileName()) :
-              QFileInfo(edit_widget->getName()).fileName();
-      if (edit_widget->isModified())
+      capt=(project) ? (prj->getProjectName()+" - "+QFileInfo(m_docViewManager->currentEditView()->getName()).fileName()) :
+              QFileInfo(m_docViewManager->currentEditView()->getName()).fileName();
+      if (m_docViewManager->currentEditView()->isModified())
       {
         enableCommand(ID_FILE_SAVE);
         setCaption(capt,true);
@@ -375,7 +376,7 @@ bool CKDevelop::fileSaveAs(){
   TEditInfo* search_info;
   int message_result=KMessageBox::Yes; // simulate ok state... this could change by one of the following messageboxes
 
-  oldName=edit_widget->getName();
+  oldName=m_docViewManager->currentEditView()->getName();
   if (bAutosave)
     saveTimer->stop();
 
@@ -395,7 +396,7 @@ bool CKDevelop::fileSaveAs(){
     }
 
     // check if the extension is changed and the widget or program to view must change
-    if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
+    if (CProject::getType(name)!=CProject::getType(m_docViewManager->currentEditView()->getName()))
       message_result = KMessageBox::warningYesNoCancel(this,
                             i18n("Do you really want to save the file\nas another type of document?"),
                             i18n("Save as new type of document?"));
@@ -430,9 +431,9 @@ bool CKDevelop::fileSaveAs(){
   }
 
   // now that all cancel possibilities are handled simulate a changed file
-  // edit_widget->toggleModified(true);
+  // m_docViewManager->currentEditView()->toggleModified(true);
 
-  if (!edit_widget->KWrite::writeFile(name)){
+  if (!m_docViewManager->currentEditView()->KWrite::writeFile(name)){
   // if saving failed
       if (bAutosave)
        saveTimer->start(saveTimeout);
@@ -444,7 +445,7 @@ bool CKDevelop::fileSaveAs(){
     // here we are ... saving the file with the same name
     //   so only the modified-flags have to be changed
     actual_info->modified = false;
-    edit_widget->toggleModified(false);
+    m_docViewManager->currentEditView()->toggleModified(false);
   }
   else
   {
@@ -672,7 +673,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 void CKDevelop::switchToFile( QString filename, int line, int col,
                               bool bForceReload, bool bShowModifiedBox)
 {
-
+  CEditWidget* pCurEditWidget = m_docViewManager->currentEditView();
 
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
@@ -689,7 +690,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     konsole_widget->setDirectory(dirpart);
   }
 
-//FB  lastfile = edit_widget->getName();
+//FB  lastfile = pCurEditWidget->getName();
 //FB  lasttab = s_tab_view->getCurrentTab();
 
   QFileInfo fileInfo(filename);
@@ -761,16 +762,13 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
 //FB----------anfang-vom-abschnitt-altes-behandeln----------
 
-  // set the correct edit_widget
+  // set the correct pCurEditWidget
   if (CProject::getType(filename) == CPP_SOURCE){
-    edit_widget = cpp_widget;
-
     if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
       enableCommand(ID_BUILD_COMPILE_FILE);
   }
   else
   {
-    edit_widget = header_widget;
     disableCommand(ID_BUILD_COMPILE_FILE);
   }
 
@@ -778,12 +776,12 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   TEditInfo* actual_info;
 
   QString editWidgetName;
-  if (edit_widget)
-    editWidgetName = edit_widget->getName(); //FB
+  if (pCurEditWidget)
+    editWidgetName = pCurEditWidget->getName(); //FB
   // We need to look in the list of "open" files for the file that
-  // is currently held in the edit_widget. This file needs to
+  // is currently held in the pCurEditWidget. This file needs to
   // be taken out of the editor_widget and stored, so that we can
-  // reuse the edit_widget for the new file.
+  // reuse the pCurEditWidget for the new file.
   for (actual_info=edit_infos.first(); actual_info != 0; actual_info=edit_infos.next())
   {
     if (actual_info->filename == editWidgetName)
@@ -812,22 +810,22 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
   }
 
   if (!bForceReload && filename == editWidgetName){
-    if (edit_widget && (line != -1))
-      edit_widget->setCursorPosition(line, col);
+    if (pCurEditWidget && (line != -1))
+      pCurEditWidget->setCursorPosition(line, col);
 
       //    cerr << endl <<endl << "Filename:" << filename
-      // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
-      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-      edit_widget->setFocus();
+      // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
+      s_tab_view->setCurrentTab((pCurEditWidget==header_widget) ? HEADER : CPP);
+      pCurEditWidget->setFocus();
       return;
   }
 
   // store the old file
-  if (edit_widget) {
-    actual_info->text = edit_widget->text();
-    actual_info->modified = edit_widget->isModified();
-    actual_info->cursor_line = edit_widget->currentLine();
-    actual_info->cursor_col = edit_widget->currentColumn();
+  if (pCurEditWidget) {
+    actual_info->text = pCurEditWidget->text();
+    actual_info->modified = pCurEditWidget->isModified();
+    actual_info->cursor_line = pCurEditWidget->currentLine();
+    actual_info->cursor_col = pCurEditWidget->currentColumn();
     // output_widget->append("auszuwechseldes file:" + actual_info->filename);
   }
   } //FB
@@ -871,55 +869,60 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     info->cursor_col = 0;
     info->last_modified = fileinfo.lastModified();
 
-//FB    edit_widget->clear();
+//FB    pCurEditWidget->clear();
     int docId = m_docViewManager->findDoc( filename);
     if (docId == -1) {
       docId = m_docViewManager->createDoc( docType, filename);
       if (docId != -1)
-        edit_widget = (CEditWidget*) m_docViewManager->createView( docId);
         qDebug("createView for a new created doc");
+        pCurEditWidget = (CEditWidget*) m_docViewManager->createView( docId);
+        pCurEditWidget->setFocusPolicy(QWidget::StrongFocus);
+        pCurEditWidget->setFont(KGlobalSettings::fixedFont());
+        config->setGroup("KWrite Options");
+        pCurEditWidget->readConfig(config);
+        pCurEditWidget->doc()->readConfig(config);
     }
     else {
       // a view for this doc exists, already;
       // use the first view we found of this doc to show the text
-      edit_widget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
+      pCurEditWidget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
       qDebug("found view in list of doc");
     }
     m_docViewManager->loadDoc( docId, filename,1);
     qDebug("and loadDoc");
-    activateView( (QextMdiChildView*) edit_widget->parentWidget());
-//FB    edit_widget->loadFile(filename,1);
+    activateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
+//FB    pCurEditWidget->loadFile(filename,1);
   }
   else
   {
     int docId = m_docViewManager->findDoc( filename);
-    edit_widget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
-    activateView( (QextMdiChildView*) edit_widget->parentWidget());
+    pCurEditWidget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
+    activateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
     // The file is in the list so use the saved text
-    edit_widget->setText(info->text);
+    pCurEditWidget->setText(info->text);
     qDebug("doc (and at least 1 view) did exist, raise it");
   }
 
   // update the pointers
   if (docType == DocViewMan::Source)
-    cpp_widget = edit_widget;
+    cpp_widget = pCurEditWidget;
   else
-    header_widget = edit_widget;
+    header_widget = pCurEditWidget;
 
-  edit_widget->toggleModified(info->modified);
+  pCurEditWidget->toggleModified(info->modified);
 
   // If the caller wanted to be positioned at a particular place in the file
   // then they have supplied the line and col. Otherwise we use the
   // current info values (0 if new) for the placement.
   if (line == -1)
-    edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
+    pCurEditWidget->setCursorPosition(info->cursor_line,info->cursor_col);
   else
-    edit_widget->setCursorPosition(line, col);
+    pCurEditWidget->setCursorPosition(line, col);
 
-  edit_widget->setName(filename);
-  info->text = edit_widget->text();
-  s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-  edit_widget->setFocus();
+  pCurEditWidget->setName(filename);
+  info->text = pCurEditWidget->text();
+  s_tab_view->setCurrentTab((pCurEditWidget==header_widget) ? HEADER : CPP);
+  pCurEditWidget->setFocus();
 
   // Need to get the breakpoints displayed in this file (if any)
 	if (brkptManager)
@@ -928,28 +931,28 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //      if (bForceReload)
 //      {
 //        QFileInfo fileinfo(filename);
-//        edit_widget->clear();
-//        edit_widget->loadFile(filename,1);
+//        pCurEditWidget->clear();
+//        pCurEditWidget->loadFile(filename,1);
 //        info->modified=false;
 //        info->cursor_line=info->cursor_col=0;
-//        info->text = edit_widget->text();
+//        info->text = pCurEditWidget->text();
 //      }
 //      else
 //      {
-////         edit_widget->setName(filename);     // inserted to stop flickering of caption
-//         edit_widget->setText(info->text);
+////         pCurEditWidget->setName(filename);     // inserted to stop flickering of caption
+//         pCurEditWidget->setText(info->text);
 //      }
 //
 //      if (line == -1)
-//        edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
+//        pCurEditWidget->setCursorPosition(info->cursor_line,info->cursor_col);
 //      else
-//        edit_widget->setCursorPosition(line, col);
+//        pCurEditWidget->setCursorPosition(line, col);
 //
-//      edit_widget->toggleModified(info->modified);
-//      edit_widget->setName(filename);
+//      pCurEditWidget->toggleModified(info->modified);
+//      pCurEditWidget->setName(filename);
 //
-//      s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-//      edit_widget->setFocus();
+//      s_tab_view->setCurrentTab((pCurEditWidget==header_widget) ? HEADER : CPP);
+//      pCurEditWidget->setFocus();
 //
 //      // Need to get the breakpoints displayed in this file (if any)
 //			if (brkptManager)
@@ -961,7 +964,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //void CKDevelop::switchToFile(QString filename, int lineNo){
 //  lasttab = s_tab_view->getCurrentTab();
 //  switchToFile( filename, false, lineNo, 0);
-//  edit_widget->setCursorPosition( lineNo, 0 );
+//  pCurEditWidget->setCursorPosition( lineNo, 0 );
 //}
 
 void CKDevelop::startDesigner()

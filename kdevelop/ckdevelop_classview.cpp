@@ -24,6 +24,7 @@
 #include "caddclassattributedlg.h"
 #include <ceditwidget.h>
 #include "classparser/ProgrammingByContract.h"
+#include "docviewman.h"
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -316,9 +317,9 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
   }
 
   // Add the declaration.
-  edit_widget->insertAtLine( toAdd, atLine );
-  edit_widget->setCursorPosition( atLine, 0 );
-  edit_widget->toggleModified( true );
+  m_docViewManager->currentEditView()->insertAtLine( toAdd, atLine );
+  m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
+  m_docViewManager->currentEditView()->toggleModified( true );
 
   // Get the code for the .cpp file.
   aMethod->asCppCode( toAdd );
@@ -334,9 +335,9 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
 	 //kdDebug() << "fixed cpp code : " << toAdd.data() << endl;	
     // Add the code to the file.
 
-    edit_widget->append( toAdd );
-    edit_widget->setCursorPosition( edit_widget->lines() - 1, 0 );
-    edit_widget->toggleModified( true );
+    m_docViewManager->currentEditView()->append( toAdd );
+    m_docViewManager->currentEditView()->setCursorPosition( m_docViewManager->currentEditView()->lines() - 1, 0 );
+    m_docViewManager->currentEditView()->toggleModified( true );
   }
 }
 
@@ -416,8 +417,8 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   }
 
   // Add the code to the file.
-  edit_widget->insertAtLine( toAdd, atLine );
-  edit_widget->setCursorPosition( atLine, 0 );
+  m_docViewManager->currentEditView()->insertAtLine( toAdd, atLine );
+  m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
 
   // Delete the genererated attribute
   delete aAttr;
@@ -496,8 +497,8 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
   }
 
   // Add the code to the file.
-  edit_widget->insertAtLine( toAdd, atLine );
-  edit_widget->setCursorPosition( atLine, 0 );
+  m_docViewManager->currentEditView()->insertAtLine( toAdd, atLine );
+  m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
   slotFileSave();
   // Delete the genererated attribute
   delete aAttr;
@@ -515,8 +516,8 @@ void CKDevelop::slotCVSigSlotMapImplement ( CParsedClass* aClass, const QString&
     }
    QString str = "\t" + toAdd + "\n";
     switchToFile ( aClass -> definedInFile );
-    edit_widget->insertAtLine( str, atLine );
-    edit_widget->setCursorPosition( atLine, 0 );
+    m_docViewManager->currentEditView()->insertAtLine( str, atLine );
+    m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
     slotFileSave();
 }
 
@@ -565,8 +566,8 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
       {
         // Start by deleting the declaration.
         switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
-        edit_widget->deleteInterval( aMethod->declaredOnLine, 
-                                     aMethod->declarationEndsOnLine );
+        m_docViewManager->currentEditView()->deleteInterval( aMethod->declaredOnLine,
+                                                             aMethod->declarationEndsOnLine );
 
         // Comment out the definition if it isn't a signal.
         if( !aMethod->isSignal )
@@ -575,7 +576,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,
           for( line = aMethod->definedOnLine; 
                line <= aMethod->definitionEndsOnLine;
                line++ )
-            edit_widget->insertAtLine( i18n("//Del by KDevelop: "), line );
+            m_docViewManager->currentEditView()->insertAtLine( i18n("//Del by KDevelop: "), line );
         }
       }
     }

@@ -99,9 +99,18 @@ public:
   /** retrieves the document found by its filename */
   int findDoc( const QString& strFileName) const;
 
+  /** Get the last focused CEditWidget view (Note: not the covering MDI widgets but the embedded view) */
+  CEditWidget* currentEditView() { return m_pCurEditView; };
+  /** Get the last focused KHTMLView view (Note: not the covering MDI widgets but the embedded view) */
+  KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
+  /** Get the document of the last focused CEditWidget view. */
+  KWriteDoc* currentEditDoc() { return m_pCurEditDoc; };
+  /** Get the document of the last focused KHTMLView view. */
+  CDocBrowser* currentBrowserDoc() { return m_pCurBrowserDoc; };
+
 public slots:
   /** */
-  void slot_gotFocus(QWidget* pView);
+  void slot_gotFocus(QextMdiChildView* pMDICover);
 
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
@@ -118,7 +127,7 @@ signals:
   void sig_updated(QObject* pDoc, int nChangeFlags);
 
 // attributes
-protected:
+private:
   /** internal struct for list of views belonging to a document */
   typedef struct
   {
@@ -135,8 +144,13 @@ protected:
       focused view */
   QList<QextMdiChildView>   m_MDICoverList;
 
-  CKDevelop*                m_parent;
+  CKDevelop*                m_pParent;
   HlManager                 m_highlightManager;
+
+  KWriteDoc*                m_pCurEditDoc;
+  CEditWidget*              m_pCurEditView;
+  CDocBrowser*              m_pCurBrowserDoc;
+  KHTMLView*                m_pCurBrowserView;
 };
 
 #endif //DOCVIEWMAN_H

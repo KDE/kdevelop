@@ -80,9 +80,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,shell_process("/bin/sh")
   ,search_process("/bin/sh")
 
-  ,edit_widget(0L)
-  ,header_widget(0L)
-  ,cpp_widget(0L)
   ,browser_widget(0L)
 
   ,dbgController(0L)
@@ -178,28 +175,12 @@ void CKDevelop::initView()
   act_outbuffer_len=0;
   prj = 0;
 
-//FB  maindock = createDockWidget( "Editor",SmallIcon("kdevelop") );
-//FB  setView(maindock);
-//FB  setMainDockWidget( maindock );
-//FB  maindock->setEnableDocking( KDockWidget::DockNone);   // We cannot remove this window
-
-//FB  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), 0L, i18n("Tree-View"));
-//FB  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), 0L, i18n("Output-View"));
- 
-//FB  s_tab_view = new CTabCtl(maindock);
   s_tab_view = new CTabCtl(0L);//FB
   s_tab_view->hide();   //FB
-//FB  s_tab_view->show();//FB
-//FB  maindock->setWidget( s_tab_view );
-	
-//FB  o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
   o_tab_view = new CTabCtl(0L, "output_tabview","output_widget");//FB
-//FB  outputdock->setWidget(o_tab_view);
   addToolWindow(o_tab_view, KDockWidget::DockBottom, m_pMdi, 70);//FB
 
-//FB  t_tab_view = new CTabCtl(treedock);
   t_tab_view = new CTabCtl(0L);//FB
-//FB  treedock->setWidget(t_tab_view);
   addToolWindow(t_tab_view, KDockWidget::DockLeft, m_pMdi, 35);//FB
 
   if (config->hasGroup("dock_setting_default"))
@@ -265,44 +246,6 @@ void CKDevelop::initView()
   ////////////////////////////
   // editor and browser window
   ////////////////////////////
-//FB  s_tab_view->setFocusPolicy(QWidget::ClickFocus);
-
-//FB  header_widget = new CEditWidget(s_tab_view,"header");
-//FB  header_widget = new CEditWidget(0L,"header");//FB
-//FB//  int newDocId = m_docViewManager->createDoc(DocViewMan::Header, "");
-//FB//  if (newDocId != -1)
-//FB//    header_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
-//FB//
-//FB//  header_widget->setFocusPolicy(QWidget::StrongFocus);
-//FB//
-//FB//  header_widget->setFont(KGlobalSettings::fixedFont());
-//FB//  header_widget->setName(i18n("Untitled.h"));
-//FB//  config->setGroup("KWrite Options");
-//FB//  header_widget->readConfig(config);
-//FB//  header_widget->doc()->readConfig(config);
-//FB//  header_widget->show();//FB
-
-//FB//  edit_widget=header_widget;
-//FB  cpp_widget = new CEditWidget(s_tab_view,"cpp");
-//FB  cpp_widget = new CEditWidget(0L,"cpp");//FB
-//FB//  newDocId = m_docViewManager->createDoc(DocViewMan::Source, "");
-//FB//  if (newDocId != -1)
-//FB//    cpp_widget = (CEditWidget*) m_docViewManager->createView( newDocId);
-//FB//
-//FB//  cpp_widget->setFocusPolicy(QWidget::StrongFocus);
-//FB//  cpp_widget->setFont(KGlobalSettings::fixedFont());
-//FB//  cpp_widget->setName(i18n("Untitled.cpp"));
-//FB//  config->setGroup("KWrite Options");
-//FB//  cpp_widget->readConfig(config);
-//FB//  cpp_widget->doc()->readConfig(config);
-//FB//   cpp_widget->show();//FB
-
-  // init the 2 first kedits
-//FB//  TEditInfo* edit1 = new TEditInfo;
-//FB//  TEditInfo* edit2 = new TEditInfo;
-//FB//  edit1->filename = header_widget->getName();
-//FB//  edit2->filename = cpp_widget->getName();
-
 //FB  browser_widget = new CDocBrowser(s_tab_view,"browser");
   int newDocId = m_docViewManager->createDoc(DocViewMan::HTML, "browser");
   if (newDocId != -1) {
@@ -315,8 +258,6 @@ void CKDevelop::initView()
   prev_was_search_result= false;
   //init
 
-//FB  s_tab_view->addTab(header_widget,SmallIcon("source_h"),i18n("Header/Reso&urce Files"));
-//FB  s_tab_view->addTab(cpp_widget,SmallIcon("source_cpp"),i18n("&C/C++ Files"));
 //FB  s_tab_view->addTab(browser_widget->view(),SmallIcon("contents"),i18n("&Documentation-Browser"));
 
   ////////////////////////

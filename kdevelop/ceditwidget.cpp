@@ -50,7 +50,6 @@ HlManager hlManager; //highlight manager
  *   -
  *-----------------------------------------------------------------*/
 CEditWidget::CEditWidget(QWidget* parent, const char* name,KWriteDoc* doc) :
-//FB  KWrite(new KWriteDoc(&hlManager), parent, name)
   KWrite(doc, parent, name)
 {
   setFocusProxy (kWriteView); 
@@ -84,7 +83,6 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name,KWriteDoc* doc) :
  *   -
  *-----------------------------------------------------------------*/
 CEditWidget::~CEditWidget() {
-  delete doc();
 }
 
 /*********************************************************************

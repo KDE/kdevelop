@@ -55,6 +55,7 @@
 #include "./kwrite/kwdoc.h"
 #include "ktipofday.h"
 #include "wzconnectdlgimpl.h"
+#include "docviewman.h"
 
 #include <kaboutdialog.h>
 #include <kcombobox.h>
@@ -82,6 +83,7 @@
 #include <qtoolbar.h>
 #include <qmessagebox.h>
 #include <qwhatsthis.h>
+#include <qobjectlist.h>
 
 //#include <iostream.h>
 #include <stdlib.h>
@@ -163,10 +165,10 @@ void CKDevelop::slotFileOpen( int id_ )
 void CKDevelop::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
-  QString filename = edit_widget->getName();
+  QString filename = m_docViewManager->currentEditView()->getName();
   int message_result;
 
-  if(edit_widget->isModified())
+  if(m_docViewManager->currentEditView()->isModified())
   {
     // no autosave if the user intends to save a file
     if (bAutosave)
@@ -189,14 +191,14 @@ void CKDevelop::slotFileClose()
       else
       {
         saveFileFromTheCurrentEditWidget();
-        if (edit_widget->isModified())
+        if (m_docViewManager->currentEditView()->isModified())
           message_result=KMessageBox::Cancel;       // simulate cancel because doSave went wrong!
       }
     }
   
     if (message_result == KMessageBox::Cancel) // cancel
     {
-      setInfoModified(filename, edit_widget->isModified());
+      setInfoModified(filename, m_docViewManager->currentEditView()->isModified());
       slotStatusMsg(i18n("Ready."));
       return;
     }
@@ -265,7 +267,7 @@ void CKDevelop::slotFileCloseAll()
           switchToFile(actual_info->filename);
           handledNames.append(actual_info->filename);
           slotFileSave();
-          actual_info->modified=edit_widget->isModified();
+          actual_info->modified=m_docViewManager->currentEditView()->isModified();
           cont=!actual_info->modified; //something went wrong
         }
       }
@@ -334,7 +336,7 @@ void CKDevelop::slotFileCloseAll()
 }
 
 bool CKDevelop::saveFileFromTheCurrentEditWidget(){
-  QString filename=edit_widget->getName();
+  QString filename=m_docViewManager->currentEditView()->getName();
   TEditInfo* actual_info;
   QFileInfo file_info(filename);
   
@@ -356,7 +358,7 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
                     i18n("File modified")))
       return false;
   }
-  edit_widget->doSave();
+  m_docViewManager->currentEditView()->doSave();
   QFileInfo file_info2(filename);
   actual_info->last_modified = file_info2.lastModified();
   return true;
@@ -364,7 +366,7 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
 
 void CKDevelop::slotFileSave(){
 
-  QString filename=edit_widget->getName();
+  QString filename=m_docViewManager->currentEditView()->getName();
   QString sShownFilename=QFileInfo(filename).fileName();
   slotStatusMsg(i18n("Saving file %1").arg(sShownFilename));
   
@@ -376,19 +378,19 @@ void CKDevelop::slotFileSave(){
   else
   {
     saveFileFromTheCurrentEditWidget(); // save the current file
-    setInfoModified(filename, edit_widget->isModified());
+    setInfoModified(filename, m_docViewManager->currentEditView()->isModified());
     QStrList lSavedFile;
     lSavedFile.append(filename);
 #ifdef WITH_CPP_REPARSE
     if (project)
 #else
-      if (project && edit_widget==header_widget)
+      if (project && m_docViewManager->currentEditView()==header_widget)
 #endif
         refreshClassViewByFileList(&lSavedFile);
   }
 
   slotStatusMsg(i18n("Ready."));
-  if (edit_widget->isModified())
+  if (m_docViewManager->currentEditView()->isModified())
     slotStatusHelpMsg(i18n("File %1 not saved.").arg(sShownFilename));
   else
       slotStatusHelpMsg(i18n("File %1 saved.").arg(sShownFilename));
@@ -500,7 +502,7 @@ void CKDevelop::slotFileSaveAll()
   setMainCaption(visibleTab);
   if (visibleTab == CPP || visibleTab == HEADER)
   {
-    edit_widget->setFocus();
+    m_docViewManager->currentEditView()->setFocus();
   }
   if (visibleTab == BROWSER)
   {
@@ -514,7 +516,7 @@ void CKDevelop::slotFileSaveAll()
 void CKDevelop::slotFilePrint(){
   QString file;
   slotFileSave();
-  file = edit_widget->getName();
+  file = m_docViewManager->currentEditView()->getName();
   CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
   printerdlg->resize(600,480);
   printerdlg->exec();
@@ -532,14 +534,14 @@ void CKDevelop::slotFileQuit(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotEditUndo(){
-  edit_widget->undo();
+  m_docViewManager->currentEditView()->undo();
 }
 void CKDevelop::slotEditRedo(){
-  edit_widget->redo();
+  m_docViewManager->currentEditView()->redo();
 }
 void CKDevelop::slotEditCut(){
   slotStatusMsg(i18n("Cutting..."));
-  edit_widget->cut();
+  m_docViewManager->currentEditView()->cut();
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditCopy(){
@@ -548,17 +550,17 @@ void CKDevelop::slotEditCopy(){
     browser_widget->slotCopyText();
   }
   else
-    edit_widget->copyText();
+    m_docViewManager->currentEditView()->copyText();
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditPaste(){
   slotStatusMsg(i18n("Pasting selection..."));
-  edit_widget->paste();
+  m_docViewManager->currentEditView()->paste();
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditInsertFile(){
   slotStatusMsg(i18n("Inserting file contents..."));
-  edit_widget->insertFile();
+  m_docViewManager->currentEditView()->insertFile();
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditSearch(){
@@ -571,7 +573,7 @@ void CKDevelop::slotEditSearch(){
       delete help_srch_dlg;
   }
   else {
-      edit_widget->search();
+      m_docViewManager->currentEditView()->search();
   }
   slotStatusMsg(i18n("Ready."));
 }
@@ -581,7 +583,7 @@ void CKDevelop::slotEditRepeatSearch(int back){
     browser_widget->findTextNext(QRegExp(doc_search_text),true);
   }
   else{
-    edit_widget->searchAgain(back==1);
+    m_docViewManager->currentEditView()->searchAgain(back==1);
   }
   slotStatusMsg(i18n("Ready."));
 }
@@ -624,9 +626,9 @@ void CKDevelop::slotEditSearchText(){
     text = browser_widget->selectedText();
   }
   else{
-    text = edit_widget->markedText();
+    text = m_docViewManager->currentEditView()->markedText();
     if(text == ""){
-      text = edit_widget->currentWord();
+      text = m_docViewManager->currentEditView()->currentWord();
     }
   }
 
@@ -637,40 +639,40 @@ void CKDevelop::slotEditSearchText(){
 
 void CKDevelop::slotEditReplace(){
   slotStatusMsg(i18n("Replacing..."));
-  edit_widget->replace();
+  m_docViewManager->currentEditView()->replace();
   slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotEditIndent(){
-  edit_widget->indent();
+  m_docViewManager->currentEditView()->indent();
 }
 void CKDevelop::slotEditUnindent(){
-  edit_widget->unIndent();
+  m_docViewManager->currentEditView()->unIndent();
 }
 
 void CKDevelop::slotEditComment(){
-  edit_widget->comment();
+  m_docViewManager->currentEditView()->comment();
 }
 void CKDevelop::slotEditUncomment(){
-  edit_widget->unComment();
+  m_docViewManager->currentEditView()->unComment();
 }
 
 /*
 void CKDevelop::slotEditSpellcheck(){
-  edit_widget->spellcheck();
+  m_docViewManager->currentEditView()->spellcheck();
 }
 */
 
 void CKDevelop::slotEditSelectAll(){
   slotStatusMsg(i18n("Selecting all..."));
-  edit_widget->selectAll();
+  m_docViewManager->currentEditView()->selectAll();
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditInvertSelection(){
-    edit_widget->invertSelection();
+    m_docViewManager->currentEditView()->invertSelection();
 }
 void CKDevelop::slotEditDeselectAll(){
-    edit_widget->deselectAll();
+    m_docViewManager->currentEditView()->deselectAll();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -679,7 +681,7 @@ void CKDevelop::slotEditDeselectAll(){
 
 void CKDevelop::slotViewGotoLine(){
   slotStatusMsg(i18n("Switching to selected line..."));
-  edit_widget->gotoLine();
+  m_docViewManager->currentEditView()->gotoLine();
   slotStatusMsg(i18n("Ready."));
 }
 /** jump to the next error, based on the make output*/
@@ -1083,7 +1085,7 @@ void CKDevelop::slotDebugActivator(int id)
       break;
     case ID_DEBUG_RUN_CURSOR:
       ASSERT(dbgInternal);
-      edit_widget->slotRunToCursor();
+      m_docViewManager->currentEditView()->slotRunToCursor();
       break;
     case ID_DEBUG_STEP:
       ASSERT(dbgInternal && dbgController);
@@ -1125,7 +1127,7 @@ void CKDevelop::slotDebugRunToCursor()
   if (!dbgController)
     return;
 
-  edit_widget->slotRunToCursor();
+  m_docViewManager->currentEditView()->slotRunToCursor();
 }
 
 void CKDevelop::slotDebugStepInto()
@@ -1186,7 +1188,7 @@ void CKDevelop::slotDebugToggleBreakpoint()
   if (!brkptManager)
     return;
 
-  edit_widget->slotToggleBreakpoint();
+  m_docViewManager->currentEditView()->slotToggleBreakpoint();
 }
 
 
@@ -1219,8 +1221,8 @@ void CKDevelop::slotDebugStop()
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
 //  dbg_widget->clear();
 #endif
-  edit_widget->clearStepLine();
-  brkptManager->refreshBP(edit_widget->getName());
+  m_docViewManager->currentEditView()->clearStepLine();
+  brkptManager->refreshBP(m_docViewManager->currentEditView()->getName());
 
   o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
   o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
@@ -1240,14 +1242,14 @@ void CKDevelop::slotDebugShowStepInSource(const QString& filename,int linenumber
 {
   if (filename.isEmpty())
   {
-    edit_widget->clearStepLine();
+    m_docViewManager->currentEditView()->clearStepLine();
   }
   else
   {
     // The editor starts at line 0 but GDB starts at line 1. Fix that now!
     switchToFile(filename);
-    edit_widget->clearStepLine();
-    edit_widget->setStepLine(linenumber-1);
+    m_docViewManager->currentEditView()->clearStepLine();
+    m_docViewManager->currentEditView()->setStepLine(linenumber-1);
 //    machine_widget(address);
   }
 }
@@ -1259,16 +1261,16 @@ void CKDevelop::slotDebugGoToSourcePosition(const QString& filename,int linenumb
 
 void CKDevelop::slotDebugRefreshBPState(const Breakpoint* BP)
 {
-  if (BP->hasSourcePosition() && (edit_widget->getName() == BP->filename()))
+  if (BP->hasSourcePosition() && (m_docViewManager->currentEditView()->getName() == BP->filename()))
   {
     if (BP->isActionDie())
     {
-      edit_widget->delBreakpoint(BP->lineNo()-1);
+      m_docViewManager->currentEditView()->delBreakpoint(BP->lineNo()-1);
       return;
     }
 
     // The editor starts at line 0 but GDB starts at line 1. Fix that now!
-    edit_widget->setBreakpoint(BP->lineNo()-1, -1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
+    m_docViewManager->currentEditView()->setBreakpoint(BP->lineNo()-1, -1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
   }
 }
 
@@ -1314,7 +1316,7 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
   if (state & s_appBusy)
   {
     stateIndicator = "A";
-    edit_widget->clearStepLine();
+    m_docViewManager->currentEditView()->clearStepLine();
   }
 
   if (state & (s_dbgNotStarted|s_appNotStarted))
@@ -1323,7 +1325,7 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
   if (state & s_programExited)
   {
     stateIndicator = "E";
-    edit_widget->clearStepLine();
+    m_docViewManager->currentEditView()->clearStepLine();
   }
 
   statusBar()->changeItem(stateIndicator, ID_STATUS_DBG);
@@ -2112,9 +2114,9 @@ void CKDevelop::slotBookmarksSet(){
   if(s_tab_view->getCurrentTab()==BROWSER)
     slotBookmarksAdd();
   else{
-    if(edit_widget==header_widget)
+    if(m_docViewManager->currentEditView()==header_widget)
       header_widget->setBookmark();
-    if(edit_widget==cpp_widget)
+    if(m_docViewManager->currentEditView()==cpp_widget)
       cpp_widget->setBookmark();
   }
 }
@@ -2148,9 +2150,9 @@ void CKDevelop::slotBookmarksToggle()
   }
   else
   {
-    if(edit_widget==header_widget)
+    if(m_docViewManager->currentEditView()==header_widget)
       header_widget->toggleBookmark();
-    if(edit_widget==cpp_widget)
+    if(m_docViewManager->currentEditView()==cpp_widget)
       cpp_widget->toggleBookmark();
   }
 }
@@ -2162,9 +2164,9 @@ void CKDevelop::slotBookmarksClear(){
     doc_bookmarks->clear();
   }    
   else{
-    if(edit_widget==header_widget)
+    if(m_docViewManager->currentEditView()==header_widget)
       header_widget->clearBookmarks();
-    if(edit_widget==cpp_widget)
+    if(m_docViewManager->currentEditView()==cpp_widget)
       cpp_widget->clearBookmarks();
   }  
 }
@@ -2195,7 +2197,7 @@ void CKDevelop::slotBookmarksNext()
   }
   else
   {
-    edit_widget->nextBookmark();
+    m_docViewManager->currentEditView()->nextBookmark();
   }
 }
 
@@ -2213,7 +2215,7 @@ void CKDevelop::slotBookmarksPrevious()
   }
   else
   {
-    edit_widget->previousBookmark();
+    m_docViewManager->currentEditView()->previousBookmark();
   }
 }
 
@@ -2393,9 +2395,9 @@ void CKDevelop::slotHelpSearchText()
     text = browser_widget->selectedText();
   }
   else{
-    text = edit_widget->markedText();
+    text = m_docViewManager->currentEditView()->markedText();
     if(text == ""){
-      text = edit_widget->currentWord();
+      text = m_docViewManager->currentEditView()->currentWord();
     }
   }
 
@@ -2728,7 +2730,7 @@ void CKDevelop::disableCommand(int id_)
 void CKDevelop::slotNewStatus()
 {
   int config;
-  config = edit_widget->config();
+  config = m_docViewManager->currentEditView()->config();
   statusBar()->changeItem(config & cfOvr ? i18n("OVR") : i18n("INS"),ID_STATUS_INS_OVR);
   // set new caption... maybe the file content is changed
   setMainCaption();
@@ -2794,12 +2796,12 @@ void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
 void CKDevelop::slotNewLineColumn()
 {
   QString linenumber;
-  linenumber = i18n("Line: %1 Col: %2").arg(edit_widget->currentLine() +1).arg(edit_widget->currentColumn() +1);
+  linenumber = i18n("Line: %1 Col: %2").arg(m_docViewManager->currentEditView()->currentLine() +1).arg(m_docViewManager->currentEditView()->currentColumn() +1);
   statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo(){
   int state;
-  state = edit_widget->undoState();
+  state = m_docViewManager->currentEditView()->undoState();
   //undo
   if(state & 1){
     enableCommand(ID_EDIT_UNDO);
@@ -3211,8 +3213,8 @@ void CKDevelop::slotClickedOnMessagesWidget(){
      XBell(kapp->getDisplay(),100); // not a next found, beep
   }
     // switchToFile(error_filename);
-//     edit_widget->setCursorPosition(error_line-1,0);
-//     edit_widget->setFocus();
+//     m_docViewManager->currentEditView()->setCursorPosition(error_line-1,0);
+//     m_docViewManager->currentEditView()->setFocus();
   // int x,y;
 //   int error_line;
 //   QString text;
@@ -3455,8 +3457,8 @@ void CKDevelop::slotSTabSelected(int item){
         t_tab_view->setCurrentTab(LFV);
     }
     disableCommand(ID_BUILD_COMPILE_FILE);
-    edit_widget = header_widget;
-    edit_widget->setFocus();
+//FB    m_docViewManager->currentEditView() = header_widget;
+    m_docViewManager->currentEditView()->setFocus();
     slotNewUndo();
     slotNewStatus();
 //    setMainCaption();  is called by slotNewStatus()
@@ -3472,8 +3474,8 @@ void CKDevelop::slotSTabSelected(int item){
     if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
-    edit_widget = cpp_widget;
-    edit_widget->setFocus();
+//FB    m_docViewManager->currentEditView() = cpp_widget;
+    m_docViewManager->currentEditView()->setFocus();
     slotNewUndo();
     slotNewStatus();
 //    setMainCaption();  is called by slotNewStatus()
@@ -3483,7 +3485,7 @@ void CKDevelop::slotSTabSelected(int item){
   if (item == HEADER || item == CPP)
   {
     int state;
-    state = edit_widget->undoState();
+    state = m_docViewManager->currentEditView()->undoState();
     //undo
     if(state & 1)
       enableCommand(ID_EDIT_UNDO);
@@ -3495,7 +3497,7 @@ void CKDevelop::slotSTabSelected(int item){
     else
       disableCommand(ID_EDIT_REDO);
 
-    QString str = edit_widget->markedText();
+    QString str = m_docViewManager->currentEditView()->markedText();
     if(str.isEmpty()){
       disableCommand(ID_EDIT_CUT);
       disableCommand(ID_EDIT_COPY);
@@ -3801,6 +3803,24 @@ void CKDevelop::slotToolbarClicked(int item){
     slotDebugActivator(item);
     break;
   }
+}
+
+/** Reimplemented from base class QextMdiMainFrm.
+ *  Dispatches this 'event' to m_docViewMan which will delete the closed view
+ */
+void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool /*layoutTaskBar*/)
+{
+  // get the embedded view
+  QObjectList* pL = (QObjectList*) pWnd->children();
+  QWidget* pView = 0L;
+  QObject* pChild;
+  for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {  // the first is the layout, the second test should be successful
+    if (pChild->inherits("QWidget")) {
+      pView = (QWidget*) pChild;
+    }
+  }
+
+  m_docViewManager->closeView( pView);
 }
 
 void CKDevelop::statusCallback(int id_){

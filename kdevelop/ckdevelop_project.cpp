@@ -37,7 +37,9 @@
 #include "ctoolclass.h"
 #include "ctabctl.h"
 #include "debug.h"
-#include "./kpp/kpp.h"
+#include "kpp.h"
+#include "docviewman.h"
+
 #include <kdebug.h>
 #include <kcursor.h>
 #include <kbuttonbox.h>
@@ -107,7 +109,7 @@ bool CKDevelop::slotProjectClose()
 	    		switchToFile(actual_info->filename);
           handledNames.append(actual_info->filename);
 	    		slotFileSave();
-          actual_info->modified=edit_widget->isModified();
+          actual_info->modified=m_docViewManager->currentEditView()->isModified();
           cont=!actual_info->modified; //something went wrong
 	  		}
 			}

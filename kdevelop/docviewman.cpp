@@ -21,6 +21,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlayout.h>
+#include <qobjectlist.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -37,7 +38,11 @@
 //------------------------------------------------------------------------------
 DocViewMan::DocViewMan( CKDevelop* parent)
 : QObject( parent)
-  ,m_parent(parent)
+  ,m_pParent(parent)
+  ,m_pCurEditDoc(0L)
+  ,m_pCurEditView(0L)
+  ,m_pCurBrowserDoc(0L)
+  ,m_pCurBrowserView(0L)
 {
   m_docsAndViews.setAutoDelete(true);
   m_MDICoverList.setAutoDelete(true);
@@ -186,8 +191,6 @@ void DocViewMan::closeDoc(int docId)
         // disconnect the focus signals
         disconnect(pView, SIGNAL(gotFocus(CEditWidget*)),
                    this, SLOT(slot_gotFocus(CEditWidget*)));
-        disconnect(pView, SIGNAL(lostFocus(CEditWidget*)),
-                   this, SIGNAL(sig_viewLostFocus(CEditWidget*)));
         //remove the view from MDI and delete it
         pView->hide();
         //XXXXX MDI-remove XXXXXX
@@ -324,7 +327,7 @@ QWidget* DocViewMan::createView(int docId)
   QApplication::sendPostedEvents();
   pLayout->addWidget( pNewView);
   pMDICover->setName( pNewView->name());
-  m_parent->addWindow( pMDICover, QextMdi::StandardAdd);
+  m_pParent->addWindow( pMDICover, QextMdi::StandardAdd);
   // captions
   QString shortName = pNewView->caption();
   int length = shortName.length();
@@ -336,10 +339,8 @@ QWidget* DocViewMan::createView(int docId)
   // connect signals
 //?       connect(pNewView, SIGNAL(sig_updated(QObject*, int)),
 //?               this, SIGNAL(sig_updated(QObject*, int)));
-  connect(pNewView, SIGNAL(gotFocus(CEditWidget*)),
-          this, SLOT(slot_gotFocus(CEditWidget*)));
-  connect(pNewView, SIGNAL(lostFocus(CEditWidget*)),
-          this, SIGNAL(sig_viewLostFocus(CEditWidget*)));
+  connect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
+          this, SLOT(slot_gotFocus(QextMdiChildView*)));
 
   // connect document to view
   if (docId >= 0) {
@@ -347,12 +348,8 @@ QWidget* DocViewMan::createView(int docId)
     pDocViewNode->existingViews.append(pNewView);
   }
 
-  // usually sig_createViewRequested creates and displays the view
-  // but at this time the focus connection was not established -
-  // we fake the signal manually
-  if (pNewView->isVisible()/* && pNewView->hasFocus()*/) {
-    slot_gotFocus(pNewView);
-  }
+  // the connect to this slot was made _after_ the first focusIn event, so we must fake this slot call
+  slot_gotFocus( pMDICover);
 
   return pNewView;
 }
@@ -379,29 +376,23 @@ void DocViewMan::closeView(QWidget* pView)
       m_docsAndViews.next();
     }
   }
-  // store the current items since lists may change while deleting view and doc
-  DocViewNode*   pDocViews = m_docsAndViews.current();
-  if (bFound) {
-    // the view was found
-    // disconnect the focus signals
-    disconnect(pView, SIGNAL(gotFocus(CEditWidget*)),
-               this, SLOT(slot_gotFocus(CEditWidget*)));
-    disconnect(pView, SIGNAL(lostFocus(CEditWidget*)),
-               this, SIGNAL(sig_viewLostFocus(CEditWidget*)));
-    // disconnect
-//XXXXX?      pView->attachDoc(0L);
-    // remove view list entry
-    pViewList->remove(pView);
-  }
-
-  // remove the view from MDI always delete the view (even if not found!)
-  pView->hide();
-  //XXXXX MDI-remove XXXXXX
-  //...
-  delete pView;
 
   if (!bFound)
     return;
+
+  // store the current items since lists may change while deleting view and doc
+  DocViewNode*   pDocViews = m_docsAndViews.current();
+  // the view was found
+  // disconnect the focus signals
+  disconnect(pView->parentWidget(), SIGNAL(gotFocus(QextMdiChildView*)),
+             this, SLOT(slot_gotFocus(QextMdiChildView*)));
+  // remove view list entry
+  pViewList->remove(pView);
+
+  // remove the view from MDI and delete the view
+  QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
+  m_pParent->removeWindowFromMdi( pMDICover);
+  delete pMDICover;
 
   // emit an according signal if we closed the last view
   if (countViews() == 0) {
@@ -483,8 +474,40 @@ int DocViewMan::docType(int docId) const
 // Moves the focused view to the end of the list of focused views or
 // adds it. Emits the sig_viewGotFocus signal
 //------------------------------------------------------------------------------
-void DocViewMan::slot_gotFocus(QWidget* pView)
+void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
 {
+  // set current view, distinguish between edit widget and browser widget
+  QObjectList* pL = (QObjectList*) pMDICover->children();
+  QWidget* pView = 0L;
+  QObject* pChild;
+  for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {
+    if (pChild->inherits("QWidget")) {
+      pView = (QWidget*) pChild;
+    }
+  }
+
+  if (pView->inherits("CEditWidget"))
+    m_pCurEditView = (CEditWidget*) pView;
+  else
+    m_pCurBrowserView = (KHTMLView*) pView;
+
+  // set current document
+  QObject* pDoc = 0L;
+  QListIterator<DocViewNode>    itDoc(m_docsAndViews);
+  for (; itDoc.current() != 0 && !pDoc; ++itDoc) {
+    QListIterator<QWidget>  itView(itDoc.current()->existingViews);
+    for (; itView.current() != 0; ++itView) {
+      if (itView.current() == pView) {
+        // view found
+        pDoc = itDoc.current()->pDoc;
+      }
+    }
+  }
+  if (pView->inherits("CEditWidget"))
+    m_pCurEditDoc = (KWriteDoc*) pDoc;
+  else
+    m_pCurBrowserDoc = (CDocBrowser*) pDoc;
+
   // emit the got focus signal
   emit sig_viewGotFocus(pView);
 }
