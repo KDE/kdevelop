@@ -1,3 +1,6 @@
+2003-07-15 Andras Mantia <amantia@freemail.hu>
+    * resolve links before opening a local file
+    * add "-follow" as a switch for "find" to successfully grep even in symlinked directories
 2003-07-14 Amilcar Lucas <a.lucas@tu-bs.de>
     * If no Main Program was selected in Project Options...-> Run Options, then use the
     * currently selected active target. This is valid for execution and for debugging.

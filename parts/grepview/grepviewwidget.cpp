@@ -179,7 +179,7 @@ void GrepViewWidget::searchActivated()
         filepattern += " -maxdepth 1";
     filepattern += " \\( -name ";
     filepattern += files;
-    filepattern += " \\) -print";
+    filepattern += " \\) -print -follow";
 
     QString command = filepattern + " " ;
     if (grepdlg->ignoreSCMDirsFlag()) {

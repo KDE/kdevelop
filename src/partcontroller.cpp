@@ -217,6 +217,12 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
   // We now have a url that exists ;)
 
   url.cleanPath(true);
+  if (url.isLocalFile())
+  {
+    QString path = url.path();
+    path = QDir(path).canonicalPath();
+    url.setPath(path);
+  }    
 
   KParts::Part *existingPart = partForURL(url);
   if (existingPart)
@@ -475,6 +481,14 @@ QPopupMenu *PartController::contextPopupMenu()
 
 KParts::Part *PartController::partForURL(const KURL &url)
 {
+  KURL urlToTest = url;
+  if (url.isLocalFile())
+  {
+    QString path = url.path();
+    path = QDir(path).canonicalPath();
+    urlToTest.setPath(path);
+  }    
+  kdDebug(9000) << "partForURL : " << urlToTest.prettyURL() << endl;
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
   {
