@@ -35,7 +35,7 @@ FileListPart::FileListPart(QObject *parent, const char *name, const QStringList&
         : KDevPlugin("filelist", "filelist", parent, name ? name : "FileListPart" )
 {
     setInstance(filelistFactory::instance());
-    setXMLFile("kdevpart_filelist.rc");
+    //setXMLFile("kdevpart_filelist.rc");
 
     m_widget = new FileListWidget(this);
 	m_widget->setCaption(i18n("File List"));

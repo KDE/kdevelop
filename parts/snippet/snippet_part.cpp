@@ -36,7 +36,7 @@ SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin("CodeSnippet", "snippet", parent, name ? name : "SnippetPart" )
 {
   setInstance(snippetFactory::instance());
-  setXMLFile("kdevpart_snippet.rc");
+  //setXMLFile("kdevpart_snippet.rc");
 
   m_widget = new SnippetWidget(this);
   m_widget->setCaption(i18n("Code Snippets"));
