@@ -11,6 +11,7 @@
 	* Replaced all usages of QCString in auto project
 	  by QString and saved 35783 latin1 conversions ;-)
 	* Create popup menus with parent widget
+	* Made is possible to edit .desktop files
 
 2002-04-26 Harald Fernengel <harry@kdevelop.org>
         * Added first version of SourceNav Part which adds back/forward tool-buttons for code navigation.

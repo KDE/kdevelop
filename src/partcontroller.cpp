@@ -106,7 +106,8 @@ void PartController::editDocument(const KURL &url, int lineNum)
   QString preferred, serviceType;
 
   QString mimeType = KMimeType::findByURL(url)->name();
-  if (mimeType.startsWith("text/"))
+  if (mimeType.startsWith("text/")
+      || mimeType == "application/x-desktop")
   {
     mimeType = "text/plain";
     kapp->config()->setGroup("Editor");
