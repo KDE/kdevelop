@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Subversion Integration
+Name=KDevsvn
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevsvn
+X-KDevelop-Scope=Project

@@ -1,0 +1,72 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>svnoptions</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>svnoptions</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>424</width>
+            <height>101</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Subversion Options</string>
+    </property>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>recurse</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>402</width>
+                <height>17</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Commit and update recursively</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>force</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>40</y>
+                <width>402</width>
+                <height>17</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Always use the force option (e.g. removing files not in the repository)</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>verbose</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>70</y>
+                <width>402</width>
+                <height>17</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Show result messages for all operations</string>
+        </property>
+    </widget>
+</widget>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+</UI>
