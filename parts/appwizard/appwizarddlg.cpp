@@ -634,8 +634,8 @@ void AppWizardDialog::accept()
 		m_pCurrentAppInfo->subMap.remove( *cleanIt );
 	}
 
-        if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
-           appFrontend->startAppCommand(KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmdDir, m_pCurrentAppInfo->subMap), KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmd, m_pCurrentAppInfo->subMap), false);
+//        if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+//           appFrontend->startAppCommand(KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmdDir, m_pCurrentAppInfo->subMap), KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmd, m_pCurrentAppInfo->subMap), false);
 
 	openAfterGeneration();
 
