@@ -335,7 +335,7 @@ void RDBController::programNoApp(const QString &msg, bool msgBox)
 
     // Now wipe the tree out
     varTree_->viewport()->setUpdatesEnabled(false);
-    varTree_->trim();
+    varTree_->prune();
     varTree_->viewport()->setUpdatesEnabled(true);
     varTree_->repaint();
 
@@ -398,7 +398,7 @@ void RDBController::parseBacktraceList(char *buf)
     frameStack_->parseRDBBacktraceList(buf);
     if (backtraceDueToProgramStop_)
     {
-        varTree_->trimExcessFrames();
+        varTree_->pruneExcessFrames();
         VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
     	if (frame == 0) {
         	frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
@@ -460,7 +460,7 @@ void RDBController::parseRequestedData(char *buf)
         VarItem *item = rdbItemCommand->getItem();
         varTree_->viewport()->setUpdatesEnabled(false);
         item->updateValue(buf);
-        item->trim();
+        item->prune();
         varTree_->viewport()->setUpdatesEnabled(true);
         varTree_->repaint();
     }
@@ -525,7 +525,7 @@ void RDBController::parseGlobals(char *buf)
 // **************************************************************************
 
 // This is called on program stop to process the locals.
-// Once the locals have been processed we trim the tree of items that are
+// Once the locals have been processed we prune the tree of items that are
 // inactive.
 void RDBController::parseLocals(char type, char *buf)
 {
@@ -1172,10 +1172,6 @@ void RDBController::slotAcceptConnection(int masterSocket)
 	// Organise any breakpoints.
     emit acceptPendingBPs();
 		
-	// All this does is force the Global item to be after the Watch item
-	// in the VariableTree widget
-    varTree_->globalRoot();
-	
     queueCmd(new RDBCommand("cont", RUNCMD, NOTINFOCMD));
 	
  	// Reset the display id for any watch expressions already in the variable tree

@@ -274,17 +274,17 @@ void VariableTree::resetWatchVars()
 
 // **************************************************************************
 
-void VariableTree::trim()
+void VariableTree::prune()
 {
 	QListViewItem *child = firstChild();
 
     while (child != 0) {
         QListViewItem *nextChild = child->nextSibling();
 
-        // Only trim var frames, not the watch or global root
+        // Only prune var frames, not the watch or global root
         if (child->rtti() == RTTI_VAR_FRAME_ROOT) {
 			if (((VarFrameRoot*) child)->isActive()) {
-				((VarFrameRoot*) child)->trim();
+				((VarFrameRoot*) child)->prune();
 			} else {
 				delete child;
 			}
@@ -296,7 +296,7 @@ void VariableTree::trim()
 
 // **************************************************************************
 
-void VariableTree::trimExcessFrames()
+void VariableTree::pruneExcessFrames()
 {
 	viewport()->setUpdatesEnabled(false);
     QListViewItem *child = firstChild();
@@ -397,17 +397,17 @@ VarItem *LazyFetchItem::findItemWithName(const QString &name) const
 
 // **************************************************************************
 
-void LazyFetchItem::trim()
+void LazyFetchItem::prune()
 {
     QListViewItem *child = firstChild();
 
     while (child != 0) {
         LazyFetchItem *item = (LazyFetchItem*) child;
         child = child->nextSibling();
-		// Never trim a branch if we are waiting on data to arrive.
+		// Never prune a branch if we are waiting on data to arrive.
 		if (!waitingForData_) {
 			if (item->isActive()) {
- 				item->trim();
+ 				item->prune();
 			} else {
 				delete item;
 			}
@@ -573,7 +573,7 @@ void VarItem::setOpen(bool open)
     if (open && cache_ != "") {
 		RDBParser::parseExpandedVariable(this, cache_.data());
 		cache_ = "";
-		trim();
+		prune();
     }
 
     QListViewItem::setOpen(open);
@@ -683,7 +683,7 @@ void VarFrameRoot::setLocals()
 	cache_ = "";
     needLocals_ = false;
 	stopWaitingForData();
-	trim();
+	prune();
 	
 	return;
 }

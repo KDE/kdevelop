@@ -113,8 +113,8 @@ public:
     void setCurrentThread(int currentThread) { currentThread_ = currentThread; }
 
     // Remove items that are not active
-    void trim();
-    void trimExcessFrames();
+    void prune();
+    void pruneExcessFrames();
     void setFetchGlobals(bool fetch);
 
 	// (from QToolTip) Display a tooltip when the cursor is over an item
@@ -160,7 +160,7 @@ public:
 
 	virtual int rtti() const { return RTTI_LAZY_FETCH_ITEM; }
 	
-    virtual void trim();
+    virtual void prune();
     virtual VarItem *findItemWithName(const QString& name) const;
     
 	int  currentActivationId() const        { return ((VariableTree*) listView())->activationId(); }
