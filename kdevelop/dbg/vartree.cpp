@@ -69,8 +69,11 @@ VarViewer::VarViewer( QWidget *parent, const char *name ) :
   label->setMaximumSize( label->sizeHint() );
   watchEntry->addWidget( label );
 
+  // make the size small so that it can fit within the parent widget
+  // size. The parents size is currently 4 tabs wide with <=3chars
+  // in each tab. (ie quite small!) 
   watchVarEntry_ = new KLined(this);
-  watchVarEntry_->setMinimumSize( watchVarEntry_->sizeHint() );
+  watchVarEntry_->setMinimumSize(0,0); //watchVarEntry_->sizeHint() );
   watchEntry->addWidget( watchVarEntry_ );
 
   // just add a bit of space at the end of the entry widget
