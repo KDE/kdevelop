@@ -135,7 +135,9 @@ void PartController::editDocument(const KURL &url, int lineNum)
   }
 
   if (mimeType.startsWith("text/")
-      || mimeType == "application/x-desktop")
+      || mimeType == "application/x-desktop"
+      || mimeType == "application/x-kdevelop" || mimeType == "application/x-kdevelop-project"
+      || mimeType == "image/x-xpm")
   {
     mimeType = "text/plain";
     kapp->config()->setGroup("Editor");
