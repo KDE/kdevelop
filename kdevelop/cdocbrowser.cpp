@@ -278,7 +278,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 void CDocBrowser::slotPopupMenu(const QString &, const QPoint & pnt){
   QString text;
 
-  if(isTextSelected()){
+  if(hasSelection()){
 
     text = selectedText();
     text.replace(QRegExp("^\n"), "");
