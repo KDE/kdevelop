@@ -47,15 +47,18 @@ SplashScreen:
 KTabBar, bug fixes, Gideon Release:
   Caleb Tennis <caleb@aei-tech.com>
 
+PartExplorer, (bugs for) CvsPart:
+  Mario Scalas <mario.scalas@libero.it>
+
 Other software included in the source package:
 
-* KDE 2.0 Development Book 
+* KDE 2.0 Development Book
   David Sweet, et al.
   Copyright notices see in doc/kde2book
 
 * GNU libc documentation
-  Sandra Loosemore, Richard M. Stallman, Roland McGrath, 
-  Andrew Oram, and Ulrich Drepper   
+  Sandra Loosemore, Richard M. Stallman, Roland McGrath,
+  Andrew Oram, and Ulrich Drepper
   Copyright notices see in doc/libc
 
 * STL documentation

@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Luc Willems", I18N_NOOP("Help with Perl support"), "Willems.luc@pandora.be");
   aboutData.addCredit("Marcel Turino", I18N_NOOP("Documentation index view"), "M.Turino@gmx.de");
   aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "Oliver.Kellogg@t-online.de");
+  aboutData.addCredit("Mario Scalas", I18N_NOOP("PartExplorer, redesign of CvsPart, patches, bugs"), "mario.scalas@libero.it");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
