@@ -1,12 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Bug Tracking Application
-Comment[fr]=Recherche de bogues dans une application.
+Comment[fr]=Un module externe pour la recherche de bogues dans une application.
 Exec=blubb
 Icon=find
 Name=KDevBugList
 GenericName=Bug Tracking Application
-GenericName[fr]=Recherche de bogues dans une application
+GenericName[fr]=Recherche de bogues
 ServiceTypes=KDevelop/Plugin
 Type=Service
 X-KDE-Library=libkdevbuglist
