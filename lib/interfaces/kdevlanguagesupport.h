@@ -34,8 +34,12 @@
 #include <kmimetype.h>
 #include "kdevplugin.h"
 #include "codemodel.h"
+#include "../external_interfaces/designer.h"
 
 class Tag;
+class KDevDesignerIntegration;
+
+using namespace KInterfaceDesigner;
 
 class KDevLanguageSupport : public KDevPlugin
 {
@@ -120,7 +124,19 @@ public:
     */
     virtual QStringList updateWidget(const QString& formName, const QString& fileName);
 
+    /**
+     * Returns a pointer to designer integration plugin of given type or 0.
+     */
+    virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);
 
+public slots:
+    /**Adds a function requested by a gui designer.*/
+    void addFunction(DesignerType type, const QString &formName, Function function);
+    /**Removes a function requested by a gui designer.*/
+    void removeFunction(DesignerType type, const QString &formName, Function function);
+    /**Edits a function requested by a gui designer.*/
+    void editFunction(DesignerType type, const QString &formName, Function oldFunction, Function function);
+    
 signals:
     /**
      * Emitted when the content of the classtore has been

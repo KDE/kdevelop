@@ -1575,7 +1575,7 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
 
   QFile ifile(implementationPath);
   if (!ifile.open(IO_WriteOnly)) {
-    KMessageBox::error(&dlg, "Cannot write to implementation file");
+    KMessageBox::error(&dlg, i18n("Cannot write to implementation file"));
     return;
   }
   QTextStream istream(&ifile);
@@ -1774,7 +1774,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
 
   QFile hfile(headerPath);
   if (!hfile.open(IO_WriteOnly)) {
-    KMessageBox::error(&dlg, "Cannot write to header file");
+    KMessageBox::error(&dlg, i18n("Cannot write to header file"));
     return;
   }
   QTextStream hstream(&hfile);

@@ -1,4 +1,4 @@
-SUBDIRS = lib parts languages buildtools editors vcs src pics doc mimetypes embedded
+SUBDIRS = lib parts languages buildtools editors vcs src pics doc mimetypes embedded kdevdesigner
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
 

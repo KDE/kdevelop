@@ -24,6 +24,7 @@
 */
 #include "codemodel.h"
 
+#include "kdevdesignerintegration.h"
 #include "kdevlanguagesupport.h"
 
 KDevLanguageSupport::KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
@@ -89,6 +90,35 @@ QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const
 QString KDevLanguageSupport::formatModelItem( const CodeModelItem *item, bool /*shortDescription*/ )
 {
     return item->name();
+}
+
+void KDevLanguageSupport::addFunction( DesignerType type, const QString & formName, Function function )
+{
+    KDevDesignerIntegration *designerIntegration = designer(type);
+    if (!designerIntegration)
+        return;
+    designerIntegration->addFunction(formName, function);
+}
+
+void KDevLanguageSupport::editFunction( DesignerType type, const QString & formName, Function oldFunction, Function function )
+{
+    KDevDesignerIntegration *designerIntegration = designer(type);
+    if (!designerIntegration)
+        return;
+    designerIntegration->editFunction(formName, oldFunction, function);
+}
+
+void KDevLanguageSupport::removeFunction( DesignerType type, const QString & formName, Function function )
+{
+    KDevDesignerIntegration *designerIntegration = designer(type);
+    if (!designerIntegration)
+        return;
+    designerIntegration->removeFunction(formName, function);
+}
+
+KDevDesignerIntegration * KDevLanguageSupport::designer( DesignerType type )
+{
+    return 0;
 }
 
 #include "kdevlanguagesupport.moc"

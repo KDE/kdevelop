@@ -5,6 +5,8 @@
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2002-2003 by Roberto Raggi                              *
  *   roberto@kdevelop.org                                                  *
+ *   Copyright (C) 2003-2004 by Alexander Dymo                             *
+ *   adymo@mksat.net                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -103,6 +105,8 @@ public:
     bool isHeader(const QString& fileName) const;
     bool isSource(const QString& fileName) const;
 
+    virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);
+    
 signals:
     void fileParsed( const QString& fileName );
 
@@ -192,6 +196,8 @@ private:
     KTextEditor::EditInterface* m_activeEditor;
     KTextEditor::ViewCursorInterface* m_activeViewCursor;
     QString m_activeFileName;
+    
+    QMap<KInterfaceDesigner::DesignerType, KDevDesignerIntegration*> m_designers;
 
     QWaitCondition m_eventConsumed;
     bool m_projectClosed;

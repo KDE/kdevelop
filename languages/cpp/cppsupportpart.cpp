@@ -5,6 +5,8 @@
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2002-2003 by Roberto Raggi                              *
  *   roberto@kdevelop.org                                                  *
+ *   Copyright (C) 2003-2004 by Alexander Dymo                             *
+ *   adymo@mksat.net                                                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,6 +40,9 @@
 #include "subclassingdlg.h"
 #include "addmethoddialog.h"
 #include "addattributedialog.h"
+
+// designer integration
+#include "qtdesignerintegration.h"
 
 #include <qheader.h>
 #include <qdir.h>
@@ -1752,6 +1757,20 @@ void CppSupportPart::updateParserConfiguration()
 	m_driver->parseFile( conf_file_name, true );
 
 	parseProject( true );
+}
+
+KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::DesignerType type )
+{
+    KDevDesignerIntegration *des = 0;
+    switch (type)
+    {
+        case KInterfaceDesigner::QtDesigner:
+            des = m_designers[type];
+            if (des == 0)
+                des = new QtDesignerIntegration(this);
+            break;
+    }
+    return des;
 }
 
 #include "cppsupportpart.moc"
