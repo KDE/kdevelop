@@ -470,7 +470,7 @@ void CustomProjectPart::updateTargetMenu()
         }
         QTextStream stream(&f);
         //QRegExp re(".PHONY\\s*:(.*)");
-	QRegExp re("^[^($%.#].*[^)\\s][:].*$");
+	static QRegExp re("^[^($%.#].*[^)\\s][:].*$");
 	QString str = "";
         while (!stream.atEnd()) {
             QString str = stream.readLine();
@@ -484,9 +484,11 @@ void CustomProjectPart::updateTargetMenu()
             {
 	        kdDebug(9025) << "Adding target: " << str.simplifyWhiteSpace() << endl;
 #if KDE_VERSION > 305
+		// m_targets += str.simplifyWhiteSpace().section(' ', 0, 0).replace(':', "");
 	        m_targets += QStringList::split(" ", str.simplifyWhiteSpace())[0].replace(':', "");
 #else
-		//FIXME
+		static QRegExp colre(":");
+		m_targets += QStringList::split(" ", str.simplifyWhiteSpace())[0].replace(colre, "");
 #endif
             }
         }
