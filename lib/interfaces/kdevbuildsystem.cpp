@@ -221,7 +221,7 @@ BuildItemConfigWidget::BuildItemConfigWidget( BuildBaseItem *it, QWidget * paren
 {
     QVBoxLayout *l = new QVBoxLayout(this, 2, 0);
     PropertyEditor *ed = new PropertyEditor(this, "item_propeditor");
-    ed->populateProperties(it->attributes());
+    ed->populateProperties(&(it->attributes()));
     l->addWidget(ed);
 }
 

@@ -33,6 +33,7 @@
 #include "kdevproject.h"
 
 #include "propertylist.h"
+#include "multiproperty.h"
 
 class BuildFileItem;
 class BuildGroupItem;
@@ -65,8 +66,8 @@ public:
     PropertyList *pAttributes() { return &m_attributes; }
 
 //    bool hasAttribute( const QString& name ) const { return m_attributes.contains( name ); }
-    QVariant attribute( const QString& name ) const { return m_attributes.value(name); }
-    void setAttribute( const QString& name, const QVariant& value ) { m_attributes.setValue(name, value); }
+    QVariant attribute( const QString& name ) { return m_attributes[name]->value(); }
+    void setAttribute( const QString& name, const QVariant& value ) { m_attributes[name]->setValue(value); }
 
     virtual QString path();
 
