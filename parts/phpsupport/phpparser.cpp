@@ -41,7 +41,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
   int bracketClose = 0;
   bool inClass = false;
   for ( QStringList::Iterator it = lines->begin(); it != lines->end(); ++it ) {
-    line = (*it);
+    line = (*it).latin1();
     if(line.isNull()) return; // ok, something goes wrong
     //    cerr << "LINE" << line << endl;
     bracketOpen += line.contains("{");
@@ -122,7 +122,7 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 }
 void PHPParser::parseFile(const QString& fileName){
   cerr  << "enter parsedFile" << endl;
-  cerr << "FileName:" << fileName << endl;
+  cerr << "FileName:" << fileName.latin1() << endl;
   QFile f(QFile::encodeName(fileName));
   if (!f.open(IO_ReadOnly))
     return;

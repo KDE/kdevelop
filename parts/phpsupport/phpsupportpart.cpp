@@ -146,7 +146,7 @@ void PHPSupportPart::slotPhpBook(KDialogBase *dlg){
 }
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
-  cerr << endl << "kdevelop (phpsupport): slotWebResult()" << filename << line;
+  cerr << endl << "kdevelop (phpsupport): slotWebResult()" << filename.latin1() << line;
   core()->gotoSourceFile(filename,line);
 }
 void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
@@ -259,7 +259,7 @@ void PHPSupportPart::executeInTerminal(){
   }
   
   *phpExeProc << file; 
-  cerr << "kdevelop (phpsupport): " << file << endl;
+  cerr << "kdevelop (phpsupport): " << file.latin1() << endl;
   phpExeProc->start(KProcess::NotifyOnExit,KProcess::All);
   
 
@@ -312,7 +312,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
     if ((fi.extension().contains("inc") || fi.extension().contains("php")
 	|| fi.extension().contains("html")
 	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
-      cerr << "remove and parse" << fileName << endl;
+      cerr << "remove and parse" << fileName.latin1() << endl;
         classStore()->removeWithReferences(fileName);
         m_parser->parseFile(fileName); 
     }

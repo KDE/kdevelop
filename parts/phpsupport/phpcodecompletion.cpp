@@ -58,7 +58,7 @@ void PHPCodeCompletion::readGlobalPHPFunctionsFile(){
       QString s;
       while ( !t.eof() ) {        // until end of file...
 	  s = t.readLine();       // line of text excluding '\n'
-	  if(lineReg.match(s)){
+	  if(lineReg.match(s.latin1())){
 	      e.prefix = lineReg.group(1);
 	      e.text = lineReg.group(2);
 	      //	      if(QString(lineReg.group(3)) == "void"){
@@ -256,10 +256,10 @@ QString PHPCodeCompletion::getClassName(QString varName,QString maybeInstanceOf)
 }
 
 QString PHPCodeCompletion::searchClassNameForVariable(QString varName){
-  KRegExp createVarRe("\\$" + varName.mid(1) + "[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)");
+  KRegExp createVarRe(QString("\\$" + varName.mid(1) + "[ \t]*=[ \t]*new[ \t]+([0-9A-Za-z_]+)").latin1());
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->line(i);  
-    if(createVarRe.match(lineStr)) { // ok found
+    if(createVarRe.match(lineStr.latin1())) { // ok found
       //      cerr << endl << "match in searchClassNameForVariable:";
       return createVarRe.group(1);
     }
@@ -271,7 +271,7 @@ QString PHPCodeCompletion::searchCurrentClassName(){
   KRegExp classre("^[ \t]*class[ \t]+([A-Za-z_]+)[ \t]*(extends[ \t]*([A-Za-z_]+))?.*$");
   for(int i=m_currentLine;i>=0;i--){
     QString lineStr = m_editInterface->line(i);  
-    if(classre.match(lineStr)) { // ok found
+    if(classre.match(lineStr.latin1())) { // ok found
       return classre.group(1);
     }
   }
@@ -289,13 +289,13 @@ bool PHPCodeCompletion::checkForGlobalFunctionArgHint(KEditor::Document *doc,QSt
   cerr << "col: " << col << endl;
   cerr << "leftBracket: " << leftBracket << endl;
   cerr << "rightBracket: " << rightBracket << endl;
-  cerr << "methodStart: " << methodStart << endl; 
+  cerr << "methodStart: " << methodStart.latin1() << endl; 
   if(leftBracket == -1) return false; // ok not found
   if(rightBracket>leftBracket) return false; // we are out of (..)
   methodStart = methodStart.left(leftBracket+1);
   //  cerr << methodStart << endl;
   KRegExp functionre("([A-Za-z_]+)[ \t]*\\(");
-  if(functionre.match(methodStart)){ // check for global functions
+  if(functionre.match(methodStart.latin1())){ // check for global functions
     QString name = functionre.group(1);
     int startMethod = lineStr.findRev(name,col);
     QString startString = lineStr.mid(0,startMethod);
@@ -391,7 +391,7 @@ bool PHPCodeCompletion::checkForNewInstanceArgHint(KEditor::Document *doc,QStrin
   start = start.mid(equal,leftBracket-equal+1);
   //  cerr << "NEW: " << start << endl;
   KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)[ \t]*\\(");
-  if(newre.match(start)){
+  if(newre.match(start.latin1())){
     ParsedClass* pClass=0;
     pClass =  m_classStore->getClassByName(newre.group(1));
     if(pClass !=0){ // exists this class?
@@ -418,7 +418,7 @@ bool PHPCodeCompletion::checkForNewInstance(KEditor::Document *doc,QString lineS
   //  cerr  << "enter checkForNewInstance" << endl;
   QString start = lineStr.left(col);
   KRegExp newre("=[ \t]*new[ \t]+([A-Za-z_]+)");
-  if(newre.match(start)){
+  if(newre.match(start.latin1())){
     QString classStart = newre.group(1);
     if(start.right(2) == classStart){
       QValueList<KEditor::CompletionEntry> list;
