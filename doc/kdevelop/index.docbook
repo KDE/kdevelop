@@ -32,7 +32,7 @@
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2002-11-25</date>
+  <date>2003-09-01</date>
   <releaseinfo>3.0</releaseinfo>
 
   <authorgroup>
@@ -89,8 +89,75 @@
 
 <!-- ====================================================================== -->
 
+<chapter id="overview-manual">
+<title>About this manual</title>
+
+<para>
+This user manual is intended to describe the contents and use of the &kdevelop; Integrated Development Environment (<acronym>IDE</acronym>) from a user's point of view. It is no programming manual nor does it describe the development process in detail. It's only aim is to guide you in the handling of the <acronym>IDE</acronym>.
+</para>
+<para>
+You will here find information on the following topics:
+</para>
+<itemizedlist>
+  <listitem><para>
+  <link linkend="unixdev">Development on UNIX</link> - a historical overview on UNIX program development, the main tools necessary and why you need an <acronym>IDE</acronym>.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="kdevelopinstall">Installing &kdevelop;</link> - tells you where to obtain &kdevelop; and how to get it up and running.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="kdevelopoverview">Overview: &kdevelop;'s features</link> - is some kind of a warm-up, giving a short overview of what is built-in into &kdevelop; and makes you acquainted with the look and feel of this <acronym>IDE</acronym>.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="initialsetup">Configuring &kdevelop;</link> - shows how you can taylor the <acronym>IDE</acronym> to suit your needs.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="appwizard">Getting started: the application wizard</link> - describes the basics on how to set up a new project in &kdevelop; using the built-in application wizard.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="editing">Editing tools</link> - all you need to write your source files: using the editor, searching for text both locally and project-wide, up to integrating new files and classes into the project.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="filebrowsers">The file browsers</link> - demonstrates various tools to look at the structure of your project and how to access the files you want to work with.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="classbrowser">The class browsers</link> - describes one of the most powerful tools of &kdevelop; which lets you navigate through class dependencies and allows to easily create and access the classes and methods you need.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="documentation">Documentation</link> - shows how to access the rich built-in documentation &kdevelop; provides and tells you how to create documentation of your project, concise and powerful API documentation providing you an overview over all your project sources as well as docbook-based user documentation.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="projectmanagement">Building and project management</link> - deals with the creating and management of your project, describing the basics of autoconf and automake as well as how to set up custom make files and how to use compiler or make options to taylor your application to suit your needs.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="advancedautoproject">Advanced autoproject usage</link> - looks at ways to keep multiple build configurations, to cross-compile for diverse platforms, or to make an embedded system using the <application>Qt/embedded</application> library.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="debugger">The debugger interface</link> - describes how to use the integrated <application>gdb</application> debugger interface so you can hunt down bugs without leaving &kdevelop; so to always maintain easy acess to the program sources in question.
+  </para></listitem>
+<!-- ### Maybe interesting, of course, but too detailed for an IDE user manual
+  <listitem><para>
+  <link linkend="python">Python</link> - an overview on how to create Python-based applications in &kdevelop;.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="php">PHP</link> -  an overview on how to create PHP-based HTML applications in &kdevelop;.
+  </para></listitem>//-->
+  <listitem><para>
+  <link linkend="cvs">Using CVS</link> - tells you how you can maintain your project using the CVS versioning system, a must especially if many developers work at the same project.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="externalprogs">Leveraging external programs</link> - shows how to access ecternal programs and tools from within &kdevelop; thus greatly extending its capabilities.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="plugintools">Plugin tools</link> - provides you an overview on the parts which make up &kdevelop; and how you can taylor it to suit your needs by loading the necessary parts only, both <acronym>IDE</acronym> and project-wide.
+  </para></listitem>
+</itemizedlist>
+</chapter>
+
+<!-- ====================================================================== -->
+
 <chapter id="unixdev">
-<title>Overview: Development on UNIX</title>
+<title>Development on UNIX</title>
 
 <sect1 id="history">
 <title>Some historical remarks</title>
@@ -384,10 +451,16 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   The <application>ctags</application> source navigation tool, from <ulink url="http://ctags.sourceforge.net">http://ctags.sourceforge.net</ulink>, which enables you fast access to declarations and definitions by a few simple clicks on a name in the editor.
   </para></listitem>
   <listitem><para>
-  <application>dot</application>, a graphics language compiler, from <ulink url="http://www.graphviz.org">http:/www.graphviz.org</ulink>. This allows you to navigate in a graphical view of your classes' dependencies.
+  <application>dot</application>, a graphics language compiler, from <ulink url="http://www.graphviz.org">http:/www.graphviz.org</ulink>. This
+  <!-- ### temporarily disabled until the graphial class browser works again
+  allows you to navigate in a graphical view of your classes' dependencies. Likewise the <application>dot</application> //-->
+  tool is needed in conjunction with <application>doxygen</application> below if you want to have class relationships graphically displayed (which is highly recommended).
   </para></listitem>
   <listitem><para>
   The <application>doxygen</application> documentation tool, from <ulink url="http://www.stack.nl/~dimitri/doxygen">http://www.stack.nl/~dimitri/doxygen</ulink> if you want to generate concise and powerful API documentation from your projects.
+  </para></listitem>
+  <listitem><para>
+  <application>valgrind</application> from <ulink url="http://developer.kde.org/~sewardj/">http://developer.kde.org/~sewardj/</ulink> helps you to find memory management problems in your applications.
   </para></listitem>
   <listitem><para>
   Any other compiler and/or tool in case you want to develop for another language/platform than <acronym>C++</acronym>/&kde; or use some special facility.
@@ -530,7 +603,7 @@ If you want to keep track of what your &kdevelop; application does at run-time y
 <formalpara>
 <title>A release-compiled version</title>
 <para>
-If you just only want to run &kdevelop; a (smaller and faster running) release version suffices. <command>configure</command> defaults to this.
+If you only want to use &kdevelop; as-is a (smaller and faster running) release version suffices. <command>configure</command> defaults to this.
 </para>
 </formalpara>
 <para>
@@ -716,25 +789,25 @@ The <command>kbuildsycoca</command> command ("build system control cache") looks
   several <link  linkend="uimodes-overview">user interface modes</link> from which you can select the look and feel of the workspace,
   </para></listitem>
   <listitem><para>
-  an <link linkend="appwizard">Application Wizard</link> which aids you in setting up a new project,
+  an <link linkend="appwizard">application wizard</link> which aids you in setting up a new project,
   </para></listitem>
   <listitem><para>
-  several <link linkend="makesystems">Project Management Systems</link> which aid in building and managing your project,
+  several <link linkend="makesystems">project management systems</link> which aid in building and managing your project,
   </para></listitem>
   <listitem><para>
-  some <link linkend="editing">Editing tools</link> to easily work on your program texts
+  some <link linkend="editing">editing tools</link> to easily work on your program texts
   </para></listitem>
   <listitem><para>
-  various <link linkend="filebrowsers">File Browsers</link> providing you different views on your file system,
+  various <link linkend="filebrowsers">file browsers</link> providing you different views on your file system,
   </para></listitem>
   <listitem><para>
-  various <link linkend="classbrowser">Class Browsers</link> to aid you in maintaining the classes and their relationships of your object-oriented programming project,
+  various <link linkend="classbrowser">class browsers</link> to aid you in maintaining the classes and their relationships of your object-oriented programming project,
   </para></listitem>
   <listitem><para>
-  a <link linkend="debugger">Debugger Interface</link> to find and remove program errors from within &kdevelop;, and
+  a <link linkend="debugger">debugger interface</link> to find and remove program errors from within &kdevelop;, and
   </para></listitem>
   <listitem><para>
-  several <link linkend="parts">Plugin Parts</link>, extensible modules which can be loaded at runtime and on demand.  This allows you to only turn on those features you really need.
+  several <link linkend="plugintools">plugin tools</link>, extensible modules which can be loaded at runtime and on demand.  This allows you to only turn on those features you really need.
   </para></listitem>
   <listitem><para>
   a set of other diagnosis, documentation, and optimization helper tools.
@@ -821,7 +894,7 @@ Select the radio button of the user interface mode you want to switch to, then p
 <emphasis>Note 1:</emphasis> If you switch to or from the (non-windowed) IDEAl mode, you'll have to restart &kdevelop;.
 </para>
 <para>
-<emphasis>Note 2:</emphasis> Currently there are two IDEAl modes provided - a "window" IDEAl mode and a "standard" IDEAl mode (bottom row of the radio buttons). The window mode fits with the other mdi modes, but is still experimental. You don't need to restart &kdevelop; if you select this one. Yet it is recommended to use the standard IDEAl mode in everyday work for now.
+<emphasis>Note 2:</emphasis> Currently there are two IDEAl modes provided - a "window" IDEAl mode and a "standard" IDEAl mode (bottom row of the radio buttons). The window mode fits with the other mdi modes, but is still experimental. You don't need to restart &kdevelop; if you select this one from one of the other three mdi modes. Yet it is recommended to use the standard IDEAl mode in everyday work for now.
 </para>
 </sect2>
 
@@ -960,6 +1033,30 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 
 <!-- ====================================================================== -->
 
+<chapter id="initialsetup">
+<title>Configuring &kdevelop;</title>
+
+<para>
+</para>
+
+<sect1 id="initialsetup-general">
+<title>General configuration issues</title>
+
+<para>
+</para>
+</sect1> <!-- initialsetup-general -->
+
+<sect1 id="initialsetup-advanced">
+<title>Advanced configuration</title>
+
+<para>
+</para>
+</sect1> <!-- initialsetup-advanced -->
+
+</chapter> <!-- initialsetup -->
+
+<!-- ====================================================================== -->
+
 <chapter id="appwizard">
 <title>Getting started: the application wizard</title>
 
@@ -974,20 +1071,20 @@ Organizing all development work in projects allows you to easily switch between 
 <title>New projects</title>
 
 <para>
-Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial director structure has to be set up, initial header and source files must be provided, the make system has to be initialized, etc.
+Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, etc.
 </para>
 <para>
-&kdevelop; provides an easy way to initiate a new programming project - the <emphasis>Application Wizard</emphasis>. You will find the Application Wizard at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
+&kdevelop; provides an easy way to initiate a new programming project - the <emphasis>application wizard</emphasis>. You will find the application wizard at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
 </para>
 <para>
-Only a short series of steps is necessary to start a new programming project, using the Application Wizard:
+Only a short series of steps is necessary to start a new programming project, using the application wizard:
 </para>
 <orderedlist>
   <listitem><para>
-  Select the programming language you want to use and the type of the application you want to build from a set of predefined templates.
+  <link linkend="newprojects-start-type">Select the programming language</link> you want to use and the type of the application you want to build from a set of predefined templates.
   </para></listitem>
   <listitem><para>
-  Supply some general information as application name, directory where the application shall be built, etc.
+  <link linkend="newprojects-start-general">Supply some general information</link> as application name, directory where the application shall be built, etc.
   </para></listitem>
   <listitem><para>
   Decide whether you want to use a version control system, like e.g. CVS, and supply the necessary data if needed.
@@ -996,11 +1093,11 @@ Only a short series of steps is necessary to start a new programming project, us
   Set up some templates for initial header and source files (if applicable).
   </para></listitem>
   <listitem><para>
-  Finally tell Application Wizard to set up all initial directory structure, starting header/source file templates, and managment tools, like e.g. an initial make skeleton, etc.
+  Finally tell application wizard to set up all initial directory structure, starting header/source file templates, and managment tools, like e.g. an initial make skeleton, etc.
   </para></listitem>
 </orderedlist>
 <para>
-Voil&agrave; - that's all. Application Wizard will have provided you with a primary functional set of programming files, where you can readily start working.
+Voil&agrave; - that's all. Application wizard will have provided you with a primary functional set of programming files, where you can readily start working.
 </para>
 <para>
 Let's look at all this in more detail now ...
@@ -1010,7 +1107,7 @@ Let's look at all this in more detail now ...
 <title>Initial steps</title>
 
 <para>
-To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.  The <guilabel>Create New Project</guilabel> dialog will pop up as shown below:
+To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.  The <guilabel>Create New Project</guilabel> dialog will pop up showing an initial <guilabel>General</guilabel> page:
 </para>
 
 <screenshot id="screenshot-newprojectwizard">
@@ -1018,24 +1115,144 @@ To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenui
     <imageobject>
       <imagedata fileref="createnewproject.png" format="PNG"/>
     </imageobject>
+<!-- ### caption is disturbing in this context
 	<caption><para>
 	The Create New Project application wizard dialog
-	</para></caption>
+	</para></caption> -->
   </mediaobject>
 </screenshot>
 
 <para>
-Fill in the appropriate information, and select <guibutton>Next</guibutton>
+As you see, this dialog is divided into an upper and a lower part. In the upper part you can decide on the programming languange and application type, the lower part holds some general information.
 </para>
 
 <sect3 id="newprojects-start-type">
 <title>Select programming language and application type</title>
-<para></para>
+
+<para>
+The left hand side of the upper part in this dialog is where you do the selection work. When it shows up, you'll find there a list of folders each labeled with a programming language, as for instance:
+</para>
+<itemizedlist>
+  <listitem><para>Ada</para></listitem>
+  <listitem><para>C</para></listitem>
+  <listitem><para>C++</para></listitem>
+  <listitem><para>Fortran</para></listitem>
+  <listitem><para>Java</para></listitem>
+  <listitem><para>PHP</para></listitem>
+  <listitem><para>Pascal</para></listitem>
+  <listitem><para>Perl</para></listitem>
+  <listitem><para>Python</para></listitem>
+  <listitem><para>Ruby</para></listitem>
+  <listitem><para>Shell</para></listitem>
+</itemizedlist>
+<para>
+To be precise, these folders do not contain real programming tools actually. They do lead to pre-defined <emphasis>templates</emphasis> you can use as a starting point for development in that language. To get an idea of what is provided, just open the folders one after the other. There will be a series of subfolders on some, one or more simple entries only on others. The subfolders you see organize the available templates according to some tasks, the simple entries name the templates you may select.
+</para>
+<para>
+We cannot go into detail here on which tasks each template provides, but it's easy to find out. Whenever you select a template entry some information is displayed in the fields to the right. In the lower field you will find a <emphasis>short description</emphasis> on what the template is supposed to do. In the field above that a picture will be shown, if available, about the the outcome of the application this template produces if you compile and run it unmodified. Usually this is a <emphasis>screenshot</emphasis> of the main window the application will display.
+</para>
+<para>
+Select the template which best fits your application's goals as a starting point. Then enter the general properties information in the lower field as shown in the next chapter.
+</para>
 </sect3>
 
 <sect3 id="newprojects-start-general">
 <title>Provide general information</title>
-<para></para>
+
+<para>
+The lower part of the <guilabel>Create New Project</guilabel> dialog <guilabel>General</guilabel> page is a framed field labeled <guilabel>Properties</guilabel>. You must provide some general information about your project here so that the application wizard knows how to build the initial structure.
+</para>
+<formalpara>
+<title>Application Name</title>
+<para>
+Your application needs a name of course. Enter this in the uppermost <guilabel>Properties</guilabel> field, called <guilabel>Application Name</guilabel>.
+</para>
+</formalpara>
+<para>
+When you do so, you will notice that the application wizard refuses to accept special characters of any kind. The only characters accepted are:
+<itemizedlist>
+  <listitem><para>upper and lower case characters</para></listitem>
+  <listitem><para>numbers</para></listitem>
+  <listitem><para>the underline character</para></listitem>
+</itemizedlist>
+</para>
+<para>
+One prominent cause of this restriction is that the application manager will use this application name as the <emphasis>basis of some class names</emphasis> it will construct when it sets up an initial project. Thus the name of the application must stick to the rules of the programming language you use.
+</para>
+<formalpara>
+<title>The project directory</title>
+<para>
+The other prominent cause of this restriction you can see at the bottom line of the <guilabel>Properties</guilabel> area. It is labeled <guilabel>Final location</guilabel> and shows the directory where the application manager  will create the application.
+</para>
+</formalpara>
+<para>
+As you type the application name you will notice that the application wizard repeats your input at the end of the <guilabel>Final location</guilabel> line, using lower case only characters.
+</para>
+<para>
+Thus you must select the name of your new application with care.  If you end up with an already used directory the application manager will complain, albeit only at the very end of the setup process:
+</para>
+
+<screenshot id="screenshot-wrongprojectloc">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="wrong-project-location.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para>
+Once you pressed <guibutton>OK</guibutton> on this the application manager will send you back to this first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, requiring you to correct the application directory.
+</para>
+
+<formalpara>
+<title>The starting path</title>
+<para>
+There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (you might e.g. set up for another version of an already existing application). As an alternative you may select another path to the application directory.
+</para>
+</formalpara>
+<para>
+This is done in the second row input field of the <guilabel>Properties</guilabel>, named <guilabel>Location</guilabel>. What you enter here is the <emphasis>starting path</emphasis> of the new application development directory. The application manager appends the application name to this path when it initializes the new project. The result is shown in the <guilabel>Final location</guilabel> line to give you better control on what is going on.
+</para>
+<para>
+Application manager will copy an <emphasis>initial value</emphasis> to the <guilabel>Location</guilabel> field on start-up. This is taken from what you have chosen in the <guilabel>Default projects directory</guilabel> field during the <link linkend="initialsetup-general">general configuration steps</link>.
+</para>
+<para>
+Alter the <guilabel>Location</guilabel> field contents so that the application deveopment directory shown in the <guilabel>Final location</guilabel> line will be unique.
+</para>
+<para>
+<emphasis>Note:</emphasis> Take care that the path you enter in the <guilabel>Location</guilabel> field already exists. Otherwise the application manger will not allow you to continue to the next step, keeping the <guibutton>Next &gt;</guibutton> button deactivated (greyed).
+</para>
+<para>
+The application manager will warn you about non-existing paths by appending <emphasis>(invalid)</emphasis> to the <guilabel>Final location</guilabel> line. Thus, if the <guibutton>Next &gt;</guibutton> button will remain greyed whatever you do - check here whether your application development path is valid.
+</para>
+
+<formalpara>
+<title>Personal information</title>
+<para>
+The fields following this are not so critical. Just supply your name (i.e. the name of the person who is responsible for the application) in the <guilabel>Author</guilabel> field, and a valid e-mail address in the <guilabel>Email</guilabel> field, so that users can give you feedback on the application.
+</para>
+</formalpara>
+<para>
+<emphasis>Note 1:</emphasis> The application manager will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
+</para>
+<para>
+<emphasis>Note 2:</emphasis> Of all fields, the <guilabel>Email</guilabel> is <emphasis>optional</emphasis>, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
+</para>
+
+<formalpara>
+<title>Version and license info</title>
+<para>
+Finally enter a starting version number for your new application in the <guilabel>Version</guilabel> field, and select the license under which you want your application be put from the <guilabel>License</guilabel> control.
+</para>
+</formalpara>
+<!-- ### Supply a link to licence stuff explanation -->
+<para>
+<emphasis>Note:</emphasis> Both version and license information will as well be integrated into the starting templates in a suiting format the application type you selected does provide.
+</para>
+
+<para>
+Once you have correctly entered all this information stuff, press the <guibutton>Next &gt;</guibutton> button to proceed as will be shown in the following chapters.
+</para>
 </sect3>
 
 </sect2>
@@ -2165,139 +2382,23 @@ breakpoints.
 </chapter> <!-- debugger -->
 
 <!-- ====================================================================== -->
-
-<chapter id="parts">
-<title>Plugin parts</title>
-
-<sect1 id="parts-overview">
-<title>Overview</title>
-
-<para>
-&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
-</para>
-
-<para>
-Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
-</para>
-
-<para>
-Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
-</para>
-
-<para>
-Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
-</para>
-
-<table id="table-project-parts">
-<title>Project management parts in &kdevelop;</title>
-
-<tgroup cols="2"><tbody>
-<row>
-  <entry>antproject</entry>
-  <entry>ANT Project Manager (Java applications)</entry>
-</row>
-<row>
-  <entry>autoproject</entry>
-  <entry>Automake Project Manager</entry>
-</row>
-<row>
-  <entry>customproject</entry>
-  <entry>Custom Project Manager</entry>
-</row>
-<row>
-  <entry>trollproject</entry>
-  <entry>QMake based Project Manager</entry>
-</row>
-</tbody></tgroup>
-</table>
-
-<table id="table-global-parts">
-<title>Global parts in &kdevelop;</title>
-
-<tgroup cols="2"><tbody>
-<row><entry>Part Name</entry><entry>Description</entry></row>
-<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
-<row><entry>history</entry><entry></entry></row>
-<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
-<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
-<row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
-<row><entry>openwith</entry><entry></entry></row>
-<row><entry>fileselector</entry><entry>A file selection widget</entry></row>
-<row><entry>uimode</entry><entry>Customize the UI mode</entry></row>
-<row><entry>texttools</entry><entry>Additional text tools</entry></row>
-<row><entry>tipofday</entry><entry>A tip of the day</entry></row>
-<row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
-<row><entry>cvs</entry><entry>CVS Support</entry></row>
-<row><entry>tools</entry><entry></entry></row>
-<row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
-<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
-<row><entry>filter</entry><entry></entry></row>
-<row><entry>valgrind</entry><entry>A graphical valgrind frontend</entry></row>
-</tbody></tgroup>
-</table>
-
-<table>
-<title>Language support parts in &kdevelop;</title>
-<tgroup cols="2">
-<tbody>
-<row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
-<row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
-<row><entry>javasupport</entry><entry>Support for Java</entry></row>
-<row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
-<row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
-<row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
-</tbody></tgroup>
-</table>
-
-<table>
-<title>Project specific parts in &kdevelop;</title>
-<tgroup cols="2"><tbody>
-<row><entry>astyle</entry><entry></entry></row>
-<row><entry>buglist</entry><entry></entry></row>
-<row><entry>classview</entry><entry>Classview Manager</entry></row>
-<row><entry>ctags</entry><entry></entry></row>
-<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
-<row><entry>diff</entry><entry></entry></row>
-<row><entry>distpart</entry><entry></entry></row>
-<row><entry>doxygen</entry><entry></entry></row>
-<row><entry>fileview</entry><entry></entry></row>
-<row><entry>javadebugger</entry><entry></entry></row>
-<row><entry>manager</entry><entry></entry></row>
-<row><entry>nedit</entry><entry></entry></row>
-<row><entry>outputviews</entry><entry></entry></row>
-<row><entry>perforce</entry><entry></entry></row>
-<row><entry>qeditor</entry><entry></entry></row>
-<row><entry>scripting</entry><entry></entry></row>
-<row><entry>scriptproject</entry><entry></entry></row>
-<row><entry>sourcenav</entry><entry></entry></row>
-<row><entry>svn</entry><entry></entry></row>
-<row><entry>visualboyadvance</entry><entry></entry></row>
-<row><entry>windowmenu</entry><entry></entry></row>
-</tbody></tgroup>
-</table>
-
-</sect1> <!-- parts-overview -->
-
-</chapter>
-
-<!-- ====================================================================== -->
-
+<!-- ### Questionable, if not IDE-specific.
 <chapter id="python">
 <title>Python</title>
 
 <para>
 </para>
 
-</chapter> <!-- python -->
+</chapter> --> <!-- python -->
 
 <!-- ====================================================================== -->
-
+<!-- ### Questionable, if not IDE-specific.
 <chapter id="php">
 <title>PHP</title>
 
 <para>
 </para>
-</chapter> <!-- php -->
+</chapter> --> <!-- php -->
 
 <!-- ====================================================================== -->
 
@@ -2648,6 +2749,117 @@ the content of the matched subgroups will be shown in a list box.
 </listitem>
 
 </itemizedlist>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="parts-overview">
+<title>Overview</title>
+
+<para>
+&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
+</para>
+
+<para>
+Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
+</para>
+
+<para>
+Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
+</para>
+
+<para>
+Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
+</para>
+
+<table id="table-project-parts">
+<title>Project management parts in &kdevelop;</title>
+
+<tgroup cols="2"><tbody>
+<row>
+  <entry>antproject</entry>
+  <entry>ANT Project Manager (Java applications)</entry>
+</row>
+<row>
+  <entry>autoproject</entry>
+  <entry>Automake Project Manager</entry>
+</row>
+<row>
+  <entry>customproject</entry>
+  <entry>Custom Project Manager</entry>
+</row>
+<row>
+  <entry>trollproject</entry>
+  <entry>QMake based Project Manager</entry>
+</row>
+</tbody></tgroup>
+</table>
+
+<table id="table-global-parts">
+<title>Global parts in &kdevelop;</title>
+
+<tgroup cols="2"><tbody>
+<row><entry>Part Name</entry><entry>Description</entry></row>
+<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
+<row><entry>history</entry><entry></entry></row>
+<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
+<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
+<row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
+<row><entry>openwith</entry><entry></entry></row>
+<row><entry>fileselector</entry><entry>A file selection widget</entry></row>
+<row><entry>uimode</entry><entry>Customize the UI mode</entry></row>
+<row><entry>texttools</entry><entry>Additional text tools</entry></row>
+<row><entry>tipofday</entry><entry>A tip of the day</entry></row>
+<row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
+<row><entry>cvs</entry><entry>CVS Support</entry></row>
+<row><entry>tools</entry><entry></entry></row>
+<row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
+<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
+<row><entry>filter</entry><entry></entry></row>
+<row><entry>valgrind</entry><entry>A graphical valgrind frontend</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Language support parts in &kdevelop;</title>
+<tgroup cols="2">
+<tbody>
+<row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
+<row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
+<row><entry>javasupport</entry><entry>Support for Java</entry></row>
+<row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
+<row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
+<row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Project specific parts in &kdevelop;</title>
+<tgroup cols="2"><tbody>
+<row><entry>astyle</entry><entry></entry></row>
+<row><entry>buglist</entry><entry></entry></row>
+<row><entry>classview</entry><entry>Classview Manager</entry></row>
+<row><entry>ctags</entry><entry></entry></row>
+<row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
+<row><entry>diff</entry><entry></entry></row>
+<row><entry>distpart</entry><entry></entry></row>
+<row><entry>doxygen</entry><entry></entry></row>
+<row><entry>fileview</entry><entry></entry></row>
+<row><entry>javadebugger</entry><entry></entry></row>
+<row><entry>manager</entry><entry></entry></row>
+<row><entry>nedit</entry><entry></entry></row>
+<row><entry>outputviews</entry><entry></entry></row>
+<row><entry>perforce</entry><entry></entry></row>
+<row><entry>qeditor</entry><entry></entry></row>
+<row><entry>scripting</entry><entry></entry></row>
+<row><entry>scriptproject</entry><entry></entry></row>
+<row><entry>sourcenav</entry><entry></entry></row>
+<row><entry>svn</entry><entry></entry></row>
+<row><entry>visualboyadvance</entry><entry></entry></row>
+<row><entry>windowmenu</entry><entry></entry></row>
+</tbody></tgroup>
+</table>
+
+</sect1> <!-- parts-overview -->
 
 </chapter> <!-- plugintools -->
 
