@@ -146,8 +146,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk = Token( k, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
-	} else if( m_preprocessorEnabled && m_driver->macros().contains(ide) &&
-        		m_driver->macros()[ide].body().stripWhiteSpace() != ide ){
+	} else if( m_preprocessorEnabled && m_driver->macros().contains(ide) ){
 	    Macro m = m_driver->macros()[ ide ];
 	    if( m.hasArguments() ){
 		readWhiteSpaces();
@@ -158,33 +157,20 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    m_source.insert( currentPosition(), body );
 
             // tokenize the macro body
+	    bool d = m_preprocessorEnabled;
+	    disablePreprocessor();
+
             m_endPtr = currentPosition() + body.length();
             while( !currentChar().isNull() ){
                 Token tok;
-
-                readWhiteSpaces();
-                bool d = m_preprocessorEnabled;
-
-                if( currentChar().isLetter() || currentChar() == '_' ){
-                    QString word;
-                    int c = currentPosition();
-                    while( (c<m_endPtr) && (m_source[c].isLetterOrNumber() || m_source[c] == '_') ) {
-                        word += m_source[ c++ ];
-                    }
-                    if( word == ide )
-                        disablePreprocessor();
-
-                }
                 nextToken( tok );
-                if( tok == -1 || tok == Token_eof ){
-                    m_preprocessorEnabled = d;
+                if( tok == -1 || tok == Token_eof )
                     break;
-                }
+
                 addToken( tok );
 
-                m_preprocessorEnabled = d;
             }
-
+            m_preprocessorEnabled = d;
 	    m_endPtr = m_source.length();
 	} else if( m_skipWordsEnabled ){
 	    QMap< QString, QPair<SkipType, QString> >::Iterator pos = m_words.find( ide );
@@ -445,7 +431,6 @@ void Lexer::processDefine( Macro& m )
 	}
     }
 
-    m.setFileName( m_driver->currentFileName() );
     m.setBody( body );
     m_driver->addMacro( m );
 
