@@ -553,7 +553,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 
    if (m_mdiMode == QextMdi::TabPageMode) {
       if (m_pWinList->count() == 0) {
-         if (m_pDockbaseAreaOfDocumentViews) {
+         if (!m_pDockbaseAreaOfDocumentViews) {
             m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
             m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
             setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
@@ -620,7 +620,7 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 
    if (m_mdiMode == QextMdi::TabPageMode) {
       if (m_pWinList->count() == 0) {
-         if (m_pDockbaseAreaOfDocumentViews) {
+         if (!m_pDockbaseAreaOfDocumentViews) {
             m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
             m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
             setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
@@ -1083,7 +1083,7 @@ void QextMdiMainFrm::switchToChildframeMode()
       finishToplevelMode();
    }
 
-   if (m_pDockbaseAreaOfDocumentViews) {
+   if (!m_pDockbaseAreaOfDocumentViews) {
       // cover QextMdi's childarea by a dockwidget
       m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
       m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
