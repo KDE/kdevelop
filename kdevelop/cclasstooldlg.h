@@ -120,20 +120,20 @@ protected slots:
   
   /** Slot from the classtree telling that the user wants to view a
    * declation. */
-  void slotCTViewDecl( const char *className, const char *declName, THType type );
+  void slotCTViewDecl( const char *className, const char *declName, THType type,THType );
 
   /** Slot from the classtree telling that the user wants to view a
    * defintion. */
-  void slotCTViewDef( const char *className, const char *declName, THType type );
+  void slotCTViewDef( const char *className, const char *declName, THType type,THType );
   void OK();
 
 signals: // Signals
 
   /** This signal is emitted when a user wants to view a declaration. */
-  void signalViewDeclaration( const char *, const char *, THType );
+  void signalViewDeclaration( const char *, const char *, THType,THType );
 
   /** This signal is emitted when a user wants to view a definition. */
-  void signalViewDefinition( const char *, const char *, THType );
+  void signalViewDefinition( const char *, const char *, THType,THType );
 
 private: // Private attribues
 
