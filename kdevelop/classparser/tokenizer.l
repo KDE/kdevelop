@@ -66,6 +66,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "friend"        {return CPFRIEND;}
 "struct"        {return CPSTRUCT;}
 "union"         {return CPUNION;}
+"operator"      {return CPOPERATOR;}
 
     /*==============> Ignored stuff <==============*/
 "Q_EXPORT"       {}
@@ -77,7 +78,6 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "L"?[']{CCHAR}+[']    {return STRING;}
 
     /*==============> Normal operators <==============*/
-"*"          {return '*';}
 ":"          {return ':';}
 "::"         {return CLCL;}
 "~"          {return '~';}
@@ -85,7 +85,11 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "<"          {return '<';}
 ">"          {return '>';}
 "&"          {return '&';}
-"->"         {return RA;}
+"+"          {return '+';}
+"-"          {return '-';}
+"*"          {return '*';}
+"/"          {return '/';}
+"%"          {return '%';}
 
     /*==============> End of Phrase <==============*/
 ";"          {return ';';}

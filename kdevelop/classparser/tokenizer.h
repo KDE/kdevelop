@@ -47,7 +47,6 @@
 #define ID             262
 #define CLCL           263
 #define CONST          264
-#define RA             266
 #define CPUNION        267
 #define STRING         268
 #define STATIC         269
@@ -59,6 +58,7 @@
 #define CPTYPEDEF      275
 #define CPFRIEND       276
 #define CPSTRUCT       277
+#define CPOPERATOR     278
 typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;
