@@ -1299,7 +1299,26 @@ void CKDevelop::readOptions()
   else{
     tree_view_pos=config->readNumEntry("tree_view_pos", 263);
   }
-	
+  // set the mode of the tab headers
+  int mode=config->readNumEntry("tabviewmode", 3);
+  switch (mode){
+    case 1:
+      slotViewTabText();
+      break;
+    case 2:
+      slotViewTabIcons();
+      break;
+    case 3:
+      slotViewTabTextIcons();
+      break;
+    default:
+      slotViewTabTextIcons();
+      break;
+  }
+
+
+
+  	
 	/////////////////////////////////////////
 	// RUNTIME VALUES AND FILES
   bAutosave=config->readBoolEntry("Autosave",true);
@@ -1380,6 +1399,15 @@ void CKDevelop::saveOptions(){
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
+
+  // set the mode of the tab headers
+  if(view_tab_menu->isItemChecked(ID_VIEW_TAB_TEXT))
+    config->writeEntry("tabviewmode", 1);
+  else if(view_tab_menu->isItemChecked(ID_VIEW_TAB_ICONS))
+    config->writeEntry("tabviewmode", 2);
+  else
+    config->writeEntry("tabviewmode", 3);
+
 
 //  config->writeEntry("show_kdevelop",bKDevelop);
 

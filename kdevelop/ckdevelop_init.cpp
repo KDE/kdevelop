@@ -196,10 +196,10 @@ void CKDevelop::initView()
   doc_tree = new DocTreeView(t_tab_view,"DOC");
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
-  t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("CV"));
-  t_tab_view->addTab(log_file_tree,i18n("LFV"));
-  t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("RFV"));
-  t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("DOC"));
+  t_tab_view->addTab(class_tree,SmallIcon("CVclass"),i18n("Classes"));
+  t_tab_view->addTab(log_file_tree,SmallIcon("attach"),i18n("Groups"));
+  t_tab_view->addTab(real_file_tree,SmallIcon("folder"),i18n("Files"));
+  t_tab_view->addTab(doc_tree,SmallIcon("contents"),i18n("Docs"));
 
   ////////////////////////
   // Right main window
@@ -649,6 +649,12 @@ void CKDevelop::initMenuBar(){
 
   ///////////////////////////////////////////////////////////////////
   // View-menu entries
+
+  view_tab_menu = new QPopupMenu;
+  view_tab_menu->insertItem(i18n("Text only"), this, SLOT(slotViewTabText()), 0, ID_VIEW_TAB_TEXT);
+  view_tab_menu->insertItem(i18n("Icons only"), this, SLOT(slotViewTabIcons()), 0, ID_VIEW_TAB_ICONS);
+  view_tab_menu->insertItem(i18n("Text and Icons"), this, SLOT(slotViewTabTextIcons()),0, ID_VIEW_TAB_TEXT_ICONS);
+
   view_menu = new QPopupMenu;
   view_menu->insertItem(SmallIconSet("goto"),i18n("Goto &Line..."), this,
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
@@ -671,6 +677,7 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotViewTBrowserToolbar()),0,ID_VIEW_BROWSER_TOOLBAR);
   view_menu->insertItem(i18n("&Statusbar"),this,
 			   SLOT(slotViewTStatusbar()),0,ID_VIEW_STATUSBAR);
+  view_menu->insertItem(i18n("Tab-Te&xt"), view_tab_menu,ID_VIEW_TABS);
   view_menu->insertSeparator();
   view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
@@ -1492,7 +1499,7 @@ void CKDevelop::initDebugger()
     o_tab_view->addTab(brkptManager,i18n("breakpoint"));
     o_tab_view->addTab(frameStack,i18n("frame stack"));
     o_tab_view->addTab(disassemble,i18n("disassemble"));
-    t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("VAR"));
+    t_tab_view->addTab(var_viewer,SmallIcon("brace"),i18n("Watch"));
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
     dbg_widget = new COutputWidget(o_tab_view, "debuggerTab");

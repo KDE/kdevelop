@@ -304,7 +304,11 @@ public:
   void slotViewTStatusbar();
   /** refresh all trees and other widgets*/
   void slotViewRefresh();
-  
+
+  void slotViewTabIcons();
+  void slotViewTabText();
+  void slotViewTabTextIcons();
+
   ////////////////////////
   // PROJECT-Menu entries
   ///////////////////////
@@ -793,6 +797,7 @@ private:
   //MB end
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
+  QPopupMenu* view_tab_menu;
   QPopupMenu* bookmarks_menu;
   QPopupMenu* doc_bookmarks;
 

@@ -807,6 +807,45 @@ void CKDevelop::slotViewRefresh(){
   refreshTrees();
 }
 
+void CKDevelop::slotViewTabIcons(){
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,true);
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
+    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),"");
+    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),"");
+    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),"");
+    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),"");
+    t_tab_view->changeTab(var_viewer,SmallIcon("brace"),"");
+
+}
+void CKDevelop::slotViewTabText(){
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,true);
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,false);
+    t_tab_view->removePage(class_tree);
+    t_tab_view->removePage(log_file_tree);
+    t_tab_view->removePage(real_file_tree);
+    t_tab_view->removePage(doc_tree);
+    t_tab_view->removePage(var_viewer);
+    t_tab_view->addTab(class_tree,i18n("Classes"));
+    t_tab_view->addTab(log_file_tree,i18n("Groups"));
+    t_tab_view->addTab(real_file_tree,i18n("Files"));
+    t_tab_view->addTab(doc_tree,i18n("Docs"));
+    t_tab_view->addTab(var_viewer,i18n("Watch"));
+
+}
+void CKDevelop::slotViewTabTextIcons(){
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT_ICONS,true);
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_ICONS,false);
+    view_tab_menu->setItemChecked(ID_VIEW_TAB_TEXT,false);
+
+    t_tab_view->changeTab(class_tree,SmallIcon("CVclass"),i18n("Classes"));
+    t_tab_view->changeTab(log_file_tree,SmallIcon("attach"),i18n("Groups"));
+    t_tab_view->changeTab(real_file_tree,SmallIcon("folder"),i18n("Files"));
+    t_tab_view->changeTab(doc_tree,SmallIcon("contents"),i18n("Docs"));
+    t_tab_view->changeTab(var_viewer,SmallIcon("brace"),i18n("Watch"));
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////////

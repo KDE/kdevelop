@@ -87,6 +87,11 @@
 #define ID_VIEW_BROWSER_TOOLBAR     12050
 #define ID_VIEW_STATUSBAR           12060
 
+#define ID_VIEW_TAB_TEXT            12061
+#define ID_VIEW_TAB_ICONS           12062
+#define ID_VIEW_TAB_TEXT_ICONS      12063
+#define ID_VIEW_TABS                12065
+
 #define ID_VIEW_REFRESH             12070
 #define ID_VIEW_PREVIEW             12072
 
