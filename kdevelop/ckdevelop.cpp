@@ -3005,7 +3005,7 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 void CKDevelop::slotClipboardChanged(KWriteView *, bool bContents)
 {
   int item=s_tab_view->getCurrentTab();
-  QString text=QApplication::clipboard()->text();
+  QString text=kapp->clipboard()->text();
   if(!bContents || item==BROWSER)
     disableCommand(ID_EDIT_PASTE);
   else
@@ -3647,17 +3647,17 @@ void CKDevelop::slotSTabSelected(int item){
 
   if (item == HEADER || item == CPP)
   {
-   // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
+//    enableCommand(ID_FILE_SAVE);  // is handled by setMainCaption()
     enableCommand(ID_FILE_SAVE_AS);
     enableCommand(ID_FILE_CLOSE);
 
     enableCommand(ID_FILE_PRINT);
 
-//  QString text=QApplication::clipboard()->text();
-//  if(text.isEmpty())
-//    disableCommand(ID_EDIT_PASTE);
-//  else
-//    enableCommand(ID_EDIT_PASTE);
+    QString text=kapp->clipboard()->text();
+    if(text.isEmpty())
+      disableCommand(ID_EDIT_PASTE);
+    else
+      enableCommand(ID_EDIT_PASTE);
 
     enableCommand(ID_EDIT_INSERT_FILE);
     enableCommand(ID_EDIT_SEARCH);

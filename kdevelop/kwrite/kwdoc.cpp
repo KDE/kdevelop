@@ -10,9 +10,9 @@
 
 #include <kcharsets.h>
 
-#ifdef QT_I18N
+//#ifdef QT_I18N
 #include <kapp.h>
-#endif
+//#endif
 
 #include "kwview.h"
 #include "kwdoc.h"
@@ -1124,10 +1124,10 @@ void KWriteDoc::del(KWriteView *view, VConfig &c) {
 void KWriteDoc::clipboardChanged() { //slot
 #if defined(_WS_X11_)
   KWriteView *view;
-  disconnect(QApplication::clipboard(),SIGNAL(dataChanged()),
+  disconnect(kapp->clipboard(),SIGNAL(dataChanged()),
     this,SLOT(clipboardChanged()));
   deselectAll();
-  QString text=QApplication::clipboard()->text();
+  QString text=kapp->clipboard()->text();
   for (view = views.first(); view != 0L; view = views.next())
       emit view->kWrite->clipboardStatus(view, !text.isEmpty());
   updateViews();
@@ -1664,21 +1664,21 @@ void KWriteDoc::copy(int flags) {
   QString s = markedText(flags);
   if (!s.isEmpty()) {
 #if defined(_WS_X11_)
-    disconnect(QApplication::clipboard(),SIGNAL(dataChanged()),this,0);
+    disconnect(kapp->clipboard(),SIGNAL(dataChanged()),this,0);
 #endif
-    QApplication::clipboard()->setText(s);
+    kapp->clipboard()->setText(s);
     for (view = views.first(); view != 0L; view = views.next())
       emit view->kWrite->clipboardStatus(view, !s.isEmpty());
 
 #if defined(_WS_X11_)
-    connect(QApplication::clipboard(),SIGNAL(dataChanged()),
+    connect(kapp->clipboard(),SIGNAL(dataChanged()),
       this,SLOT(clipboardChanged()));
 #endif
   }
 }
 
 void KWriteDoc::paste(KWriteView *view, VConfig &c) {
-  QString s = QApplication::clipboard()->text();
+  QString s = kapp->clipboard()->text();
   if (!s.isEmpty()) {
 //    unmarkFound();
     insert(view,c,s);
@@ -2548,19 +2548,24 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
   int line, col;
   int searchEnd;
   int slen, blen, tlen;
-  char *s, *b, *t;
+  char *s = 0;
+  char *b = 0;
+  char *t = 0;
+
   TextLine *textLine;
   int pos, newPos;
+  bool ret = false;
 
   slen = strlen(searchFor);
-  if (slen == 0) return 0;
+  if (slen == 0)
+    return 0;
+
   s = new char[slen];
   memcpy(s,searchFor,slen);
-  if (!(sc.flags & sfCaseSensitive)) downcase(s,slen);
+  if (!(sc.flags & sfCaseSensitive))
+    downcase(s,slen);
 
   blen = -2;
-  b = 0;
-  t = 0;
 
   line = sc.cursor.y;
   col = sc.cursor.x;
@@ -2573,13 +2578,14 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
         col = 0;
       }
       searchEnd = selectEnd;
-    } else searchEnd = lastLine();
+    } else
+      searchEnd = lastLine();
 
     while (line <= searchEnd) {
       textLine = contents.at(line);
       tlen = textLine->length();
       if (tlen > blen) {
-        delete b;
+        delete [] b;
         blen = (tlen + 257) & (~255);
         b = new char[blen];
         blen -= 2;
@@ -2641,7 +2647,7 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
       textLine = contents.at(line);
       tlen = textLine->length();
       if (tlen > blen) {
-        delete b;
+        delete [] b;
         blen = (tlen + 257) & (~255);
         b = new char[blen];
         blen -= 2;
@@ -2690,7 +2696,8 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
     }
   }
   sc.flags |= sfWrapped;
-  return false;
+  goto exit;
+
 found:
   if (sc.flags & sfWrapped) {
     if ((line > sc.startCursor.y || (line == sc.startCursor.y && col >= sc.startCursor.x))
@@ -2698,7 +2705,12 @@ found:
   }
   sc.cursor.x = col;
   sc.cursor.y = line;
-  return true;
+  ret = true;
+
+exit:
+  delete [] s;
+  delete [] b;
+  return ret;
 }
 
 void KWriteDoc::unmarkFound() {

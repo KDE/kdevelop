@@ -1030,7 +1030,7 @@ void KWriteView::placeCursor(int x, int y, int flags) {
 void KWriteView::focusInEvent(QFocusEvent *) {
 //  printf("got focus %d\n",cursorTimer);
 
-  QString text=QApplication::clipboard()->text();
+  QString text=kapp->clipboard()->text();
   //dbg - start
   kWrite->newCurPos();
   kWrite->newStatus();
