@@ -87,7 +87,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>&amp;Ok</string>
+                <string>&amp;OK</string>
             </property>
             <property stdset="1">
                 <name>default</name>
