@@ -1,4 +1,7 @@
-
+1999-04-14 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed another parsing bug. Classdeclarations with empty
+	        inheritance like in: class foo : {};
+	
 1999-04-14 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed the parsing bug for real this time.
 	* fixed the real file view so that all files are visible.
@@ -10,8 +13,8 @@
 
 1999-04-13  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* added support for dialogs to CProject
-	* added "new dialog" dialog, doesn't work correctly at the moment	
-	
+	* added "new dialog" dialog, doesn't work correctly at the moment
+
 1999-04-13  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>	
 	* started tutorial and wrote all documentation into the sgml file
 	* changed the documentation update to use kdoc2 commandline options
