@@ -124,7 +124,7 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     getCursorPosition(&currentPara, &index);
 
     bool isQt304 = false;
-    if (qVersion() == "3.0.4") {
+    if (QString(qVersion()) == "3.0.4") {
       isQt304 = true;
     }
 
@@ -160,11 +160,11 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
         break;
     }
 
-    if (displayAdditions)
-      setCursorPosition(paraCount+1, 0);
-
+    if (displayAdditions) {
+      moveCursor(QTextEdit::MoveEnd, false);
+    }
     ensureCursorVisible();
-
+    
 #endif
   }
 }
@@ -298,7 +298,7 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   {
     // add the error keyed on the line number in the make output widget
     ErrorDetails errorDetails(fileInErr, lineInErr, type);
-    if (qVersion() == "3.0.4") {
+    if (QString(qVersion()) == "3.0.4") {
       m_errorMap.insert(numLines(), errorDetails);
     }
     else {
