@@ -15,22 +15,33 @@
 #include "kwdoc.h"
 #include "kmimemagic.h"
 
+// ISO/IEC 9899:1990 (aka ANSI C)
+// "interrupt" isn´t an ANSI keyword, but an extension of some C compilers
 char *cKeywords[] = {
   "break", "case", "continue", "default", "do", "else", "enum", "extern",
-  "for", "goto", "if", "interrupt", "register", "return", "struct", "switch",
-  "typedef", "union", "volatile", "while", 0L};
+  "for", "goto", "if", "interrupt",  "return", "sizeof", "struct", "switch",
+  "typedef", "union", "while", 0L};
 
 char *cTypes[] = {
-  "char", "double", "float", "int", "long", "short", "signed", "static",
-  "unsigned", "void", 0L};
+  "auto", "char", "const", "double", "float", "int", "long", "register",
+  "short", "signed", "static",
+  "unsigned", "void", "volatile", 0L};
 
+//  ISO/IEC 14882:1998 . Sec. 2.11.1 (aka ANSI C++)
+// keyword "const" (apart from a type spec.) is also a keyword, so it is named inside this array
 char *cppKeywords[] = {
-  "class", "delete", "false", "friend", "inline", "new", "operator",
-  "private", "protected", "public", "this", "true", "virtual","catch","const_cast","dynamic_cast","namespace","reinterpret_cast","sizeof","static_cast","template","throw","try","typeid","typename","using","asm","auto","wchar_t","explicit", 0L};
-
+  "asm", "catch", "class", "const", "const_cast", "delete", "dynamic_cast",
+  "explicit", "export", "false", "friend", "inline", "namespace", "new", "operator",
+  "private", "protected", "public", "reinterpret_cast", "static_cast", "template",
+  "this", "throw", "true", "try", "typeid", "typename", "using", "virtual",
+  // alternative representations  (these words are reserved and shall not be used otherwise)
+  //  ISO/IEC 14882:1998 . Sec. 2.11.2
+  "and", "and_eq", "bitand", "bitor", "compl", "not", "not_eq", "or", "or_eq", "xor",
+  "xor_eq",
+  0L};
 
 char *cppTypes[] = {
-  "bool", "const","mutable", 0L};
+  "bool", "wchar_t", "mutable", 0L};
 
 char *javaKeywords[] = {
   "abstract", "break", "case", "cast", "catch", "class", "continue",
