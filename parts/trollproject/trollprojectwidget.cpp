@@ -411,11 +411,6 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     removefileButton->setEnabled ( true );
     QToolTip::add( removefileButton, i18n( "Remove file" ) );
 
-
-
-
-
-
     // build
     buildTargetButton = new QToolButton ( fileTools, "Make button" );
     buildTargetButton->setPixmap ( SmallIcon ( "make_kdevelop" ) );
@@ -541,13 +536,15 @@ QStringList TrollProjectWidget::allFiles()
 
         SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
         QString path = spitem->path;
-        QPtrListIterator<GroupItem> tit(spitem->groups);
-        for (; tit.current(); ++tit) {
+
+        for (QPtrListIterator<GroupItem> tit(spitem->groups); tit.current(); ++tit) {
             GroupItem::GroupType type = (*tit)->groupType;
+
             if (type == GroupItem::Sources || type == GroupItem::Headers) {
-                QPtrListIterator<FileItem> fit(tit.current()->files);
-		for (; fit.current(); ++fit){
+
+		for (QPtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
 		    QString filePath = path.mid( projectDirectory().length() + 1 );
+
 		    if( !filePath.isEmpty() && !filePath.endsWith("/") )
 			filePath += "/";
                     res.append( filePath + (*fit)->name);
@@ -592,7 +589,7 @@ void TrollProjectWidget::setupContext()
     {
       runable = false;
     }
-    if (m_shownSubproject->configuration.m_template==QTMP_SUBDIRS)
+    else if (m_shownSubproject->configuration.m_template==QTMP_SUBDIRS)
     {
       hasSubdirs = true;
       addSubdirButton->setEnabled(true);
@@ -814,8 +811,7 @@ void TrollProjectWidget::slotExecuteTarget()
   // can't build from scope
   if (m_shownSubproject->isScope)
     return;
-  if (m_shownSubproject->isScope)
-    return;
+
 
   // Only run application projects
   if (m_shownSubproject->configuration.m_template!=QTMP_APPLICATION)
@@ -855,24 +851,7 @@ void TrollProjectWidget::slotBuildProject()
   if (!m_rootSubproject)
     return;
 
-  QFileInfo fi;
-  QFileInfo fi2;
-  if (m_rootSubproject->configuration.m_makefile.isEmpty())
-  {
-    fi.setFile(dir + "/Makefile");
-    fi2.setFile(dir + "/makefile");
-  }
-  else
-  {
-    fi.setFile(m_rootSubproject->configuration.m_makefile);
-    fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
-  }
-  if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-      if (r == KMessageBox::No)
-          return;
-      m_part->startQMakeCommand(dir);
-  }
+  createMakefileIfMissing(dir, m_rootSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
@@ -891,24 +870,7 @@ void TrollProjectWidget::slotBuildTarget()
   if (m_shownSubproject->isScope)
     return;
   QString dir = subprojectDirectory();
-  QFileInfo fi;
-  QFileInfo fi2;
-  if (m_shownSubproject->configuration.m_makefile.isEmpty())
-  {
-    fi.setFile(dir + "/Makefile");
-    fi2.setFile(dir + "/makefile");
-  }
-  else
-  {
-    fi.setFile(m_shownSubproject->configuration.m_makefile);
-    fi2.setFile(dir + "/" + m_shownSubproject->configuration.m_makefile);
-  }
-  if (!fi.exists() && !fi2.exists()) {
-    int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-    if (r == KMessageBox::No)
-      return;
-    m_part->startQMakeCommand(dir);
-  }
+  createMakefileIfMissing(dir, m_shownSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
@@ -924,25 +886,8 @@ void TrollProjectWidget::slotRebuildProject()
 
   if (!m_rootSubproject)
     return;
-  QFileInfo fi;
-  QFileInfo fi2;
-  if (m_rootSubproject->configuration.m_makefile.isEmpty())
-  {
-    fi.setFile(dir + "/Makefile");
-    fi2.setFile(dir + "/makefile");
-  }
-  else
-  {
-    fi.setFile(m_rootSubproject->configuration.m_makefile);
-    fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
-  }
-  if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-      if (r == KMessageBox::No)
-          return;
-      m_part->startQMakeCommand(dir);
-  }
 
+  createMakefileIfMissing(dir, m_rootSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
@@ -963,24 +908,7 @@ void TrollProjectWidget::slotRebuildTarget()
     return;
 
   QString dir = subprojectDirectory();
-  QFileInfo fi;
-  QFileInfo fi2;
-  if (m_shownSubproject->configuration.m_makefile.isEmpty())
-  {
-    fi.setFile(dir + "/Makefile");
-    fi2.setFile(dir + "/makefile");
-  }
-  else
-  {
-    fi.setFile(m_shownSubproject->configuration.m_makefile);
-    fi2.setFile(dir + "/" + m_shownSubproject->configuration.m_makefile);
-  }
-  if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-      if (r == KMessageBox::No)
-          return;
-      m_part->startQMakeCommand(dir);
-  }
+  createMakefileIfMissing(dir, m_shownSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
@@ -1510,11 +1438,11 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
     case GroupItem::IDLs:
       m_shownSubproject->idls.append(filename);
       break;
-    case GroupItem::Images:
+    case GroupItem::Translations:
       m_shownSubproject->images.append(filename);
       break;
-    case GroupItem::Translations:
-      m_shownSubproject->translations.append(filename);
+    case GroupItem::Images:
+      m_shownSubproject->images.append(filename);
       break;
     /*
     case GroupItem::InstallObject:
@@ -1967,8 +1895,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             updateProjectFile(titem->owner);
           }
         }
-
-        if (r == idInsNewFilepatternItem)
+	else if (r == idInsNewFilepatternItem)
         {
           // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
@@ -1984,7 +1911,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             slotOverviewSelectionChanged(m_shownSubproject);
           }
         }
-        if (r == idInsExistingFile)
+        else if (r == idInsExistingFile)
         {
 #if KDE_VERSION >= 310
           AddFilesDialog *dialog = new AddFilesDialog(projectDirectory()+relpath,
@@ -2003,7 +1930,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           if ( dialog->exec() == QDialog::Rejected )
             return;
           QStringList files = dialog->selectedFiles();
-          for (unsigned int i=0;i<files.count();i++)
+          for (unsigned int i=0;i<files.count();++i)
           {
             switch (dialog->mode())
             {
@@ -2049,7 +1976,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           // Update subprojectview
           slotOverviewSelectionChanged(m_shownSubproject);
         }
-        if (r == idInsNewFile)
+        else if (r == idInsNewFile)
         {
             KDevCreateFile * createFileSupport = m_part->createFileSupport();
             if (createFileSupport)
@@ -2096,7 +2023,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 }
             }
         }
-        if (r == idInsInstallObject)
+        else if (r == idInsInstallObject)
         {
 //          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
@@ -2113,13 +2040,13 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             slotOverviewSelectionChanged(m_shownSubproject);
           }
         }
-	if (r == idLUpdate)
+	else if (r == idLUpdate)
         {
 	   QString cmd = "lupdate ";
            cmd += m_shownSubproject->pro_file;
            m_part->appFrontend()->startAppCommand(m_shownSubproject->path,cmd,false);
         }
-        if (r == idLRelease)
+        else if (r == idLRelease)
         {
 	   QString cmd = "lrelease ";
            cmd += m_shownSubproject->pro_file;
@@ -2129,8 +2056,14 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         removefileButton->setEnabled(true);
         FileItem *fitem = static_cast<FileItem*>(pvitem);
+	GroupItem::GroupType gtype = static_cast<GroupItem*>(item->parent())->groupType;
 
-        KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
+	KPopupMenu popup(this);
+	if (!(gtype == GroupItem::InstallObject))
+        popup.insertTitle(i18n("File: %1").arg(fitem->name));
+	else
+        popup.insertTitle(i18n("Pattern: %1").arg(fitem->name));
+
         int idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
         int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass Widget..."));
         int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
@@ -2149,8 +2082,17 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           popup.removeItem(idSubclassWidget);
         }
 
+	if(gtype == GroupItem::InstallObject)
+	{
+          popup.removeItem(idRemoveFile);
+          popup.removeItem(idFileProperties);
+	}
+
+	if(!(gtype == GroupItem::InstallObject))
+	{
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
+	}
 
         int r = popup.exec(p);
         if (r == idRemoveFile)
@@ -2187,7 +2129,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             if (!newFileNames.empty())
             {
                 QDomDocument &dom = *(m_part->projectDom());
-                for (uint i=0; i<newFileNames.count(); i++)
+                for (uint i=0; i<newFileNames.count(); ++i)
                 {
                     QString srcfile_relpath = newFileNames[i].remove(0,projectDirectory().length());
                     QString uifile_relpath = QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length());
@@ -2783,24 +2725,7 @@ void TrollProjectWidget::slotCleanProject()
   if (!m_rootSubproject)
     return;
 
-  QFileInfo fi;
-  QFileInfo fi2;
-  if (m_rootSubproject->configuration.m_makefile.isEmpty())
-  {
-    fi.setFile(dir + "/Makefile");
-    fi2.setFile(dir + "/makefile");
-  }
-  else
-  {
-    fi.setFile(m_rootSubproject->configuration.m_makefile);
-    fi2.setFile(dir + "/" + m_rootSubproject->configuration.m_makefile);
-  }
-  if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-      if (r == KMessageBox::No)
-          return;
-      m_part->startQMakeCommand(dir);
-  }
+  createMakefileIfMissing(dir, m_rootSubproject);
 
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
@@ -2821,24 +2746,8 @@ void TrollProjectWidget::slotCleanTarget()
     return;
 
   QString dir = subprojectDirectory();
-  QFileInfo fi;
-  QFileInfo fi2;
-  if (m_shownSubproject->configuration.m_makefile.isEmpty())
-  {
-    fi.setFile(dir + "/Makefile");
-    fi2.setFile(dir + "/makefile");
-  }
-  else
-  {
-    fi.setFile(m_shownSubproject->configuration.m_makefile);
-    fi2.setFile(dir + "/" + m_shownSubproject->configuration.m_makefile);
-  }
-  if (!fi.exists() && !fi2.exists()) {
-      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
-      if (r == KMessageBox::No)
-          return;
-      m_part->startQMakeCommand(dir);
-  }
+  createMakefileIfMissing(dir, m_shownSubproject);
+
   m_part->mainWindow()->raiseView(m_part->makeFrontend()->widget());
   QString dircmd = "cd "+dir + " && " ;
   QString rebuildcmd = constructMakeCommandLine(m_shownSubproject->configuration.m_makefile) + " clean";
@@ -2928,23 +2837,39 @@ void TrollProjectWidget::startMakeCommand( const QString & dir, const QString & 
       if (cmdline.isEmpty())
           cmdline = MAKE_COMMAND;
       cmdline += " clean";
-      QString dircmd = "cd ";
-      dircmd += dir;
-      dircmd += " && ";
+      QString dircmd = "cd " + dir + " && ";
       cmdline.prepend(m_part->makeEnvironment());
       m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
     }
 
-    QString cmdline = constructMakeCommandLine();
-    cmdline += " ";
-    cmdline += target;
+    QString cmdline = constructMakeCommandLine() + " " + target;
 
-    QString dircmd = "cd ";
-    dircmd += dir;
-    dircmd += " && ";
+    QString dircmd = "cd " + dir + " && ";
 
     cmdline.prepend(m_part->makeEnvironment());
     m_part->makeFrontend()->queueCommand(dir, dircmd + cmdline);
+}
+
+void TrollProjectWidget::createMakefileIfMissing(const QString &dir, SubprojectItem *item)
+{
+  QFileInfo fi;
+  QFileInfo fi2;
+  if (item->configuration.m_makefile.isEmpty())
+  {
+    fi.setFile(dir + "/Makefile");
+    fi2.setFile(dir + "/makefile");
+  }
+  else
+  {
+    fi.setFile(item->configuration.m_makefile);
+    fi2.setFile(dir + "/" + item->configuration.m_makefile);
+  }
+  if (!fi.exists() && !fi2.exists()) {
+      int r = KMessageBox::questionYesNo(this, i18n("There is no Makefile in this directory. Run qmake first?"));
+      if (r == KMessageBox::No)
+          return;
+      m_part->startQMakeCommand(dir);
+  }
 }
 
 QPtrList<SubprojectItem> TrollProjectWidget::findSubprojectForFile( QFileInfo fi )

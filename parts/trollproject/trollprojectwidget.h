@@ -317,6 +317,7 @@ private:
     QString getHeader();
     QString constructMakeCommandLine(const QString makeFileName = QString::null);
     void startMakeCommand(const QString &dir, const QString &target);
+    void createMakefileIfMissing(const QString &dir, SubprojectItem *item);
 
     /*fileName: full base file name like QFileInfo::baseName ( true )*/
     QPtrList<SubprojectItem> findSubprojectForFile( QFileInfo fi );
