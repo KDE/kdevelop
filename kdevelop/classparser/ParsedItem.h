@@ -112,7 +112,7 @@ public: // Public queries
   /** Is this a global variable?
    * @return If this a global item or not.
    */
-  inline bool isGlobal()    { return ( exportScope = PIE_GLOBAL ); }
+  inline bool isGlobal()    { return ( exportScope == PIE_GLOBAL ); }
 
   /**
    * The path is the scope + "." + the name of the item.
