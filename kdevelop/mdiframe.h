@@ -22,10 +22,21 @@
 
 class MdiFrame : public QextMdiMainFrm
 {
+Q_OBJECT
+
 public:
     MdiFrame(QWidget *parent, const char *name=0);
 
     QList<QextMdiChildView> childrenOfType(const char *name);
+
+public slots:
+  /** redirect the slots to CKDevelop */
+  virtual void switchToChildframeMode();
+  virtual void switchToToplevelMode();
+
+signals:
+  void letKDevelopDoTheSwitchToChildframeMode();
+  void letKDevelopDoTheSwitchToToplevelMode();
 };
 
 #endif

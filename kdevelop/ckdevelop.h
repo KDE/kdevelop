@@ -369,6 +369,14 @@ public:
   void slotBoomarksBrowserSelected(int);
 
   ////////////////////////
+  // WINDOW-Menu entries
+  ///////////////////////
+  /* extends the QextMDI slot, docks all undocked DockWidgets */
+  void slotSwitchToChildframeMode();
+  /* extends the QextMDI slot, undocks all docked DockWidgets */
+  void slotSwitchToToplevelMode();
+
+  ////////////////////////
   // HELP-Menu entries
   ///////////////////////
   /** goes one page back in the documentation browser */

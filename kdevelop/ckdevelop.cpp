@@ -2479,6 +2479,46 @@ void CKDevelop::slotToolbarClicked(int item){
   }
 }
 
+void CKDevelop::slotSwitchToChildframeMode() {
+  showMaximized();
+  dockIn( dockbase_o_tab_view, DockBottom);
+  dockIn( dockbase_t_tab_view, DockLeft);
+}
+
+void CKDevelop::slotSwitchToToplevelMode() {
+  int dy1 = 30;
+  int dy2 = 30+5;
+  int dx2 = 5;
+  
+  int tbHeight = mdi_main_frame->taskBarHeight();
+  
+  // calculate the output tab view geometry (mapped to desktop)
+  int oHeight = dockbase_o_tab_view->height();
+  int oWidth  = dockbase_o_tab_view->width();
+  QPoint oPos( dockbase_o_tab_view->pos());
+  QPoint oGlobPos( dockbase_o_tab_view->mapToGlobal( oPos) - oPos);
+  QRect oGlobRect( oGlobPos.x(), oGlobPos.y()+dy1+tbHeight/2, oWidth-dx2, oHeight-dy2-tbHeight/2);
+
+  // calculate the tree tab view geometry (mapped to desktop)
+  int tHeight = dockbase_t_tab_view->height();
+  int tWidth  = dockbase_t_tab_view->width();
+  QPoint tPos( dockbase_t_tab_view->pos());
+  QPoint tGlobPos( dockbase_t_tab_view->mapToGlobal( tPos) - tPos);
+  QRect tGlobRect( tGlobPos.x(), tGlobPos.y()+dy1+tbHeight, tWidth-dx2, tHeight-dy2-tbHeight/2 );
+ 
+  // undock the trees window and the output window (make them toplevel)
+  dockbase_o_tab_view->unDock();
+  resize( width(), height()-oHeight);
+  dockbase_t_tab_view->unDock();
+  
+  // resize and position all on the desktop
+  resize( width(), height() - tHeight + tbHeight);
+  dockbase_o_tab_view->setGeometry( oGlobRect);
+  dockbase_o_tab_view->show();
+  dockbase_t_tab_view->setGeometry( tGlobRect);
+  dockbase_t_tab_view->show();
+}
+
 void CKDevelop::statusCallback(int id_){
   switch(id_){
     ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))

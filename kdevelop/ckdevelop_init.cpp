@@ -1076,6 +1076,10 @@ void CKDevelop::initConnections(){
   connect(&search_process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
 
+  connect(mdi_main_frame,SIGNAL(letKDevelopDoTheSwitchToChildframeMode()),
+          this,SLOT(slotSwitchToChildframeMode()) );
+  connect(mdi_main_frame,SIGNAL(letKDevelopDoTheSwitchToToplevelMode()),
+          this,SLOT(slotSwitchToToplevelMode()) );
 }
 void CKDevelop::initDlgEditor(){
     // the dialog editor manager

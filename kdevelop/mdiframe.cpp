@@ -34,3 +34,15 @@ QList<QextMdiChildView> MdiFrame::childrenOfType(const char *name)
     
     return lst;
 }
+
+void MdiFrame::switchToChildframeMode()
+{
+  emit letKDevelopDoTheSwitchToChildframeMode();
+  QextMdiMainFrm::switchToChildframeMode();
+}
+
+void MdiFrame::switchToToplevelMode()
+{
+  QextMdiMainFrm::switchToToplevelMode();
+  emit letKDevelopDoTheSwitchToToplevelMode();
+}
