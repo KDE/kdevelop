@@ -49,7 +49,7 @@ QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringLis
     m_actionQuickOpen->setToolTip(i18n("Quick open file in project"));
     m_actionQuickOpen->setWhatsThis(i18n("<b>Quick open</b><p>Provides a file name input form with completion listbox to quickly open file in a project."));
 
-    m_actionQuickOpenClass = new KAction( i18n("Find Class..."), CTRL + ALT + Key_O,
+    m_actionQuickOpenClass = new KAction( i18n("Find Class..."), CTRL + ALT + Key_C,
 				          this, SLOT(slotQuickOpenClass()),
 				          actionCollection(), "quick_open_class" );
     m_actionQuickOpenClass->setToolTip(i18n("Find class in project"));
