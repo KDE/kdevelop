@@ -72,6 +72,13 @@ CRealFileView::~CRealFileView(){
  *                                                                   *
  ********************************************************************/
 
+
+void CRealFileView::projectClosed()
+{
+    clear();
+}
+
+
 /*------------------------------------------ CRealFileView::refresh()
  * refresh()
  *   Add all files in the project directory.

@@ -52,6 +52,7 @@ class QSplitter;
 class CDocBrowser;
 class CClassView;
 class DocTreeView;
+class ProcessView;
 class CRealFileView;
 class CLogFileView;
 class KSwallowWidget;
@@ -550,15 +551,12 @@ public:
   void slotToggleLast();
 
   void slotMenuBuffersSelected(int id);
-  void slotClickedOnMessagesWidget();
+  void slotClickedOnMessagesWidget(int row);
   
 
   void slotURLSelected(KHTMLView* widget,QString url,int, QString);
   void slotDocumentDone( KHTMLView * );
   void slotURLonURL(KHTMLView*,QString);
-
-  void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
-  void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);
 
   void slotApplReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotApplReceivedStderr(KProcess* proc,char* buffer,int buflen);
@@ -567,7 +565,7 @@ public:
   void switchToKDlgEdit();
 
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
-  void slotProcessExited(KProcess* proc);
+  void slotProcessExited(KProcess *);
   void slotSearchProcessExited(KProcess*);
   
   //////////////// -- the methods for signals generated from the CV
@@ -755,11 +753,9 @@ private:
   
   KIconLoader icon_loader;
   /** for tools,compiler,make,kodc */
-  KShellProcess process;
+    //  KShellProcess process;
   /** only for selfmade appl */
   KShellProcess appl_process;
-  /**  for kdoc,sgmltools ... */
-  KShellProcess shell_process;
   /** search with glimpse */
   KShellProcess search_process;
   /** at the moment only one project at the same time */
@@ -819,7 +815,7 @@ private:
   DocTreeView* doc_tree;
   
   /** Output from the compiler ... */
-  COutputWidget* messages_widget;
+  ProcessView* messages_widget;
   /** stdin and stdout output. */
   COutputWidget* stdin_stdout_widget;
   /** stderr output. */

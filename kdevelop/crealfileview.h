@@ -16,6 +16,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
 #ifndef KPROJECTDIRTREELIST_H
 #define KPROJECTDIRTREELIST_H
 
@@ -24,15 +25,16 @@
 #include "ctreeview.h"
 #include <kpopmenu.h>
 #include <qstrlist.h>
+#include "component.h"
 
-//#include "cproject.h"
 class CProject;
 
 /**
   *display all files and dirs in the projectdir, a little filemanager
   @author Stefan Bartel 
   */
-class CRealFileView : public CTreeView {
+class CRealFileView : public CTreeView, public Component
+{
   Q_OBJECT 
 
 public: 
@@ -42,6 +44,8 @@ public:
   /** destructor */
   ~CRealFileView();
 
+  virtual void projectClosed();
+    
   /** starts the scan */
   void refresh(CProject* project);
 

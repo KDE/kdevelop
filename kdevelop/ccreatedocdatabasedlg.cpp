@@ -28,13 +28,16 @@
 #include <kstddirs.h>
 
 #include "ccreatedocdatabasedlg.h"
+#include "processview.h"
 
 #if HAVE_CONFIG_H
 #include "../config.h"
 #endif
 
-CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config ) : QDialog(parent,name,true) {
-
+CCreateDocDatabaseDlg::	CCreateDocDatabaseDlg(ProcessView *proc, KConfig *config,
+                                              QWidget *parent, const char *name)
+    : QDialog(parent,name,true)
+{
   setCaption(i18n("Create Search Database..."));
   this->proc = proc;
   this->conf = config;
@@ -313,37 +316,29 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
     size_str = " -b ";
   }
   
-  proc->clearArguments();
-  *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KGlobal::dirs()->getSaveLocation("appdata");
-  proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  proc->prepareJob("");
+  (*proc) <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KGlobal::dirs()->getSaveLocation("appdata");
+  proc->startJob();
   accept();
-
 }
+
 void CCreateDocDatabaseDlg::slotAddButtonClicked(){
   QString str = dir_edit->text();
 
-  if(str != "" ){
+  if (!str.isEmpty()){
     dir_listbox->insertItem(str,0);
     dir_edit->clear();
   }
   
 }
+
 void CCreateDocDatabaseDlg::slotRemoveButtonClicked(){
   dir_listbox->removeItem(dir_listbox->currentItem());
-  
 }
+
 void CCreateDocDatabaseDlg::slotDirButtonClicked(){
   QString name=KFileBaseDialog::getDirectory(dir_edit->text(),this,i18n("Select Directory..."));
   if(!name.isEmpty()){
     dir_edit->setText(name);
   }
 }
-
-
-
-
-
-
-
-
-

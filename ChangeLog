@@ -1,4 +1,13 @@
 1999-10-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* New class ProcessView, which is an output window
+	  (like COutputWindow) plus KProcess. This allows
+	  the encapsulation of the process handling. Hopefully
+	  the search and grep windows will inherit it soon.
+	* Let LFV, RFV, CClassView and ProcessView inherit Component
+	* Renamed StringTokenizer to avoid clash with its
+	  binary-incompatible counterpart in khtml
+
+1999-10-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Cleaned up hacks which were used before processes
 	  used /bin/sh
 	* Replaced QMultiLineEdit::insertAt() (which is obsolete)

@@ -26,13 +26,14 @@
 #include "ctreeview.h"
 #include "./classparser/ClassParser.h"
 #include "cclasstreehandler.h"
+#include "component.h"
 
 class CClassToolDlg;
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
   */
-class CClassView : public CTreeView
+class CClassView : public CTreeView, public Component
 {
   Q_OBJECT
 
@@ -44,6 +45,8 @@ public: // Constructor & Destructor
   /** Destructor. */
   ~CClassView();
 
+  virtual void projectClosed();
+    
 private: // Private classes
 
   /** Class that handles dynamic tooltips in the CV. */

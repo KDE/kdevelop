@@ -48,6 +48,7 @@
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
 #include "component.h"
+#include "processview.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -56,9 +57,7 @@
 extern KGuiCmdManager cmdMngr;
 
 CKDevelop::CKDevelop(bool witharg)
-    : process("/bin/sh"),
-      appl_process("/bin/sh"),
-      shell_process("/bin/sh"),
+    : appl_process("/bin/sh"),
       search_process("/bin/sh")
 {
   version = VERSION;
@@ -107,10 +106,8 @@ void CKDevelop::initView(){
   ////////////////////////
   o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
 	
-  messages_widget = new COutputWidget(kapp,o_tab_view);
-  messages_widget->setFocusPolicy(QWidget::NoFocus);
-  messages_widget->setReadOnly(TRUE);
-
+  messages_widget = new ProcessView(o_tab_view, "messages_widget");
+  components.append(messages_widget);
 
   stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
   stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
@@ -140,12 +137,15 @@ void CKDevelop::initView(){
   ////////////////////////
 
   class_tree = new CClassView(t_tab_view,"cv");
+  components.append(class_tree);
   class_tree->setFocusPolicy(QWidget::NoFocus);
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
+  components.append(log_file_tree);
   log_file_tree->setFocusPolicy(QWidget::NoFocus);
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
+  components.append(real_file_tree);
   real_file_tree->setFocusPolicy(QWidget::NoFocus);
 
   doc_tree = new DocTreeView(t_tab_view,"DOC");
@@ -1033,43 +1033,27 @@ void CKDevelop::initConnections(){
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
   connect(browser_widget, SIGNAL(textSelected(KHTMLView *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
 
-  connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
+  connect(messages_widget, SIGNAL(rowSelected(int)),this,SLOT(slotClickedOnMessagesWidget(int)));
   // connect the windowsmenu with a method
   connect(menu_buffers,SIGNAL(activated(int)),this,SLOT(slotMenuBuffersSelected(int)));
   connect(doc_bookmarks, SIGNAL(activated(int)), this, SLOT(slotBoomarksBrowserSelected(int)));
 
   connect(grep_dlg,SIGNAL(itemSelected(QString,int)),SLOT(slotGrepDialogItemSelected(QString,int)));
-
+  connect(messages_widget, SIGNAL(processExited(KProcess*)),
+          this, SLOT(slotProcessExited(KProcess*)));
 
   // connections for the proc -processes
   connect(&search_process, SIGNAL(receivedStdout(KProcess*,char*,int)),
           this, SLOT(slotSearchReceivedStdout(KProcess*,char*,int)) );
 
+#if 0
+  // let's see
   connect(&search_process, SIGNAL(receivedStderr(KProcess*,char*,int)),
           this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+#endif
 
   connect(&search_process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotSearchProcessExited(KProcess*) )) ;
-
-
-  connect(&process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-  	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-
-  connect(&process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-
-  connect(&process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotProcessExited(KProcess*) )) ;
-
-  // shellprocess
-  connect(&shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
-	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
-
-  connect(&shell_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
-	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
-
-  connect(&shell_process,SIGNAL(processExited(KProcess*)),
-	  this,SLOT(slotProcessExited(KProcess*) )) ;
 
   //application process
   connect(&appl_process,SIGNAL(processExited(KProcess*)),

@@ -31,14 +31,15 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include "cupdatekdedocdlg.h"
+#include "processview.h"
 
 #if HAVE_CONFIG_H
 #include "../config.h"
 #endif
 
 
-CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,
-                                   KShellProcess* proc,KConfig* config)
+CUpdateKDEDocDlg::CUpdateKDEDocDlg(ProcessView *proc, KConfig *config,
+                                   QWidget *parent, const char *name)
     : QDialog(parent,name,true) {
     
     conf = config;
@@ -352,8 +353,7 @@ void CUpdateKDEDocDlg::OK(){
      }
 
 
-  proc->clearArguments();
-  QDir::setCurrent(kdelibs_path);
+  proc->prepareJob(kdelibs_path);
 
   conf->setGroup("Doc_Location");
   QString qtPath=conf->readEntry("doc_qt", QT_DOCDIR);
@@ -463,7 +463,7 @@ void CUpdateKDEDocDlg::OK(){
 
   #endif
 
-   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+   proc->startJob();
    bUpdated=true;
    doc_path=new_doc_path; // all went ok... so set the new doc_path
    accept();

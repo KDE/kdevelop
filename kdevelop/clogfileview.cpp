@@ -66,6 +66,13 @@ CLogFileView::~CLogFileView(){
  *                                                                   *
  ********************************************************************/
 
+
+void CLogFileView::projectClosed()
+{
+    clear();
+}
+
+
 /*-------------------------------------------- CLogFileView::refresh()
  * refresh()
  *   Add all files in the project.

@@ -29,7 +29,7 @@ class QLabel;
 class QPushButton;
 class QRadioButton;
 class KConfig;
-class KShellProcess;
+class ProcessView;
 
 
 /** Generates the API-Documention from all KDE-Libs with kdoc
@@ -39,7 +39,8 @@ class KShellProcess;
 class CUpdateKDEDocDlg : public QDialog  {
    Q_OBJECT
 public: 
-   CUpdateKDEDocDlg(QWidget *parent=0, const char *name=0,KShellProcess* proc=0,KConfig* config=0);
+   CUpdateKDEDocDlg(ProcessView *proc, KConfig *config,
+                    QWidget *parent=0, const char *name=0);
   ~CUpdateKDEDocDlg();
   bool isUpdated() const {return bUpdated;};
   QString getDocPath() const {return doc_path;};
@@ -66,7 +67,7 @@ public:
   void slotDocButtonClicked();
   void slotSourceButtonClicked();
 protected:
-  KShellProcess* proc;
+  ProcessView *proc;
   QString doc_path;
   bool bUpdated;
 };

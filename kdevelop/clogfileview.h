@@ -17,14 +17,16 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
 #ifndef CLOGFILEVIEW_H
 #define CLOGFILEVIEW_H
 
 #include <qwidget.h>
 #include <kapp.h>
 #include <kpopmenu.h>
-#include "ctreeview.h"
 #include <qptrdict.h>
+#include "ctreeview.h"
+#include "component.h"
 
 //#include "cproject.h"
 class CProject;
@@ -34,7 +36,8 @@ class CProject;
   *@author Sandy Meier
   */
 
-class CLogFileView : public CTreeView {
+class CLogFileView : public CTreeView, public Component
+{
   Q_OBJECT 
 public: 
 
@@ -43,6 +46,8 @@ public:
 
   /** destructor */
   ~CLogFileView();
+
+  virtual void projectClosed();
     
   /** starts the refresh */
   void refresh(CProject* prj);

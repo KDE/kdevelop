@@ -233,6 +233,13 @@ void CClassView::initPopups()
  *                                                                   *
  ********************************************************************/
 
+
+void CClassView::projectClosed()
+{
+    clear();
+}
+
+
 /*---------------------------------------------- CClassView::refresh()
  * refresh()
  *   Add all classes from the project. Reparse and redraw all classes 

@@ -56,6 +56,7 @@
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
+#include "processview.h"
 #include "ceditwidget.h"
 #include "cfinddoctextdlg.h"
 #include "cexecuteargdlg.h"
@@ -841,16 +842,15 @@ void CKDevelop::slotBuildCompileFile(){
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
+  QFileInfo fileinfo(cpp_widget->getName());
   slotStatusMsg(i18n("Compiling ")+cpp_widget->getName());
   messages_widget->clear();
-  process.clearArguments();
-  QFileInfo fileinfo(cpp_widget->getName());
-  QDir::setCurrent(fileinfo.dirPath());
+  messages_widget->prepareJob(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
-  process << make_cmd << fileinfo.baseName()+".o";
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  (*messages_widget) << make_cmd << fileinfo.baseName()+".o";
+  messages_widget->startJob();
 }
 
 void CKDevelop::slotBuildRun(){
@@ -911,17 +911,12 @@ void CKDevelop::slotBuildMake(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  process.clearArguments();
-  if(!prj->getMakeOptions().isEmpty()){
-    process << make_cmd << prj->getMakeOptions();
-  }
-  else{
-    process << make_cmd;
-  }
+  messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
+  (*messages_widget) << make_cmd;
+  if(!prj->getMakeOptions().isEmpty())
+      (*messages_widget) << prj->getMakeOptions();
   beep = true;
-  
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  messages_widget->startJob();
 }
 
 // void CKDevelop::slotBuildMakeWith(){
@@ -965,13 +960,11 @@ void CKDevelop::slotBuildRebuildAll(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean command "));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  process.clearArguments();
-  process << make_cmd;
-  process << "clean";
+  messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
+  (*messages_widget) << make_cmd << "clean";
   next_job = make_cmd; // checked in slotProcessExited()
   beep = true;
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  messages_widget->startJob();
 }
 
 
@@ -979,10 +972,6 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  QString flaglabel;
-  flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  
-
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);
@@ -990,25 +979,24 @@ void CKDevelop::slotBuildRebuildAll(){
   slotFileSaveAll();
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
-  QDir::setCurrent(prj->getProjectDir()); 
-  shell_process.clearArguments();
-  shell_process << make_cmd << "distclean && " << make_cmd 
+  messages_widget->prepareJob(prj->getProjectDir());
+  (*messages_widget) << make_cmd << "distclean && " << make_cmd 
 		<< " -f Makefile.dist && ";
-  shell_process << flaglabel;
+  (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
        if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
+          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
        if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
+          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
   }
-  shell_process  << "\" " << "LDFLAGS=\" " ;
+  (*messages_widget) << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-  shell_process  << "\" "<< "./configure && " << make_cmd;
+         (*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
+  (*messages_widget) << "\" "<< "./configure && " << make_cmd;
 
   beep = true;
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  messages_widget->startJob();
 }
 
 void CKDevelop::slotBuildDistClean(){
@@ -1022,10 +1010,9 @@ void CKDevelop::slotBuildDistClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir());
-  process.clearArguments();
-  process << make_cmd << "distclean";
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  messages_widget->prepareJob(prj->getProjectDir());
+  (*messages_widget) << make_cmd << "distclean";
+  messages_widget->startJob();
 }
 
 
@@ -1042,14 +1029,13 @@ void CKDevelop::slotBuildDistClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf/automake suite..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir());
-  shell_process.clearArguments();
+  messages_widget->prepareJob(prj->getProjectDir());
+  (*messages_widget) << make_cmd;
   if(QFileInfo(QDir::current(),"Makefile.dist").exists())
-    shell_process << make_cmd << " -f Makefile.dist";
+      (*messages_widget) << " -f Makefile.dist";
   else
-    shell_process << make_cmd << " -f Makefile.cvs";
-
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      (*messages_widget) << " -f Makefile.cvs";
+  messages_widget->startJob();
   beep = true;
 }
 
@@ -1066,29 +1052,27 @@ void CKDevelop::slotBuildConfigure(){
     prj->writeProject();
 
   slotStatusMsg(i18n("Running ./configure..."));
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
 
   showOutputView(true);
   setToolMenuProcess(false);
   error_parser->toogleOff();
   slotFileSave();
-  messages_widget->clear();
   slotFileSaveAll();
-  QDir::setCurrent(prj->getProjectDir()); 
-  shell_process.clearArguments();
-  shell_process << flaglabel;
+  messages_widget->clear();
+  messages_widget->prepareJob(prj->getProjectDir());
+  (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
       if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
+          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
       if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
+          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
   }
-  shell_process  << "\" " << "LDFLAGS=\" " ;
+  (*messages_widget) << "\" " << "LDFLAGS=\" " ;
   if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-  shell_process  << "\" "<< "./configure " << argdlg.getArguments();
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+         (*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
+  (*messages_widget)  << "\" "<< "./configure " << argdlg.getArguments();
+  messages_widget->startJob();
   beep = true;
 }
 
@@ -1096,8 +1080,7 @@ void CKDevelop::slotBuildConfigure(){
 void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
   setToolMenuProcess(true);
-  process.kill();
-  shell_process.kill();
+  messages_widget->killJob();
   appl_process.kill();
   slotStatusMsg(i18n("Ready."));
 }
@@ -1363,7 +1346,7 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   }
   slotStatusMsg(i18n("Updating KDE-Libs documentation..."));
   config->setGroup("Doc_Location");
-  CUpdateKDEDocDlg dlg(this,"test",&shell_process, config);
+  CUpdateKDEDocDlg dlg(messages_widget, config, this, "update_kdedoc");
   if(dlg.exec()){
     slotStatusMsg(i18n("Generating Documentation..."));
     setToolMenuProcess(false);
@@ -1379,7 +1362,7 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   if(!CToolClass::searchProgram("glimpseindex")){
     return;
   }
-  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config);
+  CCreateDocDatabaseDlg dlg(messages_widget, config, this,"DLG");
   if(dlg.exec()){
     slotStatusMsg(i18n("Creating Search Database..."));
   }
@@ -2215,17 +2198,6 @@ void CKDevelop::slotDocumentDone( KHTMLView * ){
   disableCommand(ID_HELP_BROWSER_STOP);
 }
 
-void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
-  messages_widget->insert(QString::fromLatin1(buffer, buflen));
-  o_tab_view->setCurrentTab(MESSAGES);
-}
-
-
-void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  messages_widget->insert(QString::fromLatin1(buffer, buflen));
-  o_tab_view->setCurrentTab(MESSAGES);
-}
-
 
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   stdin_stdout_widget->insert(QString::fromLatin1(buffer, buflen));
@@ -2335,12 +2307,9 @@ void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
 */
 
 
-void CKDevelop::slotClickedOnMessagesWidget(){
+void CKDevelop::slotClickedOnMessagesWidget(int row){
   TErrorMessageInfo info;
-  int x,y;
-
-  messages_widget->cursorPosition(&x,&y);
-  info = error_parser->getInfo(x+1);
+  info = error_parser->getInfo(row+1);
   if(info.filename != ""){
     if(!bKDevelop)
       switchToKDevelop();
@@ -2353,7 +2322,7 @@ void CKDevelop::slotClickedOnMessagesWidget(){
 }
 
 
-void CKDevelop::slotProcessExited(KProcess* proc){
+void CKDevelop::slotProcessExited(KProcess *proc){
   setToolMenuProcess(true);
   slotStatusMsg(i18n("Ready."));
   bool ready = true;
@@ -2367,20 +2336,16 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 		     proc->exitStatus());
     
     if (next_job == make_cmd){ // rest from the rebuild all
-      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-      process.clearArguments();
-      if(!prj->getMakeOptions().isEmpty()){
-      	process << make_cmd << prj->getMakeOptions();
-      }
-      else{
-      	process << make_cmd;
-      }
+      messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
+      (*messages_widget) << make_cmd;
+      if(!prj->getMakeOptions().isEmpty())
+      	(*messages_widget) << prj->getMakeOptions();
       setToolMenuProcess(false);
-      process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      messages_widget->startJob();
       next_job = "";
       ready=false;
     }
-    if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0){ 
+    if ((next_job == "run"  || next_job == "run_with_args") && proc->exitStatus() == 0){ 
       // rest from the buildRun
       appl_process.clearArguments();
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
@@ -2829,7 +2794,7 @@ void CKDevelop::slotToolbarClicked(int item){
 		break;
 	case ID_HELP_BROWSER_STOP:
 		browser_widget->cancelAllRequests();
-	  shell_process.kill();
+	        messages_widget->killJob();
 		disableCommand(ID_HELP_BROWSER_STOP);
 		break;
 	case ID_HELP_CONTENTS:

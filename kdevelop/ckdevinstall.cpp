@@ -77,11 +77,18 @@ void CKDevInstall::slotProcessExited(KProcess*){
 							   "your documentation. This will provide an extended\n"
 							   "help functionality and will give you the information\n"
 							   "you need."));
-	    
-	    CCreateDocDatabaseDlg dlg(this,"DLG",shell_process,config);
+
+#warning FIXME!!
+#if 0
+            // I don't understand this code. shell_process is anynchronous, but its
+            // output is simply ignored. Wouldn't it be more clever to show some kind
+            // of protocol window to get more diagnostics?
+	    CCreateDocDatabaseDlg dlg(messages_widget, config, this, "create_docdatabase");
 	    if(!dlg.exec()){
+                // this looks like a recursive call?
 		slotProcessExited(shell_process);
 	    }
+#endif
 	    hint_label->setText(i18n("                 Creating search database                      "
 	                          "                                                             "
 	                          "                      Please wait...                           "
@@ -853,13 +860,16 @@ void CKDevInstall::slotAuto() // proceed >>
     config->setGroup("Doc_Location");
     config->writeEntry("doc_kde",QDir::homeDirPath ()+"/.kde/share/apps/kdevelop/KDE-Documentation/");
     config->sync();
-    CUpdateKDEDocDlg dlg(this,"test",shell_process, config);
+#warning FIXME!!
+#if 0
+    CUpdateKDEDocDlg dlg(messages_widget, config, this, "update_kdedoc");
     if(!dlg.exec()){
       slotProcessExited(shell_process);
     }
 
     if (dlg.isUpdated())
         config->writeEntry("doc_kde",dlg.getDocPath());
+#endif
 
     auto_button->setEnabled(false);
     hint_label->setText(i18n("                Creating KDE documentation                           "

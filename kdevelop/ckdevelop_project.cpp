@@ -28,6 +28,7 @@
 #include "cclassview.h"
 #include "crealfileview.h"
 #include "clogfileview.h"
+#include "processview.h"
 #include "ceditwidget.h"
 #include "cprjoptionsdlg.h"
 #include "caddexistingfiledlg.h"
@@ -150,14 +151,10 @@ bool CKDevelop::slotProjectClose(){
     QListIterator<Component> it(components);
     for ( ; it.current(); ++it)
         (*it)->projectClosed();
-    class_tree->clear();
-    log_file_tree->clear();
-    real_file_tree->clear();
     menu_buffers->clear();
 
     header_widget->clear();
     cpp_widget->clear();
-    messages_widget->clear();
     stdin_stdout_widget->clear();
     stderr_widget->clear();
     kdlg_dialogs_view->clear();
@@ -297,7 +294,7 @@ void CKDevelop::slotAddExistingFiles(){
 
     if(file == dest_name) {
       copy = false;
-      process.clearArguments();
+      KShellProcess process("/bin/sh");
       process << "cat"; // copy is your friend :-) ...cat, too
 
       if (add_dlg->isTemplateChecked())
@@ -343,7 +340,7 @@ void CKDevelop::slotAddExistingFiles(){
     }
       
     if(copy){
-      process.clearArguments();
+      KShellProcess process("/bin/sh");
       process << "cat"; // copy is your friend :-) ...cat, too
 
       fi.setFile(file);
@@ -398,8 +395,6 @@ void CKDevelop::slotProjectRemoveFile(){
 
 void CKDevelop::slotProjectOptions(){
   CPrjOptionsDlg prjdlg(this,"optdialog",prj);
-  QString flaglabel;
-  flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
   
   QString args=prj->getConfigureArgs();
 
@@ -412,23 +407,22 @@ void CKDevelop::slotProjectOptions(){
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
       messages_widget->clear();
       showOutputView(true);
-      QDir::setCurrent(prj->getProjectDir());
-      shell_process.clearArguments();
-      shell_process << make_cmd << " -f Makefile.dist  && ";
-      shell_process << flaglabel;
+      messages_widget->prepareJob(prj->getProjectDir());
+      (*messages_widget) << make_cmd << " -f Makefile.dist  && ";
+      (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
       if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
       {
        if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
+          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
        if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
+          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
       }
-      shell_process  << "\" " << "LDFLAGS=\" " ;
+      (*messages_widget) << "\" " << "LDFLAGS=\" " ;
       if (!prj->getLDFLAGS().isEmpty())
-         shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-      shell_process  << "\" " << " ./configure" << args;
+         (*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
+      (*messages_widget) << "\" " << " ./configure" << args;
 
-      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      messages_widget->startJob();
       return;
     }
     if(prjdlg.needMakefileUpdate()){
@@ -437,22 +431,20 @@ void CKDevelop::slotProjectOptions(){
       slotStatusMsg(i18n("Running configure..."));
       messages_widget->clear();
       showOutputView(true);
-      QDir::setCurrent(prj->getProjectDir());
-      shell_process.clearArguments();
-      shell_process << flaglabel;
+      messages_widget->prepareJob(prj->getProjectDir());
+      (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
       if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
       {
        if (!prj->getCXXFLAGS().isEmpty())
-          shell_process << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
+          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
        if (!prj->getAdditCXXFLAGS().isEmpty())
-          shell_process << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
+          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
       }
-      shell_process  << "\" " << "LDFLAGS=\" " ;
+      (*messages_widget) << "\" " << "LDFLAGS=\" " ;
       if (!prj->getLDFLAGS().isEmpty())
-	shell_process << prj->getLDFLAGS().simplifyWhiteSpace ();
-      shell_process  << "\" " << " ./configure "  << args;
-
-      shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	(*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
+      (*messages_widget) << "\" " << " ./configure "  << args;
+      messages_widget->startJob();
     }
   }
   
@@ -669,11 +661,9 @@ void CKDevelop::slotProjectMessages(){
   slotStatusMsg(i18n("Creating pot-file in /po..."));
   messages_widget->clear();
   error_parser->toogleOff();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-  shell_process.clearArguments();
-  //shellprocess << make_cmd;
-  shell_process << make_cmd + " messages &&  cd ../po && make merge";
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
+  (*messages_widget) << make_cmd << " messages &&  cd ../po && make merge";
+  messages_widget->startJob();
   beep = true;
 }
 
@@ -689,7 +679,8 @@ void CKDevelop::slotProjectAPI(){
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
 
-#ifdef WITH_KDOC2
+#if 1
+  //#ifdef WITH_KDOC2
   config->setGroup("Doc_Location");
   QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
   if (idx_path.isEmpty())
@@ -718,15 +709,15 @@ void CKDevelop::slotProjectAPI(){
           sources += " ";
       }
 
-  shell_process.clearArguments();
-  shell_process << "kdoc";
-  shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
+  (*messages_widget) << "kdoc";
+  (*messages_widget) << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
   if (!sources.isEmpty())
-      shell_process << sources;
+      (*messages_widget) << sources;
   if (!link.isEmpty())
       {
-          shell_process << ("-L" + idx_path);
-          shell_process << link;
+          (*messages_widget) << ("-L" + idx_path);
+          (*messages_widget) << link;
       }
 
 #else
@@ -799,7 +790,7 @@ void CKDevelop::slotProjectAPI(){
   
 #endif
   
-  shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  messages_widget->startJob();
 }
 
 void CKDevelop::slotProjectManual(){
@@ -827,18 +818,17 @@ void CKDevelop::slotProjectManual(){
 		generator.genNifFile(nif_file);
 	    }
 	}
-	QDir::setCurrent(info.dirPath());
-        shell_process.clearArguments();
+        messages_widget->prepareJob(info.dirPath());
 	if(ksgml){
-	    shell_process << "ksgml2html";
-	    shell_process << info.fileName();
-	    shell_process << "en";
+	    (*messages_widget) << "ksgml2html";
+	    (*messages_widget) << info.fileName();
+	    (*messages_widget) << "en";
 	}
 	else{
-	    shell_process << "sgml2html";
-	    shell_process << info.fileName();
+	    (*messages_widget) << "sgml2html";
+	    (*messages_widget) << info.fileName();
 	}
-        shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+        messages_widget->startJob();
     }
 }
 
@@ -861,10 +851,9 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make dist..."));
   messages_widget->clear();
-  QDir::setCurrent(prj->getProjectDir());
-  shell_process.clearArguments();
-  shell_process << make_cmd << " dist";
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  messages_widget->prepareJob(prj->getProjectDir());
+  (*messages_widget) << make_cmd << " dist";
+  messages_widget->startJob();
   beep = true;
 }
 
@@ -1128,19 +1117,7 @@ void CKDevelop::newSubDir(){
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));
   messages_widget->clear();
   showOutputView(true);
-  QDir::setCurrent(prj->getProjectDir());
-  shell_process.clearArguments();
-  shell_process << make_cmd << " -f Makefile.dist  && ./configure";
-  shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+  messages_widget->prepareJob(prj->getProjectDir());
+  (*messages_widget) << make_cmd << " -f Makefile.dist  && ./configure";
+  messages_widget->startJob();
 }
-
-
-
-
-
-
-
-
-
-
-
