@@ -302,8 +302,9 @@ ProjectFileType CProject::getType( const char *aFile )
       
       // Check for a known extension.
       if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
-	  ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" )
+	  ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" || ext == ".ui" )
 	retVal = CPP_SOURCE;
+	// .ui = Qt2 designer files to be added to the SOURCES line for compiling Ralf N. 02.09.00
       else if( ext == ".h" || ext == ".hxx" || ext == ".hpp" || ext == ".H" || ext == ".hh" )
 	retVal = CPP_HEADER;
       else if( ext == ".l++" || ext == ".lxx" || ext == ".ll" || ext == ".l")

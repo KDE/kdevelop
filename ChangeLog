@@ -1,3 +1,10 @@
+2000-09-02 Ralf Nolden <nolden@kde.org>
+	* fixed CProject to treat *.ui designer files as SOURCE for Makefile.am´s
+	* updated KDE2 and Qt2 templates to current KDE automake/autoconf
+          stuff including support for Qt designer - it should work now. Please keep
+          in mind to add klocale.h to your ui file in designer to avoid compiler
+          errors for i18n() in KDE projects.
+
 2000-07-07 jbb <jbb@kdevelop.de>
       * Applied patches
         - Dialog Editor problem w/ QSpinBox (fix: Steven Suson <suson@TuckerEnery.com>)
