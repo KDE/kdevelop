@@ -21,7 +21,7 @@
 #define AUTOFORM_H
 
 #include <qscrollview.h>
-#include <dataform.h>
+#include "dataform.h"
 class KPushButton;
 class QVBox;
 

@@ -49,7 +49,7 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
                              this, SLOT(show()),
                              actionCollection(), "make_dist" );
 
-    m_action->setStatusText(i18n("Make source and binary distribution"));
+    m_action->setToolTip(i18n("Make source and binary distribution"));
     m_action->setWhatsThis(i18n("<b>Project distribution & publishing</b><p>Helps users package and publish their software."));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
 
