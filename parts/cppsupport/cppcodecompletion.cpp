@@ -586,11 +586,11 @@ CppCodeCompletion::completeText( )
 
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
-    
+        
     if( ch2 == "->" || ch == "." || ch == "(" ){
 	int pos = ch2 == "->" ? nCol - 3 : nCol - 2;
 	QChar c = strCurLine[ pos ];
-	if( !(c.isLetterOrNumber() || c == '_') )
+	if( !(c.isLetterOrNumber() || c == '_' || c == ')') )
 	    return;
     } 
  
