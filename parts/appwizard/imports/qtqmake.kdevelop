@@ -29,7 +29,7 @@
  </kdevdoctreeview>
  <kdevdebugger>
   <general>
-   <dbgshell>libtool</dbgshell>
+   <dbgshell/>
   </general>
  </kdevdebugger>
   <kdevfilecreate>
