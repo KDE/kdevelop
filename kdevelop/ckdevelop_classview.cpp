@@ -19,6 +19,8 @@
 
 #include "ckdevelop.h"
 #include "cclassview.h"
+#include <assert.h>
+
 
 /*********************************************************************
  *                                                                   *
@@ -49,7 +51,10 @@ void CKDevelop::slotClassTreeSelected()
     if( idxT == THGLOBAL_FUNCTION || 
         idxT == THPUBLIC_METHOD ||
         idxT == THPROTECTED_METHOD ||
-        idxT == THPRIVATE_METHOD )
+        idxT == THPRIVATE_METHOD || 
+        idxT == THPUBLIC_SLOT || 
+        idxT == THPROTECTED_SLOT || 
+        idxT == THPRIVATE_SLOT  )
       CVGotoDeclaration( class_tree->currentItem() );
     else // Goto the definition.
       CVGotoDefinition( class_tree->currentItem() );
@@ -296,7 +301,7 @@ void CKDevelop::slotCVAddAttribute( CParsedAttribute *aAttr )
 void CKDevelop::CVGotoDefinition(QListViewItem *item)
 {
   CParsedClass *aClass;
-  CParsedAttribute *aAttr;
+  CParsedAttribute *aAttr = NULL;
   QListViewItem *parent;
   QString toFile;
   int idxType;
@@ -317,24 +322,44 @@ void CKDevelop::CVGotoDefinition(QListViewItem *item)
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
+    case THPUBLIC_SLOT:
+    case THPROTECTED_SLOT:
+    case THPRIVATE_SLOT:
+    case THGLOBAL_FUNCTION:
+    case THGLOBAL_VARIABLE:
       parent = item->parent();
       aClass = class_tree->store->getClassByName( parent->text(0) );
       
       // Fetch the attribute/method.
-      aAttr = ( idxType == THPUBLIC_ATTR || 
-                idxType == THPROTECTED_ATTR ||
-                idxType == THPRIVATE_ATTR ? 
-                aClass->getAttributeByName( item->text(0) ) :
-                aClass->getMethodByNameAndArg( item->text(0) ) );
-      
-      toFile = aAttr->definedInFile;
-      toLine = aAttr->definedOnLine;
-      break;
-    case THGLOBAL_FUNCTION:
-    case THGLOBAL_VARIABLE:
-      aAttr = ( idxType == THGLOBAL_FUNCTION ?
-                class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) ) :
-                class_tree->store->getGlobalVarByName( item->text(0) ) );
+      if( idxType == THPUBLIC_ATTR || 
+          idxType == THPROTECTED_ATTR ||
+          idxType == THPRIVATE_ATTR )
+      {
+        aAttr = aClass->getAttributeByName( item->text(0) );
+      }
+      else if( idxType == THPUBLIC_METHOD ||
+               idxType == THPROTECTED_METHOD ||
+               idxType == THPRIVATE_METHOD )
+      {
+        aAttr = aClass->getMethodByNameAndArg( item->text(0) );
+      }
+      else if( idxType == THPUBLIC_SLOT || 
+               idxType == THPROTECTED_SLOT || 
+               idxType == THPRIVATE_SLOT  )
+      {
+        aAttr = aClass->getSlotByNameAndArg( item->text(0) );
+      }
+      else if( idxType == THGLOBAL_FUNCTION )
+      {
+        aAttr = class_tree->store->getGlobalFunctionByNameAndArg( item->text(0) );
+      }
+      else if( idxType == THGLOBAL_VARIABLE )
+      {
+        aAttr = class_tree->store->getGlobalVarByName( item->text(0) );
+      }
+
+      assert( aAttr != NULL);
+
       toFile = aAttr->definedInFile;
       toLine = aAttr->definedOnLine;
       break;
@@ -367,6 +392,14 @@ void CKDevelop::CVGotoDeclaration(QListViewItem *item)
 
   switch( class_tree->treeH->itemType() )
   {
+    case THPUBLIC_SLOT:
+    case THPROTECTED_SLOT:
+    case THPRIVATE_SLOT:
+      parent = item->parent();
+      aClass = class_tree->store->getClassByName( parent->text(0) );
+      if( aClass )
+        aMethod = aClass->getSlotByNameAndArg( item->text(0) );      
+      break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
@@ -456,11 +489,11 @@ void CKDevelop::refreshMethodCombo( CParsedClass *aClass )
     lb->inSort( str );
   }
   
-  for( aMethod = aClass->slotList.first(); 
-       aMethod != NULL;
-       aMethod = aClass->slotList.next() )
+  for( aClass->slotIterator.toFirst(); 
+       aClass->slotIterator.current();
+       ++aClass->slotIterator )
   {
-    aMethod->toString( str );
+    aClass->slotIterator.current()->toString( str );
     lb->inSort( str );
   }
   

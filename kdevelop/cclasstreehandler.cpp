@@ -112,9 +112,9 @@ void CClassTreeHandler::updateClass( CParsedClass *aClass,
 
   // Add parts of the class
   addMethodsFromClass( aClass, parent, CTHALL );
+  addSlotsFromClass( aClass, parent );
   addAttributesFromClass( aClass, parent, CTHALL );
-  addSlots( aClass, parent );
-  addSignals( aClass, parent );
+  addSignalsFromClass( aClass, parent );
 }
 
 /*---------------------------------- CClassTreeHandler::addClass()
@@ -422,18 +422,28 @@ void CClassTreeHandler::addGlobalVar( CParsedAttribute *aAttr,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSlots( CParsedClass *aPC, QListViewItem *parent )
+void CClassTreeHandler::addSlotsFromClass( CParsedClass *aPC, QListViewItem *parent )
 {
   CParsedMethod *aMethod;
   QString str;
+  QList<CParsedMethod> *list;
+
+  THType type = THPUBLIC_SLOT;
+  
+  list = aPC->getSortedSlotList();
 
   // Add the methods
-  for( aMethod = aPC->slotList.first();
+  for( aMethod = list->first();
        aMethod != NULL;
-       aMethod = aPC->slotList.next() )
+       aMethod = list->next() )
   {
+    if( aMethod->isProtected() )
+      type = THPROTECTED_SLOT;
+    else if( aMethod->isPrivate() )
+      type = THPRIVATE_SLOT;
+
     aMethod->toString( str );
-    addItem( str, THSTRUCT, parent );
+    addItem( str, type, parent );
   }
 }
 
@@ -448,7 +458,7 @@ void CClassTreeHandler::addSlots( CParsedClass *aPC, QListViewItem *parent )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassTreeHandler::addSignals( CParsedClass *aPC, QListViewItem *parent )
+void CClassTreeHandler::addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent )
 {
   CParsedMethod *aMethod;
   QString str;

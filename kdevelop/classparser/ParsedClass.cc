@@ -50,7 +50,8 @@
  *-----------------------------------------------------------------*/
 CParsedClass::CParsedClass()
   : methodIterator( methods ),
-    attributeIterator( attributes )
+    attributeIterator( attributes ),
+    slotIterator( slotList )
 {
   parents.setAutoDelete( true );
   attributes.setAutoDelete( true );
@@ -204,7 +205,6 @@ void CParsedClass::addMethod( CParsedMethod *aMethod )
   methods.append( aMethod );
 
   aMethod->toString( str );
-
   methodsByNameAndArg.insert( str, aMethod );
 }
 
@@ -240,8 +240,13 @@ void CParsedClass::addSlot( CParsedMethod *aMethod )
 {
   assert( aMethod != NULL );
 
+  QString str;
+
   aMethod->setDeclaredInClass( name );
   slotList.append( aMethod );
+
+  aMethod->toString( str );
+  slotsByNameAndArg.insert( str, aMethod );
 }
 
 /*----------------------------------- CParsedClass::addSignalSlotMap()
@@ -324,6 +329,23 @@ CParsedMethod *CParsedClass::getMethodByNameAndArg( const char *aName )
   return methodsByNameAndArg.find( aName );
 }
 
+/*----------------------------- CParsedClass::getSlotByNameAndArg()
+ * getSlotByNameAndArg()
+ *   Get a slot by using its' name and args using the same format
+ *   as in CParsedMethod::toString().
+ *
+ * Parameters:
+ *   aName              Name and args of the slot to fetch.
+ *
+ * Returns:
+ *   CParsedMethod *    The method.
+ *   NULL               If not found.
+ *-----------------------------------------------------------------*/
+CParsedMethod *CParsedClass::getSlotByNameAndArg( const char *aName )
+{
+  return slotsByNameAndArg.find( aName );
+}
+
 /*------------------------------------------ CParsedClass::getMethod()
  * getMethod()
  *   Get a method by comparing with another method.
@@ -343,7 +365,16 @@ CParsedMethod *CParsedClass::getMethod( CParsedMethod &aMethod )
        retVal != NULL && !retVal->isEqual( aMethod );
        retVal = methods.next() )
     ;
-    
+
+  // If none was found try with the slots.
+  if( retVal == NULL )
+  {
+    for( retVal = slotList.first(); 
+         retVal != NULL && !retVal->isEqual( aMethod );
+         retVal = slotList.next() )
+      ;
+  }
+
   return retVal;
 }
 
@@ -452,6 +483,43 @@ QList<CParsedAttribute> *CParsedClass::getSortedAttributeList()
        str = srted.next() )
   {
     retVal->append( getAttributeByName( str ) );
+  }
+
+  return retVal;
+}
+
+/*------------------------------- CParsedClass::getSortedSlotList()
+ * getSortedSlotList()
+ *   Get all slots in sorted order. 
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedMethod> *  The sorted list.
+ *-----------------------------------------------------------------*/
+QList<CParsedMethod> *CParsedClass::getSortedSlotList()
+{
+  QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
+  char *str;
+  QStrList srted;
+  QString m;
+  
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( slotIterator.toFirst();
+       slotIterator.current();
+       ++slotIterator )
+  {
+    slotIterator.current()->toString( m );
+    srted.inSort( m );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getSlotByNameAndArg( str ) );
   }
 
   return retVal;

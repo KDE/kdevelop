@@ -68,6 +68,12 @@ private: // Private attributes
   /** All methods ordered by name and argument. */
   QDict<CParsedMethod> methodsByNameAndArg;
 
+  /** List of all slots. */
+  QList<CParsedMethod> slotList;
+
+  /** All slots ordered by name and argument. */
+  QDict<CParsedMethod> slotsByNameAndArg;
+
 public: // Public attributes
 
   /** Name of the parsed class. */
@@ -98,7 +104,7 @@ public: // Public attributes
   QList<CParsedMethod> signalList;
 
   /** List of slots */
-  QList<CParsedMethod> slotList;
+  QListIterator<CParsedMethod> slotIterator;
 
   /** List of signal<->slot mappings. */
   QList<CParsedSignalSlot> signalMaps;
@@ -154,6 +160,9 @@ public: // Public queries
   /** Get a method by using its' name and arguments. */
   CParsedMethod *getMethodByNameAndArg( const char *aName );
 
+  /** Get a method by using its' name and arguments. */
+  CParsedMethod *getSlotByNameAndArg( const char *aName );
+
   /** Get a method by comparing with another method. */
   CParsedMethod *getMethod( CParsedMethod &aMethod );
 
@@ -165,6 +174,9 @@ public: // Public queries
 
   /** Get all attributes in sorted order. */
   QList<CParsedAttribute> *getSortedAttributeList();
+
+  /** Get all slots in sorted order. */
+  QList<CParsedMethod> *getSortedSlotList();
 
   /** Check if this class has the named parent. */
   bool hasParent( const char *aName );

@@ -371,6 +371,7 @@ void CClassParser::addDeclaration( CParsedMethod *method,
 
         // Try to fetch a method with the same signature.
         m = c->getMethod( *method );
+
         if( m != NULL )
         {
           m->setDeclaredInFile( currentFile );

@@ -86,10 +86,10 @@ public: // Public methods
   void addGlobalVar( CParsedAttribute *aAttr, QListViewItem *parent );
 
   /** Add all signals to the view. */
-  void addSlots( CParsedClass *aPC, QListViewItem *parent );
+  void addSlotsFromClass( CParsedClass *aPC, QListViewItem *parent );
 
   /** Add all signals to the view. */
-  void addSignals( CParsedClass *aPC, QListViewItem *parent );
+  void addSignalsFromClass( CParsedClass *aPC, QListViewItem *parent );
 
 private: // Private attributes
 

@@ -105,6 +105,8 @@ void CClassView::initPopups()
   classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()));
   classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()));
   classPopup.insertSeparator();
+  id = classPopup.insertItem( i18n( "Add slot for signal" ), this, SLOT(slotAddSlotSignal()));
+  classPopup.setItemEnabled( id, false );
   id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
   classPopup.setItemEnabled(id, false );
   id = classPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
@@ -124,6 +126,15 @@ void CClassView::initPopups()
   attributePopup.insertSeparator();
   id = attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
   attributePopup.setItemEnabled( id, false );
+
+  // Slot popup
+  slotPopup.setTitle( i18n( "Slot" ) );
+  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
+  slotPopup.insertSeparator();
+  id = slotPopup.insertItem( i18n( "Delete slot" ), this, SLOT(slotMethodDelete()));
+  slotPopup.setItemEnabled( id, false );
+
 }
 
 /*********************************************************************
@@ -320,6 +331,11 @@ KPopupMenu *CClassView::getCurrentPopup()
     case THGLOBAL_VARIABLE:
       popup = &attributePopup;
       break;
+    case THPUBLIC_SLOT:
+    case THPROTECTED_SLOT:
+    case THPRIVATE_SLOT:
+      popup = &slotPopup;
+      break;
     default:
       break;
   }
@@ -410,6 +426,10 @@ void CClassView::slotAttributeDelete()
   }
 }
 
+void CClassView::slotAddSlotSignal()
+{
+}
+
 void CClassView::slotFolderNew() 
 {
 }
@@ -452,3 +472,4 @@ void CClassView::slotViewDeclaration()
 {
   emit selectedViewDeclaration();
 }
+

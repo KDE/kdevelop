@@ -73,6 +73,7 @@ protected: // Protected signals and slots
     void slotMethodDelete();
     void slotAttributeNew();
     void slotAttributeDelete();
+    void slotAddSlotSignal();
     void slotFolderNew();
     void slotClassBaseClasses();
     void slotClassDerivedClasses();
@@ -110,6 +111,9 @@ private: // Popupmenus
 
   /** Popupmenu for attributes. */
   KPopupMenu attributePopup;
+
+  /** Popupmenu for slots. */
+  KPopupMenu slotPopup;
 
 private: // Private attributes
 
