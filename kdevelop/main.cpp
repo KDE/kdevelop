@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
     KWMModuleApplication a(argc,argv,"kdevelop");
     a.getConfig()->setGroup("General Options");
     bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
-    bool bInstall=a.getConfig()->readBoolEntry("Install",true);  // this is incomplete, so leave it false everybody -Ralf
+    bool bInstall=a.getConfig()->readBoolEntry("Install",true);
     if(bStartLogo){
       start_logo= new KStartupLogo;
       start_logo->show();
@@ -48,6 +48,7 @@ int main(int argc, char* argv[]) {
         CKDevInstall* install=new CKDevInstall(kdevelop,"install");
         install->show();
         delete install;
+	kdevelop->refreshTrees();  // this is because of the new documentation
       }
       kdevelop->show();
       a.getConfig()->setGroup("General Options");
@@ -71,6 +72,15 @@ int main(int argc, char* argv[]) {
     int rc = a.exec();
     return rc;
 }
+
+
+
+
+
+
+
+
+
 
 
 

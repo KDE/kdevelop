@@ -1,3 +1,10 @@
+1999-03-07  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+        * completed empty documentation entries and updated the installation documentation
+	  with a descriptive help for the installation process
+	* some cosmetic changes to the installation process
+	* added a refresh trees after the installation process to read the new documentation correctly into the doc-tree
+	  without an extra refresh from the menubar.
+	
 1999-03-06    Sandy Meier <smeier@rz.uni-potsdam.de>
 
 	* some bugfixes

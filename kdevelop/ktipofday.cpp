@@ -156,7 +156,7 @@ void KTipofDay::slotNext()
 		{
   			tip_text = t.readLine();
 				tip_label->setText(tip_text);
-				if (next < 25)
+				if (next < 30)
   				config->writeEntry("NextTip",next+1);
   		  else
   		    config->writeEntry("NextTip",1);

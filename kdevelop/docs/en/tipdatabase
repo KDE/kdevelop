@@ -1,3 +1,8 @@
+...that KDevelop offers Quickhelp by a right button click on items ?
+...that can select your autosaving time in the setup dialog ?
+If you want to specify additional command-line options to your make program, you can set them in the setup dialog.
+If you use functions of other libraries than the application is currently linked with, you can specify them in the project options dialog.
+If you want to change your applications version number, you can change it in the project options dialog, automatically updating your project.
 If you want to create a new project, choose "Project"->"Application Wizard" from the menubar.
 If you don't have a KDE-library documentation, create it by choosing "Update" from the Documentation tab in the KDevelop Setup dialog.
 If you changed your applications's classes, you should update your API documentation by selecting "Make API-Doc" from the Build-menu.
@@ -21,4 +26,4 @@ If you compile your project and get an error, you can click on the error message
 ...that you can copy text from the documentation browser to the clipboard with a right button menu and insert it into your sources ?
 ...that you should keep your library documentations up to date after installing new libraries ?
 ...that you can configure the syntax-highlighting of the editor ?
-...that you can undo and redo your actions ?
+...that you can undo and redo your actions and set the amount of steps in the editor dialog ?
