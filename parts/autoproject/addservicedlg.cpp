@@ -196,12 +196,12 @@ void AddServiceDialog::accept()
 
     // Find a prefix that points to the services directory.
     // If there is none, use kde_services
-    QMap<QCString,QCString>::ConstIterator it;
+    QMap<QString,QString>::ConstIterator it;
     for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
         if (it.data() == "$(kde_servicesdir)")
             break;
-    QCString prefix = (it == subProject->prefixes.end())? QCString("kde_services") : it.key();
-    QCString varname = prefix + "_DATA";
+    QString prefix = (it == subProject->prefixes.end())? QString("kde_services") : it.key();
+    QString varname = prefix + "_DATA";
 
     // Look if a list view item for this prefix exists already.
     // Create a new one otherwise
@@ -214,15 +214,15 @@ void AddServiceDialog::accept()
         }
     }
     if (!titem) {
-        titem = m_widget->createTargetItem(QCString(""), prefix, "DATA");
+        titem = m_widget->createTargetItem("", prefix, "DATA");
         subProject->targets.append(titem);
     }
     // Add this file to the target
     FileItem *fitem = m_widget->createFileItem(fileName);
     titem->sources.append(fitem);
     
-    subProject->variables[varname] += (QCString(" ") + fileName.latin1());
-    QMap<QCString, QCString> replaceMap;
+    subProject->variables[varname] += (" " + fileName);
+    QMap<QString, QString> replaceMap;
     replaceMap.insert(varname, subProject->variables[varname]);
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
     

@@ -154,15 +154,15 @@ void AddApplicationDialog::accept()
 
     // Find a prefix that points to the applnk directory.
     // If there is none, use appslnksection
-    QCString section = section_combo->currentText().latin1();
-    QCString appsdir = "$(kde_appsdir)/" + section;
-    QMap<QCString,QCString>::ConstIterator it;
+    QString section = section_combo->currentText();
+    QString appsdir = "$(kde_appsdir)/" + section;
+    QMap<QString,QString>::ConstIterator it;
     for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
         if (it.data() == appsdir)
             break;
     
-    QMap<QCString, QCString> replaceMap;
-    QCString prefix;
+    QMap<QString, QString> replaceMap;
+    QString prefix;
     if (it == subProject->prefixes.end()) {
         prefix = "applnk" + section;
         replaceMap.insert(prefix + "dir", appsdir);
@@ -170,7 +170,7 @@ void AddApplicationDialog::accept()
     } else {
         prefix = it.key();
     }
-    QCString varname = prefix + "_DATA";
+    QString varname = prefix + "_DATA";
     
     // Look if a list view item for this prefix exists already.
     // Create a new one otherwise
@@ -183,14 +183,14 @@ void AddApplicationDialog::accept()
         }
     }
     if (!titem) {
-        titem = m_widget->createTargetItem(QCString(""), prefix, "DATA");
+        titem = m_widget->createTargetItem("", prefix, "DATA");
         subProject->targets.append(titem);
     }
     // Add this file to the target
     FileItem *fitem = m_widget->createFileItem(fileName);
     titem->sources.append(fitem);
         
-    subProject->variables[varname] += (QCString(" ") + fileName.latin1());
+    subProject->variables[varname] += (" " + fileName);
     replaceMap.insert(varname, subProject->variables[varname]);
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
     

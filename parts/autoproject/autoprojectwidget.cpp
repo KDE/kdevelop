@@ -49,7 +49,7 @@
 #include "autoprojectpart.h"
 
 
-static QString nicePrimary(QCString primary)
+static QString nicePrimary(const QString &primary)
 {
     if (primary == "PROGRAMS")
         return i18n("Program");
@@ -70,11 +70,11 @@ static QString nicePrimary(QCString primary)
 }
 
 
-static QCString cleanWhitespace(QCString str)
+static QString cleanWhitespace(const QString &str)
 {
-    QCString res;
+    QString res;
     
-    QStringList l = QStringList::split(QRegExp("[ \t]"), QString(str));
+    QStringList l = QStringList::split(QRegExp("[ \t]"), str);
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
         res += *it;
@@ -166,169 +166,158 @@ FileItem::FileItem(QListView *lv, const QString &text)
 AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
     : QVBox(0, "auto project widget")
 {
-    widgetLayout = new QVBoxLayout ( this );
-
     QSplitter *splitter = new QSplitter(Vertical, this);
 
-    overviewBox = new QVBox ( splitter, "vertical overview box" );
+    QVBox *overviewBox = new QVBox(splitter, "vertical overview box");
 
-    overviewButtonBox = new QHBox ( overviewBox, "subproject button box" );
-    overviewButtonBox->setMargin ( 2 );
-    overviewButtonBox->setSpacing ( 2 );
+    QHBox *overviewButtonBox = new QHBox(overviewBox, "subproject button box");
+    overviewButtonBox->setMargin(2);
+    overviewButtonBox->setSpacing(2);
 
-    subProjectOptionsButton = new QToolButton ( overviewButtonBox );
-	subProjectOptionsButton->setPixmap ( SmallIcon ( "configure" ) );
-	QToolTip::add ( subProjectOptionsButton, i18n ( "Show options of currently selected subproject..." ) );
+    subProjectOptionsButton = new QToolButton(overviewButtonBox);
+    subProjectOptionsButton->setPixmap(SmallIcon("configure"));
+    QToolTip::add(subProjectOptionsButton, i18n("Show options of currently selected subproject..."));
 
-    addSubprojectButton = new QToolButton ( overviewButtonBox );
-    addSubprojectButton->setPixmap ( SmallIcon ( "folder_new" ) );
-    QToolTip::add ( addSubprojectButton, i18n ( "Add new subproject to currently selected subproject..." ) );
+    addSubprojectButton = new QToolButton(overviewButtonBox);
+    addSubprojectButton->setPixmap(SmallIcon("folder_new"));
+    QToolTip::add(addSubprojectButton, i18n("Add new subproject to currently selected subproject..."));
 
-    addExistingSubprojectButton = new QToolButton ( overviewButtonBox );
-    addExistingSubprojectButton->setPixmap ( SmallIcon ( "fileimport" ) );
-    QToolTip::add ( addExistingSubprojectButton, i18n ( "Add existing subproject to currently selected subproject..." ) );
+    addExistingSubprojectButton = new QToolButton(overviewButtonBox);
+    addExistingSubprojectButton->setPixmap(SmallIcon("fileimport"));
+    QToolTip::add(addExistingSubprojectButton, i18n("Add existing subproject to currently selected subproject..."));
 
-    addTargetButton = new QToolButton ( overviewButtonBox );
-    addTargetButton->setPixmap ( SmallIcon ( "targetnew_kdevelop" ) );
-    QToolTip::add ( addTargetButton, i18n ( "Add new target to currently selected subproject..." ) );
+    addTargetButton = new QToolButton(overviewButtonBox);
+    addTargetButton->setPixmap(SmallIcon("targetnew_kdevelop"));
+    QToolTip::add(addTargetButton, i18n("Add new target to currently selected subproject..."));
 
-    addServiceButton = new QToolButton ( overviewButtonBox );
-    addServiceButton->setPixmap ( SmallIcon ( "servicenew_kdevelop" ) );
-    QToolTip::add ( addServiceButton, i18n ( "Add new service to currently selected subproject..." ) );
+    addServiceButton = new QToolButton(overviewButtonBox);
+    addServiceButton->setPixmap(SmallIcon("servicenew_kdevelop"));
+    QToolTip::add(addServiceButton, i18n("Add new service to currently selected subproject..."));
 
-    addApplicationButton = new QToolButton ( overviewButtonBox );
-    addApplicationButton->setPixmap ( SmallIcon ( "window_new" ) );
-    QToolTip::add ( addApplicationButton, i18n ( "Add new application to currently selected subproject..." ) );
+    addApplicationButton = new QToolButton(overviewButtonBox);
+    addApplicationButton->setPixmap(SmallIcon("window_new"));
+    QToolTip::add(addApplicationButton, i18n("Add new application to currently selected subproject..."));
 
-    buildSubprojectButton = new QToolButton ( overviewButtonBox );
-    buildSubprojectButton->setPixmap ( SmallIcon ( "launch" ) );
-    QToolTip::add ( buildSubprojectButton, i18n ( "Build currently selected subproject..." ) );
+    buildSubprojectButton = new QToolButton(overviewButtonBox);
+    buildSubprojectButton->setPixmap(SmallIcon("launch"));
+    QToolTip::add(buildSubprojectButton, i18n("Build currently selected subproject..."));
 
-    overviewButtonBox->setMaximumHeight ( subProjectOptionsButton->height() );
+    overviewButtonBox->setMaximumHeight(subProjectOptionsButton->height());
 
-/*    subProjectOptionsButton->setEnabled ( true );
-    addSubprojectButton->setEnabled ( true );
-    addTargetButton->setEnabled ( true );
-    addServiceButton->setEnabled ( true );
-    addApplicationButton->setEnabled ( true );
-    buildSubprojectButton->setEnabled ( true );
-*/
-	// HACK
-	QWidget* spacer1 = new QWidget ( overviewButtonBox );
-	overviewButtonBox->setStretchFactor ( spacer1, 1 );
+    QWidget *spacer1 = new QWidget(overviewButtonBox);
+    overviewButtonBox->setStretchFactor(spacer1, 1);
 
-    overview = new KListView ( overviewBox, "project overview widget");
+    overview = new KListView(overviewBox, "project overview widget");
     overview->setResizeMode(QListView::LastColumn);
-    overview->setSorting ( -1 );
+    overview->setSorting(-1);
     overview->header()->hide();
-    overview->addColumn ( QString::null );
+    overview->addColumn(QString::null);
 
-    widgetLayout->addWidget ( overviewBox );
+    QVBox *targetBox = new QVBox(splitter, "vertical target box");
 
-    targetBox = new QVBox ( splitter, "vertical target box" );
+    QHBox *targetButtonBox = new QHBox(targetBox, "target button box");
+    targetButtonBox->setMargin(2);
+    targetButtonBox->setSpacing(2);
 
-    targetButtonBox = new QHBox ( targetBox, "target button box" );
-    targetButtonBox->setMargin ( 2 );
-    targetButtonBox->setSpacing ( 2 );
+    targetOptionsButton = new QToolButton(targetButtonBox);
+    targetOptionsButton->setPixmap(SmallIcon("configure"));
+    QToolTip::add(targetOptionsButton, i18n("Show options of currently target..."));
 
-    targetOptionsButton = new QToolButton ( targetButtonBox );
-    targetOptionsButton->setPixmap ( SmallIcon ( "configure" ) );
-    QToolTip::add ( targetOptionsButton, i18n ( "Show options of currently target..." ) );
+    addNewFileButton = new QToolButton(targetButtonBox);
+    addNewFileButton->setPixmap(SmallIcon("filenew"));
+    QToolTip::add(addNewFileButton, i18n("Create new file and add it to currently selected target..."));
 
-    addNewFileButton = new QToolButton ( targetButtonBox );
-    addNewFileButton->setPixmap ( SmallIcon ( "filenew" ) );
-    QToolTip::add ( addNewFileButton, i18n ( "Create new file and add it to currently selected target..." ) );
+    addExistingFileButton = new QToolButton(targetButtonBox);
+    addExistingFileButton->setPixmap(SmallIcon("fileimport"));
+    QToolTip::add(addExistingFileButton, i18n("Add existing files to the currently selected target..."));
 
-    addExistingFileButton = new QToolButton ( targetButtonBox );
-    addExistingFileButton->setPixmap ( SmallIcon ( "fileimport" ) );
-    QToolTip::add ( addExistingFileButton, i18n ( "Add existing files to the currently selected target..." ) );
+    removeFileButton = new QToolButton(targetButtonBox);
+    removeFileButton->setPixmap(SmallIcon("editdelete"));
+    QToolTip::add(removeFileButton, i18n("Remove currently selected file"));
 
-    removeFileButton = new QToolButton ( targetButtonBox );
-    removeFileButton->setPixmap ( SmallIcon ( "editdelete" ) );
-    QToolTip::add ( removeFileButton, i18n ( "Remove currently selected file" ) );
+    buildTargetButton = new QToolButton(targetButtonBox);
+    buildTargetButton->setPixmap(SmallIcon("launch"));
+    QToolTip::add(buildTargetButton, i18n("Build currently selected target..."));
 
-    buildTargetButton = new QToolButton ( targetButtonBox );
-    buildTargetButton->setPixmap ( SmallIcon ( "launch" ) );
-    QToolTip::add ( buildTargetButton, i18n ( "Build currently selected target..." ) );
+    targetButtonBox->setMaximumHeight(addNewFileButton->height());
 
-    targetButtonBox->setMaximumHeight ( addNewFileButton->height() );
+    targetOptionsButton->setEnabled(false);
+    addNewFileButton->setEnabled(false);
+    addExistingFileButton->setEnabled(false);
+    removeFileButton->setEnabled(false);
+    buildTargetButton->setEnabled(false);
 
-    targetOptionsButton->setEnabled ( false );
-    addNewFileButton->setEnabled ( false );
-    addExistingFileButton->setEnabled ( false );
-    removeFileButton->setEnabled ( false );
-    buildTargetButton->setEnabled ( false );
-
-	// HACK
-	QWidget* spacer2 = new QWidget ( targetButtonBox );
-	targetButtonBox->setStretchFactor ( spacer2, 1 );
-
-    //widgetLayout->addWidget ( splitter );
+    QWidget *spacer2 = new QWidget(targetButtonBox);
+    targetButtonBox->setStretchFactor(spacer2, 1);
 
     details = new KListView(targetBox, "project details widget");
     details->setRootIsDecorated(true);
     details->setResizeMode(QListView::LastColumn);
     details->setSorting(-1);
     details->header()->hide();
-
-    widgetLayout->addWidget ( targetBox );
-
-    KActionCollection* actions = new KActionCollection ( this );
-
-    subProjectOptionsAction = new KAction ( i18n ( "Options..." ), "configure", 0, this, SLOT ( slotSubprojectOptions() ), actions, "subproject options" );
-    addSubprojectAction = new KAction ( i18n ( "Add Subproject..." ), "folder_new", 0, this, SLOT ( slotAddSubproject() ), actions, "add subproject" );
-    addExistingSubprojectAction = new KAction ( i18n ( "Add existing subproject..." ), "fileimport", 0, this, SLOT ( slotAddExistingSubproject() ), actions, "add existing subproject" );
-    addTargetAction = new KAction ( i18n ( "Add Target..." ), "targetnew_kdevelop", 0, this, SLOT ( slotAddTarget() ), actions, "add target" );
-    addServiceAction = new KAction ( i18n ( "Add Service..." ), "servicenew_kdevelop", 0, this, SLOT ( slotAddService() ), actions, "add service" );
-    addApplicationAction = new KAction ( i18n ( "Add Application..." ), "window_new", 0, this, SLOT ( slotAddApplication() ), actions, "add application" );
-    buildSubprojectAction = new KAction ( i18n ( "Build" ), "launch", 0, this, SLOT ( slotBuildSubproject() ), actions, "add build subproject" );
-
-    targetOptionsAction = new KAction ( i18n ( "Options..." ), "configure", 0, this, SLOT ( slotTargetOptions() ), actions, "target options" );
-    addNewFileAction = new KAction ( i18n ( "Create new file..." ), "filenew", 0, this, SLOT ( slotAddNewFile() ), actions, "add new file" );
-    addExistingFileAction = new KAction ( i18n ( "Add existing file(s)..." ), "fileimport", 0, this, SLOT ( slotAddExistingFile() ), actions, "add existing file" );
-    buildTargetAction = new KAction ( i18n ( "Build target..." ), "launch", 0, this, SLOT ( slotBuildTarget() ), actions, "build target" );
-    setActiveTargetAction = new KAction ( i18n ( "Make target active..." ), "", 0, this, SLOT ( slotSetActiveTarget() ), actions, "set active target" );
-
-    removeFileAction = new KAction ( i18n ( "Remove file..." ), "editdelete", 0, this, SLOT ( slotRemoveFile() ), actions, "remove file" );
-
-    connect ( subProjectOptionsButton, SIGNAL ( clicked() ), this, SLOT ( slotSubprojectOptions() ) );
-    connect ( addSubprojectButton, SIGNAL ( clicked() ), this, SLOT ( slotAddSubproject() ) );
-    connect ( addExistingSubprojectButton, SIGNAL ( clicked() ), this, SLOT ( slotAddExistingSubproject() ) );
-    connect ( addTargetButton, SIGNAL ( clicked() ), this, SLOT ( slotAddTarget() ) );
-    connect ( addServiceButton, SIGNAL ( clicked() ), this, SLOT ( slotAddService() ) );
-    connect ( addApplicationButton, SIGNAL ( clicked() ), this, SLOT ( slotAddApplication() ) );
-    connect ( buildSubprojectButton, SIGNAL ( clicked() ), this, SLOT ( slotBuildSubproject() ) );
-
-    connect ( targetOptionsButton, SIGNAL ( clicked() ), this, SLOT ( slotTargetOptions() ) );
-    connect ( addNewFileButton, SIGNAL ( clicked() ), this, SLOT ( slotAddNewFile() ) );
-    connect ( addExistingFileButton, SIGNAL ( clicked() ), this, SLOT ( slotAddExistingFile() ) );
-    connect ( removeFileButton , SIGNAL ( clicked() ), this, SLOT ( slotRemoveFile() ) );
-    connect ( buildTargetButton, SIGNAL ( clicked() ), this, SLOT ( slotBuildTarget() ) );
-
     details->addColumn(QString::null);
 
-    connect ( overview, SIGNAL ( clicked ( QListViewItem* ) ), this, SLOT ( slotItemClicked ( QListViewItem* ) ) );
-    connect( overview, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( overview, SIGNAL(returnPressed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+    KActionCollection* actions = new KActionCollection(this);
 
-    connect ( details, SIGNAL ( clicked ( QListViewItem* ) ), this, SLOT ( slotItemClicked ( QListViewItem* ) ) );
+    subProjectOptionsAction = new KAction(i18n("Options..."), "configure", 0,
+                                          this, SLOT(slotSubprojectOptions()), actions, "subproject options");
+    addSubprojectAction = new KAction(i18n("Add Subproject..."), "folder_new", 0,
+                                      this, SLOT(slotAddSubproject()), actions, "add subproject");
+    addExistingSubprojectAction = new KAction(i18n("Add existing subproject..."), "fileimport", 0,
+                                              this, SLOT(slotAddExistingSubproject()), actions, "add existing subproject");
+    addTargetAction = new KAction(i18n("Add Target..."), "targetnew_kdevelop", 0,
+                                  this, SLOT(slotAddTarget()), actions, "add target");
+    addServiceAction = new KAction(i18n("Add Service..."), "servicenew_kdevelop", 0,
+                                   this, SLOT(slotAddService()), actions, "add service");
+    addApplicationAction = new KAction(i18n("Add Application..."), "window_new", 0,
+                                       this, SLOT(slotAddApplication()), actions, "add application");
+    buildSubprojectAction = new KAction(i18n("Build"), "launch", 0,
+                                        this, SLOT(slotBuildSubproject()), actions, "add build subproject");
+
+    targetOptionsAction = new KAction(i18n("Options..."), "configure", 0,
+                                      this, SLOT(slotTargetOptions()), actions, "target options");
+    addNewFileAction = new KAction(i18n("Create new file..."), "filenew", 0,
+                                   this, SLOT(slotAddNewFile()), actions, "add new file");
+    addExistingFileAction = new KAction(i18n("Add existing file(s)..."), "fileimport", 0,
+                                        this, SLOT(slotAddExistingFile()), actions, "add existing file");
+    buildTargetAction = new KAction(i18n("Build target..."), "launch", 0,
+                                    this, SLOT(slotBuildTarget()), actions, "build target");
+    setActiveTargetAction = new KAction(i18n("Make target active..."), "", 0,
+                                        this, SLOT(slotSetActiveTarget()), actions, "set active target");
+    removeFileAction = new KAction(i18n("Remove file..."), "editdelete", 0,
+                                   this, SLOT(slotRemoveFile()), actions, "remove file");
+
+    connect( subProjectOptionsButton, SIGNAL(clicked()), this, SLOT(slotSubprojectOptions()) );
+    connect( addSubprojectButton, SIGNAL(clicked()), this, SLOT(slotAddSubproject()) );
+    connect( addExistingSubprojectButton, SIGNAL(clicked()), this, SLOT(slotAddExistingSubproject()) );
+    connect( addTargetButton, SIGNAL(clicked()), this, SLOT(slotAddTarget()) );
+    connect( addServiceButton, SIGNAL(clicked()), this, SLOT(slotAddService()) );
+    connect( addApplicationButton, SIGNAL(clicked()), this, SLOT(slotAddApplication()) );
+    connect( buildSubprojectButton, SIGNAL(clicked()), this, SLOT(slotBuildSubproject()) );
+
+    connect( targetOptionsButton, SIGNAL(clicked()), this, SLOT(slotTargetOptions()) );
+    connect( addNewFileButton, SIGNAL(clicked()), this, SLOT(slotAddNewFile()) );
+    connect( addExistingFileButton, SIGNAL(clicked()), this, SLOT(slotAddExistingFile()) );
+    connect( removeFileButton , SIGNAL(clicked()), this, SLOT(slotRemoveFile()) );
+    connect( buildTargetButton, SIGNAL(clicked()), this, SLOT(slotBuildTarget()) );
+
+    connect( overview, SIGNAL(selectionChanged(QListViewItem*)),
+             this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
+    connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+             this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+
+    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
+             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
     connect( details, SIGNAL(executed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
-    connect( details, SIGNAL(returnPressed(QListViewItem*)),
-             this, SLOT(slotItemExecuted(QListViewItem*)) );
+             this, SLOT(slotDetailsExecuted(QListViewItem*)) );
     connect( details, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
+             this, SLOT(slotDetailsContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
     m_part = part;
     m_kdeMode = kde;
-    m_shownSubproject = 0;
     m_activeSubproject = 0;
     m_activeTarget = 0;
-    m_activeFile = 0;
+    m_shownSubproject = 0;
 }
 
 
@@ -343,8 +332,7 @@ void AutoProjectWidget::openProject(const QString &dirName)
     item->path = dirName;
     parse(item);
     item->setOpen(true);
-
-    slotItemExecuted(item);
+    item->setSelected(true);
 }
 
 
@@ -452,46 +440,6 @@ QString AutoProjectWidget::buildDirectory()
 }
 
 
-void AutoProjectWidget::slotItemClicked ( QListViewItem* item )
-{
-    if ( !item ) return;
-
-    ProjectItem* pvItem = static_cast<ProjectItem*>(item);
-
-    if ( pvItem->type() == ProjectItem::Subproject )
-    {
-        subProjectOptionsButton->setEnabled ( true );
-        addSubprojectButton->setEnabled ( true );
-        addTargetButton->setEnabled ( true );
-        addServiceButton->setEnabled ( true );
-        addApplicationButton->setEnabled ( true );
-        buildSubprojectButton->setEnabled ( true );
-
-        m_activeSubproject = static_cast<SubprojectItem*>(item);
-    }
-    else if ( pvItem->type() == ProjectItem::Target )
-    {
-        targetOptionsButton->setEnabled ( true );
-        addNewFileButton->setEnabled ( true );
-        addExistingFileButton->setEnabled ( true );
-        removeFileButton->setEnabled ( false );
-        buildTargetButton->setEnabled ( true );
-
-        m_activeTarget = static_cast<TargetItem*> ( item );
-    }
-    else if ( pvItem->type() == ProjectItem::File )
-    {
-        targetOptionsButton->setEnabled ( false );
-        addNewFileButton->setEnabled ( false );
-        addExistingFileButton->setEnabled ( false );
-        removeFileButton->setEnabled ( true );
-        buildTargetButton->setEnabled ( false );
-
-        m_activeFile = static_cast<FileItem*> ( item );
-    }
-}
-
-
 void AutoProjectWidget::setActiveTarget(const QString &targetPath)
 {
     int prefixlen = projectDirectory().length()+1;
@@ -507,7 +455,7 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
         for (; tit.current(); ++tit) {
             QString primary = (*tit)->primary;
             if (primary != "PROGRAMS" && primary != "LIBRARIES"
-                && primary != "LTLIBRARIES")
+                && primary != "LTLIBRARIES" && primary != "JAVA")
                 continue;
             QString currentTargetPath = (path + "/" + QString((*tit)->name)).mid(prefixlen);
             bool hasTarget = (targetPath == currentTargetPath);
@@ -522,7 +470,7 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
                 m_activeTarget = (*tit);
                 if (m_shownSubproject != m_activeSubproject) {
                     overview->setSelected(spitem, true);
-                    slotItemExecuted(spitem);
+                    //                    slotItemExecuted(spitem);
                 }
             } else {
                 details->viewport()->update();
@@ -545,11 +493,11 @@ void AutoProjectWidget::addFile(const QString &name)
     m_activeTarget->insertItem(fitem);
 
     // TODO: Merge with code in addfiledlg.cpp
-    QCString canontargetname = AutoProjectTool::canonicalize(m_activeTarget->name);
-    QCString varname = canontargetname + "_SOURCES";
-    m_activeSubproject->variables[varname] += (QCString(" ") + name.latin1());
+    QString canontargetname = AutoProjectTool::canonicalize(m_activeTarget->name);
+    QString varname = canontargetname + "_SOURCES";
+    m_activeSubproject->variables[varname] += (" " + name);
     
-    QMap<QCString,QCString> replaceMap;
+    QMap<QString,QString> replaceMap;
     replaceMap.insert(varname, m_activeSubproject->variables[varname]);
     
     AutoProjectTool::modifyMakefileam(m_activeSubproject->path + "/Makefile.am", replaceMap);
@@ -560,147 +508,237 @@ void AutoProjectWidget::addFile(const QString &name)
 
 void AutoProjectWidget::removeFile(const QString &fileName)
 {
+    (void) fileName;
 }
 
 
-void AutoProjectWidget::slotItemExecuted(QListViewItem *item)
+void AutoProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
 {
     if (!item)
         return;
 
-    // We assume here that ALL items in both list views
-    // are ProjectItem's
-    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
-
-    if (pvitem->type() == ProjectItem::Subproject) {
-        if (m_shownSubproject) {
-            // Remove all TargetItems and all of their children from the view
-            QListIterator<TargetItem> it1(m_shownSubproject->targets);
-            for (; it1.current(); ++it1) {
-                // After AddTargetDialog, it can happen that an
-                // item is not yet in the list view, so better check...
-                if (it1.current()->parent())
-                    while ((*it1)->firstChild())
-                        (*it1)->takeItem((*it1)->firstChild());
-                details->takeItem(*it1);
-            }
+    if (m_shownSubproject) {
+        // Remove all TargetItems and all of their children from the view
+        QListIterator<TargetItem> it1(m_shownSubproject->targets);
+        for (; it1.current(); ++it1) {
+            // After AddTargetDialog, it can happen that an
+            // item is not yet in the list view, so better check...
+            if (it1.current()->parent())
+                while ((*it1)->firstChild())
+                    (*it1)->takeItem((*it1)->firstChild());
+            details->takeItem(*it1);
         }
+    }
             
-        m_shownSubproject = static_cast<SubprojectItem*>(item);
-        m_activeSubproject = static_cast<SubprojectItem*>(item);
-
-        // Insert all TargetItems and all of their children into the view
-        QListIterator<TargetItem> it2(m_shownSubproject->targets);
-        for (; it2.current(); ++it2) {
-            details->insertItem(*it2);
-            QListIterator<FileItem> it3((*it2)->sources);
-            for (; it3.current(); ++it3)
-                (*it2)->insertItem(*it3);
-            QString primary = (*it2)->primary;
-            if (primary == "PROGRAMS" || primary == "LIBRARIES"
-                || primary == "LTLIBRARIES" || primary == "JAVA")
-                (*it2)->setOpen(true);
-        }
-    } else if (pvitem->type() == ProjectItem::File) {
-        QString dirName = m_shownSubproject->path;
-        FileItem *fitem = static_cast<FileItem*>(pvitem);
-        m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
-    	m_part->topLevel()->lowerView(this);
+    // We assume here that ALL items in the over list view
+    // are SubprojectItem's
+    m_shownSubproject = static_cast<SubprojectItem*>(item);
+        
+    // Insert all TargetItems and all of their children into the view
+    QListIterator<TargetItem> it2(m_shownSubproject->targets);
+    for (; it2.current(); ++it2) {
+        details->insertItem(*it2);
+        QListIterator<FileItem> it3((*it2)->sources);
+        for (; it3.current(); ++it3)
+            (*it2)->insertItem(*it3);
+        QString primary = (*it2)->primary;
+        if (primary == "PROGRAMS" || primary == "LIBRARIES"
+            || primary == "LTLIBRARIES" || primary == "JAVA")
+            (*it2)->setOpen(true);
     }
 }
 
-void AutoProjectWidget::slotSubprojectOptions()
+
+void AutoProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
 {
-    kdDebug ( 9000 ) << "AutoProjectWidget::slotSubprojectOptions()" << endl;
-    SubprojectOptionsDialog(m_part, this, m_activeSubproject, this, "subproject options dialog").exec();
+    bool isTarget = false;
+    bool isRegularTarget = false;
+    bool isFile = false;
+    
+    if (item) {
+        // We assume here that ALL items in the detail list view
+        // are ProjectItem's
+        ProjectItem *pvitem = static_cast<ProjectItem*>(item);
+        if (pvitem->type() == ProjectItem::Target) {
+            isTarget = true;
+            QString primary = static_cast<TargetItem*>(pvitem)->primary;
+            if (primary == "PROGRAMS" || primary == "LIBRARIES"
+                || primary == "LTLIBRARIES" || primary == "JAVA")
+                isRegularTarget = true; // not a data group
+        } else if (pvitem->type() == ProjectItem::File) {
+            isFile = true;
+        }
+    }
+    
+    targetOptionsButton->setEnabled(isRegularTarget);
+    addNewFileButton->setEnabled(isTarget);
+    addExistingFileButton->setEnabled(isTarget);
+    removeFileButton->setEnabled(isFile);
+    buildTargetButton->setEnabled(isRegularTarget);
 }
 
-void AutoProjectWidget::slotAddSubproject()
+
+void AutoProjectWidget::slotDetailsExecuted(QListViewItem *item)
 {
-    AddSubprojectDialog dlg(m_part, this, m_activeSubproject, this, "add subproject dialog");
+    if (!item)
+        return;
+    
+    ProjectItem *pvitem = static_cast<ProjectItem*>(item);
+    if (pvitem->type() != ProjectItem::File)
+        return;
+    
+    QString dirName = m_shownSubproject->path;
+    FileItem *fitem = static_cast<FileItem*>(item);
+    m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+    m_part->topLevel()->lowerView(this);
+}
+
+
+void AutoProjectWidget::slotSubprojectOptions()
+{
+    kdDebug(9020) << "AutoProjectWidget::slotSubprojectOptions()" << endl;
+
+    SubprojectOptionsDialog dlg(m_part, this, m_shownSubproject,
+                                this, "subproject options dialog");
     dlg.exec();
 }
 
+
+void AutoProjectWidget::slotAddSubproject()
+{
+    AddSubprojectDialog dlg(m_part, this, m_shownSubproject,
+                            this, "add subproject dialog");
+    dlg.exec();
+}
+
+
 void AutoProjectWidget::slotAddExistingSubproject()
 {
-    ImportExistingDialog ( m_part, m_activeSubproject, this, "Add existing subprojects to this subproject" ).exec();
+    ImportExistingDialog dlg(m_part, m_shownSubproject,
+                             this, "add existing subprojects to this subproject");
+    dlg.exec();
 }
+
 
 void AutoProjectWidget::slotAddTarget()
 {
     AddTargetDialog dlg(this, m_shownSubproject, this, "add target dialog");
 
     // Update the details view if a target was added
-    if ( dlg.exec() && m_activeSubproject ) slotItemExecuted ( m_activeSubproject );
+    if (dlg.exec())
+        slotOverviewSelectionChanged(m_shownSubproject);
 }
+
 
 void AutoProjectWidget::slotAddService()
 {
-    AddServiceDialog dlg(this, m_activeSubproject, this, "add service dialog");
+    AddServiceDialog dlg(this, m_shownSubproject, this, "add service dialog");
 
     // Update the details view if a service was added
-    if ( dlg.exec() && m_activeSubproject ) slotItemExecuted ( m_activeSubproject );
+    if (dlg.exec())
+        slotOverviewSelectionChanged(m_shownSubproject);
 }
+
 
 void AutoProjectWidget::slotAddApplication()
 {
-    AddApplicationDialog dlg(this, m_activeSubproject, this, "add application dialog");
+    AddApplicationDialog dlg(this, m_shownSubproject, this, "add application dialog");
 
     // Update the details view if an application was added
-    if ( dlg.exec() && m_activeSubproject ) slotItemExecuted ( m_activeSubproject );
+    if (dlg.exec())
+        slotOverviewSelectionChanged(m_shownSubproject);
 }
+
 
 void AutoProjectWidget::slotBuildSubproject()
 {
-    QString relpath = m_activeSubproject->path.mid(projectDirectory().length());
+    QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
 
     m_part->startMakeCommand(buildDirectory() + relpath, QString::fromLatin1(""));
 
-    m_part->topLevel()->lowerView ( this );
+    m_part->topLevel()->lowerView(this);
 }
+
 
 void AutoProjectWidget::slotTargetOptions()
 {
-    kdDebug ( 9000 ) << "AutoProjectWidget::slotTargetOptions()" << endl;
-    TargetOptionsDialog(this, m_activeTarget, this, "target options dialog").exec();
+    kdDebug(9020) << "AutoProjectWidget::slotTargetOptions()" << endl;
+    TargetItem *titem = selectedTarget();
+    if (!titem)
+        return;
+
+    TargetOptionsDialog dlg(this, titem, this, "target options dialog");
+    dlg.exec();
 }
+
 
 void AutoProjectWidget::slotAddNewFile()
 {
-    AddFileDialog dlg(m_part, this, m_activeSubproject, m_activeTarget, this, "add file dialog");
+    TargetItem *titem = selectedTarget();
+    if (!titem)
+        return;
 
-    if (dlg.exec()) slotItemExecuted(m_activeSubproject); // update list view
+    AddFileDialog dlg(m_part, this, m_shownSubproject, titem,
+                      this, "add file dialog");
+
+    if (dlg.exec())
+        slotOverviewSelectionChanged(m_shownSubproject); // update list view
 }
+
 
 void AutoProjectWidget::slotAddExistingFile()
 {
-    ImportExistingDialog ( m_part, m_activeSubproject, m_activeTarget, this, "Add existing files to this target" ).exec();
+    TargetItem *titem = selectedTarget();
+    if (!titem)
+        return;
+
+    ImportExistingDialog dlg(m_part, m_shownSubproject, titem,
+                             this, "add existing files to this target");
+    dlg.exec();
 }
+
 
 void AutoProjectWidget::slotBuildTarget()
 {
-    QString name = m_activeTarget->name;
+    TargetItem *titem = selectedTarget();
+    if (!titem)
+        return;
 
-    if (m_activeTarget->primary == "LIBRARIES") name + ".a";
+    QString name = titem->name;
+    if (titem->primary == "LIBRARIES")
+        name + ".a";
+    else if (titem->primary == "LTLIBRARIES")
+        name + ".la";
 
-    else if (m_activeTarget->primary == "LTLIBRARIES") name + ".la";
-
-    QString relpath = m_activeSubproject->path.mid(projectDirectory().length());
-    m_part->startMakeCommand(buildDirectory() + relpath, m_activeTarget->name);
-
-    m_part->topLevel()->lowerView ( this );
+    QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+    m_part->startMakeCommand(buildDirectory() + relpath, titem->name);
+    
+    m_part->topLevel()->lowerView(this);
 }
+
 
 void AutoProjectWidget::slotRemoveFile()
 {
-    RemoveFileDialog dlg(this, m_activeSubproject, m_activeTarget, m_activeFile->text(0), this, "remove file dialog");
+    FileItem *fitem = selectedFile();
+    if (!fitem)
+        return;
+    TargetItem *titem = static_cast<TargetItem*>(fitem->parent());
 
-    if (dlg.exec()) slotItemExecuted(m_activeSubproject);
+    RemoveFileDialog dlg(this, m_shownSubproject, titem, fitem->text(0),
+                         this, "remove file dialog");
+
+    if (dlg.exec())
+        slotOverviewSelectionChanged(m_shownSubproject);
 }
+
 
 void AutoProjectWidget::slotSetActiveTarget()
 {
-    QString targetPath = m_shownSubproject->path + "/" + QString(m_activeTarget->name);
+    TargetItem *titem = selectedTarget();
+    if (!titem)
+        return;
+
+    QString targetPath = m_shownSubproject->path + "/" + QString(titem->name);
     targetPath = targetPath.mid(projectDirectory().length()+1);
     kdDebug(9020) << "Setting active " << targetPath << endl;
     setActiveTarget(targetPath);
@@ -708,100 +746,96 @@ void AutoProjectWidget::slotSetActiveTarget()
     DomUtil::writeEntry(dom, "/kdevautoproject/general/activetarget", targetPath);
 }
 
-void AutoProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+
+void AutoProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+{
+    if (!item)
+        return;
+
+    KPopupMenu popup(i18n("Subproject: %1").arg(item->text(0)), this);
+
+    subProjectOptionsAction->plug(&popup);
+    popup.insertSeparator();
+    addSubprojectAction->plug(&popup);
+    addExistingSubprojectAction->plug(&popup);
+    popup.insertSeparator();
+    addTargetAction->plug(&popup);
+    addServiceAction->plug(&popup);
+    addApplicationAction->plug(&popup);
+    popup.insertSeparator();
+    buildSubprojectAction->plug(&popup);
+    
+    popup.exec(p);
+}
+
+
+void AutoProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
     if (!item)
         return;
     
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
 
-    if (pvitem->type() == ProjectItem::Subproject)
-    {
-        subProjectOptionsButton->setEnabled ( true );
-        addSubprojectButton->setEnabled ( true );
-        addTargetButton->setEnabled ( true );
-        addServiceButton->setEnabled ( true );
-        addApplicationButton->setEnabled ( true );
-        buildSubprojectButton->setEnabled ( true );
-
-        SubprojectItem *spitem = static_cast<SubprojectItem*>(pvitem);
-
-        m_activeSubproject = spitem;
-
-        KPopupMenu* popup = new KPopupMenu ( this, i18n ( "Subproject" ) );
-
-        subProjectOptionsAction->plug ( popup );
-        popup->insertSeparator();
-        addSubprojectAction->plug ( popup );
-        addExistingSubprojectAction->plug ( popup );
-        popup->insertSeparator();
-        addTargetAction->plug ( popup );
-        popup->insertSeparator();
-        addServiceAction->plug ( popup );
-        popup->insertSeparator();
-        addApplicationAction->plug ( popup );
-        popup->insertSeparator();
-        buildSubprojectAction->plug ( popup );
-
-        popup->exec ( p );
-    }
-    else if (pvitem->type() == ProjectItem::Target)
-    {
-        targetOptionsButton->setEnabled ( true );
-        addNewFileButton->setEnabled ( true );
-        addExistingFileButton->setEnabled ( true );
-        removeFileButton->setEnabled ( false );
-        buildTargetButton->setEnabled ( true );
-
+    if (pvitem->type() == ProjectItem::Target) {
+        
         TargetItem *titem = static_cast<TargetItem*>(pvitem);
 
-        m_activeTarget = titem;
-
-        KPopupMenu* popup = new KPopupMenu ( this, ( nicePrimary(titem->primary ) ) );
+        KPopupMenu popup(i18n("Target: %1").arg(titem->name), this);
 
         if (titem->primary == "PROGRAMS" || titem->primary == "LIBRARIES"
-            || titem->primary == "LTLIBRARIES")
-        {
-            targetOptionsAction->plug ( popup );
-            setActiveTargetAction->plug ( popup );
-            popup->insertSeparator();
+            || titem->primary == "LTLIBRARIES" || titem->primary == "JAVA") {
+            targetOptionsAction->plug(&popup);
+            setActiveTargetAction->plug(&popup);
+            popup.insertSeparator();
+            addNewFileAction->plug(&popup);
+            addExistingFileAction->plug(&popup);
+            popup.insertSeparator();
+            buildTargetAction->plug(&popup);
+        } else {
+            addNewFileAction->plug(&popup);
+            addExistingFileAction->plug(&popup);
         }
 
-        addNewFileAction->plug ( popup );
-        addExistingFileAction->plug ( popup );
-        popup->insertSeparator();
-        buildTargetAction->plug ( popup );
-
-        popup->exec ( p );
-    }
-    else if (pvitem->type() == ProjectItem::File)
-    {
-        targetOptionsButton->setEnabled ( false );
-        addNewFileButton->setEnabled ( false );
-        addExistingFileButton->setEnabled ( false );
-        removeFileButton->setEnabled ( true );
-        buildTargetButton->setEnabled ( false );
+        popup.exec(p);
+        
+    } else if (pvitem->type() == ProjectItem::File) {
 
         FileItem *fitem = static_cast<FileItem*>(pvitem);
-        m_activeFile = fitem;
-/*        TargetItem *titem = static_cast<TargetItem*>(fitem->parent());
 
-        m_activeTarget = titem;*/
+        KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
 
-        KPopupMenu* popup = new KPopupMenu ( this, i18n ( "Remove file" ) );
+        removeFileAction->plug(&popup);
+        FileContext context(m_shownSubproject->path + "/" + fitem->name);
+        m_part->core()->fillContextMenu(&popup, &context);
 
-        removeFileAction->plug ( popup );
-
-        popup->exec ( p );
-
-        FileContext context ( m_activeSubproject->path + "/" + fitem->name );
-        m_part->core()->fillContextMenu ( popup, &context );
+        popup.exec(p);
+        
     }
 }
 
 
-TargetItem *AutoProjectWidget::createTargetItem(const QCString &name,
-                                                const QCString &prefix, const QCString &primary)
+TargetItem *AutoProjectWidget::selectedTarget()
+{
+    ProjectItem *pvitem = static_cast<ProjectItem*>(details->selectedItem());
+    if (!pvitem && pvitem->type() != ProjectItem::Target)
+        return 0;
+
+    return static_cast<TargetItem*>(pvitem);
+}
+
+
+FileItem *AutoProjectWidget::selectedFile()
+{
+    ProjectItem *pvitem = static_cast<ProjectItem*>(details->selectedItem());
+    if (!pvitem && pvitem->type() != ProjectItem::File)
+        return 0;
+
+    return static_cast<FileItem*>(pvitem);
+}
+
+
+TargetItem *AutoProjectWidget::createTargetItem(const QString &name,
+                                                const QString &prefix, const QString &primary)
 {
     bool group = !(primary == "PROGRAMS" || primary == "LIBRARIES"
                    || primary == "LTLIBRARIES" || primary == "JAVA");
@@ -843,12 +877,13 @@ void AutoProjectWidget::emitRemovedFile(const QString &name)
 }
 
 
-void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCString rhs)
+void AutoProjectWidget::parsePrimary(SubprojectItem *item,
+                                     const QString &lhs, const QString &rhs)
 {
     // Parse line foo_bar = bla bla
     int pos = lhs.findRev('_');
-    QCString prefix = lhs.left(pos);
-    QCString primary = lhs.right(lhs.length()-pos-1);
+    QString prefix = lhs.left(pos);
+    QString primary = lhs.right(lhs.length()-pos-1);
     //    kdDebug(9020) << "Prefix:" << prefix << ",Primary:" << primary << endl;
 
 #if 0
@@ -875,16 +910,16 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
         QStringList l = QStringList::split(QRegExp("[ \t\n]"), QString(rhs));
         QStringList::Iterator it1;
         for (it1 = l.begin(); it1 != l.end(); ++it1) {
-            TargetItem *titem = createTargetItem((*it1).latin1(), prefix, primary);
+            TargetItem *titem = createTargetItem(*it1, prefix, primary);
             item->targets.append(titem);
 
-            QCString canonname = AutoProjectTool::canonicalize(*it1);
+            QString canonname = AutoProjectTool::canonicalize(*it1);
             titem->ldflags = cleanWhitespace(item->variables[canonname + "_LDFLAGS"]);
             titem->ldadd = cleanWhitespace(item->variables[canonname + "_LDADD"]);
             titem->libadd = cleanWhitespace(item->variables[canonname + "_LIBADD"]);
             titem->dependencies = cleanWhitespace(item->variables[canonname + "_DEPENDENCIES"]);
 
-            QCString sources = item->variables[canonname + "_SOURCES"];
+            QString sources = item->variables[canonname + "_SOURCES"];
             QStringList l2 = QStringList::split(QRegExp("[ \t\n]"), sources);
             QStringList::Iterator it2;
             for (it2 = l2.begin(); it2 != l2.end(); ++it2) {
@@ -902,7 +937,7 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
             }
         }
         // Create a new one
-        TargetItem *titem = createTargetItem(QCString(""), prefix, primary);
+        TargetItem *titem = createTargetItem("", prefix, primary);
         item->targets.append(titem);
         
         QStringList l = QStringList::split(QRegExp("[ \t]"), QString(rhs));
@@ -914,7 +949,7 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
     } else if (primary == "JAVA") {
         QStringList l = QStringList::split(QRegExp("[ \t\n]"), QString(rhs));
         QStringList::Iterator it1;
-        TargetItem *titem = createTargetItem(QCString(""), prefix, primary);
+        TargetItem *titem = createTargetItem("", prefix, primary);
         item->targets.append(titem);
 
         for (it1 = l.begin(); it1 != l.end(); ++it1) {
@@ -925,16 +960,18 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
 }
 
 
-void AutoProjectWidget::parsePrefix(SubprojectItem *item, QCString lhs, QCString rhs)
+void AutoProjectWidget::parsePrefix(SubprojectItem *item,
+                                    const QString &lhs, const QString &rhs)
 {
     // Parse a line foodir = bla bla
-    QCString name = lhs.left(lhs.length()-3);
-    QCString dir = rhs;
+    QString name = lhs.left(lhs.length()-3);
+    QString dir = rhs;
     item->prefixes.insert(name, dir);
 }
 
 
-void AutoProjectWidget::parseSubdirs(SubprojectItem *item, QCString /*lhs*/, QCString rhs)
+void AutoProjectWidget::parseSubdirs(SubprojectItem *item,
+                                     const QString &/*lhs*/, QString rhs)
 {
     // Parse a line SUBDIRS = bla bla
 
@@ -997,10 +1034,10 @@ void AutoProjectWidget::parse(SubprojectItem *item)
 {
     AutoProjectTool::parseMakefileam(item->path + "/Makefile.am", &item->variables);
     
-    QMap<QCString, QCString>::ConstIterator it;
+    QMap<QString, QString>::ConstIterator it;
     for (it=item->variables.begin(); it!=item->variables.end(); ++it) {
-        QCString lhs = it.key();
-        QCString rhs = it.data();
+        QString lhs = it.key();
+        QString rhs = it.data();
         if (lhs.find('_') > 0)
             parsePrimary(item, lhs, rhs);
         else if (lhs.right(3) == "dir")

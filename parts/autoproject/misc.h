@@ -32,13 +32,13 @@ public:
      * Returns the canonicalized version of a file name, i.e.
      * the file name with special characters replaced by underscores
      */
-    static QCString canonicalize(QString str);
+    static QString canonicalize(const QString &str);
     /**
      * Parses a Makefile.am and stores its variable assignments
      * in a map.
      */
-    static void parseMakefileam(const QString &filename, QMap<QCString,QCString> *variables);
-    static void modifyMakefileam(const QString &filename, QMap<QCString,QCString> variables);
+    static void parseMakefileam(const QString &filename, QMap<QString,QString> *variables);
+    static void modifyMakefileam(const QString &filename, QMap<QString,QString> variables);
 };
 
 #endif

@@ -56,7 +56,6 @@ public:
 private:
     Type typ;
     bool bld;
-    //void init();
 };
 
 
@@ -71,13 +70,12 @@ public:
 
     QString subdir;
     QString path;
-    QMap<QCString, QCString> prefixes;
-    QMap<QCString, QCString> variables;
+    QMap<QString, QString> prefixes;
+    QMap<QString, QString> variables;
     QList<TargetItem> targets;
 
 private:
     void init();
-    bool bld;
 };
 
 
@@ -98,21 +96,21 @@ public:
     TargetItem(QListView *lv, bool group, const QString &text);
     
     // Name of target, e.g. foo
-    QCString name;
+    QString name;
     // One of PROGRAMS, LIBRARIES, LTLIBRARIES, SCRIPTS, HEADERS, DATA, JAVA
-    QCString primary;
+    QString primary;
     // May be bin, pkglib, noinst, check, sbin, pkgdata, java...
-    QCString prefix;
+    QString prefix;
     // Content of foo_SOURCES (or java_JAVA) assignment
     QList<FileItem> sources;
     // Content of foo_LDFLAGS assignment
-    QCString ldflags;
+    QString ldflags;
     // Content of foo_LDADD assignment
-    QCString ldadd;
+    QString ldadd;
     // Content of foo_LIBADD assignment
-    QCString libadd;
+    QString libadd;
     // Content of foo_DEPENDENCIES assignment
-    QCString dependencies;
+    QString dependencies;
 };
 
 
@@ -188,18 +186,31 @@ public:
      * (not implemented currently)
      */
     void removeFile(const QString &fileName);
+
+    /**
+     * Returns the currently selected target. Returns 0 if
+     * no target is selected.
+     */
+    TargetItem *selectedTarget();
+    /**
+     * Returns the currently selected file. Returns 0 if
+     * no file is selected.
+     */
+    FileItem *selectedFile();
     
-    TargetItem *createTargetItem(const QCString &name,
-                                 const QCString &prefix, const QCString &primary);
+    TargetItem *createTargetItem(const QString &name,
+                                 const QString &prefix, const QString &primary);
     FileItem *createFileItem(const QString &name);
 
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
     
 private slots:
-    void slotItemClicked ( QListViewItem* item );
-    void slotItemExecuted(QListViewItem *item);
-    void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotOverviewSelectionChanged(QListViewItem *item);
+    void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotDetailsSelectionChanged(QListViewItem *item);
+    void slotDetailsExecuted(QListViewItem *item);
+    void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 
     void slotAddApplication();
     void slotSubprojectOptions();
@@ -216,17 +227,16 @@ private slots:
     void slotSetActiveTarget();
 
 private:
-    void parsePrimary(SubprojectItem *item, QCString lhs, QCString rhs);
-    void parseSubdirs(SubprojectItem *item, QCString lhs, QCString rhs);
-    void parsePrefix(SubprojectItem *item, QCString lhs, QCString rhs);
+    void parsePrimary(SubprojectItem *item,
+                      const QString &lhs, const QString &rhs);
+    void parseSubdirs(SubprojectItem *item,
+                      const QString &lhs, QString rhs);
+    void parsePrefix(SubprojectItem *item,
+                     const QString &lhs, const QString &rhs);
     void parse(SubprojectItem *item);
 
-    QVBoxLayout* widgetLayout;
-    QHBox* overviewButtonBox, *targetButtonBox;
-    QVBox* overviewBox, *targetBox;
     QToolButton* subProjectOptionsButton, *addSubprojectButton, *addExistingSubprojectButton, *addTargetButton, *addServiceButton, *addApplicationButton, *buildSubprojectButton, *targetOptionsButton, *addNewFileButton, *addExistingFileButton, *buildTargetButton, *removeFileButton;
 
-    //KPopupMenu* m_popup;
     KAction* addApplicationAction;
     KAction* subProjectOptionsAction;
     KAction* addSubprojectAction;
@@ -246,10 +256,9 @@ private:
 
     bool m_kdeMode;
     AutoProjectPart *m_part;
-    SubprojectItem *m_shownSubproject;
     SubprojectItem *m_activeSubproject;
-    TargetItem * m_activeTarget;
-    FileItem* m_activeFile;
+    TargetItem *m_activeTarget;
+    SubprojectItem *m_shownSubproject;
 };
 
 #endif

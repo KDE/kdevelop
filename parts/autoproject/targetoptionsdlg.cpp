@@ -32,6 +32,7 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     : TargetOptionsDialogBase(parent, name, true)
 {
     setCaption( i18n("Target Options for '%1'").arg(item->name) );
+    setIcon( SmallIcon("configure") );
 
     target = item;
     m_widget = widget;
@@ -50,9 +51,7 @@ TargetOptionsDialog::TargetOptionsDialog(AutoProjectWidget *widget, TargetItem *
     QStringList l = widget->allLibraries();
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it)
-        QCheckListItem *clitem = new QCheckListItem(insidelib_listview, *it, QCheckListItem::CheckBox);
-
-    setIcon ( SmallIcon ( "configure" ) );
+        (void) new QCheckListItem(insidelib_listview, *it, QCheckListItem::CheckBox);
 
     readConfig();
 }
@@ -128,9 +127,9 @@ void TargetOptionsDialog::storeConfig()
     if (noundefined_box->isChecked())
         flagslist.append("-no-undefined");
     flagslist.append(ldflagsother_edit->text());
-    QCString new_ldflags = flagslist.join(" ").latin1();
+    QString new_ldflags = flagslist.join(" ");
         
-    QCString new_dependencies = dependencies_edit->text().latin1();
+    QString new_dependencies = dependencies_edit->text();
     
     QStringList liblist;
     QCheckListItem *clitem = static_cast<QCheckListItem*>(insidelib_listview->firstChild());
@@ -143,13 +142,13 @@ void TargetOptionsDialog::storeConfig()
         liblist.append(clitem->text());
         clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
     }
-    QCString new_addstr = liblist.join(" ").latin1();
+    QString new_addstr = liblist.join(" ");
 
-    QCString canonname = AutoProjectTool::canonicalize(target->name);
-    QMap<QCString, QCString> replaceMap;
+    QString canonname = AutoProjectTool::canonicalize(target->name);
+    QMap<QString, QString> replaceMap;
     
     if (target->primary == "PROGRAMS") {
-        QCString old_ldadd = target->ldadd;
+        QString old_ldadd = target->ldadd;
         if (new_addstr != old_ldadd) {
             target->ldadd = new_addstr;
             replaceMap.insert(canonname + "_LDADD", new_addstr);
@@ -157,20 +156,20 @@ void TargetOptionsDialog::storeConfig()
     }
     
     if (target->primary == "LIBRARIES" || target->primary == "LTLIBARIES") {
-        QCString old_libadd = target->libadd;
+        QString old_libadd = target->libadd;
         if (new_addstr != old_libadd) {
             target->libadd = new_addstr;
             replaceMap.insert(canonname + "_LIBADD", new_addstr);
         }
     }
     
-    QCString old_ldflags = target->ldflags;
+    QString old_ldflags = target->ldflags;
     if (new_ldflags != old_ldflags) {
         target->ldflags = new_ldflags;
         replaceMap.insert(canonname + "_LDFLAGS", new_ldflags);
     }
 
-    QCString old_dependencies = target->dependencies;
+    QString old_dependencies = target->dependencies;
     if (new_dependencies != old_dependencies) {
         target->dependencies = new_dependencies;
         replaceMap.insert(canonname + "_DEPENDENCIES", new_dependencies);

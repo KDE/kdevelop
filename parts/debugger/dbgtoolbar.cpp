@@ -104,8 +104,7 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
         return;
 
     if (e->button() == RightButton) {
-        KPopupMenu *menu = new KPopupMenu(this);
-        menu->setTitle("Debug toolbar");
+        KPopupMenu *menu = new KPopupMenu(i18n("Debug toolbar"), this);
         menu->insertItem(i18n("Dock to panel"),
                          parent(), SLOT(slotDock()));
         menu->insertItem(i18n("Dock to panel and iconify KDevelop"),
@@ -230,8 +229,7 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
         }
     case RightButton:
         {
-            KPopupMenu* menu = new KPopupMenu( this );
-            menu->setTitle("Debug toolbar");
+            KPopupMenu* menu = new KPopupMenu(i18n("Debug toolbar"), this);
             menu->insertItem(i18n("Activate"),                        toolBar_, SLOT(slotUndock()));
             menu->insertItem(i18n("Activate (KDevelop gets focus)"),  toolBar_, SLOT(slotActivateAndUndock()));
             menu->popup(e->globalPos());

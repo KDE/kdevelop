@@ -42,8 +42,7 @@ KPopupMenu *ClassViewWidget::createPopup()
 {
     KPopupMenu *popup = contextItem? contextItem->createPopup() : 0;
     if (!popup) {
-        popup = new KPopupMenu();
-        popup->insertTitle(i18n("Class View"), -1, 0);
+        popup = new KPopupMenu(i18n("Class View"), this);
     }
 
     popup->setCheckable(true);

@@ -88,11 +88,11 @@ void AddFileDialog::accept()
     target->sources.append(fitem);
     target->insertItem(fitem);
     
-    QCString canontargetname = AutoProjectTool::canonicalize(target->name);
-    QCString varname = canontargetname + "_SOURCES";
-    subProject->variables[varname] += (QCString(" ") + name.latin1());
+    QString canontargetname = AutoProjectTool::canonicalize(target->name);
+    QString varname = canontargetname + "_SOURCES";
+    subProject->variables[varname] += (" " + name);
     
-    QMap<QCString,QCString> replaceMap;
+    QMap<QString,QString> replaceMap;
     replaceMap.insert(varname, subProject->variables[varname]);
     
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);

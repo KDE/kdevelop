@@ -51,7 +51,7 @@ AddTargetDialog::~AddTargetDialog()
 
 void AddTargetDialog::primaryChanged()
 {
-    QStrList list;
+    QStringList list;
     switch (primary_combo->currentItem()) {
     case 0: // Program
         list.append("bin");
@@ -92,11 +92,11 @@ void AddTargetDialog::primaryChanged()
 
     prefix_combo->clear();
     
-    prefix_combo->insertStrList(list);
-    QStrList prefixes;
-    QMap<QCString,QCString>::ConstIterator it;
+    prefix_combo->insertStringList(list);
+    QStringList prefixes;
+    QMap<QString,QString>::ConstIterator it;
     for (it = subProject->prefixes.begin(); it != subProject->prefixes.end(); ++it)
-        prefix_combo->insertItem(QString(it.key()));
+        prefix_combo->insertItem(it.key());
 
     // Only enable ldflags stuff for libtool libraries
     bool lt = primary_combo->currentItem() == 2;
@@ -111,10 +111,10 @@ void AddTargetDialog::primaryChanged()
 
 void AddTargetDialog::accept()
 {
-    QCString name = filename_edit->text().stripWhiteSpace().latin1();
-    QCString prefix = prefix_combo->currentText().latin1();
+    QString name = filename_edit->text().stripWhiteSpace();
+    QString prefix = prefix_combo->currentText();
 
-    QCString primary;
+    QString primary;
     switch (primary_combo->currentItem()) {
     case 0: primary = "PROGRAMS";    break;
     case 1: primary = "LIBRARIES";   break;
@@ -155,16 +155,16 @@ void AddTargetDialog::accept()
             flagslist.append("-no-undefined");
     }
     flagslist.append(ldflagsother_edit->text());
-    QCString ldflags = flagslist.join(" ").latin1();
+    QString ldflags = flagslist.join(" ");
 
     TargetItem *titem = m_widget->createTargetItem(name, prefix, primary);
     subProject->targets.append(titem);
     
-    QCString canonname = AutoProjectTool::canonicalize(name);
-    QCString varname = prefix + "_" + primary;
-    subProject->variables[varname] += (QCString(" ") + name);
+    QString canonname = AutoProjectTool::canonicalize(name);
+    QString varname = prefix + "_" + primary;
+    subProject->variables[varname] += (" " + name);
     
-    QMap<QCString,QCString> replaceMap;
+    QMap<QString,QString> replaceMap;
     replaceMap.insert(varname, subProject->variables[varname]);
     replaceMap.insert(canonname + "_SOURCES", "");
     if (primary == "LTLIBRARIES" || primary == "PROGRAMS")

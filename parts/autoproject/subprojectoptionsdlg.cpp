@@ -95,7 +95,7 @@ void SubprojectOptionsDialog::readConfig()
     cxxflags_edit->setText(subProject->variables["AM_CXXFLAGS"]);
     fflags_edit->setText(subProject->variables["AM_FFLAGS"]);
 
-    QCString includes = subProject->variables["INCLUDES"];
+    QString includes = subProject->variables["INCLUDES"];
     QStringList includeslist = QStringList::split(QRegExp("[ \t]"), QString(includes));
 
     QListViewItem *lastItem = 0;
@@ -117,12 +117,12 @@ void SubprojectOptionsDialog::readConfig()
         }
     }
     
-    QMap<QCString, QCString>::ConstIterator it2;
+    QMap<QString, QString>::ConstIterator it2;
     for (it2 = subProject->prefixes.begin(); it2 != subProject->prefixes.end(); ++it2)
         new QListViewItem(prefix_listview, it2.key(), it2.data());
 
-    QCString subdirs = subProject->variables["SUBDIRS"];
-    kdDebug() << "Subdirs variable: " << subdirs << endl;
+    QString subdirs = subProject->variables["SUBDIRS"];
+    kdDebug(9020) << "Subdirs variable: " << subdirs << endl;
     QStringList subdirslist = QStringList::split(QRegExp("[ \t]"), QString(subdirs));
     lastItem = 0;
     for (it = subdirslist.begin(); it != subdirslist.end(); ++it) {
@@ -136,27 +136,27 @@ void SubprojectOptionsDialog::readConfig()
 
 void SubprojectOptionsDialog::storeConfig()
 {
-    QMap<QCString, QCString> replaceMap;
+    QMap<QString, QString> replaceMap;
     
-    QCString old_cflags = subProject->variables["AM_CFLAGS"];
-    QCString new_cflags = cflags_edit->text().latin1();
+    QString old_cflags = subProject->variables["AM_CFLAGS"];
+    QString new_cflags = cflags_edit->text();
     if (new_cflags != old_cflags) {
         subProject->variables["AM_CFLAGS"] = new_cflags;
-        replaceMap.insert(QCString("AM_CFLAGS"), new_cflags);
+        replaceMap.insert("AM_CFLAGS", new_cflags);
     }
 
-    QCString old_cxxflags = subProject->variables["AM_CXXFLAGS"];
-    QCString new_cxxflags = cxxflags_edit->text().latin1();
+    QString old_cxxflags = subProject->variables["AM_CXXFLAGS"];
+    QString new_cxxflags = cxxflags_edit->text();
     if (new_cxxflags != old_cxxflags) {
         subProject->variables["AM_CXXFLAGS"] = new_cxxflags;
-        replaceMap.insert(QCString("AM_CXXFLAGS"), new_cxxflags);
+        replaceMap.insert("AM_CXXFLAGS", new_cxxflags);
     }
 
-    QCString old_fflags = subProject->variables["AM_FFLAGS"];
-    QCString new_fflags = fflags_edit->text().latin1();
+    QString old_fflags = subProject->variables["AM_FFLAGS"];
+    QString new_fflags = fflags_edit->text();
     if (new_fflags != old_fflags) {
         subProject->variables["AM_FFLAGS"] = new_fflags;
-        replaceMap.insert(QCString("AM_FFLAGS"), new_fflags);
+        replaceMap.insert("AM_FFLAGS", new_fflags);
     }
 
     QStringList includeslist;
@@ -171,15 +171,15 @@ void SubprojectOptionsDialog::storeConfig()
         includeslist.append(clitem->text());
         clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
     }
-    QCString includes = includeslist.join(" ").latin1();
+    QString includes = includeslist.join(" ");
     subProject->variables["INCLUDES"] = includes;
     replaceMap.insert("INCLUDES", includes);
 
     subProject->prefixes.clear();
     for (QListViewItem *item = prefix_listview->firstChild();
          item; item = item->nextSibling()) {
-        QCString key = item->text(0).latin1();
-        QCString data = item->text(1).latin1();
+        QString key = item->text(0);
+        QString data = item->text(1);
         subProject->prefixes[key] = data;
         replaceMap.insert(key + "dir", data);
     }
@@ -189,7 +189,7 @@ void SubprojectOptionsDialog::storeConfig()
     for (QListViewItem *item = buildorder_listview->firstChild();
          item; item = item->nextSibling())
         subdirslist.append(item->text(0));
-    QCString subdirs = subdirslist.join(" ").latin1();
+    QString subdirs = subdirslist.join(" ");
     kdDebug() << "New subdirs variable: " << subdirs << endl;
     subProject->variables["SUBDIRS"] = subdirs;
     replaceMap.insert("SUBDIRS", subdirs);

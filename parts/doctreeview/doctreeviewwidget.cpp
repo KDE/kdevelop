@@ -598,9 +598,9 @@ void DocTreeViewWidget::slotContextMenu(KListView *, QListViewItem *item, const 
     if (!item)
         return;
     contextItem = item;
-    KPopupMenu pop(i18n("Documentation Tree"));
-    pop.insertItem(i18n("Customize..."), this, SLOT(slotConfigure()));
-    pop.exec(p);
+    KPopupMenu popup(i18n("Documentation Tree"), this);
+    popup.insertItem(i18n("Customize..."), this, SLOT(slotConfigure()));
+    popup.exec(p);
 }
 
 

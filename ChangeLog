@@ -1,3 +1,17 @@
+2002-04-27  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Context menu actions in auto project act on context
+	  item, not active target
+	* Use selectionChanged() instead of executed() signal
+	  in overview widget, so that the shown targets are
+	  always those in the selected subproject
+	* Disable toolbuttons when subproject empty
+	* Data groups cannot be 'built' and they have
+	  no target options
+	* Replaced all usages of QCString in auto project
+	  by QString and saved 35783 latin1 conversions ;-)
+	* Create popup menus with parent widget
+
 2002-04-26 Harald Fernengel <harry@kdevelop.org>
         * Added first version of SourceNav Part which adds back/forward tool-buttons for code navigation.
         * Allow user to open more than one file in KFileDialog

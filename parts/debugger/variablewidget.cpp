@@ -125,7 +125,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
     setSelected(item, true);    // Need to select this item.
 
     if (item->parent()) {
-        KPopupMenu popup(item->text(VarNameCol));
+        KPopupMenu popup(item->text(VarNameCol), this);
         int idRemoveWatch = -1;
         if (dynamic_cast<WatchRoot*>(findRoot(item)))
             idRemoveWatch = popup.insertItem( i18n("Remove watch variable") );

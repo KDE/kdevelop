@@ -83,7 +83,7 @@ RemoveFileDialog::~RemoveFileDialog()
 
 void RemoveFileDialog::accept()
 {
-    QMap<QCString,QCString> replaceMap;
+    QMap<QString,QString> replaceMap;
     
     if (removeFromTargetsCheckBox && removeFromTargetsCheckBox->isChecked()) {
         QListIterator<TargetItem> it(subProject->targets);
@@ -99,8 +99,8 @@ void RemoveFileDialog::accept()
                     }
                     fitem = nextitem;
                 }
-                QCString canontargetname = AutoProjectTool::canonicalize((*it)->name);
-                QCString varname = canontargetname + "_SOURCES";
+                QString canontargetname = AutoProjectTool::canonicalize((*it)->name);
+                QString varname = canontargetname + "_SOURCES";
                 QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
                 sources.remove(fileName);
                 subProject->variables[varname] = sources.join(" ");
@@ -119,8 +119,8 @@ void RemoveFileDialog::accept()
         }
         fitem = static_cast<FileItem*>(fitem->nextSibling());
     }
-    QCString canontargetname = AutoProjectTool::canonicalize(target->name);
-    QCString varname = canontargetname + "_SOURCES";
+    QString canontargetname = AutoProjectTool::canonicalize(target->name);
+    QString varname = canontargetname + "_SOURCES";
     QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
     sources.remove(fileName);
     subProject->variables[varname] = sources.join(" ");

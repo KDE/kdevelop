@@ -97,8 +97,8 @@ void AddSubprojectDialog::accept()
     }
 
     // Adjust SUBDIRS variable in containing Makefile.am
-    subProject->variables["SUBDIRS"] += (QCString(" ") + name.latin1());
-    QMap<QCString,QCString> replaceMap;
+    subProject->variables["SUBDIRS"] += (" " + name);
+    QMap<QString,QString> replaceMap;
     replaceMap.insert("SUBDIRS", subProject->variables["SUBDIRS"]);
     AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 

@@ -57,19 +57,19 @@ QString AutoProjectTool::execFlagsDialog(const QString &compiler, const QString 
 }
 
 
-QCString AutoProjectTool::canonicalize(QString str)
+QString AutoProjectTool::canonicalize(const QString &str)
 {
-    QCString res;
+    QString res;
     for (uint i=0; i < str.length(); ++i)
-        res += str[i].isLetterOrNumber()? str[i].latin1() : '_';
+        res += str[i].isLetterOrNumber()? str[i] : QChar('_');
 
     return res;
 }
 
 
-void AutoProjectTool::parseMakefileam(const QString &filename, QMap<QCString,QCString> *variables)
+void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString,QString> *variables)
 {
-    QFile f(filename);
+    QFile f(fileName);
     if (!f.open(IO_ReadOnly))
         return;
     QTextStream stream(&f);
@@ -87,8 +87,8 @@ void AutoProjectTool::parseMakefileam(const QString &filename, QMap<QCString,QCS
         line += s;
         
         if (re.match(line.latin1())) {
-            QCString lhs = re.group(1);
-            QCString rhs = re.group(2);
+            QString lhs = re.group(1);
+            QString rhs = re.group(2);
             variables->insert(lhs, rhs);
         }
     }
@@ -97,14 +97,14 @@ void AutoProjectTool::parseMakefileam(const QString &filename, QMap<QCString,QCS
 }
 
 
-void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QCString> variables)
+void AutoProjectTool::modifyMakefileam(const QString &fileName, QMap<QString,QString> variables)
 {
-    QFile fin(filename);
+    QFile fin(fileName);
     if (!fin.open(IO_ReadOnly))
         return;
     QTextStream ins(&fin);
     
-    QFile fout(filename + "#");
+    QFile fout(fileName + "#");
     if (!fout.open(IO_WriteOnly)) {
         fin.close();
         return;
@@ -117,9 +117,9 @@ void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QC
         QString line;
         QString s = ins.readLine();
         if (re.match(s.latin1())) {
-            QCString lhs = re.group(1);
-            QCString rhs = re.group(2);
-            QMap<QCString,QCString>::Iterator it;
+            QString lhs = re.group(1);
+            QString rhs = re.group(2);
+            QMap<QString,QString>::Iterator it;
             for (it = variables.begin(); it != variables.end(); ++it) {
                 if (lhs == it.key())
                     break;
@@ -142,12 +142,12 @@ void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QC
     }
     
     // Write new variables out
-    QMap<QCString,QCString>::Iterator it2;
+    QMap<QString,QString>::Iterator it2;
     for (it2 = variables.begin(); it2 != variables.end(); ++it2)
         outs << it2.key() + " = " + it2.data() << endl;
     
     fin.close();
     fout.close();
 
-    QDir().rename(filename + "#", filename);
+    QDir().rename(fileName + "#", fileName);
 }
