@@ -155,7 +155,7 @@ bool ProjectManager::loadProject(const KURL &url)
 {
   if (url.isMalformed())
     return false;
-  
+
   if( projectLoaded() && !closeProject() )
     return false;
 
@@ -174,24 +174,24 @@ bool ProjectManager::loadProject(const KURL &url)
 
   if( !loadProjectPart() ) {
     delete m_info; m_info = 0;
-    return false;  
+    return false;
   }
-  
+
   if( !loadLanguageSupport() ) {
     unloadProjectPart();
     delete m_info; m_info = 0;
     return false;
   }
-  
+
   loadLocalParts();
-  
-  ProjectWorkspace::restore();
+
   Core::getInstance()->doEmitProjectOpened();
+  ProjectWorkspace::restore();
 
   m_openRecentProjectAction->addURL(KURL(projectFile()));
   m_closeProjectAction->setEnabled(true);
   m_projectOptionsAction->setEnabled(true);
-  
+
   return true;
 }
 
@@ -199,19 +199,19 @@ bool ProjectManager::closeProject()
 {
   if( !projectLoaded() )
     return false;
-  
+
   Q_ASSERT( API::getInstance()->project() );
 
-  Core::getInstance()->doEmitProjectClosed();
   ProjectWorkspace::save();
-    
+  Core::getInstance()->doEmitProjectClosed();
+
   if( !closeProjectSources() )
     return false;
-  
+
   unloadLocalParts();
   unloadLanguageSupport();
   unloadProjectPart();
-    
+
   // TODO, if this fails, user is screwed
   saveProjectFile();
 
@@ -220,10 +220,10 @@ bool ProjectManager::closeProject()
 
   delete m_info;
   m_info = 0;
-  
+
   m_closeProjectAction->setEnabled(false);
   m_projectOptionsAction->setEnabled(false);
-  
+
   return true;
 }
 
@@ -257,7 +257,7 @@ bool ProjectManager::loadProjectFile()
   }
 
   fin.close();
-  
+
   API::getInstance()->setProjectDom(&m_info->m_document);
 
   return true;
@@ -266,19 +266,19 @@ bool ProjectManager::loadProjectFile()
 bool ProjectManager::saveProjectFile()
 {
   Q_ASSERT( API::getInstance()->projectDom() );
-  
+
   QFile fout(m_info->m_fileName);
   if( !fout.open(IO_WriteOnly) ) {
     KMessageBox::sorry(TopLevel::getInstance()->main(), i18n("Could not write the project file."));
     return false;
   }
-  
+
   QTextStream stream(&fout);
   API::getInstance()->projectDom()->save(stream, 2);
   fout.close();
 
   API::getInstance()->setProjectDom(0);
-  
+
   return true;
 }
 
@@ -323,7 +323,7 @@ bool ProjectManager::loadProjectPart()
             .arg(m_info->m_projectPlugin));
     return false;
   }
-  
+
   KDevProject *projectPart = KParts::ComponentFactory
     ::createInstanceFromService< KDevProject >( projectService, API::getInstance(), 0,
                                                   PluginController::argumentsFromService( projectService ) );
@@ -335,16 +335,16 @@ bool ProjectManager::loadProjectPart()
   }
 
   API::getInstance()->setProject( projectPart );
-  
+
   QFileInfo fi(m_info->m_fileName);
   QString projectDir = fi.dir().canonicalPath();
   QString projectName = fi.baseName();
   kdDebug(9000) << "projectDir: " << projectDir << "  projectName: " << projectName << endl;
 
   projectPart->openProject(projectDir, projectName);
-  
+
   PluginController::getInstance()->integratePart( projectPart );
-  
+
   return true;
 }
 
@@ -369,7 +369,7 @@ bool ProjectManager::loadLanguageSupport()
             .arg(m_info->m_language));
     return false;
   }
-  
+
   KService::Ptr languageSupportService = *languageSupportOffers.begin();
   KDevLanguageSupport *langSupport = KParts::ComponentFactory
       ::createInstanceFromService<KDevLanguageSupport>( languageSupportService,
@@ -386,7 +386,7 @@ bool ProjectManager::loadLanguageSupport()
 
   API::getInstance()->setLanguageSupport( langSupport );
   PluginController::getInstance()->integratePart( langSupport );
-  
+
   return true;
 }
 
@@ -403,12 +403,12 @@ void ProjectManager::loadLocalParts()
 {
   // Make sure to refresh load/ignore lists
   getGeneralInfo();
-  
+
   KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
   for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
   {
     QString name = (*it)->name();
-    
+
     // Unload it if it is marked as ignored and loaded
     if (m_info->m_ignoreParts.contains(name)) {
       KDevPlugin* part = m_info->m_localParts[name];
@@ -419,15 +419,15 @@ void ProjectManager::loadLocalParts()
       }
       continue;
     }
-    
+
     // Check if it is already loaded
     if( m_info->m_localParts[ name ] != 0 )
       continue;
-    
+
     if( m_info->m_loadParts.contains( name ) ||
         checkNewService( *it ) )
     {
-      KDevPlugin *part = PluginController::loadPlugin( *it ); 
+      KDevPlugin *part = PluginController::loadPlugin( *it );
       if ( !part ) continue;
 
       PluginController::getInstance()->integratePart( part );
@@ -451,7 +451,7 @@ bool ProjectManager::checkNewService(const KService::Ptr &service)
 {
   QVariant var = service->property("X-KDevelop-ProgrammingLanguages");
   QStringList langlist = var.asStringList();
-  
+
   // empty means it supports all languages
   if( !langlist.isEmpty() && !langlist.contains(m_info->m_language) ) {
     m_info->m_ignoreParts << service->name();
