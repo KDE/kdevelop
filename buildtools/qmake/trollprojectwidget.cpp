@@ -2316,7 +2316,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         }
         if(fitem->name.contains(".ui"))
         {
-	  idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclass Widget..."));
+	  idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclassing Wizard..."));
           popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));

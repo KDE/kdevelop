@@ -346,7 +346,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 		removeDetailAction->plug( &popup );
 		FileContext context( m_widget->selectedSubproject()->path + "/" + fitem->name, false );
 
-		int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclass Widget...") );
+		int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass"),i18n("Subclassing Wizard...") );
         popup.setWhatsThis(idSubclassWidget, i18n("<b>Subclass widget</b><p>Launches <b>Subclassing</b> wizard. "
                            "It allows to create a subclass from the class defined in .ui file. "
                            "There is also possibility to implement slots and functions defined in the base class."));
