@@ -231,6 +231,9 @@ void CAddClassMethodDlg::setWidgetValues()
 
 void CAddClassMethodDlg::setCallbacks()
 {
+  connect( &methodRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
+  connect( &slotRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
+  connect( &signalRb, SIGNAL( clicked() ), SLOT( slotToggleModifier() ) );
 
   // Ok and cancel buttons.
   connect( &okBtn, SIGNAL( clicked() ), SLOT( OK() ) );
@@ -270,16 +273,35 @@ CParsedMethod *CAddClassMethodDlg::asSystemObj()
   else if( privateRb.isChecked() )
     aMethod->setExport( PIE_PRIVATE );
   
-  // Set modifiers
-  aMethod->setIsStatic( staticCb.isChecked() );
-  aMethod->setIsConst( constCb.isChecked() );
-  aMethod->setIsVirtual( virtualCb.isChecked() );
+  // Set modifiers if this is a normal method.
+  if( !aMethod->isSignal && !aMethod->isSlot )
+  {
+    aMethod->setIsStatic( staticCb.isChecked() );
+    aMethod->setIsConst( constCb.isChecked() );
+    aMethod->setIsVirtual( virtualCb.isChecked() );
+  }
 
   // Set comment
   comment = "/** " + docEdit.text() + " */";
   aMethod->setComment( comment );
 
   return aMethod;
+}
+
+void CAddClassMethodDlg::slotToggleModifier()
+{
+  if( slotRb.isChecked() || signalRb.isChecked() )
+  {
+    staticCb.setEnabled( false );
+    constCb.setEnabled( false );
+    virtualCb.setEnabled( false );
+  }
+  else
+  {
+    staticCb.setEnabled( true );
+    constCb.setEnabled( true );
+    virtualCb.setEnabled( true );
+  }
 }
 
 void CAddClassMethodDlg::OK()

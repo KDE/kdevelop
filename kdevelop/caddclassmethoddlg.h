@@ -110,8 +110,9 @@ protected: // Private widgets
   QPushButton cancelBtn;
   QLabel btnFill;
 
- protected slots:
+protected slots:
 
+  void slotToggleModifier();
   void OK();
 
 private: // Private methods
