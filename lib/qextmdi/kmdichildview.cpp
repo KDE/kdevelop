@@ -444,7 +444,7 @@ void KMdiChildView::activate()
       if(!m_bFocusInEventIsPending) {
          setFocus();
       }
-      //qDebug("KMdiChildView::activate() called!");
+      kdDebug(760) << "KMdiChildView::activate() called!" << endl;
       emit activated(this);
    }
 

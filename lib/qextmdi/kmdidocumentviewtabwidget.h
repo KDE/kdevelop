@@ -15,6 +15,7 @@
 
 class KPopupMenu;
 
+//KDE4: Add a d pointer
 class KMdiDocumentViewTabWidget:
  public KTabWidget
 {
@@ -33,7 +34,7 @@ public:
 
 	KMdi::TabWidgetVisibility tabWidgetVisibility();
 	void setTabWidgetVisibility( KMdi::TabWidgetVisibility );
- 
+
 private slots:
 	void closeTab(QWidget* w);
 public slots:
@@ -42,7 +43,6 @@ public slots:
 private:
 	void maybeShow();
 	KMdi::TabWidgetVisibility m_visibility;
-	KPopupMenu *m_tabBarMenu;
 };
 
 

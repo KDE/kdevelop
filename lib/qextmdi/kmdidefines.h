@@ -96,6 +96,12 @@ namespace KMdi
       ShowWhenMoreThanOneTab = 1,
       NeverShowTabs          = 2
    };
+   
+   enum ToolviewStyle {
+      IconOnly	= 0,
+      TextOnly	= 1,
+      TextAndIcon = 3 
+   };
 } //namespace
 
 #endif //_KMDIDEFINES_H_

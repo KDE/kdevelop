@@ -11,7 +11,8 @@
 #include <kpopupmenu.h>
 #include "kmdidocumentviewtabwidget.h"
 
-KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char* name):KTabWidget(parent,name), m_tabBarMenu(0) {
+KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char* name):KTabWidget(parent,name)
+{
 	m_visibility = KMdi::ShowWhenMoreThanOneTab;
 	tabBar()->hide();
 	setHoverCloseButton(true);
@@ -19,7 +20,6 @@ KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char
 }
 
 KMdiDocumentViewTabWidget::~KMdiDocumentViewTabWidget() {
-    delete m_tabBarMenu;
 }
 
 void KMdiDocumentViewTabWidget::closeTab(QWidget* w) {
@@ -92,7 +92,7 @@ void KMdiDocumentViewTabWidget::maybeShow()
                         cornerWidget()->show();
                 }
 	}
-	
+
 	if ( m_visibility == KMdi::ShowWhenMoreThanOneTab )
 	{
 		if (count()<2) tabBar()->hide();

@@ -439,9 +439,22 @@ public slots:
     * <LI>maximized, minimized or restored (normalized)</LI>
     * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI?
     * </UL>
-    * @param index defines an index of tab, after which the new tab will be inserted. This param have not any sence in ChildFrame mode. If index == -1 then the tab will be appended.
     */
-   virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd, int index = -1);
+   virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd);
+   //KDE4: merge the two methods
+   /**
+    * One of the most important methods at all!
+    * Adds a KMdiChildView to the MDI system. The main frame takes it under control.
+    * You can specify here whether:
+    * <UL><LI>the view should be attached or detached.</LI>
+    * <LI>shown or hidden</LI>
+    * <LI>maximized, minimized or restored (normalized)</LI>
+    * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI?
+    * </UL>
+    * @param index defines an index of tab, after which the new tab will be inserted. This param have not any sence in ChildFrame mode. If index == -1 then the tab will be appended.
+    * @since 3.3
+    */
+   void addWindow( KMdiChildView* pView, int flags, int index); 
    /**
    * See the method above for more details. Additionally, it moves to point pos.
    */
@@ -528,6 +541,10 @@ public slots:
     * Sets the appearance of the IDEAl mode. See KMultiTabBar styles for the first 3 bits.
     */
    void setIDEAlModeStyle(int flags);
+   /**
+    * Sets the appearance of the toolview tabs in Tab Page and Childframe mode. See KMdi::ToolviewStyle.
+    */
+   void setToolviewStyle(int flags);
    /*
    * @return if the view taskbar should be shown if there are MDI views
    */
