@@ -350,6 +350,7 @@ void CKDevInstall::slotAuto() // proceed >>
   bool kiconedit=false;
   bool ktranslator=false;
 	bool kpaint=false;
+	bool designer=false;
 	
   auto_button->setEnabled(false);
 
@@ -609,6 +610,9 @@ void CKDevInstall::slotAuto() // proceed >>
   if(CToolClass::searchInstProgram("kpaint")){
     kpaint=true;
   }
+  if(CToolClass::searchInstProgram("designer")){
+    designer=true;
+  }
 
 	QStrList tools_exe;
 	QStrList tools_entry;
@@ -684,6 +688,16 @@ void CKDevInstall::slotAuto() // proceed >>
   else
     kpaint_str=i18n("KPaint")+not_found+"\n";
 
+	QString designer_str;
+	if(designer){
+    designer_str="Qt Designer"+found+"\n";
+		tools_exe.append("designer");
+		tools_entry.append("&Qt Designer");
+		tools_argument.append(" -client ");
+	}
+  else
+    designer_str=i18n("Qt Designer")+not_found+"\n";
+
   QString ktranslator_str;
   if(ktranslator){
     ktranslator_str="KTranslator"+found+"\n";
@@ -754,7 +768,7 @@ void CKDevInstall::slotAuto() // proceed >>
   {
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str+htdig_str+htsearch_str
-                  +print_str+dbg_str+kiconedit_str+kpaint_str+ktranslator_str, KMsgBox::INFORMATION);
+                  +print_str+dbg_str+kiconedit_str+kpaint_str+ktranslator_str+designer_str, KMsgBox::INFORMATION);
 
 	config->setGroup("ToolsMenuEntries");
 	config->writeEntry("Tools_exe",tools_exe);
