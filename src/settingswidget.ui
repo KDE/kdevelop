@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>566</width>
-            <height>447</height>
+            <width>559</width>
+            <height>456</height>
         </rect>
     </property>
     <property name="caption">
@@ -336,12 +336,9 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox">
+        <widget class="QButtonGroup">
             <property name="name">
-                <cstring>groupBox4</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
+                <cstring>buttonGroup3</cstring>
             </property>
             <property name="title">
                 <string>Terminal Emulator</string>

@@ -72,6 +72,11 @@ void KDevIDEExtension::createGlobalSettingsPage(KDialogBase *dlg)
     gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
     gsw->projects_url->setURL(config->readPathEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
     gsw->embedDesignerCheckBox->setChecked(config->readBoolEntry("Embed KDevDesigner", true));    
+
+    config->setGroup("TerminalEmulator");
+    gsw->useKDETerminal->setChecked( config->readBoolEntry( "UseKDESetting", true ) );
+    gsw->useOtherTerminal->setChecked( !gsw->useKDETerminal->isChecked() );
+    gsw->terminalEdit->setText( config->readEntry( "TerminalApplication", QString::fromLatin1("konsole") ) );
 }
 
 void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
@@ -94,6 +99,10 @@ void KDevIDEExtension::acceptGlobalSettingsPage(KDialogBase *dlg)
     {
         static_cast<KDevMakeFrontend*>(makeExt)->updateSettingsFromConfig();
     }
+
+    config->setGroup("TerminalEmulator");
+    config->writeEntry("UseKDESetting", gsw->useKDETerminal->isChecked() );
+    config->writeEntry("TerminalApplication", gsw->terminalEdit->text().stripWhiteSpace() );
 }
 
 QString KDevIDEExtension::xmlFile()
