@@ -3,6 +3,8 @@
 #include "cvspart.h"
 #include <qlineedit.h>
 
+#include "cvs_commonoptions.h"
+
 CvsOptionsWidget::CvsOptionsWidget(CvsPart *part, QWidget *parent, const char *name)
         : CvsOptionsWidgetBase(parent, name) {
     m_part = part;
@@ -17,14 +19,14 @@ CvsOptionsWidget::~CvsOptionsWidget() {}
 void CvsOptionsWidget::readConfig() {
     QDomDocument &dom = *m_part->projectDom();
 
-    cvs_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",m_part->default_cvs ));
-    commit_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/commitoptions",m_part->default_commit));
-    update_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/updateoptions",m_part->default_update));
-    add_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/addoptions",m_part->default_add));
-    remove_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/removeoptions",m_part->default_remove));
-    diff_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/diffoptions",m_part->default_diff));
-    log_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/logoptions",m_part->default_log));
-    rsh_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/rshoptions",m_part->default_rsh));
+    cvs_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs ));
+    commit_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/commitoptions",default_commit));
+    update_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/updateoptions",default_update));
+    add_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/addoptions",default_add));
+    remove_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/removeoptions",default_remove));
+    diff_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/diffoptions",default_diff));
+    log_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/logoptions",default_log));
+    rsh_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/rshoptions",default_rsh));
 
 }
 
@@ -45,6 +47,6 @@ void CvsOptionsWidget::storeConfig() {
 
 void CvsOptionsWidget::accept() {
     storeConfig();
-//    emit m_part->configChange();
+//    emit configChange();
 }
 #include "cvsoptionswidget.moc"

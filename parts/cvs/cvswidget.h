@@ -17,7 +17,7 @@ public:
     ~CvsWidget();
     
 public slots:
-    void startCommand(QString &dir, QString &command);
+    void startCommand(const QString &dir, const QString &command);
 
 private slots:
     void lineHighlighted(int line);

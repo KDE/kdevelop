@@ -1,0 +1,152 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>CvsForm</class>
+<author>Yann Hodique</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>CvsForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>600</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form3</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>This form allows you to create a CVS repository
+for your new project</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>CVS root:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="0" column="1">
+            <property name="name">
+                <cstring>root_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter your CVS Root location</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>CVS Root location goes here
+e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home/cvs&lt;/tt&gt;</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="5" column="0">
+            <property name="name">
+                <cstring>TextLabel5</cstring>
+            </property>
+            <property name="text">
+                <string>Release tag:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="5" column="1">
+            <property name="name">
+                <cstring>release_edit</cstring>
+            </property>
+            <property name="text">
+                <string>start</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Tag that will be associated with initial state</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="1">
+            <property name="name">
+                <cstring>repository_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter the name of the repository</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>CVS Repository name goes here
+Most of the thime you'll just reuse the project name</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="3" column="1">
+            <property name="name">
+                <cstring>vendor_edit</cstring>
+            </property>
+            <property name="text">
+                <string>vendor</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter the vendor name</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="4" column="1">
+            <property name="name">
+                <cstring>message_edit</cstring>
+            </property>
+            <property name="text">
+                <string>new project</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Repository creation message</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>TextLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Message:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>CVS repository:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>TextLabel4</cstring>
+            </property>
+            <property name="text">
+                <string>Vendor tag:</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="1" column="1">
+            <property name="name">
+                <cstring>init_check</cstring>
+            </property>
+            <property name="text">
+                <string>Init root</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Check if you defined a new CVS Root</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>root_edit</tabstop>
+    <tabstop>init_check</tabstop>
+    <tabstop>repository_edit</tabstop>
+    <tabstop>vendor_edit</tabstop>
+    <tabstop>message_edit</tabstop>
+    <tabstop>release_edit</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -58,7 +58,7 @@ CvsWidget::CvsWidget(CvsPart *part)
 CvsWidget::~CvsWidget() {}
 
 
-void CvsWidget::startCommand(QString &dir, QString &command) {
+void CvsWidget::startCommand(const QString &dir, const QString &command) {
     m_part->mainWindow()->raiseView(this);
     m_part->core()->running(m_part, true);
     this->dir = dir;
