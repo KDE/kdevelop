@@ -68,7 +68,7 @@ private:
   void destroyCmds();
   void removeInfoRequests();
   void actOnProgramPause(const QString& msg);
-  void programNoApp(const QString& msg);
+  void programNoApp(const QString& msg, bool msgBox);
 
   void setBreakpoint(const QString& BPSetCmd, int key);
   void clearBreakpoint(const QString& BPClearCmd);
@@ -142,6 +142,7 @@ private:
 
   STTY*             tty_;
   bool              programHasExited_;
+  QString           badCore_;
 
   // Configuration values
   bool config_breakOnLoadingLibrary_;

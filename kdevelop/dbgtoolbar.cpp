@@ -18,8 +18,9 @@
 #include "dbgtoolbar.h"
 #include "ckdevelop.h"
 
-#include "kapp.h"
-#include "kwm.h"
+#include <kapp.h>
+#include <kpopmenu.h>
+#include <kwm.h>
 
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -57,31 +58,29 @@
 // similar to the KToolBar floating style.
 class DbgMoveHandle : public QFrame
 {
-  public:
-    DbgMoveHandle(QWidget * parent=0, const char * name=0,
-                    WFlags f=0, bool allowLines=TRUE);
-    virtual ~DbgMoveHandle();
+public:
+  DbgMoveHandle(DbgToolbar* parent=0, const char * name=0,
+                  WFlags f=0, bool allowLines=TRUE);
+  virtual ~DbgMoveHandle();
 
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent( QMouseEvent *e);
-    virtual void mouseMoveEvent(QMouseEvent *e);
+  virtual void mousePressEvent(QMouseEvent *e);
+  virtual void mouseReleaseEvent( QMouseEvent *e);
+  virtual void mouseMoveEvent(QMouseEvent *e);
 
-  private:
-    QWidget*    parent_;
-    QPoint      offset_;
-    bool        moving_;
-//    QRect       limit_;
+private:
+  DbgToolbar* toolBar_;
+  QPoint      offset_;
+  bool        moving_;
 };
 
 // **************************************************************************
 
-DbgMoveHandle::DbgMoveHandle(QWidget * parent,
+DbgMoveHandle::DbgMoveHandle(DbgToolbar* toolBar,
                               const char * name, WFlags f, bool allowLines) :
-  QFrame(parent, name, f, allowLines),
-  parent_(parent),
+  QFrame(toolBar, name, f, allowLines),
+  toolBar_(toolBar),
   offset_(QPoint(0,0)),
   moving_(false)
-//  limit_(KWM::getWindowRegion(KWM::desktop(winId())))
 {
   setFrameStyle( QFrame::Panel|QFrame::Raised);
   setFixedHeight( 12 );
@@ -101,8 +100,18 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
   if (moving_)
     return;
 
+  if (e->button() == RightButton)
+  {
+    KPopupMenu* menu = new KPopupMenu( this );
+    menu->setTitle("Debug toolbar");
+    menu->insertItem(i18n("Dock toolbar"),              toolBar_, SLOT(slotDock()));
+    menu->insertItem(i18n("Dock and iconify kDevelop"), toolBar_, SLOT(slotIconifyAndDock()));
+    menu->popup(e->globalPos());
+    return;
+  }
+
   moving_ = true;
-  offset_ = parent_->pos() - e->globalPos();
+  offset_ = toolBar_->pos() - e->globalPos();
   setFrameStyle( QFrame::Panel|QFrame::Sunken);
   QApplication::setOverrideCursor(QCursor(sizeAllCursor));
   setPalette(QPalette(kapp->selectColor));
@@ -130,18 +139,7 @@ void DbgMoveHandle::mouseMoveEvent(QMouseEvent *e)
   if (!moving_)
     return;
 
-  parent_->move(e->globalPos() + offset_);
-
-// I've had the window jump off the screen once. which made it impossible
-// to control the debugger. I tried the following code, but it wasn't good
-// enough. The screen edges didn't work nicely, because the desktop region
-// doesn't contain the panel or taskbar.
-
-//  QPoint moveTo = e->globalPos() + offset_;
-
-  // Make sure we never go outside the desktop region
-//  if (limit_.contains(moveTo))
-//    parent_->move(moveTo);
+  toolBar_->move(e->globalPos() + offset_);
 }
 
 // **************************************************************************
@@ -153,14 +151,18 @@ void DbgMoveHandle::mouseMoveEvent(QMouseEvent *e)
 // Hmmm, not sure this stuff looks that nice. Perhaps that's why.
 class DbgButton : public QPushButton
 {
-  public:
-    DbgButton(const char* text, const QPixmap& pixmap, QWidget * parent) :
-      QPushButton(parent),  text_(text),  pixmap_(pixmap) {};
-    virtual ~DbgButton()  {};
-    void drawButtonLabel(QPainter *painter);
-  private:
-    QString text_;
-    QPixmap pixmap_;
+public:
+  DbgButton(const char* text, const QPixmap& pixmap, DbgToolbar* parent) :
+    QPushButton(parent),
+    text_(text),
+    pixmap_(pixmap)
+    {};
+  virtual ~DbgButton()  {};
+  void drawButtonLabel(QPainter *painter);
+
+private:
+  QString     text_;
+  QPixmap     pixmap_;
 };
 
 // **************************************************************************
@@ -187,14 +189,55 @@ void DbgButton::drawButtonLabel(QPainter *painter)
 }
 
 // **************************************************************************
+// **************************************************************************
+// **************************************************************************
+
+DbgDocker::DbgDocker(DbgToolbar* toolBar, const QPixmap& pixmap) :
+  QLabel(0, "DbgDocker"),    // Cannot have a parent !!!
+  toolBar_(toolBar)
+{
+  setPixmap(pixmap);
+}
+
+// **************************************************************************
+
+void DbgDocker::mousePressEvent(QMouseEvent *e)
+{
+  if (!rect().contains( e->pos()))
+	  return;
+	
+  switch (e->button())
+  {
+    case LeftButton:
+      // Not really a click, but it'll hold for the time being !!!
+      emit clicked();
+      break;
+
+    case RightButton:
+      KPopupMenu* menu = new KPopupMenu( this );
+      menu->setTitle("Debug toolbar");
+      menu->insertItem(i18n("Undock toolbar"),                toolBar_, SLOT(slotUndock()));
+      menu->insertItem(i18n("Undock and activate kDevelop"),  toolBar_, SLOT(slotActivateAndUndock()));
+      menu->insertItem(i18n("Stop debugging"),                toolBar_, SLOT(slotDbgStop()));
+      menu->popup(e->globalPos());
+      break;
+  }
+}
+
+// **************************************************************************
+// **************************************************************************
+// **************************************************************************
 
 DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   QFrame(0, "DbgToolbar"),
   ckDevelop_(parent),
+  dbgController_(dbgController),
   activeWindow_(0),
   bKDevFocus_(0),
   bPrevFocus_(0),
-  appIsActive_(false)
+  appIsActive_(false),
+  docked_(false),
+  docker_(0)
 {
   // Must have noFocus set so that we can see what window was active.
   // see slotDbgKdevFocus() for more comments
@@ -209,6 +252,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   QPixmap pm;
 
   DbgMoveHandle*  moveHandle  = new DbgMoveHandle(this);
+
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgrun.xpm");
   DbgButton*      bRun        = new DbgButton(i18n("Run"), pm, this);
 
@@ -355,6 +399,65 @@ void DbgToolbar::setAppIndicator(bool appIndicator)
     bPrevFocus_->setPalette(QPalette(kapp->backgroundColor));
     bKDevFocus_->setPalette(QPalette(colorGroup().mid()));
   }
+}
+
+// **************************************************************************
+
+void DbgToolbar::slotDock()
+{
+  if (docked_)
+    return;
+
+  ASSERT(!docker_);
+  hide();
+  QPixmap pm;
+  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
+  docker_ = new DbgDocker(this, pm);
+  connect(docker_, SIGNAL(clicked()),  dbgController_,  SLOT(slotStepOver()));
+  KWM::setDockWindow(docker_->winId());
+  docker_->show();
+  docked_ = true;
+}
+
+// **************************************************************************
+
+void DbgToolbar::slotIconifyAndDock()
+{
+  if (docked_)
+    return;
+
+  KWM::setIconify(ckDevelop_->winId(), true);
+  slotDock();
+}
+
+// **************************************************************************
+
+void DbgToolbar::slotUndock()
+{
+  if (!docked_)
+    return;
+
+  ASSERT(docker_);
+  //TODO - this is bad - we want to remove the docker_ _in_ a call
+  // from the docker_. Yuk!!!
+  // Should create()/destroy() the window?, and always have the docked widget
+  // instantiated.?
+  docker_->close();
+  delete docker_;
+  docker_ = 0;
+  show();
+  docked_ = false;
+}
+
+// **************************************************************************
+
+void DbgToolbar::slotActivateAndUndock()
+{
+  if (!docked_)
+    return;
+
+  KWM::activate(ckDevelop_->winId());
+  slotUndock();
 }
 
 // **************************************************************************

@@ -55,6 +55,7 @@ static GDBParser* getParser()
 VarViewer::VarViewer( QWidget *parent, const char *name ) :
   QWidget( parent, name )
 {
+  setFocusPolicy(QWidget::StrongFocus);
   QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
 
   varTree_ = new VarTree(this);
@@ -120,6 +121,7 @@ VarTree::VarTree( QWidget *parent, const char *name ) :
   addColumn("Variable");
   addColumn("Value");
   setMultiSelection (false);
+  setFocusPolicy(QWidget::StrongFocus);
 
   connect (this,  SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &, int )),
                   SLOT(slotRightButtonClicked ( QListViewItem *, const QPoint &, int )));
