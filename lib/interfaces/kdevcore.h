@@ -146,6 +146,13 @@ public:
      * a command is started.
      */
     virtual void raiseWidget(QWidget *) = 0;
+
+
+    /**
+     * Make the given widget invisible. This may be ignored by
+     * some UI models.
+     */
+    virtual void lowerWidget(QWidget *) = 0;
     
     /**
      * Remove the given widget from the user interface

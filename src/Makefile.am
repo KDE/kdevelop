@@ -18,14 +18,6 @@ gideon_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
 		$(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 		$(top_builddir)/lib/libkdevelop.la
 
-#$(top_builddir)/parts/doctreeview/libkdevdoctreeview.la \
-#	       $(top_builddir)/parts/classview/libkdevclassview.la \
-#	       $(top_builddir)/parts/grepview/libkdevgrepview.la \
-#	       $(top_builddir)/parts/outputviews/libkdevoutputviews.la \
-#	       $(top_builddir)/parts/appwizard/libkdevappwizard.la \
-#	       $(top_builddir)/lib/util/libkdevutil.la \
-#	       $(LIB_KHTML)
-
 rcdir = $(kde_datadir)/gideon
 rc_DATA = gideonui.rc
 

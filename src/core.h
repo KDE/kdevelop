@@ -23,6 +23,7 @@ public:
   virtual void embedWidget(QWidget *w, Role role, const QString &shortCaption);
   virtual void raiseWidget(QWidget *w);
   virtual void removeWidget( QWidget* w, Role role );
+  virtual void lowerWidget(QWidget *w);
 
   virtual void gotoFile(const KURL &url);
   virtual void gotoDocumentationFile(const KURL& url, Embedding embed=Replace);

@@ -58,6 +58,14 @@ void Core::raiseWidget(QWidget *w)
 }
 
 
+void Core::lowerWidget(QWidget *w)
+{
+  kdDebug() << "Lower Widget " << w << endl;
+
+  TopLevel::getInstance()->lowerView(w);
+}
+
+
 void Core::removeWidget(QWidget* w, Role)
 {
   TopLevel::getInstance()->removeView(w);

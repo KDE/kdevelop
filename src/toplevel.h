@@ -20,6 +20,7 @@ public:
   void removeView(QWidget *view);
 
   void raiseView(QWidget *view);
+  void lowerView(QWidget *view);
 
   static TopLevel *getInstance();
 

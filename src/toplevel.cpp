@@ -147,6 +147,13 @@ void TopLevel::raiseView(QWidget *view)
 }
 
 
+void TopLevel::lowerView(QWidget *view)
+{
+  m_leftBar->lowerWidget(view);
+  m_bottomBar->lowerWidget(view);
+}
+
+
 void TopLevel::createGUI(KParts::Part *part)
 {
   KParts::MainWindow::createGUI(part);
