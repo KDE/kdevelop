@@ -1,5 +1,4 @@
 #include <kdebug.h>
-#include <ktexteditor/editinterface.h>
 
 #include "kwrite/kwview.h"
 #include "kwrite/kwdoc.h"
@@ -23,71 +22,92 @@ QString EditIfaceImpl::text() const
 
 void EditIfaceImpl::setText(const QString &text)
 {
-  m_edit->document()->setText(text);
-  m_edit->document()->setModified(true);
-  ((KWriteDoc*)m_edit->document())->updateViews();
+  KWriteDoc* doc = (KWriteDoc*)m_edit->document()->qt_cast( "KWriteDoc" );
+  if ( !doc )
+    return;
+  doc->setText(text);
+  doc->setModified(true);
+  doc->updateViews();
 }
 
 
 void EditIfaceImpl::append(const QString &text)
 {
-  m_edit->document()->insertLine(text);
-  m_edit->document()->setModified(true);
-  ((KWriteDoc*)m_edit->document())->updateViews();
+  KWriteDoc* doc = (KWriteDoc*)m_edit->document()->qt_cast( "KWriteDoc" );
+  if ( !doc )
+    return;
+  doc->insertLine(text);
+  doc->setModified(true);
+  doc->updateViews();
 }
 
 
 bool EditIfaceImpl::insertLine(const QString &text, uint line)
 {
-  m_edit->document()->insertLine(text, line);
-  m_edit->document()->setModified(true);
-  ((KWriteDoc*)m_edit->document())->updateViews();
+  KWriteDoc* doc = (KWriteDoc*)m_edit->document()->qt_cast( "KWriteDoc" );
+  if ( !doc )
+    return false;
+  doc->insertLine(text, line);
+  doc->setModified(true);
+  doc->updateViews();
   return true;
 }
 
 
 bool EditIfaceImpl::insertAt(const QString &text, uint line, uint col)
 {
-  m_edit->document()->insertAt(text, line, col);
-  m_edit->document()->setModified(true);
-  ((KWriteDoc*)m_edit->document())->updateViews();
+  KWriteDoc* doc = (KWriteDoc*)m_edit->document()->qt_cast( "KWriteDoc" );
+  if ( !doc )
+    return false;
+  doc->insertAt(text, line, col);
+  doc->setModified(true);
+  doc->updateViews();
   return true;
 }
 
 
 bool EditIfaceImpl::removeLine(uint line)
 {
-  m_edit->document()->removeLine(line);
-  m_edit->document()->setModified(true);
-  ((KWriteDoc*)m_edit->document())->updateViews();
+  KWriteDoc* doc = (KWriteDoc*)m_edit->document()->qt_cast( "KWriteDoc" );
+  if ( !doc )
+    return false;
+  doc->removeLine(line);
+  doc->setModified(true);
+  doc->updateViews();
   return true;
 }
 
 
 QString EditIfaceImpl::line(uint line,bool replaceTabsWithSpaces) const
 {
+  KWriteDoc* doc = (KWriteDoc*)m_edit->document()->qt_cast( "KWriteDoc" );
+  if ( !doc )
+    return QString::null;
   if(replaceTabsWithSpaces){
-    QString lineStr = m_edit->document()->textLine(line);
+    QString lineStr = doc->textLine(line);
     QString spaces;
-    spaces.fill(' ',((KWriteDoc*)m_edit->document())->tabWidth());
-    return lineStr.replace(QRegExp("\t"),spaces);		 
-    
+    spaces.fill(' ',doc->tabWidth());
+    return lineStr.replace(QRegExp("\t"),spaces);
+
   }
   else {
-    return m_edit->document()->textLine(line);
+    return doc->textLine(line);
   }
 }
 
 
 bool EditIfaceImpl::setLine(const QString &text, uint line)
 {
-  if (line >= m_edit->document()->numLines())
+    KWriteDoc* doc = (KWriteDoc*)m_edit->document()->qt_cast( "KWriteDoc" );
+  if ( !doc )
+    return false;
+  if (line >= doc->numLines())
     return false;
 
-  m_edit->document()->removeLine(line);
-  m_edit->document()->insertLine(text, line);
-  m_edit->document()->setModified(true);
-  ((KWriteDoc*)m_edit->document())->updateViews();
+  doc->removeLine(line);
+  doc->insertLine(text, line);
+  doc->setModified(true);
+  doc->updateViews();
 
   return true;
 }
