@@ -16,6 +16,7 @@
 #include <qregexp.h>
 #include <qhbox.h>
 #include <qwhatsthis.h>
+#include <qtooltip.h>
 #include <qstringlist.h>
 #include <kfiledialog.h>
 #include <kbuttonbox.h>
@@ -32,6 +33,8 @@
 #include <kurlcompletion.h>
 #include <kurlrequester.h>
 #include <kstdguiitem.h>
+#include <kparts/part.h>
+#include <kdevpartcontroller.h>
 
 #include "grepviewpart.h"
 
@@ -66,8 +69,8 @@ const char *filepatterns[] = {
 };
 
 
-GrepDialog::GrepDialog(QWidget *parent, const char *name)
-    : QDialog(parent, name, false)
+GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
+    : QDialog(parent, name, false), m_part( part )
 {
     setCaption(i18n("Search in Files"));
 
@@ -120,11 +123,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     layout->addLayout(dir_layout, 3, 1);
 
     dir_combo = new KComboBox( true, this );
-#if KDE_VERSION >= 0x030103
     dir_combo->insertStringList(config->readPathListEntry("LastSearchPaths"));
-#else
-    dir_combo->insertStringList(config->readListEntry("LastSearchPaths"));
-#endif
     dir_combo->setInsertionPolicy(QComboBox::NoInsertion);
     dir_combo->setEditText(QDir::homeDirPath());
 
@@ -136,17 +135,19 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     dir_combo->setMinimumWidth(dir_combo->fontMetrics().maxWidth()*25);
     dir_layout->addWidget( url_requester, 10 );
 
+	synch_button = new QPushButton(".", this );
+	QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
+	dir_layout->addWidget( synch_button );
+
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
     recursive_box->setChecked(true);
     dir_layout->addSpacing(10);
     dir_layout->addWidget(recursive_box);
 
-# ifdef IGNORE_SCM_DIRS
     ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
     ignore_scm_box->setChecked(true);
     dir_layout->addSpacing(10);
     dir_layout->addWidget(ignore_scm_box);
-# endif
 
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
@@ -200,6 +201,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 	     SLOT(hide()) );
     connect( pattern_combo->lineEdit(), SIGNAL( textChanged ( const QString & ) ),
              SLOT( slotPatternChanged( const QString & ) ) );
+	connect( synch_button, SIGNAL(clicked()), this, SLOT(slotSynchDirectory()) );
     slotPatternChanged( pattern_combo->currentText() );
 }
 
@@ -220,11 +222,7 @@ GrepDialog::~GrepDialog()
     config->setGroup("GrepDialog");
     // memorize the last patterns and paths
     config->writeEntry("LastSearchItems", qCombo2StringList(pattern_combo));
-#if KDE_VERSION >= 0x030103
     config->writePathEntry("LastSearchPaths", qCombo2StringList(dir_combo));
-#else
-    config->writeEntry("LastSearchPaths", qCombo2StringList(dir_combo));
-#endif
 }
 
 void GrepDialog::slotPatternChanged( const QString & _text )
@@ -283,6 +281,20 @@ void GrepDialog::show()
 	QDialog::hide();
     QDialog::show();
     pattern_combo->setFocus();
+}
+
+void GrepDialog::slotSynchDirectory( )
+{
+	KParts::ReadOnlyPart * part = dynamic_cast<KParts::ReadOnlyPart*>( m_part->partController()->activePart() );
+	if ( part )
+	{
+		KURL url = part->url();
+		if ( url.isLocalFile() )
+		{
+			dir_combo->setEditText( url.upURL().path( +1 ) );
+//			url_requester->lineEdit()->setText( url.upURL().path( +1 ) );
+		}
+	}
 }
 
 #include "grepdlg.moc"

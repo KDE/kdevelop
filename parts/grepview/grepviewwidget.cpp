@@ -92,7 +92,7 @@ GrepViewWidget::GrepViewWidget(GrepViewPart *part)
     : ProcessWidget(0, "grep widget")
     , m_matchCount(0)
 {
-    grepdlg = new GrepDialog(this, "grep widget");
+    grepdlg = new GrepDialog( part, this, "grep widget");
     connect( grepdlg, SIGNAL(searchClicked()),
 	     this, SLOT(searchActivated()) );
     connect( this, SIGNAL(clicked(QListBoxItem*)),

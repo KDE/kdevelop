@@ -24,13 +24,14 @@
 class KConfig;
 class KURLRequester;
 class QPushButton;
+class GrepViewPart;
 
 class GrepDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    GrepDialog(QWidget *parent=0, const char *name=0);
+    GrepDialog( GrepViewPart * part, QWidget *parent=0, const char *name=0 );
     ~GrepDialog();
 
     void setPattern(const QString &pattern)
@@ -50,10 +51,8 @@ public:
 	{ return recursive_box->isChecked(); }
     void show();
 
-#ifdef IGNORE_SCM_DIRS
     bool ignoreSCMDirsFlag() const
         { return ignore_scm_box->isChecked(); }
-#endif
 
 signals:
     void searchClicked();
@@ -62,6 +61,8 @@ private slots:
     void templateActivated(int index);
     void slotSearchClicked();
     void slotPatternChanged( const QString &);
+	void slotSynchDirectory();
+
 private:
     QLineEdit *template_edit;
     QComboBox *pattern_combo, *files_combo;
@@ -69,11 +70,11 @@ private:
     KURLRequester * url_requester;
 
     QCheckBox *recursive_box;
-#ifdef IGNORE_SCM_DIRS
     QCheckBox *ignore_scm_box;
-#endif
     KConfig* config;
     QPushButton *search_button;
+	QPushButton *synch_button;
+	GrepViewPart * m_part;
 };
 
 
