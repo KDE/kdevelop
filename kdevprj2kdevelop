@@ -13,7 +13,7 @@ unless ($filename =~ /\.kdevprj/) {
 $ingeneral = 0;
 $inlfvgroups = 0;
 
-open(FILE, $filename);
+open(FILE, "<$filename") || die "File not found";
 while (<FILE>) {
         if (/\[General\]/) {
                 $ingeneral = 1;
@@ -27,7 +27,8 @@ while (<FILE>) {
                 $ingeneral = 0;
                 $inlfvgroups = 0;
                 $inbin = 1;
-        } elsif (/\[.*\]/) {
+        } elsif (/\[(.*)\]/) {
+                push(@sourcefiles, $1);
                 $ingeneral = 0;
                 $inlfvgroups = 0;
                 $inbin = 0;
@@ -55,6 +56,8 @@ while (<FILE>) {
                         $project_name = $1;
                 } elsif (/^project_type=(.*)/) {
                         $project_type = $1;
+                } elsif (/^sub_dir=([^\/]*)/) {
+                        $subdir = $1;
                 }
         }
 
@@ -71,7 +74,6 @@ while (<FILE>) {
 
         if ($inbin) {
                 if (/^bin_program=(.*)/) {
-                        print "bin_program $1";
                         $bin_program = $1;
                 } elsif (/^path_to_bin_program=(.*)/) {
                         $path_to_bin_program = $1;
@@ -86,6 +88,7 @@ while (<FILE>) {
         }
 
 }
+close FILE;
 
 # Choose language support
 $primarylanguage = "C++";
@@ -115,11 +118,16 @@ if ($project_type =~ /normal_kde|mini_kde|normalogl_kde|normal_kde2|mini_kde2|md
         $keywords = $keywords . ",Qt";
 }
 
+
 ##
-## Let's go
+## Let's go: write project file
 ##
 
-print <<EOF;
+$projectfilename = $filename;
+$projectfilename =~ s/^(.*)\.kdevprj$/$1.kdevelop/;
+open(FILE, ">$projectfilename");
+
+print FILE <<EOF;
 <!DOCTYPE kdevelop>
 <kdevelop>
  <general>
@@ -132,12 +140,12 @@ EOF
 
 foreach $key (split(/,/, $keywords)) {
         next if ($key eq "");
-        print <<EOF;
+        print FILE <<EOF;
    <keyword>$key</keyword>
 EOF
 }
 
-print <<EOF;
+print FILE <<EOF;
   </keywords>
  </general>
 EOF
@@ -145,7 +153,7 @@ EOF
 # auto project specific
 
 if ($projectmanagement eq "KDevAutoProject" || $projectmanagement eq "KDevKDEAutoProject") {
-        print <<EOF;
+        print FILE <<EOF;
  <kdevautoproject>
   <general>
    <mainprogram>$path_to_bin_program$bin_program</mainprogram>
@@ -168,7 +176,7 @@ EOF
 }
 
 if ($project_management eq "KDevCustomProject") {
-      print <<EOF;
+      print FILE <<EOF;
  <kdevcustomproject>
   <general>
    <mainprogram>$path_to_bin_program/$bin_program</mainprogram>
@@ -185,7 +193,7 @@ EOF
 
 
 # file view
-print <<EOF;
+print FILE <<EOF;
  <kdevfileview>
   <groups>
 EOF
@@ -193,12 +201,12 @@ EOF
 for $group (split /,/, $lfvgroups) { 
         next if ($group eq "");
         $pattern = $lfvgrouppattern{$group};
-        print <<EOF;
+        print FILE <<EOF;
    <group pattern="$pattern" name="$group" />
 EOF
 }
 
-print <<EOF;
+print FILE <<EOF;
   </groups>
  </kdevfileview>
  <kdevdoctreeview>
@@ -210,10 +218,81 @@ print <<EOF;
    <toc>perl</toc>
   </ignoretocs>
  </kdevdoctreeview>
+EOF
+
+if ($projectmanagement eq "KDevAutoProject"
+    || $projectmanagement eq "KDevKDEAutoProject") {
+        print FILE <<EOF;
  <kdevdebugger>
   <general>
    <dbgshell>libtool</dbgshell>
   </general>
  </kdevdebugger>
+EOF
+}
+
+print FILE <<EOF;
 </kdevelop>
 EOF
+close FILE;
+
+
+##
+## Write file list
+##
+
+if ($projectmanagement eq "KDevCustomProject") {
+        $filelistfilename = $filename;
+        $filelistfilename =~ s/^(.*).kdevprj$/$1.filelist/;
+        open(FILE, ">$filelistfilename");
+        for $file (@sourcefiles) {
+                print FILE "$file\n";
+        }
+        close FILE;
+}
+
+
+##
+## Convert templates
+##
+
+$projectdir = "";
+if ($filename =~ m#(.*/)[^/]*#) {
+        $projectdir = $1;
+}
+
+$oldtemplatedir = "${projectdir}$subdir/templates";
+
+if (open(FILE, "$oldtemplatedir/cpp_template")) {
+        mkdir "${projectdir}templates";
+        if (open(OFILE, ">${projectdir}templates/cpp")) {
+                  while(<FILE>) {
+                          s/\|EMAIL\|/\$EMAIL\$/;
+                          s/\|AUTHOR\|/\$AUTHOR\$/;
+                          s/\|VERSION\|/\$VERSION\$/;
+                          s/\|DATE\|/\$DATE\$/;
+                          s/\|YEAR\|/\$YEAR\$/;
+                          s/\|FILENAME\|/\$FILENAME\$/;
+                          print OFILE $_;
+                  }
+                  close OFILE;
+        }
+        close FILE;
+}
+
+if (open(FILE, "$oldtemplatedir/header_template")) {
+        mkdir "${projectdir}templates";
+        if (open(OFILE, ">${projectdir}templates/h")) {
+                  while(<FILE>) {
+                          s/\|EMAIL\|/\$EMAIL\$/;
+                          s/\|AUTHOR\|/\$AUTHOR\$/;
+                          s/\|VERSION\|/\$VERSION\$/;
+                          s/\|DATE\|/\$DATE\$/;
+                          s/\|YEAR\|/\$YEAR\$/;
+                          s/\|FILENAME\|/\$FILENAME\$/;
+                          print OFILE $_;
+                  }
+                  close OFILE;
+        }
+        close FILE;
+}
