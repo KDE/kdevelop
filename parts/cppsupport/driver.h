@@ -131,22 +131,42 @@ private:
     QValueList<Argument> m_argumentList;
 };
 
+class SourceProvider
+{
+public:
+    SourceProvider() {}
+    virtual ~SourceProvider() {}
+    
+    virtual QString contents( const QString& fileName ) = 0;
+    virtual bool isModified( const QString& fileName ) = 0;
+    
+private:
+    SourceProvider( const SourceProvider& source );
+    void operator = ( const SourceProvider& source );
+};
+
 class Driver
 {
 public:
     Driver();
     virtual ~Driver();
+        
+    SourceProvider* sourceProvider();
+    void setSourceProvider( SourceProvider* sourceProvider );
 
     virtual void reset();
-    virtual void clear( const QString& fileName );
+    
+    virtual void parseFile( const QString& fileName, bool onlyPreProcesss=false, bool force=false );
+    virtual void remove( const QString& fileName );
 
     virtual void addDependence( const QString& fileName, const Dependence& dep );
     virtual void addMacro( const Macro& macro );
     virtual void addProblem( const QString& fileName, const Problem& problem );
 
-    QString currentFileName() const { return m_currentFileName; }
-    virtual TranslationUnitAST::Node parseFile( const QString& fileName, const QString& contents );
 
+    QString currentFileName() const { return m_currentFileName; }
+    TranslationUnitAST::Node takeTranslationUnit( const QString& fileName );
+    TranslationUnitAST* translationUnit( const QString& fileName ) const;
     QMap<QString, Dependence> dependences( const QString& fileName ) const;
     QMap<QString, Macro> macros() const;
     QValueList<Problem> problems( const QString& fileName ) const;
@@ -156,7 +176,8 @@ public:
 
     virtual void addIncludePath( const QString &path );
 
-    const QMap<QString, TranslationUnitAST*> &parsedDependences() const { return parsedDeps; }
+    // TODO: remove
+    const QMap<QString, TranslationUnitAST*> &parsedUnits() const { return m_parsedUnits; }
 
     virtual void setResolveDependencesEnabled( bool enabled );
     bool isResolveDependencesEnabled() const { return depresolv; }
@@ -176,10 +197,11 @@ private:
     QMap< QString, QMap<QString, Dependence> > m_dependences;
     QMap<QString, Macro> m_macros;
     QMap< QString, QValueList<Problem> > m_problems;
-    QMap<QString, TranslationUnitAST*> parsedDeps;
+    QMap<QString, TranslationUnitAST*> m_parsedUnits;
     QStringList includePaths;
     uint depresolv : 1;
     Lexer *lexer;
+    SourceProvider* m_sourceProvider;
 
 private:
     Driver( const Driver& source );

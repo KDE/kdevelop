@@ -148,12 +148,12 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	} else if( m_preprocessorEnabled && m_driver->macros().contains(ide) ){
-	    
+
 	    QMap<QString, QString> map;
-	  
+
 	    int svLine = currentLine();
 	    int svColumn = currentColumn();
-	    
+
 	    Macro m = m_driver->macros()[ ide ];
 	    if( m.hasArguments() ){
 		readWhiteSpaces();
@@ -161,51 +161,51 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		    nextChar();
 		    int argIdx = 0;
 		    int argCount = m.argumentList().size();
-		    while( currentChar() && currentChar() != '\n' && argIdx<argCount ){
-			readWhiteSpaces( false );
-			
-			QString arg = readArgument();			
+		    while( currentChar() && argIdx<argCount ){
+			readWhiteSpaces();
+
+			QString arg = readArgument();
 			map[ m.argumentList()[argIdx] ] = arg;
-			
+
 			if( currentChar() == ',' ){
 			    nextChar();
 			    ++argIdx;
 			} else if( currentChar() == ')' ){
+                            nextChar();
 			    break;
 			}
 		    }
 		}
-		
-		if( currentChar() == ')' )
-		    nextChar();
 	    }
-	    
+
 	    int argsEndAtLine = currentLine();
 	    int argsEndAtColumn = currentColumn();
-	    	    
-            QString body = QString(" ") + m.body() + QString(" ");
-	    m_source.insert( currentPosition(), body );
+
+	    m_source.insert( currentPosition(), m.body() );
 
             // tokenize the macro body
 	    bool d = m_preprocessorEnabled;
 	    disablePreprocessor();
 
-            m_endPtr = currentPosition() + body.length();
+            m_endPtr = currentPosition() + m.body().length();
             while( !currentChar().isNull() ){
                 Token tok;
                 nextToken( tok );
-		
-		if( tok == Token_identifier && map.contains(toString(tok)) ){
-		    QString s = toString( tok );
+
+                QString s = toString( tok );
+                if( tok == Token_eof ){
+                     break;
+		} else if( tok == Token_identifier && map.contains(s) ){
 		    QString v = map[ s ];
-		    
+
 		    m_source.insert( currentPosition(), v );
-		    
+
 		    int svEndPtr = m_endPtr;
 		    m_endPtr = currentPosition() + v.length();
 		    while( !currentChar().isNull() ){
 			Token tok2;
 			nextToken( tok2 );
+
 			if( tok2 != -1 ){
 			    // fix the token position
 			    tok2.setStartPosition( svLine, svColumn );
@@ -213,11 +213,9 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 			    addToken( tok2 );
 			}
 		    }
-		    
+
 		    m_endPtr = svEndPtr + v.length();
-		} else if( tok == -1 || tok == Token_eof )
-                    break;
-		else {
+		} else if( tok != -1 ){
 		    addToken( tok );
 		}
             }
@@ -350,38 +348,30 @@ QString Lexer::readArgument()
 {
     QString arg;
     int count = 0;
- 
-    readWhiteSpaces( false );
+
+    readWhiteSpaces();
     while( currentChar() ){
-		
+
+	readWhiteSpaces();
 	QChar ch = currentChar();
-	
-	if( ch.isSpace() ){
-	    readWhiteSpaces( false );
-	    arg += " ";
-	    ch = currentChar();
-	}
-	
-	if( ch == '\n' ){
+
+	if( ch.isNull() || (!count && (ch == ',' || ch == ')')) )
 	    break;
-	} else if( (ch == ',' || ch == ')') && !count ){
-	    break;
-	}
-	
+
 	Token tk;
-	nextToken( tk, true );
-	
+	nextToken( tk );
+
 	if( tk == '(' ){
 	    ++count;
 	} else if( tk == ')' ){
 	    --count;
-	} 
-	
+	}
+
 	if( tk != -1 ){
-	    arg += toString( tk );	
+	    arg += toString( tk ) + " ";
 	}
     }
-    return arg;
+    return arg.stripWhiteSpace();
 }
 
 void Lexer::handleDirective( const QString& directive )

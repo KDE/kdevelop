@@ -26,13 +26,57 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 
+class DefaultSourceProvider: public SourceProvider
+{
+public:
+    DefaultSourceProvider() {}
+
+    virtual QString contents( const QString& fileName )
+    {
+	QString source;
+
+	QFile f( fileName );
+	if( f.open(IO_ReadOnly) ){
+	    QTextStream s( &f );
+	    source = s.read();
+	    f.close();
+	}
+	return source;
+    }
+
+    virtual bool isModified( const QString& fileName )
+    {
+	Q_UNUSED( fileName );
+	return true;
+    }
+
+private:
+    DefaultSourceProvider( const DefaultSourceProvider& source );
+    void operator = ( const DefaultSourceProvider& source );
+};
+
+
 Driver::Driver()
     : depresolv( FALSE ), lexer( 0 )
 {
+    m_sourceProvider = new DefaultSourceProvider();
 }
 
 Driver::~Driver()
 {
+    reset();
+}
+
+SourceProvider* Driver::sourceProvider()
+{
+    return m_sourceProvider;
+}
+
+void Driver::setSourceProvider( SourceProvider* sourceProvider )
+{
+    if( m_sourceProvider )
+	delete( m_sourceProvider );
+    m_sourceProvider = sourceProvider;
 }
 
 void Driver::reset( )
@@ -40,14 +84,27 @@ void Driver::reset( )
     m_dependences.clear();
     m_macros.clear();
     m_problems.clear();
-    parsedDeps.clear();
     includePaths.clear();
+
+    while( m_parsedUnits.size() ){
+	TranslationUnitAST* unit = *m_parsedUnits.begin();
+	m_parsedUnits.remove( m_parsedUnits.begin() );
+	delete( unit );
+    }
 }
 
-void Driver::clear( const QString & fileName )
+void Driver::remove( const QString & fileName )
 {
     m_dependences.remove( fileName );
     m_problems.remove( fileName );
+    removeAllMacrosInFile( fileName );
+
+    QMap<QString, TranslationUnitAST*>::Iterator it = m_parsedUnits.find( fileName );
+    if( it != m_parsedUnits.end() ){
+	TranslationUnitAST* unit = *it;
+	m_parsedUnits.remove( fileName );
+	delete( unit );
+    }
 }
 
 void Driver::removeAllMacrosInFile( const QString& fileName )
@@ -58,6 +115,20 @@ void Driver::removeAllMacrosInFile( const QString& fileName )
         if( m.fileName() == fileName )
             m_macros.remove( m.name() );
     }
+}
+
+TranslationUnitAST::Node Driver::takeTranslationUnit( const QString& fileName )
+{
+    QMap<QString, TranslationUnitAST*>::Iterator it = m_parsedUnits.find( fileName );
+    TranslationUnitAST::Node unit( *it );
+    m_parsedUnits.remove( it );
+    return unit;
+}
+
+TranslationUnitAST* Driver::translationUnit( const QString& fileName ) const
+{
+    QMap<QString, TranslationUnitAST*>::ConstIterator it = m_parsedUnits.find( fileName );
+    return it != m_parsedUnits.end() ? *it : 0;
 }
 
 void Driver::addDependence( const QString & fileName, const Dependence & dep )
@@ -72,7 +143,7 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
 
     QString file = findIncludeFile( dep );
 
-    if ( parsedDeps.find(file) != parsedDeps.end() )
+    if ( m_parsedUnits.find(file) != m_parsedUnits.end() )
 	return;
 
     if ( !QFile::exists( file ) ) {
@@ -83,17 +154,11 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
 	return;
     }
 
-    QFile f( file );
-    f.open( IO_ReadOnly );
-    QTextStream s( &f );
-    QString contents = s.read();
-    f.close();
     QString cfn = m_currentFileName;
     Lexer *l = lexer;
-    TranslationUnitAST::Node tu = parseFile( file, contents );
+    parseFile( file );
     m_currentFileName = cfn;
     lexer = l;
-    parsedDeps.insert( file, tu.release() );
 }
 
 void Driver::addMacro( const Macro & macro )
@@ -149,9 +214,21 @@ QValueList < Problem > Driver::problems( const QString & fileName ) const
     return QValueList<Problem>();
 }
 
-TranslationUnitAST :: Node Driver::parseFile( const QString & fileName, const QString& source )
+void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force )
 {
-    clear( fileName );
+    QString absFilePath = QFileInfo( fileName ).absFilePath();
+
+    QMap<QString, TranslationUnitAST*>::Iterator it = m_parsedUnits.find( absFilePath );
+
+    if( force && it != m_parsedUnits.end() ){
+	takeTranslationUnit( absFilePath );
+    } else if( it != m_parsedUnits.end() && *it != 0 ){
+	// file already processed
+	return;
+    }
+
+    m_dependences.remove( fileName );
+    m_problems.remove( fileName );
 
     m_currentFileName = fileName;
 
@@ -159,17 +236,19 @@ TranslationUnitAST :: Node Driver::parseFile( const QString & fileName, const QS
     lexer = &lex;
     setupLexer( &lex );
 
-    lex.setSource( source );
-    Parser parser( this, &lex );
-    setupParser( &parser );
+    lex.setSource( sourceProvider()->contents(fileName) );
 
     TranslationUnitAST :: Node translationUnit;
-    parser.parseTranslationUnit( translationUnit );
+    if( !onlyPreProcess ){
+	Parser parser( this, &lex );
+	setupParser( &parser );
 
+	parser.parseTranslationUnit( translationUnit );
+    }
+
+    m_parsedUnits.insert( fileName, translationUnit.release() );
     m_currentFileName = QString::null;
     lexer = 0;
-
-    return translationUnit;
 }
 
 void Driver::setupLexer( Lexer * lexer )

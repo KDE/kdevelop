@@ -70,10 +70,9 @@ protected:
     Unit* findUnit( const QString& fileName );
     Unit* findOrCreateUnit( const QString& fileName, bool forceCreate=false );
     Unit* parseFile( const QString& fileName );
-    Unit* parseFile( const QString& fileName, const QString& contents );
 
 private:
-    Driver m_driver;
+    class KDevDriver* m_driver;
     QStringList m_fileList;
     QWaitCondition m_canParse;
     QWaitCondition m_isEmpty;

@@ -23,6 +23,7 @@
 #include <ktexteditor/view.h>
 
 #include <kdevpartcontroller.h>
+#include <kdevproject.h>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -31,16 +32,186 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
+#include <qprocess.h>
+
+#include <stdlib.h>
+#include <unistd.h>
+
+class KDevDriver: public Driver
+{
+public:
+    KDevDriver( CppSupportPart* cppSupport )
+        : m_cppSupport( cppSupport )
+    {
+	setupProject();
+	setup();
+    }
+
+    void setupProject()
+    {
+	QMap<QString, bool> map;
+
+	{
+	    QStringList fileList = m_cppSupport->project()->allFiles();
+	    QStringList::ConstIterator it = fileList.begin();
+	    while( it != fileList.end() ){
+		QFileInfo info( *it );
+		++it;
+
+		map.insert( info.dirPath(true), true );
+	    }
+	}
+
+	{
+	    QMap<QString, bool>::Iterator it = map.begin();
+	    while( it != map.end() ){
+		addIncludePath( it.key() );
+		++it;
+	    }
+	}
+    }
+
+    // setup the preprocessor
+    // code provided by Reginald Stadlbauer <reggie@trolltech.com>
+    void setup()
+    {
+	QString kdedir = getenv( "KDEDIR" );
+	if( !kdedir.isNull() )
+	    addIncludePath( kdedir + "/include" );
+
+	QString qtdir = getenv( "QTDIR" );
+	if( !qtdir.isNull() )
+	    addIncludePath( qtdir + "/include" );
+
+	QString qmakespec = getenv( "QMAKESPEC" );
+	if ( qmakespec.isNull() )
+	    qmakespec = "linux-g++";
+	// #### implement other mkspecs and find a better way to find the
+	// #### proper mkspec (althoigh this will be no fun :-)
+
+	addIncludePath( qtdir + "/mkspecs/" + qmakespec );
+
+	if ( qmakespec == "linux-g++" ) {
+	    addIncludePath( "/include" );
+	    addIncludePath( "/usr/include" );
+	    addIncludePath( "/ust/local/include" );
+	    QProcess proc;
+	    proc.addArgument( "gcc" );
+	    proc.addArgument( "-print-file-name=include" );
+	    if ( !proc.start() ) {
+		qWarning( "Couldn't start gcc" );
+		return;
+	    }
+	    while ( proc.isRunning() )
+		usleep( 1 );
+
+	    addIncludePath( proc.readStdout() );
+	    addIncludePath( "/usr/include/g++-3" );
+	    addIncludePath( "/usr/include/g++" );
+	    proc.clearArguments();
+	    proc.addArgument( "gcc" );
+	    proc.addArgument( "-E" );
+	    proc.addArgument( "-dM" );
+	    proc.addArgument( "-ansi" );
+	    proc.addArgument( "-" );
+	    if ( !proc.start() ) {
+		qWarning( "Couldn't start gcc" );
+		return;
+	    }
+	    while ( !proc.isRunning() )
+		usleep( 1 );
+	    proc.closeStdin();
+	    while ( proc.isRunning() )
+		usleep( 1 );
+	    while ( proc.canReadLineStdout() ) {
+		QString l = proc.readLineStdout();
+		QStringList lst = QStringList::split( ' ', l );
+		if ( lst.count() != 3 )
+		    continue;
+		addMacro( Macro( lst[1], lst[2] ) );
+	    }
+	    addMacro( Macro( "__cplusplus", "1" ) );
+	} else if ( qmakespec == "win32-borland" ) {
+	    QString incl = getenv( "INCLUDE" );
+	    QStringList includePaths = QStringList::split( ';', incl );
+	    QStringList::Iterator it = includePaths.begin();
+	    while( it != includePaths.end() ){
+		addIncludePath( *it );
+		++it;
+	    }
+	    // ### I am sure there are more standard include paths on
+	    // ### windows. I will fix that soon
+	    // ### Also do the compiler specific defines on windows
+	}
+    }
+
+private:
+    CppSupportPart* m_cppSupport;
+};
+
+
+class KDevSourceProvider: public SourceProvider
+{
+public:
+    KDevSourceProvider( CppSupportPart* cppSupport ): m_cppSupport( cppSupport ) {}
+
+    virtual QString contents( const QString& fileName )
+    {
+	//kapp->lock();
+	QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
+	QPtrListIterator<KParts::Part> it( parts );
+	while( it.current() ){
+	    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
+	    ++it;
+
+	    KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
+	    if( !doc || !editIface || doc->url().path() != fileName )
+		continue;
+
+	    QString contents = editIface->text();
+	    return QString( contents.unicode(), contents.length() );
+	}
+	//kapp->unlock();
+
+	QFile f( fileName );
+	QTextStream stream( &f );
+	if( f.open(IO_ReadOnly) ){
+	    QString contents = stream.read();
+	    f.close();
+	    return contents;
+	}
+
+	return QString::null;
+    }
+
+    virtual bool isModified( const QString& fileName )
+    {
+	Q_UNUSED( fileName );
+	return true;
+    }
+
+private:
+    CppSupportPart*  m_cppSupport;
+
+private:
+    KDevSourceProvider( const KDevSourceProvider& source );
+    void operator = ( const KDevSourceProvider& source );
+};
 
 BackgroundParser::BackgroundParser( CppSupportPart* part, QWaitCondition* consumed )
     : m_consumed( consumed ), m_cppSupport( part ), m_close( false )
 {
     m_consumed = 0;
+    m_driver = new KDevDriver( m_cppSupport );
+    m_driver->setSourceProvider( new KDevSourceProvider(m_cppSupport) );
+    //disabled for now m_driver->setResolveDependencesEnabled( true );
 }
 
 BackgroundParser::~BackgroundParser()
 {
     removeAllFiles();
+    delete( m_driver );
+    m_driver = 0;
 }
 
 void BackgroundParser::addFile( const QString& fileName )
@@ -66,7 +237,7 @@ void BackgroundParser::removeAllFiles()
 	delete( unit );
     }
     m_unitDict.clear();
-    m_driver.reset();
+    m_driver->reset();
     m_fileList.clear();
 
     m_mutex.unlock();
@@ -83,56 +254,25 @@ void BackgroundParser::removeFile( const QString& fileName )
         delete( unit );
 	unit = 0;
     }
-    m_driver.clear( fileName );
+    m_driver->remove( fileName );
     m_mutex.unlock();
 
     if( m_fileList.isEmpty() )
         m_isEmpty.wakeAll();
 }
 
-Unit* BackgroundParser::parseFile( const QString& fileName, const QString& contents )
+Unit* BackgroundParser::parseFile( const QString& fileName )
 {
-    m_driver.removeAllMacrosInFile( fileName );
-    TranslationUnitAST::Node translationUnit = m_driver.parseFile( fileName, contents );
+    m_driver->remove( fileName );
+    m_driver->parseFile( fileName );
+
+    m_driver->parseFile( fileName );
+    TranslationUnitAST::Node translationUnit = m_driver->takeTranslationUnit( fileName );
 
     Unit* unit = new Unit;
     unit->fileName = fileName;
     unit->translationUnit = translationUnit.release();
-    unit->problems = m_driver.problems( fileName );
-
-    return unit;
-}
-
-Unit* BackgroundParser::parseFile( const QString& fileName )
-{
-    Unit* unit = 0;
-
-    //kapp->lock();
-
-    QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
-    QPtrListIterator<KParts::Part> it( parts );
-    while( it.current() ){
-	KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( it.current() );
-	++it;
-
-	KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( doc );
-	if( !doc || !editIface || doc->url().path() != fileName )
-	    continue;
-
-	QString contents = editIface->text();
-	unit = parseFile( fileName, contents );
-    }
-    //kapp->unlock();
-
-    if( !unit ){
-	QFile f( fileName );
-	QTextStream stream( &f );
-	if( f.open(IO_ReadOnly) ){
-	    QString contents = stream.read();
-	    f.close();
-	    unit = parseFile( fileName, contents );
-	}
-    }
+    unit->problems = m_driver->problems( fileName );
 
     return unit;
 }

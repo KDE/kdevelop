@@ -110,6 +110,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     setXMLFile("kdevcppsupport.rc");
 
+    m_backgroundParser = 0;
+
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( partController(), SIGNAL(savedFile(const QString&)),
@@ -139,9 +141,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
-
-    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
-    m_backgroundParser->start();
 
     KAction *action;
 
@@ -331,12 +330,16 @@ CppSupportPart::projectOpened( )
 	     this, SLOT(slotProjectCompiled()) );
 
     QDir::setCurrent( project()->projectDirectory() );
-    
+
     m_projectFileList = project()->allFiles();
 
     m_timestamp.clear();
     m_pCompletion = new CppCodeCompletion( this );
     m_projectClosed = false;
+
+    m_backgroundParser = new BackgroundParser( this, &m_eventConsumed );
+    m_backgroundParser->start();
+
     QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
 }
 
