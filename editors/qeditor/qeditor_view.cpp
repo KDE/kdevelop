@@ -702,7 +702,7 @@ void QEditorView::setupActions()
     action = KStdAction::gotoLine( this, SLOT(gotoLine()), actionCollection() );
     action->setWhatsThis(i18n("Opens a dialog and lets you choose a line that you want the cursor to move to."));
     action = KStdAction::find( this, SLOT(doFind()), actionCollection() );
-    action->setWhatsThis(i18n("Looks up the first occurence of a piece of text or regular expression."));
+    action->setWhatsThis(i18n("Looks up the first occurrence of a piece of text or regular expression."));
     action = KStdAction::replace( this, SLOT(doReplace()), actionCollection() );
     action->setWhatsThis(i18n("Looks up a piece of text or regular expression and replace the result with some given text."));
 
