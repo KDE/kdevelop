@@ -16,7 +16,6 @@
 #include <kparts/part.h>
 #include <qdom.h>
 #include <kaction.h>
-#include <qptrlist.h>
 
 class KDevCore;
 class KDevProject;
