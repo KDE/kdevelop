@@ -141,15 +141,9 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     setSorting(-1);
     QListView::setSelectionMode(QListView::Single);
 
-//  matter of taste..
-//    header()->setStretchEnabled(true);
-
     addColumn(i18n("Variable"));
-    addColumn(i18n("Type"));
     addColumn(i18n("Value"));
-
-    // This may be a matter of taste... yes, I like it on
-//    header()->hide();
+    addColumn(i18n("Type"));
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
@@ -228,8 +222,6 @@ void VariableTree::slotDoubleClicked(QListViewItem *item, const QPoint &pos, int
 
 void VariableTree::setLocalViewState(bool localsOn, int frameNo, int threadNo)
 {
-    // FIXME: Is the following true wrt THREADS
-
     // When they want to _close_ a frame then we need to check the state of
     // all other frames to determine whether we still need the locals.
     if (!localsOn) {

@@ -32,7 +32,7 @@ class VarItem;
 class VariableTree;
 class DbgController;
 
-enum { VarNameCol = 0, VarTypeCol = 1, ValueCol = 2 };
+enum { VarNameCol = 0, ValueCol = 1, VarTypeCol = 2};
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,
                 typeStruct, typeArray, typeQString, typeWhitespace,
                 typeName };

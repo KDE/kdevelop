@@ -91,7 +91,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                          "variable(s) to the watch section.\n"
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
-    mainWindow()->embedOutputView(variableWidget, i18n("Variables / Watch"), i18n("debugger variable-view"));
+    mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("debugger variable-view"));
     mainWindow()->setViewAvailable(variableWidget, false);
 
     breakpointWidget = new BreakpointWidget();
