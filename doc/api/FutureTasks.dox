@@ -61,13 +61,11 @@
       - Update configure.in when sub projects are added and the project doesn't use am_edit
     - Keep the correctly cased project name and save it to the project file
 
-  - Plugins
-    - DocTreeViewPart
-      - Implement plugin system for doctreeview.
-      - improve documentation browsing
-      - Check if a man page exists before offering the context menu item 'Goto manpage'
-      - right click -> set as bookmark in docviewer
-    - c++ debugger
+  - Debugger Parts
+    - Create a debugger support base classes. Make the current GDB support a plugin.
+    - Implement parts for other debuggers i.e. DBX, WDB, Ladebug, JDB, XDB, bashdb, the Perl debugger, or the Python debugger.
+      We can use DDD as inspiration.
+    - General debugger
       - variable widget
         - set variable by editing the value in the tree
         - cast value by editing the type in the tree
@@ -83,6 +81,14 @@
         - Breakpoints can disappear at odd times
         - When the target program crashes, the debugger can't be started again. (intermittant?)
         - Break on method() - could have multiple methods which require a choice. How to handle this?
+
+
+  - Plugins
+    - DocTreeViewPart
+      - Implement plugin system for doctreeview.
+      - improve documentation browsing
+      - Check if a man page exists before offering the context menu item 'Goto manpage'
+      - right click -> set as bookmark in docviewer
     - ClassViewPart
       - Implement language-dependant plugin system for classview:
       - namespaces/classes/functions are not always applicable to a language, we need a way to correctly
