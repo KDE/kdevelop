@@ -90,9 +90,10 @@ private:
 
 
 FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fileName)
-    : QListViewItem(parent, extractName(fileName) + " ["+ fileName +"]"), fullname(fileName)
+    : QListViewItem(parent, extractName(fileName)), fullname(fileName)
 {
     setPixmap(0, SmallIcon("document"));
+    setText(1, fileName);
 }
 
 
@@ -110,8 +111,8 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     setRootIsDecorated(true);
     setResizeMode(QListView::LastColumn);
     setSorting(-1);
-    header()->hide();
-    addColumn(QString::null);
+    addColumn(i18n("Name"));
+    addColumn(i18n("Location"));
 
     connect( this, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
