@@ -18,6 +18,13 @@ QString qtext (const RefAdaAST& n)
   return QString::fromLatin1 (text (n).c_str ());
 }
 
+QStringList qnamelist (const RefAdaAST& n)
+{
+  QString txt = qtext (n);
+  // kdDebug() << "qnamelist: input is " << txt << endl;
+  return QStringList::split ('.', txt);
+}
+
 QString ada_spec_filename (const QString& comp_unit_name)
 {
    QString fn (comp_unit_name.lower ());
