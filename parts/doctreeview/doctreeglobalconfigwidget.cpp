@@ -86,7 +86,7 @@ void DocTreeGlobalConfigWidget::readConfig()
     QMap<QString, QString>::Iterator it;
     for (it = emap.begin(); it != emap.end(); ++it)
     {
-        KListViewItem *qtitem = new KListViewItem(qtdocs_view, it.key(), config->readPathEntry(it.key()));
+        /*UNUSED! KListViewItem *qtitem = */ new KListViewItem(qtdocs_view, it.key(), config->readPathEntry(it.key()));
     }
     if (emap.empty())
     {
@@ -102,11 +102,11 @@ void DocTreeGlobalConfigWidget::readConfig()
     QMap<QString, QString>::Iterator itx;
     for (itx = xmap.begin(); itx != xmap.end(); ++itx)
     {
-        KListViewItem *qtitem = new KListViewItem(doxygen_view, itx.key(), config->readPathEntry(itx.key()));
+        /*UNUSED! KListViewItem *qtitem = */ new KListViewItem(doxygen_view, itx.key(), config->readPathEntry(itx.key()));
     }
     if (xmap.empty() && (!QString(KDELIBS_DOXYDIR).isEmpty()))
     {
-        KListViewItem *qtitem = new KListViewItem(doxygen_view, "KDE Libraries (Doxygen)", KDELIBS_DOXYDIR);
+        /*UNUSED! KListViewItem *qtitem = */ new KListViewItem(doxygen_view, "KDE Libraries (Doxygen)", KDELIBS_DOXYDIR);
     }
 
     
@@ -115,11 +115,11 @@ void DocTreeGlobalConfigWidget::readConfig()
     QMap<QString, QString>::Iterator itd;
     for (itd = dmap.begin(); itd != dmap.end(); ++itd)
     {
-        KListViewItem *qtitem = new KListViewItem(kdoc_view, itd.key(), config->readPathEntry(itd.key()));
+        /*UNUSED! KListViewItem *qtitem = */ new KListViewItem(kdoc_view, itd.key(), config->readPathEntry(itd.key()));
     }
     if (dmap.empty() && (!QString(KDELIBS_DOCDIR).isEmpty()))
     {
-        KListViewItem *qtitem = new KListViewItem(kdoc_view, "KDE Libraries (KDoc)", KDELIBS_DOCDIR);
+        /*UNUSED! KListViewItem *qtitem = */ new KListViewItem(kdoc_view, "KDE Libraries (KDoc)", KDELIBS_DOCDIR);
     }
         
 /*    qtdocdirEdit->setURL(config->readPathEntry("qtdocdir", QT_DOCDIR));

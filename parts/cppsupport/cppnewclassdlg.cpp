@@ -527,13 +527,13 @@ void CppNewClassDialog::changeToInherited()
         access_view->selectedItem()->setText(2, QString::null);
 }
 
-void CppNewClassDialog::newTabSelected(const QString &text)
+void CppNewClassDialog::newTabSelected(const QString& /*text*/)
 {
 /*    if (text == i18n("&Advanced Inheritance"))
         reloadAdvancedInheritance(true);*/
 }
 
-void CppNewClassDialog::newTabSelected(QWidget *w)
+void CppNewClassDialog::newTabSelected(QWidget* /*w*/)
 {
 /*    if ( QString(w->name()) == QString("tab2"))
     {
@@ -542,7 +542,7 @@ void CppNewClassDialog::newTabSelected(QWidget *w)
 }
 
 
-void CppNewClassDialog::reloadAdvancedInheritance(bool clean)
+void CppNewClassDialog::reloadAdvancedInheritance(bool /*clean*/)
 {
 /*    clearConstructorsList(clean);
     clearMethodsList(clean);
@@ -663,7 +663,7 @@ bool CppNewClassDialog::isConstructor(QString className, ParsedMethod *method)
 
 void CppNewClassDialog::addToConstructorsList(QCheckListItem *myClass, ParsedMethod *method)
 {
-    PCheckListItem<ParsedMethod*> *it = new PCheckListItem<ParsedMethod*>(method, myClass, method->asString(), QCheckListItem::RadioButton);
+    /*UNUSED! PCheckListItem<ParsedMethod*> *it = */ new PCheckListItem<ParsedMethod*>(method, myClass, method->asString(), QCheckListItem::RadioButton);
 }
 
 void CppNewClassDialog::addToMethodsList(QListViewItem *parent, ParsedMethod *method)
@@ -766,7 +766,7 @@ void CppNewClassDialog::setAccessForBase(QString baseclass, QString newAccess)
 }
 
 
-void CppNewClassDialog::access_view_mouseButtonPressed( int button, QListViewItem * item, const QPoint &p, int c )
+void CppNewClassDialog::access_view_mouseButtonPressed( int button, QListViewItem * item, const QPoint &p, int /*c*/ )
 {
     if (item && ( (button == LeftButton) || (button == RightButton)) && (item->depth() > 1) )
     {
@@ -791,7 +791,7 @@ void CppNewClassDialog::access_view_mouseButtonPressed( int button, QListViewIte
 }
 
 
-void CppNewClassDialog::methods_view_mouseButtonPressed(int button ,QListViewItem * item, const QPoint&p ,int c)
+void CppNewClassDialog::methods_view_mouseButtonPressed(int button ,QListViewItem * item, const QPoint&p ,int /*c*/)
 {
     if (item && ( button == RightButton ) && (item->depth() > 1) && (! item->text(1).isNull()) )
     {
@@ -960,9 +960,9 @@ void CppNewClassDialog::ClassGenerator::common_text()
   gtk = dlg.gtk_box->isChecked();
 
   if ( (dlg.baseclasses_view->childCount() == 0) && childClass)
-    QListViewItem* it = new QListViewItem(dlg.baseclasses_view, "QWidget", "public");
+    /*UNUSED! QListViewItem* it = */ new QListViewItem(dlg.baseclasses_view, "QWidget", "public");
   if (objc && (dlg.baseclasses_view->childCount() == 0))
-    QListViewItem* it = new QListViewItem(dlg.baseclasses_view, "NSObject", "public");
+    /*UNUSED! QListViewItem* it = */ new QListViewItem(dlg.baseclasses_view, "NSObject", "public");
     
   doc = dlg.documentation_edit->text();
     
