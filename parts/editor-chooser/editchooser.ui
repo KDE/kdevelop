@@ -62,8 +62,8 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>&lt;i&gt;Note:&lt;/i&gt; Changing the preferred Editor will not take
-effect until you restart KDevelop.</string>
+                        <string>&lt;i&gt;Note:&lt;/i&gt; Changing the preferred Editor will not affect
+already opened files.</string>
                     </property>
                 </widget>
             </grid>
