@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CCConfigWidgetBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>551</width>
-            <height>501</height>
+            <height>461</height>
         </rect>
     </property>
     <property name="caption">
@@ -322,6 +322,272 @@
                     </widget>
                 </vbox>
             </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>TabPage</cstring>
+                </property>
+                <attribute name="title">
+                    <string>&amp;Get/Set Creation</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QGroupBox" row="1" column="0">
+                        <property name="name">
+                            <cstring>groupBox8</cstring>
+                        </property>
+                        <property name="title">
+                            <string>e&amp;xample for member variable of type string</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>layout5_2</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>m_lblVariableName</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>variable name:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KLineEdit">
+                                        <property name="name">
+                                            <cstring>m_edtVariableName</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>m_x</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>spacer4_3</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>61</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </hbox>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>m_edtExampleGet</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>int x() const;</string>
+                                </property>
+                                <property name="readOnly">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="2" column="1">
+                                <property name="name">
+                                    <cstring>m_edtExampleSet</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>void setX(const string&amp; theValue);</string>
+                                </property>
+                                <property name="readOnly">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>textLabel7</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>get method:</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0">
+                                <property name="name">
+                                    <cstring>textLabel8</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>set method:</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QGroupBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>groupBox9</cstring>
+                        </property>
+                        <property name="title">
+                            <string>settings:</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="KLineEdit" row="1" column="0">
+                                <property name="name">
+                                    <cstring>m_edtGet</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_lblGet</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>prefix for &lt;b&gt;get&lt;/b&gt; methods:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="2">
+                                <property name="name">
+                                    <cstring>m_edtSet</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>set</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="2" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_lblSet</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>prefix for &lt;b&gt;set&lt;/b&gt; methods:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="3" column="0">
+                                <property name="name">
+                                    <cstring>m_edtRemovePrefix</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>m_</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_lblRemovePrefix</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>member &lt;b&gt;variable&lt;/b&gt; prefix to remove:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="3" column="2">
+                                <property name="name">
+                                    <cstring>m_edtParameterName</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>theValue</string>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="1">
+                                <property name="name">
+                                    <cstring>spacer5_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>87</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLabel" row="2" column="2" rowspan="1" colspan="2">
+                                <property name="name">
+                                    <cstring>m_lblParameterName</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&lt;b&gt;parametername&lt;/b&gt; in set method:</string>
+                                </property>
+                            </widget>
+                            <spacer row="3" column="1">
+                                <property name="name">
+                                    <cstring>spacer5</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>87</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="3" column="3">
+                                <property name="name">
+                                    <cstring>spacer8</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>92</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="1" column="3">
+                                <property name="name">
+                                    <cstring>spacer7</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>92</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
+                    </widget>
+                    <spacer row="2" column="0">
+                        <property name="name">
+                            <cstring>spacer36</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>91</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </grid>
+            </widget>
         </widget>
     </vbox>
 </widget>
@@ -331,6 +597,36 @@
         <signal>clicked()</signal>
         <receiver>CCConfigWidgetBase</receiver>
         <slot>slotNewPCS()</slot>
+    </connection>
+    <connection>
+        <sender>m_edtVariableName</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotGetterSetterValuesChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_edtRemovePrefix</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotGetterSetterValuesChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_edtGet</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotGetterSetterValuesChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_edtSet</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotGetterSetterValuesChanged()</slot>
+    </connection>
+    <connection>
+        <sender>m_edtParameterName</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>CCConfigWidgetBase</receiver>
+        <slot>slotGetterSetterValuesChanged()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -361,6 +657,7 @@
     <slot access="protected">slotSelectTemplateGroup( const QString &amp; )</slot>
     <slot access="protected">slotSetCHWindow( )</slot>
     <slot>slotNewPCS()</slot>
+    <slot access="protected">slotGetterSetterValuesChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
@@ -369,5 +666,12 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
 </includehints>
 </UI>

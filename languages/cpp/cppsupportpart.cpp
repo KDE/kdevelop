@@ -34,13 +34,15 @@
 #include "cppsupport_utils.h"
 #include "classgeneratorconfig.h"
 #include "urlutil.h"
-
+#include "creategettersetterconfiguration.h"
+#include "kdevsourceformatter.h"
+#include "kdevcreatefile.h"
 // wizards
 #include "cppnewclassdlg.h"
 #include "subclassingdlg.h"
 #include "addmethoddialog.h"
 #include "addattributedialog.h"
-
+#include "creategettersetterdialog.h"
 // designer integration
 #include "qtdesignercppintegration.h"
 #include "cppimplementationwidget.h"
@@ -66,6 +68,7 @@
 #include <kdialogbase.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <kconfig.h>
@@ -156,6 +159,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     setInstance(CppSupportFactory::instance());
 
     m_pCompletionConfig = new CppCodeCompletionConfig( this, projectDom() );
+	m_pCreateGetterSetterConfiguration = new CreateGetterSetterConfiguration(this);
     connect( m_pCompletionConfig, SIGNAL(stored()), this, SLOT(codeCompletionConfigStored()) );
 
     m_driver = new CppDriver( this );
@@ -204,7 +208,9 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                                "memory class store for the current project and persistant class stores "
                                "for external libraries.") );
     action->setEnabled(false);
-
+	
+	m_createGetterSetterAction = new KAction(i18n("Create get/set methods"), 0, this, SLOT(slotCreateAccessMethods()), actionCollection(), "edit_create_getter_setter");
+	
     action = new KAction(i18n("Make Member"), "makermember", Key_F2,
                          this, SLOT(slotMakeMember()),
                          actionCollection(), "edit_make_member");
@@ -476,14 +482,29 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     m_activeClass = 0;
     m_activeFunction = 0;
     m_activeVariable = 0;
-
+	m_curAttribute = 0;
+	m_curClass = 0;
+	
     if( context->hasType(Context::EditorContext) ){
         int id;
 	
 	//Cache some values that are constant in this function
 	bool is_header, is_source;
 	QString source_header_candidate;
-		
+	
+// 	CodeModelItemContext
+	if(context->type() == Context::EditorContext)
+	{
+		m_curClass = currentClass();
+		if (m_curClass != 0)
+		{
+			m_curAttribute = currentAttribute(m_curClass);
+			if ( m_curAttribute != 0)
+				m_createGetterSetterAction->plug(popup);
+		}
+	}
+	
+	
 	is_header = isHeader(m_activeFileName);
 	is_source = isSource(m_activeFileName);	
 	
@@ -852,7 +873,7 @@ KDevLanguageSupport::Features CppSupportPart::features()
 {
     if (withcpp)
         return Features(Classes | Structs | Functions | Variables | Namespaces | Declarations
-                        | Signals | Slots | AddMethod | AddAttribute | NewClass);
+                        | Signals | Slots | AddMethod | AddAttribute | NewClass | CreateAccessMethods);
     else
         return Features (Structs | Functions | Variables | Declarations);
 }
@@ -1885,6 +1906,151 @@ void CppSupportPart::slotCreateSubclass()
     QtDesignerCppIntegration *des = dynamic_cast<QtDesignerCppIntegration*>(designer(KInterfaceDesigner::QtDesigner));
     if (des)
         des->selectImplementation(m_contextFileName);
+}
+
+void CppSupportPart::addMethod(ClassDom aClass, const QString& name, const QString type, const QString& parameters, CodeModelItem::Access accessType, bool isConst, bool isInline, bool isVirtual, bool isPureVirtual, const QString& implementation)
+{
+	partController()->editDocument( KURL( aClass->fileName() ) );
+    KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
+    if( !editIface ){
+	/// @fixme show messagebox
+		return;
+    }
+	QString declarationString = type + " " + name + "(" + parameters + ")" + (isConst ? " const" : "");
+	
+	KDevSourceFormatter* sourceFormatter = extension<KDevSourceFormatter>("KDevelop/SourceFormatter");
+	
+	QString finalDeclaration = ((isVirtual || isPureVirtual) ? "\nvirtual " : "\n" + declarationString + 
+			( isPureVirtual ? " = 0 " : "") + (isInline ? "\n{\n" + implementation + "\n}\n" : ";"));
+	
+	if (sourceFormatter != 0)
+		finalDeclaration = sourceFormatter->formatSource(finalDeclaration);
+	
+	QString indentString = "\t";
+	 
+	if (sourceFormatter != 0)
+	  indentString = sourceFormatter->indentString();
+		
+	editIface->insertText( findInsertionLineMethod(aClass, accessType), 0, finalDeclaration.replace("\n","\n\t")+"\n");
+
+    backgroundParser()->addFile( aClass->fileName() );
+	if (isInline || isPureVirtual)
+		return;
+	
+	QString definitionString ="\n" + declarationString + "\n{\n" + implementation + "\n}\n";
+	
+	if (sourceFormatter != 0)
+		   definitionString = sourceFormatter->formatSource( definitionString );
+	
+	QFileInfo info( aClass->fileName() );
+	QString implementationFile = info.dirPath(true) + "/" + info.baseName() + ".cpp" ;
+	QFileInfo fileInfo( implementationFile );
+	KDevCreateFile* createFileSupport = extension<KDevCreateFile>("KDevelop/CreateFile");
+	if( !QFile::exists(fileInfo.absFilePath()) && createFileSupport != 0)
+		createFileSupport->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.baseName() );
+
+	partController()->editDocument( KURL( implementationFile ) );
+	editIface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
+	if( !editIface )
+		return; //@fixme errorverdoedelung
+
+	editIface->insertLine( editIface->numLines(), QString::fromLatin1("") );
+	editIface->insertText( editIface->numLines()-1, 0, definitionString );
+	backgroundParser()->addFile( implementationFile );
+}
+
+ClassDom CppSupportPart::currentClass( ) const
+{
+	FileDom file = codeModel()->fileByName( m_activeFileName );
+	if (file == 0 || m_activeViewCursor == 0)
+		return 0;
+	
+	unsigned int curLine, curCol;
+	m_activeViewCursor->cursorPosition(&curLine, &curCol);
+	
+	return CodeModelUtils::findClassByPosition(file, curLine, curCol);
+}
+
+VariableDom CppSupportPart::currentAttribute( ClassDom curClass ) const
+{
+	if (m_activeViewCursor == 0 || curClass == 0)
+		return 0;
+	
+	unsigned int line,col;
+	m_activeViewCursor->cursorPosition(&line, &col);
+	
+	VariableList vars = curClass->variableList();
+	
+	for (VariableList::iterator i = vars.begin(); i != vars.end(); ++i)
+	{
+		int startLine, startCol;
+		(*i)->getStartPosition(&startLine, &startCol);
+		if (startLine < line || (startLine == line && startCol <= col) )
+		{
+			int endLine, endCol;
+			(*i)->getEndPosition(&endLine, &endCol);
+			if (endLine > line || (endLine == line && endCol >= col) )
+				return *i;
+		}
+	}
+	return 0;
+}
+
+void CppSupportPart::slotCreateAccessMethods( )
+{
+	if (m_curAttribute == 0 || m_curClass == 0)
+		return;
+	
+	CreateGetterSetterDialog dlg (this, m_curClass, m_curAttribute);
+	dlg.exec();
+}
+
+int CppSupportPart::findInsertionLineMethod( ClassDom aClass, CodeModelItem::Access access )
+{	
+	int line, column;
+	aClass->getEndPosition( &line, &column );
+
+	int point = CodeModelUtils::findLastMethodLine( aClass, access );
+	
+	if (point == -1)
+	{
+		KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
+		if( !editIface )
+			return -1;
+		
+		editIface->insertLine( line - 1, CodeModelUtils::accessSpecifierToString(access) + ":\n" );
+		return line;
+	}
+	
+	return point + 1;
+}
+
+int CppSupportPart::findInsertionLineVariable( ClassDom aClass, CodeModelItem::Access access )
+{
+	int line, column;
+	aClass->getEndPosition( &line, &column );
+
+	int point = CodeModelUtils::findLastVariableLine( aClass, access );
+
+	if (point == -1)
+	{
+		KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
+		if( !editIface )
+			return -1;
+		
+		editIface->insertLine( line - 1, CodeModelUtils::accessSpecifierToString(access) + ":\n" );
+		return line;
+	}
+	
+	return point;
+}
+
+void CppSupportPart::createAccessMethods( ClassDom theClass, VariableDom theVariable )
+{
+	m_curClass = theClass;
+	m_curAttribute = theVariable;
+	
+	slotCreateAccessMethods();
 }
 
 #include "cppsupportpart.moc"

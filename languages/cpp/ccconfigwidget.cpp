@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2001 by Daniel Engelschalt                              *
  *   daniel.engelschalt@gmx.net                                            *
+ *   Copyright (C) 2004 Jonas Jacobi<j.jacobi@gmx.de>                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +20,8 @@
 #include <qmultilineedit.h>
 #include <qslider.h>
 #include <qheader.h>
+#include <qcolor.h>
+#include <qlabel.h>
 
 // kde includes
 #include <kdevproject.h>
@@ -32,17 +35,19 @@
 #include <klistview.h>
 #include <knuminput.h>
 #include <kmainwindow.h>
-
+#include <klineedit.h>
 // kdevelop includes
 #include <domutil.h>
 #include <kdevcoderepository.h>
 #include <kdevmainwindow.h>
+#include <kdevcoderepository.h>
 #include <catalog.h>
 
 #include "ccconfigwidget.h"
 #include "cppsupportpart.h"
 #include "cppcodecompletionconfig.h"
 #include "createpcsdialog.h"
+#include "creategettersetterconfiguration.h"
 
 using namespace std;
 
@@ -56,7 +61,7 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 
     initFileTemplatesTab( );
     initCodeCompletionTab( );
-
+	initGetterSetterTab( );
     inputCodeCompletion->setRange( 0, 2000, 100 );
     inputArgumentsHint->setRange( 0, 2000, 100 );
 }
@@ -76,6 +81,7 @@ void CCConfigWidget::accept( )
 {
     saveFileTemplatesTab();
     saveCodeCompletionTab();
+	saveGetterSetterTab();
 }
 
 void CCConfigWidget::saveFileTemplatesTab( )
@@ -176,6 +182,100 @@ void CCConfigWidget::catalogUnregistered( Catalog * c )
 	    break;
 	}
     }
+}
+
+void CCConfigWidget::initGetterSetterTab( )
+{
+	CreateGetterSetterConfiguration* config = m_pPart->createGetterSetterConfiguration();
+	
+	if (config == 0)
+		return;
+	
+	m_edtGet->setText(config->prefixGet());
+	m_edtSet->setText(config->prefixSet());
+	m_edtRemovePrefix->setText(config->prefixVariable().join(","));
+	m_edtParameterName->setText(config->parameterName());
+	
+	slotGetterSetterValuesChanged();
+}
+
+void CCConfigWidget::slotGetterSetterValuesChanged( )
+{
+	bool hasError = false;
+	if (m_edtParameterName->text().isEmpty())
+	{
+		m_lblParameterName->setPaletteForegroundColor(QColor("red"));
+		m_edtExampleGet->setText("error, missing parametername");
+		m_edtExampleSet->setText("error, missing parametername");
+		hasError = true;
+	}
+	
+	QString name = m_edtVariableName->text();
+	if (name.isEmpty())
+	{
+		m_lblVariableName->setPaletteForegroundColor(QColor("red"));
+		m_edtExampleGet->setText("error, missing variablename");
+		m_edtExampleSet->setText("error, missing variablename");
+		hasError = true;
+	}
+	
+	if (hasError)
+	{
+		m_edtExampleGet->setPaletteForegroundColor(QColor("red"));
+		m_edtExampleSet->setPaletteForegroundColor(QColor("red"));
+		
+		return;
+	} else
+	{
+		m_lblVariableName->setPaletteForegroundColor(QColor("black"));
+		m_lblParameterName->setPaletteForegroundColor(QColor("black"));
+		m_edtExampleGet->setPaletteForegroundColor(QColor("black"));
+		m_edtExampleSet->setPaletteForegroundColor(QColor("black"));
+	}
+	
+	QStringList prefixes = QStringList::split(",",m_edtRemovePrefix->text().replace(" ", ""));
+	unsigned int len = 0;
+	QStringList::ConstIterator theend = prefixes.end();
+	for(QStringList::ConstIterator ci = prefixes.begin(); ci != theend; ++ci){
+		if (name.startsWith(*ci) && (*ci).length() > len)
+			len = (*ci).length();
+	}
+	
+	if (len > 0)
+		name.remove(0,len);
+	
+	QString getName = name;
+	if (!m_edtGet->text().isEmpty())
+	{
+		getName[0] = getName[0].upper();
+		getName.prepend(m_edtGet->text());
+	}
+	
+	QString setName = name;
+	if (!m_edtSet->text().isEmpty())
+	{
+		setName[0] = setName[0].upper();
+		setName.prepend(m_edtSet->text());
+	}
+	
+	m_edtExampleGet->setText("string " + getName + "() const;");
+	m_edtExampleSet->setText("void " + setName + "(const string& " + m_edtParameterName->text() + ");");
+}
+
+void CCConfigWidget::saveGetterSetterTab( )
+{
+	if (m_edtParameterName->text().isEmpty() || m_edtGet->text() == m_edtSet->text())
+		return;
+	
+	CreateGetterSetterConfiguration* config = m_pPart->createGetterSetterConfiguration();
+	if (config == 0)
+		return;
+	
+	config->setPrefixGet(m_edtGet->text());
+	config->setPrefixSet(m_edtSet->text());
+	config->setPrefixVariable(QStringList::split(",",m_edtRemovePrefix->text().replace(" ", "")));
+	config->setParameterName(m_edtParameterName->text());
+	config->store();
 }
 
 #include "ccconfigwidget.moc"

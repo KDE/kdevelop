@@ -32,6 +32,7 @@
 class Context;
 class CppCodeCompletion;
 class CppCodeCompletionConfig;
+class CreateGetterSetterConfiguration;
 class ProblemReporter;
 class BackgroundParser;
 class Catalog;
@@ -74,6 +75,8 @@ public:
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
     CppCodeCompletion* codeCompletion() { return m_pCompletion; }
     CppCodeCompletionConfig* codeCompletionConfig() { return m_pCompletionConfig; }
+	
+	CreateGetterSetterConfiguration* createGetterSetterConfiguration() { return m_pCreateGetterSetterConfiguration; }
 
     const QPtrList<Catalog>& catalogList() { return m_catalogList; }
     void addCatalog( Catalog* catalog );
@@ -93,7 +96,6 @@ public:
     FunctionDefinitionDom functionDefinitionAt( FunctionDefinitionDom fun, int line, int column );
 
     KTextEditor::Document* findDocument( const KURL& url );
-
     static KConfig *config();
 
     virtual QString formatTag( const Tag& tag );
@@ -106,6 +108,25 @@ public:
     bool isSource(const QString& fileName) const;
 
     virtual KDevDesignerIntegration *designer(KInterfaceDesigner::DesignerType type);
+	
+	/**
+	 * Add a new method to a class.
+	 * @param aClass The class to which the method should be added.
+	 * @param name The name of the method.
+	 * @param type The return type of the method.
+	 * @param parameters A string containing the parameters
+	 * (including names, default values, but no '(' , ')', e.g.: "int, const QString& aString").
+	 * @param accessType The access specifier e.g. CodeModelItem::PUBLIC.
+	 * @param isConst true if method is const.
+	 * @param isInline true if method should be declared inline.
+	 * @param isVirtual true if method is virtual(this is ignored if isPureVirtual is true)
+	 * @param isPureVirtual true if method is pure virtual (this overrides any value of isVirtual)
+	 * @param implementation a optional implementation, if this is not set the method body will be empty.
+	 * @author Jonas Jacobi <j.jacobi@gmx.de>
+	 */
+	virtual void addMethod( ClassDom aClass, const QString& name, const QString type, const QString& parameters, CodeModelItem::Access accessType, bool isConst, bool isInline, bool isVirtual, bool isPureVirtual, const QString& implementation = "" );
+							
+	void createAccessMethods(ClassDom theClass, VariableDom theVariable);
     
 signals:
     void fileParsed( const QString& fileName );
@@ -147,7 +168,8 @@ private slots:
     void emitFileParsed();
     void slotParseFiles();
     void slotCreateSubclass();
-
+	void slotCreateAccessMethods();
+			
     void slotNeedTextHint( int, int, QString& );
 
     /**
@@ -162,6 +184,38 @@ private slots:
 
 private:
 
+	/**
+	 * Get a linenumber in which a new method with a specific access specifier can be inserted.
+	 * If there isn't a "section" with access, such a "section" gets inserted and the resulting place is returned.
+	 * @param aClass the class one wants to insert a method to.
+	 * @param access the access specifier the new method should have.
+	 * @return A linenumber where the new method can be inserted 
+	 * or -1 if partController()->activePart() is no KTextEditorInterface.
+	 * @author Jonas Jacobi <j.jacobi@gmx.de>
+	 */
+	int findInsertionLineMethod(ClassDom aClass, CodeModelItem::Access access);
+	/**
+	 * Same as above, just returns a insertion line for a variable instead of a method
+	 */
+	int findInsertionLineVariable(ClassDom aClass, CodeModelItem::Access access);
+	
+	
+	/**
+	 * Get a class declaration which is "around" the current cursor position.
+	 * @return The class declaration which is "around" the current cursor position,
+	 * in the case of nested classes this is the innermost fitting class. If there is no
+	 * class declared at the current cursor position, 0 is returned.
+	 * @author Jonas Jacobi <j.jacobi@gmx.de>
+	 */
+	ClassDom currentClass() const;
+	/**
+	 * Get the class attribute of curClass, which is declared at the current cursor position.
+	 * @param curClass the class to search for attributes.
+	 * @return the attribute declared at the current cursor position or 0, if no attribute is declared there.
+	 * @author Jonas Jacobi <j.jacobi@gmx.de>
+	 */
+	VariableDom currentAttribute(ClassDom curClass) const;
+	
     /**
      * checks if a file has to be parsed
      */
@@ -184,10 +238,15 @@ private:
 
     CppCodeCompletion* m_pCompletion;
     CppCodeCompletionConfig* m_pCompletionConfig;
+	
+	CreateGetterSetterConfiguration* m_pCreateGetterSetterConfiguration;
+	class KAction* m_createGetterSetterAction;
 
     bool withcpp;
     QString m_contextFileName;
 
+	VariableDom m_curAttribute;
+	ClassDom m_curClass;
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
 
@@ -216,7 +275,7 @@ private:
     VariableDom m_activeVariable;
     
     QTimer* m_functionHintTimer;
-    
+	
     static QStringList m_sourceMimeTypes;
     static QStringList m_headerMimeTypes;
 
