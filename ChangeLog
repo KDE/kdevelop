@@ -1,3 +1,6 @@
+2002-04-06  Roberto Raggi <raggi@cli.di.unipi.it>
+	* updated to the new gideon sdk
+	
 2002-04-06  Bernd Gehrmann  <bernd@mail.berlios.de>
 	* Python part can execute scripts and strings now
 
