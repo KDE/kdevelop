@@ -532,9 +532,23 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
     if( leftParen != -1 )
 	currentExpr = currentExpr.left( leftParen ).stripWhiteSpace();
 
-    if( currentExpr.endsWith("::") )
-	currentExpr = currentExpr.left( currentExpr.length() - 2 ).stripWhiteSpace();
-        
+    if( currentExpr.contains("::") ){
+	if( currentExpr.endsWith("::") )
+	    currentExpr.truncate( currentExpr.length() - 2 );
+	    
+	QStringList type = typeName( currentExpr );
+	if( !type.isEmpty() ){
+	    if( leftParen != -1 ){
+		QString name = type.back();
+		type.pop_back();
+		type = typeOf( name, type );
+	    }
+	    
+	    if( !type.isEmpty() )
+		return evaluateExpressionInternal( exprList, type );
+	}
+    }
+            
     if( ctx ){
 	// find the variable type in the current context
 	QStringList type = ctx->findVariable( currentExpr ).type;
