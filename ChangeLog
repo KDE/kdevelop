@@ -4,6 +4,7 @@
         * bug-fix: using pre-generated kdelib documentation
           caused error msg. (like: The chosen path does not lead
 	  to the KDE-library documention...)
+
 1999-08-30   Sandy Meier <smeier@rz.uni-potsdam.de>
 	* hopefully fixed all problems with CXXFLAGS (#Bug1777,#Bug1770)
 	* fixed missing bracket in example (#Bug1793)
