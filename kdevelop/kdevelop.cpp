@@ -40,6 +40,7 @@
 #include <kedittoolbar.h>
 #include <kconfig.h>
 
+
 KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
 :  QextMdiMainFrm( pParent, name, f)
    ,m_pViewOnLeft(0L)
@@ -126,27 +127,31 @@ bool KDevelop::queryClose(){
 
 }
 
-
 bool KDevelop::queryExit(){
     kdDebug(9000) << "KDevelop::queryExit" << endl;
     saveCurrentDockAndMdiSzenario();
     // we must delete all embedded views, otherwise we get double deletion
 
     // do we? doesn't kparts take care of deleting views?
-    // as of 2/20/2001 the following snipped of code crashes when there
+    // as of 2/20/2001 the following snippet of code crashes when there
     // is an open document view in the mdi window
     // More specifically the pEmbeddedView pointer points to a QTimer and
     // crashes when trying to delete it.
     // Why there is a QTimer in the list, I have no fscking idea.
     // Having an editor window open does do double deletion
     // Does DocumentView and editorView behave different?
-#warning FIXME This will crash with an open document view
+	  // More research into the problem was that KHTMLView doesn't
+    // inherit QWidget. Potential Fix included
+    // pMdiCover's children contain a QHBoxLayout and a KHTMLView when
+    // a document window is open and a QHBoxLayout and an EditorView when
+		// an editor window is open
 
+#warning FIXME This will crash with an open document view
     QListIterator<QextMdiChildView> it(m_MDICoverList);
-    for ( ; it.current(); ++it ) {
+  for (;it.current();++it) {
         QextMdiChildView* pMdiCover = it.current();
         QWidget* pEmbeddedView = (QWidget*) pMdiCover->child( pMdiCover->name());
-        if (pEmbeddedView)
+	        if (pEmbeddedView && pEmbeddedView->isA("KHTMLView"))
             delete pEmbeddedView;
     }
     return true;
