@@ -1,4 +1,10 @@
 2001-08-08  rokrau@yahoo.com
+    * Commit of the "Kate patch", which replaces the old, internal kwrite
+      based editor with a Kate kpart. To use this you need to get the latest
+      kdebase/kate from cvs HEAD. Additionally this doesnt work very well
+      yet. It is mostly a proof of concept.
+
+2001-08-08  rokrau@yahoo.com
     * created KDEVELOP_2_BRANCH
 
 2001-08-05  F@lk Brettschneider <falk@kdevelop.org>
