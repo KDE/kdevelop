@@ -1,13 +1,13 @@
-all: $APPNAMELC$.gba
+all: %{APPNAMELC}.gba
 
-$APPNAMELC$.gba: $APPNAMELC$
-	arm-agb-elf-objcopy -O binary $APPNAMELC$ $APPNAMELC$.gba
+%{APPNAMELC}.gba: %{APPNAMELC}
+	arm-agb-elf-objcopy -O binary %{APPNAMELC} %{APPNAMELC}.gba
 
-bin_PROGRAMS = $APPNAMELC$
-$APPNAMELC$_SOURCES = main.h main.c font.raw.c master.pal.c
+bin_PROGRAMS = %{APPNAMELC}
+%{APPNAMELC}_SOURCES = main.h main.c font.raw.c master.pal.c
 
 # set the include path found by configure
 INCLUDES= $(all_includes)
 
 # the library search path.
-$APPNAMELC$_LDFLAGS = $(all_libraries) 
+%{APPNAMELC}_LDFLAGS = $(all_libraries) 

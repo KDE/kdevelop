@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <kdevelop>
  <general>
-  <author>$AUTHOR$</author>
-  <email>$EMAIL$</email>
-  <version>$VERSION$</version>
+  <author>%{AUTHOR}</author>
+  <email>%{EMAIL}</email>
+  <version>%{VERSION}</version>
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C</primarylanguage>
   <keywords>
@@ -16,7 +16,7 @@
  </general>
  <kdevautoproject>
   <general>
-   <activetarget>src/$APPNAMELC$</activetarget>
+   <activetarget>src/%{APPNAMELC}</activetarget>
   </general>
   <run>
    <disable_default>true</disable_default>
@@ -35,7 +35,7 @@
   </configurations>
  </kdevautoproject>
  <kdevvisualadvance>
-   <binary>src/$APPNAMELC$.gba</binary>
+   <binary>src/%{APPNAMELC}.gba</binary>
  </kdevvisualadvance>
  <kdevdoctreeview>
     <ignoretocs>
