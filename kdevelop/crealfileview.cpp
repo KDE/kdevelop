@@ -118,12 +118,33 @@ void CRealFileView::refresh(CProject* prj)
   scanDir(projectdir, pRootItem);
 }
 
+void CRealFileView::addFilesFromDir( const QString& directory, 
+                                     QListViewItem* parent )
+{
+  QDir theDir( directory );
+  QStrList fileList;
+  QListViewItem* item;
+
+  // Add all files for this directory
+  theDir.setFilter(QDir::Files);
+  fileList=*(theDir.entryList());
+  for( fileList.first();
+       fileList.current();
+       fileList.next() )
+  {
+    item = treeH->addItem( fileList.current(), THC_FILE, parent );
+    debug( "Added item %s", fileList.current() );
+    
+    // If this is an installed file, we change the icon.
+    if( isInstalledFile( getRelFilename( item ) ) )
+      item->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
+  }
+}
+
 void CRealFileView::scanDir(const QString& directory, QListViewItem* parent) 
 {
   QString currentPath;
   QListViewItem* lastFolder;
-  QListViewItem* item;
-  QStrList fileList;
   QStrList dirList;
   QDir dir(directory);
 
@@ -131,45 +152,37 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   if (!dir.exists()) {
     return;
   }
-
+  
   dir.setSorting(QDir::Name);
   dir.setFilter(QDir::Dirs);
   dirList = *(dir.entryList());
-
+  
   // Remove '.' and  '..'
   dirList.first();
   dirList.remove();
   dirList.remove();
-
+  
   // Recurse through all directories
   while( dirList.current() ) 
   {
+    debug( "Added dir %s", dirList.current() );
     lastFolder = treeH->addItem( dirList.current(), THFOLDER, parent );
     lastFolder->setOpen( true );
-
+    
     // Recursive call to fetch subdirectories
     currentPath = directory+"//"+dirList.current();
     scanDir( currentPath, lastFolder );
-
-    // Add all files for this directory
-    QDir theDir( currentPath );
-    theDir.setFilter(QDir::Files);
-    fileList=*(theDir.entryList());
-    for( fileList.first();
-         fileList.current();
-         fileList.next() )
-    {
-      item = treeH->addItem( fileList.current(), THC_FILE, lastFolder );
-
-      // If this is an installed file, we change the icon.
-      if( isInstalledFile( getRelFilename( item ) ) )
-        item->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
-    }
-
+    
+    // Add the files in the recursed directory.
+    //    addFilesFromDir( currentPath, lastFolder );
+    
     treeH->setLastItem( lastFolder );
-
+    
     dirList.next();
-  }
+  } 
+  
+  // Add files in THIS directory as well.
+  addFilesFromDir( directory, parent );
 }
 
 KPopupMenu *CRealFileView::getCurrentPopup()

@@ -93,6 +93,9 @@ private: // Private attributes
   CProject* project;
 
 private: // Private methods
+  /** Adds the files from a certain directory to the view. */
+  void addFilesFromDir( const QString& directory, QListViewItem* parent );
+
   /** scans the project directory and fills the treelist */
   void scanDir(const QString& directory,QListViewItem* parent);
   QString getRelFilename(QListViewItem* pItem);
