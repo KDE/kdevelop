@@ -27,6 +27,7 @@
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
 #include "commitdlg.h"
+#include "svnwidget.h"
 
 class SvnPart : public KDevPlugin
 {
@@ -93,6 +94,7 @@ class SvnPart : public KDevPlugin
 		void slotStatusLocal();
 
 	private:
+		SvnWidget *m_widget;
 		QString popupfile;  
 		QString auth_username;
 		QString auth_password;

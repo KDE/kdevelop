@@ -80,10 +80,16 @@ K_EXPORT_COMPONENT_FACTORY( libkdevsvn, svnFactory( "kdevsvn" ) );
 	}
 	readConf();
 	winlog = new CommitDialog();
+
+	//output window
+	m_widget = new SvnWidget(this);
+	mainWindow()->embedOutputView((m_widget),i18n("SVN"),i18n("Subversion output"));
 }
 
 SvnPart::~SvnPart()
 {
+	if (m_widget) mainWindow()->removeView(m_widget); // Inform toplevel, that the output view is gone
+			delete m_widget;
 	svn_pool_destroy (pool);
 	apr_terminate();
 	delete winlog;
@@ -112,7 +118,7 @@ void SvnPart::contextMenu(QPopupMenu *popup, const Context *context) {
 		sub->insertItem( i18n("Log (repository)"), this, SLOT(slotLog()) );
 		if (fi.isDir())
 			sub->insertItem( i18n("Cleanup (local)"), this, SLOT(slotCleanup()) );
-		popup->insertItem(i18n("Subversion"), sub);
+		popup->insertItem("Subversion", sub);
 	}
 }
 
@@ -554,7 +560,8 @@ void SvnPart::get_notifier(svn_wc_notify_func_t *notify_func_p, void **notify_ba
 }
 
 void SvnPart::svnDebug(const char *dbg) {
-	appFrontend()->insertStderrLine(dbg);
+	//appFrontend()->insertStderrLine(dbg);
+	m_widget->insertStdoutLine(dbg);
 }
 
 void SvnPart::svnLog(const char *msg) {
@@ -563,7 +570,7 @@ void SvnPart::svnLog(const char *msg) {
 }
 
 void SvnPart::svnMsg(const char *msg) {
-	appFrontend()->insertStdoutLine(msg);
+	m_widget->insertStdoutLine(msg);
 }
 
 void SvnPart::Error(svn_error_t *err) {

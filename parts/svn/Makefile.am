@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevsvn.la
 libkdevsvn_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(SVNLD)
 libkdevsvn_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(SVNLIBS) -lsvn_client-1
 
-libkdevsvn_la_SOURCES = svn_part.cpp svnoptionswidget.cpp svnoptions.ui commitdlg.cpp
+libkdevsvn_la_SOURCES = svnwidget.cpp svn_part.cpp svnoptionswidget.cpp svnoptions.ui commitdlg.cpp
 
 METASOURCES = AUTO
 

@@ -1,3 +1,9 @@
+2003-02-11 Mickael Marchand <marchand@kde.org>
+	* parts/svn:
+    - added an output window for subversion (just like CVS)
+    - removed i18n("Subversion") so that translators does not translate it
+      anymore :)
+
 2003-02-11  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* parts/filecreate:
           - fix: Add cpp and h types by default when there is
