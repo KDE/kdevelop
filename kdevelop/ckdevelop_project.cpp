@@ -724,46 +724,59 @@ void CKDevelop::slotProjectGenerate(){
     return;
   }
   slotStatusMsg(i18n("Generating project file..."));
+  messages_widget->clear();
+
   QString dir;
-
   dir = KFileDialog::getDirectory(QDir::currentDirPath());
-  if (!dir.isEmpty()){
-
-    if(dir.right(1) != "/" ){
-     dir = dir + "/";
-    }
-    QString qt_testfile=dir+"Makefile.am"; // test if the path contains a Makefile.am
-    if(!QFileInfo(qt_testfile).exists()){
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to a\n"
-                                                                            "directory containing a Makefile.am\n"
-                                                                            "to create a Project file from"),KMsgBox::EXCLAMATION); 	
-      slotStatusMsg(i18n("Ready."));
-      return;
-    }
+  if (dir.isEmpty())
+  {
+    slotStatusMsg(i18n("Ready."));
+    return;
   }
+
+  if (dir.right(1) != "/" ){
+    dir = dir + "/";
+  }
+  QString qt_testfile=dir+"Makefile.am"; // test if the path contains a Makefile.am
+  if(!QFileInfo(qt_testfile).exists()){
+    KMsgBox::message(this,  i18n("The selected path is not correct!"),
+                            i18n("The chosen path does not lead to a\n"
+                                 "directory containing a Makefile.am\n"
+                                 "to create a Project file from"),
+                            KMsgBox::EXCLAMATION); 	
+    slotStatusMsg(i18n("Ready."));
+    return;
+  }
+
   QDir::setCurrent(dir);
   QDir directory(dir);
   QString relDir=directory.dirName();
   QString file =relDir+".kdevprj";
-  int result=1;
-  if(QFileInfo(file).exists())
-      result=KMsgBox::yesNo(this,i18n("File Exists!"),i18n("In the path you´ve given\n"
-                                                              "already contains a KDevelop Project file!\n"
-                                                                            "Overwrite ?"),KMsgBox::EXCLAMATION); 	
-  if(result){
-    showOutputView(true);
-    setToolMenuProcess(false);
-    messages_widget->clear();
-    error_parser->toogleOff();
 
-    shell_process.clearArguments();
-    shell_process << QString("cd '")+dir +"' && ";
-    shell_process <<  "kimport | tee  "+file;
-    shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
-    beep = true;
-    next_job="load_new_prj";
+  if(QFileInfo(file).exists())
+  {
+    if (KMsgBox::yesNo(this, i18n("File Exists!"),
+                             i18n("In the path you´ve given\n"
+                                  "already contains a KDevelop Project file!\n"
+                                  "Overwrite ?"),
+							      KMsgBox::QUESTION) != 1)
+    {
+      slotStatusMsg(i18n("Ready."));
+      return;
+    }
   }
-  slotStatusMsg(i18n("Ready."));
+
+  showOutputView(true);
+  setToolMenuProcess(false);
+  error_parser->toogleOff();
+
+  shell_process.clearArguments();
+  shell_process << QString("cd '")+dir +"' && ";
+  shell_process << "echo ""Generating project from directory " + dir + """ && ";
+  shell_process <<  "kimport > " + file;
+  shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
+  beep = true;
+  next_job="load_new_prj";
 }
 
 void  CKDevelop::slotProjectWorkspaces(int id){
