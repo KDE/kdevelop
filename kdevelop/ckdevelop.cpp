@@ -2489,15 +2489,15 @@ void CKDevelop::slotToolbarClicked(int item){
 void CKDevelop::slotSwitchToChildframeMode() {
   showMaximized();
 
-  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, DockBottom);
-  dockbase_grepview->manualDock(dockbase_messages_widget, DockCenter);
-  dockbase_outputview->manualDock(dockbase_messages_widget, DockCenter);
+  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
+  dockbase_grepview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
 
-  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, DockLeft);
-  dockbase_log_file_tree->manualDock(dockbase_class_tree, DockCenter);
-  dockbase_real_file_tree->manualDock(dockbase_class_tree, DockCenter);
-  dockbase_doc_tree->manualDock(dockbase_class_tree, DockCenter);
-  dockbase_widprop_split_view->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
+  dockbase_log_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_real_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_doc_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_widprop_split_view->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
 }
 
 void CKDevelop::slotSwitchToToplevelMode() {
@@ -2564,25 +2564,25 @@ void CKDevelop::slotSwitchToToplevelMode() {
   }
 
   // undock the trees window and the output window (make them toplevel)
-  DockWidget* dockB = DockB.dock;
-  DockWidget* dockL = DockL.dock;
-  DockWidget* dockR = DockR.dock;
-  DockWidget* dockT = DockT.dock;
+  KDockWidget* dockB = DockB.dock;
+  KDockWidget* dockL = DockL.dock;
+  KDockWidget* dockR = DockR.dock;
+  KDockWidget* dockT = DockT.dock;
   if( DockB.dock != 0L) {
-    DockB.dock->unDock();
+    DockB.dock->undock();
     resize( width(), height() - bHeight);
   }
   if( DockL.dock != 0L) {
-    DockL.dock->unDock();
+    DockL.dock->undock();
     resize( width(), height() - lHeight + tbHeight);
   }
   if( DockR.dock != 0L) {
-    DockR.dock->unDock();
+    DockR.dock->undock();
     if( dockL == 0L)
       resize( width(), height() - rHeight + tbHeight);
   }
   if( DockT.dock != 0L) {
-    DockT.dock->unDock();
+    DockT.dock->undock();
     resize( width(), height() - tHeight);
   }
 

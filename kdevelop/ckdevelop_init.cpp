@@ -69,7 +69,7 @@
 extern KGuiCmdManager cmdMngr;
 
 CKDevelop::CKDevelop()
-	: DockMainWindow("CKDevelop_mainwindow")
+	: KDockMainWindow("CKDevelop_mainwindow")
   ,search_process("/bin/sh")
 {
   version = VERSION;
@@ -118,18 +118,20 @@ void CKDevelop::initView(){
   // Outputwindow
   ////////////////////////
   dockbase_o_tab_view = createDockWidget(i18n("Output messages"), BarIcon("filenew"));
-  o_tab_view = new CTabCtl(dockbase_o_tab_view,"output_tabview","output_widget");
+  o_tab_view = new CTabCtl(0,"output_tabview","output_widget");
+	dockbase_o_tab_view->setWidget(o_tab_view);
 	
-//  messages_widget = new MakeView(o_tab_view, "messages_widget");
   dockbase_messages_widget = createDockWidget(i18n("messages"), BarIcon("filenew"));
-  messages_widget = new MakeView(dockbase_messages_widget, "messages_widget");
-//  grepview = new GrepView(o_tab_view, "grepview");
-  dockbase_grepview = createDockWidget(i18n("search"), BarIcon("filenew"));
-  grepview = new GrepView(dockbase_grepview, "grepview");
-//  outputview = new OutputView(o_tab_view, "outputview");
-  dockbase_outputview = createDockWidget(i18n("output"), BarIcon("filenew"));
-  outputview = new OutputView(dockbase_outputview, "outputview");
+  messages_widget = new MakeView(0, "messages_widget");
+  dockbase_messages_widget->setWidget(messages_widget);
 
+  dockbase_grepview = createDockWidget(i18n("search"), BarIcon("filenew"));
+  grepview = new GrepView(0, "grepview");
+	dockbase_grepview->setWidget(grepview);
+	
+  dockbase_outputview = createDockWidget(i18n("output"), BarIcon("filenew"));
+  outputview = new OutputView(0, "outputview");
+	dockbase_outputview->setWidget(outputview);
 
 //  o_tab_view->addTab(messages_widget,i18n("messages"));
 //  o_tab_view->addTab(grepview, i18n("search"));
@@ -141,7 +143,8 @@ void CKDevelop::initView(){
 
   //  s_tab_current = 0;
   dockbase_t_tab_view = createDockWidget(i18n("Tree views"), BarIcon("filenew"));
-  t_tab_view = new CTabCtl(dockbase_t_tab_view);
+  t_tab_view = new CTabCtl(0);
+  dockbase_t_tab_view->setWidget(t_tab_view);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
   ////////////////////////
@@ -150,27 +153,32 @@ void CKDevelop::initView(){
 
 //  class_tree = new CClassView(t_tab_view,"cv");
   dockbase_class_tree = createDockWidget(i18n("CV"), BarIcon("filenew"));
-  class_tree = new CClassView(dockbase_class_tree,"cv");
+  class_tree = new CClassView(0,"cv");
+  dockbase_class_tree->setWidget(class_tree);
   class_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
 //  log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
   dockbase_log_file_tree = createDockWidget(i18n("LFV"), BarIcon("filenew"));
-  log_file_tree = new CLogFileView(dockbase_log_file_tree,"lfv",config->readBoolEntry("lfv_show_path",false));
+  log_file_tree = new CLogFileView(0,"lfv",config->readBoolEntry("lfv_show_path",false));
+  dockbase_log_file_tree->setWidget(log_file_tree);
   //  log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
 //  real_file_tree = new CRealFileView(t_tab_view,"RFV");
   dockbase_real_file_tree = createDockWidget(i18n("RFV"), BarIcon("filenew"));
-  real_file_tree = new CRealFileView(dockbase_real_file_tree,"RFV");
+  real_file_tree = new CRealFileView(0,"RFV");
+  dockbase_real_file_tree->setWidget(real_file_tree);
   //  real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
 //  doc_tree = new DocTreeView(t_tab_view,"DOC");
   dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("filenew"));
-  doc_tree = new DocTreeView(dockbase_doc_tree,"DOC");
+  doc_tree = new DocTreeView(0,"DOC");
+  dockbase_doc_tree->setWidget(doc_tree);
   //  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
 //  widprop_split_view = new WidgetsPropSplitView(t_tab_view,"DLG");
   dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("filenew"));
-  widprop_split_view = new WidgetsPropSplitView(dockbase_widprop_split_view,"DLG");
+  widprop_split_view = new WidgetsPropSplitView(0,"DLG");
+  dockbase_widprop_split_view->setWidget(widprop_split_view);
 
 //  t_tab_view->addTab(class_tree,i18n("CV"));
 //  t_tab_view->addTab(log_file_tree,i18n("LFV"));
@@ -185,7 +193,8 @@ void CKDevelop::initView(){
   ////////////////////////
   
   dockbase_mdi_main_frame = createDockWidget(i18n("MDI Mainframe"), BarIcon("filenew"));
-  mdi_main_frame = new MdiFrame( dockbase_mdi_main_frame, "mdi_frame");
+  mdi_main_frame = new MdiFrame( 0, "mdi_frame");
+  dockbase_mdi_main_frame->setWidget(mdi_main_frame);
   setView(dockbase_mdi_main_frame);
   setMainDockWidget( dockbase_mdi_main_frame );
 
@@ -215,18 +224,18 @@ void CKDevelop::initView(){
   // dock the 2 base widgets
   //
   
-//  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, DockBottom);
-//  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, DockLeft);
+//  dockbase_o_tab_view->manualDock( dockbase_mdi_main_frame, KDockWidget::DockBottom);
+//  dockbase_t_tab_view->manualDock( dockbase_mdi_main_frame, KDockWidget::DockLeft);
 
-  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, DockBottom);
-  dockbase_grepview->manualDock(dockbase_messages_widget, DockCenter);
-  dockbase_outputview->manualDock(dockbase_messages_widget, DockCenter);
+  dockbase_messages_widget->manualDock(dockbase_mdi_main_frame, KDockWidget::DockBottom);
+  dockbase_grepview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+  dockbase_outputview->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
 
-  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, DockLeft);
-  dockbase_log_file_tree->manualDock(dockbase_class_tree, DockCenter);
-  dockbase_real_file_tree->manualDock(dockbase_class_tree, DockCenter);
-  dockbase_doc_tree->manualDock(dockbase_class_tree, DockCenter);
-  dockbase_widprop_split_view->manualDock(dockbase_class_tree, DockCenter);
+  dockbase_class_tree->manualDock(dockbase_mdi_main_frame, KDockWidget::DockLeft);
+  dockbase_log_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_real_file_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_doc_tree->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+  dockbase_widprop_split_view->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
 
   initKeyAccel();
 

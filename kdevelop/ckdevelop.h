@@ -40,6 +40,7 @@
 #include <kprogress.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kdockwidget.h>
 #include "./kwrite/kguicommand.h"
 
 class QSplitter;
@@ -72,7 +73,6 @@ class DlgEdit;
 #include "structdef.h"
 #include "resource.h"
 #include "./print/cprintdlg.h"
-#include "./widgets/dockwidgets/dockmainwindow.h"
 
 class CParsedMethod;
 class CParsedClass;
@@ -82,7 +82,7 @@ class CParsedClass;
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
-class CKDevelop : public DockMainWindow {
+class CKDevelop : public KDockMainWindow {
   Q_OBJECT
 public:
   /**constructor*/
@@ -371,9 +371,9 @@ public:
   ////////////////////////
   // WINDOW-Menu entries
   ///////////////////////
-  /* extends the QextMDI slot, docks all undocked DockWidgets */
+  /* extends the QextMDI slot, docks all undocked KDockWidgets */
   void slotSwitchToChildframeMode();
-  /* extends the QextMDI slot, undocks all docked DockWidgets */
+  /* extends the QextMDI slot, undocks all docked KDockWidgets */
   void slotSwitchToToplevelMode();
 
   ////////////////////////
@@ -697,13 +697,13 @@ private:
   ///////////////////////////////
 
   /** The tabbar for the trees. */
-  DockWidget* dockbase_t_tab_view;
+  KDockWidget* dockbase_t_tab_view;
   CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */
-  DockWidget* dockbase_o_tab_view;
+  KDockWidget* dockbase_o_tab_view;
   CTabCtl* o_tab_view;
 
-  DockWidget* dockbase_mdi_main_frame;
+  KDockWidget* dockbase_mdi_main_frame;
   MdiFrame* mdi_main_frame;
 
   /** the current editor view or 0*/
@@ -718,29 +718,29 @@ private:
   //  KSwallowWidget* swallow_widget;
  
   /** The classview. */
-  DockWidget* dockbase_class_tree;
+  KDockWidget* dockbase_class_tree;
   CClassView* class_tree;
   /** The logical fileview. */
-  DockWidget* dockbase_log_file_tree;
+  KDockWidget* dockbase_log_file_tree;
   CLogFileView* log_file_tree;
   /** The real fileview. */
-  DockWidget* dockbase_real_file_tree;
+  KDockWidget* dockbase_real_file_tree;
   CRealFileView* real_file_tree;
   /** The documentation tree. */
-  DockWidget* dockbase_doc_tree;
+  KDockWidget* dockbase_doc_tree;
   DocTreeView* doc_tree;
   /** splitview, contains a WidgetsView and a PropertyView */
-  DockWidget* dockbase_widprop_split_view;
+  KDockWidget* dockbase_widprop_split_view;
   WidgetsPropSplitView*  widprop_split_view;
   
   /** Output from the compiler ... */
-  DockWidget* dockbase_messages_widget;
+  KDockWidget* dockbase_messages_widget;
   MakeView *messages_widget;
   /** Output from grep */
-  DockWidget* dockbase_grepview;
+  KDockWidget* dockbase_grepview;
   GrepView *grepview;
   /** Output from the application */
-  DockWidget* dockbase_outputview;
+  KDockWidget* dockbase_outputview;
   OutputView *outputview;
 
   QString version;
