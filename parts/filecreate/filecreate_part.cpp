@@ -58,7 +58,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( &data ) )
 using namespace FileCreate;
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
-    : KDevCreateFile("FileCreate", "filecreate", parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true), m_subPopups(0)
+    : KDevCreateFile("FileCreate", "wizard", parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true), m_subPopups(0)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc");
@@ -67,8 +67,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
   
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("New File Wizard"), PROJECTSETTINGSPAGE );
-	_configProxy->createGlobalConfigPage( i18n("New File Wizard"), GLOBALSETTINGSPAGE );
+	_configProxy->createProjectConfigPage( i18n("New File Wizard"), PROJECTSETTINGSPAGE, icon() );
+	_configProxy->createGlobalConfigPage( i18n("New File Wizard"), GLOBALSETTINGSPAGE, icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 

@@ -218,7 +218,6 @@ void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
 
     FileGroupsFileItem *fgfitem = static_cast<FileGroupsFileItem*>(item);
     m_part->partController()->editDocument(KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + fgfitem->fileName() ));
-    m_part->mainWindow()->lowerView(this);
 }
 
 

@@ -187,7 +187,6 @@ void FileTreeWidget::slotItemExecuted( QListViewItem* item )
         return;
 
     m_part->partController()->editDocument( ftitem->url() );
-    m_part->mainWindow()->lowerView( this );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -32,13 +32,14 @@ typedef KDevGenericFactory<FileListPart> filelistFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevfilelist, filelistFactory( &data ) )
 
 FileListPart::FileListPart(QObject *parent, const char *name, const QStringList& )
-        : KDevPlugin("filelist", "filelist", parent, name ? name : "FileListPart" )
+        : KDevPlugin("filelist", "view_text", parent, name ? name : "FileListPart" )
 {
     setInstance(filelistFactory::instance());
     //setXMLFile("kdevpart_filelist.rc");
 
     m_widget = new FileListWidget(this);
 	m_widget->setCaption(i18n("File List"));
+	m_widget->setIcon( SmallIcon( icon() ) );
 
     QWhatsThis::add
         (m_widget, i18n("<b>File List</b><p>This is the list of opened files."));

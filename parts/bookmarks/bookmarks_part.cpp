@@ -44,14 +44,14 @@ static const KAboutData data("kdevbookmarks", I18N_NOOP("Bookmarks"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( &data ) )
 
 BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringList& )
-	: KDevPlugin("bookmarks", "bookmarks", parent, name ? name : "BookmarksPart" )
+	: KDevPlugin("bookmarks", "bookmark", parent, name ? name : "BookmarksPart" )
 {
 	setInstance(BookmarksFactory::instance());
 
 	_widget = new BookmarksWidget(this);
 
 	_widget->setCaption(i18n("Bookmarks"));
-	_widget->setIcon(SmallIcon("bookmark"));
+	_widget->setIcon(SmallIcon( icon() ));
 
 	_marksChangeTimer = new QTimer( this );
 
@@ -66,7 +66,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 	connect( partController(), SIGNAL( partAdded( KParts::Part * ) ), this, SLOT( partAdded( KParts::Part * ) ) );
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("Bookmarks"), BOOKMARKSETTINGSPAGE );
+	_configProxy->createProjectConfigPage( i18n("Bookmarks"), BOOKMARKSETTINGSPAGE, icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 

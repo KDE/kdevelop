@@ -34,7 +34,7 @@ static const KAboutData data("kdevtools", I18N_NOOP("External Tools"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( &data ) )
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin( "Tools", "tools", parent, name ? name : "ToolsPart")
+	: KDevPlugin( "Tools", "configure", parent, name ? name : "ToolsPart")
 {
   setInstance(ToolsFactory::instance());
 
@@ -60,12 +60,12 @@ ToolsPart::~ToolsPart()
 
 void ToolsPart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Tools Menu"));
+	QVBox *vbox = dlg->addVBoxPage( i18n("Tools Menu"), i18n("Tools Menu"), BarIcon( icon(), KIcon::SizeMedium) );
   ToolsConfig *w = new ToolsConfig(vbox, "tools config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
   connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));
 
-  vbox = dlg->addVBoxPage(i18n("External Tools"));
+  vbox = dlg->addVBoxPage(i18n("External Tools"), i18n("External Tools"), BarIcon( icon(), KIcon::SizeMedium) );
   ToolsConfigWidget *w2 = new ToolsConfigWidget(vbox, "tools config widget");
   connect(dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
   connect(dlg, SIGNAL(destroyed()), this, SLOT(updateToolsMenu()));

@@ -57,18 +57,18 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( &data ) )
 ///////////////////////////////////////////////////////////////////////////////
 
 FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("FileView", "fileview", parent, name ? name : "FileViewPart"),
+	: KDevPlugin("FileView", "folder", parent, name ? name : "FileViewPart"),
     m_widget( 0 )
 {
     setInstance( FileViewFactory::instance() );
     //    setXMLFile("kdevfileview.rc");
 
     m_widget = new PartWidget( this );
-    m_widget->setIcon( SmallIcon("folder") );
+	m_widget->setIcon( SmallIcon( icon() ) );
     mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("File Tree"), FILETREE_OPTIONS );
+	_configProxy->createProjectConfigPage( i18n("File Tree"), FILETREE_OPTIONS, icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), 
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 

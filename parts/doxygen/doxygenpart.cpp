@@ -50,7 +50,7 @@ static const KAboutData data("kdevdoxygen", I18N_NOOP("Doxygen"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( &data ) )
 
 DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("Doxgen", "doxygen", parent, name ? name : "DoxygenPart"), m_activeEditor(0), m_cursor(0)
+    : KDevPlugin("Doxgen", "kdevelop", parent, name ? name : "DoxygenPart"), m_activeEditor(0), m_cursor(0)
 {
     setInstance(DoxygenFactory::instance());
     setXMLFile("kdevdoxygen.rc");
@@ -72,7 +72,7 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 //    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("Doxygen"), PROJECTOPTIONS );
+	_configProxy->createProjectConfigPage( i18n("Doxygen"), PROJECTOPTIONS, icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 

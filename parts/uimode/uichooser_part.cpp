@@ -18,12 +18,12 @@ static const KAboutData data("kdevuichooser", I18N_NOOP("User Interface"), "1.0"
 K_EXPORT_COMPONENT_FACTORY( libkdevuichooser, UIChooserFactory( &data ) )
 
 UIChooserPart::UIChooserPart(QObject *parent, const char *name, const QStringList &)
-  : KDevPlugin( "UIChooser", "uichooser", parent, name ? name : "UIChooserPart")
+  : KDevPlugin( "UIChooser", "view_choose", parent, name ? name : "UIChooserPart")
 {
 	setInstance(UIChooserFactory::instance());
 
 	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createGlobalConfigPage( i18n("User Interface"), UICHOOSERSETTINGSPAGE );
+	_configProxy->createGlobalConfigPage( i18n("User Interface"), UICHOOSERSETTINGSPAGE, icon() );
 	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )),
 		this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 }

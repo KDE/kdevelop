@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <kconfig.h>
 #include <kio/netaccess.h>
+#include <kiconloader.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -63,7 +64,7 @@ public:
 K_EXPORT_COMPONENT_FACTORY( libkdevabbrev, AbbrevFactory )
 
 AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("Abbrev", "abbrev", parent, name ? name : "AbbrevPart")
+    : KDevPlugin("Abbrev", "fontsizeup", parent, name ? name : "AbbrevPart")
 {
     setInstance(AbbrevFactory::instance());
     setXMLFile("kdevabbrev.rc");
@@ -246,7 +247,7 @@ QString AbbrevPart::currentWord() const
 
 void AbbrevPart::configWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Abbreviations"));
+	QVBox *vbox = dlg->addVBoxPage(i18n("Abbreviations"), i18n("Abbreviations"), BarIcon( icon(), KIcon::SizeMedium) );
     AbbrevConfigWidget *w = new AbbrevConfigWidget(this, vbox, "abbrev config widget");
     connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }

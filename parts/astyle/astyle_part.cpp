@@ -30,7 +30,7 @@ typedef KDevGenericFactory<AStylePart> AStyleFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( &data ) )
 
 AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
-  : KDevSourceFormatter("AStyle", "astyle", parent, name ? name : "AStylePart")
+  : KDevSourceFormatter("AStyle", "kdevelop", parent, name ? name : "AStylePart")
 {
   setInstance(AStyleFactory::instance());
 
@@ -97,18 +97,7 @@ void AStylePart::beautifySource()
 
   cursorPos( partController()->activePart(), &col, &line );	  
   
-// pre 3.1.3 katepart clears undo history on setText()
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION > KDE_MAKE_VERSION(3,1,2)
   iface->setText( output );
-# else
-  iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
-  iface->insertText( 0, 0, output);
-# endif
-#else
-  iface->removeText( 0, 0, iface->numLines()-1, UINT_MAX);
-  iface->insertText( 0, 0, output);
-#endif
 
   setCursorPos( partController()->activePart(), col, line );
 }
@@ -116,7 +105,7 @@ void AStylePart::beautifySource()
 
 void AStylePart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Source Formatter"));
+	QVBox *vbox = dlg->addVBoxPage(i18n("Source Formatter"), i18n("Source Formatter"), BarIcon( icon(), KIcon::SizeMedium));
   AStyleWidget *w = new AStyleWidget(vbox, "astyle config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }
