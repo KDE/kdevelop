@@ -125,8 +125,8 @@ if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2m
     if ($processes{XGETTEXT} && $processes{XGETTEXT} eq "yes")
     {
       chdir ($overDirectory);
-      printflush (STDOUT,">make messages\n");
-      system ("make package-messages >/dev/null");
+      printflush (STDOUT,">make -f admin/Makefile.common package-messages\n");
+      system ("make -f admin/Makefile.common package-messages >/dev/null");
     }
     else
     {
