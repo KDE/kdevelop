@@ -27,7 +27,7 @@ class TextLine {
     void overwrite(int pos, const char *, int l);
     void append(char, int n = 1);
     void del(int pos,int l = 1);
-    int length();
+    int length() const;
     void setLength(int l);
 
     void wrap(TextLine *nextLine, int pos);
@@ -40,10 +40,10 @@ class TextLine {
 
     void setAttribs(int attribute, int start, int end);
     void setAttr(int attribute);
-    int getAttr(int pos);
-    int getAttr();
-    int getRawAttr(int pos);
-    int getRawAttr();
+    int getAttr(int pos) const;
+    int getAttr() const;
+    int getRawAttr(int pos) const;
+    int getRawAttr() const;
 
     void setContext(int context);
     int getContext();
@@ -212,10 +212,10 @@ class KWriteDoc : QObject {
     void updateFontData();
     void setTabWidth(int);
     void updateLines(int startLine = 0, int endLine = 0xffffff, int flags = 0);
-    void updateMaxLength(TextLine *);
+    void updateMaxLength( const TextLine *);
     void updateViews(KWriteView *exclude = 0L);
 
-    int textWidth(TextLine *, int cursorX);
+    int textWidth( const TextLine *, const int cursorX);
     int textWidth(PointStruc &cursor);
     int textWidth(bool wrapCursor, PointStruc &cursor, int xPos);
     int textPos(TextLine *, int xPos);
