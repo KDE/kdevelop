@@ -35,9 +35,9 @@ using namespace std;
 
 #define ADVANCE(tk, descr) \
 { \
-  Token token = lex->lookAhead( 0 ); \
+  const Token& token = lex->lookAhead( 0 ); \
   if( token != tk ){ \
-      reportError( i18n("'%1' expected found '%2'").arg(descr).arg(lex->toString(lex->lookAhead(0))) ); \
+      reportError( i18n("'%1' expected found '%2'").arg(descr).arg(lex->toString(token)) ); \
       return false; \
   } \
   lex->nextToken(); \
@@ -45,7 +45,7 @@ using namespace std;
 
 #define CHECK(tk, descr) \
 { \
-  Token token = lex->lookAhead( 0 ); \
+  const Token& token = lex->lookAhead( 0 ); \
   if( token != tk ){ \
       return false; \
   } \
@@ -54,7 +54,7 @@ using namespace std;
 
 #define MATCH(tk, descr) \
 { \
-  Token token = lex->lookAhead( 0 ); \
+  const Token& token = lex->lookAhead( 0 ); \
   if( token != tk ){ \
       reportError( Errors::SyntaxError ); \
       return false; \
@@ -393,7 +393,6 @@ bool Parser::parseName( NameAST::Node& node )
         return false;
 
     UPDATE_POS( ast, start, lex->index() );
-    ast->setText( toString(start, lex->index()) );
     node = ast;
 
     return true;
@@ -751,13 +750,12 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node, boo
 
     int start = lex->index();
 
-    TemplateArgumentListAST::Node taln = CreateNode<TemplateArgumentListAST>();
-    node = taln;
+    TemplateArgumentListAST::Node ast = CreateNode<TemplateArgumentListAST>();
 
     AST::Node templArg;
     if( !parseTemplateArgument(templArg) )
 	return false;
-    node->addArgument( templArg );
+    ast->addArgument( templArg );
 
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
@@ -769,10 +767,11 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node, boo
 	    } else
 	       return false;
 	}
-	node->addArgument( templArg );
+	ast->addArgument( templArg );
     }
 
-    UPDATE_POS( node, start, lex->index() );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
 
     return true;
 }
@@ -1000,7 +999,6 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 
         NameAST::Node name = CreateNode<NameAST>();
 	name->setUnqualifedName( cl );
-	name->setText( toString(start, lex->index()) );
 	UPDATE_POS( name, start, lex->index() );
 	ast->setName( name );
 
@@ -1013,7 +1011,6 @@ bool Parser::parseSimpleTypeSpecifier( TypeSpecifierAST::Node& node )
 	ast->setName( name );
     }
 
-    ast->setText( toString(start, lex->index()) );
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
     return true;
@@ -1555,9 +1552,13 @@ bool Parser::parseFunctionSpecifier( GroupAST::Node& node )
     return true;
 }
 
-bool Parser::parseTypeId( AST::Node& /*node*/ )
+bool Parser::parseTypeId( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTypeId()" << endl;
+
+    // ### TODO: implement the AST for typeId
+    int start = lex->index();
+    AST::Node ast = CreateNode<AST>();
 
     TypeSpecifierAST::Node spec;
     if( !parseTypeSpecifier(spec) ){
@@ -1566,6 +1567,9 @@ bool Parser::parseTypeId( AST::Node& /*node*/ )
 
     DeclaratorAST::Node decl;
     parseAbstractDeclarator( decl );
+
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
 
     return true;
 }
@@ -1596,7 +1600,6 @@ bool Parser::parseInitDeclaratorList( InitDeclaratorListAST::Node& node )
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseInitDeclaratorList() -- end" << endl;
 
     UPDATE_POS( ast, start, lex->index() );
-    ast->setText( toString(start, lex->index()) );
     node = ast;
 
     return true;
@@ -1916,11 +1919,9 @@ bool Parser::parseElaboratedTypeSpecifier( TypeSpecifierAST::Node& node )
 	NameAST::Node name;
 
 	if( parseName(name) ){
-	    name->setText( toString(start, lex->index()) );
 	    ElaboratedTypeSpecifierAST::Node ast = CreateNode<ElaboratedTypeSpecifierAST>();
 	    ast->setKind( kind );
 	    ast->setName( name );
-	    ast->setText( toString(start, lex->index()) );
 	    UPDATE_POS( ast, start, lex->index() );
 	    node = ast;
 
@@ -1970,7 +1971,6 @@ bool Parser::parseEnumerator( EnumeratorAST::Node& node )
 
     AST::Node id = CreateNode<AST>();
     UPDATE_POS( id, start, lex->index() );
-    id->setText( toString(start, lex->index()) );
     node->setId( id );
 
     if( lex->lookAhead(0) == '=' ){
@@ -2268,7 +2268,6 @@ bool Parser::parseUnqualifiedName( ClassOrNamespaceNameAST::Node& node )
     }
 
     UPDATE_POS( ast, start, lex->index() );
-    ast->setText( toString(start, lex->index()) );
     node = ast;
 
     return true;

@@ -585,15 +585,8 @@ void Lexer::processElif()
 	return;
 
     if( !m_trueTest[m_ifLevel] ){
-#if 0
-	int n;
-	if( (n = testDefined()) != 0 ){
-	    int isdef = macroDefined();
-	    m_trueTest[m_ifLevel] = !((n == 1 && !isdef) || (n == -1 && isdef));
-	}
-	else
-#endif
-        bool inSkip = m_skipping[ m_ifLevel ];
+        // ###: TODO: implement the correct semantic for elif!!
+        bool inSkip = m_ifLevel > 0 && m_skipping[ m_ifLevel-1 ];
         m_trueTest[ m_ifLevel ] = macroExpression() != 0;
 	m_skipping[ m_ifLevel ] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
     }
@@ -874,4 +867,3 @@ int Lexer::macroExpression()
     return macroLogicalOr();
 }
 
-#include "lexer.moc"

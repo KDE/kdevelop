@@ -203,6 +203,10 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     QString scopeStr = scopeOfDeclarator( d );
     ParsedClassContainer* cl = findContainer( scopeStr, 0, true );
+    if( cl == 0 && scopeStr )
+        return;   // class not found!!!!!
+
+
     if( !cl )
        cl = m_currentContainer;
 
@@ -634,32 +638,7 @@ QString StoreWalker::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAS
 
     QString text;
 
-    if( typeSpec->cvQualify() ){
-	QPtrList<AST> l = typeSpec->cvQualify()->nodeList();
-	QPtrListIterator<AST> it( l );
-	while( it.current() ){
-	    text += it.current()->text();
-	    ++it;
-
-	    text += " ";
-	}
-    }
-
     text += typeSpec->text();
-
-    if( typeSpec->cv2Qualify() ){
-	text += " ";
-	QPtrList<AST> l = typeSpec->cv2Qualify()->nodeList();
-	QPtrListIterator<AST> it( l );
-	while( it.current() ){
-	    text += it.current()->text();
-	    ++it;
-
-	    text += " ";
-	}
-    }
-
-    text = text.simplifyWhiteSpace();
 
     QPtrList<AST> ptrOpList = declarator->ptrOpList();
     for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it ){

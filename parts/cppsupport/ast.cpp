@@ -18,6 +18,7 @@
 */
 
 #include "ast.h"
+#include <qstringlist.h>
 #include <kdebug.h>
 
 QString nodeTypeToString( NodeType type )
@@ -210,6 +211,28 @@ void NameAST::addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNam
     m_classOrNamespaceNameList.append( classOrNamespaceName.release() );
 }
 
+QString NameAST::text() const
+{
+    if( !m_unqualifiedName.get() )
+        return QString::null;
+
+    QString str;
+
+    if( m_global )
+        str += "::";
+
+    QStringList l;
+    QPtrListIterator<ClassOrNamespaceNameAST> it( m_classOrNamespaceNameList );
+    while( it.current() ){
+        str += it.current()->text() + "::";
+        ++it;
+    }
+
+    str += m_unqualifiedName->text();
+
+    return str;
+}
+
 // ------------------------------------------------------------------------
 DeclarationAST::DeclarationAST()
 {
@@ -369,6 +392,18 @@ void TemplateArgumentListAST::addArgument( AST::Node& arg )
     m_argumentList.append( arg.release() );
 }
 
+QString TemplateArgumentListAST::text() const
+{
+    QStringList l;
+
+    QPtrListIterator<AST> it( m_argumentList );
+    while( it.current() ){
+        l.append( it.current()->text() );
+	++it;
+    }
+
+    return l.join( ", " );
+}
 
 // ------------------------------------------------------------------------
 TemplateDeclarationAST::TemplateDeclarationAST()
@@ -410,6 +445,18 @@ void ClassOrNamespaceNameAST::setTemplateArgumentList( TemplateArgumentListAST::
     if( m_templateArgumentList.get() ) m_templateArgumentList->setParent( this );
 }
 
+QString ClassOrNamespaceNameAST::text() const
+{
+    if( !m_name.get() )
+        return QString::null;
+
+    QString str = m_name->text();
+    if( m_templateArgumentList.get() )
+        str += QString("<") + m_templateArgumentList->text() + QString(">");
+
+    return str;
+}
+
 // ------------------------------------------------------------------------
 TypeSpecifierAST::TypeSpecifierAST()
 {
@@ -425,6 +472,22 @@ void TypeSpecifierAST::setCv2Qualify( GroupAST::Node& cv2Qualify )
 {
     m_cv2Qualify = cv2Qualify;
     if( m_cv2Qualify.get() ) m_cv2Qualify->setParent( this );
+}
+
+QString TypeSpecifierAST::text() const
+{
+    QString str;
+
+    if( m_cvQualify.get() )
+        str += m_cvQualify->text() + " ";
+
+    if( m_name.get() )
+        str += m_name->text();
+
+    if( m_cv2Qualify.get() )
+        str += QString(" ") + m_cv2Qualify->text();
+
+    return str;
 }
 
 // ------------------------------------------------------------------------
@@ -479,6 +542,14 @@ void ElaboratedTypeSpecifierAST::setKind( AST::Node& kind )
 {
     m_kind = kind;
     if( m_kind.get() ) m_kind->setParent( this );
+}
+
+QString ElaboratedTypeSpecifierAST::text() const
+{
+    if( m_kind.get() )
+        return m_kind->text() + " " + TypeSpecifierAST::text();
+
+    return TypeSpecifierAST::text();
 }
 
 // ------------------------------------------------------------------------
@@ -863,6 +934,24 @@ void ParameterDeclarationAST::setExpression( AST::Node& expression )
     if( m_expression.get() ) m_expression->setParent( this );
 }
 
+QString ParameterDeclarationAST::text() const
+{
+    TypeSpecifierAST::Node m_typeSpec;
+    DeclaratorAST::Node m_declarator;
+    AST::Node m_expression;
+
+    QString str;
+    if( m_typeSpec.get() )
+        str += m_typeSpec->text() + " ";
+
+    if( m_declarator.get() )
+        str += m_declarator->text();
+
+    if( m_expression.get() )
+        str += QString( " = " ) + m_expression->text();
+
+    return str;
+}
 
 // --------------------------------------------------------------------------
 ParameterDeclarationListAST::ParameterDeclarationListAST()
@@ -877,6 +966,19 @@ void ParameterDeclarationListAST::addParameter( ParameterDeclarationAST::Node& p
 
     parameter->setParent( this );
     m_parameterList.append( parameter.release() );
+}
+
+QString ParameterDeclarationListAST::text() const
+{
+    QStringList l;
+
+    QPtrListIterator<ParameterDeclarationAST> it( m_parameterList );
+    while( it.current() ){
+        l.append( it.current()->text() );
+	++it;
+    }
+
+    return l.join( ", " );
 }
 
 
@@ -897,6 +999,20 @@ void ParameterDeclarationClauseAST::setEllipsis( AST::Node& ellipsis )
     if( m_ellipsis.get() ) m_ellipsis->setParent( this );
 }
 
+QString ParameterDeclarationClauseAST::text() const
+{
+    QString str;
+
+    if( m_parameterDeclarationList.get() )
+        str += m_parameterDeclarationList->text();
+
+    if( m_ellipsis.get() )
+        str += ", ...";
+
+    return str;
+}
+
+
 // --------------------------------------------------------------------------
 GroupAST::GroupAST()
 {
@@ -912,6 +1028,19 @@ void GroupAST::addNode( AST::Node& node )
     m_nodeList.append( node.release() );
 }
 
+QString GroupAST::text() const
+{
+    QStringList l;
+
+    QPtrListIterator<AST> it( m_nodeList );
+    while( it.current() ){
+        l.append( it.current()->text() );
+	++it;
+    }
+
+    return l.join( " " );
+}
+
 // --------------------------------------------------------------------------
 AccessDeclarationAST::AccessDeclarationAST()
 {
@@ -925,6 +1054,19 @@ void AccessDeclarationAST::addAccess( AST::Node& access )
 
     access->setParent( this );
     m_accessList.append( access.release() );
+}
+
+QString AccessDeclarationAST::text() const
+{
+    QStringList l;
+
+    QPtrListIterator<AST> it( m_accessList );
+    while( it.current() ){
+        l.append( it.current()->text() );
+	++it;
+    }
+
+    return l.join( " " );
 }
 
 // --------------------------------------------------------------------------

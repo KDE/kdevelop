@@ -99,24 +99,24 @@ public:
     AST();
     virtual ~AST();
 
-    virtual int nodeType() const { return m_nodeType; }
-    virtual void setNodeType( int nodeType ) { m_nodeType = nodeType; }
+    int nodeType() const { return m_nodeType; }
+    void setNodeType( int nodeType ) { m_nodeType = nodeType; }
+
+    AST* parent() { return m_parent; }
+    void setParent( AST* parent );
+
+    void setStartPosition( int line, int col );
+    void getStartPosition( int* line, int* col ) const;
+
+    void setEndPosition( int line, int col );
+    void getEndPosition( int* line, int* col ) const;
+
+    QPtrList<AST> children() { return m_children; }
+    void appendChild( AST* child );
+    void removeChild( AST* child );
 
     virtual QString text() const { return m_text; }
     virtual void setText( const QString& text ) { m_text = text; }
-
-    virtual AST* parent() { return m_parent; }
-    virtual void setParent( AST* parent );
-
-    virtual void setStartPosition( int line, int col );
-    virtual void getStartPosition( int* line, int* col ) const;
-
-    virtual void setEndPosition( int line, int col );
-    virtual void getEndPosition( int* line, int* col ) const;
-
-    virtual QPtrList<AST> children() { return m_children; }
-    virtual void appendChild( AST* child );
-    virtual void removeChild( AST* child );
 
 private:
     int m_nodeType;
@@ -143,6 +143,8 @@ public:
     QPtrList<AST> nodeList() { return m_nodeList; }
     void addNode( AST::Node& node );
 
+    virtual QString text() const;
+
 private:
     QPtrList<AST> m_nodeList;
 
@@ -163,6 +165,8 @@ public:
 
     void addArgument( AST::Node& arg );
     QPtrList<AST> argumentList() { return m_argumentList; }
+
+    virtual QString text() const;
 
 private:
     QPtrList<AST> m_argumentList;
@@ -186,6 +190,8 @@ public:
 
     TemplateArgumentListAST* templateArgumentList() { return m_templateArgumentList.get(); }
     void setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList );
+
+    virtual QString text() const;
 
 private:
     AST::Node m_name;
@@ -213,6 +219,8 @@ public:
 
     ClassOrNamespaceNameAST* unqualifiedName() { return m_unqualifiedName.get(); }
     void setUnqualifedName( ClassOrNamespaceNameAST::Node& unqualifiedName );
+
+    virtual QString text() const;
 
 private:
     bool m_global;
@@ -282,6 +290,8 @@ public:
     QPtrList<AST> accessList() { return m_accessList; }
     void addAccess( AST::Node& access );
 
+    virtual QString text() const;
+
 private:
     QPtrList<AST> m_accessList;
 
@@ -307,6 +317,8 @@ public:
 
     GroupAST* cv2Qualify() { return m_cv2Qualify.get(); }
     void setCv2Qualify( GroupAST::Node& cv2Qualify );
+
+    virtual QString text() const;
 
 private:
     NameAST::Node m_name;
@@ -449,6 +461,8 @@ public:
 
     AST* kind() { return m_kind.get(); }
     void setKind( AST::Node& kind );
+
+    virtual QString text() const;
 
 private:
     AST::Node m_kind;
@@ -626,6 +640,7 @@ public:
     class ParameterDeclarationClauseAST* parameterDeclarationClause() { return m_parameterDeclarationClause.get(); }
     void setParameterDeclarationClause( std::auto_ptr<class ParameterDeclarationClauseAST>& parameterDeclarationClause );
 
+    // ### replace 'constant' with cvQualify
     AST* constant() { return m_constant.get(); }
     void setConstant( AST::Node& constant );
 
@@ -665,6 +680,8 @@ public:
     AST* expression() { return m_expression.get(); }
     void setExpression( AST::Node& expression );
 
+    virtual QString text() const;
+
 private:
     TypeSpecifierAST::Node m_typeSpec;
     DeclaratorAST::Node m_declarator;
@@ -686,6 +703,8 @@ public:
 
     QPtrList<ParameterDeclarationAST> parameterList() { return m_parameterList; }
     void addParameter( ParameterDeclarationAST::Node& parameter );
+
+    virtual QString text() const;
 
 private:
     QPtrList<ParameterDeclarationAST> m_parameterList;
@@ -709,6 +728,8 @@ public:
 
     AST* ellipsis() { return m_ellipsis.get(); }
     void setEllipsis( AST::Node& ellipsis );
+
+    virtual QString text() const;
 
 private:
     ParameterDeclarationListAST::Node m_parameterDeclarationList;

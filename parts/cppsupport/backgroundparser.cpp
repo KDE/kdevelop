@@ -223,11 +223,15 @@ void BackgroundParser::addFile( const QString& fileName )
 {
     m_mutex.lock();
     QString fn( fileName.unicode(), fileName.length() );
-    if( m_fileList.find(fn) == m_fileList.end() )
+    bool added = false;
+    if( m_fileList.find(fn) == m_fileList.end() ){
         m_fileList.push_back( fn );
+	added = true;
+    }
     m_mutex.unlock();
 
-    m_canParse.wakeAll();
+    if( added )
+        m_canParse.wakeAll();
 }
 
 void BackgroundParser::removeAllFiles()
@@ -368,7 +372,7 @@ void BackgroundParser::run()
 
 	m_mutex.unlock();
 
-	kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED " << fileName << "!!!!!!!!!!!!!!!!!!" << endl;
+	//kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED " << fileName << "!!!!!!!!!!!!!!!!!!" << endl;
 
 	if( m_fileList.isEmpty() )
 	    m_isEmpty.wakeAll();

@@ -917,6 +917,10 @@ void CppSupportPart::slotMakeMember()
 	if( !text.isEmpty() && !implFile.isEmpty() ){
 	    partController()->editDocument( implFile );
 
+            // sync
+            while( m_backgroundParser->filesInQueue() > 0 )
+                m_backgroundParser->isEmpty().wait();
+
 	    KTextEditor::EditInterface* editiface = dynamic_cast<KTextEditor::EditInterface*>( partController()->activePart() );
 	    KTextEditor::ViewCursorInterface* cursoriface = dynamic_cast<KTextEditor::ViewCursorInterface*>( partController()->activePart()->widget() );
 

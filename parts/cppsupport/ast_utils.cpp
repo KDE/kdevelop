@@ -96,39 +96,12 @@ void scopeOfNode( AST* ast, QStringList& scope )
 }
 
 
-QString typeSpecToString( TypeSpecifierAST* typeSpec )
+QString typeSpecToString( TypeSpecifierAST* typeSpec )  // ### TODO: remove
 {
     if( !typeSpec )
         return QString::null;
 
-    QString text;
-
-    if( typeSpec->cvQualify() ){
-        QPtrList<AST> l = typeSpec->cvQualify()->nodeList();
-        QPtrListIterator<AST> it( l );
-	while( it.current() ){
-	    text += it.current()->text();
-	    ++it;
-
-	    text += " ";
-	}
-    }
-
-    text += typeSpec->text();
-
-    if( typeSpec->cv2Qualify() ){
-        text += " ";
-        QPtrList<AST> l = typeSpec->cv2Qualify()->nodeList();
-        QPtrListIterator<AST> it( l );
-	while( it.current() ){
-	    text += it.current()->text();
-	    ++it;
-
-	    text += " ";
-	}
-    }
-
-    return text.stripWhiteSpace();
+    return typeSpec->text();
 }
 
 QString declaratorToString( DeclaratorAST* declarator, const QString& scope, bool skipPtrOp )
