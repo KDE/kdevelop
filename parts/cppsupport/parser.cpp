@@ -634,7 +634,7 @@ bool Parser::parseOperatorFunctionId( AST::Node& node )
     }
 }
 
-bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node )
+bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node, bool reportError )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateArgumentList()" << endl;
 
@@ -652,8 +652,11 @@ bool Parser::parseTemplateArgumentList( TemplateArgumentListAST::Node& node )
 	lex->nextToken();
 
 	if( !parseTemplateArgument(templArg) ){
-	    syntaxError();
-	    break;
+	    if( reportError ){
+	       syntaxError();
+	       break;
+	    } else
+	       return false;
 	}
 	node->addArgument( templArg );
     }
@@ -991,7 +994,8 @@ bool Parser::parseTemplateArgument( AST::Node& node )
 
     int start = lex->index();
     if( parseTypeId(node) ){
-	return true;
+        if( lex->lookAhead(0) == ',' || lex->lookAhead(0) == '>' )
+	    return true;
     }
 
     lex->setIndex( start );
@@ -1141,7 +1145,6 @@ update_node:
 bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
-
     int start = lex->index();
 
     DeclaratorAST::Node ast = CreateNode<DeclaratorAST>();
@@ -1157,7 +1160,7 @@ bool Parser::parseAbstractDeclarator( DeclaratorAST::Node& node )
     if( lex->lookAhead(0) == '(' ){
 	lex->nextToken();
 
-	if( !parseDeclarator(decl) ){
+	if( !parseAbstractDeclarator(decl) ){
 	    return false;
 	}
 	ast->setSubDeclarator( decl );
@@ -1359,9 +1362,9 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 
     case Token_typename:
 	{
-	    
+
 	    lex->nextToken(); // skip typename
-	    
+
 	    // parse optional name
 	    QString name;
 	    if( lex->lookAhead(0) == Token_identifier ){
@@ -1369,10 +1372,10 @@ bool Parser::parseTypeParameter( AST::Node& /*node*/ )
 		lex->nextToken();
 	    }
 	    if( name )
-		
+
 		if( lex->lookAhead(0) == '=' ){
 		    lex->nextToken();
-		    
+
 		    AST::Node typeId;
 		    if( !parseTypeId(typeId) ){
 			syntaxError();
@@ -1483,6 +1486,7 @@ bool Parser::parseTypeId( AST::Node& /*node*/ )
 	return false;
     }
 
+    QString s = lex->lookAhead(0).toString().latin1();
     DeclaratorAST::Node decl;
     parseAbstractDeclarator( decl );
 
@@ -1926,9 +1930,9 @@ bool Parser::parseExceptionSpecification( AST::Node& node )
 bool Parser::parseEnumerator( EnumeratorAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseEnumerator()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != Token_identifier ){
 	return false;
     }
