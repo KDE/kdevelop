@@ -25,7 +25,7 @@ class ValListViewItem: public QListViewItem
 {
 public:
   ValListViewItem( QListView* parent, int key, int pid, const QString& message ):
-    QListViewItem( parent, QString::number( key ), QString::number( pid ), message ), 
+    QListViewItem( parent, QString::number( key ), QString::number( pid ), message ),
     _key( key ), _pid ( pid ), backtrace( false ), _line( -1 ), _active( false ) {}
 
   ValListViewItem( ValListViewItem* parent, int key, int pid, const QString& message, const QString& filename, int line, bool active ):
@@ -35,9 +35,9 @@ public:
     if ( parent->_pid != _pid && _pid > 0 )
       setText( 1, QString::number( _pid ) );
   }
-    
+
   virtual ~ValListViewItem();
-  
+
   static int intCompare( int i1, int i2 )
   {
     if ( i1 > i2 )
@@ -45,9 +45,9 @@ public:
     else if ( i1 < i2 )
       return -1;
     else
-      return 0;    
+      return 0;
   }
-  
+
   int compare( QListViewItem* i, int col, bool ascending ) const
   {
     if ( !i || i->rtti() != VALLISTVIEWITEMRTTI )
@@ -58,7 +58,7 @@ public:
       default: return QListViewItem::compare( i, col, ascending );
     }
   }
-  
+
   void paintCell( QPainter* p, const QColorGroup& cg, int column, int width, int align )
   {
     if ( _active ) {
@@ -66,7 +66,7 @@ public:
       fnt.setBold( true );
       p->setFont( fnt );
     }
-    QListViewItem::paintCell( p, cg, column, width, align ); 
+    QListViewItem::paintCell( p, cg, column, width, align );
   }
 
   int rtti() const { return VALLISTVIEWITEMRTTI; }
@@ -75,7 +75,7 @@ public:
   int line() const { return _line; }
   QString message() const { return text( 2 ); }
   bool isHighlighted() const { return _active; }
-    
+
 private:
   int _key;
   int _pid;
@@ -99,13 +99,13 @@ ValgrindWidget::ValgrindWidget( ValgrindPart *part )
   lv->setRootIsDecorated( true );
   lv->setAllColumnsShowFocus( true );
   vbl->addWidget( lv );
- 
+
   popup = new QPopupMenu( lv, "valPopup" );
   popup->insertItem( i18n( "Expand all items" ), this, SLOT(expandAll()), 0, 0 );
   popup->insertItem( i18n( "Collapse all items" ), this, SLOT(collapseAll()), 0, 1 );
 
   connect( popup, SIGNAL(aboutToShow()),
-           this, SLOT(aboutToShowPopup()) ); 
+           this, SLOT(aboutToShowPopup()) );
   connect( lv, SIGNAL(executed(QListViewItem*)),
            this, SLOT(executed(QListViewItem*)) );
   connect( lv, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
@@ -145,7 +145,7 @@ void ValgrindWidget::executed( QListViewItem* lvi )
   Q_ASSERT( _part );
   Q_ASSERT( _part->partController() );
   Q_ASSERT( _part->mainWindow() );
-  
+
   if ( !lvi || lvi->rtti() != VALLISTVIEWITEMRTTI )
     return;
   ValListViewItem* vli = 0;
@@ -162,7 +162,7 @@ void ValgrindWidget::executed( QListViewItem* lvi )
   }
   if ( vli ) {
     // display the file
-    _part->partController()->editDocument( vli->fileName(), vli->line() );
+    _part->partController()->editDocument( vli->fileName(), vli->line() - 1 );
     _part->mainWindow()->statusBar()->message( vli->message(), 10000 );
     _part->mainWindow()->lowerView( this );
   }
