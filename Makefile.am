@@ -15,7 +15,7 @@ install-data-local:
 	@echo ""
 	@echo "******************* Important *********************"
 	@echo ""
-	@echo "KDevelop 3.0 alpha7 has been installed."
+	@echo "KDevelop $(VERSION) has been installed."
 	@echo ""
 	@echo "***************************************************"
 
