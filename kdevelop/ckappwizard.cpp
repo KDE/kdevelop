@@ -1708,9 +1708,9 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create an MDI framework based on the QextMDI library and Qt2. "
-    											"It allows to switch between both modes, Toplevel and Childframe. "
-    											"Further details: www.geocities.com/gigafalk/qextmdi.htm"));
+    apphelp->setText (i18n("Create an MDI framework based on the QextMDI library and Qt2.0x. "
+    											"Allows to switch between both modes, Toplevel and Childframe. "
+    											"Requires QextMDI!!! (www.geocities.com/gigafalk/qextmdi.htm)"));
   }
   else if ((citem->isSelected() || cppitem->isSelected())
             && strcmp (cancelButton->text(), i18n("Exit"))) {

@@ -1,4 +1,7 @@
-2000-01-26 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+2000-01-27 Falk Brettschneider <gigafalk@yahoo.com>
+	* message text for QextMDI improved in AppWizard.
+	
+2000-01-27 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed missing make messages call after project generation for kde2 apps
 	
 2000-01-27 Falk Brettschneider <gigafalk@yahoo.com>
