@@ -1,4 +1,8 @@
-2003-03-25 Roberto Raggi <roberto@kdevelop.org<
+2003-03-26 Roberto Raggi <roberto@kdevelop.org>
+	* added showPart() to KDevPlugin
+	* added KNotes plugin (ported from Kontact plugin)
+
+2003-03-25 Roberto Raggi <roberto@kdevelop.org>
 	* improved the plugin framework
 	* added DCOP interfaces for FilterPart and CppSupportPart
 	
