@@ -34,7 +34,9 @@ public:
     /*$PUBLIC_FUNCTIONS$*/
 
     QString title() const;
+    void setTitle(const QString &title);
     QString url() const;
+    void setURL(const QString &url);
     
 public slots:
     /*$PUBLIC_SLOTS$*/

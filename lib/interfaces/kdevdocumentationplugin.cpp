@@ -240,11 +240,12 @@ void DocumentationPlugin::clearCatalog(DocumentationCatalogItem *item)
             namedCatalogs.remove(it);
     }
     //clear indexes for catalog
-    QValueList<IndexItem *> idx;
+    QValueList<IndexItem *> idx = indexes[item];
     for (QValueList<IndexItem *>::iterator it = idx.begin(); it != idx.end(); ++it)
     {
         delete *it;
     }
+    indexes.remove(item);
 
     //remove catalog
     catalogs.remove(item);
@@ -258,10 +259,7 @@ void DocumentationPlugin::createIndex(KListBox *index)
     for (QValueList<DocumentationCatalogItem *>::iterator it = catalogs.begin();
         it != catalogs.end(); ++it)
     {
-        if (!needRefreshIndex(*it) && loadCachedIndex(index, *it))
-            continue;
-        createIndex(index, *it);
-        cacheIndex(*it);
+        loadIndex(index, *it);
     }
     m_indexCreated = true;
 }
@@ -338,4 +336,25 @@ void DocumentationPlugin::editCatalogConfiguration(ConfigurationItem *configurat
 void DocumentationPlugin::deleteCatalogConfiguration(const ConfigurationItem *const configurationItem)
 {
     deletedConfigurationItems << configurationItem->title();
+}
+
+void DocumentationPlugin::clearCatalogIndex(DocumentationCatalogItem *item)
+{
+    //clear indexes for catalog
+    QValueList<IndexItem *> idx = indexes[item];
+    for (QValueList<IndexItem *>::iterator it = idx.begin(); it != idx.end(); ++it)
+    {
+        delete *it;
+    }
+    indexes.remove(item);
+}
+
+void DocumentationPlugin::loadIndex(KListBox *index, DocumentationCatalogItem *item)
+{
+    if (!indexEnabled(item))
+        return;
+    if (!needRefreshIndex(item) && loadCachedIndex(index, item))
+        return;
+    createIndex(index, item);
+    cacheIndex(item);
 }

@@ -191,6 +191,12 @@ public:
     is used by index caching algorythm to make a descision to rebuild index
     or to load it from cache.*/
     virtual bool needRefreshIndex(DocumentationCatalogItem *item) = 0;
+    /**Indicates if an index is enabled for given catalog. If documentation plugin
+    has Index capability, indices for it's catalogs can be enabled/disabled
+    in configuration dialog.*/
+    virtual bool indexEnabled(DocumentationCatalogItem *item) const = 0;
+    /**Enables index for documentation catalog.*/
+    virtual void setIndexEnabled(DocumentationCatalogItem *item, bool e) = 0;
     /**Builds index for given catalog. This method should fill index with
     IndexItem objects.
     @param index the listbox which contains index items
@@ -261,6 +267,10 @@ protected:
     
     /**Sets capabilities of documentation plugin.*/
     void setCapabilities(int caps) { m_capabilities = caps; }
+    /**Clears index of given catalog.*/
+    virtual void clearCatalogIndex(DocumentationCatalogItem *item);
+    /**Loads index from cache or creates and caches it if does not exist.*/
+    void loadIndex(KListBox *index, DocumentationCatalogItem *item);
     
     /**Stores items deleted from configuration. @ref saveCatalogConfiguration
     uses this to remove entries from configuration file.*/

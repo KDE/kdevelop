@@ -159,7 +159,7 @@ void DocQtPlugin::reinit(KListView *contents, KListBox *index, QStringList restr
     }
     deletedConfigurationItems.clear();
 
-    //update configuration        
+    //update configuration
     for (QMap<QString, QString>::const_iterator it = entryMap.begin();
         it != entryMap.end(); ++it)
     {
@@ -169,15 +169,19 @@ void DocQtPlugin::reinit(KListView *contents, KListBox *index, QStringList restr
                 delete namedCatalogs[it.key()];
         }
         else
-            if (!namedCatalogs.contains(it.key()))
+        {
+            if (!namedCatalogs.contains(it.key()))    //create catalog if it does not exist
             {
                 QtDocumentationCatalogItem *item = new QtDocumentationCatalogItem(
                     config->readPathEntry(it.key()), this, contents, it.key());
-                if (needRefreshIndex(item))
-                    loadCachedIndex(index, item);
-                else
-                    createIndex(index, item);
+                loadIndex(index, item);
             }
+            else if (!indexEnabled(namedCatalogs[it.key()]))    //clear index if it is disabled in configuration
+                clearCatalogIndex(namedCatalogs[it.key()]);
+            else if ( (indexEnabled(namedCatalogs[it.key()]))    //index is requested in configuration but does not yet exist
+                && (!indexes.contains(namedCatalogs[it.key()])) )
+                 createIndex(index, namedCatalogs[it.key()]);
+        }
     }
 }
 
@@ -204,7 +208,7 @@ void DocQtPlugin::autoSetup()
     config->sync();
 }
 
-void DocQtPlugin::setCatalogURL(DocumentationCatalogItem * item)
+void DocQtPlugin::setCatalogURL(DocumentationCatalogItem *item)
 {
     QtDocumentationCatalogItem *qtItem = dynamic_cast<QtDocumentationCatalogItem *>(item);
     if (!qtItem)
@@ -328,17 +332,18 @@ KURL::List DocQtPlugin::fullTextSearchLocations()
 
 void DocQtPlugin::loadCatalogConfiguration(KListView *configurationView)
 {
-/*    configurationView->setResizeMode(QListView::AllColumns);
-    configurationView->addColumn(i18n("Title"));
-    configurationView->addColumn(i18n("URL"));*/
-    
     config->setGroup("Locations");
     QMap<QString, QString> entryMap = config->entryMap("Locations");
 
     for (QMap<QString, QString>::const_iterator it = entryMap.begin();
         it != entryMap.end(); ++it)
     {
-        new ConfigurationItem(configurationView, it.key(), it.data(), hasCapability(Index), hasCapability(FullTextSearch));
+        ConfigurationItem *item = new ConfigurationItem(configurationView, it.key(), it.data(),
+            hasCapability(Index), hasCapability(FullTextSearch));
+        config->setGroup("Index Settings");
+        item->setIndex(config->readBoolEntry(item->title(), false));
+        config->setGroup("Search Settings");
+        item->setFullTextSearch(config->readBoolEntry(item->title(), false));
     }
 }
 
@@ -355,17 +360,25 @@ void DocQtPlugin::saveCatalogConfiguration(KListView *configurationView)
     QListViewItemIterator it(configurationView);
     while (it.current())
     {
+        config->setGroup("Locations");
         ConfigurationItem *confItem = dynamic_cast<ConfigurationItem*>(it.current());
         if (confItem->isChanged())
-        {
             config->deleteEntry(confItem->origTitle());
-            config->writePathEntry(confItem->title(), confItem->url());
-        }
-        else
-            config->writePathEntry(confItem->title(), confItem->url());
+        config->writePathEntry(confItem->title(), confItem->url());
+        
+        config->setGroup("Index Settings");
+        if (confItem->isChanged())
+            config->deleteEntry(confItem->origTitle());
+        config->writeEntry(confItem->title(), confItem->index());
 
+        config->setGroup("Search Settings");
+        if (confItem->isChanged())
+            config->deleteEntry(confItem->origTitle());
+        config->writeEntry(confItem->title(), confItem->fullTextSearch());
+        
         ++it;
     }
+    config->sync();
 }
 
 QPair<KFile::Mode, QString> DocQtPlugin::catalogLocatorProps()
@@ -391,6 +404,18 @@ QString DocQtPlugin::catalogTitle(const QString &url)
     QDomElement docEl = doc.documentElement();
 
     return docEl.attribute("title", QString::null);
+}
+
+bool DocQtPlugin::indexEnabled(DocumentationCatalogItem *item) const
+{
+    config->setGroup("Index Settings");
+    return config->readBoolEntry(item->text(0), false);
+}
+
+void DocQtPlugin::setIndexEnabled(DocumentationCatalogItem *item, bool e)
+{
+    config->setGroup("Index Settings");
+    config->writeEntry(item->text(0), e);
 }
 
 #include "docqtplugin.moc"

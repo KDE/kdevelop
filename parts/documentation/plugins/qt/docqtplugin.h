@@ -40,6 +40,8 @@ public:
     
     virtual bool needRefreshIndex(DocumentationCatalogItem *item);
     virtual void createIndex(KListBox *index, DocumentationCatalogItem *item);
+    virtual bool indexEnabled(DocumentationCatalogItem *item) const;
+    virtual void setIndexEnabled(DocumentationCatalogItem *item, bool e);
 
     virtual void loadCatalogConfiguration(KListView *configurationView);
     virtual void saveCatalogConfiguration(KListView *configurationView);

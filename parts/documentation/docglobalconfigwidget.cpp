@@ -71,6 +71,8 @@ void DocGlobalConfigWidget::editCollectionButtonClicked()
     if (!item)
         return;
     EditCatalogDlg dlg(activePlugin(), this, "edit collection dlg", true);
+    dlg.setTitle(item->title());
+    dlg.setURL(item->url());
     if (dlg.exec())
         activePlugin()->editCatalogConfiguration(item, dlg.title(), dlg.url());
 }

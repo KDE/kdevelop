@@ -64,4 +64,14 @@ QString EditCatalogDlg::url() const
     return locationURL->url();
 }
 
+void EditCatalogDlg::setTitle(const QString &title)
+{
+    titleEdit->setText(title);
+}
+
+void EditCatalogDlg::setURL(const QString &url)
+{
+    locationURL->setURL(url);
+}
+
 #include "editcatalogdlg.moc"
