@@ -1,0 +1,13 @@
+[KDE Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=kdevelop --profile ScriptingLanguageIDE %u
+MimeType=application/x-kdevelop;
+Icon=kdevelop
+DocPath=kdevelop/index.html
+Terminal=false
+Name=KDevelop: Scripting Language Development
+GenericName=Integrated Development Environment for Scripting Language Development
+X-DCOP-ServiceType=Multi
+Categories=Qt;KDE;Development;IDE;
+

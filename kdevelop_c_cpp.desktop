@@ -1,0 +1,13 @@
+[KDE Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=kdevelop --profile CandCppIDE %u
+MimeType=application/x-kdevelop;
+Icon=kdevelop
+DocPath=kdevelop/index.html
+Terminal=false
+Name=KDevelop: C/C++ Development
+GenericName=Integrated Development Environment for C/C++ development
+X-DCOP-ServiceType=Multi
+Categories=Qt;KDE;Development;IDE;
+

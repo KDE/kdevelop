@@ -2,7 +2,8 @@ SUBDIRS = bdb lib parts languages buildtools editors vcs src pics doc mimetypes 
 
 EXTRA_DIST = AUTHORS COPYING COPYING.LIB NEWS ChangeLog INSTALL README TODO HACKING HACKING.language admin configure.in.bot
 
-xdg_apps_DATA = kdevelop.desktop kdevassistant.desktop
+xdg_apps_DATA = kdevelop.desktop kdevassistant.desktop kdevelop_ruby.desktop \
+	kdevelop_c_cpp.desktop  kdevelop_kde_cpp.desktop  kdevelop_scripting.desktop
 #appsdir = $(kde_appsdir)/Development
 
 mime_DATA = x-kdevelop.desktop

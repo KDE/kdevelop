@@ -1,0 +1,13 @@
+[KDE Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=kdevelop --profile RubyIDE %u
+MimeType=application/x-kdevelop;
+Icon=kdevelop
+DocPath=kdevelop/index.html
+Terminal=false
+Name=KDevelop: Ruby Development
+GenericName=Integrated Development Environment for Ruby Development
+X-DCOP-ServiceType=Multi
+Categories=Qt;KDE;Development;IDE;
+
