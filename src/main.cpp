@@ -25,7 +25,6 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
   static const char *description = I18N_NOOP("Gideon");
-
   KAboutData aboutData("gideon", I18N_NOOP("Gideon"),
                        VERSION, description, KAboutData::License_GPL,
                        "(c) 1999-2002 Various Authors");
@@ -49,7 +48,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Trolltech AS", "Designer code", "info@trolltech.com");
   aboutData.addAuthor("Hugo Varotto", "Fileselector part", "hugo@varotto-usa.com");
   aboutData.addAuthor("Matt Newell", "Fileselector part", "newellm@proaxis.com");
-  aboutData.addAuthor("Jakob Simon-Gaarde", "qmake projectmanager", "jakob@jsg.dk");
+  aboutData.addAuthor("Jakob Simon-Gaarde", "QMake projectmanager", "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("Yann Hodique", "patches", "Yann.Hodique@lifl.fr");
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
