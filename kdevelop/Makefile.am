@@ -54,7 +54,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		cprintdlg.h cfileprintdlg.h cconfigenscriptdlg.h cconfiga2psdlg.h debug.h \
 		cnewprojectdlg.h cfinddoctextdlg.h kstartuplogo.h ktipofday.h
 
-EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc
+EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm
 
 # if you "make distclean", this files get removed. If you want to remove
 # them while "make clean", use CLEANFILES
@@ -75,10 +75,13 @@ install-data-local:
 	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)
 	$(mkinstalldirs) $(kde_icondir)
 	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)
+	$(INSTALL_DATA) kdevelop-project.xpm $(kde_icondir)	
 	$(mkinstalldirs) $(kde_minidir)
 	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_minidir)/kdevelop.xpm
 	$(mkinstalldirs) $(kde_confdir)
 	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
+	$(mkinstalldirs) $(kde_mimedir)	
+	$(INSTALL_DATA) x-kdevelop-project.kdelnk $(kde_mimedir)/application/
 
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:

@@ -30,6 +30,9 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
+  pop->insertItem(i18n("Undo"),this,SLOT(undo()),0,4);
+  pop->insertItem(i18n("Redo"),this,SLOT(redo()),0,5);
+  pop->insertSeparator();
   pop->insertItem(i18n("Cut"),this,SLOT(cut()),0,1);
   pop->insertItem(i18n("Copy"),this,SLOT(copy()),0,2);
   pop->insertItem(i18n("Paste"),this,SLOT(paste()),0,3);
@@ -112,7 +115,23 @@ void CEditWidget::enterEvent ( QEvent * e){
 }
 void CEditWidget::mousePressEvent(QMouseEvent* event){
   if(event->button() == RightButton){
-    
+    int state;
+    state = undoState();
+    //undo
+    if(state & 1){
+      pop->setItemEnabled(4,true);
+    }
+    else{
+      pop->setItemEnabled(4,false);
+    }
+    //redo
+    if(state & 2){
+      pop->setItemEnabled(5,true);
+    }
+    else{
+      pop->setItemEnabled(5,false);
+    }
+
     QString str = markedText();
     if(str == ""){
       str = word(event->x(),event->y());
@@ -129,6 +148,10 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+
+
+
+
 
 
 

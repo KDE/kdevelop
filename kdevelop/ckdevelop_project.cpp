@@ -562,6 +562,30 @@ void CKDevelop::slotProjectOpen(){
   
 }
 
+void CKDevelop::slotProjectOpenCmdl(const char* prjname){
+
+  QString old_project = "";
+
+  if(project){
+    old_project = prj->getProjectFile();
+    if(!slotProjectClose()){
+      return;
+    }
+  }
+
+  QFileInfo info(prjname);
+
+  if (info.isFile()){
+    if(!(readProjectFile(prjname))){
+
+    KMsgBox::message(0,prjname,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+    readProjectFile(old_project);
+    }
+
+    slotStatusMsg(IDS_DEFAULT);
+  }	
+}
+
 void CKDevelop::slotProjectNewAppl(){
   QString old_project="";
   if(!CToolClass::searchProgram("perl")){
@@ -636,6 +660,9 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 
   prj->writeWorkspace(current);
 }
+
+
+
 
 
 

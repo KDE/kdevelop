@@ -23,10 +23,13 @@
 
 
 int main(int argc, char* argv[]) {
+
     KStartupLogo* start_logo=0L;
+    KTipofDay* tipdlg=0L;
     KWMModuleApplication a(argc,argv,"kdevelop");
     a.getConfig()->setGroup("General Options");
     bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
+
     if(bStartLogo){
       start_logo= new KStartupLogo;
       start_logo->show();
@@ -44,10 +47,13 @@ int main(int argc, char* argv[]) {
 	    a.getConfig()->setGroup("General Options");
     	kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
       kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
+      if (argc > 1)
+        kdevelop->slotProjectOpenCmdl(argv[1]);
+
       a.getConfig()->setGroup("TipOfTheDay");
       bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
       if(showTip){
-        KTipofDay* tipdlg=new KTipofDay;
+        tipdlg=new KTipofDay;
         tipdlg->exec();
       }
     }
@@ -55,11 +61,17 @@ int main(int argc, char* argv[]) {
       start_logo->close();
     }
     delete start_logo;
+    delete tipdlg;
     int rc = a.exec();
 
 
     return rc;
 }
+
+
+
+
+
 
 
 

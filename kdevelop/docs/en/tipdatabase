@@ -8,6 +8,17 @@ Hint: You can search the documentation for a keyword by marking the word and sel
 The KDevelop Team wishes you a nice day !
 If you've found a bug in KDevelop, please let us know. Contact adresses are in the KDevelop Handbook.
 If you want to add your own documentations to the documentation tree, click with the right mouse button on the "Others" entry in the tree. Then configure the path and entry name.
-Happy coding !!
-Again, the KDevelop Team wishes you a nice day...;-)
+...that you can create a new class with "new class" from the Project menu ?
+that you can print your files either with a2ps or enscript from within KDevelop ?
 To open a project, select "Open" from the Project-menu.
+If you compile your project and get an error, you can click on the error message to switch to the file and line the error occured.
+...that you can use keyboard shortcuts for turning the output and tree window on and off ?
+...that you can debug your programs within KDevelop by selecting "Debug" in the Build-menu or by choosing the Debug icon ?
+...that you can switch between classes by selecting the class combo in the toolbar ?
+...that you can edit xpm's with kiconedit by selecting them in the file viewer's trees ?
+...that you can set the compiler warnings in the project options dialog ?
+...that you can even search for marked text even from within the documentation browser with a right button menu ?
+...that you can copy text from the documentation browser to the clipboard with a right button menu and insert it into your sources ?
+...that you should keep your library documentations up to date after installing new libraries ?
+...that you can configure the syntax-highlighting of the editor ?
+...that you can undo and redo your actions ?

@@ -1,3 +1,13 @@
+1999-03-03  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * changed startlogo to show without frame
+  * added default button to the setup dialog, does only reset the general options
+  * added mime-type support for *.kdevprj files and commandline start
+  * updated tipdatabase
+  * added undo/redo in the right button menu for the editors
+  * created new "Search for Text" button and added to the toolbar
+  * added KQuickHelp to the new class dialog
+  * updated "What's this ?" to new icons
+
 1999-03-03    Sandy Meier <smeier@rz.uni-potsdam.de>
 
 	* commented out the workspace-feature

@@ -65,7 +65,7 @@ private:
 
  private slots:
   void ok();
-
+  void slotDefault();
   void slotQtClicked();
   void slotKDEClicked();
 

@@ -152,6 +152,9 @@ public:
   void slotProjectNew();
   /** open a projectfile and close the old one*/
   void slotProjectOpen();
+  /** open a projec committed by comandline or kfm */
+  void slotProjectOpenCmdl(const char*);
+
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
   void  slotProjectWorkspaces(int);

@@ -1,7 +1,9 @@
 # KDE Config File  
 [KDE Desktop Entry]
+BinaryPattern=kdevelop;
 Type=Application
 Exec=kdevelop  
+MimeType=application/x-kdevelop-project;
 Icon=kdevelop.xpm
 DocPath=kdevelop/index.html
 Comment=an IDE for KDE

@@ -32,7 +32,13 @@ void CKDevelop::initWhatsThis(){
 	whats_this->add(toolBar()->getButton(ID_FILE_SAVE),i18n("Save file\n\n"
 																													"Saves the file opened in the actual "
 																													"editing view"));
-																													
+	
+	whats_this->add(toolBar()->getButton(ID_FILE_PRINT),i18n("Print\n\n"
+	                                                        "Opens the printing dialog. There, you can "
+	                                                        "configure which printing program you wish "
+	                                                        "to use, either a2ps or ensrcipt, and print "
+	                                                        "your project files."));
+	
 	whats_this->add(toolBar()->getButton(ID_EDIT_UNDO),i18n("Undo\n\n"
 	                                                        "Reverts the last editing step."));
 	
@@ -80,7 +86,7 @@ void CKDevelop::initWhatsThis(){
 	                                                                "Then, configure creates new Makefiles and "
 	                                                                "the make-command will rebuild the project."));
 	
-	whats_this->add(toolBar()->getButton(ID_BUILD_RUN),i18n("Run\n\n"
+	whats_this->add(toolBar()->getButton(ID_BUILD_RUN),i18n("Execute\n\n"
 	                                                        "After saving all files,the make-command is "
 	                                                        "called to build the project. Then the binary "
 	                                                        "is executed out of the project directory.\n"
@@ -90,6 +96,13 @@ void CKDevelop::initWhatsThis(){
 	                                                        "installed will cause some strange behavoir "
 	                                                        "like testing the helpmenu will open an error "
 	                                                        "message that the index.html file is not found."));
+	
+	whats_this->add(toolBar()->getButton(ID_BUILD_DEBUG),i18n("Debug program\n\n"
+	                                                          "Opens KDbg in the tools window with your actual"
+	                                                          "program and allows you to execute it step by step"
+	                                                          "by setting breakpoints in the sourcecode."
+	                                                          "Note that you have to open your sourcecodes in KDbg"
+	                                                          "to access it."));
 	
 	whats_this->add(toolBar()->getButton(ID_BUILD_STOP),i18n("Stop\n\n"
 	                                                          "If activated, the stop-command will interrupt "
@@ -119,7 +132,11 @@ void CKDevelop::initWhatsThis(){
 	                                                    "references for the selection in the browser window. "
 	                                                    "There, you can select a documentation page of your "
 	                                                    "choice and open it by following the link."));			
-		
+	
+	whats_this->add(toolBar(ID_BROWSER_TOOLBAR)->getButton(ID_HELP_SEARCH),i18n("Search for Help on...\n\n"
+		                                                  "Opens the Search for Help on... dialog. There, you can "
+		                                                  "search for a keyword in the documentation directly "
+		                                                  "using the search database."));
 	whats_this->add(class_tree, i18n("Class Viewer\n\n"
 	                                  "The class viewer shows all classes, methods and variables "
 	                                  "of the current project files and allows switching to declarations "
@@ -178,4 +195,6 @@ void CKDevelop::initWhatsThis(){
 	                                    "using the cerr function to debug."));
 	                                  																												
 }
+
+
 

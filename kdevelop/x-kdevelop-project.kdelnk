@@ -1,0 +1,8 @@
+# KDE Config File
+[KDE Desktop Entry]
+Comment=KDevelop Project File
+DefaultApp=kdevelop
+Icon=kdevelop-project.xpm
+Type=MimeType
+MimeType=application/x-kdevelop-project
+Patterns=*.kdevprj;

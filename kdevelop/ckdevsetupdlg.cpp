@@ -362,14 +362,28 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   
   
   // **************set the button*********************
+  setDefaultButton(i18n("Default"));
   setOkButton(i18n("OK"));
   setCancelButton(i18n("Cancel"));
+  connect( this, SIGNAL(defaultButtonPressed()), SLOT(slotDefault()) );
   connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
   connect( this, SIGNAL(applyButtonPressed()),parent, SLOT(slotOptionsMake()) );
   resize(440,420);
   
 }
 
+void CKDevSetupDlg::slotDefault(){
+
+  makeSelectLineEdit->setText("make");
+
+  autoSaveCheck->setChecked(true);
+  autosaveTimeCombo->setCurrentItem(1);
+
+  autoSwitchCheck->setChecked(true);
+  logoCheck->setChecked(true);
+  lastProjectCheck->setChecked(true);
+  tipDayCheck->setChecked(true);
+}
 
 void CKDevSetupDlg::ok(){
 
@@ -434,6 +448,7 @@ void CKDevSetupDlg::slotKDEClicked(){
     config->writeEntry("doc_kde",dir);
   }
 }
+
 
 
 

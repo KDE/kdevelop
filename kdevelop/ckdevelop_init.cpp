@@ -378,10 +378,12 @@ void CKDevelop::initMenu(){
 // Edit-menu entries
 
   edit_menu = new QPopupMenu;
-  edit_menu->insertItem(i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
+  edit_menu->insertItem(pix, i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
   accel->changeMenuAccel(edit_menu, ID_EDIT_UNDO, KAccel::Undo );
 
-  edit_menu->insertItem(i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
+  edit_menu->insertItem(pix, i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
   accel->changeMenuAccel(edit_menu, ID_EDIT_REDO,"Redo" );
   edit_menu->insertSeparator();
 
@@ -626,7 +628,7 @@ void CKDevelop::initMenu(){
   help_menu->insertItem(i18n("Back"),this, SLOT(slotDocBack()),0,ID_DOC_BACK);
   help_menu->insertItem(i18n("Forward"),this, SLOT(slotDocForward()),0,ID_DOC_FORWARD);
   help_menu->insertSeparator();
-  help_menu->insertItem(Icon("search.xpm"),i18n("&Search Marked Text"),this,
+  help_menu->insertItem(Icon("lookup.xpm"),i18n("&Search Marked Text"),this,
 				 SLOT(slotDocSText()),0,ID_DOC_SEARCH_TEXT);
   accel->changeMenuAccel(help_menu,ID_DOC_SEARCH_TEXT,"SearchMarkedText" );
   help_menu->insertItem(Icon("contents.xpm"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
@@ -697,17 +699,18 @@ void CKDevelop::initToolbar(){
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
   toolBar()->insertWidget(0,10,separatorLine);
 
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
+	toolBar()->insertButton(pix,ID_EDIT_UNDO,false,i18n("Undo"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
+	toolBar()->insertButton(pix,ID_EDIT_REDO,false,i18n("Redo"));
+
+  toolBar()->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/cut.xpm");
   toolBar()->insertButton(pix,ID_EDIT_CUT,true,i18n("Cut"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/copy.xpm");
   toolBar()->insertButton(pix,ID_EDIT_COPY, true,i18n("Copy"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/paste.xpm");
   toolBar()->insertButton(pix,ID_EDIT_PASTE, true,i18n("Paste"));
-  toolBar()->insertSeparator();
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/undo.xpm");
-	toolBar()->insertButton(pix,ID_EDIT_UNDO,false,i18n("Undo"));
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/redo.xpm");
-	toolBar()->insertButton(pix,ID_EDIT_REDO,false,i18n("Undo"));
 
   QFrame *separatorLine1= new QFrame(toolBar());
   separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
@@ -766,7 +769,7 @@ void CKDevelop::initToolbar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("forward.xpm"),ID_DOC_FORWARD, false,i18n("Forward"));
   toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
-  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("search.xpm"), ID_DOC_SEARCH_TEXT,
+  toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("lookup.xpm"), ID_DOC_SEARCH_TEXT,
 					    true,i18n("Search Text in Documenation"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));

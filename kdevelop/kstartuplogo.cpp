@@ -19,18 +19,22 @@
 #include "kstartuplogo.h"
 #include <kapp.h>
 
-KStartupLogo::KStartupLogo(QWidget *parent, const char *name) : 
-  QWidget(parent,name,WStyle_Customize | WStyle_Tool | WStyle_NoBorder){
+KStartupLogo::KStartupLogo(QWidget *parent, const char *name) : QWidget(0,name,WStyle_NoBorder | WStyle_Customize) {
+	
 
-  setCaption("Startup...");
   QPixmap pm;
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/startlogo.bmp");
   setBackgroundPixmap(pm);
+
   setGeometry(QApplication::desktop()->width()/2-200, QApplication::desktop()->height()/2-125, 400,250);
 
 }
 KStartupLogo::~KStartupLogo(){
 }
+
+
+
+
 
 
 
