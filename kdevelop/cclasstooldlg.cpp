@@ -1,5 +1,5 @@
 /***************************************************************************
-               cclasstooldlg.cpp  -  description
+               cclasstooldlg.cpp  -  implementation
 
                              -------------------
 
@@ -308,7 +308,7 @@ void CClassToolDlg::addClasses( QList<CParsedClass> *list )
   treeH.clear();
 
   // Insert root item(the current class);
-  root = treeH.addRoot( currentClass->name, CVCLASS );
+  root = treeH.addRoot( currentClass->name, THCLASS );
 
   for( aClass = list->first();
        aClass != NULL;
@@ -323,7 +323,7 @@ void CClassToolDlg::addClassAndAttributes( CParsedClass *aClass )
   QListViewItem *root;
   
   // Insert root item(the current class);
-  root = treeH.addRoot( aClass->name, CVCLASS );
+  root = treeH.addRoot( aClass->name, THCLASS );
 
   treeH.addAttributesFromClass( aClass, root, comboExport );
 }
@@ -333,7 +333,7 @@ void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
   QListViewItem *root;
   
   // Insert root item(the current class);
-  root = treeH.addRoot( aClass->name, CVCLASS );
+  root = treeH.addRoot( aClass->name, THCLASS );
 
   treeH.addMethodsFromClass( aClass, root, comboExport );
 }
@@ -440,7 +440,7 @@ void CClassToolDlg::viewParents()
   treeH.clear();
   
   // Insert root item(the current class);
-  root = treeH.addRoot( currentClass->name, CVCLASS );
+  root = treeH.addRoot( currentClass->name, THCLASS );
 
   for( aParent = currentClass->parents.first();
        aParent != NULL;
