@@ -1110,10 +1110,27 @@ will be displayed if more than one hit was reported for the search on one page.<
 <item><bf/<idx/Search for Help on...//Opens the Search for Help on... dialog that lets you search for a specific expression you want
 help on.
 <p>
-<item><bf/<idx/User Manual/		<idx/F1// Opens the User's Manual to KDevelop index page so you have access to this manual.
+<item><bf/<idx/The User Manual to KDevelop/		<idx/F1// Opens the User's Manual to KDevelop index page (this handbook).
 <p>
-<item><bf/<idx/Programming Handbook/ / Opens the <htmlurl url="../../default/kdevelop/programming/index.html" name="KDevelop Programming Handbook"> index
-page to access the programming manuals
+<item><bf/<idx/The KDevelop Programming Handbook//
+Opens the <htmlurl url="programming/index.html" name="KDevelop Programming Handbook">
+index page. This handbook contains a complete programming guide to KDE development.
+<p>
+<item><bf/<idx/KDE Application Tutorials//
+Changes to the index page of the <htmlurl url="tutorial/index.html" name="KDE Application Tutorials"> handbook.
+This handbook explains how to build the Qt tutorial applications and introduces you to KDE programming by developing
+an example application.
+<p>
+<item><bf/<idx/The KDE Library Reference Guide//
+Changes to the index page of the <htmlurl url="kde_libref/index.html" name="KDE Library Reference Guide">. This handbook contains
+detailed information about using the KDE/Qt libraries separated on topics such as event handling. <p>
+<item><bf/<idx/The KDE 2 Developer´s Guide//
+Changes to the index page of the <htmlurl url="addendum/index.html" name="KDE 2 Developer´s Guide">. This Handbook contains
+information about the most recent KDE development and how to prepare your application to be KDE 2-ready.
+<p>
+<item><bf>C/C++ <idx/Reference/</bf> Displays the language reference index page. If the
+reference is not installed, an error page shows you how to get the reference and how to install it correctly.
+
 <p>
 <item><bf/<idx/Tip of the Day// Opens the Tip of the Day dialog to inform you about KDevelop's
 features.
@@ -1123,18 +1140,6 @@ features.
 <item><bf/<idx/Bug Report/.../ Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by
 email. See <ref id="Bug Reporting" name="Bug Reporting">
 <p>
-<item><bf>C/C++ <idx/Reference/</bf> Displays the language reference index page. If the
-reference is not installed, an error page shows you how to get the reference and how to install it correctly.
-<p>
-<item><bf/<idx/Qt-Library// Changes to the index page of the Qt-library documentation provided with your copy of the Qt-library.
-<p>
-<item><bf/<idx/KDE-Core-Library// Opens the class-index file of the KDE-Core library documentation.<nidx/kdecore/
-<p>
-<item><bf/<idx/KDE-GUI-Library//  As above for the <idx/GUI/-library<nidx/kdeui/
-<p>
-<item><bf/<idx/KDE-KFile-Library// As above for the KFile-library
-<p>
-<item><bf/<idx/KDE-HTML-Library// As above for the <idx/HTML/-library<p>
 <item><bf/<idx/Project-API-Doc// Changes to the project's class-documentation index file.<nidx/KDoc/<nidx/API/
 <p>
 <item><bf/<idx/Project-User-Manual// Opens the User manual's index file of your current project. This can be used to review the
@@ -2586,29 +2591,49 @@ symbol tables.
 <bf/additional libraries:/ Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
 libraries with the -l option; for the example -lkom.
 
-<sect1>Make
+<sect><idx/Make/ Options<label id="Make Options">
 <p>
 As GNU <idx/make/ supports some useful options, the Project Options dialog contains a page called "Make-Options", where those can be
 en/disabled. The available settings are:
 
 <descrip>
-<tag/
-
 <tag/Print debug information/ prints out all information about the <idx/project files/ and what <idx/make/ determines for rebuilding them.
+<p>
 <tag/Continue after <idx/errors// tries to continue with the compilation after an error occurred (e.g. a file couldn't be compiled due to an
 error)
+<p>
 <tag/Print the data base/ prints out the <idx/make/-database for the current process which contains the changes from the last
-build-run. <tag/Environment variables/ give the current environment variables a higher priority than the currently used variables in
+build-run.
+<p>
+<tag/Environment variables/ give the current environment variables a higher priority than the currently used variables in
 the <idx/Makefile/s.
+<p>
 <tag/No built-in rules/ doesn't use built-in rules for <idx/make/.
+<p>
 <tag/Touch files/ don't run the <idx/Compiler/ on changed files; instead only touches them. This sets them as already processed by <idx/make/.
+<p>
 <tag/Ignore all <idx/errors// Ignores all <idx/errors/ that occur
+<p>
 <tag/Silent operation/ doesn't print out any information about the build-process
+<p>
 <tag/Print working directory/ prints the current directory during the <idx/make/-process.
+<p>
 <tag/job number/ sets the amount of parallel processes for <idx/make/. For a single-CPU system we recommend setting this to one or two.
+<p>
 <tag/set modified/ sets the selected file modified. Choose the file by clicking the folder button on the right. Setting a file modified
 means that the file will be processed by <idx/make/ and compiled if it is a source file.
-<tag/additional options/ set additional options to <idx/make/; those can be found in your local man page for "GNU Make". </descrip>
+<p>
+<tag/additional options/ set additional options to <idx/make/; those can be found in your local man page for "GNU Make".
+<p>
+<tag/Rebuild behaviour on run/ Sets the actions taken when you choose run. There are three options you can choose from:
+<itemize>
+<item>always rebuild: Always rebuild without checking for modified files.
+<item>Warning on modification: Warn if source files have been modified and ask if the project should be rebuilt.
+<item>Only on modification: Check if sources have changed and rebuild if so.
+</itemize>
+The default is to rebuild always.
+<p>
+</descrip>
 
 <chapt>Az Osztályböngészõ<label id="The Class Browser">
 <p>
@@ -2810,9 +2835,11 @@ the project types KDE and Qt application, the <idx/dialog editor/ recognizes thi
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
 information about widget design, see <htmlurl url="../../default/kdevelop/programming/index-6.html" name="The KDevelop Programming Handbook">.
 
-To create a new dialog, select "New" from the <idx/"File"-menu/ or select "New" from the context menu in the "Dialogs" tab. The "New
-Dialog" menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
-destination.
+To create a new dialog, select "New" from the <idx/"File"-menu/ or select "New" from the context menu in the "Dialogs" tab. The New File Dialog
+appears where you can select the item Qt/KDE Dialog(*.kdevdlg). Enter the file name for your dialog to save the layout to.
+Then press OK and a new dialog will appear. When finished with the new dialog, select "Generate Complete Sources" from the Build-Menu. The
+dialog to generate the widget´s source file will appear. There you have to give KDevelop the dialog-specific information about the baseclass,
+the source file names and destination.
 
 <sect1>Dialog Class
 <p>
@@ -3133,19 +3160,10 @@ gdb is not successful then we leave the breakpoint as pending. The next instruct
 
 This is known as "lazy breakpoints"
 
-You have to be careful, though. If you inadvertantly set a breakpoint in a file that is really outside the program, that is it's neither part of 
-the program nor of any shared library inside the project, then this breakpoint will always be pending. There's nothing you can do about 
-that, because it might be in a shared library.
-
-Now here's the problem with this. If the user "step"s over code that  contains a library dlopen, then it isn't predictable what will happen. 
-The dlopen will be catched by gdb, thus the code will stop. Now there are two possibilities, either there are pending breakpoints, then 
-they will be marked as active and "continue" will lead to there. Or there aren't any pending breakpoints in this frame stack. Then the 
-program will "continue" until it waits for input or it may lead us straight to the end, none of which is what we expected. In this situation, I 
-do not do a continue but leave it stopped with the status line reflecting the stopped state. The frame stack is in the routine that caused 
-the stop.
-
-There isn't any way around this, but I could alleviate the problem somewhat by only doing a "set stop-on 1" when we have pending 
-breakpoints.
+However, this can lead to a problem when you use the "step over" command and step over code that will load a library. This will trigger a
+break on the library load, and, normally the debugger would do a "continue" (ie run to the next breakpoint or the end of the code). The user,
+however, is expecting the program to stop at the next line, so in this situation we do not continue, but leave it at that point (which will be somewhere
+inside a dlopen command). This is disconcerting but cannot be helped.
 
 <chapt>Beépített CVS
 <p>
@@ -3255,7 +3273,8 @@ If Autosave is checked, KDevelop will save all changed files periodically.  The 
 If Autoswitch is enabled, the KDevelop windows will switch on and off according to the usage context, e.g.  if you switch to a
 documentation in the Help-menu, the Documentation browser will be opened, together with the documentation tree and the <idx/output/
 window turned off.
-Startup:
+
+<bf><idx/Startup/:</bf>
 
 For starting KDevelop, you have the option to enable/disable the <idx/start-logo/ to be shown during the time KDevelop loads.
 Further, if you don't like the last project to be opened on startup, you can disable the default behavior.
@@ -3327,6 +3346,34 @@ medium.  The higher the index size, the more the index files will grow. On the o
 will be faster and more successful, so we suggest choosing a "medium" size. For using the search function, see section
 <ref id="Using the Documentation Browser" name="Using the Documentation Browser">.
 
+<sect>Debugger <label id="Debugger">
+<p>
+The default setup for KDevelop is to use the internal debugger. Click on "Use external debugger" if you wish to use a different
+debugger and enter the name of the debugger to use. See your debuggers documentation on how to run it.
+
+Selecting the internal debugger enables an additional set of options you can choose from:
+<p>
+<itemize>
+<item>Display static members: Displaying static members makes gdb slower in producing data within kde and qt. It may change
+the "signature" of the data which QString and friends rely on. But if you need to debug into these values then check this option.
+<item>Display mangled names: When displaying the disassembled code you can select to see the methods mangled names.
+However, non-mangled names are easier to read.
+<item>Try setting BPs on lib load: This will try to set pending breakpoints on loading a library. If GDB hasn't seen a library that will be
+loaded via "dlopen" then it will refuse to set a breakpoint in that code. We can get gdb to stop on a library load and hence try to set
+the pending breakpoints. See <ref id="Shared libraries and breakpoints" name="Shared libraries and breakpoints"> for more details
+and a "gotcha" relating to this behaviour. If you are not "dlopen"ing libs, leave this off.
+<item>Enable floating toolbar: This will allow you to use the floating toolbar to control the debugger in addition to the menu and buttons.
+The toolbar is most useful for debugging GUI applications. For details see <ref id="The floating toolbar" name="The floating toolbar">.
+</itemize>
+
+<sect>Setting Paths <label id="Setting Paths">
+<p>
+On the paths tab you can enter the paths to your Qt 2.x and KDE 2 installations as well as where to create new projects. To learn
+more about installing Qt 2.x / KDE 2 and configuring KDevelop for Qt 2.x and KDE 2 read the
+<htmlurl url="tutorial/index.html" name="KDE Application Tutorials">.
+
+The default location for KDevelop to create new projects is in the user's home directory. If you want to change this behaviour you
+can enter the desired location into the default project path field.
 
 <chapt>Kérdések és Válaszok<label id="Questions and Answers">
 <p>
@@ -3475,10 +3522,10 @@ Sandy Meier 			<htmlurl url="mailto:smeier@rz.uni-potsdam.de" name = "<smeier@rz
 Stefan Heidrich			<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<sheidric@rz.uni-potsdam.de>">
 <quote/Main development of: <idx/KAppWizard/, <idx/printing/ functionality/
 
-Ralf Nolden			<htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
+Ralf Nolden			    <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <quote/Main development of: KDevelop<->Dialog Editor interface, configuration functionality, online-help and handbooks/
 
-Jonas Nordin			<htmlurl url="mailto:jonas.nordin@cenacle.se" name="<jonas.nordin@cenacle.se>">
+Jonas Nordin			  <htmlurl url="mailto:jonas.nordin@cenacle.se" name="<jonas.nordin@cenacle.se>">
 <quote/Main development of: Classviewer and -parser/
 
 Pascal Krahmer 			<htmlurl url="mailto:pascal@beast.de" name="<pascal@beast.de>">
@@ -3493,6 +3540,12 @@ Jörgen Olsson       <htmlurl url="mailto:jorgen@cenacle.net" name="<jorgen@cenac
 Stefan Bartel 			<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
 <quote/Main development of: Real-File-Viewer/
 
+Walter Tasin        <htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
+<quote/Main development of: Enhancements and Bug fixing/
+
+John Birch          <htmlurl url="mailto:jbb@ihug.co.nz" name="<jbb@ihug.co.nz>">
+<quote/Main development of: Integrated Debugger/
+
 
 
 <bf>Translation coordination:</bf>
@@ -3503,89 +3556,69 @@ Martin Piskernig		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<marti
 
 <bf>Program and Documentation Translations:</bf>
 
-Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>"> 			-Czech
-
-Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Danish
-
-Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
-
-Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
-
-Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
-
-Ralf Funken    <htmlurl url="mailto:funken.ruk@netcologne.de" name = "<funken.ruk@netcologne.de>">	-German  ( Debugger work )
-
-Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
-
-Massimo Morin       <htmlurl url="mailto:mmorin@schedsys.com" name="<mmorin@schedsys.com>"> -Italian
-
-Jacek Wojdel 				<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
-
-Duarte Loreto 			<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">		-Portuguese
-
-Ilmar Habibulin    	<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">				-Russian
-
-Jan Prokop 					<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">				-Slovak
-
-Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">		-Spanish
-
-Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patrik.adolfsson@iname.com>">		-Swedish
-
-Kaðan Kongar        <htmlurl url="mailto:kongar@doruk.net.tr" name="<kongar@doruk.net.tr>"> - Turkish
+<itemize>
+<item>Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>"> 			-Czech
+<item>Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Danish
+<item>Peeter Russak       <htmlurl url="mailto:pezz@tkwcy.ee" name="<pezz@tkwcy.ee>">	            - Estonian
+<item>Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
+<item>Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
+<item>Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
+<item>Ralf Funken    <htmlurl url="mailto:funken.ruk@netcologne.de" name = "<funken.ruk@netcologne.de>">	-German  ( Debugger work )
+<item>Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
+<item>Massimo Morin       <htmlurl url="mailto:mmorin@schedsys.com" name="<mmorin@schedsys.com>"> -Italian
+<item>Taiki Komoda        <htmlurl url="mailto:kom@kde.gr.jp" name="<kom@kde.gr.jp>">  - Japanese
+<item>Jacek Wojdel 				<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
+<item>Duarte Loreto 			<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">		-Portuguese
+<item>Guilherme Ceschiatti B.M.<htmlurl url="mailto:guiga@cpdee.ufmg.br" name="<guiga@cpdee.ufmg.br>">  -Portuguese/Brazil
+<item>Ilmar Habibulin    	<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">				-Russian
+<item>Jan Prokop 					<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">				-Slovak
+<item>Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">		-Spanish
+<item>Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patrik.adolfsson@iname.com>">		-Swedish
+<item>Kaðan Kongar        <htmlurl url="mailto:kongar@doruk.net.tr" name="<kongar@doruk.net.tr>"> - Turkish
+<item>Sunchange Lee       <htmlurl url="mailto:leesongchen@263.net" name="<leesongchen@263.net>"> - Simpl. Chinese (GB2312)
+</itemize>
 
 <bf>Startlogo:</bf>
 
-Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">
-
+<itemize>
+<item>KDevelop 1.0: Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">
+<item>KDevelop 1.1: Ralph Kocher      <htmlurl url="mailto:RKocher@t-online.de" name="<RKocher@t-online.de>">
+</itemize>
 
 <bf>Additions, patches and bugfixes:</bf>
 
-Walter Tasin						<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
-
-Jost Schenk    					<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
-
-David Barth    					<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
-
-Matthias Hipp						<htmlurl url="mailto:Matthias.Hipp@gmx.de" name = "<Matthias.Hipp@gmx.de>">
-
-Martin Piskernig    		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">
-
-Matthias Hoelzer-Kluepfel    	<htmlurl url="mailto:mh@caldera.de" name = "<mh@caldera.de>">
-
-Steen Rabol    					<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">
-
-Matt Koss 							<htmlurl url="mailto:koss@napri.sk" name="<koss@napri.sk>">
-
-Jochen Wilhelmy 				<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
-
-Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
-
-Stefan Mars             <htmlurl url="mailto:mars@lysator.liu.se" name="<mars@lysator.liu.se>">
-
-Nikolay Liber           <htmlurl url="mailto:nikolay_liber@mail.ru" name="<nikolay_liber@mail.ru>">
-
-Gordon Tyler            <htmlurl url="maito:gtyler@iafrica.com" name="<gtyler@iafrica.com>">
-
-Huy Cuong Nguyen        <htmlurl url="maito:huyc@iquebec.com" name="<huyc@iquebec.com>">
-
-John R. Zedlewski       <htmlurl url="mailto:zedlwski@princeton.edu" name="<zedlwski@princeton.edu>">
-
-Stephan Uhlmann <htmlurl url="mailto:suhlmann@gmx.de" name="<suhlmann@gmx.de>"> 
-
-Charles Egan <htmlurl url="mailto:cega@oklahoma.net" name="<cega@oklahoma.net>"> 
-
-Andrew Morton <htmlurl url="mailto:morton@nortelnetworks.com" name="<morton@nortelnetworks.com>"> 
-
-p_george <htmlurl url="mailto:p_george@club-internet.fr" name="<p_george@club-internet.fr>">
-
-Lubos Lunak <htmlurl url="mailto:l.lunak@sh.cvut.cz" name="<l.lunak@sh.cvut.cz>"> 
-
-Armin L. Schneider <htmlurl url="mailto:armin@uumail.de.uu.net" name="<armin@uumail.de.uu.net>"> 
-
-Martin Spirk <htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>"> 
-
-Ralf Palsa <htmlurl url="mailto:rpalsa@eso.org" name="<rpalsa@eso.org>"> 
-
+<itemize>
+<item>Pau Estalella Fernandez <htmlurl url="mailto:pef@upcnet.upc.es" name="<pef@upcnet.upc.es>">
+<item>Jost Schenk    					<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
+<item>David Barth    					<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
+<item>Matthias Hipp						<htmlurl url="mailto:Matthias.Hipp@gmx.de" name = "<Matthias.Hipp@gmx.de>">
+<item>Martin Piskernig    		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">
+<item>Jochen Wilhelmy 				<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
+<item>Matthias Hoelzer-Kluepfel    	<htmlurl url="mailto:mh@caldera.de" name = "<mh@caldera.de>">
+<item>Matt Koss 							<htmlurl url="mailto:koss@napri.sk" name="<koss@napri.sk>">
+<item>Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
+<item>Stefan Mars             <htmlurl url="mailto:mars@lysator.liu.se" name="<mars@lysator.liu.se>">
+<item>Nikolay Liber           <htmlurl url="mailto:nikolay_liber@mail.ru" name="<nikolay_liber@mail.ru>">
+<item>Gordon Tyler            <htmlurl url="maito:gtyler@iafrica.com" name="<gtyler@iafrica.com>">
+<item>Huy Cuong Nguyen        <htmlurl url="maito:huyc@iquebec.com" name="<huyc@iquebec.com>">
+<item>John R. Zedlewski       <htmlurl url="mailto:zedlwski@princeton.edu" name="<zedlwski@princeton.edu>">
+<item>Stephan Uhlmann         <htmlurl url="mailto:suhlmann@gmx.de" name="<suhlmann@gmx.de>">
+<item>Charles Egan            <htmlurl url="mailto:cega@oklahoma.net" name="<cega@oklahoma.net>">
+<item>Andrew Morton           <htmlurl url="mailto:morton@nortelnetworks.com" name="<morton@nortelnetworks.com>">
+<item>p_george                <htmlurl url="mailto:p_george@club-internet.fr" name="<p_george@club-internet.fr>">
+<item>Lubos Lunak             <htmlurl url="mailto:l.lunak@sh.cvut.cz" name="<l.lunak@sh.cvut.cz>">
+<item>Armin L. Schneider      <htmlurl url="mailto:armin@uumail.de.uu.net" name="<armin@uumail.de.uu.net>">
+<item>Martin Spirk            <htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>">
+<item>Ralf Palsa              <htmlurl url="mailto:rpalsa@eso.org" name="<rpalsa@eso.org>">
+<item>Richard Dale            <htmlurl url="mailto:Richard_Dale@tipitina.demon.co.uk" name="<Richard_Dale@tipitina.demon.co.uk>">
+<item>Holger Schurig          <htmlurl url="mailto:holger@holger.om.org" name="<holger@holger.om.org>">
+<item>Dag Andersen            <htmlurl url="mailto:dandersen@c2i.net" name="<dandersen@c2i.net>">
+<item>Alexis Mikhailov        <htmlurl url="mailto:alexis@abc.cap.ru" name="<alexis@abc.cap.ru>">
+<item>Ulltveit-Moe            <htmlurl url="mailto:Nils.Ulltveit-Moe@hia.no" name="<Nils.Ulltveit-Moe@hia.no>">
+<item>Nich Hudson             <htmlurl url="mailto:nick@nthcliff.demon.co.uk" name="<nick@nthcliff.demon.co.uk>">
+<item>R. Imura                <htmlurl url="mailto:imura@cs.titech.ac.jp" name="<imura@cs.titech.ac.jp>">
+<item>Falk Brettschneider     <htmlurl url="mailto:gigafalk@yahoo.com" name="<gigafalk@yahoo.com>">
+</itemize>
 
 <bf>KDevelop contains sourcecode from the following applications:</bf>
 
