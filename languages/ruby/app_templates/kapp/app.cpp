@@ -8,6 +8,7 @@
 int main(int argc, char **argv) {
     KInstance * instance = new KInstance("%{APPNAMELC}");
     QString appdir = ::locate("data", "%{APPNAMELC}/main.rb", instance);
+    delete instance;
     QFileInfo program(appdir);
      
     char ** rubyargs = (char **) calloc(argc+4, sizeof(char *));
