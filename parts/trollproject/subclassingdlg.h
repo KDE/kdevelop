@@ -27,8 +27,6 @@ class SlotItem : public QCheckListItem
                   SlotItem(QListView *parent,const QString &text,
                            const QString &specifier, const QString &Access,
                            const QString &returnType,bool isFunc);
-
-  private:
   QString         m_access;
   QString         m_methodName;
   QString         m_returnType;
@@ -46,15 +44,22 @@ public:
 
 private:
   void                  updateDlg();
+  bool                  replaceKeywords(QString &buffer);
+  void                  replace(QString &string, const QString& search, const QString& replace);
+  bool                  saveBuffer(QString &buffer, const QString& filename);
+  bool                  loadBuffer(QString &buffer, const QString& filename);
 
 public slots:
   virtual void          accept();
+  virtual void          onChangedClassName();
 
 protected:
   QStringList           &m_newFileNames;
   QString               m_formFile;
   QString               m_baseClassName;
   QString               m_baseCaption;
+  QString               m_formName;
+  QString               m_formPath;
   QValueList<SlotItem*> m_slots;
   QValueList<SlotItem*> m_functions;
 

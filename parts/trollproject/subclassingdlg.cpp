@@ -19,6 +19,11 @@
 #include <qpushbutton.h>
 #include <domutil.h>
 #include <qdom.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
+#include <qfile.h>
+#include <qregexp.h>
+
 
 #define WIDGET_CAPTION_NAME "widget/property|name=caption/string"
 #define WIDGET_CLASS_NAME   "class"
@@ -51,9 +56,17 @@ m_newFileNames(newFileNames)
 //=================================================
 {
   m_formFile = formFile;
+  QStringList splitPath = QStringList::split('/',formFile);
+  m_formName = QStringList::split('.',splitPath[splitPath.count()-1])[0]; // "somedlg.ui" = "somedlg"
+  splitPath.pop_back();
+  m_formPath = "/" + splitPath.join("/"); // join path to ui-file
+  kdDebug(9010) << "Formpath: " << m_formPath << endl;
+  kdDebug(9010) << "Formname: " << m_formName << endl;
+
   QDomDocument doc;
   DomUtil::openDOMFile(doc,formFile);
   m_baseClassName = DomUtil::elementByPathExt(doc,WIDGET_CLASS_NAME).text();
+  kdDebug(9010) << "Baseclass: " << m_baseClassName << endl;
   m_baseCaption = DomUtil::elementByPathExt(doc,WIDGET_CAPTION_NAME).text();
   setCaption(i18n("Create subclass of ")+m_baseClassName);
 
@@ -80,14 +93,14 @@ m_newFileNames(newFileNames)
                                      funcelem.attributeNode("access").value(),
                                      funcelem.attributeNode("returnType").value(),true);
     m_slotView->insertItem(newFunc);
-    m_slots << newFunc;
+    m_functions << newFunc;
   }
 
 }
 
 
 SubclassingDlg::~SubclassingDlg()
-//==============================================
+//===============================
 {
 }
 
@@ -97,28 +110,130 @@ void SubclassingDlg::updateDlg()
 {
 }
 
-void SubclassingDlg::accept()
-//=========================
+void SubclassingDlg::replace(QString &string, const QString& search, const QString& replace)
+//==========================================================================================
 {
-
-  /*
-  QDomDocument doc;
-  DomUtil::openDOMFile(doc,"/home/jsgaarde/programming/kdevelop/domapp/clean_dialog.ui");
-  DomUtil::replaceText(doc,WIDGET_CLASS_NAME,"TestClass");
-  DomUtil::replaceText(doc,WIDGET_CAPTION_NAME,"Test Dialog");
-  QDomElement slotsElem = DomUtil::elementByPathExt(doc,WIDGET_SLOTS);
-  QDomNodeList slotnodes = slotsElem.childNodes();
-  for (unsigned int i=0; i<slotnodes.count();i++)
+  int nextPos = string.find(search);
+  unsigned int searchLength = search.length();
+  while (nextPos>-1)
   {
-    QString msg;
-    QDomElement slotelem = slotnodes.item(i).toElement();
-    msg.sprintf("Slotname: %s\nReturns: %s\nAccess: %s",
-                    slotelem.text().ascii(),
-                    slotelem.attributeNode("returnType").value().ascii(),
-                    slotelem.attributeNode("access").value().ascii());
-    QMessageBox::information(0,"Slots",msg);
+    string = string.replace(nextPos,searchLength,replace);
+    nextPos = string.find(search,nextPos+replace.length());
   }
-  */
+}
+
+bool SubclassingDlg::loadBuffer(QString &buffer, const QString& filename)
+//======================================================================
+{
+  // open file and buffer it
+  QFile dataFile(filename);
+  if (!dataFile.open(IO_ReadOnly))
+    return false;
+  char *temp = new char[dataFile.size()+1];
+  dataFile.readBlock(temp,dataFile.size());
+  temp[dataFile.size()]='\0';
+  buffer = temp;
+  delete temp;
+  dataFile.close();
+  return true;
+}
+
+bool SubclassingDlg::replaceKeywords(QString &buffer)
+//=====================================================
+{
+  replace(buffer,"$NEWFILENAMEUC$",m_edFileName->text().upper());
+  replace(buffer,"$BASEFILENAMELC$",m_formName.lower());
+  replace(buffer,"$NEWCLASS$",m_edClassName->text());
+  replace(buffer,"$BASECLASS$",m_baseClassName);
+  replace(buffer,"$NEWFILENAMELC$",m_edFileName->text().lower());
+  return true;
+}
+
+bool SubclassingDlg::saveBuffer(QString &buffer, const QString& filename)
+//=======================================================================
+{
+  // save buffer
+
+  QFile dataFile(filename);
+  if (!dataFile.open(IO_WriteOnly))
+    return false;
+  dataFile.writeBlock((buffer+"\n").ascii(),(buffer+"\n").length());
+  dataFile.close();
+  return true;
+}
+
+
+void SubclassingDlg::accept()
+//===========================
+{
+  unsigned int i;
+
+  // h - file
+
+  QString public_decl =
+    "/*$PUBLIC_SLOTS$*/\n  ";
+
+  QString protected_decl =
+    "/*$PROTECTED_SLOTS$*/\n  ";
+
+  QString function_decl =
+    "/*$FUNCTIONS$*/\n  ";
+
+  QString buffer;
+  loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.h"));
+  replaceKeywords(buffer);
+  for (i=0; i<m_slots.count(); i++)
+  {
+    SlotItem *slitem = m_slots[i];
+    QString decl;
+    if (slitem->m_access=="public")
+      decl = public_decl;
+    if (slitem->m_access=="protected")
+      decl = protected_decl;
+    decl += slitem->m_specifier=="non virtual" ? "" : slitem->m_specifier + " ";
+    decl += slitem->m_returnType + " ";
+    QString spacer;
+    if (slitem->m_access=="public")
+    {
+      decl += spacer.fill(' ',43-decl.length()) + slitem->m_methodName + ";";
+      replace(buffer,"/*$PUBLIC_SLOTS$*/",decl);
+    }
+    if (slitem->m_access=="protected")
+    {
+      decl += spacer.fill(' ',46-decl.length()) + slitem->m_methodName + ";";
+      replace(buffer,"/*$PROTECTED_SLOTS$*/",decl);
+    }
+  }
+  saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".h");
+
+  // cpp - file
+
+  QString implementation =
+    "/*$SPECIALIZATION$*/\n"
+    "$RETURNTYPE$ $NEWCLASS$::$METHOD$\n"
+    "{\n"
+    "}\n\n";
+
+  loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.cpp"));
+  replaceKeywords(buffer);
+  for (i=0; i<m_slots.count(); i++)
+  {
+    SlotItem *slitem = m_slots[i];
+    QString impl = implementation;
+    replace(impl,"$RETURNTYPE$",slitem->m_returnType);
+    replace(impl,"$NEWCLASS$",m_edClassName->text());
+    replace(impl,"$METHOD$", slitem->m_methodName);
+    replace(buffer,"/*$SPECIALIZATION$*/",impl);
+  }
+  saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
+
+  m_newFileNames.append(m_formPath + "/" + m_edFileName->text()+".cpp");
+  m_newFileNames.append(m_formPath + "/" + m_edFileName->text()+".h");
   SubclassingDlgBase::accept();
 }
 
+void SubclassingDlg::onChangedClassName()
+//=======================================
+{
+  m_edFileName->setText(m_edClassName->text().lower());
+}

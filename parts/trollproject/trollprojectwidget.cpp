@@ -1093,7 +1093,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(title, this);
         int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert existing files..."));
         int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert New File..."));
-        int idSubclassWidget = popup.insertItem(SmallIconSet("widget"),i18n("Subclass widget..."));
  //       int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
@@ -1148,15 +1147,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             slotOverviewSelectionChanged(m_shownSubproject);
           }
         }
-        if (r == idSubclassWidget)
-        {
-          QStringList newFileNames;
-          SubclassingDlg *dlg = new SubclassingDlg("/home/jsgaarde/programming/kdevelop/domapp/clean_dialog.ui",newFileNames);
-          dlg->exec();
-          for (int i=0;i<newFileNames.count();i++)
-            QMessageBox::information(0,"File",newFileNames[i]);
-        }
-
 
     } else if (pvitem->type() == ProjectItem::File) {
 
@@ -1165,8 +1155,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
         int idRemoveFile = popup.insertItem(i18n("Remove File"));
-        int idFileProperties = popup.insertItem(i18n("Properties..."));
+        int idSubclassWidget = popup.insertItem(SmallIconSet("widget"),i18n("Subclass widget..."));
         int idViewUIH = popup.insertItem(i18n("Open ui.h File"));
+        int idFileProperties = popup.insertItem(i18n("Properties..."));
+
         if(!fitem->name.contains(".ui")) popup.removeItem(idViewUIH);
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
@@ -1195,7 +1187,17 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         else if(r == idViewUIH) {
           m_part->partController()->editDocument(KURL(m_shownSubproject->path + "/" +
              QString(fitem->name + ".h")));
-	}
+
+        }
+        else if (r == idSubclassWidget)
+        {
+          QStringList newFileNames;
+          SubclassingDlg *dlg = new SubclassingDlg(m_shownSubproject->path + "/" + fitem->name,newFileNames);
+          dlg->exec();
+          for (int i=0;i<newFileNames.count();i++)
+            addFile(newFileNames[i]);
+        }
+
     }
 }
 
