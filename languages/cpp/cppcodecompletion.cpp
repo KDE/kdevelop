@@ -112,7 +112,7 @@ public:
 		m_prev = 0;
 	}
 
-	QValueList<SimpleVariable>& vars()
+	const QValueList<SimpleVariable>& vars() const
 	{
 		return m_vars;
 	}
@@ -636,6 +636,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 
 		if ( ch == '.' )
 		{
+			current += ch;
 			ADD_CURRENT();
 			++index;
 		}
@@ -685,6 +686,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 		}
 		else if ( ch2 == "->" )
 		{
+			current += ch2;
 			ADD_CURRENT();
 			index += 2;
 		}
@@ -698,38 +700,8 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 	return l;
 }
 
-void CppCodeCompletion::evaluateAccessOp( QString expr, SimpleContext* ctx )
-{
-	//Remove the vars that don't correspond to the member access operator
-	//that we are using.  
-	
-	//TODO: Take into account the de-reference operator...
-	
-	bool dotOp = expr.endsWith( "." );
-	bool arrowOp = expr.endsWith( "->" );
-	
-	while ( ctx )
-	{
-		QValueList<SimpleVariable> &vars = ctx->vars();
-		QValueList<SimpleVariable>::Iterator it = vars.begin();
-		for ( ; it != vars.end(); ++it )
-		{
-			SimpleVariable & var = *it;
-			if ( ( var.ptrList.count() && !arrowOp ) ||
-			     ( !var.ptrList.count() && !dotOp ) )
-			{
-				var.type = "";
-			}
-		}
-		
-		ctx = ctx->prev();
-	}
-}
-
 QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 {
-	evaluateAccessOp( expr, ctx );
-
 	d->classNameList = typeNameList( m_pSupport->codeModel() );
 
 	bool global = false;
@@ -808,7 +780,15 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 
 	QString currentExpr = exprList.front().stripWhiteSpace();
 	exprList.pop_front();
-
+	
+	bool dotOp = currentExpr.endsWith( "." );
+	bool arrowOp = currentExpr.endsWith( "->" );
+	
+	if ( dotOp )
+		currentExpr.truncate( currentExpr.length() - 1 );
+	else if ( arrowOp )
+		currentExpr.truncate( currentExpr.length() - 2 );
+		
 	int leftParen = currentExpr.find( "(" );
 
 	if ( leftParen != -1 )
@@ -837,8 +817,16 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 	if ( ctx )
 	{
 		// find the variable type in the current context
-		QStringList type = ctx->findVariable( currentExpr ).type;
-		if ( !type.isEmpty() )
+		SimpleVariable var = ctx->findVariable( currentExpr );
+		QStringList type = var.type;
+		
+		//Remove the vars that don't correspond to the member access operator
+		//that we are using.  
+		//TODO: Take into account the de-reference operator...
+		bool correctAccessOp = ( ( var.ptrList.count() && arrowOp ) ||
+		                         ( !var.ptrList.count() && dotOp ) );
+		
+		if ( !type.isEmpty() && correctAccessOp )
 			return evaluateExpressionInternal( exprList, type );
 
 		QStringList t_this = ctx->findVariable( "this" ).type;

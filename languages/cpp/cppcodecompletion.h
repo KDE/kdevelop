@@ -67,7 +67,6 @@ public:
 	int expressionAt( const QString& text, int index );
 	QStringList splitExpression( const QString& text );
 	QStringList typeOf( const QString& name, const QStringList& scope );
-	void evaluateAccessOp( QString expr, SimpleContext* ctx );
 	QStringList evaluateExpression( QString expr, SimpleContext* ctx );
 
 	static QStringList typeName( const QString& name );
