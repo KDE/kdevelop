@@ -140,12 +140,13 @@ void CLogFileView::refresh(CProject* prj)
         {
           if(show_path) {
              current_item = treeH->addItem(filename, THC_FILE, lastGrp );
-					}
-					else{  // fill the dict, because the path is not stored into the tree
-						current_item = treeH->addItem( QFileInfo("/"+filename).fileName(), THC_FILE, lastGrp );
-				 		p_filename = new QString;
-						dict->insert(current_item,*p_filename = filename);
-					}
+	  }
+	  else{  // fill the dict, because the path is not stored into the tree
+	    QString fname = QFileInfo("/"+filename).fileName();
+	    current_item = treeH->addItem( fname , THC_FILE, lastGrp );
+	    p_filename = new QString;
+	    dict->insert(current_item,*p_filename = filename);
+	  }
 	  //	  cerr << ":" << current_item << ":" << filename << endl;
 	  if(firstitemselect == true && item_already_selected == false){
 	    setSelected(current_item,true);
