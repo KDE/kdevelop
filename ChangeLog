@@ -1,3 +1,6 @@
+2001-02-25  jbb <jbb@kdevelop.org>
+    * Fixed: Creating a cpp project didn't work.
+
 2001-02-24  jbb <jbb@kdevelop.org>
     * Fixed: kimport was run directly requiring perl to be in
       /usr/bin. This was incorrect. When this failed it revealed
