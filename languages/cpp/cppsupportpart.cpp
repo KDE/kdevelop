@@ -42,7 +42,8 @@
 #include "addattributedialog.h"
 
 // designer integration
-#include "qtdesignerintegration.h"
+#include "qtdesignercppintegration.h"
+#include "cppimplementationwidget.h"
 
 #include <qheader.h>
 #include <qdir.h>
@@ -1865,15 +1866,13 @@ KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::Designer
             des = m_designers[type];
             if (des == 0)
             {
-                des = new QtDesignerIntegration(this);
-                kdDebug() << "1" << endl;
+                CppImplementationWidget *impl = new CppImplementationWidget(this);
+                des = new QtDesignerCppIntegration(this, impl);
                 des->loadSettings(*project()->projectDom(), "kdevcppsupport/designerintegration");
-                kdDebug() << "2" << endl;
                 m_designers[type] = des;
             }
             break;
     }
-    kdDebug() << "3" << endl;
     return des;
 }
 
@@ -1882,7 +1881,7 @@ void CppSupportPart::slotCreateSubclass()
     QFileInfo fi(m_contextFileName);
     if (fi.extension(false) != "ui")
         return;
-    QtDesignerIntegration *des = dynamic_cast<QtDesignerIntegration*>(designer(KInterfaceDesigner::QtDesigner));
+    QtDesignerCppIntegration *des = dynamic_cast<QtDesignerCppIntegration*>(designer(KInterfaceDesigner::QtDesigner));
     if (des)
         des->selectImplementation(m_contextFileName);
 }

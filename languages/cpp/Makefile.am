@@ -1,12 +1,18 @@
 # Here resides the C/C++ support part.
 
-SUBDIRS = templates subclassing_template newclass_templates file_templates app_templates compiler pcsimporter debugger doc
+SUBDIRS = templates subclassing_template newclass_templates file_templates \
+	app_templates compiler pcsimporter debugger doc
 
-INCLUDES = -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/cppparser -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/compat \
+	-I$(top_srcdir)/lib/cppparser -I$(top_srcdir)/lib/external_interfaces -I$(top_srcdir)/lib/interfaces \
+	-I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/designer_integration \
+	-I$(top_builddir)/bdb/build_unix -I$(top_srcdir)/bdb/include $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevcppsupport.la
 libkdevcppsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) -L$(top_srcdir)/bdb/dist
-libkdevcppsupport_la_LIBADD = $(top_builddir)/bdb/build_unix/libdb.a $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
+libkdevcppsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
+	$(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la \
+	$(top_builddir)/lib/designer_integration/libdesignerintegration.la $(top_builddir)/bdb/build_unix/libdb.a
 
 libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
 	ccconfigwidgetbase.ui kdevdriver.cpp cppcodecompletion.cpp problemreporter.cpp \
@@ -16,7 +22,7 @@ libkdevcppsupport_la_SOURCES = cppsupportpart.cpp ccconfigwidget.cpp \
 	cppnewclassdlg.cpp classgeneratorconfig.cpp classgeneratorconfigbase.ui subclassingdlg.cpp \
 	subclassingdlgbase.ui addattributedialogbase.ui addmethoddialogbase.ui addattributedialog.cpp \
 	addmethoddialog.cpp cppsupport_utils.cpp createpcsdialogbase.ui createpcsdialog.cpp \
-	qtdesignerintegration.cpp implementationwidgetbase.ui implementationwidget.cpp
+	cppimplementationwidget.cpp qtdesignercppintegration.cpp
 
 METASOURCES = AUTO
 
@@ -39,4 +45,4 @@ r___LDFLAGS = $(all_libraries)
 r___SOURCES = main.cpp
 r___DEPENDENCIES = libkdevcppsupport.la
 r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
-noinst_HEADERS = qtdesignerintegration.h implementationwidget.h
+noinst_HEADERS = cppimplementationwidget.h qtdesignercppintegration.h

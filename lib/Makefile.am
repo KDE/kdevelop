@@ -23,5 +23,6 @@ libkdeveloplgpl_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la 
 libkdeveloplgpl_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces widgets util project $(QEXTMDI_SUBDIR) antlr catalog cppparser $(COMPAT_SUBDIR) astyle external_interfaces
+SUBDIRS = interfaces widgets util project $(QEXTMDI_SUBDIR) antlr catalog \
+	cppparser $(COMPAT_SUBDIR) astyle external_interfaces designer_integration
 

@@ -17,44 +17,22 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef QTDESIGNERINTEGRATION_H
-#define QTDESIGNERINTEGRATION_H
+#ifndef QTDESIGNERCPPINTEGRATION_H
+#define QTDESIGNERCPPINTEGRATION_H
 
-#include <qmap.h>
+#include <qtdesignerintegration.h>
 
-#include <codemodel.h>
-#include "kdevdesignerintegration.h"
-
-class CppSupportPart;
-
-class QtDesignerIntegration : public KDevDesignerIntegration
+class QtDesignerCppIntegration : public QtDesignerIntegration
 {
 Q_OBJECT
 public:
-    QtDesignerIntegration(CppSupportPart *part, const char* name = 0);
-    ~QtDesignerIntegration();
-
-public slots:
-    virtual void addFunction(const QString& formName, KInterfaceDesigner::Function function);
-    virtual void editFunction(const QString& formName, KInterfaceDesigner::Function oldFunction, KInterfaceDesigner::Function function);
-    virtual void removeFunction(const QString& formName, KInterfaceDesigner::Function function);
-
-    virtual void openFunction(const QString &formName, const QString &functionName);
-        
-    virtual void saveSettings(QDomDocument dom, QString path);
-    virtual void loadSettings(QDomDocument dom, QString path);
-
-    bool selectImplementation(const QString &formName);
+    QtDesignerCppIntegration(KDevLanguageSupport *part, ImplementationWidget *impl);
     
 protected:
-    void addFunctionToClass(KInterfaceDesigner::Function function, ClassDom klass);
+    virtual void addFunctionToClass(KInterfaceDesigner::Function function, ClassDom klass);
     QString accessID(FunctionDom fun) const;
-    
-private:
-    //Form file - derived class name 
-    QMap<QString, ClassDom> m_implementations;
-    
-    CppSupportPart *m_part;
+
+    virtual void processImplementationName(QString &name);    
 };
 
 #endif

@@ -1,19 +1,19 @@
 /***************************************************************************
  *   Copyright (C) 2004 by Alexander Dymo                                  *
- *   adymo@mksat.net                                                       *
+ *   adymo@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
  *                                                                         *
  *   This program is distributed in the hope that it will be useful,       *
  *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
  *   GNU General Public License for more details.                          *
  *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
@@ -35,8 +35,7 @@
 #include <kdevproject.h>
 #include <domutil.h>
 #include <filetemplate.h>
-
-#include "cppsupportpart.h"
+#include <kdevlanguagesupport.h>
 
 namespace ImplUtils{
 class ClassItem: public KListViewItem{
@@ -62,9 +61,19 @@ private:
 };
 }
 
-ImplementationWidget::ImplementationWidget(CppSupportPart *part, const QString &formName, QWidget* parent, const char* name, bool modal)
-    :CreateImplemenationWidgetBase(parent, name, modal), m_part(part), m_formName(formName)
+ImplementationWidget::ImplementationWidget(KDevLanguageSupport *part, QWidget* parent, const char* name, bool modal)
+    :CreateImplemenationWidgetBase(parent, name, modal), m_part(part)
 {
+}
+
+void ImplementationWidget::init(const QString &formName)
+{
+    m_formName = formName;
+    
+    classView->clear();
+    fileNameEdit->clear();
+    classNameEdit->clear();
+    
     QDomDocument doc;
     DomUtil::openDOMFile(doc, m_formName);
     m_baseClassName = DomUtil::elementByPathExt(doc, "class").text();
@@ -134,58 +143,15 @@ ClassDom ImplementationWidget::selectedClass()
 }
 
 bool ImplementationWidget::createClass()
-{
-    QString template_h = "#ifndef $DEFTEXT$_H\n#define $DEFTEXT$_H\n\n#include \"$BASEINCLUDE$\"\n\nclass $CLASSNAME$: public $BASECLASSNAME$ {\nQ_OBJECT\npublic:\n    $CLASSNAME$(QWidget *parent = 0, const char *name = 0);\n};\n\n#endif\n";
-    QString template_cpp = "#include \"$CLASSINCLUDE$\"\n\n$CLASSNAME$::$CLASSNAME$(QWidget *parent, const char *name)\n    :$BASECLASSNAME$(parent, name)\n{\n}\n";
-    if (m_part->project()->options() == KDevProject::UsesAutotoolsBuildSystem)
-        template_cpp += "\n#include \"$MOCINCLUDE$\"\n";
-    
-    QFileInfo formInfo(m_formName);
-    template_h.replace(QRegExp("\\$BASEINCLUDE\\$"), formInfo.baseName()+".h");
-    template_h.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
-    template_h.replace(QRegExp("\\$BASECLASSNAME\\$"), m_baseClassName);
-    template_h.replace(QRegExp("\\$DEFTEXT\\$"), fileNameEdit->text().upper());
-    
-    template_cpp.replace(QRegExp("\\$CLASSINCLUDE\\$"), fileNameEdit->text() + ".h");
-    template_cpp.replace(QRegExp("\\$CLASSNAME\\$"), classNameEdit->text());
-    template_cpp.replace(QRegExp("\\$BASECLASSNAME\\$"), m_baseClassName);
-    template_cpp.replace(QRegExp("\\$MOCINCLUDE\\$"), fileNameEdit->text() + ".moc");
-    
-    template_h = FileTemplate::read(m_part, "h") + template_h;
-    template_cpp = FileTemplate::read(m_part, "cpp") + template_cpp;
-    
-    QString file_h = fileNameEdit->text() + ".h";
-    QString file_cpp = fileNameEdit->text() + ".cpp";
-    if (!m_part->project()->activeDirectory().isEmpty())
-    {
-        file_h = m_part->project()->activeDirectory() + "/" + file_h;
-        file_cpp = m_part->project()->activeDirectory() + "/" + file_cpp;
-    }
-
-    QFile ifile(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_cpp));
-    if (!ifile.open(IO_WriteOnly)) {
-        KMessageBox::error(0, i18n("Cannot write to implementation file"));
-        return false;
-    }
-    QTextStream istream(&ifile);
-    istream << template_cpp;
-    ifile.close();
-  
-    QFile hfile(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_h));
-    if (!hfile.open(IO_WriteOnly)) {
-        KMessageBox::error(0, i18n("Cannot write to header file"));
-        return false;
-    }
-    QTextStream hstream(&hfile);
-    hstream << template_h;
-    hfile.close();
-    
-    QStringList fileList;
-    fileList.append(file_h);
-    fileList.append(file_cpp);
-    m_part->project()->addFiles(fileList);
-    
+{   
+    m_part->project()->addFiles(createClassFiles());
     return true;
+}
+
+int ImplementationWidget::exec(const QString &formName)
+{
+    init(formName);
+    return QDialog::exec();
 }
 
 #include "implementationwidget.moc"

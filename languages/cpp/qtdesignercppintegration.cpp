@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "qtdesignerintegration.h"
+#include "qtdesignercppintegration.h"
 
 #include <qpair.h>
 #include <qregexp.h>
@@ -40,58 +40,13 @@
 #include "codemodel_utils.h"
 #include "implementationwidget.h"
 
-QtDesignerIntegration::QtDesignerIntegration(CppSupportPart *part, const char* name)
-    :KDevDesignerIntegration(part, name), m_part(part)
+QtDesignerCppIntegration::QtDesignerCppIntegration(KDevLanguageSupport *part,
+    ImplementationWidget *impl)
+    :QtDesignerIntegration(part, impl, true, 0)
 {
 }
 
-QtDesignerIntegration::~QtDesignerIntegration()
-{
-}
-
-void QtDesignerIntegration::addFunction(const QString& formName, KInterfaceDesigner::Function function)
-{
-    kdDebug() << "QtDesignerIntegration::addFunction: form: " << formName << ", function: " << function.function << endl;
-    
-    if (!m_implementations[formName])
-        if (!selectImplementation(formName))
-            return;
-    
-    ClassDom klass = m_implementations[formName];
-    if (!klass)
-        KMessageBox::error(0, i18n("Cannot find implementation class for form: %1").arg(formName));
-
-    addFunctionToClass(function, klass);
-}
-
-void QtDesignerIntegration::editFunction(const QString& formName, KInterfaceDesigner::Function oldFunction, KInterfaceDesigner::Function function)
-{
-    kdDebug() << "QtDesignerIntegration::editFunction: form: " << formName 
-        << ", old function: " << oldFunction.function
-        << ", function: " << function.function << endl;
-}
-
-void QtDesignerIntegration::removeFunction(const QString& formName, KInterfaceDesigner::Function function)
-{
-    kdDebug() << "QtDesignerIntegration::removeFunction: form: " << formName << ", function: " << function.function << endl;
-}
-
-bool QtDesignerIntegration::selectImplementation(const QString &formName)
-{
-    QFileInfo fi(formName);
-    if (!fi.exists())
-        return false;
-    
-    ImplementationWidget selectImpl(m_part, formName);
-    if (selectImpl.exec())
-    {
-        m_implementations[formName] = selectImpl.selectedClass();
-        return true;
-    }
-    return false;
-}
-
-void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function function, ClassDom klass)
+void QtDesignerCppIntegration::addFunctionToClass(KInterfaceDesigner::Function function, ClassDom klass)
 {
     m_part->partController()->editDocument( KURL( klass->fileName() ) );
     KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_part->partController()->activePart() );
@@ -146,7 +101,8 @@ void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function func
     editIface->insertText( pt.first + insertedLine + 1, 0 /*pt.second*/, str );
     insertedLine += str.contains( QChar('\n') );
 
-    m_part->backgroundParser()->addFile( klass->fileName() );
+    CppSupportPart *cppPart = dynamic_cast<CppSupportPart *>(m_part);
+    cppPart->backgroundParser()->addFile( klass->fileName() );
 
     if (function.specifier == "pure virtual")
         return;
@@ -174,7 +130,7 @@ void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function func
         return;
 
     int atLine = 0, atColumn = 0;
-    TranslationUnitAST *translationUnit = m_part->backgroundParser()->translationUnit(implementationFile);
+    TranslationUnitAST *translationUnit = cppPart->backgroundParser()->translationUnit(implementationFile);
     if (translationUnit){
         translationUnit->getEndPosition( &atLine, &atColumn );
         kdDebug() << "atLine: " << atLine << endl;
@@ -212,10 +168,10 @@ void QtDesignerIntegration::addFunctionToClass(KInterfaceDesigner::Function func
             cursor->setCursorPositionReal( atLine+3, 1 );
     }
     
-    m_part->backgroundParser()->addFile( implementationFile );
+    cppPart->backgroundParser()->addFile( implementationFile );
 }
 
-QString QtDesignerIntegration::accessID(FunctionDom fun) const
+QString QtDesignerCppIntegration::accessID(FunctionDom fun) const
 {
     if( fun->isSignal() )
         return QString::fromLatin1( "signals" );
@@ -241,91 +197,9 @@ QString QtDesignerIntegration::accessID(FunctionDom fun) const
     return QString::null;
 }
 
-void QtDesignerIntegration::loadSettings(QDomDocument dom, QString path)
+void QtDesignerCppIntegration::processImplementationName(QString &name)
 {
-    QDomElement el = DomUtil::elementByPath(dom, path + "/qtdesigner");
-    if (el.isNull())
-        return;
-    QDomNodeList impls = el.elementsByTagName("implementation");
-    for (uint i = 0; i < impls.count(); ++i)
-    {
-        QDomElement el = impls.item(i).toElement();
-        if (el.isNull())
-            continue;
-        FileDom file = m_part->codeModel()->fileByName(el.attribute("implementationpath"));
-        if (!file)
-            continue;
-        ClassList cllist = file->classByName(el.attribute("class"));
-        if (cllist.count() > 0)
-            m_implementations[el.attribute("path")] = cllist.first();
-    }
+    name.replace(".h", ".cpp");
 }
 
-void QtDesignerIntegration::saveSettings(QDomDocument dom, QString path)
-{
-    kdDebug() << "QtDesignerIntegration::saveSettings" << endl;
-    QDomElement el = DomUtil::createElementByPath(dom, path + "/qtdesigner");
-    for (QMap<QString, ClassDom>::const_iterator it = m_implementations.begin(); 
-        it != m_implementations.end(); ++it)
-    {
-        QDomElement il = dom.createElement("implementation");
-        el.appendChild(il);
-        il.setAttribute("path", it.key());
-        il.setAttribute("implementationpath", it.data()->fileName());
-        il.setAttribute("class", it.data()->name());
-    }
-}
-
-struct MyPred{
-    MyPred(const QString &functionName): m_functionName(functionName) {}
-    bool operator () (const FunctionDefinitionDom& fun){
-        kdDebug() << "    ==: " << fun->name() << " vs " << m_functionName << endl;
-        if (fun->name() == m_functionName)
-            return true;
-        return false;
-    }
-    QString m_functionName;
-};
-
-
-void QtDesignerIntegration::openFunction(const QString &formName, const QString &functionName)
-{
-    kdDebug() << "QtDesignerIntegration::openFunction, formName = " << formName 
-        << ", functionName = " << functionName << endl;
-    QString fn = functionName;
-    if (fn.find("(") > 0)
-        fn.remove(fn.find("("), fn.length());
-    
-    if (!m_implementations[formName])
-        return;
-
-    int line = -1, col = -1;
-    
-/*    FunctionDefinitionList list;       
-    MyPred mypred(fn);
-    CodeModelUtils::findFunctionDefinitions<MyPred>(mypred, m_implementations[formName], list);
-    if (list.count() == 0)
-        return;
-    
-    list.first()->getStartPosition(&line, &col);*/
-
-    QString impl = m_implementations[formName]->fileName();
-    impl.replace(".h", ".cpp");
-    
-//    kdDebug() << "seeking for fn = " << fn << endl;
-    if (m_part->codeModel()->hasFile(impl))
-    {
-        FunctionDefinitionList list = m_part->codeModel()->fileByName(impl)->functionDefinitionList();
-        for (FunctionDefinitionList::const_iterator it = list.begin(); it != list.end(); ++it)
-        {
-//            kdDebug() << " <<: " << (*it)->name() << endl;
-            if ((*it)->name() == fn)
-                (*it)->getStartPosition(&line, &col);
-        }
-    }
-    
-    m_part->partController()->editDocument(KURL(impl), line, col);
-}
-
-
-#include "qtdesignerintegration.moc"
+#include "qtdesignercppintegration.moc"
