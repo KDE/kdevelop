@@ -662,19 +662,22 @@ void GDBBreakpointWidget::slotRemoveAllBreakpoints()
 
 /***************************************************************************/
 
-void GDBBreakpointWidget::slotRowSelected(int row, int col, int, const QPoint &)
+void GDBBreakpointWidget::slotRowSelected(int row, int col, int btn, const QPoint &)
 {
+    if ( btn == Qt::LeftButton )
+	{
 //    kdDebug(9012) << "in slotRowSelected row=" << row << endl;
-    BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
-    if (btr)
-    {
-        FilePosBreakpoint* bp = dynamic_cast<FilePosBreakpoint*>(btr->breakpoint());
-        if (bp)
-            emit gotoSourcePosition(bp->fileName(), bp->lineNum()-1);
+        BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
+        if (btr)
+        {
+            FilePosBreakpoint* bp = dynamic_cast<FilePosBreakpoint*>(btr->breakpoint());
+            if (bp)
+                emit gotoSourcePosition(bp->fileName(), bp->lineNum()-1);
 
-        // put the focus back on the clicked item if appropriate
-        if (col == Location || col ==  Condition || col == IgnoreCount)
-            m_table->editCell(row, col, false);
+            // put the focus back on the clicked item if appropriate
+            if (col == Location || col ==  Condition || col == IgnoreCount)
+                m_table->editCell(row, col, false);
+        }
     }
 }
 
