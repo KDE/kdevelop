@@ -153,6 +153,10 @@
   <Merge/>
 </ToolBar>
 
+<ToolBar name="extraToolBar" position="Top" noMerge="1" hidden="true">
+  <text>Extra Toolbar</text>
+</ToolBar>
+
 <Menu name="rb_popup">
   <Separator/>
   <Action name="file_close"/>
