@@ -13,6 +13,7 @@ listing=Name,Size,Date,Owner
 defaultMimetype=application/octet-stream
 Icon=remote
 Description=Subversion ioslave
+Description[de]=Ein-/Ausgabemodul für Subversion
 Description[et]=Subversioni IO-moodul
 Description[fr]=Module d'entrée / sortie pour Subversion
 Description[it]=ioslave per Subversion
