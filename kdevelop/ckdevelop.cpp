@@ -741,38 +741,38 @@ void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-    topSplitterPos=topSplitter->sizes();
+//    topSplitterPos=topSplitter->sizes();
 //    t_tab_view->hide();
-    treedock->hide();
   }
   else{
     treedock->show();
 //    t_tab_view->show();
-    topSplitter->setSizes(topSplitterPos);
+//    topSplitter->setSizes(topSplitterPos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     toolBar()->setButton(ID_VIEW_TREEVIEW,true);
   }
+  treedock->changeHideShowState();
 
-  QRect rMainGeom= topSplitter->geometry();
-  topSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
-  topSplitter->resize(rMainGeom.width(),rMainGeom.height());
+//  QRect rMainGeom= topSplitter->geometry();
+//  topSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
+//  topSplitter->resize(rMainGeom.width(),rMainGeom.height());
 }
 
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
-    mainSplitterPos=mainSplitter->sizes();
+//    mainSplitterPos=mainSplitter->sizes();
 //    o_tab_view->hide();
-    outputdock->hide();
   }
   else{
     outputdock->show();
 //    o_tab_view->show();
-    mainSplitter->setSizes(mainSplitterPos);
+//    mainSplitter->setSizes(mainSplitterPos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
+  outputdock->changeHideShowState();
 //  QRect rMainGeom= mainSplitter->geometry();
 //  mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
 //  mainSplitter->resize(rMainGeom.width(),rMainGeom.height());

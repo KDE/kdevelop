@@ -1292,15 +1292,16 @@ void CKDevelop::readOptions()
 	  mainSplitterPos=pos;
 
 	bool outputview= config->readBoolEntry("show_output_view", true);
-	if(outputview){
+//	if(outputview){
+  if(outputdock->mayBeShow()){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
     output_view_pos=config->readNumEntry("output_view_pos", 80);
-    mainSplitter->setSizes(mainSplitterPos);
+//    mainSplitter->setSizes(mainSplitterPos);
 	}
 	else{
 //	  o_tab_view->hide();
-	    outputdock->hide();
+//	    outputdock->hide();
 	}
   // SETTING TOP PANNER
   // set a default value for the splitter in pos
@@ -1314,14 +1315,16 @@ void CKDevelop::readOptions()
 	  topSplitterPos=pos;
 	
 	bool treeview=config->readBoolEntry("show_tree_view", true);
-	if(treeview){
+//	if(treeview){
+  if(treedock->mayBeShow()){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
-    topSplitter->setSizes(topSplitterPos);
+
+//    topSplitter->setSizes(topSplitterPos);
 	}
 	else{
 //	  t_tab_view->hide();
-	  treedock->hide();
+//	  treedock->hide();
 	}
 
   readDockConfig();

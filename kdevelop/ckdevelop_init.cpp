@@ -317,15 +317,16 @@ void CKDevelop::initView()
 
   // set the mainwidget
 //  setCentralWidget(mainSplitter);
+  main->setEnableDocking(KDockWidget::DockNone);
+  outputdock->setEnableDocking(KDockWidget::DockCorner);
+  treedock->setEnableDocking(KDockWidget::DockCorner);
+  outputdock->setDockSite(KDockWidget::DockNone);
+  treedock->setDockSite(KDockWidget::DockNone);
+
   main->manualDock(getMainDockWidget(), KDockWidget::DockCenter);
   outputdock->manualDock(getMainDockWidget(), KDockWidget::DockBottom, 80);
   treedock->manualDock(getMainDockWidget(), KDockWidget::DockLeft, 20);
 
-  main->setEnableDocking(KDockWidget::DockNone);
-  outputdock->setEnableDocking(KDockWidget::DockTop|KDockWidget::DockLeft|KDockWidget::DockRight|KDockWidget::DockBottom);
-  treedock->setEnableDocking(KDockWidget::DockTop|KDockWidget::DockLeft|KDockWidget::DockRight|KDockWidget::DockBottom);
-  outputdock->setDockSite(KDockWidget::DockNone);
-  treedock->setDockSite(KDockWidget::DockNone);
 
   initKeyAccel();
   initMenuBar();
