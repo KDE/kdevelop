@@ -307,7 +307,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 	m_custom_options_layout = new QHBoxLayout( custom_options );
 	m_custom_options_layout->setAutoAdd(true);
 	
-	showTemplates(false);
+	showTemplates(true);
 }
 
 AppWizardDialog::~AppWizardDialog()

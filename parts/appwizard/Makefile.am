@@ -12,9 +12,9 @@ libkdevappwizard_la_LIBADD = $(top_builddir)/lib/libkdevelop.la \
 	$(top_builddir)/lib/interfaces/extras/libkdevextras.la
 
 libkdevappwizard_la_SOURCES = appwizardfactory.cpp appwizardpart.cpp \
-	appwizarddlg.cpp importdlg.cpp filepropspagebase.ui filepropspage.cpp \
-	appwizarddlgbase.ui importdlgbase.ui misc.cpp vcs_form.ui autoform.cpp dataform.cpp \
-	kdevfile.cpp kdevlicense.cpp
+		appwizarddlg.cpp importdlg.cpp filepropspagebase.ui filepropspage.cpp \
+		appwizarddlgbase.ui importdlgbase.ui misc.cpp vcs_form.ui autoform.cpp dataform.cpp \
+		kdevfile.cpp kdevlicense.cpp profilesupport.cpp
 
 METASOURCES = AUTO
 
@@ -23,4 +23,4 @@ service_DATA = kdevappwizard.desktop
 
 rcdir = $(kde_datadir)/kdevappwizard
 rc_DATA = kdevappwizard.rc
-noinst_HEADERS =  autoform.h dataform.h
+noinst_HEADERS = autoform.h dataform.h profilesupport.h
