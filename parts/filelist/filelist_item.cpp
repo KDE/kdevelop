@@ -17,7 +17,7 @@
 FileListItem * FileListItem::s_activeItem = 0;
 
 FileListItem::FileListItem( QListView * parent, KURL const & url, DocumentState state )
-	: QListViewItem( parent, QString(" ") + url.fileName() ), 
+	: QListViewItem( parent, url.fileName() ),
 	_url( url )
 {
 	setState( state );

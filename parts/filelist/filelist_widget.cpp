@@ -61,6 +61,7 @@ FileListWidget::FileListWidget(FileListPart *part)
 
 	connect( _part->partController(), SIGNAL(partURLChanged(KParts::ReadOnlyPart * )), this, SLOT(refreshFileList()) );
 
+        setItemMargin(10);
 	QTimer::singleShot(0, this, SLOT(refreshFileList()));
 }
 
