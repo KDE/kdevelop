@@ -56,6 +56,7 @@ public: // Constructor & Destructor
   ~CClassParser();
 
 private: // Private classes
+  /** This class represents a lexema. Used to store lexem in a stack. */
   class CParsedLexem
   {
     public: // Constructor & destructor
@@ -159,7 +160,7 @@ private: // Private methods
 
   /** Take what's on the stack and return as a list of variables. 
    *   Works for variable declarations like int foo, bar, baz.... */
-  void fillInMultipleVariable( QList<CParsedAttribute> &list );
+  void fillInMultipleVariable( CParsedContainer *aContainer );
 
   /** Parse a variable declaration. */
   CParsedAttribute *parseVariable();
@@ -186,17 +187,14 @@ private: // Private methods
   /** Parse a class header, i.e find out classname and possible parents. */
   CParsedClass *parseClassHeader();
 
-  /** Parse a variable or method declaration of a class. */
-  void parseClassMethodVariable( CParsedClass *aClass );
-
   /** Parse the declarations of a class. */
   void parseClassDeclarations( CParsedClass *aClass );
   
   /** Parse a class declaration. */
   CParsedClass *parseClass();
 
-  /** Parse all toplevel method and variables. */
-  void parseGlobalMethodVariable();
+  /** Parse all methods and attributes and add them to the container. */
+  void parseMethodAttributes( CParsedContainer *aContainer );
 
   /** Parse toplevel statements */
   void parseToplevel();
@@ -209,8 +207,6 @@ private: // Private methods
 
   /** Reset the internal variables */
   void reset();
-
-
 };
 
 #endif

@@ -34,6 +34,7 @@
 #include "ClassParser.h"
 
 #define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
+
 enum
 { 
   CP_IS_OTHER, 
@@ -109,9 +110,6 @@ void CClassParser::emptyStack()
  *-----------------------------------------------------------------*/
 void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
 {
-  CParsedAttribute *anAttr;
-  QList<CParsedAttribute> list;
-
   while( lexem != '}' && lexem != 0 )
   {
     if( lexem != '}' )
@@ -119,38 +117,13 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
       switch( lexem )
       {
         case ID:
-          switch( checkClassDecl() )
-          {
-            case CP_IS_ATTRIBUTE:
-              anAttr = new CParsedAttribute();
-              fillInParsedVariable( anAttr );
-              if( !anAttr->name.isEmpty() )
-                aStruct->addAttribute( anAttr );
-              else
-                delete anAttr;
-              break;
-              
-            case CP_IS_MULTI_ATTRIBUTE:
-              fillInMultipleVariable( list );
-              
-              // Add the attributes to the class.
-              for( anAttr = list.first();
-                   anAttr != NULL;
-                   anAttr = list.next() )
-              {
-                aStruct->addAttribute( anAttr );
-              }
-              break;
-            default: // Ignore all other cases for now
-              emptyStack();
-              
-              // Goto the end of the declaration.
-              while( lexem != ';' && lexem != 0 && lexem != '}' )
-                getNextLexem();
-          }
+          parseMethodAttributes( aStruct );
           break;
         case CPENUM:
           parseEnum();
+          break;
+        case CPUNION:
+          parseUnion();
           break;
         case CPSTRUCT:
           PUSH_LEXEM();
@@ -168,7 +141,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
             PUSH_LEXEM();
           break;
         default:
-          debug( "Found unknow struct declaration." );
+          debug( "Found unknown struct declaration." );
       }
 
       if( lexem != '}' )
@@ -176,7 +149,6 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
     }
   }
 }
-
 
 /*---------------------------------------- CClassParser::parseStruct()
  * parseStruct()
@@ -228,10 +200,7 @@ void CClassParser::parseStruct( CParsedContainer *aContainer )
   }
   
   if( aStruct != NULL && !aStruct->name.isEmpty() )
-  {
-    debug( "Adding struct to container" );
     aContainer->addStruct( aStruct );
-  }
 }
 
 /*---------------------------------------- CClassParser::parseEnum()
@@ -403,13 +372,13 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
       aLexem = lexemStack.pop();
       arrayDecl = aLexem->text + arrayDecl;
 
-      exit = ( aLexem->type == '[' );
+      exit = ( lexemStack.isEmpty() || aLexem->type == '[' );
       delete aLexem;
     }
   }
   
   // Check if this variable has a bit definition. If so remove it.
-  if( lexemStack.top()->type == NUM )
+  if( !lexemStack.isEmpty() && lexemStack.top()->type == NUM )
   {
     while( !lexemStack.isEmpty() && lexemStack.top()->type != ID )
       delete lexemStack.pop();
@@ -468,16 +437,16 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
  * Returns:
  *   QList<CParsedAttribute>  List of variables
  *-----------------------------------------------------------------*/
-void CClassParser::fillInMultipleVariable( QList<CParsedAttribute> &list )
+void CClassParser::fillInMultipleVariable( CParsedContainer *aContainer )
 {
   bool exit = false;
   CParsedAttribute *anAttr;
   CParsedLexem *aLexem;
   QString type;
+  QList<CParsedAttribute> list;
 
-  // Make sure the list is empty and old items don't get deleted.
+  // Make sure no attributes gets deleted.
   list.setAutoDelete( false );
-  list.clear();
 
   while( !exit )
   {
@@ -506,12 +475,20 @@ void CClassParser::fillInMultipleVariable( QList<CParsedAttribute> &list )
   // Get the type
   fillInParsedType( type );
 
-  // Iterate over all attributes and add the type.
+  // Iterate over all attributes, set the type and add it to the container.
   for( anAttr = list.first();
        anAttr != NULL;
        anAttr = list.next() )
   {
-    anAttr->type = type + anAttr->type;
+    // Only add attributes that have a name.
+    if( !anAttr->name.isEmpty() )
+    {
+      anAttr->type = type + anAttr->type;
+
+      aContainer->addAttribute( anAttr );
+    }
+    else
+      delete anAttr;
   }
 }
 
@@ -954,59 +931,6 @@ CParsedClass *CClassParser::parseClassHeader()
   return aClass;
 }
 
-/*----------------------------- CClassParser::parseClassMethodVariable()
- * parseClassMethodVariable()
- *   Parse a variable or method declaration of a class.
- *
- * Parameters:
- *   aClass         The class which declarations we are parsing.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassParser::parseClassMethodVariable( CParsedClass *aClass )
-{
-  int declType = checkClassDecl();
-  CParsedAttribute *anAttr;
-  CParsedMethod *aMethod;
-  QList<CParsedAttribute> list;
-  
-  switch( declType )
-  {
-    case CP_IS_ATTRIBUTE:
-      anAttr = new CParsedAttribute();
-      fillInParsedVariable( anAttr );
-      if( !anAttr->name.isEmpty() )
-        aClass->addAttribute( anAttr );
-      else
-        delete anAttr;
-      break;
-    case CP_IS_METHOD_IMPL:
-      debug( "Found METHOD_IMPL in class." );
-    case CP_IS_OPERATOR:
-    case CP_IS_METHOD:
-      aMethod = new CParsedMethod();
-      fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
-      if( !aMethod->name.isEmpty() )
-        aClass->addMethod( aMethod );
-      else 
-        delete aMethod;
-      break;
-    case CP_IS_MULTI_ATTRIBUTE:
-      fillInMultipleVariable( list );
-      
-      // Add the attributes to the class.
-      for( anAttr = list.first();
-           anAttr != NULL;
-           anAttr = list.next() )
-      {
-        if( !anAttr->name.isEmpty() )
-          aClass->addAttribute( anAttr );
-      }
-      break;
-  }
-}
-
 /*----------------------------- CClassParser::parseClassDeclarations()
  * parseClassDeclarations()
  *   Parse the declarations of a class.
@@ -1097,7 +1021,7 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
               aClass->addSlot( aMethod );
           }
           else
-            parseClassMethodVariable( aClass );
+            parseMethodAttributes( aClass );
         }
         isStatic=false;
         break;
@@ -1140,16 +1064,16 @@ CParsedClass *CClassParser::parseClass()
  *                                                                   *
  ********************************************************************/
 
-/*------------------------- CClassParser::parseGlobalMethodVariable()
- * parseGlobalMethodVariable()
- *   Parse and add global method and variable declarations.
+/*----------------------------- CClassParser::parseMethodAttributes()
+ * parseMethodAttributes()
+ *   Parse and add method and attribute declarations.
  *
  * Parameters:
  *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassParser::parseGlobalMethodVariable()
+void CClassParser::parseMethodAttributes( CParsedContainer *aContainer )
 {
   QList<CParsedAttribute> list;
   CParsedAttribute *anAttr;
@@ -1163,7 +1087,7 @@ void CClassParser::parseGlobalMethodVariable()
       anAttr = new CParsedAttribute();
       fillInParsedVariable( anAttr );
       if( !anAttr->name.isEmpty() )
-        store.globalContainer.addAttribute( anAttr );
+        aContainer->addAttribute( anAttr );
       else
         delete anAttr;
       break;
@@ -1180,7 +1104,7 @@ void CClassParser::parseGlobalMethodVariable()
       aMethod = new CParsedMethod();
       fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
       if( !aMethod->name.isEmpty() )
-        store.globalContainer.addMethod( aMethod );
+        aContainer->addMethod( aMethod );
       else
         delete aMethod;
       break;
@@ -1189,16 +1113,7 @@ void CClassParser::parseGlobalMethodVariable()
       emptyStack();
       break;
     case CP_IS_MULTI_ATTRIBUTE:
-      fillInMultipleVariable( list );
-      
-      // Add the attributes to the class.
-      for( anAttr = list.first();
-           anAttr != NULL;
-           anAttr = list.next() )
-      {
-        if( !anAttr->name.isEmpty() )
-          store.globalContainer.addAttribute( anAttr );
-      }
+      fillInMultipleVariable( aContainer );
       break;
   }
 }
@@ -1276,7 +1191,7 @@ void CClassParser::parseToplevel()
         break;
       case CONST:
       case ID:
-        parseGlobalMethodVariable();
+        parseMethodAttributes( &store.globalContainer );
         break;
       default:
         break;
