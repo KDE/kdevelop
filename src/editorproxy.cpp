@@ -15,7 +15,7 @@
 #include <kmainwindow.h>
 #include <kactioncollection.h>
 #include <klocale.h>
-
+#include <kstdaccel.h>
 
 #include <toplevel.h>
 #include "partcontroller.h"
@@ -34,8 +34,11 @@ EditorProxy *EditorProxy::s_instance = 0;
 EditorProxy::EditorProxy()
   : QObject()
 {
-	new KAction( i18n("Show Context Menu"), CTRL+Key_Return, this, 
+	KAction *ac = new KAction( i18n("Show Context Menu"), 0, this, 
 		SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
+        KShortcut cut = KStdAccel::shortcut(KStdAccel::PopupMenuContext);
+        cut.append(KKey(CTRL+Key_Return));
+        ac->setShortcut(cut);
 }
 
 
