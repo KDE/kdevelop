@@ -18,14 +18,17 @@ class AppWizardPart;
 class QMultiLineEdit;
 class QRadioButton;
 class KTempFile;
+class QWidgetStack;
+class QVBox;
 
 #include <qlist.h>
 #include <qdict.h>
 #include <qlistview.h>
 #include <qlineedit.h>
 
+#include "kdevglobalversioncontrol.h"
 #include "appwizarddlgbase.h"
-
+#include "vcs_form.h"
 
 struct ApplicationInfo
 {
@@ -85,6 +88,8 @@ private:
     QList<KTempFile> m_tempFiles;
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
+    VcsForm *m_vcs;
+    QMap<QString,KDevGlobalVersionControl*> map;
 };
 
 #endif

@@ -13,14 +13,18 @@
 
 #include "appwizarddlg.h"
 
+#include <qvbox.h>
 #include <qbuttongroup.h>
 #include <qcombobox.h>
+#include <qtabwidget.h>
+#include <qwidgetstack.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qgrid.h>
 #include <qheader.h>
 #include <qlabel.h>
 #include <qlistview.h>
+#include <qmap.h>
 #include <qmultilineedit.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
@@ -41,6 +45,7 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 
+#include "kdevglobalversioncontrol.h"
 #include "kdevmakefrontend.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
@@ -156,6 +161,22 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
 
     //    licenseChanged();
+    
+    m_vcs = new VcsForm();
+    
+    int i=0;
+    m_vcs->combo->insertItem("None",i);
+    //m_vcs->stack->addWidget(new QLabel(QString("plop"),m_vcs->stack),i++);
+    m_vcs->stack->addWidget(0,i++);
+        
+    map = KDevGlobalVersionControl::getVcsMap();
+        for (QMap<QString,KDevGlobalVersionControl*>::Iterator it = map.begin(); it != map.end(); ++it) {
+        m_vcs->combo->insertItem(it.key(),i);
+                m_vcs->stack->addWidget((*it)->newProjectWidget(m_vcs->stack),i++);
+                }
+    m_vcs->stack->raiseWidget(0);   
+    addPage(m_vcs,"Version Control System");
+        
     nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
 
@@ -358,6 +379,9 @@ void AppWizardDialog::accept()
     m_cmdline += KShellProcess::quote(templateFiles.join(","));
 
     m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
+    
+    if (m_vcs->stack->id(m_vcs->stack->visibleWidget()))
+    	KDevGlobalVersionControl::getVcsMap()[m_vcs->combo->currentText()]->createNewProject(dest_edit->text());
 
     QWizard::accept();
 }

@@ -11,15 +11,7 @@ kde_module_LTLIBRARIES = libkdevappwizard.la
 libkdevappwizard_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevappwizard_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevappwizard_la_SOURCES = appwizardfactory.cpp \
-			      appwizardpart.cpp \
-			      appwizarddlg.cpp \
-			      importdlg.cpp \
-			      filepropspagebase.ui \
-			      filepropspage.cpp \
-			      appwizarddlgbase.ui \
-			      importdlgbase.ui \
-			      misc.cpp
+libkdevappwizard_la_SOURCES = appwizardfactory.cpp 			      appwizardpart.cpp 			      appwizarddlg.cpp 			      importdlg.cpp 			      filepropspagebase.ui 			      filepropspage.cpp 			      appwizarddlgbase.ui 			      importdlgbase.ui 			      misc.cpp vcs_form.ui
 
 METASOURCES = AUTO
 
