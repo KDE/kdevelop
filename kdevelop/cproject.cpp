@@ -76,7 +76,8 @@ bool CProject::readProject()
 
   // organise the prjfile file and check that it _is_ a kdevelop prjfile.
   config = new KSimpleConfig(prjfile);
-  if (getKDevPrjVersion() != KDEVELOP_PRJ_VERSION)    // too simple a test!
+  config->setGroup( "General" );
+  if (!config->hasKey("kdevprj_version"))    // still too simple a test!
     return false;
 
   dir = fileinfo.dirPath() + "/";
