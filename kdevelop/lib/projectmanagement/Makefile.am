@@ -1,5 +1,5 @@
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general
+INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general -I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler
 
 noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
@@ -9,12 +9,17 @@ libkdevprojectmanagement_la_SOURCES =  addtreedlgbase.ui appwizard.cpp  automake
 		appwizardbase.ui filepropspagebase.ui addexistingfilesbase.ui \
 		addexistingfilesdlg.cpp flatdirtreeview.cpp  addtreedlg.cpp renamefiledlg.ui
 
+libkdevprojectmanagement_la_LIBADD = $(top_builddir)/kdevelop/lib/projectmanagement/ProjectOptions/libKDevProjectOptions.la \
+	$(top_builddir)/kdevelop/lib/projectmanagement/KDevCompiler/libKDevCompiler.la
+
 noinst_HEADERS = addtreedlgbase.h appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 				pmc.h project.h projectspace.h \
 				filepropspage.h registeredfile.h \
-				appwizardbase.h filepropspagebase.h addexistingfilesdlg.h \
-				flatdirtreeview.h  addtreedlg.h
+				appwizardbase.h filepropspagebase.h addexistingfilesdlg.h\
+				flatdirtreeview.h  addtreedlg.h 
 
+SUBDIRS = ProjectOptions KDevCompiler
+				
 METASOURCES = AUTO
 
 #noinst_PROGRAMS = testprj
