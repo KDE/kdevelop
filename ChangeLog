@@ -1,3 +1,6 @@
+2000-02-23 Ralf Funken <funken.ruk@netcologne.de>
+	* Updated de.po and kdevelop.pot
+
 2000-02-22 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed some silent bugs in the mdi template and KAppWizard,
   * added docbook file generation to new file dialog
