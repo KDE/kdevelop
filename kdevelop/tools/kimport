@@ -130,7 +130,7 @@ sub processDir()
 
     while ( defined ($file = readdir DIR))
     {
-        next if ($file =~ /Makefile|^\.|\.lo$|\.closure$|\.o$|\.a$|\.la$|\.P$|\.moc$|\.moc\.(.*)$|meta_unload.cpp$/);
+        next if ($file =~ /Makefile|^\.|\.lo$|^CVS$|\.closure$|\.o$|\.a$|\.la$|\.P$|\.moc$|\.moc\.(.*)$|meta_unload.cpp$/);
 
         if (-d $file)
         {
