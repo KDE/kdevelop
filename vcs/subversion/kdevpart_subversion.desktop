@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Subversion Integration (requires kio_svn, currently in kdenonbeta)
+Comment=Subversion
 Comment[es]=Subversión
 Comment[hi]=सबवर्सन
 Comment[pt_BR]=Subversão
