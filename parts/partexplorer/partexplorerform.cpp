@@ -131,12 +131,19 @@ PartExplorerForm::PartExplorerForm( QWidget *parent )
     connect( m_base->costraintsText, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
 
     connect( actionButton(User1), SIGNAL(clicked()), this, SLOT(slotSearchRequested()) );
+    connect( m_base->typeEdit, SIGNAL( textChanged ( const QString & ) ), this,  SLOT( slotServicetypeChanged( const QString&  ) ) );
+    slotServicetypeChanged( m_base->typeEdit->text() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 PartExplorerForm::~PartExplorerForm()
 {
+}
+
+void PartExplorerForm::slotServicetypeChanged( const QString& _text )
+{
+    enableButton( KDialogBase::User1, !_text.isEmpty() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -160,6 +167,9 @@ QString PartExplorerForm::costraints() const
 
 void PartExplorerForm::slotSearchRequested()
 {
+    if ( m_base->typeEdit->text().isEmpty() )
+        return;
+
     QString serviceType = this->serviceType(),
         costraints = this->costraints();
 

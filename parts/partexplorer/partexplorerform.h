@@ -43,6 +43,7 @@ public slots:
 
 protected slots:
     void slotSearchRequested();
+    void slotServicetypeChanged( const QString& );
 
 private:
     ResultsList *m_resultsList;
