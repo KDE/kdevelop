@@ -471,6 +471,7 @@ enum lineStarts
   START_Stop  = 1886352467,
   START__no_  = 544173608,
   START_curr  = 1920103779,
+  START_Curr  = 1920103747,
   START_Watc  = 1668571479,
   START_Sing  = 1735289171,
   START_No_s  = 1931505486,
@@ -484,7 +485,7 @@ enum lineStarts
 // int. Hence those big numbers you see above.
 void GDBController::parseLine(char* buf)
 {
-  //int t=*(int*)(char*)"Temp";
+//  int t=*(int*)(char*)"Curr";
 
   ASSERT(*buf != BLOCK_START);
 
@@ -573,6 +574,15 @@ void GDBController::parseLine(char* buf)
       break;
     }
 
+    case START_Curr:
+    {
+      if ( strncmp(buf, "Current language:", 17)==0)
+      {
+        DBG_DISPLAY("Parsed (START_Curr)<ignored><" + QString(buf) + ">");
+        break;
+      }
+    }
+
     // When the watchpoint variable goes out of scope the program stops
     // and tells you. (sometimes)
     case START_Watc:
@@ -616,21 +626,22 @@ void GDBController::parseLine(char* buf)
       {
         // When it's a library event, we try and set any pending
         // breakpoints, and that done, just continue onwards.
-        setStateOff(s_appBusy);
-        setStateOn(s_silent);
-        bool restart =  currentCmd_ && (
-                          currentCmd_->rawDbgCommand() == "run" ||
-                          currentCmd_->rawDbgCommand() == "continue");
+        // HOWEVER, this only applies when we did a "run" or a
+        // "continue" otherwise the program will just keep going
+        // on a "step" type command, in this situation and that's
+        // REALLY wrong.
         DBG_DISPLAY("Parsed (sh.lib) <" + QString(buf) + ">");
-        emit acceptPendingBPs();
-        if (restart)
-          queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
-        else
+        if (currentCmd_ && (currentCmd_->rawDbgCommand() == "run" ||
+                            currentCmd_->rawDbgCommand() == "continue"))
         {
-          setStateOff(s_silent);
-          setStateOn(s_appBusy);
-          actOnProgramPause(QString(buf));
+          setStateOn(s_silent);     // be quiet, children!!
+          setStateOff(s_appBusy);   // and stop that fiddling.
+          emit acceptPendingBPs();  // now go clean your rooms!
+          queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
         }
+        else
+          actOnProgramPause(QString(buf));
+
         break;
       }
 
@@ -1132,7 +1143,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
   connect( tty_, SIGNAL(OutOutput( const char* )), SIGNAL(ttyStdout( const char* )) );
   connect( tty_, SIGNAL(ErrOutput( const char* )), SIGNAL(ttyStderr( const char* )) );
 
-  QString tty(tty_->getMainTTY());
+  QString tty(tty_->getSlave());
   if (tty.isEmpty())
   {
     KMsgBox::message(0, i18n("Error"), i18n("tty not set, so gdb cannot start\n\ncheck the settings on /dev/tty*\nand /dev/pty*"),
