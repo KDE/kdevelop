@@ -157,6 +157,25 @@ void KDlgPropertyBase::dumpColorPropCall(QTextStream *stream, QString methname,
 	}
 }
 
+void KDlgPropertyBase::dumpFontPropCall(QTextStream *stream, QString methname,
+					 QString name)
+{
+    if (getPropValue(name) != "")
+	{
+	    QFont font = KDlgItemsGetFont(getPropValue(name));
+	    QString contents = "QFont(";
+	    contents += "\"" + QString(font.family()) +"\"";
+	    contents += ", ";
+	    contents += QString().setNum(font.pointSize());
+	    contents += ", ";
+	    contents += QString().setNum(font.weight());
+	    if(font.italic())
+	    contents += "true)";
+	    contents += ")";
+	    dumpPropCall(stream, methname, contents);
+	}
+}
+
 
 void KDlgPropertyBase::dumpPixmapPropCall(QTextStream *stream, QString methname,
 					  QString name)
@@ -254,7 +273,7 @@ void KDlgPropertyBase::fillWithStandardEntrys()
 
   addProp("VarName",            "",             "C++ Code",       ALLOWED_VARNAME);
   //  addProp("Connections",        "",             "C++ Code",       ALLOWED_CONNECTIONS);
-  addProp("ResizeToParent",     "",             "C++ Code",       ALLOWED_BOOL);
+  //addProp("ResizeToParent",     "",             "C++ Code",       ALLOWED_BOOL);
   addProp("AcceptsDrops",       "",             "C++ Code",       ALLOWED_BOOL);
   addProp("HasFocus",           "",             "C++ Code",       ALLOWED_BOOL);
   //  addProp("FocusProxy",         "",             "C++ Code",       ALLOWED_STRING);
@@ -271,25 +290,25 @@ void KDlgPropertyBase::fillWithStandardEntrys()
   addProp("SizeIncX",           "",             "Geometry",       ALLOWED_INT);
   addProp("SizeIncY",           "",             "Geometry",       ALLOWED_INT);
 
-  addProp("BgMode",             "",             "Appearance",     ALLOWED_COMBOLIST,
-		"(not set)\n"
-		"FixedColor\n"
-		"FixedPixmap\n"
-		"NoBackground\n"	
-		"PaletteForeground\n"
-		"PaletteBackground\n"
-		"PaletteLight\n"
-		"PaletteMidlight\n"
-		"PaletteDark\n"
-		"PaletteMid\n"
-		"PaletteText\n"
-		"PaletteBase\n");
-  addProp("BgColor",            "",             "Appearance",     ALLOWED_COLOR);
-  addProp("BgPalColor",         "",             "Appearance",     ALLOWED_COLOR);
+ //  addProp("BgMode",             "",             "Appearance",     ALLOWED_COMBOLIST,
+// 	  "(not set)\n"
+// 	  "FixedColor\n"
+// 	  "FixedPixmap\n"
+// 	  "NoBackground\n"	
+// 	  "PaletteForeground\n"
+// 	  "PaletteBackground\n"
+// 	  "PaletteLight\n"
+// 	  "PaletteMidlight\n"
+// 	  "PaletteDark\n"
+// 	  "PaletteMid\n"
+// 	  "PaletteText\n"
+// 	  "PaletteBase\n");
+  //  addProp("BgColor",            "",             "Appearance",     ALLOWED_COLOR);
+  //  addProp("BgPalColor",         "",             "Appearance",     ALLOWED_COLOR);
   addProp("BgPixmap",           "",             "Appearance",     ALLOWED_FILE);
   addProp("MaskBitmap",         "",             "Appearance",     ALLOWED_FILE);
   addProp("Font",               "",             "Appearance",     ALLOWED_FONT);
-  addProp("Cursor",             "",             "Appearance",     ALLOWED_CURSOR);
+  //  addProp("Cursor",             "",             "Appearance",     ALLOWED_CURSOR);
 }
 
 

@@ -110,6 +110,8 @@ class KDlgPropertyBase
 			   QString name);
     void dumpPixmapPropCall(QTextStream *stream, QString methname,
 			    QString name);	
+    void dumpFontPropCall(QTextStream *stream, QString methname,
+					 QString name);
     /**
      * sets all entries of a propertyentry in one step.
     */

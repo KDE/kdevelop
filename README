@@ -1,7 +1,7 @@
-KDevelop 0.4
+KDevelop 1.0Beta1
 
-KDevelop will be an easy to use IDE (Intergrated Development Enviroment) for
-Unix/X11.At the moment there are only alpha-versions.
+KDevelop is an easy to use IDE (Intergrated Development Enviroment) for
+Unix/X11.
 
 KDevelop-Homepage:
 http://www.kdevelop.org
@@ -14,9 +14,9 @@ programs and libraries:
 	GNU make
 	perl 5.004
 	autoconf 2.12
-	automake 1.2
+	automake 1.4
 	Qt 1.42
-	KDE 1.1
+	KDE 1.1 or KDE 1.2
  	KDE-SDK  (optional)
 	sgmltools  (optional)
 	Glimpse 4.1 (optional)

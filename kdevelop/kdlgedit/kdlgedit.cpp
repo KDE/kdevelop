@@ -1162,7 +1162,16 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 
     ////////////////////////////////C++ Code//////////////////////////
     props->dumpBoolPropCall(stream, "setFocus", "hasFocus", false);
-  
+    //    props->dumpBoolPropCall(stream, "setAcceptsDrops", "AcceptDrops", false);
+
+    
+    if(props->getPropValue("Font") != ""){
+	if(local_includes.contains("#include <qfont.h>") == 0)
+	    local_includes.append("#include <qfont.h>");
+	props->dumpFontPropCall(stream, "setFont","Font");
+    }
+
+
     ////////////////////////////////Appearance/////////////////////////
 
     if (!props->getPropValue("BgPixmap").isEmpty())

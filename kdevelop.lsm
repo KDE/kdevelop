@@ -1,7 +1,7 @@
 Begin3
 Title:          KDevelop
-Version:        0.4
-Entered-date:   14. June 1999
+Version:        1.0Beta1
+Entered-date:   
 Description:    an IDE for X/Qt/KDE
 Keywords:       IDE, KDE, X11, Qt, development, C++
 Author:         The KDevelop Team
@@ -9,6 +9,6 @@ Maintained-by:  Sandy Meier <smeier@rz.uni-potsdam.de>
 Primary-site:   
 Home-page:      http://www.kdevelop.org
 Original-site:  
-Platform:       Linux,FreeBSD needs Qt 1.42 and KDE 1.1
+Platform:       Linux,FreeBSD needs Qt 1.42 and KDE 1.1/KDE 1.2
 Copying-policy: GNU Public License
 End
