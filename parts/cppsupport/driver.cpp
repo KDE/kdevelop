@@ -162,6 +162,17 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "YY_BREAK" );
     lexer->addSkipWord( "YY_RESTORE_YY_MORE_OFFSET" );
 
+    // gtk
+    lexer->addSkipWord( "G_BEGIN_DECLS" );
+    lexer->addSkipWord( "G_END_DECLS" );
+    lexer->addSkipWord( "G_GNUC_CONST" );
+    lexer->addSkipWord( "G_CONST_RETURN" );
+    lexer->addSkipWord( "GTKMAIN_C_VAR" );
+    lexer->addSkipWord( "GTKVAR" );
+    lexer->addSkipWord( "GDKVAR" );
+    lexer->addSkipWord( "G_GNUC_PRINTF", SkipWordAndArguments );
+
+
     // windows
     lexer->addSkipWord( "WINAPI" );
 
