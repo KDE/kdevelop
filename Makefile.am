@@ -1,8 +1,8 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = kdevelop po doc 
+SUBDIRS = doc kdevelop po 
 
-EXTRA_DIST = kdevelop.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO kdevelop.lsm kdevelop.m4 Makefile.cvs acconfig.h 
+EXTRA_DIST = AUTHORS BUGS COPYING ChangeLog FAQ INSTALL Menushortcuts.html README README.htdig TODO acconfig.h config.guess config.h.bot configure.in.in kdevelop.kdevprj kdevelop.lsm kdevelop.m4 acinclude.m4 configure.files subdirs aclocal.m4 configure.in stamp-h.in config.h.in kdevelop.kdevprj.save 
 
 ####### kdevelop will overwrite this part!!! (end)############
 # not a GNU package. You can remove this line, if 

@@ -4,8 +4,6 @@
 EXTRA_DIST = index.html index.sgml logotp3.png 
 
 ####### kdevelop will overwrite this part!!! (end)############
-EXTRA_DIST =index.sgml logotp3.png \
-            index.html
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/welcome

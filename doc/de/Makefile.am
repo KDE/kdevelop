@@ -1,3 +1,10 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+SUBDIRS = cref kde_libref manual tutorial welcome 
+
+EXTRA_DIST = tip.database 
+
+####### kdevelop will overwrite this part!!! (end)############
 EXTRA_DIST = tip.database
 
 SUBDIRS = manual welcome cref tutorial kde_libref

@@ -1,13 +1,10 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
-SUBDIRS = addendum cref kde_libref manual programming tutorial welcome 
+SUBDIRS = addendum cref kde_libref manual programming tutorial welcome about 
 
 EXTRA_DIST = tip.database 
 
 ####### kdevelop will overwrite this part!!! (end)############
-EXTRA_DIST =tip.database
-
-SUBDIRS = kde_libref manual programming tutorial cref welcome about
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/

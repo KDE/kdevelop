@@ -1,3 +1,9 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+
+EXTRA_DIST = index-1.html index-2.html index-3.html index-4.html index-5.html index-6.html index.html index.sgml logotp3.png 
+
+####### kdevelop will overwrite this part!!! (end)############
 EXTRA_DIST = index.html index-1.html index-2.html index-3.html index-4.html index-5.html index-6.html logotp3.png index.sgml
 
 install-data-local:

@@ -147,7 +147,14 @@ sub processDir($)
         # Note: this restricts the subdir line as well.
         next if ($file =~ /^CVS$|Makefile|^\.|\.lo$|\.closure$|\.o$|\.a$|\.la$|\.P$|\.moc$|\.moc\.(.*)$|meta_unload.cpp$/);
 
-        push @subdirs, $file, next  if (-d $file);
+        if (-d "$reldir$file")
+        {
+            push @subdirs, $file;
+            print STDERR  "<$file> is a dir\n"    if  ($debug);
+            next;
+        }
+
+        print STDERR  "<$file>\n"    if ($debug);
 
         if ($file =~ /^$binfile$/)
         {

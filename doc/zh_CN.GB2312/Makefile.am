@@ -1,3 +1,10 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+SUBDIRS = manual tutorial welcome 
+
+EXTRA_DIST = tip.database 
+
+####### kdevelop will overwrite this part!!! (end)############
 EXTRA_DIST = tip.database
 SUBDIRS = welcome tutorial manual
 

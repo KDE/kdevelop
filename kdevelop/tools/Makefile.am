@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 
 
-EXTRA_DIST = kdevdlg2ui kimport one2two processes.pl.in processesend.pl 
+EXTRA_DIST = kdevdlg2ui kimport one2two processesend.pl processes.pl.in 
 
 ####### kdevelop will overwrite this part!!! (end)############
 

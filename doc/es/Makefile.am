@@ -1,3 +1,10 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+SUBDIRS = cref manual welcome 
+
+EXTRA_DIST = es.po tip.database 
+
+####### kdevelop will overwrite this part!!! (end)############
 EXTRA_DIST = tip.database
 
 SUBDIRS = welcome cref manual

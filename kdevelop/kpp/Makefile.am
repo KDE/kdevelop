@@ -8,8 +8,8 @@ noinst_LIBRARIES = libkpp.a
 
 libkpp_a_SOURCES = cdevproject.cpp projectView.ui prefView.ui kpp.cpp cspec.cpp 
 
-EXTRA_DIST = README buildrpm.sh cspec.cpp cspec.h kpp.cpp kpp.h prefView.ui projectView.ui template.spec cdevproject.cpp cdevproject.h template-make.spec template-kde.spec 
 
+EXTRA_DIST = README buildrpm.sh cspec.cpp cspec.h kpp.cpp kpp.h prefView.ui projectView.ui template.spec cdevproject.cpp cdevproject.h template-kde.spec template-make.spec 
 
 ####### kdevelop will overwrite this part!!! (end)############
 

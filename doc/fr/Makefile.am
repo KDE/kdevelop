@@ -1,6 +1,10 @@
-SUBDIRS = tutorial welcome programming
+####### kdevelop will overwrite this part!!! (begin)##########
 
-EXTRA_DIST = tip.database
+SUBDIRS = programming tutorial welcome 
+
+EXTRA_DIST = tip.database 
+
+####### kdevelop will overwrite this part!!! (end)############
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/fr/kdevelop/

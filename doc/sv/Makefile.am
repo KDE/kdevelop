@@ -1,3 +1,9 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+
+
+EXTRA_DIST = tip.database 
+
+####### kdevelop will overwrite this part!!! (end)############
 EXTRA_DIST = tip.database
 
 

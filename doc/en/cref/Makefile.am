@@ -4,7 +4,6 @@
 EXTRA_DIST = index.html 
 
 ####### kdevelop will overwrite this part!!! (end)############
-EXTRA_DIST =index.html
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop/reference/C/
