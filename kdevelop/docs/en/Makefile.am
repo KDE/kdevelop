@@ -143,7 +143,7 @@ install-data-local:
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/cref.html
 	-rm -f $(kde_htmldir)/en/kdevelop/tipdatabase	
-	-rm -f $(kde_htmldir)/en/kdevelop/logotp3.gif
+	-rm -f $(kde_htmldir)/en/kdevelop/logotp3.png
 	-rm -f $(kde_htmldir)/en/kdevelop/index.html
 	-rm -f $(kde_htmldir)/en/kdevelop/index-1.html
 	-rm -f $(kde_htmldir)/en/kdevelop/index-2.html

@@ -89,12 +89,12 @@ dist=true
 install=false
 type=DATA
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/smeier/devel/kdevelop/kdevelop/main.cpp,/home/smeier/devel/kdevelop/kdevelop/caddclassattributedlg.h,/home/smeier/devel/kdevelop/kdevelop/cmakemanualdlg.cpp,/usr/lib/qt/include/qbuttongroup.h,/home/smeier/devel/kdevelop/kdevelop/cmakemanualdlg.h,/home/smeier/devel/kdevelop/kdevelop/cdoctreepropdlg.cpp,/home/smeier/devel/kdevelop/kdevelop/ckdevelop_project.cpp,/home/smeier/devel/kdevelop/kdevelop/ckappwizard.h,/home/smeier/devel/kdevelop/kdevelop/cprjoptionsdlg.cpp,/home/smeier/devel/kdevelop/kdevelop/ckappwizard.cpp,/home/smeier/devel/kdevelop/kdevelop/tools/processes.pl.in,/home/smeier/devel/kdevelop/kdevelop/ckdevelop.cpp,/opt/kde/include/kmsgbox.h,/home/smeier/devel/kdevelop/kdevelop/caddclassmethoddlg.h,/home/smeier/devel/kdevelop/kdevelop/cbugreportdlg.h,/home/smeier/devel/kdevelop/kdevelop/cclasstooldlg.h,/home/smeier/devel/kdevelop/kdevelop/cclasstooltreeview.h,/home/smeier/devel/kdevelop/kdevelop/cclasstreehandler.h,/home/smeier/devel/kdevelop/kdevelop/cclassview.h,/home/smeier/devel/kdevelop/kdevelop/ccreatedocdatabasedlg.h,/home/smeier/devel/kdevelop/kdevelop/cdocbrowser.h,/home/smeier/devel/kdevelop/kdevelop/clogfileview.h,/home/smeier/devel/kdevelop/ChangeLog,
+openfiles=Unbenannt.h,Unbenannt.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/kdevelop/classparser/PersistantClassStore.h,/home/rnolden/Development/kdevelop/kdevelop/classparser/ClassStore.cc,/home/rnolden/Development/kdevelop/kdevelop/classparser/PersistantClassStore.cc,
 show_outputview=true
 show_treeview=true
-header_file=/home/smeier/devel/kdevelop/ChangeLog
-cpp_file=Unbenannt.cpp
-browser_file=file:/usr/lib/qt/doc/html/qwidget.html#l0
+header_file=/home/rnolden/Development/kdevelop/kdevelop/classparser/PersistantClassStore.h
+cpp_file=/home/rnolden/Development/kdevelop/kdevelop/classparser/ClassStore.cc
+browser_file=file:/opt/kde/share/doc/HTML/default/kdevelop/kde_libref.html
 [kdevelop/print/cprintdlg.cpp]
 install_location=
 dist=true
@@ -1673,10 +1673,11 @@ makefiles=Makefile.am,kdevelop/Makefile.am,kdevelop/docs/Makefile.am,kdevelop/do
 project_type=normal_empty
 author=The KDevelop Team
 sub_dir=kdevelop/
-lfv_open_groups=SGML Sources,
+lfv_open_groups=SGML Sources,Others,
 workspace=1
 project_name=KDevelop
 version=0.4
+sgml_file=/home/rnolden/Development/kdevelop/kdevelop/docs/de/programming.sgml
 email=
 kdevprj_version=0.3
 [kdevelop/ccvaddfolderdlg.cpp]
