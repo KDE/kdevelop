@@ -27,7 +27,6 @@
 
 #include "kdevplugin.h"
 #include "kdevpartcontroller.h"
-#include "kdevapi.h"
 #include "kdevcore.h"
 #include "kdevversioncontrol.h"
 

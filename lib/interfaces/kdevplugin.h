@@ -23,8 +23,8 @@
 #include <qobject.h>
 #include <qvaluelist.h>
 #include <kxmlguiclient.h>
+#include "kdevapi.h"
 
-class KDevApi;
 class KDevCore;
 class KDevProject;
 class KDevVersionControl;
@@ -233,6 +233,7 @@ public:
     * @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
     * @return a KDevelop extension plugin for given service type or 0 if no plugin supports it
     */
+    
     template <class Extension>
     Extension *extension(const QString &serviceType)
     {
