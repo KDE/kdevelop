@@ -27,9 +27,9 @@
 #include <qfileinfo.h>
 #include <ktabctl.h>
 #include <qregexp.h>
+#include <qevent.h>
+#include <qtoolbar.h>
 #include <qclipboard.h>
-
-
 #include "ckdevsetupdlg.h"
 #include "ckdevelop.h"
 #include "cupdatekdedocdlg.h"
@@ -37,7 +37,6 @@
 #include "./kwrite/kwdoc.h"
 #include "ccreatedocdatabasedlg.h"
 #include "ctoolclass.h"
-#include "cprintdlg.h"
 #include "debug.h"
 #include "kswallow.h"
 #include "cdocbrowser.h"
@@ -258,11 +257,25 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
-  
   CPrintDlg* printerdlg = new CPrintDlg(this, "suzus");
   printerdlg->resize(600,480);
   printerdlg->exec(); 
+  delete (printerdlg);
 }
+
+// void CKDevelop::mousePressEvent(QMouseEvent* event){
+//   if(event->button() == RightButton){
+//     cout << "hallo" << endl;
+//   }
+//   else {
+//     CPrintDlg* printerdlg = new CPrintDlg(this, "suzus");
+//     printerdlg->resize(600,480);
+//     printerdlg->exec(); 
+//     delete (printerdlg);
+//   }
+//   QToolBar::mousePressEvent(event);
+// }
+
 void CKDevelop::slotSCurrentTab(int item){
   s_tab_view->setCurrentTab(item);
 }
@@ -522,6 +535,21 @@ void CKDevelop::slotOptionsKeys(){
   if( KKeyDialog::configureKeys( accel ) ) {
   }
 }
+
+void CKDevelop::slotOptionsConfigureEnscript(){
+  printconf = new CConfigPrintDlg(this, "confdialog",2);
+  printconf->resize(610,510);
+  printconf->exec();  
+  delete (printconf);
+}
+
+void CKDevelop::slotOptionsConfigureA2ps(){
+  printconf = new CConfigPrintDlg(this, "confdialog",1);
+  printconf->resize(610,510);
+  printconf->exec(); 
+  delete (printconf);
+}
+
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
   slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
   cpp_widget->hlDef();

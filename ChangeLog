@@ -4,6 +4,10 @@
 	* added "file not found!" msgbox to the doc-browser
 	* added better integration of KIconedit, accessable via LFV
 	
+1999-02-20  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* implemented the defaultbutton ( it works :-) )
+	* added the printconfigure entry in the options menu
+
 1999-02-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* remove the sh-scripts "autoconfsuite","cleanrebuildall","rebuildmakefiles" and
 	replaced it with a C++ solution

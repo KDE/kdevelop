@@ -169,7 +169,6 @@ void CPrintDlg::init(){
   qtarch_ButtonGroup_4->setTitle(i18n( "Default printsettings" ));
   qtarch_ButtonGroup_4->setAlignment( 1 );
   
-  //QButtonGroup* qtarch_ButtonGroup_3;
   qtarch_ButtonGroup_3 = new QButtonGroup( printwidget, "ButtonGroup_3" );
   qtarch_ButtonGroup_3->setGeometry( 170, 280, 140, 60 );
   qtarch_ButtonGroup_3->setMinimumSize( 0, 0 );
@@ -378,6 +377,7 @@ void CPrintDlg::init(){
   pageSide->setInsertionPolicy( QComboBox::NoInsertion );
   pageSide->setSizeLimit( 10 );
   pageSide->setAutoResize( FALSE );
+  pageSide->insertItem(i18n("all"));
   pageSide->insertItem(i18n("odd"));
   pageSide->insertItem(i18n("even"));
   pageSide->insertItem(i18n("first half"));
@@ -461,6 +461,7 @@ void CPrintDlg::init(){
   prettyCombBox->insertItem( "Tcl" );
   prettyCombBox->insertItem( "Verilog" );
   prettyCombBox->insertItem( "VHDLt" );
+  prettyCombBox->setCurrentItem(2);
   
   mediaCombBox = new QComboBox( FALSE, printwidget, "mediaCombBox" );
   mediaCombBox->setGeometry( 30, 300, 120, 30 );
@@ -524,16 +525,19 @@ void CPrintDlg::slotProgramActivated(int i) {
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
-	if (!(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("a2ps default"))) || 
+	    !(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
 	  defaultCombBox->removeItem(a);
 	  a--;
 	  j--;
 	}
-	if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter")))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter"))) ||
+	    !(strcmp(defaultCombBox->text(a),i18n("enscript default")))) {
 	  state++;
 	}
       }
       if (state == 0) {
+      defaultCombBox->insertItem(i18n("enscript default"));
       defaultCombBox->insertItem(i18n("lineprinter"));
       }
     }
@@ -551,16 +555,19 @@ void CPrintDlg::slotProgramActivated(int i) {
       int j =defaultCombBox->count();
       int state=0;
       for (int a=0;a<j;a++) {
-	if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter")))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("lineprinter"))) || 
+	    !(strcmp(defaultCombBox->text(a),i18n("enscript default")))) {
 	  defaultCombBox->removeItem(a);
 	  a--;
 	  j--;
 	}
-	if (!(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
+	if (!(strcmp(defaultCombBox->text(a),i18n("unix manual output"))) ||
+	    !(strcmp(defaultCombBox->text(a),i18n("unix manual output")))) {
 	  state++;
 	}
       }
       if (state == 0) {
+      defaultCombBox->insertItem(i18n("a2ps default"));
       defaultCombBox->insertItem(i18n("unix manual output"));
       }
     }
@@ -615,9 +622,6 @@ void CPrintDlg::slotPrintingConfClicked() {
       printconf = new CConfigPrintDlg(this, "confdialog",2);
     }
   printconf->resize(610,510);
-  printconf->setCancelButton();
-  printconf->setDefaultButton();
-  printconf->setApplyButton(i18n("Preview"));
   printconf->exec(); 
 }
 

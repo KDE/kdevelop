@@ -59,7 +59,7 @@ class KSwallowWidget;
 #include "cdoctree.h"
 #include "structdef.h"
 #include "resource.h"
-
+#include "cprintdlg.h"
 
 /** the mainclass in kdevelop
   *@author Sandy Meier
@@ -184,6 +184,8 @@ public:
   void slotOptionsSyntaxHighlightingDefaults();
   void slotOptionsSyntaxHighlighting();
   void slotOptionsKeys();
+  void slotOptionsConfigureEnscript();
+  void slotOptionsConfigureA2ps();
   /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
   void slotOptionsDocBrowser();
@@ -270,6 +272,7 @@ public:
   
 protected:
   virtual void closeEvent(QCloseEvent* e);
+  //  void mousePressEvent(QMouseEvent* event);
  
 private:
   //the menus
@@ -350,6 +353,9 @@ private:
   // values are "run","make" "refresh";
   QString next_job;
   QString make_cmd;
+
+  CConfigPrintDlg* printconf;
+
   enum {TOOLBAR_CLASS_CHOICE,TOOLBAR_METHOD_CHOICE};
 };
 

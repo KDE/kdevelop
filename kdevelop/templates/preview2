@@ -24,27 +24,26 @@
 
 #include <qtabdialog.h>
 #include <qdialog.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
+#include <qchkbox.h>
+#include <qlined.h>
+#include <qcombo.h>
 #include <qdialog.h>
-#include <qcheckbox.h>
+#include <qchkbox.h>
 #include <qspinbox.h>
-#include <qcombobox.h>
+#include <qcombo.h>
 #include <qdialog.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <qchkbox.h>
+#include <qcombo.h>
 #include <qdialog.h>
-#include <qcheckbox.h>
-#include <qlineedit.h>
+#include <qchkbox.h>
+#include <qlined.h>
 #include <qspinbox.h>
-#include <qcombobox.h>
-#include <qpushbutton.h>
+#include <qcombo.h>
+#include <qpushbt.h>
 #include <qlabel.h>
 #include <kfontdialog.h>
 #include <qfont.h>
 #include <qfontinfo.h>
-#include <kprocess.h>
 
 class CConfigPrintDlg : public QTabDialog {
   Q_OBJECT
@@ -91,8 +90,6 @@ public slots:
  void slotNumberingPages1Clicked();
  void slotCurrentAmpmClicked(int);
  void slotModificationAmpmClicked(int);
- void slotPreviewClicked();
- void slotCreateParameters();
 
 protected:
     QCheckBox* headerButton;
@@ -208,8 +205,6 @@ protected:
 
     KFontDialog* fontDialog;
     QString parameters,globalpara,leftstr,middlestr,rightstr,headerstr;
-    QPushButton* previewButton;
-    KProcess *process,*process2,*process3;
 };
 
 #endif // CCONFIGPRINTDLG

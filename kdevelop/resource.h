@@ -136,6 +136,9 @@
 #define ID_OPTIONS_SYNTAX_HIGHLIGHTING 	  	     16030
 
 #define ID_OPTIONS_KEYS               	  	     16035
+#define ID_OPTIONS_PRINT                             16037
+#define ID_OPTIONS_A2PS                              16038
+#define ID_OPTIONS_ENSCRIPT                          16039
 #define ID_OPTIONS_KDEVELOP  			     16040
 #define ID_OPTIONS_DOCBROWSER			               16050
 

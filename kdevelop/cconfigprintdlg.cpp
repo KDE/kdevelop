@@ -19,15 +19,19 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <kapp.h>
+#include <iostream.h>
 
-CConfigPrintDlg::CConfigPrintDlg(QWidget* parent,const char* name,int prog) : QTabDialog(parent, name, true){
+CConfigPrintDlg::CConfigPrintDlg(QWidget* parent,const char* name,int program) : QTabDialog(parent, name, true){
+  prog = program;
   init(prog);
   if (prog==1) {
       slotHeader1Clicked();
+      slotDefault1Clicked();
   }
   else {
       slotHeader2Clicked();
       slotUnderlayButtonClicked();
+      slotDefault2Clicked();
   }
 }
 
@@ -35,6 +39,9 @@ CConfigPrintDlg::~CConfigPrintDlg(){
 }
 
 void CConfigPrintDlg::init(int prog) {
+  previewButton = new QPushButton(i18n("Preview"),this,"hallo");
+  previewButton->setGeometry(5,478,100,26);
+  connect (previewButton,SIGNAL(clicked()),SLOT(slotPreviewClicked()));
   QWidget *tab1 = new QWidget(this,"header");
   initTab1(tab1,prog);
   addTab (tab1,i18n("Header"));
@@ -47,18 +54,35 @@ void CConfigPrintDlg::init(int prog) {
   QWidget *tab4 = new QWidget(this,"underlay");
   initTab4(tab4,prog);
   addTab (tab4,i18n("Underlay"));
+  selectedProgram(prog);
+  setCancelButton();
+  setDefaultButton();
+  if (prog==1) {
+    connect(this,SIGNAL(defaultButtonPressed()),SLOT(slotDefault1Clicked()));
+  }
+  else {
+    connect(this,SIGNAL(defaultButtonPressed()),SLOT(slotDefault2Clicked()));
+  }
+  connect (this,SIGNAL(applyButtonPressed()),SLOT(slotOkClicked()));
+}
+void CConfigPrintDlg::selectedProgram(int prog) {
   if (prog==1) {
     interpretButton->setEnabled(true);
+    interpretButton->setChecked(false);
     replaceButton->setEnabled(true);
+    replaceButton->setChecked(false);
     printAsISOLatin->setEnabled(true);
+    printAsISOLatin->setChecked(false);
     boltFontButton->setEnabled(true);
-    a2psFontButton->setEnabled(true);
+    boltFontButton->setChecked(false);
+    a2psFontSize->setEnabled(true);
     qtarch_Label_3->setEnabled(true);
     qtarch_ButtonGroup_51->setEnabled(false);
     qtarch_ButtonGroup_52->setEnabled(false);
     qtarch_Label_14->setEnabled(false);
     qtarch_ButtonGroup_53->setEnabled(false);
     tocButton->setEnabled(false);
+    tocButton->setChecked(false);
     markedWrappedLinesButton->setEnabled(false);
     valueForWrappedLine->setEnabled(false);
     cycleOfChange->setEnabled(false);
@@ -132,13 +156,16 @@ void CConfigPrintDlg::init(int prog) {
     modificationTimeFormat->setEnabled(false);
     modificationDatePosition->setEnabled(false);
     currentDateFormat->setEnabled(false);
+    alignFileList->setEnabled(false);
+    qtarch_Label_8->setEnabled(false);
   }
   else {
     interpretButton->setEnabled(false);
-    replaceButton->setEnabled(false);
+    replaceButton->setEnabled(true);
+    replaceButton->setChecked(false);
     printAsISOLatin->setEnabled(false);
     boltFontButton->setEnabled(false);
-    a2psFontButton->setEnabled(false);
+    a2psFontSize->setEnabled(false);
     qtarch_Label_3->setEnabled(false);
     qtarch_ButtonGroup_51->setEnabled(true);
     qtarch_ButtonGroup_52->setEnabled(true);
@@ -838,6 +865,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	currentTimeAmpm->setAutoResize( FALSE );
 	currentTimeAmpm->insertItem( "am/pm" );
 	currentTimeAmpm->insertItem( "24 h" );
+	connect(currentTimeAmpm,SIGNAL(activated(int)),SLOT(slotCurrentAmpmClicked(int)));
 
 	modificationDateFormat = new QComboBox( FALSE, parent, "modificationDateFormat" );
 	modificationDateFormat->setGeometry( 430, 160, 130, 30 );
@@ -880,6 +908,7 @@ void CConfigPrintDlg::initTab2(QWidget*parent, int prog) {
 	modificationTimeAmpm->setAutoResize( FALSE );
 	modificationTimeAmpm->insertItem( "am/pm" );
 	modificationTimeAmpm->insertItem( "24 h" );
+	connect(modificationTimeAmpm,SIGNAL(activated(int)),SLOT(slotModificationAmpmClicked(int)));
 
 	currentTimeFormat = new QComboBox( FALSE, parent, "currentTimeFormat" );
 	currentTimeFormat->setGeometry( 430, 270, 130, 30 );
@@ -1106,8 +1135,13 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	numberingPagesButton->setText(i18n("numbering pages") );
 	numberingPagesButton->setAutoRepeat( FALSE );
 	numberingPagesButton->setAutoResize( FALSE );
+	if (prog==1) {
+	  connect(numberingPagesButton,SIGNAL(clicked()),SLOT(slotNumberingPages1Clicked()));
+	}
+	else {
+	  connect(numberingPagesButton,SIGNAL(clicked()),SLOT(slotNumberingPages2Clicked()));
+	}
 
-	QLabel* qtarch_Label_8;
 	qtarch_Label_8 = new QLabel( parent, "Label_8" );
 	qtarch_Label_8->setGeometry( 30, 100, 110, 30 );
 	qtarch_Label_8->setMinimumSize( 0, 0 );
@@ -1116,7 +1150,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_8->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_8->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_8->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_8->setText(i18n("characters per line") );
+	qtarch_Label_8->setText(i18n("align files") );
 	qtarch_Label_8->setAlignment( 289 );
 	qtarch_Label_8->setMargin( -1 );
 
@@ -1149,22 +1183,18 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	linesPerPage->setSpecialValueText( "" );
 	linesPerPage->setWrapping( FALSE );
 
-	characterPerLine = new QSpinBox( parent, "characterPerLine" );
-	characterPerLine->setGeometry( 160, 100, 120, 30 );
-	characterPerLine->setMinimumSize( 0, 0 );
-	characterPerLine->setMaximumSize( 32767, 32767 );
-	characterPerLine->setFocusPolicy( QWidget::StrongFocus );
-	characterPerLine->setBackgroundMode( QWidget::PaletteBackground );
-	characterPerLine->setFontPropagation( QWidget::NoChildren );
-	characterPerLine->setPalettePropagation( QWidget::NoChildren );
-	characterPerLine->setFrameStyle( 50 );
-	characterPerLine->setLineWidth( 2 );
-	characterPerLine->setRange( 0, 99 );
-	characterPerLine->setSteps( 1, 0 );
-	characterPerLine->setPrefix( "" );
-	characterPerLine->setSuffix( "" );
-	characterPerLine->setSpecialValueText( "" );
-	characterPerLine->setWrapping( FALSE );
+	alignFileList = new QComboBox( FALSE, parent, "alignFilesLine" );
+	alignFileList->setGeometry( 160, 100, 120, 30 );
+	alignFileList->setMinimumSize( 0, 0 );
+	alignFileList->setMaximumSize( 32767, 32767 );
+	alignFileList->setFocusPolicy( QWidget::StrongFocus );
+	alignFileList->setBackgroundMode( QWidget::PaletteBackground );
+	alignFileList->setFontPropagation( QWidget::NoChildren );
+	alignFileList->setPalettePropagation( QWidget::NoChildren );
+	alignFileList->setSizeLimit( 10 );
+	alignFileList->setAutoResize( FALSE );
+	alignFileList->insertItem( "yes" );
+	alignFileList->insertItem( "no" );
 
 	valueForWrappedLine = new QComboBox( FALSE, parent, "valueForWrappedLine" );
 	valueForWrappedLine->setGeometry( 180, 370, 90, 30 );
@@ -1176,9 +1206,9 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	valueForWrappedLine->setPalettePropagation( QWidget::NoChildren );
 	valueForWrappedLine->setSizeLimit( 10 );
 	valueForWrappedLine->setAutoResize( FALSE );
-	valueForWrappedLine->insertItem( "black box" );
+	valueForWrappedLine->insertItem( "box" );
 	valueForWrappedLine->insertItem( "arrow" );
-	valueForWrappedLine->insertItem( "plus (+)" );
+	valueForWrappedLine->insertItem( "plus" );
 	valueForWrappedLine->insertItem( "none" );
 
 	cycleOfChange = new QSpinBox( parent, "cycleOfChange" );
@@ -1220,8 +1250,15 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	numberingPagesList->setPalettePropagation( QWidget::NoChildren );
 	numberingPagesList->setSizeLimit( 10 );
 	numberingPagesList->setAutoResize( FALSE );
-	numberingPagesList->insertItem( "files single" );
-	numberingPagesList->insertItem( "files together" );
+	if (prog==1) {
+	  numberingPagesList->insertItem( "files single" );
+	  numberingPagesList->insertItem( "files together" );
+	}
+	else {
+	  numberingPagesList->insertItem( "left" );
+	  numberingPagesList->insertItem( "center" );
+	  numberingPagesList->insertItem( "right" );
+	}
 
 	highlightBarsButton = new QCheckBox( parent, "highlightBarsButton" );
 	highlightBarsButton->setGeometry( 40, 250, 100, 30 );
@@ -1320,7 +1357,7 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	qtarch_Label_3->setBackgroundMode( QWidget::PaletteBackground );
 	qtarch_Label_3->setFontPropagation( QWidget::NoChildren );
 	qtarch_Label_3->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_3->setText( i18n("font for a2ps") );
+	qtarch_Label_3->setText( i18n("fontsize for a2ps") );
         qtarch_Label_3->setAlignment( 289 );
 	qtarch_Label_3->setMargin( -1 );
 
@@ -1365,18 +1402,22 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	setTabSize->setSpecialValueText( "" );
 	setTabSize->setWrapping( FALSE );
 
-	a2psFontButton = new QPushButton( parent, "a2psFontButton" );
-	a2psFontButton->setGeometry( 430, 300, 140, 30 );
-	a2psFontButton->setMinimumSize( 0, 0 );
-	a2psFontButton->setMaximumSize( 32767, 32767 );
-	a2psFontButton->setFocusPolicy( QWidget::TabFocus );
-	a2psFontButton->setBackgroundMode( QWidget::PaletteBackground );
-	a2psFontButton->setFontPropagation( QWidget::NoChildren );
-	a2psFontButton->setPalettePropagation( QWidget::NoChildren );
-	a2psFontButton->setText( "" );
-	a2psFontButton->setAutoRepeat( FALSE );
-	a2psFontButton->setAutoResize( FALSE );
-	connect (a2psFontButton,SIGNAL(clicked()),SLOT(slotFontA2psClicked()));
+	a2psFontSize = new QSpinBox( parent, "a2psFontSize" );
+	a2psFontSize->setGeometry( 430, 300, 140, 30 );
+	a2psFontSize->setMinimumSize( 0, 0 );
+	a2psFontSize->setMaximumSize( 32767, 32767 );
+	a2psFontSize->setFocusPolicy( QWidget::StrongFocus );
+	a2psFontSize->setBackgroundMode( QWidget::PaletteBackground );
+	a2psFontSize->setFontPropagation( QWidget::NoChildren );
+	a2psFontSize->setPalettePropagation( QWidget::NoChildren );
+	a2psFontSize->setFrameStyle( 50 );
+	a2psFontSize->setLineWidth( 2 );
+	a2psFontSize->setRange( 2, 99 );
+	a2psFontSize->setSteps( 1, 0 );
+	a2psFontSize->setPrefix( "" );
+	a2psFontSize->setSuffix( "" );
+	a2psFontSize->setSpecialValueText( "" );
+	a2psFontSize->setWrapping( FALSE );
 
 	fontForBodyButton = new QPushButton( parent, "fontForBodyButton" );
 	fontForBodyButton->setGeometry( 430, 380, 140, 30 );
@@ -1404,7 +1445,6 @@ void CConfigPrintDlg::initTab3(QWidget*parent, int prog) {
 	fontForHeaderButton->setAutoResize( FALSE );
 	connect (fontForHeaderButton,SIGNAL(clicked()),SLOT(slotFontHeaderClicked()));
 
-	qtarch_ButtonGroup_20->insert( a2psFontButton );
 	qtarch_ButtonGroup_20->insert( fontForBodyButton );
 	qtarch_ButtonGroup_20->insert( fontForHeaderButton );
 	qtarch_ButtonGroup_21->insert( interpretButton );
@@ -1632,7 +1672,7 @@ void CConfigPrintDlg::initTab4(QWidget*parent, int prog) {
 	underlayYPosition->setWrapping( FALSE );
 
 	qtarch_Label_74 = new QLabel( parent, "Label_74" );
-	qtarch_Label_74->setGeometry( 30, 380, 120, 30 );
+	qtarch_Label_74->setGeometry( 30, 380, 150, 30 );
 	qtarch_Label_74->setMinimumSize( 0, 0 );
 	qtarch_Label_74->setMaximumSize( 32767, 32767 );
 	qtarch_Label_74->setFocusPolicy( QWidget::NoFocus );
@@ -1767,14 +1807,6 @@ void CConfigPrintDlg::slotHeader1Clicked() {
 
 void CConfigPrintDlg::slotHeader2Clicked() {
     if (headerButton->isChecked()) {
-	slotHeadertext2Clicked();
-	slotLoginClicked();
-	slotFilenameClicked();
-	slotHostnameClicked();
-	slotCurrentDate2Clicked();
-	slotCurrentTime2Clicked();
-	slotModiDateClicked();
-	slotModiTimeClicked();
 	loginButton->setEnabled(true);
 	headertextButton->setEnabled(true);
 	filenameLine->setEnabled(true);
@@ -1785,6 +1817,14 @@ void CConfigPrintDlg::slotHeader2Clicked() {
 	fancyHeaderButton->setEnabled(true);
 	hostnameButton->setEnabled(true);
 	fontForHeaderButton->setEnabled(true);
+	slotHeadertext2Clicked();
+	slotLoginClicked();
+	slotFilenameClicked();
+	slotHostnameClicked();
+	slotCurrentDate2Clicked();
+	slotCurrentTime2Clicked();
+	slotModiDateClicked();
+	slotModiTimeClicked();
 	qtarch_ButtonGroup_59->setEnabled(true);
 	qtarch_ButtonGroup_61->setEnabled(true);
 	qtarch_ButtonGroup_62->setEnabled(true);
@@ -1956,7 +1996,12 @@ void CConfigPrintDlg::slotCurrentTime2Clicked() {
 	qtarch_ButtonGroup_89->setEnabled(true);
 	currentTimeAmpm->setEnabled(true);
 	currentTimePosition->setEnabled(true);
-	currentTimeFormat->setEnabled(true);
+	if (currentTimeAmpm->currentItem()==0) {
+	  currentTimeFormat->setEnabled(false);
+	} 
+	else {
+	  currentTimeFormat->setEnabled(true);
+	}
     }
     else {
 	qtarch_ButtonGroup_90->setEnabled(false);
@@ -1997,7 +2042,12 @@ void CConfigPrintDlg::slotModiTimeClicked() {
 	qtarch_ButtonGroup_87->setEnabled(true);
 	modificationTimeAmpm->setEnabled(true);
 	modificationTimePosition->setEnabled(true);
+	if (modificationTimeAmpm->currentItem()==0) {
+	  modificationTimeFormat->setEnabled(false);
+	} 
+	else {
 	modificationTimeFormat->setEnabled(true);
+	}
     }
     else {
 	qtarch_ButtonGroup_87->setEnabled(false);
@@ -2013,7 +2063,8 @@ void CConfigPrintDlg::slotCutLinesClicked() {
     if (cutLinesButton->isChecked()) {
 	qtarch_ButtonGroup_53->setEnabled(false);
 	markedWrappedLinesButton->setEnabled(false);
-	slotWrappedLinesClicked();
+	valueForWrappedLine->setEnabled(false);       
+	qtarch_Label_13->setEnabled(false);
     }
     else {
 	qtarch_ButtonGroup_53->setEnabled(true);
@@ -2122,48 +2173,628 @@ void CConfigPrintDlg::slotUnderlayAngleDefaultClicked() {
 
 void CConfigPrintDlg::slotFontUnderlayClicked() {
   QFont font;
-  QString string1,string2;
+  QString string1,string2,string3,string;
   int size;
   fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
   fontDialog->exec();
   font=fontDialog->font();
   string1=font.family();
+  string=string1.left(1).upper();
+  string1=string1.replace(0,1,string);
+  if (font.italic()) {
+    string3="Italic";
+  }
+  else {
+    string3="Roman";
+  }
   size=font.pointSize();
-  underlayFontButton->setText(string1+string2.setNum(size));
+  underlayFontButton->setText(string1+ "-" + string3 + string2.setNum(size));
 }
 
 void CConfigPrintDlg::slotFontBodyClicked() {
   QFont font;
-  QString string1,string2;
+  QString string1,string2,string3,string;
   int size;
   fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
   fontDialog->exec();
   font=fontDialog->font();
   string1=font.family();
+  string=string1.left(1).upper();
+  string1=string1.replace(0,1,string);
+  if (font.italic()) {
+    string3="Italic";
+  }
+  else {
+    string3="Roman";
+  }
   size=font.pointSize();
-  fontForBodyButton->setText(string1+string2.setNum(size));
+  fontForBodyButton->setText(string1+ "-" + string3 + string2.setNum(size));
 }
 
 void CConfigPrintDlg::slotFontHeaderClicked() {
   QFont font;
-  QString string1,string2;
+  QString string1,string2,string3,string;
   int size;
   fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
   fontDialog->exec();
   font=fontDialog->font();
   string1=font.family();
+  string=string1.left(1).upper();
+  string1=string1.replace(0,1,string);
+  if (font.italic()) {
+    string3="Italic";
+  }
+  else {
+    string3="Roman";
+  }
   size=font.pointSize();
-  fontForHeaderButton->setText(string1+string2.setNum(size));
+  fontForHeaderButton->setText(string1+ "-" + string3 + string2.setNum(size));
 }
 
-void CConfigPrintDlg::slotFontA2psClicked() {
-  QFont font;
-  QString string1,string2;
-  int size;
-  fontDialog = new KFontDialog(this,"Fontdialog",TRUE);
-  fontDialog->exec();
-  font=fontDialog->font();
-  string1=font.family();
-  size=font.pointSize();
-  a2psFontButton->setText(string1+string2.setNum(size));
+void CConfigPrintDlg::slotDefaultClicked() {
+  headerButton->setChecked(true);
+  headertextButton->setChecked(false);
+  fancyHeaderButton->setChecked(false);
+  headertextLine->clear();
+  headertextPosition->setCurrentItem(0);
+  loginPosition->setCurrentItem(0);
+  filenameSize->setCurrentItem(0);
+  filenamePosition->setCurrentItem(0);
+  hostnameButton->setChecked(false),
+  hostnamePosition->setCurrentItem(0);
+  hostnameSize->setCurrentItem(0);
+  loginButton->setChecked(false);
+  currentTimeButton->setChecked(true);
+  currentDateButton->setChecked(true);
+  currentTimePosition->setCurrentItem(2);
+  currentDatePosition->setCurrentItem(2);
+  currentTimeAmpm->setCurrentItem(1);
+  currentTimeFormat->setCurrentItem(0);
+  currentDateFormat->setCurrentItem(0);
+  modificationTimeButton->setChecked(false);
+  modificationDateButton->setChecked(false);
+  modificationTimePosition->setCurrentItem(0);
+  modificationDatePosition->setCurrentItem(0);
+  modificationTimeAmpm->setCurrentItem(0);
+  modificationTimeFormat->setCurrentItem(0);
+  modificationDateFormat->setCurrentItem(0);
+  numberingLineButton->setChecked(false);
+  bordersButton->setChecked(true);
+  numberingPagesButton->setChecked(true);
+  numberingPagesList->setCurrentItem(0);
+  tocButton->setChecked(false);
+  highlightBarsButton->setChecked(false);
+  markedWrappedLinesButton->setChecked(true);
+  valueForWrappedLine->setCurrentItem(1);
+  setTabSize->setValue(8);
+  a2psFontSize->setValue(9);
+  linesPerPage->setValue(60);
+  cycleOfChange->setValue(1);
+  cutLinesButton->setChecked(false);
+  printAsISOLatin->setChecked(false);
+  boltFontButton->setChecked(false);
+  fontForBodyButton->setText("Times-Roman10");
+  fontForHeaderButton->setText("Times-Roman10");
+  underlayFontButton->setText("Times-Roman10");
+  underlayPositionDefaultButton->setChecked(true);
+  underlayAngleDefault->setChecked(true);
+  filenameLine->setChecked(true);
+  underlayGray->setValue(8);
+  underlayButton->setChecked(false);
+  underlayXPosition->setValue(0);
+  underlayYPosition->setValue(0);
+  underlaytextLine->clear();
+  underlayAngle->setValue(0);
+  underlayStyle->setCurrentItem(0);
+  replaceButton->setChecked(false);
+  slotLoginClicked();
+}
+
+void CConfigPrintDlg::slotDefault1Clicked() {
+  selectedProgram(1);
+  slotDefaultClicked();
+  slotHeader1Clicked();
+}
+
+void CConfigPrintDlg::slotDefault2Clicked() {
+  slotDefaultClicked();
+  alignFileList->setCurrentItem(0);
+  slotUnderlayButtonClicked();
+  slotHeader2Clicked();
+  slotCutLinesClicked();
+  slotWrappedLinesClicked();
+  slotHighlightBarsClicked();
+  slotNumberingPages2Clicked();
+}
+
+void CConfigPrintDlg::slotCreateParameters() {
+  parameters = "";
+  middlestr = "";
+  leftstr = "";
+  rightstr = "";
+  headerstr = "";
+  if (prog==1) {
+    if (headerButton->isChecked()) {
+      if (headertextButton->isChecked()) {
+	globalpara.append(" -H\"");
+	globalpara.append(headertextLine->text());
+	globalpara.append("\"");
+      }
+      if (!loginButton->isChecked()) {
+	parameters.append(" -nL");
+      }
+      if (!filenameLine->isChecked()) {
+	parameters.append(" -nu");
+      }
+      if (currentTimeButton->isChecked()) {
+	parameters.append(" -d");
+      }
+      else {
+	parameters.append(" -nd");
+      }
+    }
+    else {
+      parameters.append(" -nH");
+    }
+    if (numberingLineButton->isChecked()) {
+      parameters.append(" -n");
+    }
+    else {
+      parameters.append(" -nn");
+    }
+    if (bordersButton->isChecked()) {
+      parameters.append(" -s");
+    }
+    else {
+      parameters.append(" -ns");
+    }
+    if (numberingPagesList->currentItem()==0) {
+      globalpara.append(" -r");
+    }
+    else {
+      globalpara.append(" -nr");
+    }
+    parameters.append(" -l");
+    parameters.append(linesPerPage->text());
+    if (cutLinesButton->isChecked()) {
+      globalpara.append(" -f");
+    }
+    else {
+      globalpara.append(" -nf");
+    }
+    if (interpretButton->isChecked()) {
+      globalpara.append(" -i");
+    }
+    else {
+      globalpara.append(" -ni");
+    }
+    if (replaceButton->isChecked()) {
+      globalpara.append(" -nv");
+    }
+    else {
+      globalpara.append(" -v");
+    }
+    if (printAsISOLatin->isChecked()) {
+      globalpara.append(" -8");
+    }
+    else {
+      globalpara.append(" -n8");
+    }
+    if (boltFontButton->isChecked()) {
+      parameters.append(" -b");
+    }
+    else {
+      parameters.append(" -nb");
+    }
+    globalpara.append(" -t");
+    globalpara.append(setTabSize->text());
+    parameters.append(" -F");
+    parameters.append(a2psFontSize->text());
+    globalpara.append(parameters);
+    //  cout << globalpara << endl; 
+  }
+  else {
+    globalpara = "";
+    parameters = "";
+    if (headerButton->isChecked()) {
+
+      if (headertextButton->isChecked()) {
+	if (headertextPosition->currentItem()==0) {
+	  leftstr.append("\"");
+	  leftstr.append(headertextLine->text());
+	  leftstr.append("\"");
+	}
+	else if (headertextPosition->currentItem()==1) {
+	  middlestr.append("\"");
+	  middlestr.append(headertextLine->text());
+	  middlestr.append("\"");
+	}
+	else {
+	  rightstr.append("\"");
+	  rightstr.append(headertextLine->text());
+	  rightstr.append("\"");
+	}
+      }
+      if (loginButton->isChecked()) {
+	if (loginPosition->currentItem()==0) {
+	  leftstr.append(" %n");
+	}
+	else if (loginPosition->currentItem()==1) {
+	  middlestr.append(" %n");
+	}
+	else {
+	  rightstr.append(" %n");
+	}
+      }
+      if (filenameLine->isChecked()) {
+	if (filenamePosition->currentItem()==0) {
+	  if (filenameSize->currentItem()==0) {
+	  leftstr.append(" $n");
+	  }
+	  else {
+	    leftstr.append(" $N");
+	  }
+	}
+	else if (filenamePosition->currentItem()==1) {
+	  if (filenameSize->currentItem()==0) {
+	    middlestr.append(" $n");
+	  }
+	  else {
+	    middlestr.append(" $N");
+	  }
+	}
+	else {
+	  if (filenameSize->currentItem()==0) {
+	    rightstr.append(" $n");
+	  }
+	  else {
+	    rightstr.append(" $N");
+	  }
+	}
+      }
+      if (hostnameButton->isChecked()) {
+	if (hostnamePosition->currentItem()==0) {
+	  if (hostnameSize->currentItem()==0) {
+	  leftstr.append(" %m");
+	  }
+	  else {
+	    leftstr.append(" %M");
+	  }
+	}
+	else if (hostnamePosition->currentItem()==1) {
+	  if (hostnameSize->currentItem()==0) {
+	    middlestr.append(" %m");
+	  }
+	  else {
+	    middlestr.append(" %M");
+	  }
+	}
+	else {
+	  if (hostnameSize->currentItem()==0) {
+	    rightstr.append(" %m");
+	  }
+	  else {
+	    rightstr.append(" %M");
+	  }
+	}
+      }
+
+      if (currentTimeButton->isChecked()) {
+	if (currentTimeAmpm->currentItem()==1) {
+	  if (currentTimePosition->currentItem()==0) {
+	    if (currentTimeFormat->currentItem()==0) {
+	      leftstr.append(" %*");
+	    }
+	    else {
+	      leftstr.append(" %T");
+	    }
+	  }
+	  else if (currentTimePosition->currentItem()==1) {
+	    if (currentTimeFormat->currentItem()==0) {
+	      middlestr.append(" %*");
+	    }
+	    else {
+	      middlestr.append(" %T");
+	    }
+	  }
+	  else {
+	    if (currentTimeFormat->currentItem()==0) {
+	      rightstr.append(" %*");
+	    }
+	    else {
+	      rightstr.append(" %T");
+	    }
+	  }
+	}
+	else {
+	  if (currentTimePosition->currentItem()==0) {
+	      leftstr.append(" %t");
+	  }
+	  else if (currentTimePosition->currentItem()==1) {
+	      middlestr.append(" %t");
+	  }
+	  else {
+	    if (currentTimeFormat->currentItem()==0) {
+	      rightstr.append(" %t");
+	    }
+	  }
+	}
+      }
+ 
+      if (currentDateButton->isChecked()) {
+	if (currentDatePosition->currentItem()==0) {
+	  if (currentDateFormat->currentItem()==0) {
+	    leftstr.append(" %F");
+	  }
+	  else if (currentDateFormat->currentItem()==1) {
+	    leftstr.append(" %D");
+	  }
+	  else if (currentDateFormat->currentItem()==2) {
+	    leftstr.append(" %E");
+	  }
+	  else {
+	    leftstr.append(" %W");
+	  }
+	}
+	else if (currentDatePosition->currentItem()==1) {
+	  if (currentDateFormat->currentItem()==0) {
+	    middlestr.append(" %F");
+	  }
+	  else if (currentDateFormat->currentItem()==1) {
+	    middlestr.append(" %D");
+	  }
+	  else if (currentDateFormat->currentItem()==2) {
+	    middlestr.append(" %E");
+	  }
+	  else {
+	    middlestr.append(" %W");
+	  }
+	}
+	else if (currentDateFormat->currentItem()==0) {
+	    rightstr.append(" %F");
+	  }
+	  else if (currentDateFormat->currentItem()==1) {
+	    rightstr.append(" %D");
+	  }
+	  else if (currentDateFormat->currentItem()==2) {
+	    rightstr.append(" %E");
+	  }
+	  else {
+	    rightstr.append(" %W");
+	  }
+	}
+
+      if (modificationDateButton->isChecked()) {
+	if (modificationDatePosition->currentItem()==0) {
+	  if (modificationDateFormat->currentItem()==0) {
+	    leftstr.append(" $F");
+	  }
+	  else if (modificationDateFormat->currentItem()==1) {
+	    leftstr.append(" $D");
+	  }
+	  else if (modificationDateFormat->currentItem()==2) {
+	    leftstr.append(" $E");
+	  }
+	  else {
+	    leftstr.append(" $W");
+	  }
+	}
+	else if (modificationDatePosition->currentItem()==1) {
+	  if (modificationDateFormat->currentItem()==0) {
+	    middlestr.append(" $F");
+	  }
+	  else if (modificationDateFormat->currentItem()==1) {
+	    middlestr.append(" $D");
+	  }
+	  else if (modificationDateFormat->currentItem()==2) {
+	    middlestr.append(" $E");
+	  }
+	  else {
+	    middlestr.append(" $W");
+	  }
+	}
+	else if (modificationDateFormat->currentItem()==0) {
+	    rightstr.append(" $F");
+	  }
+	  else if (modificationDateFormat->currentItem()==1) {
+	    rightstr.append(" $D");
+	  }
+	  else if (modificationDateFormat->currentItem()==2) {
+	    rightstr.append(" $E");
+	  }
+	  else {
+	    rightstr.append(" $W");
+	  }
+	}
+
+      if (modificationTimeButton->isChecked()) {
+	if (modificationTimeAmpm->currentItem()==1) {
+	  if (modificationTimePosition->currentItem()==0) {
+	    if (modificationTimeFormat->currentItem()==0) {
+	      leftstr.append(" $*");
+	    }
+	    else {
+	      leftstr.append(" $T");
+	    }
+	  }
+	  else if (modificationTimePosition->currentItem()==1) {
+	    if (modificationTimeFormat->currentItem()==0) {
+	      middlestr.append(" $*");
+	    }
+	    else {
+	      middlestr.append(" $T");
+	    }
+	  }
+	  else {
+	    if (modificationTimeFormat->currentItem()==0) {
+	      rightstr.append(" $*");
+	    }
+	    else {
+	      rightstr.append(" $T");
+	    }
+	  }
+	}
+	else {
+	  if (modificationTimePosition->currentItem()==0) {
+	    leftstr.append(" $t");
+	  }
+	  else if (modificationTimePosition->currentItem()==1) {
+	    middlestr.append(" $t");
+	  }
+	  else {
+	    if (modificationTimeFormat->currentItem()==0) {
+	      rightstr.append(" $t");
+	    }
+	  }
+	}
+      }
+      if (fancyHeaderButton->isChecked()) {
+	globalpara.append(" -G");
+      }
+
+      if (numberingPagesButton->isChecked()) {
+	if (numberingPagesList->currentItem()==0) {
+	  leftstr.append(" Page $% of $=");
+	}
+	else if (numberingPagesList->currentItem()==1) {
+	  middlestr.append(" Page $% of $=");
+	}
+	else  {
+	  rightstr.append(" Page $% of $=");
+	}
+      }
+      globalpara.append(" --header='");
+      globalpara.append(leftstr);
+      globalpara.append("|");
+      globalpara.append(middlestr);
+      globalpara.append("|");
+      globalpara.append(rightstr);
+      globalpara.append("'");
+    }
+    else {
+      globalpara.append(" -B");
+    }
+
+   if (numberingLineButton->isChecked()) {
+      globalpara.append(" -C");
+    }
+   if (bordersButton->isChecked()) {
+     globalpara.append(" -j");
+   }
+   if (alignFileList->currentItem()==0) {
+     globalpara.append(" --file-align=2");
+   }
+   globalpara.append(" -L");
+   globalpara.append(linesPerPage->text());
+   if (tocButton->isChecked()) {
+     globalpara.append(" --toc");
+   }
+   if (highlightBarsButton->isChecked()) {
+     globalpara.append(" -H");
+     globalpara.append(cycleOfChange->text());
+   }
+   if (cutLinesButton->isChecked()) {
+     globalpara.append(" -c");
+   }
+   else {
+     if (markedWrappedLinesButton->isChecked()) {
+       globalpara.append(" --mark-wrapped-lines=");
+       globalpara.append(valueForWrappedLine->text(valueForWrappedLine->currentItem()));
+     }
+   }
+   if (replaceButton->isChecked()) {
+     globalpara.append(" --non-printable-format=");
+     globalpara.append("space");
+   }
+   globalpara.append(" -T");
+   globalpara.append(setTabSize->text());
+   globalpara.append(" --header-font=");
+   globalpara.append(fontForHeaderButton->text());
+   globalpara.append(" --font=");
+   globalpara.append(fontForBodyButton->text());
+   if (underlayButton->isChecked()) {
+     globalpara.append(" --underlay=\"");
+     globalpara.append(underlaytextLine->text());
+     globalpara.append("\"");
+     globalpara.append(" --ul-font=");
+     globalpara.append(underlayFontButton->text());
+     globalpara.append(" --ul-gray=");
+     float zahl;
+     zahl = underlayGray->value() / 10;
+     globalpara.append(parameters.setNum(zahl));
+     globalpara.append(" --ul-style=");
+     globalpara.append(underlayStyle->text(underlayStyle->currentItem()));
+     if (!underlayPositionDefaultButton->isChecked()) { 
+       globalpara.append(" --ul-position=+");
+       globalpara.append(underlayXPosition->text());
+       globalpara.append("+");
+       globalpara.append(underlayYPosition->text());
+     }
+     if (!underlayAngleDefault->isChecked()) {
+       globalpara.append(" --ul-angle=");
+       globalpara.append(underlayAngle->text());
+     }
+   }
+   
+   //  cout << globalpara << endl;
+  }
+}
+
+void CConfigPrintDlg::slotNumberingPages1Clicked() {
+  numberingPagesButton->setChecked(true);
+}
+
+void CConfigPrintDlg::slotNumberingPages2Clicked() {
+  if (numberingPagesButton->isChecked()) {
+    numberingPagesList->setEnabled(true);
+  }
+  else {
+    numberingPagesList->setEnabled(false);
+  }
+}
+
+void CConfigPrintDlg::slotCurrentAmpmClicked(int prog) {
+  if (prog==0) {
+    currentTimeFormat->setEnabled(false);
+  }
+  else {
+    currentTimeFormat->setEnabled(true);
+  }
+}
+
+void CConfigPrintDlg::slotModificationAmpmClicked(int prog) {
+  if (prog==0) {
+    modificationTimeFormat->setEnabled(false);
+  }
+  else {
+    modificationTimeFormat->setEnabled(true);
+  }
+}
+
+void CConfigPrintDlg::slotPreviewClicked() {
+  QString dir,data1,data2,param,text;
+  QStrList test; 
+  slotCreateParameters();
+  dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
+  data1 = KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview1";
+  data2 = KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview2";
+  param = (QString) "--output="+ dir;
+  process = new KProcess();
+  *process << "enscript";
+  *process << param;
+  *process << data1;
+  *process << data2;
+  process->start(KProcess::Block,KProcess::AllOutput);
+  process2 = new KProcess();
+  *process2 << "gv";
+  *process2 << dir;
+  process2->start(KProcess::Block,KProcess::AllOutput);
+  process3 = new KProcess();
+  *process3 << "rm";
+  *process3 << dir;
+  process3->start(KProcess::Block,KProcess::AllOutput);
+}
+
+void CConfigPrintDlg::slotOkClicked() {
+  slotCreateParameters();
 }

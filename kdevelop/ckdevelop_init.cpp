@@ -510,10 +510,14 @@ void CKDevelop::initMenu(){
   tools_menu->insertItem(i18n("KTranslator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
   menuBar()->insertItem(i18n("&Tools"), tools_menu);
 
-  
-  ///////////////////////////////////////////////////////////////////
-  // Options-menu entries
-  
+///////////////////////////////////////////////////////////////////
+// Options-menu entries
+
+  // submenu for setting printprograms
+  QPopupMenu* p3 = new QPopupMenu;
+  p3->insertItem(i18n("&A2PS..."), this, SLOT(slotOptionsConfigureA2ps()),0,ID_OPTIONS_A2PS);
+  p3->insertItem(i18n("&ENSCRIPT..."), this,
+		 SLOT(slotOptionsConfigureEnscript()),0,ID_OPTIONS_ENSCRIPT);
   options_menu = new QPopupMenu;
   options_menu->insertItem(i18n("&Editor..."),this,
 			   SLOT(slotOptionsEditor()),0,ID_OPTIONS_EDITOR);
@@ -528,6 +532,7 @@ void CKDevelop::initMenu(){
   
   options_menu->insertItem(i18n("Configure &Keys..."),this,
 			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
+  options_menu->insertItem(i18n("Configure &Print"),p3,ID_OPTIONS_PRINT);
   options_menu->insertSeparator();
   
   options_menu->insertItem(i18n("Documentation &Browser..."),this,
