@@ -11,3 +11,8 @@ if [ "$1" = "purge" ]; then
     rm -rf "$GLOBAL_HTDIG_DIR"
     rm -rf "$GLOBAL_KDEVDOCTREEVIEW_DIR"
 fi
+
+#DEBHELPER#
+
+exit 0
+

@@ -17,36 +17,18 @@ DEB_HOST_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE	?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 
-ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -g
-endif
-ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
-	INSTALL_PROGRAM += -s
-endif
 ifneq (,$(findstring withjava,$(DEB_BUILD_OPTIONS)))
 	JAVA_FLAGS=--enable-javasupport
-endif
-ifneq (,$(JAVA_HOME))
-	JAVA_FLAGS+= --with-java=$(JAVA_HOME)
-endif
-
-ifeq ($(DEB_BUILD_GNU_TYPE),alpha-linux)
-  export CFLAGS +=-O0 -mieee
-  export CXXFLAGS +=-O0 -mieee
+	ifneq (,$(JAVA_HOME))
+		JAVA_FLAGS+= --with-java=$(JAVA_HOME)
+	endif
 endif
 
-ifeq ($(DEB_BUILD_GNU_TYPE),i386-linux)
-  # Uncomment the following 2 lines to enable i686 optimziation
-  # You may want to tweak the settings to your likings
-  #export CFLAGS=-O3 -march=i686 -ffast-math -finline-functions
-  #export CXXFLAGS=-O3 -march=i686 -ffast-math -finline-functions
-  XINERAMA=--with-xinerama
-endif
 
 -include debian/debiandirs
 
 debian/debiandirs: admin/debianrules
-	perl -w admin/debianrules echodirs > debian/debiandirs
+	admin/debianrules echodirs > debian/debiandirs
 
 configure: configure-stamp
 configure-stamp:
@@ -69,9 +51,13 @@ configure-stamp:
 
 	# make build directory
 
-	./configure $(configkdevelop) --prefix=$(kde_prefix) \
-		--sysconfdir=$(kde_confdir) \
-		$(JAVA_FLAGS) --disable-final
+	./configure --prefix=$(kde_prefix) \
+				--sysconfdir=$(kde_confdir) \
+				--with-kdelibsdoxy-dir=/usr/share/doc/kde/HTML/en/kdelibs-apidocs \
+				--with-pythondir=/usr \
+				$(configkdevelop) \
+				--disable-final \
+				$(JAVA_FLAGS)
 
 	touch configure-stamp
 

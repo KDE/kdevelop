@@ -1,6 +1,8 @@
-?package(kdevelop):\
+?package(gideon):\
         needs=x11\
         section=Apps/Programming\
-        hints="KDE"\
-        title="Gideon"\
+        hints="KDE,Development"\
+	kderemove="y"\
+        title="KDevelop 3.0"\
+	icon="/usr/share/icons/hicolor/16x16/apps/gideon.png"\
         command=gideon

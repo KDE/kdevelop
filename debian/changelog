@@ -1,3 +1,73 @@
+gideon (1:2.999-0cvs20030716) unstable; urgency=low
+
+  * Updated the Debian menu entry to use the name KDevelop 3.0
+  * Added the Gideon icon to the Debian menu entry
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Wed, 16 Jul 2003 21:04:24 -0700
+
+gideon (1:2.999-0cvs20030706) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added the URL for KDevelop to the package descriptions
+
+ -- Norman Jordan <njordan@debian.org>  Sun,  6 Jul 2003 23:51:16 -0700
+
+gideon (1:2.999-0cvs20030702) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Wed,  2 Jul 2003 03:41:49 -0700
+
+gideon (1:2.999-0cvs20030621) unstable; urgency=low
+
+  * Updated CVS sources
+  * The package gideon-plugins had two dependencies on the package gideon,
+    removed one of them.
+  * Now gideon's postinst and postrm scripts will call update-menus and
+    ldconfig
+
+ -- Norman Jordan <njordan@debian.org>  Sat, 21 Jun 2003 00:20:29 -0700
+
+gideon (1:2.999-0cvs20030612) unstable; urgency=low
+
+  * Updated CVS sources
+  * Added the wxwin2.4 packages to the suggests field
+
+ -- Norman Jordan <njordan@debian.org>  Thu, 12 Jun 2003 22:19:20 -0700
+
+gideon (1:2.999-0cvs20030609) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Mon,  9 Jun 2003 11:27:20 -0700
+
+gideon (1:2.999-0cvs20030604) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Wed,  4 Jun 2003 21:19:16 -0700
+
+gideon (1:2.999-0cvs20030530) unstable; urgency=low
+
+  * Updated CVS sources
+
+ -- Norman Jordan <njordan@debian.org>  Fri, 30 May 2003 11:53:23 -0700
+
+gideon (1:2.999-0cvs20030526) unstable; urgency=low
+
+  * Updated CVS sources
+  * Cleaned up debian/rules
+
+ -- Norman Jordan <njordan@debian.org>  Mon, 26 May 2003 11:20:05 -0700
+
+gideon (1:2.999-0cvs20030518) unstable; urgency=low
+
+  * Updated CVS sources
+  * Fixed up debian/rules to work with the new admin/debianrules file
+
+ -- Norman Jordan <njordan@debian.org>  Sun, 18 May 2003 13:31:34 -0700
+
 gideon (1:2.999-0cvs20030514) unstable; urgency=low
 
   * Updated CVS sources
