@@ -1620,6 +1620,8 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
 
     int start = lex->index();
 
+    ParameterDeclarationClauseAST::Node ast = CreateNode<ParameterDeclarationClauseAST>();
+    
     ParameterDeclarationListAST::Node params;
     if( !parseParameterDeclarationList(params) ){
 
@@ -1627,6 +1629,8 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
 	    goto good;
 
 	if( lex->lookAhead(0) == Token_ellipsis && lex->lookAhead(1) == ')' ){
+	    AST_FROM_TOKEN( ellipsis, lex->index() );
+	    ast->setEllipsis( ellipsis );
 	    lex->nextToken();
 	    goto good;
 	}
@@ -1634,11 +1638,12 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
     }
 
     if( lex->lookAhead(0) == Token_ellipsis ){
+	AST_FROM_TOKEN( ellipsis, lex->index() );
+	ast->setEllipsis( ellipsis );	
 	lex->nextToken();
     }
 
 good:
-    ParameterDeclarationClauseAST::Node ast = CreateNode<ParameterDeclarationClauseAST>();
     ast->setParameterDeclarationList( params );
 
     // TODO: add ellipsis
