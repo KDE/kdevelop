@@ -60,7 +60,7 @@ KMdiToolViewAccessor::~KMdiToolViewAccessor() {
 
 QWidget *KMdiToolViewAccessor::wrapperWidget() {
 	if (!d->widgetContainer) {
-		d->widgetContainer=mdiMainFrm->createDockWidget( "KMdiToolViewAccessor::null",QPixmap());	
+		d->widgetContainer=mdiMainFrm->createDockWidget( "KMdiToolViewAccessor::null",QPixmap());
 		connect(d->widgetContainer,SIGNAL(widgetSet(QWidget*)),this,SLOT(setWidgetToWrap(QWidget*)));
 	}
 	return d->widgetContainer;

@@ -164,7 +164,7 @@ KMdiTaskBarButton * KMdiTaskBar::addWinButton(KMdiChildView *win_ptr)
    }
 
    KMdiTaskBarButton *b=new KMdiTaskBarButton( this, win_ptr);
-   QObject::connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) ); 
+   QObject::connect( b, SIGNAL(clicked()), win_ptr, SLOT(setFocus()) );
    QObject::connect( b, SIGNAL(clicked(KMdiChildView*)), this, SLOT(setActiveButton(KMdiChildView*)) );
    QObject::connect( b, SIGNAL(leftMouseButtonClicked(KMdiChildView*)), m_pFrm, SLOT(activateView(KMdiChildView*)) );
    QObject::connect( b, SIGNAL(rightMouseButtonClicked(KMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(KMdiChildView*)) );
@@ -296,7 +296,7 @@ void KMdiTaskBar::layoutTaskBar( int taskBarWidth)
       int h = sz.height()+sz.height()/8+10;
       w += h;
       allButtonsWidthHint += w;
-   } 
+   }
 
    // if there's enough space, use actual width
    int buttonCount = m_pButtonList->count();

@@ -180,7 +180,7 @@ protected slots:
 public slots:
    /**
    * Pushes the desired taskbar button down (switch on), the old one is released (switched off).
-   * Actually it's a radiobutton group behaviour.
+   * Actually it's a radiobutton group behavior.
    */
    void setActiveButton(KMdiChildView *win_ptr);
 protected:

@@ -49,201 +49,201 @@
   */
 class DLL_IMP_EXP_KMDICLASS KMdiChildArea : public QFrame
 {
-   friend class KMdiChildFrmCaption;
-   friend class KMdiChildFrm;
+  friend class KMdiChildFrmCaption;
+  friend class KMdiChildFrm;
 
-   Q_OBJECT
+  Q_OBJECT
 
-// attributes
-public:
-   /**
-   * Z Order stack of KMdiChildFrm childframe windows (top=last)
-   */
-   QPtrList<KMdiChildFrm> *m_pZ; //Auto delete enabled
-   /**
-   * the default size of an newly created childframe
-   */
-   QSize                   m_defaultChildFrmSize;
+  // attributes
+  public:
+     /**
+     * Z Order stack of KMdiChildFrm childframe windows (top=last)
+     */
+     QPtrList<KMdiChildFrm> *m_pZ; //Auto delete enabled
+     /**
+     * the default size of an newly created childframe
+     */
+     QSize                   m_defaultChildFrmSize;
 
-protected:
-   /**
-   * The MDI childframe window caption font
-   */
-   QFont m_captionFont;
-   /**
-   * The foreground color of the active MDI childframe window caption
-   */
-   QColor m_captionActiveBackColor;
-   /**
-   * The background color of the active MDI childframe window captions
-   */
-   QColor m_captionActiveForeColor;
-   /**
-   * The foreground color of inactive MDI childframe window captions
-   */
-   QColor m_captionInactiveBackColor;
-   /**
-   * The background color of inactive MDI childframe window captions
-   */
-   QColor m_captionInactiveForeColor;
-   /**
-   *
-   */
-   int m_captionFontLineSpacing;
+  protected:
+     /**
+     * The MDI childframe window caption font
+     */
+     QFont m_captionFont;
+     /**
+     * The foreground color of the active MDI childframe window caption
+     */
+     QColor m_captionActiveBackColor;
+     /**
+     * The background color of the active MDI childframe window captions
+     */
+     QColor m_captionActiveForeColor;
+     /**
+     * The foreground color of inactive MDI childframe window captions
+     */
+     QColor m_captionInactiveBackColor;
+     /**
+     * The background color of inactive MDI childframe window captions
+     */
+     QColor m_captionInactiveForeColor;
+     /**
+     *
+     */
+     int m_captionFontLineSpacing;
 
-// methods
-public:
-   /**
-   * Consruction. Note: This class needn't to know about KMdiMainFrm .
-   */
-   KMdiChildArea(QWidget *parent);
-   /**
-   * Destructor : THERE should be no child windows anymore...
-   * Howewer it simply deletes all the child widgets :)
-   */
-   ~KMdiChildArea();
+  // methods
+  public:
+     /**
+     * Consruction. Note: This class needn't to know about KMdiMainFrm .
+     */
+     KMdiChildArea(QWidget *parent);
+     /**
+     * Destructor : THERE should be no child windows anymore...
+     * Howewer it simply deletes all the child widgets :)
+     */
+     ~KMdiChildArea();
 
-   /**
-   * Appends a new KMdiChildFrm to this manager.
-   * The child is shown,raised and gets focus if this window has it.
-   */
-   void manageChild(KMdiChildFrm *lpC,bool bShow=true,bool bCascade=true);
-   /**
-   * Destroys a KMdiChildFrm managed.<br>
-   * Note that if a client is attached to this child , it is deleted too!
-   */
-   void destroyChild(KMdiChildFrm *lpC,bool bFocusTopChild = true);
-   /**
-   * Destroys a KMdiChildFrm managed.<br>
-   * Note that if a client is attached to this child , it is NOT deleted!
-   */
-   void destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopChild = true);
-   /**
-   * Brings the child lpC to the top of the stack
-   * The children is focused if bSetFocus is true
-   * otherwise is raised only
-   */
-   void setTopChild(KMdiChildFrm *lpC,bool bSetFocus=false);
-   /**
-   * Returns the topmost child (the active one) or 0 if there are no children.
-   * Note that the topmost child may be also hidded , if ALL the windows are minimized.
-   */
-   inline KMdiChildFrm * topChild() const { return m_pZ->last(); };
-   /**
-   * Returns the number of visible children
-   */
-   int getVisibleChildCount() const;
-   /**
-   * Calculates the cascade point for the given index. If index is -1
-   * the cascade point is calculated for the window following the last window
-   */
-   QPoint getCascadePoint(int indexOfWindow = -1);
-   /**
-   * Sets the MDI childframe window caption font (no relayout)
-   */
-   void setMdiCaptionFont(const QFont &fnt);
-   /**
-   * Sets the foreground color of the active MDI childframe window caption (no relayout)
-   */
-   void setMdiCaptionActiveForeColor(const QColor &clr);
-   /**
-   * Sets the background color of the active MDI childframe window captions (no relayout)
-   */
-   void setMdiCaptionActiveBackColor(const QColor &clr);
-   /**
-   * Sets the foreground color of inactive MDI childframe window captions (no relayout)
-   */
-   void setMdiCaptionInactiveForeColor(const QColor &clr);
-   /**
-   * Sets the background color of inactive MDI childframe window captions (no relayout)
-   */
-   void setMdiCaptionInactiveBackColor(const QColor &clr);
+     /**
+     * Appends a new KMdiChildFrm to this manager.
+     * The child is shown,raised and gets focus if this window has it.
+     */
+     void manageChild(KMdiChildFrm *lpC,bool bShow=true,bool bCascade=true);
+     /**
+     * Destroys a KMdiChildFrm managed.<br>
+     * Note that if a client is attached to this child , it is deleted too!
+     */
+     void destroyChild(KMdiChildFrm *lpC,bool bFocusTopChild = true);
+     /**
+     * Destroys a KMdiChildFrm managed.<br>
+     * Note that if a client is attached to this child , it is NOT deleted!
+     */
+     void destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopChild = true);
+     /**
+     * Brings the child lpC to the top of the stack
+     * The children is focused if bSetFocus is true
+     * otherwise is raised only
+     */
+     void setTopChild(KMdiChildFrm *lpC,bool bSetFocus=false);
+     /**
+     * Returns the topmost child (the active one) or 0 if there are no children.
+     * Note that the topmost child may be also hidded , if ALL the windows are minimized.
+     */
+     inline KMdiChildFrm * topChild() const { return m_pZ->last(); };
+     /**
+     * Returns the number of visible children
+     */
+     int getVisibleChildCount() const;
+     /**
+     * Calculates the cascade point for the given index. If index is -1
+     * the cascade point is calculated for the window following the last window
+     */
+     QPoint getCascadePoint(int indexOfWindow = -1);
+     /**
+     * Sets the MDI childframe window caption font (no relayout)
+     */
+     void setMdiCaptionFont(const QFont &fnt);
+     /**
+     * Sets the foreground color of the active MDI childframe window caption (no relayout)
+     */
+     void setMdiCaptionActiveForeColor(const QColor &clr);
+     /**
+     * Sets the background color of the active MDI childframe window captions (no relayout)
+     */
+     void setMdiCaptionActiveBackColor(const QColor &clr);
+     /**
+     * Sets the foreground color of inactive MDI childframe window captions (no relayout)
+     */
+     void setMdiCaptionInactiveForeColor(const QColor &clr);
+     /**
+     * Sets the background color of inactive MDI childframe window captions (no relayout)
+     */
+     void setMdiCaptionInactiveBackColor(const QColor &clr);
 
-public slots:
-   /**
-   * Cascades the windows resizing it to the minimum size.
-   */
-   void cascadeWindows();
-   /**
-   * Casecades the windows resizing it to the maximum available size.
-   */
-   void cascadeMaximized();
-   /**
-   * Maximize all windows but only in vertical direction
-   */
-   void expandVertical();
-   /**
-   * Maximize all windows but only in horizontal direction
-   */
-   void expandHorizontal();
-   /**
-   * Foces focus to the topmost child
-   * In case that it not gets focused automatically...
-   * Btw : It should not happen.
-   */
-   void focusTopChild();
-   /**
-   * Tile Pragma
-   */
-   void tilePragma();
-   /**
-   * Tile Anodine
-   */
-   void tileAnodine();
-   /**
-   * Tile Vertically
-   */
-   void tileVertically();
-   /**
-   * Positioning of minimized child frames
-   */
-   void layoutMinimizedChildren();
+  public slots:
+     /**
+     * Cascades the windows resizing it to the minimum size.
+     */
+     void cascadeWindows();
+     /**
+     * Casecades the windows resizing it to the maximum available size.
+     */
+     void cascadeMaximized();
+     /**
+     * Maximize all windows but only in vertical direction
+     */
+     void expandVertical();
+     /**
+     * Maximize all windows but only in horizontal direction
+     */
+     void expandHorizontal();
+     /**
+     * Foces focus to the topmost child
+     * In case that it not gets focused automatically...
+     * Btw : It should not happen.
+     */
+     void focusTopChild();
+     /**
+     * Tile Pragma
+     */
+     void tilePragma();
+     /**
+     * Tile Anodine
+     */
+     void tileAnodine();
+     /**
+     * Tile Vertically
+     */
+     void tileVertically();
+     /**
+     * Positioning of minimized child frames
+     */
+     void layoutMinimizedChildren();
 
-protected:
-   /**
-   * Internally used for the tile algorithm
-   */
-   void tileAllInternal(int maxWnds);
-   /**
-   * Automatically resizes a maximized MDI view and layouts the positions of minimized MDI views.
-   */
-   virtual void resizeEvent(QResizeEvent *);
-   /**
-   * Shows the 'Window' popup menu on right mouse button click
-   */
-   void mousePressEvent(QMouseEvent *e);
-   /**
-   * Internally used. Actions that are necessary when an MDI view gets minimized
-   */
-   void childMinimized(KMdiChildFrm *lpC,bool bWasMaximized);
+  protected:
+     /**
+     * Internally used for the tile algorithm
+     */
+     void tileAllInternal(int maxWnds);
+     /**
+     * Automatically resizes a maximized MDI view and layouts the positions of minimized MDI views.
+     */
+     virtual void resizeEvent(QResizeEvent *);
+     /**
+     * Shows the 'Window' popup menu on right mouse button click
+     */
+     void mousePressEvent(QMouseEvent *e);
+     /**
+     * Internally used. Actions that are necessary when an MDI view gets minimized
+     */
+     void childMinimized(KMdiChildFrm *lpC,bool bWasMaximized);
 
-signals:
-   /**
-   * Signalizes that there aren't maximized child frames any more
-   */
-   void noMaximizedChildFrmLeft(KMdiChildFrm*);
-   /**
-   * Signalizes that the child frames are maximized now
-   */
-   void nowMaximized(bool);
-   /**
-   * Internally used.
-   * Signalizes from KMdiChildArea to KMdiMainFrm
-   * that the signal/slot connections of the system buttons in the menubar (only in Maximize mode)
-   * must be updated to another MDI view because the focused MDI view has changed
-   */
-   void sysButtonConnectionsMustChange(KMdiChildFrm*, KMdiChildFrm*);
-   /**
-   * Internally used.
-   * Signalizes from KMdiChildArea to KMdiMainFrm
-   * that the 'Window' popup menu must be shown
-   */
-   void popupWindowMenu( QPoint);
-   /**
-   * Signalizes that the last attached (docked) MDI view has been closed.
-   * Note: Detached MDI views can remain.
-   */
-   void lastChildFrmClosed();
+  signals:
+     /**
+     * Signalizes that there aren't maximized child frames any more
+     */
+     void noMaximizedChildFrmLeft(KMdiChildFrm*);
+     /**
+     * Signalizes that the child frames are maximized now
+     */
+     void nowMaximized(bool);
+     /**
+     * Internally used.
+     * Signalizes from KMdiChildArea to KMdiMainFrm
+     * that the signal/slot connections of the system buttons in the menubar (only in Maximize mode)
+     * must be updated to another MDI view because the focused MDI view has changed
+     */
+     void sysButtonConnectionsMustChange(KMdiChildFrm*, KMdiChildFrm*);
+     /**
+     * Internally used.
+     * Signalizes from KMdiChildArea to KMdiMainFrm
+     * that the 'Window' popup menu must be shown
+     */
+     void popupWindowMenu( QPoint);
+     /**
+     * Signalizes that the last attached (docked) MDI view has been closed.
+     * Note: Detached MDI views can remain.
+     */
+     void lastChildFrmClosed();
 };
 
 #endif   // _KMDICHILDAREA_H_

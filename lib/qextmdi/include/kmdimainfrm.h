@@ -57,11 +57,13 @@ class QMenuBar;
 #include <kmditoolviewaccessor.h>
 
 class QToolButton;
-class KMdiMainFrmPrivate;
 
 namespace KMDIPrivate {
-	class KMDIGUIClient;
+  class KMDIGUIClient;
 }
+
+class KMdiDockContainer;
+class KMdiMainFrmPrivate;
 
 /**
  * @short Internal class
@@ -376,7 +378,7 @@ public:
    */
    QPopupMenu* windowMenu() const { return m_pWindowMenu; };
    /**
-   * Sets a background colour for the MDI view area widget.
+   * Sets a background color for the MDI view area widget.
    */
    virtual void setBackgroundColor( const QColor &c) { m_pMdi->setBackgroundColor( c); };
    /**
@@ -694,6 +696,22 @@ signals:
    void collapseOverlapContainers();
 
    void mdiModeHasBeenChangedTo(KMdi::MdiMode);
+
+public slots:
+   void prevToolViewInDock();
+   void nextToolViewInDock();
+
+private slots:
+   void setActiveToolDock(KMdiDockContainer*);
+   void removeFromActiveDockList(KMdiDockContainer*);
+#define protected public
+signals:
+#undef protected
+    void toggleTop();
+    void toggleLeft();
+    void toggleRight();
+    void toggleBottom();
+
 };
 
 #endif //_KMDIMAINFRM_H_

@@ -34,46 +34,57 @@ class KDockButton_Private;
 
 class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
 {
-        Q_OBJECT
-public:
-        KMdiDockContainer(QWidget *parent, QWidget *win, int position);
-        virtual ~KMdiDockContainer();
+  Q_OBJECT
+
+  public:
+    KMdiDockContainer(QWidget *parent, QWidget *win, int position);
+    virtual ~KMdiDockContainer();
         KMdiDockWidget *parentDockWidget();
-        virtual void insertWidget (KDockWidget *w, QPixmap, const QString &, int &);
-        virtual void setToolTip (KDockWidget *, QString &);
-	virtual void setPixmap(KDockWidget*,const QPixmap&);
-	virtual void undockWidget(KDockWidget*);
-	virtual void removeWidget(KDockWidget*);	
-        void hideIfNeeded();
+
+    virtual void insertWidget (KDockWidget *w, QPixmap, const QString &, int &);
+    virtual void setToolTip (KDockWidget *, QString &);
+    virtual void setPixmap(KDockWidget*,const QPixmap&);
+    virtual void undockWidget(KDockWidget*);
+    virtual void removeWidget(KDockWidget*);
+
+    void hideIfNeeded();
 #ifndef NO_KDE2
-	virtual void save(KConfig *);
-	virtual void load(KConfig *);
+    virtual void save(KConfig *);
+    virtual void load(KConfig *);
 #endif
 
-public slots:
-	void init();
-        void collapseOverlapped();
-private:                    
-  	QWidget *m_mainWin;
-	QWidgetStack *m_ws;
-	KMultiTabBar *m_tb;
-	int mTabCnt;
-	int oldtab;
-  	int m_position; 
+  public slots:
+    void init();
+    void collapseOverlapped();
+    void toggle();
+    void nextToolView();
+    void prevToolView();
+  protected slots:
+    void tabClicked(int);
+    void delayedRaise();
+    void changeOverlapMode();
+  private:
+    QWidget *m_mainWin;
+    QWidgetStack *m_ws;
+    KMultiTabBar *m_tb;
+    int mTabCnt;
+    int oldtab;
+    int m_previousTab;
+    int m_position;
 	QMap<KMdiDockWidget*,int> m_map;
 	QMap<int,KMdiDockWidget*> m_revMap;
 	QMap<KMdiDockWidget*,KDockButton_Private*> m_overlapButtons;
-	QStringList itemNames;
-	int m_inserted;
-	int m_delayedRaise;
-	bool m_vertical;
-        bool m_block;
-protected slots:
-	void tabClicked(int);
-	void delayedRaise();
-	void changeOverlapMode();
-};
+    QStringList itemNames;
+    int m_inserted;
+    int m_delayedRaise;
+    bool m_vertical;
+    bool m_block;
+    bool m_tabSwitching;
 
+  signals:
+	void activated(KMdiDockContainer*);
+	void deactivated(KMdiDockContainer*);
+};
 
 /* THIS IS GOING TO BE REMOVED ONCE THAT CONTAINER IS IN KDELIBS. It's a copy of a private header
 */

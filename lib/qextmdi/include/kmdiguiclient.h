@@ -47,9 +47,16 @@ private slots:
     void setupActions();
     void changeViewMode(int id);
     void mdiModeHasBeenChangedTo(KMdi::MdiMode);
+signals:
+    void toggleTop();
+    void toggleLeft();
+    void toggleRight();
+    void toggleBottom();
+
 private:
     class KMDIGUIClientPrivate;
     KMDIGUIClientPrivate *d;
+    KMdi::MdiMode m_mdiMode;
 
     QGuardedPtr<KMdiMainFrm> m_mdiMainFrm;
     QPtrList<KAction> m_toolViewActions;
@@ -58,6 +65,8 @@ private:
     KActionMenu *m_docMenu;
     KActionMenu *m_toolMenu;
     KSelectAction *m_mdiModeAction;
+
+    KActionMenu *m_gotoToolDockMenu;
 };
 
 

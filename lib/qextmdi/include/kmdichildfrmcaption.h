@@ -42,81 +42,81 @@ class DLL_IMP_EXP_KMDICLASS KMdiChildFrmCaption : public QWidget
 {
    Q_OBJECT
 public:
-   /** 
-   * Constructor 
+   /**
+   * Constructor
    */
    KMdiChildFrmCaption(KMdiChildFrm *parent);
-   /** 
-   * Destructor 
+   /**
+   * Destructor
    */
    ~KMdiChildFrmCaption();
-   /** 
-   * Repaint the caption bar in active background colours 
+   /**
+   * Repaint the caption bar in active background colors
    */
    void setActive(bool bActive);
-   /** 
-   * Repaint with a new caption bar title 
+   /**
+   * Repaint with a new caption bar title
    */
    void setCaption(const QString& text);
-   /** 
-   * Returns the caption bar height depending on the used font 
+   /**
+   * Returns the caption bar height depending on the used font
    */
    int heightHint();
 
 public slots:
-   /** 
+   /**
    * Grabs the mouse, a move cursor, sets a move indicator variable to true and keeps the global mouse position in mind
    */
    void slot_moveViaSystemMenu();
 
 protected:
-   /** 
-   * Draws the caption bar and its title using the settings 
+   /**
+   * Draws the caption bar and its title using the settings
    */
    virtual void paintEvent(QPaintEvent *e);
-   /** 
-   * The same as KMdiChildFrmCaption::slot_moveViaSystemMenu 
+   /**
+   * The same as KMdiChildFrmCaption::slot_moveViaSystemMenu
    */
    virtual void mousePressEvent(QMouseEvent *);
-   /** 
-   * Calls maximizePressed of the parent widget ( KMdiChildFrm ) 
+   /**
+   * Calls maximizePressed of the parent widget ( KMdiChildFrm )
    */
    virtual void mouseDoubleClickEvent(QMouseEvent *);
-   /** 
-   * Restore the normal mouse cursor, set the state variable back to 'not moving' 
+   /**
+   * Restore the normal mouse cursor, set the state variable back to 'not moving'
    */
    virtual void mouseReleaseEvent(QMouseEvent *);
-   /** 
-   * Checks if out of move range of the KMdiChildArea and calls KMdiChildFrm::move 
+   /**
+   * Checks if out of move range of the KMdiChildArea and calls KMdiChildFrm::move
    */
    virtual void mouseMoveEvent(QMouseEvent *e);
-   /** 
-   * Computes a new abbreviated string from a given string depending on a given maximum width 
+   /**
+   * Computes a new abbreviated string from a given string depending on a given maximum width
    */
    QString abbreviateText(QString origStr, int maxWidth);
 
 // attributes
 public:
-   /** 
-   * the title string shown in the caption bar 
+   /**
+   * the title string shown in the caption bar
    */
    QString           m_szCaption;
 
 protected: // Protected attributes
-   /** 
-   * parent widget 
+   /**
+   * parent widget
    */
    KMdiChildFrm  *m_pParent;
-   /** 
-   * state variable indicating whether activated or not activated 
+   /**
+   * state variable indicating whether activated or not activated
    */
    bool              m_bActive;
-   /** 
-   * the position offset related to its parent widget (internally used for translating mouse move positions 
+   /**
+   * the position offset related to its parent widget (internally used for translating mouse move positions
    */
    QPoint            m_offset;
    /**
-   * True if the child knows that it is currently being dragged. 
+   * True if the child knows that it is currently being dragged.
    */
    bool              m_bChildInDrag;
 };

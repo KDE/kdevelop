@@ -250,7 +250,7 @@ public:
    * top left position of the argument is the position of the top left point
    * of the client area in its parent coordinates and the arguments width
    * and height is the width and height of the client area. Please note: This
-   * differs from the behaviour of QWidget::setGeometry()!
+   * differs from the behavior of QWidget::setGeometry()!
    */
    void setInternalGeometry(const QRect& newGeomety);
    /**
@@ -262,7 +262,7 @@ public:
    * position of the argument is the position of the top left point of the
    * frame in its parent coordinates and the arguments width and height is
    * the width and height of the widget frame. Please note: This differs
-   * from the behaviour of QWidget::setGeometry()!
+   * from the behavior of QWidget::setGeometry()!
    */
    void setExternalGeometry(const QRect& newGeomety);
    /**

@@ -84,11 +84,11 @@ public:
  */
 class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragBeginEvent : public QCustomEvent
 {
-public:
-   /**
-   * Constructs a new customer event of type QEvent::User + KMdi::EV_DragBegin
-   */
-   KMdiChildFrmDragBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_DragBegin)), e) {};
+  public:
+     /**
+     * Constructs a new customer event of type QEvent::User + KMdi::EV_DragBegin
+     */
+     KMdiChildFrmDragBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_DragBegin)), e) {};
 };
 
 //------------------------------------------------------------------------------
@@ -98,11 +98,11 @@ public:
  */
 class DLL_IMP_EXP_KMDICLASS KMdiChildFrmDragEndEvent : public QCustomEvent
 {
-public:
-   /**
-   * Constructs a new customer event of type QEvent::User + KMdi::EV_DragEnd
-   */
-   KMdiChildFrmDragEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_DragEnd)), e) {};
+  public:
+     /**
+     * Constructs a new customer event of type QEvent::User + KMdi::EV_DragEnd
+     */
+    KMdiChildFrmDragEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_DragEnd)), e) {};
 };
 
 //------------------------------------------------------------------------------
@@ -112,11 +112,11 @@ public:
  */
 class DLL_IMP_EXP_KMDICLASS KMdiChildFrmResizeBeginEvent : public QCustomEvent
 {
-public:
-   /**
-   * Constructs a new customer event of type QEvent::User + KMdi::EV_ResizeBegin
-   */
-   KMdiChildFrmResizeBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_ResizeBegin)), e) {};
+  public:
+     /**
+     * Constructs a new customer event of type QEvent::User + KMdi::EV_ResizeBegin
+     */
+    KMdiChildFrmResizeBeginEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_ResizeBegin)), e) {};
 };
 
 //------------------------------------------------------------------------------
@@ -126,11 +126,11 @@ public:
  */
 class DLL_IMP_EXP_KMDICLASS KMdiChildFrmResizeEndEvent : public QCustomEvent
 {
-public:
-   /**
-   * Constructs a new customer event of type QEvent::User + KMdi::EV_ResizeEnd
-   */
-   KMdiChildFrmResizeEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_ResizeEnd)), e) {};
+  public:
+     /**
+     * Constructs a new customer event of type QEvent::User + KMdi::EV_ResizeEnd
+     */
+    KMdiChildFrmResizeEndEvent( QMouseEvent *e) : QCustomEvent( QEvent::Type(QEvent::User + int(KMdi::EV_ResizeEnd)), e) {};
 };
 
 //==============================================================================
@@ -141,254 +141,255 @@ public:
 //------------------------------------------------------------------------------
 class DLL_IMP_EXP_KMDICLASS KMdiChildFrm : public QFrame
 {
-   friend class KMdiChildArea;
-   friend class KMdiChildFrmCaption;
-   Q_OBJECT
+  friend class KMdiChildArea;
+  friend class KMdiChildFrmCaption;
 
-// attributes
-public:
-   enum MdiWindowState { Normal,Maximized,Minimized };
-                           //positions same in h and cpp for fast order check
-   KMdiChildView*       m_pClient;
+  Q_OBJECT
 
-protected:
-   KMdiChildArea*       m_pManager;
-   KMdiChildFrmCaption* m_pCaption;
-   KMdiWin32IconButton* m_pWinIcon;
-   QToolButton*            m_pUnixIcon;
-   QToolButton*            m_pMinimize;
-   QToolButton*            m_pMaximize;
-   QToolButton*            m_pClose;
-   QToolButton*            m_pUndock;
-   MdiWindowState          m_state;
-   QRect                   m_restoredRect;
-   int                     m_iResizeCorner;
-   int                     m_iLastCursorCorner;
-   bool                    m_bResizing;
-   bool                    m_bDragging;
-   QPixmap*                m_pIconButtonPixmap;
-   QPixmap*                m_pMinButtonPixmap;
-   QPixmap*                m_pMaxButtonPixmap;
-   QPixmap*                m_pRestoreButtonPixmap;
-   QPixmap*                m_pCloseButtonPixmap;
-   QPixmap*                m_pUndockButtonPixmap;
-   /**
-   * Every child frame window has an temporary ID in the Window menu of the child area.
-   */
-   int                     m_windowMenuID;
-   /**
-   * Imitates a system menu for child frame windows
-   */
-   QPopupMenu*             m_pSystemMenu;
-   QSize                   m_oldClientMinSize;
-   QSize                   m_oldClientMaxSize;
-   QLayout::ResizeMode     m_oldLayoutResizeMode;
-   QTime                   m_timeMeasure;
+  // attributes
+  public:
+     enum MdiWindowState { Normal,Maximized,Minimized };
+                             //positions same in h and cpp for fast order check
+     KMdiChildView*       m_pClient;
 
-// methods
-public:
-   /**
-   * Creates a new KMdiChildFrm class.<br>
-   */
-   KMdiChildFrm(KMdiChildArea *parent);
-   /**
-   * Delicato : destroys this KMdiChildFrm
-   * If a child is still here managed (no recreation was made) it is destroyed too.
-   */
-   ~KMdiChildFrm();
-   /**
-   * Reparents the widget w to this KMdiChildFrm (if this is not already done)
-   * Installs an event filter to catch focus events.
-   * Resizes this mdi child in a way that the child fits perfectly in.
-   */
-   void setClient(KMdiChildView *w, bool bAutomaticResize = false);
-   /**
-   * Reparents the client widget to 0 (desktop), moves with an offset from the original position
-   * Removes the event filter.
-   */
-   void unsetClient( QPoint positionOffset = QPoint(0,0));
-   /**
-   * Sets the window icon pointer.
-   */
-   void setIcon(const QPixmap &pxm);
-   /**
-   * Returns the child frame icon.
-   */
-   QPixmap* icon() const;
-   /**
-   * Enables or disables the close button
-   */
-   void enableClose(bool bEnable);
-   /**
-   * Sets the caption of this window
-   */
-   void setCaption(const QString& text);
-   /**
-   * Returns the caption of this mdi child.
-   * Cool to have it inline...
-   */
-   const QString& caption(){ return m_pCaption->m_szCaption; };
-   /**
-   * Minimizes , Maximizes or restores the window.
-   */
-   void setState(MdiWindowState state,bool bAnimate=true);
-   /**
-   * Returns the current state of the window
-   * Cool to have it inline...
-   */
-   inline MdiWindowState state() const { return m_state; };
-   /**
-   * Returns the inner client area of the parent of this (which is KMdiChildArea).
-   */
-   QRect mdiAreaContentsRect() const;
-   /**
-   * Returns the geometry that will be restored by calling restore().
-   */
-   QRect restoreGeometry() const;
-   /**
-   * Sets the geometry that will be restored by calling restore().
-   */
-   void  setRestoreGeometry(const QRect& newRestGeo);
-   /**
-   * Forces updating the rects of the caption and so...
-   * It may be useful when setting the mdiCaptionFont of the MdiManager
-   */
-   void updateRects(){ resizeEvent(0); };
-   /**
-   * Returns the system menu.
-   */
-   QPopupMenu* systemMenu() const;
-   /**
-   * Returns the caption bar height
-   */
-   inline int captionHeight() const { return m_pCaption->height(); };
-   /**
-   * sets new raise behaviour and pixmaps of the buttons depending on the current decoration style
-   */
-   void redecorateButtons();
+  protected:
+     KMdiChildArea*       m_pManager;
+     KMdiChildFrmCaption* m_pCaption;
+     KMdiWin32IconButton* m_pWinIcon;
+     QToolButton*            m_pUnixIcon;
+     QToolButton*            m_pMinimize;
+     QToolButton*            m_pMaximize;
+     QToolButton*            m_pClose;
+     QToolButton*            m_pUndock;
+     MdiWindowState          m_state;
+     QRect                   m_restoredRect;
+     int                     m_iResizeCorner;
+     int                     m_iLastCursorCorner;
+     bool                    m_bResizing;
+     bool                    m_bDragging;
+     QPixmap*                m_pIconButtonPixmap;
+     QPixmap*                m_pMinButtonPixmap;
+     QPixmap*                m_pMaxButtonPixmap;
+     QPixmap*                m_pRestoreButtonPixmap;
+     QPixmap*                m_pCloseButtonPixmap;
+     QPixmap*                m_pUndockButtonPixmap;
+     /**
+     * Every child frame window has an temporary ID in the Window menu of the child area.
+     */
+     int                     m_windowMenuID;
+     /**
+     * Imitates a system menu for child frame windows
+     */
+     QPopupMenu*             m_pSystemMenu;
+     QSize                   m_oldClientMinSize;
+     QSize                   m_oldClientMaxSize;
+     QLayout::ResizeMode     m_oldLayoutResizeMode;
+     QTime                   m_timeMeasure;
 
-   /**
-   * returns the mouse state "In Drag"
-   */
-   bool isInDrag() const { return m_bDragging; }
-   /**
-   * returns the mouse state "In Resize"
-   */
-   bool isInResize() const { return m_bResizing; }
-   /** Internally called from the signal focusInEventOccurs.
-   * It raises the MDI childframe to the top of all other MDI child frames and sets the focus on it.
-   */
-   void raiseAndActivate();
+  // methods
+  public:
+     /**
+     * Creates a new KMdiChildFrm class.<br>
+     */
+     KMdiChildFrm(KMdiChildArea *parent);
+     /**
+     * Delicato : destroys this KMdiChildFrm
+     * If a child is still here managed (no recreation was made) it is destroyed too.
+     */
+     ~KMdiChildFrm();
+     /**
+     * Reparents the widget w to this KMdiChildFrm (if this is not already done)
+     * Installs an event filter to catch focus events.
+     * Resizes this mdi child in a way that the child fits perfectly in.
+     */
+     void setClient(KMdiChildView *w, bool bAutomaticResize = false);
+     /**
+     * Reparents the client widget to 0 (desktop), moves with an offset from the original position
+     * Removes the event filter.
+     */
+     void unsetClient( QPoint positionOffset = QPoint(0,0));
+     /**
+     * Sets the window icon pointer.
+     */
+     void setIcon(const QPixmap &pxm);
+     /**
+     * Returns the child frame icon.
+     */
+     QPixmap* icon() const;
+     /**
+     * Enables or disables the close button
+     */
+     void enableClose(bool bEnable);
+     /**
+     * Sets the caption of this window
+     */
+     void setCaption(const QString& text);
+     /**
+     * Returns the caption of this mdi child.
+     * Cool to have it inline...
+     */
+     const QString& caption(){ return m_pCaption->m_szCaption; };
+     /**
+     * Minimizes , Maximizes or restores the window.
+     */
+     void setState(MdiWindowState state,bool bAnimate=true);
+     /**
+     * Returns the current state of the window
+     * Cool to have it inline...
+     */
+     inline MdiWindowState state() const { return m_state; };
+     /**
+     * Returns the inner client area of the parent of this (which is KMdiChildArea).
+     */
+     QRect mdiAreaContentsRect() const;
+     /**
+     * Returns the geometry that will be restored by calling restore().
+     */
+     QRect restoreGeometry() const;
+     /**
+     * Sets the geometry that will be restored by calling restore().
+     */
+     void  setRestoreGeometry(const QRect& newRestGeo);
+     /**
+     * Forces updating the rects of the caption and so...
+     * It may be useful when setting the mdiCaptionFont of the MdiManager
+     */
+     void updateRects(){ resizeEvent(0); };
+     /**
+     * Returns the system menu.
+     */
+     QPopupMenu* systemMenu() const;
+     /**
+     * Returns the caption bar height
+     */
+     inline int captionHeight() const { return m_pCaption->height(); };
+     /**
+     * sets new raise behavior and pixmaps of the buttons depending on the current decoration style
+     */
+     void redecorateButtons();
 
-   /**
-   * Sets the minimum size of the widget to w by h pixels.
-   * It extends it's base clase method in a way that the minimum size of
-   * the child area will be set additionally if the view is maximized.
-   */
-   virtual void setMinimumSize ( int minw, int minh );
+     /**
+     * returns the mouse state "In Drag"
+     */
+     bool isInDrag() const { return m_bDragging; }
+     /**
+     * returns the mouse state "In Resize"
+     */
+     bool isInResize() const { return m_bResizing; }
+     /** Internally called from the signal focusInEventOccurs.
+     * It raises the MDI childframe to the top of all other MDI child frames and sets the focus on it.
+     */
+     void raiseAndActivate();
 
-public slots:
-   /**
-   *
-   */
-   void slot_resizeViaSystemMenu();
+     /**
+     * Sets the minimum size of the widget to w by h pixels.
+     * It extends it's base clase method in a way that the minimum size of
+     * the child area will be set additionally if the view is maximized.
+     */
+     virtual void setMinimumSize ( int minw, int minh );
 
-protected:
-   /** Reimplemented from its base class.
-   * Resizes the captionbar, relayouts the position of the system buttons,
-   * and calls resize for its embedded client KMdiChildView with the proper size
-   */
-   virtual void resizeEvent(QResizeEvent *);
-   /** Reimplemented from its base class.
-   * Detects if the mouse is on the edge of window and what resize cursor must be set.
-   * Calls KMdiChildFrm::resizeWindow if it is in m_bResizing.
-   */
-   virtual void mouseMoveEvent(QMouseEvent *e);
-   /** Reimplemented from its base class.
-   * Colours the caption, raises the childfrm widget and
-   * turns to resize mode if it is on the edge (resize-sensitive area)
-   */
-   virtual void mousePressEvent(QMouseEvent *e);
-   /** Reimplemented from its base class.
-   * Sets a normal cursor and leaves the resize mode.
-   */
-   virtual void mouseReleaseEvent(QMouseEvent *);
-   /** Reimplemented from its base class.
-   * give its child view the chance to notify a childframe move... that's why it sends
-   * a KMdiChildMovedEvent to the embedded KMdiChildView .
-   */
-   virtual void moveEvent(QMoveEvent* me);
-   /**
-   * Reimplemented from its base class. If not in resize mode, it sets the mouse cursor to normal appearance.
-   */
-   virtual void leaveEvent(QEvent *);
-   /** Reimplemented from its base class.
-   * Additionally it catches<UL>
-   * <LI>the client's mousebutton press events and raises and activates the childframe then</LI>
-   * <LI>the client's resize event and resizes its childframe widget (this) as well</LI></UL>
-   */
-   virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
-   /** Calculates the new geometry from the new mouse position given as parameters
-   * and calls KMdiChildFrm::setGeometry
-   */
-   void resizeWindow(int resizeCorner, int x, int y);
-   /**
-   * Override the cursor appearance depending on the widget corner given as parameter
-   */
-   void setResizeCursor(int resizeCorner);
-   /**
-   * changes from the resize cursor to the normal (previous) cursor
-   */
-   void unsetResizeCursor();
-   /** That means to show a mini window showing the childframe's caption bar, only.
-   * It cannot be resized.
-   */
-   virtual void switchToMinimizeLayout();
-   /**
-   * Does the actual resize. Called from various places but from resizeEvent in general.
-   */
-   void doResize();
+  public slots:
+     /**
+     *
+     */
+     void slot_resizeViaSystemMenu();
 
-protected slots:
-   /**
-   * Handles a click on the Maximize button
-   */
-   void maximizePressed();
-   /**
-   * Handles a click on the Restore (Normalize) button
-   */
-   void restorePressed();
-   /**
-   * Handles a click on the Minimize button.
-   */
-   void minimizePressed();
-   /**
-   * Handles a click on the Close button.
-   */
-   void closePressed();
-   /**
-   * Handles a click on the Undock (Detach) button
-   */
-   void undockPressed();
-   /**
-   * Shows a system menu for child frame windows.
-   */
-   void showSystemMenu();
+  protected:
+     /** Reimplemented from its base class.
+     * Resizes the captionbar, relayouts the position of the system buttons,
+     * and calls resize for its embedded client KMdiChildView with the proper size
+     */
+     virtual void resizeEvent(QResizeEvent *);
+     /** Reimplemented from its base class.
+     * Detects if the mouse is on the edge of window and what resize cursor must be set.
+     * Calls KMdiChildFrm::resizeWindow if it is in m_bResizing.
+     */
+     virtual void mouseMoveEvent(QMouseEvent *e);
+     /** Reimplemented from its base class.
+     * Colours the caption, raises the childfrm widget and
+     * turns to resize mode if it is on the edge (resize-sensitive area)
+     */
+     virtual void mousePressEvent(QMouseEvent *e);
+     /** Reimplemented from its base class.
+     * Sets a normal cursor and leaves the resize mode.
+     */
+     virtual void mouseReleaseEvent(QMouseEvent *);
+     /** Reimplemented from its base class.
+     * give its child view the chance to notify a childframe move... that's why it sends
+     * a KMdiChildMovedEvent to the embedded KMdiChildView .
+     */
+     virtual void moveEvent(QMoveEvent* me);
+     /**
+     * Reimplemented from its base class. If not in resize mode, it sets the mouse cursor to normal appearance.
+     */
+     virtual void leaveEvent(QEvent *);
+     /** Reimplemented from its base class.
+     * Additionally it catches<UL>
+     * <LI>the client's mousebutton press events and raises and activates the childframe then</LI>
+     * <LI>the client's resize event and resizes its childframe widget (this) as well</LI></UL>
+     */
+     virtual bool eventFilter(QObject*, QEvent*);//focusInEvent(QFocusEvent *);
+     /** Calculates the new geometry from the new mouse position given as parameters
+     * and calls KMdiChildFrm::setGeometry
+     */
+     void resizeWindow(int resizeCorner, int x, int y);
+     /**
+     * Override the cursor appearance depending on the widget corner given as parameter
+     */
+     void setResizeCursor(int resizeCorner);
+     /**
+     * changes from the resize cursor to the normal (previous) cursor
+     */
+     void unsetResizeCursor();
+     /** That means to show a mini window showing the childframe's caption bar, only.
+     * It cannot be resized.
+     */
+     virtual void switchToMinimizeLayout();
+     /**
+     * Does the actual resize. Called from various places but from resizeEvent in general.
+     */
+     void doResize();
 
-protected:
-   /** Restore the focus policies for _all_ widgets in the view using the list given as parameter.
-   * Install the event filter for all direct child widgets of this. (See KMdiChildFrm::eventFilter )
-   */
-   void linkChildren( QDict<FocusPolicy>* pFocPolDict);
-   /** Backups all focus policies of _all_ child widgets in the MDI childview since they get lost during a reparent.
-   * Remove all event filters for all direct child widgets of this. (See KMdiChildFrm::eventFilter )
-   */
-   QDict<QWidget::FocusPolicy>* unlinkChildren();
-   /** Calculates the corner id for the resize cursor. The return value can be tested for:
-   * KMDI_RESIZE_LEFT, KMDI_RESIZE_RIGHT, KMDI_RESIZE_TOP, KMDI_RESIZE_BOTTOM
-   * or an OR'd variant of them for the corners.
-   */
-   int getResizeCorner(int ax,int ay);
+  protected slots:
+     /**
+     * Handles a click on the Maximize button
+     */
+     void maximizePressed();
+     /**
+     * Handles a click on the Restore (Normalize) button
+     */
+     void restorePressed();
+     /**
+     * Handles a click on the Minimize button.
+     */
+     void minimizePressed();
+     /**
+     * Handles a click on the Close button.
+     */
+     void closePressed();
+     /**
+     * Handles a click on the Undock (Detach) button
+     */
+     void undockPressed();
+     /**
+     * Shows a system menu for child frame windows.
+     */
+     void showSystemMenu();
+
+  protected:
+     /** Restore the focus policies for _all_ widgets in the view using the list given as parameter.
+     * Install the event filter for all direct child widgets of this. (See KMdiChildFrm::eventFilter )
+     */
+     void linkChildren( QDict<FocusPolicy>* pFocPolDict);
+     /** Backups all focus policies of _all_ child widgets in the MDI childview since they get lost during a reparent.
+     * Remove all event filters for all direct child widgets of this. (See KMdiChildFrm::eventFilter )
+     */
+     QDict<QWidget::FocusPolicy>* unlinkChildren();
+     /** Calculates the corner id for the resize cursor. The return value can be tested for:
+     * KMDI_RESIZE_LEFT, KMDI_RESIZE_RIGHT, KMDI_RESIZE_TOP, KMDI_RESIZE_BOTTOM
+     * or an OR'd variant of them for the corners.
+     */
+     int getResizeCorner(int ax,int ay);
 };
 
 #endif //_KMDICHILDFRM_H_
