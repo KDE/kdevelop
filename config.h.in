@@ -28,6 +28,7 @@
 #undef KDELIBS_DOCDIR
 #undef KDOC_INDEXDIR
 #undef WITH_DOCBASE
+#undef WITH_KDOC2
 
 /* Name of package */
 #undef PACKAGE

@@ -242,8 +242,12 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
   connect(source_button,SIGNAL(clicked()),SLOT(slotSourceButtonClicked()));
 
 }
+
+
 CUpdateKDEDocDlg::~CUpdateKDEDocDlg(){
 }
+
+
 void CUpdateKDEDocDlg::OK(){
     KShellProcess proc_rm;
     QString kdelibs_path = source_edit->text();
@@ -287,6 +291,38 @@ void CUpdateKDEDocDlg::OK(){
     qt_test=true;
   }
 
+#if WITH_KDOC2
+  QString cmd;
+  if(! qt_test)
+      {
+          int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set correctly.\n"
+                                                               "If you want your KDE-library documentation to\n"
+                                                               "be cross-referenced to the Qt-library, you have\n"
+                                                               "to set the correct path to your Qt-library\n"
+                                                               "documentation first.\n"
+                                                               "Do you want to set the Qt-Documentation path first ?"),KMsgBox::QUESTION);
+          if(qt_set==1)
+              return;
+      }
+  else
+      {
+          cmd = "qt2kdoc --url=";
+          cmd += qtPath;
+          cmd += " --outdir=";
+          cmd += new_doc_path;
+          cmd += " --compress ";
+          cmd += qtPath;
+          cmd += ";\n";
+      }
+
+  cmd += "makekdedoc --libdir=";
+  cmd += new_doc_path;
+  cmd += " --outputdir=";
+  cmd += new_doc_path;
+  *proc << cmd;
+  
+#else
+  
   if(!qt_test){ // don't cross-reference to qt
     int qt_set=KMsgBox::yesNo(this,i18n("Question"),i18n("The Qt-Documentation path is not set correctly.\n"
                                                     "If you want your KDE-library documentation to\n"
@@ -352,30 +388,43 @@ void CUpdateKDEDocDlg::OK(){
   	  			cd ../kspell;kdoc -d "+ new_doc_path + "/kspell -ufile:" + new_doc_path + "kspell/ -L"
     				+ new_doc_path +"kdoc-reference kspell *.h -lqt -lkdecore -lkdeui";
   } // end cross-reference qt
+
+#endif
+  
   proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   accept();
 }
+
+
 void CUpdateKDEDocDlg::slotLeaveNewRadioButtonClicked(){
   doc_button->setEnabled(true);
   doc_edit->setEnabled(true);
   doc_label->setEnabled(true);
 }
+
+
 void CUpdateKDEDocDlg::slotDelNewRadioButtonClicked(){
   doc_button->setEnabled(true);
   doc_edit->setEnabled(true);
   doc_label->setEnabled(true);
 }
+
+
 void CUpdateKDEDocDlg::slotDelRecentRadioButtonClicked(){
   doc_button->setEnabled(false);
   doc_edit->setEnabled(false);
   doc_label->setEnabled(false);
 }
+
+
 void CUpdateKDEDocDlg::slotDocButtonClicked(){
   QString name = KDirDialog::getDirectory(doc_edit->text(),this,i18n("New KDE Documentation Directory..."));
   if(!name.isEmpty()){
     doc_edit->setText(name);
   }
 }
+
+
 void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   QString dir = KDirDialog::getDirectory(source_edit->text(),this,i18n("KDE Libs Directory..."));
   if(!dir.isEmpty()){

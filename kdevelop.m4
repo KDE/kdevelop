@@ -103,6 +103,26 @@ fi
 
 
 dnl
+dnl Check whether we use kdoc2
+dnl
+AC_DEFUN(KDEV_CHECK_KDOC2,
+[
+AC_MSG_CHECKING(for kdoc2)
+AC_ARG_ENABLE(kdoc2,
+[  --enable-kdoc2        enable kdoc2 support],
+[if test "$enableval" = yes; then
+  enable_kdoc2=yes
+fi],
+enable_kdoc2=no)
+AC_MSG_RESULT($enable_kdoc2)
+
+if test "$enable_kdoc2" = "yes"; then
+  AC_DEFINE_UNQUOTED(WITH_KDOC2)
+fi
+])
+
+
+dnl
 dnl Needed to make am_edit work
 dnl
 AC_DEFUN(KDE_CHECK_FINAL,

@@ -688,6 +688,49 @@ void CKDevelop::slotProjectAPI(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
   messages_widget->clear();
+
+#ifdef WITH_KDOC2
+  config->setGroup("Doc_Location");
+  QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
+  if (idx_path.isEmpty())
+      idx_path = config->readEntry("doc_kde", KDELIBS_DOCDIR)
+          + "/kdoc-reference";
+  QString link;
+  if ( QFileInfo(idx_path + "/qt.kdoc").exists() ||
+       QFileInfo(idx_path + "/qt.kdoc.gz").exists() )
+      link = "-lqt ";
+  // This could me made a lot smarter...
+  if ( QFileInfo(idx_path + "/kdecore.kdoc").exists() ||
+       QFileInfo(idx_path + "/kdecore.kdoc.gz").exists() )
+      link += "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtml -ljscript -lkab -lkspell";
+
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+  int dirlength = QDir::currentDirPath().length()+1;
+
+  QString sources;
+  QStrList headerlist(prj->getHeaders());
+  QStrListIterator it(headerlist);
+  for (; it.current(); ++it)
+      {
+          QString file = it.current();
+          file.remove(0, dirlength);
+          sources += file;
+          sources += " ";
+      }
+
+  shell_process.clearArguments();
+  shell_process << "kdoc";
+  shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  if (!sources.isEmpty())
+      shell_process << sources;
+  if (!link.isEmpty())
+      {
+          shell_process << ("-L" + idx_path);
+          shell_process << link;
+      }
+
+#else
+ 
   config->setGroup("Doc_Location");
   QString doc_kde=config->readEntry("doc_kde");
   QString qt_ref_file=doc_kde+"kdoc-reference/qt.kdoc";
@@ -706,6 +749,7 @@ void CKDevelop::slotProjectAPI(){
   if( !QFileInfo(kde_ref_file).exists()){
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+//    shell_process << "*.h";
     shell_process << prj->getProjectName();
 		for (i=0; i < headerlist.count(); i++){
 			QString file=headerlist.at(i);
@@ -713,8 +757,6 @@ void CKDevelop::slotProjectAPI(){
 			shell_process << header;
 			shell_process << " ";
 		}
-//    shell_process << "*.h";
-//    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
   else if(!QFileInfo(qt_ref_file).exists()){
     shell_process << "kdoc";
@@ -734,7 +776,6 @@ void CKDevelop::slotProjectAPI(){
 		else{
     	shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
 		}
-//    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
   else{
     shell_process << "kdoc";
@@ -754,9 +795,11 @@ void CKDevelop::slotProjectAPI(){
 		else{
     	shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
 		}
-//    shell_process << "-n"+prj->getProjectName(); for kdoc2
   }
-    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  
+#endif
+  
+  shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 }
 
 void CKDevelop::slotProjectManual(){
@@ -772,19 +815,11 @@ void CKDevelop::slotProjectManual(){
 	messages_widget->clear();
 	QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
 	bool ksgml;
-	if(ksgml==false){
-	    process.clearArguments();
-	    process << "sgml2html";
-	    process << prj->getSGMLFile();
-	    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-	}
-	else{
-	    process.clearArguments();
-	    process << "ksgml2html";
-	    process << prj->getSGMLFile();
-	    process << "en";
-	    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
-	}
+        process.clearArguments();
+        process << (ksgml? "ksgml2html" : "sgml2html");
+        process << prj->getSGMLFile();
+        process << "en";
+        process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
     }
   
 }

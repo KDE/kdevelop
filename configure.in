@@ -67,6 +67,7 @@ KDEV_PATH_QTDOC
 KDEV_PATH_KDELIBSDOC
 KDEV_PATH_KDOCINDEX
 KDEV_CHECK_DOCBASE
+KDEV_CHECK_KDOC2
 KDE_CHECK_FINAL
 
 dnl add here all your Makefiles. This are created by configure
