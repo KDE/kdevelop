@@ -194,7 +194,7 @@ CParsedClass *CParsedClassContainer::getClassByName( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CParsedClassContainer::getSortedClassList()
 {
-  return getSortedDictList<CParsedClass>( classes, true );
+  return getSortedDictList<CParsedClass>( classes, useFullPath );
 }
 
 /*-------------------- CParsedClassContainer::getSortedClassNameList()

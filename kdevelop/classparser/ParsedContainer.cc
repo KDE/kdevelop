@@ -348,7 +348,7 @@ QStrList *CParsedContainer::getSortedStructNameList()
  *-----------------------------------------------------------------*/
 QList<CParsedStruct> *CParsedContainer::getSortedStructList()
 {
-  return getSortedDictList<CParsedStruct>( structs, true );
+  return getSortedDictList<CParsedStruct>( structs, useFullPath );
 }
 
 /*--------------------------- CParsedContainer::removeWithReferences()

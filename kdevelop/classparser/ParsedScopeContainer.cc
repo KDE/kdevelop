@@ -161,7 +161,7 @@ void CParsedScopeContainer::removeScope( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedScopeContainer> *CParsedScopeContainer::getSortedScopeList()
 {
-  return getSortedDictList<CParsedScopeContainer>( scopes, true );
+  return getSortedDictList<CParsedScopeContainer>( scopes, useFullPath );
 }
 
 /*-------------------- CParsedScopeContainer::getSortedScopeNameList()
