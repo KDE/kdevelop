@@ -228,7 +228,7 @@
     </tr>
     <tr>
       <td>\ref sectionDocumentationTopics</td>
-      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
       <td bgcolor="green">Y</td>
       <td bgcolor="yellow">Y</td>
       <td bgcolor="red">N</td>
@@ -238,7 +238,7 @@
       <td bgcolor="green">Y</td>
       <td bgcolor="green">Y</td>
       <td bgcolor="green">Y</td>
-      <td bgcolor="red">N</td>
+      <td bgcolor="green">Y</td>
       <td bgcolor="red">N</td>
     </tr>
     <tr>
