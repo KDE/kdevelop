@@ -1,3 +1,7 @@
+2000-01-25 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* fixing "Add existing file to project" problem
+	  (in teamwork with jbb)
+
 2000-01-25 jbb <jbb@ihug.co.nz>
 	* Add accel keys for debugger
 

@@ -236,6 +236,7 @@ void CKDevelop::slotProjectAddNewFile(){
 
 void CKDevelop::slotAddExistingFiles(){
   QString temp_template;
+  KShellProcess add_process("/bin/sh");
   CGenerateNewFile genfile;
   bool copy = false;
   ProjectFileType type = DATA;
@@ -245,6 +246,15 @@ void CKDevelop::slotAddExistingFiles(){
   QString str_files = add_dlg->source_edit->text(); 
   StringTokenizer str_token;
     
+  connect(&add_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
+  	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+
+  connect(&add_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
+	  this,SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+
+  connect(&add_process,SIGNAL(processExited(KProcess*)),
+	  this,SLOT(slotProcessExited(KProcess*) )) ;
+
   str_token.tokenize(str_files,",");
   while(str_token.hasMoreTokens()){
     token = str_token.nextToken();
@@ -286,32 +296,39 @@ void CKDevelop::slotAddExistingFiles(){
 
     if(file == dest_name) {
       copy = false;
-      process.clearArguments();
-      process << "cat"; // copy is your friend :-) ...cat, too
+      add_process.clearArguments();
+      add_process << QString("echo '")+
+                     i18n("Preparing file: ") << source_name << "';";
+	// give a little message
+
+      add_process << "cat"; // copy is your friend :-) ...cat, too
 
       if (add_dlg->isTemplateChecked())
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
          temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,source_name);
-         process << temp_template;
+         add_process << temp_template;
         }
         else if (CProject::getType(file)==CPP_SOURCE)
               {
                temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
-               process << temp_template;
+               add_process << temp_template;
               }
       }
-      process << file;
-      process << ">";
+      add_process << file;
+      add_process << ">";
 
-      process << temp_name;
-      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important 
-      process.clearArguments();
-      process << "mv";
-      process << temp_name;
-      process << dest_name;
-      process.start(KProcess::Block,KProcess::AllOutput);
+      add_process << temp_name;
+      add_process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
+      add_process.clearArguments();
+      add_process << QString("echo '")+
+                     i18n("Add to project: ") << source_name << "';";
+	// give a little message
+      add_process << "mv";
+      add_process << temp_name;
+      add_process << dest_name;
+      add_process.start(KProcess::Block,KProcess::AllOutput);
     }
     else
     if(QFile::exists(dest_name)){
@@ -333,37 +350,46 @@ void CKDevelop::slotAddExistingFiles(){
     }
       
     if(copy){
-      process.clearArguments();
-      process << "cat"; // copy is your friend :-) ...cat, too
+      add_process.clearArguments();
+      add_process << QString("echo '")+
+                     i18n("Copy and add to project: ") << source_name << "';";
+	// give a little message
+      add_process << "cat"; // copy is your friend :-) ...cat, too
 
       if (add_dlg->isTemplateChecked())
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
          temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,source_name);
-         process << temp_template;
+         add_process << temp_template;
         }
         else if (CProject::getType(file)==CPP_SOURCE)
               {
                temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
-               process << temp_template;
+               add_process << temp_template;
               }
       }
-      process << file;
-      process << ">";
+      add_process << file;
+      add_process << ">";
 
-      process << dest+source_name;
-      process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
+      add_process << dest+source_name;
+      add_process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
     }
 
     new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
 	lNewFiles.append(dest_name);
   }
+
+  // disconnect all of add_process
+
+  disconnect(&add_process);
+
   progress.setProgress( files.count() );
   // if (type != DATA)               // don't load data files (has to be tested if wanted)
   switchToFile(dest_name);
   refreshTrees(&lNewFiles);
     
+
   if(new_subdir){
     newSubDir();
   }
