@@ -170,6 +170,7 @@ private:
   QListViewItem *kdeminiitem;
   QListViewItem *kde2normalitem;
   QListViewItem *kde2miniitem;
+  QListViewItem *kde2mdiitem;
   QListViewItem *qtentry;
   QListViewItem *ccppentry;
   //QListViewItem *gtkentry;
