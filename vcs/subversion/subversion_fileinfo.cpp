@@ -61,7 +61,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		QString rPath = projectDirectory( );
 		rPath += QDir::separator() + dirPath;
 		kdDebug(9036) << "DIR : " << rPath << " " << KURL( QFileInfo( rPath ).absFilePath() ) << endl;
-		s << cmd << QFileInfo( rPath ).absFilePath();
+		s << cmd << QFileInfo( rPath ).absFilePath() << true << true;
 		KIO::SimpleJob *job2 = KIO::special(servURL, parms, false);
 		job2->setWindow( m_part->mainWindow()->main() );
 
@@ -128,7 +128,7 @@ bool SVNFileInfoProvider::requestStatus( const QString &dirPath, void *callerDat
 	QString rPath = projectDirectory( );
 	rPath += QDir::separator() + dirPath;
 	kdDebug(9036) << "DIR : " << rPath << " " << QFileInfo( rPath ).absFilePath() << endl;
-	s << cmd << KURL( QFileInfo( rPath ).absFilePath() );
+	s << cmd << KURL( QFileInfo( rPath ).absFilePath() ) << true << true;
 	KURL servURL = "svn+http://fakeserver_this_is_normal_behavior/";
 	job = KIO::special(servURL, parms, false);
 	job->setWindow( m_part->mainWindow()->main() );
@@ -217,6 +217,37 @@ void SVNFileInfoProvider::slotStatus( const QString& path,int text_status, int p
 			break;
 		case 10: //conflicted
 			state = VCSFileInfo::Conflict;
+			break;
+		case 11: //ignored
+			break;
+		case 12: //obstructed
+			break;
+		case 13: //external
+			break;
+		case 14: //incomplete
+			break;
+	}
+	switch ( repos_text_status ) {
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6: //deleted
+			break;
+		case 7: //replaced
+			break;
+		case 8: //modified
+			state = VCSFileInfo::NeedsPatch;
+			break;
+		case 9: //merged
+			break;
+		case 10: //conflicted
 			break;
 		case 11: //ignored
 			break;
