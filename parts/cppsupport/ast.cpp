@@ -68,6 +68,14 @@ QString nodeTypeToString( NodeType type )
 	return "SimpleDeclaration";
     case NodeType_Statement:
 	return "Statement";
+    case NodeType_IfStatement:
+	return "IfStatement";
+    case NodeType_WhileStatement:
+	return "WhileStatement";
+    case NodeType_DoStatement:
+	return "DoStatement";
+    case NodeType_StatementList:
+	return "StatementList";
     case NodeType_TranslationUnit:
 	return "TranslationUnit";
     case NodeType_FunctionDeclaration:
@@ -952,5 +960,74 @@ void StatementListAST::addStatement( StatementAST::Node& statement )
     
     statement->setParent( this );
     m_statementList.append( statement.release() );
+}
+
+// --------------------------------------------------------------------------
+IfStatementAST::IfStatementAST()
+{
+}
+
+IfStatementAST::~IfStatementAST()
+{
+}
+
+void IfStatementAST::setCondition( AST::Node& condition )
+{
+    m_condition = condition;
+    if( m_condition.get() ) m_condition->setParent( this );
+}
+
+void IfStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
+}
+
+void IfStatementAST::setElseStatement( StatementAST::Node& elseStatement )
+{
+    m_elseStatement = elseStatement;
+    if( m_elseStatement.get() ) m_elseStatement->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+WhileStatementAST::WhileStatementAST()
+{
+}
+
+WhileStatementAST::~WhileStatementAST()
+{
+}
+
+void WhileStatementAST::setCondition( AST::Node& condition )
+{
+    m_condition = condition;
+    if( m_condition.get() ) m_condition->setParent( this );
+}
+
+void WhileStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+DoStatementAST::DoStatementAST()
+{
+}
+
+DoStatementAST::~DoStatementAST()
+{
+}
+
+void DoStatementAST::setCondition( AST::Node& condition )
+{
+    m_condition = condition;
+    if( m_condition.get() ) m_condition->setParent( this );
+}
+
+void DoStatementAST::setStatement( StatementAST::Node& statement )
+{
+    m_statement = statement;
+    if( m_statement.get() ) m_statement->setParent( this );
 }
 

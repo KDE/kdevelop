@@ -111,12 +111,14 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
     
+#ifdef AST_DEBUG
     m_astView = new KListView();
     m_astView->setSorting( -1 );
     m_astView->addColumn( "" );
     m_astView->header()->hide();
     mainWindow()->embedSelectViewRight( m_astView, i18n("AST Debug"), i18n("Show the AST for the current translation unit") );
     connect( m_astView, SIGNAL(executed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
+#endif
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
@@ -158,7 +160,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setWhatsThis( i18n("Generate a new class") );
 
     m_pParser      = 0;
-	m_pCCParser    = 0;
+    m_pCCParser    = 0;
     m_pCompletion  = 0;
 
     withcpp = false;
@@ -196,12 +198,16 @@ CppSupportPart::~CppSupportPart()
     
     mainWindow( )->removeView( m_pCHWidget );
     mainWindow( )->removeView( m_problemReporter );
+#ifdef AST_DEBUG
     mainWindow()->removeView( m_astView );
+#endif
     
     delete m_backgroundParser;
     delete m_pParser;
     delete m_pCompletion;
+#ifdef AST_DEBUG
     delete m_astView;
+#endif
 
     delete m_pCCParser;
     delete m_pCHWidget;
@@ -224,6 +230,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	    m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
 	}
 	
+#ifdef AST_DEBUG
 	m_astView->clear();
 	
 	if( fileName == m_activeFileName ){
@@ -236,7 +243,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		buildView( ast, m_activeEditor, root );
 	    }
 	}
-	
+#endif	
 	m_backgroundParser->unlock();
     } else if( ev->type() == Event_FileParsed ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;

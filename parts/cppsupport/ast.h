@@ -60,6 +60,9 @@ enum NodeType
     NodeType_SimpleDeclaration,
     NodeType_Statement,
     NodeType_StatementList,
+    NodeType_IfStatement,
+    NodeType_WhileStatement,
+    NodeType_DoStatement,
     NodeType_TranslationUnit,
     NodeType_FunctionDeclaration,
     NodeType_FunctionDefinition,
@@ -727,7 +730,86 @@ private:
     void operator = ( const StatementAST& source );
 };
 
-class StatementListAST: public AST
+class IfStatementAST: public StatementAST
+{
+public:
+    typedef std::auto_ptr<IfStatementAST> Node;
+    enum { Type = NodeType_IfStatement };
+
+public:
+    IfStatementAST();
+    virtual ~IfStatementAST();
+    
+    AST* condition() const { return m_condition.get(); }
+    void setCondition( AST::Node& condition );
+    
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+    
+    StatementAST* elseStatement() { return m_elseStatement.get(); }
+    void setElseStatement( StatementAST::Node& statement );
+    
+private:
+    AST::Node m_condition;
+    StatementAST::Node m_statement;
+    StatementAST::Node m_elseStatement;
+    
+private:
+    IfStatementAST( const IfStatementAST& source );
+    void operator = ( const IfStatementAST& source );
+};
+
+class WhileStatementAST: public StatementAST
+{
+public:
+    typedef std::auto_ptr<WhileStatementAST> Node;
+    enum { Type = NodeType_WhileStatement };
+
+public:
+    WhileStatementAST();
+    virtual ~WhileStatementAST();
+    
+    AST* condition() const { return m_condition.get(); }
+    void setCondition( AST::Node& condition );
+    
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+    
+private:
+    AST::Node m_condition;
+    StatementAST::Node m_statement;
+    
+private:
+    WhileStatementAST( const WhileStatementAST& source );
+    void operator = ( const WhileStatementAST& source );
+};
+
+class DoStatementAST: public StatementAST
+{
+public:
+    typedef std::auto_ptr<DoStatementAST> Node;
+    enum { Type = NodeType_DoStatement };
+
+public:
+    DoStatementAST();
+    virtual ~DoStatementAST();
+    
+    AST* condition() const { return m_condition.get(); }
+    void setCondition( AST::Node& condition );
+    
+    StatementAST* statement() { return m_statement.get(); }
+    void setStatement( StatementAST::Node& statement );
+    
+private:
+    AST::Node m_condition;
+    StatementAST::Node m_statement;
+    
+private:
+    DoStatementAST( const DoStatementAST& source );
+    void operator = ( const DoStatementAST& source );
+};
+
+class StatementListAST: public StatementAST
 {
 public:
     typedef std::auto_ptr<StatementListAST> Node;

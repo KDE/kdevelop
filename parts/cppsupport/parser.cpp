@@ -2230,9 +2230,11 @@ bool Parser::parseCondition( AST::Node& /*node*/ )
 }
 
 
-bool Parser::parseWhileStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseWhileStatement( StatementAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseWhileStatement()" << endl;
+    int start = lex->index();
+    
     ADVANCE( Token_while, "while" );
     ADVANCE( '(' , "(" );
     
@@ -2249,12 +2251,20 @@ bool Parser::parseWhileStatement( StatementAST::Node& /*node*/ )
 	return false;
     }
     
+    WhileStatementAST::Node ast = CreateNode<WhileStatementAST>();
+    ast->setCondition( cond );
+    ast->setStatement( body );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    
     return true;
 }
 
-bool Parser::parseDoStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseDoStatement( StatementAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDoStatement()" << endl;
+    int start = lex->index();
+    
     ADVANCE( Token_do, "do" );
     
     StatementAST::Node body;
@@ -2270,9 +2280,15 @@ bool Parser::parseDoStatement( StatementAST::Node& /*node*/ )
 	reportError( i18n("expression expected") );
 	return false;
     }
-    
+        
     ADVANCE( ')', ")" );
     ADVANCE( ';', ";" );
+    
+    DoStatementAST::Node ast = CreateNode<DoStatementAST>();
+    ast->setStatement( body );
+    //ast->setCondition( condition );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     
     return true;
 }
@@ -2314,13 +2330,17 @@ bool Parser::parseForInitStatement( StatementAST::Node& node )
     return skipExpressionStatement();
 }
 
-bool Parser::parseCompoundStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseCompoundStatement( StatementAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseCompoundStatement()" << endl;
+    int start = lex->index();
+    
     if( lex->lookAhead(0) != '{' ){
 	return false;
     }
     lex->nextToken();
+    
+    StatementListAST::Node ast = CreateNode<StatementListAST>();
         
     while( !lex->lookAhead(0).isNull() ){
 	if( lex->lookAhead(0) == '}' )
@@ -2329,20 +2349,30 @@ bool Parser::parseCompoundStatement( StatementAST::Node& /*node*/ )
 	StatementAST::Node stmt;
 	if( !parseStatement(stmt) ){
 	    skipUntilStatement();
+	} else {
+	    ast->addStatement( stmt );
 	}
     }
     
     ADVANCE( '}', "}" );
+    
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
+    
     return true;
 }
 
-bool Parser::parseIfStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseIfStatement( StatementAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseIfStatement()" << endl;
+    
+    int start = lex->index();
     
     ADVANCE( Token_if, "if" );
     
     ADVANCE( '(' , "(" );
+ 
+    IfStatementAST::Node ast = CreateNode<IfStatementAST>();
     
     AST::Node cond;
     if( !parseCondition(cond) ){
@@ -2356,6 +2386,9 @@ bool Parser::parseIfStatement( StatementAST::Node& /*node*/ )
 	reportError( i18n("statement expected") );
 	return false;
     }
+  
+    ast->setCondition( cond );
+    ast->setStatement( stmt );
     
     if( lex->lookAhead(0) == Token_else ){
 	lex->nextToken();
@@ -2364,7 +2397,11 @@ bool Parser::parseIfStatement( StatementAST::Node& /*node*/ )
 	    reportError( i18n("statement expected") );
 	    return false;
 	}
+	ast->setElseStatement( elseStmt );
     }
+        
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     
     return true;
 }
