@@ -69,6 +69,7 @@ private slots:
     void slotAddAttribute();
     void slotOpenDeclaration();
     void slotOpenImplementation();
+	void slotCreateAccessMethods();
 
 protected:
     void contentsContextMenuEvent( QContextMenuEvent* );
@@ -94,7 +95,7 @@ private:
     KAction* m_actionAddAttribute;
     KAction* m_actionOpenDeclaration;
     KAction* m_actionOpenImplementation;
-
+	KAction* m_actionCreateAccessMethods;
     friend class ClassViewItem;
     friend class FolderBrowserItem;
     friend class NamespaceDomBrowserItem;

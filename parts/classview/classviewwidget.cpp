@@ -71,6 +71,10 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
     m_actionNewClass = new KAction( i18n("New Class..."), KShortcut(), this, SLOT(slotNewClass()),
 				    m_part->actionCollection(), "classview_new_class" );
     m_actionNewClass->setWhatsThis(i18n("<b>New class</b><p>Calls the <b>New Class</b> wizard."));
+	
+	m_actionCreateAccessMethods = new KAction( i18n("Create get/set methods"), KShortcut(), this, SLOT(slotCreateAccessMethods()), m_part->actionCollection(), "classview_create_access_methods" );
+	
+	
     m_actionAddMethod = new KAction( i18n("Add Method..."), KShortcut(), this, SLOT(slotAddMethod()),
 				    m_part->actionCollection(), "classview_add_method" );
     m_actionAddMethod->setWhatsThis(i18n("<b>Add method</b><p>Calls the <b>New Method</b> wizard."));
@@ -269,6 +273,11 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
             sep = true;
         }	
     }
+	
+	if (item && item->isVariable()){
+		if( m_part->langHasFeature(KDevLanguageSupport::CreateAccessMethods) ) 
+				m_actionCreateAccessMethods->plug( &menu );
+	}
 
     if( item && item->model() ){
 	CodeModelItemContext context( item->model() );
@@ -1037,6 +1046,20 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 	if ( item && r.isValid() && !tooltip.isEmpty() )
 	{
 		tip( r, QString("<qt><pre>") + QStyleSheet::escape( tooltip ) + QString("</pre></qt>") );
+	}
+}
+
+void ClassViewWidget::slotCreateAccessMethods( )
+{
+	if ( !selectedItem() ) return;
+
+    if( m_part->languageSupport()->features() & KDevLanguageSupport::CreateAccessMethods )
+	{
+        VariableDomBrowserItem* item = dynamic_cast<VariableDomBrowserItem*>( selectedItem() );
+		if (item == 0)
+			return;
+		
+		m_part->languageSupport()->createAccessMethods(static_cast<ClassModel*>(static_cast<ClassDomBrowserItem*>(item->parent())->dom()),static_cast<VariableModel*>(item->dom()));
 	}
 }
 
