@@ -349,6 +349,7 @@ void AddMethodDialog::addMethod()
 void AddMethodDialog::deleteCurrentMethod()
 {
     delete( methods->currentItem() );
+    updateGUI();
 }
 
 void AddMethodDialog::currentChanged( QListViewItem* item )
