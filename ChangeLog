@@ -1,3 +1,6 @@
+2000-03-11 Ralf Nolden <rnolden@kdevelop.de>
+        * fixed kdoc namespace file errors ->replaced :: with __ for correct html filenames
+
 2000-03-11  Ralf Funken <rfunken@kdevelop.de>
 	* Corrected some messages
         * Updated german manual

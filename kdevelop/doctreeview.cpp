@@ -526,6 +526,9 @@ int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
             continue;
         classname = s.mid(9, pos1-9);
         QString filename = s.mid(pos1+7, pos2-(pos1+7));
+        if(filename.contains("::"))
+          filename.replace( QRegExp("::"), "__" );           // becomes "b"
+
         class_doc= new ListViewDocItem(this, classname,
                             baseurl + "/" + filename);
         count++;
@@ -542,6 +545,8 @@ int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
         QString membername = s.mid(10, pos1-10);
         membername=classname+"::"+membername;
         QString memberfilename = s.mid(pos1+7, pos2-(pos1+7));
+        if(memberfilename.contains("::"))
+          memberfilename.replace( QRegExp("::"), "__" );           // becomes "b"
         if(class_doc && classname)
           new ListViewDocItem(class_doc, membername,
                             baseurl + "/" + memberfilename);
@@ -556,6 +561,8 @@ int DocTreeKDELibsBook::readKdoc2Index(FILE *f)
             continue;
         QString membername = s.mid(9, pos1-9);
         QString memberfilename = s.mid(pos1+7, pos2-(pos1+7));
+        if(memberfilename.contains("::"))
+          memberfilename.replace( QRegExp("::"), "__" );           // becomes "b"
         if(class_doc && classname)
           new ListViewDocItem(class_doc, membername,
                             baseurl + "/" + memberfilename);
