@@ -30,6 +30,7 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <stdio.h>
+#include <iostream.h>
 
 #include "cdoctreepropdlg.h"
 #include "cproject.h"
@@ -55,7 +56,7 @@ ListViewDocItem::ListViewDocItem(KListViewItem *parent,
                                  const char *text, const char *filename)
     : KListViewItem(parent, text, filename)
 {
-    setPixmap(0, BarIcon("mini/mini-doc.xpm"));
+    setPixmap(0, BarIcon("mini-doc.xpm"));
 }
 
 
@@ -83,7 +84,7 @@ ListViewBookItem::ListViewBookItem(KListViewItem *parent,
 
 void ListViewBookItem::setOpen(bool o)
 {
-    setPixmap(0, o? BarIcon("mini/mini-book2.xpm") : BarIcon("mini/mini-book1.xpm"));
+    setPixmap(0, o? BarIcon("mini-book2.xpm") : BarIcon("mini-book1.xpm"));
     KListViewItem::setOpen(o);
 }
 
@@ -112,7 +113,7 @@ ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
 
 void ListViewFolderItem::setOpen(bool o)
 {
-    setPixmap(0, o? BarIcon("mini/folder_open.xpm") : BarIcon("mini/folder.xpm"));
+    setPixmap(0, o? KGlobal::iconLoader()->loadApplicationMiniIcon("folder_open.png") : KGlobal::iconLoader()->loadApplicationMiniIcon("folder.png"));
     KListViewItem::setOpen(o);
 }
 
@@ -161,8 +162,11 @@ QString DocTreeKDevelopBook::locatehtml(const QString &filename)
 {
     QString path = locate("html", KGlobal::locale()->language()+"/kdevelop/"+filename);
     if (path.isNull())
-        path = locate("html", "default/kdevelop"+filename);
+        path = locate("html", "default/kdevelop/"+filename);
+    cerr << "PATH" << path;
     return path;
+
+
 }
 
 
