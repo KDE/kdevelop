@@ -43,7 +43,7 @@ CTagsFactory::~CTagsFactory()
 KDevPart *CTagsFactory::createPartObject(KDevApi *api, QObject *parent,
                                          const QStringList &/*args*/)
 {
-    kdDebug(9021) << "Building CTags" << endl;
+    kdDebug(9022) << "Building CTags" << endl;
     return new CTagsPart(api, parent, "ctags part");
 }
 

@@ -433,7 +433,7 @@ void CTagsDialog::projectChanged()
 
 void CTagsDialog::slotSearch()
 {
-    kdDebug(9021) << "search tag" << endl;
+    kdDebug(9022) << "search tag" << endl;
     ensureTagsLoaded();
     if (!m_tags)
         return;
@@ -507,7 +507,7 @@ void CTagsDialog::ensureTagsLoaded()
         if (!m_part->project())
             return;
 
-        kdDebug(9021) << "create/load tags" << endl;
+        kdDebug(9022) << "create/load tags" << endl;
         
         QString tagsFileName = m_part->project()->projectDirectory() + "/tags";
         QFileInfo fi(tagsFileName);
@@ -520,7 +520,7 @@ void CTagsDialog::ensureTagsLoaded()
                 return;
             }
         }
-        kdDebug(9021) << "load tags from " << tagsFileName << endl;
+        kdDebug(9022) << "load tags from " << tagsFileName << endl;
         loadTagsFile(tagsFileName);
     }
 }
@@ -528,7 +528,7 @@ void CTagsDialog::ensureTagsLoaded()
 
 bool CTagsDialog::createTagsFile()
 {
-    kdDebug(9021) << "create tags file" << endl;
+    kdDebug(9022) << "create tags file" << endl;
 
     QString cmd = "cd ";
     cmd += m_part->project()->projectDirectory();
@@ -549,7 +549,7 @@ bool CTagsDialog::createTagsFile()
 
 void CTagsDialog::loadTagsFile(const QString &fileName)
 {
-    kdDebug(9021) << "load tags file" << endl;
+    kdDebug(9022) << "load tags file" << endl;
 
     kinds_listview->clear();
     
