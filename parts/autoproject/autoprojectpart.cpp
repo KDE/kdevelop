@@ -28,6 +28,7 @@
 #include <qstringlist.h>
 #include <qwhatsthis.h>
 #include <qregexp.h>
+#include <qlabel.h>
 
 #include <kaction.h>
 #include <kdebug.h>
@@ -181,6 +182,7 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
         //ok we handle the execute in this kpart
         vbox = dlg->addVBoxPage(i18n("Run Options"));
         RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), vbox);
+        w3->mainprogram_label->setText(i18n("Main program (if empty automaticaly uses active target):"));
         connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
     }
     vbox = dlg->addVBoxPage(i18n("Make Options"));
@@ -229,6 +231,8 @@ DomUtil::PairList AutoProjectPart::runEnvironmentVars()
 
 
 /** Retuns the currently selected run directory
+  * If no main Program was selected in the Run Options dialog
+  * use the currently active target instead to calculate it.
   * The returned string can be:
   *   if /kdevautoproject/run/directoryradio == executable
   *        The directory where the executable is
@@ -251,8 +255,10 @@ QString AutoProjectPart::runDirectory()
         return DomUtil::readEntry(dom, "/kdevautoproject/run/customdirectory");
 
     if ( DomMainProgram.isEmpty() )
-        return QString::null;
+        // No Main Program was specified, return the directory of the active target
+        return buildDirectory() + "/" + activeDirectory();
 
+    // A Main Program was specified, return it's run directory
     int pos = DomMainProgram.findRev('/');
     if (pos != -1)
         return buildDirectory() + "/" + DomMainProgram.left(pos);
@@ -261,6 +267,8 @@ QString AutoProjectPart::runDirectory()
 
 
 /** Retuns the currently selected main program
+  * If no main Program was selected in the Run Options dialog
+  * use the currently active target instead.
   * The returned string can be:
   *   if /kdevautoproject/run/directoryradio == executable
   *        The executable name
@@ -276,6 +284,33 @@ QString AutoProjectPart::mainProgram(bool relative = false)
     QString directoryRadioString = DomUtil::readEntry(dom, "/kdevautoproject/run/directoryradio");
     QString DomMainProgram = DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram");
 
+    if ( DomMainProgram.isEmpty() ) {
+    // If no Main Program was specified, return the active target
+
+        // Get a pointer to the active target
+        TargetItem* titem = m_widget->activeTarget();
+
+        if ( !titem ) {
+            kdDebug ( 9000 ) << "Error! : No Main Program was specified and there's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
+
+        if ( titem->primary != "PROGRAMS" ) {
+            kdDebug ( 9000 ) << "Error! : No Main Program was specified and active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
+            return QString::null;
+        }
+
+        if (relative == false || directoryRadioString == "custom")
+            return buildDirectory() + "/" + activeDirectory() + "/" + titem->name;
+
+        if ( directoryRadioString == "executable" )
+            return titem->name;
+
+        return activeDirectory() + "/" + titem->name;
+
+    }
+    else {
+    // A Main Program was specified, return it
         if ( directoryRadioString == "custom" )
             return DomMainProgram;
 
@@ -289,6 +324,7 @@ QString AutoProjectPart::mainProgram(bool relative = false)
         if (pos != -1)
             return DomMainProgram.mid(pos+1);
         return DomMainProgram;
+    }
 }
 
 
@@ -823,13 +859,25 @@ void AutoProjectPart::slotMakeMessages()
 }
 
 
+/** Checks if the currently selected main program or,
+  * if no main Program was selected in the Run Options dialog,
+  * the currently active target is is to date and builds it if necessary.
+  * In the end checks if the program is already running and if not calls the
+  * slotExecute2() function to execute it or asks the user what to do.
+  */
 void AutoProjectPart::slotExecute()
 {
     partController()->saveAllFiles();
+    QDomDocument &dom = *projectDom();
 
-    if( DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/autocompile", true) && isDirty() ){
+    if( DomUtil::readBoolEntry(dom, "/kdevautoproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
-        slotBuild();
+        if ( DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram").isEmpty() )
+        // If no Main Program was specified, build the active target
+            slotBuildActiveTarget();
+        else
+        // A Main Program was specified, build all targets because we don't know which is it
+            slotBuild();
         return;
     }
 
@@ -844,6 +892,11 @@ void AutoProjectPart::slotExecute()
     slotExecute2();
 }
 
+
+/** Executes the currently selected main program.
+  * If no main Program was selected in the Run Options dialog
+  * the currently active target is executed instead.
+  */
 void AutoProjectPart::slotExecute2()
 {
     disconnect(appFrontend(), SIGNAL(processExited()), this, SLOT(slotExecute2()));
