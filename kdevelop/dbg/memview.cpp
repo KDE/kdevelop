@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "memview.h"
+#include "dbgcontroller.h"
 
 #include <klocale.h>
 #include <kbuttonbox.h>
@@ -46,7 +47,7 @@
 // and displayed as is, so it's rather crude, but it works!
 // **************************************************************************
 
-MemoryView::MemoryView(QWidget *parent, const char *name) :
+MemoryView::MemoryView(QWidget *parent, const char *name, DbgController* dbgController) :
   KDialog(parent, name, true),      // modal
   start_(new QLineEdit(this)),
   end_(new QLineEdit(this)),
@@ -108,7 +109,21 @@ MemoryView::MemoryView(QWidget *parent, const char *name) :
   buttonbox->layout();
   topLayout->addWidget(buttonbox);
 
+  if (dbgController)
+  {
+    connect( this, SIGNAL(disassemble(const QString&, const QString&)), dbgController,  SLOT(slotDisassemble(const QString&, const QString&)));
+    connect( this, SIGNAL(memoryDump(const QString&, const QString&)),  dbgController,  SLOT(slotMemoryDump(const QString&, const QString&)));
+    connect( this, SIGNAL(registers()),                                 dbgController,  SLOT(slotRegisters()));
+    connect( this, SIGNAL(libraries()),                                 dbgController,  SLOT(slotLibraries()));
+
+    connect( dbgController, SIGNAL(rawGDBMemoryDump(char*)),  SLOT(slotRawGDBMemoryView(char*)));
+    connect( dbgController, SIGNAL(rawGDBDisassemble(char*)), SLOT(slotRawGDBMemoryView(char*)));
+    connect( dbgController, SIGNAL(rawGDBRegisters(char*)),   SLOT(slotRawGDBMemoryView(char*)));
+    connect( dbgController, SIGNAL(rawGDBLibraries(char*)),   SLOT(slotRawGDBMemoryView(char*)));
+  }
+
   topLayout->activate();
+
 }
 
 // **************************************************************************

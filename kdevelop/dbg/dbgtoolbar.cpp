@@ -316,7 +316,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController/*, CKDevelop* parent*/) :
 
 //  bStep->setAccel(CTRL+'S');
 
-//  connect(bRun,         SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugRun()));
+  connect(bRun,         SIGNAL(clicked()),  dbgController_, SLOT(slotRun()));
   connect(bInterrupt,   SIGNAL(clicked()),  dbgController,  SLOT(slotBreakInto()));
   connect(bNext,        SIGNAL(clicked()),  dbgController,  SLOT(slotStepOver()));
   connect(bNexti,       SIGNAL(clicked()),  dbgController,  SLOT(slotStepOverIns()));

@@ -25,6 +25,7 @@
 
 #include <kdialog.h>
 
+class DbgController;
 class QLineEdit;
 class QMultiLineEdit;
 
@@ -33,7 +34,7 @@ class MemoryView : public KDialog
   Q_OBJECT
 
 public:
-  MemoryView(QWidget *parent, const char *name);
+  MemoryView(QWidget *parent, const char *name, DbgController* dbgController);
   ~MemoryView();
 
 signals:
