@@ -27,6 +27,7 @@ automake 1.4
 Qt 1.44 NOT Qt 2.0
 KDE 1.1.x 
 flex
+db (berkley database)
 
 
 optional:
