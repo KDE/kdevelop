@@ -42,6 +42,8 @@ public:
 
   void realClose();
 
+  bool isClosing() const { return m_closing; }
+
   /** Reimplemented from QextMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 
@@ -68,6 +70,9 @@ private slots:
   void slotKeyBindings();
   void slotSettings();
   void slotActiveProcessCountChanged( uint active );
+  void slotShowMenuBar();
+  void slotNewToolbarConfig();
+  void slotConfigureToolbars();
   
 private:
   

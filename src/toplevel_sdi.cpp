@@ -52,6 +52,7 @@ TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
 
 void TopLevelSDI::init()
 {
+  setStandardToolBarMenuEnabled( true );
   setXMLFile("gideonui.rc");
 
   createFramework();
