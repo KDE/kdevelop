@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
-  <!ENTITY kappname "&kapp;"><!-- replace kapp here -->
+  <!ENTITY kappname "&|NAMELITTLE|;"><!-- replace |NAMELITTLE| here -->
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
   
@@ -40,7 +40,7 @@ thanks ;-).
 as Authors, publish date, the abstract, and Keywords -->
 
 <bookinfo>
-<title>The Kapp Handbook</title>
+<title>The |NAME| Handbook</title>
 
 <authorgroup>
 <author>
@@ -53,6 +53,7 @@ as Authors, publish date, the abstract, and Keywords -->
 </author>
 </authorgroup>
 
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
 
 <copyright>
 <year>1999</year>
@@ -78,7 +79,7 @@ Do NOT change these in the translation. -->
 
 <abstract>
 <para>
-&kapp; is an application specially designed to do nothing you would
+&|NAMELITTLE|; is an application specially designed to do nothing you would
 ever want.
 </para>
 </abstract>
@@ -121,7 +122,7 @@ any problems or feature requests to the KDE mailing lists.
 </chapter>
 
 <chapter id="using-kapp">
-<title>Using Kapp</title>
+<title>Using |NAME|</title>
 
 <!-- This chapter should tell the user how to use your app. You should use as
 many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
@@ -165,7 +166,7 @@ The Squiggle Tool <guiicon><inlinemediaobject>
 	    <phrase>Squiggle</phrase>
 	  </textobject>
 </inlinemediaobject></guiicon> is used to draw squiggly lines all over
-the &kapp; main window. It's not a bug, it's a feature!
+the &|NAMELITTLE|; main window. It's not a bug, it's a feature!
 </para>
 
 </sect1>
@@ -181,7 +182,7 @@ menus or toolbars. This may not be necessary for small apps or apps with no tool
 or menu bars. -->
 
 <sect1 id="kapp-mainwindow">
-<title>The main Kapp window</title>
+<title>The main |NAME| window</title>
 <para></para>
 
 <sect2>
@@ -227,14 +228,14 @@ or menu bars. -->
 </chapter>
 
 <chapter id="developers">
-<title>Developer's Guide to Kapp</title>
+<title>Developer's Guide to |NAME|</title>
 
 <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
 used for apps that use plugins or that provide their own scripting hooks
 and/or development libraries. -->
 
 <para>
-Programming &kapp; plugins is a joy to behold. Just read through the next
+Programming &|NAMELITTLE|; plugins is a joy to behold. Just read through the next
 66 pages of API's to learn how!
 </para>
 
@@ -434,16 +435,11 @@ Contributors:
 <para>
 Documentation copyright 1999 George N. Ugnacious <email>gnu@kde.org</email>
 </para>
-<para>
-Translations done by:
-<itemizedlist>
-<listitem>
-<para>Babel D. Fish <email>babelfish@kde.org</email> (Sanskrit)</para>
-</listitem>
-</itemizedlist>
-</para>
 
-&underFDL;               <!-- FDL: do not remove -->
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;               <!-- FDL: do not remove. Commercial development should -->
+<!-- replace this with their copyright and either remove it or re-set this.-->
 
 <!-- Determine which license your application is licensed under, 
      and delete all the remaining licenses below:
@@ -461,13 +457,13 @@ Translations done by:
 <appendix id="installation">
 <title>Installation</title>
 
-<sect1 id="getting-kapp">
-<title>How to obtain Kapp</title>
+<sect1 id="getting-|NAMELITTLE|">
+<title>How to obtain |NAME|</title>
 
 <para>
-&kapp; is part of the KDE project
+&|NAMELITTLE|; is part of the KDE project
 <ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-&kapp; can be found in the kdeutils package on
+&|NAMELITTLE|; can be found in the kdeutils package on
 <ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
 main ftp site of the KDE project. </para>
 </sect1>
@@ -487,15 +483,15 @@ information here.
 -->
 
 <para>
-In order to successfully use &kapp;, you need KDE 1.1. Foobar.lib is required
-in order to support the advanced &kapp; features. &kapp; uses about 5 megs of
+In order to successfully use &|NAMELITTLE|;, you need KDE 1.1. Foobar.lib is required
+in order to support the advanced &|NAMELITTLE|; features. &|NAMELITTLE|; uses about 5 megs of
 memory to run, but this may vary depending on your platform and
 configuration.
 </para>
 
 <para>
-All required libraries as well as &kapp; itself can be found
-on <ulink url="ftp://ftp.kapp.org">The &kapp; home page</ulink>.
+All required libraries as well as &|NAMELITTLE|; itself can be found
+on <ulink url="ftp://ftp.kapp.org">The &|NAMELITTLE|; home page</ulink>.
 </para>
 
 <!-- For a list of updates, you may refer to the application web site
@@ -507,7 +503,7 @@ url="http://apps.kde.org/kapp">http://apps.kde.org/kapp</ulink>.
 </sect1>
 
 <sect1 id="compilation">
-<title>Compilation and installation</title>
+<title>Compilation and Installation</title>
 
 <para>
 In order to compile and install KApp on your system, type the following in the base
@@ -539,8 +535,22 @@ dicer-toaster daemon first, or KApp won't work !</para>
 <!--
 Local Variables:
 mode: sgml
-sgml-minimize-attributes: nil
-sgml-general-insert-case: lower
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
 End:
 -->
+
+
+
+
+
+
+
+
+
+
+
+
 
