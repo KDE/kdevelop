@@ -1,7 +1,3 @@
-<!DOCTYPE gideonindex>
-<gideonindex>
-<title>libc</title>
-<base href="/home/bernd/kde2/share/doc/HTML/en/gideon/libc"/>
 <conceptindex>
 <entry name="__va_copy" url="libc_67.html#IDX433"/>
 <entry name="abort signal" url="libc_423.html#IDX2456"/>
@@ -3003,5 +2999,3 @@
 <entry name="wctype.h" url="libc_60.html#IDX351"/>
 <entry name="zoneinfo" url="libc_404.html#IDX2343"/>
 </fileindex>
-</gideonindex>
-

@@ -1,7 +1,19 @@
+htmldir = $(kde_htmldir)/en/gideon/kde2book
 indexdir = ${kde_datadir}/gideon/docindices
 index_DATA = kde2book.index
 
-htmldir = $(kde_htmldir)/en/gideon/kde2book
+kde2book.index:
+	echo "<!DOCTYPE gideonindex>" > kde2book.index ; \
+	echo "<gideonindex>" >> kde2book.index ; \
+	echo "<title>KDE2 Development Book</title>" >> kde2book.index ; \
+	echo "<base href=\"$(htmldir)\"/>" >> kde2book.index ; \
+	echo "<conceptindex>" >> kde2book.index ; \
+	sort < kde2book.index.in | uniq >> kde2book.index ; \
+	echo "</conceptindex>" >> kde2book.index ; \
+	echo "</gideonindex>" >> kde2book.index ; \
+	echo "" >> kde2book.index
+
+EXTRA_DIST = kde2book.index.in
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
@@ -14,5 +26,6 @@ dist-hook:
 	for file in $(srcdir)/*.html ; do cp -p $$file $(distdir) ; done
 
 index:
-	perl ../tools/index-db --title="KDE2 Development Book" --base=$(htmldir) *.xml > kde2book.index
+	rm -f indextmp.xml kde2book.index ; \
+	xsltproc ../tools/index.xsl main.xml > kde2book.index.in
 
