@@ -198,6 +198,9 @@ public: // Public queries
   /** Check if this class has the named parent. */
   bool hasParent( const char *aName );
 
+  /** Initialize the object from a persistant string. */
+  void fromPersistantString( const char *dataStr );
+
   /** Return a string made for persistant storage. */
   void asPersistantString( QString &dataStr );
 

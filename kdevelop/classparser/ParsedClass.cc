@@ -712,3 +712,18 @@ void CParsedClass::asPersistantString( QString &dataStr )
     dataStr += str;
   }
 }
+
+/*--------------------------------- CParsedClass::fromPersistantString()
+ * fromPersistantString()
+ *   Initialize the object from a persistant string.
+ *
+ * Parameters:
+ *   dataStr      The string with the data.
+ *   
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CParsedClass::fromPersistantString( const char *dataStr )
+{
+  
+}
