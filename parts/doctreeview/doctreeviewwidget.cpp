@@ -1079,15 +1079,24 @@ void DocTreeViewWidget::slotConfigure()
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize Documentation Tree"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                     "customization dialog");
+
     QVBox *vbox1 = dlg.addVBoxPage(i18n("Documentation Tree: Global"));
-    QVBox *vbox2 = dlg.addVBoxPage(i18n("Documentation Tree: Project"));
     DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget( m_part, this, vbox1, "doctreeview global config widget");
-    DocTreeProjectConfigWidget *w2 = new DocTreeProjectConfigWidget(this, vbox2, m_part->project(),"doctreeview project config widget");
     connect(&dlg, SIGNAL(okClicked()), w1, SLOT(accept()));
-    connect(&dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
+
+    DocTreeProjectConfigWidget *w2 = 0;
+
+    if(m_part->project()) {
+      QVBox *vbox2 = dlg.addVBoxPage(i18n("Documentation Tree: Project"));
+      w2 = new DocTreeProjectConfigWidget(this, vbox2, m_part->project(),"doctreeview project config widget");
+      connect(&dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
+    }
+
     dlg.exec();
+
     delete w1;
-    delete w2;
+    if(w2)
+      delete w2;
 }
 
 void DocTreeViewWidget::configurationChanged()
