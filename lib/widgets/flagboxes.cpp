@@ -24,6 +24,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qregexp.h>
+#include <qspinbox.h>
 
 // only for KDE < 3.1
 #if KDE_VERSION <= 305
@@ -258,7 +259,7 @@ FlagPathEdit::FlagPathEdit( QWidget * parent, QString pathDelimiter,
 {
     QBoxLayout *topLayout = new QVBoxLayout(this, 0, 1);
     topLayout->addWidget(new QLabel(description, this));
-    QBoxLayout *layout = new QHBoxLayout(topLayout, 1);
+    QBoxLayout *layout = new QHBoxLayout(topLayout, KDialog::spacingHint());
 
     if (delimiter.isEmpty())
     {
@@ -412,15 +413,15 @@ void FlagRadioButtonController::writeFlags(QStringList *list)
     }
 }
 
- FlagListEditController::FlagListEditController( )
+ FlagEditController::FlagEditController( )
 {
 }
 
- FlagListEditController::~ FlagListEditController( )
+ FlagEditController::~ FlagEditController( )
 {
 }
 
-void FlagListEditController::readFlags( QStringList * list )
+void FlagEditController::readFlags( QStringList * list )
 {
     QPtrListIterator<FlagListEdit> it(plist);
     for (; it.current(); ++it) {
@@ -435,9 +436,24 @@ void FlagListEditController::readFlags( QStringList * list )
             }
         }
     }
+
+
+    QPtrListIterator<FlagSpinEdit> it2(slist);
+    for (; it2.current(); ++it2) {
+        FlagSpinEdit *sitem = it2.current();
+
+        for (QStringList::Iterator sli = list->begin(); sli != list->end(); ++sli)
+        {
+            if ((*sli).startsWith(sitem->flag))
+            {
+                sitem->setText((*sli).replace(QRegExp(sitem->flag),""));
+                sli = list->remove(sli);
+            }
+        }
+    }
 }
 
-void FlagListEditController::writeFlags( QStringList * list )
+void FlagEditController::writeFlags( QStringList * list )
 {
     QPtrListIterator<FlagListEdit> it(plist);
     for (; it.current(); ++it) {
@@ -445,14 +461,28 @@ void FlagListEditController::writeFlags( QStringList * list )
         if (!pitem->isEmpty())
             (*list) += pitem->flags();
     }
+
+    QPtrListIterator<FlagSpinEdit> it2(slist);
+    for (; it2.current(); ++it2) {
+        FlagSpinEdit *sitem = it2.current();
+        if (!sitem->isDefault())
+            (*list) << sitem->flags();
+    }
 }
 
-void FlagListEditController::addListEdit( FlagListEdit * item )
+void FlagEditController::addListEdit( FlagListEdit * item )
 {
     plist.append(item);
 }
 
-FlagListEdit::FlagListEdit( QWidget * parent, QString listDelimiter, FlagListEditController * controller, const QString & flagstr, const QString & description )
+void FlagEditController::addSpinBox(FlagSpinEdit *item)
+{
+    slist.append(item);
+}
+
+
+FlagListEdit::FlagListEdit( QWidget * parent, QString listDelimiter, FlagEditController * controller,
+    const QString & flagstr, const QString & description)
     : QWidget(parent), delimiter(listDelimiter), flag(flagstr), m_description(description)
 {
     QBoxLayout *topLayout = new QVBoxLayout(this, 0, 1);
@@ -461,10 +491,13 @@ FlagListEdit::FlagListEdit( QWidget * parent, QString listDelimiter, FlagListEdi
 
     edit = new KLineEdit(this);
     layout->addWidget(edit);
-    details = new QPushButton("...", this);
-    details->setMaximumWidth(30);
-    connect(details, SIGNAL(clicked()), this, SLOT(showListDetails()));
-    layout->addWidget(details);
+    if (! listDelimiter.isEmpty())
+    {
+        details = new QPushButton("...", this);
+        details->setMaximumWidth(30);
+        connect(details, SIGNAL(clicked()), this, SLOT(showListDetails()));
+        layout->addWidget(details);
+    }
 
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
@@ -522,5 +555,44 @@ QStringList FlagListEdit::flags( )
     }
     return fl;
 }
+
+FlagSpinEdit::FlagSpinEdit( QWidget * parent, int minVal, int maxVal, int incr, int defaultVal, FlagEditController * controller, const QString & flagstr, const QString & description )
+    :QWidget(parent), m_defaultVal(defaultVal), flag(flagstr)
+{
+    QBoxLayout *topLayout = new QVBoxLayout(this, 0, 1);
+    topLayout->addWidget(new QLabel(description, this));
+
+    spb = new QSpinBox(minVal, maxVal, incr, this);
+    spb->setValue(defaultVal);
+    topLayout->addWidget(spb);
+
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+
+    QToolTip::add(this, flagstr);
+    controller->addSpinBox(this);
+}
+
+void FlagSpinEdit::setText( const QString text )
+{
+    spb->setValue(text.toInt());
+}
+
+QString FlagSpinEdit::text( )
+{
+    return QString("%1").arg(spb->value());
+}
+
+QString FlagSpinEdit::flags( )
+{
+    return flag + text();
+}
+
+bool FlagSpinEdit::isDefault( )
+{
+    if (spb->value() == m_defaultVal)
+        return true;
+    return false;
+}
+
 
 #include "flagboxes.moc"

@@ -21,12 +21,13 @@
 #include <qradiobutton.h>
 #include <qptrlist.h>
 
+class QSpinBox;
 class FlagListBox;
 class FlagListToolTip;
 class FlagCheckBoxController;
 class FlagRadioButtonController;
 class FlagPathEditController;
-class FlagListEditController;
+class FlagEditController;
 class KLineEdit;
 class QPushButton;
 class KURLRequester;
@@ -128,7 +129,7 @@ class FlagListEdit: public QWidget
     Q_OBJECT
 public:
     /**If the listDelimiter is not empty then list edit can contain a list of entries*/
-    FlagListEdit(QWidget *parent, QString listDelimiter, FlagListEditController *controller,
+    FlagListEdit(QWidget *parent, QString listDelimiter, FlagEditController *controller,
                  const QString &flagstr, const QString &description);
 
     ~FlagListEdit() {}
@@ -149,7 +150,29 @@ private:
     QString delimiter;
     QString flag;
     QString m_description;
-    friend class FlagListEditController;
+    friend class FlagEditController;
+};
+
+class FlagSpinEdit: public QWidget
+{
+public:
+    FlagSpinEdit(QWidget *parent, int minVal, int maxVal, int incr, int defaultVal, FlagEditController *controller,
+                 const QString &flagstr, const QString &description);
+    ~FlagSpinEdit() {}
+
+    void setText(const QString text);
+    QString text();
+    bool isDefault();
+
+    QString flags();
+
+private:
+    int m_defaultVal;
+    QString flag;
+
+    QSpinBox *spb;
+
+    friend class FlagEditController;
 };
 
 class FlagPathEditController
@@ -167,19 +190,22 @@ private:
     friend class FlagPathEdit;
 };
 
-class FlagListEditController
+class FlagEditController
 {
 public:
-    FlagListEditController();
-    ~FlagListEditController();
+    FlagEditController();
+    ~FlagEditController();
 
     void readFlags(QStringList *list);
     void writeFlags(QStringList *list);
 
 private:
     void addListEdit(FlagListEdit *item);
+    void addSpinBox(FlagSpinEdit *item);
     QPtrList<FlagListEdit> plist;
+    QPtrList<FlagSpinEdit>  slist;
     friend class FlagListEdit;
+    friend class FlagSpinEdit;
 };
 
 class FlagCheckBoxController
