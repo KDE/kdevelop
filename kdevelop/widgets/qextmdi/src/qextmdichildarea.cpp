@@ -196,7 +196,7 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
          lpC->raise();
       }
       if (bSetFocus) {
-         if(!lpC->hasFocus())lpC->setFocus();
+//TEST         if(!lpC->hasFocus())lpC->setFocus();
       }
       lpC->m_pClient->setFocus();
    }
@@ -304,10 +304,11 @@ void QextMdiChildArea::focusTopChild()
    }
    lpC->raise();
    if(!lpC->hasFocus()) {
-      lpC->setFocus();
+//TEST      lpC->setFocus();
    }
    if (!lpC->m_pClient->hasFocus()) {
-      lpC->m_pClient->setFocus();
+      lpC->m_pClient->activate();
+//TEST      lpC->m_pClient->setFocus();
    }
 }
 
@@ -488,7 +489,8 @@ void QextMdiChildArea::tileAllInternal(int maxWnds)
       }
    }
    if (lpTop)
-      lpTop->setFocus();
+//TEST      lpTop->setFocus();
+      lpTop->m_pClient->activate();
 }
 //============ tileAnodine ============//
 void QextMdiChildArea::tileAnodine()
@@ -537,7 +539,10 @@ void QextMdiChildArea::tileAnodine()
       }
    }
    delete[] numRows;
-   if(lpTop)lpTop->setFocus();
+   if (lpTop) {
+//TEST      lpTop->setFocus();
+      lpTop->m_pClient->activate();
+   }
 }
 
 //============ tileVertically===========//
@@ -570,7 +575,10 @@ void QextMdiChildArea::tileVertically()
          }
       }
    }
-   if(lpTop)lpTop->setFocus();
+   if (lpTop) {
+//TEST      lpTop->setFocus();
+      lpTop->m_pClient->activate();
+   }
 }
 
 //============ layoutMinimizedChildren ============//

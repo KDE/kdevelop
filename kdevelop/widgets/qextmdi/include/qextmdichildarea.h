@@ -68,7 +68,7 @@ public:
    QPtrList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
 #endif
    /**
-   * the default size of an newly created childframe 
+   * the default size of an newly created childframe
    */
    QSize                   m_defaultChildFrmSize;
 

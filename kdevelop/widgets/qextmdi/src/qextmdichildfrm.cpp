@@ -24,6 +24,7 @@
 //
 //----------------------------------------------------------------------------
 
+
 #include <qpainter.h>
 #include <qapplication.h>
 #include <qcursor.h>
@@ -37,6 +38,7 @@
 #include "qextmdichildarea.h"
 #include "qextmdichildfrm.h"
 #include "qextmdimainfrm.h"
+
 
 //////////////////////////////////////////////////////////////////////////////
 // QextMdiChildFrm
@@ -73,6 +75,7 @@
 #include "kde2laptop_maxbutton.xpm"
 #include "kde2laptop_restorebutton.xpm"
 #include "kde2laptop_undockbutton.xpm"
+
 
 QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* name)
   : QLabel( parent, name)
@@ -508,7 +511,7 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
             setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
             m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
             int nFrameWidth = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER;
-            int nFrameHeight = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR + 
+            int nFrameHeight = QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + QEXTMDI_MDI_CHILDFRM_SEPARATOR +
                                m_pCaption->heightHint();
             QRect maximizedFrmRect(-m_pClient->x(), -m_pClient->y(),
                                    m_pManager->width() + nFrameWidth,
@@ -663,7 +666,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
          QString tmpStr;
          tmpStr.setNum( i);
          tmpStr = "unnamed" + tmpStr;
-         widg->setName( tmpStr);
+         widg->setName( tmpStr.latin1() );
          i++;
       }
       FocusPolicy* pFocPol = new FocusPolicy;
@@ -712,7 +715,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
    //reparent to desktop widget , no flags , point , show it
    QDict<FocusPolicy>* pFocPolDict;
    pFocPolDict = unlinkChildren();
-   
+
    // get name of focused child widget
    QWidget* focusedChildWidget = m_pClient->focusedChildWidget();
    const char* nameOfFocusedWidget = "";
@@ -766,7 +769,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
    
    // reset the focus policy of the view
    m_pClient->setFocusPolicy(QWidget::ClickFocus);
-   
+
    // lose information about the view (because it's undocked now)
    m_pClient=0;
 }
@@ -833,7 +836,7 @@ QDict<QWidget::FocusPolicy>* QextMdiChildFrm::unlinkChildren()
          QString tmpStr;
          tmpStr.setNum( i);
          tmpStr = "unnamed" + tmpStr;
-         widg->setName( tmpStr);
+         widg->setName( tmpStr.latin1() );
          i++;
       }
       FocusPolicy* pFocPol = new FocusPolicy;
@@ -965,11 +968,15 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
                // in case we didn't click on the icon button
                QFocusEvent* pFE = new QFocusEvent(QFocusEvent::FocusIn);
                QApplication::sendEvent(qApp->mainWidget(), pFE);
-               if (m_pClient && !((QWidget*)obj)->hasFocus())
+               if (m_pClient) {//TEST && !((QWidget*)obj)->hasFocus())
                   m_pClient->activate();
+							 }
                QWidget* w = (QWidget*) obj;
-               if( (w->parent() != m_pCaption) && (w != m_pCaption))
-                  w->setFocus();
+               if( (w->parent() != m_pCaption) && (w != m_pCaption)) {
+                  if ((w->focusPolicy() == QWidget::ClickFocus) || (w->focusPolicy() == QWidget::StrongFocus)) {
+                     w->setFocus();
+                  }
+               }
             }
             if ((obj == m_pWinIcon) || (obj == m_pUnixIcon)) {
                // in case we clicked on the icon button

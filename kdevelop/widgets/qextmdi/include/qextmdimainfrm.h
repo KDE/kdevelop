@@ -33,7 +33,7 @@
 #include <kmainwindow.h>
 #include <kmenubar.h>
 #include <kpopupmenu.h>
-#include "kparts/dockmainwindow.h"
+#include <kparts/dockmainwindow.h>
 #else
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -43,7 +43,11 @@
 //#endif
 #endif
 
-#include <qlist.h>
+#if QT_VERSION < 300
+# include <qlist.h>
+#else
+# include <qptrlist.h>
+#endif
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdom.h>

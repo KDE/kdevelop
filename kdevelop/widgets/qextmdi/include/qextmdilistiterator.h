@@ -26,8 +26,11 @@
 #ifndef _QEXTMDILISTITERATOR_H_
 #define _QEXTMDILISTITERATOR_H_
 
-#include <qlist.h>
-
+#if QT_VERSION < 300
+# include <qlist.h>
+#else
+# include <qptrlist.h>
+#endif
 
 template <class Item>
 class QextMdiListIterator : public QextMdiIterator<Item*> {
