@@ -881,7 +881,8 @@ void CKAppWizard::okPermited() {
   namelow = namelow.lower();
   QDir directory;
   directory.mkdir(directoryline->text() + QString("/"));
-  directory.setPath(directoryline->text() + QString("/"));
+  if (!directory.exists())
+     directory.setCurrent(directoryline->text() + QString("/"));
   KShellProcess p;
   QString copysrc;
   QString copydes = directoryline->text() + QString ("/");
