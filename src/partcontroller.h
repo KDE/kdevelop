@@ -95,11 +95,11 @@ private slots:
   void slotOpenFile();
   void slotOpenRecent(const KURL&);
 
-//  void slotBack();
-//  void slotForward();
-//  void slotBackAboutToShow();
-//  void slotForwardAboutToShow();
-//  void slotPopupActivated( int id );
+  void slotBack();
+  void slotForward();
+  void slotBackAboutToShow();
+  void slotForwardAboutToShow();
+  void slotPopupActivated( int id );
   
   void slotSwitchTo();
   
@@ -158,16 +158,17 @@ private:
 
   DocumentationPart *findDocPart(const QString &context);
 
-//  KToolBarPopupAction* m_backAction;
-//  KToolBarPopupAction* m_forwardAction;
+  KToolBarPopupAction* m_backAction;
+  KToolBarPopupAction* m_forwardAction;
   
   KDirWatch* dirWatcher;
+  
   QMap< KURL, QDateTime > accessTimeMap;
   QMap< KParts::ReadOnlyPart*, KURL > _partURLMap;	// used to note when a URL changes (a file changes name)
-//  bool m_restoring;
+  
   QGuardedPtr<KParts::Factory> _editorFactory;
 
-/*    
+    
 	struct HistoryEntry 
 	{
 		HistoryEntry() {}
@@ -179,14 +180,14 @@ private:
 		int id;
 	};
 
-	void addDocumentHistoryEntry(const KURL & url, int line = -1, int col = -1, QString context = QString::null );
-	void maybeAddDocumentHistoryEntry();
+	void addHistoryEntry(const KURL & url, int line = -1, int col = -1 );
 	void jumpTo( const HistoryEntry & );
 		
-	QValueList<HistoryEntry> m_DocumentHistoryList;
-	QValueList<HistoryEntry>::Iterator m_CurrentDocument;
+	QValueList<HistoryEntry> m_history;;
+	QValueList<HistoryEntry>::Iterator m_Current;
 	bool m_isJumping;
-*/  
+	QGuardedPtr<KParts::ReadOnlyPart> m_latestPart;
+  
 };
 
 

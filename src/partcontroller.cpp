@@ -84,12 +84,10 @@ PartController::PartController(QWidget *parent)
   connect(dirWatcher, SIGNAL(dirty(const QString&)), this, SLOT(dirty(const QString&)));
   connect(this, SIGNAL(fileDirty(const KURL& )), this, SLOT(slotFileDirty(const KURL&)) );
 
-//  m_history.setAutoDelete( true );
-//  m_restoring = false;
   setupActions();
   
-//  m_CurrentDocument = m_DocumentHistoryList.begin();
-//  m_isJumping = false;
+  m_Current = m_history.end();
+  m_isJumping = false;
 }
 
 
@@ -167,33 +165,29 @@ void PartController::setupActions()
   m_switchToAction->setWhatsThis(i18n("<b>Switch to</b><p>Prompts to enter the name of previously opened file to switch to."));
 
   new KActionSeparator(ac, "dummy_separator");
-/*  
-  m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
-    this, SLOT(slotBack()),
-    ac, "browser_back");
+  
+  m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0, this, SLOT(slotBack()), ac, "history_back");
   m_backAction->setEnabled( false );
   m_backAction->setToolTip(i18n("Back"));
-  m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the <b>documentation</b> browsing history."));
+  m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the navigation history."));
 
 
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotBackAboutToShow()));
   connect(m_backAction->popupMenu(), SIGNAL(activated(int)),
-         this, SLOT(slotBackPopupActivated(int)));
+         this, SLOT(slotPopupActivated(int)));
 
 
-  m_forwardAction = new KToolBarPopupAction(i18n("Forward"), "forward", 0,
-    this, SLOT(slotForward()),
-    ac, "browser_forward");
+  m_forwardAction = new KToolBarPopupAction(i18n("Forward"), "forward", 0, this, SLOT(slotForward()), ac, "history_forward");
   m_forwardAction->setEnabled( false );
   m_forwardAction->setToolTip(i18n("Forward"));
-  m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the <b>documentation</b> browsing history."));
+  m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the navigation history."));
 
   connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()),
          this, SLOT(slotForwardAboutToShow()));
   connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)),
-         this, SLOT(slotForwardPopupActivated(int)));
-*/  
+         this, SLOT(slotPopupActivated(int)));
+  
 }
 
 
@@ -285,10 +279,9 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 	KParts::Part *existingPart = partForURL(url);
 	if (existingPart)
 	{
-//		maybeAddDocumentHistoryEntry();
 		activatePart(existingPart);
 		EditorProxy::getInstance()->setLineNumber(existingPart, lineNum, col);
-//		addDocumentHistoryEntry( url, lineNum, col );
+		addHistoryEntry( url, lineNum, col );
 		return;
 	}
 	
@@ -317,11 +310,10 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 				extension->setURLArgs(args);
 			}
 
-//			maybeAddDocumentHistoryEntry();
 			editorpart->openURL( url );
 			integratePart( editorpart, url, true );
 			EditorProxy::getInstance()->setLineNumber( editorpart, lineNum, col );
-//			addDocumentHistoryEntry( url, lineNum, col );
+			addHistoryEntry( url, lineNum, col );
 		}
 		m_presetEncoding = QString::null;
 		return;
@@ -346,12 +338,11 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 
 		if ( editorpart )
 		{
-//			maybeAddDocumentHistoryEntry();
 			editorpart->openURL( url );
 
 			integratePart( editorpart, url, true );
 			EditorProxy::getInstance()->setLineNumber( editorpart, lineNum, col );
-//			addDocumentHistoryEntry( url, lineNum, col );
+			addHistoryEntry( url, lineNum, col );
 
 			return;
 		}
@@ -382,10 +373,9 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 		KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>( factory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, className.latin1() ) );
 		if ( part )
 		{
-//			maybeAddDocumentHistoryEntry();
 			part->openURL( url );
 			integratePart( part, url, false );
-//			addDocumentHistoryEntry( url, lineNum, col );
+			addHistoryEntry( url, lineNum, col );
 		}
 	}
 	else
@@ -756,8 +746,8 @@ void PartController::updateMenuItems()
   m_closeAllWindowsAction->setEnabled(hasReadOnlyParts);
   m_closeOtherWindowsAction->setEnabled(hasReadOnlyParts);
 
-//  m_backAction->setEnabled( true );
-//  m_forwardAction->setEnabled( true );
+  m_backAction->setEnabled( m_Current != m_history.begin() );
+  m_forwardAction->setEnabled( m_Current != m_history.fromLast() );
 }
 
 
@@ -974,18 +964,23 @@ bool PartController::readyToClose()
 	return closeAllFiles();
 }
 
-void PartController::slotActivePartChanged( KParts::Part* part )
+void PartController::slotActivePartChanged( KParts::Part * part )
 {
-    updateMenuItems();
-    if( !part || QString(part->name()) != "DocumentationPart" ){
-//        m_backAction->setEnabled( false );
-//        m_forwardAction->setEnabled( false );
-    }
+	updateMenuItems();
+
+	if ( m_isJumping ) return;
+
+	if ( _partURLMap.contains( m_latestPart ) )
+	{
+		addHistoryEntry( _partURLMap[ m_latestPart ] );
+	}
+
+	if ( dynamic_cast<DocumentationPart*>( part ) ) return;
 
 	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part );
 	if ( ro_part )
 	{
-//		addDocumentHistoryEntry( ro_part->url() );
+		m_latestPart = ro_part;
 	}
 }
 
@@ -1050,14 +1045,7 @@ void PartController::dirty( const QString& fileName )
 	url.setPath( fileName );
 	emit fileDirty( url );
 }
-/*
-bool PartController::isDirty( KParts::ReadOnlyPart* part )
-{
-	if ( !part ) return false;
 
-	return isDirty( part->url() );
-}
-*/
 bool PartController::isDirty( KURL const & url )
 {
 	if ( !url.isLocalFile() ) return false;
@@ -1151,42 +1139,31 @@ KURL::List PartController::openURLs( )
 
 void PartController::revertFiles( const KURL::List &  )
 {
+#warning not implemented	
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-/*
-PartController::HistoryEntry::HistoryEntry( const KURL & u, int l, int c, QString ctx ) 
-	: url(u), line(l), col(c), context(ctx)
+
+PartController::HistoryEntry::HistoryEntry( const KURL & u, int l, int c) 
+	: url(u), line(l), col(c)
 {
-	id = abs( QTime::currentTime().msecsTo( QTime() ) );	// nasty, but should provide a reasonably unique number
+	id = abs( QTime::currentTime().msecsTo( QTime() ) );	// should provide a reasonably unique number
 }
 
 void PartController::slotBack()
 {
-	if ( m_CurrentDocument != m_DocumentHistoryList.begin() )
+	if ( m_Current != m_history.begin() )
 	{
-		jumpTo( *(--m_CurrentDocument) );
-		
-		m_isJumping = true;
-		--m_CurrentDocument;
-		editDocument( (*m_CurrentDocument).url, (*m_CurrentDocument).line, (*m_CurrentDocument).col );
-		m_isJumping = false;
-		
+		jumpTo( *(--m_Current) );
 	}
 }
 
 void PartController::slotForward()
 {
-	if (  m_CurrentDocument != m_DocumentHistoryList.fromLast() )
+	if (  m_Current != m_history.fromLast() )
 	{
-		jumpTo( *(++m_CurrentDocument) );
-		
-		m_isJumping = true;
-		++m_CurrentDocument;
-		editDocument( (*m_CurrentDocument).url, (*m_CurrentDocument).line, (*m_CurrentDocument).col );
-		m_isJumping = false;
-		
+		jumpTo( *(++m_Current) );
 	}
 }
 
@@ -1195,15 +1172,15 @@ void PartController::slotBackAboutToShow()
 	KPopupMenu *popup = m_backAction->popupMenu();
 	popup->clear();
 
-	if ( m_CurrentDocument == m_DocumentHistoryList.begin() ) return;
+	if ( m_Current == m_history.begin() ) return;
 
-	QValueList<HistoryEntry>::Iterator it = m_CurrentDocument;
+	QValueList<HistoryEntry>::Iterator it = m_Current;
 	--it;
 	
 	int i = 0;
 	while( i < 10 )
 	{
-		if ( it == m_DocumentHistoryList.begin() )
+		if ( it == m_history.begin() )
 		{
 			popup->insertItem( (*it).url.fileName() + QString(" (%1,%2)").arg( (*it).line).arg((*it).col), (*it).id );
 			return;
@@ -1220,15 +1197,15 @@ void PartController::slotForwardAboutToShow()
 	KPopupMenu *popup = m_forwardAction->popupMenu();
 	popup->clear();
 
-	if ( m_CurrentDocument == m_DocumentHistoryList.fromLast() ) return;
+	if ( m_Current == m_history.fromLast() ) return;
 
-	QValueList<HistoryEntry>::Iterator it = m_CurrentDocument;
+	QValueList<HistoryEntry>::Iterator it = m_Current;
 	++it;
 	
 	int i = 0;
 	while( i < 10 )
 	{
-		if ( it == m_DocumentHistoryList.fromLast() )
+		if ( it == m_history.fromLast() )
 		{
 			popup->insertItem( (*it).url.fileName() + QString(" (%1,%2)").arg( (*it).line).arg((*it).col), (*it).id );
 			return;
@@ -1242,24 +1219,14 @@ void PartController::slotForwardAboutToShow()
 
 void PartController::slotPopupActivated( int id )
 {
-	kdDebug(9000) << "id: " << id << endl;
-
-	QValueList<HistoryEntry>::Iterator it = m_DocumentHistoryList.begin();
-	while( it != m_DocumentHistoryList.end() )
+	QValueList<HistoryEntry>::Iterator it = m_history.begin();
+	while( it != m_history.end() )
 	{
-		kdDebug(9000) << "(*it).id: " << (*it).id << endl;
 		if ( (*it).id == id )
 		{
-			m_CurrentDocument = it;
-			jumpTo( *m_CurrentDocument );
+			m_Current = it;
+			jumpTo( *m_Current );
 			return;
-			
-			m_isJumping = true;
-			m_CurrentDocument = it;
-			editDocument( (*m_CurrentDocument).url, (*m_CurrentDocument).line, (*m_CurrentDocument).col );
-			m_isJumping = false;
-			return;
-			
 		}
 		++it;
 	}
@@ -1268,70 +1235,43 @@ void PartController::slotPopupActivated( int id )
 void PartController::jumpTo( const HistoryEntry & entry )
 {
 	m_isJumping = true;
-	if ( entry.context == QString::null )
-	{
-		editDocument( entry.url, entry.line, entry.col );
-	}
-	else
-	{
-		showDocument( entry.url, entry.context );
-	}
+	editDocument( entry.url, entry.line, entry.col );
 	m_isJumping = false;
 }
 
-void PartController::addDocumentHistoryEntry(const KURL & url, int line, int col, QString context )
+void PartController::addHistoryEntry(const KURL & url, int line, int col )
 {
 	if ( m_isJumping ) return;
 
-	QValueList<HistoryEntry>::Iterator it = m_CurrentDocument;
+	QValueList<HistoryEntry>::Iterator it = m_Current;
 	// if We're not already the last entry, we truncate the list here before adding an entry
-	if ( it != m_DocumentHistoryList.end() && it != m_DocumentHistoryList.fromLast() )
+	if ( it != m_history.end() && it != m_history.fromLast() )
 	{
-		m_DocumentHistoryList.erase( ++it, m_DocumentHistoryList.end() );
+		m_history.erase( ++it, m_history.end() );
 	}
 	
-	HistoryEntry newEntry( url, line, col, context );
+	HistoryEntry newEntry( url, line, col );
 	
 	// Only save the new entry if it is different from the last
-	if ( newEntry.url == (*m_CurrentDocument).url )
+	if ( newEntry.url == (*m_Current).url )
 	{
 		if ( newEntry.line == -1 )
 		{
 			return;
 		}
-		if ( (*m_CurrentDocument).line == -1 )
+		if ( (*m_Current).line == -1 )
 		{
-			(*m_CurrentDocument).line = line;
-			(*m_CurrentDocument).col = col;
+			(*m_Current).line = line;
+			(*m_Current).col = col;
 			return;
 		}
 	}
-	else
-	{
-		m_DocumentHistoryList.append( newEntry );
-		m_CurrentDocument = m_DocumentHistoryList.fromLast();
-	}
 	
 	// add entry
-	m_DocumentHistoryList.append( HistoryEntry( url, line, col ) );
-	m_CurrentDocument = m_DocumentHistoryList.fromLast();
+	m_history.append( newEntry );
+	m_Current = m_history.fromLast();
 	
+	updateMenuItems();
 }
 
-void PartController::maybeAddDocumentHistoryEntry()
-{
-	if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( activePart() ) )
-	{
-		if ( KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( doc->widget() ) )
-		{
-			unsigned int line = 0;
-			unsigned int col = 0;
-			cursorIface->cursorPositionReal(&line, &col);
-			
-			addDocumentHistoryEntry( doc->url(), line, col );
-		}
-	}
-}
-
-*/
 #include "partcontroller.moc"
