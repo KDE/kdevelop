@@ -16,15 +16,18 @@
 distpartPart::distpartPart(KDevApi *api, QObject *parent, const char *name)
   : KDevPart(api, parent, name)
 {
-  m_widget = new distpartWidget(this);
+  setInstance(distpartFactory::instance());
+ 
+  setXMLFile("kdevpart_distpart.rc");
 
-  QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
-  KAction *action;
-
-  action = new KAction( i18n("Project Distrabution and Publishing"), 0,
-                          m_widget, SLOT(show()),
+  m_action =  new KAction( i18n("Project Distrabution and Publishing"), 0,
+                          this, SLOT(show()),
                           actionCollection(), "make_dist" );
-  core()->embedWidget(m_widget, KDevCore::OutputView, i18n("distpart"));
+
+  m_action->setStatusText(i18n("Make Source and Binary Distrabuition"));
+  m_action->setWhatsThis(i18n("Distrabution and Publishing:\n\n"
+                 	    "fnork fnork blub.... \n"
+                            "bork bork bork....."));
 }
 
 
@@ -34,4 +37,12 @@ distpartPart::~distpartPart()
 }
 
 
+void distpartPart::show()
+{
+  m_widget = new distpartWidget(this);
+
+  QWhatsThis::add(m_widget, i18n("This will help users package and publish there software."));
+
+  core()->embedWidget(m_widget, KDevCore::OutputView, i18n("distpart"));
+}
 #include "distpart_part.moc"

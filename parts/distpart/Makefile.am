@@ -7,7 +7,9 @@ libkdevdistpart_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevdistpart_la_SOURCES = distpart_ui.ui distpart_factory.cpp distpart_part.cpp distpart_widget.cpp
 
 METASOURCES = AUTO
-
+KDEICON = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevpart_distpart.desktop
 
+rc_DATA = kdevpart_distpart.rc
+rcdir = $(kde_datadir)/kdevdistpart

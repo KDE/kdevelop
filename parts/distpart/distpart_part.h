@@ -9,7 +9,7 @@
 
 #include <qguardedptr.h>
 #include <kdevpart.h>
-
+#include <kaction.h>
 
 class distpartWidget;
 
@@ -23,11 +23,13 @@ public:
   distpartPart(KDevApi *api, QObject *parent=0, const char *name=0);
   ~distpartPart();
 
+public slots:
+  void show();
 
 private:
 
   QGuardedPtr<distpartWidget> m_widget;
-
+  KAction *m_action;
 };
 
 
