@@ -575,7 +575,7 @@ void CKDevelop::slotProjectFileProperties(){
 
 void CKDevelop::slotShowFileProperties(const QString& rel_name){
   CFilePropDlg dlg(this,"DLG",prj,rel_name);
-  dlg.show();
+  dlg.exec();
 }
 
 void CKDevelop::slotProjectOpen()
