@@ -28,7 +28,7 @@
 #ifndef LANGUAGEINTERFACEIMPL_H
 #define LANGUAGEINTERFACEIMPL_H
 
-#include <languageinterface.h>
+#include "../interfaces/languageinterface.h"
 
 class LanguageInterfaceImpl : public LanguageInterface
 {

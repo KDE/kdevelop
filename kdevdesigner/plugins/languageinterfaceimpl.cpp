@@ -27,7 +27,7 @@
 
 #include "languageinterfaceimpl.h"
 #include <qobject.h>
-#include <designerinterface.h>
+#include "../interfaces/designerinterface.h"
 #include <qfile.h>
 //#include "yyreg.h"
 #include <qmetaobject.h>

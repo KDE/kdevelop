@@ -37,6 +37,8 @@
 #include "kdevdesigner_part.h"
 
 #include <kiconloader.h>
+#include <kapplication.h>
+#include <kstandarddirs.h>
 
 #include <qapplication.h>
 #include <qobject.h>
@@ -1542,7 +1544,8 @@ void MetaDataBase::setupInterfaceManagers( const QString &plugDir )
     if ( !languageInterfaceManager ) {
 	languageInterfaceManager =
 	    new QPluginManager<LanguageInterface>( IID_Language,
-						   QApplication::libraryPaths(),
+//						   QApplication::libraryPaths(),
+						   kapp->dirs()->resourceDirs("qtplugins"),
 						   plugDir );
 
 	langList = languageInterfaceManager->featureList();
