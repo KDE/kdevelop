@@ -72,7 +72,7 @@
       <toc>w3c-svg</toc>
       <toc>sw</toc>
       <toc>w3c-uaag10</toc>
-      <toc>wxwindows_bugs</toc>
+      <toc>wxwidgets_bugs</toc>
     </ignoretocs>
     <ignoreqt_xml>
       <toc>Guide to the Qt Translation Tools</toc>

@@ -126,7 +126,7 @@ clean:
 	-rm -f parts/appwizard/common/gnu.tar.gz
 	-rm -f parts/appwizard/common/incadmin.tar.gz
 	-rm -f parts/appwizard/common/gnome.tar.gz
-	-rm -f parts/appwizard/common/wxwindows.tar.gz
+	-rm -f parts/appwizard/common/wxwidgets.tar.gz
 
 install: DH_OPTIONS=
 install-stamp: install

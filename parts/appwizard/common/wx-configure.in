@@ -12,7 +12,7 @@ CXXFLAGS="$CPPFLAGS -Wall -g -fexceptions"
 WXCONFIG=wx-config
 AC_ARG_WITH(wx-config,
 [[  --with-wx-config=FILE     Use the given path to wx-config when determining
-                            wxWindows configuration; defaults to "wx-config"]],
+                            wxWidgets configuration; defaults to "wx-config"]],
 [
     if test "$withval" != "yes" -a "$withval" != ""; then
         WXCONFIG=$withval
@@ -24,12 +24,12 @@ wxversion=0
 AC_DEFUN([WXTEST],
 [
 	AC_REQUIRE([AC_PROG_AWK])
-	AC_MSG_CHECKING([wxWindows version])
+	AC_MSG_CHECKING([wxWidgets version])
 	if wxversion=`$WXCONFIG --version`; then
 		AC_MSG_RESULT([$wxversion])
 	else
 		AC_MSG_RESULT([not found])
-		AC_MSG_ERROR([wxWindows is required. Try --with-wx-config.])
+		AC_MSG_ERROR([wxWidgets is required. Try --with-wx-config.])
 	fi])
 
 # Call WXTEST func
@@ -42,7 +42,7 @@ if test -n "$vers" && test "$vers" -ge 2003003; then
 	WX_CXXFLAGS="`$WXCONFIG --cxxflags | sed -e 's/-fno-exceptions//'`"
 	WX_LIBS="`$WXCONFIG --libs`"
 else
-	AC_MSG_ERROR([wxWindows 2.3.3 or newer is required])
+	AC_MSG_ERROR([wxWidgets 2.3.3 or newer is required])
 fi
 
 
