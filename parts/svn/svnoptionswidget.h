@@ -23,14 +23,14 @@
 #include <qwidget.h>
 #include "svnoptions.h"
 
-class svnPart;
+class SvnPart;
 
 class svnOptionsWidget : public svnoptions
 {
 	Q_OBJECT
 
 	public:
-		svnOptionsWidget(svnPart *widget, QWidget *parent, const char *name=0);
+		svnOptionsWidget(SvnPart *widget, QWidget *parent, const char *name=0);
 		~svnOptionsWidget();
 
 		public slots:
@@ -40,7 +40,7 @@ class svnOptionsWidget : public svnoptions
 		void readConfig();
 		void storeConfig();
 
-		svnPart *m_part;
+		SvnPart *m_part;
 };
 
 #endif

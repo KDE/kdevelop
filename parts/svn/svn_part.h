@@ -27,13 +27,13 @@
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
 
-class svnPart : public KDevPlugin
+class SvnPart : public KDevPlugin
 {
 	Q_OBJECT
 
 	public:
-		svnPart(QObject *parent, const char *name, const QStringList &);
-		~svnPart();
+		SvnPart(QObject *parent, const char *name, const QStringList &);
+		~SvnPart();
 
 		bool recursive;
 		bool force;
@@ -43,9 +43,24 @@ class svnPart : public KDevPlugin
 		
 	protected:
 		svn_client_auth_baton_t* createAuthBaton();
+		//debug and info messages
+		static void svnDebug(const char *dbg);
+		static void svnMsg(const char *msg);
+		//to create logs for the lib
+		static svn_error_t *get_log_message (const char **log_msg, apr_array_header_t *commit_items,
+				void *baton, apr_pool_t *pool);
+		void *make_log_msg_baton (const char *base_dir, apr_pool_t *pool);
+		// to receive notifications from the svn lib
+		static void notify (void *baton, const char *path, svn_wc_notify_action_t action,
+				svn_node_kind_t kind, const char *mime_type, svn_wc_notify_state_t content_state,
+				svn_wc_notify_state_t prop_state, svn_revnum_t revision);
+		void get_notifier(svn_wc_notify_func_t *notify_func_p, void **notify_baton_p,
+				svn_boolean_t is_checkout, svn_boolean_t suppress_final_line, 
+				apr_pool_t *pool);
 
 	private slots:
 		void contextMenu(QPopupMenu *popup, const Context *context);
+		//actions
 		void slotCommit();
 		void slotUpdate();
 		void slotAdd();
@@ -54,9 +69,6 @@ class svnPart : public KDevPlugin
 		void slotDiff();
 		void slotCleanup();
 		void projectConfigWidget(KDialogBase *dlg);
-		static svn_error_t *get_log_message (const char **log_msg, apr_array_header_t *commit_items,
-				void *baton, apr_pool_t *pool);
-		void *make_log_msg_baton (apr_pool_t *pool);
 
 	private:
 		QString popupfile;  
@@ -73,8 +85,16 @@ class svnPart : public KDevPlugin
 			const char *base_dir; /* UTF-8! */
 		};
 
-};
+		struct notify_baton
+		{
+			svn_boolean_t received_some_change;
+			svn_boolean_t is_checkout;
+			svn_boolean_t suppress_final_line;
+			svn_boolean_t sent_first_txdelta;
+			apr_pool_t *pool;
+		};
 
+};
 
 #endif
 

@@ -17,3 +17,8 @@ disabled for now.
 Hope you'll enjoy it :)
 
 Mickael
+
+
+Code stolen :) :
+->there are some important parts of the code imported from the 'svn' command line source code
+->the commitdlg has been copied from the cvs part

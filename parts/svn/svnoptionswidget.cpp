@@ -22,7 +22,7 @@
 #include "svn_part.h"
 #include <qcheckbox.h>
 
-	svnOptionsWidget::svnOptionsWidget(svnPart *part, QWidget *parent, const char *name)
+	svnOptionsWidget::svnOptionsWidget(SvnPart *part, QWidget *parent, const char *name)
 : svnoptions(parent, name) 
 {
 	m_part = part;
