@@ -20,7 +20,6 @@
 
 #include <kapp.h>
 #include <kfiledialog.h>
-#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <klocale.h>
 #include <qprogressdialog.h>
@@ -255,12 +254,12 @@ void CUpdateKDEDocDlg::OK(){
     kdelibs_path = kdelibs_path +"/";
   }
   // check if path set corectly
-  QString kde_testfile=kdelibs_path+"/kfile/kdir.cpp"; // test if the path really is the kdelibs path
+  QString kde_testfile=kdelibs_path+"/kdecore/index.html"; // test if the path really is the kdelibs path
   if(!QFileInfo(kde_testfile).exists()){
-    QMessageBox::warning(this,i18n("The selected path is not correct!"),i18n("The chosen path for the KDE-Libs does not\n"
+    KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path for the KDE-Libs does not\n"
 									 "lead to the KDE Libraries. Please choose the\n"
 									 "correct path.This is where you have unpacked\n"
-									 "e.g. a kdelibs snapshot a la /snapshot/kdelibs."));
+									 "e.g. a kdelibs snapshot a la /snapshot/kdelibs."),KMsgBox::EXCLAMATION);
     return;
   }
   
@@ -428,18 +427,16 @@ void CUpdateKDEDocDlg::slotDocButtonClicked(){
 void CUpdateKDEDocDlg::slotSourceButtonClicked(){
   QString dir = KDirDialog::getDirectory(source_edit->text(),this,i18n("KDE Libs Directory..."));
   if(!dir.isEmpty()){
-    QString kde_testfile=dir+"/kfile/kdir.cpp"; // test if the path really is the kdelibs path
+    QString kde_testfile=dir+"/kdecore/index.html"; // test if the path really is the kdelibs path
     if(QFileInfo(kde_testfile).exists()){
       source_edit->setText(dir);
     }
     else{
-      QMessageBox::warning(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
+      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
 									   "KDE Libraries. Please choose the\n"
-									   "correct path."));
+									   "correct path."),KMsgBox::EXCLAMATION);
     }
   }
 
 }
-
-
 
