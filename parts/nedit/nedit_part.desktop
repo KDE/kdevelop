@@ -1,7 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Name=NeditPart
-Comment=NEdit Plugin
-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart,KDevelop/Editor
-X-KDE-Library=libneditpart
-Type=Service
