@@ -230,7 +230,11 @@ void MakeWidget::copy()
 
   selection.remove((selection.length()-1) - removeend, removeend);
 
+#if QT_VERSION >= 0x030100
   kapp->clipboard()->setText(selection, QClipboard::Clipboard);
+#else
+  kapp->clipboard()->setText(selection);
+#endif
 }
 
 void MakeWidget::nextError()
