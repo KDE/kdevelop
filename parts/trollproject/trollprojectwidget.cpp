@@ -43,6 +43,7 @@
 #include <kparts/part.h>
 #include <kaction.h>
 #include <kprocess.h>
+#include <klineeditdlg.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -845,10 +846,10 @@ void TrollProjectWidget::slotCreateScope(SubprojectItem *spitem)
     spitem = m_shownSubproject;
   QString relpath = spitem->path.mid(projectDirectory().length());
   bool ok = FALSE;
-  QString scopename = QInputDialog::getText(
+  QString scopename = KLineEditDlg::getText(
                       i18n( "Create Scope" ),
                       i18n( "Please enter a name for the new scope:" ),
-                      QLineEdit::Normal, QString::null, &ok, this );
+                      QString::null, &ok, this );
   if ( ok && !scopename.isEmpty() )
   {
     QString newScopeString;
@@ -874,10 +875,10 @@ void TrollProjectWidget::slotAddSubdir(SubprojectItem *spitem)
   QString relpath = spitem->path.mid(projectDirectory().length());
 
   bool ok = FALSE;
-  QString subdirname = QInputDialog::getText(
+  QString subdirname = KLineEditDlg::getText(
                     i18n( "Add Subdirectory" ),
                     i18n( "Please enter a name for the new subdirectory:" ),
-                    QLineEdit::Normal, QString::null, &ok, this );
+                    QString::null, &ok, this );
   if ( ok && !subdirname.isEmpty() )
   {
     QDir dir(projectDirectory()+relpath);
@@ -1359,10 +1360,10 @@ void TrollProjectWidget::slotNewFile()
     } else {
         bool ok = FALSE;
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-        QString filename = QInputDialog::getText(
+        QString filename = KLineEditDlg::getText(
                             i18n( "Insert New File"),
                             i18n( "Please enter a name for the new file:" ),
-                            QLineEdit::Normal, QString::null, &ok, this );
+                            QString::null, &ok, this );
         if ( ok && !filename.isEmpty() )
         {
             QFile newfile(projectDirectory()+relpath+'/'+filename);
@@ -1527,10 +1528,10 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     createFileSupport->createNewFile(fcext, projectDirectory()+m_shownSubproject->path.mid(projectDirectory().length()));
             } else {
                 bool ok = FALSE;
-                QString filename = QInputDialog::getText(
+                QString filename = KLineEditDlg::getText(
                                     i18n( "Insert New File"),
                                     i18n( "Please enter a name for the new file:" ),
-                                    QLineEdit::Normal, QString::null, &ok, this );
+                                    QString::null, &ok, this );
                 if ( ok && !filename.isEmpty() )
                 {
                     QFile newfile(projectDirectory()+relpath+'/'+filename);
