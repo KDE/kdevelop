@@ -861,6 +861,20 @@ void CppSupportPart::slotMakeMember()
 	        scopeStr += "::";
 
 	    QString declStr = declaratorToString( declarator, scopeStr ).simplifyWhiteSpace();
+	    if( declarator->exceptionSpecification() ){
+		declStr += QString::fromLatin1( " throw( ");
+		QPtrList<AST> l = declarator->exceptionSpecification()->nodeList();
+		QPtrListIterator<AST> type_it( l );
+		while( type_it.current() ){
+		    declStr += type_it.current()->text();
+		    ++type_it;
+		    
+		    if( type_it.current() )
+			declStr += QString::fromLatin1( ", " );
+		}
+		    
+		declStr += QString::fromLatin1(" )");
+	    }
 
 	    text += "\n\n";
 	    QString type = typeSpecToString( decl->typeSpec() );
