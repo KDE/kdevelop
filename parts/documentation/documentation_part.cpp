@@ -49,6 +49,7 @@
 #include "documentation_widget.h"
 #include "docglobalconfigwidget.h"
 #include "contentsview.h"
+#include "find_documentation.h"
 
 #define GLOBALDOC_OPTIONS 1
 #define PROJECTDOC_OPTIONS 2
@@ -70,7 +71,7 @@ DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QS
     connect(m_configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int)));
     connect(core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
         this, SLOT(contextMenu(QPopupMenu *, const Context *)));
-    
+
     m_widget = new DocumentationWidget(this);
     m_widget->setIcon(SmallIcon("contents"));
     m_widget->setCaption(i18n("Documentation"));
@@ -268,6 +269,12 @@ void DocumentationPart::contextInfoPage()
     infoPage(m_contextStr);
 }
 
+void DocumentationPart::contextFindDocumentation()
+{ 
+  mainWindow()->raiseView(m_widget);
+  m_widget->findInDocumentation(m_contextStr);
+}
+
 void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType(Context::EditorContext))
@@ -278,7 +285,9 @@ void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
         {
             m_contextStr = ident;
             QString squeezed = KStringHandler::csqueeze(m_contextStr, 20);            
-            int id = popup->insertItem(i18n("Look in Documentation Index: %1").arg(squeezed),
+            int id = popup->insertItem(i18n("Find Documentation: %1").arg(squeezed),
+                               this, SLOT(contextFindDocumentation()));
+            id = popup->insertItem(i18n("Look in Documentation Index: %1").arg(squeezed),
                                this, SLOT(contextLookInDocumentationIndex()));
             popup->setWhatsThis(id, i18n("<b>Look in documentation index</b><p>"
                               "Opens the documentation index tab. It allows "

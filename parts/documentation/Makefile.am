@@ -4,7 +4,7 @@ kde_module_LTLIBRARIES = libkdevdocumentation.la
 libkdevdocumentation_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdocumentation_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(LIB_KHTML)
 
-libkdevdocumentation_la_SOURCES = documentation_part.cpp documentation_widget.cpp contentsview.cpp indexview.cpp docglobalconfigwidgetbase.ui docglobalconfigwidget.cpp docconfiglistview.cpp editcatalogdlgbase.ui editcatalogdlg.cpp docutils.cpp searchview.cpp bookmarkview.cpp editbookmarkdlg.ui
+libkdevdocumentation_la_SOURCES = documentation_part.cpp documentation_widget.cpp contentsview.cpp indexview.cpp docglobalconfigwidgetbase.ui docglobalconfigwidget.cpp docconfiglistview.cpp editcatalogdlgbase.ui editcatalogdlg.cpp docutils.cpp searchview.cpp bookmarkview.cpp editbookmarkdlg.ui find_documentation.ui find_documentation_options.ui
 
 METASOURCES = AUTO
 

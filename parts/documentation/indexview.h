@@ -26,6 +26,7 @@ class KListBox;
 class KLineEdit;
 class QListBoxItem;
 class DocumentationWidget;
+class FindDocumentation;
 
 class IndexView : public QWidget
 {
@@ -56,6 +57,8 @@ private:
     
     KListBox *m_index;
     KLineEdit *m_edit;
+    
+friend class FindDocumentation;
 };
 
 #endif

@@ -36,6 +36,7 @@
 #include "indexview.h"
 #include "searchview.h"
 #include "bookmarkview.h"
+#include "find_documentation.h"
 
 DocumentationWidget::DocumentationWidget(DocumentationPart *part)
     :QWidget(0, "documentation widget"), m_part(part)
@@ -50,6 +51,9 @@ DocumentationWidget::DocumentationWidget(DocumentationPart *part)
     
     m_index = new IndexView(this);
     m_tab->addItem(m_index, i18n("Index"));
+    
+    m_finder = new FindDocumentation(this);
+    m_tab->addItem(m_finder,i18n("Finder"));
     
     m_search = new SearchView(m_part, this);
     m_tab->addItem(m_search, i18n("Search"));
@@ -103,6 +107,13 @@ void DocumentationWidget::lookInDocumentationIndex(const QString &term)
     m_index->setSearchTerm(term);
     //adymo: let's allow the user to press enter here ;)
 //    m_index->searchInIndex();
+}
+
+void DocumentationWidget::findInDocumentation(const QString &term)
+{
+   m_tab->setCurrentItem(m_finder);
+   m_finder->setSearchTerm(term);
+   m_finder->startSearch();
 }
 
 void DocumentationWidget::focusInEvent(QFocusEvent */*e*/)

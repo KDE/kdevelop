@@ -22,6 +22,7 @@
 
 #include <qwidget.h>
 
+class FindDocumentation;
 class KDevProject;
 class DocumentationPart;
 class ContentsView;
@@ -50,6 +51,7 @@ public slots:
     void lookInDocumentationIndex(const QString &term);
     void searchInDocumentation();
     void searchInDocumentation(const QString &term);
+    void findInDocumentation(const QString &term = "");
     
 protected:
     virtual void focusInEvent(QFocusEvent *e);
@@ -63,7 +65,10 @@ private:
     IndexView *m_index;
     SearchView *m_search;
     BookmarkView *m_bookmarks;
+    FindDocumentation *m_finder;
     QToolBox *m_tab;
+
+friend class FindDocumentation;
 };
 
 #endif

@@ -22,6 +22,7 @@
 
 #include <qwidget.h>
 
+class FindDocumentation;
 class DocumentationWidget;
 class QListViewItem;
 class KListView;
@@ -45,6 +46,8 @@ protected:
 private:
     DocumentationWidget *m_widget;
     KListView *m_view;
+    
+friend class FindDocumentation;
 };
 
 #endif

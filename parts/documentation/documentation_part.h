@@ -23,6 +23,8 @@
 #include <qguardedptr.h>
 #include <kdevplugin.h>
 
+
+class FindDocumentation;
 class DocumentationWidget;
 class KListBox;
 class KConfig;
@@ -52,6 +54,7 @@ public slots:
     void lookInDocumentationIndex();
     void lookInDocumentationIndex(const QString &term);
     void contextLookInDocumentationIndex();
+    void contextFindDocumentation();
     void searchInDocumentation();
     void searchInDocumentation(const QString &term);
     void contextSearchInDocumentation();
@@ -85,6 +88,7 @@ private:
     
 friend class DocGlobalConfigWidget;
 friend class SearchView;
+friend class FindDocumentation;
 };
 
 #endif
