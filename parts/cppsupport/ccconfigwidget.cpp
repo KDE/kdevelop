@@ -53,7 +53,7 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 {
     m_pPart = part;
     connect( m_pPart->codeRepository(), SIGNAL(catalogRegistered(Catalog* )), this, SLOT(catalogRegistered(Catalog* )) );
-    connect( m_pPart->codeRepository(), SIGNAL(catalogUnregistered(Catalog* )), this, SLOT(catalogUnegistered(Catalog* )) );
+    connect( m_pPart->codeRepository(), SIGNAL(catalogUnregistered(Catalog* )), this, SLOT(catalogUnregistered(Catalog* )) );
 
     initFileTemplatesTab( );
     initCodeCompletionTab( );
@@ -141,7 +141,7 @@ void CCConfigWidget::saveCodeCompletionTab( )
     c->setIncludeTypes( m_includeTypes->isOn() );
     c->setIncludeEnums( m_includeEnums->isOn() );
     c->setIncludeTypedefs( m_includeTypedefs->isOn() );
-    
+
     for( QMap<QCheckListItem*, Catalog*>::Iterator it=m_catalogs.begin(); it!=m_catalogs.end(); ++it )
     {
 	it.data()->setEnabled( it.key()->isOn() );
@@ -153,7 +153,7 @@ void CCConfigWidget::saveCodeCompletionTab( )
 void CCConfigWidget::slotNewPCS( )
 {
     CreatePCSDialog dlg( m_pPart, m_pPart->mainWindow()->main() );
-    dlg.exec();    
+    dlg.exec();
 }
 
 void CCConfigWidget::catalogRegistered( Catalog * c )
@@ -161,7 +161,7 @@ void CCConfigWidget::catalogRegistered( Catalog * c )
     QFileInfo dbInfo( c->dbName() );
     QCheckListItem* item = new QCheckListItem( m_pcsOptions, dbInfo.baseName(), QCheckListItem::CheckBox );
     item->setOn( c->enabled() );
-    
+
     m_catalogs[ item ] = c;
 }
 

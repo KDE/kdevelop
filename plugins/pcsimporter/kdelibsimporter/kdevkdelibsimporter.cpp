@@ -13,10 +13,13 @@
 #include "kdevkdelibsimporter.moc"
 #include "settingsdialog.h"
 
+#include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include <qvaluestack.h>
 #include <qlabel.h>
 #include <qdir.h>
+#include <qcombobox.h>
 
 K_EXPORT_COMPONENT_FACTORY( libkdevkdelibsimporter, KGenericFactory<KDevKDELibsImporter>( "kdevkdelibsimporter" ) );
 
@@ -48,10 +51,47 @@ QStringList KDevKDELibsImporter::fileList()
 	return QStringList();
 
     QStringList files;
-    files += fileList( m_settings->kdeDir() + "/include" );
-    files += fileList( m_settings->kdeDir() + "/include/kio" );
-    files += fileList( m_settings->kdeDir() + "/include/kparts" );
-    files += fileList( m_settings->kdeDir() + "/include/ktexteditor" );
+    int scope = m_settings->cbParsingScope->currentItem();
+    if ( scope == 0 )
+    {
+        files += fileList( m_settings->kdeDir() );
+        files += fileList( m_settings->kdeDir() + "/arts" );
+        files += fileList( m_settings->kdeDir() + "/artsc" );
+        files += fileList( m_settings->kdeDir() + "/dcopc" );
+        files += fileList( m_settings->kdeDir() + "/dom" );
+        files += fileList( m_settings->kdeDir() + "/kabc" );
+        files += fileList( m_settings->kdeDir() + "/kdeprint" );
+        files += fileList( m_settings->kdeDir() + "/kdesu" );
+        files += fileList( m_settings->kdeDir() + "/kio" );
+        files += fileList( m_settings->kdeDir() + "/kjs" );
+        files += fileList( m_settings->kdeDir() + "/kparts" );
+        files += fileList( m_settings->kdeDir() + "/ktexteditor" );
+    }
+    else if (scope == 1)
+    {
+        QValueStack<QString> s;
+        s.push(m_settings->kdeDir());
+        files += fileList(m_settings->kdeDir());
+
+        QDir dir;
+        do {
+            dir.setPath(s.pop());
+            kdDebug(9015) << "Examining: " << dir.path() << endl;
+            const QFileInfoList *dirEntries = dir.entryInfoList();
+            QPtrListIterator<QFileInfo> it(*dirEntries);
+            for (; it.current(); ++it) {
+                QString fileName = it.current()->fileName();
+                if (fileName == "." || fileName == "..")
+                    continue;
+                QString path = it.current()->absFilePath();
+                if (it.current()->isDir()) {
+                    kdDebug(9015) << "Pushing: " << path << endl;
+                    s.push(path);
+                    files += fileList(path);
+                }
+            }
+        } while (!s.isEmpty());
+    }
 
     return files;
 }

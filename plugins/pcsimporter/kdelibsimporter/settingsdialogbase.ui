@@ -15,36 +15,57 @@
     <property name="caption">
         <string>Form1</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="KListBox">
+        <widget class="KListBox" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>kdeListBox</cstring>
             </property>
         </widget>
-        <spacer>
+        <widget class="QComboBox" row="1" column="2">
+            <item>
+                <property name="text">
+                    <string>KDE Libs Headers</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>All KDE Headers</string>
+                </property>
+            </item>
             <property name="name">
-                <cstring>spacer3</cstring>
+                <cstring>cbParsingScope</cstring>
+            </property>
+        </widget>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>41</width>
-                    <height>61</height>
+                    <width>120</width>
+                    <height>20</height>
                 </size>
             </property>
         </spacer>
-    </vbox>
+        <widget class="QLabel" row="1" column="1">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Parse:</string>
+            </property>
+        </widget>
+    </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>kdeListBox</sender>

@@ -49,6 +49,13 @@ protected slots:
     virtual void reject();
     virtual void accept();
 
+    void moveUpInList();
+    void moveDownInList();
+    void scrollUpInList();
+    void scrollDownInList();
+    void goToBegin();
+    void goToEnd();
+
 private:
     QuickOpenPart* m_part;
     KCompletion* m_completion;

@@ -45,23 +45,6 @@
                     <enum>LastColumn</enum>
                 </property>
             </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer2</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Minimum</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>41</width>
-                        <height>61</height>
-                    </size>
-                </property>
-            </spacer>
         </vbox>
     </widget>
     <widget class="QWidget">
@@ -135,4 +118,7 @@
     <slot>slotSelectionChanged(QListViewItem*)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>

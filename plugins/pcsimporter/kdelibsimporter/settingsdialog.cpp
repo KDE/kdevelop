@@ -33,9 +33,10 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
 
     for( QStringList::Iterator it=kdedirs.begin(); it!=kdedirs.end(); ++it )
     {
-	QString kdedir = *it;
-	if( !kdedir.isEmpty() && isValidKDELibsDir(kdedir) )
-	    kdeListBox->insertItem( kdedir );
+        QString kdedir = *it;
+        if( !kdedir.isEmpty() && isValidKDELibsDir(kdedir) )
+            if (!kdeListBox->findItem(kdedir, ExactMatch))
+                kdeListBox->insertItem( kdedir );
     }
 }
 
@@ -56,7 +57,7 @@ void SettingsDialog::slotSelectionChanged(QListBoxItem* item)
 
 bool SettingsDialog::isValidKDELibsDir( const QString & path ) const
 {
-    return QFile::exists( path + "/include/kaction.h" );
+    return QFile::exists( path + "/kapplication.h" );
 }
 
 QString SettingsDialog::kdeDir( ) const

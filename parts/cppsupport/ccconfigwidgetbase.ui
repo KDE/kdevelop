@@ -182,7 +182,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>31</width>
-                                <height>51</height>
+                                <height>18</height>
                             </size>
                         </property>
                     </spacer>
@@ -216,7 +216,7 @@
                                     <cstring>newPCSButton</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>New Persistant Class Store</string>
+                                    <string>Add Persistant Class Store...</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -226,8 +226,6 @@
         </widget>
     </vbox>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>newPCSButton</sender>
