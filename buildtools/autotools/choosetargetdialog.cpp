@@ -325,6 +325,7 @@ void ChooseTargetDialog::slotOk()
 	}
 
 	d->widget->emitAddedFiles( newFileList );
+	KDialogBase::slotOk();
 }
 
 TargetItem* ChooseTargetDialog::chosenTarget()
