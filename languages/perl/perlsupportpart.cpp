@@ -62,7 +62,7 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
 
     KAction *action;
 
-    action = new KAction( i18n("Execute Program"), "exec", 0,
+    action = new KAction( i18n("Execute Main Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_exec" );
     action->setToolTip( i18n("Runs the Perl program") );
