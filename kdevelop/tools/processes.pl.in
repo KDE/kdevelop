@@ -69,7 +69,7 @@ setupDefaultChangings();
 printflush (STDOUT,"changing directory...\n");
 chdir ($overDirectory);
 
-if ($processes{APPLICATION} eq "customproj"){
+if ($processes{APPLICATION} =~/customproj/){
   changeCustomApp();  
 }
 else{
@@ -94,7 +94,7 @@ else{
   elsif ($processes{APPLICATION} eq "c") {
     changeTerminalCApp();
   }
-  elsif ($processes{APPLICATION} eq "gnomenormal") {
+  elsif ($processes{APPLICATION} =~ /gnomenormal/) {
     changeGnomeApp();
   }
 }
@@ -125,14 +125,13 @@ if ($processes{VSSUPPORT} eq "cvs") {
 
   if ($processes{APPLICATION} ne "customproj")
   {
-
     $copydes = $underDirectory . "/docs/.cvsignore";
     copy ("$copysrc", "$copydes");
     
     $copydes = $underDirectory . "/docs/en/.cvsignore";
     copy ("$copysrc", "$copydes");
 
-    if ($processes{APPLICATION} -= /kde2mini|kde2normal|kde2mdi/)
+    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/)
     {
 
       $copydes = $underDirectory . "-api/.cvsignore";
@@ -292,8 +291,7 @@ sub condCopyUserDocFiles {
   {
   	#copying, rename and replace in the handbook-en-template
   	chdir ($templatedir);
-    if ($processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2normal" ||
-  			$processes{APPLICATION} eq "kde2mdi")
+    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi/)
     {
     	copy ("docbook_en_template", "$overDirectory/doc/en/index.docbook");
     	chdir ("$overDirectory/doc/en");
@@ -331,8 +329,7 @@ sub condCopyKdelnkFile {
   	#copying, rename and replace in the kdelnk-file
   	chdir ($templatedir);
 
-    if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini"||
-        $processes{APPLICATION} eq "kicker" ||$processes{APPLICATION} eq "kde2mdi") {
+    if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|kicker/) {
     	copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
     	chdir ($underDirectory);
       replaceValuesInFile(\%changings, "$nameLittle.desktop");
@@ -463,11 +460,11 @@ sub changeNormalApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if($processes{APPLICATION} eq "kdenormal")
+  if ($processes{APPLICATION} =~ /kdenormal/)
   {
     replaceValuesInFile(\%changings, "configure.in");
   }
-  if($processes{APPLICATION} eq "kicker"|$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mdi")
+  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi|kicker/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
@@ -491,7 +488,7 @@ sub changeNormalApp {
   rename ("kbasedoc.h",    $nameLittle."doc.h");
   rename ("kbaseview.cpp", $nameLittle."view.cpp");
   rename ("kbaseview.h",   $nameLittle."view.h");
-  if($processes{APPLICATION} eq "kde2normal"|| $processes{APPLICATION} eq "kde2mdi")
+  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi/)
   {
     rename ("kbaseui.rc",  $nameLittle."ui.rc");
   }
@@ -503,11 +500,11 @@ sub changeNormalApp {
   replaceValuesInFile(\%changings, $nameLittle."view.cpp");
   replaceValuesInFile(\%changings, $nameLittle."doc.h");
   replaceValuesInFile(\%changings, $nameLittle."view.h");
-  if($processes{APPLICATION} eq "kdenormal")
+  if ($processes{APPLICATION} =~ /kdenormal/)
   {
     replaceValuesInFile(\%changings, "resource.h");
   }
-  if($processes{APPLICATION} eq "kde2normal"|| $processes{APPLICATION} eq "kde2mdi")
+  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi/)
   {
     replaceValuesInFile(\%changings, $nameLittle."ui.rc");
   }
@@ -529,7 +526,7 @@ sub changeNormalApp {
   	processHeaderTemplate("$nameLittle.h");
   	processHeaderTemplate("${nameLittle}view.h");
   	processHeaderTemplate("${nameLittle}doc.h");
-    if($processes{APPLICATION} eq "kdenormal")
+    if ($processes{APPLICATION} =~ /kdenormal/)
     {
     	processHeaderTemplate("resource.h");
     }
@@ -556,7 +553,7 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if($processes{APPLICATION} eq "kde2mini|kicker")
+  if ($processes{APPLICATION} =~ /kde2mini|kicker/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
@@ -725,7 +722,7 @@ sub changeQtApp {
   replaceValuesInFile(\%changings, "${nameLittle}doc.h");
   replaceValuesInFile(\%changings, "${nameLittle}view.h");
 
-  if ($processes{APPLICATION} eq "qtnormal" || $processes{APPLICATION} eq "qextmdi")
+  if ($processes{APPLICATION} =~ /qtnormal|qextmdi/)
   {
     replaceValuesInFile(\%changings, "resource.h");
   }
@@ -756,7 +753,7 @@ sub changeQtApp {
   	processHeaderTemplate("$nameLittle.h");
   	processHeaderTemplate("${nameLittle}view.h");
   	processHeaderTemplate("${nameLittle}doc.h");
-    if ($processes{APPLICATION} eq "qtnormal" || $processes{APPLICATION} eq "qextmdi"){
+    if ($processes{APPLICATION} =~ /qtnormal|qextmdi/) {
     	processHeaderTemplate("resource.h");
     }
   }
