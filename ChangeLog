@@ -1,3 +1,6 @@
+2000-03-21 Ralf Nolden <rnolden@kdevelop.de>
+        * updated version to 1.2, updated manuals for versions and dates
+
 2000-03-20 Walter Tasin  <tasin@kdevelop.de>
 	* KDevelop examines now if the created "binary" is a script
 	  and starts debugging the real binary inside .libs if necessary

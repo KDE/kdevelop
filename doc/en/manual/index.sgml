@@ -2,10 +2,10 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.1
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.2
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 3.0 , March 16,2000
+<date>Version 1.2 , March 21, 2000
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -59,9 +59,9 @@ anywhere within the IDE.
 
 <sect>Changes
 <p>
-Version 1.1 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
-the project made great improvements since the 1.0 final release. We believe that the current version is to be 
-expected as the final release for the KDE 1.x series, giving developers the environment they want to use.
+Version 1.2 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
+the project made great improvements since the 1.0 final release, followed by the release of version 1.1. We believe that the current
+version is to be expected as the final release for the KDE 1.x series, giving developers the environment they want to use.
 
 Improvements were made in the following sections:
 
@@ -128,7 +128,7 @@ The first official stable release was made with version 1.0 on December 6, 1999.
 introduced more features and stability into the IDE by new code or code that was unstable before, which lead 
 to the second release as version 1.1 on February 28, 2000. 
  
-Since then, the project continues to integrate more functionality and simplifying the current codebase along 
+Since then, the project continud to integrate more functionality and simplifying the current codebase along
 with many translators who transfer KDevelop to as most languages as possible to provide the international 
 developer community the IDE in their own language, including the handbooks that ship with it. Many users 
 contributed their experience and knowledge to the project as one of the most promising products for Linux/Unix 
@@ -251,7 +251,7 @@ If your system's <idx/make-command/ is <tt/gmake/, type <tt/gmake/ instead of <t
 <sect>Starting KDevelop
 <p>
 If you use <idx/KDE/ as your window manager, KDevelop can be started by choosing
-"K"&rarr"Development"&rarr"KDevelop 1.1". As KDevelop supports <idx/KDE/-Mime-types, you can 
+"K"&rarr"Development"&rarr"KDevelop 1.2". As KDevelop supports <idx/KDE/-Mime-types, you can
 also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the 
 <idx/KDE/ File Manager which will start KDevelop and load the project.
 Under other window managers, open a console and type:
