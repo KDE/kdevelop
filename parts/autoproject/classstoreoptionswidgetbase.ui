@@ -1,0 +1,248 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>ClassStoreOptionsWidgetBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>classstore_widget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>575</width>
+            <height>530</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>5</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>ClassStore options</string>
+    </property>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>31</x>
+                <y>10</y>
+                <width>490</width>
+                <height>131</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Persistent ClassStore</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>60</y>
+                    <width>240</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Persistant ClassStore file (information only)</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>lePCSFile</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>90</y>
+                    <width>440</width>
+                    <height>28</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>cbEnablePCS</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>30</y>
+                    <width>190</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Enable Persistent ClassStore</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>30</x>
+                <y>160</y>
+                <width>490</width>
+                <height>280</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Pre - Parsing</string>
+        </property>
+        <widget class="QListView">
+            <column>
+                <property name="text">
+                    <string>With SubDirs</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizeable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Directory</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizeable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <property name="name">
+                <cstring>lvPCSPaths</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>90</y>
+                    <width>440</width>
+                    <height>130</height>
+                </rect>
+            </property>
+            <property name="hScrollBarMode">
+                <enum>AlwaysOff</enum>
+            </property>
+            <property name="allColumnsShowFocus">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>btAddPath</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>230</y>
+                    <width>140</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Add Path...</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>btRemovePath</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>290</x>
+                    <y>230</y>
+                    <width>170</width>
+                    <height>34</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Remove selected Path</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>cbEnablePP</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>30</y>
+                    <width>140</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Enable Pre-Parsing</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>20</x>
+                    <y>60</y>
+                    <width>201</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Include these paths for Pre-Parsing</string>
+            </property>
+        </widget>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>cbEnablePCS</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>classstore_widget</receiver>
+        <slot>slotEnablePCS(bool)</slot>
+    </connection>
+    <connection>
+        <sender>btAddPath</sender>
+        <signal>clicked()</signal>
+        <receiver>classstore_widget</receiver>
+        <slot>slotAddPreParsingPath()</slot>
+    </connection>
+    <connection>
+        <sender>btRemovePath</sender>
+        <signal>clicked()</signal>
+        <receiver>classstore_widget</receiver>
+        <slot>slotRemovePreParsingPath()</slot>
+    </connection>
+    <connection>
+        <sender>cbEnablePP</sender>
+        <signal>clicked()</signal>
+        <receiver>classstore_widget</receiver>
+        <slot>slotEnablePreParsing()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">classstoreoptionswidgetbase.ui.h</include>
+</includes>
+<slots>
+    <slot access="protected">slotEnablePreParsing()</slot>
+    <slot access="protected">slotAddPreParsingPath()</slot>
+    <slot access="protected">slotEnablePCS( bool )</slot>
+    <slot access="protected">slotRemovePreParsingPath()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -25,6 +25,7 @@
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
 #include "configureoptionswidget.h"
+#include "classstoreoptionswidget.h"
 #include "addtranslationdlg.h"
 #include "autoprojectfactory.h"
 #include "autoprojectwidget.h"
@@ -129,6 +130,10 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     vbox = dlg->addVBoxPage(i18n("Make Options"));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
+
+    vbox = dlg->addVBoxPage( i18n( "ClassStore Options" ) );
+    ClassStoreOptionsWidget* w5 = new ClassStoreOptionsWidget( this, vbox );
+    connect( dlg, SIGNAL( okClicked( ) ), w5, SLOT(accept( ) ) );
 }
 
 
@@ -172,7 +177,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     if (!fi1.exists()) {
         QFileInfo fi2(m_widget->buildDirectory() + "/configure");
         if (!fi2.exists()) {
-            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory "
+            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
                                                               "and no configure script for this project.\n"
                                                               "Run automake & friends and configure first?"));
             if (r == KMessageBox::No)
