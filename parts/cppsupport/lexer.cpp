@@ -110,27 +110,6 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	}
-#if 0
-    } else if( !m_skipping[ m_ifLevel ] && !m_inPreproc && ch == '#' && peekChar() == '#' ){
-        // TODO: check m_size
-        Token lastTok = m_tokens[ --m_size ];
-
-        nextChar( 2 );
-        readWhiteSpaces();
-        QString lastTokText = toString( lastTok );
-        qDebug( "lastTokText = %s", lastTokText.latin1() );
-
-        Token tok;
-        nextToken( tok );
-
-        QString expandedText = lastTokText + toString( tok );
-        qDebug( "expandedText = %s", expandedText.latin1() );
-        m_source.insert( currentPosition(), expandedText );
-
-        lastTok.getStartPosition( &m_currentLine, &m_currentColumn );
-
-        m_endPtr += expandedText.length();
-#endif
     } else if( m_startLine && ch == '#' ){
 
 	nextChar(); // skip #

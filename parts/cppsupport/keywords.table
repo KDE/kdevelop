@@ -14,7 +14,8 @@ slots Token_slots
 emit Token_emit
 # Qt keywords -- end
 
-__int64 Token_int 
+__int64 Token_int
+__asm__ Token_asm
 and Token_and
 and_eq Token_and_eq
 asm Token_asm
