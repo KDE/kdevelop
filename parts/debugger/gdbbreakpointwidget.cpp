@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 
+#include <qvbuttongroup.h>
 #include <qfileinfo.h>
 #include <qheader.h>
 #include <qtable.h>
@@ -186,47 +187,21 @@ void BreakpointTableRow::setRow()
 GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     QHBox(parent, name)
 {
-    QVBox* toolbar = new QVBox( this );
-    toolbar->setMargin ( 2 );
-    toolbar->setSpacing ( 2 );
+    QButtonGroup* toolbar = new QVButtonGroup( this );
 
     m_add       = new QToolButton( toolbar, "add breakpoint" );
-    m_add->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0,
-                                         ( QSizePolicy::SizeType)0,
-                                         0,
-                                         0,
-                                         m_add->sizePolicy().hasHeightForWidth())
-                                         );
     m_add->setPixmap ( SmallIcon ( "breakpoint_add" ) );
     QToolTip::add ( m_add, i18n ( "Add empty breakpoint" ) );
 
     m_delete    = new QToolButton( toolbar, "delete breakpoint" );
-    m_delete->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0,
-                                         ( QSizePolicy::SizeType)0,
-                                         0,
-                                         0,
-                                         m_delete->sizePolicy().hasHeightForWidth())
-                                         );
     m_delete->setPixmap ( SmallIcon ( "breakpoint_delete" ) );
     QToolTip::add ( m_delete, i18n ( "Delete selected breakpoint" ) );
 
     m_edit      = new QToolButton( toolbar, "edit breakpoint" );
-    m_edit->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0,
-                                         ( QSizePolicy::SizeType)0,
-                                         0,
-                                         0,
-                                         m_edit->sizePolicy().hasHeightForWidth())
-                                         );
     m_edit->setPixmap ( SmallIcon ( "breakpoint_edit" ) );
     QToolTip::add ( m_edit, i18n ( "Edit selected breakpoint" ) );
 
     m_removeAll      = new QToolButton( toolbar, "Delete all breakppoints" );
-    m_removeAll->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0,
-                                         ( QSizePolicy::SizeType)0,
-                                         0,
-                                         0,
-                                         m_removeAll->sizePolicy().hasHeightForWidth())
-                                         );
     m_removeAll->setPixmap ( SmallIcon ( "breakpoint_delete_all" ) );
     QToolTip::add ( m_removeAll, i18n ( "Remove all breakpoints" ) );
 
@@ -641,8 +616,8 @@ void GDBBreakpointWidget::slotAddBlankBreakpoint(int idx)
     if (btr)
     {
         QTableSelection ts;
-	ts.init(btr->row(), 0);
-	ts.expandTo(btr->row(), numCols );
+    ts.init(btr->row(), 0);
+    ts.expandTo(btr->row(), numCols );
         m_table->addSelection(ts);
         m_table->editCell(btr->row(), Location, false);
     }
@@ -800,8 +775,8 @@ void GDBBreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNu
     if (btr)
     {
         QTableSelection ts;
-	ts.init(btr->row(), 0);
-	ts.expandTo(btr->row(), numCols);
+    ts.init(btr->row(), 0);
+    ts.expandTo(btr->row(), numCols);
         m_table->addSelection(ts);
         m_table->editCell(btr->row(), Location, false);
     }
