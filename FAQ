@@ -1,3 +1,6 @@
+***** WARNING! THIS FAQ IS OUTDATED. The recent version can be found on www.kdevelop.org *****
+***** If you have any comments / additions to this FAQ, please post them to the mailing-list ****
+
 Q: I am running SuSE 7.3 and new projects fail to build
 A: The autoconf version shipped with SuSE 7.3 doesn't work with
    KDevelop 2.0. Either update KDevelop or downgrade your autoconf as
