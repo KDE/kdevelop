@@ -202,21 +202,15 @@ void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
   assert( aClass != NULL );
   assert( parent != NULL );
 
-  const char *str;
-  CParsedClass *sc;
   QListViewItem *ci;
 
-  for( str = aClass->childClasses.first();
-       str != NULL;
-       str = aClass->childClasses.next() )
+  for( aClass->classIterator.toFirst();
+       aClass->classIterator.current();
+       ++aClass->classIterator )
   {
-    sc = store->getClassByName( str );
-    if( sc != NULL )
-    {
-      ci = addClass( sc->name, parent );
-      updateClass( sc, ci );
-      setLastItem( ci );
-    }
+    ci = addClass( aClass->classIterator.current()->name, parent );
+    updateClass( aClass->classIterator.current(), ci );
+    setLastItem( ci );
   }
 }
 
@@ -389,7 +383,7 @@ void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr,
     type = THPROTECTED_ATTR;
   else if( aAttr->isPrivate() )
     type = THPRIVATE_ATTR;
-    
+
   addItem( aAttr->name, type, parent );
 }
 
@@ -633,46 +627,34 @@ void CClassTreeHandler::getCurrentNames( const char **className,
                                          const char **declName,
                                          THType *idxType )
 {
-  CParsedClass *aClass = NULL;
-  CParsedStruct *aStruct = NULL;
   QListViewItem *item;
   QListViewItem *parent;
+  THType parentType;
+  CParsedItem *parentItem = NULL;
 
-  *idxType = itemType();
   item = tree->currentItem();
   parent = item->parent();
+  parentType = itemType( parent );
 
-  // Initialize the variables.
-  *className = NULL;
-  *declName = NULL;
+  switch( parentType )
+  {
+    case THCLASS:
+      *className = parent->text(0);
+      break;
+    case THSTRUCT:
+      *className = parent->text(0);
+      break;
+    default:
+      *className = NULL;
+  }
 
-  if( *idxType == THCLASS )
-  {
-    aClass = store->getClassByName( item->text(0) );
-    if( aClass != NULL )
-      *className = aClass->name;
-  }
-  else if( itemType( parent ) == THCLASS )
-  {
-    aClass = store->getClassByName( parent->text(0) );
-    if( aClass != NULL )
-    {
-      *className = aClass->name;
-      *declName = item->text(0);
-    }
-  }
-  else if( itemType( parent ) == THSTRUCT )
-  {
-    aStruct = store->globalContainer.getStructByName( parent->text(0) );
-    if( aStruct != NULL )
-    {
-      *className = aStruct->name;
-      *declName = item->text(0);
-    }
-  }
-  else // Global item
-  {
-    *className = NULL;
-    *declName = item->text( 0 );
-  }
+  // Set the name of the current item.
+  *declName = item->text(0);
+
+  // Set the type of the current item.
+  *idxType = itemType();
+
+  // If this is a top-level class or struct we make sure to send the name.
+  if( *className == NULL && ( *idxType == THSTRUCT || *idxType == THCLASS ) )
+    *className = *declName;
 }
