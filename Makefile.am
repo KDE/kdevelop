@@ -65,7 +65,7 @@ DOXYGEN_EXAMPLE_PATH = languages/cpp/app_templates/khello languages/cpp/app_temp
 
 ## Use KDE Libs tag files
 DOXYGEN_LINK_WITH_KDE_QT_APIDOX = YES
-DOXYGEN_REFERENCES = kdecore kdeui khtml kjs kio kparts dcop kdefx interfaces kmdi kutils arts
+DOXYGEN_REFERENCES = dcop interfaces kdecore kdefx kdeui khtml kio kjs kparts kutils
 
 ## Use Search engine (Versions 1.3.4 and above only!)
 DOXYGEN_SEARCHENGINE = YES
