@@ -364,7 +364,7 @@ void QextMdiChildView::activate()
 
    // check if someone wants that we interrupt the method (because it's probably unnecessary)
    if (m_bInterruptActivation) {
-      m_bInterruptActivation = false;
+      m_bInterruptActivation = FALSE;
       return;   // nothing to do, we are the active childview, already
    }
    else {
@@ -440,8 +440,33 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          if (!m_bFocusActivationIsPending) {
             m_bFocusActivationIsPending = true;
             activate(); // sets the focus
-            m_bFocusActivationIsPending = false;
+            m_bFocusActivationIsPending = FALSE;
          }
+      }
+   }
+   else if ( (e->type() == QEvent::ChildRemoved)) {
+      // if we lost a child we uninstall ourself as event filter for the lost 
+      // child and its children
+      QObject* pLostChild = ((QChildEvent*)e)->child();
+      if ( (pLostChild != 0L) /*&& (pLostChild->inherits("QWidget"))*/ ) {
+         QObjectList *list = pLostChild->queryList();
+         list->insert(0, pLostChild);        // add the lost child to the list too, just to save code
+         QObjectListIt it( *list );          // iterate over all lost child widgets
+         QObject * obj;
+         while ( (obj=it.current()) != 0 ) { // for each found object...
+            QWidget* widg = (QWidget*)obj;
+            ++it;
+            widg->removeEventFilter(this);
+            if( (widg->focusPolicy() == QWidget::StrongFocus) || (widg->focusPolicy() == QWidget::TabFocus) || (widg->focusPolicy() == QWidget::WheelFocus)) {
+               if( m_firstFocusableChildWidget == widg) {
+                  m_firstFocusableChildWidget = 0L;   // reset first widget
+               }
+               if (m_lastFocusableChildWidget == widg) {
+                  m_lastFocusableChildWidget = 0L;    // reset last widget
+               }
+            }
+         }
+         delete list;                        // delete the list, not the objects
       }
    }
    else if ( (e->type() == QEvent::ChildInserted) && isAttached() ) {
@@ -450,7 +475,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       // (as we did when we were added to the MDI system).
       QObject* pNewChild = ((QChildEvent*)e)->child();
       if ( (pNewChild != 0L) && (pNewChild->inherits("QWidget")) &&
-           !(pNewChild->inherits("QMessageBox")) && !(pNewChild->inherits("KMessageBox")) ) {
+           !(pNewChild->inherits("QMessageBox")) && !(pNewChild->inherits("KMessageBox")) && !(pNewChild->inherits("QFileDialog")) ) {
          QWidget* pNewWidget = (QWidget*)pNewChild;
          QObjectList *list = pNewWidget->queryList( "QWidget" );
          list->insert(0, pNewChild);         // add the new child to the list too, just to save code

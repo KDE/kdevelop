@@ -504,10 +504,9 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          QObject::disconnect(m_pMinimize,SIGNAL(clicked()),this,SLOT(restorePressed()));
          QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
          m_state=state;
-         setGeometry(-QEXTMDI_MDI_CHILDFRM_BORDER,
-                     -QEXTMDI_MDI_CHILDFRM_BORDER - m_pCaption->height() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
-                     m_pManager->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-                     m_pManager->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + m_pCaption->height());
+         setGeometry(-m_pClient->x(), -m_pClient->y(),
+                     m_pManager->width() + width() - m_pClient->width(),
+                     m_pManager->height() + height() - m_pClient->height());
          raise();
          break;
       case Normal:
@@ -520,10 +519,9 @@ void QextMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
-         QRect maximizedFrmRect(-QEXTMDI_MDI_CHILDFRM_BORDER,
-                     -QEXTMDI_MDI_CHILDFRM_BORDER - m_pCaption->height() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
-                     m_pManager->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-                     m_pManager->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + m_pCaption->height());
+         QRect maximizedFrmRect(-m_pClient->x(), -m_pClient->y(),
+                                m_pManager->width() + width() - m_pClient->width(),
+                                m_pManager->height() + height() - m_pClient->height());
          if (geometry() != maximizedFrmRect) {
             setGeometry(maximizedFrmRect);
          }
@@ -910,6 +908,23 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
                              re->size().height() + captionHeight + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER );
       if( newChildFrmSize != size())
          resize( newChildFrmSize );
+   }
+   else if ( (e->type() == QEvent::ChildRemoved)) {
+      // if we lost a child we uninstall ourself as event filter for the lost 
+      // child and its children
+      QObject* pLostChild = ((QChildEvent*)e)->child();
+      if ( (pLostChild != 0L) /*&& (pLostChild->inherits("QWidget"))*/ ) {
+         QObjectList *list = pLostChild->queryList();
+         list->insert(0, pLostChild);        // add the lost child to the list too, just to save code
+         QObjectListIt it( *list );          // iterate over all lost child widgets
+         QObject * obj;
+         while ( (obj=it.current()) != 0 ) { // for each found object...
+            QWidget* widg = (QWidget*)obj;
+            ++it;
+            widg->removeEventFilter(this);
+         }
+         delete list;                        // delete the list, not the objects
+      }
    }
    else if (e->type() == QEvent::ChildInserted) {
       // if we got a new child we install ourself as event filter for the new 
