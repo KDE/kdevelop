@@ -1,3 +1,6 @@
+1999-10-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+        * Changed parent of kwrite dialogs to topLevelWidget()
+
 1999-10-02  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* rearranged kde and qt source templates to new automake/am_edit
 	* added docbook template based on kdesdk and newfiledlg code for that

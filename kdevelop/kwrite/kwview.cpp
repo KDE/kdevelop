@@ -1580,7 +1580,7 @@ void KWrite::optDlg() {
 void KWrite::colDlg() {
   ColorDialog *dlg;
 
-  dlg = new ColorDialog(kWriteDoc->colors,this);
+  dlg = new ColorDialog(kWriteDoc->colors,topLevelWidget());
 
   dlg->setCaption(i18n("Color Settings"));
 
@@ -2254,7 +2254,7 @@ void KWrite::gotoLine() {
   GotoLineDialog *dlg;
   PointStruc cursor;
 
-  dlg = new GotoLineDialog(kWriteView->cursor.y + 1, kWriteDoc->numLines(), this);
+  dlg = new GotoLineDialog(kWriteView->cursor.y + 1, kWriteDoc->numLines(), topLevelWidget());
 //  dlg = new GotoLineDialog(kWriteView->cursor.y + 1, this);
 
   dlg->setCaption(i18n("Goto Line"));
@@ -2853,7 +2853,7 @@ void KWrite::hlDef() {
     itemStyleList.append(new ItemStyle(*defItemStyleList->at(z)));
   }
   */
-  dlg = new DefaultsDialog(hlManager,&defaultStyleList,&defaultFont,this);
+  dlg = new DefaultsDialog(hlManager,&defaultStyleList,&defaultFont,topLevelWidget());
 
   dlg->setCaption(i18n("Highlight Defaults"));
 
@@ -2878,8 +2878,8 @@ void KWrite::hlDlg() {
   //this gets the data from the KConfig object
   hlManager->getHlDataList(hlDataList);
   dlg = new HighlightDialog(hlManager, &hlDataList,
-    kWriteDoc->getHighlightNum(), this);
-  dlg->setCaption(i18n("Highligh Settings"));
+    kWriteDoc->getHighlightNum(), topLevelWidget());
+  dlg->setCaption(i18n("Highlight Settings"));
 //  dlg->hlChanged(kWriteDoc->getHighlightNum());
   if (dlg->exec() == QDialog::Accepted) {
     //this stores the data into the KConfig object
