@@ -156,11 +156,6 @@
   <Merge/>
 </ToolBar>
 
-<ToolBar name="debugToolBar" position="Top" noMerge="1">
-  <text>Debugger Toolbar</text>
-  <Merge/>
-</ToolBar>
-
 <Menu name="rb_popup">
   <Merge/>
   <Separator/>
