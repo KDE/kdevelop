@@ -126,9 +126,9 @@ void EditorProxy::popupAboutToShow()
     if( wordstr.isEmpty() ) {
       int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
       int endPos = startPos;
-      while (startPos >= 0 && linestr[startPos].isLetter())
+      while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
           startPos--;
-      while (endPos < (int)linestr.length() && linestr[endPos].isLetter())
+      while (endPos < (int)linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
           endPos++;
       wordstr = (startPos==endPos)?
           QString() : linestr.mid(startPos+1, endPos-startPos-1);  
