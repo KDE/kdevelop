@@ -17,4 +17,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local: script.local
-	$(INSTALL_DATA) -D script.local $(DESTDIR)$(kpartappdir)/script
+	$(mkinstalldirs) $(DESTDIR)$(kpartappdir)
+	$(INSTALL_DATA) script.local $(DESTDIR)$(kpartappdir)/script

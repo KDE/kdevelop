@@ -16,5 +16,5 @@ script.local: ${srcdir}/script
 	perl -npi -e 's%^#\!.*$$%#!'${perl}' -I'${commondatadir}'%g;' script.local
 
 install-data-local: script.local
-	$(INSTALL_DATA) -D script.local $(DESTDIR)$(pythonhellodir)/script
-
+	$(mkinstalldirs) $(DESTDIR)$(pythonhellodir)
+	$(INSTALL_DATA) script.local $(DESTDIR)$(pythonhellodir)/script
