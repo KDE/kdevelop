@@ -892,13 +892,11 @@ void GDBController::parseRequestedData(char* buf)
   {
     // Fish out the item from the command and let it deal with the data
     VarItem* item = gdbItemCommand->getItem();
-    // Hack due to my bad QString implementation - this just tidies up the display
-    if ((strncmp(buf, "There is no member named len.", 29) != 0) &&
-        (strncmp(buf, "There is no member or method named len.", 39) != 0))
-    {
-      item->updateValue(buf);
-      item->trim();
-    }
+    varTree_->viewport()->setUpdatesEnabled(false);
+    item->updateValue(buf);
+    item->trim();
+    varTree_->viewport()->setUpdatesEnabled(true);
+//    varTree_->repaint();
   }
 }
 

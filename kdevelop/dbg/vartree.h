@@ -125,6 +125,8 @@ public:
   void setActive()                        { activeFlag_ = rootActiveFlag(); }
   bool isActive() const                   { return activeFlag_ == rootActiveFlag(); }
   QString getValue() const                { return QString(text(ValueCol)); }
+  bool isTrimmable() const;
+  void waitingForData ()                  { waitingForData_ = true; }
 
   virtual void updateValue(char* /* buf */);
   virtual DataType getDataType() const;
@@ -135,6 +137,7 @@ public:
 
 private:
   int activeFlag_;
+  bool waitingForData_;
 };
 
 /***************************************************************************/

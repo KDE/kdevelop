@@ -323,7 +323,8 @@ TrimmableItem::TrimmableItem(VarTree* parent) :
 
 TrimmableItem::TrimmableItem(TrimmableItem* parent) :
   QListViewItem (parent, parent->lastChild()),
-  activeFlag_(0)
+  activeFlag_(0),
+  waitingForData_(false)
 {
   setActive();
 }
@@ -339,6 +340,13 @@ TrimmableItem::~TrimmableItem()
 int TrimmableItem::rootActiveFlag() const
 {
   return ((VarTree*)listView())->activeFlag();
+}
+
+// **************************************************************************
+
+bool TrimmableItem::isTrimmable() const
+{
+  return !waitingForData_;
 }
 
 // **************************************************************************
@@ -387,7 +395,7 @@ void TrimmableItem::trim()
     if (TrimmableItem* item = dynamic_cast<TrimmableItem*>(child))
     {
       // Never trim a branch if we are waiting on data to arrive.
-      if (!isOpen() || getDataType() != typePointer)
+      if (isTrimmable())
       {
         if (item->isActive())
           item->trim();      // recurse
@@ -425,6 +433,7 @@ QCString TrimmableItem::getCache()
 
 void TrimmableItem::updateValue(char* /* buf */)
 {
+  waitingForData_ = false;
 }
 
 // **************************************************************************
@@ -500,7 +509,10 @@ QString VarItem::fullName() const
 void VarItem::setText ( int column, const QString& data )
 {
   if (!isActive() && isOpen() && dataType_ == typePointer)
+  {
+    waitingForData();
     ((VarTree*)listView())->emitExpandItem(this);
+  }
 
   setActive();
   if (column == ValueCol)
@@ -511,12 +523,22 @@ void VarItem::setText ( int column, const QString& data )
   }
 
   QListViewItem::setText(column, data);
+  repaint();
 }
 
 // **************************************************************************
 
 void VarItem::updateValue(char* buf)
 {
+  TrimmableItem::updateValue(buf);
+
+  // Hack due to my bad QString implementation - this just tidies up the display
+  if ((strncmp(buf, "There is no member named len.", 29) == 0) ||
+      (strncmp(buf, "There is no member or method named len.", 39) == 0))
+  {
+    return;
+  }
+
   if (*buf == '$')
   {
     if (char* end = strchr(buf, '='))
@@ -566,8 +588,13 @@ void VarItem::setOpen(bool open)
       trim();
     }
     else
+    {
       if (dataType_ == typePointer || dataType_ == typeReference)
+      {
+        waitingForData();
         ((VarTree*)listView())->emitExpandItem(this);
+      }
+    }
   }
 
   QListViewItem::setOpen(open);
@@ -588,31 +615,46 @@ void VarItem::checkForRequests()
 
   // Signature for a QT1.44 QString
   if (strncmp(cache_, "<QArrayT<char>> = {<QGArray> = {shd = ", 38) == 0)
+  {
+    waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
                                           fullName().latin1()+QCString(".shd.data"));
+  }
 
   // Signature for a QT1.44 QDir
   if (strncmp(cache_, "dPath = {<QArrayT<char>> = {<QGArray> = {shd", 44) == 0)
+  {
+    waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
                                           fullName().latin1()+QCString(".dPath.shd.data"));
+  }
 
   // Signature for a QT2.0.x QT2.1 QString
   // TODO - This handling is not that good - but it works sufficiently well
   // at the moment to leave it here, and it won't cause bad things to happen.
   if (strncmp(cache_, "d = 0x", 6) == 0)      // Eeeek - too small
+  {
+    waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
+  }
 
   // Signature for a QT2.0.x QT2.1 QCString
   if (strncmp(cache_, "<QArray<char>> = {<QGArray> = {shd = ", 37) == 0)
+  {
+    waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
                                           fullName().latin1()+QCString(".shd.data"));
+  }
   // Signature for a QT2.0.x QT2.1 QDir
   if (strncmp(cache_, "dPath = {d = 0x", 15) == 0)
+  {
+    waitingForData();
     ((VarTree*)listView())->emitExpandUserItem(this,
            QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
+  }
 }
 
 // **************************************************************************
