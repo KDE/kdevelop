@@ -1,0 +1,20 @@
+#!perl -I/usr/share/apps/kdevappwizard/template-common
+
+use gideon;
+
+initGideon();
+installLicense();
+
+print "Installing project file\n";
+install( "${src}/template-qmakesimple/app.kdevelop",     "${dest}/${APPNAMELC}.kdevelop" );
+
+print "Installing application framework\n";
+mkdir( "${dest}/src", 0777 );
+mkdir( "${dest}/bin", 0777 );
+install( "${src}/template-qmakesimple/app.pro",  "${dest}/${APPNAMELC}.pro" );
+
+print "Installing application sources\n";
+install( "${src}/template-qmakesimple/src.pro",  "${dest}/src/src.pro" );
+install( "${src}/template-qmakesimple/main.cpp", "${dest}/src/${APPNAMELC}.cpp" );
+
+print "Finished\n";
