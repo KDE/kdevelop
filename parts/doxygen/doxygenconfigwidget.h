@@ -1,4 +1,6 @@
 /***************************************************************************
+ *   Copyright (C) 2000 by Dimitri van Heesch                              *
+ *   dimitri@stack.nl                                                      *
  *   Copyright (C) 2001 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
@@ -31,19 +33,22 @@ public slots:
     void accept();
 
 private slots:
-    void toggle(const char *,bool);
+    void toggle(const char *, bool);
+    void changed();
 
 private:
+    QSize sizeHint() const;
     void loadFile();
     void saveFile();
     void init();
     void addDependency(QDict<QObject> *switches,
-                       const QCString &dep,const QCString &name);
+                       const QCString &dep, const QCString &name);
 
     QString m_fileName;
-    QDict<IInput>          *m_inputWidgets;
+    bool m_hasChanged;
+    QDict<IInput> *m_inputWidgets;
     QDict< QList<IInput> > *m_dependencies;
-    QDict<QObject>         *m_switches;
+    QDict<QObject> *m_switches;
 };
 
 #endif

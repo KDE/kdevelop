@@ -28,6 +28,7 @@
 DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *parent, const char *name)
     : QTabWidget(parent, name)
 {
+    m_hasChanged = false;
     m_dependencies = new QDict< QList<IInput> >(257);
     m_dependencies->setAutoDelete(true);
     m_inputWidgets = new QDict< IInput >;
@@ -51,10 +52,10 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
             case ConfigOption::O_String:
                 {
                     InputString::StringMode sm = InputString::StringFree;
-                    switch(((ConfigString *)option)->widgetType()) {
-                    case ConfigString::String: sm=InputString::StringFree; break;
-                    case ConfigString::File:   sm=InputString::StringFile; break;
-                    case ConfigString::Dir:    sm=InputString::StringDir;  break;
+                    switch (((ConfigString *)option)->widgetType()) {
+                    case ConfigString::String: sm = InputString::StringFree; break;
+                    case ConfigString::File:   sm = InputString::StringFile; break;
+                    case ConfigString::Dir:    sm = InputString::StringDir;  break;
                     }
                     InputString *inputString = new InputString
                         ( option->name(),                        // name
@@ -62,10 +63,10 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           *((ConfigString *)option)->valueRef(), // variable 
                           sm                                     // type
                           );
-                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace() );
-                    connect(inputString,SIGNAL(changed()),SIGNAL(changed()));
-                    m_inputWidgets->insert(option->name(),inputString);
-                    addDependency(m_switches,option->dependsOn(),option->name());
+                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace());
+                    connect(inputString, SIGNAL(changed()), this, SLOT(changed()));
+                    m_inputWidgets->insert(option->name(), inputString);
+                    addDependency(m_switches, option->dependsOn(), option->name());
                 }
                 break;
             case ConfigOption::O_Enum:
@@ -77,12 +78,12 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           InputString::StringFixed               // type
                           );
                     QStrListIterator sli=((ConfigEnum *)option)->iterator();
-                    for (sli.toFirst();sli.current();++sli)
+                    for (sli.toFirst(); sli.current(); ++sli)
                         inputString->addValue(sli.current());
-                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace() );
-                    connect(inputString,SIGNAL(changed()),SIGNAL(changed()));
+                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace());
+                    connect(inputString, SIGNAL(changed()), this, SLOT(changed()));
                     m_inputWidgets->insert(option->name(),inputString);
-                    addDependency(m_switches,option->dependsOn(),option->name());
+                    addDependency(m_switches, option->dependsOn(), option->name());
                 }
                 break;
             case ConfigOption::O_List:
@@ -101,10 +102,10 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           *((ConfigList *)option)->valueRef(),    // variable
                           lm                                      // type
                           );
-                    QWhatsThis::add(inputStrList, option->docs().simplifyWhiteSpace() );
-                    connect(inputStrList,SIGNAL(changed()),SIGNAL(changed()));
+                    QWhatsThis::add(inputStrList, option->docs().simplifyWhiteSpace());
+                    connect(inputStrList, SIGNAL(changed()), this, SLOT(changed()));
                     m_inputWidgets->insert(option->name(),inputStrList);
-                    addDependency(m_switches,option->dependsOn(),option->name());
+                    addDependency(m_switches, option->dependsOn(), option->name());
                 }
                 break;
             case ConfigOption::O_Bool:
@@ -114,10 +115,10 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           pagebox,                                // widget
                           *((ConfigBool *)option)->valueRef()     // variable
                           );
-                    QWhatsThis::add(inputBool, option->docs().simplifyWhiteSpace() );
-                    connect(inputBool,SIGNAL(changed()),SIGNAL(changed()));
-                    m_inputWidgets->insert(option->name(),inputBool);
-                    addDependency(m_switches,option->dependsOn(),option->name());
+                    QWhatsThis::add(inputBool, option->docs().simplifyWhiteSpace());
+                    connect(inputBool, SIGNAL(changed()), this, SLOT(changed()));
+                    m_inputWidgets->insert(option->name(), inputBool);
+                    addDependency(m_switches, option->dependsOn(), option->name());
                 }
                 break;
             case ConfigOption::O_Int:
@@ -129,21 +130,21 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                           ((ConfigInt *)option)->minVal(),        // min value
                           ((ConfigInt *)option)->maxVal()         // max value
                           );
-                    QWhatsThis::add(inputInt, option->docs().simplifyWhiteSpace() );
-                    connect(inputInt,SIGNAL(changed()),SIGNAL(changed()));
-                    m_inputWidgets->insert(option->name(),inputInt);
-                    addDependency(m_switches,option->dependsOn(),option->name());
+                    QWhatsThis::add(inputInt, option->docs().simplifyWhiteSpace());
+                    connect(inputInt, SIGNAL(changed()), this, SLOT(changed()));
+                    m_inputWidgets->insert(option->name(), inputInt);
+                    addDependency(m_switches, option->dependsOn(), option->name());
                 }
                 break;
             } 
     }
     
     QDictIterator<QObject> di(*m_switches);
-    QObject *obj = 0;
-    for (di.toFirst();(obj=di.current());++di) {
-        connect(obj,SIGNAL(toggle(const char *,bool)),SLOT(toggle(const char *,bool)));
+    for (; di.current(); ++di) {
+        QObject *obj = di.current();
+        connect(obj, SIGNAL(toggle(const char *,bool)), this, SLOT(toggle(const char *,bool)));
         // UGLY HACK: assumes each item depends on a boolean without checking!
-        emit toggle(di.currentKey(),((InputBool *)obj)->getState());
+        emit toggle(di.currentKey(), ((InputBool *)obj)->getState());
     }
     
     m_fileName = fileName;
@@ -159,25 +160,33 @@ DoxygenConfigWidget::~DoxygenConfigWidget()
 }
 
 
-void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
-                                        const QCString &dep,const QCString &name)
+QSize DoxygenConfigWidget::sizeHint() const
 {
-    if (!dep.isEmpty())
-        {
-            IInput *parent = m_inputWidgets->find(dep);
-            IInput *child = m_inputWidgets->find(name);
-            if (switches->find(dep) == 0)
-                switches->insert(dep,parent->qobject());
-            QList<IInput> *list = m_dependencies->find(dep);
-            if (list == 0) {
-                list = new QList<IInput>;
-                m_dependencies->insert(dep,list);
-            }
-            list->append(child);
-        }
+    // without this the whole dialog becomes much too large
+    return QSize(QTabWidget::sizeHint().width(), 1);
 }
 
-void DoxygenConfigWidget::toggle(const char *name,bool state)
+
+void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
+                                        const QCString &dep, const QCString &name)
+{
+    if (dep.isEmpty())
+        return;
+    
+    IInput *parent = m_inputWidgets->find(dep);
+    IInput *child = m_inputWidgets->find(name);
+    if (!switches->find(dep))
+        switches->insert(dep, parent->qobject());
+    QList<IInput> *list = m_dependencies->find(dep);
+    if (!list) {
+        list = new QList<IInput>;
+        m_dependencies->insert(dep, list);
+    }
+    list->append(child);
+}
+
+
+void DoxygenConfigWidget::toggle(const char *name, bool state)
 {
     QList<IInput> *inputs = m_dependencies->find(name);
     IInput *input = inputs->first();
@@ -187,18 +196,25 @@ void DoxygenConfigWidget::toggle(const char *name,bool state)
     }
 }
 
+
+void DoxygenConfigWidget::changed()
+{
+    m_hasChanged = true;
+}
+
+
 void DoxygenConfigWidget::init()
 {
     QDictIterator<IInput> di(*m_inputWidgets);
-    IInput *input = 0;
-    for (di.toFirst();(input=di.current());++di)
-        input->init();
+    for (; di.current(); ++di)
+        di.current()->init();
+    
     QDictIterator<QObject> dio(*m_switches);
-    QObject *obj = 0;
-    for (dio.toFirst();(obj=dio.current());++dio) {
-        connect(obj,SIGNAL(toggle(const char *,bool)),SLOT(toggle(const char *,bool)));
+    for (; dio.current(); ++dio) {
+        QObject *obj = dio.current();
+        connect(obj, SIGNAL(toggle(const char *,bool)), this, SLOT(toggle(const char *,bool)));
         // UGLY HACK: assumes each item depends on a boolean without checking!
-        emit toggle(dio.currentKey(),((InputBool *)obj)->getState());
+        emit toggle(dio.currentKey(), ((InputBool *)obj)->getState());
     }
 }
 
@@ -228,6 +244,9 @@ void DoxygenConfigWidget::loadFile()
 
 void DoxygenConfigWidget::saveFile()
 {
+    if (!m_hasChanged)
+        return;
+    
     QFile f(m_fileName);
     if (!f.open(IO_WriteOnly)) {
         KMessageBox::information(0, i18n("Cannot write Doxyfile."));
