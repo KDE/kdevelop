@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY kdevelop "<application>KDevelop</application>">
-  <!ENTITY kdevrelease "3.0.0">
+  <!ENTITY kdevrelease "3.0.90-CVS">
   <!ENTITY apache "<application>Apache</application>">
   <!ENTITY appwizard "Application Wizard">
   <!ENTITY autoconf "<command>autoconf</command>">
@@ -13,19 +13,17 @@
   <!ENTITY doxygen "<application>doxygen</application>">
   <!ENTITY doxywizard "<application>doxywizard</application>">
   <!ENTITY egrep "<command>egrep</command>">
-  <!ENTITY gnu "GNU">
   <!ENTITY grep "<command>grep</command>">
   <!ENTITY libtool "<command>libtool</command>">
-  <!ENTITY Mac "<application>Mac</application>">
-  <!ENTITY Microsoft "<application>Microsoft</application>">
   <!ENTITY python "<application>Python</application>">
   <!ENTITY perl "<application>Perl</application>">
   <!ENTITY php "<application>PHP</application>">
   <!ENTITY promanag "Project Manager">
-  <!ENTITY qt "Qt">
   <!ENTITY qte "<application>Qt/embedded</application>">
   <!ENTITY ssh "<application>ssh</application>">
-  <!ENTITY Windows "<application>Windows</application>">
+  <!-- chapters in separate files -->
+  <!ENTITY unixdev SYSTEM "unixdev.docbook">
+  <!-- book related entities -->
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "INCLUDE">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -41,8 +39,8 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-02-17</date>
-  <releaseinfo>3.0.0</releaseinfo>
+  <date>2004-02-21</date>
+  <releaseinfo>3.0.90-CVS</releaseinfo>
 
   <authorgroup>
     <author>
@@ -286,10 +284,10 @@ The information in this chapter is meant as a quick reference for a head start o
 
   <listitem>
     <formalpara id="nutshell-autoconf-problem">
-    <title><quote>Wrong <command>autoconf</command> version</quote> etc. Error</title>
+    <title><quote>Wrong <command>autoconf</command> version</quote> &etc; Error</title>
 
     <para>
-    There are several error messages concerning too old versions of <application>autoconf</application> etc. prohibiting <command>configure</command> to work properly. Run <command>autoreconf</command> in the directory tree where the <filename>configure.in</filename> files in question are. This command will try to update the information in the &GNU; Build System files. See <command>man autoreconf</command> for more information.
+    There are several error messages concerning too old versions of <application>autoconf</application> &etc; prohibiting <command>configure</command> to work properly. Run <command>autoreconf</command> in the directory tree where the <filename>configure.in</filename> files in question are. This command will try to update the information in the &GNU; Build System files. See <command>man autoreconf</command> for more information.
     </para>
     </formalpara>
   </listitem>
@@ -299,383 +297,7 @@ The information in this chapter is meant as a quick reference for a head start o
 
 <!-- ====================================================================== -->
 
-<chapter id="unixdev">
-<title>Development on UNIX</title>
-
-<indexterm zone="unixdev"><primary>development</primary></indexterm>
-<indexterm zone="unixdev">
-  <primary>UNIX</primary>
-  <secondary>development</secondary></indexterm>
-
-<sect1 id="history">
-<title>Some Historical Remarks</title>
-
-<indexterm zone="history"><primary>history</primary></indexterm>
-<indexterm zone="history"><primary>scripting languages</primary></indexterm>
-<indexterm zone="history">
-  <primary>UNIX</primary>
-  <secondary>history</secondary></indexterm>
-<indexterm zone="history">
-  <primary>UNIX</primary>
-  <secondary>pipe</secondary></indexterm>
-<indexterm zone="history">
-  <primary>UNIX</primary>
-  <secondary>shell</secondary></indexterm>
-<indexterm zone="history">
-  <primary>shell</primary>
-  <secondary>UNIX</secondary></indexterm>
-
-<para>
-From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
-</para>
-<para>
-The other paradigm is the world of <emphasis>scripting languages</emphasis>. This world evolved with the invention of the UNIX shell which was the user's interface to the operating system&mdash;and at the same time a very high level programming language. A shell script is built from a set of small utility programs like e.g. <command>grep</command>, <command>sed</command>, or <command>find</command>. Each such utility is designed for some tightly defined job. The trick is that any such utility can be connected to another one via a simple transport mechanism, called a <emphasis>pipe</emphasis>, which directs the output of the foregoing utility into the input of the next processed one. This makes up for a very powerful and highly flexible programming tool.
-</para>
-<para>
-As time has gone by, both worlds have evolved. While C is still used mainly as a system programming language, C++ as a variant of C enriched by object-oriented and generic extensions has found its place for the development of complex applications in the 1990's. There are numerous other programming languages, even older ones keep their place&mdash;FORTRAN77 and Ada e.g. still have their stronghold in numerical applications.
-</para>
-</sect1> <!-- history -->
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="unixdev-scripting-languages">
-<title>Contemporary Scripting Languages</title>
-<para>
-In the scripting area, there has been a shift away from the shell, which suffers from portability concerns, to languages which unify all commonly needed functionality in their standard libraries, while still being able to interface to the outside through pipes when necessary.
-</para>
-<para>
-All these scripting languages have in common that they are widely portable between UNIX variants, &Microsoft; &Windows;, &Mac; OS or even VMS. Also, they all have implementations that are freely distributable.
-</para>
-
-<sect2 id="unixdev-SL-Perl">
-<title>&perl;</title>
-
-<indexterm zone="unixdev-SL-Perl"><primary>Perl</primary></indexterm>
-<indexterm zone="unixdev-SL-Perl">
-  <primary>scripting languages</primary>
-  <secondary>Perl</secondary></indexterm>
-
-<para>
-<ulink url="http://www.perl.com">&perl;</ulink> has become popular as a text processing and system administration language. In the beginning of the World Wide Web, CGI scripts written in &perl; were a widely used method to create dynamic web pages from databases. Today, this method has been replaced mostly by the <command>mod_perl</command> plugin for the &apache; web server. Among &perl;'s strengths are its built-in support for advanced regular expression matching and its rich archive of freely distributed modules.
-</para>
-<para>
-For more information see the <ulink url="http://cpan.org">Comprehensive Perl Archive Network (CPAN)</ulink> website.
-</para>
-</sect2> <!-- unixdev-SL-Perl -->
-
-<sect2 id="unixdev-SL-Python">
-<title>Python</title>
-
-<indexterm zone="unixdev-SL-Python"><primary>Python</primary></indexterm>
-<indexterm zone="unixdev-SL-Python">
-  <primary>scripting languages</primary>
-  <secondary>Python</secondary></indexterm>
-
-<para>
-<ulink url="http://www.python.org">&python;</ulink> shines by the elegance of its class system and the ease and flexibility with which external libraries can be wrapped in a way that they appear like standard &python; classes and functions. In contrast to &perl;, &python; has a clear and concise embedding API, which makes it the language of choice for making C and C++ programs scriptable.
-</para>
-</sect2> <!-- unixdev-SL-Python -->
-
-<sect2 id="unixdev-SL-PHP">
-<title>PHP</title>
-
-<indexterm zone="unixdev-SL-PHP"><primary>PHP</primary></indexterm>
-<indexterm zone="unixdev-SL-PHP">
-  <primary>scripting languages</primary>
-  <secondary>PHP</secondary></indexterm>
-
-<para>
-<ulink url="http://www.php.net">&php;</ulink> was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content in the web.
-</para>
-</sect2> <!-- unixdev-SL-PHP -->
-</sect1> <!-- unixdev-scripting-languages -->
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-<sect1 id="unixdev-hl-script">
-<title>Higher-level Scripting</title>
-
-<para>
-Higher-level UNIX applications usually miss the speed and flexibility of the traditional character-oriented shell scripting mechanisms. This is especially true in the world of graphical user interfaces (GUI) as e.g. &kde;.
-</para>
-<para>
-There have been attempts to provide similar mechanisms which will work on a higher application level, most notably <link linkend="unixdev-corba">CORBA</link> and, in the &kde; environment, <link linkend="unixdev-dcop">DCOP</link>.
-</para>
-
-<sect2 id="unixdev-corba">
-<title>The CORBA Protocol</title>
-
-<indexterm zone="unixdev-corba"><primary>CORBA</primary></indexterm>
-<indexterm zone="unixdev-corba">
-  <primary>scripting languages</primary>
-  <secondary>CORBA</secondary></indexterm>
-<indexterm zone="unixdev-corba">
-  <primary>communication</primary>
-  <secondary>CORBA</secondary></indexterm>
-
-<para>
-<ulink url="http://www.omg.org/gettingstarted/corbafaq.htm">CORBA</ulink> (<emphasis>Common Object Request Broker Architecture</emphasis>) is an attempt to let computer applications work together over networks. It was devised by the private, vendor independent <ulink url="http://www.omg.org">OMG</ulink> (Object Management Group) standards comittee.
-</para>
-<para>
-CORBA-based programs use the IIOP standard protocol to communicate. Implementations based on IIOP are available on a wide variety of operating systems, programming languages, and networks and are thus highly portable.
-</para>
-<para>
-The main drawback of CORBA is its rather low speed. While this may be tolerable in networks, it is a real hindrance for inter-application communications in a non-networked environment such as &kde; running on a single computer.
-</para>
-
-</sect2> <!-- unixdev-corba -->
-
-<sect2 id="unixdev-dcop">
-<title>The DCOP Interface</title>
-
-<indexterm zone="unixdev-dcop"><primary>DCOP</primary></indexterm>
-<indexterm zone="unixdev-dcop">
-  <primary>scripting languages</primary>
-  <secondary>DCOP</secondary></indexterm>
-<indexterm zone="unixdev-dcop">
-  <primary>communication</primary>
-  <secondary>DCOP</secondary></indexterm>
-
-<para>
-Another evolution on UNIX-like scripting is the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html"><emphasis>DCOP</emphasis></ulink> protocol which was devised for communication between &kde; applications to overcome the limitations of CORBA.
-</para>
-<para>
-DCOP stands for <emphasis>Desktop Communication Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional UNIX pipe mechanism.
-</para>
-<para>
-Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables e.g. a &kde; program to send messages to another &kde; program, or receive data from it for its own purposes.
-</para>
-<para>
-There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly (although a lot faster than CORBA). But it returns much of the power and flexibility of UNIX scripting to high-level programs which are based on a graphical user interface.
-</para>
-<para>
-For more information, see the <ulink url="http://developer.kde.org/documentation/library/kdeqt/dcop.html">DCOP: Desktop COmmunications Protocol</ulink> paper or <ulink url="developer.kde.org/documentation/library/cvs-api/dcop/html/index.html">The DCOP Desktop Communication Protocol library</ulink> API reference of the &kde; dcop library.
-</para>
-</sect2> <!--  unixdev-dcop -->
-
-</sect1> <!--  unixdev-hl-script -->
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="unixdev-buildsystems">
-<title>Build Systems</title>
-
-<para>
-Except in very simple cases a programming project will consist of a lot of building blocks of source code each put into a separate file for easier maintenance. To make this running one has to effectively translate all this stuff into a few machine language units in a suiting format which allows the operating system to load and execute the program.
-</para>
-<para>
-To accomplish this, the basic tools needed are
-<itemizedlist>
-  <listitem><para>
-  a <emphasis>text editor</emphasis> to write the source code files,
-  </para></listitem>
-  <listitem><para>
-  a translating program, usually a <emphasis>compiler</emphasis> to turn the source code into object files,
-  </para></listitem>
-  <listitem><para>
-  a <emphasis>librarian</emphasis> which collects object files into libraries to reuse them easily without the need to recompile,
-  </para></listitem>
-  <listitem><para>
-  a <emphasis>linker</emphasis> which binds several object files and libraries together into one executable,
-  </para></listitem>
-  <listitem><para>
-  a <emphasis>make system</emphasis> which provides some means to manage all this stuff and&mdash;not to forget
-  </para></listitem>
-  <listitem><para>
-  a <emphasis>debugger</emphasis> to (hopefully) find all errors in the program and possibly some other diagnosis tools to get everything running smoothly.
-  </para></listitem>
-</itemizedlist>
-</para>
-
-<para>
-When you have a large project consisting of possibly hundreds of source code files, the process of compiling may become quite laborsome. You do not want to recompile all files each time you have changed only some of them. Instead, you only want to compile those files which are affected by the changes. In general, it is not always easily obvious which of the files have to be recompiled.
-</para>
-<para>
-When you e.g. change a function prototype in a header file, you need to compile every file which includes this header file. If your project contains many such files you may easily miss one or two of them if you have to do the job manually. Thus some means of automization is necessary.
-</para>
-
-<sect2 id="unixdev-buildsystems-make">
-<title>The Make Process</title>
-
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>make</primary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>Makefile</primary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>rule</primary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>recompilations</primary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>target</primary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>dependencies</primary></indexterm>
-<indexterm zone="unixdev-buildsystems-make">
-  <primary>commands</primary></indexterm>
-
-<para>
-A tool which takes care of recompilations is <command>make</command>. It keeps track of all work using a set of <emphasis>rules</emphasis> which describe what to do in case some piece of information (usually a source or object code file) was changed. All rules belonging to a certain project are stored in a so-called <filename>Makefile</filename> which is processed by <command>make</command> any time you want to update your work.
-</para>
-<para>
-Each rule consists of several building blocks, namely
-<itemizedlist>
-  <listitem><para>
-  a <emphasis>target</emphasis>, i.e. the file to be built
-  </para></listitem>
-  <listitem><para>
-  a set of <emphasis>dependencies</emphasis>, basically the names of those files the target depends on (e.g. the name of a source file, where then the target will be the name of the object file to be built) and
-  </para></listitem>
-  <listitem><para>
-  the <emphasis>commands</emphasis> which are to be executed to <quote>make</quote> the target (i.e. to compile it or to link other object files together to build an executable progam file).
-  </para></listitem>
-</itemizedlist>
-</para>
-<para>
-Basically the <command>make</command> command will read the rules one after another, check each file in the dependency list of a given target and make this target anew if any one of these files has changed, using the commands listed in that rule.
-</para>
-<para>
-There are several additional possibilities to control such a make process, and a <filename>Makefile</filename> can thus grow very complex. We cannot go into the details here. However, we recommend that you make yourself accustomed to the syntax of <command>make</command>. Even if you do not normally use it directly, an understanding of the fundamentals of the build system can be useful. See the <ulink url="info://make/Top"> <quote>GNU Make Manual</quote></ulink> for more information. </para>
-<para>
-For more &kdevelop; specific detail see the <link  linkend="project-management">Building and Project Management</link> chapter of this manual.
-</para>
-<para>
-There are several tutorials available, see the <link linkend="automake-references">references</link> in the Building and project management chapter.
-</para>
-</sect2> <!-- unixdev-buildsystems-make -->
-
-</sect1> <!-- unixdev-buildsystems -->
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="unixdev-guidevelopment">
-<title>GUI Development</title>
-
-<indexterm zone="unixdev-guidevelopment">
-  <primary>GUI</primary></indexterm>
-<indexterm zone="unixdev-guidevelopment">
-  <primary>graphical user interface</primary></indexterm>
-<indexterm zone="unixdev-guidevelopment">
-  <primary>user interface</primary>
-  <secondary>GUI</secondary></indexterm>
-
-<para>
-Application developers become even more encumbered by having not only to create program libraries and logic, but also to provide an easy to use custom built user interface that is both intuitive and functional.  Most programmers receive little to no training in GUI development, and as a result user interfaces often are poorly designed.
-</para>
-<para>
-During the years some common design principles have evolved. It is strongly advised to adhere to them. This way your user interfaces will retain a common look and feel that the users of your application will gratefully appreciate.
-</para>
-<para>
-For &kde; GUI development there is a style guide available. It is found in the <ulink url="http://developer.kde.org/documentation/standards/kde/style/basics/index.html">&kde; User Interface Guidelines</ulink> on the &kde; Developer's Corner page.
-</para>
-<para>
-A short introduction to common GUI design principles can be found <ulink url="http://axp16.iie.org.mx/Monitor/v01n03/ar_ihc2.htm">here</ulink>.
-</para>
-
-</sect1> <!-- unixdev-guidevelopment -->
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-<sect1 id="unixdev-ide">
-<title>Integrating Concepts and Tools &ndash; the IDE</title>
-
-<indexterm zone="unixdev-ide">
-  <primary>IDE</primary></indexterm>
-<indexterm zone="unixdev-ide">
-  <primary>integrated development environment</primary></indexterm>
-<indexterm zone="unixdev-ide">
-  <primary>development</primary>
-  <secondary>IDE</secondary></indexterm>
-<indexterm zone="unixdev-ide">
-  <primary>environment</primary>
-  <secondary>IDE</secondary></indexterm>
-
-<para>
-There are separate tools available for almost any step in the programming process&mdash;planning, editing, managing files and compilation processes, debugging, documentation and the like. But once the projects grow the programming processes will most likely become quite cumbersome.
-</para>
-<para>
-Much repetitive work has to be done when designing, compiling, and debugging a program. A lot of such work can be saved through the use of templates and scripts. And another lot by keeping these tools easily available and able to communicate with each other under a common GUI.
-</para>
-<para>
-For example&mdash;would it not be convenient if a debugger were able to open the source file in question in an editor and place the cursor directly at the position of that bug just found?
-</para>
-<para>
-To more easily accomplish such a scheme, <emphasis>Integrated Development Environments</emphasis> (IDEs) were devised. Such an IDE integrates all templates, tools, and scripts which are commonly needed in the development process into one single environment.
-</para>
-<para>
-For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of tools which ease program development and maintenance, even for different programming languages and across platforms.
-</para>
-
-<sect2 id="unixdev-ide-kdevelop">
-<title>Basic Features of &kdevelop; &kdevrelease;</title>
-
-<indexterm zone="unixdev-ide-kdevelop">
-  <primary>&kdevelop;</primary>
-  <secondary>features</secondary></indexterm>
-<indexterm zone="unixdev-ide-kdevelop">
-  <primary>features</primary></indexterm>
-
-<!-- ### copied from web page, needs to be updated -->
-
-<itemizedlist>
-  <listitem>
-  <para>Manages all <emphasis>development tools</emphasis> needed for C++ programming, such as compiler, linker, debugger and build system.</para>
-  </listitem>
-  <listitem>
-  <para>Provides an <emphasis>&appwizard;</emphasis> which generates complete, ready-to-go sample applications.</para>
-  </listitem>
-  <listitem>
-  <para>Allows the user to select an <emphasis>integrated editor</emphasis> based on the &kde; programmer's editor KWrite, Trolltec's QEditor, or others.</para>
-  </listitem>
-  <listitem>
-  <para>A <emphasis>class generator</emphasis>, for creating new classes and integrating them into the current project.</para>
-  </listitem>
-  <listitem>
-  <para><emphasis>File managemen</emphasis>t for sources, headers, documentation etc. to be included in the project.</para>
-  </listitem>
-  <listitem>
-  <para>Assistance in <emphasis>creating application user manuals</emphasis> written with KDE tools.</para>
-  </listitem>
-  <listitem>
-  <para>Automatic HTML-based <emphasis>API-documentation</emphasis> for a project's classes with cross-references to the used libraries.</para>
-  </listitem>
-  <listitem>
-  <para><emphasis>Internationalization support</emphasis>, allowing translators to add their target language to a project easily, including support of KBabel.</para>
-  </listitem>
-  <listitem>
-  <para>Support for managing a project via one of several <emphasis>versioning systems</emphasis> (e.g. CVS) by providing an easy-to-use frontend for the most needed functions.</para>
-  </listitem>
-  <listitem>
-  <para>An integrated <emphasis>debugger</emphasis> frontend.</para>
-  </listitem>
-  <listitem>
-  <para>An integrated <emphasis>shell console</emphasis> emulator.</para>
-  </listitem>
-  <listitem>
-  <para><emphasis>Syntax highlighting</emphasis> in source texts.</para>
-  </listitem>
-  <listitem>
-  <para>An <emphasis>auto-code completion</emphasis> facility for class variables, class methods, function arguments and more.</para>
-  </listitem>
-  <listitem>
-  <para><emphasis>Templates for creating various projects</emphasis> (KControl modules, Kicker (panel) applets, KIOSlaves, Konqueror plugins and desktop styles).</para>
-  </listitem>
-  <listitem>
-  <para>Four <emphasis>navigation tree views</emphasis> for easily switching between source files, header files, classes and documentation, obviating the need for an external file manager.</para>
-  </listitem>
-  <listitem>
-  <para><emphasis>Cross-compiling support</emphasis>, with the ability to specify different compilers, compiler flags, target architecture, etc.</para>
-  </listitem>
-  <listitem>
-  <para>Support for <emphasis>Qt/Embedded projects</emphasis> (such as the Zaurus and iPAQ).</para>
-  </listitem>
-  <listitem>
-  <para><emphasis>Inclusion of any other program</emphasis> you need for development by adding it to the <guimenuitem>Tools</guimenuitem> menu according to your individual needs.</para>
-  </listitem>
-</itemizedlist>
-
-</sect2> <!-- unixdev-ide-kdevelop -->
-
-</sect1> <!-- unixdev-ide -->
-
-</chapter> <!-- unixdev -->
+&unixdev; <!-- external "Development on UNIX" chapter -->
 
 <!-- ====================================================================== -->
 
@@ -864,7 +486,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    <application>&gnu; make</application> (or compatible)
+    <application>&GNU; make</application> (or compatible)
     <indexterm>
       <primary>make</primary>
       <secondary>requirements</secondary></indexterm>
@@ -919,7 +541,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
   <para>
-    <application>Qt</application> &ge; 3.0.3
+    &Qt; &ge; 3.0.3
     <indexterm>
       <primary>Qt</primary>
       <secondary>requirements</secondary></indexterm>
@@ -998,7 +620,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   </listitem>
   <listitem>
     <para>
-    Be careful <emphasis>not to mix &qt; versions</emphasis>. Always link &kdevelop; to the same &qt; version your &kde; library was compiled. Otherwise you will most likely experience <emphasis>very strange</emphasis> behaviours.
+    Be careful <emphasis>not to mix &Qt; versions</emphasis>. Always link &kdevelop; to the same &Qt; version your &kde; library was compiled. Otherwise you will most likely experience <emphasis>very strange</emphasis> behaviours.
     </para>
   </listitem>
 </orderedlist>
@@ -1435,7 +1057,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
   <secondary>&kdevelop; API</secondary></indexterm>
 
 <para>
-API is the short form of <quote>Application Program Interface</quote>. Actually such an API cotains a series of descriptions (i.e. calling conventions) by which an application program can access the operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
+API is the short form of <quote>Application Program Interface</quote>. Actually such an API cotains a series of descriptions (&ie; calling conventions) by which an application program can access the operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
 </para>
 <para>
 There is a version of the most current API available at the <ulink url="http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html">KDevelop-Home website</ulink>. It will be automatically updated every 24 hours so you can keep up.
@@ -1683,7 +1305,7 @@ To switch to or from full screen mode select <menuchoice> <guimenu>View</guimenu
 <formalpara>
 <title>Hide/Unhide the Menubar</title>
 <para>
-To <emphasis>hide</emphasis> the menubar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, e.g. the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
+To <emphasis>hide</emphasis> the menubar select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Show Menubar</guimenuitem> </menuchoice> from the menus or press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo>. You may also include a <guiicon>Show Menubar</guiicon> icon in a suiting toolbar, &eg; the <guilabel>Browse Toolbar</guilabel> for that purpose. To <emphasis>unhide</emphasis> the menubar you must press <keycombo> <keycap>Ctrl</keycap> <keycap>M</keycap> </keycombo> or use the <guiicon>Show Menubar</guiicon> icon if available.
 </para>
 </formalpara>
 
@@ -1771,13 +1393,13 @@ Globally, a project will rely on some form of project management system.  &kdeve
 
 <itemizedlist>
   <listitem><para>
-  <link linkend="automake-project">Automake projects</link> use the &gnu; standard development tools.
+  <link linkend="automake-project">Automake projects</link> use the &GNU; standard development tools.
   </para></listitem>
   <listitem><para>
   <link linkend="qmake-project">QMake projects</link> use the trolltech QMake project manager.
   </para></listitem>
   <listitem><para>
-  <link linkend="ant-project">ANT projects</link> use the Apache ANT project manager for Java development.
+  <link linkend="ant-project">ANT projects</link> use the Apache ANT project manager for &Java; development.
   </para></listitem>
   <listitem><para>
   <link linkend="custom-project">Custom projects</link> require you to maintain your own <filename>Makefiles</filename>.
@@ -1819,7 +1441,7 @@ Projects created with &kdevelop;'s &automanag; make it very easy for developers 
   <secondary>projects</secondary></indexterm>
 
 <para>
-For developers who enjoy the flexibility and feel of &qt;'s qmake system, &kdevelop; offers the ability to handle qmake based projects (.pro files) within the GUI.
+For developers who enjoy the flexibility and feel of &Qt;'s qmake system, &kdevelop; offers the ability to handle qmake based projects (.pro files) within the &GUI;.
 </para>
 <para>
 For more information on the QMake project manager see the <quote>qmake User Guide</quote> which should be included in your distribution or have a look at the <ulink url="http://doc.trolltech.com/">TROLLTECH Documentation</ulink> home page where you may find the QMake documentation of your <quote>Qt C++ GUI Application Development Toolkit</quote> version.
@@ -1827,7 +1449,7 @@ For more information on the QMake project manager see the <quote>qmake User Guid
 </sect2> <!-- qmake-project -->
 
 <sect2 id="ant-project">
-<title>ANT Projects (Java Projects)</title>
+<title>ANT Projects (&Java; Projects)</title>
 
 <indexterm zone="ant-project">
   <primary>projects</primary>
@@ -1846,7 +1468,7 @@ For more information on the QMake project manager see the <quote>qmake User Guid
   <secondary>Java</secondary></indexterm>
 
 <para>
-Java developers may want to use the Apache ANT project manager for their projects. To set up a new Ant project in &kdevelop; select <menuchoice><guimenu>Project</guimenu>
+&Java; developers may want to use the Apache ANT project manager for their projects. To set up a new Ant project in &kdevelop; select <menuchoice><guimenu>Project</guimenu>
 <guimenuitem>New Project...</guimenuitem>
 <guimenuitem>Java</guimenuitem>
 <guimenuitem>Ant Project</guimenuitem>
@@ -2017,7 +1639,7 @@ The <guilabel>General</guilabel> configuration dialog allows you to define some 
     </para>
     <itemizedlist>
       <listitem><para>
-      the <link linkend="setup-main-messages-font">Messages Output View</link> &kdevelop; uses to communicate e.g. compilation progresses, and
+      the <link linkend="setup-main-messages-font">Messages Output View</link> &kdevelop; uses to communicate &eg; compilation progresses, and
       </para></listitem>
       <listitem><para>
       the <link linkend="setup-main-applications-font">Application Output View</link> which will show error and state information concerning a running application.
@@ -2272,7 +1894,7 @@ Any style changes apply to newly entered text only. If you want to change the fo
 </para></tip>
 
 <note><para>
-The exact outcome of these style formatting definitions depends on the <link linkend="setup-editor">editor</link> you use. Currently, most settings are taylored to the Kate editor part (the <quote>Embedded Advanced Text Editor</quote>). Some other editors (e.g. the Qt editor) may rely on their own configuration settings. You will have to experiment in this case to find out the exact effects of the style settings provided here.
+The exact outcome of these style formatting definitions depends on the <link linkend="setup-editor">editor</link> you use. Currently, most settings are taylored to the Kate editor part (the <quote>Embedded Advanced Text Editor</quote>). Some other editors (&eg; the Qt editor) may rely on their own configuration settings. You will have to experiment in this case to find out the exact effects of the style settings provided here.
 </para></note>
 
 <warning><para>
@@ -2411,7 +2033,7 @@ This applies to <emphasis>static word wrap cases</emphasis> only where a fixed m
     <term><guilabel>Minimum in conditional</guilabel></term>
     <listitem>
     <para>
-    Conditionals or source following e.g. an assignment operator should usually get an extra indent on continuation lines in order to keep the text readable. The amount of this extra indent is defined here.
+    Conditionals or source following &eg; an assignment operator should usually get an extra indent on continuation lines in order to keep the text readable. The amount of this extra indent is defined here.
     </para>
     <para>
     The default is set to <quote>Twice current</quote> which means that continued conditionals will get an extra indent level of the standard indentation size you selected in the <link linkend="setup-format-indent-filling">Filling</link> group. You may change this extra indent to another fixed width (including zero) using the arrows or by entering the value directly.
@@ -2718,33 +2340,33 @@ There is a toolbar on top of the <guilabel>File Selector</guilabel> which can be
 <formalpara id="setup-fileselector-autosync">
 <title>Defining when the contents should change</title>
 <para>
-Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, i.e. when you select another directory or when you explicitely want to refresh its contents.
+Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitely want to refresh its contents.
 </para>
 </formalpara>
-<para>
-You can however configure the <guilabel>File Selector</guilabel> to immediately reflect certain changes in your work. The settings in the <guilabel>Auto Synchronization</guilabel> group of the configuration dialog are responsible for this.
-</para>
 
 <note><para>
-You can always update the contents of the <guilabel>File Selector</guilabel> by pressing the <guilabel>Reload</guilabel> button in the toolbar. This is not availble by default, however. You must <link linkend="setup-fileselector-add-action">insert it there</link> first.
+Press the <guilabel>Reload</guilabel> button in the toolbar to update the contents of the <guilabel>File Selector</guilabel>. This toolbar button is not availble by default, however. You must <link linkend="setup-fileselector-add-action">insert it there</link> first.
 </para></note>
 
+<para>
+You can configure the <guilabel>File Selector</guilabel> to immediately reflect certain changes in your work. The settings in the <guilabel>Auto Synchronization</guilabel> group of the configuration dialog are responsible for this.
+</para>
+
 <variablelist>
-  <title>The file selector may update its content...</title>
   <varlistentry>
-    <term>...<guilabel>When a document becomes active</guilabel></term>
+    <term><guilabel>When a document becomes active</guilabel></term>
     <listitem><para>
-    If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever you go to another already open document, e.g. when you click on the tab of the according edit window in IDEAl mode. If necessary the <guilabel>File Selector</guilabel> will switch to the directory this file belongs to and update the display to show the actual contents in there.
+    If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever you go to another already open document, &eg; when you click on the tab of the according edit window in IDEAl mode. If necessary the <guilabel>File Selector</guilabel> will switch to the directory this file belongs to and update the display to show the actual contents in there.
     </para></listitem>
   </varlistentry>
   <varlistentry>
-    <term>...<guilabel>When a document is opened</guilabel></term>
+    <term><guilabel>When a document is opened</guilabel></term>
     <listitem><para>
-    If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever a document will be opened, e.g. by the <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice> menu. If necessary the <guilabel>File Selector</guilabel> will switch to the directory this file belongs to and update the display to show the actual contents in there.
+    If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever a document will be opened, &eg; by the <menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice> menu. If necessary the <guilabel>File Selector</guilabel> will switch to the directory this file belongs to and update the display to show the actual contents in there.
     </para></listitem>
   </varlistentry>
   <varlistentry>
-    <term>...<guilabel>When the file selector becomes visible</guilabel></term>
+    <term><guilabel>When the file selector becomes visible</guilabel></term>
     <listitem><para>
     If you select this checkbox, the contents in the <guilabel>File Selector</guilabel> window will be updated whenever it gets visible again. If necessary it will switch to the directory the actual document belongs to and update the display to show the actual contents in there.
     </para></listitem>
@@ -2817,11 +2439,172 @@ If &kdevelop; was automatically restarted by the KDE session manager the changes
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="setup-docu">
-<title>Configuring the Documentation Tree</title>
+<title>Configuring the Documentation</title>
+
+<para>
+&kdevelop; contains a very powerful documentation facility which provides access to several kinds of extensive documentation. In &eg; IDEAl mode you find a <guilabel>Documentation</guilabel> tab at the right border of the work area.
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="doctree.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    The &kdevelop; Documentation Tree (IDEAl mode)
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+You may set up the contents of this documentation tree if you select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menubar. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>Documentation Tree</guilabel> in the left hand tree. This will in turn display a series of tabbed configuration dialog pages to the right hand, namely:
+</para>
+
+<simplelist>
+  <member><link linkend="setup-docu-general">General</link></member>
+  <member><link linkend="setup-docu-textsearch">Full Text Search</link></member>
+  <member><link linkend="setup-docu-bookmark">Bookmarks</link></member>
+  <member><link linkend="setup-docu-TOC">KDevelopTOCDocumentation</link></member>
+  <member><link linkend="setup-docu-DevHelp">DevHelp Documentation</link></member>
+</simplelist>
+
+<para>
+We will discuss these configuration dialogs in a slightly different order, grouped in the <link linkend="setup-docu-common">Commonly Used Documentation</link>, <link linkend="setup-docu-special">Providing Special Documentation</link>, and <link linkend="setup-docu-textsearch">Setting Up Text Search Indexes</link> section for a more intuitive reading. Use one of the links above if you want to directly look at the help for one of the tabbed configure dialog sections.
+</para>
+
+<tip><para>
+You should at least configure the <link linkend="setup-docu-textsearch">Full Text Search</link> section. It is mandatory to immediately access the &Qt; and &kde; Libraries API help from within a source text.
+</para></tip>
+
+<sect2 id="setup-docu-common">
+<title>Commonly Used Documentation</title>
 
 <para>
 (... to be written ...)
 </para>
+
+<sect3 id="setup-docu-general">
+<title>Basic &kdevelop; Documentation</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-doctree-general.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Setting up the basic documentations
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+</sect3> <!-- setup-docu-general -->
+
+<sect3 id="setup-docu-TOC">
+<title>Standard Contents of the Documentation List</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-doctree-TOC.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Providing standard documentations listed in &kdevelop;
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+</sect3> <!-- setup-docu-TOC -->
+
+</sect2> <!-- setup-docu-common -->
+
+<sect2 id="setup-docu-special">
+<title>Providing Special Documentation</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<sect3 id="setup-docu-bookmark">
+<title>Bookmarked Documentation</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-doctree-bookmark.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Eplicitely adding documentation to the bookmarks
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="doctree-add-bookmark.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Adding existing documentation to the bookmarks
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+</sect3> <!-- setup-docu-bookmark -->
+
+<sect3 id="setup-docu-DevHelp">
+<title>DevHelp Documentation</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-doctree-DevHelp.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Providing DevHelp documentation
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+</sect3> <!-- setup-docu-DevHelp -->
+
+</sect2> <!-- setup-docu-special -->
+
+<sect2 id="setup-docu-textsearch">
+<title>Setting Up Text Search Indexes</title>
+
+<para>
+(... to be written ...)
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-doctree-textsearch.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Setting up text search indexes
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+</sect2> <!-- setup-docu-textsearch -->
+
 </sect1> <!-- setup-docu -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -2907,7 +2690,7 @@ If &kdevelop; was automatically restarted by the KDE session manager the changes
 In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and any additional tools needed to get the application up and running.
 </para>
 <para>
-Organizing all development work in projects allows you to easily switch between the global tasks at hand. This is quite handy if you e.g. work on several applications at the same time as is often the case. Tell &kdevelop; to open the project you want to work at and you may proceed in the environment just where you left.
+Organizing all development work in projects allows you to easily switch between the global tasks at hand. This is quite handy if you &eg; work on several applications at the same time as is often the case. Tell &kdevelop; to open the project you want to work at and you may proceed in the environment just where you left.
 </para>
 
 <sect1 id="new-projects">
@@ -2918,7 +2701,7 @@ Organizing all development work in projects allows you to easily switch between 
   <secondary>new</secondary></indexterm>
 
 <para>
-Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, etc.
+Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, &etc;
 </para>
 <para>
 &kdevelop; provides an easy way to initiate a new programming project&mdash;the <emphasis>&appwizard;</emphasis>. You will find the &appwizard; at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
@@ -2931,16 +2714,16 @@ Only a short series of steps is necessary to start a new programming project, us
   <link linkend="new-projects-start-type">Select the programming language</link> you want to use and the type of the application you want to build from a set of predefined templates.
   </para></listitem>
   <listitem><para>
-  <link linkend="new-projects-start-general">Supply some general information</link> as application name, directory where the application shall be built, etc.
+  <link linkend="new-projects-start-general">Supply some general information</link> as application name, directory where the application shall be built, &etc;
   </para></listitem>
   <listitem><para>
-  Decide whether you want to use a <link linkend="new-projects-start-cvs">version control system</link>, like e.g. CVS, and supply the necessary data if needed.
+  Decide whether you want to use a <link linkend="new-projects-start-cvs">version control system</link>, like &eg; CVS, and supply the necessary data if needed.
   </para></listitem>
   <listitem><para>
   Set up some templates for <link linkend="new-projects-start-templates">initial header and source files</link> (if applicable).
   </para></listitem>
   <listitem><para>
-  Finally tell &appwizard; to <link linkend="new-projects-start-build">set up all initial stuff</link>, directory structure, starting header/source file templates, and management tools, like e.g. an initial make skeleton, etc.
+  Finally tell &appwizard; to <link linkend="new-projects-start-build">set up all initial stuff</link>, directory structure, starting header/source file templates, and management tools, like &eg; an initial make skeleton, &etc;
   </para></listitem>
 </orderedlist>
 <para>
@@ -3196,7 +2979,7 @@ Thus you must select the name of your new application with care.  If you end up 
 <formalpara>
 <title>The Starting Path</title>
 <para>
-There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (you might e.g. set up for another version of an already existing application). As an alternative you may select another path to the application directory.
+There are two ways to select another path for your new application. One is to select another name. Yet, this is not always feasible (you might &eg; set up for another version of an already existing application). As an alternative you may select another path to the application directory.
 </para>
 </formalpara>
 <para>
@@ -3216,7 +2999,7 @@ Take care that the path you enter in the <guilabel>Location</guilabel> field alr
 <formalpara>
 <title>Personal Information</title>
 <para>
-The fields following this are not so critical. Just supply your name (i.e. the name of the person who is responsible for the application) in the <guilabel>Author</guilabel> field, and a valid e-mail address in the <guilabel>Email</guilabel> field, so that users can give you feedback on the application.
+The fields following this are not so critical. Just supply your name (&ie; the name of the person who is responsible for the application) in the <guilabel>Author</guilabel> field, and a valid e-mail address in the <guilabel>Email</guilabel> field, so that users can give you feedback on the application.
 </para>
 </formalpara>
 
@@ -3242,7 +3025,7 @@ Finally enter a starting version number for your new application in the <guilabe
 </formalpara>
 
 <para>
-If you select an application type for which the &appwizard; provides common source template texts (e.g. C/C++), you may view the license notification text on the third page of this <guilabel>Create New Project</guilabel> dialog (see the <link linkend="new-projects-start-templates">Supply header/source templates</link> chapter below).
+If you select an application type for which the &appwizard; provides common source template texts (&eg; C/C++), you may view the license notification text on the third page of this <guilabel>Create New Project</guilabel> dialog (see the <link linkend="new-projects-start-templates">Supply header/source templates</link> chapter below).
 </para>
 <para>
 If you selected <quote>Custom</quote> from the <guilabel>License</guilabel> tab you must provide a license text on your own.
@@ -3743,7 +3526,7 @@ If you set up <quote>MyApp</quote> as in our previous example the &appwizard; sh
 * <link linkend="appwizard-behind-app-templates">Installing file templates</link>
 * <link linkend="appwizard-behind-app-license">Installing license file</link>
 * <link linkend="appwizard-behind-app-admin">Installing admin directory</link>
-* <link linkend="appwizard-behind-app-gnu">Installing GNU coding standard files</link>
+* <link linkend="appwizard-behind-app-gnu">Installing &GNU; coding standard files</link>
 * <link linkend="appwizard-behind-app-doc">Installing Docbook template</link>
 * <link linkend="appwizard-behind-app-project">Installing project file</link>
 * <link linkend="appwizard-behind-app-framework">Installing application framework</link>
@@ -3834,9 +3617,9 @@ The <computeroutput>--licensefile</computeroutput> parameter tells the &perl; <f
   <secondary>coding standard</secondary></indexterm>
 
 <formalpara id="appwizard-behind-app-gnu">
-<title>The &gnu; Coding Standard Files</title>
+<title>The &GNU; Coding Standard Files</title>
 <para>
-There are several standard files to be distributed with every application which conforms to the &gnu; coding standard. The &perl; <filename>script</filename> extracts these files from the <filename>share/apps/kdevappwizard/template-common/gnu.tar.gz</filename> tarball of your &kde; installation directory and customizes them according to the information you provided in the <guilabel>Create New Page</guilabel> dialog.
+There are several standard files to be distributed with every application which conforms to the &GNU; coding standard. The &perl; <filename>script</filename> extracts these files from the <filename>share/apps/kdevappwizard/template-common/gnu.tar.gz</filename> tarball of your &kde; installation directory and customizes them according to the information you provided in the <guilabel>Create New Page</guilabel> dialog.
 </para>
 </formalpara>
 <para>
@@ -3846,7 +3629,7 @@ After this step you will find the following files in your application base direc
     <filename>AUTHORS</filename>, initially containing information from the <computeroutput>--author</computeroutput> and <computeroutput>--email</computeroutput> parameters.
   </para></listitem>
   <listitem><para>
-    <filename>COPYING</filename>, this is the general &gnu; license, which all &gnu; conforming applications must contain&mdash;even if you decided to put your application under another license.
+    <filename>COPYING</filename>, this is the general &GNU; license, which all &GNU; conforming applications must contain&mdash;even if you decided to put your application under another license.
   </para></listitem>
   <listitem><para>
     <filename>ChangeLog</filename>, initially empty&mdash;you should protocol all major changes here.
@@ -3928,7 +3711,7 @@ In our case the following directory structure has been created in the <filename 
     The <filename>optimized</filename> subdirectory will hold the compiled output of the <emphasis><quote>optimized</quote> build configuration</emphasis>. You should test an optimized version of your application from within here.
   </para></listitem>
   <listitem><para>
-    The <filename>po</filename> subdirectory is meant for <emphasis>translation purposes</emphasis>. It will hold so-called <quote>Portable Object</quote> files (<filename>.po</filename> files) and templates (<filename>.pot</filename> files) which will be processed by a translation program as e.g. <application>KBabel</application>.
+    The <filename>po</filename> subdirectory is meant for <emphasis>translation purposes</emphasis>. It will hold so-called <quote>Portable Object</quote> files (<filename>.po</filename> files) and templates (<filename>.pot</filename> files) which will be processed by a translation program as &eg; <application>KBabel</application>.
   </para></listitem>
 </itemizedlist>
 </para>
@@ -4753,7 +4536,7 @@ Documentation has multiple facets. There is
     <emphasis>comments</emphasis> in header/source files
     </para></listitem>
     <listitem><para>
-    <emphasis>internal API documentation</emphasis> of your project generated from the program file by special tools, e.g. &doxygen;
+    <emphasis>internal API documentation</emphasis> of your project generated from the program file by special tools, &eg; &doxygen;
     </para></listitem>
   </itemizedlist>
   </para></listitem>
@@ -4761,7 +4544,7 @@ Documentation has multiple facets. There is
   <emphasis>project external documentation</emphasis>, comprising among others
   <itemizedlist>
     <listitem><para>
-    <emphasis>external API documentation</emphasis> of e.g. common system libraries (<application>KDE</application>, <application>Qt</application>, etc.)
+    <emphasis>external API documentation</emphasis> of &eg; common system libraries (<application>KDE</application>, <application>Qt</application>, &etc;)
     </para></listitem>
     <listitem><para>
     any other documentation (programming language manuals, general system information, HowTo articles and the like)
@@ -4797,7 +4580,7 @@ All this documentation should be easily maintainable and ready at hand whenever 
 <title>Building and Project Management</title>
 
 <para>
-This chapter deals only with compiled projects, such as C++, Java or
+This chapter deals only with compiled projects, such as C++, &Java; or
 Fortran projects. Projects for scripting languages like Python and
 PHP work very differently.
 </para>
@@ -4820,24 +4603,24 @@ You will find here information on:
 In the <link linkend="unixdev-buildsystems">Build systems</link> chapter we have given a rough survey of the build systems commonly in use on UNIX systems. In the following sections we will look at this in more detail.
 </para>
 <para>
-There is some confusion about how to name such things. GNU calls them <quote>build systems</quote> when it describes Automake, Autoconf and Libtool. QMake calls itself <quote>a tool to write Makefiles for different compilers and platforms</quote>. In KDE often the term <quote>project management systems</quote> is used. We will use this term in a broader sense to describe the built-in environments in &kdevelop; which are used to organize and build your projects. In the context of this section, however, we will mostly talk about <quote>automated build systems</quote>.
+There is some confusion about how to name such things. &GNU; calls them <quote>build systems</quote> when it describes Automake, Autoconf and Libtool. QMake calls itself <quote>a tool to write Makefiles for different compilers and platforms</quote>. In KDE often the term <quote>project management systems</quote> is used. We will use this term in a broader sense to describe the built-in environments in &kdevelop; which are used to organize and build your projects. In the context of this section, however, we will mostly talk about <quote>automated build systems</quote>.
 </para>
 
 <sect2 id="automake-manager-summary-buildsys">
 <title>The Need for an Automated Build System</title>
 
 <para>
-If you have a simple <quote>Hello World</quote> program, written in C, you can compile and link it using <command>gcc</command> <parameter>-o hello hello.c</parameter> and execute it using the command <command>./hello</command>, so you do not even need a <filename>Makefile</filename>.
+If you have a simple <quote>Hello World</quote> program, written in C, you can compile and link it using &gcc; <parameter>-o hello hello.c</parameter> and execute it using the command <command>./hello</command>, so you do not even need a <filename>Makefile</filename>.
 </para>
 <para>
-If you have a C application with several modules and header files and you are only going to run it on your own machine (i.e. it is an in-house application), you will only need a simple <filename>Makefile</filename>, which is fairly easy to write by hand (use <userinput>info Make</userinput> to find out more).
+If you have a C application with several modules and header files and you are only going to run it on your own machine (&ie; it is an in-house application), you will only need a simple <filename>Makefile</filename>, which is fairly easy to write by hand (use <userinput>info Make</userinput> to find out more).
 </para>
 <para>
 The complications begin when:
 </para>
 <itemizedlist>
   <listitem><para>
-  Your source-code, documentation, graphics, sounds, translations, data files, etc. are located in more than one directory,
+  Your source-code, documentation, graphics, sounds, translations, data files, &etc; are located in more than one directory,
   </para></listitem>
   <listitem><para>
   You have a hierarchy of directories and sub-directories,
@@ -4860,7 +4643,7 @@ The complications begin when:
 </itemizedlist>
 
 <para>
-If you have some or all of the above situations, you probably need a <emphasis>build system</emphasis>. In the example above we used <command>gcc</command> to compile and build the <quote>Hello World</quote> program, but not all C compilers are called <quote><command>gcc</command></quote>. So if you distribute your application to someone who is using some other C compiler, your Makefile must somehow use the name of that person's compiler, otherwise your application will fail to compile&mdash;and that is just simple example of what can go wrong.
+If you have some or all of the above situations, you probably need a <emphasis>build system</emphasis>. In the example above we used &gcc; to compile and build the <quote>Hello World</quote> program, but not all C compilers are called <quote>&gcc;</quote>. So if you distribute your application to someone who is using some other C compiler, your Makefile must somehow use the name of that person's compiler, otherwise your application will fail to compile&mdash;and that is just simple example of what can go wrong.
 </para>
 <para>
 A build system will iron out these differences for you.
@@ -4885,13 +4668,13 @@ In brief, a build system offers safe and secure methods for your application to 
 </para>
 <itemizedlist>
   <listitem><para>
-  <link linkend="automake-project">Automake projects</link> which use the &gnu; standard development tools.
+  <link linkend="automake-project">Automake projects</link> which use the &GNU; standard development tools.
   </para></listitem>
   <listitem><para>
   <link linkend="qmake-project">QMake projects</link> which use the trolltech QMake project manager.
   </para></listitem>
   <listitem><para>
-  <link linkend="ant-project">ANT projects</link> which use the Apache ANT project manager for Java development.
+  <link linkend="ant-project">ANT projects</link> which use the Apache ANT project manager for &Java; development.
   </para></listitem>
   <listitem><para>
   <link linkend="custom-project">Custom projects</link> which require you to maintain your own <filename>Makefiles</filename>.
@@ -4995,7 +4778,7 @@ The rules are rather different if you distribute via a web-based source-code rep
   Accepts definitions of how the various files are to be built or installed and modifies the <filename>Makefile.am</filename> accordingly.
   </para></listitem>
   <listitem><para>
-  Accepts parameters used in building or installing (e.g. library names) and ensures that they are used in the required compilation and build steps.
+  Accepts parameters used in building or installing (&eg; library names) and ensures that they are used in the required compilation and build steps.
   </para></listitem>
 </itemizedlist>
 
@@ -5009,10 +4792,10 @@ A <filename>Makefile.am</filename> file has lines containing variable-names foll
 </para>
 <itemizedlist>
   <listitem><para>
-  A <emphasis>directory</emphasis> in which to do installation (e.g. <filename>bin</filename>),
+  A <emphasis>directory</emphasis> in which to do installation (&eg; <filename>bin</filename>),
   </para></listitem>
   <listitem><para>
-  A <emphasis>qualifier</emphasis> for the primary (e.g. <varname>myapp</varname> for <varname>SOURCES</varname>, indicating that the source files listed after <varname>myapp_SOURCES</varname> go into building <filename>myapp</filename>),
+  A <emphasis>qualifier</emphasis> for the primary (&eg; <varname>myapp</varname> for <varname>SOURCES</varname>, indicating that the source files listed after <varname>myapp_SOURCES</varname> go into building <filename>myapp</filename>),
   </para></listitem>
   <listitem><para>
   A special <emphasis>prefix</emphasis> <varname>noinst</varname> (short for <quote>no installation</quote>), usually used to list program header files (<filename>.h</filename>),
@@ -5149,7 +4932,7 @@ The overall view window contains a tree-list of all the directories in your proj
   <filename>doc</filename> &ndash; your user manual or Handbook,
   </para></listitem>
   <listitem><para>
-  <filename>po</filename> &ndash; extracts of strings in your source-code files that require translation into other human languages (e.g. window titles, menu names, button labels, dialog box text and messages of various kinds).
+  <filename>po</filename> &ndash; extracts of strings in your source-code files that require translation into other human languages (&eg; window titles, menu names, button labels, dialog box text and messages of various kinds).
   </para></listitem>
 </itemizedlist>
 
@@ -5186,7 +4969,7 @@ This concept of an &automanag; target differs somewhat from what a <filename>Mak
   The definition of how a set of files is to be compiled, built or installed is known as a <emphasis>target</emphasis> in &automanag;, but as a <emphasis>variable</emphasis> in <command>Automake</command> itself.
   </para></listitem>
   <listitem><para>
-  A <emphasis>target</emphasis> in <command>make</command> is often something quite different, being the parameter of a <command>make</command> command (e.g. <userinput>make install</userinput>, <userinput>make clean</userinput>).
+  A <emphasis>target</emphasis> in <command>make</command> is often something quite different, being the parameter of a <command>make</command> command (&eg; <userinput>make install</userinput>, <userinput>make clean</userinput>).
   </para>
   <para>
   However some <filename>Makefile.am</filename> variables do represent an underlying <emphasis>sub-target</emphasis> in <command>make</command>.
@@ -5259,13 +5042,13 @@ When you right-click on a <emphasis>file name</emphasis> in the detail view the 
   </inlinemediaobject></entry>
   <entry valign="bottom"><itemizedlist>
     <listitem><para>
-    The main popup-menu item for a file is to <guimenuitem>Remove</guimenuitem> the file from its target (i.e. it will no longer be used to compile, build or install that target).
+    The main popup-menu item for a file is to <guimenuitem>Remove</guimenuitem> the file from its target (&ie; it will no longer be used to compile, build or install that target).
     </para></listitem>
     <listitem><para>
     The <guimenuitem>CVS</guimenuitem> item offers a variety of CVS operations on the file.
     </para></listitem>
     <listitem><para>
-    The <guimenuitem>Open With</guimenuitem> item allows you to open the file with a variety of editors or with any application at all (e.g. you can open the icon file in our example with <application>KIcon</application>).
+    The <guimenuitem>Open With</guimenuitem> item allows you to open the file with a variety of editors or with any application at all (&eg; you can open the icon file in our example with <application>KIcon</application>).
     </para></listitem>
     <listitem><para>
     The <guimenuitem>Perforce</guimenuitem> item is used for similar operations as in CVS using the commercial <quote><application>Perforce</application></quote> version control system.
@@ -5555,7 +5338,7 @@ CXX = g++
 <para>
 When you have suitable cross compilers available, you can cross compile your
 programs for processors and operating systems different from the system where
-&kdevelop; and the compiler is running. The &gnu; compiler collection GCC can
+&kdevelop; and the compiler is running. The &GNU; compiler collection &gcc; can
 be configured and compiled as a cross compiler if you compile it yourself.
 Consult the <ulink url="info://gcc/Cross-Compiler">GCC info pages</ulink> for
 more information. Some Linux distributions also provide binary packages.
@@ -5606,7 +5389,7 @@ For many combinations, you can use a short form, for instance
 <indexterm zone="qtembedded"><primary>framebuffer</primary></indexterm>
 
 <para>
-&qte; is a version of the &qt; library that does not use the X window
+&qte; is a version of the &Qt; library that does not use the X window
 system, but draws directly to the framebuffer on Linux systems. It is
 therefore interesting for embedded systems which have tight restrictions
 on the memory usage of the whole system. Its API is fully compatible with
@@ -5615,7 +5398,7 @@ the one of the X11 version.
 
 <para>
 Developing an application for &qte; with &kdevelop; is not very different
-from developing a program for the X11 version of &qt;. In fact, you can use the
+from developing a program for the X11 version of &Qt;. In fact, you can use the
 same codebase for both versions. If you use the autoproject project
 management, you switch to the embedded version by passing the argument
 <option>--enable-embedded</option> to the configure script. You can set
@@ -5673,7 +5456,7 @@ the autoproject project management, you have to add
 <para>
 For C and C++, &kdevelop; contains an internal debugger that is directly
 integrated with the editor. Technically, it is implemented as a frontend
-that uses the portable &gnu; debugger <application>gdb</application> through
+that uses the portable &GNU; debugger <application>gdb</application> through
 a pipe. The debugger can be started in several ways:
 </para>
 
@@ -5731,7 +5514,7 @@ The debugger frontend offers several views <quote>into</quote> the process:
 <para>
 This window lists the values of all local variables at the current execution
 point of the program. It covers the variables in the complete call stack,
-i.e.  the function where the process was interrupted, the function that called
+&ie;  the function where the process was interrupted, the function that called
 this function, and so on up to <function>main()</function> function.
 </para>
 </formalpara>
@@ -5799,11 +5582,11 @@ via the context menu.
 <indexterm zone="debugger"><primary>mangling</primary><secondary>name</secondary></indexterm>
 
 <para>
-In C++, function names in the executable are <quote>mangled</quote>, i.e. the function
+In C++, function names in the executable are <quote>mangled</quote>, &ie; the function
 names include information about the argument types. This is necessary in
 order to support overloading of functions. The mangling algorithm is not
 standardized and differs even between different versions of the
-&gnu; C++ compiler.
+&GNU; C++ compiler.
 </para>
 </formalpara>
 
@@ -5899,7 +5682,7 @@ So far, this has been a description of the basic features of &CVS; one usually
 has to cope with. But &CVS; can provide a lot more: One can  maintain several
 branches of a project (e. g. &kde; 1.1.2 and &kde; 2 were branches in &kde;'s
 development tree), merge changes from one branch to another, ask for
-differences between revisions, the revision history of files etc.
+differences between revisions, the revision history of files &etc;
 </para>
 
 <para>
@@ -6118,7 +5901,7 @@ activated by pressing <keycombo><keycap>Ctrl</keycap>
 an <literal>if-else</literal> code template and save some key strokes. The set
 of supported abbreviations depends on the programming language of the edited
 file. For example, for PHP you will obviously be interested in other code
-templates than for Java.
+templates than for &Java;.
 </para>
 </formalpara>
 
@@ -6309,7 +6092,7 @@ Other parts are <link linkend="table-project-parts">project specific</link>, and
 </para>
 
 <para>
-Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
+Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, &etc;
 </para>
 
 <table id="table-project-parts">
@@ -6318,7 +6101,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <tgroup cols="2"><tbody>
 <row>
   <entry>antproject</entry>
-  <entry>ANT Project Manager (Java applications)</entry>
+  <entry>ANT Project Manager (&Java; applications)</entry>
 </row>
 <row>
   <entry>autoproject</entry>
@@ -6366,7 +6149,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <tbody>
 <row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
 <row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
-<row><entry>javasupport</entry><entry>Support for Java</entry></row>
+<row><entry>javasupport</entry><entry>Support for &Java;</entry></row>
 <row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
 <row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
 <row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
@@ -6380,7 +6163,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <row><entry>buglist</entry><entry></entry></row>
 <row><entry>classview</entry><entry>Classview Manager</entry></row>
 <row><entry>ctags</entry><entry></entry></row>
-<row><entry>debugger</entry><entry>&gnu; Debugger Manager</entry></row>
+<row><entry>debugger</entry><entry>&GNU; Debugger Manager</entry></row>
 <row><entry>diff</entry><entry></entry></row>
 <row><entry>distpart</entry><entry></entry></row>
 <row><entry>doxygen</entry><entry></entry></row>
@@ -6582,11 +6365,11 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 
 <!-- ### temporarily disabled as the <bibliography> markup is not used by KDE Docbook
      (see: Lauri Watts: The KDE DocBook Authors guide, Revision 1.00.00: 2003,
-                        Chapter 19. Tags we do not use)
+                        Chapter 19. Tags we do not use) -->
 <bibliography>
 
 <biblioentry>
-<title><ulink url="info://make/Top">&gnu; Make Manual</ulink></title>
+<title><ulink url="info://make/Top">GNU Make Manual</ulink></title>
 <authorgroup>
 <author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
 <author><firstname>Roland</firstname><surname>McGrath</surname></author>
@@ -6594,7 +6377,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://automake/Top">&gnu; Automake</ulink></title>
+<title><ulink url="info://automake/Top">GNU Automake</ulink></title>
 <authorgroup>
 <author><firstname>David</firstname><surname>MacKenzie</surname></author>
 <author><firstname>Tom</firstname><surname>Tromey</surname></author>
@@ -6602,7 +6385,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://autoconf/Top">&gnu; Autoconf</ulink></title>
+<title><ulink url="info://autoconf/Top">GNU Autoconf</ulink></title>
 <authorgroup>
 <author><firstname>David</firstname><surname>MacKenzie</surname></author>
 <author><firstname>Ben</firstname><surname>Elliston</surname></author>
@@ -6610,12 +6393,12 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://gcc/Top">Using the &gnu; Compiler Collection</ulink></title>
+<title><ulink url="info://gcc/Top">Using the GNU Compiler Collection</ulink></title>
 <author><firstname>Richard M.</firstname><surname>Stallman</surname></author>
 </biblioentry>
 
 <biblioentry>
-<title><ulink url="info://libtool/Top">&gnu; Libtool</ulink></title>
+<title><ulink url="info://libtool/Top">GNU Libtool</ulink></title>
 <authorgroup>
 <author><firstname>Gordon</firstname><surname>Matzigkeit</surname></author>
 <author><firstname>Alexandre</firstname><surname>Oliva</surname></author>
@@ -6726,13 +6509,13 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 <isbn>ISBN 0596001320</isbn>
 </biblioentry>
 
-</bibliography>//
--->
+</bibliography>
+<!-- -->
 
 </appendix> <!-- app-bibliography -->
 
 <!-- ====================================================================== -->
 
-<index id="app-index"/>
+&documentation.index;
 
 </book>
