@@ -50,7 +50,6 @@ ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QS
       action = new KAction( i18n("New File..."), 0,
                             this, SLOT(slotNewFile()),
                             actionCollection(), "file_newfile" );
-      core()->insertNewAction( action );
     }
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),

@@ -2,6 +2,7 @@
 #include "kdevplugin.h"
 #include "kdevpartcontroller.h"
 #include "kdevapi.h"
+#include "kdevcore.h"
 
 #include <dcopclient.h>
 #include <qdom.h>
@@ -42,6 +43,16 @@ QString KDevPlugin::pluginName() const
 QString KDevPlugin::icon() const
 {
     return d->icon;
+}
+
+QString KDevPlugin::shortDescription() const
+{
+    return QString::null;
+}
+
+QString KDevPlugin::description() const
+{
+    return QString::null;
 }
 
 DCOPClient* KDevPlugin::dcopClient() const
@@ -139,6 +150,12 @@ void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
 void KDevPlugin::savePartialProjectSession(QDomElement* /*el*/)
 {
   // there's still nothing to do in the base class
+}
+
+void KDevPlugin::showPart()
+{
+    if( part() )
+        partController()->showPart( part(), pluginName(), shortDescription() );
 }
 
 #include "kdevplugin.moc"

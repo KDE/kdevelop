@@ -61,27 +61,22 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("Compile &File"), "make_kdevelop",
                           this, SLOT(slotCompileFile()),
                           actionCollection(), "build_compilefile" );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
-    core()->insertNewAction( action );
 
     KActionMenu *menu = new KActionMenu( i18n("Build &Target"),
                                          actionCollection(), "build_target" );
     m_targetMenu = menu->popupMenu();
-    core()->insertNewAction( menu );
 
     connect( m_targetMenu, SIGNAL(aboutToShow()),
              this, SLOT(updateTargetMenu()) );

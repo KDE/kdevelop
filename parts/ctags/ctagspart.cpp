@@ -45,7 +45,6 @@ CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
     action = new KAction( i18n("CTags..."), 0,
                           this, SLOT(slotSearchTags()),
                           actionCollection(), "tools_ctags" );
-    core()->insertNewAction( action );
 
     connect( core(), SIGNAL(projectClosed()),
              this, SLOT(projectClosed()) );

@@ -73,7 +73,6 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("Add Translation..."), 0,
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
-    core()->insertNewAction( action );
 
 /*	action = new KAction ( i18n("&Import existing files and directories..."), "", 0,
 							this, SLOT ( slotImportExisting() ),
@@ -86,62 +85,44 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("Build &Active Target"), "make_kdevelop", Key_F7,
                           this, SLOT(slotBuildActiveTarget()),
                           actionCollection(), "build_buildactivetarget" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Compile &File"), "make_kdevelop",
                           this, SLOT(slotCompileFile()),
                           actionCollection(), "build_compilefile" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Run Configure"), 0,
                           this, SLOT(slotConfigure()),
                           actionCollection(), "build_configure" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Run automake && friends"), 0,
                           this, SLOT(slotMakefilecvs()),
                           actionCollection(), "build_makefilecvs" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Install"), 0,
                           this, SLOT(slotInstall()),
                           actionCollection(), "build_install" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("&Distclean"), 0,
                           this, SLOT(slotDistClean()),
                           actionCollection(), "build_distclean" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Make Messages && Merge"), 0,
                           this, SLOT(slotMakeMessages()),
                           actionCollection(), "build_messages" );
-    core()->insertNewAction( action );
 
     if (!kde)
         action->setEnabled(false);
 
     buildConfigAction = new KSelectAction( i18n("Build Configuration"), 0,
                                            actionCollection(), "project_configuration" );
-    core()->insertNewAction( buildConfigAction );
-
 
     QDomDocument &dom = *projectDom();
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {

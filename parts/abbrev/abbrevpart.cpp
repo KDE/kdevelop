@@ -71,12 +71,10 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
                           actionCollection(), "edit_expandtext" );
     action->setStatusText( i18n("Expand current word") );
     action->setWhatsThis( i18n("Expand current word") );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("Expand Abbreviation"), CTRL + Key_L,
                           this, SLOT(slotExpandAbbrev()),
                           actionCollection(), "edit_expandabbrev" );
-    core()->insertNewAction( action );
 
     load();
 

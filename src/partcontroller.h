@@ -47,6 +47,7 @@ public:
 
   KParts::Part *partForURL(const KURL &url);
 
+  void showPart( KParts::Part* part, const QString& name, const QString& shortDescription );
 
 public slots:
 

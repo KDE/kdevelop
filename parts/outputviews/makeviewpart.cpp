@@ -52,8 +52,6 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     action = new KAction( i18n("&Previous Error"), SHIFT+Key_F4, m_widget, SLOT(prevError()),
                           actionCollection(), "view_previous_error");
     action->setStatusText( i18n("Switches to the file and line where the previous error was reported from") );
-    core()->insertNewAction( action );
-
 
     connect( core(), SIGNAL(stopButtonClicked()),
              m_widget, SLOT(killJob()) );

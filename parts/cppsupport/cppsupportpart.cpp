@@ -155,8 +155,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
                                "If you are looking at an implementation file (.cpp etc.), "
                                "this brings you to the corresponding header file.") );
     action->setEnabled(false);
-    core()->insertNewAction( action );
-
 
     action = new KAction(i18n("Complete Text"), CTRL+Key_Space,
                          this, SLOT(slotCompleteText()),
@@ -164,21 +162,16 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     action->setStatusText( i18n("Complete current expression") );
     action->setWhatsThis( i18n("Complete current expression") );
     action->setEnabled(false);
-    core()->insertNewAction( action );
-
 
     action = new KAction(i18n("Make Member"), "makermember", Key_F2,
                          this, SLOT(slotMakeMember()),
                          actionCollection(), "edit_make_member");
-    core()->insertNewAction( action );
-
 
     action = new KAction(i18n("New Class..."), "classnew", 0,
                          this, SLOT(slotNewClass()),
                          actionCollection(), "project_newclass");
     action->setStatusText( i18n("Generate a new class") );
     action->setWhatsThis( i18n("Generate a new class") );
-    core()->insertNewAction( action );
 
     m_pCompletion  = 0;
 
@@ -936,7 +929,7 @@ void CppSupportPart::slotMakeMember()
     }
 }
 
-QStringList CppSupportPart::subclassWidget(QString formName)
+QStringList CppSupportPart::subclassWidget(const QString& formName)
 {
     QStringList newFileNames;
     SubclassingDlg *dlg = new SubclassingDlg(this, formName, newFileNames);
@@ -944,7 +937,7 @@ QStringList CppSupportPart::subclassWidget(QString formName)
     return newFileNames;
 }
 
-QStringList CppSupportPart::updateWidget(QString formName, QString fileName)
+QStringList CppSupportPart::updateWidget(const QString& formName, const QString& fileName)
 {
     QStringList dummy;
     SubclassingDlg *dlg = new SubclassingDlg(this, formName, fileName, dummy);

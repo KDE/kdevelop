@@ -36,7 +36,6 @@ TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList 
   action->setWhatsThis(i18n("Tip of the day\n\n"
                             "Will display another good tip \n"
                             "contributed by KDevelop users."));
-  core()->insertNewAction( action );
 
   connect(core(), SIGNAL(coreInitialized()), this, SLOT(showOnStart()));
 }

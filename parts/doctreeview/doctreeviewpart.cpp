@@ -76,14 +76,11 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
                                "the documentation. For this to work, you must first "
                                "create a full text index, which can be done in the "
                                "configuration dialog of the documentation tree.") );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("Man Page..."), 0,
                           this, SLOT(slotManpage()),
                           actionCollection(), "help_manpage" );
     action->setStatusText( i18n("Show a manpage") );
-    core()->insertNewAction( action );
-    
 }
 
 

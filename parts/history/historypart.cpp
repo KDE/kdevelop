@@ -66,12 +66,10 @@ void HistoryPart::setupActions()
   m_backAction = new KToolBarPopupAction(i18n("&Back"), "back", 0,
     			this, SLOT(backActivated()),
   			actionCollection(), "history_back");
-  core()->insertNewAction( m_backAction );
 
   m_forwardAction = new KToolBarPopupAction(i18n("&Forward"), "forward", 0,
 		 	this, SLOT(forwardActivated()),
 			actionCollection(), "history_forward");
-  core()->insertNewAction( m_forwardAction );
 
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
 	 this, SLOT(backAboutToShow()));

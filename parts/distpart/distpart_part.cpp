@@ -31,7 +31,6 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
     m_action->setStatusText(i18n("Make Source and Binary Distribution"));
     m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
-    core()->insertNewAction( m_action );
     
     m_dialog = new DistpartDialog(this);
 

@@ -64,8 +64,6 @@ FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const 
     action = new KAction( i18n("&Ftnchek"), 0,
                           this, SLOT(slotFtnchek()),
                           actionCollection(), "project_ftnchek" );
-    core()->insertNewAction( action );
-    
 
     parser = 0;
 }

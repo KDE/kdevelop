@@ -63,8 +63,8 @@ public:
 
     virtual void customEvent( QCustomEvent* ev );
 
-    virtual QStringList subclassWidget(QString formName);
-    virtual QStringList updateWidget(QString formName, QString fileName);
+    virtual QStringList subclassWidget(const QString& formName);
+    virtual QStringList updateWidget(const QString& formName, const QString& fileName);
     
 signals:
     void fileParsed( const QString& fileName );

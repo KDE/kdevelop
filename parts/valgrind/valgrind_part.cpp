@@ -41,8 +41,8 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
   
   QWhatsThis::add( m_widget, i18n( "Valgrind memory leak check" ) );
 
-  core()->insertNewAction( new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
-					SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" ) );
+  new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
+	       SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
   
   mainWindow()->embedOutputView( m_widget, "Valgrind", "Valgrind memory leak check" );
 }

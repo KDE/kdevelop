@@ -84,5 +84,4 @@ void Core::openProject(const QString& projectFileName)
   ProjectManager::getInstance()->loadProject(projectFileName);
 }
 
-
 #include "core.moc"

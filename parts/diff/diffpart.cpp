@@ -46,9 +46,9 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget->setCaption( nm );
   mainWindow()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
 
-  core()->insertNewAction( new KAction( i18n("Difference Viewer..."), 0,
-					this, SLOT(slotExecDiff()),
-					actionCollection(), "tools_diff" ) );
+  new KAction( i18n("Difference Viewer..."), 0,
+	       this, SLOT(slotExecDiff()),
+	       actionCollection(), "tools_diff" );
 
   connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
            this, SLOT(contextMenu(QPopupMenu *, const Context *)) );

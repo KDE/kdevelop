@@ -34,7 +34,6 @@ AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   _action = new KAction(i18n("&Reformat Source"), 0,
 			  this, SLOT(beautifySource()), actionCollection(), "edit_astyle");
   _action->setEnabled(false);
-  core()->insertNewAction( _action );
 
   connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 

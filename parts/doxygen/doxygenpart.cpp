@@ -46,7 +46,6 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
     action = new KAction( i18n("Run Doxygen"), 0,
                           this, SLOT(slotDoxygen()),
                           actionCollection(), "build_doxygen" );
-    core()->insertNewAction( action );
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );

@@ -76,14 +76,14 @@ public:
      * and propmts to implement it's slots.
      * Returns a list of newly created files.
     */
-    virtual QStringList subclassWidget(QString formName);
+    virtual QStringList subclassWidget(const QString& formName);
     /**
      * Opens and "Update Widget" dialog for given Qt .ui file (formName)
      * and prompts to add missing slot implementations
      * in the subclass located in fileName.
      * Returns a list of newly created files.
     */
-    virtual QStringList updateWidget(QString formName, QString fileName);
+    virtual QStringList updateWidget(const QString& formName, const QString& fileName);
 
 
 signals:

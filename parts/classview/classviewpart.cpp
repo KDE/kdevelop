@@ -63,19 +63,15 @@ ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringLi
     classes_action = new ClassListAction(this, i18n("Classes"), 0,
                                          this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
-    core()->insertNewAction( classes_action );
 
     methods_action = new MethodListAction(this, i18n("Methods"), 0,
                                           this, SLOT(selectedMethod()),
                                           actionCollection(), "method_combo");        
-    core()->insertNewAction( methods_action );    
 
     
     popup_action  = new DelayedPopupAction(i18n("Declaration/Implementation"), "classwiz", 0,
                                            this, SLOT(switchedDeclImpl()),
                                            actionCollection(), "class_wizard");    
-    core()->insertNewAction( popup_action );    
-
     
     setupPopup();
     m_decl_or_impl = false;

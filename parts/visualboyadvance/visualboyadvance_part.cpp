@@ -31,7 +31,6 @@ VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, co
   action = new KAction( i18n("Execute program"), "exec",  Key_F9,
 			this, SLOT(slotExecute()),
 			actionCollection(), "build_execute" );
-  core()->insertNewAction( action );
 
   connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 	   this, SLOT(projectConfigWidget(KDialogBase*)) );

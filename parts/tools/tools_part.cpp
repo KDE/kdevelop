@@ -92,7 +92,6 @@ void ToolsPart::updateMenu()
 
 	  KAction *action = new KAction(df.readName(), df.readIcon(), 0,
                                         this, SLOT(slotToolActivated()), (QObject*)0, name.latin1());
-	  core()->insertNewAction( action );
 	  actions.append(action);
 	}
 
@@ -194,7 +193,6 @@ void ToolsPart::updateToolsMenu()
         KAction *action = new KAction(*it, 0,
                                       this, SLOT(toolsMenuActivated()),
                                       (QObject*) 0, menutext.utf8());
-	core()->insertNewAction( action );
         if (isdesktopfile) {
             KDesktopFile df(config->readEntry("CommandLine"));
             action->setIcon(df.readIcon());

@@ -71,6 +71,16 @@ public:
     QString icon() const;
 
     /**
+     * Returns the short description
+     **/
+    virtual QString shortDescription() const;
+    
+    /**
+     * Returns the description
+     **/
+    virtual QString description() const;
+    
+    /**
      * Create the DCOP interface for the given @p serviceType, if this
      * plugin provides it. Return false otherwise.
      */
@@ -204,13 +214,20 @@ public:
      */
     virtual void savePartialProjectSession(QDomElement* el);
 
+   
 signals:
     /**
      * Emitted when the part will be shown. If you really want to avoid that
      * the part is shown at all, you will have to reimplement showPart();
      **/
     void aboutToShowPart();
-
+    
+protected:
+    /**
+     * This will cause the part to show up by calling  KPart::show();
+     **/
+    virtual void showPart();
+    
 private:
     KDevApi *m_api;
     class Private;

@@ -33,7 +33,6 @@ RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringL
     action = new KAction( i18n("Debug Regular Expression..."), 0,
                           this, SLOT(slotRegexpTest()),
                           actionCollection(), "tools_regexptest" );
-    core()->insertNewAction( action );
 
     m_dialog = 0;
 }

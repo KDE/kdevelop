@@ -55,34 +55,26 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_exec" );
     action->setStatusText( i18n("Runs the Perl program") );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Execute String..."), "exec", 0,
                           this, SLOT(slotExecuteString()),
                           actionCollection(), "build_execstring" );
     action->setStatusText( i18n("Executes a string as Perl code") );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Start Perl Interpreter"), "exec", 0,
                           this, SLOT(slotStartInterpreter()),
                           actionCollection(), "build_runinterpreter" );
     action->setStatusText( i18n("Starts the Perl interpreter without a program") );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Find Perl function documentation..."), 0,
                           this, SLOT(slotPerldocFunction()),
                           actionCollection(), "help_perldocfunction" );
     action->setStatusText( i18n("Show the documentation page of a Perl function") );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("Find Perl FAQ entry..."), 0,
                           this, SLOT(slotPerldocFAQ()),
                           actionCollection(), "help_perldocfaq" );
     action->setStatusText( i18n("Show the FAQ entry for a keyword") );
-    core()->insertNewAction( action );
 }
 
 

@@ -70,20 +70,14 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
     action = new KAction( i18n("&Build Project"), "make_kdevelop", Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "build_build" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("&Clean Project"), 0,
                           this, SLOT(slotClean()),
                           actionCollection(), "build_clean" );
-    core()->insertNewAction( action );
-
 
     action = new KAction( i18n("Execute Program"), "exec", 0,
                           this, SLOT(slotExecute()),
                           actionCollection(), "build_execute" );
-    core()->insertNewAction( action );
-
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );

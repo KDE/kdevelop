@@ -63,7 +63,6 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   newAction->setText( i18n("Create a new file", "New...") );
   newAction->setWhatsThis( i18n("Use this to create a new file within your project.") );
   newAction->setToolTip( i18n("New file") );
-  core()->insertNewAction( newAction );
 
   m_filetypes.setAutoDelete(true);
 

@@ -14,6 +14,11 @@ class KDialogBase;
 class KDevPlugin;
 class KAction;
 
+namespace KParts
+{
+    class Part;
+}
+
 class QStatusBar;
 class QPopupMenu;
 
@@ -171,8 +176,7 @@ public:
      * all components get a stopButtonClicked().
      */
     virtual void running(KDevPlugin *which, bool runs) = 0;
-
-
+    
 signals:
 
     /**

@@ -43,6 +43,10 @@ struct ApplicationInfo
     QString fileTemplates;
     
     QListViewItem *item; // item pointer to the listview
+    
+    ApplicationInfo()
+	: item( 0 ) 
+    {}
 };
 
 
@@ -51,6 +55,10 @@ struct AppWizardFileTemplate
     QString suffix;
     QString style;
     QMultiLineEdit *edit;
+    
+    AppWizardFileTemplate()
+	: edit( 0 )
+    {}
 };
 
 

@@ -38,12 +38,10 @@ FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
     action = new KAction( i18n("Execute Command..."), 0,
                           this, SLOT(slotShellInsert()),
                           actionCollection(), "tools_insertshell" );
-    core()->insertNewAction( action );
 
     action = new KAction( i18n("Filter Selection Through Command..."), 0,
                           this, SLOT(slotShellFilter()),
                           actionCollection(), "tools_filtershell" );
-    core()->insertNewAction( action );
 
     m_insertDialog = 0;
     m_filterDialog = 0;    

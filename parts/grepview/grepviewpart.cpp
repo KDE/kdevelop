@@ -65,7 +65,6 @@ GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList
                                "searched for within all files in the directories "
                                "you specify. Matches will be displayed, you "
                                "can switch to a match directly.") );
-    core()->insertNewAction( action );
 }
 
 

@@ -1,6 +1,5 @@
 #include "kdevlanguagesupport.h"
 
-
 KDevLanguageSupport::KDevLanguageSupport( const QString& pluginName, const QString& icon, QObject *parent, const char *name)
     : KDevPlugin( pluginName, icon, parent, name ? name : "KDevLanguageSupport" )
 {
@@ -48,12 +47,12 @@ void KDevLanguageSupport::addAttribute(const QString &/*className*/)
 {
 }
 
-QStringList KDevLanguageSupport::subclassWidget(QString formName)
+QStringList KDevLanguageSupport::subclassWidget(const QString& /*formName*/)
 {
     return QStringList();
 }
 
-QStringList KDevLanguageSupport::updateWidget(QString formName, QString fileName)
+QStringList KDevLanguageSupport::updateWidget(const QString& /*formName*/, const QString& /*fileName*/)
 {
     return QStringList();
 }

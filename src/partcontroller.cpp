@@ -871,5 +871,27 @@ void PartController::restoreState()
   updateMenuItems();
 }
 
+void PartController::showPart( KParts::Part* part, const QString& name, const QString& shortDescription )
+{
+  if (!part->widget()) {
+    // TODO error handling
+    return; // to avoid later crash
+  }
+
+  QPtrListIterator<KParts::Part> it(*parts());
+  for ( ; it.current(); ++it)
+  {
+    if( it.current() == part ){
+        // part already embedded
+	// TODO: raise it
+	return;
+    }
+  }
+
+  // embed the part
+  TopLevel::getInstance()->embedPartView( part->widget(), name, shortDescription );
+  addPart( part );
+}
+
 
 #include "partcontroller.moc"
