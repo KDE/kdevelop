@@ -18,6 +18,7 @@
 
 #include "kjsproblems.h"
 #include "kjssupport_part.h"
+#include <kiconloader.h>
 
 class KJSProblemItem: public KListViewItem
 {
@@ -49,11 +50,29 @@ class KJSProblemItem: public KListViewItem
 
 KJSProblems::KJSProblems(kjsSupportPart *part, QWidget *parent, const char *name) : KListView(parent,name), m_part(part)
 {
+	addColumn ("File");
+	addColumn ("Line #");
+	addColumn ("Problem:");
+	setIcon( SmallIcon("info") );
 }
 
 
 KJSProblems::~KJSProblems()
-{}
+{
+
+}
+
+void KJSProblems::clearItems()
+{
+	clear();
+	setIcon( SmallIcon("info") );
+}
+
+void KJSProblems::addLine(const QString &file, int lineNo, const QString &message)
+{
+	new QListViewItem( this,  file, QString::number( lineNo ), message);
+	setIcon( SmallIcon("error") );
+}
 
 
 #include "kjsproblems.moc"

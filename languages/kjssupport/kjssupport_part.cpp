@@ -83,7 +83,6 @@ kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringL
 
     // get the problem reporter
         m_problemReporter = new KJSProblems( this, 0, "problems" );
-	m_problemReporter->setIcon( SmallIcon("info") );
 	mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("Problem reporter"));
 	m_cc = new JSCodeCompletion();
     }
@@ -91,6 +90,7 @@ kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringL
 
 kjsSupportPart::~kjsSupportPart()
 {
+	delete m_problemReporter;
 	delete m_cc;
 	delete m_build;
 	delete m_js;
@@ -114,10 +114,6 @@ KMimeType::List kjsSupportPart::mimeTypes()
 void kjsSupportPart::slotRun()
 {
 	// Execute the application here.
-/*
-	kdDebug() << "app " << project()->mainProgram(true ) << endl;
-	m_js->runFile( project()->mainProgram(true ));
-*/	
 
 	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
 	if ( ro_part ) 
@@ -200,6 +196,8 @@ void kjsSupportPart::parse()
 	{
 		kapp->setOverrideCursor(waitCursor);
 		QStringList files = project()->allFiles();
+		m_problemReporter->clear();
+
 		for (QStringList::Iterator it = files.begin(); it != files.end() ;++it)
 		{
 			kdDebug(9014) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
@@ -255,6 +253,7 @@ void kjsSupportPart::parse(const QString &fileName)
 		QRegExp classMethRx("this\\.([_a-zA-Z\\d]+)[\\s]*=[\\s]*function(\\([^){}\\n\\r]*\\))");
 		QRegExp methRx("function[\\s]+([_a-zA-Z\\d]+[\\s]*\\([^){}\\n\\r]*\\))");
 		QRegExp allocRx("([_\\d\\w]+)[\\s]*=[\\s]*new[\\s]*([_\\d\\w]+)");
+		QRegExp assnRx("var[\\s]+([_\\d\\w]+)[\\s]+[=][\\s]+([_\\d\\w]+)[;]");
 		
                 while (!stream.atEnd())
                 {
@@ -307,11 +306,24 @@ void kjsSupportPart::parse(const QString &fileName)
 				
 			}
 			
+						
+			kdDebug() << "Syntax check..." << endl;
+			KJS::UString jsLine( line.latin1() );
+			int lineNumber = 0;
+			KJS::UString errorMessage;
+	
+			if ( !m_js->interpreter()->checkSyntax( jsLine, &lineNumber, &errorMessage ) )
+			{
+				kdDebug() << errorMessage.qstring() << " on line " << lineNo << endl;
+				m_problemReporter->addLine(m_file->fileName(), lineNo, errorMessage.qstring());
+			}
+
 			if( line.contains("{") )
 				++depth;
 				
 			if( line.contains("}") )
 				--depth;
+
                        ++lineNo;
                 }
 		
@@ -323,6 +335,8 @@ void kjsSupportPart::parse(const QString &fileName)
 		kdDebug() << "Trying to add list..." << endl;
                 
                 codeModel()->addFile( m_file );
+
+		
         }
 }
 

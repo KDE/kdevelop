@@ -32,6 +32,10 @@ public:
 
     KJSProblems(kjsSupportPart *part, QWidget *parent = 0L, const char *name = 0L);
     ~KJSProblems();
+
+    void clearItems();
+    void addLine(const QString &file, int lineNo, const QString &message);
+
 private:
     kjsSupportPart *m_part;
 };
