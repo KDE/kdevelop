@@ -127,6 +127,7 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   hbox->addSpacing(4);
 
   d->m_stack = new QWidgetStack(frame);
+  d->m_stack->setMinimumHeight(100);
   vbox->addWidget(d->m_stack, 1);
 
   QBoxLayout *box = 0;
@@ -323,6 +324,8 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
     if (extend < 125)
       extend = 125;
     setGeometry(x(), d->m_initialPos - extend, width(), extend);
+    qDebug("geom %d %d %d %d", x(), d->m_initialPos - extend, width(),
+	extend);
     break;
   }
 
