@@ -197,8 +197,10 @@ HlCharDetect::HlCharDetect(int attribute, int context, char c)
 }
 
 const char *HlCharDetect::checkHgl(const char *str) {
-  if (*str == sChar) return str + 1;
-  return 0L;
+    if (*str == sChar) return str + 1;
+   return 0L;
+  
+
 }
 
 Hl2CharDetect::Hl2CharDetect(int attribute, int context, const char *s)
@@ -280,15 +282,16 @@ void HlKeyword::addList(const char **list) {
 }
 
 const char *HlKeyword::checkHgl(const char *s) {
-  int z, count;
+ int z, count, len;
   KeywordData *word;
 
   count = words.count();
+  len = strlen(s);
   for (z = 0; z < count; z++) {
-    word = words.at(z);
-    if (memcmp(s,word->s,word->len) == 0) {
-      return s + word->len;
-    }
+      word = words.at(z);
+      if (len>=word->len && memcmp(s,word->s,word->len) == 0) {
+          return s + word->len;
+      }
   }
   return 0L;
 }
