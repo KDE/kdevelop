@@ -12,6 +12,7 @@
 class KAction;
 class KService;
 class ProjectInfo;
+class ProjectSession;
 
 class ProjectManager : public QObject, public KXMLGUIClient
 {
@@ -68,6 +69,7 @@ private:
 
   static ProjectManager *s_instance;
 
+  ProjectSession* m_pKDevSession;
 };
 
 

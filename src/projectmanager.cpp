@@ -33,7 +33,7 @@ class QDomDocument;
 #include "classstore.h"
 #include "partselectwidget.h"
 #include "generalinfowidget.h"
-#include "projectworkspace.h"
+#include "projectsession.h"
 
 #include "projectmanager.h"
 
@@ -51,12 +51,14 @@ public:
 ProjectManager *ProjectManager::s_instance = 0;
 
 ProjectManager::ProjectManager()
+: m_info(0L)
+ ,m_pKDevSession(new ProjectSession)
 {
-  m_info = 0;
 }
 
 ProjectManager::~ProjectManager()
 {
+  delete m_pKDevSession;
   delete m_info;
 }
 
@@ -194,7 +196,12 @@ bool ProjectManager::loadProject(const KURL &url)
 
   Core::getInstance()->doEmitProjectOpened();
 
-  ProjectWorkspace::restore();
+  // first restore the project session stored in a .kdevses file
+  QString projSessionFileName = m_info->m_fileName.left(m_info->m_fileName.length()-8); // without ".kdevelop"
+  projSessionFileName += "kdevses"; // suffix for a KDevelop session file
+  if (!m_pKDevSession->restoreFromFile(projSessionFileName)) {
+    debug("error during restoring of the KDevelop session !\n");
+  }
 
   m_openRecentProjectAction->addURL(KURL(projectFile()));
   m_closeProjectAction->setEnabled(true);
@@ -210,7 +217,11 @@ bool ProjectManager::closeProject()
 
   Q_ASSERT( API::getInstance()->project() );
 
-  ProjectWorkspace::save();
+  // save the session
+  QString sessionFileName = m_info->m_fileName;
+  sessionFileName = sessionFileName.left( sessionFileName.length() - 8); // without "kdevelop"
+  sessionFileName += "kdevses";
+  m_pKDevSession->saveToFile(sessionFileName);
 
   if( !closeProjectSources() )
     return false;
