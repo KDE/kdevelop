@@ -5,16 +5,17 @@
 
 
 #include <kdevcore.h>
+#include <qgroupbox.h>
+#include <qlayout.h>
 #include "distpart_part.h"
 #include "distpart_widget.h"
-#include <qlayout.h>
 
 distpartWidget::distpartWidget(distpartPart *part)
 	: distpart_ui(0, "distpart widget")
 {
-    connect(customProjectCheckBox, SIGNAL(released( ) ),
+    connect(customProjectCheckBox, SIGNAL(toggled() ),
            this, SLOT(slotcustomProjectCheckBoxChanged()));
-    connect(uploadCustomCheckBox, SIGNAL(released()),
+    connect(uploadCustomCheckBox, SIGNAL(toggled()),
            this, SLOT(slotuploadCustomCheckBoxChanged()));
 
 }
@@ -100,7 +101,7 @@ void distpartWidget::slotuploadResetPushButtonPressed()
 void distpartWidget::slotcustomProjectCheckBoxChanged()
 {
   kdDebug () << "New State" << customProjectCheckBox->isChecked() << endl;
-  Layout36->setEnabled(customProjectCheckBox->isChecked());
+  sourceOptionsGroupBox->setEnabled(customProjectCheckBox->isChecked());
 }
 bool distpartWidget::getcustomProjectCheckBoxState()
 {
