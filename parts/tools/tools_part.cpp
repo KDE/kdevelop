@@ -59,7 +59,7 @@ ToolsPart::~ToolsPart()
 
 void ToolsPart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Tools menu"));
+  QVBox *vbox = dlg->addVBoxPage(i18n("Tools Menu"));
   ToolsConfig *w = new ToolsConfig(vbox, "tools config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
   connect(dlg, SIGNAL(destroyed()), this, SLOT(updateMenu()));

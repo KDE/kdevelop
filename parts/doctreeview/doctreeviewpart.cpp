@@ -123,10 +123,10 @@ void DocTreeViewPart::configWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
 
-    vbox = dlg->addVBoxPage(i18n("Documentation tree (I)"));
+    vbox = dlg->addVBoxPage(i18n("Documentation Tree (I)"));
     DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget(m_widget, vbox, "doc tree global config widget");
 
-    vbox = dlg->addVBoxPage(i18n("Documentation tree (II)"));
+    vbox = dlg->addVBoxPage(i18n("Documentation Tree (II)"));
     DocTreeConfigWidget *w2 = new DocTreeConfigWidget(m_widget, vbox, "documentation tree config widget");
 
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );

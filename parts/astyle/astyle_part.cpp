@@ -70,7 +70,7 @@ void AStylePart::beautifySource()
 
 void AStylePart::configWidget(KDialogBase *dlg)
 {
-  QVBox *vbox = dlg->addVBoxPage(i18n("Source formatter"));
+  QVBox *vbox = dlg->addVBoxPage(i18n("Source Formatter"));
   AStyleWidget *w = new AStyleWidget(vbox, "astyle config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
 }

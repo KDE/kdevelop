@@ -37,7 +37,7 @@ void ToolsConfig::showEvent(QShowEvent *e)
       QVBoxLayout *vbox = new QVBoxLayout(hbox);
       _tree = new KDevApplicationTree(this);
       _tree->header()->hide();
-      QLabel *l = new QLabel(_tree, i18n("&Applications"), this);
+      QLabel *l = new QLabel(_tree, i18n("&Applications:"), this);
       l->show();
       _tree->show();
 
@@ -60,7 +60,7 @@ void ToolsConfig::showEvent(QShowEvent *e)
 
       vbox = new QVBoxLayout(hbox);
       _list = new QListBox(this);
-      l = new QLabel(_list, i18n("&Tools menu"), this);
+      l = new QLabel(_list, i18n("&Tools menu:"), this);
       l->show();
       _list->show();
       vbox->addWidget(l);
