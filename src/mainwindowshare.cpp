@@ -19,6 +19,7 @@
 #include <qvbox.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
+#include <qdir.h>
 
 #include <kaction.h>
 #include <kaboutdata.h>
@@ -33,6 +34,7 @@
 #include <kmenubar.h>
 #include <kedittoolbar.h>
 #include <kbugreport.h>
+#include <kurlrequester.h>
 
 #if (KDE_VERSION > 305)
 #include <knotifydialog.h>
@@ -218,6 +220,8 @@ void MainWindowShare::slotSettings()
     QVBox *vbox = dlg.addVBoxPage(i18n("General"));
     SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
 
+    gsw->projects_url->setMode((int)KFile::Directory);
+
     KConfig* config = kapp->config();
     config->setGroup("General Options");
     gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
@@ -233,11 +237,13 @@ void MainWindowShare::slotSettings()
     gsw->changeMessageFontButton->setFont(gsw->messageFont());
     gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
     gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
+    gsw->projects_url->setURL(config->readEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
     Core::getInstance()->doEmitConfigWidget(&dlg);
     dlg.exec();
 
     config->setGroup("General Options");
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
+    config->writeEntry("DefaultProjectsDir", gsw->projects_url->url());
     config->writeEntry("Application Font", gsw->applicationFont());
     config->setGroup("MakeOutputView");
     config->writeEntry("Messages Font",gsw->messageFont());
