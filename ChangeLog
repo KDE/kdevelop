@@ -1,3 +1,11 @@
+2001-07-09  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: strange dock-back effect fixed
+    * bugfix: bugreport of rokrau: ''2 Undesired switch between RFV and CV... fixed.
+    * bugreport of rokrau: '1 When closing a file, more than the one active file is
+      closed...tabbed MDI mode...' hopefully fixed.
+    * applied patch of Lorenzo Delana <ldelana@libero.it> (automake dir var name)
+      Thanks a lot, Lorenzo!
+
 2001-07-09  rokrau@yahoo.com
     * Fix a null pointer crash in main.cpp. I cant leave you guys alone for 
       a single week, can I? :-) 
