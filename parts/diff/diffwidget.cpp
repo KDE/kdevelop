@@ -30,6 +30,8 @@ DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
   job = 0;
   komparePart = 0;
 
+  fileCleanupHandler.setAutoDelete( true );
+
   loadKomparePart( this );
 
   te = new QTextEdit( this, "Main Text Edit" );
@@ -48,10 +50,6 @@ DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
 
 DiffWidget::~DiffWidget()
 {
-  KTempFile* tmpFile = 0;
-  for ( tmpFile = fileCleanupHandler.first(); tmpFile; tmpFile = fileCleanupHandler.next() ) {
-    delete tmpFile;
-  }
   fileCleanupHandler.clear();
 }
 
