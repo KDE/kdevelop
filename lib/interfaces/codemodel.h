@@ -30,6 +30,7 @@ class FileModel;
 class NamespaceModel;
 class ClassModel;
 class FunctionModel;
+class FunctionDefinitionModel;
 class VariableModel;
 class ArgumentModel;
 class QRegExp;
@@ -39,6 +40,7 @@ typedef KSharedPtr<FileModel> FileDom;
 typedef KSharedPtr<NamespaceModel> NamespaceDom;
 typedef KSharedPtr<ClassModel> ClassDom;
 typedef KSharedPtr<FunctionModel> FunctionDom;
+typedef KSharedPtr<FunctionDefinitionModel> FunctionDefinitionDom;
 typedef KSharedPtr<VariableModel> VariableDom;
 typedef KSharedPtr<ArgumentModel> ArgumentDom;
 
@@ -47,6 +49,7 @@ typedef QValueList<FileDom> FileList;
 typedef QValueList<NamespaceDom> NamespaceList;
 typedef QValueList<ClassDom> ClassList;
 typedef QValueList<FunctionDom> FunctionList;
+typedef QValueList<FunctionDefinitionDom> FunctionDefinitionList;
 typedef QValueList<VariableDom> VariableList;
 typedef QValueList<ArgumentDom> ArgumentList;
 
@@ -134,6 +137,7 @@ public:
 	Function,
 	Variable,
 	Argument,
+	FunctionDefinition,
 
 	Custom = 1000
     };
@@ -173,6 +177,7 @@ public:
     virtual bool isNamespace() const { return false; }
     virtual bool isClass() const { return false; }
     virtual bool isFunction() const { return false; }
+    virtual bool isFunctionDefinition() const { return false; }
     virtual bool isVariable() const { return false; }
     virtual bool isArgument() const { return false; }
     virtual bool isCustom() const { return false; }
@@ -207,6 +212,9 @@ public:
 
     virtual bool isClass() const { return true; }
 
+    QStringList scope() const { return m_scope; }
+    void setScope( const QStringList& scope ) { m_scope = scope; }
+
     QStringList baseClassList() const;
     bool addBaseClass( const QString& baseClass );
     void removeBaseClass( const QString& baseClass );
@@ -227,6 +235,14 @@ public:
     bool addFunction( FunctionDom fun );
     void removeFunction( FunctionDom fun );
 
+    FunctionDefinitionList functionDefinitionList();
+    const FunctionDefinitionList functionDefinitionList() const;
+    bool hasFunctionDefinition( const QString& name ) const;
+    FunctionDefinitionList functionDefinitionByName( const QString& name );
+    const FunctionDefinitionList functionDefinitionByName( const QString& name ) const;
+    bool addFunctionDefinition( FunctionDefinitionDom fun );
+    void removeFunctionDefinition( FunctionDefinitionDom fun );
+
     VariableList variableList();
     const VariableList variableList() const;
     bool hasVariable( const QString& name ) const;
@@ -239,9 +255,11 @@ public:
     virtual void write( QDataStream& stream ) const;
 
 private:
+    QStringList m_scope;
     QStringList m_baseClassList;
     QMap<QString, ClassList> m_classes;
     QMap<QString, FunctionList> m_functions;
+    QMap<QString, FunctionDefinitionList> m_functionDefinitions;
     QMap<QString, VariableDom> m_variables;
 
 private:
@@ -339,6 +357,9 @@ public:
 
     virtual bool isFunction() const { return true; }
 
+    QStringList scope() const { return m_scope; }
+    void setScope( const QStringList& scope ) { m_scope = scope; }
+
     int access() const;
     void setAccess( int access );
 
@@ -366,16 +387,6 @@ public:
     QString resultType() const;
     void setResultType( const QString& type );
 
-    bool hasImplementation() const;
-    QString implementedInFile() const;
-    void setImplementedInFile( const QString& fileName );
-
-    void getImplementationStartPosition( int* line, int* col ) const;
-    void setImplementationStartPosition( int line, int col );
-
-    void getImplementationEndPosition( int* line, int* col ) const;
-    void setImplementationEndPosition( int line, int col );
-
     ArgumentList argumentList();
     const ArgumentList argumentList() const;
     bool addArgument( ArgumentDom arg );
@@ -385,6 +396,7 @@ public:
     virtual void write( QDataStream& stream ) const;
 
 private:
+    QStringList m_scope;
     int m_access;
 
     union {
@@ -402,15 +414,29 @@ private:
 
     QString m_resultType;
     ArgumentList m_arguments;
-    QString m_implementedInFile;
-    int m_implStartLine, m_implEndLine;
-    int m_implStartColumn, m_implEndColumn;
 
 private:
     FunctionModel( const FunctionModel& source );
     void operator = ( const FunctionModel& source );
     friend class CodeModel;
 };
+
+class FunctionDefinitionModel: public FunctionModel
+{
+protected:
+    FunctionDefinitionModel( CodeModel* model );
+
+public:
+    typedef FunctionDefinitionDom Ptr;
+
+    virtual bool isFunctionDefinition() const { return true; }
+
+private:
+    FunctionDefinitionModel( const FunctionDefinitionModel& source );
+    void operator = ( const FunctionDefinitionModel& source );
+    friend class CodeModel;
+};
+
 
 class VariableModel: public CodeModelItem
 {

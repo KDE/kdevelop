@@ -91,6 +91,7 @@ bool CodeModel::addFile( FileDom file )
     NamespaceList namespaceList = file->namespaceList();
     ClassList classList = file->classList();
     FunctionList functionList = file->functionList();
+    FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
     VariableList variableList = file->variableList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
@@ -99,6 +100,8 @@ bool CodeModel::addFile( FileDom file )
 	m_globalNamespace->addClass( *it );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	m_globalNamespace->addFunction( *it );
+    for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
+	m_globalNamespace->addFunctionDefinition( *it );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
 	m_globalNamespace->addVariable( *it );
 
@@ -112,6 +115,7 @@ void CodeModel::removeFile( FileDom file )
     NamespaceList namespaceList = file->namespaceList();
     ClassList classList = file->classList();
     FunctionList functionList = file->functionList();
+    FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
     VariableList variableList = file->variableList();
 
     for( NamespaceList::Iterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
@@ -120,9 +124,13 @@ void CodeModel::removeFile( FileDom file )
 	m_globalNamespace->removeClass( *it );
     for( FunctionList::Iterator it=functionList.begin(); it!=functionList.end(); ++it )
 	m_globalNamespace->removeFunction( *it );
+    for( FunctionDefinitionList::Iterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it )
+	m_globalNamespace->removeFunctionDefinition( *it );
     for( VariableList::Iterator it=variableList.begin(); it!=variableList.end(); ++it )
 	m_globalNamespace->removeVariable( *it );
 
+    kdDebug(9000) << "------------------------------> remove file: " << file->name() << endl;
+    kdDebug(9000) << "------------------------------> contains file: " << m_files.contains( file->name() ) << endl;
     m_files.remove( file->name() );
 }
 
@@ -237,10 +245,10 @@ bool NamespaceModel::hasNamespace( const QString & name ) const
 
 bool NamespaceModel::addNamespace( NamespaceDom ns )
 {
-    if( ns->name().isEmpty() || m_namespaces.contains(ns->name()) )
+    if( ns->name().isEmpty() )
 	return false;
 
-    m_namespaces.insert( ns->name(), ns );
+    m_namespaces[ ns->name() ] = ns;
     return true;
 }
 
@@ -389,6 +397,62 @@ void ClassModel::removeFunction( FunctionDom fun )
 	m_functions.remove( fun->name() );
 }
 
+FunctionDefinitionList ClassModel::functionDefinitionList( )
+{
+    FunctionDefinitionList l;
+    QMap<QString, FunctionDefinitionList>::Iterator it = m_functionDefinitions.begin();
+    while( it != m_functionDefinitions.end() ){
+	l += *it;
+	++it;
+    }
+
+    return l;
+}
+
+const FunctionDefinitionList ClassModel::functionDefinitionList( ) const
+{
+    FunctionDefinitionList l;
+    QMap<QString, FunctionDefinitionList>::ConstIterator it = m_functionDefinitions.begin();
+    while( it != m_functionDefinitions.end() ){
+	l += *it;
+	++it;
+    }
+
+    return l;
+}
+
+bool ClassModel::hasFunctionDefinition( const QString & name ) const
+{
+    return m_functionDefinitions.contains( name );
+}
+
+FunctionDefinitionList ClassModel::functionDefinitionByName( const QString & name )
+{
+    return m_functionDefinitions.contains( name ) ? m_functionDefinitions[ name ] : FunctionDefinitionList();
+}
+
+const FunctionDefinitionList ClassModel::functionDefinitionByName( const QString & name ) const
+{
+    return m_functionDefinitions.contains( name ) ? m_functionDefinitions[ name ] : FunctionDefinitionList();
+}
+
+bool ClassModel::addFunctionDefinition( FunctionDefinitionDom fun )
+{
+    if( fun->name().isEmpty() )
+	return false;
+
+    m_functionDefinitions[ fun->name() ].push_back( fun );
+    return true;
+}
+
+void ClassModel::removeFunctionDefinition( FunctionDefinitionDom fun )
+{
+    m_functionDefinitions[ fun->name() ].remove( fun );
+
+    if( m_functionDefinitions[fun->name()].isEmpty() )
+	m_functionDefinitions.remove( fun->name() );
+}
+
 VariableList ClassModel::variableList( )
 {
 #if QT_VERSION >= 0x030005
@@ -474,8 +538,6 @@ FunctionModel::FunctionModel( CodeModel* model )
     d.v.m_inline = false;
     d.v.m_constant = false;
     d.v.m_abstract = false;
-    m_implStartLine = m_implEndLine = 0;
-    m_implStartColumn = m_implEndColumn = 0;
 }
 
 bool FunctionModel::isVirtual( ) const
@@ -559,45 +621,6 @@ void FunctionModel::removeArgument( ArgumentDom arg )
     m_arguments.remove( arg );
 }
 
-bool FunctionModel::hasImplementation( ) const
-{
-    return !m_implementedInFile.isEmpty();
-}
-
-QString FunctionModel::implementedInFile( ) const
-{
-    return m_implementedInFile;
-}
-
-void FunctionModel::setImplementedInFile( const QString & fileName )
-{
-    m_implementedInFile = fileName;
-}
-
-void FunctionModel::getImplementationStartPosition( int * line, int * col ) const
-{
-    if( line ) *line = m_implStartLine;
-    if( col ) *col = m_implStartColumn;
-}
-
-void FunctionModel::setImplementationStartPosition( int line, int col )
-{
-    m_implStartLine = line;
-    m_implStartColumn = col;
-}
-
-void FunctionModel::getImplementationEndPosition( int * line, int * col ) const
-{
-    if( line ) *line = m_implEndLine;
-    if( col ) *col = m_implEndColumn;
-}
-
-void FunctionModel::setImplementationEndPosition( int line, int col )
-{
-    m_implEndLine = line;
-    m_implEndColumn = col;
-}
-
 // ------------------------------------------------------------------------
 VariableModel::VariableModel( CodeModel* model )
     : CodeModelItem( Variable, model)
@@ -656,6 +679,11 @@ void FunctionModel::setSlot( bool isSlot )
     d.v.m_slot = isSlot;
 }
 
+FunctionDefinitionModel::FunctionDefinitionModel( CodeModel* model )
+    : FunctionModel( model )
+{
+}
+
 int VariableModel::access( ) const
 {
     return m_access;
@@ -704,7 +732,7 @@ void ClassModel::read( QDataStream & stream )
 {
     CodeModelItem::read( stream );
 
-    stream >> m_baseClassList;
+    stream >> m_scope >> m_baseClassList;
 
     int n;
 
@@ -724,6 +752,14 @@ void ClassModel::read( QDataStream & stream )
 	addFunction( fun );
     }
 
+    m_functionDefinitions.clear();
+    stream >> n;
+    for( int i=0; i<n; ++i ){
+	FunctionDefinitionDom fun = codeModel()->create<FunctionDefinitionModel>();
+	fun->read( stream );
+	addFunctionDefinition( fun );
+    }
+
     m_variables.clear();
     stream >> n;
     for( int i=0; i<n; ++i ){
@@ -737,7 +773,7 @@ void ClassModel::write( QDataStream & stream ) const
 {
     CodeModelItem::write( stream );
 
-    stream << m_baseClassList;
+    stream << m_scope << m_baseClassList;
 
     const ClassList class_list = classList();
     stream << int( class_list.size() );
@@ -747,6 +783,11 @@ void ClassModel::write( QDataStream & stream ) const
     const FunctionList function_list = functionList();
     stream << int( function_list.size() );
     for( FunctionList::ConstIterator it = function_list.begin(); it!=function_list.end(); ++it )
+	(*it)->write( stream );
+
+    const FunctionDefinitionList function_definition_list = functionDefinitionList();
+    stream << int( function_definition_list.size() );
+    for( FunctionDefinitionList::ConstIterator it = function_definition_list.begin(); it!=function_definition_list.end(); ++it )
 	(*it)->write( stream );
 
     const VariableList variable_list = variableList();
@@ -808,6 +849,7 @@ void FunctionModel::read( QDataStream & stream )
 {
     CodeModelItem::read( stream );
 
+    stream >> m_scope;
     stream >> d.flags;
 
     int n;
@@ -821,9 +863,6 @@ void FunctionModel::read( QDataStream & stream )
     }
 
     stream
-	>> m_implementedInFile
-	>> m_implStartLine >> m_implEndLine
-	>> m_implStartColumn >> m_implEndColumn
 	>> m_resultType;
 }
 
@@ -831,6 +870,7 @@ void FunctionModel::write( QDataStream & stream ) const
 {
     CodeModelItem::write( stream );
 
+    stream << m_scope;
     stream << d.flags;
 
     const ArgumentList argument_list = argumentList();
@@ -839,9 +879,6 @@ void FunctionModel::write( QDataStream & stream ) const
 	(*it)->write( stream );
 
     stream
-	<< m_implementedInFile
-	<< m_implStartLine << m_implEndLine
-	<< m_implStartColumn << m_implEndColumn
 	<< m_resultType;
 }
 
