@@ -90,8 +90,10 @@ private:
   // override from QMultiLineEdit
   void keyPressEvent( QKeyEvent* keyEvent );
   void mouseReleaseEvent(QMouseEvent* event);
+#if (QT_VERSION < 300)
   void paintCell(QPainter* p, int row, int col);
   int mapToView( int xIndex, int line );
+#endif
 
   QString m_buf;
   QStack<QString> m_dirStack;
