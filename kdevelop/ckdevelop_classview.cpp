@@ -21,6 +21,7 @@
 #include "cclassview.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
+#include "classparser/ProgrammingByContract.h"
 
 /*********************************************************************
  *                                                                   *
@@ -89,7 +90,7 @@ void CKDevelop::slotMethodChoiceCombo(int index)
     cv_decl_or_impl = true;
 
     // Switch to the method defintin
-    CVGotoDefinition( classname, methodname, THPUBLIC_METHOD );
+    CVGotoDefinition( classname, methodname, THCLASS, THPUBLIC_METHOD );
   }
 }
 
@@ -103,12 +104,16 @@ void CKDevelop::slotMethodChoiceCombo(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDeclaration( const char *className, 
-                                       const char *declName, 
-                                       THType type )
+void CKDevelop::slotCVViewDeclaration( const char *parentPath, 
+                                       const char *itemName, 
+                                       THType parentType,
+                                       THType itemType )
 {
-  CVGotoDeclaration( className, declName, type );
-  CVMethodSelected( declName );
+  REQUIRE( "Valid parent path", parentPath != NULL );
+  REQUIRE( "Valid item name", itemName != NULL );
+  
+  CVGotoDeclaration( parentPath, itemName, parentType, itemType );
+  CVMethodSelected( itemName );
 }
 
 /*-------------------------------- CKDevelop::slotCVViewDefinition()
@@ -121,12 +126,16 @@ void CKDevelop::slotCVViewDeclaration( const char *className,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVViewDefinition(  const char *className, 
-                                       const char *declName, 
-                                       THType type )
+void CKDevelop::slotCVViewDefinition( const char *parentPath, 
+                                      const char *itemName, 
+                                      THType parentType,
+                                      THType itemType )
 {
-  CVGotoDefinition( className, declName, type );
-  CVMethodSelected( declName );
+  REQUIRE( "Valid parent path", parentPath != NULL );
+  REQUIRE( "Valid item name", itemName != NULL );
+
+  CVGotoDefinition( parentPath, itemName, parentType, itemType );
+  CVMethodSelected( itemName );
 }
 
 /*-------------------------------------- CKDevelop::slotCVAddMethod()
@@ -142,7 +151,7 @@ void CKDevelop::slotCVViewDefinition(  const char *className,
  *-----------------------------------------------------------------*/
 void CKDevelop::slotCVAddMethod( const char *aClassName )
 {
-  assert( aClassName != NULL );
+  REQUIRE( "Valid class name", aClassName != NULL );
 
   CAddClassMethodDlg dlg(this, "methodDlg" );
   
@@ -173,10 +182,11 @@ void CKDevelop::slotCVAddMethod( const char *aClassName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod )
+void CKDevelop::slotCVAddMethod( const char *aClassName, 
+                                 CParsedMethod *aMethod )
 {
-  assert( aClassName != NULL );
-  assert( aMethod != NULL );
+  REQUIRE( "Valid class name", aClassName != NULL );
+  REQUIRE( "Valid method", aMethod != NULL );
 
   CParsedClass *aClass;
   QString toAdd;
@@ -228,7 +238,7 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
   }
 
   // Switch to the .h file.
-  CVGotoDeclaration( aClassName, aClassName, THCLASS );  
+  CVGotoDeclaration( aClassName, "", THCLASS, THCLASS );  
 
   aMethod->asHeaderCode( headerCode );
 
@@ -304,6 +314,8 @@ void CKDevelop::slotCVAddMethod( const char *aClassName, CParsedMethod *aMethod 
  *-----------------------------------------------------------------*/
 void CKDevelop::slotCVAddAttribute( const char *aClassName )
 {
+  REQUIRE( "Valid class name", aClassName != NULL );
+
   CParsedClass *aClass;
   CParsedAttribute *attr = NULL;
   QString toAdd;
@@ -337,7 +349,7 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   }
 
   // Switch to the .h file.
-  CVGotoDeclaration( aClass->name, aClass->name, THCLASS );  
+  CVGotoDeclaration( aClass->name, "", THCLASS, THCLASS );  
 
   // Get the code for the new attribute
   aAttr->asHeaderCode( toAdd );
@@ -384,7 +396,8 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodName )
+void CKDevelop::slotCVDeleteMethod( const char *aClassName,
+                                    const char *aMethodName )
 {
   CParsedClass *aClass;
   CParsedMethod *aMethod;
@@ -510,45 +523,42 @@ void CKDevelop::CVMethodSelected( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDefinition( const char *className, 
-                                  const char *declName, 
-                                  THType type )
+void CKDevelop::CVGotoDefinition( const char *parentPath, 
+                                  const char *itemName, 
+                                  THType parentType,
+                                  THType itemType )
 {
-  CParsedClass *aClass = NULL;
+  CParsedContainer *aContainer = NULL;
   CParsedMethod *aMethod = NULL;
 
-  aClass = CVGetClass( className );
+  aContainer = CVGetContainer( parentPath, parentType );
 
   // Get the type of declaration at the index.
-  switch( type )
+  switch( itemType )
   {
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
-      if( aClass )
-        aMethod = aClass->getSlotByNameAndArg( declName );      
+      if( aContainer )
+        aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );      
       break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
-      if( aClass )
-      {
-        aMethod = aClass->getMethodByNameAndArg( declName );
-
-        // If at first we don't succeed...
-        if( aMethod == NULL )
-          aMethod = aClass->getSlotByNameAndArg( declName ); 
-      }
+      if( aContainer )
+        aMethod = aContainer->getMethodByNameAndArg( itemName );
       break;
     case THGLOBAL_FUNCTION:
-      aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
+      aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
       break;
     default:
-      debug( "Unknown type %d in CVGotoDefinition.", type );
+      debug( "Unknown type %d in CVGotoDefinition.", itemType );
   }
 
   if( aMethod )
     switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+  else
+    debug( "Couldn't find method %s.%s", parentPath, itemName );
 }
 
 /*-------------------------------------- CKDevelop::CVGotoDeclaration()
@@ -561,70 +571,56 @@ void CKDevelop::CVGotoDefinition( const char *className,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDeclaration( const char *className, 
-                                   const char *declName, 
-                                   THType type )
+void CKDevelop::CVGotoDeclaration( const char *parentPath, 
+                                   const char *itemName,
+                                   THType parentType,
+                                   THType itemType )
 {
-  CParsedClass *aClass = NULL;
+  CParsedContainer *aContainer = NULL;
   CParsedAttribute *aAttr = NULL;
-  CParsedStruct *aStruct = NULL;
   QString toFile;
   int toLine = -1;
 
-  aClass = CVGetClass( className );
+  aContainer = CVGetContainer( parentPath, parentType );
 
-  switch( type )
+  switch( itemType )
   {
     case THCLASS:
-      toFile = aClass->declaredInFile;
-      toLine = aClass->declaredOnLine;
-      break;
     case THSTRUCT:
-      if( aClass != NULL )
-        aClass->getStructByName( declName );
-      else
-        aStruct = class_tree->store->globalContainer.getStructByName( declName );
-
-      toFile = aStruct->declaredInFile;
-      toLine = aStruct->declaredOnLine;
+    case THSCOPE:
+      if( aContainer != NULL )
+      {
+        toFile = aContainer->declaredInFile;
+        toLine = aContainer->declaredOnLine;
+      }
       break;
     case THPUBLIC_ATTR:
     case THPROTECTED_ATTR:
     case THPRIVATE_ATTR:
-      if( aClass != NULL )
-        aAttr = aClass->getAttributeByName( declName );
-      else
-      {
-        aStruct = class_tree->store->globalContainer.getStructByName( className );
-        if( aStruct != NULL )
-          aAttr = aStruct->getAttributeByName( declName );
-      }
+      if( aContainer != NULL )
+        aAttr = aContainer->getAttributeByName( itemName );
       break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
-      aAttr = aClass->getMethodByNameAndArg( declName );
-
-      // If at first we don't succeed...
-      if( aAttr == NULL )
-        aAttr = aClass->getSlotByNameAndArg( declName );      
+      aAttr = aContainer->getMethodByNameAndArg( itemName );
       break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
-      aAttr = aClass->getSlotByNameAndArg( declName );
+      aAttr = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
       break;
     case THSIGNAL:
-      aAttr = aClass->getSignalByNameAndArg( declName );
+      aAttr = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       break;
     case THGLOBAL_FUNCTION:
-      aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
+      aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
       break;
     case THGLOBAL_VARIABLE:
-      aAttr = class_tree->store->globalContainer.getAttributeByName( declName );
+      aAttr = class_tree->store->globalContainer.getAttributeByName( itemName );
       break;
     default:
-      debug( "Unknown type %d in CVGotoDeclaration.", type );
+      debug( "Unknown type %d in CVGotoDeclaration.", itemType );
       break;
   }
   
@@ -751,20 +747,36 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
  * Returns:
  *   Pointer to the class or NULL if not found.
  *-----------------------------------------------------------------*/
-CParsedClass *CKDevelop::CVGetClass( const char *className )
+CParsedContainer *CKDevelop::CVGetContainer( const char *containerPath,
+                                             THType containerType )
 {
-  QString parentClassName;
-  CParsedClass *aClass = NULL;
+  REQUIRE1( "Valid container path", containerPath != NULL, NULL );
 
-  if( className != NULL && strlen( className ) > 0 )
+  CParsedContainer *aContainer;
+
+  if( strlen( containerPath ) > 0 )
   {
-    // Try to fetch the class.
-    aClass = class_tree->store->getClassByName( className );
+    switch( containerType )
+    {
+      case THCLASS:
+        // Try to fetch the class.
+        aContainer = class_tree->store->getClassByName( containerPath );
 
-    // If we found the class and it isn't a subclass we update the combo.
-    if( aClass != NULL && !aClass->isSubClass )
-      CVClassSelected( className );
+        // If we found the class and it isn't a subclass we update the combo.
+        if( aContainer != NULL && aContainer->declaredInScope.isEmpty() )
+          CVClassSelected( containerPath );
+        break;
+      case THSTRUCT:
+        aContainer = class_tree->store->globalContainer.getStructByName( containerPath );
+        break;
+      case THSCOPE:
+        aContainer = class_tree->store->globalContainer.getScopeByName( containerPath );
+        break;
+      default:
+        aContainer = NULL;
+        break;
+    }
   }
 
-  return aClass;
+  return aContainer;
 }
