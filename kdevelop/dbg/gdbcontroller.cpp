@@ -280,7 +280,7 @@ void GDBController::reConfig()
 // Fairly obvious that we'll add whatever command you give me to a queue
 // If you tell me to, I'll put it at the head of the queue so it'll run ASAP
 // Not quite so obvious though is that if we are going to run again. then any
-// information requests become redundent and must be rwmoved.
+// information requests become redundent and must be removed.
 // We also try and run whatever command happens to be at the head of
 // the queue.
 void GDBController::queueCmd(DbgCommand* cmd, bool executeNext)
