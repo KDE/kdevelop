@@ -364,8 +364,8 @@ CCConfigWidget::slotRemovePPPath( )
 {
     QString text = lvPCSPaths->selectedItem( )->text( 1 );
 
-    int answer = KMessageBox::warningYesNo( 0, i18n( "Delete entry ?\n" ) + text );
-    if( answer == KMessageBox::Yes )
+//    int answer = KMessageBox::warningYesNo( 0, i18n( "Delete entry ?\n" ) + text );
+//    if( answer == KMessageBox::Yes )
         delete lvPCSPaths->selectedItem( );
 	
     m_bChangedPPPath = true;
