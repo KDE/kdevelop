@@ -832,10 +832,14 @@ void CKDevelop::readOptions()
     view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
   if(config->readBoolEntry("show_browser_toolbar",true))
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
-    if (config->readBoolEntry("show_statusbar",true))
+  if (config->readBoolEntry("show_statusbar",true))
     view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
-    if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isVisible()))
-    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
+  if (config->readBoolEntry("show_mdi_view_taskbar",m_pTaskBar->isSwitchedOn())) {
+    showViewTaskBar();
+  }
+  else {
+    hideViewTaskBar();
+  }
 
   // read setting whether to use the ctags search database
   bCTags = config->readBoolEntry("use_ctags", false);

@@ -777,14 +777,24 @@ void CKDevelop::slotViewTStatusbar(){
 }
 
 void CKDevelop::slotViewMdiViewTaskbar(){
-  if(view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR)){
-    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,false);
-    m_pTaskBar->hide();
+  if (view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR)){
+    hideViewTaskBar();
   }
   else{
-    view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR,true);
-    m_pTaskBar->show();
+    showViewTaskBar();
   }
+}
+
+void CKDevelop::showViewTaskBar()
+{
+  QextMdiMainFrm::showViewTaskBar();
+  view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, true);
+}
+
+void CKDevelop::hideViewTaskBar()
+{
+  QextMdiMainFrm::hideViewTaskBar();
+  view_menu->setItemChecked(ID_VIEW_MDIVIEWTASKBAR, false);
 }
 
 void CKDevelop::slotViewRefresh(){
