@@ -34,7 +34,7 @@ K_EXPORT_COMPONENT_FACTORY( libdoccustomplugin, DocPDFPluginFactory(&data) )
 DocPDFPlugin::DocPDFPlugin(QObject* parent, const char* name, const QStringList args)
     :DocumentationPlugin(DocPDFPluginFactory::instance()->config(), parent, name)
 {
-    setCapabilities(PDFDocumentationTitles | ProjectUserManual);
+    setCapabilities(CustomDocumentationTitles | ProjectUserManual);
     autoSetup();
 }
 
