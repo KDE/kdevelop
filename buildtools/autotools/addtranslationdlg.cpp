@@ -24,6 +24,7 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kstdguiitem.h>
 
 #include "misc.h"
 #include "autoprojectpart.h"
@@ -49,8 +50,8 @@ AddTranslationDialog::AddTranslationDialog(AutoProjectPart *part, QWidget *paren
 
     KButtonBox *buttonbox = new KButtonBox(this);
     buttonbox->addStretch();
-    QPushButton *ok_button = buttonbox->addButton(i18n("&OK"));
-    QPushButton *cancel_button = buttonbox->addButton(i18n("Cancel"));
+    QPushButton *ok_button = buttonbox->addButton(KStdGuiItem::ok().text());
+    QPushButton *cancel_button = buttonbox->addButton(KStdGuiItem::cancel().text());
     ok_button->setDefault(true);
     connect( ok_button, SIGNAL(clicked()), this, SLOT(accept()) );
     connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
@@ -99,7 +100,7 @@ void AddTranslationDialog::accept()
     f.close();
 
     m_part->startMakeCommand(dir, QString::fromLatin1("force-reedit"));
-                             
+
     QDialog::accept();
 }
 
