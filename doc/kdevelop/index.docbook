@@ -216,7 +216,7 @@ are available on most platforms as distribution packages and thereby can be inst
 
 <itemizedlist>
 <title>Optional:</title>
-<listitem><para>dot, from www.graphviz.org</para></listitem>
+<listitem><para>dot, from <ulink url="http://www.graphviz.org">www.graphviz.org</ulink></para></listitem>
 </itemizedlist>
 
 </sect1>
@@ -240,9 +240,9 @@ of the &kdevelop; distribution:
 <title>User Interface Modes</title>
 
 <para>
-&kdevelop; 3.0 offers developers four separate interface modes: <link linkend="mdi-desc">Multiple Document</link>, 
+&kdevelop; 3.0 offers developers four separate interface modes: <link linkend="mdi-desc">Multiple Document</link>,
 <link linkend="tabbed-desc">Tabbed Document</link>, <link linkend="toplevel-desc">Toplevel Window</link>
-, and <link linkend="ideal-desc">IDEAl</link>. 
+, and <link linkend="ideal-desc">IDEAl</link>.
 </para>
 
 <sect2 id="mdi-desc">
@@ -310,7 +310,7 @@ of the &kdevelop; distribution:
 
 <sect1 id="parts">
 <title>Plugin Parts</title>
-<para>KDevelop 3.0 offers extensible modules, or parts, to be loaded at runtime and on demand.  This 
+<para>KDevelop 3.0 offers extensible modules, or parts, to be loaded at runtime and on demand.  This
 allows developers to only turn on features that they need or want for their development.
 </para>
 
@@ -320,72 +320,96 @@ For example, the uimode part allows a developer to select which user interface t
 </para>
 
 <para>
-Other parts are project specfic, and are only utilized when a project of that type is loaded.  The 
-Automake Manager, for example, only needs to be active when an Automake based project is currently 
+Other parts are project specfic, and are only utilized when a project of that type is loaded.  The
+Automake Manager, for example, only needs to be active when an Automake based project is currently
 loaded.  Otherwise, this part will not be active.
 </para>
 
 <para>
-Active parts can have many effects on the &kdevelop;.  Depending on their function, they may add extra menus,
+Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus,
 extra menu items, extra tool buttons, etc.
 </para>
 
+<para>
+Globally, a project will rely on some form of project management system.  &kdevelop; offers four
+<link linkend="makesystems">project management systems</link>:
+</para>
+
 <table>
-<title>Available Parts in KDevelop 3.0</title>
+<title>Project Management Parts in &kdevelop;</title>
+<tgroup cols="2"><tbody>
+<row><entry>antproject</entry><entry>ANT Project Manager</entry></row>
+<row><entry>autoproject</entry><entry>Automake Project Manager</entry></row>
+<row><entry>customproject</entry><entry>Custom Project Manager</entry></row>
+<row><entry>trollproject</entry><entry>QMake based Project Manager</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Global Parts in &kdevelop;</title>
+<tgroup cols="2"><tbody>
+<row><entry>Part Name</entry><entry>Description</entry></row>
+<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
+<row><entry>history</entry><entry></entry></row>
+<row><entry>konsole</entry><entry>Embedded Konsole</entry></row>
+<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
+<row><entry>doctreeview</entry><entry>Documentation Viewer</entry></row>
+<row><entry>openwith</entry><entry></entry></row>
+<row><entry>fileselector</entry><entry>A file selection widget</entry></row>
+<row><entry>uimode</entry><entry>Customize the UI mode</entry></row>
+<row><entry>texttools</entry><entry>Additional text tools</entry></row>
+<row><entry>tipofday</entry><entry>A tip of the day</entry></row>
+<row><entry>grepview</entry><entry>A graphical grep utility</entry></row>
+<row><entry>cvs</entry><entry>CVS Support</entry></row>
+<row><entry>tools</entry><entry></entry></row>
+<row><entry>regexptest</entry><entry>A regular expression tester</entry></row>
+<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
+<row><entry>filter</entry><entry></entry></row>
+<row><entry>valgrind</entry><entry>A graphical valgrind frontend</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Language Support Parts in &kdevelop;</title>
 <tgroup cols="2">
 <tbody>
-<row><entry>Part Name</entry><entry>Description</entry></row>
-<row><entry>abbrev</entry><entry>Abbreviation Expansion</entry></row>
-<row><entry>antproject</entry><entry></entry></row>
-<row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
+<row><entry>cppsupport</entry><entry>Support for C/C++</entry></row>
+<row><entry>fortransupport</entry><entry>Support for Fortran</entry></row>
+<row><entry>javasupport</entry><entry>Support for Java</entry></row>
+<row><entry>perlsupport</entry><entry>Support for Perl</entry></row>
+<row><entry>phpsupport</entry><entry>Support for PHP</entry></row>
+<row><entry>pythonsupport</entry><entry>Support for Python</entry></row>
+</tbody></tgroup>
+</table>
+
+<table>
+<title>Project Specific Parts in &kdevelop;</title>
+<tgroup cols="2"><tbody>
 <row><entry>astyle</entry><entry></entry></row>
-<row><entry>autoproject</entry><entry>Automake Project Manager</entry></row>
 <row><entry>buglist</entry><entry></entry></row>
 <row><entry>classview</entry><entry>Classview Manager</entry></row>
-<row><entry>cppsupport</entry><entry></entry></row>
 <row><entry>ctags</entry><entry></entry></row>
-<row><entry>customproject</entry><entry>Custom Project Manager</entry></row>
-<row><entry>cvs</entry><entry>CVS Support</entry></row>
 <row><entry>debugger</entry><entry>GNU Debugger Manager</entry></row>
 <row><entry>diff</entry><entry></entry></row>
 <row><entry>distpart</entry><entry></entry></row>
-<row><entry>doctreeview</entry><entry></entry></row><row><entry>antproject</entry><entry></entry></row>
 <row><entry>doxygen</entry><entry></entry></row>
-<row><entry>editor-chooser</entry><entry>Chooses an internal text editor</entry></row>
-<row><entry>fileselector</entry><entry></entry></row>
 <row><entry>fileview</entry><entry></entry></row>
-<row><entry>filter</entry><entry></entry></row>
-<row><entry>fortransupport</entry><entry></entry></row>
-<row><entry>grepview</entry><entry></entry></row>
-<row><entry>history</entry><entry></entry></row>
 <row><entry>javadebugger</entry><entry></entry></row>
-<row><entry>javasupport</entry><entry></entry></row>
-<row><entry>konsole</entry><entry></entry></row>
 <row><entry>manager</entry><entry></entry></row>
 <row><entry>nedit</entry><entry></entry></row>
-<row><entry>openwith</entry><entry></entry></row>
 <row><entry>outputviews</entry><entry></entry></row>
 <row><entry>perforce</entry><entry></entry></row>
-<row><entry>perlsupport</entry><entry></entry></row>
-<row><entry>phpsupport</entry><entry></entry></row>
-<row><entry>pythonsupport</entry><entry></entry></row>
 <row><entry>qeditor</entry><entry></entry></row>
-<row><entry>regexptest</entry><entry></entry></row>
 <row><entry>scripting</entry><entry></entry></row>
 <row><entry>scriptproject</entry><entry></entry></row>
 <row><entry>sourcenav</entry><entry></entry></row>
 <row><entry>svn</entry><entry></entry></row>
-<row><entry>texttools</entry><entry></entry></row>
-<row><entry>tipofday</entry><entry></entry></row>
-<row><entry>tools</entry><entry></entry></row>
-<row><entry>trollproject</entry><entry></entry></row>
-<row><entry>uimode</entry><entry></entry></row>
 <row><entry>visualboyadvance</entry><entry></entry></row>
 <row><entry>windowmenu</entry><entry></entry></row>
-
-
 </tbody></tgroup>
 </table>
+
+
 </sect1>
 
 <sect1 id="makesystems">
