@@ -1011,6 +1011,29 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	    if( meth->name() == name )
 		return meth->type();
 	}
+    } else {
+	QStringList path = QStringList::split( ".", scope->path() );
+	QValueList<Tag> tags = m_repository->getTagsInScope( name, path );
+        kdDebug(9020) << "------> #" << tags.size() << " tags in scope " << scope->path() << endl;
+	if( tags.size() ){
+	    const Tag& tag = tags[ 0 ]; // hmmm
+	    if( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Namespace )
+		return tag.name();
+	    return tag.attribute( "type" ).toString();
+	}
+		
+        QValueList<Tag> parents = m_repository->getBaseClassList( path.join("::") );
+        kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
+        QValueList<Tag>::Iterator it = parents.begin();
+        while( it != parents.end() ){
+            const Tag& tag = *it;
+            ++it;
+
+	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
+	    type = typeOf( tag.attribute( "baseClass" ).toString(), container );
+	    if( type )
+		return type;
+        }
     }
 
     if( klass )
@@ -1111,7 +1134,6 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 	}
     }
     
-
     return QString::null;
 }
 
@@ -1132,6 +1154,9 @@ void CppCodeCompletion::setupCodeInformationRepository( )
 
 QString CppCodeCompletion::typeName( const QString& str )
 {
+    if( str.isEmpty() )
+	return QString::null;
+    
     Driver d;
     Lexer lex( &d );
     lex.setSource( str );

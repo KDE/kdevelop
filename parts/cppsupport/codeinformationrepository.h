@@ -33,8 +33,12 @@ public:
     QStringList getSignatureList( const QStringList& scope, const QString& functionName );
 
     QValueList<Tag> query( const QValueList<Catalog::QueryArgument>& args );
+    QValueList<Tag> getTagsInScope( const QStringList& scope );
+    QValueList<Tag> getTagsInScope( const QString& name, const QStringList& scope );
+    
     QValueList<Tag> getTagsInFile( const QString& fileName );
     QValueList<Tag> getBaseClassList( const QString& className );
+    QValueList<Tag> getClassOrNamespaceList( const QStringList& scope );
 
 private:
     QMap<QString, Catalog*> m_catalogs;

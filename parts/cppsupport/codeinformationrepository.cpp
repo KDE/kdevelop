@@ -72,11 +72,10 @@ QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileNa
     return QValueList<Tag>();
 }
 
-QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope )
+QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & scope )
 {
-    kdDebug(9020) << "CodeInformationRepository::getEntriesInScope()" << endl;
+    kdDebug(9020) << "CodeInformationRepository::getTagsInScope()" << endl;
     
-    QValueList<KTextEditor::CompletionEntry> entryList;
     QValueList<Tag> tags;
     QValueList<Catalog::QueryArgument> args;
     
@@ -99,7 +98,17 @@ QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesIn
     args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )
     	<< Catalog::QueryArgument( "scope", scope );
     tags += query( args );
+    
+    return tags;
+}
 
+QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope )
+{
+    kdDebug(9020) << "CodeInformationRepository::getEntriesInScope()" << endl;
+    
+    QValueList<KTextEditor::CompletionEntry> entryList;
+    QValueList<Tag> tags = getTagsInScope( scope );
+    
     QValueList<Tag>::Iterator it = tags.begin();
     while( it != tags.end() ){
         const Tag& tag = *it;
@@ -188,18 +197,37 @@ QStringList CodeInformationRepository::getSignatureList( const QStringList & sco
     return list;
 }
 
+QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStringList & scope )
+{
+    kdDebug(9020) << "CodeInformationRepository::getClassOrNamespaceList()" << endl;
 
+    QValueList<Tag> tags;    
+    QValueList<Catalog::QueryArgument> args;
+    
+    args.clear();
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Namespace )
+	<< Catalog::QueryArgument( "scope", scope );
+    tags += query( args );
+    
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Class )
+    	<< Catalog::QueryArgument( "scope", scope );
+    
+    tags += query( args );
+        
+    return tags;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name, const QStringList & scope )
+{
+    QValueList<Tag> tags;    
+    QValueList<Catalog::QueryArgument> args;
+    
+    args.clear();
+    args << Catalog::QueryArgument( "scope", scope )
+	<< Catalog::QueryArgument( "name", name );
+    
+    tags += query( args );
+    
+    return tags;
+}
 
