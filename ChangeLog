@@ -1,6 +1,7 @@
 2002-02-29  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* migrated all parts to KTextEditor
 	* removed all traces of KEditor
+	* reenabled Tip-of-the-day
 
 2002-02-26  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* refactored the core source completely
