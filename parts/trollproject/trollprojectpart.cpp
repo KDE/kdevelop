@@ -163,7 +163,7 @@ void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
     vbox = dlg->addVBoxPage(i18n("Run Options"));
-    RunOptionsWidget *optdlg = new RunOptionsWidget(*projectDom(), "/kdevtrollproject",projectDirectory(), vbox);
+    RunOptionsWidget *optdlg = new RunOptionsWidget(*projectDom(), "/kdevtrollproject", buildDirectory(), vbox);
     
     vbox = dlg->addVBoxPage(i18n("Make Options"));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);

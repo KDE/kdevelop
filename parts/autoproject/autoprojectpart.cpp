@@ -173,7 +173,7 @@ void AutoProjectPart::projectConfigWidget(KDialogBase *dlg)
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
         vbox = dlg->addVBoxPage(i18n("Run Options"));
-        RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject",projectDirectory(), vbox);
+        RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevautoproject", buildDirectory(), vbox);
         connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
     }
     vbox = dlg->addVBoxPage(i18n("Make Options"));

@@ -13,6 +13,7 @@
 
 #include <klocale.h>
 #include <kfiledialog.h>
+#include <urlutil.h>
 
 #include <qlineedit.h>
 #include <qlistview.h>
@@ -24,14 +25,20 @@
 
 
 RunOptionsWidget::RunOptionsWidget(QDomDocument &dom, const QString &configGroup,
-                                    const QString &projectDirectory,QWidget *parent, const char *name)
+                                    const QString &buildDirectory, QWidget *parent, const char *name)
     : RunOptionsWidgetBase(parent, name),
       m_dom(dom), m_configGroup(configGroup)
 {
     env_var_group->setColumnLayout( 1, Qt::Vertical );
     m_environmentVariablesWidget = new EnvironmentVariablesWidget( dom, configGroup + "/run/envvars", env_var_group );
 
-    m_projectDirectory = projectDirectory;
+    // Store the build directory in a KURL
+    if (buildDirectory.right(1) == "/")
+      m_buildDirectory = buildDirectory;
+    else
+      m_buildDirectory = buildDirectory + "/";
+    m_buildDirectory.cleanPath();
+
     mainprogram_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, configGroup + "/run/programargs"));
     startinterminal_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/run/terminal"));
@@ -54,17 +61,54 @@ void RunOptionsWidget::accept()
 
 void RunOptionsWidget::browseMainProgram()
 {
-  QString path = KFileDialog::getOpenFileName(m_projectDirectory,
-                               i18n("*|All Files"),
-                               this,
-                               i18n("Select Main Program Executable"));
+    KFileDialog *dlg = new KFileDialog(m_buildDirectory.directory(false, false), QString::null, this, QString::null, true);
+    QStringList filters;
+    filters << "application/x-executable"
+    << "application/x-shellscript"
+    << "application/x-perl"
+    << "application/x-python";
+    dlg->setMimeFilter(filters);
+    dlg->setCaption(i18n("Select main program executable."));
+    QString path = mainprogram_edit->text().stripWhiteSpace();
+    if (!path.isEmpty()) {
+        // strip initial "./" if necessary
+        if ((path.length() > 2) && (path.left(2) == "./"))
+            path = path.mid(2);
 
-  if (path.find(m_projectDirectory)==0)
-  {
-    path.remove(0,m_projectDirectory.length()+1);
-    path = "./" + path;
-  }
-  mainprogram_edit->setText(path);
+        // the directory where the executable is
+        QString dir;
+        int pos = path.findRev("/");
+        if (path.left(1) != "/")
+            dir = m_buildDirectory.directory(false, false) + path.left(pos);
+        else
+            dir = path.left(pos);
+
+        // Store it all in a KURL
+        KURL target = dir;
+        target.addPath(path.mid(pos + 1));
+        target.cleanPath();
+
+        // pass it to the dialog
+        dlg->setURL(target.directory(false, false));
+        dlg->setSelection(target.filename());
+    }
+
+    if (dlg->exec()) {
+    // if after the dialog execution the OK button was selected:
+        path = dlg->selectedFile().stripWhiteSpace();
+        if (!path.isEmpty()) {
+            QString relative = URLUtil::relativePath(m_buildDirectory.directory(false, false), path, false);
+
+            // if it's relative, uses it (if it's absolute don't touch it)
+            if (relative.isEmpty() == false) {
+                // add the necessary "./" to make sure it
+                // executes the correct (local) file
+                path = "./" + relative;
+            }
+            mainprogram_edit->setText(path);
+        }
+    }
+    delete dlg;
 }
 
 #include "runoptionswidget.moc"

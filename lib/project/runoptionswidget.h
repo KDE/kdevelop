@@ -15,6 +15,7 @@
 #include "runoptionswidgetbase.h"
 
 #include <qdom.h>
+#include <kurl.h>
 
 class EnvironmentVariablesWidget;
 
@@ -24,8 +25,12 @@ class RunOptionsWidget : public RunOptionsWidgetBase
     Q_OBJECT
     
 public:
-    RunOptionsWidget( QDomDocument &dom, const QString &configGroup,
-                      const QString &projectDirectory, QWidget *parent=0, const char *name=0 );
+    RunOptionsWidget( QDomDocument &dom,             //!< document DOM
+                      const QString &configGroup,    //!< configuration group
+                      const QString &buildDirectory, //!< project build directory
+                      QWidget *parent=0,             //!< parent widget
+                      const char *name=0             //!< widget's name
+                       );
     ~RunOptionsWidget();
 
 public slots:
@@ -33,10 +38,10 @@ public slots:
 
 private:
     virtual void browseMainProgram();
-    
+
     QDomDocument &m_dom;
     QString m_configGroup;
-    QString m_projectDirectory;
+    KURL m_buildDirectory;
     EnvironmentVariablesWidget* m_environmentVariablesWidget;
 };
 
