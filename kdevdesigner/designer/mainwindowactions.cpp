@@ -875,7 +875,7 @@ void MainWindow::setupPreviewActions()
 	else if ( *it == "Windows" )
 	    info = i18n( "The preview will use the Windows look and feel." );
 	else if ( *it == "Platinum" )
-	    info = i18n( "The preview will use the Platinum look and feel which is similar to the Macinosh GUI style." );
+	    info = i18n( "The preview will use the Platinum look and feel which is similar to the Macintosh GUI style." );
 	else if ( *it == "CDE" )
 	    info = i18n( "The preview will use the CDE look and feel which is similar to some versions of the Common Desktop Environment." );
 	else if ( *it == "SGI" )
