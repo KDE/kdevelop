@@ -44,6 +44,7 @@ AppOutputViewPart::AppOutputViewPart(QObject *parent, const char *name, const QS
 
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
              this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
+    connect(m_widget, SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited()));
     connect(m_widget, SIGNAL(processExited(KProcess*)), SIGNAL(processExited()));
 }
 
@@ -66,6 +67,13 @@ void AppOutputViewPart::slotStopButtonClicked( KDevPlugin* which )
 void AppOutputViewPart::stopApplication()
 {
     m_widget->killJob();
+
+    core()->running( this, false );
+}
+
+void AppOutputViewPart::slotProcessExited( KProcess * )
+{
+    core()->running( this, false );
 }
 
 /**
@@ -97,6 +105,9 @@ void AppOutputViewPart::startAppCommand(const QString &directory, const QString 
     else
       // use the supplied directory
       m_widget->startJob(directory, cmd);
+
+    core()->running( this, true );
+
     mainWindow()->raiseView(m_widget);
 }
 

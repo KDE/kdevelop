@@ -40,6 +40,7 @@ signals:
 
 private slots:
     void slotStopButtonClicked(KDevPlugin*);
+    void slotProcessExited();
 
 private:
     QGuardedPtr<AppOutputWidget> m_widget;
