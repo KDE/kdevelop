@@ -45,11 +45,6 @@ public: // Constructor & Destructor
   /** Destructor. */
   ~CClassView();
 
-  virtual void projectClosed();
-  virtual void addedFileToProject(const QString &name);
-  virtual void removedFileFromProject(const QString &name);
-  virtual void savedFile(const QString &name);
-    
 private: // Private classes
 
   /** Class that handles dynamic tooltips in the CV. */
@@ -106,6 +101,14 @@ signals:
   void setStatusbarProgress(int);
   void resetStatusbarProgress();
 
+protected:
+  // Component notifications:
+  virtual void projectClosed();
+  virtual void projectOpened(CProject *prj);
+  virtual void addedFileToProject(const QString &name);
+  virtual void removedFileFromProject(const QString &name);
+  virtual void savedFile(const QString &name);
+    
 protected slots:
   void slotProjectOptions();
   void slotGraphicalView();

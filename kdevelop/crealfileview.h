@@ -44,8 +44,6 @@ public:
   /** destructor */
   ~CRealFileView();
 
-  virtual void projectClosed();
-    
   /** starts the scan */
   void refresh(CProject* project);
 
@@ -82,6 +80,11 @@ signals:
   void commitDirToVCS(QString dir);
   void updateDirFromVCS(QString dir);
 
+protected:
+  // Component notifications:
+  virtual void projectClosed();
+  virtual void projectOpened(CProject *prj);
+    
 protected slots:
   /** emits signal "fileSelected" when it gets the selectionChanged-signal from itself */
   void slotSelectionChanged(QListViewItem* selection);

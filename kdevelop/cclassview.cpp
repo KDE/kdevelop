@@ -240,6 +240,12 @@ void CClassView::projectClosed()
 }
 
 
+void CClassView::projectOpened(CProject *prj)
+{
+    refresh(prj);
+}
+
+
 void CClassView::addedFileToProject(const QString &name)
 {
     // This could be much finer-grained...

@@ -47,8 +47,6 @@ public:
   /** destructor */
   ~CLogFileView();
 
-  virtual void projectClosed();
-    
   /** starts the refresh */
   void refresh(CProject* prj);
   /** store the internal state to the projectfile*/
@@ -73,6 +71,10 @@ protected: // Implementations of virtual methods.
   /** Get the current popupmenu. */
   virtual KPopupMenu *getCurrentPopup();
 
+  // Component notifications:
+  virtual void projectClosed();
+  virtual void projectOpened(CProject *prj);
+    
 protected:
   void split(QString str,QStrList& filters);
  protected slots:

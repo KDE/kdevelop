@@ -93,19 +93,19 @@ messages:
 # if you have more of them, create a subdirectory with an extra Makefile 
 install-data-local: 
 	$(mkinstalldirs) $(APPSDIR)/Development
-	$(INSTALL_DATA) kdevelop.desktop $(APPSDIR)/Development
-	$(INSTALL_DATA) kdevelop-setup.desktop $(APPSDIR)/Development
-	$(INSTALL_DATA) .directory $(APPSDIR)/Development
+	$(INSTALL_DATA) $(srcdir)/kdevelop.desktop $(APPSDIR)/Development
+	$(INSTALL_DATA) $(srcdir/kdevelop-setup.desktop $(APPSDIR)/Development
+	$(INSTALL_DATA) $(srdir/.directory $(APPSDIR)/Development
 	$(mkinstalldirs) $(kde_icondir)/locolor
-	$(INSTALL_DATA) kdevelop.png $(kde_icondir)/locolor
-	$(INSTALL_DATA) kdevelop-project.png $(kde_icondir)/locolor	
+	$(INSTALL_DATA) $(srcdir)/kdevelop.png $(kde_icondir)/locolor
+	$(INSTALL_DATA) $(srcdir)/kdevelop-project.png $(kde_icondir)/locolor	
 #	$(mkinstalldirs) $(kde_minidir)
-	$(INSTALL_DATA) mini-kdevelop.png $(kde_icondir)/mini/kdevelop.png
-	$(INSTALL_DATA) development-package.png $(kde_icondir)/mini/development-package.png
+	$(INSTALL_DATA) $(srcdir)/mini-kdevelop.png $(kde_icondir)/mini/kdevelop.png
+	$(INSTALL_DATA) $(srcdir/development-package.png $(kde_icondir)/mini/development-package.png
 	$(mkinstalldirs) $(kde_confdir)
-	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
+	$(INSTALL_DATA) $(srcdir)/kdeveloprc $(kde_confdir)/kdeveloprc
 	$(mkinstalldirs) $(kde_mimedir)/application	
-	$(INSTALL_DATA) x-kdevelop-project.desktop $(kde_mimedir)/application/
+	$(INSTALL_DATA) $(srcdir9/x-kdevelop-project.desktop $(kde_mimedir)/application/
 
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:

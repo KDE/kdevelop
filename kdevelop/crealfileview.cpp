@@ -79,6 +79,12 @@ void CRealFileView::projectClosed()
 }
 
 
+void CRealFileView::projectOpened(CProject *prj)
+{
+    refresh(prj);
+}
+
+
 /*------------------------------------------ CRealFileView::refresh()
  * refresh()
  *   Add all files in the project directory.

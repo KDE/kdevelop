@@ -73,6 +73,12 @@ void CLogFileView::projectClosed()
 }
 
 
+void CLogFileView::projectOpened(CProject *prj)
+{
+    refresh(prj);
+}
+
+
 /*-------------------------------------------- CLogFileView::refresh()
  * refresh()
  *   Add all files in the project.
