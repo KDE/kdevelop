@@ -33,6 +33,8 @@ private slots:
     void slotAdd();
     void slotRemove();
     void slotLog();
+    void slotDiff();
+    void slotDiffFinished( const QString& diff, const QString& err );
 
 private:
     QString popupfile;

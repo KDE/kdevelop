@@ -8,6 +8,7 @@ libkdevcvs_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevcvs_la_SOURCES = cvspart.cpp \
 			commitdlg.cpp \
+                        cvscommand.cpp \
 			logform.ui
 
 METASOURCES = AUTO
