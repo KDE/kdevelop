@@ -40,7 +40,7 @@ void SubclassesDlg::accept()
         m_config.remove(*pair);
     }
 
-    for (int i = 0; i < subclasses_box->count(); ++i)
+    for (int i = 0; i < (int)subclasses_box->count(); ++i)
     {
         m_config << DomUtil::Pair(subclasses_box->text(i).remove(0,m_projectDir.length()), m_form);
     }
