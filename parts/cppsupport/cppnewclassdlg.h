@@ -79,6 +79,8 @@ private:
 
       CppNewClassDialog& dlg;
     };
+    // workaround to make gcc 2.95.x happy
+    friend class CppNewClassDialog::ClassGenerator;
 };
 
 #endif
