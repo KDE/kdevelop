@@ -570,17 +570,16 @@ void MainWindow::removeView(QWidget *view)
     m_captionDict.remove(wrapper->caption());
   }
   
+  // Find the KDockWidget which covers the KMdiChildView to remove and delete.
+  // Undock the KDockWidget if there is one.
+  // This will remove the corresponding tab from the output and tree views.
+  QGuardedPtr<KDockWidget> pDock = dockManager->findWidgetParentDock(wrapper ? wrapper : view);
+  
   // Note: this reparenting is necessary. Otherwise, the view gets
   // deleted twice: once when the wrapper is deleted, and the second
   // time when the part is deleted.
   view->hide();
   view->reparent(this, QPoint(0,0), false);
-
-  // Find the KDockWidget which covers the KMdiChildView to remove and delete.
-  // Undock the KDockWidget if there is one.
-  // This will remove the corresponding tab from the output and tree views.
-
-  QGuardedPtr<KDockWidget> pDock = dockManager->findWidgetParentDock(wrapper ? wrapper : view);
 
   // QextMDI removes and deletes the wrapper widget
   // removed by robe.. seems that this fix the crash when exit from kdevelop in MDI mode
