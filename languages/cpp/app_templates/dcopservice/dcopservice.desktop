@@ -1,22 +1,23 @@
 [Desktop Entry]
 Type=Service
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC}
 X-DCOP-ServiceType=Unique
 X-KDE-StartupNotify=false
 Comment=Template for dcop services
 Comment[ca]=Plantilla per als serveis dcop
+Comment[cy]=Patrymlun ar gyfer gwasanaethau dcop
 Comment[da]=Skabelon for dcop-tjenester
 Comment[de]=Vorlage für DCOP-Dienste
 Comment[el]=Πρότυπο για υπηρεσίες dcop
 Comment[es]=Plantilla para servicios DCOP
 Comment[et]=DCOP teenuste mall
 Comment[fr]=Un modèle pour les services DCOP.
-Comment[hi]=डीसीओपी सेवाओं हेतु टेम्प्लेट
+Comment[hi]=डीसीओपी सेवाओं के लिए टेम्प्लेट
 Comment[hu]=Sablon DCOP-szolgáltatásokhoz
 Comment[is]=Snið fyrir dcop þjónustur
 Comment[it]=Modello per servizi dcop
+Comment[ja]=dcop サービスのためのテンプレート
 Comment[nb]=Mal for dcop-tjenester
 Comment[nl]=Sjabloon voor DCOP-services
 Comment[pl]=Szablon dla usług dcop
@@ -28,6 +29,6 @@ Comment[sr]=Шаблон за dcop сервисе
 Comment[sr@Latn]=Šablon za dcop servise
 Comment[sv]=Mall för DCOP-tjänster
 Comment[ta]=டிகாப்சேவைக்கான மாதரி உரு
-Comment[xx]=xxTemplate for dcop servicesxx
+Comment[tg]=Қолиб барои хидмадгори DCOP
 Comment[zh_CN]=dcop 服务模板
 
