@@ -983,7 +983,7 @@ bool CKDevelop::queryExit(){
 bool CKDevelop::queryClose(){
   kdDebug() << "queryClose()..." << endl;
 
-  if (bStartupIsPending) return true;
+  if (bStartupIsPending) return false;
 
   config->setGroup("Files");
   if(project){
