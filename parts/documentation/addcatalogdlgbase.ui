@@ -70,7 +70,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Location:</string>
+                        <string>Locatio&amp;n:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>locationURL</cstring>
@@ -187,6 +187,12 @@
         <signal>activated(const QString&amp;)</signal>
         <receiver>AddCatalogDlgBase</receiver>
         <slot>docTypeChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>locationURL</sender>
+        <signal>urlSelected(const QString&amp;)</signal>
+        <receiver>AddCatalogDlgBase</receiver>
+        <slot>locationURLChanged(const QString&amp;)</slot>
     </connection>
 </connections>
 <slots>

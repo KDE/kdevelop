@@ -50,7 +50,7 @@ AddCatalogDlg::~AddCatalogDlg()
 void AddCatalogDlg::locationURLChanged(const QString &text)
 {
 	DocumentationPlugin * plugin = this->plugin();
-	if ( plugin ) return;
+	if ( !plugin ) return;
 	
 	titleEdit->setText( plugin->catalogTitle(DocUtils::noEnvURL(text)) );
 }
