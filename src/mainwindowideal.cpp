@@ -780,7 +780,10 @@ void MainWindowIDEAl::restoreOutputViewTab()
       lowerView(m_bottomBar->current());
   } else {
     // previous exist, so raise it
-    m_bottomBar->raiseWidget(previous_output_view);
+    if (m_bottomBar->current())
+      // If the user hasn't changed the view during the compile process then restore the old
+      if (m_bottomBar->current()->caption() == "Messages Output")
+        m_bottomBar->raiseWidget(previous_output_view);
   }
   previous_output_view = NULL;
 }
