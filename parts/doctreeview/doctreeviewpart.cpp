@@ -66,9 +66,9 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
 
     KAction *action;
 
-//    action = new KAction( i18n("Lookup in &Index..."), 0,
-//                          this, SLOT(slotDocumentationIndex()),
-//                          actionCollection(), "help_lookupindex" );
+    action = new KAction( i18n("Lookup in &Index..."), 0,
+                          this, SLOT(slotDocumentationIndex()),
+                          actionCollection(), "help_lookupindex" );
     action->setStatusText( i18n("Allows you to lookup a term in the documentation index") );
     action->setWhatsThis( i18n("Lookup in documentation index\n\n"
                                "Opens the documentation index dialog. There you "
