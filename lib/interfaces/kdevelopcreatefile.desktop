@@ -4,5 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/CreateFile
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Create File interface
+Name[hu]=KDevelop fájllétrehozási felület
+Name[pt_BR]=Interface para Criar Arquivo do KDevelop
+Name[sv]=KDevelop gränssnitt för att skapa filer
+Name[xx]=xxKDevelop Create File interfacexx
 
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
 

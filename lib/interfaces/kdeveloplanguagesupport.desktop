@@ -4,6 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/LanguageSupport
 X-KDE-Derived=KDevelop/Part
 Name=KDevelop Language Support Interface
+Name[hu]=KDevelop nyelvtámogatási felület
+Name[pt_BR]=Interface de Suporte à Linguagem do KDevelop
+Name[sv]=KDevelop gränssnitt för språkstöd
+Name[xx]=xxKDevelop Language Support Interfacexx
 
-[PropertyDef::X-KDevelop-Language]
-Type=QString
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
+

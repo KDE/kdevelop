@@ -4,4 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/VersionControl
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Version Control Interface
+Name[hu]=KDevelop verziókezelési felület
+Name[pt_BR]=Interface de Controle de Versão do KDevelop
+Name[sv]=KDevelop gränssnitt för versionskontroll
+Name[xx]=xxKDevelop Version Control Interfacexx
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
 

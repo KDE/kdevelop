@@ -4,9 +4,18 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/CompilerOptions
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Compiler Options Dialog Interface
+Name[hu]=A KDevelop fordítási opcióinak párbeszédablaka
+Name[pt_BR]=Interface de Diálogo de Opções do Compilador do KDevelop
+Name[sv]=KDevelop dialoggränssnitt för kompilatoralternativ
+Name[xx]=xxKDevelop Compiler Options Dialog Interfacexx
 
 [PropertyDef::X-KDevelop-Language]
 Type=QString
 
 [PropertyDef::X-KDevelop-Default]
 Type=bool
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
+

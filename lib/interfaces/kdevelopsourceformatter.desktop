@@ -4,4 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/SourceFormatter
 X-KDE-Derived=KDevelop/Plugin
 Name=Source formatter interface
+Name[hu]=Forrásformázási felület
+Name[pt_BR]=Interface de formatação de fonte
+Name[sv]=Gränssnitt för källkodsformatering
+Name[xx]=xxSource formatter interfacexx
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
 

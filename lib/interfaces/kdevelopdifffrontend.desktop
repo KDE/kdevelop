@@ -4,4 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/DiffFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Diff Frontend Interface
+Name[hu]=Diff-kezelési felület
+Name[pt_BR]=Interface de Frontend do Diff
+Name[sv]=Gränssnitt för jämförelse
+Name[xx]=xxDiff Frontend Interfacexx
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
 

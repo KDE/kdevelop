@@ -4,4 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/MakeFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Make Frontend Interface
+Name[hu]=Make kezelőfelület
+Name[pt_BR]=Interface de Frontend do Make
+Name[sv]=Byggränssnitt
+Name[xx]=xxMake Frontend Interfacexx
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
 

@@ -4,4 +4,12 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/AppFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=App frontend interface
+Name[hu]=Alkalmazáskezelési felület
+Name[pt_BR]=Interface frontend para aplicativos
+Name[sv]=Programgränssnitt
+Name[xx]=xxApp frontend interfacexx
+
+# versioning - prevent DLL hell
+[PropertyDef::X-KDevelop-Version]
+Type=int
 
