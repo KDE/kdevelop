@@ -39,8 +39,10 @@ else {
   system ("make -f Makefile.dist");
   
   #start configure
-  printflush (STDOUT,"KDEHOME=$ENV{KDEHOME}; KDEDIR=$ENV{KDEDIR}; QTDIR=$ENV{QTDIR};\n");
-  printflush (STDOUT,"make configure...\n");
+  printflush (STDOUT,"KDEHOME=$ENV{KDEHOME}; ") if ($ENV{KDEHOME});
+  printflush (STDOUT,"KDEDIR=$ENV{KDEDIR}; ") if ($ENV{KDEDIR});
+  printflush (STDOUT,"QTDIR=$ENV{QTDIR};") if ($ENV{QTDIR});
+  printflush (STDOUT,"\nmake configure...\n");
 
   printflush (STDOUT,">LDFLAGS=\"\" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\"\n>./configure $confargs\n");
   chdir ($overDirectory);
