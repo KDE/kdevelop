@@ -78,6 +78,7 @@ void KDlgPropertyBase::dumpConstruct(QTextStream *stream, QString classname,
     s += ",\"";
     s += getPropValue("Name");
     s += "\");\n";
+    *stream << s;
 }
 
 

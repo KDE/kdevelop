@@ -65,7 +65,6 @@ public:
     KListViewItem( KListViewItem *parent, const char *text, const char *id );
     virtual ~KListViewItem();
     virtual void insertItem(QListViewItem *item);
-    void setOpenPixmap(const QPixmap &pm);
     QListViewItem *lastChild() const
 	{ return last; }
     QString ident() const

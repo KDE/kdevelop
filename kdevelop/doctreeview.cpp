@@ -159,21 +159,6 @@ QString DocTreeKDevelopBook::locatehtml(const char *filename)
 }
 
 
-static QString removeHTML(const QString &str)
-{
-    QString res = str;
-    int pos;
-    while ( (pos = res.find('<')) != -1)
-        {
-            int pos2 = res.find('>', pos);
-            if (pos2 == -1)
-                pos2 = res.length();
-            res.remove(pos, pos2-pos+1);
-        }
-    return res;
-}
-
-
 void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
 {
     char buf[512];
@@ -507,22 +492,22 @@ void DocTreeOthersFolder::handleRightButtonPressed(QListViewItem *item,
 {
     if (item == this)
         {
-            KPopupMenu *pop = new KPopupMenu(i18n("Others"));
-            pop->insertItem(i18n("Add Entry..."),
-                            listView(), SLOT(slotAddDocumentation()));
-            pop->popup(p);
+            KPopupMenu pop(i18n("Others"));
+            pop.insertItem(i18n("Add Entry..."),
+                           listView(), SLOT(slotAddDocumentation()));
+            pop.exec(p);
         }
     else if (item->parent() == this)
         {
-            KPopupMenu *pop = new KPopupMenu(i18n("Others"));
-            pop->insertItem(i18n("Add Entry..."),
-                            listView(), SLOT(slotAddDocumentation()));
-            pop->insertItem(i18n("Remove Entry"),
-                            listView(), SLOT(slotRemoveDocumentation()));
-            pop->insertSeparator();
-            pop->insertItem(i18n("Properties..."),
-                            listView(), SLOT(slotDocumentationProp()));
-            pop->popup(p);
+            KPopupMenu pop(i18n("Others"));
+            pop.insertItem(i18n("Add Entry..."),
+                           listView(), SLOT(slotAddDocumentation()));
+            pop.insertItem(i18n("Remove Entry"),
+                           listView(), SLOT(slotRemoveDocumentation()));
+            pop.insertSeparator();
+            pop.insertItem(i18n("Properties..."),
+                           listView(), SLOT(slotDocumentationProp()));
+            pop.exec(p);
         }
 }
     
