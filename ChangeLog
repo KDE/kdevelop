@@ -5,6 +5,7 @@
 	* Added isDirectory() to FileContext, so one
 	  can distinguish between regular files and
 	  directories.
+	* Added "Insert quoted" button to regexp part
 
 2002-04-22  Bernd Gehrmann  <bernd@mail.berlios.de>
 

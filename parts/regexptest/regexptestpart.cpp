@@ -47,7 +47,7 @@ RegexpTestPart::~RegexpTestPart()
 void RegexpTestPart::slotRegexpTest()
 {
     if (!m_dialog) {
-        m_dialog = new RegexpTestDialog(/*this*/);
+        m_dialog = new RegexpTestDialog(this);
     }
 
     m_dialog->show();

@@ -14,17 +14,25 @@
 
 #include "regexptestdlgbase.h"
 
+class KDevPlugin;
+
 
 class RegexpTestDialog : public RegexpTestDialogBase
 {
     Q_OBJECT
     
 public:
-    RegexpTestDialog( /*KDevPart *part*/ );
+    RegexpTestDialog( KDevPlugin *part );
     ~RegexpTestDialog();
 
+protected:
+    virtual void showEvent(QShowEvent *e);
+    
 private:
     virtual void somethingChanged();
+    virtual void insertQuoted();
+
+    KDevPlugin *m_part;
 };
 
 #endif

@@ -19,22 +19,40 @@
 #include <qlineedit.h>
 #include <qlistview.h>
 #include <qradiobutton.h>
+#include <qpushbutton.h>
+#include <kdebug.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <kparts/part.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/editinterface.h>
+
+#include "kdevplugin.h"
+#include "kdevpartcontroller.h"
 
 
-RegexpTestDialog::RegexpTestDialog(/*KDevPart *part*/)
+RegexpTestDialog::RegexpTestDialog(KDevPlugin *part)
     : RegexpTestDialogBase(0, "regexp test dialog", false)
 {
     pattern_edit->setFocus();
     pattern_edit->setFont(KGlobalSettings::fixedFont());
     teststring_edit->setFont(KGlobalSettings::fixedFont());
     subgroups_listview->setSorting(0);
+
+    m_part = part;
 }
 
 
 RegexpTestDialog::~RegexpTestDialog()
 {}
+
+
+void RegexpTestDialog::showEvent(QShowEvent *e)
+{
+    KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>
+        (m_part->partController()->activePart());
+    insertbutton->setEnabled(rwpart);
+}
 
 
 void RegexpTestDialog::somethingChanged()
@@ -80,7 +98,7 @@ void RegexpTestDialog::somethingChanged()
                 regcompMessage = i18n("Invalid back reference to subexpresion");
                 break;
             case REG_EESCAPE:
-                regcompMessage = i18n("Trailing backslah");
+                regcompMessage = i18n("Trailing backslash");
                 break;
             case REG_BADPAT:
                 regcompMessage = i18n("Invalid use of pattern operators");
@@ -121,6 +139,45 @@ void RegexpTestDialog::somethingChanged()
         }
     }
     regfree(&compiledPattern);
+}
+
+
+void RegexpTestDialog::insertQuoted()
+{
+    QString rawstr = pattern_edit->text();
+
+    QString str;
+    
+    int len = rawstr.length();
+    for (int i=0; i < len; ++i) {
+        QChar ch = rawstr[i];
+        if (ch == '"')
+            str += "\\\"";
+        else if (ch == '\\')
+            str += "\\\\";
+        else
+            str += ch;
+    }
+
+    KParts::ReadWritePart *rwpart = dynamic_cast<KParts::ReadWritePart*>
+        (m_part->partController()->activePart());
+    KTextEditor::EditInterface *editiface
+        = dynamic_cast<KTextEditor::EditInterface*>(rwpart);
+    if (!editiface) {
+        kdDebug() << "no edit" << endl;
+        return;
+    }
+    KTextEditor::ViewCursorInterface *cursoriface
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(rwpart->widget());
+    if (!cursoriface) {
+        kdDebug() << "no viewcursor" << endl;
+        return;
+    }
+
+    uint line, col;
+    cursoriface->cursorPositionReal(&line, &col);
+    editiface->insertText(line, col, str);
+    reject();
 }
 
 #include "regexptestdlg.moc"
