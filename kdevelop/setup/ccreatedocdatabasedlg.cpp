@@ -241,7 +241,7 @@ void CCreateDocDatabaseDlg::slotOkClicked()
       *m_proc <<  "find " +
                 dirs +
                 " -name '*.html' | awk 'OFS=\"\"; {print \"file://localhost\", $0}' | htdig -v -s -c " +
-                htdigConf + "  ; htmerge -v -s -c " + htdigConf;
+                htdigConf + " - ; htmerge -v -s -c " + htdigConf;
       m_proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
       slotShowToolProcessOutputDlg();
     }
