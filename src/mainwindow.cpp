@@ -242,7 +242,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_bUiModeSwitchPending(false)
   ,m_bRemoveViewPending(false)
 {
-  setIDEAlModeStyle(1); // KDEV3 style of KMultiTabBar
+//  setIDEAlModeStyle(1); // KDEV3 style of KMultiTabBar
   setStandardMDIMenuEnabled();
   setManagedDockPositionModeEnabled(true);
 
