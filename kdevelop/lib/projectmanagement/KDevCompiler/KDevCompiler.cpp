@@ -46,11 +46,12 @@ KDevCompiler::KDevCompiler(const QString &name, const QString &icon, QWidget &qw
 }
 
 // destructor
+// what happens if any of the pointers are null
 KDevCompiler::~KDevCompiler(){
-	delete compilerName;
-	delete compilerFlags;
-	delete compilerIcon;
-	delete optionsPageWidget;
+	if(compilerName)      delete compilerName;
+	if(compilerFlags)     delete compilerFlags;
+	if(compilerIcon)      delete compilerIcon;
+	if(optionsPageWidget) delete optionsPageWidget;
 }
 
 // returns the name of the compiler
@@ -74,17 +75,21 @@ QWidget* KDevCompiler::optionsWidget(){
 }
 
 // set the compiler Name
+// MEMORY LEAK what happens if compilerName/Flags/Icon are already set?
 void KDevCompiler::setName(const QString &name){
+  if(compilerName) delete compilerName;
 	compilerName = new QString(name);
 }
 
 // set the compiler flags
 void KDevCompiler::setFlags(const QString &flags){
+  if(compilerFlags) delete compilerFlags;
 	compilerFlags = new QString(flags);
 }
 
 // set the compiler icon
 void KDevCompiler::setIcon(const QString &icon){
+  if(compilerIcon) delete compilerIcon;
 	compilerIcon = new QString(icon);
 }
 
