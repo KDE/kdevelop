@@ -1,3 +1,7 @@
+2001-07-26 Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+	* debian packaging for kdevelop-3.0 branch
+	* kwrite: add path kwriteeditor_part for locating syntax.xml
+
 2001-07-22 Sandy Meier <smeier@kdevelop.org>
 	* implemented initial codeCompletion interface for kwrite
 	* added codeCompletion parsing to the PHP supportpart

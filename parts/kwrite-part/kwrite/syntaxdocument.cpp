@@ -29,7 +29,9 @@
 
 SyntaxDocument::SyntaxDocument() : QDomDocument()
 {
-  QString syntaxPath = locate("data", "kwrite/syntax.xml");
+  QString syntaxPath = locate("data", "kwriteeditor_part/syntax.xml");
+  if ( syntaxPath.isEmpty() )
+    syntaxPath = locate("data", "kwrite/syntax.xml");
 
   if( !syntaxPath.isEmpty() )
   {
