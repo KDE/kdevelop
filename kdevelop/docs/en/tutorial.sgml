@@ -1,82 +1,527 @@
 <!doctype linuxdoc system>
 <article>
 <title>The KDevelop Programming Handbook
-<author>Ralf Nolden, The KDevelop Team <tt></tt>
-<date>Version 0.4 , Sun Apr 11 14:01:56 CEST 1999
+<author>Ralf Nolden &lt;<tt/Ralf.Nolden@post.rwth-aachen.de/&gt;, The KDevelop Team
+<date>Version 2.0 , Mon May 3 17:02:49 CEST 1999
 
 <abstract>
-This Handbook describes programming with KDevelop Version 0.4.
+The User Guide to Programming with the KDevelop IDE, Version 1.0.
 </abstract>
 
 <toc>
-<sect>Introduction<p>
-	As for the first version of this programming handbook, I don't make any promises about correctness and actuality towards special
-programming aspects. It should be taken as a hint for programmers how to use KDevelop at it's best for development as well as for the
-first time give a better introduction into certain things like API-documentation and the code frame structure of KAppWizard generated
-projects. A lot of users requested a tutorial, especially for KDE application development. Mainly new developers have to get a good
-structured guideline towards programming as the KDevelop handbook keeps only track of how to actually use the IDE. Advanced users shouldn't
-have any problems as we tried to keep our design as usable as possible (at least how we thought it should look like).
-	This handbook tries to cover as much as is needed to know for a first start. The structure is therefore based on the actual difficulty
-of programming C++ applications, so first come terminal applications and libraries (although still not supported by kdevelop), then GUI-based
-programming starting with Qt-only programs, followed by KDE application development. Nevertheless most users will tend to develop KDE-apps, I
-advise reading the Qt-section as a must, because this section will cover most Qt-related things that either have the same importance and use
-within KDE-applications or are base-knowledge for GUI-development.
-The KDE-section will then cope with example programs showing development steps and KDE-specific information like development standards and
-special classes provided with the KDE-libraries.
-To those that wish to take part in the newest issues of programming, I will at least try to explain CORBA and especially the IDL scripting
-language to give a first understanding of internals that are needed for KOM/KOffice development.
-The handbook ends with an introduction into that most interesting part of current KDE development, giving an overview of how to create a new
-KOM/KOffice compliant KDE application and how the generated code structure works.
 
-<sect>C/C++ Applications<p>
-<sect1>Generating a terminal application<p>
-Since version 0.3, KDevelop's application generator offers the possiblility to generate a pure C++-terminal based frame application using GNU
-standard development tools. To create a new terminal application, select "KAppWizard" from the Project-menu. On the first page, choose "C/C++-Application"
-and press "Proceed". The next page requires to insert a name for the application as a minimum. Also the program version number, the author's name
-and email-address can be set; this information will be used to generate the handbook anb by the templates for the class generator. "Generate" opens the
-output page of the wizard, showing you commands and generation output progress. "READY" in the output window displays that the generation was successful.
-Then choose "Exit" to finish KAppWizard and return to KDevelop. The new project will be loaded and is ready to compile.
+<sect>Introduction
 <p>
-To test the frame application,
-either choose "Make" from the Build-menu or press the button with the orange wheel in the toolbar. This invokes the "make"-command for the project and
-builds the application. After the binary is build, the outputwindow will change to the "Stdin/Stdout" tab and shows you the "Hello World!" string.
-	That is actually all the generated project does- the rest is actually programming work for the user.
+As Unix Systems are becoming more and more popular to even beginners working with computer machines due to its advantages in regards of
+stability and functionality, most are somehow disappointed, because those applications don't have a consistant look and each one
+behaves different from another. With KDE, developers have an almost perfect way to create first-class applications for Unix desktop
+systems to get a wider user community by the mere quality their applications have to offer. Therefore, KDE becomes more and more
+popular as a base for programming design, and developers want to take advantage of the possibilities that the system has to offer.
 
-<sect1>Adding new classes<p>
-The next step would be to create all needed classes with the class generator. To generate a new class, choose "New Class" from the Project-menu,
-opening the class generator dialog. Here, the classname has to be inserted. The classgenerator make an auto-completion for the file names for the
-new class, that is naming the files lowercase to the selected classname; the header using the *.h, the implementation file the *.cpp fileextension.
-After pressing the "OK" button, the new class will be generated and included in the project. That means that the implementation file is included
-into the compile-process by it's addition to the Makefile.am, but the user doesn't have to care for anything as by the next invocation of "Execute"
-or "Make", the new source will be processed as well.
-<sect>Static Libraries<p>
-<sect>Shared Libraries<p>
-<sect>Qt-Applications<p>
-	The Qt library, on which KDE is based, offers a lot of possibilities towards programming GUI based applications. For commericial development, Qt seems
-to be a good alternative due to the fact of it's easy use and it's cross-platform availability. Therefore, and basically by the fact that from version 2.x
-Qt is published under a new license, we assume that development using this library will reach a far more wider community of developers than those already
-taking advantage of it, we included direct support for a project type based on the Qt library alone. The framecode which is offered is almost similar to
-the structure of that which is generated for a KDE application, just the derived classes have been changed and a Qt-based program won't take advantage of the
-possibilities that a full-featured KDE program can offer like e.g. session management.
-<sect1>Qt-Application generation and frame code structure<p>
-<sect>KDE-Applications<p>
-<sect1>Creating the example program<p>
-<sect1>Generated frame code structure<p>
-<sect1>Additional files and documentation<p>
-<sect1>Generating and documenting new classes<p>
-<sect1>The Editor example<p>
-<sect1>The Draw example<p>
-<sect1>Updating the application documentation<p>
-<sect>CORBA<p>
-<sect1>What is CORBA ?<p>
-<sect1>The IDL Language description<p>
-<sect>KOM<p>
-<sect1>Introduction<p>
-<sect1>Requirements<p>
-<sect>KOffice-Applications using KOM<p>
-<sect1>Generating KOM/KOffice applications<p>
-<sect1>Generated frame code structure and IDL description<p>
+
+<sect1>What you should know already
+<p>
+For making the best use of this programming handbook, we assume that you already know how to program applications with the C++
+programming language. You don't have to know anything about GUI programming, although having a basic knowledge will make things easier
+to understand. Also, you should have made yourself comfortable with KDevelop by reading the <em/The User Manual to KDevelop/,
+describing all commands and available functions that are provided by the IDE.
+
+<sect1>About this Handbook
+<p>
+This handbook has been written to give developers an introduction into KDE application development with special regards to the KDevelop
+Integrated Development Environment. The reader will learn how to create his own application, what the framework automatically generated
+by the KAppWizard already offers and how it runs. By the following chapters, the user is introduced into certain aspects of GUI
+application design by a tutorial application, which we called <em/KScribble/.
+
+<bf/In the next chapter/
+
+we'll take a look at the Qt and KDE libraries, showing basic concepts and why things are the way they are.
+Also, we will discuss how to create the tutorial applications provided with the Qt toolkit by using KDevelop, so beginners can already
+see first results with a few steps, and thereby will learn how to make use of some of KDevelop's best features.
+
+<bf/In the following chapters/ you will learn:
+<itemize>
+<item>how to create an application with the KAppWizard,
+<item>what the project skelleton already provides,
+<item>what the code already created means,
+<item>how to create your own views,
+<item>how to extend your application's functionality by dialog, menubars and toolbars
+<item>how to make your application user friendly by providing help functions and
+<item>how to write SGML online documentation.
+</itemize>
+
+
+<sect1>Additional Information
+<p>
+Additional information about Qt/KDE programming is available by various sources:
+
+<itemize>
+<item><em/Programming with Qt/ by Matthias Kalle Dalheimer, published by O'Reilly (see <htmlurl url="http://www.oreilly.com"
+name="http://www.oreilly.com">, covering almost all aspects of the Qt GUI toolkit and contains examples as well.
+<item><em/The User Manual to KDevelop/, provided with the KDevelop IDE,
+<item><em/Online-Reference/ to the Qt-library, provided with your copy of the Qt toolkit in HTML and available as Postscript on
+<htmlurl url="http://www.troll.no" name="http://www.troll.no">
+<item>On the internet, see
+<itemize>
+<item>the Troll Tech website at <htmlurl url="http://www.troll.no" name="http://www.troll.no">,
+<item>the KDE website at <htmlurl url="http://www.kde.org" name="http://www.kde.org">,
+<item>the KDE developer website at <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">
+<item>the KDevelop homepage at <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
+name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">
+</itemize>
+</itemize>
+
+Addtionally, you should look for help on the various mailinglists, whose adresses are available on the mentioned websites, and on the
+usenet newsgroups dedicated to users of KDE and Unix Systems.
+
+For KDevelop itself, you should send requests to our mailinglist at <htmlurl url="mailto:kdevelop@fara3.cs.uni-potsdam.de"
+name="kdevelop@fara3.cs.uni-potsdam.de">. Mind that the KDevelop team is dedicated to provide the means to enable you to program
+applications and therefore is not intended as a technical support team in cases where the applications you're developing don't work due
+to implementation errors. By this, we ask all users to take advantage of the mailinglist in any case you're running into problems with
+the use of the IDE itself, reporting bugs and questions about features as well as giving comments about what can be improved.
+
+<sect>The KDE and Qt Libraries
+<p>
+The norwegian company Troll Tech (<htmlurl url="http://www.troll.no" name="http://www.troll.no">) provides a so-called GUI-toolkit,
+named Qt. Thereby, GUI means "<bf/G/raphical <bf/U/ser <bf/I/nterface", and therefore, Qt-based applications represent themselves with
+buttons, windows etc, allowing user input by visualizing the functions an application provides. Such a toolkit is needed for developing
+graphical applications that run on the X-Window interface on Unix Systems; although other toolkits can be used, Qt offers some
+technical advantages that make application design very easy. Plus- it offers portablity to Windows Systems, which can be a criteria for
+developers who want to provide their applications on both systems.
+
+The KDE Team (<htmlurl url="http://www.kde.org" name="http://www.kde.org">) joined together with the goal to make using Unix
+Systems more friendly, and decided to use the Qt toolkit as a base for their development for a window manager system on X-Window, plus
+a variety of tools included with the KDE packages. After KDE was out, a lot of developers turned their eyes towards the new environment
+and what it has to offer them. The KDE libraries are providing essential methods and classes that make all applications designed with
+them look similar and consistent, so the user has the great advantage that he only has to get accustomed with an application's specific
+usage, not with handling dialogs or buttons. Also, KDE programs include themselves into the desktop and are able to interact with the
+window manager via drag'n drop, session management etc.
+
+The next sections describe, what the C++ libraries of Qt and KDE have to offer in regards of application design and creation,
+specifically on X-Window, as well as giving an introduction into the Qt library technics by examples that are explained in detail.
+
+<sect1>The Qt GUI Toolkit
+<p>
+Application design with the Qt toolkit offers the following advantages to the developer:
+
+<itemize>
+<item>A complete set of classes and methods ready to use,
+<item>A good solution towards user interaction by virtual methods and the signal/slot mechanism,
+<item>A set of predefined GUI-elements, called "widgets", that can be used easily for creating the visible elements
+<item>Additional completely pre-defined dialogs that only have to be called for standard functions
+</itemize>
+
+Therefore knowing the Qt classes is very essential, even if you only want to program KDE-applications. Mind that almost all KDE-classes
+and widgets are based on the Qt library, so we suggest having a look at how a Qt-based application looks like first; then we'll switch
+to the difference for creating a KDE applications.
+
+<sect2>The first Qt Application
+<p>
+As usual, programs in C++ contain the <tt/main()/ function. With this, your application starts executing. Now, how does a program
+make itself visible ? For an example, we'll have a look at the first tutorial included with the Qt Online Reference Documentation:
+
+<tscreen><code>
+#include <qapplication.h>
+#include <qpushbutton.h>
+
+int main( int argc, char **argv )
+{
+QApplication a( argc, argv );
+
+QPushButton hello( "Hello world!" );
+hello.resize( 100, 30 );
+
+a.setMainWidget( &hello );
+hello.show();
+return a.exec();
+}
+</code></tscreen>
+
+This application merely paints a window containing a button with "Hello world" as its text. As for all Qt-Applications, you first have
+to create an instance of the class <tt/QApplication/, which is the element <tt/a/ here. You also see that the parameters that can be
+passed to the program by commandline are given to the QApplication object. During the execution process, the application can check for
+the commandline options and provide methods to interpret them as well as executing the resulting actions, such as loading a file or
+whatever.
+
+Next, the program creates an instance of the class <tt/QPushButton/ called <tt/hello/. This represents the button later. The
+constructor of <tt/hello/ gets a string as a parameter, which is the contents of the widget which is visible as the button's
+text.
+
+Then the program calls the <tt/resize()/ method on the <tt/hello/ button. This changes the default size a widget (which is in this
+case the QPushButton) has when created to the length of 100 pixels and the heigth of 30 pixels. Finally, the <tt/setMainWidget()/
+method is called for <tt/a/ and the <tt/show()/ method for <tt/hello/. The <tt/QApplication/ is finally executed by <tt/a.exec()/,
+enters the main event loop and waits until it has to return an integer value to the overlaying Operating System signaling that the
+application is exited.
+
+<sect2>The Reference Documentation for Qt
+<p>
+Now, let's have a quick look at the reference documentation of the Qt library. To do this, start KDevelop and select "Qt-library" from
+the "Help"-menu in the menubar. The documentation browser opens and shows you the start page of the Qt reference. This will be your
+first place to get information about Qt, it's classes and the available functions they provide. Also, the above program is the first
+that is included in the tutorials section. To get to the classes we want to have a look, <tt/QApplication/ and <tt/QPushButton/, select
+"Alphabetical Class List" and search for the classes. Follow either of them to have a look at.
+
+For <tt/QApplication/, you will see the constructor and all other methods that this class provides. If you follow a link, you will get
+more information about the usage and meaning of the methods, which is very useful when you sometimes can't detect the correct use or
+want to have an example. This also counts for the KDE library documentation, which uses a similar documentation type; therefore this is
+almost all you have to know about using the class-references with the documentation browser.
+
+<sect2>Interpretation of the Sample
+<p>
+Starting with <tt/QApplication/, you will find all the methods used in our first example:
+
+<itemize>
+<item>the constructor <tt/QApplication()/,
+<item>the <tt/setMainWidget()/ method and
+<item>the <tt/exec()/ method.
+</itemize>
+
+The interpretation of these methods is very simple:
+
+<enum>
+<item>first create an instance of the class <tt/QApplication/ with the constructor,
+<item>create a widget,
+<item>set the widget as the main widget for <tt/a/,
+<item>execute the <tt/a/ instance of <tt/QApplication/.
+</enum>
+
+The second object of our program is the pushbutton, an instance of the class <tt/QPushButton/. From the two constructors given to
+create an instance, we used the second: this accepts a text, which is the label contents of the button; here, it is the string "Hello
+world!". Then we called the <tt/resize()/ method to change the size of the button according to it's contents- the button has to be
+larger to make the string completely visible.
+
+But what about the <tt/show()/ method ?  Now, you see that like most other widgets, <tt/QPushButton/ is based on a single-inheritance-
+here, the documentation says, <em/Inherits/ <tt/QButton/.  Follow the link to the <tt/QButton/ class. This shows you a lot of other
+functions that are inherited by QPushButton, which we'll use later to explain the signal/slot mechanism. Anyway, the <tt/show()/ method
+is not listed, therfore, it must be a method that is provided by inheritance as well. The class that <tt/QButton/ inherits, is
+<tt/QWidget/. Just follow the link again, and you will see a whole bunch of methods that the <tt/QWidget/ class provides; including the
+<tt/show()/ method. Now we understand what was done in the sample with the button:
+
+<enum>
+<item>create an instance of <tt/QPushButton/, use the second constructor to set the button's text,
+<item>resize the widget to it's contents,
+<item>set the widget as the main widget of the <tt/QApplication/ instance <tt/a/,
+<item>show the widget on the screen by calling <tt/show()/, an inherited method from <tt/QWidget/.
+</enum>
+
+Mind that the button is shown even before the <tt/main()/ function reaches the <tt/exec()/ method call; this behavoir can be used to
+create "splash-screens" for applications that may take some time to load and thereby signal the user that the program he started is
+loading.
+
+After calling the <tt/exec()/ method, the application is visible to the user, showing a window with the button showing "Hello world!".
+Now, GUI programs behave somewhat differently than procedural applications. The main thing here is that the application enters a
+so-called "main event loop". This means that the program has to wait for user actions and then react to it, also that for a Qt
+application, the program has to be in the main event loop to start the event handling. The next section tells you in short what this
+means to the programmer and what Qt offers to process user events.
+
+(For already advanced users: The button has no parent declared in the constructor, therefore it is a top-level widget alone and runs in
+a local event loop which doesn't need to wait for the main event loop, see the<tt/QWidget/ class documentation)
+
+
+<sect2>User Interaction
+<p>
+After reading the last sections, you should already know:
+<itemize>
+<item>What the Qt-libary provides in terms of GUI applications,
+<item>how a program using Qt is created and
+<item>where and how to find information about classes that you want to use with the documentation browser
+</itemize>
+
+Now we'll turn to give the application "life" by processing user events. Generally, the user has two ways to interact with a program:
+the mouse and the keyboard. For both ways, a graphical user interface has to provide methods that detect actions and methods that do
+something as a reaction to these actions.
+
+Basically, the user can only interact with objects that are visible. Therefore, the base class that provides user interaction is
+<tt/QWidget/. Now, all events that are produced by the user are created as a <tt/QEvent/ and then processed by the virtual member
+function
+
+<tt/QWidget::event(QEvent*)/,
+
+which then decides which event has been executed and how to react (the main event handler). Therefore, the <tt/event()/ function passes
+the event to so-called event filters, that determine what happened and do something with the event. If no filter signs responsible for
+the event, the specialized event handlers are called. Thereby we can decide between:
+
+<bf/a) Keyboard events --TAB and Shift-TAB keys:/
+
+changes the keyboard input focus from the current widget to the next widget in the focus order. The focus can be set to widgets by
+calling <tt/setFocusPolicy()/ and process the following event handlers:
+
+<itemize>
+<item><tt/virtual void focusInEvent ( QFocusEvent * )/
+<item><tt/virtual void focusOutEvent ( QFocusEvent * )/
+</itemize>
+
+<bf/b) all other keyboard input:/
+<itemize>
+<item><tt/virtual void keyPressEvent ( QKeyEvent * )/
+<item><tt/virtual void keyReleaseEvent ( QKeyEvent * )/
+</itemize>
+
+<bf/c) mouse movements:/
+<itemize>
+<item><tt/virtual void mouseMoveEvent ( QMouseEvent * )/
+<item><tt/virtual void enterEvent ( QEvent * )/
+<item><tt/virtual void leaveEvent ( QEvent * )/
+</itemize>
+
+<bf/d) mouse button actions:/
+<itemize>
+<item><tt/virtual void mousePressEvent ( QMouseEvent * )/
+<item><tt/virtual void mouseReleaseEvent ( QMouseEvent * )/
+<item><tt/virtual void mouseDoubleClickEvent ( QMouseEvent * )/
+</itemize>
+
+<bf/e) window events containing the widget:/
+<itemize>
+<item><tt/virtual void moveEvent ( QMoveEvent * )/
+<item><tt/virtual void resizeEvent ( QResizeEvent * )/
+<item><tt/virtual void closeEvent ( QCloseEvent * )/
+</itemize>
+
+Note that all event functions are virtual and protected, therfore, you can reimplement them in your own widget classes for receiving a
+certain behavoir. <tt/QWidget/ also contains some other virtual methods that can be useful in your programs; anyway, it is sufficent to
+know about <tt/QWidget/ very well generally.
+
+
+<sect2>Object Interaction by Signals and Slots
+<p>
+Now we're coming to the most obvious advantages of the Qt toolkit: the signal/slot mechanism. This offers a very handy and useful
+solution to object interaction, which usually is solved by <tt/callback/ functions for X-Window toolkits. As this communication
+requires a strict programming and sometimes makes user interface creation very difficult (as refered by the Qt documentation and
+explained in <em/Programming with Qt/ by K.Dahlheimer), Troll Tech invented a new system where objects can emit signals that can be
+connected to methods declared as slots. For the C++ part of the programmer, he only has to know some things about this mechanism:
+
+<enum>
+<item>the classdeclaration of a class using signals/slots has to contain the <tt/Q_OBJECT/ macro at the beginning (without the
+semicolon); and have to be derived from the <tt/QObject/ class,
+<item>a signal can be emitted by the keyword <tt/emit/, e.g. <tt/emit signal(parameters);/ from within any member function
+of a class that allows signals/slots,
+<item>all signals used by the classes that are not inherited have to be added to the classdeclaration by a <tt/signals:/ section,
+<item>all methods that can be connected with a signal are declared in sections with the additional keyword <tt/slot/, e.g.
+<tt/<bf/public/ slots:/ within the classdeclaration,
+<item>the meta-object compiler <tt/moc/ has to run over the header file to expand the macros and to produce the implementation (which
+is not needed to know.). The output files of <tt/moc/ are compiled as well by the C++ compiler.
+</enum>
+
+Another way to use signals without deriving from <tt/QQbject/ is to use the <tt/QSignal/ class- see the reference documentation for
+more information and example usage. In the following, we assume you're deriving from <tt/QObject/.
+
+
+This way, your class is able to send signals anywhere and to provide slots that signals can connect to. By using the signals, you don't
+have to care about who's receiving it- just you have to emit the signal and whatever slot wants to connect to it can react to the
+emission. Also the slots can be used as normal methods during implementation.
+
+Now, to connect a signal to a slot, you have to use the <tt/connect()/ methods that are provided by <tt/QObject/ or, where available,
+special methods that objects provide to set the connection for a certain signal.
+
+<sect3>Sample Usage
+<p>
+To explain the way how to set up object-interaction, we'll take our first example again and extend it by a simple connection:
+
+<tscreen><code>
+#include <qapplication.h>
+#include <qpushbutton.h>
+
+int main( int argc, char **argv )
+{
+QApplication a( argc, argv );
+
+QPushButton hello( "Hello world!" );
+hello.resize( 100, 30 );
+
+a.setMainWidget( &hello );
+
+connect(&hello, SIGNAL( clicked() ), &a, SLOT( quit() );
+
+hello.show();
+return a.exec();
+}
+</code></tscreen>
+
+You see, the only addition to give the button more interaction is to use a <tt/connect()/ method:
+<tt/connect(&hello, SIGNAL( clicked() ), &a, SLOT( quit() );/ is all you have to add. What is the meaning now ? The class declaration
+of <tt/QObject/ says about the <tt/connect()/ method:
+
+<tt/bool connect ( const QObject * sender, const char * signal, const QObject * receiver, const char * member )/
+
+This means, you have to specify a QObject instance pointer that is the sender of the signal, meaning that it can emit this signal as
+first parameter; then you have to specify the signal that will be connected. The last two parameters are the receiver object that
+provides a slot, followed by the member function which actually <em/is/ the slot that will be executed on signal emission. What is
+important to know is that your signal and your slot have to have the same parameters, independent from the usage of the actual
+parameters.
+
+By using signals and slots, your program's objects can interact with each other easily without explicitely depending on the existance
+of the receiver object. You will learn more about using this mechanism for productive usage later in this handbook while working with
+the tutorial application <em/KScribble/.
+
+
+<sect1>What KDE provides
+<p>
+<sect2>The KDE 1.1 libraries
+<p>
+For the time of this writing and due to the fact that KDevelop uses KDE 1.1, I'm refering to the state of the KDE libraries at that
+release. The main KDE libraries you'll be using for creating your own KDE applications are:
+
+<itemize>
+<item>the KDE-Core library, containing all classes that are non-visible elements and provide functionality your application may use.
+<item>the KDE-UI library, containing user interface elements like menubars, toolbars and the like,
+<item>the KFile library, containing the file selection dialogs,
+</itemize>
+
+Additionally, for specific solutions KDE offers the following libraries:
+
+<itemize>
+<item>the KHTMLW library, offering a complete HTML-interpreting widget that is used by various programs like KDEHelp, KFM, KDevelop,
+<item>the KAb library, the KAddressBook. Provides Adressbook access for e.g. email applications
+<item>the KSpell library, offering widgets and functionality to integrate the use of ISpell, the common spellchecker, in applications
+like editors; used for the KEdit application.
+</itemize>
+
+Our view should now turn to what changes are required to make a KDE application out of a Qt application.
+
+<sect2>Example KDE Application
+<p>
+In the following, you will see that writing a KDE application is not much more difficult than a Qt application. For the use of KDE's
+features, you just have to use some other classes, and you're almost done. As an example, we'll discuss the changed version of the Qt
+example from above:
+
+<tscreen><code>
+#include <kapplication.h>
+#include <qpushbutton.h>
+
+int main( int argc, char **argv )
+{
+KApplication a( argc, argv );
+
+QPushButton hello( "Hello world!" );
+hello.resize( 100, 30 );
+
+a.setTopWidget( &hello );
+
+connect(&hello, SIGNAL( clicked() ), &a, SLOT( quit() );
+
+hello.show();
+return a.exec();
+}
+</code></tscreen>
+
+You see that first we have changed from <tt/QApplication/ to <tt/KApplication/. Further, we had to change the previously used
+<tt/setMainWidget()/ method to <tt/setTopWidget/, which <tt/KApplication/ uses to set the main widget. That's it ! Your first KDE
+application is ready- you only have to tell the compiler the KDE include path and the linker to link in the KDE-Core library with
+-lkdecore.
+
+As you now know what at least the main() function provides generally and how an application gets visible and allows user and object
+interaction, we'll go on with the next chapter, where our first application is made with KDevelop- there you can also test everything
+which was mentionend before and see the effects.
+
+What you should have looked into additionally until now is the reference documentation for Qt, especially the <tt/QApplication/,
+<tt/QWidget/ and <tt/QObject/ class and the KDE-Core library documentation for the <tt/KApplication/ class.
+
+
+<sect>Creating new Applications with KAppWizard<label id="Creating new Applications with KAppWizard">
+<p>
+<sect1>Invoking KAppWizard and Project Generation
+<p>
+<sect1>The Application Skeletton
+<p>
+<sect1>Additional Contents of KDevelop Projects
+<p>
+<sect>Creating Views
+<p>
+<sect1>Using Library Views and Dialogs
+<p>
+<sect1>Qt Views
+<p>
+<sect1>KDE Views
+<p>
+<sect1>Creating your own Views
+<p>
+<sect>Configuring Menubars and Toolbars
+<p>
+<sect1>How does it work ?
+<p>
+<sect1>Adding a new menu
+<p>
+<sect1>Integrating Toolbar buttons
+<p>
+<sect1>Configuring Statusbars
+<p>
+<sect>The Dialogeditor: Where your Dialogs are Build
+<p>
+<sect1>What the Dialogeditor provides
+<p>
+<sect1>Constructing a new Dialog
+<p>
+<sect1>Setting Widget Properties
+<p>
+<sect1>Integrating the Dialog
+<p>
+<sect>Printing
+<p>
+<sect1>The Qt Print Dialog
+<p>
+<sect1>The QPainter Class
+<p>
+<sect>Help Functions
+<p>
+<sect1>Extending the Statusbar Help
+<p>
+<sect1>Adding Quickhelp
+<p>
+<sect1>The "What's This ? Button"
+<p>
+
+<sect>Extending the Documentation with SGML
+<p>
+<sect1>Why SGML ?
+<p>
+<sect1>What the Documentation already contains
+<p>
+<sect1>Adding new Pages
+<p>
+<sect1>How to call Help in Dialogs
+<p>
+
+<sect>Class Documentation with KDoc
+<p>
+<sect1>How to use KDevelop's Documentation features
+<p>
+<sect1>Adding Class and Member Documentation
+<p>
+<sect1>Special Tags
+<p>
+<sect>Finding Errors
+<p>
+<sect1>Debugging Macros provided by Qt
+<p>
+<sect1>KDE Macros
+<p>
+
+<sect>Copyright
+<p>
+<tscreen><verb>
+
+KDevelop Copyright 1998,1999 The KDevelop Team.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+</verb></tscreen>
+
 </article>
+
+
+
 
 
 

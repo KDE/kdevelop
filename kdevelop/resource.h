@@ -85,23 +85,20 @@
 
 #define ID_VIEW_REFRESH             12070
 
-#define ID_BOOKMARKS_SET						30000
-#define ID_BOOKMARKS_ADD						30010
-#define ID_BOOKMARKS_CLEAR					30020
 
 ///////////////////////////////////////////////////////////////////
 // Project-menu entries 
 
-#define ID_PROJECT_KAPPWIZARD       13010
-#define ID_PROJECT_OPEN			        13030
-#define ID_PROJECT_CLOSE            13040
-#define ID_PROJECT_NEW_CLASS        13050
-#define ID_PROJECT_ADD_FILE         13060
-#define ID_PROJECT_ADD_FILE_NEW     13070
-#define ID_PROJECT_ADD_FILE_EXIST   13080
-#define ID_PROJECT_ADD_NEW_TRANSLATION_FILE 13085
-#define ID_PROJECT_REMOVE_FILE      13090
-#define ID_PROJECT_COMPILE_FILE     13100
+#define ID_PROJECT_KAPPWIZARD       13210
+#define ID_PROJECT_OPEN			        13230
+#define ID_PROJECT_CLOSE            13240
+#define ID_PROJECT_NEW_CLASS        13250
+#define ID_PROJECT_ADD_FILE         13260
+#define ID_PROJECT_ADD_FILE_NEW     13270
+#define ID_PROJECT_ADD_FILE_EXIST   13280
+#define ID_PROJECT_ADD_NEW_TRANSLATION_FILE 13285
+#define ID_PROJECT_REMOVE_FILE      13290
+#define ID_PROJECT_COMPILE_FILE     13200
 
 
 #define ID_PROJECT_WORKSPACES        13101
@@ -160,28 +157,36 @@
 
 #define ID_OPTIONS_KDEVELOP            16080
 
+
+///////////////////////////////////////////////////////////////////
+// Bookmark-menu-entries
+#define ID_BOOKMARKS_SET						17000
+#define ID_BOOKMARKS_ADD						17010
+#define ID_BOOKMARKS_CLEAR					17020
+
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
-#define ID_HELP_BACK                 17010
-#define ID_HELP_FORWARD              17020
+#define ID_HELP_BACK                 18010
+#define ID_HELP_FORWARD              18020
 
-#define ID_HELP_SEARCH_TEXT          17030
-#define ID_HELP_SEARCH              18005
+#define ID_HELP_SEARCH_TEXT          18030
+#define ID_HELP_SEARCH              18040
 
-#define ID_HELP_CONTENTS             18010
-#define ID_HELP_REFERENCE           18007
-#define ID_HELP_QT_LIBRARY           17040
-#define ID_HELP_KDE_CORE_LIBRARY     17050
-#define ID_HELP_KDE_GUI_LIBRARY      17060
-#define ID_HELP_KDE_KFILE_LIBRARY    17070
-#define ID_HELP_KDE_HTML_LIBRARY     17080
+#define ID_HELP_CONTENTS             18050
+#define ID_HELP_REFERENCE           18060
 
-#define ID_HELP_PROJECT_API			      17090
-#define ID_HELP_USER_MANUAL          17100
-#define ID_HELP_HOMEPAGE            18020
-#define ID_HELP_ABOUT               18030
+#define ID_HELP_QT_LIBRARY           18070
+#define ID_HELP_KDE_CORE_LIBRARY     18080
+#define ID_HELP_KDE_GUI_LIBRARY      18090
+#define ID_HELP_KDE_KFILE_LIBRARY    18100
+#define ID_HELP_KDE_HTML_LIBRARY     18110
 
-#define ID_HELP_WHATS_THIS     			18040
+#define ID_HELP_PROJECT_API			      18120
+#define ID_HELP_USER_MANUAL          18130
+#define ID_HELP_HOMEPAGE            18140
+#define ID_HELP_ABOUT               18150
+
+#define ID_HELP_WHATS_THIS     			18160
 
 ///////////////////////////////////////////////////////////////////
 // KDlg-File-menu-entries

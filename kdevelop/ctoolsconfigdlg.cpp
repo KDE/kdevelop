@@ -62,6 +62,53 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	move_down_button->setAutoRepeat( FALSE );
 	move_down_button->setAutoResize( FALSE );
 
+
+	executable_label = new QLabel( this, "command_label" );
+	executable_label->setGeometry( 30, 240, 170, 30 );
+	executable_label->setText(i18n( "Executable:" ));
+	executable_label->setAlignment( 289 );
+	executable_label->setMargin( -1 );
+	
+	executable_edit = new QLineEdit( this, "LineEdit_1" );
+	executable_edit->setGeometry( 210, 240, 190, 30 );
+	executable_edit->setText( "" );
+	executable_edit->setMaxLength( 32767 );
+	executable_edit->setEchoMode( QLineEdit::Normal );
+	executable_edit->setFrame( TRUE );
+	
+	executable_button = new QPushButton( this, "executable_button" );
+	executable_button->setGeometry( 410, 240, 30, 30 );
+	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
+	executable_button->setText( "..." );
+	executable_button->setAutoRepeat( FALSE );
+	executable_button->setAutoResize( FALSE );
+
+	menu_text_label = new QLabel( this, "Label_3" );
+	menu_text_label->setGeometry( 30, 280, 170, 30 );
+	menu_text_label->setText(i18n( "Menu Text:" ));
+	menu_text_label->setAlignment( 289 );
+	menu_text_label->setMargin( -1 );
+	
+	menu_text_edit = new QLineEdit( this, "LineEdit_2" );
+	menu_text_edit->setGeometry( 210, 280, 230, 30 );
+	menu_text_edit->setText( "" );
+	menu_text_edit->setMaxLength( 32767 );
+	menu_text_edit->setEchoMode( QLineEdit::Normal );
+	menu_text_edit->setFrame( TRUE );
+
+	arguments_label = new QLabel( this, "Label_4" );
+	arguments_label->setGeometry( 30, 320, 170, 30 );
+	arguments_label->setText(i18n( "Arguments:" ));
+	arguments_label->setAlignment( 289 );
+	arguments_label->setMargin( -1 );
+	
+	arguments_edit = new QLineEdit( this, "LineEdit_3" );
+	arguments_edit->setGeometry( 210, 320, 230, 30 );
+	arguments_edit->setText( "" );
+	arguments_edit->setMaxLength( 32767 );
+	arguments_edit->setEchoMode( QLineEdit::Normal );
+	arguments_edit->setFrame( TRUE );
+
 	ok_button = new QPushButton( this, "ok_button" );
 	ok_button->setGeometry( 390, 20, 100, 30 );
 	connect( ok_button, SIGNAL(clicked()), SLOT(slotOK()) );
@@ -83,52 +130,6 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	help_button->setText(i18n( "&Help" ));
 	help_button->setAutoRepeat( FALSE );
 	help_button->setAutoResize( FALSE );
-
-	executable_edit = new QLineEdit( this, "LineEdit_1" );
-	executable_edit->setGeometry( 210, 240, 190, 30 );
-	executable_edit->setText( "" );
-	executable_edit->setMaxLength( 32767 );
-	executable_edit->setEchoMode( QLineEdit::Normal );
-	executable_edit->setFrame( TRUE );
-
-	executable_label = new QLabel( this, "command_label" );
-	executable_label->setGeometry( 30, 240, 170, 30 );
-	executable_label->setText(i18n( "Executable:" ));
-	executable_label->setAlignment( 289 );
-	executable_label->setMargin( -1 );
-
-	menu_text_edit = new QLineEdit( this, "LineEdit_2" );
-	menu_text_edit->setGeometry( 210, 280, 230, 30 );
-	menu_text_edit->setText( "" );
-	menu_text_edit->setMaxLength( 32767 );
-	menu_text_edit->setEchoMode( QLineEdit::Normal );
-	menu_text_edit->setFrame( TRUE );
-
-	menu_text_label = new QLabel( this, "Label_3" );
-	menu_text_label->setGeometry( 30, 280, 170, 30 );
-	menu_text_label->setText(i18n( "Menu Text:" ));
-	menu_text_label->setAlignment( 289 );
-	menu_text_label->setMargin( -1 );
-
-	arguments_edit = new QLineEdit( this, "LineEdit_3" );
-	arguments_edit->setGeometry( 210, 320, 230, 30 );
-	arguments_edit->setText( "" );
-	arguments_edit->setMaxLength( 32767 );
-	arguments_edit->setEchoMode( QLineEdit::Normal );
-	arguments_edit->setFrame( TRUE );
-
-	arguments_label = new QLabel( this, "Label_4" );
-	arguments_label->setGeometry( 30, 320, 170, 30 );
-	arguments_label->setText(i18n( "Arguments:" ));
-	arguments_label->setAlignment( 289 );
-	arguments_label->setMargin( -1 );
-
-	executable_button = new QPushButton( this, "executable_button" );
-	executable_button->setGeometry( 410, 240, 30, 30 );
-	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
-	executable_button->setText( "..." );
-	executable_button->setAutoRepeat( FALSE );
-	executable_button->setAutoResize( FALSE );
 
 	resize( 510, 380 );
 
@@ -244,6 +245,7 @@ void CToolsConfigDlg::slotHelp()
 {
   kapp->invokeHTMLHelp("kdevelop/index-2.html", "ss2.3" );
 }
+
 
 
 

@@ -1,6 +1,6 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = kdevelop
-CXXFLAGS = -O2 -Wall 
+CXXFLAGS = -O2 -Wall
 LDFLAGS = 
 kdevelop_SOURCES = ctoolsconfigdlg.cpp cexecuteargdlg.cpp main.cpp ktipofday.cpp kswallow.cpp kstartuplogo.cpp cupdatekdedocdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp cprintdlg.cpp coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_kdlginit.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp cfileprintdlg.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdoctree.cpp cdocbrowser.cpp cdatepikerdlg.cpp ccreatedocdatabasedlg.cpp cconfigenscriptdlg.cpp cconfiga2psdlg.cpp cclassview.cpp cclasstooldlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp 
 kdevelop_LDADD   = ./classparser/libclassparser.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)

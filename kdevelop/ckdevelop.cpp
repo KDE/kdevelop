@@ -1370,7 +1370,7 @@ void CKDevelop::slotStatusMsg(const char *text)
 {
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
-  statusBar()->clear();
+//  statusBar()->clear();
   statusBar()->changeItem(text, ID_STATUS_MSG );
 }
 
