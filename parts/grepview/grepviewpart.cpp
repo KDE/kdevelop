@@ -17,7 +17,6 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kdialogbase.h>
-#include <kgenericfactory.h>
 #include <kiconloader.h>
 
 #include "kdevcore.h"
@@ -25,7 +24,6 @@
 #include "grepviewwidget.h"
 
 
-typedef KGenericFactory<GrepViewPart> GrepViewFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) );
 
 GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList & )

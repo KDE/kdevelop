@@ -27,6 +27,8 @@
 #include <kdebug.h>
 #include <qlabel.h>
 
+#include "grepviewpart.h"
+
 
 const char *template_desc[] = {
     "verbatim",
@@ -63,7 +65,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
 {
     setCaption(i18n("Search in Files"));
 
-    config = kapp->config();
+    config = GrepViewFactory::instance()->config();
     config->setGroup("GrepDialog");
 
     QGridLayout *layout = new QGridLayout(this, 6, 2, 10, 4);
