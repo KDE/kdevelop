@@ -1,3 +1,21 @@
+2004-12-17 Alexander Dymo <adymo@kdevelop.org>
+ * Advanced subclassing option in C++ New Class Wizard can be used
+   for classes in the persistant class store. This means that if
+   the PCS for Qt library is built then advanced subclassing from
+   Qt classes is possible in the wizard.
+
+2004-12-15 Alexander Dymo <adymo@kdevelop.org>
+ * Finished the implementation of plugin profiles for KDevelop shell
+   and shell extension architecture.
+   This means that KDevelop IDE becomes a KDevelop Platform now. And
+   KDevelop IDE is now only a program built on KDevelop Platform.
+ * Made KDevelop Assistant to use KDevelop Platfrom.
+ * Implemented profile detection for projects. Now, for example, when you open
+   C++ language project KDevelop loads "CppIDE" profile. If a project file
+   has KDE keyword set then KDevelop loads "KDECppIDE" profile (profile defines
+   a list of plugins to be loaded and unloaded). kdevprofileeditor will show
+   all information related to the profile.
+
 2004-11-23  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Added some ruby project options which are used for both debugging and an
