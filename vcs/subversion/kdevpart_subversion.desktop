@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Subversion
+Comment[xx]=xxsubversionxx
+Name=KDevsubversion
+Name[sv]=KDevelop subversion
+Name[xx]=xxSubversionxx
+Name[fr]=Subversion
+GenericName=Subversion
+Icon=misc
+ServiceTypes=KDevelop/VersionControl
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevsubversion
+X-KDevelop-Version=1
