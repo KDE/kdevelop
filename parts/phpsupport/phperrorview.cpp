@@ -43,7 +43,7 @@ void PHPErrorView::parse(QString& phpOutput){
   ErrorItem* errorItem;
   int currentLine=0;
 
-  // todo, test and add other
+  /// @todo test and add other
   QRegExp parseError("^<b>Parse error</b>:  parse error in <b>(.*)</b> on line <b>(.*)</b>.*$");
   QRegExp undefFunctionError("^<b>Fatal error</b>:  Call to undefined function:  (.*) in <b>(.*)</b> on line <b>(.*)</b>.*$");
   QRegExp warning("^<b>Warning</b>.*<b>(.*)</b> on line <b>(.*)</b>.*$");

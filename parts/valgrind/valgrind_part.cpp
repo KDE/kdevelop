@@ -168,7 +168,7 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
   if ( proc->isRunning() ) {
     KMessageBox::sorry( 0, i18n( "There is already an instance of valgrind running." ) );
     return;
-    // todo - ask for forced kill
+    /// @todo - ask for forced kill
   }
  
   clear();

@@ -46,7 +46,7 @@ PHPConfigWidget::PHPConfigWidget(PHPConfigData* data,QWidget* parent,  const cha
   }
  
   // page shell
-  // todo,check were the php.exe is located
+  /// @todo check were the php.exe is located
   QString exepath = configData->getPHPExecPath();
   if(exepath.isEmpty()) exepath = "/usr/local/bin/php"; 
   exe_edit->setText(exepath);

@@ -330,7 +330,7 @@ void SvnPart::slotStatus(bool remote) {
 		true, //get_all
 		true, //update
 		false, //do it an option ? (no_ignore)
-		NULL,//notify_func //TODO
+		NULL,//notify_func /// @todo
 		NULL,//notify_baton
 		pool);
 	if (err) {

@@ -32,7 +32,7 @@ public:
     // and the corresponding index file names. Index files in ~/.kdoc
     // have a (private) suffix in their item name
     static void readLibraryDocs(QString dir, QStringList *itemNames, QStringList *fileNames);
-    static void getAllLibraries(QStringList *itemNames, QStringList *fileNames); // TODO: not a good name
+    static void getAllLibraries(QStringList *itemNames, QStringList *fileNames); /// @todo: not a good name
     // Returns the list of index files to be hidden
     static void getHiddenLibraries(QStringList *fileNames);
     static void setHiddenLibraries(const QStringList &fileNames);

@@ -172,7 +172,7 @@ void ProgressDialog::addTocFile(QDomDocument &doc)
                 kdDebug() << "candidate: " << url << endl;
                 candidates.append(url);
             }
-            // TODO: Generalize to arbitrary number of levels
+            /// @todo: Generalize to arbitrary number of levels
             QDomElement grandchildEl = childEl.firstChild().toElement();
             while (!grandchildEl.isNull()) {
                 if (grandchildEl.tagName() == "tocsect2") {
@@ -257,7 +257,7 @@ void ProgressDialog::scanDirectories()
     }
 
     if (indexKDevelop) {
-        //TODO Problem: they are in index.cache.bz2 :-(
+        /// @todo Problem: they are in index.cache.bz2 :-(
     }
 
     if (indexQt) {

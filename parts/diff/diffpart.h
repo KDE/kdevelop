@@ -32,7 +32,7 @@ public:
 
     void openURL( const KURL& url );
     void showDiff( const QString& diff );
-    void showDiff( const KURL &, const KURL & ) { /* TODO */ }
+    void showDiff( const KURL &, const KURL & ) { /** @todo */ }
 
 public slots:
     void slotExecDiff();

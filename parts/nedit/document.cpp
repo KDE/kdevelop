@@ -59,7 +59,7 @@ Document::Document(bool bReadOnly, bool bSingleView, QWidget *parentWidget, cons
   setInstance( KNEditFactory::instance() );
 
   // unique NEdit server name
-  // TODO: make this really unique...
+  /// @todo: make this really unique...
   m_serverName = QString::fromLatin1( "ktexteditor_nedit_" + QString::number( documentNumber() ) );
 
   // start one NEdit server per document
@@ -221,7 +221,7 @@ void Document::processExited()
   delete proc;
   proc = 0;
 
-// TODO - notify views
+/// @todo - notify views
 
   kdDebug() << "Process Exited" << endl;
 
@@ -231,7 +231,7 @@ void Document::processExited()
 
 uint Document::hlMode ()
 {
-  return 0; // TODO: get hlMode  
+  return 0; /// @todo: get hlMode  
 }
 
 bool Document::setHlMode (uint mode)

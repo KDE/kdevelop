@@ -143,7 +143,7 @@ private:
     QString waitingDir;
 };
 
-/*  TODO anders
+/*  @todo anders
     KFSFilterHelper
     A popup widget presenting a listbox with checkable items
     representing the mime types available in the current directory, and

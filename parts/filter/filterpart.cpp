@@ -60,7 +60,7 @@ FilterPart::~FilterPart()
 
 void FilterPart::slotShellInsert()
 {
-    // TODO: Disable menu item if no active part
+    /// @todo: Disable menu item if no active part
 
     KParts::ReadWritePart *part
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
@@ -97,7 +97,7 @@ void FilterPart::slotShellInsert()
 
 void FilterPart::slotShellFilter()
 {
-    // TODO: Disable menu item if no active part
+    /// @todo: Disable menu item if no active part
 
     KParts::ReadWritePart *part
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());

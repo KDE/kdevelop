@@ -390,7 +390,7 @@ private:
   */
   int insertionIndex( QListBox *lb, InsertionPolicy policy );
   
-  /** @private
+  /**
     Private data storage 
   */
   KActionSelectorPrivate *d;

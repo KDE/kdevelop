@@ -112,7 +112,7 @@ void AdaSupportPart::initialParse ()
     {
         kapp->setOverrideCursor (waitCursor);
 
-        // TODO: Progress indicator!
+        /// @todo: Progress indicator!
 
         QStringList files = project ()->allFiles ();
         for (QStringList::Iterator it = files.begin (); it != files.end (); ++it) {

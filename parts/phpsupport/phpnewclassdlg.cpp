@@ -48,7 +48,7 @@ PHPNewClassDlg::PHPNewClassDlg(const QStringList& baseClassNames,const QString& 
   }
  
   
-  m_baseClassEdit->setCompletionObject( comp ); // todo, change it to KLineEdit
+  m_baseClassEdit->setCompletionObject( comp ); /// @todo change it to KLineEdit
   connect(m_baseClassEdit,SIGNAL(returnPressed(const QString&)),comp,SLOT(addItem(const QString&)));
   connect(m_classNameEdit,SIGNAL(textChanged(const QString&)),
 	  this,SLOT(classNameTextChanged(const QString&)));

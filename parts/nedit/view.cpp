@@ -65,18 +65,18 @@ void View::embedNEdit( WId id )
 
 QPoint View::cursorCoordinates ()
 {
-  // TODO
+  /// @todo implement this function
   return QPoint();
 }
 
 void View::cursorPosition (uint *line, uint *col)
 {
-  // TODO
+  /// @todo implement this function
 }
 
 void View::cursorPositionReal (uint *line, uint *col)
 {
-  // TODO
+  /// @todo implement this function
 }
 
 bool View::setCursorPosition (uint line, uint col)
@@ -93,19 +93,19 @@ bool View::setCursorPositionReal (uint line, uint col)
 
 uint View::cursorLine ()
 {
-  // TODO
+  /// @todo implement this function
   return 0;
 }
 
 uint View::cursorColumn ()
 {
-  // TODO
+  /// @todo implement this function
   return 0;
 }
 
 uint View::cursorColumnReal ()
 {
-  // TODO
+  /// @todo implement this function
   return 0;
 }
 

@@ -69,7 +69,7 @@ QString SQLSupportPart::cryptStr(const QString& aStr)
 
 void SQLSupportPart::activeConnectionChanged()
 {
-    // TODO
+    /// @todo
 }
 
 void SQLSupportPart::clearConfig()
@@ -220,7 +220,7 @@ void SQLSupportPart::savedFile( const QString &fileName )
 
 KDevLanguageSupport::Features SQLSupportPart::features()
 {
-    return Features( 0 ); // TODO...
+    return Features( 0 ); /// @todo...
 }
 
 KMimeType::List SQLSupportPart::mimeTypes( )

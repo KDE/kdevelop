@@ -265,7 +265,7 @@ void KDevFileSelector::readConfig(KConfig *config, const QString & name)
 
     autoSyncEvents = config->readNumEntry( "AutoSyncEvents", 0 );
     // connect events as needed
-    // TODO - solve startup problem: no need to set location for each doc opened!
+    /// @todo - solve startup problem: no need to set location for each doc opened!
     if ( autoSyncEvents & DocumentChanged )
         connect( partController, SIGNAL( viewChanged() ), this, SLOT( autoSync() ) );
 
@@ -458,7 +458,7 @@ void KDevFileSelector::autoSync( KParts::Part *part )
         waitingUrl = u.directory();
     }
 }
-//FIXME crash on shutdown
+/// @todo FIXME crash on shutdown
 void KDevFileSelector::setActiveDocumentDir()
 {
     //kdDebug()<<"KDevFileSelector::setActiveDocumentDir()"<<endl;
@@ -469,8 +469,8 @@ void KDevFileSelector::setActiveDocumentDir()
 
 void KDevFileSelector::viewChanged()
 {
-    // TODO: make sure the button is disabled if the directory is unreadable, eg
-    //       the document URL has protocol http
+    /// @todo: make sure the button is disabled if the directory is unreadable, eg
+    ///       the document URL has protocol http
     acSyncDir->setEnabled( ! activeDocumentUrl().directory().isEmpty() );
 }
 
@@ -516,11 +516,11 @@ bool KDevFileSelector::eventFilter( QObject* o, QEvent *e )
             = lb->height() < lb->contentsHeight() ? lb->verticalScrollBar()->width() : 0;
         int w = QMIN( mainwin->main()->width(), lb->contentsWidth() + add );
         lb->resize( w, lb->height() );
-        // TODO - move the listbox to a suitable place if nessecary
-        // TODO - decide if it is worth caching the size while untill the contents
-        //        are changed.
+        /// @todo - move the listbox to a suitable place if nessecary
+        /// @todo - decide if it is worth caching the size while untill the contents
+        ///        are changed.
     }
-    // TODO - same thing for the completion popup?
+    /// @todo - same thing for the completion popup?
     return QWidget::eventFilter( o, e );
 }
 
