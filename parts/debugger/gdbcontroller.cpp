@@ -1240,12 +1240,13 @@ void GDBController::slotStart(const QString& shell, const QString &application)
         queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
     // Get the run environment variables pairs into the environstr string
-    // in the form of; "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
+    // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
     // "set enviroment" command
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
+    QString project_mananger_key = (DomUtil::readEntry(dom,"general/projectmanagement")).lower();
     DomUtil::PairList envvars =
-        DomUtil::readPairListEntry(dom, "/kdevautoproject/run/envvars",
+        DomUtil::readPairListEntry(dom, "/" + project_mananger_key + "/run/envvars",
                                         "envvar", "name", "value");
     QString environstr;
     DomUtil::PairList::ConstIterator it;
