@@ -270,6 +270,7 @@ public:
   virtual void removeView(QWidget *view);
   virtual void raiseView(QWidget *view);
   virtual void lowerView(QWidget *view);
+  virtual void lowerAllViews() { ; /* dummy function */ }
   virtual void loadSettings();
   virtual KMainWindow *main();
   virtual KStatusBar* statusBar()

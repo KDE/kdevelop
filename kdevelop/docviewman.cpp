@@ -60,8 +60,8 @@ DocViewMan::DocViewMan( CKDevelop* parent )
   ,m_pCurBrowserDoc(0L)
   ,m_pCurBrowserView(0L)
   ,m_curIsBrowser(false)
-  ,m_pKateFactory(0L)
   ,m_bCloseActionPending(false)
+  ,m_pKateFactory(0L)
 {
   m_MDICoverList.setAutoDelete(true);
   m_docBookmarksList.setAutoDelete(true);
