@@ -953,10 +953,12 @@ bool PartController::saveFile( const KURL & url, bool force )
 			;
 	}
 
-	part->save();
-	_dirtyDocuments.remove( part );
-	emit documentChangedState( url, Clean );
-	emit savedFile( url );
+	if ( part->save() )
+	{
+		_dirtyDocuments.remove( part );
+		emit documentChangedState( url, Clean );
+		emit savedFile( url );
+	}
 	
 	return true;
 }
@@ -1073,19 +1075,10 @@ bool PartController::closeAllOthers( const KURL & url )
 
 void PartController::slotCloseOtherWindows()
 {
-	KParts::ReadOnlyPart * active = dynamic_cast<KParts::ReadOnlyPart*>(activePart());
-	if ( !active ) return;
-	
-	closeAllOthers( active->url() );
-	/*	
-	KParts::ReadOnlyPart * active = dynamic_cast<KParts::ReadOnlyPart*>(activePart());
-	if ( !active ) return;
-
-	KURL::List ignoreList;
-	ignoreList.append( active->url() );
-	
-	closeFilesDialog( ignoreList );
-	*/
+	if ( KParts::ReadOnlyPart * active = dynamic_cast<KParts::ReadOnlyPart*>( activePart() ) )
+	{
+		closeAllOthers( active->url() );
+	}
 }
 
 void PartController::slotOpenFile()
