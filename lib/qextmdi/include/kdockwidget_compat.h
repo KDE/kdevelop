@@ -634,6 +634,21 @@ public:
    */
   KDockWidget *findNearestDockWidget(DockPosition pos);
 
+  /**
+   * Allows changing the pixmap which is used for the caption or dock tabs
+   *
+   * @param pixmap is the pixmap to set
+   * @since 3.2
+   */
+   void setPixmap(const QPixmap& pixmap=QPixmap());
+		    
+  /**
+   * Returns the dockwidget's associated caption/dock tab pixmap
+   *
+   * @since 3.2
+   */
+   const QPixmap& pixmap() const;
+				     
 public slots:
   /**
    * subject to changes. It doesn't completely work yet without small hacks from within the calling application (Perhaps

@@ -635,6 +635,24 @@ KDockWidget::KDockWidget( KDockManager* dockManager, const char* name, const QPi
   applyToWidget( parent, QPoint(0,0) );
 }
 
+void KDockWidget::setPixmap(const QPixmap& pixmap) {
+	delete pix;
+	pix=new QPixmap(pixmap);
+	setIcon(*pix);
+	KDockTabGroup *dtg=parentDockTabGroup();
+	if (dtg)
+		dtg->changeTab(this,pixmap,dtg->tabLabel(this));
+	 QWidget *contWid=parentDockContainer();
+         if (contWid)
+         	dynamic_cast<KDockContainer*>(contWid)->setPixmap(this,pixmap);
+
+
+}
+
+const QPixmap& KDockWidget::pixmap() const {
+	return *pix;
+}
+
 KDockWidget::~KDockWidget()
 {
   d->pendingDtor = true;
