@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
   aboutData.addAuthor("Stefan Heidrich",I18N_NOOP("KAppWizard, Printing"), "sheidric@rz.uni-potsdam.de");
   aboutData.addAuthor("Stefan Bartel",I18N_NOOP("Real-File-Viewer, Project Options"), "bartel@rz.uni-potsdam.de");
   aboutData.addAuthor("John Birch",I18N_NOOP("Internal Debugger, port of KDevelop 1.3 to KDE 2.1"), "jbb@kdevelop.org");
-	aboutData.addAuthor("F@lk Brettschneider",I18N_NOOP("MDI"), "falk.brettschneider@gmx.de", "http://www.geocities.com/gigafalk/qextmdi.htm");
+	aboutData.addAuthor("F@lk Brettschneider",I18N_NOOP("MDI, many Bugfixes"), "falk.brettschneider@gmx.de", "http://www.geocities.com/gigafalk/qextmdi.htm");
 
   aboutData.addCredit ("Jochen Wilhelmy",I18N_NOOP("Initial KWrite sources"), "digisnap@cs.tu-berlin.de");
   aboutData.addCredit ("Martin R. Jones",I18N_NOOP("KDE Help"), "mjones@kde.org");
@@ -123,6 +123,10 @@ int main(int argc, char* argv[])
   aboutData.addCredit ("Carsten Wolff",I18N_NOOP("Patches/Bugfixes"), "AirWulf666@gmx.net");
   aboutData.addCredit ("Lorenzo Delana",I18N_NOOP("Patches/Bugfixes"), "ldelana@libero.it");
   aboutData.addCredit ("Andre Alexander Bell",I18N_NOOP("Patches/Bugfixes"), "andre.bell@gmx.de");
+  aboutData.addCredit ("John Firebaugh",I18N_NOOP("Patches/Bugfixes"), "jfirebaugh@kde.org");
+  aboutData.addCredit ("Eray Ozkural",I18N_NOOP("Patches/Bugfixes"), "erayo@cs.bilkent.edu.tr");
+  aboutData.addCredit ("Markus Kuehni",I18N_NOOP("Patches/Bugfixes"), "markus.kuehni@trilab.ch");
+  aboutData.addCredit ("Nikita Youshchenko",I18N_NOOP("Patches/Bugfixes"), "mokhin@bog.msu.ru");
 
   aboutData.addCredit ("Jacek Wojdel",I18N_NOOP("Startlogo KDevelop 1.0"), "wojdel@kbs.twi.tudelft.nl");
   aboutData.addCredit ("Ralph Kocher",I18N_NOOP("Startlogo KDevelop 1.1, 1.2"), "RKocher@t-online.de");
@@ -137,20 +141,6 @@ int main(int argc, char* argv[])
   KApplication a;
   a.dcopClient()->attach();
   a.dcopClient()->registerAs("kdevelop");
-
-// KDE version check -  no more (rokrau 081201)
-//  KStandardDirs stddirs;
-//  QString libPath = stddirs.findResourceDir("lib", "libkdeui.so.3");
-//  QFileInfo libFI( libPath + "/libkdeui.so.3");
-//  QDateTime requiredDate(QDate(2001,5,24), QTime(22,30));
-//  if ( libFI.lastModified() < requiredDate) {
-//    KMessageBox::sorry(0L,
-//                       i18n("KDevelop cannot start :-(\n") +
-//                       i18n("because your KDE base library libkdeui.so is too old!\n\n") +
-//                       i18n("You need a version newer than %1\n but the detected version is from %2.\n").arg(requiredDate.toString()).arg(libFI.lastModified().toString()),
-//                       i18n("KDE version") );
-//    ::exit(0);
-//  }
 
   config = KGlobal::config();
   config->setGroup("General Options");
