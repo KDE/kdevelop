@@ -91,8 +91,12 @@ CParsedMethod::~CParsedMethod()
  *-----------------------------------------------------------------*/
 void CParsedMethod::addArgument( CParsedArgument *anArg )
 {
-  assert( anArg != NULL );
-
+  //  assert( anArg != NULL );
+  if(anArg == 0 ){
+    cerr << "ERROR!!! in parser void CParsedMethod::addArgument(   : \n";
+    return;
+  }
+  
   if( anArg->type != "void" )
     arguments.append( anArg );
 }
@@ -224,7 +228,11 @@ void CParsedMethod::out()
  *-----------------------------------------------------------------*/
 void CParsedMethod::copy( CParsedMethod *aMethod )
 {
-  assert( aMethod != NULL );
+  //  assert( aMethod != NULL );
+  if(aMethod == 0 ){
+    cerr << "ERROR!!! in parser  void CParsedMethod::copy( CParsedMethod *aMethod ) \n";
+    return;
+  }
 
   CParsedArgument *newArg;
   CParsedArgument *anArg;

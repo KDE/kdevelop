@@ -89,7 +89,11 @@ CParsedAttribute::~CParsedAttribute()
  *-----------------------------------------------------------------*/
 void CParsedAttribute::setType( const char *aType )
 {
-  assert( aType != NULL );
+  //  assert( aType != NULL );
+   if(aType == 0 ){
+    cerr << "ERROR!!! in parser void CParsedAttribute::setType( const char *aType ) : \n";
+    return;
+  }
 
   type = aType;
   type = type.stripWhiteSpace();

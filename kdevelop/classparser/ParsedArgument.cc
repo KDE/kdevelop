@@ -84,7 +84,8 @@ CParsedArgument::~CParsedArgument()
  *-----------------------------------------------------------------*/
 void CParsedArgument::setName( const char *aName )
 {
-  assert( aName != NULL && strlen( aName ) > 0 );
+  //  assert( aName != NULL && strlen( aName ) > 0 );
+  
 
   name = aName;
   name = name.stripWhiteSpace();
@@ -102,8 +103,12 @@ void CParsedArgument::setName( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedArgument::setType( const char *aType )
 {
-  assert( aType != NULL && strlen( aType ) > 0 );
-
+  //  assert( aType != NULL && strlen( aType ) > 0 );
+  
+  if(aType == 0 ){
+    cerr << "ERROR!!! in parser  CParsedArgument::setType: \n";
+    return 0;
+  }
   type = aType;
   type = type.stripWhiteSpace();
 }
@@ -142,7 +147,11 @@ void CParsedArgument::setNamePos( int pos )
  *-----------------------------------------------------------------*/
 void CParsedArgument::copy( CParsedArgument *anArg )
 {
-  assert( anArg != NULL );
+  //  assert( anArg != NULL );
+  if(anArg == 0 ){
+    cerr << "ERROR!!! in parser  void CParsedArgument::copy( CParsedArgument *anArg ): \n";
+    return;
+  }
 
   setNamePos( anArg->posName );
   setName( anArg->name );

@@ -82,7 +82,11 @@ CParsedParent::~CParsedParent()
  *-----------------------------------------------------------------*/
 void CParsedParent::setName( const char *aName )
 {
-  assert( aName != NULL && strlen( aName ) > 0 );
+  //  assert( aName != NULL && strlen( aName ) > 0 );
+  if(aName == 0 ){
+    cerr << "ERROR!!! in parser void CParsedParent::setName(: \n";
+    return;
+  }
 
   name = aName;
 }
@@ -99,7 +103,7 @@ void CParsedParent::setName( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedParent::setExport( int aExport )
 {
-  assert( aExport == PUBLIC || aExport == PRIVATE || aExport == PROTECTED );
+  //  assert( aExport == PUBLIC || aExport == PRIVATE || aExport == PROTECTED );
 
   exportattr = aExport;
 }

@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "ParsedClassContainer.h"
+#include <iostream.h>
 
 /*********************************************************************
  *                                                                   *
@@ -86,9 +87,13 @@ void CParsedClassContainer::clear()
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::addClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL );
-  assert( !aClass->name.isEmpty() );
-  assert( !hasClass( aClass->name ) );
+  //  assert( aClass != NULL );
+  //  assert( !aClass->name.isEmpty() );
+  //  assert( !hasClass( aClass->name ) );
+  if(aClass == 0 ){
+    cerr << "ERROR!!! in parser  CParsedClassContainer::addClass: \n";
+    return;
+  }
 
   classes.insert( aClass->name, aClass );
 }
@@ -107,9 +112,17 @@ void CParsedClassContainer::addClass( CParsedClass *aClass )
 void CParsedClassContainer::addSubClass( const char *key, 
                                          CParsedClass *aClass )
 {
-  assert( aClass != NULL );
-  assert( !aClass->name.isEmpty() );
-  assert( key != NULL );
+  //  assert( aClass != NULL );
+  //  assert( !aClass->name.isEmpty() );
+  //  assert( key != NULL );
+  if(aClass == 0 ){
+    cerr << "ERROR!!! in parser  CParsedClassContainer::addSubClass: \n";
+    return;
+  }
+  if(key == 0 ){
+    cerr << "ERROR!!! in parser  CParsedClassContainer::addSubClass: \n";
+    return;
+  }
 
   classes.insert( key, aClass );
 }
@@ -126,9 +139,13 @@ void CParsedClassContainer::addSubClass( const char *key,
  *-----------------------------------------------------------------*/
 void CParsedClassContainer::removeClass( const char *aName )
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
-  assert( hasClass( aName ) );
+  //  assert( aName != NULL );
+  //  assert( strlen( aName ) > 0 );
+  //  assert( hasClass( aName ) );
+  if(aName == 0 ){
+    cerr << "ERROR!!! in parser void CParsedClassContainer::removeClass( const char *aName ): \n";
+    return;
+  }
 
   classes.remove( aName );
 }
@@ -182,7 +199,11 @@ bool CParsedClassContainer::hasClass( const char *aName )
  *-----------------------------------------------------------------*/
 CParsedClass *CParsedClassContainer::getClassByName( const char *aName )
 {
-  assert( aName != NULL );
+  //  assert( aName != NULL );
+   if(aName == 0 ){
+    cerr << "ERROR!!! in parser CParsedClass *CParsedClassContainer::getClassByName( const char *aName )  \n";
+    return 0;
+  }
 
   CParsedClass *aClass;
 

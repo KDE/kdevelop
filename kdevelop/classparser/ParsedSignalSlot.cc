@@ -82,7 +82,11 @@ CParsedSignalSlot::~CParsedSignalSlot()
  *-----------------------------------------------------------------*/
 void CParsedSignalSlot::setSignal( QString &aSignal )
 {
-  assert( aSignal != NULL && !aSignal.isEmpty() );
+  //  assert( aSignal != NULL && !aSignal.isEmpty() );
+   if(aSignal == 0 ){
+    cerr << "ERROR!!! in parser void CParsedSignalSlot::setSignal( QString &aSignal ) : \n";
+    return;
+  }
 
   signal = aSignal;
 }
@@ -99,7 +103,11 @@ void CParsedSignalSlot::setSignal( QString &aSignal )
  *-----------------------------------------------------------------*/
 void CParsedSignalSlot::setSignal( const char *aSignal )
 {
-  assert( aSignal != NULL && strlen( aSignal ) > 0 );
+  //  assert( aSignal != NULL && strlen( aSignal ) > 0 );
+   if(aSignal == 0 ){
+     cerr << "ERROR!!! in parser void CParsedSignalSlot::setSignal( const char *aSignal )  \n";
+    return;
+  }
 
   signal = aSignal;
 }
@@ -116,7 +124,11 @@ void CParsedSignalSlot::setSignal( const char *aSignal )
  *-----------------------------------------------------------------*/
 void CParsedSignalSlot::setSlot( CParsedMethod *aSlot )
 {
-  assert( aSlot != NULL );
+  //  assert( aSlot != NULL );
+  if(aSlot == 0 ){
+    cerr << "ERROR!!! in parser void CParsedSignalSlot::setSlot( C  : \n";
+    return;
+  }
 
   slot = aSlot;
 }

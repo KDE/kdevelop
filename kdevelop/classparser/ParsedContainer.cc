@@ -1,6 +1,7 @@
 
 #include <assert.h>
 #include "ParsedContainer.h"
+#include <iostream.h>
 
 /*********************************************************************
  *                                                                   *
@@ -57,8 +58,12 @@ CParsedContainer::~CParsedContainer()
  *-----------------------------------------------------------------*/
 void CParsedContainer::addStruct( CParsedStruct *aStruct ) 
 {
-  assert( aStruct != NULL );
-  assert( !aStruct->name.isEmpty() );
+  //  assert( aStruct != NULL );
+  //  assert( !aStruct->name.isEmpty() );
+  if(aStruct == 0 ){
+    cerr << "ERROR!!! in parser  CParsedContainer::addStruct(: \n";
+    return;
+  }
 
   aStruct->setDeclaredInClass( name );
   structs.insert( aStruct->name, aStruct );  
@@ -76,8 +81,12 @@ void CParsedContainer::addStruct( CParsedStruct *aStruct )
  *-----------------------------------------------------------------*/
 void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
 {
-  assert( anAttribute != NULL );
-  assert( !anAttribute->name.isEmpty() );
+  //  assert( anAttribute != NULL );
+  //  assert( !anAttribute->name.isEmpty() );
+  if(anAttribute == 0 ){
+    cerr << "ERROR!!! in parser void CParsedContainer::addAttribute( CParsedAttribute *anAttribute ) \n";
+    return;
+  }
 
   anAttribute->setDeclaredInClass( name );
   attributes.insert( anAttribute->name, anAttribute );
@@ -95,14 +104,18 @@ void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
  *-----------------------------------------------------------------*/
 void CParsedContainer::addMethod( CParsedMethod *aMethod )
 {
-  assert( aMethod != NULL );
-  assert( !aMethod->name.isEmpty() );
-
+  //  assert( aMethod != NULL );
+  //  assert( !aMethod->name.isEmpty() );
+  if(aMethod == 0 ){
+    cerr << "ERROR!!! in parser  CParsedContainer::addMethod( : \n";
+    return;
+  }
+  
   QString str;
-
+  
   aMethod->setDeclaredInClass( name );
   methods.append( aMethod );
-
+  
   aMethod->asString( str );
   methodsByNameAndArg.insert( str, aMethod );
 }
@@ -234,7 +247,11 @@ QList<CParsedMethod> *CParsedContainer::getSortedMethodList()
  *-----------------------------------------------------------------*/
 CParsedAttribute *CParsedContainer::getAttributeByName( const char *aName )
 {    
-  assert( aName != NULL );
+  //  assert( aName != NULL );
+  if(aName == 0 ){
+    cerr << "ERROR!!! in parser  CParsedAttribute *CParsedContainer::getAttributeByName(: \n";
+    return 0;
+  }
 
   return attributes.find( aName );
 }
@@ -312,7 +329,11 @@ QList<CParsedAttribute> *CParsedContainer::getSortedAttributeList()
  *-----------------------------------------------------------------*/
 CParsedStruct *CParsedContainer::getStructByName( const char *aName )
 {    
-  assert( aName != NULL );
+  //  assert( aName != NULL );
+  if(aName == 0 ){
+    cerr << "ERROR!!! in parser void CParsedStruct *CParsedContainer::getStructByName( const char *aName ) \n";
+    return 0;
+  }
 
   return structs.find( aName );
 }
@@ -423,10 +444,14 @@ void CParsedContainer::removeMethod( CParsedMethod *aMethod )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedContainer::removeAttribute( const char *aName )
+void CParsedContainer::removeAttribute( const char *aName ) 
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
+  //  assert( aName != NULL );
+  //  assert( strlen( aName ) > 0 );
+   if(aName == 0 ){
+    cerr << "ERROR!!! in parse void CParsedContainer::removeAttribute( const char *aName )\n";
+    return 0;
+  }
 
   attributes.remove( aName );
 }
@@ -443,9 +468,13 @@ void CParsedContainer::removeAttribute( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedContainer::removeStruct( const char *aName )
 {
-  assert( aName != NULL );
-  assert( strlen( aName ) > 0 );
-
+  //  assert( aName != NULL );
+  //  assert( strlen( aName ) > 0 );
+  if(aName == 0 ){
+    cerr << "ERROR!!! in parser  void CParsedContainer::removeStruct( \n";
+    return;
+  }
+  
   structs.remove( aName );
 }
 

@@ -93,7 +93,11 @@ CParsedClass::~CParsedClass()
  *-----------------------------------------------------------------*/
 void CParsedClass::addParent( CParsedParent *aParent )
 {
-  assert( aParent != NULL );
+  //  assert( aParent != NULL );
+   if(aParent == 0 ){
+    cerr << "ERROR!!! in parser  CParsedClass::addParent: \n";
+    return;
+   }
 
   parents.append( aParent );
 }
@@ -110,7 +114,11 @@ void CParsedClass::addParent( CParsedParent *aParent )
  *-----------------------------------------------------------------*/
 void CParsedClass::addSignal( CParsedMethod *aMethod )
 {
-  assert( aMethod != NULL );
+  //  assert( aMethod != NULL );
+   if(aMethod == 0 ){
+     cerr << "ERROR!!! in parser void CParsedClass::addSignal( CParsedMethod *aMethod ) : \n";
+     return;
+  }
 
   aMethod->setDeclaredInClass( name );
   signalList.append( aMethod );
@@ -132,7 +140,11 @@ void CParsedClass::addSignal( CParsedMethod *aMethod )
  *-----------------------------------------------------------------*/
 void CParsedClass::addSlot( CParsedMethod *aMethod )
 {
-  assert( aMethod != NULL );
+  //  assert( aMethod != NULL );
+   if(aMethod == 0 ){
+    cerr << "ERROR!!! in parser  void CParsedClass::addSlot( CParsedMethod *aMethod ): \n";
+    return;
+  }
 
   QString str;
 
@@ -155,7 +167,11 @@ void CParsedClass::addSlot( CParsedMethod *aMethod )
  *-----------------------------------------------------------------*/
 void CParsedClass::addSignalSlotMap( CParsedSignalSlot *aSS )
 {
-  assert( aSS != NULL );
+  if(aSS == 0 ){
+     cerr << "ERROR!!! in parser  void CParsedClass::addSignalSlotMap( CParsedSignalSlot *aSS ) \n";
+    return;
+  }
+  //  assert( aSS != NULL );
 
   signalMaps.append( aSS );
 }
