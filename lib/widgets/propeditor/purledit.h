@@ -22,9 +22,14 @@
 
 #include "propertywidget.h"
 
+#ifndef PURE_QT
 #include <kfile.h>
-
 class KURLRequester;
+#else
+class QPushButton;
+class QLineEdit;
+#endif
+
 
 namespace PropertyLib{
 
@@ -35,17 +40,29 @@ class PUrlEdit : public PropertyWidget
 {
 Q_OBJECT
 public:
-    PUrlEdit(KFile::Mode mode, MultiProperty* property, QWidget* parent=0, const char* name=0);
+#ifndef PURE_QT
+    enum Mode {File = KFile::File,Directory = KFile::Directory};
+#else
+    enum Mode {File,Directory};
+#endif
+
+    PUrlEdit(Mode mode, MultiProperty* property, QWidget* parent=0, const char* name=0);
 
     virtual QVariant value() const;
     virtual void setValue(const QVariant& value, bool emitChange);
     
 private slots:
     void updateProperty(const QString &val);    
-
+    void select();
 private:
+#ifndef PURE_QT
     KURLRequester *m_edit;
-
+#else
+    QLineEdit *m_edit;
+    QPushButton *m_select;
+    QString m_url;
+    Mode m_mode;
+#endif
 };
 
 }

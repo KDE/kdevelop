@@ -19,33 +19,55 @@
  ***************************************************************************/
 #include "purledit.h"
 
+#ifndef PURE_QT
 #include <kurlrequester.h>
+#else
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#endif
+#include <qfiledialog.h>
 #include <qlayout.h>
 
 namespace PropertyLib{
 
-PUrlEdit::PUrlEdit(KFile::Mode mode, MultiProperty* property, QWidget* parent, const char* name)
+PUrlEdit::PUrlEdit(Mode mode, MultiProperty* property, QWidget* parent, const char* name)
     :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+#ifndef PURE_QT
     m_edit = new KURLRequester(this);
-    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     l->addWidget(m_edit);
-    m_edit->setMode(mode);
-
+    m_edit->setMode((KFile::Mode)mode);
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+#else
+    m_edit = new QLineEdit(this);
+    m_select = new QPushButton("...",this);
+    l->addWidget(m_edit);
+    l->addWidget(m_select);
+    m_mode = mode;
+    connect( m_select, SIGNAL(clicked()),this,SLOT(select()));
+#endif
+    m_edit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
 QVariant PUrlEdit::value() const
 {
+#ifndef PURE_QT
      return QVariant(m_edit->url());
+#else
+     return QVariant(m_url);
+#endif
 }
 
 void PUrlEdit::setValue(const QVariant& value, bool emitChange)
 {
+#ifndef PURE_QT
     disconnect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
     m_edit->setURL(value.toString());
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+#else
+    m_edit->setText(value.toString());
+#endif
     if (emitChange)
         emit propertyChanged(m_property, value);
 }
@@ -55,6 +77,18 @@ void PUrlEdit::updateProperty(const QString &val)
     emit propertyChanged(m_property, QVariant(val));
 }
 
+void PUrlEdit::select()
+{
+    QString path = m_url;
+    if( m_mode == Directory )
+	m_url = QFileDialog::getExistingDirectory( m_url,this);
+    else
+        m_url = QFileDialog::getOpenFileName(m_url, QString::null, this);
+    updateProperty(m_url);
+    m_edit->setText(m_url);
+
+}
+	
 }
 
 #ifndef PURE_QT

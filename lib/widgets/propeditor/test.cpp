@@ -67,6 +67,15 @@ int main( int argc, char **argv )
        new Property( Property::StringList, "StringList",
                      "sample stringlist", things ) );
 
+
+     currentList->addProperty(
+        new Property( Property::DirectoryURL, "Directory",
+                      "sample dir", "C:/" ) );
+
+     currentList->addProperty(
+        new Property( Property::FileURL, "File",
+                      "sample file", "C:/" ) );
+	
     editor->populateProperties( currentList );
 
     app.setMainWidget( editor );

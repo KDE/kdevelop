@@ -1,5 +1,5 @@
 TEMPLATE = app
-CONFIG += debug
+CONFIG += release
 DEFINES += PURE_QT
 
 SOURCES += childproperty.cpp  pcombobox.cpp  \
@@ -18,7 +18,7 @@ SOURCES += childproperty.cpp  pcombobox.cpp  \
 	propertywidgetproxy.cpp plinestyleedit.cpp \
 	qeditlistbox.cpp pcolorbutton.cpp \
 	pdoublenuminput.cpp qfloatinput.cpp \
-	test.cpp
+	purledit.cpp test.cpp
 
 HEADERS += childproperty.h pcombobox.h \
 	pdummywidget.h ppointedit.h \
@@ -35,6 +35,6 @@ HEADERS += childproperty.h pcombobox.h \
 	pcheckbox.h plinestyleedit.h \
 	qeditlistbox.h pcolorbutton.h \
 	pdoublenuminput.h qfloatinput.h \
-	compat_tools.h
+	compat_tools.h purledit.h
 
 IMAGES += undo.xpm

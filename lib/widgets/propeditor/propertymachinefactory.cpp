@@ -50,10 +50,11 @@
 #include "ppixmapedit.h"
 #include "pcursoredit.h"
 #include "plinestyleedit.h"
+#include "purledit.h"
+
 
 #ifndef PURE_QT
 #include "pfontbutton.h"
-#include "purledit.h"
 #include "pcolorcombo.h"
 #endif
 
@@ -97,11 +98,12 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
 #ifndef PURE_QT
         case Property::Font:
             return new Machine(new PFontButton(property));
-        case Property::FileURL:
-            return new Machine(new PUrlEdit(KFile::File, property));
-        case Property::DirectoryURL:
-            return new Machine(new PUrlEdit(KFile::Directory, property));
 #endif
+        case Property::FileURL:
+            return new Machine(new PUrlEdit(PUrlEdit::File, property));
+        case Property::DirectoryURL:
+            return new Machine(new PUrlEdit(PUrlEdit::Directory, property));
+
         case Property::Double:
             return new Machine(new PDoubleNumInput(property));
         case Property::Pixmap:
