@@ -1,3 +1,5 @@
+SUBDIRS = buildsystem
+
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/project -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets/propeditor -I$(top_builddir)/lib/project $(all_includes)
 METASOURCES = AUTO
 
