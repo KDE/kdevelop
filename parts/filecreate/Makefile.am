@@ -1,3 +1,5 @@
+SUBDIRS = file-templates
+
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevfilecreate.la
