@@ -74,6 +74,7 @@ protected slots:
 private:
     bool qt_test;
     bool kde_test;
+    bool till_doc;
     bool successful;
     
     bool glimpse;
