@@ -430,7 +430,11 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   pseudoModal = 0L;
 
   clear();
-  clearFileName();
+  KWriteView *view;
+  for (view = views.first(); view != 0L; view = views.next()) {
+    emit view->kWrite->newCaption();
+  }
+//FB Why that clear???  clearFileName();
 
 #if defined(QT_I18N) && defined(HAVE_NKF_H)
   JPcode = Nkf::EUC;
