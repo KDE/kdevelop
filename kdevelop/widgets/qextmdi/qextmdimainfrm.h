@@ -103,6 +103,7 @@ public:
 	virtual void switchWindows(bool bRight);
    virtual bool event(QEvent* e);
    virtual void setSysButtonsAtMenuPosition();
+	virtual int taskBarHeight() { return m_pTaskBar->height(); };
 
 public slots:
    /**
