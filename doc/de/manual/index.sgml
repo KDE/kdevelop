@@ -2877,8 +2877,8 @@ would take a long time to implement. Then, the "rest" of your work is implementi
 chapter deals with how to use the dialogeditor to create your project widgets as well as what to do in case you see your widgets need
 corrections or additions during the further development process.
 
-You can switch to the Dialog Editor either by selecting "Dialog Editor" from the "Tools"-menu or by the according toolbar icon.
-To switch back to the Project Editor, select "KDevelop" from the dialogeditor's "Tools"-menu or by the icon in the toolbar.
+You can switch to the Dialog Editor either by selecting "Dialog Editor" from the "View"-menu or by the according toolbar icon.
+To switch back to the Project Editor, select "KDevelop" from the dialogeditor's "View"-menu or by the icon in the toolbar.
 
 What else does the dialogeditor's interface offer you ?  Mainly, that its appearance is almost the same as the project editor in term
 of the main view separation as well as the menu- and toolbars. This allows you to make yourself accustomed with the dialogeditor very
