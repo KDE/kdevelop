@@ -4,6 +4,8 @@
 
 * Implement Add Plugin
 
+* Show .po files in project management
+
 * Distinguish vanilla c++ support from c++ + Qt extensions
   and show signals/slots in the class view only with Qt.
 

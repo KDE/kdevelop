@@ -76,6 +76,9 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
 
+    if (!kde)
+        action->setEnabled(false);
+    
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
