@@ -819,15 +819,15 @@ void CKDevelop::slotViewRefresh(){
 }
 
 void CKDevelop::slotViewTabIcons(){
-    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
-                                  (actionCollection()->action("view_tab_text"));
-    pToggleAction->setChecked(false);
-    pToggleAction = dynamic_cast<KToggleAction*>
-                    (actionCollection()->action("view_tab_icons"));
-    pToggleAction->setChecked(true);
-    pToggleAction = dynamic_cast<KToggleAction*>
-                    (actionCollection()->action("view_tab_texticons"));
-    pToggleAction->setChecked(false);
+//    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+//                                  (actionCollection()->action("view_tab_text"));
+//    pToggleAction->setChecked(false);
+//    pToggleAction = dynamic_cast<KToggleAction*>
+//                    (actionCollection()->action("view_tab_icons"));
+//    pToggleAction->setChecked(true);
+//    pToggleAction = dynamic_cast<KToggleAction*>
+//                    (actionCollection()->action("view_tab_texticons"));
+//    pToggleAction->setChecked(false);
     QWidget* w[5];
     w[0] = class_tree;
     w[1] = log_file_tree;
@@ -851,15 +851,15 @@ void CKDevelop::slotViewTabIcons(){
     }
 }
 void CKDevelop::slotViewTabText(){
-    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
-                                  (actionCollection()->action("view_tab_text"));
-    pToggleAction->setChecked(true);
-    pToggleAction = dynamic_cast<KToggleAction*>
-                    (actionCollection()->action("view_tab_icons"));
-    pToggleAction->setChecked(false);
-    pToggleAction = dynamic_cast<KToggleAction*>
-                    (actionCollection()->action("view_tab_texticons"));
-    pToggleAction->setChecked(false);
+//    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+//                                  (actionCollection()->action("view_tab_text"));
+//    pToggleAction->setChecked(true);
+//    pToggleAction = dynamic_cast<KToggleAction*>
+//                    (actionCollection()->action("view_tab_icons"));
+//    pToggleAction->setChecked(false);
+//    pToggleAction = dynamic_cast<KToggleAction*>
+//                    (actionCollection()->action("view_tab_texticons"));
+//    pToggleAction->setChecked(false);
     QWidget* w[5];
     w[0] = class_tree;
     w[1] = log_file_tree;
@@ -883,15 +883,15 @@ void CKDevelop::slotViewTabText(){
     }
 }
 void CKDevelop::slotViewTabTextIcons(){
-    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
-                                  (actionCollection()->action("view_tab_text"));
-    pToggleAction->setChecked(false);
-    pToggleAction = dynamic_cast<KToggleAction*>
-                    (actionCollection()->action("view_tab_icons"));
-    pToggleAction->setChecked(false);
-    pToggleAction = dynamic_cast<KToggleAction*>
-                    (actionCollection()->action("view_tab_texticons"));
-    pToggleAction->setChecked(true);
+//    KToggleAction* pToggleAction = dynamic_cast<KToggleAction*>
+//                                  (actionCollection()->action("view_tab_text"));
+//    pToggleAction->setChecked(false);
+//    pToggleAction = dynamic_cast<KToggleAction*>
+//                    (actionCollection()->action("view_tab_icons"));
+//    pToggleAction->setChecked(false);
+//    pToggleAction = dynamic_cast<KToggleAction*>
+//                    (actionCollection()->action("view_tab_texticons"));
+//    pToggleAction->setChecked(true);
     QWidget* w[5];
     w[0] = class_tree;
     w[1] = log_file_tree;
@@ -1760,16 +1760,16 @@ void CKDevelop::setDebugMenuProcess(bool enable)
   toolBar()->setItemEnabled(ID_DEBUG_NEXT,                  onOff);
   toolBar()->setItemEnabled(ID_DEBUG_FINISH,                onOff);
 
-  debug_menu->setItemEnabled(ID_DEBUG_RUN,                  onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_RUN_CURSOR,           onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_NEXT,                 onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_NEXT_INST,            onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_STEP,                 onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_STEP_INST,            onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_FINISH,               onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_MEMVIEW,              onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_BREAK_INTO,           onOff);
-  debug_menu->setItemEnabled(ID_DEBUG_STOP,                 enable);
+//  debug_menu->setItemEnabled(ID_DEBUG_RUN,                  onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_RUN_CURSOR,           onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_NEXT,                 onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_NEXT_INST,            onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_STEP,                 onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_STEP_INST,            onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_FINISH,               onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_MEMVIEW,              onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_BREAK_INTO,           onOff);
+//  debug_menu->setItemEnabled(ID_DEBUG_STOP,                 enable);
 
   // now create/destroy the floating toolbar
   if (onOff && dbgController && dbgEnableFloatingToolbar)
@@ -4647,34 +4647,34 @@ void CKDevelop::statusCallback(int id_){
 //    ON_STATUS_MSG(ID_PROJECT_MAKE_TAGS, i18n("Creates a tags file from the current project sources"))
 //    ON_STATUS_MSG(ID_PROJECT_LOAD_TAGS, i18n("Load a tags file generated for the current project sources"))
 
-    ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
-    ON_STATUS_MSG(ID_BUILD_MAKE,                            i18n("Invokes make-command"))
-    ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,                     i18n("Rebuilds the program"))
-    ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,               i18n("Invokes make clean and rebuild all"))
-    ON_STATUS_MSG(ID_BUILD_STOP,                            i18n("Stops make immediately"))
-    ON_STATUS_MSG(ID_BUILD_RUN,                             i18n("Invokes make-command and runs the program"))
-    ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,                   i18n("Lets you set run-arguments to the binary and invokes the make-command"))
-    ON_STATUS_MSG(ID_BUILD_DISTCLEAN,                       i18n("Invokes make distclean and deletes all compiled files"))
-    ON_STATUS_MSG(ID_BUILD_MAKECLEAN,                       i18n("Invokes make clean which deletes all object and metaobject files"))
-    ON_STATUS_MSG(ID_BUILD_AUTOCONF,                        i18n("Invokes automake and co."))
-    ON_STATUS_MSG(ID_BUILD_CONFIGURE,                       i18n("Invokes ./configure"))
+//    ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
+//    ON_STATUS_MSG(ID_BUILD_MAKE,                            i18n("Invokes make-command"))
+//    ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,                     i18n("Rebuilds the program"))
+//    ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,               i18n("Invokes make clean and rebuild all"))
+//    ON_STATUS_MSG(ID_BUILD_STOP,                            i18n("Stops make immediately"))
+//    ON_STATUS_MSG(ID_BUILD_RUN,                             i18n("Invokes make-command and runs the program"))
+//    ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,                   i18n("Lets you set run-arguments to the binary and invokes the make-command"))
+//    ON_STATUS_MSG(ID_BUILD_DISTCLEAN,                       i18n("Invokes make distclean and deletes all compiled files"))
+//    ON_STATUS_MSG(ID_BUILD_MAKECLEAN,                       i18n("Invokes make clean which deletes all object and metaobject files"))
+//    ON_STATUS_MSG(ID_BUILD_AUTOCONF,                        i18n("Invokes automake and co."))
+//    ON_STATUS_MSG(ID_BUILD_CONFIGURE,                       i18n("Invokes ./configure"))
 
-    ON_STATUS_MSG(ID_DEBUG_START,                           i18n("Invokes the debugger on the current project executable"))
-    ON_STATUS_MSG(ID_DEBUG_START_OTHER,                     i18n("Various startups for the debugger"))
-    ON_STATUS_MSG(ID_DEBUG_SET_ARGS,                        i18n("Lets you debug your project app after specifying arguments for your app."))
-    ON_STATUS_MSG(ID_DEBUG_CORE,                            i18n("Examine a core file"))
-    ON_STATUS_MSG(ID_DEBUG_NAMED_FILE,                      i18n("Debug an app other than the current project executable"))
-    ON_STATUS_MSG(ID_DEBUG_ATTACH,                          i18n("Attach to running process"))
-    ON_STATUS_MSG(ID_DEBUG_RUN,                             i18n("Continues app execution"))
-    ON_STATUS_MSG(ID_DEBUG_RUN_CURSOR,                      i18n("Continues app execution until reaching the current cursor position"))
-    ON_STATUS_MSG(ID_DEBUG_STOP,                            i18n("Kills the app and exits the debugger"))
-    ON_STATUS_MSG(ID_DEBUG_STEP,                            i18n("Step into"))
-    ON_STATUS_MSG(ID_DEBUG_STEP_INST,                       i18n("Step instr"))
-    ON_STATUS_MSG(ID_DEBUG_NEXT,                            i18n("Step over"))
-    ON_STATUS_MSG(ID_DEBUG_NEXT_INST,                       i18n("Step over instr"))
-    ON_STATUS_MSG(ID_DEBUG_FINISH,                          i18n("Run to end of function"))
-    ON_STATUS_MSG(ID_DEBUG_MEMVIEW,                         i18n("Various views into the app"))
-    ON_STATUS_MSG(ID_DEBUG_BREAK_INTO,                      i18n("Interuppt the app"))
+//    ON_STATUS_MSG(ID_DEBUG_START,                           i18n("Invokes the debugger on the current project executable"))
+//    ON_STATUS_MSG(ID_DEBUG_START_OTHER,                     i18n("Various startups for the debugger"))
+//    ON_STATUS_MSG(ID_DEBUG_SET_ARGS,                        i18n("Lets you debug your project app after specifying arguments for your app."))
+//    ON_STATUS_MSG(ID_DEBUG_CORE,                            i18n("Examine a core file"))
+//    ON_STATUS_MSG(ID_DEBUG_NAMED_FILE,                      i18n("Debug an app other than the current project executable"))
+//    ON_STATUS_MSG(ID_DEBUG_ATTACH,                          i18n("Attach to running process"))
+//    ON_STATUS_MSG(ID_DEBUG_RUN,                             i18n("Continues app execution"))
+//    ON_STATUS_MSG(ID_DEBUG_RUN_CURSOR,                      i18n("Continues app execution until reaching the current cursor position"))
+//    ON_STATUS_MSG(ID_DEBUG_STOP,                            i18n("Kills the app and exits the debugger"))
+//    ON_STATUS_MSG(ID_DEBUG_STEP,                            i18n("Step into"))
+//    ON_STATUS_MSG(ID_DEBUG_STEP_INST,                       i18n("Step instr"))
+//    ON_STATUS_MSG(ID_DEBUG_NEXT,                            i18n("Step over"))
+//    ON_STATUS_MSG(ID_DEBUG_NEXT_INST,                       i18n("Step over instr"))
+//    ON_STATUS_MSG(ID_DEBUG_FINISH,                          i18n("Run to end of function"))
+//    ON_STATUS_MSG(ID_DEBUG_MEMVIEW,                         i18n("Various views into the app"))
+//    ON_STATUS_MSG(ID_DEBUG_BREAK_INTO,                      i18n("Interuppt the app"))
 
     ON_STATUS_MSG(ID_TOOLS_DESIGNER,                        i18n("Start QT's designer (dialog editor)"))
 

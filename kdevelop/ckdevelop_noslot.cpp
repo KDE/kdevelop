@@ -743,8 +743,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
 
-    KAction* pFileNewAction = actionCollection()->action("file_new");
-    pFileNewAction->setEnabled(false);
+//    KAction* pFileNewAction = actionCollection()->action("file_new");
+//    pFileNewAction->setEnabled(false);
     //disableCommand(ID_FILE_NEW);
   }
 
@@ -889,21 +889,22 @@ void CKDevelop::readOptions()
 
 //  config->setGroup("General Options");
 	int mode=config->readNumEntry("tabviewmode", 3);
+	KRadioAction* pRadioAction;
 	switch (mode){
 		case 1:
-			pToggleAction = dynamic_cast<KToggleAction*>
-			                (actionCollection()->action("view_tab_text"));
-			if (pToggleAction) pToggleAction->setChecked(true);
+			pRadioAction = dynamic_cast<KRadioAction*>
+			               (actionCollection()->action("view_tab_text"));
+			if (pRadioAction) pRadioAction->setChecked(true);
 		break;
 		case 2:
-			pToggleAction = dynamic_cast<KToggleAction*>
-			                (actionCollection()->action("view_tab_icons"));
-			if (pToggleAction) pToggleAction->setChecked(true);
+			pRadioAction = dynamic_cast<KRadioAction*>
+			               (actionCollection()->action("view_tab_icons"));
+			if (pRadioAction) pRadioAction->setChecked(true);
 		break;
 		case 3:
-			pToggleAction = dynamic_cast<KToggleAction*>
-			                (actionCollection()->action("view_tab_texticons"));
-			if (pToggleAction) pToggleAction->setChecked(true);
+			pRadioAction = dynamic_cast<KRadioAction*>
+			               (actionCollection()->action("view_tab_texticons"));
+			if (pRadioAction) pRadioAction->setChecked(true);
 		break;
 	}
 
@@ -943,15 +944,15 @@ void CKDevelop::readOptions()
 		if (doctool == DT_KDOC || doctool == 0)
 		{
 			pKdocAction->setChecked(true);
-			pDoxyAction->setChecked(false);
-			if (getProject())
+			//pDoxyAction->setChecked(false);
+			if (hasProject())
 				pDoxyConfAction->setEnabled(false);
 		}
 		else if (doctool == DT_DOX)
 		{
 			pDoxyAction->setChecked(true);
-			pKdocAction->setChecked(false);
-			if (getProject())
+			//pKdocAction->setChecked(false);
+			if (hasProject())
 				pDoxyConfAction->setEnabled(true);
 		}
 	}
@@ -1026,17 +1027,18 @@ void CKDevelop::saveOptions(){
 	config->writeEntry("use_ctags", bCTags);
 
 	// set the mode of the tab headers
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_tab_text"));
-	if (pToggleAction && pToggleAction->isChecked())
+	KRadioAction*
+	pRadioAction = dynamic_cast<KRadioAction*>
+	               (actionCollection()->action("view_tab_text"));
+	if (pRadioAction && pRadioAction->isChecked())
 		config->writeEntry("tabviewmode", 1);
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_tab_icons"));
-	if (pToggleAction && pToggleAction->isChecked())
+	pRadioAction = dynamic_cast<KRadioAction*>
+	               (actionCollection()->action("view_tab_icons"));
+	if (pRadioAction && pRadioAction->isChecked())
 		config->writeEntry("tabviewmode", 2);
-	pToggleAction = dynamic_cast<KToggleAction*>
-	                (actionCollection()->action("view_tab_texticons"));
-	if (pToggleAction && pToggleAction->isChecked())
+	pRadioAction = dynamic_cast<KRadioAction*>
+	               (actionCollection()->action("view_tab_texticons"));
+	if (pRadioAction && pRadioAction->isChecked())
 		config->writeEntry("tabviewmode", 3);
 
 	// write current chosen MDI mode

@@ -115,7 +115,7 @@ bool CKDevelop::slotProjectClose()
       toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_COMPILE_CHOICE);
 
       // close all documents
-      m_docViewManager->doCloseAllDocs();
+     	 m_docViewManager->doCloseAllDocs();
 
       // set project to false and disable all ID_s related to project=true    
       prj->writeProject();
@@ -595,9 +595,9 @@ CProject* CKDevelop::projectOpenCmdl_Part1(QString prjname)
     return 0L;
   }
 
-  project_menu->setEnabled(false);
-  disableCommand(ID_PROJECT_OPEN);
-  accel->setEnabled(false);
+//  project_menu->setEnabled(false);
+//  disableCommand(ID_PROJECT_OPEN);
+//  accel->setEnabled(false);
 
   QString old_project;
   if (project)
@@ -1791,9 +1791,9 @@ void CKDevelop::slotTagSearch()
 }
 void CKDevelop::slotSwitchDocTool()
 {
-	KToggleAction* pDoxyAction = dynamic_cast<KToggleAction*>
+	KRadioAction* pDoxyAction = dynamic_cast<KRadioAction*>
 	                             (actionCollection()->action("project_api_doxygen"));
-	KToggleAction* pKdocAction = dynamic_cast<KToggleAction*>
+	KRadioAction* pKdocAction = dynamic_cast<KRadioAction*>
 	                             (actionCollection()->action("project_api_kdoc"));
 	KAction* pDoxyConfAction = actionCollection()->action("project_api_doxyconf");
 	// kdoc used, can we switch to doxygen ?
@@ -1808,15 +1808,15 @@ void CKDevelop::slotSwitchDocTool()
 			return;
 		}
 		// yes, we have it
-		pKdocAction->setChecked(false);
-		pDoxyAction->setChecked(true);
+		//pKdocAction->setChecked(false);
+		//pDoxyAction->setChecked(true);
 		if (hasProject()) pDoxyConfAction->setEnabled(true);
 		doctool = DT_DOX;
 		return;
 	} else // kdoc
 	{
-		pKdocAction->setChecked(false);
-		pDoxyAction->setChecked(true);
+		//pKdocAction->setChecked(false);
+		//pDoxyAction->setChecked(true);
 		pDoxyConfAction->setEnabled(false);
 		doctool = DT_KDOC;
 	}

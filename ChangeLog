@@ -1,3 +1,7 @@
+2002-02-10  Roland Krause  <rokrau@klondike.dyndns.org>
+    * Done with the first pass over the KActions. Waiting for info on 
+       how to integrate the dynamically created KActions.  
+
 2002-02-09  Roland Krause  <rokrau@klondike.dyndns.org>
     * Interim commit with another set of KAction changes 
 

@@ -142,7 +142,13 @@
   <Menu name="debug">
     <text>&amp;Debug</text>
     <Action name="debug_start" />
-    <Action name="debug_start_other" />
+    <Menu name="debug_start_other">
+      <text>Start (other)</text>
+      <Action name="debug_examine_core" />
+      <Action name="debug_other_exec" />
+      <Action name="debug_attach_process" />
+      <Action name="debug_with_args" />
+    </Menu>
     <Separator/>
     <Action name="debug_run" />
     <Action name="debug_run_cursor" />
@@ -157,29 +163,58 @@
     <Action name="debug_interrupt" />
     <Action name="debug_stop" />
   </Menu>
-  <Menu name="tools">
-    <text>&amp;Tools</text>
-  </Menu>
   <Menu name="options">
     <text>&amp;Options</text>
     <Action name="options_editor" />
-    <Action name="options_editor_colors" />
-    <Action name="options_editor_defaults" />
-    <Action name="options_editor_hl" />
     <Separator/>
     <Action name="options_doc_browser" />
     <Action name="options_tools" />
     <Separator/>
     <Action name="options_setup" />
   </Menu>
-  <Menu name="window">
-    <text>&amp;Window</text>
-  </Menu>
-  <Menu name="bookmarks">
-    <text>Book&amp;marks</text>
-  </Menu>
   <Menu name="help">
     <text>&amp;Help</text>
+    <Action name="help_back" />
+    <Action name="help_forward" />
+    <Separator/>
+    <Action name="help_search_marked" />
+    <Action name="help_search" />
+    <Action name="help_manpage" />
+    <Separator/>
+    <Action name="help_whatsthis" />
+    <Separator/>
+    <Action name="help_contents" />
+    <Action name="help_programming" />
+    <Action name="help_tutorial" />
+    <Action name="help_kdelibref" />
+    <Action name="help_cppreference" />
+    <Separator/>
+    <Action name="help_apidoc" />
+    <Action name="help_userman" />
+    <Separator/>
+    <Action name="help_tip" />
+    <Action name="help_homepage" />
+    <Action name="help_bugreport" />
+    <Separator/>
+    <Action name="help_about_app" />
+    <Action name="help_about_kde" />
   </Menu>
 </MenuBar>
+
+<State name="no_project">
+  <disable>
+    <Action name="file_new" />
+    <Action name="file_close" />
+    <Action name="file_close_all" />
+    <Action name="file_save" />
+    <Action name="file_save_as" />
+    <Action name="file_save_all" />
+    <Action name="file_print" />
+  </disable>
+  <enable>
+    <Action name="file_open" />
+    <Action name="file_quit" />
+  </enable>
+</State>
+
 </kpartgui>
