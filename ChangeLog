@@ -1,3 +1,6 @@
+2003-05-21 Roberto Raggi <roberto@kdevelop.org>
+    * implemented the support for profiles
+
 2003-05-18 Alexander Dymo <cloudtemple@mksat.net>
     * Reformat source option is now available in the "Subclassing" wizard
     * Trollproject:
@@ -20,7 +23,7 @@
 2003-05-16 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
     * Trollproject: Support for custom installation groups or qmake install objects
       Each install object tells "make install" to copy user specified filesgroups to
-      a certain location.      
+      a certain location.
       example:
          doxy.files += docs/*.html \
                        docs/*.css
