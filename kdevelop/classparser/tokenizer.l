@@ -82,6 +82,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "__END_DECLS"    {}
 "inline"         {}
 "volatile"       {}
+"afx_msg"        {}
 
     /*==============> String <==============*/
 "L"?["]{SCHAR}*["]     {return STRING;}
