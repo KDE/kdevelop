@@ -38,7 +38,6 @@ FramestackWidget::FramestackWidget(QWidget *parent, const char *name, WFlags f)
         viewedThread_(0)
 {
     setRootIsDecorated(true);
-    setResizeMode(LastColumn);
     setSorting(-1);
     setSelectionMode(Single);
     addColumn(QString::null);
