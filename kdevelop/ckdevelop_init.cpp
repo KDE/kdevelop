@@ -709,7 +709,7 @@ void CKDevelop::initMenuBar(){
   m_plugin_menu->insertItem(i18n("&Plugin Manager..."),this,SLOT(slotPluginPluginManager()),0,ID_PLUGIN_MANAGER);
   m_plugin_menu->insertSeparator();
 
-  m_kdev_menubar->insertItem(i18n("&Plugins"),m_plugin_menu);
+  m_kdev_menubar->insertItem(i18n("P&lugins"),m_plugin_menu);
   
   ///////////////////////////////////////////////////////////////////
   // Bookmarks-menu entries
