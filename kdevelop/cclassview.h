@@ -60,13 +60,16 @@ public: // Public refreshmethods
   /** Refresh the whole view. */
   void refresh();
 
+  /** Add a source file, parse it and update the tree. */
+  void addFile( const char *aName );
+
   /** Refresh a class by using its' name. */
   void refreshClassByName( const char *aName );
 
 signals:
-	void setStatusbarProgressSteps(int);
-	void setStatusbarProgress(int);
-	void resetStatusbarProgress();
+  void setStatusbarProgressSteps(int);
+  void setStatusbarProgress(int);
+  void resetStatusbarProgress();
 protected: // Protected signals and slots
   protected slots:
     void slotProjectOptions();

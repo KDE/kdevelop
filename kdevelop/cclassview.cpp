@@ -121,7 +121,7 @@ void CClassView::initPopups()
 
   // Attribute popup
   attributePopup.setTitle( i18n( "Attribute" ) );
-  attributePopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDefinition()));
   attributePopup.insertSeparator();
   id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
   attributePopup.setItemEnabled( id, false );
@@ -177,21 +177,10 @@ void CClassView::refresh( CProject *proj )
   // Parse headerfiles.
   header = proj->getHeaders();
 
-  // Jonas- commented this out for the use of the progressbar in the statusbar, added the signals -Ralf
-/*  progressDlg.setLabelText( i18n("Parsing headers...") );
-  progressDlg.setTotalSteps( header.count() );
-  progressDlg.setProgress( 0 );
-  progressDlg.show();
-  i=0;
-  for( str = header.first(); str != NULL; str = header.next() )
-  {
-    debug( "  parsing:[%s]", str );
-    cp.parse( str );
-    i++;
-    progressDlg.setProgress( i );
-  }*/
-
+  emit resetStatusbarProgress();
+  emit setStatusbarProgress( 0 );
   emit setStatusbarProgressSteps(header.count());
+
   i=0;
   for( str = header.first(); str != NULL; str = header.next() )
   {
@@ -203,23 +192,12 @@ void CClassView::refresh( CProject *proj )
 	
   // Parse sourcefiles.
   src = proj->getSources();
-/*  progressDlg.setLabelText( i18n("Parsing sources...") );
-  progressDlg.setTotalSteps( src.count() );
-  progressDlg.setProgress( 0 );
-  progressDlg.show();
-  i=0;
-  for( str = src.first(); str != NULL; str = src.next() )
-  {
-    debug( "  parsing:[%s]", str );
-    cp.parse( str );
-    i++;
-    progressDlg.setProgress( i );
-  }
-*/
-	emit resetStatusbarProgress();
+
+  emit resetStatusbarProgress();
   emit setStatusbarProgress( 0 );
-	emit setStatusbarProgressSteps(src.count());
-	i=0;
+  emit setStatusbarProgressSteps(src.count());
+
+  i=0;
   for( str = src.first(); str != NULL; str = src.next() )
   {
     debug( "  parsing:[%s]", str );
@@ -275,6 +253,30 @@ void CClassView::refresh()
   // Open the classes and globals folder.
   setOpen( classesItem, true );
   setOpen( globalsItem, true );
+}
+
+/*---------------------------------------------- CClassView::addFile()
+ * addFile()
+ *   Add a source file, parse it and rebuild the tree.
+ *
+ * Parameters:
+ *   aName          The absolute filename.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::addFile( const char *aName )
+{
+  // Reset the tree.
+  ((CClassTreeHandler *)treeH)->clear();
+
+  debug( "Adding file %s", aName );
+
+  // Parse the file.
+  cp.parse( aName );
+
+  // Build the new classtree.
+  refresh();
 }
 
 /*---------------------------------- CClassView::refreshClassByName()
