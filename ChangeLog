@@ -1,3 +1,7 @@
+2000-02-20 Ralf Funken <funken.ruk@netcologne.de>
+	* Sections about pending breakpoints in en and de manuals were technically
+	  incorrect. Fixed.
+
 2000-02-18 Ralf Funken <funken.ruk@netcologne.de>
 	* joined translated german tutorial with new en chapters
 	* added Menushortcuts.html to kdevelop folder.

@@ -3132,7 +3132,7 @@ You have to be careful, though. If you inadvertantly set a breakpoint in a file 
 the program nor of any shared library inside the project, then this breakpoint will always be pending. There's nothing you can do about 
 that, because it might be in a shared library.
 
-Now here's the problem with this. If the user "step"s over code that  contains a library dlopen, then it isn't predictable what will happen. 
+Now here's the problem with this. If the user "step"s over code that  contains a library dlopen, then what will happen depends on the code stepped over. 
 The dlopen will be catched by gdb, thus the code will stop. Now there are two possibilities, either there are pending breakpoints, then 
 they will be marked as active and "continue" will lead to there. Or there aren't any pending breakpoints in this frame stack. Then the 
 program will "continue" until it waits for input or it may lead us straight to the end, none of which is what we expected. In this situation, I 
