@@ -2,7 +2,7 @@
 
 SUBDIRS = doc kdevelop po 
 
-EXTRA_DIST = AUTHORS BUGS COPYING ChangeLog FAQ INSTALL Menushortcuts.html README README.htdig TODO acconfig.h config.guess config.h.bot configure.in.in kdevelop.kdevprj kdevelop.lsm kdevelop.m4 acinclude.m4 configure.files subdirs aclocal.m4 configure.in stamp-h.in config.h.in kdevelop.kdevprj.save 
+EXTRA_DIST = AUTHORS BUGS COPYING ChangeLog FAQ INSTALL Menushortcuts.html README README.htdig TODO acconfig.h config.guess config.h.bot configure.in.in kdevelop.kdevprj kdevelop.lsm kdevelop.m4 acinclude.m4 configure.files subdirs aclocal.m4 configure.in stamp-h.in config.h.in kdevelop.kdevprj.save eventsrc
 
 ####### kdevelop will overwrite this part!!! (end)############
 # not a GNU package. You can remove this line, if 
@@ -25,6 +25,9 @@ package-messages:
 	$(MAKE) -C po merge
 
 EXTRA_DIST = admin 
+
+datadir = $(kde_datadir)/kdevelop
+data_DATA = eventsrc
 
 dist-hook:
 	cd $(top_distdir) && perl admin/am_edit -padmin
