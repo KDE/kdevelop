@@ -713,7 +713,7 @@ protected: // Protected methods
    * @param parentPath Path of the container. Empty for globals.
    * @param itemName   Name of the selected item. Empty for containers.
    * @param parentType Type of container. Ignored for globals.
-   * @param itemType   Type of the seleceted item. Ignored for containers.
+   * @param itemType   Type of the selected item. Ignored for containers.
    */
   void CVGotoDefinition( const char *parentPath, 
                          const char *itemName, 
@@ -726,7 +726,7 @@ protected: // Protected methods
    * @param parentPath Path of the container. Empty for globals.
    * @param itemName   Name of the selected item. Empty for containers.
    * @param parentType Type of container. Ignored for globals.
-   * @param itemType   Type of the seleceted item. Ignored for containers.
+   * @param itemType   Type of the selected item. Ignored for containers.
    */
   void CVGotoDeclaration( const char *parentPath, 
                          const char *itemName, 

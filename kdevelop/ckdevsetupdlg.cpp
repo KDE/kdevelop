@@ -453,7 +453,7 @@ void CKDevSetupDlg::addDocTab()
 
   QWhatsThis::add(kdocCheck, i18n("Create KDOC-reference of your project\n\n"
                     "If this is enabled, on creating the API-Documentation KDoc creates also\n"
-                    "a cross reference file of your project into the seleceted kdoc-reference\n"
+                    "a cross reference file of your project into the selected kdoc-reference\n"
                     "directory."));
 
 }
@@ -489,7 +489,7 @@ void CKDevSetupDlg::addDebuggerTab()
   dbgExternalGroup = new QButtonGroup( debuggerPage, "dbgExternalGroup" );
   QGridLayout *grid2 = new QGridLayout(dbgExternalGroup,1,2,15,7);
   dbgExternalGroup->setFrameStyle( 49 );
-  dbgExternalGroup->setTitle(i18n( "External" ));
+  dbgExternalGroup->setTitle(i18n("External debugger settings", "External" ));
   dbgExternalGroup->setAlignment( 1 );
   dbgExternalGroup->lower();
 
@@ -514,7 +514,7 @@ void CKDevSetupDlg::addDebuggerTab()
   grid->addWidget(dbgInternalGroup,2,0);
   grid2 = new QGridLayout(dbgInternalGroup,5,1,15,7);
   dbgInternalGroup->setFrameStyle( 49 );
-  dbgInternalGroup->setTitle(i18n( "Internal" ));
+  dbgInternalGroup->setTitle(i18n( "Internal debugger settings", "Internal" ));
   dbgInternalGroup->setAlignment( 1 );
   dbgInternalGroup->lower();
 

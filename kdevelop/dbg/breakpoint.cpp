@@ -126,13 +126,17 @@ void Breakpoint::configureDisplay()
 
   if (s_pending_)
   {
-    QString pending(i18n("Pending "));
+    QString pending(i18n("Breakpoint state. The 'Pending ' state is the first state displayed",
+                          "Pending "));
     if (s_actionAdd_)
-      pending += i18n("add ");
+      pending += i18n("Breakpoint state. The 'add ' state is appended to the other states",
+                      "add ");
     if (s_actionClear_)
-      pending += i18n("clear ");
+      pending += i18n("Breakpoint state. The 'clear ' state is appended to the other states",
+                      "clear ");
     if (s_actionModify_)
-      pending += i18n("modify ");
+      pending += i18n("Breakpoint state. The 'modify ' state is appended to the other states",
+                      "modify ");
 
     display_ = i18n("%1>\t%2").arg(pending).arg(display_);
   }

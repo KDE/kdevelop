@@ -485,7 +485,7 @@ void CFilePrintDlg::init() {
 	i18n("Cleans the 'self choosen file list'."));
 
   QWhatsThis::add(selfChoosenFilesAddButton,
-	i18n("Adds the selecte file to the choosen file to the list."));
+	i18n("Adds the selected file to the 'self choosen file list'."));
 
   QWhatsThis::add(selfChoosenFilesDeleteButton,
 	i18n("Deletes the selected files in the filelist."));

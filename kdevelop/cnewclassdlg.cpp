@@ -107,7 +107,7 @@ void CNewClassDlg::initDialog(const char* dir /*=0*/){
 
 
   impl_label = new QLabel( files_group, "impl_label" );
-  impl_label->setText( i18n("Impl.") );
+  impl_label->setText( i18n("Implementation") );
   impl_label->setMinimumSize( impl_label->sizeHint() );
   layout->addWidget( impl_label );
 
