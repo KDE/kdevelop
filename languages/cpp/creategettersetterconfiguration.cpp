@@ -19,7 +19,8 @@
 #include <kmessagebox.h>
 QString CreateGetterSetterConfiguration::defaultPath = QString::fromLatin1( "/kdevcppsupport/creategettersetter" );
 
-CreateGetterSetterConfiguration::CreateGetterSetterConfiguration( CppSupportPart * part ) : QObject(part), m_part(part), m_settings(0)
+CreateGetterSetterConfiguration::CreateGetterSetterConfiguration( CppSupportPart * part ) 
+: QObject(part), m_part(part), m_settings(0)
 {
 	init();
 }
@@ -58,3 +59,4 @@ void CreateGetterSetterConfiguration::store( )
 
 #include "creategettersetterconfiguration.moc"
 
+//kate: indent-mode csands; tab-width 4; space-indent off;

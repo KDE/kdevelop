@@ -19,22 +19,24 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory )
 static const KDevPluginInfo data("kdevcppsupport");
 
 CppSupportFactory::CppSupportFactory()
-    : KDevGenericFactory<CppSupportPart>( data )
+: KDevGenericFactory<CppSupportPart>( data )
 {
 }
 
 KInstance *CppSupportFactory::createInstance()
 {
-    KInstance *instance = KDevGenericFactory<CppSupportPart>::createInstance();
-    KStandardDirs *dirs = instance->dirs();
-    dirs->addResourceType( "newclasstemplates", KStandardDirs::kde_default("data") + "kdevcppsupport/newclass/" );
-    dirs->addResourceType( "pcs", KStandardDirs::kde_default( "data" ) + "kdevcppsupport/pcs/" );
-
-    return instance;
+	KInstance *instance = KDevGenericFactory<CppSupportPart>::createInstance();
+	KStandardDirs *dirs = instance->dirs();
+	dirs->addResourceType( "newclasstemplates", KStandardDirs::kde_default("data") + "kdevcppsupport/newclass/" );
+	dirs->addResourceType( "pcs", KStandardDirs::kde_default( "data" ) + "kdevcppsupport/pcs/" );
+	
+	return instance;
 }
 
 const KDevPluginInfo * CppSupportFactory::info()
 {
-    return &data;
+	return &data;
 }
+//kate: indent-mode csands; tab-width 4; space-indent off;
+
 
