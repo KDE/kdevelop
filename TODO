@@ -20,6 +20,11 @@ High priority tasks!
   - docking state of all toolviews not restored after Gideon restart
   - editor options dialog missing when all views are closed
 
+* version control
+  - Trying to commit a single file results in commit of the whole directory
+    when message not given!
+    cvs commit -m ChangeLog
+    
 * debugger
   - Trying to call the debugger for the Gideon project itself just
      shows an error message (have to be smart about libtool)
