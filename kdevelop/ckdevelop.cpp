@@ -2041,6 +2041,9 @@ void CKDevelop::slotClipboardChanged()
 
 void CKDevelop::slotNewLineColumn()
 {
+  // if edit_widget isn't shown don't proceed
+  if (edit_widget==0l)
+      return false;
   QString str = i18n("Line: %1 Col: %2")
       .arg(edit_widget->currentLine()+1)
       .arg(edit_widget->currentColumn()+1);
