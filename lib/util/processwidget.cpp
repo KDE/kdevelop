@@ -168,6 +168,9 @@ void ProcessWidget::maybeScrollToBottom()
     if ( verticalScrollBar()->value() == verticalScrollBar()->maxValue() ) {
         qApp->processEvents();
         verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
+        //FIXME: dirty hack to _actually_ scroll to the bottom
+        qApp->processEvents();
+        verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
     }
 }
 
