@@ -254,13 +254,15 @@ WatchRoot* VarTree::findWatch()
 
 void VarTree::trim()
 {
-  QListViewItem* sibling = firstChild();
-  while (sibling)
+  QListViewItem* child = firstChild();
+  while (child)
   {
+    QListViewItem* nextChild = child->nextSibling();
+
     // don't trim the watch root
-    if (!(dynamic_cast<WatchRoot*> (sibling)))
+    if (!(dynamic_cast<WatchRoot*> (child)))
     {
-      if (TrimmableItem* item = dynamic_cast<TrimmableItem*> (sibling))
+      if (TrimmableItem* item = dynamic_cast<TrimmableItem*> (child))
       {
         if (item->isActive())
           item->trim();
@@ -268,7 +270,7 @@ void VarTree::trim()
           delete item;
       }
     }
-    sibling = sibling->nextSibling();
+    child = nextChild;
   }
 }
 
@@ -276,15 +278,16 @@ void VarTree::trim()
 
 void VarTree::trimExcessFrames()
 {
-  QListViewItem* sibling = firstChild();
-  while (sibling)
+  QListViewItem* child = firstChild();
+  while (child)
   {
-    if (FrameRoot* frame = dynamic_cast<FrameRoot*> (sibling))
+    QListViewItem* nextChild = child->nextSibling();
+    if (FrameRoot* frame = dynamic_cast<FrameRoot*> (child))
     {
       if (frame->getFrameNo() != 0)
         delete frame;
     }
-    sibling = sibling->nextSibling();
+    child = nextChild;
   }
 }
 
