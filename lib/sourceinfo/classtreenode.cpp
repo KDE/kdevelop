@@ -20,6 +20,7 @@
 //#include <iostream.h>
 #include "programmingbycontract.h"
 
+using namespace std;
 
 /*********************************************************************
  *                                                                   *

@@ -15,10 +15,12 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+#include <iostream>
 #include <qstrlist.h>
 #include "parsedcontainer.h"
 #include "programmingbycontract.h"
+
+using namespace std;
 
 /*********************************************************************
  *                                                                   *
@@ -36,10 +38,10 @@
  *   -
  *-----------------------------------------------------------------*/
 ParsedContainer::ParsedContainer()
-    : _useFullPath( false ),
-      methodIterator( methods ),
+    : methodIterator( methods ),
       attributeIterator( attributes ),
-      structIterator( structs )
+      structIterator( structs ),
+      _useFullPath( false )
 {
     attributes.setAutoDelete( true );
     methods.setAutoDelete( true );

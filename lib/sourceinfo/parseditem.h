@@ -21,7 +21,7 @@
 #include <qdatastream.h>
 #include <qstring.h>
 #include <qtextstream.h>
-#include <iostream.h>
+#include <iostream>
 
 /** The type of a ParsedItem. */
 enum PIType { 
@@ -109,13 +109,13 @@ public:
     inline void setName(const QString &aName)
     {
 	if( !aName || aName == "" ){
-	    cerr << "EE: ParsedItem::setName - not a valid name" << endl;
+	    std::cerr << "EE: ParsedItem::setName - not a valid name" << std::endl;
 	    name_ = "setName standard name";
 	  }
 	else {
 	    if( name_.length( ) > 100 ){
-		cerr << "EE: ParsedItem::setName - length > 100" << endl;
-		cerr << "  : original length : '" << name_.length( ) << "'" << endl;
+		std::cerr << "EE: ParsedItem::setName - length > 100" << std::endl;
+		std::cerr << "  : original length : '" << name_.length( ) << "'" << std::endl;
 		name_ = "setName standard name";
 	    }
 	    else {

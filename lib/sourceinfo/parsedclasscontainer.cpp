@@ -16,11 +16,13 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+#include <iostream>
 #include <qregexp.h>
 #include "parsedclass.h"
 #include "parsedclasscontainer.h"
 #include "programmingbycontract.h"
+
+using namespace std;
 
 /*********************************************************************
  *                                                                   *

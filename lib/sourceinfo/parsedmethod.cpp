@@ -16,12 +16,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <qdatastream.h>
 #include <qregexp.h>
 #include <kdebug.h>
 #include "parsedmethod.h"
+
+using namespace std;
 
 /*********************************************************************
  *                                                                   *

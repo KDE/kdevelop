@@ -20,10 +20,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream.h>
+#include <iostream>
 #include "persistantclassstore.h"
 #include "classstore.h"
 #include "programmingbycontract.h"
+
+using namespace std;
 
 #define CLASSPREFIX "[CLASS]"
 

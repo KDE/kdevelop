@@ -16,13 +16,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <kdebug.h>
 #include <qstrlist.h>
 #include "programmingbycontract.h"
 #include "parsedclass.h"
+
+using namespace std;
 
 /*********************************************************************
  *                                                                   *

@@ -17,7 +17,8 @@
 
 #include "parseditem.h"
 #include "programmingbycontract.h"
-#include <iostream.h>
+
+using namespace std;
 
 /*********************************************************************
  *                                                                   *

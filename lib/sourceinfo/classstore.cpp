@@ -18,14 +18,14 @@
 
 #include "classstore.h"
 #include "ClassStoreIface.h"
-#include <iostream.h>
+#include <iostream>
 #include <qregexp.h>
 #include <kdebug.h>
 #include "programmingbycontract.h"
 
 #include <qfile.h>
 
-
+using namespace std;
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *

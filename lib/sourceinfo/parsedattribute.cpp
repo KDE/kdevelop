@@ -17,12 +17,14 @@
  ***************************************************************************/
 
 #include <stdio.h>
-#include <iostream.h>
+#include <iostream>
 //#include <qdatastream.h>
 #include <qstring.h>
 #include <kdebug.h>
 #include "parsedattribute.h"
 #include "programmingbycontract.h"
+
+using namespace std;
 
 /*********************************************************************
  *                                                                   *

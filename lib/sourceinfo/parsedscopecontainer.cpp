@@ -16,11 +16,12 @@
  *                                                                         *
  ***************************************************************************/
 
-//#include <iostream.h>
 #include <kdebug.h>
 #include "parsedclass.h"
 #include "parsedscopecontainer.h"
 #include "programmingbycontract.h"
+
+using namespace std;
 
 /*********************************************************************
  *                                                                   *
