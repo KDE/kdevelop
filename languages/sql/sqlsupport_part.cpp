@@ -30,7 +30,7 @@
 
 typedef KDevGenericFactory<SQLSupportPart> SQLSupportFactory;
 static const KAboutData data("kdevsqlsupport", I18N_NOOP("Language"), "1.0");
-K_EXPORT_COMPONENT_FACTORY( libkdevsqlsupport, SQLSupportFactory( &data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevsqlsupport, SQLSupportFactory( &data ) )
 
 SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QStringList& )
         : KDevLanguageSupport ( "KDevPart", "kdevpart", parent, name ? name : "SQLSupportPart" )

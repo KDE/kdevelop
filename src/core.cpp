@@ -97,6 +97,6 @@ QString beautifyToolTip(const QString& text)
     temp.replace(QRegExp("\\.\\.\\."), "");
     return temp;
 }
-};
+}
 
 #include "core.moc"

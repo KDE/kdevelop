@@ -11,7 +11,7 @@
 namespace MainWindowUtils{
 
 QString beautifyToolTip(const QString& text);
-};
+}
 
 class Core : public KDevCore
 {

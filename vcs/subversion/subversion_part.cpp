@@ -45,7 +45,7 @@
 static const KAboutData data("kdevsubversion", I18N_NOOP("Subversion"), "1.0");
 
 typedef KDevGenericFactory<subversionPart> subversionFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( &data ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( &data ) )
 
 //bool g_projectWasJustCreated = false;
 
