@@ -2,7 +2,7 @@
 #include "kwrite/kwview.h"
 #include "kwrite/kwdoc.h"
 #include <qsizegrip.h>
-#include <qapp.h>
+#include <qapplication.h>
 
 #include "codecompletion_arghint.h"
 

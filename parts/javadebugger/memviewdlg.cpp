@@ -24,7 +24,7 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qmultilinedit.h>
+#include <qmultilineedit.h>
 #include <qpushbutton.h>
 
 // **************************************************************************

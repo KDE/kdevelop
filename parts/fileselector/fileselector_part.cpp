@@ -5,8 +5,8 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kapp.h>
-#include <kstddirs.h>
+#include <kapplication.h>
+#include <kstandarddirs.h>
 #include <ktextbrowser.h>
 #include <kconfig.h>
 #include <kfileitem.h>

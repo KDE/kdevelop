@@ -44,7 +44,7 @@
 #include <qbuffer.h>
 #include <qtextcodec.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include <kfiledialog.h>

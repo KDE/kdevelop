@@ -44,7 +44,7 @@
 #include <kregexp.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "kwtextline.h"
 #include "kwattribute.h"

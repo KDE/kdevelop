@@ -23,7 +23,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "appwizardfactory.h"
 #include "importdlg.h"

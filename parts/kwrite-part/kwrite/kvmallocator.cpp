@@ -26,7 +26,7 @@
 #include <sys/mman.h>
 
 #include <qintdict.h>
-#include <qlist.h>
+#include <qptrlist.h>
 
 #include <ktempfile.h>
 

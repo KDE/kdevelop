@@ -1,6 +1,6 @@
 #include <kdebug.h>
 #include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include <jni.h>
 #include <qtjava/QtSupport.h>

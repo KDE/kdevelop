@@ -10,16 +10,14 @@
  ***************************************************************************/
 
 #include <qlayout.h>
-#include <qlabel.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
-#include <qlabel.h>
 #include <qhbox.h>
 #include <qwhatsthis.h>
 #include <qstringlist.h>
 #include <qfiledialog.h>
 #include <kbuttonbox.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kconfig.h>

@@ -20,7 +20,7 @@
 #include <qprogressbar.h>
 #include <qregexp.h>
 #include <qlabel.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kregexp.h>

@@ -12,13 +12,13 @@
 #include <qpopupmenu.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kstringhandler.h>
 
 #include "kdevcore.h"

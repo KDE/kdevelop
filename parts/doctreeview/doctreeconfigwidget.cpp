@@ -24,7 +24,7 @@
 #include <kinstance.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ksimpleconfig.h>
 #include <kprocess.h>
 

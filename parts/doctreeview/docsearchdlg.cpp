@@ -19,14 +19,14 @@
 #include <qlineedit.h>
 #include <qregexp.h>
 #include <qtextstream.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kbuttonbox.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
 #include <kprocess.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "docsearchdlg.h"
 #include <qpushbutton.h>

@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <dcopclient.h>
 #include <kdebug.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "kdevcore.h"
 #include "scriptingfactory.h"

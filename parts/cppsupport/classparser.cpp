@@ -20,7 +20,7 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qfile.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include "classparser.h"
 #include "programmingbycontract.h"

@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <qtextview.h>
 #include <kiconloader.h>

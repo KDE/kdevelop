@@ -11,7 +11,7 @@
 
 #include <qdir.h>
 #include <qheader.h>
-#include <qstack.h>
+#include <qptrstack.h>
 #include <kiconloader.h>
 
 #include "scriptprojectwidget.h"

@@ -5,7 +5,7 @@
 #include <ktrader.h>
 #include <kservice.h>
 #include <kconfig.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 
 

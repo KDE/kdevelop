@@ -15,9 +15,7 @@
 #include <qtextstream.h>
 #include <kbuttonbox.h>
 #include <kdebug.h>
-#include <klocale.h>
 #include <kfiledialog.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 
 #include "kdevmakefrontend.h"

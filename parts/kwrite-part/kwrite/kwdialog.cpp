@@ -12,14 +12,14 @@
 #include <qgroupbox.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <qcollection.h>
+#include <qptrcollection.h>
 #include <qpushbutton.h>
 #include <qobjectlist.h>
 #include <qradiobutton.h>
 #include <qwhatsthis.h>
 
 #include <klocale.h>
-#include <kcolorbtn.h>
+#include <kcolorbutton.h>
 #include <knuminput.h>
 
 #include "kwdoc.h"

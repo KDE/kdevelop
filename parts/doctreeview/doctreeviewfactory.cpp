@@ -11,7 +11,7 @@
 
 #include <kdebug.h>
 #include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
 

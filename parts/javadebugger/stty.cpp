@@ -65,8 +65,8 @@
 #include <qstring.h>
 
 #include <klocale.h>
-#include <kstddirs.h>
-#include <kapp.h>
+#include <kstandarddirs.h>
+#include <kapplication.h>
 
 #include "stty.h"
 

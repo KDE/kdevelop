@@ -537,7 +537,7 @@ char *yytext;
 #include <qdir.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include <qstack.h>
+#include <qptrstack.h>
   
 #include "config.h"
 #include "version.h"

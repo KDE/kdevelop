@@ -17,14 +17,14 @@
 #include <qlayout.h>
 #include <qtextstream.h>
 #include <kaboutdata.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #define INDEXER
 #include "misc.cpp"

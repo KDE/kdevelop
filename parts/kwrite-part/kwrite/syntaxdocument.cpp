@@ -22,7 +22,7 @@
 #include "syntaxdocument.h"
 #include <qfile.h>
 #include <kdebug.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <qstringlist.h>

@@ -1,7 +1,7 @@
 #include <qcombobox.h>
 
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <ktrader.h>
 #include <kservice.h>
 #include <kdebug.h>

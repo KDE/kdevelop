@@ -1,7 +1,7 @@
 #include <kiconloader.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kstdaction.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kfiledialog.h>

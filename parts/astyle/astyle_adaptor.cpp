@@ -1,7 +1,7 @@
 #include <string>
 
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 
 

@@ -24,7 +24,7 @@
 #include "jdbcommand.h"
 #include "stty.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 

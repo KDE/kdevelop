@@ -18,7 +18,7 @@
 #include <qvbox.h>
 #include <qcheckbox.h>
 #include <dcopclient.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -28,7 +28,7 @@
 #include <kprocess.h>
 #include <krun.h>
 #include <kstdaction.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ktrader.h>
 #include <kconfig.h>
 

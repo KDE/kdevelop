@@ -12,7 +12,7 @@
 
 #include <kdebug.h>
 #include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "appwizardfactory.h"
 #include "appwizardpart.h"

@@ -14,7 +14,7 @@
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klineeditdlg.h>
 #include <klocale.h>

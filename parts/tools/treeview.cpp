@@ -30,10 +30,8 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <ksimpleconfig.h>
-#include <kdebug.h>
 #include <kiconloader.h>
 #include <kdesktopfile.h>
-#include <kdebug.h>
 #include <kaction.h>
 
 #include "treeview.h"

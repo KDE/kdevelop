@@ -19,7 +19,7 @@
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qvbox.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <klocale.h>

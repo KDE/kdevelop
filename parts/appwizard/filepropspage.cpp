@@ -5,7 +5,7 @@
 #include <iostream.h>
 #include <klocale.h>
 #include <qlabel.h>
-#include <qmultilinedit.h>
+#include <qmultilineedit.h>
 
 /* 
  *  Constructs a FilePropsPage which is a child of 'parent', with the 

@@ -12,7 +12,7 @@
 #include <qfile.h>
 #include <qheader.h>
 #include <qsplitter.h>
-#include <qstack.h>
+#include <qptrstack.h>
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qregexp.h>

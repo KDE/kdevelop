@@ -16,7 +16,7 @@
 #include "breakpointdlg.h"
 #include "breakpoint.h"
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kbuttonbox.h>
 #include <klineedit.h>
 #include <knuminput.h>

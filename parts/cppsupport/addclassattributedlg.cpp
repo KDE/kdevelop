@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <qwhatsthis.h>
-#include <kapp.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 

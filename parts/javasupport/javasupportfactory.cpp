@@ -13,7 +13,7 @@
 
 #include <kdebug.h>
 #include <kinstance.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "javasupportfactory.h"
 #include "classparser.h"

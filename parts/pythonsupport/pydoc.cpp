@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #include <qtextstream.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kinstance.h>
 
 #include "pydoc.h"
