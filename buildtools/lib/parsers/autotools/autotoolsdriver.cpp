@@ -29,14 +29,14 @@
 
 extern FILE *yyin, *yyout;
 extern int yyparse();
-extern int yydebug;
+//extern int yydebug;
 extern QValueStack<AutoTools::ProjectAST *> projects;
 
 namespace AutoTools {
 
 int Driver::parseFile(const char *fileName, ProjectAST **ast)
 {
-	yydebug = 1;
+	//yydebug = 1;
 	yyin = fopen(fileName, "r");
 	if (yyin == 0)
 	{
