@@ -396,7 +396,7 @@ QString
 CppCodeCompletion::createTmpFileForParser( int iLine )
 {
     // regular expression for matching a method implementation
-    KRegExp regMethod( "[ \t]*[A-Za-z_]+::[~A-Za-z_]+[\t]*\\([0-9A-Za-z_,\\)\\*]*" );
+    QRegExp regMethod( "([A-Za-z0-9_]+)\\s*::\\s*[~A-Za-z0-9_]+\\s*\\(\\s[ \\t0-9A-Za-z_,\\*&]*\\s\\)" );
 
     QString strLine;
     int     iMethodBegin = 0;
@@ -404,15 +404,12 @@ CppCodeCompletion::createTmpFileForParser( int iLine )
     for( int i = iLine; i > 0; i-- ){
         strLine = m_pEditIface->textLine( i );
 
-	// something can cause a SIGSEGFAULT here ...
-        if( regMethod.match( strLine.latin1( ) ) ){
+        if( regMethod.search( strLine ) >= 0 ){
             iMethodBegin = i;
 
             kdDebug( 9007 ) << "method begins @ line '" << iMethodBegin << "'" << endl;
             // test to figure out the current classname
-            m_currentClassName = strLine;
-            m_currentClassName.remove( m_currentClassName.find( "::" ), 999 );
-            m_currentClassName.remove( 0, m_currentClassName.findRev( " ", -1 ) + 1);
+            m_currentClassName = regMethod.cap(1);
             kdDebug( 9007 ) << "method's classname is '" << m_currentClassName << "'" << endl;
             break;
         }
