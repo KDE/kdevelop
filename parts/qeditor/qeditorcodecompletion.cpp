@@ -25,6 +25,7 @@
  ***************************************************************************/
 
 #include "qeditorcodecompletion.h"
+#include "qeditor_settings.h"
 #include "qeditorcodecompletion.moc"
 
 // #include "qeditorcodecompletion_arghint.h"
@@ -202,7 +203,8 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
             QTimer::singleShot(0,this,SLOT(showComment()));
             return false;
         }
-        if( ke->key() == Key_Enter || ke->key() == Key_Return || ke->key() == Key_Space || ke->key() == Key_Tab ) {
+        if( ke->key() == Key_Enter || ke->key() == Key_Return ||
+            (QEditorSettings::self()->completeWordWithSpace() && (ke->key() == Key_Space || ke->key() == Key_Tab)) ) {
             CompletionItem* item = static_cast<CompletionItem*>(
                 m_completionListBox->item(m_completionListBox->currentItem()));
 
@@ -219,6 +221,14 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
 
             emit filterInsertString(&(item->m_entry),&add);
             m_view->insertText(add);
+
+            if( QEditorSettings::self()->completeWordWithSpace() ){
+                if( ke->key() == Key_Space )
+                    m_view->insertText( " " );
+                else if( ke->key() == Key_Tab )
+                    m_view->insertText( "\t" );
+            }
+
             // HACK: move cursor. This needs to be handled in a clean way
             // by the doc/view.
             //m_view->setCursorPositionReal( m_lineCursor, m_view->cursorColumnReal() + add.length() );
@@ -236,7 +246,7 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
 
         // redirect the event to the editor
         QApplication::sendEvent( m_view->editor(), e );
-	
+
         QString currentLine = m_view->currentTextLine();
         int len = m_view->cursorColumnReal() - m_colCursor;
         QString currentComplText = currentLine.mid( m_colCursor, len );

@@ -40,9 +40,10 @@ void QEditorSettings::init()
 {
     if( !m_config )
 	return;
-    
+
     m_wordWrap = m_config->readBoolEntry( "WordWrap", true );
     m_tabStop = m_config->readNumEntry( "TabStop", 8 );
+    m_completeWordWithSpace = m_config->readBoolEntry( "CompleteWordWithSpace", false );
     m_parenthesesMatching = m_config->readBoolEntry( "ParenthesesMatching", true );
     m_showMarkers = m_config->readBoolEntry( "ShowMarkers", true );
     m_showLineNumber = m_config->readBoolEntry( "ShowLineNumber", false );
@@ -53,7 +54,7 @@ QEditorSettings* QEditorSettings::self()
 {
     if( !m_self )
 	m_self = new QEditorSettings( QEditorPartFactory::instance()->config() );
-    
+
     return m_self;
 }
 
@@ -69,19 +70,28 @@ void QEditorSettings::setWordWrap( bool enable )
 void QEditorSettings::setTabStop( int tabStop )
 {
     m_tabStop = tabStop;
-    
+
     KConfigGroupSaver cgs( m_config, generalGroup() );
     m_config->writeEntry( "TabStop", m_tabStop );
+    m_config->sync();
+}
+
+void QEditorSettings::setCompleteWordWithSpace( bool enable )
+{
+    m_completeWordWithSpace = enable;
+
+    KConfigGroupSaver cgs( m_config, generalGroup() );
+    m_config->writeEntry( "CompleteWordWithSpace", m_completeWordWithSpace );
     m_config->sync();
 }
 
 void QEditorSettings::setParenthesesMatching( bool enable )
 {
     m_parenthesesMatching = enable;
-    
+
     KConfigGroupSaver cgs( m_config, generalGroup() );
     m_config->writeEntry( "ParenthesesMatching", m_parenthesesMatching );
-    m_config->sync();    
+    m_config->sync();
 }
 
 void QEditorSettings::setShowMarkers( bool enable )

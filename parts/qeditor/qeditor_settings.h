@@ -35,42 +35,46 @@ public:
     ~QEditorSettings();
     
     static QEditorSettings* self();
-    
+
     KConfig* config() { return m_config; }
     const KConfig* config() const { return m_config; }
-    
+
     // groups
     QString generalGroup() const { return QString::fromLatin1("General"); }
-    
+
     // settings
     bool wordWrap() const { return m_wordWrap; }
     void setWordWrap( bool enable );
-    
+
     int tabStop() const { return m_tabStop; }
     void setTabStop( int tabStop );
-    
+
+    bool completeWordWithSpace() const { return m_completeWordWithSpace; }
+    void setCompleteWordWithSpace( bool enable );
+
     bool parenthesesMatching() const { return m_parenthesesMatching; }
     void setParenthesesMatching( bool enable );
 
     bool showMarkers() const { return m_showMarkers; }
     void setShowMarkers( bool enable );
-    
+
     bool showLineNumber() const { return m_showLineNumber; }
     void setShowLineNumber( bool enable );
-    
+
     bool showCodeFoldingMarkers() const { return m_showCodeFoldingMarkers; }
-    void setShowCodeFoldingMarkers( bool enable );    
-    
+    void setShowCodeFoldingMarkers( bool enable );
+
 private:
     static QEditorSettings* m_self;
     KConfig* m_config;
     bool m_wordWrap;
     int m_tabStop;
+    bool m_completeWordWithSpace;
     bool m_parenthesesMatching;
     bool m_showMarkers;
     bool m_showLineNumber;
     bool m_showCodeFoldingMarkers;
-    
+
 private:
     QEditorSettings( const QEditorSettings& );
     void operator = ( const QEditorSettings& );
