@@ -28,6 +28,7 @@ servicetype_DATA = kdevelopcompileroptions.desktop \
 		   kdevelopcreatefile.desktop kdevelopversioncontrol.desktop \
 		   kdevelopsourceformatter.desktop
 
+EXTRA_DIST = newlanguage.dox.h
 
 METASOURCES = AUTO
 
