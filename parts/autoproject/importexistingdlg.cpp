@@ -124,8 +124,18 @@ ImportExistingDialog::ImportExistingDialog ( AutoProjectPart* part, AutoProjectW
 	if ( titem && spitem && titem->type() == ProjectItem::Target && spitem->type() == ProjectItem::Subproject )
 	{
 		destStaticLabel->setText ( i18n ( "Target:" ) );
-		destLabel->setText ( titem->name );
-		targetLabel->setText ( titem->name );
+		
+		if ( titem->name && !titem->name.isEmpty() )
+		{
+			targetLabel->setText ( titem->name );
+			destLabel->setText ( titem->name );
+		}
+		else
+		{
+			targetLabel->setText ( "" );
+			destLabel->setText ( "" );
+		}
+		
 		directoryLabel->setText ( spitem->path );
 	}
 
