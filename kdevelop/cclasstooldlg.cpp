@@ -290,8 +290,8 @@ void CClassToolDlg::setClass( const char *aName )
 
 void CClassToolDlg::setClass( CParsedClass *aClass )
 {
-  assert( aClass != NULL );
-
+  if (aClass == NULL ) return;
+  
   setActiveClass( aClass->name );
   currentClass = aClass;
 }
