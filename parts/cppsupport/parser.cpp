@@ -820,6 +820,10 @@ bool Parser::parseAsmDefinition( DeclarationAST::Node& /*node*/ )
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseAsmDefinition()" << endl;
 
     ADVANCE( Token_asm, "asm" );
+
+    GroupAST::Node cv;
+    parseCvQualify( cv );
+
     skip( '(', ')' );
     ADVANCE( ')', ")" );
     ADVANCE( ';', ';' );
@@ -3369,7 +3373,8 @@ bool Parser::parseCastExpression( AST::Node& /*node*/ )
             if ( lex->lookAhead(0) == ')' ) {
                 lex->nextToken();
 		AST::Node expr;
-                return parseCastExpression( expr );
+                if( parseCastExpression(expr) )
+		    return true;
             }
         }
     }

@@ -1007,7 +1007,7 @@ QString ParameterDeclarationClauseAST::text() const
         str += m_parameterDeclarationList->text();
 
     if( m_ellipsis.get() )
-        str += ", ...";
+        str += " ...";
 
     return str;
 }
