@@ -10,7 +10,6 @@
 		<keyword>Ruby</keyword>
   </keywords>
   <ignoreparts>
-   <part>KDevFileView</part>
    <part>KDevDoxygen</part>
    <part>KDevdistpart</part>
    <part>KDevVisualBoyAdvance</part>

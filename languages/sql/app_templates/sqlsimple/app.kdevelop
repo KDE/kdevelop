@@ -10,7 +10,6 @@
 		<keyword>SQL</keyword>
   </keywords>
   <ignoreparts>
-   <part>KDevFileView</part>
    <part>KDevdistpart</part>
    <part>KDevDebugger</part>
   </ignoreparts>
