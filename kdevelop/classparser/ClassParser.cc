@@ -786,12 +786,18 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
               case CP_IS_ATTRIBUTE:
                 anAttr = new CParsedAttribute();
                 fillInParsedVariable( anAttr );
-                aClass->addAttribute( anAttr );
+                if( !anAttr->name.isEmpty() )
+                  aClass->addAttribute( anAttr );
+                else
+                  delete anAttr;
                 break;
               case CP_IS_METHOD:
                 aMethod = new CParsedMethod();
                 fillInParsedMethod( aMethod );
-                aClass->addMethod( aMethod );
+                if( !aMethod->name.isEmpty() )
+                  aClass->addMethod( aMethod );
+                else 
+                  delete aMethod;
                 break;
             }
         }
@@ -924,12 +930,18 @@ void CClassParser::parseToplevel()
           case CP_IS_ATTRIBUTE:
             anAttr = new CParsedAttribute();
             fillInParsedVariable( anAttr );
-            store.addGlobalVar(  anAttr );
+            if( !anAttr->name.isEmpty() )
+              store.addGlobalVar(  anAttr );
+            else
+              delete anAttr;
             break;
           case CP_IS_METHOD:
             aMethod = new CParsedMethod();
             fillInParsedMethod( aMethod );
-            store.addGlobalFunction( aMethod );
+            if( !aMethod->name.isEmpty() )
+              store.addGlobalFunction( aMethod );
+            else
+              delete aMethod;
             break;
         }
         break;

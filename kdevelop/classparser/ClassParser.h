@@ -120,6 +120,7 @@ private: // Private methods
   const char *getText()      { return lexer->YYText(); }
   
   /** Fetch the current linenumber from the lexer and return it. */
+  //  int getLineno()            { debug("%d",lexer->lineno());return lexer->lineno() - 1;  }
   int getLineno()            { return lexer->lineno() - 1;  }
 
   /** Remove all elements from the stack. */
