@@ -157,7 +157,7 @@
 #define ID_BUILD_CONFIGURE          14100
 #define ID_BUILD_DISTCLEAN          14110
 #define ID_BUILD_MAKECLEAN          14115
-
+#define ID_BUILD_RPM                14116
 // The debugger entries
 #define ID_DEBUG_RUN                14320
 #define ID_DEBUG_RUN_CURSOR         14325

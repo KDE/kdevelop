@@ -216,8 +216,8 @@ bool Kpp::startBuild(){
 	cerr << "Starting build" << endl;
 	rpmBuild = new KShellProcess();
 	QString buildProc = "sh ";
-	
-	*rpmBuild << " sh buildrpm.sh kpp 2.0 /home/geiseri/PROJECTS/dist/kpp-2.0";
+
+	*rpmBuild << "env";
 	rpmBuild->start(KShellProcess::NotifyOnExit,KShellProcess::All);
 	connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdOut(KProcess*, char *, int)));
 	connect(rpmBuild, SIGNAL(receivedStdout(KProcess *, char *, int)), SLOT(readStdErr(KProcess*, char *, int)));
