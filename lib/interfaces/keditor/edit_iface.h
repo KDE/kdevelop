@@ -40,7 +40,8 @@ public:
   virtual DCOPRef dcopInterface() const;
 
   static EditDocumentIface *interface(Document *doc);
-
+ signals:
+  void textChanged();
 
 private:
 
