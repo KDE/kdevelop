@@ -1,3 +1,7 @@
+2003-06-14 Harald Fernengel <harry@kdevelop.org>
+    * Added perforce to the main menu, also uses KActions now so you can
+      assign your favourite keybinding to the commands.
+
 2003-06-14 Hamish Rodda <rodda@kde.org>
     * Warn if another process is running on execution and allow a restart.
     * Make automake deal with METASOURCES=AUTO
