@@ -19,7 +19,7 @@
 #include <assert.h>
 #include <kiconloader.h>
 
-QPixmap **CTreeHandler::icons = new QPixmap *[ THEND_POS ];
+QPixmap *CTreeHandler::icons[THEND_POS]; // = new QPixmap *[ THEND_POS ];
 bool CTreeHandler::iconsRead = false;
 
 
@@ -43,7 +43,7 @@ CTreeHandler::CTreeHandler()
   lastItem = NULL;
   lastRootItem = NULL;
 
-  if( !CTreeHandler::iconsRead )
+  if( !iconsRead )
     readIcons();
 }
 
@@ -271,7 +271,7 @@ void CTreeHandler::readIcons()
   KIconLoader *il;
 
   // Allocate the array.
-  icons = new QPixmap *[ THEND_POS ];
+//  icons = new QPixmap *[ THEND_POS ];
   for( int i=0; i<THEND_POS; i++ )
     icons[ i ] = NULL;
 
@@ -305,7 +305,7 @@ void CTreeHandler::readIcons()
   icons[ THINSTALLED_FILE ] = new QPixmap( il->loadMiniIcon( "inst_file.xpm" ) );
   icons[ THDELETE ] = new QPixmap( il->loadMiniIcon( "delete.xpm" ) );
 
-  CTreeHandler::iconsRead = true;
+  iconsRead = true;
 }
 
 
