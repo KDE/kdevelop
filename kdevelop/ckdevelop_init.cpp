@@ -59,6 +59,7 @@ CKDevelop::CKDevelop(bool witharg)
       search_process("/bin/sh"),
 
       dbgController(0),
+      dbgToolbar(0),
       var_viewer(0),
       brkptManager(0),
       frameStack(0),

@@ -1,3 +1,12 @@
+2000-01-05 jbb <jbb@ihug.co.nz>
+    * Disassemble window - feed in smaller chunks
+      some functions can be too _huge_, hence very slow.
+    * use "ps x" without options.
+    * Remove "stop" button on debug toolbar and enable
+      stop on main toolbar. It couldn't reside (easily) on the
+      floating toolbar because it wanted to delete itself.
+    * Rearrange floating toolbar.
+
 2000-01-04 jbb <jbb@ihug.co.nz>
 	* Disassemble window - not complete, but workable.
       Fix attach/detach

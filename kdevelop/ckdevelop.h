@@ -79,12 +79,14 @@ class KDlgWidgets;
 class KDlgDialogs;
 class KDlgItems;
 
+// Debugger classes
 class VarViewer;
 class DbgController;
 class FrameStack;
 class BreakpointManager;
 class Breakpoint;
 class Disassemble;
+class DbgToolbar;
 
 /** the mainclass in kdevelop
   *@author Sandy Meier
@@ -922,24 +924,36 @@ private:
   int lasttab;
   QString lastfile;
 
-  /** debugger additions */
+  /** debugger additions for the internal debugger */
+
+  /** The controller for the debugging program (eg gdb) */
   DbgController* dbgController;
 
-  /** The debugger's tree of local variables */
+  /** The floating toolbar - always on top */
+  DbgToolbar* dbgToolbar;
+
+  /** The debugger's tree of local variables - on tree view tab */
   VarViewer* var_viewer;
 
-  /** */
+  /** Manages a list of breakpoints - Always active - on output tab */
   BreakpointManager* brkptManager;
+
+  /** Manages a frame stack list - on output tab */
   FrameStack* frameStack;
+
+  /** show disassembled code being run - on output tab */
   Disassemble* disassemble;
 
-  /** debugger dialog */
+  /** debug aid. Switch on using compile switch GDB_MONITOR
+      or DBG_MONITOR  - on output tab */
   COutputWidget* dbg_widget;
 
   bool dbgInternal;
+
+  /** The external debugger command to run */
   QString dbgExternalCmd;
 
-  // Initiates a variety of debugging sessions.
+  // Initiates a variety of debugging sessions and options
   QPopupMenu* debugPopup;
 
   // Protect the gdbcontroller deletion.

@@ -783,6 +783,9 @@ void CKDevelop::slotDebugRun()
 
 void CKDevelop::slotDebugStop()
 {
+  delete dbgToolbar;
+  dbgToolbar = 0;
+
   if (dbgShuttingDown)
     return;
 
@@ -802,6 +805,7 @@ void CKDevelop::slotDebugStop()
   brkptManager->refreshBP(edit_widget->getName());
 
   toolBar()->setItemEnabled(ID_BUILD_DEBUG, project);
+  toolBar()->setItemEnabled(ID_BUILD_STOP, false);
 
   o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal && dbgController);
   o_tab_view->setTabEnabled(i18n("Disassemble"), dbgInternal && dbgController);
@@ -1115,8 +1119,11 @@ void CKDevelop::setupInternalDebugger()
 
   // We turn off the original toolbar start button and startup the debuggers
   // floating toolbar.
+  // The enable the stop button so they can exit the debugger.
   toolBar()->setItemEnabled(ID_BUILD_DEBUG, false);
-  DbgToolbar* dbgToolbar = new DbgToolbar(dbgController, this);
+  toolBar()->setItemEnabled(ID_BUILD_STOP, true);
+
+  dbgToolbar = new DbgToolbar(dbgController, this);
   dbgToolbar->show();
 
   connect(  dbgController,  SIGNAL(dbgStatus(const QString&,int)),
@@ -1347,6 +1354,7 @@ void CKDevelop::slotBuildConfigure(){
 
 void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
+  slotDebugStop();
   setToolMenuProcess(true);
   process.kill();
   shell_process.kill();
