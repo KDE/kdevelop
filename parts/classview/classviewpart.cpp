@@ -81,6 +81,10 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
 
 ClassViewPart::~ClassViewPart()
 {
+    m_namespaces->view()->clear();
+    m_classes->view()->clear();
+    m_functions->view()->clear();
+    
     mainWindow()->removeView( m_widget );
     delete (ClassViewWidget*) m_widget;
 }
