@@ -1,11 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="kdevprojectmanager" library="libkdevprojectmanagerplugin" version="1">
+<kpartplugin name="kdevprojectmanager" library="libkdevprojectmanager" version="2">
 <MenuBar>
- <Menu name="tools"><Text>&amp;Tools</Text>
-  <Action name="plugin_action"/>
+ <Menu name="build"><Text>&amp;Build</Text>
+  <Action name="project_buildall"/>
+  <Action name="project_build"/>
+  <Separator />
+  <Action name="project_refresh"/>
  </Menu>
 </MenuBar>
-<ToolBar name="extraToolBar">
-  <Action name="plugin_action"/>
-</ToolBar>
 </kpartplugin>

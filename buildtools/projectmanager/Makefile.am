@@ -26,5 +26,7 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevprojectmanager.desktop
 
 rcdir = $(kde_datadir)/kdevprojectmanager
-rc_DATA = kdevprojectmanager.rc 
+rc_DATA = \
+    kdevprojectmanager.rc
+
 

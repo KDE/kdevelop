@@ -23,6 +23,7 @@
 #include <kdevprojectbuilder.h>
 
 #include <kdevcore.h>
+#include <kdevmainwindow.h>
 #include <kdevpartcontroller.h>
 
 #include <klocale.h>
@@ -108,15 +109,35 @@ KDevProjectManagerWidget::KDevProjectManagerWidget(KDevProjectManagerPart *part)
     : QVBox(0, "kdevprojectmanager widget"),
       m_part(part)
 {
+    m_actionReload = new KAction(i18n("Reload"), SmallIcon("reload"), 0, this, SLOT(reload()),
+        part->actionCollection(), "project_reload");
+        
+    m_actionBuildAll = new KAction(i18n("Build All"), SmallIcon("launch"), Key_F8, this, SLOT(buildAll()),
+        part->actionCollection(), "project_buildall");
+        
+    m_actionBuild = new KAction(i18n("Build"), SmallIcon("launch"), SHIFT + Key_F8, this, SLOT(build()),
+        part->actionCollection(), "project_build");
+
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     m_overview = new ProjectOverview(this, splitter);
     m_details = new ProjectDetails(this, splitter);
     
-    connect(m_overview->listView(), SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(updateDetails(QListViewItem*)));
+    connect(m_overview->listView(), SIGNAL(selectionChanged(QListViewItem*)), 
+        this, SLOT(updateDetails(QListViewItem*)));        
 }
 
 KDevProjectManagerWidget::~KDevProjectManagerWidget()
 {
+}
+
+void KDevProjectManagerWidget::buildAll()
+{
+    m_overview->buildAll();
+}
+
+void KDevProjectManagerWidget::build()
+{
+    m_details->build();
 }
 
 void KDevProjectManagerWidget::updateDetails(QListViewItem *item)
@@ -146,7 +167,7 @@ private:
 };
 
 ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
-    : QVBox(parentWidget), KXMLGUIBuilder(this), 
+    : QVBox(parentWidget), 
       m_managerWidget(m)
 {
     m_toolBarShell = new KDevToolBarShell(this);
@@ -165,7 +186,7 @@ ProjectView::ProjectView(KDevProjectManagerWidget *m, QWidget *parentWidget)
     m_listView->setResizeMode(QListView::LastColumn);
     
     connect(m_listView, SIGNAL(returnPressed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));
-    connect(m_listView, SIGNAL(executed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));
+    connect(m_listView, SIGNAL(executed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));    
 }
 
 ProjectView::~ProjectView()
@@ -327,16 +348,11 @@ void ProjectViewItem::setOpen(bool opened)
 ProjectOverview::ProjectOverview(KDevProjectManagerWidget *manager, QWidget *parentWidget)
     : ProjectView(manager, parentWidget)
 {
-    m_actionReload = new KAction(i18n("Reload"), SmallIcon("reload"), 0, this, SLOT(reload()),
-        actionCollection(), "project_reload");
-        
-    m_actionBuildAll = new KAction(i18n("Build All"), SmallIcon("launch"), Key_F8, this, SLOT(buildAll()),
-        actionCollection(), "project_buildall");
-            
     if (KToolBar *tb = toolBar()) {
-        m_actionBuildAll->plug(tb);
+        part()->actionCollection()->action("project_buildall")->plug(tb);
         tb->insertSeparator();
-        m_actionReload->plug(tb);
+        part()->actionCollection()->action("project_reload")->plug(tb);
+        
 #if 0 // ###
         tb->insertButton(SmallIcon("folder_new"), -1, true);
         tb->insertButton(SmallIcon("targetnew_kdevelop"), -1, true);
@@ -375,9 +391,17 @@ ProjectViewItem *ProjectOverview::createProjectItem(ProjectItemDom dom, ProjectV
     return item;
 }
 
+void KDevProjectManagerWidget::reload()
+{
+    kdDebug(9000) << "KDevProjectManagerWidget::reload()" << endl;
+    m_overview->reload();
+}
+
 void ProjectOverview::buildAll()
 {
     kdDebug(9000) << "ProjectOverview::buildAll()" << endl;
+    
+    part()->partController()->saveAllFiles();
     
     if (KDevProjectBuilder *builder = part()->defaultBuilder()) {
         ProjectItemList item_list = projectModel()->itemList();
@@ -418,13 +442,12 @@ void ProjectOverview::refresh()
 ProjectDetails::ProjectDetails(KDevProjectManagerWidget *parent, QWidget *parentWidget)
     : ProjectView(parent, parentWidget)
 {
-    m_actionBuild = new KAction(i18n("Build"), SmallIcon("launch"), CTRL + Key_F8, this, SLOT(build()),
-        actionCollection(), "project_build");
-            
-
     if (KToolBar *tb = toolBar()) {
-        m_actionBuild->plug(tb);
+        part()->actionCollection()->action("project_build")->plug(tb);
+
 #if 0 // ### 
+        m_actionBuild->plug(tb);
+        
         tb->insertButton(SmallIcon("filenew"), -1, true);
         tb->insertButton(SmallIcon("fileimport"), -1, true);
         tb->insertButton(SmallIcon("editdelete"), -1, true);

@@ -24,7 +24,6 @@
 
 #include <qvbox.h>
 
-#include <kxmlguibuilder.h>
 #include <klistview.h>
 
 class KDevProject;
@@ -52,6 +51,11 @@ public:
     inline ProjectModel *projectModel() const
     { return part()->projectModel(); }
 
+public slots:
+    void reload();
+    void buildAll();
+    void build();
+
 protected slots:
     void updateDetails(QListViewItem *item);
 
@@ -59,6 +63,10 @@ private:
     KDevProjectManagerPart *m_part;
     ProjectOverview *m_overview;
     ProjectDetails *m_details;
+    
+    KAction *m_actionReload;
+    KAction *m_actionBuild;
+    KAction *m_actionBuildAll;
 };
 
 class ProjectViewItem: public QListViewItem
@@ -98,9 +106,7 @@ private:
     ProjectView *m_projectView;
 };
 
-class ProjectView: public QVBox,
-    public KXMLGUIBuilder, 
-    virtual public KXMLGUIClient
+class ProjectView: public QVBox
 {
     Q_OBJECT
 public:
@@ -161,10 +167,6 @@ public slots:
     
 private slots:
     void contextMenu(KListView *listView, QListViewItem *item, const QPoint &pt);
-    
-private:
-    KAction *m_actionReload;
-    KAction *m_actionBuildAll;
 };
 
 class ProjectDetails: public ProjectView
@@ -183,7 +185,6 @@ private slots:
     
 private:
     ProjectItemDom m_currentItem;
-    KAction *m_actionBuild;
 };
 
 #endif

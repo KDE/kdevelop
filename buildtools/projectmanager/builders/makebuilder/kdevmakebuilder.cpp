@@ -152,7 +152,7 @@ void KDevMakeBuilder::commandFailed(const QString &command)
     }
 }
 
-QString KDevMakeBuilder::buildCommand(ProjectItemDom item)
+QString KDevMakeBuilder::buildCommand(ProjectItemDom item, const QString &target)
 {
     QDomDocument &dom = *project()->projectDom();
 
@@ -176,9 +176,7 @@ QString KDevMakeBuilder::buildCommand(ProjectItemDom item)
         cmdline += " -n";
 
     cmdline += " ";
-#if 0 // ### enable me
     cmdline += target;
-#endif 
 
     cmdline.prepend(nice);
     cmdline.prepend(makeEnvironment());

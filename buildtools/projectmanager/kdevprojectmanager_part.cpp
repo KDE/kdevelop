@@ -26,6 +26,7 @@
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 
+#include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -50,8 +51,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     m_dirty = false;
     
     setInstance(KDevProjectManagerFactory::instance());
-    setXMLFile("kdevpart_kdevprojectmanager.rc");
-
+    
     m_widget = new KDevProjectManagerWidget(this);
 
     QWhatsThis::add(m_widget, i18n("Project Manager"));
@@ -91,6 +91,8 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
             }
         }    
     }
+    
+    setXMLFile("kdevprojectmanager.rc");    
 }
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
