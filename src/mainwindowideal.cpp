@@ -101,6 +101,7 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
  ,m_closing(false)
  ,m_bSwitching(false)
 {
+    resize( 800, 600 ); // starts kdevelop at 800x600 the first time
     m_pMainWindowShare = new MainWindowShare(this);
 
     m_raiseLeftBar = new KAction( i18n("Switch &Left Tabbar"), ALT+Key_L,
