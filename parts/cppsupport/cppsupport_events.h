@@ -19,11 +19,8 @@
 
 #if QT_VERSION < 0x030100
 #include <kdevmutex.h>
-#include <kdevdeepcopy.h>
-using namespace KDevCompat;
 #else
 #include <qmutex.h>
-#include <qdeepcopy.h>
 #endif
 
 enum
@@ -36,10 +33,17 @@ class FoundProblemsEvent: public QCustomEvent
 {
 public:
     FoundProblemsEvent( const QString& fileName, const QValueList<Problem>& problems )
-	: QCustomEvent(Event_FoundProblems),
-          m_fileName( QDeepCopy<QString>(fileName) ),
-          m_problems( QDeepCopy<QValueList<Problem> >(problems) )
-    {}
+    : QCustomEvent(Event_FoundProblems)
+    {
+        // the members are deep copies
+        m_fileName = QString(fileName.ascii());
+        QValueListConstIterator<Problem> it = problems.begin();
+        while (it != problems.end()) {
+            Problem p = *it;
+            m_problems.append(Problem(p.text().ascii(), p.line(), p.column()));
+            ++it;
+        }
+    }
 
     QString fileName() const { return m_fileName; }
     QValueList<Problem> problems() const { return m_problems; }
@@ -57,9 +61,10 @@ class FileParsedEvent: public QCustomEvent
 {
 public:
     FileParsedEvent( const QString& fileName )
-	: QCustomEvent( Event_FileParsed ),
-          m_fileName( QDeepCopy<QString>(fileName) )
-    {}
+    : QCustomEvent( Event_FileParsed )
+    {
+        m_fileName = QString(fileName.ascii());
+    }
 
     QString fileName() const { return m_fileName; }
 
