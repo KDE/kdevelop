@@ -205,7 +205,12 @@ void MakeWidget::queueJob(const QString &dir, const QString &command)
 	commandList.append(command);
 	dirList.append(dir);
 	if (!isRunning())
+	{
+		// Store the current output view so that it
+		// can be restored after a successful compilation
+		m_part->mainWindow()->storeOutputViewTab();
 		startNextJob();
+	}
 }
 
 void MakeWidget::startNextJob()
@@ -424,7 +429,13 @@ void MakeWidget::slotProcessExited(KProcess *)
 	// through the event loop. After that, we can be sure that the process is really finished
 	// and its KProcess object can be reused.
 	if (childproc->normalExit() && !childproc->exitStatus())
+	{
 		QTimer::singleShot(0, this, SLOT(startNextJob()));
+		if (commandList.isEmpty())
+			// The last command on the list was successful so restore the
+			// output view to what it had before the compilation process started
+			m_part->mainWindow()->restoreOutputViewTab();
+	}
 	else
 	{
 		commandList.clear();

@@ -330,8 +330,6 @@ QString CustomProjectPart::buildDirectory()
 
 void CustomProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
-    emit compilationStarted();
-
     partController()->saveAllFiles();
 
     QDomDocument &dom = *projectDom();

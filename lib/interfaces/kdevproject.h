@@ -105,14 +105,8 @@ signals:
 	void removedFilesFromProject(const QStringList& fileList );
 	
 	/**
-	 * Emitted when one compile related command (make, make install, make ...) starts to execute.
-	 * Used to store and, later on, restore the bottomView() if the compilation was sucessful.  
-	 */
-	void compilationStarted();
-	/**
 	 * Emitted when one compile related command (make, make install, make ...) ends sucessfuly.
 	 * Used to reparse the files after a sucessful compilation
-	 * Used to restore the bottomView() to the state it had before the compile command was issued.
 	 */  
 	void projectCompiled();
 };

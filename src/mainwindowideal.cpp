@@ -126,7 +126,7 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
 
     m_timeStamps.clear();
 
-    previous_bottom_view = NULL;
+    previous_output_view = NULL;
 }
 
 
@@ -170,7 +170,6 @@ void MainWindowIDEAl::init() {
     }
     kdDebug(9000) << "-> kapp = " << kapp << endl;
     kapp->installEventFilter( new IDEAlEventFilter(this) );
-    connect( API::getInstance()->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 }
 
 MainWindowIDEAl::~MainWindowIDEAl() {
@@ -445,7 +444,7 @@ void MainWindowIDEAl::saveSettings() {
     m_leftBar->saveSettings(config);
 
     config->setGroup("RightBar");
-    m_leftBar->saveSettings(config);
+    m_rightBar->saveSettings(config);
 
     config->setGroup("BottomBar");
     m_bottomBar->saveSettings(config);
@@ -685,45 +684,36 @@ bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )
   return FALSE;  // standard event processing
 }
 
-/**
- * When a new project gets opened, connect the signals to the project manager
- */
-void MainWindowIDEAl::slotProjectOpened() {
-    connect( API::getInstance()->project(), SIGNAL(compilationStarted()), this, SLOT(slotCompilationStarted()) );
-    connect( API::getInstance()->project(), SIGNAL(projectCompiled()), this, SLOT(slotCompilationSucessful()) );
-}
-
 
 /**
- * Store the bottom view status when the compilation starts
+ * Store the currently active view tab of the output (bottom) view
  */
-void MainWindowIDEAl::slotCompilationStarted()
+void MainWindowIDEAl::storeOutputViewTab()
 {
   if (m_bottomBar->isRaised()) {
     // If m_bottomBar->isRaised then store the current view
-    // so that it can be restored after a sucessfull compilation
-    previous_bottom_view = m_bottomBar->current();
+    previous_output_view = m_bottomBar->current();
   }else {
     // If not hide the bottom view by storing NULL
-    previous_bottom_view = NULL;
+    previous_output_view = NULL;
   }
 }
 
 
 /**
- * Restore the bottom view status to the state it had when the compilation started
+ * Restore the previously saved view tab to the output (bottom) view
  */
-void MainWindowIDEAl::slotCompilationSucessful()
+void MainWindowIDEAl::restoreOutputViewTab()
 {
-  if ( previous_bottom_view == NULL) {
+  if ( previous_output_view == NULL) {
     // If no previous exists then hide current
     if (m_bottomBar->current())
       lowerView(m_bottomBar->current());
   } else {
     // previous exist, so raise it
-    m_bottomBar->raiseWidget(previous_bottom_view);
+    m_bottomBar->raiseWidget(previous_output_view);
   }
-  previous_bottom_view = NULL;
+  previous_output_view = NULL;
 }
 
 #include "mainwindowideal.moc"

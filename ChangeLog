@@ -1,3 +1,7 @@
+2003-04-05 Amilcar Lucas <a.lucas@tu-bs.de>
+    - Simplified the "Inteligent messages auto-hide" code a lot
+    - Now it also works for AutoMake&friends and configure
+
 2003-04-01 Alexander Dymo <cloudtemple@mksat.net>
     * C/C++ "New class" dialog improvements:
     - Nested namespace support

@@ -79,6 +79,12 @@ public:
 
   enum EView {OutputView, TreeView};
 
+  /** Store the currently active view tab/window of the output view/window */
+  void storeOutputViewTab();
+
+  /** Restore the previously saved view tab/window to the output view/window */
+  void restoreOutputViewTab();
+
 signals:
 
   void wantsToQuit();

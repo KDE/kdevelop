@@ -237,6 +237,8 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
 {
   resize( 800, 600 );
   m_pMainWindowShare = new MainWindowShare(this);
+
+  previous_output_view = NULL;
 }
 
 
@@ -1279,6 +1281,41 @@ void MainWindow::callCommand(const QString& command)
 	}
 	delete winListIter;
     }
+}
+
+/**
+ * Store the currently active view tab/window of the output view/window
+ */
+void MainWindow::storeOutputViewTab()
+{
+/*  TODO: implement this properly
+  if (m_bottomBar->isRaised()) {
+    // If m_bottomBar->isRaised then store the current view
+    previous_output_view = m_bottomBar->current();
+  }else {
+    // If not hide the bottom view by storing NULL
+    previous_output_view = NULL;
+  }
+*/
+}
+
+
+/**
+ * Restore the previously saved view tab/window to the output view/window
+ */
+void MainWindow::restoreOutputViewTab()
+{
+/* TODO: implement this properly
+  if ( previous_output_view == NULL) {
+    // If no previous exists then hide current
+    if (m_bottomBar->current())
+      lowerView(m_bottomBar->current());
+  } else {
+    // previous exist, so raise it
+    m_bottomBar->raiseWidget(previous_output_view);
+  }
+  previous_output_view = NULL;
+*/
 }
 
 #include "mainwindow.moc"

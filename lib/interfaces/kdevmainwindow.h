@@ -38,6 +38,12 @@ public:
   virtual void lowerView(QWidget *view) = 0;
   virtual void lowerAllViews() = 0;
 
+  /** Store the currently active view tab/window of the output view/window */
+  virtual void storeOutputViewTab() = 0;
+
+  /** Restore the previously saved view tab/window to the output view/window */
+  virtual void restoreOutputViewTab() = 0;
+
   virtual void loadSettings() = 0;
 
   virtual KMainWindow *main() = 0;
@@ -49,8 +55,12 @@ public:
 
   virtual void setUserInterfaceMode(const QString& /*uiMode*/) {}
   
-  // this allows to order the mainwindow to do anything special, we use it to trigger the execution of a hack
+  /** this allows to order the mainwindow to do anything special, we use it to trigger the execution of a hack */
   virtual void callCommand(const QString& /*command*/) {}
+
+  protected:
+  /** Stores the saved view tab/window of the output view/window */
+  QWidget *previous_output_view;
 };
 
 

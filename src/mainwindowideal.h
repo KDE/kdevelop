@@ -90,14 +90,11 @@ public slots:
   void raiseBottomTabbar();
   void raiseEditor();
 
-/** When a new project gets opened, connect the signals to the project manager */
-  void slotProjectOpened();
+  /** Store the currently active view tab of the output (bottom) view */
+  void storeOutputViewTab();
 
-/** Store the bottom view status when the compilation starts */
-  void slotCompilationStarted();
-
-/** Restore the bottom view status to the state it had when the compilation started */
-  void slotCompilationSucessful();
+  /** Restore the previously saved view tab to the output (bottom) view */
+  void restoreOutputViewTab();
 
 private slots:
   void slotQuit();
@@ -137,8 +134,6 @@ private:
   
   QMap<QWidget*, QDateTime> m_timeStamps;
   bool m_bSwitching;
-
-  QWidget *previous_bottom_view;
 
   friend class IDEAlEventFilter;
 };
