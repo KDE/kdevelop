@@ -53,10 +53,6 @@
     <Action name="settings_configure_toolbars"/>
     <Action name="settings_configure"/>
   </Menu>
-  <Menu name="buffers">
-    <text>&amp;Window</text>
-    <ActionList name="buffer_list"/>
-  </Menu>
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
     <Merge/>

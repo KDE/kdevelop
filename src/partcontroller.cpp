@@ -1,5 +1,3 @@
-#include <qlayout.h>
-#include <qtabwidget.h>
 #include <qpopupmenu.h>
 
 
@@ -316,41 +314,6 @@ void PartController::activatePart(KParts::Part *part)
 }
 
 
-void PartController::updateBufferMenu()
-{
-  QPtrList<KAction> bufferActions;
-
-  TopLevel::getInstance()->main()->unplugActionList("buffer_list");
-
-  QPtrListIterator<PartListEntry> it(m_partList);
-  for ( ; it.current(); ++it)
-  {
-    QString name = it.current()->url().url();
-
-    KToggleAction *action = new KToggleAction(name, 0, 0, name.latin1());
-    action->setChecked(it.current()->part() == activePart());
-    connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
-    bufferActions.append(action);
-  }
-
-  TopLevel::getInstance()->main()->plugActionList("buffer_list", bufferActions);
-}
-
-
-void PartController::slotBufferSelected()
-{
-  QPtrListIterator<PartListEntry> it(m_partList);
-  for ( ; it.current(); ++it)
-    if (it.current()->isEqual(KURL(sender()->name())))
-    {
-      activatePart(it.current()->part());
-      break;
-    }
-
-  updateBufferMenu();
-}
-
-
 void PartController::closeActivePart()
 {
   if (!activePart())
@@ -395,21 +358,18 @@ void PartController::slotPartRemoved(KParts::Part *part)
       break;
     }
 
-  updateBufferMenu();
   updateMenuItems();
 }
 
 
 void PartController::slotPartAdded(KParts::Part *)
 {
-  updateBufferMenu();
   updateMenuItems();
 }
 
 
 void PartController::slotActivePartChanged(KParts::Part *)
 {
-  updateBufferMenu();
 }
 
 

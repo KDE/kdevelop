@@ -1,3 +1,7 @@
+2002-04-15  Matthias Hölzer-Klüpfel <mhk@kde.org>
+	
+	* moved window menu code from src to a plugin
+	
 2002-04-15  Simon Hausmann <hausmann@kde.org>
 
 	* Completed transition to KDevPlugin and KGenericFactory.

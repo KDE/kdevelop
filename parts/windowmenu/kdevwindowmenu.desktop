@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Window menu
+Name=KDevOpenWith
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevwindowmenu
+X-KDevelop-Scope=Global

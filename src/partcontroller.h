@@ -69,7 +69,6 @@ private slots:
   void slotPartRemoved(KParts::Part *part);
   void slotActivePartChanged(KParts::Part *part);
 
-  void slotBufferSelected();
   void slotSaveAllFiles();
   void slotRevertAllFiles();
 
@@ -105,7 +104,6 @@ private:
   void activatePart(KParts::Part *part);
 
   void updateMenuItems();
-  void updateBufferMenu();
 
   void editText(const KURL &url, int num);
 

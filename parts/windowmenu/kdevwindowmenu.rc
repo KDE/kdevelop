@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevWindowMenu" version="1">
+<MenuBar>
+ <Menu name="window">
+   <Text>&amp;Window</Text>
+   <ActionList name="window_list" />
+ </Menu>
+</MenuBar>
+</kpartgui>
