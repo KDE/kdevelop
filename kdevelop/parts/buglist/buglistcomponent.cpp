@@ -35,6 +35,12 @@ BugListComponent::BugListComponent (QObject *parent=0, const char *name=0)
 
     // Not pointing nowhere like.
     m_pBugList = NULL;
+
+    // HACK: Filling in some defaults for testing purposes.
+    m_FileName = "bugs.xml";
+    m_Initials = "ILH";
+    m_UserName = "Ivan Hawkes";
+    m_UserEMail = "linuxgroupie@ivanhawkes.com";
 }
 
 
@@ -83,6 +89,9 @@ void BugListComponent::configWidgetRequested(KDialogBase *dlg)
 
 void BugListComponent::projectSpaceOpened()
 {
+    int         Count;
+    QString     LastProject;
+
     kdDebug(9040) << "BugList::projectSpaceOpened()" << endl;
 
     // Take a note of the project space in use.
@@ -92,15 +101,45 @@ void BugListComponent::projectSpaceOpened()
         m_pMenuAction->setEnabled (TRUE);
 
         // Keep a track of the current project space. Probably not needed.
-        kdDebug(9040) << "BugList::Project Space Read" << endl;
         m_pProjectSpace = projectSpace();
-
         QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
-//        QDomNodeList projNodes = doc->elementsByTagName("BugList");
-//        QDomElement bugElement = projNodes.item(0).toElement();
-//        kdDebug(9040) << "BugList::file = " << bugElement.attribute("file") << endl;
-  QDomElement psElement = doc.documentElement(); // get the Projectspace
-  kdDebug(9040) << "BugList::filex = " << psElement.attribute("pluginName") << endl;
+
+        // Get the Projectspace
+        QDomElement psElement = doc.documentElement();
+
+        // Get the list of projects.
+        QDomNodeList projNodes = doc.elementsByTagName("Project");
+        if (projNodes.count () > 1)
+        {
+            // Several projects - get details for last used project.
+            LastProject = psElement.attribute("lastActiveProject");
+            for (Count = 0;Count < projNodes.count ();Count++)
+            {
+                QDomElement projElement = projNodes.item(Count).toElement();
+                kdDebug(9040) << "BugList::Checking " << projElement.attribute("name") << endl;
+                if (LastProject == projElement.attribute("name"))
+                {
+                    // Found the right project - grab what we need from it.
+                    m_FileName = projElement.attribute("bugfile");
+                }
+            }
+        }
+        else
+        {
+            // Just one project, use the bug file from that one.
+            QDomElement projElement = projNodes.item(0).toElement();
+            kdDebug(9040) << "BugList::BugFile = " << projElement.attribute("bugfile") << endl;
+            m_FileName = projElement.attribute("bugfile");
+        }
+
+        // Update the attributes if the component is currently running.
+        if (m_pBugList)
+        {
+            m_pBugList->m_FileName = m_FileName;
+            m_pBugList->m_Initials = m_Initials;
+            m_pBugList->m_UserName = m_UserName;
+            m_pBugList->m_UserEMail = m_UserEMail;
+        }
     }
     else
     {
@@ -112,24 +151,6 @@ void BugListComponent::projectSpaceOpened()
         elem.setAttribute ("test", "value");
         rootElement.appendChild (elem);*/
     }
-/*
-#if 0
-    //at the moment GrepView writes only data that are user depended,
-    // find the "GrepView" tag
-    QDomDocument doc = pProjectSpace->readUserDocument();
-    QDomNodeList grepList = doc.elementsByTagName("GrepView");
-    QDomElement grepElement = grepList.item(0).toElement();
-    kdDebug(9001) << "GrepView::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;
-#endif
-#if 0
-    kdDebug(9001) << "GrepView::writeProjectSpaceUserConfig" << endl;
-    QDomDocument doc = pProjectSpace->readUserDocument();
-    QDomElement rootElement = doc.documentElement();
-    QDomElement elem = doc.createElement("GrepView");
-    elem.setAttribute("test", "value");
-    rootElement.appendChild( elem );
-#endif
-*/
 }
 
 
@@ -158,7 +179,7 @@ void BugListComponent::slotActivate()
 
     if (!m_pBugList)
     {
-        m_pBugList = new BugList ();
+        m_pBugList = new BugList (NULL,"BugList",m_FileName,m_Initials,m_UserName,m_UserEMail);
         connect (m_pBugList, SIGNAL(signalDeactivate()), this, SLOT(slotWidgetClosed()));
         m_pBugList->show ();
     }

@@ -49,6 +49,12 @@ private:
     ProjectSpace    *m_pProjectSpace;   // Pointer to the project space.
     KAction         *m_pMenuAction;     // The menu item we add.
 
+    // Configuration info needed by the buglist component.
+    QString         m_FileName;
+    QString         m_Initials;
+    QString         m_UserName;
+    QString         m_UserEMail;
+
 public slots:
     /**
         Call this slot to let the widget know to create the buglist editor.

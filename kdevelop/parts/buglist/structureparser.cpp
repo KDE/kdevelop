@@ -287,7 +287,7 @@ bool StructureParser::endElement (const QString & namespaceURI, const QString & 
     // When a bug tag is closed we should add the bug to the listbox.
     if (Tag == "BUG")
     {
-        m_pParent->slotAddBug (CurrentBug);
+        m_pParent->InsertBug (CurrentBug);
     }
     else if (Tag == "DEVELOPER")
     {

@@ -23,7 +23,7 @@ const QString BugCounter::GetNextID ()
     QString     NextID;
 
     LastBugNumber++;
-    NextID.sprintf ("ILH%05i", LastBugNumber);
+    NextID.sprintf (Initials + "%05i", LastBugNumber);
 
     return NextID;
 }

@@ -32,9 +32,16 @@
 #define LST_PACKAGE     5
 #define LST_ASSIGNEDTO  6
 
-BugList::BugList(QWidget *parent, const char *name)
+BugList::BugList(QWidget *parent, const char *name, QString FileName,
+                 QString Initials, QString UserName, QString UserEMail)
 : QWidget(parent, name)
 {
+    // Grab our members from the constructor.
+    m_FileName = FileName;
+    m_Initials = Initials;
+    m_UserName = UserName;
+    m_UserEMail = UserEMail;
+
     // Don't let it get too small.
     this->setMinimumSize (500,300);
 
@@ -131,7 +138,6 @@ BugList::BugList(QWidget *parent, const char *name)
     Developers.setAutoDelete (TRUE);
 
     // Parse the contents of the XML file into memory.
-    FileName = "/home/ivan/buglist/bugs.xml";
     ParseFile ();
 
     // Make sure at least we are in there.
@@ -141,8 +147,8 @@ BugList::BugList(QWidget *parent, const char *name)
 
         // Add the current developer settings into the dictionary.
         pBugCounter = new BugCounter;
-        pBugCounter->Initials = "ILH";
-        pBugCounter->LastBugNumber = 1;
+        pBugCounter->Initials = m_Initials;
+        pBugCounter->LastBugNumber = 0;
         Developers.insert (pBugCounter->Initials, pBugCounter);
     }
 }
@@ -159,7 +165,7 @@ void BugList::ParseFile ()
     StructureParser     handler (this);
 
     // Use the simple reader to parse our file.
-    QFile               xmlFile (FileName);
+    QFile               xmlFile (m_FileName);
     QXmlInputSource     source (xmlFile);
     QXmlSimpleReader    reader;
 
@@ -179,7 +185,7 @@ void BugList::ParseFile ()
 
 void BugList::WriteXMLFile ()
 {
-    ofstream        Out (FileName,ios::trunc | ios::out);
+    ofstream        Out (m_FileName,ios::trunc | ios::out);
     QSortedList     <QString> SortedBugList;
     QSortedList     <QString> SortedDeveloperList;
     QDictIterator   <Bug> BugIterator (BugDictionary);
@@ -354,7 +360,7 @@ void BugList::WriteXMLFile ()
 
 // Add the bug passed as a parameter to our listbox and dictionary.
 
-void BugList::slotAddBug (Bug * pBug)
+void BugList::InsertBug (Bug * pBug)
 {
     QString     Age;
     char        tmp [10];
@@ -376,6 +382,20 @@ void BugList::slotAddBug (Bug * pBug)
 
     // Add the current bug item to the list.
     (void) new QListViewItem (pMainBugList, pBug->BugID, pBug->Description, pBug->Severity, pBug->Priority, Age, pBug->Package, pBug->AssignedTo);
+}
+
+
+// Add the bug passed as a parameter to our listbox and dictionary.
+// NOTE: This does not mark the buffer as dirty because I use this method
+// from the structure parser to load the listbox on startup.
+
+void BugList::slotAddBug (Bug * pBug)
+{
+    // Do the insertion.
+    InsertBug (pBug);
+
+    // Mark the buffer as being dirty now.
+    Dirty = TRUE;
 }
 
 
@@ -407,6 +427,9 @@ void BugList::slotUpdateBug (Bug * pBug)
         pItem->setText (LST_PACKAGE,pBug->Package);
         pItem->setText (LST_ASSIGNEDTO,pBug->AssignedTo);
         pItem->setText (LST_PRIORITY,pBug->Priority);
+
+        // Let them know when they exit that changes have occured.
+        Dirty = TRUE;
     }
 }
 
@@ -422,7 +445,7 @@ void BugList::slotAddClicked()
     pBug = new Bug;
 
     // Get a new bug id.
-    pBugCounter = Developers ["ILH"];
+    pBugCounter = Developers [m_Initials];
     pBug->BugID = pBugCounter->GetNextID ();
 
     // Fire up the bug editor on the new bug we created.
@@ -458,9 +481,6 @@ void BugList::slotEditClicked()
 
         // Show the edit screen.
         pBugEdit->show();
-
-        // Let them know when they exit that changes have occured.
-        Dirty = TRUE;
     }
 }
 
@@ -621,7 +641,7 @@ void BugList::slotOwnership ()
         // Get a pointer to the entry they want to edit.
         pBug = BugDictionary [pMainBugList->currentItem ()->text (0)];
 
-        if ((pBug->AssignedTo != "Ivan Hawkes") && (pBug->AssignedTo.length () > 0))
+        if ((pBug->AssignedTo != m_UserName) && (pBug->AssignedTo.length () > 0))
         {
             if (MB.warning (this,
                 i18n ("Bug Owner Already Set"),
@@ -635,16 +655,12 @@ void BugList::slotOwnership ()
         }
 
         // Update the fields to our settings.
-        pBug->AssignedTo = "Ivan Hawkes";
+        pBug->AssignedTo = m_UserName;
         pBug->AssignedDate = QDateTime::currentDateTime ().date ();
-        pBug->AssignedEMail = "linuxgroupie@ivanhawkes.com";
+        pBug->AssignedEMail = m_UserEMail;
 
         // Update the list.
         slotUpdateBug (pBug);
-
-        // Let them know when they exit that changes have occured.
-        Dirty = TRUE;
     }
-
 }
 #include "buglist.moc"

@@ -47,7 +47,8 @@ friend StructureParser;
 
 public:
     /** construtor/destructor */
-    BugList(QWidget* parent=0, const char *name=0);
+    BugList(QWidget* parent, const char *name, QString FileName,
+            QString Initials, QString UserName, QString UserEMail);
     ~BugList();
 
     // Resize method.
@@ -56,6 +57,9 @@ public:
     // Parse the XML file to fill our listbox.
     void ParseFile ();
     void WriteXMLFile ();
+
+    // Takes care of adding a bug to the list.
+    void InsertBug (Bug *);
 
 signals:
     void signalDeactivate ();
@@ -85,9 +89,15 @@ private:
     QHBox *             pExitBox;
     QHBox *             pMaintenanceBox;
     QHBox *             pBugListBox;
-    QString             FileName;
     int                 MyCounter;
     bool                Dirty;                  // True if the file has been chnaged in memory.
+
+public:
+    /** Configuration information from the user and global files. */
+    QString             m_FileName;
+    QString             m_Initials;
+    QString             m_UserName;
+    QString             m_UserEMail;
 };
 
 #endif
