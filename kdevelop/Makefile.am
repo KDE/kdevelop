@@ -23,6 +23,7 @@ LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
 bin_PROGRAMS = kdevelop
+bin_SCRIPTS = extractrc
 
 # Which sources should be compiled for kdevelop.
 kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
@@ -104,11 +105,10 @@ install-data-local:
 	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
 	$(mkinstalldirs) $(kde_mimedir)/application	
 	$(INSTALL_DATA) x-kdevelop-project.kdelnk $(kde_mimedir)/application/
-
+	
 # remove ALL you have installed in install-data-local or install-exec-local
 uninstall-local:
 	-rm -f $(APPSDIR)/Development/kdevelop.kdelnk
 	-rm -f $(APPSDIR)/Development/kdevelop-setup.kdelnk
 	-rm -f $(kde_icondir)/kdevelop.xpm
 	-rm -f $(kde_minidir)/kdevelop.xpm
-

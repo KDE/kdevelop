@@ -2268,7 +2268,7 @@ void CKAppWizard::slotProcessExited() {
 
   project = new CProject(prj_str);
   project->readProject();
-  project->setKDevPrjVersion("1.2");
+  project->setKDevPrjVersion("1.3");
 
   // Remove sources now... if desired
   if (!generatesource->isChecked())
@@ -2327,7 +2327,7 @@ void CKAppWizard::slotProcessExited() {
   project->setEmail (emailline->text());
   project->setVersion (versionline->text());
   if (userdoc->isChecked()) {
-    if(kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+    if(project->isKDE2Project())
       project->setSGMLFile (directory + "/doc/en/index.docbook");
     else
       project->setSGMLFile (directory + "/" + namelow + "/docs/en/index.sgml");
@@ -2340,9 +2340,8 @@ void CKAppWizard::slotProcessExited() {
   if (kdeminiitem->isSelected() ) {
     project->setLDADD (" -lkdeui -lkdecore -lqt -lXext -lX11");
   }
-
   else if ( kde2miniitem->isSelected()) {
-    project->setLDADD ("$(LIB_KDEUI)");
+    project->setLDADD (" -lkdeui -lkdecore $(LIB_QT)");
   }
   else if (kdenormalitem->isSelected()) {
     project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11");
@@ -2353,7 +2352,7 @@ void CKAppWizard::slotProcessExited() {
      project->setLDADD(" -lkfile -lkfm -lkdeui -lkdecore -lqt -lXext -lX11 $(LIB_QGL)");
   }
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
-    project->setLDADD ("$(LIB_KFILE)");
+    project->setLDADD (" -lkfile -lkfm -lkdeui -lkdecore $(LIB_QT)");
   }
   else if (qtnormalitem->isSelected() || qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");
@@ -2365,8 +2364,7 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" $(GNOMEUI_LIBS) $(GNOME_LIBDIR)");
   }
 
-  if(qt2normalitem->isSelected() ||qt2mdiitem->isSelected() || kde2normalitem->isSelected() ||
-  	kde2miniitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
+  if(project->isQt2Project() || project->isKDE2Project() || qextmdiitem->isSelected())
   {
   	KConfig * config = KApplication::getKApplication()->getConfig();
 		config->setGroup("QT2");
@@ -2412,7 +2410,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
-  if(kde2normalitem->isSelected() || kde2miniitem->isSelected() || kde2mdiitem->isSelected())
+  if(project->isKDE2Project())
     makeAmInfo.rel_name = "doc/Makefile.am";
   else
     makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
@@ -2425,7 +2423,7 @@ void CKAppWizard::slotProcessExited() {
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
 
-  if(kde2normalitem->isSelected() || kde2miniitem->isSelected() || kde2mdiitem->isSelected())
+  if(project->isKDE2Project())
     makeAmInfo.rel_name = "doc/en/Makefile.am";
   else
     makeAmInfo.rel_name =  namelow + "/docs/en/Makefile.am";
@@ -2438,7 +2436,7 @@ void CKAppWizard::slotProcessExited() {
   }
   
   if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected() ||
-  		 qt2normalitem->isSelected() || qt2mdiitem->isSelected() || qextmdiitem->isSelected()) &&
+  		 project->isQt2Project() || qextmdiitem->isSelected()) &&
         CToolClass::searchProgram("xgettext"))
   {
     makeAmInfo.rel_name = "po/Makefile.am";
@@ -2627,7 +2625,7 @@ void CKAppWizard::slotProcessExited() {
 
   if (kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() ||
   	kde2normalitem->isSelected() || kde2mdiitem->isSelected() ||
-  	qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() ||
+  	qtnormalitem->isSelected() ||project->isQt2Project() ||
     qextmdiitem->isSelected())
 	{
      if (generatesource->isChecked()) {
@@ -2768,7 +2766,7 @@ void CKAppWizard::slotProcessExited() {
     project->addFileToProject (namelow + "/fileopen.xpm",fileInfo);
   } 
   
-  if (userdoc->isChecked() && !(kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()))
+  if (userdoc->isChecked() && !project->isKDE2Project() )
   {
     for (int i=0; i<7; i++){
       QString num;
@@ -2780,7 +2778,7 @@ void CKAppWizard::slotProcessExited() {
       fileInfo.dist = true;
       if (!cppitem->isSelected() && !citem->isSelected()) {
         fileInfo.install = true;
-        if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())
+        if (qtnormalitem->isSelected() || project->isQt2Project() || qextmdiitem->isSelected())
         	fileInfo.install_location = "$(prefix)/doc/";
         else
   	      fileInfo.install_location = "$(kde_htmldir)/en/";
@@ -2789,7 +2787,7 @@ void CKAppWizard::slotProcessExited() {
       project->addFileToProject (namelow + "/docs/en/index"+num+".html",fileInfo);
     }
   }
-  if (userdoc->isChecked() && (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()))
+  if (userdoc->isChecked() && project->isKDE2Project())
   {
       fileInfo.rel_name ="doc/en/index.docbook";
       fileInfo.type = DATA;
@@ -2816,21 +2814,30 @@ void CKAppWizard::slotProcessExited() {
     project->addLFVGroup ("GNU","");
     project->setFilters("GNU",group_filters);
   }
-  
-  if (!(cppitem->isSelected() || gnomenormalitem->isSelected() || citem->isSelected() ||
-  		qtnormalitem->isSelected()|| qextmdiitem->isSelected()))
-  {
+
+  if (project->isKDE2Project() || project->isKDEProject())
+	{
+    group_filters.clear();
+    group_filters.append("*.po");
+    project->addLFVGroup (i18n("Translations"),"");
+    project->setFilters(i18n("Translations"),group_filters);
+  }
+  if (project->isQt2Project())
+	{
     group_filters.clear();
     group_filters.append("*.ts");
     project->addLFVGroup (i18n("Translations"),"");
     project->setFilters(i18n("Translations"),group_filters);
-  } 
+  }
+
   if (!cppitem->isSelected() && !citem->isSelected() &&!gnomenormalitem->isSelected()) {
     group_filters.clear();
     group_filters.append("*.kdevdlg");
-    project->addLFVGroup (i18n("Dialogs"),"");
-    project->setFilters(i18n("Dialogs"),group_filters);
-  } 
+    group_filters.append("*.ui");
+    group_filters.append("*.rc");
+    project->addLFVGroup (i18n("User Interface"),"");
+    project->setFilters(i18n("User Interface"),group_filters);
+  }
   
   
   group_filters.clear();
@@ -2856,15 +2863,6 @@ void CKAppWizard::slotProcessExited() {
   group_filters.append("*.H");
   project->addLFVGroup (i18n("Headers"),"");
   project->setFilters(i18n("Headers"),group_filters);
-
-  if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected() ||
-  	qt2normalitem->isSelected()|| qt2mdiitem->isSelected())
-	{
-		group_filters.clear();
-    group_filters.append("*.ui");
-    project->addLFVGroup (i18n("User Interface"),"");
-    project->setFilters(i18n("User Interface"),group_filters);
-  }
 
   project->writeProject ();
   project->updateMakefilesAm ();

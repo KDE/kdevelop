@@ -804,13 +804,18 @@ void CKDevelop::slotProjectMessages(){
   error_parser->toogleOff();
   shell_process.clearArguments();
   //shellprocess << make_cmd;
-  if(!prj->isQt2Project()){
+  if(prj->isQt2Project()){
     shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
-    shell_process << make_cmd + " messages && cd ../po && " + make_cmd + " merge";
+    shell_process << "lupdate Makefile.am && lrelease Makefile.am" ;
+  }
+  else if(prj->isKDE2Project()){
+    shell_process << QString("cd '")+prj->getProjectDir() +"' && ";
+    shell_process <<  make_cmd + " package-messages";
+
   }
   else{
     shell_process << QString("cd '")+prj->getProjectDir() + prj->getSubDir()+ "' && ";
-    shell_process << "lupdate Makefile.am && lrelease Makefile.am" ;
+    shell_process << make_cmd + " messages && cd ../po && " + make_cmd + " merge";
   }
   next_job="fv_refresh";
   shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);

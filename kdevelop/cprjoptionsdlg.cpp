@@ -757,14 +757,29 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
   l_qt=new QCheckBox(w4,"l_qt");
   l_qt->setGeometry(20,180,110,20);
   l_qt->setText("qt");
-  if (ldadd.contains(" -lqt ")) {
-    l_qt->setChecked(true);
-    pos=ldadd.find("-lqt ");
-    ldadd.remove(pos,5);
-    //cerr << "-lqt OK" << endl;
-  } else {
-    l_qt->setChecked(false);
+  if(!(prj->isKDE2Project() || prj->isQt2Project())){
+    if (ldadd.contains(" -lqt ")) {
+      l_qt->setChecked(true);
+      pos=ldadd.find("-lqt ");
+      ldadd.remove(pos,5);
+      //cerr << "-lqt OK" << endl;
+    }
+    else {
+      l_qt->setChecked(false);
+    }
   }
+  else{
+    if (ldadd.contains(" $(LIB_QT) ")) {
+      l_qt->setChecked(true);
+      pos=ldadd.find("$(LIB_QT)");
+      ldadd.remove(pos,8);
+      //cerr << "-lqt OK" << endl;
+    }
+    else {
+      l_qt->setChecked(false);
+    }
+  }
+
   KQuickHelp::add(l_qt, i18n("Qt"));
 
   l_kdecore=new QCheckBox(w4,"l_kdecore");
@@ -1479,7 +1494,10 @@ void CPrjOptionsDlg::ok(){
     text+=" -lkdecore";
   }
   if (l_qt->isChecked()) {
+   if(!(prj_info->isKDE2Project() || prj_info->isQt2Project()))
     text+=" -lqt";
+   else
+    text+=" $(LIB_QT)";
   }
   if (l_Xext->isChecked()) {
     text+=" -lXext";

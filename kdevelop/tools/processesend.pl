@@ -102,9 +102,7 @@ if ($processes{USER} eq "yes") {
 chdir ($underDirectory);
 
 if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal" ||
-    $processes{APPLICATION} eq "kdenormalogl" ||
-    $processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
-    $processes{APPLICATION} eq "kde2mdi")
+    $processes{APPLICATION} eq "kdenormalogl" )
   {
     printflush (STDOUT,"creating $nameLittle.pot\n");
     if ($processes{XGETTEXT} && $processes{XGETTEXT} eq "yes")
@@ -117,6 +115,24 @@ if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenorma
       printflush (STDOUT,"NO $nameLittle.pot creation without xgettext\n");
     }
   }
+
+if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
+    $processes{APPLICATION} eq "kde2mdi")
+  {
+    printflush (STDOUT,"creating $nameLittle.pot\n");
+    if ($processes{XGETTEXT} && $processes{XGETTEXT} eq "yes")
+    {
+      chdir ($overDirectory);
+      printflush (STDOUT,">make messages\n");
+      system ("make package-messages >/dev/null");
+    }
+    else
+    {
+      printflush (STDOUT,"NO $nameLittle.pot creation without xgettext\n");
+    }
+  }
+
+
 
 printflush (STDOUT,"READY\n");
 

@@ -713,7 +713,10 @@ void CProject::updateMakefileAm(QString makefile){
 	      tsfiles =  tsstr + " " + tsfiles ;
   	  }
   	  stream << "TRANSLATIONS = " << tsfiles << "\n";
+	    // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
+  	  stream << "KDE_OPTIONS = qtonly\n";
 	  }
+	
     /********************* QT 2 INTERNATIONALIZATION END **************/	
 	
 	  if(static_libs.isEmpty()){
@@ -747,7 +750,7 @@ void CProject::updateMakefileAm(QString makefile){
           if (type!="normal_cpp" && type != "normal_c")
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
 
-          if (QFileInfo(getProjectDir() + "am_edit").exists())
+          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
           {
 	    stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
 	  }
@@ -760,6 +763,9 @@ void CProject::updateMakefileAm(QString makefile){
 
 	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
 	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
+    if(isQt2Project())	
+	    // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
+  	  stream << "KDE_OPTIONS = qtonly\n";
 	}
 
 	//***************************generate needed things for shared_library*********
@@ -777,7 +783,7 @@ void CProject::updateMakefileAm(QString makefile){
           if (type!="normal_cpp" && type != "normal_c")
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
 
-          if (QFileInfo(getProjectDir() + "am_edit").exists())
+          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
           {
 	    stream << "lib" << dir.dirName() << "_la_METASOURCES = AUTO\n\n";
 	  }
@@ -788,10 +794,13 @@ void CProject::updateMakefileAm(QString makefile){
            }
 
 	  stream << "lib" << dir.dirName() << "_la_SOURCES = " << sources << "\n";
+    if(isQt2Project())	
+	    // am_edit used only for qt apps requires this switch in Makefile.am큦 to use tr instead of i18n and other specific stuff
+  	  stream << "KDE_OPTIONS = qtonly\n";
 	}
 
 	//***************************generate needed things for a po makefile*********
-	if (config.readEntry("type") == "po"){ // a po makefile
+	if (config.readEntry("type") == "po" && (!isKDE2Project())){ // a po makefile - KDE2 Projects have PO_FILES=AUTO in it.
 	  getPOFiles(makefile,po_files);
 	  for(str= po_files.first();str !=0;str = po_files.next()){
 	    pos =  str + " " + pos ;
@@ -802,22 +811,19 @@ void CProject::updateMakefileAm(QString makefile){
  
 	// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
 //	QString type=getProjectType();
+  if(!(isKDE2Project() || isQt2Project()) ){  // KDE2 and Qt2 use KDE큦 admin dir which contains am_edit
         if (makefile==QString("Makefile.am"))
         {
-//	if((type =="normal_qt2" || type=="mdi_qt2" || type=="mdi_qextmdi" ||type =="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2") &&
-//      )
           if (QFileInfo(getProjectDir() + "am_edit").exists())
           {
            stream << "dist-hook:\n\t-perl am_edit\n";
-	  }
-          else
-//  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type== "mdi_qextmdi" || type=="normal_qt2" ||
-//	  		type=="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2"))
-          if (QFileInfo(getProjectDir() + "automoc").exists())
+      	  }
+          else if (QFileInfo(getProjectDir() + "automoc").exists())
           {
            stream << "dist-hook:\n\t-perl automoc\n";
           }
        }
+  }
 	//************SUBDIRS***************
 	if(!subdirs.isEmpty()){ // the SUBDIRS key
 	  stream << "\nSUBDIRS = ";
@@ -1123,10 +1129,14 @@ void CProject::addMakefileAmToProject(QString rel_name,TMakefileAmInfo info){
 }
 
 void CProject::updateConfigureIn(){
-
   if( isCustomProject()) return; // do nothing
 
-  QString abs_filename = getProjectDir() + "/configure.in";
+  QString abs_filename;
+  if(isKDE2Project())
+    abs_filename = getProjectDir() + "/configure.in.in"; // KDE2 templates define only AM_INIT_AUTOMAKE in configure.in.in
+  else
+    abs_filename = getProjectDir() + "/configure.in";
+
   QFile file(abs_filename);
   QStrList list;
   QTextStream stream(&file);

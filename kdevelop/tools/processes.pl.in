@@ -462,8 +462,14 @@ sub changeNormalApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  replaceValuesInFile(\%changings, "configure.in");
-
+  if($processes{APPLICATION} eq "kdenormal")
+  {
+    replaceValuesInFile(\%changings, "configure.in");
+  }
+  if($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mdi")
+  {
+    replaceValuesInFile(\%changings, "configure.in.in");
+  }
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
 #		   "Makefile.am");  			not needed anymore!!
@@ -483,7 +489,7 @@ sub changeNormalApp {
   rename ("kbasedoc.h",    $nameLittle."doc.h");
   rename ("kbaseview.cpp", $nameLittle."view.cpp");
   rename ("kbaseview.h",   $nameLittle."view.h");
-  if($processes{APPLICATION} eq "kde2normal")
+  if($processes{APPLICATION} eq "kde2normal"|| $processes{APPLICATION} eq "kde2mdi")
   {
     rename ("kbaseui.rc",  $nameLittle."ui.rc");
   }
@@ -499,7 +505,7 @@ sub changeNormalApp {
   {
     replaceValuesInFile(\%changings, "resource.h");
   }
-  if($processes{APPLICATION} eq "kde2normal")
+  if($processes{APPLICATION} eq "kde2normal"|| $processes{APPLICATION} eq "kde2mdi")
   {
     replaceValuesInFile(\%changings, $nameLittle."ui.rc");
   }
@@ -614,7 +620,14 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  replaceValuesInFile(\%changings, "configure.in");
+  if($processes{APPLICATION} eq "kdemini")
+  {
+    replaceValuesInFile(\%changings, "configure.in");
+  }
+  if($processes{APPLICATION} eq "kde2mini")
+  {
+    replaceValuesInFile(\%changings, "configure.in.in");
+  }
 
 #    replaceOldFile("SUBDIRS = |NAMELITTLE|", "SUBDIRS = $nameLittle.po",
 #		   "Makefile.am");  			not needed anymore!!
