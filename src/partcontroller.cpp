@@ -531,12 +531,12 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
   TopLevel::getInstance()->embedPartView(part->widget(), url.filename(), url.url());
 
   addPart(part);
-
+/*
   if( isTextEditor )
   {
       EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
   }
-
+*/
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
   if ( !ro_part ) return;
@@ -675,16 +675,20 @@ void PartController::slotFileNameChanged()
 }
 */
 
-void PartController::reinstallPopups( ){
-
+void PartController::reinstallPopups( )
+{
+	kdDebug(9000) << k_funcinfo << endl;
+/*
   EditorProxy* editorProxy = EditorProxy::getInstance();
   QPopupMenu* popup = contextPopupMenu();
 
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
     editorProxy->installPopup( it.current(), popup, true );
+*/	
 }
 
+/*
 QPopupMenu *PartController::contextPopupMenu()
 {
     QPopupMenu * popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
@@ -693,6 +697,7 @@ QPopupMenu *PartController::contextPopupMenu()
 
   return popup;
 }
+*/
 
 KParts::ReadOnlyPart *PartController::partForURL(const KURL &url)
 {
@@ -1010,7 +1015,9 @@ bool PartController::readyToClose()
 void PartController::slotActivePartChanged( KParts::Part * part )
 {
 	updateMenuItems();
-
+	
+	QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
+	
 	if ( m_isJumping ) return;
 
 	if ( _partURLMap.contains( m_latestPart ) )
@@ -1315,6 +1322,25 @@ void PartController::addHistoryEntry(const KURL & url, int line, int col )
 	m_Current = m_history.fromLast();
 	
 	updateMenuItems();
+}
+
+void PartController::slotWaitForFactoryHack( )
+{
+	kdDebug(9000) << k_funcinfo << endl;
+	
+	if ( !activePart() ) return;
+	
+	if ( KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( activePart()->widget() ) )
+	{
+		if ( !view->factory() )
+		{
+			QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
+		}
+		else
+		{
+			EditorProxy::getInstance()->installPopup( activePart() );
+		}
+	}
 }
 
 #include "partcontroller.moc"

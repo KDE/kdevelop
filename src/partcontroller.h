@@ -89,6 +89,8 @@ protected:
 
 private slots:
 
+	void slotWaitForFactoryHack();
+
   void slotSaveAllFiles();
   void slotRevertAllFiles();
 
@@ -123,7 +125,7 @@ private:
 
   bool closeFilesDialog( KURL::List const & ignoreList );
   
-  QPopupMenu *contextPopupMenu();
+//  QPopupMenu *contextPopupMenu();
   
   void doEmitState( KURL const & );
 

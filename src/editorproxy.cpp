@@ -9,7 +9,13 @@
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/selectioninterface.h>
+#include <ktexteditor/view.h>
+#include <kxmlguiclient.h>
+#include <kxmlguifactory.h>
+#include <kmainwindow.h>
+#include <kactioncollection.h>
 
+#include <toplevel.h>
 #include "partcontroller.h"
 #include "core.h"
 #include "debugger.h"
@@ -51,43 +57,32 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
     iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
 }
 
-
-void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup, bool revalidate /*= false*/ )
+void EditorProxy::installPopup( KParts::Part * part )
 {
-  kdDebug( 9000 ) << "EditorProxy::installPopup called with popup = " << popup << endl;
-
-  if (part->inherits("KTextEditor::Document") && part->widget())
-  {
-    PopupMenuInterface *iface = dynamic_cast<PopupMenuInterface*>(part->widget());
-    if (iface)
-    {
-      iface->installPopup(popup);
-
-      // @fixme this needs cleaning up
-      // The popupmenu is no longer destroyed after being used, so this code now creates a 
-      // new connection to aboutToShow() for every merged editorpart. This meant we were setting
-      // up the contextmenu multiple times for every invocation. No wonder it was slow.. ;)
-      // As a simple too-close-to-release-to-do-properly fix, let's simply add a disconnect().
-      // teatime
-      disconnect(popup, SIGNAL(aboutToShow()), this, 0);
-
-      connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
-    }
-  }
-
-  static bool forcerevalidation = true;
-  
-  if( forcerevalidation || revalidate ){
-  
-    forcerevalidation = false;
-  
-    // ugly hack: mark the "original" items
-    m_popupIds.resize(popup->count());
-    for (uint index=0; index < popup->count(); ++index)
-        m_popupIds[index] = popup->idAt(index);
-        
-  }
-
+	if ( part->inherits("KTextEditor::Document") && part->widget())
+	{
+		PopupMenuInterface *iface = dynamic_cast<PopupMenuInterface*>(part->widget());
+		if (iface)
+		{
+			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
+			QPopupMenu * popup = static_cast<QPopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
+			
+			popup->insertSeparator( 0 );
+			
+			KActionCollection * ac = TopLevel::getInstance()->main()->actionCollection();
+			ac->action( "file_close" )->plug( popup, 0 );
+			
+			iface->installPopup( popup );
+					
+			connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
+			
+			// ugly hack: mark the "original" items
+			m_popupIds.resize(popup->count());
+			for (uint index=0; index < popup->count(); ++index)
+				m_popupIds[index] = popup->idAt(index);
+		
+		}
+	}
 }
 
 
@@ -113,21 +108,21 @@ void EditorProxy::popupAboutToShow()
 //        kdDebug(9000) << "leaving id " << id << endl;
     }
   }
-
+/*	// why twice !?!?
   // ugly hack: mark the "original" items
   m_popupIds.resize(popup->count());
   for (uint index=0; index < popup->count(); ++index)
     m_popupIds[index] = popup->idAt(index);
-
+*/
 
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(PartController::getInstance()->activePart());
   if (!ro_part)
     return;
-
+/*	// I disagree.. the EditorContext shouldn't emit the filecontext event
   // fill the menu in the file context
   FileContext context(ro_part->url().path(), false);
   Core::getInstance()->fillContextMenu(popup, &context);
-
+*/
   // fill the menu in the editor context
   if (!ro_part->widget())
     return;
