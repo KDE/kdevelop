@@ -92,7 +92,7 @@ AdaColorizer::AdaColorizer (QEditor * editor)
     context0->appendChild (new StartsWithHLItem ("--", Comment, 0));
     context0->appendChild (new KeywordsHLItem (ada_keywords, Keyword, Normal, 0));
     context0->appendChild (new WhiteSpacesHLItem (Normal, 0));
-    context0->appendChild (new StringHLItem ("\"", String, 3));
+    context0->appendChild (new StringHLItem ("\"", String, 1));
     context0->appendChild (new NumberHLItem (Constant, 0));
     context0->appendChild (new RegExpHLItem ("[0-9][0-9]*#[A-Fa-f0-9]*#", Constant, 0));
 
@@ -103,7 +103,7 @@ AdaColorizer::AdaColorizer (QEditor * editor)
     m_items.append (context1);
 }
 
- AdaColorizer::~AdaColorizer ()
+AdaColorizer::~AdaColorizer ()
 {
 }
 
@@ -113,11 +113,8 @@ int AdaColorizer::computeLevel (QTextParagraph* parag, int startLevel)
 
     QString s = editor ()->text (parag->paragId ());
     ParagData* data = (ParagData*) parag->extraData ();
-    kdDebug() << "AdaColorizer::computeLevel called, startLevel="
-                  << startLevel << ", text: " << s;
     if (!data || s.isEmpty ()) {
-        kdDebug() << ", early return (editor text =\"" << s << "\")"
-	              << endl;
+        kdDebug() << "AdaColorizer::computeLevel: early return" << endl;
         return startLevel;
     }
 
@@ -137,7 +134,9 @@ int AdaColorizer::computeLevel (QTextParagraph* parag, int startLevel)
         data->setBlockStart (true);
     }
 
-    kdDebug() << ", level=" << level << endl;
+    kdDebug() << "AdaColorizer::computeLevel called, startLevel="
+              << startLevel << ", text: '" << s
+              << "', level=" << level << endl;
     return level;
 }
 
