@@ -1,3 +1,14 @@
+2003-08-03 jbb <jbb@kdevelop.org>
+    * fixes for debugger startup problems
+    * fixes for debugger shutdown
+    A significant change in this patch is that we no longer attempt to
+    shutdown gdb from information that gdb supplies. This must now be done by
+    the user via the stop button.
+    A reproductable crash after the client program segfaulted and the user
+    tried to continue, shutdown and then restarted has been fixed.
+    I suspect that this was the major cause of the reported crashes judging
+    from the few backtraces supplied.
+
 2003-07-28 Mario Scalas <mario.scalas@libero.it>
     * PartExplorer is now shown in the embedded SelectView because the dialog-based interface was hardly useful!
     * Results list will now use tooltips to show available services' properties.
