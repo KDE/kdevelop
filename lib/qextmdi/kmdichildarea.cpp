@@ -49,7 +49,7 @@ KMdiChildArea::KMdiChildArea(QWidget *parent)
    m_captionInactiveBackColor = QColor(160,160,160);
    m_captionInactiveForeColor = QColor( 55, 55, 55);
    m_pZ = new QPtrList<KMdiChildFrm>;
-   m_pZ->setAutoDelete(TRUE);
+   m_pZ->setAutoDelete(true);
    setFocusPolicy(ClickFocus);
    m_defaultChildFrmSize = QSize(400,300);
 }
@@ -76,8 +76,8 @@ void KMdiChildArea::manageChild(KMdiChildFrm *lpC,bool bShow,bool bCascade)
       if(top){ //Maximize if needed
          if(top->state() == KMdiChildFrm::Maximized){
             emit sysButtonConnectionsMustChange( top,lpC);
-            top->setState(KMdiChildFrm::Normal,FALSE);
-            lpC->setState(KMdiChildFrm::Maximized,FALSE);
+            top->setState(KMdiChildFrm::Normal,false);
+            lpC->setState(KMdiChildFrm::Maximized,false);
          }
       }
       lpC->show();
@@ -93,15 +93,15 @@ void KMdiChildArea::destroyChild(KMdiChildFrm *lpC,bool bFocusTopChild)
 
    // destroy the old one
    QObject::disconnect(lpC);
-   lpC->blockSignals(TRUE);
-   m_pZ->setAutoDelete(FALSE);
+   lpC->blockSignals(true);
+   m_pZ->setAutoDelete(false);
    m_pZ->removeRef(lpC);
 
    // focus the next new childframe
    KMdiChildFrm* newTopChild = topChild();
    if (bWasMaximized){
       if (newTopChild) {
-         newTopChild->setState(KMdiChildFrm::Maximized,FALSE);
+         newTopChild->setState(KMdiChildFrm::Maximized,false);
          emit sysButtonConnectionsMustChange(lpC, newTopChild);
       }
       else {
@@ -109,7 +109,7 @@ void KMdiChildArea::destroyChild(KMdiChildFrm *lpC,bool bFocusTopChild)
       }
    }
    delete lpC;
-   m_pZ->setAutoDelete(TRUE);
+   m_pZ->setAutoDelete(true);
 
    if (bFocusTopChild)
       focusTopChild();
@@ -124,14 +124,14 @@ void KMdiChildArea::destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopCh
    // destroy the old one
    QObject::disconnect(lpC);
    lpC->unsetClient();
-   m_pZ->setAutoDelete(FALSE);
+   m_pZ->setAutoDelete(false);
    m_pZ->removeRef(lpC);
 
    // focus the next new childframe
    KMdiChildFrm* newTopChild = topChild();
    if (bWasMaximized){
       if (newTopChild) {
-         newTopChild->setState(KMdiChildFrm::Maximized,FALSE);
+         newTopChild->setState(KMdiChildFrm::Maximized,false);
          emit sysButtonConnectionsMustChange(lpC, newTopChild);
       }
       else {
@@ -139,7 +139,7 @@ void KMdiChildArea::destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopCh
       }
    }
    delete lpC;
-   m_pZ->setAutoDelete(TRUE);
+   m_pZ->setAutoDelete(true);
 
    if (bFocusTopChild)
       focusTopChild();
@@ -150,13 +150,13 @@ void KMdiChildArea::destroyChildButNotItsView(KMdiChildFrm *lpC,bool bFocusTopCh
 void KMdiChildArea::setTopChild(KMdiChildFrm *lpC,bool /* bSetFocus */)
 {
    if(m_pZ->last() != lpC){
-      m_pZ->setAutoDelete(FALSE);
+      m_pZ->setAutoDelete(false);
       if (lpC) {
          m_pZ->removeRef(lpC);
       }
       //disable the labels of all the other children
       for(KMdiChildFrm *pC=m_pZ->first();pC;pC=m_pZ->next()){
-         pC->m_pCaption->setActive(FALSE);
+         pC->m_pCaption->setActive(false);
       }
       if (!lpC) {
          return;
@@ -166,21 +166,21 @@ void KMdiChildArea::setTopChild(KMdiChildFrm *lpC,bool /* bSetFocus */)
       if (pMaximizedChild->m_state != KMdiChildFrm::Maximized) {
          pMaximizedChild = 0L;
       }
-      m_pZ->setAutoDelete(TRUE);
+      m_pZ->setAutoDelete(true);
       m_pZ->append(lpC);
       int nChildAreaMinW = 0,               nChildAreaMinH = 0;
       int nChildAreaMaxW = QWIDGETSIZE_MAX, nChildAreaMaxH = QWIDGETSIZE_MAX;
       if ( (pMaximizedChild != 0L) && (lpC->m_pClient != 0L) ) {
          nChildAreaMinW = lpC->m_pClient->minimumWidth();
          nChildAreaMinH = lpC->m_pClient->minimumHeight();
-         /// @todo setting the maximum size doesn't work properly - fix this later
+         /// @todo: setting the maximum size doesn't work properly - fix this later
          // nChildAreaMaxW = lpC->m_pClient->maximumWidth();
          // nChildAreaMaxH = lpC->m_pClient->maximumHeight();
       }
       setMinimumSize(nChildAreaMinW, nChildAreaMinH);
       setMaximumSize(nChildAreaMaxW, nChildAreaMaxH);
       if (pMaximizedChild) {
-         const bool bDontAnimate = FALSE;
+         const bool bDontAnimate = false;
          // first maximize the new view
          lpC->setState(KMdiChildFrm::Maximized, bDontAnimate);
          qApp->sendPostedEvents();
@@ -237,9 +237,9 @@ QPoint KMdiChildArea::getCascadePoint(int indexOfWindow)
    QPoint pnt(0,0);
    if(indexOfWindow==0)return pnt;
 
-   bool bTopLevelMode = FALSE;
+   bool bTopLevelMode = false;
    if( height() == 1)	// hacky?!
-   		bTopLevelMode = TRUE;
+   		bTopLevelMode = true;
 
    KMdiChildFrm *lpC=m_pZ->first();
    int step=(lpC ? lpC->m_pCaption->heightHint()+KMDI_CHILDFRM_BORDER : 20);
@@ -267,16 +267,16 @@ void KMdiChildArea::childMinimized(KMdiChildFrm *lpC,bool bWasMaximized)
 {
    if(m_pZ->findRef(lpC) == -1)return;
    if(m_pZ->count() > 1){
-      m_pZ->setAutoDelete(FALSE);
+      m_pZ->setAutoDelete(false);
       m_pZ->removeRef(lpC);
-      m_pZ->setAutoDelete(TRUE);
+      m_pZ->setAutoDelete(true);
       m_pZ->insert(0,lpC);
       if(bWasMaximized){
          // Need to maximize the top child
          lpC = m_pZ->last();
          if(!lpC)return; //??
          if(lpC->m_state==KMdiChildFrm::Minimized)return;
-         lpC->setState(KMdiChildFrm::Maximized,FALSE); //do not animate the change
+         lpC->setState(KMdiChildFrm::Maximized,false); //do not animate the change
       }
       focusTopChild();
    } else {
@@ -295,7 +295,7 @@ void KMdiChildArea::focusTopChild()
    }
    //disable the labels of all the other children
    for(KMdiChildFrm *pC=m_pZ->first();pC;pC=m_pZ->next()){
-      if(pC != lpC)pC->m_pCaption->setActive(FALSE);
+      if(pC != lpC)pC->m_pCaption->setActive(false);
    }
    lpC->raise();
    if (!lpC->m_pClient->hasFocus()) {
@@ -309,7 +309,7 @@ void KMdiChildArea::cascadeWindows()
 {
    int idx=0;
    QPtrList<KMdiChildFrm> list(*m_pZ);
-   list.setAutoDelete(FALSE);
+   list.setAutoDelete(false);
    while(!list.isEmpty()){
       KMdiChildFrm *lpC=list.first();
       if(lpC->m_state != KMdiChildFrm::Minimized){
@@ -329,7 +329,7 @@ void KMdiChildArea::cascadeMaximized()
    int idx=0;
    QPtrList<KMdiChildFrm> list(*m_pZ);
 
-   list.setAutoDelete(FALSE);
+   list.setAutoDelete(false);
    while(!list.isEmpty()){
       KMdiChildFrm *lpC=list.first();
       if(lpC->m_state != KMdiChildFrm::Minimized){
@@ -351,7 +351,7 @@ void KMdiChildArea::expandVertical()
 {
    int idx=0;
    QPtrList<KMdiChildFrm> list(*m_pZ);
-   list.setAutoDelete(FALSE);
+   list.setAutoDelete(false);
    while(!list.isEmpty()){
       KMdiChildFrm *lpC=list.first();
       if(lpC->m_state != KMdiChildFrm::Minimized){
@@ -368,7 +368,7 @@ void KMdiChildArea::expandHorizontal()
 {
    int idx=0;
    QPtrList<KMdiChildFrm> list(*m_pZ);
-   list.setAutoDelete(FALSE);
+   list.setAutoDelete(false);
    while(!list.isEmpty()){
       KMdiChildFrm *lpC=list.first();
       if(lpC->m_state != KMdiChildFrm::Minimized){

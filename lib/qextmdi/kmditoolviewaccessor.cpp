@@ -19,19 +19,22 @@
 //
 //----------------------------------------------------------------------------
 
+#ifndef NO_KDE
+# include <kdebug.h>
+#endif
 
-#include "kmditoolviewaccessor.h"
-#include "kmditoolviewaccessor.moc"
-#include "kmditoolviewaccessor_p.h"
 #if 0
 # include "kmdiguiclient.h"
 #endif
 #include "kmdimainfrm.h"
 #include <kmdidockwidget.h>
-#include <kdebug.h>
 
+#include "kmditoolviewaccessor.h"
+#include "kmditoolviewaccessor_p.h"
 
-KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent , QWidget *widgetToWrap):QObject(parent) {
+KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widgetToWrap, const QString& tabToolTip, const QString& tabCaption)
+: QObject(parent) 
+{
 	mdiMainFrm=parent;
 	d=new KMdiToolViewAccessorPrivate();
 	if (widgetToWrap->inherits("KDockWidget")) {
@@ -43,8 +46,11 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent , QWidget *widge
                                               (widgetToWrap->icon()?(*(widgetToWrap->icon())):QPixmap()),
                                               0L,  // parent
                                               widgetToWrap->caption(),
-                                              widgetToWrap->caption() );
+                                              tabCaption==0 ? widgetToWrap->caption() : tabCaption);
 		d->widgetContainer->setWidget(widgetToWrap);
+		if (tabToolTip!=0) {
+			d->widgetContainer->setToolTipString(tabToolTip);
+		}
 	}
 	d->widget->installEventFilter(this);
 }
@@ -93,7 +99,7 @@ void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap) {
 		tmp->setName(widgetToWrap->name());
 	}
 	tmp->setWidget(widgetToWrap);
-	mdiMainFrm->m_pToolViews.insert(widgetToWrap,this);
+	mdiMainFrm->m_pToolViews->insert(widgetToWrap,this);
 #if 0	
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
@@ -122,15 +128,20 @@ void KMdiToolViewAccessor::show(KDockWidget::DockPosition pos, QWidget* pTargetW
 
       KDockWidget* pTargetDock = 0L;
         // Should we dock to ourself?
-      bool DockToOurself = FALSE;
+      bool DockToOurself = false;
       if(mdiMainFrm->m_pDockbaseAreaOfDocumentViews)
       {
-        if (pTargetWnd == mdiMainFrm->m_pDockbaseAreaOfDocumentViews->getWidget()) DockToOurself = TRUE;
+        if (pTargetWnd == mdiMainFrm->m_pDockbaseAreaOfDocumentViews->getWidget()) {
+		DockToOurself = true;
+                pTargetDock = mdiMainFrm->m_pDockbaseAreaOfDocumentViews;
+	} else if (pTargetWnd == mdiMainFrm->m_pDockbaseAreaOfDocumentViews) {
+		DockToOurself = true;
+                pTargetDock = mdiMainFrm->m_pDockbaseAreaOfDocumentViews;
+	}
       }
       // this is not inheriting QWidget*, its plain impossible that this condition is true
-      //if (pTargetWnd == this) DockToOurself = TRUE;
-      if (DockToOurself) pTargetDock = mdiMainFrm->m_pDockbaseAreaOfDocumentViews;
-      else if(pTargetWnd != 0L) {
+      //if (pTargetWnd == this) DockToOurself = true;
+      if (!DockToOurself) if(pTargetWnd != 0L) {
          pTargetDock = mdiMainFrm->dockManager->findWidgetParentDock( pTargetWnd);
          if (!pTargetDock) {
             if (pTargetWnd->parentWidget()) {
@@ -139,13 +150,13 @@ void KMdiToolViewAccessor::show(KDockWidget::DockPosition pos, QWidget* pTargetW
          }
       }
       if (pTargetDock) {
-	      if (mdiMainFrm->m_managedDockPositionMode && mdiMainFrm->m_pMdi) {
+	      if (mdiMainFrm->m_managedDockPositionMode && (mdiMainFrm->m_pMdi || mdiMainFrm->m_documentTabWidget)) {
 			KDockWidget *dw1=pTargetDock->findNearestDockWidget(pos);
                         if (dw1)
                         pCover->manualDock(dw1,KDockWidget::DockCenter,percent);
                         else
                         pCover->manualDock ( pTargetDock, pos, 20 );
-	
+
 	      }
       else
       	pCover->manualDock( pTargetDock, pos, percent);
@@ -160,3 +171,7 @@ void KMdiToolViewAccessor::hide() {
 	if (!d->widgetContainer) return;
 	d->widgetContainer->undock();
 }
+
+#ifndef NO_INCLUDE_MOCFILES
+# include "kmditoolviewaccessor.moc"
+#endif

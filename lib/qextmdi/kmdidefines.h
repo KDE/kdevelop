@@ -24,8 +24,8 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-#ifndef _KMDIDEFINES_H_
-#define _KMDIDEFINES_H_
+#ifndef _KMDI_DEFINES_H_
+#define _KMDI_DEFINES_H_
 
 #include <qglobal.h>
 
@@ -89,10 +89,11 @@ namespace KMdi
    };
 
    enum MdiMode {
-      ToplevelMode   = 0,
-      ChildframeMode = 1,
-      TabPageMode    = 2,
-      IDEAlMode      = 3
+      UndefinedMode  = 0,
+      ToplevelMode   = 1,
+      ChildframeMode = 2,
+      TabPageMode    = 3,
+      IDEAlMode      = 4
    };
 
 } //namespace

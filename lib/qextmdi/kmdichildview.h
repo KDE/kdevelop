@@ -28,8 +28,8 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-#ifndef _KMDICHILDVIEW_H_
-#define _KMDICHILDVIEW_H_
+#ifndef _KMDI_CHILD_VIEW_H_
+#define _KMDI_CHILD_VIEW_H_
 
 #include <qwidget.h>
 #include <qpixmap.h>

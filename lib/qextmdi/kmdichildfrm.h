@@ -25,8 +25,8 @@
 //    License, or (at your option) any later version.
 //
 //------------------------------------------------------------------------------
-#ifndef _KMDICHILDFRM_H_
-#define _KMDICHILDFRM_H_
+#ifndef _KMDI_CHILD_FRM_H_
+#define _KMDI_CHILD_FRM_H_
 
 #include <qptrlist.h>
 #include <qpixmap.h>

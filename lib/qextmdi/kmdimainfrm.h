@@ -38,6 +38,7 @@
 #endif
 
 #include <qptrlist.h>
+#include <qmap.h>
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdom.h>
@@ -128,10 +129,6 @@ public:
   *
   * Additionally, here's a hint how to restore the mainframe's settings from config file:
   * \code
-  * #ifdef NO_KDE // KDE2 comes with its own style
-  *    int guiStyle = config->readIntEntry( "mainmodule session", "GUI style", 0);
-  *    mainframe->setGUIStyle( guiStyle);
-  * #endif
   *
   *    // restore MDI mode (toplevel, childframe, tabpage)
   *    int mdiMode = config->readIntEntry( "mainmodule session", "MDI mode", KMdi::ChildframeMode);
@@ -217,10 +214,11 @@ class DLL_IMP_EXP_KMDICLASS KMdiMainFrm : public KMdiDockMainWindow
    friend class KMdiToolViewAccessor;
 // attributes
 protected:
+   KMdi::MdiMode           m_mdiMode;
    KMdiChildArea           *m_pMdi;
    KMdiTaskBar             *m_pTaskBar;
    QPtrList<KMdiChildView> *m_pDocumentViews;
-   QMap<QWidget*,KMdiToolViewAccessor*> m_pToolViews;
+   QMap<QWidget*,KMdiToolViewAccessor*> *m_pToolViews;
    KMdiChildView           *m_pCurrentWindow;
    QPopupMenu              *m_pWindowPopup;
    QPopupMenu              *m_pTaskBarPopup;
@@ -244,7 +242,6 @@ protected:
    QToolButton             *m_pRestore;
    QToolButton             *m_pClose;
    QPoint                  m_undockPositioningOffset;
-   KMdi::MdiMode    m_mdiMode;
    bool                    m_bMaximizedChildFrmMode;
    int                     m_oldMainFrmHeight;
    int                     m_oldMainFrmMinHeight;
@@ -359,7 +356,7 @@ public:
    * this iterator to handle with the MDI view list in a more abstract way.
    * The iterator hides what special data structure is used in KMdi.
    */
-#warning fixme
+//#warning fixme
    KMdiIterator<KMdiChildView*>* createIterator() {
       if ( m_pDocumentViews == 0L) {
          return new KMdiNullIterator<KMdiChildView*>();
@@ -454,7 +451,8 @@ public slots:
     * <UL><LI>the view should be attached or detached.</LI>
     * <LI>shown or hidden</LI>
     * <LI>maximized, minimized or restored (normalized)</LI>
-    * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI></UL>
+    * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI?
+    * </UL>
     */
    virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd);
    /**
@@ -522,7 +520,6 @@ public slots:
    */
    virtual void switchToToplevelMode();
    virtual void finishToplevelMode();
-   void setupToolViewsForIDEALMode();
    /**
    * Docks all view windows (Windows-like)
    */
@@ -611,6 +608,11 @@ public slots:
    * Activates the view with the tab page index (TabPage mode only)
    */
    virtual void activateView(int index);
+
+private:
+   void setupToolViewsForIDEALMode();
+   void setupTabbedDocumentViewSpace();
+   class KMdiDocumentViewTabWidget * m_documentTabWidget;
 
 protected:
    /**
@@ -704,6 +706,7 @@ public slots:
 private slots:
    void setActiveToolDock(KMdiDockContainer*);
    void removeFromActiveDockList(KMdiDockContainer*);
+   void slotDocCurrentChanged(QWidget*);
 #define protected public
 signals:
 #undef protected

@@ -18,8 +18,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef _KATE_DOCK_CONTAINER_
-#define _KATE_DOCK_CONTAINER_
+#ifndef _KMDI_DOCK_CONTAINER_
+#define _KMDI_DOCK_CONTAINER_
 
 #include <qwidget.h>
 #include <qstringlist.h>
@@ -39,9 +39,10 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
   public:
     KMdiDockContainer(QWidget *parent, QWidget *win, int position);
     virtual ~KMdiDockContainer();
-        KMdiDockWidget *parentDockWidget();
+    KDockWidget *parentDockWidget();
 
     virtual void insertWidget (KDockWidget *w, QPixmap, const QString &, int &);
+    virtual void showWidget (KDockWidget *w);
     virtual void setToolTip (KDockWidget *, QString &);
     virtual void setPixmap(KDockWidget*,const QPixmap&);
     virtual void undockWidget(KDockWidget*);
@@ -49,8 +50,8 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
 
     void hideIfNeeded();
 #ifndef NO_KDE2
-    virtual void save(KConfig *);
-    virtual void load(KConfig *);
+    virtual void save(KConfig *,const QString& group_or_prefix);
+    virtual void load(KConfig *,const QString& group_or_prefix);
 #endif
 
   public slots:
@@ -84,24 +85,6 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
   signals:
 	void activated(KMdiDockContainer*);
 	void deactivated(KMdiDockContainer*);
-};
-
-/* THIS IS GOING TO BE REMOVED ONCE THAT CONTAINER IS IN KDELIBS. It's a copy of a private header
-*/
-class KDockButton_Private : public QPushButton
-{
-  Q_OBJECT
-public:
-  KDockButton_Private( QWidget *parent=0, const char *name=0 );
-  ~KDockButton_Private();
-
-protected:
-  virtual void drawButton( QPainter * );
-  virtual void enterEvent( QEvent * );
-  virtual void leaveEvent( QEvent * );
-
-private:
-  bool moveMouse;
 };
 
 #endif

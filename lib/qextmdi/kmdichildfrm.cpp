@@ -110,8 +110,8 @@ KMdiChildFrm::KMdiChildFrm(KMdiChildArea *parent)
    ,m_restoredRect()
    ,m_iResizeCorner(KMDI_NORESIZE)
    ,m_iLastCursorCorner(KMDI_NORESIZE)
-   ,m_bResizing(FALSE)
-   ,m_bDragging(FALSE)
+   ,m_bResizing(false)
+   ,m_bDragging(false)
    ,m_pIconButtonPixmap(0L)
    ,m_pMinButtonPixmap(0L)
    ,m_pMaxButtonPixmap(0L)
@@ -153,7 +153,7 @@ KMdiChildFrm::KMdiChildFrm(KMdiChildArea *parent)
    setFrameStyle(QFrame::WinPanel|QFrame::Raised);
    setFocusPolicy(NoFocus);
 
-   setMouseTracking(TRUE);
+   setMouseTracking(true);
 
    setMinimumSize(KMDI_CHILDFRM_MIN_WIDTH, m_pCaption->heightHint());
 
@@ -178,16 +178,16 @@ void KMdiChildFrm::mousePressEvent(QMouseEvent *e)
 {
    if( m_bResizing) {
       if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
-      m_bResizing = FALSE;
+      m_bResizing = false;
       releaseMouse();
    }
 
-   m_pCaption->setActive(TRUE);
-   m_pManager->setTopChild(this,FALSE);
+   m_pCaption->setActive(true);
+   m_pManager->setTopChild(this,false);
 
    m_iResizeCorner=getResizeCorner(e->pos().x(),e->pos().y());
    if(m_iResizeCorner != KMDI_NORESIZE) {
-      m_bResizing = TRUE;
+      m_bResizing = true;
       //notify child view
       KMdiChildFrmResizeBeginEvent ue(e);
       if( m_pClient != 0L) {
@@ -203,7 +203,7 @@ void KMdiChildFrm::mouseReleaseEvent(QMouseEvent *e)
    if(m_bResizing) {
       if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
 
-      m_bResizing = FALSE;
+      m_bResizing = false;
       //notify child view
       KMdiChildFrmResizeEndEvent ue(e);
       if( m_pClient != 0L) {
@@ -224,19 +224,19 @@ void KMdiChildFrm::setResizeCursor(int resizeCorner)
          break;
       case KMDI_RESIZE_LEFT:
       case KMDI_RESIZE_RIGHT:
-         QApplication::setOverrideCursor(Qt::sizeHorCursor,TRUE);
+         QApplication::setOverrideCursor(Qt::sizeHorCursor,true);
          break;
       case KMDI_RESIZE_TOP:
       case KMDI_RESIZE_BOTTOM:
-         QApplication::setOverrideCursor(Qt::sizeVerCursor,TRUE);
+         QApplication::setOverrideCursor(Qt::sizeVerCursor,true);
          break;
       case KMDI_RESIZE_TOPLEFT:
       case KMDI_RESIZE_BOTTOMRIGHT:
-         QApplication::setOverrideCursor(Qt::sizeFDiagCursor,TRUE);
+         QApplication::setOverrideCursor(Qt::sizeFDiagCursor,true);
          break;
       case KMDI_RESIZE_BOTTOMLEFT:
       case KMDI_RESIZE_TOPRIGHT:
-         QApplication::setOverrideCursor(Qt::sizeBDiagCursor,TRUE);
+         QApplication::setOverrideCursor(Qt::sizeBDiagCursor,true);
          break;
    }
 }
@@ -267,7 +267,7 @@ void KMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
          resizeWindow(m_iResizeCorner, p.x(), p.y());
       }
       else
-         m_bResizing = FALSE;
+         m_bResizing = false;
    }
    else {
       m_iResizeCorner = getResizeCorner(e->pos().x(), e->pos().y());
@@ -389,13 +389,13 @@ void KMdiChildFrm::maximizePressed()
 {
    switch(m_state){
       case Maximized:
-         emit m_pManager->nowMaximized(FALSE);
+         emit m_pManager->nowMaximized(false);
          setState(Normal);
          break;
       case Normal:
       case Minimized:
          setState(Maximized);
-         emit m_pManager->nowMaximized(TRUE);
+         emit m_pManager->nowMaximized(true);
          break;
    }
 }
@@ -405,7 +405,7 @@ void KMdiChildFrm::restorePressed()
    if( m_state == Normal)
       return;
    if( m_state == Maximized)
-      emit m_pManager->nowMaximized(FALSE);
+      emit m_pManager->nowMaximized(false);
    setState(Normal);
 }
 
@@ -417,7 +417,7 @@ void KMdiChildFrm::minimizePressed()
       case Minimized: setState(Normal);    break;
       case Normal:    setState(Minimized); break;
       case Maximized:
-         emit m_pManager->nowMaximized(FALSE);
+         emit m_pManager->nowMaximized(false);
          setState(Normal);
          setState(Minimized);
          break;
@@ -454,9 +454,9 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    case Normal:
       switch(m_state){
       case Maximized:
-         m_pClient->m_stateChanged = TRUE;
+         m_pClient->m_stateChanged = true;
          m_state=state;
-         // client min / max size / layout behaviour don't change
+         // client min / max size / layout behavior don't change
          // set frame max size indirectly by setting the clients max size to
          // it's current value (calls setMaxSize() of frame)
          m_pClient->setMaximumSize(m_pClient->maximumSize().width(), m_pClient->maximumSize().height());
@@ -464,9 +464,9 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          setGeometry(m_restoredRect);
          break;
       case Minimized:
-         m_pClient->m_stateChanged = TRUE;
+         m_pClient->m_stateChanged = true;
          m_state=state;
-         // restore client min / max size / layout behaviour
+         // restore client min / max size / layout behavior
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
          m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
          if (m_pClient->layout() != 0L) {
@@ -485,9 +485,9 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    case Maximized:
       switch(m_state){
       case Minimized: {
-            m_pClient->m_stateChanged = TRUE;
+            m_pClient->m_stateChanged = true;
             m_state=state;
-            // restore client min / max size / layout behaviour
+            // restore client min / max size / layout behavior
             m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
             m_pClient->setMaximumSize(m_oldClientMaxSize.width(),m_oldClientMaxSize.height());
             if (m_pClient->layout() != 0L) {
@@ -509,9 +509,9 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
          }
          break;
       case Normal: {
-            m_pClient->m_stateChanged = TRUE;
+            m_pClient->m_stateChanged = true;
             m_state=state;
-            // client min / max size / layout behaviour don't change
+            // client min / max size / layout behavior don't change
             setMaximumSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
             m_pMaximize->setPixmap( *m_pRestoreButtonPixmap);
             int nFrameWidth = KMDI_CHILDFRM_DOUBLE_BORDER;
@@ -533,9 +533,9 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    case Minimized:
       switch(m_state){
       case Maximized:
-         m_pClient->m_stateChanged = TRUE;
+         m_pClient->m_stateChanged = true;
          m_state=state;
-         // save client min / max size / layout behaviour
+         // save client min / max size / layout behavior
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
          if (m_pClient->layout() != 0L) {
@@ -547,12 +547,12 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
             m_pClient->layout()->setResizeMode(QLayout::FreeResize);
          }
          switchToMinimizeLayout();
-         m_pManager->childMinimized(this,TRUE);
+         m_pManager->childMinimized(this,true);
          break;
       case Normal:
-         m_pClient->m_stateChanged = TRUE;
+         m_pClient->m_stateChanged = true;
          m_state=state;
-         // save client min / max size / layout behaviour
+         // save client min / max size / layout behavior
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
          if (m_pClient->layout() != 0L) {
@@ -565,7 +565,7 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
             m_pClient->layout()->setResizeMode(QLayout::FreeResize);
          }
          switchToMinimizeLayout();
-         m_pManager->childMinimized(this,FALSE);
+         m_pManager->childMinimized(this,false);
          break;
       case Minimized:
          break;
@@ -580,7 +580,7 @@ void KMdiChildFrm::setState(MdiWindowState state, bool /*bAnimate*/)
    }
    if ( (pTopChild != 0L) && pTopChild->isMaximized() ) {
       m_pManager->setMinimumSize(pTopChild->minimumWidth(), pTopChild->minimumHeight());
-      /// @todo setting the maximum size doesn't work properly - fix this later
+      /// @todo: setting the maximum size doesn't work properly - fix this later
       /// m_pManager->setMaximumSize(pTopChild->maximumWidth(), pTopChild->maximumHeight());
    }
    else {
@@ -615,7 +615,7 @@ void KMdiChildFrm::setCaption(const QString& text)
 void KMdiChildFrm::enableClose(bool bEnable)
 {
    m_pClose->setEnabled(bEnable);
-   m_pClose->repaint(FALSE);
+   m_pClose->repaint(false);
 }
 
 //============ setIcon ==================//
@@ -658,7 +658,7 @@ void KMdiChildFrm::setClient(KMdiChildView *w, bool bAutomaticResize)
 
    // memorize the focuses in a dictionary because they will get lost during reparenting
    QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
-   pFocPolDict->setAutoDelete(TRUE);
+   pFocPolDict->setAutoDelete(true);
    QObjectList *list = m_pClient->queryList( "QWidget" );
    QObjectListIt it( *list );          // iterate over the buttons
    QObject * obj;
@@ -826,7 +826,7 @@ QDict<QWidget::FocusPolicy>* KMdiChildFrm::unlinkChildren()
 {
    // memorize the focuses in a dictionary because they will get lost during reparenting
    QDict<FocusPolicy>* pFocPolDict = new QDict<FocusPolicy>;
-   pFocPolDict->setAutoDelete(TRUE);
+   pFocPolDict->setAutoDelete(true);
 
    QObjectList *list = m_pClient->queryList( "QWidget" );
    QObjectListIt it( *list );          // iterate over all child widgets of child frame
@@ -949,7 +949,7 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
    case QEvent::Enter:
       {
          // check if the receiver is really a child of this frame
-         bool bIsChild = FALSE;
+         bool bIsChild = false;
          QObject*    pObj = obj;
          while ( (pObj != 0L) && !bIsChild) {
             bIsChild = (pObj == this);
@@ -964,9 +964,9 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
    case QEvent::MouseButtonPress:
       {
          if ( (QWidget*)obj != m_pClient ) {
-            bool bIsSecondClick = FALSE;
+            bool bIsSecondClick = false;
             if (m_timeMeasure.elapsed() <= QApplication::doubleClickInterval()) {
-               bIsSecondClick = TRUE;  // of a possible double click
+               bIsSecondClick = true;  // of a possible double click
             }
             if ( !(((obj == m_pWinIcon) || (obj == m_pUnixIcon)) && bIsSecondClick) ) {
                // in case we didn't click on the icon button
@@ -992,7 +992,7 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
                else {
                   closePressed();   // double click on icon button closes the view
                }
-               return TRUE;
+               return true;
             }
          }
       }
@@ -1051,11 +1051,11 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
          }
       }
       break;
-	 default:
-			break;
+   default:
+      break;
    }
    // return QWidget::eventFilter( obj, e);  // standard event processing
-   return FALSE;                  // standard event processing (see Qt documentation)
+   return false;                  // standard event processing (see Qt documentation)
 }
 
 //============= raiseAndActivate ===============//
@@ -1063,8 +1063,8 @@ bool KMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
 void KMdiChildFrm::raiseAndActivate()
 {
    //qDebug("ChildFrm::raiseAndActivate");
-   m_pCaption->setActive(TRUE);
-   m_pManager->setTopChild(this,FALSE); //Do not focus by now...
+   m_pCaption->setActive(true);
+   m_pManager->setTopChild(this,false); //Do not focus by now...
 }
 
 //============= setMinimumSize ===============//
@@ -1093,15 +1093,15 @@ QPopupMenu* KMdiChildFrm::systemMenu() const
       m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
       m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
       if( state() == Normal)
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),FALSE);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),false);
       else if( state() == Maximized) {
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(1),FALSE);
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),FALSE);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(1),false);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),false);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),false);
       }
       else if( state() == Minimized) {
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
-         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),FALSE);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),false);
+         m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),false);
       }
    }
    else  {
@@ -1128,7 +1128,7 @@ QPopupMenu* KMdiChildFrm::systemMenu() const
 void KMdiChildFrm::showSystemMenu()
 {
    if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look) {
-      m_pUnixIcon->setDown( FALSE);
+      m_pUnixIcon->setDown( false);
    }
    QPoint popupmenuPosition;
    //qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
@@ -1164,7 +1164,7 @@ void KMdiChildFrm::switchToMinimizeLayout()
 void KMdiChildFrm::slot_resizeViaSystemMenu()
 {
    grabMouse();
-   m_bResizing = TRUE;
+   m_bResizing = true;
    m_iResizeCorner = KMDI_RESIZE_BOTTOMLEFT;
    setResizeCursor( m_iResizeCorner);
 }
@@ -1211,18 +1211,18 @@ void KMdiChildFrm::redecorateButtons()
       m_pUndockButtonPixmap = new QPixmap( kde2laptop_undockbutton);
    }
 
-   m_pUnixIcon->setAutoRaise(TRUE);
+   m_pUnixIcon->setAutoRaise(true);
    if (KMdiMainFrm::frameDecorOfAttachedViews() == KMdi::KDE1Look) {
-      m_pMinimize->setAutoRaise(TRUE);
-      m_pMaximize->setAutoRaise(TRUE);
-      m_pClose->setAutoRaise(TRUE);
-      m_pUndock->setAutoRaise(TRUE);
+      m_pMinimize->setAutoRaise(true);
+      m_pMaximize->setAutoRaise(true);
+      m_pClose->setAutoRaise(true);
+      m_pUndock->setAutoRaise(true);
    }
    else {
-      m_pMinimize->setAutoRaise(FALSE);
-      m_pMaximize->setAutoRaise(FALSE);
-      m_pClose->setAutoRaise(FALSE);
-      m_pUndock->setAutoRaise(FALSE);
+      m_pMinimize->setAutoRaise(false);
+      m_pMaximize->setAutoRaise(false);
+      m_pClose->setAutoRaise(false);
+      m_pUndock->setAutoRaise(false);
    }
 
    if (m_pClient && m_pClient->icon()) {

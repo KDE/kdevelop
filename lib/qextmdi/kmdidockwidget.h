@@ -16,7 +16,10 @@
 #endif
 
 #if defined(NO_KDE) || defined(OLDER_THAN_KDE_3_2)
-# include <kdockwidget_compat.h>
+# include "kdockwidget_compat.h"
+# ifndef NO_KDE
+#  include "dockmainwindow_compat.h"
+# endif
 using namespace KDockWidget_Compat;
 #else
 # include <kdockwidget.h>
@@ -26,7 +29,8 @@ using namespace KDockWidget_Compat;
 #ifndef NO_KDE
 #include <kparts/dockmainwindow.h>
 #else
-#include "dummykpartsdockmainwindow.h"
+#include "kmdidummy.h"
+#include "kmdidummykpartsdockmainwindow.h"
 #endif
 
 class KMdiDockWidget : public KDockWidget
@@ -75,6 +79,8 @@ public:
   KMdiDockContainerBase() : KDockContainer() {}
 };
 
-#undef KParts // as KDockWidget_Compat
+#ifndef NO_KDE
+# undef KParts // as KDockWidget_Compat
+#endif
 
 #endif

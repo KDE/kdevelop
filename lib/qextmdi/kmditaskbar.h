@@ -29,7 +29,7 @@
 #define _KMDITASKBAR_H_
 
 #ifdef NO_KDE
-#include "dummyktoolbar.h"
+#include "kmdidummy.h"
 #else
 #include <ktoolbar.h>
 #endif

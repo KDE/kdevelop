@@ -50,7 +50,7 @@ KMdiChildFrmCaption::KMdiChildFrmCaption(KMdiChildFrm *parent)
 :QWidget(parent, "kmdi_childfrmcaption")
 {
    m_szCaption    = tr("Unnamed");
-   m_bActive      = FALSE;
+   m_bActive      = false;
    m_pParent      = parent;
    setBackgroundMode(NoBackground);
    setFocusPolicy(NoFocus);
@@ -68,11 +68,11 @@ KMdiChildFrmCaption::~KMdiChildFrmCaption()
 void KMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
    if ( e->button() == LeftButton) {
-      setMouseTracking(FALSE);
+      setMouseTracking(false);
       if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look) {
-         QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
+         QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
       }
-      m_pParent->m_bDragging = TRUE;
+      m_pParent->m_bDragging = true;
       m_offset = mapToParent( e->pos());
    }
    else if ( e->button() == RightButton) {
@@ -89,7 +89,7 @@ void KMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
          QApplication::restoreOverrideCursor();
       releaseMouse();
       if(m_pParent->m_bDragging) {
-         m_pParent->m_bDragging = FALSE;
+         m_pParent->m_bDragging = false;
          if (m_bChildInDrag) {
             //notify child view
             KMdiChildFrmDragEndEvent ue(e);
@@ -153,7 +153,7 @@ void KMdiChildFrmCaption::setActive(bool bActive)
    : m_pParent->m_pManager->m_captionInactiveBackColor);
 
    m_bActive = bActive;
-   repaint( FALSE);
+   repaint( false);
 }
 
 //=============== setCaption ===============//
@@ -161,7 +161,7 @@ void KMdiChildFrmCaption::setActive(bool bActive)
 void KMdiChildFrmCaption::setCaption(const QString& text)
 {
    m_szCaption = text;
-   repaint(FALSE);
+   repaint(false);
 }
 
 //============== heightHint ===============//
@@ -264,11 +264,11 @@ void KMdiChildFrmCaption::mouseDoubleClickEvent(QMouseEvent *)
 
 void KMdiChildFrmCaption::slot_moveViaSystemMenu()
 {
-   setMouseTracking(TRUE);
+   setMouseTracking(true);
    grabMouse();
    if (KMdiMainFrm::frameDecorOfAttachedViews() != KMdi::Win95Look)
-      QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
-   m_pParent->m_bDragging = TRUE;
+      QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
+   m_pParent->m_bDragging = true;
    m_offset = mapFromGlobal( QCursor::pos());
 }
 

@@ -22,10 +22,6 @@
     Boston, MA 02111-1307, USA.
  ***************************************************************************/
 
-#include "kmultitabbar.h"
-#include "kmultitabbar.moc"
-#include "kmultitabbar_p.h"
-#include "kmultitabbar_p.moc"
 #include <qbutton.h>
 #include <qpopupmenu.h>
 #include <qlayout.h>
@@ -34,9 +30,21 @@
 #include <qfontmetrics.h>
 #include <qstyle.h>
 
-#include <kiconloader.h>
-#include <kdebug.h>
+#ifdef NO_KDE
+# include "kmdidummy.h"
+#else
+# include <kiconloader.h>
+# include <kdebug.h>
+#endif
 
+#include "kmultitabbar.h"
+#ifndef NO_INCLUDE_MOCFILES
+# include "kmultitabbar.moc"
+#endif
+#include "kmultitabbar_p.h"
+#ifndef NO_INCLUDE_MOCFILES
+# include "kmultitabbar_p.moc"
+#endif
 
 KMultiTabBarInternal::KMultiTabBarInternal(QWidget *parent, KMultiTabBar::KMultiTabBarMode bm):QScrollView(parent)
 {

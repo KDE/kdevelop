@@ -26,9 +26,11 @@
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdatetime.h>
-#include <kmdidockwidget.h>
 
-class KMdiToolViewAccessor : public QObject
+#include "kmdidockwidget.h"
+#include "kmdidefines.h"
+
+class DLL_IMP_EXP_KMDICLASS KMdiToolViewAccessor : public QObject
 {
    friend class KMdiMainFrm;
    Q_OBJECT
@@ -50,7 +52,7 @@ private:
    bool m_bFocusInEventIsPending;
 
 private:
-	KMdiToolViewAccessor( class KMdiMainFrm *parent , QWidget *widgetToWrap);
+	KMdiToolViewAccessor( class KMdiMainFrm *parent , QWidget *widgetToWrap, const QString& tabToolTip = 0, const QString& tabCaption = 0);
 	KMdiToolViewAccessor( class KMdiMainFrm *parent);
 public:
 	~KMdiToolViewAccessor();

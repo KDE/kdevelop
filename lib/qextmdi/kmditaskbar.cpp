@@ -57,7 +57,7 @@ KMdiTaskBarButton::KMdiTaskBarButton(KMdiTaskBar *pTaskBar,KMdiChildView *win_pt
 :QPushButton(pTaskBar),
  m_actualText("")
 {
-   setToggleButton( TRUE);
+   setToggleButton( true);
    m_pWindow      = win_ptr;
    QToolTip::add(this,win_ptr->caption());
    setFocusPolicy(NoFocus);
@@ -135,15 +135,15 @@ QString KMdiTaskBarButton::actualText() const
 //####################################################################
 
 KMdiTaskBar::KMdiTaskBar(KMdiMainFrm *parent,QMainWindow::ToolBarDock dock)
-:  KToolBar( parent, "KMdiTaskBar", /*honor_style*/ FALSE, /*readConfig*/ TRUE)
+:  KToolBar( parent, "KMdiTaskBar", /*honor_style*/ false, /*readConfig*/ true)
    ,m_pCurrentFocusedWindow(0)
    ,m_pStretchSpace(0)
-   ,m_layoutIsPending(FALSE)
-   ,m_bSwitchedOn(FALSE)
+   ,m_layoutIsPending(false)
+   ,m_bSwitchedOn(false)
 {
    m_pFrm = parent;
    m_pButtonList = new QPtrList<KMdiTaskBarButton>;
-   m_pButtonList->setAutoDelete(TRUE);
+   m_pButtonList->setAutoDelete(true);
 //QT30   setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
    setFocusPolicy(NoFocus);
@@ -170,11 +170,11 @@ KMdiTaskBarButton * KMdiTaskBar::addWinButton(KMdiChildView *win_ptr)
    QObject::connect( b, SIGNAL(rightMouseButtonClicked(KMdiChildView*)), m_pFrm, SLOT(taskbarButtonRightClicked(KMdiChildView*)) );
    QObject::connect( b, SIGNAL(buttonTextChanged(int)), this, SLOT(layoutTaskBar(int)) );
    m_pButtonList->append(b);
-   b->setToggleButton( TRUE);
+   b->setToggleButton( true);
    b->setText(win_ptr->tabCaption());
-   
+
    layoutTaskBar();
-      
+
    m_pStretchSpace = new QLabel(this, "empty");
    m_pStretchSpace->setText("");
    setStretchableWidget( m_pStretchSpace);
@@ -261,7 +261,7 @@ void KMdiTaskBar::setActiveButton(KMdiChildView *win_ptr)
       if( b->m_pWindow == m_pCurrentFocusedWindow)
          oldPressedButton = b;
    }
-   
+
    if( newPressedButton != 0L && newPressedButton != oldPressedButton) {
          if( oldPressedButton != 0L)
             oldPressedButton->toggle();// switch off
@@ -273,7 +273,7 @@ void KMdiTaskBar::setActiveButton(KMdiChildView *win_ptr)
 void KMdiTaskBar::layoutTaskBar( int taskBarWidth)
 {
    if (m_layoutIsPending) return;
-   m_layoutIsPending = TRUE;
+   m_layoutIsPending = true;
 
    if( !taskBarWidth)
       // no width is given
@@ -285,7 +285,7 @@ void KMdiTaskBar::layoutTaskBar( int taskBarWidth)
    for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
       allButtonsWidth += b->width();
    }
-   
+
    // calculate actual width of all taskbar buttons
    int allButtonsWidthHint = 0;
    for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
@@ -330,7 +330,7 @@ void KMdiTaskBar::layoutTaskBar( int taskBarWidth)
             }
          }
    }
-   m_layoutIsPending = FALSE;
+   m_layoutIsPending = false;
 }
 
 void KMdiTaskBar::resizeEvent( QResizeEvent* rse)

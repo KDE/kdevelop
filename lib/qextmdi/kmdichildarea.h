@@ -25,8 +25,8 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef _KMDICHILDAREA_H_
-#define _KMDICHILDAREA_H_
+#ifndef _KMDI_CHILD_AREA_H_
+#define _KMDI_CHILD_AREA_H_
 
 #include <qframe.h>
 #include <qptrlist.h>

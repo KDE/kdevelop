@@ -24,8 +24,8 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-#ifndef _KMDICAPTION_H_
-#define _KMDICAPTION_H_
+#ifndef _KMDI_CHILD_FRM_CAPTION_H_
+#define _KMDI_CHILD_FRM_CAPTION_H_
 
 #include <qwidget.h>
 
