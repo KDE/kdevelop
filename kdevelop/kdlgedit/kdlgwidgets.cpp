@@ -16,22 +16,23 @@
  ***************************************************************************/
 
 
-#include <kapp.h>
-#include <kstddirs.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
-#include "../ckdevelop.h"
+#include <kapp.h>
+#include <kstddirs.h>
+#include <klocale.h>
+#include "kdlgedit.h"
 #include "kdlgwidgets.h"
 #include "kdlgeditwidget.h"
 
 #define btnsize 34
 
 
-KDlgWidgets::KDlgWidgets(CKDevelop *parCKD, QWidget *parent, const char *name ) : QWidget(parent,name)
+KDlgWidgets::KDlgWidgets(KDlgEdit *dlged, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
-  pCKDevel = parCKD;
+  dlgedit = dlged;
   scrview = new myScrollView(this);
 
   QWhatsThis::add(scrview->viewport(),
@@ -79,110 +80,110 @@ void KDlgWidgets::myScrollView::addButton(const QPixmap &pix, QString name, bool
 
 void KDlgWidgets::clicked_QWidget()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QWidget");
+  dlgedit->kdlg_get_edit_widget()->addItem("QWidget");
 }
 
 void KDlgWidgets::clicked_QLabel()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QLabel");
+  dlgedit->kdlg_get_edit_widget()->addItem("QLabel");
 }
 
 void KDlgWidgets::clicked_QPushButton()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QPushButton");
+  dlgedit->kdlg_get_edit_widget()->addItem("QPushButton");
 }
 
 void KDlgWidgets::clicked_QLineEdit()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QLineEdit");
+  dlgedit->kdlg_get_edit_widget()->addItem("QLineEdit");
 }
 
 void KDlgWidgets::clicked_QCheckBox()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QCheckBox");
+  dlgedit->kdlg_get_edit_widget()->addItem("QCheckBox");
 }
 void KDlgWidgets::clicked_QListBox()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QListBox");
+  dlgedit->kdlg_get_edit_widget()->addItem("QListBox");
 }
 void KDlgWidgets::clicked_QLCDNumber()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QLCDNumber");
+  dlgedit->kdlg_get_edit_widget()->addItem("QLCDNumber");
 }
 
 void KDlgWidgets::clicked_QRadioButton()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QRadioButton");
+  dlgedit->kdlg_get_edit_widget()->addItem("QRadioButton");
 }
 
 void KDlgWidgets::clicked_QComboBox()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QComboBox");
+  dlgedit->kdlg_get_edit_widget()->addItem("QComboBox");
 }
 void KDlgWidgets::clicked_QProgressBar()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QProgressBar");
+  dlgedit->kdlg_get_edit_widget()->addItem("QProgressBar");
 }
 void KDlgWidgets::clicked_QMultiLineEdit()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QMultiLineEdit");
+  dlgedit->kdlg_get_edit_widget()->addItem("QMultiLineEdit");
 }
 void KDlgWidgets::clicked_QSpinBox()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QSpinBox");
+  dlgedit->kdlg_get_edit_widget()->addItem("QSpinBox");
 }
 void KDlgWidgets::clicked_QScrollBar()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QScrollBar");
+  dlgedit->kdlg_get_edit_widget()->addItem("QScrollBar");
 }
 void KDlgWidgets::clicked_QSlider()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QSlider");
+  dlgedit->kdlg_get_edit_widget()->addItem("QSlider");
 }
 void KDlgWidgets::clicked_QGroupBox()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QGroupBox");
+  dlgedit->kdlg_get_edit_widget()->addItem("QGroupBox");
 }
 void KDlgWidgets::clicked_QListView()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("QListView");
+  dlgedit->kdlg_get_edit_widget()->addItem("QListView");
 }
 void KDlgWidgets::clicked_KDatePicker()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KDatePicker");
+  dlgedit->kdlg_get_edit_widget()->addItem("KDatePicker");
 }
 void KDlgWidgets::clicked_KDateTable()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KDateTable");
+  dlgedit->kdlg_get_edit_widget()->addItem("KDateTable");
 }
 void KDlgWidgets::clicked_KColorButton()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KColorButton");
+  dlgedit->kdlg_get_edit_widget()->addItem("KColorButton");
 }
 
 void KDlgWidgets::clicked_KLed()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KLed");
+  dlgedit->kdlg_get_edit_widget()->addItem("KLed");
 }
 
 void KDlgWidgets::clicked_KProgress()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KProgress");
+  dlgedit->kdlg_get_edit_widget()->addItem("KProgress");
 }
 
 void KDlgWidgets::clicked_KKeyButton()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KKeyButton");
+  dlgedit->kdlg_get_edit_widget()->addItem("KKeyButton");
 }
 
 void KDlgWidgets::clicked_KRestrictedLine()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KRestrictedLine");
+  dlgedit->kdlg_get_edit_widget()->addItem("KRestrictedLine");
 }
 
 void KDlgWidgets::clicked_KSeparator()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KSeparator");
+  dlgedit->kdlg_get_edit_widget()->addItem("KSeparator");
 }
 
 

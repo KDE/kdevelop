@@ -23,15 +23,16 @@
 #include <kapp.h>
 #include <kpopmenu.h>
 #include <kglobal.h>
-#include "../ckdevelop.h"
+#include <klocale.h>
+#include "kdlgedit.h"
 #include "kdlgproplvis.h"
 #include "kdlgeditwidget.h"
 #include "kdlgitems.h"
 
 
-KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWidget(parent,name)
+KDlgItems::KDlgItems(KDlgEdit *dlged, QWidget *parent, const char *name ) : QWidget(parent,name)
 {
-  pCKDevel = CKPar;
+  dlgedit = dlged;
   treelist = new QListView( this );
 
   treelist->setRootIsDecorated(true);
@@ -56,10 +57,8 @@ KDlgItems::~KDlgItems()
 
 void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int d)
 {
-    //  #define mkQPixTb(fn) QPixmap(KApplication::kde_toolbardir() + QString("/") +fn)
-    //  #define mkQPixDd(fn) QPixmap(KApplication::kde_datadir() + QString("/kdevelop/toolbar/") + fn)
 
-  KDlgEditWidget *edwid = pCKDevel->kdlg_get_edit_widget();
+  KDlgEditWidget *edwid = dlgedit->kdlg_get_edit_widget();
   if (!edwid)
     return;
 
@@ -111,7 +110,7 @@ KDlgItems::MyTreeListItem::MyTreeListItem(QListView* parent, KDlgItem_QWidget *i
 
 void KDlgItems::refreshList()
 {
-  addWidgetChilds( pCKDevel->kdlg_get_edit_widget()->mainWidget());
+  addWidgetChilds( dlgedit->kdlg_get_edit_widget()->mainWidget());
 
 }
 
@@ -127,7 +126,7 @@ void KDlgItems::itemSelected ()
   if (!itm)
     return;
 
-  pCKDevel->kdlg_get_edit_widget()->selectWidget((KDlgItem_Base*)itm);
+  dlgedit->kdlg_get_edit_widget()->selectWidget((KDlgItem_Base*)itm);
   setCursor(KCursor::arrowCursor());
 }
 

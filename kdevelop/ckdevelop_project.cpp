@@ -37,9 +37,6 @@
 #include "cnewclassdlg.h"
 #include "caddnewtranslationdlg.h"
 #include "cerrormessageparser.h"
-#include "./kdlgedit/kdlgeditwidget.h"
-#include "./kdlgedit/kdlgpropwidget.h"
-#include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgedit.h"
 #include "cmakemanualdlg.h"
 #include "cgeneratenewfile.h"
@@ -155,17 +152,9 @@ bool CKDevelop::slotProjectClose(){
 
     header_widget->clear();
     cpp_widget->clear();
-    kdlg_dialogs_view->clear();
 
     kdlgedit->slotFileSave();
     
-    kdlg_edit_widget->hide();
-    kdlg_prop_widget->hide();
-    kdlg_tabctl->setTabEnabled("widgets_view",false);
-    kdlg_tabctl->setTabEnabled("dialogs_view",false);
-    kdlg_tabctl->setTabEnabled("items_view",false);
-    kdlg_tabctl->setCurrentTab(1); // dialogs
-
     //clear all edit_infos before starting a new project
     edit_infos.clear();
     
@@ -809,7 +798,7 @@ void CKDevelop::newFile(bool add_to_project){
   type = CProject::getType( complete_filename );
   if(type == KDEV_DIALOG){
       kdlgedit->slotFileCloseForceSave();
-      kdlg_edit_widget->newDialog();
+      kdlgedit->newDialog();
   }
   // load into the widget
   switchToFile(complete_filename);
@@ -954,8 +943,9 @@ bool CKDevelop::readProjectFile(QString file){
 
   if(prj->isKDEProject() || prj->isQtProject()){
     enableCommand(ID_TOOLS_KDLGEDIT);
-    kdlg_tabctl->setTabEnabled("dialogs_view",true);
-  }  
+    kdlgedit->enableDialogsTab(true);
+  } else
+    kdlgedit->enableDialogsTab(false); 
 
   if (prj->isKDEProject()){
    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
@@ -972,12 +962,6 @@ bool CKDevelop::readProjectFile(QString file){
     enableCommand(ID_PROJECT_OPTIONS);
   }
   
-  if(prj->isKDEProject() || prj->isQtProject()){
-    kdlg_tabctl->setTabEnabled("dialogs_view",true);
-    kdlg_tabctl->setCurrentTab(1); // dialogs
-  
-  }
-
   enableCommand(ID_PROJECT_REMOVE_FILE);
   enableCommand(ID_PROJECT_WORKSPACES);
   enableCommand(ID_BUILD_AUTOCONF);

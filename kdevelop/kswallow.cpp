@@ -132,7 +132,7 @@ void KSwallowWidget::sWExecute()
     process->setExecutable(executable.data());
     swallowTitle = executable + "_swallow";
 
-    debug("Args: %s", arg.data());
+    //    debug("Args: %s", arg.data());
 
     *process << "-caption" << swallowTitle;
 

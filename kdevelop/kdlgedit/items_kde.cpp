@@ -65,9 +65,7 @@ void KDlgItem_KColorButton::repaintItem(KColorButton *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-
-  if (strIsDef("Text"))
+  if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
 
   if (Prop2Str("Pixmap").isEmpty())
@@ -84,7 +82,7 @@ void KDlgItem_KColorButton::repaintItem(KColorButton *it)
   itm->setToggleButton(Prop2Bool("isToggleButton") == 1 ? TRUE : FALSE);
   itm->setOn((Prop2Bool("isToggledOn") == 1 ? TRUE : FALSE) && (Prop2Bool("isToggleButton") == 1 ? TRUE : FALSE));
 
-  if (strIsDef("DisplayedColor"))
+  if (!Prop2Str("DisplayedColor").isNull())
     itm->setColor(Str2Color(Prop2Str("DisplayedColor")));
   else
     itm->setColor(QColor());

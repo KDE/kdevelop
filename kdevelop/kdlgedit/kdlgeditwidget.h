@@ -30,6 +30,7 @@ class KDlgItemDatabase;
 class KDlgItem_QWidget;
 class KDlgItem_Base;
 class CKDevelop;
+class KDlgEdit;
 class KRuler;
 class QTextStream;
 class KQuickHelpWindow;
@@ -40,7 +41,7 @@ class KQuickHelpWindow;
 class KDlgEditWidget : public QWidget  {
   Q_OBJECT
   public:
-    KDlgEditWidget(CKDevelop* parCKD, QWidget *parent=0, const char *name=0);
+    KDlgEditWidget(CKDevelop* parCKD, KDlgEdit *dlged, QWidget *parent=0, const char *name=0);
     ~KDlgEditWidget();
 
     /**
@@ -84,6 +85,7 @@ class KDlgEditWidget : public QWidget  {
      * returns a pointer to the CKDevelop class which has created this class.
     */
     CKDevelop *getCKDevel() { return pCKDevel; }
+    KDlgEdit *getDlgEdit() { return dlgedit; }
 
     KRuler *horizontalRuler() { return rulh; }
     KRuler *verticalRuler() { return rulv; }
@@ -166,6 +168,7 @@ class KDlgEditWidget : public QWidget  {
     KDlgItem_QWidget *main_widget;
     KDlgItem_Base *selected_widget;
     CKDevelop *pCKDevel;
+    KDlgEdit *dlgedit;
     KRuler *rulh, *rulv;
     bool is_modified;
     bool was_widgetadded;

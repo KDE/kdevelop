@@ -42,8 +42,6 @@
 #include <qtabdialog.h>
 
 #include "./kdlgedit/kdlgedit.h"
-#include "./kdlgedit/kdlgpropwidget.h"
-#include "./kdlgedit/kdlgproplv.h"
 #include "ctoolsconfigdlg.h"
 #include "ktipofday.h"
 
@@ -714,44 +712,33 @@ void CKDevelop::slotViewPreviousError(){
   }
 }
 
-void CKDevelop::slotViewTTreeView(){
-  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
-    view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-		toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
-    if (bKDevelop)
-     t_tab_view->hide();
+void CKDevelop::slotViewTTreeView()
+{
+  bool willshow = !view_menu->isItemChecked(ID_VIEW_TREEVIEW);
+  view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
+  kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, willshow);
+  toolBar()->setButton(ID_VIEW_TREEVIEW, willshow);
+  toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, willshow);
+  if (bKDevelop)
+    if (willshow)
+      t_tab_view->show();
     else
-     kdlg_tabctl->hide();
-
-  }
-  else{
-    if (bKDevelop)
-     t_tab_view->show();
-    else
-     kdlg_tabctl->show();
-    kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-		toolBar()->setButton(ID_VIEW_TREEVIEW,true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,true);
-  }
+      t_tab_view->hide();
+  else 
+    kdlgedit->showTabWidget(willshow);
 }
 
-void CKDevelop::slotViewTOutputView(){
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
-    o_tab_view->hide();
-  }
-  else{
+void CKDevelop::slotViewTOutputView()
+{
+  bool willshow = !view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);
+  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
+  kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, willshow);
+  toolBar()->setButton(ID_VIEW_OUTPUTVIEW, willshow);
+  toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, willshow);
+  if (willshow)
     o_tab_view->show();
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,true);
-  }
+  else
+    o_tab_view->hide();
 }
 
 
@@ -1745,27 +1732,11 @@ void CKDevelop::slotHelpAbout(){
 }
 
 void CKDevelop::slotKDlgViewPropView(){
-  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
-
-/*  properties_view_pos=kdlg_top_panner->sizes()[0];
-    QValueList<int> sizes;
-    sizes << 100;
-    kdlg_top_panner->setSizes(sizes);
-*/  kdlg_prop_widget->getListView()->hide();
-  }
-  else{
-/*    QValueList<int> sizes;
-    sizes << properties_view_pos;
-    kdlg_top_panner->setSizes(sizes);
-*/  kdlg_prop_widget->getListView()->show();
-    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-  }
-/*  QRect rMainGeom= kdlg_top_panner->geometry();
-  kdlg_top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-  kdlg_top_panner->resize(rMainGeom.width(),rMainGeom.height());
-*/
+  bool willshow = !kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW);
+  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW, willshow);
+  kdlgedit->showPropWidget(willshow);
 }
+
 void CKDevelop::slotKDlgViewToolbar(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,false);

@@ -16,8 +16,6 @@
  *                                                                         *
  ***************************************************************************/
 #include "./kdlgedit/kdlgedit.h"
-#include "./kdlgedit/kdlgpropwidget.h"
-#include "./kdlgedit/kdlgproplv.h"
 #include <iostream.h>
 
 #include <qprogressdialog.h>
@@ -374,8 +372,6 @@ void CKDevelop::refreshTrees(){
   // Update RFV.
   real_file_tree->refresh(prj);
 
-  kdlg_dialogs_view->refresh(prj);
-
   kdev_statusbar->repaint();
   setCursor(KCursor::arrowCursor());	
   // update the file_open_menu
@@ -425,7 +421,8 @@ void CKDevelop::refreshTrees(TFileInfo *info)
       // Update RFV.
       real_file_tree->refresh(prj);
       // update dialogs tree
-      kdlg_dialogs_view->refresh(prj);
+      // -> Component
+      //      kdlg_dialogs_view->refresh(prj);
       
     }
   // refresh the file_open_list
@@ -646,7 +643,7 @@ void CKDevelop::switchToKDevelop(){
   this->setUpdatesEnabled(false);
 
   //////// change the mainview ////////
-  kdlg_tabctl->hide();
+  //  kdlg_tabctl->hide();
   kdlg_top_panner->hide();
   s_tab_view->show();
   t_tab_view->show();
@@ -727,7 +724,7 @@ void CKDevelop::switchToKDlgEdit(){
   //////// change the mainview ////////
   s_tab_view->hide();
   t_tab_view->hide();
-  kdlg_tabctl->show();
+  //  kdlg_tabctl->show();
   kdlg_top_panner->show();
 
   top_panner->hide();
@@ -763,10 +760,7 @@ void CKDevelop::switchToKDlgEdit(){
   else
     enableToolBar(KToolBar::Hide, ID_KDLG_TOOLBAR);
 
-  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW))
-    kdlg_prop_widget->getListView()->show();
-  else
-    kdlg_prop_widget->getListView()->hide();
+  kdlgedit->showPropWidget(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW));
 
   setKeyAccel();  // initialize Keys
 
@@ -785,10 +779,10 @@ void CKDevelop::switchToKDlgEdit(){
   else
     showOutputView(false);
   
-  if(!kdlg_tabctl->isTabEnabled("widgets_view")){
-    kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
-  }
-  kdlg_tabctl->setFocus();
+  //  if(!kdlg_tabctl->isTabEnabled("widgets_view")){
+  //    kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
+  //  }
+  //  kdlg_tabctl->setFocus();
   this->setUpdatesEnabled(true);
   this->repaint();
 }
@@ -894,10 +888,7 @@ void CKDevelop::showTreeView(bool show){
    }
    else
    {
-     if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-       kdlg_tabctl->show();
-     else
-       kdlg_tabctl->hide();
+     kdlgedit->showTabWidget(view_menu->isItemChecked(ID_VIEW_TREEVIEW));
    }
 
   if(bAutoswitch)

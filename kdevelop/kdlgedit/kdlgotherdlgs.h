@@ -18,6 +18,7 @@
 
 #include <qdialog.h>
 #include <qcheckbox.h>
+#include "kdlgeditwidget.h"
 
 class QSpinBox;
 class QLabel;
@@ -27,7 +28,7 @@ class KDlgGridDialog : public QDialog
 {
   Q_OBJECT
   public:
-    KDlgGridDialog( QWidget * parent=0, const char * name=0/*, bool modal=FALSE, WFlags f=0*/ );
+    KDlgGridDialog(KDlgEditWidget *ew, const char * name=0/*, bool modal=FALSE, WFlags f=0*/ );
     ~KDlgGridDialog();
 
     int getGridX();

@@ -27,11 +27,8 @@
 #include "defines.h"
 
 
-
 class AdvLvi_Base;
-class QPushButton;
-class KDlgItem_Base;
-class CKDevelop;
+class KDlgEdit;
 
 /**
  * @short Advanced QListViewItem class (allows widgets in cells)
@@ -71,7 +68,7 @@ class AdvListView : public QListView
 {
   Q_OBJECT
   public:
-    AdvListView( CKDevelop* parCKD, QWidget * parent = 0, const char * name = 0 );
+    AdvListView(KDlgEdit *dlged, QWidget *parent=0, const char *name=0);
     virtual ~AdvListView();
 
     virtual void hideAll();
@@ -92,7 +89,7 @@ class AdvListView : public QListView
 
     QString openStats[MAX_MAIN_ENTRYS];
 
-    CKDevelop *pCKDevel;
+    KDlgEdit *dlgedit;
   public slots:
     void help();
     void linkclicked(QString);

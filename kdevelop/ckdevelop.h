@@ -176,17 +176,10 @@ public:
     */
   void setToolMenuProcess(bool enable);
 
-  KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
-  KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
-  KDlgWidgets* kdlg_get_widgets_view()   { return kdlg_widgets_view; }
-  KDlgDialogs* kdlg_get_dialogs_view()   { return kdlg_dialogs_view; }
-  KDlgItems*   kdlg_get_items_view()     { return kdlg_items_view; }
   KStatusBar*  kdlg_get_statusbar()      { return kdlg_statusbar; }
-  CTabCtl* kdlg_get_tabctl()             { return  kdlg_tabctl;}
 
   /** Get the current project. */
   CProject* getProject()                 {return prj;}
-
 
  public slots:
 
@@ -766,19 +759,6 @@ private:
   CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */
   CTabCtl* o_tab_view;
-
-  /** The tabbar for the kdlg view. */
-  CTabCtl* kdlg_tabctl;
-  /** The editing view of kdlg. */
-  KDlgEditWidget* kdlg_edit_widget;
-  /** The properties window of kdlg. */
-  KDlgPropWidget* kdlg_prop_widget;
-  /** The first tab of kdlg_tabctl. */
-  KDlgWidgets* kdlg_widgets_view;
-  /** The second tab of kldg_tabctl. */
-  KDlgDialogs* kdlg_dialogs_view;
-  /** the third tab of kldg_tabctl. */
-  KDlgItems*   kdlg_items_view;
 
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources

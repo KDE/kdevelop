@@ -78,8 +78,9 @@ void KDlgItem_QWidget::MyWidget::paintEvent( QPaintEvent *e)
     }
 
 
-  if (parentObject->isItemActive)	
-    KDlgItemsPaintRects(&p,width(),height());
+  if (parentObject->isItemActive)
+      parentObject->paintCorners(&p);
+  //    KDlgItemsPaintRects(&p,width(),height());
 }
 
 
@@ -190,13 +191,10 @@ void KDlgItem_QLineEdit::repaintItem(QLineEdit *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-
-  if (strIsDef("Text"))
+  if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
 
-  if (intIsDef("MaxLength"))
+  if (!Prop2Str("MaxLength").isEmpty())
       //    if(Prop2Int("MaxLength") >=0){
       itm->setMaxLength(Prop2Int("MaxLength",32767));
   //    }
@@ -204,7 +202,7 @@ void KDlgItem_QLineEdit::repaintItem(QLineEdit *it)
   else
     itm->setMaxLength(32767);
 
-  if (intIsDef("CursorPosition"))
+  if (!Prop2Str("CursorPosition").isEmpty())
     itm->setCursorPosition(Prop2Int("CursorPosition",32767));
   else
     itm->setCursorPosition(0);
@@ -268,9 +266,7 @@ void KDlgItem_QPushButton::repaintItem(QPushButton *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-
-  if (strIsDef("Text"))
+  if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
 
   if (Prop2Str("Pixmap").isEmpty())
@@ -333,10 +329,7 @@ void KDlgItem_QLabel::repaintItem(QLabel *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-
-  if (strIsDef("Text"))
+  if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
 
   itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
@@ -387,9 +380,6 @@ void KDlgItem_QLCDNumber::repaintItem(QLCDNumber *it)
     return;
 
   KDlgItem_Base::repaintItem(itm);
-
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
   int i = props->getIntFromProp("NumDigits",4);
   if (i<=0) i=1;
@@ -445,10 +435,7 @@ void KDlgItem_QRadioButton::repaintItem(QRadioButton *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-
-  if (strIsDef("Text"))
+  if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
 
   if (Prop2Str("Pixmap").isEmpty())
@@ -510,10 +497,7 @@ void KDlgItem_QCheckBox::repaintItem(QCheckBox *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-
-  if (strIsDef("Text"))
+  if (!Prop2Str("Text").isNull())
     itm->setText(Prop2Str("Text"));
 
   if (Prop2Str("Pixmap").isEmpty())
@@ -608,7 +592,9 @@ KDlgItem_QListBox::KDlgItem_QListBox(KDlgEditWidget *editwid, QWidget *parent, c
   parentWidgetItem = 0;
   item = new QListBox(parent, name);
   item->installEventFilter(this);
-  // TODO: Filter on viewport
+  item->setMouseTracking(true);
+  ((QScrollView*)item)->viewport()->installEventFilter(this);
+  ((QScrollView*)item)->viewport()->setMouseTracking(true);
   item->show();
   ((QScrollView*)item)->viewport()->setMouseTracking(true);
   repaintItem();
@@ -618,6 +604,7 @@ KDlgItem_QListBox::KDlgItem_QListBox(KDlgEditWidget *editwid, QWidget *parent, c
 void KDlgItem_QListBox::recreateItem()
 {
   item->recreate((QWidget*)parent(), 0, item->pos(), true);
+  item->setMouseTracking(true);
   ((QScrollView*)item)->viewport()->setMouseTracking(true);
 }
 
@@ -702,14 +689,12 @@ void KDlgItem_QMultiLineEdit::repaintItem(QMultiLineEdit *it)
     return;
 
   KDlgItem_Base::repaintItem(itm);
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
   itm->setAutoUpdate(Prop2Bool("isAutoUpdate") == 1 ? TRUE : FALSE);
   itm->setReadOnly(Prop2Bool("isReadOnly") == 1 ? TRUE : FALSE);
   itm->setOverwriteMode(Prop2Bool("isOverWriteMode") == 1 ? TRUE : FALSE);
 
-  if (strIsDef("Text"))
+  if (!Prop2Str("Text").isNull())
   {
     int i = 0;
     QString src = Prop2Str("Text");
@@ -831,17 +816,14 @@ void KDlgItem_QSpinBox::repaintItem(QSpinBox *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-
-  if (strIsDef("Suffix"))
+  if (!Prop2Str("Suffix").isNull())
     itm->setSuffix(Prop2Str("Suffix"));
-  if (strIsDef("Prefix"))
+  if (!Prop2Str("Prefix").isNull())
     itm->setPrefix(Prop2Str("Prefix"));
 
   itm->setWrapping(Prop2Bool("isWrapping") == 1 ? TRUE : FALSE);
 
-  if(intIsDef("Value"))
+  if(!Prop2Str("Value").isEmpty())
     itm->setValue(Prop2Int("Value"));
   
   itm->setRange(Prop2Int("MinValue"),Prop2Int("MaxValue"));
@@ -894,12 +876,9 @@ void KDlgItem_QSlider::repaintItem(QSlider *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
- 
   itm->setTracking(Prop2Bool("isTracking") == 1 ? TRUE : FALSE);
   
-  if(intIsDef("Value"))
+  if(!Prop2Str("Value").isEmpty())
     itm->setValue(Prop2Int("Value"));
   
   itm->setRange(Prop2Int("MinValue"),Prop2Int("MaxValue"));
@@ -957,13 +936,9 @@ void KDlgItem_QScrollBar::repaintItem(QScrollBar *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-
- 
   itm->setTracking(Prop2Bool("isTracking") == 1 ? TRUE : FALSE);
   
-  if(intIsDef("Value"))
+  if (!Prop2Str("Value").isEmpty())
     itm->setValue(Prop2Int("Value"));
   
   itm->setRange(Prop2Int("MinValue"),Prop2Int("MaxValue"));
@@ -1018,10 +993,7 @@ void KDlgItem_QGroupBox::repaintItem(QGroupBox *it)
 
   KDlgItem_Base::repaintItem(itm);
 
-  #define strIsDef(s) (!Prop2Str(s).isNull())
-  #define intIsDef(s) (!Prop2Str(s).isEmpty())
-  
-  if (strIsDef("Title"))
+  if (!Prop2Str("Title").isNull())
     itm->setTitle(Prop2Str("Title"));
 }
 
@@ -1038,9 +1010,10 @@ KDlgItem_QListView::KDlgItem_QListView(KDlgEditWidget *editwid, QWidget *parent,
   parentWidgetItem = 0;
   item = new QListView(parent, name);
   item->installEventFilter(this);
-  // TODO: Filter on viewport
-  item->show();
+  item->setMouseTracking(true);
+  ((QScrollView*)item)->viewport()->installEventFilter(this);
   ((QScrollView*)item)->viewport()->setMouseTracking(true);
+  item->show();
   repaintItem();
   isMainwidget = false;
 }
@@ -1048,6 +1021,7 @@ KDlgItem_QListView::KDlgItem_QListView(KDlgEditWidget *editwid, QWidget *parent,
 void KDlgItem_QListView::recreateItem()
 {
   item->recreate((QWidget*)parent(), 0, item->pos(), true);
+  item->setMouseTracking(true);
   ((QScrollView*)item)->viewport()->setMouseTracking(true);
 }
 

@@ -22,13 +22,13 @@
 #include <qcheckbox.h>
 #include <qwhatsthis.h>
 #include <kapp.h>
+#include <klocale.h>
 #include "kdlgotherdlgs.h"
 #include "kdlgeditwidget.h"
-#include "../ckdevelop.h"
 
 
-KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name/*, bool modal, WFlags f*/ )
-  : QDialog(parent,name,true)
+KDlgGridDialog::KDlgGridDialog(KDlgEditWidget *ew, const char * name/*, bool modal, WFlags f*/ )
+  : QDialog(ew->topLevelWidget(),name,true)
 {
   int w = 350;
   int h = 170;
@@ -46,7 +46,7 @@ KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name/*, bool moda
   sbHGrid->setGeometry( 200, 10, w-210, 20 );
   sbHGrid->setSpecialValueText( i18n("No Grid") );
   sbHGrid->setWrapping( true );
-  i = ((CKDevelop*)parent)->kdlg_get_edit_widget()->gridSizeX();
+  i = ew->gridSizeX();
   if (i==1) i=0;
   sbHGrid->setValue(i);
   sbHGrid->setSuffix(QString(" ")+i18n("Pixels"));
@@ -57,7 +57,7 @@ KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name/*, bool moda
   sbVGrid->setWrapping( true );
   sbVGrid->setSuffix(QString(" ")+i18n("Pixels"));
 
-  i = ((CKDevelop*)parent)->kdlg_get_edit_widget()->gridSizeY();
+  i = ew->gridSizeY();
   if (i==1) i=0;
   sbVGrid->setValue(i);
 

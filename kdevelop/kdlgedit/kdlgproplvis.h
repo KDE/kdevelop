@@ -40,7 +40,7 @@ class QLabel;
 class KDlgPropertyEntry;
 class KRestrictedLine;
 class KColorButton;
-class CKDevelop;
+class KDlgEdit;
 class QGroupBox;
 class QMultiLineEdit;
 class QToolButton;
@@ -49,7 +49,7 @@ class AdvLvi_Base : public QWidget
 {
   Q_OBJECT
   public:
-    AdvLvi_Base(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_Base(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText() { return QString(); }
     virtual QString getDisplayedText() { return QString(); }
@@ -59,7 +59,7 @@ class AdvLvi_Base : public QWidget
     virtual void paintEvent ( QPaintEvent * );
     KDlgPropertyEntry *propEntry;
 
-    CKDevelop *pCKDevel;
+    KDlgEdit *dlgedit;
 };
 
 
@@ -67,7 +67,7 @@ class AdvLvi_String : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_String(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_String(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -85,7 +85,7 @@ class AdvLvi_Int : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_Int(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_Int(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -106,7 +106,7 @@ class AdvLvi_UInt : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_UInt(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_UInt(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -126,7 +126,7 @@ class AdvLvi_ExtEdit : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_ExtEdit(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_ExtEdit(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -145,7 +145,7 @@ class AdvLvi_Bool : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_Bool(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_Bool(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -165,7 +165,7 @@ class AdvLvi_Orientation : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_Orientation(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_Orientation(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -183,7 +183,7 @@ class AdvLvi_Filename : public AdvLvi_ExtEdit
 {
   Q_OBJECT
   public:
-    AdvLvi_Filename(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0 );
+    AdvLvi_Filename(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0 );
 
   public slots:
     void btnPressed();
@@ -193,7 +193,7 @@ class AdvLvi_Font : public AdvLvi_ExtEdit
 {
   Q_OBJECT
   public:
-    AdvLvi_Font(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0 );
+    AdvLvi_Font(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0 );
 
   public slots:
     void btnPressed();
@@ -203,7 +203,7 @@ class AdvLvi_ColorEdit : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_ColorEdit(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0 );
+    AdvLvi_ColorEdit(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0 );
 
     virtual QString getText();
 
@@ -221,7 +221,7 @@ class AdvLvi_BgMode : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_BgMode(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_BgMode(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -239,7 +239,7 @@ class AdvLvi_Cursor : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_Cursor(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_Cursor(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -261,7 +261,7 @@ class AdvLvi_Varname : public AdvLvi_String
 {
   Q_OBJECT
   public:
-    AdvLvi_Varname(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_Varname(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
   public slots:
     void VarnameChanged();
@@ -271,7 +271,7 @@ class AdvLvi_ComboList : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_ComboList(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_ComboList(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
 
@@ -309,7 +309,7 @@ class AdvLvi_MultiString : public AdvLvi_Base
 {
   Q_OBJECT
   public:
-    AdvLvi_MultiString(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name=0);
+    AdvLvi_MultiString(QWidget *parent, KDlgEdit *dlged, KDlgPropertyEntry *dpe, const char *name=0);
 
     virtual QString getText();
     virtual QString getDisplayedText() { return QString("[QStrings...]"); }

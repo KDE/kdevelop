@@ -23,7 +23,7 @@
 
 class AdvListView;
 class KDlgItem_Base;
-class CKDevelop;
+class KDlgEdit;
 
 /**
   *@author Pascal Krahmer
@@ -32,7 +32,7 @@ class CKDevelop;
 class KDlgPropWidget : public QWidget  {
    Q_OBJECT
 public:
-	KDlgPropWidget(CKDevelop* parCKD, QWidget *parent=0, const char *name=0);
+	KDlgPropWidget(KDlgEdit *dlged, QWidget *parent=0, const char *name=0);
 	~KDlgPropWidget();
 
         void refillList(KDlgItem_Base* source);
@@ -42,7 +42,7 @@ protected:
 
 private:
         AdvListView *lv;
-        CKDevelop *pCKDevel;
+        KDlgEdit *dlgedit;
 };
 
 #endif

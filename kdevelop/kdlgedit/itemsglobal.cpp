@@ -18,9 +18,6 @@
 
 #include <qmessagebox.h>
 #include <qpainter.h>
-//#include <qfont.h>
-//#include <qcolor.h>
-//#include <kapp.h>
 #include <kcursor.h>
 #include <klocale.h>
 #include "items.h"
@@ -79,14 +76,14 @@ bool KDlgItemDatabase::addItem(KDlgItem_Base *item)
   return true;
 }
 
-void KDlgItemDatabase::removeItem(KDlgItem_Base *item, bool deleteIt)
+void KDlgItemDatabase::removeItem(KDlgItem_Base *item)
 {
   int i;
   for (i=0; i<MAX_WIDGETS_PER_DIALOG; i++)
     if (items[i]==item)
       {
-        if ((deleteIt) && (items[i]))
-          delete items[i];
+          //        if ((deleteIt) && (items[i]))
+          //          delete items[i];
         items[i]=0;
         return;
       }
@@ -160,138 +157,6 @@ KDlgItem_Base *KDlgItemDatabase::getNext()
 }
 
 
-
-void KDlgItemsPaintRects(QPainter *p, int w, int h)
-{
-  if (!p)
-    return;
-
-  QBrush b(Qt::Dense4Pattern);
-
-  p->drawWinFocusRect(0,0,w,h);
-  p->drawWinFocusRect(1,1,w-2,h-2);
-  p->fillRect(0,0,8,8,b);
-  p->fillRect(w-8,0,8,8,b);
-  p->fillRect(0,h-8,8,8,b);
-  p->fillRect(w-8,h-8,8,8,b);
-
-  p->fillRect((int)(w/2)-4,0, 8,8,b);
-  p->fillRect((int)(w/2)-4,h-8, 8,8,b);
-
-  p->fillRect(0,(int)(h/2)-4,8,8,b);
-  p->fillRect(w-8,(int)(h/2)-4,8,8,b);
-}
-
-
-int KDlgItemsGetClickedRect(int x, int y, int winw, int winh)
-{
-  int w = winw;
-  int h = winh;
-
-  if ((x>=w-8) && (y>=h-8) && (x<=w) && (y<=h)) return RESIZE_BOTTOM_RIGHT;
-  if ((x>=0)   && (y>=0)   && (x<=8) && (y<=8)) return RESIZE_TOP_LEFT;
-  if ((x>=w-8) && (y>=0)   && (x<=w) && (y<=8)) return RESIZE_TOP_RIGHT;
-  if ((x>=0)   && (y>=h-8) && (x<=8) && (y<=h)) return RESIZE_BOTTOM_LEFT;
-
-  if ((x>=(int)(w/2)-4) && (y>=0)   && (x<=(int)(w/2)+4) && (y<=8)) return RESIZE_MIDDLE_TOP;
-  if ((x>=(int)(w/2)-4) && (y>=h-8) && (x<=(int)(w/2)+4) && (y<=h)) return RESIZE_MIDDLE_BOTTOM;
-
-  if ((x>=0)   && (y>=(int)(h/2)-4) && (x<=8) && (y<=(int)(h/2)+4)) return RESIZE_MIDDLE_LEFT;
-  if ((x>=w-8) && (y>=(int)(h/2)-4) && (x<=w) && (y<=(int)(h/2)+4)) return RESIZE_MIDDLE_RIGHT;
-
-  return RESIZE_MOVE;
-}
-
-bool KDlgItemsGetResizeCoords(int pressedEdge, int &x, int &y, int &w, int &h, int diffx, int diffy)
-{
-  bool noMainWidget = false;
-
-  switch (pressedEdge)
-    {
-      case RESIZE_MOVE:
-        noMainWidget = true;
-        x += diffx;
-        y += diffy;
-        break;
-      case RESIZE_BOTTOM_RIGHT:
-        w += diffx;
-        h += diffy;
-        break;
-      case RESIZE_MIDDLE_RIGHT:
-        w += diffx;
-        break;
-      case RESIZE_MIDDLE_BOTTOM:
-        h += diffy;
-        break;
-      case RESIZE_TOP_LEFT:
-        noMainWidget = true;
-        if (x+diffx<x+w-1) x += diffx; else x += w-1;
-        if (y+diffy<y+h-1) y += diffy; else y += h-1;
-        w -= diffx;
-        h -= diffy;
-        break;
-      case RESIZE_TOP_RIGHT:
-        noMainWidget = true;
-        if (y+diffy<y+h-1) y += diffy; else y += h-1;
-        w += diffx;
-        h -= diffy;
-        break;
-      case RESIZE_MIDDLE_LEFT:
-        noMainWidget = true;
-        if (x+diffx<x+w-1) x += diffx; else x += w-1;
-        w -= diffx;
-        break;
-      case RESIZE_MIDDLE_TOP:
-        noMainWidget = true;
-        if (y+diffy<y+h-1) y += diffy; else y += h-1;
-        h -= diffy;
-        break;
-      case RESIZE_BOTTOM_LEFT:
-        noMainWidget = true;
-        if (x+diffx<x+w-1) x += diffx; else x += w-1;
-        w -= diffx;
-        h += diffy;
-        break;
-    }
-
-  return noMainWidget;
-}
-
-void KDlgItemsSetMouseCursor(QWidget* caller, int pressedEdge)
-{
-  switch (pressedEdge)
-    {
-      case RESIZE_BOTTOM_RIGHT:
-        caller->setCursor(KCursor::sizeFDiagCursor());
-        break;
-      case RESIZE_TOP_LEFT:
-        caller->setCursor(KCursor::sizeFDiagCursor());
-        break;
-      case RESIZE_TOP_RIGHT:
-        caller->setCursor(KCursor::sizeBDiagCursor());
-        break;
-      case RESIZE_BOTTOM_LEFT:
-        caller->setCursor(KCursor::sizeBDiagCursor());
-        break;
-      case RESIZE_MIDDLE_TOP:
-        caller->setCursor(KCursor::sizeVerCursor());
-        break;
-      case RESIZE_MIDDLE_BOTTOM:
-        caller->setCursor(KCursor::sizeVerCursor());
-        break;
-      case RESIZE_MIDDLE_LEFT:
-        caller->setCursor(KCursor::sizeHorCursor());
-        break;
-      case RESIZE_MIDDLE_RIGHT:
-        caller->setCursor(KCursor::sizeHorCursor());
-        break;
-      case RESIZE_MOVE:
-      default:
-        caller->setCursor(KCursor::arrowCursor());
-    };
-
-}
-
 int KDlgItemsIsValueTrue(QString val)
 {
   QString v(val.upper());
@@ -304,7 +169,7 @@ int KDlgItemsIsValueTrue(QString val)
   return -1;
 }
 
-int __isValTrue(QString val, int defaultval )
+static int __isValTrue(QString val, int defaultval )
 {
   QString v(val.upper());
 
@@ -316,7 +181,7 @@ int __isValTrue(QString val, int defaultval )
   return defaultval;
 }
 
-int __Prop2Int(QString val, int defaultval)
+static int __Prop2Int(QString val, int defaultval)
 {
   if (val.length() == 0)
     return defaultval;

@@ -22,23 +22,36 @@
 #include <qobject.h>
 #include <qtextstream.h>
 #include <qstrlist.h>
-//#include "items.h"
+#include "../component.h"
 
 class CProject;
 class TDialogFileInfo;
 class KDlgItem_QWidget;
+class CTabCtl;
+class KDlgEditWidget;
+class KDlgPropWidget;
+class KDlgWidgets;
+class KDlgDialogs;
+class KDlgItems;
+class CKDevelop;
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>
   */
 
-class KDlgEdit : public QObject  {
+class KDlgEdit : public QObject, public Component
+{
   Q_OBJECT
 public: 
-  KDlgEdit(QObject *parent=0, const char *name=0);
+  KDlgEdit(CKDevelop *ckdevelop, QWidget *parent, const char *name=0);
   ~KDlgEdit();
   QString getRelativeName(QString abs_filename);
-  
+  void helpForTopic(const QString &str);
+  void newDialog();
+  void initWhatsThis();
+  void showPropWidget(bool b);
+  void showTabWidget(bool b);
+  void enableDialogsTab(bool b);
 
 public slots:
 /** New Dialog - this is not for an extra dialog but is called if the kdevelop file new selects it for creating a new dialog */
@@ -120,12 +133,35 @@ void slotFileNew();
   /** filled at the generation process, needed for the header*/
   QStrList includes;
   /** the includes for the data source file, f.e. QPixmap*/
-  QStrList local_includes; 
+  QStrList local_includes;
+
+protected:
+    virtual void projectClosed();
+    virtual void projectOpened(CProject *prj);
+    
+public:
+  CTabCtl* kdlg_get_tabctl()             { return  kdlg_tabctl;}
+  KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
+  KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
+  KDlgWidgets* kdlg_get_widgets_view()   { return kdlg_widgets_view; }
+  KDlgDialogs* kdlg_get_dialogs_view()   { return kdlg_dialogs_view; }
+  KDlgItems*   kdlg_get_items_view()     { return kdlg_items_view; }
+  CKDevelop *kdlg_get_ckdevelop()        { return ckdev; }
+    
+private:  
+  /** The tabbar for the kdlg view. */
+  CTabCtl* kdlg_tabctl;
+  /** The editing view of kdlg. */
+  KDlgEditWidget* kdlg_edit_widget;
+  /** The properties window of kdlg. */
+  KDlgPropWidget* kdlg_prop_widget;
+  /** The first tab of kdlg_tabctl. */
+  KDlgWidgets* kdlg_widgets_view;
+  /** The second tab of kldg_tabctl. */
+  KDlgDialogs* kdlg_dialogs_view;
+  /** the third tab of kldg_tabctl. */
+  KDlgItems*   kdlg_items_view;
+  CKDevelop *ckdev;
 };
 
 #endif
-
-
-
-
-

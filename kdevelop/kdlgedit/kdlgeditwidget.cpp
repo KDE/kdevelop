@@ -19,6 +19,7 @@
 #include "kdlgeditwidget.h"
 #include "kdlgproplvis.h"
 #include "../ckdevelop.h"
+#include "kdlgedit.h"
 #include <qmessagebox.h>
 #include <kapp.h>
 #include <qpushbutton.h>
@@ -32,13 +33,15 @@
 #include "kdlgpropwidget.h"
 
 
-KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
+KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD, KDlgEdit *dlged,
+                               QWidget *parent, const char *name )
    : QWidget(parent,name)
 {
 #warning FIXME
     //  qhw = new KQuickHelpWindow();
   dlgfilelinecnt = 0;
   pCKDevel = parCKD;
+  dlgedit = dlged;
 
   setBackgroundMode(PaletteLight);
 
@@ -76,11 +79,10 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
   main_widget->getProps()->setProp_Value("Height","300");
   main_widget->repaintItem();
 
-  if ((parCKD) && parCKD->kdlg_get_items_view())
-    parCKD->kdlg_get_items_view()->addWidgetChilds(main_widget);
+  dlgedit->kdlg_get_items_view()->addWidgetChilds(main_widget);
 
-  if ((parCKD) && parCKD->kdlg_get_prop_widget())
-    parCKD->kdlg_get_prop_widget()->refillList(selected_widget);
+  if (dlgedit->kdlg_get_prop_widget())
+    dlgedit->kdlg_get_prop_widget()->refillList(selected_widget);
 
   setModified(false);
   setWidgetAdded(false);
@@ -211,8 +213,7 @@ void KDlgEditWidget::slot_deleteSelected()
   selected_widget = 0;
   selectWidget(mainWidget());
 
-  if ((pCKDevel) && ((CKDevelop*)pCKDevel)->kdlg_get_items_view())
-    ((CKDevelop*)pCKDevel)->kdlg_get_items_view()->addWidgetChilds(main_widget);
+  dlgedit->kdlg_get_items_view()->addWidgetChilds(main_widget);
 
   setModified(true);
   setWidgetRemoved(true);
@@ -308,7 +309,7 @@ void KDlgEditWidget::slot_pasteSelected()
       return;
     }
 
-  getCKDevel()->kdlg_get_items_view()->refreshList();
+  dlgedit->kdlg_get_items_view()->refreshList();
 
   setWidgetAdded(true);
   setModified(true);
@@ -556,7 +557,7 @@ bool KDlgEditWidget::openFromFile( QString fname )
 
   printf("kdlgedit : Loading complete.\n");
 
-  getCKDevel()->kdlg_get_items_view()->refreshList();
+  dlgedit->kdlg_get_items_view()->refreshList();
   selectWidget(mainWidget());
 
   setModified(false);
@@ -594,7 +595,7 @@ bool KDlgEditWidget::saveToFile( QString fname )
       t << "\ndata SessionManagement\n";
       t << "{\n";
 
-      AdvListView *lv = pCKDevel->kdlg_get_prop_widget()->getListView();
+      AdvListView *lv = dlgedit->kdlg_get_prop_widget()->getListView();
       lv->saveOpenStats();
       int i;
       int n=0;
@@ -670,7 +671,7 @@ void KDlgEditWidget::newDialog()
   deselectWidget();
   mainWidget()->deleteMyself();
 
-  getCKDevel()->kdlg_get_items_view()->refreshList();
+  dlgedit->kdlg_get_items_view()->refreshList();
   selectWidget(mainWidget());
 
   setModified(false);
@@ -719,8 +720,8 @@ void KDlgEditWidget::selectWidget(KDlgItem_Base *i)
   if (selected_widget)
     {
       selected_widget -> select();
-      if ((pCKDevel) && pCKDevel->kdlg_get_prop_widget())
-         pCKDevel->kdlg_get_prop_widget()->refillList(selected_widget);
+      if (dlgedit->kdlg_get_prop_widget())
+        dlgedit->kdlg_get_prop_widget()->refillList(selected_widget);
     }
 
   if (!wasSel)
@@ -823,8 +824,7 @@ KDlgItem_QWidget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
 
 //  wid->repaintItem();
 
-  if ((pCKDevel) && ((CKDevelop*)pCKDevel)->kdlg_get_items_view())
-    ((CKDevelop*)pCKDevel)->kdlg_get_items_view()->addWidgetChilds(main_widget);
+  dlgedit->kdlg_get_items_view()->addWidgetChilds(main_widget);
 
   return wid;
 }

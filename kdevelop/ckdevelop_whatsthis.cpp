@@ -253,31 +253,6 @@ void CKDevelop::initWhatsThis(){
 	                                  "documentation and the KDevelop manuals. Can be "
 	                                  "configured individually by right-button menu."));
 	
-	QWhatsThis::add((QWidget*)kdlg_widgets_view, i18n("Widgets\n\n"
-																		"Here, you can select a widget item to add to "
-																		"the dialog you're working on. More information "
-																		"about the widget items can be found by What's this "
-																		"help on the buttons or in the KDevelop documentation. "));
-	
-	QWhatsThis::add((QWidget*)kdlg_dialogs_view, i18n("Dialogs\n\n"
-																		"Selecting a dialog in the list will open the dialog "
-																		"definition file and dispay the dialog for editing."));
-																		
-	QWhatsThis::add((QWidget*)kdlg_prop_widget, i18n("Properties\n\n"
-																		"The properties window shows the properties for the currently "
-																		"selected widget item. You can switch to the different items "
-																		"by selecting them in the editing view or by using the drop-down "
-																		"menu at the top of the properties window containing a list with "
-																		"all used widget items."));
-																		
-	QWhatsThis::add((QWidget*)kdlg_edit_widget, i18n("Widget Editing Window\n\n"
-																		"The Widget Editing Window is the working window of the widget editor "
-																		"displaying a resizable widget with a grid to place selected widget items "
-																		"on. A click on the items will acitvate them and give a resize-frame around "
-																		"with draggable points to resize the item. The properties for the selected item "
-																		"are shown in the properties window at the right. New widget items can be added "
-																		"by choosing them on the widgets-window on the left."));
-																		
 	QWhatsThis::add(header_widget, i18n("Header/Resource Files\n\n"
 	                                  "This window shows header and all other project files "
 	                                  "except for source files. The statusbar shows the "

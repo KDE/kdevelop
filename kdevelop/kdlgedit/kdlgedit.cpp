@@ -30,6 +30,7 @@
 #include "../ckdevelop.h"
 #include "../cgeneratenewfile.h"
 #include "../cproject.h"
+#include "../ctabctl.h"
 #include "kdlgedit.h"
 #include "kdlgeditwidget.h"
 #include "kdlgitems.h"
@@ -38,17 +39,44 @@
 #include "kdlgnewdialogdlg.h"
 #include "kdlgdialogs.h"
 #include "kdlgpropertybase.h"
-#define DONTINC_ALL
-#define INC_WIDGET
+#include "kdlgwidgets.h"
+#include "kdlgproplv.h"
 #include "kdlgloader.h"
 
-KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
+
+KDlgEdit::KDlgEdit(CKDevelop *ckdevelop, QWidget *parent, const char *name)
+    : QObject(parent,name)
 {
-   connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(kdlgdialogsSelected(QString)),
-	   SLOT(slotOpenDialog(QString)));
-   connect(((CKDevelop*)parent())->kdlg_get_dialogs_view(),SIGNAL(deleteDialog(QString)),
-	   SLOT(slotDeleteDialog(QString)));
+  ckdev = ckdevelop;
+   
+  kdlg_tabctl= new CTabCtl(parent);
+  kdlg_tabctl->setFocusPolicy(QWidget::ClickFocus);
+
+  kdlg_widgets_view= new KDlgWidgets(this,kdlg_tabctl,"widgets_view");
+  kdlg_dialogs_view = new KDlgDialogs(kdlg_tabctl,"dialogs_view");
+  kdlg_items_view = new KDlgItems(this,kdlg_tabctl,"items_view");
+
+  kdlg_tabctl->addTab(kdlg_widgets_view,i18n("Widgets"));
+  kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
+  kdlg_tabctl->addTab(kdlg_items_view,i18n("Items"));
+
+  kdlg_tabctl->setTabEnabled("widgets_view",false);
+  kdlg_tabctl->setTabEnabled("items_view",false);
+  kdlg_tabctl->setTabEnabled("dialogs_view",false);
+  kdlg_tabctl->setCurrentTab(1);// dialogs
+  
+  kdlg_prop_widget = 0;
+  kdlg_edit_widget = new KDlgEditWidget(ckdev, this, parent, "KDlg_edit_widget"); // the editing view of kdlg
+  kdlg_prop_widget = new KDlgPropWidget(this, parent, "KDlg_properties_widget"); // the properties window of kdlg
+
+  connect(kdlg_get_dialogs_view(),SIGNAL(kdlgdialogsSelected(QString)),
+          SLOT(slotOpenDialog(QString)));
+  connect(kdlg_get_dialogs_view(),SIGNAL(deleteDialog(QString)),
+          SLOT(slotDeleteDialog(QString)));
+  connect(kdlg_get_dialogs_view(),SIGNAL(newDialog()),
+          SLOT(slotFileNew()));
    dialog_file = "";
+   initWhatsThis();
 }
 
 KDlgEdit::~KDlgEdit()
@@ -56,43 +84,103 @@ KDlgEdit::~KDlgEdit()
 }
 
 
-void KDlgEdit::slotFileNew(){
- 
+void KDlgEdit::initWhatsThis()
+{
+    QWhatsThis::add((QWidget*)kdlg_widgets_view, i18n("Widgets\n\n"
+                                                      "Here, you can select a widget item to add to "
+                                                      "the dialog you're working on. More information "
+                                                      "about the widget items can be found by What's this "
+                                                      "help on the buttons or in the KDevelop documentation. "));
+    
+    QWhatsThis::add((QWidget*)kdlg_dialogs_view, i18n("Dialogs\n\n"
+                                                      "Selecting a dialog in the list will open the dialog "
+                                                      "definition file and dispay the dialog for editing."));
+    
+    QWhatsThis::add((QWidget*)kdlg_prop_widget, i18n("Properties\n\n"
+                                                     "The properties window shows the properties for the currently "
+                                                     "selected widget item. You can switch to the different items "
+                                                     "by selecting them in the editing view or by using the drop-down "
+                                                     "menu at the top of the properties window containing a list with "
+                                                     "all used widget items."));
+    
+    QWhatsThis::add((QWidget*)kdlg_edit_widget, i18n("Widget Editing Window\n\n"
+                                                     "The Widget Editing Window is the working window of the widget editor "
+                                                     "displaying a resizable widget with a grid to place selected widget items "
+                                                     "on. A click on the items will acitvate them and give a resize-frame around "
+                                                     "with draggable points to resize the item. The properties for the selected item "
+                                                     "are shown in the properties window at the right. New widget items can be added "
+                                                     "by choosing them on the widgets-window on the left."));
+}
+
+
+void KDlgEdit::showPropWidget(bool b)
+{
+    if (b)
+        kdlg_prop_widget->getListView()->show();
+    else
+        kdlg_prop_widget->getListView()->hide();
+}
+
+
+void KDlgEdit::showTabWidget(bool b)
+{
+    if (b)
+        kdlg_tabctl->show();
+    else
+        kdlg_tabctl->hide();
+}
+
+
+void KDlgEdit::enableDialogsTab(bool b)
+{
+  kdlg_tabctl->setTabEnabled("dialogs_view", b);
+}
+
+
+void KDlgEdit::newDialog()
+{
+    kdlg_edit_widget->newDialog();
+}
+
+
+void KDlgEdit::slotFileNew()
+{
+    ckdev->slotFileNew();
 }
 
 
 void KDlgEdit::slotOpenDialog(QString file){
     if(file != dialog_file){
 	if(slotFileCloseForceSave()){
-	    ((CKDevelop*)parent())->kdlg_get_edit_widget()->show();
-	    ((CKDevelop*)parent())->kdlg_get_prop_widget()->show();
-	    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",true);
-	    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",true);
-	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_BUILD_GENERATE);
-	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
-	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_CLOSE);
-	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE);
-	    ((CKDevelop*)parent())->enableCommand(ID_KDLG_FILE_SAVE_AS);
+	    kdlg_get_edit_widget()->show();
+	    kdlg_get_prop_widget()->show();
+	    kdlg_get_tabctl()->setTabEnabled("widgets_view",true);
+	    kdlg_get_tabctl()->setTabEnabled("items_view",true);
+	    ckdev->enableCommand(ID_KDLG_BUILD_GENERATE);
+	    ckdev->enableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
+	    ckdev->enableCommand(ID_KDLG_FILE_CLOSE);
+	    ckdev->enableCommand(ID_KDLG_FILE_SAVE);
+	    ckdev->enableCommand(ID_KDLG_FILE_SAVE_AS);
 	    
 	    dialog_file = file;
 	    
-	    ((CKDevelop*)parent())->kdlg_get_edit_widget()->openFromFile(file);
-	    ((CKDevelop*)parent())->setCaption(i18n("KDevelop Dialog Editor: ")+file); 
-	    ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
+	    kdlg_get_edit_widget()->openFromFile(file);
+	    ckdev->setCaption(i18n("KDevelop Dialog Editor: ")+file); 
+	    kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
 	}
     }
 }
 bool KDlgEdit::slotFileCloseForceSave(){
     slotFileSave();
-    ((CKDevelop*)parent())->kdlg_get_edit_widget()->hide();
-    ((CKDevelop*)parent())->kdlg_get_prop_widget()->hide();
-    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",false);
-    ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",false);
-    ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_GENERATE);
-    ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
-    ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_CLOSE);
-    ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE);
-    ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE_AS);
+    kdlg_get_edit_widget()->hide();
+    kdlg_get_prop_widget()->hide();
+    kdlg_get_tabctl()->setTabEnabled("widgets_view",false);
+    kdlg_get_tabctl()->setTabEnabled("items_view",false);
+    ckdev->disableCommand(ID_KDLG_BUILD_GENERATE);
+    ckdev->disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
+    ckdev->disableCommand(ID_KDLG_FILE_CLOSE);
+    ckdev->disableCommand(ID_KDLG_FILE_SAVE);
+    ckdev->disableCommand(ID_KDLG_FILE_SAVE_AS);
     dialog_file = "";
     return true;
 }
@@ -100,29 +188,29 @@ bool KDlgEdit::slotFileCloseForceSave(){
 bool KDlgEdit::slotFileClose(){
   if (dialog_file == "") return true;
   int result = 1;
-  if(((CKDevelop*)parent())->kdlg_get_edit_widget()->isModified()){
+  if(kdlg_get_edit_widget()->isModified()){
     result = QMessageBox::information(0, i18n("Question"),i18n("You have modified the current dialog\nDo you want to save it?"), i18n("Yes"), i18n("No"), i18n("Cancel"));
   }
   if(result == 2) return false; // cancel
   if(result == 0) { // ok
     slotFileSave();
   }
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->hide();
-  ((CKDevelop*)parent())->kdlg_get_prop_widget()->hide();
-  ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("widgets_view",false);
-  ((CKDevelop*)parent())->kdlg_get_tabctl()->setTabEnabled("items_view",false);
-  ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
-  ((CKDevelop*)parent())->disableCommand(ID_KDLG_BUILD_GENERATE);
-  ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_CLOSE);
-  ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE);
-  ((CKDevelop*)parent())->disableCommand(ID_KDLG_FILE_SAVE_AS);
+  kdlg_get_edit_widget()->hide();
+  kdlg_get_prop_widget()->hide();
+  kdlg_get_tabctl()->setTabEnabled("widgets_view",false);
+  kdlg_get_tabctl()->setTabEnabled("items_view",false);
+  ckdev->disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
+  ckdev->disableCommand(ID_KDLG_BUILD_GENERATE);
+  ckdev->disableCommand(ID_KDLG_FILE_CLOSE);
+  ckdev->disableCommand(ID_KDLG_FILE_SAVE);
+  ckdev->disableCommand(ID_KDLG_FILE_SAVE_AS);
   dialog_file = "";
   return true;
 }
 
 void KDlgEdit::slotFileSave(){
   if (dialog_file != ""){
-    ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(dialog_file);
+    kdlg_get_edit_widget()->saveToFile(dialog_file);
   }
 }
 void KDlgEdit::slotFileSaveAs(){
@@ -131,7 +219,7 @@ void KDlgEdit::slotFileSaveAs(){
     return;
   }
   else{
-    ((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(name);
+    kdlg_get_edit_widget()->saveToFile(name);
   }
 }
 	
@@ -143,19 +231,19 @@ void KDlgEdit::slotEditRedo()
 }
 
 void KDlgEdit::slotEditCut(){
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_cutSelected();
+  kdlg_get_edit_widget()->slot_cutSelected();
 }
 
 void KDlgEdit::slotEditDelete(){
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_deleteSelected();
+  kdlg_get_edit_widget()->slot_deleteSelected();
 }
 
 void KDlgEdit::slotEditCopy(){
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_copySelected();
+  kdlg_get_edit_widget()->slot_copySelected();
 }
 
 void KDlgEdit::slotEditPaste(){
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->slot_pasteSelected();
+  kdlg_get_edit_widget()->slot_pasteSelected();
 }
 
 void KDlgEdit::slotEditProperties()
@@ -164,24 +252,63 @@ void KDlgEdit::slotEditProperties()
 
 void KDlgEdit::slotViewRefresh()
 {
-  ((CKDevelop*)parent())->kdlg_get_items_view()->refreshList();
+  kdlg_get_items_view()->refreshList();
 
-  KDlgItem_Base* sel = ((CKDevelop*)parent())->kdlg_get_edit_widget()->selectedWidget();
+  KDlgItem_Base* sel = kdlg_get_edit_widget()->selectedWidget();
 
   if (sel)
-    ((CKDevelop*)parent())->kdlg_get_prop_widget()->refillList(sel);
+    kdlg_get_prop_widget()->refillList(sel);
 
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->recreateItem();
+  kdlg_get_edit_widget()->mainWidget()->recreateItem();
 }
 
+void KDlgEdit::helpForTopic(const QString &str)
+{
+  // from AdvListView
+  if (str.upper() == "KDEV")
+    ckdev->slotHelpContents();
+  if (str.upper() == "KDECORE")
+    ckdev->slotHelpKDECoreLib();
+  if (str.upper() == "KDEUI")
+    ckdev->slotHelpKDEGUILib();
+  if (str.upper() == "KDEKFILELIB")
+    ckdev->slotHelpKDEKFileLib();
+  if (str.upper() == "KDEHTML")
+    ckdev->slotHelpKDEHTMLLib();
+  if (str.upper() == "QT")
+    ckdev->slotHelpQtLib();
+  if (str.upper() == "C")
+    ckdev->slotHelpReference();
+  if (str.upper() == "ABOUT")
+    ckdev->slotHelpAbout();
+  if (str.upper() == "HOMEPAGE")
+    ckdev->slotHelpHomepage();
+  if (str.upper() == "MANUAL")
+    ckdev->slotHelpManual();
+  if (str.upper() == "KDEWEB")
+    {
+      // lets give this URL to kfm, he knows better what
+      // to do with it
+      if(vfork() > 0) {
+	// drop setuid, setgid
+	setgid(getgid());
+	setuid(getuid());
+	
+	execlp("kfmclient", "kfmclient", "exec", QString("http://www.kde.org").data(), 0);
+	_exit(0);
+      }
+    }
+}
+
+
 void KDlgEdit::generateSourcecodeIfNeeded(){
-  CProject* prj = ((CKDevelop*)parent())->getProject();
+  CProject* prj = ckdev->getProject();
   TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
   //cerr << ":::::" << info.classname;
   if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty()){ // no class generated
   }
   else{
-      if (((CKDevelop*)parent())->kdlg_get_edit_widget()->isModified()){
+      if (kdlg_get_edit_widget()->isModified()){
 	  buildGenerate(false);
       }
   }
@@ -193,7 +320,7 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
   // otherwise generate only the needed changes
   //************************************
 
-  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  CProject* prj = ckdev->getProject(); 
   TDialogFileInfo info = prj->getDialogFileInfo(getRelativeName(dialog_file));
   //cerr << ":::::" << info.classname;
   if (info.classname.isNull() || info.classname == "" || info.classname.isEmpty() || force_get_classname_dialog ){ // no class generated
@@ -215,22 +342,22 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
       prj->writeDialogFileInfo(info);
 	
       // registrate the source files
-      newsubdir = ((CKDevelop*)parent())->addFileToProject(location + dlg.getHeaderName()
+      newsubdir = ckdev->addFileToProject(location + dlg.getHeaderName()
 							   ,CPP_HEADER);
-      newsubdir = ((CKDevelop*)parent())->addFileToProject(location + dlg.getSourceName()
+      newsubdir = ckdev->addFileToProject(location + dlg.getSourceName()
 							   ,CPP_SOURCE) || newsubdir;
-      newsubdir  =((CKDevelop*)parent())->addFileToProject(location + dlg.getDataName()
+      newsubdir  =ckdev->addFileToProject(location + dlg.getDataName()
 							   ,CPP_SOURCE) || newsubdir;
 
       if(newsubdir)
-	((CKDevelop*)parent())->newSubDir();
+	ckdev->newSubDir();
 
       // generate the new files;
       // header
       generateInitialHeaderFile(info,dlg.getBaseClassHeader());
       generateInitialSourceFile(info);
-      ((CKDevelop*)parent())->refreshTrees();
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->setWidgetAdded(true); 
+      ckdev->refreshTrees();
+      kdlg_get_edit_widget()->setWidgetAdded(true); 
     }
     else{
       return; // cancel sourcecode generation
@@ -241,10 +368,10 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
       ///////////////////////////// datafile ///////////////////////////////////////////
 	////////first generate the datafile and then the header for the datafile//////////
 
-  if( ((CKDevelop*)parent())->isFileInBuffer(prj->getProjectDir() + info.data_file)){
-      ((CKDevelop*)parent())->switchToFile(prj->getProjectDir() + info.data_file);
-      ((CKDevelop*)parent())->slotFileSave();
-      ((CKDevelop*)parent())->slotFileClose();
+  if( ckdev->isFileInBuffer(prj->getProjectDir() + info.data_file)){
+      ckdev->switchToFile(prj->getProjectDir() + info.data_file);
+      ckdev->slotFileSave();
+      ckdev->slotFileClose();
   }
 
   cerr << "generate";
@@ -255,14 +382,14 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
     stream << "#include \"" << header_file_info.fileName() << "\"\n\n";
     
     stream << "void  " << info.classname + "::initDialog(){\n";
-    ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
+    kdlg_get_edit_widget()->mainWidget()->getProps()->setProp_Value("VarName","this");
     variables.clear();
     includes.clear();
     local_includes.clear();
-    if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+    if(ckdev->getProject()->isKDEProject()){
       local_includes.append("#include <kapp.h>");
     }
-    generateWidget(((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget(),&stream,"this");
+    generateWidget(kdlg_get_edit_widget()->mainWidget(),&stream,"this");
     stream << "}\n";
   }
   file.close();
@@ -301,15 +428,15 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
 
   ///////////////////////////headerfile////////////////////////
   
-  if(((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetAdded() 
-     || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasWidgetRemoved()
-		 || ((CKDevelop*)parent())->kdlg_get_edit_widget()->wasVarnameChanged()){
+  if(kdlg_get_edit_widget()->wasWidgetAdded() 
+     || kdlg_get_edit_widget()->wasWidgetRemoved()
+		 || kdlg_get_edit_widget()->wasVarnameChanged()){
     QString var;
     bool was_in_buffer = false;
-    if( ((CKDevelop*)parent())->isFileInBuffer(prj->getProjectDir() + info.header_file)){
-      ((CKDevelop*)parent())->switchToFile(prj->getProjectDir() + info.header_file);
-      ((CKDevelop*)parent())->slotFileSave();
-      ((CKDevelop*)parent())->slotFileClose();
+    if( ckdev->isFileInBuffer(prj->getProjectDir() + info.header_file)){
+      ckdev->switchToFile(prj->getProjectDir() + info.header_file);
+      ckdev->slotFileSave();
+      ckdev->slotFileClose();
       was_in_buffer = true;
     }
     
@@ -379,14 +506,14 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
     }
     file.close();
     if(was_in_buffer){
-      ((CKDevelop*)parent())->switchToFile(prj->getProjectDir() + info.header_file);
+      ckdev->switchToFile(prj->getProjectDir() + info.header_file);
     }
   }
 
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->setModified(false);
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->setWidgetAdded(false);
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->setWidgetRemoved(false);
-  ((CKDevelop*)parent())->kdlg_get_edit_widget()->setVarnameChanged(false);
+  kdlg_get_edit_widget()->setModified(false);
+  kdlg_get_edit_widget()->setWidgetAdded(false);
+  kdlg_get_edit_widget()->setWidgetRemoved(false);
+  kdlg_get_edit_widget()->setVarnameChanged(false);
 
   slotFileSave();
 }
@@ -400,17 +527,17 @@ void KDlgEdit::slotBuildGenerate(){
 
 void KDlgEdit::slotViewGrid()
 {
-  KDlgGridDialog dlg((QWidget*)parent());
+  KDlgGridDialog dlg(kdlg_get_edit_widget());
 
   if (dlg.exec())
     {
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->setGridSize(dlg.getGridX(), dlg.getGridY());
-      ((CKDevelop*)parent())->kdlg_get_edit_widget()->mainWidget()->repaintItem();
+      kdlg_get_edit_widget()->setGridSize(dlg.getGridX(), dlg.getGridY());
+      kdlg_get_edit_widget()->mainWidget()->repaintItem();
     }
 }
 
 QString KDlgEdit::getRelativeName(QString abs_filename){
-  CProject* prj = ((CKDevelop*)parent())->getProject();
+  CProject* prj = ckdev->getProject();
   // normalize it a little bit
   abs_filename.replace(QRegExp("///"),"/"); // remove ///
   abs_filename.replace(QRegExp("//"),"/"); // remove //
@@ -420,7 +547,7 @@ QString KDlgEdit::getRelativeName(QString abs_filename){
   
 void KDlgEdit::generateInitialHeaderFile(TDialogFileInfo info,QString baseclass_header){
   CGenerateNewFile generator;
-  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  CProject* prj = ckdev->getProject(); 
   QString header_file = prj->getProjectDir() + info.header_file;
   generator.genHeaderFile(header_file,prj);
 
@@ -479,7 +606,7 @@ void KDlgEdit::generateInitialHeaderFile(TDialogFileInfo info,QString baseclass_
 }
 void KDlgEdit::generateInitialSourceFile(TDialogFileInfo info){
   CGenerateNewFile generator;
-  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  CProject* prj = ckdev->getProject(); 
   QString source_file = prj->getProjectDir() + info.source_file;
   generator.genCPPFile(source_file,prj);
   QFileInfo header_file_info(prj->getProjectDir() + info.header_file);
@@ -609,7 +736,7 @@ void KDlgEdit::generateQLineEdit(KDlgItem_QWidget *wid, QTextStream *stream,QStr
     props->dumpConstruct(stream, "QLineEdit", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpIntPropCall(stream, "setMaxLength", "MaxLength");
@@ -631,7 +758,7 @@ void KDlgEdit::generateQMultiLineEdit(KDlgItem_QWidget *wid, QTextStream *stream
     props->dumpConstruct(stream, "QMultiLineEdit", _parent);
     generateCommon(wid,stream,_parent);
     
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     if (props->propValueAsBool("isTextSelected"))
@@ -725,7 +852,7 @@ void KDlgEdit::generateQRadioButton(KDlgItem_QWidget *wid, QTextStream *stream,Q
     props->dumpConstruct(stream, "QRadioButton", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
     
     props->dumpBoolPropCall(stream, "setChecked", "isChecked", false);
@@ -753,7 +880,7 @@ void KDlgEdit::generateQCheckBox(KDlgItem_QWidget *wid, QTextStream *stream,QStr
     props->dumpConstruct(stream, "QCheckBox", _parent);
     generateCommon(wid,stream,_parent);
   
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
  
     props->dumpBoolPropCall(stream, "setChecked", "isChecked", false);
@@ -775,7 +902,7 @@ void KDlgEdit::generateQCheckBox(KDlgItem_QWidget *wid, QTextStream *stream,QStr
 void KDlgEdit::generateQComboBox(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
   KDlgPropertyBase* props = wid->getProps();
-  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+  bool withi18n = ckdev->getProject()->isKDEProject();
   
   props->dumpConstruct(stream, "QComboBox", _parent);
   generateCommon(wid,stream,_parent);
@@ -815,7 +942,7 @@ void KDlgEdit::generateQLabel(KDlgItem_QWidget *wid, QTextStream *stream,QString
     props->dumpConstruct(stream, "QLabel", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
@@ -828,7 +955,7 @@ void KDlgEdit::generateQLabel(KDlgItem_QWidget *wid, QTextStream *stream,QString
 void KDlgEdit::generateQListBox(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
   KDlgPropertyBase* props = wid->getProps();
-  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+  bool withi18n = ckdev->getProject()->isKDEProject();
   
   props->dumpConstruct(stream, "QListBox", _parent);
   generateCommon(wid,stream,_parent);
@@ -875,7 +1002,7 @@ void KDlgEdit::generateQPushButton(KDlgItem_QWidget *wid, QTextStream *stream,QS
     props->dumpConstruct(stream, "QPushButton", _parent);
     generateCommon(wid,stream,_parent);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpBoolPropCall(stream, "setDefault", "isDefault", false);
@@ -904,7 +1031,7 @@ void KDlgEdit::generateQGroupBox(KDlgItem_QWidget *wid, QTextStream *stream,QStr
     props->dumpConstruct(stream, "QGroupBox", _parent);
     generateCommon(wid,stream,_parent);
     
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setTitle", "Title", withi18n);
     
     *stream << "\n";
@@ -926,7 +1053,7 @@ void KDlgEdit::generateQListView(KDlgItem_QWidget *wid, QTextStream *stream,QStr
     props->dumpBoolPropCall(stream, "setAllColumnsShowFocus", "isAllColumnsShowFocus", false);
     props->dumpBoolPropCall(stream, "setRootIsDecorated", "isRootDecorated", false);
 
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
      //Columns
     int i = 0;
     QString src = props->getPropValue("Columns");
@@ -1000,7 +1127,7 @@ void KDlgEdit::generateKColorButton(KDlgItem_QWidget *wid, QTextStream *stream,Q
     props->dumpConstruct(stream, "KColorButton", _parent);
     generateCommon(wid,stream,_parent);
   
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+    bool withi18n = ckdev->getProject()->isKDEProject();
     props->dumpStringPropCall(stream, "setText", "Text", withi18n);
 
     props->dumpBoolPropCall(stream, "setDefault", "isDefault", false);
@@ -1015,23 +1142,6 @@ void KDlgEdit::generateKColorButton(KDlgItem_QWidget *wid, QTextStream *stream,Q
 
     *stream << "\n";
 }
-
-#if 0
-void KDlgEdit::generateKCombo(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
-{
-    KDlgPropertyBase* props = wid->getProps();
-
-    props->dumpConstruct(stream, "KCombo", _parent);
-    generateCommon(wid,stream,_parent);
-  
-    props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
-
-    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
-    props->dumpStringPropCall(stream, "setText", "Text", withi18n);
-
-    *stream << "\n";
-}
-#endif
 
 void KDlgEdit::generateKDatePicker(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
@@ -1158,7 +1268,7 @@ void KDlgEdit::generateCommon(KDlgItem_QWidget *wid, QTextStream *stream,QString
 	}
 
     if (!props->getPropValue("Quickhelp").isEmpty()
-	&& ((CKDevelop*)parent())->getProject()->isKDEProject())
+	&& ckdev->getProject()->isKDEProject())
 	{
 	    if(local_includes.contains("#include <kquickhelp.h>") == 0)
 		local_includes.append("#include <kquickhelp.h>");
@@ -1167,7 +1277,7 @@ void KDlgEdit::generateCommon(KDlgItem_QWidget *wid, QTextStream *stream,QString
 	}
     
     if(props->getPropValue("ToolTip") != ""){
-      if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+      if(ckdev->getProject()->isKDEProject()){
 	if(local_includes.contains("#include <qtooltip.h>") == 0)
 	  local_includes.append("#include <qtooltip.h>");
 	*stream << "  QToolTip::add("+ props->getPropValue("VarName") +
@@ -1271,7 +1381,7 @@ class PreviewDlg : public QDialog
 
 void KDlgEdit::slotViewPreview()
 {
-  if (!((CKDevelop*)parent())->kdlg_get_edit_widget())
+  if (!kdlg_get_edit_widget())
     return;
 
 
@@ -1279,9 +1389,9 @@ void KDlgEdit::slotViewPreview()
 
   QString pid_str;
   pid_str.setNum(getpid());
-  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("/tmp/"+ pid_str+ "previewdlg.kdevdlg"))
+  if (!kdlg_get_edit_widget()->saveToFile("/tmp/"+ pid_str+ "previewdlg.kdevdlg"))
     {
-      QMessageBox::warning(((CKDevelop*)parent())->kdlg_get_edit_widget(),i18n("Dialog editor (WYSIWYG Preview)"),
+      QMessageBox::warning(kdlg_get_edit_widget(),i18n("Dialog editor (WYSIWYG Preview)"),
                            i18n("Error saving temporary dialog file."));
       return;
     }
@@ -1296,13 +1406,32 @@ void KDlgEdit::slotDeleteDialog(QString file){
   }
   slotFileCloseForceSave();
   
-  ((CKDevelop*)parent())->delFileFromProject(file); // relative filename
+  ckdev->delFileFromProject(file); // relative filename
 
-  CProject* prj = ((CKDevelop*)parent())->getProject(); 
+  CProject* prj = ckdev->getProject(); 
   file = prj->getProjectDir() + file;
   KShellProcess* proc = new KShellProcess;
   QString command = "rm -f " + file;
   //  cerr << "\n\n" << command << "\n\n";
   *proc << command;
   proc->start();
+}
+
+
+void KDlgEdit::projectClosed()
+{
+    slotFileSave();
+    kdlg_dialogs_view->clear();
+    kdlg_edit_widget->hide();
+    kdlg_prop_widget->hide();
+    kdlg_tabctl->setTabEnabled("widgets_view",false);
+    kdlg_tabctl->setTabEnabled("dialogs_view",false);
+    kdlg_tabctl->setTabEnabled("items_view",false);
+    kdlg_tabctl->setCurrentTab(1); // dialogs
+}
+
+
+void KDlgEdit::projectOpened(CProject *prj)
+{
+    kdlg_dialogs_view->refresh(prj);
 }

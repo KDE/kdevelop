@@ -24,6 +24,7 @@
 #include <kiconloader.h>
 #include <kcursor.h>
 #include "../ckdevelop.h"
+#include "kdlgedit.h"
 #include "kdlgitembase.h"
 #include "kdlgpropertybase.h"
 #include "kdlgeditwidget.h"
@@ -39,8 +40,6 @@ KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool i
   childs = 0;
   isMainwidget = ismainwidget;
   item = 0;
-//  item = new QWidget(parent);
-//  item->setMouseTracking(true);
 
   props = new KDlgPropertyBase();
   repaintItem();
@@ -98,7 +97,6 @@ void KDlgItem_Base::deleteMyself()
   childs->clear();
 }
 
-
 int KDlgItem_Base::Prop2Bool(QString name)
 {
   if (props->getProp(name))
@@ -106,7 +104,6 @@ int KDlgItem_Base::Prop2Bool(QString name)
   else
     return -1;
 }
-
 
 int KDlgItem_Base::Prop2Int(QString name, int defaultval)
 {
@@ -125,7 +122,6 @@ QString KDlgItem_Base::Prop2Str(QString name)
     return QString();
 }
 
-
 void KDlgItem_Base::repaintItem(QWidget *it)
 {
   QWidget *itm = it ? it : item;
@@ -136,15 +132,6 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   int b=0;
   int x=0,y=0;
   QString str;
-
-  #define Prop2Bool(name) (KDlgItemsIsValueTrue( props->getProp(name)->value ))
-  #define Prop2Str(name) (props->getProp(name)->value)
-  #define setB2Prop(name) b = Prop2Bool(name);
-  #define setStr2Prop(name) str = Prop2Str(name);
-  #define ifBValid(name) setB2Prop(name); if ((b==0) || (b==1))
-  #define ifBTrue(name) setB2Prop(name); if (b==1)
-  #define ifBFalse(name) setB2Prop(name); if (b==0)
-  #define strNotEmpty(str) (str.length()!=0)
 
   itm->setMinimumWidth(props->getIntFromProp("MinWidth",0));
   itm->setMaximumWidth(props->getIntFromProp("MaxWidth",32767));
@@ -179,7 +166,7 @@ void KDlgItem_Base::repaintItem(QWidget *it)
     itm->setBackgroundMode(QWidget::PaletteBackground);
 */
 
-  ifBTrue("IsFixedSize")
+  if (KDlgItemsIsValueTrue(props->getProp("IsFixedSize")->value) == 1)
     itm->setFixedSize( props->getIntFromProp("Width",itm->width()),
                        props->getIntFromProp("Height",itm->height()) );
 
@@ -195,28 +182,25 @@ void KDlgItem_Base::repaintItem(QWidget *it)
                    props->getIntFromProp("Width",itm->width()),
                    props->getIntFromProp("Height",itm->height()));
 
-  ifBTrue("IsHidden")
+  if (KDlgItemsIsValueTrue(props->getProp("IsHidden")->value) == 1)
     itm->hide();
   else
     itm->show();
 
-//  ifBValid("IsEnabled")
-//    itm->setEnabled(b);
-
-  setStr2Prop("BgPixmap");
-  if (strNotEmpty(str))
+  str = props->getProp("BgPixmap")->value;
+  if (!str.isEmpty())
     itm->setBackgroundPixmap( QPixmap( str ) );
   else
     itm->setBackgroundPixmap( QPixmap() );
 
-  setStr2Prop("MaskBitmap");
-  if (strNotEmpty(str))
+  str = props->getProp("MaskBitmap")->value;
+  if (!str.isEmpty())
     itm->setMask( QBitmap( str ) );
   else
     itm->setMask( QBitmap() );
 
-  setStr2Prop("Font");
-  if (strNotEmpty(str))
+  str = props->getProp("Font")->value;
+  if (!str.isEmpty())
     {
     itm->setFont(KDlgItemsGetFont(str));
 //    itm->setFont(KDlgItemsGetFont("\"helvetica\" \"20\" \"75\" \"TRUE\""));
@@ -261,12 +245,153 @@ void KDlgItem_Base::execContextMenu(bool ismain)
 }
 
 
+const int CornerSize = 8;
+
+KDlgItem_Base::Corner KDlgItem_Base::cornerForPos(QPoint pos)
+{
+    int w = item->width();
+    int h = item->height();
+    int x = pos.x();
+    int y = pos.y();
+    
+    if ( (x>=w-CornerSize) && (y>=h-CornerSize) && (x<=w) && (y<=h) )
+        return BottomRight;
+    if ( (x>=0) && (y>=0) && (x<=CornerSize) && (y<=CornerSize) )
+        return TopLeft;
+    if ( (x>=w-CornerSize) && (y>=0) && (x<=w) && (y<=CornerSize) )
+        return TopRight;
+    if ( (x>=0) && (y>=h-CornerSize) && (x<=CornerSize) && (y<=h) )
+        return BottomLeft;
+    if ( (x>=w/2-CornerSize/2) && (y>=0) && (x<=w/2+CornerSize/2) && (y<=CornerSize) )
+        return MiddleTop;
+    if ( (x>=w/2-CornerSize/2) && (y>=h-CornerSize) && (x<=w/2+CornerSize/2) && (y<=h) )
+        return MiddleBottom;
+    if ( (x>=0) && (y>=h/2-CornerSize/2) && (x<=CornerSize) && (y<=h/2+CornerSize/2) )
+        return MiddleLeft;
+    if ( (x>=w-CornerSize) && (y>=h/2-CornerSize/2) && (x<=w) && (y<=h/2+CornerSize/2) )
+        return MiddleRight;
+    
+    return NoCorner;
+}
+
+
+bool KDlgItem_Base::getResizeCoords(Corner c, int diffx, int diffy,
+                                    int *x, int *y, int *w, int *h)
+{
+    bool noMainWidget = false;
+    
+    switch (c)
+        {
+        case BottomRight:
+            *w += diffx;
+            *h += diffy;
+            break;
+        case MiddleRight:
+            *w += diffx;
+            break;
+        case MiddleBottom:
+            *h += diffy;
+        break;
+        case TopLeft:
+            noMainWidget = true;
+            if (*x + diffx < *x + *w-1) *x += diffx; else *x += *w-1;
+            if (*y + diffy < *y + *h-1) *y += diffy; else *y += *h-1;
+            *w -= diffx;
+            *h -= diffy;
+            break;
+        case TopRight:
+            noMainWidget = true;
+            if (*y+diffy < *y + *h-1) *y += diffy; else *y += *h-1;
+            *w += diffx;
+            *h -= diffy;
+            break;
+        case MiddleLeft:
+            noMainWidget = true;
+            if (*x+diffx < *x + *w-1) *x += diffx; else *x += *w-1;
+            *w -= diffx;
+            break;
+        case MiddleTop:
+            noMainWidget = true;
+            if (*y+diffy < *y + *h-1) *y += diffy; else *y += *h-1;
+            *h -= diffy;
+            break;
+        case BottomLeft:
+            noMainWidget = true;
+            if (*x + diffx < *x + *w-1) *x += diffx; else *x += *w-1;
+            *w -= diffx;
+            *h += diffy;
+            break;
+        default:
+            noMainWidget = true;
+            *x += diffx;
+            *y += diffy;
+    }
+    return noMainWidget;
+}
+
+
+void KDlgItem_Base::paintCorners(QPainter *p)
+{
+    int w = item->width();
+    int h = item->height();
+
+    QBrush b(Qt::Dense4Pattern);
+    
+    p->drawWinFocusRect(0,0,w,h);
+    p->drawWinFocusRect(1,1,w-2,h-2);
+    p->fillRect(0, 0, CornerSize, CornerSize, b);
+    p->fillRect(w-CornerSize, 0, CornerSize, CornerSize, b);
+    p->fillRect(0, h-CornerSize, CornerSize, CornerSize, b);
+    p->fillRect(w-CornerSize, h-CornerSize, CornerSize, CornerSize, b);
+    
+    p->fillRect(w/2-CornerSize/2, 0, CornerSize, CornerSize, b);
+    p->fillRect(w/2-CornerSize/2, h-CornerSize, CornerSize, CornerSize, b);
+    
+    p->fillRect(0, h/2-CornerSize/2, CornerSize, CornerSize, b);
+    p->fillRect(w-CornerSize, h/2-CornerSize/2, CornerSize, CornerSize, b);
+}
+
+
+void KDlgItem_Base::setMouseCursorToEdge(Corner c)
+{
+    QCursor cursor;
+    switch (c)
+        {
+        case BottomRight:
+            cursor = KCursor::sizeFDiagCursor();
+            break;
+        case TopLeft:
+            cursor = KCursor::sizeFDiagCursor();
+            break;
+        case TopRight:
+            cursor = KCursor::sizeBDiagCursor();
+            break;
+        case BottomLeft:
+            cursor = KCursor::sizeBDiagCursor();
+            break;
+        case MiddleTop:
+            cursor = KCursor::sizeVerCursor();
+            break;
+        case MiddleBottom:
+            cursor = KCursor::sizeVerCursor();
+            break;
+        case MiddleLeft:
+            cursor = KCursor::sizeHorCursor();
+            break;
+        case MiddleRight:
+            cursor = KCursor::sizeHorCursor();
+            break;
+        default:
+            cursor = KCursor::arrowCursor();
+        }
+    item->setCursor(cursor);
+}
+
+
 void KDlgItem_Base::moveRulers(QWidget *widget, QMouseEvent *e )
 {
     int gx = getEditWidget()->gridSizeX();
     int gy = getEditWidget()->gridSizeY();
-    //    int x = e->pos().x()+widget->recPosX(0);
-    //    int y = e->pos().y()+widget->recPosY(0);
     QPoint relpos = e->pos();
     relpos += widget->mapToGlobal(QPoint(0,0));
     relpos -= getEditWidget()->mapToGlobal(QPoint(0,0));
@@ -290,7 +415,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
         {
             QWidget *widget = (QWidget *)o;
             QPaintEvent *pe = (QPaintEvent *)e;
-            cout << "PaintEvent on " << widget->className() << endl;
+            //            cout << "PaintEvent on " << widget->className() << endl;
 
             widget->removeEventFilter(this);
             qApp->sendEvent(widget, e);
@@ -299,7 +424,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
                 {
                     QPainter p(widget);
                     p.setClipRect(pe->rect());
-                    KDlgItemsPaintRects(&p, widget->width(), widget->height());
+                    paintCorners(&p);
                 }
             return true;
         }
@@ -307,7 +432,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
         {
             QWidget *widget = (QWidget *)o;
             QMouseEvent *mpe = (QMouseEvent *)e;
-            cout << "MousePressEvent on " << widget->className() << endl;
+            //            cout << "MousePressEvent on " << widget->className() << endl;
             
             getEditWidget()->selectWidget(this);
             
@@ -318,8 +443,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
                     startPnt = mpe->globalPos();
                     lastPnt = mpe->globalPos();
                     origRect = widget->geometry();
-                    pressedEdge = KDlgItemsGetClickedRect(mpe->pos().x(), mpe->pos().y(),
-                                                          widget->width(), widget->height());
+                    pressedEdge = cornerForPos(mpe->pos());
                 }
             
             if (mpe->button() == RightButton)
@@ -331,9 +455,9 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
     if (e->type() == QEvent::MouseButtonRelease)
         {
             QWidget *widget = (QWidget *)o;
-            cout << "MouseReleaseEvent on " << widget->className() << endl;
+            //            cout << "MouseReleaseEvent on " << widget->className() << endl;
             isMBPressed = false;
-            KDlgPropWidget *pw = getEditWidget()->getCKDevel()->kdlg_get_prop_widget();
+            KDlgPropWidget *pw = getEditWidget()->getDlgEdit()->kdlg_get_prop_widget();
             if (pw)
                 pw->refillList(this);
             return true;
@@ -342,21 +466,16 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
         {
             QWidget *widget = (QWidget *)o;
             QMouseEvent *mme = (QMouseEvent *)e;
-            cout << "MouseMoveEvent on " << widget->className() << endl;
+            //            cout << "MouseMoveEvent on " << widget->className() << endl;
             
             moveRulers(widget, mme);
+            Corner c = NoCorner;
             if (isItemActive)
-                {
-                    int pE;
-                    if (isMBPressed) 
-                        pE = pressedEdge; 
-                    else 
-                        pE = KDlgItemsGetClickedRect(mme->pos().x(), mme->pos().y(), 
-                                                     widget->width(), widget->height());
-                    KDlgItemsSetMouseCursor(widget, pE);
-                }
-            else
-                widget->setCursor(KCursor::arrowCursor());
+                if (isMBPressed)
+                    c = pressedEdge;
+                else
+                    c = cornerForPos(mme->pos());
+            setMouseCursorToEdge(c);
             
             if ((!isMBPressed) || (mme->pos() == lastPnt)) return true;
             int gx = getEditWidget()->gridSizeX();
@@ -370,7 +489,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
             diffx = ((int)(diffx/gx))*gx;
             diffy = ((int)(diffy/gy))*gy;
             bool noMainWidget;
-            noMainWidget = KDlgItemsGetResizeCoords(pressedEdge, x, y, w, h, diffx, diffy);
+            noMainWidget = getResizeCoords(pressedEdge, diffx, diffy, &x, &y, &w, &h);
             
             if ((x!=origRect.x()) || (y!=origRect.y()))
                 {
@@ -415,7 +534,7 @@ bool KDlgItem_Base::eventFilter( QObject *o, QEvent *e)
                             getEditWidget()->verticalRuler()->setRange(0,h);
                             getEditWidget()->horizontalRuler()->setRange(0,w);
                         }
-                    AdvListView *lv = getEditWidget()->getCKDevel()->kdlg_get_prop_widget()->getListView();
+                    AdvListView *lv = getEditWidget()->getDlgEdit()->kdlg_get_prop_widget()->getListView();
                     if (lv)
                         lv->setGeometryEntrys(x,y,w,h);
                 }

@@ -51,17 +51,6 @@
 #define RULER_WIDTH  18                    // width of the vertical ruler
 #define RULER_HEIGHT  18                   // height of the horizontal ruler
 
-// defines the point the user has clicked on the widget in order to move/resize it
-#define RESIZE_MOVE            0
-#define RESIZE_TOP_LEFT        1
-#define RESIZE_TOP_RIGHT       2
-#define RESIZE_BOTTOM_LEFT     3
-#define RESIZE_BOTTOM_RIGHT    4
-#define RESIZE_MIDDLE_TOP      5
-#define RESIZE_MIDDLE_BOTTOM   6
-#define RESIZE_MIDDLE_LEFT     7
-#define RESIZE_MIDDLE_RIGHT    8
-
 // defines how many groups (i.e. general or appearance) are allowed in the property view
 #define MAX_MAIN_ENTRYS 16
 

@@ -24,7 +24,7 @@
 #include <qlistview.h>
 
 class KDlgItem_QWidget;
-class CKDevelop;
+class KDlgEdit;
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>
@@ -37,8 +37,6 @@ class KDlgItems : public QWidget  {
 
     class MyTreeListItem : public QListViewItem
     {
-      private:
-      Q_OBJECT
       public:
         MyTreeListItem (QListView* parent, KDlgItem_QWidget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
         MyTreeListItem (MyTreeListItem* parent, KDlgItem_QWidget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
@@ -51,8 +49,9 @@ class KDlgItems : public QWidget  {
     QListView *treelist;
     QPixmap folder_pix;
     QPixmap entry_pix;
+    KDlgEdit *dlgedit;
   public:
-    KDlgItems(CKDevelop *CKPar, QWidget *parent=0, const char *name=0);
+    KDlgItems(KDlgEdit *dlged, QWidget *parent=0, const char *name=0);
     ~KDlgItems();
 
     /**
@@ -70,7 +69,7 @@ class KDlgItems : public QWidget  {
     */
     void refreshList();
 
-    CKDevelop *pCKDevel;
+    //    CKDevelop *pCKDevel;
   public slots:
     void itemSelected();
     void rightButtonPressed ( QListViewItem *, const QPoint &, int );

@@ -28,7 +28,7 @@
 
 class QToolButton;
 class QLabel;
-class CKDevelop;
+class KDlgEdit;
 
 #define MAX_BUTTONS 64
 
@@ -55,14 +55,15 @@ class KDlgWidgets : public QWidget  {
            void resizeEvent ( QResizeEvent * );
        };
    public:
-     KDlgWidgets(CKDevelop *parCKD, QWidget *parent=0, const char *name=0);
+     KDlgWidgets(KDlgEdit *dlged, QWidget *parent=0, const char *name=0);
      ~KDlgWidgets();
 
    protected:
      QScrollView *scrview;
 
      void resizeEvent ( QResizeEvent * );
-     CKDevelop *pCKDevel;
+     KDlgEdit *dlgedit;
+    //     CKDevelop *pCKDevel;
 
    public slots:
      void clicked_QWidget();

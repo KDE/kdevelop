@@ -1,3 +1,10 @@
+1999-10-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Further kdlgedit restructuring: Use KDlgEdit
+	  (which inherits Component) as relay between 
+	  CKDevelop and dialog editor.
+	* Turned a bunch of global functions into members
+	  and removed many macros - we are using C++ !!!
+
 1999-10-20 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* committed patch by G. Jungman (beginning of
 	  namespace support) - Thanks

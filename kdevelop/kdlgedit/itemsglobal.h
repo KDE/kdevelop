@@ -30,38 +30,11 @@ class QColor;
 
 QString KDlgLimitLines(QString src, unsigned maxlen = 40);
 
-/**
- * Paints the border and the rectangles of a selected item.
-*/
-void KDlgItemsPaintRects(QPainter *p, int w, int h);
-
 QFont KDlgItemsGetFont(QString desc);
 
 QString getLineOutOfString(QString src, int ln, QString sep = "\n");
 
 QColor Str2Color(QString desc);
-
-/**
- * Returns the constant of the clicked point (see RESIZE_* constants in defines.h)
- * @param winw width of the item
- * @param winh height of the item
- * @param x clicked x position in the item
- * @param y clicked y position in the item
-*/
-int  KDlgItemsGetClickedRect(int x, int y, int winw, int winh);
-
-/**
- * Returns the new coordinates of the item.
- * @param pressedEdge RESIZE_* constant
- * @param diffx x difference between starting and recent point of the mouse cursor.
- * @param diffy y difference between starting and recent point of the mouse cursor.
-*/
-bool KDlgItemsGetResizeCoords(int pressedEdge, int &x, int &y, int &w, int &h, int diffx, int diffy);
-
-/**
- * Sets the right mousecursor depending on what edge it is above.
-*/
-void KDlgItemsSetMouseCursor(QWidget* caller, int pressedEdge);
 
 /**
  * Returns 1 if val == "TRUE", "1" or "YES"
@@ -96,7 +69,7 @@ class KDlgItemDatabase
     /**
      * removes <i>item</i> from the database
     */
-    void removeItem(KDlgItem_Base *item, bool deleteIt=false);
+    void removeItem(KDlgItem_Base *item);
 
     /**
      * removes all items from the database

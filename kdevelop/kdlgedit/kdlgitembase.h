@@ -124,17 +124,24 @@ public:
     bool isMBPressed;
     QPoint startPnt, lastPnt;
     QRect origRect;
-    int pressedEdge;
     void moveRulers(QWidget *widget, QMouseEvent *e);
+    void paintCorners(QPainter *p);
 
 protected:
 
+    enum Corner { NoCorner, TopLeft, TopRight, BottomLeft, BottomRight,
+                  MiddleTop, MiddleBottom, MiddleLeft, MiddleRight };
+                  
     virtual bool eventFilter( QObject *o, QEvent *e);
     int Prop2Bool(QString name);
     int Prop2Int(QString name, int defaultval=0);
     QString Prop2Str(QString name);
 
-
+    Corner cornerForPos(QPoint pos);
+    bool getResizeCoords(Corner c, int diffx, int diffy, int *x, int *y, int *w, int *h);
+    void setMouseCursorToEdge(Corner c);
+    
+    Corner pressedEdge;
     KDlgItemDatabase *childs;
     QWidget *item;
     KDlgPropertyBase *props;

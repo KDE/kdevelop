@@ -24,11 +24,11 @@
 #include "ckdevelop.h"
 
 #include "./kdlgedit/kdlgedit.h"
-#include "./kdlgedit/kdlgeditwidget.h"
-#include "./kdlgedit/kdlgpropwidget.h"
-#include "./kdlgedit/kdlgwidgets.h"
-#include "./kdlgedit/kdlgdialogs.h"
-#include "./kdlgedit/kdlgitems.h"
+//#include "./kdlgedit/kdlgeditwidget.h"
+//#include "./kdlgedit/kdlgpropwidget.h"
+//#include "./kdlgedit/kdlgwidgets.h"
+//#include "./kdlgedit/kdlgdialogs.h"
+//#include "./kdlgedit/kdlgitems.h"
 #include "./kwrite/kwview.h"
 #include "./kwrite/kguicommand.h"
 
@@ -40,43 +40,15 @@ void CKDevelop::initKDlg(){
 #warning kdlg_top_panner was a KNewPanner
   kdlg_top_panner = new QSplitter(Qt::Horizontal, top_panner, "kdlg_top_panner");
 
-  kdlg_tabctl= new CTabCtl(kdlg_top_panner);
-  kdlg_tabctl->setFocusPolicy(QWidget::ClickFocus);
+  kdlgedit = new KDlgEdit(this, kdlg_top_panner, "kdlgedit");
+  components.append(kdlgedit);
 
-  kdlg_widgets_view= new KDlgWidgets(this,kdlg_tabctl,"widgets_view");
-  kdlg_dialogs_view = new KDlgDialogs(kdlg_tabctl,"dialogs_view");
-  kdlg_items_view = new KDlgItems(this,kdlg_tabctl,"items_view");
-  kdlgedit=new KDlgEdit(this,"dialogeditor");
-
-  kdlg_tabctl->addTab(kdlg_widgets_view,i18n("Widgets"));
-  kdlg_tabctl->addTab(kdlg_dialogs_view,i18n("Dialogs"));
-  kdlg_tabctl->addTab(kdlg_items_view,i18n("Items"));
-
-  kdlg_prop_widget = 0;
-  kdlg_edit_widget = new KDlgEditWidget(this, kdlg_top_panner,"KDlg_edit_widget"); // the editing view of kdlg
-  kdlg_prop_widget = new KDlgPropWidget(this, kdlg_top_panner,"KDlg_properties_widget"); // the properties window of kdlg
-
-#warning QSplitter doesnt have labels. Simply delete this stuff?
-#if 0
-  kdlg_top_panner->showLabels(true);
-  kdlg_top_panner->setLabels(i18n("Widget Editor"),i18n("Widget Properties"));
-#endif
-
-//  kdlg_edit_widget->hide();
-//  kdlg_prop_widget->hide();
-  kdlg_tabctl->setTabEnabled("widgets_view",false);
-  kdlg_tabctl->setTabEnabled("items_view",false);
-  kdlg_tabctl->setTabEnabled("dialogs_view",false);
-  kdlg_tabctl->setCurrentTab(1);// dialogs
-  
   initKDlgMenuBar();
 //  initKDlgKeyAccel();
   initKDlgToolBar();
   
   initKDlgStatusBar();
   kdlg_top_panner->setSizes(kdlg_sizes);
-
-  connect(kdlg_dialogs_view,SIGNAL(newDialog()),SLOT(slotFileNew()));
 }
 
 void CKDevelop::initKDlgMenuBar(){
