@@ -1,3 +1,18 @@
+kdevelop (4:2.1.5-0woody2) unstable; urgency=low
+
+  * fixed the order of reading the doxygen books, read
+    all of the *-apidocs when found.
+
+ -- Ralf Nolden (KDE) <nolden@kde.org>  Fri, 17 Jan 2003 14:19:03 +0100
+
+kdevelop (4:2.1.5-0woody1) unstable; urgency=low
+
+  * new revision upstream
+  * fixes problems with doxygen-generated apidocs in KDE 3
+  * used new admin.tar.gz for KDE 3.1 development
+
+ -- Ralf Nolden (KDE) <nolden@kde.org>  Tue, 14 Jan 2003 01:03:23 +0100
+
 kdevelop (4:2.1.4-0woody4) unstable; urgency=low
 
   * updated admin directory for templates. This makes new apps require automake1.6 /automake1.7,

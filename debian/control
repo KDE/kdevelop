@@ -7,7 +7,7 @@ Standards-Version: 3.5.2
 
 Package: kdevelop
 Architecture: any
-Depends: ${shlibs:Depends}, autoconf, automake | automake1.5 | automake1.6 | automake1.7, kdevelop-data
+Depends: ${shlibs:Depends}, autoconf, automake1.6 | automake1.7, kdevelop-data
 Recommends: make, kdevelop-doc
 Suggests: libqt3-dev, qt3-doc, kdbg, kdelibs4-dev, kdebase, libarts1-dev, kdelibs4-doc, htdig, doxygen | kdoc, gettext, sgmltools-lite, linuxdoc-tools, gettext, a2ps, enscript, gv, qt-designer | kde-designer | qt3-tools, ark, kpaint, kbabel, kiconedit, gdb, kdesdk-scripts, graphviz, c-cpp-reference, ebook-dev-kde20, dh-make
 Description: An IDE for Unix/X11

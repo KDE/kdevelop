@@ -881,8 +881,13 @@ void CKDevSetupDlg::slotOkClicked(){
   if(text.right(1) != "/" ){
     text = text + "/";
   }
-  QString kde_testfile=text+"kdecore/index.html"; // test if the path really is the qt-doc path
+  #if KDE_QTVER >= 3
+  QString kde_testfile = text + "kdecore/kdecore.tag";
+  if( !QFile::exists(kde_testfile) && !QFile::exists(kde_testfile+".gz") )  
+  #else
+  QString kde_testfile=text+"kdecore/index.html";
   if(!QFileInfo(kde_testfile).exists())
+  #endif
   {
     answer=KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to the\n"
                                                 "KDE-library documentation. Do you really want to save\n"
