@@ -51,6 +51,8 @@ using namespace std;
    (node)->setStartPosition( line, col ); \
    (lex)->tokenAt( end!=start ? end-1 : end ).getEndPosition( &line, &col ); \
    (node)->setEndPosition( line, col ); \
+   if( (node)->nodeType() == NodeType_Generic )  \
+       (node)->setText( toString((start),(end)) ); \
 }
 
 struct ParserPrivateData
@@ -66,7 +68,7 @@ Parser::Parser( Driver* drv, Lexer* lexer )
 {
     d = new ParserPrivateData();
     m_fileName = "<stdin>";
-    
+
     m_maxProblems = 5;
     m_problems.clear();
 }
@@ -383,34 +385,35 @@ bool Parser::parseDefinition( DeclarationAST::Node& node )
 	
 	    return parseDeclaration( node );
 	}
-	
+
     } // end switch
 }
 
 bool Parser::parseLinkageSpecification( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseLinkageSpecification()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != Token_extern ){
 	return false;
     }
     lex->nextToken();
-    
-    QString type;
-    if( lex->lookAhead(0) == Token_string_literal ){
-	type = lex->lookAhead( 0 ).toString();
-	lex->nextToken();
-    }
-    
+
     LinkageSpecificationAST::Node ast = CreateNode<LinkageSpecificationAST>();
-    
-    ast->setExternType( type );
-    
+
+    int startExternType = lex->index();
+    if( lex->lookAhead(0) == Token_string_literal ){
+	lex->nextToken();
+        AST::Node externType = CreateNode<AST>();
+        UPDATE_POS( externType, startExternType, lex->index() );
+
+        ast->setExternType( externType );
+    }
+
     if( lex->lookAhead(0) == '{' ){
         LinkageBodyAST::Node linkageBody;
-	parseLinkageBody( linkageBody );	
+	parseLinkageBody( linkageBody );
 	ast->setLinkageBody( linkageBody );
     } else {
         DeclarationAST::Node decl;
@@ -474,25 +477,26 @@ bool Parser::parseNamespace( DeclarationAST::Node& node )
     if( lex->lookAhead(0) != Token_namespace ){
 	return false;
     }
-    lex->nextToken();    
+    lex->nextToken();
 
-    QString namespaceName;        
+    int startNamespaceName = lex->index();
     if( lex->lookAhead(0) == Token_identifier ){
-	namespaceName = lex->lookAhead( 0 ).toString();
 	lex->nextToken();
     }
+    AST::Node namespaceName = CreateNode<AST>();
+    UPDATE_POS( namespaceName, startNamespaceName, lex->index() );
 
     if ( lex->lookAhead(0) == '=' ) {
 	// namespace alias
 	lex->nextToken();
-		
+
 	NameAST::Node name;
-	if( parseName(name) ){	    
-	    ADVANCE( ';', ";" );	    
-	
+	if( parseName(name) ){
+	    ADVANCE( ';', ";" );
+
 	    NamespaceAliasAST::Node ast = CreateNode<NamespaceAliasAST>();
 	    ast->setNamespaceName( namespaceName );
-	    ast->setAliasName( name );    
+	    ast->setAliasName( name );
 	    UPDATE_POS( ast, start, lex->index() );
 	    node = ast;
 	    return true;
@@ -507,23 +511,23 @@ bool Parser::parseNamespace( DeclarationAST::Node& node )
 
     NamespaceAST::Node ast = CreateNode<NamespaceAST>();
     ast->setNamespaceName( namespaceName );
-        
+
     LinkageBodyAST::Node linkageBody;
     parseLinkageBody( linkageBody );
-    
+
     ast->setLinkageBody( linkageBody );
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
-    
+
     return true;
 }
 
 bool Parser::parseUsing( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseUsing()" << endl;
-    
+
     int start = lex->index();
-    
+
     if( lex->lookAhead(0) != Token_using ){
 	return false;
     }
@@ -536,21 +540,23 @@ bool Parser::parseUsing( DeclarationAST::Node& node )
 	UPDATE_POS( node, start, lex->index() );
 	return true;
     }
-    
-    bool isTypename = false;
+
+    UsingAST::Node ast = CreateNode<UsingAST>();
+
+    int startTypeName = lex->index();
     if( lex->lookAhead(0) == Token_typename ){
-        isTypename = true;
 	lex->nextToken();
+	AST::Node tn = CreateNode<AST>();
+	UPDATE_POS( tn, startTypeName, lex->index() );
+	ast->setTypeName( tn );
     }
-    
+
     NameAST::Node name;
     if( !parseName(name) )
 	return false;
-	
-    UsingAST::Node ast = CreateNode<UsingAST>();
-    ast->setTypename( true );
+
     ast->setName( name );
-        
+
     ADVANCE( ';', ";" );
     
     UPDATE_POS( ast, start, lex->index() );
@@ -710,39 +716,43 @@ bool Parser::parseAsmDefinition( DeclarationAST::Node& /*node*/ )
 bool Parser::parseTemplateDeclaration( DeclarationAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTemplateDeclaration()" << endl;
-    
+
     int start = lex->index();
-    
-    bool _export = false;
+
+    AST::Node _export;
+
+    int startExport = lex->index();
     if( lex->lookAhead(0) == Token_export ){
-	_export = true;
 	lex->nextToken();
+	AST::Node n = CreateNode<AST>();
+	UPDATE_POS( n, startExport, lex->index() );
+	_export = n;
     }
-    
+
     if( lex->lookAhead(0) != Token_template ){
-	if( _export ){
+	if( _export.get() ){
 	    ADVANCE( Token_template, "template" );
 	} else
 	    return false;
     }
-    
+
     ADVANCE( Token_template, "template" );
 
     AST::Node params;
     if( lex->lookAhead(0) == '<' ){
 	lex->nextToken();
 	parseTemplateParameterList( params );
-	
+
 	ADVANCE( '>', ">" );
     }
-    
+
     DeclarationAST::Node def;
     if( !parseDefinition(def) ){
 	reportError( i18n("expected a declaration") );
     }
-    
+
     TemplateDeclarationAST::Node ast = CreateNode<TemplateDeclarationAST>();
-    ast->setExport( _export );
+    ast->setExported( _export );
     ast->setTemplateParameterList( params );
     ast->setDeclaration( def );
     UPDATE_POS( ast, start, lex->index() );

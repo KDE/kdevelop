@@ -55,12 +55,12 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
     ns->setDefinedInFile( m_fileName );
     ns->setDeclarationEndsOnLine( endLine );
 
-    if( ast->namespaceName().isEmpty() ){
+    if( !ast->namespaceName() ){
 	QFileInfo fileInfo( m_fileName );
 	QString shortFileName = fileInfo.baseName();
 	ns->setName( QString::fromLatin1("(") + shortFileName + QString::fromLatin1(")") );
     } else {
-	ns->setName( ast->namespaceName() );
+	ns->setName( ast->namespaceName()->text() );
     }
 
     ParsedScopeContainer* ns2 = m_currentScope->getScopeByName( ns->name() );

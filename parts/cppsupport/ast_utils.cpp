@@ -155,10 +155,12 @@ void scopeOfNode( AST* ast, QStringList& scope )
 	break;
 
     case NodeType_Namespace:
-	s = ((NamespaceAST*)ast)->namespaceName();
-	s = s.isEmpty() ? QString::fromLatin1("<unnamed>") : s;
+    {
+        AST* namespaceName = ((NamespaceAST*)ast)->namespaceName();
+	s = namespaceName ? namespaceName->text() : QString::fromLatin1("<unnamed>");
 	scope.push_back( s );
-	break;
+    }
+    break;
 
     case NodeType_FunctionDefinition:
         if( ((FunctionDefinitionAST*)ast)->nestedName() ){

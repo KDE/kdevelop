@@ -94,7 +94,7 @@ public:
 
     virtual QString text() const { return m_text; }
     virtual void setText( const QString& text ) { m_text = text; }
-    
+
     virtual AST* parent() { return m_parent; }
     virtual void setParent( AST* parent );
 
@@ -129,7 +129,6 @@ public:
 
 public:
     GroupAST();
-    virtual ~GroupAST();
 
     QPtrList<AST> nodes() { return m_nodes; }
     void addNode( AST::Node& node );
@@ -151,7 +150,6 @@ public:
 
 public:
     TemplateArgumentListAST();
-    virtual ~TemplateArgumentListAST();
 
     void addArgument( AST::Node& arg );
     QPtrList<AST> arguments() { return m_arguments; }
@@ -172,18 +170,17 @@ public:
 
 public:
     ClassOrNamespaceNameAST();
-    virtual ~ClassOrNamespaceNameAST();
-    
-    AST* name();
+
+    AST* name() { return m_name.get(); }
     void setName( AST::Node& name );
-    
-    TemplateArgumentListAST* templateArgumentList();
+
+    TemplateArgumentListAST* templateArgumentList() { return m_templateArgumentList.get(); }
     void setTemplateArgumentList( TemplateArgumentListAST::Node& templateArgumentList );
-                
+
 private:
     AST::Node m_name;
     TemplateArgumentListAST::Node m_templateArgumentList;
-    
+
 private:
     ClassOrNamespaceNameAST( const ClassOrNamespaceNameAST& source );
     void operator = ( const ClassOrNamespaceNameAST& source );
@@ -197,8 +194,7 @@ public:
 
 public:
     NestedNameSpecifierAST();
-    virtual ~NestedNameSpecifierAST();
-    
+
     void addClassOrNamespaceName( ClassOrNamespaceNameAST::Node& classOrNamespaceName );
     QPtrList<ClassOrNamespaceNameAST> classOrNamespaceNameList() { return m_classOrNamespaceNameList; }
                     
@@ -218,22 +214,21 @@ public:
 
 public:
     NameAST();
-    virtual ~NameAST();
-        
-    bool isGlobal() const;
+
+    bool isGlobal() const { return m_global; }
     void setGlobal( bool b );
-    
+
+    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
     void setNestedName( NestedNameSpecifierAST::Node& nestedName );
-    NestedNameSpecifierAST* nestedName();
-    
+
+    AST* unqualifiedName() { return m_unqualifiedName.get(); }
     void setUnqualifedName( AST::Node& unqualifiedName );
-    AST* unqualifiedName();
-    
+
 private:
     bool m_global;
     NestedNameSpecifierAST::Node m_nestedName;
     AST::Node m_unqualifiedName;
-    
+
 private:
     NameAST( const NameAST& source );
     void operator = ( const NameAST& source );
@@ -247,8 +242,7 @@ public:
 
 public:
     DeclarationAST();
-    virtual ~DeclarationAST();
-    
+
 private:
     DeclarationAST( const DeclarationAST& source );
     void operator = ( const DeclarationAST& source );
@@ -265,8 +259,7 @@ public:
 
 public:
     TypeSpecifierAST();
-    virtual ~TypeSpecifierAST();
-    
+
 private:
     NameAST::Node m_name;
     
@@ -283,8 +276,7 @@ public:
     
 public:
     BaseSpecifierAST();
-    virtual ~BaseSpecifierAST();
-    
+
     AST* isVirtual() { return m_isVirtual.get(); }
     void setIsVirtual( AST::Node& isVirtual );
     
@@ -312,8 +304,7 @@ public:
     
 public:
     BaseClauseAST();
-    virtual ~BaseClauseAST();
-    
+
     void addBaseSpecifier( BaseSpecifierAST::Node& baseSpecifier );
     QPtrList<BaseSpecifierAST> baseSpecifiers() { return m_baseSpecifiers; }
     
@@ -333,22 +324,21 @@ public:
 
 public:
     ClassSpecifierAST();
-    virtual ~ClassSpecifierAST();    
-    
-    AST* classKey();
+
+    AST* classKey() { return m_classKey.get(); }
     void setClassKey( AST::Node& classKey );
-        
+
     BaseClauseAST* baseClause() { return m_baseClause.get(); }
     void setBaseClause( BaseClauseAST::Node& baseClause );
-    
-    void addDeclaration( DeclarationAST::Node& declaration );
+
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
-        
+    void addDeclaration( DeclarationAST::Node& declaration );
+
 private:
     AST::Node m_classKey;
     BaseClauseAST::Node m_baseClause;
     QPtrList<DeclarationAST> m_declarations;
-    
+
 private:
     ClassSpecifierAST( const ClassSpecifierAST& source );
     void operator = ( const ClassSpecifierAST& source );
@@ -362,14 +352,13 @@ public:
 
 public:
     EnumeratorAST();
-    virtual ~EnumeratorAST();
-    
-    AST* id();
+
+    AST* id() { return m_id.get(); }
     void setId( AST::Node& id );
-    
-    AST* expr();
+
+    AST* expr() { return m_expr.get(); }
     void setExpr( AST::Node& expr );
-    
+
 private:
     AST::Node m_id;
     AST::Node m_expr;
@@ -387,14 +376,13 @@ public:
 
 public:
     EnumSpecifierAST();
-    virtual ~EnumSpecifierAST();
-        
+
     void addEnumerator( EnumeratorAST::Node& enumerator );
     QPtrList<EnumeratorAST> enumerators() { return m_enumerators; }
 
 private:
     QPtrList<EnumeratorAST> m_enumerators;
-        
+
 private:
     EnumSpecifierAST( const EnumSpecifierAST& source );
     void operator = ( const EnumSpecifierAST& source );
@@ -408,14 +396,13 @@ public:
 
 public:
     ElaboratedTypeSpecifierAST();
-    virtual ~ElaboratedTypeSpecifierAST();
-    
-    AST* kind();
+
+    AST* kind() { return m_kind.get(); }
     void setKind( AST::Node& kind );
-    
+
 private:
     AST::Node m_kind;
-    
+
 private:
     ElaboratedTypeSpecifierAST( const ElaboratedTypeSpecifierAST& source );
     void operator = ( const ElaboratedTypeSpecifierAST& source );
@@ -430,7 +417,6 @@ public:
 
 public:
     LinkageBodyAST();
-    virtual ~LinkageBodyAST();
 
     void addDeclaration( DeclarationAST::Node& ast );
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
@@ -451,22 +437,21 @@ public:
 
 public:
     LinkageSpecificationAST();
-    virtual ~LinkageSpecificationAST();
-    
-    QString externType() const;
-    void setExternType( const QString& type );
-    
-    LinkageBodyAST* linkageBody();
+
+    AST* externType() { return m_externType.get(); }
+    void setExternType( AST::Node& externType );
+
+    LinkageBodyAST* linkageBody() { return m_linkageBody.get(); }
     void setLinkageBody( LinkageBodyAST::Node& linkageBody );
-    
-    DeclarationAST* declaration();
+
+    DeclarationAST* declaration() { return m_declaration.get(); }
     void setDeclaration( DeclarationAST::Node& decl );
-    
+
 private:
-    QString m_externType;
+    AST::Node m_externType;
     LinkageBodyAST::Node m_linkageBody;
     DeclarationAST::Node m_declaration;
-        
+
 private:
     LinkageSpecificationAST( const LinkageSpecificationAST& source );
     void operator = ( const LinkageSpecificationAST& source );
@@ -480,18 +465,17 @@ public:
 
 public:
     NamespaceAST();
-    virtual ~NamespaceAST();
-    
-    QString namespaceName() const;
-    void setNamespaceName( const QString& name );
-    
-    LinkageBodyAST* linkageBody();
+
+    AST* namespaceName() { return m_namespaceName.get(); }
+    void setNamespaceName( AST::Node& namespaceName );
+
+    LinkageBodyAST* linkageBody() { return m_linkageBody.get(); }
     void setLinkageBody( LinkageBodyAST::Node& linkageBody );
-    
+
 private:
-    QString m_namespaceName;
+    AST::Node m_namespaceName;
     LinkageBodyAST::Node m_linkageBody;
-    
+
 private:
     NamespaceAST( const NamespaceAST& source );
     void operator = ( const NamespaceAST& source );
@@ -505,18 +489,17 @@ public:
 
 public:
     NamespaceAliasAST();
-    virtual ~NamespaceAliasAST();
-    
-    QString namespaceName() const;
-    void setNamespaceName( const QString& name );
-    
-    NameAST* aliasName();
+
+    AST* namespaceName() { return m_namespaceName.get(); }
+    void setNamespaceName( AST::Node& name );
+
+    NameAST* aliasName() { return m_aliasName.get(); }
     void setAliasName( NameAST::Node& name );
-    
+
 private:
-    QString m_namespaceName;
+    AST::Node m_namespaceName;
     NameAST::Node m_aliasName;
-    
+
 private:
     NamespaceAliasAST( const NamespaceAliasAST& source );
     void operator = ( const NamespaceAliasAST& source );
@@ -530,18 +513,17 @@ public:
 
 public:
     UsingAST();
-    virtual ~UsingAST();
-    
-    bool isTypename() const;
-    void setTypename( bool b );
-    
-    NameAST* name();
+
+    AST* typeName() { return m_typeName.get(); }
+    void setTypeName( AST::Node& typeName );
+
+    NameAST* name() { return m_name.get(); }
     void setName( NameAST::Node& name );
-    
+
 private:
-    bool m_typename;
+    AST::Node m_typeName;
     NameAST::Node m_name;
-    
+
 private:
     UsingAST( const UsingAST& source );
     void operator = ( const UsingAST& source );
@@ -555,14 +537,13 @@ public:
 
 public:
     UsingDirectiveAST();
-    virtual ~UsingDirectiveAST();
-        
-    NameAST* name();
+
+    NameAST* name() { return m_name.get(); }
     void setName( NameAST::Node& name );
-    
+
 private:
     NameAST::Node m_name;
-    
+
 private:
     UsingDirectiveAST( const UsingDirectiveAST& source );
     void operator = ( const UsingDirectiveAST& source );
@@ -576,30 +557,29 @@ public:
 
 public:
     DeclaratorAST();
-    virtual ~DeclaratorAST();
 
-    QPtrList<AST> ptrOpList();
+    QPtrList<AST> ptrOpList() { return m_ptrOpList; }
     void addPtrOp( AST::Node& ptrOp );
 
-    DeclaratorAST* subDeclarator();
+    DeclaratorAST* subDeclarator() { return m_subDeclarator.get(); }
     void setSubDeclarator( std::auto_ptr<DeclaratorAST>& subDeclarator );
 
-    NameAST* declaratorId();
+    NameAST* declaratorId() { return m_declaratorId.get(); }
     void setDeclaratorId( NameAST::Node& declaratorId );
 
-    AST* bitfieldInitialization();
+    AST* bitfieldInitialization() { return m_bitfieldInitialization.get(); }
     void setBitfieldInitialization( AST::Node& bitfieldInitialization );
 
-    QPtrList<AST> arrayDimensionList();
+    QPtrList<AST> arrayDimensionList() { return m_arrayDimensionList; }
     void addArrayDimension( AST::Node& arrayDimension );
 
-    class ParameterDeclarationClauseAST* parameterDeclarationClause();
+    class ParameterDeclarationClauseAST* parameterDeclarationClause() { return m_parameterDeclarationClause.get(); }
     void setParameterDeclarationClause( std::auto_ptr<class ParameterDeclarationClauseAST>& parameterDeclarationClause );
 
-    bool isConstMethod();
-    void setIsConstMethod( bool isConstMethod );
+    AST* constant() { return m_constant.get(); }
+    void setConstant( AST::Node& constant );
 
-    AST* exceptionSpecification();
+    AST* exceptionSpecification() { return m_exceptionSpecification.get(); }
     void setExceptionSpecification( AST::Node& exceptionSpecification );
 
 private:
@@ -609,7 +589,7 @@ private:
     AST::Node m_bitfieldInitialization;
     QPtrList<AST> m_arrayDimensionList;
     std::auto_ptr<class ParameterDeclarationClauseAST> m_parameterDeclarationClause;
-    bool m_isConstMethod;
+    AST::Node m_constant;
     AST::Node m_exceptionSpecification;
 
 private:
@@ -625,7 +605,6 @@ public:
 
 public:
     ParameterDeclarationAST();
-    virtual ~ParameterDeclarationAST();
 
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
@@ -654,7 +633,6 @@ public:
 
 public:
     ParameterDeclarationListAST();
-    virtual ~ParameterDeclarationListAST();
 
     QPtrList<ParameterDeclarationAST> parameters() { return m_parameters; }
     void addParameter( ParameterDeclarationAST::Node& parameter );
@@ -675,7 +653,6 @@ public:
 
 public:
     ParameterDeclarationClauseAST();
-    virtual ~ParameterDeclarationClauseAST();
 
     ParameterDeclarationListAST* parameterDeclarationList() { return m_parameterDeclarationList.get(); }
     void setParameterDeclarationList( ParameterDeclarationListAST::Node& parameterDeclarationList );
@@ -701,18 +678,17 @@ public:
 
 public:
     InitDeclaratorAST();
-    virtual ~InitDeclaratorAST();
-    
-    DeclaratorAST* declarator();
+
+    DeclaratorAST* declarator() { return m_declarator.get(); }
     void setDeclarator( DeclaratorAST::Node& declarator );
-    
-    AST* initializer();
+
+    AST* initializer() { return m_initializer.get(); }
     void setInitializer( AST::Node& initializer );
-    
+
 private:
     DeclaratorAST::Node m_declarator;
     AST::Node m_initializer;
-    
+
 private:
     InitDeclaratorAST( const InitDeclaratorAST& source );
     void operator = ( const InitDeclaratorAST& source );
@@ -726,14 +702,13 @@ public:
 
 public:
     InitDeclaratorListAST();
-    virtual ~InitDeclaratorListAST();
-    
+
     QPtrList<InitDeclaratorAST> initDeclaratorList() { return m_initDeclaratorList; }
     void addInitDeclarator( InitDeclaratorAST::Node& decl );
-    
+
 private:
     QPtrList<InitDeclaratorAST> m_initDeclaratorList;
-    
+
 private:
     InitDeclaratorListAST( const InitDeclaratorListAST& source );
     void operator = ( const InitDeclaratorListAST& source );
@@ -747,18 +722,17 @@ public:
 
 public:
     TypedefAST();
-    virtual ~TypedefAST();
-    
-    TypeSpecifierAST* typeSpec();
+
+    TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
-    
-    InitDeclaratorListAST* initDeclaratorList();
+
+    InitDeclaratorListAST* initDeclaratorList() { return m_initDeclaratorList.get(); }
     void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
-    
+
 private:
     TypeSpecifierAST::Node m_typeSpec;
     InitDeclaratorListAST::Node m_initDeclaratorList;
-    
+
 private:
     TypedefAST( const TypedefAST& source );
     void operator = ( const TypedefAST& source );
@@ -772,22 +746,21 @@ public:
 
 public:
     TemplateDeclarationAST();
-    virtual ~TemplateDeclarationAST();
-    
-    bool isExport() const;
-    void setExport( bool b );
-    
-    AST* templateParameterList();
+
+    AST* exported() { return m_exported.get(); }
+    void setExported( AST::Node& exported );
+
+    AST* templateParameterList() { return m_templateParameterList.get(); }
     void setTemplateParameterList( AST::Node& templateParameterList );
-    
-    DeclarationAST* declaration();
+
+    DeclarationAST* declaration() { return m_declaration.get(); }
     void setDeclaration( DeclarationAST::Node& declaration );
-    
+
 private:
-    bool m_export;
+    AST::Node m_exported;
     AST::Node m_templateParameterList;
     DeclarationAST::Node m_declaration;
-    
+
 private:
     TemplateDeclarationAST( const TemplateDeclarationAST& source );
     void operator = ( const TemplateDeclarationAST& source );
@@ -801,7 +774,6 @@ public:
 
 public:
     SimpleDeclarationAST();
-    virtual ~SimpleDeclarationAST();
 
     GroupAST* functionSpecifier() { return m_functionSpecifier.get(); }
     void setFunctionSpecifier( GroupAST::Node& functionSpecifier );
@@ -812,10 +784,10 @@ public:
     NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
     void setNestedName( NestedNameSpecifierAST::Node& nestedName );
 
-    TypeSpecifierAST* typeSpec();
+    TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
 
-    InitDeclaratorListAST* initDeclaratorList();
+    InitDeclaratorListAST* initDeclaratorList() { return m_initDeclaratorList.get(); }
     void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
 
 private:
@@ -838,7 +810,6 @@ public:
 
 public:
     StatementAST();
-    virtual ~StatementAST();
 
 private:
     StatementAST( const StatementAST& source );
@@ -853,7 +824,6 @@ public:
 
 public:
     ExpressionStatementAST();
-    virtual ~ExpressionStatementAST();
 
     AST* expression() { return m_expression.get(); }
     void setExpression( AST::Node& expression );
@@ -875,22 +845,21 @@ public:
 
 public:
     IfStatementAST();
-    virtual ~IfStatementAST();
-    
+
     AST* condition() const { return m_condition.get(); }
     void setCondition( AST::Node& condition );
-    
+
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
-    
+
     StatementAST* elseStatement() { return m_elseStatement.get(); }
     void setElseStatement( StatementAST::Node& statement );
-    
+
 private:
     AST::Node m_condition;
     StatementAST::Node m_statement;
     StatementAST::Node m_elseStatement;
-    
+
 private:
     IfStatementAST( const IfStatementAST& source );
     void operator = ( const IfStatementAST& source );
@@ -904,18 +873,17 @@ public:
 
 public:
     WhileStatementAST();
-    virtual ~WhileStatementAST();
-    
+
     AST* condition() const { return m_condition.get(); }
     void setCondition( AST::Node& condition );
-    
+
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
-    
+
 private:
     AST::Node m_condition;
     StatementAST::Node m_statement;
-    
+
 private:
     WhileStatementAST( const WhileStatementAST& source );
     void operator = ( const WhileStatementAST& source );
@@ -929,18 +897,17 @@ public:
 
 public:
     DoStatementAST();
-    virtual ~DoStatementAST();
-    
+
     AST* condition() const { return m_condition.get(); }
     void setCondition( AST::Node& condition );
-    
+
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
-    
+
 private:
     AST::Node m_condition;
     StatementAST::Node m_statement;
-    
+
 private:
     DoStatementAST( const DoStatementAST& source );
     void operator = ( const DoStatementAST& source );
@@ -954,26 +921,25 @@ public:
 
 public:
     ForStatementAST();
-    virtual ~ForStatementAST();
-    
+
     StatementAST* initStatement() { return m_initStatement.get(); }
     void setInitStatement( StatementAST::Node& statement );
-    
+
     AST* condition() const { return m_condition.get(); }
     void setCondition( AST::Node& condition );
-    
+
     AST* expression() const { return m_expression.get(); }
     void setExpression( AST::Node& expression );
-    
+
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
-    
+
 private:
     AST::Node m_condition;
     StatementAST::Node m_initStatement;
     StatementAST::Node m_statement;
     AST::Node m_expression;
-    
+
 private:
     ForStatementAST( const ForStatementAST& source );
     void operator = ( const ForStatementAST& source );
@@ -987,18 +953,17 @@ public:
 
 public:
     SwitchStatementAST();
-    virtual ~SwitchStatementAST();
-    
+
     AST* condition() const { return m_condition.get(); }
     void setCondition( AST::Node& condition );
-    
+
     StatementAST* statement() { return m_statement.get(); }
     void setStatement( StatementAST::Node& statement );
-    
+
 private:
     AST::Node m_condition;
     StatementAST::Node m_statement;
-    
+
 private:
     SwitchStatementAST( const SwitchStatementAST& source );
     void operator = ( const SwitchStatementAST& source );
@@ -1012,8 +977,7 @@ public:
 
 public:
     StatementListAST();
-    virtual ~StatementListAST();
-    
+
     QPtrList<StatementAST> statementList() { return m_statementList; }
     void addStatement( StatementAST::Node& statement );
     
@@ -1033,14 +997,13 @@ public:
 
 public:
     DeclarationStatementAST();
-    virtual ~DeclarationStatementAST();
-    
+
     DeclarationAST* declaration() { return m_declaration.get(); }
     void setDeclaration( DeclarationAST::Node& declaration );
-    
+
 private:
     DeclarationAST::Node m_declaration;
-    
+
 private:
     DeclarationStatementAST( const DeclarationStatementAST& source );
     void operator = ( const DeclarationStatementAST& source );
@@ -1054,8 +1017,7 @@ public:
 
 public:
     FunctionDefinitionAST();
-    virtual ~FunctionDefinitionAST();
-                
+
     TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
     
@@ -1073,7 +1035,7 @@ private:
     NestedNameSpecifierAST::Node m_nestedName;
     InitDeclaratorAST::Node m_initDeclarator;
     StatementListAST::Node m_functionBody;
-    
+
 private:
     FunctionDefinitionAST( const FunctionDefinitionAST& source );
     void operator = ( const FunctionDefinitionAST& source );
@@ -1088,11 +1050,10 @@ public:
 
 public:
     TranslationUnitAST();
-    virtual ~TranslationUnitAST();
-    
+
     void addDeclaration( DeclarationAST::Node& ast );
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
-    
+
 private:
     QPtrList<DeclarationAST> m_declarations;
    
