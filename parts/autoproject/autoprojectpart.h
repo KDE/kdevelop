@@ -95,6 +95,8 @@ private:
     KSelectAction *buildConfigAction;
     QString makeEnvironment();
     void setWantautotools();
+    QString makefileCvsCommand();
+    QString configureCommand();
 
     // Enble AutoProjectWidget to emit our signals
     friend class AutoProjectWidget;

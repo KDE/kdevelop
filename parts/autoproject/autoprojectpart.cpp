@@ -375,6 +375,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 {
     partController()->saveAllFiles();
 
+    QString preCommand;
     QFileInfo fi1();
     if ( !QFile::exists(dir + "/GNUmakefile") && !QFile::exists(dir + "/makefile")
          && ! QFile::exists(dir + "/Makefile") ) {
@@ -384,13 +385,16 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
                                                               "Run automake & friends and configure first?"));
             if (r == KMessageBox::No)
                 return;
-            slotMakefilecvs();
-            slotConfigure();
+            preCommand = makefileCvsCommand();
+            if (preCommand.isNull())
+                return;
+            preCommand += " && ";
+            preCommand += configureCommand() + " && ";
         } else {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run configure first?"));
             if (r == KMessageBox::No)
                 return;
-            slotConfigure();
+            preCommand = configureCommand() + " && ";
         }
     }
     QDomDocument &dom = *projectDom();
@@ -416,7 +420,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     dircmd += dir;
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(dir, dircmd + cmdline);
+    makeFrontend()->queueCommand(dir, preCommand + dircmd + cmdline);
 }
 
 
@@ -453,12 +457,11 @@ void AutoProjectPart::slotCompileFile()
     startMakeCommand(buildDir, target);
 }
 
-
-void AutoProjectPart::slotConfigure()
+QString AutoProjectPart::configureCommand()
 {
     QDomDocument &dom = *projectDom();
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
-  
+
     QString cmdline = topsourceDirectory();
     cmdline += "/configure";
     QString cc = DomUtil::readEntry(dom, prefix + "ccompilerbinary");
@@ -482,26 +485,34 @@ void AutoProjectPart::slotConfigure()
 
     QString configargs = DomUtil::readEntry(dom, prefix + "configargs");
     if (!configargs.isEmpty()) {
-	cmdline += " ";
+        cmdline += " ";
         cmdline += configargs;
     }
 
     QString builddir = buildDirectory();
-    
+
     QString dircmd = "cd ";
     dircmd += builddir;
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(builddir, dircmd + cmdline);
+    return dircmd + cmdline;
 }
 
+void AutoProjectPart::slotConfigure()
+{
+    QString cmdline = configureCommand();
+    if (cmdline.isNull())
+        return;
 
-void AutoProjectPart::slotMakefilecvs()
+    makeFrontend()->queueCommand(buildDirectory(), cmdline);
+}
+
+QString AutoProjectPart::makefileCvsCommand()
 {
     QString cmdline = DomUtil::readEntry(*projectDom(), "/kdevautoproject/make/makebin");
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
-    
+
     if (QFile::exists(topsourceDirectory() + "/Makefile.cvs"))
         cmdline += " -f Makefile.cvs";
     else if (QFile::exists(topsourceDirectory() + "/Makefile.dist"))
@@ -511,7 +522,7 @@ void AutoProjectPart::slotMakefilecvs()
     else {
         KMessageBox::sorry(m_widget, i18n("There is neither a Makefile.cvs file nor an "
                                           "autogen.sh script in the project directory."));
-        return;
+        return QString::null;
     }
 
     cmdline.prepend(makeEnvironment());
@@ -520,7 +531,16 @@ void AutoProjectPart::slotMakefilecvs()
     dircmd += topsourceDirectory();
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
+    return dircmd + cmdline;
+}
+
+void AutoProjectPart::slotMakefilecvs()
+{
+    QString cmdline = makefileCvsCommand();
+    if ( cmdline.isNull() )
+        return;
+
+    makeFrontend()->queueCommand(projectDirectory(), cmdline);
 }
 
 
