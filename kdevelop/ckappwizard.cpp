@@ -475,34 +475,35 @@ void CKAppWizard::initPages(){
   KQuickHelp::add(email,
 		  KQuickHelp::add(emailline,
 				  i18n("Enter your email adress here. This will be\n"
-				  "used for all generated files.")));
+				  "used for file header information.")));
   
-  KQuickHelp::add(apidoc, i18n("This lets you generate a HTML-based documentation set\n"
-  													"for your project classes including cross-reference to\n"
+  KQuickHelp::add(apidoc, i18n("Generate a HTML-based documentation set\n"
+  													"for your project classes including cross-references to\n"
   													"the used libraries."));
-  KQuickHelp::add(userdoc, i18n("This will generate a preset documentation handbook in HTML\n"
+  													
+  KQuickHelp::add(userdoc, i18n("Generate a preset documentation handbook in HTML\n"
   																"by an SGML file included with your package."));
-  KQuickHelp::add(lsmfile, i18n("This will create a lsm-file for your project. The Linux Software Map\n"
+  KQuickHelp::add(lsmfile, i18n("Create a lsm-file for your project. The Linux Software Map\n"
   														"is a file generally used for projects for distribution purpose and contains\n"
   														"a short description of the project including the requirements on the side of\n"
   														"the end-user."));
-  KQuickHelp::add(gnufiles, i18n("This will generate a set of GNU standard files for your project.\n"
+  KQuickHelp::add(gnufiles, i18n("Generate a set of GNU standard files for your project.\n"
   																"These will give the end-user of the sourcepackage an overview about\n"
   																"the licensing, readme's etc, as well as a ChangeLog file for you to\n"
   																"protocol your changes."));
-  KQuickHelp::add(progicon, i18n("This will add a program icon to your project that represents\n"
-  														"your application."));
-  KQuickHelp::add(miniicon, i18n("This will add a mini program icon to your project that is used\n"
+  KQuickHelp::add(progicon, i18n("Add a program icon to your project that represents\n"
+  														"your application in the window manager."));
+  KQuickHelp::add(miniicon, i18n("Add a mini program icon to your project that is used\n"
   															"for window-manager popup menus."));
-  KQuickHelp::add(datalink, i18n("This will add a KDE link file which is installed in\n"
+  KQuickHelp::add(datalink, i18n("Add a KDE link file which is installed in\n"
   															"the KDE panel of the end-user. By default, your application's\n"
   															"link file will be installed in the Applications-menu. You can\n"
   															"change this destination by editing the installation properties\n"
   															"for the link file later."));
-  KQuickHelp::add(iconload, i18n("This lets you select another icon for your program\n"
+  KQuickHelp::add(iconload, i18n("Lets you select another icon for your program\n"
   														"than the sample program icon provided by the Application\n"
   														"Wizard."));
-  KQuickHelp::add(miniload, i18n("This lets you select another mini-icon for your program\n"
+  KQuickHelp::add(miniload, i18n("Lets you select another mini-icon for your program\n"
   														"than the sample program icon provided by the Application\n"
   														"Wizard."));
   
@@ -648,13 +649,15 @@ void CKAppWizard::initPages(){
   cppedit->setReadOnly( FALSE );
   cppedit->setOverwriteMode( FALSE );
   
-  KQuickHelp::add(cppheader, i18n("Check this if you want a standard\n"
-				  "cpp-Template for your cpp-files."));
-  
-  QToolTip::add(cppload,i18n("you can load another cpptemplate here"));
-  QToolTip::add(cppnew,i18n("you can clear the cpptemplate here"));
-  QToolTip::add(cppedit,i18n("you can edit your cpptemplate here"));
-  
+  QToolTip::add(cppload,i18n("Press this button to select an\n"
+  													"existing header template file"));
+  QToolTip::add(cppnew,i18n("Clears the pre-set headertemplate"));
+  QToolTip::add(cppedit,i18n("Edit your headertemplate here"));
+
+  KQuickHelp::add(cppheader, i18n("Use a standard\n"
+				"headertemplate for your implementation files"));
+
+
   connect(cppheader,SIGNAL(clicked()),SLOT(slotCppHeaderClicked()));   
   connect(cppload,SIGNAL(clicked()),SLOT(slotCppDialogClicked()));
   connect(cppnew,SIGNAL(clicked()),SLOT(slotNewCppButtonClicked()));   
@@ -695,9 +698,9 @@ void CKAppWizard::initPages(){
   errOutput->setOverwriteMode( FALSE );
   QFont font("helvetica",10);
   output->setFont(font);
-  QToolTip::add(output,i18n("you can see the normal outputs here"));
+  QToolTip::add(output,i18n("Displays the normal output of the project generator"));
   errOutput->setFont(font);
-  QToolTip::add(errOutput,i18n("you can see all warnings and errormessages here"));
+  QToolTip::add(errOutput,i18n("Displays warnings and errormessages of the project generator"));
   // go to page 2 then to page 1
   gotoPage(1);  
   gotoPage(0);    
@@ -752,8 +755,10 @@ void CKAppWizard::slotOkClicked() {
   KShellProcess p;
   dir.setPath(directoryline->text());
   if (dir.exists()) {
-    if(KMsgBox::yesNo(0,i18n("Directory exists!"),i18n("WARNING!!! If you click 'OK', all files and subdirs will
-removed."),KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {       return;
+    if(KMsgBox::yesNo(0,i18n("Directory exists!"),
+    	i18n("The selected project directory already exists. If you click 'OK', all files and subdirectories of the currently chosen
+project directory will be deleted before a new project is going to be generated"),     	
+KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {        return;
     }
     else {
       p.clearArguments();
@@ -1057,9 +1062,9 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("With this framework you can\n"
-			   "generate a normal kde-program with\n"
-			   "toolsbar and main menus."));
+    apphelp->setText (i18n("Create a KDE-application with session-management, "
+    												"menubar, toolbar, statusbar and support for a "
+    												"document-view codeframe model."));
   }
   else if (kdeminiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/miniApp.bmp");
@@ -1082,9 +1087,7 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("With this framework you can\n"
-			   "generate a kde-mini-program with only\n"
-			   "an empty widget."));
+    apphelp->setText (i18n("Create a KDE-application with an empty main widget."));
   }
   else if (qtnormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
@@ -1107,9 +1110,9 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("With this framework you can\n"
-			   "generate a qt-program with toolsbar\n"
-			   "and main menus"));
+    apphelp->setText (i18n("Create a Qt-Application with a main window containing "
+    											"a menubar, toolbar and statusbar, including support for "
+    											"a generic document-view model."));
   }
   else if (cppitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() + "/kdevelop/pics/terminalApp.bmp");
@@ -1132,9 +1135,8 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("With this framework you can\n"
-			   "generate a c++-program with write\n"
-			   "`Hallo World` on the terminal.\n"));
+    apphelp->setText (i18n("Create a C++ application. The program will run in a terminal "
+    											"and doesn't contain any support for a Graphical User Interface."));
   }
   /*  else if (citem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
       if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
@@ -1181,10 +1183,9 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
       okButton->setEnabled(true);
     }
-    apphelp->setText (i18n("With this program-typ you can\n"
-			   "generate an empty project.\n"
-			   "Here you can use your own makefiles and\n"
-			   "kdevelop would not edit your makefiles."));
+    apphelp->setText (i18n("Creates an empty project to work with existing development projects. "
+    											"KDevelop will not take care of any Makefiles as those are supposed to "
+    											"be included with your old project."));
   }
   /*  else if (gtknormalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
       if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
@@ -1212,18 +1213,18 @@ void CKAppWizard::slotApplicationClicked() {
       }*/
   else if (kdeentry->isSelected()) {
     okButton->setEnabled(false);
-    apphelp->setText (i18n("Under this group all kde-releated\n"
-			   "programs are listed."));
+    apphelp->setText (i18n("Contains all KDE-compliant\n"
+			   "project types."));
   }
   else if (qtentry->isSelected()) {
     okButton->setEnabled(false);
-    apphelp->setText (i18n("Under this group all qt-releated\n"
-			   "programs are listed."));
+    apphelp->setText (i18n("Contains all Qt-based\n"
+			   "project types."));
   }
   else if (ccppentry->isSelected()) {
     okButton->setEnabled(false);
-    apphelp->setText (i18n("Under this group all c/c++-terminal\n"
-			   "releated programs are listed."));
+    apphelp->setText (i18n("Contains all C/C++-terminal\n"
+			   "project types."));
   }
   /*  else if (gtkentry->isSelected()) {
       okButton->setEnabled(false);
@@ -1233,9 +1234,7 @@ void CKAppWizard::slotApplicationClicked() {
       }*/
   else if (othersentry->isSelected()) {
     okButton->setEnabled(false);
-    apphelp->setText (i18n("Under this group are listed all\n"
-			   "program-typs, which can not be list\n"
-			   "in the other groups."));
+    apphelp->setText (i18n("Contains all individual project types."));
   }
 }
 
@@ -1795,6 +1794,8 @@ void CKAppWizard::slotProcessExited() {
   group_filters.clear();
   group_filters.append("*.h");
   group_filters.append("*.hxx");
+  group_filters.append("*.hpp");
+  group_filters.append("*.H");
   project->addLFVGroup ("Header","");
   project->setFilters("Header",group_filters);
   
