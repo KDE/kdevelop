@@ -56,7 +56,8 @@
 
 ReplaceWidget::ReplaceWidget(ReplacePart *part)
         : QWidget(0, "replace widget"), m_part( part ),
-        m_dialog( new ReplaceDlgImpl( this, "replace widget" ) )
+        m_dialog( new ReplaceDlgImpl( this, "replace widget" ) ),
+        _terminateOperation( false )
 {
     // setup outputview
     QVBoxLayout * layout = new QVBoxLayout( this );
@@ -80,6 +81,8 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
     connect( _replace, SIGNAL( clicked() ), SLOT( replace() ) );
     connect( _cancel, SIGNAL( clicked() ), SLOT( clear() ) );
     connect( _listview, SIGNAL( editDocument( const QString &, int ) ), SLOT( editDocument( const QString &, int ) ) );
+
+    connect( m_part->core(), SIGNAL( stopButtonClicked( KDevPlugin * ) ), SLOT( stopButtonClicked( KDevPlugin * ) ) );
 }
 
 //BEGIN Slots
@@ -89,7 +92,7 @@ void ReplaceWidget::showDialog()
     if ( ! m_part->project() )
         return; // This shouldn't happen, since the part only has project scope
 
-    m_dialog->show( m_part->project()->projectDirectory() + "/" );
+    m_dialog->show( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" );
 }
 
 void ReplaceWidget::find()
@@ -99,10 +102,15 @@ void ReplaceWidget::find()
 
     _listview->setReplacementData( m_dialog->expressionPattern(), m_dialog->replacementString() );
 
-    showReplacements();
-
-    _cancel->setEnabled( true );
-    _replace->setEnabled( true );
+    if ( showReplacements() )
+    {
+        _cancel->setEnabled( true );
+        _replace->setEnabled( true );
+    }
+    else
+    {
+        clear();
+    }
 }
 
 void ReplaceWidget::replace()
@@ -124,11 +132,24 @@ void ReplaceWidget::editDocument( QString const & file, int line )
     m_part->partController()->editDocument( file, line );
 }
 
+void ReplaceWidget::stopButtonClicked(KDevPlugin* which)
+{
+    kdDebug(0) << "ReplaceWidget::stopButtonClicked()" << endl;
+
+    if ( which != 0 && which != m_part )
+        return;
+    _terminateOperation = true;
+}
+
 //END Slots
 
-void ReplaceWidget::showReplacements()
+bool ReplaceWidget::showReplacements()
 {
     ReplaceItem::s_listview_done = false;
+
+    m_part->core()->running( m_part, true );
+
+    bool completed = true;
 
     QStringList files = workFiles();
     QStringList openfiles = openProjectFiles();
@@ -136,6 +157,12 @@ void ReplaceWidget::showReplacements()
     QStringList::ConstIterator it = files.begin();
     while ( it != files.end() )
     {
+        if ( shouldTerminate() )
+        {
+            completed = false;
+            break;
+        }
+
         if ( openfiles.contains( *it ) )
         {
             if ( KTextEditor::EditInterface * ei = getEditInterfaceForFile( *it ) )
@@ -159,16 +186,31 @@ void ReplaceWidget::showReplacements()
         kapp->processEvents( 100 );
     }
 
+    m_part->core()->running( m_part, false );
+
     ReplaceItem::s_listview_done = true;
+
+    return completed;
 }
 
-void ReplaceWidget::makeReplacements()
+bool ReplaceWidget::makeReplacements()
 {
+    m_part->core()->running( m_part, true );
+
+    bool completed = true;
+
     QStringList openfiles = openProjectFiles();
 
     ReplaceItem const * fileitem = _listview->firstChild();
     while ( fileitem )
     {
+        // is this a good idea? should the replace operation be interruptable?
+//         if ( shouldTerminate() )
+//         {
+//             completed = false;
+//             break;
+//         }
+
         if ( fileitem->isOn() )
         {
             QString currentfile = fileitem->file();
@@ -231,6 +273,10 @@ void ReplaceWidget::makeReplacements()
                                      "parseProject()",
                                      data, replyType, replyData );
     //END *** remove this ***
+
+    m_part->core()->running( m_part, false );
+
+    return completed;
 }
 
 //BEGIN Helpers
@@ -345,6 +391,13 @@ KTextEditor::EditInterface * ReplaceWidget::getEditInterfaceForFile( QString con
         }
     }
     return 0;
+}
+
+bool ReplaceWidget::shouldTerminate()
+{
+    bool b = _terminateOperation;
+    _terminateOperation = false;
+    return b;
 }
 
 //END Helpers

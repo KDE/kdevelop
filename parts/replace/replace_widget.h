@@ -35,7 +35,8 @@ public:
 
 public slots:
     void showDialog();
-    
+    void stopButtonClicked( KDevPlugin * );
+
 private slots:
     void find();
     void replace();
@@ -43,8 +44,9 @@ private slots:
     void editDocument( const QString & ,int );
 
 private:
-    void showReplacements();
-    void makeReplacements();
+    bool showReplacements();
+    bool makeReplacements();
+    bool shouldTerminate();
 
     QString relativeProjectPath( QString );
     QString fullProjectPath( QString );
@@ -62,6 +64,8 @@ private:
     ReplaceView * _listview;
     QPushButton * _cancel;
     QPushButton * _replace;
+
+    bool _terminateOperation;
 };
 
 

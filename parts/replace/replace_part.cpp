@@ -27,7 +27,7 @@ typedef KGenericFactory<ReplacePart> ReplaceFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevreplace, ReplaceFactory( "kdevreplace" ) );
 
 ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
-        : KDevPlugin( "replace-across", "", parent, name ? name : "ReplacePart" )
+        : KDevPlugin( "Project Wide Replace", "", parent, name ? name : "ReplacePart" )
 {
     setInstance(ReplaceFactory::instance());
     setXMLFile("kdevpart_replace.rc");
