@@ -16,6 +16,7 @@
 #include <qtimer.h>
 #include <qvbox.h>
 #include <qregexp.h>
+#include <qtooltip.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
@@ -62,12 +63,13 @@ FileViewFolderItem::FileViewFolderItem(QListView *parent, const QString &name, c
 
 bool FileViewFolderItem::matches(const QString &fileName)
 {
+    QString fName = QFileInfo(fileName).fileName();
     QStringList::ConstIterator it;
     for (it = patterns.begin(); it != patterns.end(); ++it) {
         // The regexp objects could be created already
         // in the constructor
         QRegExp re(*it, true, true);
-        if (re.exactMatch(fileName))
+        if (re.exactMatch(fName))
             return true;
     }
 
@@ -89,7 +91,7 @@ private:
 
 
 FileGroupsFileItem::FileGroupsFileItem(QListViewItem *parent, const QString &fileName)
-    : QListViewItem(parent, extractName(fileName)), fullname(fileName)
+    : QListViewItem(parent, extractName(fileName) + " ["+ fileName +"]"), fullname(fileName)
 {
     setPixmap(0, SmallIcon("document"));
 }
@@ -125,7 +127,8 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
 
 
 FileGroupsWidget::~FileGroupsWidget()
-{}
+{
+}
 
 
 void FileGroupsWidget::slotItemExecuted(QListViewItem *item)
