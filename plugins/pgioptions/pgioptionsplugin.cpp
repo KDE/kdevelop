@@ -22,7 +22,7 @@
 #include "pgioptionsplugin.h"
 
 
-const char *optimization_flags[] = {
+const char * const optimization_flags[] = {
     "-Mautopar",
     "-Mextract",
     "-Minline",
@@ -31,7 +31,7 @@ const char *optimization_flags[] = {
 };
 
 
-const char *hpf_flags[] = {
+const char * const hpf_flags[] = {
     "-Mbackslash",
     "-Mcmf",
     "-Mdclchk",
@@ -129,7 +129,7 @@ OptimizationTab::OptimizationTab(PgiOptionsPlugin::Type type, QWidget *parent, c
         optBox = new QListView(this);
         optBox->addColumn("");
         optBox->header()->hide();
-        for (const char **p = optimization_flags; *p; ++p) {
+        for (const char * const *p = optimization_flags; *p; ++p) {
             new QCheckListItem(optBox, *p, QCheckListItem::CheckBox);
             kdDebug() << (*p) << endl;
         }
@@ -204,7 +204,7 @@ HpfTab::HpfTab(QWidget *parent, const char *name)
     hpfBox = new QListView(this);
     hpfBox->addColumn("");
     hpfBox->header()->hide();
-    for (const char **p = hpf_flags; *p; ++p)
+    for (const char * const *p = hpf_flags; *p; ++p)
         new QCheckListItem(hpfBox, *p, QCheckListItem::CheckBox);
 
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
