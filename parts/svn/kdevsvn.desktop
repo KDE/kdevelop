@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Type=Service
-Exec=blubb
-Comment=SVN Integration
-Name=SVN
-ServiceTypes=KDevelop/Plugin
-X-KDE-Library=libkdevsvn
-X-KDevelop-Scope=Global
