@@ -39,12 +39,6 @@ public:
         {}
 
     ClassStore *classStore;
-    /**
-     * a new classstore for codecompletion
-     * added by daniel
-     */
-    ClassStore* ccClassStore;
-     
     QDomDocument *projectDom;
     KDevCore *core;
     KDevMakeFrontend *makeFrontend;
@@ -52,6 +46,12 @@ public:
     KDevProject *project;
     KDevLanguageSupport *languageSupport;
     KDevVersionControl *versionControl;
+    /**
+     * a new classstore for codecompletion
+     * added by daniel
+     */
+    ClassStore* ccClassStore;
+
 };
 
 #endif
