@@ -108,6 +108,7 @@ private:
     KRegExp* m_pErrorJadeRx;
     KRegExp* m_pCompileFile1;
     KRegExp* m_pCompileFile2;
+    KRegExp* m_pCompileFile3;
     KRegExp* m_pLinkFile;
 };
 

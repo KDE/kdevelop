@@ -141,6 +141,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
     m_pErrorJadeRx = new KRegExp("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)");
     m_pCompileFile1 = new KRegExp("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].*`.*`(.+)");
     m_pCompileFile2 = new KRegExp("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-c ([^ ]+).*");
+    m_pCompileFile3 = new KRegExp("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-c -.*");
     m_pLinkFile = new KRegExp("[(g\\+\\+)(/bin/sh\\s\\.\\./\\.\\./libtool)].* \\-o ([^ ]+).*");
     
     if (m_bLineWrapping) {
@@ -192,6 +193,7 @@ MakeWidget::~MakeWidget()
     delete m_pErrorJadeRx;
     delete m_pCompileFile1;
     delete m_pCompileFile2;
+    delete m_pCompileFile3;
     delete m_pLinkFile;
 }
 
@@ -639,6 +641,15 @@ void MakeWidget::insertLine1(const QString &line, Type type)
 	QString tool;
 	if (!line.startsWith("g++")) { tool = " (libtool)"; }
 	insertLine2(explain + "<b>" + m_pCompileFile1->group(m_fileNameGroup) + "</b>" + tool, StyledDiagnostic);
+	return;
+    }
+    else if (m_bShortCompilerOutput && m_pCompileFile3->match(line)) {
+	QString explain(i18n("compiling ")); 
+	QString tool;
+	int i = line.findRev(" ");
+	QString filename = line.right(line.length()-i);
+	if (!line.startsWith("g++")) { tool = " (libtool)"; }
+	insertLine2(explain + "<b>" + filename + "</b>" + tool, StyledDiagnostic);
 	return;
     }
     else if (m_bShortCompilerOutput && m_pCompileFile2->match(line)) {
