@@ -1,3 +1,7 @@
+2004-05-27 Sascha Cunz <scunz@ng-projekt.de>
+    * Change "New File" in the toolbar to popup a menu with all available file templates,
+      if one clicks on it.
+
 2004-05-26 Robert Gruber <rgruber@users.sourceforge.net>
     * Added possibility to set the priority of the make-process
     * Added possibility to search case insensitive
