@@ -32,6 +32,7 @@
 #include <qdropsite.h>
 #include <qdragobject.h>
 #include <qregexp.h>
+#include <qdialog.h>
 
 #include <ktempfile.h>
 #include <kconfig.h>
@@ -903,8 +904,8 @@ class KWrite : public KTextEditor::View {
   public slots:    //please keep prototypes and implementations in same order
     void spellcheck();
     void spellcheck2(KSpell*);
-    void misspelling (QString word, QStringList *, unsigned pos);
-    void corrected (QString originalword, QString newword, unsigned pos);
+    void misspelling (const QString &word, const QStringList &, unsigned int pos);
+    void corrected (const QString &originalword, const QString &newword, unsigned int pos);
     void spellResult (const QString &newtext);
     void spellCleanDone();
   signals:

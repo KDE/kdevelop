@@ -3152,7 +3152,7 @@ void KWrite::updateBookmarks()
       nam.setNum( z + 666 );
 
       KAction *act = new KAction( i18n("Line: %1").arg(KGlobal::locale()->formatNumber(b->cursor.y + 1, 0) ),
-                                  ALT+keys[z], this, SLOT( slotGotoBookmark() ), 0, nam );
+                                  KShortcut(ALT+keys[z]), this, SLOT( slotGotoBookmark() ), this, nam );
 
       bookmarkActionList.append( act );
     }
@@ -3438,10 +3438,10 @@ void KWrite::spellcheck()
 
   connect (kspell.kspell, SIGNAL (progress (unsigned int)),
           this, SIGNAL (spellcheck_progress (unsigned int)) );
-  connect (kspell.kspell, SIGNAL (misspelling (QString , QStringList *, unsigned)),
-          this, SLOT (misspelling (QString, QStringList *, unsigned)));
-  connect (kspell.kspell, SIGNAL (corrected (QString, QString, unsigned)),
-          this, SLOT (corrected (QString, QString, unsigned)));
+  connect (kspell.kspell, SIGNAL (misspelling (const QString &, const QStringList &, unsigned int)),
+          this, SLOT (misspelling (const QString &, const QStringList &, unsigned int)));
+  connect (kspell.kspell, SIGNAL (corrected (const QString &, const QString &, unsigned int)),
+          this, SLOT (corrected (const QString &, const QString &, unsigned int)));
   connect (kspell.kspell, SIGNAL (done(const QString&)),
           this, SLOT (spellResult (const QString&)));
 }
@@ -3469,7 +3469,7 @@ void KWrite::spellcheck2(KSpell *)
   kspell.kspell->check(kspell.spell_tmptext);
 }
 
-void KWrite::misspelling (QString origword, QStringList *, unsigned pos)
+void KWrite::misspelling (const QString &origword, const QStringList &, unsigned int pos)
 {
   int line;
   unsigned int cnt;
@@ -3493,7 +3493,7 @@ void KWrite::misspelling (QString origword, QStringList *, unsigned pos)
   kWriteDoc->updateViews();
 }
 
-void KWrite::corrected (QString originalword, QString newword, unsigned pos)
+void KWrite::corrected (const QString &originalword, const QString &newword, unsigned int pos)
 {
   //we'll reselect the original word in case the user has played with
   //the selection
