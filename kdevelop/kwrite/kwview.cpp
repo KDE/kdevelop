@@ -830,9 +830,11 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
       repaint(0, 0, width(), height(), false);
 
     } else {
+			if(dy) leftBorder->scroll(0,dy);
+
       if (updateState > 0) paintTextLines(oldXPos,oldYPos);
 
-      if (dx || dy) {
+      if (dx || dy) {				
         scroll(dx,dy);
       } else if (cursorOn) paintCursor();
     }
@@ -2847,6 +2849,7 @@ void KWrite::setStepLine( int line )
   cursor.x = 0;
   cursor.y = line;
   stepLine = line;
+
   kWriteView->updateCursor(cursor);
   kWriteDoc->unmarkFound();
   kWriteDoc->tagLines( line, line );
