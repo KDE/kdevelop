@@ -208,8 +208,12 @@ void FileTreeWidget::openDirectory( const QString& dirName )
     KURL url;
     url.setPath( dirName );
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
-    m_rootBranch = addBranch( new MyFileTreeBranch( this, url, url.prettyURL(), pix ) );
-    m_rootBranch->root()->setOpen( true );
+
+    // this is a bit odd, but the order of these calls seems to be important
+    MyFileTreeBranch * b = new MyFileTreeBranch( this, url, url.prettyURL(), pix );
+    b->setChildRecurse( false );
+    m_rootBranch = addBranch( b );
+    m_rootBranch->setOpen( true );
 }
 
 bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
