@@ -13,6 +13,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  debugger distpart konsole astyle tools ctags regexptest doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith history filecreate \
-          texttools javasupport javadebugger valgrind replace rubysupport closer bashsupport pascalsupport pascalproject\
+          texttools javasupport javadebugger replace rubysupport closer bashsupport pascalsupport pascalproject\
           $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR)
 
