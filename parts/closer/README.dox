@@ -6,7 +6,4 @@ a dialog showing the currenly open files and offering to close them.
 
 \authors <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
 
-\todo Decide if it is supposed to be a part of KDevelop at all, and if so,
-if it is sane to offer it as a plugin or just put it in the main code.
-
 */

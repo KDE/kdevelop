@@ -11,9 +11,7 @@ The operation is only carried out on files that are part of the current project.
 \feature Replaces a search pattern with a specified string, after letting the
 user preview and choose which replacements should take place.
 
-\todo Make it possible to stop a find operation
 \todo Better user feedback
-\todo Some more code cleanups (Subclass the .ui generated file)
 \todo Better commenting (doxygen style comments).
 
 
