@@ -1352,7 +1352,7 @@ void QextMdiMainFrm::activatePrevWin()
   delete it;
 }
 
-/** Activates the previous open view */
+/** Activates the view with a certain index (TabPage mode only) */
 void QextMdiMainFrm::activateView(int index)
 {
    if (m_pDockbaseOfTabPage && (m_mdiMode == QextMdi::TabPageMode)) {
