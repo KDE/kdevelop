@@ -69,6 +69,9 @@ QEditorCodeCompletion::QEditorCodeCompletion( QEditorView* view )
   m_completionListBox = new QListBox( m_completionPopup );
   m_completionListBox->setFrameStyle( QFrame::NoFrame );
   m_completionListBox->installEventFilter( this );
+  m_completionListBox->setHScrollBarMode( QScrollView::AlwaysOn );
+  m_completionListBox->setVScrollBarMode( QScrollView::AlwaysOn );
+  m_completionListBox->setCornerWidget( new QSizeGrip(m_completionListBox) );
 
   m_completionPopup->installEventFilter( this );
   m_completionPopup->setFocusProxy( m_completionListBox );
