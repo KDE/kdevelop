@@ -28,6 +28,11 @@
 #include <config.h>
 #endif
 
+#ifdef __osf__
+#define _XOPEN_SOURCE_EXTENDED
+#define O_NDELAY O_NONBLOCK
+#endif
+
 #include <sys/types.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
