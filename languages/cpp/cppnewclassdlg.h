@@ -23,7 +23,7 @@
 #include "codemodel.h"
 #include "cppnewclassdlgbase.h"
 
-class KDevLanguageSupport;
+class CppSupportPart;
 class KDevProject;
 class QPopupMenu;
 class KCompletion;
@@ -100,7 +100,7 @@ class CppNewClassDialog : public CppNewClassDialogBase
     Q_OBJECT
 
 public:
-    CppNewClassDialog(KDevLanguageSupport *part, QWidget *parent=0, const char *name=0);
+    CppNewClassDialog(CppSupportPart *part, QWidget *parent=0, const char *name=0);
     ~CppNewClassDialog();
 
 protected:
@@ -149,6 +149,7 @@ protected:
 
     void reloadAdvancedInheritance(bool clean = false);
     void parseClass(QString clName, QString inheritance);
+    void parsePCSClass(QString clName, QString inheritance);
     void addToConstructorsList(QCheckListItem *myClass, FunctionDom method);
     void addToMethodsList(QListViewItem *parent, FunctionDom method);
     void addToUpgradeList(QListViewItem *parent, FunctionDom method, QString modifier);
@@ -167,7 +168,7 @@ private:
     QString m_parse;
     QPopupMenu *accessMenu;
     QPopupMenu *overMenu;
-    KDevLanguageSupport *m_part;
+    CppSupportPart *m_part;
 
     // configuration variables
     QString interface_url;

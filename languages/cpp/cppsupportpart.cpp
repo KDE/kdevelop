@@ -702,7 +702,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
         kdDebug() << "file context with " << url.fileName() << endl;
         if (url.fileName().endsWith(".ui"))
         {
-            m_contextFileName = url.fileName();
+            m_contextFileName = url.path();
             int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
             popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
         }

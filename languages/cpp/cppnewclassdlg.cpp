@@ -7,8 +7,8 @@
 *   bernd@kdevelop.org                                                    *
 *   Copyright (C) 2003 by Eray Ozkural                                    *
 *   <erayo@cs.bilkent.edu.tr>                                             *
-*   Copyright (C) 2003 by Alexander Dymo                                  *
-*   cloudtemple@mksat.net                                                 *
+*   Copyright (C) 2003-2004 by Alexander Dymo                             *
+*   adymo@kdevelop.org                                                    *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -39,14 +39,14 @@
 #include <klineedit.h>
 #include <kdeversion.h>
 
-//FIXME: remove this!
-#include <kdevapi.h>
-
-#include "kdevlanguagesupport.h"
+#include "cppsupportpart.h"
 #include "kdevproject.h"
 #include "kdevsourceformatter.h"
+#include "kdevcoderepository.h"
+#include "backgroundparser.h"
 #include "domutil.h"
 #include "filetemplate.h"
+#include "storeconverter.h"
 
 #include "classgeneratorconfig.h"
 
@@ -69,7 +69,7 @@ QString QRegExp_escape(const QString& str )
 #endif
 }
 
-CppNewClassDialog::CppNewClassDialog(KDevLanguageSupport *part, QWidget *parent, const char *name)
+CppNewClassDialog::CppNewClassDialog(CppSupportPart *part, QWidget *parent, const char *name)
 	: CppNewClassDialogBase(parent, name)
 {
     headerModified = false;
@@ -817,6 +817,11 @@ void CppNewClassDialog::parseClass(QString clName, QString inheritance)
 	    myClasses = m_part -> codeModel() -> globalNamespace() -> classByName(clName);
     }
     
+    if (myClasses.empty()) {
+        kdDebug() << "Trying persistant class store..." << endl;
+        parsePCSClass(clName, inheritance);
+    }
+    
     for (ClassList::const_iterator classIt = myClasses.begin(); classIt != myClasses.end(); ++classIt)
     {
         PCheckListItem<ClassDom> *it = new PCheckListItem<ClassDom>(*classIt, constructors_view, (*classIt)->name());
@@ -921,7 +926,7 @@ void CppNewClassDialog::addToConstructorsList(QCheckListItem *myClass, FunctionD
 void CppNewClassDialog::addToMethodsList(QListViewItem *parent, FunctionDom method)
 {
     PCheckListItem<FunctionDom> *it = new PCheckListItem<FunctionDom>(method, parent, m_part->formatModelItem(method.data()), QCheckListItem::CheckBox);
-    it->setText(1, i18n("extend"));
+    method->isAbstract() ? it->setText(1, i18n("replace")) : it->setText(1, i18n("extend"));
 }
 
 void CppNewClassDialog::addToUpgradeList(QListViewItem *parent, FunctionDom method, QString modifier)
@@ -934,6 +939,116 @@ void CppNewClassDialog::addToUpgradeList(QListViewItem *parent, VariableDom attr
 {
     PListViewItem<VariableDom> *it = new PListViewItem<VariableDom>(attr, parent, m_part->formatModelItem(attr.data()));
     it->setText(1, modifier);
+}
+
+
+void CppNewClassDialog::parsePCSClass(QString clName, QString inheritance)
+{
+    // Determine namespace
+    QStringList clNamespace = currNamespace;
+    bool clFullQualified = false;
+    
+    if(clName.contains("::")) {
+        // Full qualified, override imported namespace
+        clFullQualified = true;
+        int splitpoint = clName.findRev("::");
+        clNamespace = QStringList::split("::", clName.left(splitpoint));
+        clName = clName.mid(splitpoint + 2);
+    }
+  
+    kdDebug(9007) << "clFullQualified = " << clFullQualified << endl;
+    kdDebug(9007) << "clName = " << clName << endl;
+    kdDebug(9007) << "clNamespace = " << clNamespace.join(".") << endl;
+  
+    QString templateAdd = templateActualParamsFormatted(clName);
+    removeTemplateParams(clName);
+
+    CodeModel *myModel = new CodeModel();
+    StoreConverter converter(m_part, myModel);
+    converter.PCSClassToCodeModel(clName, clNamespace);
+    
+    ClassList myClasses = myModel->globalNamespace()->classByName(clName);
+    kdDebug() << "    tag class count: " << myClasses.count() << endl;
+
+    for (ClassList::const_iterator classIt = myClasses.begin(); classIt != myClasses.end(); ++classIt)
+    {
+        kdDebug() << "    this is class "  << (*classIt)->name() << endl;
+        PCheckListItem<ClassDom> *it = new PCheckListItem<ClassDom>(*classIt, constructors_view, (*classIt)->name());
+        it->templateAddition = templateAdd;
+        PListViewItem<ClassDom> *over = new PListViewItem<ClassDom>(*classIt, methods_view, (*classIt)->name());
+        over->templateAddition = templateAdd;
+        QListViewItem *over_methods = new QListViewItem(over, i18n("Methods"));
+        QListViewItem *over_slots = new QListViewItem(over, i18n("Slots (Qt-specific)"));
+        PListViewItem<ClassDom> *access = new PListViewItem<ClassDom>(*classIt, access_view, (*classIt)->name());
+        QListViewItem *access_methods = new QListViewItem(access, i18n("Methods"));
+        QListViewItem *access_slots = new QListViewItem(access, i18n("Slots (Qt-specific)"));
+        QListViewItem *access_attrs = new QListViewItem(access, i18n("Attributes"));
+
+        FunctionList functionList = (*classIt)->functionList();
+        for (FunctionList::const_iterator methodIt = functionList.begin();
+            methodIt != functionList.end(); ++methodIt)
+        {
+            if ( (*methodIt)->isSignal() )
+            {
+                //don't show signals as overridable methods
+            }
+            else if (isConstructor((*classIt)->name(), *methodIt))
+            {
+                addToConstructorsList(it, *methodIt);
+            }
+            else if ((*methodIt)->isSlot())
+            {
+                if ((*methodIt)->access() != CodeModelItem::Private)
+                {
+                    addToMethodsList(over_slots, *methodIt);
+
+                    QString inhModifier;
+                    //protected inheritance gives protected attributes
+                    if (inheritance.contains("protected")) inhModifier = "protected";
+                    //private inheritance gives private attributes
+                    else if (inheritance.contains("private")) inhModifier = "private";
+                    //public inheritance gives protected and public attributes
+                    else if (inheritance.contains("public")) inhModifier = (*methodIt)->access() == CodeModelItem::Public ? "public" : "protected";
+                    addToUpgradeList(access_slots, *methodIt, inhModifier );
+                }
+            }
+            else
+            {
+                //display only public and protected methods of the base class
+                if ( (!isDestructor((*classIt)->name(), *methodIt)) && ((*methodIt)->access() != CodeModelItem::Private) )
+                {
+                    addToMethodsList(over_methods, *methodIt);
+                    
+                    //see what modifier is given for the base class
+                    QString inhModifier;
+                    //protected inheritance gives protected methods
+                    if (inheritance.contains("protected")) inhModifier = "protected";
+                    //private inheritance gives private methods
+                    else if (inheritance.contains("private")) inhModifier = "private";
+                    //public inheritance gives protected and public methods
+                    else if (inheritance.contains("public")) inhModifier = (*methodIt)->access() == CodeModelItem::Public ? "public" : "protected";
+                    addToUpgradeList(access_methods, *methodIt, inhModifier );
+                }
+            }
+        }
+
+        VariableList variableList = (*classIt)->variableList();
+        for (VariableList::const_iterator varIt = variableList.begin();
+            varIt != variableList.end(); ++varIt)
+        {
+            if ((*varIt)->access() != CodeModelItem::Private)
+            {
+                QString inhModifier;
+                //protected inheritance gives protected attributes
+                if (inheritance.contains("protected")) inhModifier = "protected";
+                //private inheritance gives private attributes
+                else if (inheritance.contains("private")) inhModifier = "private";
+                //public inheritance gives protected and public attributes
+                else if (inheritance.contains("public")) inhModifier = (*varIt)->access() == CodeModelItem::Public ? "public" : "protected";
+                addToUpgradeList(access_attrs, *varIt, inhModifier );
+            }
+        }
+    }
 }
 
 void CppNewClassDialog::clear_selection_button_clicked()
