@@ -263,7 +263,17 @@ public:
   void slotViewTMDIViewTaskbar();
   /** refresh all trees and other widgets*/
   void slotViewRefresh();
-  
+  /** show/hide the VAR debugger view */
+  void slotViewDebuggerViewsVar();
+  /** show/hide the breakpoint debugger view */
+  void slotViewDebuggerViewsBreakpoints();
+  /** show/hide the framestack debugger view */
+  void slotViewDebuggerViewsFrameStack();
+  /** show/hide the disassemble debugger view */
+  void slotViewDebuggerViewsDisassemble();
+  /** show/hide the debugger view */
+  void slotViewDebuggerViewsDebugger();
+
   ////////////////////////
   // PROJECT-Menu entries
   ///////////////////////
@@ -562,7 +572,11 @@ public:
                              const char *declName, 
                              THType type  );
 
+  /** */
   void slotMDIGetFocus(QextMdiChildView* item);
+
+  /** synchronize the state of the debugger_views_menu with the real debugger view states (item checks) */
+  void slotUpdateDebuggerViewsMenu();
 
 protected: // Protected methods
 
@@ -636,7 +650,7 @@ protected:
   /** initializes the session windows and opens the projects of the last
    * session */
   virtual void readProperties(KConfig* );
-	
+
 private:
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
@@ -645,6 +659,7 @@ private:
   KGuiCmdPopup* view_menu;
   QPopupMenu* bookmarks_menu;
   QPopupMenu* doc_bookmarks;
+  QPopupMenu* debugger_views_menu;
 
   QPopupMenu* project_menu;
   QPopupMenu* build_menu;

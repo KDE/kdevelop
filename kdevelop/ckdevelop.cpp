@@ -78,6 +78,11 @@
 #include "dlgedit/dialogview.h"
 #include "dlgedit/dlgedit.h"
 
+#include "./dbg/framestack.h"
+#include "./dbg/brkptmanager.h"
+#include "./dbg/dbgcontroller.h"
+#include "./dbg/vartree.h"
+#include "./dbg/disassemble.h"
 
 
 extern KGuiCmdManager cmdMngr;
@@ -684,6 +689,25 @@ void CKDevelop::slotViewRefresh(){
   refreshTrees();
 }
 
+void CKDevelop::slotViewDebuggerViewsVar(){
+  dockbase_var_viewer->changeHideShowState();
+}
+
+void CKDevelop::slotViewDebuggerViewsBreakpoints(){
+  dockbase_brkptManager_view->changeHideShowState();
+}
+
+void CKDevelop::slotViewDebuggerViewsFrameStack(){
+  dockbase_frameStack_view->changeHideShowState();
+}
+
+void CKDevelop::slotViewDebuggerViewsDisassemble(){
+  dockbase_disassemble_view->changeHideShowState();
+}
+
+void CKDevelop::slotViewDebuggerViewsDebugger(){
+  dockbase_dbg_widget_view->changeHideShowState();
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -746,7 +770,65 @@ void CKDevelop::slotBuildRunWithArgs(){
  * b) run a debugger
  */
 void CKDevelop::slotBuildDebug(){
-    // integrated debugger and external tools
+  // integrated debugger and external tools
+  enableCommand(ID_BUILD_STOP);
+  disableCommand(ID_BUILD_DEBUG);
+
+//if(we_will_use_the_internal_debugger) {
+    // save the normal "edit" configuration before switching to "debug" configuration.
+    writeDockConfig( config, "EditMode Dock-Settings");
+
+    // only if we wasn't in debug mode before, create the debugger widgets
+    // and put they on default position
+    if(dockbase_brkptManager_view == 0L) {  // maybe a hacky test?
+      dockbase_brkptManager_view = createDockWidget(i18n("breakpoint"), BarIcon(""));
+      brkptManager  = new BreakpointManager(0L, "BPManagerTab");
+      dockbase_brkptManager_view->setWidget(brkptManager);
+      	
+      dockbase_frameStack_view = createDockWidget(i18n("frame stack"), BarIcon(""));
+      frameStack    = new FrameStack(0L, "FStackTab");
+      dockbase_frameStack_view->setWidget(frameStack);
+      	
+      dockbase_disassemble_view = createDockWidget(i18n("disassemble"), BarIcon(""));
+      disassemble   = new Disassemble(0L, "DisassembleTab");
+      dockbase_disassemble_view->setWidget(disassemble);
+      	
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+      dockbase_dbg_widget_view = createDockWidget(i18n("debugger"), BarIcon(""));
+      dbg_widget = new COutputWidget(kapp, 0L, "debuggerTab");
+      dockbase_dbg_widget_view->setWidget(dbg_widget);
+      dbg_widget->insertLine("Start dbg");
+#endif
+
+      dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("debugger.xpm"));
+      dockbase_var_viewer->setCaption("");
+      var_viewer = new VarViewer(0L,"VARTab");
+      dockbase_var_viewer->setWidget(var_viewer);
+      dockbase_var_viewer->setToolTipString(i18n("variables tree view (for debugging)"));
+
+      dockbase_brkptManager_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+      dockbase_frameStack_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+      dockbase_o_tab_view = dockbase_disassemble_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+      dockbase_o_tab_view = dockbase_dbg_widget_view->manualDock(dockbase_messages_widget, KDockWidget::DockCenter);
+#endif
+      QString nameOfOutputSuperDock = dockbase_o_tab_view->name();
+
+      dockbase_var_viewer->manualDock(dockbase_class_tree, KDockWidget::DockCenter);
+    }
+
+    // rearrange the debugger widgets by a probably existing "debug" configuration
+    readDockConfig( config, "DebugMode Dock-Settings");
+
+    // enable the View->DebuggerViews submenu
+    enableCommand(ID_VIEW_DEBUGGER_VIEWS_VAR);
+    enableCommand(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS);
+    enableCommand(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK);
+    enableCommand(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+    enableCommand(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER);
+#endif
+//  }
 }
 
 /**
@@ -891,6 +973,26 @@ void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
   setToolMenuProcess(true);
   ComponentManager::self()->notifyCompilationAborted();
+
+  writeDockConfig( config, "DebugMode Dock-Settings");
+  disableCommand(ID_VIEW_DEBUGGER_VIEWS_VAR);
+  disableCommand(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS);
+  disableCommand(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK);
+  disableCommand(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  disableCommand(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER);
+#endif
+
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_VAR, false);
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS, false);
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK, false);
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE, false);
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER, false);
+#endif
+
+  readDockConfig( config, "EditMode Dock-Settings");
+
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -2617,6 +2719,17 @@ void CKDevelop::slotSwitchToToplevelMode() {
   }
 }
 
+void CKDevelop::slotUpdateDebuggerViewsMenu(){
+  // check/uncheck menu items
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_VAR, dockbase_var_viewer->mayBeHide());
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS, dockbase_brkptManager_view->mayBeHide());
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK, dockbase_frameStack_view->mayBeHide());
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE, dockbase_disassemble_view->mayBeHide());
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  debugger_views_menu->setItemChecked(ID_VIEW_DEBUGGER_VIEWS_DEBUGGER, dockbase_dbg_widget_view->mayBeHide());
+#endif
+}
+
 void CKDevelop::statusCallback(int id_){
   switch(id_){
     ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
@@ -2779,20 +2892,3 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

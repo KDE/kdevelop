@@ -828,7 +828,7 @@ void CKDevelop::saveOptions(){
   config->writeEntry("Recent Projects", recent_projects);
   
 	// write all settings concerning to the dockwidget´s stuff
-  writeDockConfig( config, "Dock Settings");
+  writeDockConfig( config, "EditMode Dock-Settings");
 
   config->sync();
 }
@@ -950,4 +950,3 @@ void CKDevelop::resizeEvent(QResizeEvent* rse){
   // if necessary, adjust the 4 system buttons of a maximized MDI view to the right-hand side
   mdi_main_frame->setSysButtonsAtMenuPosition();
 }
-
