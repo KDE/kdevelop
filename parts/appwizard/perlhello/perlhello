@@ -1,0 +1,8 @@
+# KDE Config File
+[General]
+Name=Simple Perl script
+Icon=camel.png
+Category=Perl
+Comment=This generates a simplistic 'Hello world' program in Perl (http://www.perl.org)
+DefaultDestinatonDir=
+FileTemplates=perl,ShellStyle

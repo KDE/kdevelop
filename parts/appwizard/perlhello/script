@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+
+use gideon;
+
+initGideon();
+
+print "Installing project file\n";
+install( "${src}/template-perlhello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
+
+print "Installing application sources\n";
+install( "${src}/template-perlhello/app.pl",       "${dest}/${APPNAMELC}.pl" );
+
+print "Finished\n";
