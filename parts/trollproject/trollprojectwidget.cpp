@@ -804,10 +804,10 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     Buffer->setValues("DEFINES",item->configuration.m_defines,FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("QMAKE_CXXFLAGS_DEBUG");
   if (item->configuration.m_cxxflags_debug.count())
-    Buffer->setValues("QMAKE_CXXFLAGS_DEBUG",item->configuration.m_cxxflags_debug,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+    Buffer->setValues("QMAKE_CXXFLAGS_DEBUG",item->configuration.m_cxxflags_debug,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   Buffer->removeValues("QMAKE_CXXFLAGS_RELEASE");
   if (item->configuration.m_cxxflags_release.count())
-    Buffer->setValues("QMAKE_CXXFLAGS_RELEASE",item->configuration.m_cxxflags_release,FileBuffer::VSM_RESET,VALUES_PER_ROW);
+    Buffer->setValues("QMAKE_CXXFLAGS_RELEASE",item->configuration.m_cxxflags_release,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   Buffer->removeValues("QMAKE_LFLAGS_DEBUG");
   if (item->configuration.m_lflags_debug.count())
     Buffer->setValues("QMAKE_LFLAGS_DEBUG",item->configuration.m_lflags_debug,FileBuffer::VSM_RESET,VALUES_PER_ROW);
