@@ -435,8 +435,8 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       lpC->show();
    }
 
-   QFocusEvent *fe = new QFocusEvent(QEvent::FocusIn);
-   QApplication::sendEvent( pWnd, fe);
+   QFocusEvent fe(QEvent::FocusIn);
+   QApplication::sendEvent( pWnd, &fe);
 
    m_pCurrentWindow  = pWnd;  // required for checking the active item
 }
