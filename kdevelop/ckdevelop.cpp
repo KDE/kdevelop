@@ -798,6 +798,8 @@ void CKDevelop::slotDebugRun()
 
     connect(  brkptManager,     SIGNAL(publishBPState(Breakpoint*)),
               dbgController,    SLOT(slotBPState(Breakpoint*)));
+    connect(  brkptManager,     SIGNAL(clearAllBreakpoints()),
+              dbgController,    SLOT(slotClearAllBreakpoints()));
 
     connect(  frameStack,       SIGNAL(selectFrame(int)),
               dbgController,    SLOT(slotSelectFrame(int)));
@@ -918,20 +920,21 @@ void CKDevelop::slotDebugMemoryView()
 
 void CKDevelop::slotDebugStatus(const QString& msg, int state)
 {
-  if (state)
+  QString stateIndicator("P");		// default to "paused"
+
+  if (state & (s_appBusy|s_waitForWrite))
+    stateIndicator = "A";
+
+  if (state & (s_dbgNotStarted|s_appNotStarted))
+    stateIndicator = " ";
+
+  if (state & s_programExited)
   {
-    if (state & (s_dbgNotStarted|s_appNotStarted))
-      statusBar()->changeItem(" ", ID_STATUS_DBG);
-    if (state & (s_appBusy|s_waitForWrite))
-      statusBar()->changeItem("A", ID_STATUS_DBG);
-    if (state & s_programExited)
-    {
-      statusBar()->changeItem("E", ID_STATUS_DBG);
-      edit_widget->clearStepLine();
-    }
+    stateIndicator = "E";
+    edit_widget->clearStepLine();
   }
-  else
-    statusBar()->changeItem("P", ID_STATUS_DBG);
+
+  statusBar()->changeItem(stateIndicator, ID_STATUS_DBG);
 
   if (!msg.isEmpty())
     slotStatusMsg(msg);

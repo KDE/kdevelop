@@ -1114,10 +1114,20 @@ void CKDevelop::initConnections(){
 	// Connect the breakpoint manager to monitor the bp setting - even
 	// when the debugging isn't running
   // ... Must connect up both editors!!!!!
-  connect(  header_widget,  SIGNAL(gutterClick(const QString&,int,bool)),
-            brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int,bool)));
-  connect(  cpp_widget,     SIGNAL(gutterClick(const QString&,int,bool)),
-            brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int,bool)));
+  connect(  header_widget,  SIGNAL(editBreakpoint(const QString&,int)),
+            brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
+  connect(  cpp_widget,     SIGNAL(editBreakpoint(const QString&,int)),
+            brkptManager,   SLOT(slotEditBreakpoint(const QString&,int)));
+
+  connect(  header_widget,  SIGNAL(toggleBreakpoint(const QString&,int)),
+            brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
+  connect(  cpp_widget,     SIGNAL(toggleBreakpoint(const QString&,int)),
+            brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int)));
+
+  connect(  header_widget,  SIGNAL(clearAllBreakpoints()),
+            brkptManager,   SLOT(slotClearAllBreakpoints()));
+  connect(  cpp_widget,     SIGNAL(clearAllBreakpoints()),
+            brkptManager,   SLOT(slotClearAllBreakpoints()));
 
   connect(  var_viewer->varTree(),  SIGNAL(toggleWatchpoint(const QString&)),
             brkptManager,           SLOT(slotToggleWatchpoint(const QString&)));

@@ -1,4 +1,8 @@
-1999-12-15 Sandy Meier   <smeier@rz.uni-potsdam.de>
+1999-12-18 jbb <jbb@ihug.co.nz>
+	* update to kwrite icon border code adding
+      more debug menu items
+
+ 1999-12-15 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* commited patch by Richard Dale <Richard_Dale@tipitina.demon.co.uk>
 	 (enable/disable autocopy in kwrite
 

@@ -90,145 +90,117 @@ void releaseBuffer(void *user) {
   resizeBuffer(0,0,0);
 }
 
-KIconBorder::KIconBorder(KWrite *write, KWriteDoc *doc, KWriteView *view) : QWidget(write) {
-	kWrite = write;
-	kWriteDoc = doc;
-	kWriteView = view;
-
-  int /*id_Abort,*/ id_Add, id_Clear, id_EditBp;
-
+KIconBorder::KIconBorder(KWrite *write, KWriteDoc *doc, KWriteView *view) :
+  QWidget(write),
+	kWrite(write),
+	kWriteDoc(doc),
+	kWriteView(view),
+	LMBIsBreakpoint(true),
+	cursorOnLine(0),
+	menuId_LMBBrkpoint(0),
+	menuId_LMBBookmark(0),
+	menuId_editBrkpoint(0)
+{
 	setBackgroundColor(colorGroup().background());
-	
-	setGeometry ( 2, 2, iconBorderWidth, 800/*this->height()*/);
+	setGeometry ( 2, 2, iconBorderWidth, 800);
 
-//	bookmarkIcon.load(KApplication::kde_icondir()+"/mini/bookmarkicon.xpm");
-
-//	id_Abort=selectMenu.insertItem(i18n("Abort"), this, SLOT(closePopup()));
-//	selectMenu.insertSeparator();
-	id_Add=selectMenu.insertItem(i18n("Toggle Bookmark"), this, SLOT(toggleBookmark()));
-	id_Clear=selectMenu.insertItem(i18n("Clear Bookmarks"), kWrite, SLOT(clearBookmarks()));
+	selectMenu.insertItem(i18n("Toggle bookmark"), this, SLOT(slotToggleBookmark()));
+	selectMenu.insertItem(i18n("Clear all bookmarks"), kWrite, SLOT(clearBookmarks()));
 	selectMenu.insertSeparator();
-	id_EditBp=selectMenu.insertItem(i18n("Edit Breakpoint"), this, SLOT(slotBreakpointRMBMenu()));
+	selectMenu.insertItem(i18n("Toggle breakpoint"), this, SLOT(slotToggleBreakpoint()));
+	menuId_editBrkpoint = selectMenu.insertItem(i18n("Edit breakpoint"), this, SLOT(slotEditBreakpoint()));
+	selectMenu.insertItem(i18n("Clear all breakpoints"), kWrite, SIGNAL(clearAllBreakpoints()));
 	selectMenu.insertSeparator();
-	id_toggle=selectMenu.insertItem(i18n("Set Breakpoints"), this, SLOT(toggleMenu()));
+	menuId_LMBBrkpoint  = selectMenu.insertItem(i18n("LMB sets breakpoints"), this, SLOT(slotLMBMenuToggle()));
+	menuId_LMBBookmark  = selectMenu.insertItem(i18n("LMB sets bookmarks"),   this, SLOT(slotLMBMenuToggle()));
 	selectMenu.setCheckable(true);
-	selectBroBm=true;
-	selectMenu.setItemChecked(id_toggle, true);
-//	selectMenu.insertItem("Get Range", this, SLOT(getRange()));
-//	selectMenu.insertItem("Hide function", this, SLOT(closePopup()));
-//	selectMenu.insertItem("Show function", this, SLOT(closePopup()));
+	
+	selectMenu.setItemChecked(menuId_LMBBrkpoint, LMBIsBreakpoint);
+	selectMenu.setItemChecked(menuId_LMBBookmark, !LMBIsBreakpoint);
 }
 
-KIconBorder::~KIconBorder() {
+
+KIconBorder::~KIconBorder()
+{
 }
 
 /**  */
-void KIconBorder::toggleMenu(){
-  selectBroBm = selectMenu.isItemChecked(id_toggle);
-	selectBroBm = !selectBroBm;
-  selectMenu.setItemChecked(id_toggle,selectBroBm);
-}
-
-/** toggles a bookmark */
-void KIconBorder::toggleBookmark(){
-
-	int line = ( mouseY + kWriteView->getYPos() ) / kWriteDoc->getFontHeight();
-	//	kWriteView->cursor.y = ( mouseY + kWriteView->getYPos() ) / kWriteDoc->getFontHeight();
-  //	kWriteView->changeYPos(mouseY);
-
-	if(kWrite->bookmarked(line))
-  {
-    kWrite->removeBookmark(line);
-  }
-	else
-	{
-		// Save the cursor position
-		int oldLine = kWriteView->cursor.y;
-
-		// Add a bookmark at the clicked line
-		kWriteView->cursor.y = line;
-  	kWrite->addBookmark();
-
-		// Reset the cursor position
-		kWriteView->cursor.y = oldLine;
-
-		// Repaint the bookmarked line
-    kWriteDoc->tagLines( line, line );
-	  kWriteDoc->updateViews();
-	}
-}
-
 /** Paints an icon to y */
-void KIconBorder::ShowIcon(QPixmap& icon, int y){
+void KIconBorder::showIcon(const QPixmap& icon, int y)
+{
   QPainter paint;
 
   paint.begin(this);
 	paint.drawPixmap(2,y,icon);
   paint.end();
-
 }
 
-int KIconBorder::getFontHeight()
-{
-	return kWriteDoc->getFontHeight();
-}
-
-void KIconBorder::clearLine(/*QPainter &paint,*/ int line)
+void KIconBorder::clearLine(int line)
 {
 	QPainter paint;
 
 	paint.begin(this);
 
-	int y = line * getFontHeight() - kWriteView->getYPos();
+	int y = line * kWriteDoc->getFontHeight() - kWriteView->getYPos();
 
-  paint.fillRect(0, y, iconBorderWidth-2, getFontHeight(), colorGroup().background());
+  paint.fillRect(0, y, iconBorderWidth-2, kWriteDoc->getFontHeight(), colorGroup().background());
 
   paint.setPen(white);
-  paint.drawLine(iconBorderWidth-2, y, iconBorderWidth-2, y + getFontHeight());
+  paint.drawLine(iconBorderWidth-2, y, iconBorderWidth-2, y + kWriteDoc->getFontHeight());
   paint.setPen(QColor(colorGroup().background()).dark());
-  paint.drawLine(iconBorderWidth-1, y, iconBorderWidth-1, y + getFontHeight());
+  paint.drawLine(iconBorderWidth-1, y, iconBorderWidth-1, y + kWriteDoc->getFontHeight());
 
 	paint.end();
 }
 
 void KIconBorder::paintBookmark(int line)
 {
-  #include "pix/bookmark.xpm"
 
   if (kWrite->bookmarked(line))
 	{
+    #include "pix/bookmark.xpm"
 		QPixmap bookmarkPixmap(bookmark_xpm);
-    ShowIcon(bookmarkPixmap, line * getFontHeight() - kWriteView->getYPos());
+    showIcon(bookmarkPixmap, line * kWriteDoc->getFontHeight() - kWriteView->getYPos());
 	}
 }
 
 void KIconBorder::paintBreakpoint(int line)
 {
-  #include "pix/breakpoint.xpm"
-  #include "pix/breakpoint_gr.xpm"
-  #include "pix/breakpoint_bl.xpm"
-  #include "pix/ddd.xpm"
-
   // A breakpoint is on this line - draw it
 	if ( kWriteDoc->textLine(line)->getBPId() != 0 )
 	{
 		QPixmap bpPix;
     if (!kWriteDoc->textLine(line)->isBPEnabled())
+    {
+      #include "pix/breakpoint_gr.xpm"
       bpPix = QPixmap(breakpoint_gr_xpm);
+    }
     else
+    {
 		  if (kWriteDoc->textLine(line)->isBPPending())
+		  {
+        #include "pix/breakpoint_bl.xpm"
 			  bpPix = QPixmap(breakpoint_bl_xpm);
+			 }
       else
+      {
+        #include "pix/breakpoint.xpm"
 				bpPix = QPixmap(breakpoint_xpm);
+      }
+    }
 
-		ShowIcon(bpPix, line * getFontHeight() - kWriteView->getYPos());
+		showIcon(bpPix, line * kWriteDoc->getFontHeight() - kWriteView->getYPos());
   }
+}
 
+void KIconBorder::paintDbgPosition(int line)
+{
   // This line is the position in source the debugger has stopped at.
   if (kWrite->getStepLine() == line )
 	{
+    #include "pix/ddd.xpm"
 		QPixmap dddPixmap(ddd_xpm);
-		ShowIcon(dddPixmap, line * getFontHeight() - kWriteView->getYPos());
+		showIcon(dddPixmap, line * kWriteDoc->getFontHeight() - kWriteView->getYPos());
 	}
 }
 
@@ -239,8 +211,8 @@ void KIconBorder::paintLine(int line)
 		clearLine(line);
 
 		paintBookmark(line);
-
 		paintBreakpoint(line);
+		paintDbgPosition(line);
   }
 }
 
@@ -261,42 +233,87 @@ void KIconBorder::paintEvent(QPaintEvent* e)
 	}
 }
 
-/**  */
-void KIconBorder::slotBreakpointRMBMenu(){
-  kWriteView->placeCursor( 0, mouseY, 0 );
-  kWriteDoc->updateViews();
-  emit kWrite->gutterClick(QString(kWriteDoc->fileName()), kWriteView->cursor.y+1,true);
-}
+/** Checks MouseEvents and executes the popup
+    All slots called from here (including the menu work off the "cursorOnLine" variable
+    set at the line the user has clicked on. We cannot pass the cursorOnLine as a parameter
+    because the menu items cannot have parameters
+*/
+void KIconBorder::mousePressEvent(QMouseEvent* e)
+{
+  kWriteView->placeCursor( 0, e->y(), 0 );
+	cursorOnLine = ( e->y() + kWriteView->getYPos() ) / kWriteDoc->getFontHeight();
 
-/** Checks MouseEvents and executes the popup */
-void KIconBorder::mousePressEvent(QMouseEvent* e){
-//	selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width()/2,e->y()-20)));
-	mouseY=e->y();
-
-  if (e->button()==LeftButton) {
-    if (selectBroBm) {
-            //toggle Breakpoint
-      kWriteView->placeCursor( 0, e->y(), 0 );
-      kWriteDoc->updateViews();
-      emit kWrite->gutterClick(QString(kWriteDoc->fileName()), kWriteView->cursor.y+1,false);
-  		//e->button() == RightButton);
-    } else {
-      toggleBookmark(); //or toggle after renewing bookmark handling
+  switch (e->button())
+  {
+    case LeftButton:
+    {
+      if (LMBIsBreakpoint)
+        slotToggleBreakpoint();
+      else
+        slotToggleBookmark();
+      break;
     }
-  } else if (e->button()==RightButton) {
-    selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width()/2,e->y()-20)));
-  } else if (e->button()==MidButton) {
-    toggleBookmark();
+    case RightButton:
+    {
+	    selectMenu.setItemEnabled (menuId_editBrkpoint,
+	                            kWriteDoc->textLine(cursorOnLine)->getBPId() != 0 );
+      selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width(),e->y()-20)));
+      break;
+    }
+
+    case MidButton:
+    {
+      slotToggleBookmark();
+      break;
+    }
   }
 }
 
-/** Closes Popup */
-void KIconBorder::closePopup(){
-	selectMenu.hide();
+void KIconBorder::slotLMBMenuToggle()
+{
+  LMBIsBreakpoint = !LMBIsBreakpoint;
+	selectMenu.setItemChecked(menuId_LMBBrkpoint, LMBIsBreakpoint);
+	selectMenu.setItemChecked(menuId_LMBBookmark, !LMBIsBreakpoint);
+}
+
+void KIconBorder::slotToggleBreakpoint()
+{
+  emit kWrite->toggleBreakpoint(QString(kWriteDoc->fileName()), cursorOnLine+1);
+}
+
+void KIconBorder::slotEditBreakpoint()
+{
+  emit kWrite->editBreakpoint(QString(kWriteDoc->fileName()), cursorOnLine+1);
+}
+
+/** toggles a bookmark */
+void KIconBorder::slotToggleBookmark()
+{
+	if(kWrite->bookmarked(cursorOnLine))
+  {
+    kWrite->removeBookmark(cursorOnLine);
+  }
+	else
+	{
+		// Save the cursor position
+		int oldLine = kWriteView->cursor.y;
+
+		// Add a bookmark at the clicked line
+		kWriteView->cursor.y = cursorOnLine;
+  	kWrite->addBookmark();
+
+		// Reset the cursor position
+		kWriteView->cursor.y = oldLine;
+
+		// Repaint the bookmarked line
+    kWriteDoc->tagLines(cursorOnLine, cursorOnLine);
+	  kWriteDoc->updateViews();
+	}
 }
 
 /** gets the Range of the function the cursor is in */
-void KIconBorder::getRange(){
+void KIconBorder::slotGetRange()
+{
 	kWriteView->getRange(kWriteView->cursor.y);
 }
 
