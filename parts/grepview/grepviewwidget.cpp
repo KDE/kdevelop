@@ -16,6 +16,9 @@
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kprocess.h>
+#include <kparts/part.h>
+#include <ktexteditor/selectioninterface.h>
+using namespace KTextEditor;
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -118,6 +121,20 @@ GrepViewWidget::~GrepViewWidget()
 
 void GrepViewWidget::showDialog()
 {
+    // Get the selected text if there is any
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(m_part->partController()->activePart());
+    if (ro_part)
+    {
+        SelectionInterface *selectIface = dynamic_cast<SelectionInterface*>(ro_part);
+        if(selectIface && selectIface->hasSelection())
+        {
+            QString selText = selectIface->selection();
+            if(!selText.contains('\n'))
+            {
+                grepdlg->setPattern(selText);
+            }
+        }
+    }
     grepdlg->show();
 }
 
