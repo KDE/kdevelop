@@ -46,6 +46,7 @@
 #include <knotifydialog.h>
 #include <kedittoolbar.h>
 #include <designer.h>
+#include <kstdaction.h>
 
 #include "kdevplugin.h"
 #include "projectmanager.h"
@@ -106,7 +107,8 @@ NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode md
     m_raiseEditor->setToolTip(i18n("Raise editor"));
     m_raiseEditor->setWhatsThis(i18n("<b>Raise editor</b><p>Focuses the editor."));
 
-
+	KStdAction::configureToolbars( this, SLOT(configureToolbars()), actionCollection(), "set_configure_toolbars" );
+	
 	//@fixme why is this part of KDevMainWindow?
 //    previous_output_view = NULL;
 }
@@ -140,23 +142,7 @@ void NewMainWindow::init() {
 	// remove the kmdi-created menu
 	delete m_pWindowMenu;
 
-	// get the xmlgui created one instead
-    m_pWindowMenu = static_cast<QPopupMenu*>(main()->child( "window", "KPopupMenu" ));
-
-    if( !m_pWindowMenu )
-	{
-		kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
-
-		m_pWindowMenu = new QPopupMenu( main(), "window");
-		menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
-	}
-
-	actionCollection()->action( "file_close" )->plug( m_pWindowMenu );
-	actionCollection()->action( "file_close_all" )->plug( m_pWindowMenu );
-	actionCollection()->action( "file_closeother" )->plug( m_pWindowMenu );
-
-	QObject::connect( m_pWindowMenu, SIGNAL(activated(int)), this, SLOT(openURL(int )) );
-    QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
+	setupWindowMenu();
 
 	menuBar()->setEnabled( false );
 
@@ -208,6 +194,18 @@ void NewMainWindow::init() {
 		tabWidget()->setTabReorderingEnabled(true);
 		connect(tabWidget(), SIGNAL(movedTab(int, int)), this, SLOT(tabMoved(int, int)));
 		connect(tabWidget(), SIGNAL(contextMenu(QWidget*,const QPoint &)), this, SLOT(tabContext(QWidget*,const QPoint &)));
+	}
+}
+
+void NewMainWindow::configureToolbars( )
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	KEditToolbar dlg( factory() );
+	if ( dlg.exec() )
+	{
+		setupWindowMenu();
+		createGUI( PartController::getInstance()->activePart() );
 	}
 }
 
@@ -327,6 +325,27 @@ void NewMainWindow::openURL( int id )
 		}
 		++it;
 	}
+}
+
+void NewMainWindow::setupWindowMenu( )
+{
+	// get the xmlgui created one instead
+	m_pWindowMenu = static_cast<QPopupMenu*>(main()->child( "window", "KPopupMenu" ));
+
+	if( !m_pWindowMenu )
+	{
+		kdDebug(9000) << "Couldn't find the XMLGUI window menu. Creating new." << endl;
+
+		m_pWindowMenu = new QPopupMenu( main(), "window");
+		menuBar()->insertItem(i18n("&Window"),m_pWindowMenu);
+	}
+
+	actionCollection()->action( "file_close" )->plug( m_pWindowMenu );
+	actionCollection()->action( "file_close_all" )->plug( m_pWindowMenu );
+	actionCollection()->action( "file_closeother" )->plug( m_pWindowMenu );
+
+	QObject::connect( m_pWindowMenu, SIGNAL(activated(int)), this, SLOT(openURL(int )) );
+	QObject::connect( m_pWindowMenu, SIGNAL(aboutToShow()), this, SLOT(fillWindowMenu()) );
 }
 
 void NewMainWindow::fillWindowMenu()

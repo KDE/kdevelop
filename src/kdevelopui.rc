@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="22" name="kdevelop" >
+<kpartgui version="23" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -111,7 +111,7 @@
     <DefineGroup name="show_merge" />
     <Separator />
     <Action name="settings_configure_shortcuts" />
-    <Action name="settings_configure_toolbars" />
+    <Action name="set_configure_toolbars" />
     <Action name="settings_configure_notifications" />
     <Action name="settings_configure_editors" />
     <Action name="settings_configure" />

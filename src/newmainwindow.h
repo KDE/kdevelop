@@ -98,7 +98,9 @@ private slots:
   void tabMoved(int from, int to);
   void tabContext(QWidget*,const QPoint &);  
   void tabContextActivated(int);    
-   
+  void configureToolbars();
+  void setupWindowMenu();
+
 //  void loadMDISettings();
 
 private:
