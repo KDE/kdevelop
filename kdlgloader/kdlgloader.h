@@ -16,6 +16,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#ifndef KDLGLOADER_H
+#define KDLGLOADER_H
 
 #if hpux
 #include <dl.h>
@@ -41,10 +43,17 @@ inline const char *dlerror()
 #define KDLGERR_DLG_NOT_OPENED          7   // Dialog is not open.
 #define KDLGERR_ERROR_READING_FILE      8   // Error while reading the dialog file.
 
+class KDlgLdr;
+
+typedef KDlgLdr* (*PFN_DLGLDR_INIT)(QWidget*);
+typedef long (*PFN_DLGLDR_DELETE)(KDlgLdr*);
+typedef long (*PFN_DLGLDR_OPENDIALOG)(KDlgLdr*, QString);
+typedef long (*PFN_DLGLDR_FREEDIALOG)(KDlgLdr*);
+typedef QWidget* (*PFN_DLGLDR_GIPNAME)(KDlgLdr*, QString);
+typedef QWidget* (*PFN_DLGLDR_GIPVNAME)(KDlgLdr*, QString);
+typedef long (*PFN_DLGLDR_SETBEHAVIOUR)(KDlgLdr*, long);
 
 static const char *KDLGLDR_LIBRARY_NAME          = "libkdlgloader.so";
-
-class KDlgLdr;
 
 static const char *FNC_KDLGLDR_INIT              = "kdlgldr_init";
 static const char *FNC_KDLGLDR_DELETE            = "kdlgldr_delete";
@@ -55,13 +64,13 @@ static const char *FNC_KDLGLDR_GETITEMPTRVARNAME = "kdlgldr_getitemptrvarname";
 static const char *FNC_KDLGLDR_SETBEHAVIOUR      = "kdlgldr_setbehaviour";
 
 
-KDlgLdr* (*KDlgLdr_Init)(QWidget*) = 0;                    // KDlgLoader::KDlgLoader()
-long (*KDlgLdr_Delete)(KDlgLdr*) = 0;                      // delete KDlgLoader
-long (*KDlgLdr_OpenDialog)(KDlgLdr*, QString) = 0;         // KDlgLoader::openDialog()
-long (*KDlgLdr_FreeDialog)(KDlgLdr*) = 0;                  // KDlgLoader::freeDialog()
-QWidget* (*KDlgLdr_GetItemPtrName)(KDlgLdr*, QString) = 0;     // KDlgLoader::getItemPtrName()
-QWidget* (*KDlgLdr_GetItemPtrVarName)(KDlgLdr*, QString) = 0;  // KDlgLoader::getItemPtrVarName()
-long (*KDlgLdr_SetBehaviour)(KDlgLdr*, long) = 0;          // KDlgLoader::setBehaviour()
+PFN_DLGLDR_INIT KDlgLdr_Init = 0;                    // KDlgLoader::KDlgLoader()
+PFN_DLGLDR_DELETE KDlgLdr_Delete = 0;                      // delete KDlgLoader
+PFN_DLGLDR_OPENDIALOG KDlgLdr_OpenDialog = 0;         // KDlgLoader::openDialog()
+PFN_DLGLDR_FREEDIALOG KDlgLdr_FreeDialog = 0;                     // KDlgLoader::freeDialog()
+PFN_DLGLDR_GIPNAME KDlgLdr_GetItemPtrName = 0;     // KDlgLoader::getItemPtrName()
+PFN_DLGLDR_GIPVNAME KDlgLdr_GetItemPtrVarName = 0;  // KDlgLoader::getItemPtrVarName()
+PFN_DLGLDR_SETBEHAVIOUR KDlgLdr_SetBehaviour = 0;          // KDlgLoader::setBehaviour()
 
 void *KDlgLdr_Library = 0;                                 // Library handle
 
@@ -83,7 +92,7 @@ bool loadKDlgLdrLibrary()
     }
 
 #if hpux
-  #define LOAD_LIB_FNC(fncname, fncptr) \
+  #define LOAD_LIB_FNC(fncname, fncptr, fncast) \
        if (!fncptr) { \
          if (shl_findsym((mapped_shl_entry **)&KDlgLdr_Library, fncname, \
                         TYPE_PROCEDURE, &fncptr) != 0) { \
@@ -95,18 +104,18 @@ bool loadKDlgLdrLibrary()
 	     } \
 	   }
 #else
-  #define LOAD_LIB_FNC(fncname, fncptr) \
-       if (!fncptr) { (void*)fncptr = dlsym(KDlgLdr_Library, fncname); \
+  #define LOAD_LIB_FNC(fncname, fncptr, fncast) \
+       if (!fncptr) { fncptr = (fncast) dlsym(KDlgLdr_Library, fncname); \
         if (!fncptr) { warning("Getting dialog loader library method failed. (%s)",dlerror()); return false; } }
 #endif
 
-  LOAD_LIB_FNC(FNC_KDLGLDR_INIT,              KDlgLdr_Init)
-  LOAD_LIB_FNC(FNC_KDLGLDR_DELETE,            KDlgLdr_Delete)
-  LOAD_LIB_FNC(FNC_KDLGLDR_OPENDLG,           KDlgLdr_OpenDialog)
-  LOAD_LIB_FNC(FNC_KDLGLDR_FREEDLG,           KDlgLdr_FreeDialog)
-  LOAD_LIB_FNC(FNC_KDLGLDR_GETITEMPTRNAME,    KDlgLdr_GetItemPtrName)
-  LOAD_LIB_FNC(FNC_KDLGLDR_GETITEMPTRVARNAME, KDlgLdr_GetItemPtrVarName)
-  LOAD_LIB_FNC(FNC_KDLGLDR_SETBEHAVIOUR,      KDlgLdr_SetBehaviour)
+  LOAD_LIB_FNC(FNC_KDLGLDR_INIT,              KDlgLdr_Init, PFN_DLGLDR_INIT)
+  LOAD_LIB_FNC(FNC_KDLGLDR_DELETE,            KDlgLdr_Delete, PFN_DLGLDR_DELETE)
+  LOAD_LIB_FNC(FNC_KDLGLDR_OPENDLG,           KDlgLdr_OpenDialog, PFN_DLGLDR_OPENDIALOG)
+  LOAD_LIB_FNC(FNC_KDLGLDR_FREEDLG,           KDlgLdr_FreeDialog, PFN_DLGLDR_FREEDIALOG)
+  LOAD_LIB_FNC(FNC_KDLGLDR_GETITEMPTRNAME,    KDlgLdr_GetItemPtrName, PFN_DLGLDR_GIPNAME)
+  LOAD_LIB_FNC(FNC_KDLGLDR_GETITEMPTRVARNAME, KDlgLdr_GetItemPtrVarName, PFN_DLGLDR_GIPVNAME)
+  LOAD_LIB_FNC(FNC_KDLGLDR_SETBEHAVIOUR,      KDlgLdr_SetBehaviour, PFN_DLGLDR_SETBEHAVIOUR)
 
   #undef LOAD_LIB_FNC
 
@@ -182,3 +191,5 @@ class KDlgLoader {
     KDlgLdr *ldr;
     bool libLoaded;
 };
+
+#endif
