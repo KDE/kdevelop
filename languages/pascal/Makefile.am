@@ -27,5 +27,5 @@ genparser:
 #PascalStoreWalker.hpp PascalStoreWalker.cpp: pascal.tree.g
 #	antlr pascal.tree.g
 
-#templatedir = ${kde_datadir}/kdevabbrev/templates
-#template_DATA = pascaltemplates
+templatedir = ${kde_datadir}/kdevabbrev/templates
+template_DATA = pascaltemplates
