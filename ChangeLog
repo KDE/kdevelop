@@ -1,3 +1,11 @@
+2001-05-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added Python Hello world template
+	* Fixed memory leaks
+	* Fixed project files in templates to include mainprogram variable
+	* Fixed script project to not show . and .. and to go to a source
+	  file when it is clicked
+
 2001-05-09  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Implemented proper comparing of file identities:

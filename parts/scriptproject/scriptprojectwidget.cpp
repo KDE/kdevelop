@@ -17,60 +17,44 @@
 #include "scriptprojectwidget.h"
 
 
-class ScriptProjectFileItem : public QListViewItem
+ScriptProjectItem::ScriptProjectItem(ScriptProjectWidget *parent, Type type, const QString &name)
+    : QListViewItem(parent, name), typ(type)
 {
-public:
-    ScriptProjectFileItem(QListViewItem *parent, const QString &nam);
-};
-
-
-ScriptProjectFileItem::ScriptProjectFileItem(QListViewItem *parent, const QString &name)
-    : QListViewItem(parent, name)
-{
-    setPixmap(0, SmallIcon("document"));
+    init();
 }
 
 
-class ScriptProjectDirItem : public QListViewItem
+ScriptProjectItem::ScriptProjectItem(ScriptProjectItem *parent, Type type, const QString &name)
+    : QListViewItem(parent, name), typ(type)
 {
-public:
-    ScriptProjectDirItem(ScriptProjectWidget *parent, const QString &name);
-    ScriptProjectDirItem(ScriptProjectDirItem *parent, const QString &name);
-    QString path();
-
-    void setOpen(bool o);
-};
-
-
-ScriptProjectDirItem::ScriptProjectDirItem(ScriptProjectWidget *parent, const QString &name)
-    : QListViewItem(parent, name)
-{
-    setExpandable(true);
-    setPixmap(0, SmallIcon("folder"));
+    init();
 }
 
 
-ScriptProjectDirItem::ScriptProjectDirItem(ScriptProjectDirItem *parent, const QString &name)
-    : QListViewItem(parent, name)
+void ScriptProjectItem::init()
 {
-    setExpandable(true);
-    setPixmap(0, SmallIcon("folder"));
+    if (typ == File)
+        setPixmap(0, SmallIcon("document"));
+    else {
+        setExpandable(true);
+        setPixmap(0, SmallIcon("folder"));
+    }
 }
 
 
-QString ScriptProjectDirItem::path()
+QString ScriptProjectItem::path()
 {
     QString name = text(0);
     if (parent()) {
         name.prepend("/");
-        name.prepend(static_cast<ScriptProjectDirItem*>(parent())->path());
+        name.prepend(static_cast<ScriptProjectItem*>(parent())->path());
     }
 
     return name;
 }
 
 
-void ScriptProjectDirItem::setOpen(bool o)
+void ScriptProjectItem::setOpen(bool o)
 {
     if (o && !childCount()) {
         QDir dir(path());
@@ -80,10 +64,12 @@ void ScriptProjectDirItem::setOpen(bool o)
             QFileInfoListIterator it(*fileList);
             for (; it.current(); ++it) {
                 QFileInfo *fi = it.current();
-                if (fi->isDir() && fi->fileName() != "." && fi->fileName() != "..")
-                    ( new ScriptProjectDirItem(this, fi->fileName()) )->setOpen(true);
+                if (fi->fileName() == "." || fi->fileName() == "..")
+                    continue;
+                if (fi->isDir())
+                    ( new ScriptProjectItem(this, Dir, fi->fileName()) )->setOpen(true);
                 else
-                    (void) new ScriptProjectFileItem(this, fi->fileName());
+                    (void) new ScriptProjectItem(this, File, fi->fileName());
             }
         }
 
@@ -102,6 +88,7 @@ ScriptProjectWidget::ScriptProjectWidget(QWidget *parent, const char *name)
     addColumn("");
 }
 
+
 ScriptProjectWidget::~ScriptProjectWidget()
 {}
 
@@ -110,7 +97,7 @@ void ScriptProjectWidget::openProject(const QString &dirName)
 {
     m_projectDirectory = dirName;
 
-    ( new ScriptProjectDirItem(this, dirName) )->setOpen(true);
+    ( new ScriptProjectItem(this, ScriptProjectItem::Dir, dirName) )->setOpen(true);
 }
 
 
@@ -146,4 +133,3 @@ QString ScriptProjectWidget::projectDirectory()
 }
 
 #include "scriptprojectwidget.moc"
-

@@ -53,8 +53,8 @@ private:
     void insertCategoryIntoTreeView(QString completeCategoryPath);
     QStringList m_templateNames;
     KTempFile *tempFile;
-    QList<ApplicationInfo>* m_pAppsInfo;
-    QDict<QListViewItem>* m_pCategoryMap; //store the category name and the pointer in the treeview
+    QList<ApplicationInfo> m_appsInfo;
+    QDict<QListViewItem> m_categoryMap; //store the category name and the pointer in the treeview
 
     AppWizardPart *m_part;
     ApplicationInfo* m_pCurrentAppInfo;

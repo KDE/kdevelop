@@ -65,8 +65,6 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     : AppWizardDialogBase(parent, name)
 {
   templates_listview->header()->hide();
-  m_pAppsInfo = new QList<ApplicationInfo>();
-  m_pCategoryMap = new QDict<QListViewItem>();
   KGlobal::dirs()->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "gideon/templates/");
   m_templateNames = KGlobal::dirs()->findAllResources("apptemplates", QString::null, false, true);
   kdDebug(9010) << "Templates: " << endl;
@@ -92,7 +90,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     
     categories.append(category);
     pInfo->category = category;
-    m_pAppsInfo->append(pInfo);
+    m_appsInfo.append(pInfo);
   }
   categories.sort();
   for (it = categories.begin(); it != categories.end(); ++it) {
@@ -100,8 +98,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
   }
   ApplicationInfo* pInfo=0;
   QListViewItem* pItem=0;
-  for(pInfo=m_pAppsInfo->first();pInfo!=0;pInfo=m_pAppsInfo->next()){
-    pItem = m_pCategoryMap->find(pInfo->category);
+  for(pInfo=m_appsInfo.first();pInfo!=0;pInfo=m_appsInfo.next()){
+    pItem = m_categoryMap.find(pInfo->category);
     if(pItem !=0){
       pItem = new QListViewItem(pItem,pInfo->name);
       //      pItem->setPixmap(0, SmallIcon("resource"));
@@ -363,7 +361,7 @@ void AppWizardDialog::insertCategoryIntoTreeView(QString completeCategoryPath){
   QListViewItem* pParentItem=0;
   for( it = categories.begin(); it != categories.end(); ++it ){
     category = category + "/"+ *it;
-    pItem = m_pCategoryMap->find(category);
+    pItem = m_categoryMap.find(category);
     if(pItem == 0){ // not found, create it
       if(pParentItem==0){
 	pParentItem = new QListViewItem(templates_listview,*it);
@@ -374,7 +372,7 @@ void AppWizardDialog::insertCategoryIntoTreeView(QString completeCategoryPath){
       pParentItem->setPixmap(0, SmallIcon("folder"));
       pParentItem->setOpen(true);
       kdDebug(9010) << "Category: " << category << endl;
-      m_pCategoryMap->insert(category,pParentItem);
+      m_categoryMap.insert(category,pParentItem);
     }
     else{
       pParentItem = pItem;
@@ -382,15 +380,18 @@ void AppWizardDialog::insertCategoryIntoTreeView(QString completeCategoryPath){
   }
 }
 
+
 void AppWizardDialog::templatesTreeViewClicked(QListViewItem* pItem){
   ApplicationInfo* pInfo=0;
-  for(pInfo=m_pAppsInfo->first();pInfo!=0;pInfo=m_pAppsInfo->next()){
+  for(pInfo=m_appsInfo.first();pInfo!=0;pInfo=m_appsInfo.next()){
     if(pInfo->pItem == pItem){
       desc_textview->setText(pInfo->comment);
       m_pCurrentAppInfo = pInfo;
     }
   }
 }
+
+
 void AppWizardDialog::destButtonClicked(){
   QString dir = KFileDialog::getExistingDirectory ( dest_edit->text(),this,
 						    "Project Location" );

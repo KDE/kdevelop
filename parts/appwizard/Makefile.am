@@ -1,6 +1,6 @@
 # Here resides the app wizard part.
 
-SUBDIRS = common kapp kpartapp kpartplugin kappjava kdevpart
+SUBDIRS = common kapp kpartapp kpartplugin kappjava kdevpart pythonhello
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 

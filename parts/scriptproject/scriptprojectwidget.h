@@ -32,4 +32,23 @@ private:
     QString m_projectDirectory;
 };
 
+
+class ScriptProjectItem : public QListViewItem
+{
+public:
+    enum Type { File, Dir };
+    
+    ScriptProjectItem(ScriptProjectWidget *parent, Type type, const QString &nam);
+    ScriptProjectItem(ScriptProjectItem *parent, Type type, const QString &nam);
+    QString path();
+    Type type()
+    { return typ; }
+
+    virtual void setOpen(bool o);
+
+private:
+    void init();
+    Type typ;
+};
+
 #endif

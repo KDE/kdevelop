@@ -17,6 +17,7 @@
 #include "kdevproject.h"
 
 class ScriptProjectWidget;
+class QListViewItem;
 
 
 class ScriptProjectPart : public KDevProject
@@ -34,6 +35,9 @@ protected:
     virtual QString mainProgram();
     virtual QString projectDirectory();
     virtual QStringList allSourceFiles();
+
+private slots:
+    void slotItemExecuted(QListViewItem *item);
 
 private:
     QGuardedPtr<ScriptProjectWidget> m_widget;

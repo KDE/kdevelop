@@ -34,6 +34,9 @@ ScriptProjectPart::ScriptProjectPart(KDevApi *api, QObject *parent, const char *
     m_widget->setCaption(i18n("Project"));
     
     core()->embedWidget(m_widget, KDevCore::SelectView, i18n("Project"));
+
+    connect( m_widget, SIGNAL(executed(QListViewItem*)),
+             this, SLOT(slotItemExecuted(QListViewItem*)) );
 }
 
 
@@ -75,5 +78,11 @@ QStringList ScriptProjectPart::allSourceFiles()
 }
 
 
+void ScriptProjectPart::slotItemExecuted(QListViewItem *item)
+{
+    ScriptProjectItem *spitem = static_cast<ScriptProjectItem*>(item);
+    if (spitem->type() == ScriptProjectItem::File)
+        core()->gotoSourceFile(KURL(spitem->path()));
+}
 
 #include "scriptprojectpart.moc"
