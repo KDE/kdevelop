@@ -1,0 +1,42 @@
+<!DOCTYPE kdeveloptoc>
+<kdeveloptoc>
+<title>KDevelop API Documentation</title>
+<base href="http://developer.kde.org/documentation/library/cvs-api/kdevelop/html"/>
+<tocsect1 name="Overview" url="index.html">
+	<tocsect2 name="KDevelop 3 Architecture" url="KDev3Arch.html"/>
+	<tocsect2 name="Programming Languages Support Status" url="LangSupportStatus.html"/>
+</tocsect1>
+<tocsect1 name="How-to" url="index.html#expand">
+	<tocsect2 name="How to extend KDevelop via plugins" url="howToAddPlugins.html"/>
+	<tocsect2 name="How to add support for a programming language" url="howToAddProgrammingLanguages.html"/>
+	<tocsect2 name="How to add templates to the application wizard" url="howToAddTemplates.html"/>
+	<tocsect2 name="How to add file templates to the file create part" url="howToAddFileTemplates.html"/>
+	<tocsect2 name="How to document KDevelop parts" url="howToDocument.html"/>
+</tocsect1>
+<tocsect1 name="PlannedTasks" url="index.html#PlannedTasks">
+	<tocsect2 name="High priority tasks!" url="HighPriTasks.html"/>
+</tocsect1>
+<tocsect1 name="Class Hierarchy" url="hierarchy.html">
+</tocsect1>
+<tocsect1 name="Classes" url="classes.html">
+</tocsect1>
+<tocsect1 name="Classes (annotated)" url="annotated.html">
+</tocsect1>
+<tocsect1 name="Members" url="functions.html">
+</tocsect1>
+<tocsect1 name="Namespaces" url="namespaces.html">
+</tocsect1>
+<tocsect1 name="Source Files" url="files.html">
+</tocsect1>
+<tocsect1 name="README.dox" url="index.html#misc">
+	<tocsect2 name="Requirements" url="requirements.html"/>
+	<tocsect2 name="Features" url="features.html"/>
+	<tocsect2 name="Authors" url="authors.html"/>
+	<tocsect2 name="Maintainers" url="maintainers.html"/>
+	<tocsect2 name="Unmaintained parts" url="unmaintained.html"/>
+	<tocsect2 name="Deprecated List" url="deprecated.html"/>
+	<tocsect2 name="Todo List" url="todo.html"/>
+	<tocsect2 name="Known Bugs" url="bug.html"/>
+	<tocsect2 name="F.A.Q." url="FAQ.html"/>
+</tocsect1>
+</kdeveloptoc>
