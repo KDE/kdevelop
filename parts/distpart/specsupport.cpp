@@ -176,9 +176,9 @@ void SpecSupport::parseDotRpmmacros() {
     QFile dotfile(QDir::homeDirPath() + "/.rpmmacros");
 
     if (!dotfile.open(IO_ReadOnly)) {
-        QErrorMessage * msg = new QErrorMessage(this);
-        msg->message("It seems you don't have a ~/.rpmmacros\nYou may experience problems building packages.\n");
-        msg->exec();
+//        QErrorMessage * msg = new QErrorMessage(this);
+//        msg->message("It seems you don't have a ~/.rpmmacros\nYou may experience problems building packages.\n");
+//        msg->exec();
         return;
     }
     QTextStream stream(&dotfile);
