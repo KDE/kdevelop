@@ -25,7 +25,7 @@
 #include "kdevdifffrontend.h"
 #include "commitdlg.h"
 #include "logform.h"
-#include "cvscommand.h"
+#include "execcommand.h"
 
 
 typedef KGenericFactory<CvsPart> CvsFactory;
@@ -172,7 +172,7 @@ void CvsPart::slotDiff()
 
     args << "diff"; // cannot use "-u3 -p" since it will clash with ~/.cvsrc
     args << name;
-    CvsCommand* cmv = new CvsCommand( args, dir, this );
+    ExecCommand* cmv = new ExecCommand( "cvs", args, dir, this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
              this, SLOT(slotDiffFinished( const QString&, const QString& )) );
 }
