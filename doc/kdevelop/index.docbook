@@ -39,8 +39,8 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2003-09-01</date>
-  <releaseinfo>3.0</releaseinfo>
+  <date>2003-09-26</date>
+  <releaseinfo>3.0.0a7</releaseinfo>
 
   <authorgroup>
     <author>
@@ -75,6 +75,10 @@ Entries which require special treatment are marked with comments starting with '
   <copyright>
     <year>2002</year>
     <holder>Caleb Tennis</holder>
+  </copyright>
+  <copyright>
+    <year>2003</year>
+    <holder>Bernd Pol</holder>
   </copyright>
 
   <legalnotice>&FDLNotice;</legalnotice>
