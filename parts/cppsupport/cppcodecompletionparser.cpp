@@ -200,7 +200,19 @@ QString CppCodeCompletionParser::getCurrentClassname ( int nLine )
 
 QString CppCodeCompletionParser::getTypeOfObject ( const QString& strObject, int nLine )
 {
-	return "";
+	// Lets look if its a Member of actuall class
+
+	QString strCurrentClassname;
+
+	strCurrentClassname = getCurrentClassname (nLine);
+
+	if (strCurrentClassname.isEmpty())
+		return "";
+
+	if (!m_pStore->hasClass (strCurrentClassname))
+		return "";
+
+	
 }
 
 QString CppCodeCompletionParser::getReturnTypeOfMethod ( const QString& strMethod )
