@@ -141,8 +141,10 @@
 #define ID_DEBUG_RUN                14320
 #define ID_DEBUG_STOP               14330
 #define ID_DEBUG_STEP               14340
+#define ID_DEBUG_STEP_INST          14341
 #define ID_DEBUG_NEXT               14350
-#define ID_DEBUG_RESTART            14360
+#define ID_DEBUG_NEXT_INST          14351
+#define ID_DEBUG_FINISH             14360
 #define ID_DEBUG_MEMVIEW            14370
 #define ID_DEBUG_BREAK_INTO         14380
 

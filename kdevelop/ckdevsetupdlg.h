@@ -84,6 +84,7 @@ private:
   QCheckBox* dbgMembersCheck;
   QCheckBox* dbgAsmCheck;
   QCheckBox* dbgLibCheck;
+  QCheckBox* dbgFloatCheck;
 
  private slots:
   void slotOkClicked();

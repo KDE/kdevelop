@@ -927,6 +927,8 @@ private:
 
   /** debugger additions for the internal debugger */
 
+  void setDebugMenuProcess(bool enable);
+
   /** The controller for the debugging program (eg gdb) */
   DbgController* dbgController;
   
@@ -945,24 +947,27 @@ private:
   /** show disassembled code being run - on output tab */
    Disassemble* disassemble;
  
-   /** debug aid. Switch on using compile switch GDB_MONITOR
-       or DBG_MONITOR  - on output tab */
+  /** debug aid. Switch on using compile switch GDB_MONITOR
+      or DBG_MONITOR  - on output tab */
 
   COutputWidget* dbg_widget;
 
+  /** */
   bool dbgInternal;
   
   /** The external debugger command to run */
   QString dbgExternalCmd;
 
-  // Initiates a variety of debugging sessions.
+  /** Initiates a variety of debugging sessions. */
   QPopupMenu* debugPopup;
 
-  // Protect the gdbcontroller deletion.
-   bool dbgShuttingDown;
+  /** Protect the gdbcontroller deletion. */
+  bool dbgShuttingDown;
 
+  /** Have both float and normal toolbar */
+  bool dbgEnableFloatingToolbar;
 
-     /** memory effect on open file dialog box*/
+  /** memory effect on open file dialog box*/
   QString _LastOpenDir;
 
 

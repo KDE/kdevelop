@@ -394,6 +394,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
   bool displayMangledNames = config->readBoolEntry("Display mangled names", false);
   bool displayStaticMembers = config->readBoolEntry("Display static members", false);
   bool setBPsOnLibLoad = config->readBoolEntry("Break on loading libs", false);
+  bool dbgFloatingToolbar = config->readBoolEntry("Enable floating toolbar", false);
 
   w3 = new QWidget( this, "debug" );
 
@@ -433,7 +434,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
 	                  "as your debugger")));
 
   dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
-  dbgInternalGroup->setGeometry( 10, 120, 400, 130 );
+  dbgInternalGroup->setGeometry( 10, 130, 400, 150 );
   dbgInternalGroup->setFrameStyle( 49 );
   dbgInternalGroup->setTitle(i18n( "Internal" ));
   dbgInternalGroup->setAlignment( 1 );
@@ -477,6 +478,19 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_p
                     "try to set the pending breakpoints. See docs for more\n"
                     "details and a \"gotcha\" relating to this behaviour.\n\n"
                     "If you are not \"dlopen\"ing libs leave this off." ));
+
+  dbgFloatCheck = new QCheckBox( w3, "dbgFloatToolbar" );
+  dbgFloatCheck->setGeometry( 20, 240, 310, 25 );
+  dbgFloatCheck->setText(i18n("Enable floating toolbar"));
+  dbgFloatCheck->setAutoRepeat( FALSE );
+  dbgFloatCheck->setAutoResize( FALSE );
+  dbgFloatCheck->setChecked(dbgFloatingToolbar);
+  KQuickHelp::add(dbgFloatCheck, i18n("Enable flaoting toolbar\n\n"
+	                  "Use the floating toolbar. This toolbar always stays\n"
+                    "on top of all windows so that if the app covers KDevelop\n"
+                    "you have control of the app though the small toolbar\n"
+                    "Also this toolbar can be docked to the panel\n"
+                    "This toolbar is in addition to the toolbar in KDevelop" ));
 
   slotSetDebug();
   connect( dbgExternalCheck, SIGNAL(toggled(bool)), SLOT(slotSetDebug()));
@@ -600,6 +614,7 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("Display mangled names", dbgAsmCheck->isChecked());
   config->writeEntry("Display static members", dbgMembersCheck->isChecked());
   config->writeEntry("Break on loading libs", dbgLibCheck->isChecked());
+  config->writeEntry("Enable floating toolbar", dbgFloatCheck->isChecked());
 
   accel->setKeyDict( *dict);
   accel->writeSettings(config);
@@ -668,4 +683,5 @@ void CKDevSetupDlg::slotSetDebug()
   dbgMembersCheck->setEnabled(!externalDbg);
   dbgAsmCheck->setEnabled(!externalDbg);
   dbgLibCheck->setEnabled(!externalDbg);
+  dbgFloatCheck->setEnabled(!externalDbg);
 }

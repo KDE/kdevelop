@@ -76,7 +76,15 @@ CKDevelop::CKDevelop(bool witharg)
   config = kapp->getConfig();
   kdev_caption=kapp->getCaption();
 
-  // ********* DEBUG stuff splattered everywhere (jbb) :-)
+  // ********* DEBUGGER stuff splattered everywhere (jbb) :-)
+  // We need to know what debugger we are using to set the
+  // system up appropriately
+  config->setGroup("Debug");
+  dbgInternal = !config->readBoolEntry("Use external debugger");
+  dbgExternalCmd = config->readEntry("External debugger program","kdbg");
+  dbgEnableFloatingToolbar = config->readBoolEntry("Enable floating toolbar", false);
+
+
   debugPopup = new QPopupMenu();
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
@@ -84,7 +92,7 @@ CKDevelop::CKDevelop(bool witharg)
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug this project's executable"),this,SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
   debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set debug arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
 //  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set remote target"),this,SLOT(slotDebugSetRemote()),0,ID_DEBUG_SET_REMOTE);
-
+  // ************ END DEBUGGER STUFF
 
   initView();
   initConnections();
@@ -930,9 +938,30 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("contents.xpm"),ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
 	
+  if (dbgInternal)
+  {
+    toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
+    QFrame *separatorLine= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
+    separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+    toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine);
+
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false, i18n("Continue with app execution. May start the app"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Execute one line of code, stepping into fn if appropriate"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP_INST, false,i18n("Execute one assembler instruction, stepping into fn if appropriate"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Execute one line of code, but run through functions"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT_INST, false,i18n("Execute one assembler instruction, but run through functions"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgstepout.xpm"),ID_DEBUG_FINISH, false,i18n("Execute to end of current stack frame"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgmemview.xpm"),ID_DEBUG_MEMVIEW, false,i18n("Memory, dissemble, registers, library viewer"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("dbgbreak.xpm"),ID_DEBUG_BREAK_INTO, false, i18n("Interrupt the app execution"));
+    toolBar(ID_BROWSER_TOOLBAR)->insertButton(Icon("stop_proc.xpm"),ID_DEBUG_STOP, false, i18n("Stop debugging the app"));
+
+  	QFrame *separatorLine1= new QFrame(toolBar(ID_BROWSER_TOOLBAR));
+    separatorLine1->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+    toolBar(ID_BROWSER_TOOLBAR)->insertWidget(0,20,separatorLine1);
+  }
+
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   connect(toolBar(ID_BROWSER_TOOLBAR), SIGNAL(pressed(int)), SLOT(statusCallback(int)));
-
 }
 
 /*------------------------------------------ CKDevelop::initStatusBar()
@@ -1332,6 +1361,7 @@ void CKDevelop::initDebugger()
   config->setGroup("Debug");
   dbgInternal = !config->readBoolEntry("Use external debugger");
   dbgExternalCmd = config->readEntry("External debugger program","kdbg");
+  dbgEnableFloatingToolbar = config->readBoolEntry("Enable floating toolbar", false);
 
   // once we've set these tabs up we don't seem to be able to remove them
   // without crashing. So for internal debuggers set them up and if they

@@ -800,8 +800,7 @@ void CKDevelop::slotDebugRun()
 
 void CKDevelop::slotDebugStop()
 {
-  delete dbgToolbar;
-  dbgToolbar = 0;
+  setDebugMenuProcess(false);
 
   if (dbgShuttingDown)
     return;
@@ -820,9 +819,6 @@ void CKDevelop::slotDebugStop()
 #endif
   edit_widget->clearStepLine();
   brkptManager->refreshBP(edit_widget->getName());
-
-  toolBar()->setItemEnabled(ID_BUILD_DEBUG, project);
-  toolBar()->setItemEnabled(ID_BUILD_STOP, false);
 
   o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal && dbgController);
   o_tab_view->setTabEnabled(i18n("Disassemble"), dbgInternal && dbgController);
@@ -956,6 +952,7 @@ void CKDevelop::slotDebugAttach()
     slotBuildDebug();
 }
 
+
 void CKDevelop::slotDebugSetArgs()
 {
   QString args=prj->getDebugArgs();
@@ -1072,19 +1069,57 @@ void CKDevelop::slotBuildDebug()
   swallow_widget->init();
 }
 
+void CKDevelop::setDebugMenuProcess(bool enable)
+{
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_RUN,        enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_MEMVIEW,    enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP,       enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STEP_INST,  enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT,       enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_NEXT_INST,  enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_FINISH,     enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_BREAK_INTO, enable);
+  toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(ID_DEBUG_STOP,       enable);
+
+  // When starting we turn off the original toolbar start button and startup
+  // the debuggers floating toolbar.
+  // Then enable the stop button so they can exit the debugger.
+  toolBar()->setItemEnabled(ID_BUILD_DEBUG, !enable);
+//  toolBar()->setItemEnabled(ID_BUILD_STOP, enable);
+
+  if (enable)
+  {
+    if (dbgEnableFloatingToolbar)
+    {
+      ASSERT(dbgController);
+      dbgToolbar = new DbgToolbar(dbgController, this);
+      dbgToolbar->show();
+      connect(  dbgController,  SIGNAL(dbgStatus(const QString&,int)),
+                dbgToolbar,     SLOT(slotDbgStatus(const QString&,int)));
+    }
+  }
+  else
+  {
+    // Always try and delete this when the toolbar is disabled
+    delete dbgToolbar;
+    dbgToolbar = 0;
+  }
+}
+
+
 void CKDevelop::setupInternalDebugger()
 {
   ASSERT(!dbgController);
   if (dbgController)
     return;
-
+	
   saveTimer->stop();  // stop the autosaving
-
   slotStatusMsg(QString().sprintf(i18n("Running %s in internal debugger"),
                   (prj->getBinPROGRAM()).data()));
 
   dbgController = new GDBController(var_viewer->varTree(), frameStack);
   dbgShuttingDown = false;
+	setDebugMenuProcess(true);  // MUST be after dbgController
 
   o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal && dbgController);
   o_tab_view->setTabEnabled(i18n("Disassemble"), dbgInternal && dbgController);
@@ -1144,17 +1179,6 @@ void CKDevelop::setupInternalDebugger()
   connect(  dbgController,  SIGNAL(rawGDBDisassemble(char*)),
             disassemble,    SLOT(slotDisassemble(char*)));
 
-  // We turn off the original toolbar start button and startup the debuggers
-  // floating toolbar.
-  // The enable the stop button so they can exit the debugger.
-  toolBar()->setItemEnabled(ID_BUILD_DEBUG, false);
-  toolBar()->setItemEnabled(ID_BUILD_STOP, true);
-
-  dbgToolbar = new DbgToolbar(dbgController, this);
-  dbgToolbar->show();
-
-  connect(  dbgController,  SIGNAL(dbgStatus(const QString&,int)),
-            dbgToolbar,     SLOT(slotDbgStatus(const QString&,int)));
 }
 
 void CKDevelop::slotBuildMake(){
@@ -3388,6 +3412,43 @@ void CKDevelop::slotToolbarClicked(int item){
       slotClassbrowserViewDefinition();
       cv_decl_or_impl=true;
     }		
+    break;
+
+  case ID_DEBUG_RUN:
+    ASSERT(dbgInternal);
+    slotDebugRun();
+    break;
+  case ID_DEBUG_STEP:
+    ASSERT(dbgInternal && dbgController);
+    dbgController->slotStepInto();
+    break;
+  case ID_DEBUG_STEP_INST:
+    ASSERT(dbgInternal && dbgController);
+    dbgController->slotStepIntoIns();
+    break;
+  case ID_DEBUG_NEXT:
+    ASSERT(dbgInternal && dbgController);
+    dbgController->slotStepOver();
+    break;
+  case ID_DEBUG_NEXT_INST:
+    ASSERT(dbgInternal && dbgController);
+    dbgController->slotStepOverIns();
+    break;
+  case ID_DEBUG_STOP:
+    ASSERT(dbgInternal);
+    slotDebugStop();
+    break;
+  case ID_DEBUG_BREAK_INTO:
+    ASSERT(dbgInternal && dbgController);
+    dbgController->slotBreakInto();
+    break;
+  case ID_DEBUG_MEMVIEW:    // change this name
+    ASSERT(dbgInternal);
+    slotDebugMemoryView();
+    break;
+  case ID_DEBUG_FINISH:
+    ASSERT(dbgInternal);
+    dbgController->slotStepOutOff();
     break;
   }
 }
