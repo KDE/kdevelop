@@ -154,7 +154,7 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
     parag->setFirstPreProcess( FALSE );
 
     if ( invalidate && parag->next() &&
-//         state != oldState &&
+         state != oldState &&
 	 !parag->next()->firstPreProcess() &&
          parag->next()->endState() != -1 ) {
 	parag->next()->setEndState( -1 );
