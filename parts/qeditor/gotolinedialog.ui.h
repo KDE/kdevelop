@@ -10,6 +10,7 @@
 void GotoLineDialog::init()
 {
 	m_editor = 0;
+        spinLineNumber->setMinValue( 1 );
 }
 
 void GotoLineDialog::destroy()
@@ -23,5 +24,6 @@ void GotoLineDialog::setEditor( QEditor* editor )
 
 void GotoLineDialog::accept()
 {
-	m_editor->doGotoLine( spinLineNumber->value() );
+	m_editor->doGotoLine( spinLineNumber->value()-1 );
+        QDialog::accept();
 }
