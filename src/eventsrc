@@ -1,6 +1,7 @@
 [!Global!]
 IconName=kdevelop
 Comment=KDevelop
+Comment[hi]=के-डेवलप
 Comment[xx]=xxKDevelopxx
 
 [ProcessSuccess]
@@ -34,6 +35,7 @@ Comment[de]=Prozess erfolgreich beendet
 Comment[es]=Proceso finalizado con éxito
 Comment[et]=Protsess edukalt lõpetatud
 Comment[fr]=Le processus a terminé avec succès.
+Comment[hi]=प्रक्रिया सफलतापूर्वक सम्पन्न
 Comment[hu]=A folyamat sikeresen befejeződött
 Comment[it]=Processo terminato con successo
 Comment[nl]=Het proces werd succesvol voltooid
@@ -59,6 +61,7 @@ Name[el]=Σφάλμα διεργασίας
 Name[es]=Proceso fallido
 Name[et]=Protsessi viga
 Name[fr]=Erreur du processus
+Name[hi]=प्रक्रिया त्रुटि
 Name[hu]=Hibás folyamat
 Name[it]=Errore di processo
 Name[nl]=Procesfout
@@ -81,6 +84,7 @@ Comment[el]=Η διεργασία ολοκληρώθηκε με λάθη
 Comment[es]=Proceso finalizado con errores
 Comment[et]=Protsess lõppes vigadega
 Comment[fr]=Le processus a terminé avec des erreurs.
+Comment[hi]=प्रक्रिया त्रुटियों के साथ सम्पन्न
 Comment[hu]=A folyamat hibajelzéssel fejeződött be
 Comment[it]=Processo terminato con errori
 Comment[nl]=Het proces eindigde met fouten
