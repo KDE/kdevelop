@@ -12,8 +12,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>414</width>
-            <height>437</height>
+            <width>410</width>
+            <height>429</height>
         </rect>
     </property>
     <property stdset="1">
@@ -26,6 +26,10 @@
     </property>
     <widget>
         <class>QWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Widget2</cstring>
+        </property>
         <attribute>
             <name>title</name>
             <string>General</string>
@@ -175,75 +179,159 @@
                     <name>title</name>
                     <string>General</string>
                 </property>
-                <grid>
+                <widget>
+                    <class>QLabel</class>
                     <property stdset="1">
-                        <name>margin</name>
-                        <number>11</number>
+                        <name>name</name>
+                        <cstring>TextLabel8</cstring>
                     </property>
                     <property stdset="1">
-                        <name>spacing</name>
-                        <number>6</number>
+                        <name>geometry</name>
+                        <rect>
+                            <x>246</x>
+                            <y>20</y>
+                            <width>40</width>
+                            <height>22</height>
+                        </rect>
                     </property>
-                    <widget row="2"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>TextLabel4</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>Company:</string>
-                        </property>
-                    </widget>
-                    <widget row="1"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>TextLabel6</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>Email:</string>
-                        </property>
-                    </widget>
-                    <widget row="0"  column="0" >
-                        <class>QLabel</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>TextLabel3</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>text</name>
-                            <string>Author:</string>
-                        </property>
-                    </widget>
-                    <widget row="2"  column="1" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>company_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget row="1"  column="1" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>email_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget row="0"  column="1" >
-                        <class>QLineEdit</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>author_edit</cstring>
-                        </property>
-                    </widget>
-                </grid>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Initials:</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel3</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>20</y>
+                            <width>56</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Author:</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel6</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>50</y>
+                            <width>56</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Email:</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabel4</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>10</x>
+                            <y>80</y>
+                            <width>56</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Company:</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>company_edit</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>70</x>
+                            <y>80</y>
+                            <width>290</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>email_edit</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>70</x>
+                            <y>50</y>
+                            <width>290</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>author_edit</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>70</x>
+                            <y>20</y>
+                            <width>150</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLineEdit</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>initial_edit</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>geometry</name>
+                        <rect>
+                            <x>291</x>
+                            <y>20</y>
+                            <width>70</width>
+                            <height>22</height>
+                        </rect>
+                    </property>
+                </widget>
             </widget>
         </grid>
     </widget>
     <widget>
         <class>QWidget</class>
+        <property stdset="1">
+            <name>name</name>
+            <cstring>Widget3</cstring>
+        </property>
         <attribute>
             <name>title</name>
             <string>Header</string>
@@ -289,21 +377,19 @@
                             <cstring>Spacer1</cstring>
                         </property>
                         <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>168</x>
-                                <y>5</y>
-                                <width>137</width>
-                                <height>20</height>
-                            </rect>
-                        </property>
-                        <property stdset="1">
                             <name>orientation</name>
                             <enum>Horizontal</enum>
                         </property>
                         <property stdset="1">
                             <name>sizeType</name>
                             <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
                         </property>
                     </spacer>
                     <widget>
@@ -365,15 +451,16 @@
     <slot access="public">slotNewHeader()</slot>
 </connections>
 <tabstops>
-    <tabstop>loadheader_button</tabstop>
-    <tabstop>newheader_button</tabstop>
-    <tabstop>header_multiedit</tabstop>
     <tabstop>author_edit</tabstop>
+    <tabstop>initial_edit</tabstop>
     <tabstop>email_edit</tabstop>
     <tabstop>company_edit</tabstop>
     <tabstop>license_combobox</tabstop>
     <tabstop>version_edit</tabstop>
     <tabstop>lsm_checkbox</tabstop>
     <tabstop>desc_multiedit</tabstop>
+    <tabstop>loadheader_button</tabstop>
+    <tabstop>newheader_button</tabstop>
+    <tabstop>header_multiedit</tabstop>
 </tabstops>
 </UI>

@@ -141,7 +141,7 @@ BugList::BugList(QWidget *parent, const char *name, QString FileName,
     ParseFile ();
 
     // Make sure at least we are in there.
-    if (Developers.isEmpty ())
+    if (!Developers [m_Initials])
     {
         BugCounter *    pBugCounter;
 
@@ -444,8 +444,25 @@ void BugList::slotAddClicked()
     // Create a bug for the editor to work on.
     pBug = new Bug;
 
-    // Get a new bug id.
+    // Try to grab a developer's bug counter.
     pBugCounter = Developers [m_Initials];
+
+    // They didn't have a matching set of initials. We better add it now.
+    if (!pBugCounter)
+    {
+        BugCounter *    pBugCounter;
+
+        // Add the current developer settings into the dictionary.
+        pBugCounter = new BugCounter;
+        pBugCounter->Initials = m_Initials;
+        pBugCounter->LastBugNumber = 0;
+        Developers.insert (pBugCounter->Initials, pBugCounter);
+
+        // And get that counter again.
+        pBugCounter = Developers [m_Initials];
+    }
+
+    // Get a suitable ID.
     pBug->BugID = pBugCounter->GetNextID ();
 
     // Fire up the bug editor on the new bug we created.

@@ -35,12 +35,6 @@ BugListComponent::BugListComponent (QObject *parent=0, const char *name=0)
 
     // Not pointing nowhere like.
     m_pBugList = NULL;
-
-    // HACK: Filling in some defaults for testing purposes.
-    m_FileName = "bugs.xml";
-    m_Initials = "ILH";
-    m_UserName = "Ivan Hawkes";
-    m_UserEMail = "linuxgroupie@ivanhawkes.com";
 }
 
 
@@ -89,7 +83,7 @@ void BugListComponent::configWidgetRequested(KDialogBase *dlg)
 
 void BugListComponent::projectSpaceOpened()
 {
-    int         Count;
+    uint        Count;
     QString     LastProject;
 
     kdDebug(9040) << "BugList::projectSpaceOpened()" << endl;
@@ -100,11 +94,14 @@ void BugListComponent::projectSpaceOpened()
         // Bug tracking is only valid with a project.
         m_pMenuAction->setEnabled (TRUE);
 
-        // Keep a track of the current project space. Probably not needed.
+        // Grab the user details from the projectspace.
         m_pProjectSpace = projectSpace();
-        QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
+        m_Initials = m_pProjectSpace->initials ();
+        m_UserName = m_pProjectSpace->author ();
+        m_UserEMail = m_pProjectSpace->email ();
 
         // Get the Projectspace
+        QDomDocument doc = *m_pProjectSpace->readGlobalDocument();
         QDomElement psElement = doc.documentElement();
 
         // Get the list of projects.
@@ -119,7 +116,7 @@ void BugListComponent::projectSpaceOpened()
                 if (LastProject == projElement.attribute("name"))
                 {
                     // Found the right project - grab what we need from it.
-                    m_FileName = projElement.attribute("relativePath") + projElement.attribute("bugfile");
+                    m_FileName = m_pProjectSpace->absolutePath () + "/" + projElement.attribute("relativePath") + projElement.attribute("bugfile");
                 }
             }
         }
@@ -127,10 +124,19 @@ void BugListComponent::projectSpaceOpened()
         {
             // Just one project, use the bug file from that one.
             QDomElement projElement = projNodes.item(0).toElement();
-            m_FileName = projElement.attribute("relativePath") + projElement.attribute("bugfile");
+            m_FileName = m_pProjectSpace->absolutePath () + "/" + projElement.attribute("relativePath") + projElement.attribute("bugfile");
         }
 
+        kdDebug(9040) << "BugList::AbsPath = " << m_pProjectSpace->absolutePath () << endl;
         kdDebug(9040) << "BugList::BugFile = " << m_FileName << endl;
+        kdDebug(9040) << "BugList::m_Initials = " << m_Initials << endl;
+        kdDebug(9040) << "BugList::m_UserName = " << m_UserName << endl;
+        kdDebug(9040) << "BugList::m_UserEMail = " << m_UserEMail << endl;
+
+        // HACK: ProjectSpace not providing this stuff yet!!!
+        m_Initials = "ILH";
+        m_UserName = "Ivan Hawkes";
+        m_UserEMail = "linuxgroupie@ivanhawkes.com";
 
         // Update the attributes if the component is currently running.
         if (m_pBugList)
@@ -162,8 +168,17 @@ void BugListComponent::projectSpaceOpened()
 
 void BugListComponent::projectSpaceClosed()
 {
+    kdDebug(9040) << "BugList::closeProjectSpace" << endl;
+
     // Bug tracking is only valid with a project.
     m_pMenuAction->setEnabled (FALSE);
+
+    // Close down the tracking - warn of change lose.
+    if (!m_pBugList)
+    {
+        m_pBugList->slotCloseClicked ();
+        m_pBugList = NULL;
+    }
 
     m_pProjectSpace = NULL;
 }

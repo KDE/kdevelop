@@ -43,6 +43,7 @@ AppWizard::AppWizard(QWidget* parent, const char* obj_name) : AppWizardBase(pare
   
   email_edit->setText( fromaddr );
   author_edit->setText( name );
+  initial_edit->setText( "JD" );    // Get from config when available.
   company_edit->setText( company );
   
   // conntects
@@ -78,6 +79,7 @@ void AppWizard::accept(){
   kdDebug(9030) << "start generation" << endl;
   if(m_newProjectspace){ // only if a new one was selected
     m_pProjectspace->setAuthor(author_edit->text());
+    m_pProjectspace->setInitials(initial_edit->text());
     m_pProjectspace->setEmail(email_edit->text());
     m_pProjectspace->setCompany(company_edit->text());
     m_pProjectspace->setVersion(version_edit->text());
