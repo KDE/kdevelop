@@ -1152,10 +1152,10 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked()
 
 void CPrjOptionsDlg::addCompletionOptionsPage()
 {
-  QFrame* additionalPage = addPage(i18n("Code Completion"),i18n("\"configure\" Code Completion"),
-  KGlobal::instance()->iconLoader()->loadIcon( "configure", KIcon::NoGroup, KIcon::SizeMedium ));
+  QFrame* additionalPage = addPage(i18n("Code Completion"),i18n("Code Completion Configuration"),
+  KGlobal::instance()->iconLoader()->loadIcon( "source", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(additionalPage);
-  QWhatsThis::add(additionalPage, i18n("Set some configure options of your project here."));
+  QWhatsThis::add(additionalPage, i18n("Set some code completion options here."));
   completionOptsDlg = new CPrjCompletionOpts(prj_info, additionalPage);
   grid->addWidget(completionOptsDlg,0,0);
 }
