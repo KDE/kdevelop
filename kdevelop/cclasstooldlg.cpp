@@ -35,7 +35,7 @@
  ********************************************************************/
 
 CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
-  : QDialog( parent, name, true ),
+  : QDialog( parent, name, false ),
     classTree( this, "classTree" ),
     classLbl( this, "classLbl" ),
     classCombo( false, this, "classCombo" ),
@@ -285,20 +285,17 @@ void CClassToolDlg::setStore( CClassStore *aStore )
 {
   assert( aStore != NULL );
 
-  QListBox *lb;
+  QStrList *list;
 
   store = aStore;
 
   // Set the store in the treehandler as well.
   ((CClassTreeHandler *)classTree.treeH)->setStore( store );
 
-  lb = classCombo.listBox();
-
-  // Add all classnames in sorted order.
-  for( store->classIterator.toFirst();
-       store->classIterator.current();
-       ++(store->classIterator) )
-    lb->inSort( store->classIterator.current()->name );
+  // Fetch the list and update the combobox.
+  list = store->getSortedClassNameList();
+  classCombo.insertStrList( list );
+  delete list;
 }
 
 void CClassToolDlg::setClass( const char *aName )

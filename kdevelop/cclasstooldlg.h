@@ -90,24 +90,24 @@ public: // Public widgets
 
 protected: // Private widgets
 
- QLabel classLbl;
- QComboBox classCombo;
+  QLabel classLbl;
+  QComboBox classCombo;
+  
+  QVBoxLayout topLayout;
+  QHBoxLayout comboLayout;
+  QHBoxLayout btnLayout;
 
- QVBoxLayout topLayout;
- QHBoxLayout comboLayout;
- QHBoxLayout btnLayout;
+  QPushButton parentsBtn;
+  QPushButton childrenBtn;
+  QPushButton clientsBtn;
+  QPushButton suppliersBtn;
 
- QPushButton parentsBtn;
- QPushButton childrenBtn;
- QPushButton clientsBtn;
- QPushButton suppliersBtn;
+  QPushButton attributesBtn;
+  QPushButton methodsBtn;
+  QPushButton virtualsBtn;
+  QComboBox exportCombo;
 
- QPushButton attributesBtn;
- QPushButton methodsBtn;
- QPushButton virtualsBtn;
- QComboBox exportCombo;
-
- protected slots:
+protected slots:
 
   void slotParents();
   void slotChildren();
