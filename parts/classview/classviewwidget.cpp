@@ -135,7 +135,7 @@ void ClassViewWidget::slotProjectOpened( )
     m_projectDirectory = QDir(m_part->project()->projectDirectory()).canonicalPath();
     if( m_projectDirectory.isEmpty() )
 	m_projectDirectory = m_part->project()->projectDirectory();
-    
+
     m_projectDirectoryLength = m_projectDirectory.length() + 1;
 
     connect( m_part->languageSupport(), SIGNAL(updatedSourceInfo()),
@@ -678,12 +678,27 @@ void FunctionDomBrowserItem::openImplementation()
     if( lst.isEmpty() )
         return;
 
-    FunctionDefinitionDom fun = lst.front();
-    QString path = QFileInfo( m_dom->fileName() ).dirPath( true );
+    FunctionDefinitionDom fun;
+    QFileInfo fileInfo( m_dom->fileName() );
+    QString path = fileInfo.dirPath( true );
 
-    for( FunctionDefinitionList::Iterator it=lst.begin(); it!=lst.end(); ++it ){
-	if( path == QFileInfo((*it)->fileName()).dirPath(true) )
+    for( FunctionDefinitionList::Iterator it=lst.begin(); it!=lst.end(); ++it )
+    {
+        QFileInfo defFileInfo( (*it)->fileName() );
+        QString defPath = defFileInfo.dirPath( true );
+
+        if( path != defPath )
+            continue;
+
+	if( defFileInfo.baseName() == fileInfo.baseName() ) {
+            fun = *it;
+        } else if( !fun ) {
 	    fun = *it;
+        }
+    }
+
+    if( !fun ) {
+        fun = lst.front();
     }
 
     int startLine, startColumn;
