@@ -98,6 +98,10 @@ m_newFileNames(newFileNames)
   SlotItem *newSlot;
   m_qtBaseClassName = DomUtil::elementByPathExt(doc,"widget").attribute("class","QDialog");
 
+  if (m_qtBaseClassName=="QMainWindow")
+    m_canBeModal = false;
+  else
+    m_canBeModal = true;
   newSlot = new SLOT_ACCEPT;
   newSlot->setOn(false);
   m_slotView->insertItem(newSlot);
@@ -192,14 +196,27 @@ bool SubclassingDlg::loadBuffer(QString &buffer, const QString& filename)
   return true;
 }
 
-bool SubclassingDlg::replaceKeywords(QString &buffer)
-//=====================================================
+bool SubclassingDlg::replaceKeywords(QString &buffer,bool canBeModal)
+//===================================================================
 {
   replace(buffer,"$NEWFILENAMEUC$",m_edFileName->text().upper());
   replace(buffer,"$BASEFILENAMELC$",m_formName.lower());
   replace(buffer,"$NEWCLASS$",m_edClassName->text());
   replace(buffer,"$BASECLASS$",m_baseClassName);
   replace(buffer,"$NEWFILENAMELC$",m_edFileName->text().lower());
+  if (canBeModal)
+  {
+    replace(buffer,"$CAN_BE_MODAL_H$",", bool modal = FALSE");
+    replace(buffer,"$CAN_BE_MODAL_CPP1$",", bool modal");
+    replace(buffer,"$CAN_BE_MODAL_CPP2$",", modal");
+  }
+  else
+  {
+    replace(buffer,"$CAN_BE_MODAL_H$","");
+    replace(buffer,"$CAN_BE_MODAL_CPP1$","");
+    replace(buffer,"$CAN_BE_MODAL_CPP2$","");
+  }
+
   return true;
 }
 
@@ -238,7 +255,7 @@ void SubclassingDlg::accept()
 
   QString buffer;
   loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.h"));
-  replaceKeywords(buffer);
+  replaceKeywords(buffer,m_canBeModal);
   for (i=0; i<m_slots.count(); i++)
   {
     SlotItem *slitem = m_slots[i];
@@ -306,7 +323,7 @@ void SubclassingDlg::accept()
 
 
   loadBuffer(buffer,::locate("data", "kdevtrollproject/subclassing/subclass_template.cpp"));
-  replaceKeywords(buffer);
+  replaceKeywords(buffer,m_canBeModal);
   for (i=0; i<m_slots.count(); i++)
   {
     SlotItem *slitem = m_slots[i];

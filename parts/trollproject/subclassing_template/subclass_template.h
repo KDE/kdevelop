@@ -9,7 +9,7 @@ class $NEWCLASS$ : public $BASECLASS$
   Q_OBJECT
 
 public:
-                        $NEWCLASS$(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+                        $NEWCLASS$(QWidget* parent = 0, const char* name = 0$CAN_BE_MODAL_H$, WFlags fl = 0 );
                         ~$NEWCLASS$();
   /*$PUBLIC_FUNCTIONS$*/
 

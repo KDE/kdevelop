@@ -47,7 +47,7 @@ public:
 
 private:
   void                  updateDlg();
-  bool                  replaceKeywords(QString &buffer);
+  bool                  replaceKeywords(QString &buffer, bool canBeModal=true);
   void                  replace(QString &string, const QString& search, const QString& replace);
   bool                  saveBuffer(QString &buffer, const QString& filename);
   bool                  loadBuffer(QString &buffer, const QString& filename);
@@ -64,6 +64,7 @@ protected:
   QString               m_baseCaption;
   QString               m_formName;
   QString               m_formPath;
+  bool                  m_canBeModal;
   QValueList<SlotItem*> m_slots;
   QValueList<SlotItem*> m_functions;
 
