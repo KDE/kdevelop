@@ -64,6 +64,7 @@ private slots:
     void slotCompletionAborted();
     void slotCompletionDone();
     void slotFilterInsertString( KTextEditor::CompletionEntry*, QString* );
+    void slotAboutToShowCompletionBox();
 
 private:
     void updateActions();

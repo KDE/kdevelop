@@ -129,6 +129,8 @@ void AbbrevPart::setAutoWordCompletionEnabled( bool enabled )
 		 this, SLOT(slotCompletionAborted()) );
 	connect( docIface->widget(), SIGNAL(completionDone()),
 		 this, SLOT(slotCompletionDone()) );
+	connect( docIface->widget(), SIGNAL(aboutToShowCompletionBox()),
+		 this, SLOT(slotAboutToShowCompletionBox()) );
 
 	connect( docIface, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
     }
@@ -524,6 +526,11 @@ void AbbrevPart::updateActions()
 {
     actionCollection()->action( "edit_expandtext" )->setEnabled( docIface != 0 );
     actionCollection()->action( "edit_expandabbrev" )->setEnabled( docIface != 0 );
+}
+
+void AbbrevPart::slotAboutToShowCompletionBox()
+{
+    m_inCompletion = true;
 }
 
 #include "abbrevpart.moc"
