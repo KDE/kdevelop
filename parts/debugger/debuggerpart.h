@@ -18,6 +18,8 @@
 #include "kdevplugin.h"
 #include "kdevcore.h"
 
+#include "debuggerdcopinterface.h"
+
 namespace KParts { class Part; };
 
 class QLabel;
@@ -38,7 +40,7 @@ class DbgToolBar;
 class VariableWidget;
 class GDBOutputWidget;
 
-class DebuggerPart : public KDevPlugin
+class DebuggerPart : public KDevPlugin, virtual public DebuggerDCOPInterface
 {
     Q_OBJECT
 
@@ -47,6 +49,9 @@ public:
     ~DebuggerPart();
     virtual void restorePartialProjectSession(const QDomElement* el);
     virtual void savePartialProjectSession(QDomElement* el);
+
+k_dcop:
+    virtual ASYNC slotDebugExternalProcess();
 
 private slots:
     void guiClientAdded(KXMLGUIClient*);
@@ -77,7 +82,10 @@ private slots:
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
 
+    void slotDCOPApplicationRegistered(const QCString &appId);
+
 private:
+    void attachProcess(int pid);
     void startDebugger();
     void setupController();
 

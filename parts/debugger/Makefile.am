@@ -6,7 +6,8 @@ kde_module_LTLIBRARIES = libkdevdebugger.la
 libkdevdebugger_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdebugger_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevdebugger_la_SOURCES = debuggerpart.cpp \
+libkdevdebugger_la_SOURCES = debuggerdcopinterface.skel \
+                             debuggerpart.cpp \
                              dbgcontroller.cpp \
                              gdbcontroller.cpp \
                              dbgcommand.cpp \

@@ -27,6 +27,8 @@
 #include <kparts/part.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
+#include <dcopclient.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -291,11 +293,39 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
              appFrontend(), SLOT(insertStderrLine(const QString&)) );
 
     setupController();
+
+    connect(kapp->dcopClient(), SIGNAL(applicationRegistered(const QCString&)), SLOT(slotDCOPApplicationRegistered(const QCString&)));
+    kapp->dcopClient()->setNotifications(true);
 }
 
+void DebuggerPart::slotDCOPApplicationRegistered(const QCString& appId)
+{
+    if (appId.find("drkonqi-") == 0) {
+        kapp->dcopClient()->send(appId, "krashinfo", "registerDebuggingApplication(QString)", i18n("Debug in &KDevelop"));
+        connectDCOPSignal(appId, "krashinfo", "acceptDebuggingApplication()", "slotDebugExternalProcess()", true);
+    }
+}
+
+ASYNC DebuggerPart::slotDebugExternalProcess()
+{
+    QByteArray answer;
+    QCString replyType;
+
+    kapp->dcopClient()->call(kapp->dcopClient()->senderId(), "krashinfo", "pid()", QByteArray(), replyType, answer, true, 5000);
+
+    QDataStream d(answer, IO_ReadOnly);
+    int pid;
+    d >> pid;
+
+    attachProcess(pid);
+    mainWindow()->raiseView(framestackWidget);
+    mainWindow()->main()->raise();
+}
 
 DebuggerPart::~DebuggerPart()
 {
+    kapp->dcopClient()->setNotifications(false);
+
     if (variableWidget)
         mainWindow()->removeView(variableWidget);
     if (gdbBreakpointWidget)
@@ -606,6 +636,11 @@ void DebuggerPart::slotAttachProcess()
         return;
 
     int pid = dlg.pidSelected();
+    attachProcess(pid);
+}
+
+void DebuggerPart::attachProcess(int pid)
+{
     mainWindow()->statusBar()->message(i18n("Attaching to process %1").arg(pid), 1000);
 
     startDebugger();
