@@ -241,15 +241,31 @@ KPopupMenu *CRealFileView::getCurrentPopup()
 
   switch( treeH->itemType() )
   {
-    case THPROJECT :
-			popup = new KPopupMenu(i18n("RFV Options"));
-      popup->insertItem( i18n("Show non-project Files"),
-                         this, SLOT(slotShowNonPrjFiles()), 0, ID_RFV_SHOW_NONPRJFILES );
-      popup->setCheckable(true);
-      if(showNonPrjFiles) popup->setItemChecked(ID_RFV_SHOW_NONPRJFILES, true);
-      break;
-		case THINSTALLED_FILE:
-      popup = new KPopupMenu(i18n("File (Registered)"));
+    
+  case THPROJECT :
+    popup = new KPopupMenu(i18n("RFV Options"));
+    popup->insertItem( i18n("Show non-project Files"),
+		       this, SLOT(slotShowNonPrjFiles()), 0, ID_RFV_SHOW_NONPRJFILES );
+    popup->setCheckable(true);
+    if(showNonPrjFiles) popup->setItemChecked(ID_RFV_SHOW_NONPRJFILES, true);
+    if (project->getVersionControl())
+      {
+	popup->insertSeparator(-1);
+	popup->insertItem( i18n("Update"),
+			   this, SLOT(slotUpdate()) );
+	popup->insertItem( i18n("Commit"),
+			   this, SLOT(slotCommit()) );
+	popup->insertItem( i18n("Add to Repository"),
+			   this, SLOT(slotAddToRepository()) );
+	popup->insertItem( i18n("Remove from Repository (and Disk)"),
+			   this, SLOT(slotRemoveFromRepository()) );
+	break;
+      }
+    break;
+
+
+  case THINSTALLED_FILE:
+    popup = new KPopupMenu(i18n("File (Registered)"));
       popup->insertItem( i18n("Remove File from Project..."),
                          this, SLOT(slotRemoveFileFromProject()));
       popup->insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),
