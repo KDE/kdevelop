@@ -47,11 +47,16 @@ public:
     void removeIndex( const QCString& name );
 
     void addItem( Tag& tag );
-    bool removeItem( const QCString& id );
+    bool removeItem( const Tag& id );
+    bool removeItemById( const QCString& id );
+    void removeItems( const QValueList<QueryArgument>& args );
 
     Tag getItemById( const QCString& id );
+    bool hasItem( const QCString& id );
     QValueList<Tag> getAllItems();
     QValueList<Tag> query( const QValueList<QueryArgument>& args );
+    
+    QCString generateId();
 
 private:
     class Private;

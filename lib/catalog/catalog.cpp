@@ -24,6 +24,9 @@
 #include <qfileinfo.h>
 #include <qdatastream.h>
 
+#include <krandomsequence.h>
+#include <kdebug.h>
+
 #include <cstring>
 #include <cstdlib>
 #include <db.h>
@@ -36,12 +39,13 @@ struct Catalog::Private
 
     DB* dbp;
     QMap<QCString, DB*> indexList;
-
+    KRandomSequence rnd;
+    
     Private()
 	: dbp( 0 )
     {
     }
-
+    
     bool hasIndex( const QCString& name ) const
     {
         return indexList.contains( name );
@@ -152,8 +156,9 @@ struct Catalog::Private
     {
 	Q_ASSERT( dbp != 0 );
 
-	DBT key;
+	DBT key, data;
 	std::memset( &key, 0, sizeof(key) );
+	std::memset( &data, 0, sizeof(data) );
 
 	QByteArray a1;
 	{
@@ -163,10 +168,58 @@ struct Catalog::Private
 	    key.size = a1.size();
 	}
 
-	int ret = dbp->del( dbp, 0, &key, 0 );
+	int ret = 0;	
+	ret = dbp->del( dbp, 0, &key, 0 );
+	Q_ASSERT( ret == 0 );
+		
 	return ret == 0;
     }
+    
+    bool removeItem( DB* dbp, const QVariant& id, const QCString& v )
+    {
+        Q_ASSERT( dbp != 0 );
 
+        DBT key, data;
+        int ret;
+
+        std::memset( &key, 0, sizeof(key) );
+        std::memset( &data, 0, sizeof(data) );
+
+        QByteArray a1;
+        {
+            QDataStream stream( a1, IO_WriteOnly );
+            stream << id;
+            key.data = a1.data();
+            key.size = a1.size();
+        }
+
+        QByteArray a2;
+        {
+            QDataStream stream( a2, IO_WriteOnly );
+            stream << v;
+            data.data = a2.data();
+            data.size = a2.size();
+        }
+
+        DBC* dbc = 0;
+ 
+	ret = dbp->cursor( dbp, 0, &dbc, 0 );
+	Q_ASSERT( ret == 0 );
+	if( ret != 0 )
+	    kdDebug() << "dbp->cursor: " << db_strerror(ret) << endl;
+     
+	ret = dbc->c_get( dbc, &key, &data, DB_GET_BOTH );
+	Q_ASSERT( ret == 0 );
+	if( ret != 0 )
+	    kdDebug() << "dbc->c_get: " << db_strerror(ret) << endl;
+ 
+	ret = dbc->c_del( dbc, 0 );
+	Q_ASSERT( ret == 0 );
+ 
+	dbc->c_close( dbc );
+
+        return ret == 0;
+    } 
 };
 
 /*!
@@ -224,7 +277,7 @@ void Catalog::addIndex( const QCString& name )
         int ret;
 
         if ((ret = db_create(&dbp, 0, 0)) != 0) {
-	    qWarning( "db_create: %s", db_strerror(ret) );
+	    kdDebug() << "db_create: " << db_strerror(ret) << endl;
 	    return /*false*/;
         }
 
@@ -239,7 +292,7 @@ void Catalog::addIndex( const QCString& name )
 
         if ((ret = dbp->open(
 	    dbp BDB_OPEN_HACK, QFile::encodeName( indexName ).data(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
-	    qWarning( "db_open: %s", db_strerror(ret) );
+	    kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	    dbp->close( dbp, 0 );
 	    return;
         }
@@ -295,7 +348,7 @@ void Catalog::open( const QString& dbName )
     int ret;
 
     if ((ret = db_create(&d->dbp, 0, 0)) != 0) {
-	qWarning( "db_create: %s", db_strerror(ret) );
+	kdDebug() << "db_create: " << db_strerror(ret) << endl;
 	return /*false*/;
     }
 
@@ -307,7 +360,7 @@ void Catalog::open( const QString& dbName )
 
     if ((ret = d->dbp->open(
 	d->dbp  BDB_OPEN_HACK, d->dbName.local8Bit(), 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
-	qWarning( "db_open: %s", db_strerror(ret) );
+	kdDebug() << "db_open: " << db_strerror(ret) << endl;
 	close();
 	return;
     }
@@ -335,33 +388,43 @@ bool Catalog::isValid() const
 void Catalog::addItem( Tag& tag )
 {
     // TODO: generate a unique ID
-    static int n = 0;
-    QCString id;
-    id.sprintf( "%05d_", n++ );
-
+    
+    QCString id = generateId();
+    
     tag.setId( id );
     if( d->addItem(d->dbp, id, tag) ){
 	QMap<QCString, DB*>::Iterator it = d->indexList.begin();
 	while( it != d->indexList.end() ){
 	    if( tag.hasAttribute(it.key()) )
 	        d->addItem( it.data(), tag.attribute(it.key()), id );
-
 	    ++it;
 	}
     }
 }
 
 /*!
-    \fn Catalog::removeItem( const QString& id )
+    \fn Catalog::removeItemById( const QCString& id )
  */
-bool Catalog::removeItem( const QCString& id )
+bool Catalog::removeItemById( const QCString& id )
 {
-   if( d->removeItem(d->dbp, id) ){
-       // TODO: remove item from the index dbs
-       return true;
-   }
+    Tag tag = getItemById( id );
+    
+    QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+    while( it != d->indexList.end() ){
+	if( tag.hasAttribute(it.key()) )
+	    d->removeItem( it.data(), tag.attribute(it.key()), id );
+	++it;
+    }
 
-   return false;
+    return d->removeItem( d->dbp, id );
+}
+
+/*!
+    \fn Catalog::removeItem( const Tag& tag )
+ */
+bool Catalog::removeItem( const Tag& tag )
+{
+   return removeItemById( tag.id() );
 }
 
 /*!
@@ -458,17 +521,9 @@ QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
 	    int rtn = dbp->cursor( dbp, 0, &cursor, 0 );
 	    Q_ASSERT( rtn == 0 );
 
-#if 0
-	    if( value.type() == QVariant::String ){
-	        qDebug( "index = %s - value = %s", indexName.latin1(), value.toString().latin1() );
-	    } else {
-	        qDebug( "!!!!!!!! ERROR %d", value.type() );
-	    }
-#endif
-
 	    rtn = cursor->c_get( cursor, &key, &data, DB_SET );
 	    if( rtn == DB_NOTFOUND ){
-	        qWarning( "!!! not found !!!" );
+	        // kdDebug() << "!!! not found !!!" << endl;
 		rtn = 0;
 	    }
 	    Q_ASSERT( rtn == 0 );
@@ -478,7 +533,6 @@ QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
         ++it;
     }
     cursors[ current ] = 0;
-
 
     DBC* join_curs = 0;
     int rtn = d->dbp->join( d->dbp, cursors, &join_curs, 0 );
@@ -498,7 +552,6 @@ QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
 	    a2.resetRawData( (const char*) data.data, data.size );
 	    tags << tag;
 	}
-
     }
 
     join_curs->c_close( join_curs );
@@ -510,5 +563,122 @@ QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
     delete[] cursors;
 
     return tags;
+}
+
+void Catalog::removeItems( const QValueList< QueryArgument > & args )
+{
+    DBT key, data;
+
+    DBC** cursors = new DBC* [ args.size() + 1 ];
+
+    QValueList< QPair<QCString,QVariant> >::ConstIterator it = args.begin();
+    int current = 0;
+    while( it != args.end() ){
+        QCString indexName = (*it).first;
+	QVariant value = (*it).second;
+
+        if( d->hasIndex(indexName) ){
+            DB* dbp = d->index( indexName );
+	    Q_ASSERT( dbp != 0 );
+
+            std::memset( &key, 0, sizeof(key) );
+            std::memset( &data, 0, sizeof(data) );
+
+	    QByteArray a1;
+	    {
+		QDataStream stream( a1, IO_WriteOnly );
+		stream << value;
+		key.data = a1.data();
+		key.size = a1.size();
+	    }
+
+	    DBC* cursor = 0;
+	    int rtn = dbp->cursor( dbp, 0, &cursor, 0 );
+	    Q_ASSERT( rtn == 0 );
+
+	    rtn = cursor->c_get( cursor, &key, &data, DB_SET );
+	    if( rtn == DB_NOTFOUND ){
+	        // kdDebug() << "!!! not found !!!" << endl;
+		rtn = 0;
+	    }
+	    Q_ASSERT( rtn == 0 );
+
+	    cursors[ current++ ] = cursor;
+        }
+        ++it;
+    }
+    cursors[ current ] = 0;
+
+
+    DBC* join_curs = 0;
+    int rtn = d->dbp->join( d->dbp, cursors, &join_curs, 0 );
+    Q_ASSERT( rtn == 0 );
+
+    std::memset( &key, 0, sizeof(key) );
+    std::memset( &data, 0, sizeof(data) );
+
+    QValueList<QCString> ids;
+    while( join_curs->c_get(join_curs, &key, &data, 0) == 0 ) {
+
+        QByteArray a1;
+	{
+	    a1.setRawData( (const char*) key.data, key.size );
+	    QDataStream s( a1, IO_ReadOnly );
+	    QCString id;
+	    s >> id;
+	    ids.append( id );
+	    a1.resetRawData( (const char*) key.data, key.size );
+	}
+    }
+
+    join_curs->c_close( join_curs );
+    DBC** c = cursors;
+    while( *c != 0 ){
+        (*c)->c_close( *c );
+        ++c;
+    }
+    delete[] cursors;
+
+    QValueList<QCString>::Iterator dit = ids.begin();
+    while( dit != ids.end() ){
+        removeItemById( *dit );
+	++dit;
+    }
+}
+
+QCString Catalog::generateId()
+{
+    QCString asStr;
+    int n = 0;
+    for( ;; ){
+	++n;
+	
+	unsigned long l = d->rnd.getLong( 999999 );
+	asStr.setNum( l );
+	
+	if( !hasItem(asStr) ){
+	    return asStr;
+	}
+    } 
+}
+
+bool Catalog::hasItem( const QCString & id )
+{
+    Q_ASSERT( d->dbp != 0 );
+
+    DBT key, data;
+    std::memset( &key, 0, sizeof(key) );
+    std::memset( &data, 0, sizeof(data) );
+
+    QByteArray a1;
+    {
+	QDataStream stream( a1, IO_WriteOnly );
+	stream << id;
+	key.data = a1.data();
+	key.size = a1.size();
+    }
+
+    int ret = d->dbp->get( d->dbp, 0, &key, &data, 0 );
+    return ret == 0;
 }
 
