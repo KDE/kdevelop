@@ -486,7 +486,7 @@
                                 <enum>WidgetWidth</enum>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>Enter the description of you application here.</string>
+                                <string>Enter the description of your application here.</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -574,7 +574,7 @@
                                 <bool>true</bool>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>Start the RPM buld process</string>
+                                <string>Start the RPM build process</string>
                             </property>
                         </widget>
                         <widget class="QPushButton">

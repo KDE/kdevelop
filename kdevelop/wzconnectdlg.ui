@@ -1413,8 +1413,8 @@ All in one dialog.</comment>
                             <property stdset="1">
                                 <name>text</name>
                                 <string>You may go back to the &lt; Methods &gt; tab 
-then add a new Method if you intent to 
-implement the connection  into a new 
+then add a new Method if you intend to 
+implement the connection into a new 
 function member.</string>
                             </property>
                         </widget>
