@@ -28,6 +28,7 @@
 #include <qlabel.h>
 #include <kprocess.h>
 #include <htmltoken.h>
+#include <ksimpleconfig.h>
 
 /** the KDevelop-A2psConfigdialog
   *@author Stefan Heidrich
@@ -40,6 +41,7 @@ public:
   ~CConfigA2psDlg();
   void init();
   bool lookProgram(QString);
+  void loadSettings();
 
 public slots:
     QString slotCreateParameters();
@@ -92,5 +94,6 @@ protected:
     QButtonGroup* qtarch_ButtonGroup_182;
     QString globalpara;
     KShellProcess *process,*process2;
+    KSimpleConfig *settings;
 };
 #endif // CCONFIGA2PSDLG

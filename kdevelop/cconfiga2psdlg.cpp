@@ -25,7 +25,7 @@
 
 CConfigA2psDlg::CConfigA2psDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
-  slotDefaultClicked();
+  loadSettings();
 }
 
 CConfigA2psDlg::~CConfigA2psDlg(){
@@ -552,7 +552,8 @@ void CConfigA2psDlg::slotDefaultClicked() {
   slotHeadertextButtonClicked();
   headertextLine->clear();
   loginButton->setChecked(false);
- 
+  alignFilesButton->setChecked(false); 
+
   currentDateButton->setChecked(true);
  
   numberingLineButton->setChecked(false);
@@ -630,10 +631,10 @@ QString CConfigA2psDlg::slotCreateParameters() {
     parameters.append(linesPerPage->text());
   }
   if (cutLinesButton->isChecked()) {
-    globalpara.append(" -f");
+    globalpara.append(" -nf");
   }
   else {
-    globalpara.append(" -nf");
+    globalpara.append(" -f");
   }
   if (interpretButton->isChecked()) {
     globalpara.append(" -i");
@@ -704,7 +705,34 @@ void CConfigA2psDlg::slotPreviewClicked() {
 }
 
 void CConfigA2psDlg::slotOkClicked() {
-  slotCreateParameters();
+  QString lastSettings;
+  lastSettings = slotCreateParameters();
+  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings->setGroup("A2ps");
+  settings->writeEntry("Header",headerButton->isChecked());
+  settings->writeEntry("Borders",bordersButton->isChecked());
+  settings->writeEntry("Filename",filenameLine->isChecked());
+  settings->writeEntry("DateTime",currentDateButton->isChecked());
+  settings->writeEntry("Login",loginButton->isChecked());
+  settings->writeEntry("AlignFiles",alignFilesButton->isChecked());
+  settings->writeEntry("TabSize",setTabSize->text());
+  settings->writeEntry("Headertext",headertextButton->isChecked());
+  settings->writeEntry("HeadertextLine",headertextLine->text());
+  settings->writeEntry("Fontsize",fontsizeButton->isChecked());
+  settings->writeEntry("FontsizeLine",a2psFontSize->text());
+  settings->writeEntry("CutLines",cutLinesButton->isChecked());
+  settings->writeEntry("Interpret",interpretButton->isChecked());
+  settings->writeEntry("Replace",replaceButton->isChecked());
+  settings->writeEntry("PrintAscii",printAsISOLatin->isChecked());
+  settings->writeEntry("BoldFont",boltFontButton->isChecked());
+  settings->writeEntry("NumberingLines",numberingLineButton->isChecked());
+  settings->writeEntry("NumberingPages",numberingPagesList->currentItem());
+  settings->writeEntry("LinesPerPage",linesButton->isChecked());
+  settings->writeEntry("LinesPerPageLine",linesPerPage->text());
+  settings->setGroup("LastSettings");
+  settings->writeEntry("A2psSettings",lastSettings);
+  settings->sync();
+  delete (settings);
   reject();
 }
 
@@ -766,4 +794,113 @@ void CConfigA2psDlg::slotLinesClicked() {
     qtarch_label->setEnabled(false);
     linesPerPage->setEnabled(false);
   }
+}
+
+void CConfigA2psDlg::loadSettings() {
+  selectedProgram();
+  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings->setGroup("A2ps");
+  if (!strcmp(settings->readEntry("Header"),"true")) {
+    headerButton->setChecked(true);
+  }
+  else {
+    headerButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Headertext"),"true")) {
+    headertextButton->setChecked(true);
+  }
+  else {
+    headertextButton->setChecked(false);
+  }
+    slotHeadertextButtonClicked();
+
+    headertextLine->setText(settings->readEntry("HeadertextLine"));
+
+  if (!strcmp(settings->readEntry("Login"),"true")) {
+    loginButton->setChecked(true);
+  }
+  else {
+    loginButton->setChecked(false);
+  }
+   if (!strcmp(settings->readEntry("DateTime"),"true")) {
+     currentDateButton->setChecked(true);
+   }
+   else {
+     currentDateButton->setChecked(false);
+   }
+   if (!strcmp(settings->readEntry("NumberingLines"),"true")) {
+     numberingLineButton->setChecked(true);
+   }
+   else {
+     numberingLineButton->setChecked(false);
+   }
+  if (!strcmp(settings->readEntry("Borders"),"true")) {
+    bordersButton->setChecked(true);
+  }
+  else {
+    bordersButton->setChecked(false);
+  } 
+  numberingPagesList->setCurrentItem( (settings->readEntry("NumberingPages")).toInt());
+  
+  setTabSize->setValue((settings->readEntry("TabSize")).toInt());
+  a2psFontSize->setValue((settings->readEntry("FontsizeLine")).toInt());
+  linesPerPage->setValue((settings->readEntry("LinesPerPageLine")).toInt());
+  if (!strcmp(settings->readEntry("CutLines"),"true")) {
+    cutLinesButton->setChecked(true);
+  }
+  else {
+    cutLinesButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("PrintAscii"),"true")) {
+    printAsISOLatin->setChecked(true);
+  }
+  else {
+    printAsISOLatin->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("BoldFont"),"true")) {
+    boltFontButton->setChecked(true);
+  }
+  else {
+    boltFontButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("AlignFiles"),"true")) {
+    alignFilesButton->setChecked(true);
+  }
+  else {
+    alignFilesButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Interpret"),"true")) {
+    interpretButton->setChecked(true);
+  }
+  else {
+    interpretButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Filename"),"true")) {
+    filenameLine->setChecked(true);
+  }
+  else {
+    filenameLine->setChecked(false);
+  }
+  slotFilenameClicked();
+  if (!strcmp(settings->readEntry("Replace"),"true")) {
+    replaceButton->setChecked(true);
+  }
+  else {
+    replaceButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Fontsize"),"true")) {
+    fontsizeButton->setChecked(true);
+  }
+  else {
+    fontsizeButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("LinesPerPage"),"true")) {
+    linesButton->setChecked(true);
+  }
+  else {
+    linesButton->setChecked(false);
+  }
+  slotFontsizeClicked();
+  slotLinesClicked();
+  delete (settings);
 }

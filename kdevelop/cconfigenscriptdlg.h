@@ -37,6 +37,7 @@
 #include <kfontdialog.h>
 #include <kprocess.h>
 #include <htmltoken.h>
+#include <ksimpleconfig.h>
 
 class CConfigEnscriptDlg : public QTabDialog {
   Q_OBJECT
@@ -50,6 +51,8 @@ public:
   void initTab4(QWidget*parent);
   void selectedProgram();
   bool lookProgram(QString);
+  void loadSettings();
+  QString createParameters(int);
 
 public slots:
  void slotHeaderClicked();
@@ -77,7 +80,6 @@ public slots:
  void slotCurrentAmpmClicked(int);
  void slotModificationAmpmClicked(int);
  void slotPreviewClicked();
- QString slotCreateParameters();
 
 protected:
     QCheckBox* headerButton;
@@ -193,6 +195,7 @@ protected:
     QString parameters,globalpara,leftstr,middlestr,rightstr,headerstr;
     QPushButton* previewButton;
     KShellProcess *process,*process2;
+    KSimpleConfig *settings;
 };
 
 #endif // CCONFIGENSCRIPTDLG

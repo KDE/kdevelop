@@ -28,13 +28,14 @@
 #include "ctoolclass.h"
 #include <kmsgbox.h>
 
-CPrintDlg::CPrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
+CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name) : QDialog(parent, name, true){
   init();
   slotProgramActivated(0);
   slotPrintToFileClicked(false);
   slotPrettyPrintClicked(false);
   string = "";
   globalpara = "";
+  files = (QString) edittab;
 }
 
 CPrintDlg::~CPrintDlg(){
@@ -485,6 +486,7 @@ void CPrintDlg::init(){
   okButton = new QPushButton( mainwidget, "okButton" );
   okButton->setText(("Ok"));
   okButton->setGeometry( 20, 440, 100, 30 );
+  connect(okButton,SIGNAL(clicked()),SLOT(slotOkClicked()));
   previewButton = new QPushButton( mainwidget, "previewButton" );
   previewButton->setText(("Preview"));
   previewButton->setGeometry( 140, 440, 100, 30 );
@@ -610,8 +612,8 @@ void CPrintDlg::slotCreateParameters() {
       if (strcmp (printerLine->text(),"lpr")) {
 	parameters = (QString) "-P" + printerLine->text();
       }
-      parameters = parameters + (QString) " " + globalpara;
-      parameters = (QString) " -X" + mediaCombBox->text(mediaCombBox->currentItem());
+      parameters = parameters + globalpara;
+      parameters = parameters + (QString) " -X" + mediaCombBox->text(mediaCombBox->currentItem());
       if (pagePerSide->currentItem()==0) {
 	parameters.append(" -1");
       }
@@ -627,9 +629,11 @@ void CPrintDlg::slotCreateParameters() {
       parameters.append(" -#");
       parameters.append(copySpinBox->text());
     }
-    else {
+    else 
+      if (defaultCombBox->currentItem()==1) {
 	parameters = "";
       }
+    string = parameters;
   }
   else {
     if (defaultCombBox->currentItem()==0) {
@@ -659,10 +663,10 @@ void CPrintDlg::slotCreateParameters() {
 	parameters.append (" --media=Letterdj");
       }
 
-      if (!strcmp(pageSide->text(pageSide->currentItem()),"all")) {
+      if (!strcmp(pageSide->currentText(),"all")) {
       }
       else {
-	parameters.append ((QString)" --pages=" + pageSide->text(pageSide->currentItem()));
+	parameters.append ((QString)" --pages=" + pageSide->currentText());
       }
       if (prettyColorCheckBox->isChecked()) {
 	parameters.append(" --color");
@@ -787,8 +791,8 @@ void CPrintDlg::slotCreateParameters() {
       else {
 	parameters = "-l";
       }
+    string = parameters;
   }
-  string = parameters;
 }
 
 void CPrintDlg::slotPreviewClicked() {
@@ -797,39 +801,60 @@ void CPrintDlg::slotPreviewClicked() {
     return;
   }
   QString dir,data1,data2,text;
-  slotCreateParameters();
-  dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
+  if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
+    dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.html";
+  }
+  else {
+    dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
+  }
   data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
   data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
   process = new KShellProcess();
-  cout << string << endl;
   if (programCombBox->currentItem()==1) {
     text = (QString) " --output="+ dir;
     process = new KShellProcess();
-    *process << "enscript " + string + text + " " + data1 + " " + data2;
+    settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+    settings->setGroup("LastSettings");
+    globalpara = settings->readEntry("EnscriptSettings");
+    delete (settings);
+    slotCreateParameters();
+    *process << "enscript " + string + (QString) " " + text + " " + files;
   }
   else {
-    *process << "a2ps -nP " + string + " " + data1 + " " + data2 + " >" + dir;
+    settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+    settings->setGroup("LastSettings");
+    globalpara = settings->readEntry("A2psSettings");
+    delete (settings); 
+    slotCreateParameters();
+    *process << "a2ps -nP " + string + " " + files + " >" + dir;
   }
   process->start(KProcess::Block,KProcess::AllOutput);
   process2 = new KShellProcess();
-  if (lookProgram("gv")) {
-    *process2 << "gv";
+  if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
+    *process2 << "arena";
     *process2 << dir;
     process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
     return;
   }
-  else if (lookProgram("ghostview")) {
-    *process2 << "ghostview";
-    *process2 << dir;
-    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
-    return;
-  }
-  else if (lookProgram("kghostview")) {
-    *process2 << "kghostview";
-    *process2 << dir;
-    process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
-    return;
+  else {
+    if (lookProgram("gv")) {
+      *process2 << "gv";
+      *process2 << dir;
+      process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      return;
+    }
+    else if (lookProgram("ghostview")) {
+      *process2 << "ghostview";
+      *process2 << dir;
+      process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      return;
+    }
+    else if (lookProgram("kghostview")) {
+      *process2 << "kghostview";
+      *process2 << dir;
+      process2->start(KProcess::NotifyOnExit,KProcess::AllOutput);
+      return;
+    }
   }
 }
 
@@ -846,8 +871,11 @@ void CPrintDlg::slotPrintingConfClicked() {
     }
     a2psconf = new CConfigA2psDlg(this, "confdialog");
     a2psconf->resize(600,430);
-    a2psconf->exec(); 
-    globalpara = a2psconf->slotCreateParameters();
+    a2psconf->exec();
+    settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings->setGroup("LastSettings");
+  globalpara = settings->readEntry("A2psSettings");
+  delete (settings); 
   }
   else
     if (prog==1) {
@@ -857,7 +885,10 @@ void CPrintDlg::slotPrintingConfClicked() {
       enscriptconf = new CConfigEnscriptDlg(this, "confdialog");
       enscriptconf->resize(610,510);
       enscriptconf->exec(); 
-      globalpara = enscriptconf->slotCreateParameters();
+      settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+      settings->setGroup("LastSettings");
+      globalpara = settings->readEntry("EnscriptSettings");
+      delete (settings);
     }
 }
 
@@ -882,3 +913,52 @@ bool CPrintDlg::lookProgram(QString name) {
   }
   return found;
 }
+
+void CPrintDlg::slotOkClicked() {
+  if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
+    KMsgBox::message(0,"Program not found!","KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!",KMsgBox::EXCLAMATION); 
+    return;
+  }
+  if (printToFileButton->isChecked()) {
+    QString filetext = printToFileLine->text();
+    if (!strcmp(filetext.right(1),"/") || !strcmp(printToFileLine->text(),"")) {
+      KMsgBox::message(0,"No Filename","You need a filename.\nPlease enter one!",KMsgBox::EXCLAMATION); 
+      return;
+    }
+  }
+  QString dir,data1,data2,text;
+  process = new KShellProcess();
+  if (programCombBox->currentItem()==1) {
+    process = new KShellProcess();
+    if (printToFileButton->isChecked()) {
+      dir =  printToFileLine->text();
+      text = (QString) " --output="+ dir;
+      settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+      settings->setGroup("LastSettings");
+      globalpara = settings->readEntry("EnscriptSettings");
+      delete (settings);
+      slotCreateParameters();
+      *process << "enscript " + string + text + " " + files;
+    }
+    else {
+      settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+      settings->setGroup("LastSettings");
+      globalpara = settings->readEntry("A2psSettings");
+      delete (settings);
+      slotCreateParameters();
+      *process << "enscript " + string + " " + files;
+    }
+  }
+  else {
+    if (printToFileButton->isChecked()) {
+      dir =  printToFileLine->text();
+      *process << "a2ps -nP " + string + " " + files + " >" + dir;
+    }
+    else {
+      *process << "a2ps " + string + " " + files;
+    }
+  }
+  process->start(KProcess::Block,KProcess::AllOutput);
+  reject();
+}
+

@@ -258,7 +258,11 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
-  CPrintDlg* printerdlg = new CPrintDlg(this, "suzus");
+  QString file;
+  slotFileSave();
+  file = edit_widget->getName();
+  //  cout << file << endl;
+  CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
   printerdlg->resize(600,480);
   printerdlg->exec(); 
   delete (printerdlg);

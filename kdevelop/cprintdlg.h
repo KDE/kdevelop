@@ -37,10 +37,12 @@
 class CPrintDlg : public QDialog {
   Q_OBJECT
 public:
-  CPrintDlg(QWidget* parent=0,const char* name=0);
+  CPrintDlg(QWidget* parent=0,const char* file="",const char* name=0);
   ~CPrintDlg();
   void init();
-  
+  bool lookProgram(QString name);
+  QString files;
+
 public slots:
     void slotProgramActivated(int);
  void slotPrettyPrintClicked(bool);
@@ -51,7 +53,7 @@ public slots:
  void slotPrintToFileDlgClicked();
  void slotPreviewClicked();
  void slotCreateParameters();
- bool lookProgram(QString name);
+ void slotOkClicked();
 
 protected:
  QButtonGroup *paperFormatGroup,*qtarch_ButtonGroup_35,*qtarch_ButtonGroup_34,*qtarch_ButtonGroup_9,*qtarch_ButtonGroup_11,*qtarch_ButtonGroup_3;
@@ -66,5 +68,6 @@ protected:
  CConfigA2psDlg *a2psconf;
  QString string,globalpara;
  KShellProcess *process,*process2;
+ KSimpleConfig *settings;
 };
 #endif

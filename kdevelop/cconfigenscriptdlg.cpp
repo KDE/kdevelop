@@ -25,7 +25,7 @@ CConfigEnscriptDlg::CConfigEnscriptDlg(QWidget* parent,const char* name) : QTabD
   init();
   slotHeaderClicked();
   slotUnderlayButtonClicked();
-  slotDefaultClicked();
+  loadSettings();
 }
 
 CConfigEnscriptDlg::~CConfigEnscriptDlg(){
@@ -2034,7 +2034,7 @@ void CConfigEnscriptDlg::slotDefaultClicked() {
   slotNumberingPagesClicked();
 }
 
-QString CConfigEnscriptDlg::slotCreateParameters() {
+QString CConfigEnscriptDlg::createParameters(int i) {
   parameters = "";
   middlestr = "";
   leftstr = "";
@@ -2074,26 +2074,32 @@ QString CConfigEnscriptDlg::slotCreateParameters() {
     if (filenameLine->isChecked()) {
       if (filenamePosition->currentItem()==0) {
 	if (filenameSize->currentItem()==0) {
-	  leftstr.append(" $n");
+	  if (i==0) leftstr.append(" $n");
+	  else leftstr.append(" $$n");
 	}
 	else {
-	  leftstr.append(" $N");
+	  if (i==0) leftstr.append(" $N");
+	  else leftstr.append(" $$N");
 	}
       }
       else if (filenamePosition->currentItem()==1) {
 	if (filenameSize->currentItem()==0) {
-	  middlestr.append(" $n");
+	  if (i==0) middlestr.append(" $n");
+	  else middlestr.append(" $$n");
 	}
 	else {
-	  middlestr.append(" $N");
+	  if (i==0) middlestr.append(" $N");
+	  else middlestr.append(" $$N");
 	}
       }
       else {
 	if (filenameSize->currentItem()==0) {
-	  rightstr.append(" $n");
+	  if (i==0) rightstr.append(" $n");
+	  else rightstr.append(" $$n");
 	}
 	else {
-	  rightstr.append(" $N");
+	  if (i==0) rightstr.append(" $N");
+	  else rightstr.append(" $$N");
 	}
       }
     }
@@ -2212,43 +2218,55 @@ QString CConfigEnscriptDlg::slotCreateParameters() {
     if (modificationDateButton->isChecked()) {
       if (modificationDatePosition->currentItem()==0) {
 	if (modificationDateFormat->currentItem()==0) {
-	  leftstr.append(" $F");
+	  if (i==0) leftstr.append(" $F");
+	  else leftstr.append(" $$F");
 	}
 	else if (modificationDateFormat->currentItem()==1) {
-	  leftstr.append(" $D");
+	  if (i==0) leftstr.append(" $D");
+	  else leftstr.append(" $$D");
 	}
 	else if (modificationDateFormat->currentItem()==2) {
-	  leftstr.append(" $E");
+	  if (i==0) leftstr.append(" $E");
+	  else leftstr.append(" $$E");
 	}
 	else {
-	  leftstr.append(" $W");
+	  if (i==0) leftstr.append(" $W");
+	  else leftstr.append(" $$W");
 	}
       }
       else if (modificationDatePosition->currentItem()==1) {
 	if (modificationDateFormat->currentItem()==0) {
-	  middlestr.append(" $F");
+	  if (i==0) middlestr.append(" $F");
+	  else middlestr.append(" $$F");
 	}
 	else if (modificationDateFormat->currentItem()==1) {
-	    middlestr.append(" $D");
+	  if (i==0) middlestr.append(" $D");
+	  else middlestr.append(" $$D");
 	}
 	else if (modificationDateFormat->currentItem()==2) {
-	  middlestr.append(" $E");
+	  if (i==0) middlestr.append(" $E");
+	  else middlestr.append(" $$E");
 	}
 	else {
-	  middlestr.append(" $W");
+	  if (i==0) middlestr.append(" $W");
+	  else middlestr.append(" $$W");
 	}
       }
       else if (modificationDateFormat->currentItem()==0) {
-	rightstr.append(" $F");
+	if (i==0) rightstr.append(" $F");
+	else rightstr.append(" $$F");
       }
       else if (modificationDateFormat->currentItem()==1) {
-	rightstr.append(" $D");
+	if (i==0) rightstr.append(" $D");
+	else rightstr.append(" $$D");
       }
       else if (modificationDateFormat->currentItem()==2) {
-	rightstr.append(" $E");
+	if (i==0) rightstr.append(" $E");
+	else rightstr.append(" $$E");
       }
       else {
-	rightstr.append(" $W");
+	if (i==0) rightstr.append(" $W");
+	else rightstr.append(" $$W");
       }
     }
     
@@ -2256,39 +2274,48 @@ QString CConfigEnscriptDlg::slotCreateParameters() {
       if (modificationTimeAmpm->currentItem()==1) {
 	if (modificationTimePosition->currentItem()==0) {
 	  if (modificationTimeFormat->currentItem()==0) {
-	    leftstr.append(" $*");
+	    if (i==0) leftstr.append(" $*");
+	    else leftstr.append(" $$*");
 	  }
 	  else {
-	    leftstr.append(" $T");
+	    if (i==0) leftstr.append(" $T");
+	    else leftstr.append(" $$T");
 	  }
 	}
 	else if (modificationTimePosition->currentItem()==1) {
 	  if (modificationTimeFormat->currentItem()==0) {
-	    middlestr.append(" $*");
+	    if (i==0) middlestr.append(" $*");
+	    else middlestr.append(" $$*");
 	  }
 	  else {
-	    middlestr.append(" $T");
+	    if (i==0) middlestr.append(" $T");
+	    else middlestr.append(" $$T");
 	  }
 	}
 	else {
 	  if (modificationTimeFormat->currentItem()==0) {
-	    rightstr.append(" $*");
+	    if (i==0) rightstr.append(" $*");
+	    else rightstr.append(" $$*");
 	  }
 	  else {
-	    rightstr.append(" $T");
+	    if (i==0) rightstr.append(" $T");
+	    else rightstr.append(" $$T");
 	  }
 	}
       }
       else {
 	if (modificationTimePosition->currentItem()==0) {
-	  leftstr.append(" $t");
+	  if (i==0) leftstr.append(" $t");
+	  else leftstr.append(" $$t");
 	}
 	else if (modificationTimePosition->currentItem()==1) {
-	  middlestr.append(" $t");
+	  if (i==0) middlestr.append(" $t");
+	  else middlestr.append(" $$t");
 	  }
 	else {
 	  if (modificationTimeFormat->currentItem()==0) {
-	    rightstr.append(" $t");
+	    if (i==0) rightstr.append(" $t");
+	    else rightstr.append(" $$t");
 	  }
 	}
       }
@@ -2299,13 +2326,16 @@ QString CConfigEnscriptDlg::slotCreateParameters() {
     
     if (numberingPagesButton->isChecked()) {
       if (numberingPagesList->currentItem()==0) {
-	leftstr.append(" Page $% of $=");
+	if (i==0) leftstr.append(" Page $% of $=");
+	else leftstr.append(" Page $$% of $$=");
       }
       else if (numberingPagesList->currentItem()==1) {
-	middlestr.append(" Page $% of $=");
+	if (i==0) middlestr.append(" Page $% of $=");
+	else middlestr.append(" Page $$% of $$=");
       }
       else  {
-	rightstr.append(" Page $% of $=");
+	if (i==0) rightstr.append(" Page $% of $=");
+	else rightstr.append(" Page $$% of $$=");
       }
     }
     globalpara.append(" --header='");
@@ -2416,7 +2446,7 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
    return;
   }
   QString dir,data1,data2,param,text;
-  slotCreateParameters();
+  createParameters(0);
   dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.ps";
   data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
   data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
@@ -2446,7 +2476,68 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
 }
 
 void CConfigEnscriptDlg::slotOkClicked() {
-  slotCreateParameters();
+  QString lastSettings;
+  lastSettings = createParameters(1);
+  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings->setGroup("Enscript");
+  settings->writeEntry("Header",headerButton->isChecked());
+  settings->writeEntry("FancyHeader",fancyHeaderButton->isChecked());
+  settings->writeEntry("Headertext",headertextButton->isChecked());
+  settings->writeEntry("HeadertextLine",headertextLine->text());
+  settings->writeEntry("HeadertextPosition",headertextPosition->currentItem());
+  settings->writeEntry("Login",loginButton->isChecked());
+  settings->writeEntry("LoginPosition",loginPosition->currentItem());
+  settings->writeEntry("Filename",filenameLine->isChecked());
+  settings->writeEntry("FilenameSize",filenameSize->currentItem());
+  settings->writeEntry("FilenamePosition",filenamePosition->currentItem());
+  settings->writeEntry("Hostname",hostnameButton->isChecked());
+  settings->writeEntry("HostnameSize",hostnameSize->currentItem());
+  settings->writeEntry("HostnamePosition",hostnamePosition->currentItem());
+  settings->writeEntry("CurrentDate",currentDateButton->isChecked());
+  settings->writeEntry("CurrentDateFormat",currentDateFormat->currentItem());
+  settings->writeEntry("CurrentDatePosition",currentDatePosition->currentItem());
+  settings->writeEntry("CurrentTime",currentTimeButton->isChecked());
+  settings->writeEntry("CurrentTimeAmpm",currentTimeAmpm->currentItem());
+  settings->writeEntry("CurrentTimeFormat",currentTimeFormat->currentItem());
+  settings->writeEntry("CurrentTimePosition",currentTimePosition->currentItem());
+  settings->writeEntry("ModificationDate",modificationDateButton->isChecked());
+  settings->writeEntry("ModificationDateFormat",modificationDateFormat->currentItem());
+  settings->writeEntry("ModificationDatePosition",modificationDatePosition->currentItem());
+  settings->writeEntry("ModificationTime",modificationTimeButton->isChecked());
+  settings->writeEntry("ModificationTimeAmpm",modificationTimeAmpm->currentItem());
+  settings->writeEntry("ModificationTimeFormat",modificationTimeFormat->currentItem());
+  settings->writeEntry("ModificationTimePosition",modificationTimePosition->currentItem());
+  settings->writeEntry("NumberingLines",numberingLineButton->isChecked());
+  settings->writeEntry("Borders",bordersButton->isChecked());
+  settings->writeEntry("NumberingPages",numberingPagesButton->isChecked());
+  settings->writeEntry("NumberingPagesPosition",numberingPagesList->currentItem());
+  settings->writeEntry("AlignFiles",alignFileList->currentItem());
+  settings->writeEntry("LinesPerPageLine",linesPerPage->text());
+  settings->writeEntry("TabSize",setTabSize->text());
+  settings->writeEntry("FontForHeader",fontForHeaderButton->text());
+  settings->writeEntry("FontForBody",fontForBodyButton->text());
+  settings->writeEntry("CutLines",cutLinesButton->isChecked());
+  settings->writeEntry("Replace",replaceButton->isChecked());
+  settings->writeEntry("TOC",tocButton->isChecked());
+  settings->writeEntry("HighlightBars",highlightBarsButton->isChecked());
+  settings->writeEntry("CycleOfChange",cycleOfChange->text());
+  settings->writeEntry("WrappedLines",markedWrappedLinesButton->isChecked());
+  settings->writeEntry("WrappedLInesValue",valueForWrappedLine->currentItem());
+  settings->writeEntry("Underlay",underlayButton->isChecked());
+  settings->writeEntry("Underlaytext",underlaytextLine->text());
+  settings->writeEntry("UnderlayPositionDefault",underlayPositionDefaultButton->isChecked());
+  settings->writeEntry("UnderlayXPosition",underlayXPosition->text());
+  settings->writeEntry("UnderlayYPosition",underlayYPosition->text());
+  settings->writeEntry("Underlayfont",underlayFontButton->text());
+  settings->writeEntry("UnderlayAngleDefault",underlayAngleDefault->isChecked());
+  settings->writeEntry("UnderlayAngle",underlayAngle->text());
+  settings->writeEntry("UnderlayGray",underlayGray->text());
+  settings->writeEntry("UnderlayStyle",underlayStyle->currentItem());
+  settings->setGroup("LastSettings");
+  settings->writeEntry("EnscriptSettings",lastSettings);
+  settings->sync();
+  delete (settings);
+  reject();
 }
 
 bool CConfigEnscriptDlg::lookProgram(QString name) {
@@ -2465,4 +2556,175 @@ bool CConfigEnscriptDlg::lookProgram(QString name) {
     }
   }
   return found;
+}
+
+void CConfigEnscriptDlg::loadSettings() {
+  settings = new KSimpleConfig(KApplication::localkdedir() + (QString) "/share/config/kdeveloprc");
+  settings->setGroup("Enscript");
+  if (!strcmp(settings->readEntry("Header"),"true")) {
+    headerButton->setChecked(true);
+  }
+  else {
+   headerButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("FancyHeader"),"true")) {
+ fancyHeaderButton->setChecked(true);
+  }
+  else {
+ fancyHeaderButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Headertext"),"true")) {
+  headertextButton->setChecked(true);
+  }
+  else {
+  headertextButton->setChecked(false);
+  }
+  headertextLine->setText(settings->readEntry("HeadertextLine"));
+    headertextPosition->setCurrentItem((settings->readEntry("HeadertextPosition")).toInt());
+  if (!strcmp(settings->readEntry("Login"),"true")) {
+  loginButton->setChecked(true);
+  }
+  else {
+  loginButton->setChecked(false);
+  }
+  loginPosition->setCurrentItem((settings->readEntry("LoginPosition")).toInt());
+  if (!strcmp(settings->readEntry("Filename"),"true")) {
+  filenameLine->setChecked(true);
+  }
+  else {
+  filenameLine->setChecked(false);
+  }
+    filenameSize->setCurrentItem((settings->readEntry("FilenameSize")).toInt());
+  filenamePosition->setCurrentItem((settings->readEntry("FilenamePosition")).toInt());
+  if (!strcmp(settings->readEntry("Hostname"),"true")) {
+  hostnameButton->setChecked(true);
+  }
+  else {
+  hostnameButton->setChecked(false);
+  }
+  hostnameSize->setCurrentItem((settings->readEntry("HostnameSize")).toInt());
+  hostnamePosition->setCurrentItem((settings->readEntry("HostnamePosition")).toInt());
+  if (!strcmp(settings->readEntry("CurrentDate"),"true")) {
+  currentDateButton->setChecked(true);
+  }
+  else {
+  currentDateButton->setChecked(false);
+  }
+  currentDateFormat->setCurrentItem((settings->readEntry("CurrentDateFormat")).toInt());
+  currentDatePosition->setCurrentItem((settings->readEntry("CurrentDatePosition")).toInt());
+  if (!strcmp(settings->readEntry("CurrentTime"),"true")) {
+  currentTimeButton->setChecked(true);
+  }
+  else {
+  currentTimeButton->setChecked(false);
+  }
+  currentTimeAmpm->setCurrentItem((settings->readEntry("CurrentTimeAmpm")).toInt());
+  currentTimeFormat->setCurrentItem((settings->readEntry("CurrentTimeFormat")).toInt());
+  currentTimePosition->setCurrentItem((settings->readEntry("CurrentTimePosition")).toInt());
+  if (!strcmp(settings->readEntry("ModificationDate"),"true")) {
+  modificationDateButton->setChecked(true);
+  }
+  else {
+  modificationDateButton->setChecked(false);
+  }
+  modificationDateFormat->setCurrentItem((settings->readEntry("ModificationDateFormat")).toInt());
+  modificationDatePosition->setCurrentItem((settings->readEntry("ModificationDatePosition")).toInt());
+  if (!strcmp(settings->readEntry("ModificationTime"),"true")) {
+  modificationTimeButton->setChecked(true);
+  }
+  else {
+  modificationTimeButton->setChecked(false);
+  }
+  modificationTimeAmpm->setCurrentItem((settings->readEntry("ModificationTimeAmpm")).toInt());
+  modificationTimeFormat->setCurrentItem((settings->readEntry("ModificationTimeFormat")).toInt());
+  modificationTimePosition->setCurrentItem((settings->readEntry("ModificationTimePosition")).toInt());
+  if (!strcmp(settings->readEntry("NumberingLines"),"true")) {
+  numberingLineButton->setChecked(true);
+  }
+  else {
+  numberingLineButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Borders"),"true")) {
+  bordersButton->setChecked(true);
+  }
+  else {
+  bordersButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("NumberingPages"),"true")) {
+  numberingPagesButton->setChecked(true);
+  }
+  else {
+  numberingPagesButton->setChecked(false);
+  }
+  numberingPagesList->setCurrentItem((settings->readEntry("NumberingPagesPosition")).toInt());
+  alignFileList->setCurrentItem((settings->readEntry("AlignFiles")).toInt());
+  linesPerPage->setValue((settings->readEntry("LinesPerPageLine")).toInt());
+  setTabSize->setValue((settings->readEntry("TabSize")).toInt());
+  fontForHeaderButton->setText(settings->readEntry("FontForHeader"));
+  fontForBodyButton->setText(settings->readEntry("FontForBody"));
+  if (!strcmp(settings->readEntry("CutLines"),"true")) {
+  cutLinesButton->setChecked(true);
+  }
+  else {
+  cutLinesButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("Replace"),"true")) {
+  replaceButton->setChecked(true);
+  }
+  else {
+  replaceButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("TOC"),"true")) {
+  tocButton->setChecked(true);
+  }
+  else {
+  tocButton->setChecked(false);
+  }
+  if (!strcmp(settings->readEntry("HighlightBars"),"true")) {
+  highlightBarsButton->setChecked(true);
+  }
+  else {
+  highlightBarsButton->setChecked(false);
+  }
+  cycleOfChange->setValue((settings->readEntry("CycleOfChange")).toInt());
+  if (!strcmp(settings->readEntry("WrappedLines"),"true")) {
+  markedWrappedLinesButton->setChecked(true);
+  }
+  else {
+  markedWrappedLinesButton->setChecked(false);
+  }
+  valueForWrappedLine->setCurrentItem((settings->readEntry("WrappedLInesValue")).toInt());
+  if (!strcmp(settings->readEntry("Underlay"),"true")) {
+  underlayButton->setChecked(true);
+  }
+  else {
+  underlayButton->setChecked(false);
+  }
+  underlaytextLine->setText(settings->readEntry("Underlaytext"));
+  if (!strcmp(settings->readEntry("UnderlayPositionDefault"),"true")) {
+  underlayPositionDefaultButton->setChecked(true);
+  }
+  else {
+  underlayPositionDefaultButton->setChecked(false);
+  }
+  underlayXPosition->setValue((settings->readEntry("UnderlayXPosition")).toInt());
+  underlayYPosition->setValue((settings->readEntry("UnderlayYPosition")).toInt());
+  underlayFontButton->setText(settings->readEntry("Underlayfont"));
+  if (!strcmp(settings->readEntry("UnderlayAngleDefault"),"true")) {
+  underlayAngleDefault->setChecked(true);
+  }
+  else {
+  underlayAngleDefault->setChecked(false);
+  }
+  underlayAngle->setValue((settings->readEntry("UnderlayAngle")).toInt());
+  underlayGray->setValue((settings->readEntry("UnderlayGray")).toInt());
+  underlayStyle->setCurrentItem((settings->readEntry("UnderlayStyle")).toInt());
+  slotLoginClicked();
+  slotUnderlayButtonClicked();
+  slotHeaderClicked();
+  slotCutLinesClicked();
+  slotWrappedLinesClicked();
+  slotHighlightBarsClicked();
+  slotNumberingPagesClicked();
+  delete (settings);
 }
