@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Adding Printing Functionality</TITLE>
+<TITLE>KDE Anwendungs Tutorials: Hinzufügen der Druckerfunktionalität</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,18 +18,19 @@
  <A HREF="index-12.html">Zurück</A>
  <A HREF="index.html#toc13">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="s13">13. Adding Printing Functionality</A></H3>
+<H3><A NAME="s13">13. Hinzufügen der Druckerfunktionalität</A></H3>
 
 <P>
-<P>In this chapter we will show you how easy it is to implement printing functions using Qt. It´s actually just one line of code for us to
-do here, but we will start understanding who is actually doing the printing job. When the user presses the print button in
-<EM>KScribble</EM> or chooses "Print" from the "File" menu, the <CODE>slotFilePrint()</CODE> method is called in <CODE>KScribbleApp</CODE>.
-This method detects which child window is currently activ and creates a printer instance of the class <CODE>QPrinter</CODE>. Then it calls
-the widget´s printing method, <CODE>KScribbleView::print()</CODE>. Here, the framework already contains the base implementation - which
-already shows you that for printing you just have to use <CODE>QPainter</CODE> which then draws on the printer. This method also calls the
-printing dialog.
-<P>What we have to do here is to use <CODE>QPainter</CODE> methods to draw the pixmap of the document connected to the view. As
-<CODE>QPainter</CODE> already offers a whole set of methods <CODE>drawPixmap()</CODE>, we will of course use one of them:
+<P>In diesem Kapitel werden wir Ihnen zeigen, wie einfach es ist, Druckerfunktionen mit Qt zu implementieren. Tatsächlich ist es 
+nur eine Zeile Code, die wir schreiben müssen, aber wir werden verstehen, wer den Druckauftrag eigentlich ausführt. Wenn der 
+Benutzer den "Drucken" Knopf in <EM>KScribble</EM> benutzt oder "Drucken" aus dem Dateimenü wählt, wird die <CODE>slotFilePrint()</CODE> 
+Methode in <CODE>KScribbleApp</CODE> aufgerufen. Diese Methode prüft, welches Kind Fenster gerade aktiv ist und erzeugt eine Instanz 
+der Druckerklasse <CODE>QPrinter</CODE>. Dann ruft sie die Druckmethode des Widgets auf, nämlich <CODE>KScribbleView::print()</CODE>. Das 
+Framework enthält bereits die Basisimplementation- was zeigt, daß Sie zum Drucken nur die Klasse <CODE>QPainter</CODE> verwenden 
+müssen, die dann auf dem Drucker ausgibt. Dise Klasse ruft auch den Druckdialog auf.
+<P>Was wir hier tun müssen, ist <CODE>QPainter</CODE> Methoden zu benutzen, um das Pixmap des Dokuments zu drucken, das mit der Ansicht 
+verbunden ist. Da <CODE>QPainter</CODE> bereits einen Satz an <CODE>drawPixmap()</CODE> Methoden anbietet, werden wir natürlich eine davon 
+benutzen: 
 <P>
 <HR>
 <PRE>
@@ -49,17 +50,17 @@ void KScribbleView::print(QPrinter *pPrinter)
 }
 </PRE>
 <HR>
-<P>Here, we paint into the offset of the printer page at 0,0 with our buffer pixmap of the document. That´s all !
-<P>You can just go ahead and test it - now you can print any graphics that <EM>KScribble</EM> is able to open.
-<P>This is now the end of our trour through creating a KDE 2 application. You can find the source package of KScribble
-completely with an extension that adds cut, copy, paste and undo functions as well as drag´n drop here:
+<P>Hier drucken wir unser gepuffertes Pixmap des Dokuments in den Offset 0,0 der Druckerseite. Das ist alles!
+<P>Sie können es einfach einmal ausprobieren- Sie können nun jede Grafik drucken, die <EM>KScribble</EM> öffnen kann.
+<P>Dies ist das Ende unserer Tour durch die Erstellung einer KDE 2 Anwendung. Sie können das Quellpaket von KScribble inklusive einer 
+Erweiterung, die Ausschneiden, Kopieren, Einfügen und Wiederrufen sowie Drag&amp;Drop Funktionen hinzufügt, hier finden:
 <P>
-<A HREF="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz">$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz</A>        
-The example tarball is locally installed and can be downloaded to your home directory, where you can untar it and test it.
-After untarring the tarball with <CODE>tar zxvf kscribble-1.0.tar.gz</CODE>, load the project and call "Automake and autoconf" from the
-"Build" menu in KDevelop, then call "./configure" from the same menu. The configure options are those of my installtion of the KDE 2
-and Qt 2.1, so you have to change them manually to match your installation path for these options.
-<P>The appendix also contains the complete sourcecode for this package to read through online.
+<A HREF="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz">$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz</A> 
+<P>Das Beispieltarball ist lokal installiert und kann in Ihr Homerverzeichnis kopiert werden, wo Sie es auspacken und testen können. 
+Nach dem Auspacken mit <CODE>tar zxvf kscribble-1.0.tar.gz</CODE> laden Sie das Projekt und rufen Sie "Automake und Autoconf" aus dem 
+"Erstellen" Menü in KDevelop auf. Dann wählen Sie "Configure" aus dem gleichen Menü. Die Konfigurationen sind die meiner 
+Installation von KDE 2 und Qt 2.1, Sie müssen sie also an Ihre Installation anpassen.
+<P>Der Anhang enthält ebenfalls den kompletten Quellcode für dieses Paket, so daß Sie ihn online lesen können.
 <P>
 <P>
 <P ALIGN="RIGHT">

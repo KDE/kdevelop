@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Anwendungs Tutorials: Using KImageIO with KScribble</TITLE>
+<TITLE>KDE Anwendungs Tutorials: Verwendung von KImageIO mit KScribble</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,33 +18,39 @@
  <A HREF="index-11.html">Zurück</A>
  <A HREF="index.html#toc12">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="s12">12. Using KImageIO with KScribble</A></H3>
+<H3><A NAME="s12">12. Verwendung von KImageIO mit KScribble</A></H3>
 
 <P>
-<P>When it comes to images, the Qt and KDE libraries offer a wide variety of operations. Besides actual drawing routines, the libraries
-support a whole set of image formats which they can read and write - all without any cost on our view. The main class for these
-operations is <CODE>QImageIO</CODE>, which has a support library by KDE: <CODE>KImageIO</CODE>. As a preparation before we can make use of these nice methods, we
-have to add the according library to <EM>KScribble</EM>: libkimgio. Open "Project"->"Options" in KDevelop and add the line -lkimgio to the
-additional libraries to link <EM>KScribble</EM> with.
+<P>Wenn es um Bilder geht, bieten die Qt und KDE Bibliotheken ein weites Feld an Operationen. 
+Neben den reinen Zeichenroutinen unterstützen die Bibliotheken einen ganzen Satz an 
+Bildformaten, die gelesen und geschrieben werden können- alles ohne Einschränkungen für Ihre 
+Ansicht. Die Hauptklasse für diese Operationen ist <CODE>QImageIO</CODE> die auch eine 
+Supportbibliothek unter KDE hat: <CODE>KImageIO</CODE>. Zur Vorbereitung und bevor wir diese 
+schönen Routinen verwenden können, müssen wir die erforderliche Bibliothek für <EM>KScribble</EM> 
+verfügbar machen: nämlich libkimgio. Öffnen Sie "Projekt"->"Optionen" in Kdevelop und fügen Sie 
+die Zeile -libkimgio bei den zusätzlichen Bibliotheken ein. 
 <P>
-<H3><A NAME="ss12.1">12.1 Preparing the Document</A>
+<H3><A NAME="ss12.1">12.1 Vorbereiten des Dokuments</A>
 </H3>
 
-<P>Now we can go on and apply our changes. First, we have to remove the current restriction in the document class to only read and write
-PNG files. Just replace "PNG" in the following methods with format, as given by the <CODE>openDocument()</CODE> and <CODE>saveDocument()</CODE>
-methods:
-<P>In method <CODE>KScribbleDoc::openDocument()</CODE>:
+<P>Nun können wir unsere Änderungen vornehmen. Als erstes müssen wir die Einschränkung, nur PNG 
+Dateien lesen und schreiben zu können, entfernen. Ersetzen Sie in den folgenden Methoden, "PNG" 
+durch "format", wie in den Methoden <CODE>openDocument()</CODE> und <CODE>saveDocument()</CODE>:
+<P>In der Methode <CODE>KScribbleDoc::openDocument()</CODE>:
 <P><CODE>       if(!buffer.load( filename, format ))</CODE>
-<P>In method <CODE>KScribbleDoc:: saveDocument()</CODE>:
+<P>In der Methode <CODE>KScribbleDoc:: saveDocument()</CODE>:
 <P><CODE>       if(!buffer.save( filename, format ))</CODE>
-<P>Then we have a default behavoir of these methods. Now, for now we don´t have all available file formats yet. This will be our next
-task, together with adapting the slots in <EM>KScribble</EM> that deliver us filenames.
+<P>Jetzt haben wir ein Standardverhalten in diesen Methoden. Trotzdem stehen uns noch nicht alle 
+möglichen Dateiformate zur Verfügung. Darum, und um die Adaptierung der Slots, die uns 
+Dateinamen liefern, kümmern wir uns als nächstes.
 <P>
-<H3><A NAME="ss12.2">12.2 Registering File Formats</A>
+<P>
+<H3><A NAME="ss12.2">12.2 Registrierung von Dateiformaten</A>
 </H3>
 
-<P>To use <CODE>KImageIO</CODE>, we have to initialize the library first. For this, we add a call for <CODE>registerFormats()</CODE> in our
-<CODE>main()</CODE> function:
+<P>Um <CODE>KImageIO</CODE> zu benutzen, müssen wir erst die Bibliothek initialisieren. Dazu fügen wir 
+einen Aufruf von <CODE>registerFormats()</CODE> in unsere <CODE>main()</CODE> Funktion ein:
+<P>
 <HR>
 <PRE>
         
@@ -58,22 +64,25 @@ main.cpp:
 ............
 </PRE>
 <HR>
-
-Note that this call is after the application is instanciated with KApplication app - without the application instance, our program will
-not run, as <CODE>KImageIO</CODE> then doen´t know on which application to register the formats. The include file for this call will be added to
-kscribble.h, as we´re going to use some of its methods in <CODE>KScribbleApp</CODE>:
+<P>Beachten Sie, daß dieser Aufruf nach der Instanzierung mit KApplication app erfolgt- ohne die 
+Applikationsinstanz läuft unser Programm nicht, weil <CODE>KImageIO</CODE> dann nicht weiß, bei 
+welcher Anwendung die Formate registriert werden sollen. Die Includedatei werden wir in 
+kscribble.h eintragen, da wir einige der Methoden darin, in <CODE>KScribbleApp</CODE> verwenden 
+werden: 
 <P>kscribble.h:
 <P>#include &lt;kimgio.h&gt;
 <P>
 <P>
-<H3><A NAME="ss12.3">12.3 Opening Images</A>
+<H3><A NAME="ss12.3">12.3 Bilddateien öffnen</A>
 </H3>
 
 <P>
-<P>Now that we can make use of <CODE>KImageIO</CODE>, we have to apply the first change to the most important method of <CODE>KScribbleApp</CODE>:
-<CODE>openDocumentFile()</CODE>. This method opens us any document until now only on the behalf of the filename. It just leaves out the
-extension, as the format is not required by the document class by default. But as we have changed that, we just need a format - and
-have to adapt the call for <CODE>KScribbleDoc::openDocument()</CODE> in the method <CODE>openDocumentFile()</CODE>:
+<P>Jetzt, da wir <CODE>KImageIO</CODE> verwenden können, werden wir die erste Änderung in der 
+wichtigsten Methode von <CODE>KScribbleApp</CODE> vornehmen: <CODE>openDocumentFile()</CODE>. Diese 
+Methode öffnet uns bis jetzt jedes Dokument nur Anhand des Dateinamens. Sie läßt einfach die 
+Erweiterung weg, da das Format normalerweise nicht von der Dokumentklasse benötigt wird. Aber 
+da wir dies geändert haben, brauchen wir jetzt das Format und müssen den Aufruf für 
+<CODE>KScribbleDoc::openDocument()</CODE> in der Methode <CODE>openDocumentFile()</CODE> adaptieren:
 <P>
 <HR>
 <PRE>
@@ -94,17 +103,21 @@ kscribble.cpp:
   }
 </PRE>
 <HR>
-<P>Of course, this works the same as using <CODE>QString format=QImageIO::imageFormat(file);</CODE>. Here, <CODE>KImageIO</CODE> delivers us the format of
-the image and we can call the document to open the file by filename and format. (Another possiblity would be to detect the format in
-the document class as well).
+<P>Es funktioniert natürlich genauso wie die Verwendung von <CODE>QString format=QImageIO::imageFormat(file);</CODE>. Hier liefert uns <CODE>KImageIO</CODE> das Format des Bildes 
+und wir können dem Dokument mitteilen, die Datei mit dem Dateinamen und dem Format zu öffnen ( 
+eine weitere Möglichkeit wäre das Format in der Dokumentklasse zu ermitteln).
 <P>
-<H3><A NAME="ss12.4">12.4 Setting File Filters with KImageIO</A>
+<P>
+<H3><A NAME="ss12.4">12.4 Setzen von Dateifiltern mit KImageIO</A>
 </H3>
 
-<P>Here, we´re finishing our tutorial with the last section - we will adapt the file dialogs of <EM>KScribble</EM> to make use of file filters.
-For these, <CODE>KImageIO</CODE> provides nice methods to give us the needed strings for all image file formats that are available for opening and
-saving. The following implementation replaces the default file filter (which is in fact none - you have to change your own
-applications´ file filter to your mime type accordingly) with the <CODE>pattern()</CODE> method of <CODE>KImageIO</CODE>:
+<P>
+<P>Mit diesem Kapitel endet unsere Einführung. Wir werden die Dateidialoge von <EM>KScribble</EM> dazu 
+bringen, Dateifilter zu verwenden. Zu diesem Zweck bietet <CODE>KImageIO</CODE> Methoden, uns die Bezeichnungen aller 
+Bilddateiformate zu holen, die man öffnen und speichern kann. Die folgende Implementierung ersetzt 
+den Standardfilter (der eigentlich gar keiner ist - Sie müssen den Dateifilter Ihrer Anwendung den 
+nötigen Mimetypen anpassen), indem sie die <CODE>pattern()</CODE> Methode von <CODE>KimageIO</CODE> 
+verwendet:
 <P>
 <HR>
 <PRE>
@@ -123,10 +136,12 @@ applications´ file filter to your mime type accordingly) with the <CODE>pattern(
   }
 </PRE>
 <HR>
-<P>Here, the mode in <CODE>pattern()</CODE> is set to Reading - which may differ from the patterns that are retrieved when set to writing. Now
-we have finished opening files by its filename and format completely. What is missing to complete this structure, is setting the
-patterns as well for saving a file. For that, the <CODE>slotFileSaveAs()</CODE> is called, which itself invokes the file dialog that
-retrieves a file name. There, we will set the pattern mode to Writing:
+<P>Wir setzen hier den Modus in <CODE>pattern()</CODE> auf Lesen - was sich von dem zum Schreiben benutzten 
+Patterns unterscheided. Jetzt haben wir das Öffnen der Datei mit Dateinamen und Format 
+erledigt. Was noch zur Vervollständigung der Struktur fehlt, ist das Setzen der Patterns auch zum 
+Schreiben. Dazu wird der Slot <CODE>slotFileSaveAs()</CODE> aufgerufen, der dann seinerseits den 
+Dateidialog aufruft, in dem dann der Dateiname abgefragt wird. Dort werden wir den Patternmodus zum 
+Schreiben setzen: 
 <P>
 <HR>
 <PRE>
@@ -138,7 +153,7 @@ void KScribbleApp::slotFileSaveAs()
 ->                               KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));
   if(!newName.isEmpty())
   {
-    KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+    KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
     if( m )
     {
       KScribbleDoc* doc =       m->getDocument();

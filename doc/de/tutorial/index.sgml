@@ -7,7 +7,7 @@ Integrierte Entwicklungsumgebung KDevelop
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" 
 name = "<Ralf.Nolden@post.rwth-aachen.de>"> 
 <inst>Das KDevelop Team 
-<date>Version 0.1 , Mon Jun 21 1999 <abstract> 
+<date>Version 1.0 , Sat Mar 4 2000 <abstract> 
 Das KDE Anwendungs-Tutorial Leitfaden für die Integrierte 
 Entwicklungsumgebung KDevelop; eine Sammlung von 
 Anleitungen, die anhand von Beispielen zeigen, wie man eine 
@@ -20,7 +20,7 @@ id="Copyright" name="Copyright">. </abstract>
 <toc> 
 <chapt>Einleitung
 <p>
-
+ 
 Da KDE derzeit zu einem Standard bei den Oberflächen von 
 UNIX Systemen heranwächst, wollen immer mehr Entwickler die
 Vorzüge des sorgfältig geschriebenen API genießen, das das 
@@ -649,7 +649,7 @@ Signal-Slot Verfahrens und der Ereignisverarbeitung.
 
 Als Anhaltspunkt sollten Sie bereits wissen:
 <itemize>
-<item>Das jede KDE Applikation eine Instanz von <tt>KApplication</tt> (bei Qt eine Instanze von <tt>QApplication</tt>) benötigt
+<item>Das jede KDE Applikation eine Instanz von <tt>KApplication</tt> (bei Qt eine Instanz von <tt>QApplication</tt>) benötigt
 <item>Generell ein Main Fenster von <tt>KTMainWindow</tt> bei KDE (for Qt von <tt>QMainWindow</tt>) abgeleitet ist
 <item>Das Ereignisse (z.B. Tastendrücke oder Mausbewegungen) von darunterliegenden Window System an die Anwendung gesendet 
 werden
@@ -1128,7 +1128,7 @@ enthält und kopieren Sie die Inhalte in Ihre Ansicht.
 <p>
 
 Übrig bleiben zwei virtuelle Handler, die reimplementiert werden müssen. Als erstes müssen wir darauf achten, daß unser Bild im 
-Fenstergezeichnet wird, wenn etwas anderes passiert: wenn Sie ein anderes Fenster öffnen, das die Zeichnung verdeckt, wird sie 
+Fenster gezeichnet wird, wenn etwas anderes passiert: wenn Sie ein anderes Fenster öffnen, das die Zeichnung verdeckt, wird sie 
 nicht mehr da sein, wenn sie wieder zu Ihrer Zeichnung wechseln, es sei denn, Ihr Zeichenereignis wird ausgeführt, so daß das 
 Bild neu gezeichnet wird: 
 
@@ -1185,39 +1185,41 @@ Wir sind an einem Punkt angekommen, an dem wir die Funktionalität unserer Anwend
 nachdem <em>KScribble</em> angezeigt wird, sind Sie bereit, Ihr erstes Bild damit zu zeichnen !
 
 
-<chapt>Extending the GUI
+<chapt>Erweiterung der GUI
 <p>
-As we have seen, we have already provided <em>KScribble</em> the ability to open and save pictures with the document class and enabled user
-interaction by overwriting virtual methods in the view class and we gained the first functionaliy - we can draw pictures as well. But
-when we created the <tt>QPen</tt> instance in the document class, we set some pre-defined values for the pen; the color is black and the pen
-width set to 3 pixels. As you usually want to change these values in a drawing application, we have to enhance the main GUI by
-providing ways to set these, according to the currently active window and document connected to it. This chapter will therefore
-introduce you to:
+Wie wir gesehen haben, haben wir <em/KScribble/ bereits die Fähigkeit gegeben, Bilder mit der Dokumentklasse zu öffnen und zu 
+speichern, haben durch Überladen virtueller Methoden Interaktion ermöglicht, und wir haben die erste Funktionalität erreicht- wir 
+können auch Bilder zeichnen. Aber als wir die <tt>QPen</tt> Instanz erzeugt haben, haben wir vordefinierte Werte für den Stift 
+verwendet; die Farbe ist Schwarz und die Breite ist auf 3 Pixel eingestellt. Da Sie für gewöhnlich diese Werte ändern können 
+wollen, müssen wir die Haupt GUI um Funktionen, diese Werten zu setzen, erweitern, je nachdem welches Fenster gerade aktiv ist und 
+welches Dokument damit verbunden ist. Dieses Kapitel wird Ihnen daher zeigen:
 
 <itemize>
-<item>adding a new menu to the menubar
-<item>extending the toolbar with icons for the actions defined in the menubar
-<item>creating a new dialog with the KDevelop Dialogeditor
-<item>connecting the new commands of the menubar and toolbar to calling the dialogs.
-<item>enabling the document class to let us change the pen values
+<item>Das Hinzufügen eines neuen Menüs zur Menüleiste
+<item>Erweiterung der Werkzeugleiste um Icons für die in der Menüleiste definierten Methoden
+<item>Die Erstellung eines neuen Dialoges mit dem KDevelop Dialogeditor
+<item>Verbinden der neuen Kommandos der Menü- und Werkzeugleiste mit Aufrufen der Dialoge
+<item>Ermöglichen der Änderung der Stiftgröße in der document Klasse
 </itemize>
 
-Further, we also add a method to delete the document contents at all with a menubar command.
+Desweiteren fügen wir eine Methode hinzu, den Inhalt des gesamten Dokuments über das Menü zu löschen.
 
-<sect>Adding the "Pen" Menu
+<sect>Hinzufügen des "Stift" Menüs
 <p>
 
-As the title of this section says, we will add a menu for setting the pen values of the documents here. Menus that are inserted into
-the menubar are instances of <tt>QPopupMenu</tt>, and you can have a look at how the current menubar is created when you switch to the
-<tt>KScribbleApp</tt> class, method <tt>initMenubar()</tt>. You will see that the menubar items are created in the order they appear on the
-menubar - but this isn't necessary. There are two things important on how the menubar will look like:
+Wie der Name dieses Abschnittes schon sagt, werden wir hier ein Menü zum Setzen der Stiftwerte des Dokuments hinzufügen. Menüs, 
+die in die Menüleiste eingefügt werden, sind Instanzen von <tt>QPopupMenu</tt>, und Sie können einen Blick darauf werfen, wie die 
+aktuelle Menüleiste aufgebaut ist, wenn Sie zur <tt>KScribbleApp</tt> Klasse, Methode 
+<tt>initMenubar()</tt> wechseln. Sie werden sehen, daß die Menüleistenelemente in der 
+Reihenfolge ihres Erscheinens auf der Menüleiste erzeugt wurden, aber das ist nicht 
+notwendigerweise so. Es gibt zwei Dinge, die für das Aussehen der Menüleiste wichtig sind: 
 <itemize>
-<item>in the menus the order of the menuitems
-<item>in the menubar the order of inserting the popup menus.
+<item>In den Menüs, die Reihenfolge der Einträge
+<item>In der Menüleiste, die Reihenfolge der Popupmenüs
 </itemize>
 
-Last but not least you have to create menus first with calling the constructor. The class declaration already contains the pointers to
-the popup menus, so we will have to add our "Pen" menu here first:
+Schließlich und endlich werden wir zuerst die Menüs erzeugen müssen, indem wir den Konstruktor aufrufen. Die Klassendeklaration 
+enthält bereits die Zeiger auf die Popupmenüs, also werden wir zuerst das "Stift" Menü hier einfügen:
 
 <code>
 kscribbleapp.h
@@ -1232,8 +1234,8 @@ class KScribbleApp
 }
 </code>
 
-Now we are going to create the menu itself. Change to the implementation of the method <tt>KScribbleApp::initMenuBar()</tt> and add the
-lines marked with an arrow:
+Jetzt werden wir das Menü selbst erzeugen. Ändern Sie die Implementation der Methode <tt>KScribbleApp::initMenuBar()</tt> und 
+editieren Sie die mit dem Pfeil markierten Zeilen:
 
 <code>
 void KScribbleApp::initMenuBar()
@@ -1256,76 +1258,92 @@ void KScribbleApp::initMenuBar()
 }
 </code>
 
-You see that we first create the menu with <tt>new QPopupMenu()</tt>. Then we use the insertItem methods to add two menu entries, Color
-and Brush. The visible commands are inserted with the method <tt>i18n()</tt>, which ensures that you can internationalize your
-appliction. So as a general rule, you would declare all visual text that will appear later by the method <tt>i18n()</tt>. Qt-only
-programs using Qt > 2.0 would use the according method <tt>tr()</tt> instead of <tt>i18n()</tt>, as Qt has it's own ways of
-internationalizing applications. The second argument is a macro, the ID of the menubar item. This ID is a number that we have to set
-using #define in the file resource.h, where you will see all other already used ID's declared. There are also other ways to insert
-menus by directly connecting a slot to the inserted entry, but the application framework uses ID's to select which action has been
-activated- and highlighted. Therefore each menu entry, independent of the popup menu it appears, has to be a unique number, and as we
-can hardly remember numbers later, setting a #define for the ID is a nice solution. The popup menu is now inserted into the menubar
-with <tt>insertItem()</tt> as well, and with the pointer to the menu as second argument.
+Sie sehen, daß wir zunächst das Menü mit <tt>new QPopupMenu()</tt> erzeugen. Dann verwenden wir 
+die insertItem Methoden, zum Hinzufügen der Menüeinträge Color und Brush. Die sichtbaren 
+Kommandos werden mit der Methode <tt>i18n()</tt> eingefügt, womit sichergestellt ist, daß Sie 
+Ihre Applikation internationalisieren können. Als generelle Regel kann gesagt werden, daß Sie 
+alle später sichtbaren Texte mit der Methode <tt>i18n()</tt> deklarieren. Nur-Qt Programme, die 
+Qt > 2.0 verwenden, benutzen dazu die Methode <tt>tr()</tt>, da Qt eigene Verfahren hat, 
+Anwendungen zu internationalisieren. Das zweite Argument ist ein Makro, die ID des 
+Menüeintrages. Diese ID ist eine Nummer, die wir mit #define in der resource.h, in der Sie 
+auch die anderen bisher definierten ID's finden, setzen müssen. Es gibt auch den Weg, Menüs 
+direkt einzufügen, indem Sie einen Slot mit dem gewählten Eintrag verbinden, aber das Framework 
+dieser Anwendung verwendet ID's, um festzustellen, welche Aktion ausgewählt und markiert wurde. 
+Deshalb muß jeder Menüeintrag, unbhängig davon, in welchem Popupmenü er erscheint, eine 
+einzigartige Nummer besitzen, und da wir uns Nummern schlecht merken können, ist die Verwendung 
+eines #define für die ID eine gute Lösung. Das Popupmenü wird nun ebenfalls mit 
+<tt>insertItem()</tt> der Menüleiste hinzugefügt, und zwar mit einem Zeiger auf das Menü als 
+zweitem Argument. Beachten Sie, daß wir das Popupmenü nach dem Edit- und vor dem Viewmenü 
+eingefügt haben, es wird also später zwischen diesen beiden Menüs erscheinen. Was auch wichtig 
+bei der Erstellung von Menüs ist, ist, daß sie dem Benutzer auch über Shortcuts zur Verfügung 
+gestellt werden sollten; normalerweise sehen Sie in Menüs einen unterstrichenen Buchstaben, der 
+zusammen mit ALT die entsprechende Funktion aufruft. Als Programmierer, müssen Sie diesen 
+Buchstaben durch ein vorangestelltes "&amp;" setzen, das "Pen" Menü wird also später durch 
+drücken von ALT+P erreichbar sein. Innerhalb des Menüs kann der Benutzer auch nur den 
+Buchstaben eingeben, um den entsprechen Menüpunkt auszuführen, Sie sollten also für die anderen 
+Menüpunkte ebenfalls Tastaturkürzel zur Verfügung stellen. Achten Sie darauf, den Code zum 
+Einfügen von Einträgen in Gruppen zusammenzuschreiben, die Sie überblicken können, damit Sie 
+keine Kürzel doppelt verwenden (Dies ist auch für Ihre Übersetzer wichtig: In anderen Sprachen 
+kommt das gewählte Kürzel vielleicht nicht im Menütext vor, der Übersetzer muß also auch wieder 
+ein Kürzel auswählen). 
 
-Note that we inserted the popup menu after the "Edit" menu and before the "View" menu, so it will appear between those menus later in
-the menubar. What is also important when creating menus is that they should be available to the user with shortcuts; ususally in menus
-you will see underlined characters that the user can jump to directly by pressing ALT and the according underlined letter of the
-menuitem. As a programmer, you have to set this character by a leading ampersand, so the "Pen" menu will later be accessible via the
-keyboard by pressing ALT+P. Within the menu, the user can press another button to go directly to the command he wants to, so in the
-menu all items should have this kind of shortcuts as well. Note that you should write item insertions together in groups that have the
-same visible access, so you can keep a better overview of the characters you already used so that there are no menu accelerators used
-twice. (this is also important for your translators: in other languages the used accelerator may not be available in the translated
-word, so they have to set some accelerators again.)
+In den letzten beiden Zeilen verbinden wir die Stiftmenüs mit zwei Slots: einen für das 
+Menüsignal "aktiviert, Aktion ausführen" und einen für die Markierung des Menüeintrages. Dies 
+ermöglicht es, eine Hilfemeldung in der Stauszeile anzuzeigen. Sie können sich die Methoden 
+ansehen, die mit dem Menü verbunden sind. Sie enthalten Anweisungen, in denen die gesendete ID 
+geprüft und die folgende Aktion aufgerufen wird. Was noch zu tun bleibt, ist die #define 
+Anweisungen in die resource.h einzutragen:     
 
-In the last two lines we're connecting the pen menu with two slots: one for when the menu signals that it is activated and the action
-should be executed, and one for when it is highlighted. That allows making a statusbar help message available for the user. You can
-have a look at the methods the menu is connected to, they contain switch statements where the sent menu ID is compared and the
-following action called.
-
-What is left to do is to add the #define statements to the file resource.h:
-
-<code>
-resource.h
-
-///////////////////////////////////////////////////////////////////
+<code> 
+resource.h ///////////////////////////////////////////////////////////////////
 // Pen-menu entries
 #define ID_PEN_COLOR                14010
 #define ID_PEN_BRUSH                14020
 </code>
 
-You will see that the numbers are unique for these entries- you have to watch out not to set the same number for two entries- but if it
-happens by accident, there's still the compiler that informs you about redefining.
+Sie sehen, daß die Nummern für jeden Eintrag einzigartig sind- Sie müssen darauf achten, 
+nicht zweimal dieselbe Nummer zu vergeben- sollte es aber dennoch einmal versehentlich 
+passieren, wird Sie der Compiler über die Redefinition informieren.
 
-This is currently all you have to do to add a new menu for your menubar. The actions they will execute are: "Color" will call a color
-selection dialog, "Brush" will call a dialog (which we still have to create) to select the brush width.
+Das ist zum jetzigen Zeitpunkt alles, das Sie zum Hinzufügen eines neuen Menüs tun müssen. Die 
+ausgeführten Aktionen sind: "Color", Aufruf des Farbauswahldialogs, "Brush", Aufruf des Dialogs 
+zum Setzen der Stiftbreite (diesen Dialog werden wir noch erstellen). Aber zuerst werden wir im 
+nächsten Kapitel auch die Werkzeugleiste um zwei Icons für diese Aktionen erweitern.
 
-But first we'll extend the toolbar as well by two icons for these actions in the next section.
 
-<sect>Adding Toolbar Buttons
+<sect>Hinzufügen von Knöpfen zur Werkzeugleiste
 <p>
 
-Whenever you think that some new commands should be made available by toolbar buttons as well because they are often used and you want
-to offer additional functionality, you can easily do that by adding buttons in the framework's <tt>initToolBar()</tt> method of the
-<tt>App</tt> class. Here, we decide to add a button for both menu entries in the Pen-menu, but those need icons - which you can either
-find in the KDE directory /toolbar or, when you don't find an icon that matches your action, have to create yourself. KIconEdit is very
-suitable to paint icons, so we will first create them. Choose "New" from the KDevelop "File" menu and select "Icon" as the filetype.
-The first icon will be named "pencolor.xpm". Now we have to select where we want to have the icon created in our project directory.
-Press the directory selection button and change to your project directory containing the <em>KScribble</em> sources. Then create a new
-directory "toolbar". Change to that directory and press "OK". The new icon will then be created in the new directory "toolbar" and will
-be opened by KIconEdit within KDevelop automatically. Paint something that will signalize the user what the button is intended to do,
-save the pixmap and then switch to the RFV / LFV in KDevelop. Select the icon by a right mouse button press and select "Properties"
-from the popup menu. You will see that the icon is included in the distribution, but for your program to find the icon again later, you
-have to set the installation destination as well. Check the "install" option and enter into the line now active below:
+Wenn Sie neue Kommandos über Knöpfe in der Werkzeugleiste zur Verfügung stellen möchten, können 
+Sie dies leicht mit der <tt>initToolbar()</tt> Methode der <tt>App</tt> Klasse tun. Hier 
+entscheiden wir uns, je einen Knopf für die beiden Menüeinträge im Stiftmenü hinzuzufügen, aber 
+diese Knöpfe brauchen Icons. Sie können sie entweder im KDE Verzeichnis toolbar finden, oder, 
+wenn keins der Icons zu der Aktion paßt, sie selbst erzeugen. KIconEdit ist gut dafür geeignet 
+Icons zu erstellen, also werden wir sie zuerst erzeugen. Wählen Sie "Neu" aus dem KDevelop 
+Dateimenü, gehen Sie auf den Linux/KDE Tabulator und wählen Sie dann "Icon" als Dateityp. Das 
+erste Icon nennen wir "pencolor.xpm". Nun müssen wir sagen, wo das Icon erzeugt werden soll. 
+Drücken Sie den Verzeichnisauswahlknopf und wechseln Sie in das Verzeichnis mit Ihren 
+<em/KScribble/ Quelldateien. Dort erzeugen Sie ein neues Verzeichnis "toolbar". Wechseln Sie in 
+dieses Verzeichnis und drücken Sie "OK". Das neue Icon wird erzeugt und automatisch mit 
+KIconEdit innerhalb von KDevelop geöffnet. Zeichnen Sie etwas, daß dem Benutzer den Sinn des 
+Knopfes zeigt, speichern Sie das Pixmap und wählen Sie dann den LFV / RFV in KDevelop. Wählen 
+Sie das Icon mit der rechten Maustaste aus und gehen Sie im Popupmenü auf "Eigenschaften". Sie 
+sehen, daß das Icon der Distribution hinzugefügt wurde, damit es aber später von Ihrem Programm 
+gefunden werden kann, müssen Sie Sie das Installationsziel ebenfalls angeben. Markieren Sie die 
+die "installieren" Option und geben Sie dann darunter ein:
 
 <tt>$(kde_datadir)/kscribble/toolbar/pencolor.xpm</tt>
 
-This will install the pixmap in the KDE file system hierarchy's data directory, where each application has its subdirectory containing
-additional files needed by the application. Icons have to be installed into another subdirectory "toolbar", so the application's icon
-loader can find the pixmaps for your program.
+Damit wird das Pixmap im data Verzeichnis der KDE Dateisystemhierarchie installiert, in der 
+jede Anwendung ihr Unterverzeichnis mit zusätzlich benötigten Dateien hat. Icons müssen in 
+einem Unterverzeichnis namens toolbar abgelegt werden, damit der icon loader die Pixmaps für 
+Ihr Programm finden kann. 
 
-After you're finished, repeat all these above steps with the second icon for selecting the pen width. Name this pixmap "penwidth.xpm".
+Wenn Sie damit fertig sind, wiederholen Sie die gleichen Schritte für das zweite Icon zum 
+Setzen der Stiftweite. Nennen Sie dieses Icon "penwidth.xpm".
 
-Now we only have to insert the buttons into the toolbar; add the lines marked with the arrow into your code:
+Nun müssen wir nur noch Knöpfe auf der Werkzeugleiste erzeugen; fügen Sie dazu die markierten 
+Zeilen Ihrem Code hinzu: 
 
 <code>
 void KScribbleApp::initToolBar()
@@ -1341,67 +1359,85 @@ void KScribbleApp::initToolBar()
 ..
 }
 </code>
-Here, we use the methods of KToolBar to insert buttons. The first argument, <tt>BarIcon()</tt>, tells the method to load the icon for
-the button. What seems unusual is that we don't have to care for the file extension. The preferred format for KDE 2 is *.PNG, but it
-works with xpm's as well. (You could use ImageMagick for that as well which can do that- or use <em>KScribble</em> in a later step to
-convert your icons to PNG !)
 
-The second argument is again the ID. The commands are then automatically activated, as the <tt>toolBar()</tt> is already connected to
-the same methods as the menubar is for signal <tt>activated()</tt>. The third argument stands for "available" when true, "deactivated"
-when false; as we want to have these available, we set this to true. At last, we add a tooltip for the the buttons, which we also
-embrace with <tt>i18n()</tt> to allow internationalization.
+Wir verwenden an dieser Stelle die Methoden von KToolBar um die Knöpfe einzufügen. Das erste 
+Argument, <tt>BarIcon()</tt>, veranlaßt die Methode, das Icon für den Knopf zu laden. Was etwas 
+ungewöhnlich erscheint, ist, daß wir uns nicht um die Dateierweiterung zu kümmern brauchen. Das 
+bevorzugte Format unter KDE 2 ist *.PNG, aber es funktioniert auch mit xpm's ( Sie könnten 
+ImageMagick für die Konvertierung der Icons nach PNG verwenden- oder, zu einem späteren 
+Zeitpunkt,<em>KScribble</em> !). 
 
-Now you're done for now- the GUI is extended at least visually. You can compile and run <em>KScribble</em> again and see how it looks like- of
-course the new items in the menubar and toolbar can't execute any action - that is what we're going to add in the next section.
-You will also note that the toolbar icons we added are not displayed - which is because we didn't install <em>KScribble</em> and so they can't
-be found. All other used icons are already shipped with the KDE libraries, so these are already visible.
+Das zweite Argument ist wiederum die ID. Die Kommandos werden dann automatisch aktiviert, da 
+<tt>toolBar()</tt> bereits mit denselben Methoden verbunden ist wie die Menübar über das Signal 
+<tt>activated()</tt>. Das dritte Argument steht für "erreichbar" wenn wahr, "deaktiviert" wenn 
+falsch; da wir die Knöpfe verfügbar haben wollen, setzen wir es auf wahr. Schließlich setzen wir 
+noch eine Kurzinfo für die Knöpfe, die wir wieder in <tt>i18n()</tt> einschließen, um die 
+Internationalisierung zu ermöglichen. 
 
+Nun sind Sie für's erste fertig- die GUI ist, zumindest visuell, erweitert. Sie können 
+<em/KScribble/ wieder kompilieren und ausführen und sich anschauen, wie es aussieht- natürlich haben 
+die neuen Elemente ind der Menü- und in der Werkzeugleiste noch keine Funktion- dies wird sich aber 
+im nächsten Abschnitt ändern. Sie werden vielleicht auch bemerken, daß die Icons, die wir 
+hinzugefügt haben, nicht angezeigt werden. Dies liegt daran, daß wir <em/KScribble/ nicht 
+installiert haben, und so werden sie nicht gefunden. Alle anderen Icons werden bereits mit den KDE 
+Bibliotheken geliefert, deshalb sind sie schon sichtbar.
 
-
-<sect>Creating the Pen Width Dialog
+<sect>Erzeugen des Dialogs für die Stiftweite
 <p>
-As we´ve already created the according menubar and toolbar commands, we now have to build the first dialog to set the pen width. For
-this, select "New" from the KDevelop "File" menu and select "Qt/KDE Dialog". Then enter the dialog file name as <tt>kpenbrushdlg</tt>,
-the extension will be automatically added. Enter "OK" and the dialogeditor opens an empty widget that will be our dialog background.
-When constructing a dialog, we have to think about what is really needed by the user; here, we need a label to display what will be
-set; a spinbox with up and down buttons to set the pen width value and three buttons, one for resetting the pen width to the default
-value, one to cancel the dialog and one for taking over the new value - the OK button. In this order we will add the items to the
-dialog - which is important because the tab-focus follows the order by which the widgets are created. So if you´re starting with the OK
-button, then the spinbox and then the cancel button, the input focus will change from the ok button to the spinbox and then to the
-cancel button - which is not what the user expects. The tab focus should follow the widget´s items top-down from left to right, so we
-have to construct the dialog in this order as well. To add items to the dialog, select the "Widgets" tab on the left pane. There you
-have all available widgets present by icons to construct your dialog. Pressing a widget button will create the new item and place it at
-the top-left corner of the widget. From there, you can place it with the mouse to the position you would like it to show up. Further,
-when a widget item is selected, you can set the according values in the "Widget Properties" pane on the right.
+Da wir schon die Menüleisten- und Werkzeugleistenkommandos erstellt haben, müssen wir jetzt unseren 
+ersten Dialog für das Setzen der Stiftweite erzeugen. Dazu wählen Sie "Neu" aus dem Dateimenü und 
+dann "Qt/KDE Dialog". Geben Sie als Dialognamen <tt>kpenbrushdlg</tt> ein, die Erweiterung wird 
+automatisch angehängt. Wählen Sie "OK" und der Dialogeditor öffnet ein leeres Widget, das den 
+Hintergrund für unseren Dialog bilden wird. Wenn wir einen Dialog entwerfen, müssen wir uns 
+überlegen, was der Benutzer wirklich braucht; in unserem Fall brauchen wir ein Label, das 
+beschreibt, was geändert wird, eine Spinbox mit auf und ab Knöpfen zum Setzen der Stiftweite und 
+drei weitere Knöpfe: einen zum Zurücksetzen der Weite, einen zum Abbrechen des Dialogs und einen zum 
+Übernehmen des neuen Wertes - den "OK" Knopf. In dieser Reihenfolge werden wir die Elemente auch 
+hinzufügen, was wichtig ist, weil der Fokus der Tabulatortaste der Reihenfolge folgt, in der die 
+Widgets erstellt werden. D.h., wenn Sie mit dem "OK" Knopf anfangen, bringt uns das Drücken der 
+Tabtaste zuerst zur Spinbox und dann zum "Cancel" Knopf - was so nicht erwartet wird. Der Tabfokus 
+sollte den Elementen von oben nach unten und von rechts nach links folgen, also müssen wir den 
+Dialog auch in dieser Reihenfolge erstellen. Um Elementen zum Dialog hinzuzufügen, wählen Sie den 
+Widgets Tabulator im linken Panel. Dort werden alle verfügbaren Widgets durch Icons repräsentiert, 
+damit Sie Ihren Dialog erstellen können. Ein Druck auf ein Widget Icon erzeugt das neue Element in 
+der linken, oberen Ecke des Hauptwidgets. Von dort können Sie es mit der Maus zu der Position 
+ziehen, an der Sie das Element haben wollen. Desweiteren können Sie die Einstellungen für das 
+gewählte Widget im "Widgeteigenschaften" Panel auf der rechten Bilschirmseite vornehmen.
 
-<bf>The Label:</bf> press the "QLabel" button on the "Widgets" tab and place it at position x:50, y:20. Then select the "General"
-section in the widget properties pane. Change the text in properity "Text" from "Label" to "Pen Width:". Adjust the width of the label
-to a width that matches the label contents in x-direction; a width of 120 should last. You can do this either by using the mouse or set
-the value in the "Geometry" section of the properties.
+<bf>Das Label:</bf> Wählen Sie <tt>QLabel</tt> aus dem Widgettabulator und plazieren Sie es an 
+Position x:50, y:20. Dann gehen Sie zum "General" Abschnitt in den Widgeteigenschaften. Ändern Sie 
+den den Text der Eigenschaft "Text" von "Label:" nach "Pen Width:". Passen Sie die Breite in 
+x-Richtung dem Text des Labels an, ein Wert von 120 sollte reichen. Sie können dies entweder mit der 
+Maus machen, oder den Wert im "Geometry" Abschnitt eingeben.
 
-<bf>The Spinbox:</bf> press the "QSpinBox" button on the "Widgets" tab and place it at the right of the label we created in the last
-step. Now set the variable name in section "C++Code" to "width_spbox". The minimum and maximum values are 1 and 100, which should last
-for setting the brush width.
+<bf>Die Spinbox:</bf> Wählen Sie <tt>QSpinbox</tt> und plazieren Sie sie rechts neben dem eben 
+erstellten Label. Setzen Sie den Variablennamen im Abschnitt "C++ Code" auf "width_spbox". Die 
+Minimal- und Maximalwerte sind 1 und 100, was für unsere Stiftweite ausreichen sollte.
 
-<bf>The Buttons:</bf> finally, we need the mentioned three buttons. The leftmost button will be the default button. Create a
-<tt>QPushbutton</tt> and place it somewhere nicely on the bottom of the dialog, set the variable name to "default_btn" and the button text to
-"Default". Proceed with the OK button with variable name "ok_btn" and the cancel button with variable name "cancel_btn" and set the
-button text to "&amp;OK" and "&amp;Cancel".
+<bf>Die Knöpfe:</bf> Schließlich brauchen wir noch unsere drei Knöpfe. Der linke Knopf soll der 
+Standardknopf sein. Erzeugen Sie einen <tt>QPushbutton</tt> und plazieren Sie ihn an einer günstigen 
+Stelle unten im Dialog, setzen Sie den Variablennamen auf "default_btn" und den Text auf "Default". 
+Machen Sie das gleiche mit dem "OK" Knopf, Variablenname "ok_btn" und dem "Cancel" Knopf", 
+Variablenname "cancel_btn". Setzen Sie die Knopftexte auf "&amp;OK" und "&amp;Cancel".
 
-If you´re fine with the layout of the dialog, choose "Generate complete sources" from the Build menu and set the classname to
-"KPenBrushDlg", the inheritance to <tt>QDialog</tt>. After pressing "OK", the sources for the dialog are created and added to the project. Now
-you can return to the editor view in KDevelop and we can add the code needed to give the dialog some execution purpose.
+Wenn Sie mit Ihrem Layout zufrieden sind, wählen Sie "Alle Quellen erzeugen" aus dem "Erstellen" 
+Menü, geben Sie als Klassennamen "KPenBrushDlg" ein und wählen Sie <tt>QDialog</tt>. Nachdem Sie 
+"OK" gedrückt haben, werden die Quellen für Ihren Dialog erzeugt und dem Projekt hinzugefügt. Sie 
+können nun wieder zur Editoransicht in KDevelop zurückkehren und wir können den Code hinzufügen, 
+der benötigt wird, damit der Dialog auch etwas macht.
 
-<sect>Connections and Setting Up
+<sect>Verbinden und Einstellen
 <p>
-After we have created the GUI of the dialog, we have to add some functionality to the buttons and provide ways to set and retrieve the
-selected value of the spinbox - because we want the dialog to display the current value when it gets called and to access the selected
-value when the user pressed the OK button to quit the dialog.
+Nachdem wie nun das GUI des Dialogs erstellt haben, müssen wir den Köpfen noch die Funktionalität 
+geben, und Mittel zur Verfügung stellen, die Werte der Spinbox zu holen und zu setzen, weil wir 
+wollen, daß der Dialog den aktuellen Wert anzeigt, wenn er aufgerufen wird, und wir möchten den 
+eingestellten Wert auslesen, wenn der "OK" Knopf gedrückt wird. 
 
-In the generated class for the dialog, <tt>KPenBrushDlg</tt>, you can see one method besides the constructor and the destructor,
-<tt>initDialog()</tt>. This method implements the whole GUI construction, so we don´t have to care for that anymore and we can go
-directly to add the usual connections for the push buttons first. Add the lines marked by arrows to the constructor of the
-dialog:
+In der erzeugten Klasse <tt>KPenBrushDlg</tt> können Sie neben dem Konstruktor und dem Destruktor 
+noch die Methode <tt>initDialog()</tt> finden. Diese Methode implementiert die gesamte GUI 
+Konstruktion, deshalb müssen wir uns darum nicht mehr kümmern, sondern können direkt die üblichen 
+Verbindungen für unsere Knöpfe erstellen. Fügen Sie die markierten Zeilen in den Konstruktor des 
+Dialogs ein: 
 
 <code>
 KPenBrushDlg::KPenBrushDlg(int curr, QWidget *parent, const char *name) : QDialog(parent,name,true){
@@ -1413,26 +1449,30 @@ KPenBrushDlg::KPenBrushDlg(int curr, QWidget *parent, const char *name) : QDialo
 }
 </code>
 
-This provides the functionality for the buttons on the bottom of the dialog when the user clicks the button. First, we set the default
-button to execute a slot called <tt>slotDefault()</tt>. This slot is still to be implemented below, where we will set the default value
-of the spinbox directly.
+Dies implementiert die Funktionalität für die Knöpfe, für den Fall, daß sie gedrückt werden. Als 
+erstes stellen wir den Standardknopf so ein, daß er den Slot <tt>slotDefault()</tt> ausführt. Dieser 
+Slot, in dem wir den Standardwert für die Spinbox direkt setzen, muß noch implementiert werden. 
 
-The second <tt>connect()</tt> call connects the ok button to call the slot <tt>accept()</tt> provided by <tt>QDialog</tt>, as well as the cancel
-button gets connected to <tt>QDialog</tt>´s slot <tt>reject()</tt>. This will both close the dialog and will set the result value which we will
-use later when we implement the method that calls the dialog to determine if we want to use the value set or to ignore any changes.
+Der zweite <tt>connect()</tt> Aufruf verbindet den "OK" Knopf mit dem Slot <tt>accept()</tt>, der 
+von <tt>QDialog</tt> bereitgestellt wird, genauso wie der <tt>reject()</tt> Slot, den wir mit dem 
+"Cancel" Knopf verbinden. "Cancel" wird sowohl den Dialog schließen, als auch den resultierenden 
+Wert setzen, den wir später, wenn wir die Methode implementieren, die den Dialog aufruft, dazu 
+verwenden werden, herauszufinden ob der neu eingestellte Wert verwendet oder die ganze Aktion 
+abgebrochen werden soll.
 
-Now we have to add two methods to set and retrieve the spinbox value:
+Jetzt werden wir die beiden Methoden zum Setzen und holen der Spinbox-Werte hinzufügen:
 
 <code>
 void setCurrent(int curr){ width_spbox->setValue(curr); }
 int width() { return width_spbox->value(); };
 </code>
 
-Add these methods to the class declaration with the modifier "public", as we want to set and retrieve the values when we call the
-dialog to show up. The <tt>setCurrent()</tt> method will be used to set the current value the pen has, the <tt>width()</tt> method
-returns us the selected with when the user presses OK and we want to know which value has been chosen.
+Fügen Sie diese Methoden in der Klassendeklaration mit dem Modifizierer "public" ein, da wir die 
+Werte setzen und holen wollen, wenn der Dialog angezeigt wird. Die Methode <tt>setCurrent()</tt> wird zum Setzen des 
+aktuellen Stiftwertes verwendet, die <tt>width()</tt> Methode liefert den Wert zurück, den die 
+Spinbox hat, wenn der Benutzer "OK" drückt.
 
-Last but not least, we need to implement the <tt>slotDefault()</tt> method:
+Schließlich müssen wir noch die Methode <tt>slotDefault()</tt> implementieren:
 
 <code>
 //kpenbrushdlg.h:
@@ -1450,15 +1490,18 @@ void KPenBrushDlg::slotDefault()
 }
 </code>
 
-This will set the default value to 3 pixels for the pen.
+Dies setzt den Standardwert für den Stift auf 3 Pixel.
 
-Now we´re ready with our first dialog and we can turn to over to the other application classes to adapt some things and add the method
-calls to invoke the dialog.
+Wir sind nun mit unserem ersten Dialog fertig und können uns den anderen Klassen der Anwendung 
+zuwenden, um noch einiges zu adaptieren und Methoden zu implementieren, die den Dialog aufrufen.
+                             
 
-<sect>Calling the Dialogs
+<sect>Aufrufen der Dialoge
 <p>
-As you may guess, calling the dialogs means that we will not only implement calling our width selection dialog but also add the method
-for selecting the pen color, but one after another. First, create a method <tt>slotPenBrush()</tt> in the class <tt>KScribbleApp</tt>:
+Wie Sie sich vielleicht schon denken können, bedeutet das Aufrufen der Dialoge nicht nur, 
+daß wir den Dialog zur Auswahl der Stiftgröße implementieren werden, sondern auch, daß wir 
+eine Methode zur Auswahl der Stiftfarbe hinzufügen. Doch eins nach dem anderen. Als erstes 
+erzeugen Sie eine Methode <tt>slotPenBrush()</tt> in der Klasse <tt>KScribbleApp</tt>:
 
 <code>
 void KScribbleApp::slotPenBrush()
@@ -1466,7 +1509,7 @@ void KScribbleApp::slotPenBrush()
   slotStatusMsg(i18n("Setting brush width..."));
 
   // get one window with document for a current pen width
-  QWidgetList windows = pWorkspace->clientList();
+  QWidgetList windows = pWorkspace->windowList();
   KScribbleView* m = (KScribbleView*)windows.at(0);
 	KScribbleDoc* pDoc = m->getDocument();
   int curr_width=pDoc->penWidth();
@@ -1489,19 +1532,26 @@ void KScribbleApp::slotPenBrush()
   slotStatusMsg(i18n("Ready."));
 }
 </code>
-Here, we first have to access the window list and retrieve a pointer to a document - which can be a document of any window, because all
-documents should have the same current pen width. Then we create an integer variable curr_width that stores the current pen width.
+ 
+Hier müssen wir zuerst auf die Fensterliste zugreifen und den Zeiger auf ein Dokument 
+holen - das ein Dokument eines beliebigen Fensters sein kann, da alle Dokumente die 
+gleiche aktuelle Stiftweite haben sollten. Dann legen wir eine Integervariable curr_width 
+an, welche die aktuelle Stiftweite speichert.
 
-Now we can call the dialog by creating the dlg instance of KPenBrushDlg. Then we set the current pen width by calling
-<tt>dlg->setCurrent()</tt>, which method we added to the dialog.
-By calling <tt>dlg->exec()</tt> we invoke the dialog. The <tt>if()</tt> statement ensures that the following code is only executed when
-the result code of the dialog has the accept flag set - which means, the code is executed if the user pressed the OK button on the
-dialog.
+Jetzt können wir den Dialog aufrufen, indem wir eine dlg Instanz von KPenBrushDlg 
+erzeugen. Dann setzen wir die aktuelle Stiftweite durch einen Aufruf der Methode 
+<tt>dlg->setCurrent()</tt>, die wir ja dem Dialog hinzugefügt haben. Durch Aufruf von 
+<tt>dlg->exec()</tt> zeigen wir den Dialog an. Die <tt>if()</tt> Anweisung stellt sicher, 
+daß der folgende Code nur ausgeführt wird, wenn das Accept Flag gesetzt ist - das 
+bedeutet, der Code wird ausgeführt, wenn der Benutzer den "OK" Knopf gedrückt hat. 
 
-Assuming the user changed the value and pressed OK, we have to set all documents to use the new pen width. For that we use the
-<tt>for()</tt> loop and set every document´s pen width to the width variable we retrieved before with <tt>dlg->width()</tt>.
+Davon ausgehend, daß der Benutzer den Wert geändert und "OK" gedrückt hat, müssen wir in 
+allen Dokumenten die neue Stiftweite einstellen. Dazu verwenden wir die <tt>for()</tt> 
+Schleife und setzen in jedem Dokument die entsprechende Variable, die wir zuvor mit 
+<tt>dlg->width()</tt> geholt haben. 
 
-We don´t have implemented the method <tt>setPenWidth()</tt> in the document class, so we´ll do this right now:
+Wir haben die Methode <tt>setPenWidth()</tt> noch nicht in der Dokumentklasse 
+implementiert, also werden wir das jetzt nachholen: 
 
 <code>
 
@@ -1511,9 +1561,11 @@ public:
   void setPenWidth( int w ){ pen.setWidth( w ); }
 </code>
 
-What is missing to execute any action is to add the methods that shall be called when the menu items are activated or the toolbar
-buttons pressed. For this, we have to add the ID´s to the slot <tt>commandCallback()</tt>, which selects and executes the according
-methods we want to call if a menu or toolbar item was chosen:
+Was noch fehlt, damit überhaupt eine Aktion ausgeführt wird, ist die Methoden 
+hinzuzufügen, die aufgerufen werden sollen, wenn die Menüpunkte aktiviert oder die Knöpfe 
+in der Werkzeugleiste gedrückt werden. Dazu müssen wir die ID's im Slot 
+<tt>commandCallback()</tt> eintragen, der die entsprechenden Methoden auswählt und 
+ausführt:   
 
 <code>
 void KScribbleApp::commandCallback(int id_)
@@ -1532,7 +1584,8 @@ void KScribbleApp::commandCallback(int id_)
 }
 </code>
 
-This addition also adds the <tt>slotPenColor()</tt> method to the execution list to set the pen color, which we will implement now:
+Diese Erweiterung fügt auch die Methode <tt>slotPenColor()</tt> zum Setzen der Stiftfarbe 
+in die Liste der auszuführenden Methoden ein. Diese Methode werden wir nun implementieren: 
 
 <code>
 void KScribbleApp::slotPenColor()
@@ -1543,7 +1596,7 @@ void KScribbleApp::slotPenColor()
   int result = KColorDialog::getColor( myColor, this );
   if ( result == KColorDialog::Accepted )
   {
-    QWidgetList windows = pWorkspace->clientList();
+    QWidgetList windows = pWorkspace->windowList();
     KScribbleDoc* pDoc;
     KScribbleView* m;
     for ( int i = 0; i < int(windows.count()); ++i )
@@ -1559,8 +1612,11 @@ void KScribbleApp::slotPenColor()
   slotStatusMsg(i18n("Ready."));
 }
 </code>
-When looking at the code, we see that we use another new method of <tt>KScribbleDoc</tt> to set the pen color. This one has to be implemented as
-well:
+
+Wenn wir uns den Code ansehen, erkennen wir, daß wir eine weitere neue Methode von 
+<tt>KScribbleDoc</tt> verwenden, um die Farbe des Srifts zu setzen. Diese Methode müssen 
+wir ebenfalls implementieren: 
+
 <code>
 kscribbledoc.h:
 
@@ -1568,85 +1624,122 @@ kscribbledoc.h:
     void setPenColor( const QColor &amp;c ){ pen.setColor( c ); }
 </code>
 
-Watch out for adding the declaration of the two new methods <tt>slotPenBrush()</tt> and <tt>slotPenColor()</tt> to the class
-<tt>KScribbleApp</tt>, so our class knows about these methods.
+Denken Sie daran, die Deklarationen für <tt>slotPenBrush()</tt> und 
+<tt>slotPenColor()</tt> auch einzufügen, damit Ihre Klasse <tt>KScribbleApp</tt> sie 
+überhaupt kennt. 
 
-Now you´re ready ! Let´s summarize what we´ve done in this chapter:
-<itemize>
-<item> we first added menubar and toolbar commands/items for two dialogs that we want to call;
-<item> then we created the first dialog to set the pen width with the KDevelop dialogeditor
-<item> after that we created the methods we want to call by the menubar/toolbar items which invoke the dialogs and set the poperties we
-wanted to change
-<item> finally, we added the needed set functions to the document so we are able to change the values after the dialogs get executed.
-</itemize>
-
-By this structure, you are provided the general way how to extend your application with more functionality and manipulating settings
-that influence the behavoir of the document and view interaction.
-
-<chapt>Extended Views
-<p>
-
-In this chapter we´re going to extend the functionality of our view widget by two enhancements: syncronized views and scrollviews.
-
-<sect>Syncronizing Views
-<p>
-Let´s first explain what this will bring us and how we´re going to do it. While playing with <em>KScribble</em>, you may have noticed, that if
-you open another view of a document by calling "Window"->"New Window", this new view works with the same data as the first view, and
-does like any other view you create with that command. But when it comes to painting into the document, you can only do that in one
-view - the other views are not displaying the document contents at the same time. If you obscure one view that doesn´t contain the
-actual contents with another window and then bring it up to the front again, it will display the acutal contents. That comes because
-after a widget has been obscured and then activated again, it receives a paint event from the window system, which will call
-<tt>KScribbleView::paintEvent()</tt> again and that finally redraws the contents of the area that has been obscured. What we want to
-achieve is that all views should paint syncronous with the one the user actually paints to. In fact, you will see that this enhancement
-is a really easy task. The document class already provides us a method <tt>updateAllViews()</tt>, which calls the <tt>update()</tt>
-method on each view in the document´s view list. This makes it very easy to syncronize the document contents - every time the contents
-is changed, here by mouse movements (where we copy the changings to the buffer with <tt>bitBlt()</tt>), we just have to call
-updateAllViews(this). The this pointer is needed, because the calling view doesn´t need a repaint and the <tt>update()</tt> method is
-only executed if the sender view is not the same as it´s own.
-
-What you´ve got to do here is only to call updateAllViews(this) at the end of the virtual methods <tt>mousePressEvent()</tt>,
-<tt>mouseMoveEvent()</tt> and <tt>mouseReleaseEvent()</tt> - and you´re done !  Take this as a general rule in your applications: each
-time the contents of the document is changed by a view, call <tt>updateAllViews()</tt>. How the update has to be executed has to be
-implemented in the widget´s <tt>update()</tt> method; one may be content by setting e.g. the changed text in an editor, in our
-application we just call <tt>repaint()</tt>, which generates a paint event and copies the contents of the document into the view again.
-
-<sect>Scrolled Views
-<p>
-
-In this section we will add a functionality that is most often a thread to developers - if you can´t use an already implemented widget
-that provides the scrolling already. What does scrolling mean ? In our context, the problem begins where we want to open a picture that
-is bigger than a view can display. therefore, the result will be that you can only see as much as the view provides, beginning from the
-topleft corner; the rest will be cut away from the user´s view. A scrollview on the other hand is a widget that provides a scrollbar on
-the right side and on the bottom of the widget by which the user can "move" the contents. In fact, it shows the same size of the
-document contents, but the view area can be moved within the document, so each part can be displayed if the user wants to by moving the
-scrollbar sliders up and down, left and right. Fortunately, Qt provides a class <tt>QScrollView</tt> that itself inherits from
-<tt>QWidget</tt> and offers the same base functionality as an ordinary widget but manages the contents by scrollbars automatically -
-with the additional option that the programmer can either just use an instance of the <tt>QScrollView</tt>, create the child widgets
-to manage with the scrollview as parent and add them to the scrollview with <tt>addChild()</tt> or create a view by inheriting
-<tt>QScrollView</tt> and draw into the viewport, which is a defined area inside the scrollview, instead of directly to the widget. The
-difference here is that <tt>QScrollView</tt> provides a set of event handlers similar to the <tt>QWidget</tt> event handlers especially for the
-viewport. So what was formerly a <tt>mousePressEvent()</tt> in our view will become a viewportMousePressEvent, a <tt>paintEvent()</tt>
-will become a viewportPaintEvent etc. The second possibility will suite our needs to make KScribbleView a scrollable widget and so we
-will have to make the following modifications:
+Nun sind Sie fertig. Lassen Sie uns zusammenfassen, was wir in diesem Kapitel getan haben:
 
 <itemize>
-<item>first we have to make the document use a size of its contents. This can be done by getting the size for an opened picture, for a
-new picture we have to define a default start size. In other painting applications, this size can be changed most often by a command
-provided by the user interface, e.g. a dialog that asks for the new width and height as well as a method to shrink the picture
-contents to fit into that new size.
-<item>changing the inheritance of KScribbleView from <tt>QWidget</tt> to <tt>QScrollView</tt>
-<item>renaming the virtual methods to the according viewport methods of <tt>QScrollView</tt>
-<item>adapt the virtual event handlers to act on the geometry of the viewport. This means that the old implementation relies on the
-geometries of <tt>QWidget</tt> starting at the topleft corner of a widget. If the view is scrolled and the topleft corner is not visible, we
-have to ensure the positions retrieved from the <tt>QWidget</tt> coordinates are translated to viewport coordinates
+<item> Zunächst haben wir Menü- und Werkzeugleistenkommandos und -elemente für zwei 
+Dialoge, die wir aufrufen wollen, eingefügt.
+<item> Dann haben wir mit dem Dialogeditor den Dialog zum Einstellen der Stiftweite 
+erstellt.
+<item> Als nächstes haben wir die Methoden geschrieben, die die Dialoge aufrufen und die 
+Eigenschaften setzen die wir ändern wollen.
+<item> Schließlich haben wir die benötigten Set-Methoden hinzugefügt, so daß wir in der 
+Lage sind, die Werte zu ändern, nachdem die Dialoge ausgeführt worden sind.
 </itemize>
 
-<sect1>Sizing the Document Contents
+Mit dieser Struktur steht Ihnen ein allgemeiner Weg zur Verfügung, Ihre Anwendung um 
+weitere Funktionalität zu erweitern und Einstellungen zu manipulieren, die das Verhalten 
+des Dokumentes und die Interaktion mit den Ansichten beeinflussen.
+
+
+<chapt>Erweiterte Ansichten
 <p>
 
-As already mentioned, we have to set a size to the document contents as well as to initialize this size and provide a method to
-retrieve the size by the views. For this, we add a variable <tt>QSize size</tt> to <tt>KScribbleDoc</tt> as well as the method
-<tt>docSize()</tt>:
+In diesem Kapitel werden wir die Funktionalität unseres Widgets durch zwei Verbesserungen 
+erweitern: Synchronisierte Ansichten und rollbare Ansichten.
+ 
+<sect>Synchronisierung der Ansichten
+<p>
+Lassen Sie uns zuerst erklären, was uns das Ganze bringen wird und wie wir es erreichen 
+können. Während Sie mit <em>KScribble</em> experimentiert haben, werden Sie vielleicht 
+bemerkt haben, daß, wenn Sie eine neue Ansicht des Dokuments durch Aufruf von 
+"Fenster"->"neues Fenster" öffnen, diese neue Ansicht mit denselben Daten arbeitet, wie 
+die erste Ansicht und sich genauso verhält, wie jede Ansicht, die Sie mit diesem Kommando 
+erzeugen. Aber wenn es darum geht, in das Dokument zu zeichnen, können Sie das nur in 
+einer Ansicht tun- die anderen Ansichten zeigen nicht den jeweils aktuellen Inhalt. Wenn 
+Sie eine Ansicht, die nicht die aktuellen Daten enthält, verdecken und sie dann wieder in 
+den Vordergrund holen, werden die richtigen Daten angezeigt. Das liegt daran, das jede 
+Ansicht, wenn Sie verdeckt war, ein paint-Ereignis vom Fenstersystem erhält, wenn Sie 
+wieder in den Vordergrund kommt, dann <tt>KScribbleView::paintEvent()</tt> aufruft und 
+dadurch den Bereich, der verdeckt war, schließlich neuzeichnet. Was wir erreichen wollen, 
+ist das alle Ansichten synchron mit der Ansicht gezeichnet werden, in der der Benutzer 
+gerade arbeitet. Tatsächlich werden Sie sehen, das diese Erweiterung leicht zu 
+bewerkstelligen ist. Die document Klasse bietet uns bereits eine Methode 
+<tt>updateAllViews()</tt>, welche die Methode <tt>update()</tt> für jede Ansicht in der 
+Ansichtenliste des Dokuments aufruft. Das macht es sehr einfach die Inhalte der Ansichten 
+zu synchronisieren - jedes Mal, wenn der Inhalt verändert wird, hier durch Mausbewegungen 
+( durch die wir die Änderungen mittels <tt>bitBlt()</tt> in den Puffer kopieren), müssen 
+wir nur updateAllViews(this) aufrufen. Der this Zeiger ist nötig, weil die aufrufende 
+Ansicht nicht neugezeichnet werden muß und <tt>update()</tt> nur ausgeführt werden soll, 
+wenn Sender und Empfänger verschieden sind.   
+ 
+Was Sie hier tun müssen, ist nur updateAllViews(this) am Ende der virtuellen Methoden 
+<tt>mousePressEvent()</tt>, <tt>mouseMoveEvent()</tt> und 
+<tt>mouseReleaseEvent()</tt> aufzurufen- und Sie sind fertig ! Nehmen Sie dies als 
+allgemeine Regel in Ihren Anwendungen: jedesmal wenn sich der Inhalt eines Dokuments 
+in einer Ansicht ändert, rufen Sie <tt>updateAllViews()</tt> auf. Wie die Aktualisierung 
+durchgeführt wird, muß in der <tt>update()</tt> Methode des Widgets implementiert werden; 
+man mag zufrieden sein, indem man z.B. den geänderten Text in einem Editor setzt, in 
+unserer Anwendung rufen wir nur die Funktion <tt>repaint()</tt> auf, die ein paint-Event 
+auslöst und den Inhalt des Dokuments wieder in die Ansicht kopiert.
+
+
+<sect>Rollbare Ansichten
+<p>
+In diesem Abschnitt werden wir eine Funktionalität implementieren, die meistens zum Kreuz 
+für die Entwickler wird - wenn Sie nicht auf bereits implementierte Widgets 
+zurückgreifen können, die das Rollen schon mitbringen. Was bedeutet Rollen? In unserem 
+Kontext beginnt das Problem damit, das wir ein Bild öffnen wollen, das viel größer als der 
+darstellbare Bereich ist. Beginnend von der oberen, linken Ecke, wird der Rest des Bildes 
+aus der Sicht des Benutzers ausgeschnitten. Eine Rollansicht ist ein Widget, das auf der 
+rechten und unteren Seite Rollbalken zur Verfügung stellt, mit deren Hilfe der Benutzer 
+den Inhalt des Fensters verschieben kann. Tatsächlich wird das Dokument in seiner ganzen 
+Größe gezeigt, aber die Ansicht kann innerhalb des Dokuments bewegt werden, so daß jeder 
+Teil mit Hilfe der Scrollbars angezeigt werden kann. Glücklicherweise gibt es in Qt die 
+Klasse <tt>QScrollView</tt>,die selber von <tt>QWidget</tt> abgeleitet ist und die gleiche 
+Grundfunktionalität wie ein gewöhnliches Widget bietet, jedoch den Inhalt der Ansicht bei 
+der Verwendung von Scrollbars verwaltet - mit der zusätzlichen Option, daß der 
+Programmierer entweder einfach nur eine Instanz von <tt>QScrollView</tt> verwendet, die zu 
+verwaltenden Kindfenster mit der Rollansicht als Eltern erstellt und sie mit 
+<tt>addChild()</tt> der Rollansicht hinzufügt oder eine Ansicht von <tt>QScrollView</tt> 
+ableitet und dann, statt direkt in das Widget, in den viewport zeichnet, der ein 
+definierter Bereich innerhalb der Rollansicht ist. Der Unterschied hier ist, daß 
+<tt>QScrollView</tt> einen Satz von Ereignisbehandlungsroutinen, ähnlich denen von 
+<tt>QWidget</tt>, extra für den Viewport bereitstellt. Das was also vorher 
+<tt>mousePressEvent()</tt> in unserer Ansicht war, ist jetzt 
+ein viewportMousePressEvent, ein <tt>paintEvent()</tt> wird zu einem 
+viewportPaintEvent usw. . Die zweite der genannten Möglichkeiten passt auf unsere 
+Anforderungen, wir werden also folgendene Modifikationen vornehmen, um KScribbleView zu 
+einem rollbaren Widget zu machen:   
+
+<itemize>
+<item> Zunächst müssen wir das Dokument der Größe seines Inhalts anpassen. Dies kann 
+erreicht werden, indem wir uns die Größe des geöffneten Bildes holen, für ein neues Bild 
+müssen wir eine Standardgröße definieren. In anderen Zeichenanwendungen kann diese Größe 
+meistens durch ein Kommando des Benutzerinterfaces, z.B. in einem Dialog, 
+der nach der neuen Höhe und Breite fragt, sowie einer Methode zur Anpassung des Bildes an 
+diese Werte, geändert werden.
+<item> Ändern der Elternklasse für KScribbleView von <tt>QWidget</tt> nach 
+<tt>QScrollView</tt>. 
+<item> Umbenennen der virtuellen Methoden in die entsprechenden Viewportmethoden aus 
+<tt>QScrollView</tt>. 
+<item> Adaptieren der virtuellen Event Handler, so daß sie die Geometrie des Viewports 
+beeinflussen. Das bedeutet, daß die alte Implementation auf die Geometrie von 
+<tt>QWidget</tt> vertraut, die in der linken, oberen Ecke eines Widgets beginnt. Wenn die 
+Ansicht gerollt wird und diese Ecke ist nicht sichtbar, müssen wir dafür sorgen, daß die 
+von <tt>QWidget</tt> gelieferten Positionen in Viewportkoordinaten übersetzt werden. 
+</itemize>
+
+<sect1>Größe des Dokumentinhalts verändern
+<p>
+
+Wie bereits erwähnt, müssen wir sowohl die Größe eines Dokuments ändern, als auch diese Größe initialisieren, und wir müssen eine 
+Methode breitstellen, die diese Größe für die Ansichten holt. Dazu fügen wir die Variable <tt>QSize size</tt> sowie die Methode 
+<tt>docSize()</tt> in <tt>KScribbleDoc</tt> ein:
 
 <code>
 kscribbledoc.h:
@@ -1662,8 +1755,9 @@ private:
 
 </code>
 
-Now we have to modify all methods that deal with initializing and opening the document contents - <tt>newDocument()</tt> and
+Jetzt müssen wir alle Methoden, die Dokumentinhalte öffnen oder initialisieren, modifizieren - <tt>newDocument()</tt> und
 <tt>openDocument()</tt>:
+
 <code>
   bool KScribbleDoc::newDocument()
   {
@@ -1699,16 +1793,17 @@ Now we have to modify all methods that deal with initializing and opening the do
   }
 </code>
 
-In <tt>newDocument()</tt>, we initialize the size with a default value of 300 pixels wide and 200 pixels high. This is enough for a
-small picture for now and we could add a dialog for resizing as well if we want.
-When it comes to opening a picture, we have to set the size to the size of the picture. This can be done by calling
-<tt>QPixmap::size()</tt>, which we used in <tt>openDocument()</tt>. Then we´re done with setting the sizes and we can move on to
-reimplementing KScribbleView and make it a scrollview.
+In <tt>newDocument()</tt> initialisieren wir die Größe mit Standardwerten von 300 Pixeln Breite und 200 Pixeln Höhe. Das ist genug 
+für ein kleines Bild und wir könnten auch immer noch einen Dialog zur Größenänderung hinzufügen. Wenn es daran geht, das Bild zu 
+öffnen, müssen wir die Größe auf die des Bildes setzen. Dies kann man erreichen, indem man <tt>QPixmap::size()</tt> aufruft, was 
+wir bereits in <tt>openDocument()</tt> verwendet haben. Dann sind mit dem Setzen der Größen fertig und wir können damit beginnen, 
+KScribbleView zu reimplementieren und eine Rollansicht daraus zu machen. 
 
-<sect>Adapting the View
+<sect>Adaptieren der Ansicht
 <p>
 
-As said above, we first have to change some things in the interface of KScribbleView. The following code shows these changings:
+Wie oben gesagt, müssen wir zuerst einige Dinge in der Schnittstelle von KScribbleView ändern. Der folgende Code zeigt diese 
+Änderungen: 
 
 <code>
 #include <qscrollview.h>
@@ -1733,11 +1828,12 @@ class KScribbleView : public QScrollView
 }
 </code>
 
-Here, we changed the inheritance from <tt>QWidget</tt> to <tt>QScrollView</tt> first and added the according include file we need. Also we changed all
-implemented event handlers that deal with interaction on the contents of the scrollview to the according methods <tt>QScrollView</tt> provides
-for this purpose and commented out the resizeEvent. Now we can go over to the implementation of these methods and make use of the size
-our picture has. As a view is always created after the document exists, we can resize the widget directly in the constructor to fit
-this size and as well resize the contents (which is the viewport size):
+An dieser Stelle haben wir zuerst durch als Basisklasse ersetzt und die erforderliche Headerdatei eingesetzt.Außerdem haben wir 
+alle implementierten Event Handler, die mit Interaktion bezüglich des Inhalts der Rollansicht zu tun haben, durch die 
+entsprechenden Methoden aus <tt>QScrollView</tt> ersetzt und haben das resizeEvent auskommentiert. Nun können wir nit der 
+Implementation dieser Methoden beginnen und die Größe unseres Bildes verwenden. Da eine Ansicht immer erst nach dem Dokument 
+existiert, können wir sowohl die Größe des Widgets (die Viewportgröße), als auch die des Inhalts direkt im Konstruktor anpassen.
+
 <code>
 #include <qsize.h>
 
@@ -1759,38 +1855,42 @@ KScribbleView::KScribbleView(KScribbleDoc* pDoc, QWidget *parent, const char* na
 }
 </code>
 
-Note that formerly, the <tt>resizeEvent()</tt> took care of resizing the drawing area to the same as the widget size. At the same time,
-this changed the document size as well, so the document picture had always the same size as the widget. With the already initialized
-size of the document (which we set in <tt>newDocument()</tt> and <tt>openDocument()</tt>), we just resize the contents by calling
-<tt>resizeContents()</tt> provided by <tt>QScrollView</tt> with the size of the document. You may also notice that we changed the
-cursor over the widget from the overall widget to the viewport widget, which we can retrieve with <tt>viewport()</tt>. Now we can
-reimplement the event handlers. At first, we should take care for the paintEvent, as this is one of the most important ones, because it
-gets called whenever the widget shows up or is resized.
+Beachten Sie, daß sich vorher <tt>resizeEvent()</tt> um die Gleichheit der Größe der Zeichenfläche und des Widgets gekümmert hat. 
+Zur gleichen Zeit wurde dabei auch die Größe des Dokuments geändert, so daß das Bild immer die gleiche Größe wie das Widget hatte. 
+Da wir jetzt bereits die Größe des Dokuments initialisiert haben (in <tt>newDocument()</tt> und <tt>openDocument()</tt>), passen 
+wir jetzt die Größe des Inhalts einfach durch Aufruf von <tt>resizeContents()</tt> aus <tt>QScrollView</tt> an die Größe des 
+Dokuments an. Sie sehen auch, daß wir den Cursor für das Widget von dem allumfassenden Widget auf den Viewport geändert haben, den 
+wir mit <tt>viewport()</tt> ermitteln können. Jetzt können wir wieder die Event Handler implementieren. Zuerst sollten wir auf 
+das paintEvent achten, da dies eines der wichtigsten ist, weil es immer aufgerufen wird, wenn das Widget sichtbar wird oder seine 
+Größe ändert. 
 
-<bf>Attention:</bf> take care to comment out the <tt>resizeEvent()</tt> implementation!
+<bf>Achtung:</bf> Denken Sie daran die <tt>resizeEvent()</tt> Implementation auszukommentieren!
 
-Now, the paint event will have to copy the pixmap in the buffer to the according position in the view. For this, we have to change the
-destination of <tt>bitBlt()</tt> from this to <tt>viewport()</tt>, set the topleft position to 0,0 and set the target (the buffer) to
-copy from the contentsX and contentsY position on into the viewport:
+Jetzt wird der paintEvent das Pixmap aus dem Puffer an die entsprechende Position der Ansicht kopieren müssen. Zu diesem Zweck 
+müssen wir das Ziel von <tt>bitBlt()</tt> von this nach <tt>viewport()</tt> ändern, die linke, obere Position auf 0,0 setzen und 
+das Ziel (den Puffer) so einstellen, daß von den contentsX und contentsY Positionen in den Viewport kopiert wird:
+
 <code>
 void KScribbleView::viewportPaintEvent( QPaintEvent *e )
 {
   bitBlt( viewport(),0,0, &amp;doc->buffer,contentsX() ,contentsY() );
 }
 </code>
-The <tt>contentsX()</tt> thereby is the position in x-direction of the scrollview´s contents - which goes to position 0 in the
-viewport´s absolute position, which is the topleft point visible in the scrollview. The same applies to the y-direction. This part is
-sometimes hard to understand and you may have to do a bit "try and error" when implementing your own scrollviews. The other possible
-call of <tt>bitBlt()</tt> would be to switch the values of the positions and inverting the contents values:
+
+<tt>contentsX()</tt> ist die Position in X-Richtung der Rollansicht - die absolut der Position 0 des Viewports entspricht, und 
+damit der linken, oberen Ecke der Ansicht. Das gleiche gilt auch für die Y-Richtung. Dieser Teil ist manchmal schwer zu verstehen 
+und Sie müssen vielleicht ein wenig "Versuch und Irrtum" bei der Implementation Ihrer eigenen rollbaren Ansichten spielen. Der 
+andere mögliche Aufruf von <tt>bitBlt()</tt> würde sein, die Werte der Positionen zu switchen und die Werte der Inhalte zu 
+vertauschen:
 
 bitBlt( viewport(), -contentsX(), -contentsY(), &amp;doc->buffer, 0, 0 );
 
+Die letzten Änderungen, die wir noch brauchen, ist die Änderung des Maus Eventhandlers. Im Moment hat <tt>mouseMoveEvent()</tt>, 
+das zu <tt>viewportMouseMoveEvent()</tt> wird, auch einen <tt>bitBlt()</tt> Aufruf. Hier müssen wir die gleichen Änderungen 
+vornehmen, wie beim paint Event. Weiterhin haben wir im <tt>mousePressEvent()</tt> und dem <tt>mouseMoveEvent()</tt> die Position 
+der Events mit <tt>e->pos()</tt> geholt. Diese Abfrage liefert uns nun die Position eines Widgets - nicht die des Inhalts, also 
+müssen wir dies mit <tt>viewportToContents()</tt> übersetzen, damit an die korrekte Position des Dokuments gezeichnet wird:
 
-The last changes we need to do are changing the mouse event handlers. First, the <tt>mouseMoveEvent()</tt>, which changes to
-<tt>viewportMouseMoveEvent()</tt>, has a <tt>bitBlt()</tt> call as well. Here, we have to apply the same chages as in the paint event.
-Further, in the <tt>mousePressEvent()</tt> and the <tt>mouseMoveEvent()</tt>, we have retrieved the position of the mouse events with
-<tt>e->pos()</tt>. This position now will deliver us a widget position - not the contents position, so we have to translate this to
-draw into the correct position of the document with <tt>viewportToContents()</tt>:
 <code>
   void KScribbleView::viewportMousePressEvent( QMouseEvent *e )
   {
@@ -1817,20 +1917,22 @@ draw into the correct position of the document with <tt>viewportToContents()</tt
   }
 </code>
 
-In the <tt>viewportMouseMoveEvent()</tt>, we had to change the destination again from this to <tt>viewport()</tt> - and with that
-translate the positions. This time, we used the second version of the call we used in <tt>viewportPaintEvent()</tt>, with subtracting
-the contentsX and contentsY values to copy the rectangle containing the current painting into the correct position of the viewport.
+In <tt>viewportMouseMoveEvent()</tt> mussten wir wieder das Ziel von this nach <tt>viewport()</tt> ändern - und damit die 
+Positionen übersetzen. Diesmal haben wir die zweite Variante des Aufrufs, den wir in <tt>viewportPaintEvent()</tt> verwendet 
+haben, benutzt, indem wir die contentsX und contentsY subtrahiert haben um das Rechteck, das die aktuelle Zeichnung enthält, an 
+die korrekte Stelle des Viewports zu kopieren.
 
-At last, we will apply a small change in conjunction with the <tt>update()</tt> method: why should we repaint the whole widget every
-time ? This will reduce performance most often and lead to a so-called "flicker" effect. This effect sometimes occurs with widgets, but
-there are some ways to reduce this behavoir. Instead of calling <tt>repaint()</tt>, we could call <tt>repaint(false)</tt> as well. This
-will not erase the widget contents before redrawing it. As we copy the document contents directly into the widget, we don´t need to
-erase it anyway, because all the data will be overwritten anyway. In conjunction with <tt>QScrollView</tt>, we will reduce the painting
-even more: we limit the update method to call <tt>repaint()</tt> on the viewport() widget, because that will call 
-<tt>viewportPaintEvent()</tt>. On the other hand, the painting area we use is the rectangle containing the document contents, which, when the
-document size is smaller than the viewport size. So we can limit the paint event to the rectangle of the viewport where the document 
-is displayed, whose visible width and height we can retrieve and compose to the rectangle. Additionally, we use the erase parameter with false,
-so the document area doesn´t get erased:
+Schließlich werden wir noch eine kleine Änderung an der <tt>update()</tt> Methode vornehmen: warum sollten wir jedes mal das ganze 
+Widget neuzeichnen? Dies wird in den meisten Fällen die Performance herabsetzen und zu dem sogenannten "Flicker" Effekt führen. 
+Dieser Effekt tritt manchmal bei Widgets auf, aber es gibt einige Möglichkeiten dieses Verhalten zu verringern. Statt 
+<tt>repaint()</tt> aufzurufen, könnten wir ebensogut <tt>repaint(false)</tt> verwenden. Dadurch werden die Inhalte nicht vor dem 
+Zeichnen gelöscht. Da wir den Inhalt des Dokuments direkt in das Widget kopieren, müssen wir die Daten nicht löschen, weil sie 
+sowieso überschrieben werden. Die Verbindung mit <tt>QScrollView</tt> können wir die Zeichenaktionen sogar noch weiter reduzieren: 
+wir beschränken die update Methode darauf <tt>repaint()</tt> auf dem viewport() Widget aufzurufen, da dies wiederum 
+<tt>viewportPaintEvent()</tt> aufruft. Außerdem können wir, wenn das Dokument kleiner als der Viewport ist, das paint Event noch 
+auf das Rechteck des Viewports beschränken in dem das Dokument angezeigt wird. Die sichtbare Höhe und Breite können wir uns holen 
+und zu dem zu zeichnenden Rechteck zusammensetzen. Zusätzlich verwenden wir false als erase Parameter, so daß die Dokumentenfläche 
+nicht gelöscht wird: 
 
 <code>
 void KScribbleView::update(KScribbleView* pSender){
@@ -1839,43 +1941,52 @@ viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
 }
 </code>
 
-Now you´re ready !  This chapter has been one of the hardest to implement and understand - especially when it comes to the geometries
-that change. But on the other hand, we gave our application a whole new functionality by the new scrollview and the syncronized views.
+Jetzt sind wir fertig ! Dieses Kapitel war sicher eines, der am schwierigsten zu implementierenden un zu verstehenden - 
+insbesondere dort, wo es um die sich ändernden Geometrien geht. Andererseits haben wir unserer Anwendung durch die rollbaren 
+und synchronisierten Ansichten, eine vollkommen andere Funktionalität verliehen.
 
-With that, we´re moving on to the last chapter of our tutorial. There, we will apply only a few changes by making use of some new
-methods of the KDE2 libraries, but as usual, this will bring us some interesting functionality - <em>KScribble</em> will be able to open and
-save a whole range of picture formats and thereby we will remove the restriction of operating only on the png file format.
+Damit begeben wir uns in das letzte Kapitel unserer Einführung. Dort werden wir nur noch einige, wenige Änderungen vornehmen, 
+indem wir Gebrauch von einigen neuen Methoden der KDE 2 Bibliotheken machen, doch wie immer, wird uns dies wieder eine 
+interessante Funktionalität eröffnen - <em>KScribble</em> wird in der Lage sein, eine ganze Reihe von Bildformaten zu öffnen und 
+zu speichern, und damit wird die Einschränkung, nur mit png Dateien arbeiten zu können, entfallen.
 
-<chapt>Using KImageIO with KScribble
+
+<chapt>Verwendung von KImageIO mit KScribble
 <p>
 
-When it comes to images, the Qt and KDE libraries offer a wide variety of operations. Besides actual drawing routines, the libraries
-support a whole set of image formats which they can read and write - all without any cost on our view. The main class for these
-operations is <tt>QImageIO</tt>, which has a support library by KDE: <tt>KImageIO</tt>. As a preparation before we can make use of these nice methods, we
-have to add the according library to <em>KScribble</em>: libkimgio. Open "Project"->"Options" in KDevelop and add the line -lkimgio to the
-additional libraries to link <em>KScribble</em> with.
+Wenn es um Bilder geht, bieten die Qt und KDE Bibliotheken ein weites Feld an Operationen. 
+Neben den reinen Zeichenroutinen unterstützen die Bibliotheken einen ganzen Satz an 
+Bildformaten, die gelesen und geschrieben werden können- alles ohne Einschränkungen für Ihre 
+Ansicht. Die Hauptklasse für diese Operationen ist <tt>QImageIO</tt> die auch eine 
+Supportbibliothek unter KDE hat: <tt>KImageIO</tt>. Zur Vorbereitung und bevor wir diese 
+schönen Routinen verwenden können, müssen wir die erforderliche Bibliothek für <em/KScribble/ 
+verfügbar machen: nämlich libkimgio. Öffnen Sie "Projekt"->"Optionen" in Kdevelop und fügen Sie 
+die Zeile -libkimgio bei den zusätzlichen Bibliotheken ein. 
 
-<sect>Preparing the Document
+<sect>Vorbereiten des Dokuments
 <p>
-Now we can go on and apply our changes. First, we have to remove the current restriction in the document class to only read and write
-PNG files. Just replace "PNG" in the following methods with format, as given by the <tt>openDocument()</tt> and <tt>saveDocument()</tt>
-methods:
+Nun können wir unsere Änderungen vornehmen. Als erstes müssen wir die Einschränkung, nur PNG 
+Dateien lesen und schreiben zu können, entfernen. Ersetzen Sie in den folgenden Methoden, "PNG" 
+durch "format", wie in den Methoden <tt>openDocument()</tt> und <tt>saveDocument()</tt>:
 
-In method <tt>KScribbleDoc::openDocument()</tt>:
+In der Methode <tt>KScribbleDoc::openDocument()</tt>:
  	
 <tt>	if(!buffer.load( filename, format ))</tt>
 	
-In method <tt>KScribbleDoc:: saveDocument()</tt>:
+In der Methode <tt>KScribbleDoc:: saveDocument()</tt>:
 
 <tt>	if(!buffer.save( filename, format ))</tt>
 
-Then we have a default behavoir of these methods. Now, for now we don´t have all available file formats yet. This will be our next
-task, together with adapting the slots in <em>KScribble</em> that deliver us filenames.
+Jetzt haben wir ein Standardverhalten in diesen Methoden. Trotzdem stehen uns noch nicht alle 
+möglichen Dateiformate zur Verfügung. Darum, und um die Adaptierung der Slots, die uns 
+Dateinamen liefern, kümmern wir uns als nächstes.
 
-<sect>Registering File Formats
+
+<sect>Registrierung von Dateiformaten
 <p>
-To use <tt>KImageIO</tt>, we have to initialize the library first. For this, we add a call for <tt>registerFormats()</tt> in our
-<tt>main()</tt> function:
+Um <tt>KImageIO</tt> zu benutzen, müssen wir erst die Bibliothek initialisieren. Dazu fügen wir 
+einen Aufruf von <tt>registerFormats()</tt> in unsere <tt>main()</tt> Funktion ein:
+
 <code> 	
 main.cpp:
 
@@ -1886,22 +1997,27 @@ main.cpp:
   if (app.isRestored())
 ............
 </code>
-Note that this call is after the application is instanciated with KApplication app - without the application instance, our program will
-not run, as <tt>KImageIO</tt> then doen´t know on which application to register the formats. The include file for this call will be added to
-kscribble.h, as we´re going to use some of its methods in <tt>KScribbleApp</tt>:
+
+Beachten Sie, daß dieser Aufruf nach der Instanzierung mit KApplication app erfolgt- ohne die 
+Applikationsinstanz läuft unser Programm nicht, weil <tt>KImageIO</tt> dann nicht weiß, bei 
+welcher Anwendung die Formate registriert werden sollen. Die Includedatei werden wir in 
+kscribble.h eintragen, da wir einige der Methoden darin, in <tt>KScribbleApp</tt> verwenden 
+werden: 
 
 kscribble.h:
 
 #include &lt;kimgio.h&gt;
 
 
-<sect>Opening Images
+<sect>Bilddateien öffnen
 <p>
 
-Now that we can make use of <tt>KImageIO</tt>, we have to apply the first change to the most important method of <tt>KScribbleApp</tt>:
-<tt>openDocumentFile()</tt>. This method opens us any document until now only on the behalf of the filename. It just leaves out the
-extension, as the format is not required by the document class by default. But as we have changed that, we just need a format - and
-have to adapt the call for <tt>KScribbleDoc::openDocument()</tt> in the method <tt>openDocumentFile()</tt>:
+Jetzt, da wir <tt>KImageIO</tt> verwenden können, werden wir die erste Änderung in der 
+wichtigsten Methode von <tt>KScribbleApp</tt> vornehmen: <tt>openDocumentFile()</tt>. Diese 
+Methode öffnet uns bis jetzt jedes Dokument nur Anhand des Dateinamens. Sie läßt einfach die 
+Erweiterung weg, da das Format normalerweise nicht von der Dokumentklasse benötigt wird. Aber 
+da wir dies geändert haben, brauchen wir jetzt das Format und müssen den Aufruf für 
+<tt>KScribbleDoc::openDocument()</tt> in der Methode <tt>openDocumentFile()</tt> adaptieren:
 
 <code>
 kscribble.cpp:
@@ -1921,16 +2037,21 @@ kscribble.cpp:
   }
 </code>
 
-Of course, this works the same as using <tt>QString format=QImageIO::imageFormat(file);</tt>. Here, <tt>KImageIO</tt> delivers us the format of
-the image and we can call the document to open the file by filename and format. (Another possiblity would be to detect the format in
-the document class as well).
+Es funktioniert natürlich genauso wie die Verwendung von <tt>QString 
+format=QImageIO::imageFormat(file);</tt>. Hier liefert uns <tt>KImageIO</tt> das Format des Bildes 
+und wir können dem Dokument mitteilen, die Datei mit dem Dateinamen und dem Format zu öffnen ( 
+eine weitere Möglichkeit wäre das Format in der Dokumentklasse zu ermitteln).
 
-<sect>Setting File Filters with KImageIO
+
+<sect>Setzen von Dateifiltern mit KImageIO
 <p>
-Here, we´re finishing our tutorial with the last section - we will adapt the file dialogs of <em>KScribble</em> to make use of file filters.
-For these, <tt>KImageIO</tt> provides nice methods to give us the needed strings for all image file formats that are available for opening and
-saving. The following implementation replaces the default file filter (which is in fact none - you have to change your own
-applications´ file filter to your mime type accordingly) with the <tt>pattern()</tt> method of <tt>KImageIO</tt>:
+
+Mit diesem Kapitel endet unsere Einführung. Wir werden die Dateidialoge von <em>KScribble</em> dazu 
+bringen, Dateifilter zu verwenden. Zu diesem Zweck bietet <tt>KImageIO</tt> Methoden, uns die Bezeichnungen aller 
+Bilddateiformate zu holen, die man öffnen und speichern kann. Die folgende Implementierung ersetzt 
+den Standardfilter (der eigentlich gar keiner ist - Sie müssen den Dateifilter Ihrer Anwendung den 
+nötigen Mimetypen anpassen), indem sie die <tt>pattern()</tt> Methode von <tt>KimageIO</tt> 
+verwendet:
 
 <code>
   void KScribbleApp::slotFileOpen()
@@ -1948,10 +2069,12 @@ applications´ file filter to your mime type accordingly) with the <tt>pattern()<
   }
 </code>
 
-Here, the mode in <tt>pattern()</tt> is set to Reading - which may differ from the patterns that are retrieved when set to writing. Now
-we have finished opening files by its filename and format completely. What is missing to complete this structure, is setting the
-patterns as well for saving a file. For that, the <tt>slotFileSaveAs()</tt> is called, which itself invokes the file dialog that
-retrieves a file name. There, we will set the pattern mode to Writing:
+Wir setzen hier den Modus in <tt>pattern()</tt> auf Lesen - was sich von dem zum Schreiben benutzten 
+Patterns unterscheided. Jetzt haben wir das Öffnen der Datei mit Dateinamen und Format 
+erledigt. Was noch zur Vervollständigung der Struktur fehlt, ist das Setzen der Patterns auch zum 
+Schreiben. Dazu wird der Slot <tt>slotFileSaveAs()</tt> aufgerufen, der dann seinerseits den 
+Dateidialog aufruft, in dem dann der Dateiname abgefragt wird. Dort werden wir den Patternmodus zum 
+Schreiben setzen: 
 
 <code>
 void KScribbleApp::slotFileSaveAs()
@@ -1962,7 +2085,7 @@ void KScribbleApp::slotFileSaveAs()
 ->                               KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));
   if(!newName.isEmpty())
   {
-    KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+    KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
     if( m )
     {
       KScribbleDoc* doc =	m->getDocument();
@@ -1981,19 +2104,20 @@ void KScribbleApp::slotFileSaveAs()
 }
 </code>
 
-<chapt>Adding Printing Functionality
+<chapt>Hinzufügen der Druckerfunktionalität
 <p>
 
-In this chapter we will show you how easy it is to implement printing functions using Qt. It´s actually just one line of code for us to
-do here, but we will start understanding who is actually doing the printing job. When the user presses the print button in
-<em>KScribble</em> or chooses "Print" from the "File" menu, the <tt>slotFilePrint()</tt> method is called in <tt>KScribbleApp</tt>.
-This method detects which child window is currently activ and creates a printer instance of the class <tt>QPrinter</tt>. Then it calls
-the widget´s printing method, <tt>KScribbleView::print()</tt>. Here, the framework already contains the base implementation - which
-already shows you that for printing you just have to use <tt>QPainter</tt> which then draws on the printer. This method also calls the
-printing dialog.
+In diesem Kapitel werden wir Ihnen zeigen, wie einfach es ist, Druckerfunktionen mit Qt zu implementieren. Tatsächlich ist es 
+nur eine Zeile Code, die wir schreiben müssen, aber wir werden verstehen, wer den Druckauftrag eigentlich ausführt. Wenn der 
+Benutzer den "Drucken" Knopf in <em/KScribble/ benutzt oder "Drucken" aus dem Dateimenü wählt, wird die <tt>slotFilePrint()</tt> 
+Methode in <tt>KScribbleApp</tt> aufgerufen. Diese Methode prüft, welches Kind Fenster gerade aktiv ist und erzeugt eine Instanz 
+der Druckerklasse <tt>QPrinter</tt>. Dann ruft sie die Druckmethode des Widgets auf, nämlich <tt>KScribbleView::print()</tt>. Das 
+Framework enthält bereits die Basisimplementation- was zeigt, daß Sie zum Drucken nur die Klasse <tt>QPainter</tt> verwenden 
+müssen, die dann auf dem Drucker ausgibt. Dise Klasse ruft auch den Druckdialog auf.
 
-What we have to do here is to use <tt>QPainter</tt> methods to draw the pixmap of the document connected to the view. As
-<tt>QPainter</tt> already offers a whole set of methods <tt>drawPixmap()</tt>, we will of course use one of them:
+Was wir hier tun müssen, ist <tt>QPainter</tt> Methoden zu benutzen, um das Pixmap des Dokuments zu drucken, das mit der Ansicht 
+verbunden ist. Da <tt>QPainter</tt> bereits einen Satz an <tt>drawPixmap()</tt> Methoden anbietet, werden wir natürlich eine davon 
+benutzen: 
 
 <code>
 void KScribbleView::print(QPrinter *pPrinter)
@@ -2012,21 +2136,23 @@ void KScribbleView::print(QPrinter *pPrinter)
 }
 </code>
 
-Here, we paint into the offset of the printer page at 0,0 with our buffer pixmap of the document. That´s all !
+Hier drucken wir unser gepuffertes Pixmap des Dokuments in den Offset 0,0 der Druckerseite. Das ist alles!
 
-You can just go ahead and test it - now you can print any graphics that <em>KScribble</em> is able to open.
+Sie können es einfach einmal ausprobieren- Sie können nun jede Grafik drucken, die <em/KScribble/ öffnen kann.
 
-This is now the end of our trour through creating a KDE 2 application. You can find the source package of KScribble
-completely with an extension that adds cut, copy, paste and undo functions as well as drag´n drop here:
+Dies ist das Ende unserer Tour durch die Erstellung einer KDE 2 Anwendung. Sie können das Quellpaket von KScribble inklusive einer 
+Erweiterung, die Ausschneiden, Kopieren, Einfügen und Wiederrufen sowie Drag&amp;Drop Funktionen hinzufügt, hier finden:
 
 <htmlurl
-url="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz"name="$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz">   	
-The example tarball is locally installed and can be downloaded to your home directory, where you can untar it and test it.
-After untarring the tarball with <tt>tar zxvf kscribble-1.0.tar.gz</tt>, load the project and call "Automake and autoconf" from the
-"Build" menu in KDevelop, then call "./configure" from the same menu. The configure options are those of my installtion of the KDE 2
-and Qt 2.1, so you have to change them manually to match your installation path for these options.
+url="../../../../../apps/kdevelop/examples/kscribble-1.0.tar.gz"name="$(KDEDIR)/share/apps/kdevelop/examples/kscribble-1.0.tar.gz"
+> 
 
-The appendix also contains the complete sourcecode for this package to read through online.
+Das Beispieltarball ist lokal installiert und kann in Ihr Homerverzeichnis kopiert werden, wo Sie es auspacken und testen können. 
+Nach dem Auspacken mit <tt>tar zxvf kscribble-1.0.tar.gz</tt> laden Sie das Projekt und rufen Sie "Automake und Autoconf" aus dem 
+"Erstellen" Menü in KDevelop auf. Dann wählen Sie "Configure" aus dem gleichen Menü. Die Konfigurationen sind die meiner 
+Installation von KDE 2 und Qt 2.1, Sie müssen sie also an Ihre Installation anpassen.
+
+Der Anhang enthält ebenfalls den kompletten Quellcode für dieses Paket, so daß Sie ihn online lesen können.
 
 	
 <chapt>Copyright <label id="Copyright"> <p> 
@@ -2648,12 +2774,12 @@ void KScribbleApp::initView()
   QVBox* view_back = new QVBox( this );
   view_back->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
   pWorkspace = new QWorkspace( view_back );
-	connect(pWorkspace, SIGNAL(clientActivated(QWidget*)), this, SLOT(setWndTitle(QWidget*)));
+	connect(pWorkspace, SIGNAL(windowActivated(QWidget*)), this, SLOT(setWndTitle(QWidget*)));
   setView(view_back);
 }
 
 void KScribbleApp::setWndTitle(QWidget*){
-	setCaption(pWorkspace->activeClient()->caption());
+	setCaption(pWorkspace->activeWindow()->caption());
 }
 
 void KScribbleApp::enableCommand(int id_)
@@ -2698,7 +2824,7 @@ void KScribbleApp::createClient(KScribbleDoc* doc)
 	w->installEventFilter(this);
   doc->addView(w);
 	w->setIcon(kapp->miniIcon());
-  if ( pWorkspace->clientList().isEmpty() ) // show the very first window in maximized mode
+  if ( pWorkspace->windowList().isEmpty() ) // show the very first window in maximized mode
 	  w->showMaximized();
   else
   	w->show();
@@ -2865,10 +2991,10 @@ bool KScribbleApp::eventFilter(QObject* object, QEvent* event){
  			
 			e->accept();
   		//////////////	
-  		if(pWorkspace->clientList().count()==1)
+  		if(pWorkspace->windowList().count()==1)
   			setPlainCaption(kapp->caption());
   		else
-  			setCaption(pWorkspace->activeClient()->caption());			
+  			setCaption(pWorkspace->activeWindow()->caption());			
   		//////////////
 		}
 		else
@@ -2917,7 +3043,7 @@ void KScribbleApp::slotFileOpenRecent(int id_)
 void KScribbleApp::slotFileSave()
 {
   slotStatusMsg(i18n("Saving file..."));
-	KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
 	if( m )
 	{
 	  KScribbleDoc* doc =	m->getDocument();
@@ -2940,7 +3066,7 @@ void KScribbleApp::slotFileSaveAs()
                                KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));
   if(!newName.isEmpty())
   {
-    KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+    KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
     if( m )
     {
       KScribbleDoc* doc =	m->getDocument();
@@ -2964,7 +3090,7 @@ void KScribbleApp::slotFileClose()
 {
   slotStatusMsg(i18n("Closing file..."));
 	
-	KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*)pWorkspace->activeWindow();
 	if( m )
 	{
 		KScribbleDoc* doc=m->getDocument();
@@ -2979,7 +3105,7 @@ void KScribbleApp::slotFilePrint()
 {
   slotStatusMsg(i18n("Printing..."));
 	
-	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
 	if ( m )
 		m->print( printer );
 
@@ -3011,7 +3137,7 @@ void KScribbleApp::slotEditUndo()
 {
   slotStatusMsg(i18n("Reverting last action..."));
 	
-	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
 	if ( m )
 //		m->undo();
 
@@ -3022,7 +3148,7 @@ void KScribbleApp::slotEditCut()
 {
   slotStatusMsg(i18n("Cutting selection..."));
 	
-	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
 	if ( m )
 		m->cutSelection();	
 
@@ -3033,7 +3159,7 @@ void KScribbleApp::slotEditCopy()
 {
   slotStatusMsg(i18n("Copying selection to clipboard..."));
 	
-	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
 	if ( m )
 		m->copySelection();
 		
@@ -3044,7 +3170,7 @@ void KScribbleApp::slotEditPaste()
 {
   slotStatusMsg(i18n("Inserting clipboard contents..."));
 	
-	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
 	if ( m )
 		m->pasteSelection();
 		
@@ -3055,7 +3181,7 @@ void KScribbleApp::slotEditClearAll()
 {
   slotStatusMsg(i18n("Clearing the document contents..."));
 	
-	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
 	if ( m ){
 		KScribbleDoc* pDoc = m->getDocument();
 		pDoc->editClearAll();
@@ -3068,7 +3194,7 @@ void KScribbleApp::slotPenBrush()
   slotStatusMsg(i18n("Setting brush width..."));
 
   // get one window with document for a current pen width
-  QWidgetList windows = pWorkspace->clientList();
+  QWidgetList windows = pWorkspace->windowList();
   KScribbleView* m = (KScribbleView*)windows.at(0);
 	KScribbleDoc* pDoc = m->getDocument();
   int curr_width=pDoc->penWidth();
@@ -3098,7 +3224,7 @@ void KScribbleApp::slotPenColor()
   int result = KColorDialog::getColor( myColor, this );
   if ( result == KColorDialog::Accepted )
   {
-  	QWidgetList windows = pWorkspace->clientList();
+  	QWidgetList windows = pWorkspace->windowList();
   	KScribbleDoc* pDoc;
   	KScribbleView* m;
   	for ( int i = 0; i < int(windows.count()); ++i )
@@ -3157,7 +3283,7 @@ void KScribbleApp::slotWindowNewWindow()
 {
   slotStatusMsg(i18n("Opening a new application window..."));
 	
-	KScribbleView* m = (KScribbleView*) pWorkspace->activeClient();
+	KScribbleView* m = (KScribbleView*) pWorkspace->activeWindow();
 	if ( m ){
  		KScribbleDoc* doc = m->getDocument();
   	createClient(doc);
@@ -3192,7 +3318,7 @@ void KScribbleApp::windowMenuAboutToShow()
   pWindowMenu->insertItem(i18n("&amp;Tile"),
                           pWorkspace, SLOT(tile() ),0 , ID_WINDOW_TILE );
 	
-	if ( pWorkspace->clientList().isEmpty() ) {
+	if ( pWorkspace->windowList().isEmpty() ) {
 		disableCommand(ID_WINDOW_NEW_WINDOW);
 		disableCommand(ID_WINDOW_CASCADE);
 		disableCommand(ID_WINDOW_TILE);
@@ -3200,18 +3326,18 @@ void KScribbleApp::windowMenuAboutToShow()
 	
 	pWindowMenu->insertSeparator();
 	
-	QWidgetList windows = pWorkspace->clientList();
+	QWidgetList windows = pWorkspace->windowList();
 	for ( int i = 0; i < int(windows.count()); ++i ) {
 		int id = pWindowMenu->insertItem(QString("&amp;%1 ").arg(i+1)+windows.at(i)->caption(),
 		                                 this, SLOT( windowMenuActivated( int ) ) );
 		pWindowMenu->setItemParameter( id, i );
-	  pWindowMenu->setItemChecked( id, pWorkspace->activeClient() == windows.at(i) );
+	  pWindowMenu->setItemChecked( id, pWorkspace->activeWindow() == windows.at(i) );
 	}
 }
 
 void KScribbleApp::windowMenuActivated( int id )
 {
-  QWidget* w = pWorkspace->clientList().at( id );
+  QWidget* w = pWorkspace->windowList().at( id );
   if ( w )
 		w->setFocus();
 }
