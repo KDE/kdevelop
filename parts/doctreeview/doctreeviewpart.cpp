@@ -33,6 +33,7 @@
 #include "doctreeviewfactory.h"
 #include "doctreeviewwidget.h"
 #include "doctreeconfigwidget.h"
+#include "doctreeglobalconfigwidget.h"
 
 
 DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStringList & )
@@ -120,9 +121,16 @@ void DocTreeViewPart::projectClosed()
 
 void DocTreeViewPart::configWidget(KDialogBase *dlg)
 {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Documentation tree"));
-    DocTreeConfigWidget *w = new DocTreeConfigWidget(m_widget, vbox, "documentation tree config widget");
-    connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+    QVBox *vbox;
+
+    vbox = dlg->addVBoxPage(i18n("Documentation tree (I)"));
+    DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget(m_widget, vbox, "doc tree global config widget");
+
+    vbox = dlg->addVBoxPage(i18n("Documentation tree (II)"));
+    DocTreeConfigWidget *w2 = new DocTreeConfigWidget(m_widget, vbox, "documentation tree config widget");
+
+    connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
+    connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
 }
 
 

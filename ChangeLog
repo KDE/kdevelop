@@ -1,3 +1,14 @@
+2002-06-20  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Ported my KDE architecture documentation to
+	  docbook; it's now in doc/kdearch.
+	* New kdeapi ioslave. This allows it to hyperlink
+	  to Qt and kdelibs doxygen documentation in
+	  DocBook documents without having to care for the 
+	  location of the docs.
+	* Settings widget for qt/kdelibs doxygen docs
+	  location (autodetected by configure if it exists).
+
 2002-06-13  John Firebaugh  <jfirebaugh@kde.org>
         * Debugger: be very smart about libtool.
 

@@ -37,7 +37,7 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
                   parent, name, false)
 {
     proc = 0;
-    indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
+    indexdir = kapp->dirs()->saveLocation("data", "kdevelop/helpindex");
     QDir d; d.mkdir(indexdir);
     
     QGridLayout *grid = new QGridLayout(plainPage(), 5,3, spacingHint());
@@ -206,10 +206,18 @@ void ProgressDialog::addTocFile(QDomDocument &doc)
 
 void ProgressDialog::scanDirectories()
 {
-    bool indexShownLibs, indexHiddenLibs, indexBookmarks;
-    QStringList indexedTocs;
-    DocTreeViewTool::getIndexOptions(&indexShownLibs, &indexHiddenLibs, &indexBookmarks, &indexedTocs);
+    KConfig *config = KGlobal::config();
 
+    config->setGroup("Index");
+    bool indexKDevelop = config->readEntry("IndexKDevelop");
+    bool indexQt = config->readEntry("IndexQt");
+    bool indexKdelibs = config->readEntry("IndexKdelibs");
+    bool indexBooks = config->readEntry("IndexBooks");
+    bool indexBookmarks = config->readEntry("IndexBookmarks");
+
+    bool indexShownLibs = true;
+    bool indexHiddenLibs = true;
+    
     QStringList itemNames, fileNames, hiddenNames;
     DocTreeViewTool::getAllLibraries(&itemNames, &fileNames);
     DocTreeViewTool::getHiddenLibraries(&hiddenNames);
@@ -235,7 +243,46 @@ void ProgressDialog::scanDirectories()
             }
         }
     }
+
+    if (indexKDevelop) {
+        //TODO Problem: they are in index.cache.bz2 :-(
+    }
     
+    if (indexQt) {
+        config->setGroup("General");
+        QString qtdocdir = config->readEntry("qtdocdir", QT_DOCDIR);
+        if (!qtdocdir.isNull())
+            addDir(qtdocdir);
+    }
+
+    if (indexKdelibs) {
+        config->setGroup("General");
+        QString kdelibsdocdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
+        if (!kdelibsdocdir.isNull())
+            addDir(kdelibsdocdir);
+    }
+
+    if (indexBooks) {
+        KStandardDirs *dirs = KGlobal::dirs();
+        QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
+        
+        QStringList::ConstIterator it4;
+        for (it4 = tocs.begin(); it4 != tocs.end(); ++it4) {
+            QFile f(*it4);
+            if (!f.open(IO_ReadOnly)) {
+                kdDebug() << "Could not read doc toc: " << (*it4) << endl;
+                continue;
+            }
+            QDomDocument doc;
+            if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
+                kdDebug() << "Not a valid kdeveloptoc file: " << (*it4) << endl;
+                continue;
+            }
+            f.close();
+            addTocFile(doc);
+        }
+    }
+
     if (indexBookmarks) {
         QStringList bookmarksTitle, bookmarksURL;
         DocTreeViewTool::getBookmarks(&bookmarksTitle, &bookmarksURL);
@@ -246,22 +293,6 @@ void ProgressDialog::scanDirectories()
             files.append(*it3);
             setFilesScanned(++filesScanned);
         }
-    }
-
-    QStringList::ConstIterator it4;
-    for (it4 = indexedTocs.begin(); it4 != indexedTocs.end(); ++it4) {
-        QFile f(*it4);
-        if (!f.open(IO_ReadOnly)) {
-            kdDebug() << "Could not read doc toc: " << (*it4) << endl;
-            continue;
-        }
-        QDomDocument doc;
-        if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
-            kdDebug() << "Not a valid kdeveloptoc file: " << (*it4) << endl;
-            continue;
-        }
-        f.close();
-        addTocFile(doc);
     }
 }
 
@@ -477,6 +508,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, &aboutData);
     //    KCmdLineArgs::addCmdLineOptions(options);
     
+    KGlobal::dirs()->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
     KGlobal::locale()->setMainCatalogue("htmlsearch");
     KApplication app;
 

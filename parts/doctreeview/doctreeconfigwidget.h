@@ -41,13 +41,11 @@ private slots:
     void removeLibrary();
     void addBookmarkClicked();
     void removeBookmarkClicked();
-    void updateIndexClicked();
 
 private:
     QWidget *createKDevelopTab();
     QWidget *createLibrariesTab();
     QWidget *createBookmarksTab();
-    QWidget *createIndexTab();
     
     DocTreeViewWidget *m_widget;
     QWidget *kdevelopTab;

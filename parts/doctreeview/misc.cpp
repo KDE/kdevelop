@@ -112,25 +112,3 @@ void DocTreeViewTool::setBookmarks(const QStringList &itemNames, const QStringLi
     config->writeEntry("BookmarksTitle", itemNames);
     config->writeEntry("BookmarksURL", fileNames);
 };
-
-
-void DocTreeViewTool::setIndexOptions(bool shownlibs, bool hiddenlibs, bool others, const QStringList &tocs)
-{
-    KConfig *config = instanceConfig();
-    config->setGroup("DocTreeView");
-    config->writeEntry("IndexShownLibraries", shownlibs);
-    config->writeEntry("IndexHiddenLibraries", hiddenlibs);
-    config->writeEntry("IndexOthers", others);
-    config->writeEntry("IndexedTocs", tocs);
-}
-
-
-void DocTreeViewTool::getIndexOptions(bool *shownlibs, bool *hiddenlibs, bool *others, QStringList *tocs)
-{
-    KConfig *config = instanceConfig();
-    config->setGroup("DocTreeView");
-    *shownlibs = config->readBoolEntry("IndexShownLibraries", true);
-    *hiddenlibs = config->readBoolEntry("IndexHiddenLibraries", true);
-    *others = config->readBoolEntry("IndexOthers", true);
-    *tocs = config->readListEntry("IndexedTocs");
-}

@@ -2,7 +2,8 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
-kde_module_LTLIBRARIES = libkdevdoctreeview.la
+kde_module_LTLIBRARIES = libkdevdoctreeview.la kio_kdeapi.la
+
 libkdevdoctreeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevdoctreeview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
@@ -10,24 +11,30 @@ libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp \
 				doctreeviewpart.cpp \
 				doctreeviewwidget.cpp \
 			        doctreeconfigwidget.cpp \
+				doctreeglobalconfigwidgetbase.ui \
+				doctreeglobalconfigwidget.cpp \
 				adddocitemdlg.cpp \
 				docindexdlg.cpp \
 				docsearchdlg.cpp \
 				misc.cpp \
 				librarydocdlgbase.ui
 
-bin_PROGRAMS = gideon-index
-gideon_index_SOURCES = htdigindex.cpp
+bin_PROGRAMS = kdevelop-htdig
+kdevelop_htdig_SOURCES = htdigindex.cpp
 
 # gideon_index_CXXFLAGS = -DINDEXER ## makes problems with automake 1.5 and am_edit (Walter/2.01.2002)
 
-gideon_index_LDFLAGS = $(all_libraries) $(KDE_RPATH)
-gideon_index_LDADD = $(LIB_KDEUI)
+kdevelop_htdig_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+kdevelop_htdig_LDADD = $(LIB_KDEUI)
+
+kio_kdeapi_la_SOURCES = kio_kdeapi.cpp
+kio_kdeapi_la_LIBADD = $(LIB_KIO)
+kio_kdeapi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevdoctreeview.desktop
+service_DATA = kdevdoctreeview.desktop kdeapi.protocol
 
 rcdir = $(kde_datadir)/kdevdoctreeview
 rc_DATA = kdevdoctreeview.rc
