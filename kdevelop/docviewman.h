@@ -24,7 +24,7 @@
 #include <qlist.h>
 #include <qmap.h>
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 #include "qextmdichildview.h"
 #include "highlight.h"
 #include "structdef.h"      // needed for TEditInfo
@@ -36,9 +36,9 @@ class CKDevelop;
 class KHTMLView;
 class CDocBrowser;
 
-//==============================================================================
+//=============================================================================
 // class DocViewMan
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 /** 
   MDI manager for document classes of KDevelop (KWriteDocs, CDocBrowser)
   and view classes of KDevelop (CEditWidget, KHTMLView).
@@ -46,14 +46,6 @@ class CDocBrowser;
 class DocViewMan : public QObject
 {
   Q_OBJECT
-
-public: // enumerations
-  enum ContentsType {  // as flags to be able to combine them
-     Undefined      = 0x00  // null element of this set
-    ,Header         = 0x01
-    ,Source         = 0x02
-    ,HTML           = 0x04
-  };
 
 public:
   DocViewMan( CKDevelop* parent);
@@ -92,13 +84,37 @@ public:
   /** */  
   void doTakeOverOfEditorOptions();
 
-  /** */
-  CDocBrowser* createCDocBrowser(const QString& url);
-  /** */
-  KWriteDoc* createKWriteDoc(const QString& strFileName);
+  /** Get the modified files and ask if they should be saved */
+  void saveModifiedFiles();
+
+  /** Force reload for the modified file */
+  void reloadModifiedFiles();
 
   /** */
-  ProjectFileType getKWriteDocType(KWriteDoc* pDoc);
+  bool saveFileFromTheCurrentEditWidget();
+
+  /** */
+  void doFileSave(bool project);
+  /** */
+  void doFileCloseAll();
+
+  /** */
+  bool doProjectClose();
+  /** */
+  void doCloseAllDocs();
+
+  /** Install the new bookmark popup */
+  void installBMPopup(QPopupMenu *p);
+
+  ///////////////////////////
+  // Doc stuff
+  ///////////////////////////
+
+  /** Get the document of the currently focused CEditWidget view. */
+  KWriteDoc* currentEditDoc() { return m_pCurEditDoc; };
+  /** Get the document of the currently focused KHTMLView view. */
+  CDocBrowser* currentBrowserDoc() { return m_pCurBrowserDoc; };
+
   /** */
   bool curDocIsBrowser() { return m_curIsBrowser; };
   /** */
@@ -106,115 +122,60 @@ public:
   /** */
   bool curDocIsCppFile();
 
-  /** Create a new document depending on the requested type.
-    * Load the data from file (optionally) and uses the given parameters (optionally).
-    * @return the document id (-1 if failed)
-    */
-  //  QObject* createDoc(int contentsType, const QString& strFileName = 0L);
+  /** */
+  ProjectFileType getKWriteDocType(KWriteDoc* pDoc);
+
+  /** Get a list of all the KWriteDoc */
+  QList<KWriteDoc> getKWriteDocList() const;
+  /** Get a list of all the DocBrowser */
+  QList<CDocBrowser> getDocBrowserList() const;
+
+  /** Retrieves the document found by its filename */
+  QObject* findDocFromFilename(const QString& strFileName) const;
+  /** Retrieves the KWriteDoc found by its filename */
+  KWriteDoc* findKWriteDoc(const QString& strFileName) const;
+  /** Find if there is another KWriteDoc in the doc list */
+  KWriteDoc* findKWriteDoc();
+  /** Find if there is another CDocBrowser in the doc list */
+  CDocBrowser* findCDocBrowser();
+  /** Get the name of a document */
+  QString docName(QObject* doc) const;
+  /** Find out if no document has been modified */
+  bool noDocModified();
+
+  /** Close a browser document, causes all views to be closed. */
+  void closeCDocBrowser(CDocBrowser* pDoc);
+  /** Close an editor document, causes all views to be closed. */
+  void closeKWriteDoc(KWriteDoc* pDoc);
+
+  /** */
+  CDocBrowser* createCDocBrowser(const QString& url);
+  /** */
+  KWriteDoc* createKWriteDoc(const QString& strFileName);
 
   /** Load edit document from file. */
   void loadKWriteDoc(KWriteDoc* pDoc, 
                      const QString& strFileName, 
                      int /*mode*/);
 
-  /** */
+  /** Save edit document in a file */
   bool saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName);
 
-  /** Load document from file. */
-  void loadDoc(int docId, const QString& strFileName, int mode);
-  /** Save document to file. */
-  bool saveDoc(int docId, const QString& strFileName);
-
-
-  /** Close a document, causes all views to be closed. */
-  // void closeDoc(int docId);
-
-  void closeCDocBrowser(CDocBrowser* pDoc);
-  void closeKWriteDoc(KWriteDoc* pDoc);
-
-
+  /** @return the number of documents */
+  int docCount() const;
 
   ///////////////////////////
-  // EditInfo stuff
+  // View stuff
   ///////////////////////////
 
-  /* get the info structure from the filename */
-  // TEditInfo* getInfoFromFilename(const QString &filename);
+  /** Get the currently focused CEditWidget view 
+      (Note: not the covering MDI widgets but the embedded view) */
+  CEditWidget* currentEditView() { return m_pCurEditView; };
+  /** Get the currently focused KHTMLView view 
+      (Note: not the covering MDI widgets but the embedded view) */
+  KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
 
-  /** Remove a specified file from the edit_infos struct
-   *  and leave the widgets in a proper state
-   *  @param filename           The filename you want to remove.
-   */
-  // void removeFileFromEditlist(const char *filename);
-
-  /*
-    synchronize the "modified"-information of the KWriteDocs 
-    with the TEditInfo list
-   */
-  // void synchronizeDocAndInfo();
-
-  /*
-    get the modified files and ask if they should be saved
-   */
-  void saveModifiedFiles();
-
-  /*
-    force reload for the modified file
-   */
-  void reloadModifiedFiles();
-
-  /** syncs modified-flag in edit_info-structs
-   *
-   *  @param sFilename   the filename you want to set
-   *  @param bModified   changing edit_info-elment to this value
-   */
-  // bool setInfoModified(const QString &sFilename, bool bModified=true);
-
-  bool noInfoModified();
-
-  // TEditInfo* findInfo(const QString &sFilename);
-
-  // void appendInfo(TEditInfo* info);
-
-  bool saveFileFromTheCurrentEditWidget();
-
-  void doFileSave(bool project);
-  void doFileCloseAll();
-
-  bool doProjectClose();
-  void doCloseAllDocs();
-
-  ///////////////////////////
-  // Doc stuff
-  ///////////////////////////
-
-  // New interface
-  /** Get a list of all the KWriteDoc */
-  QList<KWriteDoc> getKWriteDocList() const;
-  /** */
-  QList<CDocBrowser> getDocBrowserList() const;
-  /** */
-  QObject* getDocFromFilename(const QString& strFileName) const;
-  /** */
-  KWriteDoc* getKWDocFromFilename(const QString& strFileName) const;
-  /** */
-  QString docName(QObject* doc) const;
-
-  /** Retrieve the document pointer.
-    * The returned object is of type QObject since we deal with several document types. */
-  // QObject* docPointer(int docId) const;
-  /** Retrieve the document pointer and make sure that it is a KWriteDoc */
-  // KWriteDoc* kwDocPointer(int docId) const;
-
-  /** get the ids of all documents of this type or a combination of types */
-  // QList<int> docs( int type = DocViewMan::Undefined) const;
-  /** Get the id of a document displayed by a given view */
-  // int docOfView(QWidget* pView) const;
-  /** Get the type of a document. Returns one of the DocViewMan::ContentsType enum. */
-  // int docType(int docId) const;
-
-
-  /** */
+  /** Add a MDI frame around a newly created view */
   void addQExtMDIFrame(QWidget* pNewView);
 
   /** */
@@ -226,10 +187,6 @@ public:
   /** get the first edit view for an edit document */
   CEditWidget* getFirstEditView(KWriteDoc* pDoc) const;
 
-  /** Create a new view of given type for a given document.
-    * If no view type is given, default 0 isused.
-    * If no doc is given (-1 - default) the view is not connected to a document. */
-  // QWidget* createView(int docId = -1);
   /** Close a view, automatically disconnects document. */
   void closeView(QWidget* pView);
 
@@ -246,39 +203,17 @@ public:
   /** get all view pointer for a document */
   // const QList<QWidget> viewsOfDoc(int docId) const;
 
-  /** @return the number of documents */
-  int docCount() const;
-  /** retrieves the document found by its filename */
-  // int findDoc(const QString& strFileName) const;
-  /** retrieves the KWriteDoc found by its filename */
-  KWriteDoc* findKWriteDoc(const QString& strFileName) const;
-  /** */
-  KWriteDoc* findKWriteDoc();
-  /** */
-  CDocBrowser* findCDocBrowser();
-
-  /** Get the currently focused CEditWidget view (Note: not the covering MDI widgets but the embedded view) */
-  CEditWidget* currentEditView() { return m_pCurEditView; };
-  /** Get the currently focused KHTMLView view (Note: not the covering MDI widgets but the embedded view) */
-  KHTMLView* currentBrowserView() { return m_pCurBrowserView; };
-  /** Get the document of the currently focused CEditWidget view. */
-  KWriteDoc* currentEditDoc() { return m_pCurEditDoc; };
-  /** Get the document of the currently focused KHTMLView view. */
-  CDocBrowser* currentBrowserDoc() { return m_pCurBrowserDoc; };
-
-  /** Get the type of the currently (because of its view) focused document */
-  //  int currentDocType() { return m_currentDocType; };
-
-  /** Install the new bookmark popup */
-  void installBMPopup(QPopupMenu *p);
 
 public slots:
-  /** Is called whenever the MDI view gets focus. The update of pointers for the "current..."-methods is made here */
+  /** Is called whenever the MDI view gets focus. 
+   * The update of pointers for the "current..."-methods is made here */
   void slot_gotFocus(QextMdiChildView* pMDICover);
   /** Updates the bookmarks for each document */
   void updateBMPopup();
-  /** shows the desired bookmark (eventually, switches to file and activates it) */
+  /** shows the desired bookmark 
+   * (eventually, switches to file and activates it) */
   void gotoBookmark(int n);
+
   
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
@@ -286,15 +221,16 @@ signals:
   /** Is emitted when a view handled by the doc view manager looses focus. */
   void sig_viewLostFocus(QWidget* pView);
 
-   /** is emitted when the las view managed by this instance has been closed */
+  /** Is emitted when the last view managed by this instance 
+      has been closed */
   void sig_lastViewClosed();
-  /** is emitted when the las document managed by this instance has been closed */
+  /** Is emitted when the last document managed by this instance 
+      has been closed */
   void sig_lastDocClosed();
 
 // attributes
 private:
 
-  // New interface
   /** List of all documents */
   QList<QObject> m_documentList;
 

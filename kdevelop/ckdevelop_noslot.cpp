@@ -962,7 +962,7 @@ bool CKDevelop::queryClose(){
 
     // m_docViewManager->synchronizeDocAndInfo();
 
-    int save = m_docViewManager->noInfoModified();
+    int save = m_docViewManager->noDocModified();
 
     if (!save)
     {

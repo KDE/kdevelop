@@ -507,7 +507,7 @@ bool DocViewMan::saveKWriteDoc(KWriteDoc* pDoc, const QString& strFileName)
 }
 
 //-----------------------------------------------------------------------------
-// find if there is another KWriteDoc in the doc list 
+// Find if there is another KWriteDoc in the doc list 
 //-----------------------------------------------------------------------------
 KWriteDoc* DocViewMan::findKWriteDoc()
 {
@@ -568,7 +568,7 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
 }
 
 //-----------------------------------------------------------------------------
-// find if there is another CDocBrowser in the doc list 
+// Find if there is another CDocBrowser in the doc list 
 //-----------------------------------------------------------------------------
 CDocBrowser* DocViewMan::findCDocBrowser()
 {
@@ -890,7 +890,7 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
 }
 
 //-----------------------------------------------------------------------------
-// returns the number of documents for the asked document type
+// Returns the number of documents
 //-----------------------------------------------------------------------------
 int DocViewMan::docCount() const
 {
@@ -898,42 +898,6 @@ int DocViewMan::docCount() const
 
   return m_documentList.count();
 }
-
-//-----------------------------------------------------------------------------
-// retrieves the document found by its filename
-//-----------------------------------------------------------------------------
-/*
-int DocViewMan::findDoc( const QString& strFileName) const
-{
-  QListIterator<DocViewNode> it(m_docsAndViews);
-  bool bFound = false;
-  DocViewNode* pDocViewNode = 0L;
-  for ( ; it.current() && !bFound; ++it) {
-    pDocViewNode = it.current();
-    switch (pDocViewNode->docType) {
-      case DocViewMan::Header:
-      case DocViewMan::Source:
-        {
-          KWriteDoc* pDoc = (KWriteDoc*) pDocViewNode->pDoc;
-          if (pDoc->fileName() == strFileName)
-            bFound = true;
-        }
-        break;
-      case DocViewMan::HTML:
-        {
-          CDocBrowser* pDoc = (CDocBrowser*) pDocViewNode->pDoc;
-          if (pDoc->currentURL() == strFileName)
-            bFound = true;
-        }
-        break;
-    }
-  }
-  if( !pDocViewNode || !bFound)
-    return -1;
-  else
-    return pDocViewNode->docId;
-}
-*/
 
 //-----------------------------------------------------------------------------
 // Retrieves the KWriteDoc found by its filename
@@ -949,6 +913,25 @@ KWriteDoc* DocViewMan::findKWriteDoc(const QString& strFileName) const
       return pDoc;
     }
   }
+  return 0L;
+}
+
+//-----------------------------------------------------------------------------
+// Retrieves any Document found by its filename
+//-----------------------------------------------------------------------------
+QObject* DocViewMan::findDocFromFilename(const QString& strFileName) const
+{
+  debug("DocViewMan::findDocFromFilename !\n");
+
+  QListIterator<QObject> itDoc(m_documentList);
+
+  for (; itDoc.current() != 0; ++itDoc) {
+    QObject* doc = itDoc.current();
+    if (doc  && (docName(doc) == strFileName)) {
+      return doc;
+    }
+  }
+
   return 0L;
 }
 
@@ -988,9 +971,9 @@ void DocViewMan::updateBMPopup()
   }
 }
 
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // shows the desired bookmark (eventually, switches to file and activates it)
-//------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 void DocViewMan::gotoBookmark(int n) {
 
   debug("DocViewMan::gotoBookmark : %d !\n", n);
@@ -1013,115 +996,13 @@ void DocViewMan::gotoBookmark(int n) {
   }
 }
 
-/*---------------------------------------- getInfoFromFilename
- * TEditInfo* DocViewMan::getInfoFromFilename(const QString &filename)
- *
- * searches for the edit_info-element
- *
- * Returns:
- *       returns either 0l if the filename wasn't found
- *       or the pointer of the first occurence inside
- *       the TEditInfoList
- *-----------------------------------------------------------------*/
-/*
-TEditInfo* DocViewMan::getInfoFromFilename(const QString &filename)
+
+//-----------------------------------------------------------------------------
+// Find if no documents have been modified 
+//-----------------------------------------------------------------------------
+bool DocViewMan::noDocModified()
 {
-  TEditInfo *pRetVal=0l;
-  bool bSearch=true;
-  QDir dir=QFileInfo(filename).dir(true);
-  QString fullname=dir.canonicalPath()+"/"+QFileInfo(filename).fileName();
-
-  // search the current file which would be changed
-  for(pRetVal=edit_infos.first(); bSearch && pRetVal != 0l;)
-  {
-    if (pRetVal->filename == fullname )
-      bSearch=false;
-    else
-      pRetVal=edit_infos.next();
-  }
-  return pRetVal;
-}
-*/
-
-/*
-void DocViewMan::synchronizeDocAndInfo()
-{
-  debug("DocViewMan::synchronizeDocAndInfo ! \n");
-
-  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-  QList<int> allKWriteDocs = docs(DocViewMan::Header | DocViewMan::Source);
-  QListIterator<int> docIter(allKWriteDocs);
-  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
-    int curKWriteDocId = *(docIter.current());
-    // Because of our filter from above the doc object is always a KWriteDoc, and we'll always get id's for existing docs
-    KWriteDoc* pDoc = (KWriteDoc*) docPointer( curKWriteDocId);
-    setInfoModified(pDoc->fileName(), pDoc->isModified());
-  }
-}
-*/
-
-
-/*
-void DocViewMan::removeFileFromEditlist(const char *filename){
-  TEditInfo* actual_info;
-
-  QString corrAbsFilename = (m_pParent->isUntitled(filename)) 
-    ? QString(filename) 
-    : QFileInfo(filename).absFilePath();
-
-  //search the actual edit_info and remove it
-  for(actual_info=edit_infos.first();actual_info != 0;){
-    TEditInfo* next_info=edit_infos.next();
-    if (actual_info->filename == corrAbsFilename){ // found
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
-//      m_pParent->menu_buffers->removeItem(actual_info->id);
-      if(edit_infos.removeRef(actual_info)){
-//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
-      }
-    }
-    actual_info=next_info;
-  }
-
-  int docId = findDoc(corrAbsFilename);
-  closeDoc( docId);
-}
-*/
-
-/*---------------------------------------- setInfoModified()
- * setInfoModified(const QString &sFilename, bool bModified)
- *
- *  search all edit_infos for the file named "sFilename", the first
- *  match will change 'modified'
- *
- * Parameters:
- *  sFilename   filename to search in the EditInfos
- *  bModified   sets editinfo->modified
- * Returns:
- *       returns true if a struct-element was changed
- *-----------------------------------------------------------------*/
-/*
-bool DocViewMan::setInfoModified(const QString &sFilename, bool bModified)
-{
-  bool bChanged=false;
-
-  for(TEditInfo* actual_info = edit_infos.first();
-      !bChanged && actual_info != 0;
-      actual_info = edit_infos.next())
-  {
-   if ( actual_info->filename == sFilename)
-      { // found
-        actual_info->modified=bModified;
-        bChanged=true;
-      }
-  }
-
-  return bChanged;
-}
-*/
-
-bool DocViewMan::noInfoModified()
-{
-  debug("DocViewMan::noInfoModified !\n");
+  debug("DocViewMan::noDocModified !\n");
 
   QListIterator<QObject> itDoc(m_documentList);
   for (itDoc.toFirst(); itDoc.current() != 0; ++itDoc) {
@@ -1133,29 +1014,6 @@ bool DocViewMan::noInfoModified()
   return true;
 }
 
-/*
-TEditInfo* DocViewMan::findInfo(const QString &sFilename)
-{
-    TEditInfo* actual_info = 0;
-
-    for(TEditInfo* search_info = edit_infos.first();
-	search_info != 0 && actual_info == 0;
-	search_info = edit_infos.next())
-      {
-	if (search_info->filename == sFilename)
-	  actual_info = search_info;
-      }
-
-    return actual_info;
-}
-*/
-
-/*
-void DocViewMan::appendInfo(TEditInfo* info)
-{
-  edit_infos.append(info);
-}
-*/
 
 void DocViewMan::doFileSave(bool project)
 {
@@ -1176,7 +1034,8 @@ void DocViewMan::doFileSave(bool project)
       m_pParent->refreshClassViewByFileList(&lSavedFile);
 }
 
-// closes all KWrite documents and their views but not the document browser views
+// closes all KWrite documents and their views 
+// but not the document browser views
 void DocViewMan::doFileCloseAll()
 {
   debug("DocViewMan::doFileCloseAll !\n");
@@ -1310,7 +1169,7 @@ bool DocViewMan::doProjectClose()
 
   // check if something went wrong with saving
   if (cont) {
-    cont = noInfoModified();
+    cont = noDocModified();
   }
 
   return cont;
@@ -1529,30 +1388,6 @@ QString DocViewMan::docName(QObject* pDoc) const
   }
 
   return QString("");
-}
-
-QObject* DocViewMan::getDocFromFilename(const QString& strFileName) const
-{
-  debug("DocViewMan::getDocFromFilename !\n");
-
-  QListIterator<QObject> itDoc(m_documentList);
-  QList<KWriteDoc> resultList;
-
-  for (; itDoc.current() != 0; ++itDoc) {
-    QObject* doc = itDoc.current();
-    if (doc  && (docName(doc) == strFileName)) {
-      return doc;
-    }
-  }
-
-  return 0;
-}
-
-KWriteDoc* DocViewMan::getKWDocFromFilename(const QString& strFileName) const
-{
-  debug("DocViewMan::getKWDocFromFilename !\n");
-
-  return (dynamic_cast<KWriteDoc*> (getDocFromFilename(strFileName)));
 }
 
 
