@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
   aboutData.addAuthor("Stefan Heidrich",I18N_NOOP("KAppWizard, Printing"), "sheidric@rz.uni-potsdam.de");
   aboutData.addAuthor("Stefan Bartel",I18N_NOOP("Real-File-Viewer, Project Options"), "bartel@rz.uni-potsdam.de");
   aboutData.addAuthor("John Birch",I18N_NOOP("Internal Debugger, port of KDevelop 1.3 to KDE 2.1"), "jbb@kdevelop.org");
-	aboutData.addAuthor("F@lk Brettschneider",I18N_NOOP("MDI"), "falk.brettschneider@gmx.de");
+	aboutData.addAuthor("F@lk Brettschneider",I18N_NOOP("MDI"), "falk.brettschneider@gmx.de", "http://www.geocities.com/gigafalk/qextmdi.htm");
 
   aboutData.addCredit ("Jochen Wilhelmy",I18N_NOOP("Initial KWrite sources"), "digisnap@cs.tu-berlin.de");
   aboutData.addCredit ("Martin R. Jones",I18N_NOOP("KDE Help"), "mjones@kde.org");
