@@ -1,0 +1,9 @@
+This part shows apidocs and other documentation.
+It is also responsible for indexing the documentation.
+The indexing is done whith the helper tool "kdevelop-htdig", located in htdigindex.h/cpp.
+With the index you can search for keywords in the kdelibs/qt api.
+
+
+Initially created by: Bernd Gehrmann <bernd@kdevelop.org>
+Maintainer: Sebastian Kratzert <skratzert@gmx.de>
+
