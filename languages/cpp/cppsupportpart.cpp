@@ -785,25 +785,28 @@ void CppSupportPart::savedFile(const KURL &fileName)
 
 QString CppSupportPart::findSourceFile()
 {
+    // get the path of the currently active document
     QFileInfo fi( m_activeFileName );
     QString path = fi.filePath();
     QString ext = fi.extension();
-    QString base = path.left( path.length() - ext.length() );
+    // extract the base path (full path without '.' and extension)
+    QString base = path.left( path.length() - ext.length() - 1);
     QStringList candidates;
 
-    if (ext == "h" || ext == "H" || ext == "hh" || ext == "hxx" || ext == "hpp" || ext == "tlh") {
-        candidates << (base + "c");
-        candidates << (base + "cc");
-        candidates << (base + "cpp");
-        candidates << (base + "c++");
-        candidates << (base + "cxx");
-        candidates << (base + "C");
-        candidates << (base + "m");
-        candidates << (base + "mm");
-        candidates << (base + "M");
-	candidates << (base + "inl");
-    }
-
+    if (QStringList::split(',', "h,H,hh,hxx,hpp,tlh").contains(ext)) {
+        candidates << (base + ".c");
+        candidates << (base + ".cc");
+        candidates << (base + ".cpp");
+        candidates << (base + ".c++");
+        candidates << (base + ".cxx");
+        candidates << (base + ".C");
+        candidates << (base + ".m");
+        candidates << (base + ".mm");
+        candidates << (base + ".M");
+        candidates << (base + ".inl");
+        candidates << (base + "_impl.h");        
+    } 
+    
     QStringList::ConstIterator it;
     for (it = candidates.begin(); it != candidates.end(); ++it) {
         kdDebug(9007) << "Trying " << (*it) << endl;
@@ -811,7 +814,6 @@ QString CppSupportPart::findSourceFile()
             return *it;
         }
     }
-
     return m_activeFileName;
 }
 
@@ -819,34 +821,51 @@ QString CppSupportPart::sourceOrHeaderCandidate()
 {
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(partController()->activePart());
     if (!doc)
-      return "";
+      return QString::null;
 
+    // get the path of the currently active document
     QFileInfo fi(doc->url().path());
     QString path = fi.filePath();
+    // extract the exension 
     QString ext = fi.extension();
-    QString base = path.left(path.length()-ext.length());
+    if (ext.isEmpty()) return QString::null;
+    // extract the base path (full path without '.' and extension)
+    QString base = path.left(path.length()-ext.length() - 1);
     kdDebug(9007) << "base: " << base << ", ext: " << ext << endl;
+    // depending on the current extension assemble a list of 
+    // candidate files to look for
     QStringList candidates;
-    if (ext == "h" || ext == "H" || ext == "hh" || ext == "hxx" || ext == "hpp" || ext == "tlh") {
-        candidates << (base + "c");
-        candidates << (base + "cc");
-        candidates << (base + "cpp");
-        candidates << (base + "c++");
-        candidates << (base + "cxx");
-        candidates << (base + "C");
-        candidates << (base + "m");
-        candidates << (base + "mm");
-        candidates << (base + "M");
-	candidates << (base + "inl");
-    } else if (QStringList::split(',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl").contains(ext)) {
-        candidates << (base + "h");
-        candidates << (base + "H");
-        candidates << (base + "hh");
-        candidates << (base + "hxx");
-        candidates << (base + "hpp");
-        candidates << (base + "tlh");
+    // special case for template classes created by the new class dialog
+    if (path.endsWith("_impl.h")) {
+        QString headerpath = path;
+        headerpath.replace("_impl.h",".h");
+        candidates << headerpath;
     }
-
+    // if file is a header file search for implementation file
+    else if (QStringList::split(',', "h,H,hh,hxx,hpp,tlh").contains(ext)) {
+        candidates << (base + ".c");
+        candidates << (base + ".cc");
+        candidates << (base + ".cpp");
+        candidates << (base + ".c++");
+        candidates << (base + ".cxx");
+        candidates << (base + ".C");
+        candidates << (base + ".m");
+        candidates << (base + ".mm");
+        candidates << (base + ".M");
+        candidates << (base + ".inl");
+        candidates << (base + "_impl.h");        
+    } 
+    // if file is an implementation file, search for header file
+    else if (QStringList::split(',', "c,cc,cpp,c++,cxx,C,m,mm,M,inl").contains(ext)) {
+        candidates << (base + ".h");
+        candidates << (base + ".H");
+        candidates << (base + ".hh");
+        candidates << (base + ".hxx");
+        candidates << (base + ".hpp");
+        candidates << (base + ".tlh");
+    }
+    // search for files from the assembled candidate lists, return the first 
+    // candidate file that actually exists or QString::null if nothing is found.
     QStringList::ConstIterator it;
     for (it = candidates.begin(); it != candidates.end(); ++it) {
         kdDebug(9007) << "Trying " << (*it) << endl;
