@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>476</width>
-            <height>253</height>
+            <height>194</height>
         </rect>
     </property>
     <property name="caption">
@@ -274,7 +274,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>kiconbutton.h</includehint>
+    <includehint>kicondialog.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

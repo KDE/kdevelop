@@ -31,7 +31,7 @@
                     <cstring>tab1</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Project Types</string>
+                    <string>&amp;Project Types</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -66,7 +66,7 @@
                             <cstring>newtype_button</cstring>
                         </property>
                         <property name="text">
-                            <string>New &amp;Type...</string>
+                            <string>&amp;New Type...</string>
                         </property>
                     </widget>
                     <widget class="QListView" row="0" column="0" rowspan="11" colspan="1">
@@ -135,7 +135,7 @@
                             <cstring>sidetab_checkbox</cstring>
                         </property>
                         <property name="text">
-                            <string>Use side tab</string>
+                            <string>Use s&amp;ide tab</string>
                         </property>
                     </widget>
                     <spacer row="9" column="1">
@@ -220,7 +220,7 @@
                     <cstring>tab2</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Used Global Types</string>
+                    <string>Used &amp;Global Types</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -306,7 +306,7 @@
                             <cstring>copyToProject_button</cstring>
                         </property>
                         <property name="text">
-                            <string>Copy to &amp;Project Types</string>
+                            <string>Copy to Pro&amp;ject Types</string>
                         </property>
                     </widget>
                 </grid>
@@ -316,7 +316,7 @@
                     <cstring>tab3</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Project Templates</string>
+                    <string>Project &amp;Templates</string>
                 </attribute>
                 <grid>
                     <property name="name">
@@ -352,7 +352,7 @@
                             <cstring>edittemplate_button</cstring>
                         </property>
                         <property name="text">
-                            <string>C&amp;hange Target...</string>
+                            <string>C&amp;hange Content...</string>
                         </property>
                     </widget>
                     <widget class="QPushButton" row="1" column="1">
@@ -360,7 +360,7 @@
                             <cstring>newtemplate_button</cstring>
                         </property>
                         <property name="text">
-                            <string>New &amp;Template...</string>
+                            <string>&amp;New Template...</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
@@ -506,14 +506,18 @@
     <tabstop>newsubtype_button</tabstop>
     <tabstop>edittype_button</tabstop>
     <tabstop>remove_button</tabstop>
+    <tabstop>edit_type_content_button</tabstop>
     <tabstop>moveup_button</tabstop>
     <tabstop>movedown_button</tabstop>
+    <tabstop>sidetab_checkbox</tabstop>
     <tabstop>fc_tabs</tabstop>
     <tabstop>fcglobal_view</tabstop>
+    <tabstop>copyToProject_button</tabstop>
     <tabstop>fctemplates_view</tabstop>
     <tabstop>newtemplate_button</tabstop>
     <tabstop>edittemplate_button</tabstop>
     <tabstop>removetemplate_button</tabstop>
+    <tabstop>edit_template_content_button</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">addglobaldlg.h</include>

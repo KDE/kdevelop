@@ -94,7 +94,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                               "variable(s) to the watch section.\n"
                               "To change a variable value in your "
                               "running app use a watch variable (eg a=5)."));
-    mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("debugger variable-view"));
+    mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("Debugger variable-view"));
     mainWindow()->setViewAvailable(variableWidget, false);
 
     gdbBreakpointWidget = new GDBBreakpointWidget();
@@ -107,7 +107,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                 "the breakpoint and will take you "
                                 "to the source in the editor window."));
     gdbBreakpointWidget->setIcon( SmallIcon("stop") );
-    mainWindow()->embedOutputView(gdbBreakpointWidget, i18n("Breakpoints"), i18n("debugger breakpoints"));
+    mainWindow()->embedOutputView(gdbBreakpointWidget, i18n("Breakpoints"), i18n("Debugger breakpoints"));
 
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -122,7 +122,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                 "can see the values in any of the "
                                 "previous calling functions."));
     framestackWidget->setIcon( SmallIcon("table") );
-    mainWindow()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("debugger function call stack"));
+    mainWindow()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("Debugger function call stack"));
     mainWindow()->setViewAvailable(framestackWidget, false);
 
     disassembleWidget = new DisassembleWidget();
@@ -138,7 +138,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                  "\"step into\" instruction."));
     disassembleWidget->setIcon( SmallIcon("gear") );
     mainWindow()->embedOutputView(disassembleWidget, i18n("Disassemble"),
-                                  i18n("debugger disassemble view"));
+                                  i18n("Debugger disassemble view"));
     mainWindow()->setViewAvailable(disassembleWidget, false);
 
     gdbOutputWidget = new GDBOutputWidget;
@@ -433,9 +433,15 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     popup->insertSeparator();
     if (econtext->url().isLocalFile())
-        popup->insertItem( i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()) );
+    {
+        int id = popup->insertItem( i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()) );
+        popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Toggles breakpoint at the current line."));
+    }
     if (!m_contextIdent.isEmpty())
-        popup->insertItem( i18n("Watch: %1").arg(m_contextIdent), this, SLOT(contextWatch()) );
+    {
+        int id = popup->insertItem( i18n("Watch: %1").arg(m_contextIdent), this, SLOT(contextWatch()) );
+        popup->setWhatsThis(id, i18n("<b>Toggle breakpoint</b><p>Adds an expression under the cursor to the Variables/Watch list."));
+    }
 }
 
 

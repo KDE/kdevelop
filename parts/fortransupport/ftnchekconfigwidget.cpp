@@ -29,7 +29,9 @@ public:
                 const QString &description)
         : QCheckListItem(parent, flagstr, QCheckListItem::CheckBox),
           flag(flagstr), desc(description)
-    {}
+    {
+        setText(1, desc);
+    }
 
     static void readFlagsToListView(QListView *listview, QStringList *list);
     static void writeFlagsFromListView(QListView *listview, QStringList *list);

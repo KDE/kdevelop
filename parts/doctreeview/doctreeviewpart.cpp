@@ -57,12 +57,12 @@ DocTreeViewPart::DocTreeViewPart( QObject *parent, const char *name, const QStri
     m_widget = new DocTreeViewWidget(this);
     m_widget->setIcon(SmallIcon("contents"));
     m_widget->setCaption(i18n("Documentation Tree"));
-    QWhatsThis::add(m_widget, i18n("<b>Documentation Tree</b><p>"
+    QWhatsThis::add(m_widget, i18n("<b>Documentation tree</b><p>"
                                    "The documentation tree gives access to various "
                                    "documentation sources (Qt DCF, Doxygen, KDoc, KDevelopTOC and DevHelp "
                                    "documentation) and the KDevelop manuals. It also provides documentation index."));
 
-    mainWindow()->embedSelectViewRight(m_widget, i18n("Documentation"), i18n("documentation browser"));
+    mainWindow()->embedSelectViewRight(m_widget, i18n("Documentation"), i18n("Documentation browser"));
 
     KAction *action;
 

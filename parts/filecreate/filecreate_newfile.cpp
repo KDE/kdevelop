@@ -21,6 +21,7 @@
 #include <kurlrequester.h>
 #include <kcombobox.h>
 #include <klocale.h>
+#include <kdebug.h>
 
 namespace FileCreate {
 
@@ -29,30 +30,34 @@ namespace FileCreate {
                 KDialogBase::Ok, parent, "New file", true)
   {
       QVBoxLayout* lay = new QVBoxLayout( plainPage(), 5, 5 );
-      
+
       lay->addWidget( new QLabel( i18n("<b>New file creation</b>"), plainPage() ) );
-      
-      QGrid* grid = new QGrid( 2, plainPage() );
-      grid->setSpacing( 5 );
-      new QLabel(i18n("Directory:"), grid );
-      m_urlreq = new KURLRequester( grid, "url request" );
-      new QLabel(i18n("File name:"), grid );
-      m_filename = new QLineEdit( grid );
-      lay->addWidget( grid );
-      
-      QHBox* hbox = new QHBox( plainPage() );
-      hbox->setMargin( 5 );
-      hbox->setSpacing( 5 );
-      m_filetypes = new KComboBox( hbox, "combo" );
-      m_addToProject = new QCheckBox( i18n("Add to project (on checkbox)", "Add to project"), hbox, "addproject" );
-      lay->addWidget( hbox );
-      
-      lay->addItem( new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Expanding) );
+
+      QGridLayout* grid = new QGridLayout(lay, 2, 2, 5 );
+      QLabel * l = new QLabel(i18n("&Directory:"), plainPage() );
+      grid->addWidget(l, 0, 0);
+      m_urlreq = new KURLRequester( plainPage(), "url request" );
+      grid->addWidget(m_urlreq, 0, 1);
+      l->setBuddy(m_urlreq);
+      l = new QLabel(i18n("&File name:"), plainPage() );
+      grid->addWidget(l, 1, 0);
+      m_filename = new QLineEdit( plainPage() );
+      grid->addWidget(m_filename, 1, 1);
+      l->setBuddy(m_filename);
+//      lay->addWidget( grid );
+
+      QHBoxLayout* hbox = new QHBoxLayout( lay, 5 );
+      m_filetypes = new KComboBox( plainPage(), "combo" );
+      hbox->addWidget(m_filetypes);
+      m_addToProject = new QCheckBox( i18n("Add to project (on checkbox)", "&Add to project"), plainPage(), "addproject" );
+      hbox->addWidget(m_addToProject);
+
+      lay->addStretch(20);
 
       m_filename->setFocus();
       m_addToProject->setChecked( true );
 
-      m_urlreq->setMode((int) KFile::Directory);      
+      m_urlreq->setMode((int) KFile::Directory);
   }
 
   NewFileChooser::~NewFileChooser() {

@@ -49,7 +49,7 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
 
     m_widget = new PartWidget( this );
     m_widget->setIcon( SmallIcon("folder") );
-    mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("view on the project directory") );
+    mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("File tree view in the project directory") );
 
     // File tree
     connect( project(), SIGNAL( addedFilesToProject( const QStringList & ) ),

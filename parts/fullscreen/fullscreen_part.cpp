@@ -34,6 +34,8 @@ FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringL
 
   m_pFullScreen = new KAction( i18n( "&Full-Screen Mode" ), "window_fullscreen", CTRL+SHIFT+Key_F, this,
         SLOT( slotToggleFullScreen() ), actionCollection(), "fullscreen" );
+  m_pFullScreen->setToolTip(i18n("Full-screen mode"));
+  m_pFullScreen->setWhatsThis(i18n("<b>Full-screen mode</b><p>Enters or exits full screen mode (also hides menubar when switching into full screen mode)."));
 }
 
 FullScreenPart::~FullScreenPart()
@@ -49,13 +51,15 @@ void FullScreenPart::slotToggleFullScreen( )
       mw->showFullScreen();
 
       m_pFullScreen->setText( i18n( "Exit Full-Screen Mode" ) );
+      m_pFullScreen->setToolTip( i18n( "Exit full-screen mode" ) );
       m_pFullScreen->setIcon( "window_nofullscreen" );
    } else {
       mw->menuBar()->show();
 
       mw->showNormal();
 
-      m_pFullScreen->setText( i18n( "Full-Screen Mode" ) );
+      m_pFullScreen->setText( i18n( "&Full-Screen Mode" ) );
+      m_pFullScreen->setToolTip(i18n("Full-screen mode"));
       m_pFullScreen->setIcon( "window_fullscreen" );
    }
 }

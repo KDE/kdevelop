@@ -61,9 +61,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
 
 
   KAction * newAction = KStdAction::openNew(this, SLOT(slotNewFile()), actionCollection(), "file_new");
-  newAction->setStatusText( i18n("Creates a new file") );
   newAction->setText( i18n("Create a new file", "New...") );
-  newAction->setWhatsThis( i18n("Use this to create a new file within your project.") );
+  newAction->setWhatsThis( i18n("<b>New file</b><p>Creates a new file. Also adds it the project if the <b>Add to project</b> checkbox is turned on.") );
   newAction->setToolTip( i18n("New file") );
 
   m_filetypes.setAutoDelete(true);
@@ -134,7 +133,7 @@ bool FileCreatePart::setWidget(TypeChooser * widg) {
 
   if (widg && as_widget) {
     connect( widg->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
-    mainWindow()->embedSelectView(as_widget, i18n("New File"), i18n("file creation"));
+    mainWindow()->embedSelectView(as_widget, i18n("New File"), i18n("File creation"));
   }
 
   return true;

@@ -163,7 +163,7 @@ void CvsPart::init()
 
     m_widget = new CvsWidget( this );
     m_widget->setIcon( SmallIcon("db") );
-    mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("cvs output") ); // i18n("CVS") ?!?? ;)
+    mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("CVS output") ); // i18n("CVS") ?!?? ;)
     QWhatsThis::add(m_widget, i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows results of cvs command execution."));
 }
 

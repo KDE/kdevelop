@@ -118,8 +118,9 @@ FileGroupsWidget::FileGroupsWidget(FileGroupsPart *part)
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
-    m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project files"), KShortcut(),
+    m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
+    m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
 
     m_part = part;
     (void) translations; // supress compiler warning
@@ -162,7 +163,7 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
     KPopupMenu popup(i18n("File Groups"), this);
     /// @todo Add, remove groups
     int customizeId = popup.insertItem(i18n("Customize..."));
-    popup.insertSeparator();
+    popup.setWhatsThis(customizeId, i18n("<b>Customize</b><p>Opens <b>Cusomtize File Groups</b> dialog where the groups can be managed."));
     if (item->parent()) {
         // Not for group items
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);

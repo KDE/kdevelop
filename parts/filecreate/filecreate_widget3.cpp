@@ -40,7 +40,9 @@ namespace FileCreate {
     addColumn("");
     addColumn("");
 
-    QWhatsThis::add(this, i18n("This part makes the creation of new files within the project easier."));
+    QWhatsThis::add(this, i18n("<b>New file</b><p>This part makes the creation of new files easier. Select a type in the list to create a file. "
+        "The list of project file types can be configured in project settings dialog, <b>New File Wizard</b> tab. "
+        "Globally available file types are listed and can be configured in KDevelop settings dialog, <b>New File Wizard</b> tab."));
 
 
     connect( this, SIGNAL(clicked(QListViewItem*)), this, SLOT(slotTypeSelected(QListViewItem*)) );

@@ -205,10 +205,12 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
     connect( this, SIGNAL(selectionChanged()),
              this, SLOT(slotSelectionChanged()) );
 
-    m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project files"), KShortcut(),
+    m_actionToggleShowNonProjectFiles = new KToggleAction( i18n("Show Non Project Files"), KShortcut(),
         this, SLOT(slotToggleShowNonProjectFiles()), this, "actiontoggleshowshownonprojectfiles" );
-    m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS fields"), KShortcut(),
+    m_actionToggleShowNonProjectFiles->setWhatsThis(i18n("<b>Show non project files</b><p>Shows files that do not belong to a project in a file tree."));
+    m_actionToggleShowVCSFields = new KToggleAction( i18n("Show VCS Fields"), KShortcut(),
         this, SLOT(slotToggleShowVCSFields()), this, "actiontoggleshowvcsfieldstoggleaction" );
+    m_actionToggleShowVCSFields->setWhatsThis(i18n("<b>Show VCS fields</b><p>Shows <b>Revision</b> and <b>Timestamp</b> for each file contained in VCS repository."));
 
     QDomDocument &dom = *m_part->projectDom();
     m_actionToggleShowNonProjectFiles->setChecked( !DomUtil::readBoolEntry(dom, "/kdevfileview/tree/hidenonprojectfiles") );
@@ -316,7 +318,8 @@ void FileTreeWidget::slotContextMenu( KListView *, QListViewItem* item, const QP
 
     if (item == this->firstChild()) // rootnode
     {
-        popup.insertItem( i18n( "Reload Tree"), this, SLOT( slotReloadTree() ) );
+        int id = popup.insertItem( i18n( "Reload Tree"), this, SLOT( slotReloadTree() ) );
+        popup.setWhatsThis(id, i18n("<b>Reload tree</b><p>Reloads the project files tree."));
     }
 
     // Submenu for visualization options

@@ -39,7 +39,7 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
     m_filetree = new FileTreeWidget( m_part, this );
     m_filetree->setCaption(i18n("File Tree"));
     m_filetree->setIcon(SmallIcon("folder"));
-    QWhatsThis::add(m_filetree, i18n("File Tree\n\n"
+    QWhatsThis::add(m_filetree, i18n("<b>File tree</b><p>"
                                     "The file viewer shows all files of the project "
                                     "in a tree layout."));
 
@@ -55,6 +55,16 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
     connect( m_filter, SIGNAL( activated(const QString&) ), this, SLOT( slotFilterChange(const QString&) ) );
     connect( m_filter, SIGNAL( returnPressed(const QString&) ),
              m_filter, SLOT( addToHistory(const QString&) ) );
+
+    QWhatsThis::add
+        ( m_filter,
+                i18n("<p>Here you can enter a name filter to limit which files are <b>not displayed</b>."
+                     "<p>To clear the filter, toggle off the filter button to the left."
+                     "<p>To reapply the last filter used, toggle on the filter button." ) );
+    QWhatsThis::add
+        ( m_btnFilter,
+                i18n("<p>This button clears the name filter when toggled off, or "
+                     "reapplies the last filter used when toggled on.") );
 
     m_filter->insertItem( m_filetree->hidePatterns() );
 }

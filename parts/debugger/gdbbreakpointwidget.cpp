@@ -30,6 +30,7 @@
 #include <qtable.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <qvbox.h>
 #include <qlayout.h>
 
@@ -182,18 +183,23 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     m_add       = new QToolButton( toolbar, "add breakpoint" );
     m_add->setPixmap ( SmallIcon ( "breakpoint_add" ) );
     QToolTip::add ( m_add, i18n ( "Add empty breakpoint" ) + I18N_NOOP(" <Alt+A>"));
+    QWhatsThis::add( m_add, i18n("<b>Add empty breakpoint</b><p>Shows a popup menu that allows to choose "
+        "the type of breakpoint. Then adds a breakpoint of selected type to the breakpoints list."));
 
     m_delete    = new QToolButton( toolbar, "delete breakpoint" );
     m_delete->setPixmap ( SmallIcon ( "breakpoint_delete" ) );
     QToolTip::add ( m_delete, i18n ( "Delete selected breakpoint" ) + I18N_NOOP(" <Delete>") );
+    QWhatsThis::add( m_delete, i18n("<b>Delete selected breakpoint</b><p>Deletes the selected breakpoint in the breakpoints list."));
 
     m_edit      = new QToolButton( toolbar, "edit breakpoint" );
     m_edit->setPixmap ( SmallIcon ( "breakpoint_edit" ) );
     QToolTip::add ( m_edit, i18n ( "Edit selected breakpoint" ) + I18N_NOOP(" <Return>")  );
+    QWhatsThis::add( m_edit, i18n("<b>Edit selected breakpoint</b><p>Allows to edit location, condition and ignore count properties of the selected breakpoint in the breakpoints list."));
 
     m_removeAll      = new QToolButton( toolbar, "Delete all breakppoints" );
     m_removeAll->setPixmap ( SmallIcon ( "breakpoint_delete_all" ) );
     QToolTip::add ( m_removeAll, i18n ( "Remove all breakpoints" ) );
+    QWhatsThis::add( m_removeAll, i18n("<b>Remove all breakpoints</b><p>Removes all breakpoints in the project."));
 
     l->addWidget(m_add);
     l->addWidget(m_edit);

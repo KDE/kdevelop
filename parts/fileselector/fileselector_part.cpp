@@ -34,7 +34,7 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 {
     setInstance(FileSelectorFactory::instance());
 
-    m_filetree = new KDevFileSelector( mainWindow(), partController() );
+    m_filetree = new KDevFileSelector( this, mainWindow(), partController() );
 
     connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
 	     this, SLOT(fileSelected(const KFileItem*)));
@@ -44,7 +44,8 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 
     m_filetree->setCaption( i18n("File Selector") );
     m_filetree->setIcon( SmallIcon("view_detailed") );
-    mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("file selector") );
+    mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("File selector") );
+    QWhatsThis::add(m_filetree, i18n("<b>File selector</b><p>This file selector lists directory contents and provides some file management functions."));
 
     m_filetree->readConfig( instance()->config(), "fileselector" );
 }

@@ -36,6 +36,7 @@
 
 #include <qsplitter.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 #include <qtoolbutton.h>
 #include <qheader.h>
 #include <qdir.h>
@@ -75,16 +76,21 @@ void GenericProjectWidget::initOverviewListView( QSplitter * splitter )
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("group_new") );
     QToolTip::add( btn, i18n("Add new group") );
+    QWhatsThis::add( btn, i18n("<b>Add new group</b><p>Adds a new group of targets and files. "
+        "Group is usually a subdirectory in the project directory but that depends on an underlying build system.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotNewGroup()));
 
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("targetnew_kdevelop") );
     QToolTip::add( btn, i18n("Add new target") );
+    QWhatsThis::add( btn, i18n("<b>Add new target</b><p>Adds a new target. "
+        "Target is usually an application, static or shared library but that depends on an underlying build system.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotNewTarget()));
 
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("launch") );
     QToolTip::add( btn, i18n("Build") );
+    QWhatsThis::add( btn, i18n("<b>Build</b><p>Executes all commands necessary to build the current group.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotBuildGroup()));
 
     QWidget *spacer1 = new QWidget( buttonBox );
@@ -93,6 +99,7 @@ void GenericProjectWidget::initOverviewListView( QSplitter * splitter )
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("configure") );
     QToolTip::add( btn, i18n("Configure group") );
+    QWhatsThis::add( btn, i18n("<b>Configure group</b><p>Opens a group configuration dialog supplied by a build system plugin.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotConfigureGroup()));
 
     buttonBox->setMaximumHeight( btn->height() );
@@ -127,26 +134,31 @@ void GenericProjectWidget::initDetailsListView( QSplitter * splitter )
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("filenew") );
     QToolTip::add( btn, i18n("New file") );
+    QWhatsThis::add( btn, i18n("<b>New file</b><p>Creates a new file and adds it to a current target.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotNewFile()));
 
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("fileimport") );
     QToolTip::add( btn, i18n("Add files") );
+    QWhatsThis::add( btn, i18n("<b>Add files</b><p>Adds existing files to a current target.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotAddFiles()));
 
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("editdelete") );
     QToolTip::add( btn, i18n("Remove target or file") );
+    QWhatsThis::add( btn, i18n("<b>Remove target or file</b><p>Removes current target or file.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotDeleteTargetOrFile()));
 
 /*    btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("editdelete") );
     QToolTip::add( btn, i18n("Remove file") );
+    QWhatsThis::add( btn, i18n("<b></b><p>") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotDeleteFile()));
 */
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("launch") );
     QToolTip::add( btn, i18n("Build target") );
+    QWhatsThis::add( btn, i18n("<b>Build target</b><p>Executes all commands necessary to build the current target.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotBuildTarget()));
 
 
@@ -156,6 +168,7 @@ void GenericProjectWidget::initDetailsListView( QSplitter * splitter )
     btn = new QToolButton( buttonBox );
     btn->setPixmap( SmallIcon("configure") );
     QToolTip::add( btn, i18n("Configure target or file") );
+    QWhatsThis::add( btn, i18n("<b>Configure target or file</b><p>Opens a target or file configuration dialog supplied by a build system plugin.") );
     connect(btn, SIGNAL(clicked()), this, SLOT(slotConfigureTargetOrFile()));
 
     buttonBox->setMaximumHeight( btn->height() );
@@ -341,48 +354,94 @@ void GenericProjectWidget::initActions( )
 {
     newGroupAction = new KAction (i18n("New Group"), "group_new", 0,
         this, SLOT( slotNewGroup() ), m_part->actionCollection(), "new_group" );
+    newGroupAction->setToolTip(i18n("New group"));
+    newGroupAction->setWhatsThis(i18n("<b>New group</b><p>Adds a new group of targets and files. "
+        "Group is usually a subdirectory in the project directory but that depends on an underlying build system."));
     newTargetAction = new KAction (i18n("New Target"), "targetnew_kdevelop", 0,
         this, SLOT( slotNewTarget() ), m_part->actionCollection(), "new_target" );
+    newTargetAction->setToolTip(i18n("New target"));
+    newTargetAction->setWhatsThis(i18n("<b>New target</b><p>Adds a new target. "
+        "Target is usually an application, static or shared library but that depends on an underlying build system."));
     buildGroupAction = new KAction (i18n("Build Group"), "launch", 0,
         this, SLOT( slotBuildGroup() ), m_part->actionCollection(), "build_group" );
+    buildGroupAction->setToolTip(i18n("Build group"));
+    buildGroupAction->setWhatsThis(i18n("<b>Build group</b><p>Executes all commands necessary to build the current group."));
     buildAction = new KAction (i18n("Build"), "launch", 0,
         this, SLOT( slotBuild() ), m_part->actionCollection(), "build" );
+    buildAction->setToolTip(i18n("Build project"));
+    buildAction->setWhatsThis(i18n("<b>Build project</b><p>Executes all commands necessary to build the project."));
     buildTargetAction = new KAction (i18n("Build Target"), "launch", 0,
         this, SLOT( slotBuildTarget() ), m_part->actionCollection(), "build_target" );
+    buildTargetAction->setToolTip(i18n("Build target"));
+    buildTargetAction->setWhatsThis(i18n("<b>Build target</b><p>Executes all commands necessary to build the current target."));
     buildFileAction = new KAction (i18n("Build File"), "launch", 0,
         this, SLOT( slotBuildFile() ), m_part->actionCollection(), "build_file" );
+    buildFileAction->setToolTip(i18n("Build file"));
+    buildFileAction->setWhatsThis(i18n("<b>Build file</b><p>Executes all commands necessary to build the current file."));
     installGroupAction = new KAction (i18n("Install Group"), 0, 0,
         this, SLOT( slotInstallGroup() ), m_part->actionCollection(), "install_group" );
+    installGroupAction->setToolTip(i18n("Install group"));
+    installGroupAction->setWhatsThis(i18n("<b>Install group</b><p>Executes all commands necessary to install the current group."));
     installAction = new KAction (i18n("Install"), 0, 0,
         this, SLOT( slotInstall() ), m_part->actionCollection(), "install" );
+    installAction->setToolTip(i18n("Install"));
+    installAction->setWhatsThis(i18n("<b>Install</b><p>Executes all commands necessary to install the project."));
     newFileAction = new KAction (i18n("New File"), "filenew", 0,
         this, SLOT( slotNewFile() ), m_part->actionCollection(), "new_file" );
+    newFileAction->setToolTip(i18n("New file"));
+    newFileAction->setWhatsThis(i18n("<b>New file</b><p>Creates a new file and adds it to a current target."));
     addFilesAction = new KAction (i18n("Add Files"), "fileimport", 0,
         this, SLOT( slotAddFiles() ), m_part->actionCollection(), "add_files" );
+    addFilesAction->setToolTip(i18n("Add files"));
+    addFilesAction->setWhatsThis(i18n("<b>Add files</b><p>Adds existing files to a current target."));
     deleteGroupAction = new KAction (i18n("Remove Group"), 0, 0,
         this, SLOT( slotDeleteGroup() ), m_part->actionCollection(), "remove_group" );
+    deleteGroupAction->setToolTip(i18n("Remove group"));
+    deleteGroupAction->setWhatsThis(i18n("<b>Remove group</b><p>Removes current group."));
     deleteTargetAction = new KAction (i18n("Remove Target"), 0, 0,
         this, SLOT( slotDeleteTarget() ), m_part->actionCollection(), "remove_target" );
+    deleteTargetAction->setToolTip(i18n("Remove target"));
+    deleteTargetAction->setWhatsThis(i18n("<b>Remove target</b><p>Removes current target."));
     deleteFileAction = new KAction (i18n("Remove File"), 0, 0,
         this, SLOT( slotDeleteFile() ), m_part->actionCollection(), "remove_file" );
+    deleteFileAction->setToolTip(i18n("Remove file"));
+    deleteFileAction->setWhatsThis(i18n("<b>Remove file</b><p>Removes current file."));
     configureGroupAction = new KAction (i18n("Options..."), "configure", 0,
         this, SLOT( slotConfigureGroup() ), m_part->actionCollection(), "configure_group" );
+    configureGroupAction->setToolTip(i18n("Options"));
+    configureGroupAction->setWhatsThis(i18n("<b>Options</b><p>Opens a group configuration dialog supplied by a build system plugin."));
     configureTargetAction = new KAction (i18n("Options..."), "configure", 0,
         this, SLOT( slotConfigureTarget() ), m_part->actionCollection(), "configure_target" );
+    configureTargetAction->setToolTip(i18n("Options"));
+    configureTargetAction->setWhatsThis(i18n("<b>Options</b><p>Opens a target configuration dialog supplied by a build system plugin."));
     configureFileAction = new KAction (i18n("Options..."), "configure", 0,
         this, SLOT( slotConfigureFile() ), m_part->actionCollection(), "configure_item" );
+    configureFileAction->setToolTip(i18n("Options"));
+    configureFileAction->setWhatsThis(i18n("<b>Options</b><p>Opens a file configuration dialog supplied by a build system plugin."));
     executeAction = new KAction (i18n("Execute"), "exec", 0,
         this, SLOT( slotExecute() ), m_part->actionCollection(), "execute" );
+    executeAction->setToolTip(i18n("Execute project"));
+    executeAction->setWhatsThis(i18n("<b>Execute project</b><p>Executes the main project executable or the current application target."));
     executeGroupAction = new KAction (i18n("Execute"), "exec", 0,
         this, SLOT( slotExecuteGroup() ), m_part->actionCollection(), "execute_group" );
+    executeGroupAction->setToolTip(i18n("Execute group"));
+    executeGroupAction->setWhatsThis(i18n("<b>Execute group</b><p>Executes the current application target in a group."));
     executeTargetAction = new KAction (i18n("Execute"), "exec", 0,
         this, SLOT( slotExecuteTarget() ), m_part->actionCollection(), "execute_target" );
+    executeTargetAction->setToolTip(i18n("Execute target"));
+    executeTargetAction->setWhatsThis(i18n("<b>Execute target</b><p>Executes application target."));
     cleanAction = new KAction (i18n("Clean"), 0, 0,
         this, SLOT( slotClean() ), m_part->actionCollection(), "clean" );
+    cleanAction->setToolTip(i18n("Clean project"));
+    cleanAction->setWhatsThis(i18n("<b>Clean project</b><p>Executes all commands necessary to clean the project."));
     cleanGroupAction = new KAction (i18n("Clean"), 0, 0,
         this, SLOT( slotCleanGroup() ), m_part->actionCollection(), "clean_group" );
+    cleanGroupAction->setToolTip(i18n("Clean group"));
+    cleanGroupAction->setWhatsThis(i18n("<b>Clean group</b><p>Executes all commands necessary to clean the current group."));
     cleanTargetAction = new KAction (i18n("Clean"), 0, 0,
         this, SLOT( slotCleanTarget() ), m_part->actionCollection(), "clean_target" );
+    cleanTargetAction->setToolTip(i18n("Clean target"));
+    cleanTargetAction->setWhatsThis(i18n("<b>Clean target</b><p>Executes all commands necessary to clean the current target."));
 
 }
 

@@ -355,7 +355,7 @@ void CppSupportPart::projectOpened( )
 
     m_problemReporter = new ProblemReporter( this );
     m_problemReporter->setIcon( SmallIcon("info") );
-    mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
+    mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("Problem reporter"));
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );

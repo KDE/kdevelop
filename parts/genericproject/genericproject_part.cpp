@@ -55,9 +55,13 @@ GenericProjectPart::GenericProjectPart(QObject *parent, const char *name, const 
 
     m_widget = new GenericProjectWidget( this );
 
-    QWhatsThis::add(m_widget, i18n("Generic Project Manager"));
+    QWhatsThis::add(m_widget, i18n("<b>Generic project manager</b><p>"
+                                   "The project tree consists of two parts. The 'overview' "
+                                   "in the upper half shows the groups, "
+                                   "The 'details' view in the lower half shows the "
+                                   "targets and files for the group selected in the overview."));
 
-    mainWindow()->embedSelectViewRight( m_widget, i18n("Project Manager"), i18n("Project Manager") );
+    mainWindow()->embedSelectViewRight( m_widget, i18n("Project Manager"), i18n("Generic project manager") );
 
     m_mainBuild = new BuildGroupItem("/", 0);
     m_mainGroup = m_widget->addGroup(m_mainBuild);

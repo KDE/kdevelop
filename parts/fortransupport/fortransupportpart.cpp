@@ -64,6 +64,8 @@ FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const 
     action = new KAction( i18n("&Ftnchek"), 0,
                           this, SLOT(slotFtnchek()),
                           actionCollection(), "project_ftnchek" );
+    action->setToolTip(i18n("Run ftnchek"));
+    action->setWhatsThis(i18n("<b>Run ftnchek</b><p>Runs <b>ftnchek</b> to check fortran programs for semantic errors. Configure ftnchek options in project settings dialog, <b>Ftnchek</b> tab."));
 
     parser = 0;
 }
