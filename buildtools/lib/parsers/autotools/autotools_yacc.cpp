@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 1.875d.  */
+/* A Bison parser, made by GNU Bison 2.0.  */
 
 /* Skeleton parser for Yacc-like parsing with Bison,
    Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004 Free Software Foundation, Inc.
@@ -225,7 +225,7 @@ Don't forget to uncomment "yydebug = 1" line in qmakedriver.cpp.
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 
 /* Enabling verbose error messages.  */
@@ -248,7 +248,7 @@ typedef int YYSTYPE;
 /* Copy the second part of user declarations.  */
 
 
-/* Line 214 of yacc.c.  */
+/* Line 213 of yacc.c.  */
 #line 253 "autotools_yacc.cpp"
 
 #if ! defined (yyoverflow) || YYERROR_VERBOSE
@@ -264,14 +264,10 @@ typedef int YYSTYPE;
 
 # ifdef YYSTACK_USE_ALLOCA
 #  if YYSTACK_USE_ALLOCA
-#   define YYSTACK_ALLOC alloca
-#  endif
-# else
-#  if defined (alloca) || defined (_ALLOCA_H)
-#   define YYSTACK_ALLOC alloca
-#  else
 #   ifdef __GNUC__
 #    define YYSTACK_ALLOC __builtin_alloca
+#   else
+#    define YYSTACK_ALLOC alloca
 #   endif
 #  endif
 # endif
@@ -435,10 +431,10 @@ static const yysigned_char yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const unsigned short int yyrline[] =
 {
-       0,   141,   141,   141,   148,   174,   177,   181,   185,   189,
-     193,   197,   201,   205,   209,   215,   223,   229,   238,   244,
-     253,   263,   265,   268,   272,   275,   276,   277,   278,   281,
-     290,   298,   307,   307,   310,   318
+       0,   142,   142,   142,   149,   175,   178,   182,   186,   190,
+     194,   198,   202,   206,   210,   216,   224,   230,   239,   245,
+     254,   264,   266,   269,   273,   276,   277,   278,   279,   282,
+     291,   299,   308,   308,   311,   319
 };
 #endif
 
@@ -609,19 +605,52 @@ do								\
     }								\
 while (0)
 
+
 #define YYTERROR	1
 #define YYERRCODE	256
 
-/* YYLLOC_DEFAULT -- Compute the default location (before the actions
-   are run).  */
 
+/* YYLLOC_DEFAULT -- Set CURRENT to span from RHS[1] to RHS[N].
+   If N is 0, then set CURRENT to the empty location which ends
+   the previous symbol: RHS[0] (always defined).  */
+
+#define YYRHSLOC(Rhs, K) ((Rhs)[K])
 #ifndef YYLLOC_DEFAULT
-# define YYLLOC_DEFAULT(Current, Rhs, N)		\
-   ((Current).first_line   = (Rhs)[1].first_line,	\
-    (Current).first_column = (Rhs)[1].first_column,	\
-    (Current).last_line    = (Rhs)[N].last_line,	\
-    (Current).last_column  = (Rhs)[N].last_column)
+# define YYLLOC_DEFAULT(Current, Rhs, N)				\
+    do									\
+      if (N)								\
+	{								\
+	  (Current).first_line   = YYRHSLOC (Rhs, 1).first_line;	\
+	  (Current).first_column = YYRHSLOC (Rhs, 1).first_column;	\
+	  (Current).last_line    = YYRHSLOC (Rhs, N).last_line;		\
+	  (Current).last_column  = YYRHSLOC (Rhs, N).last_column;	\
+	}								\
+      else								\
+	{								\
+	  (Current).first_line   = (Current).last_line   =		\
+	    YYRHSLOC (Rhs, 0).last_line;				\
+	  (Current).first_column = (Current).last_column =		\
+	    YYRHSLOC (Rhs, 0).last_column;				\
+	}								\
+    while (0)
 #endif
+
+
+/* YY_LOCATION_PRINT -- Print the location on the stream.
+   This macro was not mandated originally: define only if we know
+   we won't break user code: when these are the locations we know.  */
+
+#ifndef YY_LOCATION_PRINT
+# if YYLTYPE_IS_TRIVIAL
+#  define YY_LOCATION_PRINT(File, Loc)			\
+     fprintf (File, "%d.%d-%d.%d",			\
+              (Loc).first_line, (Loc).first_column,	\
+              (Loc).last_line,  (Loc).last_column)
+# else
+#  define YY_LOCATION_PRINT(File, Loc) ((void) 0)
+# endif
+#endif
+
 
 /* YYLEX -- calling `yylex' with the right arguments.  */
 
@@ -645,19 +674,13 @@ do {						\
     YYFPRINTF Args;				\
 } while (0)
 
-# define YYDSYMPRINT(Args)			\
-do {						\
-  if (yydebug)					\
-    yysymprint Args;				\
-} while (0)
-
-# define YYDSYMPRINTF(Title, Token, Value, Location)		\
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)		\
 do {								\
   if (yydebug)							\
     {								\
       YYFPRINTF (stderr, "%s ", Title);				\
       yysymprint (stderr, 					\
-                  Token, Value);	\
+                  Type, Value);	\
       YYFPRINTF (stderr, "\n");					\
     }								\
 } while (0)
@@ -724,8 +747,7 @@ do {					\
 int yydebug;
 #else /* !YYDEBUG */
 # define YYDPRINTF(Args)
-# define YYDSYMPRINT(Args)
-# define YYDSYMPRINTF(Title, Token, Value, Location)
+# define YY_SYMBOL_PRINT(Title, Type, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
 #endif /* !YYDEBUG */
@@ -742,10 +764,6 @@ int yydebug;
    Do not make this value too large; the results are undefined if
    SIZE_MAX < YYSTACK_BYTES (YYMAXDEPTH)
    evaluated with infinite-precision integer arithmetic.  */
-
-#if defined (YYMAXDEPTH) && YYMAXDEPTH == 0
-# undef YYMAXDEPTH
-#endif
 
 #ifndef YYMAXDEPTH
 # define YYMAXDEPTH 10000
@@ -828,15 +846,15 @@ yysymprint (yyoutput, yytype, yyvaluep)
   (void) yyvaluep;
 
   if (yytype < YYNTOKENS)
-    {
-      YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
-# ifdef YYPRINT
-      YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
-# endif
-    }
+    YYFPRINTF (yyoutput, "token %s (", yytname[yytype]);
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
+
+# ifdef YYPRINT
+  if (yytype < YYNTOKENS)
+    YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
+# endif
   switch (yytype)
     {
       default:
@@ -852,16 +870,21 @@ yysymprint (yyoutput, yytype, yyvaluep)
 
 #if defined (__STDC__) || defined (__cplusplus)
 static void
-yydestruct (int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
 #else
 static void
-yydestruct (yytype, yyvaluep)
+yydestruct (yymsg, yytype, yyvaluep)
+    const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
 #endif
 {
   /* Pacify ``unused variable'' warnings.  */
   (void) yyvaluep;
+
+  if (!yymsg)
+    yymsg = "Deleting";
+  YY_SYMBOL_PRINT (yymsg, yytype, yyvaluep, yylocationp);
 
   switch (yytype)
     {
@@ -890,10 +913,10 @@ int yyparse ();
 
 
 
-/* The lookahead symbol.  */
+/* The look-ahead symbol.  */
 int yychar;
 
-/* The semantic value of the lookahead symbol.  */
+/* The semantic value of the look-ahead symbol.  */
 YYSTYPE yylval;
 
 /* Number of syntax errors so far.  */
@@ -929,7 +952,7 @@ yyparse ()
   int yyresult;
   /* Number of tokens to shift before error messages enabled.  */
   int yyerrstatus;
-  /* Lookahead token as an internal (translated) token number.  */
+  /* Look-ahead token as an internal (translated) token number.  */
   int yytoken = 0;
 
   /* Three stacks and their tools:
@@ -980,6 +1003,8 @@ yyparse ()
   yyssp = yyss;
   yyvsp = yyvs;
 
+
+  yyvsp[0] = yylval;
 
   goto yysetstate;
 
@@ -1070,18 +1095,18 @@ yyparse ()
 yybackup:
 
 /* Do appropriate processing given the current state.  */
-/* Read a lookahead token if we need one and don't already have one.  */
+/* Read a look-ahead token if we need one and don't already have one.  */
 /* yyresume: */
 
-  /* First try to decide what to do without reference to lookahead token.  */
+  /* First try to decide what to do without reference to look-ahead token.  */
 
   yyn = yypact[yystate];
   if (yyn == YYPACT_NINF)
     goto yydefault;
 
-  /* Not known => get a lookahead token if don't already have one.  */
+  /* Not known => get a look-ahead token if don't already have one.  */
 
-  /* YYCHAR is either YYEMPTY or YYEOF or a valid lookahead symbol.  */
+  /* YYCHAR is either YYEMPTY or YYEOF or a valid look-ahead symbol.  */
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
@@ -1096,7 +1121,7 @@ yybackup:
   else
     {
       yytoken = YYTRANSLATE (yychar);
-      YYDSYMPRINTF ("Next token is", yytoken, &yylval, &yylloc);
+      YY_SYMBOL_PRINT ("Next token is", yytoken, &yylval, &yylloc);
     }
 
   /* If the proper action on seeing token YYTOKEN is to reduce or to
@@ -1116,8 +1141,8 @@ yybackup:
   if (yyn == YYFINAL)
     YYACCEPT;
 
-  /* Shift the lookahead token.  */
-  YYDPRINTF ((stderr, "Shifting token %s, ", yytname[yytoken]));
+  /* Shift the look-ahead token.  */
+  YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
 
   /* Discard the token being shifted unless it is eof.  */
   if (yychar != YYEOF)
@@ -1167,239 +1192,239 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 141 "autotools.yy"
+#line 142 "autotools.yy"
     {
-	ProjectAST *projectAST = new ProjectAST();
-	projects.push(projectAST);
-;}
+        ProjectAST *projectAST = new ProjectAST();
+        projects.push(projectAST);
+    ;}
     break;
 
   case 4:
-#line 149 "autotools.yy"
+#line 150 "autotools.yy"
     {
-	projects.top()->addChildAST(yyvsp[0].node);
+            projects.top()->addChildAST((yyvsp[0].node));
 
-	if ( yyvsp[0].node->nodeType() == AST::ProjectAST && 
-	     static_cast<ProjectAST*>( yyvsp[0].node )->scopedID == "if" )
-	{
-		yyvsp[0].node->setDepth(depth);
-		depth++;
-	}
-	else if ( yyvsp[0].node->nodeType() == AST::ProjectAST && 
-	          static_cast<ProjectAST*>( yyvsp[0].node )->scopedID == "else" )
-	{
-		--depth;
-		yyvsp[0].node->setDepth(depth);
-		++depth;
-	}
-	else if ( yyvsp[0].node->nodeType() == AST::ProjectAST && 
-	          static_cast<ProjectAST*>( yyvsp[0].node )->scopedID == "endif" )
-	{
-		--depth;
-		yyvsp[0].node->setDepth(depth);
-	}
-	else
-		yyvsp[0].node->setDepth(depth);
-;}
+            if ( (yyvsp[0].node)->nodeType() == AST::ProjectAST && 
+                 static_cast<ProjectAST*>( (yyvsp[0].node) )->scopedID == "if" )
+            {
+                (yyvsp[0].node)->setDepth(depth);
+                depth++;
+            }
+            else if ( (yyvsp[0].node)->nodeType() == AST::ProjectAST && 
+                 static_cast<ProjectAST*>( (yyvsp[0].node) )->scopedID == "else" )
+            {
+                --depth;
+                (yyvsp[0].node)->setDepth(depth);
+                ++depth;
+            }
+            else if ( (yyvsp[0].node)->nodeType() == AST::ProjectAST && 
+                 static_cast<ProjectAST*>( (yyvsp[0].node) )->scopedID == "endif" )
+            {
+                --depth;
+                (yyvsp[0].node)->setDepth(depth);
+            }
+            else
+                (yyvsp[0].node)->setDepth(depth);
+        ;}
     break;
 
   case 6:
-#line 178 "autotools.yy"
+#line 179 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 7:
-#line 182 "autotools.yy"
+#line 183 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 8:
-#line 186 "autotools.yy"
+#line 187 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 9:
-#line 190 "autotools.yy"
+#line 191 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 10:
-#line 194 "autotools.yy"
+#line 195 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 11:
-#line 198 "autotools.yy"
+#line 199 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 12:
-#line 202 "autotools.yy"
+#line 203 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 13:
-#line 206 "autotools.yy"
+#line 207 "autotools.yy"
     {
-	yyval.node = yyvsp[0].node;
-;}
+            (yyval.node) = (yyvsp[0].node);
+        ;}
     break;
 
   case 14:
-#line 210 "autotools.yy"
+#line 211 "autotools.yy"
     {
-	yyval.node = new NewLineAST();
-;}
+            (yyval.node) = new NewLineAST();
+        ;}
     break;
 
   case 15:
-#line 216 "autotools.yy"
+#line 217 "autotools.yy"
     {
 	ConditionAST* projectAST = new ConditionAST();
 	projectAST->type = "if";
-	projectAST->conditionName = yyvsp[0].value;
-	yyval.node = projectAST;
+	projectAST->conditionName = (yyvsp[0].value);
+	(yyval.node) = projectAST;
 ;}
     break;
 
   case 16:
-#line 224 "autotools.yy"
+#line 225 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type= "endif";
-	yyval.node = past;
+	(yyval.node) = past;
 ;}
     break;
 
   case 17:
-#line 230 "autotools.yy"
+#line 231 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type= "endif";
-	past->conditionName = yyvsp[0].value;
-	yyval.node = past;
+	past->conditionName = (yyvsp[0].value);
+	(yyval.node) = past;
 ;}
     break;
 
   case 18:
-#line 239 "autotools.yy"
+#line 240 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type = "else";
-	yyval.node = past;
+	(yyval.node) = past;
 ;}
     break;
 
   case 19:
-#line 245 "autotools.yy"
+#line 246 "autotools.yy"
     {
 	ConditionAST* past = new ConditionAST();
 	past->type = "else";
-	past->conditionName = yyvsp[0].value;
-	yyval.node = past;
+	past->conditionName = (yyvsp[0].value);
+	(yyval.node) = past;
 ;}
     break;
 
   case 20:
-#line 254 "autotools.yy"
+#line 255 "autotools.yy"
     {
-	AssignmentAST *node = new AssignmentAST();
-	node->scopedID = yyvsp[-2].value;
-	node->op = yyvsp[-1].value;
-	node->values = yyvsp[0].values;
-	yyval.node = node;
-;}
+            AssignmentAST *node = new AssignmentAST();
+            node->scopedID = (yyvsp[-2].value);
+            node->op = (yyvsp[-1].value);
+            node->values = (yyvsp[0].values);
+            (yyval.node) = node;
+        ;}
     break;
 
   case 21:
-#line 264 "autotools.yy"
-    { yyval.value = yyvsp[-1].value + yyvsp[0].value; ;}
+#line 265 "autotools.yy"
+    { (yyval.value) = (yyvsp[-1].value) + (yyvsp[0].value); printf("value is: %s\n", (yyval.value).latin1() ); ;}
     break;
 
   case 23:
-#line 269 "autotools.yy"
+#line 270 "autotools.yy"
     {
-	yyval.values.append(yyvsp[0].value);
-;}
+            (yyval.values).append((yyvsp[0].value));
+        ;}
     break;
 
   case 24:
-#line 272 "autotools.yy"
-    { yyval.values.clear(); ;}
+#line 273 "autotools.yy"
+    { (yyval.values).clear(); ;}
     break;
 
   case 25:
-#line 275 "autotools.yy"
-    { yyval.value = yyvsp[-1].value + " \\\n"; ;}
+#line 276 "autotools.yy"
+    { (yyval.value) = (yyvsp[-1].value) + " \\\n"; ;}
     break;
 
   case 26:
-#line 276 "autotools.yy"
-    { yyval.value = yyvsp[-1].value + "\n"; ;}
+#line 277 "autotools.yy"
+    { (yyval.value) = (yyvsp[-1].value) + "\n"; ;}
     break;
 
   case 27:
-#line 277 "autotools.yy"
-    { yyval.value = "\\\n"; ;}
+#line 278 "autotools.yy"
+    { (yyval.value) = "\\\n"; ;}
     break;
 
   case 29:
-#line 282 "autotools.yy"
+#line 283 "autotools.yy"
     {
 	AutomakeTargetAST *node = new AutomakeTargetAST();
-	node->target = yyvsp[-2].value;
-	node->deps = yyvsp[0].values;
-	yyval.node = node;
+	node->target = (yyvsp[-2].value);
+	node->deps = (yyvsp[0].values);
+	(yyval.node) = node;
 ;}
     break;
 
   case 30:
-#line 291 "autotools.yy"
+#line 292 "autotools.yy"
     {
 	ProjectAST* node = new ProjectAST(ProjectAST::Rule);
-	node->scopedID = yyvsp[0].value;
-	yyval.node = node;
+	node->scopedID = (yyvsp[0].value);
+	(yyval.node) = node;
 ;}
     break;
 
   case 31:
-#line 299 "autotools.yy"
+#line 300 "autotools.yy"
     {
 	AssignmentAST *node = new AssignmentAST();
-	node->scopedID = yyvsp[-1].value;
-	node->values = QStringList(yyvsp[0].value);
-	yyval.node = node;
+	node->scopedID = (yyvsp[-1].value);
+	node->values = QStringList((yyvsp[0].value));
+	(yyval.node) = node;
 ;}
     break;
 
   case 34:
-#line 311 "autotools.yy"
+#line 312 "autotools.yy"
     {
-	CommentAST *node = new CommentAST();
-	node->comment = yyvsp[-1].value + "\n";
-	yyval.node = node;
-;}
+            CommentAST *node = new CommentAST();
+            node->comment = (yyvsp[-1].value) + "\n";
+            (yyval.node) = node;
+        ;}
     break;
 
 
     }
 
-/* Line 1010 of yacc.c.  */
-#line 1403 "autotools_yacc.cpp"
+/* Line 1037 of yacc.c.  */
+#line 1428 "autotools_yacc.cpp"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -1499,7 +1524,7 @@ yyerrlab:
 
   if (yyerrstatus == 3)
     {
-      /* If just tried and failed to reuse lookahead token after an
+      /* If just tried and failed to reuse look-ahead token after an
 	 error, discard it.  */
 
       if (yychar <= YYEOF)
@@ -1509,23 +1534,22 @@ yyerrlab:
 	  if (yychar == YYEOF)
 	     for (;;)
 	       {
+
 		 YYPOPSTACK;
 		 if (yyssp == yyss)
 		   YYABORT;
-		 YYDSYMPRINTF ("Error: popping", yystos[*yyssp], yyvsp, yylsp);
-		 yydestruct (yystos[*yyssp], yyvsp);
+		 yydestruct ("Error: popping",
+                             yystos[*yyssp], yyvsp);
 	       }
         }
       else
 	{
-	  YYDSYMPRINTF ("Error: discarding", yytoken, &yylval, &yylloc);
-	  yydestruct (yytoken, &yylval);
+	  yydestruct ("Error: discarding", yytoken, &yylval);
 	  yychar = YYEMPTY;
-
 	}
     }
 
-  /* Else will try to reuse lookahead token after shifting the error
+  /* Else will try to reuse look-ahead token after shifting the error
      token.  */
   goto yyerrlab1;
 
@@ -1542,7 +1566,7 @@ yyerrorlab:
      goto yyerrorlab;
 #endif
 
-  yyvsp -= yylen;
+yyvsp -= yylen;
   yyssp -= yylen;
   yystate = *yyssp;
   goto yyerrlab1;
@@ -1572,8 +1596,8 @@ yyerrlab1:
       if (yyssp == yyss)
 	YYABORT;
 
-      YYDSYMPRINTF ("Error: popping", yystos[*yyssp], yyvsp, yylsp);
-      yydestruct (yystos[yystate], yyvsp);
+
+      yydestruct ("Error: popping", yystos[yystate], yyvsp);
       YYPOPSTACK;
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1582,10 +1606,11 @@ yyerrlab1:
   if (yyn == YYFINAL)
     YYACCEPT;
 
-  YYDPRINTF ((stderr, "Shifting error token, "));
-
   *++yyvsp = yylval;
 
+
+  /* Shift the error token. */
+  YY_SYMBOL_PRINT ("Shifting", yystos[yyn], yyvsp, yylsp);
 
   yystate = yyn;
   goto yynewstate;
@@ -1602,6 +1627,9 @@ yyacceptlab:
 | yyabortlab -- YYABORT comes here.  |
 `-----------------------------------*/
 yyabortlab:
+  yydestruct ("Error: discarding lookahead",
+              yytoken, &yylval);
+  yychar = YYEMPTY;
   yyresult = 1;
   goto yyreturn;
 
@@ -1624,7 +1652,7 @@ yyreturn:
 }
 
 
-#line 320 "autotools.yy"
+#line 321 "autotools.yy"
 
 
 #include "autotools_lex.cpp"

@@ -49,6 +49,7 @@ To debug this lexer, put the line below into the next flex file section.
 %option debug
 */
 %}
+%option debug
 %option noyywrap
 
 %x list
