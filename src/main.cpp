@@ -62,13 +62,14 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Stephane ANCELOT", I18N_NOOP("Patches"), "sancelot@free.fr");
   aboutData.addCredit("Jens Zurheide", I18N_NOOP("Patches"), "jens.zurheide@gmx.de");
   aboutData.addCredit("Julian Rockey", I18N_NOOP("Filecreate part and other bits and patches"), "linux@jrockey.com");
-  aboutData.addCredit("Amilcar do Carmo Lucas", I18N_NOOP("Patches"), "amilcar@ida.ing.tu-bs.de");
+  aboutData.addCredit("Amilcar do Carmo Lucas", I18N_NOOP("Doxygen and autoproject patches"), "amilcar@ida.ing.tu-bs.de");
   aboutData.addCredit("Ajay Guleria", I18N_NOOP("ClearCase support"), "ajay_guleria@yahoo.com");
   aboutData.addCredit("Marek Janukowicz", I18N_NOOP("Ruby support"), "child@t17.ds.pwr.wroc.pl");
   aboutData.addCredit("Jens Dagerbo", I18N_NOOP("Replace part, patches"), "jens.dagerbo@swipnet.se");
   aboutData.addCredit("Luc Willems", I18N_NOOP("Help with Perl support"), "Willems.luc@pandora.be");
   aboutData.addCredit("Marcel Turino", I18N_NOOP("Documentation index view"), "M.Turino@gmx.de");
   aboutData.addCredit("Oliver Kellogg", I18N_NOOP("Ada support"), "Oliver.Kellogg@t-online.de");
+  aboutData.addCredit("Tobias Glaeﬂer", I18N_NOOP("QMake projectmanager patches"), "tobi.web@gmx.de");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
