@@ -212,7 +212,7 @@ class Context
       var_list(global_variables, binding)
 
     when /^\s*l(?:ocal)?$/
-      var_list(eval("local_variables", binding), binding)
+      var_list(eval("local_variables", binding) << "self", binding)
 
     when /^\s*i(?:nstance)?\s+/
       obj = debug_eval($', binding)
