@@ -108,7 +108,7 @@
     </connection>
     <connection>
         <sender>importerListView</sender>
-        <signal>selectionChanged(QListViewItem*)</signal>
+        <signal>clicked(QListViewItem*)</signal>
         <receiver>CreatePCSDialogBase</receiver>
         <slot>slotSelectionChanged(QListViewItem*)</slot>
     </connection>

@@ -42,7 +42,7 @@ SettingsDialog::~SettingsDialog()
 /*$SPECIALIZATION$*/
 void SettingsDialog::slotSelectionChanged(QListBoxItem* item)
 {
-    if( !item ){
+    if( !qtListBox->selectedItem() ){
 	emit enabled( false );
 	return;
     }

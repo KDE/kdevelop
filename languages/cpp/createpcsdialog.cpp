@@ -194,6 +194,12 @@ CreatePCSDialog::CreatePCSDialog(CppSupportPart* part, QWidget* parent, const ch
 
     QHBoxLayout* hbox = new QHBoxLayout( settingsPage );
     hbox->setAutoAdd( true );
+
+	if ( importerListView->firstChild() )
+	{
+		importerListView->setSelected( importerListView->firstChild(), true );
+		setNextEnabled( page, true );
+	}
 }
 
 CreatePCSDialog::~CreatePCSDialog()

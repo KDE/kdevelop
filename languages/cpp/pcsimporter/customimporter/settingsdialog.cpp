@@ -55,7 +55,9 @@ SettingsDialog::SettingsDialog(QWidget* parent, const char* name, WFlags fl)
 
     grid->addMultiCellWidget(elb, 2, 2, 0, grid->numCols());
 
-    connect(dbName_edit, SIGNAL(textChanged(const QString& )), this, SLOT(nameChanged(const QString& )));
+    connect(dbName_edit, SIGNAL(textChanged(const QString& )), this, SLOT( validate() ));
+    connect(elb->addButton(), SIGNAL(clicked()), this, SLOT(validate()));
+    connect(elb->removeButton(), SIGNAL(clicked()), this, SLOT(validate()));
 }
 
 SettingsDialog::~SettingsDialog()
@@ -77,9 +79,9 @@ bool SettingsDialog::recursive( ) const
     return recursive_box->isChecked();
 }
 
-void SettingsDialog::nameChanged( const QString &text )
+void SettingsDialog::validate()
 {
-    emit enabled(!text.isEmpty());
+    emit enabled( !dbName_edit->text().isEmpty() && elb->listBox()->count() > 0 );
 }
 
 #include "settingsdialog.moc"

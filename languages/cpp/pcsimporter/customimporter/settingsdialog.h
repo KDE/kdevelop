@@ -34,7 +34,7 @@ public:
   bool recursive() const;
 
 private slots:
-  void nameChanged(const QString &);
+  void validate();
 
 private:
   KEditListBox *elb;
