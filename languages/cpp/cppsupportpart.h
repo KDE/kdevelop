@@ -62,7 +62,11 @@ public:
     QString specialHeaderName( bool local=false ) const;
     void updateParserConfiguration();
 
+	// @fixme - isValid is used to avoid using the problem reporter
+	// when a project is first parsed. This because the problem reporter
+	// is currently a great slowdown for large projects (see bug #73671)
     ProblemReporter* problemReporter() { return isValid() ? static_cast<ProblemReporter *>(m_problemReporter) : 0; }
+    
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
     CppCodeCompletion* codeCompletion() { return m_pCompletion; }
     CppCodeCompletionConfig* codeCompletionConfig() { return m_pCompletionConfig; }
