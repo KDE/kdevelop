@@ -740,7 +740,7 @@ void CKDevelop::switchToKDevelop(){
   setCaption(kdev_caption);
 
   bKDevelop=true;
-  this->setUpdatesEnabled(false);
+  setUpdatesEnabled(false);
 
   //////// change the mainview ////////
   kdlg_tabctl->hide();
@@ -792,8 +792,8 @@ void CKDevelop::switchToKDevelop(){
   else
     showOutputView(false);
 
-  this->setUpdatesEnabled(true);
-  this->repaint();
+  setUpdatesEnabled(true);
+  repaint();
 
 }
 void CKDevelop::switchToKDlgEdit(){
@@ -815,7 +815,7 @@ void CKDevelop::switchToKDlgEdit(){
   kdev_caption = caption();
   setCaption(kdlg_caption);
   bKDevelop=false;
-  this->setUpdatesEnabled(false);
+  setUpdatesEnabled(false);
   //////// change the mainview ////////
   s_tab_view->hide();
   t_tab_view->hide();
@@ -872,8 +872,8 @@ void CKDevelop::switchToKDlgEdit(){
     kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
   }
   kdlg_tabctl->setFocus();
-  this->setUpdatesEnabled(true);
-  this->repaint();
+  setUpdatesEnabled(true);
+  repaint();
 }
 
 void CKDevelop::setToolMenuProcess(bool enable){

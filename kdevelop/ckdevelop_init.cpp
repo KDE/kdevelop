@@ -423,8 +423,8 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
   accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ), true, ID_BUILD_RUN_WITH_ARGS );
   
-  accel->insertItem( i18n("Debug"), "BuildDebug", (unsigned int) 0);
-  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_DEBUG_START );
+//  accel->insertItem( i18n("Debug"), "BuildDebug", (unsigned int) 0);
+//  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_DEBUG_START );
 
   accel->insertItem( i18n("DistClean"), "BuildDistClean", (unsigned int) 0);
   accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()), true, ID_BUILD_DISTCLEAN );
@@ -699,8 +699,6 @@ void CKDevelop::initMenuBar(){
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
   build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
-//  build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
-//  build_menu->insertItem(Icon("debugger.xpm"), i18n("&Debug..."), debugPopup, ID_BUILD_DEBUG);
 
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);

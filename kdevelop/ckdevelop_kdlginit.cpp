@@ -192,7 +192,7 @@ void CKDevelop::initKDlgMenuBar(){
 
   kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("&Execute  "),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
 	kdlg_build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments"),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
-  kdlg_build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_DEBUG_START);
+//  kdlg_build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_DEBUG_START);
 
   kdlg_build_menu->insertSeparator();
   kdlg_build_menu->insertItem(i18n("&DistClean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
@@ -335,7 +335,6 @@ void CKDevelop::initKDlgMenuBar(){
  
   disableCommand(ID_BUILD_RUN);
   disableCommand(ID_BUILD_RUN_WITH_ARGS);
-//  disableCommand(ID_BUILD_DEBUG);
   disableCommand(ID_BUILD_MAKE);
   disableCommand(ID_BUILD_REBUILD_ALL);
   disableCommand(ID_BUILD_STOP);
@@ -347,6 +346,7 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_BUILD_COMPILE_FILE);
  
   disableCommand(ID_KDLG_BUILD_GENERATE);
+  disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
 
   disableCommand(ID_CV_WIZARD);
   disableCommand(ID_CV_GRAPHICAL_VIEW);

@@ -130,8 +130,7 @@
 #define ID_BUILD_STOP               14060
   
 #define ID_BUILD_RUN                14070
-#define ID_BUILD_RUN_WITH_ARGS			14075
-//#define ID_BUILD_DEBUG              14080
+#define ID_BUILD_RUN_WITH_ARGS      14075
 
 #define ID_BUILD_AUTOCONF           14090
 #define ID_BUILD_CONFIGURE          14100

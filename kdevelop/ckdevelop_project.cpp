@@ -199,7 +199,8 @@ bool CKDevelop::slotProjectClose(){
     disableCommand(ID_BUILD_STOP);
     disableCommand(ID_BUILD_AUTOCONF);
     disableCommand(ID_KDLG_BUILD_GENERATE);
-    
+    disableCommand(ID_KDLG_BUILD_COMPLETE_GENERATE);
+
     // prj menu
     disableCommand(ID_PROJECT_CLOSE);
     disableCommand(ID_PROJECT_ADD_FILE_EXIST);
