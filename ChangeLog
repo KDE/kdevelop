@@ -1,3 +1,6 @@
+2002-11-19  Caleb Tennis <caleb@aei-tech.com>
+    * Prepped for Alpha 2 Release - KDEVELOP_3_0_ALPHA_2
+
 2002-11-16  Harald Fernengel <harry@kdevelop.org>
     * Added ability to raise the left/right/bottom toolviews in IDEAl mode
     * Added tooltips for IDEAl buttons
