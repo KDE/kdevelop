@@ -10,7 +10,7 @@ Architecture: any
 Section: devel
 Replaces: kdevelop
 Depends: ${shlibs:Depends}, autoconf, automake, make, ${perl:Depends}
-Suggests: libqt2.1-dev, qt2.1-doc, kdelibs3-dev-cvs, kdelibs-doc, glimpse, kdebase, sgml-tools, a2ps, enscript, gv, htdig, glimpse, ktranslator
+Suggests: libqt2.1-dev, qt2.1-doc, kdelibs3-dev-cvs, kdelibs-doc, glimpse, kdebase, sgml-tools, a2ps, enscript, gv, htdig, ktranslator
 Conflicts: kdevelop
 Description: An IDE for Unix/X11
  KDevelop is an easy to use Integrated Development Environment
