@@ -135,6 +135,12 @@ KDevArgHint::~KDevArgHint()
 	delete m_pFuncLabel;
 }
 
+void KDevArgHint::setFont ( const QFont& font )
+{
+	m_pFuncLabel->setFont ( font );
+	m_pStateLabel->setFont ( font );
+}
+
 /** No descriptions */
 void KDevArgHint::gotoPrev()
 {
