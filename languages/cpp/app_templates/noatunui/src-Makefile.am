@@ -20,5 +20,5 @@ plugins_DATA = %{APPNAMELC}.plugin
 # kde_services_DATA = %{APPNAMELC}.desktop
 
 messages: rc.cpp
-·       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
 	$(XGETTEXT) *.cpp *.h -o $(podir)/%{APPNAMELC}.pot

@@ -37,5 +37,5 @@ rc_DATA = %{APPNAMELC}.rc
 rcdir = $(kde_datadir)/%{APPNAMELC}
 
 messages: rc.cpp
-·       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
 	$(XGETTEXT) *.cpp %{APPNAMELC}_aboutdata.h -o $(podir)/%{APPNAMELC}.pot

@@ -19,6 +19,6 @@ desktopdir = $(kde_appsdir)/System/ScreenSavers
 
 EXTRA_DIST = $(desktop_DATA)
 
-#messages: rc.cpp
-#       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
-#	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
+messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot

@@ -18,5 +18,5 @@ pluginsdir = $(kde_datadir)/khtml/kpartplugins
 plugins_DATA = plugin_%{APPNAMELC}.rc
 
 messages: rc.cpp
-·       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
