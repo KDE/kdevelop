@@ -41,6 +41,58 @@ QString CClassView::GLOBALROOTNAME = "Globals";
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------ CClassView::CCVToolTip::CCVToolTip()
+ * CCVToolTip()
+ *   Constructor.
+ *
+ * Parameters:
+ *   parent         Parent widget.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CClassView::CCVToolTip::CCVToolTip( QWidget *parent )
+  : QToolTip( parent )
+{
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                        PROTECTED METHODS                          *
+ *                                                                   *
+ ********************************************************************/
+
+/*-------------------------------- CClassView::CCVToolTip::maybeTip()
+ * maybeTip()
+ *   Constructor.
+ *
+ * Parameters:
+ *   parent         Parent widget.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::CCVToolTip::maybeTip( const QPoint &p )
+{
+  CClassView *cv;
+  QString str;
+  QRect r;
+
+  cv = (CClassView *)parentWidget();
+  cv->tip( p, r, str );
+
+  if( !str.isEmpty() && r.isValid() )
+    tip( r, str );
+    
+  debug( "Maybetip @ %d,%d(%s)", p.x(), p.y(), ( str.isEmpty() ? "" : str.data() ) );
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                     CREATION RELATED METHODS                      *
+ *                                                                   *
+ ********************************************************************/
+
 /*------------------------------------------- CClassView::CClassView()
  * CClassView()
  *   Constructor.
@@ -61,6 +113,9 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
   // Set the store.
   store = &cp.store;
 
+  // Create the tooltip;
+  toolTip = new CCVToolTip( this );
+
   setTreeHandler( new CClassTreeHandler() );
   ((CClassTreeHandler *)treeH)->setStore( store );
 
@@ -78,6 +133,7 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
  *-----------------------------------------------------------------*/
 CClassView::~CClassView()
 {
+  delete toolTip;
 }
 
 /*------------------------------------------ CClassView::initPopups()
@@ -379,6 +435,31 @@ void CClassView::viewGraphicalTree()
   cb->setCaption(i18n("Graphical classview"));
   cb->InitializeTree(forest);
   cb->show();
+}
+
+/*------------------------------------------------- CClassView::tip()
+ * tip()
+ *   Check and get a tooltip for a point.
+ *
+ * Parameters:
+ *   p          Point to check if we should get a tooltip for.
+ *   r          Rectangle of the tooltip item.
+ *   str        String that should contain the tooltip.
+ *   
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::tip( const QPoint &p, QRect &r, QString &str )
+{
+  QListViewItem *i;
+
+  i = itemAt( p );
+  r = itemRect( i );
+
+  if( treeH->itemType( i ) != THFOLDER && i != NULL && r.isValid() )
+    str = i->text( 0 );
+  else
+    str = "";
 }
 
 /*------------------------------------- CClassView::viewDefinition()

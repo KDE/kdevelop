@@ -21,6 +21,7 @@
 #include <kapp.h>
 #include <qstring.h>
 #include <qlist.h>
+#include <qtooltip.h>
 #include "ctreeview.h"
 #include "./classparser/ClassParser.h"
 #include "cclasstreehandler.h"
@@ -41,6 +42,17 @@ public: // Constructor & Destructor
 
   /** Destructor. */
   ~CClassView();
+
+private: // Private classes
+
+  /** Class that handles dynamic tooltips in the CV. */
+  class CCVToolTip : public QToolTip
+  {
+  public:
+    CCVToolTip(QWidget *parent);
+  protected:
+    void maybeTip( const QPoint & );
+  };
 
 public: // Public constants
 
@@ -79,60 +91,64 @@ public: // Public methods
   /** View graphical classtree. */
   void viewGraphicalTree();
 
+  /** Check and get a tooltip for a point. */
+  void tip( const QPoint &p, QRect &r, QString &str );
+
 signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
   void resetStatusbarProgress();
-protected: // Protected signals and slots
-  protected slots:
-    void slotProjectOptions();
-    void slotGraphicalView();
-    void slotFileNew();
-    void slotClassNew();
-    void slotClassDelete();
-    void slotClassViewSelected();
-    void slotMethodNew();
-    void slotMethodDelete();
-    void slotAttributeNew();
-    void slotAttributeDelete();
-    void slotImplementVirtual();
-    void slotAddSlotSignal();
-    void slotFolderNew();
-    void slotFolderDelete();
-    void slotClassBaseClasses();
-    void slotClassDerivedClasses();
-    void slotClassTool();
-    void slotViewDefinition();
-    void slotViewDeclaration();
-    /** Views the definition. */
-    void slotViewDefinition( const char *className, const char *declName, THType type );
-    
-    /** Views the declaration. */
-    void slotViewDeclaration( const char *className, const char *declName, THType type );
-    void slotClassWizard();
-  signals:
-    void selectedFileNew();
-    void selectedClassNew();
-    void selectedProjectOptions();
-    void selectedViewDeclaration(const char *, const char *,THType);
-    void selectedViewDefinition(const char *, const char *,THType);
 
-    /** Emitted when a user wants to add an attribute.
-     * @param aClass Class to add an attribute to.
-     */
-    void signalAddMethod( const char * );
+protected slots:
+  void slotProjectOptions();
+  void slotGraphicalView();
+  void slotFileNew();
+  void slotClassNew();
+  void slotClassDelete();
+  void slotClassViewSelected();
+  void slotMethodNew();
+  void slotMethodDelete();
+  void slotAttributeNew();
+  void slotAttributeDelete();
+  void slotImplementVirtual();
+  void slotAddSlotSignal();
+  void slotFolderNew();
+  void slotFolderDelete();
+  void slotClassBaseClasses();
+  void slotClassDerivedClasses();
+  void slotClassTool();
+  void slotViewDefinition();
+  void slotViewDeclaration();
+  /** Views the definition. */
+  void slotViewDefinition( const char *className, const char *declName, THType type );
+  
+  /** Views the declaration. */
+  void slotViewDeclaration( const char *className, const char *declName, THType type );
+  void slotClassWizard();
 
-    /** Emitted when a user wants to add an attribute.
-     * @param aClass Class to add an attribute to.
-     */
-    void signalAddAttribute( const char * );
+signals:
+  void selectedFileNew();
+  void selectedClassNew();
+  void selectedProjectOptions();
+  void selectedViewDeclaration(const char *, const char *,THType);
+  void selectedViewDefinition(const char *, const char *,THType);
 
-    /** Emitted when the user wants to delete a method
-     * @param aClass Name of the class that has the method.
-     * @param aMethodName A string holding the name and parameters of the method.
-     */
-    void signalMethodDelete( const char *, const char * );
-    void popupHighlighted(int);
+  /** Emitted when a user wants to add an attribute.
+   * @param aClass Class to add an attribute to.
+   */
+  void signalAddMethod( const char * );
+
+  /** Emitted when a user wants to add an attribute.
+   * @param aClass Class to add an attribute to.
+   */
+  void signalAddAttribute( const char * );
+
+  /** Emitted when the user wants to delete a method
+   * @param aClass Name of the class that has the method.
+   * @param aMethodName A string holding the name and parameters of the method.
+   */
+  void signalMethodDelete( const char *, const char * );
+  void popupHighlighted(int);
 
 protected: // Implementations of virtual methods.
 
@@ -183,6 +199,9 @@ private: // Private attributes
 
   /** The project. */
   CProject *project;
+
+  /** The dynamic tooltip:er. */
+  CCVToolTip * toolTip;
 
 private: // Private methods
 
