@@ -61,9 +61,14 @@ PluginController *PluginController::getInstance()
 
 
 PluginController::PluginController()
+  : QObject()
 {
   s_instance = this;
+}
 
+
+void PluginController::loadInitialPlugins()
+{
   loadDefaultParts();
   loadGlobalPlugins();
 }
@@ -77,6 +82,7 @@ PluginController::~PluginController()
 void PluginController::loadDefaultParts()
 {
   // Make frontend
+  emit loadingPlugin(i18n("Loading plugin: Make frontend"));
   KDevMakeFrontend *makeFrontend = loadDefaultPart< KDevMakeFrontend >( "KDevelop/MakeFrontend" );
   if ( makeFrontend ) {
     API::getInstance()->setMakeFrontend( makeFrontend );
@@ -84,6 +90,7 @@ void PluginController::loadDefaultParts()
   }
 
   // App frontend
+  emit loadingPlugin(i18n("Loading plugin: Application frontend"));
   KDevAppFrontend *appFrontend = loadDefaultPart< KDevAppFrontend >( "KDevelop/AppFrontend" );
   if ( appFrontend ) {
     API::getInstance()->setAppFrontend( appFrontend );
@@ -106,6 +113,9 @@ void PluginController::loadGlobalPlugins()
     if ( ( *it )->hasServiceType( "KDevelop/Part" ) ) {
       assert( false );
     } else {
+
+	emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
+
         QStringList args = argumentsFromService( *it );
 
         KDevPlugin *plugin = KParts::ComponentFactory

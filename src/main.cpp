@@ -13,6 +13,7 @@
 #include "plugincontroller.h"
 #include "partcontroller.h"
 #include "core.h"
+#include "splashscreen.h"
 
 
 int main(int argc, char *argv[])
@@ -43,13 +44,22 @@ int main(int argc, char *argv[])
 
   KApplication app;
 
+  SplashScreen *splash = new SplashScreen;
+ 
+  app.processEvents();
+
   TopLevel::getInstance()->loadSettings();
   
-  (void) PluginController::getInstance();
+  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
+		   splash, SLOT(showMessage(const QString &)));
+
+  PluginController::getInstance()->loadInitialPlugins();
 
   TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();
+
+  delete splash;
 
   kapp->dcopClient()->registerAs("gideon");
 

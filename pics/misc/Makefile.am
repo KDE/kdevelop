@@ -1,7 +1,2 @@
-
-pics_DATA = kAppWizard.bmp miniApp.bmp normalApp.bmp terminalApp.bmp startlogo.bmp  tipday.bmp qtApp.bmp customApp.bmp \
-						dlg_firstrun.bmp about_logo.bmp
-picsdir = $(kde_datadir)/kdevelop/pics/
-
-EXTRA_DIST = $(pics_DATA)
-
+picsdir = $(kde_datadir)/gideon/pics
+pics_DATA = gideon-splash.png

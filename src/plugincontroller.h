@@ -1,6 +1,10 @@
 #ifndef __PLUGINCONTROLLER_H__
 #define __PLUGINCONTROLLER_H__
 
+
+#include <qobject.h>
+
+
 #include <kservice.h>
 
 class KXMLGUIClient;
@@ -8,9 +12,10 @@ class KService;
 class KDevPlugin;
 
 
-class PluginController
+class PluginController : public QObject
 {
-
+  Q_OBJECT
+	
 public:
 
   ~PluginController();
@@ -23,6 +28,14 @@ public:
   static KDevPlugin *loadPlugin( const KService::Ptr &service );
 
   static QStringList argumentsFromService( const KService::Ptr &service );
+
+  void loadInitialPlugins();
+
+
+signals:
+
+  void loadingPlugin(const QString &plugin);
+  
 
 protected:
 

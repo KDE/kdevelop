@@ -10,6 +10,7 @@
 	
 	* Added a part providing a history, allowing you to go
 	  back and forward 
+	* Added splashscreen. Now we need an artist! :-)
 
 2002-04-28  Harald Fernengel <harry@kdevelop.org>
         * SourceNavPart now uses KToolBarPopupAction to display nifty
