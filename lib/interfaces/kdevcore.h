@@ -188,10 +188,6 @@ public:
      * all components get a stopButtonClicked().
      */
     virtual void running(KDevPart *which, bool runs) = 0;
-    /**
-     * Puts a message in the status bar.
-     */
-    virtual void message(const QString &str) = 0;
    
 
 signals:

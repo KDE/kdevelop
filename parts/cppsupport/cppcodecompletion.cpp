@@ -225,7 +225,7 @@ CppCodeCompletion::slotCursorPositionChanged()
     m_pCursorIface->cursorPosition(&nLine, &nCol);
     QString text = typingTypeOf( nLine, nCol );
     if( !text.isEmpty( ) )
-	m_pCore->message( text );
+	m_pSupport->topLevel()->statusBar()->message( text );
 }
 
 QString
@@ -1333,7 +1333,7 @@ CppCodeCompletion::typeOf( )
     }
 
     kdDebug() << "the type of expression is " << type << endl;
-    m_pCore->message( type.isEmpty() ? i18n("no type for expression") : type );
+    m_pSupport->topLevel()->statusBar()->message( type.isEmpty() ? i18n("no type for expression") : type );
 
     QStringList functionList;
     QString strFunction;

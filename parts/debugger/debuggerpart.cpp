@@ -20,6 +20,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmainwindow.h>
+#include <kstatusbar.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -361,7 +362,7 @@ void DebuggerPart::slotRun()
     if (controller)
         slotStop();
 
-    core()->message(i18n("Debugging program"));
+    topLevel()->statusBar()->message(i18n("Debugging program"));
     
     startDebugger();
     controller->slotRun();
@@ -373,14 +374,14 @@ void DebuggerPart::slotExamineCore()
     if (controller)
         slotStop();
 
-    core()->message(i18n("Choose a core file to examine..."));
+    topLevel()->statusBar()->message(i18n("Choose a core file to examine..."));
 
     QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
     QString coreFile = KFileDialog::getOpenFileName(dirName);
     if (coreFile.isNull())
         return;
 
-    core()->message(i18n("Examining core file %1").arg(coreFile));
+    topLevel()->statusBar()->message(i18n("Examining core file %1").arg(coreFile));
 
     startDebugger();
     controller->slotCoreFile(coreFile);
@@ -392,14 +393,14 @@ void DebuggerPart::slotAttachProcess()
     if (controller)
         slotStop();
 
-    core()->message(i18n("Choose a process to attach to..."));
+    topLevel()->statusBar()->message(i18n("Choose a process to attach to..."));
 
     Dbg_PS_Dialog dlg;
     if (!dlg.exec() || !dlg.pidSelected())
         return;
 
     int pid = dlg.pidSelected();
-    core()->message(i18n("Attaching to process %1").arg(pid));
+    topLevel()->statusBar()->message(i18n("Attaching to process %1").arg(pid));
     
     startDebugger();
     controller->slotAttachTo(pid);
@@ -550,7 +551,7 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     kdDebug(9012) << "Debugger state: " << stateIndicator << endl;
 
     if (!msg.isEmpty())
-        core()->message(msg);
+        topLevel()->statusBar()->message(msg);
 }
 
 

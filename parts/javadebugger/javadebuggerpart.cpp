@@ -18,6 +18,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kstatusbar.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -319,7 +320,7 @@ void JavaDebuggerPart::slotRun()
     if (controller)
         slotStop();
 
-    core()->message(i18n("Debugging program"));
+    topLevel()->statusBar()->message(i18n("Debugging program"));
     
     startDebugger();
     controller->slotRun();
@@ -456,7 +457,7 @@ void JavaDebuggerPart::slotStatus(const QString &msg, int state)
     kdDebug(9012) << "Debugger state: " << stateIndicator << endl;
 
     if (!msg.isEmpty())
-        core()->message(msg);
+        topLevel()->statusBar()->message(msg);
 }
 
 
