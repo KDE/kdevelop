@@ -147,7 +147,7 @@ void QextMdiMainFrm::closeEvent(QCloseEvent *e)
 	delete this;
 }
 
-void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QextMdi::AddWindowFlags flags)
+void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
 {
    QObject::connect( pWnd, SIGNAL(attachWindow(QextMdiChildView*,bool)), this, SLOT(attachWindow(QextMdiChildView*,bool)) );
    QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
@@ -168,6 +168,8 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QextMdi::AddWindowFlags 
 
    if( flags & QextMdi::Maximize)
       pWnd->maximize();
+   if( flags & QextMdi::Minimize)
+      pWnd->minimize();
    if( !(flags & QextMdi::Hide)) {
       if( pWnd->isAttached()) {
          pWnd->mdiParent()->show();
@@ -176,19 +178,15 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QextMdi::AddWindowFlags 
          pWnd->show();
       }
    }
-   if( (flags & QextMdi::Hide) && (pWnd->isAttached()) ) {
-         pWnd->minimize();
-         pWnd->mdiParent()->show();
-   }
 }
 
-void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QRect rectNormal, QextMdi::AddWindowFlags flags)
+void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QRect rectNormal, int flags)
 {
    addWindow( pWnd, flags);
    pWnd->setGeometry( rectNormal);
 }
 
-void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QPoint pos, QextMdi::AddWindowFlags flags)
+void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QPoint pos, int flags)
 {
    addWindow( pWnd, flags);
    pWnd->move( pos);
@@ -523,10 +521,12 @@ void QextMdiMainFrm::setMenuForSDIModeSysButtons( QMenuBar* pMenuBar)
 #endif
 
 #if QT_VERSION > 209
+#ifndef _OS_WIN32_
    m_pUndock->setAutoRaise(TRUE);
    m_pMinimize->setAutoRaise(TRUE);
    m_pRestore->setAutoRaise(TRUE);
    m_pClose->setAutoRaise(TRUE);
+#endif
 #endif
 
    m_pUndock->hide();
