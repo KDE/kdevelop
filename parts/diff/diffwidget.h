@@ -98,6 +98,7 @@ private:
     KIO::Job* job;
     KParts::ReadOnlyPart* extPart;
     KTempFile* tempFile;
+    QString rawDiff;
 };
 
 #endif

@@ -236,6 +236,7 @@ void DiffWidget::loadExtPart( const QString& partName )
 
 void DiffWidget::slotClear()
 {
+  rawDiff = QString();
   te->clear();
   if ( extPart )
     extPart->closeURL();
@@ -262,15 +263,14 @@ void DiffWidget::populateExtPart()
   int paragCount = te->paragraphs();
   if ( extPart->openStream( "text/plain", KURL() ) ) {
     for ( int i = 0; i < paragCount; ++i )
-      extPart->writeStream( te->text( i ).local8Bit() );
+      extPart->writeStream( rawDiff.local8Bit() );
     ok = extPart->closeStream();
   } else {
       // workaround for parts that cannot handle streams
       delete tempFile;
       tempFile = new KTempFile();
       tempFile->setAutoDelete( true );
-      for ( int i = 0; i < paragCount; ++i )
-        *(tempFile->textStream()) << te->text( i ) << endl;
+        *(tempFile->textStream()) << rawDiff.local8Bit() << endl;
       tempFile->close();
       ok = extPart->openURL( KURL::fromPathOrURL( tempFile->name() ) );
   }
@@ -288,6 +288,7 @@ void DiffWidget::slotFinished()
 void DiffWidget::setDiff( const QString& diff )
 {
   slotClear();
+  rawDiff = diff;
   slotAppend( diff );
   slotFinished();
 }
