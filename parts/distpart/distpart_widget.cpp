@@ -65,6 +65,12 @@ DistpartDialog::DistpartDialog(DistpartPart *part)
     loadSettings();
 
 
+    localOptionsGroupBox->setEnabled(false);
+    devPackageCheckBox->setEnabled(false);
+    docsPackageCheckBox->setEnabled(false);
+    appIconCheckBox->setEnabled(false);
+    uploadftpkdeorgCheckBox->setEnabled(false);
+    uploadAppsKDEcomCheckBox->setEnabled(false);
 }
 
 
