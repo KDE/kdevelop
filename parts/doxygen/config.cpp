@@ -3363,6 +3363,8 @@ void Config::create()
                     "in which this list will be split (can be a number in the range [1..20]) \n",
                     1,20,5
                 );
+  ci->addDependency("ALPHABETICAL_INDEX");
+  
   cl = addList(
                     "IGNORE_PREFIX",
                     "In case all classes in a project start with a common prefix, all \n"
@@ -3370,6 +3372,8 @@ void Config::create()
                     "The IGNORE_PREFIX tag can be used to specify one or more prefixes that \n"
                     "should be ignored while generating the index headers. \n"
                  );
+  cl->addDependency("ALPHABETICAL_INDEX");
+
   //-----------------------------------------------------------------------------------------------
   addInfo(  "HTML","configuration options related to the HTML output");
   //-----------------------------------------------------------------------------------------------

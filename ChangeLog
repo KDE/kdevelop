@@ -1,3 +1,7 @@
+2002-06-23 Matthias Hölzer-Klüpfel <mhk@kde.org>
+
+	* Made doxygen config widget "human readable"
+
 2002-06-23  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* jbb autoproject patch: Resolve $(VARIABLES) in SUBDIRS

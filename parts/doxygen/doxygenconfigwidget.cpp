@@ -17,10 +17,13 @@
 #include <qvbox.h>
 #include <qwhatsthis.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <kmessagebox.h>
+#include <kaccelmanager.h>
 
 #include "config.h"
 #include "input.h"
+#include "messages.h"
 
 
 DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *parent, const char *name)
@@ -44,7 +47,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                 page->viewport()->setBackgroundMode(PaletteBackground);
                 pagebox = new QVBox(0);
                 page->addChild(pagebox);
-                addTab(page, option->name());
+                addTab(page, message(option->name()));
                 QWhatsThis::add(page, option->docs().simplifyWhiteSpace() );
                 break;
             case ConfigOption::O_String:
@@ -56,7 +59,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                     case ConfigString::Dir:    sm = InputString::StringDir;  break;
                     }
                     InputString *inputString = new InputString
-                        ( option->name(),                        // name
+                        ( message(option->name()),                        // name
                           pagebox,                               // widget
                           *((ConfigString *)option)->valueRef(), // variable 
                           sm                                     // type
@@ -70,7 +73,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
             case ConfigOption::O_Enum:
                 {
                     InputString *inputString = new InputString
-                        ( option->name(),                        // name
+                        ( message(option->name()),                        // name
                           pagebox,                               // widget
                           *((ConfigEnum *)option)->valueRef(),   // variable 
                           InputString::StringFixed               // type
@@ -95,7 +98,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
                         case ConfigList::FileAndDir: lm=InputStrList::ListFileDir; break;
                         }
                     InputStrList *inputStrList = new InputStrList
-                        ( option->name(),                         // name
+                        ( message(option->name()),                         // name
                           pagebox,                                // widget
                           *((ConfigList *)option)->valueRef(),    // variable
                           lm                                      // type
@@ -109,7 +112,8 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
             case ConfigOption::O_Bool:
                 {
                     InputBool *inputBool = new InputBool
-                        ( option->name(),                         // name
+                        ( option->name(),			  // key
+			  message(option->name()),                // name
                           pagebox,                                // widget
                           *((ConfigBool *)option)->valueRef()     // variable
                           );
@@ -122,7 +126,7 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
             case ConfigOption::O_Int:
                 {
                     InputInt *inputInt = new InputInt
-                        ( option->name(),                         // name
+                        ( message(option->name()),                         // name
                           pagebox,                                // widget
                           *((ConfigInt *)option)->valueRef(),     // variable
                           ((ConfigInt *)option)->minVal(),        // min value
@@ -144,6 +148,8 @@ DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *paren
         // UGLY HACK: assumes each item depends on a boolean without checking!
         emit toggle(di.currentKey(), ((InputBool *)obj)->getState());
     }
+   
+    KAcceleratorManager::manage(this);
     
     m_fileName = fileName;
     loadFile();
