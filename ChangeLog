@@ -1,3 +1,9 @@
+2003-04-17 Roberto Raggi <roberto@kdevelop.org>
+    * Reduced the size of the generated pcs database(you must regenerate your
+      database using r++ to take advantage of it)
+    * Added the AST node for variable function arguments
+    * Added option "--fast" to the r++
+
 2003-04-16 Roberto Raggi <roberto@kdevelop.org>
     * Implemented the support for class inheritance in the new pcs
     * Moved the c++ parser into kdevelop/lib/cppparser, so other
