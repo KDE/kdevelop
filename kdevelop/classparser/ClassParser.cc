@@ -1048,7 +1048,7 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
         childClass = parseClass();
         if( childClass != NULL )
         {
-          // childClass->setDeclaredInClass( aClass->name );
+          childClass->setDeclaredInClass( aClass->name );
           store.addClass( childClass );
           aClass->addChildClass( childClass->name );
         }
@@ -1287,20 +1287,6 @@ void CClassParser::reset()
   isStatic=false;
 }
 
-/*------------------------------ CClassParser::removeWithReferences()
- * removeWithReferences()
- *   Remove all items in the store with references to the file.
- *
- * Parameters:
- *   file          The file.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassParser::removeWithReferences( const char *aFile )
-{
-}
-
 /*----------------------------------------- CClassParser::parseFile()
  * parseFile()
  *   Parse one file and add its' results to the internal structures.
@@ -1345,7 +1331,7 @@ bool CClassParser::parse( const char *file )
   currentFile = file;
 
   // Remove all items with references to this file.
-  removeWithReferences( file );
+  store.removeWithReferences( file );
 
   // Parse the file.
   parseFile( f );

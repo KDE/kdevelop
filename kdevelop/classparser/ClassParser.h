@@ -211,9 +211,6 @@ private: // Private methods
   /** Parse toplevel statements */
   void parseToplevel();
 
-  /** Remove all items in the store with references to the file. */
-  void removeWithReferences( const char *aFile );
-
   /** Parse a file */
   void parseFile( ifstream &file );
 
