@@ -336,17 +336,25 @@ void QextMdiChildView::focusInEvent(QFocusEvent *e)
       return;
    }
    // XXX TODO: call QWidget::focusInEvent() ???
+   activate();
+}
 
-   //qDebug("ChildView::focusInEvent");
+//============= activate ===============//
+
+void QextMdiChildView::activate()
+{
+   // this isn't called from focusInEvent, but we try to set the focus anyway
+   // if this _is_ called from focusInEvent, it doesn't matter to call it again, looping wont happen
+   setFocus();
+
+   // raise the view and push the taskbar button
    emit focusInEventOccurs( this);
 
    if( m_focusedChildWidget != 0L) {
-      //qDebug("ChildView::focusInEvent 2");
       m_focusedChildWidget->setFocus();
    }
    else {
       if( m_firstFocusableChildWidget != 0L) {
-         //qDebug("ChildView::focusInEvent 3");
          m_firstFocusableChildWidget->setFocus();
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }

@@ -100,6 +100,15 @@ public:
    */
    ~QextMdiChildView();
    /**
+   * This method does the same as focusInEvent(). That's why it is a replacement for the setFocus() call. It makes
+   * sense if you for instance want to focus (I mean raise and activate) this view although the real focus is
+   * in another toplevel widget. focusInEvent() will never get called in that case and your setFocus() call for this
+   * widget would fail without any effect.
+   * Use this method with caution, it always raises the view and pushes the taskbar button. Also when the focus is
+   * still on another MDI view in the same toplevel window where this is located!
+   */
+   void activate();
+   /**
    * Memorizes the first focusable child widget of this widget
    */
    void setFirstFocusableChildWidget(QWidget*);
