@@ -200,14 +200,6 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   myProjectItem->configuration.m_libadd.clear();
   myProjectItem->configuration.m_librarypath.clear();
 
-  //outside libs to link
-  outsideItem=(QCheckListItem *)outsidelib_listview->firstChild();
-  while(outsideItem)
-  {
-    myProjectItem->configuration.m_libadd.append(outsideItem->text(0));
-    outsideItem=(QCheckListItem*)outsideItem->itemBelow();
-  }
-
   //inside libs to link
 //  myProjectItem->configuration.m_prjdeps.clear();
   insideItem=(InsideCheckListItem *)insidelib_listview->firstChild();
@@ -230,6 +222,14 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
 
     }
     insideItem=(InsideCheckListItem*)insideItem->itemBelow();
+  }
+
+  //outside libs to link
+  outsideItem=(QCheckListItem *)outsidelib_listview->firstChild();
+  while(outsideItem)
+  {
+    myProjectItem->configuration.m_libadd.append(outsideItem->text(0));
+    outsideItem=(QCheckListItem*)outsideItem->itemBelow();
   }
 
   //external project dependencies
