@@ -114,12 +114,18 @@ void CClassParser::parseClassHeader()
         // Fetch next lexem.
         getNextLexem();
 
-        // Find out type of inheritance.
-        export = lexem;
+        // For classes with no scope identifier at inheritance.
+        if( lexem == ID )
+          export = PRIVATE;
+        else
+        {
+          // Find out type of inheritance.
+          export = lexem;
         
-        // Read the name of the parent.
-        getNextLexem();
-        assert( lexem == ID );
+          // Read the name of the parent.
+          getNextLexem();
+          assert( lexem == ID );
+        }
         
         // Add the parent.
         aParent = new CParsedParent();
@@ -166,9 +172,18 @@ void CClassParser::parseType( QString *aStr )
     isConst = true;
     getNextLexem();
   }
-  
+
   *aStr = getText();
   *aStr += " ";
+
+  // Check for modifiers.
+  if( strcmp( getText(), "unsigned" ) == 0 ||
+      strcmp( getText(), "short" ) == 0 )
+  {
+    getNextLexem();
+    *aStr += getText();
+    *aStr += " ";
+  }
 
   while( !exit )
   {
@@ -275,10 +290,13 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
   getNextLexem();
 
   if( lexem == CONST )
-      method->setIsConst( true );
+    method->setIsConst( true );
+  else if( isDefiningClass && lexem == '=' ) // Pure virtual
+    while( lexem != ';' )
+      getNextLexem();
 
-  // If this isn't a class definition skip to the start of the method.
-  if( !isDefiningClass )
+  // If this klass call other initializers, skip to start of block.
+  if( !isDefiningClass && lexem == ':' )
     while( lexem != '{' )
       getNextLexem();
 
@@ -502,6 +520,11 @@ void CClassParser::parseDeclaration()
       isAttr = true;
       parseVariableList( type );
       break;
+    case '=': // Global variable with default value assignment.
+      isAttr = true;
+      while( lexem != ';' )
+        getNextLexem();
+      break;
     case ';': // Variable 
       isAttr = true;
       break;
@@ -524,6 +547,9 @@ void CClassParser::parseDeclaration()
     case '(': // Function parameter
       isAttr = false;
       parseFunctionArgs( method );
+
+      skip = ( isDefiningClass && lexem != ';' ) ||
+             ( !isDefiningClass && lexem != '{' );
       break;
     case CLCL: // Method implementation
       isAttr = false;
@@ -706,6 +732,10 @@ void CClassParser::parseToplevel()
     // To parse toplevel definitions.
     switch( lexem )
     {
+      case CPBEGINSTATUSMSG:
+        while( lexem != CPENDSTATUSMSG )
+          getNextLexem();
+        break;
       case CPSTRUCT:
         parseStruct();
         break;
@@ -741,12 +771,12 @@ void CClassParser::parseToplevel()
           methodType = 0;
         break;
       case SIGNALSLOT_MAP:
-        //        if( !isDefiningClass )
-        //  parseSignalSlotMap();
+        if( !isDefiningClass )
+          parseSignalSlotMap();
         break;
       case SIGNALTEXT_MAP:
-        //if( !isDefiningClass )
-        //  parseSignalTextMap();
+        if( !isDefiningClass )
+          parseSignalTextMap();
         break;
       case '{':
         scopedepth++;
