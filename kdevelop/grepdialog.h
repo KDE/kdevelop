@@ -41,6 +41,9 @@ public:
 signals:
     void itemSelected(QString abs_filename, int line);
     
+public slots:
+		void slotSearchFor(QString pattern);
+		
 private slots:
     void dirButtonClicked();
     void templateActivated(int index);
@@ -67,5 +70,8 @@ private:
 
 
 #endif
+
+
+
 
 

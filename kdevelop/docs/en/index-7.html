@@ -269,7 +269,7 @@ used by the editor.
 <H4>Searching over Several Files</H4>
 
 <P>As the seach function only is referencing seaches over a single file that is currently visible, you're limited to this. But often
-you want to search for the same expression overall your project. Therefore, KDevelop contains a <CODE>grep</CODE>-frontend dialog, which
+you want to search for the same expression overall your project. Therefore, KDevelop contains a <CODE>grep</CODE>-dialog, which
 lets you search over all files that you specify either by setting the directory to start the search from and/or by mime-type.
 Specifying the exact directory and the mime-type will therefore reduce the time that KDevelop needs to read your files and display
 the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The seach dialog opens and
@@ -282,6 +282,7 @@ lets you enter:
 <LI>The directory to start form</LI>
 <LI>If the search is recursive over all included subdirectories</LI>
 </UL>
+<P>By default, the grep-dialog is set to start at your project directory and works recursively over implementation and header files.
 <P>You can even extend your search pattern by using the following options:
 <P>
 <OL>
@@ -306,6 +307,11 @@ lets you enter:
 number, select the resultline and press Enter or double click the result. The editor will automatically open the according file
 and place the cursor to the line of the result. This allows a complete specification for any search action and give out exact
 results.
+<P>KDevelop offers also some more specialized functionality to use grep within the editors and the browser. Select the expression you want
+to search for in either of the windows and press SHIFT+F2 or select "grep:&lt;your_expression&gt;" from the right button popup menu.
+This will ask grep to search for the selection in your project directory's files and will show the results immediately. Switching to
+the result works as described above. From within the browser window, it lasts to place the cursor over a word and start searching; the
+word under the cursor will be the search pattern.
 <P>
 <H4>Searching within Documentation</H4>
 

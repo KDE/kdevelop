@@ -111,7 +111,8 @@ public:
   void initKDlgMenuBar();
   void initKDlgToolBar();
   void initKDlgStatusBar();
-  void initKDlgKeyAccel();
+//  void initKDlgKeyAccel();  not needed because of setKeyAccel(); connecting and disconnecting accelerators
+
   /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
   void setKDlgCaption();
   			
@@ -206,8 +207,12 @@ public:
   void slotEditSearch();
   /** repeat last search */
   void slotEditRepeatSearch();
+  /** acts on grep to search the selected word by keyboard shortcut */
+	void slotEditSearchText();
   /** search in files, use grep and find*/
   void slotEditSearchInFiles();
+  /** called by popups in the edit and brwoser widgets to grep a string */
+	void slotEditSearchInFiles(QString);
   /** runs ispell check on the actual editwidget */
   void slotEditSpellcheck();
   /** opens the search and replace dialog */
@@ -455,10 +460,10 @@ public:
  
 
   void slotBufferMenu(const QPoint& pos);
-  void slotShowC();
+/*  void slotShowC();
   void slotShowHeader();
   void slotShowHelp();
-  void slotShowTools();
+  void slotShowTools();*/
   void slotToggleLast();
 
   void slotMenuBuffersSelected(int id);
@@ -714,3 +719,5 @@ private:
 };
 
 #endif
+
+

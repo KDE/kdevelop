@@ -63,8 +63,9 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
 	doc_pop->insertItem(i18n("Add Bookmark"),this, SIGNAL(signalBookmarkAdd()),0,ID_BOOKMARKS_ADD);
 	doc_pop->insertItem(i18n("View in new window"), this, SLOT(slotViewInKFM()),0,ID_VIEW_IN_KFM);
   doc_pop->insertSeparator();
+	doc_pop->insertItem(Icon("grep.xpm"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   doc_pop->insertItem(Icon("lookup.xpm"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
-
+	
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
   connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
     this, SLOT( slotPopupMenu( KHTMLView *, const char *, const QPoint & ) ) );
@@ -240,15 +241,19 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
     getSelectedText(text);
     doc_pop->setItemEnabled(ID_EDIT_COPY,true);
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,true);
+    doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,true);
 
     if(text.length() > 20 ){
       text = text.left(20) + "...";
     }
+    doc_pop->changeItem(Icon("grep.xpm"),i18n("grep: "+text), ID_EDIT_SEARCH_IN_FILES);
     doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "+ text),ID_HELP_SEARCH_TEXT);
   }
   else{
     doc_pop->setItemEnabled(ID_EDIT_COPY,false);
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,false);
+    doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,false);
+    doc_pop->changeItem(Icon("grep.xpm"),i18n("grep: "), ID_EDIT_SEARCH_IN_FILES);
     doc_pop->changeItem(Icon("lookup.xpm"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
   }
   doc_pop->popup(pnt);
@@ -261,9 +266,18 @@ void CDocBrowser::slotCopyText(){
   cb->setText( text );
 }
 
+
+
 void CDocBrowser::slotSearchText(){
   emit signalSearchText();
 }
+void CDocBrowser::slotGrepText(){
+	QString text;
+ 	getSelectedText(text);
+
+  emit signalGrepText(text);
+}
+
 void CDocBrowser::slotURLBack(){
   emit signalURLBack();
 }
@@ -615,6 +629,9 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
+
+
 
 
 

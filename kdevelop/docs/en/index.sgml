@@ -914,7 +914,7 @@ browser.<p>
 <item><bf/Paste		Ctrl+V/ inserts the clipboard contents at the current cursor position.<p>
 <item><bf/Indent		Ctrl+I/ Indent moves a selection to the right<p>
 <item><bf/UnIndent	Ctrl+U/ UnIndent moves a selection to the left<p>
-<item><bf/Insert File.../ Lets you select a file and inserts its contents at the current cursor position<p>
+<item><bf/Insert File...Ctrl+Insert/ Lets you select a file and inserts its contents at the current cursor position<p>
 <item><bf/Search...		Ctrl+F/Opens the Search dialog that looks for an expression in the current file. For a search across several
 files, "Search in files..." should be used.<p>
 <item><bf/Repeat Search	F3/ Repeats the last search for an expression. This also counts for searches that were made across the
@@ -926,7 +926,7 @@ text with a new expression.<p>
 <item><bf/Search in files...		Ctrl+Alt+F/Displays the "Search in files..." dialog, that handles <tt/grep/ on whole directories with
 wildcards. Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file
 and the cursor is set to the line of the search result<p>
-<item><bf/Select All/ Selects the whole text of the file currently opened in the top editing window<p>
+<item><bf/Select All  Ctrl+A/ Selects the whole text of the file currently opened in the top editing window<p>
 <item><bf/Deselect All/ Deselects the whole text of the current file. This is often used for multiple selections so you don't have
 to deselect each one separately<p>
 <item><bf/Invert Selection/ Inverts the selection, meaning that a selection becomes deselected and text which is not selected
@@ -939,14 +939,15 @@ becomes selected.<p>
 The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
 to jump errors in the code.
 <itemize>
-<item><bf/Line...	Ctrl+L/Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
+<item><bf/Goto Line...	Ctrl+G/Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
 linenumber is remembered and marked, so you can either jump to that line again or just enter a new linenumber you want to see.<p>
 <item><bf/Next Error		F4/Jumps to the next error KDevelop detects from the output. The output message of Make or other tools should
 give you a descriptive help what the problem is, so you can correct the error.<p>
 <item><bf/Previous Error		Shift+F4/ Jumps to the previous error that was reported.<p>
-<item><bf/Tree-View	Ctrl+T/en/disables the Tree window on the left side of the main view containing the Class Browser, LFV, RFV and
+<item><bf/Dialogeditor   Ctrl+D/ Switches to the dialogeditor <p>
+<item><bf/Tree-View	Shift+T/en/disables the Tree window on the left side of the main view containing the Class Browser, LFV, RFV and
 DOC-tree.<p>
-<item><bf/Output-View	Ctrl+G/en/disables the Output window on the bottom of the main view.<p>
+<item><bf/Output-View	Shift+O/en/disables the Output window on the bottom of the main view.<p>
 <item><bf/Toolbar/en/disables the toolbar.<p>
 <item><bf/Browser-Toolbar/en/disables the browser toolbar, containing the back, forward and search buttons for the browser<p>
 <item><bf/Statusbar	Ctrl+B/en/disables the statusbar.<p>
@@ -963,8 +964,10 @@ of projects
 version and other options.<p>
 <item><bf/Open/ Shows the Open Project dialog, where you can choose a KDevelop project file to be opened. After selection, the
 project will be loaded.<p>
-<item><bf/Close/Closes the current project. This is mostly done automatically when you quit KDevelop, invoke the KAppWizard or open
-another project.<p>
+<item><bf/Open recent project.../ contains a submenu with the last 5 opened projects. You can open a project more easily using the
+recent project menu.<p>
+<item><bf/Close/Closes the current project. This is mostly done automatically when you quit KDevelop, invoke the
+KAppWizard or open another project.<p>
 <item><bf/New Class.../Starts the class generator to create a new class that will be added to the current project. The class
 generator lets you specify classname, inheritance and filenames for the new class.<p>
 <item><bf/Add existing File(s)/ Opens a selection dialog where you can choose the files that you want to add to the current project and
@@ -974,7 +977,7 @@ your project will be rebuild by automake and autoconf to include the new subdire
 <item><bf/Add new translation file/ Opens a language selection dialog that lets you choose the translation file language that will be
 added to the project. This is mostly used by translators who can easily add their language to the project and work on the
 translation without having to care about the Makefile.am's<p>
-<item><bf/File Properties/ Opens the File Properties dialog showing a copy of the LFV and the project file options. Here, the
+<item><bf/File Properties Shift+F7/ Opens the File Properties dialog showing a copy of the LFV and the project file options. Here, the
 properties for your files have to be set like installation path and file type.<p>
 <item><bf/Make messages and merge/ This is intended to create the messages file for your project. The message file is the one
 containing all strings that are set up in the sources for internationalization and is used by translators to create the .po file
@@ -989,7 +992,7 @@ sgml2html will be used to do this.<p>
 containing the sources of your project. The end-user has to <tt/tar zxvf yourproject.tar.gz / to unpack it to a source directory and
 use the standard commands <tt>./configure, make </tt>and <tt/make install/.<p>
 </itemize>
-<item><bf/Options/ Opens the Project Options dialog that
+<item><bf/Options  F7/ Opens the Project Options dialog that
 lets you change various settings for your project. This could be a new version number or the compiler options to set to -02 for a
 release with optimization.<p>
 </itemize>
@@ -1001,14 +1004,14 @@ This section describes the Build menu that covers all actions to be done with ma
 help or API documentation.
 
 <itemize>
-<item><bf/Compile file.../Active, if the top editing window is the C++ Window. This only compiles the current implementation file
-and lets you save time in case you suspect errors.<p>
-<item><bf/Make/ Invokes the make-command to your project and builds the target.<p>
+<item><bf/Compile file... Ctrl+F8/Active, if the top editing window is the C++ Window. This only compiles the current implementation
+file and lets you save time in case you suspect errors.<p>
+<item><bf/Make  F8/ Invokes the make-command to your project and builds the target.<p>
 <item><bf/Rebuild All/ Rebuilds all object files and the target of you project.<p>
 <item><bf/Clean Rebuild All/ Cleans the project directory from all make-created files and rebuilds the target.<p>
-<item><bf/Stop Build/ Stops the current process.<p>
-<item><bf/Execute/ Executes your target after building the program with make.<p>
-<item><bf/Execute with Arguments/ Executes your target with arguments. First, a dialog appears to let you specify the execution
+<item><bf/Stop Build  F10/ Stops the current process.<p>
+<item><bf/Execute F9/ Executes your target after building the program with make.<p>
+<item><bf/Execute with Arguments Alt+F9/ Executes your target with arguments. First, a dialog appears to let you specify the execution
 arguments (which are saved in the project for the next session), then your application uses the entered commandline. Mind that your
 application program is started from the project directory directly<p>
 <item><bf/Debug.../ Opens KDbg in the Tools-Window to debug your
@@ -1068,15 +1071,17 @@ editing windows, each one configures it's bookmarks seperately.
 <itemize>
 <item><bf/Set Bookmark/ Opens a context-menu with up to nine configurable bookmarks. This allows setting a bookmark to a certain entry
 in the bookmarks menu by logical reasons.<p>
-<item><bf/Add Bookmark/ Adds the line of the current cursor position to the bookmarks menu as a bookmark. Mind that this could
-overwrite a bookmark set with the Set Bookmark-option.<p>
-<item><bf/Clear Bookmarks / Clears the bookmark-entries for the top editing window, e.g. if the Header-Window is visible and you call
-Clear Bookmarks, the entries for the Header-Window are deleted.<p>
+<item><bf/Add Bookmark  Ctrl+Alt+A/ Adds the line of the current cursor position to the bookmarks menu as a bookmark. Mind that this
+could overwrite a bookmark set with the Set Bookmark-option. If the browser is opened, a bookmark will be added to the
+Browser-Window bookmarks menu.<p>
+<item><bf/Clear Bookmarks Ctrl+Alt+C/ Clears the bookmark-entries for the top editing window or the browser, e.g. if
+the Header-Window is visible and you call Clear Bookmarks, the entries for the Header-Window are deleted.<p>
 <item><bf/Header-Window/ Contains the bookmark-list for the Header-Window. Selecting a bookmark will set the cursor to the selected
 bookmarks' line. Mind that bookmarks are only assigned to the file they are set to, so if you change to another file, the
 bookmarks are not deleted but choosing a bookmark won't change to the file they are assingned to as well.<p>
 <item><bf>C/C++-Window</bf> Contains the bookmark-list for the C/C++-Window. The preferences are the same as for the
 Header-Window.
+<item><bf>Browser Window</bf> Contains the browser bookmarks. Selecting a bookmark will open the browser with the selected page.
 </itemize>
 
 <sect2>Online Help
@@ -1085,14 +1090,16 @@ The Help-menu contains entries for navigating in the Helpbrowser as well as entr
 most recently used cases. Accessing additional online-documentation can be achieved with the DOC-tree in the treeview
 automatically opened (if Autoswitch is enabled) when changing to the Documentation Browser window.
 <itemize>
-<item><bf/Back / Opens the page opened before the actual one.<p>
-<item><bf/Forward / Opens the next page of the browser-history, available after a "Back"-action.<p>
+<item><bf/Back  Alt+ Left Arrow/ Opens the page opened before the actual one.<p>
+<item><bf/Forward Alt+ Right Arrow/ Opens the next page of the browser-history, available after a "Back"-action.<p>
 <item><bf/Search Marked Text		F2/ Scans the search-index for text currently marked in the editing windows or the browser-window. Afte
 the search, a result page is shown which lets you select the help-page to switch to. After choosing a page, the browser will
 highlight the found entry for the expression the search was invoked for. With the F3 key the next search result on the same page
 will be displayed if more than one hit was reported for the search on one page.<p>
 <item><bf/Search for Help on.../Opens the Search for Help on... dialog that lets you search for a specific expression you want help on.<p>
-<item><bf/Contents		F1/ Opens the User's Manual to KDevelop index page so you have access to this manual.<p>
+<item><bf/User Manual		F1/ Opens the User's Manual to KDevelop index page so you have access to this manual.<p>
+<item><bf/Programming Handbook / Opens the KDevelop Programming Handbook index page to access the programming manuals <p>
+<item><bf/Tip of the Day/ Opens the Tip of the Day dialog to inform you about KDevelop's features.<p>
 <item><bf/KDevelop Homepage/ Opens the KDevelop Homepage in the browser window if Internet access is provided.<p>
 <item><bf/Bug Report.../ Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by email.
 See <ref id="Bug Reporting" name="Bug Reporting"><p>
@@ -1107,7 +1114,7 @@ reference is not installed, an error page shows you how to get the reference and
 <item><bf/Project-User-Manual/ Opens the User manual's index file of your current project. This can be used to review the HTML-output
 generated by ksgml2html<p>
 <item><bf/About KDevelop.../ Shows the Aboutbox of KDevelop containing the used version number and the authors' names and
-email-adresses as well as reference to third-party software used in KDevelop.
+email-adresses as well as reference to the licensing of KDevelop.
 </itemize>
 
 <sect1>Keyboard Shortcuts
@@ -1174,19 +1181,25 @@ tabulator                                        TAB
 <code>
 delete letter left of cursor position            Backspace
 delete letter right of cursor position           Delete
-delete selected text                             Select text, then Backspace
+delete selected text                             Select text, then Backspace or Delete
+
 </code>
 <p>
 
 <sect3>Searching Text within the Editor
 <p>
 <code>
-open Goto Line... dialog                         STRG+L
+open Goto Line... dialog                         STRG+G
 open Find Text dialog                            STRG+F
 repeat last search                               F3
 open Search and Replace dialog                   STRG+R
+
+open Search in Files dialog (grep)               STRG+ALT+F
+search marked Text with Grep                     SHIFT+F2
+
 locate next error                                F4
 locate previous error                            SHIFT+F4
+
 </code>
 <p>
 
@@ -1196,6 +1209,8 @@ locate previous error                            SHIFT+F4
 search selected editor text in documentation     F2
 search selected browser text in documentation    F2
 display next search hit on the same page         F3
+
+search selected browser text within project			 SHIFT+F2
 </code>
 <p>
 
@@ -1210,8 +1225,8 @@ next page																				 Alt+ Right Arrow
 <sect3>Managing Bookmarks
 <p>
 <code>
-add bookmark                                     STRG+SHIFT+A
-clear bookmark list                              STRG+SHIFT+C
+add bookmark                                     STRG+ALT+A
+clear bookmark list                              STRG+ALT+C
 </code>
 <p>	
 
@@ -1226,32 +1241,30 @@ Symbol "Redo"                                    STRG+Y
 Symbol "Cut"                                     STRG+X
 Symbol "Copy"                                    STRG+C
 Symbol "Paste"                                   STRG+V
-Symbol "Compile File"                            STRG+F10
-Symbol "Make"                                    F9
-Symbol "Execute"                                 STRG+F9
-Symbol "Execute with Arguments"                  ALT+F10
+Symbol "Compile File"                            STRG+F8
+Symbol "Make"                                    F8
+Symbol "Execute"                                 F9
+Symbol "Execute with Arguments"                  ALT+F9
 Symbol "Dialog Editor"                           STRG+D
+Symbol "Back"                                    ALT+Left Arrow, if browser opened
+Symbol "Forward"                                 ALT+Right Arrow, if browser opened
 Symbol "Search Marked Text"                      F2
 </code>
 <p>
 
 <sect2>Window Management
 <p>
-<code>
-Change to Header/Resource Files window           STRG+1
-Change to C/C++ Files window                     STRG+2
-Change to Documentation Browser window           STRG+3
-Change to Tools window                           STRG+4
-</code>
+To switch to a certain window, press ALT plus the underlined letter in the window title, e.g. Tools would be Alt+T
 <p>
 
 <sect2>Shortcuts to Compilation Processes
 <p>
 <code>
-Compile current sourcefile                       STRG+F10
-Build current project target                     F9
+Compile current sourcefile                       STRG+F8
+Build current project target                     F8
 Execute target after Build process               STRG+F9
-Exectue target with Arguments                    ALT+F10
+Exectue target with Arguments                    ALT+F9
+Stop the current process                         F10
 </code>
 
 <sect>The Help System<label id="The Help System">
@@ -1411,7 +1424,7 @@ files are allowed to choose. Selecting OK will add the entry to the Doc-tree and
 <p>
 KDevelop includes a set of fuctions to help you search information within HTML documentation. To use these features, your system
 needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
-within the documentation. To set up the index, see <ref id="General Configuration" name="KDevelop Setup">, but the index is also
+within the documentation. To set up the index, see <ref id="General Configuration" name="KDevelop Setup">. The index is also
 automatically generated during the installation program.
 
 The search functions are available through several ways which you can choose from:
@@ -1426,6 +1439,11 @@ on..." icon from the toolbar, opening a search dialog where you can enter the ex
 </enum>
 Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu
 entries.
+
+The Helpbrowser also offers support for grep to search for a selection within your current project, e.g you've opened the documentation
+page for the <tt/KTMainWindow/ class (KDEUI library) and you want to know where in your code <tt/KTMainWindow/ appears. Mark
+<tt/KTMainWindow/ and either select "Grep: KTMainWindow" or press Shift+F2. The "Search in Files" dialog opens with the results about
+your grep search directly. Then you can choose an result line to jump to the according sourcecode.
 
 <sect>Working with the Editor<label id="Working with the Editor">
 <p>
@@ -1681,10 +1699,9 @@ used by the editor.
 To repeat searching for an expression entered in the search dialog, press F3.
 
 <sect2>Searching over Several Files
-
 <p>
 As the seach function only is referencing seaches over a single file that is currently visible, you're limited to this. But often
-you want to search for the same expression overall your project. Therefore, KDevelop contains a <tt/grep/-frontend dialog, which
+you want to search for the same expression overall your project. Therefore, KDevelop contains a <tt/grep/-dialog, which
 lets you search over all files that you specify either by setting the directory to start the search from and/or by mime-type.
 Specifying the exact directory and the mime-type will therefore reduce the time that KDevelop needs to read your files and display
 the results. To start a search over several files, select "Search in files..." from the "Edit"-menu. The seach dialog opens and
@@ -1697,6 +1714,8 @@ lets you enter:
 <item>The directory to start form
 <item>If the search is recursive over all included subdirectories
 </itemize>
+
+By default, the grep-dialog is set to start at your project directory and works recursively over implementation and header files.
 
 You can even extend your search pattern by using the following options:
 
@@ -1725,6 +1744,12 @@ After specifying your search, press "Search". The results are then displayed in 
 number, select the resultline and press Enter or double click the result. The editor will automatically open the according file
 and place the cursor to the line of the result. This allows a complete specification for any search action and give out exact
 results.
+
+KDevelop offers also some more specialized functionality to use grep within the editors and the browser. Select the expression you want
+to search for in either of the windows and press SHIFT+F2 or select "grep:&lt;your_expression&gt;" from the right button popup menu.
+This will ask grep to search for the selection in your project directory's files and will show the results immediately. Switching to
+the result works as described above. From within the browser window, it lasts to place the cursor over a word and start searching; the
+word under the cursor will be the search pattern.
 
 <sect2>Searching within Documentation
 <p>
@@ -3222,6 +3247,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
+
+
 
 
 

@@ -139,7 +139,7 @@ browser.<P>
 </LI>
 <LI><B>UnIndent Ctrl+U</B> UnIndent moves a selection to the left<P>
 </LI>
-<LI><B>Insert File...</B> Lets you select a file and inserts its contents at the current cursor position<P>
+<LI><B>Insert File...Ctrl+Insert</B> Lets you select a file and inserts its contents at the current cursor position<P>
 </LI>
 <LI><B>Search...                Ctrl+F</B>Opens the Search dialog that looks for an expression in the current file. For a search across several
 files, "Search in files..." should be used.<P>
@@ -156,7 +156,7 @@ text with a new expression.<P>
 wildcards. Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file
 and the cursor is set to the line of the search result<P>
 </LI>
-<LI><B>Select All</B> Selects the whole text of the file currently opened in the top editing window<P>
+<LI><B>Select All  Ctrl+A</B> Selects the whole text of the file currently opened in the top editing window<P>
 </LI>
 <LI><B>Deselect All</B> Deselects the whole text of the current file. This is often used for multiple selections so you don't have
 to deselect each one separately<P>
@@ -172,7 +172,7 @@ becomes selected.<P>
 <P>The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
 to jump errors in the code.
 <UL>
-<LI><B>Line...  Ctrl+L</B>Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
+<LI><B>Goto Line...     Ctrl+G</B>Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
 linenumber is remembered and marked, so you can either jump to that line again or just enter a new linenumber you want to see.<P>
 </LI>
 <LI><B>Next Error               F4</B>Jumps to the next error KDevelop detects from the output. The output message of Make or other tools should
@@ -180,10 +180,12 @@ give you a descriptive help what the problem is, so you can correct the error.<P
 </LI>
 <LI><B>Previous Error           Shift+F4</B> Jumps to the previous error that was reported.<P>
 </LI>
-<LI><B>Tree-View        Ctrl+T</B>en/disables the Tree window on the left side of the main view containing the Class Browser, LFV, RFV and
+<LI><B>Dialogeditor   Ctrl+D</B> Switches to the dialogeditor <P>
+</LI>
+<LI><B>Tree-View        Shift+T</B>en/disables the Tree window on the left side of the main view containing the Class Browser, LFV, RFV and
 DOC-tree.<P>
 </LI>
-<LI><B>Output-View      Ctrl+G</B>en/disables the Output window on the bottom of the main view.<P>
+<LI><B>Output-View      Shift+O</B>en/disables the Output window on the bottom of the main view.<P>
 </LI>
 <LI><B>Toolbar</B>en/disables the toolbar.<P>
 </LI>
@@ -207,8 +209,11 @@ version and other options.<P>
 <LI><B>Open</B> Shows the Open Project dialog, where you can choose a KDevelop project file to be opened. After selection, the
 project will be loaded.<P>
 </LI>
-<LI><B>Close</B>Closes the current project. This is mostly done automatically when you quit KDevelop, invoke the KAppWizard or open
-another project.<P>
+<LI><B>Open recent project...</B> contains a submenu with the last 5 opened projects. You can open a project more easily using the
+recent project menu.<P>
+</LI>
+<LI><B>Close</B>Closes the current project. This is mostly done automatically when you quit KDevelop, invoke the
+KAppWizard or open another project.<P>
 </LI>
 <LI><B>New Class...</B>Starts the class generator to create a new class that will be added to the current project. The class
 generator lets you specify classname, inheritance and filenames for the new class.<P>
@@ -222,7 +227,7 @@ your project will be rebuild by automake and autoconf to include the new subdire
 added to the project. This is mostly used by translators who can easily add their language to the project and work on the
 translation without having to care about the Makefile.am's<P>
 </LI>
-<LI><B>File Properties</B> Opens the File Properties dialog showing a copy of the LFV and the project file options. Here, the
+<LI><B>File Properties Shift+F7</B> Opens the File Properties dialog showing a copy of the LFV and the project file options. Here, the
 properties for your files have to be set like installation path and file type.<P>
 </LI>
 <LI><B>Make messages and merge</B> This is intended to create the messages file for your project. The message file is the one
@@ -243,7 +248,7 @@ use the standard commands <CODE>./configure, make </CODE>and <CODE>make install<
 </LI>
 </UL>
 </LI>
-<LI><B>Options</B> Opens the Project Options dialog that
+<LI><B>Options  F7</B> Opens the Project Options dialog that
 lets you change various settings for your project. This could be a new version number or the compiler options to set to -02 for a
 release with optimization.<P>
 </LI>
@@ -256,20 +261,20 @@ release with optimization.<P>
 help or API documentation.
 <P>
 <UL>
-<LI><B>Compile file...</B>Active, if the top editing window is the C++ Window. This only compiles the current implementation file
-and lets you save time in case you suspect errors.<P>
+<LI><B>Compile file... Ctrl+F8</B>Active, if the top editing window is the C++ Window. This only compiles the current implementation
+file and lets you save time in case you suspect errors.<P>
 </LI>
-<LI><B>Make</B> Invokes the make-command to your project and builds the target.<P>
+<LI><B>Make  F8</B> Invokes the make-command to your project and builds the target.<P>
 </LI>
 <LI><B>Rebuild All</B> Rebuilds all object files and the target of you project.<P>
 </LI>
 <LI><B>Clean Rebuild All</B> Cleans the project directory from all make-created files and rebuilds the target.<P>
 </LI>
-<LI><B>Stop Build</B> Stops the current process.<P>
+<LI><B>Stop Build  F10</B> Stops the current process.<P>
 </LI>
-<LI><B>Execute</B> Executes your target after building the program with make.<P>
+<LI><B>Execute F9</B> Executes your target after building the program with make.<P>
 </LI>
-<LI><B>Execute with Arguments</B> Executes your target with arguments. First, a dialog appears to let you specify the execution
+<LI><B>Execute with Arguments Alt+F9</B> Executes your target with arguments. First, a dialog appears to let you specify the execution
 arguments (which are saved in the project for the next session), then your application uses the entered commandline. Mind that your
 application program is started from the project directory directly<P>
 </LI>
@@ -345,11 +350,12 @@ editing windows, each one configures it's bookmarks seperately.
 <LI><B>Set Bookmark</B> Opens a context-menu with up to nine configurable bookmarks. This allows setting a bookmark to a certain entry
 in the bookmarks menu by logical reasons.<P>
 </LI>
-<LI><B>Add Bookmark</B> Adds the line of the current cursor position to the bookmarks menu as a bookmark. Mind that this could
-overwrite a bookmark set with the Set Bookmark-option.<P>
+<LI><B>Add Bookmark  Ctrl+Alt+A</B> Adds the line of the current cursor position to the bookmarks menu as a bookmark. Mind that this
+could overwrite a bookmark set with the Set Bookmark-option. If the browser is opened, a bookmark will be added to the
+Browser-Window bookmarks menu.<P>
 </LI>
-<LI><B>Clear Bookmarks </B> Clears the bookmark-entries for the top editing window, e.g. if the Header-Window is visible and you call
-Clear Bookmarks, the entries for the Header-Window are deleted.<P>
+<LI><B>Clear Bookmarks Ctrl+Alt+C</B> Clears the bookmark-entries for the top editing window or the browser, e.g. if
+the Header-Window is visible and you call Clear Bookmarks, the entries for the Header-Window are deleted.<P>
 </LI>
 <LI><B>Header-Window</B> Contains the bookmark-list for the Header-Window. Selecting a bookmark will set the cursor to the selected
 bookmarks' line. Mind that bookmarks are only assigned to the file they are set to, so if you change to another file, the
@@ -357,6 +363,7 @@ bookmarks are not deleted but choosing a bookmark won't change to the file they 
 </LI>
 <LI><B>C/C++-Window</B> Contains the bookmark-list for the C/C++-Window. The preferences are the same as for the
 Header-Window.</LI>
+<LI><B>Browser Window</B> Contains the browser bookmarks. Selecting a bookmark will open the browser with the selected page.</LI>
 </UL>
 <P>
 <H4>Online Help</H4>
@@ -365,9 +372,9 @@ Header-Window.</LI>
 most recently used cases. Accessing additional online-documentation can be achieved with the DOC-tree in the treeview
 automatically opened (if Autoswitch is enabled) when changing to the Documentation Browser window.
 <UL>
-<LI><B>Back </B> Opens the page opened before the actual one.<P>
+<LI><B>Back  Alt+ Left Arrow</B> Opens the page opened before the actual one.<P>
 </LI>
-<LI><B>Forward </B> Opens the next page of the browser-history, available after a "Back"-action.<P>
+<LI><B>Forward Alt+ Right Arrow</B> Opens the next page of the browser-history, available after a "Back"-action.<P>
 </LI>
 <LI><B>Search Marked Text               F2</B> Scans the search-index for text currently marked in the editing windows or the browser-window. Afte
 the search, a result page is shown which lets you select the help-page to switch to. After choosing a page, the browser will
@@ -376,7 +383,11 @@ will be displayed if more than one hit was reported for the search on one page.<
 </LI>
 <LI><B>Search for Help on...</B>Opens the Search for Help on... dialog that lets you search for a specific expression you want help on.<P>
 </LI>
-<LI><B>Contents         F1</B> Opens the User's Manual to KDevelop index page so you have access to this manual.<P>
+<LI><B>User Manual              F1</B> Opens the User's Manual to KDevelop index page so you have access to this manual.<P>
+</LI>
+<LI><B>Programming Handbook </B> Opens the KDevelop Programming Handbook index page to access the programming manuals <P>
+</LI>
+<LI><B>Tip of the Day</B> Opens the Tip of the Day dialog to inform you about KDevelop's features.<P>
 </LI>
 <LI><B>KDevelop Homepage</B> Opens the KDevelop Homepage in the browser window if Internet access is provided.<P>
 </LI>
@@ -403,7 +414,7 @@ reference is not installed, an error page shows you how to get the reference and
 generated by ksgml2html<P>
 </LI>
 <LI><B>About KDevelop...</B> Shows the Aboutbox of KDevelop containing the used version number and the authors' names and
-email-adresses as well as reference to third-party software used in KDevelop.</LI>
+email-adresses as well as reference to the licensing of KDevelop.</LI>
 </UL>
 <P>
 <H3><A NAME="ss5.5">5.5 Keyboard Shortcuts</A>
@@ -485,7 +496,7 @@ tabulator                                        TAB
 <PRE>
 delete letter left of cursor position            Backspace
 delete letter right of cursor position           Delete
-delete selected text                             Select text, then Backspace
+delete selected text                             Select text, then Backspace or Delete
 </PRE>
 <HR>
 <P>
@@ -495,10 +506,14 @@ delete selected text                             Select text, then Backspace
 <P>
 <HR>
 <PRE>
-open Goto Line... dialog                         STRG+L
+open Goto Line... dialog                         STRG+G
 open Find Text dialog                            STRG+F
 repeat last search                               F3
 open Search and Replace dialog                   STRG+R
+
+open Search in Files dialog (grep)               STRG+ALT+F
+search marked Text with Grep                     SHIFT+F2
+
 locate next error                                F4
 locate previous error                            SHIFT+F4
 </PRE>
@@ -513,6 +528,8 @@ locate previous error                            SHIFT+F4
 search selected editor text in documentation     F2
 search selected browser text in documentation    F2
 display next search hit on the same page         F3
+
+search selected browser text within project                      SHIFT+F2
 </PRE>
 <HR>
 <P>
@@ -533,8 +550,8 @@ next page                                                                       
 <P>
 <HR>
 <PRE>
-add bookmark                                     STRG+SHIFT+A
-clear bookmark list                              STRG+SHIFT+C
+add bookmark                                     STRG+ALT+A
+clear bookmark list                              STRG+ALT+C
 </PRE>
 <HR>
 <P>     
@@ -552,11 +569,13 @@ Symbol "Redo"                                    STRG+Y
 Symbol "Cut"                                     STRG+X
 Symbol "Copy"                                    STRG+C
 Symbol "Paste"                                   STRG+V
-Symbol "Compile File"                            STRG+F10
-Symbol "Make"                                    F9
-Symbol "Execute"                                 STRG+F9
-Symbol "Execute with Arguments"                  ALT+F10
+Symbol "Compile File"                            STRG+F8
+Symbol "Make"                                    F8
+Symbol "Execute"                                 F9
+Symbol "Execute with Arguments"                  ALT+F9
 Symbol "Dialog Editor"                           STRG+D
+Symbol "Back"                                    ALT+Left Arrow, if browser opened
+Symbol "Forward"                                 ALT+Right Arrow, if browser opened
 Symbol "Search Marked Text"                      F2
 </PRE>
 <HR>
@@ -564,15 +583,7 @@ Symbol "Search Marked Text"                      F2
 <P>
 <H4>Window Management</H4>
 
-<P>
-<HR>
-<PRE>
-Change to Header/Resource Files window           STRG+1
-Change to C/C++ Files window                     STRG+2
-Change to Documentation Browser window           STRG+3
-Change to Tools window                           STRG+4
-</PRE>
-<HR>
+<P>To switch to a certain window, press ALT plus the underlined letter in the window title, e.g. Tools would be Alt+T
 <P>
 <P>
 <H4>Shortcuts to Compilation Processes</H4>
@@ -580,10 +591,11 @@ Change to Tools window                           STRG+4
 <P>
 <HR>
 <PRE>
-Compile current sourcefile                       STRG+F10
-Build current project target                     F9
+Compile current sourcefile                       STRG+F8
+Build current project target                     F8
 Execute target after Build process               STRG+F9
-Exectue target with Arguments                    ALT+F10
+Exectue target with Arguments                    ALT+F9
+Stop the current process                         F10
 </PRE>
 <HR>
 <P>

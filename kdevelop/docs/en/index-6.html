@@ -176,7 +176,7 @@ files are allowed to choose. Selecting OK will add the entry to the Doc-tree and
 <P>KDevelop includes a set of fuctions to help you search information within HTML documentation. To use these features, your system
 needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
 within the documentation. To set up the index, see 
-<A HREF="index-12.html#General Configuration">KDevelop Setup</A>, but the index is also
+<A HREF="index-12.html#General Configuration">KDevelop Setup</A>. The index is also
 automatically generated during the installation program.
 <P>The search functions are available through several ways which you can choose from:
 <OL>
@@ -191,6 +191,10 @@ on..." icon from the toolbar, opening a search dialog where you can enter the ex
 
 Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu
 entries.
+<P>The Helpbrowser also offers support for grep to search for a selection within your current project, e.g you've opened the documentation
+page for the <CODE>KTMainWindow</CODE> class (KDEUI library) and you want to know where in your code <CODE>KTMainWindow</CODE> appears. Mark
+<CODE>KTMainWindow</CODE> and either select "Grep: KTMainWindow" or press Shift+F2. The "Search in Files" dialog opens with the results about
+your grep search directly. Then you can choose an result line to jump to the according sourcecode.
 <P>
 <P ALIGN="RIGHT">
 

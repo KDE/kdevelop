@@ -1,3 +1,8 @@
+1999-06-11  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed menu accelerators and added some more...;-)
+	* added grep-icon and support for grep by context menus within editors and browser to search selected text
+		YACF - Yet another cool feature... 	
+
 1999-06-11 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed even more parsing bugs. The parser seems to handle all
 	  linux kernel headers now!

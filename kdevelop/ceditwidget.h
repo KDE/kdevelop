@@ -53,7 +53,8 @@ public:
 public slots:
 	void spellcheck();
 	void spellcheck2(KSpell*);
-	
+	void slotGrepText();
+		
 public: // Public queries
   QString markedText();
   QString getName();
@@ -79,6 +80,7 @@ protected:
  void slotLookUp();
   signals:
  void  lookUp(QString text);
+ void grepText(QString text);
  void  bufferMenu(const QPoint&);
 
 private:
@@ -88,6 +90,8 @@ private:
 };
 
 #endif
+
+
 
 
 

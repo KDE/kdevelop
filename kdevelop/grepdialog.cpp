@@ -356,6 +356,12 @@ void GrepDialog::slotSearch()
     childproc->start(KProcess::NotifyOnExit, KProcess::Stdout);
 }
 
+void GrepDialog::slotSearchFor(QString pattern){
+		slotClear();
+		pattern_edit->clear();
+		pattern_edit->setText(pattern);
+		slotSearch();
+}
 
 void GrepDialog::finish()
 {
@@ -413,5 +419,10 @@ void GrepDialog::slotClear()
 void  GrepDialog::setDirName(QString dir){
   dir_edit->setText(dir);
 }
+
+
+
+
+
 
 

@@ -63,6 +63,7 @@ public slots:
   void slotURLBack();
   void slotURLForward();
   void slotSearchText();
+	void slotGrepText();
 	void slotSetFileTitle(const char* title);
 	void slotViewInKFM();
 		
@@ -70,6 +71,7 @@ public slots:
   void signalURLBack();
   void signalURLForward();
   void signalSearchText();
+  void signalGrepText(QString text);
 	void signalBookmarkAdd();
 	void enableStop(int);	
 protected:
@@ -189,6 +191,9 @@ public:
 };
 
 #endif
+
+
+
 
 
 

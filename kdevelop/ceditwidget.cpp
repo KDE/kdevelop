@@ -45,6 +45,7 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   pop->setItemEnabled(ID_EDIT_COPY,false);
   pop->setItemEnabled(ID_EDIT_PASTE,false);
   pop->insertSeparator();
+  pop->insertItem(Icon("grep.xpm"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
   pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
   bookmarks.setAutoDelete(true);
 
@@ -259,6 +260,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     if(str.length() > 20 ){
       str = str.left(20) + "...";
     }
+    pop->changeItem(Icon("grep.xpm"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
     pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
 
 
@@ -269,6 +271,10 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+void CEditWidget::slotGrepText(){
+    emit grepText(searchtext);
+}
+
 
 
 

@@ -389,6 +389,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload){
 }
 
 void CKDevelop::switchToFile(QString filename, int lineNo){
+  lasttab = s_tab_view->getCurrentTab();
   switchToFile( filename, false);
   edit_widget->setCursorPosition( lineNo, 0 );
 }
@@ -953,6 +954,8 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
+
 
 
 

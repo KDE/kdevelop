@@ -420,6 +420,30 @@ void CKDevelop::slotEditSearchInFiles(){
   }
   grep_dlg->show();
 }
+
+void CKDevelop::slotEditSearchInFiles(QString search){
+  slotStatusMsg(i18n("Searching in Files..."));
+  if(project){
+    grep_dlg->setDirName(prj->getProjectDir());
+  }
+  grep_dlg->show();
+	grep_dlg->slotSearchFor(search);
+}
+
+void CKDevelop::slotEditSearchText(){
+  QString text;
+  if(s_tab_view->getCurrentTab()==BROWSER){
+    browser_widget->getSelectedText(text);
+  }
+  else{
+    text = edit_widget->markedText();
+    if(text == ""){
+      text = edit_widget->currentWord();
+    }
+  }
+  slotEditSearchInFiles(text);
+}
+
 void CKDevelop::slotEditReplace(){
   slotStatusMsg(i18n("Replacing..."));
   edit_widget->replace();
@@ -1267,6 +1291,7 @@ void CKDevelop::slotHelpSearch(){
   CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
   connect(help_srch_dlg,SIGNAL(signalFind(QString)),this,SLOT(slotHelpSearchText(QString)));
   help_srch_dlg->exec();
+	delete help_srch_dlg;
 }
 
 void CKDevelop::slotHelpReference(){
@@ -2082,22 +2107,6 @@ void CKDevelop::slotSCurrentTab(int item){
     s_tab_view->setCurrentTab(item);
 }
 
-void CKDevelop::slotShowC() {
-    s_tab_view->setCurrentTab( CPP );
-}
-
-void CKDevelop::slotShowHeader() {
-    s_tab_view->setCurrentTab( HEADER );
-}
-
-void CKDevelop::slotShowHelp() {
-  s_tab_view->setCurrentTab( BROWSER );
-}
-
-void CKDevelop::slotShowTools() {
-  s_tab_view->setCurrentTab( TOOLS );
-}
-
 void CKDevelop::slotToggleLast() {
   if ( lasttab != s_tab_view->getCurrentTab() )
     s_tab_view->setCurrentTab( lasttab );
@@ -2373,6 +2382,13 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
+
+
+
+
 
 
 

@@ -61,7 +61,7 @@ void CKDevelop::initKDlg(){
   kdlg_tabctl->setCurrentTab(1);// dialogs
   
   initKDlgMenuBar();
-  initKDlgKeyAccel();
+//  initKDlgKeyAccel();
   initKDlgToolBar();
   
   initKDlgStatusBar();
@@ -401,7 +401,7 @@ void CKDevelop::initKDlgStatusBar(){
   }
 }
 
-
+/*
 void CKDevelop::initKDlgKeyAccel(){
   accel->connectItem( KAccel::Open , kdlgedit, SLOT(slotFileOpen()) );
   accel->connectItem( KAccel::Close , kdlgedit, SLOT(slotFileClose()) );
@@ -419,7 +419,7 @@ void CKDevelop::initKDlgKeyAccel(){
 
   accel->readSettings();
 }
-
+*/
 void CKDevelop::setKDlgCaption()
 {
   setCaption(kdlg_caption);
@@ -440,6 +440,11 @@ void CKDevelop::slotHelpDlgNotes()
 
   delete readmedlg;
 }
+
+
+
+
+
 
 
 

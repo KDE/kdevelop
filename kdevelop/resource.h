@@ -35,7 +35,6 @@
 
 #define ID_FILE_CLOSE               10060
 
-
 #define ID_FILE_PRINT               10070
 
 #define ID_FILE_QUIT                10080
@@ -97,7 +96,6 @@
 #define ID_PROJECT_ADD_NEW_TRANSLATION_FILE 13285
 #define ID_PROJECT_REMOVE_FILE      13290
 #define ID_PROJECT_COMPILE_FILE     13200
-
 
 #define ID_PROJECT_WORKSPACES        13101
 #define ID_PROJECT_WORKSPACES_1      13103
@@ -270,69 +268,66 @@
 #define ID_KDLG_STATUS_WH           2003
 
 ///////////////////////////////////////////////////////////////////
-// KEY-VALUES
+// KEYBOARD ACCELERATORS
+// NOTE:
+//	CTRL+F1-F8 blocked by kpanel
+//	CTRL+Alt+F1-Fx blocked to switch to konsoles
+//	Alt+F1  K-Menu
+//  Alt+F2  KDE execute
+//	Alt+F3  Window menu
 
-///////////////////////////////////////////////////////////////////
-// File-menu entries
-#define IDK_FILE_NEW	       					CTRL+Key_N
-#define IDK_FILE_OPEN	       					CTRL+Key_O
-#define IDK_FILE_SAVE	       					CTRL+Key_S
-#define IDK_FILE_PRINT         				CTRL+Key_P
-#define IDK_FILE_CLOSE	       				CTRL+Key_W
-#define IDK_FILE_QUIT	       					CTRL+Key_Q
+#define IDK_HELP_CONTENTS							Key_F1							// standard key
 
-///////////////////////////////////////////////////////////////////
-// Edit-menu entries
-#define IDK_EDIT_UNDO	       					CTRL+Key_Z
-#define IDK_EDIT_REDO	       					CTRL+Key_Y
-
-#define IDK_EDIT_CUT	       					CTRL+Key_X
-#define IDK_EDIT_COPY	       					CTRL+Key_C
-#define IDK_EDIT_PASTE								CTRL+Key_V
+#define IDK_HELP_SEARCH_TEXT					Key_F2
+#define IDK_EDIT_GREP_IN_FILES				SHIFT+Key_F2
 
 #define IDK_EDIT_REPEAT_SEARCH				Key_F3
-#define IDK_EDIT_SEARCH_IN_FILES			CTRL+ALT+Key_F
 
-#define IDK_EDIT_INDENT								CTRL+Key_I
-#define IDK_EDIT_UNINDENT							CTRL+Key_U
-
-///////////////////////////////////////////////////////////////////
-// View-menu entries
-#define IDK_VIEW_GOTO_LINE	    			CTRL+Key_L
 #define IDK_VIEW_NEXT_ERROR           Key_F4
 #define IDK_VIEW_PREVIOUS_ERROR       SHIFT+Key_F4
-#define IDK_VIEW_TREEVIEW	    				CTRL+Key_T
-#define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_G
+
+#define IDK_PROJECT_OPTIONS						Key_F7
+#define IDK_PROJECT_FILE_PROPERTIES		SHIFT+Key_F7
+
+#define IDK_BUILD_MAKE								Key_F8
+#define IDK_BUILD_COMPILE_FILE	      CTRL+Key_F8
+#define IDK_BUILD_MAKE_WITH						ALT+Key_F8
+
+#define IDK_BUILD_RUN									Key_F9
+#define IDK_BUILD_RUN_WITH_ARGS       ALT+Key_F9
+
+#define IDK_BUILD_STOP								Key_F10
+
 #define IDK_VIEW_PREVIEW							CTRL+Key_Space
+#define IDK_EDIT_INSERT_FILE					CTRL+Key_Insert      // standard key
 
-///////////////////////////////////////////////////////////////////
-// Project-menu entries 
-
-///////////////////////////////////////////////////////////////////
-// Build-menu entries 
-#define IDK_BUILD_COMPILE_FILE	      CTRL+Key_F10
-#define IDK_BUILD_MAKE								Key_F9
-#define IDK_BUILD_MAKE_WITH						ALT+Key_F9
-#define IDK_BUILD_RUN									CTRL+Key_F9
-#define IDK_BUILD_RUN_WITH_ARGS       ALT+Key_F10
-
-///////////////////////////////////////////////////////////////////
-// Tools-menu entries 
-#define IDK_TOOLS_KDEVKDLG            CTRL+Key_D
-///////////////////////////////////////////////////////////////////
-// Options-menu entries 
-
-///////////////////////////////////////////////////////////////////
-// Bookmarks-menu entries
+#define IDK_EDIT_SELECT_ALL						CTRL+Key_A
 #define IDK_BOOKMARKS_ADD							CTRL+ALT+Key_A
+#define IDK_EDIT_COPY	       					CTRL+Key_C						// standard key
 #define IDK_BOOKMARKS_CLEAR						CTRL+ALT+Key_C
+#define IDK_TOOLS_KDEVKDLG            CTRL+Key_D
+#define IDK_EDIT_SEARCH								CTRL+Key_F  					// standard key
+#define IDK_EDIT_SEARCH_IN_FILES			CTRL+ALT+Key_F
+#define IDK_VIEW_GOTO_LINE	    			CTRL+Key_G
 
-///////////////////////////////////////////////////////////////////
-// Help-menu-entries
-#define IDK_HELP_SEARCH_TEXT					Key_F2				
-#define IDK_HELP_CONTENTS							Key_F1
+#define IDK_EDIT_INDENT								CTRL+Key_I
 
-#define IDK_TOGGLE_LAST        				CTRL+Key_B
+#define IDK_TOGGLE_LAST        				CTRL+Key_L
+
+#define IDK_FILE_NEW	       					CTRL+Key_N						// standard key
+#define IDK_FILE_OPEN	       					CTRL+Key_O						// standard key
+#define IDK_VIEW_OUTPUTVIEW	    			SHIFT+Key_O
+#define IDK_FILE_PRINT         				CTRL+Key_P						// standard key
+#define IDK_FILE_QUIT	       					CTRL+Key_Q						// standard key
+#define IDK_EDIT_REPLACE							CTRL+Key_R						// standard key
+#define IDK_FILE_SAVE	       					CTRL+Key_S						// standard key
+#define IDK_VIEW_TREEVIEW	    				SHIFT+Key_T
+#define IDK_EDIT_UNINDENT							CTRL+Key_U
+#define IDK_EDIT_PASTE								CTRL+Key_V						// standard key
+#define IDK_FILE_CLOSE	       				CTRL+Key_W						// standard key
+#define IDK_EDIT_CUT	       					CTRL+Key_X						// standard key
+#define IDK_EDIT_REDO	       					CTRL+Key_Y						
+#define IDK_EDIT_UNDO	       					CTRL+Key_Z						// standard key
 
 
 ///////////////////////////////////////////////////////////////////
@@ -354,6 +349,10 @@
 ///////////////////////////////////////////////////////////////////
 // Create cases for entries and connect them to change statusBar entry
 #define ON_STATUS_MSG(id, message)     case id:  slotStatusHelpMsg(message);break;
+
+
+
+
 
 
 
