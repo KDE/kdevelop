@@ -262,8 +262,12 @@ protected:
    virtual bool eventFilter(QObject *obj, QEvent *e);
    /** If attached, the childframe will be activated and the MDI taskbar button will be pressed. Additionally, the
     *  memorized old focused child widget of this is focused again.
+    *  Sends the focusInEventOccurs signal befor changing the focus and the 
+    *  gotFocus signal after changing the focus.
     */
    virtual void focusInEvent(QFocusEvent *e);
+   /** send the lostFocus signal */
+   virtual void focusOutEvent(QFocusEvent *e);
    /** Internally used for the minimize/maximize/restore mechanism when in attach mode.
     */
    virtual void resizeEvent(QResizeEvent *e);
@@ -279,10 +283,19 @@ signals:
    /** Internally used by @ref QextMdiChildView::detach to send it as command to the mainframe.
     */
    void detachWindow( QextMdiChildView*,bool);
-   /** Internally used to send information to the mainframe that this MDI child view is focused.
+   /** Is sent when this MDI child view is going to receive focus (before actually changing the focus).
+    *  Internally used to send information to the mainframe that this MDI child view is focused.
     *  See @ref QextMdiChildView::focusInEvent
     */
    void focusInEventOccurs( QextMdiChildView*);
+   /** Is sent when this MDI child has received the focus (after actually changing the focus).
+    *  See @ref QextMdiChildView::focusInEvent
+    */
+   void gotFocus( QextMdiChildView*);
+   /** Is sent when this MDI child view has lost the focus (after actually changing the focus).
+    *  See @ref QextMdiChildView::focusOutEvent
+    */
+   void lostFocus( QextMdiChildView*);
    /** Internally used to send information to the mainframe that this MDI child view wants to be closed.
     *  See @ref QextMdiChildView::closeEvent and @ref QextMdiMainFrm::closeWindow
     */

@@ -291,6 +291,8 @@ QPixmap * QextMdiChildView::myIconPtr()
 
 void QextMdiChildView::focusInEvent(QFocusEvent *)
 {
+   // XXX TODO: call QWidget::focusInEvent() ???
+
    //qDebug("ChildView::focusInEvent");
    emit focusInEventOccurs( this);
 
@@ -298,15 +300,27 @@ void QextMdiChildView::focusInEvent(QFocusEvent *)
       //qDebug("ChildView::focusInEvent 2");
       m_focusedChildWidget->setFocus();
    }
-   else
+   else {
       if( m_firstFocusableChildWidget != 0L) {
          //qDebug("ChildView::focusInEvent 3");
          m_firstFocusableChildWidget->setFocus();
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }
+   }
+
+   emit gotFocus(this);
 }
 
-//============= focusInEvent ===============//
+//============= focusOutEvent ===============//
+
+void QextMdiChildView::focusOutEvent(QFocusEvent* e)
+{
+   QWidget::focusOutEvent(e);
+
+   emit lostFocus( this);
+}
+
+//============= resizeEvent ===============//
 
 void QextMdiChildView::resizeEvent(QResizeEvent* e)
 {
