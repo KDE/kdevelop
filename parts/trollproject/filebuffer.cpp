@@ -21,6 +21,8 @@ FileBuffer::~FileBuffer()
 {
   for ( FileBufferList::Iterator it = m_subBuffers.begin(); it != m_subBuffers.end(); ++it )
     delete *it;
+  for ( ValuesIgnoreList::Iterator it = m_valuesIgnore.begin(); it != m_valuesIgnore.end(); ++it )
+    delete *it;  
   m_subBuffers.clear();
 }
 
@@ -547,7 +549,7 @@ QStringList FileBuffer::popBlock(const Caret &blockStart, const Caret &blockEnd)
 }
 
 /**
- * Handling qmake scopes means handling two types og scopes
+ * Handling qmake scopes means handling two types of scopes
  * 1. bracket scopes s1:s2:...:sn{ . . . }
  * 2. non-bracketscopes s1:s2:...:sn:v1 = ... [\ ... [\ ...]]
  */
@@ -723,4 +725,74 @@ bool FileBuffer::getAllExcludeValues(const QString &variable,QStringList &minusV
     minusTmp[i] = getScopeName() + "-" + minusTmp[i];
   minusValues += minusTmp;
   return true;
+}
+
+
+void FileBuffer::filterOutIgnoreValues(const QString &variable,QString& line,QStringList& ignoreList)
+//===================================================================================================
+{
+  QStringList qmakeFunctions = 
+    QStringList::split(',',"join(,member(,find(,contains(,count(,error(,exists(,"
+                       "include(,isEmpty(,system(,message(,infile(,$(");
+                                              
+  int len=0;
+  int closestMatch = -1;
+  for (uint i=0; i<qmakeFunctions.count(); i++)
+  {
+    int match = line.find(qmakeFunctions[i],0);
+    if (match==-1)
+      continue;
+    if(closestMatch==-1 ||
+       closestMatch>match)
+    {
+      closestMatch = match;
+      len=qmakeFunctions[i].length();
+    }
+  }
+  int startpos = closestMatch;   
+
+  while (startpos>-1)
+  {
+    int bracketCount=1;
+    while (bracketCount>0 && startpos+len<(int)line.length())
+    {
+      if (line[startpos+len]=='(')
+        bracketCount++;
+      if (line[startpos+len]==')')
+        bracketCount--;
+      len++;
+    }
+    
+    getValuesIgnore(variable)->values.append(line.mid(startpos,len));
+    line = line.left(startpos)+line.right(line.length()-startpos-len);
+    
+    closestMatch=-1;
+    for (uint i=0; i<qmakeFunctions.count(); i++)
+    {
+      int match = line.find(qmakeFunctions[i],startpos);
+      if (match==-1)
+        continue;
+      if(closestMatch==-1 ||
+        closestMatch>match)
+      {
+        closestMatch = match;
+        len=qmakeFunctions[i].length();
+      }
+    }
+    startpos = closestMatch;
+  }
+
+}
+
+ValuesIgnore* FileBuffer::getValuesIgnore(const QString &variable)
+//================================================================
+{
+  ValuesIgnoreList::iterator it;
+  for ( it = m_valuesIgnore.begin(); it != m_valuesIgnore.end(); ++it )
+    if ((*it)->variable == variable)
+      return (*it);
+  ValuesIgnore* newVar = new ValuesIgnore;
+  newVar->variable = variable;  
+  m_valuesIgnore.append(newVar);
+  return newVar; 
 }

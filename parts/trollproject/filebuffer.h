@@ -18,6 +18,15 @@
 #include <qfile.h>
 #include "caret.h"
 
+class ValuesIgnore
+{
+public:
+  QString           variable;
+  QStringList       values;
+};
+
+typedef QValueList<ValuesIgnore*> ValuesIgnoreList;
+
 class FileBuffer;
 typedef QValueList<FileBuffer*> FileBufferList;
 
@@ -66,11 +75,15 @@ public:
   void              setValues(const QString &variable,QStringList values,FileBuffer::ValueSetMode append=VSM_APPEND, int valuesPerRow=3);
   bool              getAllExcludeValues(const QString &variable,QStringList &minusValues,int depth=0);
   void              getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes);
+  void              filterOutIgnoreValues(const QString &variable,QString& line,QStringList& ignoreList);
+  ValuesIgnore*     getValuesIgnore(const QString &variable);
 
 private:
   QString           m_scopeName;
   QStringList       m_buffer;
   FileBufferList    m_subBuffers;
+  ValuesIgnoreList  m_valuesIgnore;
+  
 };
 
 #endif
