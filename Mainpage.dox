@@ -17,7 +17,7 @@ and FAQs can be found at
 the <a href="http://www.kdevelop.org">KDevelop website</a>.
 
 
-\section status Current Staus
+\section status Current Status
 
 Here you can see the current \ref requirements and the \ref features.
 There is also a \ref LangSupportStatus page.
@@ -25,12 +25,12 @@ There is also a \ref LangSupportStatus page.
 
 \section expand How to expand KDevelop
 
-First of all read the \ref KDev3Arch then you can find more information on how to expand KDevelop on:
+First of all read the \ref KDev3Arch then you can find more information on how to expand KDevelop:
   - \ref howToExtend
   - \ref howToAddNewLanguage
   - \ref howToAddTemplates
 
-After you expanded KDevelop capabilities you migth also want to find out \ref howToDocument.
+Additionally you may also want to find out \ref howToDocument.
 
 \section PlannedTasks Planned tasks
 
