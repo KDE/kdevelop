@@ -98,12 +98,12 @@ dist=true
 install=false
 type=DATA
 [Workspace_1]
-openfiles=Unbenannt.h,Unbenannt.cpp,/home/rnolden/Development/kdevelop/kdevelop/main.cpp,/home/rnolden/Development/kdevelop/doc/en/addendum/index.sgml,/home/rnolden/Development/kdevelop/doc/en/welcome/index.sgml,/home/rnolden/Development/kdevelop/doc/en/tutorial/index.sgml,/home/rnolden/Development/kdevelop/doc/en/programming/index.sgml,/home/rnolden/Development/kdevelop/doc/en/manual/index.sgml,/home/rnolden/Development/kdevelop/AUTHORS,/home/rnolden/Development/kdevelop/BUGS,/home/rnolden/Development/kdevelop/FAQ,
+openfiles=Untitled.h,Untitled.cpp,/home/sheidric/kdevelop/kdevelop/main.cpp,/home/sheidric/kdevelop/kdevelop/ckappwizard.cpp,
 show_outputview=true
 show_treeview=true
-header_file=/home/rnolden/Development/kdevelop/FAQ
-cpp_file=/home/rnolden/Development/kdevelop/kdevelop/main.cpp
-browser_file=file:/usr/lib/qt-1.42/doc/html/qdir.html
+header_file=Untitled.h
+cpp_file=/home/sheidric/kdevelop/kdevelop/ckappwizard.cpp
+browser_file=file:/home/sheidric/docs/kdecore/KConfig.html
 [kdevelop/print/cprintdlg.cpp]
 install_location=
 dist=true
@@ -1689,7 +1689,7 @@ version_control=CVS
 project_type=normal_empty
 author=The KDevelop Team
 sub_dir=kdevelop/
-lfv_open_groups=SGML Sources,Others,
+lfv_open_groups=Sources,
 workspace=1
 project_name=KDevelop
 version='1.0 Beta 1'

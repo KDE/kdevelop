@@ -1,3 +1,6 @@
+1999-08-05  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* fixed the problem with ksgml2html messagebox
+
 1999-08-05  Jonas Nordin  <jonas.nordin@cenacle.se>
 	* fixed the way the ClassTool send it's messages to view definitions/
 	  declarations.

@@ -2238,7 +2238,7 @@ void CKAppWizard::slotProcessExited() {
   disconnect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
 
-  if (CToolClass::searchProgram("ksgml2html")) {
+  if (CToolClass::searchInstProgram("ksgml2html")) {
     KShellProcess process;
     QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
     process.clearArguments();
