@@ -461,9 +461,6 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
 }
 
 KWriteDoc::~KWriteDoc() {
-
-  debug("deleting KWriteDoc !");
-
   if (highlight)
     highlight->release();
   delete fileConfig;

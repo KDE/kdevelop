@@ -390,13 +390,9 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
 }
 
 KWriteView::~KWriteView() {
-  debug("KWriteView destructor !\n");
-
   if(kWriteDoc) {
     kWriteDoc->removeView(this);
   }
-
-  debug("KWriteView release buffer !\n");
   releaseBuffer(this);
 }
 
@@ -886,7 +882,7 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd, kWrite->flags() & cfShowTabs);
     bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h);
 
-    leftBorder->paintLine(line);
+   leftBorder->paintLine(line);
   }
   paint.end();
 }
@@ -1417,8 +1413,6 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
 }
 
 KWrite::~KWrite() {
-  debug("KWrite destructor !\n");
-
   delete kWriteView;
 }
 

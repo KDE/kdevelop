@@ -317,7 +317,6 @@ void CCreateDocDatabaseDlg::slotReceivedStdout(KProcess*,char* buffer,int count)
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  //qDebug(test);
 }
 
 void CCreateDocDatabaseDlg::slotReceivedStderr(KProcess*,char* buffer, int count)
@@ -325,7 +324,6 @@ void CCreateDocDatabaseDlg::slotReceivedStderr(KProcess*,char* buffer, int count
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  //qDebug(test);
 }
 
 void CCreateDocDatabaseDlg::slotProcessExited(KProcess*)

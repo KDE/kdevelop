@@ -403,14 +403,12 @@ void CUpdateKDEDocDlg::slotReceivedStdout(KProcess*,char* buffer,int count)
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  //qDebug(test);
 }
 void CUpdateKDEDocDlg::slotReceivedStderr(KProcess*,char* buffer, int count)
 {
   QCString test(buffer, count);
   m_pShellProcessOutputLines->insertLine(test);
   m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
-  //qDebug(test);
 }
 
 void CUpdateKDEDocDlg::slotProcessExited(KProcess*)
