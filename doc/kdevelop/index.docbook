@@ -1299,8 +1299,8 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 <title>Converting old KDevelop project files</title>
 
 <para>
-&kdevelop; 3.0 ships with a utility called <filename>kdevprj2kdevelop</filename>.
-This utility can be used to convert older &kdevelop; project files to 3.0 files.
+&kdevelop; allows you to open old KDevelop 2.x project files and convert them to &kdevelop; files.
+To do so go to <guimenuitem>Open Project...</guimenuitem> and select <guilabel>KDevelop 2 project files</guilabel> in the <guilabel>Filter:</guilabel>. Then select project file you want to open. The project gets converted to &kdevelop; and saved as a <guilabel>&kdevelop; project file</guilabel>.
 </para>
 
 </sect1> <!-- convertingold -->
