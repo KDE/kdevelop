@@ -53,11 +53,22 @@ if ($processes{USER} eq "yes") {
   #create the html-files
   printflush (STDOUT,"configure files...\n");
   chdir ($underDirectory . "/docs/en");
-  if (-e "index.nif") {
-    system ("ksgml2html index.sgml en");
+
+  if ( 	$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
+       	$processes{APPLICATION} eq "kde2mdi")
+  {
+     # FIXME: there should be the proper call for docbooks
   }
-  else {
-    system ("sgml2html index.sgml");
+  else
+  {
+    if (-e "index.nif")
+    {
+      system ("ksgml2html index.sgml en");
+    }
+    else
+    {
+      system ("sgml2html index.sgml");
+    }
   }
 }
 
