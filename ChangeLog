@@ -1,10 +1,13 @@
+
 1999-02-13  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added Make-Command selection functionality to decide if
 		make, gmake or dmake should be used to initialize the make-process
 	* replaced new file icon with open project, added undo and redo icons and edited
 		the build-command icons, added icon for compile file
 	* set project_file entry in closeEvent to "" before the actual project_file is written
-	
+	* re-done changes for slotBuildDebug() and the processes.pl for changing the resource.h file
+		VERSION string for a generated application--otherwise it will not compile...
+		
 1999-02-12  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* added the fileprintdialog to kdevelop
 	* added the printconfigdialog to kdevelop

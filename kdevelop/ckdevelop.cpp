@@ -812,7 +812,8 @@ void CKDevelop::slotBuildDebug(){
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
-  swallow_widget->setExeString("kdbg "+ prj->getProjectDir() + prj->getSubDir() +"/" +  prj->getBinPROGRAM());
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
+  swallow_widget->setExeString("kdbg "+ prj->getBinPROGRAM());
   swallow_widget->sWExecute();
   swallow_widget->init();
   
