@@ -87,15 +87,15 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name )
 
   setCaption(i18n("KDevelop Installation"));
 
-  WizardWelcomePage* pWizWelcomePage            = new WizardWelcomePage(this,"welcome_page", i18n("Welcome"), "/home/falk/kdevinstall/kdevinstall/pics/test.png");
-  WizardSyntaxHlPage* pWizSyntaxHlPage          = new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Syntax highlighting style"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
-  WizardUIModePage* pWizUIModePage              = new WizardUIModePage(this,"uimode_page", i18n("User interface mode"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
-  WizardToolsCheckPage* pWizToolsCheckPage      = new WizardToolsCheckPage(this, "toolscheck_page", i18n("Program test results"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
-  WizardQtDocPage* pWizQtDocPage                = new WizardQtDocPage(this, "qtdoc_page", i18n("Qt documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
-  WizardKDEDocPage* pWizKDEDocPage              = new WizardKDEDocPage(this, "kdedoc_page", i18n("KDE documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
-  WizardCreateKDEDocPage* pWizCreateKDEDocPage  = new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Creating the KDE documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
-  WizardIndexDocuPage* pWizIndexDocuPage        = new WizardIndexDocuPage(this, "indexdocu_page", i18n("Indexing the documentation"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
-  WizardLastPage* pWizLastPage                  = new WizardLastPage(this,"last_page", i18n("Installation finished"), "/home/falk/kdevinstall/kdevinstall/pics/test.png", m_pInstallState);
+  WizardWelcomePage* pWizWelcomePage            = new WizardWelcomePage(this,"welcome_page", i18n("Welcome"), "pics/test.png");
+  WizardSyntaxHlPage* pWizSyntaxHlPage          = new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Syntax highlighting style"), "pics/test.png", m_pInstallState);
+  WizardUIModePage* pWizUIModePage              = new WizardUIModePage(this,"uimode_page", i18n("User interface mode"), "pics/test.png", m_pInstallState);
+  WizardToolsCheckPage* pWizToolsCheckPage      = new WizardToolsCheckPage(this, "toolscheck_page", i18n("Program test results"), "pics/test.png", m_pInstallState);
+  WizardQtDocPage* pWizQtDocPage                = new WizardQtDocPage(this, "qtdoc_page", i18n("Qt documentation"), "pics/test.png", m_pInstallState);
+  WizardKDEDocPage* pWizKDEDocPage              = new WizardKDEDocPage(this, "kdedoc_page", i18n("KDE documentation"), "pics/test.png", m_pInstallState);
+  WizardCreateKDEDocPage* pWizCreateKDEDocPage  = new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Creating the KDE documentation"), "pics/test.png", m_pInstallState);
+  WizardIndexDocuPage* pWizIndexDocuPage        = new WizardIndexDocuPage(this, "indexdocu_page", i18n("Indexing the documentation"), "pics/test.png", m_pInstallState);
+  WizardLastPage* pWizLastPage                  = new WizardLastPage(this,"last_page", i18n("Installation finished"), "pics/test.png", m_pInstallState);
 
   addPage(pWizWelcomePage, "Step 1 of 9");
   addPage(pWizSyntaxHlPage, "Step 2 of 9");
