@@ -1,10 +1,10 @@
-# Doxyfile 1.3-Gideon
+# Doxyfile 1.3.2-Gideon
 
 #---------------------------------------------------------------------------
 # General configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = KDevelop
-PROJECT_NUMBER         = 3.0.0a5cvs
+PROJECT_NUMBER         = CVS_pre_3.0.0
 OUTPUT_DIRECTORY       = doc/api
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = NO
@@ -26,7 +26,6 @@ INTERNAL_DOCS          = NO
 CASE_SENSE_NAMES       = YES
 SHORT_NAMES            = NO
 HIDE_SCOPE_NAMES       = NO
-VERBATIM_HEADERS       = YES
 SHOW_INCLUDE_FILES     = YES
 JAVADOC_AUTOBRIEF      = YES
 MULTILINE_CPP_IS_BRIEF = NO
@@ -81,10 +80,11 @@ FILTER_SOURCE_FILES    = NO
 # configuration options related to source browsing
 #---------------------------------------------------------------------------
 SOURCE_BROWSER         = YES
-INLINE_SOURCES         = YES
+INLINE_SOURCES         = NO
 STRIP_CODE_COMMENTS    = YES
 REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION    = YES
+VERBATIM_HEADERS       = YES
 #---------------------------------------------------------------------------
 # configuration options related to the alphabetical class index
 #---------------------------------------------------------------------------
@@ -146,6 +146,7 @@ MAN_LINKS              = NO
 # configuration options related to the XML output
 #---------------------------------------------------------------------------
 GENERATE_XML           = NO
+XML_OUTPUT             = xml
 XML_SCHEMA             = 
 XML_DTD                = 
 #---------------------------------------------------------------------------
@@ -187,9 +188,11 @@ HIDE_UNDOC_RELATIONS   = YES
 HAVE_DOT               = YES
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
+UML_LOOK               = NO
 TEMPLATE_RELATIONS     = YES
 INCLUDE_GRAPH          = YES
 INCLUDED_BY_GRAPH      = YES
+CALL_GRAPH             = NO
 GRAPHICAL_HIERARCHY    = YES
 DOT_IMAGE_FORMAT       = png
 DOT_PATH               = 
