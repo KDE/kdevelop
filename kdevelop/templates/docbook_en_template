@@ -1,9 +1,10 @@
-<!DOCTYPE book PUBLIC  "-//KDE//DTD DocBook V3.1-Based Variant V1.0//EN" [
-  <!ENTITY kappname "&|NAMELITTLE|;" -- replace |NAMELITTLE| here -->
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1-Based Variant V1.0//EN" "dtd/kdex.dtd" [
+  <!ENTITY kappname "&kapp;"><!-- replace kapp here -->
   <!ENTITY % addindex "IGNORE">
-  <!ENTITY % English "INCLUDE" -- change language only here -->
-  <!ENTITY % ents PUBLIC "-//KDE//ENTITIES Documentation V2.0//EN">
-  %ents;
+  <!ENTITY % English "INCLUDE"><!-- change language only here -->
+  
+  
   <!-- Do not define any other entities; instead, use the entities
        from kde-genent.entities and $LANG/user.entities. -->
 ]>
@@ -39,7 +40,7 @@ thanks ;-).
 as Authors, publish date, the abstract, and Keywords -->
 
 <bookinfo>
-<title>The |NAME| Handbook</title>
+<title>The Kapp Handbook</title>
 
 <authorgroup>
 <author>
@@ -77,7 +78,7 @@ Do NOT change these in the translation. -->
 
 <abstract>
 <para>
-&|NAMELITTLE|; is an application specially designed to do nothing you would
+&kapp; is an application specially designed to do nothing you would
 ever want.
 </para>
 </abstract>
@@ -89,7 +90,7 @@ Please at least include KDE, the KDE package it is in, the name
 <keywordset>
 <keyword>KDE</keyword>
 <keyword>kdeutils</keyword>
-<keyword>|NAME|</keyword>
+<keyword>Kapp</keyword>
 <keyword>nothing</keyword>
 <keyword>nothing else</keyword>
 </keywordset>
@@ -114,13 +115,13 @@ problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
 
 <para>
-&|NAMELITTLE|; is a program that lets you do absolutely nothing. Please report
+&kapp; is a program that lets you do absolutely nothing. Please report
 any problems or feature requests to the KDE mailing lists.
 </para>
 </chapter>
 
-<chapter id="using-|NAMELITTLE|">
-<title>Using |NAME|</title>
+<chapter id="using-kapp">
+<title>Using Kapp</title>
 
 <!-- This chapter should tell the user how to use your app. You should use as
 many sections (Chapter, Sect1, Sect3, etc...) as is necessary to fully document
@@ -132,13 +133,13 @@ your application. -->
 patent issues. -->
 
 <screenshot>
-<screeninfo>Here's a screenshot of &|NAMELITTLE|;</screeninfo>
+<screeninfo>Here's a screenshot of &kapp;</screeninfo>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="screenshot.png" format="PNG">
+	    <imagedata fileref="screenshot.png" format="PNG"/>
 	  </imageobject>
 	  <imageobject>
-	    <imagedata fileref="screenshot.eps" format="EPS">
+	    <imagedata fileref="screenshot.eps" format="EPS"/>
 	  </imageobject>
 	  <textobject>
 	    <phrase>Screenshot</phrase>
@@ -148,23 +149,23 @@ patent issues. -->
 </para>
 
 
-<sect1 id="|NAMELITTLE|-features">
-<title>More |NAME| features</title>
+<sect1 id="kapp-features">
+<title>More Kapp features</title>
 
 <para>It slices! It dices! and it comes with a free toaster!</para>
 <para>
 The Squiggle Tool <guiicon><inlinemediaobject>
 	  <imageobject>
-	    <imagedata fileref="squiggle.png" format="PNG">
+	    <imagedata fileref="squiggle.png" format="PNG"/>
 	  </imageobject>
 	  <imageobject>
-	    <imagedata fileref="squiggle.eps" format="EPS">
+	    <imagedata fileref="squiggle.eps" format="EPS"/>
 	  </imageobject>
 	  <textobject>
 	    <phrase>Squiggle</phrase>
 	  </textobject>
 </inlinemediaobject></guiicon> is used to draw squiggly lines all over
-the &|NAMELITTLE|; main window. It's not a bug, it's a feature!
+the &kapp; main window. It's not a bug, it's a feature!
 </para>
 
 </sect1>
@@ -179,8 +180,8 @@ Also include any keys that have a special function but have no equivalent in the
 menus or toolbars. This may not be necessary for small apps or apps with no tool
 or menu bars. -->
 
-<sect1 id="|NAMELITTLE|-mainwindow">
-<title>The main |NAME| window</title>
+<sect1 id="kapp-mainwindow">
+<title>The main Kapp window</title>
 <para></para>
 
 <sect2>
@@ -215,7 +216,7 @@ or menu bars. -->
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits</action> &|NAMELITTLE|;</para></listitem>
+<listitem><para><action>Quits</action> &kapp;</para></listitem>
 </varlistentry>
 </variablelist>
 </para>
@@ -226,14 +227,14 @@ or menu bars. -->
 </chapter>
 
 <chapter id="developers">
-<title>Developer's Guide to |NAME|</title>
+<title>Developer's Guide to Kapp</title>
 
 <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
 used for apps that use plugins or that provide their own scripting hooks
 and/or development libraries. -->
 
 <para>
-Programming &|NAMELITTLE|; plugins is a joy to behold. Just read through the next
+Programming &kapp; plugins is a joy to behold. Just read through the next
 66 pages of API's to learn how!
 </para>
 
@@ -259,16 +260,16 @@ taken from that reference and shortened a bit for readability. -->
 <date>4 March 1996</date>
 </refsynopsisdivinfo>
 <synopsis>
-void XtUnmanageChildren(<replaceable parameter>children</replaceable>, <replaceable parameter>num_children</replaceable>)
-    WidgetList <replaceable parameter>children</replaceable>;
-    Cardinal <replaceable parameter>num_children</replaceable>;
+void XtUnmanageChildren(<replaceable class="parameter">children</replaceable>, <replaceable class="parameter">num_children</replaceable>)
+    WidgetList <replaceable class="parameter">children</replaceable>;
+    Cardinal <replaceable class="parameter">num_children</replaceable>;
 </synopsis>
 
 <refsect2 id="r2-1007-unmanagechildren-1">
 <title>Inputs</title>
 <variablelist>
 <varlistentry>
-<term><replaceable parameter>children</replaceable>
+<term><replaceable class="parameter">children</replaceable>
 </term>
 <listitem>
 <para>Specifies an array of child widgets. Each child must be of
@@ -277,10 +278,10 @@ class RectObj or any subclass thereof.
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><replaceable parameter>num_children</replaceable>
+<term><replaceable class="parameter">num_children</replaceable>
 </term>
 <listitem>
-<para>Specifies the number of elements in <replaceable parameter>children</replaceable>.
+<para>Specifies the number of elements in <replaceable class="parameter">children</replaceable>.
 </para>
 </listitem>
 </varlistentry>
@@ -296,7 +297,7 @@ The widgets will disappear from the screen, and (depending
 on its parent) may no longer have screen space allocated for
 them.
 </para>
-<para>Each of the widgets in the <replaceable parameter>children</replaceable> array must have
+<para>Each of the widgets in the <replaceable class="parameter">children</replaceable> array must have
 the same parent.
 </para>
 <para>See the &ldquo;Algorithm&rdquo; section below for full details of the
@@ -386,7 +387,7 @@ application work. -->
 <qandaset id="faqlist">
 <qandaentry>
 <question>
-<para>My Mouse doesn't work. How do I quit &|NAMELITTLE|;?</para>
+<para>My Mouse doesn't work. How do I quit &kapp;?</para>
 </question>
 <answer>
 <para>You silly goose! Check out the <link linkend="commands">Commands
@@ -415,7 +416,7 @@ distribution. -->
 <title>Credits and License</title>
 
 <para>
-&|NAMELITTLE|;
+&kapp;
 </para>
 <para>
 Program copyright 1997 John Q. Hacker <email>jqh@kde.org</email>
@@ -460,13 +461,13 @@ Translations done by:
 <appendix id="installation">
 <title>Installation</title>
 
-<sect1 id="getting-|NAMELITTLE|">
-<title>How to obtain |NAME|</title>
+<sect1 id="getting-kapp">
+<title>How to obtain Kapp</title>
 
 <para>
-&|NAMELITTLE|; is part of the KDE project
+&kapp; is part of the KDE project
 <ulink url="http://www.kde.org">http://www.kde.org</ulink>.
-&|NAMELITTLE|; can be found in the kdeutils package on
+&kapp; can be found in the kdeutils package on
 <ulink url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
 main ftp site of the KDE project. </para>
 </sect1>
@@ -486,22 +487,22 @@ information here.
 -->
 
 <para>
-In order to successfully use &|NAMELITTLE|;, you need KDE 1.1. Foobar.lib is required
-in order to support the advanced &|NAMELITTLE|; features. &|NAMELITTLE|; uses about 5 megs of
+In order to successfully use &kapp;, you need KDE 1.1. Foobar.lib is required
+in order to support the advanced &kapp; features. &kapp; uses about 5 megs of
 memory to run, but this may vary depending on your platform and
 configuration.
 </para>
 
 <para>
-All required libraries as well as &|NAMELITTLE|; itself can be found
-on <ulink url="ftp://ftp.|NAMELITTLE|.org">The &|NAMELITTLE|; home page</ulink>.
+All required libraries as well as &kapp; itself can be found
+on <ulink url="ftp://ftp.kapp.org">The &kapp; home page</ulink>.
 </para>
 
 <!-- For a list of updates, you may refer to the application web site
 or the ChangeLog file, or ... -->
 <para>
 You can find a list of changes at <ulink
-url="http://apps.kde.org/|NAMELITTLE|">http://apps.kde.org/|NAMELITTLE|</ulink>.
+url="http://apps.kde.org/kapp">http://apps.kde.org/kapp</ulink>.
 </para>
 </sect1>
 
@@ -542,3 +543,4 @@ sgml-minimize-attributes: nil
 sgml-general-insert-case: lower
 End:
 -->
+
