@@ -32,10 +32,10 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 
+#include <qdatetime.h>
+#include <qfileinfo.h>
 #include <qregexp.h>
 #include <qstring.h>
-#include <qtimer.h>
-#include <qfileinfo.h>
 
 #include <iostream>
 #include <ctype.h>
@@ -1324,26 +1324,23 @@ void GDBController::slotStopDebugger()
         destroyCmds();
 
         pauseApp();
-        setStateOn(s_waitTimer);
-
-        QTimer *timer;
-
-        timer = new QTimer(this);
-        connect(timer, SIGNAL(timeout()), this, SLOT(slotAbortTimedEvent()) );
+        QTime start;
+        QTime now;
 
         if (stateIsOn(s_attached))
         {
-            setStateOn(s_waitTimer|s_appBusy);
+            setStateOn(s_appBusy);
             const char *detach="detach\n";
             dbgProcess_->writeStdin(detach, strlen(detach));
             emit gdbStdout(detach);
-            timer->start(3000, TRUE);
             DBG_DISPLAY("<detach wait>");
-            while (stateIsOn(s_waitTimer))
+            start = QTime::currentTime();
+            while (-1)
             {
-                if (!stateIsOn(s_attached))
-                    break;
                 kapp->processEvents(20);
+                now = QTime::currentTime();
+                if (!stateIsOn(s_attached) || start.msecsTo( now ) > 2000)
+                    break;
             }
         }
 
@@ -1355,17 +1352,18 @@ void GDBController::slotStopDebugger()
 //             return;
 //         }
 
-        setStateOn(s_waitTimer|s_appBusy);
+        setStateOn(s_appBusy);
         const char *quit="quit\n";
         dbgProcess_->writeStdin(quit, strlen(quit));
         emit gdbStdout(quit);
-        timer->start(3000, TRUE);
         DBG_DISPLAY("<quit wait>");
-        while (stateIsOn(s_waitTimer))
+        start = QTime::currentTime();
+        while (-1)
         {
-            if (stateIsOn(s_programExited))
-                break;
-            kapp->processEvents(20);
+          kapp->processEvents(20);
+          now = QTime::currentTime();
+          if (stateIsOn(s_programExited) || start.msecsTo( now ) > 2000)
+            break;
         }
 
         // We cannot wait forever.
@@ -1927,15 +1925,6 @@ void GDBController::slotDbgProcessExited(KProcess*)
     emit dbgStatus (i18n("Process exited"), state_);
 
     emit gdbStdout("(gdb) Process exited\n");
-}
-
-// **************************************************************************
-
-// The time limit has expired so set the state off.
-void GDBController::slotAbortTimedEvent()
-{
-    setStateOff(s_waitTimer);
-    DBG_DISPLAY(QString("Timer aborted"));
 }
 
 // **************************************************************************
