@@ -40,11 +40,14 @@ private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotToggleShowNonProjectFiles();
+    void slotReloadTree();
 
 private:
     bool matchesHidePattern(const QString &fileName);
 
     FileViewPart *m_part;
+    KFileTreeBranch * m_rootBranch;
+    
     QStringList m_hidePatterns;
     QStringList m_projectFiles;
     bool m_showNonProjectFiles;

@@ -159,7 +159,7 @@ public:
 };
 
 FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *name)
-    : KFileTreeView(parent, name)
+    : KFileTreeView(parent, name), m_rootBranch( 0 )
 {
     setResizeMode(QListView::LastColumn);
     setSorting(0);
@@ -196,12 +196,20 @@ FileTreeWidget::~FileTreeWidget()
 
 void FileTreeWidget::openDirectory( const QString& dirName )
 {
+    // if we're reloading
+    if ( m_rootBranch )
+    {
+        removeBranch( m_rootBranch );
+        m_projectFiles.clear();
+    }
+
     addProjectFiles( m_part->project()->allFiles(), true );
 
     KURL url;
     url.setPath( dirName );
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
-    addBranch( new MyFileTreeBranch( this, url, url.prettyURL(), pix ) )->root()->setOpen( true );
+    m_rootBranch = addBranch( new MyFileTreeBranch( this, url, url.prettyURL(), pix ) );
+    m_rootBranch->root()->setOpen( true );
 }
 
 bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
@@ -255,6 +263,11 @@ void FileTreeWidget::slotContextMenu( KListView*, QListViewItem* item, const QPo
 {
     KPopupMenu popup(i18n("File Tree"), this);
 
+    if ( item == this->firstChild() ) // rootnode
+    {
+        popup.insertItem( i18n( "Reload Tree"), this, SLOT( slotReloadTree() ) );
+    }
+
     int id = popup.insertItem( i18n("Show Non-Project Files"),
                                this, SLOT(slotToggleShowNonProjectFiles()) );
     popup.setItemChecked(id, m_showNonProjectFiles);
@@ -274,6 +287,11 @@ void FileTreeWidget::slotToggleShowNonProjectFiles()
     hideOrShow();
 }
 
+void FileTreeWidget::slotReloadTree()
+{
+    openDirectory( projectDirectory() );
+}
+
 QString FileTreeWidget::projectDirectory()
 {
     return m_part->project()->projectDirectory();
@@ -286,6 +304,8 @@ QStringList FileTreeWidget::projectFiles()
 
 void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constructing )
 {
+    kdDebug(9017) << "files added to project: " << fileList.count() << endl;
+
     QStringList::ConstIterator it;
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
@@ -293,6 +313,7 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
         if ( ! m_projectFiles.contains( file ) )
         {
             m_projectFiles.append( file );
+            kdDebug(9017) << "file added: " << file << endl;
         }
 
         if ( ! constructing )
@@ -308,11 +329,14 @@ void FileTreeWidget::addProjectFiles( QStringList const & fileList, bool constru
 
 void FileTreeWidget::removeProjectFiles( QStringList const & fileList )
 {
+    kdDebug(9017) << "files removed from project: " << fileList.count() << endl;
+
     QStringList::ConstIterator it;
     for ( it = fileList.begin(); it != fileList.end(); ++it )
     {
         QString file = m_part->project()->projectDirectory() + "/" + ( *it );
         m_projectFiles.remove( file );
+        kdDebug(9017) << "file removed: " << file << endl;
 
         MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
         if( item )
