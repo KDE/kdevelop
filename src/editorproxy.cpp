@@ -1,10 +1,22 @@
+// Ewww... need this to access KParts::Part::setWidget(), so that kdevelop
+// doesn't need to be rearchitected for multiple views before the lazy view
+// creation can go in
+#define protected public
+#include <kparts/part.h>
+#undef protected
+
 #include <qwidget.h>
 #include <qpopupmenu.h>
 #include <qtimer.h>
 
 #include <kdeversion.h>
 #include <kdebug.h>
+#include <kconfig.h>
+#include <kapplication.h>
+#include <kmdidefines.h>
 
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/editinterface.h>
@@ -17,7 +29,7 @@
 #include <klocale.h>
 #include <kstdaccel.h>
 
-#include <toplevel.h>
+#include "toplevel.h"
 #include "partcontroller.h"
 #include "core.h"
 #include "debugger.h"
@@ -34,6 +46,12 @@ EditorProxy *EditorProxy::s_instance = 0;
 EditorProxy::EditorProxy()
   : QObject()
 {
+	KConfig *config = kapp->config();
+	config->setGroup("UI");
+	int mdimode = config->readNumEntry("MDIMode", KMdi::IDEAlMode);
+	
+	m_delayedViewCreationCompatibleUI = (mdimode == KMdi::IDEAlMode || mdimode == KMdi::TabPageMode);
+
 	KAction *ac = new KAction( i18n("Show Context Menu"), 0, this, 
 		SLOT(showPopup()), TopLevel::getInstance()->main()->actionCollection(), "show_popup" );
         KShortcut cut = KStdAccel::shortcut(KStdAccel::PopupMenuContext);
@@ -62,6 +80,18 @@ void EditorProxy::setLineNumber(KParts::Part *part, int lineNum, int col)
   ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(part->widget());
   if (iface)
     iface->setCursorPositionReal(lineNum, col == -1 ? 0 : col);
+  else {
+    // Save the position for a rainy day (or when the view gets activated and wants its position)
+    for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+      if ((*it)->document() == part) {
+        (*it)->setLine(lineNum);
+        (*it)->setCol(col);
+        return;
+      }
+
+    // Shouldn't hit this?
+    Q_ASSERT(false);
+  }
 }
 
 void EditorProxy::installPopup( KParts::Part * part )
@@ -72,12 +102,22 @@ void EditorProxy::installPopup( KParts::Part * part )
 		if (iface)
 		{
 			KTextEditor::View * view = static_cast<KTextEditor::View*>( part->widget() );
-			QPopupMenu * popup = static_cast<QPopupMenu*>( view->factory()->container("ktexteditor_popup", view ) );
 			
-			popup->insertSeparator( 0 );
+			QPopupMenu * popup = static_cast<QPopupMenu*>( part->factory()->container("ktexteditor_popup", view ) );
 			
-			KActionCollection * ac = TopLevel::getInstance()->main()->actionCollection();
-			ac->action( "file_close" )->plug( popup, 0 );
+			if (!popup) {
+				kdWarning() << k_funcinfo << "Popup not found!" << endl;
+				return;
+			}
+			
+			// I'm not sure if this is papering over a bug in xmlgui or not, but this test is
+			// needed in order to avoid multiple close actions in the popup menu in some cases
+			KAction * action = TopLevel::getInstance()->main()->actionCollection()->action( "file_close" );
+			if ( action && !action->isPlugged( popup ) )
+			{
+				popup->insertSeparator( 0 );
+				action->plug( popup, 0 );
+			}
 			
 			iface->installPopup( popup );
 					
@@ -87,7 +127,6 @@ void EditorProxy::installPopup( KParts::Part * part )
 			m_popupIds.resize(popup->count());
 			for (uint index=0; index < popup->count(); ++index)
 				m_popupIds[index] = popup->idAt(index);
-		
 		}
 	}
 }
@@ -203,6 +242,125 @@ void EditorProxy::showPopup( )
 		}
 	}
   	
+}
+
+void EditorProxy::registerEditor(EditorWrapper* wrapper)
+{
+  m_editorParts.append(wrapper);
+}
+
+void EditorProxy::deregisterEditor(EditorWrapper* wrapper)
+{
+  m_editorParts.remove(wrapper);
+}
+
+EditorWrapper::EditorWrapper(KTextEditor::Document* editor, bool activate, QWidget* parent, const char* name)
+  : QWidgetStack(parent, name)
+  , m_doc(editor)
+  , m_view(0L)
+  , m_line(0)
+  , m_col(0)
+  , m_first(!activate && EditorProxy::getInstance()->isDelayedViewCapable())
+{
+  EditorProxy::getInstance()->registerEditor(this);
+}
+
+EditorWrapper::~EditorWrapper()
+{
+  kdDebug() << k_funcinfo << this << endl;
+  EditorProxy::getInstance()->deregisterEditor(this);
+}
+
+KTextEditor::Document* EditorWrapper::document() const
+{
+  return m_doc;
+}
+
+void EditorWrapper::setLine(int line)
+{
+  m_line = line;
+}
+
+void EditorWrapper::setCol(int col)
+{
+  m_col = col;
+}
+
+void EditorWrapper::show()
+{
+  if ( !m_doc ) {
+    QWidgetStack::show();
+    return;
+  }
+  
+  if (m_first) {
+    m_first = false;
+    QWidgetStack::show();
+    return;
+  }
+
+  if (m_doc->widget()) {
+    QWidgetStack::show();
+    return;
+  }
+
+  m_view = m_doc->createView(this);
+  
+  addWidget(m_view);
+  
+  m_doc->setWidget(m_view);
+  // FIXME assumption check
+  // We're managing the view deletion by being its parent, don't let the part self-destruct
+  disconnect( m_view, SIGNAL( destroyed() ), m_doc, SLOT( slotWidgetDestroyed() ) );
+  //connect( m_view, SIGNAL( destroyed() ), this, SLOT( deleteLater() ) );
+  
+  m_doc->insertChildClient(m_view);
+
+  PartController::getInstance()->integrateTextEditorPart(m_doc);
+
+  ViewCursorInterface *iface = dynamic_cast<ViewCursorInterface*>(static_cast<KTextEditor::View*>(m_view));
+  if (iface) {
+    iface->setCursorPositionReal(m_line, m_col == -1 ? 0 : m_col);
+
+  } else {
+    // Shouldn't get here
+    Q_ASSERT(false);
+  }
+
+  QWidgetStack::show();
+}
+
+QWidget * EditorProxy::widgetForPart( KParts::Part * part )
+{
+	if ( !part ) return 0;
+	
+	if (part->widget())
+		return part->widget();
+	
+	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+		if ((*it)->document() == part)
+			return *it;
+	
+	return 0L;
+}
+
+QWidget * EditorProxy::topWidgetForPart( KParts::Part * part )
+{
+	if ( !part ) return 0;
+	
+	for (QValueList<EditorWrapper*>::ConstIterator it = m_editorParts.begin(); it != m_editorParts.end(); ++it)
+		if ((*it)->document() == part)
+			return *it;
+	
+	if (part->widget())
+		return part->widget();
+	
+	return 0L;
+}
+
+bool EditorProxy::isDelayedViewCapable( )
+{
+	return m_delayedViewCreationCompatibleUI;
 }
 
 #include "editorproxy.moc"

@@ -147,7 +147,8 @@ void ProjectSession::recreateDocs(QDomElement& el)
     if (!docName.isEmpty() /* && URL::exists(docName)*/) {
       KURL url(docName);
       // create the views of this document, the first view creation will also create the document
-      recreateViews(url, docEl);
+      kdDebug() << k_funcinfo << "Doc to be activated? " << (nDoc == nNrOfDocs - 1) << endl;
+	  recreateViews(url, docEl, (nDoc == nNrOfDocs - 1));
     }
   }
 
@@ -160,7 +161,7 @@ void ProjectSession::recreateDocs(QDomElement& el)
 }
 
 //---------------------------------------------------------------------------
-void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
+void ProjectSession::recreateViews(KURL& url, QDomElement docEl, bool activate)
 {
   // read information about the views
   int nNrOfViews = docEl.attribute( "NumberOfViews", "0").toInt();
@@ -175,6 +176,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
 		dd.type = viewEl.attribute("Type");
 		dd.line = viewEl.attribute("line", "0").toInt();
 		dd.url = url;
+		dd.activate = activate;
 		
 		_docDataList << dd;
 	}  
@@ -417,19 +419,22 @@ void ProjectSession::loadDocument( )
 		DocumentData & dd = _docDataList.first();
 		if ( dd.type == "Source" )
 		{
-			PartController::getInstance()->editDocument( dd.url, dd.line );
+			PartController::getInstance()->editDocumentInternal( dd.url, dd.line, -1, dd.activate );
 		}
 		else if ( dd.type == "Documentation" )
 		{
+			// FIXME needs to be deferred if !activate ?
 			PartController::getInstance()->showDocument( dd.url, true );
 		}
 		else
 		{
+			// FIXME needs to be deferred if !activate ?
 			PartController::getInstance()->editDocument( dd.url );
 		}		
 		_docDataList.pop_front();
 		
-		QTimer::singleShot( 0, this, SLOT(loadDocument()) );
+		loadDocument();
+		//QTimer::singleShot( 0, this, SLOT(loadDocument()) );
 	}
 }
 

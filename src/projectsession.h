@@ -63,7 +63,7 @@ private:
   /** Restores the part of the project session that concerns to the documents (files). */
   void recreateDocs(QDomElement& el);
   /** recreates views and their properties of a certain document. */
-  void recreateViews(KURL& url, QDomElement docEl);
+  void recreateViews(KURL& url, QDomElement docEl, bool activate);
   /** setup a valid XML file. */
   void initXMLTree();
 
@@ -78,6 +78,7 @@ private:
 	  KURL url;
 	  int line;
 	  QString type;
+      bool activate;
   };
   
   QValueList<DocumentData> _docDataList;

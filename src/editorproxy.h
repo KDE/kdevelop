@@ -4,17 +4,40 @@
 
 #include <qobject.h>
 #include <qmemarray.h>
+#include <qguardedptr.h>
 
 class QPopupMenu;
 
 #include <kparts/part.h>
 #include <ktexteditor/markinterface.h>
 #include <kdeversion.h>
-#if (KDE_VERSION > 305)
 # include <ktexteditor/markinterfaceextension.h>
-#else
-# include "kde30x_markinterfaceextension.h"
-#endif
+
+#include <qwidgetstack.h>
+
+class EditorWrapper : public QWidgetStack
+{
+  Q_OBJECT
+
+public:
+  EditorWrapper(KTextEditor::Document* editor, bool activate, QWidget* parent, const char* name = 0L);
+  virtual ~EditorWrapper();
+
+  KTextEditor::Document* document() const;
+
+  void setLine(int line);
+  void setCol(int col);
+
+public slots:
+  virtual void show();
+
+private:
+  QGuardedPtr<KTextEditor::Document> m_doc;
+  QGuardedPtr<KTextEditor::View> m_view;
+  int m_line;
+  int m_col;
+  bool m_first;
+};
 
 class EditorProxy : public QObject
 {
@@ -27,6 +50,14 @@ public:
   void setLineNumber(KParts::Part *part, int lineNum, int col);
 
   void installPopup(KParts::Part *part);
+  
+  void registerEditor(EditorWrapper* wrapper);
+  void deregisterEditor(EditorWrapper* wrapper);
+
+  QWidget * widgetForPart( KParts::Part * part );
+  QWidget * topWidgetForPart( KParts::Part * part );
+  
+  bool isDelayedViewCapable();
   
 private slots:
 
@@ -41,6 +72,10 @@ private:
 
   QMemArray<int> m_popupIds;
 
+  // This list is used to save line/col information for not yet activated editor views.
+  QValueList< EditorWrapper* > m_editorParts;
+  
+  bool m_delayedViewCreationCompatibleUI;
 };
 
 

@@ -62,6 +62,7 @@
 #include "statusbar.h"
 #include "kpopupmenu.h"
 #include "documentationpart.h"
+#include "editorproxy.h"
 
 #include "toplevel.h"
 #include "mainwindowshare.h"
@@ -368,7 +369,8 @@ void NewMainWindow::childWindowCloseRequest( KMdiChildView * childView )
 	QPtrListIterator<KParts::Part> it( *partlist );
 	while ( KParts::Part* part = it.current() )
 	{
-		if ( part->widget() && part->widget()->parentWidget() == childView )
+		QWidget * widget = EditorProxy::getInstance()->topWidgetForPart( part );
+		if ( widget && widget->parentWidget() == childView )
 		{
 			PartController::getInstance()->closePart( part );
 			return;
@@ -592,24 +594,24 @@ void NewMainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
 
 void NewMainWindow::documentChangedState( const KURL & url, DocumentState state )
 {
-	KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( PartController::getInstance()->partForURL( url ) );
-	if ( ro_part && ro_part->widget() )
+	QWidget * widget = EditorProxy::getInstance()->topWidgetForPart( PartController::getInstance()->partForURL( url ) );
+	if ( widget )
 	{
 		switch( state )
 		{
 			// we should probably restore the original icon instead of just using "kdevelop",
 			// but I have never seen any other icon in use so this should do for now
 			case Clean:
-				ro_part->widget()->setIcon( SmallIcon("kdevelop"));
+				widget->setIcon( SmallIcon("kdevelop"));
 				break;
 			case Modified:
-				ro_part->widget()->setIcon( SmallIcon("filesave"));
+				widget->setIcon( SmallIcon("filesave"));
 				break;
 			case Dirty:
-				ro_part->widget()->setIcon( SmallIcon("revert"));
+				widget->setIcon( SmallIcon("revert"));
 				break;
 			case DirtyAndModified:
-				ro_part->widget()->setIcon( SmallIcon("stop"));
+				widget->setIcon( SmallIcon("stop"));
 				break;					
 		}
 	}

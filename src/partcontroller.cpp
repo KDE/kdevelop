@@ -233,26 +233,46 @@ KURL PartController::findURLInProject(const KURL& url)
 
 void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 {
-  kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << endl;
+  editDocumentInternal(inputUrl, lineNum, col);
+}
+ 
+void PartController::editDocumentInternal( const KURL & inputUrl, int lineNum, int col, bool activate )
+{
+  kdDebug(9000) << k_funcinfo << inputUrl.prettyURL() << " linenum " << lineNum << " activate? " << activate << endl;
 
   KURL url = inputUrl;
 
   // Make sure the URL exists
 	if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
 	{
+		bool done = false;
+		
 		// Try to find this file in the current project's list instead
 		if ( API::getInstance()->project() ) 
 		{
-			url = findURLInProject(url);
+			if (url.isRelativeURL(url.url())) {
+				KURL relURL(API::getInstance()->project()->projectDirectory(), url.url());
 		
-			if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
-			{
-				// See if this url is relative to the current project's directory
-				url = API::getInstance()->project()->projectDirectory() + "/" + url.path();
+				if (relURL.isValid() && KIO::NetAccess::exists(url, false, 0)) {
+					url = relURL;
+					done = true;
+				}
+				kdDebug() << k_funcinfo << "Looking for file in project dir: " << API::getInstance()->project()->projectDirectory() << " url " << url.url() << " transformed to " << relURL.url() << ": " << done << endl;
+			}
+			
+			if (!done) {
+				url = findURLInProject(url);
+					
+				if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
+					// See if this url is relative to the current project's directory
+					url = API::getInstance()->project()->projectDirectory() + "/" + url.path();
+				
+				else
+					done = true;
 			}
 		}
 	
-		if ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) ) 
+		if ( !done && ( !url.isValid() || !KIO::NetAccess::exists(url, false, 0) )) 
 		{
 			// Not found - prompt the user to find it?
 			kdDebug(9000) << "cannot find URL: " << url.url() << endl;
@@ -276,6 +296,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 	KParts::Part *existingPart = partForURL(url);
 	if (existingPart)
 	{
+		Q_ASSERT(activate);
 		activatePart(existingPart);
 		EditorProxy::getInstance()->setLineNumber(existingPart, lineNum, col);
 		addHistoryEntry( url, lineNum, col );
@@ -320,7 +341,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 	// is this regular text - open in editor
 	if ( m_openNextAsText || MimeType->is( "text/plain" ) || MimeType->is( "text/html" ) || MimeType->is( "application/x-zerosize" ) )
 	{
-		KTextEditor::Editor * editorpart = createEditorPart();
+		KTextEditor::Editor * editorpart = createEditorPart(activate);
 
 		if ( editorpart )
 		{
@@ -338,8 +359,19 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 				
 			editorpart->openURL( url );
 
-			integratePart( editorpart, url, true );
-			EditorProxy::getInstance()->setLineNumber( editorpart, lineNum, col );
+			QWidget* widget = editorpart->widget();
+		
+			if (!widget) {
+				// We're being lazy about creating the view, but kmdi _needs_ a widget to
+				// create a tab for it, so use a QWidgetStack subclass instead
+				kdDebug() << k_lineinfo << "Creating Editor wrapper..." << endl;
+				widget = new EditorWrapper(static_cast<KTextEditor::Document*>(editorpart), activate, TopLevel::getInstance()->main());
+			}
+		
+			integratePart(editorpart, url, widget, true, activate);
+		
+			EditorProxy::getInstance()->setLineNumber(editorpart, lineNum, col);
+			
 			addHistoryEntry( url, lineNum, col );
 
 			m_openNextAsText = false;
@@ -504,7 +536,7 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
   return 0;
 }
 
-KTextEditor::Editor * PartController::createEditorPart( )
+KTextEditor::Editor * PartController::createEditorPart( bool activate )
 {
 	
 	if ( !_editorFactory )
@@ -517,20 +549,25 @@ KTextEditor::Editor * PartController::createEditorPart( )
 		if ( !_editorFactory ) return 0L;
 	}
 	
-	return static_cast<KTextEditor::Editor*>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, "KTextEditor/Editor" ) );
+	// Don't create non-wrapped views for now, avoid two paths (== two chances for bad bugs)
+	activate = false;
+	
+	return static_cast<KTextEditor::Editor*>( _editorFactory->createPart( TopLevel::getInstance()->main(), 0, 0, 0, activate ? "KTextEditor/Editor" : "KTextEditor::Document" ) );
 }
 
-void PartController::integratePart(KParts::Part *part, const KURL &url, bool isTextEditor )
+void PartController::integratePart(KParts::Part *part, const KURL &url, QWidget* widget, bool isTextEditor, bool activate )
 {
-  if (!part->widget()) {
+  if (!widget) widget = part->widget();
+
+  if (!widget) {
     /// @todo error handling
       kdDebug(9000) << "no widget for this part!!" << endl;
       return; // to avoid later crash
   }
 
-  TopLevel::getInstance()->embedPartView(part->widget(), url.filename(), url.url());
+  TopLevel::getInstance()->embedPartView(widget, url.filename(), url.url());
 
-  addPart(part);
+  addPart(part, activate);
 /*
   if( isTextEditor )
   {
@@ -559,22 +596,26 @@ void PartController::integratePart(KParts::Part *part, const KURL &url, bool isT
   // Connect to the document's views newStatus() signal in order to keep track of the
   // modified-status of the document.
 
+  if (isTextEditor)
+    integrateTextEditorPart(static_cast<KTextEditor::Document*>(part));
+}
+
+void PartController::integrateTextEditorPart(KTextEditor::Document* doc)
+{
+  //EditorProxy::getInstance()->installPopup(doc, contextPopupMenu());
+
   // What's potentially problematic is that this signal isn't officially part of the
   // KTextEditor::View interface. It is nevertheless there, and used in kate and kwrite.
   // There doesn't seem to be any othere way of making this work with katepart, and since
   // signals are dynamic, if we try to connect to an editorpart that lacks this signal,
   // all we get is a runtime warning. At this point in time we are only really supported
   // by katepart anyway so IMHO this hack is justified. //teatime
-  if (isTextEditor)
+  QPtrList<KTextEditor::View> list = doc->views();
+  QPtrListIterator<KTextEditor::View> it( list );
+  while ( it.current() )
   {
-    KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( part );
-    QPtrList<KTextEditor::View> list = doc->views();
-    QPtrListIterator<KTextEditor::View> it( list );
-    while ( it.current() )
-    {
-      connect( it, SIGNAL( newStatus() ), this, SLOT( slotNewStatus() ) );
-      ++it;
-    }
+    connect( it, SIGNAL( newStatus() ), this, SLOT( slotNewStatus() ) );
+    ++it;
   }
 }
 
@@ -727,15 +768,21 @@ KParts::Part * PartController::partForWidget( const QWidget * widget )
 
 void PartController::activatePart(KParts::Part *part)
 {
-	if ( !part ) return;
+  if ( !part ) return;
 
+  QWidget * widget = EditorProxy::getInstance()->widgetForPart( part );
+  if (widget)
+  {
+    TopLevel::getInstance()->raiseView( widget );
+    widget->show();
+    widget->setFocus();
+  }
+  
   setActivePart(part);
 
-  if (part->widget())
-  {
-    TopLevel::getInstance()->raiseView(part->widget());
-    part->widget()->setFocus();
-  }
+  QWidget* w2 = EditorProxy::getInstance()->widgetForPart( part );
+  if (w2 != widget)
+    w2->setFocus();
 }
 
 bool PartController::closePart(KParts::Part *part)
@@ -744,7 +791,7 @@ bool PartController::closePart(KParts::Part *part)
 
 	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
 	{
-		KURL url;
+		KURL url = ro_part->url();
 		if ( ! ro_part->closeURL() )
 		{
 			return false;
@@ -752,6 +799,8 @@ bool PartController::closePart(KParts::Part *part)
 		removeTimestamp( url );
 	}
 	
+  // FIXME correct? relevant?
+
   // If we didn't call removePart(), KParts::PartManager::slotObjectDestroyed would
   // get called from the destroyed signal of the part being deleted below.
   // The call chain from that looks like this:
@@ -764,11 +813,14 @@ bool PartController::closePart(KParts::Part *part)
   // But the QGuardedPtr is connected to the _same_ destroyed() slot that got us to
   // that point (slots are called in an undefined order)!
 
+  // Previously, the comment was:
   // The following line can be removed with kdelibs HEAD! (2002-05-26)
-//  removePart( part );
+  //
+  // Now, this is needed for proper functioning, so leave...
+  removePart( part );
 
-  if (part->widget())
-    TopLevel::getInstance()->removeView(part->widget());
+  if (QWidget* w = EditorProxy::getInstance()->topWidgetForPart(part))
+    TopLevel::getInstance()->removeView(w);
 
   delete part;
 
@@ -1015,7 +1067,7 @@ bool PartController::readyToClose()
 void PartController::slotActivePartChanged( KParts::Part * part )
 {
 	updateMenuItems();
-	
+
 	QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
 	
 	if ( m_isJumping ) return;
@@ -1326,13 +1378,13 @@ void PartController::addHistoryEntry(const KURL & url, int line, int col )
 
 void PartController::slotWaitForFactoryHack( )
 {
-	kdDebug(9000) << k_funcinfo << endl;
+	//kdDebug(9000) << k_funcinfo << endl;
 	
 	if ( !activePart() ) return;
 	
-	if ( KTextEditor::View * view = dynamic_cast<KTextEditor::View*>( activePart()->widget() ) )
+	if ( dynamic_cast<KTextEditor::View*>( activePart()->widget() ) )
 	{
-		if ( !view->factory() )
+		if ( !activePart()->factory() )
 		{
 			QTimer::singleShot( 100, this, SLOT(slotWaitForFactoryHack()) );
 		}
