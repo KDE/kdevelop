@@ -84,6 +84,27 @@
       <type ext="pm" name="Perl module" create="template" icon="template_source">
         <descr>A new perl module.</descr>
       </type>
+      <type ext="pp" name="Pascal source" create="no" icon="source_p">
+        <descr/>
+        <subtype ref="program" name="Pascal program" icon="source_p">
+          <descr>A new pascal program.</descr>
+        </subtype>
+        <subtype ref="unit" name="Pascal unit" icon="source_p">
+          <descr>A new pascal unit.</descr>
+        </subtype>
+      </type>
+      <type ext="pas" name="Pascal source" create="no" icon="source_p">
+        <descr/>
+        <subtype ref="program" name="Pascal program" icon="source_p">
+          <descr>A new pascal program.</descr>
+        </subtype>
+        <subtype ref="unit" name="Pascal unit" icon="source_p">
+          <descr>A new pascal unit.</descr>
+        </subtype>
+      </type>
+      <type ext="dpr" name="Delphi project" create="template" icon="source_p">
+        <descr>A new Delphi project.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>
