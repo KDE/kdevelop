@@ -36,6 +36,7 @@ Python    Python language
 PHP       PHP language
 Perl      Perl language
 Code      Compiled to native, debuggable code
+JVM       Executed and debugged in the Java VM
 GBA       Game Boy Advance
 KDE       KDE application/applet
 Qt        Qt based
