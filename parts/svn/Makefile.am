@@ -11,4 +11,3 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevpart_svn.desktop
 
-libkdevsvn_la_DEPENDENCIES = 
