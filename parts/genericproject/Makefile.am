@@ -4,7 +4,7 @@ METASOURCES = AUTO
 lib_LTLIBRARIES =  libkdevgenericproject.la
 libkdevgenericproject_la_SOURCES = detailslistview.cpp overviewlistview.cpp genericlistviewitem.cpp \
 	genericproject_part.cpp genericproject_widget.cpp variantserializer.cpp
-libkdevgenericproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/util/libkdevutil.la $(top_builddir)/lib/project/libkdevproject.la $(top_builddir)/lib/interfaces/libkdevinterfaces.la
+libkdevgenericproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevgenericproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevgenericproject_la_COMPILE_FIRST = $(top_builddir)/lib/project/removesubprojectdlgbase.h
 

@@ -609,7 +609,21 @@ void GenericProjectWidget::slotAddFiles( )
     else if (activeGroup())
         startDir += "/" + activeGroup()->path();
 
-    m_part->addFiles(KFileDialog::getOpenFileNames(startDir));
+    QStringList fileList = KFileDialog::getOpenFileNames( startDir );
+    if( fileList.isEmpty() )
+	return;
+    
+    QStringList lst;
+    for( QStringList::Iterator it=fileList.begin(); it!=fileList.end(); ++it )
+    {
+	QString absFileName = *it;
+	if( !absFileName.startsWith(m_part->projectDirectory()) )
+	    continue;
+	
+	lst << absFileName.mid( m_part->projectDirectory().length() + 1 );
+    }
+    
+    m_part->addFiles( lst );
 }
 
 void GenericProjectWidget::slotDeleteGroup( )

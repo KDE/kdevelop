@@ -190,20 +190,25 @@ void GenericProjectPart::addFiles( const QStringList & fileList )
     BuildTargetItem *tit = m_widget->activeTarget();
     if (!tit)
         return;
-    for (QStringList::const_iterator it = fileList.begin(); it != fileList.end(); ++it)
+    
+    for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it)
     {
-        addFilePrivate(*it, tit);
+	if( tit->fileByName(QFileInfo(*it).fileName()) != 0 )
+	    continue;
+	
+	QString absFilename = m_projectDir + QString::fromLatin1( "/" ) + (*it);
+	addFilePrivate( *it, tit );
     }
+ 
+    kdDebug() << "======> files: " << fileList.join( ", " ) << endl;
+    emit addedFilesToProject( fileList );
 }
 
 void GenericProjectPart::addFile( const QString & fileName )
 {
-    kdDebug() << "GenericProjectPart::addFile " << fileName << endl;
-    BuildTargetItem *tit = m_widget->activeTarget();
-    if (!tit)
-        return;
-    kdDebug() << "Active target is " << tit->name() << endl;
-    addFilePrivate(fileName, tit);
+    QStringList lst;
+    lst << fileName;
+    addFiles( lst );
 }
 
 void GenericProjectPart::addFilePrivate( const QString & fileName, BuildTargetItem *tit )
@@ -222,6 +227,8 @@ void GenericProjectPart::removeFiles( const QStringList & fileList )
 
 void GenericProjectPart::removeFile( const QString & fileName )
 {
+    QStringList lst;
+    removeFiles( lst );
 }
 
 void GenericProjectPart::loadProjectConfig( QString projectFile )
