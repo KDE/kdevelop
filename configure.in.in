@@ -65,6 +65,9 @@ AM_CONDITIONAL(include_trollproject, test -n "$with_trollproject")
 AC_ARG_ENABLE(customproject, 	[  --enable-customproject, 	enable custom project manager ], with_customproject, with_customproject=yes)
 AM_CONDITIONAL(include_customproject, test -n "$with_customproject")
 
+KDE_CHECK_HEADER(cvsservice_stub.h, [cvsservice_stub_h="found"], [cvsservice_stub_h="none"])
+AM_CONDITIONAL(include_cvsservice, test "$cvsservice_stub_h" = "found")
+
 AC_ARG_ENABLE(cvs, 		[  --enable-cvs, 		enable cvs support ], with_cvs, with_cvs=yes)
 AM_CONDITIONAL(include_cvs, test -n "$with_cvs")
 

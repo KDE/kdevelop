@@ -18,6 +18,10 @@ if include_svn
 SVN_SUBDIR = svn
 endif
 
+if include_cvsservice
+CVSSERVICE_SUBDIR = cvsservice
+endif
+
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
     adaproject adasupport cppsupport pythonsupport perlsupport phpsupport fortransupport \
     autoproject scriptproject trollproject customproject \
@@ -27,6 +31,5 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
     uimode editor-chooser openwith history filecreate \
     texttools javasupport javadebugger replace rubysupport closer \
     bashsupport pascalsupport pascalproject \
-    partexplorer bookmarks fullscreen \
-    $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR)
+    partexplorer bookmarks fullscreen $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR) $(CVSSERVICE_SUBDIR)
 
