@@ -471,6 +471,7 @@ void CustomProjectPart::updateTargetMenu()
         QTextStream stream(&f);
         //QRegExp re(".PHONY\\s*:(.*)");
 	QRegExp re("^([^($%.#].*[^)\\s])[:].*$");
+	re.setMinimal(true);
 	QString str = "";
         while (!stream.atEnd()) {
             QString str = stream.readLine();
