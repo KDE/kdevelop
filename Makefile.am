@@ -126,7 +126,7 @@ install-data-local: install-gideon-kdevelop
 
 ## We need this until we change the application name from gideon back to kdevelop
 install-gideon-kdevelop:
-	if test ! -d $(DESTDIR)$(kde_htmldir)/en/gideon; then \
+	@if test ! -d $(DESTDIR)$(kde_htmldir)/en/gideon; then \
 		echo "*** Creating a softlink from kdevelop to gidon to make the menu item Help -> Gideon Handbook work:";\
 		echo $(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon;\
 		$(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon;\
