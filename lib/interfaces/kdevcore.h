@@ -28,10 +28,10 @@ public:
     Context(const QCString &type)
     { m_type = type; }
     ~Context() {}
-    
+
     bool hasType(const QCString &type) const
     { return type == m_type; }
-    
+
 private:
     QCString m_type;
 };
@@ -176,7 +176,7 @@ public:
      * all components get a stopButtonClicked().
      */
     virtual void running(KDevPlugin *which, bool runs) = 0;
-    
+
 signals:
 
     /**
@@ -203,7 +203,7 @@ signals:
      * may hook some entries into it. More information on the
      * context can be obtained by looking for the type of
      * the context parameter and casting it accordingly.
-     * 
+     *
      */
     void contextMenu(QPopupMenu *popup, const Context *context);
     /**

@@ -56,7 +56,7 @@ ProcessWidget::ProcessWidget(QWidget *parent, const char *name)
 #else
     childproc = new KShellProcess();
 #endif
-    
+
     procLineMaker = new ProcessLineMaker( childproc );
 
     connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
@@ -105,21 +105,21 @@ bool ProcessWidget::isRunning()
 
 void ProcessWidget::slotProcessExited(KProcess *)
 {
-    emit processExited(childproc);
     childFinished(childproc->normalExit(), childproc->exitStatus());
+    emit processExited(childproc);
 }
 
 
 void ProcessWidget::insertStdoutLine(const QString &line)
 {
-    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(), 
+    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
         ProcessListBoxItem::Normal));
 }
 
 
 void ProcessWidget::insertStderrLine(const QString &line)
 {
-    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(), 
+    insertItem(new ProcessListBoxItem(line.stripWhiteSpace(),
         ProcessListBoxItem::Error));
 }
 
@@ -128,7 +128,7 @@ void ProcessWidget::childFinished(bool normal, int status)
 {
     QString s;
     ProcessListBoxItem::Type t;
-    
+
     if (normal) {
         if (status) {
             s = i18n("*** Exited with status: %1 ***").arg(status);
@@ -141,7 +141,7 @@ void ProcessWidget::childFinished(bool normal, int status)
         s = i18n("*** Process aborted ***");
         t = ProcessListBoxItem::Error;
     }
-    
+
     insertItem(new ProcessListBoxItem(s, t));
 }
 
@@ -150,7 +150,7 @@ QSize ProcessWidget::minimumSizeHint() const
 {
     // I'm not sure about this, but when I don't use override minimumSizeHint(),
     // the initial size in clearly too small
-    
+
     return QSize( QListBox::sizeHint().width(),
                   (fontMetrics().lineSpacing()+2)*4 );
 }

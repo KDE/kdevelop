@@ -15,11 +15,12 @@ public:
   KDevPartController(QWidget *parent);
 
   virtual void setEncoding(const QString &serviceType) = 0;
-  virtual void editDocument(const KURL &url, int lineNum=-1) = 0;
+  virtual void editDocument(const KURL &url, int lineNum=-1, int col=-1) = 0;
   virtual void showDocument(const KURL &url, const QString &context = QString::null) = 0;
   virtual void showPart( KParts::Part* part, const QString& name, const QString& shortDescription ) = 0;
+  virtual KParts::Part* findOpenDocument(const KURL& url) = 0;
 
-  virtual void saveAllFiles() = 0; 
+  virtual void saveAllFiles() = 0;
   virtual void revertAllFiles() = 0;
 
 

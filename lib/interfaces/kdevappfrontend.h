@@ -33,6 +33,10 @@ public slots:
      */
     virtual void startAppCommand(const QString &directory, const QString &program, bool inTerminal) = 0;
     /**
+     * Stop the currently running application
+     */
+    virtual void stopApplication() = 0;
+    /**
      * Inserts a string into the view.
      */
     virtual void insertStdoutLine(const QString &line) = 0;
