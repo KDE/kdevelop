@@ -173,11 +173,12 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 	    insert( "\t" );
 	}
 	e->accept();
-    } else if( e->ascii() == '{' || e->ascii() == '}' || e->ascii() == '#' ){
-	// electric keys
-	insert( e->text(), TRUE );
+    } else if( m_electricKeys.contains( e->ascii() ) ){
+	insert( e->text(), FALSE );
+        indent();
 	e->accept();
-    } else if( e->ascii() == ':' || e->ascii() == '#' ){
+    } else if( e->ascii() == '{' || e->ascii() == '}' ||
+               e->ascii() == ':' || e->ascii() == '#' ){
 	insert( e->text(), FALSE );
 	e->accept();
     } else if( e->key() == Key_Backspace ){
@@ -369,26 +370,33 @@ void QEditor::setLanguage( const QString& l )
     kdDebug() << "QEditor::setLanguage(" << l << ")" << endl;
     m_language = l;
     if( m_language == "c++" ){
+        setElectricKeys( "{}" );
 	document()->setPreProcessor( new CppColorizer(this) );
 	document()->setIndent( new CIndent() );
     } else if( m_language == "java" ){
+        setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
 	document()->setIndent( new CIndent() );
 #if defined(HAVE_PERL_MODE)
     } else if( m_language == "perl" ){
+        setElectricKeys( "{}" );
 	document()->setPreProcessor( new PerlColorizer(this) );
 	document()->setIndent( new CIndent() );
 #endif
     } else if( m_language == "python" ){
+        setElectricKeys( QString::null );
 	document()->setPreProcessor( new PythonColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
     } else if( m_language == "xml" ){
+        setElectricKeys( QString::null );
 	document()->setPreProcessor( new XMLColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
     } else if( m_language == "qmake" ){
+        setElectricKeys( QString::null );
 	document()->setPreProcessor( new QMakeColorizer(this) );
 	document()->setIndent( new SimpleIndent(this) );
     } else {
+        setElectricKeys( QString::null );
 	document()->setPreProcessor( 0 );
 	document()->setIndent( new SimpleIndent(this) );
     }

@@ -74,6 +74,9 @@ public:
     virtual void zoomIn();
     virtual void zoomOut();
 
+    virtual QString electricKeys() const { return m_electricKeys; }
+    virtual void setElectricKeys( const QString& keys ) { m_electricKeys = keys; }
+
     virtual int tabStop() const;
     virtual void setTabStop( int );
 
@@ -119,6 +122,7 @@ private:
     QString m_language;
     int m_currentLine;
     int m_tabStop;
+    QString m_electricKeys;
 };
 
 #endif
