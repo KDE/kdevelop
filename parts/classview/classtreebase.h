@@ -66,31 +66,27 @@ protected:
 class ClassTreeItem : public QListViewItem
 {
 public:
-    ClassTreeItem( ClassTreeBase *parent, ClassTreeItem *lastSibling,
-                   ParsedItem *parsedItem, const QString &text=QString::null )
-        : QListViewItem(parent, lastSibling, text), m_item(parsedItem)
-        { init(text); }
-    ClassTreeItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
-                   ParsedItem *parsedItem, const QString &text=QString::null )
-        : QListViewItem(parent, lastSibling, text), m_item(parsedItem)
-        { init(text); }
+    ClassTreeItem( ClassTreeBase *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
+        : QListViewItem(parent, lastSibling), m_item(parsedItem) {}
+    ClassTreeItem( ClassTreeItem *parent, ClassTreeItem *lastSibling, ParsedItem *parsedItem )
+        : QListViewItem(parent, lastSibling), m_item(parsedItem) {}
     ~ClassTreeItem()
         {}
 
     KPopupMenu *createPopup();
-    bool isOrganizer()
-    { return !m_item; }
-    virtual QString scopedText() const;
+    bool isOrganizer() { return !m_item; }
+    
     void getDeclaration(QString *toFile, int *toLine);
     void getImplementation(QString *toFile, int *toLine);
 
+    virtual QString scopedText() const;
+    virtual QString text( int ) const;
+    virtual QString tipText() const;
+    
 protected:
     ClassTreeBase *classTree()
         { return static_cast<ClassTreeBase*>(listView()); }
     ParsedItem *m_item;
-
-private:
-    void init(const QString &text);
 };
 
 
@@ -99,16 +95,22 @@ class ClassTreeOrganizerItem : public ClassTreeItem
 public:
     ClassTreeOrganizerItem( ClassTreeBase *parent, ClassTreeItem *lastSibling,
                             const QString &text )
-        : ClassTreeItem(parent, lastSibling, 0, text)
+        : ClassTreeItem(parent, lastSibling, 0 )
+        , m_text( text )
         { init(); }
     ClassTreeOrganizerItem( ClassTreeItem *parent, ClassTreeItem *lastSibling,
                             const QString &text )
-        : ClassTreeItem(parent, lastSibling, 0, text)
+        : ClassTreeItem(parent, lastSibling, 0 )
+        , m_text( text )
         { init(); }
     ~ClassTreeOrganizerItem()
         {}
 
+    virtual QString text( int ) const { return m_text; }
+    
 private:
+    QString m_text;
+    
     void init();
 };
 
@@ -127,9 +129,9 @@ public:
     ~ClassTreeScopeItem()
         {}
 
-protected:
+    virtual QString text( int ) const;
     virtual void setOpen(bool o);
-
+    
 private:
     void init();
 };
@@ -175,7 +177,8 @@ public:
                          ParsedMethod *parsedMethod );
     ~ClassTreeMethodItem()
         {}
-    QString scopedText() const;
+
+    virtual QString text( int ) const;
 };
 
 
@@ -186,6 +189,8 @@ public:
                        ParsedAttribute *parsedAttr );
     ~ClassTreeAttrItem()
         {}
+
+    virtual QString text( int ) const;
 };
 
 #endif

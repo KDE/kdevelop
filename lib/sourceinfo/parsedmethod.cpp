@@ -113,19 +113,35 @@ QString ParsedMethod::asString()
 
     QString str = name();
 
-   if ( _isObjectiveC )
-     return str;
+    if ( _isObjectiveC )
+        return str;
 
-    str += "(";
+    if ( isVirtual() )
+        str = "virtual " + str;
 
-    for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
-        if ( arg != arguments.getFirst() )
-            str += ", ";
+    if ( isStatic() )
+        str = "static " + str;
+    
+    str = type() + " " + str;
+    
+    if( arguments.count() > 0 ) {
+        str += "( ";
+        for ( arg = arguments.first(); arg != NULL; arg = arguments.next() ) {
+            if ( arg != arguments.getFirst() )
+                str += ", ";
 
-        str += arg->toString();
+            str += arg->toString();
+        }
+        str += " )";
+    } else {
+        str += "()";
     }
+    
+    if( isConst() )
+        str += " const";
 
-    str += ")";
+    if( isPure() )
+        str += " = 0";
 
     return str;
 }

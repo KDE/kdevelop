@@ -32,19 +32,6 @@
 #include "classviewpart.h"
 #include "classtooldlg.h"
 
-
-void ClassTreeItem::init(const QString &text)
-{
-    if (m_item) {
-        KConfig *config = ClassViewFactory::instance()->config();
-        config->setGroup("General");
-        bool showScoped = config->readBoolEntry("FullIdentifierScopes", false);
-        setText(0, showScoped? scopedText() : m_item->asString());
-    } else
-        setText(0, text);
-}
-
-
 KPopupMenu *ClassTreeItem::createPopup()
 {
     if (!m_item || m_item->itemType() == PIT_SCOPE)
@@ -107,7 +94,7 @@ KPopupMenu *ClassTreeItem::createPopup()
 QString ClassTreeItem::scopedText() const
 {
     QString str;
-
+    
     if (m_item)
         str = m_item->path();
 
@@ -133,6 +120,21 @@ void ClassTreeItem::getImplementation(QString *toFile, int *toLine)
 }
 
 
+QString ClassTreeItem::text( int ) const
+{
+    if (m_item)
+        return m_item->asString();
+    return QString::null;
+}
+
+
+QString ClassTreeItem::tipText() const
+{
+    // Purposefully avoid virtual dispatch here
+    return ClassTreeItem::text(0);
+}
+
+
 void ClassTreeOrganizerItem::init()
 {
     setExpandable(true);
@@ -144,8 +146,14 @@ void ClassTreeScopeItem::init()
 {
     setExpandable(true);
     setPixmap(0, UserIcon("CVnamespace", KIcon::DefaultState, ClassViewFactory::instance()));
+}
+
+
+QString ClassTreeScopeItem::text( int col ) const
+{
     if (m_item->name().isEmpty())
-        setText(0, i18n("Global"));
+        return i18n("Global");
+    return ClassTreeItem::text( col );
 }
 
 
@@ -320,12 +328,30 @@ ClassTreeMethodItem::ClassTreeMethodItem(ClassTreeItem *parent, ClassTreeItem *l
     setPixmap(0, UserIcon(icon, KIcon::DefaultState, ClassViewFactory::instance()));
 }
 
-QString ClassTreeMethodItem::scopedText() const
+
+QString ClassTreeMethodItem::text( int ) const
 {
     QString str;
+    
+    ParsedMethod* method = dynamic_cast<ParsedMethod*>(m_item);
+    
+    str = method->name();
+    
+    if( method->arguments.count() > 0 ) {
+        str += "( ";
+        for ( ParsedArgument *arg = method->arguments.first(); arg != NULL; arg = method->arguments.next() ) {
+            if ( arg != method->arguments.getFirst() )
+                str += ", ";
 
-    if (m_item)
-        str = m_item->asString();
+            str += arg->toString();
+        }
+        str += " )";
+    } else {
+        str += "()";
+    }
+    
+    if( method->isConst() )
+        str += " const";
 
     return str;
 }
@@ -352,6 +378,12 @@ ClassTreeAttrItem::ClassTreeAttrItem(ClassTreeItem *parent, ClassTreeItem *lastS
 }
 
 
+QString ClassTreeAttrItem::text( int ) const
+{
+    return m_item->name();
+}
+
+
 class ClassToolTip : public QToolTip
 {
 public:
@@ -373,7 +405,7 @@ void ClassToolTip::maybeTip(const QPoint &p)
 
     if (item && r.isValid()) {
         ClassTreeItem *ctitem = static_cast<ClassTreeItem*>(item);
-        QString str = ctitem->scopedText();
+        QString str = ctitem->tipText();
         if (!str.isEmpty())
             tip(r, str);
     }

@@ -51,13 +51,13 @@ KPopupMenu *ClassViewWidget::createPopup()
 
     popup->setCheckable(true);
     int id1 = popup->insertItem( i18n("List by Namespaces"), this, SLOT(slotTreeModeChanged()) );
-    int id2 = popup->insertItem( i18n("Full Identifier Scopes"), this, SLOT(slotScopeModeChanged()) );
+//    int id2 = popup->insertItem( i18n("Full Identifier Scopes"), this, SLOT(slotScopeModeChanged()) );
     KConfig *config = ClassViewFactory::instance()->config();
     config->setGroup("General");
     bool byNamespace = config->readBoolEntry("ListByNamespace", false);
     popup->setItemChecked(id1, byNamespace);
-    bool identifierScopes = config->readBoolEntry("FullIdentifierScopes", false);
-    popup->setItemChecked(id2, identifierScopes);
+//    bool identifierScopes = config->readBoolEntry("FullIdentifierScopes", false);
+//    popup->setItemChecked(id2, identifierScopes);
 
     return popup;
 }
