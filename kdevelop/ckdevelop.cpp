@@ -3731,7 +3731,9 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
         makeWidgetDockVisible(log_file_tree->parentWidget());
     }
     disableCommand(ID_BUILD_COMPILE_FILE);
-    m_docViewManager->currentEditView()->setFocus();
+    if (m_docViewManager->currentEditView()) {
+      m_docViewManager->currentEditView()->setFocus();
+    }
     slotNewUndo();
     slotNewStatus();
 //    setMainCaption();
@@ -3747,7 +3749,9 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
-    m_docViewManager->currentEditView()->setFocus();
+    if (m_docViewManager->currentEditView()) {
+      m_docViewManager->currentEditView()->setFocus();
+    }
     slotNewUndo();
     slotNewStatus();
 //    setMainCaption();
