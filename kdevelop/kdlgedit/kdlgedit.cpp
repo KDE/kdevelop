@@ -735,6 +735,7 @@ void KDlgEdit::generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString
 void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
 
     props->dumpConstruct(stream, "QSpinBox", _parent);
     generateCommon(wid,stream,_parent);
@@ -746,6 +747,8 @@ void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
     props->dumpIntPropCall(stream, "setValue", "Value");
 
     props->dumpBoolPropCall(stream, "setWrapping", "isWrapping", false);
+
+    props->dumpStringPropCall(stream, "setSpecialValueText", "SpecialValText", withi18n);
 
     *stream << "\n";
 }

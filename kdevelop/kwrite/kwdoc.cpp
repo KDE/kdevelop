@@ -168,7 +168,9 @@ int TextLine::firstChar() {
 }
 
 char TextLine::getChar( int pos ) const {
-  if (pos < len) return text[pos];
+
+  if (pos >= 0 && pos < len )
+    return text[pos];
   return ' ';
 }
 

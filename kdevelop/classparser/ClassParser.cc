@@ -156,6 +156,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
   {
     if( lexem != '}' )
     {
+      declStart = getLineno();
       switch( lexem )
       {
         case ID:
@@ -168,19 +169,7 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
           parseUnion();
           break;
         case CPSTRUCT:
-          PUSH_LEXEM();
-          // Check if it's a variable declaration or a struct declaration.
-          getNextLexem();
-
-          if( lexem == '{' ) // Struct declaration.
-          {
-            skipBlock();
-            // Goto the end of the declaration.
-            while( lexem != ';' && lexem != 0 )
-              getNextLexem();
-          }
-          else
-            PUSH_LEXEM();
+          parseStruct( aStruct );
           break;
         default:
           debug( "Found unknown struct declaration." );

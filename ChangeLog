@@ -1,3 +1,10 @@
+2000-07-07 jbb <jbb@kdevelop.de>
+      * Applied patches
+        - Dialog Editor problem w/ QSpinBox (fix: Steven Suson <suson@TuckerEnery.com>)
+	- show nested structures in class viewer (fix: Richard Dale <Richard_Dale@tipitina.demon.co.uk>)
+	- Ctrl-Right arrow causes crash when Wordwrap is on and source is an assembler source file. (fix: jbb)
+	- Expand Watch vars better (fix: jbb)
+
 2000-06-19 Falk Brettschneider <gigafalk@yahoo.com>
    * bugfix (JBB's hint) for: critical CPU load for some seconds - total kdevelop blocking when debugging, happens only sometimes
 
