@@ -324,15 +324,25 @@ sub condCopyUserDocFiles {
 
 sub condCopyKdelnkFile {
 
-    #if .kdelnk-file was chosen in kAppWizard
-    if ($processes{KDELNK} eq "yes") {
+  #if .kdelnk-file was chosen in kAppWizard
+  if ($processes{KDELNK} eq "yes") {
 	
-	#copying, rename and replace in the kdelnk-file
-	chdir ($templatedir);
-	copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
-	chdir ($underDirectory);
-    	replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
+  	#copying, rename and replace in the kdelnk-file
+  	chdir ($templatedir);
+
+    if ($processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini"||
+    			$processes{APPLICATION} eq "kde2mdi") {
+    	copy ("kdelnk_template", "$underDirectory/$nameLittle.desktop");
+    	chdir ($underDirectory);
+      replaceValuesInFile(\%changings, "$nameLittle.desktop");
     }
+    else
+    {
+    	copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
+    	chdir ($underDirectory);
+      replaceValuesInFile(\%changings, "$nameLittle.kdelnk");
+    }
+  }
 }
 
 

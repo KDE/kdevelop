@@ -2380,13 +2380,20 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
   }
   
   if (datalink->isChecked()) {
-    fileInfo.rel_name = namelow + "/" + namelow + ".kdelnk";
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = true;
-    fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".kdelnk";
-    project->addFileToProject (namelow + "/" + namelow + ".kdelnk",fileInfo);
-  } 
+    if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
+      fileInfo.rel_name = namelow + "/" + namelow + ".desktop";
+      fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".desktop";
+      project->addFileToProject (namelow + "/" + namelow + ".desktop",fileInfo);
+     }
+    else{
+      fileInfo.rel_name = namelow + "/" + namelow + ".kdelnk";
+      fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".kdelnk";
+      project->addFileToProject (namelow + "/" + namelow + ".kdelnk",fileInfo);
+    }
+  }
   
   if (progicon->isChecked()) {
     fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
@@ -2394,7 +2401,10 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!(qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
-      fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
+      if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+        fileInfo.install_location = "$(kde_icondir)/medium/locolor/apps/" + namelow + ".xpm";
+      else
+        fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
     }
     else {
       fileInfo.install = false;
@@ -2409,7 +2419,10 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!(qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
-      fileInfo.install_location = "$(kde_minidir)/" + namelow + ".xpm";
+      if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+        fileInfo.install_location = "$(kde_icondir)/small/locolor/apps/" + namelow + ".xpm";
+      else
+        fileInfo.install_location = "$(kde_minidir)/" + namelow + ".xpm";
     }
     else {
       fileInfo.install = false;
@@ -2447,11 +2460,10 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected()) {
-	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
-      } 
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())
+      	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
       else 
-	fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
+	      fileInfo.install_location = "$(kde_htmldir)/en/" + namelow+ "/index-1.html";
     } 
     
     project->addFileToProject (namelow + "/docs/en/index-1.html",fileInfo);

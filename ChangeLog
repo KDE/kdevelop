@@ -1,3 +1,10 @@
+2000-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed KDE2 mini template error with missing config.h include for VERSION
+	* added .desktop file support for KDE 2 apps, including installation destination
+	* fixed installation destination of KDE2 apps pixmaps
+	* re-added former tutorial, so german translation is still good ;-)
+	* finished tutorial by adding QScrollView functionality, KImageIO usage etc.
+
 2000-02-17 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* Starting a the application now checks if the project
 	  has to be rebuild

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>KDE Application Tutorials: Installing KDE 2</TITLE>
+<TITLE>KDE Application Tutorials: Getting Started</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,98 +18,51 @@
 <A HREF="index-1.html">Previous</A>
 <A HREF="index.html#toc2">Table of Contents</A>
 </P>
-<H3><A NAME="s2">2. Installing KDE 2</A></H3>
+<H3><A NAME="s2">2. Getting Started</A></H3>
 
-<P>In this chapter we will first go through a couple of steps that will help you set up KDevelop for creating KDE 2 / Qt 2.x
-applications. The requirements are:
+<P>Getting Started- that means, you should have set up KDevelop to work correctly first. Ensure you have access to the Qt online reference
+documentation by the "Help" menu or the according book in the documentation tree. When looking a the first page of the Ot
+documentation, you will see that it contains a link to a section "Tutorials" and "Examples". Under "Tutorials", you will find a 14-step
+introduction into using the Qt library to build applications. On the other hand, "Examples" will lead you to a list of example
+programs that Qt includes and takes for example usage reference in certain classes. Now, if you are an absolute beginner, you should be
+comfortable with the idea behind Qt- providing a library that offers:
+<P>
 <UL>
-<LI>a current Qt-2.1 snapshot available at 
-<A HREF="http://www.troll.no">http://www.troll.no</A></LI>
-<LI>a current KDE 2 snapshot of the packages <CODE>kdesupport</CODE> and <CODE>kdelibs</CODE></LI>
+<LI>a base application class (<CODE>QApplication</CODE>)</LI>
+<LI>a widget library for graphical user interfaces</LI>
+<LI>a set of additional helper classes for graphics, file and data handling</LI>
+<LI>the signal-slot mechanism for object communication</LI>
+<LI>event controlling by event loops and virtual methods</LI>
 </UL>
-<P>Both the Qt-2.1 and KDE 2 libraries are currently under development but are to be expected as final and changes to be expected for the
-final versions are marginal and may not even affect your application. This means you're getting to know the newest libraries coming up-
-and you're in charge of a valuable time-saving to create your application even before the libraries are completed.
-<P>The following sections describe what to do in detail within three steps:
-<UL>
-<LI>installing the Qt library</LI>
-<LI>installing the KDE libraries</LI>
-<LI>setting up KDevelop</LI>
-</UL>
-<P>Then you're ready to go and we'll proceed with creating the first step of the example program <EM>KScribble</EM> in the next chapter.
-<P>
-<P>
-<H3><A NAME="ss2.1">2.1 Setting up Qt-2.1</A>
-</H3>
-
-<P>This first step will lead you to the minimum requirement to follow our example- which implies that there is a possibility to avoid
-installing KDE 2 if you're only interested in creating Qt-only programs. As Qt-2.1 contains all needed classes and KDevelop providing a
-project template for multiple document interface applications for Qt-2.1 as well based on the same framecode that is used in the KDE 2
-template, you should have no problem at all following the example with a Qt-only application.
-<P>Now, to get the newest Qt library, get a recent version from the Troll Tech website at 
-<A HREF="http://www.troll.no">http://www.troll.no</A>, section download. Then change to root and copy the tarball to the directory where your currently used Qt
-version is placed as well - on a SuSE Linux system this would be <CODE>/usr/lib</CODE>, where you should have a directory for either
-qt-1.44 or qt-2.0.2, depending on the distribution version. Untar the library sources with
-<P><CODE>tar zxvf qtxxx.tar.gz</CODE>
-<P>depending on the name of the tarball. Then set the environment variable <CODE>QTDIR</CODE> to point to the directory where your new Qt-2.1
-library is placed with e.g. <CODE>setenv QTDIR=/usr/lib/qt-2.1</CODE>. Another solution would be to move the qt-1.44 directory, usually
-just named qt, to qt-1.44 and create a symlink that for now has to point to qt-2.1, after the library is build, change it back to
-point to the qt-1.44 directory.
-<P>Change to the Qt-2.1 directory and type:
-<BLOCKQUOTE><CODE>
-<PRE>
-./configure
-make
-</PRE>
-</CODE></BLOCKQUOTE>
-<P>You can change back your QTDIR variable to point to your qt-1.44 installation after successfully
-compiling the Qt-2.1 library.
-<P>Now switch to the directory <CODE>/usr/lib/qt-2.1/lib</CODE> and copy the created libraries to <CODE>/usr/lib</CODE> <B>exept</B> the
-symbolic link <CODE>libqt.so</CODE>.
-<P>Then you're done with Qt and you can proceed to the next step, setting up KDE 2 libraries. If you want to develop for Qt only, proceed
-to section Setting up KDevelop.
-<P>
-<H3><A NAME="ss2.2">2.2 Setting up KDE 2 Libraries</A>
-</H3>
-
-<P>
-<P>The second step leads you to install the needed KDE libraries. Download a recent snapshot of the library packages <CODE>kdesupport</CODE>
-and <CODE>kdelibs</CODE> from 
-<A HREF="http://www.kde.org">http://www.kde.org</A>. Then things will go a bit easier than for the
-Qt library. Just untar the sources to your directory and change to the kdesupport directory first. There, type:
-<P>
-<BLOCKQUOTE><CODE>
-<PRE>
-./configure --with-qt-dir=/usr/lib/qt-2.1 --prefix=/opt/kde2
-make
-
-and as root:
-
-make install
-</PRE>
-</CODE></BLOCKQUOTE>
-<P>This will install the kdesupport package to the directory given in the --prefix option and compile using the new build Qt-2.1 library,
-to which you give the path to configure by the option --with-qt-dir.
-<P>The same applies to the kdelibs package, just change to the kdelibs directory and type the same as above for the kdesupport package.
-<P>Then you're done with setting up the requirements for the needed libraries to build a KDE 2 application.
-<P>As a note aside, the KDE library package contains support for automatic HTML documentation generation, which you can easily get by
-installing KDoc, version 2.x. Then type <CODE>makekdedoc</CODE> in your kdelibs directory and KDoc will create the HTML documentation in a
-subdirectory <CODE>srcdoc</CODE>. In KDevelop you can access the KDE library documentation online with setting the KDE library
-documentation path in the KDevelop Setup dialog to point to <CODE>kdelibs/srcdoc</CODE>. On the same way set your Qt-Online documentation
-path in KDevelop to point to <CODE>/usr/lib/qt-2.1/html</CODE>, so you can access the documentation right away from within KDevelop.
-<P>If you successfully installed the Qt-2.1 and KDE 2 libraries, you're just one step away from creating your first KDE 2 application, you
-just need to give KDevelop the needed information where you installed the libraries - which we'll do in the next section.
-<P>
-<H3><A NAME="ss2.3">2.3 Setting up KDevelop</A>
-</H3>
-
-<P>This part is somewhat the easiest in the whole configuration process for KDE 2 development: Setting up KDevelop. Just open KDevelop,
-then select "Options"->"KDevelop Setup" to access the KDevelop configuration. There, change to the last page, titled "Path". This page
-contains two entry fields, one for the Qt library and one for the KDE 2 libraries. As you have successfully installed everything,
-select <CODE>/usr/lib/qt-2.1</CODE> for the Qt-2.x library path and <CODE>/opt/kde2</CODE> for the KDE 2 library path. Press the "OK" button
-and you're done.
-<P>Users that only want to develop for Qt-2.x (including the current Qt-2.0.2 version) just have to set the Qt-2.x library path.
-<P>Now we can proceed to the next chapter where we will create the first step of the <EM>KScribble</EM> example.
+<P>If that doesn't tell you anything right now, you should read about the Qt library in 
+<A HREF="programming-2.html#ss2.1">The KDevelop Programming Handbook</A> where the basics for a Qt application are described in detail. There, you will also find and
+introduction about the difference between a Qt and a KDE application, which is not much at the first level of the Qt tutorial step.
+<P>Now, to learn about Qt first would be a good start for programming KDE applications as well, so we will create a project that will
+produce the tutorial applications after editing.
+<P>To do this, start with opening KDevelop and select "Project"-"New" from the menubar. The application wizard opens and you have to
+select which type of project you want to build. For Qt applications, you would choose the Qt application, but we will use the mini-KDE
+project to build our examples. The reason is simple: the Qt tutorials don't contain much code, and  by choosing the Qt application in
+the application wizard, we would have to do a lot of changing on the provided code to create the "true" examples.
+<P>But as the mini-KDE application only consists of an empty main window but also checks for the Qt library and header files, it will fit
+for our purposes and doesn't require much changes.
+<P>When entering the next wizard page, we have to enter the project-specific information. There, we can leave out any KDE-specific
+additions such as a mini-icon and a main icon, documentation etc. We just fill in the information that will be useful for building a
+suitable base for the tutorials. As the structure of the tutorial steps builds the next step on the previously created code, we can
+start with <CODE>MyWidget</CODE> as the project name. This will already build us the base class that is needed in chapter 4, so we don't have
+to care for that later. As we want to start with the first tutorial step, we will use '1' as the project number, which we can increase
+later when moving to the next step.
+<P>Then, fill in the other required information such as your name, email address and project directory. That would be all we need and we
+can flip to the next page. Insert your header for the project's header file here or use the given example. The same is done with the
+4th page, where the same has to be set for the source files. Finally, the last page is entered, where you have to press "Create" to
+build the project. If the button is not available, start at the first page again and make sure you didn't miss to insert any required
+information.
+<P>If everything went OK, the project has been build and the messages window in the application wizard will have "READY" at it's last
+line.  Select "Close" to finish the wizard.
+<P>When looking at the treeview on the left, you will see that the project alreay includes a class "MyWidget"- this is because we chose
+this to be the application name. Further, when opening "Functions" in the classviewer's "Globals" folder, you will see that the
+application already contains a <CODE>main()</CODE> function where the execution will start.
+<P>Now the application is already set up. You could do an "Execute" or "Make", but as we want to create the tutorial applications, we can
+go ahead and change the code first to create our tutorial examples- which we'll do in the next step.
 <P>
 <P>
 <P ALIGN="RIGHT">

@@ -17,6 +17,243 @@ licensed under the GNU General Public License; see <ref id="Copyright" name="Cop
 
 <chapt>Introduction
 <p>
+As KDE is currently becoming a standard for Unix System's desktops, more and more developers want to take advantage of the well-written
+API that the KDE project includes to create new applications that offer a GUI as well as an easy use of the classes provided with
+Qt/KDE. The KDevelop project therefore intends to provide an IDE which enables developers to create and extend their applications
+rapidly with the main focus on KDE. As beginners always have difficulties to get started, this handbook tries to explain certain
+aspects of application creation for KDE by describing how to create running applications with the sample code included with the Qt
+library by using the KDevelop IDE as well as creating KDE applications by examples.
+
+Therefore, the next chapter will explain you how to create a project with KDevelop that is already a complete application; then we'll
+walk on to the Qt online documentation containing the sources for examples on how to use the Qt library.
+
+This will give you a first understanding how the underlying Qt library functions and how to use the classes provided with it; Qt is the
+point where to get started as KDE is on top of the Qt library classes and KDE applications make a wide use of them.
+
+Further, we'll cover on how to create a KDE application with KDevelop's application wizard. From the minimum framework provided,
+we will create a running example KDE application that makes use of the KDE libraries and will explain the different parts of a KDE
+application in detail.
+
+The KDevelop Team wishes you success in learing about KDE and Qt with this handbook and hope it will enable you to become another
+programmer contributing to the KDE project.
+
+<sect>What you should know already
+<p>
+This handbook requires a base knowledge about the C++ programming language as a minimum to understand the code examples and their
+functionality. Further, it is assumed that you have read <htmlurl url="index.html" name="The User Manual to KDevelop"> as well as
+<htmlurl url="programming.html" name="The KDevelop Programming Handbook"> and know how the KDevelop IDE works in general and what
+generated projects are.
+
+<chapt>Getting Started
+<p>
+Getting Started- that means, you should have set up KDevelop to work correctly first. Ensure you have access to the Qt online reference
+documentation by the "Help" menu or the according book in the documentation tree. When looking a the first page of the Ot
+documentation, you will see that it contains a link to a section "Tutorials" and "Examples". Under "Tutorials", you will find a 14-step
+introduction into using the Qt library to build applications. On the other hand, "Examples" will lead you to a list of example
+programs that Qt includes and takes for example usage reference in certain classes. Now, if you are an absolute beginner, you should be
+comfortable with the idea behind Qt- providing a library that offers:
+
+<itemize>
+<item>a base application class (<tt/QApplication/)
+<item>a widget library for graphical user interfaces
+<item>a set of additional helper classes for graphics, file and data handling
+<item>the signal-slot mechanism for object communication
+<item>event controlling by event loops and virtual methods
+</itemize>
+
+If that doesn't tell you anything right now, you should read about the Qt library in <htmlurl url="programming-2.html#ss2.1" name="The
+KDevelop Programming Handbook"> where the basics for a Qt application are described in detail. There, you will also find and
+introduction about the difference between a Qt and a KDE application, which is not much at the first level of the Qt tutorial step.
+
+Now, to learn about Qt first would be a good start for programming KDE applications as well, so we will create a project that will
+produce the tutorial applications after editing.
+
+To do this, start with opening KDevelop and select "Project"-"New" from the menubar. The application wizard opens and you have to
+select which type of project you want to build. For Qt applications, you would choose the Qt application, but we will use the mini-KDE
+project to build our examples. The reason is simple: the Qt tutorials don't contain much code, and  by choosing the Qt application in
+the application wizard, we would have to do a lot of changing on the provided code to create the "true" examples.
+
+But as the mini-KDE application only consists of an empty main window but also checks for the Qt library and header files, it will fit
+for our purposes and doesn't require much changes.
+
+When entering the next wizard page, we have to enter the project-specific information. There, we can leave out any KDE-specific
+additions such as a mini-icon and a main icon, documentation etc. We just fill in the information that will be useful for building a
+suitable base for the tutorials. As the structure of the tutorial steps builds the next step on the previously created code, we can
+start with <tt/MyWidget/ as the project name. This will already build us the base class that is needed in chapter 4, so we don't have
+to care for that later. As we want to start with the first tutorial step, we will use '1' as the project number, which we can increase
+later when moving to the next step.
+
+Then, fill in the other required information such as your name, email address and project directory. That would be all we need and we
+can flip to the next page. Insert your header for the project's header file here or use the given example. The same is done with the
+4th page, where the same has to be set for the source files. Finally, the last page is entered, where you have to press "Create" to
+build the project. If the button is not available, start at the first page again and make sure you didn't miss to insert any required
+information.
+
+If everything went OK, the project has been build and the messages window in the application wizard will have "READY" at it's last
+line.  Select "Close" to finish the wizard.
+
+When looking at the treeview on the left, you will see that the project alreay includes a class "MyWidget"- this is because we chose
+this to be the application name. Further, when opening "Functions" in the classviewer's "Globals" folder, you will see that the
+application already contains a <tt/main()/ function where the execution will start.
+
+Now the application is already set up. You could do an "Execute" or "Make", but as we want to create the tutorial applications, we can
+go ahead and change the code first to create our tutorial examples- which we'll do in the next step.
+
+
+<chapt>Building the Qt Tutorials
+<p>
+<sect>Step One: Hello World!
+<p>
+As the previous chapter explains, we created a project called <tt/MyWidget/- now, when looking at the first tutorial page of the Qt
+documentation, you will see that the first application only uses a <tt/main()/ function. Therefore, we only have to change the given
+<tt/main()/ function of our generated project to get the first tutorial step running.
+
+To access the <tt/main()/ function, select it from the classviewer's "Globals" folder, which contains a subfolder for "Functions" where
+all non-class functions are listed. This will open the file <tt/main.cpp/ in the "C/C++ Files" window and the editing cursor is already
+set in front of the first line of <tt/main()/.
+
+<sect1>What to change first
+<p>
+We could start changing the given code towards the desired one which is listed in the tutorial- but it can be even easier. Select the
+contents of the <tt/main()/ function with the mouse or by holding the Shift-key pressed while selecting the lines with the down-arrow
+key. Then select "Cut" from the "Edit" menu or press the DEL-key to remove the selected code. This will clear the main function and we
+can start from scratch to build our first tutorial.
+
+<sect1>Entering the tutorial code
+<p>
+Now, to insert the code from the tutorial, you could first read it carefully and try to remember which line contained which code. Then,
+after reading the tutorial's line-by-line description, you could use it as an example to write the tutorial by yourself.
+
+Those who want to go the easy way: select the contents of the listed <tt/main()/ function in the documentation browser and press the
+"Copy"-icon from the toolbar. Optionally, you could use the context-menu or the according entry in the "Edit" menu. This will copy the
+selection into the clipboard and, after switching back to the sourcecode window, can be inserted with "Paste" (either from the context
+menu, the toolbar icon or the according entry in the "Edit" menu).
+
+Finally, add the according header files outside the <tt/main()/ function:
+
+<tscreen><verb>
+#include <qapplication.h>
+#include <qpushbutton.h>
+</verb></tscreen>
+
+That's it ! The source code is done for your first tutorial application.
+
+<sect1>Building Hello World!
+<p>
+To build the first tutorial, select "Make" from the "Build" menu or press the according toolbar icon. Optionally, you could choose
+"Execute" as well, which results in running the application after the build was successful.
+
+If the build stops due to an error, be assured the fault was on the programmer's side, not on the tutorial ! This would be sad to
+search for an error just when you decided to program for KDE and/or Qt, but you can use this to train yourself to use KDevelop. Now, to
+find an error, you have two options: either select the according error message in the output window, which will bring you to the
+according line the error occured, or press the F4 key; optionally you could use the "Next Error" entry in the "View" menu.
+
+<sect1>Exercises
+<p>
+You may ask "Exercises ? This one was so simple, I don't need to excercise !", but be assured, things will get more complicated. This
+one was the easiest example, but the more complex they will get the more thinking is asked on your side to understand and follow the
+tutorial steps. Also the excercises will enable you to learn how to acutally use KDevelop and it's features.
+
+To teach yourself more with the first tutorial, you should try to do the following changes to the given code and see how this will
+influence the application behavoir:
+
+<enum>
+<item>change the pushbutton to a <tt>QLabel</tt>.
+<item>use <tt/setText()/ instead of directly setting the text in the pushbutton's constructor
+<item>use <tt/QPushButton::resize ( const QSize & s )/ instead of setting the size by width and height directly. Create a <tt/QSize/
+instance first that contains the size
+<item>play with the sizes to see which is width and heigth
+</enum>
+
+<sect>Step 2 and 3: Extensions
+<p>
+The tutorial steps 2 and 3 are extending the facilities of the first tutorial. There, you will learn about signals and slots as well as
+parent-child relationships between widgets.
+
+Now, why is it important to learn about that ? Well, the signals and slots are building the technology which make the difference when
+comparing the Qt library to other widget library.  Whenever you will hit an implementation problem where you want to communicate
+between objects, this will make your work incredible short and nothing serious will happen if something went wrong, even misconnections
+don't lead to a segmentation fault. This is the strength of the Qt library and a lot of KDE/Qt developer's won't want to miss it
+anymore because of it's flexibility. Understanding the signal/slot mechanism therefore is essential to create any KDE/Qt application.
+
+Another thing to watch out for is the fact that the button terminates the <tt/QApplication/ instance by calling <tt/quit()/. You will
+meet <tt/quit()/ again when working with <tt/QApplication/'s KDE-pendant, <tt/KApplication/
+
+<sect>Writing your own Widgets
+<p>
+Now, after having successfully modified and extended the <tt/main()/ function, you will hit the point to create a new widget- a unique
+widget that only can be constructed with the class you're about to write in step 4.  Actually, the class has been created by the
+application wizard for you, so there is not much to add- just that you have to insert the code that lesson 4 places in the
+<tt/main.cpp/ file into the <tt/MyWidget/ classes' header and implementation file. Fortunately, you only have to add the implementation
+to the constructor code.
+
+To access the constructor, select it from the classviewer. This will automatically bring you to the implementation where you have to
+add the code.
+
+Here, you only have to watch out for the include of <tt/qfont.h/- <tt/QFont/ is only used in the constructor code of <tt/MyWidget/.
+Therefore, add <tt/#include &lt;qfont.h&gt;/ to the top of the <tt/mywidget.cpp/ file.
+
+To run the new application, just hit "Execute". This will result in compling the changes after an autosaving.
+
+<sect>Extending the Widget Class
+<p>
+Now, in lesson 5 the target is to extend the widget class. Therefore, you will learn about virtual functions as well. Here, the
+<tt/resizeEvent()/ is reimplemented. What is important to learn here (besides extending a class) is that Qt works with user events by
+virtual functions that take an event as a parameter. Therefore, you should make yourself comfortable with the following classes of the
+Qt library:
+
+<itemize>
+<item>QEvent
+<item>QChildEvent
+<item>QCloseEvent
+<item>QFocusEvent
+<item>QKeyEvent
+<item>QMouseEvent
+<item>QMoveEvent
+<item>QPaintEvent
+<item>QResizeEvent
+<item>QTimerEvent
+</itemize>
+
+Whenever writing custom widgets, especially view areas of applications, you will have to overwrite the default implementation of the
+widget's event-methods by your own for certain events that have to be processed. Those would be e.g.
+
+<tt/virtual void mousePressEvent ( QMouseEvent * )/ for processing a mouse event to pop up a context menu. In the implementation, you
+have to insert a formal parameter into the function header, most developers either use <tt/event/ or just <tt/e/ as the parameter name.
+
+Then, you can process the event's parameters. For a <tt/QMouseEvent/, you have to ask if the right, middle or left mouse button was the
+one that caused the event.
+
+<sect>Adding a new Class
+<p>
+With lesson 6, you will have to add a class to the tutorial application. Now, normally you would think "I just will create a header
+file and an implementation file- then I'm done"- but KDevelop will make it easier for you. When adding a class, you should always use
+the Classgenerator. This will do all the work for you so you just will have to add the specific code.
+
+To add a class with the Classgenerator, choose "Project"-"New Class", which will open a dialog to enter all needed values for the class
+you want to add. The first thing we have to insert is the classname. The tutorial name this <tt/LCDRange/, so this has to be inserted
+first. Then proceed to the baseclass. The baseclass is the one that the new class inherits. Looking at the tutorial (Qt 1.42), this is
+<tt/QWidget/.  Now, as most GUI classes to add would inherit <tt>QWidget</tt>, the Classgenerator makes it even easier. Leave the baseclass
+empty and instead check "QWidget child class" in the "Additional Options" section. This will automatically add the required
+<tt/Q_OBJECT/ macro to the headerfile to add slots and signals later (which is required in chapter 7).
+
+As the filenames are automatically inserted, you don't have to care for that. The only thing that we would suggest adding is the
+documentation. It is always a good style to add a desciptive documentation to the class, especially as the classname <tt/LCDRange/
+doesn't inform you specifically about the purpose of the widget.
+
+<sect>Step 7-14
+<p>
+For the rest of the tutorial steps, you are prepared and know everything you have to know- adding the classes required and doing the
+changes.
+
+After each change you should do a new build and check your code for errors. Run the application and follow it's execution;
+additionally, you should play with KDevelop's options for "Build"- execute the application with a commandline argument such as
+--geometry and debug it with KDbg in the Tools-window. Then you should be able to proceed with the Qt examples that are provided with
+Qt. In the next chapter, you will be introduced into development for KDE 2 by an example application <em>KScribble</em>, which is a small
+drawing application that will show you the concepts of application design and how to implement you own program.
+
+<chapt>Creating KDE Applications
+<p>
 This handbook will try to teach you KDE/Qt application design by creating an example application step-by-step. The major intention is
 to gain a certain understanding how two of the most important ideas of graphical user interface programming work: the document-view
 model and the multiple document interface (MDI) model.
@@ -34,7 +271,7 @@ document-view model as well - which is hard to understand even for advanced prog
 applications, which use the document-view model even if they only contain one window and you wouldn't obviously see a need for it. But
 let's just go inside it - you will see what's coming up on you and how easy it actually is.
 
-The tutorial covers several steps:
+The further chapters of the tutorial cover the following several steps:
 <itemize>
 <item>installing KDE 2 (libraries) and setting up KDevelop to create KDE 2 applications.
 <item>understanding the basic concepts of MDI and document-view model.
@@ -307,7 +544,7 @@ from the Qt section. Then select "Next", enter "KScribble" as project name and "
 and email address into the according fields and you're done. Click on the "Create" button and KDevelop will generate our first version
 of <em>KScribble</em> while you can watch the output in the last page of the wizard. Finally, press "Exit" to return to KDevelop. In
 the output window you will see an additional message showing that the messages file has been set up for your project, which will be
-important to translate KScribble into other languages.
+important to translate <em>KScribble</em> into other languages.
 
 <sect>Overview
 <p>
@@ -377,15 +614,15 @@ Open the file <tt>kscribbledoc.h</tt> by selecting it in one of the fileviewers 
         bool modified;
 </code>
 
-As you see, we added pen and buffer as well as currentPen() and penWidth(). As pen is declared private, we offer a possibility to
-retrive the pen as well as the pen width. As these are already implemented within the classdeclaration, we don't have to add them to
-the implementation file, where we're turning to now.
+As you see, we added pen and buffer as well as <tt>currentPen()</tt> and <tt>penWidth()</tt>. As pen is declared private, we offer a
+possibility to retrive the pen as well as the pen width. As these are already implemented within the classdeclaration, we don't have to
+add them to the implementation file, where we're turning to now.
 
 <sect>Initialization of the Document
 <p>
 
-Select the method newDocument() in the KScribbleDoc class to jump to the method declaration. Here, we're only adding one line, marked
-with the arrow:
+Select the method <tt>newDocument()</tt> in the <tt>KScribbleDoc</tt> class to jump to the method declaration. Here, we're only adding
+one line, marked with the arrow:
 <code>
   kscribbledoc.cpp
 
@@ -400,7 +637,7 @@ with the arrow:
   }
 </code>
 
-This initializes the pen with the color black and width of 3 pixels; the QPen class has some more constructors, but this one lasts our
+This initializes the pen with the color black and width of 3 pixels; the <tt>QPen</tt> class has some more constructors, but this one lasts our
 needs here.
 
 <sect>Implementing the Serialization
@@ -440,19 +677,19 @@ What is left to do is to define how to open and save our pictures. This is done 
 </code>
 
 Add the lines marked with the arrow again to your code. What we did here is to comment out the passages where the file
-<tt>filename</tt> is opened, because that is done automatically by the load and save methods of QPixmap, which we add instead. Other
-documents may open a file and read in its contents such as text lines or whatever, so the QFile methods are already present in the
-codeframe. As save() and load() return a boolean value if the operation was successful, we're returning false if not, so the rest of
-the framework gets a return value and can give out warnings if the operation was not successful.
-The load() and save() methods now are already provided in QPixmap. They require the filename and the format as argument; the source
-framework on the other hand <bf>does not</bf> call the document methods with the format yet. If only one format is used, it lasts to
-set the format here. other methods could detect the format for example- but we will turn to this later. For now, we're using "PNG" as
-format; see QImageIO for more details about the image formats that can be opened.
+<tt>filename</tt> is opened, because that is done automatically by the load and save methods of <tt>QPixmap</tt>, which we add instead. Other
+documents may open a file and read in its contents such as text lines or whatever, so the <tt>QFile</tt> methods are already present in the
+codeframe. As <tt>save()</tt> and <tt>load()</tt> return a boolean value if the operation was successful, we're returning false if not,
+so the rest of the framework gets a return value and can give out warnings if the operation was not successful.
+The <tt>load()</tt> and <tt>save()</tt> methods now are already provided in <tt>QPixmap</tt>. They require the filename and the format as
+argument; the source framework on the other hand <bf>does not</bf> call the document methods with the format yet. If only one format is
+used, it lasts to set the format here. other methods could detect the format for example- but we will turn to this later. For now,
+we're using "PNG" as format; see <tt>QImageIO</tt> for more details about the image formats that can be opened.
 
-Now we're already finished defining our document structure. The QPixmap buffer serves us as a buffer storing the original picture
+Now we're already finished defining our document structure. The <tt>QPixmap</tt> buffer serves us as a buffer storing the original picture
 contents while we're working on it, the pen is a valid pen for all views connected to the document. Note that the initialization of the
-pen is done in newDocument(). This method is always called after the constructor within the framework internally, so you should add
-document instances initializations there as we did with the pen.
+pen is done in <tt>newDocument()</tt>. This method is always called after the constructor within the framework internally, so you
+should add document instances initializations there as we did with the pen.
 
 In the next chapter we will turn to the view class to define how the view shall cooperate with the user as well as how it accesses the
 document- and then we'll be ready to paint !
@@ -463,14 +700,14 @@ document- and then we'll be ready to paint !
 <sect>Interactivity with the User
 <p>
 
-In this chapter we'll turn to the view class of KScribble to define how the child windows shall work. First of all, we notice that
-KScribbleView is derived from QWidget by default. That is the minimum requirement for a child window, but it lasts already to fullfill
+In this chapter we'll turn to the view class of <em>KScribble</em> to define how the child windows shall work. First of all, we notice that
+KScribbleView is derived from <tt>QWidget</tt> by default. That is the minimum requirement for a child window, but it lasts already to fullfill
 our needs. When it comes to defining a new widget's behavoir, we need to know how the user shall interact with the window. In our
-example, this would be obviously the mouse. Therefore, we have to overwrite some virtual methods from QWidget that process mouse
+example, this would be obviously the mouse. Therefore, we have to overwrite some virtual methods from <tt>QWidget</tt> that process mouse
 events the widget receives. What we need is to know when the user presses a mouse button, because the drawing shall only take place
 when the mouse is pressed. Then we need to know when the mouse is moved (to know where it moves to) as well as when it is released-to
 finish the stroke the user has drawn. Further we want our picture to be painted on the window and resized if the user decides to resize
-the window he draws into. As members we will also add a QPointArray polyline and a boolean value mousePressed. Add the code with the
+the window he draws into. As members we will also add a <tt>QPointArray</tt> polyline and a boolean value mousePressed. Add the code with the
 arrow to your include file for the class KScribbleView:
 
 <code>
@@ -505,11 +742,11 @@ arrow to your include file for the class KScribbleView:
 <p>
 
 Now we're coming to the actual implementation of the event handlers. As explained in <htmlurl url="../kde_libref/index.html" name="The
-KDE Library Reference Guide">, Qt has a good way of handling user events, especially when they target on to widgets. QWidget as a
+KDE Library Reference Guide">, Qt has a good way of handling user events, especially when they target on to widgets. <tt>QWidget</tt> as a
 baseclass preselects the events and provides basic event handlers which, as they are declared as virtual, we can overwrite to define
-how our widget shall react on user actions. One is already overwritten: the closeEvent() method. This is needed, because our main
-window, represented in the App class, already preselects closing child windows and handles this; therefore the default event handler,
-which just accepts the closing, must be overwritten to prevent that and let the App class do the job.
+how our widget shall react on user actions. One is already overwritten: the <tt>closeEvent()</tt> method. This is needed, because our
+main window, represented in the App class, already preselects closing child windows and handles this; therefore the default event
+handler, which just accepts the closing, must be overwritten to prevent that and let the App class do the job.
 
 First of all, we have to declare the widget default behavoir in the constructor by initializing members and setting predefined values:
 
@@ -530,7 +767,7 @@ First of all, we have to declare the widget default behavoir in the constructor 
 </code>
 
 We're setting the background to NoBackground, a cursor (crossCursor) and initialize mousePressed and polyline. Then we'll start
-implementing our first event handler, mousePressEvent(), to recognize when the user presses the mouse and where:
+implementing our first event handler, <tt>mousePressEvent()</tt>, to recognize when the user presses the mouse and where:
 
 Note: the following implementations have to be inserted completely, so the lines to add are not marked with an arrow !
 
@@ -543,8 +780,8 @@ void KScribbleView::mousePressEvent( QMouseEvent *e )
 </code>
 
 Here, we're setting mousePressed to true, so we have stored this event somehow. The second line is not so obvious: we're storing the
-position where the mouse was pressed into our array's first three elements. As the array is a QPointArray, it can store values of the
-type QPoint (which contain an x and y value themselves). What we will do with this array is to store positions of the mouse and create
+position where the mouse was pressed into our array's first three elements. As the array is a <tt>QPointArray</tt>, it can store values of the
+type <tt>QPoint</tt> (which contain an x and y value themselves). What we will do with this array is to store positions of the mouse and create
 the drawing routine from there in the mouseMoveEvent:
 
 <code>
@@ -576,23 +813,24 @@ void KScribbleView::mouseMoveEvent( QMouseEvent *e )
 
 This event handler is probably the most difficult, so we will do a step-by-step walkthrough to understand what's been done. First of
 all, the event handler receives all mouse movements over the widget. But as we're only interested in the move if the mouse is pressed,
-because that is the time to draw, we have to ask if mousePressed is true. That has been done by the mousePressEvent handler before, so
-we don't have to take care for more. Now we're starting the painting action. First we create a QPainter and let it draw into the buffer
-of the document. This is important, because the document's buffer contains the real contents, the view only acts as a communicator
-between the document and the user. We get the pen from the document instance as well by calling currentPen(). The next three lines
-assign the values inside the polyline QPoint array, setting point 2 to 1, 1 to 0 and 0 to the point to where the move went (this is the
-contents of the event we're interested in). Assuming we've just pressed the mouse (so all three values of the array contain the
-pressing position) and the first mouse move event appears that contains the first position to draw a line to; this value is moved into
-the first position in the array again. You may wonder why we need three points in the array then, if we're only interested to draw a
-line from one position to the next. The following lines explain that: after drawing into our buffer is finished (with drawPolyline()
-and painter.end()), we create a rectangle r and use boundingRect() from QPointArray to get a QRect that contains all three points.
-Therefore we need three values to have a most-complete rectangle. Then we use normalize() to have the leftmost and topmost values the
-smallest (as coordinates are counted from top->bottom and left->right). The next thing to do is adapt the size of the rectangle by the
-size of the pen, because the pen has a thickness we get with penWidth() and widen the rectangle by the width of the pen. (Imagine the
-mouse movement was only two pixels away but the pen thickness is set to ten- then the rectangle wouldn't contain the whole painted
-area).
-Finally, we set the document modified and use the bitBlt() function to copy the rectangle out of the buffer into the widget. bitBlt
-operates bitwise and is very fast, so that it is a good method to copy the painted area from the buffer on the widget instead of
+because that is the time to draw, we have to ask if mousePressed is true. That has been done by the <tt>mousePressEvent()</tt> event
+handler before, so we don't have to take care for more. Now we're starting the painting action. First we create a <tt>QPainter</tt> and let it
+draw into the buffer of the document. This is important, because the document's buffer contains the real contents, the view only acts
+as a communicator between the document and the user. We get the pen from the document instance as well by calling
+<tt>currentPen()</tt>. The next three lines assign the values inside the polyline <tt>QPoint</tt> array, setting point 2 to 1, 1 to 0 and 0 to
+the point to where the move went (this is the contents of the event we're interested in). Assuming we've just pressed the mouse (so all
+three values of the array contain the pressing position) and the first mouse move event appears that contains the first position to
+draw a line to; this value is moved into the first position in the array again. You may wonder why we need three points in the array
+then, if we're only interested to draw a line from one position to the next. The following lines explain that: after drawing into our
+buffer is finished (with <tt>drawPolyline()</tt> and <tt>painter.end()</tt>), we create a rectangle r and use <tt>boundingRect()</tt>
+from <tt>QPointArray</tt> to get a <tt>QRect</tt> that contains all three points. Therefore we need three values to have a most-complete rectangle. Then
+we use <tt>normalize()</tt> to have the leftmost and topmost values the smallest (as coordinates are counted from top->bottom and
+left->right). The next thing to do is adapt the size of the rectangle by the size of the pen, because the pen has a thickness we get
+with <tt>penWidth()</tt> and widen the rectangle by the width of the pen. (Imagine the mouse movement was only two pixels away but the
+pen thickness is set to ten- then the rectangle wouldn't contain the whole painted area).
+
+Finally, we set the document modified and use the <tt>bitBlt()</tt> function to copy the rectangle out of the buffer into the widget.
+bitBlt operates bitwise and is very fast, so that it is a good method to copy the painted area from the buffer on the widget instead of
 repainting the whole window. It's arguments are: first the object to draw to (the destination), here it is our widget, so we have to
 use the pointer <bf>this</bf>. The next two arguments give the destination topleft position to start copying to, then follows the
 source to draw from with it's coordinates now including the width and height. As the pixmap coordinates are the same as the coordinates
@@ -630,9 +868,9 @@ void KScribbleView::paintEvent( QPaintEvent *e )
 }
 </code>
 
-This method also uses bitBlt() to draw the picture from the buffer into the widget. Here, we only need the rectangle that gets
-repainted, so we retrieve the geometry from the event ( e->rect() ) and use the coordinates for bitBlt(), just as we did in the
-mouseMoveEvent().
+This method also uses <tt>bitBlt()</tt> to draw the picture from the buffer into the widget. Here, we only need the rectangle that gets
+repainted, so we retrieve the geometry from the event ( <tt>e->rect()</tt> ) and use the coordinates for <tt>bitBlt()</tt>, just as we
+did in the <tt>mouseMoveEvent()</tt>.
 
 The only thing where we didn't do anything about is the size of the pixmap. We didn't set it anywhere - we did not even use the pixmap
 in the document class except for loading and saving - but these methods aren't called when creating a new picture. So it seems our
@@ -641,7 +879,7 @@ because it is uninitialized).
 On the other hand we have the fact that the KScribbleView instances get resized when they show up- at least with the minimum size. This
 is the point where we can add the initialization as well, because the user can change the size manually and the widget will receive a
 resize event as well. For reasons of simplicity, we want to set the pixmap size the same size the widget has. All this is done in the
-event handler resizeEvent():
+event handler <tt>resizeEvent()</tt>:
 
 <code>
 void KScribbleView::resizeEvent( QResizeEvent *e )
@@ -659,7 +897,7 @@ void KScribbleView::resizeEvent( QResizeEvent *e )
   bitBlt( &amp;doc->buffer, 0, 0, &amp;tmp, 0, 0, tmp.width(), tmp.height() );
 }
 </code>
-Here, we first call the resizeEvent handler or QWidget. Then we calculate the size of our picture - because we can resize a window to
+Here, we first call the resizeEvent handler or <tt>QWidget</tt>. Then we calculate the size of our picture - because we can resize a window to
 make it smaller or bigger, we have to separate these two cases: if we resize to a smaller geometry, the picture shall still contain
 it's contents. On the other hand, if we resize to a bigger widget, we have to resize the pixmap as well to that bigger size. The
 calculated values are stored in w and h. But before the resize takes place, we create a copy of our pixmap in the document in tmp. Then
@@ -667,14 +905,14 @@ we resize the buffer (the document), fill it with white color and then copy back
 pixmap always syncronous with the widget that displays it but doesn't loose contents which is outside the visible area if the resizing
 makes the widget smaller.
 
-Now our first application has gained a step where we can test it's functionality. Just hit "Run" in KDevelop and after KScribble shows
+Now our first application has gained a step where we can test it's functionality. Just hit "Run" in KDevelop and after <em>KScribble</em> shows
 up, you're ready to paint your first picture with it !
 
 <chapt>Extending the GUI
 <p>
-As we have seen, we have already provided KScribble the ability to open and save pictures with the document class and enabled user
+As we have seen, we have already provided <em>KScribble</em> the ability to open and save pictures with the document class and enabled user
 interaction by overwriting virtual methods in the view class and we gained the first functionaliy - we can draw pictures as well. But
-when we created the QPen instance in the document class, we set some pre-defined values for the pen; the color is black and the pen
+when we created the <tt>QPen</tt> instance in the document class, we set some pre-defined values for the pen; the color is black and the pen
 width set to 3 pixels. As you usually want to change these values in a drawing application, we have to enhance the main GUI by
 providing ways to set these, according to the currently active window and document connected to it. This chapter will therefore
 introduce you to:
@@ -693,8 +931,8 @@ Further, we also add a method to delete the document contents at all with a menu
 <p>
 
 As the title of this section says, we will add a menu for setting the pen values of the documents here. Menus that are inserted into
-the menubar are instances of QPopupMenu, and you can have a look at how the current menubar is created when you switch to the
-KScribbleApp class, method <tt>initMenubar()</tt>. You will see that the menubar items are created in the order they appear on the
+the menubar are instances of <tt>QPopupMenu</tt>, and you can have a look at how the current menubar is created when you switch to the
+<tt>KScribbleApp</tt> class, method <tt>initMenubar()</tt>. You will see that the menubar items are created in the order they appear on the
 menubar - but this isn't necessary. There are two things important on how the menubar will look like:
 <itemize>
 <item>in the menus the order of the menuitems
@@ -742,15 +980,16 @@ void KScribbleApp::initMenuBar()
 </code>
 
 You see that we first create the menu with <tt>new QPopupMenu()</tt>. Then we use the insertItem methods to add two menu entries, Color
-and Brush. The visible commands are inserted with the method i18n(), which ensures that you can internationalize your appliction. So as
-a general rule, you would declare all visual text that will appear later by the method i18n(). Qt-only programs using Qt > 2.0 would
-use the according method tr() instead of i18n(), as Qt has it's own ways of internationalizing applications. The second argument is a
-macro, the ID of the menubar item. This ID is a number that we have to set using #define in the file resource.h, where you will see all
-other already used ID's declared. There are also other ways to insert menus by directly connecting a slot to the inserted entry, but
-the application framework uses ID's to select which action has been activated- and highlighted. Therefore each menu entry, independent
-of the popup menu it appears, has to be a unique number, and as we can hardly remember numbers later, setting a #define for the ID is a
-nice solution. The popup menu is now inserted into the menubar with insertItem() as well, and with the pointer to the menu as second
-argument.
+and Brush. The visible commands are inserted with the method <tt>i18n()</tt>, which ensures that you can internationalize your
+appliction. So as a general rule, you would declare all visual text that will appear later by the method <tt>i18n()</tt>. Qt-only
+programs using Qt > 2.0 would use the according method <tt>tr()</tt> instead of <tt>i18n()</tt>, as Qt has it's own ways of
+internationalizing applications. The second argument is a macro, the ID of the menubar item. This ID is a number that we have to set
+using #define in the file resource.h, where you will see all other already used ID's declared. There are also other ways to insert
+menus by directly connecting a slot to the inserted entry, but the application framework uses ID's to select which action has been
+activated- and highlighted. Therefore each menu entry, independent of the popup menu it appears, has to be a unique number, and as we
+can hardly remember numbers later, setting a #define for the ID is a nice solution. The popup menu is now inserted into the menubar
+with <tt>insertItem()</tt> as well, and with the pointer to the menu as second argument.
+
 Note that we inserted the popup menu after the "Edit" menu and before the "View" menu, so it will appear between those menus later in
 the menubar. What is also important when creating menus is that they should be available to the user with shortcuts; ususally in menus
 you will see underlined characters that the user can jump to directly by pressing ALT and the according underlined letter of the
@@ -789,19 +1028,19 @@ But first we'll extend the toolbar as well by two icons for these actions in the
 <p>
 
 Whenever you think that some new commands should be made available by toolbar buttons as well because they are often used and you want
-to offer additional functionality, you can easily do that by adding buttons in the framework's initToolBar() method of the App class.
-Here, we decide to add a button for both menu entries in the Pen-menu, but those need icons - which you can either find in the KDE
-directory /toolbar or, when you don't find an icon that matches your action, have to create yourself. KIconEdit is very suitable to
-paint icons, so we will first create them. Choose "New" from the KDevelop "File" menu and select "Icon" as the filetype. The first icon
-will be named "pencolor.xpm". Now we have to select where we want to have the icon created in our project directory. Press the
-directory selection button and change to your project directory containing the KScribble sources. Then create a new directory
-"toolbar". Change to that directory and press "OK". The new icon will then be created in the new directory "toolbar" and will be opened
-by KIconEdit within KDevelop automatically. Paint something that will signalize the user what the button is intended to do, save the
-pixmap and then switch to the RFV / LFV in KDevelop. Select the icon by a right mouse button press and select "Properties" from the
-popup menu. You will see that the icon is included in the distribution, but for your program to find the icon again later, you have to
-set the installation destination as well. Check the "install" option and enter into the line now active below:
+to offer additional functionality, you can easily do that by adding buttons in the framework's <tt>initToolBar()</tt> method of the
+<tt>App</tt> class. Here, we decide to add a button for both menu entries in the Pen-menu, but those need icons - which you can either
+find in the KDE directory /toolbar or, when you don't find an icon that matches your action, have to create yourself. KIconEdit is very
+suitable to paint icons, so we will first create them. Choose "New" from the KDevelop "File" menu and select "Icon" as the filetype.
+The first icon will be named "pencolor.xpm". Now we have to select where we want to have the icon created in our project directory.
+Press the directory selection button and change to your project directory containing the <em>KScribble</em> sources. Then create a new
+directory "toolbar". Change to that directory and press "OK". The new icon will then be created in the new directory "toolbar" and will
+be opened by KIconEdit within KDevelop automatically. Paint something that will signalize the user what the button is intended to do,
+save the pixmap and then switch to the RFV / LFV in KDevelop. Select the icon by a right mouse button press and select "Properties"
+from the popup menu. You will see that the icon is included in the distribution, but for your program to find the icon again later, you
+have to set the installation destination as well. Check the "install" option and enter into the line now active below:
 
-$(kde_datadir)/kscribble/toolbar/pencolor.xpm
+<tt>$(kde_datadir)/kscribble/toolbar/pencolor.xpm</tt>
 
 This will install the pixmap in the KDE file system hierarchy's data directory, where each application has its subdirectory containing
 additional files needed by the application. Icons have to be installed into another subdirectory "toolbar", so the application's icon
@@ -825,18 +1064,19 @@ void KScribbleApp::initToolBar()
 ..
 }
 </code>
-Here, we use the methods of KToolBar to insert buttons. The first argument, BarIcon(), tells the method to load the icon for the
-button. What seems unusual is that we don't have to care for the file extension. The preferred format for KDE 2 is *.PNG, but it works
-with xpm's as well. (You could use ImageMagick for that as well which can do that- or use KScribble in a later step to convert your icons to PNG !)
+Here, we use the methods of KToolBar to insert buttons. The first argument, <tt>BarIcon()</tt>, tells the method to load the icon for
+the button. What seems unusual is that we don't have to care for the file extension. The preferred format for KDE 2 is *.PNG, but it
+works with xpm's as well. (You could use ImageMagick for that as well which can do that- or use <em>KScribble</em> in a later step to
+convert your icons to PNG !)
 
-The second argument is again the ID. The commands are then automatically activated, as the toolBar() is already connected to the same
-methods as the menubar is for signal activated(). The third argument stands for "available" when true, "deactivated" when false; as we
-want to have these available, we set this to true. At last, we add a tooltip for the the buttons, which we also embrace with i18n() to
-allow internationalization.
+The second argument is again the ID. The commands are then automatically activated, as the <tt>toolBar()</tt> is already connected to
+the same methods as the menubar is for signal <tt>activated()</tt>. The third argument stands for "available" when true, "deactivated"
+when false; as we want to have these available, we set this to true. At last, we add a tooltip for the the buttons, which we also
+embrace with <tt>i18n()</tt> to allow internationalization.
 
-Now you're done for now- the GUI is extended at least visually. You can compile and run KScribble again and see how it looks like- of
+Now you're done for now- the GUI is extended at least visually. You can compile and run <em>KScribble</em> again and see how it looks like- of
 course the new items in the menubar and toolbar can't execute any action - that is what we're going to add in the next section.
-You will also note that the toolbar icons we added are not displayed - which is because we didn't install KScribble and so they can't
+You will also note that the toolbar icons we added are not displayed - which is because we didn't install <em>KScribble</em> and so they can't
 be found. All other used icons are already shipped with the KDE libraries, so these are already visible.
 
 
@@ -867,12 +1107,12 @@ step. Now set the variable name in section "C++Code" to "width_spbox". The minim
 for setting the brush width.
 
 <bf>The Buttons:</bf> finally, we need the mentioned three buttons. The leftmost button will be the default button. Create a
-QPushbutton and place it somewhere nicely on the bottom of the dialog, set the variable name to "default_btn" and the button text to
+<tt>QPushbutton</tt> and place it somewhere nicely on the bottom of the dialog, set the variable name to "default_btn" and the button text to
 "Default". Proceed with the OK button with variable name "ok_btn" and the cancel button with variable name "cancel_btn" and set the
 button text to "&amp;OK" and "&amp;Cancel".
 
 If you´re fine with the layout of the dialog, choose "Generate complete sources" from the Build menu and set the classname to
-"KPenBrushDlg", the inheritance to QDialog. After pressing "OK", the sources for the dialog are created and added to the project. Now
+"KPenBrushDlg", the inheritance to <tt>QDialog</tt>. After pressing "OK", the sources for the dialog are created and added to the project. Now
 you can return to the editor view in KDevelop and we can add the code needed to give the dialog some execution purpose.
 
 <sect>Connections and Setting Up
@@ -897,11 +1137,12 @@ KPenBrushDlg::KPenBrushDlg(int curr, QWidget *parent, const char *name) : QDialo
 </code>
 
 This provides the functionality for the buttons on the bottom of the dialog when the user clicks the button. First, we set the default
-button to execute a slot called slotDefault(). This slot is still to be implemented below, where we will set the default value of the
-spinbox directly.
-The sectond connect() call connects the ok button to call the slot accept() provided by QDialog, as well as the cancel button gets
-connected to QDialog´s slot reject(). This will both close the dialog and will set the result value which we will use later when we
-implement the method that calls the dialog to determine if we want to use the value set or to ignore any changes.
+button to execute a slot called <tt>slotDefault()</tt>. This slot is still to be implemented below, where we will set the default value
+of the spinbox directly.
+
+The second <tt>connect()</tt> call connects the ok button to call the slot <tt>accept()</tt> provided by <tt>QDialog</tt>, as well as the cancel
+button gets connected to <tt>QDialog</tt>´s slot <tt>reject()</tt>. This will both close the dialog and will set the result value which we will
+use later when we implement the method that calls the dialog to determine if we want to use the value set or to ignore any changes.
 
 Now we have to add two methods to set and retrieve the spinbox value:
 
@@ -911,10 +1152,10 @@ int width() { return width_spbox->value(); };
 </code>
 
 Add these methods to the class declaration with the modifier "public", as we want to set and retrieve the values when we call the
-dialog to show up. The setCurrent() method will be used to set the current value the pen has, the width() method returns us the
-selected with when the user presses OK and we want to know which value has been chosen.
+dialog to show up. The <tt>setCurrent()</tt> method will be used to set the current value the pen has, the <tt>width()</tt> method
+returns us the selected with when the user presses OK and we want to know which value has been chosen.
 
-Last but not least, we need to implement the slotDefault() method:
+Last but not least, we need to implement the <tt>slotDefault()</tt> method:
 
 <code>
 //kpenbrushdlg.h:
@@ -940,7 +1181,7 @@ calls to invoke the dialog.
 <sect>Calling the Dialogs
 <p>
 As you may guess, calling the dialogs means that we will not only implement calling our width selection dialog but also add the method
-for selecting the pen color, but one after another. First, create a method slotPenBrush() in the class KScribbleApp:
+for selecting the pen color, but one after another. First, create a method <tt>slotPenBrush()</tt> in the class <tt>KScribbleApp</tt>:
 
 <code>
 void KScribbleApp::slotPenBrush()
@@ -975,12 +1216,13 @@ Here, we first have to access the window list and retrieve a pointer to a docume
 documents should have the same current pen width. Then we create an integer variable curr_width that stores the current pen width.
 
 Now we can call the dialog by creating the dlg instance of KPenBrushDlg. Then we set the current pen width by calling
-dlg->setCurrent(), which method we added to the dialog.
-By calling dlg->exec() we invoke the dialog. The if() statement ensures that the following code is only executed when the result code
-of the dialog has the accept flag set - which means, the code is executed if the user pressed the OK button on the dialog.
+<tt>dlg->setCurrent()</tt>, which method we added to the dialog.
+By calling <tt>dlg->exec()</tt> we invoke the dialog. The <tt>if()</tt> statement ensures that the following code is only executed when
+the result code of the dialog has the accept flag set - which means, the code is executed if the user pressed the OK button on the
+dialog.
 
-Assuming the user changed the value and pressed OK, we have to set all documents to use the new pen width. For that we use the for()
-loop and set every document´s pen width to the width variable we retrieved before with dlg->width().
+Assuming the user changed the value and pressed OK, we have to set all documents to use the new pen width. For that we use the
+<tt>for()</tt> loop and set every document´s pen width to the width variable we retrieved before with <tt>dlg->width()</tt>.
 
 We don´t have implemented the method <tt>setPenWidth()</tt> in the document class, so we´ll do this right now:
 
@@ -993,8 +1235,8 @@ public:
 </code>
 
 What is missing to execute any action is to add the methods that shall be called when the menu items are activated or the toolbar
-buttons pressed. For this, we have to add the ID´s to the slot commandCallback(), which selects and executes the according methods we
-want to call if a menu or toolbar item was chosen:
+buttons pressed. For this, we have to add the ID´s to the slot <tt>commandCallback()</tt>, which selects and executes the according
+methods we want to call if a menu or toolbar item was chosen:
 
 <code>
 void KScribbleApp::commandCallback(int id_)
@@ -1013,7 +1255,7 @@ void KScribbleApp::commandCallback(int id_)
 }
 </code>
 
-This addition also adds the slotPenColor() method to the execution list to set the pen color, which we will implement now:
+This addition also adds the <tt>slotPenColor()</tt> method to the execution list to set the pen color, which we will implement now:
 
 <code>
 void KScribbleApp::slotPenColor()
@@ -1040,7 +1282,7 @@ void KScribbleApp::slotPenColor()
   slotStatusMsg(i18n("Ready."));
 }
 </code>
-When looking at the code, we see that we use another new method of KScribbleDoc to set the pen color. This one has to be implemented as
+When looking at the code, we see that we use another new method of <tt>KScribbleDoc</tt> to set the pen color. This one has to be implemented as
 well:
 <code>
 kscribbledoc.h:
@@ -1049,8 +1291,8 @@ kscribbledoc.h:
     void setPenColor( const QColor &amp;c ){ pen.setColor( c ); }
 </code>
 
-Watch out for adding the declaration of the two new methods slotPenBrush() and slotPenColor() to the class KScribbleApp, so our class
-knows about these methods.
+Watch out for adding the declaration of the two new methods <tt>slotPenBrush()</tt> and <tt>slotPenColor()</tt> to the class
+<tt>KScribbleApp</tt>, so our class knows about these methods.
 
 Now you´re ready ! Let´s summarize what we´ve done in this chapter:
 <itemize>
@@ -1064,13 +1306,413 @@ wanted to change
 By this structure, you are provided the general way how to extend your application with more functionality and manipulating settings
 that influence the behavoir of the document and view interaction.
 
-We´re now at the end of our tutorial to build KScribble. I hope you have enjoyed learning a bit more about KDE and Qt coding with
-KDevelop - and there´s yet more to come with the KDE 2 version, so STAY TUNED !!!
+<chapt>Extended Views
+<p>
+
+In this chapter we´re going to extend the functionality of our view widget by two enhancements: syncronized views and scrollviews.
+
+<sect>Syncronizing Views
+<p>
+Let´s first explain what this will bring us and how we´re going to do it. While playing with <em>KScribble</em>, you may have noticed, that if
+you open another view of a document by calling "Window"->"New Window", this new view works with the same data as the first view, and
+does like any other view you create with that command. But when it comes to painting into the document, you can only do that in one
+view - the other views are not displaying the document contents at the same time. If you obscure one view that doesn´t contain the
+actual contents with another window and then bring it up to the front again, it will display the acutal contents. That comes because
+after a widget has been obscured and then activated again, it receives a paint event from the window system, which will call
+<tt>KScribbleView::paintEvent()</tt> again and that finally redraws the contents of the area that has been obscured. What we want to
+achieve is that all views should paint syncronous with the one the user actually paints to. In fact, you will see that this enhancement
+is a really easy task. The document class already provides us a method <tt>updateAllViews()</tt>, which calls the <tt>update()</tt>
+method on each view in the document´s view list. This makes it very easy to syncronize the document contents - every time the contents
+is changed, here by mouse movements (where we copy the changings to the buffer with <tt>bitBlt()</tt>), we just have to call
+updateAllViews(this). The this pointer is needed, because the calling view doesn´t need a repaint and the <tt>update()</tt> method is
+only executed if the sender view is not the same as it´s own.
+
+What you´ve got to do here is only to call updateAllViews(this) at the end of the virtual methods <tt>mousePressEvent()</tt>,
+<tt>mouseMoveEvent()</tt> and <tt>mouseReleaseEvent()</tt> - and you´re done !  Take this as a general rule in your applications: each
+time the contents of the document is changed by a view, call <tt>updateAllViews()</tt>. How the update has to be executed has to be
+implemented in the widget´s <tt>update()</tt> method; one may be content by setting e.g. the changed text in an editor, in our
+application we just call <tt>repaint()</tt>, which generates a paint event and copies the contents of the document into the view again.
+
+<sect>Scrolled Views
+<p>
+
+In this section we will add a functionality that is most often a thread to developers - if you can´t use an already implemented widget
+that provides the scrolling already. What does scrolling mean ? In our context, the problem begins where we want to open a picture that
+is bigger than a view can display. therefore, the result will be that you can only see as much as the view provides, beginning from the
+topleft corner; the rest will be cut away from the user´s view. A scrollview on the other hand is a widget that provides a scrollbar on
+the right side and on the bottom of the widget by which the user can "move" the contents. In fact, it shows the same size of the
+document contents, but the view area can be moved within the document, so each part can be displayed if the user wants to by moving the
+scrollbar sliders up and down, left and right. Fortunately, Qt provides a class <tt>QScrollView</tt> that itself inherits from
+<tt>QWidget</tt> and offers the same base functionality as an ordinary widget but manages the contents by scrollbars automatically -
+with the additional option that the programmer can either just use an instance of the <tt>QScrollView</tt>, create the child widgets
+to manage with the scrollview as parent and add them to the scrollview with <tt>addChild()</tt> or create a view by inheriting
+<tt>QScrollView</tt> and draw into the viewport, which is a defined area inside the scrollview, instead of directly to the widget. The
+difference here is that <tt>QScrollView</tt> provides a set of event handlers similar to the <tt>QWidget</tt> event handlers especially for the
+viewport. So what was formerly a <tt>mousePressEvent()</tt> in our view will become a viewportMousePressEvent, a <tt>paintEvent()</tt>
+will become a viewportPaintEvent etc. The second possibility will suite our needs to make KScribbleView a scrollable widget and so we
+will have to make the following modifications:
+
+<itemize>
+<item>first we have to make the document use a size of its contents. This can be done by getting the size for an opened picture, for a
+new picture we have to define a default start size. In other painting applications, this size can be changed most often by a command
+provided by the user interface, e.g. a dialog that asks for the new width and height as well as a method to shrink the picture
+contents to fit into that new size.
+<item>changing the inheritance of KScribbleView from <tt>QWidget</tt> to <tt>QScrollView</tt>
+<item>renaming the virtual methods to the according viewport methods of <tt>QScrollView</tt>
+<item>adapt the virtual event handlers to act on the geometry of the viewport. This means that the old implementation relies on the
+geometries of <tt>QWidget</tt> starting at the topleft corner of a widget. If the view is scrolled and the topleft corner is not visible, we
+have to ensure the positions retrieved from the <tt>QWidget</tt> coordinates are translated to viewport coordinates
+</itemize>
+
+<sect1>Sizing the Document Contents
+<p>
+
+As already mentioned, we have to set a size to the document contents as well as to initialize this size and provide a method to
+retrieve the size by the views. For this, we add a variable <tt>QSize size</tt> to <tt>KScribbleDoc</tt> as well as the method
+<tt>docSize()</tt>:
+
+<code>
+kscribbledoc.h:
+
+#include <qsize.h>
+
+...
+public:
+  const QSize docSize(){ return size;};
+
+private:
+  QSize size;
+
+</code>
+
+Now we have to modify all methods that deal with initializing and opening the document contents - <tt>newDocument()</tt> and
+<tt>openDocument()</tt>:
+<code>
+  bool KScribbleDoc::newDocument()
+  {
+    /////////////////////////////////////////////////
+    // TODO: Add your document initialization code here
+->  size=QSize(300,200 );
+   	pen=QPen( Qt::black, 3 );
+->  buffer.resize(size);
+->  buffer.fill( Qt::white );
+    /////////////////////////////////////////////////
+    modified=false;
+    return true;
+  }
+
+  bool KScribbleDoc::openDocument(const QString &amp;filename, const char *format /*=0*/)
+  {
+
+  	QFile f( filename );
+  //	if ( !f.open( IO_ReadOnly ) )
+  //		return false;
+    /////////////////////////////////////////////////
+    // TODO: Add your document opening code here
+  	if(!buffer.load( filename, format ))
+  		return false;
+->  size=buffer.size();
+    /////////////////////////////////////////////////
+  //	f.close();
+  	
+    modified=false;
+    m_filename=filename;
+  	m_title=QFileInfo(f).fileName();
+    return true;
+  }
+</code>
+
+In <tt>newDocument()</tt>, we initialize the size with a default value of 300 pixels wide and 200 pixels high. This is enough for a
+small picture for now and we could add a dialog for resizing as well if we want.
+When it comes to opening a picture, we have to set the size to the size of the picture. This can be done by calling
+<tt>QPixmap::size()</tt>, which we used in <tt>openDocument()</tt>. Then we´re done with setting the sizes and we can move on to
+reimplementing KScribbleView and make it a scrollview.
+
+<sect>Adapting the View
+<p>
+
+As said above, we first have to change some things in the interface of KScribbleView. The following code shows these changings:
+
+<code>
+#include <qscrollview.h>
+
+class KScribbleView : public QScrollView
+{
+  Q_OBJECT
+
+  protected:
+    /** changed from mousePressEvent() overwriting QScrollView method */
+    virtual void viewportMousePressEvent( QMouseEvent* );
+    /** changed from mouseReleaseEvent() overwriting QScrollView method */
+    virtual void viewportMouseReleaseEvent( QMouseEvent* );
+    /** changed from mouseMoveEvent() overwriting QScrollView method */
+    virtual void viewportMouseMoveEvent( QMouseEvent* );
+
+    /** commeted out because we have a document size defined */
+//    resizeEvent( QResizeEvent* );
+
+    /** changed from paintEvent() overwriting QScrollView method */
+    virtual void viewportPaintEvent( QPaintEvent* );
+}
+</code>
+
+Here, we changed the inheritance from <tt>QWidget</tt> to <tt>QScrollView</tt> first and added the according include file we need. Also we changed all
+implemented event handlers that deal with interaction on the contents of the scrollview to the according methods <tt>QScrollView</tt> provides
+for this purpose and commented out the resizeEvent. Now we can go over to the implementation of these methods and make use of the size
+our picture has. As a view is always created after the document exists, we can resize the widget directly in the constructor to fit
+this size and as well resize the contents (which is the viewport size):
+<code>
+#include <qsize.h>
+
+KScribbleView::KScribbleView(KScribbleDoc* pDoc, QWidget *parent, const char* name, int wflags)
+ : QScrollView(parent, name, wflags | WPaintClever | WNorthWestGravity | WRepaintNoErase)
+{
+    doc=pDoc;
+		mousePressed=false;
+    polyline=QPointArray(3);
+
+->  setResizePolicy ( QScrollView::ResizeOne );
+->  viewport()->setCursor( Qt::crossCursor );
+
+->    QSize size=doc->docSize();
+      // resize the viewport - this makes the resizeEvent obsolete
+->    resizeContents(size.width(), size.height());
+      // resize the widget to show up with the document size
+->    resize(size);
+}
+</code>
+
+Note that formerly, the <tt>resizeEvent()</tt> took care of resizing the drawing area to the same as the widget size. At the same time,
+this changed the document size as well, so the document picture had always the same size as the widget. With the already initialized
+size of the document (which we set in <tt>newDocument()</tt> and <tt>openDocument()</tt>), we just resize the contents by calling
+<tt>resizeContents()</tt> provided by <tt>QScrollView</tt> with the size of the document. You may also notice that we changed the
+cursor over the widget from the overall widget to the viewport widget, which we can retrieve with <tt>viewport()</tt>. Now we can
+reimplement the event handlers. At first, we should take care for the paintEvent, as this is one of the most important ones, because it
+gets called whenever the widget shows up or is resized.
+
+<bf>Attention:</bf> take care to comment out the <tt>resizeEvent()</tt> implementation!
+
+Now, the paint event will have to copy the pixmap in the buffer to the according position in the view. For this, we have to change the
+destination of <tt>bitBlt()</tt> from this to <tt>viewport()</tt>, set the topleft position to 0,0 and set the target (the buffer) to
+copy from the contentsX and contentsY position on into the viewport:
+<code>
+void KScribbleView::viewportPaintEvent( QPaintEvent *e )
+{
+  bitBlt( viewport(),0,0, &amp;doc->buffer,contentsX() ,contentsY() );
+}
+</code>
+The <tt>contentsX()</tt> thereby is the position in x-direction of the scrollview´s contents - which goes to position 0 in the
+viewport´s absolute position, which is the topleft point visible in the scrollview. The same applies to the y-direction. This part is
+sometimes hard to understand and you may have to do a bit "try and error" when implementing your own scrollviews. The other possible
+call of <tt>bitBlt()</tt> would be to switch the values of the positions and inverting the contents values:
+
+bitBlt( viewport(), -contentsX(), -contentsY(), &amp;doc->buffer, 0, 0 );
 
 
-<chapt>Copyright <label id="Copyright"> <p>
-<tscreen><verb>
+The last changes we need to do are changing the mouse event handlers. First, the <tt>mouseMoveEvent()</tt>, which changes to
+<tt>viewportMouseMoveEvent()</tt>, has a <tt>bitBlt()</tt> call as well. Here, we have to apply the same chages as in the paint event.
+Further, in the <tt>mousePressEvent()</tt> and the <tt>mouseMoveEvent()</tt>, we have retrieved the position of the mouse events with
+<tt>e->pos()</tt>. This position now will deliver us a widget position - not the contents position, so we have to translate this to
+draw into the correct position of the document with <tt>viewportToContents()</tt>:
+<code>
+  void KScribbleView::viewportMousePressEvent( QMouseEvent *e )
+  {
+    mousePressed = TRUE;
+->  doc->polyline[2] = doc->polyline[1] = doc->polyline[0] = viewportToContents(e->pos());
+    doc->updateAllViews(this);
+  }
 
+  void KScribbleView::viewportMouseMoveEvent( QMouseEvent *e )
+  {
+    if ( mousePressed ) {
+  ....
+      doc->polyline[1] = doc->polyline[0];
+->    doc->polyline[0] = viewportToContents(e->pos());
+      painter.drawPolyline( doc->polyline );
+  ....
+      r.setBottom( r.bottom() + doc->penWidth() );
+
+  	  doc->setModified();
+->    bitBlt(viewport(), r.x()-contentsX(), r.y()-contentsY() ,
+->            &amp;doc->buffer, r.x(), r.y(), r.width(), r.height() );
+  	  doc->updateAllViews(this);
+    }
+  }
+</code>
+
+In the <tt>viewportMouseMoveEvent()</tt>, we had to change the destination again from this to <tt>viewport()</tt> - and with that
+translate the positions. This time, we used the second version of the call we used in <tt>viewportPaintEvent()</tt>, with subtracting
+the contentsX and contentsY values to copy the rectangle containing the current painting into the correct position of the viewport.
+
+At last, we will apply a small change in conjunction with the <tt>update()</tt> method: why should we repaint the whole widget every
+time ? This will reduce performance most often and lead to a so-called "flicker" effect. This effect sometimes occurs with widgets, but
+there are some ways to reduce this behavoir. Instead of calling <tt>repaint()</tt>, we could call <tt>repaint(false)</tt> as well. This
+will not erase the widget contents before redrawing it. As we copy the document contents directly into the widget, we don´t need to
+erase it anyway, because all the data will be overwritten anyway. In conjunction with <tt>QScrollView</tt>, we will reduce the painting
+even more: we limit the update method to call <tt>repaintContents()</tt>, which allows us to define where to repaint. For that, we use
+the <tt>visibleRect()</tt> method and, like <tt>repaint(false)</tt>, we can prevent erasing the area to repaint before copying the
+document data into the viewport:
+<code>
+void KScribbleView::update(KScribbleView* pSender){
+	if(pSender != this)
+	  repaintContents(viewport()->visibleRect(), false);
+}
+</code>
+
+Now you´re ready !  This chapter has been one of the hardest to implement and understand - especially when it comes to the geometries
+that change. But on the other hand, we gave our application a whole new functionality by the new scrollview and the syncronized views.
+
+With that, we´re moving on to the last chapter of our tutorial. There, we will apply only a few changes by making use of some new
+methods of the KDE2 libraries, but as usual, this will bring us some interesting functionality - <em>KScribble</em> will be able to open and
+save a whole range of picture formats and thereby we will remove the restriction of operating only on the png file format.
+
+<chapt>Using KImageIO with KScribble
+<p>
+
+When it comes to images, the Qt and KDE libraries offer a wide variety of operations. Besides actual drawing routines, the libraries
+support a whole set of image formats which they can read and write - all without any cost on our view. The main class for these
+operations is <tt>QImageIO</tt>, which has a support library by KDE: <tt>KImageIO</tt>. As a preparation before we can make use of these nice methods, we
+have to add the according library to <em>KScribble</em>: libkimgio. Open "Project"->"Options" in KDevelop and add the line -lkimgio to the
+additional libraries to link <em>KScribble</em> with.
+
+<sect>Preparing the Document
+<p>
+Now we can go on and apply our changes. First, we have to remove the current restriction in the document class to only read and write
+PNG files. Just replace "PNG" in the following methods with format, as given by the <tt>openDocument()</tt> and <tt>saveDocument()</tt>
+methods:
+
+In method <tt>KScribbleDoc::openDocument()</tt>:
+ 	
+<tt>	if(!buffer.load( filename, format ))</tt>
+	
+In method <tt>KScribbleDoc:: saveDocument()</tt>:
+
+<tt>	if(!buffer.save( filename, format ))</tt>
+
+Then we have a default behavoir of these methods. Now, for now we don´t have all available file formats yet. This will be our next
+task, together with adapting the slots in <em>KScribble</em> that deliver us filenames.
+
+<sect>Registering File Formats
+<p>
+To use <tt>KImageIO</tt>, we have to initialize the library first. For this, we add a call for <tt>registerFormats()</tt> in our
+<tt>main()</tt> function:
+<code> 	
+main.cpp:
+
+............
+  KApplication app;
+  KImageIO::registerFormats();
+
+  if (app.isRestored())
+............
+</code>
+Note that this call is after the application is instanciated with KApplication app - without the application instance, our program will
+not run, as <tt>KImageIO</tt> then doen´t know on which application to register the formats. The include file for this call will be added to
+kscribble.h, as we´re going to use some of its methods in <tt>KScribbleApp</tt>:
+
+kscribble.h:
+
+#include &lt;kimgio.h&gt;
+
+
+<sect>Opening Images
+<p>
+
+Now that we can make use of <tt>KImageIO</tt>, we have to apply the first change to the most important method of <tt>KScribbleApp</tt>:
+<tt>openDocumentFile()</tt>. This method opens us any document until now only on the behalf of the filename. It just leaves out the
+extension, as the format is not required by the document class by default. But as we have changed that, we just need a format - and
+have to adapt the call for <tt>KScribbleDoc::openDocument()</tt> in the method <tt>openDocumentFile()</tt>:
+
+<code>
+kscribble.cpp:
+
+  void KScribbleApp::openDocumentFile(const char* file)
+  {
+  	...........
+  	
+  	else
+    {
+->    QString format=KImageIO::type(file);
+->	  if(!doc->openDocument(file,format))
+    		KMessageBox::error (this,i18n("Could not open document !"), i18n("Error !"));
+  		addRecentFile(file);
+  	}
+    ............
+  }
+</code>
+
+Of course, this works the same as using <tt>QString format=QImageIO::imageFormat(file);</tt>. Here, <tt>KImageIO</tt> delivers us the format of
+the image and we can call the document to open the file by filename and format. (Another possiblity would be to detect the format in
+the document class as well).
+
+<sect>Setting File Filters with KImageIO
+<p>
+Here, we´re finishing our tutorial with the last section - we will adapt the file dialogs of <em>KScribble</em> to make use of file filters.
+For these, <tt>KImageIO</tt> provides nice methods to give us the needed strings for all image file formats that are available for opening and
+saving. The following implementation replaces the default file filter (which is in fact none - you have to change your own
+applications´ file filter to your mime type accordingly) with the <tt>pattern()</tt> method of <tt>KImageIO</tt>:
+
+<code>
+  void KScribbleApp::slotFileOpen()
+  {
+    slotStatusMsg(i18n("Opening file..."));
+  	
+->    QString fileToOpen=KFileDialog::getOpenFileName(QDir::currentDirPath(),
+->              KImageIO::pattern(KImageIO::Reading), this, i18n("Open File..."));
+    if(!fileToOpen.isEmpty())
+    {
+  		openDocumentFile(fileToOpen);		
+    }
+
+    slotStatusMsg(i18n("Ready."));
+  }
+</code>
+
+Here, the mode in <tt>pattern()</tt> is set to Reading - which may differ from the patterns that are retrieved when set to writing. Now
+we have finished opening files by its filename and format completely. What is missing to complete this structure, is setting the
+patterns as well for saving a file. For that, the <tt>slotFileSaveAs()</tt> is called, which itself invokes the file dialog that
+retrieves a file name. There, we will set the pattern mode to Writing:
+
+<code>
+void KScribbleApp::slotFileSaveAs()
+{
+  slotStatusMsg(i18n("Saving file with a new filename..."));
+
+->  QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+->                               KImageIO::pattern(KImageIO::Writing), this, i18n("Save as..."));
+  if(!newName.isEmpty())
+  {
+    KScribbleView* m = (KScribbleView*)pWorkspace->activeClient();
+    if( m )
+    {
+      KScribbleDoc* doc =	m->getDocument();
+  	  QString format=QFileInfo(newName).extension();
+  	  format=format.upper();
+		  if(!doc->saveDocument(newName,format))
+  	  {
+  		  KMessageBox::error (this,i18n("Could not save the current document !"), i18n("I/O Error !"));
+				return;
+			}
+      doc->changedViewList();
+      setWndTitle(m);
+    }
+  }
+  slotStatusMsg(i18n("Ready."));
+}
+</code>
+
+<sect>Final Conclusion
+<p>
+
+This has been the last step of our tutorial. All in all, we learned how to create KDE applications with KDevelop, compile and execute
+programs and to give an application the functionality to make it a new one in the row of the daily growing number of freely available
+KDE programs. We hope you had fun reading and learning by the means of our tutorial and KDevelop, and although there is much more to
+discover when it comes to KDE and Qt application design and usage of the class libraries, you won a first insight into the ease of
+development for KDE with KDevelop.
+
+  	
+<chapt>Copyright <label id="Copyright">
+<p> <tscreen><verb>
 KDevelop Copyright 1998,1999 The KDevelop Team.
 
 This program is free software; you can redistribute it and/or modify
@@ -1089,14 +1731,3 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
-
-
-
-
-
-
-
-
-
-
-
