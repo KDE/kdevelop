@@ -66,15 +66,17 @@ QString DocDoxygenPlugin::catalogTitle(const QString& url)
     QFileInfo fi(url);
     if (!fi.exists())
         return QString::null;
-   
-    DOM::HTMLDocument *doc = new DOM::HTMLDocument();
-    doc->setAsync(false);
-    doc->load(DOM::DOMString(url));
-    QString title = doc->title().string();
-    //FIXME: strange, but the next line invokes a crash
-    //for now, it's better to loose memory than crash 
-//    delete doc;
-    return title;
+    
+    QFile f(url);
+    if (!f.open(IO_ReadOnly))
+        return QString::null;
+    
+    QTextStream ts(&f);
+    QString contents = ts.read();
+    QRegExp re(".*<title>(.*)</title>.*");
+    re.setCaseSensitive(false);
+    re.search(contents);
+    return re.cap(1);   
 }
 
 QString DocDoxygenPlugin::pluginName() const
