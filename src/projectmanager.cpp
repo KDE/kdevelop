@@ -158,7 +158,7 @@ void ProjectManager::slotProjectOptions()
 
   QVBox *vbox = dlg.addVBoxPage( i18n("Plugins"), i18n("Plugins"), DesktopIcon("kdf") );
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
-  vbox = dlg.addVBoxPage(i18n("Languages"));
+  vbox = dlg.addVBoxPage(i18n("Languages"), i18n("Languages"), BarIcon( "newfile", KIcon::SizeMedium ));
   LanguageSelectWidget *lw = new LanguageSelectWidget(*API::getInstance()->projectDom(), vbox, "language selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
   connect( &dlg, SIGNAL(okClicked()), lw, SLOT(accept()) );
