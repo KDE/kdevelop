@@ -29,6 +29,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "classstore.h"
+#include <kdevpartcontroller.h>
 
 #include "phpsupportpart.h"
 #include "phpsupportfactory.h"
@@ -92,38 +93,39 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
 
   configData = new PHPConfigData(projectDom());
   m_parser = new  PHPParser(core(),classStore());
-  m_codeCompletion = new  PHPCodeCompletion(core(),classStore());
+  m_codeCompletion = new  PHPCodeCompletion(this, core(),classStore());
 
-  connect(core()->editor(), SIGNAL(documentActivated(KEditor::Document*)),
-	  this, SLOT(documentActivated(KEditor::Document*)));
-
+  connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
+	  this, SLOT(slotActivePartChanged(KParts::Part *)));
 }
 
 
 PHPSupportPart::~PHPSupportPart()
 {}
 
-void PHPSupportPart::documentActivated(KEditor::Document* doc){
-  //  return;
-  m_cursorInterface = KEditor::CursorDocumentIface::interface(doc);
-  if (!m_cursorInterface) { // no CursorDocument available
-    cerr << endl << "editor doesn't support the CursorDocumentIface";
+void PHPSupportPart::slotActivePartChanged(KParts::Part *part)
+{
+  if (!part || !part->widget())
     return;
-  }
-  m_editInterface = KEditor::EditDocumentIface::interface(doc);
-  disconnect(m_editInterface, 0, this, 0 ); // to make sure that it is't connected twice
-  connect(m_editInterface,SIGNAL(textChanged()),this,SLOT(slotTextChanged()));
+
+  m_editInterface = dynamic_cast<KTextEditor::EditInterface*>(part);
+  disconnect(part, 0, this, 0 ); // to make sure that it is't connected twice
+  connect(part,SIGNAL(textChanged()),this,SLOT(slotTextChanged()));
 }
 
 void PHPSupportPart::slotTextChanged(){
   cerr << "text changed" << endl;
-  QString fileName = core()->editor()->currentDocument()->url().directory() + "/" +
-    core()->editor()->currentDocument()->url().fileName();
-  int numLines = m_cursorInterface->numberOfLines();
+
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+  if (!ro_part)
+    return;
+
+  QString fileName = ro_part->url().directory() + "/" + ro_part->url().fileName();
+  int numLines = m_editInterface->numLines();
 
   QStringList lines;
   for(int i=0;i<numLines;i++){
-    lines.append(m_editInterface->line(i));
+    lines.append(m_editInterface->textLine(i));
   }
   classStore()->removeWithReferences(fileName);
   m_parser->parseLines(&lines,fileName);
@@ -153,7 +155,6 @@ void PHPSupportPart::slotNewClass(){
   dlg.exec();
  }
 void PHPSupportPart::slotRun(){
-  KEditor::EditDocumentIface *e_iface = KEditor::EditDocumentIface::interface(core()->editor()->currentDocument());
   configData = new PHPConfigData(projectDom());
   if(validateConfig()){
     core()->raiseWidget(m_phpErrorView);
@@ -190,9 +191,9 @@ void PHPSupportPart::executeOnWebserver(){
   PHPConfigData::WebFileMode mode = configData->getWebFileMode();
   QString weburl = configData->getWebURL();
   if(mode == PHPConfigData::Current){
-    KEditor::Editor* editor = core()->editor();
-    if(editor){
-      file = QFileInfo(editor->currentDocument()->url().url()).fileName();
+    KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+    if(ro_part){
+      file = QFileInfo(ro_part->url().url()).fileName();
     }
   }
   if(mode == PHPConfigData::Default){
@@ -241,9 +242,9 @@ void PHPSupportPart::executeInTerminal(){
   *phpExeProc << "-f";
 
 
-  KEditor::Editor* editor = core()->editor();
-  if(editor){
-    file = editor->currentDocument()->url().path();
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+  if(ro_part){
+    file = ro_part->url().path();
   }
 
   *phpExeProc << file;

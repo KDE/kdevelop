@@ -20,18 +20,22 @@
 
 #include <qobject.h>
 #include <kregexp.h>
-#include "keditor/editor.h"
-#include "keditor/edit_iface.h"
-#include "keditor/cursor_iface.h"
-#include "keditor/codecompletion_iface.h"
+#include <kparts/part.h>
+
+#include <ktexteditor/editinterface.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/codecompletioninterface.h>
+
 
 class KDevCore;
 class ClassStore;
+class PHPSupportPart;
+
 /**
  *@author Sandy Meier
  */
 
-class FunctionCompletionEntry : public KEditor::CompletionEntry {
+class FunctionCompletionEntry : public KTextEditor::CompletionEntry {
  public:
   QString prototype;
 };
@@ -40,40 +44,39 @@ class PHPCodeCompletion : public QObject {
   Q_OBJECT
 
 public: 
-  PHPCodeCompletion(KDevCore* core,ClassStore* store);
+  PHPCodeCompletion(PHPSupportPart *part, KDevCore* core,ClassStore* store);
   ~PHPCodeCompletion();
 protected slots:  
-  void documentActivated(KEditor::Document* doc);
-  void cursorPositionChanged(KEditor::Document *doc, int line, int col);
+  void activePartChanged(KParts::Part *part);
+  void cursorPositionChanged();
   void argHintHided();
   void completionBoxHided();
 
  protected:
-  bool checkForVariable(KEditor::Document *doc,QString lineStr,int col,int line);
-  bool checkForGlobalFunction(KEditor::Document *doc,QString lineStr,int col);
-  bool checkForNewInstance(KEditor::Document *doc,QString lineStr,int col,int line);
+  bool checkForVariable(QString lineStr,int col,int line);
+  bool checkForGlobalFunction(QString lineStr,int col);
+  bool checkForNewInstance(QString lineStr,int col,int line);
 
-  bool checkForGlobalFunctionArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
-  bool checkForMethodArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
-  bool checkForNewInstanceArgHint(KEditor::Document *doc,QString lineStr,int col,int line);
+  bool checkForGlobalFunctionArgHint(QString lineStr,int col,int line);
+  bool checkForMethodArgHint(QString lineStr,int col,int line);
+  bool checkForNewInstanceArgHint(QString lineStr,int col,int line);
 
   void readGlobalPHPFunctionsFile();
 
-  QValueList<KEditor::CompletionEntry> getClassMethodsAndVariables(QString className);
+  QValueList<KTextEditor::CompletionEntry> getClassMethodsAndVariables(QString className);
   QString getClassName(QString varName,QString maybeInstanceOf);
   QString searchCurrentClassName();
   QString searchClassNameForVariable(QString varName);
  private:
   int m_currentLine;
-  KEditor::Editor* m_editor;
   QValueList<FunctionCompletionEntry> m_globalFunctions;
   KDevCore* m_core;
   ClassStore* m_classStore;
-  KEditor::CursorDocumentIface* m_cursorInterface;
-  KEditor::EditDocumentIface* m_editInterface;
-  KEditor::CodeCompletionDocumentIface* m_codeInterface;
   bool m_argWidgetShow;
   bool m_completionBoxShow;
+  KTextEditor::EditInterface *m_editInterface;
+  KTextEditor::CodeCompletionInterface *m_codeInterface;
+  KTextEditor::ViewCursorInterface *m_cursorInterface;
 };
 
 #endif

@@ -15,9 +15,8 @@
 #include <kdialogbase.h>
 #include "kdevlanguagesupport.h"
 #include <kio/job.h>
-#include "keditor/cursor_iface.h"
-#include "keditor/edit_iface.h"
-#include "keditor/editor.h"
+
+#include <ktexteditor/editinterface.h>
 
 class PHPHTMLView;
 class KShellProcess;
@@ -56,7 +55,7 @@ private slots:
 
     // Internal
     void initialParse();
-    void documentActivated(KEditor::Document* doc);
+    void slotActivePartChanged(KParts::Part *part);
     void slotTextChanged();
 
 private:
@@ -71,8 +70,7 @@ private:
     PHPConfigData* configData;
     PHPCodeCompletion* m_codeCompletion;
     PHPParser* m_parser;
-    KEditor::CursorDocumentIface* m_cursorInterface;
-    KEditor::EditDocumentIface* m_editInterface;
+    KTextEditor::EditInterface *m_editInterface;
 };
 
 #endif
