@@ -78,6 +78,7 @@ protected:
   QCheckBox* l_khtml;
   QCheckBox* l_kfm;
   QCheckBox* l_kfile;
+  QCheckBox* l_kparts;
   QCheckBox* l_kspell;
   QCheckBox* l_kab;
   QCheckBox* l_math;
