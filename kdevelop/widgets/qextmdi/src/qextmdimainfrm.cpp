@@ -553,7 +553,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 
    if (m_mdiMode == QextMdi::TabPageMode) {
       if (m_pWinList->count() == 0) {
-         if (m_pDockbaseAreaOfDocumentViews == 0L) {
+         if (!m_pDockbaseAreaOfDocumentViews) {
             m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
             m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
             setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
@@ -567,6 +567,19 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
       pDockW->setWidget(0L);
+      if (pDockW == m_pDockbaseOfTabPage) {
+#if !defined(NO_KDE2) && (QT_VERSION >= 300)
+         QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->count();
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->pageCount();
+#endif
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
+         }
+      }
       delete pDockW;
    }
    else if (pWnd->isAttached()) {
@@ -610,7 +623,7 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 
    if (m_mdiMode == QextMdi::TabPageMode) {
       if (m_pWinList->count() == 0) {
-         if (m_pDockbaseAreaOfDocumentViews == 0L) {
+         if (!m_pDockbaseAreaOfDocumentViews) {
             m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
             m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
             setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
@@ -624,6 +637,19 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
       pDockW->setWidget(0L);
+      if (pDockW == m_pDockbaseOfTabPage) {
+#if !defined(NO_KDE2) && (QT_VERSION >= 300)
+         QTabWidget* pTab = (QTabWidget*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->count();
+#else
+         KDockTabCtl* pTab = (KDockTabCtl*) pDockW->parentWidget()->parentWidget();
+         int cnt = pTab->pageCount();
+#endif
+         m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 2);
+         if (pDockW == m_pDockbaseOfTabPage) {
+            m_pDockbaseOfTabPage = (KDockWidget*) pTab->page(cnt - 1); // different to the one deleted next
+         }
+      }
       delete pDockW;
    }
    else if (pWnd->isAttached()) {
@@ -957,19 +983,6 @@ void QextMdiMainFrm::switchToToplevelMode()
    else if (oldMdiMode == QextMdi::TabPageMode) { // if tabified, release all views from their docking covers
       finishTabPageMode();
    }
-#if QT_VERSION < 300
-   QListIterator<QextMdiChildView> it( *m_pWinList);
-#else
-   QPtrListIterator<QextMdiChildView> it( *m_pWinList);
-#endif
-   for( it.toFirst(); it.current(); ++it) {
-      QextMdiChildView* pView = it.current();
-#ifndef NO_KDE2
-      XSetTransientForHint(qt_xdisplay(),pView->winId(),winId());
-#endif
-      if( !pView->isToolView())
-         pView->show();
-   }
 
    // 3.) undock all these found oldest ancestors (being KDockWidgets)
 #if QT_VERSION < 300
@@ -984,11 +997,12 @@ void QextMdiMainFrm::switchToToplevelMode()
 
    // 4.) recreate the MDI childframe area and hide it
    if (oldMdiMode == QextMdi::TabPageMode) {
-      QApplication::sendPostedEvents();
-      m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
-      m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
-      m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
-      m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+      if (!m_pDockbaseAreaOfDocumentViews) {
+         m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
+         m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
+         m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
+         m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
+      }
       // set this dock to main view
       setView(m_pDockbaseAreaOfDocumentViews);
       setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
@@ -1007,7 +1021,22 @@ void QextMdiMainFrm::switchToToplevelMode()
       }
    }
 
-   // 5.) reset all memorized positions of the undocked ones and show them again
+   // 5. show the child views again
+#if QT_VERSION < 300
+   QListIterator<QextMdiChildView> it( *m_pWinList);
+#else
+   QPtrListIterator<QextMdiChildView> it( *m_pWinList);
+#endif
+   for( it.toFirst(); it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
+#ifndef NO_KDE2
+      XSetTransientForHint(qt_xdisplay(),pView->winId(),winId());
+#endif
+      if( !pView->isToolView())
+         pView->show();
+   }
+
+   // 6.) reset all memorized positions of the undocked ones and show them again
    QValueList<QRect>::Iterator it5;
    for (it3.toFirst(), it5 = positionList.begin() ; it3.current(), it5 != positionList.end(); ++it3, ++it5 ) {
        KDockWidget* pDockW = it3.current();
@@ -1060,7 +1089,7 @@ void QextMdiMainFrm::switchToChildframeMode()
       finishToplevelMode();
    }
 
-   if (m_pDockbaseAreaOfDocumentViews == 0L) {
+   if (!m_pDockbaseAreaOfDocumentViews) {
       // cover QextMdi's childarea by a dockwidget
       m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
       m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
@@ -1075,6 +1104,7 @@ void QextMdiMainFrm::switchToChildframeMode()
       m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
       m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
    }
+   m_pDockbaseAreaOfDocumentViews->show();
    if (m_mdiMode == QextMdi::TabPageMode) {
 #if QT_VERSION < 300
       QListIterator<KDockWidget> it4( rootDockWidgetList);
@@ -1264,13 +1294,18 @@ void QextMdiMainFrm::finishTabPageMode()
          QSize maxs = pView->maximumSize();
          QSize sz = pView->size();
          QWidget* pParent = pView->parentWidget();
-         pView->reparent(0,0,pParent->mapToGlobal(pParent->pos())-pParent->pos()+m_undockPositioningOffset);
+         QPoint p(pParent->mapToGlobal(pParent->pos())-pParent->pos()+m_undockPositioningOffset);
+         pView->reparent(0,0,p);
+         pView->reparent(0,0,p);
          pView->resize(sz);
          pView->setMinimumSize(mins.width(),mins.height());
          pView->setMaximumSize(maxs.width(),maxs.height());
          ((KDockWidget*)pParent)->undock(); // this destroys the dockwiget cover, too
          pParent->close();
          delete pParent;
+         if (centralWidget() == pParent) {
+            setCentralWidget(0L); // avoid dangling pointer
+         }
       }
       m_pTaskBar->switchOn(TRUE);
    }
@@ -1552,6 +1587,15 @@ void QextMdiMainFrm::updateSysButtonConnections( QextMdiChildFrm* oldChild, Qext
 }
 
 /** Shows the view taskbar. This should be connected with your "View" menu. */
+bool QextMdiMainFrm::isViewTaskBarOn()
+{
+   bool bOn = false;
+   if (m_pTaskBar)
+      bOn = m_pTaskBar->isSwitchedOn();
+   return bOn;
+}
+
+/** Shows the view taskbar. This should be connected with your "View" menu. */
 void QextMdiMainFrm::showViewTaskBar()
 {
    if (m_pTaskBar)
@@ -1614,14 +1658,17 @@ void QextMdiMainFrm::fillWindowMenu()
    m_pWindowMenu->insertSeparator();
    if (!bTabPageMode) {
       int placMenuId = m_pWindowMenu->insertItem(tr("&Tile..."), m_pPlacingMenu);
-         m_pPlacingMenu->clear();
-         m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
-         m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
-         m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
-         m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
-         m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
-         m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
-         m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      m_pPlacingMenu->clear();
+      m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
+      m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
+      m_pPlacingMenu->insertItem(tr("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
+      m_pPlacingMenu->insertItem(tr("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
+      m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+      m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
+      m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      if (m_mdiMode == QextMdi::ToplevelMode) {
+         m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
+      }
       m_pWindowMenu->insertSeparator();
       int dockUndockId = m_pWindowMenu->insertItem(tr("&Dock/Undock..."), m_pDockMenu);
          m_pDockMenu->clear();

@@ -196,9 +196,9 @@ void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
 
 void QextMdiChildFrm::mouseReleaseEvent(QMouseEvent *e)
 {
-   if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
-
    if(m_bResizing) {
+      if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
+
       m_bResizing = FALSE;
       //notify child view
       QextMdiChildFrmResizeEndEvent ue(e);

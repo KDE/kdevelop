@@ -38,9 +38,6 @@
 #include <qmenubar.h>
 #include <qpopupmenu.h>
 #include "dummykpartsdockmainwindow.h"
-//#ifdef __BORLANDC__
-//using namespace KParts;
-//#endif
 #endif
 
 #if QT_VERSION < 300
@@ -51,6 +48,7 @@
 #include <qrect.h>
 #include <qapplication.h>
 #include <qdom.h>
+#include <qguardedptr.h>
 
 #include "qextmditaskbar.h"
 #include "qextmdichildarea.h"
@@ -250,8 +248,8 @@ protected:
    int                     m_oldMainFrmMaxHeight;
    static QextMdi::FrameDecor   m_frameDecoration;
    bool                    m_bSDIApplication;
-   KDockWidget*            m_pDockbaseAreaOfDocumentViews;
-   KDockWidget*            m_pDockbaseOfTabPage;
+   QGuardedPtr<KDockWidget> m_pDockbaseAreaOfDocumentViews;
+   QGuardedPtr<KDockWidget> m_pDockbaseOfTabPage;
    QDomDocument*           m_pTempDockSession;
    bool                    m_bClearingOfWindowMenuBlocked;
 
@@ -493,6 +491,10 @@ public slots:
    */
    virtual void switchToTabPageMode();
    virtual void finishTabPageMode();
+   /*
+   * @return if the view taskbar should be shown if there are MDI views
+   */
+   bool isViewTaskBarOn();
    /**
    * Shows the view taskbar. This should be connected with your "View" menu. 
    */

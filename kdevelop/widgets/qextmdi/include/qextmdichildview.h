@@ -362,6 +362,10 @@ public slots:
    */
    virtual void hide();
    /** 
+   * Calls QWidget::raise() or it's parent widget raise() if attached 
+   */
+   virtual void raise();
+   /** 
    * Overridden from its base class method. Emits a signal @ref QextMdiChildView::isMinimizedNow , additionally.
    * Note that this method is not used by an external windows manager call on system minimizing.
    */
