@@ -403,22 +403,11 @@ void CKDevelop::slotProjectOptions(){
                                        "We will regenerate all Makefiles now."));
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-      messages_widget->clear();
       showOutputView(true);
       messages_widget->prepareJob(prj->getProjectDir());
       (*messages_widget) << make_cmd << " -f Makefile.dist  && ";
-      (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
-      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-      {
-       if (!prj->getCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-      }
-      (*messages_widget) << "\" " << "LDFLAGS=\" " ;
-      if (!prj->getLDFLAGS().isEmpty())
-         (*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
-      (*messages_widget) << "\" " << " ./configure" << args;
+      (*messages_widget) << prj->getCompilationEnvironment();
+      (*messages_widget) << " ./configure" << args;
 
       messages_widget->startJob();
       return;
@@ -427,21 +416,10 @@ void CKDevelop::slotProjectOptions(){
       prj->updateMakefilesAm();
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running configure..."));
-      messages_widget->clear();
       showOutputView(true);
       messages_widget->prepareJob(prj->getProjectDir());
-      (*messages_widget) << ( (prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"" );
-      if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-      {
-       if (!prj->getCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getCXXFLAGS().simplifyWhiteSpace () << " ";
-       if (!prj->getAdditCXXFLAGS().isEmpty())
-          (*messages_widget) << prj->getAdditCXXFLAGS().simplifyWhiteSpace ();
-      }
-      (*messages_widget) << "\" " << "LDFLAGS=\" " ;
-      if (!prj->getLDFLAGS().isEmpty())
-	(*messages_widget) << prj->getLDFLAGS().simplifyWhiteSpace ();
-      (*messages_widget) << "\" " << " ./configure "  << args;
+      (*messages_widget) << prj->getCompilationEnvironment();
+      (*messages_widget) << " ./configure "  << args;
       messages_widget->startJob();
     }
   }
@@ -659,7 +637,6 @@ void CKDevelop::slotProjectMessages(){
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating pot-file in /po..."));
-  messages_widget->clear();
   error_parser->toogleOff();
   messages_widget->prepareJob(prj->getProjectDir() + prj->getSubDir());
   (*messages_widget) << make_cmd << " messages &&  cd ../po && make merge";
@@ -933,11 +910,6 @@ bool CKDevelop::readProjectFile(QString file){
       project=true;
   }
 
-  // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
-  //   if(QFile::exists(str)){
-  //     switchToFile(str);
-  //   }
-
   // if this is a c project then change Untitled.cpp to Untitled.c
   if (prj->getProjectType()=="normal_c")
   {
@@ -1056,23 +1028,9 @@ void CKDevelop::newSubDir(){
   KMessageBox::information(0, i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."));
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));
-  messages_widget->clear();
   showOutputView(true);
   messages_widget->prepareJob(prj->getProjectDir());
-  //(*messages_widget) << make_cmd << " -f Makefile.dist  && ./configure";
-  QString flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-  (*messages_widget) << flaglabel;
-  if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
-  {
-            if (!prj->getCXXFLAGS().isEmpty())
-                  (*messages_widget) << prj->getCXXFLAGS() << " ";
-            if (!prj->getAdditCXXFLAGS().isEmpty())
-                  (*messages_widget) << prj->getAdditCXXFLAGS();
-  }
-  (*messages_widget)  << "\" " << "LDFLAGS=\" " ;
-  if (!prj->getLDFLAGS().isEmpty())
-                (*messages_widget) << prj->getLDFLAGS();
-  (*messages_widget) << "\" ";
+  (*messages_widget) << prj->getCompilationEnvironment();
   (*messages_widget) << make_cmd << " -f Makefile.dist  && ./configure" << prj->getConfigureArgs();
 
   messages_widget->startJob();

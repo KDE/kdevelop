@@ -25,6 +25,7 @@
 class KDlgEditWidget;
 class KDlgPropertyBase;
 class KDlgItemDatabase;
+class KDlgItem_QWidget;
 
 /**
   * @short Base item inherited by each complexer item.
@@ -78,7 +79,7 @@ public:
 
     /**
      * Returns a pointer to the child database. If you call this method for
-     * a KDlgItem_Widget you´ll get a pointer otherwise 0 because only a QWidget
+     * a KDlgItem_QWidget you´ll get a pointer otherwise 0 because only a QWidget
      * may contain childs.
     */
     KDlgItemDatabase *getChildDb() { return childs; }
@@ -102,12 +103,12 @@ public:
     /**
      * Has to be overloaded ! Sets the state if this item to selected. (That means the border and the rectangles are painted)
     */
-    virtual void select() { }
+    virtual void select();
 
     /**
      * Has to be overloaded ! Sets the state if this item to not selected. (That means the border and the rectangles are NOT painted)
     */
-    virtual void deselect() { }
+    virtual void deselect();
 
     /**
      * Removes this item including all children (if a KDlgItem_Widget) from the dialog.
@@ -115,8 +116,20 @@ public:
     void deleteMyself();
 
     void execContextMenu(bool ismain);
-    bool isMainWidget;
-  protected:
+    bool isItemActive;
+    bool isMainwidget;
+    KDlgItem_QWidget *parentWidgetItem;
+    
+public:
+    bool isMBPressed;
+    QPoint startPnt, lastPnt;
+    QRect origRect;
+    int pressedEdge;
+    void moveRulers(QWidget *widget, QMouseEvent *e);
+
+protected:
+
+    virtual bool eventFilter( QObject *o, QEvent *e);
     int Prop2Bool(QString name);
     int Prop2Int(QString name, int defaultval=0);
     QString Prop2Str(QString name);

@@ -720,11 +720,6 @@ void CKDevelop::slotViewTTreeView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
-/*  tree_view_pos=top_panner->sizes()[0];
-    QValueList<int> sizes;
-    sizes << 0;
-    top_panner->setSizes(sizes);
-*/
     if (bKDevelop)
      t_tab_view->hide();
     else
@@ -736,19 +731,11 @@ void CKDevelop::slotViewTTreeView(){
      t_tab_view->show();
     else
      kdlg_tabctl->show();
-/*    QValueList<int> sizes;
-    sizes << tree_view_pos;
-    top_panner->setSizes(sizes);
-*/    view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,true);
   }
-/*  QRect rMainGeom= top_panner->geometry();
-  top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-  top_panner->resize(rMainGeom.width(),rMainGeom.height());
-
-*/}
+}
 
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -756,27 +743,15 @@ void CKDevelop::slotViewTOutputView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
-/*    output_view_pos=view->sizes()[0];
-    QValueList<int> sizes;
-    sizes << 100;
-    view->setSizes(sizes);
-*/
     o_tab_view->hide();
   }
   else{
-/*    QValueList<int> sizes;
-    sizes << output_view_pos;
-    view->setSizes(sizes);
-*/    o_tab_view->show();
+    o_tab_view->show();
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
-/*  QRect rMainGeom= view->geometry();
-  view->resize(rMainGeom.width()+1,rMainGeom.height());
-  view->resize(rMainGeom.width(),rMainGeom.height());
-*/
 }
 
 
@@ -835,7 +810,6 @@ void CKDevelop::slotBuildCompileFile(){
   setToolMenuProcess(false);
   QFileInfo fileinfo(cpp_widget->getName());
   slotStatusMsg(i18n("Compiling ")+cpp_widget->getName());
-  messages_widget->clear();
   messages_widget->prepareJob(fileinfo.dirPath());
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
@@ -2221,19 +2195,6 @@ void CKDevelop::slotDocumentDone( KHTMLView * ){
 }
 
 
-#if 0
-void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
-  stdin_stdout_widget->insert(QString::fromLatin1(buffer, buflen));
-  showOutputView(true);
-}
-
-
-void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
-  stderr_widget->insert(QString::fromLatin1(buffer, buflen));
-  showOutputView(true);
-}
-#endif
-
 void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
   search_output += QString::fromLatin1(buffer, buflen);
 }
@@ -2279,7 +2240,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
 
   }
 
-   QString filename =locate("appdata","search_result.html");
+   QString filename =locateLocal("appdata","search_result.html");
    QFile file(filename);
    QTextStream stream(&file);
    file.open(IO_WriteOnly);

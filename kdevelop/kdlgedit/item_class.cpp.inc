@@ -16,62 +16,40 @@
  ***************************************************************************/
 
 
-#ifdef widgettype
-#ifdef classname
-#ifdef classdesc
+#ifdef WIDGETTYPE
+#ifdef CLASSNAME
+#ifdef CLASSDESC
 
-
-
-  protected:
-    class MyWidget : public widgettype
+#ifdef ISCONTAINER
+protected:
+    class MyWidget : public QFrame
     {
       public:
-        MyWidget(classname* wid, QWidget* parent = 0, const char* name = 0);
-        int recPosX(int px);
-        int recPosY(int py);
-        bool isItemActive;
-        bool isMainwidget;
-        void deselect();
-        void select();
-        void selectMe();
+        MyWidget(KDlgItem_QWidget* wid, QWidget* parent = 0, const char* name = 0);
+        MyWidget(KDlgItem_QWidget* wid, QWidget* parent = 0, bool isMainWidget = false, const char* name = 0); 
       protected:
-        classname* parentObject;
-        bool isMBPressed;
-        QPoint startPnt, lastPnt;
-        QRect origRect;
-        int pressedEdge;
-        void moveRulers( QMouseEvent *e );
-        virtual void paintEvent ( QPaintEvent * );
-        virtual void mousePressEvent ( QMouseEvent *e );
-        virtual void mouseReleaseEvent ( QMouseEvent * );
-        virtual void mouseMoveEvent ( QMouseEvent *e );
-      #ifdef MyWidgetAdd
-        MyWidgetAdd
-      #undef MyWidgetAdd
-      #endif
+        KDlgItem_QWidget *parentObject;
+        virtual void paintEvent ( QPaintEvent *e );
     };
+#endif
 
-    MyWidget *item;
-  public:
-    classname( KDlgEditWidget* editwid = 0, QWidget *parent = 0, const char* name = 0 );
+public:
+    CLASSNAME( KDlgEditWidget* editwid = 0, QWidget *parent = 0, const char* name = 0 );
     virtual void recreateItem();
-    virtual ~classname() {}
-    virtual QString itemClass() { return QString(classdesc); }
-    virtual MyWidget* getItem() { return item; }
-    virtual void repaintItem(widgettype *it = 0);
-    virtual void select() { if (item) item->select(); }
-    virtual void selectMe() { if (item) item->selectMe(); }
-    virtual void deselect() { if (item) item->deselect(); }
+    virtual ~CLASSNAME() {}
+#ifdef ISCONTAINER
+    virtual QString itemClass() { return QString("QWidget"); }
+    virtual MyWidget* getItem() { return (MyWidget*)item; }
+#else
+    virtual QString itemClass() { return item->className(); }
+    virtual WIDGETTYPE* getItem() { return (WIDGETTYPE*)item; }
+#endif
+    virtual void repaintItem(WIDGETTYPE *it = 0);
     virtual void addMyPropEntrys();
-    KDlgItem_Widget *parentWidgetItem;
 
-#undef classdesc
+#undef CLASSDESC
 #endif
-#undef classname
+#undef CLASSNAME
 #endif
-#undef widgettype
+#undef WIDGETTYPE
 #endif
-
-
-
-

@@ -292,18 +292,6 @@ void KDlgItemsSetMouseCursor(QWidget* caller, int pressedEdge)
 
 }
 
-void KDlgItemsPaintRects(QWidget *wid, QPaintEvent *e)
-{
-  if ((!wid) || (!e))
-    return;
-
-  QPainter p(wid);
-  p.setClipRect(e->rect());
-
-  KDlgItemsPaintRects(&p, wid->width(), wid->height());
-}
-
-
 int KDlgItemsIsValueTrue(QString val)
 {
   QString v(val.upper());

@@ -228,6 +228,33 @@ QString CProject::getAdditCXXFLAGS(){
   return str;
 }
 
+QString CProject::getCompilationEnvironment()
+{
+    QString env;
+    if (!getCXXFLAGS().isEmpty() || !getAdditCXXFLAGS().isEmpty())
+        {
+            env = (getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+            if (!getCXXFLAGS().isEmpty())
+                {
+                    env += getCXXFLAGS();
+                    env += " ";
+                }
+            if (!getAdditCXXFLAGS().isEmpty())
+                {
+                    env += getAdditCXXFLAGS();
+                    env += " ";
+                }
+            env += "\" ";
+        }
+    if (!getLDFLAGS().isEmpty())
+        {
+            env += "LDFLAGS=\" " ;
+            env += getLDFLAGS();
+            env += "\" ";
+        }
+}
+
+
 void CProject::getFilters(QString group,QStrList& filters){
   filters.clear();
   config.setGroup("LFV Groups");

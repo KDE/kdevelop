@@ -23,9 +23,7 @@
 #include <qpixmap.h>
 #include <qlistview.h>
 
-//class KTreeList;
-//class KTreeListItem;
-class KDlgItem_Widget;
+class KDlgItem_QWidget;
 class CKDevelop;
 
 /**
@@ -42,12 +40,12 @@ class KDlgItems : public QWidget  {
       private:
       Q_OBJECT
       public:
-        MyTreeListItem (QListView* parent, KDlgItem_Widget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
-        MyTreeListItem (MyTreeListItem* parent, KDlgItem_Widget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
-        KDlgItem_Widget *getItem() { return itemptr; }
+        MyTreeListItem (QListView* parent, KDlgItem_QWidget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
+        MyTreeListItem (MyTreeListItem* parent, KDlgItem_QWidget *itemp, const QString& theText, const QPixmap *thePixmap = 0);
+        KDlgItem_QWidget *getItem() { return itemptr; }
 
       protected:
-        KDlgItem_Widget *itemptr;
+        KDlgItem_QWidget *itemptr;
     };
 
     QListView *treelist;
@@ -65,7 +63,7 @@ class KDlgItems : public QWidget  {
     /**
      * refills the list with <i>wd</i> as root (main-) widget.
     */
-    void addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm=0);
+    void addWidgetChilds(KDlgItem_QWidget *wd, MyTreeListItem *itm=0);
 
     /**
      * refills the list in order to actualize it.

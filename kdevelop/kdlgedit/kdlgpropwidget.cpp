@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "items.h"
+#include "itemsglobal.h"
 #include "kdlgpropwidget.h"
 #include "kdlgproplvis.h"
 #include <kcolorbtn.h>
@@ -825,23 +826,6 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
             break;
         }
 
-/*        QString val = prop->value;
-
-        if (adv)
-          {
-            val = adv->getText();
-            if (val.isNull())
-              val = "";
-          }
-
-
-        if (prop->allowed == ALLOWED_MULTISTRING)
-          val = "[QStrings...]";
-
-        AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,val);
-        if (adv)
-          lvi->setColumnWidget(1, adv);*/
-
         AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,val);
         if (adv)
           lvi->setColumnWidget(1, adv);
@@ -888,7 +872,7 @@ void AdvLvi_Base::refreshItem()
 {
   KDlgItem_Base *selit = pCKDevel->kdlg_get_edit_widget()->selectedWidget();
   if (selit)
-    ((KDlgItem_Widget*)selit)->repaintItem((QFrame*)selit->getItem());
+    ((KDlgItem_QWidget*)selit)->repaintItem((QFrame*)selit->getItem());
 
   if (propEntry->name.upper() == "NAME")
     pCKDevel->kdlg_get_items_view()->refreshList();
@@ -1026,7 +1010,7 @@ AdvLvi_UInt::AdvLvi_UInt(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *
   leInput = new KRestrictedLine( this, 0, " 01234567890" );
   leInput->setText(dpe->value.stripWhiteSpace());
 
-  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(textChanged (const char QString &)), SLOT(returnPressed()));
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 
   up = new QPushButton("",this);

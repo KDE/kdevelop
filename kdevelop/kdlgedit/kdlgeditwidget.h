@@ -27,7 +27,7 @@
   */
 
 class KDlgItemDatabase;
-class KDlgItem_Widget;
+class KDlgItem_QWidget;
 class KDlgItem_Base;
 class CKDevelop;
 class KRuler;
@@ -53,17 +53,17 @@ class KDlgEditWidget : public QWidget  {
      * Adds an item to the specified item.
      * The desired type of widget is given to the second parameter as string (i.e. "QLineEdit").
     */
-    KDlgItem_Widget *addItem(KDlgItem_Base*, QString);
+    KDlgItem_QWidget *addItem(KDlgItem_Base*, QString);
 
     /**
      * returns a pointer to the main widget.
     */
-    KDlgItem_Widget *mainWidget() { return main_widget; }
+    KDlgItem_QWidget *mainWidget() { return main_widget; }
 
     /**
      * sets the pointer to the main widget.
     */
-    void setMainWidget(KDlgItem_Widget *mw) { main_widget = mw; }
+    void setMainWidget(KDlgItem_QWidget *mw) { main_widget = mw; }
 
     /**
      * returns a pointer to the selected widget or 0 if none is selected.
@@ -96,7 +96,7 @@ class KDlgEditWidget : public QWidget  {
     /**
      * saves the item <i>wid</i> to the textstream <i>t</i> with <i>deep</i>*2 spaces before every line.
     */
-    void saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep = 0);
+    void saveWidget( KDlgItem_QWidget *wid, QTextStream *t, int deep = 0);
 
     /**
      * opens a dialog from the file <i>fname</i>
@@ -154,7 +154,7 @@ class KDlgEditWidget : public QWidget  {
     bool readGrp_Ignore( QTextStream *t );
     bool readGrp_Information( QTextStream *t );
     bool readGrp_SessionManagement( QTextStream *t );
-    bool readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString ctype );
+    bool readGrp_Item( KDlgItem_QWidget* par, QTextStream *t, QString ctype );
     bool readGroup( QTextStream *t );
 
 
@@ -163,7 +163,7 @@ class KDlgEditWidget : public QWidget  {
 
     KQuickHelpWindow *qhw;
     KDlgItemDatabase *dbase;
-    KDlgItem_Widget *main_widget;
+    KDlgItem_QWidget *main_widget;
     KDlgItem_Base *selected_widget;
     CKDevelop *pCKDevel;
     KRuler *rulh, *rulv;

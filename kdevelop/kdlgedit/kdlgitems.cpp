@@ -93,7 +93,7 @@ void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int d)
   phelp.exec(QCursor::pos());
 }
 
-KDlgItems::MyTreeListItem::MyTreeListItem(MyTreeListItem* parent, KDlgItem_Widget *itemp, const QString& theText , const QPixmap *thePixmap )
+KDlgItems::MyTreeListItem::MyTreeListItem(MyTreeListItem* parent, KDlgItem_QWidget *itemp, const QString& theText , const QPixmap *thePixmap )
   : QListViewItem((QListViewItem*)parent)
 {
   setText( 0, (const char*)theText );
@@ -101,7 +101,7 @@ KDlgItems::MyTreeListItem::MyTreeListItem(MyTreeListItem* parent, KDlgItem_Widge
   itemptr = itemp;
 }
 
-KDlgItems::MyTreeListItem::MyTreeListItem(QListView* parent, KDlgItem_Widget *itemp, const QString& theText , const QPixmap *thePixmap )
+KDlgItems::MyTreeListItem::MyTreeListItem(QListView* parent, KDlgItem_QWidget *itemp, const QString& theText , const QPixmap *thePixmap )
   : QListViewItem(parent, (const char*)theText)
 {
   setText( 0, (const char*)theText );
@@ -122,7 +122,7 @@ void KDlgItems::itemSelected ()
   if (!treelist->currentItem())
     return;
 
-  KDlgItem_Widget *itm = ((MyTreeListItem*)treelist->currentItem())->getItem();
+  KDlgItem_QWidget *itm = ((MyTreeListItem*)treelist->currentItem())->getItem();
 
   if (!itm)
     return;
@@ -138,7 +138,7 @@ void KDlgItems::resizeEvent ( QResizeEvent *e )
   treelist->setGeometry( 0,0, width(), height() );
 }
 
-void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm)
+void KDlgItems::addWidgetChilds(KDlgItem_QWidget *wd, MyTreeListItem *itm)
 {
   if ((!wd) || (!wd->getChildDb()))
     return;
@@ -170,13 +170,13 @@ void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm)
 
         if (w->getChildDb())
           {
-            MyTreeListItem *it=new MyTreeListItem(item, (KDlgItem_Widget*)w,s,&folder_pix);
+            MyTreeListItem *it=new MyTreeListItem(item, (KDlgItem_QWidget*)w,s,&folder_pix);
             it->setOpen(true);
-            addWidgetChilds((KDlgItem_Widget*)w, it);
+            addWidgetChilds((KDlgItem_QWidget*)w, it);
           }
         else
           {
-            (new MyTreeListItem(item, (KDlgItem_Widget*)w,s,&entry_pix))->setOpen(true);
+            (new MyTreeListItem(item, (KDlgItem_QWidget*)w,s,&entry_pix))->setOpen(true);
           }
       }
 

@@ -42,11 +42,6 @@ QString getLineOutOfString(QString src, int ln, QString sep = "\n");
 QColor Str2Color(QString desc);
 
 /**
- * Paints the border and the rectangles of a selected item.
-*/
-void KDlgItemsPaintRects(QWidget *wid, QPaintEvent *e);
-
-/**
  * Returns the constant of the clicked point (see RESIZE_* constants in defines.h)
  * @param winw width of the item
  * @param winh height of the item

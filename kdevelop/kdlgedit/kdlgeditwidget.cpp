@@ -66,7 +66,7 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
   edgeFrame->setGeometry(0,0,RULER_WIDTH, RULER_HEIGHT);
   edgeFrame->setFrameStyle(rulh->frameStyle());
 
-  main_widget = new KDlgItem_Widget( this, this, true );
+  main_widget = new KDlgItem_QWidget( this, this, true );
   selected_widget = 0;
   selectWidget(main_widget);
 
@@ -74,7 +74,6 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
   main_widget->getProps()->setProp_Value("Y","0");
   main_widget->getProps()->setProp_Value("Width","400");
   main_widget->getProps()->setProp_Value("Height","300");
-//  main_widget->addChild( new KDlgItem_PushButton ( this, main_widget->getItem() ) );
   main_widget->repaintItem();
 
   if ((parCKD) && parCKD->kdlg_get_items_view())
@@ -115,11 +114,11 @@ int KDlgEditWidget::raiseSelected(bool updateMe)
 
   int res = 0;
 
-  if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+  if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
     {
-      if (!((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb())
+      if (!((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb())
         return -4;
-      res = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb()->raiseItem(selectedWidget());
+      res = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb()->raiseItem(selectedWidget());
     }
   else
     {
@@ -144,11 +143,11 @@ int KDlgEditWidget::lowerSelected(bool updateMe)
 
   int res = 0;
 
-  if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+  if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
     {
-      if (!((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb())
+      if (!((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb())
         return -4;
-      res = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb()->lowerItem(selectedWidget());
+      res = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem->getChildDb()->lowerItem(selectedWidget());
     }
   else
     {
@@ -191,7 +190,7 @@ void KDlgEditWidget::slot_deleteSelected()
   if ((!selected_widget) || (selected_widget == main_widget))
     return;
 
-  KDlgItem_Widget *dummy = (KDlgItem_Widget*)selected_widget;
+  KDlgItem_QWidget *dummy = (KDlgItem_QWidget*)selected_widget;
   deselectWidget();
   selected_widget = 0;
 
@@ -232,7 +231,7 @@ void KDlgEditWidget::slot_copySelected()
     {
       QTextStream t( &f );
 
-      saveWidget((KDlgItem_Widget*)selected_widget, &t);
+      saveWidget((KDlgItem_QWidget*)selected_widget, &t);
       f.close();
     }
   else
@@ -243,10 +242,11 @@ void KDlgEditWidget::slot_copySelected()
 
 void KDlgEditWidget::slot_pasteSelected()
 {
-  KDlgItem_Widget *parent_widget = main_widget;
+  KDlgItem_QWidget *parent_widget = main_widget;
 
   if (selectedWidget())
-    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem))
+    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) ||
+        (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem))
       {
         int res = 0;
         res = QMessageBox::information( this, i18n("Add item"),
@@ -258,9 +258,9 @@ void KDlgEditWidget::slot_pasteSelected()
         if (res == 1)
           {
             if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
-                parent_widget = (KDlgItem_Widget*)selectedWidget();
-            else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
-                parent_widget = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
+                parent_widget = (KDlgItem_QWidget*)selectedWidget();
+            else if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
+                parent_widget = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem;
           }
         else if (res == 2)
           return;
@@ -386,14 +386,14 @@ bool KDlgEditWidget::readGrp_SessionManagement( QTextStream *t )
   return readGrp_Ignore( t );
 }
 
-bool KDlgEditWidget::readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString ctype )
+bool KDlgEditWidget::readGrp_Item( KDlgItem_QWidget* par, QTextStream *t, QString ctype )
 {
   int svdlc = dlgfilelinecnt;
 
   if (dlgReadLine(t) != "{")
     return false;
 
-  KDlgItem_Widget *thatsme = 0;
+  KDlgItem_QWidget *thatsme = 0;
 
   if (par)
     {
@@ -627,7 +627,7 @@ bool KDlgEditWidget::saveToFile( QString fname )
   return true;
 }
 
-void KDlgEditWidget::saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep)
+void KDlgEditWidget::saveWidget( KDlgItem_QWidget *wid, QTextStream *t, int deep)
 {
   if ((!wid) || (!t))
     return;
@@ -656,7 +656,7 @@ void KDlgEditWidget::saveWidget( KDlgItem_Widget *wid, QTextStream *t, int deep)
           KDlgItem_Base *cdit = cdb->getFirst();
           while (cdit)
             {
-              saveWidget( (KDlgItem_Widget*)cdit, t, deep+1 );
+              saveWidget( (KDlgItem_QWidget*)cdit, t, deep+1 );
               cdit = cdb->getNext();
             }
         }
@@ -742,7 +742,8 @@ bool KDlgEditWidget::addItem(QString Name)
   KDlgItem_Base *par = main_widget;
 
   if (selectedWidget())
-    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) || (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem))
+    if (((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget)) ||
+        (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem))
       {
         int res = 0;
         res = QMessageBox::information( this, i18n("Add item"),
@@ -755,8 +756,8 @@ bool KDlgEditWidget::addItem(QString Name)
           {
             if ((selectedWidget()->itemClass().upper()=="QWIDGET") && (selectedWidget() != main_widget))
                 par = selectedWidget();
-            else if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
-                par = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem;
+            else if (((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem)
+                par = ((KDlgItem_QWidget*)selectedWidget())->parentWidgetItem;
           }
         else if (res == 2)
           return true;
@@ -765,17 +766,17 @@ bool KDlgEditWidget::addItem(QString Name)
   return addItem(par, Name) ? true : false;
 }
 
-KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
+KDlgItem_QWidget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
 {
   if (!par)
     return 0;
 
-  KDlgItem_Widget *wid = 0;
+  KDlgItem_QWidget *wid = 0;
 
   #define macro_CreateIfRightOne(a,typ) \
     if (QString(a).upper() == Name.upper()) \
       { \
-        wid = (KDlgItem_Widget*)new typ( this, par->getItem() ); \
+        wid = (KDlgItem_QWidget*)new typ( this, par->getItem() ); \
         if (wid->getProps()->getProp("VarName")->value == "") \
           { \
             typeCounter.increase(a); \
@@ -783,30 +784,26 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
           } \
       }
   
-    macro_CreateIfRightOne("QWidget", KDlgItem_Widget )
-    macro_CreateIfRightOne("QPushButton", KDlgItem_PushButton )
-    macro_CreateIfRightOne("QLineEdit", KDlgItem_LineEdit )
-    macro_CreateIfRightOne("QLabel", KDlgItem_Label )
-    macro_CreateIfRightOne("QLCDNumber", KDlgItem_LCDNumber )
-    macro_CreateIfRightOne("QCheckBox", KDlgItem_CheckBox )
-    macro_CreateIfRightOne("QRadioButton", KDlgItem_RadioButton )
-    macro_CreateIfRightOne("QComboBox", KDlgItem_ComboBox )
-    macro_CreateIfRightOne("QListBox", KDlgItem_ListBox )
-    macro_CreateIfRightOne("QProgressBar", KDlgItem_ProgressBar )
-    macro_CreateIfRightOne("QMultiLineEdit", KDlgItem_MultiLineEdit )
-    macro_CreateIfRightOne("QSpinBox", KDlgItem_SpinBox )
-    macro_CreateIfRightOne("QSlider", KDlgItem_Slider )
-    macro_CreateIfRightOne("QScrollBar", KDlgItem_ScrollBar )
-    macro_CreateIfRightOne("QGroupBox", KDlgItem_GroupBox )
-    macro_CreateIfRightOne("QListView", KDlgItem_ListView )
-#if 0
-    macro_CreateIfRightOne("KCombo", KDlgItem_KCombo )
-#endif
+    macro_CreateIfRightOne("QWidget", KDlgItem_QWidget )
+    macro_CreateIfRightOne("QPushButton", KDlgItem_QPushButton )
+    macro_CreateIfRightOne("QLineEdit", KDlgItem_QLineEdit )
+    macro_CreateIfRightOne("QLabel", KDlgItem_QLabel )
+    macro_CreateIfRightOne("QLCDNumber", KDlgItem_QLCDNumber )
+    macro_CreateIfRightOne("QCheckBox", KDlgItem_QCheckBox )
+    macro_CreateIfRightOne("QRadioButton", KDlgItem_QRadioButton )
+    macro_CreateIfRightOne("QComboBox", KDlgItem_QComboBox )
+    macro_CreateIfRightOne("QListBox", KDlgItem_QListBox )
+    macro_CreateIfRightOne("QProgressBar", KDlgItem_QProgressBar )
+    macro_CreateIfRightOne("QMultiLineEdit", KDlgItem_QMultiLineEdit )
+    macro_CreateIfRightOne("QSpinBox", KDlgItem_QSpinBox )
+    macro_CreateIfRightOne("QSlider", KDlgItem_QSlider )
+    macro_CreateIfRightOne("QScrollBar", KDlgItem_QScrollBar )
+    macro_CreateIfRightOne("QGroupBox", KDlgItem_QGroupBox )
+    macro_CreateIfRightOne("QListView", KDlgItem_QListView )
     macro_CreateIfRightOne("KDatePicker", KDlgItem_KDatePicker )
     macro_CreateIfRightOne("KDateTable", KDlgItem_KDateTable )
     macro_CreateIfRightOne("KColorButton", KDlgItem_KColorButton )
 
-    macro_CreateIfRightOne("KLedLamp", KDlgItem_KLedLamp )
     macro_CreateIfRightOne("KProgress", KDlgItem_KProgress )
     macro_CreateIfRightOne("KKeyButton", KDlgItem_KKeyButton )
     macro_CreateIfRightOne("KRestrictedLine", KDlgItem_KRestrictedLine )
@@ -822,7 +819,7 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
 
   par->addChild( wid );
   if (par != main_widget)
-    wid->parentWidgetItem = (KDlgItem_Widget*)par;
+    wid->parentWidgetItem = (KDlgItem_QWidget*)par;
 
 //  wid->repaintItem();
 

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "items.h"
+#include "itemsglobal.h"
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qdatetime.h>
@@ -524,7 +525,7 @@ void KDlgEdit::generateInitialSourceFile(TDialogFileInfo info){
   }
 }
 
-void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString _parent){
+void KDlgEdit::generateWidget(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent){
   if ((!wid) || (!stream)){
     return;
   }
@@ -553,18 +554,13 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
   generateIfWidget("QSpinBox","qspinbox.h",generateQSpinBox);
   generateIfWidget("KColorButton","kcolorbtn.h",generateKColorButton);
   generateIfWidget("QListView","qlistview.h",generateQListView);
-#if 0
-  generateIfWidget("KCombo","kcombo.h",generateKCombo);
-#endif
   generateIfWidget("KDatePicker","kdatepik.h",generateKDatePicker);
   generateIfWidget("KDateTable","kdatetbl.h",generateKDateTable);
   generateIfWidget("KKeyButton","kkeydialog.h",generateKKeyButton);
   generateIfWidget("KLed","kled.h",generateKLed);
-  generateIfWidget("KLedLamp","kledlamp.h",generateKLedLamp);
   generateIfWidget("KProgress","kprogress.h",generateKProgress);
   generateIfWidget("KRestrictedLine","krestrictedline.h",generateKRestrictedLine);
   generateIfWidget("KSeparator","kseparator.h",generateKSeparator);
-  generateIfWidget("KTreeList","ktreelist.h",generateKTreeList);
 
 
 #undef generateIfWidget
@@ -584,7 +580,7 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
 	KDlgItem_Base *cdit = cdb->getFirst();
 	while (cdit)
 	  {
-	    generateWidget( (KDlgItem_Widget*)cdit, stream, wid->getProps()->getPropValue("VarName"));
+	    generateWidget( (KDlgItem_QWidget*)cdit, stream, wid->getProps()->getPropValue("VarName"));
 	    cdit = cdb->getNext();
 	  }
       }
@@ -592,7 +588,7 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
 }
 
 
-void KDlgEdit::generateQLCDNumber(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQLCDNumber(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -606,7 +602,7 @@ void KDlgEdit::generateQLCDNumber(KDlgItem_Widget *wid, QTextStream *stream,QStr
 }
 
 
-void KDlgEdit::generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQLineEdit(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -628,7 +624,7 @@ void KDlgEdit::generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QStri
 }
 
 
-void KDlgEdit::generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQMultiLineEdit(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -650,7 +646,7 @@ void KDlgEdit::generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,
 }
 
 
-void KDlgEdit::generateQProgressBar(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQProgressBar(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -662,7 +658,7 @@ void KDlgEdit::generateQProgressBar(KDlgItem_Widget *wid, QTextStream *stream,QS
 }
 
 
-void KDlgEdit::generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQSlider(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -683,7 +679,7 @@ void KDlgEdit::generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString
 }
 
 
-void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQSpinBox(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -701,7 +697,7 @@ void KDlgEdit::generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
 }
 
 
-void KDlgEdit::generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQScrollBar(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -722,7 +718,7 @@ void KDlgEdit::generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QStr
 }
 
 
-void KDlgEdit::generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQRadioButton(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -750,7 +746,7 @@ void KDlgEdit::generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QS
 }
 
 
-void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQCheckBox(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -776,7 +772,7 @@ void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 }
 
 
-void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQComboBox(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
   KDlgPropertyBase* props = wid->getProps();
   bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
@@ -812,7 +808,7 @@ void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 }
 
 
-void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQLabel(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -829,7 +825,7 @@ void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString 
 }
 
 
-void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQListBox(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
   KDlgPropertyBase* props = wid->getProps();
   bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
@@ -872,7 +868,7 @@ void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
 }
 
 
-void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQPushButton(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -901,7 +897,7 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
 }
 
 
-void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQGroupBox(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
     
@@ -915,7 +911,7 @@ void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 }
 
 
-void KDlgEdit::generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQListView(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
     
@@ -997,7 +993,7 @@ void KDlgEdit::generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QStri
 }
 
 
-void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKColorButton(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1021,7 +1017,7 @@ void KDlgEdit::generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QS
 }
 
 #if 0
-void KDlgEdit::generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKCombo(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1037,7 +1033,7 @@ void KDlgEdit::generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString 
 }
 #endif
 
-void KDlgEdit::generateKDatePicker(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKDatePicker(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1048,7 +1044,7 @@ void KDlgEdit::generateKDatePicker(KDlgItem_Widget *wid, QTextStream *stream,QSt
 }
 
 
-void KDlgEdit::generateKDateTable(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKDateTable(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1057,7 +1053,7 @@ void KDlgEdit::generateKDateTable(KDlgItem_Widget *wid, QTextStream *stream,QStr
 }
 
 
-void KDlgEdit::generateKKeyButton(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKKeyButton(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1066,7 +1062,7 @@ void KDlgEdit::generateKKeyButton(KDlgItem_Widget *wid, QTextStream *stream,QStr
 }
 
 
-void KDlgEdit::generateKLed(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKLed(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1075,24 +1071,7 @@ void KDlgEdit::generateKLed(KDlgItem_Widget *wid, QTextStream *stream,QString _p
 }
 
 
-void KDlgEdit::generateKLedLamp(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
-{
-    KDlgPropertyBase* props = wid->getProps();
-    // because kledlamp allows only parent a parameter we can't use dumpContruct at this point :-(
-    
-    QString s = "  ";
-    s += props->getPropValue("VarName");
-    s += "= new ";
-    s += "KLedLamp";
-    s += "(";
-    s += _parent;
-    s += ");\n";
-    *stream << s;
-    generateCommon(wid,stream,_parent);
-}
-
-
-void KDlgEdit::generateKProgress(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKProgress(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1101,7 +1080,7 @@ void KDlgEdit::generateKProgress(KDlgItem_Widget *wid, QTextStream *stream,QStri
 }
 
 
-void KDlgEdit::generateKRestrictedLine(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKRestrictedLine(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1110,7 +1089,7 @@ void KDlgEdit::generateKRestrictedLine(KDlgItem_Widget *wid, QTextStream *stream
 }
 
 
-void KDlgEdit::generateKSeparator(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateKSeparator(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1125,17 +1104,7 @@ void KDlgEdit::generateKSeparator(KDlgItem_Widget *wid, QTextStream *stream,QStr
 }
 
 
-void KDlgEdit::generateKTreeList(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
-{
-    KDlgPropertyBase* props = wid->getProps();
-
-    props->dumpConstruct(stream, "KTreeList", _parent);
-    generateCommon(wid,stream,_parent);
-}
-
-
-
-void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateQWidget(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
 
@@ -1146,7 +1115,7 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
 }
 
     
-void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
+void KDlgEdit::generateCommon(KDlgItem_QWidget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
    
@@ -1160,11 +1129,6 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 			    props->getPropValue("Height"));
 
 
- //   //  else 
-// 	props->dumpPropCall(stream, "resize",
-// 			    props->getPropValue("Width") + "," +
-// 			    props->getPropValue("Height"));
-    
     if (props->getPropValue("MinWidth") != "" || props->getPropValue("MinHeight") != "")
 	{
 	    QString contents =

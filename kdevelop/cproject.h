@@ -272,6 +272,11 @@ public: // Methods to fetch project options
   QString getLDADD();
   QString getCXXFLAGS();
   QString getAdditCXXFLAGS();
+  /**
+   * Returns a string with the environment settings for a compilation,
+   * consisting of CFLAGS, CXXFLAGS and LDFLAGS
+   */
+   QString getCompilationEnvironment();
 
   void getFilters(QString group,QStrList& filters);
 

@@ -137,19 +137,19 @@ void CKDevelop::initView(){
 
   class_tree = new CClassView(t_tab_view,"cv");
   components.append(class_tree);
-  class_tree->setFocusPolicy(QWidget::NoFocus);
+  class_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
   components.append(log_file_tree);
-  log_file_tree->setFocusPolicy(QWidget::NoFocus);
+  log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
   components.append(real_file_tree);
-  real_file_tree->setFocusPolicy(QWidget::NoFocus);
+  real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   doc_tree = new DocTreeView(t_tab_view,"DOC");
   components.append(doc_tree);
-  doc_tree->setFocusPolicy(QWidget::NoFocus);
+  doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   t_tab_view->addTab(class_tree,i18n("CV"));
   t_tab_view->addTab(log_file_tree,i18n("LFV"));

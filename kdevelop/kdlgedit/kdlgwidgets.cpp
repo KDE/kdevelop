@@ -147,12 +147,6 @@ void KDlgWidgets::clicked_QListView()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("QListView");
 }
-#if 0
-void KDlgWidgets::clicked_KCombo()
-{
-  pCKDevel->kdlg_get_edit_widget()->addItem("KCombo");
-}
-#endif
 void KDlgWidgets::clicked_KDatePicker()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("KDatePicker");
@@ -171,11 +165,6 @@ void KDlgWidgets::clicked_KLed()
   pCKDevel->kdlg_get_edit_widget()->addItem("KLed");
 }
 
-void KDlgWidgets::clicked_KLedLamp()
-{
-  pCKDevel->kdlg_get_edit_widget()->addItem("KLedLamp");
-}
-
 void KDlgWidgets::clicked_KProgress()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("KProgress");
@@ -189,11 +178,6 @@ void KDlgWidgets::clicked_KKeyButton()
 void KDlgWidgets::clicked_KRestrictedLine()
 {
   pCKDevel->kdlg_get_edit_widget()->addItem("KRestrictedLine");
-}
-
-void KDlgWidgets::clicked_KTreeList()
-{
-  pCKDevel->kdlg_get_edit_widget()->addItem("KTreeList");
 }
 
 void KDlgWidgets::clicked_KSeparator()
@@ -265,9 +249,8 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   macroAddButton("kdlg_KColorButton.png",     "KColorButton",  clicked_KColorButton   ,i18n("This is a button displaying the selected color."));
   macroAddButton("kdlg_KKeyButton.png",       "KKeyButton",    clicked_KKeyButton     ,i18n("A push button that looks like a keyboard key."));
   macroAddButton("kdlg_KRestrictedLine.png",  "KRestrictedLine",clicked_KRestrictedLine,i18n("Restricted Editline: Only selected Characters are valid input."));
-//  macroAddButton("kdlg_KLed.png",             "KLed",          clicked_KLed           ,i18n("A round led widget."));
+  macroAddButton("kdlg_KLed.png",             "KLed",          clicked_KLed           ,i18n("A round led widget."));
   macroAddButton("kdlg_KProgress.png",        "KProgress",     clicked_KProgress      ,i18n("A Progress indicator widget."));
-  macroAddButton("kdlg_KLedLamp.png",         "KLedLamp",      clicked_KLedLamp       ,i18n("A CDE-style LED lamp widget."));
   macroAddButton("kdlg_KDatePicker.png",     "KDatePicker",      clicked_KDatePicker     ,i18n("Lets the user choose a date."));
   macroAddButton("kdlg_KDateTable.png",     "KDateTable",      clicked_KDateTable     ,i18n("Views a calendar in a tableview."));
 

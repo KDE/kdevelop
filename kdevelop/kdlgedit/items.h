@@ -29,415 +29,304 @@
 #include "kdlgpropertybase.h"
 #include "kdlgitembase.h"
 
-#ifndef DONTINC_ALL
-  #define INC_LINEEDIT
-  #define INC_PUSHBUTTON
-  #define INC_LABEL
-  #define INC_LCDNUMBER
-  #define INC_RADIOBUTTON
-  #define INC_CHECKBOX
-  #define INC_COMBOBOX
-  #define INC_LISTBOX
-  #define INC_MULTILINEEDIT
-  #define INC_PROGRESSBAR
-  #define INC_SPINBOX
-  #define INC_SLIDER
-  #define INC_SCROLLBAR
-  #define INC_GROUPBOX
-  #define INC_LISTVIEW
-  #define INC_KCOLORBUTTON
-  #define INC_KDATEPICKER
-  #define INC_KDATETABLE
-
-//  #define INC_KLED
-  #define INC_KLEDLAMP
-  #define INC_KPROGRESS
-  #define INC_KKEYBUTTON
-  #define INC_KRESTRICTEDLINE
-  #define INC_KSEPARATOR
-#endif
-
 
 /**
  * This class is inherited from KDlgItem_Base. It defines an item using some #defines and
  * and including the item_class.cpp.inc file which contains the definition.
 */
-class KDlgItem_Widget : public KDlgItem_Base
+class KDlgItem_QWidget : public KDlgItem_Base
 {
   Q_OBJECT
 
-  public:
-    KDlgItem_Widget( KDlgEditWidget* editwid , QWidget *parent, bool ismainwidget, const char* name = 0 );
+public:
+    KDlgItem_QWidget( KDlgEditWidget* editwid , QWidget *parent, bool ismainwidget, const char* name = 0 );
 
-  #define classname KDlgItem_Widget       // the classname
-  #define widgettype QFrame               // type of the items widget
-  #define classdesc "QWidget"             // string returned by itemClass()
-  // use this macro to add lines to the MyWidget class of the class (see item_class.cpp.inc)
-  #define MyWidgetAdd  public: MyWidget(KDlgItem_Widget* wid, QWidget* parent = 0, bool isMainWidget = false, const char* name = 0);
+  #define CLASSNAME KDlgItem_QWidget       // the classname
+  #define WIDGETTYPE QFrame               // type of the items widget
+  #define CLASSDESC "QWidget"             // string returned by itemClass()
+  #define ISCONTAINER
   #include "item_class.cpp.inc"           // includes the stuff
 };
 
 
-#ifdef INC_LINEEDIT
 #include <qlineedit.h>
-class KDlgItem_LineEdit : public KDlgItem_Base
+class KDlgItem_QLineEdit : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_LineEdit
-  #define widgettype QLineEdit
-  #define classdesc "QLineEdit"
-  #define MyWidgetAdd virtual void keyPressEvent ( QKeyEvent * ) {}
+  #define CLASSNAME KDlgItem_QLineEdit
+  #define WIDGETTYPE QLineEdit
+  #define CLASSDESC "QLineEdit"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
 
-#ifdef INC_PUSHBUTTON
 #include <qpushbutton.h>
-class KDlgItem_PushButton : public KDlgItem_Base
+class KDlgItem_QPushButton : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_PushButton
-  #define widgettype QPushButton
-  #define classdesc "QPushButton"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QPushButton
+  #define WIDGETTYPE QPushButton
+  #define CLASSDESC "QPushButton"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
 
-#ifdef INC_LABEL
 #include <qlabel.h>
-class KDlgItem_Label : public KDlgItem_Base
+class KDlgItem_QLabel : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_Label
-  #define widgettype QLabel
-  #define classdesc "QLabel"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QLabel
+  #define WIDGETTYPE QLabel
+  #define CLASSDESC "QLabel"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-
-#ifdef INC_LCDNUMBER
 #include <qlcdnumber.h>
-class KDlgItem_LCDNumber : public KDlgItem_Base
+class KDlgItem_QLCDNumber : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_LCDNumber
-  #define widgettype QLCDNumber
-  #define classdesc "QLCDNumber"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QLCDNumber
+  #define WIDGETTYPE QLCDNumber
+  #define CLASSDESC "QLCDNumber"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-
-#ifdef INC_RADIOBUTTON
 #include <qradiobutton.h>
-class KDlgItem_RadioButton : public KDlgItem_Base
+class KDlgItem_QRadioButton : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_RadioButton
-  #define widgettype QRadioButton
-  #define classdesc "QRadioButton"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QRadioButton
+  #define WIDGETTYPE QRadioButton
+  #define CLASSDESC "QRadioButton"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-
-#ifdef INC_CHECKBOX
 #include <qcheckbox.h>
-class KDlgItem_CheckBox : public KDlgItem_Base
+class KDlgItem_QCheckBox : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_CheckBox
-  #define widgettype QCheckBox
-  #define classdesc "QCheckBox"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QCheckBox
+  #define WIDGETTYPE QCheckBox
+  #define CLASSDESC "QCheckBox"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_COMBOBOX
 #include <qcombobox.h>
-class KDlgItem_ComboBox : public KDlgItem_Base
+class KDlgItem_QComboBox : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_ComboBox
-  #define widgettype QComboBox
-  #define classdesc "QComboBox"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QComboBox
+  #define WIDGETTYPE QComboBox
+  #define CLASSDESC "QComboBox"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_LISTBOX
 #include <qlistbox.h>
-class KDlgItem_ListBox : public KDlgItem_Base
+class KDlgItem_QListBox : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_ListBox
-  #define widgettype QListBox
-  #define classdesc "QListBox"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QListBox
+  #define WIDGETTYPE QListBox
+  #define CLASSDESC "QListBox"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_MULTILINEEDIT
 #include <qmultilinedit.h>
-class KDlgItem_MultiLineEdit : public KDlgItem_Base
+class KDlgItem_QMultiLineEdit : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_MultiLineEdit
-  #define widgettype QMultiLineEdit
-  #define classdesc "QMultiLineEdit"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QMultiLineEdit
+  #define WIDGETTYPE QMultiLineEdit
+  #define CLASSDESC "QMultiLineEdit"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_PROGRESSBAR
 #include <qprogressbar.h>
-class KDlgItem_ProgressBar : public KDlgItem_Base
+class KDlgItem_QProgressBar : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_ProgressBar
-  #define widgettype QProgressBar
-  #define classdesc "QProgressBar"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QProgressBar
+  #define WIDGETTYPE QProgressBar
+  #define CLASSDESC "QProgressBar"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_SPINBOX
 #include <qspinbox.h>
-class KDlgItem_SpinBox : public KDlgItem_Base
+#include <qlineedit.h>
+class KDlgItem_QSpinBox : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_SpinBox
-  #define widgettype QSpinBox
-  #define classdesc "QSpinBox"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QSpinBox
+  #define WIDGETTYPE QSpinBox
+  #define CLASSDESC "QSpinBox"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_SLIDER
 #include <qslider.h>
-class KDlgItem_Slider : public KDlgItem_Base
+class KDlgItem_QSlider : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_Slider
-  #define widgettype QSlider
-  #define classdesc "QSlider"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QSlider
+  #define WIDGETTYPE QSlider
+  #define CLASSDESC "QSlider"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_SCROLLBAR
 #include <qscrollbar.h>
-class KDlgItem_ScrollBar : public KDlgItem_Base
+class KDlgItem_QScrollBar : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_ScrollBar
-  #define widgettype QScrollBar
-  #define classdesc "QScrollBar"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QScrollBar
+  #define WIDGETTYPE QScrollBar
+  #define CLASSDESC "QScrollBar"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_GROUPBOX
 #include <qgroupbox.h>
-class KDlgItem_GroupBox : public KDlgItem_Base
+class KDlgItem_QGroupBox : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_GroupBox
-  #define widgettype QGroupBox
-  #define classdesc "QGroupBox"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QGroupBox
+  #define WIDGETTYPE QGroupBox
+  #define CLASSDESC "QGroupBox"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_LISTVIEW
-#include <qlistbox.h>
-class KDlgItem_ListView : public KDlgItem_Base
+#include <qlistview.h>
+class KDlgItem_QListView : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_ListView
-  #define widgettype QListBox
-  #define classdesc "QListView"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_QListView
+  #define WIDGETTYPE QListView
+  #define CLASSDESC "QListView"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-
-
-
-
-#ifdef INC_KCOLORBUTTON
 #include <kcolorbtn.h>
 class KDlgItem_KColorButton : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KColorButton
-  #define widgettype KColorButton
-  #define classdesc "KColorButton"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KColorButton
+  #define WIDGETTYPE KColorButton
+  #define CLASSDESC "KColorButton"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_KCOMBO
-#include <kcombo.h>
-class KDlgItem_KCombo : public KDlgItem_Base
-{
-//  Q_OBJECT
-
-  #define classname KDlgItem_KCombo
-  #define widgettype KCombo
-  #define classdesc "KCombo"
-  #undef MyWidgetAdd
-  #include "item_class.cpp.inc"
-};
-#endif
-
-#ifdef INC_KDATEPICKER
 #include <kdatepik.h>
 class KDlgItem_KDatePicker : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KDatePicker
-  #define widgettype KDatePicker
-  #define classdesc "KDatePicker"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KDatePicker
+  #define WIDGETTYPE KDatePicker
+  #define CLASSDESC "KDatePicker"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_KDATETABLE
 #include <kdatetbl.h>
 class KDlgItem_KDateTable : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KDateTable
-  #define widgettype KDateTable
-  #define classdesc "KDateTable"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KDateTable
+  #define WIDGETTYPE KDateTable
+  #define CLASSDESC "KDateTable"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-/*#ifdef INC_KLED
 #include <kled.h>
 class KDlgItem_KLed: public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KLed
-  #define widgettype KLed
-  #define classdesc "KLed"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KLed
+  #define WIDGETTYPE KLed
+  #define CLASSDESC "KLed"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif*/
 
-#ifdef INC_KLEDLAMP
-#include <kledlamp.h>
-class KDlgItem_KLedLamp : public KDlgItem_Base
-{
-  Q_OBJECT
-
-  #define classname KDlgItem_KLedLamp
-  #define widgettype KLedLamp
-  #define classdesc "KLedLamp"
-  #undef MyWidgetAdd
-  #include "item_class.cpp.inc"
-};
-#endif
-
-#ifdef INC_KPROGRESS
 #include <kprogress.h>
 class KDlgItem_KProgress : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KProgress
-  #define widgettype KProgress
-  #define classdesc "KProgress"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KProgress
+  #define WIDGETTYPE KProgress
+  #define CLASSDESC "KProgress"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_KKEYBUTTON
 #include <kkeydialog.h>
 class KDlgItem_KKeyButton : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KKeyButton
-  #define widgettype KKeyButton
-  #define classdesc "KKeyButton"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KKeyButton
+  #define WIDGETTYPE KKeyButton
+  #define CLASSDESC "KKeyButton"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_KRESTRICTEDLINE
 #include <krestrictedline.h>
 class KDlgItem_KRestrictedLine : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KRestrictedLine
-  #define widgettype KRestrictedLine
-  #define classdesc "KRestrictedLine"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KRestrictedLine
+  #define WIDGETTYPE KRestrictedLine
+  #define CLASSDESC "KRestrictedLine"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
 
-#ifdef INC_KSEPARATOR
 #include <kseparator.h>
 class KDlgItem_KSeparator : public KDlgItem_Base
 {
   Q_OBJECT
 
-  #define classname KDlgItem_KSeparator
-  #define widgettype KSeparator
-  #define classdesc "KSeparator"
-  #undef MyWidgetAdd
+  #define CLASSNAME KDlgItem_KSeparator
+  #define WIDGETTYPE KSeparator
+  #define CLASSDESC "KSeparator"
+  #undef ISCONTAINER
   #include "item_class.cpp.inc"
 };
-#endif
-
-
 
 
 #endif

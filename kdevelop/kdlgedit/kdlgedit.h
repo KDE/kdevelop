@@ -26,7 +26,7 @@
 
 class CProject;
 class TDialogFileInfo;
-class KDlgItem_Widget;
+class KDlgItem_QWidget;
 
 /**
   *@author Pascal Krahmer <pascal@beast.de>
@@ -82,38 +82,33 @@ void slotFileNew();
   void slotDeleteDialog(QString file);
   
   protected:
-  void generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateCommon(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateWidget(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
 
-  void generateQLCDNumber(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQProgressBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQSpinBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQSlider(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQScrollBar(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKColorButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-#if 0
-  void generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-#endif
-  void generateKDatePicker(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKDateTable(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKKeyButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKLed(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKLedLamp(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKProgress(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKRestrictedLine(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKSeparator(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
-  void generateKTreeList(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQLCDNumber(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQPushButton(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQLineEdit(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQRadioButton(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQCheckBox(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQLabel(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQWidget(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQComboBox(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQListBox(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQMultiLineEdit(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQProgressBar(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQGroupBox(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQSpinBox(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQSlider(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQScrollBar(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateQListView(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKColorButton(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKDatePicker(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKDateTable(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKKeyButton(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKLed(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKProgress(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKRestrictedLine(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
+  void generateKSeparator(KDlgItem_QWidget *wid, QTextStream *stream,QString parent);
   void generateInitialHeaderFile(TDialogFileInfo info,QString baseclass_header);
   void generateInitialSourceFile(TDialogFileInfo info);
 
