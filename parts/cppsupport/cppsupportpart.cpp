@@ -96,7 +96,7 @@ void CppSupportPart::documentActivated(KEditor::Document *doc)
         QFileInfo fi(doc->url().path());
         QString ext = fi.extension();
         ;
-        if (QStringList::split(',', "c,cc,cpp,cxx,C,h,hxx").contains(ext))
+        if (QStringList::split(',', "c,cc,cpp,cxx,C,h,hxx,hpp").contains(ext))
             enabled = true;
     }
 
@@ -302,7 +302,7 @@ void CppSupportPart::slotSwitchHeader()
     QString base = path.left(path.length()-ext.length());
     kdDebug(9007) << "base: " << base << ", ext: " << ext << endl;
     QStringList candidates;
-    if (ext == "h" || ext == "hxx") {
+    if (ext == "h" || ext == "hxx" || ext == "hpp") {
         candidates << (base + "c");
         candidates << (base + "cc");
         candidates << (base + "cpp");
@@ -311,6 +311,7 @@ void CppSupportPart::slotSwitchHeader()
     } else if (QStringList::split(',', "c,cc,cpp,cxx,C").contains(ext)) {
         candidates << (base + "h");
         candidates << (base + "hxx");
+        candidates << (base + "hpp");
     }
     
     QStringList::ConstIterator it;
@@ -351,7 +352,7 @@ void CppSupportPart::newClass()
 void CppSupportPart::addMethod(const QString &className)
 {
    if (! m_pEditIface) {
-      KMessageBox::sorry(0, i18n("cann't get Interface: EditDocumentIface\nis the file open ?"), "OOPS" );
+      KMessageBox::sorry(0, i18n("can't get interface: EditDocumentIface\nis the file open ?"), "OOPS" );
       return;
    }
 
@@ -425,7 +426,7 @@ void CppSupportPart::addMethod(const QString &className)
 void CppSupportPart::addAttribute(const QString &className)
 {
    if (! m_pEditIface) {
-      KMessageBox::sorry(0, i18n("cann't get Interface: EditDocumentIface\nis the file open ?"), "OOPS" );
+      KMessageBox::sorry(0, i18n("can't get interface: EditDocumentIface\nis the file open ?"), "OOPS" );
       return;
    }
     AddClassAttributeDialog dlg(0, "attrDlg");
