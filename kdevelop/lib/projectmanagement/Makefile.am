@@ -15,6 +15,12 @@ filepropspagebase.h : filepropspage.ui
 filepropspagebase.cpp : filepropspage.ui
 	uic -i filepropspagebase.h -o filepropspagebase.cpp filepropspage.ui
 
+EXTRA_DIST = appwizard.ui filepropspage.ui
+
+BUILT_SOURCES = appwizardbase.h appwizardbase.cpp \
+		filepropspagebase.h filepropspagebase.cpp
+CLEANFILES = $(BUILT_SOURCES)
+
 libkdevprojectmanagement_la_SOURCES =  appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp \
 		plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp \
 		registeredfile.cpp  pluginloader.cpp appwizardbase.cpp filepropspagebase.cpp \
@@ -25,6 +31,7 @@ noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 				 plugin.h pmc.h project.h projectspace.h qobjectplugin.h \
 				registeredfile.h  pluginloader.h appwizardbase.h filepropspagebase.h \
 		filepropspage.h
+
 #noinst_PROGRAMS = testprj
 
 #testprj_SOURCES = testprj.cpp

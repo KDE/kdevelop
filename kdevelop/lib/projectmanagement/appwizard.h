@@ -18,7 +18,7 @@
 #ifndef APPWIZARD_H
 #define APPWIZARD_H
 
-#include <appwizardbase.h>
+#include "appwizardbase.h"
 #include <qwidget.h>
 #include <qlineedit.h>
 #include <qlabel.h>
