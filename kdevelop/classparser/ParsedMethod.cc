@@ -88,7 +88,8 @@ void CParsedMethod::addArgument( CParsedArgument *anArg )
 {
   assert( anArg != NULL );
 
-  arguments.append( anArg );
+  if( anArg->type != "void" )
+    arguments.append( anArg );
 }
 
 /*--------------------------------------- CParsedMethod::setVirtual()
