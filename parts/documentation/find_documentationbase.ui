@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>FindDocumentationBase</class>
 <author>Tobias Gläßer</author>
 <widget class="QWidget">
@@ -44,7 +44,7 @@
                 <string>Search</string>
             </property>
             <property name="default">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
         </widget>
         <widget class="QLineEdit" row="1" column="0" rowspan="1" colspan="2">
@@ -101,8 +101,6 @@
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>button_search</sender>
@@ -162,7 +160,4 @@
     <slot>buttonPressedOnItem( int button, QListViewItem * item, const QPoint &amp; pos, int c )</slot>
 </slots>
 <layoutdefaults spacing="1" margin="1"/>
-<includehints>
-    <includehint>klistview.h</includehint>
-</includehints>
 </UI>

@@ -256,16 +256,23 @@ void FindDocumentation::searchInIndex()
         {
             if(!item->text().contains(search_term->text(),false))
                 break;
+            
+            IndexItem::List urls = item->urls();
+            for (IndexItem::List::const_iterator it = urls.begin(); it != urls.end(); ++it)
+            {
+                QString text = item->text();
+                if (urls.count() > 1)
+                    text = (*it).first;
+                if(newitem)
+                    newitem = new DocumentationItem(DocumentationItem::Document, index_item, 
+                        newitem, text);
+                else
+                    newitem = new DocumentationItem(DocumentationItem::Document, 
+                        index_item, text);
+                
+                newitem->setURL((*it).second);
+            }
  
-            if(newitem)
-                newitem = new DocumentationItem(DocumentationItem::Document, index_item, newitem, item->text());
-            else
-                newitem = new DocumentationItem(DocumentationItem::Document, index_item, item->text());
-            //FIXME: index item can have more than one url, what to do?
-            KURL url;
-            if (item->urls().count() > 0)
-                url = item->urls().first().second;
-            newitem->setURL(url);
             item = dynamic_cast<IndexItem*>(item->next());
         }
     }
