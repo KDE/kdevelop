@@ -230,20 +230,22 @@ KPopupMenu *CRealFileView::getCurrentPopup()
   if ( (treeH->itemType() == THINSTALLED_FILE || treeH->itemType() == THC_FILE)
        && vc)
       {
-          bool reg = vc->isRegistered(getFullFilename(currentItem()));
+          VersionControl::State reg =
+              vc->registeredState(getFullFilename(currentItem()));
           int id;
           popup->insertSeparator();
           id = popup->insertItem( i18n("Update"),
                                   this, SLOT(slotUpdate()) );
-          popup->setItemEnabled(id, reg);
+          popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
           id = popup->insertItem( i18n("Commit"),
                                   this, SLOT(slotCommit()) );
+          popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
           id = popup->insertItem( i18n("Add to Repository"),
                                   this, SLOT(slotAddToRepository()) );
-          popup->setItemEnabled(id, !reg);
+          popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
           id = popup->insertItem( i18n("Remove from Repository"),
                                   this, SLOT(slotRemoveFromRepository()) );
-          popup->setItemEnabled(id, reg);
+          popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
       }
               
   return popup;

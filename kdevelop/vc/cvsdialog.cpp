@@ -13,15 +13,11 @@
 // TODO: Only show dialog if cvs client doesn't exit immediately.
 // For local repositories cvs is really fast!
 
-CvsDialog::CvsDialog(const char *command, const char *text)
+CvsDialog::CvsDialog(const char *text)
     : QDialog(0, "", true), childproc(0)
 {
-
-    
     setCaption( i18n("CVS") );
 
-    cmd = command;
-    
     QBoxLayout *layout = new QVBoxLayout(this, 10);
 
     QLabel *textlabel = new QLabel(text, this);
@@ -33,8 +29,8 @@ CvsDialog::CvsDialog(const char *command, const char *text)
     resultbox = new QMultiLineEdit(this);
     resultbox->setReadOnly(true);
     QFontMetrics rb_fm(resultbox->fontMetrics());
-    resultbox->setMinimumSize(rb_fm.width("0")*60,
-			      rb_fm.lineSpacing()*5);
+    resultbox->setMinimumSize(rb_fm.width("0")*75,
+			      rb_fm.lineSpacing()*8);
     layout->addWidget(resultbox, 5);
     
     QFrame *frame = new QFrame(this);
@@ -51,7 +47,7 @@ CvsDialog::CvsDialog(const char *command, const char *text)
     buttonbox->layout();
 
     layout->activate();
-    resize(560,280);
+    resize(sizeHint());
 }
 
 
@@ -94,7 +90,7 @@ void CvsDialog::buttonPressed()
     if (childproc)
         finish();
     else
-	delete this;
+        accept();
 }
 
 
@@ -111,7 +107,7 @@ void CvsDialog::receivedOutput(KProcess *proc, char *buffer, int buflen)
 }
 
 
-void CvsDialog::show()
+void CvsDialog::startCommand(const char *cmd)
 {
     resultbox->append(cmd);
     childproc = new KShellProcess();
@@ -126,7 +122,6 @@ void CvsDialog::show()
 
     childproc->start(KProcess::NotifyOnExit,
 		     KProcess::Communication(KProcess::Stdout|KProcess::Stderr));
-    QDialog::show();
 }
 
 

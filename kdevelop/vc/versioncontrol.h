@@ -17,6 +17,9 @@
 class VersionControl
 {
 public:
+
+    enum State { canBeCommited = 1, canBeAdded = 2 };
+    
     /**
      * Adds to list the names of all supported
      * version control systems.
@@ -49,7 +52,7 @@ public:
      * Tells whether the given file is registered
      * in the version control system.
      */
-    virtual bool isRegistered(const char *filename) = 0;
+    virtual State registeredState(const char *filename) = 0;
 };
 
 #endif

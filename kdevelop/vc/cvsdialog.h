@@ -14,10 +14,10 @@ class CvsDialog : public QDialog
     Q_OBJECT
 
 public:
-    CvsDialog( const char *command, const char *text);
+    CvsDialog(const char *text);
     ~CvsDialog();
 
-    virtual void show();
+    void startCommand(const char *cmd);
     
 protected slots:
     void childExited();
@@ -28,7 +28,6 @@ private:
     void processOutput();
     void finish();
 
-    QString cmd;
     QMultiLineEdit *resultbox;
     QPushButton *button;
     KProcess *childproc;

@@ -249,20 +249,22 @@ KPopupMenu *CLogFileView::getCurrentPopup()
 
       if (project->getVersionControl())
           {
-              bool reg = project->getVersionControl()->isRegistered(getFullFilename(currentItem()));
+              VersionControl::State reg =
+                  project->getVersionControl()->registeredState(getFullFilename(currentItem()));
               int id;
               popup->insertSeparator();
               id = popup->insertItem( i18n("Update"),
                                       this, SLOT(slotUpdate()) );
-              popup->setItemEnabled(id, reg);
+              popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
               id = popup->insertItem( i18n("Commit"),
                                       this, SLOT(slotCommit()) );
+              popup->setItemEnabled(id, reg & VersionControl::canBeCommited);
               id = popup->insertItem( i18n("Add to Repository"),
                                       this, SLOT(slotAddToRepository()) );
-              popup->setItemEnabled(id, !reg);
+              popup->setItemEnabled(id, reg & VersionControl::canBeAdded);
               id = popup->insertItem( i18n("Remove from Repository"),
                                       this, SLOT(slotRemoveFromRepository()) );
-              popup->setItemEnabled(id, reg);
+              popup->setItemEnabled(id, !(reg & VersionControl::canBeAdded));
           }
       break;
     default:

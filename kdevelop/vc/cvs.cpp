@@ -18,7 +18,9 @@ void CVS::add(const char *filename)
     command += name;
     command += " 2>&1";
 
-    ( new CvsDialog(command, i18n("Adding file to repository")) )->show();
+    CvsDialog l(i18n("Adding file to repository"));
+    l.startCommand(command);
+    l.exec();
 }
 
 
@@ -34,7 +36,9 @@ void CVS::remove(const char *filename)
     command += name;
     command += " 2>&1";
 
-    ( new CvsDialog(command, i18n("Removing file from repository")) )->show();
+    CvsDialog l(i18n("Removing file from repository"));
+    l.startCommand(command);
+    l.exec();
 }
 
 
@@ -50,7 +54,9 @@ void CVS::update(const char *filename)
     command += name;
     command += " 2>&1";
 
-    ( new CvsDialog(command, i18n("Updating")) )->show();
+    CvsDialog l(i18n("Updating"));
+    l.startCommand(command);
+    l.exec();
 }
 
 
@@ -74,14 +80,16 @@ void CVS::commit(const char *filename)
 
     delete d;
 
-    ( new CvsDialog(command, i18n("Commiting file")) )->show();
+    CvsDialog l(i18n("Commiting file"));
+    l.startCommand(command);
+    l.exec();
 }
 
 
-bool CVS::isRegistered(const char *filename)
+VersionControl::State CVS::registeredState(const char *filename)
 {
     char buf[512];
-    bool found;
+    State state;
     
     QFileInfo fi(filename);
     QString dirpath(fi.dirPath());
@@ -90,9 +98,9 @@ bool CVS::isRegistered(const char *filename)
 
     FILE *f = fopen(entriesfile, "r");
     if (!f)
-	return false;
+	return State(0);
 
-    found = false;
+    state = canBeAdded;
     while (fgets(buf, sizeof buf, f))
 	{
 	    char *nextp;
@@ -101,13 +109,15 @@ bool CVS::isRegistered(const char *filename)
 	    if ( (nextp = strchr(buf+1, '/')) == 0)
 		continue;
 	    *nextp = '\0';
-	    if (qstrcmp(buf+1, name) == 0 && *(nextp+1) != '-')
+	    if (qstrcmp(buf+1, name) == 0)
 		{
-		    found = true;
+                    state = State(state | canBeCommited);
+                    if (*(nextp+1) != '-')
+                        state = State(state & ~canBeAdded);
 		    break;
 		}
 	}
     fclose(f);
-    return found;
+    return state;
 }
     

@@ -1,3 +1,7 @@
+1999-08-01  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* The assumption that VersionControl::isRegistered is a
+	  boolean decision was obviously a bit naive => corrected
+
 1999-07-31 Sandy Meier   <smeier@rz.uni-potsdam.de>
 	* replaced the automoc in qt.tgz,normal.tgz,mini.tgz with a slightly modified version 
 	Thanks to "Armin L. Schneider" <armin.schneider@uumail.de>
