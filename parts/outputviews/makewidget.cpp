@@ -660,6 +660,9 @@ void MakeWidget::insertLine1(const QString &line, Type type)
 	else if (m_installFile.search(line) != -1) {
 	    insertLine2(i18n("installing <b>%1</b>").arg(m_installFile.cap(m_fileNameGroup)), StyledDiagnostic);
 	}
+	else {
+	    insertLine2(line, type);
+	}
 	return;
     }
     insertLine2(line, type);
