@@ -21,6 +21,7 @@
 #include <kfiledialog.h>
 #include <kconfig.h>
 #include <kurl.h>
+#include <kurldrag.h>
 #include <kurlrequesterdlg.h>
 
 #include <kedittoolbar.h>
@@ -147,7 +148,7 @@ void $APPNAME$::dropEvent(QDropEvent *event)
     // this is a very simplistic implementation of a drop event.  we
     // will only accept a dropped URL.  the Qt dnd code can do *much*
     // much more, so please read the docs there
-    KURL::List uri;
+    KURL::List urls;
 
     // see if we can decode a URI.. if not, just ignore it
     if (KURLDrag::decode(event, urls) && !urls.isEmpty())
