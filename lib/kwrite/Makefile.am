@@ -14,3 +14,12 @@ libkdevkwrite_la_SOURCES = highlight.cpp texteditor.cpp \
 METASOURCES = AUTO
 
 EXTRA_DIST = AUTHORS
+
+syntaxdir = $(kde_datadir)/kwrite
+syntax_DATA = syntax.xml
+
+
+
+
+
+
