@@ -20,6 +20,7 @@
 class KTZWidgetInfo
 {
 public:
+  KTZWidgetInfo( QWidget* w = 0 ): m_widget(w), m_index(0), m_barIndex(0) {} 
 
   QWidget *m_widget;
   int     m_index, m_barIndex;
@@ -87,8 +88,7 @@ KTabZoomWidget::~KTabZoomWidget()
 
 void KTabZoomWidget::addTab(QWidget *widget, const QString &title, const QString& toolTip)
 {
-  KTZWidgetInfo *info = new KTZWidgetInfo;
-  info->m_widget = widget;
+  KTZWidgetInfo *info = new KTZWidgetInfo( widget );
 
   info->m_barIndex = d->m_tabBar->addTab( QTab(title), toolTip );
   info->m_index = d->m_popup->addTab(widget, title);
