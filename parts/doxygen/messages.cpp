@@ -142,6 +142,7 @@ QString message(const QCString &key)
     addMessage("MAN_LINKS", i18n("Generate links"));
     addMessage("XML", i18n("XML"));
     addMessage("GENERATE_XML", i18n("Generate XML"));
+    addMessage("XML_OUTPUT", i18n("XML output directory"));
     addMessage("XML_SCHEMA", i18n("XML schema"));
     addMessage("XML_DTD", i18n("XML DTD file"));
     addMessage("DEF", i18n("DEF"));
