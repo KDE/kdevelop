@@ -9,6 +9,9 @@
       (related to QextMDI but not to KDevelop)
     * probably last bugfix before the KDE-2.2 tag: the legendary "Bero-crash"
       --> now we use another config file section for the docking state in KDevelop-2.0
+    * added kdevelop/kdevelop/tools/kdevelop2.upd that will be installed in
+      $(kde_datadir)/kconf_update. After the first "make install" or first restart
+      of KDE the evil section [dock_setting_default] will be removed from CVS
 
 2001-07-29  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: debugging with Toplevel MDI mode works properly now
