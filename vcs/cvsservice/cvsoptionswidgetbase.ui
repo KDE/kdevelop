@@ -96,9 +96,6 @@
                     <property name="text">
                         <string>Create &amp;new directories (if any)</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
@@ -107,9 +104,6 @@
                     <property name="text">
                         <string>&amp;Prune empty directories</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+P</string>
-                    </property>
                 </widget>
                 <widget class="QCheckBox">
                     <property name="name">
@@ -117,9 +111,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Update subdirectories too</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
                     </property>
                 </widget>
             </vbox>
@@ -141,9 +132,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Be recursive</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+B</string>
                     </property>
                 </widget>
             </vbox>

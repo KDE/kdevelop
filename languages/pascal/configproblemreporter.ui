@@ -26,9 +26,6 @@
             <property name="text">
                 <string>&amp;Enable background parsing</string>
             </property>
-            <property name="accel">
-                <string>Alt+E</string>
-            </property>
         </widget>
         <widget class="QSlider">
             <property name="name">

@@ -40,9 +40,6 @@
                     <property name="text">
                         <string>Show code &amp;tooltip</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+T</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -134,9 +131,6 @@
                     <property name="text">
                         <string>&amp;Never</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string></string>
                     </property>
@@ -158,9 +152,6 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Only lines beginning with the following string:</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+O</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -199,9 +190,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Always</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Always show the bookmarked line in addition to the line number</string>
