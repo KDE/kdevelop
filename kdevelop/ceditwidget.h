@@ -117,6 +117,18 @@ public: // Indent methods
    */
   void unIndent()                 { KWrite::unIndent(); }
 
+public: // Comment methods
+
+  /** Adds '//' to the beginning of the current line or of the lines in the
+   * selection
+   */
+  void comment()                   { KWrite::comment(); }
+
+  /** Removes '//' to the beginning of the current line or of the lines in the
+   * selection
+   */
+  void unComment()                 { KWrite::unComment(); }
+
 public: // Queries
 
   /** Return the popupmenu. 
