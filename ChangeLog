@@ -1,3 +1,10 @@
+2000-03-25  Ralf Funken <rfunken@kdevelop.de>
+	* fixed an error in development_package.xpm. It wasn't
+          displayed on my system. Please check if it is Ok now.
+        * Updated welcome
+        * Updated german manual
+        * Updated de.po 
+
 2000-03-23 Ralf Nolden <rnolden@kdevelop.de>
         * added "extern" to tokenizer.l (classparser) to avoid trouble with parsing extern "C" sections
         * added support for kdoc.rules file for KDoc2 in the update kde-libs documentation dialog to
