@@ -92,7 +92,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
     QChar ch = currentChar();
     QChar ch1 = peekChar();
 
-    if( ch.isNull() ){
+    if( ch.isNull() || ch.isSpace() ){
 	/* skip */
     } else if( ch == '/' && ch1 == '/' ){
 	int start = currentPosition();
@@ -617,7 +617,7 @@ void Lexer::processIfdef()
 
     if( testIfLevel() ){
 	m_trueTest[ m_ifLevel ] = macroDefined();
-	m_skipping[ m_ifLevel] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
+	m_skipping[ m_ifLevel ] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
     }
 }
 
