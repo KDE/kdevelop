@@ -74,8 +74,8 @@ void KDevelopCore::initComponents(KDevelop *gui)
                  this, SLOT(gotoProjectApiDoc()) );
         connect( *it, SIGNAL(gotoProjectManual()),
                  this, SLOT(gotoProjectManual()) );
-        connect( *it, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&)),
-                 gui, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&)) );
+        connect( *it, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
+                 gui, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
     }
 
     // Call the setup routines
