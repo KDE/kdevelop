@@ -6,6 +6,7 @@
 #define _KDEVCORE_H_
 
 #include <qstringlist.h>
+#include <qobject.h>
 
 class KDialogBase;
 class KDevPlugin;
