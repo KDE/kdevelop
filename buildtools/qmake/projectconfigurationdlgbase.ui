@@ -619,291 +619,6 @@
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>libAddTab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Libraries</string>
-                </attribute>
-                <vbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout10</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Link Convenience Libraries Inside Project</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>insidelib_listview</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>Layout9_3</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>insideLibMoveUpBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move &amp;Up</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>insideLibMoveDownBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move &amp;Down</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer6_2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout11</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Link Libraries Outside Project</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>outsidelib_listview</cstring>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout9</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibAddBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Add...</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibRemoveBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Remove</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibEditBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Edit</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibMoveUpBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move U&amp;p</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibMoveDownBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move Dow&amp;n</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer8_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>64</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout12</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QListView">
-                                <column>
-                                    <property name="text">
-                                        <string>Library Directories Outside Project</string>
-                                    </property>
-                                    <property name="clickable">
-                                        <bool>true</bool>
-                                    </property>
-                                    <property name="resizable">
-                                        <bool>true</bool>
-                                    </property>
-                                </column>
-                                <property name="name">
-                                    <cstring>outsidelibdir_listview</cstring>
-                                </property>
-                                <property name="resizeMode">
-                                    <enum>LastColumn</enum>
-                                </property>
-                            </widget>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>layout10</cstring>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibDirAddBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Add...</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibDirRemoveBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Remove</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibDirEditBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Edit</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibDirMoveUpBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move U&amp;p</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KPushButton">
-                                        <property name="name">
-                                            <cstring>outsideLibDirMoveDownBtn</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Move Dow&amp;n</string>
-                                        </property>
-                                    </widget>
-                                    <spacer>
-                                        <property name="name">
-                                            <cstring>Spacer2_2_2</cstring>
-                                        </property>
-                                        <property name="orientation">
-                                            <enum>Vertical</enum>
-                                        </property>
-                                        <property name="sizeType">
-                                            <enum>Expanding</enum>
-                                        </property>
-                                        <property name="sizeHint">
-                                            <size>
-                                                <width>20</width>
-                                                <height>70</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </vbox>
-                            </widget>
-                        </hbox>
-                    </widget>
-                </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
                     <cstring>incaddTab</cstring>
                 </property>
                 <attribute name="title">
@@ -1093,6 +808,499 @@
                                     <size>
                                         <width>20</width>
                                         <height>70</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>libAddTab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Libraries</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget" row="1" column="0">
+                        <property name="name">
+                            <cstring>layout12</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Library Directories Outside Project</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>outsidelibdir_listview</cstring>
+                                </property>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout10</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibDirAddBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Add...</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+A</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibDirRemoveBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+R</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibDirEditBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Edit</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+E</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibDirMoveUpBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move U&amp;p</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+P</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibDirMoveDownBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move Dow&amp;n</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>Spacer2_2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>70</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="1">
+                        <property name="name">
+                            <cstring>layout11</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Link Libraries Outside Project</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>outsidelib_listview</cstring>
+                                </property>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout9</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibAddBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Add...</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibRemoveBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Remove</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibEditBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Edit</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibMoveUpBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move U&amp;p</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>outsideLibMoveDownBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move Dow&amp;n</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>Spacer8_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>64</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>layout10</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QListView">
+                                <column>
+                                    <property name="text">
+                                        <string>Link Convenience Libraries Inside Project</string>
+                                    </property>
+                                    <property name="clickable">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="resizable">
+                                        <bool>true</bool>
+                                    </property>
+                                </column>
+                                <property name="name">
+                                    <cstring>insidelib_listview</cstring>
+                                </property>
+                                <property name="resizeMode">
+                                    <enum>LastColumn</enum>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>Layout9_3</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>insideLibMoveUpBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move &amp;Up</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="KPushButton">
+                                        <property name="name">
+                                            <cstring>insideLibMoveDownBtn</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Move &amp;Down</string>
+                                        </property>
+                                    </widget>
+                                    <spacer>
+                                        <property name="name">
+                                            <cstring>Spacer6_2_2</cstring>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Vertical</enum>
+                                        </property>
+                                        <property name="sizeType">
+                                            <enum>Expanding</enum>
+                                        </property>
+                                        <property name="sizeHint">
+                                            <size>
+                                                <width>20</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>depTab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Dependencies</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QListView" row="1" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Targets in Project</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>intDeps_view</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="1">
+                        <property name="name">
+                            <cstring>Layout9_3_2</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer5_2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>intMoveUp_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Up</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+U</string>
+                                </property>
+                            </widget>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>intMoveDown_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Down</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+D</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer6_2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QListView" row="3" column="0">
+                        <column>
+                            <property name="text">
+                                <string>Miscellaneous Targets</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>extDeps_view</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="3" column="1">
+                        <property name="name">
+                            <cstring>layout9_2</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer7_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>extAdd_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add...</string>
+                                </property>
+                            </widget>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>extRemove_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Remove</string>
+                                </property>
+                            </widget>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>extEdit_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit</string>
+                                </property>
+                            </widget>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>extMoveUp_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move U&amp;p</string>
+                                </property>
+                            </widget>
+                            <widget class="KPushButton">
+                                <property name="name">
+                                    <cstring>extMoveDown_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move Dow&amp;n</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer8_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>64</height>
                                     </size>
                                 </property>
                             </spacer>
@@ -1354,210 +1562,6 @@
                         </property>
                     </spacer>
                 </vbox>
-            </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>depTab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>Dependencies</string>
-                </attribute>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QListView" row="1" column="0">
-                        <column>
-                            <property name="text">
-                                <string>Targets in Project</string>
-                            </property>
-                            <property name="clickable">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>true</bool>
-                            </property>
-                        </column>
-                        <property name="name">
-                            <cstring>intDeps_view</cstring>
-                        </property>
-                        <property name="resizeMode">
-                            <enum>LastColumn</enum>
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget" row="1" column="1">
-                        <property name="name">
-                            <cstring>Layout9_3_2</cstring>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer5_2_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>intMoveUp_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Move &amp;Up</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+U</string>
-                                </property>
-                            </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>intMoveDown_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Move &amp;Down</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+D</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer6_2_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </vbox>
-                    </widget>
-                    <widget class="QListView" row="3" column="0">
-                        <column>
-                            <property name="text">
-                                <string>Miscellaneous Targets</string>
-                            </property>
-                            <property name="clickable">
-                                <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>true</bool>
-                            </property>
-                        </column>
-                        <property name="name">
-                            <cstring>extDeps_view</cstring>
-                        </property>
-                        <property name="resizeMode">
-                            <enum>LastColumn</enum>
-                        </property>
-                    </widget>
-                    <widget class="QLayoutWidget" row="3" column="1">
-                        <property name="name">
-                            <cstring>layout9_2</cstring>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer7_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extAdd_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Add...</string>
-                                </property>
-                            </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extRemove_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Remove</string>
-                                </property>
-                            </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extEdit_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Edit</string>
-                                </property>
-                            </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extMoveUp_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Move U&amp;p</string>
-                                </property>
-                            </widget>
-                            <widget class="KPushButton">
-                                <property name="name">
-                                    <cstring>extMoveDown_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Move Dow&amp;n</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>Spacer8_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>64</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </vbox>
-                    </widget>
-                </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -2126,13 +2130,20 @@
     <tabstop>checkWarning</tabstop>
     <tabstop>checkQt</tabstop>
     <tabstop>checkOpenGL</tabstop>
-    <tabstop>checkOrdered</tabstop>
     <tabstop>stlCheck</tabstop>
     <tabstop>checkThread</tabstop>
     <tabstop>checkX11</tabstop>
-    <tabstop>exceptionCheck</tabstop>
     <tabstop>rttiCheck</tabstop>
+    <tabstop>exceptionCheck</tabstop>
+    <tabstop>checkConsole</tabstop>
+    <tabstop>checkPCH</tabstop>
     <tabstop>staticRadio</tabstop>
+    <tabstop>sharedRadio</tabstop>
+    <tabstop>pluginRadio</tabstop>
+    <tabstop>checkLibtool</tabstop>
+    <tabstop>checkPkgconf</tabstop>
+    <tabstop>checkOrdered</tabstop>
+    <tabstop>checkDll</tabstop>
     <tabstop>m_targetLibraryVersion</tabstop>
     <tabstop>insideinc_listview</tabstop>
     <tabstop>insideIncMoveUpBtn</tabstop>
@@ -2146,6 +2157,12 @@
     <tabstop>insidelib_listview</tabstop>
     <tabstop>insideLibMoveUpBtn</tabstop>
     <tabstop>insideLibMoveDownBtn</tabstop>
+    <tabstop>outsidelibdir_listview</tabstop>
+    <tabstop>outsideLibDirAddBtn</tabstop>
+    <tabstop>outsideLibDirRemoveBtn</tabstop>
+    <tabstop>outsideLibDirEditBtn</tabstop>
+    <tabstop>outsideLibDirMoveUpBtn</tabstop>
+    <tabstop>outsideLibDirMoveDownBtn</tabstop>
     <tabstop>outsidelib_listview</tabstop>
     <tabstop>outsideLibAddBtn</tabstop>
     <tabstop>outsideLibRemoveBtn</tabstop>
@@ -2163,10 +2180,25 @@
     <tabstop>extMoveDown_button</tabstop>
     <tabstop>m_debugFlags</tabstop>
     <tabstop>m_releaseFlags</tabstop>
+    <tabstop>m_defines</tabstop>
+    <tabstop>mocdir_url</tabstop>
+    <tabstop>uidir_url</tabstop>
+    <tabstop>objdir_url</tabstop>
+    <tabstop>idlCmdEdit</tabstop>
+    <tabstop>idlCmdOptionsEdit</tabstop>
+    <tabstop>buildorder_listview</tabstop>
+    <tabstop>buildmoveup_button</tabstop>
+    <tabstop>buildmovedown_button</tabstop>
+    <tabstop>customVariables</tabstop>
+    <tabstop>varAdd_button</tabstop>
+    <tabstop>varRemove_button</tabstop>
+    <tabstop>varMoveUp_button</tabstop>
+    <tabstop>varMoveDown_button</tabstop>
+    <tabstop>customVariableName</tabstop>
+    <tabstop>customVariableData</tabstop>
+    <tabstop>varEdit_button</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
-    <tabstop>pluginRadio</tabstop>
-    <tabstop>sharedRadio</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
@@ -2249,6 +2281,13 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klineedit.h</includehint>
@@ -2264,13 +2303,6 @@
     <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
