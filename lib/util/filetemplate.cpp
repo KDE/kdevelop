@@ -38,7 +38,7 @@ QString FileTemplate::read(KDevPlugin *part, const QString &name, Policy p)
   //KDevProject *project = part->project();
     //QString fileName = (p == Default) ? (project->projectDirectory() +
 //					 "/templates/" + name) : name;
- 
+
     return readFile(part, fullPathForName(part, name, p) );
 }
 
@@ -53,17 +53,12 @@ QString FileTemplate::readFile(KDevPlugin *part, const QString &fileName)
     QTextStream stream(&f);
     QString str = stream.read();
 
-    QFileInfo fi(fileName);
-    QString module = fi.baseName();
-    QString basefilename = fi.baseName(true);
     QString author = DomUtil::readEntry(dom, "/general/author");
     QString email = DomUtil::readEntry(dom, "/general/email");
     QString version = DomUtil::readEntry(dom, "/general/version");
     QString date = QDate::currentDate().toString();
     QString year = QString::number(QDate::currentDate().year());
-    
-    str.replace(QRegExp("\\$MODULE\\$"),module);
-    str.replace(QRegExp("\\$FILENAME\\$"),basefilename);
+
     str.replace(QRegExp("\\$EMAIL\\$"),email);
     str.replace(QRegExp("\\$AUTHOR\\$"),author);
     str.replace(QRegExp("\\$VERSION\\$"),version);
@@ -83,6 +78,12 @@ bool FileTemplate::copy(KDevPlugin *part, const QString &name,
     if (!f.open(IO_WriteOnly))
         return false;
 
+    QFileInfo fi(f);
+    QString module = fi.baseName();
+    QString basefilename = fi.baseName(true);
+    text.replace(QRegExp("\\$MODULE\\$"),module);
+    text.replace(QRegExp("\\$FILENAME\\$"),basefilename);
+
     QTextStream stream(&f);
     stream << text;
     f.close();
@@ -94,11 +95,11 @@ QString FileTemplate::fullPathForName(KDevPlugin *part, const QString &name,
                                       Policy p) {
     // if Policy is not default, full path is just the name
     if (p!=Default) return name;
-    
+
     // first try project-specific
     QString fileName = (part->project()->projectDirectory() + "/templates/" + name);
     if (QFile::exists(fileName)) return fileName;
-    
+
     // next try global
     QString globalName = ::locate("data", "kdevfilecreate/file-templates/" + name);
     return globalName.isNull() ? fileName : globalName;
