@@ -17,6 +17,7 @@
 #include <kdevpartcontroller.h>
 #include <kurl.h>
 #include <kparts/part.h>
+#include <kdebug.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -71,7 +72,6 @@ KURL::List FileListPart::openFiles()
     }
     return openfiles;
 }
-
 
 #include "filelist_part.moc"
 

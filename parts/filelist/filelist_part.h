@@ -19,8 +19,16 @@
 
 class FileListWidget;
 class KURL::List;
-
-
+/*
+// @fixme - this should be in kdevpartcontroller
+enum DocumentState
+{
+	Clean,
+	Modified,
+	Dirty,
+	DirtyAndModified
+};
+*/
 class FileListPart : public KDevPlugin
 {
   Q_OBJECT

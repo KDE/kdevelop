@@ -13,12 +13,23 @@
 
 
 FileListItem::FileListItem( QListView * parent, KURL const & url )
-	: QListViewItem( parent, QString(" ") + url.fileName() ), _url( url )
+	: QListViewItem( parent, QString(" ") + url.fileName() ), 
+	_url( url ), _state( Clean )
 {}
 	
 KURL FileListItem::url()
 {
 	return _url;
+}
+
+DocumentState FileListItem::state( )
+{
+	return _state;
+}
+
+void FileListItem::setState( DocumentState state )
+{
+	_state = state;
 }
 
 

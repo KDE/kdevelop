@@ -14,12 +14,15 @@
 
 
 #include <klistview.h>
+#include <kurl.h>
 #include <qstring.h>
 #include <qtooltip.h>
 
+#include "filelist_part.h"
+		 
 class KDevProject;
-class FileListPart;
-
+class FileListItem;
+//class FileListPart;
 
 namespace KParts { class Part; }
 
@@ -36,11 +39,18 @@ protected:
   	void maybeTip( QPoint const & );
 
 private slots:
-	void partChanged();
+	void partAdded(KParts::Part*);
+	void partRemoved();
 	void activePartChanged(KParts::Part*);
 	void itemClicked( QListViewItem * );
+	void popupMenu( QListViewItem * , const QPoint & , int );
+	void closeSelectedFiles();
+	void documentChangedState( const KURL &, DocumentState );
+	void partURLChanged( KParts::ReadOnlyPart *);
 
 private:
+	KURL::List getSelectedURLs();
+	FileListItem * itemForURL( KURL const & url );
 	FileListPart * _part;
 
 };

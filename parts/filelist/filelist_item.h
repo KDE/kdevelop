@@ -16,16 +16,21 @@
 #include <qlistview.h>
 
 #include <kurl.h>
-
+		 
+#include <kdevpartcontroller.h>
+		 
 class FileListItem : public QListViewItem
 {
 public:
 	FileListItem( QListView * parent, KURL const & url );
 	
 	KURL url();
+	DocumentState state();
+	void setState( DocumentState );
 	
 private:
 	KURL _url;
+	DocumentState _state;
 	
 };
 
