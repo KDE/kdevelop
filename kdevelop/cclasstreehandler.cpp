@@ -318,7 +318,7 @@ void CClassTreeHandler::addAttribute( CParsedAttribute *aAttr,
   addItem( aAttr->name, type, parent );
 }
 
-/*------------------------------------ CClassTreeHandler::addGlobalFunctions()
+/*--------------------------- CClassTreeHandler::addGlobalFunctions()
  * addGlobalFunctions()
  *   Add a list of global functions to the view.
  *
@@ -343,7 +343,31 @@ void CClassTreeHandler::addGlobalFunctions( QList<CParsedMethod> *list,
     addGlobalFunc( aMeth, parent );
 }
 
-/*------------------------------------ CClassTreeHandler::addGlobalFunc()
+/*--------------------------- CClassTreeHandler::addGlobalVariables()
+ * addGlobalVariables()
+ *   Add a list of global variables to the view.
+ *
+ * Parameters:
+ *   list            List of global functions.
+ *   parent          The parent item.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassTreeHandler::addGlobalVariables( QList<CParsedAttribute> *list, QListViewItem *parent )
+{
+  assert( list != NULL );
+  assert( parent != NULL );
+
+  CParsedAttribute *aAttr;
+
+  for( aAttr = list->first();
+       aAttr != NULL;
+       aAttr = list->next() )
+    addGlobalVar( aAttr, parent );
+}
+
+/*-------------------------------- CClassTreeHandler::addGlobalFunc()
  * addGlobalFunc()
  *   Add a global function to the view.
  *
@@ -359,6 +383,7 @@ void CClassTreeHandler::addGlobalFunc( CParsedMethod *aMethod,
 {
   assert( aMethod != NULL );
   assert( parent != NULL );
+
 
   QString str;
 

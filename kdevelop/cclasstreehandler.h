@@ -76,6 +76,9 @@ public: // Public methods
   /** Add a list of global functions to the view. */
   void addGlobalFunctions( QList<CParsedMethod> *list, QListViewItem *parent );
 
+  /** Add a list of global variables to the view. */
+  void addGlobalVariables( QList<CParsedAttribute> *list, QListViewItem *parent );
+
   /** Add a global function to the view. */
   void addGlobalFunc( CParsedMethod *aMethod, QListViewItem *parent );
 
