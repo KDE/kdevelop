@@ -43,8 +43,9 @@ QValueList<Tag> CodeInformationRepository::query( const QValueList<Catalog :: Qu
         Catalog* catalog = it.data();
         ++it;
 
-        tags += catalog->query( args );
-        kdDebug(9020) << "found " << tags.size() << " tags" << endl;
+        tags = catalog->query( args );
+        if( tags.size() )
+            break;
     }
 
     return tags;
@@ -91,43 +92,13 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
 	<< Catalog::QueryArgument( "scope", scope );
-    
-    if( !isInstance ){
-	QValueList<Tag> temps = query( args );
-	QValueList<Tag>::Iterator it = temps.begin();
-	while( it != temps.end() ){
-	    const Tag& tag = *it;
-	    ++it;
-	    
-	    if( tag.hasAttribute("isStatic") && tag.attribute("isStatic").toBool() )
-		continue; // 
-	    
-	    tags << tag;
-	}
-    } else {
-	tags += query( args );
-    }
+    tags += query( args );
 
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )
     	<< Catalog::QueryArgument( "scope", scope );
-    
-    if( !isInstance ){
-	QValueList<Tag> temps = query( args );
-	QValueList<Tag>::Iterator it = temps.begin();
-	while( it != temps.end() ){
-	    const Tag& tag = *it;
-	    ++it;
-	    
-	    if( tag.hasAttribute("isStatic") && tag.attribute("isStatic").toBool() )
-		continue; // 
-	    
-	    tags << tag;
-	}
-    } else {
-	tags += query( args );
-    }
-    
+    tags += query( args );
+
     if( !isInstance ){
 	args.clear();
 	args << Catalog::QueryArgument( "kind", Tag::Kind_Enumerator )
@@ -219,7 +190,7 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QString & name,
 {
     QValueList<Tag> tags;    
     QValueList<Catalog::QueryArgument> args;
-    
+
     args.clear();
     args << Catalog::QueryArgument( "scope", scope )
 	<< Catalog::QueryArgument( "name", name );
