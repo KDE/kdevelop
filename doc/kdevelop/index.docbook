@@ -19,8 +19,8 @@
 <bookinfo>
 <title>&kdevelop; Documentation</title>
 
-<date></date>
-<releaseinfo></releaseinfo>
+<date>2002-11-25</date>
+<releaseinfo>3.0</releaseinfo>
 
 <authorgroup>
 <author>
@@ -38,6 +38,10 @@
 <copyright>
 <year>2002</year>
 <holder>Bernd Gehrmann</holder>
+</copyright>
+<copyright>
+<year>2002</year>
+<holder>Caleb Tennis</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
@@ -138,9 +142,9 @@ are available on most platforms as distribution packages and thereby can be inst
 <para>
 In order to compile and install &kdevelop; on your system, type the following in the base directory
 of the &kdevelop; distribution:
+</para>
 
-
-
+</sect1>
 </chapter>
 
 
@@ -299,6 +303,43 @@ extra menu items, extra tool buttons, etc.
 
 </tbody></tgroup>
 </table>
+
+</sect1>
+
+<sect1 id="makesystems">
+<title>Project Management Systems</title>
+
+<sect2>
+<title>Automake Project</title>
+
+<para>
+Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers 
+to use the GNU standard development tools. In opposition to the self-creation of Makefiles, 
+which have to be written anyway because of the project's complexity, those provide not only a better 
+way of Makefile generation but also a good and safe way to provide a fast adaption towards different 
+systems by autoconf-generated configure scripts. 
+</para>
+<para>
+The distribution of your applications does not require the end-user to have anything different installed
+other than a C++ compiler and the appropriate development libraries, which is most often the case; but
+ou can as well distribut binary packages of your application.  In either way, the end-user of your product
+does not have to have &kdevelop; installed.  For giving away your sources, we advise to include the 
+project file of &kdevelop; as well, as this makes it very easy for other developerss to work with your
+sources if they use KDevelop as well.  For projects where several developers, maybe working on different
+places, are involved, this should be the case anyway to ensure consistency of the Makefiles so you don't
+run into trouble.  Especially on multi language applications, translators won't actually work with the
+source code, except in cases that require correction for enabling translation support.
+</para>
+
+</sect2>
+
+<sect2>
+<title>QMake Project</title>
+<para>
+For developers who enjoy the flexibility and feel of Qt's qmake system, &kdevelop; offers the ability to
+handle qmake based projects (.pro files) within the GUI.
+</para>
+</sect2>
 
 </sect1>
 </chapter>
@@ -815,6 +856,13 @@ list of all classes, variables and functions in your project. It is designed
 as a tree view. If you open a class node by clicking on bit, a list with all 
 methods and attributes of the respective class is shown.
 </para>
+
+<figure id="screenshot-classview" float="1">
+<title>A screenshot of the class view</title>
+<mediaobject>
+<imageobject><imagedata fileref="classview.png"/></imageobject>
+</mediaobject>
+</figure>
 
 <para>
 The class view works in two different modes. By default, all symbols are 
