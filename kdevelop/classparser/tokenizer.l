@@ -71,6 +71,8 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
     /*==============> Ignored stuff <==============*/
 "Q_EXPORT"       {}
 "Q_EXPORTH"      {}
+"__BEGIN_DECLS"  {}
+"__END_DECLS"    {}
 "inline"         {}
 
     /*==============> String <==============*/
