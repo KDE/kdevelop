@@ -20,19 +20,21 @@ ViewManager::ViewManager (QWidget *parent, DocManager *dm) : QTabWidget (parent)
 
 ViewManager::~ViewManager()
 {
-
+  views.setAutoDelete (false);
 }
 
 void ViewManager::createView (KTextEditor::Document *doc)
 {
   KTextEditor::View *view = doc->createView (this, "nix");
   addTab (view, QString ("test"));
+  view->show();
+  showPage (view);
   views.append (view);
 }
 
 void ViewManager::closeView (KTextEditor::View *view)
 {
-
+  removePage (view);
 }
 
 void ViewManager::slotDocumentNew()
@@ -54,3 +56,10 @@ void ViewManager::slotDocumentOpen()
   }
 }
 
+void ViewManager::slotDocumentClose()
+{
+  KTextEditor::View *view = (KTextEditor::View *) currentPage();
+  KTextEditor::Document *doc = view->document();
+  closeView (view);
+  dm->deleteDoc(doc);
+}

@@ -27,6 +27,7 @@ Shell::Shell()
 
   KStdAction::openNew( vm, SLOT( slotDocumentNew() ), actionCollection(), "file_new" );
   KStdAction::open( vm, SLOT( slotDocumentOpen() ), actionCollection(), "file_open" );
+  KStdAction::close( vm, SLOT( slotDocumentClose() ), actionCollection(), "file_close" );
 
   createGUI();
 

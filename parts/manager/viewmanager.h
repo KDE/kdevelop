@@ -23,6 +23,7 @@ private:
 public slots:
   void slotDocumentNew();
   void slotDocumentOpen();
+  void slotDocumentClose();
 };
 
 #endif
