@@ -19,7 +19,7 @@ rc_DATA = kdevelopui.rc eventsrc
 kdevelopdatadir = $(kde_confdir)
 kdevelopdata_DATA = kdeveloprc kdevpluginprofilerc
 
-SUBDIRS = profiles
+SUBDIRS = profiles profileengine
 noinst_HEADERS = languageselectwidget.h newmainwindow.h
 kdevassistant_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevassistant_SOURCES = api.cpp core.cpp debugger.cpp documentationpart.cpp \
