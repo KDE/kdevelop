@@ -27,8 +27,3 @@ rc_DATA = kdevpascalsupport.rc
 
 #templatedir = ${kde_datadir}/kdevabbrev/templates
 #template_DATA = pascaltemplates
-
-AM_CFLAGS = 
-AM_CXXFLAGS = 
-AM_FFLAGS = 
-SUBDIRS = 
