@@ -49,6 +49,10 @@ private slots:
     void insertStdoutLine(const QString& line);
     void insertStderrLine(const QString& line);
     void slotProcessExited(KProcess *);
+    void verticScrollingOn() { m_vertScrolling = true; }
+    void verticScrollingOff() { m_vertScrolling = false; }
+    void horizScrollingOn() { m_horizScrolling = true; }
+    void horizScrollingOff() { m_horizScrolling = false; }
 
 private:
     virtual void contentsMousePressEvent(QMouseEvent *e);
@@ -73,6 +77,7 @@ private:
     int parags;
     bool moved;
     QString normalColor, errorColor, diagnosticColor;
+    bool m_vertScrolling, m_horizScrolling;
 
     MakeViewPart *m_part;
 };

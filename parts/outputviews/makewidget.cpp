@@ -120,6 +120,8 @@ public:
 
 MakeWidget::MakeWidget(MakeViewPart *part)
         : QTextEdit(0, "make widget")
+ ,m_vertScrolling(false)
+ ,m_horizScrolling(false)
 {
     setWordWrap(WidgetWidth);
     setWrapPolicy(Anywhere);
@@ -139,6 +141,15 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 
     connect(childproc, SIGNAL(processExited(KProcess*)),
             this, SLOT(slotProcessExited(KProcess*) )) ;
+
+    connect( verticalScrollBar(), SIGNAL(sliderPressed()),
+             this, SLOT(verticScrollingOn()) );
+    connect( verticalScrollBar(), SIGNAL(sliderReleased()),
+             this, SLOT(verticScrollingOff()) );
+    connect( horizontalScrollBar(), SIGNAL(sliderPressed()),
+             this, SLOT(horizScrollingOn()) );
+    connect( horizontalScrollBar(), SIGNAL(sliderReleased()),
+             this, SLOT(horizScrollingOff()) );
 
     items.setAutoDelete(true);
     parags = 0;
@@ -616,7 +627,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     }
 }
 
-void MakeWidget::paletteChange(const QPalette& oldPalette)
+void MakeWidget::paletteChange(const QPalette& /*oldPalette*/)
 {
     kdDebug(9004) << "Palette Change" << endl;
     updateColors();
@@ -655,7 +666,7 @@ void MakeWidget::insertLine2(const QString &line, Type type)
     int para, index;
     getCursorPosition( &para, &index );
 
-    bool move = para == paragraphs() - 1 && index == paragraphLength( para );
+    bool atEnd = para == paragraphs() - 1 && index == paragraphLength( para );
 
     int paraFrom, indexFrom, paraTo, indexTo;
     getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
@@ -679,7 +690,7 @@ void MakeWidget::insertLine2(const QString &line, Type type)
     append(QString("<code>%1<font color=\"%2\">%3</font></code>%4").arg(icon).arg(color).arg(eLine).arg(br));
     setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
 
-    if (move)
+    if (atEnd && !m_vertScrolling && !m_horizScrolling)
     {
         moveCursor(MoveEnd, false);
     }
