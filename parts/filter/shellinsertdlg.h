@@ -37,7 +37,8 @@ private slots:
     void slotStartClicked();
     void slotReceivedStdout(KProcess *, char *text, int len);
     void slotProcessExited(KProcess *);
-    
+    void executeTextChanged( const QString &text);
+   
 private:
     QPushButton *start_button, *cancel_button;
     QComboBox *combo;

@@ -20,6 +20,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
+#include <klineedit.h>
 
 #include "kdevplugin.h"
 #include "domutil.h"
@@ -46,13 +47,15 @@ ShellInsertDialog::ShellInsertDialog()
              this, SLOT(slotStartClicked()) );
     connect( cancel_button, SIGNAL(clicked()),
              this, SLOT(reject()) );
-
+    connect( combo->lineEdit(), SIGNAL(textChanged( const QString &)), this, SLOT(executeTextChanged( const QString &)));
     m_proc = 0;
 
     KConfig *config = FilterFactory::instance()->config();
     config->setGroup("General");
     QStringList items = config->readListEntry("InsertItems");
     combo->insertStringList(items);
+    executeTextChanged( combo->lineEdit()->text());
+
 }
 
 
@@ -71,6 +74,11 @@ ShellInsertDialog::~ShellInsertDialog()
     config->writeEntry("InsertItems", list);
 }
 
+
+void ShellInsertDialog::executeTextChanged( const QString &text)
+{
+    start_button->setEnabled(!text.isEmpty());
+}
 
 int ShellInsertDialog::exec()
 {
