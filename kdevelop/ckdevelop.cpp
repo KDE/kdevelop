@@ -802,12 +802,13 @@ void CKDevelop::slotDebugStop()
 {
   setDebugMenuProcess(false);
 
-  if (dbgShuttingDown)
+  if (dbgShuttingDown || !dbgInternal)
     return;
 
   dbgShuttingDown = true;
   delete dbgController;
   dbgController = 0;
+
   brkptManager->reset();
   frameStack->clear();
   var_viewer->clear();
