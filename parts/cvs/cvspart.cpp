@@ -329,7 +329,10 @@ void CvsPart::slotLog()
 	LogForm* f = new LogForm();
 	f->show();
 	// Form will do all the work
-	f->start( project()->projectDirectory(), fileName );
+	QString projectDir = project()->projectDirectory();
+	QString relPath = UrlFileUtilities::extractPathNameRelative( projectDir, pathUrl );
+
+	f->start( projectDir, relPath );
 
 	doneOperation();
 }
