@@ -211,7 +211,7 @@ bool ProjectManager::loadProject(const KURL &url)
 
   loadLocalParts();
 
-  Core::getInstance()->doEmitProjectOpened();
+//  Core::getInstance()->doEmitProjectOpened();
 
   // first restore the project session stored in a .kdevses file
   QString projSessionFileName = m_info->m_fileName.left(m_info->m_fileName.length()-8); // without ".kdevelop"
@@ -224,6 +224,8 @@ bool ProjectManager::loadProject(const KURL &url)
   m_closeProjectAction->setEnabled(true);
   m_projectOptionsAction->setEnabled(true);
 
+  Core::getInstance()->doEmitProjectOpened();
+  
   return true;
 }
 

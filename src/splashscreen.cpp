@@ -10,13 +10,17 @@
 #include <kglobalsettings.h>
 #include <kdeversion.h>
 
+#include <kmainwindow.h>
+#include "toplevel.h"
+
 #include "splashscreen.h"
 #include "splashscreen.moc"
 
 SplashScreen::SplashScreen()
   : QObject()
 {
-  m_splash = new QWidget(0, "splash", WStyle_NoBorder | WStyle_Customize | WStyle_Tool | WStyle_StaysOnTop );
+  m_splash = new QWidget( TopLevel::getInstance()->main(),
+    "splash", WStyle_NoBorder | WStyle_Customize | WStyle_Tool );
 
   QVBoxLayout *vbox = new QVBoxLayout(m_splash);
 

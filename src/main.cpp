@@ -82,23 +82,22 @@ int main(int argc, char *argv[])
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
 		   splash, SLOT(showMessage(const QString &)));
 
-  PluginController::getInstance()->loadInitialPlugins();
-
   splash->showMessage( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
   splash->showMessage( i18n( "Starting GUI" ) );
   TopLevel::getInstance()->main()->show();
 
+  PluginController::getInstance()->loadInitialPlugins();
+
   Core::getInstance()->doEmitCoreInitialized();
 
   splash->showMessage( i18n( "Loading Project" ) );
-  delete splash;
 
   for( int i=0; i<args->count(); ++i ){
       kdDebug(9000) << "------> arg " << args->arg(i) << endl;
   }
-  
+
   bool openProject = false;
   if( args->count() == 0 ){
       ProjectManager::getInstance()->loadDefaultProject();
@@ -111,12 +110,14 @@ int main(int argc, char *argv[])
 	  openProject = true;
       }
   }
-  
+
   if( !openProject ){
       for( int a=0; a<args->count(); ++a ){
 	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
       }
   }
+
+  delete splash;
 
   kapp->dcopClient()->registerAs("gideon");
 
