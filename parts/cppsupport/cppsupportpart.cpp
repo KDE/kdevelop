@@ -986,12 +986,14 @@ void CppSupportPart::partRemoved( KParts::Part* part )
     kdDebug(9032) << "CppSupportPart::partRemoved()" << endl;
 
     if( KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part ) ){
-	QString fileName = QDir( doc->url().path() ).canonicalPath();
+
+	QString fileName = doc->url().path();
 	if( fileName.isEmpty() )
 	    return;
-	
-	m_backgroundParser->removeFile( fileName );
-	m_backgroundParser->addFile( fileName, true );
+
+	QString canonicalFileName = QDir( fileName ).canonicalPath();
+	m_backgroundParser->removeFile( canonicalFileName );
+	m_backgroundParser->addFile( canonicalFileName, true );
     }
 }
 
