@@ -57,10 +57,10 @@ void scopeOfNode( AST* ast, QStringList& scope )
 {
     if( !ast )
 	return;
-    
+
     if( ast->parent() )
 	scopeOfNode( ast->parent(), scope );
-    
+
     QString s;
     switch( ast->nodeType() )
     {
@@ -141,8 +141,7 @@ QString declaratorToString( DeclaratorAST* declarator, const QString& scope, boo
    if( !skipPtrOp ){
        QPtrList<AST> ptrOpList = declarator->ptrOpList();
        for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it ){
-	   text += it.current()->text();
-	   ++it;
+	  text += it.current()->text();
        }
        text += " ";
    }
@@ -151,7 +150,7 @@ QString declaratorToString( DeclaratorAST* declarator, const QString& scope, boo
 
    if( declarator->subDeclarator() )
        text += QString::fromLatin1("(") + declaratorToString(declarator->subDeclarator()) + QString::fromLatin1(")");
-       
+
    if( declarator->declaratorId() )
        text += declarator->declaratorId()->text();
 

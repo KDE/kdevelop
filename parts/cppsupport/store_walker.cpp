@@ -246,6 +246,10 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     if( m != 0 ){
 	delete( method );
 	method = m;
+    } else {
+	method->setDeclaredInFile( m_fileName );
+	method->setDeclaredOnLine( startLine );
+	method->setDeclarationEndsOnLine( endLine );
     }
 
     method->setDefinedOnLine( startLine );
@@ -420,11 +424,11 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
         cl = m_currentContainer;
 
     ParsedAttribute* attr = findOrInsertAttribute( cl, id );
-    
+
     QString text = typeOfDeclaration( typeSpec, d );
     if( !text.isEmpty() )
 	attr->setType( text );
-    
+
 
     bool isFriend = false;
     //bool isVirtual = false;
@@ -660,7 +664,6 @@ QString StoreWalker::typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAS
     QPtrList<AST> ptrOpList = declarator->ptrOpList();
     for( QPtrListIterator<AST> it(ptrOpList); it.current(); ++it ){
 	text += it.current()->text();
-	++it;
     }
 
     return text;
