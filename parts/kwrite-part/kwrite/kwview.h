@@ -31,6 +31,7 @@
 #include <qstring.h>
 #include <qdropsite.h>
 #include <qdragobject.h>
+#include <qregexp.h>
 
 #include <ktempfile.h>
 #include <kconfig.h>

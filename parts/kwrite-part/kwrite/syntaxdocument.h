@@ -22,8 +22,7 @@
 
 #include <qdom.h>
 #include <qlist.h>
-
-class QStringList;
+#include <qstringlist.h>
 
 struct syntaxModeListItem
 {

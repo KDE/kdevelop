@@ -25,6 +25,7 @@
 #include <qgroupbox.h>
 #include <qtextstream.h>
 #include <qregexp.h>
+#include <qstringlist.h>
 #include <qfile.h>
 #include <qlabel.h>
 
@@ -2765,7 +2766,11 @@ void FontChanger::displayCharsets() {
   KCharsets *charsets;
 
   charsets = KGlobal::charsets();
+#if QT_VERSION < 300
   QStringList lst = charsets->availableCharsetNames(font->family);
+#else
+  QStringList lst; // ###### What happened to availableCharsetNames in KDE 3??
+#endif
 //  QStrList lst = charsets->displayable(font->family);
   charsetCombo->clear();
   for(z = 0; z < (int) lst.count(); z++) {
