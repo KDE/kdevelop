@@ -334,6 +334,10 @@ protected:
    * Override the cursor appearance depending on the widget corner given as parameter 
    */
    void setResizeCursor(int resizeCorner);
+   /** 
+   * changes from the resize cursor to the normal (previous) cursor
+   */
+   void unsetResizeCursor();
    /** That means to show a mini window showing the childframe's caption bar, only.
    * It cannot be resized. 
    */

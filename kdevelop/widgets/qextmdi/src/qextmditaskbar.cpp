@@ -33,6 +33,7 @@
 #include <qtooltip.h>
 #include <qlabel.h>
 #include <qwidget.h>
+#include <qstyle.h>
 
 #include <qnamespace.h>
 
