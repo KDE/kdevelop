@@ -3,14 +3,21 @@ INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general
 
 noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
-libkdevprojectmanagement_la_SOURCES =  appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp \
+libkdevprojectmanagement_la_SOURCES = appwizard.cpp  automakeprojectspace.cpp  cppbinaryprojectplugin.cpp \
 		plugin.cpp pmc.cpp project.cpp projectspace.cpp qobjectplugin.cpp filepropspage.cpp \
-		registeredfile.cpp  pluginloader.cpp appwizardbase.ui filepropspagebase.ui
-
+		registeredfile.cpp  pluginloader.cpp \
+		appwizardbase.ui filepropspagebase.ui
 
 noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
-				 plugin.h pmc.h project.h projectspace.h qobjectplugin.h filepropspage.h \
-				registeredfile.h  pluginloader.h
+				plugin.h pmc.h project.h projectspace.h qobjectplugin.h \
+				filepropspage.h registeredfile.h  pluginloader.h \
+				appwizardbase.h filepropspagebase.h
+
+METASOURCES = AUTO
+
+# These rules are missing - why??? - should be generated automatically
+$(srcdir)/appwizard.cpp: appwizardbase.h
+$(srcdir)/filepropspage.cpp: filepropspagebase.h
 
 #noinst_PROGRAMS = testprj
 
@@ -22,5 +29,5 @@ noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 # that depend on the following ones.
 
 #testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
-		$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
-		$(LIB_KFILE) $(LIB_KPARTS)
+#		$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
+#		$(LIB_KFILE) $(LIB_KPARTS)

@@ -25,7 +25,8 @@ kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 kdevelop_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
 # this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h projectoptionsdlg.h newprojectdlg.h
+noinst_HEADERS = kdevelop.h kdevelopcore.h kdevelopfactory.h \
+                 projectoptionsdlg.h newprojectdlg.h newprojectdlgbase.h
 
 EXTRA_DIST = kdeveloprc kdevelopui.rc\
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \
@@ -56,3 +57,8 @@ servicetype_DATA = kdevelopcomponent.desktop \
 
 messages:
 	$(XGETTEXT) `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o $(podir)/kdevelop.pot
+
+# These rules are missing - why??? - should be generated automatically
+$(srcdir)/kdevelopcore.cpp: newprojectdlgbase.h
+$(srcdir)/newprojectdlg.cpp: newprojectdlgbase.h
+
