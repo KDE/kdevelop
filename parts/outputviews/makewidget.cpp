@@ -191,6 +191,8 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	         this, SLOT(horizScrollingOn()) );
 	connect( horizontalScrollBar(), SIGNAL(sliderReleased()),
 	         this, SLOT(horizScrollingOff()) );
+	connect( this, SIGNAL(clicked(int, int)),
+		 this, SLOT(contentsClicked(int, int)) );
 }
 
 MakeWidget::~MakeWidget()
@@ -359,14 +361,9 @@ void MakeWidget::prevError()
 	KNotifyClient::beep();
 }
 
-void MakeWidget::contentsMousePressEvent(QMouseEvent *e)
+void MakeWidget::contentsClicked(int para, int /*pos*/)
 {
-	QTextEdit::contentsMousePressEvent(e);
-	if ( e->button() != LeftButton )
-		return;
-	int parag, index;
-	getCursorPosition(&parag, &index);
-	searchItem(parag);
+	searchItem(para);
 }
 
 void MakeWidget::keyPressEvent(QKeyEvent *e)
@@ -381,12 +378,26 @@ void MakeWidget::keyPressEvent(QKeyEvent *e)
 		QTextEdit::keyPressEvent(e);
 }
 
+// returns the current directory for parag
+QString MakeWidget::directory(int parag) const
+{
+	// run backwards over directories and figure out where we are
+	while ( parag > 0 ) {
+		parag--;
+		EnteringDirectoryItem* edi = dynamic_cast<EnteringDirectoryItem*>( m_paragraphToItem[ parag ] );
+		if ( edi )
+			return edi->directory + "/";
+	}
+	return QString::null;
+}
+
 void MakeWidget::searchItem(int parag)
 {
 	ErrorItem* item = dynamic_cast<ErrorItem*>( m_paragraphToItem[parag] );
 	if ( item )
 	{
-		m_part->partController()->editDocument(item->fileName, item->lineNum);
+		// open the file
+		m_part->partController()->editDocument(directory(parag) + item->fileName, item->lineNum);
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
 		m_part->mainWindow()->lowerView(this);
 	}
@@ -496,8 +507,6 @@ bool MakeWidget::appendToLastLine( const QString& text )
 
 void MakeWidget::insertItem( MakeItem* item )
 {
-
-
 	m_items.push_back( item );
 
 	if ( !item->visible( m_compilerOutputLevel ) )

@@ -70,13 +70,14 @@ private slots:
     void slotEnteredDirectory( EnteringDirectoryItem* );
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
+    void contentsClicked(int para, int pos);
 
 private:
-    virtual void contentsMousePressEvent(QMouseEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
-	bool brightBg();
-	void refill();
+    QString directory(int parag) const;
+    bool brightBg();
+    void refill();
 
     DirectoryStatusMessageFilter  m_directoryStatusFilter;
     CompileErrorFilter            m_errorFilter;
