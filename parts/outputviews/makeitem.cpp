@@ -61,11 +61,8 @@ QString MakeItem::text( EOutputLevel )
 
 QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )
 {
-    return QString("<code>%1<font color=\"%2\">%3</font></code>%4")
-		.arg( icon() )
-		.arg( color( bright_bg ) )
-		.arg( text( level ) )
-		.arg( br() );
+    return QString("<code>").append( icon() ).append("<font color=\"").append( color( bright_bg) ).append(
+		"\">").append( text(level) ).append("</font></code>").append( br() );
 }
 
 QString MakeItem::br()
@@ -117,14 +114,14 @@ bool DirectoryItem::m_showDirectoryMessages = true;
 QString EnteringDirectoryItem::text( EOutputLevel outputLevel )
 {
 	if ( outputLevel < eFull )
-		return i18n("Entering directory %3").arg( directory );
+		return i18n("Entering directory %1").arg( directory );
 	return m_text;
 }
 
 QString ExitingDirectoryItem::text( EOutputLevel outputLevel )
 {
 	if ( outputLevel < eFull )
-		return i18n("Leaving directory %3").arg( directory );
+		return i18n("Leaving directory %1").arg( directory );
 	return m_text;
 }
 
@@ -133,8 +130,8 @@ QString ActionItem::text( EOutputLevel outputLevel )
 	if ( outputLevel < eFull )
 	{
 		if ( m_tool.isEmpty() )
-			return QString( "%1 <b>%2</b>" ).arg( m_action ).arg( m_file );
-		return QString( "%1 <b>%2</b> (%3)" ).arg( m_action ).arg( m_file ).arg( m_tool );
+			return QString(m_action).append("<b>").append(m_file).append("</b>");
+		return QString(m_action).append("<b>").append(m_file).append("</b>").append("(").append(m_tool).append(")");
 	}
 	return MakeItem::text( outputLevel );
 }
