@@ -818,6 +818,7 @@ void CKDevelop::slotBuildCompileFile(){
   QFileInfo fileinfo(cpp_widget->getName());
   QString actualDir=fileinfo.dirPath();
   QDir::setCurrent(actualDir);
+  error_parser->setStartDir(actualDir);
 
   if (prj->getProjectType()!="normal_empty")
   {
@@ -1619,11 +1620,15 @@ void CKDevelop::slotBuildMake(){
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
   QDir::setCurrent(makefileDir);
+  error_parser->setStartDir(makefileDir);
   if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
   {
      if (QFileInfo(prj->getProjectDir()+"Makefile").exists())
+     {
        QDir::setCurrent(prj->getProjectDir());
+       error_parser->setStartDir(prj->getProjectDir());
+     }
   }
 
   process.clearArguments();
@@ -3342,7 +3347,18 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 
     if (next_job == make_cmd)
     { // rest from the rebuild all
-      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+      QString makefileDir=prj->getProjectDir() + prj->getSubDir();
+      QDir::setCurrent(makefileDir);
+      error_parser->setStartDir(makefileDir);
+      if (prj->getProjectType()=="normal_empty" &&
+       !QFileInfo(makefileDir+"Makefile").exists())
+      {
+        if (QFileInfo(prj->getProjectDir()+"Makefile").exists())
+        {
+          QDir::setCurrent(prj->getProjectDir());
+          error_parser->setStartDir(prj->getProjectDir());
+        }
+      }
       process.clearArguments();
       if(!prj->getMakeOptions().isEmpty()){
       	process << make_cmd << prj->getMakeOptions();
@@ -3414,10 +3430,10 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       QString str1 = messages_widget->text();
       
       if(error_parser->getMode() == CErrorMessageParser::MAKE){
-	  error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());
+	  error_parser->parseInMakeMode(&str1);
       }
       if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-	  error_parser->parseInSgml2HtmlMode(&str1,prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+	  error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
       }
       //enable/disable the menus/toolbars
       if(error_parser->hasNext()){
