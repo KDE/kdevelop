@@ -1,7 +1,7 @@
 EXTRA_DIST = index.sgml logotp3.png \
             index.html index-1.html index-2.html index-3.html index-4.html index-5.html index-6.html index-7.html \
             index-8.html index-9.html index-10.html index-11.html index-12.html index-13.html index-14.html  index-15.html \
-            index-16.html
+            index-16.html index-17.html
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/en/kdevelop
@@ -23,6 +23,7 @@ install-data-local:
 	$(INSTALL_DATA) index-14.html $(kde_htmldir)/en/kdevelop/index-14.html
 	$(INSTALL_DATA) index-15.html $(kde_htmldir)/en/kdevelop/index-15.html
 	$(INSTALL_DATA) index-16.html $(kde_htmldir)/en/kdevelop/index-16.html
+	$(INSTALL_DATA) index-17.html $(kde_htmldir)/en/kdevelop/index-17.html
 
 uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/logotp3.png
@@ -43,3 +44,4 @@ uninstall-local:
 	-rm -f $(kde_htmldir)/en/kdevelop/index-14.html
 	-rm -f $(kde_htmldir)/en/kdevelop/index-15.html
 	-rm -f $(kde_htmldir)/en/kdevelop/index-16.html
+	-rm -f $(kde_htmldir)/en/kdevelop/index-17.html
