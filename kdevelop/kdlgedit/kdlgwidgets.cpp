@@ -21,11 +21,12 @@
 #include <qtoolbutton.h>
 #include <qlabel.h>
 
+#define btnsize 32
+
+
 KDlgWidgets::KDlgWidgets(QWidget *parent, const char *name ) : QWidget(parent,name) 
 {
   scrview = new myScrollView(this);
-  scrview->setGeometry(0,0,800,400);
-  scrview->setGeometry(0,0,300,300);
 }
 
 KDlgWidgets::~KDlgWidgets()
@@ -45,13 +46,11 @@ void KDlgWidgets::myScrollView::addButton(const QPixmap &pix, QString name, bool
   buttons[btnsCount] = new QToolButton( this );
   buttons[btnsCount] -> setPixmap(pix);
   buttons[btnsCount] -> setText(name);
-  buttons[btnsCount] -> setGeometry(0,0,40,40);
+  buttons[btnsCount] -> setGeometry(0,0,btnsize,btnsize);
   addChild(buttons[btnsCount]);
+  btnsKDE[btnsCount] = isKDE;
 
   btnsCount++;
-
-  if (!isKDE)
-    qtCount++;
 }
 
 KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WFlags f )
@@ -64,10 +63,13 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
 
   int i;
   for (i = 0; i<MAX_BUTTONS; i++)
-    buttons[i] = 0;
+    {
+      buttons[i] = 0;
+      btnsKDE[i] = false;
+    }
 
   btnsCount = 0;
-  qtCount = 0;
+
 
   addButton(QPixmap(), "0");
   addButton(QPixmap(), "1");
@@ -87,60 +89,66 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   addButton(QPixmap(), "15",true);
   addButton(QPixmap(), "16",true);
 
+  QFont f;
+  f.setItalic(true);
+  f.setUnderline(true);
+
   qtlab = new QLabel(i18n("QT-Widgets"), this);
   qtlab->setAlignment(AlignHCenter | AlignBottom);
+  qtlab->setFont(f);
   kdelab = new QLabel(i18n("KDE-Widgets"), this);
   kdelab->setAlignment(AlignHCenter | AlignBottom);
+  kdelab->setFont(f);
 }
 
+int KDlgWidgets::myScrollView::moveBtns(bool isKDE, int posy)
+{
+  int i;
+  int posx = 0;
+  for (i = 0; i<btnsCount; i++)
+    {
+      if ((buttons[i]) && (btnsKDE[i] == isKDE))
+        {
+          if (posx>width()-btnsize)
+            {
+              posy += btnsize;
+              buttons[i]->setGeometry(0,posy,btnsize,btnsize);
+              moveChild(buttons[i],0,posy);
+              posx = btnsize;
+            }
+          else
+            {
+              buttons[i]->setGeometry(posx,posy,btnsize,btnsize);
+              moveChild(buttons[i],posx,posy);
+              posx += btnsize;
+            }
+        }
+    }
+
+  return posy;
+}
 
 void KDlgWidgets::myScrollView::resizeEvent ( QResizeEvent *e )
 {
+
   QWidget::resizeEvent(e);
 
   qtlab->setGeometry(0,5,width(),20);
   moveChild(qtlab,0,5);
 
-  int posx = 0;
-  int posy = 25;
-  int poskde = 0;
+  int posy = 30;
 
-  int i;
-  for (i = 0; i<btnsCount; i++)
-    {
-      if ((i>=qtCount) && (poskde == 0))
-        {
-          posy += 80;
-          poskde = posy-25;
-          posx = 0;
-          if (!isKDEProject)
-            break;
-        }
-      if (buttons[i])
-        {
-          if (posx>width()-40)
-            {
-              posy += 40;
-              moveChild(buttons[i],0,posy);
-              posx = 40;
-            }
-          else
-            {
-              moveChild(buttons[i],posx,posy);
-              posx += 40;
-            }
-        }
-    }
+  posy = moveBtns(false,posy);
 
-  if ((poskde != 0) && (isKDEProject))
-    {
-      kdelab->setGeometry(0,poskde,width(),20);
-      moveChild(kdelab,0,poskde);
-      kdelab->show();
-    }
-  else
-    kdelab->hide();
+  posy += btnsize+5;
 
-  resizeContents(width(),posy+40);
+  kdelab->setGeometry(0,posy,width(),20);
+  moveChild(kdelab,0,posy);
+
+  posy += 25;
+
+  posy = moveBtns(true,posy);
+
+  resizeContents(width(),posy+btnsize);
   setContentsPos(0,0);
 }

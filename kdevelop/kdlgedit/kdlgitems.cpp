@@ -33,7 +33,8 @@ KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWi
 
   treelist->setRootIsDecorated(true);
   treelist->clear();
-  treelist->addColumn(i18n("Widgets & Items"));
+  treelist->addColumn("");
+  treelist->header()->hide();
 
   KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
 

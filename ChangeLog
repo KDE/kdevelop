@@ -1,4 +1,12 @@
 1999-03-31 Pascal Krahmer <pascal@beast.de>
+        * fixed problem of the "widgets" tab. Now it works fine but I don´t have the pixmaps yet :)
+        * hided the headers of the qlistview of the "items" tab so it looks like the rest of kdevelop now.
+        * the properties don´t close any more when selecting another item.
+        * fixed problem that some properties were not stored to the property array so the changes were lost when selectung another item.
+        * added help methods and messages to the properties (not available through the UI for now...)
+          -- Ralf, shall we use the quickhelp function for it too or should I make it available through popup menus ?
+
+1999-03-31 Pascal Krahmer <pascal@beast.de>
         * added the patch from "Moskovkin Vitali" <movit@usa.net> (CTRL+Arrow moves the cursor by words)
         * fixed a bug for some compilers : for (int i=0;...)  becomes  int i; for (i=0;...)
 

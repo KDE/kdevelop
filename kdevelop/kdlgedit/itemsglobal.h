@@ -79,8 +79,8 @@ class KDlgPropertyBase
     #define testIfNrIsValid(nr) if ((nr<0) || (nr>numEntrys)) return;
     KDlgPropertyEntry* getProp(int nr) { testIfNrIsValid0(nr); return &props[nr];  }
     KDlgPropertyEntry* getProp(QString name);
-    void setProp(int nr, QString name, QString value, QString group, int allowed)
-       { testIfNrIsValid(nr); props[nr].name = name; props[nr].value = value; props[nr].group = group; props[nr].allowed = allowed; }
+    void setProp(int nr, QString name, QString value, QString group, int allowed, QString help = QString())
+       { testIfNrIsValid(nr); props[nr].name = name; props[nr].value = value; props[nr].group = group; props[nr].allowed = allowed; helps[nr] = help; }
     void setProp_Name   (int nr, QString name)  { testIfNrIsValid(nr); props[nr].name = name; }
     void setProp_Value  (int nr, QString value) { testIfNrIsValid(nr); props[nr].value = value; }
     void setProp_Group  (int nr, QString group) { testIfNrIsValid(nr); props[nr].group = group; }
@@ -92,7 +92,7 @@ class KDlgPropertyBase
     void setProp_Allowed(QString n, int allowed);
 
 
-    void addProp(QString name, QString value, QString group, int allowed)
+    void addProp(QString name, QString value, QString group, int allowed, QString help = QString())
        { if (numEntrys>=MAX_ENTRYS_PER_WIDGET) return; setProp(++numEntrys, name, value, group, allowed); }
 
     int getIntFromProp(int nr, int defaultval=0);
@@ -100,6 +100,7 @@ class KDlgPropertyBase
 
   protected:
     KDlgPropertyEntry props[MAX_ENTRYS_PER_WIDGET];
+    QString helps[MAX_ENTRYS_PER_WIDGET];
     int numEntrys;
 };
 

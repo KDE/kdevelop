@@ -46,6 +46,9 @@ bool isValueTrue(QString val)
 AdvListView::AdvListView( QWidget * parent , const char * name )
   : QListView( parent, name )
 {
+  int i;
+  for (i=0; i<MAX_MAIN_ENTRYS; i++)
+    openStats[i] = "";
 }
 
 void AdvListView::viewportMousePressEvent ( QMouseEvent *e )
@@ -100,6 +103,55 @@ void AdvListView::updateWidgets()
   }
 }
 
+void AdvListView::saveOpenStats()
+{
+  AdvListViewItem* it = (AdvListViewItem*)firstChild();
+
+  while (it) {
+    bool b = false;
+    int i;
+    for (i=0; i<MAX_MAIN_ENTRYS; i++)
+      if (it->text(0) == openStats[i])
+        {
+          if (it->isOpen())
+            {
+              b = true;
+              break;
+            }
+          else
+            {
+              openStats[i] = "";
+            }
+        }
+
+    if ((!b) && (it->isOpen()))
+      {
+        for (i=0; i<MAX_MAIN_ENTRYS; i++)
+          if (openStats[i] == "")
+            {
+              openStats[i] = it->text(0);
+              break;
+            }
+      }
+
+    it = (AdvListViewItem*)it->nextSibling();
+  }
+}
+
+void AdvListView::restoreOpenStats()
+{
+  AdvListViewItem* it = (AdvListViewItem*)firstChild();
+
+  while (it) {
+    int i;
+    for (i=0; i<MAX_MAIN_ENTRYS; i++)
+      if (it->text(0) == openStats[i])
+        it->setOpen(true);
+
+    it = (AdvListViewItem*)it->nextSibling();
+  }
+}
+
 void AdvListView::hideAll()
 {
   AdvListViewItem* i = (AdvListViewItem*)firstChild();
@@ -111,28 +163,18 @@ void AdvListView::hideAll()
 }
 
 
-/**
- *
-*/
 AdvListViewItem::AdvListViewItem( QListView * parent, QString a, QString b)
    : QListViewItem( parent, a, b )
 {
   init();
-//  parent->connect( parent, SIGNAL(scrollBy(int, int)), SLOT(updateWidgets()));
 }
 
-/**
- *
-*/
 AdvListViewItem::AdvListViewItem( AdvListViewItem * parent, QString a, QString b )
    : QListViewItem( parent, a, b )
 {
   init();
 }
 
-/**
- *
-*/
 void AdvListViewItem::init()
 {
   clearAllColumnWidgets();
@@ -152,9 +194,6 @@ void AdvListViewItem::hideWidgets()
   }
 }
 
-/**
- *
-*/
 void AdvListViewItem::setColumnWidget( int col, AdvLvi_Base *wp, bool activated )
 {
   if ( (col < 0) || (col > MAX_WIDGETCOLS_PER_LINE) )
@@ -164,9 +203,6 @@ void AdvListViewItem::setColumnWidget( int col, AdvLvi_Base *wp, bool activated 
   colactivated[ col ] = activated;
 }
 
-/**
- *
-*/
 void AdvListViewItem::clearColumnWidget( int col, bool deleteit )
 {
   if ( (col < 0) || (col > MAX_WIDGETCOLS_PER_LINE) )
@@ -181,9 +217,6 @@ void AdvListViewItem::clearColumnWidget( int col, bool deleteit )
   setColumnWidget( col, 0 );
 }
 
-/**
- *
-*/
 void AdvListViewItem::clearAllColumnWidgets( bool deletethem )
 {
   int i;
@@ -191,9 +224,6 @@ void AdvListViewItem::clearAllColumnWidgets( bool deletethem )
     clearColumnWidget(i, deletethem);
 }
 
-/**
- *
-*/
 QWidget* AdvListViewItem::getColumnWidget( int col )
 {
   if ( (col < 0) || (col > MAX_WIDGETCOLS_PER_LINE) )
@@ -202,9 +232,6 @@ QWidget* AdvListViewItem::getColumnWidget( int col )
   return colwid[ col ];
 }
 
-/**
- *
-*/
 void AdvListViewItem::activateColumnWidget( int col, bool activate )
 {
   if ( (col < 0) || (col > MAX_WIDGETCOLS_PER_LINE) )
@@ -213,9 +240,6 @@ void AdvListViewItem::activateColumnWidget( int col, bool activate )
   colactivated[ col ] = activate;
 }
 
-/**
- *
-*/
 bool AdvListViewItem::columnWidgetActive( int col )
 {
   if ( (col < 0) || (col > MAX_WIDGETCOLS_PER_LINE) )
@@ -416,6 +440,7 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
     return;
 
   lv->hideAll();
+  lv->saveOpenStats();
   lv->clear();
 
   QString grps[32];
@@ -481,6 +506,8 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
        }
 
     }
+
+  lv->restoreOpenStats();
 }
 
 KDlgPropWidget::~KDlgPropWidget()
@@ -702,6 +729,7 @@ AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, KDlgPropertyEntry *dpe, const char *na
   cbBool->insertItem(i18n("TRUE"));
   cbBool->insertItem(i18n("FALSE"));
   cbBool->setCurrentItem(isValueTrue(dpe->value) ? 0 : 1);
+  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
 }
 
 void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
@@ -730,6 +758,7 @@ AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, KDlgPropertyEntry *dpe, cons
 {
   setGeometry(0,0,0,0);
   btn = new KColorButton(this);
+  connect(btn, SIGNAL(changed(const QColor&)), SLOT(changed(const QColor&)));
 }
 
 void AdvLvi_ColorEdit::resizeEvent ( QResizeEvent *e )
@@ -807,6 +836,7 @@ AdvLvi_BgMode::AdvLvi_BgMode(QWidget *parent, KDlgPropertyEntry *dpe, const char
   cbBool->insertItem("PaletteText");
   cbBool->insertItem("PaletteBase");
   cbBool->setCurrentItem(0);
+  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
 }
 
 void AdvLvi_BgMode::resizeEvent ( QResizeEvent *e )
@@ -820,7 +850,11 @@ void AdvLvi_BgMode::resizeEvent ( QResizeEvent *e )
 QString AdvLvi_BgMode::getText()
 {
   if (cbBool)
-    return cbBool->currentItem() ? QString(cbBool->currentText()) : QString();
+    {
+      QString s = cbBool->currentItem() ? QString(cbBool->currentText()) : QString();
+      propEntry->value = s;
+      return s;
+    }
   else
     return QString();
 }
@@ -856,6 +890,7 @@ AdvLvi_Cursor::AdvLvi_Cursor(QWidget *parent, KDlgPropertyEntry *dpe, const char
 
   btnMore = new QPushButton("...",this);
   connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
+  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
 }
 
 void AdvLvi_Cursor::btnPressed()
@@ -888,10 +923,12 @@ QString AdvLvi_Cursor::getText()
         {
           cbBool->setCurrentItem(0);
           cbBool->changeItem(cbBool->currentText(),0);
-          propEntry->value = cbBool->currentText();
         }
 
-      return cbBool->currentItem() != 1 ? QString(cbBool->currentText()) : QString();
+      QString s = cbBool->currentItem() != 1 ? QString(cbBool->currentText()) : QString();
+      propEntry->value = s;
+
+      return s;
     }
   else
     return QString();

@@ -27,6 +27,8 @@
 #include "defines.h"
 
 
+#define MAX_MAIN_ENTRYS 16
+
 class AdvLvi_Base;
 class QPushButton;
 class KDlgItem_Base;
@@ -73,6 +75,8 @@ class AdvListView : public QListView
     virtual ~AdvListView() {}
 
     virtual void hideAll();
+    virtual void saveOpenStats();
+    virtual void restoreOpenStats();
   protected:
 
     virtual void mousePressEvent ( QMouseEvent * );
@@ -84,6 +88,8 @@ class AdvListView : public QListView
     virtual void paintEvent ( QPaintEvent * );
 
     void updateWidgets();
+
+    QString openStats[MAX_MAIN_ENTRYS];
 };
 
 

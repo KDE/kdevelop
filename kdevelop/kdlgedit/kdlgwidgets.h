@@ -42,12 +42,13 @@ class KDlgWidgets : public QWidget  {
            void addButton(const QPixmap &, QString, bool isKDE = false);
            void setIsKDEProject(bool isKDE = true) { isKDEProject = isKDE; }
          protected:
+           int moveBtns(bool isKDE, int posy);
 
            QToolButton *buttons[MAX_BUTTONS];
            QLabel *qtlab, *kdelab;
            bool isKDEProject;
            int btnsCount;
-           int qtCount;
+           bool btnsKDE[MAX_BUTTONS];
 
            void resizeEvent ( QResizeEvent * );
        };
