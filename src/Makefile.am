@@ -28,7 +28,7 @@ kdevassistant_SOURCES = api.cpp core.cpp debugger.cpp documentationpart.cpp \
 	projectmanager.cpp projectsession.cpp settingswidget.ui statusbar.cpp toplevel.cpp \
 	generalinfowidgetbase.ui main_assistant.cpp mimewarningdialog.ui
 kdevassistant_LDADD = $(top_builddir)/lib/widgets/libwidgets.la \
-	$(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/qextmdi/libkdevelopqextmdi.la -lktexteditor \
+	$(top_builddir)/lib/libkdevelop.la $(LIB_KDEVMDI) -lktexteditor \
 	$(LIB_KHTML) $(LIB_KPARTS) $(LIB_KDEUI)
 
 rc_assistantdir = $(kde_datadir)/kdevassistant
