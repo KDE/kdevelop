@@ -31,6 +31,7 @@
 #include "cvsoptionswidget.h"
 #include "domutil.h"
 #include "kdevmainwindow.h"
+#include "kdevproject.h"
 
 typedef KGenericFactory<CvsPart> CvsFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
@@ -61,6 +62,13 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context) {
     if (context->hasType("file")) {
 	const FileContext *fcontext = static_cast<const FileContext*>(context);
 	popupfile = fcontext->fileName();
+
+    // does the file start with a "/"? we want the files to have absolute paths
+    if ( ! popupfile.startsWith ( "/" ) ) {
+        // relative path, prefix with the project path
+        popupfile = project()->projectDirectory() + "/" + popupfile;
+    }
+    
 	QFileInfo fi(popupfile);
 	popup->insertSeparator();
 	
