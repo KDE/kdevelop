@@ -741,7 +741,7 @@ QStringList CppCodeCompletion::getFunctionList( QString strMethod )
 
 QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classname )
 {
-    QRegExp regMethod ("\\b(\\w+)\\s*::\\s*[~\\w]\\w*\\s*\\(([^)]*)\\)\\s*[:{]");
+    QRegExp regMethod ("\\s*([_\\w]+)\\s*::\\s*[~\\w_][\\w_]*\\s*\\(([^)]*)\\)\\s*[:{]");
 
     int iMethodBegin = 0;
     QString text;

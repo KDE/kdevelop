@@ -79,7 +79,7 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
     QRegExp rx( "[\n|&|\\*]" );
     QRegExp strconst( "\\\"([^\"]|\\\\\\\")*\\\"" );
     QRegExp chrconst( "'[^']*'" );
-    QRegExp keywords( "\\b(public|protected|private|mutable|typename|case|new|delete|enum|class|virtual|const|extern|static|struct|if|else|return|while|for|do)\\b" ); // etc...
+    QRegExp keywords( "[^_\\w](public|protected|private|mutable|typename|case|new|delete|enum|class|virtual|const|extern|static|struct|if|else|return|while|for|do)[^_\\w]" ); // etc...
     QRegExp assign( "=[^,;]*" );
 
     contents = remove_comment( contents );
