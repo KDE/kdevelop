@@ -79,6 +79,10 @@ struct ProjectConfiguration
   bool            m_inheritconfig;
   bool            m_target_install;
   QString         m_target_install_path;
+
+  QMap<QString,QString> m_variables;
+  QStringList    m_projectInclude;
+
 };
 
 
@@ -143,6 +147,8 @@ public:
     QStringList translations_exclude;
     QStringList idls;
     QStringList idls_exclude;
+
+
 
 
 
@@ -283,7 +289,7 @@ public:
 
     enum TrollProjectView { SubprojectView, DetailsView };
     void setLastFocusedView(TrollProjectView view);
-    
+
 public slots:
     void slotBuildTarget();
     void slotRebuildTarget();
@@ -304,7 +310,7 @@ public slots:
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);
-    
+
 private slots:
     void slotOverviewSelectionChanged(QListViewItem *item);
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
@@ -370,7 +376,7 @@ private:
     TrollProjectPart *m_part;
 
     TrollProjectView m_lastFocusedView;
-    
+
     friend class ChooseSubprojectDlg;
 };
 

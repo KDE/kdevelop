@@ -26,6 +26,7 @@
 #include <kurlrequester.h>
 #include <kdebug.h>
 #include <kiconloader.h>
+#include <klistview.h>
 
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -293,7 +294,15 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   myProjectItem->configuration.idl_compiler=idlCmdEdit->url();
   myProjectItem->configuration.idl_options=idlCmdOptionsEdit->text();
 
+  // custom vars
+  QListViewItem *item = customVariables->firstChild();
+  for( ; item; item = item->nextSibling() )
+  {
+	myProjectItem->configuration.m_variables[item->text(0)] = item->text(1);
+  }
+
   QDialog::accept();
+
 
 }
 
@@ -316,13 +325,6 @@ void ProjectConfigurationDlg::UpdateControls()
       staticRadio->setChecked(true); //default
       if (myProjectItem->configuration.m_requirements & QD_STATIC){
         staticRadio->setChecked(true);
-/*        libAddTab->setEnabled(false);
-        libPathTab->setEnabled(false);*/
-        libAddTab->setEnabled(true);
-        libPathTab->setEnabled(true);
-      }else{
-        libAddTab->setEnabled(true);
-        libPathTab->setEnabled(true);
       }
       if (myProjectItem->configuration.m_requirements & QD_SHARED){
         sharedRadio->setChecked(true);
@@ -392,11 +394,11 @@ void ProjectConfigurationDlg::UpdateControls()
 */
   //target.path = path
   //INSTALLS += target
-  if (myProjectItem->configuration.m_target_install == true) 
+  if (myProjectItem->configuration.m_target_install == true)
   {
     checkInstallTarget->setChecked(true);
     m_InstallTargetPath->setEnabled(true);
-  } 
+  }
   else
   {
     checkInstallTarget->setChecked(false);
@@ -404,8 +406,8 @@ void ProjectConfigurationDlg::UpdateControls()
   }
   m_InstallTargetPath->setText(myProjectItem->configuration.m_target_install_path);
 
-  
-  
+
+
   m_targetOutputFile->setText(myProjectItem->configuration.m_target);
   m_targetPath->setText(myProjectItem->configuration.m_destdir);
   clickSubdirsTemplate();
@@ -417,17 +419,23 @@ void ProjectConfigurationDlg::UpdateControls()
   if (myProjectItem->configuration.m_inheritconfig == false)
     checkDontInheritConfig->setChecked(true);
   else
-    checkDontInheritConfig->setChecked(false);    
-     
+    checkDontInheritConfig->setChecked(false);
+
   updateIncludeControl();
   updateLibaddControl();
   updateLibDirAddControl();
-  updateBuildOrderControl();  
+  updateBuildOrderControl();
   updateDependenciesControl();
 
   objdir_url->setURL(myProjectItem->configuration.m_objectpath);
   uidir_url->setURL(myProjectItem->configuration.m_uipath);
   mocdir_url->setURL(myProjectItem->configuration.m_mocpath);
+
+
+  customVariables->clear();
+  QMap<QString,QString>::Iterator idx = myProjectItem->configuration.m_variables.begin();
+  for( ; idx != myProjectItem->configuration.m_variables.end(); ++idx )
+  	new KListViewItem(customVariables,idx.key(),idx.data());
 }
 
 QPtrList <qProjectItem> ProjectConfigurationDlg::getAllProjects()
@@ -467,7 +475,7 @@ void ProjectConfigurationDlg::updateIncludeControl()
   QPtrList <qProjectItem> itemList=getAllProjects();
   qProjectItem *item=itemList.first();
 
-  
+
   while(item){
     if(item->type() == qProjectItem::Subproject)
     {
@@ -709,8 +717,8 @@ void ProjectConfigurationDlg::updateBuildOrderControl()
         item=itemList.next();;
       }
 
-  }else buildOrderTab->setEnabled(false);
-
+  }
+  	else buildOrderTab->setEnabled(false);
 }
 
 void ProjectConfigurationDlg::updateLibDirAddControl()
@@ -723,7 +731,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
   outsidelibdir_listview->setSorting(-1,false);
 
   qProjectItem *item=itemList.first();
-  
+
   while(item){
     if(item->type()==qProjectItem::Subproject)
     {
@@ -736,7 +744,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
         {
           // create lib string
           QString tmpLibDir=sItem->getLibAddPath(myProjectItem->getDownDirs());
-          
+
           QStringList::Iterator it=libDirList.begin();
           for(;it!=libDirList.end();++it)
           {
@@ -760,7 +768,7 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
       kdDebug()<<"create LIBDIR item  "<<(*it1).ascii()<<endl;
       new QListViewItem(outsidelibdir_listview,outsidelibdir_listview->lastItem(),(*it1));
   }
-  
+
 }
 
 
@@ -785,6 +793,13 @@ void ProjectConfigurationDlg::templateLibraryClicked(int)
   {
     libGroup->setEnabled(true);
 //    staticRadio->setChecked(true);
+    TabBuild->setTabEnabled(buildOrderTab, false);
+    TabBuild->setTabEnabled(custVarsTab, true);
+    TabBuild->setTabEnabled(depTab,true);
+    TabBuild->setTabEnabled(libAddTab,true);
+    TabBuild->setTabEnabled(incaddTab,true);
+    TabBuild->setTabEnabled(buildOptsTab,true);
+    TabBuild->setTabEnabled(configTab,true);
   } else {
     libGroup->setEnabled(false);
   }
@@ -793,22 +808,27 @@ void ProjectConfigurationDlg::clickSubdirsTemplate()
 {
   if (radioSubdirs->isChecked())
   {
-    m_targetPath->setEnabled(false);
-    m_targetOutputFile->setEnabled(false);
-    Browse->setEnabled(false);
-    libGroup->setEnabled(false);
-    buildOrderTab->setEnabled(true);
-    corbaTab->setEnabled(false);
+    TabBuild->setTabEnabled(buildOrderTab, true);
+    TabBuild->setTabEnabled(custVarsTab, true);
+    TabBuild->setTabEnabled(depTab,false);
+    TabBuild->setTabEnabled(libAddTab,false);
+    TabBuild->setTabEnabled(incaddTab,false);
+    TabBuild->setTabEnabled(buildOptsTab,false);
+    TabBuild->setTabEnabled(configTab,false);
   }
   else
   {
-    m_targetPath->setEnabled(true);
-    m_targetOutputFile->setEnabled(true);
-    Browse->setEnabled(true);
-    buildOrderTab->setEnabled(false);
+    TabBuild->setTabEnabled(buildOrderTab, false);
+    TabBuild->setTabEnabled(custVarsTab, true);
+    TabBuild->setTabEnabled(depTab,true);
+    TabBuild->setTabEnabled(libAddTab,true);
+    TabBuild->setTabEnabled(incaddTab,true);
+    TabBuild->setTabEnabled(buildOptsTab,true);
+    TabBuild->setTabEnabled(configTab,true);
+
     if (radioLibrary->isChecked()) libGroup->setEnabled(true);
     else libGroup->setEnabled(false);
-    corbaTab->setEnabled(true);
+    //70corbaTab->setEnabled(true);
   }
 }
 

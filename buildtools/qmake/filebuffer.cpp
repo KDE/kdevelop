@@ -13,6 +13,7 @@
 #include <qtextstream.h>
 #include "filebuffer.h"
 #include <qmessagebox.h>
+#include <qregexp.h>
 
 /**
  * Destructor
@@ -49,14 +50,14 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
   for (; i<=m_buffer.count(); ++i)
   {
     int idxSeek = line.find(subString);
-//    qWarning("FILEBUFFER: substring %s in line %s idxSeek = %d", subString.ascii(), line.latin1(), idxSeek);
+    //qWarning("FILEBUFFER: substring %s in line %s idxSeek = %d", subString.ascii(), line.latin1(), idxSeek);
     if ((line.find(subString)!=-1)
         //adymo: do not match substrings if the next character is not a letter or number
         //this is supposed to fix handling of similar words like TARGET and TARGETDEPS
         && ( ! (searchForVariable && line[idxSeek+subString.length()].isLetterOrNumber()) ) )
     {
 
-//      qWarning("FILEBUFFER: next char is %c, index %d", line[idxSeek+subString.length()].latin1(), idxSeek+subString.length());
+      //qWarning("FILEBUFFER: next char is %c, index %d", line[idxSeek+subString.length()].latin1(), idxSeek+subString.length());
       if (startPos.m_row == (int) i-1)
         // first line in search so start idx should be added to result idx
         idxSeek = idxSeek + startPos.m_idx;
@@ -269,15 +270,23 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
       curPos = Caret(variablePos)+Caret(1,0);
       continue;
     }
+    QRegExp functionRegExp("(\\$\\$system\\(|\\$\\$include\\().+[)]");
     QString line=m_buffer[eqSign.m_row];
     QChar effectOperator = line[eqSign.m_idx-1];
     int lineNum=eqSign.m_row;
     curValues.clear();
     curValuesIgnore.clear();
+    kdDebug() << "line before: " << line << endl;
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
     filterOutIgnoreValues(line,curValuesIgnore);
     while (!line.isEmpty())
     {
+      kdDebug() << "line after: " << line << endl;
+      if( functionRegExp.search(line) != -1) // QMake function
+      {
+      	curValues += functionRegExp.cap(0);
+      }
+      else
       if (line[line.length()-1]=='\\')
       {
         line = line.left(line.length()-1).simplifyWhiteSpace();
@@ -287,7 +296,8 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
         filterOutIgnoreValues(line,curValuesIgnore);
         continue;
       }
-      curValues += QStringList::split(" ",line);
+      else
+      	curValues += QStringList::split(" ",line);
       line = "";
     }
     if (QString("+-*~").find(effectOperator)==-1)
@@ -327,7 +337,20 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
   }
   plusList = plusValues;
   minusList = minusValues;
+  m_customValueNames.remove(variable);
   return true;
+}
+
+void FileBuffer::getValueNames()
+{
+	QRegExp var("([_\\d\\w]+)[\\s]*(=|-=|\\+=)");
+	m_customValueNames.clear();
+	QStringList::ConstIterator idx = m_buffer.begin();
+	for( ; idx != m_buffer.end(); ++idx)
+	{
+		if( var.search(*idx) != -1 )
+			m_customValueNames += var.cap(1);
+	}
 }
 
 /**
@@ -403,6 +426,15 @@ void FileBuffer::removeValues(const QString &variable)
       finished = true;
       continue;
     }
+    // Check if this is infact a variable decliration and not someone using the damn thing.
+    Caret eqSign = findInBuffer("=",variablePos);
+    if (eqSign.m_row != variablePos.m_row && eqSign > variablePos )
+    {
+      curPos = Caret(variablePos)+Caret(1,0);
+      finished = false;
+      continue;
+    }
+
     QString line = pop(variablePos.m_row);
     while (line[line.length()-1]=='\\')
     {
@@ -428,12 +460,14 @@ void FileBuffer::bufferFile(const QString &fileName)
     while ( !inStream.eof() )
     {
       inLine = inStream.readLine();
+      kdDebug() << "Read Line: " << inLine << endl;
       inLine = inLine.simplifyWhiteSpace();
       m_buffer.append(inLine);
     }
   }
   dataFile.close();
   removeComments();
+  getValueNames();
 }
 
 /**
@@ -763,9 +797,9 @@ bool FileBuffer::getAllExcludeValues(const QString &variable,QStringList &minusV
 void FileBuffer::filterOutIgnoreValues(QString& line,QStringList& valuesignore)
 //=====================================================================================================
 {
-  QStringList qmakeFunctions =
+  QStringList qmakeFunctions/* =
     QStringList::split(',',"join(,member(,find(,contains(,count(,error(,exists(,"
-                       "include(,isEmpty(,system(,message(,infile(");
+                       "include(,isEmpty(,system(,message(,infile(")*/;
 
   int len=0;
   int closestMatch = -1;

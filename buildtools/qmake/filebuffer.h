@@ -79,13 +79,16 @@ public:
   void              getVariableValueSetModes(const QString &variable,QPtrList<FileBuffer::ValueSetMode> &modes);
   void              filterOutIgnoreValues(QString& line,QStringList& valuesignore);
   ValuesIgnore*     getValuesIgnore(const QString &variable);
+  QStringList       getCustomValueNames() const { return m_customValueNames; }
 
 private:
+  void       getValueNames();
   QString           m_scopeName;
   QStringList       m_buffer;
   FileBufferList    m_subBuffers;
   ValuesIgnoreList  m_valuesIgnore;
-  
+  QStringList       m_customValueNames;
+
 };
 
 #endif

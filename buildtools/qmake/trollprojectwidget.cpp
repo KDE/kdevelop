@@ -504,7 +504,6 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     details->setSorting(-1);
     details->header()->hide();
     details->addColumn(QString::null);
-
     // Detail button connections
     connect ( addfilesButton, SIGNAL ( clicked () ), this, SLOT ( slotAddFiles () ) );
     connect ( newfileButton, SIGNAL ( clicked () ), this, SLOT ( slotNewFile () ) );
@@ -1156,10 +1155,11 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
 //=======================================================================
 {
-  updateProjectFile(item); //for update buildorder
-
   FileBuffer *Buffer = &(item->m_FileBuffer);
   QString relpath = item->path.mid(projectDirectory().length());
+
+  updateProjectFile(item); //for update buildorder
+
   // Template variable
   Buffer->removeValues("TEMPLATE");
   if (item->configuration.m_template == QTMP_APPLICATION)
@@ -1293,6 +1293,13 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
 
   updateInstallObjects(item,Buffer);
 
+  // save custom vars first
+  QMap<QString,QString>::Iterator custVars = item->configuration.m_variables.begin();
+  for( ; custVars != item->configuration.m_variables.end(); ++custVars )
+  {
+  	Buffer->removeValues( custVars.key() );
+	Buffer->setValues( custVars.key(), custVars.data(), FileBuffer::VSM_RESET);
+  }
 
   // Write to .pro file
 //  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
@@ -1337,6 +1344,7 @@ SubqmakeprojectItem* TrollProjectWidget::getScope(SubqmakeprojectItem *baseItem,
 
 void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 {
+
   SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   FileBuffer *subBuffer=m_shownSubproject->m_RootBuffer->getSubBuffer(spitem->scopeString);
@@ -2800,6 +2808,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
     item->m_FileBuffer.handleScopes();
 
     parseScope(item,"",&(item->m_FileBuffer));
+
     QStringList minusListDummy;
     QStringList lst;
 
@@ -2813,6 +2822,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
 
     // retrieve the project configuration
     item->m_FileBuffer.getValues("TEMPLATE",lst,minusListDummy);
+
     if (lst.count())
     {
       if (lst[0] == "app")
@@ -2947,7 +2957,7 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
       }
     }
 
-
+    // Handle includes. include( ... )
 
     // Handle "subdirs" project
     if (item->configuration.m_template == QTMP_SUBDIRS)
@@ -2964,6 +2974,19 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
         parse(newitem);
       }
     }
+
+    // Handle custom config vars.
+    QStringList allValues = item->m_FileBuffer.getCustomValueNames();
+    kdDebug() << "Custom values: " << allValues.join(",") << endl;
+    QStringList::Iterator it = allValues.begin();
+    for( ; it != allValues.end(); ++it )
+    {
+    	item->m_FileBuffer.getValues(*it,lst,minusListDummy);
+	if( lst.count() != 0 )
+	item->configuration.m_variables[*it] = lst[0]; // Only support reading first one...
+	kdDebug() << "Custom value: " << *it << " " << lst.join(",") << endl;
+    }
+
 }
 void TrollProjectWidget::slotBuildFile()
 {
