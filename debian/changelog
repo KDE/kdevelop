@@ -1,3 +1,10 @@
+kdevelop (1:1.1final-1) stable; urgency=low
+
+  * New upstream release
+  * Recommend kdelibs-doc
+
+ -- Bernd Gehrmann <bernd@users.sourceforge.net>  Sun, 27 Feb 2000 12:00:00 +0100
+
 kdevelop (1:1.1beta2-20000206-1) stable; urgency=low
 
   * Back to old configure arguments
