@@ -8,10 +8,12 @@ Comment[da]=Et Konqueror navigationspanel plugin der hedder $NAME$
 Comment[et]=Konquerori liikumispaneeli plugin nimega $NAME$
 Comment[fr]=Un module externe pour le panneau de navigation de Konqueror nommé $NAME$
 Comment[it]=Un plugin per la navigazione in konqueror chiamato $NAME$
+Comment[nl]=Een konqueror navigatiepaneel-plugin met de naam $NAME$
 Comment[pt]=Um 'plugin' do painel de navegação do konqueror chamado $NAME$
 Comment[pt_BR]=Um plugin de painel de navegação do konqueror chamado $NAME$
 Comment[ru]=Модуль панели навигации konqueror $NAME$
 Comment[sv]=Ett insticksprogram i Konquerors navigeringspanel som heter $NAME$
+Comment[xx]=xxA konqueror navigation panel plugin  called $NAME$xx
 Name=%{APPNAMELC}
 Name[xx]=xx%{APPNAMELC}xx
 
