@@ -187,9 +187,6 @@ sub installWX
 		  chdir( $dest ) || die "Could not chdir to $dest\n";
         system( 'gunzip', '-f', 'wxwindows.tar.gz' );
         system( 'tar', 'xf', 'wxwindows.tar' );
-        move( "wx-Makefile.am", "Makefile.am" );
-        move( "wx-Makefile.cvs", "Makefile.cvs" );
-        move( "wx-configure.in", "configure.in" );
         unlink( "wxwindows.tar" );
 }
 
