@@ -564,11 +564,14 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 		i18n("This does not appear to be a valid or\n"
 		    "supported kdevelop project file"),
 		    prjname);
-	}
-	// If there is an old project then try to restore it. (I wonder why - jbb)
-	// I believe the logic here is a bit screwed up, this needs a little revamp (rokrau)
-	if (!old_project.isEmpty() && readProjectFile(old_project))
-		slotViewRefresh();
+    // If there is an old project then try to restore it. (I wonder why - jbb)
+    if (!old_project.isEmpty())
+    {
+      prjname = old_project; // just reset the prjname to the old one
+      if (readProjectFile(prjname))
+        slotViewRefresh();
+    }
+  }
 
 	project_menu->setEnabled(true);
 	enableCommand(ID_PROJECT_OPEN);
@@ -1135,6 +1138,15 @@ void CKDevelop::slotConfigMakeDistRPM()
 				prj->getKPPIcon());
 	rpmbuilder->show();
 }
+
+
+void CKDevelop::slotProjectLoadTags()
+{
+	debug("in slotProjectLoadTags()\n");
+	slotStatusMsg(i18n("Loading tags file..."));
+	
+}
+
 
 
 void CKDevelop::slotProjectMakeTags()

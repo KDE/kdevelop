@@ -500,6 +500,8 @@ public: // Public methods
   * mainly used to see if we need to run the libtool wrapper
   */
   bool isAScript(const QString &filename);
+  /** check if the Project is empty. */
+  bool isEmpty() ;
 
 protected:
 

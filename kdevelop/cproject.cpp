@@ -1808,19 +1808,34 @@ QString CProject::findMakefile(const CMakefile::Type type, const QString& name)
 	else {
 		makefileGenerator = i18n(". Possibly by tmake?");
 	}
-	QMessageBox::warning(0,i18n("Makefile not found"),
-		i18n("%2 contains a hint as to what you can do to create the makefile (eg by Build->Configure)",
-		"You want to make (by running 'make') in\n\n %1\n\n"
-		"but there is no Makefile in this directory.\n\n"
-		"Hints:\n"
-		"1. Possibly you forgot to create the Makefiles.\n"
-		"   In that case create them%2\n\n"
-		"2. Or this directory does not belong to your project.\n"
-		"   Check the settings in Project->Options->MakeOptions!")
-		 .arg(makefileDir).arg(makefileGenerator),	
-		QMessageBox::Ok,
-		QMessageBox::NoButton,
-		QMessageBox::NoButton);
+	// if the project is still empty, there is no need to complain
+	if (!isEmpty())
+	{
+		/* If a toplevel Makefile wasnt found we should let the user know
+		 * that he needs to create it.
+		 * If the user opens a distclean project he will also get this warning
+		 * which is sort of annoying, but I dont know of a way to prevent this.
+		 */
+		if (type==CMakefile::toplevel) {
+			QMessageBox::warning(0,i18n("Makefile not found"),
+			i18n("There is no makefile to build your application.\n"
+			     "Possibly you forgot to create the makefiles.\n"
+			     "In this case please run Build->Configure.\n"),
+			QMessageBox::Ok,
+			QMessageBox::NoButton,
+			QMessageBox::NoButton);
+		}
+		else if ((type==CMakefile::cvs) && !isCustomProject())
+		{
+			QMessageBox::warning(0,i18n("Makefile not found"),
+			i18n("There is no makefile to generate the configure script.\n"
+			     "Possibly you did not get a complete checkout of the project.\n"
+			     "Or you need to rename the file to Makefile.cvs.\n"),
+			QMessageBox::Ok,
+			QMessageBox::NoButton,
+			QMessageBox::NoButton);
+		}
+	}
 	return makefile; // still QString::null
 }
 /*
@@ -1858,4 +1873,10 @@ void CProject::setTopMakefile(const QString& name)
 void CProject::setCvsMakefile(const QString& name)
 {
 	cvsMakefile=findMakefile(CMakefile::cvs, name);
+}
+/** check if the Project is empty. */
+bool CProject::isEmpty() {
+	QStrList all;
+	getAllFiles(all);
+	return all.isEmpty();
 }

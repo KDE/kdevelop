@@ -394,6 +394,7 @@ public:
   void slotProjectMakeDistRPM();
   void slotConfigMakeDistRPM();
   void slotProjectMakeTags();
+  void slotProjectLoadTags();
   ////////////////////////
   // BUILD-Menu entries
   ///////////////////////

@@ -447,6 +447,11 @@ void CKDevelop::initKeyAccel()
   accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
   accel->connectItem("ProjectOptions", this, SLOT(slotProjectOptions() ), true, ID_PROJECT_OPTIONS );
 
+  accel->insertItem(i18n("Make tags file"), "MakeTagsfile", ID_PROJECT_MAKE_TAGS);
+  accel->connectItem("MakeTagsfile", this, SLOT(slotProjectMakeTags() ), true, ID_PROJECT_MAKE_TAGS );
+
+  accel->insertItem(i18n("Load tags file"), "LoadTagsfile", ID_PROJECT_LOAD_TAGS);
+  accel->connectItem("LoadTagsfile", this, SLOT(slotProjectLoadTags() ), true, ID_PROJECT_LOAD_TAGS );
 
   //build menu
   accel->insertItem( i18n("Compile File"), "CompileFile", IDK_BUILD_COMPILE_FILE );
@@ -737,6 +742,8 @@ void CKDevelop::initMenuBar(){
   project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   // create a tags file
   project_menu->insertItem(SmallIconSet("tags"),i18n("Make &tags file"), this, SLOT(slotProjectMakeTags()),0, ID_PROJECT_MAKE_TAGS);
+  // load a tags file
+  project_menu->insertItem(SmallIconSet("tags"),i18n("Load &tags file"), this, SLOT(slotProjectLoadTags()),0, ID_PROJECT_LOAD_TAGS);
 
   project_menu->insertSeparator();
 
