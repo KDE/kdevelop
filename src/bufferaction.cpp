@@ -13,13 +13,13 @@
 #include "texteditor.h"
 
 
-BufferAction::BufferAction(TextEditorDocument *doc, QObject *parent=0, const char *name=0)
-    : KAction(doc->fileName(), 0, 0, 0), m_doc(doc)
+BufferAction::BufferAction(TextEditorDocument *doc, QObject *parent, const char *name)
+    : KAction(doc->fileName(), 0, parent, name), m_doc(doc)
 {}
 
 
-BufferAction::BufferAction(const KURL &url, QObject *parent=0, const char *name=0)
-    : KAction(url.url(), 0, 0, 0), m_doc(0), m_url(url)
+BufferAction::BufferAction(const KURL &url, QObject *parent, const char *name)
+    : KAction(url.url(), 0, parent, name), m_doc(0), m_url(url)
 {}
 
 
