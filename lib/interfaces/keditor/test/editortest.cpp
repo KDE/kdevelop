@@ -4,20 +4,17 @@
 
 #include "editortest.h"
 
-#include <kkeydialog.h>
 #include <kconfig.h>
 #include <kurl.h>
 #include <ktrader.h>
 #include <kservice.h>
 #include <kdebug.h>
-
-#include <kedittoolbar.h>
-
 #include <kaction.h>
 #include <kstdaction.h>
-
+#include <klocale.h>
 #include <klibloader.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 
 
 using namespace KEditor;
@@ -54,14 +51,7 @@ EditorTest::EditorTest()
     m_editor = static_cast < Editor* > (factory->create(this, "editor"));
 
     if (m_editor)
-	{
 	  KParts::MainWindow::factory()->addClient(m_editor);
-
-	  connect(m_editor, SIGNAL(partCreated(KParts::Part*)), this, SLOT(slotPartCreated(KParts::Part*)));
-	  connect(m_editor, SIGNAL(viewCreated(QWidget*)), this, SLOT(slotViewCreated(QWidget*)));
-	  connect(m_editor, SIGNAL(activatePart(KParts::Part*)), this, SLOT(slotPartActivated(KParts::Part*)));
-	  connect(m_editor, SIGNAL(activateView(QWidget*)), this, SLOT(slotViewActivated(QWidget*)));
-	}
   }
   else
   {
@@ -79,33 +69,44 @@ EditorTest::~EditorTest()
 void EditorTest::setupActions()
 {
   KStdAction::quit(kapp, SLOT(quit()), actionCollection());
+  KStdAction::openNew(this, SLOT(slotNew()), actionCollection());
+  KStdAction::open(this, SLOT(slotOpen()), actionCollection());
 }
 
 
-void EditorTest::slotPartCreated(KParts::Part *part)
+void EditorTest::slotNew()
 {
-  partManager->addPart(part);
-  partManager->addManagedTopLevelWidget(part->widget());
+  KEditor::Document *doc = m_editor->createDocument();
+  if (!doc)
+    return;
+
+  partManager->addPart(doc);
+  if (doc->widget())
+  {
+    tabWidget->addTab(doc->widget(), i18n("Unknown"));
+    tabWidget->showPage(doc->widget());
+  }
 }
 
 
-void EditorTest::slotViewCreated(QWidget *view)
+void EditorTest::slotOpen()
 {
-  tabWidget->addTab(view, view->caption());
-  view->show();
-  tabWidget->showPage(view);
-}
+  KURL url = KFileDialog::getOpenURL();
+  if (url.isEmpty())
+    return; 
 
+  KEditor::Document *doc = m_editor->document(url);
+  if (!doc)
+    doc = m_editor->createDocument(url);
+  if (!doc)
+    return;
 
-void EditorTest::slotPartActivated(KParts::Part *part)
-{
-  partManager->setActivePart(part);
-}
-
-
-void EditorTest::slotViewActivated(QWidget *view)
-{
-  tabWidget->showPage(view);
+  partManager->addPart(doc);
+  if (doc->widget())
+  {
+    tabWidget->addTab(doc->widget(), url.url());
+    tabWidget->showPage(doc->widget());
+  }
 }
 
 

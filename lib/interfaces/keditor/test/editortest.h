@@ -24,18 +24,17 @@ class KToggleAction;
 class EditorTest : public KParts::MainWindow
 {
   Q_OBJECT
+
 public:
 		  
   EditorTest();
   virtual ~EditorTest();
-	
 
+ 
 private slots:
 
-  void slotPartCreated(KParts::Part *part);
-  void slotViewCreated(QWidget *view);
-  void slotPartActivated(KParts::Part *part);
-  void slotViewActivated(QWidget *view);
+  void slotNew();
+  void slotOpen();
 
 
 private:

@@ -7,6 +7,7 @@
 
 #include <kxmlguiclient.h>
 #include <kparts/part.h>
+#include <kurl.h>
 class KAction;
 
 
@@ -29,7 +30,7 @@ class Editor;
  * A document can be queried for more complex interfaces.
  */
 
-class Document : public KParts::Part
+class Document : public KParts::ReadWritePart
 {
   Q_OBJECT
   		
@@ -46,86 +47,7 @@ public:
    * \return Pointer to the interface, or 0 if the document
    * does not provide that interface.
    */ 
-  DocumentInterface *getInterface(const QString &ifname);
-
-  /**
-   * \brief Load file.
-   * 
-   * Load the contents of a file into the document
-   *
-   * This method is \e abstract. It has to be implemented
-   * by the actual document.
-   *
-   * \param filename The name of the file to load.
-   *
-   * \return true, if file was loaded, false if not
-   */
-  virtual bool load(const QString &filename) = 0;
-
-  /**
-   * \brief Save file as.
-   *
-   * Save the contents of the document under a given filename.
-   *
-   * This method is \e abstract. It has to be implemented
-   * by the actual document.
-   * 
-   * \param filename The name of the file to save.
-   *
-   * \return true, if the file was saved, false if not
-   */
-  virtual bool save(const QString &filename) = 0;
-
-
-  /** 
-   * \brief Save file.
-   *
-   * Save the content of the document under it's current name.
-   *
-   * \return true, if the file was saved, false if not.
-   */
-  virtual bool save();
- 
-protected: 
-  /**
-   * \brief Change the name.
-   *
-   * Change the name of the document. This is the name
-   * that will be used in the \a save method.
-   */
-  virtual void rename(const QString &filename);
-  
-public:
-
-  /**
-   * \brief The current filename.
-   *
-   * The current name of the document.
-   *
-   * \return The name.
-   */
-  virtual QString fileName() const;
-
-  /**
-   * \brief A short name.
-   *
-   * A shortened name of the file, e.g. for editor tabs.
-   *
-   * \return S short version of the filename.
-   */
-  virtual QString shortName() const;
-
-
-signals:
-
-  /**
-   * \bried File name has changed.
-   *
-   * Emitted whenever the name of the document changes.
-   *
-   * \param name The new name of the doument.
-   */
-  void fileNameChanged(const QString &name);
+  DocumentInterface *queryInterface(const QString &ifname);
 
 
 protected:  
@@ -137,16 +59,12 @@ protected:
 
 protected slots:
 
-  void slotSave();
   void slotSaveAs();
-  void slotClose();
 
 
 private:
 
   Editor *_parent;
-
-  QString _fileName;
 
 };
 
@@ -236,38 +154,11 @@ public:
    * always test if a given interface is provided.
    *
    */
-  EditorInterface *getInterface(const QString &ifname);
+  EditorInterface *queryInterface(const QString &ifname);
 
-  virtual Document *getDocument(const QString &filename=QString::null) = 0;
+  virtual Document *document(const KURL &url) = 0;
+  virtual Document *createDocument(const KURL &url="") = 0;
   virtual Document *currentDocument() = 0;
-  
-  void addView(QWidget *view);
-  void addPart(KParts::Part *part);
-  
-		  
-signals:
-
-  void documentActivated(Document *doc);
-  void documentAdded();
-  void documentRemoved();
-
-  void partCreated(KParts::Part *part);
-  void viewCreated(QWidget *view);
-  void activatePart(KParts::Part *part);
-  void activateView(QWidget *view);
-  
-
-private slots:
-		
-  void slotLoadFile();
-  void slotNewFile();
-
-  void documentCountChanged();
-
-			   
-private:
-			   
-  KAction *_openAction, *_newAction;
 
 };
 
