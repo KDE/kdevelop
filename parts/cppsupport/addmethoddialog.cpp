@@ -150,9 +150,26 @@ AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ParsedClass* klass,
 
         if( sourceFile->count() == 0 ){
             QFileInfo info( fileName );
-            sourceFile->insertItem( info.dirPath(true) + info.baseName() + ".cpp" );
+            sourceFile->insertItem( info.dirPath(true) + "/" + info.baseName() + ".cpp" );
         }
     }
+
+    returnType->setAutoCompletion( true );
+    returnType->insertStringList( QStringList()
+	    << "void"
+            << "char"
+	    << "wchar_t"
+	    << "bool"
+	    << "short"
+	    << "int"
+	    << "long"
+	    << "signed"
+	    << "unsigned"
+	    << "float"
+	    << "double" );
+
+    returnType->insertStringList( m_cppSupport->classStore()->getSortedClassNameList() );
+    returnType->insertStringList( m_cppSupport->classStore()->getSortedStructNameList() );
 
     updateGUI();
     addMethod();
