@@ -221,6 +221,9 @@ public:
     int tokenPosition( const Token& token ) const;
     void getTokenPosition( const Token& token, int* line, int* col );
 
+    int currentLine() const { return m_currentLine; }
+    int currentColumn() const { return m_currentColumn; }
+
 private:
     QChar currentChar() const;
     QChar peekChar( int n=1 ) const;

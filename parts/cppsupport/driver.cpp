@@ -21,8 +21,11 @@
 #include "lexer.h"
 #include "parser.h"
 #include <kdebug.h>
+#include <stdlib.h>
+#include <qfile.h>
 
 Driver::Driver()
+    : depresolv( FALSE ), lexer( 0 )
 {
 }
 
@@ -35,23 +38,50 @@ void Driver::reset( )
     m_dependences.clear();
     m_macros.clear();
     m_problems.clear();
+    parsedDeps.clear();
+    includePaths.clear();
 }
 
 void Driver::clear( const QString & fileName )
 {
     m_dependences.remove( fileName );
-    m_macros.remove( fileName );
     m_problems.remove( fileName );
 }
 
 void Driver::addDependence( const QString & fileName, const Dependence & dep )
 {
-    findOrInsertDependenceList( fileName ).insert( dep.first, dep );
+    QString fn = dep.first;
+    findOrInsertDependenceList( fileName ).insert( fn, dep );
+
+    if ( !depresolv )
+	return;
+
+    if ( parsedDeps.find( dep.first ) != parsedDeps.end() )
+	return;
+    QString file = findIncludeFile( dep.first );
+    if ( !QFile::exists( file ) ) {
+	Problem p( "Couldn't find include file " + dep.first,
+		   lexer ? lexer->currentLine() : -1,
+		   lexer ? lexer->currentColumn() : -1 );
+	addProblem( dep.first,p );
+	return;
+    }
+    QFile f( file );
+    f.open( IO_ReadOnly );
+    QTextStream s( &f );
+    QString contents = s.read();
+    f.close();
+    QString cfn = m_currentFileName;
+    Lexer *l = lexer;
+    TranslationUnitAST::Node tu = parseFile( dep.first, contents );
+    m_currentFileName = cfn;
+    lexer = l;
+    parsedDeps.insert( dep.first, tu.release() );
 }
 
-void Driver::addMacro( const QString & fileName, const Macro & macro )
+void Driver::addMacro( const Macro & macro )
 {
-    findOrInsertMacroList( fileName ).insert( macro.name(), macro );
+    m_macros.insert( macro.name(), macro );
 }
 
 void Driver::addProblem( const QString & fileName, const Problem & problem )
@@ -68,17 +98,6 @@ QMap< QString, Dependence >& Driver::findOrInsertDependenceList( const QString &
     QMap<QString, Dependence> l;
     m_dependences.insert( fileName, l );
     return m_dependences[ fileName ];
-}
-
-QMap< QString, Macro >& Driver::findOrInsertMacroList( const QString & fileName )
-{
-    QMap<QString, QMap<QString, Macro> >::Iterator it = m_macros.find( fileName );
-    if( it != m_macros.end() )
-        return it.data();
-
-    QMap<QString, Macro> l;
-    m_macros.insert( fileName, l );
-    return m_macros[ fileName ];
 }
 
 QValueList < Problem >& Driver::findOrInsertProblemList( const QString & fileName )
@@ -100,12 +119,9 @@ QMap< QString, Dependence > Driver::dependences( const QString & fileName ) cons
     return QMap<QString, Dependence>();
 }
 
-QMap< QString, Macro > Driver::macros( const QString & fileName ) const
+QMap< QString, Macro > Driver::macros() const
 {
-    QMap<QString, QMap<QString, Macro> >::ConstIterator it = m_macros.find( fileName );
-    if( it != m_macros.end() )
-	return it.data();
-    return QMap<QString, Macro>();
+    return m_macros;
 }
 
 QValueList < Problem > Driver::problems( const QString & fileName ) const
@@ -122,17 +138,19 @@ TranslationUnitAST :: Node Driver::parseFile( const QString & fileName, const QS
 
     m_currentFileName = fileName;
 
-    Lexer lexer( this );
-    setupLexer( &lexer );
+    Lexer lex( this );
+    lexer = &lex;
+    setupLexer( &lex );
 
-    lexer.setSource( source );
-    Parser parser( this, &lexer );
+    lex.setSource( source );
+    Parser parser( this, &lex );
     setupParser( &parser );
 
     TranslationUnitAST :: Node translationUnit;
     parser.parseTranslationUnit( translationUnit );
     
     m_currentFileName = QString::null;
+    lexer = 0;
     
     return translationUnit;
 }
@@ -258,7 +276,34 @@ void Driver::setupParser( Parser * parser )
     Q_UNUSED( parser );
 }
 
-void Driver::removeMacro( const QString& fileName, const QString& macroName )
+void Driver::removeMacro( const QString& macroName )
 {
-    findOrInsertMacroList( fileName ).remove( macroName );
+    m_macros.remove( macroName );
 }
+
+void Driver::addIncludePath( const QString &path )
+{
+    includePaths << path;
+}
+
+QString Driver::findIncludeFile( const QString &fileName ) const
+{
+    for ( QStringList::ConstIterator it = includePaths.begin(); it != includePaths.end(); ++it ) {
+	QString f = *it + "/" + fileName;
+	if ( QFile::exists( f ) )
+	    return f;
+    }
+    return QString::null;
+}
+
+void Driver::setResolveDependencesEnabled( bool enabled )
+{
+    depresolv = enabled;
+    if ( depresolv )
+	setupPreProcessor();
+}
+
+void Driver::setupPreProcessor()
+{
+}
+

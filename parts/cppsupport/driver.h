@@ -76,7 +76,8 @@ public:
     typedef QPair<QString,int> Argument;
     
 public:
-    Macro(): m_hasArguments( false ) {}
+    Macro( bool hasArguments = false ): m_hasArguments( hasArguments ) {}
+    Macro( const QString &n, const QString &b ) : m_name( n ), m_body( b ), m_hasArguments( false ) {}
     
     Macro( const Macro& source )
 	: m_name( source.m_name),
@@ -133,32 +134,44 @@ public:
     virtual void clear( const QString& fileName );
     
     virtual void addDependence( const QString& fileName, const Dependence& dep );
-    virtual void addMacro( const QString& fileName, const Macro& macro );
+    virtual void addMacro( const Macro& macro );
     virtual void addProblem( const QString& fileName, const Problem& problem );
 
-    virtual QString currentFileName() const { return m_currentFileName; }
+    QString currentFileName() const { return m_currentFileName; }
     virtual TranslationUnitAST::Node parseFile( const QString& fileName, const QString& contents );
 
     QMap<QString, Dependence> dependences( const QString& fileName ) const;
-    QMap<QString, Macro> macros( const QString& fileName ) const;
+    QMap<QString, Macro> macros() const;
     QValueList<Problem> problems( const QString& fileName ) const;
 
-    virtual void removeMacro( const QString& fileName, const QString& macroName );
+    virtual void removeMacro( const QString& macroName );
+
+    virtual void addIncludePath( const QString &path );
+
+    const QMap<QString, TranslationUnitAST*> &parsedDependences() const { return parsedDeps; }
+
+    virtual void setResolveDependencesEnabled( bool enabled );
+    bool isResolveDependencesEnabled() const { return depresolv; }
 
 protected:
     virtual void setupLexer( Lexer* lexer );
     virtual void setupParser( Parser* parser );
+    virtual void setupPreProcessor();
 
 private:
     QMap<QString, Dependence>& findOrInsertDependenceList( const QString& fileName );
-    QMap<QString, Macro>& findOrInsertMacroList( const QString& fileName );
     QValueList<Problem>& findOrInsertProblemList( const QString& fileName );
+    QString findIncludeFile( const QString &fileName ) const;
 
 private:
     QString m_currentFileName;
     QMap< QString, QMap<QString, Dependence> > m_dependences;
-    QMap< QString, QMap<QString, Macro> > m_macros;
+    QMap<QString, Macro> m_macros;
     QMap< QString, QValueList<Problem> > m_problems;
+    QMap<QString, TranslationUnitAST*> parsedDeps;
+    QStringList includePaths;
+    uint depresolv : 1;
+    Lexer *lexer;
 
 private:
     Driver( const Driver& source );

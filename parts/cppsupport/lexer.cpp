@@ -90,7 +90,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
     QChar ch = currentChar();
     QChar ch1 = peekChar();
-    
+
     if( ch.isNull() ){
 	/* skip */
     } else if( ch == '/' && ch1 == '/' ){
@@ -120,7 +120,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	QString directive = m_source.mid( start, currentPosition() - start );
 
 	handleDirective( directive );
-    } else if( m_startLine && m_skipping[m_ifLevel] ){
+    } else if( m_startLine && m_skipping[ m_ifLevel ] ){
 	// skip line and continue
 	while( !currentChar().isNull() && currentChar() != '\n' )
 	    nextChar();
@@ -146,8 +146,9 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk = Token( k, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
-	} else if( m_preprocessorEnabled && m_driver->macros( m_driver->currentFileName() ).contains(ide) ){
-	    Macro m = m_driver->macros( m_driver->currentFileName() )[ ide ];
+	} else if( m_preprocessorEnabled && m_driver->macros().contains(ide) &&
+        		m_driver->macros()[ide].body().stripWhiteSpace() != ide ){
+	    Macro m = m_driver->macros()[ ide ];
 	    if( m.hasArguments() ){
 		readWhiteSpaces();
 		if( currentChar() == '(' )
@@ -192,7 +193,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk = Token( Token_identifier, start, currentPosition() - start );
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
-	} 
+	}
     } else if( ch.isNumber() ){
 	int start = currentPosition();
 	readNumberLiteral();
@@ -215,7 +216,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	tk.setStartPosition( startLine, startColumn );
 	tk.setEndPosition( m_currentLine, m_currentColumn );
     }
-    
+
     m_startLine = false;
 }
 
@@ -280,12 +281,12 @@ void Lexer::handleDirective( const QString& directive )
 {
     bool skip = skipWordsEnabled();
     bool preproc = preprocessorEnabled();
-    
+
     disableSkipWords();
     disablePreprocessor();
-    
+
     if( directive == "define" ){
-	if( !m_skipping[m_ifLevel] ){
+	if( !m_skipping[ m_ifLevel ] ){
 	    Macro m;
 	    processDefine( m );
 	}
@@ -310,7 +311,7 @@ void Lexer::handleDirective( const QString& directive )
     // skip line
     while( !currentChar().isNull() && currentChar() != '\n' )
         nextChar();
-    
+
     m_skipWordsEnabled = skip;
     m_preprocessorEnabled = preproc;
 }
@@ -325,23 +326,22 @@ int Lexer::testDefined()
 	n = 1;
 	readWhiteSpaces( false );
     }
-    
+
     int startWord = currentPosition();
     readIdentifier();
     QString word = m_source.mid( startWord, currentPosition() - startWord );
-    
+
     if( word == "defined" ){
 	return n ? -1 : 1;
     }
-    
+
     return 0;
 }
 */
 int Lexer::testIfLevel()
 {
-    int rtn = !m_skipping[ m_ifLevel++ ];
-    m_skipping[ m_ifLevel ] = m_skipping[ m_ifLevel-1 ];
-    return rtn;
+    m_skipping[ m_ifLevel + 1 ] = m_skipping[ m_ifLevel ];
+    return !m_skipping[ m_ifLevel++ ];
 }
 
 int Lexer::macroDefined()
@@ -350,44 +350,44 @@ int Lexer::macroDefined()
     int startWord = currentPosition();
     readIdentifier();
     QString word = m_source.mid( startWord, currentPosition() - startWord );
-    bool r = m_driver->macros( m_driver->currentFileName() ).contains( word );
-        
+    bool r = m_driver->macros().contains( word );
+
     return r;
 }
 
 void Lexer::processDefine( Macro& m )
 {
     readWhiteSpaces( false );
-        
+
     int startMacroName = currentPosition();
     readIdentifier();
     QString macroName = m_source.mid( startMacroName, int(currentPosition()-startMacroName) );
     m.setName( macroName );
-    
+
     if( currentChar() == '(' ){
 	m.setHasArguments( true );
 	nextChar();
-	
+
 	while( currentChar() != ')' ){
 	    readWhiteSpaces( false );
 	    int startArg = currentPosition();
 	    readIdentifier();
 	    QString arg = m_source.mid( startArg, int(currentPosition()-startArg) );
-	    
+
 	    m.addArgument( Macro::Argument(arg, 0) );
-	    
+
 	    readWhiteSpaces( false );
 	    if( currentChar().isNull() || currentChar() != ',' )
 		break;
-	    
+
 	    nextChar(); // skip ','
 	}
-	
+
 	if( currentChar() == ')' )
 	    nextChar(); // skip ')'
     }
-	        
-    QString body;    
+
+    QString body;
     while( !currentChar().isNull() ){
 
 	if( currentChar() == '\n' ){
@@ -402,42 +402,40 @@ void Lexer::processDefine( Macro& m )
 		nextChar();
 	    }
 	} else {
-	    
+
 	    Token tk;
 	    nextToken( tk, true );
-	    
+
 	    if( tk == '\n' )
 		break;
-	    
+
 	    if( tk.type() != -1 ){
-		body += toString( tk );	
+		body += toString( tk );
 	    }
 	}
     }
-    
+
     m.setBody( body );
-    m_driver->addMacro( m_driver->currentFileName(), m );
- 
+    m_driver->addMacro( m );
+
     // qDebug( "add macro %s with body %s", m.name().latin1(), m.body().latin1() );
 }
 
 void Lexer::processElse()
 {
-    if( m_ifLevel == 0 ){
+    if( m_ifLevel == 0 )
         // TODO: report error
 	return;
-    }
 
     m_skipping[ m_ifLevel ] = m_trueTest[ m_ifLevel ];
 }
 
 void Lexer::processElif()
 {
-    if( m_ifLevel == 0 ){
+    if( m_ifLevel == 0 )
 	// TODO: report error
 	return;
-    }
-    
+
     if( !m_trueTest[m_ifLevel] ){
 #if 0
 	int n;
@@ -456,11 +454,10 @@ void Lexer::processElif()
 
 void Lexer::processEndif()
 {
-    if( m_ifLevel == 0 ){
+    if( m_ifLevel == 0 )
 	// TODO: report error
 	return;
-    }
-        
+
     m_skipping[ m_ifLevel ] = 0;
     m_trueTest[ m_ifLevel-- ] = 0;
 
@@ -486,7 +483,7 @@ void Lexer::processIfdef()
     if( testIfLevel() ){
 	m_trueTest[ m_ifLevel ] = macroDefined();
 	m_skipping[ m_ifLevel] = !m_trueTest[ m_ifLevel ];
-    } 
+    }
 }
 
 void Lexer::processIfndef()
@@ -494,21 +491,21 @@ void Lexer::processIfndef()
     if( testIfLevel() ){
 	m_trueTest[ m_ifLevel ] = !macroDefined();
 	m_skipping[ m_ifLevel] = !m_trueTest[ m_ifLevel ];
-    } 
+    }
 }
 
 void Lexer::processInclude()
 {
     if( m_skipping[m_ifLevel] )
 	return;
-    
+
     readWhiteSpaces( false );
     if( !currentChar().isNull() ){
 	QChar ch = currentChar();
 	if( ch == '"' || ch == '<' ){
 	    nextChar();
 	    QChar ch2 = ch == QChar('"') ? QChar('"') : QChar('>');
-	    
+
 	    int startWord = currentPosition();
 	    while( !currentChar().isNull() && currentChar() != ch2 )
 		nextChar();
@@ -528,14 +525,14 @@ void Lexer::processUndef()
     int startWord = currentPosition();
     readIdentifier();
     QString word = m_source.mid( startWord, currentPosition() - startWord );
-    m_driver->removeMacro( m_driver->currentFileName(), word );
+    m_driver->removeMacro( word );
     // qDebug( "remove definition for %s", word.latin1() );
 }
 
 int Lexer::macroPrimary()
 {
-    readWhiteSpaces( false );    
-    int result = 0;    
+    readWhiteSpaces( false );
+    int result = 0;
     switch( currentChar().latin1() ) {
     case '(':
 	nextChar();
@@ -546,7 +543,7 @@ int Lexer::macroPrimary()
 	}
 	nextChar();
 	return result;
-	
+
     case '+':
     case '-':
     case '!':
@@ -560,7 +557,7 @@ int Lexer::macroPrimary()
 	    else if( tk == '~' ) return ~result;
 	}
 	break;
-	
+
     default:
 	{
 	    Token tk;
@@ -571,7 +568,7 @@ int Lexer::macroPrimary()
 		    return macroPrimary();
 		}
 		// TODO: implement
-		return m_driver->macros(m_driver->currentFileName()).contains( toString(tk) );
+		return m_driver->macros().contains( toString(tk) );
 	    case Token_number_literal:
 		return toString(tk).toInt();
 	    case Token_char_literal:
@@ -579,11 +576,11 @@ int Lexer::macroPrimary()
 		default:
 		break;
 	    } // end switch
-	
+
 	} // end default
-	
+
     } // end switch
-    
+
     return 0;
 }
 
@@ -634,7 +631,7 @@ int Lexer::macroRelational()
 	nextChar();
 	if( currentChar() == '=') {
 	    nextChar();
-	    
+
 	    iresult = macroAddSubtract();
 	    result = lt ? (result <= iresult) : (result >= iresult);
 	}
@@ -643,7 +640,7 @@ int Lexer::macroRelational()
 	    result = lt ? (result < iresult) : (result > iresult);
 	}
     }
-    
+
     return result;
 }
 
@@ -658,7 +655,7 @@ int Lexer::macroEquality()
 	iresult = macroRelational();
 	result = eq ? (result==iresult) : (result!=iresult);
     }
-    return result; 
+    return result;
 }
 
 int Lexer::macroBoolAnd()
@@ -680,7 +677,7 @@ int Lexer::macroBoolXor()
 	nextChar();
 	result ^= macroBoolAnd();
     }
-    return result;  
+    return result;
 }
 
 int Lexer::macroBoolOr()
@@ -704,7 +701,7 @@ int Lexer::macroLogicalAnd()
         result = macroBoolOr() && result;
 	QString s = m_source.mid( start, currentPosition() - start );
     }
-    return result;    
+    return result;
 }
 
 int Lexer::macroLogicalOr()
