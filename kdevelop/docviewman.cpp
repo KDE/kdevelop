@@ -929,8 +929,6 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
       pView = (QWidget*) pChild;
     }
   }
-  if (pView->hasFocus())
-    return; // nothing to do if we've got the focus, already
 
   if (pView->inherits("CEditWidget")) {
     m_pCurEditView = (CEditWidget*) pView;
