@@ -33,8 +33,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 CVSLogPage::CVSLogPage( CvsService_stub *cvsService, QWidget *parent, const char *name, int )
-    : QWidget( parent, name? name : "logformpage" ),
-    DCOPObject( "CvsLogPageDCOPIface" ),
+    : DCOPObject( "CvsLogPageDCOPIface" ),
+	QWidget( parent, name? name : "logformpage" ),
     m_cvsService( cvsService ), m_cvsLogJob( 0 )
 {
     QLayout *thisLayout = new QVBoxLayout( this );

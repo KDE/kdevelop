@@ -44,9 +44,9 @@ int g_dcopErrCounter = 0;
 
 
 CvsProcessWidget::CvsProcessWidget( CvsService_stub *service, CvsServicePart *part, QWidget *parent, const char *name )
-    : QTextEdit( parent, name ),
-    DCOPObject( "CvsProcessWidgetDCOPIface" ),
-    m_part( part ), m_service( service ), m_job( 0 )
+    : DCOPObject( "CvsProcessWidgetDCOPIface" ),
+    QTextEdit( parent, name ),
+	m_part( part ), m_service( service ), m_job( 0 )
 {
     setReadOnly( true );
     setTextFormat( Qt::LogText );

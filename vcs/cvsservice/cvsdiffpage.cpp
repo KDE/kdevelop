@@ -34,9 +34,9 @@
 
 CVSDiffPage::CVSDiffPage( CvsService_stub *cvsService,
     QWidget *parent, const char *name, int )
-    : QWidget( parent, name? name : "logformdialog" ),
-    // Leaving it anonymous let us to have multiple objects at the same time!
-    DCOPObject(), //  "CVSDiffPageDCOPIface"
+	// Leaving it anonymous let us to have multiple objects at the same time!
+    : DCOPObject(), //  "CVSDiffPageDCOPIface"
+	QWidget( parent, name? name : "logformdialog" ),
     m_diffText( 0 ), m_cvsService( cvsService ), m_cvsDiffJob( 0 )
 {
     QLayout *thisLayout = new QVBoxLayout( this );
