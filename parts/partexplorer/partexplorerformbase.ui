@@ -46,7 +46,7 @@
                 <string>KDE service &amp;type:</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>typeEdit</cstring>
+                <cstring>typeCombo</cstring>
             </property>
             <property name="toolTip" stdset="0">
                 <string></string>
@@ -79,7 +79,7 @@
                 <string>&amp;Additional constraints:</string>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>costraintsText</cstring>
+                <cstring>constraintsText</cstring>
             </property>
             <property name="toolTip" stdset="0">
                 <string></string>
