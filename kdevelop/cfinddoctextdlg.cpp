@@ -31,7 +31,7 @@
 #include <qpushbutton.h>
 
 CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) :
-  QDialog(parent,name)
+  QDialog(parent,name, true)
 {
     resize(250,120);
     setCaption(i18n("Search for Help on..."));

@@ -40,24 +40,41 @@
 #include <config.h>
 #endif
 
-// SETUP DIALOG
-CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name )
-  : QTabDialog( parent, name,TRUE )
+CKDevSetupDlg::CKDevSetupDlg(KAccel* accel, QWidget *parent, const char *name ) :
+  KDialogBase ( IconList,                 // dialogFace
+                i18n("KDevelop Setup"),   // caption
+                Ok|Default|Cancel,        // buttonMask
+                Ok,                       // defaultButton
+                parent,
+                name,
+                true,                     // modal
+                true),                    // separator
+  wantsTreeRefresh(false),
+  config(KGlobal::config()),
+  m_accel(accel)
 {
-  accel = accel_pa;
-  wantsTreeRefresh=false;
 
-  setCaption( i18n("KDevelop Setup" ));
-  config=KGlobal::config();
+  addGeneralTab();
+  addKeysTab();
+  addDocTab();
+  addDebuggerTab();
+  addQT2Tab();
 
+//  connect( this, SIGNAL(defaultButtonPressed()), SLOT(slotDefault()) );
+  connect( this, SIGNAL(okClicked()), SLOT(slotOkClicked()) );
+  connect( this, SIGNAL(okClicked()), parent, SLOT(slotOptionsMake()) );
+}
+
+void CKDevSetupDlg::addGeneralTab()
+{
   // ****************** the General Tab ********************
-  w1 = new QWidget( this, "general" );
+  generalPage = addPage(i18n("General"));
+  QGridLayout *grid = new QGridLayout(generalPage,4,1,15,7);
 
-  QGridLayout *grid1 = new QGridLayout(w1,4,1,15,7);
   QButtonGroup* makeGroup;
-  makeGroup = new QButtonGroup( w1, "makeGroup" );
+  makeGroup = new QButtonGroup( generalPage, "makeGroup" );
   //makeGroup->setGeometry( 10, 10, 400, 60 );
-  grid1->addWidget(makeGroup,0,0);
+  grid->addWidget(makeGroup,0,0);
   makeGroup->setFrameStyle( 49 );
   makeGroup->setTitle(i18n( "Make-Command" ));
   makeGroup->setAlignment( 1 );
@@ -91,7 +108,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   bool autoSave=config->readBoolEntry("Autosave",true);
 
   QButtonGroup* autosaveGroup;
-  autosaveGroup = new QButtonGroup( w1, "autosaveGroup" );
+  autosaveGroup = new QButtonGroup( generalPage, "autosaveGroup" );
   grid2 = new QGridLayout(autosaveGroup,2,2,15,7);
 
   autosaveGroup->setFrameStyle( 49 );
@@ -144,10 +161,10 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(autosaveTimeCombo, autosaveMsg);
   QWhatsThis::add(autoSaveCheck, autosaveMsg);
   QWhatsThis::add(autosaveGroup, autosaveMsg);
-  grid1->addWidget(autosaveGroup,1,0);
+  grid->addWidget(autosaveGroup,1,0);
 
   QButtonGroup* autoswitchGroup;
-  autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
+  autoswitchGroup = new QButtonGroup( generalPage, "autoswitchGroup" );
 
   autoswitchGroup->setFrameStyle( 49 );
   autoswitchGroup->setTitle(i18n( "Autoswitch") );
@@ -189,10 +206,10 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 						       "off the outputwindow.");
   QWhatsThis::add(autoSwitchCheck, autoswitchMsg);
   QWhatsThis::add(autoswitchGroup, autoswitchMsg);
-  grid1->addWidget(autoswitchGroup,2,0);
+  grid->addWidget(autoswitchGroup,2,0);
 //  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
 
-  QButtonGroup* startupGroup = new QButtonGroup( w1, "startupGroup" );
+  QButtonGroup* startupGroup = new QButtonGroup( generalPage, "startupGroup" );
   //startupGroup->setGeometry( 10, 260, 400, 70 );
 
   grid2 = new QGridLayout(startupGroup,2,2,15,7);
@@ -248,33 +265,39 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 	QWhatsThis::add(tipDayCheck, i18n("Tip of the Day\n\n"
 	                  "If Tip of the Day is enabled, KDevelop will show the\n"
 	                  "Tip of the Day every time it starts."));
-  grid1->addWidget(startupGroup,3,0);
-  connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutoswitch(bool)) );
+  grid->addWidget(startupGroup,3,0);
+  connect( autoSwitchCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsAutoswitch(bool)) );
   connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
-  connect( autosaveTimeCombo, SIGNAL(activated(int)),parent, SLOT(slotOptionsAutosaveTime(int)) );
-  connect( autoSaveCheck, SIGNAL(toggled(bool)),parent, SLOT(slotOptionsAutosave(bool)) );
+  connect( autosaveTimeCombo, SIGNAL(activated(int)),parent(), SLOT(slotOptionsAutosaveTime(int)) );
+  connect( autoSaveCheck, SIGNAL(toggled(bool)),parent(), SLOT(slotOptionsAutosave(bool)) );
   connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeLabel, SLOT(setEnabled(bool)) );
   connect( autoSaveCheck, SIGNAL(toggled(bool)),autosaveTimeCombo, SLOT(setEnabled(bool)) );
-  connect( defaultClassViewCheck,SIGNAL(toggled(bool)),parent,SLOT(slotOptionsDefaultCV(bool)));
+  connect( defaultClassViewCheck,SIGNAL(toggled(bool)),parent(),SLOT(slotOptionsDefaultCV(bool)));
+}
 
-  // ****************** the Keys Tab ***************************
+//
+// ****************** the Keys Tab ***************************
+//
+void CKDevSetupDlg::addKeysTab()
+{
 
-//  dict = new QDict<KKeyEntry>( accel->keyDict() );
-  //  KKeyChooser* w2 = new KKeyChooser ( dict,this);
-  keyMap = accel->keyDict();
-  w2 = new QWidget( this, "keys" );
-  grid1 = new QGridLayout(w2,2,1,15,7);
+  keyMap = m_accel->keyDict();
+  keysPage = addPage(i18n("Keys"));
+  QGridLayout *grid = new QGridLayout(keysPage,2,1,15,7);
 
-  w21 = new KKeyChooser ( &keyMap, w2, true);
-  grid1->addWidget( w21,0,0);
+  keyChooser = new KKeyChooser ( &keyMap, keysPage, true);
+  grid->addWidget(keyChooser,0,0);
+}
 
+void CKDevSetupDlg::addDocTab()
+{
   // ****************** the Documentation Tab ********************
-  w = new QWidget( this, "documentaion" );
-  grid1 = new QGridLayout(w,2,1,15,7);
+  QFrame* docPage = addPage(i18n("Documentation"));
+  QGridLayout *grid = new QGridLayout(docPage,2,1,15,7);
 
   config->setGroup("Doc_Location");
 
-  QWhatsThis::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
+  QWhatsThis::add(docPage, i18n("Enter the path to your QT and KDE-Libs\n"
 				"Documentation for the Documentation Browser.\n"
 				"QT usually comes with complete Documentation\n"
 				"whereas for KDE you can create the Documentation\n"
@@ -282,13 +305,13 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 
   QButtonGroup* docGroup;
 
-  docGroup = new QButtonGroup( w, "docGroup" );
-  grid1->addWidget(docGroup,0,0);
+  docGroup = new QButtonGroup( docPage, "docGroup" );
+  grid->addWidget(docGroup,0,0);
   docGroup->setFrameStyle( 49 );
   docGroup->setTitle(i18n("Directories"));
   docGroup->setAlignment( 1 );
   docGroup->lower();
-  grid2 = new QGridLayout(docGroup,2,3,15,7);
+  QGridLayout *grid2 = new QGridLayout(docGroup,2,3,15,7);
 
   qt_edit = new QLineEdit( docGroup, "qt_edit" );
   grid2->addWidget(qt_edit,0,1);
@@ -299,8 +322,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QPushButton* qt_button;
   qt_button = new QPushButton( docGroup, "qt_button" );
   grid2->addWidget(qt_button,0,2);
-  QPixmap pix = SmallIcon("fileopen");
-  qt_button->setPixmap(pix);
+  qt_button->setPixmap(SmallIcon("fileopen"));
   connect(qt_button,SIGNAL(clicked()),SLOT(slotQtClicked()));
 
   QLabel* qt_label;
@@ -330,7 +352,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QPushButton* kde_button;
   kde_button = new QPushButton(  docGroup, "kde_button" );
   grid2->addWidget(kde_button,1,2);
-  kde_button->setPixmap(pix);
+  kde_button->setPixmap(SmallIcon("fileopen"));
   connect(kde_button,SIGNAL(clicked()),SLOT(slotKDEClicked()));
 
   QLabel* kde_label;
@@ -352,8 +374,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 
 
   QButtonGroup* docOptionsGroup;
-  docOptionsGroup = new QButtonGroup( w, "docOptionsGroup" );
-  grid1->addWidget(docOptionsGroup,1,0);
+  docOptionsGroup = new QButtonGroup( docPage, "docOptionsGroup" );
+  grid->addWidget(docOptionsGroup,1,0);
   docOptionsGroup->setFrameStyle( 49 );
   docOptionsGroup->setTitle(i18n("Options"));
   docOptionsGroup->setAlignment( 1 );
@@ -396,7 +418,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QPushButton* create_button;
   create_button = new QPushButton( docOptionsGroup, "create_button" );
   grid2->addWidget(create_button,1,1);
-  connect( create_button, SIGNAL(clicked()),parent, SLOT(slotOptionsCreateSearchDatabase()) );
+  connect( create_button, SIGNAL(clicked()),parent(), SLOT(slotOptionsCreateSearchDatabase()) );
   create_button->setText(i18n("Create..."));
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
@@ -429,6 +451,10 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
                     "a cross reference file of your project into the seleceted kdoc-reference\n"
                     "directory."));
 
+}
+
+void CKDevSetupDlg::addDebuggerTab()
+{
   // ****************** the Debugger Tab ***************************
 
   config->setGroup("Debug");
@@ -440,10 +466,10 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   bool dbgFloatingToolbar   = config->readBoolEntry("Enable floating toolbar", false);
   bool dbgTerminal          = config->readBoolEntry("Debug on separate tty console", false);
 
-  w3 = new QWidget( this, "debug" );
-  grid1 = new QGridLayout(w3,3,1,15,7);
-  dbgExternalCheck = new QCheckBox( w3, "dbgExternal" );
-  grid1->addWidget(dbgExternalCheck,0,0);
+  debuggerPage = addPage(i18n("Debugger"));
+  QGridLayout *grid = new QGridLayout(debuggerPage,3,1,15,7);
+  dbgExternalCheck = new QCheckBox( debuggerPage, "dbgExternal" );
+  grid->addWidget(dbgExternalCheck,0,0);
   dbgExternalCheck->setText(i18n("Use external debugger"));
   dbgExternalCheck->setAutoRepeat( FALSE );
   dbgExternalCheck->setAutoResize( FALSE );
@@ -454,8 +480,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 	                  "or the internal debugger within kdevelop\n"
                     "The internal debugger is a frontend to gdb"));
 
-  dbgExternalGroup = new QButtonGroup( w3, "dbgExternalGroup" );
-  grid2 = new QGridLayout(dbgExternalGroup,1,2,15,7);
+  dbgExternalGroup = new QButtonGroup( debuggerPage, "dbgExternalGroup" );
+  QGridLayout *grid2 = new QGridLayout(dbgExternalGroup,1,2,15,7);
   dbgExternalGroup->setFrameStyle( 49 );
   dbgExternalGroup->setTitle(i18n( "External" ));
   dbgExternalGroup->setAlignment( 1 );
@@ -470,7 +496,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgExternalSelectLineEdit = new QLineEdit( dbgExternalGroup, "dbgExternalSelectLineEdit" );
   grid2->addWidget(dbgExternalSelectLineEdit,0,1);
   dbgExternalSelectLineEdit->setText(dbg_cmd);
-  grid1->addWidget(dbgExternalGroup,1,0);
+  grid->addWidget(dbgExternalGroup,1,0);
 
   QString dbgSelectCmdMsg = i18n("Identify the external debugger\n\n"
 	                  "Enter the program name you wish to run\n"
@@ -478,8 +504,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QWhatsThis::add(dbgSelectCmdLabel, dbgSelectCmdMsg);
   QWhatsThis::add(dbgExternalSelectLineEdit, dbgSelectCmdMsg);
 
-  dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
-  grid1->addWidget(dbgInternalGroup,2,0);
+  dbgInternalGroup = new QButtonGroup( debuggerPage, "dbgInternalGroup" );
+  grid->addWidget(dbgInternalGroup,2,0);
   grid2 = new QGridLayout(dbgInternalGroup,5,1,15,7);
   dbgInternalGroup->setFrameStyle( 49 );
   dbgInternalGroup->setTitle(i18n( "Internal" ));
@@ -553,16 +579,21 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 
   slotSetDebug();
   connect( dbgExternalCheck, SIGNAL(toggled(bool)), SLOT(slotSetDebug()));
+}
 
-//************************** QT-2 directory select *************************//
-  w4 = new QWidget( this, "pat" );
+//
+//************************** QT-2 directory select *************************
+//
+void CKDevSetupDlg::addQT2Tab()
+{
+  QFrame* QT2Page = addPage(i18n("Path"));
   config->setGroup("QT2");
-  grid1 = new QGridLayout(w4,2,1,15,7);
+  QGridLayout *grid = new QGridLayout(QT2Page,2,1,15,7);
 
-  QGroupBox* kde2_box= new QGroupBox(w4,"NoName");
-  grid1->addWidget(kde2_box,0,0);
+  QGroupBox* kde2_box= new QGroupBox(QT2Page,"NoName");
+  grid->addWidget(kde2_box,0,0);
   kde2_box->setTitle(i18n("Qt 2.x / KDE path"));
-  grid2 = new QGridLayout(kde2_box,4,2,15,7);
+  QGridLayout *grid2 = new QGridLayout(kde2_box,4,2,15,7);
 
   QLabel* qt2= new QLabel(kde2_box,"NoName");
   qt2->setText(i18n("Qt 2.x directory:"));
@@ -576,7 +607,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   qt2_edit->setText(qt2_path);
 
   QPushButton* qt2_button= new QPushButton(kde2_box,"NoName");
-  qt2_button->setPixmap(pix);
+  qt2_button->setPixmap(SmallIcon("fileopen"));
   grid2->addWidget(qt2_button,1,1);
 
   QString qt2Msg = i18n("Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0");
@@ -597,8 +628,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 
 
   QPushButton* kde2_button= new QPushButton(kde2_box,"NoName");
-  kde2_button->setPixmap(pix);
- grid2->addWidget(kde2_button,3,1);
+  kde2_button->setPixmap(SmallIcon("fileopen"));
+  grid2->addWidget(kde2_button,3,1);
 
   QString kde2Msg = i18n("Set the root directory path leading to your KDE 2 includes/libraries, e.g. /opt/kde2");
   QWhatsThis::add(kde2_edit, kde2Msg);
@@ -608,8 +639,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   connect(qt2_button,SIGNAL(clicked()),SLOT(slotQt2Clicked()));
   connect(kde2_button, SIGNAL(clicked()),SLOT(slotKDE2Clicked()));
 
-  QGroupBox* ppath_box= new QGroupBox(w4,"NoName");
-  grid1->addWidget( ppath_box,1,0);
+  QGroupBox* ppath_box= new QGroupBox(QT2Page,"NoName");
+  grid->addWidget( ppath_box,1,0);
   grid2 = new QGridLayout(ppath_box,2,2,15,7);
   ppath_box->setTitle(i18n("Default Project Path"));
 
@@ -626,8 +657,8 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   ppath_edit->setText(project_path);
 
   QPushButton* ppath_button= new QPushButton(ppath_box,"NoName");
-ppath_button->setPixmap(pix);
- grid2->addWidget(ppath_button,1,1);
+  ppath_button->setPixmap(SmallIcon("fileopen"));
+  grid2->addWidget(ppath_button,1,1);
   connect(ppath_button, SIGNAL(clicked()),SLOT(slotPPathClicked()));
 // ---
 
@@ -635,28 +666,12 @@ ppath_button->setPixmap(pix);
   QWhatsThis::add(ppath_edit, ppathMsg);
   QWhatsThis::add(ppath_button, ppathMsg);
   QWhatsThis::add(ppath, ppathMsg);
-
-  // *********** tabs ****************
-  addTab(w1, i18n("General"));
-  addTab(w2, i18n("Keys"));
-  addTab( w, i18n("Documentation" ));
-  addTab(w3, i18n("Debugger" ));
-  addTab(w4, i18n("Path"));
-
-  // **************set the button*********************
-  setDefaultButton(i18n("Default"));
-  setOkButton(i18n("OK"));
-  setCancelButton(i18n("Cancel"));
-  connect( this, SIGNAL(defaultButtonPressed()), SLOT(slotDefault()) );
-  connect( this, SIGNAL(applyButtonPressed()), SLOT(slotOkClicked()) );
-  connect( this, SIGNAL(applyButtonPressed()),parent, SLOT(slotOptionsMake()) );
-  resize(440,420);
 }
 
 void CKDevSetupDlg::slotDefault(){
 
   // General tab
-  if(w1->isVisible()){
+  if(generalPage->isVisible()){
     makeSelectLineEdit->setText("make");
 
     autoSaveCheck->setChecked(true);
@@ -669,8 +684,21 @@ void CKDevSetupDlg::slotDefault(){
     tipDayCheck->setChecked(true);
   }
   // keychooser tab
-  if(w2->isVisible())
-    w21->allDefault();
+  if(keysPage->isVisible())
+    keyChooser->allDefault();
+
+  if(debuggerPage->isVisible())
+  {
+    dbgExternalCheck->setChecked(false);
+//    QLineEdit* dbgExternalSelectLineEdit;
+
+    // Dbg internal options
+    dbgMembersCheck->setChecked(false);
+    dbgAsmCheck->setChecked(false);
+    dbgLibCheck->setChecked(false);
+    dbgFloatCheck->setChecked(false);
+    dbgTerminalCheck->setChecked(false);
+  }
 }
 
 void CKDevSetupDlg::slotOkClicked(){
@@ -773,8 +801,8 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("ProjectDefaultDir", ppath_edit->text());	
 // ---
 
-  accel->setKeyDict(keyMap);
-  accel->writeSettings(config);
+  m_accel->setKeyDict(keyMap);
+  m_accel->writeSettings(config);
   config->sync();
   accept();
 }

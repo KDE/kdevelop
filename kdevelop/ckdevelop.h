@@ -623,7 +623,7 @@ public:
   void slotClickedOnMessagesWidget();
   
 
-  void slotURLSelected(KHTMLPart* widget,const QString& url,int,const char*);
+  void slotURLSelected(const QString& url,int,const char*);
   void slotDocumentDone();
   void slotURLonURL(const QString& url);
 
@@ -743,7 +743,7 @@ protected: // Protected methods
 	 *
 	 * @param file The URL to open.
 	 */
-	void openBrowserBookmark(char* file);
+	void openBrowserBookmark(const QString& file);
 
   /** Update the class combo with all classes in alpabetical order. */
   void CVRefreshClassCombo();

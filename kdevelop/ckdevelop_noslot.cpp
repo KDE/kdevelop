@@ -1351,7 +1351,7 @@ void CKDevelop::readOptions()
 		filename = DocTreeKDevelopBook::locatehtml("welcome/index.html");
 
   if(!filename.isEmpty())
-    slotURLSelected(browser_widget,filename,1,"test");
+    slotURLSelected(filename,1,"test");
 }
 
 void CKDevelop::saveOptions(){

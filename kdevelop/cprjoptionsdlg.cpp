@@ -54,7 +54,7 @@
 
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
- : KDialogBase (  Tabbed,                   // dialogFace
+ : KDialogBase (  IconList,                 // dialogFace
                   i18n("Project Options" ), // caption
                   Ok|Cancel,                // buttonMask
                   Ok,                       // defaultButton
@@ -64,8 +64,6 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
                   true)                     // separator
 {
   prj_info = prj;
-
-//  setMinimumSize(680,355);
 
   addGeneralPage();
   addCompilerOptionsPage();

@@ -28,20 +28,19 @@ class QComboBox;
 class QLineEdit;
 class QButtonGroup;
 class QLabel;
+class QFrame;
 
-#include <qtabdialog.h>
+#include <kdialogbase.h>
 #include <kaccel.h>
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
+//#ifdef HAVE_CONFIG_H
+//#include <config.h>
+//#endif
 
 /** the setup dialog for kdevelop
   *@author Sandy Meier
   */
-class CKDevSetupDlg : public QTabDialog
+class CKDevSetupDlg : public KDialogBase
 {
     Q_OBJECT
 public:
@@ -49,19 +48,40 @@ public:
     bool hasChangedPath() const {return wantsTreeRefresh;};
 
 private:
-  QWidget *w;
-  QWidget *w1;
-  QWidget *w2;
-  QWidget *w3;
-  QWidget *w4;
-  KKeyChooser* w21;
+  void addGeneralTab();
+  void addKeysTab();
+  void addDocTab();
+  void addDebuggerTab();
+  void addQT2Tab();
 
-  QString kde_doc_path, qt_doc_path;
+ private slots:
+  void slotOkClicked();
+  void slotDefault();
+  void slotQtClicked();
+  void slotKDEClicked();
+  void slotKDEUpdateReq();
+  void slotSetDebug();
+  void slotQt2Clicked();
+  void slotKDE2Clicked();
+// --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
+	void slotPPathClicked();
+// ---
+
+private:
   bool wantsTreeRefresh;
-
-  KKeyEntryMap keyMap;
   KConfig* config;
-  KAccel* accel;
+  KAccel* m_accel;
+
+  QFrame* generalPage;
+  QFrame* keysPage;
+  QFrame* debuggerPage;
+
+  QString kde_doc_path;
+  QString qt_doc_path;
+
+
+  KKeyChooser* keyChooser;
+  KKeyEntryMap keyMap;
 
   QCheckBox* autoSaveCheck;
   QComboBox* autosaveTimeCombo;
@@ -94,20 +114,6 @@ private:
   QCheckBox* dbgLibCheck;
   QCheckBox* dbgFloatCheck;
   QCheckBox* dbgTerminalCheck;
-
- private slots:
-  void slotOkClicked();
-  void slotDefault();
-  void slotQtClicked();
-  void slotKDEClicked();
-  void slotKDEUpdateReq();
-  void slotSetDebug();
-  void slotQt2Clicked();
-  void slotKDE2Clicked();
-// --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
-	void slotPPathClicked();
-// ---
-
 };
 
 #endif

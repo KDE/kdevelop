@@ -1234,8 +1234,8 @@ void CKDevelop::initConnections(){
   connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   // connect Docbrowser rb menu
-  connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
-  								this, SLOT(slotURLSelected(KHTMLView*,const QString&,int,const char*))); 	
+//  connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
+//  								this, SLOT(slotURLSelected(KHTMLView*,const QString&,int,const char*))); 	
 
   connect(browser_widget, SIGNAL(completed()),this, SLOT(slotDocumentDone()));
   connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));

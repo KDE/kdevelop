@@ -2479,17 +2479,16 @@ void CKDevelop::slotBookmarksClear(){
   }  
 }
 
-void CKDevelop::openBrowserBookmark(char* file)
+void CKDevelop::openBrowserBookmark(const QString& file)
 {
   slotStatusMsg(i18n("Opening bookmark..."));
-  slotURLSelected(browser_widget, QString(file),1,"test");  
+  slotURLSelected(file,1,"test");
   slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotBookmarksBrowserSelected(int id_)
 {
-  char* file = doc_bookmarks_list.at(id_);
-  openBrowserBookmark(file);  
+  openBrowserBookmark(doc_bookmarks_list.at(id_));
 }  
 
 void CKDevelop::slotBookmarksNext()
@@ -2498,8 +2497,9 @@ void CKDevelop::slotBookmarksNext()
   {
     if(doc_bookmarks_list.count() > 0)
     {
-      char* file = doc_bookmarks_list.next();
-      if(file == NULL) file = doc_bookmarks_list.first();
+      QString file = doc_bookmarks_list.next();
+      if (file.isEmpty())
+        file = doc_bookmarks_list.first();
       openBrowserBookmark(file);  
     }
   }
@@ -2515,8 +2515,9 @@ void CKDevelop::slotBookmarksPrevious()
   {
     if(doc_bookmarks_list.count() > 0)
     {
-      char* file = doc_bookmarks_list.prev();
-      if(file == NULL) file = doc_bookmarks_list.last();
+      QString file = doc_bookmarks_list.prev();
+      if(file.isEmpty())
+        file = doc_bookmarks_list.last();
       openBrowserBookmark(file);  
     }
   }
@@ -2723,7 +2724,7 @@ void CKDevelop::showDocHelp(const QString& filename)
 {
   QString file = DocTreeKDevelopBook::locatehtml(filename);
   if (!file.isEmpty())
-    slotURLSelected(browser_widget, file, 1, "test");
+    slotURLSelected(file, 1, "test");
 }
 
 void CKDevelop::slotHelpContents(){
@@ -2816,7 +2817,7 @@ void CKDevelop::slotHelpAPI(){
     }
     else{
       slotStatusMsg(i18n("Switching to project API Documentation..."));
-      slotURLSelected(browser_widget,api_file,1,"test");     
+      slotURLSelected(api_file,1,"test");
       slotStatusMsg(i18n("Ready.")); 
     }
   }
@@ -2834,11 +2835,11 @@ void CKDevelop::slotHelpManual(){
       if(!QFileInfo(doc_file).exists())
         return;   // replaced by right mouse button handling to generate the help manual in DocTreeView
       else
-        slotURLSelected(browser_widget,doc_file,1,"test");
+        slotURLSelected(doc_file,1,"test");
     }
     else{
       slotStatusMsg(i18n("Switching to project Manual..."));
-      slotURLSelected(browser_widget,doc_file,1,"test");
+      slotURLSelected(doc_file,1,"test");
       slotStatusMsg(i18n("Ready."));
     }
   }
@@ -3122,7 +3123,7 @@ void CKDevelop::slotNewUndo(){
 }
 
 
-void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*)
+void CKDevelop::slotURLSelected(const QString& url,int,const char*)
 {
   if (url.isEmpty())
     return;
@@ -3467,7 +3468,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*)
     stream << "\n</TABLE></BODY></HTML>";
 
     file.close();
-    slotURLSelected(browser_widget, filename, 1,"test");
+    slotURLSelected(filename, 1,"test");
     return;
   }
   else
@@ -3475,7 +3476,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*)
     ASSERT (useHtDig);
     filename = locateLocal("appdata", "search_result.html");
     if (QFile::exists(filename))
-      slotURLSelected(browser_widget, filename, 1,"test");
+      slotURLSelected(filename, 1,"test");
   }
 }
 
@@ -3965,7 +3966,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
       return;
     }
   }
-  slotURLSelected(browser_widget, url_file, 1, "test");
+  slotURLSelected(url_file, 1, "test");
   
 }
 

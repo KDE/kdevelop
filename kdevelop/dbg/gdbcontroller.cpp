@@ -1237,6 +1237,8 @@ void GDBController::slotStart(const QString& application, const QString& args, c
   // An alternative to this would be catch load, catch unload, but they don't work!
   if (config_breakOnLoadingLibrary_)
     queueCmd(new GDBCommand("set stop-on 1", NOTRUNCMD, NOTINFOCMD));
+  else
+    queueCmd(new GDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
 
   // Print some nicer names in disassembly output. Although for an assembler
   // person this may actually be wrong and the mangled name could be better.
