@@ -23,7 +23,6 @@ Comment[sv]=Valgrind är ett verktyg som hjälper dig hitta minneshanteringsprob
 Comment[ta]=Valgrind கருவி உங்கள் நிரலில் உள்ள நினைவக மேலாளர் பிரச்சினைகளை கண்டுபிடிக்க உதவும். http://developer.kde.org/~sewardj/
 Comment[xx]=xxValgrind is a tool that helps you find memory management problems in programs. http://developer.kde.org/~sewardj/xx
 Comment[zh_CN]=Valgrind 是一个帮助你发现程序中内存管理错误的工具。http://developer.kde.org/~sewardj/
-Comemnt[de]=Valgrind ist ein Werkzeug, dass bei der Suche nach Speicherverwaltungsproblemen in Programmen hilft. http://developer.kde.org/~sewardj/
 Name=KDevvalgrind
 Name[da]=KDevelop Valgrind
 Name[de]=Unterstützung für Valgrind (KDevelop)
