@@ -136,7 +136,7 @@ void ClassViewPart::setupActions( )
     m_popupAction->setWhatsThis(i18n("<b>Class browser actions</b><p>A menu for commonly used class browser actions "
                                      "like switch between function declaration and definition, "
                                      "add classes, methods and attributes, "
-                                     "graphical class viewer."));
+                                     "inheritance diagram."));
     m_popupAction->setDelayed(false);
     KPopupMenu *popup = m_popupAction->popupMenu();
     //@todo check if language support has namespaces, classes, etc.
@@ -177,8 +177,8 @@ void ClassViewPart::setupActions( )
 #endif
 
     popup->insertSeparator();
-    id = popup->insertItem(i18n("Graphical Class Hierarchy"), this, SLOT(graphicalClassView()));
-    popup->setWhatsThis(id, i18n("<b>Graphical class hierarchy</b><p>Displays inheritance relationship between classes in project. "
+    id = popup->insertItem(i18n("Inheritance Diagram"), this, SLOT(graphicalClassView()));
+    popup->setWhatsThis(id, i18n("<b>Inheritance diagram</b><p>Displays inheritance relationship between classes in project. "
                                  "Note, it does not display classes outside inheritance hierarchy."));
 }
 
