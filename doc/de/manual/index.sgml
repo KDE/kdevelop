@@ -5,7 +5,7 @@
 <subtitle>Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.1
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 2.0 , Apr 11,1999
+<date>Version 3.0 , Mär 16,2000
 <abstract>
 Dieses Handbuch ist Teil der KDevelop Integrierten Entwicklungsumgebung und ist daher ebenso unter der GNU General Public License
 lizensiert; siehe <ref id="Copyright" name="Copyright">.
@@ -101,7 +101,8 @@ Dieses Handbuch ist daher unterteilt in folgende Abschnitte:
 <item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und Linker Flags und der Projekteinstellungen.
 <item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt Ihnen ausführlich, wie Sie den KDevelop Klassenbrowser benutzen.
 <item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er Ihnen C++ Code erzeugt.
-<item>Kapitel <ref id="Debuggen einer Anwendung" name="Debuggen einer Anwendung">, Features und Erläuterungen zum internen Debugger
+<item>Kapitel <ref id="Der interne Debugger" name="Der interne Debugger">, gibt eine Übersicht über die Einstellungen zum Debuggen und die Verwendung des internen Debugggers.
+<item>Kapitel <ref id="CVS Integration" name="CVS Integration">, erkärt, wie die Revisions-Kontrollsysteme CVS und RCS mit Ihrem KDevelop Projekt verwendet werden.
 <item>Kapitel <ref id="Grundsätzliche Konfiguration" name="Grundsätzliche Konfiguration"> zeigt Ihnen, wie Sie generelle Einstellungen zur Benutzung von KDevelop vornehmen.
 <item>Kapitel <ref id="Fragen und Antworten" name="Fragen und Antworten">, behandelt Fragen, die bei der Benutzung von KDevelop unter verschiedenen Unix-Systemen vorkommen und generelle Problemlösungen.
 </itemize>
@@ -110,6 +111,37 @@ Für Programmieranfänger und neue Benutzer dieses Produkts empfehlen wir, sich in
 mit der Entwicklungsumgebung zu arbeiten, da es die Benutzung vollständig behandelt. Das Verständnis, wie Vorgänge am schnellsten zu erledigen sind,
 wird Ihnen viel Zeit ersparen, nach Funktionen und Features zu suchen, genauso, wie es Sie in die Lage versetzt, erstklassige
 Entwicklungswerkzeuge noch einfacher zu benutzen.
+
+<sect>Über das KDevelop Projekt
+<p>
+Das KDevelop Projekt wurde im Sommer 1998, nachdem KDE 1.0 für Linux/Unix verfügar war, aus der Taufe gehoben und hatte zum Ziel,
+eine einfach zu benutzende C/C++ IDE zu erstellen, die inbesondere auf die KDE Umgebung abzielt. Seitdem haben sich viele Helfer
+und Unterstützer, sowie Sponsoren gefunden, die dem Team dabei helfen, seine Arbeit an der inzwischen weitläufig bekannten
+Programmierumgebung fortzusetzen. Innerhalb von anderthalb Jahren, hat sich die IDE zu einer full-featured KDE Anwendung
+entwickelt, welche die größtmögliche Funktionalität und Stabilität aufweist, da die Entwickler begannen die IDE mit Hilfe der IDE
+selbst weiterzuentwickeln, sobald die erforderliche Funktionalität erreicht war. Dadurch konnten die meisten Fehler von den
+Autoren gefunden und sehr schnell behoben, sowie erforderliche Erweiterungen erkannt und implementiert werden.
+
+Das erste offizielle stable Release war die Version 1.0, die am 6. Dezember 1999 erschien. Danach hat das KDevelop Team weitere
+Features implementiert und durch neuen oder verbesserten Code eine noch größere Stabilität erreicht. Das Ergebnis war die Version
+1.1 vom 28. Februar 2000.
+
+Seitdem fährt das Projekt fort, mehr Funktionalität zu integrieren und die Codebasis zu vereinfachen. Hinzu kommt eine
+Internationalierungsgruppe mit vielen Übersetzern, die KDevelop in so viele Sprachen wie möglich transferieren, um der
+internationalen Entwicklergemeinde eine IDE in der jeweiligen Muttersprache zur Verfügung zu stellen. Dies beinhaltet auch die
+umfangreichen Handbücher, die zu KDevelop gehören oder damit ausgeliefert werden. Viele Anwender haben ihre Erfahrung und ihr
+Wissen in das Projekt eingebracht, das sich heute als eines der vielversprechendsten Produkte für Linux/Unix Entwickler
+präsentieren kann, um es noch stabiler und auf andere Unices portierbar zu machen.
+
+<sect>Gedruckte Versionen
+<p>
+Eine gedruckte Version der kompletten KDevelop Dokumentation ist als Buch unter dem Titel <bf>Developing
+Applications for Linux: KDE Edition</bf> erhältlich und kann online entweder auf <htmlurl url="http://www.kdevelop.org"
+name="http://www.kdevelop.org"> oder auf <htmlurl url="http://www.opendocs.org" name="http://www.opendocs.org"> bestellt werden. Ein
+Teil des Gewinns fließt zurück in das KDevelop Projekt, um die Weiterentwicklung von KDevelop zu unterstützen.
+
+Ebenfalls auf <htmlurl url="http://www.kdevelop.org" name="http://www.kdevelop.org"> erhältlich, sind druckbare Versionen in DVI,
+PostScript und PDF Format, sowohl in A4 als auch in Letter-Größe.
 
 <chapt>Installation<label id="Installation">
 <p>
@@ -2174,7 +2206,7 @@ Ausgabe durch die aktuellen Einstellungen aussehen wird.
 <sect1>Programme
 <p>
 KDevelop erzeugt standardmäßig Projektdateien mit der Dateierweiterung .kdevprj. Diese Datei enthält alle Projektinformationen, sodaß
-Sie vorsichtig sein sollten, sie nicht zu löschen. Die Datei wird im Hauptverzeichnis des Projekts gespeichert und muß zum Laden des
+Sie darauf achten sollten sollten, sie nicht zu löschen. Die Datei wird im Hauptverzeichnis des Projekts gespeichert und muß zum Laden des
 Projekts geöffnet werden. Die Projektdatei enthält alle Informationen ihrer Dateien wie Dateieigenschaften, Installationspfade,
 Distributionsstatus und die Compileroptionen (CXXFLAGS). Das Setzen von Dateioptionen erlaubt Ihnen anzugeben, wohin die Dateien
 installiert werden sollen.
@@ -2190,7 +2222,7 @@ Aus Sicht des Programmierers ist dieses Rahmenprogramm an das MVC (Modell-Ansich
 drei Klassen ausgelegt. Dieser Applikationstyp bietet bereits eine logische Strukturierung zur Erstellung von Anwendungen mit einer
 graphischen Benutzerschnittstelle.
 
-<item>eine KDE-basiertes Rahmenprogramm. Dieser Applikationstyp bietet die größte Flexibilität für diejenigen, die ihr Programm von
+<item>ein KDE-basiertes Rahmenprogramm. Dieser Applikationstyp bietet die größte Flexibilität für diejenigen, die ihr Programm von
 Grund auf entwickeln möchten, kann aber auch als Ausgangspunkt von Wizards und Modulen verwendet werden.
 
 <item>ein rein Qt-basiertes Rahmenprogramm. Für Entwickler, die nur die Qt-Bibliothek als graphische Benutzerschnittstelle verwenden
@@ -2201,8 +2233,13 @@ vollständig unterstützt wird, sollten Sie keine Probeme bei der Erstellung volls
 möchten. Enfernen Sie einfach die Zeile mit "Hello World" in der main()-Funktion und konstruieren Sie Ihre Klassen wie gewöhnlich mit
 KDevelop.
 
-<item>ein C-Rahmenprogramm. Dieser Programmtyp ist auf das Vorhandensein eines C-Compilers beschränkt.
+<item>ein C-Rahmenprogramm. Dieser Programmtyp ist auf die Verwendung des C-Compilers beschränkt.
 </itemize>
+
+Desweiteren erlaubt es KDevelop, Projekte für KDE 2 und Qt 2.x zu erstellen. Diese machen, bevor Sie ein Projekt erstellen, die
+Installation der benötigten Bibliotheken, sowie das Setzen des entsprechenden Installationspfades im KDevelop Setupdialog,
+erforderlich (siehe auch <ref id="Grundsätzliche Konfiguration" name="Grundsätzliche Konfiguration">), damit sichergestellt ist,
+daß alles automatisch funktioniert.
 
 Zusätzlich bietet sich KDevelop an, um mit bereits existierenden Projekten zu arbeiten. Diese können jede Option haben, die der
 Programmierer selbst in configure und Makefiles gesetzt hat. Soweit es die Ausführung und den Erstellungsprozess betrifft, sind zur
@@ -2303,7 +2340,8 @@ Unterstützung für ein Single Document-view Interface (SDI) Modell.
 <item>QT 2.1 MDI: Erzeugt eine Qt-2.1 Applikation mit einem Hauptfenster, das eine Menüleiste, Werkzeugleiste und Statusleiste enthält, 
 einschließlich Unterstützung für ein Multiple Document Interface (MDI) Modell.
 <item>QextMDI: Erzeugt eine auf der QextMDI Bibliothek und Qt2.0x basierende MDI Anwendung. Ermöglicht das Umschalten zwischen den beiden 
-Modi Toplevel und Kind-Frame. Benötigt QextMDI !!! (www.geocities.com/gigafalk/qextmdi.htm).
+Modi Toplevel und Kind-Frame. Benötigt QextMDI. Mehr Informationen erhalten Sie auf
+<htmlurl url="http://www.geocities.com/gigafalk/qextmdi.htm" name="http://www.geocities.com/gigafalk/qextmdi.htm">.
 </itemize>
 
 Die beiden Typen C und C++ bieten die Erstellung einer Kommandozeilenanwendung an. 
@@ -2313,6 +2351,8 @@ Außerdem können Sie ein völlig leeres Projekt erzeugen, um beispielsweise mit be
 Der Wizard fragt Sie nach dem Projektnamen, Version und dem Verzeichnis in dem das Projekt erstellt werden soll. Außerdem können Sie Ihren 
 Namen und Ihre EMail Adresse angeben. Diese werden in den Header und cpp Schablonen am Anfang Ihrer Quelldateien eingetragen und werden 
 außerdem für die Einträge in die -lsm Datei verwendet.
+
+Zum Hinzufügen der Revisionskontrolle zu Ihrem Projekt, lesen Sie bitte das Kapitel <ref id="CVS Integration" name="CVS Integration">.
 
 <sect>Öffnen und Schließen von Projekten
 <p>
@@ -3087,7 +3127,7 @@ die Sie benötigen mögen, hinzuzufügen.
 
 Informationen zur Implementation der Widgetfunktionen erhalten Sie im <htmlurl url="programming/index-6.html" name="KDevelop Programming Handbook">.
 
-<chapt>Debuggen einer Anwendung<label id="Debuggen einer Anwendung">
+<chapt>Der interne Debugger<label id="Der interne Debugger">
 <sect>Einstellungen
 <p>
 
@@ -3275,7 +3315,7 @@ bis zur nächsten Unterbrechung oder bis zum Ende des Codes ausführen). Der Benut
 anhält. Deshalb wird in dieser Situation kein "continue" ausgeführt, sondern wir lassen das Programm an diesem Punkt (dies wird irgendwo innerhalb 
 des dlopen Kommandos sein). Das mag etwas verwirren, kann aber nicht vermieden werden.
 
-<chapt>CVS Integration
+<chapt>CVS Integration <label id="CVS Integration">
 <p>
 KDevelop unterstützt auch die Verwaltung Ihrer Projekte mit Hilfe von CVS Archiven. CVS (Concurrent Version 
 System) hat zum Ziel, Gruppen von Entwicklern das voneinander unabhängige Arbeiten am gleichen Quellcode zu 
@@ -3286,6 +3326,57 @@ werden dann von den Entwicklern dem CVS hinzugefügt oder aus ihm entfernt.
 Der Entwickler arbeitet lokal mit seiner Kopie des CVS Baumes. Er nimmt die Änderungen an seinen Dateien vor und testet, ob sein 
 Projekt weiterhin arbeitet, wenigstens insoweit, daß unvollständige Quellen nicht die Arbeit der anderen Entwickler, die seine 
 Änderungen erhalten, behindern oder unmöglich machen.
+
+<sect>Erzeugen eines CVS Archivs
+<p>
+Wenn Sie ein neues Projekt mit KDevelop erstellen, können Sie dieses Projekt direkt als CVS-Modul importieren. Um dies
+einzuschalten, muß CVS installiert sein ( das sollte bereits der Fall sein, wenn nicht, passen Sie Ihre Systeminstallation an oder
+kontaktieren Sie Ihren Systemadministrator).
+
+Wählen Sie "CVS" auf der dritten Seite des Application Wizard (VCS Unterstützung). Dadurch werden die Eingabefelder auf dieser
+Seite aktiviert und Sie können die Importparameter eingeben. Der AppWiz wird daraufhin Ihr Projekt als Modul in das CVSROOT
+Verzeichnis importieren und Ihr Projekt als lokale Kopie des zugehörigen CVS Verzeichnisses erstellen, d.h. Sie arbeiten immer mit
+einer Kopie Ihres Projektes.
+
+<bf>Achtung:</bf> Damit Sie ein Archiv erstellen können, benötigen Sie Schreibrechte im CVSROOT Verzeichnis ! Außerdem muß sich
+das Rootverzeichnis auf derselben Maschine wie KDevelop befinden ! Wenn Sie Ihr Archiv auf einem Remote Server haben wollen,
+müssen Sie entweder Kontakt mit dem Systemadministrator aufnehmen, damit dieser ein Archiv auf dem Server anlegt, oder Sie führen
+die folgenden Schritte aus:
+
+<itemize>
+<item>Erstellen Sie Ihr Projekt lokal
+<item>Importieren Sie das Projekt als Modul auf den CVS Server
+<item>Löschen Sie den lokalen Projektverzeichnisbaum
+<item>Checken Sie das Modul vom CVS Server aus
+<item>Schalten Sie, nachdem Sie das Projekt geladen haben, die CVS-Unterstützung in den Projektoptionen ein. Wie Sie die
+Unterstützung einschalten können, wird weiter unten beschrieben.
+</itemize>
+
+Für weitere Details zu den CVS Kommandos, konsultieren Sie bitte Ihre Systemhilfe, z.B. indem Sie <tt>man cvs</tt> eingeben.
+
+Im folgenden, werden wir die Optionen beschreiben, die zur Verfügung stehen, wenn Sie ein Archiv mit dem KAppWizard erzeugen.
+
+<descrip>
+<tag/VCS Verzeichnis:/ Dies ist das CVS Rootverzeichnis, in das der Projektverzeichnisbaum importiert wird, und in dem Commits,
+Checkouts und Updates ausgeführt werden.
+
+<tag/Archiv in VCS/ Dies ist der Modulname für Ihr Projekt. Da es der Name Ihres Projektverzeichnisses ist, können Sie ihn nicht
+ändern.
+
+<tag/Vendor Zeichen/ Dies ist das Zeichen für den kompletten Zweig.
+
+<tag/Log Nachricht/ ist die erste Log-Nachricht des neuen Moduls. Wenn Sie Dateien zum Archiv hinzufügen oder commiten, werden Sie
+jedesmal nach einer Log-Meldung gefragt, um die Änderungen zu dokumentieren.
+
+<tag/Release Zeichen/ Dies gibt an, unter welchem Zeichen Ihr Projekt gefunden werden kann. Das bedeutet, Sie können mehrere
+Module mit dem gleichen Namen im CVS haben, die sich aber in diesem Zeichen unterscheiden, Sie haben also verschiedene Zweige
+Ihres Projekts. Beispiel: KDE 2 wird unter dem HEAD (Standardzweig) entwickelt, KDE 1.1.2 hat das Zeichen (den
+Tag) KDE_1_1_2_RELEASE.
+</descrip>
+
+Nachdem Sie Ihr Projekt mit dem Applicattion Wizard erstellt haben, ist die CVS Unterstützung für Ihr Projekt eingeschaltet (wenn
+Sie dies ausgewählt haben), Sie können also Änderungen, wie im Abschnitt "Verwendung von CVS Kommandos" beschrieben, commiten und
+hinzufügen.
 
 <sect>Einschalten der CVS Unterstützung
 <p>
@@ -3460,6 +3551,13 @@ die Suche in einer größeren Suchdatenbank beschleunigt und die Trefferquote ist 
 Verwendung der Suchfunktion, sehen Sie unter 
 <ref id="Benutzung des Dokumentationsbrowsers" name="Benutzung des Dokumentationsbrowsers"> nach.
 
+<sect2>Auch KDOC-Referenz Ihres Projektes erstellen
+<p>
+Diese Option ermöglicht es, eine Crossreferenz für Ihr Projekt zu erstellen, wenn Sie die API Dokumentation mit KDoc erzeugen.
+Diese Datei wird im Referenzverzeichnis erstellt und stellt Ihr Projekt im Dokumentationsbaum zur Verfügung. Wenn Sie im
+Referenzverzeichnis kein Schreibrecht haben, müssen Sie diese Option ausschalten, damit Sie Ihre API Dokumentation fehlerfrei
+generieren können.
+
 <sect>Debugger <label id="Debugger">
 <p>
 Standardmäßig verwendet KDevelop den internen Debugger. Aktivieren Sie das Kontrollkästchen "Verwende externen Debugger", wenn Sie einen anderen Debugger verwenden wollen und geben 
@@ -3628,6 +3726,36 @@ aktualisiert die Makedateien).
 <bf>A:</bf> Wenn es sich dbei der entfernten Datei um eine Headerdatei handelt, die automatisch von automoc bearbeitet wird (der 
 automatisch den Qt-Meta-Object-Compiler über alle Header laufen läßt), ist die entfernte Datei immer noch als von moc erzeugte 
 *.moc.cpp Datei vorhanden und kompiliert. Entfernen Sie die entsprechende *.moc.cpp Datei und erstellen Sie Ihr Projekt neu.
+
+<bf>F:</bf> Configure beschwert sich darüber, daß es eine kleine KDE Anwendung nicht ausführen kann. Eine Untersuchung der
+config.log zeigt, daß die Bibliothek libXext nicht gefunden wird.
+<bf>A:</bf> Installieren Sie das Paket xdevel.
+
+<bf>F:</bf> Ich entwickle eine Anwendung, für die ich die -D Option des Präprozessors einschalten muß. Wenn ich dies in KDevelop
+in den Projektoptionen einstelle, ist alles in Ordnung. Wenn ich aber eine Distribution meines Projektes erstelle, wird die -D
+Option nicht verwendet. Was muß ich machen, damit es funktioniert?
+<bf>A:</bf> Editieren Sie die Datei configure.in in Ihrem Projekthauptverzeichnis. Sie müssen hier am Anfang der Datei
+eingeben:
+
+CXXFLAGS=$(CXXFLAGS) " -DYOURDEFINE"
+AC_SUBST(CXXFLAGS)
+
+
+<bf>F:</bf> Bei mir läuft ein KDE 2 Schnappschuß und ich möchte KDevelop unter KDE 2 verwenden. Wie kann ich am besten vorgehen?
+<bf>A:</bf> Da KDevelop für KDE 2 sich zur Zeit noch in der Entwicklung befindet, sollten Sie in Betracht ziehen, die stabile 1.x
+Version von KDevelop zu verwenden. Sie können dies mit Hilfe eines Shellskripts machen:
+
+#/bin/bash
+QTDIR=/usr/lib/qt-1.44 export QTDIR
+KDEDIR=/opt/kde export KDEDIR
+exec /opt/kde/bin/kdevelop
+
+Speichern Sie diese Datei zum Beispiel als kdevelop1 und machen Sie sie ausführbar, indem Sie eingeben:
+
+chmod 755 kdevelop1
+
+Sie können nun KDevelop 1.x unter KDE 2 ausführen, indem Sie kdevelop1 aufrufen. Zum Erstellen von KDE 2 Anwendungen mit KDevelop
+1.x, müssen Sie den korrekten Pfad im KDevelop-Setup eingeben, auch wenn Sie KDevelop unter KDE 2 ausführen !
 
 <chapt>Autoren
 <p>
