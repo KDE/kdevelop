@@ -521,7 +521,7 @@ void QEditorView::internalCollapseBlock( QTextParagraph* p )
                 break;
             }
 	    
-	    kdDebug(9032) << "hide parag " << p->paragId() << " level = " << data->level() << endl;
+	    // kdDebug(9032) << "hide parag " << p->paragId() << " level = " << data->level() << endl;
             p->hide();
 	    
             p = p->next();

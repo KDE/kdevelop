@@ -152,8 +152,8 @@ QEditor::QEditor( QWidget* parent, const char* name )
 
     connect( this, SIGNAL(cursorPositionChanged(QTextCursor*) ),
 	     this, SLOT(doMatch(QTextCursor*)) );
-    connect( this, SIGNAL(cursorPositionChanged(int, int) ),
-	     this, SLOT(slotCursorPositionChanged(int, int)) );
+//    connect( this, SIGNAL(cursorPositionChanged(int, int) ),
+//	     this, SLOT(slotCursorPositionChanged(int, int)) );
 }
 
 QEditor::~QEditor()
@@ -457,18 +457,10 @@ void QEditor::setText( const QString& text )
     setTextFormat( KTextEdit::AutoText );
 }
 
-void QEditor::slotCursorPositionChanged( int /*line*/, int )
+void QEditor::slotCursorPositionChanged( int line, int column )
 {
-#if 0
-    if( line != m_currentLine ){
-	if( m_currentLine != -1 ){
-	    clearParagraphBackground( m_currentLine );
-	}
-	m_currentLine = line;
-	setParagraphraphBackgroundColor( m_currentLine,
-				     palette().active().mid() );
-    }
-#endif
+    Q_UNUSED( line );
+    Q_UNUSED( column );
 }
 
 int QEditor::level( int line) const
@@ -510,18 +502,16 @@ void QEditor::setBackgroundParser( BackgroundParser* parser )
 
 void QEditor::refresh()
 {
+    document()->invalidate();
     QTextParagraph* p = document()->firstParagraph();
     while( p ){
-	if( p->endState() == -1 ){
-	    break;
-	}
-	p->setEndState( -1 );
-        p->invalidate( 0 );
+        p->format();
 	p = p->next();
     }
-    sync();
-    viewport()->repaint( true );
+    removeSelection( ParenMatcher::Match );
+    removeSelection( ParenMatcher::Mismatch );
     ensureCursorVisible();
+    repaintContents( false );
 }
 
 bool QEditor::event( QEvent* e )
