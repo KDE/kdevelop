@@ -211,7 +211,11 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiMainFrm : public KParts::DockMainWindow
 protected:
    QextMdiChildArea        *m_pMdi;
    QextMdiTaskBar          *m_pTaskBar;
+#if QT_VERSION < 300
    QList<QextMdiChildView> *m_pWinList;
+#else
+   QPtrList<QextMdiChildView> *m_pWinList;
+#endif
    QextMdiChildView        *m_pCurrentWindow;
    QPopupMenu              *m_pWindowPopup;
    QPopupMenu              *m_pTaskBarPopup;
@@ -403,7 +407,11 @@ public:
    /**
    *
    */
+#if QT_VERSION < 300
    void findRootDockWidgets(QList<KDockWidget>* pRootDockWidgetList, QValueList<QRect>* pPositionList);
+#else
+   void findRootDockWidgets(QPtrList<KDockWidget>* pRootDockWidgetList, QValueList<QRect>* pPositionList);
+#endif
 
 public slots:
    /**

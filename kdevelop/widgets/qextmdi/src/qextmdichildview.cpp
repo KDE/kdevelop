@@ -412,7 +412,7 @@ void QextMdiChildView::activate()
       m_bInterruptActivation = FALSE;
    }
    else {
-	    if(!m_bFocusInEventIsPending) {
+      if(!m_bFocusInEventIsPending) {
          setFocus();
       }
       //qDebug("QextMdiChildView::activate() called!");
@@ -527,7 +527,7 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
          }
          delete list;   // delete the list, not the objects
       }
-      if (!isAttached()) {   // is toplevel, for attached views activation is done by frame event filter
+      if (!isAttached()) {   // is toplevel, for attached views activation is done by main frame event filter
          static bool m_bActivationIsPending = FALSE;
          if(!m_bActivationIsPending) {
             m_bActivationIsPending = TRUE;
@@ -572,7 +572,11 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
       if ((pNewChild != 0L) && (pNewChild->isWidgetType()))
       {
          QWidget* pNewWidget = (QWidget*)pNewChild;
+#if QT_VERSION < 300
          if (pNewWidget->testWFlags(WType_Modal))
+#else
+         if (pNewWidget->testWFlags(Qt::WType_Dialog | Qt::WShowModal))
+#endif
              return FALSE;
          QObjectList *list = pNewWidget->queryList( "QWidget" );
          list->insert(0, pNewChild);         // add the new child to the list too, just to save code

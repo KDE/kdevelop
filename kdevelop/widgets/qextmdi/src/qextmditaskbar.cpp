@@ -141,7 +141,11 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
    ,m_bSwitchedOn(FALSE)
 {
    m_pFrm = parent;
+#if QT_VERSION < 300
    m_pButtonList = new QList<QextMdiTaskBarButton>;
+#else
+   m_pButtonList = new QPtrList<QextMdiTaskBarButton>;
+#endif
    m_pButtonList->setAutoDelete(TRUE);
 //QT30   setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
@@ -302,10 +306,11 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
    int tbHandlePixel;
 #if QT_VERSION < 300
    tbHandlePixel = style().toolBarHandleExtent();
+   int buttonAreaWidth = taskBarWidth - tbHandlePixel - style().defaultFrameWidth() - 5;
 #else
    tbHandlePixel = style().pixelMetric(QStyle::PM_DockWindowHandleExtent, this);
+   int buttonAreaWidth = taskBarWidth - tbHandlePixel - style().pixelMetric(QStyle::PM_DefaultFrameWidth, this) - 5;
 #endif
-   int buttonAreaWidth = taskBarWidth - tbHandlePixel - style().defaultFrameWidth() - 5;
    if( ((allButtonsWidthHint) <= buttonAreaWidth) || (width() < parentWidget()->width())) {
       for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
          b->setText( b->actualText());
