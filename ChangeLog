@@ -1,5 +1,7 @@
 2003-02-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
-	* parts/cppsupport: fix nasty inner class bug (part of bug 45998)
+	* parts/cppsupport: fix nasty inner class bug (part of bug 45998). Determine
+        whether we are at global scope, and then insert class/struct accordingly to
+        class store. This one goes for you Roberto ;)
 
 2003-02-26 jbb <jbb@kdevelop.org>
     * parts/debugger
