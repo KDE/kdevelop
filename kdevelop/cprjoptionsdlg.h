@@ -145,7 +145,7 @@ private:
   QString old_cxxflags;
   bool need_configure_in_update;
   bool need_makefile_generation;
-	KConfig *settings;
+  KConfig *settings;
   // Binary path
   QLineEdit* binary_edit;
   QLineEdit* libtool_edit;
