@@ -27,6 +27,22 @@
 #include <kdevcoderepository.h>
 #include <kdevlanguagesupport.h>
 
+#include <qcomboview.h>
+#include <klistviewaction.h>
+
+
+class TagListViewItem: public QListViewItem{
+public:
+    TagListViewItem(QListView *parent, Tag tag, QString name):
+        QListViewItem(parent, name), m_tag(tag)
+    {
+    }
+    Tag tag() const { return m_tag; }
+private:
+    Tag m_tag;
+};
+
+
 typedef KGenericFactory<ClassBrowserPart> ClassBrowserFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevclassbrowser, ClassBrowserFactory( "kdevclassbrowser" ) );
 
@@ -80,20 +96,14 @@ void ClassBrowserPart::slotProjectClosed()
 
 void ClassBrowserPart::setupActions( )
 {
-    m_actionNamespaces = new KSelectAction( i18n("Namespaces"), 0, actionCollection(), "namespaces_combo" );
-    //m_actionNamespaces->setEditable( true );
-    m_actionNamespaces->setMenuAccelsEnabled( false );
-    connect( m_actionNamespaces, SIGNAL(activated(const QString&)), this, SLOT(selectNamespace(const QString&)) );
+    m_actionNamespaces = new KListViewAction( new QComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
+    connect( m_actionNamespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(const QListViewItem*)) );
 
-    m_actionClasses = new KSelectAction( i18n("Classes"), 0, actionCollection(), "classes_combo" );
-    //m_actionClasses->setEditable( true );
-    m_actionClasses->setMenuAccelsEnabled( false );
-    connect( m_actionClasses, SIGNAL(activated(const QString&)), this, SLOT(selectClass(const QString&)) );
+    m_actionClasses = new KListViewAction( new QComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
+    connect( m_actionClasses->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectClass(const QListViewItem*)) );
 
-    m_actionMethods = new KSelectAction( i18n("Methods"), 0, actionCollection(), "methods_combo" );
-    //m_actionMethods->setEditable( true );
-    m_actionMethods->setMenuAccelsEnabled( false );
-    connect( m_actionMethods, SIGNAL(activated(const QString&)), this, SLOT(selectMethod(const QString&)) );
+    m_actionMethods = new KListViewAction( new QComboView(true), i18n("Methods"), 0, 0, 0, actionCollection(), "methods_combo" );
+    connect( m_actionMethods->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectMethod(QListViewItem*)) );
 }
 
 void ClassBrowserPart::slotCatalogAdded( Catalog * catalog )
@@ -112,10 +122,10 @@ void ClassBrowserPart::slotCatalogChanged( Catalog * catalog )
 {
     Q_UNUSED( catalog );
 
-    QString m_selectedNamespaces = m_actionNamespaces->currentText();
+/*    QString m_selectedNamespaces = m_actionNamespaces->currentText();
     QString m_selectedClasses = m_actionClasses->currentText();
     QString m_selectedMethods = m_actionMethods->currentText();
-
+*/
     refresh();
 
     //m_actionNamespaces->setCurrentText( m_selectedNamespaces );
@@ -132,141 +142,57 @@ void ClassBrowserPart::refresh( )
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "kind", Tag::Kind_Namespace );
 
-    m_actionNamespaces->clear();
+    m_actionNamespaces->view()->clear();
     QValueList<Catalog*> l = codeRepository()->registeredCatalogs();
     QValueList<Catalog*>::Iterator it = l.begin();
     while( it != l.end() ){
-	Catalog* catalog = *it;
-	++it;
+        Catalog* catalog = *it;
+        ++it;
 
-	namespaceList += catalog->query( args );
+        namespaceList += catalog->query( args );
     }
 
     namespaceList = ClassBrowserUtils::simplifyNamespaces( namespaceList );
-    QStringList items;
-    items << QString::fromLatin1("");
 
+    new QListViewItem(m_actionNamespaces->view()->listView(), i18n("(Global Scope)"));
     QValueList<Tag>::Iterator dit = namespaceList.begin();
     while( dit != namespaceList.end() ){
-	Tag& t = *dit;
-	++dit;
-
-	items.append( t.path() );
+        new TagListViewItem(m_actionNamespaces->view()->listView(), *dit, (*dit).path());
+        ++dit;
     }
-
-    items.sort();
-
-    kdDebug() << "#items is " << items.size() << endl;
-    m_actionNamespaces->setItems( items );
 
     refreshClasses();
     refreshMethods();
     adjust();
 }
 
-void ClassBrowserPart::selectNamespace( const QString & name )
+void ClassBrowserPart::selectNamespace( const QListViewItem * it )
 {
-    Q_UNUSED( name );
+    Q_UNUSED( it );
 
     refreshClasses();
     refreshMethods();
     adjust();
 }
 
-void ClassBrowserPart::selectClass( const QString & name )
+void ClassBrowserPart::selectClass( const QListViewItem * it )
 {
-    Q_UNUSED( name );
+    Q_UNUSED( it );
 
     refreshMethods();
     adjust();
 }
 
-void ClassBrowserPart::selectMethod( const QString & name )
+void ClassBrowserPart::selectMethod( QListViewItem * it )
 {
-    if( name.isEmpty() )
-	return;
+    TagListViewItem * tagItem = dynamic_cast<TagListViewItem*>(it);
+    if (!tagItem)
+        return;
 
-    int idx = name.find( '(' );
-    if( idx == -1 )
-	return;
-
-    QString methodName = name.left( idx );
-    kdDebug() << "search implementation of method " << methodName << endl;
-
-    QStringList scope = QStringList::split( "::", m_actionNamespaces->currentText() );
-    if( !m_actionClasses->currentText().isEmpty() )
-	scope << m_actionClasses->currentText();
-
-    // try with function implementation first
-    QValueList<Catalog::QueryArgument> args;
-    args << Catalog::QueryArgument( "kind", Tag::Kind_Function )
-	<< Catalog::QueryArgument( "name", methodName )
-	<< Catalog::QueryArgument( "scope", scope );
-
-    QValueList<Catalog*> l = codeRepository()->registeredCatalogs();
-    QValueList<Catalog*>::Iterator it = l.begin();
-    while( it != l.end() ){
-	Catalog* catalog = *it;
-	++it;
-
-	QValueList<Tag> methodList = catalog->query( args );
-	kdDebug() << "#items is " << methodList.size() << endl;
-
-	QValueList<Tag>::Iterator dit = methodList.begin();
-	while( dit != methodList.end() ){
-	    Tag& t = *dit;
-	    ++dit;
-
-	    QString str = languageSupport()->formatTag( t );
-	    //kdDebug() << "str = " << str << endl;
-
-	    if( str == name ){
-		int line, col;
-		t.getStartPosition( &line, &col );
-		kdDebug() << "found implementation at " << t.fileName() << " " << line << ", " << col << endl;
-		partController()->editDocument( KURL(t.fileName()), line );
-		adjust();
-		return;
-	    }
-	}
-    }
-
-
-    // no implementation try to find a declaration
-    kdDebug() << "search declaration of method " << methodName << endl;
-
-    args.clear();
-    args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-	<< Catalog::QueryArgument( "name", methodName )
-	<< Catalog::QueryArgument( "scope", scope );
-
-    it = l.begin();
-    while( it != l.end() ){
-	Catalog* catalog = *it;
-	++it;
-
-	QValueList<Tag> methodList = catalog->query( args );
-	kdDebug() << "#items is " << methodList.size() << endl;
-
-	QValueList<Tag>::Iterator dit = methodList.begin();
-	while( dit != methodList.end() ){
-	    Tag& t = *dit;
-	    ++dit;
-
-	    QString str = languageSupport()->formatTag( t );
-	    //kdDebug() << "str = " << str << endl;
-
-	    if( str == name ){
-		int line, col;
-		t.getStartPosition( &line, &col );
-		kdDebug() << "found declaration at " << t.fileName() << " " << line << ", " << col << endl;
-		partController()->editDocument( t.fileName(), line );
-		adjust();
-		return;
-	    }
-	}
-    }
-
+    int line, col;
+    tagItem->tag().getStartPosition( &line, &col );
+    kdDebug() << "found tag at " << tagItem->tag().fileName() << " " << line << ", " << col << endl;
+    partController()->editDocument( KURL(tagItem->tag().fileName()), line );
     adjust();
 }
 
@@ -274,39 +200,35 @@ void ClassBrowserPart::refreshClasses( )
 {
     QValueList<Tag> classList;
 
-    QStringList scope = QStringList::split( "::", m_actionNamespaces->currentText() );
+    QStringList scope;
+    if (m_actionNamespaces->view()->currentItem())
+    {
+        TagListViewItem *tagItem = dynamic_cast<TagListViewItem*>(m_actionNamespaces->view()->currentItem());
+        if (tagItem)
+            scope = tagItem->tag().scope();
+    }
 
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "kind", Tag::Kind_Class )
-	<< Catalog::QueryArgument( "scope", scope );
+        << Catalog::QueryArgument( "scope", scope );
 
-    m_actionClasses->clear();
+    m_actionClasses->view()->clear();
     QValueList<Catalog*> l = codeRepository()->registeredCatalogs();
     QValueList<Catalog*>::Iterator it = l.begin();
     while( it != l.end() ){
-	Catalog* catalog = *it;
-	++it;
+        Catalog* catalog = *it;
+        ++it;
 
-	classList += catalog->query( args );
+        classList += catalog->query( args );
     }
 
-    QStringList items;
-    items << QString::fromLatin1("");
-
+    new QListViewItem(m_actionClasses->view()->listView(), i18n("(Globals)"));
     QValueList<Tag>::Iterator dit = classList.begin();
     while( dit != classList.end() ){
-	Tag& t = *dit;
-	++dit;
-
-        QString name = t.name();
-        if( !name.isEmpty() )
-	    items.append( name );
+        new TagListViewItem(m_actionClasses->view()->listView(), *dit, (*dit).name());
+        ++dit;
     }
 
-    items.sort();
-
-    kdDebug() << "#items is " << items.size() << endl;
-    m_actionClasses->setItems( items );
     adjust();
 }
 
@@ -314,49 +236,57 @@ void ClassBrowserPart::refreshMethods( )
 {
     QValueList<Tag> methodList;
 
-    QStringList scope = QStringList::split( "::", m_actionNamespaces->currentText() );
-    if( !m_actionClasses->currentText().isEmpty() )
-	scope << m_actionClasses->currentText();
+    QStringList scope;
+    if (m_actionNamespaces->view()->currentItem())
+    {
+        TagListViewItem *tagItem = dynamic_cast<TagListViewItem*>(m_actionNamespaces->view()->currentItem());
+        if (tagItem)
+            scope = tagItem->tag().scope();
+    }
+
+    if (m_actionClasses->view()->currentItem())
+    {
+        TagListViewItem *tagItem = dynamic_cast<TagListViewItem*>(m_actionClasses->view()->currentItem());
+        if (tagItem)
+            scope << tagItem->tag().name();
+    }
 
     QValueList<Catalog::QueryArgument> args;
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-	<< Catalog::QueryArgument( "scope", scope );
+        << Catalog::QueryArgument( "scope", scope );
 
     if( !m_selectedFileName.isEmpty() )
-	args << Catalog::QueryArgument( "fileName", m_selectedFileName );
+        args << Catalog::QueryArgument( "fileName", m_selectedFileName );
 
-    m_actionMethods->clear();
+    kdDebug() << "inside refreshMethods" << endl;
+    m_actionMethods->view()->clear();
     QValueList<Catalog*> l = codeRepository()->registeredCatalogs();
     QValueList<Catalog*>::Iterator it = l.begin();
     while( it != l.end() ){
-	Catalog* catalog = *it;
-	++it;
+        Catalog* catalog = *it;
+        ++it;
 
-	methodList += catalog->query( args );
+        methodList += catalog->query( args );
     }
 
-    QStringList items;
-    items << QString::fromLatin1("");
-
+    new QListViewItem(m_actionMethods->view()->listView(), "");
     QValueList<Tag>::Iterator dit = methodList.begin();
     while( dit != methodList.end() ){
-	Tag& t = *dit;
-	++dit;
-
-	items.append( languageSupport()->formatTag(t) );
+        new TagListViewItem(m_actionMethods->view()->listView(), *dit, languageSupport()->formatTag(*dit));
+        ++dit;
     }
 
-    items.sort();
-    kdDebug() << "#items is " << items.size() << endl;
-    m_actionMethods->setItems( items );
     adjust();
 }
 
 void ClassBrowserPart::adjust( )
 {
-    m_actionNamespaces->setComboWidth( 200 );
+/*    m_actionNamespaces->setComboWidth( 200 );
     m_actionClasses->setComboWidth( 150 );
-    m_actionMethods->setComboWidth( 300 );
+    m_actionMethods->setComboWidth( 300 );*/
+    m_actionNamespaces->view()->setMinimumWidth(200);
+    m_actionClasses->view()->setMinimumWidth(150);
+    m_actionMethods->view()->setMinimumWidth(150);
 }
 
 #include "classbrowser_part.moc"

@@ -18,7 +18,8 @@
 #include <catalog.h>
 
 class ClassBrowserWidget;
-class KSelectAction;
+class KListViewAction;
+class QListViewItem;
 
 namespace ClassBrowserUtils
 {
@@ -49,9 +50,9 @@ public:
 
 public slots:
     void refresh();
-    void selectNamespace( const QString& name );
-    void selectClass( const QString& name );
-    void selectMethod( const QString& name );
+    void selectNamespace( const QListViewItem * it );
+    void selectClass( const QListViewItem * it );
+    void selectMethod( QListViewItem * it );
 
 private slots:
     void slotProjectOpened();
@@ -68,9 +69,9 @@ private:
 
 private:
     QGuardedPtr<ClassBrowserWidget> m_widget;
-    KSelectAction* m_actionNamespaces;
-    KSelectAction* m_actionClasses;
-    KSelectAction* m_actionMethods;
+    KListViewAction* m_actionNamespaces;
+    KListViewAction* m_actionClasses;
+    KListViewAction* m_actionMethods;
     QString m_selectedFileName;
 };
 
