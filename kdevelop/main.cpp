@@ -48,7 +48,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char* argv[])
 {
   KConfig* config;
-  KStartupLogo* start_logo;
+//  KStartupLogo* start_logo;
 
   KAboutData aboutData( "kdevelop",
                         I18N_NOOP("KDevelop"),
@@ -175,20 +175,22 @@ int main(int argc, char* argv[])
     }
 
   config->setGroup("General Options");
-  start_logo=NULL;
-  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
-  {
-    start_logo= new KStartupLogo();
-    start_logo->show();
-    start_logo->raise();
-    QApplication::flushX();
-  }
+// commented this out, gallium. The code in CKDevelop makes the logo show for all the time until the former project is loaded and
+// that is the sense behind the logo, not only showing it until the mainwindow pops up :)
+//  start_logo=NULL;
+//  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
+//  {
+//    start_logo= new KStartupLogo();
+//    start_logo->show();
+//    start_logo->raise();
+//    QApplication::flushX();
+//  }
 
     CKDevelop* kdevelop = new CKDevelop();
     a.setMainWidget(kdevelop);
 
-   if (start_logo)
-	delete start_logo;
+//   if (start_logo)
+//	delete start_logo;
 
     kdevelop->completeStartup(args->count() == 0);
 

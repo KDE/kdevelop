@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kfiledialog.h>
+#include <ktip.h>
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
@@ -256,9 +257,8 @@ void CKDevSetupDlg::addGeneralTab()
                     "the last project used."));
 
 
-  config->setGroup("TipOfTheDay");
-  bool tip=config->readBoolEntry("show_tod",true);
-
+  config->setGroup("TipOfDay");
+  bool tip=config->readBoolEntry("RunOnStart",true);
 
 	tipDayCheck = new QCheckBox( startupGroup, "tipDayCheck" );
                 grid2->addWidget(tipDayCheck,0,1);
@@ -895,8 +895,8 @@ void CKDevSetupDlg::slotOkClicked(){
   bool lastprj=lastProjectCheck->isChecked();
   config->writeEntry("LastProject",lastprj);
 	
-	config->setGroup("TipOfTheDay");
-  config->writeEntry("show_tod",tipDayCheck->isChecked());
+	config->setGroup("TipOfDay");
+    config->writeEntry("RunOnStart",tipDayCheck->isChecked());
 
   config->setGroup("Debug");
   config->writeEntry("Use external debugger", dbgExternalCheck->isChecked());

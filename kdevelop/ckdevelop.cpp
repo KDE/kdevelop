@@ -54,11 +54,11 @@
 #include "./dbg/memview.h"
 #include "./dbg/disassemble.h"
 #include "./kwrite/kwdoc.h"
-#include "ktipofday.h"
 #include "wzconnectdlgimpl.h"
 #include "docviewman.h"
 #include "kdevsession.h"
 
+#include <ktip.h>
 #include <kaboutdialog.h>
 #include <kcombobox.h>
 #include <kcursor.h>
@@ -2454,11 +2454,13 @@ void CKDevelop::slotHelpReference() {
   showDocHelp("reference/C/cref.html");
 }
 
-void CKDevelop::slotHelpTipOfDay(){
-  KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
-  tipdlg->show();
+void CKDevelop::slotHelpTipOfDay(bool force){
 
-  delete tipdlg;  
+  QString file=locate("html", KGlobal::locale()->language()+"/kdevelop/tip.database");
+  if(!QFileInfo(file).exists())
+  	file=locate("html", "en/kdevelop/tip.database");
+
+  KTipDialog::showTip(locate("data", file), force);
 }
 
 void CKDevelop::slotHelpHomepage(){

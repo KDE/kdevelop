@@ -32,6 +32,7 @@
 #include "grepdialog.h"
 #include "./ctags/ctagsdialog_impl.h"
 #include "ckonsolewidget.h"
+#include "kstartuplogo.h"
 
 #include "./dbg/dbgcontroller.h"
 #include "./dbg/vartree.h"
@@ -113,14 +114,13 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   config = KGlobal::config();
 
-// gallium - commented out (not required now)
-//  config->setGroup("General Options");
-//  start_logo=0L;
-//  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
-//  {
-//    start_logo= new KStartupLogo(this);
-//    start_logo->show();
-//  }
+  config->setGroup("General Options");
+  start_logo=0L;
+  if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() ) )
+  {
+    start_logo= new KStartupLogo(this);
+    start_logo->show();
+  }
 
   // ********* MDI stuff (falk) *******
   m_docViewManager = new DocViewMan( this); // controls the kwrite documents, their views and the covering MDI views
@@ -156,9 +156,8 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
 
   slotViewRefresh();
 
-// gallium - commented this out
-//  if(start_logo)
-//    start_logo->raise();
+  if(start_logo)
+    start_logo->raise();
 
   initDebugger();
   initWhatsThis();
@@ -688,7 +687,7 @@ void CKDevelop::initMenuBar(){
   help->insertItem(SmallIconSet("contents"),i18n("Project &User-Manual"),this,
                         SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
   help->insertSeparator();	
-	help->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
+	help->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay(bool)), 0, ID_HELP_TIP_OF_DAY);
   help->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help->insertItem( i18n( "&Report Bug..." ),help_menu, SLOT(reportBug()),0,ID_HELP_BUG_REPORT);
   help->insertSeparator();	
@@ -1089,13 +1088,12 @@ void CKDevelop::completeStartup(bool ignoreLastProject)
 {
   initProject(ignoreLastProject);
 
-// gallium - commented this out
-//  if (start_logo)
-//    delete start_logo;
+  if (start_logo)
+    delete start_logo;
 
   config->setGroup("TipOfTheDay");
-  if(config->readBoolEntry("show_tod",true) && !kapp->isRestored())
-    slotHelpTipOfDay();
+  if( !kapp->isRestored())
+    slotHelpTipOfDay(false);
 
   // set the right default position for the MDI view taskbar
   config->setGroup("CKDevelop Toolbar QextMdiTaskBar");

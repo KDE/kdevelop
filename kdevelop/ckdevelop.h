@@ -91,7 +91,7 @@ class Breakpoint;
 class Disassemble;
 class DbgToolbar;
 class KStatusBarLabel;
-
+class KStartLogo;
 class Kpp;
 
 // MDI and related classes
@@ -561,7 +561,7 @@ public:
   /** shows the C/C++-referenc */
   void slotHelpReference();
   /** shows the tip of the day */
-  void slotHelpTipOfDay();
+  void slotHelpTipOfDay(bool force=true);
   /**  open the KDevelop Homepage with kfm/konqueror*/
   void slotHelpHomepage();
   /** shows the API of the current project */
@@ -876,6 +876,7 @@ public:
   bool bStartupIsPending;
 
 private:
+  KStartupLogo* start_logo;
   KFileOpenWithHandler fowh;
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
