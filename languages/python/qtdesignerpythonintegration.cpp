@@ -59,7 +59,7 @@ void QtDesignerPythonIntegration::addFunctionToClass(KInterfaceDesigner::Functio
         return;
     }
     
-    kdDebug() << "===============" << endl;
+    kdDebug(9014) << "===============" << endl;
 
     int line, column;
     klass->getStartPosition( &line, &column );
@@ -81,7 +81,7 @@ void QtDesignerPythonIntegration::addFunctionToClass(KInterfaceDesigner::Functio
     func.replace("()", "");
     QString str = "    def " + func + "(self):\n\n";
 
-    kdDebug() << "insert " << str << " into " << point.first << endl;
+    kdDebug(9014) << "insert " << str << " into " << point.first << endl;
     
     editIface->insertText(point.first, 0 /*pt.second*/, str );
 

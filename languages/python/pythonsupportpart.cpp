@@ -391,16 +391,16 @@ KDevDesignerIntegration *PythonSupportPart::designer(KInterfaceDesigner::Designe
 void PythonSupportPart::slotCreateSubclass()
 {
     QFileInfo fi(m_contextFileName);
-    kdDebug() << k_funcinfo << " file: " << m_contextFileName << " ext: " << fi.extension(false) << endl;
+    kdDebug(9014) << k_funcinfo << " file: " << m_contextFileName << " ext: " << fi.extension(false) << endl;
     if (fi.extension(false) != "ui")
         return;
     QtDesignerPythonIntegration *des = dynamic_cast<QtDesignerPythonIntegration*>(designer(KInterfaceDesigner::QtDesigner));
     if (des)
     {
-        kdDebug() << "ok: " << des << endl;
-        kdDebug() << "have impl: " << des->selectImplementation(m_contextFileName);
+        kdDebug(9014) << "ok: " << des << endl;
+        kdDebug(9014) << "have impl: " << des->selectImplementation(m_contextFileName);
     }
-    kdDebug() << "end: " << des << endl;
+    kdDebug(9014) << "end: " << des << endl;
 }
 
 #include "pythonsupportpart.moc"
