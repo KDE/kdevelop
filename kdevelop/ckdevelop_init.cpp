@@ -94,8 +94,6 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   ,m_pKDevSession(0L)
   ,m_CTagsCmdLine()
 {
-  m_pTaskBar->hide();
-
   doctool = DT_KDOC;
 
   version = VERSION;
