@@ -1,0 +1,21 @@
+# Makefile.am for $APPNAMELC$.
+#
+
+AM_CPPFLAGS = -UQT_NO_ASCII_CAST
+METASOURCES = AUTO
+
+INCLUDES = $(all_includes)
+
+
+bin_PROGRAMS = $APPNAMELC$
+
+$APPNAMELC$_SOURCES = $APPNAMELC$.cpp
+$APPNAMELC$_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LDADD)  $(LIB_KSYCOCA)
+$APPNAMELC$_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+
+datadir = $(kde_datadir)/k$APPNAMELC$
+
+desktop_DATA = $APPNAMELC$.desktop
+desktopdir = $(kde_appsdir)/System/ScreenSavers
+
+EXTRA_DIST = $(desktop_DATA)
