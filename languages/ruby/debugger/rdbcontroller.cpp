@@ -375,7 +375,11 @@ void RDBController::parseProgramLocation(char *buf)
 		line = input.readLine();
 	}
 
-	if (!sourceFile.isNull() && !sourceFile.endsWith("debuggee.rb")) {
+	if ( !sourceFile.isNull() 
+		&& !sourceFile.endsWith("/qtruby.rb")
+		&& !sourceFile.endsWith("/korundum.rb")
+		&& !sourceFile.endsWith("/debuggee.rb") ) 
+	{
         actOnProgramPause(QString());
         emit showStepInSource(sourceFile, sourceLine, "");
 		return;
@@ -435,7 +439,11 @@ void RDBController::parseFrameMove(char *buf)
 		sourceFile = sourcepos_re.cap(1);
 		sourceLine = sourcepos_re.cap(2).toInt();
 		
-		if (!sourceFile.isNull() && !sourceFile.endsWith("debuggee.rb")) {
+		if (	!sourceFile.isNull()
+				&& !sourceFile.endsWith("/qtruby.rb")
+				&& !sourceFile.endsWith("/korundum.rb")
+				&& !sourceFile.endsWith("/debuggee.rb") )
+		{ 
         	emit showStepInSource(sourceFile, sourceLine, "");
 			return;
 		}

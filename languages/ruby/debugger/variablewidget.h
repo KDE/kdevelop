@@ -288,7 +288,10 @@ public:
 	} 
 	
     bool needsVariables() const { 
-		return isOpen() && !isWaitingForData() && needsVariables_; 
+		return	text(VAR_NAME_COLUMN).contains("try_initialize") == 0 
+				&& isOpen() 
+				&& !isWaitingForData() 
+				&& needsVariables_; 
 	}
 	
 	int frameNo() { return frameNo_; }
