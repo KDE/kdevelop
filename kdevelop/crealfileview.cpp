@@ -278,11 +278,12 @@ void CRealFileView::slotDeleteFilePhys() {
                     KMsgBox::QUESTION) == 2){
     return;
   }
+	filename = getFullFilename(currentItem());
+	QFile::remove(filename);
+
   if (isInstalledFile(filename)) {
     emit removeFileFromProject(filename);
-  }
-  filename = getFullFilename(currentItem());
-  QFile::remove(filename);
+}
   refresh(project);
 }
 

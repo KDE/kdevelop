@@ -583,6 +583,11 @@ void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+
+  // save/generate dialog if needed
+  if (kdlg_edit_widget->isModified()){
+    kdlgedit->slotBuildGenerate();
+  }
   error_parser->reset();
   error_parser->toogleOn();
   showOutputView(true);

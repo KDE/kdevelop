@@ -53,6 +53,8 @@ public:
 
   /** disabled the popupmenus, used in cfilepropdialog */
   void setPopupMenusDisabled();
+  /** all groups are opened after a refresh*/
+  void setAllGroupsOpened(){allgroups_opened=true;}
 
 protected: // Implementations of virtual methods.
 
@@ -89,6 +91,7 @@ protected:
   KPopupMenu project_pop;
   bool popupmenu_disable;
   bool firstitemselect;
+  bool allgroups_opened;
 
   CProject* project;
   QString preselectitem;

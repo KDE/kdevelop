@@ -577,6 +577,7 @@ void CProject::updateMakefileAm(QString makefile){
 	  else{
 	    stream << "\n";
 	  }
+	  
 	}
 	//***************************generate needed things for static_library*********
 	config->setGroup(makefile);
@@ -602,7 +603,12 @@ void CProject::updateMakefileAm(QString makefile){
 	  }
 	  
 	  stream <<  "POFILES = " << pos << "\n";
-	} 
+	}
+ 
+	// ********generate the dist-hook, to fix a automoc problem, hope "make dist" works now******
+	if((getProjectType() != "normal_cpp") && (makefile == QString("Makefile.am"))){
+	  stream << "dist-hook:\n\t-perl automoc\n";
+	}
 	//************SUBDIRS***************
 	if(!subdirs.isEmpty()){ // the SUBDIRS key
 	  stream << "\nSUBDIRS = ";

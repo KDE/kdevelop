@@ -612,9 +612,6 @@ bool KDlgEditWidget::saveToFile( QString fname )
 
   printf("kdlgedit : Saving complete.\n");
 
-  setModified(false);
-  setWidgetAdded(false);
-  setWidgetRemoved(false);
 
   return true;
 }

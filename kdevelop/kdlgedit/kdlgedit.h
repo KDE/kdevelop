@@ -68,7 +68,13 @@ void slotFileNew();
   /** generates the sources for the current edited widget */
   void slotBuildGenerate();
   void generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+
+  void generateQLCDNumber(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
+  void generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
   void generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);
 
   void slotOpenDialog(QString file);

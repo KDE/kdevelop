@@ -65,7 +65,7 @@ void KDlgItem_LineEdit::addMyPropEntrys()
   props->addProp("Text",           "",       "General",        ALLOWED_STRING);
   props->addProp("hasFrame",       "TRUE",   "General",        ALLOWED_BOOL);
   props->addProp("MaxLength",      "",       "General",        ALLOWED_INT);
-  props->addProp("CursorPositon",  "",       "General",        ALLOWED_INT);
+  props->addProp("CursorPosition",  "",       "General",        ALLOWED_INT);
   props->addProp("isTextSelected", "FALSE",  "General",        ALLOWED_BOOL);
 }
 

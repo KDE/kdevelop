@@ -1,3 +1,12 @@
+1999-04-22  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* dialog-files (header,sourcecode) are now added to project and "make/run" 
+	checks for modified dialogs ( works only for baseclass "QDialog"
+	* implemented the sourcecode generation for QPushButton,QLabel,QLineEdit,
+	QWidget,QRadioButton and QCheckBox
+	* added support for "make dist" to CProject, 
+	   will work 100% correctly with the new Application Wizard (NG)
+	* fixed a bug in the RFV (crashed on "delete" with installed files)
+
 1999-04-20  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * changed the KDE-doc-update to use kdoc 1.x again --too much confusion about 2.x ;-(
 	* inserted progressbar into the statusbar and added display for progress on save all files

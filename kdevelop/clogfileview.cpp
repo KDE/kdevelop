@@ -3,7 +3,6 @@
 		           a projectfile into a tree
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -44,6 +43,7 @@ CLogFileView::CLogFileView(QWidget*parent,const char* name)
 
   preselectitem = ""; // no preselect
   firstitemselect = false;
+  allgroups_opened= false;
 }
 
 CLogFileView::~CLogFileView(){
@@ -181,6 +181,9 @@ void CLogFileView::refresh(CProject* prj)
 
     treeH->setLastItem( lastGrp );
     if(opengroups.contains(lastGrp->text(0)) > 0){
+      setOpen( lastGrp, true );
+    }
+    if(allgroups_opened){
       setOpen( lastGrp, true );
     }
   }

@@ -89,6 +89,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   else{
     log_tree->setFirstItemSelected(); // select the first item
       }
+  log_tree->setAllGroupsOpened();
   log_tree->refresh(prj);
   
   type_combo = new QComboBox( FALSE, this, "type_combo" );

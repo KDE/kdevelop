@@ -873,6 +873,7 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.type = "normal";
   KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
+  sub_dir_list.append("po");
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 

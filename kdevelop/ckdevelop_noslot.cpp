@@ -194,7 +194,9 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
 }
 
 void CKDevelop::switchToKDevelop(){
+  kdlg_caption = caption();
   setCaption(kdev_caption);
+
 
   bKDevelop=true;
   this->setUpdatesEnabled(false);
@@ -254,6 +256,7 @@ void CKDevelop::switchToKDevelop(){
 
 }
 void CKDevelop::switchToKDlgEdit(){
+  kdev_caption = caption();
   setCaption(kdlg_caption);
   bKDevelop=false;
   this->setUpdatesEnabled(false);
