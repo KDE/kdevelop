@@ -76,6 +76,7 @@ struct ApplicationInfo
     QValueList<installDir> dirList;
     QString customUI;
     QString message;
+    QString sourceArchive;
 
     //! item pointer to the listview
     QListViewItem *item;
