@@ -27,6 +27,8 @@
 #include <kstandarddirs.h>
 #include <kinstance.h>
 #include <kstatusbar.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
@@ -142,6 +144,10 @@ MakeWidget::MakeWidget(MakeViewPart *part)
     moved = false;
 
     m_part = part;
+    
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    setFont(config->readFontEntry("Messages Font"));
 
     updateColors();
 }
@@ -207,6 +213,14 @@ bool MakeWidget::isRunning()
     return childproc->isRunning();
 }
 
+void MakeWidget::copy()
+{
+  //int pf=0, inf=0, pt=0, nto=0;
+  //getSelection(&pf, &inf, &pt, &nto);
+  //qDebug("getSelection %d %d %d %d", pf, inf, pt, nto);
+  //qDebug("selected text %s", selectedText().latin1());
+  QTextEdit::copy();
+}
 
 void MakeWidget::nextError()
 {

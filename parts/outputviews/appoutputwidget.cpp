@@ -16,6 +16,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kstatusbar.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include "appoutputviewpart.h"
 #include "kdevpartcontroller.h"
@@ -26,6 +28,9 @@ AppOutputWidget::AppOutputWidget(AppOutputViewPart* part)
 	, m_part(part)
 {
 	connect(this, SIGNAL(executed(QListBoxItem*)), SLOT(slotRowSelected(QListBoxItem*)));
+	KConfig *config = kapp->config();
+	config->setGroup("General Options");
+	setFont(config->readFontEntry("Application Font"));
 }
 
 

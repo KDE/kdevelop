@@ -40,6 +40,7 @@ public slots:
     void killJob();
     void nextError();
     void prevError();
+    void copy();
 
 protected:
     void paletteChange(const QPalette& oldPalette);

@@ -53,7 +53,6 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
                           actionCollection(), "view_previous_error");
     action->setStatusText( i18n("Switches to the file and line where the previous error was reported from") );
 
-
     connect( core(), SIGNAL(stopButtonClicked()),
              m_widget, SLOT(killJob()) );
 }
