@@ -4,7 +4,6 @@
 
 #kdevelop: SCRIPTING_SUBDIR = scripting
 #kdevelop: QEDITOR_SUBDIR = qeditor
-#kdevelop: SVN_SUBDIR = svn
 
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  adaproject adasupport \
@@ -15,6 +14,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith history filecreate \
           texttools javasupport javadebugger replace rubysupport closer bashsupport pascalsupport pascalproject \
-          partexplorer bookmarks fullscreen \
-          $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR)
+          partexplorer bookmarks fullscreen svn \
+          $(QEDITOR_SUBDIR) $(SCRIPTING_SUBDIR)
 
