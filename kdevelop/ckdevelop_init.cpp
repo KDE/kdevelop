@@ -22,6 +22,7 @@
 #include <qtoolbutton.h>
 #include <qprogressdialog.h>
 #include <qframe.h>
+#include <qclipbrd.h>
 
 #include <kmsgbox.h>
 #include <kaccel.h>
@@ -969,6 +970,10 @@ void CKDevelop::initConnections(){
   connect(cpp_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+  connect(cpp_widget, SIGNAL(markStatus(KWriteView *, bool)),
+      this, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
+  connect(cpp_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
+      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
   connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
@@ -977,6 +982,10 @@ void CKDevelop::initConnections(){
   connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
   connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
+  connect(header_widget, SIGNAL(markStatus(KWriteView *, bool)),
+      this, SLOT(slotHEADERMarkStatus(KWriteView *, bool)));
+  connect(header_widget, SIGNAL(clipboardStatus(KWriteView *, bool)),
+      this, SLOT(slotClipboardChanged(KWriteView *, bool)));
   connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
   connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
   connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
@@ -999,6 +1008,7 @@ void CKDevelop::initConnections(){
   connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
   connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
+  connect(browser_widget, SIGNAL(textSelected(KHTMLView *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
 
   connect(messages_widget, SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
   // connect the windowsmenu with a method
