@@ -1,0 +1,44 @@
+<chapter id="kdevelop-scripting">
+
+<chapterinfo>
+  <authorgroup>
+    <author><firstname>Ian</firstname><surname>Geiser</surname></author>
+    <!-- ROLES_OF_TRANSLATORS -->
+  </authorgroup>
+</chapterinfo>
+
+<title>Using Scripts in KDevelop</title>
+
+<sect1 id="running-scripts">
+<title>Running Scripts</title>
+<para>
+  (... to be written ...)
+  <menuchoice><guimenu>Tools</guimenu>
+<guimenuitem>S</guimenuitem></menuchoice>
+</para>
+</sect1>
+
+<sect1 id="adding-scripts">
+<title>Adding Scripts</title>
+<para>
+(... to be written ...)
+</para>
+
+<figure id="screenshot-kdcop" float="1">
+  <title>KDCOP Browsing DCOP Interfaces in KDevelop</title>
+  <mediaobject>
+    <imageobject><imagedata fileref="kdcop_browsing.png"/></imageobject>
+  </mediaobject>
+</figure>
+
+<figure id="screenshot-scripts" float="1">
+  <title>KDevelop Scripts on the Filesystem</title>
+  <mediaobject>
+    <imageobject><imagedata fileref="script_location.png"/></imageobject>
+  </mediaobject>
+</figure>
+
+</sect1> <!-- loading-recent-project -->
+
+
+</chapter> <!-- projects-advanced -->

@@ -33,6 +33,7 @@
   <!ENTITY project-management SYSTEM "project-management.docbook">
   <!ENTITY app-files SYSTEM "app-files.docbook">
   <!ENTITY app-menu SYSTEM "app-menu.docbook">
+  <!ENTITY kdevelop-scripting SYSTEM "kdevelop-scripting.docbook">
   <!-- book related entities -->
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "INCLUDE">
@@ -151,6 +152,11 @@ Here you will find information on the following topics:
 
   <listitem><para>
   <link linkend="setup">Configuring &kdevelop;</link> &mdash; shows how you can tailor the IDE to suit your needs.
+  </para></listitem>
+
+
+  <listitem><para>
+      <link linkend="kdevelop-scripting">Scripting &kdevelop;</link> &mdash; describes how to add scripts to automate &kdevelop;.
   </para></listitem>
 
 <!--  <listitem><para>
@@ -445,6 +451,7 @@ Information on these topics is availabe:
 &getting-started;    <!-- "Getting Started"                                 -->
 &kdevelop-survey;    <!-- "Overview of &kdevelop; Features"                 -->
 &setup;              <!-- "Configuring &kdevelop;"                          -->
+&kdevelop-scripting; <!-- "Scripting &kdevelop;"                            -->
 <!-- ### This chapter will be removed soon: -->
 &applicationwizard;  <!-- "Getting Started &mdash; the &appwizard;"         -->
 &project-advanced;   <!-- "Advanced Project Management"                     -->
