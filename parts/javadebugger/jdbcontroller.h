@@ -79,15 +79,11 @@ private:
 
 public slots:
     void slotStart(const QString &application, const QString &args, const QString &sDbgShell=QString());
-    void slotCoreFile(const QString &coreFile);
-    void slotAttachTo(int pid);
 
     void slotRun();
-    void slotRunUntil(const QString &filename, int lineNum);
     void slotStepInto();
     void slotStepOver();
     void slotStepIntoIns();
-    void slotStepOverIns();
     void slotStepOutOff();
 
     void slotBreakInto();
@@ -95,10 +91,6 @@ public slots:
     void slotClearAllBreakpoints();
 
     void slotDisassemble(const QString &start, const QString &end);
-    void slotMemoryDump(const QString &start, const QString &amount);
-    void slotRegisters();
-    void slotLibraries();
-
     void slotExpandItem(VarItem *parent);
     void slotExpandUserItem(VarItem *parent, const QCString &userRequest);
     void slotSelectFrame(int frame);
@@ -120,10 +112,6 @@ signals:
     void showStepInSource     (const QString &fileName, int lineNum, const QString &address);
     void rawJDBBreakpointList (char *buf);
     void rawJDBBreakpointSet  (char *buf, int key);
-    void rawJDBDisassemble    (char *buf);
-    void rawJDBMemoryDump     (char *buf);
-    void rawJDBRegisters      (char *buf);
-    void rawJDBLibraries      (char *buf);
     void ttyStdout            (const char *output);
     void ttyStderr            (const char *output);
     void dbgStatus            (const QString &status, int statusFlag);
@@ -145,13 +133,10 @@ private:
 
     STTY*             tty_;
     bool              programHasExited_;
-    QString           badCore_;
 
     // Configuration values
-    bool    config_breakOnLoadingLibrary_;
     bool    config_forceBPSet_;
     bool    config_displayStaticMembers_;
-    bool    config_asmDemangle_;
     bool    config_dbgTerminal_;
     QString config_jdbPath_;
 };

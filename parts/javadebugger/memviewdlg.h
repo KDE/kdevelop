@@ -42,7 +42,7 @@ signals:
     void libraries();
     
 public slots:
-    void slotRawGDBMemoryView(char *buf);
+    void slotRawJDBMemoryView(char *buf);
     
 private slots:
     void slotDisassemble();

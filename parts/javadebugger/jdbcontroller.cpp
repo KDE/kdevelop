@@ -34,6 +34,7 @@
 #include <qregexp.h>
 #include <qstring.h>
 #include <qtimer.h>
+#include <qfileinfo.h>
 
 #include <iostream>
 #include <ctype.h>
@@ -114,7 +115,7 @@
 // Now that the breakpoint is pending, we need jdb to tell us when a shared
 // library has been loaded. We use "set stop-on 1". This breaks on _any_
 // library event, and we just try to set the pending breakpoints. Once we're
-// done, we then "continue"
+// done, we then "cont"
 //
 // Now here's the problem with all this. If the user "step"s over code that
 // contains a library dlopen then it'll just keep running, because we receive a
@@ -140,11 +141,8 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
       currentCmd_(0),
       tty_(0),
       programHasExited_(false),
-      badCore_(QString()),
-      config_breakOnLoadingLibrary_(true),
       config_forceBPSet_(true),
       config_displayStaticMembers_(false),
-      config_asmDemangle_(true),
       config_dbgTerminal_(false),
       config_jdbPath_()
 {
@@ -153,8 +151,6 @@ JDBController::JDBController(VariableTree *varTree, FramestackWidget *frameStack
     ASSERT(!config->readBoolEntry("Use external debugger", false));
 
     config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
-    config_asmDemangle_           = !config->readBoolEntry("Display mangled names", true);
-    config_breakOnLoadingLibrary_ = config->readBoolEntry("Break on loading libs", true);
     config_forceBPSet_            = config->readBoolEntry("Allow forced BP set", true);
     config_jdbPath_               = config->readEntry("JDB path", "");
     config_dbgTerminal_           = config->readBoolEntry("Debug on separate tty console", false);
@@ -193,16 +189,6 @@ JDBController::~JDBController()
         timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(slotAbortTimedEvent()) );
 
-        if (stateIsOn(s_attached)) {
-            queueCmd(new JDBCommand("detach", NOTRUNCMD, NOTINFOCMD, DETACH));
-            timer->start(3000, TRUE);
-            DBG_DISPLAY("<attached wait>\n")
-                while (stateIsOn(s_waitTimer)) {
-                    if (!stateIsOn(s_attached))
-                        break;
-                    kapp->processEvents(20);
-                }
-        }
 
         setStateOn(s_waitTimer|s_appBusy);
         const char *quit="quit\n";
@@ -238,15 +224,8 @@ void JDBController::reConfig()
     bool old_displayStatic        = config_displayStaticMembers_;
     config_displayStaticMembers_  = config->readBoolEntry("Display static members", false);
 
-    bool old_asmDemangle  = config_asmDemangle_;
-    config_asmDemangle_   = !config->readBoolEntry("Display mangled names", true);
 
-    bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
-    config_breakOnLoadingLibrary_   = config->readBoolEntry("Break on loading libs", true);
-
-    if (( old_displayStatic           != config_displayStaticMembers_   ||
-          old_asmDemangle             != config_asmDemangle_            ||
-          old_breakOnLoadingLibrary_  != config_breakOnLoadingLibrary_ )&&
+    if (( old_displayStatic != config_displayStaticMembers_)&&
         dbgProcess_) {
         bool restart = false;
         if (stateIsOn(s_appBusy)) {
@@ -255,28 +234,9 @@ void JDBController::reConfig()
             restart = true;
         }
 
-        if (old_displayStatic != config_displayStaticMembers_) {
-            if (config_displayStaticMembers_)
-                queueCmd(new JDBCommand("set print static-members on", NOTRUNCMD, NOTINFOCMD));
-            else
-                queueCmd(new JDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
-        }
-        if (old_asmDemangle != config_asmDemangle_) {
-            if (config_asmDemangle_)
-                queueCmd(new JDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
-            else
-                queueCmd(new JDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
-        }
-
-        if (old_breakOnLoadingLibrary_ != config_breakOnLoadingLibrary_) {
-            if (config_breakOnLoadingLibrary_)
-                queueCmd(new JDBCommand("set stop-on 1", NOTRUNCMD, NOTINFOCMD));
-            else
-                queueCmd(new JDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
-        }
 
         if (restart)
-            queueCmd(new JDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+            queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
     }
 }
 
@@ -416,9 +376,9 @@ void JDBController::actOnProgramPause(const QString &msg)
         varTree_->setActiveFlag();
 
         // These two need to be actioned immediately. The order _is_ important
-        queueCmd(new JDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
+        queueCmd(new JDBCommand("where", NOTRUNCMD, INFOCMD, BACKTRACE), true);
         if (stateIsOn(s_viewLocals))
-            queueCmd(new JDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+            queueCmd(new JDBCommand("locals", NOTRUNCMD, INFOCMD, LOCALS));
 
         varTree_->findWatch()->requestWatchVars();
         varTree_->findWatch()->setActive();
@@ -555,7 +515,7 @@ void JDBController::parseLine(char *buf)
                         emit unableToSetBPNow(BPNo);
                         queueCmd(new JDBCommand(QCString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
                         queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-                        queueCmd(new JDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+                        queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
                     }
                     DBG_DISPLAY("Parsed (START_cann)<" + QString(buf) + ">");
                     break;
@@ -595,76 +555,13 @@ void JDBController::parseLine(char *buf)
             }
         }
 
-        // When the watchpoint variable goes out of scope the program stops
-        // and tells you. (sometimes)
-    case START_Watc:
-        {
-            if ((strncmp(buf, "Watchpoint", 10)==0) &&
-                (strstr(buf, "deleted because the program has left the block"))) {
-                int BPNo = atoi(buf+11);
-                if (BPNo)
-                    {
-                        queueCmd(new JDBCommand(QCString().sprintf("delete %d",BPNo), NOTRUNCMD, NOTINFOCMD));
-                        queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-                    }
-                else
-                    ASSERT(false);
-
-                actOnProgramPause(QString(buf));
-                break;
-            }
-            actOnProgramPause(QString(buf));
-            DBG_DISPLAY("Unparsed (START_Watc)<" + QString(buf) + ">");
-            break;
-        }
-
-    case START_Temp:
-        {
-            if (strncmp(buf, "Temporarily disabling shared library breakpoints:", 49) == 0) {
-                DBG_DISPLAY("Parsed (START_Temp)<" + QString(buf) + ">");
-                break;
-            }
-
-            actOnProgramPause(QString(buf));
-            DBG_DISPLAY("Unparsed (START_Temp)<" + QString(buf) + ">");
-            break;
-        }
-
-    case START_Stop:
-        {
-            if (strncmp(buf, "Stopped due to shared library event", 35) == 0) {
-                // When it's a library event, we try and set any pending
-                // breakpoints, and that done, just continue onwards.
-                // HOWEVER, this only applies when we did a "run" or a
-                // "continue" otherwise the program will just keep going
-                // on a "step" type command, in this situation and that's
-                // REALLY wrong.
-                //        DBG_DISPLAY("Parsed (sh.lib) <" + QString(buf) + ">");
-                if (currentCmd_ && (currentCmd_->rawDbgCommand() == "run" ||
-                                    currentCmd_->rawDbgCommand() == "continue")) {
-                    setStateOn(s_silent);     // be quiet, children!!
-                    setStateOff(s_appBusy);   // and stop that fiddling.
-                    emit acceptPendingBPs();  // now go clean your rooms!
-                    queueCmd(new JDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
-                } else
-                    actOnProgramPause(QString(buf));
-
-                break;
-            }
-
-            // A stop line means we've stopped. We're not really expecting one
-            // of these unless it's a library event so just call actOnPause
-            actOnProgramPause(QString(buf));
-            DBG_DISPLAY("Unparsed (START_Stop)<" + QString(buf) + ">");
-            break;
-        }
 
     case START_Brea:
         {
             // Starts with "Brea" so assume "Breakpoint" and just get a full
             // breakpoint list. Note that the state is unchanged.
             // Much later: I forget why I did it like this :-o
-            queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+            queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
 
             DBG_DISPLAY("Parsed (BP) <" + QString(buf) + ">");
             break;
@@ -682,26 +579,10 @@ void JDBController::parseLine(char *buf)
 
     case START_warn:
         {
-            if (strncmp(buf, "warning: core file may not match", 32) == 0 ||
-                strncmp(buf, "warning: exec file is newer", 27) == 0) {
-                badCore_ = QString(buf);
-            }
             actOnProgramPause(QString());
             break;
         }
 
-    case START_Core:
-        {
-            DBG_DISPLAY("Parsed (Core)<" + QString(buf) + ">");
-            actOnProgramPause(buf);
-            if (!badCore_.isEmpty() && strncmp(buf, "Core was generated by", 21) == 0)
-                KMessageBox::error( 0,
-                                    i18n("jdb message:\n")+badCore_ + "\n" + QString(buf)+"\n\n"+
-                                    i18n("Any symbols jdb resolves are suspect"),
-                                    i18n("Mismatched core file"));
-
-            break;
-        }
 
     default:
         {
@@ -762,7 +643,7 @@ void JDBController::parseLine(char *buf)
 void JDBController::parseProgramLocation(char *buf)
 {
     if (stateIsOn(s_silent)) {
-        // It's a silent stop. This means that the queue will have a "continue"
+        // It's a silent stop. This means that the queue will have a "cont"
         // in it somewhere. The only action needed is to reset the state so that
         // queue'd items can be sent to jdb
         DBG_DISPLAY("Program location (but silent) <" + QString(buf) + ">");
@@ -985,9 +866,6 @@ char *JDBController::parseCmdBlock(char *buf)
         case BPLIST:          emit rawJDBBreakpointList (buf);      break;
         case BACKTRACE:       parseBacktraceList        (buf);      break;
         case DISASSEMBLE:     emit rawJDBDisassemble    (buf);      break;
-        case MEMDUMP:         emit rawJDBMemoryDump     (buf);      break;
-        case REGISTERS:       emit rawJDBRegisters      (buf);      break;
-        case LIBRARIES:       emit rawJDBLibraries      (buf);      break;
         case DETACH:          setStateOff(s_attached);              break;
             //      case FILE_START:      parseFileStart            (buf);      break;
         default:                                                    break;
@@ -1087,7 +965,7 @@ void JDBController::clearBreakpoint(const QCString &BPClearCmd)
     // Note: this is NOT an info command, because jdb doesn't explictly tell
     // us that the breakpoint has been deleted, so if we don't have it the
     // BP list doesn't get updated.
-    queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+    queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
 }
 
 // **************************************************************************
@@ -1112,7 +990,7 @@ void JDBController::modifyBreakpoint(Breakpoint *BP)
         // Note: this is NOT an info command, because jdb doesn't explictly tell
         // us that the breakpoint has been deleted, so if we don't have it the
         // BP list doesn't get updated.
-        queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+        queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
     }
 }
 
@@ -1126,8 +1004,6 @@ void JDBController::modifyBreakpoint(Breakpoint *BP)
 
 void JDBController::slotStart(const QString &application, const QString &args, const QString &sDbgShell)
 {
-    badCore_ = QString();
-
     ASSERT (!dbgProcess_ && !tty_);
 
     tty_ = new STTY(config_dbgTerminal_, "konsole");
@@ -1149,6 +1025,8 @@ void JDBController::slotStart(const QString &application, const QString &args, c
         return;
     }
 
+    QFileInfo app(application);
+
     JDB_DISPLAY("\nStarting JDB - app:["+application+"] args:["+args+"] sDbgShell:["+sDbgShell+"]\n");
     dbgProcess_ = new KProcess;
 
@@ -1166,9 +1044,9 @@ void JDBController::slotStart(const QString &application, const QString &args, c
 
     if (!sDbgShell.isEmpty())
         *dbgProcess_<<"/bin/sh"<<"-c"<<sDbgShell+" "+config_jdbPath_+
-            "jdb "+application+" -fullname -nx -quiet";
+            "jdb "+app.baseName()+"";
     else
-        *dbgProcess_<<config_jdbPath_+QString("jdb")<<application<<"-fullname"<<"-nx"<<"-quiet";
+        *dbgProcess_<<config_jdbPath_+QString("jdb")<<app.baseName()<<"";
 
     dbgProcess_->start( KProcess::NotifyOnExit,
                         KProcess::Communication(KProcess::All));
@@ -1179,40 +1057,6 @@ void JDBController::slotStart(const QString &application, const QString &args, c
     // Initialise jdb. At this stage jdb is sitting wondering what to do,
     // and to whom. Organise a few things, then set up the tty for the application,
     // and the application itself
-
-    queueCmd(new JDBCommand("set edit off", NOTRUNCMD, NOTINFOCMD, 0));
-    queueCmd(new JDBCommand("set confirm off", NOTRUNCMD, NOTINFOCMD));
-
-    if (config_displayStaticMembers_)
-        queueCmd(new JDBCommand("set print static-members on", NOTRUNCMD, NOTINFOCMD));
-    else
-        queueCmd(new JDBCommand("set print static-members off", NOTRUNCMD, NOTINFOCMD));
-
-    queueCmd(new JDBCommand(QCString("tty ")+tty.latin1(), NOTRUNCMD, NOTINFOCMD));
-
-    if (!args.isEmpty())
-        queueCmd(new JDBCommand(QCString("set args ") + args.latin1(), NOTRUNCMD, NOTINFOCMD));
-
-    // This makes jdb pump a variable out on one line.
-    queueCmd(new JDBCommand("set width 0", NOTRUNCMD, NOTINFOCMD));
-    queueCmd(new JDBCommand("set height 0", NOTRUNCMD, NOTINFOCMD));
-
-    // Get jdb to notify us of shared library events. This allows us to
-    // set breakpoints in shared libraries, that the user has set previously.
-    // The 1 doesn't mean anything specific, just any non-zero value to
-    // satisfy jdb!
-    // An alternative to this would be catch load, catch unload, but they don't work!
-    if (config_breakOnLoadingLibrary_)
-        queueCmd(new JDBCommand("set stop-on 1", NOTRUNCMD, NOTINFOCMD));
-    else
-        queueCmd(new JDBCommand("set stop-on 0", NOTRUNCMD, NOTINFOCMD));
-
-    // Print some nicer names in disassembly output. Although for an assembler
-    // person this may actually be wrong and the mangled name could be better.
-    if (config_asmDemangle_)
-        queueCmd(new JDBCommand("set print asm-demangle on", NOTRUNCMD, NOTINFOCMD));
-    else
-        queueCmd(new JDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
     // Load the file into jdb
     /*if (sDbgShell.isEmpty())
@@ -1230,28 +1074,7 @@ void JDBController::slotStart(const QString &application, const QString &args, c
     // attach to a running process.
 }
 
-// **************************************************************************
 
-void JDBController::slotCoreFile(const QString &coreFile)
-{
-    setStateOff(s_silent);
-    queueCmd(new JDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD, NOTINFOCMD, 0));
-    queueCmd(new JDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
-    if (stateIsOn(s_viewLocals))
-        queueCmd(new JDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
-}
-
-// **************************************************************************
-
-void JDBController::slotAttachTo(int pid)
-{
-    setStateOff(s_appNotStarted|s_programExited|s_silent);
-    setStateOn(s_attached);
-    queueCmd(new JDBCommand(QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
-    queueCmd(new JDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
-    if (stateIsOn(s_viewLocals))
-        queueCmd(new JDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
-}
 
 // **************************************************************************
 
@@ -1260,22 +1083,9 @@ void JDBController::slotRun()
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new JDBCommand(stateIsOn(s_appNotStarted) ? "run" : "continue", RUNCMD, NOTINFOCMD, 0));
+    queueCmd(new JDBCommand(stateIsOn(s_appNotStarted) ? "run" : "cont", RUNCMD, NOTINFOCMD, 0));
 }
 
-// **************************************************************************
-
-void JDBController::slotRunUntil(const QString &fileName, int lineNum)
-{
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    if (fileName == "")
-        queueCmd(new JDBCommand(QCString().sprintf("until %d", lineNum), RUNCMD, NOTINFOCMD, 0));
-    else
-        queueCmd(new JDBCommand(QCString().sprintf("until %s:%d", fileName.latin1(), lineNum),
-                                RUNCMD, NOTINFOCMD, 0));
-}
 
 // **************************************************************************
 
@@ -1307,15 +1117,6 @@ void JDBController::slotStepOver()
     queueCmd(new JDBCommand("next", RUNCMD, NOTINFOCMD, 0));
 }
 
-// **************************************************************************
-
-void JDBController::slotStepOverIns()
-{
-    if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand("nexti", RUNCMD, NOTINFOCMD, 0));
-}
 
 // **************************************************************************
 
@@ -1324,7 +1125,7 @@ void JDBController::slotStepOutOff()
     if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
         return;
 
-    queueCmd(new JDBCommand("finish", RUNCMD, NOTINFOCMD, 0));
+    queueCmd(new JDBCommand("step up", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1372,7 +1173,7 @@ void JDBController::slotBPState(Breakpoint *BP)
     }
 
     if (restart)
-        queueCmd(new JDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+        queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
 }
 
 // **************************************************************************
@@ -1399,11 +1200,12 @@ void JDBController::slotClearAllBreakpoints()
     // Note: this is NOT an info command, because jdb doesn't explictly tell
     // us that the breakpoint has been deleted, so if we don't have it the
     // BP list doesn't get updated.
-    queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+    queueCmd(new JDBCommand("stop", NOTRUNCMD, NOTINFOCMD, BPLIST));
 
     if (restart)
-        queueCmd(new JDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+        queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
 }
+
 
 // **************************************************************************
 
@@ -1411,41 +1213,8 @@ void JDBController::slotDisassemble(const QString &start, const QString &end)
 {
     if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
         return;
-
-    QCString cmd = QCString().sprintf("disassemble %s %s", start.latin1(), end.latin1());
-    queueCmd(new JDBCommand(cmd, NOTRUNCMD, INFOCMD, DISASSEMBLE));
 }
 
-// **************************************************************************
-
-void JDBController::slotMemoryDump(const QString &address, const QString &amount)
-{
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    QCString cmd = QCString().sprintf("x/%sb %s", amount.latin1(), address.latin1());
-    queueCmd(new JDBCommand(cmd, NOTRUNCMD, INFOCMD, MEMDUMP));
-}
-
-// **************************************************************************
-
-void JDBController::slotRegisters()
-{
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand("info all-registers", NOTRUNCMD, INFOCMD, REGISTERS));
-}
-
-// **************************************************************************
-
-void JDBController::slotLibraries()
-{
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    queueCmd(new JDBCommand("info sharedlibrary", NOTRUNCMD, INFOCMD, LIBRARIES));
-}
 
 // **************************************************************************
 
@@ -1485,7 +1254,7 @@ void JDBController::slotSelectFrame(int frameNo)
             // Add the frame params to the variable list
             frame->setParams(frameStack_->getFrameParams(currentFrame_));
             // and ask for the locals
-            queueCmd(new JDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
+            queueCmd(new JDBCommand("locals", NOTRUNCMD, INFOCMD, LOCALS));
         }
     }
 }
@@ -1611,7 +1380,7 @@ void JDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
     //    {
     //      queueCmd(new JDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
     //      queueCmd(new JDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
-    //      queueCmd(new JDBCommand("continue", RUNCMD, NOTINFOCMD, 0));
+    //      queueCmd(new JDBCommand("cont", RUNCMD, NOTINFOCMD, 0));
     //      emit unableToSetBPNow(BPNo);
     //    }
     //    return;

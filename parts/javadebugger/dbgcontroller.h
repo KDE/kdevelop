@@ -69,24 +69,15 @@ protected:
 public slots:
     virtual void slotStart(const QString &application, const QString &args,
                            const QString &sDbgShell=QString())              = 0;
-    virtual void slotCoreFile(const QString &coreFile)                      = 0;
-    virtual void slotAttachTo(int pid)                                      = 0;
     
     virtual void slotRun()                                                  = 0;
-    virtual void slotRunUntil(const QString &fileName, int lineNum)         = 0;
     virtual void slotStepInto()                                             = 0;
     virtual void slotStepOver()                                             = 0;
     virtual void slotStepIntoIns()                                          = 0;
-    virtual void slotStepOverIns()                                          = 0;
     virtual void slotStepOutOff()                                           = 0;
     
     virtual void slotBreakInto()                                            = 0;
     virtual void slotBPState(Breakpoint *BP)                                = 0;
-    
-    virtual void slotDisassemble(const QString &start, const QString &end)  = 0;
-    virtual void slotMemoryDump(const QString &start, const QString &amount)= 0;
-    virtual void slotRegisters()                                            = 0;
-    virtual void slotLibraries()                                            = 0;
     
     virtual void slotExpandItem(VarItem *parent)                            = 0;
     virtual void slotExpandUserItem(VarItem *parent,
@@ -103,12 +94,12 @@ protected slots:
 signals:
     void rawData              (const QString &rawData);
     void gotoSourcePosition   (const QString &fileName, int lineNum);
-    void rawGDBBreakpointList (char *buf);
-    void rawGDBBreakpointSet  (char *buf, int key);
-    void rawGDBDisassemble    (char *buf);
-    void rawGDBMemoryDump     (char *buf);
-    void rawGDBRegisters      (char *buf);
-    void rawGDBLibraries      (char *buf);
+    void rawJDBBreakpointList (char *buf);
+    void rawJDBBreakpointSet  (char *buf, int key);
+    void rawJDBDisassemble    (char *buf);
+    void rawJDBMemoryDump     (char *buf);
+    void rawJDBRegisters      (char *buf);
+    void rawJDBLibraries      (char *buf);
     void ttyStdout            (const char *output);
     void ttyStderr            (const char *output);
     

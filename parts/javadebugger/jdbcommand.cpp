@@ -19,20 +19,10 @@
 #include "breakpoint.h"
 #include "variablewidget.h"
 
-/***************************************************************************/
-
-QCString JDBCommand::idlePrompt_ = QCString().sprintf("\nset prompt %c%c\n", BLOCK_START, IDLE);
-
-/***************************************************************************/
 
 JDBCommand::JDBCommand(const QCString &setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt)
     : DbgCommand(setCommand, isRunCmd, isInfoCmd, setPrompt)
 {
-    if (prompt_) {
-        cmdBuffer_ = QCString().sprintf("set prompt %c%c\n", BLOCK_START, prompt_) +
-            command_ +
-            idlePrompt_;
-    }
 }
 
 /***************************************************************************/

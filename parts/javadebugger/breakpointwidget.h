@@ -53,8 +53,8 @@ public slots:
     // Connected to from the dbgcontroller:
     void slotSetPendingBPs();
     void slotUnableToSetBPNow(int BPNo);
-    void slotParseGDBBrkptList(char *str);
-    void slotParseGDBBreakpointSet(char *str, int BPKey);
+    void slotParseJDBBrkptList(char *str);
+    void slotParseJDBBreakpointSet(char *str, int BPKey);
   
 private slots:
     void slotExecuted(QListBoxItem *item);

@@ -317,7 +317,7 @@ void BreakpointWidget::slotUnableToSetBPNow(int BPid)
 
 /***************************************************************************/
 
-void BreakpointWidget::slotParseGDBBrkptList(char *str)
+void BreakpointWidget::slotParseJDBBrkptList(char *str)
 {
     // An example of a GDB breakpoint table
     // Num Type           Disp Enb Address    What
@@ -402,7 +402,7 @@ void BreakpointWidget::slotParseGDBBrkptList(char *str)
 
 /***************************************************************************/
 
-void BreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
+void BreakpointWidget::slotParseJDBBreakpointSet(char *str, int BPKey)
 {
     char *startNo=0;
     bool hardware = false;

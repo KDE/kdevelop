@@ -257,10 +257,10 @@ QString FilePosBreakpoint::dbgSetCommand() const
 {
     QString cmdStr;
     if (fileName_.isEmpty())
-        cmdStr = QString("break %1").arg(lineNo_);  // gdb command - not translatable
+        cmdStr = QString("stop at %1").arg(lineNo_);  // jdb command - not translatable
     else {
         QFileInfo fi(fileName_);
-        cmdStr = QString("break %1:%2").arg(fi.fileName()).arg(lineNo_); // gdb command
+        cmdStr = QString("stop at %1:%2").arg(fi.baseName()).arg(lineNo_); // jdb command
     }
     
     if (isTemporary())
@@ -291,7 +291,8 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
 
 void FilePosBreakpoint::configureDisplay()
 {
-    display_ = i18n("breakpoint at %1:%2").arg(fileName_).arg(lineNo_);
+    QFileInfo fi(fileName_);
+    display_ = i18n("breakpoint at %1:%2").arg(fi.baseName()).arg(lineNo_);
     Breakpoint::configureDisplay();
 }
 

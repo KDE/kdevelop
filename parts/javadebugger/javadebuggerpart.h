@@ -35,14 +35,10 @@ public:
 
 private slots:
     void slotRun();
-    void slotExamineCore();
-    void slotAttachProcess();
     void slotStop();
     void slotPause();
     void slotContinue();
-    void slotRunToCursor();
     void slotStepOver();
-    void slotStepOverInstruction();
     void slotStepIntoInstruction();
     void slotStepInto();
     void slotStepOut();

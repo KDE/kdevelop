@@ -129,22 +129,6 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
 
-    action = new KAction(i18n("Examine core file"), "core", 0,
-                         this, SLOT(slotExamineCore()),
-                         actionCollection(), "debug_core");
-    action->setStatusText( i18n("Loads a core file into the debugger") );
-    action->setWhatsThis( i18n("Examine core file\n\n"
-                               "This loads a core file, which is typically created "
-                               "after the application has crashed e.g. with a "
-                               "segmentation fault. The core file contains an "
-                               "image of the program memory at the time it crashed, "
-                               "allowing you a post-mortem analysis.") );
-
-    action = new KAction(i18n("Attach to process"), "connect_creating", 0,
-                         this, SLOT(slotAttachProcess()),
-                         actionCollection(), "debug_attach");
-    action->setStatusText( i18n("Attaches the debugger to a running process") );
-
     action = new KAction(i18n("Sto&p"), "stop", 0,
                          this, SLOT(slotStop()),
                          actionCollection(), "debug_stop");
@@ -168,12 +152,6 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
 
-    action = new KAction(i18n("Run to &cursor"), "dbgrunto", 0,
-                         this, SLOT(slotRunToCursor()),
-                         actionCollection(), "debug_runtocursor");
-    action->setEnabled(false);
-    action->setStatusText( i18n("Continues execution until the cursor position is reached") );
-
     action = new KAction(i18n("Step &over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
@@ -184,12 +162,6 @@ JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *na
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
                                "following the function call.") );
-
-    action = new KAction(i18n("Step over ins&truction"), "dbgnextinst", 0,
-                         this, SLOT(slotStepOverInstruction()),
-                         actionCollection(), "debug_stepoverinst");
-    action->setEnabled(false);
-    action->setStatusText( i18n("Steps over the next assembly instruction") );
 
     action = new KAction(i18n("Step &into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
@@ -315,9 +287,7 @@ void JavaDebuggerPart::startDebugger()
     ac->action("debug_stop")->setEnabled(true);
     ac->action("debug_pause")->setEnabled(true);
     ac->action("debug_cont")->setEnabled(true);
-    ac->action("debug_runtocursor")->setEnabled(true);
     ac->action("debug_stepover")->setEnabled(true);
-    ac->action("debug_stepoverinst")->setEnabled(true);
     ac->action("debug_stepinto")->setEnabled(true);
     ac->action("debug_stepintoinst")->setEnabled(true);
     ac->action("debug_stepout")->setEnabled(true);
@@ -353,43 +323,6 @@ void JavaDebuggerPart::slotRun()
     controller->slotRun();
 }
 
-
-void JavaDebuggerPart::slotExamineCore()
-{
-    if (controller)
-        slotStop();
-
-    core()->message(i18n("Choose a core file to examine..."));
-
-    QString dirName = project()? project()->projectDirectory() : QDir::homeDirPath();
-    QString coreFile = KFileDialog::getOpenFileName(dirName);
-    if (coreFile.isNull())
-        return;
-
-    core()->message(i18n("Examining core file %1").arg(coreFile));
-
-    startDebugger();
-    controller->slotCoreFile(coreFile);
-}
-
-
-void JavaDebuggerPart::slotAttachProcess()
-{
-    if (controller)
-        slotStop();
-
-    core()->message(i18n("Choose a process to attach to..."));
-
-    Dbg_PS_Dialog dlg;
-    if (!dlg.exec() || !dlg.pidSelected())
-        return;
-
-    int pid = dlg.pidSelected();
-    core()->message(i18n("Attaching to process %1").arg(pid));
-    
-    startDebugger();
-    controller->slotAttachTo(pid);
-}
 
 
 void JavaDebuggerPart::slotStop()
@@ -437,22 +370,7 @@ void JavaDebuggerPart::slotContinue()
 }
 
 
-void JavaDebuggerPart::slotRunToCursor()
-{
-    QString fileName;
-    int lineNum;
-    // FIXME: Find out current file name and line number
-    controller->slotRunUntil(fileName, lineNum);
-}
-
-
 void JavaDebuggerPart::slotStepOver()
-{
-    controller->slotStepOver();
-}
-
-
-void JavaDebuggerPart::slotStepOverInstruction()
 {
     controller->slotStepOver();
 }

@@ -101,7 +101,7 @@ MemoryViewDialog::~MemoryViewDialog()
 
 // **************************************************************************
 
-void MemoryViewDialog::slotRawGDBMemoryView(char *buf)
+void MemoryViewDialog::slotRawJDBMemoryView(char *buf)
 {
     // just display the resultant output from GDB in the edit box
     output_->clear();
