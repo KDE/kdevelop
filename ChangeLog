@@ -1,3 +1,7 @@
+2003-04-18 Roberto Raggi <roberto@kdevelop.org>
+    * started to implement the recovery support, this is the first
+      step to implement the incremental parser
+
 2003-04-17 Roberto Raggi <roberto@kdevelop.org>
     * Reduced the size of the generated pcs database(you must regenerate your
       database using r++ to take advantage of it)
