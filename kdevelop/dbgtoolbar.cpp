@@ -245,8 +245,9 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   // This widget is closed when the debugger finishes i.e. they press "Stop"
   KWM::setDecoration(winId(), KWM::noFocus|KWM::noDecoration|KWM::staysOnTop);
 
-  QBoxLayout * topLayout    = new QVBoxLayout( this );
-  QBoxLayout * focusLayout  = new QHBoxLayout();
+  QBoxLayout* topLayout       = new QVBoxLayout( this );
+  QBoxLayout* focusLayout     = new QHBoxLayout();
+  QBoxLayout* assemblerLayout = new QHBoxLayout();
 
   QPixmap pm;
 
@@ -263,6 +264,12 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
   DbgButton*    bStep       = new DbgButton(i18n("Step in"), pm, this);
+
+  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
+  DbgButton*    bNexti      = new DbgButton(i18n("i"), pm, this);
+
+  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
+  DbgButton*    bStepi      = new DbgButton(i18n("i"), pm, this);
 
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepout.xpm");
   DbgButton*    bFinish     = new DbgButton(i18n("Step out"), pm, this);
@@ -283,6 +290,8 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   connect(bInterrupt,   SIGNAL(clicked()),  dbgController,  SLOT(slotBreakInto()));
   connect(bNext,        SIGNAL(clicked()),  dbgController,  SLOT(slotStepOver()));
   connect(bStep,        SIGNAL(clicked()),  dbgController,  SLOT(slotStepInto()));
+  connect(bNexti,       SIGNAL(clicked()),  dbgController,  SLOT(slotStepOverIns()));
+  connect(bStepi,       SIGNAL(clicked()),  dbgController,  SLOT(slotStepIntoIns()));
   connect(bFinish,      SIGNAL(clicked()),  dbgController,  SLOT(slotStepOutOff()));
   connect(bView,        SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugMemoryView()));
   connect(bStop,        SIGNAL(clicked()),                  SLOT(slotDbgStop()));
@@ -293,6 +302,8 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   QToolTip::add( bInterrupt,  i18n("Interrupt the app execution") );
   QToolTip::add( bNext,       i18n("Execute one line of code, but run through functions") );
   QToolTip::add( bStep,       i18n("Execute one line of code, stepping into fn if appropriate") );
+  QToolTip::add( bNexti,      i18n("Execute one assembler instruction, but run through functions") );
+  QToolTip::add( bStepi,      i18n("Execute one assembler instruction, stepping into fn if appropriate") );
   QToolTip::add( bFinish,     i18n("Execute to end of current stack frame") );
   QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewer") );
   QToolTip::add( bStop,       i18n("Stop the debugger") );
@@ -317,6 +328,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   topLayout->addWidget(bRun);
   topLayout->addWidget(bNext);
   topLayout->addWidget(bStep);
+  topLayout->addLayout(assemblerLayout);
   topLayout->addWidget(bFinish);
   topLayout->addWidget(bView);
   topLayout->addWidget(bInterrupt);
@@ -326,8 +338,11 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   focusLayout->addWidget(bKDevFocus_);
   focusLayout->addWidget(bPrevFocus_);
 
-  setMinimumSize(w+16, h*8);
-  setMaximumSize(w+16, h*8);
+  assemblerLayout->addWidget(bNexti);
+  assemblerLayout->addWidget(bStepi);
+
+  setMinimumSize(w+16, h*9);
+  setMaximumSize(w+16, h*9);
 
   setAppIndicator(appIsActive_);
   topLayout->activate();

@@ -759,17 +759,17 @@ void GDBController::parseProgramLocation(char* buf)
 
   //  "/opt/qt/src/widgets/qlistview.cpp:1558:42771:beg:0x401b22f2"
   // This is soooo easy in perl...
-  QRegExp regExp1(":[0-9]+:[0-9]+:beg:0x[abcdef0-9]+$");
-  QRegExp regExp2(":beg:0x[abcdef0-9]+$");
-  int colon;
-  int addPos;
-  if (((addPos = regExp2.match(buf, 0)) >= 0) &&
-      ((colon = regExp1.match(buf, 0)) >= 0))
+  QRegExp regExp1(":[0-9]+:[0-9]+:[a-z]+:0x[abcdef0-9]+$");
+  QRegExp regExp2(":0x[abcdef0-9]+$");
+  int linePos;
+  int addressPos;
+  if (((linePos     = regExp1.match(buf, 0)) >= 0) &&
+      ((addressPos  = regExp2.match(buf, 0)) >= 0))
   {
     actOnProgramPause(QString(" "));
-    emit showStepInSource(QString(buf, colon+1),
-                          atoi(buf+colon+1),
-                          QString(buf+addPos+5));
+    emit showStepInSource(QString(buf, linePos+1),
+                          atoi(buf+linePos+1),
+                          QString(buf+addressPos+1));
     return;
   }
 
@@ -1262,12 +1262,32 @@ void GDBController::slotStepInto()
 
 // **************************************************************************
 
+void GDBController::slotStepIntoIns()
+{
+  if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
+    return;
+
+  queueCmd(new GDBCommand("stepi", RUNCMD, NOTINFOCMD));
+}
+
+// **************************************************************************
+
 void GDBController::slotStepOver()
 {
   if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
     return;
 
   queueCmd(new GDBCommand("next", RUNCMD, NOTINFOCMD));
+}
+
+// **************************************************************************
+
+void GDBController::slotStepOverIns()
+{
+  if (stateIsOn(s_appBusy|s_appNotStarted|s_shuttingDown))
+    return;
+
+  queueCmd(new GDBCommand("nexti", RUNCMD, NOTINFOCMD));
 }
 
 // **************************************************************************

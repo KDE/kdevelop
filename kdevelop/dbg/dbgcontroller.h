@@ -75,6 +75,8 @@ public slots:
   virtual void slotRunUntil(const QString& filename, int lineNo)          = 0;
   virtual void slotStepInto()                                             = 0;
   virtual void slotStepOver()                                             = 0;
+  virtual void slotStepIntoIns()                                          = 0;
+  virtual void slotStepOverIns()                                          = 0;
   virtual void slotStepOutOff()                                           = 0;
 
   virtual void slotBreakInto()                                            = 0;

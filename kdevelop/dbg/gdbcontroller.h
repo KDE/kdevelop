@@ -87,6 +87,8 @@ public slots:
   void slotRunUntil(const QString& filename, int lineNo);
   void slotStepInto();
   void slotStepOver();
+  void slotStepIntoIns();
+  void slotStepOverIns();
   void slotStepOutOff();
 
   void slotBreakInto();
