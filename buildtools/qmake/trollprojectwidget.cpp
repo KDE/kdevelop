@@ -595,8 +595,9 @@ QStringList TrollProjectWidget::allFiles()
         for (QPtrListIterator<GroupItem> tit(spitem->groups); tit.current(); ++tit) {
             GroupItem::GroupType type = (*tit)->groupType;
 
-            if (type == GroupItem::Sources || type == GroupItem::Headers) {
-
+            if (type == GroupItem::Sources || type == GroupItem::Headers || type == GroupItem::Forms || type == GroupItem::Images ||
+	    	type ==  GroupItem::Lexsources || type ==  GroupItem::Yaccsources || type == GroupItem::Distfiles ||
+		type ==  GroupItem::Translations || type ==  GroupItem::IDLs || type ==  GroupItem::InstallObject  ) {
 		for (QPtrListIterator<FileItem> fit(tit.current()->files); fit.current(); ++fit){
 		    QString filePath = path.mid( projectDirectory().length() + 1 );
 
@@ -1460,12 +1461,12 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,const QStri
   while ( it.current() != 0 )
   {
      if(it.current()->name == filename) //File already exists in this subproject
-       return; 
+       return;
      ++it;
-  }  
-  
-  FileItem *fitem = createFileItem(filename);    
-    
+  }
+
+  FileItem *fitem = createFileItem(filename);
+
   fitem->uiFileLink = getUiFileLink(titem->owner->relpath+"/",filename);
   if (titem->groupType != GroupItem::InstallObject)
     titem->files.append(fitem);
@@ -1523,9 +1524,9 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
        while ( it.current() != 0 )
        {
         if(it.current()->name == filename) //File already exists in this subproject
-          return; 
+          return;
         ++it;
-       }  
+       }
       break;
     }
   }

@@ -1290,8 +1290,32 @@ KDevProject::Options AutoProjectPart::options() const
     return UsesAutotoolsBuildSystem;
 }
 
-#include "autoprojectpart.moc"
+QStringList recursiveATFind( const QString &currDir, const QString &baseDir )
+{
+	kdDebug() << "Dir " << currDir << endl;
+	QStringList fileList;
 
+	if( !currDir.contains( "/..") && !currDir.contains("/.") )
+	{
+		QDir dir(currDir);
+		QStringList dirList = dir.entryList(QDir::Dirs );
+		QStringList::Iterator idx = dirList.begin();
+		for( ; idx != dirList.end(); ++idx )
+		{
+			fileList += recursiveATFind( currDir + "/" + (*idx),baseDir );
+		}
+		QStringList newFiles = dir.entryList("*.am *.in");
+		idx = newFiles.begin();
+		for( ; idx != newFiles.end(); ++idx )
+		{
+			QString file = currDir + "/" + (*idx);
+			fileList.append( file.remove( baseDir ) );
+		}
+	}
+
+
+	return fileList;
+}
 
 /*!
     \fn AutoProjectPart::distFiles() const
@@ -1302,6 +1326,23 @@ QStringList AutoProjectPart::distFiles() const
 	// Scan current source directory for any .pro files.
 	QString projectDir = projectDirectory();
 	QDir dir(projectDir);
-	QStringList files = dir.entryList( "Makefile.am configure* admin/* INSTALL README NEWS TODO ChangeLog COPYING AUTHORS stamp-h.in");
+	QDir admin(projectDir +"/admin");
+	QStringList files = dir.entryList( "Makefile.cvs Makefile.am configure* INSTALL README NEWS TODO ChangeLog COPYING AUTHORS stamp-h.in");
+	QStringList adminFiles = admin.entryList(QDir::Files);
+	QStringList::Iterator idx = adminFiles.begin();
+	for( ; idx != adminFiles.end(); ++idx)
+	{
+		files.append( "admin/" + (*idx) );
+	}
+	QStringList srcDirs = dir.entryList(QDir::Dirs);
+	idx = srcDirs.begin();
+	for(; idx != srcDirs.end(); ++idx)
+	{
+		sourceList += recursiveATFind( projectDirectory() + "/" + (*idx), projectDirectory());
+	}
 	return sourceList + files;
 }
+#include "autoprojectpart.moc"
+
+
+
