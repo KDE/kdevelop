@@ -106,7 +106,7 @@ QString CVSFileInfoProvider::projectDirectory() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QMap<QString, VCSFileInfo> CVSFileInfoProvider::parse( QStringList stringStream )
+VCSFileInfoMap CVSFileInfoProvider::parse( QStringList stringStream )
 {
     QRegExp rx_recordStart( "^=+$" );
     QRegExp rx_fileName( "^\\b(File: (\\.|-|\\w)+)\\b" );
@@ -125,7 +125,7 @@ QMap<QString, VCSFileInfo> CVSFileInfoProvider::parse( QStringList stringStream 
         stickyDate,
         stickyOptions;
 
-    QMap<QString, VCSFileInfo> vcsStates;
+    VCSFileInfoMap vcsStates;
 
     int state = 0,
         lastAcceptableState = 4;
@@ -186,6 +186,8 @@ QMap<QString, VCSFileInfo> CVSFileInfoProvider::parse( QStringList stringStream 
 
 VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsString )
 {
+    // @todo add more status as "Conflict" (but I dunno how CVS writes it so I awaint
+    // until I have a conflict or somebody else fix it ;-)
     if (stateAsString == "Up-to-date")
         return VCSFileInfo::Uptodate;
     if (stateAsString == "Locally Modified")

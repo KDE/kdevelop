@@ -12,14 +12,13 @@
 #ifndef CVSFILEINFOPROVIDER_H
 #define CVSFILEINFOPROVIDER_H
 
+#include <qmap.h>
+
 #include <kdevvcsfileinfoprovider.h>
 #include "cvsservicedcopiface.h"
-
-#include <qmap.h>
 #include "cvsdir.h"
 
 class CvsServicePart;
-class KURL;
 class CvsService_stub;
 class CvsJob_stub;
 
@@ -49,7 +48,7 @@ private:
 
     QString projectDirectory() const;
 
-    static QMap<QString, VCSFileInfo> parse( QStringList stringStream );
+    static VCSFileInfoMap parse( QStringList stringStream );
 
     static VCSFileInfo::FileState String2EnumState( QString stateAsString );
 
