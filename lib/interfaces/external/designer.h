@@ -86,6 +86,11 @@ signals:
     void editFunction(DesignerType type, const QString &formName, const QString &functionName);
     /**Emit this signal when a designer wants to open the editor for a form sources.*/
     void editSource(DesignerType type, const QString &formName);
+    
+    /**Emitted when a form state is changed in the designer.
+    @param formName An absolute name of the form file.
+    @param status 0: form is clean, 1: form is modified.*/
+    void newStatus(const QString &formName, int status);
 };
 
 }
