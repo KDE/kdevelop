@@ -13,8 +13,8 @@ public:
     ~CvsInterface();
 
 protected:
-    virtual void projectClosed();
-    virtual void projectOpened(CProject *prj);
+    virtual void projectClosed() {};
+    virtual void projectOpened(CProject *prj) {};
 
     virtual void addToRepositoryRequested(const QString &fileName);
     virtual void removeFromRepositoryRequested(const QString &fileName);

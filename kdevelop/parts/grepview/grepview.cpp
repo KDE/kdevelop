@@ -45,7 +45,7 @@ void GrepView::setupGUI()
     KAction *action;
     action = new KAction(i18n("Grep"), CTRL+ALT+Key_F, m_widget, SLOT(showDialog()),
                          actionCollection(), "grep");
-    action->setShortText( i18n("Opens the search in files dialog to search "
+    action->setStatusText( i18n("Opens the search in files dialog to search "
                                "for expressions over several files") );
     action->setWhatsThis( i18n("Search in files\n\n"
                                "Opens the Search in files dialog "

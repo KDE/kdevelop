@@ -75,7 +75,7 @@ void KDevelopCore::initActions()
     
     action = KStdAction::print( this, SLOT( slotFilePrint() ),
                                 m_kdevelopgui->actionCollection(), "file_print");
-    action->setShortText( i18n("Prints the current document") );
+    action->setStatusText( i18n("Prints the current document") );
     action->setWhatsThis( i18n("Print\n\n"
                                "Opens the printing dialog. There, you can "
                                "configure which printing program you wish "
@@ -83,7 +83,7 @@ void KDevelopCore::initActions()
     
     action = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
                           m_kdevelopgui->actionCollection(), "options_kdevelop_setup");
-    action->setShortText( i18n("Configures KDevelop") );
+    action->setStatusText( i18n("Configures KDevelop") );
 }
 
 

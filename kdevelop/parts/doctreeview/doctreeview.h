@@ -17,7 +17,7 @@ public:
     // This is currently called by DocTreeViewConfigWidget if the
     // changes are accepted. Maybe this could be done through
     // the component system (but maybe not ;-)
-    void configurationChanged();
+    void configurationChanged() {};
 
 protected:
     virtual void setupGUI();
