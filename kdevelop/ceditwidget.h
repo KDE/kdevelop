@@ -94,13 +94,13 @@ public: // Selection related methods
 public: // Search and replace methods
 
   /** Presents a search dialog to the user. */
-  void search()                   { KWrite::find(); }
+  void search()                   { KWrite::search(); }
 
   /** Repeats the last search or replace operation. 
    * On replace, the user is prompted even if the "Prompt On Replace" 
    * option was off.
    */
-  void searchAgain()              { KWrite::findAgain(); }
+  void searchAgain()              { KWrite::searchAgain(); }
 
   /** Presents a replace dialog to the user. */
   void replace()                  { KWrite::replace(); }
@@ -142,7 +142,7 @@ public: // Queries
   /** Returns the number of lines in the text. 
    * @return Number of lines in the text.
    */
-  uint lines()                    { return (uint) numLines();}//(text().contains('\n', false)); }
+  uint lines()                    { return (uint)(text().contains('\n', false)); }
 	
 public slots:
  void spellcheck();
@@ -190,10 +190,22 @@ protected: // Protected methods
 protected slots:
  void slotLookUp();
 
+private slots:
+	/** user wants run to the cursor position */
+	void slotRunToCursor();
+	/** user wants run to run until a return is encountered */
+	void slotStepOutOff();
+	/** user wants add the search text to the watch variable list */
+	void slotAddWatchVariable();
+
 signals:
  void lookUp(QString text);
  void grepText(QString text);
  void bufferMenu(const QPoint&);
+
+ void runToCursor(const QString& filename, int lineNo);
+ void stepOutOff();
+ void addWatchVariable(const QString& varname);
 
 private:
  KSpell *kspell;
