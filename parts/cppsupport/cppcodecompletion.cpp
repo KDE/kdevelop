@@ -280,7 +280,7 @@ void CppCodeCompletion::slotTimeout()
     
     if( nLine != m_ccLine || nCol != m_ccColumn )
 	return;;
-    
+
     QString textLine = m_activeEditor->textLine( nLine );
     QChar ch = textLine[ nCol ];;
     if( ch.isLetterOrNumber() || ch == '_' )
@@ -375,10 +375,12 @@ CppCodeCompletion::slotTextChanged()
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
 
-    m_ccLine = nLine;
-    m_ccColumn = nCol;
-    
+    m_ccLine = 0;
+    m_ccColumn = 0;
+
     if ( ch == "(" || ch == "." || ch2 == "->" || ch2 == "::" ){
+        m_ccLine = nLine;
+        m_ccColumn = nCol;
     	m_ccTimer->start( 500, true );
     }
 }
@@ -592,7 +594,7 @@ CppCodeCompletion::completeText( )
 	if( !(c.isLetterOrNumber() || c == '_' || c == ')') )
 	    return;
     }
- 
+
     if( ch == "(" ){
         --nCol;
         showArguments = TRUE;
@@ -600,6 +602,10 @@ CppCodeCompletion::completeText( )
 
     QString type;
     QString expr, word;
+
+    // sync
+    while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
+         m_pSupport->backgroundParser()->isEmpty().wait();
 
     m_pSupport->backgroundParser()->lock();
     AST* ast = m_pSupport->backgroundParser()->translationUnit( m_activeFileName );
@@ -726,19 +732,25 @@ CppCodeCompletion::completeText( )
         }
 
     } else if( AST* node = findNodeAt(ast, line, column) ){
-	
+
         kdDebug(9007) << "------------------- AST FOUND --------------------" << endl;
 
         if( FunctionDefinitionAST* def = functionDefinition(node) ){
 
+            kdDebug(9007) << "------> found a function definition" << endl;
 
 	    int startLine, startColumn;
 	    def->getStartPosition( &startLine, &startColumn );
 
 	    QString contents = getText( startLine, startColumn, line, showArguments ? column-1 : column );
+
+            kdDebug(9007) << "------> computed context" << endl;
+
 	    // kdDebug(9007) << "contents = |" << contents << "|" << endl;
 
 	    int start_expr = expressionAt( contents, contents.length() - 1 );
+
+            kdDebug(9007) << "------> found expression at " << start_expr << endl;
 	    // kdDebug(9007) << "start_expr = " << start_expr << endl;
 	    if( start_expr != int(contents.length()) - 1 ){
 		expr = contents.mid( start_expr, contents.length() - start_expr );
@@ -774,12 +786,12 @@ CppCodeCompletion::completeText( )
                     kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
             }
 
-            m_pSupport->backgroundParser()->unlock();
-
             type = typeName( evaluateExpression(expr, ctx) );
             delete( ctx );
             ctx = 0;
        }
+
+       m_pSupport->backgroundParser()->unlock();
     }
 
     if( !type.isEmpty() ){
@@ -852,6 +864,10 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
 {
     if( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
 	return;
+
+    // sync
+    while( m_pSupport->backgroundParser()->filesInQueue() > 0 )
+         m_pSupport->backgroundParser()->isEmpty().wait();
 
     m_pSupport->backgroundParser()->lock();
 
