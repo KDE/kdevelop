@@ -45,7 +45,7 @@ private slots:
     void slotDiff();
     void slotDiffFinished( const QString& diff, const QString& err );
 
-    void projectConfigWidget(KDialogBase *dlg);
+    //void projectConfigWidget(KDialogBase *dlg);
 
     void projectConfigWidget(KDialogBase *dlg);
 
