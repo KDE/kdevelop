@@ -105,9 +105,7 @@ void VariableWidget::slotAddWatchVariable()
     QString watchVar(watchVarEditor_->currentText());
     if (!watchVar.isEmpty())
     {
-        watchVarEditor_->clearEdit();
-        watchVarEditor_->addToHistory(watchVar);
-        varTree_->slotAddWatchVariable(watchVar);
+        slotAddWatchVariable(watchVar);
     }
 }
 
@@ -117,9 +115,9 @@ void VariableWidget::slotAddWatchVariable(const QString &ident)
 {
     if (!ident.isEmpty())
     {
-        watchVarEditor_->clearEdit();
         watchVarEditor_->addToHistory(ident);
         varTree_->slotAddWatchVariable(ident);
+        watchVarEditor_->clearEdit();
     }
 }
 
