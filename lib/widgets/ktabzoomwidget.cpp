@@ -76,7 +76,7 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
     d->m_layout = new QVBoxLayout(this);
 
   d->m_popup = new KTabZoomFrame(parent, pos);
-  
+
   if(pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
     d->m_popup->setMinimumWidth(110);
   else
@@ -124,8 +124,8 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title, const QString
     if(widget->minimumSizeHint().width() + 12 > d->m_popup->minimumWidth())
       d->m_popup->setMinimumWidth(widget->minimumSizeHint().width() + 12);
     break;
-  }  
-   
+  }
+
   emit tabsChanged();
 }
 
@@ -354,6 +354,8 @@ void KTabZoomWidget::setDockMode(bool docked)
     return;
   }
 
+  if( !d->m_popup->isVisible() )
+      d->m_popup->show();
   d->m_strut->show();
 
   adjustStrut();
