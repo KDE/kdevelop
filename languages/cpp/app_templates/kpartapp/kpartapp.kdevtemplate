@@ -147,5 +147,5 @@ Dest=%{dest}/src/%{APPNAMELC}_shell.rc
 
 [MSG]
 Type=message
-Comment=A complex KDE Application using KParts was created in %{dest}
+Comment=A complex KDE application using KParts was created in %{dest}
 

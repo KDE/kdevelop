@@ -1,3 +1,13 @@
+# KDE Config File
+[General]
+Name=KOffice Part
+Name[fr]=Un composant logiciel pour KOffice
+Icon=kopart.png
+Category=C++/KDE
+Comment=Generates a framework for a full KOffice Application.
+Comment[fr]=Génère un squelette de composant logiciel d'une application KOffice.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC_part.cpp
 Archive=kofficepart.tar.gz
 
 [ADMIN]
@@ -15,18 +25,11 @@ Dir=%{dest}/doc
 [MKDIR_DOCBOOK2]
 Type=mkdir
 Dir=%{dest}/doc/en
-[MkDir1]
-Type=mkdir
-Dir=%{dest}/doc
 
 [FILE1]
 Type=install
 Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
-
-[MkDir2]
-Type=mkdir
-Dir=%{dest}/doc/en
 
 [FILE2]
 Type=install
@@ -142,3 +145,6 @@ Type=install
 Source=%{src}/template-kopart/main.cpp
 Dest=%{dest}/src/x-%{APPNAMELC}.cpp
 
+[MSG]
+Type=message
+Comment=A KOffice part was created in %{dest}

@@ -23,18 +23,11 @@ Dir=%{dest}/doc
 [MKDIR_DOCBOOK2]
 Type=mkdir
 Dir=%{dest}/doc/en
-[MkDir1]
-Type=mkdir
-Dir=%{dest}/doc
 
 [FILE1]
 Type=install
 Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
-
-[MkDir2]
-Type=mkdir
-Dir=%{dest}/doc/en
 
 [FILE2]
 Type=install
@@ -147,4 +140,4 @@ Dest=%{dest}/src/%{APPNAMELC}.desktop
 
 [MSG]
 Type=message
-Comment=A Simple Designer based KDE Application was created in %{dest}
+Comment=A simple designer based KDE application was created in %{dest}

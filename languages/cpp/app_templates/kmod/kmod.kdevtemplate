@@ -29,3 +29,6 @@ Type=install
 Source=%{src}/kmod-driver.c
 Dest=%{dest}/%{APPNAMELC}-driver.c
 
+[MSG]
+Type=message
+Command=A linux kernel module was created in %{dest}

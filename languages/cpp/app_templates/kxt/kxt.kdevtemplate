@@ -25,18 +25,11 @@ Dir=%{dest}/doc
 [MKDIR_DOCBOOK2]
 Type=mkdir
 Dir=%{dest}/doc/en
-[MkDir1]
-Type=mkdir
-Dir=%{dest}/doc
 
 [FILE1]
 Type=install
 Source=%{kdevelop}/template-common/kde-doc-Makefile.am
 Dest=%{dest}/doc/Makefile.am
-
-[MkDir2]
-Type=mkdir
-Dir=%{dest}/doc/en
 
 [FILE2]
 Type=install
@@ -182,3 +175,6 @@ Type=install
 Source=%{src}/src-configure.in.in
 Dest=%{dest}/configure.in.in
 
+[MSG]
+Type=message
+Comment=A KConfig XT application was created in %{dest}
