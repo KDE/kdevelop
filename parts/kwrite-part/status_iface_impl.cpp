@@ -5,6 +5,7 @@
 #include "kwrite/kwview.h"
 
 
+#include "keditor/editor.h"
 #include "status_iface_impl.h"
 
 
@@ -18,6 +19,8 @@ StatusIfaceImpl::StatusIfaceImpl(KWrite *edit, KEditor::Document *parent, KEdito
 
 bool StatusIfaceImpl::modified()
 {
+  document()->setModified(m_edit->isModified());
+
   return m_edit->isModified();
 }
 
