@@ -3267,7 +3267,7 @@ Pascal Krahmer 			<htmlurl url="mailto:pascal@beast.de" name="<pascal@beast.de>"
 <quote/Main development of: Dialog Editor/
 
 Bernd Gehrmann 			<htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
-<quote/Main development of: Grep Dialog, CVS integration/
+<quote/Main development of: Grep Dialog, CVS integration, new DOC tree/
 
 Stefan Bartel 			<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
 <quote/Main development of: Real-File-Viewer/
@@ -3334,8 +3334,6 @@ Matt Koss 							<htmlurl url="mailto:koss@napri.sk" name="<koss@napri.sk>">
 
 Jochen Wilhelmy 				<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
 
-Bernd Gehrmann 					<htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
-
 Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
 
 
@@ -3344,8 +3342,6 @@ Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@deb
 <bf/KWrite 0.98/ &copy		by Jochen Wilhelmy		<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
 
 <bf/KDE Help/ &copy		by Martin R. Jones 		<htmlurl url="mailto:mjones@kde.org" name="<mjones@kde.org>">
-
-<bf/GrapeFruit/	&copy 1999 	by Bernd Gehrmann <htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
 
 <bf/KSwallow/	&copy 		by Matthias Hoelzer  <htmlurl url="mailto:hoelzer@physik.uni-wuerzburg.de"
 name="<hoelzer@physik.uni-wuerzburg.de>">
@@ -3390,35 +3386,3 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </book>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
