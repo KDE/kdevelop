@@ -1,6 +1,6 @@
 # all khello data files
 dataFiles = src-Makefile.am app.cpp app.h main.cpp appui.rc app.kdevelop \
-	subdirs app.desktop preview.png
+	subdirs app.desktop khello.png
 templateName = khello
 
 ### no need to change below:
