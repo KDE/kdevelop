@@ -44,7 +44,7 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputw
 	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp component.cpp processview.cpp \
 	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp
 
-kdevelop_METASOURCES = USE_AUTOMOC
+kdevelop_METASOURCES = AUTO
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,

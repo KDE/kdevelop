@@ -10,9 +10,9 @@ SOMINOR = 0
 noinst_HEADERS = prjstatplugin.h
 
 libprjstat_kdevplg_la_SOURCES = prjstatplugin.cpp main.cpp
-libprjstat_kdevplg_la_METASOURCES = USE_AUTOMOC  
+libprjstat_kdevplg_la_METASOURCES = AUTO  
 
-EXTRA_DIST = README
+EXTRA_DIST =
 
 LDFLAGS = $(QT_LDFLAGS) $(X_LDFLAGS)
 libprjstat_kdevplg_la_LDFLAGS = -version-info $(SOMAJOR):$(SOMINOR) $(LDFLAGS)

@@ -662,7 +662,7 @@ void CProject::updateMakefileAm(QString makefile){
 #warning updateMakefileAm deletes LDFLAGS etc.
 			if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
 				stream << "\nINCLUDES = $(all_includes)\n\n";
-				stream << getBinPROGRAM() << "_METASOURCES = USE_AUTOMOC\n\n";
+				stream << getBinPROGRAM() << "_METASOURCES = AUTO\n\n";
 				stream << getBinPROGRAM() << "_LDFLAGS = $(all_libraries) $(KDE_RPATH)\n\n";
 				stream << "DISTCLEANFILES = $(" << getBinPROGRAM() << "_METASOURCES)\n\n";
 				stream << "messages:\n";
@@ -680,7 +680,7 @@ void CProject::updateMakefileAm(QString makefile){
 					QDir dir(getDir(makefile));
 					if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
 						stream << "\nINCLUDES = $(all_includes)\n\n";
-						stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
+						stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
 					}
 					stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
 					stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";

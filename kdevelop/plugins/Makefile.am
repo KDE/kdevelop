@@ -4,7 +4,7 @@ INCLUDES= $(all_includes)
 
 noinst_LIBRARIES = libkdevplugin.a
 
-libkdevplugin_a_METASOURCES = USE_AUTOMOC
+libkdevplugin_a_METASOURCES = AUTO
 
 libkdevplugin_a_SOURCES =  pluginmanagerdlg.cpp 
 

@@ -4,7 +4,7 @@ INCLUDES= $(all_includes)
 
 noinst_LIBRARIES = libkwrite.a
 
-libkwrite_a_METASOURCES = USE_AUTOMOC
+libkwrite_a_METASOURCES = AUTO
 
 libkwrite_a_SOURCES = highlight.cpp kwdialog.cpp kwdoc.cpp kwview.cpp kguicommand.cpp undohistory.cpp
 
