@@ -1,4 +1,4 @@
-#include <string.h>
+//#include <string.h>
 
 //#include <qcombo.h>
 #include <qgrpbox.h>
@@ -8,8 +8,9 @@
 #include <qstringlist.h>
 
 #include <kapp.h>
-#include <kfontdialog.h>
 #include <kcharsets.h>
+#include <kfontdialog.h>
+#include <kglobalsettings.h>
 
 
 #include "highlight.h"
@@ -1997,13 +1998,9 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
-//      KCharsets(defaultFont.charset).setQFont(font);
-      KGlobal::charsets()->setQFont(font);
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
-//      KCharsets(itemData.charset).setQFont(font);
-      KGlobal::charsets()->setQFont(font);
     }
     a[z].setFont(font);
   }
@@ -2059,9 +2056,10 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
   }
 
   config->setGroup("Default Font");
-  font.family = config->readEntry("Family","courier");
-  font.size = config->readNumEntry("Size",12);
-  font.charset = config->readEntry("Charset","ISO-8859-1");
+  QFont defaultFont = KGlobalSettings::fixedFont();
+  font.family = config->readEntry("Family", defaultFont.family());
+  font.size = config->readNumEntry("Size", defaultFont.pointSize());
+  font.charset = config->readEntry("Charset", QFont::encodingName(QFont::ISO_8859_1));//  "ISO-8859-1");
 }
 
 void HlManager::setDefaults(ItemStyleList &list, ItemFont &font) {

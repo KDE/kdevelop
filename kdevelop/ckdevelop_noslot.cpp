@@ -1067,6 +1067,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
     disableCommand(ID_PROJECT_FILE_PROPERTIES);
     disableCommand(ID_PROJECT_OPTIONS);
+
+    disableCommand(ID_FILE_NEW);
   }
 
   if(bAutosave)
