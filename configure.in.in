@@ -62,18 +62,32 @@ AC_ARG_ENABLE(sql, AC_HELP_STRING([--disable-sql], [disable SQL programming lang
 AM_CONDITIONAL(include_sql, test "$sql" = "yes")
 
 
+dnl  **********
+dnl  Check which build tools support should be compiled
+dnl  **********
 
-AC_ARG_ENABLE(autoproject, 	[  --enable-autoproject, 	enable automake project manager ], autoproject=${enableval}, autoproject=yes)
+AC_ARG_ENABLE(antproject, 	[  --enable-antproject, 	enable ant build tool ], antproject=${enableval}, antproject=yes)
+AM_CONDITIONAL(include_ant, test -n "$antproject")
+
+AC_ARG_ENABLE(autoproject, 	[  --enable-autoproject, 	enable automake build tool ], autoproject=${enableval}, autoproject=yes)
 AM_CONDITIONAL(include_autoproject, test -n "$autoproject")
 
-AC_ARG_ENABLE(scriptproject, 	[  --enable-scriptproject, 	enable script project manager ], scriptproject=${enableval}, scriptproject=yes)
+AC_ARG_ENABLE(genericproject, 	[  --enable-genericproject, 	enable generic build tool ], genericproject=${enableval}, genericproject=yes)
+AM_CONDITIONAL(include_genericproject, test -n "$genericproject")
+
+AC_ARG_ENABLE(scriptproject, 	[  --enable-scriptproject, 	enable script build tool ], scriptproject=${enableval}, scriptproject=yes)
 AM_CONDITIONAL(include_scriptproject, test -n "$scriptproject")
 
-AC_ARG_ENABLE(trollproject, 	[  --enable-trollproject, 	enable troll project manager ], trollproject=${enableval}, trollproject=yes)
+AC_ARG_ENABLE(trollproject, 	[  --enable-trollproject, 	enable troll build tool ], trollproject=${enableval}, trollproject=yes)
 AM_CONDITIONAL(include_trollproject, test -n "$trollproject")
 
-AC_ARG_ENABLE(customproject, 	[  --enable-customproject, 	enable custom project manager ], customproject=${enableval}, customproject=yes)
+AC_ARG_ENABLE(customproject, 	[  --enable-customproject, 	enable custom build tool ], customproject=${enableval}, customproject=yes)
 AM_CONDITIONAL(include_customproject, test -n "$customproject")
+
+
+dnl  **********
+dnl  Check which version control systems support should be compiled
+dnl  **********
 
 KDE_CHECK_HEADER(cvsservice_stub.h, [cvsservice_stub_h="found"], [cvsservice_stub_h="none"])
 AM_CONDITIONAL(include_cvsservice, test "$cvsservice_stub_h" = "found")
@@ -86,6 +100,11 @@ AM_CONDITIONAL(include_perforce, test -n "$with_perforce")
 
 AC_ARG_ENABLE(clearcase, 	[  --enable-clearcase, 		enable clearcase support ], with_clearcase=${enableval}, with_clearcase=yes)
 AM_CONDITIONAL(include_clearcase, test -n "$with_clearcase")
+
+
+dnl  **********
+dnl  Check if visualboy advance support should be compiled
+dnl  **********
 
 AC_ARG_ENABLE(vba, 		[  --enable-vba, 		enable visualboy advance support ], with_vba=${enableval}, with_vba=yes)
 AM_CONDITIONAL(include_vba, test -n "$with_vba")
