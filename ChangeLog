@@ -1,3 +1,6 @@
+1999-11-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Don't i18n 'None' as vcsystem in project file
+
 1999-11-01 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* bugfix: similar library names caused trouble in reparse
 	  library flags (e.g. -lm and -lmysqlclient)
