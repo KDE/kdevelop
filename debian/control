@@ -2,8 +2,8 @@ Source: kdevelop
 Section: devel
 Priority: optional
 Maintainer: Bernd Gehrmann <bernd@physik.hu-berlin.de>
-Build-Depends: debhelper, kdelibs3-dev (>= 4:2.1-beta2-2), gettext, autoconf, automake, libtool, kdoc, kdelibs3-doc
-Standards-Version: 3.2.1
+Build-Depends: debhelper, kdelibs3-dev (>= 4:2.1-final-0), gettext, autoconf, automake, libtool, kdoc, kdelibs3-doc
+Standards-Version: 3.5.0
 
 Package: kdevelop
 Architecture: any
