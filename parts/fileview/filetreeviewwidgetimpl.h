@@ -72,7 +72,7 @@ public:
     * Here the popup menu is filled: by standard only the "reload tree" (only if the above function
     * returns true) and "show project files" options are added
     * @param popupMenu the menu to fill
-    * @param the QListViewItem which this menu has been requested upon
+    * @param item the QListViewItem which this menu has been requested upon
     */
     virtual void fillPopupMenu( QPopupMenu *popupMenu, QListViewItem *item ) const;
     /**

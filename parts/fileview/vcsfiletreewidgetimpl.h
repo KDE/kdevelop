@@ -48,7 +48,7 @@ private slots:
     //! when the requested info are ready the infoProvider object will be so kind the
     //! to give them to us in a ready-to-use format: we'll use that info to update all
     //! the items which are childs of the @see filetreeview::FileTreeViewItem stored in
-    //! @param callerData.
+    //! @p callerData.
     void vcsDirStatusReady( const VCSFileInfoMap &modifiedFiles, void *callerData );
 
 private:
@@ -58,7 +58,7 @@ private:
     KAction *m_actionSyncWithRepository;
     KDevVCSFileInfoProvider *m_vcsInfoProvider;
     //! We use this guard to avoid enabling the "reload tree" action when performing
-    // syncing with remote repositories.
+    //! syncing with remote repositories.
     bool m_isSyncingWithRepository;
     mutable KFileTreeViewItem *m_vcsStatusRequestedItem;
 };
