@@ -125,7 +125,10 @@ void CDocBrowser::showURL(QString url, bool reload){
     showHTML.start(KProcess::DontCare);
     return;
   }
-  
+  // workaround for kdoc2 malformed urls in crossreferences to Qt-documentation
+  if(url.contains("file%253A/"))
+		url.replace( QRegExp("file%253A/"), "" );
+
 
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
