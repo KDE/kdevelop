@@ -273,7 +273,7 @@ void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
 }
 
 void FileCreatePart::openCreatedFile(const KDevCreateFile::CreatedFile & createdFile) {
-  if (createdFile.status == KDevCreateFile::CreatedFile::STATUS_OK) {
+	if (createdFile.status == KDevCreateFile::CreatedFile::STATUS_OK && project() ) {
     KURL uu(project()->projectDirectory() + createdFile.dir + "/" + createdFile.filename );
     partController()->editDocument ( uu );
   }
@@ -469,7 +469,8 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   if (dialog.addToProject())
   {
     // work out the path relative to the project directory
-    QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
+//    QString relToProj = URLUtil::relativePath(projectURL, selectedURL, URLUtil::SLASH_PREFIX );
+    QString relToProj = URLUtil::relativePath(projectURL.path(), fullPath, URLUtil::SLASH_PREFIX );
     project()->addFile(relToProj.mid(1));
   }
   else

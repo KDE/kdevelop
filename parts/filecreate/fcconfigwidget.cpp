@@ -380,18 +380,7 @@ void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString des
     {
         KURL destDir;
         destDir.setPath(dest);
-#ifdef KDE_MAKE_VERSION
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-#  define OLD__KDE
-# endif
-#else
-# define OLD__KDE
-#endif
-#ifdef OLD__KDE
-        if (!KIO::NetAccess::exists(destDir))
-#else
         if (!KIO::NetAccess::exists(destDir, false, 0 ))
-#endif
             KIO::NetAccess::mkdir(destDir);
 
         KURL destination;
