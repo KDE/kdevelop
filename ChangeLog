@@ -1,3 +1,7 @@
+2002-09-25 Yann Hodique <Yann.Hodique@lifl.fr>
+	* Implemented some features in distpart
+	* Fixed a few bugs
+
 2002-09-20 Roberto Raggi <raggi@cli.di.unipi.it>
 	* Added statement rules to c++ parser
 
