@@ -6,3 +6,4 @@ output=filesystem
 reading=true
 defaultMimetype=text/html
 Description=A kioslave for displaying WinHelp files
+Icon=help

@@ -6,3 +6,4 @@ output=filesystem
 reading=true
 listing=Name
 determineMimetypeFromExtension=false
+Icon=khelpcenter
