@@ -6,7 +6,7 @@ EXTRA_DIST = qextmdichildarea.cpp qextmdichildfrm.cpp qextmdichildfrmcaption.cpp
 ####### kdevelop will overwrite this part!!! (end)############
 # Here resides the qextmdi library.
 
-INCLUDES = $(all_includes) -I$(top_srcdir)/kdevelop/widgets/qextmdi/include -I$(top_srcdir)/kdevelop/widgets/qextmdi/res
+INCLUDES = -I$(top_srcdir)/kdevelop/widgets/qextmdi/include -I$(top_srcdir)/kdevelop/widgets/qextmdi/res $(all_includes)
 
 lib_LTLIBRARIES = libkdevelopqextmdi.la
 libkdevelopqextmdi_la_LDFLAGS = $(all_libraries) -version-info 2:0
