@@ -25,16 +25,35 @@ class KURL::List;
 namespace CvsUtils
 {
     bool isRegisteredInRepository( const QString &projectDirectory, const KURL &url );
-    // Ideally this function will take a bunch of URLs and validate them (they are valid files,
-    // are files registered in CVS, ...). Currently checks only for files belonging to the
-    // repository ;)
+    /*
+    * Ideally this function will take a bunch of URLs and validate them (they are valid files,
+    * are files registered in CVS, are on a supported filesystem, ...). Currently checks
+    * only for files belonging to the repository ;)
+    * param @projectDirectory
+    * param @urls list of KURL to check (the list can be modified during the operation)
+    * parap @op type of cvs operation, as pecified in @see CvsOperation enum
+    */
     void validateURLs( const QString &projectDirectory, KURL::List &urls, CvsOperation op );
 
-    // Add file(s) to their respective ignore list
+    /*
+    * Add file(s) to their respective ignore list. This means that, for example, if you
+    * add '/home/mario/src/myprj/mylib/module1/bad.cpp' then the string 'bad.cpp' will be
+    * appended to file '/home/mario/src/myprj/mylib/module1/.cvsignore'.
+    * param @projectDirectory
+    * param @urls list of urls to be added to the check list.
+    */
     void addToIgnoreList( const QString &projectDirectory, const KURL &url );
     void addToIgnoreList( const QString &projectDirectory, const KURL::List &urls );
 
-    // Remove file(s) from their respective .ignore files
+    /*
+    * Remove file(s) from their respective .ignore files. As specified for @see addToIgnoreList
+    * function, this means that, for example, if you remove '/home/mario/src/myprj/mylib/module1/bad.cpp'
+    * then a search for the string 'bad.cpp' will be performed on file
+    * '/home/mario/src/myprj/mylib/module1/.cvsignore': if found, it will be removed, otherwise
+    * nothing will be removed.
+    * param @projectDirectory
+    * param @urls list of urls to be removed from the check list.
+    */
     void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
     void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
 };
