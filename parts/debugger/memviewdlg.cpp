@@ -46,6 +46,9 @@
 // and displayed as is, so it's rather crude, but it works!
 // **************************************************************************
 
+namespace GDBDebugger
+{
+
 MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     : KDialog(parent, name, true),      // modal
       start_(new KLineEdit(this)),
@@ -59,22 +62,22 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
 
     QGridLayout *grid = new QGridLayout(2, 2, 5);
     topLayout->addLayout(grid);
-    
+
     QLabel *label = new QLabel(start_, i18n("Start:"), this);
     grid->addWidget(label, 0, 0);
     grid->setRowStretch(0, 0);
     grid->addWidget(start_, 1, 0);
     grid->setRowStretch(1, 0);
-    
+
     label = new QLabel(end_, i18n("Amount/End address (memory/disassemble):"), this);
     grid->addWidget(label, 0, 1);
     grid->addWidget(end_, 1, 1);
-    
+
     label = new QLabel(i18n("MemoryView:"), this);
     topLayout->addWidget(label, 0);
     topLayout->addWidget(output_, 5);
     output_->setFont(KGlobalSettings::fixedFont());
-    
+
     KButtonBox *buttonbox = new KButtonBox(this, Horizontal, 5);
     QPushButton *memoryDump = buttonbox->addButton(i18n("Memory"));
     QPushButton *disassemble = buttonbox->addButton(i18n("Disassemble"));
@@ -86,7 +89,7 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     topLayout->addWidget(buttonbox);
 
     start_->setFocus();
-    
+
     connect(memoryDump, SIGNAL(clicked()), SLOT(slotMemoryDump()));
     connect(disassemble, SIGNAL(clicked()), SLOT(slotDisassemble()));
     connect(registers, SIGNAL(clicked()), SIGNAL(registers()));
@@ -132,4 +135,7 @@ void MemoryViewDialog::slotMemoryDump()
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
+
+}
+
 #include "memviewdlg.moc"

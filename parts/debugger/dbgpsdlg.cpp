@@ -32,6 +32,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+namespace GDBDebugger
+{
+
 /***************************************************************************/
 
 // Display a list of processes for the user to select one
@@ -136,6 +139,8 @@ void Dbg_PS_Dialog::slotProcessExited()
 
         start = pos+1;
     }
+}
+
 }
 
 /***************************************************************************/

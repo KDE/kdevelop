@@ -21,15 +21,18 @@
 #include "domutil.h"
 #include "debuggerpart.h"
 
+namespace GDBDebugger
+{
+
 DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, const char *name)
     : DebuggerConfigWidgetBase(parent, name), dom(*part->projectDom())
 {
     QFontMetrics fm(programArgs_edit->fontMetrics());
     programArgs_edit->setMinimumWidth(fm.width('X')*30);
- 
+
     programArgs_edit->setText(             DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
     gdbPath_edit->setText(                 DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
-    
+
     QString shell =                        DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
     if( shell == QString("no_value") ) {
         QFileInfo info( part->project()->projectDirectory() + "/libtool" );
@@ -74,6 +77,8 @@ void DebuggerConfigWidget::accept()
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/breakonloadinglibs", breakOnLoadingLibrary_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/separatetty", dbgTerminal_box->isChecked());
     DomUtil::writeBoolEntry(dom, "/kdevdebugger/general/floatingtoolbar", enableFloatingToolBar_box->isChecked());
+}
+
 }
 
 #include "debuggerconfigwidget.moc"

@@ -72,6 +72,9 @@
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
 
+namespace GDBDebugger
+{
+
 static int chownpty(int fd, int grant)
 // param fd: the fd of a master pty.
 // param grant: 1 to grant, 0 to revoke
@@ -351,6 +354,8 @@ bool STTY::findExternalTTY(const QString &termApp)
     pid_ = pid;
 
     return true;
+}
+
 }
 
 // **************************************************************************

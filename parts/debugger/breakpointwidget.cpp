@@ -34,6 +34,9 @@
 /***************************************************************************/
 /***************************************************************************/
 
+namespace GDBDebugger
+{
+
 class BreakpointItem : public QListViewItem
 {
 public:
@@ -281,9 +284,9 @@ void BreakpointWidget::removeAllBreakpoints()
         next = item->itemBelow();
 	static_cast<BreakpointItem*>(item)->remove();
 	item = next;
-	
+
     }
-    
+
 
     if( childCount() > 0 )
         emit clearAllBreakpoints();
@@ -504,6 +507,8 @@ void BreakpointWidget::slotParseGDBBreakpointSet(char *str, int BPKey)
             item->update( activeFlag_, id, hardware );
         }
     }
+}
+
 }
 
 /***************************************************************************/

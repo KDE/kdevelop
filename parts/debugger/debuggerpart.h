@@ -22,15 +22,19 @@ class QLabel;
 class QPopupMenu;
 class KDialogBase;
 class VariableWidget;
+class ProcessWidget;
+namespace KParts { class Part; };
+class ProcessLineMaker;
+
+namespace GDBDebugger
+{
+
 class BreakpointWidget;
 class FramestackWidget;
 class DisassembleWidget;
-class ProcessWidget;
 class Breakpoint;
 class DbgController;
 class DbgToolBar;
-namespace KParts { class Part; };
-class ProcessLineMaker;
 
 class DebuggerPart : public KDevPlugin
 {
@@ -51,7 +55,7 @@ private slots:
 //    void projectClosed();
     void projectConfigWidget(KDialogBase *dlg);
     void slotActivePartChanged(KParts::Part*);
-    
+
     void slotRun();
     void slotExamineCore();
     void slotAttachProcess();
@@ -74,7 +78,7 @@ private:
     void startDebugger();
     void stopDebugger();
     void setupController();
-    
+
     QGuardedPtr<VariableWidget> variableWidget;
     QGuardedPtr<BreakpointWidget> breakpointWidget;
     QGuardedPtr<FramestackWidget> framestackWidget;
@@ -85,8 +89,10 @@ private:
     QGuardedPtr<DbgToolBar> floatingToolBar;
     ProcessLineMaker* procLineMaker;
     ProcessLineMaker* gdbLineMaker;
-    
+
     QString m_contextIdent;
 };
+
+}
 
 #endif

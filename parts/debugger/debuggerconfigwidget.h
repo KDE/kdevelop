@@ -18,10 +18,13 @@
 
 #include <qdom.h>
 
+namespace GDBDebugger
+{
+
 class DebuggerPart;
 
 class DebuggerConfigWidget : public DebuggerConfigWidgetBase
-{ 
+{
     Q_OBJECT
 
 public:
@@ -34,5 +37,7 @@ public slots:
 private:
     QDomDocument &dom;
 };
+
+}
 
 #endif

@@ -53,6 +53,9 @@
 
 #include "debuggerpart.h"
 
+namespace GDBDebugger
+{
+
 typedef KGenericFactory<DebuggerPart> DebuggerFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
 
@@ -61,18 +64,18 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
       controller(0)
 {
     setInstance(DebuggerFactory::instance());
-    
+
     setXMLFile("kdevdebugger.rc");
 
     statusBarIndicator = new QLabel(" ", mainWindow()->statusBar());
     statusBarIndicator->setFixedWidth(15);
     mainWindow()->statusBar()->addWidget(statusBarIndicator, 0, true);
     statusBarIndicator->show();
-    
+
     //
     // Setup widgets and dbgcontroller
     //
-    
+
     variableWidget = new VariableWidget();
     variableWidget->setEnabled(false);
     variableWidget->setIcon(SmallIcon("math_brace"));
@@ -101,7 +104,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
     mainWindow()->embedOutputView(breakpointWidget, i18n("Breakpoints"), i18n("debugger breakpoints"));
-    
+
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
@@ -115,7 +118,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "previous calling functions."));
     mainWindow()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("debugger function call stack"));
     mainWindow()->setViewAvailable(framestackWidget, false);
-    
+
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
@@ -128,17 +131,17 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                             "\"step into\" instruction."));
     mainWindow()->embedOutputView(disassembleWidget, i18n("Disassemble"), i18n("debugger disassemble view"));
     mainWindow()->setViewAvailable(disassembleWidget, false);
-    
+
     gdbOutputWidget = new ProcessWidget(0);
     mainWindow()->embedOutputView(gdbOutputWidget, i18n("GDB"), i18n("GDB output"));
     mainWindow()->setViewAvailable(gdbOutputWidget, false);
-    
+
     VariableTree *variableTree = variableWidget->varTree();
 
     // variableTree -> framestackWidget
     connect( variableTree,     SIGNAL(selectFrame(int, int)),
              framestackWidget, SLOT(slotSelectFrame(int, int)));
-    
+
     // breakpointWidget -> this
     connect( breakpointWidget, SIGNAL(refreshBPState(const Breakpoint&)),
              this,             SLOT(slotRefreshBPState(const Breakpoint&)));
@@ -150,9 +153,9 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     //
     // Now setup the actions
     //
-    
+
     KAction *action;
-    
+
     action = new KAction(i18n("&Start"), "1rightarrow", 0,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
@@ -163,7 +166,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                "before this, or you can interrupt the program "
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
-    
+
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
@@ -226,7 +229,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          actionCollection(), "debug_memview");
     action->setStatusText( i18n("Various views into the application") );
 
-    
+
     action = new KAction(i18n("Examine Core File"), "core", 0,
                          this, SLOT(slotExamineCore()),
                          actionCollection(), "debug_core");
@@ -244,7 +247,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          actionCollection(), "debug_attach");
     action->setStatusText( i18n("Attaches the debugger to a running process") );
 
-    
+
     action = new KAction(i18n("Toggle Breakpoint"), 0, 0,
                          this, SLOT(toggleBreakpoint()),
                          actionCollection(), "debug_toggle_breakpoint");
@@ -253,17 +256,17 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 //                         this, SLOT(slotDisableBreakpoint()),
 //                         actionCollection(), "debug_disable_breakpoint");
 
-                         
+
     connect( mainWindow()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );
-    
+
 //    connect( core(), SIGNAL(projectOpened()),
 //             this, SLOT(projectOpened()) );
 //    connect( core(), SIGNAL(projectClosed()),
 //             this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
-    
+
     connect( partController(), SIGNAL(loadedFile(const QString &)),
              breakpointWidget, SLOT(refreshBP(const QString &)) );
     connect( debugger(), SIGNAL(toggledBreakpoint(const QString &, int)),
@@ -280,23 +283,23 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
 
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
              this, SLOT(slotActivePartChanged(KParts::Part*)) );
-             
+
     procLineMaker = new ProcessLineMaker();
-    
+
     connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
              appFrontend(), SLOT(insertStdoutLine(const QString&)) );
     connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
              appFrontend(), SLOT(insertStderrLine(const QString&)) );
-    
+
     gdbLineMaker = new ProcessLineMaker();
-    
+
     connect( gdbLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
              gdbOutputWidget, SLOT(insertStdoutLine(const QString&)) );
     connect( gdbLineMaker, SIGNAL(receivedStderrLine(const QString&)),
              gdbOutputWidget, SLOT(insertStderrLine(const QString&)) );
-    
+
     setupController();
-    
+
 //    if( project() )
 //        projectOpened();
 }
@@ -314,7 +317,7 @@ DebuggerPart::~DebuggerPart()
         mainWindow()->removeView(disassembleWidget);
     if(gdbOutputWidget)
         mainWindow()->removeView(gdbOutputWidget);
-    
+
     delete variableWidget;
     delete breakpointWidget;
     delete framestackWidget;
@@ -324,7 +327,7 @@ DebuggerPart::~DebuggerPart()
     delete floatingToolBar;
     delete statusBarIndicator;
     delete procLineMaker;
-    
+
     GDBParser::destroy();
 }
 
@@ -375,7 +378,7 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
     m_contextIdent = econtext->currentWord();
-    
+
     popup->insertSeparator();
     if (econtext->url().isLocalFile())
         popup->insertItem( i18n("Toggle Breakpoint"), this, SLOT(toggleBreakpoint()) );
@@ -390,10 +393,10 @@ void DebuggerPart::toggleBreakpoint()
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
     KTextEditor::ViewCursorInterface *cursorIface
         = dynamic_cast<KTextEditor::ViewCursorInterface*>(partController()->activeWidget());
-    
+
     if (!rwpart || !cursorIface)
         return;
-    
+
     uint line, col;
     cursorIface->cursorPositionReal(&line, &col);
 
@@ -470,7 +473,7 @@ void DebuggerPart::setupController()
              procLineMaker,    SLOT(slotReceivedStdout(const char*)));
     connect( controller,       SIGNAL(ttyStderr(const char*)),
              procLineMaker,    SLOT(slotReceivedStderr(const char*)));
-             
+
     connect( controller,       SIGNAL(gdbStdout(const char*)),
              gdbLineMaker,     SLOT(slotReceivedStdout(const char*)) );
     connect( controller,       SIGNAL(gdbStderr(const char*)),
@@ -499,11 +502,11 @@ void DebuggerPart::startDebugger()
             return;
         }
     }
-    
+
     core()->running(this, true);
 
     stateChanged( QString("active") );
-    
+
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Continue") );
     ac->action("debug_run")->setIcon( "dbgrun" );
@@ -513,19 +516,19 @@ void DebuggerPart::startDebugger()
                                "debugger. This only takes effect when the application "
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
-    
+
 
     mainWindow()->setViewAvailable(variableWidget, true);
     mainWindow()->setViewAvailable(framestackWidget, true);
     mainWindow()->setViewAvailable(disassembleWidget, true);
     mainWindow()->setViewAvailable(gdbOutputWidget, true);
-    
+
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
-    
+
     gdbOutputWidget->clear();
-    
+
     controller->slotStart(shell, program);
 //    breakpointWidget->slotSetPendingBPs(); //This sets the breakpoints again, so when you remove them during
 					    //a debugging session, the app will still stop at those breakpoints...
@@ -535,20 +538,20 @@ void DebuggerPart::stopDebugger()
 {
     controller->slotStop();
     debugger()->clearExecutionPoint();
-    
+
     delete floatingToolBar;
     floatingToolBar = 0;
-    
+
     breakpointWidget->reset();
     framestackWidget->clear();
     variableWidget->clear();
     disassembleWidget->clear();
     disassembleWidget->slotActivate(false);
-    
+
     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
-    
+
     mainWindow()->setViewAvailable(variableWidget, false);
     mainWindow()->setViewAvailable(framestackWidget, false);
     mainWindow()->setViewAvailable(disassembleWidget, false);
@@ -564,9 +567,9 @@ void DebuggerPart::stopDebugger()
                                "before this, or you can interrupt the program "
                                "while it is running, in order to get information "
                                "about variables, frame stack, and so on.") );
-    
+
     stateChanged( QString("stopped") );
-    
+
     core()->running(this, false);
 }
 
@@ -609,7 +612,7 @@ void DebuggerPart::slotAttachProcess()
 
     int pid = dlg.pidSelected();
     mainWindow()->statusBar()->message(i18n("Attaching to process %1").arg(pid), 1000);
-    
+
     startDebugger();
     controller->slotAttachTo(pid);
 }
@@ -634,13 +637,13 @@ void DebuggerPart::slotRunToCursor()
         = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
     KTextEditor::ViewCursorInterface *cursorIface
         = dynamic_cast<KTextEditor::ViewCursorInterface*>(partController()->activeWidget());
-    
+
     if (!rwpart || !rwpart->url().isLocalFile() || !cursorIface)
         return;
 
     uint line, col;
     cursorIface->cursorPosition(&line, &col);
-  
+
     controller->slotRunUntil(rwpart->url().path(), line);
 }
 
@@ -677,7 +680,7 @@ void DebuggerPart::slotStepOut()
 void DebuggerPart::slotMemoryView()
 {
     // Hmm, couldn't this be made non-modal?
-    
+
     MemoryViewDialog *dlg = new MemoryViewDialog();
     connect( dlg,        SIGNAL(disassemble(const QString&, const QString&)),
              controller, SLOT(slotDisassemble(const QString&, const QString&)));
@@ -687,7 +690,7 @@ void DebuggerPart::slotMemoryView()
              controller, SLOT(slotRegisters()));
     connect( dlg,        SIGNAL(libraries()),
              controller, SLOT(slotLibraries()));
-    
+
     connect( controller, SIGNAL(rawGDBMemoryDump(char*)),
              dlg,        SLOT(slotRawGDBMemoryView(char*)));
     connect( controller, SIGNAL(rawGDBDisassemble(char*)),
@@ -696,7 +699,7 @@ void DebuggerPart::slotMemoryView()
              dlg,        SLOT(slotRawGDBMemoryView(char*)));
     connect( controller, SIGNAL(rawGDBLibraries(char*)),
              dlg,        SLOT(slotRawGDBMemoryView(char*)));
-    
+
     dlg->exec();
     delete dlg;
 }
@@ -707,7 +710,7 @@ void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
     if (BP.isActionDie())
         debugger()->setBreakpoint(BP.fileName(), BP.lineNum()-1,
                               -1, true, false);
-    else 
+    else
         debugger()->setBreakpoint(BP.fileName(), BP.lineNum()-1,
                               1/*BP->id()*/, BP.isEnabled(), BP.isPending() );
 }
@@ -716,7 +719,7 @@ void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
 void DebuggerPart::slotStatus(const QString &msg, int state)
 {
     QString stateIndicator;
-        
+
     if (state & s_dbgNotStarted) {
         stateIndicator = " ";
     } else if (state & s_appBusy) {
@@ -730,11 +733,11 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
         stateIndicator = "P";
         stateChanged( QString("paused") );
     }
-    
+
     // And now? :-)
     kdDebug(9012) << "Debugger state: " << stateIndicator << ": " << endl;
     kdDebug(9012) << "   " << msg << endl;
-    
+
     statusBarIndicator->setText(stateIndicator);
     if (!msg.isEmpty())
         mainWindow()->statusBar()->message(msg, 3000);
@@ -834,7 +837,7 @@ void DebuggerPart::savePartialProjectSession(QDomElement* el)
     generalEl.setAttribute("dbgToolbar", true);
     el->appendChild(generalEl);
   }
-  
+
   QDomElement breakpointListEl = domDoc.createElement("breakpointList");
   QPtrList<Breakpoint> bpList = breakpointWidget->breakpoints();
   QPtrListIterator<Breakpoint> it(bpList);
@@ -855,6 +858,8 @@ void DebuggerPart::savePartialProjectSession(QDomElement* el)
   if (!breakpointListEl.isNull()) {
     el->appendChild(breakpointListEl);
   }
+}
+
 }
 
 #include "debuggerpart.moc"

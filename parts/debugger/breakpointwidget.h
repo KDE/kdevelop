@@ -1,5 +1,5 @@
 /***************************************************************************
-    begin                : Sun Aug 8 1999                                           
+    begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
  ***************************************************************************/
@@ -9,7 +9,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -17,6 +17,9 @@
 #define _BREAKPOINTWIDGET_H_
 
 #include <klistview.h>
+
+namespace GDBDebugger
+{
 
 class Breakpoint;
 class QMouseEvent;
@@ -32,25 +35,25 @@ class BreakpointItem;
 class BreakpointWidget : public KListView
 {
     Q_OBJECT
-    
+
 public:
     BreakpointWidget( QWidget* parent=0, const char* name=0 );
     virtual ~BreakpointWidget();
-    
+
     const QPtrList<Breakpoint> breakpoints();
-    
+
     enum Column {
         Status     = 0,
         File       = 1,
         Line       = 2,
         Hits       = 3,
         Condition  = 4
-    }; 
-    
+    };
+
 public slots:
     void reset();
     void refreshBP(const QString &filename);
-    
+
     // Connected to from the editor widget:
     void slotToggleBreakpoint(const QString &filename, int lineNum);
     void slotEditBreakpoint(const QString &fileName, int lineNum);
@@ -61,7 +64,7 @@ public slots:
     void slotUnableToSetBPNow(int BPNo);
     void slotParseGDBBrkptList(char *str);
     void slotParseGDBBreakpointSet(char *str, int BPKey);
-  
+
 private slots:
     void slotExecuted(QListViewItem *item);
     void slotContextMenu(QListViewItem *item);
@@ -75,7 +78,7 @@ signals:
 
 private:
     friend class BreakpointItem;
-    
+
     BreakpointItem* find(const Breakpoint& BP) const;
     BreakpointItem* findId(int id) const;
     BreakpointItem* findKey(int BPKey) const;
@@ -86,6 +89,9 @@ private:
 private:
     int activeFlag_;
 };
+
+}
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/

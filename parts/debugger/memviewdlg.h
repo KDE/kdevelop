@@ -1,7 +1,7 @@
 /***************************************************************************
-    begin                : Tue Oct 5 1999                                           
-    copyright            : (C) 1999 by John Birch                         
-    email                : jb.nz@writeme.com                                     
+    begin                : Tue Oct 5 1999
+    copyright            : (C) 1999 by John Birch
+    email                : jb.nz@writeme.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -9,7 +9,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -25,23 +25,26 @@ class QMultiLineEdit;
  * @author John Birch
  */
 
+namespace GDBDebugger
+{
+
 class MemoryViewDialog : public KDialog
 {
     Q_OBJECT
-    
+
 public:
     MemoryViewDialog( QWidget *parent=0, const char *name=0 );
     ~MemoryViewDialog();
-    
+
 signals:
     void disassemble(const QString &start, const QString &end);
     void memoryDump(const QString &start, const QString &end);
     void registers();
     void libraries();
-    
+
 public slots:
     void slotRawGDBMemoryView(char *buf);
-    
+
 private slots:
     void slotDisassemble();
     void slotMemoryDump();
@@ -50,5 +53,7 @@ private:
     KLineEdit *start_, *end_;
     QMultiLineEdit *output_;
 };
+
+}
 
 #endif

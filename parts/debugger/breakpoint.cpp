@@ -1,5 +1,5 @@
 /***************************************************************************
-    begin                : Sun Aug 8 1999                                           
+    begin                : Sun Aug 8 1999
     copyright            : (C) 1999 by John Birch
     email                : jb.nz@writeme.com
  ***************************************************************************/
@@ -9,7 +9,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -24,6 +24,9 @@
 #include <qstring.h>
 
 #include <stdio.h>
+
+namespace GDBDebugger
+{
 
 /***************************************************************************/
 /***************************************************************************/
@@ -84,10 +87,10 @@ QString Breakpoint::statusString() const
 // {
 //     if (s_temporary_)
 //         display_ += i18n("\ttemporary");
-//     
+//
 //     if (ignoreCount_)
 //         display_ += i18n("\tignore count %1").arg(ignoreCount_);
-//     
+//
 //     if (s_hardwareBP_)
 //         display_ = i18n("hw %1").arg(display_);
 // }
@@ -98,7 +101,7 @@ QString Breakpoint::dbgRemoveCommand() const
 {
     if (dbgId_>0)
         return QString("delete %1").arg(dbgId_); // gdb command - not translatable
-    
+
     return QString();
 }
 
@@ -147,17 +150,17 @@ void Breakpoint::setActive(int active, int id)
 {
     active_           = active;
     dbgId_            = id;
-    
+
     if (s_pending_ && !(s_actionAdd_ && s_actionModify_)) {
         s_pending_ = false;
         s_actionModify_ = false;
     }
-    
+
     s_actionAdd_          = false;
     s_actionClear_        = false;
     s_actionDie_          = false;
     s_dbgProcessing_      = false;
-    
+
     if (!s_actionModify_) {
         s_changedCondition_   = false;
         s_changedIgnoreCount_ = false;
@@ -174,7 +177,7 @@ bool Breakpoint::modifyDialog()
         setIgnoreCount(modifyBPDialog->getIgnoreCount());
         setEnabled(modifyBPDialog->isEnabled());
     }
-    
+
     delete modifyBPDialog;
     return (s_changedCondition_ || s_changedIgnoreCount_ || s_changedEnable_);
 }
@@ -208,10 +211,10 @@ QString FilePosBreakpoint::dbgSetCommand() const
         QFileInfo fi(fileName_);
         cmdStr = QString("break %1:%2").arg(fi.fileName()).arg(lineNo_); // gdb command
     }
-    
+
     if (isTemporary())
         cmdStr = "t"+cmdStr;  // gdb command
-    
+
     return cmdStr;
 }
 
@@ -222,7 +225,7 @@ bool FilePosBreakpoint::match(const Breakpoint *brkpt) const
     // simple case
     if (this == brkpt)
         return true;
-    
+
     // Type case
     const FilePosBreakpoint* check = dynamic_cast<const FilePosBreakpoint*>(brkpt);
     if (!check)
@@ -280,12 +283,12 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
     // simple case
     if (this == brkpt)
         return true;
-    
+
     // Type case
     const Watchpoint *check = dynamic_cast<const Watchpoint*>(brkpt);
     if (!check)
         return false;
-    
+
     // member case
     return (varName_ == check->varName_);
 }
@@ -419,3 +422,5 @@ bool Watchpoint::match(const Breakpoint* brkpt) const
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
+
+}

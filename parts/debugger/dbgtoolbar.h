@@ -16,9 +16,6 @@
 #ifndef _DBGTOOLBAR_H_
 #define _DBGTOOLBAR_H_
 
-class DbgButton;
-class DbgToolBar;
-class DebuggerPart;
 class KWinModule;
 
 #include <ksystemtray.h>
@@ -35,6 +32,13 @@ class KWinModule;
 // **************************************************************************
 // **************************************************************************
 
+namespace GDBDebugger
+{
+
+class DbgButton;
+class DbgToolBar;
+class DebuggerPart;
+
 class DbgDocker : public KSystemTray
 {
     Q_OBJECT
@@ -43,7 +47,7 @@ public:
     DbgDocker(QWidget *parent, DbgToolBar *toolBar, const QPixmap &pixmap);
     virtual ~DbgDocker()  {};
     virtual void mousePressEvent(QMouseEvent *e);
-    
+
 signals:
     void clicked();
 
@@ -86,5 +90,7 @@ private:
     DbgDocker*      docker_;
     KSystemTray*    dockWindow_;
 };
+
+}
 
 #endif

@@ -21,6 +21,9 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+namespace GDBDebugger
+{
+
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
@@ -60,28 +63,28 @@ void GDBParser::parseData(TrimmableItem *parent, char *buf,
                           bool requested, bool params)
 {
     static const char *unknown = "?";
-    
+
     Q_ASSERT(parent);
     if (!buf)
         return;
-    
+
     if (parent->getDataType() == typeArray) {
         parseArray(parent, buf);
         return;
     }
-    
+
     if (requested && !*buf)
         buf = (char*)unknown;
-    
+
     while (*buf) {
         QString varName = "";
         DataType dataType = determineType(buf);
-        
+
         if (dataType == typeName) {
             varName = getName(&buf);
             dataType = determineType(buf);
         }
-        
+
         QCString value = getValue(&buf, requested);
         setItem(parent, varName, dataType, value, requested, params);
     }
@@ -97,18 +100,18 @@ void GDBParser::parseArray(TrimmableItem *parent, char *buf)
             buf = skipNextTokenStart(buf);
             if (!*buf)
                 return;
-            
+
             DataType dataType = determineType(buf);
             QCString value = getValue(&buf, false);
             QString varName = elementRoot.arg(idx);
             setItem(parent, varName, dataType, value, false, false);
-            
+
             int pos = value.find(" <repeats", 0);
             if (pos > -1) {
                 if (int i = atoi(value.data()+pos+10))
                     idx += (i-1);
             }
-            
+
             idx++;
     }
 }
@@ -123,7 +126,7 @@ QString GDBParser::getName(char **buf)
         return QCString(start, *buf - start + 1);
     } else
         *buf = start;
-    
+
     return QString();
 }
 
@@ -133,17 +136,17 @@ QCString GDBParser::getValue(char **buf, bool requested)
 {
     char *start = skipNextTokenStart(*buf);
     *buf = skipTokenValue(start);
-    
+
     if (*start == '{')
         return QCString(start+1, *buf - start -1);
-    
+
     QCString value(start, *buf - start + 1);
-    
+
     // QT2.x string handling
     // A very bad hack alert!
     if (requested)
         return value.replace( QRegExp("\\\\000"), "" );
-    
+
     return value;
 }
 
@@ -154,14 +157,14 @@ TrimmableItem *GDBParser::getItem(TrimmableItem *parent, DataType dataType,
 {
     if (requested)
         return parent;
-    
+
     if (varName.isEmpty()) {
         if (parent->getDataType() == typeReference)
             return parent;
-        
+
         return 0;
     }
-    
+
     return parent->findMatch(varName, dataType);
 }
 
@@ -175,7 +178,7 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
     if (!item) {
         if (varName.isEmpty())
             return;
-        
+
         item = new VarItem(parent, varName, dataType);
     } else {
         // Don't update a "this" item because it'll alwasy stay red because the local
@@ -185,18 +188,18 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
         //    if (params && varName == "this")
         //      return;
     }
-    
+
     switch (dataType) {
     case typePointer:
         item->setText(ValueCol, value);
         item->setExpandable(varName != "_vptr.");
         break;
-        
+
     case typeStruct:
     case typeArray:
         item->setCache(value);
         break;
-        
+
     case typeReference:
         {
             int pos;
@@ -212,11 +215,11 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
             item->setExpandable(!value.isEmpty() && (value[0] == '@'));
             break;
         }
-        
+
     case typeValue:
         item->setText(ValueCol, value);
         break;
-        
+
     default:
         break;
     }
@@ -228,21 +231,21 @@ DataType GDBParser::determineType(char *buf) const
 {
     if (!buf || !*(buf= skipNextTokenStart(buf)))
         return typeUnknown;
-    
+
     // A reference, probably from a parameter value.
     if (*buf == '@')
         return typeReference;
-    
+
     // Structures and arrays - (but which one is which?)
     // {void (void)} 0x804a944 <__builtin_new+41> - this is a fn pointer
     // (void (*)(void)) 0x804a944 <f(E *, char)>  - so is this - ugly!!!
     if (*buf == '{') {
         if (strncmp(buf, "{{", 2) == 0)
             return typeArray;
-        
+
         if (strncmp(buf, "{<No data fields>}", 18) == 0)
             return typeValue;
-        
+
         buf++;
         while (*buf) {
             switch (*buf) {
@@ -277,7 +280,7 @@ DataType GDBParser::determineType(char *buf) const
         }
         return typeUnknown;
     }
-    
+
     // some sort of address. We need to sort out if we have
     // a 0x888888 "this is a char*" type which we'll term a value
     // or whether we just have an address
@@ -290,10 +293,10 @@ DataType GDBParser::determineType(char *buf) const
             else
                 break;
         }
-        
+
         return typePointer;
     }
-    
+
     // Pointers and references - references are a bit odd
     // and cause GDB to fail to produce all the local data
     // if they haven't been initialised. but that's not our problem!!
@@ -319,7 +322,7 @@ DataType GDBParser::determineType(char *buf) const
     buf = skipTokenValue(buf);
     if ((strncmp(buf, " = ", 3) == 0) || (*buf == '='))
         return typeName;
-    
+
     return typeValue;
 }
 
@@ -337,12 +340,12 @@ char *GDBParser::skipString(char *buf) const
             else
                 break;
         }
-        
+
         // If the string is long then it's chopped and has ... after it.
         while (*buf && *buf == '.')
             buf++;
     }
-    
+
     return buf;
 }
 
@@ -352,17 +355,17 @@ char *GDBParser::skipQuotes(char *buf, char quotes) const
 {
     if (buf && *buf == quotes) {
         buf++;
-        
+
         while (*buf) {
             if (*buf == '\\')
                 buf++;             // skips \" or \' problems
             else if (*buf == quotes)
                 return buf+1;
-            
+
             buf++;
         }
     }
-    
+
     return buf;
 }
 
@@ -372,7 +375,7 @@ char *GDBParser::skipDelim(char *buf, char open, char close) const
 {
     if (buf && *buf == open) {
         buf++;
-        
+
         while (*buf) {
             if (*buf == open)
                 buf = skipDelim(buf, open, close);
@@ -396,21 +399,21 @@ char *GDBParser::skipTokenValue(char *buf) const
     if (buf) {
         while (true) {
             buf = skipTokenEnd(buf);
-            
+
             char *end = buf;
             while (*end && isspace(*end) && *end != '\n')
                 end++;
-            
+
             if (*end == 0 || *end == ',' || *end == '\n' || *end == '=' || *end == '}')
                 break;
-            
+
             if (buf == end)
                 break;
-            
+
             buf = end;
         }
     }
-    
+
     return buf;
 }
 
@@ -431,11 +434,11 @@ char *GDBParser::skipTokenEnd(char *buf) const
         case '(':
             return skipDelim(buf, '(', ')');
         }
-        
+
         while (*buf && !isspace(*buf) && *buf != ',' && *buf != '}' && *buf != '=')
             buf++;
     }
-    
+
     return buf;
 }
 
@@ -446,10 +449,12 @@ char *GDBParser::skipNextTokenStart(char *buf) const
     if (buf)
         while (*buf && (isspace(*buf) || *buf == ',' || *buf == '}' || *buf == '='))
             buf++;
-    
+
     return buf;
 }
 
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
+
+}

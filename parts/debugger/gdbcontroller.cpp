@@ -118,6 +118,8 @@ using namespace std;
 //
 // **************************************************************************
 
+namespace GDBDebugger
+{
 
 GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack, QDomDocument &projectDom)
         : DbgController(),
@@ -733,12 +735,11 @@ void GDBController::parseProgramLocation(char *buf)
 
     // This extracts the address the program has stopped at as
 	// that is the only piece of info in this line we might use.
-    QRegExp regExp3("^0x[abcdef0-9]+ ");
-    regExp3.setMinimal(true);
-    int start;
-    if ((start = regExp3.search(buf, 0)) >= 0)
-        emit showStepInSource(QString(), -1,
-                              QCString(buf, (strchr(buf, ' ')-buf)+1));
+    QRegExp regExp3("^(0x[abcdef0-9]+)");
+    if (regExp3.search(buf, 0) >= 0)
+        emit showStepInSource(QString(),
+                              -1,
+                              regExp3.cap(1));
     else
         emit showStepInSource("", -1, "");
 
@@ -1803,6 +1804,8 @@ void GDBController::slotDbgStatus(const QString&, int)
 {}
 
 #endif
+
+}
 
 // **************************************************************************
 // **************************************************************************
