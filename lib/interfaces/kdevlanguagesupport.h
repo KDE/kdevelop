@@ -81,7 +81,7 @@ public:
         NewClass=512        /**<Language support can create classes.*/,
         AddMethod=1024      /**<Language support can create methods.*/,
         AddAttribute=2048   /**<Language support can create class attributes.*/,
-		CreateAccessMethods=4096  /**<Language support can create get/set methods for attributes.*/,
+        CreateAccessMethods=4096  /**<Language support can create get/set methods for attributes.*/
     };
 
     /**Constructs a language support plugin.
