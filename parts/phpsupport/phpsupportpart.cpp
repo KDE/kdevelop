@@ -32,8 +32,9 @@
 
 #include "phpsupportpart.h"
 #include "phpsupportfactory.h"
-#include "phpconfigwidget.h"
 #include "phpconfigdata.h"
+#include "phpconfigwidget.h"
+#include "phpbookconfig.h"
 
 #include "phphtmlview.h"
 #include "phperrorview.h"
@@ -49,20 +50,24 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
   m_htmlView=0;
   phpExeProc=0;
   setInstance(PHPSupportFactory::instance());
-  
+
   setXMLFile("kdevphpsupport.rc");
-  
+
   connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
   connect( core(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
   connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 	   this, SLOT(projectConfigWidget(KDialogBase*)) );
-  
+
   KAction *action;
   action = new KAction( i18n("&Run"), Key_F9,
 			this, SLOT(slotRun()),
 			actionCollection(), "build_run" );
+
+  action = new KAction( i18n("&PhpBook"), 0,
+			this, SLOT(slotPhpBook(KDialogBase*)),
+			actionCollection(), "phpbook_config" );
 
   m_phpErrorView = new PHPErrorView(this);
   core()->embedWidget(m_phpErrorView, KDevCore::OutputView, i18n("PHP"));
@@ -79,7 +84,7 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
 
   m_htmlView = new PHPHTMLView();
   core()->embedWidget(m_htmlView->view(), KDevCore::DocumentView, i18n("PHP"));
-  connect(m_htmlView,  SIGNAL(started(KIO::Job*)), 
+  connect(m_htmlView,  SIGNAL(started(KIO::Job*)),
 	  this, SLOT(slotWebJobStarted(KIO::Job*)));
 
   configData = new PHPConfigData(document());
@@ -88,6 +93,15 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
 
 PHPSupportPart::~PHPSupportPart()
 {}
+
+void PHPSupportPart::slotPhpBook(KDialogBase *dlg){
+        cerr << "slotPhPBook" << endl;
+        QVBox *vbox = dlg->addVBoxPage(i18n("PHP Book Settings"));
+          PHPBookConfig *w_PhpBook;
+	  w_PhpBook =new PHPBookConfig(configData, vbox, "PHP Book Config");
+//	  connect(w_PhpBook, SIGNAL(slotOK), this,
+//		  SLOT(slotOK()));
+}
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
   cerr << endl << "kdevelop (phpsupport): slotWebResult()" << filename << line;
@@ -118,7 +132,7 @@ bool PHPSupportPart::validateConfig(){
     KDialogBase dlg(KDialogBase::TreeList, i18n("Customize PHP Mode"),
                     KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, 0,
                     "php config dialog");
-    
+
     QVBox *vbox = dlg.addVBoxPage(i18n("PHP Settings"));
     PHPConfigWidget* w = new PHPConfigWidget(configData,vbox, "php config widget");
     connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
@@ -152,7 +166,7 @@ void PHPSupportPart::slotWebJobStarted(KIO::Job* job){
   cerr << endl << "job started" << job->progressId();
   if (job->className() == QString("KIO::TransferJob")){
     KIO::TransferJob *tjob = static_cast<KIO::TransferJob*>(job);
-    connect(tjob,  SIGNAL(data(KIO::Job*, const QByteArray&)), 
+    connect(tjob,  SIGNAL(data(KIO::Job*, const QByteArray&)),
 	    this, SLOT(slotWebData(KIO::Job*, const QByteArray&)));
     connect(tjob,  SIGNAL(result(KIO::Job*)),
 	    this, SLOT(slotWebResult(KIO::Job*)));
@@ -182,9 +196,9 @@ void PHPSupportPart::executeInTerminal(){
   phpExeProc->clearArguments();
   *phpExeProc << "php";
   *phpExeProc << "-f";
-  *phpExeProc << "/home/smeier/phpHello/app.php"; 
+  *phpExeProc << "/home/smeier/phpHello/app.php";
   phpExeProc->start(KProcess::Block,KProcess::Stdout);
-  
+
   cerr << "kdevelop (phpsupport): slotExecuteInTerminal()" << endl;
   //    core()->gotoDocumentationFile(KURL("http://www.php.net"));
 }
@@ -231,7 +245,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
   //    kdDebug(9007) << "maybeParse()" << endl;
     QFileInfo fi(fileName);
     QString path = fi.filePath();
-    if ((fi.extension().contains("inc") || fi.extension().contains("php") 
+    if ((fi.extension().contains("inc") || fi.extension().contains("php")
 	|| fi.extension().contains("html")
 	|| fi.extension().contains("php3")) && !fi.extension().contains("~")) {
         classStore()->removeWithReferences(fileName);
@@ -243,7 +257,7 @@ void PHPSupportPart::maybeParse(const QString fileName)
 void PHPSupportPart::initialParse()
 {
     cerr << "kdevelop (phpsupport): initialParse()" << endl;
-    
+
     if (project()) {
       //  kdDebug(9016) << "project" << endl;
         kapp->setOverrideCursor(waitCursor);
@@ -311,7 +325,7 @@ void PHPSupportPart::parse(const QString &fileName)
     int bracketOpen = 0;
     int bracketClose = 0;
     bool inClass = false;
-    
+
     while (!stream.eof()) {
         rawline = stream.readLine();
         line = rawline.stripWhiteSpace().latin1();
@@ -328,7 +342,7 @@ void PHPSupportPart::parse(const QString &fileName)
 	  lastClass->setName(classre.group(1));
 	  lastClass->setDefinedInFile(fileName);
 	  lastClass->setDefinedOnLine(lineNo);
-	  
+
 	  QString parentStr = classre.group(3);
 	  if(parentStr !=""){
 	    ParsedParent *parent = new ParsedParent;
@@ -336,7 +350,7 @@ void PHPSupportPart::parse(const QString &fileName)
 	    parent->setAccess(PIE_PUBLIC);
 	    lastClass->addParent(parent);
 	  }
-	  
+
 	  if (classStore()->hasClass(lastClass->name)) {
 	    ParsedClass *old = classStore()->getClassByName(lastClass->name);
 	    old->setDeclaredOnLine(lastClass->declaredOnLine);
@@ -346,12 +360,12 @@ void PHPSupportPart::parse(const QString &fileName)
 	  } else {
 	    classStore()->addClass(lastClass);
 	  }
-	  
+
 	  if(bracketOpen == bracketClose && bracketOpen !=0 && bracketClose !=0){
 	    inClass = false; // ok we are out ouf class
 	  }
 
-	     
+
         } else if (methodre.match(line)) {
 	  //	  cerr << "kdevelop (phpsupport): regex match line ( method ): " << line << endl;
 	  ParsedMethod *method = new ParsedMethod;
@@ -363,7 +377,7 @@ void PHPSupportPart::parse(const QString &fileName)
 
 	  method->setDefinedInFile(fileName);
 	  method->setDefinedOnLine(lineNo);
-            
+
 	  if (lastClass && inClass) {
 	    //	    kdDebug(9018) << "in Class: " << line << endl;
 	    ParsedMethod *old = lastClass->getMethod(method);

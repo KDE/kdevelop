@@ -27,8 +27,7 @@ class PHPSupportPart : public KDevLanguageSupport
 {
     Q_OBJECT
 
-public:
-    PHPSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+public:    PHPSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
     ~PHPSupportPart();
 
 protected:
@@ -49,6 +48,7 @@ private slots:
     void slotWebData(KIO::Job* job,const QByteArray& data);
     void slotWebResult(KIO::Job* job);
     void slotWebJobStarted(KIO::Job* job);
+    void slotPhpBook(KDialogBase *dlg);
 
     // Internal
     void initialParse();

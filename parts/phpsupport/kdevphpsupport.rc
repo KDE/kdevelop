@@ -3,6 +3,7 @@
 <MenuBar>
   <Menu name="build" >
     <Action name="build_run" />
+    <Action name="phpbook_config" />
   </Menu>
 </MenuBar>
 </kpartgui>
