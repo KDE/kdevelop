@@ -29,6 +29,7 @@
 #include <qprogressdialog.h>
 #include <qwhatsthis.h>
 #include <qxml.h>
+#include <qdatastream.h>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -418,6 +419,7 @@ void DocTreeDoxygenFolder::refresh()
 class DocTreeTocFolder : public DocTreeItem
 {
 public:
+    DocTreeTocFolder(const QString& name, KListView *parent, const QString &fileName, const QString &context);
     DocTreeTocFolder(KListView *parent, const QString &fileName, const QString &context);
 
     QString tocName() const { return toc_name; }
@@ -425,13 +427,14 @@ public:
     virtual void refresh();
     
 private:
-    void init();
+    //void init();
     void addTocSect(DocTreeItem *parent, QDomElement childEl, uint level);
     
     QString base;
     QString toc_name;
 };
 
+#if 0
 class TocNameExtractor : public QXmlDefaultHandler
 {
 public:
@@ -470,6 +473,15 @@ private:
     DocTreeTocFolder* m_parent;
     bool m_titleNext;
 };
+#endif
+
+DocTreeTocFolder::DocTreeTocFolder(const QString& name, KListView *parent, const QString &fileName, const QString &context)
+        : DocTreeItem(parent, Folder, fileName, context, true)
+{
+    setFileName( fileName );
+    setIndexFileName( fileName );
+    setText(0, name);
+}
 
 DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, const QString &context)
         : DocTreeItem(parent, Folder, fileName, context, true)
@@ -477,9 +489,10 @@ DocTreeTocFolder::DocTreeTocFolder(KListView *parent, const QString &fileName, c
     setFileName( fileName );
     setIndexFileName( fileName );
     
-    init();
+    refresh();
 }
 
+#if 0
 void DocTreeTocFolder::init()
 {
     QFileInfo fi(indexFileName());
@@ -500,6 +513,7 @@ void DocTreeTocFolder::init()
     r.setDTDHandler(&t);
     r.parse(&s);
 }
+#endif
 
 void DocTreeTocFolder::refresh()
 {
@@ -1073,11 +1087,60 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     }
 
     // doctocs
+    // We're caching title only because it is a huge startup speed gain to not have to extract the title from the XML
     QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
-    for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit) {
-        DocTreeTocFolder* item = new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit));
-        item->postInit();
-        folder_toc.append(item);
+    QString cache = dirs->findResource("data", "kdevdoctreeview/docpartcache");
+    bool regenerateCache = false;
+    QFile cacheFile(cache);
+    if (!cache.isEmpty() && cacheFile.open(IO_ReadOnly)) {
+      QDataStream ds(&cacheFile);
+      int version;
+      ds >> version;
+      // Opening cache
+      if (version == 1) {
+        QString fileName, title;
+        while (!ds.atEnd()) {
+          ds >> fileName >> title;
+          if (tocs.contains(fileName) && QFileInfo(fileName).lastModified() < QFileInfo(cacheFile).lastModified()) {
+            // Cache hit!
+            DocTreeTocFolder* item = new DocTreeTocFolder(title, docView, fileName, QString("ctx_%1").arg(fileName));
+            item->postInit();
+            folder_toc.append(item);
+            tocs.remove(fileName);
+          } else {
+            // couldn't find toc, may have been uninstalled. don't need to regenerate.
+          }
+        }
+      } else {
+        // Incorrect cache version
+        regenerateCache = true;
+      }
+      cacheFile.close();
+    }
+    
+    if (tocs.count()) {
+      regenerateCache = true;
+      QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
+      for (QStringList::Iterator tit = tocs.begin(); tit != tocs.end(); ++tit) {
+          DocTreeTocFolder* item = new DocTreeTocFolder(docView, *tit, QString("ctx_%1").arg(*tit));
+          item->postInit();
+          folder_toc.append(item);
+      }
+    }
+    
+    if (regenerateCache) {
+      // update cache here
+      if (cache.isEmpty()) {
+        cache = dirs->saveLocation("data");
+        cache += "kdevdoctreeview/docpartcache";
+        cacheFile.setName(cache);
+      }
+      // Creating cache
+      cacheFile.open(IO_WriteOnly);
+      QDataStream ds(&cacheFile);
+      ds << 1;
+      for (DocTreeTocFolder* f = folder_toc.first(); f; f = folder_toc.next())
+        ds << f->fileName() << f->text(0);
     }
 
     //    initKDocKDELibs();
