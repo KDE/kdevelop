@@ -109,7 +109,6 @@ Other Issues
   - implement multiple-views per document
 
 * modularity:
-  - make the KDevPart template work standalone
   - make sure all lib interfaces are available via DCOP
 
 * improvement:
