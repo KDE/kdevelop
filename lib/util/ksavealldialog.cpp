@@ -15,6 +15,7 @@
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <klistbox.h>
+#include <kstdguiitem.h>
 
 #include "ksavealldialog.h"
 
@@ -34,7 +35,7 @@ KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) 
 
   setButtonOKText( i18n("Save &All"), i18n("Saves all modified files") );
   setButtonText( User1, i18n("Save &None") );
-  setButtonText( Close, i18n("&Cancel") );
+  setButtonText( Close, KStdGuiItem::cancel().text() );
   setButtonTip( User1, i18n("Lose all modifications") );
   setButtonTip( Close, i18n("Cancels the action") );
 

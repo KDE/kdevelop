@@ -24,6 +24,8 @@
 #include <kcharselect.h>
 #include <qdialog.h>
 #include <klocale.h>
+#include <kpushbutton.h>
+#include <kstdguiitem.h>
 #endif
 
 #include "psymbolcombo.h"
@@ -84,8 +86,8 @@ void PSymbolCombo::selectChar()
     dv->addWidget(select);
 
     QHBoxLayout *dh = new QHBoxLayout(dv, 6);
-    QPushButton *pbOk = new QPushButton(i18n("&OK"), dia);
-    QPushButton *pbCancel = new QPushButton(i18n("&Cancel"), dia);
+    KPushButton *pbOk = new KPushButton(KStdGuiItem::ok(), dia);
+    KPushButton *pbCancel = new KPushButton(KStdGuiItem::cancel(), dia);
     QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));

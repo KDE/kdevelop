@@ -19,6 +19,7 @@
 #include <klineedit.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <kstdguiitem.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -86,7 +87,7 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     QPushButton *disassemble = buttonbox->addButton(i18n("&Disassemble"));
     QPushButton *registers = buttonbox->addButton(i18n("&Registers"));
     QPushButton *libraries = buttonbox->addButton(i18n("&Libraries"));
-    QPushButton *cancel = buttonbox->addButton(i18n("&Cancel"));
+    QPushButton *cancel = buttonbox->addButton(KStdGuiItem::cancel().text());
     memoryDump->setDefault(true);
     buttonbox->layout();
     topLayout->addWidget(buttonbox);

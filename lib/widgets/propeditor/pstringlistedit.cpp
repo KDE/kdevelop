@@ -19,11 +19,12 @@
 #include <klocale.h>
 
 #include <qlineedit.h>
-#include <qpushbutton.h>
+#include <kpushbutton.h>
 #include <qlayout.h>
 #include <qdialog.h>
 
 #include <keditlistbox.h>
+#include <kstdguiitem.h>
 
 #include "pstringlistedit.h"
 #include "propertyeditor.h"
@@ -66,8 +67,8 @@ void PStringListEdit::showEditor( )
     dv->addWidget(select);
 
     QHBoxLayout *dh = new QHBoxLayout(dv, 6);
-    QPushButton *pbOk = new QPushButton(i18n("&OK"), dia);
-    QPushButton *pbCancel = new QPushButton(i18n("&Cancel"), dia);
+    KPushButton *pbOk = new KPushButton(KStdGuiItem::ok(), dia);
+    KPushButton *pbCancel = new KPushButton(KStdGuiItem::cancel(), dia);
     QSpacerItem *si = new QSpacerItem(30, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     connect(pbOk, SIGNAL(clicked()), dia, SLOT(accept()));
@@ -78,7 +79,7 @@ void PStringListEdit::showEditor( )
     dh->addWidget(pbCancel);
 
     select->insertStringList(m_list);
-    
+
     if (dia->exec() == QDialog::Accepted)
     {
         m_list = select->items();

@@ -19,6 +19,7 @@
 #include <qstringlist.h>
 #include <kfiledialog.h>
 #include <kbuttonbox.h>
+#include <kpushbutton.h>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -30,6 +31,7 @@
 #include <kcombobox.h>
 #include <kurlcompletion.h>
 #include <kurlrequester.h>
+#include <kstdguiitem.h>
 
 #include "grepviewpart.h"
 
@@ -150,7 +152,7 @@ GrepDialog::GrepDialog(QWidget *parent, const char *name)
     layout->addLayout(button_layout, 5, 1);
     QPushButton *search_button = new QPushButton(i18n("&Search"), this);
     search_button->setDefault(true);
-    QPushButton *done_button = new QPushButton(i18n("&Cancel"), this);
+    KPushButton *done_button = new KPushButton(KStdGuiItem::cancel(), this);
     button_layout->addStretch();
     button_layout->addWidget(search_button);
     button_layout->addWidget(done_button);
