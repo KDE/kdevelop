@@ -77,38 +77,42 @@ bool DirectoryStatusMessageFilter::matchEnterDir( const QString& line, QString& 
     static const QString ko_b( (const QChar*)ko_behind, sizeof(ko_behind) / 2 );
     static const QString pt_br_e( (const QChar*)pt_br_enter, sizeof(pt_br_enter) / 2 );
     static const QString ru_e( (const QChar*)ru_enter, sizeof(ru_enter) / 2 );
-
-    // we need a QRegExp because KRegExp is not Utf8 aware.
+	static const QString en_e("Entering directory");
+	static const QString de_e1("Wechsel in das Verzeichnis Verzeichnis");
+	static const QString de_e2("Wechsel in das Verzeichnis");
+	static const QString es_e("Cambiando a directorio");
+	static const QString nl_e("Binnengaan van directory");
+	//@todo: other translations!
+	
+	// we need a QRegExp because KRegExp is not Utf8 aware.
     // 0x00AB is LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
     // 0X00BB is RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
     static QRegExp dirChange(QString::fromLatin1(".*: (.+) (`|") + QChar(0x00BB) + QString::fromLatin1(")(.*)('|") + QChar(0x00AB) + QString::fromLatin1(")(.*)"));
+	static QRegExp enEnter(QString::fromLatin1(".*: Entering directory"));
     kdDebug(9004) << "Directory filter line " << line << endl;
 
-    if (dirChange.search(line) > -1 )
-    {
-        QString msg = dirChange.cap(1);
-        QString msgBehind = dirChange.cap(5);
-
-        kdDebug(9004) << "msg " << msg << endl;
-	kdDebug(9004) << "masgBehind" << msgBehind << endl;
-
-        if ( msg == "Entering directory" ||   // English - default
-                msg == "Wechsel in das Verzeichnis Verzeichnis" ||    // German - yes, this is badly translated
-		msg == "Wechsel in das Verzeichnis" || // German without typo
-                msg == "Cambiando a directorio" || // Spanish
-                msg == fr_e || // French
-                msg == ja_e || // Japanese
-                ( msg == ko_e && msgBehind == ko_b ) || // Korean
-                msg == "Binnengaan van directory" || // Dutch
-                msg == pl_e || // Polish
-                msg == pt_br_e || // Brazilian Portuguese
-                msg == ru_e ) // Russian
-        {
-            dir = dirChange.cap(3);
-            return true;
-        }
-    }
-
+	// avoid QRegExp if possible. This regex performs VERY badly with large inputs,
+	// and the input required is very short if these strings match.
+	if(line.find(en_e) > -1 ||
+	   line.find(fr_e) > -1 ||
+	   line.find(pl_e) > -1 ||
+	   line.find(ja_e) > -1 ||
+	   line.find(ko_e) > -1 ||
+	   line.find(ko_b) > -1 ||
+	   line.find(pt_br_e) > -1 ||
+	   line.find(ru_e) > -1 ||
+	   line.find(de_e1) > -1 ||
+	   line.find(de_e2) > -1 ||
+	   line.find(es_e) > -1 ||
+	   line.find(nl_e) > -1)
+	{
+		// grab the directory name
+		if(dirChange.search(line) > -1)
+		{
+			dir = dirChange.cap(3);
+			return true;
+		}
+	}
     return false;
 }
 
@@ -144,33 +148,40 @@ bool DirectoryStatusMessageFilter::matchLeaveDir( const QString& line, QString& 
     static const QString ko_l( (const QChar*)ko_leave, sizeof(ko_leave) / 2 );
     static const QString pt_br_l( (const QChar*)pt_br_leave, sizeof(pt_br_leave) / 2 );
     static const QString ru_l( (const QChar*)ru_leave, sizeof(ru_leave) / 2 );
-
+	static const QString en_l("Leaving directory");
+	static const QString de_l1("Verlassen des Verzeichnisses Verzeichnis");
+	static const QString de_l2("Verlassen des Verzeichnisses");
+	static const QString es_l("Saliendo directorio");
+	static const QString nl_l("Verdwijnen uit directory");
+	static const QString po_l("Opuszczam katalog");
+	
     // we need a QRegExp because KRegExp is not Utf8 aware.
     // 0x00AB is LEFT-POINTING DOUBLE ANGLE QUOTATION MARK
     // 0X00BB is RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-    static QRegExp dirChange(QString::fromLatin1(".*: (.+) (`|") + QChar(0x00BB) + QString::fromLatin1(")(.*)('|") + QChar(0x00AB) + QString::fromLatin1(")(.*)"));
 
-    if (dirChange.search(line) > -1 )
-    {
-        QString msg = dirChange.cap(1);
-//        QString msgBehind = dirChange.cap(5);
+	static QRegExp dirChange(QString::fromLatin1(".*: (.+) (`|") + QChar(0x00BB) + QString::fromLatin1(")(.*)('|") + QChar(0x00AB) + QString::fromLatin1(")(.*)"));
 
-        if ( msg == "Leaving directory" || // en
-                msg == "Verlassen des Verzeichnisses Verzeichnis" || // de
-		msg == "Verlassen des Verzeichnisses" ||
-                msg == "Saliendo directorio" || // es
-                msg == fr_l || // fr
-                msg == ja_l || //ja
-                ( msg == (const char*)ko_leave && msg == (const char*)ko_behind ) || //ko
-                msg == "Verdwijnen uit directory" || //nl
-                msg == "Opuszczam katalog" || //po
-                msg == pt_br_l || //pt_BR
-                msg == ru_l ) //ru
-        {
-            dir = dirChange.cap(3);
-            return true;
-        }
-    }
-
+	// avoid QRegExp if possible. This regex performs VERY badly with large inputs,
+	// and the input required is very short if these strings match.
+	//@todo: fix ko translation. I have no idea what the code did originally.
+	if(line.find(en_l) > -1 ||
+	   line.find(fr_l) > -1 ||
+	   line.find(ja_l) > -1 ||
+	   line.find(ko_l) > -1 ||
+	   line.find(pt_br_l) > -1 ||
+	   line.find(ru_l) > -1 ||
+	   line.find(de_l1) > -1 ||
+	   line.find(de_l2) > -1 ||
+	   line.find(es_l) > -1 ||
+	   line.find(nl_l) > -1 ||
+	   line.find(po_l) > -1)
+	{
+		// grab the directory name
+		if(dirChange.search(line) > -1 )
+		{
+			dir = dirChange.cap(3);
+			return true;			
+		}
+	}
     return false;
 }
