@@ -12,7 +12,7 @@ Archive=kdevpart.tar.gz
 [FILE1]
 Type=install
 EscapeXML=true
-Source=%{src}/template-kpartapp/app.kdevelop
+Source=%{src}/app.kdevelop
 Dest=%{dest}/%{APPNAMELC}.kdevelop
 
 [FILE2]
