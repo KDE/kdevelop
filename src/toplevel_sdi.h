@@ -38,6 +38,13 @@ public:
 
   void init();
 
+  void realClose();
+
+
+signals:
+
+  void wantsToQuit();
+
 
 public slots:
 
@@ -56,6 +63,8 @@ private slots:
 
 private:
 
+  virtual bool queryClose();
+
   void createStatusBar();
   void createFramework();
   void createActions();
@@ -67,6 +76,8 @@ private:
 
   KAction *m_closeProjectAction, *m_projectOptionsAction;
   KRecentFilesAction *m_openRecentProjectAction;
+
+  bool m_closing;
 
 };
 

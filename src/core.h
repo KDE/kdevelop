@@ -32,7 +32,17 @@ public:
   void doEmitCoreInitialized() { emit coreInitialized(); }
   void doEmitProjectConfigWidget(KDialogBase *base) { emit projectConfigWidget(base); }
   void doEmitConfigWidget(KDialogBase *base) { emit configWidget(base); };
+
+
+public slots:
+
+  void slotQuit();
   
+
+private slots:
+
+  void wantsToQuit();
+
 
 protected:
 

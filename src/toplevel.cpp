@@ -3,6 +3,7 @@
 
 
 #include "toplevel.h"
+#include "core.h"
 
 
 #include "toplevel_mdi.h"
@@ -27,6 +28,8 @@ KDevTopLevel *TopLevel::getInstance()
       mdi->init();
 
       kapp->setMainWidget(mdi);
+
+      QObject::connect(mdi, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
     }
     else
     {
@@ -36,6 +39,8 @@ KDevTopLevel *TopLevel::getInstance()
       sdi->init();
 
       kapp->setMainWidget(sdi);
+
+      QObject::connect(sdi, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
     }
   }
 

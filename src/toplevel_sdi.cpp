@@ -30,7 +30,7 @@
 
 
 TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
-  : KParts::MainWindow(parent, name)
+  : KParts::MainWindow(parent, name), m_closing(false)
 {
 }
 
@@ -49,6 +49,25 @@ void TopLevelSDI::init()
 
 TopLevelSDI::~TopLevelSDI()
 {
+}
+
+
+bool TopLevelSDI::queryClose()
+{
+  if (m_closing)
+    return true;
+
+  emit wantsToQuit();
+  return false;
+}
+
+
+void TopLevelSDI::realClose()
+{
+  saveSettings();
+  
+  m_closing = true;
+  close();
 }
 
 
@@ -125,9 +144,7 @@ void TopLevelSDI::createActions()
 
 void TopLevelSDI::slotQuit()
 {
-  saveSettings();
-
-  kapp->quit();
+  (void) queryClose();
 }
 
 

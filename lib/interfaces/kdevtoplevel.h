@@ -24,6 +24,8 @@ public:
 
   KStatusBar *statusBar();
 
+  virtual void realClose();
+
 };
 
 

@@ -47,6 +47,8 @@ public:
   void saveAllFiles();
   void revertAllFiles();
 
+  bool readyToClose();
+
 
 public slots:
 

@@ -27,7 +27,7 @@
 
 
 TopLevelMDI::TopLevelMDI(QWidget *parent, const char *name)
-  : QextMdiMainFrm(parent, name)
+  : QextMdiMainFrm(parent, name), m_closing(false)
 {
 }
 
@@ -46,6 +46,25 @@ void TopLevelMDI::init()
 
 TopLevelMDI::~TopLevelMDI()
 {
+}
+
+
+bool TopLevelMDI::queryClose()
+{
+  if (m_closing)
+    return true;
+
+  emit wantsToQuit();
+  return false;
+}
+
+
+void TopLevelMDI::realClose()
+{
+  saveSettings();
+
+  m_closing = true;
+  close();
 }
 
 
@@ -109,9 +128,7 @@ void TopLevelMDI::createActions()
 
 void TopLevelMDI::slotQuit()
 {
-  saveSettings();
-
-  kapp->quit();
+  (void) queryClose();
 }
 
 

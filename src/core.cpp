@@ -1,3 +1,6 @@
+#include <qtimer.h>
+
+
 #include <kapp.h>
 #include <kdebug.h>
 #include <kstatusbar.h>
@@ -32,6 +35,19 @@ Core::Core()
 
 Core::~Core()
 {
+}
+
+
+void Core::wantsToQuit()
+{
+  QTimer::singleShot(0, this, SLOT(slotQuit()));
+}
+
+
+void Core::slotQuit()
+{
+  if (PartController::getInstance()->readyToClose())
+    TopLevel::getInstance()->realClose();
 }
 
 

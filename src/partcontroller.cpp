@@ -607,4 +607,32 @@ void PartController::slotPopupAboutToHide()
 }
 
 
+bool PartController::readyToClose()
+{
+  QPtrListIterator<PartListEntry> it(m_partList);
+  for ( ; it.current(); ++it)
+  {
+    if (!it.current()->part()->inherits("KParts::ReadWritePart"))
+      continue;
+
+    KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current()->part());
+    if (rw_part->isModified())
+    {
+      int res = KMessageBox::warningYesNoCancel(TopLevel::getInstance()->main(), 
+		  i18n("The document %1 is modified. Do you want to save it?").arg(rw_part->url().url()), 
+		  i18n("Save file?"), i18n("Save"), i18n("Discard"), i18n("Cancel"));
+
+      if (res == KMessageBox::Cancel)
+        return false;
+
+      if (res == KMessageBox::Ok)
+        rw_part->save();
+    }
+
+  }
+
+  return true;
+}
+
+
 #include "partcontroller.moc"

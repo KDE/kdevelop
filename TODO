@@ -2,7 +2,6 @@ Short-Term:
 
 mhk: move function areas of kdevcore into separate classes
 mhk: try to implement breakpoints with the MarkInterface
-mhk: stop gideon from closing when there are still modified docs
 
 
 Mid-Term:

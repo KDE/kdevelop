@@ -9,3 +9,8 @@ KStatusBar *KDevTopLevel::statusBar()
 {
   return main()->statusBar();
 }
+
+
+void KDevTopLevel::realClose()
+{
+}

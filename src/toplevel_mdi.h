@@ -37,6 +37,13 @@ public:
 
   void init();
 
+  void realClose();
+
+
+signals:
+
+  void wantsToQuit();
+
 
 public slots:
 
@@ -59,7 +66,9 @@ private slots:
 
 
 private:
-
+  
+  virtual bool queryClose();
+  
   QextMdiChildView *wrapper(QWidget *view, const QString &name);
 
   void createStatusBar();
@@ -76,6 +85,8 @@ private:
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;
 
   QPtrList<QextMdiChildView> m_outputViews, m_selectViews, m_partViews;
+
+  bool m_closing;
 
 };
 
