@@ -322,6 +322,77 @@ bool FlagPathEdit::isEmpty( )
         return edit->text().isEmpty();
 }
 
+FlagRadioButton::FlagRadioButton( QWidget * parent, FlagRadioButtonController * controller, const QString & flagstr, const QString & description )
+    : QRadioButton(description, parent), flag(flagstr)
+{
+    QToolTip::add(this, flagstr);
+    controller->addRadioButton(this);
+}
 
+FlagRadioButtonController::FlagRadioButtonController(QStringList multiKeys)
+    :m_multiKeys(multiKeys)
+{
+}
+
+void FlagRadioButtonController::addRadioButton(FlagRadioButton *item)
+{
+    cblist.append(item);
+}
+
+
+void FlagRadioButtonController::readFlags(QStringList *list)
+{
+    //handle keys like -vxyz -> transform they into -vx -vy -vz
+    //very "effective" algo :(
+/*    QStringList addons;
+    for (QStringList::Iterator mk = m_multiKeys.begin(); mk != m_multiKeys.end(); ++ mk)
+    {
+        kdDebug() << "multikey " << *mk << endl;
+        for (QStringList::Iterator sli = list->begin(); sli != list->end(); ++sli)
+        {
+            QString key = *sli;
+            kdDebug() << "current key: " << key << endl;
+            if ( (key.length() > 3) && (key.startsWith(*mk)) )
+            {
+                list->remove(sli);
+                key = key.remove(*mk);
+                kdDebug() << "refined key " << key << endl;
+                for (int i = 0; i < key.length(); ++i)
+                {
+                    kdDebug() << "adding key " << *mk + key[i] << endl;
+                    addons << *mk + key[i];
+                }
+            }
+        }
+    }
+    kdDebug() << "good" << endl;
+    *list += addons;
+
+    for (QStringList::Iterator sli = list->begin(); sli != list->end(); ++sli)
+    {
+        kdDebug() << "KEYS: " << *sli << endl;
+    }
+*/
+    QPtrListIterator<FlagRadioButton> it(cblist);
+    for (; it.current(); ++it) {
+        FlagRadioButton *fitem = it.current();
+        QStringList::Iterator sli = list->find(fitem->flag);
+        if (sli != list->end()) {
+            fitem->setChecked(true);
+            list->remove(sli);
+        }
+    }
+}
+
+
+void FlagRadioButtonController::writeFlags(QStringList *list)
+{
+    QPtrListIterator<FlagRadioButton> it(cblist);
+    for (; it.current(); ++it) {
+        FlagRadioButton *fitem = it.current();
+        if (fitem->isChecked())
+            (*list) << fitem->flag;
+    }
+}
 
 #include "flagboxes.moc"

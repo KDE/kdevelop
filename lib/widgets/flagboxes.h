@@ -18,15 +18,18 @@
 
 #include <qlistview.h>
 #include <qcheckbox.h>
+#include <qradiobutton.h>
 #include <qptrlist.h>
 
 class FlagListBox;
 class FlagListToolTip;
 class FlagCheckBoxController;
+class FlagRadioButtonController;
 class FlagPathEditController;
 class KLineEdit;
 class QPushButton;
 class KURLRequester;
+
 
 class FlagListItem : public QCheckListItem
 {
@@ -77,6 +80,20 @@ private:
     friend class FlagCheckBoxController;
 };
 
+class FlagRadioButton : public QRadioButton
+{
+    Q_OBJECT
+public:
+    FlagRadioButton(QWidget *parent, FlagRadioButtonController *controller,
+                 const QString &flagstr, const QString &description);
+    ~FlagRadioButton()
+        {}
+
+private:
+    QString flag;
+    friend class FlagRadioButtonController;
+};
+
 class FlagPathEdit: public QWidget
 {
     Q_OBJECT
@@ -105,28 +122,6 @@ private:
     friend class FlagPathEditController;
 };
 
-class FlagCheckBoxController
-{
-public:
-    /**multiKeys is a list of options like -vxyz (-vx -vy -vz)
-       multiKeys must contain a list of option names like {-v}
-       in the above example.
-    */
-    FlagCheckBoxController(QStringList multiKeys = QStringList());
-    ~FlagCheckBoxController()
-        {}
-
-    void readFlags(QStringList *list);
-    void writeFlags(QStringList *list);
-
-private:
-    void addCheckBox(FlagCheckBox *item);
-    QPtrList<FlagCheckBox> cblist;
-    friend class FlagCheckBox;
-
-    QStringList m_multiKeys;
-};
-
 class FlagPathEditController
 {
 public:
@@ -142,5 +137,46 @@ private:
     friend class FlagPathEdit;
 };
 
+class FlagCheckBoxController
+{
+public:
+    /**multiKeys is a list of options like -vxyz (-vx -vy -vz)
+       multiKeys must contain a list of option names like {-v}
+       in the above example.
+    */
+    FlagCheckBoxController(QStringList multiKeys = QStringList());
+    ~FlagCheckBoxController()
+        {}
+
+    void readFlags(QStringList *list);
+    void writeFlags(QStringList *list);
+
+    void addCheckBox(FlagCheckBox *item);
+private:
+    QPtrList<FlagCheckBox> cblist;
+
+    QStringList m_multiKeys;
+};
+
+class FlagRadioButtonController
+{
+public:
+    /**multiKeys is a list of options like -vxyz (-vx -vy -vz)
+       multiKeys must contain a list of option names like {-v}
+       in the above example.
+    */
+    FlagRadioButtonController(QStringList multiKeys = QStringList());
+    ~FlagRadioButtonController()
+        {}
+
+    void readFlags(QStringList *list);
+    void writeFlags(QStringList *list);
+
+    void addRadioButton(FlagRadioButton *item);
+private:
+    QPtrList<FlagRadioButton> cblist;
+
+    QStringList m_multiKeys;
+};
 
 #endif
