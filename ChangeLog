@@ -1,3 +1,13 @@
+2001-06-01  rokrau@yahoo.com
+    * initial Fortran support, Fortran files are recognized as source files
+      instead of data files and they can be compiled
+    * switch between source and header files now works also without ctags 
+      support. This is slower but shouldn't be noticable for smaller projects.
+    * the methods CKDevelop::readProperties and CKDevelop::saveProperties are, 
+      as it seems, not called from anywhere anymore, so I commented them out. 
+      This marks them for deletion in the next code cleanup.
+    * improved the implementation of the CTags support a little bit. 
+
 2001-06-01  Harald Fernengel  <harry@bnro.de>
     * added parenthesis highlighting code (stole it from quanta, so if it isn't working
       please don't blame me ;). Very primitive, works only for () [] and {}
