@@ -468,8 +468,12 @@ ParsedScopeContainer * StoreWalker::findOrInsertScopeContainer( ParsedScopeConta
 
 ParsedAttribute * StoreWalker::findOrInsertAttribute( ParsedClassContainer * scope, const QString & name )
 {
-    ParsedAttribute* attr = m_currentScopeContainer->getAttributeByName( name );
+    ParsedAttribute* attr = scope->getAttributeByName( name );
     if( !attr ){
+	kdDebug(9007) << "--------------> insert attribute " << name << endl;
+	kdDebug(9007) << "--------------> scope is " << scope->path() << endl;
+	kdDebug(9007) << "--------------> m_currentScopeContainer is " << m_currentScopeContainer->path() << endl;
+	
 	attr = new ParsedAttribute();
 	attr->setName( name );
 
