@@ -80,7 +80,7 @@ static const char * const del_xpm_data[] =
 };
 const char **del_xpm = (const char **)del_xpm_data;
 
-static char *update_xpm_data[] = 
+static const char* const update_xpm_data[] =
 {
   "16 16 5 1",
   /* colors */
