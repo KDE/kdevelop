@@ -1,3 +1,7 @@
+2001-03-18  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: added focusNextPrevChild(..) to avoid a focusOut, this enables the Tab key again, switched off subwidget focus loop
+    * bugfix: CKDevelop::slotFileSaveAll doesn't crash any more
+
 2001-03-17  jbb <jbb@kdevelop.org>
     * add dialog for library settings - it's a bit crude :(
 
