@@ -62,21 +62,27 @@ KDEV_CHECK_KDOC2
 dnl KDE_CHECK_FINAL
 
 dnl add here all your Makefiles. This are created by configure
-AC_OUTPUT(Makefile
+AC_OUTPUT(
+Makefile
 kdevelop/Makefile \
-po/Makefile \
-kdlgloader/Makefile \
 kdevelop/classparser/Makefile \
 kdevelop/classwizard/Makefile \
 kdevelop/gfxview/Makefile \
 kdevelop/kwrite/Makefile \
-kdevelop/pics/Makefile \
 kdevelop/print/Makefile \
 kdevelop/vc/Makefile \
-kdevelop/pics/mini/Makefile \
-kdevelop/toolbar/Makefile \
+kdevelop/plugins/Makefile \
+kdevelop/plugins/prjstat/Makefile \
+kdevelop/widgets/Makefile \
+kdevelop/widgets/qextmdi/Makefile \
+kdevelop/widgets/dockwidgets/Makefile \
+kdevelop/dlgedit/Makefile
 kdevelop/tools/Makefile \
 kdevelop/templates/Makefile \
+kdevelop/pics/Makefile \
+kdevelop/pics/mini/Makefile \
+kdevelop/toolbar/Makefile \
+kdlgloader/Makefile \
 doc/Makefile \
 doc/welcome/Makefile \
 doc/manual/Makefile \
@@ -85,10 +91,10 @@ doc/tutorial/Makefile \
 doc/kde_libref/Makefile \
 doc/addendum/Makefile \
 doc/cref/Makefile \
-kdevelop/plugins/Makefile \
-kdevelop/plugins/prjstat/Makefile \
-kdevelop/widgets/Makefile \
-kdevelop/widgets/qextmdi/Makefile \
-kdevelop/widgets/dockwidgets/Makefile \
-kdevelop/dlgedit/Makefile
+po/Makefile \
 ) 
+
+
+
+
+

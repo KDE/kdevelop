@@ -1330,7 +1330,8 @@ void CKDevelop::slotHelpBrowserReload(){
   if(!bKDevelop)
       switchToKDevelop();
   browser_view->setFocus();
-  browser_widget->widget()->setFocus();
+//  browser_widget->widget()->setFocus();
+//  browser_widget->setFocus();
   browser_widget->showURL(browser_widget->currentURL(), true);
   slotStatusMsg(i18n("Ready."));
 }
@@ -1867,7 +1868,7 @@ void CKDevelop::slotNewUndo(){
 
 
 void CKDevelop::slotURLSelected(const QString &url, const QString &, int){
-    browser_widget->widget()->setFocus();
+//    browser_widget->setFocus();
 
     if(url.contains("kdevelop/search_result.html") != 0){
 	browser_widget->showURL(url,true); // with reload if equal
@@ -2359,7 +2360,8 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 	
 	if(bAutoswitch){
 	    t_tab_view->setCurrentTab(DOC);
-	    browser_widget->widget()->setFocus();
+//	    browser_widget->widget()->setFocus();
+//	    browser_widget->setFocus();
 	
 	    if (browser_widget->isTextSelected())
 		enableCommand(ID_EDIT_COPY);

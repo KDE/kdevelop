@@ -242,11 +242,11 @@ void CKDevelop::initWhatsThis(){
 // 	                                  "the status of the insert/overwrite key as well as the "
 // 	                                  "cursor position by line and column."));
 	
-	QWhatsThis::add(browser_widget, i18n("Documentation Browser\n\n"
-	                                  "The documentation browser window shows the online-"
-	                                  "documentation provided with kdevelop as well as "
-	                                  "library class documentation created. Use the documentation "
-	                                  "tree to switch between various parts of the documentation."));	
+//	QWhatsThis::add(browser_widget, i18n("Documentation Browser\n\n"
+//	                                  "The documentation browser window shows the online-"
+//	                                  "documentation provided with kdevelop as well as "
+//	                                  "library class documentation created. Use the documentation "
+//	                                  "tree to switch between various parts of the documentation."));	
 	
 	QWhatsThis::add(messages_widget, i18n("Messages\n\n"
 	                                  "The messages window shows the output of the compiler and "

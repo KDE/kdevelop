@@ -184,8 +184,8 @@ bool CEditWidget::isEditing(const QString &filename)
  *-----------------------------------------------------------------*/
 void CEditWidget::setFocus(){
     cerr << "CEditWidget::setFocus()\n";
-    KWrite::setFocus();
-    kWriteView->setFocus();
+//    KWrite::setFocus();
+//    kWriteView->setFocus();
 }
 
 /*--------------------------------------------- CEditWidget::gotoPos()

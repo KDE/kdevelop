@@ -139,7 +139,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       {
         buffer[256]='\0';
         dstream.readRawBytes(buffer, 256);
-	write(buffer);
+	      write(buffer);
       }
 
       end();
@@ -278,7 +278,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 void CDocBrowser::slotPopupMenu(const QString &, const QPoint & pnt){
   QString text;
 
-  if(this->isTextSelected()){
+  if(isTextSelected()){
 
     text = selectedText();
     text.replace(QRegExp("^\n"), "");

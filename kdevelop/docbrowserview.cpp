@@ -19,11 +19,15 @@
 
 #include "cdocbrowser.h"
 #include "docbrowserview.h"
+#include <khtmlview.h>
 
 DocBrowserView::DocBrowserView(QWidget* parent,char* name) : QextMdiChildView(name){
   browser = new CDocBrowser(this,name);
 }
 
 void DocBrowserView::resizeEvent (QResizeEvent *e){
-  browser->resize(e->size());
+//  QextMdiChildView::resizeEvent(e);
+  KHTMLView* view=browser->htmlView();
+  view->resize(e->size());
+//  browser->resize(e->size());
 }
