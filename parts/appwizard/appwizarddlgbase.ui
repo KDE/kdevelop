@@ -224,31 +224,6 @@
                     <widget class="QComboBox" row="3" column="3">
                         <item>
                             <property name="text">
-                                <string>GPL</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>BSD</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>QPL</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>LGPL</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>GPL+Qt Exemption</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
                                 <string>Custom</string>
                             </property>
                         </item>

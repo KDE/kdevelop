@@ -52,6 +52,8 @@
 
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
+#include "kdevlicense.h"
+#include "kdevcore.h"
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
 #include "filepropspage.h"
@@ -191,6 +193,18 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
                                                    appname_edit,
                                                    "AppNameValidator");
     appname_edit->setValidator(appname_edit_validator);
+    
+    // insert the licenses into the license_combo
+    QDict< KDevLicense > lics( m_part->core()->licenses() );
+    QDictIterator< KDevLicense > dit(lics);
+    int idx=1;
+    for( ; dit.current(); ++dit )
+    {
+        license_combo->insertItem( dit.currentKey(), idx++ );
+        if( dit.currentKey() == "GPL" )
+            license_combo->setCurrentItem( idx - 1 );
+    }
+    
 }
 
 AppWizardDialog::~AppWizardDialog()
@@ -244,142 +258,34 @@ void AppWizardDialog::textChanged()
 
 void AppWizardDialog::licenseChanged()
 {
-    QString str =
-        "/***************************************************************************\n"
-        " *   Copyright (C) %1 by %2   *\n"
-        " *   %3   *\n"
-        " *                                                                         *\n";
-
-    QString author = author_edit->text();
-    QString email = email_edit->text();
-
-    str = str.arg(QDate::currentDate().year()).arg(author.left(45),-45).arg(email.left(67),-67);
-
-    switch (license_combo->currentItem())
-        {
-        case 0:
-            str +=
-                " *   This program is free software; you can redistribute it and/or modify  *\n"
-                " *   it under the terms of the GNU General Public License as published by  *\n"
-                " *   the Free Software Foundation; either version 2 of the License, or     *\n"
-                " *   (at your option) any later version.                                   *\n"
-                " *                                                                         *\n"
-                " *   This program is distributed in the hope that it will be useful,       *\n"
-                " *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *\n"
-                " *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *\n"
-                " *   GNU General Public License for more details.                          *\n"
-                " *                                                                         *\n"
-                " *   You should have received a copy of the GNU General Public License     *\n"
-                " *   along with this program; if not, write to the                         *\n"
-                " *   Free Software Foundation, Inc.,                                       *\n"
-                " *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *\n";
-            break;
-        case 1:
-            str +=
-                " *   Permission is hereby granted, free of charge, to any person obtaining *\n"
-                " *   a copy of this software and associated documentation files (the       *\n"
-                " *   \"Software\"), to deal in the Software without restriction, including   *\n"
-                " *   without limitation the rights to use, copy, modify, merge, publish,   *\n"
-                " *   distribute, sublicense, and/or sell copies of the Software, and to    *\n"
-                " *   permit persons to whom the Software is furnished to do so, subject to *\n"
-                " *   the following conditions:                                             *\n"
-                " *                                                                         *\n"
-                " *   The above copyright notice and this permission notice shall be        *\n"
-                " *   included in all copies or substantial portions of the Software.       *\n"
-                " *                                                                         *\n"
-                " *   THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,       *\n"
-                " *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF    *\n"
-                " *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.*\n"
-                " *   IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR     *\n"
-                " *   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, *\n"
-                " *   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR *\n"
-                " *   OTHER DEALINGS IN THE SOFTWARE.                                       *\n";
-            break;
-        case 2:
-            str +=
-                " *   This program may be distributed under the terms of the Q Public       *\n"
-                " *   License as defined by Trolltech AS of Norway and appearing in the     *\n"
-                " *   file LICENSE.QPL included in the packaging of this file.              *\n"
-                " *                                                                         *\n"
-                " *   This program is distributed in the hope that it will be useful,       *\n"
-                " *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *\n"
-                " *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *\n";
-            break;
-        case 3:
-            str +=
-                " *   This program is free software; you can redistribute it and/or modify  *\n"
-                " *   it under the terms of the GNU Library General Public License as       *\n"
-                " *   published by the Free Software Foundation; either version 2 of the    *\n"
-                " *   License, or (at your option) any later version.                       *\n"
-                " *                                                                         *\n"
-                " *   This program is distributed in the hope that it will be useful,       *\n"
-                " *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *\n"
-                " *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *\n"
-                " *   GNU General Public License for more details.                          *\n"
-                " *                                                                         *\n"
-                " *   You should have received a copy of the GNU Library General Public     *\n"
-                " *   License along with this program; if not, write to the                 *\n"
-                " *   Free Software Foundation, Inc.,                                       *\n"
-                " *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *\n";
-	    break;
-        case 4:
-            str +=
-                " *   This program is free software; you can redistribute it and/or modify  *\n"
-                " *   it under the terms of the GNU General Public License as published by  *\n"
-                " *   the Free Software Foundation; either version 2 of the License, or     *\n"
-                " *   (at your option) any later version.                                   *\n"
-                " *                                                                         *\n"
-                " *   This program is distributed in the hope that it will be useful,       *\n"
-                " *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *\n"
-                " *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *\n"
-                " *   GNU General Public License for more details.                          *\n"
-                " *                                                                         *\n"
-                " *   You should have received a copy of the GNU General Public License     *\n"
-                " *   along with this program; if not, write to the                         *\n"
-                " *   Free Software Foundation, Inc.,                                       *\n"
-                " *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *\n"
-                " *                                                                         *\n"
-                " *   In addition, as a special exception, the copyright holders give       *\n"
-                " *   permission to link the code of this program with any edition of       *\n"
-                " *   the Qt library by Trolltech AS, Norway (or with modified versions     *\n"
-                " *   of Qt that use the same license as Qt), and distribute linked         *\n"
-                " *   combinations including the two.  You must obey the GNU General        *\n"
-                " *   Public License in all respects for all of the code used other than    *\n"
-                " *   Qt.  If you modify this file, you may extend this exception to        *\n"
-                " *   your version of the file, but you are not obligated to do so.  If     *\n"
-                " *   you do not wish to do so, delete this exception statement from        *\n"
-                " *   your version.                                                         *\n";
-        }
-
-    str += " ***************************************************************************/\n";
-
-    QValueList<AppWizardFileTemplate>::Iterator it;
-    for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
-        QString style = (*it).style;
-        QMultiLineEdit *edit = (*it).edit;
-
-        QString text;
-        if (style == "CStyle") {
-            text = str;
-        } else if (style == "PStyle") {
-            text = str;
-            text.replace(QRegExp("/\\**\n \\*"), "{\n  ");
-            text.replace(QRegExp("\\*\n \\*"), " \n  ");
-            text.replace(QRegExp(" *\\**/\n"), "}\n");
-        } else if (style == "AdaStyle") {
-            text = str;
-            text.replace(QRegExp("/\\*"), "--");
-            text.replace(QRegExp(" \\*"), "--");
-            text.replace(QRegExp("\\*/"), "*");
-        } else if (style == "ShellStyle") {
-            text = str;
-            text.replace(QRegExp("\\*|/"), "#");
-            text.replace(QRegExp("\n ##"), "\n##");
-            text.replace(QRegExp("\n #"), "\n# ");
-        }
-
-        edit->setText(text);
-    }
+	QValueList<AppWizardFileTemplate>::Iterator it;
+	if( license_combo->currentItem() == 0 )
+	{
+		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it)
+		{
+			QMultiLineEdit *edit = (*it).edit;
+			edit->setText( QString::null );
+		}
+	} else {
+		KDevLicense* lic = m_part->core()->licenses()[ license_combo->currentText() ];
+		for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
+			QString style = (*it).style;
+			QMultiLineEdit *edit = (*it).edit;
+			
+			KDevFile::CommentingStyle commentStyle = KDevFile::CPPStyle;
+			if (style == "PStyle") {
+				commentStyle = KDevFile::PascalStyle;
+			} else if (style == "AdaStyle") {
+				commentStyle = KDevFile::AdaStyle;
+			} else if (style == "ShellStyle") {
+				commentStyle = KDevFile::BashStyle;
+			}
+			
+			QString text;
+			text = lic->assemble( commentStyle, author_edit->text(), email_edit->text(), 0 );
+			edit->setText(text);
+		}
+	}
 }
 
 
@@ -432,20 +338,19 @@ void AppWizardDialog::accept()
     source = dir.absPath();
     script = dir.filePath("template-" + finfo.fileName() + "/script");
 
-    QString license =
-        (license_combo->currentItem()<4)? license_combo->currentText() : i18n("Custom");
-
-    QString licensefile;
-    switch (license_combo->currentItem())
+    QString licenseFile, licenseName = i18n("Custom");
+    
+    if( license_combo->currentItem() != 0 )
+    {
+        licenseName = license_combo->currentText();
+        KDevLicense* lic = m_part->core()->licenses()[ licenseName ];
+        if( lic )
         {
-        case 0: licensefile = "COPYING";     break;
-        case 1: licensefile = "LICENSE.BSD"; break;
-        case 2: licensefile = "LICENSE.QPL"; break;
-        case 3: licensefile = "COPYING.LIB"; break;
-        case 4: licensefile = "COPYING";     break;
-        default: ;
+            QStringList files( lic->copyFiles() );
+            licenseFile = files.first();
         }
-
+    }
+    
     QStringList templateFiles;
     QValueList<AppWizardFileTemplate>::Iterator it;
     for (it = m_fileTemplates.begin(); it != m_fileTemplates.end(); ++it) {
@@ -477,9 +382,9 @@ void AppWizardDialog::accept()
     m_cmdline += " --source=";
     m_cmdline +=  KShellProcess::quote(source);
     m_cmdline += " --license=";
-    m_cmdline +=  KShellProcess::quote(license);
+    m_cmdline +=  KShellProcess::quote(licenseName);
     m_cmdline += " --licensefile=";
-    m_cmdline += KShellProcess::quote(licensefile);
+    m_cmdline += KShellProcess::quote(licenseFile);
     m_cmdline += " --filetemplates=";
     m_cmdline += KShellProcess::quote(templateFiles.join(","));
 
