@@ -122,6 +122,8 @@ CKDevelop::CKDevelop() :
   initView();
   initConnections();
   initStatusBar();
+  initKeyAccel();
+  setKeyAccel();
 
   readOptions();
   slotViewRefresh();
@@ -308,6 +310,7 @@ void CKDevelop::initView()
 void CKDevelop::initKeyAccel()
 {
   accel = new CKDevAccel( this );
+
   //file menu
   accel->connectItem( KStdAccel::New, this, SLOT(slotFileNew()), true, ID_FILE_NEW );
   accel->connectItem( KStdAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN );
@@ -513,7 +516,12 @@ void CKDevelop::initKeyAccel()
   accel->insertItem( i18n("Search for Help on"), "HelpSearch", (unsigned int) 0);
   accel->connectItem( "HelpSearch", this, SLOT(slotHelpSearch()), true, ID_HELP_SEARCH );
 
-  // Tab-Switch
+  accel->insertItem( i18n("View Project API-Doc"), "HelpProjectAPI", (unsigned int) 0);
+  accel->connectItem("HelpProjectAPI", this, SLOT(slotHelpAPI()), true, ID_HELP_PROJECT_API);
+
+  accel->insertItem( i18n("View Project User-Manual"), "HelpProjectManual", (unsigned int) 0);
+  accel->connectItem( "HelpProjectManual", this, SLOT(slotHelpManual()), true, ID_HELP_USER_MANUAL);   // Tab-Switch
+
   accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
   accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast()) );
 
@@ -768,7 +776,7 @@ void CKDevelop::initMenuBar(){
   ///////////////////////////////////////////////////////////////////
   // Debug-menu entries
 
-  QPopupMenu* debugPopup = new QPopupMenu();
+  debugPopup = new QPopupMenu();
   debugPopup->insertItem(SmallIconSet("debugger"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
   debugPopup->insertItem(SmallIconSet("debugger"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
   debugPopup->insertItem(SmallIconSet("debugger"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
@@ -1351,19 +1359,13 @@ void CKDevelop::setKeyAccel()
 
   accel->setItemEnabled("Dialog Editor", true );
 
-  accel->connectItem( KStdAccel::Open , this, SLOT(slotFileOpen()), true, ID_FILE_OPEN);
-  accel->connectItem( KStdAccel::Close , this, SLOT(slotFileClose()), true, ID_FILE_CLOSE);
-  accel->connectItem( KStdAccel::Save , this, SLOT(slotFileSave()), true, ID_FILE_SAVE);
-  accel->connectItem( KStdAccel::Undo , this, SLOT(slotEditUndo()), true, ID_EDIT_UNDO);
-  accel->connectItem( "Redo" , this, SLOT(slotEditRedo()), true, ID_EDIT_REDO);
-  accel->connectItem( KStdAccel::Cut , this, SLOT(slotEditCut()), true, ID_EDIT_CUT);
-  accel->connectItem( KStdAccel::Copy , this, SLOT(slotEditCopy()), true, ID_EDIT_COPY);
-  accel->connectItem( KStdAccel::Paste , this, SLOT(slotEditPaste()), true, ID_EDIT_PASTE);
 
   accel->changeMenuAccel(file_menu, ID_FILE_NEW, KStdAccel::New );
   accel->changeMenuAccel(file_menu, ID_FILE_OPEN, KStdAccel::Open );
   accel->changeMenuAccel(file_menu, ID_FILE_CLOSE, KStdAccel::Close );
   accel->changeMenuAccel(file_menu, ID_FILE_SAVE, KStdAccel::Save );
+  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_ALL,"SaveAll" );
+  accel->changeMenuAccel(edit_menu, ID_FILE_SAVE_AS,"SaveAs" );
   accel->changeMenuAccel(file_menu, ID_FILE_PRINT, KStdAccel::Print );
   accel->changeMenuAccel(file_menu, ID_FILE_QUIT, KStdAccel::Quit );
 
@@ -1382,20 +1384,56 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
   accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
 
+
+  accel->changeMenuAccel(view_menu,ID_TOOLS_DESIGNER ,"Dialog Editor" );
   accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
   accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
   accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
   accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
   accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
 
-  accel->changeMenuAccel(project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
+  accel->changeMenuAccel(project_menu, ID_PROJECT_KAPPWIZARD,"NewProject" );
+  accel->changeMenuAccel(project_menu, ID_PROJECT_OPEN,"OpenProject" );
+  accel->changeMenuAccel(project_menu, ID_PROJECT_CLOSE,"CloseProject" );
+  accel->changeMenuAccel(project_menu,ID_PROJECT_NEW_CLASS , "NewClass");
+  accel->changeMenuAccel(project_menu, ID_PROJECT_ADD_FILE_EXIST, "AddExistingFiles");
+  accel->changeMenuAccel(project_menu,ID_PROJECT_ADD_NEW_TRANSLATION_FILE ,"Add new Translation File" );
   accel->changeMenuAccel(project_menu,ID_PROJECT_FILE_PROPERTIES ,"FileProperties" );
+  accel->changeMenuAccel(project_menu,ID_PROJECT_MESSAGES , "MakeMessages");
+  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_PROJECT_API,"ProjectAPI" );
+  accel->changeMenuAccel(project_menu,ID_PROJECT_MAKE_USER_MANUAL , "ProjectManual");
+//  accel->changeMenuAccel(project_menu, ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,"Source-tgz" );
+  accel->changeMenuAccel(project_menu,ID_PROJECT_OPTIONS ,"ProjectOptions" );
 
   accel->changeMenuAccel(build_menu,ID_BUILD_COMPILE_FILE ,"CompileFile" );
   accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
+  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL , "RebuildAll");
+  accel->changeMenuAccel(build_menu,ID_BUILD_REBUILD_ALL ,"CleanRebuildAll" );
+  accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
   accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
   accel->changeMenuAccel(build_menu,ID_BUILD_RUN_WITH_ARGS,"Run_with_args");
-  accel->changeMenuAccel(build_menu,ID_BUILD_STOP,"Stop_proc");
+  accel->changeMenuAccel(build_menu,ID_BUILD_DISTCLEAN ,"BuildDistClean" );
+  accel->changeMenuAccel(build_menu, ID_BUILD_MAKECLEAN, "BuildMakeClean");
+  accel->changeMenuAccel(build_menu, ID_BUILD_AUTOCONF, "BuildAutoconf");
+  accel->changeMenuAccel(build_menu, ID_BUILD_CONFIGURE, "BuildConfigure");
+
+
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_START , "DebugStart");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN ,"DebugRun" );
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_RUN_CURSOR, "DebugRunCursor");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_STOP, "DebugStop");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP, "DebugStepInto");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_STEP_INST, "DebugStepIntoInstr");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT, "DebugStepOver");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_NEXT_INST , "DebugStepOverInstr");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_FINISH ,  "DebugStepOut");
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_MEMVIEW ,"DebugViewer" );
+  accel->changeMenuAccel(debug_menu,ID_DEBUG_BREAK_INTO ,"DebugInterrupt" );
+
+  accel->changeMenuAccel(debugPopup, ID_DEBUG_CORE, "DebugExamineCore");
+  accel->changeMenuAccel(debugPopup, ID_DEBUG_NAMED_FILE, "DebugOtherExec");
+  accel->changeMenuAccel(debugPopup, ID_DEBUG_ATTACH, "DebugAttach");
+  accel->changeMenuAccel(debugPopup, ID_DEBUG_SET_ARGS, "DebugRunWithArgs");
 
   accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_TOGGLE ,"Toggle_Bookmarks" );
   accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_NEXT ,"Next_Bookmarks" );
@@ -1403,7 +1441,12 @@ void CKDevelop::setKeyAccel()
   accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
 
   accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
+  accel->changeMenuAccel(help_menu, ID_HELP_SEARCH, "HelpSearch" );
   accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KStdAccel::Help );
+
+  accel->changeMenuAccel(help_menu,ID_HELP_PROJECT_API , "HelpProjectAPI" );
+  accel->changeMenuAccel(help_menu,ID_HELP_USER_MANUAL ,  "HelpProjectManual");
+
 }
 
 void CKDevelop::setToolmenuEntries(){

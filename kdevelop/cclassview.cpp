@@ -162,19 +162,19 @@ void CClassView::initPopups()
 {
   int id;
   // Project popup
-  projectPopup.setTitle(i18n ("Project"));
+  projectPopup.insertTitle(i18n ("Project"));
   projectPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
   projectPopup.insertItem(SmallIconSet("CVclass"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   projectPopup.insertSeparator();
-  projectPopup.insertItem(SmallIconSet("folder"),i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
-  projectPopup.insertSeparator();
+  projectPopup.insertItem(SmallIconSet("folder_new"),i18n("Add Folder..."), this,
+      SLOT(slotFolderNew()),0, ID_CV_FOLDER_NEW);   projectPopup.insertSeparator();
   projectPopup.insertItem(SmallIconSet("configure"),i18n("Options..."), this, SLOT(slotProjectOptions()),0, ID_PROJECT_OPTIONS);
   projectPopup.insertItem(SmallIconSet("graphview"),i18n("Graphical classview.."), this, SLOT(slotGraphicalView()), 0, ID_CV_GRAPHICAL_VIEW);
 
 
 
   // Class popup
-  classPopup.setTitle( i18n("Class"));
+  classPopup.insertTitle(SmallIcon("CVclass"), i18n("Class"));
   classPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_CLASS_DECLARATION);
   classPopup.insertItem(SmallIconSet("CVpublic_meth"), i18n("Add member function..."), this, SLOT(slotMethodNew()),0, ID_CV_METHOD_NEW);
   classPopup.insertItem(SmallIconSet("CVpublic_var"), i18n("Add member variable..."), this, SLOT(slotAttributeNew()),0, ID_CV_ATTRIBUTE_NEW);
@@ -194,38 +194,38 @@ void CClassView::initPopups()
   //  classPopup.insertItem( i18n( "ClassWizard" ), this, SLOT( slotClassWizard()),0, ID_CV_CLASSWIZARD );
 
   // Struct popup
-  structPopup.setTitle( i18n( "Struct" ) );
+  structPopup.insertTitle(SmallIcon("CVstruct"), i18n( "Struct" ) );
   structPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DEFINITION);
 
   // Method popup
-  methodPopup.setTitle( i18n( "Method" ) );
+  methodPopup.insertTitle(SmallIcon("CVpublic_meth"), i18n( "Method" ),1 );
   methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()), 0, ID_CV_VIEW_DEFINITION);
   methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration() ),0,ID_CV_VIEW_DECLARATION);
   methodPopup.insertSeparator();
   methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()),0, ID_CV_METHOD_DELETE);
 
   // Attribute popup
-  attributePopup.setTitle( i18n( "Attribute" ) );
+  attributePopup.insertTitle(SmallIcon("CVpublic_var"), i18n( "Attribute" ), 1);
   attributePopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION);
   //  attributePopup.insertSeparator();
   //  id = attributePopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()),0, ID_CV_ATTRIBUTE_DELETE);
   //  attributePopup.setItemEnabled( id, false );
 
   // Slot popup
-  slotPopup.setTitle( i18n( "Slot" ) );
+  slotPopup.insertTitle(SmallIcon("CVpublic_slot"), i18n( "Slot" ),1 );
   slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()),0, ID_CV_VIEW_DEFINITION);
   slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DECLARATION);
   slotPopup.insertSeparator();
   slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
   // Signal popup
-  signalPopup.setTitle( i18n( "Signal" ) );
+  signalPopup.insertTitle(SmallIcon("CVpublic_signal"), i18n( "Signal" ) );
   signalPopup.insertItem( i18n( "Go to declaration" ), this, SLOT(slotViewDeclaration()),0, ID_CV_VIEW_DEFINITION );
   signalPopup.insertSeparator();
   signalPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete signal" ), this, SLOT(slotMethodDelete()),0,ID_CV_METHOD_DELETE);
 
   // Folder popup
-  folderPopup.setTitle( i18n( "Folder" ) );
+  folderPopup.insertTitle(SmallIcon("folder"), i18n( "Folder" ) );
   folderPopup.insertItem(SmallIconSet("filenew"),i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
   folderPopup.insertItem(SmallIconSet("CVclass"),i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
   folderPopup.insertSeparator();
@@ -642,20 +642,47 @@ KPopupMenu *CClassView::getCurrentPopup()
       popup = &structPopup;
       break;
     case THPUBLIC_METHOD:
+      methodPopup.changeTitle(1,SmallIcon("CVpublic_meth"), i18n("Public Method"));
+      popup = &methodPopup;
+      break;
     case THPROTECTED_METHOD:
+      methodPopup.changeTitle(1,SmallIcon("CVprotected_meth"), i18n("Protected Method"));
+      popup = &methodPopup;
+      break;
     case THPRIVATE_METHOD:
+      methodPopup.changeTitle(1,SmallIcon("CVprivate_meth"), i18n("Private Method"));
+      popup = &methodPopup;
+      break;
     case THGLOBAL_FUNCTION:
+      methodPopup.changeTitle(1,SmallIcon("CVglobal_meth"), i18n("Global Method"));
       popup = &methodPopup;
       break;
     case THPUBLIC_ATTR:
+      attributePopup.changeTitle(1,SmallIcon("CVpublic_var"), i18n("Public Variable"));
+      popup = &attributePopup;
+      break;
     case THPROTECTED_ATTR:
+      attributePopup.changeTitle(1,SmallIcon("CVprotected_var"), i18n("Protected Variable"));
+      popup = &attributePopup;
+      break;
     case THPRIVATE_ATTR:
+      attributePopup.changeTitle(1,SmallIcon("CVprivate_var"), i18n("Private Variable"));
+      popup = &attributePopup;
+      break;
     case THGLOBAL_VARIABLE:
+      attributePopup.changeTitle(1,SmallIcon("CVglobal_var"), i18n("Global Variable"));
       popup = &attributePopup;
       break;
     case THPUBLIC_SLOT:
+      slotPopup.changeTitle(1,SmallIcon("CVpublic_slot"), i18n("Public Slot"));
+      popup = &slotPopup;
+      break;
     case THPROTECTED_SLOT:
+      slotPopup.changeTitle(1,SmallIcon("CVprotected_slot"), i18n("Protected Slot"));
+      popup = &slotPopup;
+      break;
     case THPRIVATE_SLOT:
+      slotPopup.changeTitle(1,SmallIcon("CVprivate_slot"), i18n("Private Slot"));
       popup = &slotPopup;
       break;
     case THSIGNAL:

@@ -802,6 +802,7 @@ private:
 //  QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
   QPopupMenu* debug_menu;
+  QPopupMenu* debugPopup;
   QPopupMenu* tools_menu;
   QPopupMenu* options_menu;
   QPopupMenu* menu_buffers;

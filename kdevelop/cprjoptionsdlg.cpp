@@ -1372,7 +1372,8 @@ void CPrjOptionsDlg::addMakePage()
 //
 void CPrjOptionsDlg::addBinPage()
 {
-  QFrame* binaryOptions = addPage(i18n("Binary"));
+  QFrame* binaryOptions = addPage(i18n("Binary"),  i18n("Binary Program to start"),
+		KGlobal::instance()->iconLoader()->loadIcon( "exec", KIcon::NoGroup, KIcon::SizeMedium ));
   QGroupBox* binary_box= new QGroupBox(binaryOptions,"binary_box");
   binary_box->setGeometry(10,10,560,150);
 //  binary_box->setMinimumSize(0,0);

@@ -82,6 +82,7 @@ void CKDevelop::slotClassChoiceCombo(int index)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
+#include <iostream.h>
 void CKDevelop::slotMethodChoiceCombo(int index)
 {
   KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
@@ -565,13 +566,16 @@ void CKDevelop::CVGotoDefinition( const char *parentPath,
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
       if( aContainer )
-        aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );      
-      break;
+        aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+      if(aMethod)
+        break;
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
       if( aContainer )
         aMethod = aContainer->getMethodByNameAndArg( itemName );
+      if(!aMethod)
+        aMethod = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
       break;
     case THGLOBAL_FUNCTION:
       aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
@@ -630,6 +634,8 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
     case THPRIVATE_METHOD:
       if( aContainer != NULL )
         aAttr = aContainer->getMethodByNameAndArg( itemName );
+      if(!aAttr)
+        aAttr = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
       break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
@@ -749,16 +755,29 @@ void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
        ++aClass->methodIterator )
   {
     aClass->methodIterator.current()->asString( str );
-    lb->inSort( str );
+    if(aClass->methodIterator.current()->isPublic())
+      methodCombo->insertItem(SmallIcon("CVpublic_meth"), str );
+    if(aClass->methodIterator.current()->isProtected())
+      methodCombo->insertItem(SmallIcon("CVprotected_meth"), str );
+    if(aClass->methodIterator.current()->isPrivate())
+      methodCombo->insertItem(SmallIcon("CVprivate_meth"), str );
   }
-  
+  lb->sort();
+
   for( aClass->slotIterator.toFirst(); 
        aClass->slotIterator.current();
        ++aClass->slotIterator )
   {
     aClass->slotIterator.current()->asString( str );
-    lb->inSort( str );
+    if(aClass->slotIterator.current()->isPublic())
+      methodCombo->insertItem(SmallIcon("CVpublic_slot"), str );
+    if(aClass->slotIterator.current()->isProtected())
+      methodCombo->insertItem(SmallIcon("CVprotected_slot"), str );
+    if(aClass->slotIterator.current()->isPrivate())
+      methodCombo->insertItem(SmallIcon("CVprivate_slot"), str );
+
   }
+  lb->sort();
 
   lb->setAutoUpdate( true );
 
