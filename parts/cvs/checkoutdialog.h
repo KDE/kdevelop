@@ -9,10 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SERVERCONFIGURATIONWIDGET_H
-#define SERVERCONFIGURATIONWIDGET_H
+#ifndef CHECKOUTDIALOG_H
+#define CHECKOUTDIALOG_H
 
-#include <serverconfigurationwidgetbase.h>
+#include <checkoutdialogbase.h>
 
 /**
 * Encapsulates user input while configuring access to remote CVS repository
@@ -20,30 +20,18 @@
 *
 * @author Mario Scalas
 */
-class ServerConfigurationWidget : public ServerConfigurationWidgetBase
+class CheckoutDialog : public CheckoutDialogBase
 {
     Q_OBJECT
 public:
-    ServerConfigurationWidget( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
-    ~ServerConfigurationWidget();
+    CheckoutDialog( QWidget *parent = 0, const char *name = 0, WFlags f = 0 );
+    ~CheckoutDialog();
 
-    QString connectionMethod() const;
-    QString userName() const;
-    QCString password() const;
-    QString serverName() const;
-    QString serverPort() const;
+    QString cvsRsh() const;
     QString serverPath() const;
-    QString compressionLevel() const;
 
-signals:
-    void serverStringReady( const QString &serverString );
-
-private slots:
-    void slotBuildServerString();
-    void slotConnectionMethodChanged( const QString &connMethod );
-
-private:
-    mutable QCString m_password;
+public slots:
+    void slotFetchModulesList();
 };
 
 #endif

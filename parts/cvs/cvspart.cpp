@@ -1,4 +1,4 @@
-/***************************************************************************
+/**************************************************************************
  *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *   Copyright (C) 2003 by Mario Scalas                                    *
@@ -39,6 +39,7 @@
 #include "kdevmainwindow.h"
 #include "kdevproject.h"
 #include "urlutil.h"
+#include "execcommand.h"
 
 #include "cvsutils.h"
 #include "changelog.h"
@@ -48,15 +49,17 @@
 #include "commitdlg.h"
 #include "logform.h"
 #include "cvsform.h"
-#include "execcommand.h"
 #include "cvsoptionswidget.h"
+#include "checkoutdialog.h"
 
-void quote( QStringList &args )
+QStringList quoted( const QStringList &args )
 {
+    QStringList qNames;
     for (size_t i=0; i<args.count(); ++i)
     {
-        args[i] = KShellProcess::quote( args[i] );
+        qNames << KShellProcess::quote( args[i] );
     }
+    return qNames;
 }
 
 QStringList prependToStringList( const QString &s, const QStringList &paths )
@@ -235,6 +238,7 @@ void CvsPart::doneOperation()
 
 void CvsPart::slotCheckOut()
 {
+    (new CheckoutDialog(0))->show();
     /// @todo
 }
 
@@ -604,7 +608,7 @@ void CvsPart::commit( const KURL::List& urlList )
     if (dlg.exec() == QDialog::Rejected)
         return;
 
-    QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
+    QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
     // 1. Commit changes to the actual file
     QString command = buildCommitCmd( project()->projectDirectory(), fileList, dlg.logMessage().join( "" ) );
 
@@ -640,7 +644,7 @@ void CvsPart::update( const KURL::List& urlList )
     kdDebug(9000) << "CvsPart::update() here" << endl;
 
     CvsOptions *options = CvsOptions::instance();
-    QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
+    QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
 
     QString command("cd ");
     command += KShellProcess::quote( project()->projectDirectory() );
@@ -667,7 +671,7 @@ void CvsPart::add( const KURL::List& urlList )
     kdDebug(9000) << "CvsPart::add() here" << endl;
 
     CvsOptions *options = CvsOptions::instance();
-    QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
+    QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
 
     QString command("cd ");
     command += KShellProcess::quote( project()->projectDirectory() );
@@ -695,7 +699,7 @@ void CvsPart::remove( const KURL::List& urlList )
     kdDebug(9000) << "CvsPart::remove() here" << endl;
 
     CvsOptions *options = CvsOptions::instance();
-    QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
+    QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
 
     QString command("cd ");
     command += KShellProcess::quote( project()->projectDirectory() );
@@ -722,7 +726,7 @@ void CvsPart::revert( const KURL::List& urlList )
     kdDebug(9000) << "CvsPart::revert() here" << endl;
 
     CvsOptions *options = CvsOptions::instance();
-    QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
+    QStringList fileList = quoted( URLUtil::toRelativePaths( project()->projectDirectory(), urlList ) );
 
     QString command("cd ");
     command += KShellProcess::quote( project()->projectDirectory() );
@@ -747,6 +751,7 @@ void CvsPart::log( const KURL::List& urlList )
         return;
 
     kdDebug(9000) << "CvsPart::log() here: " << endl;
+    // FIXME: These should be quoted ...
     QStringList fileList = URLUtil::toRelativePaths( project()->projectDirectory(), urlList );
 
     LogForm* f = new LogForm();

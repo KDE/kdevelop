@@ -16,6 +16,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include "serverconfigurationwidget.h"
 
@@ -39,7 +40,7 @@ ServerConfigurationWidget::ServerConfigurationWidget( QWidget *parent, const cha
     connect( connectionMethodComboBox, SIGNAL(activated(int)), this, SLOT(slotBuildServerString()) );
 
     // Update others widgets when connection method changes
-    connect( connectionMethodComboBox, SIGNAL(activated(QString &)), this, SLOT(slotConnectionMethodChanged(QString &)) );
+    connect( connectionMethodComboBox, SIGNAL(activated(const QString &)), this, SLOT(slotConnectionMethodChanged(const QString &)) );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -78,21 +79,22 @@ void ServerConfigurationWidget::slotBuildServerString()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void ServerConfigurationWidget::slotConnectionMethodChanged( QString &connMethod )
+void ServerConfigurationWidget::slotConnectionMethodChanged( const QString &connMethod )
 {
+    kdDebug( 9999 ) << "ServerConfigurationWidget::slotConnectionMethodChanged( QString &)" << endl;
+    kdDebug( 9999 ) << "connMethod == " << connMethod << endl;
+
     if (connMethod == "local")
     {
         this->userNameLineEdit->setDisabled( true );
         this->serverNameLineEdit->setDisabled( true );
         this->serverPortNumInput->setDisabled( true );
-        this->serverPathLineEdit->setDisabled( true );
     }
     else // connMethod == "pserver" || connMethod == "ext"
     {
         this->userNameLineEdit->setEnabled( true );
         this->serverNameLineEdit->setEnabled( true );
         this->serverPortNumInput->setEnabled( true );
-        this->serverPathLineEdit->setEnabled( true );
     }
 }
 
