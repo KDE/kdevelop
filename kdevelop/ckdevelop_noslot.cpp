@@ -773,10 +773,10 @@ void CKDevelop::adjustTTreesToolButtonState()
   bool bWatchChecked = isToolViewVisible(var_viewer);
 
   if (dbgController != 0L) {  // if not debugging, don't consider the watch view
-    toolBar()->setButton(ID_VIEW_TREEVIEW, (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked && bWatchChecked));
+//    toolBar()->setButton(ID_VIEW_TREEVIEW, (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked && bWatchChecked));
   }
   else {
-    toolBar()->setButton(ID_VIEW_TREEVIEW, (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked));
+//    toolBar()->setButton(ID_VIEW_TREEVIEW, (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked));
   }
 }
 
@@ -795,13 +795,13 @@ void CKDevelop::adjustTOutputToolButtonState()
 
   if (dbgController != 0L) {  // if not debugging, don't consider the disassemble, callstack and debugger views
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked && bDebuggerChecked));
+//    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked && bDebuggerChecked));
 #else
-    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked));
+//    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked));
 #endif
   }
   else {
-    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked));
+//    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked));
   }
 }
 

@@ -233,7 +233,7 @@
   <Action name="build_make" />
   <Action name="build_rebuild" />
   <Separator/>
-<!--  <Action name="debug" />-->
+  <Action name="toolbar_debug" />
   <Action name="build_exec" />
   <Action name="build_stop" />
   <Separator/>

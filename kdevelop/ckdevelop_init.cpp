@@ -759,25 +759,37 @@ void CKDevelop::initMenuBar() {
     "All debuggers should allow you to execute your program "
     "step by step by setting breakpoints in the sourcecode." ));
 
+  KActionMenu* toolbarDebug = new KActionMenu(
+    i18n("Debug"), "debugger",
+    actionCollection(), "toolbar_debug" );
+  connect(
+    toolbarDebug, SIGNAL(activated()),
+    this, SLOT(slotBuildDebug()) );
+  toolbarDebug->setDelayed(true);
+
   pAction = new KAction(i18n(
     "Examine core file"), "core", 0,
     this, SLOT(slotDebugExamineCore()),
     actionCollection(), "debug_examine_core" );
+  toolbarDebug->insert( pAction );
 
   pAction = new KAction(
     i18n("Debug another executable"), "exec", 0,
     this, SLOT(slotDebugNamedFile()),
     actionCollection(), "debug_other_exec" );
+  toolbarDebug->insert( pAction );
 
   pAction = new KAction(
     i18n("Attach to process"), "connect_creating", 0,
     this, SLOT(slotDebugAttach()),
     actionCollection(), "debug_attach_process" );
+  toolbarDebug->insert( pAction );
 
   pAction = new KAction(
     i18n("Debug with arguments"), "exec", 0,
     this, SLOT(slotDebugRunWithArgs()),
     actionCollection(), "debug_with_args" );
+  toolbarDebug->insert( pAction );
 
   pAction = new KAction(
     i18n("Run"), "dbgrun", 0,
@@ -1052,15 +1064,6 @@ void CKDevelop::initMenuBar() {
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::initToolBar(){
-
-  toolBar()->insertButton("debugger",ID_DEBUG_START, false, i18n("Debug"));
-  QPopupMenu* debugToolPopup = new QPopupMenu();
-  debugToolPopup->insertItem(SmallIconSet("core"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
-  debugToolPopup->insertItem(SmallIconSet("exec"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
-  debugToolPopup->insertItem(SmallIconSet("connect_creating"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugToolPopup->insertItem(SmallIconSet("exec"),i18n("Debug with arguments"),this,SLOT(slotDebugRunWithArgs()),0,ID_DEBUG_SET_ARGS);
-  connect(debugToolPopup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
-  toolBar()->setDelayedPopup(ID_DEBUG_START, debugToolPopup);
 
   /////////////////////
   // the second toolbar

@@ -734,7 +734,7 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
         }
       }
     }
-    toolBar()->setButton(type, true);
+//    toolBar()->setButton(type, true);
   }
   else{
     m_bToggleToolViewsIsPending = true;
@@ -746,7 +746,7 @@ void CKDevelop::toggleGroupOfToolViewCovers(int type, QList<KDockWidget>* pToolV
       }
     }
     m_bToggleToolViewsIsPending = false;
-    toolBar()->setButton(type, false);
+//    toolBar()->setButton(type, false);
   }
 
   QWidget* pCurView = activeWindow();
@@ -762,11 +762,11 @@ void CKDevelop::slotViewTStdToolbar(){
 //        kdDebug() << "in CKDevelop::slotViewTStdToolbar():\n";
         if (pViewToolbarAction->isChecked()) {
 //                kdDebug() << "pViewToolbarAction is checked.\n";
-                toolBar()->show();
+                toolBar("mainToolBar")->show();
         }
         else {
 //                kdDebug() << "pViewToolbarAction is not checked.\n";
-                toolBar()->hide();
+                toolBar("mainToolBar")->hide();
         }
 }
 void CKDevelop::slotViewTBrowserToolbar(){
@@ -1762,10 +1762,10 @@ void CKDevelop::setDebugMenuProcess(bool enable)
   setToolMenuProcess(!enable);
   bool onOff = dbgInternal && enable;
 
-  toolBar()->setItemEnabled(ID_DEBUG_RUN,                   onOff);
-  toolBar()->setItemEnabled(ID_DEBUG_STEP,                  onOff);
-  toolBar()->setItemEnabled(ID_DEBUG_NEXT,                  onOff);
-  toolBar()->setItemEnabled(ID_DEBUG_FINISH,                onOff);
+//  toolBar()->setItemEnabled(ID_DEBUG_RUN,                   onOff);
+//  toolBar()->setItemEnabled(ID_DEBUG_STEP,                  onOff);
+//  toolBar()->setItemEnabled(ID_DEBUG_NEXT,                  onOff);
+//  toolBar()->setItemEnabled(ID_DEBUG_FINISH,                onOff);
 
 //  debug_menu->setItemEnabled(ID_DEBUG_RUN,                  onOff);
 //  debug_menu->setItemEnabled(ID_DEBUG_RUN_CURSOR,           onOff);
@@ -3102,7 +3102,7 @@ void CKDevelop::enableCommand(int id_)
   accel->setItemEnabled(id_,true);
 
 //  menuBar()->setItemEnabled(id_,true);
-  toolBar()->setItemEnabled(id_,true);
+//  toolBar()->setItemEnabled(id_,true);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,true);
 }
 
@@ -3112,7 +3112,7 @@ void CKDevelop::disableCommand(int id_)
   accel->setItemEnabled(id_,false);
 
 //  menuBar()->setItemEnabled(id_,false);
-  toolBar()->setItemEnabled(id_,false);
+//  toolBar()->setItemEnabled(id_,false);
   toolBar(ID_BROWSER_TOOLBAR)->setItemEnabled(id_,false);
 }
 
