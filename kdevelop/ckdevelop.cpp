@@ -1622,15 +1622,17 @@ void CKDevelop::slotHelpBugReport(){
     info.kde_version = config->readEntry("kde_version","");
     info.qt_version = config->readEntry("qt_version","");
     info.compiler = config->readEntry("compiler","");
+    info.sendmail_command = config->readEntry("sendmail_command","");
 
     CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","submit@bugs.kde.org"));
     if( dlg.exec()){
-	config->writeEntry("author_name",dlg.name);
-	config->writeEntry("author_email",dlg.email_address);
-	config->writeEntry("os",dlg.os);
-	config->writeEntry("qt_version",dlg.qt_version);
-	config->writeEntry("kde_version",dlg.kde_version);
-	config->writeEntry("compiler",dlg.compiler);
+			config->writeEntry("author_name",dlg.name);
+			config->writeEntry("author_email",dlg.email_address);
+			config->writeEntry("os",dlg.os);
+			config->writeEntry("qt_version",dlg.qt_version);
+			config->writeEntry("kde_version",dlg.kde_version);
+			config->writeEntry("compiler",dlg.compiler);
+			config->writeEntry("sendmail_command",dlg.sendmail_command);
     }
     
     

@@ -1,3 +1,7 @@
+1999-10-25 Stefan Bartel <bartel@rz.uni-potsdam.de>
+	* the bugreport dialog now uses sendmail and got several minor improvements.
+	* little typo bug while installation fixed ( "emacs stlye" )
+
 1999-10-23 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* improvements on parsing function arguments
 	  like function pointer, multiple arrays,
