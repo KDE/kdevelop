@@ -195,7 +195,7 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 
   // Make sure the URL exists
   // KDE 3.0 compatibility hack: use KIO::NetAccess for everything >= KDE 3.1
-  if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
+  if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
     // Try to find this file in the current project's list instead
     KDevProject* project = API::getInstance()->project();
 
@@ -203,14 +203,14 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
       url = findURLInProject(url);
 
       localUrl = url.url().startsWith("file:/");
-      if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
+      if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
         // See if this url is relative to the current project's directory
         url = project->projectDirectory() + "/" + url.url();
       }
     }
 
     localUrl = url.url().startsWith("file:/");
-    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url))) {
+    if (!url.isValid() || (localUrl ? !QFile(url.path()).exists() : !KIO::NetAccess::exists(url, false, 0))) {
       // Here perhaps we should prompt the user to find the file?
       return;
     }

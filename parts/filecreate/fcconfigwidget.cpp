@@ -379,7 +379,7 @@ void FCConfigWidget::copyTemplate(QString templateUrl, QString dest, QString des
     {
         KURL destDir;
         destDir.setPath(dest);
-        if (!KIO::NetAccess::exists(destDir))
+        if (!KIO::NetAccess::exists(destDir, false, 0 ))
             KIO::NetAccess::mkdir(destDir);
 
         KURL destination;
