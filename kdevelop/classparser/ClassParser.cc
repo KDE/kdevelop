@@ -1686,8 +1686,9 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
       {
         QString scopePath = scope->path();
 
-        // Check if the class is declared in an scope.
-        if( !scopePath.isEmpty() )
+        if( aClass->declaredInScope.isEmpty() && !scopePath.isEmpty() )
+          scope->addClass( aClass );
+        else if( !scopePath.isEmpty() )
         {
           // Get the parent class;
           parentClass = store.getClassByName( scopePath );
@@ -1703,10 +1704,12 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
           else
             parentClass->addClass( aClass );
         }
+
+        cout << "Storing class with path: " << aClass->path() << endl;
         
         // Always add the class to the global store.
         if( !store.hasClass( aClass->path() ) )
-          scope->addClass( aClass );
+          store.addClass( aClass );
         else
           debug( "Found new definition of class %s", aClass->path().data() );
       }
