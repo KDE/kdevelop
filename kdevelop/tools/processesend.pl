@@ -21,8 +21,13 @@ $nameBig = $processes{NAME};
 $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
 
-$overDirectory = $processes{DIRECTORY};
-$underDirectory = $processes{DIRECTORY} . $nameLittle;
+if ($processes{VSSUPPORT} ne "none") {
+  $overDirectory = $processes{DIRECTORY} . $processes{PRJVSLOCATION};
+}
+else {
+	$overDirectory = $processes{DIRECTORY};
+}
+$underDirectory = $overDirectory . $nameLittle;
 
 if ($processes{APPLICATION} eq "customproj") {}
 else {
@@ -42,19 +47,26 @@ if ($processes{USER} eq "yes") {
   #create the html-files
   printflush (STDOUT,"configure files...\n");
   chdir ($underDirectory . "/docs/en");
-#  if (open (LOOKING,index.nif")) {
- # 	close (LOOKING);
- # 	system ("ksgml2html index.sgml en");
- # }
- # else {
+  if (-e "index.nif") {
+  	system ("ksgml2html index.sgml en");
+  }
+  else {
   	system ("sgml2html index.sgml");
- # }
+  }
 }
 
 chdir ($underDirectory);
 printflush (STDOUT,"READY\n");
 
 exit;
+
+
+
+
+
+
+
+
 
 
 

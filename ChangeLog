@@ -1,3 +1,8 @@
+1999-07-30 Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
+	* now the applicationwizard uses ksgml2html too
+	* implemented some internal of the vcs tab in wizard
+	* fixed some other bugs
+
 1999-07-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed recent projects menu
   * added welcome chapter to doctree

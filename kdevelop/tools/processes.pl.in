@@ -31,9 +31,16 @@ $nameBig = $processes{NAME};
 $nameBig =~ tr/a-z/A-Z/;
 $name =  $processes{NAME};
 
-$overDirectory = $processes{DIRECTORY};
-$underDirectory = $processes{DIRECTORY} . $nameLittle;
-
+if ($processes{VSSUPPORT} eq "none") {
+	$overDirectory = $processes{DIRECTORY};
+	$underDirectory = $processes{DIRECTORY} . $nameLittle;
+}
+else {
+	$overDirectory = $homedirectory . "/kdeveloptemp/";
+	$underDirectory = $overDirectory . $nameLittle;
+}
+	
+	
 #create the projectdirectory 
 printflush (STDOUT, "change directory...\n");
 chdir ($processes{DIRECTORY});
@@ -63,6 +70,48 @@ elsif ($processes{APPLICATION} eq "qtnormal") {
 }
 elsif ($processes{APPLICATION} eq "customproj") {
   changeCustomApp();
+}
+
+if ($processes{VSSUPPORT} eq "cvs") {
+	chdir ($homedirectory . "/kdeveloptemp/");
+  $copysrc = $ENV{KDEDIR} . "/share/apps/kdevelop/templates/cvsignore_template";
+	$copydes = $homedirectory . "/kdeveloptemp/.cvsignore";
+  system ("cp $copysrc $copydes");
+
+  chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/templates/");
+  $copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/templates/.cvsignore";
+  system ("cp $copysrc $copydes");
+
+ 	chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/");
+	$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/.cvsignore";
+	system ("cp $copysrc $copydes");
+
+  if ($processes{APPLICATION} ne "customproj") {
+   	chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/");
+		$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/.cvsignore";
+		system ("cp $copysrc $copydes");
+
+   	chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/en/");
+   	$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/docs/en/.cvsignore";
+   	system ("cp $copysrc $copydes");
+  			
+  	if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kdenormal") {	
+			chdir ($homedirectory . "/kdeveloptemp/" . $nameLittle . "/api/");				
+			$copydes = $homedirectory . "/kdeveloptemp/" . $nameLittle . "/api/.cvsignore";
+			system ("cp $copysrc $copydes");
+				
+    	chdir ($homedirectory . "/kdeveloptemp/po/");
+			$copydes = $homedirectory . "/kdeveloptemp/po/.cvsignore";
+			system ("cp $copysrc $copydes");
+    }
+  }
+}
+
+if ($processes{VSSUPPORT} eq "cvs") {
+  	chdir ($homedirectory . "/kdeveloptemp/");
+  	$vsimport = "cvs -d " . $processes{VSLOCATION} . " import -m \"" . $processes{LOGMESSAGE} . "\" " .
+    						$processes{PRJVSLOCATION} . " "  . $processes{VENDORTAG} . " " . $processes{RELEASETAG};
+    system ("$vsimport")
 }
 
 exit;
@@ -652,3 +701,12 @@ sub changeCustomApp {
     condCopyLsmFile();
     
 }
+
+
+
+
+
+
+
+
+

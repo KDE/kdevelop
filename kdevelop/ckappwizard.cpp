@@ -523,7 +523,7 @@ void CKAppWizard::initPages(){
   page1a = new KWizardPage;
   widget1c = new QWidget(this);
   page1a->w = widget1c;
-  page1a->title = (i18n("VS Support"));
+  page1a->title = (i18n("Version Control System Support"));
   page1a->enabled = true;
   addPage(page1a);
 
@@ -546,7 +546,7 @@ void CKAppWizard::initPages(){
 	vsSupport->setBackgroundMode( QWidget::PaletteBackground );
 	vsSupport->setFontPropagation( QWidget::NoChildren );
 	vsSupport->setPalettePropagation( QWidget::NoChildren );
-	vsSupport->setText( "vs support" );
+	vsSupport->setText( "vcs support" );
 	vsSupport->setAlignment( 289 );
 	vsSupport->setMargin( -1 );	
 	
@@ -571,7 +571,7 @@ void CKAppWizard::initPages(){
 	vsInstall->setBackgroundMode( QWidget::PaletteBackground );
 	vsInstall->setFontPropagation( QWidget::NoChildren );
 	vsInstall->setPalettePropagation( QWidget::NoChildren );
-	vsInstall->setText( "vs location" );
+	vsInstall->setText( "vcs location" );
 	vsInstall->setAlignment( 289 );
 	vsInstall->setMargin( -1 );
 	
@@ -608,7 +608,7 @@ void CKAppWizard::initPages(){
 	projectVSLocation->setBackgroundMode( QWidget::PaletteBackground );
 	projectVSLocation->setFontPropagation( QWidget::NoChildren );
 	projectVSLocation->setPalettePropagation( QWidget::NoChildren );
-	projectVSLocation->setText( "projectlocation in vs" );
+	projectVSLocation->setText( "repository in vcs" );
 	projectVSLocation->setAlignment( 289 );
 	projectVSLocation->setMargin( -1 );	
 	
@@ -715,7 +715,7 @@ void CKAppWizard::initPages(){
 				
 	KQuickHelp::add(vendorTag,
 		  KQuickHelp::add(vendorline,
-				  i18n("Here you can choose the name, which your project\n"
+				  i18n("Here you can choose the vendor tag, which your project\n"
 				  		 "has in the version control system.")));
 				
 	KQuickHelp::add(releaseTag,
@@ -731,13 +731,13 @@ void CKAppWizard::initPages(){
 	KQuickHelp::add(vsInstall,
 		  KQuickHelp::add(vsLocation,
 		  		KQuickHelp::add(locationbutton,
-				  		i18n("Here you can choose where your vsroot location should be.\n"
+				  		i18n("Here you can choose where your vcsroot loction should be.\n"
 				  				 "At the moment we only support local vs. And be sure, you\n"
 				  				 "have read and write access in the location."))));
 				
 	KQuickHelp::add(projectVSLocation,
 		  KQuickHelp::add(projectlocationline,
-				  i18n("Here you can choose in which directory your project is in the\n"
+				  i18n("Here you can choose the repository of your project in the\n"
 				  		 "version control system.")));
 				
 				
@@ -1028,7 +1028,7 @@ void CKAppWizard::slotOkClicked() {
 
   dir.setPath(directoryline->text());
   if (dir.exists()) {
-    if(KMsgBox::yesNo(0,i18n("Directory exists!"),
+    if(KMsgBox::yesNo(0,(directoryline->text() + (QString) i18n(" already exists!")),
     	i18n("The selected project directory already exists. If you\n "
     	"click 'OK', all files and subdirectories of the currently chosen\n "
 			"project directory will be deleted before a new project is going\n "
@@ -1153,16 +1153,48 @@ void CKAppWizard::okPermited() {
   else entries << "no\n";
   entries << "VERSION\n";
   entries << versionline->text() << "\n";
-  
+  entries << "VSSUPPORT\n";
+  if (!vsBox->currentItem() == 0) {
+  	entries << QString(vsBox->text(vsBox->currentItem())).lower() + "\n";
+  	entries << "VENDORTAG\n";
+  	entries << QString(vendorline->text()) + "\n";
+  	entries << "RELEASETAG\n";
+  	entries << QString(releaseline->text()) + "\n";
+  	entries << "VSLOCATION\n";
+  	entries << QString(vsLocation->text()) + "\n";
+  	entries << "PRJVSLOCATION\n";
+  	entries << QString(projectlocationline->text()) + "\n";
+  	entries << "LOGMESSAGE\n";
+  	entries << QString(messageline->text()) + "\n";
+  }
+  else entries << "none\n";
+
+
   namelow = nameline->text();
   namelow = namelow.lower();
-  QDir directory;
-  directory.mkdir(directoryline->text() + QString("/"));
-  if (!directory.exists())
-     directory.setCurrent(directoryline->text() + QString("/"));
+  QDir dir;
+  dir.mkdir(directoryline->text() + QString("/"));
+  if (!dir.exists())
+     dir.setCurrent(directoryline->text() + QString("/"));
   KShellProcess p;
   QString copysrc;
-  QString copydes = directoryline->text() + QString ("/");
+  QString copydes;
+  QString vcsInit;
+  if (vsBox->currentItem() == 1) {
+  	copydes = QDir::homeDirPath() + "/kdeveloptemp";
+  	dir.mkdir(QDir::homeDirPath() + "/kdeveloptemp");
+  	dir.setCurrent(QDir::homeDirPath() + "/kdeveloptemp");
+  	vcsInit = (QString) "cvs -d " + vsLocation->text() + (QString) " init";
+  	p.clearArguments();
+	  p << vcsInit;
+	  p.start(KProcess::Block,KProcess::AllOutput);
+
+ 	}
+ 	else {
+ 	  copydes = directoryline->text() + QString ("/");
+ 	}
+ 	
+ 	p.clearArguments();
   if (kdeminiitem->isSelected()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
     p << "cp " + copysrc + (QString) " " + copydes;
@@ -1188,6 +1220,8 @@ void CKAppWizard::okPermited() {
     p << "cp " + copysrc + (QString) " " + copydes;
     p.start(KProcess::Block,KProcess::AllOutput);
   }
+
+  dir.setCurrent("/");
 
   q->clearArguments();
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotProcessExited()));
@@ -1230,6 +1264,25 @@ void CKAppWizard::okPermited() {
   applications->setEnabled(false);
   generatesource->setEnabled(false);
   apphelp->setEnabled(false);
+  messageline->setEnabled(false);
+ 	logMessage->setEnabled(false);
+ 	vendorline->setEnabled(false);
+ 	vendorTag->setEnabled(false);
+ 	releaseline->setEnabled(false);
+ 	releaseTag->setEnabled(false);
+ 	vsInstall->setEnabled(false);
+ 	projectVSLocation->setEnabled(false);
+ 	projectlocationline->setEnabled(false);
+ 	vsLocation->setEnabled(false);
+ 	locationbutton->setEnabled(false);
+ 	qtarch_ButtonGroup_1->setEnabled(false);
+	vsBox->setEnabled(false);
+	vsSupport->setEnabled(false);
+  name->setEnabled(false);
+  email->setEnabled(false);
+  authorname->setEnabled(false);
+  versionnumber->setEnabled(false);
+  directory->setEnabled(false);
 }
 
 
@@ -1571,7 +1624,7 @@ void CKAppWizard::slotDefaultClicked(int page) {
   vendorline->setText(QString(nameline->text()).lower());
   releaseline->setText("start");
   projectlocationline->setText(QString(nameline->text()).lower());
-  vsLocation->setText(QDir::homeDirPath()+ QString("/cvsroot"));
+  vsLocation->setText(QDir::homeDirPath() + "/cvsroot");
   vsBox->setCurrentItem(0);
   modifyVendor= false;
   modifyPrjVSLocation= false;
@@ -1714,8 +1767,31 @@ void CKAppWizard::slotCppHeaderClicked() {
 
 void CKAppWizard::slotProcessExited() {
 
-  QString directory = directoryline->text();
-  QString prj_str = directory + "/" + namelow + ".kdevprj";
+  KShellProcess p;
+
+ 	if (vsBox->currentItem() != 0) {
+		p.clearArguments();
+ 	 	QString copydes = (QString) "rm -r -f " + QDir::homeDirPath() + "/kdeveloptemp";
+  	p << copydes;
+ 		p.start(KProcess::Block,KProcess::AllOutput);
+
+	  QDir dir;
+  	dir.setCurrent(directoryline->text());
+
+	  p.clearArguments();
+  	QString checkout = (QString) "cvs -d " + vsLocation->text() + " co " + projectlocationline->text();
+	  p << checkout;
+  	p.start(KProcess::Block,KProcess::AllOutput);
+  }
+  	
+	QString directory = directoryline->text();
+	QString prj_str;
+	if (vsBox->currentItem() != 0) {
+	  prj_str = directory + "/" + vsLocation->text() + "/" + namelow + ".kdevprj";
+	}
+	else {
+  	prj_str = directory + "/" + namelow + ".kdevprj";
+  }
   project = new CProject(prj_str);
   project->readProject();
   project->setKDevPrjVersion("0.3");
@@ -1810,7 +1886,14 @@ void CKAppWizard::slotProcessExited() {
     makeAmInfo.sub_dirs = sub_dir_list;
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   }
-  
+
+	if (vsBox->currentItem()==0) {
+    project->setVCSystem("None");
+  }
+  else {
+    project->setVCSystem("CVS");
+  }
+
   TFileInfo fileInfo;
   fileInfo.rel_name = namelow + ".kdevprj";
   fileInfo.type = DATA;
@@ -2302,21 +2385,5 @@ void CKAppWizard::slotPrjVSLocationEntry() {
   	modifyPrjVSLocation = true;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
