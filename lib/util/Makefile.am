@@ -7,6 +7,7 @@ noinst_LTLIBRARIES = libkdevutil.la
 
 libkdevutil_la_SOURCES = processwidget.cpp \
 			 servicecombobox.cpp \
-			 domutil.cpp
+			 domutil.cpp \
+			 splitter.cpp
 
 METASOURCES = AUTO
