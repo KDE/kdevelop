@@ -203,14 +203,14 @@ ParsedAttribute *AddClassAttributeDialog::asSystemObj()
 void AddClassAttributeDialog::accept()
 {
     if (typeEdit.text().isEmpty()) {
-        KMessageBox::sorry(this, i18n("No type"),
-                           i18n("You have to specify a variable type.") );
+        KMessageBox::sorry(this, i18n("You have to specify a variable type."),
+                           i18n("No Type") );
         return;
     }
-    
+
     if (nameEdit.text().isEmpty()) {
-        KMessageBox::sorry(this, i18n("No name"),
-                           i18n("You have to specify a variable name.") );
+        KMessageBox::sorry(this, i18n("You have to specify a variable name."),
+                            i18n("No Name"));
         return;
     }
     
