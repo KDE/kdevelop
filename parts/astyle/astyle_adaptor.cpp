@@ -55,9 +55,16 @@ KDevFormatter::KDevFormatter()
 
   // fill
   if (config->readEntry("Fill", "Tabs") != "Tabs")
-    setSpaceIndentation(config->readNumEntry("FillSpaces",2));
-  else
-    setTabIndentation();
+  {
+		int wsCount = config->readNumEntry("FillSpaces",2);
+		setSpaceIndentation(wsCount);
+		m_indentString = "";
+		m_indentString.fill(' ', wsCount);
+  } else
+  {
+	setTabIndentation();
+	m_indentString = "\t";
+  }
 
   // indent
   setSwitchIndent(config->readBoolEntry("IndentSwitches", false));
@@ -122,10 +129,13 @@ KDevFormatter::KDevFormatter( AStyleWidget * widget )
 	if ( widget->Fill_Tabs->isChecked() )
 	{
 		setTabIndentation();
+		m_indentString = "\t";
 	}
 	else
 	{
 		setSpaceIndentation( widget->Fill_SpaceCount->value() );
+		m_indentString = "";
+		m_indentString.fill(' ', widget->Fill_SpaceCount->value());
 	}
 	
 	// indent

@@ -24,7 +24,7 @@ public:
 
   QString formatSource( const QString text, AStyleWidget * widget );
   virtual QString formatSource(const QString text);
-
+  QString indentString() const;
 
 private slots:
 

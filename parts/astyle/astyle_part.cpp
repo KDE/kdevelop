@@ -190,4 +190,10 @@ QString AStylePart::formatSource( const QString text )
     return formatSource(text, 0);
 }
 
+QString AStylePart::indentString( ) const
+{
+  KDevFormatter formatter;
+  return formatter.indentString();
+}
+
 #include "astyle_part.moc"

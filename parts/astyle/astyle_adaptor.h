@@ -35,10 +35,16 @@ public:
 
   KDevFormatter();
   KDevFormatter( AStyleWidget * widget );
+  QString indentString() const
+  {
+	  return m_indentString;
+  }
   
 private:
 	bool predefinedStyle( const QString & style );
 
+private:
+	QString m_indentString;
 };
 
 
