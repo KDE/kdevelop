@@ -29,10 +29,17 @@ public slots:
     void accept();
    // void setProject(KDevProject* project);
 
+private slots:
+    void EnableDoc();
+    void DisableDoc();
+
 private:
     void readConfig();
     void storeConfig();
-    
+
+    /** The documentation items to ignore */
+    QStringList m_ignoreDocs;
+
     DocTreeViewWidget *m_widget;
     KDevProject *m_project;
 };
