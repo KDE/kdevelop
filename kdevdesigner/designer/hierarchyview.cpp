@@ -1141,14 +1141,14 @@ void FormDefinitionView::showRMBMenu( QListViewItem *i, const QPoint &pos )
 	if ( i->rtti() == HierarchyItem::Slot || i->rtti() == HierarchyItem::Function ) {
 
 	    QCString funct( MetaDataBase::normalizeFunction( i->text( 0 ) ).latin1() );
-	    Command *cmd = new RemoveFunctionCommand( i18n( "Remove function" ), formWindow, funct,
+	    Command *cmd = new RemoveFunctionCommand( i18n( "Remove Function" ), formWindow, funct,
 						     QString::null, QString::null, QString::null,
 						     QString::null, formWindow->project()->language() );
 	    formWindow->commandHistory()->addCommand( cmd );
 	    cmd->execute();
 	    formWindow->mainWindow()->objectHierarchy()->updateFormDefinitionView();
 	} else if ( i->rtti() == HierarchyItem::Variable ) {
-	    Command *cmd = new RemoveVariableCommand( i18n( "Remove variable" ), formWindow,
+	    Command *cmd = new RemoveVariableCommand( i18n( "Remove Variable" ), formWindow,
 						      i->text( 0 ) );
 	    formWindow->commandHistory()->addCommand( cmd );
 	    cmd->execute();
@@ -1227,7 +1227,7 @@ void FormDefinitionView::save( QListViewItem *p, QListViewItem *i )
 
 void FormDefinitionView::addVariable( const QString &varName, const QString &access )
 {
-    Command *cmd = new AddVariableCommand( i18n( "Add variable" ), formWindow,
+    Command *cmd = new AddVariableCommand( i18n( "Add Variable" ), formWindow,
 					      varName, access );
     formWindow->commandHistory()->addCommand( cmd );
     cmd->execute();

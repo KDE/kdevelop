@@ -595,32 +595,32 @@ void Workspace::rmbClicked( QListViewItem *i, const QPoint& pos )
     menu.setCheckable( TRUE );
     switch ( wi->type() ) {
     case WorkspaceItem::SourceFileType:
-	menu.insertItem( i18n( "&Open source file" ), OPEN_SOURCE );
+	menu.insertItem( i18n( "&Open Source File" ), OPEN_SOURCE );
 	menu.insertSeparator();
 	menu.insertItem( SmallIcon( "designer_editcut.png" , KDevDesignerPartFactory::instance()),
-			 i18n( "&Remove source file from project" ), REMOVE_SOURCE );
+			 i18n( "&Remove Source File From Project" ), REMOVE_SOURCE );
 	break;
     case WorkspaceItem::FormFileType:
-	menu.insertItem( i18n( "&Open form" ), OPEN_FORM );
+	menu.insertItem( i18n( "&Open Form" ), OPEN_FORM );
 	menu.insertSeparator();
 	menu.insertItem( SmallIcon( "designer_editcut.png" , KDevDesignerPartFactory::instance()),
-			 i18n( "&Remove form from project" ), REMOVE_FORM );
+			 i18n( "&Remove Form From Project" ), REMOVE_FORM );
 	break;
     case WorkspaceItem::FormSourceType:
-	menu.insertItem( i18n( "&Open form source" ), OPEN_FORM_SOURCE );
+	menu.insertItem( i18n( "&Open Form Source" ), OPEN_FORM_SOURCE );
 	menu.insertSeparator();
 	if ( project->isCpp() )
 	    menu.insertItem( SmallIcon( "designer_editcut.png" , KDevDesignerPartFactory::instance()),
-			     i18n( "&Remove source file from form" ), REMOVE_FORM_SOURCE );
+			     i18n( "&Remove Source File From Form" ), REMOVE_FORM_SOURCE );
 	else
 	    menu.insertItem( SmallIcon( "designer_editcut.png" , KDevDesignerPartFactory::instance()),
-	                     i18n( "&Remove form from project" ), REMOVE_FORM );
+	                     i18n( "&Remove Form From Project" ), REMOVE_FORM );
 	break;
     case WorkspaceItem::ProjectType:
 	MainWindow::self->popupProjectMenu( pos );
 	return;
     case WorkspaceItem::ObjectType:
-	menu.insertItem( i18n( "&Open source" ), OPEN_OBJECT_SOURCE );
+	menu.insertItem( i18n( "&Open Source" ), OPEN_OBJECT_SOURCE );
 	break;
     }
 

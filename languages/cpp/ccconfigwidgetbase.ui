@@ -338,7 +338,7 @@
                             <cstring>groupBox8</cstring>
                         </property>
                         <property name="title">
-                            <string>e&amp;xample for member variable of type string</string>
+                            <string>E&amp;xample for Member Variable of Type String</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -357,7 +357,7 @@
                                             <cstring>m_lblVariableName</cstring>
                                         </property>
                                         <property name="text">
-                                            <string>variable name:</string>
+                                            <string>Variable name:</string>
                                         </property>
                                     </widget>
                                     <widget class="KLineEdit">
@@ -414,7 +414,7 @@
                                     <cstring>textLabel7</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>get method:</string>
+                                    <string>Get method:</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="2" column="0">
@@ -422,7 +422,7 @@
                                     <cstring>textLabel8</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>set method:</string>
+                                    <string>Set method:</string>
                                 </property>
                             </widget>
                         </grid>
@@ -432,7 +432,7 @@
                             <cstring>groupBox9</cstring>
                         </property>
                         <property name="title">
-                            <string>settings:</string>
+                            <string>Settings</string>
                         </property>
                         <grid>
                             <property name="name">
@@ -448,7 +448,7 @@
                                     <cstring>m_lblGet</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>prefix for &lt;b&gt;get&lt;/b&gt; methods:</string>
+                                    <string>Prefix for &lt;b&gt;get&lt;/b&gt; methods:</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="1" column="2">
@@ -464,7 +464,7 @@
                                     <cstring>m_lblSet</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>prefix for &lt;b&gt;set&lt;/b&gt; methods:</string>
+                                    <string>Prefix for &lt;b&gt;set&lt;/b&gt; methods:</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="3" column="0">
@@ -480,7 +480,7 @@
                                     <cstring>m_lblRemovePrefix</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>member &lt;b&gt;variable&lt;/b&gt; prefix to remove:</string>
+                                    <string>Member &lt;b&gt;variable&lt;/b&gt; prefix to remove:</string>
                                 </property>
                             </widget>
                             <widget class="KLineEdit" row="3" column="2">
@@ -513,7 +513,7 @@
                                     <cstring>m_lblParameterName</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&lt;b&gt;parametername&lt;/b&gt; in set method:</string>
+                                    <string>&lt;b&gt;Parametername&lt;/b&gt; in set method:</string>
                                 </property>
                             </widget>
                             <spacer row="3" column="1">

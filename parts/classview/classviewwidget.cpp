@@ -72,7 +72,7 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
 				    m_part->actionCollection(), "classview_new_class" );
     m_actionNewClass->setWhatsThis(i18n("<b>New class</b><p>Calls the <b>New Class</b> wizard."));
 	
-	m_actionCreateAccessMethods = new KAction( i18n("Create get/set methods"), KShortcut(), this, SLOT(slotCreateAccessMethods()), m_part->actionCollection(), "classview_create_access_methods" );
+	m_actionCreateAccessMethods = new KAction( i18n("Create get/set Methods"), KShortcut(), this, SLOT(slotCreateAccessMethods()), m_part->actionCollection(), "classview_create_access_methods" );
 	
 	
     m_actionAddMethod = new KAction( i18n("Add Method..."), KShortcut(), this, SLOT(slotAddMethod()),

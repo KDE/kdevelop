@@ -183,7 +183,7 @@
                 <cstring>btnGroupAutoOpen</cstring>
             </property>
             <property name="title">
-                <string>Automatically open groups</string>
+                <string>Automatically Open Groups</string>
             </property>
             <grid>
                 <property name="name">

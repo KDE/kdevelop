@@ -505,7 +505,7 @@ void PopupMenuEditor::choosePixmap( int index )
     hide(); // qChoosePixmap hides the menu
     QIconSet icons( qChoosePixmap( 0, formWnd, 0, 0 ) );
     SetActionIconsCommand * cmd =
-	new SetActionIconsCommand( i18n( "Set icon" ), formWnd, a, this, icons );
+	new SetActionIconsCommand( i18n( "Set Icon" ), formWnd, a, this, icons );
     formWnd->commandHistory()->addCommand( cmd );
     cmd->execute();
     show();
@@ -1284,7 +1284,7 @@ void PopupMenuEditor::clearCurrentField()
 	return;
     if ( currentField == 0 ) {
 	QIconSet icons( 0 );
-	SetActionIconsCommand * cmd = new SetActionIconsCommand( i18n( "Remove icon" ),
+	SetActionIconsCommand * cmd = new SetActionIconsCommand( i18n( "Remove Icon" ),
 								 formWnd,
 								 i->action(),
 								 this,

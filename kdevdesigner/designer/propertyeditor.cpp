@@ -4048,7 +4048,7 @@ void EventList::showRMBMenu( QListViewItem *i, const QPoint &pos )
 	conn.signal = i->parent()->text( 0 );
 	conn.slot = i->text( 0 );
 	delete i;
-	RemoveConnectionCommand *cmd = new RemoveConnectionCommand( i18n( "Remove connection" ),
+	RemoveConnectionCommand *cmd = new RemoveConnectionCommand( i18n( "Remove Connection" ),
 								    formWindow,
 								    conn );
 	formWindow->commandHistory()->addCommand( cmd );
@@ -4081,7 +4081,7 @@ void EventList::renamed( QListViewItem *i )
 	conn.receiver = formWindow->mainContainer();
 	conn.signal = i->parent()->text( 0 );
 	conn.slot = i->text( 0 );
-	AddConnectionCommand *cmd = new AddConnectionCommand( i18n( "Add connection" ),
+	AddConnectionCommand *cmd = new AddConnectionCommand( i18n( "Add Connection" ),
 							      formWindow,
 							      conn );
 	formWindow->commandHistory()->addCommand( cmd );
@@ -4099,7 +4099,7 @@ void EventList::renamed( QListViewItem *i )
 	}
 
          //normally add a function in kdevdesigner
-        AddFunctionCommand *cmd2 = new AddFunctionCommand( i18n( "Add function" ),
+        AddFunctionCommand *cmd2 = new AddFunctionCommand( i18n( "Add Function" ),
                                                 formWindow, funcname.latin1(), "virtual",
                                                 "public",
                                                 "slot", formWindow->project()->language(),

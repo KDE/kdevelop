@@ -112,7 +112,7 @@ void PixmapCollectionEditor::setChooserMode( bool c )
 	buttonOk->setDefault( TRUE );
 	connect( viewPixmaps, SIGNAL( doubleClicked( QIconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
 	connect( viewPixmaps, SIGNAL( returnPressed( QIconViewItem * ) ), buttonOk, SIGNAL( clicked() ) );
-	setCaption( i18n( "Choose an Image" ) );
+	setCaption( i18n( "Choose Image" ) );
     } else {
 	buttonClose->show();
 	buttonOk->hide();

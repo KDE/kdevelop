@@ -255,7 +255,7 @@
                         <cstring>tab</cstring>
                     </property>
                     <attribute name="title">
-                        <string>Lists of Explicitly Enabled and Disabled Plugins</string>
+                        <string>Lists of Explicitly Enabled &amp;&amp; Disabled Plugins</string>
                     </attribute>
                     <grid>
                         <property name="name">

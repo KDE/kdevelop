@@ -169,7 +169,7 @@ void WizardEditor::upClicked()
     listBox->setCurrentItem( index2 );
 
     // schedule swap command
-    SwapWizardPagesCommand *cmd = new SwapWizardPagesCommand( i18n( "Swap pages %1 and %2 of %1" ).arg( index1 ).arg( index2 )
+    SwapWizardPagesCommand *cmd = new SwapWizardPagesCommand( i18n( "Swap Pages %1 and %2 of %1" ).arg( index1 ).arg( index2 )
 							     .arg( wizard->name() ), formwindow, wizard, index1, index2);
     commands.append( cmd );
 
@@ -189,7 +189,7 @@ void WizardEditor::downClicked()
     listBox->setCurrentItem( index2 );
 
     // schedule swap command
-    SwapWizardPagesCommand *cmd = new SwapWizardPagesCommand( i18n( "Swap pages %1 and %2 of %1" ).arg( index1 ).arg( index2 ).arg( wizard->name() ), formwindow, wizard, index2, index1);
+    SwapWizardPagesCommand *cmd = new SwapWizardPagesCommand( i18n( "Swap Pages %1 and %2 of %1" ).arg( index1 ).arg( index2 ).arg( wizard->name() ), formwindow, wizard, index2, index1);
     commands.append( cmd );
 
     // update buttons
@@ -248,6 +248,6 @@ void WizardEditor::itemDropped( QListBoxItem * i )
     int droppedItem = listBox->index( i );
 
     //qDebug( "Moving page %d -> %d", draggedItem, droppedItem );
-    MoveWizardPageCommand *cmd = new MoveWizardPageCommand( i18n( "Move page %1 to %2 in %3" ).arg( draggedItem ).arg( droppedItem ).arg( wizard->name() ), formwindow, wizard, draggedItem, droppedItem );
+    MoveWizardPageCommand *cmd = new MoveWizardPageCommand( i18n( "Move Page %1 to %2 in %3" ).arg( draggedItem ).arg( droppedItem ).arg( wizard->name() ), formwindow, wizard, draggedItem, droppedItem );
     commands.append( cmd );
 }

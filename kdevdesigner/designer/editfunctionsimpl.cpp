@@ -147,7 +147,7 @@ void EditFunctions::okClicked()
 		}
 	    }
 	    if ( !functionFound )
-		commands.append( new RemoveFunctionCommand( i18n( "Remove function" ),
+		commands.append( new RemoveFunctionCommand( i18n( "Remove Function" ),
 							    formWindow, (*fit).function, (*fit).specifier,
 							    (*fit).access,
 							    (*fit).type,
@@ -192,7 +192,7 @@ void EditFunctions::okClicked()
 		}
 	    }
 	    if ( !functionFound )
-		commands.append( new AddFunctionCommand( i18n( "Add function" ),
+		commands.append( new AddFunctionCommand( i18n( "Add Function" ),
 							formWindow, function.function, function.specifier,
 							function.access,
 							function.type, formWindow->project()->language(),
@@ -203,7 +203,7 @@ void EditFunctions::okClicked()
 		QString normalizedOldName = MetaDataBase::normalizeFunction( (*it).oldName );
 		if ((*it).oldName.endsWith("const")) // make sure we get the 'const' when we remove the old name
 		    normalizedOldName += " const";
-		commands.append( new ChangeFunctionAttribCommand( i18n( "Change function attributes" ),
+		commands.append( new ChangeFunctionAttribCommand( i18n( "Change Function Attributes" ),
 								  formWindow, function, normalizedOldName,
 								  (*it).oldSpec, (*it).oldAccess, (*it).oldType,
 								  formWindow->project()->language(), (*it).oldRetTyp ) );

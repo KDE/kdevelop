@@ -751,8 +751,8 @@ void MainWindow::setupFileActions()
     recentlyProjectsMenu = new QPopupMenu( this );
 
     if ( !singleProject ) {
-	fileMenu->insertItem( i18n( "Recently opened files " ), recentlyFilesMenu );
-	fileMenu->insertItem( i18n( "Recently opened projects" ), recentlyProjectsMenu );
+	fileMenu->insertItem( i18n( "Recently Opened Files " ), recentlyFilesMenu );
+	fileMenu->insertItem( i18n( "Recently Opened Projects" ), recentlyProjectsMenu );
     }
 
     connect( recentlyFilesMenu, SIGNAL( aboutToShow() ),

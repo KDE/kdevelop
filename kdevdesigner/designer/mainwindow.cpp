@@ -2597,7 +2597,7 @@ bool MainWindow::openEditor( QWidget *w, FormWindow *f )
 			conn.signal = signl;
 			conn.slot = s;
 			AddConnectionCommand *cmd =
-			    new AddConnectionCommand( i18n( "Add connection" ), f, conn );
+			    new AddConnectionCommand( i18n( "Add Connection" ), f, conn );
 			f->commandHistory()->addCommand( cmd );
 			cmd->execute();
 			f->formFile()->setModified( TRUE );

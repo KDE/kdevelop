@@ -70,7 +70,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Generic Name:</string>
+                        <string>&amp;Generic name:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>genericNameEdit</cstring>

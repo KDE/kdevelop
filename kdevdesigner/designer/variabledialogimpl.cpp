@@ -119,7 +119,7 @@ void VariableDialog::okClicked()
 	    return;
 	}
     }
-    Command *cmd = new SetVariablesCommand( i18n( "Edit variables" ), formWindow, lst );
+    Command *cmd = new SetVariablesCommand( i18n( "Edit Variables" ), formWindow, lst );
     formWindow->commandHistory()->addCommand( cmd );
     cmd->execute();
     accept();

@@ -48,7 +48,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&amp;Branch Tag:</string>
+                <string>&amp;Branch tag:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>comboBox5</cstring>

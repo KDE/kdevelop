@@ -1041,7 +1041,7 @@ void FormWindow::handleMouseRelease( QMouseEvent *e, QWidget *w )
 		QString oldBuddy = startWidget->property( "buddy" ).toString();
 		if ( oldBuddy.isNull() )
 		    oldBuddy = "";
-		SetPropertyCommand *cmd = new SetPropertyCommand( i18n( "Set buddy for %1" ).arg( startWidget->name() ),
+		SetPropertyCommand *cmd = new SetPropertyCommand( i18n( "Set Buddy for %1" ).arg( startWidget->name() ),
 								  this, startWidget, mainWindow()->propertyeditor(),
 								  "buddy", startWidget->property( "buddy" ),
 								  endWidget->name(), endWidget->name(),
@@ -1996,7 +1996,7 @@ void FormWindow::selectAll()
 void FormWindow::layoutHorizontal()
 {
     QWidgetList widgets( selectedWidgets() );
-    LayoutHorizontalCommand *cmd = new LayoutHorizontalCommand( i18n( "Lay out horizontally" ),
+    LayoutHorizontalCommand *cmd = new LayoutHorizontalCommand( i18n( "Lay Out Horizontally" ),
 								this, mainContainer(), 0, widgets );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );
@@ -2006,7 +2006,7 @@ void FormWindow::layoutHorizontal()
 void FormWindow::layoutVertical()
 {
     QWidgetList widgets( selectedWidgets() );
-    LayoutVerticalCommand *cmd = new LayoutVerticalCommand( i18n( "Lay out vertically" ),
+    LayoutVerticalCommand *cmd = new LayoutVerticalCommand( i18n( "Lay Out Vertically" ),
 							    this, mainContainer(), 0, widgets );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );
@@ -2016,7 +2016,7 @@ void FormWindow::layoutVertical()
 void FormWindow::layoutHorizontalSplit()
 {
     QWidgetList widgets( selectedWidgets() );
-    LayoutHorizontalSplitCommand *cmd = new LayoutHorizontalSplitCommand( i18n( "Lay out horizontally (in splitter)" ),
+    LayoutHorizontalSplitCommand *cmd = new LayoutHorizontalSplitCommand( i18n( "Lay Out Horizontally (in splitter)" ),
 									  this, mainContainer(), 0, widgets );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );
@@ -2026,7 +2026,7 @@ void FormWindow::layoutHorizontalSplit()
 void FormWindow::layoutVerticalSplit()
 {
     QWidgetList widgets( selectedWidgets() );
-    LayoutVerticalSplitCommand *cmd = new LayoutVerticalSplitCommand( i18n( "Lay out vertically (in splitter)" ),
+    LayoutVerticalSplitCommand *cmd = new LayoutVerticalSplitCommand( i18n( "Lay Out Vertically (in splitter)" ),
 								      this, mainContainer(), 0, widgets );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );
@@ -2039,7 +2039,7 @@ void FormWindow::layoutGrid()
     int yres = grid().y();
 
     QWidgetList widgets( selectedWidgets() );
-    LayoutGridCommand *cmd = new LayoutGridCommand( i18n( "Lay out in a grid" ),
+    LayoutGridCommand *cmd = new LayoutGridCommand( i18n( "Lay Out in a Grid" ),
 						    this, mainContainer(), 0, widgets, xres, yres );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );
@@ -2060,7 +2060,7 @@ void FormWindow::layoutHorizontalContainer( QWidget *w )
 	     insertedWidgets.find( (QWidget*)o ) )
 	    widgets.append( (QWidget*)o );
     }
-    LayoutHorizontalCommand *cmd = new LayoutHorizontalCommand( i18n( "Lay out children horizontally" ),
+    LayoutHorizontalCommand *cmd = new LayoutHorizontalCommand( i18n( "Lay Out Children Horizontally" ),
 								this, mainContainer(), w, widgets );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );
@@ -2081,7 +2081,7 @@ void FormWindow::layoutVerticalContainer( QWidget *w )
 	     insertedWidgets.find( (QWidget*)o ) )
 	    widgets.append( (QWidget*)o );
     }
-    LayoutVerticalCommand *cmd = new LayoutVerticalCommand( i18n( "Lay out children vertically" ),
+    LayoutVerticalCommand *cmd = new LayoutVerticalCommand( i18n( "Lay Out Children Vertically" ),
 							    this, mainContainer(), w, widgets );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );
@@ -2105,7 +2105,7 @@ void FormWindow::layoutGridContainer( QWidget *w )
 	     insertedWidgets.find( (QWidget*)o ) )
 	    widgets.append( (QWidget*)o );
     }
-    LayoutGridCommand *cmd = new LayoutGridCommand( i18n( "Lay out children in a grid" ),
+    LayoutGridCommand *cmd = new LayoutGridCommand( i18n( "Lay Out Children in a Grid" ),
 						    this, mainContainer(), w, widgets, xres, yres );
     clearSelection( FALSE );
     commandHistory()->addCommand( cmd );

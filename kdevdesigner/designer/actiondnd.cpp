@@ -408,7 +408,7 @@ void QDesignerToolBar::buttonContextMenuEvent( QContextMenuEvent *e, QObject *o 
 	QAction *a = *it;
 	int index = actionList.find( a );
 	RemoveActionFromToolBarCommand *cmd = new RemoveActionFromToolBarCommand(
-	    i18n( "Delete Action '%1' from Toolbar '%2'" ).
+	    i18n( "Delete Action '%1' From Toolbar '%2'" ).
 	    arg( a->name() ).arg( caption() ),
 	    formWindow, a, this, index );
 	formWindow->commandHistory()->addCommand( cmd );
@@ -463,7 +463,7 @@ void QDesignerToolBar::removeWidget( QWidget *w )
     QAction *a = *it;
     int index = actionList.find( a );
     RemoveActionFromToolBarCommand *cmd =
-	new RemoveActionFromToolBarCommand( i18n( "Delete Action '%1' from Toolbar '%2'" ).
+	new RemoveActionFromToolBarCommand( i18n( "Delete Action '%1' From Toolbar '%2'" ).
 					    arg( a->name() ).arg( caption() ),
 					    formWindow, a, this, index );
     formWindow->commandHistory()->addCommand( cmd );
@@ -486,7 +486,7 @@ void QDesignerToolBar::buttonMouseMoveEvent( QMouseEvent *e, QObject *o )
 	return;
     int index = actionList.find( a );
     RemoveActionFromToolBarCommand *cmd =
-	new RemoveActionFromToolBarCommand( i18n( "Delete Action '%1' from Toolbar '%2'" ).
+	new RemoveActionFromToolBarCommand( i18n( "Delete Action '%1' From Toolbar '%2'" ).
 					    arg( a->name() ).arg( caption() ),
 					    formWindow, a, this, index );
     formWindow->commandHistory()->addCommand( cmd );

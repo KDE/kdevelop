@@ -84,7 +84,7 @@
                             <cstring>TextLabel1_3</cstring>
                         </property>
                         <property name="text">
-                            <string>&amp;Language</string>
+                            <string>&amp;Language:</string>
                         </property>
                         <property name="buddy" stdset="0">
                             <cstring>comboLanguage</cstring>

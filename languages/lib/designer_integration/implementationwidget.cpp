@@ -79,7 +79,7 @@ void ImplementationWidget::init(const QString &formName)
     m_baseClassName = DomUtil::elementByPathExt(doc, "class").text();
     setCaption(i18n("Create or Select Implementation Class for: %1").arg(m_baseClassName));
     
-    KListViewItem *item = new KListViewItem(classView, i18n("Namespaces and Classes"));
+    KListViewItem *item = new KListViewItem(classView, i18n("Namespaces &amp;&amp; Classes"));
     item->setOpen(true);
     processNamespaces(m_part->codeModel()->globalNamespace(), item);
 }

@@ -276,7 +276,7 @@ void MultiLineEditor::okClicked()
 void MultiLineEditor::applyClicked()
 {
     if ( !callStatic ) {
-	PopulateMultiLineEditCommand *cmd = new PopulateMultiLineEditCommand( i18n( "Set the text of '%1'" ).arg( mlined->name() ),
+	PopulateMultiLineEditCommand *cmd = new PopulateMultiLineEditCommand( i18n( "Set the Text of '%1'" ).arg( mlined->name() ),
 						formwindow, mlined, textEdit->text() );
 	cmd->execute();
 	formwindow->commandHistory()->addCommand( cmd );
