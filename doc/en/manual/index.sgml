@@ -119,6 +119,20 @@ that allows easy selection of classes, methods and member attributes as well as 
 <item>overall GUI enhancements like geometry-managed dialogs; usage of KDE 2´s new dialog classes and dockwidgets.
 </itemize>
 
+<bf>KDevelop 2.0:</bf>
+<itemize>
+<item>New configuration file *.kdevses, which holds user specific session information. Makes it a lot
+easier to work in teams on the same source code.
+<item>added manpage display
+<item>new User Interface modes (Toplevel Mode, ChildFrame Mode)
+<item>CTags support. Source Code can now be parsed so navigation is a lot easier now. You can easily switch 
+between declaration and definition of Symbols as well as change between the corresponding Source / Header files
+by pressing F12 or via the right mouse button menu.
+<item>Output from Tools can now be displayed in messages window.
+<item>The Grep Dialog remembers the last search items and search paths.
+<item>Many more usability improvements.
+</itemize>
+
 Any comments about the IDE, its documentation or feature requests are welcome.
 
 <sect>About this Handbook
@@ -1454,6 +1468,7 @@ Symbol "Search Marked Text"                      F2
 <sect1>Window Management
 <p>
 To switch to a certain window, press ALT plus the underlined letter in the window title, e.g. <idx/Tools/ would be Alt+T
+Press F12 to switch between corresponding header and source files
 <p>
 
 <sect1>Shortcuts to Compilation Processes
@@ -3343,9 +3358,10 @@ your needs towards application development. This can be done by adding programs 
 <idx/"Tools"-menu/. To change the tools-menu, select "<idx/Tools/" from the "Options" menu. This dialog allows to specify the entry
 name, program and additional command line options you want to pass to the execution. To remove a program from the menu, select the
 entry name and choose "Delete". To add a program, specify the menuentry, where a & is used as a menu-accelerator; you may compare the
-already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
-is added to the list. After leaving the <idx/configuration dialog/, the tools-menu updates itself, so the new configuration is already
-usable without restarting KDevelop.
+already configured entries with the entry list. Select the binary and pass your commandline options (use %S to get the name of the
+current open file and %D for the project directory). Select whether to capture the output of the Tool (displayed in the "messages" 
+and "stderr" panes). Then hit "Add" and the entry is added to the list. After leaving the <idx/configuration dialog/, the tools-menu 
+updates itself, so the new configuration is already usable without restarting KDevelop.
 
 <sect>File Viewer Options
 <p><nidx/file viewers/
