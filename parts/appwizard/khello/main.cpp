@@ -30,7 +30,9 @@ int main(int argc, char **argv)
     $APPNAME$ *mainWin = 0;
 
     if (app.isRestored())
+    {
         RESTORE($APPNAME$);
+    }
     else
     {
         // no session.. just start up normally

@@ -34,7 +34,9 @@ int main(int argc, char **argv)
 
     // see if we are starting with session management
     if (app.isRestored())
+    {
         RESTORE($APPNAME$);
+    }
     else
     {
         // no session.. just start up normally
