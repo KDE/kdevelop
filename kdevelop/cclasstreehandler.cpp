@@ -199,6 +199,9 @@ QListViewItem *CClassTreeHandler::addClass( const char *aName,
 void CClassTreeHandler::addSubclassesFromClass( CParsedClass *aClass,
                                                 QListViewItem *parent )
 {
+  assert( aClass != NULL );
+  assert( parent != NULL );
+
   const char *str;
   CParsedClass *sc;
   QListViewItem *ci;
@@ -271,7 +274,7 @@ void CClassTreeHandler::addMethods( QList<CParsedMethod> *list,
        aMethod != NULL;
        aMethod = list->next() )
   {
-    if( filter == CTHALL || filter == (CTHFilter)aMethod->export )
+    if( filter == CTHALL || filter == (CTHFilter)aMethod->exportScope )
       addMethod( aMethod, parent );
   }
 }
@@ -358,7 +361,7 @@ void CClassTreeHandler::addAttributes( QList<CParsedAttribute> *list,
        aAttr != NULL;
        aAttr = list->next() )
   {
-    if( filter == CTHALL || filter == (CTHFilter)aAttr->export )
+    if( filter == CTHALL || filter == (CTHFilter)aAttr->exportScope )
       addAttribute( aAttr, parent );
   }
 }
