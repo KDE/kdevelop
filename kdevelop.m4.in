@@ -134,12 +134,13 @@ fi],
 enable_scripting=no)
 AC_MSG_RESULT($enable_scripting)
 
-SCRIPTING_SUBDIR=
+SCRIPTING=
 if test "$enable_scripting" = "yes"; then
   KDE_CHECK_PYTHON
-  SCRIPTING_SUBDIR=scripting
+  SCRIPTING=scripting
 fi
-  AM_CONDITIONAL(include_scripting, test -n "$SCRIPTING_SUBDIR")
+  AC_SUBST(SCRIPTING)
+  AM_CONDITIONAL(include_scripting, test -n "$SCRIPTING")
 ])
 
 
@@ -385,7 +386,7 @@ AC_MSG_RESULT($enable_svnsupport)
 
  	AC_SUBST(SVNCONFIG)
  	if test -x "$SVNCONFIG"; then
- 		SVN_SUBDIR=svn
+ 		SVN=svn
  		SVNLD="`$SVNCONFIG --ldflags`"
  		SVNLIBS="`$SVNCONFIG --libs --cppflags`"
  		dnl ugly hack for subversion svn-config problems in 0.14.x, to be removed when svn-config is fixed
@@ -397,8 +398,9 @@ AC_MSG_RESULT($enable_svnsupport)
  	AC_SUBST(SVNLD)
  	AC_SUBST(SVNINC)
  	AC_SUBST(SVNLIBS)
+        AC_SUBST(SVN)
 fi
-	AM_CONDITIONAL(include_svn, test -n "$SVN_SUBDIR")
+	AM_CONDITIONAL(include_svn, test -n "$SVN")
 ])
 
 dnl  **********
@@ -497,19 +499,20 @@ AC_DEFUN(KDEV_CHECK_MDI,
 
   if test "$ac_cv_mdi_setup" = "yes"; then
     LIB_KDEVMDI="-lkmdi"
-    QEXTMDI_SUBDIR=""
+    QEXTMDIR=""
     KDEVMDI_INCLUDES=""
     AC_MSG_RESULT(yes)
   else		   
     LIB_KDEVMDI='$(top_builddir)/lib/qextmdi/src/libkdevelopqextmdi.la'
-    QEXTMDI_SUBDIR="qextmdi"
+    QEXTMDIR="qextmdi"
     KDEVMDI_INCLUDES='-I$(top_srcdir)/lib/qextmdi/include'
     AC_MSG_RESULT(no)
   fi
  
   AC_SUBST(LIB_KDEVMDI)
   AC_SUBST(KDEVMDI_INCLUDES)
-  AM_CONDITIONAL(include_qextmdi, test -n "$QEXTMDI_SUBDIR")
+  AC_SUBST(QEXTMDIR)
+  AM_CONDITIONAL(include_qextmdi, test -n "$QEXTMDIR")
 ])
 
 dnl  **********
@@ -552,9 +555,10 @@ AC_DEFUN(KDEV_CHECK_COMPAT,
     AC_MSG_RESULT(no)
   else
     AC_MSG_RESULT(yes)
-    COMPAT_SUBDIR=compat
+    COMPAT=compat
   fi
-AM_CONDITIONAL(include_compat, test -n "$COMPAT_SUBDIR")
+AC_SUBST(COMPAT)
+AM_CONDITIONAL(include_compat, test -n "$COMPAT")
 ])
 
 dnl  **********
@@ -595,8 +599,9 @@ AC_DEFUN(KDEV_CHECK_QEDITOR,
     AC_MSG_RESULT(no)
   else
     AC_MSG_RESULT(yes)
-    QEDITOR_SUBDIR=qeditor
+    QEDITOR=qeditor
   fi
-AM_CONDITIONAL(include_qeditor, test -n "$QEDITOR_SUBDIR")
+AC_SUBST(QEDITOR)
+AM_CONDITIONAL(include_qeditor, test -n "$QEDITOR")
 ])
 
