@@ -1,7 +1,7 @@
-dataFiles = dcopservice.desktop dcopservice.png  \
+dataFiles = dcopservice.desktop  \
 	src-Makefile.am main.rb dcopservice.rb dcopservice.kdevelop \
 	subdirs
-templateName = dcopservice
+templateName = dcopserviceruby
 
 ### no need to change below:
 template_DATA = $(templateName).kdevtemplate
