@@ -108,7 +108,7 @@ public:
       \verbatim
         <code>
           QStringList l; l << "one" << "two";
-          writeEntry(doc, "/general/special", "el", l);
+          writeListEntry(doc, "/general/special", "el", l);
         </code>
       \endverbatim creates the DOM fragment: \verbatim
         <code>
@@ -126,7 +126,7 @@ public:
           DomUtil::PairList l;
           l << DomUtil::StringPair("one", "1");
           l << DomUtil::StringPair("two", "2");
-          writeEntry(doc, "/general/special", "el", "first", "second", l);
+          writePairListEntry(doc, "/general/special", "el", "first", "second", l);
         </code>
       \endverbatim creates the DOM fragment: \verbatim
         <code>
