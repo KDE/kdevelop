@@ -3224,27 +3224,29 @@ Martin Piskernig		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<marti
 
 <bf>Program and Documentation Translations:</bf>
 
+Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>"> 			-Czech
+
 Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Danish
 
-Martin Piskernig    		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
+Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
 
-Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">			-Spanish
+Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">		-Spanish
 
-Sami Kuhmonen 			<htmlurl url="sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
+Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
 
-Herve Lefebvre 			<htmlurl url="hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
+Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
 
-Pahan Szabolcs 			<htmlurl url="szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
+Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
 
 Duarte Loreto 			<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">		-Portuguese
 
-Ilmar Habibulin    		<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">				-Russian
+Ilmar Habibulin    	<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">				-Russian
 
-Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
+Jacek Wojdel 				<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
 
-Jan Prokop 			<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">				-Slovak
+Jan Prokop 					<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">				-Slovak
 
-Patrik Adolfsson 		<htmlurl url="patrik.adolfsson@iname.com" name="<patrik.adolfsson@iname.com>">		-Swedish
+Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patrik.adolfsson@iname.com>">		-Swedish
 
 
 <bf>Startlogo:</bf>
@@ -3254,27 +3256,27 @@ Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kb
 
 <bf>Additions, patches and bugfixes:</bf>
 
-Jost Schenk    			<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
+Jost Schenk    					<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
 
-David Barth    			<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
+David Barth    					<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
 
-Matthias Hipp			<htmlurl url="mailto:Matthias.Hipp@gmx.de" name = "<Matthias.Hipp@gmx.de>">
+Matthias Hipp						<htmlurl url="mailto:Matthias.Hipp@gmx.de" name = "<Matthias.Hipp@gmx.de>">
 
 Martin Piskernig    		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">
 
 Matthias Hoelzer-Kluepfel    	<htmlurl url="mailto:mh@caldera.de" name = "<mh@caldera.de>">
 
-Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">
+Steen Rabol    					<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">
 
-Matt Koss 			<htmlurl url="koss@napri.sk" name="<koss@napri.sk>">
+Matt Koss 							<htmlurl url="mailto:koss@napri.sk" name="<koss@napri.sk>">
 
-Jochen Wilhelmy 		<htmlurl url="digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
+Jochen Wilhelmy 				<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
 
-Bernd Gehrmann 			<htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
+Bernd Gehrmann 					<htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
 
-Walter Tasin 			<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
+Walter Tasin 						<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
 
-Torsten Uhlmann 		<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
+Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
 
 
 <bf>KDevelop contains sourcecode from the following applications:</bf>
@@ -3327,6 +3329,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
 
 
 

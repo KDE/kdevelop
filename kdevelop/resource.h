@@ -38,6 +38,7 @@
 #define ID_FILE_PRINT               10070
 
 #define ID_FILE_QUIT                10080
+#define ID_FILE_DELETE							10090
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
@@ -233,6 +234,13 @@
 #define ID_KDLG_BUILD_COMPLETE_GENERATE      20420
 
 ///////////////////////////////////////////////////////////////////
+// Popup menu id's
+#define ID_LFV_NEW_GROUP						30110
+#define ID_LFV_REMOVE_GROUP					30120
+#define ID_LFV_GROUP_PROP						30130
+#define ID_LFV_SHOW_PATH_ITEM				30140
+
+///////////////////////////////////////////////////////////////////
 // tab-ID's for the s_tab_view
 #define HEADER  0
 #define CPP 	1
@@ -356,6 +364,8 @@
 ///////////////////////////////////////////////////////////////////
 // Create cases for entries and connect them to change statusBar entry
 #define ON_STATUS_MSG(id, message)     case id:  slotStatusHelpMsg(message);break;
+
+
 
 
 

@@ -25,8 +25,8 @@
 #include "debug.h"
 #include <assert.h>
 #include <qfileinfo.h>
+#include "resource.h"
 
-#define ID_SHOW_PATH_ITEM  1000
 
 /*********************************************************************
  *                                                                   *
@@ -67,28 +67,28 @@ CLogFileView::~CLogFileView(){
 void CLogFileView::initPopups()
 {
   file_pop.setTitle(i18n("File"));
-  file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
-  file_pop.insertItem(i18n("Remove File from Project..."),this,SLOT(slotFileRemove()));
-  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Remove File from Disc..."),this,SLOT(slotFileDelete()));
+  file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()),0, ID_FILE_NEW );
+  file_pop.insertItem(i18n("Remove File from Project..."),this,SLOT(slotFileRemove()),0,ID_PROJECT_REMOVE_FILE );
+  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Remove File from Disc..."),this,SLOT(slotFileDelete()), 0, ID_FILE_DELETE);
   file_pop.insertSeparator();
-  file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
+  file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()), 0, ID_PROJECT_FILE_PROPERTIES);
   
   group_pop.setTitle(i18n("Group"));
-  group_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()));
+  group_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()), 0, ID_LFV_NEW_GROUP);
   group_pop.insertSeparator();
-  group_pop.insertItem(i18n("Remove Group"),this,SLOT(slotGroupRemove()));
+  group_pop.insertItem(i18n("Remove Group"),this,SLOT(slotGroupRemove()),0,ID_LFV_REMOVE_GROUP);
   group_pop.insertSeparator();
-  group_pop.insertItem(i18n("Properties..."),this,SLOT(slotGroupProp()));
+  group_pop.insertItem(i18n("Properties..."),this,SLOT(slotGroupProp()),0, ID_LFV_GROUP_PROP);
 
 
   project_pop.setTitle(i18n("Project/LFV"));
-  project_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
-  project_pop.insertItem(i18n("New Class..."),this,SLOT(slotNewClass()));
-  project_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()));
+  project_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()),0,ID_FILE_NEW);
+  project_pop.insertItem(i18n("New Class..."),this,SLOT(slotNewClass()), 0, ID_PROJECT_NEW_CLASS);
+  project_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()),0,ID_LFV_NEW_GROUP);
   project_pop.insertSeparator();
-  project_pop.insertItem(i18n("Show relative path"),this,SLOT(slotShowPath()),0,ID_SHOW_PATH_ITEM);
+  project_pop.insertItem(i18n("Show relative path"),this,SLOT(slotShowPath()),0,ID_LFV_SHOW_PATH_ITEM);
   project_pop.setCheckable(true);
-  if(show_path) project_pop.setItemChecked(ID_SHOW_PATH_ITEM,true);
+  if(show_path) project_pop.setItemChecked(ID_LFV_SHOW_PATH_ITEM,true);
 
 }
 
@@ -436,16 +436,18 @@ void CLogFileView::storeState(CProject* prj){
 
 /**  */
 void CLogFileView::slotShowPath(){
-	if(project_pop.isItemChecked(ID_SHOW_PATH_ITEM)){
-		project_pop.setItemChecked(ID_SHOW_PATH_ITEM,false);
+	if(project_pop.isItemChecked(ID_LFV_SHOW_PATH_ITEM)){
+		project_pop.setItemChecked(ID_LFV_SHOW_PATH_ITEM,false);
 		show_path = false;
 	}
 	else{
-		project_pop.setItemChecked(ID_SHOW_PATH_ITEM,true);
+		project_pop.setItemChecked(ID_LFV_SHOW_PATH_ITEM,true);
 		show_path = true;
 	}
 	refresh(project);	
 }
+
+
 
 
 

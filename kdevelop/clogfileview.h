@@ -60,6 +60,11 @@ public:
   QString getFileName(QListViewItem* item);
   bool showPath(){return show_path;}
 
+  KPopupMenu* filePopup() { return &file_pop;};
+  KPopupMenu* groupPopup(){ return &group_pop;};
+  KPopupMenu* projectPopup(){ return &project_pop;};
+
+
 protected: // Implementations of virtual methods.
 
   /** Initialize popupmenus. */
@@ -108,6 +113,9 @@ protected:
   
 };
 #endif
+
+
+
 
 
 

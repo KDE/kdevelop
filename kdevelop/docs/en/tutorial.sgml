@@ -2332,10 +2332,6 @@ extend the HTML output with the KDE logo.
 But besides this, sgmltools allow output in plain text, GNU info, LyX, DVI, Postscript and RTF; therefore the SGML documentation can be 
 easily used to provide a printed version of the online handbook.   
   
-This document is a user's guide to the SGML-Tools formatting system, a SGML-based system 
-which allows you to produce a variety of output formats. You can create plain text output (ASCII and ISO-8859-1), DVI, PostScript, 
-HTML, GNU info, LyX, and RTF output from a single document source file. This guide describes SGML-Tools version 1.0. 
-
 <sect1>What the Documentation already contains 
 <p>
 When creating a KDevelop project, the subdirectory docs/en already contains the index.sgml documentation file and the already produced 
@@ -2668,6 +2664,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
 
 
 
