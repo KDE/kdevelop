@@ -68,6 +68,7 @@ public slots:
     void completeText();
 
 private slots:
+    void slotPartAdded(KParts::Part *part);
     void slotActivePartChanged(KParts::Part *part);
     void slotArgHintHided();
     void slotCompletionBoxHided( KTextEditor::CompletionEntry entry );
@@ -77,6 +78,7 @@ private slots:
     void computeFileEntryList();
 
 private:
+    void integratePart( KParts::Part* part );
     void setupCodeInformationRepository();
     FunctionDefinitionAST* functionDefinition( AST* node );
     void computeRecoveryPoints();

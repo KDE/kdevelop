@@ -268,13 +268,25 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     m_repository = new CodeInformationRepository( cppSupport->codeRepository() );
     setupCodeInformationRepository();
 
+    if( part->partController()->parts() )
+    {
+        QPtrListIterator<KParts::Part> it( *part->partController()->parts() );
+	while( KParts::Part* part = it.current() )
+	{
+	    integratePart( part );
+	    ++it;
+	}
+    }
+
+    if( part->partController()->activePart() )
+        slotActivePartChanged( part->partController()->activePart() );
+
+    connect( part->partController( ), SIGNAL( partAdded( KParts::Part* ) ),
+	     this, SLOT( slotPartAdded( KParts::Part* ) ) );
     connect( part->partController( ), SIGNAL( activePartChanged( KParts::Part* ) ),
 	     this, SLOT( slotActivePartChanged( KParts::Part* ) ) );
 
     connect( part, SIGNAL(fileParsed(const QString&)), this, SLOT(slotFileParsed(const QString&)) );
-
-    if( part->partController()->activePart() )
-        slotActivePartChanged( part->partController()->activePart() );
 }
 
 CppCodeCompletion::~CppCodeCompletion( )
@@ -314,6 +326,32 @@ void CppCodeCompletion::slotCompletionBoxHided( KTextEditor::CompletionEntry ent
     m_bCompletionBoxShow = false;
 }
 
+void CppCodeCompletion::integratePart( KParts::Part* part )
+{
+    if( !part || !part->widget() )
+        return;
+
+    if( KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part ) )
+    {
+        kdDebug(9007) << "=================> integrate document: " << doc << endl;
+
+	if( m_pSupport && m_pSupport->codeCompletionConfig()->automaticCodeCompletion() ){
+		kdDebug( 9007 ) << "enabling code completion" << endl;
+		connect(part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+		connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
+			SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
+		connect(part->widget(), SIGNAL( argHintHidden() ), this,
+			SLOT( slotArgHintHided() ) );
+	}
+
+    }
+}
+
+void CppCodeCompletion::slotPartAdded(KParts::Part *part)
+{
+    integratePart( part );
+}
+
 void CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 {
     kdDebug( 9007 ) << "CppCodeCompletion::slotActivePartChanged()" << endl;
@@ -346,16 +384,6 @@ void CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
     if( !m_activeCompletion ){
         kdDebug( 9007 ) << "Editor doesn't support the CompletionIface" << endl;
         return;
-    }
-
-    // here we have to investigate :)
-    if( m_pSupport && m_pSupport->codeCompletionConfig()->automaticCodeCompletion() ){
-        kdDebug( 9007 ) << "enabling code completion" << endl;
-	connect(part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
-	connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
-                 SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
-	connect(part->widget(), SIGNAL( argHintHidden() ), this,
-                 SLOT( slotArgHintHided() ) );
     }
 
     kdDebug(9007) << "CppCodeCompletion::slotActivePartChanged() -- end" << endl;
