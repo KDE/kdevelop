@@ -102,6 +102,7 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
    ,m_pDockbaseAreaOfDocumentViews(0L)
    ,m_pDockbaseOfTabPage(0L)
    ,m_pTempDockSession(0L)
+   ,m_bClearingOfWindowMenuBlocked(FALSE)
 {
    // Create the local list of windows
    m_pWinList = new QList<QextMdiChildView>;
@@ -1192,7 +1193,9 @@ void QextMdiMainFrm::fillWindowMenu()
       bTabPageMode = TRUE;
 
    // construct the menu and its submenus
-   m_pWindowMenu->clear();
+   if (!m_bClearingOfWindowMenuBlocked) {
+      m_pWindowMenu->clear();
+   }
    m_pWindowMenu->insertItem(tr("&Close"), this, SLOT(closeActiveView()));
    m_pWindowMenu->insertItem(tr("Close &All"), this, SLOT(closeAllViews()));
    if (!bTabPageMode) {

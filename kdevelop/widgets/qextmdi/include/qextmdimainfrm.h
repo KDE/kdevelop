@@ -116,6 +116,7 @@ protected:
    KDockWidget*            m_pDockbaseAreaOfDocumentViews;
    KDockWidget*            m_pDockbaseOfTabPage;
    QDomDocument*           m_pTempDockSession;
+   bool                    m_bClearingOfWindowMenuBlocked;
 
 // methods
 public:
@@ -413,6 +414,11 @@ protected:
    * as toplevel and stay-on-top on the application's main widget.
    */
    virtual void addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos = KDockWidget::DockNone, QWidget* pTargetWnd = 0L, int percent = 50, const QString& tabToolTip = 0, const QString& tabCaption = 0);
+   /**
+   * prevents fillWindowMenu() from m_pWindowMenu->clear(). You have to care for it by yourself.
+   * This is useful if you want to add some actions in your overridden fillWindowMenu() method.
+   */
+   void blockClearingOfWindowMenu( bool bBlocked) { m_bClearingOfWindowMenuBlocked = bBlocked; };
 
 protected slots: // Protected slots
    /** 
