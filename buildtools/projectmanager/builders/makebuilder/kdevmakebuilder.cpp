@@ -8,6 +8,7 @@
 #include <domutil.h>
 #include <makeoptionswidget.h>
 
+#include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <kprocess.h>
 #include <kdialogbase.h>
