@@ -57,7 +57,8 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
   TEditInfo* actual_info;
 
 //search the actual edit_info and remove it
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+  for(actual_info=edit_infos.first();actual_info != 0;){
+    TEditInfo* next_info=edit_infos.next();
     if (actual_info->filename == filename){ // found
 //      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
       menu_buffers->removeItem(actual_info->id);
@@ -65,6 +66,7 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
 //	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
       }
     }
+    actual_info=next_info;
   }
 
   // was this file in the cpp_widget?
@@ -123,6 +125,35 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
   }
 
 }
+
+/*---------------------------------------- setInfoModified()
+ * setInfoModified(const QString &sFilename, bool bModified)
+ *
+ *  search all edit_infos for the file named "sFilename", the first
+ *  match will change 'modified'
+ *
+ * Parameters:
+ *  sFilename   filename to search in the EditInfos
+ *  bModified   sets editinfo->modified
+ * Returns:
+ *       returns true if a struct-element was changed
+ *-----------------------------------------------------------------*/
+bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
+{
+  bool bChanged=false;
+  TEditInfo* actual_info;
+  for(actual_info=edit_infos.first();!bChanged && actual_info != 0;actual_info=edit_infos.next())
+  {
+   if ( actual_info->filename == sFilename)
+      { // found
+        actual_info->modified=bModified;
+        bChanged=true;
+      }
+  }
+
+  return bChanged;
+}
+
 /*---------------------------------------- CKDevelop::isUntitled()
  * isUntitled()
  *
@@ -217,10 +248,9 @@ bool CKDevelop::fileSaveAs(){
 
   // now that all cancel possibilities are handled simulate a changed file
   // edit_widget->toggleModified(true);
-  edit_widget->doSave(name); // try the save
 
-  // if edit_widget is still modified, then saving failed
-  if (edit_widget->isModified()){
+  if (!edit_widget->KWrite::writeFile(name)){
+  // if saving failed
       if (bAutosave)
        saveTimer->start(saveTimeout);
      return false;
@@ -1059,7 +1089,30 @@ bool CKDevelop::queryClose(){
     }
   }
   else{
+    TEditInfo* actual_info;
+    int message_result=1;
+    int save=true;
+
     config->writeEntry("project_file","");
+
+    setInfoModified(header_widget->getName(), header_widget->isModified());
+    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+
+    for(actual_info=edit_infos.first();save && actual_info != 0;
+		actual_info=edit_infos.next())
+    {
+       if (actual_info->modified)
+         save=false;
+    }
+
+    if (!save)
+    {
+      message_result = KMsgBox::yesNo(this,i18n("Exit KDevelop"),
+                                         i18n("There is unsaved data.\n"
+					      "Do you really want to quit?"),
+                                         KMsgBox::QUESTION);
+    }
+    return message_result==1;
   }
   return true;
 }
@@ -1135,58 +1188,4 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
