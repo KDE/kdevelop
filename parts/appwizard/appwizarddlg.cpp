@@ -169,11 +169,13 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     //m_vcs->stack->addWidget(new QLabel(QString("plop"),m_vcs->stack),i++);
     m_vcs->stack->addWidget(0,i++);
         
-    map = KDevGlobalVersionControl::getVcsMap();
-        for (QMap<QString,KDevGlobalVersionControl*>::Iterator it = map.begin(); it != map.end(); ++it) {
+    KDevGlobalVersionControl::GlobalVcsMap map = KDevGlobalVersionControl::vcsMap();
+    for (KDevGlobalVersionControl::GlobalVcsMap::Iterator it = map.begin(); it != map.end(); ++it) {
+	if ( !(*it) )
+            continue;
         m_vcs->combo->insertItem(it.key(),i);
-                m_vcs->stack->addWidget((*it)->newProjectWidget(m_vcs->stack),i++);
-                }
+        m_vcs->stack->addWidget((*it)->newProjectWidget(m_vcs->stack),i++);
+    }
     m_vcs->stack->raiseWidget(0);   
     addPage(m_vcs,"Version Control System");
         
@@ -381,7 +383,7 @@ void AppWizardDialog::accept()
     m_part->makeFrontend()->queueCommand(QString::null, m_cmdline);
     
     if (m_vcs->stack->id(m_vcs->stack->visibleWidget())) {
-        KDevGlobalVersionControl* pVC = KDevGlobalVersionControl::getVcsMap()[m_vcs->combo->currentText()];
+        KDevGlobalVersionControl* pVC = KDevGlobalVersionControl::vcsMap()[m_vcs->combo->currentText()];
         if (pVC) {
             pVC->createNewProject(dest_edit->text());
         }

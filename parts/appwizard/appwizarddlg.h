@@ -89,7 +89,6 @@ private:
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
     VcsForm *m_vcs;
-    QMap<QString,KDevGlobalVersionControl*> map;
 };
 
 #endif
