@@ -3,5 +3,6 @@ SOURCES += $APPNAMELC$.cpp \
 HEADERS += $APPNAMELC$.h
 TEMPLATE = app
 CONFIG += release \
-          warn_on
+          warn_on \
+	  thread
 TARGET = ../bin/$APPNAMELC$

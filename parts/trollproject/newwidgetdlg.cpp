@@ -46,63 +46,14 @@ void NewWidgetDlg::templateSelChanged()
   QMessageBox::information(0,"template","");
 }
 
-
-bool NewWidgetDlg::openXMLFile(QDomDocument &doc, QString filename)
-//=================================================================
-{
-  QFile file( filename );
-  if ( !file.open( IO_ReadOnly ) )
-    return false;
-  if ( !doc.setContent( &file ) ) {
-    file.close();
-    return false;
-  }
-  file.close();
-  return true;
-}
-
-bool NewWidgetDlg::saveXMLFile(QDomDocument &doc, QString filename)
-//=================================================================
-{
-  QFile file( filename );
-  if ( !file.open( IO_ReadWrite | IO_Truncate ) )
-    return false;
-  QTextStream t( &file );
-  t << doc.toString();
-  file.close();
-  return true;
-}
-
-void NewWidgetDlg::removeTextNodes(QDomDocument doc,QString pathExt)
-//==================================================================
-{
-  QDomElement elem = DomUtil::elementByPathExt(doc,pathExt);
-  QDomNodeList children = elem.childNodes();
-  for (unsigned int i=0;i<children.count();i++)
-    if (children.item(i).isText())
-      elem.removeChild(children.item(i));
-}
-
-
-void NewWidgetDlg::appendTextNode(QDomDocument doc, QString pathExt, QString text)
-//================================================================================
-{
-  QDomElement elem = DomUtil::elementByPathExt(doc,pathExt);
-  elem.appendChild(doc.createTextNode(text));
-}
-
-
-
 void NewWidgetDlg::accept()
 //=========================
 {
   QDomDocument doc;
-  openXMLFile(doc,"/home/jsgaarde/programming/kdevelop/domapp/clean_dialog.ui");
-  removeTextNodes(doc,"class");
-  appendTextNode(doc,"class","TestClass");
-  removeTextNodes(doc,"widget/property|name=caption/string");
-  appendTextNode(doc,"widget/property|name=caption/string","Test Dialog");
-  saveXMLFile(doc,"/home/jsgaarde/programming/kdevelop/domapp/clean_dialog2.ui");
+  DomUtil::openDOMFile(doc,"/home/jsgaarde/programming/kdevelop/domapp/clean_dialog.ui");
+  DomUtil::replaceText(doc,"class","TestClass");
+  DomUtil::replaceText(doc,"widget/property|name=caption/string","Test Dialog");
+  DomUtil::saveDOMFile(doc,"/home/jsgaarde/programming/kdevelop/domapp/clean_dialog2.ui");
   NewWidgetDlgBase::accept();
 }
 
