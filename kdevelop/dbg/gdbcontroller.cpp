@@ -1149,7 +1149,11 @@ void GDBController::slotStart(const QString& application, const QString& args)
   QString tty(tty_->getSlave());
   if (tty.isEmpty())
   {
-    KMsgBox::message(0, i18n("Error"), i18n("tty not set, so gdb cannot start\n\ncheck the settings on /dev/tty*\nand /dev/pty*"),
+    KMsgBox::message(0, i18n("Error"), i18n("gdb cannot use the tty* or pty* devices\n"
+                                             "Check the settings on /dev/tty* and /dev/pty*\n\n"
+                                             "As root you may need to \"chmod ug+rw\" tty* and pty* devices\n"
+                                             "and/or add the user to the tty group using\n"
+                                             "\"usermod -G tty username\""),
                           KMsgBox::EXCLAMATION);
 
     delete tty_;
