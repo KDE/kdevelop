@@ -2520,7 +2520,6 @@ bool Parser::parseWhileStatement( StatementAST::Node& node )
     StatementAST::Node body;
     if( !parseStatement(body) ){
 	reportError( i18n("statement expected") );
-	return false;
     }
 
     WhileStatementAST::Node ast = CreateNode<WhileStatementAST>();
@@ -2589,8 +2588,7 @@ bool Parser::parseForStatement( StatementAST::Node& node )
     ADVANCE( ')', ")" );
 
     StatementAST::Node body;
-    if( !parseStatement(body) )
-	return false;
+    parseStatement(body)
 
     ForStatementAST::Node ast = CreateNode<ForStatementAST>();
     ast->setInitStatement( init );
@@ -2674,7 +2672,6 @@ bool Parser::parseIfStatement( StatementAST::Node& node )
     StatementAST::Node stmt;
     if( !parseStatement(stmt) ){
 	reportError( i18n("statement expected") );
-	return false;
     }
 
     ast->setCondition( cond );
@@ -2684,8 +2681,7 @@ bool Parser::parseIfStatement( StatementAST::Node& node )
 	lex->nextToken();
 	StatementAST::Node elseStmt;
 	if( !parseStatement(elseStmt) ) {
-	    reportError( i18n("statement expected") );
-	    return false;
+	reportError( i18n("statement expected") );
 	}
 	ast->setElseStatement( elseStmt );
     }
