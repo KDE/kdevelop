@@ -1854,7 +1854,6 @@ void CKDevelop::slotBuildConfigure(){
   showOutputView(true);
   setToolMenuProcess(false);
   error_parser->toogleOff();
-  slotFileSave();
   messages_widget->clear();
   slotFileSaveAll();
   QDir::setCurrent(prj->getProjectDir()); 
