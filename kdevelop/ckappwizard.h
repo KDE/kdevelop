@@ -109,7 +109,7 @@ void slotDirDialogClicked();
   void slotVendorEntry();
 
 private:
-
+	QString kdedir_env;
   QString m_author_email;
   QString  m_author_name;
   bool  gen_prj, modifyDirectory,modifyVendor;
@@ -167,6 +167,8 @@ private:
   //QListViewItem *komitem;
   QListViewItem *kdenormalitem;
   QListViewItem *kdeminiitem;
+  QListViewItem *kde2normalitem;
+  QListViewItem *kde2miniitem;
   QListViewItem *qtentry;
   QListViewItem *ccppentry;
   //QListViewItem *gtkentry;
