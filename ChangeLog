@@ -1,6 +1,7 @@
 2001-08-26  F@lk Brettschneider <falk@kdevelop.org>
     * find dialog in docu view highlights found text piece again
       (solution: uses KHTMLPart's find dialog now)
+    * fixed the "collapsing tree view" bug for class view (CV) and real file view (RFV)
 
 2001-08-23  Harald Fernengel  <harry@bnro.de>
     * pop up normal search dialog if user presses "Find again" without specifying a search string before
