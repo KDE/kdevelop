@@ -98,6 +98,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"inline"         {}
 <INITIAL>"afx_msg"        {}
 <INITIAL>"extern"         {}
+<INITIAL>"OSG_BEGIN_NAMESPACE"         {}
 
     /*==============> String <==============*/
 <INITIAL>"L"?["]{SCHAR}*["]     {return STRING;}
