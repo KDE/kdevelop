@@ -301,7 +301,7 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
             else
                 idx_filename += libname;
             idx_filename += ".kdoc";
-            setExpandable(true);
+            setExpandable(QFile::exists(idx_filename) || QFile::exists(idx_filename+".gz"));
         }
 #endif
 
