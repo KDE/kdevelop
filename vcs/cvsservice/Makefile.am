@@ -20,13 +20,22 @@ libkdevcvsservice_la_SOURCES = cvspart.cpp cvspartimpl.cpp \
     jobscheduler.cpp \
     cvsfileinfoprovider.cpp cvsservicedcopiface.skel
 
+noinst_HEADERS = changelog.h checkoutdialog.h checkoutdialogbase.h commitdlg.h \
+    cvsentry.h cvsform.h cvsformbase.h cvsoptions.h cvsoptionswidget.h cvsoptionswidgetbase.h \
+    cvspart.h cvspartimpl.h cvsprocesswidget.h tagdialog.h tagdialogbase.h diffdialog.h \
+    cvsdir.h cvslogpage.h cvslogdialog.h jobscheduler.h diffwidget.h cvsfileinfoprovider.h \
+    cvsservicedcopiface.h
+    
 METASOURCES = AUTO
+
+ICONS = AUTO
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevcvsservice.desktop
 
+servicepicsdir = $(kde_datadir)/kdevcvsservice/pics
+servicepics_DATA = kdev_cvs.png
 
 rcdir = $(kde_datadir)/kdevcvsservice
 rc_DATA = kdevcvsservicepart.rc buildcvs.sh
-noinst_HEADERS = changelog.h checkoutdialog.h checkoutdialogbase.h commitdlg.h cvsentry.h cvsform.h cvsformbase.h cvsoptions.h cvsoptionswidget.h cvsoptionswidgetbase.h cvspart.h cvspartimpl.h cvsprocesswidget.h tagdialog.h tagdialogbase.h diffdialog.h cvsdir.h cvslogpage.h cvslogdialog.h jobscheduler.h diffwidget.h cvsfileinfoprovider.h
-#cvsservicedcopiface.h
+

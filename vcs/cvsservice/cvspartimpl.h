@@ -45,9 +45,10 @@ class CVSFileInfoProvider;
 */
 class CvsServicePartImpl : public QObject
 {
+    friend class CvsServicePart;
+    
     Q_OBJECT
 public:
-
     //! Available Cvs operations
     enum CvsOperation
     {

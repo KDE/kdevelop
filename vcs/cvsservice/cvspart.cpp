@@ -103,6 +103,7 @@ CvsServicePart::CvsServicePart( QObject *parent, const char *name, const QString
     setXMLFile( "kdevcvsservicepart.rc" );
 
     init();
+    m_impl->m_widget->setIcon( UserIcon( "kdev_cvs", KIcon::DefaultState, CvsFactory::instance()) );
 
     // @fixme (at all costs!), Ok, this is a crime but for now CvsServicePart is the only implementation
     // of KDevVersionControl
