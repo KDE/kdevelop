@@ -215,7 +215,10 @@ int KTabZoomFrame::addTab(QWidget *widget, const QString &title)
   info->m_title = title;
 
   d->m_info.append(info);
-
+  
+  if(minimumWidth() < widget->sizeHint().width() + 10) 
+    setMinimumWidth(widget->sizeHint().width() + 10);
+ 
   return index;
 }
 
@@ -223,13 +226,13 @@ int KTabZoomFrame::addTab(QWidget *widget, const QString &title)
 void KTabZoomFrame::removeTab(int index)
 {
   for (KTZFWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
-    if (i->m_index == index)
+	if (i->m_index == index)
     {
-      d->m_info.remove(i);
-      return;
+	  if(d->m_title->text()==i->m_title) slotCloseButtonClicked();
+	  d->m_info.remove(i);
+	  return;
     }
 }
-
 
 void KTabZoomFrame::selected(int index)
 {
@@ -243,8 +246,6 @@ void KTabZoomFrame::selected(int index)
       return;
     }
 }
-
-
 
 void KTabZoomFrame::mousePressEvent(QMouseEvent *ev)
 {
@@ -278,7 +279,6 @@ void KTabZoomFrame::mousePressEvent(QMouseEvent *ev)
     break;
   }
 }
-
 
 void KTabZoomFrame::mouseReleaseEvent(QMouseEvent *)
 {
