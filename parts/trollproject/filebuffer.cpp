@@ -248,9 +248,19 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
       line = "";
     }
     if (QString("+-*~").find(effectOperator)==-1)
+    {
+      // operator = resets the variable values
       plusValues.clear();
+      minusValues.clear();
+    }
     if (effectOperator=='-')
+    {
+      // remove from plus list if in curvalues
+      for (int i=0; i<curValues.count(); i++)
+        plusValues.remove(curValues[i]);
+      // add curvalues to minuslist
       minusValues += curValues;
+    }
     else
     {
       // remove from minus list if in curvalues

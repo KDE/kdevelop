@@ -597,13 +597,13 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
   FileBuffer *subBuffer=m_shownSubproject->m_RootBuffer->getSubBuffer(spitem->scopeString);
   subBuffer->removeValues("SUBDIRS");
-  subBuffer->setValues("SUBDIRS",spitem->subdirs,4);
+  subBuffer->setValues("SUBDIRS",spitem->subdirs,4,true);
   subBuffer->removeValues("SOURCES");
-  subBuffer->setValues("SOURCES",spitem->sources,4);
+  subBuffer->setValues("SOURCES",spitem->sources,4,true);
   subBuffer->removeValues("HEADERS");
-  subBuffer->setValues("HEADERS",spitem->headers,4);
+  subBuffer->setValues("HEADERS",spitem->headers,4,true);
   subBuffer->removeValues("FORMS");
-  subBuffer->setValues("FORMS",spitem->forms,4);
+  subBuffer->setValues("FORMS",spitem->forms,4,true);
   m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
 

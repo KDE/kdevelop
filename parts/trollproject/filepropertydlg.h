@@ -39,10 +39,14 @@ class FilePropertyDlg : public FilePropertyBase
                   FilePropertyDlg(SubprojectItem *spitem, FileItem *fitem,QWidget *parent=0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
 
   private:
-  void            updateScopeTree();
+  void            createScopeTree(const QString &scopeString);
+  void            diveIntoScope(ScopeItem *sitem,const QString &scopeString);
+  QString         getExcludedScopes(ScopeItem *sitem=0);
   FileItem        *m_fileItem;
   SubprojectItem  *m_subProjectItem;
 
+  public slots:
+  virtual void updateFileProperties();
 };
 
 #endif

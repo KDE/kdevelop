@@ -46,13 +46,13 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>20</height>
+                    <height>0</height>
                 </size>
             </property>
         </spacer>
         <widget class="QPushButton" row="2" column="2">
             <property name="name">
-                <cstring>PushButton2</cstring>
+                <cstring>buttonCancel</cstring>
             </property>
             <property name="text">
                 <string>Cancel</string>
@@ -60,7 +60,7 @@
         </widget>
         <widget class="QPushButton" row="2" column="1">
             <property name="name">
-                <cstring>PushButton1</cstring>
+                <cstring>buttonOk</cstring>
             </property>
             <property name="text">
                 <string>Ok</string>
@@ -94,13 +94,13 @@
 </widget>
 <connections>
     <connection>
-        <sender>PushButton1</sender>
+        <sender>buttonOk</sender>
         <signal>clicked()</signal>
         <receiver>FilePropertyBase</receiver>
-        <slot>accept()</slot>
+        <slot>updateFileProperties()</slot>
     </connection>
     <connection>
-        <sender>PushButton2</sender>
+        <sender>buttonCancel</sender>
         <signal>clicked()</signal>
         <receiver>FilePropertyBase</receiver>
         <slot>reject()</slot>
@@ -108,8 +108,11 @@
 </connections>
 <tabstops>
     <tabstop>ScopeTree</tabstop>
-    <tabstop>PushButton1</tabstop>
-    <tabstop>PushButton2</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
 </tabstops>
+<slots>
+    <slot>updateFileProperties()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
