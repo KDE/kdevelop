@@ -26,7 +26,7 @@
 #include "ceditwidget.h"
  
 void CKDevelop::initWhatsThis(){
-  /*  QWhatsThis::add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
+    QWhatsThis::add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"
 																															"Shows the open project dialog "
 																															"to select a project to be opened"));
 																															
@@ -308,9 +308,9 @@ void CKDevelop::initWhatsThis(){
 		"for terminal-based application communication. Running "
 		"terminal applications are using this instead of a terminal window."));
 	*/
-  /*
-QWhatsThis::add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
-  */                                  																												
+
+	QWhatsThis::add(stderr_widget, i18n("StdErr\n\n""The Standard Error window displays messages of running applications ""using the cerr function to debug."));
+                                  																												
 }
 
 

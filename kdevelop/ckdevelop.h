@@ -552,9 +552,9 @@ public:
   void slotClickedOnMessagesWidget();
   
 
-  void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
-  void slotDocumentDone( KHTMLView *_view );
-  void slotURLonURL(KHTMLView*,const char* url);
+  void slotURLSelected(KHTMLView* widget,QString url,int, QString);
+  void slotDocumentDone( KHTMLView * );
+  void slotURLonURL(KHTMLView*,QString);
 
   void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);

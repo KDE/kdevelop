@@ -34,15 +34,15 @@
 #include <kapp.h>
 #include <kconfig.h>
 #include "structdef.h"
-#include "kbrowser.h"
+#include <kbrowser.h>
 
 
 /** 
   *the documentation browser, attention!: only a prototype
   *@author Sandy Meier
   */
-class CDocBrowser : public KBrowser {
-  Q_OBJECT 
+class CDocBrowser : public KHTMLView {
+  Q_OBJECT
 public: 
   /** construtor */
   CDocBrowser(QWidget*parent=0,const char* name=0); 
@@ -61,13 +61,13 @@ public slots:
   void slotDocFixedFont(const char *);
   void slotDocColorsChanged(const QColor&, const QColor&,
             		const QColor&, const QColor&, const bool, const bool);
-  void slotPopupMenu( KHTMLView *, const char *, const QPoint & );
+  void slotPopupMenu(KHTMLView*, QString , const QPoint & );
   void slotCopyText();
   void slotURLBack();
   void slotURLForward();
   void slotSearchText();
 	void slotGrepText();
-	void slotSetFileTitle(const char* title);
+	void slotSetFileTitle(QString);
 	void slotViewInKFM();
 		
  signals:
@@ -82,7 +82,7 @@ protected:
   QString m_title, m_refTitle;
 //  void  mousePressEvent(QMouseEvent* event);
   QPopupMenu* doc_pop;
-  KBrowser* createFrame( QWidget *_parent, const char *_name );
+//  KBrowser* createFrame( QWidget *_parent, const char *_name );
 
 
 private:

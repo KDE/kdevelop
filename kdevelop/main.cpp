@@ -27,6 +27,7 @@
 
 
 
+
 KGuiCmdManager cmdMngr; //manager for user -> gui commands
 
 

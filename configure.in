@@ -9,7 +9,7 @@ AC_CONFIG_AUX_DIR(admin)
 dnl inits some variables needed by automake's Makefiles.
 dnl add here the package name and it's version number. It will
 dnl be defined in config.h and in the Makefiles
-AM_INIT_AUTOMAKE(kdevelop,'2.0sometimeinthefuture')
+AM_INIT_AUTOMAKE(kdevelop,0.1)
 
 dnl sets the prefix to $KDEDIR or /usr/local/kde (if no $KDEDIR
 dnl set) for the case, that there is no --prefix
@@ -63,7 +63,7 @@ KDEV_CHECK_KDOC2
 dnl KDE_CHECK_FINAL
 
 dnl add here all your Makefiles. This are created by configure
-AC_OUTPUT(Makefile \
+AC_OUTPUT(Makefile
 kdevelop/Makefile \
 po/Makefile \
 kdlgloader/Makefile \

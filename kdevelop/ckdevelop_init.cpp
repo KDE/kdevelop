@@ -1013,16 +1013,15 @@ void CKDevelop::initConnections(){
   connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   // connect Docbrowser rb menu
-  connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,const char*,int,const char*)),
-  								this, SLOT(slotURLSelected(KHTMLView*,const char*,int,const char*))); 	
 
-  connect(browser_widget, SIGNAL(documentDone(KHTMLView*)),
-  								this, SLOT(slotDocumentDone(KHTMLView*)));
+  connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,QString,int,QString)), this, SLOT(slotURLSelected(KHTMLView*,QString,int,QString))); 	
+
+  connect(browser_widget, SIGNAL(documentDone(KHTMLView*)), this, SLOT(slotDocumentDone(KHTMLView*)));
   connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
   connect(browser_widget, SIGNAL(signalBookmarkAdd()),this,SLOT(slotBookmarksAdd()));
 
-  connect(browser_widget, SIGNAL(onURL(KHTMLView *, const char *)),this,SLOT(slotURLonURL(KHTMLView *, const char *)));
+  connect(browser_widget, SIGNAL(onURL(KHTMLView *, QString)),this,SLOT(slotURLonURL(KHTMLView *, QString)));
   connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
   connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
   connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));

@@ -1634,11 +1634,7 @@ void CKDevelop::slotHelpKDEKFileLib(){
 void CKDevelop::slotHelpKDEHTMLLib(){
   config->setGroup("Doc_Location");
   QString doc_kde = config->readEntry("doc_kde", KDELIBS_DOCDIR);
-  QString file = doc_kde + "khtmlw/index.html";
-  if( !QFileInfo( file ).exists() ){
-    // not found: use khtml
-    file = doc_kde + "khtml/index.html";
-  }
+  QString file = doc_kde + "khtml/index.html";
   slotURLSelected(browser_widget,"file:" +file  ,1,"test");
 }
 
@@ -1689,6 +1685,7 @@ void CKDevelop::slotHelpManual(){
 void CKDevelop::slotHelpContents(){
   QString file = CToolClass::locatehtml("kdevelop/index.html");
   slotURLSelected(browser_widget,"file:" + file,1,"test");
+
 }
 
 void CKDevelop::slotHelpTutorial(){
@@ -2079,7 +2076,7 @@ void CKDevelop::slotNewUndo(){
 }
 
 
-void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
+void CKDevelop::slotURLSelected(KHTMLView* ,QString url,int,QString){
 //	enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
     switchToKDevelop();
@@ -2104,7 +2101,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
 
 }
 
-void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
+void CKDevelop::slotURLonURL(KHTMLView*, QString url)
 {
 	if ( url )
 	{
@@ -2116,8 +2113,7 @@ void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
 	}
 }
 
-#warning Whats the argument _view good for?
-void CKDevelop::slotDocumentDone( KHTMLView *_view ){
+void CKDevelop::slotDocumentDone( KHTMLView * ){
   QString actualURL=browser_widget->currentURL();
   QString actualTitle=browser_widget->currentTitle();
   int cur =  history_list.at()+1; // get the current index

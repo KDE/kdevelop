@@ -55,7 +55,7 @@ QColor CDocBrowser::vLinkColor;
 bool CDocBrowser::underlineLinks;
 bool CDocBrowser::forceDefaults;
 
-CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KBrowser(parent,name){
+CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,name){
 
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(BarIcon("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
@@ -69,9 +69,9 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KBrowser(parent,name
   doc_pop->insertItem(BarIcon("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
 	
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
-  connect( this, SIGNAL( popupMenu( KHTMLView *, const char *, const QPoint & ) ),
-    this, SLOT( slotPopupMenu( KHTMLView *, const char *, const QPoint & ) ) );
-	connect(this, SIGNAL( setTitle ( const char *) ), this, SLOT( slotSetFileTitle( const char*) ) );
+  connect( this, SIGNAL( popupMenu(KHTMLView *, QString, const QPoint & ) ),
+    this, SLOT( slotPopupMenu(KHTMLView *, QString, const QPoint & ) ) );
+	connect(this, SIGNAL( setTitle ( QString) ), this, SLOT( slotSetFileTitle( QString) ) );
 
 }
 
@@ -94,7 +94,6 @@ void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
 
-    //    openURL(url,reload);
     //    return;
   QString url_wo_ref=url; // without ref
   QString ref;
@@ -127,17 +126,18 @@ void CDocBrowser::showURL(QString url,bool reload){
     KIONetAccess::download(url,str);
     
     //cerr << endl << "STR:" << str;
-    
+
     char buffer[256+1];
     QFile file(str) ;
     if(file.exists()){
       emit enableStop(ID_HELP_BROWSER_STOP);
+//        openURL(url,reload);
+
       file.open(IO_ReadOnly);
       QDataStream dstream ( &file );
       QString content;
 
       begin( url);
-
       while ( !dstream.eof() )
       {
         buffer[256]='\0';
@@ -146,9 +146,9 @@ void CDocBrowser::showURL(QString url,bool reload){
       }
 
       end();
-  #warning uncommented parse();
-//      parse();
+      parse();
       show();
+
       KIONetAccess::removeTempFile(str);
       file.close();
     }
@@ -174,6 +174,7 @@ void CDocBrowser::showURL(QString url,bool reload){
      emit documentDone(this);  // simulate documentDone to put it in history...
   }
   old_url = url_wo_ref;
+
 }
 
 QString CDocBrowser::currentURL(){
@@ -181,7 +182,7 @@ QString CDocBrowser::currentURL(){
 }
 
 void CDocBrowser::setDocBrowserOptions(){
-
+/*
   KConfig *config = KApplication::getKApplication()->getConfig();
   config->setGroup( "DocBrowserAppearance" );
 
@@ -201,8 +202,6 @@ void CDocBrowser::setDocBrowserOptions(){
   underlineLinks = config->readBoolEntry( "UnderlineLinks", true );
   forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
 
-  KHTMLWidget* htmlview;
-  htmlview=getKHTMLWidget();
   htmlview->setFontSizes( &fSize );
   htmlview->setFixedFont( fixedFont);
   htmlview->setStandardFont( standardFont );
@@ -211,6 +210,10 @@ void CDocBrowser::setDocBrowserOptions(){
   #warning uncommented htmlview->setForceDefault( force );
   //  htmlview->setForceDefault( forceDefaults );
   htmlview->setDefaultBGColor( bgColor );
+*/
+  KHTMLWidget* htmlview;
+  htmlview=getKHTMLWidget();
+  htmlview->setURLCursor( KCursor::handCursor() );
 }
 
 void CDocBrowser::slotDocFontSize(int size){
@@ -262,7 +265,7 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 //	emit enableMenuItems();){
 }
 
-void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint & pnt){
+void CDocBrowser::slotPopupMenu(KHTMLView*, QString, const QPoint & pnt){
   QString text;
   int pos;
   if(this->isTextSelected()){
@@ -294,6 +297,7 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
     doc_pop->changeItem(BarIcon("lookup"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
   }
   doc_pop->popup(pnt);
+
 }
 
 void CDocBrowser::slotCopyText(){
@@ -323,17 +327,17 @@ void CDocBrowser::slotURLForward(){
   emit signalURLForward();
 }
 
-void CDocBrowser::slotSetFileTitle( const char* title ){
+void CDocBrowser::slotSetFileTitle( QString title){
 	m_title= title;
 }
 
 QString CDocBrowser::currentTitle(){
 	return (m_refTitle.isEmpty()) ? m_title : m_refTitle+" - "+m_title;	
 }
-
+/*
 KBrowser* CDocBrowser::createFrame( QWidget *_parent, const char *_name ){
     return new CDocBrowser(_parent,_name);
-}
+}*/
 //
 // KDE Help Options
 //

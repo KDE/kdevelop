@@ -373,9 +373,16 @@ void DocTreeKDELibsFolder::refresh()
     (void) new DocTreeKDELibsBook(this, i18n("KDE Core Library"),   "kdecore");
     (void) new DocTreeKDELibsBook(this, i18n("KDE UI Library"),     "kdeui");
     (void) new DocTreeKDELibsBook(this, i18n("KDE KFile Library"),  "kfile");
-    (void) new DocTreeKDELibsBook(this, i18n("KDE HTMLW Library"),  "khtmlw");
+    (void) new DocTreeKDELibsBook(this, i18n("KDE HTML Library"),  "khtml");
     (void) new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab");
     (void) new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell");
+    (void) new DocTreeKDELibsBook(this, i18n("KDE KOM Library"), "kom");
+    (void) new DocTreeKDELibsBook(this, i18n("KDE KParts Library"), "kparts");
+    (void) new DocTreeKDELibsBook(this, i18n("KDE KPartsUI Library"), "kpartsui");
+    (void) new DocTreeKDELibsBook(this, i18n("KDE KIO Library"), "kio");
+    (void) new DocTreeKDELibsBook(this, i18n("KDE KDE Daemon Library"), "kded");
+
+
 }
 
 

@@ -1138,7 +1138,7 @@ void CKDevelop::readOptions(){
 	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
   }
-	
+/*	
   QString filename;
   filename = config->readEntry("browser_file","");
   if(!filename.isEmpty()){
@@ -1148,7 +1148,7 @@ void CKDevelop::readOptions(){
     QString file = CToolClass::locatehtml("kdevelop/welcome/index.html");
     slotURLSelected(browser_widget,"file:" + file,1,"test");
   }
-
+*/
   bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
   if(switchKDevelop){
     switchToKDevelop();
