@@ -1637,10 +1637,17 @@ void CKDevelop::slotBuildMake(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
   messages_widget->clear();
-//  QDir::setCurrent(makefileDir);
-  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+  if ((prj->getDirWhereMakeWillBeCalled()).isEmpty())
+  {
+     QDir::setCurrent(makefileDir);
+     error_parser->setStartDir(makefileDir);
+  }
+  else
+  {
+     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  }
 
-  error_parser->setStartDir(makefileDir);
   if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
   {
@@ -1727,10 +1734,17 @@ void CKDevelop::slotBuildRebuildAll(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
   messages_widget->clear();
-//  QDir::setCurrent(makefileDir);
-  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-//  error_parser->setStartDir(makefileDir);
-  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  if ((prj->getDirWhereMakeWillBeCalled()).isEmpty())
+  {
+     QDir::setCurrent(makefileDir);
+     error_parser->setStartDir(makefileDir);
+  }
+  else
+  {
+     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  }
+
   if (prj->getProjectType()=="normal_empty" &&
        !QFileInfo(makefileDir+"Makefile").exists())
   {
@@ -1772,10 +1786,16 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   slotFileSaveAll();
   messages_widget->clear();
   slotStatusMsg(i18n("Running make clean and rebuilding all..."));
-//  QDir::setCurrent(prj->getProjectDir());
-//  error_parser->setStartDir(prj->getProjectDir());
-  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  if (prj->getDirWhereMakeWillBeCalled().isEmpty())
+  {
+     QDir::setCurrent(prj->getProjectDir());
+     error_parser->setStartDir(prj->getProjectDir());
+  }
+  else
+  {
+     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  }
 
   QString makefile("Makefile.dist");
   if(!QFileInfo(QDir::current(), makefile).exists())
@@ -1816,9 +1836,16 @@ void CKDevelop::slotBuildDistClean(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
   messages_widget->clear();
-//  QDir::setCurrent(prj->getProjectDir());
-  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-  error_parser->setStartDir(prj->getProjectDir());
+  if (prj->getDirWhereMakeWillBeCalled().isEmpty())
+  {
+     QDir::setCurrent(prj->getProjectDir());
+     error_parser->setStartDir(prj->getProjectDir());
+  }
+  else
+  {
+     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  }
 
   process.clearArguments();
   process << make_cmd << "distclean";
@@ -1875,9 +1902,17 @@ void CKDevelop::slotBuildAutoconf(){
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf/automake suite..."));
   messages_widget->clear();
-//  QDir::setCurrent(prj->getProjectDir());
-  QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
-  error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  if (prj->getDirWhereMakeWillBeCalled().isEmpty())
+  {
+     QDir::setCurrent(prj->getProjectDir());
+     error_parser->setStartDir(prj->getProjectDir());
+  }
+  else
+  {
+     QDir::setCurrent(prj->getDirWhereMakeWillBeCalled());
+     error_parser->setStartDir(prj->getDirWhereMakeWillBeCalled());
+  }
+
   shell_process.clearArguments();
   QString makefile("Makefile.dist");
   if(!QFileInfo(QDir::current(), makefile).exists())
