@@ -22,14 +22,14 @@
 #include <qframe.h>
 #include <qmap.h>
 
-class QAccel;
 class QEditorView;
 class QEditorArgHintData;
 
-class QEditorArgHint: public QFrame{
+class QEditorArgHint: public QFrame
+{
     Q_OBJECT
 public:
-    QEditorArgHint( QWidget* =0, const char* =0 );
+    QEditorArgHint( QEditorView* =0, const char* =0 );
     virtual ~QEditorArgHint();
 
     virtual void setCurrentFunction( int );
@@ -41,6 +41,7 @@ public:
     QString functionAt( int id ) const { return m_functionMap[ id ]; }
 
     virtual void show();
+    virtual void adjustSize();
     virtual bool eventFilter( QObject*, QEvent* );
 
 signals:
@@ -54,7 +55,6 @@ private slots:
     void slotDone();
 
 private:
-    QAccel* m_escAccel;
     QMap<int, QString> m_functionMap;
     int m_currentFunction;
     QString m_wrapping;

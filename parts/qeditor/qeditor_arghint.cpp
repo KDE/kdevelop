@@ -20,15 +20,17 @@
 #include "qeditor_view.h"
 #include "qeditor_part.h"
 
-#include <qaccel.h>
 #include <qlabel.h>
 #include <qintdict.h>
 #include <qlayout.h>
 #include <qregexp.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 
-struct QEditorArgHintData{
+struct QEditorArgHintData
+{
+    QEditorView* editorView;
     QIntDict<QLabel> labelDict;
     QLayout* layout;
 };
@@ -36,9 +38,8 @@ struct QEditorArgHintData{
 
 using namespace std;
 
-QEditorArgHint::QEditorArgHint( QWidget* parent, const char* name )
-    : QFrame( parent, name, WType_Popup ),
-      m_escAccel( 0 )
+QEditorArgHint::QEditorArgHint( QEditorView* parent, const char* name )
+    : QFrame( parent, name, WType_Popup )
 {
     setBackgroundColor( black );
 
@@ -46,12 +47,13 @@ QEditorArgHint::QEditorArgHint( QWidget* parent, const char* name )
     d->labelDict.setAutoDelete( TRUE );
     d->layout = new QVBoxLayout( this, 1, 2 );
     d->layout->setAutoAdd( TRUE );
+    d->editorView = parent;
 
     m_markCurrentFunction = true;
 
     setFocusPolicy( StrongFocus );
     setFocusProxy( parent );
-
+    
     reset( -1, -1 );
 }
 
@@ -76,20 +78,11 @@ void QEditorArgHint::reset( int line, int col )
 
     m_currentLine = line;
     m_currentCol = col - 1;
-
-    m_escAccel = new QAccel( (QWidget*) parent() );
-    m_escAccel->insertItem( Key_Escape, 1 );
-    m_escAccel->setEnabled( true );
-    connect( m_escAccel, SIGNAL(activated(int)), this, SLOT(slotDone()) );
 }
 
 void QEditorArgHint::slotDone()
 {
     hide();
-    if( m_escAccel ){
-        delete( m_escAccel );
-        m_escAccel = 0;
-    }
 
     m_currentLine = m_currentCol = -1;
 
@@ -140,7 +133,7 @@ void QEditorArgHint::addFunction( int id, const QString& prot )
 {
     m_functionMap[ id ] = prot;
     QLabel* label = new QLabel( prot.stripWhiteSpace().simplifyWhiteSpace(), this );
-    label->setBackgroundColor( QColor (255, 255, 238) );
+    label->setBackgroundColor( QColor(255, 255, 238) );
     label->show();
     d->labelDict.insert( id, label );
 
@@ -190,12 +183,29 @@ bool QEditorArgHint::eventFilter( QObject*, QEvent* e )
             setCurrentFunction( currentFunction() - 1 );
             ke->accept();
             return TRUE;
+	} else if( ke->key() == Key_Escape ){
+	    slotDone();
+	    return FALSE;
         } else if( (ke->state() & ControlButton) && ke->key() == Key_Right ){
             setCurrentFunction( currentFunction() + 1 );
             ke->accept();
             return TRUE;
         }
     }
+    
     return FALSE;
 }
+
+void QEditorArgHint::adjustSize( )
+{
+    QRect screen = QApplication::desktop()->screenGeometry( pos() );
+
+    QFrame::adjustSize();
+    if( width() > screen.width() )
+	resize( screen.width(), height() );
+    
+    if( x() + width() > screen.width() )
+	move( screen.width() - width(), y() );
+}
+
 #include "qeditor_arghint.moc"
