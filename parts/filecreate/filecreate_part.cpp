@@ -89,6 +89,8 @@ FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringL
   /// having to change the source, as this is not considered 'user-friendly'
   /// these days, I'm led to believe.
   selectWidget(1);
+  
+  QTimer::singleShot( 0, this, SLOT(slotGlobalInitialize()) );
 }
 
 
@@ -263,7 +265,8 @@ void FileCreatePart::slotFiletypeSelected(const FileType * filetype) {
                                                           QString::null,
                                                           filetype->subtypeRef());
 
-  openCreatedFile(createdFile);
+  if (project())
+    openCreatedFile(createdFile);
 
 //  mainWindow()->lowerView( typeChooserWidgetAsQWidget() );
 }
@@ -381,13 +384,17 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
 {
   KDevCreateFile::CreatedFile result;
   
+  KURL projectURL;
   if ( !project() )
   {
-    result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
-    return result;
-  } 
+    //result.status = KDevCreateFile::CreatedFile::STATUS_NOTCREATED;
+    //return result;
+  }
+  else
+  {
+    projectURL = project()->projectDirectory();
+  }
 
-  KURL projectURL( project()->projectDirectory() );
   KURL selectedURL;
 
   NewFileChooser dialog;
@@ -399,9 +406,13 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   } else {
     kdDebug(9034) << "could not find filetype" << endl;
   }
+  if (!project())
+    dialog.setInProjectMode(false);
 
   if (!dir.isNull())
     dialog.setDirectory(dir);
+  else if (!project())
+    dialog.setDirectory(QDir::currentDirPath());
   else
   {
     QString activeDir = project()->activeDirectory();
@@ -488,24 +499,11 @@ void FileCreatePart::slotNoteFiletype(const FileType * filetype) {
 
 void FileCreatePart::slotInitialize( )
 {
-  // read in global template information
-  QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
-  kdDebug(9034) << "Found global template info info " << globalXMLFile << endl;
-  QDomDocument globalDom;
-  if (!globalXMLFile.isNull() &&
-      DomUtil::openDOMFile(globalDom,globalXMLFile)) {
-    kdDebug(9034) << "Reading global template info..." << endl;
-//    kapp->processEvents();
-    readTypes(globalDom, m_filetypes, false);
-
-    // use side tab or not?
-    /// @todo this is a very Bad Way to do this. Must remember to move this setting to user's kdeveloprc config file
-    QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
-    if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
-        m_useSideTab = false;
-    }
-  }
-
+  m_filetypes.clear();
+  refresh();
+  
+  //read global configuration
+  slotGlobalInitialize();
 
   // read in which global templates are to be used for this project
   QDomElement useGlobalTypes =
@@ -568,6 +566,30 @@ void FileCreatePart::slotInitialize( )
 
   setShowSideTab(m_useSideTab);
 
+  // refresh view
+  refresh();
+}
+
+void FileCreatePart::slotGlobalInitialize( )
+{
+  // read in global template information
+  QString globalXMLFile = ::locate("data", "kdevfilecreate/template-info.xml");
+  kdDebug(9034) << "Found global template info info " << globalXMLFile << endl;
+  QDomDocument globalDom;
+  if (!globalXMLFile.isNull() &&
+      DomUtil::openDOMFile(globalDom,globalXMLFile)) {
+    kdDebug(9034) << "Reading global template info..." << endl;
+//    kapp->processEvents();
+    readTypes(globalDom, m_filetypes, false);
+
+    // use side tab or not?
+    /// @todo this is a very Bad Way to do this. Must remember to move this setting to user's kdeveloprc config file
+    QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
+    if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
+        m_useSideTab = false;
+    }
+  }
+  
   // refresh view
   refresh();
 }

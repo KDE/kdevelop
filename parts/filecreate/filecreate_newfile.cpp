@@ -137,5 +137,10 @@ namespace FileCreate {
     m_filename->setText(name);
   }
 
+  void NewFileChooser::setInProjectMode( bool m )
+  {
+    m_addToProject->setEnabled(m);
+    m_addToProject->setChecked(m);
+  }
 
 }

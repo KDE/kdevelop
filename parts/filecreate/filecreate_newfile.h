@@ -36,6 +36,8 @@ namespace FileCreate {
     void setCurrent(const FileType *filetype);
     void setDirectory(const QString & url);
     void setName(const QString & name);
+    
+    void setInProjectMode(bool m);
   private slots:
       void slotFileNameChanged(const QString &);
   protected:

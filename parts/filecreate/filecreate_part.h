@@ -105,6 +105,7 @@ public slots:
   void slotProjectOpened();
   void slotProjectClosed();
   void slotInitialize();
+  void slotGlobalInitialize();
 
   /**
    * Called when a file type is selected from the docked widget.
