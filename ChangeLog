@@ -1,3 +1,8 @@
+2001-06-09 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+
+    * Started to move the kwrite code from lib to the part.
+    * Added additional kwrite functions to the menues.
+
 2001-06-05 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
     * Reenabled the signals when files are loaded and
@@ -13,7 +18,7 @@
 2001-06-04 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
     
 	* Added DCOP bindings to the editor interfaces,
-	so they are accessible for scripting.
+	  so they are accessible for scripting.
 
 2001-06-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
