@@ -1,3 +1,7 @@
+2001-12-05  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: grottenh‰ﬂliches flickering removed when switching between maximized MDI editor views
+      Thanks to QextMDI-superguru Lars Beikirch <lars.beikirch@gmx.net>
+
 2001-12-04  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: during session restoring don't create a view when the file doesn't exist any more
     * bugfix: default mainframe caption after the last view has been closed
