@@ -90,7 +90,7 @@ void ProjectManager::createActions( KActionCollection* ac )
 
   m_openRecentProjectAction =
     new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
-                          this, SLOT(loadProject(const KURL &)),
+                          this, SLOT(loadRecentProject(const KURL &)),
                           ac, "project_open_recent");
   m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
 
@@ -165,6 +165,45 @@ void ProjectManager::loadDefaultProject()
       loadProject(KURL(project));
     }
   }
+}
+
+void ProjectManager::loadRecentProject(const KURL &url)
+{
+  QString fileName = url.path();
+
+  closeProject();
+
+  m_info = new ProjectInfo;
+
+  if (!loadProjectFile(fileName))
+  {
+    delete m_info;
+    m_info = 0;
+
+    if(KMessageBox::questionYesNo(TopLevel::getInstance()->main(), i18n("Do you want to remove it from the list?"))==
+       KMessageBox::Yes)
+    {
+      m_openRecentProjectAction->removeURL(url);
+      saveSettings();
+     }
+  return;
+  }
+
+  m_info->m_fileName = fileName;
+
+  getGeneralInfo();
+
+  loadProjectPart();
+  loadLanguageSupport();
+  loadLocalParts();
+
+  initializeProjectSupport();
+
+  ProjectWorkspace::restore();
+
+  m_openRecentProjectAction->addURL(KURL(projectFile()));
+  m_closeProjectAction->setEnabled(true);
+  m_projectOptionsAction->setEnabled(true);
 }
 
 void ProjectManager::loadProject(const KURL &url)

@@ -35,7 +35,8 @@ public:
 
 public slots:
 
-  void loadProject( const KURL& url );
+  void loadProject( const KURL& url);
+  void loadRecentProject( const KURL& url);
   void closeProject();
 
 private slots:
