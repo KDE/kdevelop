@@ -1,0 +1,57 @@
+# KDE Config File
+[General]
+Name=Simple Win32 GUI App.
+Icon=win32gui.png
+Category=C++
+Comment=Generates a shell project for crosscompiling Win32 projects.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
+Archive=win32gui.tar.gz
+
+[INCADMIN]
+Type=include
+File=%{kdevelop}/template-common/incadmin.kdevtemplate
+
+[GNU]
+Type=include
+File=%{kdevelop}/template-common/gnu.kdevtemplate
+
+[FILE1]
+Type=install
+EscapeXML=true
+Source=%{src}/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[FILE2]
+Type=install
+Source=%{src}/win32gui-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[FILE3]
+Type=install
+Source=%{src}/win32gui-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[FILE4]
+Type=install
+Source=%{src}/win32gui-configure.in
+Dest=%{dest}/configure.in
+
+[MkDir1]
+Type=mkdir
+Dir=%{dest}/src
+
+[FILE5]
+Type=install
+Source=%{src}/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[FILE6]
+Type=install
+Source=%{src}/app.cpp
+Dest=%{dest}/src/%{APPNAMELC}.cpp
+
+[MSG]
+Type=message
+Comment=For this project to compile and run you need both Wine and MinGW installed.
+
