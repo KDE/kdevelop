@@ -311,6 +311,7 @@ void CppCodeCompletion::slotTimeout()
 void
 CppCodeCompletion::slotArgHintHided( )
 {
+    kdDebug(9007) << "CppCodeCompletion::slotArgHintHided()" << endl;
     m_bArgHintShow = false;
 }
 
@@ -374,6 +375,8 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 	connect(part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 	connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
                  SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
+	connect(part->widget(), SIGNAL( argHintHidden() ), this,
+                 SLOT( slotArgHintHided() ) );
     }
 
     kdDebug(9007) << "CppCodeCompletion::slotActivePartChanged() -- end" << endl;
@@ -812,8 +815,6 @@ CppCodeCompletion::completeText( )
 
     m_pSupport->backgroundParser()->unlock();
 
-
-
     if( !type.isEmpty() ){
         kdDebug(9007) << "type = " << type << endl;
 	QStringList scope = QStringList::split( "::", type ); // TODO: check :: or . ??!?
@@ -822,8 +823,8 @@ CppCodeCompletion::completeText( )
 	if( showArguments ){
 	    QStringList functionList = getSignatureListForClass( type, word, isInstance );
 
-	    if( functionList.count() == 0 ){
-		functionList = getGlobalSignatureList( word );
+	    if( expr.isEmpty() /*|| functionList.count() == 0 */){
+		functionList += getGlobalSignatureList( word );
 	    }
 
 	    if( functionList.count() ){
