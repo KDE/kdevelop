@@ -8,12 +8,18 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>469</width>
-            <height>412</height>
+            <width>536</width>
+            <height>501</height>
         </rect>
     </property>
     <property name="caption">
         <string>Debugger Configuration</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string></string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string></string>
     </property>
     <grid>
         <property name="name">
@@ -44,7 +50,7 @@
                 <cstring>programArgs_edit</cstring>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Arguments that are given to the application when it is debugged.</string>
+                <string></string>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -92,15 +98,32 @@
             <property name="text">
                 <string></string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Arguments that are given to the application when it is debugged.</string>
+            </property>
         </widget>
         <widget class="KURLRequester" row="1" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>debuggingShell_edit</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Run gdb in a special shell</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If you want gdb to be executed by a special shell or tool insert it here.</string>
+            </property>
         </widget>
         <widget class="KURLRequester" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>gdbPath_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Path to gdb</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If gdb is installed in a standard location, you don't have to insert anything here.
+If gdb is not reachable via $PATH or if you need a special gdb (e.g. for remote  debugging on a different architecture)  insert the path to the corresponding gdb here.
+Note that its name has to be gdb, so you might have to create a symlink named gdb which points to your specific gdb, e.g. arm-elf-gdb.</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="3">
@@ -109,6 +132,9 @@
             </property>
             <property name="text">
                 <string>Display static &amp;members</string>
+            </property>
+            <property name="accel">
+                <string>Alt+M</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Displaying static members makes GDB slower in
@@ -224,103 +250,110 @@ Otherwise leave it unchecked.</string>
                 <string>Remote Debugging</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>The goal of "Run shell script" is to start gdbserver (or an application with
-embedded gdbstub on the target). Key command here is:
-        ssh ${ruser} gdbserver jeloin:2345 "${remote##/*/}"
-where jeloin:2345 is the host and a port.
-"${remote##/*/}" is magic for remote filename without (the host local) path.
-
-The goal of "Run gdb script" (gdb commands) is to connect with that target.
-Key command in this file is: target remote dox:2345
-where dox:2345 is the target with a port.
-
-(Note that the gdb script is run from the execution directory - often ./src
-not the projects base - see "Run options")
-</string>
+                <string>This script is intended for the actual commands needed to connect to a remotely running executable.
+	shell sleep 5	wait for remote program to start
+	target remote ...	connect to the remote debugger
+	continue	[optional] run debugging to the first breakpoint.</string>
             </property>
-            <grid>
+            <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>runShellScript_label</cstring>
+                        <cstring>layout1</cstring>
                     </property>
-                    <property name="text">
-                        <string>Run shell script:</string>
-                        <comment>Shell script to be executed at run time</comment>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>debuggingShell_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>configGdbScript_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Config gdb script:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>programArgs_edit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>configGdbScript_edit</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>runShellScript_edit</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Script to start remote application</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>When debugging remotely this script is intended to actually start the remote process.
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>runShellScript_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Run shell script:</string>
+                                <comment>Shell script to be executed at run time</comment>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>runShellScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string></string>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester" row="2" column="1">
+                            <property name="name">
+                                <cstring>runGdbScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Script to connect with remote application</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This script is sourced by gdb after the two preceding scripts have been executed.
+This script is intended for the actual commands needed to connect to a remotely running executable.
+	shell sleep 5	wait for remote program to start
+	target remote ...	connect to the remote debugger
+	continue	[optional] run debugging to the first breakpoint.</string>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester" row="1" column="1">
+                            <property name="name">
+                                <cstring>runShellScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Script to start remote application</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This shell script is run after the Config gdb script has been sourced by gdb.
+When debugging remotely this script is intended to actually start the remote process.
 [It is expected that the debug executable can be reached on the target, maybe by downloading it as a final build step]
 1) Find a way to execute a command remotely - rsh, ssh, telnet, ...
 2a) Execute "gdbserver ... application" on target.
 or if your executable contains the gdb stub
 2b) Execute "application" on target.</string>
-                    </property>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="2" column="0">
+                            <property name="name">
+                                <cstring>runGdbScript_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Run gdb script:</string>
+                                <comment>Gdb script to be executed at run time.</comment>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>runGdbScript_edit</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>configGdbScript_label</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Config gdb script:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>configGdbScript_edit</cstring>
+                            </property>
+                        </widget>
+                        <widget class="KURLRequester" row="0" column="1">
+                            <property name="name">
+                                <cstring>configGdbScript_edit</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Gdb configure script</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This script is sourced by gdb when the debugging starts.</string>
+                            </property>
+                        </widget>
+                    </grid>
                 </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>runGdbScript_edit</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Script to connect with remote application</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>This script is intended for the actual commands needed to connect to a remotely running executable.
-	shell sleep 5	wait for remote program to start
-	target remote ...	connect to the remote debugger
-	continue	[optional] run debugging to the first breakpoint.</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>runGdbScript_label</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Run gdb script:</string>
-                        <comment>Gdb script to be executed at run time.</comment>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>gdbPath_edit</cstring>
-                    </property>
-                </widget>
-            </grid>
+            </vbox>
         </widget>
     </grid>
 </widget>
-<customwidgets>
-</customwidgets>
 <tabstops>
     <tabstop>programArgs_edit</tabstop>
     <tabstop>debuggingShell_edit</tabstop>
@@ -330,6 +363,9 @@ or if your executable contains the gdb stub
     <tabstop>breakOnLoadingLibrary_box</tabstop>
     <tabstop>enableFloatingToolBar_box</tabstop>
     <tabstop>dbgTerminal_box</tabstop>
+    <tabstop>outputRadixOctal</tabstop>
+    <tabstop>outputRadixDecimal</tabstop>
+    <tabstop>outputRadixHexadecimal</tabstop>
     <tabstop>configGdbScript_edit</tabstop>
     <tabstop>runShellScript_edit</tabstop>
     <tabstop>runGdbScript_edit</tabstop>
@@ -340,6 +376,15 @@ or if your executable contains the gdb stub
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kurlrequester.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
