@@ -265,14 +265,17 @@ time ? This will reduce performance most often and lead to a so-called "flicker"
 there are some ways to reduce this behavoir. Instead of calling <CODE>repaint()</CODE>, we could call <CODE>repaint(false)</CODE> as well. This
 will not erase the widget contents before redrawing it. As we copy the document contents directly into the widget, we don´t need to
 erase it anyway, because all the data will be overwritten anyway. In conjunction with <CODE>QScrollView</CODE>, we will reduce the painting
-even more: we limit the update method to call <CODE>repaintContents()</CODE>, which allows us to define where to repaint. For that, we use
-the contents geometry methods and, like <CODE>repaint(false)</CODE>, we can prevent erasing the area to repaint before copying the
-document data into the viewport:
+even more: we limit the update method to call <CODE>repaint()</CODE> on the viewport() widget, because that will call 
+<CODE>viewportPaintEvent()</CODE>. On the other hand, the painting area we use is the rectangle containing the document contents, which, when the
+document size is smaller than the viewport size. So we can limit the paint event to the rectangle of the viewport where the document 
+is displayed, whose visible width and height we can retrieve and compose to the rectangle. Additionally, we use the erase parameter with false,
+so the document area doesn´t get erased:
+<P>
 <HR>
 <PRE>
 void KScribbleView::update(KScribbleView* pSender){
-        if(pSender != this)
-          repaintContents(contentsX(),contentsY(),contentsWidth(),contentsHeight(), false);
+if(pSender != this)
+viewport()->repaint(0,0,visibleWidth(), visibleHeight(), false);
 }
 </PRE>
 <HR>
