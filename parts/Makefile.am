@@ -7,4 +7,4 @@
 #PYTHON_SUBDIR = 
 
 SUBDIRS = autoproject cppsupport doctreeview classview appwizard \
-	  outputviews grepview $(PYTHON_SUBDIR)
+	  outputviews grepview konsole $(PYTHON_SUBDIR)

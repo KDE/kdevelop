@@ -1,0 +1,17 @@
+# Here resides the konsole view part.
+
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+
+lib_LTLIBRARIES = libkdevkonsoleview.la
+libkdevkonsoleview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
+libkdevkonsoleview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
+
+libkdevkonsoleview_la_SOURCES = konsoleviewfactory.cpp \
+			     konsoleviewpart.cpp \
+			     konsoleviewwidget.cpp
+
+METASOURCES = AUTO
+
+servicedir = $(kde_servicesdir)
+service_DATA = kdevkonsoleview.desktop
+
