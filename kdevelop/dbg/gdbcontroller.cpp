@@ -698,7 +698,7 @@ void GDBController::parseLine(char* buf)
       if (isdigit(*buf))
       {
         DBG_DISPLAY("Parsed (digit)<" + QString(buf) + ">");
-        parseProgramLocation(buf);
+//        parseProgramLocation(buf);
         break;
       }
 
@@ -747,20 +747,22 @@ void GDBController::parseProgramLocation(char* buf)
 {
   if (stateIsOn(s_silent))
   {
-    // It's a forced breakpoint stoppage. This means that the queue
-    // will have a "continue" in it somewhere. The only action needed
-    // is to reset the state so that queue'd items can be sent to gdb
-    DBG_DISPLAY("Program location (but silentBreakInto) <" + QString(buf) + ">");
+    // It's a silent stop. This means that the queue will have a "continue"
+    // in it somewhere. The only action needed is to reset the state so that
+    // queue'd items can be sent to gdb
+    DBG_DISPLAY("Program location (but silent) <" + QString(buf) + ">");
     setStateOff(s_appBusy);
     return;
   }
 
-  char* bp_colon = strchr(buf, ':');
-  if (bp_colon && strchr(bp_colon+2, ':'))    // make sure we avoid "::" problems
+  //  "/opt/qt/src/widgets/qlistview.cpp:1558:42771:beg:0x401b22f2"
+  // This is soooo easy in perl...
+  QRegExp regExp1(":[0-9]+:[0-9]+:beg:0x[abcdef0-9]+");
+  int colon;
+  if ((colon = regExp1.match(buf, 0)) >= 0)
   {
-    QString filename(buf, (bp_colon-buf)+1);
-    int lineno = atoi(bp_colon+1);
-    if (lineno)
+    QString filename(buf, colon+1);
+    if (int lineno = atoi(buf+colon+1))
     {
       actOnProgramPause(QString(" "));
       emit showStepInSource(filename, lineno);
@@ -768,6 +770,25 @@ void GDBController::parseProgramLocation(char* buf)
     }
   }
 
+/*
+  QRegExp regExp2(" at *:[0-9]$");
+  if ((int start = regExp2.match(buf, 0)) >= 0)
+  {
+    QRegExp regExp3(":[0-9]$");
+    int colon;
+    if ((colon = regExp3.match(buf+start+5, 0)) >= 0)
+    {
+      QString filename(buf+start+5, colon);
+      if (int lineno = atoi(buf+colon+1))
+      {
+        actOnProgramPause(QString(" "));
+        emit showStepInSource(filename, lineno);
+        return;
+      }
+    }
+  }
+
+*/
   if (stateIsOn(s_appBusy))
     actOnProgramPause("No source: "+QString(buf));
   else
