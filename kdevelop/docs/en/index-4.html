@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>The User Manual to KDevelop: Overview</TITLE>
+<TITLE>The User Manual to KDevelop: Development with KDevelop</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="unix kde qt C++ ide development">
 <META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
@@ -18,271 +18,103 @@
 <A HREF="index-3.html">Previous</A>
 <A HREF="index.html#toc4">Table of Contents</A>
 </P>
-<H3><A NAME="Overview"></A> <A NAME="s4">4. Overview</A></H3>
+<H3><A NAME="Developing with KDevelop"></A> <A NAME="s4">4. Development with KDevelop</A></H3>
 
-<P>Looking at KDevelop, the user interface can be described by it's logical separation: the main window, the treeview and the
-outputwindow, surrounded by the menubar, toolbars and the statusbar. This section describes the purpose of each part of the
-interface, starting by the windows, followed by the bars and the functions they provide.
+<P>In this chapter you will get a general overview how you can use KDevelop and the internal Dialogeditor to create own applications.
+Thereby, all tools are described by their use during the development process. If you are a beginner in C++/GUI design and
+programming, you should read <B>"The KDevelop Programming Handbook"</B>, which describes some basics for program design and shows a
+more detailed use of KDevelop by sample projects which you can follow step-by-step to get used with the way applications are
+created using KDevelop. Also you should have read chapter 3, 
+<A HREF="index-3.html#Programs">Programs</A> to gain a general understanding
+why Unix applications should make use of provided development tools; this will make things easier when you hit references to what
+Makefiles are etc.
 <P>
-<H3><A NAME="ss4.1">4.1 Main Window </A>
+<H3><A NAME="ss4.1">4.1 What are KDevelop Project Applications ?</A>
 </H3>
 
-<P>The main window consists of four tabulators for which the left two are for editing purpose. First comes the Header-/Resource
-window for headers and any other text files like the documentation sgml's, then the C/C++ window for sourcecodes. These are
-followed by the Documentation window displaying in HTML-format. At last is the Tools window for external programs like KIconedit
-and KDbg which are embedded into the IDE. Any Tool that is registered can be accessed via the Tools-menu; whereas the
-registration of third-party programs can easily be done by a configuration dialog (see the 
-<@@ref>Configurationconfiguration</A> section). For a description of the Editor windows functionality, see 
-<@@ref>Configurationconfiguration</A><@@ref>The EditorThe Editor</A>, and for the Helpbrowser, you should look at section 
-<@@ref>Configurationconfiguration</A><@@ref>The EditorThe Editor</A><@@ref>The Documetation BrowserThe Documentation Browser</A>.
+<P>Projects created with KDevelop make it very easy for developers to use the GNU standard development tools. In opposition to the
+self-creation of Makefiles, which have to be written anyway because of the project's complexity, those provide not only a better
+way of Makefile generation but also a good and safe way to provide a fast adaption towards different sytems by autoconf-generated
+<CODE>configure</CODE> scripts.
+<P>The distribution of your applications does not require the end-user to have anything different installed than a C++ compiler and
+the development libraries, which is most often the case; but you can as well distribute binary packages of your application. In
+either way, the end-user of your product does not have to have KDevelop installed. For giving away your sources, we advise to
+include the project file of KDevelop as well, as this makes it very easy for other developers to work with your sources if they
+use KDevelop as well. For projects where several developers, maybe working on different places, are involved, this should the case
+anyway to ensure consistancy of the Makefiles so you don't run into trouble. Especially on multilanguage applications, translators
+won't actually work with the sourcecode, except in cases that require corrections for enabling translation support. Anyway, those
+will be thankful as KDevelop simplifies their work to a minimum by adding their language and reducing the work to concentrate on
+the translation.
 <P>
-<H3><A NAME="ss4.2">4.2 The Classviewer and Fileviewers</A>
+<P>With using KDevelop for your own projects, you would start creating a new application with the KAppWizard. There, you can also
+set the project type according the goals of your program. Then, you would start developing the user interface by adding
+widgets that are already constructed in the libraries and only have to be called by your application, or by self-constructions
+that can be made with the dialogeditor. Next comes the extension of the user interface by changing and extending those parts that
+are already made by KDevelop like the statusbar, menubar and toolbars. As resources are collected in a resource file, this can be
+extended simply by adding new values to the already existing one; the given resources can also be used as a guideline for adding
+your specific ones. After implementing the functionality to methods that are either generated empty by the dialogeditor or already
+containing code for standard user actions, you should extend the User Manual by simply editing the provided sgml index file
+towards describing your applications capabilities. The last step would be to generate translation files and to distribute your
+project to translators doing the rest to enhance internationalization.
+<P>But even for non-GUI application designers the IDE offers an easy way to create new projects; the editor and classbrowser in
+conjunction with KDevelop's powerful project management will reduce the time for development to the minimum that is required for
+implementation of functionality.
+<P>
+<H3><A NAME="ss4.2">4.2 Short Description of KDevelop's Tools</A>
 </H3>
 
+<P>With KDevelop you have chosen a package, that, in conjuction with the use of other tools, will provide you a prefect and flexible
+environment for object-orientated application development under Unix-Systems. Generally, KDevelop consists of the programming
+environment and the dialogeditor; besides that all needed programs that can be helpful for designing applications are embedded in
+one or the other way.
 <P>
-<H4>The Classviewer</H4>
+<H4>Programming Environment and Dialogeditor</H4>
 
-<P>The classviewer shows the classes of your project as well as global functions and variables.  Opening the tree will show all
-member functions and members with symbols for attributes (private, protected and public, signals and slots), so you can see the
-properties of members visually without switching to the header file.  Selecting the class name will open the according
-headerfile containing the class and set the cursor to the class declaration beginning. Selecting member functions will open the
-implementation file and place the cursor at the function header.        For elements, KDevelop will look for the header file and place
-the cursor at the line the element is declarated.       The classviewer also provides popup-menus that offer more specified options,
-see 
-<@@ref>The ClassviewerThe Classviewer</A> for more detailed information.
 <P>
-<H4>The Logical File Viewer</H4>
+<H4>The Programming Environment</H4>
 
-<P>The Logical File Viewer (LFV) allows sorting files by filters in groups. Individual groups can be added by the properties
-entry of the project menu or by a right click on the tree items. This allows a more specialized search for files that you want to
-access quickly, in the first place only showing project-included files. According to their Mime-type, the files will be opened
-when selected. You will like the LFV for things like selecting pixmaps- this will start KIconEdit (if installed on the system) in
-the Tools-window and opens the chosen picture.
+<P>The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitely using
+many other tools by simplifying their use. It's build-in Editor and Helpbrowser as well as the Classbrowser reduce the amount of
+work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
+on it's own and will allow t
 <P>
-<H4>The Real File Viewer</H4>
-
-<P>The Real File Viewer (RFV) shows the project directory tree with all files, so you can edit non-project files or files hidden by
-the LFV like configure.in and Makefiles.
-Popup-menus also provide functions like adding or removing files to the current project.
 <P>
-<H4>The Documentation Tree</H4>
-
-<P>The Documentation Tree (DOC) displays all available HTML-based documentation that is configured as books. Selecting a book will
-open the first page in the Browser window. Also, a popup-menu provides personal configuration for additional HTML-based
-documentation packages.
-<P>
-<H3><A NAME="ss4.3">4.3 Output window</A>
+<H3><A NAME="ss4.3">4.3 Creating a new class with the Classgenerator</A>
 </H3>
 
-<P> The Output window is separated as well into a messages window, a stdin/stdout
-window and a stderr window for the following necessities:
-<UL>
-<LI> messages window:   displays all output of the compiler. Clicking on error messages will change the edit widget to set the
-cursor to the line the compiler found an error.</LI>
-<LI> stdout window: display for terminal based applications that send messages to the standard output of the computer. Note that
-Terminal applications are now started in an external console window.</LI>
-<LI> stderr window: displays all the error messages your program
-produces. This is useful for testing purposes. The Output window is programmed to show up each time an external process is called,
-such as make or a terminal application.</LI>
-</UL>
-<P>
-<H3><A NAME="ss4.4">4.4 File Mangagement and Printing</A>
+<P> New classes can be added to your project by
+selecting "New Class" from the project menu. The following dialog lets you enter all information needed to construct a new class.
+First, you should enter the classname which will also preset the filenames for the header and implementation files. The Baseclass
+is the class the new class will inherit. For Qt or KDE classes requiring QWidget as a baseclass, you can also check the QWidget
+option. Further the inheritance from the baseclass can be selected by public, protected and private. The "Documentation" field
+offers a place for a short description for your class; this will be inserted into the header file for documentation purposes and
+is placed there for KDoc to read. The affected Makefile.am will be updated with the new files created and you can rebuild your
+project now containing your new class. 
+<H3><A NAME="ss4.4">4.4 Adding new or existing files</A>
 </H3>
 
-<P>This section covers the functions that KDevelop provides about files; accessed via the File-menu in the menubar or by the
-according icons in the toolbar:
-<P>
-<DL>
-<DT><B>New                      Ctrl+N</B><DD><P>Opens the "New File" dialog, allowing to create a new file. The file can be created using different templates
-and the filename has to be given as well as the path where the file will be created.
-<P>
-<DT><B>Open                     Ctrl+O</B><DD><P>displays the "Open File..." dialog and lets you choose a file to be opened.
-<P>
-<DT><B>Close            Ctrl+W</B><DD><P>Closes the file in the top editing window
-<P>
-<DT><B>Save                     Ctrl+S</B><DD><P>Saves the file opened in the top editing window. If the file has not been saved yet, the "Save File As..."
-dialog will be opened to let you choose a path and filename for the file to be saved.
-<P>
-<DT><B>Save As...</B><DD><P>Opens the "Save File As..." dialog to let you save the current file under a new filename
-<P>
-<DT><B>Save All</B><DD><P>Saves all changed files
-<P>
-<DT><B>Print... Ctrl+P</B><DD><P>Opens the "Print File" dialog where you can set various options for printing either using a2ps, enscript or
-lpr
-<P>
-<DT><B>Quit                     Ctrl+Q</B><DD><P>Exits KDevelop. If files are changed, you will be asked if you want to save these files.
-<P>
-</DL>
-<P>
-<P>
-<P>
-<H3><A NAME="ss4.5">4.5 Editing Files</A>
+<P> Adding a new file is often used when you think that
+you should separate your class implementation file into several ones. Then you need to create an new file which will get the part
+of the class implementation you want to move. You can specify which type the new file will be, including a template for pixmap
+files often needed to create new toolbar icons. The new file will be added to the project and all affected project files like
+Makefile.am etc will be updated. 
+<H3><A NAME="ss4.5">4.5 File Properties</A>
 </H3>
 
-<P>Here, the "Edit" menu and the according icons in the toolbar are covered which provide editing files. Also the editing functions
-are available via a context-menu in the editor.
-<DL>
-<DT><B>Undo                     Ctrl+Z</B><DD><P>Reverts the last editing operation
-<P>
-<DT><B>Redo                     Ctrl+Z</B><DD><P>lets you do the last undo step again
-<P>
-<DT><B>Cut                      Ctrl+X</B><DD><P>cuts out a selection and copies it to the system clipboard.
-<P>
-<DT><B>Copy                     Ctrl+C</B><DD><P>copies a selection to the system clipboard. This also counts for seletions made in the documentation
-browser.
-<P>
-<DT><B>Paste            Ctrl+V</B><DD><P>inserts the clipboard contents at the current cursor position.
-<P>
-<DT><B>Indent           Ctrl+I</B><DD><P>Indent moves a selection to the right
-<P>
-<DT><B>UnIndent Ctrl+U</B><DD><P>UnIndent moves a selection to the left
-<P>
-<DT><B>Insert File...</B><DD><P>Lets you select a file and inserts its contents at the current cursor position
-<P>
-<DT><B>Search...                Ctrl+F</B><DD><P>Opens the Search dialog that looks for an expression in the current file. For a search across several
-files, "Search in files..." should be used.
-<P>
-<DT><B>Repeat Search    F3</B><DD><P>Repeats the last seach for an expression. This also counts for searches that were made across the
-documentation, where more than one hit was found in the same page. The next hit will be displayed by choosing "Repeat Search"
-or F3 and signed as marked.
-<P>
-<DT><B>Replace...               Ctrl+R</B><DD><P>Opens the "Search and Replace" dialog that allows the search for an expression and replaces the found
-text with a new expression.
-<P>
-<P>
-<DT><B>Search in files...</B><DD><P>Displays the "Search in files..." dialog, that handles <CODE>grep</CODE> on whole directories with wildcards.
-Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file and the
-cursor is set to the line of the search result
-<P>
-<DT><B>Select All</B><DD><P>Selects the whole text of the file currently opened in the top editing window
-<P>
-<DT><B>Deselect All</B><DD><P>Deselects the whole text of the current file. This is often used for multiple selections so you don't have
-to deselect each one seperately
-<P>
-<DT><B>Invert Selection</B><DD><P>Inverts the selection, meaning that a selection becomes deselected and text which is not selected
-becomes selected.
-<P>
-</DL>
-<P>
-<P>
-<H3><A NAME="ss4.6">4.6 View Configuration</A>
+<P> The file properties dialog can be accessed via the project menu or
+within the LFV by a right mouseclick.  It shows the project files in groups as they are sorted in the LFV and displays the file
+properties like file size, file type and if the file is included in the project as well as the installation path if the file is
+going to be installed by the end-user's make install command.  It is important for documentation files as well as pixmaps to
+specify the location where the files should go when the project is build and installed by end users, so you have to set up those
+locations.   For standard KDE location macros you should look in your Makefile.am where the location macros are specified. 
+<H3><A NAME="ss4.6">4.6 Accessable Tools</A>
 </H3>
 
-<P>The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
-to jump errors in the code.
-<DL>
-<DT><B>Line...  Ctrl+L</B><DD><P>Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
-linenumber is remembered and marked, so you can either jump to that line again or just enter a new linenumber you want to see.
-<P>
-<DT><B>Next Error               F4</B><DD><P>Jumps to the next error KDevelop detects from the output. The output message of Make or other tools should
-give you a descriptive help what the problem is, so you can correct the error.
-<P>
-<DT><B>Previous Error           Shift+F4</B><DD><P>Jumps to the previous error that was reported.
-<P>
-<DT><B>Tree-View        Ctrl+T</B><DD><P>en/disables the Tree window on the left side of the main view containing the classbrowser, LFV, RFV and
-DOC-tree.
-<P> 
-<DT><B></B><DD><P>
-<DT><B>Output-View      Ctrl+G</B><DD><P>en/disables the Output window on the bottom of the main view.
-<P>
-<DT><B>Toolbar</B><DD><P>en/disables the toolbar.
-<P>
-<DT><B>Browser-Toolbar</B><DD><P>en/disables the browser toolbar, containing the back, forward and search buttons for the browser
-<P>
-<DT><B>Statusbar        Ctrl+B</B><DD><P>en/disables the statusbar.
-<P>
-<DT><B>Refresh</B><DD><P>rescans all files to rebuild the classbrowser. The scanning progress is shown in the statusbar progress display.
-<P>
-</DL>
-<P>
-<P>
-<H3><A NAME="ss4.7">4.7 Creating and Maintaining Projects</A>
-</H3>
-
-<P>
-<DL>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-</DL>
-<P>
-<P>
-<H3><A NAME="ss4.8">4.8 Building Projects</A>
-</H3>
-
-<P>
-<DL>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-</DL>
-<P>
-<P>
-<H3><A NAME="ss4.9">4.9 Calling Tools</A>
-</H3>
-
-<H3><A NAME="ss4.10">4.10 Setting Options</A>
-</H3>
-
-<P>
-<DL>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD>
-</DL>
-<P>
-<H3><A NAME="ss4.11">4.11 The Window Menu</A>
-</H3>
-
-<H3><A NAME="ss4.12">4.12 Managing Bookmarks</A>
-</H3>
-
-<P>
-<DL>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD>
-</DL>
-<P>
-<H3><A NAME="ss4.13">4.13 Online Help</A>
-</H3>
-
-<P>
-<DL>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD>
-</DL>
-<P>
-<H3><A NAME="ss4.14">4.14 Keyboard Shortcuts</A>
-</H3>
-
-<P>
-<DL>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD><P>
-<DT><B></B><DD>
-</DL>
-<P>
-<P>
+<P> The tools-menu allows direct access to external tools.  Those are KDbg, KIconedit and KTranslator.  If a tool
+is started, it will be working in the "Tools" window and is closed automatically when you leave KDevelop. Another way of starting
+KDbg is that you choose "Debug" from the "Build" menu or the debug icon from the toolbar, starting KDbg with the project binary.
+If the binary does not exist, you have to create it first with invoking make or rebuild all. KIconedit can also be started by a
+click on the pixmap file in the LFV you want to edit, loading the pixmap automatically.
 <P>
 <P ALIGN="RIGHT">
 

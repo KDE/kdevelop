@@ -115,13 +115,13 @@ the KDevelop homepage URL offering a download and describes the installation pro
 <H3><A NAME="ss2.4">2.4 Starting KDevelop</A>
 </H3>
 
-<P>If you use KDE as your windowmanager, KDevelop can be started either with choosing "K"->"Applications"->"KDevelop". As KDevelop
-supports KDE-Mime-types, you can also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project
-icon) in the KDE File Manager which will start KDevelop and load the project.
+<P>If you use KDE as your windowmanager, KDevelop can be started either with choosing "K"-&gt;"Applications"-&gt;"KDevelop". As
+KDevelop supports KDE-Mime-types, you can also start by selecting a KDevelop project file ("*.kdevprj", displayed with the
+KDevelop project icon) in the KDE File Manager which will start KDevelop and load the project.
 <P>Under other windowmanagers, open a console and type:
 <BLOCKQUOTE><CODE>
 <PRE>
-        % kdevelop
+% kdevelop
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>Starting KDevelop with a certain project would be to change into the project-directory and to type:
@@ -141,8 +141,8 @@ kdeveloprc file and restart KDevelop, the automatic installation will be called 
 </H3>
 
 <P>
-<P>KDevelop includes an automatic installation program module, which is invoked when starting the first time under the current user
-account; meaning that the user's configuration file does not exist.  We advise following the installation steps by choosing
+<P>KDevelop includes an automatic installation program module, which is invoked when starting the first time under the current
+user account; meaning that the user's configuration file does not exist.  We advise following the installation steps by choosing
 "Proceed" to automatically check your system and to set up your KDevelop environment.
 <P>The Installation dialog's buttons execute the following actions:
 <P><B>Help:</B>  Will open  the KDEHelp program and open this page.
@@ -159,11 +159,11 @@ in a later setup step if found.
 <LI> Checking for a2ps and enscript to ensure that printing is available.  Either one of these programs have to be installed to
 allow correct printing.
 </LI>
-<LI> Checking for KDbg, KIconedit and KTranslator.  We advise to install those programs as they are good helpers to create
-complete KDE-applications. Note that KDbg is used directly for debugging your current project within KDevelop; KIconedit is used
-to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator are then configured to
-be available in the "Tools" menu of the KDevelop menubar if they are found. Other tools can be added to the Tools-menu by
-selecting "Tools..." in the Options menu later.
+<LI> Checking for KDbg,KIconedit and KTranslator.  We advise to install those programs as they are good
+helpers to create complete KDE-applications. Note that KDbg is used directly for debugging your current project within KDevelop;
+KIconedit is used to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator are
+then configured to be available in the "Tools" menu of the KDevelop menubar if they are found. Other tools can be added to the
+Tools-menu by selecting "Tools..." in the Options menu later.
 </LI>
 <LI> Showing the summary dialog.  All tested programs are listed with found or not found, additional hints are given, if a
 needed program is recommended.
@@ -185,15 +185,16 @@ the documentation package provided by
 continue with creating the search index. Mind that the path to your kde-library documentation has to be set manually in the setup
 dialog accessed by the options menu then.
 </LI>
-<LI> The "Update KDE-Library documentation" dialog is set up to use a default path for the location of the documentation to
-create in $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your library
-sources with the selection button on top of the dialog and press OK. If the path was set correctly, you are asked if your
+<LI> The "Update KDE-Library documentation" dialog is set up to use a default path for the location of the documentation
+to create in $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your
+library sources with the selection button on top of the dialog and press OK. If the path was set correctly, you are asked if your
 documentation should be created using the khtml  or the khtmlw library.  We advise to use khtml as khtmlw is older and exists for
 compatibility reasons. New applications using HTML widgets should use khtml.  To avoid confusion while programming, we decided to
 only include one of those for documentation.  If you are working on applications that use khtmlw, you should create a different
-documentation with the KDevelop Setup in the options menu and use khtmlw then.    During the creation of the documentation, a
-message in the installation window shows that it is in progress and you should wait for the next message.
-
+documentation with the 
+<A HREF="index-11.html#KDevelop Setup">KDevelop Setup</A> in the options menu and use khtmlw then.    During the
+creation of the documentation, a message in the installation window shows that it is in progress and you should wait for the next
+message.
 <B>NOTE:</B> On a multi-user system or systems with disk-quotas for user accounts, the creation of a complete HTML documentation
 for each user would be a mere waste of diskspace. In this case, ask you system administrator to run KDevelop under the
 root account to allow write access to the system's root directory. The we advise to create the documentation within the
@@ -210,8 +211,8 @@ offering the addition of other documentations.
 <LI> During the creation of the search index, the installation window will show a message that this is in progress.
 </LI>
 <LI> If all installation steps were done correctly,  a final message shows that KDevelop will be started
-after pressing OK and you are ready to start. Mind that you can set up additional options like autosaving in the "KDevelop Setup"
-dialog that can be accessed by the options menu.</LI>
+after pressing OK and you are ready to start. Mind that you can set up additional options like autosaving in the 
+<A HREF="index-11.html#KDevelop Setup">KDevelop Setup</A> dialog that can be accessed by the options menu. </LI>
 </OL>
 <P><B>Cancel:</B>  Will show a warning message that the installation process is going to be cancelled.  This warning message allows to
 return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you have to

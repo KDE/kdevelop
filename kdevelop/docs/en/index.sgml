@@ -71,29 +71,29 @@ distribution of KDevelop, covering themes like understanding generated applicati
 applications by example projects. The design of this handbook is therefore separated into the following parts:
 
 <itemize>
-<item>Chapter 2, <ref id="Installation" name="Installation">, covers the sytem requirements, installation and setting up of the
+<item>Chapter <ref id="Installation" name="Installation">, covers the sytem requirements, installation and setting up of the
 KDevelop IDE.
 
-<item>Chapter 3, <ref id="Programs" name="Programs">, tells you how programs are created with standard GNU development tools and
+<item>Chapter <ref id="Programs" name="Programs">, tells you how programs are created with standard GNU development tools and
 how they are build.
 
-<item>Chapter 4, <ref id="Overview" name="Overview">, explains the menus and dialogs as well as keyboard shortcuts.
-
-<item>Chapter 5, <ref id="Projects" name="Projects">, describes the creation and maintaining of software projects.
-
-<item>Chapter 6, <ref id="Developing with KDevelop" name="Developing with KDevelop">, takes you on a short trip describing the
+<item>Chapter <ref id="Developing with KDevelop" name="Developing with KDevelop">, takes you on a short trip describing the
 main fuctionality of the environment.
 
-<item>Chapter 7, <ref id="The Helpsystem" name="The Helpsystem">, shows how to use the build-in documenation browser and
+<item>Chapter <ref id="Overview" name="Overview">, explains the menus and dialogs as well as keyboard shortcuts.
+
+<item>Chapter <ref id="The Helpsystem" name="The Helpsystem">, shows how to use the build-in documenation browser and
 additional help functions.
 
-<item>Chapter 8, <ref id="Working with the Editor" name="Working with the Editor">, tells you the features of file management and
+<item>Chapter  <ref id="Working with the Editor" name="Working with the Editor">, tells you the features of file management and
 editing functionality of KDevelop.
 
-<item>Chapter 9, <ref id="The Dialogeditor" name="The Dialogeditor">, features the integrated visual GUI constructor and how it
+<item>Chapter <ref id="Projects" name="Projects">, describes the creation and maintaining of software projects.
+
+<item>Chapter <ref id="The Dialogeditor" name="The Dialogeditor">, features the integrated visual GUI constructor and how it
 generates C++ output.
 
-<item>Chapter 10, <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to the usage of
+<item>Chapter <ref id="Questions and Answers" name="Questions and Answers">, covers questions that regard to the usage of
 KDevelop under different Unices and problem solutions in general.
 </itemize>
 
@@ -196,13 +196,13 @@ If your system's make-command is <tt/gmake/, type <tt/gmake/ instead of <tt/make
 
 
 <sect1>Starting KDevelop<p>
-If you use KDE as your windowmanager, KDevelop can be started either with choosing "K"->"Applications"->"KDevelop". As KDevelop
-supports KDE-Mime-types, you can also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project
-icon) in the KDE File Manager which will start KDevelop and load the project.
+If you use KDE as your windowmanager, KDevelop can be started either with choosing "K"&rarr"Applications"&rarr"KDevelop". As
+KDevelop supports KDE-Mime-types, you can also start by selecting a KDevelop project file ("*.kdevprj", displayed with the
+KDevelop project icon) in the KDE File Manager which will start KDevelop and load the project.
 
 Under other windowmanagers, open a console and type:
 <tscreen><verb>
-	&percnt kdevelop
+&percnt kdevelop
 </verb></tscreen>
 
 Starting KDevelop with a certain project would be to change into the project-directory and to type:
@@ -218,8 +218,8 @@ kdeveloprc file and restart KDevelop, the automatic installation will be called 
 <sect1>The Installation Program<label id="The Installation Program">
 <p>
 
-KDevelop includes an automatic installation program module, which is invoked when starting the first time under the current user
-account; meaning that the user's configuration file does not exist.  We advise following the installation steps by choosing
+KDevelop includes an automatic installation program module, which is invoked when starting the first time under the current
+user account; meaning that the user's configuration file does not exist.  We advise following the installation steps by choosing
 "Proceed" to automatically check your system and to set up your KDevelop environment.
 
 The Installation dialog's buttons execute the following actions:
@@ -239,11 +239,11 @@ in a later setup step if found.
 <item> Checking for a2ps and enscript to ensure that printing is available.  Either one of these programs have to be installed to
 allow correct printing.
 
-<item> Checking for KDbg, KIconedit and KTranslator.  We advise to install those programs as they are good helpers to create
-complete KDE-applications. Note that KDbg is used directly for debugging your current project within KDevelop; KIconedit is used
-to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator are then configured to
-be available in the "Tools" menu of the KDevelop menubar if they are found. Other tools can be added to the Tools-menu by
-selecting "Tools..." in the Options menu later.
+<item> Checking for KDbg,KIconedit and KTranslator.  We advise to install those programs as they are good
+helpers to create complete KDE-applications. Note that KDbg is used directly for debugging your current project within KDevelop;
+KIconedit is used to display and edit pixmaps selected in the file-viewer trees. The programs KDbg, KIconedit and KTranslator are
+then configured to be available in the "Tools" menu of the KDevelop menubar if they are found. Other tools can be added to the
+Tools-menu by selecting "Tools..." in the Options menu later.
 
 <item> Showing the summary dialog.  All tested programs are listed with found or not found, additional hints are given, if a
 needed program is recommended.
@@ -264,15 +264,15 @@ the documentation package provided by <htmlurl url="developer.kde.org" name="dev
 continue with creating the search index. Mind that the path to your kde-library documentation has to be set manually in the setup
 dialog accessed by the options menu then.
 
-<item> The "Update KDE-Library documentation" dialog is set up to use a default path for the location of the documentation to
-create in $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your library
-sources with the selection button on top of the dialog and press OK. If the path was set correctly, you are asked if your
+<item> The "Update KDE-Library documentation" dialog is set up to use a default path for the location of the documentation
+to create in $(HOME)/.kde/share/apps/kdevelop/KDE-Documentation.  The only thing you have to do is choosing the path to your
+library sources with the selection button on top of the dialog and press OK. If the path was set correctly, you are asked if your
 documentation should be created using the khtml  or the khtmlw library.  We advise to use khtml as khtmlw is older and exists for
 compatibility reasons. New applications using HTML widgets should use khtml.  To avoid confusion while programming, we decided to
 only include one of those for documentation.  If you are working on applications that use khtmlw, you should create a different
-documentation with the KDevelop Setup in the options menu and use khtmlw then.    During the creation of the documentation, a
-message in the installation window shows that it is in progress and you should wait for the next message.
-
+documentation with the <ref id="KDevelop Setup" name="KDevelop Setup"> in the options menu and use khtmlw then.    During the
+creation of the documentation, a message in the installation window shows that it is in progress and you should wait for the next
+message.
 <bf>NOTE:</bf> On a multi-user system or systems with disk-quotas for user accounts, the creation of a complete HTML documentation
 for each user would be a mere waste of diskspace. In this case, ask you system administrator to run KDevelop under the
 root account to allow write access to the system's root directory. The we advise to create the documentation within the
@@ -289,9 +289,8 @@ offering the addition of other documentations.
 <item> During the creation of the search index, the installation window will show a message that this is in progress.
 
 <item> If all installation steps were done correctly,  a final message shows that KDevelop will be started
-after pressing OK and you are ready to start. Mind that you can set up additional options like autosaving in the "KDevelop Setup"
-dialog that can be accessed by the options menu.
-</enum>
+after pressing OK and you are ready to start. Mind that you can set up additional options like autosaving in the <ref id="KDevelop
+Setup" name="KDevelop Setup"> dialog that can be accessed by the options menu. </enum>
 
 <bf>Cancel:</bf>  Will show a warning message that the installation process is going to be cancelled.  This warning message allows to
 return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you have to
@@ -324,8 +323,8 @@ cout << "Hello World" << endl;
 </verb></tscreen>
 Well, actually all the program will do is to print out the string "Hello World" to your standard output. But this is just the
 sourcecode for the program to be build, not the program itself. Therefore, we need a compiler, in this case a C++-compiler like
-g++. Then we can save the file with the sourcecode, as, let's say, myprogram.cpp and invoke the compiler with the filename (on a
-console):
+g++. Then we can save the file with the sourcecode, as, let's say, myprogram.cpp and invoke the compiler with the filename
+(on a console):
 
 <tscreen><verb>
 g++ -o myprogram myprogram.cpp
@@ -384,16 +383,16 @@ problem to build your binary ? Not to mention more difficult issues like install
 e.g. KDE can be installed in <tt//opt/kde/ on one machine, while it is installed under <tt//usr/local/kde/ on another. In this
 case, you would have to rewrite the Makefile each time to ensure a correct compilation and installation of your product.
 
-Fortunately, GNU-tools have even more to provide than that mighty <tt/make/- the commonly used automake and autoconf packages. It
-sounds good to hear something with "auto"- seems like something about application design can be done quick and easy, which exactly
-hits the point.
+Fortunately, GNU-tools have even more to provide than that mighty <tt/make/- the commonly used automake and autoconf
+packages. It sounds good to hear something with "auto"- seems like something about application design can be done quick and easy,
+which exactly hits the point.
 
 Automake's purpose is generally to create a so-called <tt/Makefile.in/ from a file <tt/Makefile.am/ which you have to write for
 your project. This Makefile.am constists of macros which can be interpreted and reduce the complexity that make offers, so a
 Makefile.am is written safer and quicker than the final Makefile.
 
-Having this said, who is finally creating me my Makefile ? Now, here comes autoconf. Autoconf requires several macro files for the
-project. That are those Makefile.in's generated by automake and a file called <tt/configure.in/, also containing macros.
+Having this said, who is finally creating me my Makefile ? Now, here comes autoconf. Autoconf requires several macro files
+for the project. That are those Makefile.in's generated by automake and a file called <tt/configure.in/, also containing macros.
 Hereby the Makefile.am and .in's are containing macros that are responsible for the way how to build the software in terms of
 which sources have to be compiled, which files belong to the package and what name the final binary or library will have after a
 build. Configure.in on the other hand contains macros for what the final configure-shell script will check for on the system
@@ -466,6 +465,83 @@ how it supports the idea of providing an easy way to Unix programming. To get fu
 GNU tools, you should read the documentation provided with them, commonly accessed via the <tt/man/ command or by the "System GNU
 Info contents" section in KDEHelp.
 
+<sect>Development with KDevelop<label id="Developing with KDevelop">
+<p>
+In this chapter you will get a general overview how you can use KDevelop and the internal Dialogeditor to create own applications.
+Thereby, all tools are described by their use during the development process. If you are a beginner in C++/GUI design and
+programming, you should read <bf/"The KDevelop Programming Handbook"/, which describes some basics for program design and shows a
+more detailed use of KDevelop by sample projects which you can follow step-by-step to get used with the way applications are
+created using KDevelop. Also you should have read chapter 3, <ref id="Programs" name="Programs"> to gain a general understanding
+why Unix applications should make use of provided development tools; this will make things easier when you hit references to what
+Makefiles are etc.<p>
+<sect1>What are KDevelop Project Applications ?<p>
+Projects created with KDevelop make it very easy for developers to use the GNU standard development tools. In opposition to the
+self-creation of Makefiles, which have to be written anyway because of the project's complexity, those provide not only a better
+way of Makefile generation but also a good and safe way to provide a fast adaption towards different sytems by autoconf-generated
+<tt/configure/ scripts.
+
+The distribution of your applications does not require the end-user to have anything different installed than a C++ compiler and
+the development libraries, which is most often the case; but you can as well distribute binary packages of your application. In
+either way, the end-user of your product does not have to have KDevelop installed. For giving away your sources, we advise to
+include the project file of KDevelop as well, as this makes it very easy for other developers to work with your sources if they
+use KDevelop as well. For projects where several developers, maybe working on different places, are involved, this should the case
+anyway to ensure consistancy of the Makefiles so you don't run into trouble. Especially on multilanguage applications, translators
+won't actually work with the sourcecode, except in cases that require corrections for enabling translation support. Anyway, those
+will be thankful as KDevelop simplifies their work to a minimum by adding their language and reducing the work to concentrate on
+the translation.
+
+
+With using KDevelop for your own projects, you would start creating a new application with the KAppWizard. There, you can also
+set the project type according the goals of your program. Then, you would start developing the user interface by adding
+widgets that are already constructed in the libraries and only have to be called by your application, or by self-constructions
+that can be made with the dialogeditor. Next comes the extension of the user interface by changing and extending those parts that
+are already made by KDevelop like the statusbar, menubar and toolbars. As resources are collected in a resource file, this can be
+extended simply by adding new values to the already existing one; the given resources can also be used as a guideline for adding
+your specific ones. After implementing the functionality to methods that are either generated empty by the dialogeditor or already
+containing code for standard user actions, you should extend the User Manual by simply editing the provided sgml index file
+towards describing your applications capabilities. The last step would be to generate translation files and to distribute your
+project to translators doing the rest to enhance internationalization.
+
+But even for non-GUI application designers the IDE offers an easy way to create new projects; the editor and classbrowser in
+conjunction with KDevelop's powerful project management will reduce the time for development to the minimum that is required for
+implementation of functionality.
+
+<sect1>Short Description of KDevelop's Tools<p>
+With KDevelop you have chosen a package, that, in conjuction with the use of other tools, will provide you a prefect and flexible
+environment for object-orientated application development under Unix-Systems. Generally, KDevelop consists of the programming
+environment and the dialogeditor; besides that all needed programs that can be helpful for designing applications are embedded in
+one or the other way.
+
+<sect2>Programming Environment and Dialogeditor<p>
+<sect3>The Programming Environment<p>
+The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitely using
+many other tools by simplifying their use. It's build-in Editor and Helpbrowser as well as the Classbrowser reduce the amount of
+work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
+on it's own and will allow t
+
+
+<sect1> Creating a new class with the Classgenerator<p> New classes can be added to your project by
+selecting "New Class" from the project menu. The following dialog lets you enter all information needed to construct a new class.
+First, you should enter the classname which will also preset the filenames for the header and implementation files. The Baseclass
+is the class the new class will inherit. For Qt or KDE classes requiring QWidget as a baseclass, you can also check the QWidget
+option. Further the inheritance from the baseclass can be selected by public, protected and private. The "Documentation" field
+offers a place for a short description for your class; this will be inserted into the header file for documentation purposes and
+is placed there for KDoc to read. The affected Makefile.am will be updated with the new files created and you can rebuild your
+project now containing your new class. <sect1> Adding new or existing files<p> Adding a new file is often used when you think that
+you should separate your class implementation file into several ones. Then you need to create an new file which will get the part
+of the class implementation you want to move. You can specify which type the new file will be, including a template for pixmap
+files often needed to create new toolbar icons. The new file will be added to the project and all affected project files like
+Makefile.am etc will be updated. <sect1> File Properties<p> The file properties dialog can be accessed via the project menu or
+within the LFV by a right mouseclick.  It shows the project files in groups as they are sorted in the LFV and displays the file
+properties like file size, file type and if the file is included in the project as well as the installation path if the file is
+going to be installed by the end-user's make install command.  It is important for documentation files as well as pixmaps to
+specify the location where the files should go when the project is build and installed by end users, so you have to set up those
+locations.   For standard KDE location macros you should look in your Makefile.am where the location macros are specified. <sect1>
+Accessable Tools<p> The tools-menu allows direct access to external tools.  Those are KDbg, KIconedit and KTranslator.  If a tool
+is started, it will be working in the "Tools" window and is closed automatically when you leave KDevelop. Another way of starting
+KDbg is that you choose "Debug" from the "Build" menu or the debug icon from the toolbar, starting KDbg with the project binary.
+If the binary does not exist, you have to create it first with invoking make or rebuild all. KIconedit can also be started by a
+click on the pixmap file in the LFV you want to edit, loading the pixmap automatically.
 
 <sect>Overview<label id="Overview">
 <p>
@@ -478,22 +554,22 @@ The main window consists of four tabulators for which the left two are for editi
 window for headers and any other text files like the documentation sgml's, then the C/C++ window for sourcecodes. These are
 followed by the Documentation window displaying in HTML-format. At last is the Tools window for external programs like KIconedit
 and KDbg which are embedded into the IDE. Any Tool that is registered can be accessed via the Tools-menu; whereas the
-registration of third-party programs can easily be done by a configuration dialog (see the <ref id="Configuration"
-name="configuration"> section). For a description of the Editor windows functionality, see <ref id="The Editor" name="The
-Editor">, and for the Helpbrowser, you should look at section <ref id="The Documetation Browser" name="The Documentation
-Browser">.
+registration of third-party programs can easily be done by a configuration dialog (see section 11, <ref id="General Configuration"
+name="configuration">). For a description of the Editor windows functionality, see chapter 7,<ref id="Working with the Editor"
+name="Working with the Editor">, and for the Helpbrowser, you should look at section <ref id="Using the Documentation Browser"
+name="Using the Documentation Browser">.
 
-<sect1> The Classviewer and Fileviewers
+<sect1> The Classbrowser and Fileviewers
 <p>
-<sect2>The Classviewer
+<sect2>The Class Viewer
 <p>
-The classviewer shows the classes of your project as well as global functions and variables.  Opening the tree will show all
+The Class Viewer (CV) shows the classes of your project as well as global functions and variables.  Opening the tree will show all
 member functions and members with symbols for attributes (private, protected and public, signals and slots), so you can see the
 properties of members visually without switching to the header file.  Selecting the class name will open the according
 headerfile containing the class and set the cursor to the class declaration beginning. Selecting member functions will open the
 implementation file and place the cursor at the function header.	For elements, KDevelop will look for the header file and place
 the cursor at the line the element is declarated.	The classviewer also provides popup-menus that offer more specified options,
-see <ref id="The Classviewer" name="The Classviewer"> for more detailed information.
+see <ref id="The Classbrowser" name="The Classbrowser"> for more detailed information.
 
 <sect2>The Logical File Viewer
 <p>
@@ -527,234 +603,484 @@ produces. This is useful for testing purposes. The Output window is programmed t
 such as make or a terminal application.
 </itemize>
 
-<sect1>File Mangagement and Printing<p>
+<sect1>Menubar Commands<p>
+<sect2>File Mangagement and Printing<p>
 This section covers the functions that KDevelop provides about files; accessed via the File-menu in the menubar or by the
 according icons in the toolbar:
 
-<descrip>
-<tag/New			Ctrl+N/ Opens the "New File" dialog, allowing to create a new file. The file can be created using different templates
+<itemize>
+<item><bf/New			Ctrl+N/ Opens the "New File" dialog, allowing to create a new file. The file can be created using different templates
 and the filename has to be given as well as the path where the file will be created.<p>
-<tag/Open			Ctrl+O/ displays the "Open File..." dialog and lets you choose a file to be opened.<p>
-<tag/Close		Ctrl+W/ Closes the file in the top editing window<p>
-<tag/Save			Ctrl+S/	Saves the file opened in the top editing window. If the file has not been saved yet, the "Save File As..."
+<item><bf/Open			Ctrl+O/ displays the "Open File..." dialog and lets you choose a file to be opened.<p>
+<item><bf/Close		Ctrl+W/ Closes the file in the top editing window<p>
+<item><bf/Save			Ctrl+S/	Saves the file opened in the top editing window. If the file has not been saved yet, the "Save File As..."
 dialog will be opened to let you choose a path and filename for the file to be saved.<p>
-<tag/Save As.../ Opens the "Save File As..." dialog to let you save the current file under a new filename<p>
-<tag/Save All/ Saves all changed files<p>
-<tag/Print...	Ctrl+P/ Opens the "Print File" dialog where you can set various options for printing either using a2ps, enscript or
+<item><bf/Save As.../ Opens the "Save File As..." dialog to let you save the current file under a new filename<p>
+<item><bf/Save All/ Saves all changed files<p>
+<item><bf/Print...	Ctrl+P/ Opens the "Print File" dialog where you can set various options for printing either using a2ps, enscript or
 lpr<p>
-<tag/Quit			Ctrl+Q/ Exits KDevelop. If files are changed, you will be asked if you want to save these files.<p>
-</descrip>
+<item><bf/Quit			Ctrl+Q/ Exits KDevelop. If files are changed, you will be asked if you want to save these files.<p>
+</itemize>
 <p>
 
 
-<sect1>Editing Files<p>
+<sect2>Editing Files<p>
 Here, the "Edit" menu and the according icons in the toolbar are covered which provide editing files. Also the editing functions
 are available via a context-menu in the editor.
-<descrip>
-<tag/Undo			Ctrl+Z/ Reverts the last editing operation<p>
-<tag/Redo			Ctrl+Z/ lets you do the last undo step again<p>
-<tag/Cut			Ctrl+X/ cuts out a selection and copies it to the system clipboard.<p>
-<tag/Copy			Ctrl+C/ copies a selection to the system clipboard. This also counts for seletions made in the documentation
+<itemize>
+<item><bf/Undo			Ctrl+Z/ Reverts the last editing operation<p>
+<item><bf/Redo	Ctrl+Z/ lets you do the last undo step again<p>
+<item><bf/Cut			Ctrl+X/ cuts out a selection and copies it to the system clipboard.<p>
+<item><bf/Copy			Ctrl+C/ copies a selection to the system clipboard. This also counts for seletions made in the documentation
 browser.<p>
-<tag/Paste		Ctrl+V/ inserts the clipboard contents at the current cursor position.<p>
-<tag/Indent		Ctrl+I/ Indent moves a selection to the right<p>
-<tag/UnIndent	Ctrl+U/ UnIndent moves a selection to the left<p>
-<tag/Insert File.../ Lets you select a file and inserts its contents at the current cursor position<p>
-<tag/Search...		Ctrl+F/Opens the Search dialog that looks for an expression in the current file. For a search across several
+<item><bf/Paste		Ctrl+V/ inserts the clipboard contents at the current cursor position.<p>
+<item><bf/Indent		Ctrl+I/ Indent moves a selection to the right<p>
+<item><bf/UnIndent	Ctrl+U/ UnIndent moves a selection to the left<p>
+<item><bf/Insert File.../ Lets you select a file and inserts its contents at the current cursor position<p>
+<item><bf/Search...		Ctrl+F/Opens the Search dialog that looks for an expression in the current file. For a search across several
 files, "Search in files..." should be used.<p>
-<tag/Repeat Search	F3/ Repeats the last seach for an expression. This also counts for searches that were made across the
+<item><bf/Repeat Search	F3/ Repeats the last seach for an expression. This also counts for searches that were made across the
 documentation, where more than one hit was found in the same page. The next hit will be displayed by choosing "Repeat Search"
 or F3 and signed as marked.<p>
-<tag/Replace...		Ctrl+R/ Opens the "Search and Replace" dialog that allows the search for an expression and replaces the found
+<item><bf/Replace...		Ctrl+R/ Opens the "Search and Replace" dialog that allows the search for an expression and replaces the found
 text with a new expression.<p>
 
-<tag/Search in files.../Displays the "Search in files..." dialog, that handles <tt/grep/ on whole directories with wildcards.
-Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file and the
-cursor is set to the line of the search result<p>
-<tag/Select All/ Selects the whole text of the file currently opened in the top editing window<p>
-<tag/Deselect All/ Deselects the whole text of the current file. This is often used for multiple selections so you don't have
+<item><bf/Search in files...		Ctrl+Alt+F/Displays the "Search in files..." dialog, that handles <tt/grep/ on whole directories with
+wildcards. Search results are displayed with a list of the filenames, line and expression. Choosing an entry will open the file
+and the cursor is set to the line of the search result<p>
+<item><bf/Select All/ Selects the whole text of the file currently opened in the top editing window<p>
+<item><bf/Deselect All/ Deselects the whole text of the current file. This is often used for multiple selections so you don't have
 to deselect each one seperately<p>
-<tag/Invert Selection/ Inverts the selection, meaning that a selection becomes deselected and text which is not selected
+<item><bf/Invert Selection/ Inverts the selection, meaning that a selection becomes deselected and text which is not selected
 becomes selected.<p>
-</descrip>
+</itemize>
 <p>
 
-<sect1>View Configuration<p>
+<sect2>View Configuration<p>
 The View-Menu covers closing and opening functions for windows and commands to enable/disable the tool- and statusbar as well as
 to jump errors in the code.
-<descrip>
-<tag/Line...	Ctrl+L/Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
+<itemize>
+<item><bf/Line...	Ctrl+L/Opens a "Go to Line..." dialog that lets you insert a linenumber to show in the actual file. The last
 linenumber is remembered and marked, so you can either jump to that line again or just enter a new linenumber you want to see.<p>
-<tag/Next Error		F4/Jumps to the next error KDevelop detects from the output. The output message of Make or other tools should
+<item><bf/Next Error		F4/Jumps to the next error KDevelop detects from the output. The output message of Make or other tools should
 give you a descriptive help what the problem is, so you can correct the error.<p>
-<tag/Previous Error		Shift+F4/ Jumps to the previous error that was reported.<p>
-<tag/Tree-View	Ctrl+T/en/disables the Tree window on the left side of the main view containing the classbrowser, LFV, RFV and
-DOC-tree.<p> <tag/<p>
-<tag/Output-View	Ctrl+G/en/disables the Output window on the bottom of the main view.<p>
-<tag/Toolbar/en/disables the toolbar.<p>
-<tag/Browser-Toolbar/en/disables the browser toolbar, containing the back, forward and search buttons for the browser<p>
-<tag/Statusbar	Ctrl+B/en/disables the statusbar.<p>
-<tag/Refresh/ rescans all files to rebuild the classbrowser. The scanning progress is shown in the statusbar progress display.<p>
-</descrip>
+<item><bf/Previous Error		Shift+F4/ Jumps to the previous error that was reported.<p>
+<item><bf/Tree-View	Ctrl+T/en/disables the Tree window on the left side of the main view containing the classbrowser, LFV, RFV and
+DOC-tree.<p>
+<item><bf/Output-View	Ctrl+G/en/disables the Output window on the bottom of the main view.<p>
+<item><bf/Toolbar/en/disables the toolbar.<p>
+<item><bf/Browser-Toolbar/en/disables the browser toolbar, containing the back, forward and search buttons for the browser<p>
+<item><bf/Statusbar	Ctrl+B/en/disables the statusbar.<p>
+<item><bf/Refresh/ rescans all files to rebuild the classbrowser. The scanning progress is shown in the statusbar progress display.<p>
+</itemize>
 <p>
 
-<sect1>Creating and Maintaining Projects<p>
+<sect2>Creating and Maintaining Projects<p>
 This section describes functions that are available in the "Project"-menu and are supposed to cover the creation and maintaining
 of projects
-<descrip>
-<tag/Application Wizard/<p>
-<tag/New.../<p>
-<tag/Open/<p>
-<tag/Close/<p>
-<tag/New Class.../<p>
-<tag/Add File(s) to Project/<p>
-<tag/New File.../<p>
-<
-</descrip>
+<itemize>
+<item><bf/Application Wizard/ Starts the KAppWizard and allows you to create a new project by choosing application type, name,
+version and other options.<p>
+<item><bf/New.../Opens the New Project dialog to let you create empty projects that can be adapted to be used with existing
+non-kdevelop projects.<p>
+<item><bf/Open/ Shows the Open Project dialog, where you can choose a KDevelop project file to be opened. After selection, the
+project will be loaded.<p>
+<item><bf/Close/Closes the current project. This is mostly done automatically when you quit KDevelop, invoke the KAppWizard or open
+another project.<p>
+<item><bf/New Class.../Starts the class generator to create a new class that will be added to the current project. The class
+generator lets you specify classname, inheritance and filenames for the new class.<p>
+<item><bf/Add File(s) to Project/<p>
+<item><bf/New File.../ Opens the New File dialog to let you create and add a new file to the current project.<p>
+<item><bf/Existing file(s)/ Opens a selection dialog where you can choose the files that you want to add to the current project and the
+path where they will be copied to. If you choose a destination that was currently not included in the project, e.g. creating a new
+subdirectory, KDevelop will copy the files to add to the new subdirectory and create a new Makefile.am. After the copy process,
+your project will be rebuild by automake and autoconf to include the new subdirectory into the make-process.<p>
+<item><bf/Add new translation file/ Opens a language selection dialog that lets you choose the translation file language that will be
+added to the project. This is mostly used by translators who can easily add their language to the project and work on the
+translation without having to care about the Makefile.am's<p>
+<item><bf/File Properties/ Opens the File Properties dialog showing a copy of the LFV and the project file options. Here, the
+properties for your files have to be set like installation path and file type.<p>
+<item><bf/Options/ Opens the Project Options dialog that lets you change various settings for your project. This could be a
+new version number or the compiler options to set to -02 for a release with optimization.<p>
+</itemize>
 <p>
 
-<sect1>Building Projects
-<descrip>
-<tag/<p>
-<tag/<p>
-<tag/<p>
-<tag/<p>
-<tag/<p>
-<tag/<p>
-</descrip>
+<sect2>Building Projects<p>
+This section describes the Build menu that covers all actions to be done with make or actions like rebuilding the project's online
+help or API documentation.
+
+<itemize>
+<item><bf/Compile file.../Active, if the top editing window is the C++ Window. This only compiles the current implementation file
+and lets you save time in case you suspect errors.<p>
+<item><bf/Make/ Invokes the make-command to your project and builds the target.<p>
+<item><bf/Rebuild All/ Rebuilds all object files and the target of you project.<p>
+<item><bf/Clean Rebuild All/ Cleans the project directory from all make-created files and rebuilds the target.<p>
+<item><bf/Stop Build/ Stops the current process.<p>
+<item><bf/Execute/ Executes your target after building the program with make.<p>
+<item><bf/Execute with Arguments/ Executes your target with arguments that you have to set first with the "Execution Arguments" option
+of the Build-menu.<p>
+<item><bf/Debug.../ Opens KDbg in the Tools-Window to debug your application. In this case, KDbg automatically opens the file
+containing the main() function and executes your application.<p>
+<item><bf/Distclean/ Removes all files that are generated by the project like object files etc. Distclean has to be done before
+distributing your project, so the distribution file doesn't contain any platform-specific files like those that were generated by
+your compiler.<p>
+<item><bf/Autoconf/ Calles Make on the file Makefile.dist, located in your main project directory. Makefile.dist contains all commands
+for automake, autoconf etc. to build your project. If you added files manually or changed macros yourself, you should run Autoconf
+afterwards, followed by Configure to recreate all Makefiles.<p>
+<item><bf/Configure/ Executes the configure-script generated by autoconf. If this command cannot be executed, run Autoconf and then
+Configure again.<p>
+<item><bf/Execution Arguments/ Here you can set the arguments you want to add to the execution of your application by "Execute with
+Arguments". Your argument settings for the execution are saved in the project, so you don't have to set arguments again after
+changing to another project or when you initialize your project again the next time you start KDevelop.<p>
+<item><bf/Make messages and merge/ This is intended to create the messages file for your project. The message file is the one
+containing all strings that are set up in the sources for internationalization and is used by translators to create the .po file
+for their target language.<p>
+<item><bf/Make API-Doc/ Calls KDoc on your header files and generates a HTML output with the documentation of your project
+classes.<p>
+<item><bf/Make User-Manual/ runs ksgml2html on your manual sgml file, creating a HTML user manual. If ksgml2html is not installed,
+sgml2html will be used to do this.<p>
+
+</itemize>
 <p>
 
-<sect1>Calling Tools
+<sect2>Calling Tools<p>
+The Tools-menu contains by default the entries for the internal Dialogeditor (which can also be started by the toolbar button) and
+the following programs if installed: KDbg, KIconEdit and KTranslator. These are checked by the KDevelop installation program and
+inserted in the given order into the menu. Invoking a tool will open the "Tools"-window and start the selected program inside this
+window. The Tools menu can be edited by the Tools-entry in the Options-menu.
 
-<sect1>Setting Options
-<descrip>
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-</descrip>
+<sect2>Changing KDevelop's settings<p>
+The Options-menu contains all entries for invoking configuration dialogs with which you can change KDevelop's default settings.
+Major settings like those for the editor or printing have their own entries; general settings of KDevelop's behavoir can be made
+with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
 
-<sect1>The Window Menu
-
-<sect1>Managing Bookmarks
-<descrip>
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-</descrip>
-
-<sect1>Online Help
-<descrip>
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-</descrip>
-
-<sect1>Keyboard Shortcuts
-<descrip>
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-<tag/
-</descrip>
-
-
-
-<sect>Developing with KDevelop<label id="Developing with KDevelop">
+<itemize>
+<item><bf/Editor.../ Allows the configuration of the editor's behavoir like word-breaking, selections etc.<p>
+<item><bf/Editor Colors.../ Here, you can set the color-configuration of the editor like e.g. the background.<p>
+<item><bf/Editor Defaults.../ This sets the default display like font and fontsize for the editor<p>
+<item><bf/Syntax-Highlighting / This dialog lets you configure the fonts and colors for the highlighting of several programming
+languages, including HTML, and the mime-types highlighting will be enabled to.<p>
+<item><bf/Documentation Browser/ In this tab-dialog, you can set the fonts, sizes and colors for the internal Helpbrowser<p>
+<item><bf/Configure Printer.../ Contains the entries for the printer configuration dialogs according to the used printing program, a2ps
+or enscript.<p>
+<item><bf/a2ps/ Configures the printer for use with a2ps. See Printing for more information.<p>
+<item><bf/enscript/ Configures the printer for use with enscript. See Printing for more information.<p>
+<item><bf/Tools.../ Opens the Configure Tools dialog. Here, you can configure the "Tools" menu by adding or removing programs that will
+be started in the Tools-window.<p>
+<item><bf/KDevelop Setup/ Opens the KDevelop Setup dialog. The first tabulator configures general settings, followed by the
+key-configuration and the Documentation settings. The Documentation settings also include the generation of a new set of
+HTML-library documentation and the rebuilding of the search index for the Helpbrowser.
+</itemize>
 <p>
-<sect1> Creating a new class with the Classgenerator<p>
+<sect2>The Window Menu<p>
+The Window menu contains a list with all currently open files. This allows a quick swith to another file you're currently working
+on.
+<sect2>Managing Bookmarks<p>
+The Bookmarks menu is intended for adding and removing bookmarks you want to set in the current editing file. As KDevelop uses two
+editing windows, each one configures it's bookmarks seperately.
+<itemize>
+<item><bf/Set Bookmark/ Opens a context-menu with up to nine configurable bookmarks. This allows setting a bookmark to a certain entry
+in the bookmarks menu by logical reasons.<p>
+<item><bf/Add Bookmark/ Adds the line of the current cursor position to the bookmarks menu as a bookmark. Mind that this could
+overwrite a bookmark set with the Set Bookmark-option.<p>
+<item><bf/Clear Bookmarks / Clears the bookmark-entries for the top editing window, e.g. if the Header-Window is visible and you call
+Clear Bookmarks, the entries for the Header-Window are deleted.<p>
+<item><bf/Header-Window/ Contains the bookmark-list for the Header-Window. Selecting a bookmark will set the cursor to the selected
+bookmarks' line. Mind that bookmarks are only assigned to the file they are set to, so if you change to another file, the
+bookmarks are not deleted but choosing a bookmark won't change to the file they are assingned to as well.<p>
+<item><bf>C/C++-Window</bf> Contains the bookmark-list for the C/C++-Window. The preferences are the same as for the
+Header-Window.
+</itemize>
+<p>
+<sect2>Online Help<p>
+The Help-menu contains entries for navigating in the Helpbrowser as well as entries for library and online-documentation for the
+most recently used cases. Accessing additional online-documentation can be achieved with the DOC-tree in the treeview
+automatically opened (if Autoswitch is enabled) when changing to the Documentation Browser window.
+<itemize>
+<item><bf/Back / Opens the page opened before the actual one.<p>
+<item><bf/Forward / Opens the next page of the browser-history, available after a "Back"-action.<p>
+<item><bf/Search Marked Text		F2/ Scans the search-index for text currently marked in the editing windows or the browser-window. Afte
+the search, a result page is shown which lets you select the help-page to switch to. After choosing a page, the browser will
+highlight the found entry for the expression the search was invoked for. With the F3 key the next search result on the same page
+will be displayed if more than one hit was reported for the search on one page.<p>
+<item><bf/Search for Help on.../Opens the Search for Help on... dialog that lets you search for a specific expression you want help on.<p>
+<item><bf/Contents		F1/ Opens the User's Manual to KDevelop index page so you have access to this manual.<p>
+<item><bf/KDevelop Homepage/ Opens the KDevelop Homepage in the browser window if Internet access is provided.<p>
+<item><bf>C/C++ Reference</bf> Displays the language reference index page. If the reference is not installed, an error page shows
+you how to get the reference and how to install it correctly.<p>
+<item><bf/Qt-Library/ Changes to the index page of the Qt-library documentation provided with your copy of the Qt-library.<p>
+<item><bf/KDE-Core-Library/ Opens the class-index file of the KDE-Core library documentation.<p>
+<item><bf/KDE-GUI-Library/  As above for the GUI-library<p>
+<item><bf/KDE-KFile-Library/ As above for the KFile-library<p>
+<item><bf/KDE-HTML-Library/ As above for the HTML-library<p>
+<item><bf/Project-API-Doc/ Changes to the project's class-documentation index file.<p>
+<item><bf/Project-User-Manual/ Opens the User manual's index file of your current project. This can be used to review the HTML-output
+generated by ksgml2html<p>
+<item><bf/About KDevelop.../ Shows the Aboutbox of KDevelop containing the used version number and the authors' names and
+email-adresses as well as reference to third-party software used in KDevelop.
+</itemize>
+<p>
+<sect1>Keyboard Shortcuts<p>
+This section handles the predifined as well as the standard values for configurable keyboard commands used in the KDevelop IDE.
+You should see section <ref id="Changing Keyboard Shortcuts" name="Changing Keyboard Shortcuts"> for a detailed explanation how
+to change assigned values to commands.
+<sect2>Shortcuts for Text Processing<p>
+<sect3>Cursor Movements<p>
+<itemize>
+<item>one letter to the left									<bf/Left Arrow/
+<item>one letter to the right									<bf/Right Arrow/
+<item>one word to the left										<bf/CTRL+Left Arrow/
+<item>one word to the right										<bf/CTRL+Right Arrow/
+<item>one line upwards												<bf/Up Arrow/
+<item>one line downwards											<bf/Down Arrow/
+<item>to the beginning of the line						<bf/POS 1/
+<item>to the end of the line									<bf/END/
+<item>one page up 														<bf/PageUp/
+<item>one page down														<bf/PageDown/
+<item>to the beginning of the current file		<bf/CTRL+PageUp/
+<item>to the end of the current file					<bf/CTRL+PageDown/
+</itemize>
+<sect3>Text Selections<p>
+<itemize>
+<item>one letter to the left									<bf/SHIFT+Left Arrow/
+<item>one letter to the right									<bf/SHIFT+Right Arrow/
+<item>one word to the left										<bf/CTRL+SHIFT+Left Arrow/
+<item>one word to the right										<bf/CTRL+SHIFT+Right Arrow/
+<item>one line upwards												<bf/CTRL+Up/
+<item>one line downwards											<bf/CTRL+Down/
+<item>to the beginning of the current line		<bf/CTRL+POS 1/
+<item>to the end of the current line					<bf/CTRL+END/
+<item>one page up															<bf/SHIFT+PageUp/
+<item>one page down														<bf/SHIFT+PageDown/
+<item>to the beginning of the current file		<bf/CTRL+SHIFT+PageUp/
+<item>to the end of the current file					<bf/CTRL+SHIFT+PageDown/
+</itemize>
+<sect3>Inserting and Copying Text, Tabulators<p>
+<itemize>
+<item>en/disable insertmode										<bf/INS/
+<item>copy selection to the clipboard					<bf/CTRL+C, CTRL+INS/
+<item>insert text from the clipboard					<bf/CTRL+V, SHIFT+INS/
+<item>delete current line											<bf/CTRL+K/
+<item>insert line after current line					<bf/END, then Enter/
+<item>insert line before current line					<bf/POS 1, then Enter/
+<item>undo editing step												<bf/CTRL+Z/
+<item>redo an undo step												<bf/CTRL+Y/
+<item>tabulator																<bf/TAB/
+</itemize>
+<sect3>Deleting Text<p>
+<itemize>
+<item>delete letter left of cursor position		<bf/Backspace/
+<item>delete letter right of cursor position 	<bf/Delete/
+<item>delete selected text										<bf/Select text, then Backspace/
+</itemize>
+<sect3>Searching Text within the Editor<p>
+<itemize>
+<item>open Goto Line... dialog								<bf/STRG+L/
+<item>open Find Text dialog										<bf/STRG+F/
+<item>repeat last search											<bf/F3/
+<item>open Search and Replace dialog					<bf/STRG+R/
+<item>locate next error												<bf/F4/
+<item>locate previous error										<bf/SHIFT+F4/
+</itemize>
 
-New classes can be added to your project by selecting "New Class" from the project menu.  The following dialog lets you enter all
-information needed to construct a new class.  First, you should enter the classname which will also preset the filenames for the
-header and implementation files.  The Baseclass is the class the new class will inherit.  For Qt or KDE classes requiring QWidget
-as a baseclass, you can also check the QWidget option.  Further the inheritance from the baseclass can be selected by public,
-protected and private. The "Documentation" field offers a place for a short description for your class; this will be inserted into
-the header file for documentation purposes and is placed there for KDoc to read. The affected Makefile.am will be updated with the
-new files created and you can rebuild your project now containing your new class.
+<sect3>Searching Text with the Documentation Browser<p>
+<itemize>
+<item>search selected editor text in documentation 		<bf/F2/
+<item>search selected browser text in documentation		<bf/F2/
+<item>display next search hit on the same page				<bf/F3/
+</itemize>
 
-<sect1> Adding new or existing files<p>
+<sect3>Managing Bookmarks<p>
+<itemize>
+<item>add bookmark														<bf/STRG+SHIFT+A/
+<item>clear bookmark list											<bf/STRG+SHIFT+C/
+</itemize>
+	
+<sect2>Shortcuts for Toolbar Symbols<p>
+<itemize>
+<item>Symbol "Open File"                      <bf/STRG+O/
+<item>Symbol "Save File"                      <bf/STRG+S/
+<item>Symbol "Print File"                     <bf/STRG+P/
+<item>Symbol "Undo"                           <bf/STRG+Z/
+<item>Symbol "Redo"                           <bf/STRG+Y/
+<item>Symbol "Cut"                            <bf/STRG+X/
+<item>Symbol "Copy"                           <bf/STRG+C/
+<item>Symbol "Paste"                          <bf/STRG+V/
+<item>Symbol "Compile File"                   <bf/STRG+F10/
+<item>Symbol "Make"                           <bf/F9/
+<item>Symbol "Execute"                        <bf/STRG+F9/
+<item>Symbol "Execute with Arguments"         <bf/ALT+F10/
+<item>Symbol "Dialogeditor"                   <bf/STRG+D/
+<item>Symbol "Search Marked Text"             <bf/F2/
+</itemize>
 
-Adding a new file is often used when you think that you should separate your class implementation file into several ones.
-Then you need to create an new file which will get the part of the class implementation you want to move.  You can specify which
-type the new file will be, including a template for pixmap files often needed to create new toolbar icons.   The new file will be
-added to the project and all affected project files like Makefile.am etc will be updated.
+<sect2>Window Management<p>
+<itemize>
+<item>Change to Header/Resource Files window		<bf/STRG+1/
+<item>Change to C/C++ Files window							<bf/STRG+2/
+<item>Change to Documentation Browser window		<bf/STRG+3/
+<item>Change to Tools window										<bf/STRG+4/
+</itemize>
 
-
-<sect1> File Properties<p>
-The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
-files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
-included in the project as well as the installation path if the file is going to be installed by the end-user's make install
-command.  It is important for documentation files as well as pixmaps to specify the location where the files should go when the
-project is build and installed by end users, so you have to set up those locations.   For standard KDE location macros you should
-look in your Makefile.am where the location macros are specified.
-
-<sect1> Accessable Tools<p>
-
-The tools-menu allows direct access to external tools.  Those are KDbg, KIconedit and KTranslator.  If a tool is started, it will
-be working in the "Tools" window and is closed automatically when you leave KDevelop. Another way of starting KDbg is that you
-choose "Debug" from the "Build" menu or the debug icon from the toolbar, starting KDbg with the project binary.  If the binary
-does not exist, you have to create it first with invoking make or rebuild all.
-KIconedit can also be started by a click on the pixmap file in the LFV you want to edit, loading the pixmap automatically.
+<sect2>Shortcuts to Compilation Processes<p>
+<itemize>
+<item>Compile current sourcefile								<bf/STRG+F10/
+<item>Build current project target							<bf/F9/
+<item>Execute target after Build process				<bf/STRG+F9/
+<item>Exectue target with Arguments							<bf/ALT+F10/
+</itemize>
 
 
 
 <sect>The Helpsystem<label id="The Helpsystem">
 <p>
-<sect1>Quickhelp, "What's this ?"
+Most of KDevelop's strength is accumulated in the Helpsystem.  It is also to be understood as an example of how to extend your own
+KDE application with a complete set of help functionality, and is, in part, already realized in the template applications, so
+KDE/Qt application frameworks generated with the KAppWizard do already contain the basic functionality for statusbar help and
+documentation, that only has to be extended by the programmer. This section therefore introduces into the usage of the general
+help provided within the IDE as well as to show the usage of the Helpbrowser, which, by intelligent use, will make it very easy to
+get the information you need for development.
 
-For Version 0.3 of KDevelop, we integrated an extending statusbar message system, displaying statushelp for menubar entries and
-process status for each selected function. The statusbar always shows you what KDevelop is doing. Furthermore, the statusbar shows
-the mode of the insert / overwrite key as well as displaying line and comlumn position of the cursor in the editwindow. Dialog
-fields offer quickhelp by right mouse button click so you don't have to worry about searching functions in the documentation.
-Also, the "What's this ?" button on the far right of the toolbar offers help window for the main working view. Just push the
-"What's this ?" button and click on the item you want to have a descriptive help for.
+<sect1>The "What's this ?"-Button and Quickhelp<p>
+Looking at KDevelop's top toolbar, you will see the "What's this?" button on the right end. By selecting the button, the cursor
+will change to a pointer with a question mark on the right, as is the same as the button in the toolbar. Now, you can select any
+visible part of the KDevelop user interface and click on it. This will result in displaying a helpwindow giving you a short
+description of the function this part gives you or what it can do for you. Included are the main view, the treeviews and the
+toolbars, for which every button help is provided. After another mouseclick or a keyboard input, the What's this? help window
+disappears and your cursor is set to the last active position. Mind, that, if you place the mousepointer over a button, it gets
+raised and after a short time, you will get a QuickTip-window, describing the function the button represents in the menubar; this
+will disappear if you move the mousepointer away.
 
-<sect1> The Statusbar Help
+For user interaction dialogs, Quickhelp provides you help windows with a short description of the selected item you want help for.
+These are accessed by a right-button mouseclick to the item, a context-menu pops up that allows the selection of "Quick-Help".
+Selecting this will pop up the help window. This is always useful for dialogs where you can't see the action's purpose for as long
+as you are not familiar with KDevelop. Mind that most dialogs offer a Help-button which will show you the detailed context-help
+for the dialog's options within the provided online-manual in the help-browser.
+
+<sect1> The Statusbar Help<p>
+The statusbar of KDevelop offers you many fuctions that inform you about the current activity state as well as "status messages"
+offering a short description for commands.
+<sect2> Statusbar Entries<p>
+The Statusbar contains:
+<enum>
+<item> a general message field, mostleft. This is used for help messages and displays the current activity.
+<item> the progressbar, indicating the progress for actions that require a comparably long time to be finished, such as saving
+files and the scan-progress of the Classbrowser.
+<item> an Insert/Overwrite indicator. It shows the editor mode for insert actions by INS for Insert mode and OVR for Overwrite
+mode. The mode can be changed by the INS-key on the keyboard.
+<item> a line counter, displaying the current line the cursor is placed.
+<item> a column counter, indicating the current column position of the cursor in a line.
+</enum>
+
+<sect2> Help Messages<p>
+The statusbar informs you about the action of menuentries if you select a menu within the menubar and select an action without
+executing it. Further, if you press on a toolbar icon, but without releasing the mousebutton, the help message for the button is
+displayed in the same way as for the menuentries. You can prevent the execution of the selected icon by moving the mousepointer
+away from the icon, still hoding the button pressed. If the cursor is away, release the mousebutton.
+
+For actions that are currently executed, KDevelop displays the action. This counts for processes running in the background
+such as saving files as well as for dialogs. If the process has exited such as a make-invocation, the statusbar display
+changes back to "Ready" state.
+
+Also, when using the documentation browser, the statusbar displays link urls for as long as the cursor is placed over an URL link
+in the browser window. Therefore, you can easily find out if the file is a local or a remote file only accessed by network
+connection.
+
+The caption of the KDevelop Project Editor shows you the currently opened filename in the top window. This would be a HTML file
+for the documentation browser or a text file for the editing windows. Further, the Project name is displayed, so you have constant
+control where you are and what you're currently working at.
+
+<sect1> Using the Documentation Browser<label id="Using the Documentation Browser">
 <p>
-
-<sect1> Using the Documentation Browser
+The documentation browser allows quick and easy access to all manuals and documentations that are provided with KDevelop or
+generated automatically, including online-documentation for the KDE-libraries and your project documentation. Plus, the
+Documentation Tree in the tree-view lets you customize a special "Others" folder that contains all individually added
+documentation. <sect2>Requirements
 <p>
-The documentation browser allows quick and easy access to all manuals and documentations, including a search utility that is also
-present in the editors.
+To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
+classdocumentation for the KDE-libraries during the setup process, but can also invoked by option in the <ref id="KDevelop Setup"
+name="KDevelop Setup">. For the generation of an API (Application Programming Interface) Documentation for your project's classes,
+KDoc is also used and called by the Build-menu, entry "Make API-Doc". This will process all current header files of the project
+plus the addition of a cross-reference to the Qt and KDE-libraries if those are available in the Helpbrowser. For the generation
+of the project handbooks, you should have ksgml2html (provided with the KDE-SDK) and, as a minimum, SGML-tools installed on your
+system. To extend and change your project's online-documentation, you have to edit the documentation file for your project by
+selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu. In case sgmltools detect
+formatting errors, those will be displayed in the output window allow you to find the error line directly. The program "glimpse"
+is used to create a personal search-index for your documentation automatically. The index is generally build during the
+installation process, but can also be build with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog. For a description of
+the provided search functions see <ref id="Using the Search Index" name="Using the Search Index">
 
-Accessing Help functionality:
-<itemize>
-<item>in the editor, select the text you want to have help on or place the cursor in the word that you want to look for.  Then
-press the right mouse button and select look up: "expression" .This can also be done by selectin "Search Marked Text" from the
+<sect2>Provided Documentation
+<p>
+The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
+the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
+installation, configuration, available functionality and introduction to application development. The second book is "The KDevelop
+Programming Handbook" in it's first edition. The programming handbook covers most questions related to the creation and extension
+of projects that work with KDevelop. By tutorials the user gets an introduction to the rich facilities that applications created
+with the Qt- and/or KDE-libraries have to offer as well as given a guideline for ensuring KDE-compliance, which covers the same
+instructions given on the internet site of <htmlurl url="http://developer.kde.org" name="developer.kde.org">
+However, the programming handbook cannot replace any additonal documentation available in printed or electronic form about the C++
+programming language as well as about the usage of the Qt-library in certain terms.
+
+The C/C++-Reference used with KDevelop is currently only available on the <htmlurl
+url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="KDevelop homepage"> can be installed easily by downloading
+and copying the sourcefile to the main KDE-directory ($KDEDIR). There, you only have to untar it with <tt/tar zxvf
+c_c++_reference.tar.gz/, automatically placing it in the documentation directory of KDevelop. For uninstalling the reference
+documentation you just have to delete the "reference" folder under ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
+
+The Qt/KDE-libraries documentation folder allows direct access to the HTML-online documentation of your copy of the Qt-library.
+The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be set
+manually in the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog. Also, all available documentation for the KDE-libraries
+are listed in order of the library name, so if you would use classes of a certain library it is easy to determine the library type
+to be added to the linker settings in the project. Mind that the whole KDE-library documentation is only accessable when generated
+by KDoc- so this program, included in the KDE-SDK, has to be installed before the documentation can be generated. As the
+installation program of KDevelop does this automatically, it should be installed before KDevelop is started for the first time. If
+this is not the case and the documentation cannot be build, you are able to create it afterwards at any time with the <ref
+id="KDevelop Setup" name="KDevelop Setup"> dialog.
+
+The library documentation tree is followed by the "Others" folder which is inteded to contain all personally customized
+documentation as described below. Finally, the Doc-Tree allows access to the Project API and the Project Manual for your current
+project.
+
+<sect2>Adding Documentation to the Helpbrowser
+<p>
+To customize your Helpbrowser, open the Tree-View and select the "DOC" Tabulator. You will see an opened tree called
+Documentation, containing four folders. The "Others" folder is, by default, empty. On a right mousebutton click over this folder,
+a context menu opens that has an entry "Add Entry". Select this to open the Add Entry dialog where you have to enter two values:
+the upper one for the name that will be displayed for the documentation within the Doc-tree, and, below that, a file-entry line.
+Here, you have to enter the path and filename to the startpage that will be opened by the selection of the entry later. You can
+enter the path and filename directly or by selection of the pushbutton on the right to open a file-chooser dialog. This allows a
+quick browsing on your system to the path for your startpage. Mind that only HTML-documentation can be selected, so only HTML
+files are allowed to choose. Selecting OK will add the entry to the Doc-tree and is available directly.
+
+<sect2>Using the search Index<label id="Using the Search Index">
+<p>
+KDevelop includes a set of fuctions to help you search information within HTML documentation. To use these features, your system
+needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
+within the documentation. To set up the index, see <ref id="KDevelop Setup" name="KDevelop Setup">, but the index is also
+automatically generated during the installation program.
+
+The search functions are available through several ways which you can choose from:
+<enum>
+<item>in the editor, select the text you want to have help on or place the cursor in the word that you want to look for. Then
+press the right mouse button and select look up: "expression" This can also be done by selecting "Search Marked Text" from the
 help menu, the shorcut key F3 or by selecting the Search icon from the toolbar.
-
 <item>in the Documentation browser select the text you want to look up and press the right mouse button, select look
 up:"expression" or select "Search Marked Text" or the search icon as above.
-
 <item>if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help
-on..." icon from the toolbar, opening a search dialog where you can enter the expression you search for.
-</itemize>
-Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu entries.
-
-
-
+on..." icon from the toolbar, opening a search dialog where you can enter the expression you want to get information for.
+</enum>
+Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu
+entries.
 
 <sect>Working with the Editor<label id="Working with the Editor">
-<sect1> Editor<p>
-The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1.
-The options dialog configures the main behavoir for the editor regarding things as selections, wrapping etc.
-
+<sect1> Editor
+<p>
+The integrated editor of KDevelop is based on KWrite, known as the "Extended Editor"  in KDE-1.1. The options dialog configures
+the main behavoir for the editor regarding things as selections, wrapping etc.
 <bf>Edit Options:</bf>
-
 <bf>Auto Indent:</bf>									this sets the edior to place the cursor below the first literal when a new line is entered.
-
 <bf>Backspace Indent:</bf>							this option sets the cursor below the first literal of the line above when backspace is pressed.
-
 <bf>Word Wrap:</bf>										words are taken into the next line after the column set in "Wrap Words At:"
 
 <bf>Replace Tabs:</bf>									tabulators in the current text are replaced with tabulators of the "Tab Width:" value
@@ -920,7 +1246,8 @@ installed on your system. The configuration is almost similar for both programs,
 using the corresponding configuration dialogs.
 
 
-<sect1> KDevelop Setup<p>
+<sect1> KDevelop Setup<label id="KDevelop Setup">
+<p>
 <sect2> General
 <p>
 <bf>Make-command:</bf>
@@ -944,7 +1271,7 @@ For starting KDevelop, you have the option to enable/disable the startlogo to be
 Further, if you don't like the last project to be opened on startup, you can disable the default behavoir.
 
 
-<sect2> Keys
+<sect2>Changing Keyboard Shortcuts <label id="Changing Keyboard Shortcuts">
 <p>
 The Configure Keys dialog lets you configure the KDevelop key bindings. Note that global keys can be configured in the
 KDE Control Center, such as open file and print.  A key function can be configured by choosing the menu entry. Then the
@@ -1198,6 +1525,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 <p>
 </article>
+
+
+
 
 
 
