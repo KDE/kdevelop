@@ -40,7 +40,7 @@ static KCmdLineOptions options[] =
 int main(int argc, char **argv)
 {
     KAboutData about("kdevdesigner", I18N_NOOP("KDevDesigner"), version, description,
-                     KAboutData::License_GPL, "KDevDesigner Copyright: (C) 2004 Alexander Dymo\nQt Designer Copyright: (C) 2000-2003 Trolltech AS All Rights Reserved", 0, 0);
+                     KAboutData::License_GPL, "KDevDesigner Copyright: (C) 2004-2005 Alexander Dymo\nQt Designer Copyright: (C) 2000-2005 Trolltech AS All Rights Reserved", 0, 0);
     about.addAuthor( "Trolltech AS", "Qt Designer code (Free Edition)" );
     about.addAuthor( "Alexander Dymo", "Port to KDE, partification", "adymo@kdevelop.org" );
     KCmdLineArgs::init(argc, argv, &about);
