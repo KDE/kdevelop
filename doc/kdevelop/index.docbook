@@ -89,6 +89,59 @@ Development Environment (Gideon)</para>
 
 </chapter>
 
+<chapter id="kdevelopoverview">
+<title>&kdevelop; Overview</title>
+<sect1 id="howto">
+<title>How to obtain KDevelop</title>
+<para>
+&kdevelop; can be found via the project home page at <ulink url="http://www.kdevelop.org">
+http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">KDE ftp site</ulink>
+&kdevelop; is also available from many different Linux distributions.
+</para>
+
+<para>
+Anonymous CVS repository snapshots are also available.  The module name is <emphasis>kdevelop</emphasis>. 
+See the instructions on the <ulink url="http://developer.kde.org/source/anoncvs.html">KDE website</ulink> 
+for details on how to obtain the &kdevelop; source code.
+</para> 
+
+</sect1>
+
+<sect1 id="requirements">
+<title>&kdevelop; Requirements</title>
+<para>
+In order to successfully compile and use &kdevelop;, you need the following programs and libraries which
+are available on most platforms as distribution packages and thereby can be installed easily.
+</para>
+
+<itemizedlist>
+<title>Required:</title>
+<listitem><para>gcc/g++ 2.95, 3.1, 3.2 (or compatible)</para></listitem>
+<listitem><para>GNU make (or compatible)</para></listitem>
+<listitem><para>perl 5.004</para></listitem>
+<listitem><para>autoconf 2.54 or greater</para></listitem>
+<listitem><para>automake 1.6.2 or greater</para></listitem>
+<listitem><para>flex 2.5.4</para></listitem>
+<listitem><para>Qt 3.0.3 or greater</para></listitem>
+<listitem><para>KDE 3.0.4 or greater</para></listitem>
+</itemizedlist>
+
+<itemizedlist>
+<title>Optional:</title>
+<listitem><para>dot, from www.graphviz.org</para></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id="compileandinstall">
+<title>&kdevelop; Compilation and Installation</title>
+<para>
+In order to compile and install &kdevelop; on your system, type the following in the base directory
+of the &kdevelop; distribution:
+
+
+
+</chapter>
 
 
 <chapter id="userinterface">
@@ -186,7 +239,7 @@ loaded.  Otherwise, this part will not be active.
 </para>
 
 <para>
-Active parts can have many effects on the &kdevelop.  Depending on their function, they may add extra menus,
+Active parts can have many effects on the &kdevelop;.  Depending on their function, they may add extra menus,
 extra menu items, extra tool buttons, etc.
 </para>
 
