@@ -811,6 +811,10 @@ void CKDevelop::slotDebugActivator(int id)
       ASSERT(dbgInternal);
       slotDebugRun();
       break;
+    case ID_DEBUG_RUN_CURSOR:
+      ASSERT(dbgInternal);
+      edit_widget->slotRunToCursor();
+      break;
     case ID_DEBUG_STEP:
       ASSERT(dbgInternal && dbgController);
       dbgController->slotStepInto();
@@ -3506,6 +3510,7 @@ void CKDevelop::slotToolbarClicked(int item){
   // for these functions.
   case ID_DEBUG_START:
   case ID_DEBUG_RUN:
+  case ID_DEBUG_RUN_CURSOR:
   case ID_DEBUG_STEP:
   case ID_DEBUG_STEP_INST:
   case ID_DEBUG_NEXT:
@@ -3615,6 +3620,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_DEBUG_ATTACH,                          i18n("Attach to running process"))
 
   ON_STATUS_MSG(ID_DEBUG_RUN,                             i18n("Continues app execution"))
+  ON_STATUS_MSG(ID_DEBUG_RUN_CURSOR,                      i18n("Continues app execution stopping at current cursor position"))
   ON_STATUS_MSG(ID_DEBUG_STOP,                            i18n("Kills the app and exits the debugger"))
   ON_STATUS_MSG(ID_DEBUG_STEP,                            i18n("Step into"))
   ON_STATUS_MSG(ID_DEBUG_STEP_INST,                       i18n("Step instr"))
