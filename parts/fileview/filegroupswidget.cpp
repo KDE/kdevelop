@@ -119,11 +119,22 @@ bool FileViewFolderItem::matches(const QString &fileName)
     // Test with the file path, so that "*ClientServer/*.h" patterns work
     QString fName = QFileInfo(fileName).filePath();
 
+#if QT_VERSION < 0x030200
+	QPtrListIterator<FileComparator> it( m_patterns );
+	while ( it.current() )
+	{
+		if ( (*it)->matches( fName ) )
+		{
+			return true;
+		}
+		++it;
+	}
+#else
     QPtrList<FileComparator>::ConstIterator theend = m_patterns.end();
     for (QPtrList<FileComparator>::ConstIterator ci = m_patterns.begin(); ci != theend; ++ci)
     	if ((*ci)->matches(fName))
 		return true;
-
+#endif
     return false;
 }
 
