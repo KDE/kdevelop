@@ -82,11 +82,18 @@
 #define ID_VIEW_BROWSER_TOOLBAR     12050
 #define ID_VIEW_STATUSBAR           12060
 #define ID_VIEW_MDIVIEWTASKBAR      12065
+#define ID_VIEW_DEBUGGER_VIEWS      12066
 
 #define ID_VIEW_REFRESH             12070
 #define ID_VIEW_PREVIEW             12072
 
 #define ID_VIEW_IN_KFM							12080
+
+#define ID_VIEW_DEBUGGER_VIEWS_VAR          12090
+#define ID_VIEW_DEBUGGER_VIEWS_BREAKPOINTS  12091
+#define ID_VIEW_DEBUGGER_VIEWS_FRAMESTACK   12092
+#define ID_VIEW_DEBUGGER_VIEWS_DISASSEMBLE  12093
+#define ID_VIEW_DEBUGGER_VIEWS_DEBUGGER     12094
 
 ///////////////////////////////////////////////////////////////////
 // Project-menu entries 
