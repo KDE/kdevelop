@@ -432,30 +432,31 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 
        kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
        if( codeModel()->hasFile(m_activeFileName) ){
-           QPopupMenu* m = new QPopupMenu( popup );
-           popup->insertItem( i18n("Go to definition"), m );
            QString candidate1;
            if (isHeader(m_activeFileName))
                candidate1 = sourceOrHeaderCandidate();
            else
                candidate1 = m_activeFileName;
 
-           const FileDom file = codeModel()->fileByName( candidate1 );
-           const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
-           for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
-	       QString text = (*it)->scope().join( "::");
-	       if( !text.isEmpty() )
-		   text += "::";
-	       text += formatModelItem( *it, true );
-               int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
-	       int line, column;
-	       (*it)->getStartPosition( &line, &column );
-	       m->setItemParameter( id, line );
+           if( codeModel()->hasFile(candidate1) ){
+               QPopupMenu* m = new QPopupMenu( popup );
+               popup->insertItem( i18n("Go to definition"), m );
+
+               const FileDom file = codeModel()->fileByName( candidate1 );
+               const FunctionDefinitionList functionDefinitionList = file->functionDefinitionList();
+               for( FunctionDefinitionList::ConstIterator it=functionDefinitionList.begin(); it!=functionDefinitionList.end(); ++it ){
+	           QString text = (*it)->scope().join( "::");
+	           if( !text.isEmpty() )
+		       text += "::";
+	           text += formatModelItem( *it, true );
+                   int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
+	           int line, column;
+	           (*it)->getStartPosition( &line, &column );
+	           m->setItemParameter( id, line );
+               }
            }
 
            kdDebug() << "CppSupportPart::contextMenu 1" << endl;
-           QPopupMenu* m2 = new QPopupMenu( popup );
-           popup->insertItem( i18n("Go to declaration"), m2 );
            QString candidate;
            if (isSource(m_activeFileName))
                candidate = sourceOrHeaderCandidate();
@@ -464,6 +465,9 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
            kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
            if (!candidate.isEmpty() && codeModel()->hasFile(candidate) )
            {
+                QPopupMenu* m2 = new QPopupMenu( popup );
+                popup->insertItem( i18n("Go to declaration"), m2 );
+
                 FileDom file2 = codeModel()->fileByName( candidate );
                 kdDebug() << "CppSupportPart::contextMenu 3: " << file2->name() << endl;
 
