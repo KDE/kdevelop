@@ -1,0 +1,32 @@
+
+AC_INIT
+AM_INIT_AUTOMAKE(testprog,[0.1])
+
+AC_PROG_MAKE_SET
+
+# ruby interpreter check
+AC_PATH_PROG([RUBY],[ruby])
+if test -z "${RUBY}"  ; then
+   AC_MSG_ERROR([you need Ruby to use this program])
+fi
+
+# QtRuby check
+AC_MSG_CHECKING([whether QTRuby is installed])
+qtruby_present=no
+cat >qtrubytest.rb <<END
+require 'Qt'
+END
+${RUBY} qtrubytest.rb >/dev/null 2>&1 && qtruby_present=yes
+AC_MSG_RESULT([$qtruby_present])
+
+# rbuic check
+AC_PATH_PROG([RBUIC],[rbuic])
+if test -z "${RBUIC}" ; then
+   AC_MSG_ERROR([cannot find rbuic (part of the QtRuby package)])
+fi
+AC_SUBST([RBUIC])
+AC_SUBST([RUBY])
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
