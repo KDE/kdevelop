@@ -326,12 +326,13 @@ than procedural applications. The main thing here is that the application enters
 that for a Qt application, the program has to be in the main event loop to start the event handling.
 The next section tells you in short what this means to the programmer and what Qt offers to process
 user events.
-<note>
+</para>
+<note><para>
 For already advanced users: The button has no parent declared in the constructor, therefore it
 is a top-level widget alone and runs in a local event loop which doesn't need to wait for the main
-event loop.  See the QWidget class documentation and The KDE Library Reference Guide
+event loop.  See the QWidget class documentation and The KDE Library Reference Guide</para>
 </note> 
-</para>
+
 </sect3>
 </sect2>
 
@@ -360,24 +361,24 @@ the <methodname>event()</methodname> method passes the event to so-called event 
 that determine what happened and what to do with the event. If no filter signs responsible for the 
 event, the specialized event handlers are called. Thereby we can decide between: 
 <itemizedlist>
-<listitem>
-Keyboard events -- TAB and Shift-TAB keys:
+<listitem><para>
+Keyboard events -- TAB and Shift-TAB keys:</para>
 <itemizedlist>
 <listitem><para><methodname>virtual void focusInEvent(QFocusEvent *)</methodname></para></listitem>
 <listitem><para><methodname>virtual void focusOutEvent(QFocusEvent *)</methodname></para></listitem>
 </itemizedlist>
 </listitem>
 
-<listitem>
-All other keyboard input:
+<listitem><para>
+All other keyboard input:</para>
 <itemizedlist>
 <listitem><para><methodname>virtual void keyPressEvent(QKeyEvent *)</methodname></para></listitem>
 <listitem><para><methodname>virtual void keyReleaseEvent(QKeyEvent *)</methodname></para></listitem>
 </itemizedlist>
 </listitem>
 
-<listitem>
-Mouse movements:
+<listitem><para>
+Mouse movements:</para>
 <itemizedlist>
 <listitem><para><methodname>virtual void mouseMoveEvent(QMouseEvent *)</methodname></para></listitem>
 <listitem><para><methodname>virtual void enterEvent(QEvent *)</methodname></para></listitem>
@@ -385,8 +386,8 @@ Mouse movements:
 </itemizedlist>
 </listitem>
 
-<listitem>
-Mouse button actions
+<listitem><para>
+Mouse button actions</para>
 <itemizedlist>
 <listitem><para><methodname>virtual void mousePressEvent(QMouseEvent *)</methodname></para></listitem>
 <listitem><para><methodname>virtual void mouseReleaseEvent(QMouseEvent *)</methodname></para></listitem>
@@ -394,8 +395,8 @@ Mouse button actions
 </itemizedlist>
 </listitem>
 
-<listitem>
-Window events containing the widget
+<listitem><para>
+Window events containing the widget</para>
 <itemizedlist>
 <listitem><para><methodname>virtual void moveEvent(QMoveEvent *)</methodname></para></listitem>
 <listitem><para><methodname>virtual void resizeEvent(QResizeEvent *)</methodname></para></listitem>
@@ -610,9 +611,11 @@ also covers a complete description about the invocation of the <classname>QAppli
 
 <chapter id="chapter3">
 <title>Creating New Applications</title>
+
 <sect1 id="c3s1">
+<title>The Application Wizard</title>
 <para>
-&kdevelop;'s Application Wizard is inteded to let you start working on new project with &kdevelop;.  Therefore 
+&kdevelop;'s Application Wizard is intended to let you start working on new project with &kdevelop;.  Therefore 
 all of your projects are first created by the wizard, and then you can start building them and extend what is 
 already provided by the source skeleton.  You can choose from several project types according to your project goals:
 <itemizedlist>
@@ -637,6 +640,7 @@ initial version of a sample project.  For all other project types the steps are 
 may not have as many options available.
 </para>
 </sect1>
+
 <sect1 id="c3s2">
 <title>Invoking the Application Wizard and Project Generation</title>
 <sect2 id="c3s2s1">
@@ -896,6 +900,9 @@ added some KDE methods that set program and author information for this applicat
 </sect2>
 <sect2>
 <title>User Application Start</title>
+
+<para>... (not written yet)</para>
+
 </sect2>
 <sect2>
 <title>The Constructor</title>
@@ -1210,6 +1217,7 @@ key-configuration dialog.
 </sect1>
 </chapter>
 
+<!-- 
 <chapter id="chapter6">
 <title>Other Features</title>
 </chapter>
@@ -1217,18 +1225,19 @@ key-configuration dialog.
 <chapter id="chapter7">
 <title>Printing Support</title>
 </chapter>
-
+-->
 <chapter id="chapter8">
 <title>Help Functions</title>
 <sect1 id="c8s1">
 <title>Introduction</title>
+<para>
 A very important part of the development process is to provide help functionality to the user
 wherever possible. Most developers tend to delay this, but you should remember that a normal user
 isn't necessarily a Unix expert. He may come from the the dark side of computer software usage offering
 all sweets that a user may need to work himself into using an application even without ever touching the
 manuals. Therefore, the KDE and Qt library provide all means usually considered making an application
 professional in the eyes of the normal user by help functions that are ready to use. 
-Within the application, those are:
+Within the application, those are:</para>
 <itemizedlist>
 <listitem><para>Tool-Tips</para></listitem>
 <listitem><para>Statusbar help</para></listitem>
@@ -1239,9 +1248,10 @@ Additionally, the application should provide means to access a HTML-based online
 using the standard help key F1.  This context based help system is provided automatically through the
 <classname>KMainWindow</classname> class, though as the author you must provide the content.
 </para>
+<para>
 As &kdevelop; also offers all types of help as well as the KDE framework generated by the 
 application wizard already contains support for this, this chapter will help you find out where 
-and how to add your help functionality. 
+and how to add your help functionality. </para>
 <para>
 During the development of your application you should try to be consistent whatever you're doing;
 therefore you should do the necessary steps directly while extending the code. This will prevent you
@@ -1350,13 +1360,14 @@ language of the user; therefore enabling users that are not native speakers the 
 use of the provided functionality and feel more comfortable.
 </para>
 </sect1>
+<!-- 
 <sect1 id="c10s2">
 <title>How KDE support Internationalization</title>
 <para>
 </para>
-</sect1>
+</sect1> -->
 </chapter>
-
+<!-- 
 <chapter id="chapter11">
 <title>Finding Errors</title>
 </chapter>
@@ -1368,7 +1379,7 @@ use of the provided functionality and feel more comfortable.
 <chapter id="chapter13">
 <title>References</title>
 </chapter>
-
+-->
 <appendix id="bibliography">
 <title>Bibliography</title>
 <bibliography>
@@ -1516,8 +1527,8 @@ use of the provided functionality and feel more comfortable.
 
 </bibliography>
 
-<para>
-</para>
+&underFDL;
+
 
 </appendix>
 
