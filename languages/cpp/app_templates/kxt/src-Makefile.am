@@ -27,6 +27,7 @@ kde_kcfg_DATA = %{APPNAMELC}.kcfg
 noinst_HEADERS = %{APPNAMELC}.h %{APPNAMELC}view.h prefs.h
 
 messages: rc.cpp
+·       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
 
 KDE_ICON = %{APPNAMELC}

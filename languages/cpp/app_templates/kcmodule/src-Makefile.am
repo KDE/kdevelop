@@ -13,4 +13,5 @@ xdg_apps_DATA = %{APPNAMELC}.desktop
 
 
 messages: rc.cpp
+	$(EXTRACTRC) `find -name \*.ui -o -name \*.rc` > rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/kcm%{APPNAMELC}.pot

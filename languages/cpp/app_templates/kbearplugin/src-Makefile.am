@@ -16,6 +16,7 @@ rcdir = $(kde_datadir)/kbear%{APPNAMELC}
 rc_DATA = kbear%{APPNAMELC}.rc
 
 messages: rc.cpp
+	$(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.pp
 	$(XGETTEXT) *.cpp -o $(podir)/kbear%{APPNAMELC}.pot
 
 AM_CFLAGS =

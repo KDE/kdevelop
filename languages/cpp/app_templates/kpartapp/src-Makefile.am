@@ -8,6 +8,7 @@ noinst_HEADERS = %{APPNAMELC}.h %{APPNAMELC}_part.h
 METASOURCES = AUTO
 
 messages: rc.cpp
+·       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
 
 KDE_ICON = %{APPNAMELC}

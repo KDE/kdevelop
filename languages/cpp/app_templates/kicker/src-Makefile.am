@@ -11,4 +11,5 @@ lib%{APPNAMELC}_la_LIBADD = $(LIB_KDEUI)
 %{APPNAMELC}dir = $(kde_datadir)/kicker/applets
 
 messages: rc.cpp
+·       $(EXTRACTRC) `find . -name \*.ui -o -name \*.rc` > rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
