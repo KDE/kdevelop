@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qaccel.h>
 #include "ckdevaccel.h"
 
 CKDevAccel::CKDevAccel( QWidget * parent, const char *name )
@@ -103,7 +104,7 @@ void CKDevAccel::connectItem(const char *action,
 
 void CKDevAccel::connectItem(KAccel::StdAccel accel,
                              const QObject* receiver, const char* member,
-                             bool activate=true)
+                             bool activate)
 {
     if (stdAction(accel) && !aKeyDict[ stdAction(accel) ]){
         insertStdItem(accel);

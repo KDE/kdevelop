@@ -21,6 +21,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qintdict.h>
+#include <qmenudata.h>
 #include <kaccel.h>
 
 // general structure to the new CKDevAccel class
