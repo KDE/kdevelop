@@ -23,7 +23,7 @@ kdevelopinclude_HEADERS = kdevlanguagesupport.h kdevmainwindow.h \
 servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = kdevelopproject.desktop kdeveloplanguagesupport.desktop \
 	kdevelopplugin.desktop
-
+libkdevinterfaces_la_LIBADD = ../util/libkdevutil.la
 
 METASOURCES = AUTO
 
