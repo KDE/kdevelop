@@ -250,10 +250,10 @@ void CKDevelop::initKeyAccel(){
   
   accel->connectItem( KAccel::Save , this, SLOT(slotFileSave()) );
   
-  accel->insertItem(i18n("Save As"), "SaveAs", "");
+  accel->insertItem(i18n("Save As"), "SaveAs", Key_unknown);
   accel->connectItem( "SaveAs", this, SLOT(slotFileSaveAs()) );
   
-  accel->insertItem(i18n("Save All"), "SaveAll", "");
+  accel->insertItem(i18n("Save All"), "SaveAll", Key_unknown);
   accel->connectItem( "SaveAll", this, SLOT(slotFileSaveAll()) );
   
   accel->connectItem( KAccel::Print , this, SLOT(slotFilePrint()) );
@@ -261,7 +261,7 @@ void CKDevelop::initKeyAccel(){
 
   //edit menu  
 
-  accel->insertItem( i18n("Insert File"), "InsertFile", "");
+  accel->insertItem( i18n("Insert File"), "InsertFile", Key_unknown);
   accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()) );
 
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_SEARCH_IN_FILES );
@@ -278,10 +278,10 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Previous Error"), "PreviousError",IDK_VIEW_PREVIOUS_ERROR);
   accel->connectItem( "PreviousError", this, SLOT( slotViewPreviousError()) );
 
-  accel->insertItem(i18n("Sourcecode Editor"),"KDevKDlg","");
+  accel->insertItem(i18n("Sourcecode Editor"),"KDevKDlg",Key_unknown);
   accel->connectItem("KDevKDlg",this,SLOT(switchToKDevelop()) );
   
-  accel->insertItem( i18n("Dialog Editor"), "Dialog Editor", "");
+  accel->insertItem( i18n("Dialog Editor"), "Dialog Editor", Key_unknown);
   accel->connectItem("Dialog Editor", this, SLOT(switchToKDlgEdit()) );
   
   accel->insertItem( i18n("Toogle Tree-View"), "Tree-View",IDK_VIEW_TREEVIEW);
@@ -290,55 +290,55 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Toogle Output-View"), "Output-View",IDK_VIEW_OUTPUTVIEW);
   accel->connectItem( "Output-View", this, SLOT(slotViewTOutputView()) );
   
-  accel->insertItem( i18n("Toolbar"), "Toolbar", "");
+  accel->insertItem( i18n("Toolbar"), "Toolbar", Key_unknown);
   accel->connectItem( "Toolbar", this, SLOT(slotViewTStdToolbar()) );
   
-  accel->insertItem( i18n("Browser-Toolbar"), "Browser-Toolbar", "");
+  accel->insertItem( i18n("Browser-Toolbar"), "Browser-Toolbar", Key_unknown);
   accel->connectItem( "Browser-Toolbar", this, SLOT(slotViewTBrowserToolbar()) );
 	
-  accel->insertItem( i18n("Statusbar"), "Statusbar", "");
+  accel->insertItem( i18n("Statusbar"), "Statusbar", Key_unknown);
   accel->connectItem( "Statusbar", this, SLOT(slotViewTStatusbar()) );
   
   accel->insertItem( i18n("Preview dialog"), "Preview dialog",IDK_VIEW_PREVIEW);
   
-  accel->insertItem( i18n("Refresh"), "Refresh", "");
+  accel->insertItem( i18n("Refresh"), "Refresh", Key_unknown);
   accel->connectItem( "Refresh", this, SLOT(slotViewRefresh()) );
   
-  accel->insertItem( i18n("Graphical Classview"), "CVViewTree", "");
+  accel->insertItem( i18n("Graphical Classview"), "CVViewTree", Key_unknown);
   accel->connectItem( "CVViewTree", this, SLOT(slotClassbrowserViewTree()));
   
   // project menu
-  accel->insertItem( i18n("New Project"), "NewProject","");
+  accel->insertItem( i18n("New Project"), "NewProject",Key_unknown);
   accel->connectItem( "NewProject", this, SLOT(slotProjectNewAppl()) );
   
-  accel->insertItem( i18n("Open Project"), "OpenProject", "");
+  accel->insertItem( i18n("Open Project"), "OpenProject", Key_unknown);
   accel->connectItem( "OpenProject", this, SLOT(slotProjectOpen()) );
   
-  accel->insertItem( i18n("Close Project"), "CloseProject", "");
+  accel->insertItem( i18n("Close Project"), "CloseProject", Key_unknown);
   accel->connectItem("CloseProject", this, SLOT(slotProjectClose()) );
   
-  accel->insertItem(i18n("New Class"), "NewClass", "");
+  accel->insertItem(i18n("New Class"), "NewClass", Key_unknown);
   accel->connectItem("NewClass", this, SLOT(slotProjectNewClass()) );
   
-  accel->insertItem(i18n("Add existing File(s)"), "AddExistingFiles", "");
+  accel->insertItem(i18n("Add existing File(s)"), "AddExistingFiles", Key_unknown);
   accel->connectItem("AddExistingFiles",this, SLOT(slotProjectAddExistingFiles()) );
   
-  accel->insertItem(i18n("Add new Translation File"),"Add new Translation File", "");
+  accel->insertItem(i18n("Add new Translation File"),"Add new Translation File", Key_unknown);
   accel->connectItem("Add new Translation File", this, SLOT(slotProjectAddNewTranslationFile()) );
   
   accel->insertItem(i18n("File Properties"), "FileProperties", IDK_PROJECT_FILE_PROPERTIES);
   accel->connectItem("FileProperties", this, SLOT(slotProjectFileProperties() ) );
   
-  accel->insertItem(i18n("Make messages and merge"), "MakeMessages", "");
+  accel->insertItem(i18n("Make messages and merge"), "MakeMessages", Key_unknown);
   accel->connectItem("MakeMessages", this, SLOT(slotProjectMessages()) );
   
-  accel->insertItem(i18n("Make API-Doc"), "ProjectAPI", "");
+  accel->insertItem(i18n("Make API-Doc"), "ProjectAPI", Key_unknown);
   accel->connectItem("ProjectAPI", this, SLOT(slotProjectAPI()) );
   
-  accel->insertItem(i18n("Make User-Manual..."), "ProjectManual", "");
+  accel->insertItem(i18n("Make User-Manual..."), "ProjectManual", Key_unknown);
   accel->connectItem("ProjectManual", this, SLOT(slotProjectManual()));
   
-  accel->insertItem(i18n("Make Source-tgz"), "Source-tgz", "");
+  accel->insertItem(i18n("Make Source-tgz"), "Source-tgz", Key_unknown);
   accel->connectItem("Source-tgz", this, SLOT(slotProjectMakeDistSourceTgz()) );
  	
   accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
@@ -352,10 +352,10 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Make"), "Make", IDK_BUILD_MAKE );
   accel->connectItem( "Make", this, SLOT(slotBuildMake() ) );
   
-  accel->insertItem( i18n("Rebuild All"), "RebuildAll", "");
+  accel->insertItem( i18n("Rebuild All"), "RebuildAll", Key_unknown);
   accel->connectItem( "RebuildAll", this, SLOT(slotBuildRebuildAll()) );
   
-  accel->insertItem( i18n("Clean/Rebuild all"), "CleanRebuildAll", "");
+  accel->insertItem( i18n("Clean/Rebuild all"), "CleanRebuildAll", Key_unknown);
   accel->connectItem( "CleanRebuildAll", this, SLOT(slotBuildCleanRebuildAll()) );
   
   accel->insertItem( i18n("Stop process"), "Stop_proc", IDK_BUILD_STOP);
@@ -367,16 +367,16 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Execute with arguments"), "Run_with_args", IDK_BUILD_RUN_WITH_ARGS);
   accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ) );
   
-  accel->insertItem( i18n("Debug"), "BuildDebug", "");
+  accel->insertItem( i18n("Debug"), "BuildDebug", Key_unknown);
   accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()) );
   
-  accel->insertItem( i18n("DistClean"), "BuildDistClean", "");
+  accel->insertItem( i18n("DistClean"), "BuildDistClean", Key_unknown);
   accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()) );
   
-  accel->insertItem( i18n("Autoconf and automake"), "BuildAutoconf", "");
+  accel->insertItem( i18n("Autoconf and automake"), "BuildAutoconf", Key_unknown);
   accel->connectItem("BuildAutoconf", this,SLOT(slotBuildAutoconf()) );
   
-  accel->insertItem( i18n("Configure..."), "BuildConfigure", "");
+  accel->insertItem( i18n("Configure..."), "BuildConfigure", Key_unknown);
   accel->connectItem( "BuildConfigure", this, SLOT(slotBuildConfigure()) );
   
   
@@ -398,7 +398,7 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
   accel->connectItem( "SearchMarkedText", this, SLOT(slotHelpSearchText() ) );
 
-  accel->insertItem( i18n("Search for Help on"), "HelpSearch", "");
+  accel->insertItem( i18n("Search for Help on"), "HelpSearch", Key_unknown);
   accel->connectItem( "HelpSearch", this, SLOT(slotHelpSearch()) );
   
   // Tab-Switch

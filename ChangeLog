@@ -1,3 +1,9 @@
+1999-09-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed 'unknown' accelerators which listen for weird
+	  things like umlauts.
+	* Applied HP-UX portabiliby fix for kdlgloader.h
+	  by Andrew Morton <morton@nortelnetworks.com>
+
 1999-09-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Fixed some KMessageBoxes which have caption and text
 	  swapped compared to QMessageBox
