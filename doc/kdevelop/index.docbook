@@ -110,93 +110,93 @@ Entries which require special treatment are marked with comments starting with '
 <title>About this Manual</title>
 
 <para>
-This user manual is intended to describe the contents and use of the &kdevelop; &kdevrelease; Integrated Development Environment (IDE) from a user's point of view. It is no programming manual nor does it describe the development process in detail. It's only aim is to guide you in the handling of the IDE.
+This user manual is intended to describe the contents and use of the &kdevelop; &kdevrelease; Integrated Development Environment (IDE) from a user's point of view. It is not a programming manual, nor does it describe the development process in detail. Its only aim is to guide you in the handling of the IDE.
 </para>
 <para>
-You will here find information on the following topics:
+Here you will find information on the following topics:
 </para>
 <itemizedlist>
   <listitem><para>
-  <link linkend="nutshell">In a Nutshell&mdash;Tips and Tricks</link>&mdash;a quick reference of the most used commands and actions.
+  <link linkend="nutshell">In a Nutshell &mdash; Tips and Tricks</link> &mdash; a quick reference of the most used commands and actions.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="unixdev">Development on UNIX</link>&mdash;a historical survey of UNIX program development, the main tools necessary and why you need an IDE.
+  <link linkend="unixdev">Development on &UNIX;</link> &mdash; a historical overview of &UNIX; program development, the main tools necessary and why you need an IDE.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="kdevelop-install">Installing &kdevelop;</link>&mdash;tells you where to obtain &kdevelop; and how to get it up and running.
+  <link linkend="kdevelop-install">Installing &kdevelop;</link> &mdash; tells you where to obtain &kdevelop; and how to get it up and running.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="kdevelop-survey">Survey of the Features of &kdevelop;</link>&mdash;is some kind of a warm-up, giving a short overall view of what is built-in into &kdevelop; and makes you acquainted with the look and feel of this IDE.
+  <link linkend="kdevelop-survey">Overview of the Features of &kdevelop;</link> &mdash; is a kind of a warm-up, giving a short overall view of what is built-in within &kdevelop; and gets you acquainted with the look and feel of this IDE.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="app-menus">Menus and Toolbars Survey</link>&mdash;(in the appendix) provides you with a short overall view of the menu and toolbar selections available.
+  <link linkend="app-menus">Menus and Toolbars Overview</link> &mdash; (in the appendix) provides you with a short overall view of the menu and toolbar selections available.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="app-shortcuts">Shortcut Keys</link>&mdash;(in the appendix) lists the key sequences you may use to quickly access some specific &kdevelop; operation.
+  <link linkend="app-shortcuts">Shortcut Keys</link> &mdash; (in the appendix) lists the key sequences you may use to quickly access specific &kdevelop; operations.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="setup">Configuring &kdevelop;</link>&mdash;shows how you can taylor the IDE to suit your needs.
+  <link linkend="setup">Configuring &kdevelop;</link> &mdash; shows how you can tailor the IDE to suit your needs.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="applicationwizard">Getting started: the &appwizard;</link>&mdash;describes the basics on how to set up a new project in &kdevelop; using the built-in &appwizard;.
+  <link linkend="applicationwizard">Getting started: the &appwizard;</link> &mdash; describes the basics of how to set up a new project in &kdevelop; using the built-in &appwizard;.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="projects-advanced">Advanced Project Management</link>&mdash;shows how to load existing projects, convert projects from older &kdevelop; versions, and import other existing projects. Furthermore the configuration of a project's options to suit your needs is discussed.
+  <link linkend="projects-advanced">Advanced Project Management</link> &mdash; shows how to load existing projects, convert projects from older &kdevelop; versions, and import other existing projects. Furthermore the configuration of a project's options to suit your needs is covered.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="editing">Editing tools</link>&mdash;all you need to write your source files: using the editor, searching for text both locally and project-wide, up to integrating new files and classes into the project.
+  <link linkend="editing">Editing tools</link> &mdash; all you need to write your source files: using the editor, searching for text both locally and project-wide, up to integrating new files and classes into the project.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="file-browsers">The File Browsers</link>&mdash;demonstrates various tools to look at the structure of your project and how to access the files you want to work with.
+  <link linkend="file-browsers">The File Browsers</link> &mdash; demonstrates various tools to look at the structure of your project and how to access the files you want to work with.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="class-browsers">The Class Browsers</link>&mdash;describes one of the most powerful tools of &kdevelop; which lets you navigate through class dependencies and allows to easily create and access the classes and methods you need.
+  <link linkend="class-browsers">The Class Browsers</link> &mdash; describes one of the most powerful tools of &kdevelop; which lets you navigate through class dependencies and allows you to easily create and access the classes and methods you need.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="documentation">Documentation</link>&mdash;shows how to access the rich built-in documentation &kdevelop; provides and tells you how to create documentation of your project, concise and powerful API documentation providing you an overall view of all your project sources as well as docbook-based user documentation.
+  <link linkend="documentation">Documentation</link> &mdash; shows how to access the rich built-in documentation &kdevelop; provides and tells you how to create documentation of your project, concise and powerful API documentation providing you an overall view of all your project sources as well as docbook-based user documentation.
   </para></listitem>
   <listitem><para>
-  <link linkend="project-management">Building and Project Management</link>&mdash;deals with the creating and management of your project, describing the basics of autoconf and automake as well as how to set up custom make files and how to use compiler or make options to taylor your application to suit your needs.
-  </para></listitem>
-
-  <listitem><para>
-  <link linkend="adv-build-management">Advanced Build Management</link>&mdash;looks at ways to keep multiple build configurations, to cross-compile for diverse platforms, or to make an embedded system using the <application>Qt/embedded</application> library.
+  <link linkend="project-management">Building and Project Management</link> &mdash; deals with the creation and management of your project; describing the basics of autoconf and automake as well as how to set up custom make files and how to use compiler or make options to tailor your application to suit your needs.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="debugger">The Debugger Interface</link>&mdash;describes how to use the integrated <application>gdb</application> debugger interface so you can hunt down bugs without leaving &kdevelop;.
+  <link linkend="adv-build-management">Advanced Build Management</link> &mdash; looks at ways to keep multiple build configurations, to cross-compile for diverse platforms, or to make an embedded system using the <application>Qt/embedded</application> library.
+  </para></listitem>
+
+  <listitem><para>
+  <link linkend="debugger">The Debugger Interface</link> &mdash; describes how to use the integrated <application>gdb</application> debugger interface so you can hunt down bugs without leaving &kdevelop;.
   </para></listitem>
 
 <!-- ### Currently disabled. Probably too specialized programming stuff. Check later again.
   <listitem><para>
-  <link linkend="python">Python</link>&mdash;a survey of how to create Python-based applications in &kdevelop;.
+  <link linkend="python">Python</link> &mdash; an overview of how to create Python-based applications in &kdevelop;.
   </para></listitem>
   <listitem><para>
-  <link linkend="php">PHP</link>&mdash; a survey of how to create PHP-based HTML applications in &kdevelop;.
+  <link linkend="php">PHP</link> &mdash;  an overview of how to create PHP-based HTML applications in &kdevelop;.
   </para></listitem>//-->
 
   <listitem><para>
-  <link linkend="cvs">Using CVS</link>&mdash;tells you how you can maintain your project using the CVS versioning system, a must especially if many developers work at the same project.
+  <link linkend="cvs">Using CVS</link> &mdash; tells you how you can maintain your project using the CVS versioning system; a must, especially if many developers work on the same project.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="external-progs">Leveraging External Programs</link>&mdash;shows how to access external programs and tools from within &kdevelop; thus greatly extending its capabilities.
+  <link linkend="external-progs">Leveraging External Programs</link> &mdash; shows how to access external programs and tools from within &kdevelop; thus greatly extending its capabilities.
   </para></listitem>
 
   <listitem><para>
-  <link linkend="plugin-tools">Plugin tools</link>&mdash;provides you a survey of the parts which make up &kdevelop; and how you can taylor it to suit your needs by loading the necessary parts only, both IDE and project-wide.
+  <link linkend="plugin-tools">Plugin tools</link> &mdash; provides you with an overview of the parts which make up &kdevelop; and how you can tailor it to suit your needs by only loading the parts that are necessary, both IDE and project-wide.
   </para></listitem>
 </itemizedlist>
 </chapter>
@@ -204,14 +204,14 @@ You will here find information on the following topics:
 <!-- ====================================================================== -->
 
 <chapter id="nutshell">
-<title>In a Nutshell&mdash;Tips and Tricks</title>
+<title>In a Nutshell &mdash; Tips and Tricks</title>
 
 <!-- Traditionally, most of this stuff will have been put into a FAQ section. It is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for.
 This chapter is meant to provide short hints and tips together with (mandatory) navigation links.
 There should be an additional FAQ section near the end nevertheless which contains more general stuff not directly related to navigating the manual. -->
 
 <para>
-The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. If you want more information on a topic just follow the link in the title starting that advice.
+The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. If you want more information on a topic, just follow the link in the title starting that advice.
 </para>
 
 <itemizedlist>
@@ -222,7 +222,7 @@ The information in this chapter is meant as a quick reference for a head start o
     <formalpara id="nutshell-IDEAl-tabs">
     <title>Force Smaller Tool View Tabs in IDEAl Mode</title>
     <para>
-      In more recent versions (most notably from CVS HEAD) &kdevelop; will start with large text-based tool tip tabs around the work area. You may change this look if you place a <computeroutput>MDIStyle</computeroutput> entry under the <computeroutput>[UI]</computeroutput> tag in your <filename>&amp;KDEHOME/share/config/kdeveloprc</filename> configuration file as follows:
+      In more recent versions (most notably from CVS HEAD) &kdevelop; will start with large text-based tool tip tabs around the work area. You may change this look if you place a <computeroutput>MDIStyle</computeroutput> entry under the <computeroutput>[UI]</computeroutput> tag in your <filename>$KDEHOME/share/config/kdeveloprc</filename> configuration file as follows:
     </para>
     </formalpara>
     <simplelist>
@@ -244,7 +244,7 @@ The information in this chapter is meant as a quick reference for a head start o
     </formalpara>
     <itemizedlist>
       <listitem><para>
-      In your  <filename>&amp;KDEHOME/share/config/kdeveloprc</filename> configuration file find the line containing <quote><computeroutput>Style=Checked</computeroutput></quote> and remove it. Then restart &kdevelop;.
+      In your  <filename>$KDEHOME/share/config/kdeveloprc</filename> configuration file find the line containing <quote><computeroutput>Style=Checked</computeroutput></quote> and remove it. Then restart &kdevelop;.
       </para></listitem>
     </itemizedlist>
     <para>
@@ -309,7 +309,7 @@ The information in this chapter is meant as a quick reference for a head start o
     <formalpara id="nutshell-compilemsg-detail">
     <title><link linkend="setup-main-compile">Missing detail in compilation messages</link></title>
     <para>
-    If during compilations you miss some valuable information in the <guilabel>Messages Output View</guilabel> window, you may have selected a too low level of messages detail. Right click in the window and select another detail level from the menu which will pop up.
+    If during compilations you notice some valuable information is missing in the <guilabel>Messages Output View</guilabel> window, it may be that the level of message detail is set too low. Right-click in the window and select another detail level from the context menu.<!-- they are programmers, so they should know what a context menu is -->
     </para>
     </formalpara>
   </listitem>
@@ -322,7 +322,7 @@ The information in this chapter is meant as a quick reference for a head start o
       <formalpara id="nutshell-new-project-file">
       <title>Create New Files in a Project</title>
       <para>
-      Select the subproject in the upper half of the &automanag;, then right click in the lower half on the groups title you want to have the files added and select <guimenuitem>Create New File...</guimenuitem>.
+      Select the sub-project in the upper half of the &automanag;, then right-click in the lower half on the groups title you want to have the files added and select <guimenuitem>Create New File...</guimenuitem>.
       </para>
       </formalpara>
     </listitem>
@@ -332,7 +332,7 @@ The information in this chapter is meant as a quick reference for a head start o
       <title>Add Existing Files to a Project</title>
 
       <para>
-      Select the subproject in the upper half of the &automanag;, then right click in the lower half on the groups title you want to have the files added and select <guimenuitem>Add Existing Files...</guimenuitem>.
+      Select the sub-project in the upper half of the &automanag;, then right click in the lower half on the groups title you want to have the files added and select <guimenuitem>Add Existing Files...</guimenuitem>.
       </para>
       </formalpara>
     </listitem>
@@ -342,7 +342,7 @@ The information in this chapter is meant as a quick reference for a head start o
       <title>Remove a File from a Project</title>
 
       <para>
-      Select the subproject in the upper half of the &automanag;, then in the lower half open the groups list you want to have the file removed from, right click on the file in this list and select <guimenuitem>Remove</guimenuitem>.
+      Select the sub-project in the upper half of the &automanag;, then in the lower half open the groups list you want to have the file removed from, right click on the file in this list and select <guimenuitem>Remove</guimenuitem>.
       </para>
       </formalpara>
     </listitem>
@@ -366,11 +366,11 @@ The information in this chapter is meant as a quick reference for a head start o
 
 <!-- ====================================================================== -->
 
-&unixdev;            <!-- "Development on UNIX"                             -->
-&kdevelop-survey;    <!-- "Survey of &kdevelop; Features"                   -->
+&unixdev;            <!-- "Development on &UNIX;"                           -->
+&kdevelop-survey;    <!-- "Overview of &kdevelop; Features"                 -->
 &kdevelop-install;   <!-- "Installing &kdevelop";                           -->
 &setup;              <!-- "Configuring &kdevelop;"                          -->
-&applicationwizard;  <!-- "Getting Started&mdash;the &appwizard;"           -->
+&applicationwizard;  <!-- "Getting Started &mdash; the &appwizard;"         -->
 
 <!-- ====================================================================== -->
 
@@ -427,7 +427,7 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="project-options">
-<title>Tayloring the Project&mdash;Project Options</title>
+<title>Tailoring the Project &mdash; Project Options</title>
 
 <para>
 (... to be written ...)
@@ -446,7 +446,7 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 <title>Code Snippets</title>
 
 <itemizedlist>
-  <title>Features (preliminary survey)</title>
+  <title>Features (preliminary overview)</title>
   <listitem><para>
   SnippetPart adds a tool-view which by default docs to the right
   </para></listitem>
@@ -1433,7 +1433,7 @@ breakpoints.
 
 <para>
 &CVS; is the revision control system which many open source projects -
-including &kde;&mdash;are using. It stores all sources codes in a central place,
+including &kde; &mdash; are using. It stores all sources codes in a central place,
 called the <emphasis>repository</emphasis>.  From the repository, developers
 can check out a current version of the project or snapshots of it at arbitrary
 points of time. In contrast to some other revision control systems, it is not
@@ -1576,7 +1576,7 @@ SourceForge documentation.
 Although &kdevelop; is a so-called <quote>Integrated</quote> development environment, it
 will never contain all features that you may want to use, and the
 capabilities of its editor will never suffice to perform often-used text
-processing tasks. As a genuine UNIX program, &kdevelop; contains several
+processing tasks. As a genuine &UNIX; program, &kdevelop; contains several
 possibilities to start external programs, plugin external programs to work
 on files, or use external filters to process the content of the editor.
 </para>
@@ -1623,7 +1623,7 @@ Other tools will be discussed in the chapter <xref linkend="plugin-tools"/>.
 <!-- ====================================================================== -->
 
 <appendix id="app-menus">
-<title>Menus and Toolbars Survey</title>
+<title>Menus and Toolbars Overview</title>
 
 <para>
 (... to be written ...)
@@ -1853,14 +1853,14 @@ the content of the matched subgroups will be shown in a list box.
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="parts-survey">
-<title>Survey</title>
+<title>Overview</title>
 
 <para>
 &kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
 </para>
 
 <para>
-Some of the parts are considered <link linkend="table-global-parts">global</link>&mdash;that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
+Some of the parts are considered <link linkend="table-global-parts">global</link> &mdash; that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
 </para>
 
 <para>
@@ -1972,7 +1972,7 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 <title>IDEAl Mode</title>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 <screenshot>
@@ -1986,7 +1986,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 </screenshot>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 <screenshot>
@@ -2007,7 +2007,7 @@ You will most probably need some time to get accustomed to the icons in the tab 
 </para>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 </sect1> <!-- ideal-desc -->
@@ -2018,7 +2018,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 <title>Child Frame Windows Mode</title>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 <screenshot>
@@ -2032,7 +2032,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 </screenshot>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 </sect1> <!-- mdi-desc -->
@@ -2043,7 +2043,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 <title>Tabbed Pages Mode</title>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 <screenshot>
@@ -2057,7 +2057,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 </screenshot>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 </sect1> <!-- tabbed-desc -->
@@ -2068,7 +2068,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 <title>Toplevel Windows Mode</title>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 <screenshot>
@@ -2082,7 +2082,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 </screenshot>
 
 <para>
-Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
+Click <link linkend="uimodes-survey">here</link> to return to the modes overview.
 </para>
 
 </sect1> <!-- toplevel-desc -->
@@ -2123,7 +2123,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 <para>
 <itemizedlist>
 <listitem><para>
-2003-01-03&mdash;Started this Changelog
+2003-01-03 &mdash; Started this Changelog
 </para></listitem>
 </itemizedlist>
 </para>
@@ -2199,7 +2199,7 @@ Click <link linkend="uimodes-survey">here</link> to return to the modes survey.
 
 
 <biblioentry>
-<title>Advanced Programming in the UNIX(R) Environment</title>
+<title>Advanced Programming in the &UNIX; Environment</title>
 <edition>1st edition</edition>
 <pubdate>June 1992</pubdate>
 <author><firstname>W. Richard</firstname><surname>Stevens</surname></author>

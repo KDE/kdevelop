@@ -795,7 +795,7 @@ Then it is adviceable that you <emphasis>compile the initial project</emphasis> 
   <tertiary>build</tertiary></indexterm>
 
 <para>
-It is always advisable to look at the messages output and try to understand what had happened. At least in principle you should know what was be done when the &appwizard; initiated your new project. We cannot go into the details but will have a survey of those messages to get an idea of what was going on behind the scenes.
+It is always advisable to look at the messages output and try to understand what had happened. At least in principle you should know what was be done when the &appwizard; initiated your new project. We cannot go into the details but will have an overview of those messages to get an idea of what was going on behind the scenes.
 </para>
 
 <tip>

@@ -10,7 +10,7 @@
 <title>Configuring &kdevelop;</title>
 
 <para>
-&kdevelop; is a very powerful and flexible IDE which offers many ways to taylor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you did select.
+&kdevelop; is a very powerful and flexible IDE which offers many ways to tailor it to your needs. To start configuration select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure KDevelop...</guimenuitem></menuchoice>. This will cause the configuration dialog to pop up consisting of a selection window to the left and the configuration dialog on the right hand side whose contents will vary upon the configuration item you did select.
 </para>
 
 <screenshot>
@@ -48,7 +48,7 @@ If you want directly look up a certain configuration item use one of the followi
 <title>General Configuration</title>
 
 <para>
-General configuration concerns the more common tasks of tayloring &kdevelop; as there are:
+General configuration concerns the more common tasks of tailoring &kdevelop; as there are:
 </para>
 <itemizedlist>
   <listitem><para>
@@ -367,7 +367,7 @@ Any style changes apply to newly entered text only. If you want to change the fo
 </para></tip>
 
 <note><para>
-The exact outcome of these style formatting definitions depends on the <link linkend="setup-editor">editor</link> you use. Currently, most settings are taylored to the Kate editor part (the <quote>Embedded Advanced Text Editor</quote>). Some other editors (&eg; the Qt editor) may rely on their own configuration settings. You will have to experiment in this case to find out the exact effects of the style settings provided here.
+The exact outcome of these style formatting definitions depends on the <link linkend="setup-editor">editor</link> you use. Currently, most settings are tailored to the Kate editor part (the <quote>Embedded Advanced Text Editor</quote>). Some other editors (&eg; the Qt editor) may rely on their own configuration settings. You will have to experiment in this case to find out the exact effects of the style settings provided here.
 </para></note>
 
 <warning><para>
@@ -397,7 +397,7 @@ A formatted source example will be displayed in the field to the right. If none 
 </para>
 
 <note><para>
-Currently only the predefined source formatting styles will be demonstrated by an example text. If you decide to define your own style, no example display will be available. You have to experiment on an actual source text to taylor the settings to your liking.
+Currently only the predefined source formatting styles will be demonstrated by an example text. If you decide to define your own style, no example display will be available. You have to experiment on an actual source text to tailor the settings to your liking.
 </para></note>
 
 </sect3> <!-- setup-format-general -->
@@ -476,7 +476,7 @@ This defines which of the (C/C++) entities will be formatted with an extra inden
 </para>
 </formalpara>
 <para>
-By default only <guilabel>namespaces</guilabel> and <guilabel>labels</guilabel> will be extra indented. You may want to experiment with various settings to taylor those extra indents to your liking.
+By default only <guilabel>namespaces</guilabel> and <guilabel>labels</guilabel> will be extra indented. You may want to experiment with various settings to tailor those extra indents to your liking.
 </para>
 
 <formalpara>
@@ -847,7 +847,7 @@ You can configure the <guilabel>File Selector</guilabel> to immediately reflect 
 </variablelist>
 
 <para>
-You may freely combine these settings to taylor the actualization behaviour of the <guilabel>File Selector</guilabel> to your liking.
+You may freely combine these settings to tailor the actualization behaviour of the <guilabel>File Selector</guilabel> to your liking.
 </para>
 
 <formalpara>

@@ -31,7 +31,7 @@ You will find here information on:
 <title>Summary of &automanag;</title>
 
 <para>
-In the <link linkend="unixdev-buildsystems">Build systems</link> chapter we have given a rough survey of the build systems commonly in use on UNIX systems. In the following sections we will look at this in more detail.
+In the <link linkend="unixdev-buildsystems">Build systems</link> chapter we have given a rough overview of the build systems commonly in use on &UNIX; systems. In the following sections we will look at this in more detail.
 </para>
 <para>
 There is some confusion about how to name such things. &GNU; calls them <quote>build systems</quote> when it describes Automake, Autoconf and Libtool. QMake calls itself <quote>a tool to write Makefiles for different compilers and platforms</quote>. In KDE often the term <quote>project management systems</quote> is used. We will use this term in a broader sense to describe the built-in environments in &kdevelop; which are used to organize and build your projects. In the context of this section, however, we will mostly talk about <quote>automated build systems</quote>.
