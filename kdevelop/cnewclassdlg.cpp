@@ -249,10 +249,17 @@ void CNewClassDlg::ok(){
 //   }
 
  
-  QString classname = classname_edit->text();
-  QString headername = header_edit->text();
+  QString headername = prj_info->getProjectDir() + prj_info->getSubDir() + header_edit->text();
+  QString implname = prj_info->getProjectDir() + prj_info->getSubDir() + impl_edit->text();
+
+  if (QFileInfo(headername).exists() || QFileInfo(implname).exists()) {
+      KMsgBox::message(this, i18n("Error..."),i18n("Sorry, but KDevelop is not able to add classes "
+                                                   "to existing header or implementation files."),
+                       KMsgBox::EXCLAMATION);
+      return;
+  }
   QString headerfile = header_edit->text();
-  QString implname = impl_edit->text();
+  QString classname = classname_edit->text();
   QString basename = baseclass_edit->text();
   if(basename.isEmpty() && qwidget_check->isChecked()){
     basename = "QWidget";
@@ -262,16 +269,13 @@ void CNewClassDlg::ok(){
 
   CGenerateNewFile generator;
   // generate the sourcecode
+
   
   if(template_check->isChecked()){
-    headername = prj_info->getProjectDir() + prj_info->getSubDir() + headername;
-    implname = prj_info->getProjectDir() + prj_info->getSubDir() + implname;
     headername = generator.genHeaderFile(headername,prj_info);
     implname = generator.genCPPFile(implname,prj_info);
   }
   else{
-    headername = prj_info->getProjectDir() + prj_info->getSubDir() + headername;
-    implname = prj_info->getProjectDir() + prj_info->getSubDir() + implname;
     QFile file(headername);
     file.open(IO_ReadWrite);
     file.close();
