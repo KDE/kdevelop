@@ -305,7 +305,12 @@ void CKDevelop::setToolMenuProcess(bool enable){
     enableCommand(ID_BUILD_DISTCLEAN);
     enableCommand(ID_BUILD_AUTOCONF);
     enableCommand(ID_BUILD_CONFIGURE);
-    enableCommand(ID_BUILD_MESSAGES);
+    if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
+      disableCommand(ID_BUILD_MESSAGES);
+    }
+    else{
+      enableCommand(ID_BUILD_MESSAGES);
+    }
     disableCommand(ID_BUILD_STOP);
     enableCommand(ID_BUILD_MAKE_PROJECT_API);
     enableCommand(ID_BUILD_MAKE_USER_MANUAL);

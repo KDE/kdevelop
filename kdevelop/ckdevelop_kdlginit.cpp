@@ -148,6 +148,8 @@ void CKDevelop::initKDlgMenuBar(){
   //  kdlg_project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
 
+  kdlg_project_menu->insertItem(i18n("Add new &Translation File..."), this,
+			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
   kdlg_project_menu->insertSeparator();		
   kdlg_project_menu->insertItem(i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
@@ -284,6 +286,7 @@ void CKDevelop::initKDlgMenuBar(){
   disableCommand(ID_PROJECT_ADD_FILE);
   //  disableCommand(ID_PROJECT_REMOVE_FILE);
   disableCommand(ID_PROJECT_NEW_CLASS);
+  disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
   disableCommand(ID_PROJECT_FILE_PROPERTIES);
   disableCommand(ID_PROJECT_OPTIONS);
   disableCommand(ID_PROJECT_WORKSPACES);

@@ -907,7 +907,7 @@ void CKAppWizard::slotProcessExited() {
   if (!(ta->isChecked() || qta->isChecked())) {
     makeAmInfo.rel_name = "po/Makefile.am";
     KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
-    makeAmInfo.type = "normal";
+    makeAmInfo.type = "po";
     KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
     sub_dir_list.clear();
     makeAmInfo.sub_dirs = sub_dir_list;

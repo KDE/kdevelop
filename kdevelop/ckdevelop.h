@@ -230,6 +230,8 @@ public:
   void slotProjectAddExistingFiles();
   /** helper methods for slotProjectAddExistingFiles() */
   void slotAddExistingFiles();
+  /** add a new po file to the project*/
+  void slotProjectAddNewTranslationFile();
   /** remove a project file */
   void slotProjectRemoveFile();
   /** opens the New class dialog */

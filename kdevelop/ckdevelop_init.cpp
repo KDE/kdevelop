@@ -550,6 +550,10 @@ void CKDevelop::initMenu(){
   project_menu->insertItem(i18n("&New Class..."), this,
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add File(s) to Project"),p2,ID_PROJECT_ADD_FILE);
+  
+  project_menu->insertItem(i18n("Add new &Translation File..."), this,
+			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
   
@@ -978,7 +982,7 @@ void CKDevelop::initProject(){
 
 
 void CKDevelop::setKeyAccel(){
-if(bKDevelop){
+  if(bKDevelop){
     accel->disconnectItem(accel->stdAction( KAccel::Open ), kdlgedit, SLOT(slotFileOpen()) );
     accel->disconnectItem(accel->stdAction( KAccel::Close ) , kdlgedit, SLOT(slotFileClose()) );
     accel->disconnectItem(accel->stdAction( KAccel::Save ) , kdlgedit, SLOT(slotFileSave()) );

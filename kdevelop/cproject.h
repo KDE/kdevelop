@@ -78,7 +78,7 @@ struct TWorkspace {
   *
   ** format of the Makefile.am groups:**
   * [xxx/Makefile.am]
-  * type: at the moment "normal" or "prog_main"
+  * type: at the moment "normal","prog_main" or "po"
   * files: all files in the current dir
   * sub_dirs: the subdirs
   *
@@ -87,7 +87,7 @@ struct TWorkspace {
   * install_location: install location for "make install"
   * dist: include the file into the distribution at "make dist"
   * install: install it at "make install" ?
-  * type: at the moment "DATA","HEADER","SCRIPT","SOURCE"
+  * type: at the moment "DATA","HEADER","SCRIPT","SOURCE" "PO"
   *
   *@author Sandy Meier
   */
@@ -178,8 +178,10 @@ public: // Public queries
   /**the new projectmanagment*/
   void getAllFiles(QStrList& list);
 
-  /** Get all sources in the project. */
+  /** Get all sources for this makefile */
   void getSources(QString rel_name_makefileam,QStrList& sources);
+  /** Get all po files for this makefile */
+  void getPOFiles(QString rel_name_makefileam,QStrList& po_files);
 
   /** check if a subdir is in the project (registered)*/
   bool isDirInProject(QString rel_name);

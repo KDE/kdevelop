@@ -29,6 +29,7 @@
 #include "cnewfiledlg.h"
 #include "cnewclassdlg.h"
 #include "cnewprojectdlg.h"
+#include "caddnewtranslationdlg.h"
 
 void CKDevelop::slotProjectNew(){
   QString old_project="";
@@ -535,6 +536,15 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_PROJECT_ADD_FILE);
   enableCommand(ID_PROJECT_ADD_FILE_NEW);
   enableCommand(ID_PROJECT_ADD_FILE_EXIST);
+
+  if (prj->getProjectType() != "normal_kde" && prj->getProjectType() != "mini_kde"){
+    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+  }
+  else{
+    enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+  }
+  
+
   enableCommand(ID_PROJECT_REMOVE_FILE);
   enableCommand(ID_PROJECT_NEW_CLASS);
   enableCommand(ID_PROJECT_FILE_PROPERTIES);
@@ -721,7 +731,13 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
   prj->writeWorkspace(current);
 }
 
-
+void CKDevelop::slotProjectAddNewTranslationFile(){
+  CAddNewTranslationDlg dlg(this,0,prj);
+  if (dlg.exec()){
+    
+  }
+  
+}
 
 
 

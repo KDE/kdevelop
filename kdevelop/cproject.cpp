@@ -501,6 +501,8 @@ void CProject::updateMakefileAm(QString makefile){
   
   QString sources;
   QStrList source_files;
+  QStrList po_files;
+  QString pos;
   config->setGroup(makefile);
   config->readListEntry("files",files);
   config->readListEntry("sub_dirs",subdirs);
@@ -516,6 +518,7 @@ void CProject::updateMakefileAm(QString makefile){
       if(str == "####### kdevelop will overwrite this part!!! (begin)##########"){
  	stream << str << "\n";
 	
+	//***************************generate needed things for the main makefile*********
 	if (config->readEntry("type") == "prog_main"){ // the main makefile
 	  getSources(makefile,source_files);
 	  for(str= source_files.first();str !=0;str = source_files.next()){
@@ -558,6 +561,15 @@ void CProject::updateMakefileAm(QString makefile){
 	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
 	}
 
+	//***************************generate needed things for a po makefile*********
+	if (config->readEntry("type") == "po"){ // a po makefile
+	  getPOFiles(makefile,po_files);
+	  for(str= po_files.first();str !=0;str = po_files.next()){
+	    pos =  str + " " + pos ;
+	  }
+	  
+	  stream <<  "POFILES = " << pos << "\n";
+	} 
 	//************SUBDIRS***************
 	if(!subdirs.isEmpty()){ // the SUBDIRS key
 	  stream << "\nSUBDIRS = ";
@@ -668,6 +680,23 @@ void CProject::getSources(QString rel_name_makefileam,QStrList& sources){
       info = getFileInfo(file);
       if(info.type == "SOURCE"){
 	sources.append(getName(file));
+      }
+    }
+  }
+}
+void CProject::getPOFiles(QString rel_name_makefileam,QStrList& po_files){
+  po_files.clear();
+  QStrList files;
+  QString file;
+  TFileInfo info;
+  config->setGroup(rel_name_makefileam);
+  config->readListEntry("files",files);
+  
+  for(file = files.first();file != 0;file = files.next()){
+    if(file.right(3) == ".po"){   
+      info = getFileInfo(file);
+      if(info.type == "PO"){
+	po_files.append(getName(file));
       }
     }
   }

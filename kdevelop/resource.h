@@ -2,8 +2,7 @@
                           resource.h  - 
                              -------------------                                         
 
-    begin                : Mon Oct  5 1998
-                                           
+    begin                : Mon Oct  5 1998                                           
     copyright            : (C) 1998 by Sandy Meier                     
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
@@ -98,6 +97,7 @@
 #define ID_PROJECT_ADD_FILE         13060
 #define ID_PROJECT_ADD_FILE_NEW     13070
 #define ID_PROJECT_ADD_FILE_EXIST   13080
+#define ID_PROJECT_ADD_NEW_TRANSLATION_FILE 13085
 #define ID_PROJECT_REMOVE_FILE      13090
 #define ID_PROJECT_COMPILE_FILE     13100
 
