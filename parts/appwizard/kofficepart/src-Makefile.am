@@ -2,8 +2,8 @@
 INCLUDES  = $(KOFFICE_INCLUDES) -I$(interfacedir) $(all_includes)
 
 ## The part
-kde_module_LTLIBRARIES = lib$APPNAMELC$.la
-lib$APPNAME$_la_SOURCES = $APPNAMELC$_part.cc \
+kde_module_LTLIBRARIES = lib$APPNAMELC$part.la
+lib$APPNAME$part_la_SOURCES = $APPNAMELC$_part.cc \
 	$APPNAMELC$_view.cc $APPNAMELC$_factory.cc
 lib$APPNAMELC$part_la_LDFLAGS = $(KDE_PLUGIN)
 lib$APPNAMELC$part_la_LIBADD = -lkofficeui
