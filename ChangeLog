@@ -1,3 +1,8 @@
+1999-11-18  Falk Brettschneider <gigafalk@yahoo.com>
+        * Improved "Window" menu
+        * MDI system uses KDE-look theme now
+        * Interface changes in MDI system 
+
 1999-11-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Framework for a modularized customization dialog
 
