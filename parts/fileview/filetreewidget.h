@@ -28,6 +28,8 @@ public:
     ~FileTreeWidget();
     void openDirectory(const QString &dirName);
     bool shouldBeShown( KFileTreeViewItem* item );
+    QString projectDirectory();
+    QStringList projectFiles();
     
 public slots:
     void hideOrShow();
@@ -42,7 +44,6 @@ private:
     
     FileViewPart *m_part;
     QStringList m_hidePatterns;
-    QStringList m_projectFiles;
     bool m_showNonProjectFiles;
 };
 

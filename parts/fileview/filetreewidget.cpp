@@ -57,6 +57,7 @@ private:
 void MyFileTreeViewItem::hideOrShow()
 {
     setVisible( listView()->shouldBeShown( this ) );
+    repaint();
 
     MyFileTreeViewItem* item = static_cast<MyFileTreeViewItem*>(firstChild());
     while( item ) {
@@ -68,8 +69,9 @@ void MyFileTreeViewItem::hideOrShow()
 void MyFileTreeViewItem::paintCell(QPainter *p, const QColorGroup &cg,
                              int column, int width, int alignment)
 {
-    if ( listView()->m_showNonProjectFiles &&
-         listView()->m_projectFiles.contains( path() ) ) {
+    QString prunedPath = path().replace( QRegExp( listView()->projectDirectory() + "/" ), "" );
+    if ( listView()->m_showNonProjectFiles && listView()->projectFiles().contains( prunedPath ) )
+    {
         QFont font(p->font());
         font.setBold(true);
         p->setFont(font);
@@ -156,15 +158,6 @@ FileTreeWidget::~FileTreeWidget()
 
 void FileTreeWidget::openDirectory( const QString& dirName )
 {
-	QStringList::iterator it;
-
-	QStringList fileList = m_part->project()->allFiles();
-
-	for ( it = fileList.begin(); it != fileList.end(); ++it )
-	{
-    	m_projectFiles.append ( m_part->project()->projectDirectory() + "/" + ( *it ) );
-	}
-
     KURL url;
     url.setPath( dirName );
     const QPixmap& pix = KMimeType::mimeType("inode/directory")->pixmap( KIcon::Small );
@@ -173,7 +166,8 @@ void FileTreeWidget::openDirectory( const QString& dirName )
 
 bool FileTreeWidget::shouldBeShown( KFileTreeViewItem* item )
 {
-    return( (m_showNonProjectFiles || item->isDir() || m_projectFiles.contains( item->path() ))
+    QString prunedItemPath = item->path().replace( QRegExp( projectDirectory() + "/" ), "" );
+    return( (m_showNonProjectFiles || item->isDir() || projectFiles().contains( prunedItemPath ))
              && !matchesHidePattern( item->text(0) ) );
 }
 
@@ -238,6 +232,16 @@ void FileTreeWidget::slotToggleShowNonProjectFiles()
 {
     m_showNonProjectFiles = !m_showNonProjectFiles;
     hideOrShow();
+}
+
+QString FileTreeWidget::projectDirectory()
+{
+    return m_part->project()->projectDirectory();
+}
+
+QStringList FileTreeWidget::projectFiles()
+{
+    return m_part->project()->allFiles();
 }
 
 #include "filetreewidget.moc"
