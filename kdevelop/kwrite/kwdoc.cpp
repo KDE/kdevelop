@@ -10,6 +10,7 @@
 #include <qkeycode.h>
 #include <qevent.h>
 
+#include <kiconloader.h>
 #include <kcharsets.h>
 #include <klocale.h>
 
@@ -3305,7 +3306,7 @@ void KWriteDoc::updateBMPopup(QPopupMenu* popup)
 			i18n("Line").data(), 
 			line + 1);
 	  }
-          popup->insertItem(buf,z);
+          popup->insertItem(SmallIconSet("filenew"),buf,z);
         }
     }
 }
