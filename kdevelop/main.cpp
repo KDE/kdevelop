@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
   KWrite::addFindCommands(cmdMngr);
   KWrite::addStateCommands(cmdMngr);
   cmdMngr.makeDefault();
-  cmdMngr.readConfig(a.getConfig());
+  cmdMngr.readConfig(a.config());
 
   // Resource types
   KGlobal::dirs()->addResourceType("kdev_template", KStandardDirs::kde_default("data")
@@ -53,9 +53,9 @@ int main(int argc, char* argv[]) {
                                    + kapp->name() + "/pics/");
   
 
-  a.getConfig()->setGroup("General Options");
-  bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
-  bool bInstall=a.getConfig()->readBoolEntry("Install",true);
+  a.config()->setGroup("General Options");
+  bool bStartLogo= a.config()->readBoolEntry("Logo",true);
+  bool bInstall=a.config()->readBoolEntry("Install",true);
   if (argc > 1 ){
     if( QString(argv[1]) == "--setup") bInstall = true; // start the setupwizard
   }
@@ -81,10 +81,10 @@ int main(int argc, char* argv[]) {
     }
     kdevelop->show();
     
-    a.getConfig()->setGroup("General Options");
-    kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
+    a.config()->setGroup("General Options");
+    kdevelop->slotTCurrentTab(a.config()->readNumEntry("LastActiveTree",DOC));
     
-    if(!a.getConfig()->readBoolEntry("show_kdevelop",true))
+    if(!a.config()->readBoolEntry("show_kdevelop",true))
       kdevelop->setKDlgCaption();
     
     if (argc > 1){ 
@@ -96,8 +96,8 @@ int main(int argc, char* argv[]) {
       delete start_logo;
     }
   
-    a.getConfig()->setGroup("TipOfTheDay");
-    bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
+    a.config()->setGroup("TipOfTheDay");
+    bool showTip=a.config()->readBoolEntry("show_tod",true);
     if(showTip){
     	kdevelop->slotHelpTipOfDay();
     }

@@ -51,10 +51,12 @@
 #include "makeview.h"
 #include "outputview.h"
 #include "ckdevaccel.h"
+#include "componentmanager.h"
 #include "processview.h"
 #include "./widgets/qextmdi/qextmdimainfrm.h"
 #include "editorview.h"
 #include "docbrowserview.h"
+
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -71,8 +73,8 @@ CKDevelop::CKDevelop()
   cv_decl_or_impl=true;
   file_open_list.setAutoDelete(TRUE);
   
-  config = kapp->getConfig();
-  kdev_caption=kapp->getCaption();
+  config = kapp->config();
+  kdev_caption=kapp->caption();
 
   initView();
   initConnections();
@@ -112,13 +114,8 @@ void CKDevelop::initView(){
   o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
 	
   messages_widget = new MakeView(o_tab_view, "messages_widget");
-  components.append(messages_widget);
-
   grepview = new GrepView(o_tab_view, "grepview");
-  components.append(grepview);
-
   outputview = new OutputView(o_tab_view, "outputview");
-  components.append(outputview);
 
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(grepview, i18n("search"));
@@ -141,19 +138,15 @@ void CKDevelop::initView(){
   ////////////////////////
 
   class_tree = new CClassView(t_tab_view,"cv");
-  components.append(class_tree);
   class_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
-  components.append(log_file_tree);
   log_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
-  components.append(real_file_tree);
   real_file_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   doc_tree = new DocTreeView(t_tab_view,"DOC");
-  components.append(doc_tree);
   doc_tree->setFocusPolicy(QWidget::ClickFocus); //#
 
   t_tab_view->addTab(class_tree,i18n("CV"));
@@ -201,14 +194,15 @@ void CKDevelop::initView(){
 //   edit1->filename = header_widget->getName();
 //   edit2->filename = cpp_widget->getName();
 
-  mdi_main_frame = new QextMdiMainFrm(top_panner);
-  mdi_main_frame->reparent(top_panner,0,QPoint(0,0));
-  
+  mdi_main_frame = new QextMdiMainFrm(top_panner, "mdi_frame", 0);
+  //  mdi_main_frame->reparent(top_panner,0,QPoint(0,0));
+
   browser_view = new DocBrowserView(mdi_main_frame,"browser");
   // let's go
   browser_widget = browser_view->browser;
   browser_widget->setFocusPolicy(QWidget::StrongFocus);
   mdi_main_frame->addWindow(browser_view,true);
+
   // maybe we should make this configurable :-)
   mdi_main_frame-> m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
   prev_was_search_result= false;
@@ -231,6 +225,15 @@ void CKDevelop::initView(){
 //   s_tab_view->addTab(browser_widget,i18n("&Documentation-Browser"));
 //   s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
 //   s_tab_view->addTab(mdi_main_frame,i18n("Tdsfksjd&s"));
+
+  ComponentManager *manager = ComponentManager::self();
+  manager->registerComponent(class_tree);
+  manager->registerComponent(log_file_tree);
+  manager->registerComponent(real_file_tree);
+  manager->registerComponent(doc_tree);
+  manager->registerComponent(outputview);
+  manager->registerComponent(messages_widget);
+  manager->registerComponent(grepview);
 
 
   // set the mainwidget
@@ -1033,21 +1036,21 @@ void CKDevelop::initConnections(){
 
   // connect Docbrowser rb menu
 
-  connect(browser_widget, SIGNAL(URLSelected(KHTMLView*,QString,int,QString)), this, SLOT(slotURLSelected(KHTMLView*,QString,int,QString))); 	
+  connect(browser_widget, SIGNAL(URLSelected(KHTMLWidget*,QString,int,QString)), this, SLOT(slotURLSelected(KHTMLWidget*,QString,int,QString))); 	
 
-  connect(browser_widget, SIGNAL(documentDone(KHTMLView*)), this, SLOT(slotDocumentDone(KHTMLView*)));
+  connect(browser_widget, SIGNAL(documentDone(KHTMLWidget*)), this, SLOT(slotDocumentDone(KHTMLWidget*)));
   connect(browser_widget, SIGNAL(signalURLBack()),this,SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(signalURLForward()),this,SLOT(slotHelpForward()));
   connect(browser_widget, SIGNAL(signalBookmarkAdd()),this,SLOT(slotBookmarksAdd()));
 
-  connect(browser_widget, SIGNAL(onURL(KHTMLView *, QString)),this,SLOT(slotURLonURL(KHTMLView *, QString)));
+  connect(browser_widget, SIGNAL(onURL(KHTMLWidget*, QString)),this,SLOT(slotURLonURL(KHTMLWidget*, QString)));
   connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
   connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
   connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
   connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-  connect(browser_widget, SIGNAL(textSelected(KHTMLView *, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLView *, bool)));
+  connect(browser_widget, SIGNAL(textSelected(KHTMLWidget*, bool)),this,SLOT(slotBROWSERMarkStatus(KHTMLWidget*, bool)));
   
   connect(browser_view,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
 
@@ -1251,7 +1254,7 @@ if(bKDevelop){
 }
 
 void CKDevelop::setToolmenuEntries(){
-  config = kapp->getConfig();
+  config = kapp->config();
   config->setGroup("ToolsMenuEntries");
 	config->readListEntry("Tools_exe",tools_exe);
 	config->readListEntry("Tools_entry",tools_entry);

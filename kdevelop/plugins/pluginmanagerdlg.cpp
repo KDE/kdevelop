@@ -49,9 +49,10 @@ void PluginManagerDlg::searchPlugins(){
     //////// 1. STEP  get all interesting dirs
     ////////////////////////
 
-    QStringList dirlist = KGlobal::dirs()->getResourceDirs("lib");
+    QStringList dirlist = KGlobal::dirs()->resourceDirs("lib");
     QString lib_path = getenv("LD_LIBRARY_PATH");
-    
+    // dirlist += QStringList::split(lib_path, ':');
+    // should be simpler than the following, not? ;-)
     tokener.tokenize(lib_path,":");
     
     while(tokener.hasMoreTokens()){

@@ -28,20 +28,18 @@
 #include <qpopupmenu.h>
 #include <qframe.h>
 
-#include <khtmlview.h>
 #include <khtml.h>
 #include <kiconloader.h>
 #include <kapp.h>
 #include <kconfig.h>
 #include "structdef.h"
-#include <kbrowser.h>
 
 
 /** 
   *the documentation browser, attention!: only a prototype
   *@author Sandy Meier
   */
-class CDocBrowser : public KHTMLView {
+class CDocBrowser : public KHTMLWidget {
   Q_OBJECT
 public: 
   /** construtor */
@@ -61,7 +59,7 @@ public slots:
   void slotDocFixedFont(const char *);
   void slotDocColorsChanged(const QColor&, const QColor&,
             		const QColor&, const QColor&, const bool, const bool);
-  void slotPopupMenu(KHTMLView*, QString , const QPoint & );
+  void slotPopupMenu(KHTMLWidget*, QString , const QPoint & );
   void slotCopyText();
   void slotURLBack();
   void slotURLForward();

@@ -437,7 +437,9 @@ KWriteDoc::~KWriteDoc() {
 
 TextLine *KWriteDoc::textLine(int line) {
 //  if (line < 0) line = 0;
-//  if (line >= (int) contents.count()) line = contents.count() -1;
+  if (line >= (int)contents.count())
+    return 0L;
+
   return contents.at(line);
 }
 
@@ -516,6 +518,10 @@ void KWriteDoc::removeView(KWriteView *view) {
   views.remove(view);
 }
 
+bool KWriteDoc::ownedView(KWriteView *view) {
+  // do we own the given view?
+  return (views.containsRef(view) > 0);
+}
 
 int KWriteDoc::currentColumn(PointStruc &cursor) {
   return contents.at(cursor.y)->cursorX(cursor.x,tabChars);
@@ -1976,9 +1982,7 @@ void KWriteDoc::setFileName( const QString& s ) {
   //highlight detection
   pos = fName.findRev('/') +1;
   if (pos >= (int) fName.length()) return; //no filename
-  hl = hlManager->wildcardFind((pos) ? s.right(pos) : QString("")); // this is a WORKAROUND
-                                                                    //  QT-2.00 QRegExp doesn´t permit a null-string
-
+  hl = hlManager->wildcardFind(s.right(pos));
   if (hl == -1) {
     // fill the detection buffer with the contents of the text
     const int HOWMANY = 1024;

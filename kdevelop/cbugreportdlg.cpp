@@ -648,7 +648,7 @@ bool CBugReportDlg::generateEmail() {
   text.append("OS/Distribution\t: ");text.append(os_edit->text());text.append("\n");
   text.append("Compiler\t\t: ");text.append(compiler_edit->text());text.append("\n\n");
 
-  QDir dir(KGlobal::dirs()->getSaveLocation("appdata","bugreports"));
+  QDir dir(KGlobal::dirs()->saveLocation("appdata","bugreports"));
   QFile file(locateLocal("appdata","bugreports/bugreport."+strBugID));
 
 	if (!file.open(IO_WriteOnly)) {

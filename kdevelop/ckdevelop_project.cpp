@@ -39,6 +39,7 @@
 #include "./kdlgedit/kdlgedit.h"
 #include "cmakemanualdlg.h"
 #include "cgeneratenewfile.h"
+#include "componentmanager.h"
 #include "misc.h"
 
 
@@ -488,10 +489,7 @@ void CKDevelop::slotProjectOpen(){
 
     slotStatusMsg(i18n("Ready."));
 
-    QListIterator<Component> it(components);
-    for ( ; it.current(); ++it)
-        (*it)->projectOpened(prj);
-  
+    ComponentManager::self()->notifyProjectOpened(prj);
   }	
   
 }
@@ -877,9 +875,9 @@ void CKDevelop::delFileFromProject(QString rel_filename){
 
   prj->removeFileFromProject(rel_filename);
   prj->writeProject();
-  QListIterator<Component> it(components);
-  for (; it.current(); ++it)
-      (*it)->removedFileFromProject(rel_filename);
+  ComponentManager::self()->notifyRemovedFileFromProject(rel_filename);
+
+  // ### Should be removed:
   refreshTrees();
 }
 

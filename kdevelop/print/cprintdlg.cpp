@@ -1020,14 +1020,14 @@ void CPrintDlg::slotPreviewClicked() {
     process = new KShellProcess();
     if (programCombBox->currentItem()==1) {
       text = (QString) " --output="+ dir;
-      settings = kapp->getConfig();
+      settings = kapp->config();
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("EnscriptSettings");
       slotCreateParameters();
       *process << "enscript " + string + (QString) " " + text + " " + files;
     }
     else {
-      settings = kapp->getConfig();
+      settings = kapp->config();
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("A2psSettings");
       slotCreateParameters();
@@ -1082,7 +1082,7 @@ void CPrintDlg::slotPrintingConfClicked() {
     a2psconf->resize(600,430);
     a2psconf->setCaption("A2ps Configdialog");
     a2psconf->exec();
-    settings = kapp->getConfig();
+    settings = kapp->config();
   settings->setGroup("LastSettings");
   globalpara = settings->readEntry("A2psSettings");
   delete (a2psconf);
@@ -1096,7 +1096,7 @@ void CPrintDlg::slotPrintingConfClicked() {
       enscriptconf->resize(610,510);
       enscriptconf->setCaption("Enscript Configdialog");
       enscriptconf->exec(); 
-      settings = kapp->getConfig();
+      settings = kapp->config();
       settings->setGroup("LastSettings");
       globalpara = settings->readEntry("EnscriptSettings");
       delete (enscriptconf);
@@ -1126,7 +1126,7 @@ bool CPrintDlg::lookProgram(QString name) {
 }
 
 void CPrintDlg::slotOkClicked() {
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("PrintDialog");
   settings->writeEntry("Program",programCombBox->currentItem());
   settings->writeEntry("Printer",printerLine->text());
@@ -1169,7 +1169,7 @@ void CPrintDlg::slotOkClicked() {
       if (printToFileButton->isChecked()) {
 				dir =  printToFileLine->text();
 				text = (QString) " --output="+ dir;
-				settings = kapp->getConfig();
+				settings = kapp->config();
 				settings->setGroup("LastSettings");
 				globalpara = settings->readEntry("EnscriptSettings");
 				slotCreateParameters();
@@ -1179,7 +1179,7 @@ void CPrintDlg::slotOkClicked() {
 				process->start(KProcess::Block,KProcess::AllOutput);
     	}
       else {
-				settings = kapp->getConfig();
+				settings = kapp->config();
 				settings->setGroup("LastSettings");
 				globalpara = settings->readEntry("EnscriptSettings");
 				slotCreateParameters();
@@ -1192,7 +1192,7 @@ void CPrintDlg::slotOkClicked() {
   	  }
     }
 	  else if (programCombBox->currentItem()==0) {
-  	  settings = kapp->getConfig();
+  	  settings = kapp->config();
       settings->setGroup("LastSettings");
      	globalpara = settings->readEntry("A2psSettings");
 	    slotCreateParameters();
@@ -1244,7 +1244,7 @@ QString CPrintDlg::createFileString() {
   QString test="";
   QString test2 = "";
   QStrList filelist;
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("LastSettings");
   globalpara = settings->readEntry("FileSettings");
   settings->setGroup("Files");
@@ -1291,7 +1291,7 @@ QString CPrintDlg::createFileString() {
 }
 
 void CPrintDlg::loadSettings() {
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("PrintDialog");
   programCombBox->setCurrentItem(settings->readNumEntry("Program"));
   if (programCombBox->currentItem()==0) {

@@ -127,7 +127,7 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
     connect(shell_process,SIGNAL(processExited(KProcess*)),
 	    this,SLOT(slotProcessExited(KProcess*) )) ;
     
-    config = kapp->getConfig();
+    config = kapp->config();
 
 
 	

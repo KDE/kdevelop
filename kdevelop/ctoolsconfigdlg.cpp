@@ -282,7 +282,7 @@ void CToolsConfigDlg::slotShowToolProp(int index){
 
 void CToolsConfigDlg::readConfig(){
   
-  config = kapp->getConfig();
+  config = kapp->config();
   config->setGroup("ToolsMenuEntries");
   config->readListEntry("Tools_exe",tools_exe);
   config->readListEntry("Tools_entry",tools_entry);

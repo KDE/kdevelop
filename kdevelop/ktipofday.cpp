@@ -148,7 +148,7 @@ KTipofDay::~KTipofDay(){
 
 void KTipofDay::slotOK()
 {
-	KConfig *config = kapp->getConfig();
+	KConfig *config = kapp->config();
 	config->setGroup("TipOfTheDay");
   config->writeEntry("show_tod",show_check->isChecked());
   hide();
@@ -169,7 +169,7 @@ void KTipofDay::slotNext()
 	int next;
 	bool found = false;
 
-	KConfig *config = kapp->getConfig();
+	KConfig *config = kapp->config();
 	config->setGroup("TipOfTheDay");
 	next = config->readNumEntry("NextTip", 2);
 	

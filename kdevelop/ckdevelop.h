@@ -19,13 +19,10 @@
 #ifndef CKDEVELOP_H
 #define CKDEVELOP_H
 
-#define NO_KIO_COMPATABILITY
-
 //#ifdef HAVE_CONFIG_H
 //#include <config.h>
 //#endif
 
-class CKDevelop;
 #include <iostream.h>
 
 #include <qlist.h>
@@ -39,7 +36,6 @@ class CKDevelop;
 #include <kapp.h>
 #include <ktmainwindow.h>
 #include <kprocess.h>
-#include <khtmlview.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kprogress.h>
@@ -48,7 +44,7 @@ class CKDevelop;
 #include "./kwrite/kguicommand.h"
 
 class QSplitter;
-
+class KHTMLWidget;
 class CDocBrowser;
 class CClassView;
 class DocTreeView;
@@ -516,7 +512,7 @@ public:
   void slotMarkStatus();
 //  void slotCPPMarkStatus(KWriteView *, bool);
 //  void slotHEADERMarkStatus(KWriteView *, bool);
-  void slotBROWSERMarkStatus(KHTMLView *, bool);
+  void slotBROWSERMarkStatus(KHTMLWidget *, bool);
   /** recognize change of Clipboard data */
   void slotClipboardChanged();
   /** change Statusbar status of Line and Column */
@@ -533,9 +529,9 @@ public:
   // editorview related
   void   slotEditorViewClosing(EditorView*);
 
-  void slotURLSelected(KHTMLView* widget,QString url,int, QString);
-  void slotDocumentDone( KHTMLView * );
-  void slotURLonURL(KHTMLView*,QString);
+  void slotURLSelected(KHTMLWidget* widget,QString url,int, QString);
+  void slotDocumentDone( KHTMLWidget * );
+  void slotURLonURL(KHTMLWidget*,QString);
 
   void switchToKDevelop();
   void switchToKDlgEdit();
@@ -754,7 +750,6 @@ private:
   //some widgets for the mainview
   ///////////////////////////////
 
-  QList<Component> components;
   /** The tabbar for the trees. */
   CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */

@@ -73,6 +73,16 @@ const char *cppKeywords[] = {
 const char *cppTypes[] = {
   "bool", "wchar_t", "mutable", 0L};
 
+const char *objcKeywords[] = {
+  "@class", "@defs", "@encode", "@end", "@implementation", "@interface", "@private", "@protected",
+  "@protocol", "@public","@selector", "self", "super", 0L};
+
+const char *objcTypes[] = {
+  "auto", "char", "const", "double", "float", "int", "long", "register",
+  "short", "signed", "static",
+  "unsigned", "void", "volatile",
+  0L};
+
 const char *idlKeywords[] = {
   "module", "interface", "struct", "case", "enum", "typedef","signal", "slot",
   "attribute", "readonly", "context", "oneway", "union", "in", "out", "inout",
@@ -885,7 +895,7 @@ Highlight::~Highlight() {
 KConfig *Highlight::getKConfig() {
   KConfig *config;
 
-  config = kapp->getConfig();
+  config = kapp->config();
   config->setGroup(iName + " Highlight");
   return config;
 }
@@ -1175,6 +1185,29 @@ void CppHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   keyword->addList(cppKeywords);
   dataType->addList(cTypes);
   dataType->addList(cppTypes);
+}
+
+ObjcHighlight::ObjcHighlight(const QString &name) : CHighlight(name) {
+  iWildcards = "*.m;*.h";
+  iMimetypes = "text/x-objc-src;text/x-c-hdr";
+}
+
+ObjcHighlight::~ObjcHighlight() {
+}
+
+void ObjcHighlight::makeContextList() {
+  HlContext *c;
+
+  CHighlight::makeContextList();
+  c = contextList[0];
+  c->items.append(new Hl2CharDetect(8,1,'@','"'));
+}
+
+void ObjcHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
+  keyword->addList(cKeywords);
+  keyword->addList(objcKeywords);
+  dataType->addList(cTypes);
+  dataType->addList(objcTypes);
 }
 
 IdlHighlight::IdlHighlight(const QString &name) : CHighlight(name) {
@@ -1760,6 +1793,7 @@ HlManager::HlManager() : QObject(0L) {
   hlList.append(new Highlight(i18nop("Normal")));
   hlList.append(new CHighlight(     "C"        ));
   hlList.append(new CppHighlight(   "C++"      ));
+  hlList.append(new ObjcHighlight(  "Objective-C"));
   hlList.append(new JavaHighlight(  "Java"     ));
   hlList.append(new HtmlHighlight(  "HTML"     ));
   hlList.append(new BashHighlight(  "Bash"     ));
@@ -1783,7 +1817,7 @@ Highlight *HlManager::getHl(int n) {
 int HlManager::defaultHl() {
   KConfig *config;
 
-  config = kapp->getConfig();
+  config = kapp->config();
   config->setGroup("General Options");
   return nameFind(config->readEntry("Highlight"));
 }
@@ -1950,7 +1984,7 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
   list.append(new ItemStyle(darkGray,gray,false,true));    //comment
   list.append(new ItemStyle(darkGreen,green,false,false)); //others
 
-  config = kapp->getConfig();
+  config = kapp->config();
   config->setGroup("Default Item Styles");
   for (z = 0; z < defaultStyles(); z++) {
     i = list.at(z);
@@ -1974,7 +2008,7 @@ void HlManager::setDefaults(ItemStyleList &list, ItemFont &font) {
   ItemStyle *i;
   char s[64];
 
-  config = kapp->getConfig();
+  config = kapp->config();
   config->setGroup("Default Item Styles");
   for (z = 0; z < defaultStyles(); z++) {
     i = list.at(z);
@@ -2097,7 +2131,7 @@ void getXFontList(QStringList &fontList) {
 void getFontList(QStringList &fontList) {
 
   //try to get KDE fonts
-  if (kapp->getKDEFonts(fontList)) return;
+  if (kapp->kdeFonts(fontList)) return;
 //  if (getKDEFontList(fontList)) return;
   //not successful: get X fonts
   getXFontList(fontList);
@@ -2206,7 +2240,7 @@ FontChanger::FontChanger(QWidget *parent, int x, int y)
   label = new QLabel(charsetCombo,i18n("Charset:"),parent);
   connect(charsetCombo,SIGNAL(activated(const QString&)),SLOT(charsetChanged(const QString&)));
 
-//  KCharsets *charsets=KApplication::getKApplication()->getCharsets();
+//  KCharsets *charsets=KApplication::kApplication()->getCharsets();
 //  QStrList lst = charsets->displayable(selFont.family());
 
   r.moveBy(0,25);

@@ -318,20 +318,18 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName )
   QString toAdd;
   int atLine = -1;
   CAddClassAttributeDlg dlg(this, "attrDlg" );
-  CParsedAttribute *aAttr;
 
-  if( dlg.exec() )
-  {
-    aAttr = dlg.asSystemObj();
-
-    aAttr->setDeclaredInClass( aClassName );
-  }
-  else
-    return;
+  if( !dlg.exec() )
+      return;
+  
+  CParsedAttribute *aAttr = dlg.asSystemObj();
+  aAttr->setDeclaredInClass( aClassName );
 
   // Fetch the current class.
   aClass = class_tree->store->getClassByName( aClassName );
-  
+
+  // Find the line number of the last attribute that has
+  // the same export as we want 
   for( aClass->attributeIterator.toFirst();
        aClass->attributeIterator.current();
        ++aClass->attributeIterator )

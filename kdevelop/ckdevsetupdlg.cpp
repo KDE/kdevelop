@@ -48,7 +48,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   wantsTreeRefresh=false;
 
   setCaption( i18n("KDevelop Setup" ));
-  config=kapp->getConfig();
+  config=kapp->config();
   
   // ****************** the General Tab ********************
   w1 = new QWidget( this, "general" );

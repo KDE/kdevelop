@@ -30,7 +30,7 @@
 AdvListView::AdvListView(QWidget *parent, const char *name)
     : QListView(parent, name)
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     config->setGroup("KDlgEdit");
     openStats = config->readListEntry("PropOpenStats");
 }
@@ -40,7 +40,7 @@ AdvListView::~AdvListView()
 {
   saveOpenStats();
 
-  KConfig *config = kapp->getConfig();
+  KConfig *config = kapp->config();
   config->setGroup("KDlgEdit");
   config->writeEntry("PropOpenStats", openStats);
 }

@@ -30,7 +30,7 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	cclassview.cpp ceditwidget.cpp ckdevsetupdlg.cpp  ckdevelop_classview.cpp \
 	cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
 	clogfileview.cpp cdocbrowser.cpp cproject.cpp \
-	kswallow.cpp cgeneratenewfile.cpp \
+	kswallow.cpp cgeneratenewfile.cpp componentmanager.cpp \
 	doctreeview.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
 	cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
 	ctoolclass.cpp cdoctreepropdlg.cpp \
@@ -60,7 +60,7 @@ kdevelop_LDADD   = ./widgets/qextmdi/libqextmdi.a ./plugins/libkdevplugin.a ./vc
 noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h \
 	ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 	clogfileview.h structdef.h cdocbrowser.h cproject.h \
-	cclassview.h kswallow.h cgeneratenewfile.h \
+	cclassview.h kswallow.h cgeneratenewfile.h componentmanager.h \
 	doctreeview.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
 	cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h \
 	ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \

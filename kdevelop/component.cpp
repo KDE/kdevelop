@@ -24,3 +24,7 @@ void Component::addedFileToProject(const QString&)
 void Component::removedFileFromProject(const QString&)
 {
 }
+
+void Component::savedFile(const QString&)
+{
+}

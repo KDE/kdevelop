@@ -268,7 +268,7 @@ DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
                                         const char *libname )
     : ListViewBookItem(parent, text, libname)
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     config->setGroup("Doc_Location");
     QString idx_path = config->readEntry("kdoc_index", KDOC_INDEXDIR);
     if (!idx_path.isEmpty())
@@ -356,7 +356,7 @@ private:
 
 void DocTreeKDELibsFolder::insertBook(const QString &libtitle, const char *libname)
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     config->setGroup("Doc_Location");
     QString kde_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
     QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
@@ -504,7 +504,7 @@ void DocTreeOthersFolder::refresh()
     
     ListViewFolderItem::refresh();
 
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     config->setGroup("Other_Doc_Location");
     config->readListEntry("others_list", others);
     config->setGroup("Other_Doc_Location");
@@ -664,7 +664,7 @@ void DocTreeView::slotAddDocumentation()
     if (!dlg.exec())
         return;
     
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     config->setGroup("Other_Doc_Location");
     QStrList others;
     config->readListEntry("others_list", others);
@@ -689,7 +689,7 @@ void DocTreeView::slotAddDocumentation()
 
 void DocTreeView::slotRemoveDocumentation()
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     config->setGroup("Other_Doc_Location");
     QStrList others;
     
@@ -704,7 +704,7 @@ void DocTreeView::slotRemoveDocumentation()
 
 void DocTreeView::slotDocumentationProp()
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = kapp->config();
     config->setGroup("Other_Doc_Location");
 
     QString name = currentItem()->text(0);

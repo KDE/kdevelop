@@ -278,6 +278,7 @@ class KWriteDoc : QObject {
   protected:
     void registerView(KWriteView *);
     void removeView(KWriteView *);
+    bool ownedView(KWriteView *);
 
     int currentColumn(PointStruc &cursor);
 

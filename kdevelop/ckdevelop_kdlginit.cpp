@@ -22,13 +22,9 @@
 #include <qsplitter.h>
 #include <kmenubar.h>
 #include "ckdevelop.h"
+#include "componentmanager.h"
 
 #include "./kdlgedit/kdlgedit.h"
-//#include "./kdlgedit/kdlgeditwidget.h"
-//#include "./kdlgedit/kdlgpropwidget.h"
-//#include "./kdlgedit/kdlgwidgets.h"
-//#include "./kdlgedit/kdlgdialogs.h"
-//#include "./kdlgedit/kdlgitems.h"
 #include "./kwrite/kwview.h"
 #include "./kwrite/kguicommand.h"
 
@@ -37,11 +33,10 @@ extern KGuiCmdManager cmdMngr;
 void CKDevelop::initKDlg(){
   kdlg_caption="KDevelop Dialogeditor:";
 
-#warning kdlg_top_panner was a KNewPanner
   kdlg_top_panner = new QSplitter(Qt::Horizontal, top_panner, "kdlg_top_panner");
 
   kdlgedit = new KDlgEdit(this, kdlg_top_panner, "kdlgedit");
-  components.append(kdlgedit);
+  ComponentManager::self()->registerComponent(kdlgedit);
 
   initKDlgMenuBar();
 //  initKDlgKeyAccel();

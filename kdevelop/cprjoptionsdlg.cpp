@@ -1109,7 +1109,7 @@ void CPrjOptionsDlg::setupTab5()
 
   connect(m_set_modify_dir,SIGNAL(clicked()),SLOT(slotFileDialogClicked()));
 
-  KConfig *settings = kapp->getConfig();
+  KConfig *settings = kapp->config();
   settings->setGroup("MakeOptionsSettings");
 
   m_print_debug_info->setChecked(settings->readBoolEntry("PrintDebugInfo"));
@@ -1329,7 +1329,7 @@ void CPrjOptionsDlg::ok4()
 void CPrjOptionsDlg::ok5()
 {
   //**********make options*************
-  KConfig *settings = kapp->getConfig();
+  KConfig *settings = kapp->config();
   settings->setGroup("MakeOptionsSettings");
 
   settings->writeEntry("PrintDebugInfo", m_print_debug_info->isChecked());

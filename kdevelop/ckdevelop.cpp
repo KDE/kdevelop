@@ -74,6 +74,7 @@
 #include "widgets/qextmdi/qextmdichildview.h"
 #include "widgets/qextmdi/qextmdimainfrm.h"
 #include "docbrowserview.h"
+#include "componentmanager.h"
 
 
 
@@ -569,7 +570,7 @@ void CKDevelop::slotEditSearchInFiles(QString search){
 void CKDevelop::slotEditSearchText(){
     QString text;
     if(mdi_main_frame->activeWindow() == browser_view){
-	browser_widget->getSelectedText(text);
+	browser_widget->selectedText();
     }
     else{
 	// if editor_view->editor isn't shown don't proceed
@@ -995,9 +996,7 @@ void CKDevelop::slotBuildConfigure(){
 void CKDevelop::slotBuildStop(){
   slotStatusMsg(i18n("Killing current process..."));
   setToolMenuProcess(true);
-  QListIterator<Component> it(components);
-  for ( ; it.current(); ++it)
-      (*it)->compilationAborted();
+  ComponentManager::self()->notifyCompilationAborted();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -1200,14 +1199,12 @@ void CKDevelop::slotOptionsKDevelop(){
   if (setup->exec()) {
     if (setup->hasChangedPath())
         {
-            QListIterator<Component> it(components);
-            for ( ; it.current(); ++it)
-                (*it)->docPathChanged();
+            ComponentManager::self()->notifyDocPathChanged();
         }
 
     // kwrite keys
     cmdMngr.changeAccels();
-    cmdMngr.writeConfig(kapp->getConfig());
+    cmdMngr.writeConfig(kapp->config());
   } else {
     // cancel keys
     cmdMngr.restoreAccels();
@@ -1461,13 +1458,13 @@ void CKDevelop::slotHelpSearchText(QString text){
 	enableCommand(ID_HELP_BROWSER_STOP);
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
-  search_process << "glimpse  -H "+ KGlobal::dirs()->getSaveLocation("appdata")+" -U -c -y '"+ text +"'";
+  search_process << "glimpse  -H "+ KGlobal::dirs()->saveLocation("appdata")+" -U -c -y '"+ text +"'";
   search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
 }
 void CKDevelop::slotHelpSearchText(){
     QString text;
     if(mdi_main_frame->activeWindow() == browser_view){
-	browser_widget->getSelectedText(text);
+	browser_widget->selectedText();
     }
     else{
 	// if editor_view->editor isn't shown don't proceed
@@ -1912,7 +1909,7 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
   }
 }
 */
-void CKDevelop::slotBROWSERMarkStatus(KHTMLView *, bool bMarked)
+void CKDevelop::slotBROWSERMarkStatus(KHTMLWidget *, bool bMarked)
 {
 #warning FIXME MDI stuff
   // int item=s_tab_view->getCurrentTab();
@@ -1974,7 +1971,7 @@ void CKDevelop::slotNewUndo(){
 }
 
 
-void CKDevelop::slotURLSelected(KHTMLView* ,QString url,int,QString){
+void CKDevelop::slotURLSelected(KHTMLWidget* ,QString url,int,QString){
 //	enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
       switchToKDevelop();
@@ -1997,7 +1994,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,QString url,int,QString){
 
 }
 
-void CKDevelop::slotURLonURL(KHTMLView*, QString url)
+void CKDevelop::slotURLonURL(KHTMLWidget*, QString url)
 {
 	if ( url )
 	{
@@ -2009,7 +2006,7 @@ void CKDevelop::slotURLonURL(KHTMLView*, QString url)
 	}
 }
 
-void CKDevelop::slotDocumentDone( KHTMLView * ){
+void CKDevelop::slotDocumentDone( KHTMLWidget * ){
   QString actualURL=browser_widget->currentURL();
   QString actualTitle=browser_widget->currentTitle();
   int cur =  history_list.at()+1; // get the current index

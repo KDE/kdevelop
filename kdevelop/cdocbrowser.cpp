@@ -55,7 +55,7 @@ QColor CDocBrowser::vLinkColor;
 bool CDocBrowser::underlineLinks;
 bool CDocBrowser::forceDefaults;
 
-CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,name){
+CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLWidget(parent,name){
 
   doc_pop = new QPopupMenu();
   doc_pop->insertItem(BarIcon("back"),i18n("Back"),this, SLOT(slotURLBack()),0,ID_HELP_BACK);
@@ -69,9 +69,9 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
   doc_pop->insertItem(BarIcon("lookup"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
 	
 //  getKHTMLWidget()->setFocusPolicy( QWidget::StrongFocus );
-  connect( this, SIGNAL( popupMenu(KHTMLView *, QString, const QPoint & ) ),
-    this, SLOT( slotPopupMenu(KHTMLView *, QString, const QPoint & ) ) );
-	connect(this, SIGNAL( setTitle ( QString) ), this, SLOT( slotSetFileTitle( QString) ) );
+  connect( this, SIGNAL( popupMenu(KHTMLWidget *, QString, const QPoint & ) ),
+           this, SLOT( slotPopupMenu(KHTMLWidget *, QString, const QPoint & ) ) );
+  connect(this, SIGNAL( setTitle ( QString) ), this, SLOT( slotSetFileTitle( QString) ) );
 
 }
 
@@ -117,10 +117,6 @@ void CDocBrowser::showURL(QString url,bool reload){
   }
   
 
-  KHTMLWidget* htmlview;
-  htmlview=getKHTMLWidget();
-//  htmlview->setCursor( KCursor::waitCursor() );
-
   if( (url_wo_ref != old_url) || reload){
     QString str="";
     KIONetAccess::download(url,str);
@@ -146,7 +142,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       }
 
       end();
-      parse();
+      //      parse();
       show();
 
       KIONetAccess::removeTempFile(str);
@@ -156,7 +152,6 @@ void CDocBrowser::showURL(QString url,bool reload){
       KMessageBox::error(0, i18n("file \"%1\" not found!").arg(str));
        return;
     }
-//  htmlview->setCursor( KCursor::arrowCursor() );
   }
   
 
@@ -166,12 +161,13 @@ void CDocBrowser::showURL(QString url,bool reload){
   else
   {
     if (url_wo_ref == old_url)
-     gotoXY(0,0);
+        ;
+        //     gotoXY(0,0);
   }
 
   if (url_wo_ref == old_url)
   {
-     emit documentDone(this);  // simulate documentDone to put it in history...
+      //     emit documentDone(this);  // simulate documentDone to put it in history...
   }
   old_url = url_wo_ref;
 
@@ -202,9 +198,6 @@ void CDocBrowser::setDocBrowserOptions(){
   underlineLinks = config->readBoolEntry( "UnderlineLinks", true );
   forceDefaults = config->readBoolEntry( "ForceDefaultColors", false );
 
-  KHTMLWidget* htmlview;
-  htmlview=getKHTMLWidget();
-
   htmlview->setFontSizes( &fSize );
   htmlview->setFixedFont( fixedFont);
   htmlview->setStandardFont( standardFont );
@@ -213,7 +206,6 @@ void CDocBrowser::setDocBrowserOptions(){
   #warning uncommented htmlview->setForceDefault( force );
   //  htmlview->setForceDefault( forceDefaults );
   htmlview->setDefaultBGColor( bgColor );
-*/
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
   htmlview->setDefaultBGColor(white);
@@ -221,39 +213,35 @@ void CDocBrowser::setDocBrowserOptions(){
   htmlview->setUnderlineLinks(true);
   htmlview->setURLCursor( KCursor::handCursor() );
   QWidget::show();
+  #warning FIXME
+*/
 
 
 }
 
 void CDocBrowser::slotDocFontSize(int size){
-  KHTMLWidget* htmlview;
-  htmlview=getKHTMLWidget();
   fSize = size;
-  htmlview->setFontSizes( &size );
-  htmlview->parse();
-  showURL(complete_url, true);
+  KHTMLWidget::setFontSizes( &size );
+  //  htmlview->parse();
+  openURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
 
 void CDocBrowser::slotDocStandardFont(const char* n){
-  KHTMLWidget* htmlview;
-  htmlview=getKHTMLWidget();
   standardFont = n;
-  htmlview->setStandardFont( n );
-  htmlview->parse();
-  showURL(complete_url, true);
+  KHTMLWidget::setStandardFont( n );
+  //  htmlview->parse();
+  openURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
 
 void CDocBrowser::slotDocFixedFont(const char* n){
-  KHTMLWidget* htmlview;
-  htmlview=getKHTMLWidget();
   fixedFont = n;
-  htmlview->setFixedFont( n );
-  htmlview->parse();
-  showURL(complete_url, true);
+  KHTMLWidget::setFixedFont( n );
+  //  htmlview->parse();
+  openURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();
 }
@@ -261,25 +249,23 @@ void CDocBrowser::slotDocFixedFont(const char* n){
 void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 	const QColor &link, const QColor &vlink, const bool uline, const bool force)
 {
-  KHTMLWidget* htmlview;
-  htmlview=getKHTMLWidget();
   #warning uncommented htmlview->setForceDefault( force );
   //  htmlview->setForceDefault( force );
-  htmlview->setDefaultBGColor( bg );
-  htmlview->setDefaultTextColors( text, link, vlink );
-  htmlview->setUnderlineLinks(uline);
-  htmlview->parse();
-  showURL(complete_url, true);
+  KHTMLWidget::setDefaultBGColor( bg );
+  KHTMLWidget::setDefaultTextColors( text, link, vlink );
+  KHTMLWidget::setUnderlineLinks(uline);
+  //  htmlview->parse();
+  openURL(complete_url, true);
 //	busy = true;
 //	emit enableMenuItems();){
 }
 
-void CDocBrowser::slotPopupMenu(KHTMLView*, QString, const QPoint & pnt){
+void CDocBrowser::slotPopupMenu(KHTMLWidget*, QString, const QPoint & pnt){
   QString text;
   int pos;
   if(this->isTextSelected()){
 
-    getSelectedText(text);
+    text = selectedText();
     text.replace(QRegExp("^\n"), "");
     pos=text.find("\n");
     if (pos>-1)
@@ -310,22 +296,15 @@ void CDocBrowser::slotPopupMenu(KHTMLView*, QString, const QPoint & pnt){
 }
 
 void CDocBrowser::slotCopyText(){
-  QString text;
-  getSelectedText( text );
-  QClipboard *cb = kapp->clipboard();
-  cb->setText( text );
+  kapp->clipboard()->setText(KHTMLWidget::selectedText());
 }
-
-
 
 void CDocBrowser::slotSearchText(){
   emit signalSearchText();
 }
-void CDocBrowser::slotGrepText(){
-	QString text;
- 	getSelectedText(text);
 
-  emit signalGrepText(text);
+void CDocBrowser::slotGrepText(){
+  emit signalGrepText(KHTMLWidget::selectedText());
 }
 
 void CDocBrowser::slotURLBack(){
@@ -420,7 +399,7 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
 
 void CDocBrowserFont::readOptions()
 {
-	KConfig *config = KApplication::getKApplication()->getConfig();
+	KConfig *config = kapp->config();
 	config->setGroup( "DocBrowserAppearance" );
 	
 	QString fs = config->readEntry( "BaseFontSize" );
@@ -492,7 +471,7 @@ void CDocBrowserFont::slotApplyPressed()
 {
 	QString o;
 
-	KConfig *config = KApplication::getKApplication()->getConfig();
+	KConfig *config = kapp->config();
 	config->setGroup( "DocBrowserAppearance" );
 
 	QString fs;
@@ -586,7 +565,7 @@ CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
 
 void CDocBrowserColor::readOptions()
 {
-	KConfig *config = KApplication::getKApplication()->getConfig();
+	KConfig *config = kapp->config();
 	config->setGroup( "DocBrowserAppearance" );
 	
 	bgColor = config->readColorEntry( "BgColor", &white );
@@ -601,7 +580,7 @@ void CDocBrowserColor::readOptions()
 
 void CDocBrowserColor::slotApplyPressed()
 {
-	KConfig *config = KApplication::getKApplication()->getConfig();
+	KConfig *config = kapp->config();
 	config->setGroup( "DocBrowserAppearance" );
 
 	config->writeEntry( "BgColor", bgColor );

@@ -760,7 +760,7 @@ void CFilePrintDlg::slotSelfChoosenFileDeleteClicked() {
 void CFilePrintDlg::slotOkClicked() {
   beginTime.setHMS(beginTimeHourLine->value(),beginTimeMinuteLine->value(),0);
   endTime.setHMS(endTimeHourLine->value(),endTimeMinuteLine->value(),0);
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("FileDialog");
   int i=6;
   if (currentButton->isChecked()) {
@@ -854,7 +854,7 @@ void CFilePrintDlg::slotOkClicked() {
 void CFilePrintDlg::loadSettings() {
   selfChoosenFilesMultiLine->clear();
   fileList.clear();
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("FileDialog");
   qtarch_ButtonGroup_139->setButton(settings->readNumEntry("FileSelection"));
   selfChoosenFileLine->setText(settings->readEntry("FileLine"));

@@ -48,6 +48,7 @@
 #include <kio_job.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 #include <X11/Xlib.h> //used to have XSetTransientForHint()
 
@@ -167,6 +168,7 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc, bool HandleOwnDND)
 
   setAcceptDrops(true);
   HandleURIDrops = HandleOwnDND;
+  dragInfo.state = diNone;
 }
 
 KWriteView::~KWriteView() {
@@ -228,12 +230,10 @@ void KWriteView::doCursorCommand(VConfig &c, int cmdNum) {
       cursorPageDown(c);
       break;*/
     case cmTop:
-      top(c);
-      home(c);
+      top_home(c);
       break;
     case cmBottom:
-      bottom(c);
-      end(c);
+      bottom_end(c);
       break;
   }
 }
@@ -415,23 +415,60 @@ void KWriteView::cursorDown(VConfig &c) {
 
 void KWriteView::scrollUp(VConfig &c) {
 
+  if (! yPos) return;
+
   newYPos = yPos - kWriteDoc->fontHeight;
-  if (newYPos < 0) newYPos = 0;
   if (cursor.y == (yPos + height())/kWriteDoc->fontHeight -1) {
     cursor.y--;
     cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
+
+    update(c);
   }
-  update(c);
 }
 
 void KWriteView::scrollDown(VConfig &c) {
+
+  if (endLine >= kWriteDoc->lastLine()) return;
 
   newYPos = yPos + kWriteDoc->fontHeight;
   if (cursor.y == (yPos + kWriteDoc->fontHeight -1)/kWriteDoc->fontHeight) {
     cursor.y++;
     cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
+    update(c);
   }
+}
+
+void KWriteView::pageUp(VConfig &c) {
+
+  int lines = (endLine - startLine - 1);
+
+  if (lines <= 0)
+    lines = 1;
+
+  if (!(c.flags & cfPageUDMovesCursor) && yPos > 0) {
+    newYPos = yPos - lines * kWriteDoc->fontHeight;
+    if (newYPos < 0) newYPos = 0;
+  }
+  cursor.y -= lines;
+  cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
   update(c);
+//  cursorPageUp(c);
+}
+
+void KWriteView::pageDown(VConfig &c) {
+
+  int lines = (endLine - startLine - 1);
+
+  if (!(c.flags & cfPageUDMovesCursor) && endLine < kWriteDoc->lastLine()) {
+    if (lines < kWriteDoc->lastLine() - endLine)
+      newYPos = yPos + lines * kWriteDoc->fontHeight;
+    else
+      newYPos = yPos + (kWriteDoc->lastLine() - endLine) * kWriteDoc->fontHeight;
+  }
+  cursor.y += lines;
+  cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
+  update(c);
+//  cursorPageDown(c);
 }
 
 void KWriteView::topOfView(VConfig &c) {
@@ -451,28 +488,6 @@ void KWriteView::bottomOfView(VConfig &c) {
   update(c);
 }
 
-void KWriteView::pageUp(VConfig &c) {
-
-  if (!(c.flags & cfPageUDMovesCursor) && yPos > 0) {
-    newYPos = yPos - (endLine - startLine)*kWriteDoc->fontHeight;
-    if (newYPos < 0) newYPos = 0;
-  }
-  cursor.y -= endLine - startLine;
-  cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
-  update(c);
-//  cursorPageUp(c);
-}
-
-void KWriteView::pageDown(VConfig &c) {
-
-  if (!(c.flags & cfPageUDMovesCursor) && endLine < kWriteDoc->lastLine()) {
-    newYPos = yPos + (endLine - startLine)*kWriteDoc->fontHeight;
-  }
-  cursor.y += endLine - startLine;
-  cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
-  update(c);
-//  cursorPageDown(c);
-}
 /*
 void KWriteView::cursorPageUp(VConfig &c) {
 
@@ -488,6 +503,8 @@ void KWriteView::cursorPageDown(VConfig &c) {
   update(c);
 }
 */
+
+// go to the top, same X position
 void KWriteView::top(VConfig &c) {
 
 //  cursor.x = 0;
@@ -497,12 +514,31 @@ void KWriteView::top(VConfig &c) {
   update(c);
 }
 
+// go to the bottom, same X position
 void KWriteView::bottom(VConfig &c) {
   
 //  cursor.x = 0;
   cursor.y = kWriteDoc->lastLine();
   cXPos = kWriteDoc->textWidth(c.flags & cfWrapCursor,cursor,cOldXPos);
 //  cOldXPos = cXPos = 0;
+  update(c);
+}
+
+// go to the top left corner
+void KWriteView::top_home(VConfig &c) {
+
+  cursor.y = 0;
+  cursor.x = 0;
+  cOldXPos = cXPos = 0;
+  update(c);
+}
+
+// go to the bottom right corner
+void KWriteView::bottom_end(VConfig &c) {
+
+  cursor.y = kWriteDoc->lastLine();
+  cursor.x = kWriteDoc->textLength(cursor.y);
+  cOldXPos = cXPos = kWriteDoc->textWidth(cursor);
   update(c);
 }
 
@@ -536,13 +572,20 @@ void KWriteView::getVConfig(VConfig &c) {
 
 void KWriteView::update(VConfig &c) {
 
-//  bool moot = (cursor.x == c.cursor.x && cursor.y == c.cursor.y);
+  /*
+   * we need to be sure to kill the selection on an attempted cursor
+   * movement even if the cursor doesn't physically move,
+   * but we need to be careful not to do some other things in this case,
+   * like we don't want to expose the cursor
+   */
 
-  if (cursor.x == c.cursor.x && cursor.y == c.cursor.y) return;
+  bool nullMove = (cursor.x == c.cursor.x && cursor.y == c.cursor.y);
+
+//  if (cursor.x == c.cursor.x && cursor.y == c.cursor.y) return;
 
 //  if (cursor.y != c.cursor.y || c.flags & cfMark) kWriteDoc->recordReset();
 
-//  if (!moot) {
+  if (! nullMove) {
     kWriteDoc->unmarkFound();
   
     exposeCursor = true;
@@ -557,12 +600,14 @@ void KWriteView::update(VConfig &c) {
     }
     kWriteDoc->newBracketMark(cursor, bm);
 
-//  }
+  }
 
   if (c.flags & cfMark) {
-    /*if (!moot)*/ kWriteDoc->selectTo(c, cursor, cXPos);
+    if (! nullMove)
+      kWriteDoc->selectTo(c, cursor, cXPos);
   } else {
-    if (!(c.flags & cfPersistent)) kWriteDoc->deselectAll();
+    if (!(c.flags & cfPersistent))
+      kWriteDoc->deselectAll();
   }
 }
 
@@ -758,7 +803,7 @@ void KWriteView::updateView(int flags) {
   int dx, dy;
   int pageScroll;
 
-//printf("upView %d %d %d %d %d\n", exposeCursor, updateState, flags, newXPos, newYPos);
+//debug("upView %d %d %d %d %d", exposeCursor, updateState, flags, newXPos, newYPos);
   if (exposeCursor || flags & ufDocGeometry) {
     emit kWrite->newCurPos();
   } else {
@@ -918,10 +963,10 @@ void KWriteView::updateView(int flags) {
         scroll(dx,dy);
 //        kapp->syncX();
 //        scroll2(dx - dx/2,dy - dy/2);
-      } else {
-        if (cursorOn) paintCursor();
-        if (bm.eXPos > bm.sXPos) paintBracketMark();
+//      } else {
       }
+      if (cursorOn) paintCursor();
+      if (bm.eXPos > bm.sXPos) paintBracketMark();
     }
   }
   exposeCursor = false;
@@ -999,7 +1044,7 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
   r = lineRanges;
   for (line = startLine; line <= endLine; line++) {
     if (r->start < r->end) {
-//printf("painttextline %d %d %d\n", line, r->start, r->end);
+//debug("painttextline %d %d %d", line, r->start, r->end);
       kWriteDoc->paintTextLine(paint, line, r->start, r->end);
       bitBlt(this, r->start - (xPos-2), line*h - yPos, drawBuffer, 0, 0,
         r->end - r->start, h);
@@ -1065,8 +1110,37 @@ void KWriteView::placeCursor(int x, int y, int flags) {
   update(c);
 }
 
+// convert the given physical coordinates to logical (line/column within the document)
+/*
+void KWriteView::calcLogicalPosition(int &x, int &y) {
+
+  TextLine   line;
+
+  y = (yPos + y)/kWriteDoc->fontHeight;
+
+  line = kWriteDoc->textLine(y);
+
+  x = kWriteDoc->textPos(kWriteDoc->textLine(y), x);
+}
+*/
+// given physical coordinates, report whether the text there is selected
+bool KWriteView::isTargetSelected(int x, int y) {
+
+  TextLine   *line;
+
+  y = (yPos + y) / kWriteDoc->fontHeight;
+
+  line = kWriteDoc->textLine(y);
+  if (! line)
+    return false;
+
+  x = kWriteDoc->textPos(line, x);
+
+  return line->isSelected(x);
+}
+
 void KWriteView::focusInEvent(QFocusEvent *) {
-//  printf("got focus %d\n",cursorTimer);
+//  debug("got focus %d",cursorTimer);
 
   if (!cursorTimer) {
     cursorTimer = startTimer(KApplication::cursorFlashTime() / 2);
@@ -1076,7 +1150,7 @@ void KWriteView::focusInEvent(QFocusEvent *) {
 }
 
 void KWriteView::focusOutEvent(QFocusEvent *) {
-//  printf("lost focus %d\n", cursorTimer);
+//  debug("lost focus %d", cursorTimer);
 
   if (cursorTimer) {
     killTimer(cursorTimer);
@@ -1097,7 +1171,7 @@ void KWriteView::keyPressEvent(QKeyEvent *e) {
     e->ignore();
     return;
   }*/
-//  printf("ascii %i, key %i, state %i\n",e->ascii(), e->key(), e->state());
+//  debug("ascii %i, key %i, state %i",e->ascii(), e->key(), e->state());
 
   getVConfig(c);
 //  ascii = e->ascii();
@@ -1127,18 +1201,31 @@ void KWriteView::keyPressEvent(QKeyEvent *e) {
 void KWriteView::mousePressEvent(QMouseEvent *e) {
 
   if (e->button() == LeftButton) {
-    int flags;
 
-    flags = 0;
-    if (e->state() & ShiftButton) {
-      flags |= cfMark;
-      if (e->state() & ControlButton) flags |= cfMark | cfKeepSelection;
+    if (isTargetSelected(e->x(), e->y())) {
+      // we have a mousedown on selected text
+      // we initialize the drag info thingy as pending from this position
+
+      dragInfo.state = diPending;
+      dragInfo.start.x = e->x();
+      dragInfo.start.y = e->y();
+    } else {
+      // we have no reason to ever start a drag from here
+      dragInfo.state = diNone;
+
+      int flags;
+
+      flags = 0;
+      if (e->state() & ShiftButton) {
+        flags |= cfMark;
+        if (e->state() & ControlButton) flags |= cfMark | cfKeepSelection;
+      }
+      placeCursor(e->x(), e->y(), flags);
+      scrollX = 0;
+      scrollY = 0;
+      if (!scrollTimer) scrollTimer = startTimer(50);
+      kWriteDoc->updateViews();
     }
-    placeCursor(e->x(), e->y(), flags);
-    scrollX = 0;
-    scrollY = 0;
-    if (!scrollTimer) scrollTimer = startTimer(50);
-    kWriteDoc->updateViews();
   }
   if (e->button() == MidButton) {
     placeCursor(e->x(), e->y());
@@ -1148,10 +1235,11 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
   if (kWrite->popup && e->button() == RightButton) {
     kWrite->popup->popup(mapToGlobal(e->pos()));
   }
-  kWrite->mousePressEvent(e);
+//  kWrite->mousePressEvent(e); // this doesn't do anything, does it?
 }
 
 void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {
+
   if (e->button() == LeftButton) {
     VConfig c;
     getVConfig(c);
@@ -1163,9 +1251,17 @@ void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {
 void KWriteView::mouseReleaseEvent(QMouseEvent *e) {
 
   if (e->button() == LeftButton) {
-    if (kWrite->config() & cfMouseAutoCopy) kWrite->copy();
-    killTimer(scrollTimer);
-    scrollTimer = 0;
+    if (dragInfo.state == diPending) {
+      // we had a mouse down in selected area, but never started a drag
+      // so now we kill the selection
+      placeCursor(e->x(), e->y(), 0);
+      kWriteDoc->updateViews();
+    } else if (dragInfo.state == diNone) {
+      if (kWrite->config() & cfMouseAutoCopy) kWrite->copy();
+      killTimer(scrollTimer);
+      scrollTimer = 0;
+    }
+    dragInfo.state = diNone;
   }
 }
 
@@ -1174,6 +1270,24 @@ void KWriteView::mouseMoveEvent(QMouseEvent *e) {
   if (e->state() & LeftButton) {
     int flags;
     int d;
+    int x = e->x(),
+        y = e->y();
+
+    if (dragInfo.state == diPending) {
+      // we had a mouse down, but haven't confirmed a drag yet
+      // if the mouse has moved sufficiently, we will confirm
+
+      if (x > dragInfo.start.x + 4 || x < dragInfo.start.x - 4 ||
+          y > dragInfo.start.y + 4 || y < dragInfo.start.y - 4) {
+        // we've left the drag square, we can start a real drag operation now
+        doDrag();
+      }
+      return;
+    } else if (dragInfo.state == diDragging) {
+      // this isn't technically needed because mouseMoveEvent is suppressed during
+      // Qt drag operations, replaced by dragMoveEvent
+      return;
+    }
 
     mouseX = e->x();
     mouseY = e->y();
@@ -1196,7 +1310,7 @@ void KWriteView::mouseMoveEvent(QMouseEvent *e) {
       mouseY = height();
       scrollY = d;
     }
-//printf("modifiers %d\n", ((KGuiCmdApp *) kapp)->getModifiers());
+//debug("modifiers %d", ((KGuiCmdApp *) kapp)->getModifiers());
     flags = cfMark;
     if (e->state() & ControlButton) flags |= cfKeepSelection;
     placeCursor(mouseX, mouseY, flags);
@@ -1210,7 +1324,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   int line, y, yEnd;
 
   QRect updateR = e->rect();
-//  printf("update rect  = ( %i, %i, %i, %i )\n",
+//  debug("update rect  = ( %i, %i, %i, %i )",
 //    updateR.x(),updateR.y(), updateR.width(), updateR.height() );
 
   QPainter paint;
@@ -1238,7 +1352,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
 }
 
 void KWriteView::resizeEvent(QResizeEvent *) {
-//  printf("KWriteView::resize\n");
+//  debug("KWriteView::resize");
   resizeBuffer(this, width(), kWriteDoc->fontHeight);
 //  QWidget::update();
 
@@ -1261,6 +1375,36 @@ void KWriteView::timerEvent(QTimerEvent *e) {
 /////////////////////////////////////
 // Drag and drop handlers
 //
+
+// call this to start a drag from this view
+void KWriteView::doDrag()
+{
+  dragInfo.state = diDragging;
+  dragInfo.dragObject = new QTextDrag(kWriteDoc->markedText(0), this);
+  if (kWrite->isReadOnly()) {
+    dragInfo.dragObject->dragCopy();
+  } else {
+
+/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   drag() is broken for move operations in Qt - dragCopy() is the only safe way
+   to go right now
+
+    if (dragInfo.dragObject->drag()) {
+      // the drag has completed and it turned out to be a move operation
+      if (! kWriteDoc->ownedView((KWriteView*)(QDragObject::target()))) {
+        // the target is not me - we need to delete our selection
+        VConfig c;
+        getVConfig(c);
+        kWriteDoc->delMarkedText(c);
+        kWriteDoc->updateViews();
+      }
+    }
+*/
+    dragInfo.dragObject->dragCopy();
+
+  }
+}
+
 void KWriteView::dragEnterEvent( QDragEnterEvent *event )
 {
   event->accept( (QTextDrag::canDecode(event) && ! kWrite->isReadOnly()) || QUriDrag::canDecode(event) );
@@ -1269,7 +1413,6 @@ void KWriteView::dragEnterEvent( QDragEnterEvent *event )
 /*
 void KWriteView::dragMoveEvent( QDragMoveEvent * )
 {
-  // we should implement a shadow cursor here
 }
 void KWriteView::dragLeaveEvent( QDragLeaveEvent * )
 {
@@ -1284,10 +1427,8 @@ void KWriteView::dropEvent( QDropEvent *event )
 
     if (! HandleURIDrops) {
       // the container should handle this one for us...
-      debug("KWriteView:Handing off QUriDrag...");
       emit dropEventPass(event);
     } else {
-      debug("KWriteView:Handling own QUriDrag...");
       // we can only load one url
       // this is why a smarter container should do this if possible
       if (QUriDrag::decode(event, urls)) {
@@ -1302,18 +1443,51 @@ void KWriteView::dropEvent( QDropEvent *event )
       }
     }
   } else if ( QTextDrag::canDecode(event) && ! kWrite->isReadOnly() ) {
-    debug("KWriteView:accepting QTextDrag...");
+
     QString   text;
 
     if (QTextDrag::decode(event, text)) {
-      placeCursor(event->pos().x(), event->pos().y());
+      bool      priv, selected;
+
+      // is the source our own document?
+      priv = kWriteDoc->ownedView((KWriteView*)(event->source()));
+      // dropped on a text selection area?
+      selected = isTargetSelected(event->pos().x(), event->pos().y());
+
+      if (priv && selected) {
+        // this is a drag that we started and dropped on our selection
+        // ignore this case
+        return;
+      }
+
       VConfig c;
       PointStruc cursor;
+
       getVConfig(c);
       cursor = c.cursor;
-//      kWrite->insertText(text, text.length());
-//      updateCursor(c.cursor);
-      kWriteDoc->insert(c, text);   //!!! not tested
+
+      if (priv) {
+        // this is one of mine (this document), not dropped on the selection
+        if (event->action() == QDropEvent::Move) {
+          kWriteDoc->delMarkedText(c);
+          getVConfig(c);
+          cursor = c.cursor;
+        } else {
+        }
+        placeCursor(event->pos().x(), event->pos().y());
+        getVConfig(c);
+        cursor = c.cursor;
+      } else {
+        // this did not come from this document
+        if (! selected) {
+          placeCursor(event->pos().x(), event->pos().y());
+          getVConfig(c);
+          cursor = c.cursor;
+        }
+      }
+      kWriteDoc->insert(c, text);
+      cursor = c.cursor;
+
       updateCursor(cursor);
       kWriteDoc->updateViews();
     }
@@ -1340,17 +1514,17 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const QString &name, bool Handle
   bookmarks.setAutoDelete(true);
 
   //KSpell initial values
-  kspell = NULL;
-  ksc = new KSpellConfig; //default KSpellConfig to start
-  kspellon = FALSE;
+  kspell.kspell = NULL;
+  kspell.ksc = new KSpellConfig; //default KSpellConfig to start
+  kspell.kspellon = FALSE;
 
   kWriteView->setFocus();
   resize(parent->width() -4, parent->height() -4);
 }
 
 KWrite::~KWrite() {
-  if (kspell)
-    kspell->cleanUp(); // need a way to wait for this to complete
+  if (kspell.kspell)
+    kspell.kspell->cleanUp(); // need a way to wait for this to complete
 
   delete kWriteView;
   delete popup; //right mouse button popup
@@ -1687,37 +1861,18 @@ void KWrite::writeFile(QIODevice &dev) {
 
 
 bool KWrite::loadFile(const QString &name, int flags) {
-
   QFileInfo info(name);
   if (!info.exists()) {
     if (flags & lfNewFile) return true;
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("The specified File does not exist"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    KMessageBox::sorry(this, i18n("The specified File does not exist"));
     return false;
   }
   if (info.isDir()) {
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("You have specified a directory"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    KMessageBox::sorry(this, i18n("You have specified a directory"));
     return false;
   }
   if (!info.isReadable()) {
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("You do not have read permission to this file"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    KMessageBox::sorry(this, i18n("You do not have read permission to this file"));
     return false;
   }
 
@@ -1727,13 +1882,7 @@ bool KWrite::loadFile(const QString &name, int flags) {
     f.close();
     return true;
   }
-  QMessageBox::warning(this,
-    i18n("Sorry"),
-    i18n("An Error occured while trying to open this Document"),
-    i18n("OK"),
-    "",
-    "",
-    0,0);
+  KMessageBox::sorry(this, i18n("An Error occured while trying to open this Document"));
   return false;
 }
 
@@ -1741,13 +1890,7 @@ bool KWrite::writeFile(const QString &name) {
 
   QFileInfo info(name);
   if(info.exists() && !info.isWritable()) {
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("You do not have write permission to this file"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    KMessageBox::sorry(this, i18n("You do not have write permission to this file"));
     return false;
   }
 
@@ -1757,13 +1900,7 @@ bool KWrite::writeFile(const QString &name) {
     f.close();
     return true;//kWriteDoc->setFileName(name);
   }
-  QMessageBox::warning(this,
-    i18n("Sorry"),
-    i18n("An Error occured while trying to open this Document"),
-    i18n("OK"),
-    "",
-    "",
-    0,0);
+  KMessageBox::sorry(this, i18n("An Error occured while trying to open this Document"));
   return false;
 }
 
@@ -1784,13 +1921,7 @@ void KWrite::loadURL(const QString &url, int flags) {
     }
     if (u.isMalformed()) {
 	s = i18n("Malformed URL\n%1").arg(url);
-      QMessageBox::warning(this,
-        i18n("Sorry"),
-        s,
-        i18n("OK"),
-        "",
-        "",
-        0,0);
+      KMessageBox::sorry(this, s);
       return;
     }
   }
@@ -1944,13 +2075,8 @@ bool KWrite::canDiscard() {
   int query;
 
   if (isModified()) {
-    query = QMessageBox::warning(this,
-      i18n("Warning"),
-      i18n("The current Document has been modified.\nWould you like to save it?"),
-      i18n("Yes"),
-      i18n("No"),
-      i18n("Cancel"),
-      0,2);
+    query = KMessageBox::warningYesNoCancel(this,
+      i18n("The current Document has been modified.\nWould you like to save it?"));
     switch (query) {
       case 0: //yes
         if (save() == CANCEL) return false;
@@ -2239,7 +2365,7 @@ void KWrite::replace() {
 //usleep(50000);
 //XSync(qt_xdisplay(),true);
 //kapp->syncX();
-//printf("xpending %d\n",XPending(qt_xdisplay()));
+//debug("xpending %d",XPending(qt_xdisplay()));
 //kapp->processEvents();
 //    kWriteView->tagAll();
 //    searchAgain();
@@ -2353,12 +2479,9 @@ void KWrite::searchAgain(SConfig &s) {
         continueSearch(s);
       } else {
         // wrapped
-        QMessageBox::information(this,
-          i18n("Find"),
+        KMessageBox::sorry(this,
           i18n("Search string not found!"),
-          i18n("OK"),
-          "",
-          "",0,0);
+          i18n("Find"));
       }
     }
   } while (query == 0);
@@ -2508,12 +2631,7 @@ bool KWrite::askReplaceEnd() {
   if (s.flags & sfFinished) {
     // replace finished
     str = i18n("%1 replace(s) made").arg(replaces);
-    QMessageBox::information(this,
-      i18n("Replace"),
-      str,
-      i18n("OK"),
-      "",
-      "",0,0);
+    QMessageBox::information(this, str, i18n("Replace"));
     return true;
   }
 
@@ -2586,7 +2704,7 @@ void KWrite::setBookmark() {
     (height() - 211/*popup->height()*/)/2)));
 
   z = popup->exec();
-//  printf("map %d %d\n",popup->width(),popup->height());
+//  debug("map %d %d",popup->width(),popup->height());
   delete popup;
   if (z > 0) {
     setBookmark(z - 1);
@@ -2878,7 +2996,7 @@ void KWrite::hlDlg() {
   //this gets the data from the KConfig object
   hlManager->getHlDataList(hlDataList);
   dlg = new HighlightDialog(hlManager, &hlDataList,
-    kWriteDoc->getHighlightNum(), topLevelWidget());
+    kWriteDoc->getHighlightNum(), this);
   dlg->setCaption(i18n("Highlight Settings"));
 //  dlg->hlChanged(kWriteDoc->getHighlightNum());
   if (dlg->exec() == QDialog::Accepted) {
@@ -2957,7 +3075,7 @@ void KWrite::paintEvent(QPaintEvent *e) {
   int x, y;
 
   QRect updateR = e->rect();                    // update rectangle
-//  printf("Update rect = ( %i, %i, %i, %i )\n",
+//  debug("Update rect = ( %i, %i, %i, %i )",
 //    updateR.x(),updateR.y(), updateR.width(), updateR.height() );
 
   int ux1 = updateR.x();
@@ -2998,7 +3116,7 @@ void KWrite::paintEvent(QPaintEvent *e) {
 
 void KWrite::resizeEvent(QResizeEvent *) {
 
-//  printf("Resize %d, %d\n",e->size().width(),e->size().height());
+//  debug("Resize %d, %d",e->size().width(),e->size().height());
 
 //kWriteView->resize(width() -20, height() -20);
   kWriteView->tagAll();
@@ -3014,13 +3132,13 @@ void KWrite::spellcheck()
   if (isReadOnly())
     return;
 
-  kspell= new KSpell (this, "KWrite: Spellcheck", this,
+  kspell.kspell= new KSpell (this, "KWrite: Spellcheck", this,
                       SLOT (spellcheck2 (KSpell *)));	
 }
 
 void KWrite::spellcheck2(KSpell *)
 {
-  if (kspell->isOk())
+  if (kspell.kspell->isOk())
   {
 
     kWriteDoc->setReadOnly (TRUE);
@@ -3031,32 +3149,32 @@ void KWrite::spellcheck2(KSpell *)
     // or kspell should provide access to the spell widget.
     kWriteDoc->setPseudoModal((QWidget*)0x01);
 
-    spell_tmptext = text();
+    kspell.spell_tmptext = text();
 
-    connect (kspell, SIGNAL (misspelling (QString , QStrList *, unsigned)),
+    connect (kspell.kspell, SIGNAL (misspelling (QString , QStrList *, unsigned)),
               this, SLOT (misspelling (QString, QStrList *, unsigned)));
-    connect (kspell, SIGNAL (
+    connect (kspell.kspell, SIGNAL (
                               corrected (QString, QString, unsigned)),
               this, SLOT (
                           corrected (QString, QString, unsigned)));
 
-    connect (kspell, SIGNAL (progress (unsigned int)),
+    connect (kspell.kspell, SIGNAL (progress (unsigned int)),
               this, SIGNAL (spellcheck_progress (unsigned int)) );
 
-    connect (kspell, SIGNAL (done(const char *)),
+    connect (kspell.kspell, SIGNAL (done(const char *)),
               this, SLOT (spellResult (const char *)));
 
-    connect (kspell, SIGNAL(cleanDone()),
+    connect (kspell.kspell, SIGNAL(cleanDone()),
               this, SLOT(spellCleanDone()));
 
-    kspellon = TRUE;
-    kspellMispellCount = 0;
-    kspellReplaceCount = 0;
-    kspellPristine = ! kWriteDoc->isModified();
+    kspell.kspellon = TRUE;
+    kspell.kspellMispellCount = 0;
+    kspell.kspellReplaceCount = 0;
+    kspell.kspellPristine = ! kWriteDoc->isModified();
 
-    kspell->setProgressResolution (1);
+    kspell.kspell->setProgressResolution (1);
 
-    kspell->check(spell_tmptext);
+    kspell.kspell->check(kspell.spell_tmptext);
   }
   else
   {
@@ -3064,13 +3182,12 @@ void KWrite::spellcheck2(KSpell *)
     // reference ISpell explicitly.  (KSpell would like to use
     // aspell once aspell'a internationalization is mature.)
 
-    QMessageBox::information(this, i18n("KWrite: Error"),
+    KMessageBox::error(this,
     		i18n("Error starting KSpell.\n"\
-    		     "Please make sure you have ISpell properly configured and in your PATH."),
-    		i18n("OK"));
+    		     "Please make sure you have ISpell properly configured and in your PATH."));
 
     kdebug(KDEBUG_ERROR, 750, "Couldn't start kspell\n");
-    delete kspell;
+    delete kspell.kspell;
 
   }
 }
@@ -3093,7 +3210,7 @@ void KWrite::misspelling (QString origword, QStrList *, unsigned pos)
   cursor.x = pos - (cnt - kWriteDoc->textLine(line)->length()) + 1;
   cursor.y = line;
 //  deselectAll(); // shouldn't the spell check be allowed within selected text?
-  kspellMispellCount++;
+  kspell.kspellMispellCount++;
   kWriteView->updateCursor(cursor); //this does deselectAll() if no persistent selections
   kWriteDoc->markFound(cursor,origword.length());
   kWriteDoc->updateViews();
@@ -3122,17 +3239,12 @@ void KWrite::corrected (QString originalword, QString newword, unsigned pos)
       kWriteView->updateCursor(cursor);
       kWriteDoc->markFound(cursor, newword.length());
 
-//      int slen, rlen;
-
-//      slen = originalword.length();
-//      rlen = newword.length();
-//!!! not tested, i need to get ispell
       kWriteDoc->recordStart(kWriteView, cursor, configFlags,
-        KWActionGroup::ugSpell, true, kspellReplaceCount > 0);
+        KWActionGroup::ugSpell, true, kspell.kspellReplaceCount > 0);
       kWriteDoc->recordReplace(cursor, originalword.length(), newword);
       kWriteDoc->recordEnd(kWriteView, cursor, configFlags | cfGroupUndo);
 
-      kspellReplaceCount++;
+      kspell.kspellReplaceCount++;
     }
 
 }
@@ -3148,8 +3260,8 @@ void KWrite::spellResult (const char *)
   // we can safely use the undo mechanism to backout changes
   // in case of a cancel, because we force the entire spell check
   // into one group (record)
-  if (kspell->dlgResult() == 0) {
-    if (kspellReplaceCount) {
+  if (kspell.kspell->dlgResult() == 0) {
+    if (kspell.kspellReplaceCount) {
       // backout the spell check
       VConfig c;
       kWriteView->getVConfig(c);
@@ -3158,7 +3270,7 @@ void KWrite::spellResult (const char *)
       kWriteDoc->clearRedo();
       // make sure the modified flag is turned back off
       // if we started with a clean buffer
-      if (kspellPristine)
+      if (kspell.kspellPristine)
         kWriteDoc->setModified(false);
     }
   }
@@ -3167,22 +3279,21 @@ void KWrite::spellResult (const char *)
   kWriteDoc->setReadOnly (FALSE);
 
   // if we marked up the text, clear it now
-  if (kspellMispellCount)
+  if (kspell.kspellMispellCount)
     kWriteDoc->unmarkFound();
 
   kWriteDoc->updateViews();
 
-  kspell->cleanUp();
+  kspell.kspell->cleanUp();
 }
 
 void KWrite::spellCleanDone ()
 {
-  //  kdebug (KDEBUG_WARN, 750, "deleting kspell");
-  spell_tmptext = "";
-  delete kspell;
+  kspell.spell_tmptext = "";
+  delete kspell.kspell;
 
-  kspell = NULL;
-  kspellon = FALSE;
+  kspell.kspell = NULL;
+  kspell.kspellon = FALSE;
 
   emit spellcheck_done();
 }

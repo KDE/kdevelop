@@ -2790,7 +2790,7 @@ void CConfigEnscriptDlg::slotPreviewClicked() {
 void CConfigEnscriptDlg::slotOkClicked() {
   QString lastSettings;
   lastSettings = createParameters(1);
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("Enscript");
   settings->writeEntry("Header",headerButton->isChecked());
   settings->writeEntry("FancyHeader",fancyHeaderButton->isChecked());
@@ -2870,7 +2870,7 @@ bool CConfigEnscriptDlg::lookProgram(QString name) {
 }
 
 void CConfigEnscriptDlg::loadSettings() {
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("Enscript");
   headerButton->setChecked(!strcmp(settings->readEntry("Header"),"true"));
   fancyHeaderButton->setChecked(!strcmp(settings->readEntry("FancyHeader"),"true"));

@@ -233,6 +233,8 @@ class KWriteView : public QWidget {
     void cursorPageDown(VConfig &);
     void top(VConfig &);
     void bottom(VConfig &);
+    void top_home(VConfig &c);
+    void bottom_end(VConfig &c);
 
   protected slots:
     void changeXPos(int);
@@ -260,6 +262,9 @@ class KWriteView : public QWidget {
     void paintBracketMark();
 
     void placeCursor(int x, int y, int flags = 0);
+    bool isTargetSelected(int x, int y);
+
+    void doDrag();
 
     virtual void focusInEvent(QFocusEvent *);
     virtual void focusOutEvent(QFocusEvent *);
@@ -313,6 +318,14 @@ class KWriteView : public QWidget {
     BracketMark bm;
 
     bool HandleURIDrops;
+
+    enum DragState { diNone, diPending, diDragging };
+
+    struct {
+      DragState       state;
+      PointStruc      start;
+      QTextDrag       *dragObject;
+    } dragInfo;
 
   signals:
     // emitted when KWriteView is not handling its own URI drops
@@ -784,12 +797,12 @@ class KWrite : public QWidget {
     /**
      * Returns the KSpellConfig object
      */
-    KSpellConfig *ksConfig(void) {return ksc;}
+    KSpellConfig *ksConfig(void) {return kspell.ksc;}
     /**
      * Sets the KSpellConfig object.  (The object is
      *  copied internally.)
      */
-    void setKSConfig (const KSpellConfig _ksc) {*ksc=_ksc;}
+    void setKSConfig (const KSpellConfig _ksc) {*kspell.ksc=_ksc;}
 
   public slots:    //please keep prototypes and implementations in same order
     void spellcheck();
@@ -807,13 +820,16 @@ class KWrite : public QWidget {
     void spellcheck_done ();
 
   protected:
-    KSpell *kspell;
-    KSpellConfig *ksc;
-    QString spell_tmptext;
-    bool kspellon;
-    int kspellMispellCount;
-    int kspellReplaceCount;
-    bool kspellPristine;       // doing spell check on a clean document?
+    // all spell checker data stored in here
+    struct {
+      KSpell *kspell;
+      KSpellConfig *ksc;
+      QString spell_tmptext;
+      bool kspellon;              // are we doing a spell check?
+      int kspellMispellCount;     // how many words suggested for replacement so far
+      int kspellReplaceCount;     // how many words actually replaced so far
+      bool kspellPristine;        // doing spell check on a clean document?
+    } kspell;
 };
 
 

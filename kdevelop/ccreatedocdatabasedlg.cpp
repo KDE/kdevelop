@@ -286,7 +286,7 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
     return;
   }
   
-  KGlobal::dirs()->getSaveLocation("appdata");
+  KGlobal::dirs()->saveLocation("appdata");
  
   QString kde_doc_dir = conf->readEntry("doc_kde", KDELIBS_DOCDIR);
   QString qt_doc_dir = conf->readEntry("doc_qt", QT_DOCDIR);
@@ -317,7 +317,8 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   }
   
   proc->prepareJob("");
-  (*proc) <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KGlobal::dirs()->getSaveLocation("appdata");
+  (*proc) <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+
+      KGlobal::dirs()->saveLocation("appdata");
   proc->startJob();
   accept();
 }

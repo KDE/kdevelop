@@ -421,6 +421,15 @@ class CppHighlight : public CHighlight {
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
 };
 
+class ObjcHighlight : public CHighlight {
+  public:
+    ObjcHighlight(const QString &name);
+    virtual ~ObjcHighlight();
+  protected:
+    virtual void makeContextList();
+    virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
+};
+
 class IdlHighlight : public CHighlight {
   public:
     IdlHighlight(const QString &name);

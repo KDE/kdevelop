@@ -248,7 +248,6 @@ void CEditWidget::deleteInterval( uint startAt, uint endAt )
 void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
 {
   assert( toInsert != NULL );
-  assert( atLine >= 0 );
   
   int pos=0;
   QString txt;

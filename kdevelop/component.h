@@ -60,6 +60,11 @@ public:
      * given relative to the project dir.
      */
     virtual void removedFileFromProject(const QString&);
+    /**
+     * A file has been saved. The filename is
+     * given relative to the project dir.
+     */
+    virtual void savedFile(const QString&);
 };
 
 

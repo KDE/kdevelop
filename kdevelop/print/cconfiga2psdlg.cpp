@@ -864,7 +864,7 @@ void CConfigA2psDlg::slotPreviewClicked() {
 void CConfigA2psDlg::slotOkClicked() {
   QString lastSettings;
   lastSettings = slotCreateParameters();
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("A2ps");
   settings->writeEntry("Header",headerButton->isChecked());
   settings->writeEntry("Borders",bordersButton->isChecked());
@@ -954,7 +954,7 @@ void CConfigA2psDlg::slotLinesClicked() {
 
 void CConfigA2psDlg::loadSettings() {
   selectedProgram();
-  settings = kapp->getConfig();
+  settings = kapp->config();
   settings->setGroup("A2ps");
   headerButton->setChecked(!strcmp(settings->readEntry("Header"),"true"));
   headertextButton->setChecked(!strcmp(settings->readEntry("Headertext"),"true"));
