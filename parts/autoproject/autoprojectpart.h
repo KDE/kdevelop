@@ -77,6 +77,7 @@ private slots:
 private:
     QGuardedPtr<AutoProjectWidget> m_widget;
     QString m_projectName;
+    QString m_projectPath;
     KSelectAction *buildConfigAction;
 
     // Enble AutoProjectWidget to emit our signals

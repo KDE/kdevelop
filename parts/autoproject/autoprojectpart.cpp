@@ -45,19 +45,19 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     setInstance(AutoProjectFactory::instance());
 
     setXMLFile("kdevautoproject.rc");
-
+    
     bool kde = (args[0] == "kde");
 
     m_widget = new AutoProjectWidget(this, kde);
     m_widget->setIcon(SmallIcon("make"));
     m_widget->setCaption(i18n("Automake Manager"));
-    QWhatsThis::add(m_widget, i18n("Project Tree\n\n"
+    QWhatsThis::add(m_widget, i18n("Automake Manager\n\n"
                                    "The project tree consists of two parts. The 'overview' "
                                    "in the upper half shows the subprojects, each one having a "
                                    "Makefile.am. The 'details' view in the lower half shows the "
                                    "targets for the subproject selected in the overview."));
     
-    topLevel()->embedSelectView(m_widget, i18n("Automake Manager"));
+    topLevel()->embedSelectViewRight(m_widget, i18n("Automake Manager"));
 
     KAction *action;
 
@@ -163,6 +163,7 @@ void AutoProjectPart::openProject(const QString &dirName, const QString &project
 {
     m_widget->openProject(dirName);
     m_projectName = projectName;
+    m_projectPath =dirName;
 
     QDomDocument &dom = *projectDom();
     QString activeTarget = DomUtil::readEntry(dom, "/kdevautoproject/general/activetarget");
