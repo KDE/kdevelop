@@ -15,6 +15,7 @@
 #include <qprinter.h>
 #include <qprintdialog.h>
 #include <qpaintdevicemetrics.h>
+#include <qclipbrd.h>
 #include <kapp.h>
 
 #include <kfiledialog.h>
@@ -312,7 +313,8 @@ void KWriteView::update(VConfig &c) {
   if (c.flags & cfMark) {
     kWriteDoc->selectTo(c.cursor,cursor,c.flags);
   } else {
-    if (!(c.flags & cfPersistent)) kWriteDoc->deselectAll();
+    if (!(c.flags & cfPersistent))
+      kWriteDoc->deselectAll();
   }
 }
 
@@ -569,6 +571,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
       } else if (cursorOn) paintCursor();
     }
   }
+
   exposeCursor = false;
   updateState = 0;
 }
@@ -686,11 +689,14 @@ void KWriteView::placeCursor(int x, int y, int flags) {
 void KWriteView::focusInEvent(QFocusEvent *) {
 //  printf("got focus %d\n",cursorTimer);
 
+  QString text=QApplication::clipboard()->text();
   if (!cursorTimer) {
     cursorTimer = startTimer(500);
     cursorOn = true;
     paintCursor();
   }
+
+  emit kWrite->clipboardStatus(this, !text.isEmpty());
 }
 
 void KWriteView::focusOutEvent(QFocusEvent *) {
@@ -856,6 +862,7 @@ X      : cut
         case Key_Insert:
             if (e->state() & ShiftButton) kWriteDoc->paste(this,c);
               else kWrite->toggleOverwrite();
+            break;
 /*        case Key_F9:
             printf("text() %s\n", kWrite->text().data());
             break;
@@ -896,6 +903,7 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
 }
 
 void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {
+
   if (e->button() == LeftButton) {
     VConfig c;
     getVConfig(c);
@@ -1157,7 +1165,7 @@ void KWrite::loadFile(QIODevice &dev, bool insert) {
   } else {
     kWriteView->getVConfig(c);
     kWriteDoc->insertFile(kWriteView,c,dev);
-kWriteDoc->updateViews();
+    kWriteDoc->updateViews();
   }
 //  kWriteDoc->updateViews();
 }
@@ -1434,6 +1442,7 @@ void KWrite::kfmFinished() {
   }
   delete kfm;
   kfm = 0L;
+
 }
 
 void KWrite::kfmError(int e, const char *s) {
@@ -1487,7 +1496,8 @@ bool KWrite::canDiscard() {
 
 void KWrite::newDoc() {
 
-  if (canDiscard()) clear();
+  if (canDiscard())
+    clear();
 }
 
 void KWrite::open() {
