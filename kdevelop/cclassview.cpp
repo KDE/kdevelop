@@ -22,6 +22,7 @@
 #include <kmsgbox.h>
 #include <qheader.h>
 #include <qprogressdialog.h> 
+#include <qmessagebox.h>
 
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"
@@ -325,7 +326,10 @@ void CClassView::viewDefinition( const char *className,
                                  const char *declName, 
                                  THType type )
 {
-  emit selectedViewDefinition( className, declName, type );
+  if( className == NULL && declName == NULL )
+    QMessageBox::warning( this, i18n( "Not found" ), i18n( "This item could not be viewed. The item isn't parsed." ) );
+  else
+    emit selectedViewDefinition( className, declName, type );
 }
 
 /*------------------------------------- CClassView::viewDefinition()
@@ -341,7 +345,10 @@ void CClassView::viewDeclaration( const char *className,
                                   const char *declName, 
                                   THType type )
 {
-  emit selectedViewDeclaration( className, declName, type );
+  if( className == NULL && declName == NULL )
+    QMessageBox::warning( this, i18n( "Not found" ), i18n( "This item could not be viewed. The item isn't parsed." ) );
+  else
+    emit selectedViewDeclaration( className, declName, type );
 }
 
 /*********************************************************************
@@ -665,14 +672,28 @@ void CClassView::slotClassDelete()
 
 void CClassView::slotClassViewSelected()
 {
+  THType type;
+
+  type = treeH->itemType();
+
   // Only react on clicks on the left mousebutton.
-  if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER )
+  if( mouseBtn == LeftButton && type != THFOLDER )
   {
-    slotViewDeclaration();
+    if( type == THCLASS || type == THSTRUCT ||
+        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
+        type == THPRIVATE_ATTR )
+      slotViewDefinition();
+    else
+      slotViewDeclaration();
   }
-  else if( mouseBtn == MidButton && treeH->itemType() != THFOLDER )
+  else if( mouseBtn == MidButton && type != THFOLDER )
   {
-    slotViewDefinition();
+    if( type == THCLASS || type == THSTRUCT ||
+        type == THPUBLIC_ATTR || type == THPROTECTED_ATTR || 
+        type == THPRIVATE_ATTR )
+      slotViewDeclaration();
+    else
+      slotViewDefinition();
   }
 
   // Set it back, so next time only if user clicks again we react.
