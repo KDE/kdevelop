@@ -541,7 +541,7 @@ void CPrjOptionsDlg::addMakePage()
   grid2->addWidget(m_rebuild_label,0,2);
   m_rebuild_label->setFocusPolicy( QWidget::NoFocus );
   m_rebuild_label->setBackgroundMode( QWidget::PaletteBackground );
-  m_rebuild_label->setText(i18n("Rebuild behaviour on run/debug:"));
+  m_rebuild_label->setText(i18n("Rebuild behavior on run/debug:"));
   m_rebuild_label->setAlignment( 289 );
   m_rebuild_label->setMargin( -1 );
 

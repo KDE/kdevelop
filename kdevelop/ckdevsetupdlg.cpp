@@ -624,7 +624,7 @@ void CKDevSetupDlg::addDebuggerTab()
                           "\"dlopen\" then it'll refuse to set a breakpoint in that code.\n"
                     "We can get gdb to stop on a library load and hence\n"
                     "try to set the pending breakpoints. See docs for more\n"
-                    "details and a \"gotcha\" relating to this behaviour.\n\n"
+                    "details and a \"gotcha\" relating to this behavior.\n\n"
                     "If you are not \"dlopen\"ing libs leave this off." ));
 
   dbgFloatCheck = new QCheckBox( dbgInternalGroup, "dbgFloatToolbar" );
