@@ -554,6 +554,14 @@ const QList<QWidget> DocViewMan::viewsOfDoc(int docId) const
 }
 
 //------------------------------------------------------------------------------
+// get the first edit view for a document
+//------------------------------------------------------------------------------
+CEditWidget* DocViewMan::getFirstEditView(int docId) const
+{
+  return (dynamic_cast<CEditWidget*> (viewsOfDoc(docId).getFirst()));
+}
+
+//------------------------------------------------------------------------------
 // get the type of a document
 //------------------------------------------------------------------------------
 int DocViewMan::docType(int docId) const
@@ -575,6 +583,8 @@ int DocViewMan::docType(int docId) const
 //------------------------------------------------------------------------------
 void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
 {
+  debug("DocViewMan::slot_gotFocus !\n");
+
   // set current view, distinguish between edit widget and browser widget
   QObjectList* pL = (QObjectList*) pMDICover->children();
   QWidget* pView = 0L;

@@ -778,7 +778,7 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     else {
       // a view for this doc exists, already;
       // use the first view we found of this doc to show the text
-      pCurEditWidget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
+      pCurEditWidget = m_docViewManager->getFirstEditView(docId);
       qDebug("found view in list of doc");
     }
     m_docViewManager->loadDoc( docId, filename,1);
@@ -791,16 +791,16 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     debug(" document type found !\n");
 
     int docId = m_docViewManager->findDoc( filename);
-    pCurEditWidget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
+    pCurEditWidget = m_docViewManager->getFirstEditView(docId);
 
     debug(" activate view !\n");
 
     activateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
 
-    debug(" view activated !\n");
+    // Don't use the saved text because it is useless 
+    // and removes the bookmarks
+    // pCurEditWidget->setText(info->text);
 
-    // The file is in the list so use the saved text
-    pCurEditWidget->setText(info->text);
     qDebug("doc (and at least 1 view) did exist, raise it");
   }
 
@@ -824,6 +824,8 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
   pCurEditWidget->setName(filename);
   info->text = pCurEditWidget->text();
+
+  debug(" set focus on view !\n");
   pCurEditWidget->setFocus();
 
   // Need to get the breakpoints displayed in this file (if any)

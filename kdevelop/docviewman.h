@@ -148,6 +148,8 @@ public:
   int countViewsOfDoc(int docId) const;
   /** get all view pointer for a document */
   const QList<QWidget> viewsOfDoc(int docId) const;
+  /** get the first edit view for a document */
+  CEditWidget* getFirstEditView(int docId) const;
 
   /** @return the number of documents */
   int docCount() const;

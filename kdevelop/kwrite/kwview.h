@@ -174,9 +174,9 @@ class KWriteView : public QWidget {
     void top(VConfig &);
     void bottom(VConfig &);
 
-   	int getXPos() { return xPos;}
-  	int getYPos() { return yPos;}
-  	int getRange(int midline);
+    int getXPos() { return xPos;}
+    int getYPos() { return yPos;}
+    int getRange(int midline);
 
 protected slots:
     void changeXPos(int);
@@ -220,7 +220,7 @@ protected slots:
     QScrollBar *xScroll;
     QScrollBar *yScroll;
 	
-	KIconBorder *leftBorder;
+    KIconBorder *leftBorder;
 
     int xPos;
     int yPos;

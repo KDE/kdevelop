@@ -3240,14 +3240,24 @@ void KWriteDoc::updateBMPopup(QPopupMenu* popup)
       TextLine* curTextline = textLine(line);
       if(curTextline != NULL && curTextline->isBookmarked()) 
         {
-          QString buf;
-          buf.sprintf("%s; %s : %d ",fName.data(), i18n("Line").data(), line + 1);
           int z = popup->count();
+
+          QString buf;
+
+          if (z < 9) {
+	    buf.sprintf("%s &%d; %s : %d ",
+			fName.data(),
+			z,
+			i18n("Line").data(), 
+			line + 1);
+	    popup->setAccel(ALT+kw_bookmark_keys[z - 1],z);
+	  } else {
+	    buf.sprintf("%s; %s : %d ",
+			fName.data(), 
+			i18n("Line").data(), 
+			line + 1);
+	  }
           popup->insertItem(buf,z);
-          if (z < 9)
-            {
-              popup->setAccel(ALT+kw_bookmark_keys[z],z);
-            }
         }
     }
 }
@@ -3271,6 +3281,8 @@ void KWriteDoc::gotoBookmark(QString &text) {
     KWriteView * view = views.first();
     if(view) {
       view->kWrite->gotoPos(0, line);
+      view->kWrite->setFocus();
+      view->setFocus();
     }
   }
 }
