@@ -1,0 +1,26 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevCvsPart" version="1">
+<MenuBar>
+	<Menu name="project" >
+		<Action name="cvs_import" />
+	</Menu>
+	<Menu name="tools">
+		<Menu name="version_control">
+			<Text>&amp;Version Control</Text>
+			<Merge />
+			<Menu name="version_control_tools_cvs">
+				<Text>&amp;CVS</Text>
+				<Action name="cvs_commit" />
+				<Action name="cvs_diff" />
+				<Action name="cvs_log" />
+				<Action name="cvs_add" />
+				<Action name="cvs_remove" />
+				<Action name="cvs_update" />
+				<Action name="cvs_replace" />
+			</Menu>
+		</Menu>
+	</Menu>
+</MenuBar>
+
+</kpartgui>
+
