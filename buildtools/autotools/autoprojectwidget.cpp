@@ -194,7 +194,7 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	executeTargetButton->setPixmap( SmallIcon( "exec") );
 	QToolTip::add
 		( executeTargetButton, i18n( "Execute" ) );
-    QWhatsThis::add(executeTargetButton, i18n("<b>Execute target</b><p> Executes target, if it's a program. Tries to build it, if that's not yet done."));					    
+    QWhatsThis::add(executeTargetButton, i18n("<b>Execute target</b><p> Executes target, if it is a program. Tries to build it, if that is not yet done."));					    
 
 	QWidget *spacer2 = new QWidget( targetButtonBox );
 	targetButtonBox->setStretchFactor( spacer2, 1 );

@@ -92,7 +92,7 @@ void AutoDetailsView::initActions()
                                          "Also builds dependent targets."));
 	executeTargetAction = new KAction( i18n( "Execute Target..." ), "exec", 0,
 	                                 this, SLOT( slotExecuteTarget() ), actions, "execute target" );
-    executeTargetAction->setWhatsThis(i18n("<b>Execute target</b><p>Executes the target and tries to build in case it isn't."));					 
+    executeTargetAction->setWhatsThis(i18n("<b>Execute target</b><p>Executes the target and tries to build in case it is not built."));					 
 	setActiveTargetAction = new KAction( i18n( "Make Target Active" ), "", 0,
 	                                     this, SLOT( slotSetActiveTarget() ), actions, "set active target" );
     setActiveTargetAction->setWhatsThis(i18n("<b>Make target active</b><p>Marks the currently selected target as 'active'. New files and classes by default go to an active target. "
