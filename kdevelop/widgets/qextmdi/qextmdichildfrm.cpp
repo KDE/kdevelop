@@ -109,10 +109,12 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
 #endif
 #endif
 #if QT_VERSION > 209
+#ifndef _OS_WIN32_
    m_pMinimize->setAutoRaise(TRUE);
    m_pMaximize->setAutoRaise(TRUE);
    m_pClose->setAutoRaise(TRUE);
    m_pUndock->setAutoRaise(TRUE);
+#endif
 #endif
 
    QObject::connect(m_pIcon,SIGNAL(pressed()),this,SLOT(showSystemMenu()));
@@ -857,7 +859,9 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
 /** Shows a system menu for child frame windows. */
 void QextMdiChildFrm::showSystemMenu()
 {
+#ifndef _OS_WIN32_
    m_pIcon->setDown( FALSE);
+#endif
    QPoint popupmenuPosition;
    //qDebug("%d,%d,%d,%d,%d",m_pIcon->pos().x(),x(),m_pIcon->pos().y(),m_pIcon->height(),y());
    popupmenuPosition = QPoint( m_pIcon->pos().x(),
