@@ -609,7 +609,7 @@ void TrollProjectWidget::setupContext()
     addSubdirButton->setEnabled(hasSubdirs);
     buildTargetButton->setEnabled(buildable);
     m_part->actionCollection()->action("build_build_target")->setEnabled(buildable);
-    
+
     rebuildTargetButton->setEnabled(buildable);
     m_part->actionCollection()->action("build_rebuild_target")->setEnabled(buildable);
 
@@ -726,7 +726,7 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
               QPtrListIterator<FileItem> it4((*it3)->files);
               for (; it4.current(); ++it4)
                   (*it3)->insertItem(*it4);
-              (*it3)->setOpen(true);              
+              (*it3)->setOpen(true);
           }
           (*it2)->setOpen(true);
         }
@@ -772,7 +772,7 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 
     QString dirName = m_shownSubproject->path;
     FileItem *fitem = static_cast<FileItem*>(pvitem);
-    
+
     bool isUiFile = QFileInfo(fitem->name).extension() == "ui";
     if( m_part->isTMakeProject() && isUiFile ){
 	// start designer in your PATH
@@ -1058,7 +1058,7 @@ void TrollProjectWidget::slotRemoveSubproject(SubprojectItem *spitem)
     return;
   else
   {
-    if ( ( spitem = m_shownSubproject->parent() ) != NULL  )
+    if ( ( spitem = dynamic_cast<SubprojectItem *>(m_shownSubproject->parent()) ) != NULL  )
     {
     QString subdirname = m_shownSubproject->subdir;
     spitem->subdirs.remove(subdirname);
@@ -1174,15 +1174,15 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     QString target=(*it)+".target";
     QString command=(*it)+".commands";
     QString commandStr="$$IDL_COMPILER $$IDL_OPTIONS $$"+target;
-                          
+
     Buffer->removeValues(target);
     Buffer->setValues(target,*it,FileBuffer::VSM_RESET);
 
     Buffer->removeValues(command);
     Buffer->setValues(command,commandStr,FileBuffer::VSM_RESET);
 
-  }                          
-    
+  }
+
 
 
 
@@ -1360,10 +1360,10 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
       subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
       subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
   }
-  
+
   updateInstallObjects(spitem,subBuffer);
 //  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
-  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());  
+  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
 }
 
 void TrollProjectWidget::updateInstallObjects(SubprojectItem* item, FileBuffer* subBuffer)
@@ -1372,7 +1372,7 @@ void TrollProjectWidget::updateInstallObjects(SubprojectItem* item, FileBuffer* 
   GroupItem* instroot = getInstallRoot(item);
   QPtrListIterator<GroupItem> it(instroot->installs);
   QStringList instobjects;
-  
+
   for (;it.current();++it)
   {
     GroupItem* iobj = *it;
@@ -1388,7 +1388,7 @@ void TrollProjectWidget::updateInstallObjects(SubprojectItem* item, FileBuffer* 
       subBuffer->setValues(iobj->install_objectname+".files",iobj->str_files_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
     }
   }
-  
+
   if (!item->configuration.m_target_install_path.isEmpty() &&
       item->configuration.m_target_install)
   {
@@ -1399,9 +1399,9 @@ void TrollProjectWidget::updateInstallObjects(SubprojectItem* item, FileBuffer* 
   }
 
   subBuffer->removeValues("INSTALLS");
-  subBuffer->setValues("INSTALLS",instobjects,FileBuffer::VSM_APPEND,VALUES_PER_ROW);   
+  subBuffer->setValues("INSTALLS",instobjects,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
-  
+
 }
 
 QString TrollProjectWidget::getHeader()
@@ -1508,7 +1508,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
           gitem = *it;
           break;
         }
-      }      
+      }
       QPtrListIterator<GroupItem> it2(gitem->installs);
       for (; it2.current(); ++it2)
       {
@@ -1516,7 +1516,7 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem::GroupType gtype,c
         {
           if ();
         }
-      }      
+      }
 
       m_shownSubproject->files.append(fitem);
       break;
@@ -1670,7 +1670,7 @@ GroupItem* TrollProjectWidget::getInstallObject(SubprojectItem* item, const QStr
       return *it;
   }
   return 0;
-  
+
 }
 
 void TrollProjectWidget::slotNewFile()
@@ -1711,7 +1711,7 @@ void TrollProjectWidget::slotNewFile()
             gitem->installs.append(institem);
             slotOverviewSelectionChanged(m_shownSubproject);
           }
-          return;        
+          return;
       }
 
     }
@@ -1774,7 +1774,7 @@ void TrollProjectWidget::slotConfigureFile()
   FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
   SubprojectItem *scope;
   propdlg->exec();
-  
+
   for (uint i=0; i<dirtyScopes.count();i++)
   {
     scope = getScope(m_shownSubproject,dirtyScopes[i]);
@@ -1835,8 +1835,8 @@ void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)
         addfilesButton->setEnabled(true);
         newfileButton->setEnabled(true);
       }
-        
-        
+
+
     }
     else if (pvitem->type() == ProjectItem::File)
     {
@@ -2176,18 +2176,18 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                                                     "subclass","sourcefile", "uifile");
             SubclassesDlg *sbdlg = new SubclassesDlg( QString(m_shownSubproject->path + "/" + fitem->name).remove(0,projectDirectory().length()),
                 list, projectDirectory());
-                
+
             if (sbdlg->exec())
             {
                 QDomElement el = DomUtil::elementByPath( dom,  "/kdevtrollproject");
                 QDomElement el2 = DomUtil::elementByPath( dom,  "/kdevtrollproject/subclassing");
-                if ( (!el.isNull()) && (!el2.isNull()) ) 
+                if ( (!el.isNull()) && (!el2.isNull()) )
                 {
                     el.removeChild(el2);
                 }
-                
+
                 DomUtil::writePairListEntry(dom, "/kdevtrollproject/subclassing", "subclass", "sourcefile", "uifile", list);
-                
+
                 m_subclasslist = DomUtil::readPairListEntry(dom,"/kdevtrollproject/subclassing" ,
                     "subclass","sourcefile", "uifile");
             }
@@ -2326,14 +2326,14 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 	subBuffer->getValues("INTERFACES",item->forms,item->forms_exclude);
     else
 	subBuffer->getValues("FORMS",item->forms,item->forms_exclude);
-    
+
     subBuffer->getValues("SOURCES",item->sources,item->sources_exclude);
     subBuffer->getValues("HEADERS",item->headers,item->headers_exclude);
     subBuffer->getValues("IMAGES",item->images,item->images_exclude);
     subBuffer->getValues("IDLS",item->idls,item->idls_exclude);
     QStringList installs,installs_exclude;
     subBuffer->getValues("INSTALLS",installs,installs_exclude);
-    
+
     // Create list view items
 
     GroupItem * titem = createGroupItem(GroupItem::InstallRoot, "INSTALLS",scopeString);
@@ -2348,17 +2348,17 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
           continue;
         QStringList path,path_excl;
         QString path_str;
-        subBuffer->getValues((*it)+".path",path,path_excl);        
+        subBuffer->getValues((*it)+".path",path,path_excl);
         if (!path.isEmpty())
           path_str = path[0];
-               
+
         GroupItem* institem = createGroupItem(GroupItem::InstallObject, (*it)  ,scopeString);
-        subBuffer->getValues((*it)+".files",institem->str_files,institem->str_files_exclude);        
+        subBuffer->getValues((*it)+".files",institem->str_files,institem->str_files_exclude);
         institem->install_path = path_str;
         institem->install_objectname = *it;
         institem->owner = item;
         titem->installs.append(institem);
-               
+
         if (!institem->str_files.isEmpty())
         {
           QStringList::iterator it2 = institem->str_files.begin();
@@ -2368,13 +2368,13 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
             institem->files.append(fitem);
           }
         }
-        
+
 
       }
     }
-   
-    
-    
+
+
+
     titem = createGroupItem(GroupItem::Images, "IMAGES",scopeString);
     titem->owner = item;
     item->groups.append(titem);
@@ -2402,7 +2402,7 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 
 
 //    titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
-    titem = createGroupItem(GroupItem::Forms, 
+    titem = createGroupItem(GroupItem::Forms,
 				       (m_part->isTMakeProject() ? "INTERFACES" : "FORMS"),
 				       scopeString);
 
@@ -2511,7 +2511,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
 	}
       }
     }
-      
+
     item->m_FileBuffer.getValues("CONFIG",lst,minusListDummy);
     if (lst.count())
     {
@@ -2609,8 +2609,8 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         }
       }
     }
-    
-    
+
+
 
     // Handle "subdirs" project
     if (item->configuration.m_template == QTMP_SUBDIRS)
