@@ -356,8 +356,9 @@ int Lexer::testDefined()
 */
 int Lexer::testIfLevel()
 {
-    m_skipping[ m_ifLevel + 1 ] = m_skipping[ m_ifLevel ];
-    return !m_skipping[ m_ifLevel++ ];
+    int rtn = !m_skipping[ m_ifLevel++ ];
+    m_skipping[ m_ifLevel ] = m_skipping[ m_ifLevel - 1 ];
+    return rtn;
 }
 
 int Lexer::macroDefined()
@@ -444,7 +445,10 @@ void Lexer::processElse()
         // TODO: report error
 	return;
 
-    m_skipping[ m_ifLevel ] = m_trueTest[ m_ifLevel ];
+    if( m_ifLevel > 0 && m_skipping[m_ifLevel-1] )
+       m_skipping[ m_ifLevel ] = m_skipping[ m_ifLevel - 1 ];
+    else
+       m_skipping[ m_ifLevel ] = m_trueTest[ m_ifLevel ];
 }
 
 void Lexer::processElif()
@@ -462,8 +466,9 @@ void Lexer::processElif()
 	}
 	else
 #endif
-	    m_trueTest[ m_ifLevel ] = macroExpression() != 0;
-	m_skipping[ m_ifLevel ] = !m_trueTest[ m_ifLevel ];
+        bool inSkip = m_skipping[ m_ifLevel ];
+        m_trueTest[ m_ifLevel ] = macroExpression() != 0;
+	m_skipping[ m_ifLevel ] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
     }
     else
 	m_skipping[ m_ifLevel ] = true;
@@ -477,11 +482,12 @@ void Lexer::processEndif()
 
     m_skipping[ m_ifLevel ] = 0;
     m_trueTest[ m_ifLevel-- ] = 0;
-
 }
 
 void Lexer::processIf()
 {
+    bool inSkip = m_skipping[ m_ifLevel ];
+
     if( testIfLevel() ) {
 #if 0
 	int n;
@@ -490,24 +496,28 @@ void Lexer::processIf()
 	    m_trueTest[ m_ifLevel ] = (n == 1 && isdef) || (n == -1 && !isdef);
 	} else
 #endif
-	    m_trueTest[ m_ifLevel ] = macroExpression() != 0;
-	m_skipping[ m_ifLevel ] = !m_trueTest[ m_ifLevel ];
+        m_trueTest[ m_ifLevel ] = macroExpression() != 0;
+	m_skipping[ m_ifLevel ] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
     }
 }
 
 void Lexer::processIfdef()
 {
+    bool inSkip = m_skipping[ m_ifLevel ];
+
     if( testIfLevel() ){
 	m_trueTest[ m_ifLevel ] = macroDefined();
-	m_skipping[ m_ifLevel] = !m_trueTest[ m_ifLevel ];
+	m_skipping[ m_ifLevel] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
     }
 }
 
 void Lexer::processIfndef()
 {
+    bool inSkip = m_skipping[ m_ifLevel ];
+
     if( testIfLevel() ){
 	m_trueTest[ m_ifLevel ] = !macroDefined();
-	m_skipping[ m_ifLevel] = !m_trueTest[ m_ifLevel ];
+	m_skipping[ m_ifLevel ] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
     }
 }
 
