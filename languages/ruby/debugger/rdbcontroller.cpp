@@ -1214,7 +1214,7 @@ void RDBController::slotReadFromSocket(int socket)
 		return;
 	}
 	
-    kdDebug(9012) << "RDBController::slotReadFromSocket length: " << rdbOutputLen_ << " input: " << rdbOutput_ << endl;
+  //  kdDebug(9012) << "RDBController::slotReadFromSocket length: " << rdbOutputLen_ << " input: " << rdbOutput_ << endl;
 	
 	// Save the prompt, and remove it from the buffer
 	currentPrompt_ = prompt_re.cap(1).latin1();
