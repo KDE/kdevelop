@@ -36,6 +36,7 @@
 
 CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
+    classTree( this, "classTree" ),
     classLbl( this, "classLbl" ),
     classCombo( false, this, "classCombo" ),
     topLayout( this, 5 ),
@@ -46,8 +47,7 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
     attributesBtn( this, "attributesBtn" ),
     methodsBtn( this, "methodsBtn" ),
     virtualsBtn( this, "virtualsBtn" ),
-    exportCombo( false, this, "exportCombo" ),
-    classTree( this, "classTree" )
+    exportCombo( false, this, "exportCombo" )
 {
   currentOperation = CTNONE;
   comboExport = CTHALL;
@@ -616,7 +616,7 @@ void CClassToolDlg::slotExportComboChoice(int idx)
 
   str = exportCombo.currentText();
 
-  //Check exporttype
+  // Check exporttype
   if( str == i18n("All") )
     comboExport = CTHALL;
   else if( str == "Public" )
