@@ -23,6 +23,12 @@
 #include <kstandarddirs.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
+#include <kconfig.h>
+
+#include <ktexteditor/document.h>
+#include <ktexteditor/editinterface.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -54,6 +60,9 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     setInstance(AbbrevFactory::instance());
     setXMLFile("kdevabbrev.rc");
 
+    connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
+    	this, SLOT(slotActivePartChanged(KParts::Part*)) );
+	
     connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
     KAction *action;
@@ -68,6 +77,12 @@ AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
                           actionCollection(), "edit_expandabbrev" );
 
     load();
+    
+    m_inCompletion = false;
+    docIface = 0;
+    editIface = 0;
+    viewCursorIface = 0;
+    completionIface = 0;    
 }
 
 
@@ -76,6 +91,15 @@ AbbrevPart::~AbbrevPart()
     save();
 }
 
+void AbbrevPart::slotCompletionAborted()
+{
+    m_inCompletion = false;
+}
+
+void AbbrevPart::slotCompletionDone()
+{
+    m_inCompletion = false;
+}
 
 void AbbrevPart::load()
 {
@@ -134,12 +158,11 @@ void AbbrevPart::save()
 }
 
 
-static QString currentWord(KTextEditor::EditInterface *editiface,
-                           KTextEditor::ViewCursorInterface *cursoriface)
+QString AbbrevPart::currentWord() const
 {
     uint line, col;
-    cursoriface->cursorPositionReal(&line, &col);
-    QString str = editiface->textLine(line);
+    viewCursorIface->cursorPositionReal(&line, &col);
+    QString str = editIface->textLine(line);
     int i;
     for (i = col-1; i >= 0; --i)
         if( ! (str[i].isLetter() || str[i] == '_') )
@@ -159,47 +182,26 @@ void AbbrevPart::configWidget(KDialogBase *dlg)
 
 void AbbrevPart::slotExpandText()
 {
-    KParts::ReadWritePart *part = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
-    QWidget *view = partController()->activeWidget();
-    if (!part || !view) {
-        kdDebug() << "no rw part" << endl;
+    if( !editIface || !completionIface || !viewCursorIface )
         return;
-    }
-    KTextEditor::EditInterface *editiface
-        = dynamic_cast<KTextEditor::EditInterface*>(part);
-    if (!editiface) {
-        kdDebug() << "no editiface" << endl;
-        return;
-    }
-    KTextEditor::ViewCursorInterface *cursoriface
-        = dynamic_cast<KTextEditor::ViewCursorInterface*>(view);
-    if (!cursoriface) {
-        kdDebug() << "no viewcursoriface" << endl;
-        return;
-    }
-    KTextEditor::CodeCompletionInterface *completioniface
-        = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
-    if (!completioniface) {
-        kdDebug() << "no codecompletioniface" << endl;
-        return;
-    }
-
-    QString word = currentWord(editiface, cursoriface);
+	
+    QString word = currentWord();
     kdDebug(9028) << "Expanding text " << word << endl;
     if (word.isEmpty())
         return;
 
-    QValueList<KTextEditor::CompletionEntry> entries = findAllWords(editiface->text(), word);
+    QValueList<KTextEditor::CompletionEntry> entries = findAllWords(editIface->text(), word);
     if (entries.count() == 0) {
         ; // some statusbar message?
-    } else if (entries.count() == 1) {
-        uint line, col;
-        cursoriface->cursorPositionReal(&line, &col);
-        QString txt = entries[0].text.mid(word.length());
-        editiface->insertText( line, col, txt );
-        cursoriface->setCursorPositionReal( line, col + txt.length() );
+//    } else if (entries.count() == 1) {
+//        uint line, col;
+//        viewCursorIface->cursorPositionReal(&line, &col);
+//        QString txt = entries[0].text.mid(word.length());
+//        editIface->insertText( line, col, txt );
+//        viewCursorIface->setCursorPositionReal( line, col + txt.length() );
     } else {
-        completioniface->showCompletionBox(entries, word.length());
+        m_inCompletion = true;
+        completionIface->showCompletionBox(entries, word.length());
     }
 }
 
@@ -254,7 +256,7 @@ void AbbrevPart::slotExpandAbbrev()
         return;
     }
 
-    QString word = currentWord(editiface, cursoriface);
+    QString word = currentWord();
     kdDebug(9028) << "Expanding word " << word << " with suffix " << suffix << "." << endl;
 
     QAsciiDictIterator<CodeTemplate> it(m_templates);
@@ -277,23 +279,21 @@ void AbbrevPart::slotExpandAbbrev()
         uint line, col;
         cursoriface->cursorPositionReal(&line, &col);
         editiface->removeText( line, col-word.length(), line, col );
-        insertChars(editiface, cursoriface, it.current()->code );
+        insertChars(it.current()->code );
     }
 }
 
 
-void AbbrevPart::insertChars(KTextEditor::EditInterface *editiface,
-                             KTextEditor::ViewCursorInterface *cursoriface,
-                             const QString &chars)
+void AbbrevPart::insertChars( const QString &chars )
 {
     bool bMoveCursor = false;
     unsigned int line=0, col=0;
     unsigned int currentLine=0, currentCol=0;
 
-    cursoriface->cursorPositionReal( &currentLine, &currentCol );
+    viewCursorIface->cursorPositionReal( &currentLine, &currentCol );
 
     QString spaces;
-    QString s = editiface->textLine( currentLine );
+    QString s = editIface->textLine( currentLine );
     uint i=0;
     while( i<s.length() && s[ i ].isSpace() ){
         spaces += s[ i ];
@@ -306,7 +306,7 @@ void AbbrevPart::insertChars(KTextEditor::EditInterface *editiface,
         int idx = s.find( '|' );
         if( idx != -1 ){
             QString tmp = s.left( idx );
-            editiface->insertText( currentLine, currentCol, tmp );
+            editIface->insertText( currentLine, currentCol, tmp );
             currentCol += tmp.length();
 
             line = currentLine;
@@ -314,22 +314,22 @@ void AbbrevPart::insertChars(KTextEditor::EditInterface *editiface,
             bMoveCursor = true;
 
             tmp = s.mid( idx + 1 );
-            editiface->insertText( currentLine, currentCol, tmp );
+            editIface->insertText( currentLine, currentCol, tmp );
             currentCol += tmp.length();
         } else {
-            editiface->insertText( currentLine, currentCol, s );
+            editIface->insertText( currentLine, currentCol, s );
             currentCol += s.length();
         }
 
         if( i != (int)l.count()-1 ){
-            editiface->insertLine( ++currentLine, spaces );
+            editIface->insertLine( ++currentLine, spaces );
             currentCol = spaces.length();
             //pView->keyReturn();
         }
     }
 
     if( bMoveCursor ){
-        cursoriface->setCursorPositionReal( line, col );
+        viewCursorIface->setCursorPositionReal( line, col );
     }
 }
 
@@ -364,6 +364,50 @@ void AbbrevPart::clearTemplates()
 QAsciiDictIterator<CodeTemplate> AbbrevPart::templates() const
 {
     return QAsciiDictIterator<CodeTemplate>( m_templates );
+}
+
+void AbbrevPart::slotActivePartChanged( KParts::Part* part )
+{
+    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
+    
+    if( doc == docIface )
+        return;
+	
+    docIface = doc;
+	
+    if( !docIface ){
+        docIface = 0;
+        editIface = 0;
+        viewCursorIface = 0;
+        completionIface = 0;        	
+    }    
+        
+    editIface = dynamic_cast<KTextEditor::EditInterface*>( part );
+    
+    QWidget *view = partController()->activeWidget();    
+    viewCursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( view );
+    completionIface = dynamic_cast<KTextEditor::CodeCompletionInterface*>( view );
+    
+    if( !editIface || !viewCursorIface || !completionIface )
+    	return;
+    
+    KConfig* config = AbbrevFactory::instance()->config();
+    config->setGroup( "General" );
+    
+    if( config->readBoolEntry("AutoExpand", true) ){
+	connect( view, SIGNAL(completionAborted()),
+		 this, SLOT(slotCompletionAborted()) );
+	connect( view, SIGNAL(completionDone()),
+		 this, SLOT(slotCompletionDone()) );
+	
+	connect( doc, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
+    }
+}
+
+void AbbrevPart::slotTextChanged()
+{
+    if( !m_inCompletion && currentWord().length() >= 3 )
+	slotExpandText();
 }
 
 #include "abbrevpart.moc"

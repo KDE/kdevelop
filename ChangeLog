@@ -1,3 +1,6 @@
+2003-01-04 Roberto Raggi <roberto@kdevelop.org>
+	* Added Auto Expand mode
+
 2003-01-01 Caleb Tennis <caleb@aei-tech.com>
 	* Add linebreaks for data being copied from make output window
 	  to clipboard

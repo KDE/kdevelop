@@ -16,12 +16,20 @@
 
 #include <qasciidict.h>
 #include "kdevplugin.h"
-#include "ktexteditor/editinterface.h"
-#include "ktexteditor/viewcursorinterface.h"
-#include "ktexteditor/codecompletioninterface.h"
 
+#include <ktexteditor/codecompletioninterface.h>
 
 class KDialogBase;
+
+namespace KParts{
+    class Part;
+};
+
+namespace KTextEditor{
+    class Document;
+    class EditInterface;
+    class ViewCursorInterface;
+};
 
 struct CodeTemplate {
     QString description;
@@ -48,15 +56,24 @@ private slots:
     void slotExpandText();
     void slotExpandAbbrev();
     void configWidget(KDialogBase *dlg);
+    void slotActivePartChanged( KParts::Part* );
+    void slotTextChanged();
+    void slotCompletionAborted();
+    void slotCompletionDone();
 
 private:
     void load();
     void save();
+    QString currentWord() const;
     QValueList<KTextEditor::CompletionEntry> findAllWords(const QString &text, const QString &prefix);
-    void insertChars(KTextEditor::EditInterface *editiface,
-                     KTextEditor::ViewCursorInterface *cursoriface,
-                     const QString &chars);
+    void insertChars( const QString &chars );
     QAsciiDict<CodeTemplate> m_templates;
+    bool m_inCompletion;
+    
+    KTextEditor::Document* docIface;
+    KTextEditor::EditInterface* editIface;
+    KTextEditor::ViewCursorInterface* viewCursorIface;
+    KTextEditor::CodeCompletionInterface* completionIface;
 };
 
 #endif
