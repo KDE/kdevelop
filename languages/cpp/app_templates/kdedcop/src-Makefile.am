@@ -10,7 +10,7 @@ noinst_HEADERS = %{APPNAMELC}.h
 METASOURCES = AUTO
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/kdedcoptest.pot
+	$(XGETTEXT) *.cpp -o $(podir)/%{APPNAMELC}.pot
 
 # this is the program that gets installed.  it's name is used for all
 # of the other Makefile.am variables

@@ -164,4 +164,4 @@ Dest=%{dest}/src/README
 
 [MSG]
 Type=message
-Comment=A KDE Appication was created at %{dest}
+Comment=A KDE Application was created at %{dest}

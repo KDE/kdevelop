@@ -1,10 +1,11 @@
+%{H_TEMPLATE}
 
 #ifndef _%{APPNAMEUC}VIEW_H_
 #define _%{APPNAMEUC}VIEW_H_
 
 #include <qwidget.h>
 
-#include "%{APPNAME}view_base.h"
+#include "%{APPNAMELC}view_base.h"
 
 class QPainter;
 class KURL;

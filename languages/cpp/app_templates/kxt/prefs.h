@@ -1,3 +1,5 @@
+%{H_TEMPLATE}
+
 #include "prefs-base.h"
 
 

@@ -4,13 +4,11 @@ AUTOMAKE_OPTIONS = foreign 1.4
 
 SUBDIRS = src pixmaps macros
 
-EXTRA_DIST = $APPNAMELC$.lsm $APPNAMELC$.desktop 
+EXTRA_DIST = %{APPNAMELC}.lsm %{APPNAMELC}.desktop 
 
 install-data-local:
 	$(mkinstalldirs) $(datadir)/gnome/apps/Applications/
-	$(INSTALL_DATA) $(srcdir)/$APPNAMELC$.desktop $(datadir)/gnome/apps/Applications
+	$(INSTALL_DATA) $(srcdir)/%{APPNAMELC}.desktop $(datadir)/gnome/apps/Applications
 
 uninstall-local:
 	-rm -f $(datadir)/gnome/apps/Applications
-
-
