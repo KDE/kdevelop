@@ -12,6 +12,28 @@
 #include "codeinformationrepository.h"
 #include <kdebug.h>
 
+// TODO: move in utils.cpp
+static QValueList<KTextEditor::CompletionEntry>
+my_unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
+{
+
+    QValueList< KTextEditor::CompletionEntry > l;
+    QMap<QString, bool> map;
+    QValueList< KTextEditor::CompletionEntry >::ConstIterator it=entryList.begin();
+    while( it != entryList.end() ){
+        KTextEditor::CompletionEntry e = *it++;
+        QString key = e.type + " " +
+                      e.text + " " +
+                      e.prefix + " " +
+                      e.postfix + " ";
+        if( map.find(key) == map.end() ){
+            map[ key ] = TRUE;
+            l << e;
+        }
+    }
+    return l;
+}
+
 CodeInformationRepository::CodeInformationRepository()
 {
 }
@@ -109,12 +131,20 @@ QValueList<Tag> CodeInformationRepository::getTagsInScope( const QStringList & s
     return tags;
 }
 
-QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope, bool isInstance )
+QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope, bool isInstance, bool recompute )
 {
     kdDebug(9020) << "CodeInformationRepository::getEntriesInScope()" << endl;
     
-    return toEntryList( getTagsInScope(scope, isInstance) );
+    if( !recompute && !scope.size() && m_globalEntries.size() )
+	return m_globalEntries;
+    else if( scope.size() == 0 ){
+	m_globalEntries = my_unique( toEntryList( getTagsInScope(scope, isInstance) ) );
+	return m_globalEntries;
+    }
+    
+    return toEntryList( getTagsInScope(scope, isInstance) ); 
 }
+
 
 QValueList<Tag> CodeInformationRepository::getBaseClassList( const QString& className )
 {
@@ -172,7 +202,7 @@ QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStrin
 
     QValueList<Tag> tags;    
     QValueList<Catalog::QueryArgument> args;
-    
+ 
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Namespace )
 	<< Catalog::QueryArgument( "scope", scope );
@@ -182,7 +212,7 @@ QValueList<Tag> CodeInformationRepository::getClassOrNamespaceList( const QStrin
     	<< Catalog::QueryArgument( "scope", scope );
     
     tags += query( args );
-        
+ 
     return tags;
 }
 

@@ -240,6 +240,23 @@ unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
     return l;
 }
 
+static QStringList
+unique( const QStringList& entryList )
+{
+
+    QStringList l;
+    QMap<QString, bool> map;
+    QStringList::ConstIterator it=entryList.begin();
+    while( it != entryList.end() ){
+        QString e = *it++;
+        if( map.find(e) == map.end() ){
+            map[ e ] = TRUE;
+            l << e;
+        }
+    }
+    return l;
+}
+
 CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
     : d( new CppCodeCompletionData )
 {
@@ -792,6 +809,8 @@ CppCodeCompletion::completeText( )
     }
 
     m_pSupport->backgroundParser()->unlock();
+    
+    
 
     if( !type.isEmpty() ){
         kdDebug(9007) << "type = " << type << endl;
@@ -804,14 +823,43 @@ CppCodeCompletion::completeText( )
 	    if( functionList.count() == 0 ){
 		functionList = getGlobalSignatureList( word );
 	    }
-
+	    
 	    if( functionList.count() ){
-		m_activeCompletion->showArgHint( functionList, "()", "," );
+		m_activeCompletion->showArgHint( unique(functionList), "()", "," );
 	    }
 	} else {
 	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type, true, isInstance );
+	    
+	    if( expr.isEmpty() ){	
+		entryList += m_repository->getEntriesInScope( QStringList(), true );
+	    }
+	    
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length() );
+	}
+    } else {
+	// maybe, you're tring to complete a C function
+	// NOTE: this can be a very huge task!
+	
+	kdDebug(9007) << "expr = " << expr << endl;
+	kdDebug(9007) << "word = " << word << endl;
+	if( showArguments && word.length() ){
+	    
+	    QStringList functionList = getSignatureListForClass( QString::null, word, false );
+
+	    if( functionList.count() == 0 ){
+		functionList = getGlobalSignatureList( word );
+	    }
+	    
+	    if( functionList.count() ){
+		m_activeCompletion->showArgHint( unique(functionList), "()", "," );
+	    }
+	    
+	} else if( !showArguments ) {
+	    QValueList<KTextEditor::CompletionEntry> entryList = m_repository->getEntriesInScope( QStringList(), false );
+	    
+	    if( entryList.size() )
+		m_activeCompletion->showCompletionBox( entryList, word.length() );	
 	}
     }
 }
@@ -1256,6 +1304,8 @@ void CppCodeCompletion::setupCodeInformationRepository( )
 
         m_repository->addCatalog( QString::number(id++), catalog );
     }
+    
+    (void) m_repository->getEntriesInScope( QStringList(), true );
 }
 
 QString CppCodeCompletion::typeName( const QString& str )

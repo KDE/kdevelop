@@ -29,7 +29,7 @@ public:
     virtual void removeCatalog( const QString& id );
 
     QValueList<KTextEditor::CompletionEntry> toEntryList( const QValueList<Tag>& tags );
-    QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance );
+    QValueList<KTextEditor::CompletionEntry> getEntriesInScope( const QStringList& scope, bool isInstance, bool recompute=false );
     
     QStringList getSignatureList( const QStringList& scope, const QString& functionName, bool isInstance );
 
@@ -43,6 +43,7 @@ public:
 
 private:
     QMap<QString, Catalog*> m_catalogs;
+    QValueList<KTextEditor::CompletionEntry> m_globalEntries;
 
 private:
    CodeInformationRepository( const CodeInformationRepository& source );
