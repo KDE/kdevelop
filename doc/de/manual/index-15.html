@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>Benutzerhandbuch zu KDevelop: Questions and Answers</TITLE>
+<TITLE>Benutzerhandbuch zu KDevelop: Fragen und Antworten</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
 <META NAME="description" CONTENT="">
@@ -18,60 +18,56 @@
  <A HREF="index-14.html">Zurück</A>
  <A HREF="index.html#toc15">Inhaltsverzeichnis</A>
 </P>
-<H3><A NAME="Questions and Answers"></A> <A NAME="s15">15. Questions and Answers</A></H3>
+<H3><A NAME="Fragen und Antworten"></A> <A NAME="s15">15. Fragen und Antworten</A></H3>
 
-<P>This section adresses questions by users that were answered by the KDevelop Team or by their supporters on the KDevelop
-mailinglist during experiences with the current versions of KDevelop as well as bug reporting in general.
+<P>Dieses Kapitel behandelt sowohl Fragen von Benutzern die aktuelle KDevelop Version betreffend,die vom KDevelop Team oder seinen Helfern 
+in der KDevelop Mailingliste beantwortet wurden, als auch das Melden von Fehlern generell.
 <P>
-<H3><A NAME="Bug Reporting"></A> <A NAME="ss15.1">15.1 Bug Reporting </A>
+<H3><A NAME="Melden von Fehlern"></A> <A NAME="ss15.1">15.1 Melden von Fehlern </A>
 </H3>
 
-<P>Another improvement of KDevelop is the integrated bug-reporting system via email. If you experience a bug, you have the option to send
-the KDevelop development team a bug report either by your email-client or by the bug-report dialog.
-<P>To send bug reports, please use this email adress by your mail program. If you want to use KDevelop for direct bug-reporting, choose
-"Bug Report" from the "Help" menu. You are presented the report dialog that lets you enter all necessary information about the bug you
-found. After pressing "OK", the dialog's contents is sent to the mailinglist automatically.
+<P>Eine weitere Verbesserung in KDevelop ist das integrierte Fehlermeldesystem via EMail. Wenn Sie einen Fehler finden, können Sie dem 
+KDevelop Team den Fehlerreport entweder über Ihren EMail Client oder mit Hilfe des Fehler Report Dialoges senden. Alle 
+Fehlermeldungen werden auf der KDevelop Website gesammelt und können unter 
+<A HREF="http://bugs.kde.org//db/pa/lkdevelop.html">http://bugs.kde.org//db/pa/lkdevelop.html</A> eingesehen werden.
+<P>Wenn Sie einen Fehlerbericht senden wollen benutzen Sie bitte die EMail Adresse 
+<A HREF="mailto:submit@bugs.kde.org">submit@bugs.kde.org</A>. Wenn Sie KDevelop zum Berichten von Fehlern benutzen 
+wollen, wählen Sie "Bugreport" aus dem Hilfe Menü. Ihnen wird dann der Reportdialog angezeigt, in dem Sie alle notwendigen 
+Informationen zum gefundenen Fehler eingeben können. Nachdem Sie mit OK bestätigt haben, wird automatisch eine EMail gesendet.
 <P>
-<H3><A NAME="ss15.2">15.2 Where to get Information</A>
+<H3><A NAME="ss15.2">15.2 Wo Sie Informationen bekommen</A>
 </H3>
 
-<P><B>Q:</B> I have a question which is not adressed in the FAQ file, nor in the manuals of KDevelop. Where should I turn to ?
-<P><B>A:</B>  In any case send all requests that are regarding KDevelop by subscribing to the KDevelop mailinglist at 
-<A HREF="mailto:kdevelop@fara3.cs.uni-potsdam.de">kdevelop@fara3.cs.uni-potsdam.de</A>. Send a mail with an empty header and
-"subscribe" as contents; then you can participate on the discussions. All questions should go there and will be adressed there as well.
-If you stick to that, you will get the most help by the developers and all users having the same problems, as well as helping to keep
-the FAQ up to date.
-<P>The KDevelop Homepage at 
-<A HREF="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html</A> also contains a mailing-list archive that allows you to browse the
-mails already send by the subscribers, so you should look there first as most problems should have been adressed already by the team or
-other users.
+<P><B>F:</B> Ich habe eine Frage, die weder in der FAQ Datei, noch in den KDevelop Handbüchern behandelt wird. Wohin kann ich 
+mich wenden?
+<P><B>A:</B>  Senden Sie alle Anfragen die KDevelop betreffen an die Kdevelop Mailingliste. Sie können sich unter
+<A HREF="mailto:kdevelop@barney.cs.uni-potsdam.de">kdevelop@barney.cs.uni-potsdam.de</A> einschreiben, indem Sie 
+eine Mail mit leerem Header und mit "subscribe" als Inhalt, senden. Damit können Sie auch an den Diskusionen teilnehmen. Alle Fragen 
+sollten dorthin gehen und werden auch von dort aus beantwortet. Wenn Sie sich daran halten, werden Sie die gößtmögliche Hilfe von 
+den Entwicklern und den anderen Benutzern erhalten, gleichzeitig helfen Sie die FAQs aktuell zu halten.
+<P>Die KDevelop Homepage unter 
+<A HREF="http://www.kdevelop.org">http://www.kdevelop.org</A> enthält ebenfalls ein Mailinglist 
+Archiv in dem Sie in den bereits eingegangenen Mails stöbern können. Sie sollten also zuerst dort nachsehen, da die meisten Fragen bereits 
+von den Entwicklern oder anderen Benutzern beantwortet wurden.
 <P>
-<H3><A NAME="ss15.3">15.3 Library and System Problems</A>
+<H3><A NAME="ss15.3">15.3 Bibliotheken und System Probleme</A>
 </H3>
 
 <P>
-<P><B>Q:</B> Wrong JPEG library version: library is 61, caller expects 62
-<P><B>A:</B>  There are 2 ways.
+<P><B>F:</B> Falsche JPEG Bibliotheksversion: Bibliothek ist 61, erwartet wird 62
+<P><B>A:</B>  Es gibt zwei Möglichkeiten
 <OL>
-<LI> When the kdelibs are installed it installs header files for the
-jpeg libraries, these are version 61,  however most distributions
-(Redhat) use version 62 libraries. To fix  this just remove jpeglib.h
-from /opt/kde/include. The pukka include  file for version 62 should
-then be picked up. However looking at the  error message above it may
-be the other way round, in any case ensure  you only have on version
-of the header file, the library and that  they are consistent.
-
-It is useful to use the locate command to verify that I have
-the correct version of a library and header files e.g.
-updatedb
-locate libjpeg
-locate jpeglib
+<LI> Wenn die kdelibs installiert werden, werden auch die Headerdateien für die jpeg Bibliotheken installiert, und zwar Version 61. 
+Die meisten Distributionen (RedHat) verwenden jedoch 62er Bibliotheken. Um den Fehler zu beheben entfernen Sie jpeglib.h aus 
+$KDEDIR/include. Die Headerdatei für Version 62 sollte jetzt gefunden werden. Wenn man sich jedoch obige Fehlermeldung betrachtet, 
+könnte es auch umgekehrt sein, stellen Sie also in jedem Fall sicher, daß Sie nur eine Version der Headerdatei und der Bibliothek haben 
+und daß diese konsistent sind. Es ist nützlich das locate Kommando zu verwenden, um dies herauszufinden, z.B. updatedb, locate libjpeg, 
+locate jpeglib.
 </LI>
-<LI> You must recompiled kdesupport without jpeg
-library (./configure --with-libjpeg --with-libgif).</LI>
+<LI> Sie müssen kdesupport ohne die jpeg Bibliothek rekompilieren (./configure --with-libjpeg --with-libgif).</LI>
 </OL>
 <P>
-<P><B>Q:</B>
+<P><B>F:</B>
 <BLOCKQUOTE><CODE>
 <PRE>
 make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
@@ -81,16 +77,16 @@ make[2]: *** [Makefile.in] Error 1
 </PRE>
 </CODE></BLOCKQUOTE>
 
-<B>A:</B>  Workaround for automake-1.4/automake-2.13 users: Just run
-"aclocal" manually, then it will compile.
+<B>A:</B>  Workaround für automake-1.4/automake-2.13 Benutzer: Führen Sie "aclocal" von Hand aus, dann wird es sich 
+kompilieren lassen.
 <P>
-<P><B>Q:</B>  What must i do, if configure said ,that i need giflib23.
-<P><B>A:</B>  Try a newer snap of kdesupport, or maybe you have another giflib installed?
+<P><B>F:</B>  Was muß ich tun, wenn configure sagt, ich bräuchte giflib23.
+<P><B>A:</B>  Versuchen Sie einen neueren Snapshot von kdesupport, oder Sie haben vielleicht eine andere giflib installiert?
 <P>
-<P><B>Q:</B> How can I convert a KDevelop 0.2 project to a 0.3 one?
-<P><B>A:</B> Please change the AC_OUTPUT in the configure.in to a oneline version
-<P>for example:
-old version:
+<P><B>F:</B> Wie kann ich ein KDevelop 0.2 Projekt in ein 0.3er konvertieren?
+<P><B>A:</B> Ändern Sie AC_OUTPUT in configure.in in eine einzeilige Version ab
+<P>zum Beispiel:
+<P>alte Version:
 <BLOCKQUOTE><CODE>
 <PRE>
 AC_OUTPUT(Makefile \
@@ -100,14 +96,15 @@ kdevelop/templates/Makefile
 </PRE>
 </CODE></BLOCKQUOTE>
 
-new version:
+neue Version:
 <BLOCKQUOTE><CODE>
 <PRE>
 AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
 </PRE>
 </CODE></BLOCKQUOTE>
 <P>
-<P><B>Q:</B>  I  get the following linker errors when using SuSE Linux with KDE 1.1, what do I have to do to get KDevelop linked ?
+<P><B>F:</B>  Ich bekomme folgende Linker Fehler, wenn ich SuSE Linux mit KDE 1.1 verwende, was muß ich tun um KDevelop gelinked 
+zu bekommen?
 <BLOCKQUOTE><CODE>
 <PRE>
 /usr/lib/libqt.so:
@@ -137,22 +134,23 @@ make: *** [all-recursive-am] Error 2
 </PRE>
 </CODE></BLOCKQUOTE>
 
-<B>A:</B> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall
-them or get an updated rpm of the kdelibs from 
+<B>A:</B> Wenn Sie die SuSE rpm´s von KDE-1.1 haben, müssen Sie die kdelibs ohne den Patch von SuSE rekompilieren und sie 
+erneut installieren oder Sie besorgen sich ein aktuelleres rpm der kdelibs von 
 <A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P>
-<H3><A NAME="ss15.4">15.4 Usage Questions</A>
+<H3><A NAME="ss15.4">15.4 Fragen zur Verwendung</A>
 </H3>
 
-<P><B>Q:</B> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
-<P><B>A:</B>  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
+<P><B>F:</B> KDevelop erlaubt mir nicht die Verwendung  der Entfernen Taste (oder das Löschen von markiertem Text mit Rückschritt).
+<P><B>A:</B>  Verwenden Sie "Einstellungen"->"Editor" und schalten Sie "Beim Eingeben löschen" ein, dann funktionieren Backspace 
+und Entfernen.
 <P>
-<P><B>Q:</B> If I add files to my project, will they be automatically included and compiled ?
-<P><B>A:</B> Yes, they are included in the Makefile.am's then and if you make a "Rebuild All" (./configure updates the Makefiles), your new
-added files will be included as well.
-<P><B>Q:</B> If I removed a file, I get some weird linker messages. What is wrong with my project ?
-<P><B>A:</B> If the removed file is a header file, that is automatically processed by automoc (running the Qt-Meta-Object-Compiler
-automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
-according *.moc.cpp file and rebuild the project.
+<P><B>F:</B> Werden Dateien automatisch hinzugefügt und kompiliert, wenn ich sie einem Projekt hinzufüge?
+<P><B>A:</B> Ja, sie werden in Makefile.am eingetragen und wenn Sie "Alles neu erstellen" wählen dem Projekt hinzugefügt (./configure 
+aktualisiert die Makedateien).
+<P><B>F:</B> Nachdem ich eine Datei entfernt habe, bekomme ich seltsame Linker Meldungen. Was ist falsch an meinem Projekt?
+<P><B>A:</B> Wenn es sich dbei der entfernten Datei um eine Headerdatei handelt, die automatisch von automoc bearbeitet wird (der 
+automatisch den Qt-Meta-Object-Compiler über alle Header laufen läßt), ist die entfernte Datei immer noch als von moc erzeugte 
+*.moc.cpp Datei vorhanden und kompiliert. Entfernen Sie die entsprechende *.moc.cpp Datei und erstellen Sie Ihr Projekt neu.
 <P>
 <P ALIGN="RIGHT">
 
