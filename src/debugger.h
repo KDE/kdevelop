@@ -136,7 +136,9 @@ private:
     };
 
     static Debugger *s_instance;
+#if (KDE_VERSION > 305)
     QValueList<BPItem> BPList;
+#endif
 };
 
 #endif
