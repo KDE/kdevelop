@@ -1,10 +1,1 @@
-Trollprojectpart is a projectmanager for qmake based projects. 
-
-Loads and maintains .pro files (qmake project files). The trollprojectpart 
-supports subprojects and qmake scopes. Qmake projects can be configured on 
-project, subproject and file level.
-It will regenerate a projects .pro files dynamically as you add,remove or 
-reconfigure (sub)projects. Unsupported qmake features will be left unchanged
-(hopefully) no major testing has been run yet.
-
-Maintainer: Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+Please read the README.dox file.
