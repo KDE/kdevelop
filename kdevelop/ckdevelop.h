@@ -290,6 +290,13 @@ public:
   void  slotOptionsCreateSearchDatabase();
   
   ////////////////////////
+  // BOOKMARKS-Menu entries
+  ///////////////////////
+	void slotBookmarksSet();
+	void slotBookmarksAdd();
+	void slotBookmarksClear();
+
+  ////////////////////////
   // HELP-Menu entries
   ///////////////////////
   /** goes one page back in the documentation browser */
@@ -426,6 +433,7 @@ private:
   QPopupMenu* file_menu;				
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
+	QPopupMenu* bookmarks_menu;
   QPopupMenu* project_menu;
   QPopupMenu* workspaces_submenu;
   QPopupMenu* build_menu;
@@ -547,6 +555,8 @@ private:
 };
 
 #endif
+
+
 
 
 

@@ -1,3 +1,6 @@
+1999-03-26  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added Bookmarks-menu for the header and cpp widget with key-accelerators
+	
 1999-03-26  Pascal Krahmer  <pascal@breast.de>
         * added Rulers to the KDlgEditWidget (ToDo : Arrows in rulers should follow the mouse cursor)
         * added a first grid to the widget-items
@@ -8,6 +11,12 @@
 	* Converted the LFV to QListView.
 	* move all print-related files to the subdir print
 	* commit new automoc and changed some Makefiles.am
+
+
+1999-03-25  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+        * fixed panner-devider bug in switching when Browsertoolbar is disabled
+        * fixed menubar disableCommand bug for the disabling of menuitems on startup
+           add new disablings at the end of initKDlgMenuBar()
 
 1999-03-24 Jonas Nordin <jonas.nordin@cenacle.se>
 	* Converted the classview from KTreeList to QListView. Minor fixes to the
@@ -29,11 +38,6 @@
 	* fixed the classtooldialog. All options should work now.
 	* fixed minor glitch in the classparser. Didn't handle defaultvalues
 	        without argumentnames.
-
-1999-03-23  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-        * fixed panner-devider bug in switching when Browsertoolbar is disabled
-        * fixed menubar disableCommand bug for the disabling of menuitems on startup
-           add new disablings at the end of initKDlgMenuBar()
 	
 1999-03-23 Jonas Nordin <jonas.nordin@cenacle.se>
 	* added new classtool dialog inspired from ISE Eiffel.

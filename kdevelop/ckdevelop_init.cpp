@@ -360,9 +360,17 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Run"), "Run", IDK_BUILD_RUN);
   accel->connectItem( "Run", this, SLOT(slotBuildRun() ) );
 
+
   // Tools-menu
   accel->insertItem(i18n("KDevelop/KDialogEdit"),"KDevKDlg",IDK_TOOLS_KDEVKDLG);
   accel->connectItem("KDevKDlg",this,SLOT(switchToKDlgEdit()) );
+
+  // Bookmarks-menu
+  accel->insertItem( i18n("Add Bookmark"), "Add_Bookmarks", IDK_BOOKMARKS_ADD);
+  accel->connectItem( "Add_Bookmarks", this, SLOT(slotBookmarksAdd() ) );
+
+  accel->insertItem( i18n("Clear Bookmarks"), "Clear_Bookmarks", IDK_BOOKMARKS_CLEAR);
+  accel->connectItem( "Clear_Bookmarks", this, SLOT(slotBookmarksClear() ) );
 
   //Help menu
   accel->insertItem( i18n("Search Marked Text"), "SearchMarkedText",IDK_HELP_SEARCH_TEXT);
@@ -505,15 +513,7 @@ void CKDevelop::initMenu(){
 
   kdev_menubar->insertItem(i18n("&View"), view_menu);
   
-  
-  // the bookmarks menu
-  // p = new QPopupMenu;
-  //   p->insertItem(i18n("&Add Bookmark"), this, SLOT(slotBookmarksAdd()));
-  //   p->insertItem(i18n("&Edit Bookmarks..."), this, SLOT(slotBookmarksEdit()));
-  //   p->insertSeparator();
-  //   kdev_menubar->insertItem(i18n("&Bookmarks"),p);
-  
-  
+
   ///////////////////////////////////////////////////////////////////
   // Project-menu entries
   
@@ -642,6 +642,29 @@ void CKDevelop::initMenu(){
   kdev_menubar->insertItem(i18n("&Window"), menu_buffers);
   kdev_menubar->insertSeparator();
   
+  ///////////////////////////////////////////////////////////////////
+  // Bookmarks-menu entries
+/*	bookmarks_menu=new QPopupMenu;
+	bookmarks_menu->insertItem(i18n("&Set Bookmark..."),edit_widget,SLOT(setBookmark()),0,ID_BOOKMARKS_SET);
+	bookmarks_menu->insertItem(i18n("&Add Bookmark..."),edit_widget,SLOT(addBookmark()),0,ID_BOOKMARKS_ADD);
+	bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),edit_widget,SLOT(clearBookmarks()),0,ID_BOOKMARKS_CLEAR);
+	edit_widget->installBMPopup(bookmarks_menu);
+*/
+	bookmarks_menu=new QPopupMenu;
+	bookmarks_menu->insertItem(i18n("&Set Bookmark..."),this,SLOT(slotBookmarksSet()),0,ID_BOOKMARKS_SET);
+	bookmarks_menu->insertItem(i18n("&Add Bookmark..."),this,SLOT(slotBookmarksAdd()),0,ID_BOOKMARKS_ADD);
+	bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
+	bookmarks_menu->insertSeparator();
+  QPopupMenu* header_bookmarks = new QPopupMenu();
+	header_widget->installBMPopup(header_bookmarks);
+  QPopupMenu* cpp_bookmarks = new QPopupMenu();
+	cpp_widget->installBMPopup(cpp_bookmarks);
+	
+	bookmarks_menu->insertItem(i18n("Header Window"),header_bookmarks,31000);
+	bookmarks_menu->insertItem(i18n("C/C++ Window"),cpp_bookmarks,31010);
+
+	kdev_menubar->insertItem(i18n("Book&marks"),bookmarks_menu);
+
   ///////////////////////////////////////////////////////////////////
   // Help-menu entries
   help_menu = new QPopupMenu();
@@ -986,6 +1009,9 @@ if(bKDevelop){
     accel->changeMenuAccel(build_menu,ID_BUILD_MAKE ,"Make" );
     accel->changeMenuAccel(build_menu,ID_BUILD_RUN ,"Run" );
 
+    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_ADD ,"Add_Bookmarks" );
+    accel->changeMenuAccel(bookmarks_menu,ID_BOOKMARKS_CLEAR ,"Clear_Bookmarks" );
+
     accel->changeMenuAccel(help_menu,ID_HELP_SEARCH_TEXT,"SearchMarkedText" );
     accel->changeMenuAccel(help_menu, ID_HELP_CONTENTS, KAccel::Help );
   }
@@ -1034,6 +1060,12 @@ if(bKDevelop){
     accel->changeMenuAccel(kdlg_help_menu, ID_HELP_CONTENTS, KAccel::Help );
   }
 }
+
+
+
+
+
+
 
 
 

@@ -1002,6 +1002,26 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   return;
 
 }
+	
+void CKDevelop::slotBookmarksSet(){
+	if(edit_widget==header_widget)
+		header_widget->setBookmark();
+	if(edit_widget==cpp_widget)
+		cpp_widget->setBookmark();
+
+}
+void CKDevelop::slotBookmarksAdd(){
+	if(edit_widget==header_widget)
+		header_widget->addBookmark();
+	if(edit_widget==cpp_widget)
+		cpp_widget->addBookmark();
+}
+void CKDevelop::slotBookmarksClear(){
+	if(edit_widget==header_widget)
+		header_widget->clearBookmarks();
+	if(edit_widget==cpp_widget)
+		cpp_widget->clearBookmarks();
+}
 
 
 
@@ -1554,9 +1574,9 @@ void CKDevelop::slotSTabSelected(int item){
   if (item == HEADER){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
       if ( bDefaultCV)
-	t_tab_view->setCurrentTab(CV);
+				t_tab_view->setCurrentTab(CV);
       else
-	t_tab_view->setCurrentTab(LFV);
+				t_tab_view->setCurrentTab(LFV);
     }
     disableCommand(ID_BUILD_COMPILE_FILE);
     edit_widget = header_widget;
@@ -1573,9 +1593,9 @@ void CKDevelop::slotSTabSelected(int item){
   if (item == CPP){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
       if ( bDefaultCV)
-	t_tab_view->setCurrentTab(CV);
+				t_tab_view->setCurrentTab(CV);
       else
-	t_tab_view->setCurrentTab(LFV);
+				t_tab_view->setCurrentTab(LFV);
     }
     if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
@@ -2055,6 +2075,8 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
 
 
 

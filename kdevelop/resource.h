@@ -81,6 +81,10 @@
 
 #define ID_VIEW_REFRESH             12070
 
+#define ID_BOOKMARKS_SET						30000
+#define ID_BOOKMARKS_ADD						30010
+#define ID_BOOKMARKS_CLEAR					30020
+
 ///////////////////////////////////////////////////////////////////
 // Project-menu entries 
 
@@ -299,10 +303,14 @@
 
 ///////////////////////////////////////////////////////////////////
 // Tools-menu entries 
-#define IDK_TOOLS_KDEVKDLG            CTRL+Key_K
+#define IDK_TOOLS_KDEVKDLG            CTRL+Key_D
 ///////////////////////////////////////////////////////////////////
 // Options-menu entries 
 
+///////////////////////////////////////////////////////////////////
+// Bookmarks-menu entries
+#define IDK_BOOKMARKS_ADD							CTRL+ALT+Key_A
+#define IDK_BOOKMARKS_CLEAR						CTRL+ALT+Key_C
 
 ///////////////////////////////////////////////////////////////////
 // Help-menu-entries
@@ -360,6 +368,8 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
+
 
 
 
