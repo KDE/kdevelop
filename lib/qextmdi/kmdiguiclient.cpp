@@ -40,7 +40,7 @@ namespace
     const char *guiDescription = ""
         "<!DOCTYPE kpartgui><kpartgui name=\"KMDIViewActions\">"
         "<MenuBar>"
-        "    <Menu name=\"settings\">"
+        "    <Menu name=\"view\">"
         "        <ActionList name=\"%1\" />"
         "    </Menu>"
         "</MenuBar>"
