@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Ajay Guleria                                    *
+ *   ajay_guleria at yahoo dot com                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

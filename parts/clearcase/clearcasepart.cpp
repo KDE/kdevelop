@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
- *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2003 by Ajay Guleria                                    *
+ *   ajay_guleria at yahoo dot com                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -13,6 +13,7 @@
 
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
+
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -32,10 +33,10 @@
 typedef KGenericFactory<ClearcasePart> ClearcaseFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( "kdevclearcase" ) );
 
-ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & ) 
-  : KDevPlugin( "Clearcase", "clearcase", parent, name ? name : "ClearcasePart" ),
-    default_checkin("-nc"),default_checkout("-unres -nc"),default_uncheckout("-rm"),
-    default_create("-ci"),default_remove("-f"),default_diff("-pred -diff")
+ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & )
+        : KDevPlugin( "Clearcase", "clearcase", parent, name ? name : "ClearcasePart" ),
+        default_checkin("-nc"),default_checkout("-unres -nc"),default_uncheckout("-rm"),
+        default_create("-ci"),default_remove("-f"),default_diff("-pred -diff")
 {
     setInstance(ClearcaseFactory::instance());
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
@@ -43,40 +44,42 @@ ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringLi
 
 }
 
-ClearcasePart::~ClearcasePart() {
-}
+ClearcasePart::~ClearcasePart()
+{}
 
 
-void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context) {
+void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
+{
     if (context->hasType("file")) {
-	const FileContext *fcontext = static_cast<const FileContext*>(context);
-	popupfile = fcontext->fileName();
-	QFileInfo fi(popupfile);
-	popup->insertSeparator();
-	
-	KPopupMenu *sub = new KPopupMenu(popup);
-	QString name = fi.fileName();
-	sub->insertTitle( i18n("Actions for %1").arg(name) );
-	sub->insertItem( i18n("Checkin"),
-			 this, SLOT(slotCheckin()) );
-	sub->insertItem( i18n("Checkout"),
-			 this, SLOT(slotCheckout()) );
-	sub->insertItem( i18n("Uncheckout"),
-			 this, SLOT(slotUncheckout()) );
-	sub->insertSeparator();
-	sub->insertItem( i18n("Create element"),
-			 this, SLOT(slotCreate()) );
-	sub->insertItem( i18n("Remove element"),
-			 this, SLOT(slotRemove()) );
-	sub->insertSeparator();
-	sub->insertItem( i18n("Diff"),
-			 this, SLOT(slotDiff()) );
+        const FileContext *fcontext = static_cast<const FileContext*>(context);
+        popupfile = fcontext->fileName();
+        QFileInfo fi(popupfile);
+        popup->insertSeparator();
 
-	popup->insertItem(i18n("Clearcase"), sub);
+        KPopupMenu *sub = new KPopupMenu(popup);
+        QString name = fi.fileName();
+        sub->insertTitle( i18n("Actions for %1").arg(name) );
+        sub->insertItem( i18n("Checkin"),
+                         this, SLOT(slotCheckin()) );
+        sub->insertItem( i18n("Checkout"),
+                         this, SLOT(slotCheckout()) );
+        sub->insertItem( i18n("Uncheckout"),
+                         this, SLOT(slotUncheckout()) );
+        sub->insertSeparator();
+        sub->insertItem( i18n("Create element"),
+                         this, SLOT(slotCreate()) );
+        sub->insertItem( i18n("Remove element"),
+                         this, SLOT(slotRemove()) );
+        sub->insertSeparator();
+        sub->insertItem( i18n("Diff"),
+                         this, SLOT(slotDiff()) );
+
+        popup->insertItem(i18n("Clearcase"), sub);
     }
 }
 
-void ClearcasePart::slotCheckin() {
+void ClearcasePart::slotCheckin()
+{
     QString dir, name;
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
@@ -103,7 +106,8 @@ void ClearcasePart::slotCheckin() {
 }
 
 
-void ClearcasePart::slotCheckout() {
+void ClearcasePart::slotCheckout()
+{
     QString dir, name;
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
@@ -127,7 +131,8 @@ void ClearcasePart::slotCheckout() {
 }
 
 
-void ClearcasePart::slotUncheckout() {
+void ClearcasePart::slotUncheckout()
+{
     QString dir, name;
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
@@ -150,7 +155,8 @@ void ClearcasePart::slotUncheckout() {
     makeFrontend()->queueCommand(dir, command);
 }
 
-void ClearcasePart::slotCreate() {
+void ClearcasePart::slotCreate()
+{
     QFileInfo fi(popupfile);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
@@ -176,7 +182,8 @@ void ClearcasePart::slotCreate() {
 }
 
 
-void ClearcasePart::slotRemove() {
+void ClearcasePart::slotRemove()
+{
     QFileInfo fi(popupfile);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
@@ -199,7 +206,8 @@ void ClearcasePart::slotRemove() {
 }
 
 
-void ClearcasePart::slotDiff() {
+void ClearcasePart::slotDiff()
+{
     QFileInfo fi(popupfile);
     QString dir = fi.dirPath();
     QString name = fi.fileName();
@@ -212,8 +220,8 @@ void ClearcasePart::slotDiff() {
     args << "diff";
     str = DomUtil::readEntry(dom,"/kdevclearcase/diff_options",default_diff);
     if (str.length()) {
-	QStringList list = QStringList::split(' ',str);
-	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) args << *it;
+        QStringList list = QStringList::split(' ',str);
+        for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) args << *it;
     }
     args << name;
 
@@ -222,7 +230,8 @@ void ClearcasePart::slotDiff() {
              this, SLOT(slotDiffFinished( const QString&, const QString& )) );
 }
 
-void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err ) {
+void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
+{
     if ( diff.isNull() && err.isNull() ) {
         kdDebug(9000) << i18n("clearcase diff cancelled") << endl;
         return; // user pressed cancel or an error occured
