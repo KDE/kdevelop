@@ -1155,12 +1155,16 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         FileItem *fitem = static_cast<FileItem*>(pvitem);
 
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
-        int idRemoveFile = popup.insertItem(i18n("Remove File"));
-        int idSubclassWidget = popup.insertItem(SmallIconSet("widget"),i18n("Subclass widget..."));
-        int idViewUIH = popup.insertItem(i18n("Open ui.h File"));
-        int idFileProperties = popup.insertItem(i18n("Properties..."));
+        int idRemoveFile = popup.insertItem(SmallIconSet("stop"),i18n("Remove File"));
+        int idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget..."));
+        int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));
+        int idFileProperties = popup.insertItem(SmallIconSet("configure_file"),i18n("Properties..."));
 
-        if(!fitem->name.contains(".ui")) popup.removeItem(idViewUIH);
+        if(!fitem->name.contains(".ui"))
+        {
+          popup.removeItem(idViewUIH);
+          popup.removeItem(idSubclassWidget);
+        }
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
@@ -1197,7 +1201,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           dlg->exec();
           for (uint i=0; i<newFileNames.count(); i++)
           {
-            newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()),"");
+            newFileNames[i] = newFileNames[i].replace(QRegExp(projectDirectory()+"/"),"");
           }
 
           m_part->addFiles(newFileNames);
