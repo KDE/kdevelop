@@ -124,14 +124,10 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     // we are not modified since we haven't done anything yet
     setModified(false);
 
-    readConfig();
-    
-    setWordWrap( wordWrap() );
 }
 
 QEditorPart::~QEditorPart()
 {
-    writeConfig();
     QEditorPartFactory::deregisterDocument( this );
 }
 
@@ -168,33 +164,6 @@ void QEditorPart::setModified(bool modified)
         save->setEnabled(true);
     else
         save->setEnabled(false);
-}
-
-void QEditorPart::readConfig()
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    readConfig( config );
-    config->sync();
-}
-
-void QEditorPart::writeConfig()
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    writeConfig( config );
-    config->sync();
-}
-
-void QEditorPart::readConfig( KConfig* config )
-{
-    m_currentView->setTabStop( config->readNumEntry( "TabStop", 8 ) );
-}
-
-void QEditorPart::writeConfig( KConfig* config )
-{
-    if ( m_currentView )
-	config->writeEntry( "TabStop", m_currentView->tabStop() );
 }
 
 bool QEditorPart::openFile()
@@ -773,7 +742,13 @@ void QEditorPart::configDialog()
     emit configWidget( &dlg );
 
     if( dlg.exec() ){
-        m_currentView->configChanged();
+	QPtrList<QEditorView> views = QEditorPartFactory::views();
+	QPtrListIterator<QEditorView> it( views );
+	while( it.current() ){
+	    kdDebug(9032) << "------------------------ update configuration -----------------" << endl;
+	    it.current()->configChanged();
+	    ++it;
+	}
     }
 }
 
@@ -787,84 +762,3 @@ QEditorIndenter* QEditorPart::indenter() const
     return m_currentView->editor()->indenter();
 }
 
-bool QEditorPart::wordWrap() const
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    return config->readBoolEntry( "WordWrap", FALSE );
-}
-
-void QEditorPart::setWordWrap( bool enabled )
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    config->writeEntry( "WordWrap", enabled );
-    config->sync();
-    
-    QEditor* ed = m_currentView->editor();
-    if( enabled){
-	ed->setWordWrap( QEditor::WidgetWidth );
-	ed->setHScrollBarMode( QScrollView::AlwaysOff );
-	ed->setVScrollBarMode( QScrollView::AlwaysOn );
-    } else {
-	ed->setWordWrap( QEditor::NoWrap );
-	ed->setHScrollBarMode( QScrollView::AlwaysOn );
-	ed->setVScrollBarMode( QScrollView::AlwaysOn );
-    }
-}
-
-bool QEditorPart::parenthesesMatching() const
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    return config->readBoolEntry( "ParenthesesMatching", TRUE );
-}
-
-void QEditorPart::setParenthesesMatching( bool enabled )
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    config->writeEntry( "ParenthesesMatching", enabled );
-}
-
-bool QEditorPart::showMarkers() const
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    return config->readBoolEntry( "ShowMarkers", TRUE );
-}
-
-void QEditorPart::setShowMarkers( bool enabled )
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    config->writeEntry( "ShowMarkers", enabled );
-}
-
-bool QEditorPart::showLineNumber() const
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    return config->readBoolEntry( "ShowLineNumber", FALSE );
-}
-
-void QEditorPart::setShowLineNumber( bool enabled )
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    config->writeEntry( "ShowLineNumber", enabled );
-}
-
-bool QEditorPart::showCodeFoldingMarkers() const
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    return config->readBoolEntry( "ShowCodeFoldingMarkers", TRUE );
-}
-
-void QEditorPart::setShowCodeFoldingMarkers( bool enabled )
-{
-    KConfig* config = QEditorPartFactory::instance()->config();
-    config->setGroup( "General" );
-    config->writeEntry( "ShowCodeFoldingMarkers", enabled );
-}

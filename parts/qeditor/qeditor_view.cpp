@@ -28,6 +28,7 @@
 
 #include "qeditor_view.h"
 #include "qeditor_part.h"
+#include "qeditor_settings.h"
 #include "qeditor_factory.h"
 #include "qeditor.h"
 #include "paragdata.h"
@@ -131,10 +132,11 @@ QEditorView::~QEditorView()
 
 void QEditorView::configChanged()
 {
-    setMarkerWidgetVisible( m_document->showMarkers() );
-    setLineNumberWidgetVisible( m_document->showLineNumber() );
-    setLevelWidgetVisible( m_document->showCodeFoldingMarkers() );
     m_editor->configChanged();
+    
+    setMarkerWidgetVisible( QEditorSettings::self()->showMarkers() );
+    setLineNumberWidgetVisible( QEditorSettings::self()->showLineNumber() );
+    setLevelWidgetVisible( QEditorSettings::self()->showCodeFoldingMarkers() );
 }
 
 bool QEditorView::isMarkerWidgetVisible() const

@@ -41,6 +41,7 @@
 **********************************************************************/
 
 #include "qeditor.h"
+#include "qeditor_settings.h"
 
 #include "qsourcecolorizer.h"
 #include "cpp_colorizer.h"
@@ -331,6 +332,17 @@ void QEditor::drawCursor( bool visible )
 void QEditor::configChanged()
 {
     updateStyles();
+    
+    if( QEditorSettings::self()->wordWrap() ){
+	setWordWrap( QEditor::WidgetWidth );
+	setHScrollBarMode( QScrollView::AlwaysOff );
+	setVScrollBarMode( QScrollView::AlwaysOn );
+    } else {
+	setWordWrap( QEditor::NoWrap );
+	setHScrollBarMode( QScrollView::AlwaysOn );
+	setVScrollBarMode( QScrollView::AlwaysOn );
+    }
+    
     refresh();
 }
 

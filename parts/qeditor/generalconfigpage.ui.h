@@ -7,14 +7,19 @@
 *****************************************************************************/
 
 #include "qeditor_part.h"
+#include "qeditor_settings.h"
 
 void GeneralConfigPage::init()
 {
     part = 0;
+ 
+    checkWordWrap->setChecked( QEditorSettings::self()->wordWrap() );
+    checkParenthesesMatching->setChecked( QEditorSettings::self()->parenthesesMatching() );
+    checkShowMarkers->setChecked( QEditorSettings::self()->showMarkers() );
+    checkShowLineNumber->setChecked( QEditorSettings::self()->showLineNumber() );
+    checkShowCodeFoldingMarkers->setChecked( QEditorSettings::self()->showCodeFoldingMarkers() );
     
-    //checkWordWrap->hide();
-    checkParenthesesMatching->hide();
-	   
+    //checkParenthesesMatching->hide();
 }
 
 void GeneralConfigPage::destroy()
@@ -24,15 +29,6 @@ void GeneralConfigPage::destroy()
 void GeneralConfigPage::setPart( QEditorPart* p )
 {
     part = p;
-
-    if( !part )
-	return;
-
-    checkWordWrap->setChecked( part->wordWrap() );
-    checkParenthesesMatching->setChecked( part->parenthesesMatching() );
-    checkShowMarkers->setChecked( part->showMarkers() );
-    checkShowLineNumber->setChecked( part->showLineNumber() );
-    checkShowCodeFoldingMarkers->setChecked( part->showCodeFoldingMarkers() );
 }
 
 void GeneralConfigPage::accept()
@@ -40,9 +36,9 @@ void GeneralConfigPage::accept()
     if( !part )
 	return;
 
-    part->setWordWrap( checkWordWrap->isChecked() );
-    part->setParenthesesMatching( checkParenthesesMatching->isChecked() );
-    part->setShowMarkers( checkShowMarkers->isChecked() );
-    part->setShowLineNumber( checkShowLineNumber->isChecked() );
-    part->setShowCodeFoldingMarkers( checkShowCodeFoldingMarkers->isChecked() );
+    QEditorSettings::self()->setWordWrap( checkWordWrap->isChecked() );
+    QEditorSettings::self()->setParenthesesMatching( checkParenthesesMatching->isChecked() );
+    QEditorSettings::self()->setShowMarkers( checkShowMarkers->isChecked() );
+    QEditorSettings::self()->setShowLineNumber( checkShowLineNumber->isChecked() );
+    QEditorSettings::self()->setShowCodeFoldingMarkers( checkShowCodeFoldingMarkers->isChecked() );    
 }
