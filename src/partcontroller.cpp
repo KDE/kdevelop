@@ -234,13 +234,23 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
   {
     KTextEditor::PopupMenuInterface *iface = dynamic_cast<KTextEditor::PopupMenuInterface*>(part->widget());
     if (iface)
-    {
-      QPopupMenu *popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
-      iface->installPopup(popup);
-      connect(popup, SIGNAL(aboutToShow()), this, SLOT(slotPopupAboutToShow()));
-      connect(popup, SIGNAL(aboutToHide()), this, SLOT(slotPopupAboutToHide()));
-    }
+      iface->installPopup(contextPopupMenu());
   }
+}
+
+
+QPopupMenu *PartController::contextPopupMenu()
+{
+  static QPopupMenu *popup = 0;
+
+  if (!popup)
+  {
+    popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
+    connect(popup, SIGNAL(aboutToShow()), this, SLOT(slotPopupAboutToShow()));
+    connect(popup, SIGNAL(aboutToHide()), this, SLOT(slotPopupAboutToHide()));
+  }
+
+  return popup;
 }
 
 
@@ -506,6 +516,8 @@ void PartController::slotPopupAboutToShow()
   if (!popup)
     return;
 
+  kdDebug() << "COUNT BEFORE: " << popup->count() << endl;
+
   // ugly hack: mark the "original" items 
   m_popupIds.resize(popup->count());
   for (uint index=0; index < popup->count(); ++index)
@@ -552,17 +564,11 @@ void PartController::slotPopupAboutToHide()
     return;
 
   // ugly hack: remove all but the "original" items
-  bool remove = true;
-  while (remove)
-  {
-    remove = false;
-    for (uint index=0; index<popup->count(); ++index)
-      if (m_popupIds.contains(popup->idAt(index)) == 0)
-      {
-        popup->removeItemAt(index);
-	remove = true;
-      }
-  }
+  for (int index=popup->count()-1; index >= 0; --index)
+    if (m_popupIds.contains(popup->idAt(index)) == 0)
+      popup->removeItemAt(index);
+
+  kdDebug() << "COUNT AFTER: " << popup->count() << endl;
 }
 
 

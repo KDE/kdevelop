@@ -8,6 +8,7 @@
 
 
 class QTabWidget;
+class QPopupMenu;
 
 
 #include <kurl.h>
@@ -85,6 +86,8 @@ private:
 
   void closeActivePart();
   void closePart(KParts::Part *part);
+
+  QPopupMenu *contextPopupMenu();
 
   KParts::Factory *findPartFactory(const QString &mimeType, const QString &partType);
 
