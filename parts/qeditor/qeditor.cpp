@@ -247,19 +247,21 @@ void QEditor::drawCursor( bool visible )
 void QEditor::configChanged()
 {
     updateStyles();
-    internalRefresh();
+    refresh();
 }
 
 void QEditor::zoomIn()
 {
     KTextEdit::zoomIn();
     updateStyles();
+    refresh();
 }
 
 void QEditor::zoomOut()
 {
     KTextEdit::zoomOut();
     updateStyles();
+    refresh();
 }
 
 void QEditor::updateStyles()
@@ -461,7 +463,17 @@ QSourceColorizer* QEditor::colorizer() const
     return dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
 }
 
-void QEditor::internalRefresh()
+BackgroundParser* QEditor::parser() const
+{
+    return m_parser;
+}
+
+void QEditor::setBackgroundParser( BackgroundParser* parser )
+{
+    m_parser = parser;
+}
+
+void QEditor::refresh()
 {
     QTextParag* p = document()->firstParag();
     while( p ){
@@ -475,14 +487,4 @@ void QEditor::internalRefresh()
     sync();
     viewport()->repaint( true );
     ensureCursorVisible();
-}
-
-BackgroundParser* QEditor::parser() const
-{
-    return m_parser;
-}
-
-void QEditor::setBackgroundParser( BackgroundParser* parser )
-{
-    m_parser = parser;
 }

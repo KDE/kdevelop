@@ -190,9 +190,9 @@ void LevelWidget::mousePressEvent( QMouseEvent* e )
             if( data && data->isBlockStart() ){
 
                 if( data->isOpen() ){
-                    // emit collapseBlock( p );
+                    emit collapseBlock( p );
                 } else {
-                    // emit expandBlock( p );
+                    emit expandBlock( p );
                 }
 	    }
 	    break;

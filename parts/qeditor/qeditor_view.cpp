@@ -474,11 +474,8 @@ void QEditorView::expandBlock( QTextParag* p )
 
     doRepaint();
 
-    m_editor->document()->invalidate();
-    m_editor->viewport()->repaint( true );
     m_editor->setCursorPosition( p->paragId(), 0 );
-    m_editor->viewport()->setFocus();
-
+    m_editor->refresh();
 }
 
 void QEditorView::collapseBlock( QTextParag* p )
@@ -506,10 +503,8 @@ void QEditorView::collapseBlock( QTextParag* p )
 
     doRepaint();
 
-    m_editor->document()->invalidate();
-    m_editor->viewport()->repaint( true );
     m_editor->setCursorPosition( p->paragId(), 0 );
-    m_editor->viewport()->setFocus();
+    m_editor->refresh();
 }
 
 void QEditorView::doRepaint()

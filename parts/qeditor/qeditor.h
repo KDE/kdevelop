@@ -116,6 +116,7 @@ signals:
 public slots:
     void doGotoLine( int line );
     void configChanged();
+    void refresh();
 
 private slots:
     void doMatch( QTextCursor* );
@@ -124,7 +125,6 @@ private slots:
 protected:
     virtual void keyPressEvent( QKeyEvent* );
     virtual void backspaceIndent( QKeyEvent* );
-    void internalRefresh();
 
 private:
     ParenMatcher* parenMatcher;
