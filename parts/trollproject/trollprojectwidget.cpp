@@ -581,6 +581,7 @@ void TrollProjectWidget::slotRunProject()
 void TrollProjectWidget::slotBuildProject()
 {
   // no subproject selected
+  m_part->partController()->saveAllFiles();
   if (!m_shownSubproject)
     return;
   // can't build from scope
@@ -604,6 +605,7 @@ void TrollProjectWidget::slotBuildProject()
 void TrollProjectWidget::slotRebuildProject()
 {
   // no subproject selected
+  m_part->partController()->saveAllFiles();
   if (!m_shownSubproject)
     return;
   // can't build from scope
@@ -1004,7 +1006,9 @@ void TrollProjectWidget::slotAddFiles()
     proc->start();
     QString filename = files[i].right(files[i].length()-files[i].findRev('/')-1);
     // and add them to the filelist
-    addFile(filename);
+    QFile testExist(projectDirectory()+relpath+"/"+filename);
+    if (testExist.exists())
+      addFile(filename);
   }
 }
 

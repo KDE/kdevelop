@@ -8,5 +8,9 @@
     <Action name="build_execute" />
   </Menu>
 </MenuBar>
+<ToolBar name="buildToolBar">
+    <Action name="build_build" />
+    <Action name="build_execute" />
+</ToolBar>
 </kpartgui>
 
