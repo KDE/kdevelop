@@ -1,6 +1,6 @@
 EXTRA_DIST =tip.database
 
-SUBDIRS = manual welcome
+SUBDIRS = manual welcome tutorial programming kde_libref addendum
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/hu/kdevelop/

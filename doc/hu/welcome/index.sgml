@@ -24,7 +24,7 @@ Ezen felül általános képet nyújt a projektekrõl és arról, hogyan épülnek fel az 
  használatával.
 </em>
 
-<tag/<subtitle/<htmlurl url="../../../default/kdevelop/programming/index.html" name="A KDevelop Programozói Kézikönyv (angolul)">//
+<tag/<subtitle/<htmlurl url="../../../hu/kdevelop/programming/index.html" name="A KDevelop Programozói Kézikönyv (fordítás alatt)">//
 <p>
 Felhasználói kézikönyv a K Desktop Környezethez (KDE) a KDevelop IDE segítségével készülö C++ alkalmazások fejlesztéséhez, 1.0 Verzió.
 <p>
@@ -34,7 +34,7 @@ a KDE és a QT alkalmazások alapjait, valamint teljes magyarázatot ad a KDevelop 
 Továbbá leírja a fejlesztõi folyamat különbözõ lépéseit, mint például a dokumentáció írása és a projekt fájloknak a K Fájl Rendszer
 Szabványnak megfelelõ telepítési beállításai.
 </em>
-<tag/<subtitle/<htmlurl url="../../../default/kdevelop/tutorial/index.html" name="KDE Alkalmazás Tankönyv (angolul)">//
+<tag/<subtitle/<htmlurl url="../../../hu/kdevelop/tutorial/index.html" name="KDE Alkalmazás Tankönyv (fordítás alatt)">//
 <p>
 A KDevelop Integrált Fejlesztõi Környezet KDE Alkalmazás Tankönyve példák gyûjteménye, hogyan írjunk KDE
  alkalmazásokat; ahhoz is segítéget nyújt, hogyan kell lefordítani és futtatni a Qt könyvtárhoz adott példaprogramokat.
@@ -46,7 +46,7 @@ kezdve, a felhasználót végigvezeti a Qt példákon és a KDE alkalmazás projekteken
 kérdések itt teljes részletességgel vannak elmagyarázva a példákon keresztül.
 </em>
 
-<tag/<subtitle/<htmlurl url="../../../default/kdevelop/kde_libref/index.html" name="KDE Könyvtár Referencia (angolul)">//
+<tag/<subtitle/<htmlurl url="../../../hu/kdevelop/kde_libref/index.html" name="KDE Könyvtár Referencia (fordítás alatt)">//
 <p>
 Referencia a K Desktop Környezethez (KDE) készülö C++ alkalmazások fejlesztéséhez.
 <p>
@@ -56,7 +56,7 @@ A referencia kézikönyv jól struktúrált információt nyújt a KDE Alkalmazás Kereth
  Az alap KDE alkalmazás keretet érintõ ismert Qt 2.0/ KDE 2 kompatibilitási problémákról szóló információkat is tartalmaz a kézikönyv.
 </em>
 
-<tag/<subtitle/<htmlurl url="../../../default/kdevelop/addendum/index.html" name="KDE 2 Fejlesztõi Kézikönyv (angolul)">//
+<tag/<subtitle/<htmlurl url="../../../hu/kdevelop/addendum/index.html" name="KDE 2 Fejlesztõi Kézikönyv (fordítás alatt)">//
 <p>
 A KDE 2 API-hoz már létezõ dokumentációk gyûjteménye, benne a KOM/OpenParts kérdésekkel különbözõ KDE fejlesztõk tollából.
 <p>
