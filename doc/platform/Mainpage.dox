@@ -5,7 +5,15 @@
 /**
 \mainpage The KDevelop Platform %API %Documentation
 
-KDevelop Platform is set of libraries that can be reused to build an IDE (Integrated Development Environment) for developing applications under X11.
+KDevelop Platform is set of libraries and tools that are used to build IDEs (Integrated Development Environments),
+applications similar to IDEs (web development enviroment, text editors for programmers and designers, etc.)
+and/or IDE plugins for all possible purposes.
+
+Platform provides:
+- the plugin architecture (interfaces);
+- the common support libraries;
+- the generic shell with plugin profiles support.
+.
 
 \section intro Introduction
 
@@ -18,10 +26,55 @@ modifications to the Platform %API.
 
 An on-line, updated every 24H, html version of this documentation can be found at: http://www.kdevelop.org/HEAD/doc/platform/html/index.html
 
-More information about the KDevelop Platform architecture in form of tutorials, HOWTOs,
+More information about the KDevelop Platform architecture in form of tutorials, Wikis, HOWTOs,
 and FAQs can be found at
 the <a href="http://www.kdevelop.org">KDevelop website</a>.
 
+Quick overviews of the architecture can also be found in the issues of <a href="http://www.kdevelop.org/doc/tehcnotes">
+KDevelop Technotes</a>.
+
+\section platformapi Platform Libraries API
+
+- <a href="kdevinterfaces/html/index.html"><b>Interfaces Library</b></a>
+   (<a href="kdevinterfaces/html/classes.html">classes</a>)\n
+   <i>Interfaces and classes that form KDevelop plugin architecture.</i>
+- <a href="kdevextensions/html/index.html"><b>Extension Interfaces Library</b></a>
+   (<a href="kdevextensions/html/classes.html">classes</a>)\n
+   <i>Extension interfaces used by KDevelop plugin architecture.</i>
+- <a href="kdevutil/html/index.html"><b>Utility Library</b></a>
+   (<a href="kdevutil/html/classes.html">classes</a>)\n
+   <i>Utility classes for the KDevelop architecture.</i>
+- <a href="kdevextras/html/index.html"><b>Extra Interfaces Library</b></a>
+   (<a href="kdevextras/html/classes.html">classes</a>)\n
+   <i>Extra interfaces that are not the part of KDevelop plugin architecture
+   but that can be implemented by extra plugins or "plugins for plugins".</i>
+- <a href="kdevwidgets/html/index.html"><b>Widgets Library</b></a>
+   (<a href="kdevwidgets/html/classes.html">classes</a>)\n
+   <i>A collection of widgets.</i>
+- <a href="propeditor/html/index.html"><b>Property Editing Library</b></a>
+   (<a href="propeditor/html/classes.html">classes</a>)\n
+   <i>A collection of facilities to store and edit the properties of various objects.</i>
+- <a href="kdevcatalog/html/index.html"><b>Catalog Library</b></a>
+   (<a href="kdevcatalog/html/classes.html">classes</a>)\n
+   <i>The persistant symbol store library working with BerleleyDb backend.</i>
+- <a href="/html/index.html"><b></b></a>
+   (<a href="/html/classes.html">classes</a>)\n
+   <i></i>
+.
+
+\section designerapi GUI Designer Integration API
+
+- <a href="external/html/index.html"><b>KInterfaceDesigner Library</b></a>
+   (<a href="external/html/classes.html">classes</a>)\n
+   <i>KInterfaceDesigner classes and interfaces which form the core of GUI Designer integration framework.</i>
+- <a href="designer_integration/html/index.html"><b>Designer Integration Support Library</b></a>
+   (<a href="designer_integration/html/classes.html">classes</a>)\n
+   <i>The base classes to implement GUI designer integration in language support plugins.</i>
+.
+
+\section pluginsapi Platform Plugins API
+
+\section shellapi Shell API
 
 \section PlannedTasks Planned tasks
 
@@ -31,26 +84,16 @@ Here is a priority ordered list:
   -# fix the dispersed \ref todo all over the code.
   .
 
-\section misc_libs Miscellaneous libraries included in KDevelop Platform
-  - \ref PropEditor
-
 \section howTobuildAPIlocalcopy How to build a local copy of this documentation
 
-This documentation is very large and changes with every cvs commit, therefore is not available for download.
-To build your local copy of this documentation you have two choices, depending on your system configuration.
-  - If you have doxygen >= 1.3.4 , PHP >= 4.10 and a local running webserver then
-    - make apidox
-    - make install-apidox (as root)
-    .
-  - If you have an older system then
-    - setenv KDEDIR=/location_of_your_kde_instalation
-    - setenv QTDIR=/location_of_your_qt_instalation
-    - doxygen Doxyfile
-    - make install-apidox (as root)
-    .
-  .
+This documentation is large and changes with every cvs commit, therefore is not available for download.
+To build your local copy of this documentation you need to fetch KDevelop sources and 
+if you have doxygen >= 1.3.4 and (optionally) PHP >= 4.10 plus a local running webserver then
+- make apidox
+- make install-apidox (as root)
+.
 
-The advantage of the first method is that you'll get a search engine in your documentation if you read your
+The advantage of the webserver is that you'll get a search engine in your documentation if you read your
 documentation using your local webserver.
 
 \section License
