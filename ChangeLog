@@ -1,3 +1,6 @@
+2001-08-12  rokrau@yahoo.com
+    * bugfix: removed obsolete library check
+
 2001-08-08  rokrau@yahoo.com
     * bugfix: fixed another one of these fucking 0x0 pointer segfaults, 
       this time too late for KDE-2.2.... shit
