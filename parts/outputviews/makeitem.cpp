@@ -66,6 +66,8 @@ QString MakeItem::text( EOutputLevel )
 
 QString MakeItem::formattedText( EOutputLevel level, bool bright_bg )
 {
+    if (m_text.isEmpty())
+	return "<br>";
     return QString("<code>").append( icon() ).append("<font color=\"").append( color( bright_bg) ).append(
 		"\">").append( text(level) ).append("</font></code>").append( br() );
 }
@@ -81,7 +83,7 @@ QString MakeItem::br()
     return br;
 }
 
-ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning )
+ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, const QString& compiler )
 	: MakeItem( line )
 	, fileName(fn)
 	, lineNum(ln)
@@ -89,6 +91,7 @@ ErrorItem::ErrorItem( const QString& fn, int ln, const QString& tx, const QStrin
 	, m_cursor(0L)
 	, m_doc(0L)
 	, m_isWarning(isWarning)
+	, m_compiler(compiler)
 {}
 
 ErrorItem::~ErrorItem()
@@ -99,6 +102,8 @@ ErrorItem::~ErrorItem()
 bool ErrorItem::append( const QString& text )
 {
 	if ( !text.startsWith("   ") )
+		return false;
+	if ( text.startsWith("   ") && (m_compiler == "intel") )
 		return false;
 	m_text += text;
 	m_error += text;

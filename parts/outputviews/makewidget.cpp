@@ -487,7 +487,10 @@ void MakeWidget::insertStdoutLine( const QString& line )
 void MakeWidget::insertStderrLine( const QString& line )
 {
 	if ( !appendToLastLine( line ) )
+        {
+            kdDebug() << "inserting stderr line: " << line << endl;
 		m_errorFilter.processLine( line );
+  }
 }
 
 void MakeWidget::slotProcessExited(KProcess *)

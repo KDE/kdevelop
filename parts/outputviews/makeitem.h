@@ -120,7 +120,7 @@ namespace KTextEditor { class Cursor; class Document; }
 class ErrorItem : public MakeItem
 {
 public:
-	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning );
+	ErrorItem( const QString& fn, int ln, const QString& tx, const QString& line, bool isWarning, const QString& compiler );
 	virtual ~ErrorItem();
 
 	virtual bool append( const QString& text );
@@ -133,6 +133,7 @@ public:
 	KTextEditor::Cursor* m_cursor;
 	KTextEditor::Document* m_doc;
 	bool m_isWarning;
+	QString m_compiler;
 };
 
 class ActionItem : public MakeItem
