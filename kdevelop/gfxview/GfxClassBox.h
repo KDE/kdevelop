@@ -1,0 +1,114 @@
+#ifndef GFXCLASSBOX_H_INCLUDED
+#define GFXCLASSBOX_H_INCLUDED
+
+#include <qwidget.h>
+#include <qpushbutton.h>
+#include <qpixmap.h>
+#include "../classparser/ParsedClass.h"
+
+// Colour of boxes
+#define CLASSBOXCOL_INSYSTEM    QColor(0xd0,0xff,0xd0)
+#define CLASSBOXCOL_NOTINSYSTEM QColor(0xd0,0xd0,0xff)
+
+// Size of boxes
+// #define CLASSBOXWIDTH 100
+#define CLASSBOXHEIGHT 20
+
+// Space between boxes
+#define CLASSBOX_XSPACE 5
+#define CLASSBOX_YSPACE 5
+
+// Connections between boxes
+#define CONN_CHILD_DELTA_STARTX 0
+#define CONN_CHILD_DELTA_STARTY 10
+#define CONN_CHILD_DELTA_STOPX  -10
+#define CONN_CHILD_DELTA_STOPY  10
+
+class CGfxClassBox;
+class CGfxClassBox : public QWidget
+{
+  Q_OBJECT
+
+    // private // Members
+    public:
+  CParsedClass *m_class;     // The class that this box represents
+  CGfxClassBox *m_parent;    // The parent box of this box (Base class)
+  CGfxClassBox *m_sibling;   // The sibling box of this box 
+  CGfxClassBox *m_prevnode;  // Box with boxid = m_boxid - 1
+
+  QPushButton *m_foldbtn;        // Button for fold/unfold subtree
+  bool m_unfolded;           // True=show all subclasses under this class
+  int m_boxwidth;            // The width of the box
+
+ public: // Members
+  int m_boxid;               // Box id (internal use, ignore it!)
+  QPixmap *plusbtn;
+  QPixmap *minusbtn;
+  QString m_name;
+
+ public: 
+  /** Constructor */
+  CGfxClassBox(CParsedClass *aclass,
+	       QString *aname,
+	       QWidget *aparentwidget);  
+
+  /** Destructor */
+  ~CGfxClassBox();
+
+  /** Set parent class box (CGfxClassBox representing the base class) */
+  void SetParentClassBox(CGfxClassBox *aclassbox);
+
+  /** Set sibling class box */
+  void SetSiblingClassBox(CGfxClassBox *aclassbox);
+
+  /** Set previous class box */
+  void SetPreviousClassBox(CGfxClassBox *aclassbox);
+
+  /** Set name */
+  void setName(QString *name);
+
+  /** Change folded/unfolded status */
+  void SetUnfolded(bool unfolded);
+
+  /** Unfold all ancestors */
+  void MakeVisible(bool no_self_unfold);
+
+  /** Show fold/unfold button */
+  void ShowFoldButton();
+
+  /** Returns TRUE if subclass CGfxClassBoxes is to be shown */
+  bool IsUnfolded();
+
+  /** Returns TRUE if baseclass CGfxClassBox (m_parent) is unfolded */
+  bool IsVisible();
+
+  /** Get Y top position */
+  int GetY();
+
+  /** Get X leftmost position */
+  int GetX();
+
+  /** Get Y bottom position */
+  int GetYDepth();
+
+  /** Get X rightmost position */
+  int GetXDepth();
+
+ protected:
+  void paintEvent( QPaintEvent * );
+
+
+  /* ============================================================== */
+
+ signals:
+  void stateChange(CGfxClassBox *);
+  void drawConnection(CGfxClassBox *);
+
+ public slots:
+  void PosRefresh(int boxid); 
+  void btnClicked();
+  
+};
+
+ 
+#endif
