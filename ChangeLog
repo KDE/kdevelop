@@ -11,11 +11,9 @@
     - Fix display of function parameters.
 
 2003-02-25 F@lk Brettschneider <falkbr@kdevelop.org>
-	* make-outputview: scrolling during compiling possible without immediate auto-scrolling to the bottom
-
-2003-02-25 F@lk Brettschneider <falkbr@kdevelop.org>
 	* KDE-3.0 compile fixes
 	* some (runtime) warning output removed
+	* make-outputview: scrolling during compiling possible without immediate auto-scrolling to the bottom
     
 2003-02-24 Roberto Raggi <roberto@kdevelop.org>
 	* improved the background parser
