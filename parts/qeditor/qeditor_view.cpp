@@ -79,6 +79,7 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
              m_markerWidget, SLOT(doRepaint()) );
     connect( m_markerWidget, SIGNAL(markChanged(KTextEditor::Mark,KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
              document, SIGNAL(markChanged(KTextEditor::Mark,KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+    connect( m_markerWidget, SIGNAL(marksChanged()), document, SIGNAL(marksChanged()) );
 
     m_levelWidget = new LevelWidget( m_editor, this );
     connect( m_levelWidget, SIGNAL(expandBlock(QTextParagraph*)),
@@ -136,7 +137,7 @@ QEditorView::~QEditorView()
 void QEditorView::configChanged()
 {
     m_editor->configChanged();
-    
+
     setMarkerWidgetVisible( QEditorSettings::self()->showMarkers() );
     setLineNumberWidgetVisible( QEditorSettings::self()->showLineNumber() );
     setLevelWidgetVisible( QEditorSettings::self()->showCodeFoldingMarkers() );
@@ -369,7 +370,7 @@ void QEditorView::proceed()
     } // no else here !
 
     bool forw = ! (m_options & KoFindDialog::FindBackwards);
-    
+
     // 'Selected Text' option
     if ( edit && ( m_options & KoFindDialog::SelectedText ) )
     {
@@ -385,7 +386,7 @@ void QEditorView::proceed()
         lastParagraph = edit->document()->lastParagraph();
         lastIndex = lastParagraph->length()-1;
     }
-    
+
     bool bProceed = true;
     if (forw) {
         while (bProceed) { // loop until cancelled
@@ -411,7 +412,7 @@ void QEditorView::proceed()
     }
 }
 
-bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,			     
+bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
                              QTextParagraph* lastParagraph, int lastIndex )
 {
     m_currentParag = firstParagraph;
@@ -478,7 +479,7 @@ void QEditorView::doFind()
 void QEditorView::doReplace()
 {
     m_replaceDialog->m_find->setEditURL(m_editor->selectedText());
-    
+
     if( m_replaceDialog->exec() ){
         m_options = m_replaceDialog->options();
         m_replace = new KoReplace( m_replaceDialog->pattern(), m_replaceDialog->replacement(),
@@ -525,10 +526,10 @@ void QEditorView::replace( const QString&, int matchingIndex,
 void QEditorView::ensureTextIsVisible( QTextParagraph* p)
 {
     internalEnsureVisibleBlock( p );
-    
+
     m_editor->refresh();
     doRepaint();
-    
+
     // some math
     QRect r = m_editor->paragraphRect(p->paragId());
     int y = r.y();
@@ -536,7 +537,7 @@ void QEditorView::ensureTextIsVisible( QTextParagraph* p)
     y = y + h/2;
     int cY = m_editor->contentsY();
     h = m_editor->viewport()->size().height();
-    
+
     // if the paragraph is in the lower quarter of the viewport, center it
     if (y > (cY + (3*h)/4)) {
 	m_editor->center(0, y);
@@ -613,10 +614,10 @@ void QEditorView::internalCollapseBlock( QTextParagraph* p )
             if( data->level() == lev ){
                 break;
             }
-	    
+
 	    // kdDebug(9032) << "hide parag " << p->paragId() << " level = " << data->level() << endl;
             p->hide();
-	    
+
             p = p->next();
         }
     }
@@ -625,16 +626,16 @@ void QEditorView::internalCollapseBlock( QTextParagraph* p )
 void QEditorView::expandBlock( QTextParagraph* p )
 {
     internalExpandBlock( p );
-    
+
     m_editor->setCursorPosition( p->paragId(), 0 );
     m_editor->refresh();
-    doRepaint();	
+    doRepaint();
 }
 
 void QEditorView::collapseBlock( QTextParagraph* p )
 {
     internalCollapseBlock( p );
-    
+
     m_editor->setCursorPosition( p->paragId(), 0 );
     m_editor->refresh();
     doRepaint();
@@ -678,11 +679,11 @@ void QEditorView::setupActions()
     new KAction( i18n("Collapse All Blocks"), "collapse all blocks", 0,
 		 this, SLOT(collapseAllBlocks()),
                  actionCollection(), "edit_collapse_all_blocks" );
-    
+
     new KAction( i18n("Expand All Blocks"), "collapse all blocks", 0,
 		 this, SLOT(expandAllBlocks()),
                  actionCollection(), "edit_expand_all_blocks" );
-        
+
     new KAction( i18n("Start Macro"), "start macro", CTRL + Key_ParenLeft,
 		 editor(), SLOT(startMacro()),
                  actionCollection(), "tools_start_macro" );
@@ -707,10 +708,10 @@ void QEditorView::expandAllBlocks()
 	ParagData* data = (ParagData*) p->extraData();
 	if( data && data->isBlockStart() ){
 	    internalExpandBlock( p );
-	}	
+	}
 	p = p->next();
     }
-    
+
     m_editor->refresh();
     doRepaint();
 }
@@ -725,7 +726,7 @@ void QEditorView::collapseAllBlocks()
 	}
 	p = p->next();
     }
-    
+
     m_editor->refresh();
     doRepaint();
 }
@@ -742,11 +743,11 @@ void QEditorView::enableTextHints( int timeout )
     if( !m_textHintToolTip )
         m_textHintToolTip = new QEditorTextHint( this );
 
-#if KDE_VERSION > 305        
+#if KDE_VERSION > 305
     m_textHintToolTip->setWakeUpDelay( timeout );
 #else
     // TODO set delay
-#endif    
+#endif
 }
 
 void QEditorView::disableTextHints()

@@ -66,7 +66,7 @@ public:
     virtual void setPixmap(KTextEditor::MarkInterface::MarkTypes, const QPixmap &);
     virtual void setDescription(KTextEditor::MarkInterface::MarkTypes, const QString &);
     virtual void setMarksUserChangable(uint markMask);
-    
+
 public slots:
     void doRepaint() { repaint( FALSE ); }
 
@@ -75,10 +75,11 @@ protected:
     virtual void paintEvent( QPaintEvent* );
     virtual void contextMenuEvent( QContextMenuEvent* );
     virtual void mousePressEvent ( QMouseEvent * e );
-    
+
 signals:
-    virtual void markChanged( KTextEditor::Mark mark,
-                              KTextEditor::MarkInterfaceExtension::MarkChangeAction action );
+    void markChanged( KTextEditor::Mark mark, KTextEditor::MarkInterfaceExtension::MarkChangeAction action );
+    void marksChanged();
+
 private:
     QEditor*                m_editor;
     QPixmap                 m_buffer;
