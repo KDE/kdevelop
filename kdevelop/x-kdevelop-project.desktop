@@ -1,9 +1,0 @@
-[KDE Desktop Entry]
-Encoding=UTF-8
-Comment=KDevelop Project File
-Comment[fr]=Fichier de Projet KDevelop
-DefaultApp=kdevelop
-Icon=kdevelop_project
-Type=MimeType
-MimeType=application/x-kdevelop-project
-Patterns=*.kdevprj;

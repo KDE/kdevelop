@@ -1,9 +1,0 @@
-KDevelop Project Packager
--------------------------
-This is a utility that will help create RPM spec files
-from you kdevelop project.
-
-This is an initial port from KDE 1.1.2 so there are a few
-surprises. 
-
--ian reinhart geiser <geiseri@msoe.edu>
