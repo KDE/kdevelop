@@ -874,14 +874,7 @@ bool PartController::closePartForWidget( const QWidget* w )
 
 bool PartController::readyToClose()
 {
-  QPtrListIterator<KParts::Part> it(*parts());
-  for ( ; it.current(); ++it)
-  {
-    if(!closePart(*it))
-      return false;
-  }
-
-  return true;
+	return closeAllWindows();
 }
 
 void PartController::slotActivePartChanged( KParts::Part* part )
