@@ -5,23 +5,23 @@
 
 <date>Version 2.0 , Apr 11,1999
 <abstract>
-Der Referenzführer zur KDevelop Integrierten Entwicklungsumgebung für Unix Systeme, Version 1.0. Dieses Handbuch ist Teil der KDevelop
+Der Referenzf&uuml;hrer zur KDevelop Integrierten Entwicklungsumgebung f&uuml;r Unix Systeme, Version 1.0. Dieses Handbuch ist Teil der KDevelop
 Integrierten Entwicklungsumgebung und ist daher ebenso unter der GNU General Public License lizensiert; siehe <ref id="Copyright"
 name="Copyright">.
 </abstract>
 <toc>
 
-<sect>Einführung
+<sect>Einf&uuml;hrung
 <p>
-Da alles auf Erden seine Mode hat, scheint die heutige Computerwelt immer mehr zur Benutzung freier Software auch für kommerzielle
+Da alles auf Erden seine Mode hat, scheint die heutige Computerwelt immer mehr zur Benutzung freier Software auch f&uuml;r kommerzielle
 Zwecke zu tendieren. Man ist sich mittlerweile einig, das Linux (genauso wie andere Projekte wie der Apache Webserver, die Perl
 Skriptsprache und die GNU Tools), beweist, das freie Software qualitativ genauso gut sein kann wie kommerzielle Software. Doch trotz
-der Qualität hat der Endbenuzter immer noch unter den kryptischen Kommandos vieler Unix-Systeme zu leiden. Damit Linux weiter blühen
+der Qualität hat der Endbenuzter immer noch unter den kryptischen Kommandos vieler Unix-Systeme zu leiden. Damit Linux weiter bl&uuml;hen
 kann, braucht es Applikationen, sowohl freie als auch kommerzielle, die einfach zu benutzen sind.
 
 Das <idx/KDE/ Projekt versucht dieses Loch zu schließen, indem ein einfache Desktop und die zugehörigen Bibliotheken bereitgestellt
-wird um die Verfügbarkeit von GNU-basierter Software zu erweitern. Aber da speziell freie Software meist in der Freizeit der Autoren
-erstellt wird, ist die Frage für viele Programmierer wie sehr sie ihre gegenwärtige Entwicklungsumgebung mögen. KDevelop will einen
+wird um die Verf&uuml;gbarkeit von GNU-basierter Software zu erweitern. Aber da speziell freie Software meist in der Freizeit der Autoren
+erstellt wird, ist die Frage f&uuml;r viele Programmierer wie sehr sie ihre gegenwärtige Entwicklungsumgebung mögen. KDevelop will einen
 weiteren großen Schritt machen: das Programmierleben einfacher und effizienter gestalten. Produkte, die mit KDevelop erstellt wurden,
 können eine höhere Stufe der Zuverlässigkeit und Funktionalität in der gleichen Entwicklungszeit erreichen.
 
@@ -30,31 +30,31 @@ genauso, wie es die Funktionalität von anderer Projekte wie <tt/make/ und dem GN
 integrierten Teil des Entwicklungsprozesses macht. KDevelop beherrscht:
 
 <itemize>
-<item> Alle Entwicklungswerkzeuge, die für C++ Programmierung benötigt werden, wie den Compiler, Linker, automake und autoconf,
-<item> KAppWizard, welcher vollständige, sofort ausführbare Rahmenapplikationen erstellt,
+<item> Alle Entwicklungswerkzeuge, die f&uuml;r C++ Programmierung benötigt werden, wie den Compiler, Linker, automake und autoconf,
+<item> KAppWizard, welcher vollständige, sofort ausf&uuml;hrbare Rahmenapplikationen erstellt,
 <item> den Klassengenerator, um neue Klassen zu erzeugen und sie in das aktuelle Projekt zu integrieren,
 <item> Dateimanagement von Quellcode, Headerdateien, Dokumentation etc, die im Projekt eingebunden sind,
-<item> Die Erzeugung von Benutzerhandbüchern in SGML und die automatische Generierung in HTML-Ausgabe mit dem KDE look and feel,
-<item> Automatische HTML-basierte API-Dokumentation für die Klassen ihres Projekts mit Querreferenzierung zu den benutzten
+<item> Die Erzeugung von Benutzerhandb&uuml;chern in SGML und die automatische Generierung in HTML-Ausgabe mit dem KDE look and feel,
+<item> Automatische HTML-basierte API-Dokumentation f&uuml;r die Klassen ihres Projekts mit Querreferenzierung zu den benutzten
 Bibliotheken,
-<item> Unterstüzung von Internationalisierung ihrer Applikation, die es Übersetzern erlaubt, ihre Zielsprache zu einem Projekt
-hinzuzufügen,
+<item> Unterst&uuml;zung von Internationalisierung ihrer Applikation, die es Übersetzern erlaubt, ihre Zielsprache zu einem Projekt
+hinzuzuf&uuml;gen,
 <item> WYSIWYG (What you see is what you get, Was sie sehen, ist was sie bekommen)- Erzeugung von Benutzeroberflächen mit dem
 integrierten Dialogeditor,
 <item> Debuggen ihrer Applikation durch integrieren von KDbg,
 <item> Bearbeiten von Projekt-spezifischen Pixmaps mit KIconEdit,
-<item> Die Einbeziehugn jedes anderen Programms, das sie zur Entwicklung benötigen durch hinzufügen zum "Werkzeuge"-Menü nach ihren
-Individuellen Bedürfnissen.
+<item> Die Einbeziehugn jedes anderen Programms, das sie zur Entwicklung benötigen durch hinzuf&uuml;gen zum "Werkzeuge"-Men&uuml; nach ihren
+Individuellen Bed&uuml;rfnissen.
 </itemize>
 
 KDevelop macht es zu einer Freude, mit allen Programmen unter einer Oberfläche zu arbeiten und spart Zeit durch Automatisierung von
 Standard-Entwicklungsprozessen, genauso wie es ihnen direkten und transparenten Zugriff auf alle Informationen bietet, die Sie
-brauchen. Die integrierten Browser Mechanismen wurden entworfen um Dokumentationsanfragen zu unterstützen, die Entwickler in Beziehung
+brauchen. Die integrierten Browser Mechanismen wurden entworfen um Dokumentationsanfragen zu unterst&uuml;tzen, die Entwickler in Beziehung
 zu Ihrem Projekt haben.
 
 Der Klassen-Browser und der Fehler-Sucher bringen sie an jede Stelle ihres Projektcodes mit einem Mausklick ohne das sie nach Dateien
-suchen müssen; Dateibäume geben direkten Zugang zu Projektdateien und das integrierte Hilfesystem bietet eine praktischen Zugriff auf
-die Online-Dokumentation überall innerhalb der IDE.
+suchen m&uuml;ssen; Dateibäume geben direkten Zugang zu Projektdateien und das integrierte Hilfesystem bietet eine praktischen Zugriff auf
+die Online-Dokumentation &uuml;berall innerhalb der IDE.
 
 <sect1>Neuerungen
 <p>
@@ -67,8 +67,8 @@ utilities; reviewed and extended documentation as well as a new project generato
 
 <sect1>Über dieses Handbuch
 <p>
-Dieses Benutzerhandbuch gibt dem Benutzer eine vollständige Übersicht über die KDevelop IDE und beschreibt den grundlegenden
-Entwicklungsprozess in Kürze. Für Informationen über spezifische Programmierfragen raten wir, das <htmlurl url="programming.html"
+Dieses Benutzerhandbuch gibt dem Benutzer eine vollständige Übersicht &uuml;ber die KDevelop IDE und beschreibt den grundlegenden
+Entwicklungsprozess in K&uuml;rze. F&uuml;r Informationen &uuml;ber spezifische Programmierfragen raten wir, das <htmlurl url="programming.html"
 name="KDevelop Programmierer Handbuch"> zu lesen, das mit KDevelop geliefert wird; dieses deckt Themen ab wie die Funktion der
 generierten Rahemenapplikationen oder wie vollständige <idx/KDE/ Applikationen erstellt werden.
 
@@ -80,15 +80,15 @@ Dieses Handbuch ist daher unterteilt in folgende Abschnitte:
 und erstellt werden.
 <item>Kapitel <ref id="Entwicklung mit KDevelop" name="Entwicklung mit KDevelop">, nimmt Sie mit auf eine kurze Reise, die Ihnen die
 Funktionalität der Entwicklungsumgebung beschreibt.
-<item>Kapitel <ref id="Übersicht" name="Übersicht">, erklärt sowohl die Menüs und Dialoge als auch Schnelltasten.
+<item>Kapitel <ref id="Übersicht" name="Übersicht">, erklärt sowohl die Men&uuml;s und Dialoge als auch Schnelltasten.
 <item>Kapitel <ref id="Das Hilfe-System" name="Das Hilfe-System">, zeigt die Benuztung des integrierten Dokumentationsbrowsers und
 zusätzliche Hilfe-funktionen.
 <item>Kapitel <ref id="Arbeiten mit dem Editor" name="Arbeiten mit dem Editor">, erklärt die Features des Dateimanagements und
 -bearbeitung.
 <item>Kapitel <ref id="Projekte" name="Projekte">, beschreibt die Erzeugung und Überwachung von Software Projekten.
-<item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz über die Einstellung von Compiler und
+<item>Kapitel <ref id="Erstellungsoptionen" name="Erstellungsoptionen">, enthält eine Referenz &uuml;ber die Einstellung von Compiler und
 Linker Flags und der Projekteinstellungen.
-<item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt ihnen ausführlich, wie sie den KDevelp Klassenbrowser
+<item>Kapitel <ref id="Der Klassenbrowser" name="Der Klassenbrowser">, beschreibt ihnen ausf&uuml;hrlich, wie sie den KDevelp Klassenbrowser
 benutzen.
 <item>Kapitel <ref id="Der Dialogeditor" name="Der Dialogeditor">, betrachtet den Integrierten visuellen Dialogeditor und wie er ihnen
 C++ Code erzeugt.
@@ -98,22 +98,22 @@ Benutzung von KDevelop vornehmen.
 verschiedenen Unix-Systemen vorkommen und generelle Problemlösungen.
 </itemize>
 
-Für Programmieranfänger und neue Benutzer dieses Produkts empfehlen wir, sich in dieses Handbuch einzulesen bevor Sie damit beginnen,
+F&uuml;r Programmieranfänger und neue Benutzer dieses Produkts empfehlen wir, sich in dieses Handbuch einzulesen bevor Sie damit beginnen,
 mit der IDE zu arbeiten, da es die Benutzung vollständig behandelt. Das Verständnis, wie Vorgänge am schnellsten zu erledigen sind,
 wird Ihnen viel Zeit ersparen, nach Funktionen und Features zu suchen, genauso, wie es Sie in die Lage versetzt, erstklassige
 Entwicklungswerkzeuge noch einfacher zu benutzen.
 
 <sect>Installation<label id="Installation">
 <p>
-<sect1>Verfügbarkeit von KDevelop
+<sect1>Verf&uuml;gbarkeit von KDevelop
 <p>
 KDevelop kann entweder auf der <idx/KDE/ Applikations-Seite (<htmlurl url="http://www.kde.org/current.html"
 name="http://www.kde.org/current.html">) oder auf der KDevelop Homepage (<htmlurl
 url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">)
 bezogen werden. Ebenso ist KDevelop auf Linux-Distributionen vorhanden, wie z.B. SuSE Linux 6.1.
 
-Wir bieten außerdem wöchentliche Snapshots des KDevelop CVS Repositories auf unserer Homepage an für die, die auf dem aktuellen Stand
-von KDevelop sein wollen. Für gewöhnlich sind die Snapshots jedoch nicht zur Produktion geeignet, sondern zum Testen neuer Features und
+Wir bieten außerdem wöchentliche Snapshots des KDevelop CVS Repositories auf unserer Homepage an f&uuml;r die, die auf dem aktuellen Stand
+von KDevelop sein wollen. F&uuml;r gewöhnlich sind die Snapshots jedoch nicht zur Produktion geeignet, sondern zum Testen neuer Features und
 zum Einblick in den Entwicklungsfortschritt des KDevelop Teams. Außerdem bietne wir verschiedene Software von dritter Seite an, die von
 KDevelop benötigt werden wie KDoc und KDbg.
 
@@ -130,7 +130,7 @@ KDevelop Projekt beitragen möchten ein Forum zu bieten; auch solche Mails sind w
 bei der Benutzung entstanden, damit wir Fehler korrigieren und dies integrieren können, um Anfängern eine noch qualifizierte Hilfe aus
 erster Hand zu bieten.
 
-Ein guter Weg, Probleme zu berichten, ist das übersenden der Ausgabe, die Sie beim starten von KDevelop aus einer Konsole heraus
+Ein guter Weg, Probleme zu berichten, ist das &uuml;bersenden der Ausgabe, die Sie beim starten von KDevelop aus einer Konsole heraus
 erhalten, oder den Inhalt des "Meldungen" Fensters von KDevelop in Ihren Bericht zu kopieren.
 
 <sect1>Anforderungen
@@ -157,7 +157,7 @@ name="http://www.gnu.org">
 <itemize>
 <item>a2ps oder enscript zur Nutzung der Druckfunktionen
 <item>ghostview oder kghostview zur Druckvorschau
-<item>glimpse 4.0 für die Nutzung des Suchindexes, erhältlich auf <htmlurl url="http://glimpse.cs.arizona.edu"
+<item>glimpse 4.0 f&uuml;r die Nutzung des Suchindexes, erhältlich auf <htmlurl url="http://glimpse.cs.arizona.edu"
 name="http://glimpse.cs.arizona.edu">
 <item>sgmltools 1.0, erhältlich auf <htmlurl url="http://www.sgmltools.org" name="http://www.sgmltools.org">
 <item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it)with KDoc, KSgml2Html, KTranslator
@@ -180,7 +180,7 @@ bereitgestellt wird oder in den Quellpaketen ihrer Distribution enthalten ist un
 
 Zusätzlich bieten wir eine C/C++ Referenz auf unserer Homepage auf <htmlurl
 url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> an, die
-nach ihrer Installation im Dokumentationsbrowser verfügbar ist. Laden Sie das Paket herunter und kopieren Sie es als <tt/root/ in Ihr
+nach ihrer Installation im Dokumentationsbrowser verf&uuml;gbar ist. Laden Sie das Paket herunter und kopieren Sie es als <tt/root/ in Ihr
 <idx/KDE/ Verzeichnis und entpacken Sie es mit <tt/tar zxvf c_c++_reference.tar.gz/. Bei Nichtinstallation zeigt die Auswahl der
 Referenz im Dokumentationsbaum eine Fehlerseite an mit der URL der KDevelop Homepage, auf der Sie das Paket erhalten können und
 beschreibt den Installationsvorgang.
@@ -200,7 +200,7 @@ Um KDevelop auf Ihrem System zu compilieren und installieren, geben sie folgende
 
 
 <p>
-Da KDevelop <tt/autoconf/ benutzt, sollten sie keine Probleme haben, es zu übersetzen.
+Da KDevelop <tt/autoconf/ benutzt, sollten sie keine Probleme haben, es zu &uuml;bersetzen.
 
 Um KDevelop CVS Snapshots zu compilieren, geben Sie folgendes ein:
 
@@ -220,7 +220,7 @@ Wenn das make-Kommando Ihres Systems <tt/gmake/ lautet, geben Sie <tt/gmake/ ans
 <sect1>Starten von KDevelop
 <p>
 Wenn Sie <idx/KDE/ als Window-Manager benutzen, können Sie KDevelop starten, indem Sie
-"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4" auswählen. Da KDevelop die <idx/KDE/-Mime Typen unterstützt, können Sie
+"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4" auswählen. Da KDevelop die <idx/KDE/-Mime Typen unterst&uuml;tzt, können Sie
 KDevelop auch mit einem Projekt starten, indem sie eine KDevelop Projektdatei ("*.kdevprj", dargestellt mit dem Projekt-Icon) im
 <idx/KDE/ Dateimanager (kfm) auswählen.
 
@@ -236,7 +236,7 @@ Um KDevelop mit einem besteheneden Projekt zu starten, wechseln Sie in das Proje
 </verb></tscreen>
 
 Unter jedem Benutzerzugang wird KDevelop einen <ref id="Das Installationsprogramm" name="automatischen Installationsvorgang">
-beim ersten Start aufrufen, der eine Schnellkonfiguration für die benötigten Einstellungen vornimmt. Wenn Ihre Installation verloren
+beim ersten Start aufrufen, der eine Schnellkonfiguration f&uuml;r die benötigten Einstellungen vornimmt. Wenn Ihre Installation verloren
 gehen sollte, können Sie KDevelop jederzeit Re-konfigurieren, indem sie
 
 <tscreen><verb> 	
@@ -249,38 +249,38 @@ eingeben, oder, wenn sie KDE benutzen,"K"&rarr"Applications"&rarr"KDevelop"&rarr
 <p>
 KDevelop enthält ein automatisches Installationsmodul, das aufgerufen wird wenn KDevelop zum ersten Mal gestartet wird oder die
 Benutzer-Konfigurationsdatei kdeveloprc nicht existiert. Wir raten, die folgenden Installationsschritte mit der Auswahl von "Weiter"
-durchzuführen, um Ihr System zu prüfen und KDevelop einzurichten.
+durchzuf&uuml;hren, um Ihr System zu pr&uuml;fen und KDevelop einzurichten.
 
-Die Tasten des Installationsdialoges führen folgende Aktionen aus:
+Die Tasten des Installationsdialoges f&uuml;hren folgende Aktionen aus:
 
 <p>
 <bf>Hilfe:</bf> Öffnet KDEHelp.
 <p>
-<bf>Weiter:</bf> Dies started den Installationsprozess und führt folgendes aus:
+<bf>Weiter:</bf> Dies started den Installationsprozess und f&uuml;hrt folgendes aus:
 
 <enum>
-<item> Prüfen nach make/gmake, autoconf, autoheader, automake und Perl um neue Applikationen, die mit KDevelop erstellt wurden zu
+<item> Pr&uuml;fen nach make/gmake, autoconf, autoheader, automake und Perl um neue Applikationen, die mit KDevelop erstellt wurden zu
 erzeugen und zu compilieren. Wenn gmake installiert ist, wird das make-Kommando automatisch auf gmake eingestellt. Andere
-Kommandozeilenoptionen zu ihrem Erstellungsprogramm können Sie später im Setup Dialog, der über das "Einstellungen"-Menü zu erreichen
-ist, vornehmen; eine Einführung zu Entwicklung unter Unix befindet sich im Abschnitt <ref id="Programme" name="Programme">.
+Kommandozeilenoptionen zu ihrem Erstellungsprogramm können Sie später im Setup Dialog, der &uuml;ber das "Einstellungen"-Men&uuml; zu erreichen
+ist, vornehmen; eine Einf&uuml;hrung zu Entwicklung unter Unix befindet sich im Abschnitt <ref id="Programme" name="Programme">.
 
-<item> Prüfen nach KDoc und Glimpse. Diese werden das Erzeugen einer neuen <idx/KDE-Bibliothek/s Dokumentation und eines Suchindexes
+<item> Pr&uuml;fen nach KDoc und Glimpse. Diese werden das Erzeugen einer neuen <idx/KDE-Bibliothek/s Dokumentation und eines Suchindexes
 in einem späteren Einstellungsschritt ermöglichen, wenn sie gefunden werden.
 
-<item> Prüfen nach a2ps und enscript, um sicherzustellen, das die Druckfunktionen verfügbar sind. Eines dieser Programme muß
+<item> Pr&uuml;fen nach a2ps und enscript, um sicherzustellen, das die Druckfunktionen verf&uuml;gbar sind. Eines dieser Programme muß
 installiert sein, um korrektes Drucken zu ermöglichen. Wenn keines installiert ist, können Sie dies jederzeit nachholen um das Drucken
-zu ermöglichen, ohne das Setup erneut durchzuführen.
+zu ermöglichen, ohne das Setup erneut durchzuf&uuml;hren.
 
-<item> Prüfen nach KDbg, KIconedit und KTranslator. Wir ermutigen Sie, diese Programme zu installieren, da sie gute Helfer bei der
+<item> Pr&uuml;fen nach KDbg, KIconedit und KTranslator. Wir ermutigen Sie, diese Programme zu installieren, da sie gute Helfer bei der
 Erstellung von vollständigen <idx/KDE/-Applikationen sind. Beachten Sie, das KDbg direkt zum debuggen ihres aktuellen Projekts
 innerhalb von KDevelop verwendet wird; KIconedit wird benötigt, um Pixmaps, die in den Dateibäumen ausgewählt werden zu betrachten und
-zu bearbeiten. Die Programme KDbg, KIconedit und KTranslator werden gleichzeitig im "Werkzeuge"-Menü der Menüleiste von KDevelop
-eingerichtet. Andere Werkzeuge können später hinzugefügt werden, indem Sie "Werkzeuge..." im Einstellungen-Menü aufrufen.
+zu bearbeiten. Die Programme KDbg, KIconedit und KTranslator werden gleichzeitig im "Werkzeuge"-Men&uuml; der Men&uuml;leiste von KDevelop
+eingerichtet. Andere Werkzeuge können später hinzugef&uuml;gt werden, indem Sie "Werkzeuge..." im Einstellungen-Men&uuml; aufrufen.
 
-<item> Zusammenfassung der geprüften Programme: Das Installationsprogramm listet diese Programme mit -gefunden oder -nicht gefunden
+<item> Zusammenfassung der gepr&uuml;ften Programme: Das Installationsprogramm listet diese Programme mit -gefunden oder -nicht gefunden
 auf. Zusätzliche Hinweise signalisieren Ihnen, wenn ein benötigtes Programm erforderlich ist.
 
-<item>Erkennung des Pfades zur Qt-Online Dokumentation: Dies prüft verschiedene Standardpfade in Ihrem System nach der Dokumentation
+<item>Erkennung des Pfades zur Qt-Online Dokumentation: Dies pr&uuml;ft verschiedene Standardpfade in Ihrem System nach der Dokumentation
 und setzt den Pfad automatisch. Wenn Ihre Qt-Dokumentation nicht gefunden wurde, weil sie nicht installiert ist oder sich an einem
 anderen Ort befindet, werden Sie aufgefordert, entweder den korrekten Pfad manuell zu setzen oder fortzufahren. Bei Auswahl zum Setzen
 des Pfades wird im Haupt-Installationsfenster eine Editierleiste mit einem Ordner-Knopf auf der rechten Seite angezeigt, mit dem Sie
@@ -298,54 +298,54 @@ KDevelop setzen Sie dann den Pfad zum extrahierten Dokumentationssatz im KDevelo
 Alle erforderlichen Einstellungen dazu finden Sie im Setup Dialog.
 
 Der "KDE-Bibilotheks-Dokumentation aktualisieren" Dialog ist voreingestellt, die Dokumentation im Verzeichnis
-$(HOME)/.kde/share/apps/kdevelop/KDE-Documentation zu erstellen. Das einzige, was Sie tun müssen, ist den Pfad zum entpackten
+$(HOME)/.kde/share/apps/kdevelop/KDE-Documentation zu erstellen. Das einzige, was Sie tun m&uuml;ssen, ist den Pfad zum entpackten
 Quellpaket der Bibliotheken mit dem Auswahl-Knopf im oberen Teil des Dialoges anzugeben und mit "OK" zu bestätigen. Als Beispiel sei
 angenommen, das Sie die Bibliothek als kdelibs.tar.gz Paket von <htmlurl url="http://www.kde.org" name="http://www.kde.org"> bezogen
 und in Ihrem Home-Verzeichnis haben. Öffnen Sie eine Konsole oder Terminal und geben sie dort "tar zxvf kdelibs.tar.gz" ein. Dies wird
 das Quellpaket in ein Verzeichnis $HOME/kdelibs entpacken, das dann die Quelldateien jeder Bibliothek in einem Unterverzeichnis
-enthält, z.B. wäre dies für kdecore /home/rnolden/kdelibs/kdecore. Der Pfad, den Sie im Aktualisierungs-Dialog angeben müssen, wäre
+enthält, z.B. wäre dies f&uuml;r kdecore /home/rnolden/kdelibs/kdecore. Der Pfad, den Sie im Aktualisierungs-Dialog angeben m&uuml;ssen, wäre
 dann der zu allen Bibliotheken, hier also /home/rnolden/kdelibs.
 
-Nachdem Sie "OK" gewählt haben, wird ihnen im Installationsfenster angezeigt, das die Erstellung der Dokumentation durchgeführt wird.
+Nachdem Sie "OK" gewählt haben, wird ihnen im Installationsfenster angezeigt, das die Erstellung der Dokumentation durchgef&uuml;hrt wird.
 Warten Sie dann bis zur nächsten Meldung.
 <p>
 
-<bf>Anmerkung:</bf> Auf Multi-User Systemen oder Systemen mit Disk-Quotas für Benutzeraccounts würde die Installation eiener kompletten
-HTML Dokumentation separat für jeden Benutzer unnötig Plattenplatz verbrauchen. Fragen Sie in diesem Fall Ihren Systemadministrator,
+<bf>Anmerkung:</bf> Auf Multi-User Systemen oder Systemen mit Disk-Quotas f&uuml;r Benutzeraccounts w&uuml;rde die Installation eiener kompletten
+HTML Dokumentation separat f&uuml;r jeden Benutzer unnötig Plattenplatz verbrauchen. Fragen Sie in diesem Fall Ihren Systemadministrator,
 KDevelop unter dem root-Account laufen zu lassen, um Schreibzugriff auf das Wurzelverzeichnis des Systems zu erhalten. Dann
-installieren Sie die Dokumentation im <idx/KDE/-Verzeichnis unter $KDEDIR/share/apps/kdevelop/KDE-Documentation. Der korrekte Pfad für
-Einzelbenutzer kann dann später im KDevelop Setup Dialog über das "Einstellungen" Menü gesetzt werden.
+installieren Sie die Dokumentation im <idx/KDE/-Verzeichnis unter $KDEDIR/share/apps/kdevelop/KDE-Documentation. Der korrekte Pfad f&uuml;r
+Einzelbenutzer kann dann später im KDevelop Setup Dialog &uuml;ber das "Einstellungen" Men&uuml; gesetzt werden.
 
-<item> Wenn die Systemprüfung das Programm Glimpse gefunden hat, wird Ihnen die Erstellung einer Suchdatenbank angeboten. Die
+<item> Wenn die Systempr&uuml;fung das Programm Glimpse gefunden hat, wird Ihnen die Erstellung einer Suchdatenbank angeboten. Die
 Suchdatenbank kann mit der Option erstellt werden, die KDE- und Qt-Dokumentation einzubeziehen (Standardeinstellung). Zusätzlich ist
 die KDevelop Dokumentation inbegriffen und wird indiziert. Wenn Sie weitere Dokumentationen besitzen, die Sie ebenfalls indizieren
-möchten, können Sie die Verzeichnisse auswählen und der Indexerstellung hinzufügen.
+möchten, können Sie die Verzeichnisse auswählen und der Indexerstellung hinzuf&uuml;gen.
 
-<item> Während der Erstellung des Suchindexes zeigt das Installationsfenster Ihnen eine Nachricht, das dies ausgeführt wird. Warten Sie
+<item> Während der Erstellung des Suchindexes zeigt das Installationsfenster Ihnen eine Nachricht, das dies ausgef&uuml;hrt wird. Warten Sie
 danach bis zur Aufforderung zum nächsten Schritt.
 
-<item> Wenn alle Installationsschritte erfolgreich durchgeführt wurden, zeigt Ihnen eine abschließende Dialogbox an, das KDevelop
+<item> Wenn alle Installationsschritte erfolgreich durchgef&uuml;hrt wurden, zeigt Ihnen eine abschließende Dialogbox an, das KDevelop
 gestartet wird, nachdem Sie "OK" wählen. Beachten Sie, das Sie zusätzliche Optionen wie automatisches Speichern im <ref
-id="Konfiguration" name="KDevelop Setup"> Dialog, der über das "Einstellungen" Menü aufgerufen wird, einstellen können.
+id="Konfiguration" name="KDevelop Setup"> Dialog, der &uuml;ber das "Einstellungen" Men&uuml; aufgerufen wird, einstellen können.
 </enum>
 
 <bf>Abbrechen:</bf> Zeigt eine Warnhinweis an, das der Installationsprozess abgebrochen wird. Diese Warnung erlaubt es Ihnen, nochmals
-zur Installation zurückzukehren ("Zurück") oder KDevelop mit den Standardeinstellungen zu starten ("Fortfahren"). Bedenken Sie, das Sie
-in diesem Fall alle Optionen mit Hilfe der Konfigurationsdialoge des "Einstellungen" Menüs selbst vornehmen müssen.
+zur Installation zur&uuml;ckzukehren ("Zur&uuml;ck") oder KDevelop mit den Standardeinstellungen zu starten ("Fortfahren"). Bedenken Sie, das Sie
+in diesem Fall alle Optionen mit Hilfe der Konfigurationsdialoge des "Einstellungen" Men&uuml;s selbst vornehmen m&uuml;ssen.
 
 
 <sect>Programme<label id="Programme">
 <p>
 Nachdem KDevelop erfolgreich installiert und die allgemeinen Einstellungen vorgenommen sind, möchten Sie wahrscheinlich wissen, ob die
 IDE hält, was sie verspricht. Dieses Kapitel gibt Ihnen einen Leitfaden, wie Programme allgemein mit den GNU Werkzeugen erzeugt werden
-und welchen Teil speziell KDevelop in diesem Prozeß übernimmt.
+und welchen Teil speziell KDevelop in diesem Prozeß &uuml;bernimmt.
 
 <sect1>Der Compiler<label id="Der Compiler">
 <p>
 Der Compiler ist letztlich das Programm auf Ihrem System, das mindestens installiert sein muß um laufende Programme zu erzeugen; er ist
-derjenige, der den Quellcode in Objektdateien übersetzt und das Programm erzeugt.
+derjenige, der den Quellcode in Objektdateien &uuml;bersetzt und das Programm erzeugt.
 
-Normalerweise würden Sie so starten:
+Normalerweise w&uuml;rden Sie so starten:
 Öffnen Sie einen Editor Ihrer Wahl - benutzen Sie keine Textverarbeitung. Geben Sie etwa dieses ein, um den Quellcode Ihres ersten
 Programmes zu schreiben:
 
@@ -361,7 +361,7 @@ cout << "Hello World" << endl;
 </verb></tscreen>
 
 Nun, alles, was das Programm tun wird, ist den String "Hello World" auf Ihrer Standardausgabe auszugeben. Aber dies ist nur der
-Quellcode für ein zu erstellendes Programm, nicht das Programm selbst. Daher benötigen Sie einen Compiler, in diesem Fall ein
+Quellcode f&uuml;r ein zu erstellendes Programm, nicht das Programm selbst. Daher benötigen Sie einen Compiler, in diesem Fall ein
 C++-Compiler wie etwa g++. Dann können Sie den Quellcode als Datei speichern, sagen wir als myprogram.cpp und den Compiler mit dem
 Dateinamen aufrufen (auf einer Konsole):
 
@@ -374,14 +374,14 @@ und beendet sich.
 
 <sect1>Make und Makefiles<label id="Make">
 <p>
-Ich habe jetzt alles, was ich brauche: einen Editor, einen Compiler und ich kann mein eigenes C++ Programm ausführen. Aber es ist nicht
-ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben ? Und, müssen Sie dann die Quellen immer wieder übersetzen,
+Ich habe jetzt alles, was ich brauche: einen Editor, einen Compiler und ich kann mein eigenes C++ Programm ausf&uuml;hren. Aber es ist nicht
+ganz so einfach. Was passiert, wenn Sie mehr als eine Quellcodedatei haben ? Und, m&uuml;ssen Sie dann die Quellen immer wieder &uuml;bersetzen,
 wenn Sie nur eine Datei geändert haben ? Der Übersetzungsvorgang wird immer komplizierter und Zeitraubender, weil Sie alle Kommandos
-und Optionen selbst eintippen müssen. Deshalb können Sie sich ein sogenanntes "Makefile" schreiben. Man könnte es genausogut anders
+und Optionen selbst eintippen m&uuml;ssen. Deshalb können Sie sich ein sogenanntes "Makefile" schreiben. Man könnte es genausogut anders
 nennen, außer dem Namen des Programms, das zu erstellen ist. Dann sollten Sie das Werkzeug <tt/make/ oder <tt/gmake/ installiert haben,
-oder ein anderes Werkzeug, das den Übersetzungsvorgang überwacht. Fügen Sie alle Compileranweisungen in der speziellen
+oder ein anderes Werkzeug, das den Übersetzungsvorgang &uuml;berwacht. F&uuml;gen Sie alle Compileranweisungen in der speziellen
 Erstellungssyntax in das Makefile ein und speichern Sie es; danach brauchen Sie nur noch <tt/make/ oder <tt/gmake/ auf der Konsole in
-dem Verzeichnis einzugeben, wo sich das Makefile befindet; make übernimmt dann und bringt den Compiler dazu Ihr Programm zu erzeugen.
+dem Verzeichnis einzugeben, wo sich das Makefile befindet; make &uuml;bernimmt dann und bringt den Compiler dazu Ihr Programm zu erzeugen.
 Das Make-Werkzeug hat noch viele weitere Vorteile und kann zu vielen Zwecken verwendet werden. Um eine Übersicht zu bekommen, öffnen
 Sie eine Konsole und geben Sie ein:
 
@@ -390,35 +390,35 @@ Sie eine Konsole und geben Sie ein:
 oder suchen sie nach "GNU Make" in der KDE-Hilfe unter "System GNU Info contents".
 
 Dies erklärt Ihnen, warum ein Entwickler das Make-Werkzeug beötigt, um den Ubersetzungsvorgang seiner Applikation zu vereinfachen. Nun,
-das schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie müssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
-Aber hier ist die gute Nachricht über KDevelop und das Make-Werkzeug: Sie müssen nur das Make-Kommando im <ref id="General
+das schreiben der Makefiles ist jetzt nicht nur Handarbeit, Sie m&uuml;ssen sich auch noch in die Syntax und die Optionen hineinarbeiten.
+Aber hier ist die gute Nachricht &uuml;ber KDevelop und das Make-Werkzeug: Sie m&uuml;ssen nur das Make-Kommando im <ref id="General
 Configuration" name="KDevelop Setup"> Dialog setzen und Sie sind soweit. Alle Projekte, die von KDevelop erzeugt werden, benutzen das
-Make-Kommando um die Zielapplikation zu erstellen, und Sie müssen nichts eingeben. Klicken Sie einfach auf den Make-Knopf in der
-Werkzeugleiste oder wählen Sie die gewünschte Funktion aus dem "Erstellen" Menü.
+Make-Kommando um die Zielapplikation zu erstellen, und Sie m&uuml;ssen nichts eingeben. Klicken Sie einfach auf den Make-Knopf in der
+Werkzeugleiste oder wählen Sie die gew&uuml;nschte Funktion aus dem "Erstellen" Men&uuml;.
 
-Die Werkzeugleiste und das "Erstellen"-Menü bieten die meist benutzten Funktionen, um make die Arbeit erledigen zu lassen:
+Die Werkzeugleiste und das "Erstellen"-Men&uuml; bieten die meist benutzten Funktionen, um make die Arbeit erledigen zu lassen:
 
 <itemize>
 <item> Datei compilieren: ist nur aktiv, wenn Sie an einer Quellcode-Datei arbeiten. Diese Funktion ruft make mit dem korrekten
-Kommando auf, nur die aktuelle Quelldatei zu übersetzen.
+Kommando auf, nur die aktuelle Quelldatei zu &uuml;bersetzen.
 <item> Erstellen: ruft make auf und erzeugt das Zielobjekt (die Applikation)
-<item> Alles neu erstellen: löscht alle schon übersetzten Dateien und erstellt das Projekt neu
-<item> Säubern/alles neu erstellen: löscht alle übersetzten Dateien inklusive der Konfigurationsdateien des Projekts und erstellt alles
+<item> Alles neu erstellen: löscht alle schon &uuml;bersetzten Dateien und erstellt das Projekt neu
+<item> Säubern/alles neu erstellen: löscht alle &uuml;bersetzten Dateien inklusive der Konfigurationsdateien des Projekts und erstellt alles
 neu
 <item> Stoppen: beendet den aktuellen Prozeß
-<item> Ausführen: erstellt die Zieldatei und führt das Programm aus
-<item> Mit Argumenten ausführen: erstellt die Zieldatei und gibt Ihnen die Möglichkeit, dem Programm vor seiner Ausführung
-Kommandozeilenoptionen zu übergeben.
+<item> Ausf&uuml;hren: erstellt die Zieldatei und f&uuml;hrt das Programm aus
+<item> Mit Argumenten ausf&uuml;hren: erstellt die Zieldatei und gibt Ihnen die Möglichkeit, dem Programm vor seiner Ausf&uuml;hrung
+Kommandozeilenoptionen zu &uuml;bergeben.
 <item> Debuggen: erstellt die Zieldatei und startet KDbg mit dem Programm, um es zu debuggen
 </itemize>
 
 Aber dies ist nicht das einzige, wo KDevelop mit make zusammenarbeitet- bei <idx/KDE/ Applikationen sind einige Dinge speziell auf die
-Unterstützung des Entwicklers abgestimmt wie die Erzeugung der Messages-Datei für die Internationalisierung Ihres Projekts. Diese
-Funktionen sind ebenfalls sorgfältig integriert, sodaß Sie sich darüber nicht mehr den Kopf zerbrechen müssen.
+Unterst&uuml;tzung des Entwicklers abgestimmt wie die Erzeugung der Messages-Datei f&uuml;r die Internationalisierung Ihres Projekts. Diese
+Funktionen sind ebenfalls sorgfältig integriert, sodaß Sie sich dar&uuml;ber nicht mehr den Kopf zerbrechen m&uuml;ssen.
 
-Bis jetzt wissen Sie schon einiges über Quelldateien, den Compiler und warum make benötigt wird. Im nächsten Abschnitt werden wir
+Bis jetzt wissen Sie schon einiges &uuml;ber Quelldateien, den Compiler und warum make benötigt wird. Im nächsten Abschnitt werden wir
 besprechen, warum Projekte, die mit KDevelop erstellt wurden, automatisch durch Verwendung eines <tt/configure/-Scripts auf den meisten
-Unix-Plattformen übersetzt werden können.
+Unix-Plattformen &uuml;bersetzt werden können.
 
 <sect1>Configure<label id="Configure">
 <p>
@@ -426,101 +426,101 @@ Der Titel dieses Abschnitts- Configure, bedeutend soviel wie Konfiguriere - läßt
 konfiguriert werden ? Oder wer ?
 
 Nun, gehen wir davon aus, das Sie ein Programm geschrieben haben inklusive einem Makefile. Dann wollen Sie es verbreiten, aber die
-compilierte Binärdatei läuft nur auf Ihrem System und auf solchen, die mit Ihrem kompatibel sind. Um andere Plattformen zu unterstützen
-wie die verschiedenen Unix-Systeme oder Maschinen wie Alpha's oder RISC's müssen Sie ihr Programm neu übersetzen. Der einfachste Weg
+compilierte Binärdatei läuft nur auf Ihrem System und auf solchen, die mit Ihrem kompatibel sind. Um andere Plattformen zu unterst&uuml;tzen
+wie die verschiedenen Unix-Systeme oder Maschinen wie Alpha's oder RISC's m&uuml;ssen Sie ihr Programm neu &uuml;bersetzen. Der einfachste Weg
 wäre, das Quellpaket auf die Zielmaschine zu kopieren und <tt/make/ nochmals laufen zu lassen. Aber was wäre, wenn die Zielmaschine
 einen anderen Compiler benutzt oder in anderer Weise ein Problem erzeugt, die ein erstellen des Programms verhindert ? Nicht zu
-erwähnen die schwierigeren Dinge wie der Installationspfad für Ihr Programm und Dokumentation- z.B. kann <idx/KDE/ auf einer Maschine
-unter <tt//opt/kde/ installiert sein, auf einer anderen aber unter <tt/usr/local/kde/. In diesem Fall müßten Sie das Makefile immer
+erwähnen die schwierigeren Dinge wie der Installationspfad f&uuml;r Ihr Programm und Dokumentation- z.B. kann <idx/KDE/ auf einer Maschine
+unter <tt//opt/kde/ installiert sein, auf einer anderen aber unter <tt/usr/local/kde/. In diesem Fall m&uuml;ßten Sie das Makefile immer
 bearbeiten, um eine korrekte Übersetzung und Installation Ihres Produkts sicherzustellen.
 
-Glücklicherweise haben die GNU-Werkzeuge noch mehr zu bieten als das mächtige <tt/make/- die allgemein genutzten Pakete automake und
+Gl&uuml;cklicherweise haben die GNU-Werkzeuge noch mehr zu bieten als das mächtige <tt/make/- die allgemein genutzten Pakete automake und
 autoconf. Es klingt gut, etwas mit "auto"- es scheint als ob etwas beim Applikations Design einfach und schnell gemacht werden kann,
 was auch genau den Punkt trifft.
 
-Der Zweck von <tt/automake/ ist generell, die sogenannten <tt/Makefile.in/'s aus der Datei <tt/Makefile.am/ zu erstellen, die Sie für
-Ihr Projekt anstatt einer "richtigen" Makefile schreiben müssen. Diese Makefile.am besteht aus Makros, die leicht interpretiert und die
+Der Zweck von <tt/automake/ ist generell, die sogenannten <tt/Makefile.in/'s aus der Datei <tt/Makefile.am/ zu erstellen, die Sie f&uuml;r
+Ihr Projekt anstatt einer "richtigen" Makefile schreiben m&uuml;ssen. Diese Makefile.am besteht aus Makros, die leicht interpretiert und die
 Komplexität reduziert, die make anbietet, sodaß eine Makefile.am fehlerloser und schneller geschrieben werden kann als das letztliche
 Makefile.
 
-Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschieden Makrodateien für das
+Aber wer erzeugt mir dann letztlich mein Makefile ?  Nun, hier kommt autoconf. Autoconf benötigt verschieden Makrodateien f&uuml;r das
 Projekt. Diese sind die Makefile.in's, die automake erzeugt hat und eine Datei namesn <tt/configure.in/, die auch aus Makros besteht.
-Hierbein beinhalten die Makefile.am und .in's die Makros die dafür verantwortlich sind, wie das Ziel erstellt wird in Bezug auf die
-Quellen, die übersetzt werden müssen, welche Dateien zum Paket gehören und welchen Namen die letzliche Binärdatei oder Bibliothek nach
+Hierbein beinhalten die Makefile.am und .in's die Makros die daf&uuml;r verantwortlich sind, wie das Ziel erstellt wird in Bezug auf die
+Quellen, die &uuml;bersetzt werden m&uuml;ssen, welche Dateien zum Paket gehören und welchen Namen die letzliche Binärdatei oder Bibliothek nach
 einem Erstellungsvorgang hat. Configure.in andererseits beinhaltet die Makros, nach denen das letztliche configure-Skript das System
-prüft, auf denen configure ausgeführt wird. Dies können z.B. das Compiler-Kommando, benötigte Bibliotheken zu denen die letzliche
+pr&uuml;ft, auf denen configure ausgef&uuml;hrt wird. Dies können z.B. das Compiler-Kommando, benötigte Bibliotheken zu denen die letzliche
 Binärdatei gelinkt wird und include-Dateien, die das Projekt benötigt, sein.
 
-Wenn Sie z.B. eine <idx/KDE/ Applikation schreiben und nach der Fertigstellung Ihr Programm Benutzern zu verfügung stellen möchten, muß
-jeder Benutzer die Binärdatei selbst compilieren. Dann würden Sie eine configure.in Datei, die die Makros für eine KDE-kompatible
-Applikation enthält. Diese Makros werden dann expandiert zu einer Systemprüfung, ob die Qt-Bibliothek installiert ist, dem Pfad der
+Wenn Sie z.B. eine <idx/KDE/ Applikation schreiben und nach der Fertigstellung Ihr Programm Benutzern zu verf&uuml;gung stellen möchten, muß
+jeder Benutzer die Binärdatei selbst compilieren. Dann w&uuml;rden Sie eine configure.in Datei, die die Makros f&uuml;r eine KDE-kompatible
+Applikation enthält. Diese Makros werden dann expandiert zu einer Systempr&uuml;fung, ob die Qt-Bibliothek installiert ist, dem Pfad der
 Qt-Headerdateien, den KDE Bibliotheken und Headern etc.
 
 
 <bf>Zusammenfassung:</bf> Um eine GNU-gemäße Applikation zu erstellen, die auf verschiedene Unix-Betriebssysteme und andere Maschinen
-als Ihre eigene portabel sein soll, müssen Sie folgendes ausführen:
+als Ihre eigene portabel sein soll, m&uuml;ssen Sie folgendes ausf&uuml;hren:
 
 <enum>
 <item> die Quellen Ihres Projekts schreiben
-<item> eine Makefile.am für jedes Unterverzeichnis erstellen, inklusive dem Hauptverzeichnis Ihres Projekts
-<item> eine configure.in Datein im Hauptverzeichnis erstellen, das die Makros für die Systemanforderungen enthält
+<item> eine Makefile.am f&uuml;r jedes Unterverzeichnis erstellen, inklusive dem Hauptverzeichnis Ihres Projekts
+<item> eine configure.in Datein im Hauptverzeichnis erstellen, das die Makros f&uuml;r die Systemanforderungen enthält
 <item> automake aufrufen
 <item> autoconf aufrufen
 </enum>
 
-Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft über die configure.in und Makefile.in's und erzeugt
-das ausführbare Shellscript <tt/configure/. Alles, was Sie dann zu tun haben, ist die Ausführung mit <tt>./configure</tt> und das
-Script wird die Prüfungen durchführen. Schließlich werden die Makefiles erzeugt, die die Ausführung von make (oder gmake) erlauben, um
+Dann ist die Hauptarbeit getan. Automake erzeugt die Makefile.in's, autoconf läuft &uuml;ber die configure.in und Makefile.in's und erzeugt
+das ausf&uuml;hrbare Shellscript <tt/configure/. Alles, was Sie dann zu tun haben, ist die Ausf&uuml;hrung mit <tt>./configure</tt> und das
+Script wird die Pr&uuml;fungen durchf&uuml;hren. Schließlich werden die Makefiles erzeugt, die die Ausf&uuml;hrung von make (oder gmake) erlauben, um
 das Projekt zu erstellen.
 
 Dies alles scheint ein bischen viel zu sein, nur um eine kleine Applikation zu schreiben und auch viel zu lernen, speziell die
 korrekten Makros. Aber allein der Umstand, das Sie damit einen Kompiliervorgang auf fast allen Unix-Systemen erreichen, macht die
-Arbeit früher oder später wett. Schließlich müssen Sie diese Arbeit auch nur einmal für das Projekt machen und im Fall, das Ihre
-Projektdateien anwachsen, brauchen Sie ja nur die Dateinamen den Makros hinzufügen.
+Arbeit fr&uuml;her oder später wett. Schließlich m&uuml;ssen Sie diese Arbeit auch nur einmal f&uuml;r das Projekt machen und im Fall, das Ihre
+Projektdateien anwachsen, brauchen Sie ja nur die Dateinamen den Makros hinzuf&uuml;gen.
 
-Nun, inwiefern unterstützt KDevelop diese Art der Applikationserstellung und wie kompliziert wird es für den Programmierer ?
-Die gute Nachricht für Sie ist: Sie brauchen noch nicht eimal etwas über Makros und Skripte zu wissen. Alle Details sind hinter einer
-einfach zu bedienenden graphischen Benutzeroberfläche versteckt, die die Arbeit für Sie übernimmt. Eine Applikation wird mit den
+Nun, inwiefern unterst&uuml;tzt KDevelop diese Art der Applikationserstellung und wie kompliziert wird es f&uuml;r den Programmierer ?
+Die gute Nachricht f&uuml;r Sie ist: Sie brauchen noch nicht eimal etwas &uuml;ber Makros und Skripte zu wissen. Alle Details sind hinter einer
+einfach zu bedienenden graphischen Benutzeroberfläche versteckt, die die Arbeit f&uuml;r Sie &uuml;bernimmt. Eine Applikation wird mit den
 GNU-Tools deshalb auf sehr benutzerfreundliche Art erstellt:
 
-Erzeugen Sie Ihre Applikation einfach mit dem KAppWizard nach Wahl der Bedürfnisse Ihrer Applikation- es mag ein reines C++
+Erzeugen Sie Ihre Applikation einfach mit dem KAppWizard nach Wahl der Bed&uuml;rfnisse Ihrer Applikation- es mag ein reines C++
 Terminalprogramm sein oder eine Art GUI Programm, das die <idx/Qt/ oder die Qt/<idx/KDE/ Bibliothek benutzt. Die ganze Arbeit wird
-für Sie erledigt und Ihr Projekt enthält schon die Makefiles, die durch eine automatische Ausführung der GNU-Tools und des
+f&uuml;r Sie erledigt und Ihr Projekt enthält schon die Makefiles, die durch eine automatische Ausf&uuml;hrung der GNU-Tools und des
 configure-Skripts erstellt wurden.
 
-Das wäre es schon- Sie brauchen nur die Quellen Ihres Projekts zu erweitern, sei es durch hinzufügen von Klassen, Dialogen,
+Das wäre es schon- Sie brauchen nur die Quellen Ihres Projekts zu erweitern, sei es durch hinzuf&uuml;gen von Klassen, Dialogen,
 Übersetzungen oder Dokumentation, was auch vollständig automatisiert abläuft. Konzentrieren Sie sich einfach auf die wirkliche Arbeit
 eines Entwicklers, nämlich Ihrer Applikation Funktionalität zu verleihen. In den meisten Fällen werden sie wahrscheinlich nie mit
-Makefiles in Berührung kommen, wenn Sie KDevelop benutzen.
+Makefiles in Ber&uuml;hrung kommen, wenn Sie KDevelop benutzen.
 
 <sect1>Debuggen<label id="Debuggen">
 <p>
 Der folgende Abschnitt betrachtet einen Terminus, der unter Entwicklern weit verbreitet ist: Debuggen. Das bedeutet, das, obwohl Ihr
-Compiler die letzliche Applikation erzeugt, das Programm aber nicht läuft oder während der Ausführung abstürzt wegen eines sogenannten
+Compiler die letzliche Applikation erzeugt, das Programm aber nicht läuft oder während der Ausf&uuml;hrung abst&uuml;rzt wegen eines sogenannten
 "Bugs" (Käfer) im Code. Ein Programmfehler, der mit dem Namen dieser Insekten beschrieben wird, stammt aus der Geschichte des
 Computers; einer der ersten Fehler, die eine Maschine zum Absturz brachte, war keine offensichtliche Fehlfunktion- Käfer waren in den
-Computer eingedrungen und waren dafür verantwortlich. Daher beschreibt man einen Fehler, der auf den ersten Blick nicht offensichtlich
+Computer eingedrungen und waren daf&uuml;r verantwortlich. Daher beschreibt man einen Fehler, der auf den ersten Blick nicht offensichtlich
 ist, asl einen "Bug", daher bedeutet "Debuggen", die Käfer zu entfernen, wo sie nicht hingehören. Nun, Sie brauchen sie nicht wirklich
-zu jagen; vorausgesetzt das die heutigen Computer konzipiert sind, diese durch einen Schutz fernzuhalten. Sie müssen innerhalb des
-Codes gefunden werden, wenn sie die Ausführung eines Programms mit der Nachricht "Segmentation fault" (Speicherverletzung) beenden.
+zu jagen; vorausgesetzt das die heutigen Computer konzipiert sind, diese durch einen Schutz fernzuhalten. Sie m&uuml;ssen innerhalb des
+Codes gefunden werden, wenn sie die Ausf&uuml;hrung eines Programms mit der Nachricht "Segmentation fault" (Speicherverletzung) beenden.
 GNU bietet dazu ein weiteres Werkzeug, <tt/gdb/, den GNU Debugger. Dieses Terminalprogramm erlaubt es, die internen Werte einer
-Applikation und die Ausführung durch setzen von Haltepunkten im Code zu beobachten. Gdb stoppt die Ausführung jedes mal, wenn das
+Applikation und die Ausf&uuml;hrung durch setzen von Haltepunkten im Code zu beobachten. Gdb stoppt die Ausf&uuml;hrung jedes mal, wenn das
 Programm an einen Haltepunkt kommt. Aber wie die meisten Werkzeuge wird auch der debugger von einem anderen Programm gesteuert, das ein
 Frontend dazu bietet und es erlaubt, die Werte einfach zu beobachten und Haltepunkte im Code zu setzen.
 
 Zu diesem Zweck wird die Applikation Ihres Projekts standardmäßig mit der Compileroption zum Debuggen erzeugt und speichert daher
 zusätzliche Daten in der Binärdatei, um die Werte und Zeilen im Code zu lokalisieren. Als Frontend zu gdb benutzt KDevelop das Programm
-KDbg, den KDebugger. Um Ihr Programm zu debuggen, müssen Sie nur "Debuggen" im "Erstellen" Menü auswählen oder den entsprechenden
-Werkzeugleistenknopf betätigen, der durch ein Rad mit Brille dargestellt wird und signalisiert, das Sie die Ausführung beobachten
+KDbg, den KDebugger. Um Ihr Programm zu debuggen, m&uuml;ssen Sie nur "Debuggen" im "Erstellen" Men&uuml; auswählen oder den entsprechenden
+Werkzeugleistenknopf betätigen, der durch ein Rad mit Brille dargestellt wird und signalisiert, das Sie die Ausf&uuml;hrung beobachten
 wollen.
 
 KDevelop öffnet dann das Werkzeuge-Fenster und statet Ihr Programm mit KDbg. Die KDbg Oberfläche erscheint dann innerhalb des
 Werkzeuge-Fensters und erlaubt die Benutzung genauso als ob Sie den Debugger außerhalb von KDevelop gestartet hätten.
 
 Ganz Allgemein zeigen die obigen Schritte, das ein Entwickler zum Schreiben seines eigenen Programms verschiedene Stufen durchlaufen
-muß, um ein Projekt zu beginnen. Auch erklärt dies, welchen Teil KDevelop dabei übernimmt und wie die IDE die Idee eines einfachen Wegs
-zur Unix-Programmierung unterstützt. Um weitere Informationen über die GNU Tools zu erhalten, sollten Sie die zugehörige Dokumentation
-lesen, die Sie allgemein über das <tt/man/ Kommando oder über "System GNU Info contents" in der KDE Hilfe nachschlagen können.
+muß, um ein Projekt zu beginnen. Auch erklärt dies, welchen Teil KDevelop dabei &uuml;bernimmt und wie die IDE die Idee eines einfachen Wegs
+zur Unix-Programmierung unterst&uuml;tzt. Um weitere Informationen &uuml;ber die GNU Tools zu erhalten, sollten Sie die zugehörige Dokumentation
+lesen, die Sie allgemein &uuml;ber das <tt/man/ Kommando oder &uuml;ber "System GNU Info contents" in der KDE Hilfe nachschlagen können.
 
 
 <sect>Entwicklung mit KDevelop<label id="Entwicklung mit KDevelop">
@@ -529,16 +529,16 @@ Dieses Kapitel wird Ihnen eine allgemeine Übersicht geben, wie Sie KDevelop und 
 Applikationen zu entwickeln. Dabei werden alle Werkzeuge nach ihrer Verwendung im Entwicklungsprozeß beschrieben. Wenn sie Anfänger im
 Bereich C++/GUI Projektierung und Programmierung sind, sollten sie auch <htmlurl url="programming.html" name="Das KDevelop
 Programmierhandbuch"> lesen, welches einige Grundlagen in Bezug auf Programmdesign behandelt und detailierter auf die Benutzung von
-KDevelop mit Hilfe von Beispielprojekten, denen Sie Schritt für Schritt folgen können, um sich mit der Art und Weise vertraut zu
+KDevelop mit Hilfe von Beispielprojekten, denen Sie Schritt f&uuml;r Schritt folgen können, um sich mit der Art und Weise vertraut zu
 machen, wie Applikationen mit KDevelop erzeugt werden. Auch sollten Sie das Kapitel <ref id="Programme" name="Programme"> gelesen
-haben, um ein generelles Verständnis dafür zu bekommen, warum Unix-Applikationen gebrauch von den gestellten Entwicklungswerkzeugen
+haben, um ein generelles Verständnis daf&uuml;r zu bekommen, warum Unix-Applikationen gebrauch von den gestellten Entwicklungswerkzeugen
 machen sollten; dies wird Ihnen die Sache einfacher machen, wenn Sie auf Begriffe wie Makefiles etc. treffen.
 
 
 <sect1>Was sind KDevelop Projekte ?
 <p>
-Projekte, die mit KDevelop erstellt wurden, machen es für Entwickler sehr einfach, die GNU Standard Entwicklungswerkzeuge zu benutzen.
-Im Gegensatz zur Selbsterzeugung von Makefiles, die wegen der Komplexität von Projekten sowieso geschrieben werden müssen, bieten diese
+Projekte, die mit KDevelop erstellt wurden, machen es f&uuml;r Entwickler sehr einfach, die GNU Standard Entwicklungswerkzeuge zu benutzen.
+Im Gegensatz zur Selbsterzeugung von Makefiles, die wegen der Komplexität von Projekten sowieso geschrieben werden m&uuml;ssen, bieten diese
 nicht nur einen besseren Weg der Makefilegenerierung sondern auch einen sicheren Weg zur schnellen Anpassung auf verschiedene Systeme
 durch autoconf-generierte <tt/configure/ Skripte.
 
@@ -548,22 +548,22 @@ braucht der Endbenutzer KDevelop nicht installiert zu haben. Wenn Sie die Quelle
 KDevelop-Projektdatei mitzuliefern. Bei Projekten, and denen mehrere Entwickler, vielleicht an den verschiedensten Orten, arbeiten,
 sollte dies generell beachtet werden, um die Konsistenz der Makefiles zu sichern. Speziell bei mehrsprachigen Applikationen werden die
 Übersetzer nicht mit dem Quellcode arbeiten außer in Fällen, die eine Korrektur benötigen, um die Internationalisierung zu
-gewährleisten. In jedem Fall wird man dankbar darüber sein, da KDevelop deren Arbeit auf ein Minimum reduziert, indem einfach die
-gewünschte Sprache hinzugefügt wird und nur die Übersetzung vorgenommen werden muß.
+gewährleisten. In jedem Fall wird man dankbar dar&uuml;ber sein, da KDevelop deren Arbeit auf ein Minimum reduziert, indem einfach die
+gew&uuml;nschte Sprache hinzugef&uuml;gt wird und nur die Übersetzung vorgenommen werden muß.
 
-Wenn Sie KDevelop für Ihre eigenen Projekte benutzen, beginnen Sie am besten mit der Erzeugung einer neuen Applikation mit dem
-KAppWizard. Dort können Sie auch den Projekttyp nach den Bedürfnissen Ihres Programms einstellen. Dann fangen Sie mit der Entwicklung
-der Benutzeroberfläche an, indem Sie Widgets, die schon fertig in den Bibliotheken enthalten sind, hinzufügen und nur von Ihrem
-Programm aufgerufen werden müssen, oder durch Eigenkreationen, die mit dem Dialogeditor erstellt werden können. Danach folgt die
+Wenn Sie KDevelop f&uuml;r Ihre eigenen Projekte benutzen, beginnen Sie am besten mit der Erzeugung einer neuen Applikation mit dem
+KAppWizard. Dort können Sie auch den Projekttyp nach den Bed&uuml;rfnissen Ihres Programms einstellen. Dann fangen Sie mit der Entwicklung
+der Benutzeroberfläche an, indem Sie Widgets, die schon fertig in den Bibliotheken enthalten sind, hinzuf&uuml;gen und nur von Ihrem
+Programm aufgerufen werden m&uuml;ssen, oder durch Eigenkreationen, die mit dem Dialogeditor erstellt werden können. Danach folgt die
 Erweiterung der Benutzerschnittstelle durch Änderung oder Erweiterung der Teile, die schon von KDevelop gestellt werden wie die
-Statuszeile, Menüleiste oder Werkzeugleiste. Da die Ressourcen in einer Resource-Datei gesammelt sind, können sie dies einfach durch
-hinzufügen von Werten zu den Existierenden gestalten; die Vorgaben können gleichzeitig als eine Richtlinie zur Erzeugung Ihrer
+Statuszeile, Men&uuml;leiste oder Werkzeugleiste. Da die Ressourcen in einer Resource-Datei gesammelt sind, können sie dies einfach durch
+hinzuf&uuml;gen von Werten zu den Existierenden gestalten; die Vorgaben können gleichzeitig als eine Richtlinie zur Erzeugung Ihrer
 spezifischen genommen werden. Nach der Implementierung der Funktionalität in entsprechenden Methoden die entweder durch den
-Dialogeditor erzeugt wurden oder schon Code für Standard-Aktionen enthalten, sollten Sie das Benutzerhandbuch erweitern, indem Sie die
-zur Verfügung gestellte SGML index-Datei auf die Beschreibung Ihrer Applikation anpassen. Der letzte Schritt wäre die Erzeugung der
-Übersetzungs-Dateien und die Distribution Ihres Projekts an Übersetzer, die den letzten Schritt zur Internationalisierung übernehmen.
+Dialogeditor erzeugt wurden oder schon Code f&uuml;r Standard-Aktionen enthalten, sollten Sie das Benutzerhandbuch erweitern, indem Sie die
+zur Verf&uuml;gung gestellte SGML index-Datei auf die Beschreibung Ihrer Applikation anpassen. Der letzte Schritt wäre die Erzeugung der
+Übersetzungs-Dateien und die Distribution Ihres Projekts an Übersetzer, die den letzten Schritt zur Internationalisierung &uuml;bernehmen.
 
-Aber auch für nicht-GUI Programmierer bietet die IDe einen einfachen Weg, neue Projekte zu erzeugen; der Editor und Klassenbrowser in
+Aber auch f&uuml;r nicht-GUI Programmierer bietet die IDe einen einfachen Weg, neue Projekte zu erzeugen; der Editor und Klassenbrowser in
 Verbindung mit dem mächtigen Projektmanagement von KDevelop wird die Entwicklungszeit auf das Minimum reduzieren, das zur
 Implementierung von Funktionalität benötigt wird.
 
@@ -579,28 +579,28 @@ ein oder andere Weise eingebettet.
 
 <sect3>Die Programmierumgebung
 <p>
-Die Programmierumgebung ist die Benutzerschnittstelle, die KDevelop zur Erzeugung und Verwaltung von Projekten zur Verfügung stellt und
-die implizit viele andere Werkzeuge benutzt, indem sie die Verwendung für den Benutzer vereinfacht. Der integrierte Editor und
+Die Programmierumgebung ist die Benutzerschnittstelle, die KDevelop zur Erzeugung und Verwaltung von Projekten zur Verf&uuml;gung stellt und
+die implizit viele andere Werkzeuge benutzt, indem sie die Verwendung f&uuml;r den Benutzer vereinfacht. Der integrierte Editor und
 Hilfebrowser als auch der Klassenbrowser reduzieren die Menge an Arbeit, die ein Entwicklungsprozeß dem Programmierer abnötigt. Die
-einfache Benutzung macht das schreiben von Applikationen für Unix eine Freude an sich und wird sich in kürzeren Release-Zyklen und
-besseren Entwickungen niederschlagen. Von hier aus beherrschen Sie Ihr Projekt in all seinen Details, halten die Übersicht über Ihre
-Klassen und macht die Verwendung zusätzlicher Konsolen überflüssig, genauso wie die Intergrierung aller Benutzeroberflächen darin
-resultiert, das sie nur mit einem Fenster unter X arbeiten müssen und nicht gleichzeitig mehrere auf Ihrem Desktop im Auge behalten
-müssen.
+einfache Benutzung macht das schreiben von Applikationen f&uuml;r Unix eine Freude an sich und wird sich in k&uuml;rzeren Release-Zyklen und
+besseren Entwickungen niederschlagen. Von hier aus beherrschen Sie Ihr Projekt in all seinen Details, halten die Übersicht &uuml;ber Ihre
+Klassen und macht die Verwendung zusätzlicher Konsolen &uuml;berfl&uuml;ssig, genauso wie die Intergrierung aller Benutzeroberflächen darin
+resultiert, das sie nur mit einem Fenster unter X arbeiten m&uuml;ssen und nicht gleichzeitig mehrere auf Ihrem Desktop im Auge behalten
+m&uuml;ssen.
 
 <sect3>Der Dialogeditor
 <p>
 Der in KDevelop integrierte Dialogeditor bietet einen einfachen Weg, Benutzerschnittstellen unter Verwendung der <idx/Qt/ und
-<idx/KDE/ Bibliotheken zu erstellen und deren direkter Transfer in C++ Code, der dem Projekt automatisch hinzugefügt wird. Da der
+<idx/KDE/ Bibliotheken zu erstellen und deren direkter Transfer in C++ Code, der dem Projekt automatisch hinzugef&uuml;gt wird. Da der
 Dialogeditor vollständig in die gewohnte Benutzeroberfläche eingebettet ist, stehen Ihnen die gleichen Befehle wie im Programmiermodus
-zu Verfügung. Dies erlaubt z.B. die Konstruktion eines Dialogs, die Generierung des Ausgabecodes und des sofortigen Tests im Programm
-durch die Verfügbarkeit der Make-Kommandos und Sie können gleichzeitig die Compilerausgabe kontrollieren ohne in den Programmiermodus
+zu Verf&uuml;gung. Dies erlaubt z.B. die Konstruktion eines Dialogs, die Generierung des Ausgabecodes und des sofortigen Tests im Programm
+durch die Verf&uuml;gbarkeit der Make-Kommandos und Sie können gleichzeitig die Compilerausgabe kontrollieren ohne in den Programmiermodus
 zu wechseln. Eine Detailliertere Beschreibung finden Sie im Kapitel <ref id="The Dialog Editor" name="Dialogeditor">.
 
 
 <sect2>KAppWizard und die Klassenwerkzeuge
 <p>
-Der KAppWizard und die Klassenwerkzeuge, die zur Projektgenerierung und automatischer Code-Erweiterung zur Verfügung stehen, sind dazu
+Der KAppWizard und die Klassenwerkzeuge, die zur Projektgenerierung und automatischer Code-Erweiterung zur Verf&uuml;gung stehen, sind dazu
 gedacht, die Erzeugung von Applikationen so einfach und sicher wie möglich zu gestalten und bieten gerade Anfängern einen guten Start
 in die <idx/Qt//<idx/KDE/ Programmierung und die Details des GUI Designs, da sie sehr schnell zum Ziel gelangen.
 
@@ -614,14 +614,14 @@ zur Erstellung von neuen Applikationen mit KDevelop.
 
 KAppWizard bietet Ihnen ein sogenanntes Applikations-Skelett mit allen benötigten C++ Quellcodedateien eines lauffähigen Programms.
 Nach der Angabe des Projektnamens und der Einstellung der benötigten Optionen wird Ihr neues Projekt generiert und Sie bekommen eine
-vollständige Applikation, die schon einen Menge an Funktionalität beinhaltet (für KDE und Qt Projekte), ohne das Sie selbst eine
-einzige Zeile C++ Code eingeben müssen. Bei Nutzung der maximal gebotenen Einstellungen, die der Programmgenerator zur Verfügung
+vollständige Applikation, die schon einen Menge an Funktionalität beinhaltet (f&uuml;r KDE und Qt Projekte), ohne das Sie selbst eine
+einzige Zeile C++ Code eingeben m&uuml;ssen. Bei Nutzung der maximal gebotenen Einstellungen, die der Programmgenerator zur Verf&uuml;gung
 stellt, beihaltet Ihre Applikation bereits:
 
 <itemize>
-<item>eine SDI-Schnittstelle (für Applikationen mit einem Dokument je Programmansicht), basierend auf dem Document-View-Controller
+<item>eine SDI-Schnittstelle (f&uuml;r Applikationen mit einem Dokument je Programmansicht), basierend auf dem Document-View-Controller
 Modell,
-<item>Menüs und Dialoge zum Öffnen, Speichern und Drucken von Dateien,
+<item>Men&uuml;s und Dialoge zum Öffnen, Speichern und Drucken von Dateien,
 <item>eine vollständig funktionsfähige Werkzeugleiste und Statuszeile,
 <item>ein Hilfesystem, das ein SGML-basierendes Benutzerhandbuch und Statuszeilenhilfe enthält,
 <item>eine vollständig HTML-basierte API (Application Programming Interface, Programmmierschnittstelle) Dokumentation zum aktuellen
@@ -629,11 +629,11 @@ Stand des Projekts
 <item>eine Installationsroutine durch make
 </itemize>
 
-Der KAppWizard wird über das Projekt-Menü, Eintrag "Neu..." aufgerufen.
+Der KAppWizard wird &uuml;ber das Projekt-Men&uuml;, Eintrag "Neu..." aufgerufen.
 
 <sect3>Klassenwerkzeuge
 <p>
-Die Bezeichnung "Klassenwerkzeuge" beschreibt eine Vielfalt an Funktionen, die dem Entwickler zur Verfügung stehen, an einem Projekt
+Die Bezeichnung "Klassenwerkzeuge" beschreibt eine Vielfalt an Funktionen, die dem Entwickler zur Verf&uuml;gung stehen, an einem Projekt
 nicht nur mit einer Objektorientierten Sprache zu arbeiten, sondern auch die Quellen in einer objektorientierten Weise zu benutzen. Das
 Arbeiten mit Klassen anstatt der Suche nach Dateien bietet einen sehr flexiblen Weg, ein Projekt zu erweitern und läßt den Benutzer
 sich auf die Objekte des Projekts konzentrieren. Die Werkzeuge, die KDevelop anbietet sind ein Klassengenerator und ein Klassenbrowser,
@@ -643,139 +643,146 @@ wobei jeder eine Menge an automatisierter Funktionalität bereitstellt.
 <p>
 Nach der Generierung eines Projekts mit dem KAppWizard ist ihre Arbeit als Entwickler unter anderem, einen Satz von Klassen, die dem
 Design der Applikation entsprechen, zu erstellen. Der typische Prozeß ohne die Verwendung von KDevelop wäre, eine neue Header und
-Quellcodedatei anzulegen, sie zu den entsprehenden Makefile.am's hinzuzufügen und die Klassendeklaration und Implementation zu
+Quellcodedatei anzulegen, sie zu den entsprehenden Makefile.am's hinzuzuf&uuml;gen und die Klassendeklaration und Implementation zu
 schreiben.  Um diesen ganzen Vorgang zu vereinfachen, geben Sie dem Klassengenerator einfach den Namen der neuen Klasse, die beerbte
 Klasse, Vererbungsmodus und zusätzliche Informationen an wie die Klassendokumentation nach ihrer Verwendung im Projekt. Zusätzlich
-können Sie die vorgeschlagenen Dateinamen ändern, die der Generator für Sie einfügt und einstellen, ob die Klasse den Qt-Signal/Slot
+können Sie die vorgeschlagenen Dateinamen ändern, die der Generator f&uuml;r Sie einf&uuml;gt und einstellen, ob die Klasse den Qt-Signal/Slot
 Mechanismus verwenden soll.
 
-Der Rest der Arbeit wird dann automatisch ausgeführt- Sie brauchen sich nicht mehr um die Makefile.am und die Klasse zu kümmern. Der
+Der Rest der Arbeit wird dann automatisch ausgef&uuml;hrt- Sie brauchen sich nicht mehr um die Makefile.am und die Klasse zu k&uuml;mmern. Der
 erneute Aufruf von "Erstellen" bezieht dann automatisch die neue Klasse in den Übersetzungsvorgang mit ein. Da der Klassenbrowser sich
-nach dem Hinzufügen einer Klasse selbst aktualisiert, steht Ihnen der Zugang zur Implemetation und Deklaration sofort zur Verfügung und
-Sie können direkt mit der Erweiterung der Klasse beginnen. Den Klassengenerator rufen Sie über das Projekt-Menü, Eintrag "Neue Klasse"
+nach dem Hinzuf&uuml;gen einer Klasse selbst aktualisiert, steht Ihnen der Zugang zur Implemetation und Deklaration sofort zur Verf&uuml;gung und
+Sie können direkt mit der Erweiterung der Klasse beginnen. Den Klassengenerator rufen Sie &uuml;ber das Projekt-Men&uuml;, Eintrag "Neue Klasse"
 auf.
 
 <sect4>Der Klassenbrowser
 <p>
 Der Klassenbrowser zeigt alle Typen von Objekten und Funktionen Ihres Programms in einem Baum links des Editorfensters an. Ein
 Klassenanalysator scannt alle Dateien nach Methoden und Klassen und macht sie durch graphische Symbole zugänglich. Über diesen bieten
-Ihnen Kontextmenüs spezialisiertere Funktionalität an, mit den Quellen über Klassen und Funktionen zu arbeiten.
+Ihnen Kontextmen&uuml;s spezialisiertere Funktionalität an, mit den Quellen &uuml;ber Klassen und Funktionen zu arbeiten.
 
-Die Auswahl einer Klasse öffnet standardmäßig die Datei, die die Deklaration enthält; über Methoden und Funktionen wird Ihnen die
+Die Auswahl einer Klasse öffnet standardmäßig die Datei, die die Deklaration enthält; &uuml;ber Methoden und Funktionen wird Ihnen die
 Implementierung angezeigt. Eine vollständige Beschreibung finden Sie unter dem Kapitel <ref id="Der Klassenbrowser" name="Der
 Klassenbrowser">
 
 <sect1> Der Entwicklungsprozeß
 <p>
-Die Entwicklung einer neuen Applikation mit KDevelop kann generell in zwei Hauptschritte unterteilt werden: Erst müssen Sie ein
+Die Entwicklung einer neuen Applikation mit KDevelop kann generell in zwei Hauptschritte unterteilt werden: Erst m&uuml;ssen Sie ein
 Programm-Skelett mit KAppWizard erstellen, dann besteht der "Rest" der Entwicklung durch die Verwendung der Funktionen von KDevelop,
 die nur Ihre Fähigkeiten als Programmierer verlangen. Um den Entwicklungsprozeß zu beschreiben, gehen wir hier davon aus, das Sie eine
 Qt/KDE Applikation erzeugen möchten, was implizit die Benutzung der meisten Funktionen von KDevelop bei der Bearbeitung dieses
 Projekttyps bietet; somit haben sie einen generellen Überblick.
 
-<sect2>Creating a Program Skeleton
+<sect2>Erzeugen eines Programmger&uuml;sts
 <p>
-To start creating your application, you normally would call the KAppWizard, enter the project name and generate the program. By
-this, the wizard automatically creates a project file for the application and inserts the KDevelop areas into the Makefile.am's
-which will be used later when extending the application. The project file is the file you have to load for opening the project in
-later sessions.
+Um eine neue Applikation zu erstellen, werden Sie normalerweise KAppWizard aufrufen, den Projektnamen eingeben und das Programm
+generieren. Damit erzeugt der Wizard automatisch eine Projektdatei f&uuml;r die Applikation und schreib KDevelop-Bereiche in die
+Makefile.am's, die später zur Erweiterung Ihres Programms dienen. Die Projektdatei ist diejenige, die geladen wird, wenn Sie zu einem
+späteren Zeitpunkt am Projekt arbeiten wollen.
 
-You call KAppWizard by the "Project"-menu, entry "New...". When the wizard appears, you have to specify the project
-type on the first page. Selecting "Next >>" brings you to the next page where you have to insert the project name, version,
-directory and your personal information. Page 3 offers more detailed options, page 4 and 5 allow editing file headers for header
-and implementation files that are inserted automatically according to your selection. If you already have file headers you want to
-use, you can choose those files as well. The last page contains an output window and an error message window. When selecting
-"Create", your application will be generated and the actions that are executed can be seen in the output window. If READY appears
-in the output window, the KAppWizard is finished and you can select "Exit" to return to the Programming Environment. To build the
-binary, choose "Make" from the Build-menu or choose the according button in the toolbar. You can as well test the functions already
-present by choosing "Execute" from the Build-menu.
+Sie rufen KAppWizard &uuml;ber das "Projekt"-Men&uuml;, Eintrag "Neu..." auf. Nachdem der Wizard erscheint, geben Sie auf der ersten Seite den
+Projekttyp an. Über die Schaltfläche "Weiter" kommen Sie zur nächsten Seite, wo Sie den Projektnamen, Version, Verzeichnis und
+persönliche Informationen angeben. Seite 3 und 4 erlauben die Bearbeitung von Dateiköpfen f&uuml;r Header- und Quellcodedateien, die
+automatisch eingef&uuml;gt werden. Wenn Sie schon &uuml;ber Dateiköpfe verf&uuml;gen, die Sie benutzen möchten, können Sie die Datei, die diesen
+enthält, angeben. Die letzte Seite enthält das Ausgabefenster und die Fehlermeldungen. Nach Auswahl der Schaltfläche "Erzeugen" wird
+die Applikation generiert und die ausgef&uuml;hrten Befehle erscheinen im Ausgabefenster. Sobald dort READY erscheint, können Sie &uuml;ber
+die Schaltfläche "Beenden" den Wizard verlassen, um zur Programmierumgebung zur&uuml;ckzukehren. Um die Binärdatei zu erstellen, wählen sie
+"Erstellen" aus dem "Bauen"-Men&uuml; oder betätigen Sie die entsprechende Schaltfläche in der Werkzeugleiste. Sie können auch schon die
+vorhandenen Funktionen des Programms testen, indem Sie "Ausf&uuml;hren" aus dem "Bauen" Men&uuml; wählen.
 
-<sect2>Developing an Application
+<sect2>Entwicklung einer Applikation
 <p>
-This section describes the development phase of applications with KDevelop and the Dialog Editor- and all work can be done within
-the IDE.
+Dieser Abschnitt beschreibt die Entwicklungsphase von Applikationen mit KDevelop und dem Dialogeditor- und aller Arbeiten, die
+innerhalb der IDE erledigt werden können.
 
-The development steps are generally to edit the source files, the compilation of the project sources followed by the linker
-process binding all object files to the final binary. Then errors have to be located which either prevented a compilation or
-linking or are semantical bugs that can be found by a debugging session. Finally, the documentation has to be extended and
-translations have to be added. But as all those steps can mix which each other, it is not that easy to describe a general way how
-to develop your own application. Typically, the usual procedure would be to first create all visible parts of the project like the
-main view and the dialogs for configuring any options, then generate the source code and implement all needed connections that
-still have to be done like changing the menubar and toolbars, adding statusbar help for new menu entries and fill the new member
-functions with objects that are displaying your dialogs. Then you would compile your application and test it's capabilities, fix
-errors and test it again. The following sections describe how this would be done; for your particular application
-you may choose another way- KDevelop leaves you enough flexibility to decide what to do at what time.
+Die Entwicklungsschritte sind ganz allgemein die Bearbeitung der Quellcode-Dateien, die Übersetzung des Projekts gefolgt vom Linker,
+der alle Objektdateien zur letztlichen Binärdatei bindet. Dann m&uuml;ssen Fehler lokalisiert werden die entweder die Übersetzung oder den
+Linkervorgang verhinderten oder semantische Fehler sind, die nur in einer Debug-Sitzung gefunden werden können. Schließlich muß die
+Dokumentation erweitert und Übersetzungen hinzugef&uuml;gt werden. Da aber alle diese Schritte in unterschiedlicher Reihenfolge durchgef&uuml;hrt
+werden können, ist es nicht so einfach, einen allgemeinen Weg zur Entwicklung Ihrer eigenen Applikation zu beschreiben. Typischerweise
+wird die &uuml;bliche Prozedur die sein, zuerst alle sichtbaren Teile des Projekts zu erstellen wie die Hauptansicht und die Konstruktion
+von Dialogen, um Einstellungen vornehmen zu können; dann den Quellcode zu generieren und alle nötigen Verbindungen zu implementieren,
+die noch fehlen, wie etwa Änderungen der Men&uuml;leiste und der Werkzeugleisten; hinzuf&uuml;gen der Statuszeilen-Hilfe f&uuml;r neue Men&uuml;einträge
+und neue Memberfunktionen zu implementieren, die die Dialoge aufrufen. Dann Übersetzen Sie die Applikation und testen die Funktionen,
+korrigieren Fehler und testen erneut. Die folgenden Abschnitte beschreiben, wie dies aussehen könnte; f&uuml;r Ihre eigene Applikation
+können Sie aber auch einen anderen Weg wählen- KDevelop läßt Ihnen genug Flexibilität zu entscheiden, was Sie wann tun möchten.
 
-<sect3>User Interfaces
+<sect3>Benutzerschnittstellen
 <p>
-The User Interface of an application is actually what the user sees and by which he interacts with the program. Therefore a
-program generally has a menubar, toolbars and a statusbar as well as a main view which would be e.g. a text input window for an
-editor. KAppWizard generated applications already contain a complex functionality on graphical interfaces- the frame structure
-takes care of standard elements such as bars and buttons. When developing your application, you have to extend the given structure
-to give the program the user interaction capability you want to provide. One part of the work is the design of dialogs e.g. for
-changing values like the brush width in a paint application. This can be done easily with the Dialog Editor inside KDevelop. Now,
-how do you create those good-looking dialogs ? As the Qt library is a GUI toolkit, it provides a base set of so-called "widgets"
-like labels displaying plain text, lineedits for text input and buttons for navigation and selection commands. Besides these
-"low-level" parts of user interfaces, standard dialogs are provided and are ready to use such as printing dialogs. The
-<idx/KDE-libraries/ then are based on the Qt-library and contain replacements for certain dialogs as well as additional widgets that
-can be used in your application. So, when you start designing your applications behavior towards the user, you should make yourself
-comfortable with the widgets provided with <idx/Qt/ and <idx/KDE/. The online-documentation of Qt offers screenshots for most of them,
-so you should have a look there first. Then we advise to have a closer look at the KDE-UI library, offering other widgets. Libraries
-like the KHTML library contains very specialized widgets that a lot of programs make use of. It just simplifies application design like
-the predefined dialogs provided with Qt. For your own dialogs, those low-level widgets are the one you need. A dialog merely
-consists by a collection of different widgets combined together building the interface and is technically programmed by C++ code
-in a class that is derived from QWidget or a more specialized dialog class that inherits QWidget. The program using the widget
-therefore needs an object of the widget's class- this is almost all you have to understand how dialogs or views are used.
+Die Benutzerschnittstelle einer Applikation ist letztlich das, was der Benutzer sieht und durch die er mit dem Programm interagiert.
+Daher besitzt ein Programm ganz generell eine Men&uuml;leiste, Werkzeugleisten und eine Statuszeile ebenso wie eine Hauptansicht, die z.B.
+ein Texteingabefenster f&uuml;r einen Editor sein kann. Applikationen, die mit KAppWizard generiert werden, enthalten schon eine komplexe
+Funktionalität an graphischen Schnittstellen- Die Rahmenanwendung &uuml;bernimmt Standardelemente wie Leisten und Schaltflächen. Wenn Sie
+Ihre Applikation entwickeln, werden Sie die gegebene Struktur erweitern, um dem Programm die Interaktionsmöglichkeiten zu geben, die
+Sie dem Benutzer zur Verf&uuml;gung stellen wollen. Ein Teil dieser Arbeit ist das Design von Dialogen z.B. um Werte zu verändern wie die
+Pinselstärke in einem Malprogramm. Dies können Sie sehr einfach mit dem Dialogeditor innerhalb von KDevelop erledigen. Nun, wie erzeugt
+man diese gutaussehenden Dialoge ?  Da die Qt Bibliothek ein GUI-Toolkit ist, stellt sie einen grundlegenden Satz an sogenannten
+"Widgets" zur Verf&uuml;gung wie Aufschriften, die nur Text anzeigen, Zeileneingabefelder um Text einzugeben und Schaltflächen zur
+Navigation und Befehlsauswahl. Neben diesen "niederen" Teilen von Benutzerschnittstellen werden auch Standarddialoge bereitgestellt,
+die sofort zu benutzen sind wie etwa ein Druckdialog. Die <idx/KDE-Bibliotheken/ schließlich basieren auf der Qt-Bibliothek und
+enthalten Ersetzungen f&uuml;r spezielle Dialoge genauso wie zusätzliche Widgets, die in Ihrer Applikation verwendet werden können. Wenn Sie
+also damit beginnen, das Verhalten Ihrer Applikation gegen&uuml;ber dem Benutzer zu entwerfen, sollten Sie sich zuerst mit den Widgets
+vertraut machen, die von <idx/Qt/ und <idx/KDE/ bereitgestellt werden. Die Online-Dokumentation von Qt bietet Screenshots f&uuml;r die
+meisten an, deshalb sollten sie zuerst dort nachsehen. Weiterhin raten wir, das Sie einen näheren Blick auf die KDE-UI Bibliothek
+werfen, die weitere Widgets enthält. Bibliotheken wie die KHTMLW Bibliothek enthalten sehr spezialisierte Widgets, die von vielen
+Programmen benutzt werden. Es vereinfacht das Applikationsdesign wie die vordefinierten Dialoge von Qt. F&uuml;r Ihre eigenen Dialoge
+benötigen Sie meist die einfachen widgets. Ein Dialog besteht grob gesagt aus einer Kollektion verschiedener Widgets, die in ihrer
+Kombination die Schnittstelle bilden und sind technisch gesehen aus C++ Code, der in einer Klasse, die von QWidget oder einer
+spezialisierteren Dialogklasse, die von QWidget abgeleitet ist, implementiert wird. Das Programm, das das Widget benutzt braucht
+deshalb nur ein Objekt der Klasse- das ist fast alles, was Sie zur Benutzung von Dialogen oder Ansichten verstehen m&uuml;ssen.
 
-The Dialog Editor of KDevelop now offers a nice way to simply construct dialogs and user interfaces visually instead of you having
-to combine dialogs with pure C++ code together- this is the hard way to create interfaces. Switch to the Dialog Editor by
-choosing the according entry in the "Tools"-menu (or by the toolbar button). You will see that KDevelop's face has changed but for
-e.g. the menubar and the toolbar are very similar. This makes it very easy to switch back and forth between the two working modes
-and you will feel comfortable in both after some time. There you can construct your views and dialogs as you like and set all
-available preferences for the items the view will contain. When you're finished, select "Generate Sources" from the Build-menu;
-the Dialog Editor and the project management will take care of the rest. You can test if everything went OK by selecting Make or
-Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
-matter of implementation that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
-about creating dialogs, see <ref id="The Dialog Editor" name="The Dialog Editor">, examples and guidelines can also be found in
-<htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
+Der Dialogeditor von KDevelop bietet einen schönen und angenehmen Weg, Dialoge und Benutzerschnittstellen visuell zu konstruieren,
+anstatt die Dialoge &uuml;ber puren C++ Code zu kombinieren- dies ist der harte Weg, Schnittstellen zu erstellen. Wechseln Sie zum
+Dialogeditor durch Auswahl des entsprechenden Eintrags im "Ansicht"-Men&uuml; (oder durch die Werkzeugleisten-Schaltfläche). Sie können
+sehen, das KDevelop sein Aussehen verändert, das jedoch die Men&uuml;leiste und die Werkzeugleiste sehr ähnlich sind. Dies macht es sehr
+einfach, zwischen den Arbeitsmodi zu wechseln und Sie werden sich nach einer gewissen Zeit in beiden sehr wohl f&uuml;hlen. Dort können Sie
+Ihre Ansichten un dialoge konstruieren, wie Sie möchten und alle verf&uuml;gbaren Einstellungen an den Elementen vornehmen, die die Ansicht
+enthält. Wenn Sie fertig sind, wählen Sie "Quellen erzeugen" aus dem "Bauen"-Men&uuml;; der Dialogeditor und das Projektmanagement werden
+sich dann um den Rest k&uuml;mmern. Sie können testen, ob alles richtig durchgef&uuml;hrt wurde, indem Sie "Erstellen" oder "Ausf&uuml;hren"
+auswählen; dies wird Ihre Applikation inklusive der neuen Quelldateien erstellen. Aber erwarten Sie nicht, das die Dialoge schon sofort
+nutzbar sind- das ist eine Sache der Implementierung wie Sie der Entwickler gewohnt ist. Seien Sie nicht besorgt- es ist nicht sehr
+schwer. Um mehr Information zur Erstellung von Dialogen zu erhalten, schlagen Sie unter <ref id="Der Dialgoeditor" name="Der
+Dialgoeditor"> nach, Beispiele und Richtlinien finden Sie im <htmlurl url="programming-6.html" name="KDevelop Programmierhandbuch">.
 
-<sect3>Binding New Elements
+<sect3>Einbinden neuer Elemente
 <p>
-After you have created your user interfaces and generated the sources, you are ready to make your application use them by objects.
-As described above, a usual GUI-based program contains bars and the main view; additionally the main view operates with the bars,
-which are part of the main application class, and the document object which it is connected to. In terms of object-oriented
-design, you would describe the given architecture as the "Document-View-Controller"-model. This model describes the basic
-functions for objects in an application towards their role within the program. The Controller represents the one coordinating the
-main application and provides user interaction through a menubar and additionally toolbars and a statusbar. The Document class
-takes the task of representing a document the user works with. Therefore, a document class should do all actions like loading
-files and saving them again. The view now is in the center of the application window, showing the user a part of the document
-visually and provides all functions to manipulate the data by the user. As the bars and toolbars are already present, your work
-would be to create the main view and additional dialogs by which the user can change any settings or has access to additional
-functions.
+Nachdem sie Ihre Benutzerschnittstellen erzeugt und den Quellcode generiert haben, sind Sie bereit, Ihrer Applikation beizubringen, sie
+durch Objekte zu benutzen. Wie oben beschrieben, besteht ein gewöhnliches GUI-Basiertes Programm aus Leisten und der Hauptansicht;
+zusätzlich operiert die Hauptansicht mit den Leisten, die ein Teil der Haupt-Applikationsklasse sind, und dem Dokumentenobjekt, das mit
+der Ansicht verbunden ist. Im Terminus Objekt-orientierten Designs w&uuml;rde man die gegebene Architektur als
+"Dokumenten-Ansichts-Controller" Modell bezeichnen. Dieses Modell beschreibt die grundlegenden Funktionen von Objekten in einer
+Applikation nach ihrer Rolle innerhalb des Programms. Der Controller repräsentiert denjenigen Teil, der die Applikation koordiniert und
+die Benutzerinteraktion durch Men&uuml;leisten, Werkzeugleisten und Statuszeilen ermöglicht. Die Dokumentenklasse &uuml;bernimmt die Aufgabe, das
+Dokument zu bilden, das der Benutzer bearbeitet. Deshalb sollte die Dokumentenklasse alle Aktionen zum laden und speichern &uuml;bernehmen.
+Die Ansicht ist nun im Zentrum des Anwendungsfensters, zeigt dem Benutzer ein Teil des Dokuments visuell und stellt alle Funktionen zur
+Manipulation der Daten durch den Benutzer bereit. Da die Leisten schon vorhanden sind, besteht Ihre Arbeit in der Erzeugung der
+Hauptansicht und zusätzlichen Dialogen mit denen der Benutzer die Einstellungen ändern kann oder Zugriff auf weitere Funktionen bieten.
 
-To build your main-view, the generated source code for your application already contains a class in the form of
-&lt;YourApplication&gt;View which inherits the QWidget class (this is the minimal class that handles visual interfaces in Qt and
-therefore in <idx/KDE/ as well). In general, there are three different ways how to extend the given class:
+Um Ihre Hauptansicht zu erzeugen, enthält der generierte Quellcode Ihrer Applikation bereits eine Klasse in Form von
+&lt;IhreApplikation&gt;View, die die QWidget Klasse beerbt (dies ist die minimale Klasse die visuelle Schnittstellen in Qt behandelt
+und daher ebenso in <idx/KDE/). Allgemein gibt es drei verschiedene Wege, die gegebene Klasse zu erweitern:
+
 <itemize>
-<item>remove the document-view structure and use one of the predefined "big" widgets already containing a lot of functionality-
-just remove the View-class and replace the view-object by another.
-<item>change the inheritance of the View-class. Change the inheritance to e.g. QMultiLineEdit and your application would be an
-editor.
-<item>if your main view will consist of several separated parts, create the widgets and their classes you need with the
-dialogeditor and create objects of these classes in the view-class constructors that in combination will build the main view.
+<item>entfernen der Dokument-Ansichts Struktur- benutzen Sie eines der vordefinierten "großen" Widgets, die schon viel
+Funktionalität enthalten- entfernen Sie einfach die View-Klasse und ersetzen Sie das view-Objekt durch ein anderes.
+<item>ändern der Vererbung der View-Klasse. Wechseln Sie die Vererbung z.B. zu QMultiLineEdit und Ihre Applikation wird ein Editor.
+<item>wenn ihre Hauptansicht aus mehreren separaten Teilen bestehen soll, erzeugen Sie die Widgets und deren Klassen, die Sie
+benötigen, mit dem Dialogeditor und erstellen sie Objekte dieser Klassen in dem View-Klassen Konstruktor, der mit der Kombination die
+Hauptansicht bildet.
 </itemize>
 
-For dialogs, things are a bit different. The usual way would be to call a dialog through a menubar entry and additionally by a
-toolbar icon. After you constructed your dialog and generated the sources, the class is available for creating an object that will
-be the dialog. So you first have to look for a suitable place in the menubar to add an entry which will open the dialog when
-selected by the user. If the already given menus do not match your needs, create a new popup menu just like the others and insert
-your entry and the slot you want to call when the menuitem gets selected. Then implement the slot by creating an instance of the
-dialog class and call the dialog with the member functions given by the base class. Also you have to specify an ID for the
-menuentry. The frame applications have all IDs already given collected in a file resource.h, so you only have to add the ID and
-give it a new number. Then you're done- additionally you could construct another toolbar icon and add the statushelp message. Your
-application now offers a new functionality which is visible to the user. Now you have to add the implementation of methods that
-your dialog will be operating with to manipulate any values. Finally, call your make-tool or "Execute" and the changed files will
-be recompiled; the result of your changes can then be tested immediately.
+Bei Dialogen sind die Dinge etwas verschieden. Der &uuml;bliche Weg wäre, einen Dialog &uuml;ber einen Men&uuml;leisteneintrag aufzurufen und
+zusätzlich &uuml;ber eine Werkzeugleisten-Schaltfläche. Nach der Konstruktion des Dialogs und der Generierung der Quellcodes ist die Klasse
+verf&uuml;gbar, um ein Objekt zu erzeugen, der den Dialog darstellt. Daher m&uuml;ssen Sie sich zuerst nach einem geeigneten Platz in der
+Men&uuml;leiste umsehen, der den Dialog aufruft, wenn er vom Benutzer ausgewählt wird. Wenn die gegebenen Men&uuml;s nicht Ihren Anspr&uuml;chen
+gen&uuml;gen, erzeugen Sie ein neues Popup Men&uuml; wie die anderen und f&uuml;gen den Eintrag und den Slot hinzu, den Sie aufrufen, wenn der Eintrag
+aktiviert wird. Dann implementieren Sie den Slot durch erzeugen einer Instanz der Dialogklasse und rufen den Dialog mit den Methoden
+der Basisklasse auf. Zusätzlich m&uuml;ssen Sie dem Men&uuml;eintrag eine ID-Nummer geben. Die Rahmenapplikationen beinhalten alle schon
+verwendeten ID's in einer Datei resource.h, so das sie nur die ID und die Nummer hinzuf&uuml;gen m&uuml;ssen. Dann sind sie fertig- zusätzlich
+können Sie ein weiteres Werkzeugleisten-Symbol erzeugen und die Statuszeilen-Hilfe vervollständigen. Ihre Applikation bietet nun eine
+neue Funktionalität, die dem Benutzer sichtbar ist. Jetzt f&uuml;gen Sie noch die entsprechende Implementation von Methoden hinzu, die Ihr
+Dialog benötigt, um die gew&uuml;nschten Werte zu verändern. Schließlich rufen sie noch das Erstellungsprogramm oder "Ausf&uuml;hren" auf und die
+geänderten Dateien werden neu &uuml;bersetzt; das Ergebnis Ihrer Änderungen können Sie dann sofort testen.
 
 <sect3>The Complete Development Process
 <p>
@@ -2644,7 +2651,7 @@ the CV treeview. This chapter shows you how to use the Classviewer and the provi
 Classes and their methods can also be accessed by the browser toolbar. There, the left combo selects the class; the right
 lets you choose the methods of the selected class. When you select a method, the classbrowser will automatically bring you to the
 implementation file and sets the cursor to the method. Finally, the class-assistant button on the right of the method combo will bring
-you to the declaration of the method on a click; on another click to the definition. The delayed popup menu, displayed by the 
+you to the declaration of the method on a click; on another click to the definition. The delayed popup menu, displayed by the
 down-arrow on the button, offers additional functionality that is also available in the classbrowser context menus, such as:
 
 <itemize>
@@ -3251,65 +3258,66 @@ added files will be included as well.
 automatically on all headers), your removed header is still present as a moc-generated *.moc.cpp file and compiled.  Remove the
 according *.moc.cpp file and rebuild the project.
 
-<sect>Authors
+<sect>Autoren
 <p>
-<bf>Main Developers:</bf>
+<bf>Hauptentwickler:</bf>
 
 Sandy Meier 			<htmlurl url="mailto:smeier@rz.uni-potsdam.de" name = "<smeier@rz.uni-potsdam.de>">
-(maintainer, development coordinator and homepage provider)
-<quote/Main development of: framestructure, IDE look'n feel, projectmanagement./
+(Projektleiter, Entwicklungskoordinator und Homepage Provider)
+<quote/Hauptentwicklung von: Rahmenstruktur, Gestaltung, Projektmanagement./
 
 Stefan Heidrich			<htmlurl url="mailto:sheidric@rz.uni-potsdam.de" name = "<sheidric@rz.uni-potsdam.de>">
-<quote/Main development of: KAppWizard, printing functionality/
+<quote/Hauptentwicklung von: KAppWizard, Druckfunktionen/
 
 Ralf Nolden			<htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
-<quote/Main development of: KDevelop<->Dialog Editor interface, configuration functionality, online-help and handbooks/
+<quote/Hauptentwicklung von: KDevelop<->Dialogeditor Schnittstelle, Konfigurationsfunktionen, Online-Hilfe und Handb&uuml;cher/
 
 Jonas Nordin			<htmlurl url="mailto:jonas.nordin@cenacle.se" name="<jonas.nordin@cenacle.se>">
-<quote/Main development of: Classviewer and -parser/
+<quote/Hauptentwicklung von: Klassenbrowser und -analysator/
 
 Pascal Krahmer 			<htmlurl url="mailto:pascal@beast.de" name="<pascal@beast.de>">
-<quote/Main development of: Dialog Editor/
+<quote/Hauptentwicklung von: Dialogeditor/
 
 Bernd Gehrmann 			<htmlurl url="mailto:bernd@physik.hu-berlin.de" name="<bernd@physik.hu-berlin.de>">
-<quote/Main development of: Grep Dialog, CVS integration/
+<quote/Hauptentwicklung von: Grep Dialog, CVS Integration/
 
 Stefan Bartel 			<htmlurl url="mailto:bartel@rz.uni-potsdam.de" name = "<bartel@rz.uni-potsdam.de>">
-<quote/Main development of: Real-File-Viewer/
+<quote/Hauptentwicklung von: Real-File-Viewer/
 
 
 
-<bf>Translation coordination:</bf>
+<bf>Übersetzungskoordination:</bf>
 
 Martin Piskernig		<htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">
 
 
+<bf>Programm- und Dokumentations-Übersetzungen:</bf>
 
-<bf>Program and Documentation Translations:</bf>
+Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>"> 			-Tschechisch
 
-Martin Spirk 				<htmlurl url="mailto:spirk@kla.pvt.cz" name="<spirk@kla.pvt.cz>"> 			-Czech
+Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Dänisch
 
-Steen Rabol    			<htmlurl url="mailto:rabol@get2net.dk" name = "<rabol@get2net.dk>">			-Danish
+Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">,
 
-Martin Piskernig    <htmlurl url="mailto:martin.piskernig@stuwo.at" name = "<martin.piskernig@stuwo.at>">	-German
+Ralf Nolden			<htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>"> -Deutsch
 
-Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">		-Spanish
+Salvador Gimeno 		<htmlurl url="mailto:salgiza@eui.upv.es" name="<salgiza@eui.upv.es>">		-Spanisch
 
-Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnish
+Sami Kuhmonen 			<htmlurl url="mailto:sami@iqs.fi" name="<sami@iqs.fi>">					-Finnisch
 
-Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-French
+Herve Lefebvre 			<htmlurl url="mailto:hlefebvre@easynet.fr" name="<hlefebvre@easynet.fr>">			-Französisch
 
-Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Hungarian
+Pahan Szabolcs 			<htmlurl url="mailto:szabczy@bigfoot.com" name="<szabczy@bigfoot.com>">			-Ungarisch
 
-Duarte Loreto 			<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">		-Portuguese
+Duarte Loreto 			<htmlurl url="mailto:dnloreto@esoterica.pt" name="<dnloreto@esoterica.pt>">		-Portugiesisch
 
-Ilmar Habibulin    	<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">				-Russian
+Ilmar Habibulin    	<htmlurl url="mailto:ilmar@ints.ru" name = "<ilmar@ints.ru>">				-Russisch
 
-Jacek Wojdel 				<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polish
+Jacek Wojdel 				<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">     -Polnisch
 
-Jan Prokop 					<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">				-Slovak
+Jan Prokop 					<htmlurl url="mailto:jprokop@ibl.sk" name="<jprokop@ibl.sk>">				-Slovakisch
 
-Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patrik.adolfsson@iname.com>">		-Swedish
+Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patrik.adolfsson@iname.com>">		-Schwedisch
 
 
 <bf>Startlogo:</bf>
@@ -3317,7 +3325,7 @@ Patrik Adolfsson 		<htmlurl url="mailto:patrik.adolfsson@iname.com" name="<patri
 Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kbs.twi.tudelft.nl>">
 
 
-<bf>Additions, patches and bugfixes:</bf>
+<bf>Zusätliche Beiträge, Patches und Bugfixes:</bf>
 
 Walter Tasin						<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
 
@@ -3343,8 +3351,7 @@ Walter Tasin 						<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<t
 
 Torsten Uhlmann 				<htmlurl url="mailto:TUhlmann@debis.com" name="<TUhlmann@debis.com>">
 
-
-<bf>KDevelop contains sourcecode from the following applications:</bf>
+<bf>KDevelop enthält Quellcode aus den folgenden Applikationen:</bf>
 
 <bf/KWrite 0.98/ &copy		by Jochen Wilhelmy		<htmlurl url="mailto:digisnap@cs.tu-berlin.de" name="<digisnap@cs.tu-berlin.de>">
 
@@ -3358,19 +3365,20 @@ name="<hoelzer@physik.uni-wuerzburg.de>">
 <bf/kcmlocale/	&copy 1998 	by Matthias Hoelzer <htmlurl url="mailto:hoelzer@physik.uni-wuerzburg.de"
 name="<hoelzer@physik.uni-wuerzburg.de>">
 
-<sect>Thanks
+<sect>Dank
 <p>
-We like to express special thanks to all of our family members and friends who supported us in several ways to let us construct
-and improve KDevelop.
+Wir möchten an dieser Stelle unseren Familienmitgliedern und Freunden unseren besonderen Dank ausdr&uuml;cken, die uns in vielerlei Art und
+Weise unterst&uuml;tzten, KDevelop zu programmieren und zu verbessern.
 
-Further, we thank  Jochen Wilhelmy  for offering his program kwrite and his help on integrating it into KDevelop.
+Weiterhin danken wir Jochen Wilhelmy f&uuml;r das Angebot seines Programms kwrite und seiner Hilfe bei der Integration in KDevelop.
 
-Thanks also to the KDE team and Stephan Kulow, who gave us the possibility to work on KDevelop via CVS
+Dank sei auch dem KDE Team und Stephan Kulow gesagt, die uns die Möglichkeit gaben, KDevelop &uuml;ber das CVS System zu bearbeiten.
 
-We hope that our free work on this product will lead to a better acceptance of Free Software and its development. Without the help
-and idealism of many, the KDevelop IDE would never have been realized in such a short period of time and we're proud that so many
-users already have reported good experience and brought KDevelop to it's destiny: helping free software programmers to build a
-better world where users have the freedom of choice.
+Wir hoffen, das unsere freie Arbeit an diesem Produkt zu einer besseren Akzeptanz freier Software und ihrer Entwicklung
+f&uuml;hrt. Ohne die Hilfe und den Idealismus vieler wäre die KDevelop IDE nicht in solch einer kurzen Zeit realisiert worden und wir sind
+Stolz da&uuml;ber, das uns scnon so viele Benutzer &uuml;ber ihre guten Erfahrungen mit KDevelop berichteten und KDevelop zu seiner Bestimmung
+brachten: Freien Software-Programmierern zu helfen, eine bessere Welt zu gestalten, in der die Benutzer die Freiheit haben,
+auszuwählen.
 
 <sect>Copyright <label id="Copyright">
 <p>
@@ -3378,23 +3386,25 @@ better world where users have the freedom of choice.
 
 KDevelop Copyright 1998,1999 The KDevelop Team.
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+Dieses Programm ist Freie Software; Sie k&ouml;nnen sie  weitergeben und/oder ver&auml;ndern
+entsprechend den Bestimmungen der GNU General Public License, wie von der Free Software
+Foundation ver&ouml;ffentlicht, entweder entsprechend Version 2 der Bestimmungen oder
+(nach ihrer Wahl) jeder sp&auml;teren Version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Dieses Programm wird in der Hoffnung, da&szlig; es n&uuml;tzlich ist, aber OHNE EINE GARANTIE verbreitet;
+sogar ohne die implizite Garantie der MARKTG&Auml;NGIGKEIT oder EIGNUNG F&Uuml;R EINEN BESTIMMTEN ZWECK.
+Lesen Sie die GNU General Public License, um weitere Details zu erfahren.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben;
+wenn nicht, so schreiben sie an die
+Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 </verb></tscreen>
 
 
 </article>
+
+
 
 
 
