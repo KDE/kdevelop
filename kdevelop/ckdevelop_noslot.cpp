@@ -558,7 +558,8 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
   
   // load kiconedit if clicked/loaded  an icon
-  if( filename.right(4) == ".xpm" || filename.right(4) == ".png" ){
+  if( filename.right(4) == ".xpm" || filename.right(4) == ".png" ||
+	filename.right(4) == ".gif" || filename.right(4) == ".jpg"){
     if(!CToolClass::searchProgram("kiconedit")){
       return;
     }
