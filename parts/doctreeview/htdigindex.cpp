@@ -35,8 +35,8 @@
 #include "misc.cpp"
 
 
-ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
-    : KDialogBase(KDialogBase::Plain, i18n("Generating Search Index"), Cancel, Cancel,
+ProgressDialog::ProgressDialog(bool index, QWidget *parent, const char *name)
+    : KDialogBase(KDialogBase::Plain, i18n("Generating Search Index"), Cancel | Ok, Close,
                   parent, name, false)
 {
     proc = 0;
@@ -44,6 +44,16 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
     indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
     QDir d; d.mkdir(indexdir);
 
+    KConfig config("kdevdoctreeviewrc", true);
+    config.setGroup("htdig");
+    databaseDir = config.readPathEntry( "databaseDir", indexdir );
+
+    if( !index )
+        return;
+
+    d.mkdir( databaseDir );
+
+    showButtonOK( false );
     QGridLayout *grid = new QGridLayout(plainPage(), 5,3, spacingHint());
 
     QLabel *l = new QLabel(i18n("Scanning for files"), plainPage());
@@ -75,6 +85,7 @@ ProgressDialog::ProgressDialog(QWidget *parent, const char *name)
 
     setMinimumWidth(300);
     connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
     QTimer::singleShot(0, this, SLOT(slotDelayedStart()));
 }
 
@@ -97,9 +108,13 @@ void ProgressDialog::slotDelayedStart()
 
 void ProgressDialog::done(int r)
 {
-    if (!r && proc)
-        proc->kill();
-    KDialogBase::done(r);
+    if (!r)
+    {
+        showButtonCancel( false );
+        showButtonOK( true );
+    }
+    else
+        KDialogBase::done(r);
 }
 
 
@@ -140,6 +155,9 @@ void ProgressDialog::addDir(const QString &dir)
 
     QStringList::ConstIterator it;
     for ( it=list.begin(); it!=list.end(); ++it ) {
+    if( (*it).right( 12 ).lower( ) == "-source.html" )
+        continue;
+
         files.append(dir + "/" + *it);
         setFilesScanned(++filesScanned);
     }
@@ -369,7 +387,7 @@ bool ProgressDialog::createConfig()
     if (f.open(IO_WriteOnly)) {
         QTextStream ts(&f);
 
-        ts << "database_dir:\t\t" << indexdir << endl;
+        ts << "database_dir:\t\t" << databaseDir << endl;
         ts << "start_url:\t\t`" << indexdir << "/files`" << endl;
         ts << "local_urls:\t\thttp://localhost/=/" << endl;
 //        ts << "local_urls:\t\tfile://=" << endl;
@@ -571,6 +589,14 @@ void ProgressDialog::cancelClicked()
   }
 }
 
+void ProgressDialog::okClicked( )
+{
+    if ( proc )
+        proc->kill( );
+
+    KDialogBase::done( 0 );
+}
+
 int main(int argc, char *argv[])
 {
 #if 0
@@ -580,21 +606,48 @@ int main(int argc, char *argv[])
     };
 #endif
 
+    static const KCmdLineOptions options[] =
+    {
+        { "c", I18N_NOOP( "Update user's htdig configuration file only" ), 0 },
+        { "i",  I18N_NOOP( "-c and generate index" ), 0 },
+        KCmdLineLastOption
+    };
+
     KAboutData aboutData("kdevdoctreeview", I18N_NOOP("KDevelop"),
                          "0.1", I18N_NOOP("KDE Index generator for help files."));
 
     KCmdLineArgs::init(argc, argv, &aboutData);
-    //    KCmdLineArgs::addCmdLineOptions(options);
+    KCmdLineArgs::addCmdLineOptions(options);
 
     KApplication app;
 
     KGlobal::dirs()->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
     KGlobal::locale()->setMainCatalogue("kdevelop");
 
-    ProgressDialog *search = new ProgressDialog(0, "progress dialog");
-    app.setMainWidget(search);
-    search->show();
-    app.exec();
+    KCmdLineArgs   *args   = KCmdLineArgs::parsedArgs( );
+
+    if( args->isSet( "c" ))
+    {
+        ProgressDialog *search = new ProgressDialog( false, 0, "progress dialog");
+
+    if( search->createConfig( ))
+        KMessageBox::information( 0, "Configuration file updated" );
+    else
+        KMessageBox::error( 0, "Configuration file update faild!" );
+    }
+    else
+        if( args->isSet( "i" ))
+        {
+            ProgressDialog *search = new ProgressDialog( true, 0, "progress dialog");
+            app.setMainWidget(search);
+            search->show();
+            app.exec();
+        }
+    else
+    {
+        fprintf( stderr, "Internal error generating index - unknown argument\n" );
+        return 1;
+    }
 
     return 0;
 }

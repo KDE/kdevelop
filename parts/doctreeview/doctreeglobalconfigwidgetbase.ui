@@ -420,6 +420,37 @@
                                 </property>
                                 <property name="sizeHint">
                                     <size>
+                                        <width>10</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>PushButton2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Update &amp;Config</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+C</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>true</bool>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer8</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
                                         <width>20</width>
                                         <height>20</height>
                                     </size>
@@ -448,7 +479,7 @@
                                 </property>
                                 <property name="sizeHint">
                                     <size>
-                                        <width>20</width>
+                                        <width>10</width>
                                         <height>20</height>
                                     </size>
                                 </property>
@@ -496,6 +527,14 @@
                             <string>htsearch executable:</string>
                         </property>
                     </widget>
+                    <widget class="QLabel" row="9" column="0">
+                        <property name="name">
+                            <cstring>databaseDirLabel</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Database directory:</string>
+                        </property>
+                    </widget>
                     <widget class="KURLRequester" row="6" column="1">
                         <property name="name">
                             <cstring>htdigbinEdit</cstring>
@@ -515,6 +554,14 @@
                     <widget class="KURLRequester" row="8" column="1">
                         <property name="name">
                             <cstring>htsearchbinEdit</cstring>
+                        </property>
+                        <property name="focusPolicy">
+                            <enum>StrongFocus</enum>
+                        </property>
+                    </widget>
+                    <widget class="KURLRequester" row="9" column="1">
+                        <property name="name">
+                            <cstring>databaseDirEdit</cstring>
                         </property>
                         <property name="focusPolicy">
                             <enum>StrongFocus</enum>
@@ -1011,6 +1058,24 @@
         <receiver>doctreeview_global_config_widget</receiver>
         <slot>dhScanButton_clicked()</slot>
     </connection>
+    <connection>
+        <sender>databaseDirEdit</sender>
+        <signal>openFileDialog(KURLRequester*)</signal>
+        <receiver>doctreeview_global_config_widget</receiver>
+        <slot>databaseDirEdit_openFileDialog(KURLRequester*)</slot>
+    </connection>
+    <connection>
+        <sender>dhURL</sender>
+        <signal>openFileDialog(KURLRequester*)</signal>
+        <receiver>doctreeview_global_config_widget</receiver>
+        <slot>dhURL_openFileDialog(KURLRequester*)</slot>
+    </connection>
+    <connection>
+        <sender>PushButton2</sender>
+        <signal>clicked()</signal>
+        <receiver>doctreeview_global_config_widget</receiver>
+        <slot>updateConfigClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>qtdocs_view</tabstop>
@@ -1082,6 +1147,9 @@
     <slot access="protected">dhEditButton_clicked()</slot>
     <slot access="protected">dhAddButton_clicked()</slot>
     <slot access="protected">dhScanButton_clicked()</slot>
+    <slot access="protected">databaseDirEdit_openFileDialog(KURLRequester*)</slot>
+    <slot access="protected">dhURL_openFileDialog(KURLRequester*)</slot>
+    <slot access="protected">updateConfigClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>

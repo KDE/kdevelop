@@ -93,6 +93,7 @@ DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewPart *part, DocT
     dhListView->setAllColumnsShowFocus(true);
 
     dhURL->setMode((int) KFile::Directory);
+    databaseDirEdit->setMode((int) KFile::Directory);
 
     urlDownload->setURL("http://lidn.sourceforge.net");
     connect(urlDownload, SIGNAL(leftClickedURL(const QString&)), kapp,
@@ -190,6 +191,8 @@ void DocTreeGlobalConfigWidget::readConfig()
     indexBookmarksBox->setChecked(config->readBoolEntry("IndexBookmarks"));
 
     config->setGroup("htdig");
+    QString databaseDir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
+    databaseDirEdit->setURL( config->readPathEntry( "databaseDir", databaseDir ));
     QString exe = kapp->dirs()->findExe("htdig");
     htdigbinEdit->setURL(config->readPathEntry("htdigbin", exe));
     exe = kapp->dirs()->findExe("htmerge");
@@ -284,10 +287,12 @@ void DocTreeGlobalConfigWidget::storeConfig()
 #endif
 
 #if defined(_KDE_3_1_3_)
+    config->writePathEntry("databaseDir", databaseDirEdit->url());
     config->writePathEntry("htdigbin", htdigbinEdit->url());
     config->writePathEntry("htmergebin", htmergebinEdit->url());
     config->writePathEntry("htsearchbin", htsearchbinEdit->url());
 #else
+    config->writeEntry("databaseDir", databaseDirEdit->url());
     config->writeEntry("htdigbin", htdigbinEdit->url());
     config->writeEntry("htmergebin", htmergebinEdit->url());
     config->writeEntry("htsearchbin", htsearchbinEdit->url());
@@ -315,8 +320,17 @@ void DocTreeGlobalConfigWidget::storeConfig()
     config->sync();
 }
 
+void DocTreeGlobalConfigWidget::updateConfigClicked()
+{
+    runHtdig( "-c" );
+}
 
 void DocTreeGlobalConfigWidget::updateIndexClicked()
+{
+    runHtdig( "-i" );
+}
+
+void DocTreeGlobalConfigWidget::runHtdig( QString arg )
 {
     // I'm not sure if storing the configuration here is compliant
     // with user interface guides, but I see no easy way around
@@ -324,7 +338,7 @@ void DocTreeGlobalConfigWidget::updateIndexClicked()
 
     DocTreeViewFactory::instance()->config()->sync();
     KProcess proc;
-    proc << "kdevelop-htdig";
+    proc << "kdevelop-htdig" << arg;
     proc.start(KProcess::DontCare);
 }
 

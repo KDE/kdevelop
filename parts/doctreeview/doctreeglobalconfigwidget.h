@@ -29,7 +29,9 @@ public slots:
     void accept();
 
 private slots:
+    void updateConfigClicked();
     void updateIndexClicked();
+    void runHtdig( QString arg );
     void removeBookmarkClicked();
     void addBookmarkClicked();
     void extEdit();

@@ -30,7 +30,7 @@ class ProgressDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    ProgressDialog(QWidget *parent=0, const char *name=0);
+    ProgressDialog(bool index, QWidget *parent=0, const char *name=0);
     ~ProgressDialog();
 
     void addDir(const QString &dir);
@@ -45,6 +45,7 @@ private slots:
     void htdigExited(KProcess *proc);
     void htmergeExited(KProcess *proc);
     void cancelClicked();
+    void okClicked();
     void slotDelayedStart();
 
 private:
@@ -61,6 +62,7 @@ private:
 
     int count;
     bool procdone;
+    QString databaseDir;
     QString indexdir;
     QString exe;
     QStringList files;
