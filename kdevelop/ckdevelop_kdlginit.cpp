@@ -335,7 +335,7 @@ void CKDevelop::initKDlgToolBar(){
   toolBar(ID_KDLG_TOOLBAR)->insertSeparator();
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/newwidget.xpm");
-  toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_FILE_NEW,false,i18n("Create New Dialog"));
+  toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_KDLG_FILE_NEW,false,i18n("Create New Dialog"));
 
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   toolBar(ID_KDLG_TOOLBAR)->insertButton(pix,ID_KDLG_FILE_OPEN, true,i18n("Open Dialog"));

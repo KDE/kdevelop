@@ -45,6 +45,7 @@ QString getClassname(){return classname_edit->text();}
   QString getLocation(){return loc_edit->text();}
   /** QDialog,QTabDialog,QFrame,QWidget*/
   QString getBaseClass();
+  QString getBaseClassHeader();
   
   
 protected:

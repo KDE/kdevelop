@@ -80,7 +80,7 @@ void slotFileNew();
   void slotOpenDialog(QString file);
 protected:
   
-  void generateInitialHeaderFile(TDialogFileInfo info);
+  void generateInitialHeaderFile(TDialogFileInfo info,QString baseclass_header);
   void generateInitialSourceFile(TDialogFileInfo info);
 
   

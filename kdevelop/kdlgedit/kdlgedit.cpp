@@ -75,7 +75,7 @@ void KDlgEdit::slotFileNew(){
 
       // generate the new files;
       // header
-      generateInitialHeaderFile(info);
+      generateInitialHeaderFile(info,dlg.getBaseClassHeader());
       generateInitialSourceFile(info);
       slotBuildGenerate();
 
@@ -266,7 +266,7 @@ QString KDlgEdit::getRelativeName(QString abs_filename){
   return abs_filename;
 }
   
-void KDlgEdit::generateInitialHeaderFile(TDialogFileInfo info){
+void KDlgEdit::generateInitialHeaderFile(TDialogFileInfo info,QString baseclass_header){
   CGenerateNewFile generator;
   CProject* prj = ((CKDevelop*)parent())->getProject(); 
   QString header_file = prj->getProjectDir() + info.header_file;
@@ -297,7 +297,7 @@ void KDlgEdit::generateInitialHeaderFile(TDialogFileInfo info){
       stream << "//Generated area. DO NOT EDIT!!!(begin)\n";
       stream << "//Generated area. DO NOT EDIT!!!(end)\n";
     }
-    stream << "\n#include <"+info.baseclass.lower() +".h>\n";
+    stream << "\n#include <"+baseclass_header+">\n";
     
     stream << "\n/**\n";
     stream << "  *@author "+ prj->getAuthor() + "\n";
@@ -357,6 +357,14 @@ void KDlgEdit::generateInitialSourceFile(TDialogFileInfo info){
     if(info.baseclass == "QDialog"){
       stream << info.classname + "::" + info.classname 
 	+ "(QWidget *parent, const char *name) : QDialog(parent,name,true){\n";
+    } 
+    else if(info.baseclass == "QTabDialog"){
+       stream << info.classname + "::" + info.classname 
+	+ "(QWidget *parent, const char *name) : QTabDialog(parent,name,true){\n";
+    }
+    else {
+      stream << info.classname + "::" + info.classname 
+	+ "(QWidget *parent, const char *name) : " + info.baseclass +"(parent,name){\n";
     }
     
     stream << "\tinitDialog();\n}\n\n";

@@ -281,6 +281,7 @@ bool CKDevelop::slotProjectClose(){
     switchToFile(header_widget->getName());
     
     disableCommand(ID_FILE_NEW);
+    disableCommand(ID_KDLG_FILE_NEW);
     disableCommand(ID_FILE_PRINT);
     // doc menu
     disableCommand(ID_HELP_PROJECT_API);
@@ -722,6 +723,7 @@ bool CKDevelop::readProjectFile(QString file){
   // file menu
   
   enableCommand(ID_FILE_NEW);
+  enableCommand(ID_KDLG_FILE_NEW);
   enableCommand(ID_FILE_PRINT);
   // doc menu
   enableCommand(ID_HELP_PROJECT_API);
@@ -741,12 +743,19 @@ bool CKDevelop::readProjectFile(QString file){
   else{
     enableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
   }
+  if(prj->getProjectType() != "normal_empty"){
+    enableCommand(ID_PROJECT_FILE_PROPERTIES);
+    enableCommand(ID_PROJECT_OPTIONS);
+  }
+  else{
+    disableCommand(ID_PROJECT_FILE_PROPERTIES);
+    disableCommand(ID_PROJECT_OPTIONS);
+  }
   
 
   enableCommand(ID_PROJECT_REMOVE_FILE);
   enableCommand(ID_PROJECT_NEW_CLASS);
-  enableCommand(ID_PROJECT_FILE_PROPERTIES);
-  enableCommand(ID_PROJECT_OPTIONS);
+  
   enableCommand(ID_PROJECT_WORKSPACES);
 
   enableCommand(ID_BUILD_AUTOCONF);
@@ -780,6 +789,9 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
 }
 
 void CKDevelop::newSubDir(){
+  if(prj->getProjectType() == "normal_empty"){
+    return; // no makefile handling
+  }
   KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));

@@ -17,6 +17,8 @@
 #include <kfiledialog.h>
 #include "../cproject.h"
 #include "kdlgnewdialogdlg.h"
+#include <kmsgbox.h>
+#include <kapp.h>
 
 KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* prj ) : QDialog(parent,name,true) {
   project = prj;
@@ -396,6 +398,29 @@ KDlgNewDialogDlg::~KDlgNewDialogDlg(){
 }
 
 void KDlgNewDialogDlg::slotOKClicked(){
+  if(QString(classname_edit->text()) == "") {
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a classname!"),KMsgBox::EXCLAMATION);return;
+  }
+  if(QString(header_edit->text()) == "") {
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the header-file!"),KMsgBox::EXCLAMATION);return;
+  }
+  if(QString(cpp_edit->text()) == "") {
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the implementation-file!"),KMsgBox::EXCLAMATION);return;
+  }
+  if(QString(data_edit->text()) == "") {
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the data-file!"),KMsgBox::EXCLAMATION);return;
+  }
+  if(custom_radio_button->isChecked() &&  QString(custom_header_edit->text()) == ""){
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the header-file\n for the custom class!"),KMsgBox::EXCLAMATION);return;
+  }
+  if(custom_radio_button->isChecked() &&  QString(custom_class_edit->text()) == ""){
+    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the custom class!"),KMsgBox::EXCLAMATION);return;
+  }
+  if(QString(loc_edit->text()).contains(project->getProjectDir()) == 0 ){
+    KMsgBox::message(this,i18n("Error..."),i18n("You must choose a location,that is in your project-dir!")
+		     ,KMsgBox::EXCLAMATION);
+    return;
+  }
   accept();
 }
 void KDlgNewDialogDlg::slotLocButtonClicked(){
@@ -464,4 +489,12 @@ QString KDlgNewDialogDlg::getBaseClass(){
   if(qtabdialog_radio_button->isChecked()) return "QTabDialog";
   if(custom_radio_button->isChecked()) return custom_class_edit->text();
   return "QDialog";
+}
+QString  KDlgNewDialogDlg::getBaseClassHeader(){
+  if(qwidget_radio_button->isChecked()) return "qwidget.h";
+  if(qframe_radio_button->isChecked()) return "qframe.h";
+  if(qdialog_radio_button->isChecked()) return "qdialog.h";
+  if(qtabdialog_radio_button->isChecked()) return "qtabdialog.h";
+  if(custom_radio_button->isChecked()) return custom_header_edit->text();
+  return QString("qdialog.h");
 }

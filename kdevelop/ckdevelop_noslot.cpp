@@ -132,21 +132,19 @@ void CKDevelop::switchToFile(QString filename){
   }
   
   // set the correct edit_widget
-  if (CProject::getType(filename) == CPP_HEADER){
+  if (CProject::getType(filename) == CPP_SOURCE){
+    edit_widget = cpp_widget;
+    s_tab_view->setCurrentTab(CPP);
+    
+    if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
+      enableCommand(ID_BUILD_COMPILE_FILE);
+  }
+  else{
     edit_widget = header_widget;
     s_tab_view->setCurrentTab(HEADER);
     disableCommand(ID_BUILD_COMPILE_FILE);
-
-    //output_widget->append("current edit_widget = header_widget");
   }
-  else{
-    edit_widget = cpp_widget;
-    s_tab_view->setCurrentTab(CPP);
-
-    if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
-      enableCommand(ID_BUILD_COMPILE_FILE);
-    //output_widget->append("current edit_widget = cpp_widget");
-  }
+  
   edit_widget->setFocus();
   if (filename == edit_widget->getName()){
     //    cerr << endl <<endl << "Filename:" << filename 
@@ -517,7 +515,10 @@ void CKDevelop::closeEvent(QCloseEvent* e){
   config->writeEntry("cpp_file",cpp_widget->getName());
   config->writeEntry("header_file",header_widget->getName());
   config->writeEntry("browser_file",history_list.current());
-
+  
+  //save the dialog;
+  kdlgedit->slotFileSave();
+  
   config->setGroup("Files");
   config->writeEntry("project_file","");
   if(project){

@@ -2,7 +2,6 @@
            cdocbrowser.cpp - 
                              -------------------                                         
 
-    version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -74,6 +73,20 @@ CDocBrowser::~CDocBrowser(){
 void CDocBrowser::showURL(QString url,bool reload){
  //read the htmlfile
   //cerr << "URL:" << url << "\n";
+
+  if(url.left(7) == "http://"){
+    if(vfork() > 0) {
+      // drop setuid, setgid
+      setgid(getgid());
+      setuid(getuid());
+      
+      execlp("kfmclient", "kfmclient", "exec", url.data(), 0);
+      _exit(0);
+    }
+    return;
+  }
+  
+
   KHTMLWidget* htmlview;
   htmlview=getKHTMLWidget();
   htmlview->setCursor( KCursor::waitCursor() );

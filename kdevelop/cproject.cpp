@@ -244,7 +244,7 @@ ProjectFileType CProject::getType( const char *aFile )
 
     // Check for a known extension.
     if( ext == ".cpp" || ext == ".c" || ext == ".cc" ||
-        ext == ".ec" || ext == ".ecpp" )
+        ext == ".ec" || ext == ".ecpp" || ext == ".C" || ext == ".cxx" )
       retVal = CPP_SOURCE;
     else if( ext == ".h" || ext == ".hxx" )
       retVal = CPP_HEADER;
@@ -496,7 +496,7 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
 
   //  createMakefilesAm(); // do some magic generation
 
-  // write the fileinfo
+  // writethe fileinfo
   writeFileInfo( info );
 
   config.sync();
@@ -580,6 +580,7 @@ void CProject::updateMakefileAm(QString makefile){
 	
 	//***************************generate needed things for the main makefile*********
 	if (config.readEntry("type") == "prog_main"){ // the main makefile
+	  stream << "bin_PROGRAMS = " << getBinPROGRAM() << "\n";
 	  getSources(makefile,source_files);
 	  for(str= source_files.first();str !=0;str = source_files.next()){
 	    sources =  str + " " + sources ;
@@ -774,9 +775,16 @@ void CProject::getSources(QString rel_name_makefileam,QStrList& sources){
   config.readListEntry("files",files);
   
   for(file = files.first();file != 0;file = files.next()){
-    if( getType( file ) == CPP_SOURCE )
+    info = getFileInfo(file);
+    if(info.type == CPP_SOURCE ){
       sources.append(getName(file));
+    }
   }
+  
+  // for(file = files.first();file != 0;file = files.next()){
+//     if( getType( file ) == CPP_SOURCE )
+//       sources.append(getName(file));
+//   }
 }
 
 void CProject::getPOFiles(QString rel_name_makefileam,QStrList& po_files){
@@ -802,25 +810,32 @@ void CProject::setSourcesHeaders(){
   // clear the lists
   header_files.clear();
   cpp_files.clear();
-  
+  TFileInfo info;
   QStrList files;
   char *file;
 
   getAllFiles(files);
 
   for(file = files.first();file != 0;file = files.next()){
-    switch( getType( file ) )
-    {
-      case CPP_SOURCE:
-	cpp_files.append(getProjectDir()+file);
-        break;
-      case CPP_HEADER:        
-        header_files.append(getProjectDir()+file);
-        break;
-      default:
-        break;
+    info = getFileInfo(file);
+    if(info.type == CPP_SOURCE){
+      cpp_files.append(getProjectDir()+file);
+    }
+    if(info.type == CPP_HEADER){
+      header_files.append(getProjectDir()+file);
     }
   }
+    // switch( getType( file ) )
+//     {
+//       case CPP_SOURCE:
+    // 	cpp_files.append(getProjectDir()+file);
+//         break;
+//       case CPP_HEADER:        
+//         header_files.append(getProjectDir()+file);
+//         break;
+//       default:
+//         break;
+//     }
 }
 
 void CProject::setKDevelopWriteArea(QString makefile){

@@ -1432,12 +1432,15 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     prev_was_search_result=true; // after this time, jump to the searchkey
   }
   // insert into the history-list
-  int cur =  history_list.at(); // get the current index
-  if(cur == -1){
-     history_list.append(url);
-  }
-  else{
-    history_list.insert(cur+1,url);
+  if(QString(url).left(7) != "http://"){ // http aren't added to the history list
+
+    int cur =  history_list.at(); // get the current index
+    if(cur == -1){
+      history_list.append(url);
+    }
+    else{
+      history_list.insert(cur+1,url);
+    }
   }
 }
 
@@ -1907,6 +1910,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_NEW:
     slotFileNew();
     break;
+  case  ID_KDLG_FILE_NEW:
+    kdlgedit->slotFileNew();
+    break;
   case ID_PROJECT_OPEN:
     slotProjectOpen();
     break;
@@ -1996,6 +2002,9 @@ void CKDevelop::slotToolbarClicked(int item){
     break;
   case ID_HELP_SEARCH:
     slotHelpSearch();
+    break;
+  case ID_KDLG_BUILD_GENERATE:
+    kdlgedit->slotBuildGenerate();
     break;
   }
 }

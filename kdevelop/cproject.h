@@ -59,7 +59,7 @@ struct TMakefileAmInfo {
 struct TDialogFileInfo {
   /** location + name in the projectdir*/
   QString rel_name;
-  /** SOURCE,HEADER,SCRIPT,DATA,PO,DIALOG*/
+  /** CPP_SOURCE,CPP_HEADER,SCRIPT,DATA,PO,KDEV_DIALOG*/
   QString type;
   /** include in distribution?*/
   bool dist;
@@ -87,7 +87,7 @@ struct TDialogFileInfo {
 struct TFileInfo {
   /** location + name in the projectdir*/
   QString rel_name;
-  /** SOURCE,HEADER,SCRIPT,DATA,PO,DIALOG*/
+  /** CPP_SOURCE,CPP_HEADER,SCRIPT,DATA,PO,KDEV_DIALOG*/
   ProjectFileType type;
   /** include in distribution?*/
   bool dist;
@@ -151,7 +151,7 @@ public: // Methods to store project options
   /** Store the version of the kdevprj file format*/
   void setKDevPrjVersion(const char* version) { writeGroupEntry( "General", "kdevprj_version", version ); }
 
-  /** Store the project type: {normal_cpp,normal_kde,mini_kde} */
+  /** Store the project type: {normal_cpp,normal_kde,mini_kde,normal_empty,normal_qt} */
   void setProjectType(const char *type)       { writeGroupEntry( "General", "project_type", type ); }
 
   /** Store the projectname. */

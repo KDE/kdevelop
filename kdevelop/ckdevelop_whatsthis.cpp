@@ -29,7 +29,7 @@ void CKDevelop::initWhatsThis(){
 																															"Shows the open project dialog "
 																															"to select a project to be opened"));
 																																	
-	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_FILE_NEW),i18n("New file\n\n"
+	whats_this->add(toolBar(ID_KDLG_TOOLBAR)->getButton(ID_KDLG_FILE_NEW),i18n("New file\n\n"
 																													"Shows the New file dialog to "
 																													"create a new dialog definition file"));
 	

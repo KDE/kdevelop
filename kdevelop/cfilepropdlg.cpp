@@ -2,7 +2,6 @@
                           cfilepropdlg.cpp  -  description                              
                              -------------------                                         
 
-    version              :                                   
     begin                : Sat Oct 17 1998                                           
     copyright            : (C) 1998,1999 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
@@ -298,6 +297,13 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   // save the old-one
   if(saved_info !=0 ){ //ok,there is a old one,it !=0
     saved_info->type = prj->getTypeFromString( type_combo->currentText() ); 
+    if(QString(type_combo->currentText()) == "HEADER"){
+      saved_info->type = CPP_HEADER;
+    }
+    if(QString(type_combo->currentText()) == "SOURCE"){
+      saved_info->type = CPP_SOURCE;
+    }  
+    
     saved_info->dist = incdist_check->isChecked();
     saved_info->install = install_check->isChecked();
     saved_info->install_location = install_loc_edit->text();
@@ -361,10 +367,10 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   }
   install_loc_edit->setText(info->install_location);
   // save the current
-  cerr << "SAVE=INFO";
+  //  cerr << "SAVE=INFO";
   saved_info = info;
   
-  if (info->type == "PO"){
+  if (info->type == PO){
     incdist_check->setEnabled(false);
     install_loc_edit->setEnabled(false);
     install_check->setEnabled(false);
@@ -381,18 +387,24 @@ void CFilePropDlg::slotInstallCheckToogled(bool on){
     }
 }
 void CFilePropDlg::slotOk(){
-    if(saved_info !=0 ){ //ok,there is a old one,it !=0
-	saved_info->type = prj->getTypeFromString( type_combo->currentText() );
-	saved_info->dist = incdist_check->isChecked();
-	saved_info->install = install_check->isChecked();
-	saved_info->install_location = install_loc_edit->text();
+  if(saved_info !=0 ){ //ok,there is a old one,it !=0
+    saved_info->type = prj->getTypeFromString( type_combo->currentText()); 
+    if(QString(type_combo->currentText()) == "HEADER"){
+      saved_info->type = CPP_HEADER;
     }
+    if(QString(type_combo->currentText()) == "SOURCE"){
+      saved_info->type = CPP_SOURCE;
+    }  
     
-    TFileInfo* info;
-    for(info = file_list->first();info !=0;info = file_list->next()){
-	prj->writeFileInfo(*info);
-    }
-    prj->updateMakefilesAm();
-    accept();
-    
+    saved_info->dist = incdist_check->isChecked();
+    saved_info->install = install_check->isChecked();
+    saved_info->install_location = install_loc_edit->text();
+  }
+  
+  TFileInfo* info;
+  for(info = file_list->first();info !=0;info = file_list->next()){
+    prj->writeFileInfo(*info);
+  }
+  prj->updateMakefilesAm();
+  accept(); 
 }
