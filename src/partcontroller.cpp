@@ -143,9 +143,11 @@ void PartController::editDocument(const KURL &url, int lineNum)
   KParts::Factory *factory = 0;
   if (mimeType.startsWith("text/"))
   {
-    // TODO: once there is another editor, make the one used
-    // configurable
-    factory = findPartFactory(mimeType, "KTextEditor/Document");
+    KConfig *config = kapp->config();
+    config->setGroup("Editor");
+    QString editor = config->readEntry("EmbeddedKTextEditor", "");
+
+    factory = findPartFactory(mimeType, "KTextEditor/Document", editor);
   }
 
   if (!factory)
@@ -208,13 +210,27 @@ void PartController::setLineNumber(int lineNum)
 }
 
 
-KParts::Factory *PartController::findPartFactory(const QString &mimeType, const QString &partType)
+KParts::Factory *PartController::findPartFactory(const QString &mimeType, const QString &partType, const QString &preferredName)
 {
+  kdDebug() << "Preferred Name: " << preferredName << endl;
   KTrader::OfferList offers = KTrader::self()->query(mimeType, QString("'%1' in ServiceTypes").arg(partType));
 
   if (offers.count() > 0)
   {
-    KService::Ptr ptr = offers.first();
+    KService::Ptr ptr = 0;
+    // if there is a preferred plugin we'll take it
+    if ( !preferredName.isEmpty() ) {
+      KTrader::OfferList::Iterator it;
+      for (it = offers.begin(); it != offers.end(); ++it) {
+        if ((*it)->name() == preferredName) {
+          ptr = (*it);
+        }
+      }
+    }
+    // else we just take the first in the list
+    if ( !ptr ) {
+      KService::Ptr ptr = offers.first();
+    }
     return static_cast<KParts::Factory*>(KLibLoader::self()->factory(ptr->library().latin1()));
   }
 
