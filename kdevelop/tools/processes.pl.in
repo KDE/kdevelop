@@ -177,7 +177,16 @@ sub replaceValuesInFile {
   my $word = "";
   my $replace = "";
 
-  open (INPUT,"<$oldfile") || die "cannot open file: $oldfile";
+  if (-f $oldfile)
+  {
+    open (INPUT,"<$oldfile") || die "cannot open file: $oldfile";
+  }
+  else
+  {
+    printflush (STDERR, "Warning: Input file doesn't exist: $oldfile\n");
+    return;
+  }
+
   # setup filename replacement...
   $hashref->{"|FILENAME|"}=$oldfile;
   $hashref->{"|FILENAME|"}=$newfilename if ($newfilename);
@@ -427,7 +436,16 @@ sub processCppTemplate {
   chdir ($underDirectory);
   replaceValuesInFile(\%changings, "cpp", $file);
 
-  open (INPUT,"$file") || die "cannot open file: $file; $!";
+  if (-f $file)
+  {
+    open (INPUT,"$file") || die "cannot open file: $file; $!";
+  }
+  else
+  {
+    printflush (STDERR, "Warning: Template CPP file does not exist: $file\n");
+    return;
+  }
+
   open (OUTPUT,">>cpp");
   while ( defined ($line = <INPUT> )) {
     print OUTPUT $line;
@@ -448,7 +466,16 @@ sub processHeaderTemplate {
   chdir ($underDirectory);
   replaceValuesInFile(\%changings, "header", $file);
 
-  open (INPUT,"$file") || die "cannot open file: $file; $!";
+  if (-f $file)
+  {
+    open (INPUT,"$file") || die "cannot open file: $file; $!";
+  }
+  else
+  {
+    printflush (STDERR, "Warning: Template Header file does not exist: $file\n");
+    return;
+  }
+
   open (OUTPUT,">>header");
   while ( defined ($line = <INPUT> )) {
     print OUTPUT $line;
