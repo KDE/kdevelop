@@ -7,10 +7,12 @@ Name=Source Formatter Interface
 Name[ca]=Interfície del formatador de codi font
 Name[da]=Kildeformatering grænseflade
 Name[de]=Quelltext-Formatierer-Schnittstelle (KDevelop)
+Name[es]=Interfaz del formateador de código fuente
 Name[et]=Koodi vormindamise liides
 Name[fr]=Interface de formatage de code source
 Name[hu]=Forrásformázási felület
 Name[it]=Interfaccia per il formattatore del codice sorgente
+Name[ja]=ソースフォーマッタインタフェイス
 Name[nl]=Broncode formatteren-interface
 Name[pl]=Interfejs do programu formatowania źródeł
 Name[pt]=Interface de Formatação de Código
@@ -20,7 +22,7 @@ Name[sr]=Интерфејс форматера изворног кода
 Name[sr@Latn]=Интерфејс форматера изворног кода
 Name[sv]=Gränssnitt för källkodsformatering
 Name[ta]=வடிவமைப்பவரின் இடை விளிம்பு மூலம்
-Name[xx]=xxSource Formatter Interfacexx
+Name[tg]=Интерфейс қолабгузори коди берунӣ
 Name[zh_CN]=源代码格式化接口
 
 # versioning - prevent DLL hell

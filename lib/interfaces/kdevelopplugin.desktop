@@ -12,6 +12,7 @@ Name[fr]=Module externe de KDevelop
 Name[hi]=के-डेवलप प्लगइन
 Name[hu]=KDevelop-bővítőmodul
 Name[it]=Plugin di KDevelop
+Name[ja]=KDevelop プラグイン
 Name[nb]=KDevelop-programtillegg
 Name[pl]=Wtyczka do KDevelopa
 Name[pt]='Plugin' do KDevelop
@@ -22,7 +23,7 @@ Name[sr]=KDevelop-ов прикључак
 Name[sr@Latn]=KDevelop-ov dodatak
 Name[sv]=KDevelop insticksmodul
 Name[ta]=KDevelop  சொருகு
-Name[xx]=xxKDevelop Pluginxx
+Name[tg]=Модули KDevelop
 Name[zh_CN]=KDevelop 插件
 
 # versioning - prevent DLL hell

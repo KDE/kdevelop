@@ -6,10 +6,12 @@ X-KDE-Derived=KDevelop/Plugin
 Name=App Frontend Interface
 Name[da]=App forende-grænseflade
 Name[de]=Oberflächen-Schnittstelle (KDevelop)
+Name[es]=Interfaz de entorno de aplicación
 Name[et]=Rakenduse kasutajaliides
 Name[fr]=Interface graphique pour application
 Name[hu]=Alkalmazás kezelőfelülete
 Name[it]=Applicazione per le interfacce
+Name[ja]=App フロントエンドインタフェイス
 Name[pl]=Interfejs do aplikacji
 Name[pt]=Interface da Aplicação
 Name[pt_BR]=Interface Frontend para Aplicativos
@@ -18,7 +20,7 @@ Name[sr]=Интерфејс сучеља програма
 Name[sr@Latn]=Интерфејс сучеља програма
 Name[sv]=Programgränssnitt
 Name[ta]=ஆப் முன்னிருந்த இடைமுகம்
-Name[xx]=xxApp Frontend Interfacexx
+Name[tg]=Интерфейси мудири гузориш
 Name[zh_CN]=应用程序前端接口
 
 # versioning - prevent DLL hell

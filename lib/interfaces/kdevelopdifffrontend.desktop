@@ -13,6 +13,7 @@ Name[fr]=Interface du programme « Diff »
 Name[hi]=डिफ़ फ्रन्टएण्ड इंटरफ़ेस
 Name[hu]=Diff-kezelési felület
 Name[it]=Interfaccia a Diff
+Name[ja]=Diff フロントエンドインタフェイス
 Name[nb]=Grensesnitt for å finne forskjeller i filer
 Name[nl]=Diff Frontend-interface
 Name[pl]=Interfejs do programu diff 
@@ -24,7 +25,7 @@ Name[sr]=Интерфејс diff сучеља
 Name[sr@Latn]=Interfejs diff sučelja
 Name[sv]=Gränssnitt för jämförelse
 Name[ta]=டிப் முன்நிறுத்த இடைமுகம் 
-Name[xx]=xxDiff Frontend Interfacexx
+Name[tg]=Барномаи интерфейс барои ёфтани тағирпазирӣ
 Name[zh_CN]=Diff 前端接口
 
 # versioning - prevent DLL hell

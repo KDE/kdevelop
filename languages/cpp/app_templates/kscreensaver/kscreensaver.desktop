@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC} %i %m -caption "%c"
 Icon=%{APPNAMELC}
 Type=Application
@@ -18,6 +17,7 @@ Comment[hi]=केडीई स्क्रीन सेवर
 Comment[hu]=KDE képernyővédő
 Comment[is]=KDE Skjásvæfa
 Comment[it]=Uno screensaver per KDE
+Comment[ja]=KDE スクリーンセイバー
 Comment[nb]=En KDE-skjermsparer
 Comment[nl]=Een KDE-screensaver
 Comment[pl]=Wygaszacz ekranu KDE
@@ -29,6 +29,6 @@ Comment[sr]=KDE-ов чувар екрана
 Comment[sr@Latn]=KDE-ov čuvar ekrana
 Comment[sv]=En skärmsläckare för KDE
 Comment[ta]=A KDE திரைக் காப்பு 
-Comment[xx]=xxA KDE Screen Saverxx
+Comment[tg]=Муҳофизи экрани KDE 
 Comment[zh_CN]=一个 KDE 屏幕保护
 Terminal=0

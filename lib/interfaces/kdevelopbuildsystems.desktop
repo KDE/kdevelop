@@ -13,6 +13,7 @@ Name[fr]=Interface du système de construction de KDevelop
 Name[hi]=के-डेवलप बिल्ड सिस्टम इंटरफ़ेस
 Name[hu]=KDevelop fordításkezelő felület
 Name[it]=Interfaccia di compilazione di KDevelop
+Name[ja]=KDevelop ビルドシステムインタフェイス
 Name[nb]=Grensesnitt for KDevelop-byggesystemet
 Name[nl]=KDevelop Buildsysteem-interface
 Name[pl]=Interfejs KDevelopa do systemu budowania
@@ -24,7 +25,7 @@ Name[sr]=KDevelop-ов интерфејс система за изградњу
 Name[sr@Latn]=KDevelop-ov interfejs sistema za izgradnju
 Name[sv]=KDevelop byggsystemgränssnitt
 Name[ta]=கெடெவலப் அமை கணினி இடைமுகம்
-Name[xx]=xxKDevelop Build System Interfacexx
+Name[tg]=Барномаи интерфейси ҷамъкунӣ
 Name[zh_CN]=KDevelop编译系统接口
 
 [PropertyDef::X-KDevelop-BuildSystem]

@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=%{APPNAME}
-Name[xx]=xx%{APPNAME}xx
 Exec=%{APPNAMELC} %i %m -caption "%c"
 Icon=%{APPNAMELC}
 Type=Application
@@ -17,6 +16,7 @@ Comment[hi]=एक जावा केडीई के-पार्ट अनु
 Comment[hu]=Java-ban írt, KPart-alapú KDE-alkalmazás
 Comment[is]=Java KDE KPart forrit
 Comment[it]=Un'applicazione Java KDE KPart
+Comment[ja]= Java KDE KPart アプリケーション
 Comment[nb]=Et Java KDE KPart-program
 Comment[nl]=Een Java KDE KPart-toepassing
 Comment[pl]=Aplikacja Javy w KDE
@@ -28,6 +28,6 @@ Comment[sr]=Java KDE KPart програм
 Comment[sr@Latn]=Java KDE KPart program
 Comment[sv]=Ett Java KDE Kpart-program
 Comment[ta]=ஜாவா கெடி கெபாகம் பயன்பாடு
-Comment[xx]=xxA Java KDE KPart Applicationxx
+Comment[tg]=Гузориш KPart барои KDE дар Java 
 Comment[zh_CN]=一个 Java KDE KPart 应用程序
 Terminal=0
