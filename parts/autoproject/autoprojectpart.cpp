@@ -237,8 +237,8 @@ QStringList AutoProjectPart::allFiles()
 void AutoProjectPart::setWantautotools()
 {
     QDomDocument &dom = *projectDom();
-    QDomElement el  = DomUtil::elementByPath(dom, "/kdevautoproject");
-    if ( el.namedItem("make/envvars").isNull() ) {
+    QDomElement el  = DomUtil::elementByPath(dom, "/kdevautoproject/make");
+    if ( el.namedItem("envvars").isNull() ) {
         DomUtil::PairList list;
         list << DomUtil::Pair("WANT_AUTOCONF_2_5", "1");
         list << DomUtil::Pair("WANT_AUTOMAKE_1_6", "1");
