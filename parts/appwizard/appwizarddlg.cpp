@@ -89,7 +89,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         info->showFileAfterGeneration = config.readEntry("ShowFileAfterGeneration");
         info->fileTemplates = config.readEntry("FileTemplates");
         QString destDir = config.readEntry("DefaultDestinatonDir", defaultProjectsDir);
-        destDir.replace(QString("HOMEDIR"), QDir::homeDirPath());
+        destDir.replace(QRegExp("HOMEDIR"), QDir::homeDirPath());
         info->defaultDestDir = destDir;
         QString category = config.readEntry("Category");
         // format category to a unique status
