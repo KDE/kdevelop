@@ -316,7 +316,7 @@ KDevMainWindow *CvsServicePartImpl::mainWindow() const
 
 QString CvsServicePartImpl::projectDirectory() const
 {
-    return m_part->project()->projectDirectory();
+    return m_part->project() ? m_part->project()->projectDirectory() : QString::null;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

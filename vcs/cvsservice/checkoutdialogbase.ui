@@ -104,7 +104,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="text">
-                                <string>&amp;Server path (i.e. :pserver:marios@cvs.kde.org:/h:ome/kde):</string>
+                                <string>&amp;Server path (i.e. :pserver:marios@cvs.kde.org:/home/kde):</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>serverPathLineEdit</cstring>
