@@ -1,6 +1,7 @@
 # Here resides the class view part.
 
-INCLUDES = -I$(top_srcdir)/kdevelop/lib/general -I$(top_srcdir)/kdevelop/lib/projectmanagement $(all_includes)
+INCLUDES = -I$(top_srcdir)/kdevelop/lib/general -I$(top_srcdir)/kdevelop/lib/projectmanagement \
+					 -I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler $(all_includes)
 
 lib_LTLIBRARIES = libkdevprojectview.la
 libkdevprojectview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
