@@ -513,6 +513,8 @@ void MainWindowIDEAl::slotTabSelected(QWidget *view)
   if ( !switching() ) {
     m_timeStamps[view] = QDateTime::currentDateTime();
   }
+
+  raiseEditor();
 }
 
 //=============== slotBufferSelected ===============//
