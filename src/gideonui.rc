@@ -115,20 +115,14 @@
   <text>Main Toolbar</text>
   <Action name="project_open" />
   <DefineGroup name="project_operations"/>
-  <Separator/>
   <DefineGroup name="file_operations"/>
-  <Separator/>
   <DefineGroup name="edit_operations"/>
-  <Separator/>
   <DefineGroup name="find_operations"/>
   <Separator/>
   <Action name="tree_view"/>
   <Action name="output_view"/>
-  <Separator/>
   <DefineGroup name="view_operations"/>
-  <Separator/>
   <Merge/>
-  <Separator/>
   <Action name="help_whats_this"/>
 </ToolBar>
 
