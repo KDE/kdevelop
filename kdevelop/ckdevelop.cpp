@@ -1036,9 +1036,10 @@ void CKDevelop::slotDebugStop()
 //  dbg_widget->clear();
 #endif
   if (m_docViewManager->currentEditView())
+  {
     m_docViewManager->currentEditView()->clearStepLine();
-
-  brkptManager->refreshBP(m_docViewManager->currentEditView()->getName());
+    brkptManager->refreshBP(m_docViewManager->currentEditView()->getName());
+  }
 
   o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
   o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
@@ -1056,10 +1057,10 @@ void CKDevelop::slotDebugStop()
 void CKDevelop::slotDebugShowStepInSource(const QString& filename,int linenumber,
                                           const QString& /*address*/)
 {
-  if (!m_docViewManager->currentEditView()) return;
   if (filename.isEmpty())
   {
-    m_docViewManager->currentEditView()->clearStepLine();
+    if (m_docViewManager->currentEditView())
+      m_docViewManager->currentEditView()->clearStepLine();
   }
   else
   {
@@ -2610,7 +2611,7 @@ void CKDevelop::slotNewLineColumn()
 {
   if (!m_docViewManager->currentEditView()) return;
   QString linenumber;
-  linenumber = i18n("Line: %1 Col: %2").arg(m_docViewManager->currentEditView()->currentLine() +1).arg(m_docViewManager->currentEditView()->currentColumn() +1);
+  linenumber = i18n("Line: %1 Col: %2").arg(m_docViewManager->currentEditView ()->currentLine() +1).arg(m_docViewManager->currentEditView()->currentColumn() +1);
   statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo()
