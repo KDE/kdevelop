@@ -1,0 +1,17 @@
+<!DOCTYPE kdevelop>
+<kdevelop>
+ <general>
+  <author>$AUTHOR$</author>
+  <email>$EMAIL$</email>
+  <projectmanagement>KDevCustomProject</projectmanagement>
+  <primarylanguage>Java</primarylanguage>
+  <ignoreparts>
+   <part>KDevDebugger</part>
+  </ignoreparts>
+ </general>
+ <kdevcustomproject>
+  <build>
+   <buildtool>ant</buildtool>
+  </build>
+ </kdevcustomproject>
+</kdevelop>
