@@ -594,6 +594,10 @@ void VarItem::checkForRequests()
     ((VarTree*)listView())->emitExpandUserItem(this,
            QString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
            fullName().data()));
+  if (strncmp(cache_, "p_bs_data = 0x", 14) == 0)      // Eeeek - too small
+    ((VarTree*)listView())->emitExpandUserItem(this,
+           QString().sprintf("%s.p_bs_data.m_string",
+           fullName().data()));
 }
 
 // **************************************************************************
