@@ -849,6 +849,9 @@ CppCodeCompletion::completeText( )
 	    computeCompletionEntryList( entryList, ctx, isInstance );
 	    computeCompletionEntryList( entryList, m_pSupport->codeModel()->globalNamespace(), isInstance );
 
+            if( m_pSupport->codeCompletionConfig()->includeGlobalFunctions() )
+	        computeCompletionEntryList( entryList, QStringList(), false );
+
 	    if( this_type.size() )
 		computeCompletionEntryList( entryList, this_type, isInstance );
 
