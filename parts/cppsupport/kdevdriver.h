@@ -10,6 +10,9 @@
 #include <driver.h>
 #include <qprocess.h>
 
+#include <cstdlib>
+#include <unistd.h>
+
 class KDevDriver: public Driver
 {
 public:

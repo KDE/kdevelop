@@ -42,9 +42,6 @@
 #include <qtextstream.h>
 #include <qprocess.h>
 
-#include <stdlib.h>
-#include <unistd.h>
-
 class KDevSourceProvider: public SourceProvider
 {
 public:
