@@ -1,407 +1,384 @@
 <!DOCTYPE kdeveloptoc>
 <kdeveloptoc>
 <title>Clanlib</title>
-<base href="http://www.clanlib.org/ClanLib-0.7.cgi/" />
-<tocsect1 name="Overview" url="Overview/index.html">
-	<tocsect2 name="Getting started" url="Overview/getting_started.html" />
-	<tocsect2 name="Display overview" url="Overview/display-1.html" />
-	<tocsect2 name="Resources" url="Overview/resources-1.html" />
-	<tocsect2 name="Sound overview" url="Overview/sound_overview.html" />
-	<tocsect2 name="Signals &amp; Slots overview" url="signals.html" />
-	<tocsect2 name="Sprites overview" url="sprites_overview.html" />
-	<tocsect2 name="Font overview" url="font_overview-1.html" />
-	<tocsect2 name="Loading graphics overview" url="loading_graphics.html" />
-	<tocsect2 name="OpenGL overview" url="opengl_overview.html" />
-	<tocsect2 name="GUI overview" url="gui_overview.html" />
-	<tocsect2 name="GUI Theme/Style creation" url="gui_theme.html" />
-	<tocsect2 name="GUI XML creation" url="gui_resources.html" />
-	<tocsect2 name="Network overview" url="network_overview.html" />
-	<tocsect2 name="Smart pointers" url="pointers.html" />
-	<tocsect2 name="Post-Mortem Debugging" url="crash_reporter.html" />
-	<tocsect2 name="Core resources" url="core_resources.html" />
-	<tocsect2 name="Font resources" url="font_resources.html" />
-	<tocsect2 name="Sprites resources" url="sprites_resources.html" />
-	<tocsect2 name="Surface resources" url="surface_resources.html" />
-	<tocsect2 name="Sample resources" url="sample_resources.html" />
-	<tocsect2 name="Tips &amp; Tricks" url="tipsandtricks.html" />
+<base href="http://www.clanlib.org/docs/" />
+<tocsect1 name="Overview" url="overview/index.html">
+	<tocsect2 name="Getting started" url="overview/getting_started.html" />
+	<tocsect2 name="Display overview" url="overview/display-1.html" />
+	<tocsect2 name="Resources" url="overview/resources-1.html" />
+	<tocsect2 name="Sound overview" url="overview/sound_overview.html" />
+	<tocsect2 name="Signals &amp; Slots overview" url="overview/signals.html" />
+	<tocsect2 name="Sprites overview" url="overview/sprites_overview.html" />
+	<tocsect2 name="Font overview" url="overview/font_overview-1.html" />
+	<tocsect2 name="Loading graphics overview" url="overview/loading_graphics.html" />
+	<tocsect2 name="OpenGL overview" url="overview/opengl_overview.html" />
+	<tocsect2 name="GUI overview" url="overview/gui_overview.html" />
+	<tocsect2 name="GUI Theme/Style creation" url="overview/gui_theme.html" />
+	<tocsect2 name="GUI XML creation" url="overview/gui_resources.html" />
+	<tocsect2 name="Network overview" url="overview/network_overview.html" />
+	<tocsect2 name="Smart pointers" url="overview/pointers.html" />
+	<tocsect2 name="Post-Mortem Debugging" url="overview/crash_reporter.html" />
+	<tocsect2 name="Core resources" url="overview/core_resources.html" />
+	<tocsect2 name="Font resources" url="overview/font_resources.html" />
+	<tocsect2 name="Sprites resources" url="overview/sprites_resources.html" />
+	<tocsect2 name="Surface resources" url="overview/surface_resources.html" />
+	<tocsect2 name="Sample resources" url="overview/sample_resources.html" />
+	<tocsect2 name="Tips &amp; Tricks" url="overview/tipsandtricks.html" />
 </tocsect1>
-<tocsect1 name="API Reference" url="Reference/html/modules.html">
-	<tocsect2 name="App">
-		<tocsect3 name="System">
-			<tocsect4 name="CL_ClanApplication" url="Reference/html/CL_ClanApplication.html" />
+<tocsect1 name="API Reference" url="reference/index.html">
+	<tocsect2 name="App" url="">
+		<tocsect3 name="System" url="">
+			<tocsect4 name="CL_ClanApplication" url="reference/CL_ClanApplication.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="Core">
 		<tocsect3 name="I/O Data">
-			<tocsect4 name="CL_Directory" url="Reference/html/CL_Directory.html" />
-			<tocsect4 name="CL_DirectoryScanner" url="Reference/html/CL_DirectoryScanner.html" />
-			<tocsect4 name="CL_Endian" url="Reference/html/CL_Endian.html" />
-			<tocsect4 name="CL_ImplementationObject" url="Reference/html/CL_ImplementationObject.html" />
-			<tocsect4 name="CL_InputSource" url="Reference/html/CL_InputSource.html" />
-			<tocsect4 name="CL_InputSourceProvider" url="Reference/html/CL_InputSourceProvider.html" />
-			<tocsect4 name="CL_InputSourceProvider_File" url="Reference/html/CL_InputSourceProvider_File.html" />
-			<tocsect4 name="CL_InputSource_File" url="Reference/html/CL_InputSource_File.html" />
-			<tocsect4 name="CL_InputSource_Memory" url="Reference/html/CL_InputSource_Memory.html" />
-			<tocsect4 name="CL_InputSource_Zipped" url="Reference/html/CL_InputSource_Zipped.html" />
-			<tocsect4 name="CL_OutputSource" url="Reference/html/CL_OutputSource.html" />
-			<tocsect4 name="CL_OutputSourceProvider" url="Reference/html/CL_OutputSourceProvider.html" />
-			<tocsect4 name="CL_OutputSource_File" url="Reference/html/CL_OutputSource_File.html" />
-			<tocsect4 name="CL_OutputSource_Memory" url="Reference/html/CL_OutputSource_Memory.html" />
-			<tocsect4 name="CL_OutputSource_Zipped" url="Reference/html/CL_OutputSource_Zipped.html" />
-			<tocsect4 name="CL_Zip_Archive" url="Reference/html/CL_Zip_Archive.html" />
-			<tocsect4 name="CL_Zip_FileEntry" url="Reference/html/CL_Zip_FileEntry.html" />
+			<tocsect4 name="CL_Directory" url="reference/CL_Directory.html" />
+			<tocsect4 name="CL_DirectoryScanner" url="reference/CL_DirectoryScanner.html" />
+			<tocsect4 name="CL_Endian" url="reference/CL_Endian.html" />
+			<tocsect4 name="CL_InputSource" url="reference/CL_InputSource.html" />
+			<tocsect4 name="CL_InputSourceProvider" url="reference/CL_InputSourceProvider.html" />
+			<tocsect4 name="CL_InputSourceProvider_File" url="reference/CL_InputSourceProvider_File.html" />
+			<tocsect4 name="CL_InputSource_File" url="reference/CL_InputSource_File.html" />
+			<tocsect4 name="CL_InputSource_Memory" url="reference/CL_InputSource_Memory.html" />
+			<tocsect4 name="CL_InputSource_Zipped" url="reference/CL_InputSource_Zipped.html" />
+			<tocsect4 name="CL_OutputSource" url="reference/CL_OutputSource.html" />
+			<tocsect4 name="CL_OutputSourceProvider" url="reference/CL_OutputSourceProvider.html" />
+			<tocsect4 name="CL_OutputSource_File" url="reference/CL_OutputSource_File.html" />
+			<tocsect4 name="CL_OutputSource_Memory" url="reference/CL_OutputSource_Memory.html" />
+			<tocsect4 name="CL_OutputSource_Zipped" url="reference/CL_OutputSource_Zipped.html" />
+			<tocsect4 name="CL_Zip_Archive" url="reference/CL_Zip_Archive.html" />
+			<tocsect4 name="CL_Zip_FileEntry" url="reference/CL_Zip_FileEntry.html" />
 		</tocsect3>
 		<tocsect3 name="Library">
-			<tocsect4 name="CL_LibraryFactory" url="Reference/html/CL_LibraryFactory.html" />
-			<tocsect4 name="CL_LibraryLoader" url="Reference/html/CL_LibraryLoader.html" />
-			<tocsect4 name="CL_LibraryManager" url="Reference/html/CL_LibraryManager.html" />
+			<tocsect4 name="CL_LibraryFactory" url="reference/CL_LibraryFactory.html" />
+			<tocsect4 name="CL_LibraryLoader" url="reference/CL_LibraryLoader.html" />
+			<tocsect4 name="CL_LibraryManager" url="reference/CL_LibraryManager.html" />
 		</tocsect3>
 		<tocsect3 name="Math">
-			<tocsect4 name="CL_NumberPool" url="Reference/html/CL_NumberPool.html" />
-			<tocsect4 name="CL_Point" url="Reference/html/CL_Point.html" />
-			<tocsect4 name="CL_Pointf" url="Reference/html/CL_Pointf.html" />
-			<tocsect4 name="CL_Rect" url="Reference/html/CL_Rect.html" />
-			<tocsect4 name="CL_Rectf" url="Reference/html/CL_Rectf.html" />
-			<tocsect4 name="CL_Size" url="Reference/html/CL_Size.html" />
-			<tocsect4 name="CL_Sizef" url="Reference/html/CL_Sizef.html" />
-			<tocsect4 name="CL_Vector" url="Reference/html/CL_Vector.html" />
-			<tocsect4 name="CL_Vector2" url="Reference/html/CL_Vector2.html" />
+			<tocsect4 name="CL_DelauneyTriangulator" url="reference/CL_DelauneyTriangulator.html" />
+			<tocsect4 name="CL_DelauneyTriangulator_Triangle" url="reference/CL_DelauneyTriangulator_Triangle.html" />
+			<tocsect4 name="CL_DelauneyTriangulator_Vertex" url="reference/CL_DelauneyTriangulator_Vertex.html" />
+			<tocsect4 name="CL_LineMath" url="reference/CL_LineMath.html" />
+			<tocsect4 name="CL_Matrix4x4" url="reference/CL_Matrix4x4.html" />
+			<tocsect4 name="CL_NumberPool" url="reference/CL_NumberPool.html" />
+			<tocsect4 name="CL_OutlineTriangulator" url="reference/CL_OutlineTriangulator.html" />
+			<tocsect4 name="CL_Point" url="reference/CL_Point.html" />
+			<tocsect4 name="CL_Pointf" url="reference/CL_Pointf.html" />
+			<tocsect4 name="CL_Quad" url="reference/CL_Quad.html" />
+			<tocsect4 name="CL_Rect" url="reference/CL_Rect.html" />
+			<tocsect4 name="CL_Rectf" url="reference/CL_Rectf.html" />
+			<tocsect4 name="CL_Size" url="reference/CL_Size.html" />
+			<tocsect4 name="CL_Sizef" url="reference/CL_Sizef.html" />
+			<tocsect4 name="CL_TriangleMath" url="reference/CL_TriangleMath.html" />
+			<tocsect4 name="CL_Vector" url="reference/CL_Vector.html" />
+			<tocsect4 name="CL_Vector2" url="reference/CL_Vector2.html" />
 		</tocsect3>
 		<tocsect3 name="Resources">
-			<tocsect4 name="CL_Boolean" url="Reference/html/CL_Boolean.html" />
-			<tocsect4 name="CL_InputSource_Raw" url="Reference/html/CL_InputSource_Raw.html" />
-			<tocsect4 name="CL_Integer" url="Reference/html/CL_Integer.html" />
-			<tocsect4 name="CL_Raw" url="Reference/html/CL_Raw.html" />
-			<tocsect4 name="CL_Resource" url="Reference/html/CL_Resource.html" />
-			<tocsect4 name="CL_ResourceData" url="Reference/html/CL_ResourceData.html" />
-			<tocsect4 name="CL_ResourceData_Boolean" url="Reference/html/CL_ResourceData_Boolean.html" />
-			<tocsect4 name="CL_ResourceData_Integer" url="Reference/html/CL_ResourceData_Integer.html" />
-			<tocsect4 name="CL_ResourceData_Raw" url="Reference/html/CL_ResourceData_Raw.html" />
-			<tocsect4 name="CL_ResourceData_String" url="Reference/html/CL_ResourceData_String.html" />
-			<tocsect4 name="CL_ResourceManager" url="Reference/html/CL_ResourceManager.html" />
+			<tocsect4 name="CL_Boolean" url="reference/CL_Boolean.html" />
+			<tocsect4 name="CL_Float" url="reference/CL_Float.html" />
+			<tocsect4 name="CL_InputSource_Raw" url="reference/CL_InputSource_Raw.html" />
+			<tocsect4 name="CL_Integer" url="reference/CL_Integer.html" />
+			<tocsect4 name="CL_Raw" url="reference/CL_Raw.html" />
+			<tocsect4 name="CL_Resource" url="reference/CL_Resource.html" />
+			<tocsect4 name="CL_ResourceData" url="reference/CL_ResourceData.html" />
+			<tocsect4 name="CL_ResourceData_Boolean" url="reference/CL_ResourceData_Boolean.html" />
+			<tocsect4 name="CL_ResourceData_Float" url="reference/CL_ResourceData_Float.html" />
+			<tocsect4 name="CL_ResourceData_Integer" url="reference/CL_ResourceData_Integer.html" />
+			<tocsect4 name="CL_ResourceData_Raw" url="reference/CL_ResourceData_Raw.html" />
+			<tocsect4 name="CL_ResourceData_String" url="reference/CL_ResourceData_String.html" />
+			<tocsect4 name="CL_ResourceManager" url="reference/CL_ResourceManager.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_Assert" url="Reference/html/CL_Assert.html" />
-			<tocsect4 name="CL_CallStack" url="Reference/html/CL_CallStack.html" />
-			<tocsect4 name="CL_Clonable" url="Reference/html/CL_Clonable.html" />
-			<tocsect4 name="CL_CommandLine" url="Reference/html/CL_CommandLine.html" />
-			<tocsect4 name="CL_ConsoleWindow" url="Reference/html/CL_ConsoleWindow.html" />
-			<tocsect4 name="CL_CrashReporter" url="Reference/html/CL_CrashReporter.html" />
-			<tocsect4 name="CL_Error" url="Reference/html/CL_Error.html" />
-			<tocsect4 name="CL_EventListener" url="Reference/html/CL_EventListener.html" />
-			<tocsect4 name="CL_EventTrigger" url="Reference/html/CL_EventTrigger.html" />
-			<tocsect4 name="CL_KeepAlive" url="Reference/html/CL_KeepAlive.html" />
-			<tocsect4 name="CL_Log" url="Reference/html/CL_Log.html" />
-			<tocsect4 name="CL_Mutex" url="Reference/html/CL_Mutex.html" />
-			<tocsect4 name="CL_MutexSection" url="Reference/html/CL_MutexSection.html" />
-			<tocsect4 name="CL_Runnable" url="Reference/html/CL_Runnable.html" />
-			<tocsect4 name="CL_SetupCore" url="Reference/html/CL_SetupCore.html" />
-			<tocsect4 name="CL_String" url="Reference/html/CL_String.html" />
-			<tocsect4 name="CL_System" url="Reference/html/CL_System.html" />
-			<tocsect4 name="CL_Thread" url="Reference/html/CL_Thread.html" />
-			<tocsect4 name="CL_Timer" url="Reference/html/CL_Timer.html" />
+			<tocsect4 name="CL_Assert" url="reference/CL_Assert.html" />
+			<tocsect4 name="CL_CallStack" url="reference/CL_CallStack.html" />
+			<tocsect4 name="CL_Clonable" url="reference/CL_Clonable.html" />
+			<tocsect4 name="CL_CommandLine" url="reference/CL_CommandLine.html" />
+			<tocsect4 name="CL_ConsoleWindow" url="reference/CL_ConsoleWindow.html" />
+			<tocsect4 name="CL_CrashReporter" url="reference/CL_CrashReporter.html" />
+			<tocsect4 name="CL_Error" url="reference/CL_Error.html" />
+			<tocsect4 name="CL_EventListener" url="reference/CL_EventListener.html" />
+			<tocsect4 name="CL_EventTrigger" url="reference/CL_EventTrigger.html" />
+			<tocsect4 name="CL_KeepAlive" url="reference/CL_KeepAlive.html" />
+			<tocsect4 name="CL_Log" url="reference/CL_Log.html" />
+			<tocsect4 name="CL_Mutex" url="reference/CL_Mutex.html" />
+			<tocsect4 name="CL_MutexSection" url="reference/CL_MutexSection.html" />
+			<tocsect4 name="CL_Runnable" url="reference/CL_Runnable.html" />
+			<tocsect4 name="CL_SetupCore" url="reference/CL_SetupCore.html" />
+			<tocsect4 name="CL_String" url="reference/CL_String.html" />
+			<tocsect4 name="CL_System" url="reference/CL_System.html" />
+			<tocsect4 name="CL_Thread" url="reference/CL_Thread.html" />
+			<tocsect4 name="CL_Timer" url="reference/CL_Timer.html" />
 		</tocsect3>
 		<tocsect3 name="XML">
-			<tocsect4 name="CL_DomAttr" url="Reference/html/CL_DomAttr.html" />
-			<tocsect4 name="CL_DomCDATASection" url="Reference/html/CL_DomCDATASection.html" />
-			<tocsect4 name="CL_DomCharacterData" url="Reference/html/CL_DomCharacterData.html" />
-			<tocsect4 name="CL_DomComment" url="Reference/html/CL_DomComment.html" />
-			<tocsect4 name="CL_DomDocument" url="Reference/html/CL_DomDocument.html" />
-			<tocsect4 name="CL_DomDocumentFragment" url="Reference/html/CL_DomDocumentFragment.html" />
-			<tocsect4 name="CL_DomDocumentType" url="Reference/html/CL_DomDocumentType.html" />
-			<tocsect4 name="CL_DomElement" url="Reference/html/CL_DomElement.html" />
-			<tocsect4 name="CL_DomEntity" url="Reference/html/CL_DomEntity.html" />
-			<tocsect4 name="CL_DomEntityReference" url="Reference/html/CL_DomEntityReference.html" />
-			<tocsect4 name="CL_DomException" url="Reference/html/CL_DomException.html" />
-			<tocsect4 name="CL_DomImplementation" url="Reference/html/CL_DomImplementation.html" />
-			<tocsect4 name="CL_DomNamedNodeMap" url="Reference/html/CL_DomNamedNodeMap.html" />
-			<tocsect4 name="CL_DomNode" url="Reference/html/CL_DomNode.html" />
-			<tocsect4 name="CL_DomNodeList" url="Reference/html/CL_DomNodeList.html" />
-			<tocsect4 name="CL_DomNotation" url="Reference/html/CL_DomNotation.html" />
-			<tocsect4 name="CL_DomProcessingInstruction" url="Reference/html/CL_DomProcessingInstruction.html" />
-			<tocsect4 name="CL_DomText" url="Reference/html/CL_DomText.html" />
-			<tocsect4 name="CL_XMLToken" url="Reference/html/CL_XMLToken.html" />
-			<tocsect4 name="CL_XMLTokenLoad" url="Reference/html/CL_XMLTokenLoad.html" />
-			<tocsect4 name="CL_XMLTokenSave" url="Reference/html/CL_XMLTokenSave.html" />
-			<tocsect4 name="CL_XMLTokenString" url="Reference/html/CL_XMLTokenString.html" />
-			<tocsect4 name="CL_XMLTokenizer" url="Reference/html/CL_XMLTokenizer.html" />
-			<tocsect4 name="CL_XMLWriter" url="Reference/html/CL_XMLWriter.html" />
+			<tocsect4 name="CL_DomAttr" url="reference/CL_DomAttr.html" />
+			<tocsect4 name="CL_DomCDATASection" url="reference/CL_DomCDATASection.html" />
+			<tocsect4 name="CL_DomCharacterData" url="reference/CL_DomCharacterData.html" />
+			<tocsect4 name="CL_DomComment" url="reference/CL_DomComment.html" />
+			<tocsect4 name="CL_DomDocument" url="reference/CL_DomDocument.html" />
+			<tocsect4 name="CL_DomDocumentFragment" url="reference/CL_DomDocumentFragment.html" />
+			<tocsect4 name="CL_DomDocumentType" url="reference/CL_DomDocumentType.html" />
+			<tocsect4 name="CL_DomElement" url="reference/CL_DomElement.html" />
+			<tocsect4 name="CL_DomEntity" url="reference/CL_DomEntity.html" />
+			<tocsect4 name="CL_DomEntityReference" url="reference/CL_DomEntityReference.html" />
+			<tocsect4 name="CL_DomException" url="reference/CL_DomException.html" />
+			<tocsect4 name="CL_DomImplementation" url="reference/CL_DomImplementation.html" />
+			<tocsect4 name="CL_DomNamedNodeMap" url="reference/CL_DomNamedNodeMap.html" />
+			<tocsect4 name="CL_DomNode" url="reference/CL_DomNode.html" />
+			<tocsect4 name="CL_DomNodeList" url="reference/CL_DomNodeList.html" />
+			<tocsect4 name="CL_DomNotation" url="reference/CL_DomNotation.html" />
+			<tocsect4 name="CL_DomProcessingInstruction" url="reference/CL_DomProcessingInstruction.html" />
+			<tocsect4 name="CL_DomText" url="reference/CL_DomText.html" />
+			<tocsect4 name="CL_XMLToken" url="reference/CL_XMLToken.html" />
+			<tocsect4 name="CL_XMLTokenLoad" url="reference/CL_XMLTokenLoad.html" />
+			<tocsect4 name="CL_XMLTokenSave" url="reference/CL_XMLTokenSave.html" />
+			<tocsect4 name="CL_XMLTokenString" url="reference/CL_XMLTokenString.html" />
+			<tocsect4 name="CL_XMLTokenizer" url="reference/CL_XMLTokenizer.html" />
+			<tocsect4 name="CL_XMLWriter" url="reference/CL_XMLWriter.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="Display">
+		<tocsect3 name="Collision">
+			<tocsect4 name="CL_CollisionOutline" url="reference/CL_CollisionOutline.html" />
+			<tocsect4 name="CL_Contour" url="reference/CL_Contour.html" />
+			<tocsect4 name="CL_OutlineCircle" url="reference/CL_OutlineCircle.html" />
+			<tocsect4 name="CL_OutlineProvider" url="reference/CL_OutlineProvider.html" />
+			<tocsect4 name="CL_OutlineProviderBitmap" url="reference/CL_OutlineProviderBitmap.html" />
+			<tocsect4 name="CL_OutlineProviderFile" url="reference/CL_OutlineProviderFile.html" />
+		</tocsect3>
 		<tocsect3 name="Display 2D">
-			<tocsect4 name="CL_Canvas" url="Reference/html/CL_Canvas.html" />
-			<tocsect4 name="CL_Color" url="Reference/html/CL_Color.html" />
-			<tocsect4 name="CL_Display" url="Reference/html/CL_Display.html" />
-			<tocsect4 name="CL_DisplayMode" url="Reference/html/CL_DisplayMode.html" />
-			<tocsect4 name="CL_DisplayWindow" url="Reference/html/CL_DisplayWindow.html" />
-			<tocsect4 name="CL_DisplayWindowDescription" url="Reference/html/CL_DisplayWindowDescription.html" />
-			<tocsect4 name="CL_FramerateCounter" url="Reference/html/CL_FramerateCounter.html" />
-			<tocsect4 name="CL_Gradient" url="Reference/html/CL_Gradient.html" />
-			<tocsect4 name="CL_GraphicContext" url="Reference/html/CL_GraphicContext.html" />
-			<tocsect4 name="CL_Palette" url="Reference/html/CL_Palette.html" />
-			<tocsect4 name="CL_PixelBuffer" url="Reference/html/CL_PixelBuffer.html" />
-			<tocsect4 name="CL_PixelFormat" url="Reference/html/CL_PixelFormat.html" />
-			<tocsect4 name="CL_RLESurface" url="Reference/html/CL_RLESurface.html" />
-			<tocsect4 name="CL_Surface" url="Reference/html/CL_Surface.html" />
+			<tocsect4 name="CL_Canvas" url="reference/CL_Canvas.html" />
+			<tocsect4 name="CL_Color" url="reference/CL_Color.html" />
+			<tocsect4 name="CL_Display" url="reference/CL_Display.html" />
+			<tocsect4 name="CL_DisplayMode" url="reference/CL_DisplayMode.html" />
+			<tocsect4 name="CL_DisplayWindow" url="reference/CL_DisplayWindow.html" />
+			<tocsect4 name="CL_DisplayWindowDescription" url="reference/CL_DisplayWindowDescription.html" />
+			<tocsect4 name="CL_FramerateCounter" url="reference/CL_FramerateCounter.html" />
+			<tocsect4 name="CL_Gradient" url="reference/CL_Gradient.html" />
+			<tocsect4 name="CL_GraphicContext" url="reference/CL_GraphicContext.html" />
+			<tocsect4 name="CL_Palette" url="reference/CL_Palette.html" />
+			<tocsect4 name="CL_PixelBuffer" url="reference/CL_PixelBuffer.html" />
+			<tocsect4 name="CL_PixelFormat" url="reference/CL_PixelFormat.html" />
+			<tocsect4 name="CL_RLESurface" url="reference/CL_RLESurface.html" />
+			<tocsect4 name="CL_Surface" url="reference/CL_Surface.html" />
+			<tocsect4 name="CL_Surface_DrawParams1" url="reference/CL_Surface_DrawParams1.html" />
+			<tocsect4 name="CL_Surface_DrawParams2" url="reference/CL_Surface_DrawParams2.html" />
 		</tocsect3>
 		<tocsect3 name="Fonts">
-			<tocsect4 name="CL_Font" url="Reference/html/CL_Font.html" />
-			<tocsect4 name="CL_GlyphBuffer" url="Reference/html/CL_GlyphBuffer.html" />
-			<tocsect4 name="CL_TextStyler" url="Reference/html/CL_TextStyler.html" />
+			<tocsect4 name="CL_Font" url="reference/CL_Font.html" />
+			<tocsect4 name="CL_GlyphBuffer" url="reference/CL_GlyphBuffer.html" />
+			<tocsect4 name="CL_TextStyler" url="reference/CL_TextStyler.html" />
 		</tocsect3>
 		<tocsect3 name="Input">
-			<tocsect4 name="CL_InputBuffer" url="Reference/html/CL_InputBuffer.html" />
-			<tocsect4 name="CL_InputButton" url="Reference/html/CL_InputButton.html" />
-			<tocsect4 name="CL_InputContext" url="Reference/html/CL_InputContext.html" />
-			<tocsect4 name="CL_InputDevice" url="Reference/html/CL_InputDevice.html" />
-			<tocsect4 name="CL_InputEvent" url="Reference/html/CL_InputEvent.html" />
-			<tocsect4 name="CL_Joystick" url="Reference/html/CL_Joystick.html" />
-			<tocsect4 name="CL_KeyBinding" url="Reference/html/CL_KeyBinding.html" />
-			<tocsect4 name="CL_Keyboard" url="Reference/html/CL_Keyboard.html" />
-			<tocsect4 name="CL_Mouse" url="Reference/html/CL_Mouse.html" />
+			<tocsect4 name="CL_InputBuffer" url="reference/CL_InputBuffer.html" />
+			<tocsect4 name="CL_InputButton" url="reference/CL_InputButton.html" />
+			<tocsect4 name="CL_InputContext" url="reference/CL_InputContext.html" />
+			<tocsect4 name="CL_InputDevice" url="reference/CL_InputDevice.html" />
+			<tocsect4 name="CL_InputEvent" url="reference/CL_InputEvent.html" />
+			<tocsect4 name="CL_Joystick" url="reference/CL_Joystick.html" />
+			<tocsect4 name="CL_KeyBinding" url="reference/CL_KeyBinding.html" />
+			<tocsect4 name="CL_Keyboard" url="reference/CL_Keyboard.html" />
+			<tocsect4 name="CL_Mouse" url="reference/CL_Mouse.html" />
 		</tocsect3>
 		<tocsect3 name="Sprites">
-			<tocsect4 name="CL_Sprite" url="Reference/html/CL_Sprite.html" />
-			<tocsect4 name="CL_SpriteDescription" url="Reference/html/CL_SpriteDescription.html" />
-			<tocsect4 name="CL_SpritePacker" url="Reference/html/CL_SpritePacker.html" />
+			<tocsect4 name="CL_Sprite" url="reference/CL_Sprite.html" />
+			<tocsect4 name="CL_SpriteDescription" url="reference/CL_SpriteDescription.html" />
+			<tocsect4 name="CL_SpritePacker" url="reference/CL_SpritePacker.html" />
 		</tocsect3>
 		<tocsect3 name="Surface Providers">
-			<tocsect4 name="CL_DeviceContextBuffer" url="Reference/html/CL_DeviceContextBuffer.html" />
-			<tocsect4 name="CL_JPEGProvider" url="Reference/html/CL_JPEGProvider.html" />
-			<tocsect4 name="CL_PCXProvider" url="Reference/html/CL_PCXProvider.html" />
-			<tocsect4 name="CL_PNGProvider" url="Reference/html/CL_PNGProvider.html" />
-			<tocsect4 name="CL_ProviderFactory" url="Reference/html/CL_ProviderFactory.html" />
-			<tocsect4 name="CL_ProviderType" url="Reference/html/CL_ProviderType.html" />
-			<tocsect4 name="CL_TargaProvider" url="Reference/html/CL_TargaProvider.html" />
+			<tocsect4 name="CL_DeviceContextBuffer" url="reference/CL_DeviceContextBuffer.html" />
+			<tocsect4 name="CL_JPEGProvider" url="reference/CL_JPEGProvider.html" />
+			<tocsect4 name="CL_PCXProvider" url="reference/CL_PCXProvider.html" />
+			<tocsect4 name="CL_PNGProvider" url="reference/CL_PNGProvider.html" />
+			<tocsect4 name="CL_ProviderFactory" url="reference/CL_ProviderFactory.html" />
+			<tocsect4 name="CL_ProviderType" url="reference/CL_ProviderType.html" />
+			<tocsect4 name="CL_TargaProvider" url="reference/CL_TargaProvider.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_SetupDisplay" url="Reference/html/CL_SetupDisplay.html" />
+			<tocsect4 name="CL_SetupDisplay" url="reference/CL_SetupDisplay.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="GL">
 		<tocsect3 name="Display 2D">
-			<tocsect4 name="CL_OpenGLSurface" url="Reference/html/CL_OpenGLSurface.html" />
-			<tocsect4 name="CL_OpenGLWindow" url="Reference/html/CL_OpenGLWindow.html" />
-			<tocsect4 name="CL_OpenGLWindowDescription" url="Reference/html/CL_OpenGLWindowDescription.html" />
+			<tocsect4 name="CL_OpenGLSurface" url="reference/CL_OpenGLSurface.html" />
+			<tocsect4 name="CL_OpenGLWindow" url="reference/CL_OpenGLWindow.html" />
+			<tocsect4 name="CL_OpenGLWindowDescription" url="reference/CL_OpenGLWindowDescription.html" />
 		</tocsect3>
 		<tocsect3 name="Display 3D">
-			<tocsect4 name="CL_LightSource" url="Reference/html/CL_LightSource.html" />
-			<tocsect4 name="CL_Viewpoint" url="Reference/html/CL_Viewpoint.html" />
+			<tocsect4 name="CL_LightSource" url="reference/CL_LightSource.html" />
+			<tocsect4 name="CL_Material" url="reference/CL_Material.html" />
+			<tocsect4 name="CL_ProgramAttribute" url="reference/CL_ProgramAttribute.html" />
+			<tocsect4 name="CL_ProgramObject" url="reference/CL_ProgramObject.html" />
+			<tocsect4 name="CL_ProgramUniform" url="reference/CL_ProgramUniform.html" />
+			<tocsect4 name="CL_ShaderObject" url="reference/CL_ShaderObject.html" />
+			<tocsect4 name="CL_Texture" url="reference/CL_Texture.html" />
+			<tocsect4 name="CL_TextureUnit" url="reference/CL_TextureUnit.html" />
+			<tocsect4 name="CL_Viewpoint" url="reference/CL_Viewpoint.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_GLFunctions" url="Reference/html/CL_GLFunctions.html" />
-			<tocsect4 name="CL_OpenGL" url="Reference/html/CL_OpenGL.html" />
-			<tocsect4 name="CL_OpenGLState" url="Reference/html/CL_OpenGLState.html" />
-			<tocsect4 name="CL_OpenGLStateData" url="Reference/html/CL_OpenGLStateData.html" />
-			<tocsect4 name="CL_SetupGL" url="Reference/html/CL_SetupGL.html" />
+			<tocsect4 name="CL_GLFunctions" url="reference/CL_GLFunctions.html" />
+			<tocsect4 name="CL_OpenGL" url="reference/CL_OpenGL.html" />
+			<tocsect4 name="CL_OpenGLState" url="reference/CL_OpenGLState.html" />
+			<tocsect4 name="CL_OpenGLStateData" url="reference/CL_OpenGLStateData.html" />
+			<tocsect4 name="CL_SetupGL" url="reference/CL_SetupGL.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="GUI">
 		<tocsect3 name="Controls">
-			<tocsect4 name="CL_Button" url="Reference/html/CL_Button.html" />
-			<tocsect4 name="CL_CheckBox" url="Reference/html/CL_CheckBox.html" />
-			<tocsect4 name="CL_FileDialog" url="Reference/html/CL_FileDialog.html" />
-			<tocsect4 name="CL_Frame" url="Reference/html/CL_Frame.html" />
-			<tocsect4 name="CL_Image" url="Reference/html/CL_Image.html" />
-			<tocsect4 name="CL_InputBox" url="Reference/html/CL_InputBox.html" />
-			<tocsect4 name="CL_InputDialog" url="Reference/html/CL_InputDialog.html" />
-			<tocsect4 name="CL_Label" url="Reference/html/CL_Label.html" />
-			<tocsect4 name="CL_ListBox" url="Reference/html/CL_ListBox.html" />
-			<tocsect4 name="CL_Menu" url="Reference/html/CL_Menu.html" />
-			<tocsect4 name="CL_MenuItem" url="Reference/html/CL_MenuItem.html" />
-			<tocsect4 name="CL_MenuNode" url="Reference/html/CL_MenuNode.html" />
-			<tocsect4 name="CL_MessageBox" url="Reference/html/CL_MessageBox.html" />
-			<tocsect4 name="CL_ProgressBar" url="Reference/html/CL_ProgressBar.html" />
-			<tocsect4 name="CL_RadioButton" url="Reference/html/CL_RadioButton.html" />
-			<tocsect4 name="CL_RadioGroup" url="Reference/html/CL_RadioGroup.html" />
-			<tocsect4 name="CL_ScrollBar" url="Reference/html/CL_ScrollBar.html" />
-			<tocsect4 name="CL_TreeItem" url="Reference/html/CL_TreeItem.html" />
-			<tocsect4 name="CL_TreeNode" url="Reference/html/CL_TreeNode.html" />
-			<tocsect4 name="CL_TreeView" url="Reference/html/CL_TreeView.html" />
-			<tocsect4 name="CL_Window" url="Reference/html/CL_Window.html" />
+			<tocsect4 name="CL_Button" url="reference/CL_Button.html" />
+			<tocsect4 name="CL_CheckBox" url="reference/CL_CheckBox.html" />
+			<tocsect4 name="CL_FileDialog" url="reference/CL_FileDialog.html" />
+			<tocsect4 name="CL_Frame" url="reference/CL_Frame.html" />
+			<tocsect4 name="CL_Image" url="reference/CL_Image.html" />
+			<tocsect4 name="CL_InputBox" url="reference/CL_InputBox.html" />
+			<tocsect4 name="CL_InputDialog" url="reference/CL_InputDialog.html" />
+			<tocsect4 name="CL_Label" url="reference/CL_Label.html" />
+			<tocsect4 name="CL_ListBox" url="reference/CL_ListBox.html" />
+			<tocsect4 name="CL_Menu" url="reference/CL_Menu.html" />
+			<tocsect4 name="CL_MenuItem" url="reference/CL_MenuItem.html" />
+			<tocsect4 name="CL_MenuNode" url="reference/CL_MenuNode.html" />
+			<tocsect4 name="CL_MessageBox" url="reference/CL_MessageBox.html" />
+			<tocsect4 name="CL_ProgressBar" url="reference/CL_ProgressBar.html" />
+			<tocsect4 name="CL_RadioButton" url="reference/CL_RadioButton.html" />
+			<tocsect4 name="CL_RadioGroup" url="reference/CL_RadioGroup.html" />
+			<tocsect4 name="CL_ScrollBar" url="reference/CL_ScrollBar.html" />
+			<tocsect4 name="CL_TreeItem" url="reference/CL_TreeItem.html" />
+			<tocsect4 name="CL_TreeNode" url="reference/CL_TreeNode.html" />
+			<tocsect4 name="CL_TreeView" url="reference/CL_TreeView.html" />
+			<tocsect4 name="CL_Window" url="reference/CL_Window.html" />
 		</tocsect3>
 		<tocsect3 name="Framework">
-			<tocsect4 name="CL_Component" url="Reference/html/CL_Component.html" />
-			<tocsect4 name="CL_ComponentManager" url="Reference/html/CL_ComponentManager.html" />
-			<tocsect4 name="CL_ComponentMoveHandler" url="Reference/html/CL_ComponentMoveHandler.html" />
-			<tocsect4 name="CL_ComponentResizeHandler" url="Reference/html/CL_ComponentResizeHandler.html" />
-			<tocsect4 name="CL_ComponentStyle" url="Reference/html/CL_ComponentStyle.html" />
-			<tocsect4 name="CL_ComponentType" url="Reference/html/CL_ComponentType.html" />
-			<tocsect4 name="CL_GUIManager" url="Reference/html/CL_GUIManager.html" />
-			<tocsect4 name="CL_Layout" url="Reference/html/CL_Layout.html" />
-			<tocsect4 name="CL_ListItem" url="Reference/html/CL_ListItem.html" />
-			<tocsect4 name="CL_StyleManager" url="Reference/html/CL_StyleManager.html" />
-		</tocsect3>
-		<tocsect3 name="Style: Boring">
-			<tocsect4 name="CL_Button_Boring" url="Reference/html/CL_Button_Boring.html" />
-			<tocsect4 name="CL_CheckBox_Boring" url="Reference/html/CL_CheckBox_Boring.html" />
-			<tocsect4 name="CL_Frame_Boring" url="Reference/html/CL_Frame_Boring.html" />
-			<tocsect4 name="CL_Image_Boring" url="Reference/html/CL_Image_Boring.html" />
-			<tocsect4 name="CL_InputBox_Boring" url="Reference/html/CL_InputBox_Boring.html" />
-			<tocsect4 name="CL_Label_Boring" url="Reference/html/CL_Label_Boring.html" />
-			<tocsect4 name="CL_ListBox_Boring" url="Reference/html/CL_ListBox_Boring.html" />
-			<tocsect4 name="CL_MenuItem_Boring" url="Reference/html/CL_MenuItem_Boring.html" />
-			<tocsect4 name="CL_MenuNode_Boring" url="Reference/html/CL_MenuNode_Boring.html" />
-			<tocsect4 name="CL_Menu_Boring" url="Reference/html/CL_Menu_Boring.html" />
-			<tocsect4 name="CL_ProgressBar_Boring" url="Reference/html/CL_ProgressBar_Boring.html" />
-			<tocsect4 name="CL_RadioButton_Boring" url="Reference/html/CL_RadioButton_Boring.html" />
-			<tocsect4 name="CL_ScrollBar_Boring" url="Reference/html/CL_ScrollBar_Boring.html" />
-			<tocsect4 name="CL_StyleManager_Boring" url="Reference/html/CL_StyleManager_Boring.html" />
-			<tocsect4 name="CL_TreeItem_Boring" url="Reference/html/CL_TreeItem_Boring.html" />
-			<tocsect4 name="CL_TreeView_Boring" url="Reference/html/CL_TreeView_Boring.html" />
-			<tocsect4 name="CL_Window_Boring" url="Reference/html/CL_Window_Boring.html" />
+			<tocsect4 name="CL_Component" url="reference/CL_Component.html" />
+			<tocsect4 name="CL_ComponentManager" url="reference/CL_ComponentManager.html" />
+			<tocsect4 name="CL_ComponentMoveHandler" url="reference/CL_ComponentMoveHandler.html" />
+			<tocsect4 name="CL_ComponentResizeHandler" url="reference/CL_ComponentResizeHandler.html" />
+			<tocsect4 name="CL_ComponentStyle" url="reference/CL_ComponentStyle.html" />
+			<tocsect4 name="CL_ComponentType" url="reference/CL_ComponentType.html" />
+			<tocsect4 name="CL_Deck" url="reference/CL_Deck.html" />
+			<tocsect4 name="CL_GUIManager" url="reference/CL_GUIManager.html" />
+			<tocsect4 name="CL_Layout" url="reference/CL_Layout.html" />
+			<tocsect4 name="CL_ListItem" url="reference/CL_ListItem.html" />
+			<tocsect4 name="CL_StyleManager" url="reference/CL_StyleManager.html" />
 		</tocsect3>
 		<tocsect3 name="Style: Silver">
-			<tocsect4 name="CL_Button_Silver" url="Reference/html/CL_Button_Silver.html" />
-			<tocsect4 name="CL_CheckBox_Silver" url="Reference/html/CL_CheckBox_Silver.html" />
-			<tocsect4 name="CL_Frame_Silver" url="Reference/html/CL_Frame_Silver.html" />
-			<tocsect4 name="CL_Image_Silver" url="Reference/html/CL_Image_Silver.html" />
-			<tocsect4 name="CL_InputBox_Silver" url="Reference/html/CL_InputBox_Silver.html" />
-			<tocsect4 name="CL_Label_Silver" url="Reference/html/CL_Label_Silver.html" />
-			<tocsect4 name="CL_ListBox_Silver" url="Reference/html/CL_ListBox_Silver.html" />
-			<tocsect4 name="CL_MenuItem_Silver" url="Reference/html/CL_MenuItem_Silver.html" />
-			<tocsect4 name="CL_MenuNode_Silver" url="Reference/html/CL_MenuNode_Silver.html" />
-			<tocsect4 name="CL_Menu_Silver" url="Reference/html/CL_Menu_Silver.html" />
-			<tocsect4 name="CL_ProgressBar_Silver" url="Reference/html/CL_ProgressBar_Silver.html" />
-			<tocsect4 name="CL_RadioButton_Silver" url="Reference/html/CL_RadioButton_Silver.html" />
-			<tocsect4 name="CL_ScrollBar_Silver" url="Reference/html/CL_ScrollBar_Silver.html" />
-			<tocsect4 name="CL_StyleManager_Silver" url="Reference/html/CL_StyleManager_Silver.html" />
-			<tocsect4 name="CL_TreeItem_Silver" url="Reference/html/CL_TreeItem_Silver.html" />
-			<tocsect4 name="CL_TreeView_Silver" url="Reference/html/CL_TreeView_Silver.html" />
-			<tocsect4 name="CL_Window_Silver" url="Reference/html/CL_Window_Silver.html" />
+			<tocsect4 name="CL_Button_Silver" url="reference/CL_Button_Silver.html" />
+			<tocsect4 name="CL_CheckBox_Silver" url="reference/CL_CheckBox_Silver.html" />
+			<tocsect4 name="CL_Frame_Silver" url="reference/CL_Frame_Silver.html" />
+			<tocsect4 name="CL_Image_Silver" url="reference/CL_Image_Silver.html" />
+			<tocsect4 name="CL_InputBox_Silver" url="reference/CL_InputBox_Silver.html" />
+			<tocsect4 name="CL_Label_Silver" url="reference/CL_Label_Silver.html" />
+			<tocsect4 name="CL_ListBox_Silver" url="reference/CL_ListBox_Silver.html" />
+			<tocsect4 name="CL_MenuItem_Silver" url="reference/CL_MenuItem_Silver.html" />
+			<tocsect4 name="CL_MenuNode_Silver" url="reference/CL_MenuNode_Silver.html" />
+			<tocsect4 name="CL_Menu_Silver" url="reference/CL_Menu_Silver.html" />
+			<tocsect4 name="CL_ProgressBar_Silver" url="reference/CL_ProgressBar_Silver.html" />
+			<tocsect4 name="CL_RadioButton_Silver" url="reference/CL_RadioButton_Silver.html" />
+			<tocsect4 name="CL_ScrollBar_Silver" url="reference/CL_ScrollBar_Silver.html" />
+			<tocsect4 name="CL_StyleManager_Silver" url="reference/CL_StyleManager_Silver.html" />
+			<tocsect4 name="CL_TreeItem_Silver" url="reference/CL_TreeItem_Silver.html" />
+			<tocsect4 name="CL_TreeView_Silver" url="reference/CL_TreeView_Silver.html" />
+			<tocsect4 name="CL_Window_Silver" url="reference/CL_Window_Silver.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_SetupGUI" url="Reference/html/CL_SetupGUI.html" />
-		</tocsect3>
-	</tocsect2>
-	<tocsect2 name="JavaScript">
-		<tocsect3 name="Framework">
-			<tocsect4 name="CL_JSArguments" url="Reference/html/CL_JSArguments.html" />
-			<tocsect4 name="CL_JSContext" url="Reference/html/CL_JSContext.html" />
-			<tocsect4 name="CL_JSError" url="Reference/html/CL_JSError.html" />
-			<tocsect4 name="CL_JSObject" url="Reference/html/CL_JSObject.html" />
-			<tocsect4 name="CL_JSRuntime" url="Reference/html/CL_JSRuntime.html" />
-			<tocsect4 name="CL_JSValue" url="Reference/html/CL_JSValue.html" />
+			<tocsect4 name="CL_SetupGUI" url="reference/CL_SetupGUI.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="MikMod">
 		<tocsect3 name="Sound Providers">
-			<tocsect4 name="CL_SoundProvider_MikMod" url="Reference/html/CL_SoundProvider_MikMod.html" />
+			<tocsect4 name="CL_SoundProvider_MikMod" url="reference/CL_SoundProvider_MikMod.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_SetupMikMod" url="Reference/html/CL_SetupMikMod.html" />
+			<tocsect4 name="CL_SetupMikMod" url="reference/CL_SetupMikMod.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="Network">
-		<tocsect3 name="Browsing">
-			<tocsect4 name="CL_BrowseClient" url="Reference/html/CL_BrowseClient.html" />
-			<tocsect4 name="CL_BrowseMaster" url="Reference/html/CL_BrowseMaster.html" />
-			<tocsect4 name="CL_BrowseServer" url="Reference/html/CL_BrowseServer.html" />
-		</tocsect3>
 		<tocsect3 name="Internet Relay Chat">
-			<tocsect4 name="CL_DCCDownload" url="Reference/html/CL_DCCDownload.html" />
-			<tocsect4 name="CL_IRCConnection" url="Reference/html/CL_IRCConnection.html" />
+			<tocsect4 name="CL_DCCDownload" url="reference/CL_DCCDownload.html" />
+			<tocsect4 name="CL_IRCConnection" url="reference/CL_IRCConnection.html" />
 		</tocsect3>
 		<tocsect3 name="NetObjects">
-			<tocsect4 name="CL_NetObject_Client" url="Reference/html/CL_NetObject_Client.html" />
-			<tocsect4 name="CL_NetObject_Controller" url="Reference/html/CL_NetObject_Controller.html" />
-			<tocsect4 name="CL_NetObject_Server" url="Reference/html/CL_NetObject_Server.html" />
-			<tocsect4 name="CL_NetVariables" url="Reference/html/CL_NetVariables.html" />
+			<tocsect4 name="CL_NetObject_Client" url="reference/CL_NetObject_Client.html" />
+			<tocsect4 name="CL_NetObject_Controller" url="reference/CL_NetObject_Controller.html" />
+			<tocsect4 name="CL_NetObject_Server" url="reference/CL_NetObject_Server.html" />
+			<tocsect4 name="CL_NetVariables" url="reference/CL_NetVariables.html" />
 		</tocsect3>
 		<tocsect3 name="NetSessions">
-			<tocsect4 name="CL_InputSource_NetPacket" url="Reference/html/CL_InputSource_NetPacket.html" />
-			<tocsect4 name="CL_InputSource_NetStream" url="Reference/html/CL_InputSource_NetStream.html" />
-			<tocsect4 name="CL_NetComputer" url="Reference/html/CL_NetComputer.html" />
-			<tocsect4 name="CL_NetGroup" url="Reference/html/CL_NetGroup.html" />
-			<tocsect4 name="CL_NetPacket" url="Reference/html/CL_NetPacket.html" />
-			<tocsect4 name="CL_NetSession" url="Reference/html/CL_NetSession.html" />
-			<tocsect4 name="CL_NetStream" url="Reference/html/CL_NetStream.html" />
-			<tocsect4 name="CL_OutputSource_NetPacket" url="Reference/html/CL_OutputSource_NetPacket.html" />
-			<tocsect4 name="CL_OutputSource_NetStream" url="Reference/html/CL_OutputSource_NetStream.html" />
+			<tocsect4 name="CL_InputSource_NetPacket" url="reference/CL_InputSource_NetPacket.html" />
+			<tocsect4 name="CL_InputSource_NetStream" url="reference/CL_InputSource_NetStream.html" />
+			<tocsect4 name="CL_NetComputer" url="reference/CL_NetComputer.html" />
+			<tocsect4 name="CL_NetGroup" url="reference/CL_NetGroup.html" />
+			<tocsect4 name="CL_NetPacket" url="reference/CL_NetPacket.html" />
+			<tocsect4 name="CL_NetSession" url="reference/CL_NetSession.html" />
+			<tocsect4 name="CL_NetStream" url="reference/CL_NetStream.html" />
+			<tocsect4 name="CL_OutputSource_NetPacket" url="reference/CL_OutputSource_NetPacket.html" />
+			<tocsect4 name="CL_OutputSource_NetStream" url="reference/CL_OutputSource_NetStream.html" />
 		</tocsect3>
 		<tocsect3 name="Sockets">
-			<tocsect4 name="CL_IPAddress" url="Reference/html/CL_IPAddress.html" />
-			<tocsect4 name="CL_InputSource_Socket" url="Reference/html/CL_InputSource_Socket.html" />
-			<tocsect4 name="CL_OutputSource_Socket" url="Reference/html/CL_OutputSource_Socket.html" />
-			<tocsect4 name="CL_Socket" url="Reference/html/CL_Socket.html" />
+			<tocsect4 name="CL_IPAddress" url="reference/CL_IPAddress.html" />
+			<tocsect4 name="CL_InputSource_Socket" url="reference/CL_InputSource_Socket.html" />
+			<tocsect4 name="CL_OutputSource_Socket" url="reference/CL_OutputSource_Socket.html" />
+			<tocsect4 name="CL_Socket" url="reference/CL_Socket.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_SetupNetwork" url="Reference/html/CL_SetupNetwork.html" />
+			<tocsect4 name="CL_SetupNetwork" url="reference/CL_SetupNetwork.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="SDL">
 		<tocsect3 name="System">
-			<tocsect4 name="CL_SetupSDL" url="Reference/html/CL_SetupSDL.html" />
+			<tocsect4 name="CL_SetupSDL" url="reference/CL_SetupSDL.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="Signal">
 		<tocsect3 name="System">
-			<tocsect4 name="CL_FunctionSlot_v0" url="Reference/html/CL_FunctionSlot_v0.html" />
-			<tocsect4 name="CL_Signal" url="Reference/html/CL_Signal.html" />
-			<tocsect4 name="CL_Signal_v0" url="Reference/html/CL_Signal_v0.html" />
-			<tocsect4 name="CL_Signal_v0_Generic" url="Reference/html/CL_Signal_v0_Generic.html" />
-			<tocsect4 name="CL_Slot" url="Reference/html/CL_Slot.html" />
-			<tocsect4 name="CL_SlotBuffer_v0" url="Reference/html/CL_SlotBuffer_v0.html" />
-			<tocsect4 name="CL_SlotContainer" url="Reference/html/CL_SlotContainer.html" />
-			<tocsect4 name="CL_SlotParent_v0" url="Reference/html/CL_SlotParent_v0.html" />
-			<tocsect4 name="CL_Slot_Generic" url="Reference/html/CL_Slot_Generic.html" />
-			<tocsect4 name="CL_Slot_v0" url="Reference/html/CL_Slot_v0.html" />
+			<tocsect4 name="CL_FunctionSlot_v0" url="reference/CL_FunctionSlot_v0.html" />
+			<tocsect4 name="CL_Signal" url="reference/CL_Signal.html" />
+			<tocsect4 name="CL_Signal_v0" url="reference/CL_Signal_v0.html" />
+			<tocsect4 name="CL_Signal_v0_Generic" url="reference/CL_Signal_v0_Generic.html" />
+			<tocsect4 name="CL_Slot" url="reference/CL_Slot.html" />
+			<tocsect4 name="CL_SlotBuffer_v0" url="reference/CL_SlotBuffer_v0.html" />
+			<tocsect4 name="CL_SlotContainer" url="reference/CL_SlotContainer.html" />
+			<tocsect4 name="CL_SlotParent_v0" url="reference/CL_SlotParent_v0.html" />
+			<tocsect4 name="CL_Slot_Generic" url="reference/CL_Slot_Generic.html" />
+			<tocsect4 name="CL_Slot_v0" url="reference/CL_Slot_v0.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="Sound">
 		<tocsect3 name="Audio Mixing">
-			<tocsect4 name="CL_Sound" url="Reference/html/CL_Sound.html" />
-			<tocsect4 name="CL_SoundBuffer" url="Reference/html/CL_SoundBuffer.html" />
-			<tocsect4 name="CL_SoundBuffer_Session" url="Reference/html/CL_SoundBuffer_Session.html" />
-			<tocsect4 name="CL_SoundFilter" url="Reference/html/CL_SoundFilter.html" />
-			<tocsect4 name="CL_SoundOutput" url="Reference/html/CL_SoundOutput.html" />
-			<tocsect4 name="CL_SoundOutput_Description" url="Reference/html/CL_SoundOutput_Description.html" />
-			<tocsect4 name="CL_SoundProvider" url="Reference/html/CL_SoundProvider.html" />
-			<tocsect4 name="CL_SoundProvider_Session" url="Reference/html/CL_SoundProvider_Session.html" />
+			<tocsect4 name="CL_Sound" url="reference/CL_Sound.html" />
+			<tocsect4 name="CL_SoundBuffer" url="reference/CL_SoundBuffer.html" />
+			<tocsect4 name="CL_SoundBuffer_Session" url="reference/CL_SoundBuffer_Session.html" />
+			<tocsect4 name="CL_SoundFilter" url="reference/CL_SoundFilter.html" />
+			<tocsect4 name="CL_SoundOutput" url="reference/CL_SoundOutput.html" />
+			<tocsect4 name="CL_SoundOutput_Description" url="reference/CL_SoundOutput_Description.html" />
+			<tocsect4 name="CL_SoundProvider" url="reference/CL_SoundProvider.html" />
+			<tocsect4 name="CL_SoundProvider_Session" url="reference/CL_SoundProvider_Session.html" />
 		</tocsect3>
 		<tocsect3 name="CD Audio">
-			<tocsect4 name="CL_CDDrive" url="Reference/html/CL_CDDrive.html" />
+			<tocsect4 name="CL_CDDrive" url="reference/CL_CDDrive.html" />
 		</tocsect3>
 		<tocsect3 name="Filters">
-			<tocsect4 name="CL_EchoFilter" url="Reference/html/CL_EchoFilter.html" />
-			<tocsect4 name="CL_FadeFilter" url="Reference/html/CL_FadeFilter.html" />
-			<tocsect4 name="CL_InverseEchoFilter" url="Reference/html/CL_InverseEchoFilter.html" />
+			<tocsect4 name="CL_EchoFilter" url="reference/CL_EchoFilter.html" />
+			<tocsect4 name="CL_FadeFilter" url="reference/CL_FadeFilter.html" />
+			<tocsect4 name="CL_InverseEchoFilter" url="reference/CL_InverseEchoFilter.html" />
 		</tocsect3>
 		<tocsect3 name="Sound Providers">
-			<tocsect4 name="CL_SoundProviderFactory" url="Reference/html/CL_SoundProviderFactory.html" />
-			<tocsect4 name="CL_SoundProviderType" url="Reference/html/CL_SoundProviderType.html" />
-			<tocsect4 name="CL_SoundProvider_Raw" url="Reference/html/CL_SoundProvider_Raw.html" />
-			<tocsect4 name="CL_SoundProvider_Recorder" url="Reference/html/CL_SoundProvider_Recorder.html" />
-			<tocsect4 name="CL_SoundProvider_Wave" url="Reference/html/CL_SoundProvider_Wave.html" />
+			<tocsect4 name="CL_SoundProviderFactory" url="reference/CL_SoundProviderFactory.html" />
+			<tocsect4 name="CL_SoundProviderType" url="reference/CL_SoundProviderType.html" />
+			<tocsect4 name="CL_SoundProvider_Raw" url="reference/CL_SoundProvider_Raw.html" />
+			<tocsect4 name="CL_SoundProvider_Recorder" url="reference/CL_SoundProvider_Recorder.html" />
+			<tocsect4 name="CL_SoundProvider_Wave" url="reference/CL_SoundProvider_Wave.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_SetupSound" url="Reference/html/CL_SetupSound.html" />
-		</tocsect3>
-	</tocsect2>
-	<tocsect2 name="Voice">
-		<tocsect3 name="Encoding">
-			<tocsect4 name="CL_VoiceDecoder" url="Reference/html/CL_VoiceDecoder.html" />
-			<tocsect4 name="CL_VoiceEncoder" url="Reference/html/CL_VoiceEncoder.html" />
-		</tocsect3>
-		<tocsect3 name="Network">
-			<tocsect4 name="CL_VoiceClient" url="Reference/html/CL_VoiceClient.html" />
-			<tocsect4 name="CL_VoiceServer" url="Reference/html/CL_VoiceServer.html" />
+			<tocsect4 name="CL_SetupSound" url="reference/CL_SetupSound.html" />
 		</tocsect3>
 	</tocsect2>
 	<tocsect2 name="Vorbis">
 		<tocsect3 name="Sound Providers">
-			<tocsect4 name="CL_SoundProvider_Vorbis" url="Reference/html/CL_SoundProvider_Vorbis.html" />
+			<tocsect4 name="CL_SoundProvider_Vorbis" url="reference/CL_SoundProvider_Vorbis.html" />
 		</tocsect3>
 		<tocsect3 name="System">
-			<tocsect4 name="CL_SetupVorbis" url="Reference/html/CL_SetupVorbis.html" />
+			<tocsect4 name="CL_SetupVorbis" url="reference/CL_SetupVorbis.html" />
 		</tocsect3>
 	</tocsect2>
-</tocsect1>
-<tocsect1 name="Tutorials" url="Tutorial/index.html">
-	<tocsect2 name="TicTacToe Tutorial" url="Tutorial/TicTacToe/index.html" />
-	<tocsect2 name="QuickFlash Tutorial" url="Tutorial/QuickFlash/index.html" />
-</tocsect1>
-<tocsect1 name="FAQ" url="FAQ.html">
 </tocsect1>
 </kdeveloptoc>
