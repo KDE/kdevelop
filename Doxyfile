@@ -100,15 +100,17 @@ EXCLUDE                = languages/ada/app_templates \
                          languages/python/app_templates \
                          languages/ruby/app_templates \
                          languages/sql/app_templates \
-                         lib/qextmdi
+                         lib/qextmdi \
+                         vcs/cvs
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.moc.* \
                          moc* \
                          *.all_cpp.* \
-                         *face_skel.cpp \
                          *unload.* \
                          */test/* \
-                         */tests/*
+                         */tests/* \
+                         *face_skel.cpp \
+                         *.ui.h
 EXAMPLE_PATH           = languages/cpp/app_templates/khello \
                          languages/cpp/app_templates/kdevpart
 EXAMPLE_PATTERNS       = 
