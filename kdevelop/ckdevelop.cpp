@@ -969,7 +969,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
     {
        o_tab_view->setCurrentTab(STDINSTDOUT);
        QString term = "xterm";
-       QString exec_str = term + " -e sh -c '" + program + "'";
+       QString exec_str = term + " -e sh -c '" + underDir +  program + "'";
 
        if(CToolClass::searchInstProgram("konsole"))
        {
@@ -977,22 +977,22 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        }
        if(CToolClass::searchInstProgram("ksh"))
        {
-         exec_str = term + " -e ksh -c '" + program +
+         exec_str = term + " -e ksh -c '" + underDir + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        if(CToolClass::searchInstProgram("csh"))
        {
-         exec_str = term +" -e csh -c '" + program +
+         exec_str = term +" -e csh -c '" + underDir +program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("tcsh"))
        {
-          exec_str =  term +" -e tcsh -c '" + program +
+          exec_str =  term +" -e tcsh -c '" + underDir + program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("bash"))
        {
-          exec_str =  term +" -e bash -c '" + program +
+          exec_str =  term +" -e bash -c '" + underDir + program +
           ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        appl_process << exec_str;
@@ -1011,8 +1011,8 @@ void CKDevelop::slotStartRun(bool bWithArgs)
     }
     else
     {
-      appl_process << program;
-      cerr << endl << "EXEC:" << program;
+      appl_process << underDir + program;
+      cerr << endl << "EXEC:" << underDir + program;
       o_tab_view->setCurrentTab(STDERR);
     }
 
