@@ -60,9 +60,9 @@ DocTreeConfigWidget::DocTreeConfigWidget(DocTreeViewWidget *widget,
 #ifndef GIDEON
     addTab(kdevelopTab=createKDevelopTab(), i18n("KDevelop"));
 #endif
-    addTab(librariesTab=createLibrariesTab(), i18n("Qt/KDE libraries"));
-    addTab(bookmarksTab=createBookmarksTab(), i18n("Bookmarks"));
-    addTab(indexTab=createIndexTab(), i18n("Search index"));
+    addTab(librariesTab=createLibrariesTab(), i18n("&Qt/KDE libraries"));
+    addTab(bookmarksTab=createBookmarksTab(), i18n("&Bookmarks"));
+    addTab(indexTab=createIndexTab(), i18n("Search &index"));
     
     readConfig();
 }
@@ -128,9 +128,9 @@ QWidget *DocTreeConfigWidget::createBookmarksTab()
     
     QVBox *buttonbox = new QVBox(w);
     buttonbox->setMargin(KDialog::spacingHint());
-    connect( new QPushButton(i18n("Add..."), buttonbox), SIGNAL(clicked()),
+    connect( new QPushButton(i18n("&Add..."), buttonbox), SIGNAL(clicked()),
              this, SLOT(addBookmarkClicked()) );
-    connect( new QPushButton(i18n("Remove"), buttonbox), SIGNAL(clicked()),
+    connect( new QPushButton(i18n("&Remove"), buttonbox), SIGNAL(clicked()),
              this, SLOT(removeBookmarkClicked()) );
 
     QGridLayout *layout = new QGridLayout(w, 2, 2, 2*KDialog::marginHint(), KDialog::spacingHint());
@@ -149,11 +149,11 @@ QWidget *DocTreeConfigWidget::createIndexTab()
     QLabel *info_label = new QLabel(i18n("Here you can configure which files are included "
                                          "in the index created for full text searching."), w);
     
-    indexshownlibs_box = new QCheckBox(i18n("Index libraries shown in the documentation tree"), w);
-    indexhiddenlibs_box = new QCheckBox(i18n("Index other libraries"), w);
-    indexbookmarks_box = new QCheckBox(i18n("Index files in the Bookmarks section of the documentation tree"), w);
+    indexshownlibs_box = new QCheckBox(i18n("Index &libraries shown in the documentation tree"), w);
+    indexhiddenlibs_box = new QCheckBox(i18n("Index &other libraries"), w);
+    indexbookmarks_box = new QCheckBox(i18n("Index files in the &Bookmarks section of the documentation tree"), w);
 
-    QPushButton *update_button = new QPushButton(i18n("Update index now"), w);
+    QPushButton *update_button = new QPushButton(i18n("&Update index now"), w);
     connect( update_button, SIGNAL(clicked()), this, SLOT(updateIndexClicked()) );
     
     QBoxLayout *layout = new QVBoxLayout(w, 2*KDialog::marginHint(), KDialog::spacingHint());

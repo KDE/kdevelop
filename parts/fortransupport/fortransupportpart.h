@@ -9,35 +9,42 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWCONFIGWIDGET_H_
-#define _FILEVIEWCONFIGWIDGET_H_
+#ifndef _FORTRANSUPPORTPART_H_
+#define _FORTRANSUPPORTPART_H_
 
-#include "fileviewconfigwidgetbase.h"
+class FixedFormParser;
+class KDialogBase;
 
-class FileViewPart;
+#include "kdevlanguagesupport.h"
 
 
-class FileViewConfigWidget : public FileViewConfigWidgetBase
+class FortranSupportPart : public KDevLanguageSupport
 {
     Q_OBJECT
 
 public:
-    FileViewConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
-    ~FileViewConfigWidget();
+    FortranSupportPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    ~FortranSupportPart();
 
-public slots:
-     void accept();
+protected:
+    virtual KDevLanguageSupport::Features features();
+
+private slots:
+    void slotFtnchek();
+    void projectConfigWidget(KDialogBase *dlg);
+    void projectOpened();
+    void projectClosed();
+    void savedFile(const QString &fileName);
+    void addedFileToProject(const QString &fileName);
+    void removedFileFromProject(const QString &fileName);
+
+    // Internal
+    void initialParse();
 
 private:
-    virtual void addGroup();
-    virtual void removeGroup();
-    virtual void moveUp();
-    virtual void moveDown();
-    
-    void readConfig();
-    void storeConfig();
-    
-    FileViewPart *m_part;
+    void maybeParse(const QString fileName);
+
+    FixedFormParser *parser;
 };
 
 #endif

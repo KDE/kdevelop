@@ -34,6 +34,7 @@ EditorPart::EditorPart(QWidget *parent, const char */*name*/)
     : KParts::ReadOnlyPart(parent, "editorpart")
 {
     QWidget *vbox = new QWidget(parent, "editorvbox");
+    vbox->setBackgroundMode(QWidget::NoBackground);
     vbox->setFocusPolicy(QWidget::StrongFocus);
     setWidget(vbox);
 

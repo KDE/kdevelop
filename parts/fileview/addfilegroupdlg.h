@@ -9,35 +9,29 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWCONFIGWIDGET_H_
-#define _FILEVIEWCONFIGWIDGET_H_
+#ifndef _ADDFILEGROUPDLG_H_
+#define _ADDFILEGROUPDLG_H_
 
-#include "fileviewconfigwidgetbase.h"
+#include <qdialog.h>
+#include <qlineedit.h>
 
-class FileViewPart;
 
-
-class FileViewConfigWidget : public FileViewConfigWidgetBase
+class AddFileGroupDialog : public QDialog
 {
     Q_OBJECT
 
-public:
-    FileViewConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
-    ~FileViewConfigWidget();
+public: 
+    AddFileGroupDialog( QWidget *parent=0, const char *name=0 );
+    ~AddFileGroupDialog();
 
-public slots:
-     void accept();
-
+    QString title() const
+        { return title_edit->text(); }
+    QString pattern() const
+        { return pattern_edit->text(); }
+    
 private:
-    virtual void addGroup();
-    virtual void removeGroup();
-    virtual void moveUp();
-    virtual void moveDown();
-    
-    void readConfig();
-    void storeConfig();
-    
-    FileViewPart *m_part;
+    QLineEdit *title_edit;
+    QLineEdit *pattern_edit;
 };
 
 #endif

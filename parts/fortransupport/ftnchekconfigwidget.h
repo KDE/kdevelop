@@ -9,35 +9,33 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWCONFIGWIDGET_H_
-#define _FILEVIEWCONFIGWIDGET_H_
+#ifndef _FTNCHEKCONFIGWIDGET_H_
+#define _FTNCHEKCONFIGWIDGET_H_
 
-#include "fileviewconfigwidgetbase.h"
+#include <qdom.h>
+#include "ftnchekconfigwidgetbase.h"
 
-class FileViewPart;
+class QButtonGroup;
 
-
-class FileViewConfigWidget : public FileViewConfigWidgetBase
+class FtnchekConfigWidget : public FtnchekConfigWidgetBase
 {
     Q_OBJECT
-
+    
 public:
-    FileViewConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
-    ~FileViewConfigWidget();
+    FtnchekConfigWidget(QDomDocument &projectDom, QWidget *parent, const char *name);
+    ~FtnchekConfigWidget();
 
 public slots:
-     void accept();
-
-private:
-    virtual void addGroup();
-    virtual void removeGroup();
-    virtual void moveUp();
-    virtual void moveDown();
+    void accept();
     
+private:
     void readConfig();
     void storeConfig();
-    
-    FileViewPart *m_part;
+
+    QButtonGroup *arguments_group, *common_group;
+    QButtonGroup *truncation_group, *usage_group;
+    QButtonGroup *f77_group, *portability_group;
+    QDomDocument dom;
 };
 
 #endif

@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Kurt Granroth", "KDE application templates", "kurth@granroth.org");
     aboutData.addAuthor("Matthias Hoelzer-Kluepfel", "htdig indexing", "hoelzer@kde.org");
     aboutData.addAuthor("The KWrite authors", "editor component", "kwrite-devel@kde.org");
+    aboutData.addAuthor("Robert Moniot", "ftnchek documentation", "moniot@fordham.edu");
     KCmdLineArgs::init(argc, argv, &aboutData);
 
     KApplication app;

@@ -969,7 +969,7 @@ void QTextCursor::gotoEnd()
     if ( doc )
 	string = doc->lastParag();
     idx = string->length() - 1;
-    qDebug("gotoEnd: going to parag %d, index %d",string->paragId(),idx);
+    //    qDebug("gotoEnd: going to parag %d, index %d",string->paragId(),idx);
 }
 
 void QTextCursor::gotoPageUp( int visibleHeight )

@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>607</width>
+            <width>599</width>
             <height>494</height>
         </rect>
     </property>
@@ -106,7 +106,7 @@
             </property>
             <property stdset="1">
                 <name>sizeType</name>
-                <enum>Expanding</enum>
+                <enum>Preferred</enum>
             </property>
             <property>
                 <name>sizeHint</name>
@@ -120,7 +120,7 @@
             <class>QLayoutWidget</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>Layout4</cstring>
+                <cstring>Layout3</cstring>
             </property>
             <vbox>
                 <property stdset="1">
@@ -163,6 +163,17 @@
                         <string>&amp;Add group</string>
                     </property>
                 </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>deletegroup_button</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>&amp;Delete group</string>
+                    </property>
+                </widget>
                 <spacer>
                     <property>
                         <name>name</name>
@@ -188,11 +199,22 @@
                     <class>QPushButton</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>deletegroup_button</cstring>
+                        <cstring>moveup_button</cstring>
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>&amp;Delete group</string>
+                        <string>Move &amp;Up</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QPushButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>movedown_button</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Move &amp;Down</string>
                     </property>
                 </widget>
                 <spacer>
@@ -229,7 +251,7 @@
             </property>
             <property stdset="1">
                 <name>sizeType</name>
-                <enum>Expanding</enum>
+                <enum>Preferred</enum>
             </property>
             <property>
                 <name>sizeHint</name>
@@ -243,10 +265,10 @@
 </widget>
 <connections>
     <connection>
-        <sender>addgroup_button</sender>
+        <sender>moveup_button</sender>
         <signal>clicked()</signal>
         <receiver>fileview_config_widget</receiver>
-        <slot>addGroup()</slot>
+        <slot>moveUp()</slot>
     </connection>
     <connection>
         <sender>deletegroup_button</sender>
@@ -254,7 +276,21 @@
         <receiver>fileview_config_widget</receiver>
         <slot>removeGroup()</slot>
     </connection>
-    <slot access="protected">addGroup()</slot>
+    <connection>
+        <sender>addgroup_button</sender>
+        <signal>clicked()</signal>
+        <receiver>fileview_config_widget</receiver>
+        <slot>addGroup()</slot>
+    </connection>
+    <connection>
+        <sender>movedown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>fileview_config_widget</receiver>
+        <slot>moveDown()</slot>
+    </connection>
+    <slot access="public">addGroup()</slot>
+    <slot access="protected">moveUp()</slot>
+    <slot access="public">moveDown()</slot>
     <slot access="protected">removeGroup()</slot>
 </connections>
 </UI>

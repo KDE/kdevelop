@@ -14,6 +14,7 @@
 #include <qtimer.h>
 #include <qvbox.h>
 #include <kdialogbase.h>
+#include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
 
@@ -47,6 +48,7 @@ private:
 FileViewGroupItem::FileViewGroupItem(QListView *parent, const QString &name, const QString &pattern)
     : QListViewItem(parent, name)
 {
+    setPixmap(0, SmallIcon("folder"));
     patterns = QStringList::split(';', pattern);
 }
 
@@ -79,7 +81,9 @@ private:
 
 FileViewFileItem::FileViewFileItem(QListViewItem *parent, const QString &fileName)
     : QListViewItem(parent, extractName(fileName)), fullname(fileName)
-{}
+{
+    setPixmap(0, SmallIcon("document"));
+}
 
 
 QString FileViewFileItem::extractName(const QString &fileName)

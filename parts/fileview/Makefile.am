@@ -9,6 +9,7 @@ libkdevfileview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 libkdevfileview_la_SOURCES = fileviewfactory.cpp \
 			     fileviewpart.cpp \
 			     fileviewwidget.cpp \
+			     addfilegroupdlg.cpp \
 			     fileviewconfigwidget.cpp \
 			     fileviewconfigwidgetbase.ui
 

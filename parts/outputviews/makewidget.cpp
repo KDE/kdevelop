@@ -253,7 +253,7 @@ void MakeWidget::insertStdoutLine(const QString &line)
     if (enterDirRx.match(line)) {
         QString *dir = new QString(enterDirRx.group(1));
         dirstack.push(dir);
-        qDebug( "Entering dir: %s", (*dir).ascii() );
+        kdDebug(9004) << "Entering dir: %s" << (*dir).ascii() << endl;
     }
     else if (leaveDirRx.match(line)) {
         kdDebug(9004) << "Leaving dir: " << leaveDirRx.group(1) << endl;
@@ -270,10 +270,13 @@ void MakeWidget::insertStderrLine(const QString &line)
 {
     // KRegExp has ERE syntax
     KRegExp errorGccRx("([^: \t]+):([0-9]+):.*");
+    KRegExp errorFtnchekRx("(.*).*line.*([0-9]+):.*");
     KRegExp errorJadeRx("[a-zA-Z]+:([^: \t]+):([0-9]+):[0-9]+:[a-zA-Z]:.*");
     const int errorGccFileGroup = 1;
-    const int errorJadeFileGroup = 1;
     const int errorGccRowGroup = 2;
+    const int errorFtnchekFileGroup = 1;
+    const int errorFtnchekRowGroup = 2;
+    const int errorJadeFileGroup = 1;
     const int errorJadeRowGroup = 2;
 
     QString fn;
@@ -284,6 +287,11 @@ void MakeWidget::insertStderrLine(const QString &line)
         hasmatch = true;
         fn = errorGccRx.group(errorGccFileGroup);
         row = QString(errorGccRx.group(errorGccRowGroup)).toInt()-1;
+    } else if (errorFtnchekRx.match(line)) {
+        kdDebug() << "Matching " << line << endl;
+        hasmatch = true;
+        fn = errorFtnchekRx.group(errorFtnchekFileGroup);
+        row = QString(errorFtnchekRx.group(errorFtnchekRowGroup)).toInt()-1;
     } else if (errorJadeRx.match(line)) {
         hasmatch = true;
         fn = errorGccRx.group(errorJadeFileGroup);

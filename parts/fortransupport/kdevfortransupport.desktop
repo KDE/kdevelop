@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Fortran 77 support
+Name=KDevFortran77Support
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevfortransupport
+X-KDevelop-Language=Fortran77

@@ -9,35 +9,25 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWCONFIGWIDGET_H_
-#define _FILEVIEWCONFIGWIDGET_H_
+#ifndef _FORTRANSUPPORTFACTORY_H_
+#define _FORTRANSUPPORTFACTORY_H_
 
-#include "fileviewconfigwidgetbase.h"
-
-class FileViewPart;
+#include "kdevfactory.h"
 
 
-class FileViewConfigWidget : public FileViewConfigWidgetBase
+class FortranSupportFactory : public KDevFactory
 {
     Q_OBJECT
 
 public:
-    FileViewConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
-    ~FileViewConfigWidget();
+    FortranSupportFactory( QObject *parent=0, const char *name=0 );
+    ~FortranSupportFactory();
 
-public slots:
-     void accept();
+    virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
+    static KInstance *instance();
 
 private:
-    virtual void addGroup();
-    virtual void removeGroup();
-    virtual void moveUp();
-    virtual void moveDown();
-    
-    void readConfig();
-    void storeConfig();
-    
-    FileViewPart *m_part;
+    static KInstance *s_instance;
 };
 
 #endif

@@ -3,7 +3,7 @@
 # from KPart. 
 
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
-	  cppsupport javasupport pythonsupport perlsupport phpsupport \
+	  cppsupport javasupport pythonsupport perlsupport phpsupport fortransupport \
 	  debugger javadebugger konsole astyle ctags manager tools \
 	  autoproject scriptproject \
 	  kwrite-part simple-editor

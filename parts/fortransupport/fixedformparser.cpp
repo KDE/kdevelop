@@ -9,35 +9,34 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FILEVIEWCONFIGWIDGET_H_
-#define _FILEVIEWCONFIGWIDGET_H_
+#include <qfile.h>
+#include <qtextstream.h>
+#include "classstore.h"
 
-#include "fileviewconfigwidgetbase.h"
-
-class FileViewPart;
+#include "fixedformparser.h"
 
 
-class FileViewConfigWidget : public FileViewConfigWidgetBase
+FixedFormParser::FixedFormParser(ClassStore *classstore)
 {
-    Q_OBJECT
+    store = classstore;
+    stream = 0;
+}
 
-public:
-    FileViewConfigWidget( FileViewPart *widget, QWidget *parent, const char *name=0 );
-    ~FileViewConfigWidget();
 
-public slots:
-     void accept();
+void FixedFormParser::parse(const QString &fileName)
+{
+    QFile f(QFile::encodeName(fileName));
+    if (!f.open(IO_ReadOnly))
+        return;
+    stream = new QTextStream(&f);
 
-private:
-    virtual void addGroup();
-    virtual void removeGroup();
-    virtual void moveUp();
-    virtual void moveDown();
-    
-    void readConfig();
-    void storeConfig();
-    
-    FileViewPart *m_part;
-};
+    QCString line;
+    int lineNo = 0;
+    while (!stream->atEnd()) {
+        line = stream->readLine();
+        ++lineNo;
+    }
 
-#endif
+    delete stream;
+    f.close();
+}

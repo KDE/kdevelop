@@ -11,7 +11,9 @@
 
 #include <qdom.h>
 #include <qlistview.h>
+#include <knotifyclient.h>
 
+#include "addfilegroupdlg.h"
 #include "fileviewpart.h"
 #include "fileviewconfigwidget.h"
 
@@ -22,6 +24,8 @@ FileViewConfigWidget::FileViewConfigWidget(FileViewPart *part,
 {
     m_part = part;
 
+    listview->setSorting(-1);
+    
     readConfig();
 }
 
@@ -37,10 +41,16 @@ void FileViewConfigWidget::readConfig()
     QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
     QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
 
+    QListViewItem *lastItem = 0;
     QDomElement groupEl = groupsEl.firstChild().toElement();
     while (!groupEl.isNull()) {
-        if (groupEl.tagName() == "group")
-            new QListViewItem(listview, groupEl.attribute("name"), groupEl.attribute("pattern"));
+        if (groupEl.tagName() == "group") {
+            QListViewItem *newItem =
+                new QListViewItem(listview, groupEl.attribute("name"), groupEl.attribute("pattern"));
+            if (lastItem)
+                newItem->moveItem(lastItem);
+            lastItem = newItem;
+        }
         groupEl = groupEl.nextSibling().toElement();
     }
 }
@@ -59,23 +69,53 @@ void FileViewConfigWidget::storeConfig()
 
     QListViewItem *item = listview->firstChild();
     while (item) {
-            QDomElement groupEl = projectDom.createElement("group");
-            groupEl.setAttribute("name", item->text(0));
-            groupEl.setAttribute("pattern", item->text(1));
-            groupsEl.appendChild(groupEl);
+        QDomElement groupEl = projectDom.createElement("group");
+        groupEl.setAttribute("name", item->text(0));
+        groupEl.setAttribute("pattern", item->text(1));
+        groupsEl.appendChild(groupEl);
+        item = item->nextSibling();
     }
 }
 
 
 void FileViewConfigWidget::addGroup()
 {
+    AddFileGroupDialog dlg;
+    if (!dlg.exec())
+        return;
+
+    (void) new QListViewItem(listview, dlg.title(), dlg.pattern());
 }
 
 
 void FileViewConfigWidget::removeGroup()
 {
-    if (listview->currentItem())
-        delete listview->currentItem();
+    delete listview->currentItem();
+}
+
+
+void FileViewConfigWidget::moveUp()
+{
+    if (listview->currentItem() == listview->firstChild()) {
+        KNotifyClient::beep();
+        return;
+    }
+
+    QListViewItem *item = listview->firstChild();
+    while (item->nextSibling() != listview->currentItem())
+        item = item->nextSibling();
+    item->moveItem(listview->currentItem());
+}
+
+
+void FileViewConfigWidget::moveDown()
+{
+   if (listview->currentItem()->nextSibling() == 0) {
+        KNotifyClient::beep();
+        return;
+   }
+
+   listview->currentItem()->moveItem(listview->currentItem()->nextSibling());
 }
 
 
