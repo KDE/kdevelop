@@ -1,3 +1,7 @@
+2001-11-01  F@lk Brettschneider <falk@kdevelop.org>
+    * workaround for a strange behaviour of kdoc: don't try libkmid when building the API documentation of the project
+      --> at least building the API docu works now again
+
 2001-10-30  Roland Krause  <rokrau@yahoo.com>
     * Fixed compilation problems with KDE3 and Qt3
 
