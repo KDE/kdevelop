@@ -68,6 +68,8 @@ KTabZoomFrame::KTabZoomFrame(QWidget *parent, KTabZoomPosition::Position pos, co
   vbox->addWidget(f);
 
   QHBoxLayout *hbox = new QHBoxLayout(f);
+  if (pos == KTabZoomPosition::Right)
+    hbox->setDirection(QBoxLayout::RightToLeft);
 
   d->m_title = new QLabel(f);
   d->m_title->setPaletteBackgroundColor(KGlobalSettings::activeTitleColor());
