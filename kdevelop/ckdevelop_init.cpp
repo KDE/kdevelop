@@ -186,15 +186,15 @@ void CKDevelop::initView()
 
   if (config->hasGroup("dock_setting_default"))
   {
-		// use the last placements
-//FB    readDockConfig(config);
+    // use the last placements
+    readDockConfig(config);
   }
-  else
-  {
+//  else
+//  {
     // Set the default window placement
 //FB    outputdock->manualDock(maindock, KDockWidget::DockBottom, 80/*size relation in %*/);
 //FB    treedock->manualDock(maindock, KDockWidget::DockLeft, 30/*size relation in %*/);
-  }
+//  }
   // do not allow to pull off the dockwidgets to desktop or to tab mode
   // the probs which would be introduced are too hard to handle (in KDevelop-1.x ;-)
 //FB  outputdock->setEnableDocking( KDockWidget::DockCorner);
