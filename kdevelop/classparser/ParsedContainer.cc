@@ -132,9 +132,6 @@ void CParsedContainer::addMethod( CParsedMethod *aMethod )
   
   aMethod->asString( str );
 
-  if( useFullPath )
-    str = aMethod->declaredInScope + QString( "." ) + str;
-
   methodsByNameAndArg.insert( str, aMethod );
 }
 
@@ -234,7 +231,31 @@ CParsedMethod *CParsedContainer::getMethodByNameAndArg( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedMethod> *CParsedContainer::getSortedMethodList()
 {
-  return getSortedDictList<CParsedMethod>( methodsByNameAndArg );
+  QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
+  CParsedMethod *aMethod;
+  char *str;
+  QStrList srted;
+  QString m;
+
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( aMethod = methods.first();
+       aMethod != NULL;
+       aMethod = methods.next() )
+  {
+    aMethod->asString( m );
+    srted.inSort( m );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getMethodByNameAndArg( str ) );
+  }
+
+  return retVal;
 }
 
 /*--------------------------- CParsedContainer::getAttributeByName()
