@@ -14,13 +14,13 @@ namespace KParts
 };
 
 
-class KDevPartController : public QWidget
+class KDevPartController : public QObject
 {
   Q_OBJECT
 
 public:
 
-  KDevPartController(QWidget *parent=0, const char *name=0);
+  KDevPartController(QObject *parent);
 
   virtual void editDocument(const KURL &url, int lineNum=-1) = 0;
   virtual void showDocument(const KURL &url, int lineNum=-1) = 0;

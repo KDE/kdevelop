@@ -73,9 +73,18 @@ void TopLevel::createFramework()
   m_bottomBar = new KTabZoomWidget(m_leftBar, KTabZoomPosition::Bottom);
   m_leftBar->addContent(m_bottomBar);
 
-  PartController::createInstance(m_bottomBar, this);
+  m_tabWidget = new QTabWidget(m_bottomBar);
+  m_tabWidget->setMargin(2);
 
-  m_bottomBar->addContent(PartController::getInstance());
+  PartController::createInstance(m_tabWidget);
+
+  m_bottomBar->addContent(m_tabWidget);
+
+  connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)), 
+	  PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
+
+  connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+	  this, SLOT(createGUI(KParts::Part*)));
 }
 
 
@@ -120,6 +129,13 @@ void TopLevel::slotQuit()
   saveSettings();
 
   kapp->quit();
+}
+
+
+void TopLevel::embedPartView(QWidget *view, const QString &name)
+{
+  m_tabWidget->addTab(view, name);
+  m_tabWidget->showPage(view);
 }
 
 

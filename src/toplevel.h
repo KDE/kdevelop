@@ -2,6 +2,9 @@
 #define _TOPLEVEL_H_
 
 
+#include <qtabwidget.h>
+
+
 #include <kparts/mainwindow.h>
 
 
@@ -14,6 +17,7 @@ class TopLevel : public KParts::MainWindow
 
 public:
 
+  void embedPartView(QWidget *view, const QString &title);
   void embedSelectView(QWidget *view, const QString &title);
   void embedOutputView(QWidget *view, const QString &title);
 
@@ -24,9 +28,12 @@ public:
 
   static TopLevel *getInstance();
 
-  void createGUI(KParts::Part *part);
-
   void loadSettings();
+
+
+private slots:
+
+  void createGUI(KParts::Part *part);
 
 
 protected:
@@ -53,6 +60,7 @@ private:
 
   void saveSettings();
 
+  QTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_bottomBar;
 
   static TopLevel *s_instance;

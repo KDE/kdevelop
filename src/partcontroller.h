@@ -32,18 +32,25 @@ class PartController : public KDevPartController
 
 public:
 
+  PartController(QWidget *toplevel);
+
   void editDocument(const KURL &url, int lineNum=-1);
   void showDocument(const KURL &url, int lineNum=-1);
 
   bool closeDocuments(const QStringList &list);
 
-  static void createInstance(QWidget *parent, QWidget *mainwindow, const char *name=0);
+  static void createInstance(QWidget *parent);
   static PartController *getInstance();
 
   void saveAllFiles();
   void revertAllFiles();
 
   KParts::Part *activePart();
+
+
+public slots:
+
+  void slotCurrentChanged(QWidget *w);
 
 
 protected:
@@ -67,8 +74,6 @@ private slots:
   void slotCloseWindow();
   void slotCloseAllWindows();
   void slotCloseOtherWindows();
-
-  void slotCurrentChanged(QWidget *w);
 
 
 private:

@@ -9,6 +9,7 @@
 
 #include "toplevel.h"
 #include "plugincontroller.h"
+#include "partcontroller.h"
 #include "core.h"
 
 
@@ -39,8 +40,9 @@ int main(int argc, char *argv[])
 
   app.setTopWidget(TopLevel::getInstance());
   TopLevel::getInstance()->loadSettings();
-  (void) PluginController::getInstance();
   
+  (void) PluginController::getInstance();
+
   TopLevel::getInstance()->show();
 
   Core::getInstance()->doEmitCoreInitialized();

@@ -61,18 +61,10 @@ bool PartListEntry::isEqual(const KURL &url)
 PartController *PartController::s_instance = 0;
 
 
-PartController::PartController(QWidget *parent, QWidget *mainwindow, const char *name)
-  : KDevPartController(parent, name)
+PartController::PartController(QWidget *parent)
+  : KDevPartController(parent)
 {
-  QVBoxLayout *vbox = new QVBoxLayout(this);
-
-  m_tabWidget = new QTabWidget(this);
-  vbox->addWidget(m_tabWidget);
-  m_tabWidget->setMargin(2);
-
-  connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)), this, SLOT(slotCurrentChanged(QWidget *)));
-
-  m_partManager = new KParts::PartManager(mainwindow, m_tabWidget);
+  m_partManager = new KParts::PartManager(parent);
   connect(m_partManager, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
   connect(m_partManager, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotPartRemoved(KParts::Part*)));
   connect(m_partManager, SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
@@ -86,10 +78,10 @@ PartController::~PartController()
 }
 
 
-void PartController::createInstance(QWidget *parent, QWidget *mainwindow, const char *name)
+void PartController::createInstance(QWidget *parent)
 {
   if (!s_instance)
-    s_instance = new PartController(parent, mainwindow, name);
+    s_instance = new PartController(parent);
 }
 
 
@@ -162,7 +154,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
   if (factory)
   {
-    KParts::ReadWritePart *part = static_cast<KParts::ReadWritePart*>(factory->createPart(m_tabWidget, "KParts/ReadWritePart"));
+    KParts::ReadWritePart *part = static_cast<KParts::ReadWritePart*>(factory->createPart(TopLevel::getInstance(), "KParts/ReadWritePart"));
     part->openURL(url);
     integratePart(part, url);
     setLineNumber(lineNum);
@@ -191,7 +183,7 @@ void PartController::showDocument(const KURL &url, int lineNum)
 
   if (factory)
   {
-    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(m_tabWidget, "KParts/ReadOnlyPart"));
+    KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance(), "KParts/ReadOnlyPart"));
     part->openURL(url);
     integratePart(part, url);
     setLineNumber(lineNum);
@@ -233,13 +225,9 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
 
 void PartController::integratePart(KParts::Part *part, const KURL &url)
 {
-  m_tabWidget->addTab(part->widget(), url.fileName());
-  m_tabWidget->showPage(part->widget());
+  TopLevel::getInstance()->embedPartView(part->widget(), url.fileName());
 
   m_partList.append(new PartListEntry(part, url));
-
-  if (part->widget()->inherits("QFrame"))
-    kdDebug() << "INHERITS QFRAME!!!!!!!!" << endl;
 
   m_partManager->addPart(part);
 }
@@ -267,8 +255,6 @@ void PartController::slotActivePartChanged(KParts::Part *part)
 {
   kdDebug() << "ACTIVE PART: " << part << endl;
 
-  TopLevel::getInstance()->createGUI(part);
-
   emit activePartChanged(part);
 }
 
@@ -276,8 +262,12 @@ void PartController::slotActivePartChanged(KParts::Part *part)
 void PartController::activatePart(KParts::Part *part)
 {
   m_partManager->setActivePart(part);
-  m_tabWidget->showPage(part->widget());
-  part->widget()->setFocus();
+
+  if (part->widget())
+  {
+    TopLevel::getInstance()->raiseView(part->widget());
+    part->widget()->setFocus();
+  }
 }
 
 
