@@ -645,6 +645,7 @@ void MainWindowIDEAl::updateTabForPart( KParts::ReadWritePart * rw_part )
         {
             m_tabWidget->changeTab( rw_part->widget(), rw_part->url().fileName() );
         }
+        m_tabWidget->setTabToolTip( rw_part->widget(), rw_part->url().url() );
     }
 }
 
