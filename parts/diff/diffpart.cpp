@@ -49,7 +49,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget = new DiffWidget();
   diffWidget->setIcon( SmallIcon("editcopy") );
   QString nm( i18n( "Diff" ) );
-  diffWidget->setCaption( nm );
+  diffWidget->setCaption( i18n( "Diff Output" ) );
   QWhatsThis::add(diffWidget, i18n("<b>Difference viewer</b><p>Shows output of the diff format. "
     "Can utilize every installed component that is able to show diff output. "
     "For example if you have Kompare installed, Difference Viewer can use its graphical diff view."));

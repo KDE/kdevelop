@@ -28,6 +28,7 @@
 #include "kdevmainwindow.h"
 #include "subversion_core.h"
 #include "subversion_part.h"
+#include "subversion_widget.h"
 #include "subversionoptionswidgetimpl.h"
 #include "subversionprojectwidget.h"
 #include "urlutil.h"
@@ -86,6 +87,7 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 	connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
 	connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
 
+	m_impl->processWidget()->setCaption(i18n( "Subversion Output" ));
 	mainWindow()->embedOutputView( (QWidget*)m_impl->processWidget(), i18n( "Subversion" ), i18n( "Subversion messages" ) );
     QWhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
 	setVersionControl( this );
@@ -192,7 +194,8 @@ void subversionPart::contextMenu( QPopupMenu *popup, const Context *context ) {
 			return;
 
 		KPopupMenu *subMenu = new KPopupMenu( popup );
-		popup->insertSeparator();
+                if (context->hasType( Context::FileContext ))
+		    popup->insertSeparator();
 
 		int id = subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
 		// CvsService let to do log and diff operations only on one file (or directory) at time

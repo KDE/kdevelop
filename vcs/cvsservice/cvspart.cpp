@@ -130,6 +130,7 @@ void CvsServicePart::init()
 
     m_impl->m_widget->setIcon( UserIcon( "kdev_cvs", KIcon::DefaultState, CvsFactory::instance()) );
     QWhatsThis::add( m_impl->processWidget(), i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows output of Cervisia CVS Service.") );
+    m_impl->processWidget()->setCaption(i18n("CvsService Output"));
     mainWindow()->embedOutputView( m_impl->processWidget(), i18n("CvsService"), i18n("cvs output") );
 }
 
@@ -294,7 +295,8 @@ void CvsServicePart::contextMenu( QPopupMenu *popup, const Context *context )
                 return;
 
         KPopupMenu *subMenu = new KPopupMenu( popup );
-        popup->insertSeparator();
+        if (context->hasType( Context::FileContext ))
+            popup->insertSeparator();
 
         int id = subMenu->insertItem( actionCommit->text(), this, SLOT(slotCommit()) );
         subMenu->setWhatsThis(id, i18n("<b>Commit file(s)</b><p>Commits file to repository if modified."));

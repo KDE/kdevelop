@@ -38,6 +38,7 @@ FileListPart::FileListPart(QObject *parent, const char *name, const QStringList&
     setXMLFile("kdevpart_filelist.rc");
 
     m_widget = new FileListWidget(this);
+	m_widget->setCaption(i18n("File List"));
 
     QWhatsThis::add
         (m_widget, i18n("<b>File List</b><p>This is the list of opened files."));
