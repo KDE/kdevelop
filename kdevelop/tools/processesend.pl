@@ -34,14 +34,16 @@ else {
   #start configure
   printflush (STDOUT,"make configure...\n");
   chdir ($overDirectory);
-	if ($processes{APPLICATION} eq "qt2normal" || $processes{APPLICATION} eq "kde2normal" ||
-			$processes{APPLICATION} eq "kde2mini" || $processes{APPLICATION} eq "kde2mdi") {
-	  system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
+       if ($processes{APPLICATION} eq "qt2normal" || $processes{APPLICATION} eq "qt2mdi" ||
+       	$processes{APPLICATION} eq "kde2normal" || $processes{APPLICATION} eq "kde2mini" ||
+       	$processes{APPLICATION} eq "kde2mdi")
+       {
+         system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure $processes{CONFIGARG}");
 	
-	}
-	else{
-  	system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure");
-	}
+       }
+       else{
+ 	system ("LDFLAGS=\" \" CFLAGS=\"-O0 -g3 -Wall\" CXXFLAGS=\"-O0 -g3 -Wall\" ./configure");
+       }
 }
 #if User-Documentation was chosen in kAppWizard
 if ($processes{USER} eq "yes") {

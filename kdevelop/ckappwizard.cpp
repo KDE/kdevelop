@@ -163,8 +163,8 @@ void CKAppWizard::initPages(){
   qtentry->setExpandable (true);
   qtentry->setOpen (TRUE);
   qtentry->sortChildItems (0,FALSE);
-  //qtminiitem = new QListViewItem (qtentry,"Mini");
-  qt_2normalitem = new QListViewItem( qtentry, i18n("Qt 2.x SDI"));
+  qt2mdiitem = new QListViewItem( qtentry, i18n("Qt 2.1 MDI"));
+  qt2normalitem = new QListViewItem( qtentry, i18n("Qt 2.x SDI"));
   qtnormalitem = new QListViewItem (qtentry,i18n("Normal"));
 
   kdeentry = new QListViewItem (applications,i18n("KDE"));
@@ -1061,8 +1061,11 @@ void CKAppWizard::generateEntries() {
   else if (qtnormalitem->isSelected()) {
     entries << "qtnormal\n";
   }
-  else if (qt_2normalitem->isSelected()) {
+  else if (qt2normalitem->isSelected()) {
      entries << "qt2normal\n";
+  }
+  else if (qt2mdiitem->isSelected()) {
+     entries << "qt2mdi\n";
   }
   else if (cppitem->isSelected()) {
     entries << "cpp\n";
@@ -1079,7 +1082,7 @@ void CKAppWizard::generateEntries() {
   else if (customprojitem->isSelected()) {
     entries << "customproj\n";
   }
-	if (qt_2normalitem->isSelected() || kde2miniitem->isSelected() ||
+	if (qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
 			kde2normalitem->isSelected() || kde2mdiitem->isSelected())
 	{
   	entries << "CONFIGARG\n";
@@ -1252,8 +1255,11 @@ void CKAppWizard::okPermited() {
   else if (qtnormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
   } 
-  else if (qt_2normalitem->isSelected()) {
+  else if (qt2normalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt2.tar.gz";
+  }
+  else if (qt2mdiitem->isSelected()) {
+    copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qtmdi.tar.gz";
   }
   else if (cppitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
@@ -1391,10 +1397,11 @@ void CKAppWizard::slotAppEnd() {
   delete (kde2mdiitem);
   delete (kdeentry);
   qtentry->removeItem (qtnormalitem);
-  qtentry->removeItem (qt_2normalitem);
+  qtentry->removeItem (qt2normalitem);
+  qtentry->removeItem (qt2mdiitem);
   delete (qtnormalitem);
-  delete (qt_2normalitem);
-  //delete (qtminiitem);
+  delete (qt2normalitem);
+  delete (qt2mdiitem);
   delete (qtentry);
   ccppentry->removeItem (cppitem);
   ccppentry->removeItem (citem);
@@ -1621,7 +1628,7 @@ void CKAppWizard::slotApplicationClicked() {
     											"a menubar, toolbar and statusbar, including support for "
     											"a generic document-view model."));
   }
-  else if (qt_2normalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+  else if (qt2normalitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
     pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtApp.bmp");
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(false);
@@ -1645,6 +1652,31 @@ void CKAppWizard::slotApplicationClicked() {
     apphelp->setText (i18n("Create a Qt-2.x Application with a main window containing "
     											"a menubar, toolbar and statusbar, including support for "
     											"a single document-view interface (SDI) model."));
+  }
+  else if (qt2mdiitem->isSelected() && strcmp (cancelButton->text(), i18n("Exit"))) {
+    pm.load(KApplication::kde_datadir() +"/kdevelop/pics/qtmdi.bmp");
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setEnabled(false);
+    apidoc->setChecked(false);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(true);
+    miniicon->setChecked(true);
+    miniload->setEnabled(true);
+    iconload->setEnabled(true);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
+      okButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a Qt-2.1 Application with a main window containing "
+    											"a menubar, toolbar and statusbar, including support for "
+    											"a multiple document interface (MDI) model."));
   }
   else if ((citem->isSelected() || cppitem->isSelected())
             && strcmp (cancelButton->text(), i18n("Exit"))) {
@@ -2008,8 +2040,11 @@ void CKAppWizard::slotProcessExited() {
   else if (qtnormalitem->isSelected()) {
     project->setProjectType("normal_qt");
   } 
-  else if (qt_2normalitem->isSelected()) {
+  else if (qt2normalitem->isSelected()) {
     project->setProjectType("normal_qt2");
+  }
+  else if (qt2mdiitem->isSelected()) {
+    project->setProjectType("mdi_qt2");
   }
   else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
@@ -2041,11 +2076,11 @@ void CKAppWizard::slotProcessExited() {
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
     project->setLDADD (" -lkfile -lkdeui -lkdecore -lqt -lXext -lX11");
   }
-  else if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+  else if (qtnormalitem->isSelected() || qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
     project->setLDADD (" -lqt -lXext -lX11");
   }
 
-  if(qt_2normalitem->isSelected() || kde2normalitem->isSelected() ||
+  if(qt2normalitem->isSelected() ||qt2mdiitem->isSelected() || kde2normalitem->isSelected() ||
   	kde2miniitem->isSelected() || kde2mdiitem->isSelected())
   {
   	KConfig * config = KApplication::getKApplication()->getConfig();
@@ -2053,7 +2088,7 @@ void CKAppWizard::slotProcessExited() {
 		QString qtpath=config->readEntry("qt2dir");
 		if(qtpath.right(1) == "/")
 			qtpath=qtpath.remove(qtpath.length()-1,1);
-		if(qt_2normalitem->isSelected())
+		if(qt2normalitem->isSelected() || qt2mdiitem->isSelected())
 	    project->setConfigureArgs("--with-qt-dir="+qtpath);
   	else{	
   		QString kde2path=config->readEntry("kde2dir");
@@ -2107,7 +2142,8 @@ void CKAppWizard::slotProcessExited() {
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
-  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected() || qt_2normalitem->isSelected()) &&
+  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected() ||
+  		 qt2normalitem->isSelected() || qt2mdiitem->isSelected()) &&
 CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.am";
 //    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
     makeAmInfo.type = "po";
@@ -2216,7 +2252,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
 
   if (kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() ||
   	kde2normalitem->isSelected() || kde2mdiitem->isSelected() ||
-  	qtnormalitem->isSelected() || qt_2normalitem->isSelected())
+  	qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected())
 	{
      if (generatesource->isChecked()) {
       fileInfo.rel_name = namelow + "/" + namelow + "doc.cpp";
@@ -2269,7 +2305,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.rel_name = namelow + "/" + namelow + ".xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(qtnormalitem->isSelected() || qt_2normalitem->isSelected())) {
+    if (!(qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected())) {
       fileInfo.install = true;
       fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
     }
@@ -2284,7 +2320,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
-    if (!(qtnormalitem->isSelected() || qtnormalitem->isSelected())) {
+    if (!(qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected())) {
       fileInfo.install = true;
       fileInfo.install_location = "$(kde_minidir)/" + namelow + ".xpm";
     }
@@ -2295,7 +2331,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     project->addFileToProject (namelow + "/mini-" + namelow + ".xpm",fileInfo);
   }
   
-  if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+  if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
     fileInfo.rel_name = namelow + "/filenew.xpm";
     fileInfo.type = DATA;
     fileInfo.dist = true;
@@ -2324,7 +2360,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-1.html";
       } 
       else 
@@ -2338,7 +2374,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-2.html";
       } 
       else 
@@ -2351,7 +2387,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-3.html";
       } 
       else 
@@ -2364,7 +2400,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-4.html";
       } 
       else 
@@ -2377,7 +2413,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-5.html";
       } 
       else 
@@ -2390,7 +2426,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index-6.html";
       } 
       else 
@@ -2403,7 +2439,7 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     fileInfo.dist = true;
     if (!cppitem->isSelected() && !citem->isSelected()) {
       fileInfo.install = true;
-      if (qtnormalitem->isSelected() || qt_2normalitem->isSelected()) {
+      if (qtnormalitem->isSelected() || qt2normalitem->isSelected()|| qt2mdiitem->isSelected()) {
 	fileInfo.install_location = "$(prefix)/doc/" + namelow+ "/index.html";
       } 
       else 
@@ -2441,7 +2477,9 @@ CToolClass::searchProgram("xgettext")) {     makeAmInfo.rel_name = "po/Makefile.
     project->setFilters("GNU",group_filters);
   }
   
-  if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected()|| qt_2normalitem->isSelected())) {
+  if (!(cppitem->isSelected() || citem->isSelected() ||
+  		qtnormalitem->isSelected()|| qt2normalitem->isSelected()|| qt2mdiitem->isSelected()))
+  {
     group_filters.clear();
     group_filters.append("*.po");
     project->addLFVGroup (i18n("Translations"),"");
@@ -2556,7 +2594,7 @@ void CKAppWizard::slotMakeEnd() {
     }
     if (kdenormalitem->isSelected()|| kdenormaloglitem->isSelected() ||
     	kde2normalitem->isSelected()|| kde2mdiitem->isSelected() ||
-    	qtnormalitem->isSelected()|| qt_2normalitem->isSelected())
+    	qtnormalitem->isSelected()|| qt2normalitem->isSelected()|| qt2mdiitem->isSelected())
     {
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.cpp");
       file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.h");

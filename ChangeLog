@@ -1,3 +1,7 @@
+2000-01-26 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added Qt 2.1 MDI frameapp to appwizard
+	* fixed static library behavoir for qt2/kde2 apps (_METASOURCES=AUTO) in cproject.cpp
+
 2000-01-25 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added KDE 2 MDI frameapp to appwizard --needs qt-2.1 like KDE2 CVS version
 

@@ -673,10 +673,19 @@ void CProject::updateMakefileAm(QString makefile){
 	    sources =  str + " " + sources ;
 	  }
 	  QDir dir(getDir(makefile));
-	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c"){
+//	  if (getProjectType() != "normal_cpp" && getProjectType() != "normal_c" && getProjectType() != "qt2mdi"){
+		QString type=getProjectType();
+	  if (!(type=="normal_cpp" || type== "normal_c" || type== "mdi_qt2" || type=="normal_qt2" ||
+	  		type=="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2"))
+	  {
 	    stream << "\nINCLUDES = $(all_includes)\n\n";
 	    stream << "lib" << dir.dirName() << "_a_METASOURCES = USE_AUTOMOC\n\n";
 	  }
+	  if(type =="normal_qt2" || type=="mdi_qt2"||type =="normal_kde2" || type=="mini_kde2" || type=="mdi_kde2")
+	  {
+	    stream << "\nINCLUDES = $(QT_INCLUDES) $(X_INCLUDES)\n\n";
+	    stream << "lib" << dir.dirName() << "_a_METASOURCES = AUTO\n\n";
+		}	
 	  stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
 	  stream << "lib" << dir.dirName() << "_a_SOURCES = " << sources << "\n";
 	}

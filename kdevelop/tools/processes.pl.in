@@ -60,29 +60,19 @@ if ($processes{APPLICATION} eq "customproj") {
 }
 else {
   unpackFiles ("template.tar");	
-  if ($processes{APPLICATION} eq "kdemini") {
+  if ($processes{APPLICATION} eq "kdemini" || $processes{APPLICATION} eq "kde2mini") {
     changeMiniApp();
   }
-  elsif ($processes{APPLICATION} eq "kdenormal") {
+  elsif ($processes{APPLICATION} eq "kdenormal" || $processes{APPLICATION} eq "kde2normal" ||
+  			$processes{APPLICATION} eq "kde2mdi")
+  {
     changeNormalApp();
   }
-  # Added by Robert Wheat, 01-22-2000, OpenGL(tm) Support
   elsif ($processes{APPLICATION} eq "kdenormalogl") {
     changeNormalOGLApp();
   }
-  elsif ($processes{APPLICATION} eq "kde2mini") {
-    changeMiniApp();
-  }
-  elsif ($processes{APPLICATION} eq "kde2normal") {
-    changeNormalApp();
-  }
-  elsif ($processes{APPLICATION} eq "kde2mdi") {
-    changeNormalApp();
-  }
-  elsif ($processes{APPLICATION} eq "qtnormal") {
-    changeQtApp();
-  }
-  elsif ($processes{APPLICATION} eq "qt2normal") {
+  elsif ($processes{APPLICATION} eq "qtnormal" || $processes{APPLICATION} eq "qt2normal" ||
+  				$processes{APPLICATION} eq "qt2mdi") {
     changeQtApp();
   }
   elsif ($processes{APPLICATION} eq "cpp") {
