@@ -74,7 +74,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     m_needMakefileCvs = false;
 
     m_widget = new AutoProjectWidget(this, m_isKDE);
-	m_widget->setIcon(SmallIcon( info()->icon() ));
+    m_widget->setIcon(SmallIcon( info()->icon() ));
     m_widget->setCaption(i18n("Automake Manager"));
     QWhatsThis::add(m_widget, i18n("<b>Automake manager</b><p>"
                                    "The project tree consists of two parts. The 'overview' "
@@ -222,11 +222,11 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
 
 //    connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)), this, SLOT(projectConfigWidget(KDialogBase*)) );
 
-	_configProxy = new ConfigWidgetProxy( core() );
-	_configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS, info()->icon() );
-	_configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS, info()->icon() );
-	_configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS, info()->icon() );
-	connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
+    _configProxy = new ConfigWidgetProxy( core() );
+    _configProxy->createProjectConfigPage( i18n("Configure Options"), CONFIGURE_OPTIONS, info()->icon() );
+    _configProxy->createProjectConfigPage( i18n("Run Options"), RUN_OPTIONS, info()->icon() );
+    _configProxy->createProjectConfigPage( i18n("Make Options"), MAKE_OPTIONS, info()->icon() );
+    connect( _configProxy, SIGNAL(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )), this, SLOT(insertConfigWidget(const KDialogBase*, QWidget*, unsigned int )) );
 
 
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
@@ -554,9 +554,9 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 			if ( !messageBoxShown )
 			{
 				KMessageBox::information(m_widget, i18n("The directory you selected is not the active directory.\n"
-														"You should 'activate' the target you're currently working on in Automake Manager.\n"
-														"Just right-click a target and choose 'Make Target Active'."),
-														i18n ( "No Active Target Found" ), "No automake manager active target warning" );
+									"You should 'activate' the target you're currently working on in Automake Manager.\n"
+									"Just right-click a target and choose 'Make Target Active'."),
+									i18n ( "No Active Target Found" ), "No automake manager active target warning" );
 				messageBoxShown = true;
 			}
 		}
@@ -652,16 +652,16 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
                                                               "and no configure script for this project.\n"
                                                               "Run automake & friends and configure first?"));
             if (r == KMessageBox::No)
-                return 0;
+              return QString::null;
             preCommand = makefileCvsCommand();
             if (preCommand.isNull())
-                return 0;
+              return QString::null;
             preCommand += " && ";
             preCommand += configureCommand() + " && ";
         } else {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"));
             if (r == KMessageBox::No)
-                return 0;
+              return QString::null;
             preCommand = configureCommand() + " && ";
         }
     }
@@ -729,16 +729,9 @@ void AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem)
   for (l2it = l2.begin(); l2it != l2.end(); ++l2it) {
     QString dependency = *l2it;
     if (dependency.startsWith("$(top_builddir)/")) {
-        // These are the internal libraries
-#if KDE_VERSION > 305
-        dependency.remove("$(top_builddir)/");
-#else
-        QString topBuildDirStr("$(top_builddir)/");
-        int i = dependency.find(topBuildDirStr);
-        if (i != -1) {
-        dependency.remove(i, i + topBuildDirStr.length() - 1);
-    }
-#endif
+       // These are the internal libraries
+      dependency.remove("$(top_builddir)/");
+
       tdir = buildDirectory();
       if (!tdir.endsWith("/") && !tdir.isEmpty())
         tdir += "/";
