@@ -14,7 +14,11 @@
 
 #include <qstack.h>
 #include "qtextedit.h"
+#if QT_VERSION < 300
 #include "qrichtext_p.h"
+#else
+#include "private/qrichtext_p.h"
+#endif
 
 
 class MakeViewPart;
