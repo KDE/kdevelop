@@ -24,12 +24,12 @@
 #include <qdialog.h>
 #include <qpainter.h>
 
-#include <keditlistbox.h>
-
 #ifndef PURE_QT
+#include <keditlistbox.h>
 #include <kpushbutton.h>
 #include <kstdguiitem.h>
 #else
+#include "qeditlistbox.h"
 #include <qpushbutton.h>
 #include <compat_tools.h>
 #endif
@@ -70,7 +70,11 @@ void PStringListEdit::showEditor()
     QDialog* dia = new QDialog(this, "stringlist_dialog", true);
     QVBoxLayout *dv = new QVBoxLayout(dia, 2);
 
+#ifdef PURE_QT
+    QEditListBox *select = new QEditListBox(dia, "select_char");
+#else
     KEditListBox *select = new KEditListBox(dia, "select_char");
+#endif
     dv->addWidget(select);
 
     QHBoxLayout *dh = new QHBoxLayout(dv, 6);
