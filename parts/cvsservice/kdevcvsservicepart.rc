@@ -6,7 +6,7 @@
             <Text>&amp;Version Control</Text>
             <Merge />
             <Menu name="version_control_tools_cvsservice">
-                <Text>CVS &amp;Service</Text>
+                <Text>&amp;CVS Service</Text>
                 <Action name="cvsservice_commit" />
                 <Action name="cvsservice_diff" />
                 <Action name="cvsservice_log" />
@@ -14,6 +14,8 @@
                 <Action name="cvsservice_add_bin" />
                 <Action name="cvsservice_remove" />
                 <Separator />
+                <Action name="cvsservice_tag" />
+                <Action name="cvsservice_untag" />
                 <Action name="cvsservice_update" />
                 <Action name="cvsservice_revert" />
                 <Separator />

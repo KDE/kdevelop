@@ -62,10 +62,8 @@ public:
     virtual void createNewProject( const QString& dir );
     /**
     * Fetch a module from remote repository, so it can be used for importing
-    * @param parent
-    * @return the full path to the fetched module, or an empty string
     */
-    virtual void fetchFromRepository( QWidget *parent );
+    virtual void fetchFromRepository();
 
 private slots:
     // Add menu items binded to cvs operations' slots to @p popup, using

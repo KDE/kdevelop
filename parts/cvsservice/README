@@ -24,6 +24,7 @@ Current features:
 * checkout from remote repository ability added to the appwizard/importdlg
 * should handle :ext: repositories thanks to cvsservice
 * can tag / un-tag files
+* Can revert and diff between specific releases
 
 To Do list
 
@@ -31,6 +32,8 @@ To Do list
 integrate them ;-)
 
 1. There is need of testing for the SSH repositories!
+2. Make the CvsProcessWidget show the start / ending of commands (currently does nothing)
+3. Share a common outputview between VCS ...
 
 F.A.Q.
 

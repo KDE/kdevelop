@@ -48,6 +48,10 @@ public:
     virtual void unTag( const KURL::List& urlList );
     virtual void addToIgnoreList( const KURL::List& urlList );
     virtual void removeFromIgnoreList( const KURL::List& urlList );
+    virtual void createNewProject( const QString &dirName,
+        const QString &cvsRsh, const QString &location,
+        const QString &message, const QString &module, const QString &vendor,
+        const QString &release, bool mustInitRoot );
 
 private slots:
     void slotJobFinished( bool normalExit, int exitStatus );

@@ -130,6 +130,17 @@ public:
     * @param urlList
     */
     virtual void removeFromIgnoreList( const KURL::List& urlList ) = 0;
+    /**
+    * Creates a new project with cvs support, that is will import the
+    * generated sources in the repository.
+    * @param dirName path to project directory on local system
+    * @param cvsRsh value for the CVS_RSH env var (for accessing :ext:
+    *        repositories)
+    */
+    virtual void createNewProject( const QString &dirName,
+        const QString &cvsRsh, const QString &location,
+        const QString &message, const QString &module, const QString &vendor,
+        const QString &release, bool mustInitRoot ) = 0;
 
 // Helpers
 public:

@@ -16,6 +16,8 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kprocess.h>
+#include <kstandarddirs.h>
 #include <kmainwindow.h>
 #include <dcopref.h>
 #include <repository_stub.h>
@@ -27,12 +29,14 @@
 #include <kdevmainwindow.h>
 #include <kdevcore.h>
 #include <kdevdifffrontend.h>
+#include <kdevmakefrontend.h>
 
 #include "cvsprocesswidget.h"
 #include "checkoutdialog.h"
 #include "commitdlg.h"
 #include "tagdialog.h"
 #include "diffdialog.h"
+#include "releaseinputdialog.h"
 #include "logform.h"
 
 #include "changelog.h"
@@ -87,8 +91,7 @@ void CvsServiceImpl::checkout()
 {
     kdDebug() << "CvsServiceImpl::checkout()" << endl;
 
-    CheckoutDialog dlg( m_cvsService, mainWindow()->main()->centralWidget(),
-        "checkoutdialog" );
+    CheckoutDialog dlg( m_cvsService, mainWindow()->main()->centralWidget() );
 
     if ( dlg.exec() == QDialog::Accepted )
     {
@@ -213,7 +216,21 @@ void CvsServiceImpl::revert( const KURL::List& urlList )
         return;
 
     CvsOptions *options = CvsOptions::instance();
-    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, options->revertOptions() );
+	QString revertOptions = options->revertOptions();
+
+    ReleaseInputDialog dlg(
+		i18n("Release / tag to revert"),
+		mainWindow()->main()->centralWidget()
+	);
+	if (dlg.exec() == QDialog::Rejected)
+		return;
+	if (!dlg.releaseTag().isEmpty())
+	{
+		QString releaseOption = " -r " + dlg.releaseTag();
+		revertOptions += releaseOption;
+	}
+
+    DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, revertOptions );
 
     processWidget()->startJob();
     connect( processWidget(), SIGNAL(jobFinished(bool,int)),
@@ -329,6 +346,47 @@ void CvsServiceImpl::addToIgnoreList( const KURL::List& urlList )
 void CvsServiceImpl::removeFromIgnoreList( const KURL::List& urlList )
 {
     CvsPartImpl::removeFromIgnoreList( projectDirectory(), urlList );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void CvsServiceImpl::createNewProject( const QString &dirName,
+    const QString &cvsRsh, const QString &location,
+    const QString &message, const QString &module, const QString &vendor,
+    const QString &release, bool mustInitRoot )
+{
+    kdDebug( 9000 ) << "====> CvsServiceImpl::createNewProject( const QString& )" << endl;
+
+    CvsOptions *options = CvsOptions::instance();
+    options->setCvsRshEnvVar( cvsRsh );
+    options->setLocation( location );
+
+    QString rsh_preamble;
+    if ( !options->cvsRshEnvVar().isEmpty() )
+        rsh_preamble = "CVS_RSH=" + KShellProcess::quote( options->cvsRshEnvVar() );
+
+    QString init;
+    if (mustInitRoot)
+    {
+        init = rsh_preamble + " cvs -d " + KShellProcess::quote( options->location() ) + " init && ";
+    }
+    QString cmdLine = init + "cd " + KShellProcess::quote(dirName) +
+        " && " + rsh_preamble +
+        " cvs -d " + KShellProcess::quote(options->location()) +
+        " import -m " + KShellProcess::quote(message) + " " +
+        KShellProcess::quote(module) + " " +
+        KShellProcess::quote(vendor) + " " +
+        KShellProcess::quote(release) +
+        // CVS build-up magic here ...
+        " && sh " +
+        locate("data","kdevcvsservice/buildcvs.sh") + " . " +
+        KShellProcess::quote(module) + " " +
+        KShellProcess::quote(location);
+
+    kdDebug( 9000 ) << "  ** Will run the following command: " << endl << cmdLine << endl;
+    kdDebug( 9000 ) << "  ** on directory: " << dirName << endl;
+
+    m_part->makeFrontend()->queueCommand( dirName, cmdLine );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

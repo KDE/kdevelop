@@ -152,43 +152,43 @@ void CvsPart::setupActions()
     actionCommit = new KAction( i18n("&Commit"), 0, this,
         SLOT(slotActionCommit()), actionCollection(), "cvsservice_commit" );
 
-    actionDiff = new KAction( i18n("&Diff"), 0, this, SLOT(slotActionDiff()),
+    actionDiff = new KAction( i18n("&Difference between revisions"), 0, this, SLOT(slotActionDiff()),
         actionCollection(), "cvsservice_diff" );
 
-    actionLog = new KAction( i18n("&Log"), 0, this, SLOT(slotActionLog()),
+    actionLog = new KAction( i18n("Generate &log"), 0, this, SLOT(slotActionLog()),
         actionCollection(), "cvsservice_log" );
 
-    actionAdd = new KAction( i18n("&Add"), 0, this, SLOT(slotActionAdd()),
+    actionAdd = new KAction( i18n("&Add to repository"), 0, this, SLOT(slotActionAdd()),
         actionCollection(), "cvsservice_add" );
 
-    actionAddBinary = new KAction( i18n("Add as &binary"), 0, this,
+    actionAddBinary = new KAction( i18n("Add to repository as &binary"), 0, this,
         SLOT(slotActionAddBinary()), actionCollection(), "cvsservice_add_bin" );
 
-    actionRemove = new KAction( i18n("&Remove From Repository"), 0, this,
+    actionRemove = new KAction( i18n("&Remove from repository"), 0, this,
         SLOT(slotActionRemove()), actionCollection(), "cvsservice_remove" );
 
-    actionUpdate = new KAction( i18n("&Update"), 0, this,
+    actionUpdate = new KAction( i18n("&Update local copy to the most recent release"), 0, this,
         SLOT(slotActionUpdate()), actionCollection(), "cvsservice_update" );
 
-    actionRevert = new KAction( i18n("R&eplace with Copy From Repository"), 0,
+    actionRevert = new KAction( i18n("R&evert to a previous release"), 0,
         this, SLOT(slotActionRevert()), actionCollection(),
         "cvsservice_revert" );
 
-    actionTag = new KAction( i18n("&Tag/branch file(s)"), 0,
+    actionTag = new KAction( i18n("&Tag/branch these file(s)"), 0,
         this, SLOT(slotActionTag()), actionCollection(),
         "cvsservice_tag" );
 
-    actionTag = new KAction( i18n("Re&move tag from file(s)"), 0,
+    actionUnTag = new KAction( i18n("Re&move tag from these file(s)"), 0,
         this, SLOT(slotActionUnTag()), actionCollection(),
         "cvsservice_untag" );
 
     actionAddToIgnoreList = new KAction(
-        i18n("&Ignore this file when doing cvs operation"), 0,
+        i18n("&Ignore this file(s) in cvs operations"), 0,
         this, SLOT(slotActionAddToIgnoreList()), actionCollection(),
         "cvsservice_ignore" );
 
     actionRemoveFromIgnoreList = new KAction(
-        i18n("Do &not Ignore this file when doing cvs operation"), 0,
+        i18n("Do &not Ignore this file in cvs operations"), 0,
         this, SLOT(slotActionRemoveFromIgnoreList()), actionCollection(),
         "cvsservice_donot_ignore" );
 
@@ -201,14 +201,14 @@ void CvsPart::setupActions()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::fetchFromRepository( QWidget *parent )
+void CvsPart::fetchFromRepository()
 {
     m_impl->checkout();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void CvsPart::createNewProject( const QString& dirName )
+void CvsPart::createNewProject( const QString &dirName )
 {
     kdDebug( 9000 ) << "====> CvsPart::createNewProject( const QString& )" << endl;
 
@@ -219,36 +219,12 @@ void CvsPart::createNewProject( const QString& dirName )
     // createNewProject() is called _before_ projectOpened() signal is emitted.
     g_projectWasJustCreated = true;
 
-    CvsOptions *options = CvsOptions::instance();
-    options->setCvsRshEnvVar( m_cvsConfigurationForm->cvsRsh() );
-    options->setLocation( m_cvsConfigurationForm->location() );
-
-    QString rsh_preamble;
-    if ( !options->cvsRshEnvVar().isEmpty() )
-        rsh_preamble = "CVS_RSH=" + KShellProcess::quote( options->cvsRshEnvVar() );
-
-    QString init;
-    if (m_cvsConfigurationForm->mustInitRoot())
-    {
-        init = rsh_preamble + " cvs -d " + KShellProcess::quote( options->location() ) + " init && ";
-    }
-    QString cmdLine = init + "cd " + KShellProcess::quote(dirName) +
-        " && " + rsh_preamble +
-        " cvs -d " + KShellProcess::quote(m_cvsConfigurationForm->location()) +
-        " import -m " + KShellProcess::quote(m_cvsConfigurationForm->message()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->module()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->vendor()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->release()) +
-        // CVS build-up magic here ...
-        " && sh " +
-        locate("data","kdevcvsservice/buildcvs.sh") + " . " +
-        KShellProcess::quote(m_cvsConfigurationForm->module()) + " " +
-        KShellProcess::quote(m_cvsConfigurationForm->location());
-
-    kdDebug( 9000 ) << "  ** Will run the following command: " << endl << cmdLine << endl;
-    kdDebug( 9000 ) << "  ** on directory: " << dirName << endl;
-
-    makeFrontend()->queueCommand( dirName, cmdLine );
+    m_impl->createNewProject( dirName,
+        m_cvsConfigurationForm->cvsRsh(), m_cvsConfigurationForm->location(),
+        m_cvsConfigurationForm->message(), m_cvsConfigurationForm->module(),
+        m_cvsConfigurationForm->vendor(), m_cvsConfigurationForm->release(),
+        m_cvsConfigurationForm->mustInitRoot()
+    );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
