@@ -79,13 +79,135 @@ description of all available compiler flags you should see your compiler documen
 <H3><A NAME="Compiler Warnings"></A> <A NAME="ss9.3">9.3 Compiler Warnings</A>
 </H3>
 
+<P>The following gives a desciption about the compiler warning options that can be set on page 3 of the project options dialog. The
+explanations are taken from the man page for GCC, egcs version 1.1.1.
+The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
 <P>
+<DL>
+<DT><B>-Wall</B><DD><P>Standard `-W' options combined.
 <P>
+<DT><B>-W</B><DD><P>Compile with -W. This option sets options not included in -Wall which are very specific. Please read GCC-Info for more
+information.
+<P>
+<DT><B>-Wtraditional</B><DD><P>Warn about certain constructs that behave differently in traditional and ANSI C.
+<P>
+<DT><B>-Wundef</B><DD><P>"Warn if an undefined identifier is evaluated in an `#if' directive.
+<P>
+<DT><B>-Wshadow</B><DD><P>Warn whenever a local variable shadows another local variable.
+<P>
+<DT><B>-Wid-clash-LEN</B><DD><P>Warn whenever two distinct identifiers match in the first len characters. This may help you prepare a program
+that will compile with certain obsolete, brain-damaged compilers.
+<P>
+<DT><B>-Wlarger-then-LEN</B><DD><P>Warn whenever an object of larger than LEN bytes is defined.
+<P>
+<DT><B>-Wpointer-arith</B><DD><P>Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
+size of 1, for convenience in calculations with void * pointers and pointers to functions.
+<P>
+<DT><B>-Wbad-function-cast</B><DD><P>Warn whenever a function call is cast to a non-matching type. Forexample, warn if <CODE>int malloc()</CODE> is
+cast to <CODE>anything *.</CODE>
+<P>
+<DT><B>-Wcast-equal</B><DD><P>Warn whenever a pointer is cast so as to remove a type qualifier from the target type. For example, warn if a
+const char * is cast to an ordinary char *.
+<P>
+<DT><B>-Wcast-align</B><DD><P>Warn whenever a pointer is cast such that the required alignment of the target is increased. For example, warn
+if a char * is cast to an int * on machines where integers can only be accessed at two- or four-byte boundaries.
+<P>
+<DT><B>-Wwrite-strings</B><DD><P>Give string constants the type const char[length] so that copying the address of one into a non-const char *
+pointer will get a warning. These warnings will help you find at compile time code that can try to write into a string constant,
+but only if you have been very careful about using const in declarations and prototypes. Otherwise, it will just be a nuisance;
+this is why we did not make `-Wall' request these warnings.
+<P>
+<DT><B>-Wconversion</B><DD><P>Warn if a prototype causes a type conversion that is different from what would happen to the same argument in the absence of a
+prototype. This includes conversions of fixed point to floating and vice versa, and conversions changing the width or signedness
+of a fixed point argument except when the same as the default promotion.
+<P>
+<DT><B>-Wsign-compare</B><DD><P>Warn when a comparison between signed and unsigned values could produce an incorrect result when the signed
+value is converted to unsigned.
+<P>
+<DT><B>-Waggregate-return</B><DD><P>Warn if any functions that return
+structures or unions are defined or called. (In languages where you can return an array, this also elicits a warning.)
+<P>
+<DT><B>-Wmissing-prototypes</B><DD><P>Warn if a global function is defined without a previous prototype declaration. This warning is issued even if the definition
+itself provides a prototype. The aim is to detect global functions that fail to be declared in header files.
+<P>
+<DT><B>-Wmissing-declarations</B><DD><P>Warn if a global function is defined without a previous declaration. Do so even if the definition
+itself provides a prototype. Use this option to detect global functions that are not declared in header files. -Wredundant-decls
+Warn if anything is declared more than once in the same scope, even in cases where multiple declaration is valid and changes nothing.
+<P>
+<DT><B>-Wredundant-decls</B><DD><P>Warn if anything is declared more than once in the same scope even in cases where multiple declaration is
+valid and changes nothing.
+<P>
+<DT><B>-Wnested-externs</B><DD><P>Warn if an extern declaration is encountered within an function.
+<P>
+<DT><B>-Winline</B><DD><P>Warn if a function can not be inlined, and either it was declared as inline, or else the -fin*line-functions option was given.
+<P>
+<DT><B>-Wold-style-cast</B><DD><P>Warn if an old-style (C-style) cast is used within a program
+<P>
+<DT><B>-Woverloaded-virtual</B><DD><P>(C++ only.) In a derived class, the definitions of virtual functions must match the type signature of a
+virtual function declared in the base class. Use this option to request warnings when a derived class declares a function that may
+be an erroneous attempt to define a virtual function: that is, warn when a function with the same name as a virtual function in
+the base class, but with a type signature that doesn't match any virtual functions from the base class.
+<P>
+<DT><B>-Wsynth</B><DD><P>Warn when g++'s synthesis behavoir does not match that of cfront.
+<P>
+<DT><B>make all warnings into errors</B><DD><P>(-Werror) Treat warnings as errors; abort compilation after any warning.
+<P>
+</DL>
+<P>For a release of your project, it is recommended to enable <B>-Wall</B>.
 <P>
 <H3><A NAME="Linker Options"></A> <A NAME="ss9.4">9.4 Linker Options</A>
- </H3>
+</H3>
 
-<P> 
+<P>The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
+libraries that your application uses to link them to your binary with the linker, e.g. your application uses the class
+KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes or functions that are
+not listed as checkboxes, use the <B>"additonal libraries"</B> field.
+<H4>Library Flags</H4>
+
+<P>
+<DL>
+<DT><B>remove all symbol table and relocation information from the executable:</B><DD><P>This means that all redundant information will be
+removed from the object files and the binary, resulting that debugging will not be possible. For as long as your application is in
+a development stage and not released as final, you should leave this option disabled.
+<P>
+<DT><B>prevent using shared libraries:</B><DD><P>This option disables the use of shared libraries on systems that support this. On systems
+using no shared libraries, this option will have no effect.
+<P>
+<DT><B>additional flags:</B><DD><P>Here, you can enter additional flags for the linker, setting the LDFLAGS environment variable by make. The
+available options can be taken from the man page for <B>ld</B> or your compiler manpage.
+</DL>
+<P>
+<H4>Libraries</H4>
+
+<P>The libraries section contains checkboxes for the most needed libraries in conjuction with Qt/KDE application
+development. You have to enable those libraries that your application uses, otherwise the linker will complain about unresolved
+symbol tables.
+<DL>
+<DT><B>X11</B><DD><P>The X11 library. Recommended for all X-Window programs.
+<P>
+<DT><B>Xext</B><DD><P>The X11 extension library. Also most X-Window programs depend on Xext.
+<P>
+<DT><B>qt</B><DD><P>The Qt library. Recommended for Qt and KDE applications.
+<P>
+<DT><B>kdecore</B><DD><P>The KDE Core library; contains the classes for KDE Application frameworks.
+<P>
+<DT><B>kdeui</B><DD><P>The KDE User Interface library; contains KDE-specific widgets.
+<P>
+<DT><B>khtmlw</B><DD><P>The KHTML Widget library.
+<P>
+<DT><B>kfm</B><DD><P>The KFM library containing classes for KFM functions.
+<P>
+<DT><B>kfile</B><DD><P>The KFile library. Contains file dialogs etc.
+<P>
+<DT><B>kspell</B><DD><P>The KSpell library. Contains an interface for programs to use ISpell for spellchecking.
+<P>
+<DT><B>kab</B><DD><P>The KAdressBook library. Needed for access to the adressbook as well as providing adressbook widgets
+<P>
+</DL>
+
+<B>additional libraries:</B> Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
+libraries with the -l option; for the example -lkom.
+<P>
 <P ALIGN="RIGHT">
 
 <A HREF="index-10.html">Next</A>

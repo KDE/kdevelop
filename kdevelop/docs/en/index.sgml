@@ -270,9 +270,9 @@ library sources with the selection button on top of the dialog and press OK. If 
 documentation should be created using the khtml  or the khtmlw library.  We advise to use khtml as khtmlw is older and exists for
 compatibility reasons. New applications using HTML widgets should use khtml.  To avoid confusion while programming, we decided to
 only include one of those for documentation.  If you are working on applications that use khtmlw, you should create a different
-documentation with the <ref id="KDevelop Setup" name="KDevelop Setup"> in the options menu and use khtmlw then.    During the
-creation of the documentation, a message in the installation window shows that it is in progress and you should wait for the next
-message.
+documentation with the <ref id="General Configuration" name="KDevelop Setup"> in the options menu and use khtmlw then.    During
+the creation of the documentation, a message in the installation window shows that it is in progress and you should wait for the
+next message.
 <bf>NOTE:</bf> On a multi-user system or systems with disk-quotas for user accounts, the creation of a complete HTML documentation
 for each user would be a mere waste of disk space. In this case, ask you system administrator to run KDevelop under the
 root account to allow write access to the system's root directory. The we advise to create the documentation within the
@@ -289,9 +289,8 @@ offering the addition of other documentations.
 <item> During the creation of the search index, the installation window will show a message that this is in progress.
 
 <item> If all installation steps were done correctly,  a final message shows that KDevelop will be started
-after pressing OK and you are ready to start. Mind that you can set up additional options like auto saving in the <ref id="KDevelop
-Setup" name="KDevelop Setup"> dialog that can be accessed by the options menu. </enum>
-
+after pressing OK and you are ready to start. Mind that you can set up additional options like auto saving in the <ref
+id="General Configuration" name="KDevelop Setup"> dialog that can be accessed by the options menu. </enum>
 <bf>Cancel:</bf>  Will show a warning message that the installation process is going to be canceled.  This warning message allows to
 return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you have to
 set all options yourself with the configuration dialogs provided in the options-menu.
@@ -348,7 +347,7 @@ To get a complete overview, open a console and type:
 or search for "GNU Make" in KDEHelp, "System GNU Info contents".
 At least, you have an insight, why a developer needs the make utility for making it easier to compile his application.
 Now, writing Makefiles is not only handwork until now, you also have to dig yourself into the whole syntax and options. But here
-is the good news about KDevelop and any Make-utility: You just have to set the Make-Command in the <ref id="KDevelop Setup"
+is the good news about KDevelop and any Make-utility: You just have to set the Make-Command in the <ref id="General Configuration"
 name="KDevelop Setup"> dialog, and then you're done. All projects generated with KDevelop will use that Make command to build the
 target application, and no typing at all. Just hit the buttons on the toolbar of KDevelop, beginning with the one after the second
 separator line, or choose the desired function for Make in the "Build" menu.
@@ -1008,7 +1007,7 @@ window. The Tools menu can be edited by the Tools-entry in the Options-menu.
 <sect2>Changing KDevelop's settings<p>
 The Options-menu contains all entries for invoking configuration dialogs with which you can change KDevelop's default settings.
 Major settings like those for the editor or printing have their own entries; general settings of KDevelop's behavoir can be made
-with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog.
+with the <ref id="General Configuration" name="KDevelop Setup"> dialog.
 
 <itemize>
 <item><bf/Editor.../ Allows the configuration of the editor's behavoir like word-breaking, selections etc.<p>
@@ -1293,7 +1292,7 @@ documentation.
 <sect2>Requirements
 <p>
 To make use of all features of the Helpbrowser, you should have KDoc and glimpse installed. KDoc will generate all kind of online
-classdocumentation for the KDE-libraries during the setup process, but can also invoked by option in the <ref id="KDevelop Setup"
+classdocumentation for the KDE-libraries during the setup process, but can also invoked by option in the <ref id="General Configuration"
 name="KDevelop Setup">. For the generation of an API (Application Programming Interface) Documentation for your project's classes,
 KDoc is also used and called by the Build-menu, entry "Make API-Doc". This will process all current header files of the project
 plus the addition of a cross-reference to the Qt and KDE-libraries if those are available in the Helpbrowser. For the generation
@@ -1302,7 +1301,7 @@ system. To extend and change your project's online-documentation, you have to ed
 selecting it in the RFV. After saving your changes, call "Make User-Manual" from the Build-menu. In case sgmltools detect
 formatting errors, those will be displayed in the output window allow you to find the error line directly. The program "glimpse"
 is used to create a personal search-index for your documentation automatically. The index is generally build during the
-installation process, but can also be build with the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog. For a description of
+installation process, but can also be build with the <ref id="General Configuration" name="KDevelop Setup"> dialog. For a description of
 the provided search functions see <ref id="Using the Search Index" name="Using the Search Index">
 
 <sect2>Provided Documentation
@@ -1325,13 +1324,13 @@ documentation you just have to delete the "reference" folder under ($KDEDIR)/sha
 
 The Qt/KDE-libraries documentation folder allows direct access to the HTML-online documentation of your copy of the Qt-library.
 The path to the library documentation is usually automatically detected by the KDevelop installation program, but can be set
-manually in the <ref id="KDevelop Setup" name="KDevelop Setup"> dialog. Also, all available documentation for the KDE-libraries
+manually in the <ref id="General Configuration" name="KDevelop Setup"> dialog. Also, all available documentation for the KDE-libraries
 are listed in order of the library name, so if you would use classes of a certain library it is easy to determine the library type
 to be added to the linker settings in the project. Mind that the whole KDE-library documentation is only accessable when generated
 by KDoc- so this program, included in the KDE-SDK, has to be installed before the documentation can be generated. As the
 installation program of KDevelop does this automatically, it should be installed before KDevelop is started for the first time. If
 this is not the case and the documentation cannot be build, you are able to create it afterwards at any time with the <ref
-id="KDevelop Setup" name="KDevelop Setup"> dialog.
+id="General Configuration" name="KDevelop Setup"> dialog.
 
 The library documentation tree is followed by the "Others" folder which is inteded to contain all personally customized
 documentation as described below. Finally, the Doc-Tree allows access to the Project API and the Project Manual for your current
@@ -1352,7 +1351,7 @@ files are allowed to choose. Selecting OK will add the entry to the Doc-tree and
 <p>
 KDevelop includes a set of fuctions to help you search information within HTML documentation. To use these features, your system
 needs to have the program "glimpse", a free database generator, installed, which creates the search index and executes searches
-within the documentation. To set up the index, see <ref id="KDevelop Setup" name="KDevelop Setup">, but the index is also
+within the documentation. To set up the index, see <ref id="General Configuration" name="KDevelop Setup">, but the index is also
 automatically generated during the installation program.
 
 The search functions are available through several ways which you can choose from:
@@ -1606,10 +1605,133 @@ description of all available compiler flags you should see your compiler documen
 
 <sect1>Compiler Warnings<label id="Compiler Warnings">
 <p>
+The following gives a desciption about the compiler warning options that can be set on page 3 of the project options dialog. The
+explanations are taken from the man page for GCC, egcs version 1.1.1.
+The warnings themselves are diagnostic messages that indicate that constructions may cause errors.
 
+<descrip>
+<tag/-Wall/Standard `-W' options combined.
+<p>
+<tag/-W/ Compile with -W. This option sets options not included in -Wall which are very specific. Please read GCC-Info for more
+information.
+<p>
+<tag/-Wtraditional/Warn about certain constructs that behave differently in traditional and ANSI C.
+<p>
+<tag/-Wundef/"Warn if an undefined identifier is evaluated in an `#if' directive.
+<p>
+<tag/-Wshadow/Warn whenever a local variable shadows another local variable.
+<p>
+<tag/-Wid-clash-LEN/Warn whenever two distinct identifiers match in the first len characters. This may help you prepare a program
+that will compile with certain obsolete, brain-damaged compilers.
+<p>
+<tag/-Wlarger-then-LEN/Warn whenever an object of larger than LEN bytes is defined.
+<p>
+<tag/-Wpointer-arith/Warn about anything that depends on the «size of» a function type or of void. GNU C assigns these types a
+size of 1, for convenience in calculations with void * pointers and pointers to functions.
+<p>
+<tag/-Wbad-function-cast/Warn whenever a function call is cast to a non-matching type. Forexample, warn if <tt/int malloc()/ is
+cast to <tt/anything *./
+<p>
+<tag/-Wcast-equal/Warn whenever a pointer is cast so as to remove a type qualifier from the target type. For example, warn if a
+const char * is cast to an ordinary char *.
+<p>
+<tag/-Wcast-align/Warn whenever a pointer is cast such that the required alignment of the target is increased. For example, warn
+if a char * is cast to an int * on machines where integers can only be accessed at two- or four-byte boundaries.
+<p>
+<tag/-Wwrite-strings/Give string constants the type const char[length] so that copying the address of one into a non-const char *
+pointer will get a warning. These warnings will help you find at compile time code that can try to write into a string constant,
+but only if you have been very careful about using const in declarations and prototypes. Otherwise, it will just be a nuisance;
+this is why we did not make `-Wall' request these warnings.
+<p>
+<tag/-Wconversion/Warn if a prototype causes a type conversion that is different from what would happen to the same argument in the absence of a
+prototype. This includes conversions of fixed point to floating and vice versa, and conversions changing the width or signedness
+of a fixed point argument except when the same as the default promotion.
+<p>
+<tag/-Wsign-compare/Warn when a comparison between signed and unsigned values could produce an incorrect result when the signed
+value is converted to unsigned.
+<p>
+<tag/-Waggregate-return/Warn if any functions that return
+structures or unions are defined or called. (In languages where you can return an array, this also elicits a warning.)
+<p>
+<tag/-Wmissing-prototypes/ Warn if a global function is defined without a previous prototype declaration. This warning is issued even if the definition
+itself provides a prototype. The aim is to detect global functions that fail to be declared in header files.
+<p>
+<tag/-Wmissing-declarations/ Warn if a global function is defined without a previous declaration. Do so even if the definition
+itself provides a prototype. Use this option to detect global functions that are not declared in header files. -Wredundant-decls
+Warn if anything is declared more than once in the same scope, even in cases where multiple declaration is valid and changes nothing.
+<p>
+<tag/-Wredundant-decls/Warn if anything is declared more than once in the same scope even in cases where multiple declaration is
+valid and changes nothing.
+<p>
+<tag/-Wnested-externs/Warn if an extern declaration is encountered within an function.
+<p>
+<tag/-Winline/Warn if a function can not be inlined, and either it was declared as inline, or else the -fin*line-functions option was given.
+<p>
+<tag/-Wold-style-cast/Warn if an old-style (C-style) cast is used within a program
+<p>
+<tag/-Woverloaded-virtual/(C++ only.) In a derived class, the definitions of virtual functions must match the type signature of a
+virtual function declared in the base class. Use this option to request warnings when a derived class declares a function that may
+be an erroneous attempt to define a virtual function: that is, warn when a function with the same name as a virtual function in
+the base class, but with a type signature that doesn't match any virtual functions from the base class.
+<p>
+<tag/-Wsynth/Warn when g++'s synthesis behavoir does not match that of cfront.
+<p>
+<tag/make all warnings into errors/(-Werror) Treat warnings as errors; abort compilation after any warning.
+<p>
+</descrip>
 
-<sect1>Linker Options<label id="Linker Options"> <p> <sect>The Classbrowser<label id="The Classbrowser"> <p>
-The Linker Options can be set by the last page of the project options dialog
+For a release of your project, it is recommended to enable <bf/-Wall/.
+
+<sect1>Linker Options<label id="Linker Options">
+<p>
+The Linker Options for your current project can be set by the last page of the project options dialog. You have to enable those
+libraries that your application uses to link them to your binary with the linker, e.g. your application uses the class
+KFileDialog. As the class KFileDialog is part of the KFile library, you have to enable kfile. For classes or functions that are
+not listed as checkboxes, use the <bf/"additonal libraries"/ field.
+<sect2>Library Flags
+<p>
+<descrip>
+<tag/remove all symbol table and relocation information from the executable:/ This means that all redundant information will be
+removed from the object files and the binary, resulting that debugging will not be possible. For as long as your application is in
+a development stage and not released as final, you should leave this option disabled.
+
+<tag/prevent using shared libraries:/ This option disables the use of shared libraries on systems that support this. On systems
+using no shared libraries, this option will have no effect.
+
+<tag/additional flags:/ Here, you can enter additional flags for the linker, setting the LDFLAGS environment variable by make. The
+available options can be taken from the man page for <bf/ld/ or your compiler manpage.
+</descrip>
+
+<sect2>Libraries
+<p>
+The libraries section contains checkboxes for the most needed libraries in conjuction with Qt/KDE application
+development. You have to enable those libraries that your application uses, otherwise the linker will complain about unresolved
+symbol tables.
+<descrip> <tag/X11/The X11 library. Recommended for all X-Window programs.
+<p>
+<tag/Xext/The X11 extension library. Also most X-Window programs depend on Xext.
+<p>
+<tag/qt/The Qt library. Recommended for Qt and KDE applications.
+<p>
+<tag/kdecore/The KDE Core library; contains the classes for KDE Application frameworks.
+<p>
+<tag/kdeui/The KDE User Interface library; contains KDE-specific widgets.
+<p>
+<tag/khtmlw/The KHTML Widget library.
+<p>
+<tag/kfm/The KFM library containing classes for KFM functions.
+<p>
+<tag/kfile/The KFile library. Contains file dialogs etc.
+<p>
+<tag/kspell/The KSpell library. Contains an interface for programs to use ISpell for spellchecking.
+<p>
+<tag/kab/The KAdressBook library. Needed for access to the adressbook as well as providing adressbook widgets
+<p>
+</descrip>
+<bf/additional libraries:/ Here you can enter additional libraries that your application needs, e.g. the KOM library. Set the
+libraries with the -l option; for the example -lkom.
+
+<sect>The Classbrowser<label id="The Classbrowser"> <p>
 
 <sect>The Dialogeditor<label id="The Dialogeditor">
 <p>
