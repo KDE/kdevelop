@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>SettingsWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -25,9 +25,6 @@
             </property>
             <property name="text">
                 <string>&amp;Load last project on startup</string>
-            </property>
-            <property name="accel">
-                <string>Alt+L</string>
             </property>
         </widget>
         <widget class="QGroupBox" row="3" column="0">
@@ -145,9 +142,6 @@
                                             </property>
                                             <property name="text">
                                                 <string>&amp;Directory navigation messages</string>
-                                            </property>
-                                            <property name="accel">
-                                                <string>Alt+D</string>
                                             </property>
                                         </widget>
                                     </vbox>
@@ -351,9 +345,6 @@
                     </property>
                     <property name="text">
                         <string>Use &amp;embedded KDevelop Designer</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+E</string>
                     </property>
                 </widget>
             </grid>
