@@ -1,3 +1,6 @@
+1999-04-28 Sandy Meier <smeier@rz.uni-potsdam.de>
+	* removed all macros in the kde baseapplication (normal.tar.gz)
+
 1999-04-27 Jacek Stolarczyk <jacek@mer.chemia.polsl.gliwice.pl>
 	* updated Polish translation by Jacek Wojdel<J.C.Wojdel@cs.tudelft.nl>
 	
