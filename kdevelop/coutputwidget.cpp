@@ -104,7 +104,7 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     int col = qstrlen(textLine(row));
 
     bool displayAdditions=atEnd();
-    insertAt(line, row, col);
+    insertAt(line, row, 0/*col*/);
     if (displayAdditions)
       setCursorPosition(numLines()+1,0);
   }
