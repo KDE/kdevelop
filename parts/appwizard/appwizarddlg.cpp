@@ -302,7 +302,7 @@ void AppWizardDialog::accept()
         KShellProcess p("/bin/sh");
         p.clearArguments();
         p << "mkdirhier";
-        p << "\"" << finalLoc_label->text() << "\"";
+        p << KShellProcess::quote(finalLoc_label->text());
         p.start(KProcess::Block,KProcess::AllOutput);
     }
 
