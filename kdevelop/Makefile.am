@@ -2,7 +2,7 @@
 INCLUDES= $(all_includes)
 # claim, which subdirectories you want to install
 # if you don't have subdirectories, comment it
-SUBDIRS = lib plugin parts classparser tools templates
+SUBDIRS = lib classparser plugin parts tools templates
 LFLAGS = -+
 ####### This part is very kdevelop specific
 # you can add here more. This one gets installed 
