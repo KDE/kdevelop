@@ -174,6 +174,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	}
     } else if( ch == '/' && ch1 == '*' ){
 	int start = currentPosition();
+	nextChar( 2 );
 	readMultiLineComment();
 	if( recordComments() ){
 	    tk = CREATE_TOKEN( Token_comment, start, currentPosition() - start );
