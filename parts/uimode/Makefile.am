@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = $(KDEVMDI_INCLUDES) -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevuichooser.la
 libkdevuichooser_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
