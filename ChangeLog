@@ -1,3 +1,7 @@
+2001-03-19  F@lk Brettschneider <falk@kdevelop.org>
+    * adapted HTML browser to DocViewMan MDI-mechanism
+      (E.g. removed browser_widget and replaced it with m_docViewManager->currentBrowserDoc())
+
 2001-03-18  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: switched off automatic focus - wtf, (removed enterEvent() from CEditWidget)
 
