@@ -1,3 +1,3 @@
 INCLUDES = 
 METASOURCES = AUTO
-SUBDIRS = interfaces debugger
+SUBDIRS = interfaces debugger designer_integration
