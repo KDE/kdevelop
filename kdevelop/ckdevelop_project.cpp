@@ -1201,7 +1201,7 @@ void CKDevelop::slotAddSpec(QString path)
 		QString namelow = (prj->getProjectName()).lower();
 		QStrList myList;
 		prj->getAllFiles(myList);
-		if(myList.contains(namelow+".spec"))
+		//if(myList.contains(namelow+".spec"))
 		{
 				cerr << "I need to add " << path << " to the project..." << endl;
         TFileInfo fileInfo;
