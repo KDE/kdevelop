@@ -14,15 +14,16 @@
 
 #include "kdevfactory.h"
 
-
 class JavaSupportFactory : public KDevFactory
 {
     Q_OBJECT
 
 public:
+	/** Starts the Java VM, registers native methods */
     JavaSupportFactory( QObject *parent=0, const char *name=0 );
     ~JavaSupportFactory();
 
+	/** Constructs a java JavaSupportPart instance */
     virtual KDevPart *createPartObject(KDevApi *api, QObject *parent, const QStringList &args);
     static KInstance *instance();
 
