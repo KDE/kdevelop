@@ -1,9 +1,13 @@
+1999-07-27 Jonas Nordin  <jonas.nordin@cenacle.se>
+	* fixed goto declaration in the delayed popupmenu in the browser 
+	  toolbar.
+
 1999-07-27  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-  * fixed the kdelnk template, appwizard and the KDE template (minor bugs)
-  * fixed documentation makefile
-  * Jonas: added processEvents() to ClassParser.cc line 1381, see file header
-  * added licensing chapter to programming handbook
-  * removed alpha code warning from configure.in
+	* fixed the kdelnk template, appwizard and the KDE template (minor bugs)
+	* fixed documentation makefile
+	* Jonas: added processEvents() to ClassParser.cc line 1381, see file header
+	* added licensing chapter to programming handbook
+	* removed alpha code warning from configure.in
 
 1999-07-27 Jonas Nordin   <jonas.nordin@cenacle.se>
 	* fixed problems with the browser toolbar. It now correctly switches
