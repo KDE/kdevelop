@@ -873,3 +873,5 @@ int Lexer::macroExpression()
     readWhiteSpaces( false );
     return macroLogicalOr();
 }
+
+#include "lexer.moc"
