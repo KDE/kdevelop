@@ -1185,6 +1185,7 @@ void CKDevelop::slotProjectLoadTags()
   }
   prj->ctagsDataBase().load(filename);
   bCTags = true;
+  slotStatusMsg(i18n("Ready."));
   kdDebug() << "loading tags file completed\n";
 }
 
@@ -1209,14 +1210,14 @@ void CKDevelop::slotAddSpec(QString path)
         prj->getAllFiles(myList);
         //if(myList.contains(namelow+".spec"))
         {
-                kdDebug() << "I need to add " << path << " to the project..." << endl;
-        TFileInfo fileInfo;
-        fileInfo.rel_name = namelow + ".spec";
-        fileInfo.type = DATA;
-        fileInfo.dist = true;
-        fileInfo.install = false;
-        fileInfo.install_location = "";
-        prj->addFileToProject (namelow + ".spec",fileInfo);
+          kdDebug() << "I need to add " << path << " to the project..." << endl;
+          TFileInfo fileInfo;
+          fileInfo.rel_name = namelow + ".spec";
+          fileInfo.type = DATA;
+          fileInfo.dist = true;
+          fileInfo.install = false;
+          fileInfo.install_location = "";
+          prj->addFileToProject (namelow + ".spec",fileInfo);
         }
 }
 void CKDevelop::slotGetRPMBuildSTDOUT(QString sstdout){
