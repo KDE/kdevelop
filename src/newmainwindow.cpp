@@ -23,6 +23,7 @@
 #include <qtabbar.h>
 #include <qtoolbutton.h>
 
+#include <kaboutdata.h>
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kstdaction.h>
@@ -132,7 +133,10 @@ void NewMainWindow::init() {
 
     createGUI(0);
 
-	QString uimode = QString( "kdevuimode%1rc" ).arg( m_mdiMode );
+    QString appstr = "kdev";
+    if (KGlobal::instance()->aboutData())
+        appstr = KGlobal::instance()->aboutData()->appName();
+	QString uimode = QString( "%1uimode%2rc" ).arg(appstr).arg( m_mdiMode );
 	KConfig uiConfig( uimode, true );
 	readDockConfig( &uiConfig );
 
@@ -610,7 +614,10 @@ void NewMainWindow::saveSettings()
     ProjectManager::getInstance()->saveSettings();
     saveMainWindowSettings(config, "Mainwindow");
 
-	QString uimode = QString( "kdevuimode%1rc" ).arg( m_mdiMode );
+    QString appstr = "kdev";
+    if (KGlobal::instance()->aboutData())
+        appstr = KGlobal::instance()->aboutData()->appName();
+	QString uimode = QString( "%1uimode%2rc" ).arg(appstr).arg( m_mdiMode );
 	KConfig uiConfig( uimode );
 	writeDockConfig( &uiConfig );
 
