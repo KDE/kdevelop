@@ -434,7 +434,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             icon_label->clear();
         }
         desc_textview->setText(info->comment);
-        dest_edit->setText(info->defaultDestDir);
+//        dest_edit->setText(info->defaultDestDir);
         m_projectLocationWasChanged = false;
         //projectNameChanged(); // set the dest new
 
