@@ -56,7 +56,7 @@ QStringList RubyImplementationWidget::createClassFiles()
     QFile file(QDir::cleanDirPath(m_part->project()->projectDirectory() + "/" + file_rb));
     if (!file.open(IO_WriteOnly)) {
         KMessageBox::error(0, i18n("Cannot write to file"));
-        return false;
+        return QStringList();
     }
     QTextStream stream(&file);
     stream << template_rb;
