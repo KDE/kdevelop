@@ -33,9 +33,9 @@ uninstall-local:
 	-rm -f $(kde_datadir)/kdevelop/template-make.spec
 
 ####### kdevelop will overwrite this part!!! (end)############
-#SOMAJOR = 1
-#SOMINOR = 0
-#SOSUBMINOR = 0
+SOMAJOR = 1
+SOMINOR = 0
+SOSUBMINOR = 0
 
 # here you should add all header files, which contains the functionality
 # of your shared lib (published for the users)
