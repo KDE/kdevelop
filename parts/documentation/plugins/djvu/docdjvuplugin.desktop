@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=DocDjvuPlugin
+Exec=blubb
+Comment=Documentation plugin for djvu foormat
+ServiceTypes=KDevelop/DocumentationPlugins
+X-KDevelop-Version=1
+X-KDE-Library=libdocdjvuplugin
