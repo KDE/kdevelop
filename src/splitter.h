@@ -89,7 +89,7 @@ private:
     QList<QWidget> childlist;
     QList<SplitterHandle> handlelist;
     QValueList<int> sizes; // should really be a QVector
-    Orientation or;
+    Orientation _or;
 };
 
 

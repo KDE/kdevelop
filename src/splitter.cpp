@@ -20,7 +20,7 @@
 Splitter::Splitter(QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
-    or = Horizontal;
+    _or = Horizontal;
 
     handlelist.setAutoDelete(true);
 }
@@ -32,7 +32,7 @@ Splitter::~Splitter()
 
 void Splitter::setOrientation(Orientation orient)
 {
-    if (orient != or) {
+    if (orient != _or) {
         if (!childlist.isEmpty()) {
             if (hasMultipleChildren()) {
                 kdDebug(9000) << "Cannot change the orientation of a splitter with several widgets." << endl;
@@ -47,7 +47,7 @@ void Splitter::setOrientation(Orientation orient)
             }
         }
         
-        or = orient;
+        _or = orient;
         doLayout();
     }
 }
@@ -55,7 +55,7 @@ void Splitter::setOrientation(Orientation orient)
 
 Qt::Orientation Splitter::orientation() const
 {
-    return or;
+    return _or;
 }
 
 
