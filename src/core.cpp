@@ -337,25 +337,38 @@ void Core::docContextMenu(QPopupMenu *popup, const QString &url, const QString &
 
 KEditor::Editor *Core::editor()
 {
+  // only load the editor once
   if (_editor)
     return _editor;
 
-  // ask the trader which editor he has to offer
-  KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("KDevelop/Editor"), QString::null);
-  if (offers.isEmpty())
-        return 0;
+  // find the preferred editor
+  KConfig *config = kapp->config();
+  config->setGroup("Editor");
+  QString editor = config->readEntry("EmbeddedEditor");
+  
+  // ask the trader about the editors, using the preferred one if available
+  KTrader::OfferList offers = KTrader::self()->query(QString::fromLatin1("KDevelop/Editor"), QString("Name == '%1'").arg(editor));
+  
+  // try to load the editor
+  KTrader::OfferList::Iterator it;
+  for (it = offers.begin(); it != offers.end(); ++it)
+  {
+    KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
+    if (!factory)
+      continue;
 
-  // for now, pick the first one
-  KService *service = *offers.begin();
-  KLibFactory *factory = KLibLoader::self()->factory(service->library());
-  if (!factory)
-        return 0;
-
-  // cast it, so we can easily access the part later
-  _editor = static_cast<KEditor::Editor*>(factory->create(win, "editor"));
+    // Note: The create function might return 0, in that
+    // case, we continue with our list
+    _editor = static_cast<KEditor::Editor*>(factory->create(win, "editor"));
+    if (_editor)
+      break;
+  }
+ 
+  // Note: We should probably abort the application if no editor
+  // is found at all!  
   if (!_editor)
-        return 0;
-
+    return 0;
+  
   // merge the GUI with ours
   win->factory()->addClient(_editor);
 
