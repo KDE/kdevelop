@@ -3,11 +3,14 @@
 
 
 #include <qwidget.h>
+#include <qstring.h>
 
 
 class KDevProject;
 class KonsoleWidgetPrivate;
 class KonsoleViewPart;
+class KParts::ReadOnlyPart;
+class QVBoxLayout;
 
 
 class KonsoleViewWidget : public QWidget
@@ -28,6 +31,7 @@ public slots:
 private slots:
 
   void wentToSourceFile(const QString &fileName);
+  void partDestroyed();
 
  
 protected:
@@ -36,8 +40,12 @@ protected:
  
  
 private:
- 
-  KonsoleWidgetPrivate *d;
+
+  void activate();
+
+  QString url;
+  KParts::ReadOnlyPart *part;
+  QVBoxLayout *vbox;
 
 };
 
