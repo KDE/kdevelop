@@ -30,7 +30,7 @@
 class GrepListBoxItem : public ProcessListBoxItem
 {
 public:
-    GrepListBoxItem(const QString &s1, const QString &s2, const QString &s3, bool showFilename);
+    GrepListBoxItem(const QString &fileName, const QString &lineNumber, const QString &text, bool showFilename);
     QString filename()
         { return str1; }
     int linenumber()
@@ -44,15 +44,20 @@ private:
 };
 
 
-GrepListBoxItem::GrepListBoxItem(const QString &s1,
-                                 const QString &s2,
-                                 const QString &s3,
+GrepListBoxItem::GrepListBoxItem(const QString &fileName,
+                                 const QString &lineNumber,
+                                 const QString &text,
                                  bool showFilename)
-    : ProcessListBoxItem(s1+s2+s3, Normal)
+    : ProcessListBoxItem(fileName + lineNumber + text, Normal)
 {
-    str1 = s1; // filename 
-    str2 = s2; 
-    str3 = s3;
+    static QRegExp re( "\t" );
+
+    str1 = fileName;
+    str2 = lineNumber; 
+    str3 = text;
+    // replace tab -> 8 spaces
+    str3 = str3.replace( re, "        " );
+
     show = showFilename;
 }
 
