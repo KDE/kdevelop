@@ -502,7 +502,7 @@ AC_DEFUN(KDEV_CHECK_COMPAT,
     AC_LANG_RESTORE
    ])
 
-  if test "$ac_cv_qt31_setup" == "yes"; then
+  if test "$ac_cv_qt31_setup" = "yes"; then
     AC_MSG_RESULT(no)
   else
     AC_MSG_RESULT(yes)
