@@ -1,3 +1,8 @@
+2002-04-24  F@lk Brettschneider <falk@kdevelop.org>
+        * fixed an evil crash after QextMDI gets confused in the view-focus control.
+	  (reason for that bug was changed event behaviour in the latest Qt versions.
+	   Sometimes optimizing the code makes it very sensitive, too)
+
 2002-04-10  Harald Fernengel <harry@kdevelop.org>
         * Jumping to error messages now also works on localized versions of "make"
           Error messages that contain Utf8 characters only work under KDE3,

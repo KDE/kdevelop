@@ -198,6 +198,7 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       if (bSetFocus) {
 //TEST         if(!lpC->hasFocus())lpC->setFocus();
       }
+      QFocusEvent::setReason(QFocusEvent::Other);
       lpC->m_pClient->setFocus();
    }
 }
