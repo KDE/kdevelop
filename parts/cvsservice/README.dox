@@ -2,14 +2,17 @@
 This is an experimental attempt to integrate Cervisia HEAD's cvsservice into gideon (read FAQ).
 This part _does_ require cvsservice being installed on
 your system: I'm not an auto* wizard so you have to manually pass to the
-configure script the options:<br>
+configure script the options:
+
 <code>
     --with-extra-libs=$HOME/kde/lib --with-extra-includes=$HOME/kde/include
 </code>
+
 (where $HOME/kde is where I install my own kde stuff so I don't mess with working kde installation)
 
 <b>WARNING:</b> Keep in mind that there are incoming changes in cvsservice architecture
 which could make this part quite subject to heavy modifications.
+
 <b>WARNING2:</b> If it doesn't compile try to update your cvsservice.
 
 Implementation of this component is done by:

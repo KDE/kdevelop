@@ -18,11 +18,6 @@ class AdaProjectWidget;
 class KDialogBase;
 class KDevCompilerOptions;
 
-/**
-    Ada Project: the common project part for all available ada
-    compilers (currently only gnat).
-    It holds the project file list and tries to abstract from their specifics.
- */
 class AdaProjectPart : public KDevProject
 {
     Q_OBJECT

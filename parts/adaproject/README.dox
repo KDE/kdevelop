@@ -1,5 +1,7 @@
 /** \class AdaProjectPart
-Ada Project
+Ada Project: the common project part for all available ada
+compilers (currently only gnat).
+It holds the project file list and tries to abstract from their specifics.
 
 \authors <a href="mailto:okellogg AT users.sourceforge.net">Oliver Kellogg</a>
 
@@ -7,8 +9,10 @@ Ada Project
 \feature Feature 1
 \feature Feature 2
 
+
 \bug Bug1
 \bug Bug2
+
 
 \requirement Ada compiler
 

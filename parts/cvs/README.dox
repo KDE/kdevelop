@@ -1,7 +1,7 @@
 /** \class CvsPart
 
- Implementation for the CvsPart command line tool wrapper: it let to do all common
- used cvs operations (add, commit, remove, ...).
+Implementation for the CvsPart command line tool wrapper: it let to do all common
+used cvs operations (add, commit, remove, ...).
 Currently CvsPart is really primitive when compared to Cervisia.
 The better option will be integrating Cervisia within KDevelop (read FAQ).
 
@@ -37,7 +37,7 @@ What cvspart when compared to Cervisia is really missing:
    a modules list and ask the user which one he wants to commit
 \todo Additional slots for more complex stuff as status, revert, patch creation, ...
 
-\faq Why not integrate Cervisia in KDevelop?<br>
+\faq <b>Why not integrate Cervisia in KDevelop?</b>
    This would be a nice but CervisiaPart component is not really designed for
    being embedded in KDevelop. We'll need to adapt it at source level to fit
    in gideon's architecture but this is not possible since Cervisia is QPL.
@@ -45,7 +45,7 @@ What cvspart when compared to Cervisia is really missing:
    really needs experimentation since I'm not really proficient with DCOP ;-).
    Feel free to provide and source code for this kind of integration.
 
-\faq Does cvspart support login with :pserver: or :ext: ?<br>
+\faq <b>Does cvspart support login with :pserver: or :ext: ?</b>
    You _must_ be logged in before using cvs operations because there is no
    support for login (this will change if requests come).
 

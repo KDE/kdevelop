@@ -26,12 +26,6 @@ namespace KParts
     class ReadOnlyPart;
 };
 
-/**
- *
- * @short Main Part
- * @author Mario Scalas <mario.scalas@libero.it>
- * @version 0.1
- */
 class CervisiaPlugin : public KDevVersionControl
 {
     Q_OBJECT

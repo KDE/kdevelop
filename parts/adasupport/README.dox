@@ -2,12 +2,11 @@
 Ada Language Support
 
 The ANTLR Ada core support files are:
-
-ada.g             -- contains AdaLexer and AdaParser, requires AdaAST.hpp and adasupport.cpp
-ada.tree.g        -- contains the AdaTreeParserSuper
-AdaAST.hpp        -- definition of the AST node used by ada.g
-adasupport.hpp    -- general purpose utilities
-adasupport.cpp    -- implementation of general purpose utilities and implementation of AdaParser class methods from ada.g
+  - ada.g             -- contains AdaLexer and AdaParser, requires AdaAST.hpp and adasupport.cpp
+  - ada.tree.g        -- contains the AdaTreeParserSuper
+  - AdaAST.hpp        -- definition of the AST node used by ada.g
+  - adasupport.hpp    -- general purpose utilities
+  - adasupport.cpp    -- implementation of general purpose utilities and implementation of AdaParser class methods from ada.g
 
 These are ANTLR master files.
 They only depend on the ANTLR C++ runtime support and on the C++ STL.
