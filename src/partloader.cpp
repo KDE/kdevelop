@@ -9,16 +9,14 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qfile.h>
 #include <qobjectlist.h>
 #include <qwidget.h>
-#include <kdebug.h>
-
-
-#include <kconfig.h>
 #include <kapp.h>
-#include <kmessagebox.h>
+#include <kconfig.h>
+#include <kdebug.h>
 #include <klocale.h>
-
+#include <kmessagebox.h>
 
 #include "kdevfactory.h"
 #include "kdevpart.h"
@@ -79,7 +77,7 @@ static KLibFactory *factoryForService(KService *service)
         return outputviewsFactory;
     }
     
-    return KLibLoader::self()->factory(service->library());
+    return KLibLoader::self()->factory(QFile::encodeName(service->library()));
 }
 
 
@@ -106,7 +104,8 @@ KDevPart *PartLoader::loadService(KService *service, const char *className, KDev
     if (!factory || !factory->inherits("KDevFactory")) {
         if (!factory) {
             QString errorMessage = KLibLoader::self()->lastErrorMessage();
-            KMessageBox::error(0, i18n("Error: could not load part! The error message from libtldl was:\n\n%1").arg(errorMessage));
+            KMessageBox::error(0, i18n("There was an error loading the module %1.\n"
+                                       "The diagnostics is:\n%2").arg(service->name()).arg(errorMessage));
             exit(1);
         }
         kdDebug(9000) << "Does not have a KDevFactory" << endl;
