@@ -483,7 +483,9 @@ enum lineStarts
   START_Sing  = 1735289171,
   START_No_s  = 1931505486,
   START_Core  = 1701998403,
-  START_Temp  = 1886217556
+  START_Temp  = 1886217556,
+  START__New  = 1,
+  START__Swi  = 2
 };
 
 // Any data that isn't "wrapped", arrives here. Rather than do multiple
@@ -492,7 +494,8 @@ enum lineStarts
 // int. Hence those big numbers you see above.
 void GDBController::parseLine(char* buf)
 {
-//  int t=*(int*)(char*)"Curr";
+  int t=*(int*)(char*)"[New";
+  int t1=*(int*)(char*)"[Swi";
 
   ASSERT(*buf != (char)BLOCK_START);
 
@@ -584,6 +587,24 @@ void GDBController::parseLine(char* buf)
       DBG_DISPLAY("Unparsed (START_cann)<" + QString(buf) + ">");
       actOnProgramPause(QString(buf));
       break;
+    }
+
+    case START__New:
+    {
+      if ( strncmp(buf, "[New Thread", 11)==0)
+      {
+        DBG_DISPLAY("Parsed (START_[New)<ignored><" + QString(buf) + ">");
+        break;
+      }
+    }
+
+    case START__Swi:
+    {
+      if ( strncmp(buf, "[Switching to Thread", 20)==0)
+      {
+        DBG_DISPLAY("Parsed (START_[Swi)<ignored><" + QString(buf) + ">");
+        break;
+      }
     }
 
     case START_Curr:

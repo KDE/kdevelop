@@ -26,17 +26,12 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <kdebug.h>
-
-
 static KCmdLineOptions options[] =
 {
    { "setup", I18N_NOOP("Setup KDevelop"), 0 },
    { "+[file]", I18N_NOOP("The file to open"), 0 },
    { 0, 0, 0 }
 };
-
-
 
 int main(int argc, char* argv[])
 {
@@ -72,8 +67,7 @@ int main(int argc, char* argv[])
   KCmdLineArgs::addCmdLineOptions( options );
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-  KApplication a;   // (argc, argv, "kdevelop");
-
+  KApplication a;
   a.dcopClient()->attach();
   a.dcopClient()->registerAs("kdevelop");
 
@@ -97,11 +91,6 @@ int main(int argc, char* argv[])
     }
 
     CKDevelop* kdevelop = new CKDevelop();
-
-    // We don't want this happening - It shouldn't - but (indirectly) KHTMLPart connects :(
-//    if (a.dcopClient() && a.dcopClient()->isAttached())
-//      a.dcopClient()->suspend();
-
     kdevelop->completeStartup(args->count() == 0);
 
     if (bInstall)
