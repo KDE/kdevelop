@@ -17,6 +17,8 @@
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
 
 #include <kapp.h>
 #include <klocale.h>
