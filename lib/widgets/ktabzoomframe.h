@@ -22,6 +22,8 @@ public:
   int addTab(QWidget *widget, const QString &title);
   void removeTab(int index);
 
+  void setDockMode(bool docked);
+
 
 public slots:
 

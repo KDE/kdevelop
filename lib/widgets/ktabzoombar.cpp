@@ -22,10 +22,11 @@ public:
   KTabZoomPosition::Position m_tabPosition;
   int                        m_selected;
   KTabZoomBarLayout          *m_layout;
-  QSignalMapper              *m_mapper;
+  QSignalMapper              *m_toggledMapper, *m_clickedMapper;
   QIntDict<KTabZoomButton>   m_buttons;
   int                        m_count;
-
+  bool 			     m_docked;
+  
 };
 
 
@@ -35,6 +36,7 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
   d = new KTabZoomBarPrivate;
 
   d->m_tabPosition = pos;
+  d->m_docked = false;
 
   d->m_layout = new KTabZoomBarLayout(this, pos);
 
@@ -45,8 +47,11 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
 
   d->m_selected = -1;
 
-  d->m_mapper = new QSignalMapper(this);
-  connect(d->m_mapper, SIGNAL(mapped(int)), this, SLOT(toggled(int)));
+  d->m_toggledMapper = new QSignalMapper(this);
+  connect(d->m_toggledMapper, SIGNAL(mapped(int)), this, SLOT(toggled(int)));
+
+  d->m_clickedMapper = new QSignalMapper(this);
+  connect(d->m_clickedMapper, SIGNAL(mapped(int)), this, SLOT(clicked(int)));
 }
 
 
@@ -66,8 +71,11 @@ int KTabZoomBar::addTab(QTab *tab)
 
   d->m_buttons.insert(index, btn);
 
-  d->m_mapper->setMapping(btn, index);
-  connect(btn, SIGNAL(toggled(bool)), d->m_mapper, SLOT(map()));
+  d->m_toggledMapper->setMapping(btn, index);
+  connect(btn, SIGNAL(toggled(bool)), d->m_toggledMapper, SLOT(map()));
+
+  d->m_clickedMapper->setMapping(btn, index);
+  connect(btn, SIGNAL(clicked()), d->m_clickedMapper, SLOT(map()));
 
   return index;
 }
@@ -86,6 +94,9 @@ void KTabZoomBar::removeTab(int index)
 
 void KTabZoomBar::toggled(int index)
 {
+  if (d->m_docked)
+    return;
+
   static bool guard=false;
   if (guard)
     return;
@@ -115,6 +126,26 @@ void KTabZoomBar::toggled(int index)
 }
 
 
+void KTabZoomBar::clicked(int index)
+{
+  if (!d->m_docked)
+    return;
+  
+  emit selected(index);
+}
+
+
+void KTabZoomBar::restore(int index)
+{
+  KTabZoomButton *button = d->m_buttons[index];
+  if (!button)
+    return;
+
+  button->setOn(true);
+  emit selected(index);
+}
+
+
 void KTabZoomBar::setPressed(int index, bool pressed)
 {
   KTabZoomButton *button = d->m_buttons[index];
@@ -131,6 +162,19 @@ void KTabZoomBar::unsetButtons()
   while (it.current())
   {
     it.current()->setOn(false);
+    ++it;
+  }
+}
+
+
+void KTabZoomBar::setDockMode(bool docked)
+{
+  d->m_docked = docked;
+
+  QIntDictIterator<KTabZoomButton> it(d->m_buttons);
+  while (it.current())
+  {
+    it.current()->setToggleButton(!docked);
     ++it;
   }
 }

@@ -8,6 +8,7 @@
 
 
 #include <kdebug.h>
+#include <kconfig.h>
 
 
 #include "ktabzoomframe.h"
@@ -242,6 +243,9 @@ void KTabZoomWidget::setDockMode(bool docked)
 {
   d->m_docked = docked;
 
+  d->m_tabBar->setDockMode(docked);
+  d->m_popup->setDockMode(docked);
+
   if (!docked)
   {
     d->m_strut->hide();
@@ -251,6 +255,38 @@ void KTabZoomWidget::setDockMode(bool docked)
   d->m_strut->show();
 
   adjustStrut();
+}
+
+
+void KTabZoomWidget::saveSettings(KConfig *config)
+{
+  config->writeEntry("Docked", d->m_docked);
+  if (d->m_tabPosition == KTabZoomPosition::Left || d->m_tabPosition == KTabZoomPosition::Right)
+    config->writeEntry("Strut", d->m_popup->width());
+  else
+    config->writeEntry("Strut", d->m_popup->height());
+}
+
+
+void KTabZoomWidget::loadSettings(KConfig *config)
+{
+  int s = config->readNumEntry("Strut", -1);
+  if (s > 0)
+  {
+    if (d->m_tabPosition == KTabZoomPosition::Left || d->m_tabPosition == KTabZoomPosition::Right)
+      d->m_popup->resize(s, d->m_popup->height());
+    else
+      d->m_popup->resize(d->m_popup->width(), s);
+  }
+
+  setDockMode(config->readBoolEntry("Docked", false));
+
+  if (d->m_docked)
+  {
+    KTZWidgetInfo *i=d->m_info.first();
+    if (i)
+      d->m_tabBar->restore(i->m_barIndex);
+  }
 }
 
 

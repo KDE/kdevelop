@@ -26,17 +26,22 @@ public:
   
   void unsetButtons();
 
+  void restore(int index);
+
+  void setDockMode(bool docked);
+
+
+private slots:
+
+  void toggled(int index);
+  void clicked(int index);
+
 
 signals:
 
   void selected(int index);
   void unselected();
   void docked();
-
-
-private slots:
-
-  void toggled(int index);
 
 
 private:

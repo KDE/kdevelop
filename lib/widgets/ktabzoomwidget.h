@@ -5,6 +5,9 @@
 #include <qwidget.h>
 
 
+class KConfig;
+
+
 #include "ktabzoomposition.h"
 
 
@@ -31,6 +34,9 @@ public:
 
   void lowerAllWidgets();
 
+  void saveSettings(KConfig *config);
+  void loadSettings(KConfig *config);
+  
 
 public slots:
 

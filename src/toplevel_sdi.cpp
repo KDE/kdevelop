@@ -198,15 +198,31 @@ void TopLevelSDI::createGUI(KParts::Part *part)
 
 void TopLevelSDI::loadSettings()
 {
+  KConfig *config = kapp->config();
+  
   ProjectManager::getInstance()->loadSettings();
-  applyMainWindowSettings(kapp->config(), "Mainwindow");
+  applyMainWindowSettings(config, "Mainwindow");
+
+  config->setGroup("LeftBar");
+  m_leftBar->loadSettings(config);
+
+  config->setGroup("BottomBar");
+  m_bottomBar->loadSettings(config);
 }
 
 
 void TopLevelSDI::saveSettings()
 {
+  KConfig *config = kapp->config();
+
   ProjectManager::getInstance()->saveSettings();
-  saveMainWindowSettings(kapp->config(), "Mainwindow");
+  saveMainWindowSettings(config, "Mainwindow");
+
+  config->setGroup("LeftBar");
+  m_leftBar->saveSettings(config);
+
+  config->setGroup("BottomBar");
+  m_bottomBar->saveSettings(config);
 }
 
 

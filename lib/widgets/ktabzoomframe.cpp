@@ -172,10 +172,17 @@ void KTabZoomFrame::slotCloseButtonClicked()
 }
 
 
+void KTabZoomFrame::setDockMode(bool docked)
+{
+  d->m_closeButton->setEnabled(!docked);
+  d->m_dockButton->setOn(docked);
+}
+
+
 void KTabZoomFrame::slotDockButtonToggled(bool toggle)
 {
-  d->m_closeButton->setEnabled(!toggle);
-  
+  setDockMode(toggle);
+
   emit dockToggled(toggle);
 }
 
