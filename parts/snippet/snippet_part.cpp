@@ -33,14 +33,14 @@ typedef KGenericFactory<SnippetPart> snippetFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevsnippet, snippetFactory( "kdevsnippet" ) )
 
 SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin("CodeSnippet", "snippet", parent, name ? name : "SnippetPart" )
+  : KDevPlugin("CodeSnippet", "editcut", parent, name ? name : "SnippetPart" )
 {
   setInstance(snippetFactory::instance());
   //setXMLFile("kdevpart_snippet.rc");
 
   m_widget = new SnippetWidget(this);
   m_widget->setCaption(i18n("Code Snippets"));
-  m_widget->setIcon(SmallIcon("editcut"));
+  m_widget->setIcon(SmallIcon( icon() ));
 
   QWhatsThis::add(m_widget, i18n("<b>Code Snippet</b><p>This is a list of available snippets."));
 
@@ -81,7 +81,7 @@ KAboutData* SnippetPart::aboutData()
  */
 void SnippetPart::slotConfigWidget( KDialogBase *dlg )
 {
-  QVBox *vbox = dlg->addVBoxPage( i18n("Code Snippets") );
+  QVBox *vbox = dlg->addVBoxPage( i18n("Code Snippets"), i18n("Code Snippets"), BarIcon( icon(), KIcon::SizeMedium ) );
 
   SnippetSettings * w = new SnippetSettings( m_widget, vbox );
 
