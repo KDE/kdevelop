@@ -1115,6 +1115,16 @@ void QextMdiMainFrm::setSysButtonsAtMenuPosition()
    }
 }
 
+/** Activates the next open view */
+void QextMdiMainFrm::gotoNextWindow()
+{
+}
+
+/** Activates the previous open view */
+void QextMdiMainFrm::gotoPrevWindow()
+{
+}
+
 /** turns the system buttons for maximize mode (SDI mode) on, and connects them with the current child frame */
 void QextMdiMainFrm::setEnableMaximizedChildFrmMode(bool bEnable)
 {
