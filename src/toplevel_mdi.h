@@ -16,6 +16,7 @@
 class QDomElement;
 class ViewMenuAction;
 class ViewMenuActionPrivateData;
+class TopLevelShare;
 
 /**\brief Handles the multiple document interface modes..
 
@@ -57,8 +58,6 @@ public:
 
   enum EView {OutputView, TreeView};
 
-protected:
-KParts::ReadOnlyPart * getPartFromWidget(const QWidget * pWidget) const;
 signals:
 
   void wantsToQuit();
@@ -97,6 +96,8 @@ public slots:
   virtual void updateActionState();
 
 protected:
+  /** */
+  KParts::ReadOnlyPart * getPartFromWidget(const QWidget * pWidget) const;
   /** Reimplemented from QWidget just to get the info, that the window will now be shown */
   void resizeEvent(QResizeEvent *ev);
   /** Adds a tool view window to the output or tree views*/
@@ -104,18 +105,10 @@ protected:
 
 
 private slots:
-
   void slotQuit();
-  void slotKeyBindings();
-  void slotSettings();
-  void slotActiveProcessCountChanged( uint active );
-  void slotShowMenuBar();
-  void slotNewToolbarConfig();
-  void slotConfigureToolbars();
   void slotReactToProjectOpened();
   void slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl);
   void slotSaveAdditionalViewProperties(const QString& viewName, QDomElement* viewEl);
-
   
 private:
   
@@ -151,8 +144,6 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   void saveMDISettings();
   void loadMDISettings();
   
-  KAction       * m_stopProcesses;                 //!< Stops all running processes
-
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:QextMdiChildView*.\n
                                                    //!< Contains the same pairs as \ref TopLevelMDI::m_childViewMap "m_childViewMap"
   QMap<QextMdiChildView*,QWidget*> m_childViewMap; //!< Key: QextMdiChildView* --> Data:QWidget*.\n
@@ -175,6 +166,7 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   QString          m_CurrentOutputTab;             //!< Holds the previously active output tool view, if all output views have been hidden
   QString          m_CurrentTreeTab;               //!< Holds the previously active tree tool view, if all output views have been hidden
 
+  TopLevelShare*   m_topLevelShare;
 };
 
 //=========================

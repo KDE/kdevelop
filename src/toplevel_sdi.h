@@ -9,7 +9,7 @@
 
 
 class KTabZoomWidget;
-
+class TopLevelShare;
 
 #include "kdevtoplevel.h"
 
@@ -67,16 +67,7 @@ public slots:
   void raiseEditor();
 
 private slots:
-
   void slotQuit();
-  void slotKeyBindings();
-  void slotConfigureToolbars();
-  void slotConfigureNotifications();
-  void slotSettings();
-  void slotActiveProcessCountChanged( uint active );
-  void slotNewToolbarConfig();
-  void slotShowMenuBar();
-
   void slotBufferSelected();      // One entry of the Windows menu has been selected
   void slotFillWindowMenu();
   void slotPartAdded(KParts::Part*);
@@ -100,7 +91,6 @@ private:
   void moveRelativeTab(int);
   void raiseTabbar( KTabZoomWidget *tabBar );
 
-  KAction *m_stopProcesses;
   KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar, *m_raiseEditor;
 
   QTabWidget *m_tabWidget;
@@ -108,6 +98,7 @@ private:
 
   bool m_closing;
 
+  TopLevelShare*   m_pTopLevelShare;
 };
 
 

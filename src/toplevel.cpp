@@ -57,4 +57,3 @@ void TopLevel::invalidateInstance(KDevTopLevel *instance)
   if ( s_instance == instance )
     s_instance = 0;
 }
-

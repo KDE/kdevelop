@@ -29,6 +29,7 @@
 #include "projectsession.h"
 
 #include "toplevel.h"
+#include "toplevelshare.h"
 #include "toplevel_mdi.h"
 
 // ====================================================== class ViewMenuAction
@@ -209,9 +210,13 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews):
 
 // ====================================================== class TopLevelMDI
 TopLevelMDI::TopLevelMDI(QWidget *parent, const char *name)
-  : QextMdiMainFrm(parent, name), m_stopProcesses(0L), m_closing(false),
-    m_myWindowsReady(false),  m_pShowOutputViews(0L), m_pShowTreeViews(0L)
+  : QextMdiMainFrm(parent, name)
+  ,m_closing(false)
+  ,m_myWindowsReady(false)
+  ,m_pShowOutputViews(0L)
+  ,m_pShowTreeViews(0L)
 {
+  m_topLevelShare = new TopLevelShare(this);
 }
 
 
@@ -311,20 +316,8 @@ void TopLevelMDI::createFramework()
  */
 void TopLevelMDI::createActions()
 {
-  ProjectManager::getInstance()->createActions( actionCollection() );
-
-  KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
-
   KAction *action;
 
-  m_stopProcesses = new KAction( i18n( "&Stop" ), "stop",
-                Key_Escape, Core::getInstance(), SIGNAL(stopButtonClicked()),
-                actionCollection(), "stop_processes" );
-  m_stopProcesses->setStatusText(i18n("Stop all running processes"));
-  m_stopProcesses->setEnabled( false );
-
-  connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
-           this, SLOT(slotActiveProcessCountChanged(uint)) );
 
   // Create actions for the view menu
   ViewMenuActionPrivateData ViewActionData;   // ViewActionData holds the parameter for the action
@@ -346,50 +339,23 @@ void TopLevelMDI::createActions()
 
   connect(manager(), SIGNAL(change()),this, SLOT(updateActionState()));
 
-  action = KStdAction::showMenubar(
-     this, SLOT(slotShowMenuBar()),
-     actionCollection(), "settings_show_menubar" );
-  action->setStatusText(i18n("Lets you switch the menubar on/off"));
-
-  action = KStdAction::keyBindings(
-      this, SLOT(slotKeyBindings()),
-      actionCollection(), "settings_configure_shortcuts" );
-  action->setStatusText(i18n("Lets you configure shortcut keys"));
-
-  action = KStdAction::configureToolbars(
-      this, SLOT(slotConfigureToolbars()),
-      actionCollection(), "settings_configure_toolbars" );
-  action->setStatusText(i18n("Lets you configure toolbars"));
-
-  action = KStdAction::preferences(this, SLOT(slotSettings()),
-                actionCollection(), "settings_configure" );
-  action->setStatusText(i18n("Lets you customize KDevelop") );
-
-	action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
+  action = new KAction( i18n("&Next Window"), ALT+Key_PageDown, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
   action->setStatusText( i18n("Switches to the next window") );
 
-	action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
+  action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
   action->setStatusText( i18n("Switches to the previous window") );
 
+
   m_pOutputToolViewsMenu = new KActionMenu( i18n("Output Tool Views"), 0, "view_output_tool_views");
-	connect(m_pOutputToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillOutputToolViewsMenu()));
+  connect(m_pOutputToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillOutputToolViewsMenu()));
   actionCollection()->insert(m_pOutputToolViewsMenu);
 
   m_pTreeToolViewsMenu = new KActionMenu( i18n("Tree Tool Views"), 0, "view_tree_tool_views");
-	connect(m_pTreeToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillTreeToolViewsMenu()));
+  connect(m_pTreeToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillTreeToolViewsMenu()));
   actionCollection()->insert(m_pTreeToolViewsMenu);
-}
 
-void TopLevelMDI::slotActiveProcessCountChanged( uint active )
-{
-  m_stopProcesses->setEnabled( active > 0 );
+  m_topLevelShare->createActions();
 }
-
-void TopLevelMDI::slotQuit()
-{
-  (void) queryClose();
-}
-
 
 QextMdiChildView *TopLevelMDI::wrapper(QWidget *view, const QString &name)
 {
@@ -674,64 +640,6 @@ void TopLevelMDI::saveMDISettings()
   config->writeEntry("MDI mode", mdiMode());
 
   config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
-}
-
-
-void TopLevelMDI::slotKeyBindings()
-{
-  KKeyDialog dlg( false, this );
-  QPtrList<KXMLGUIClient> clients = guiFactory()->clients();
-  for( QPtrListIterator<KXMLGUIClient> it( clients );
-       it.current(); ++it ) {
-    dlg.insert( (*it)->actionCollection() );
-  }
-  dlg.configure();
-}
-
-void TopLevelMDI::slotConfigureToolbars()
-{
-  saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
-  KEditToolbar dlg( factory() );
-  connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
-  dlg.exec();
-}
-
-// called when OK ar Apply is clicked in the EditToolbar Dialog
-void TopLevelMDI::slotNewToolbarConfig()
-{
-  // replug actionlists here...
-
-  applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
-}
-
-void TopLevelMDI::slotShowMenuBar()
-{
-  if (menuBar()->isVisible()) {
-    menuBar()->hide();
-  } else {
-    menuBar()->show();
-  }
-  saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
-}
-
-void TopLevelMDI::slotSettings()
-{
-  KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
-                  KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
-                  "customization dialog");
-
-  QVBox *vbox = dlg.addVBoxPage(i18n("General"));
-  SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
-
-  KConfig* config = kapp->config();
-  config->setGroup("General Options");
-  gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-
-  Core::getInstance()->doEmitConfigWidget(&dlg);
-  dlg.exec();
-
-  config->setGroup("General Options");
-  config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
 }
 
 
@@ -1238,6 +1146,11 @@ void TopLevelMDI::slotSaveAdditionalViewProperties(const QString& viewName, QDom
 
   // MDI stuff
   viewEl->setAttribute( "Attach", pMDICover->isAttached() || (mdiMode() == QextMdi::TabPageMode));
+}
+
+void TopLevelMDI::slotQuit()
+{
+    (void) queryClose();
 }
 
 #include "toplevel_mdi.moc"

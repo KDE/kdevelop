@@ -41,13 +41,17 @@
 
 
 #include "toplevel.h"
+#include "toplevelshare.h"
 #include "toplevel_sdi.h"
 
 
 TopLevelSDI::TopLevelSDI(QWidget *parent, const char *name)
-        : KParts::MainWindow(parent, name),
-        m_pWindowMenu(0L),
-m_closing(false) {
+ : KParts::MainWindow(parent, name)
+ ,m_pWindowMenu(0L)
+ ,m_closing(false)
+{
+    m_pTopLevelShare = new TopLevelShare(this);
+    
     KAction * action;
 
     action = new KAction( i18n("&Next Window"), ALT+Key_PageDown,
@@ -189,55 +193,7 @@ void TopLevelSDI::createFramework() {
 
 
 void TopLevelSDI::createActions() {
-    ProjectManager::getInstance()->createActions( actionCollection() );
-
-    KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
-
-    KAction* action;
-
-    m_stopProcesses = new KAction( i18n( "&Stop" ), "stop",
-                                   Key_Escape, Core::getInstance(), SIGNAL(stopButtonClicked()),
-                                   actionCollection(), "stop_processes" );
-    m_stopProcesses->setStatusText(i18n("Stop all running processes"));
-    m_stopProcesses->setEnabled( false );
-
-    connect( Core::getInstance(), SIGNAL(activeProcessCountChanged(uint)),
-             this, SLOT(slotActiveProcessCountChanged(uint)) );
-
-    action = KStdAction::showMenubar(
-                 this, SLOT(slotShowMenuBar()),
-                 actionCollection(), "settings_show_menubar" );
-    action->setStatusText(i18n("Lets you switch the menubar on/off"));
-
-    action = KStdAction::keyBindings(
-                 this, SLOT(slotKeyBindings()),
-                 actionCollection(), "settings_configure_shortcuts" );
-    action->setStatusText(i18n("Lets you configure shortcut keys"));
-
-    action = KStdAction::configureToolbars(
-                 this, SLOT(slotConfigureToolbars()),
-                 actionCollection(), "settings_configure_toolbars" );
-    action->setStatusText(i18n("Lets you configure toolbars"));
-
-#if (KDE_VERSION > 305)
-
-    action = KStdAction::configureNotifications(
-                 this, SLOT(slotConfigureNotifications()),
-                 actionCollection(), "settings_configure_notifications" );
-    action->setStatusText(i18n("Lets you configure system notifications"));
-#endif
-
-    action = KStdAction::preferences(this, SLOT(slotSettings()),
-                                     actionCollection(), "settings_configure" );
-    action->setStatusText( i18n("Lets you customize KDevelop") );
-}
-
-void TopLevelSDI::slotActiveProcessCountChanged( uint active ) {
-    m_stopProcesses->setEnabled( active > 0 );
-}
-
-void TopLevelSDI::slotQuit() {
-    (void) queryClose();
+    m_pTopLevelShare->createActions();
 }
 
 
@@ -352,66 +308,6 @@ void TopLevelSDI::saveSettings() {
     config->setGroup("BottomBar");
     m_bottomBar->saveSettings(config);
 }
-
-
-void TopLevelSDI::slotKeyBindings() {
-    KKeyDialog dlg( false, this );
-    QPtrList<KXMLGUIClient> clients = guiFactory()->clients();
-    for( QPtrListIterator<KXMLGUIClient> it( clients );
-            it.current(); ++it ) {
-        dlg.insert( (*it)->actionCollection() );
-    }
-    dlg.configure();
-}
-
-void TopLevelSDI::slotConfigureToolbars() {
-    saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
-    KEditToolbar dlg( factory() );
-    connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
-    dlg.exec();
-}
-
-// called when OK ar Apply is clicked in the EditToolbar Dialog
-void TopLevelSDI::slotNewToolbarConfig() {
-    // replug actionlists here...
-
-    applyMainWindowSettings( KGlobal::config(), "Mainwindow" );
-}
-
-void TopLevelSDI::slotShowMenuBar() {
-    if (menuBar()->isVisible()) {
-        menuBar()->hide();
-    } else {
-        menuBar()->show();
-    }
-    saveMainWindowSettings( KGlobal::config(), "Mainwindow" );
-}
-
-void TopLevelSDI::slotConfigureNotifications() {
-#if (KDE_VERSION > 305)
-    KNotifyDialog::configure(this, "Notification Configuration Dialog");
-#endif
-}
-
-void TopLevelSDI::slotSettings() {
-    KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
-                    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
-                    "customization dialog");
-
-    QVBox *vbox = dlg.addVBoxPage(i18n("General"));
-    SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
-
-    KConfig* config = kapp->config();
-    config->setGroup("General Options");
-    gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-
-    Core::getInstance()->doEmitConfigWidget(&dlg);
-    dlg.exec();
-
-    config->setGroup("General Options");
-    config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-}
-
 
 //=============== slotFillWindowMenu ===============//
 void TopLevelSDI::slotFillWindowMenu() {
@@ -565,6 +461,11 @@ void TopLevelSDI::slotLeftTabsChanged() {
     if ( !m_leftBar )
         return;
     m_raiseLeftBar->setEnabled( !m_leftBar->isEmpty() );
+}
+
+void TopLevelSDI::slotQuit()
+{
+    (void) queryClose();
 }
 
 #include "toplevel_sdi.moc"

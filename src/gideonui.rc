@@ -38,6 +38,7 @@
     <text>&amp;View</text>
     <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
+    <Separator/>
     <Action name="view_tree_tool_views"/>
     <Action name="view_output_tool_views"/>
     <Action name="raise_left_tabbar"/>
@@ -75,6 +76,13 @@
     <Action name="settings_show_menubar" />
     <Merge name="StandardToolBarMenuHandler" />
     <DefineGroup name="show_merge" />
+    <Separator/>
+    <Action name="settings_main_toolbar"/>
+    <Action name="settings_build_toolbar"/>
+    <Action name="settings_view_toolbar"/>
+    <Action name="settings_browser_toolbar"/>
+    <Action name="settings_statusbar"/>
+    <Action name="settings_viewbar"/>
     <Separator />
     <Action name="settings_configure_shortcuts" />
     <Action name="settings_configure_toolbars" />
