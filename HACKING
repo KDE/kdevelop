@@ -7,13 +7,13 @@ A small guide how to extend Gideon via plugins:
     plugin will automatically be loaded.
 
     You can change the default loading by changing some settings in your foo.desktop file:
-	#set it to "Global" or "Project"
+	#set it to "Global" or "Project", this property is _not_ optional
 	X-KDevelop-Scope=
 	#you can add a list of programming language which are supported by your plugin
-	#if your plugin works with all languages leave the field empty
+	#if your plugin works with all languages leave the field empty (optional)
 	X-KDevelop-ProgrammingLanguages=
 	#you can add a list of keywords, the plugin will be only loaded if all keywords match with the 
-	#keywords in the projectfile
+	#keywords in the projectfile (optional)
 	Keywords=
 
 	an example from the Java Debugger Plugin:
