@@ -460,7 +460,7 @@ void QextMdiChildArea::tileAnodine()
    QextMdiChildFrm *lpTop=topChild();
    int numVisible=getVisibleChildCount(); // count visible windows
    if(numVisible<1)return;
-   int numCols=int(sqrt(numVisible)); // set columns to square root of visible count
+   int numCols=int(sqrt((double)numVisible)); // set columns to square root of visible count
    // create an array to form grid layout
    int *numRows=new int[numCols];
    int numCurCol=0;
