@@ -84,6 +84,7 @@ AutoProjectWidget::AutoProjectWidget( AutoProjectPart *part, bool kde )
 	m_activeTarget = 0;
 	m_shownSubproject = 0;
 	m_choosenTarget = 0;
+        m_makefileHandler = new MakefileHandler();
 
 	QSplitter *splitter = new QSplitter(Vertical, this);
 
@@ -95,7 +96,9 @@ AutoProjectWidget::AutoProjectWidget( AutoProjectPart *part, bool kde )
 
 
 AutoProjectWidget::~AutoProjectWidget()
-{}
+{
+    delete m_makefileHandler;
+}
 
 void AutoProjectWidget::initOverview ( QWidget* parent )
 {
@@ -126,8 +129,7 @@ AutoDetailsView* AutoProjectWidget::getDetailsView ()
 void AutoProjectWidget::openProject( const QString &dirName )
 {
 	m_subprojectView->loadMakefileams ( dirName );
-	MakefileHandler mfh;
-	mfh.parse( dirName, true );
+	m_makefileHandler->parse( dirName, true );
 }
 
 
@@ -152,7 +154,7 @@ QStringList AutoProjectWidget::allSubprojects()
 {
 	int prefixlen = m_part->projectDirectory().length() + 1;
 	QStringList res;
-	
+
 	QListViewItemIterator it( m_subprojectView->listView() );
 	for ( ; it.current(); ++it )
 	{
@@ -162,33 +164,33 @@ QStringList AutoProjectWidget::allSubprojects()
 		QString path = static_cast<SubprojectItem*>( it.current() ) ->path;
 		res.append( path.mid( prefixlen ) );
 	}
-	
+
 	return res;
 }
 
 QPtrList <SubprojectItem> AutoProjectWidget::allSubprojectItems()
 {
 	QPtrList <SubprojectItem> res;
-	
+
 	QListViewItemIterator it ( m_subprojectView->listView() );
-	
+
 	for ( ; it.current(); ++it )
 	{
 		// Skip root subproject
 		// if ( it.current() == m_subprojectView->firstChild() )
 		//	continue;
-		
+
 		SubprojectItem* spitem = static_cast <SubprojectItem*> ( it.current() );
 		res.append ( spitem );
 	}
-	
+
 	return res;
 }
 
 SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, bool pathIsAbsolute)
 {
 	kdDebug(9020) << "Looking for path " << path << endl;
-	
+
 	int prefixLen = m_part->projectDirectory().length() + 1;
 	QListViewItemIterator it( m_subprojectView->listView() );
 	for(; it.current(); ++it)
@@ -209,10 +211,10 @@ SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, b
 
 QString AutoProjectWidget::pathForTarget(const TargetItem *titem) const
 {
-	
-	if (!titem) 
+
+	if (!titem)
 		return QString::null;
-	
+
 	kdDebug(9020) << "Looking for target " << titem->name << endl;
 	int prefixLen = m_part->projectDirectory().length() + 1;
 	QListViewItemIterator it( m_subprojectView->listView() );
@@ -235,7 +237,7 @@ QStringList AutoProjectWidget::allLibraries()
 {
 	int prefixlen = m_part->projectDirectory().length() + 1;
 	QStringList res;
-	
+
 	QListViewItemIterator it( m_subprojectView->listView() );
 	for ( ; it.current(); ++it )
 	{
@@ -252,7 +254,7 @@ QStringList AutoProjectWidget::allLibraries()
 			}
 		}
 	}
-	
+
 	return res;
 }
 
@@ -267,7 +269,7 @@ QStringList AutoProjectWidget::allFiles()
 	{
 		if ( item->firstChild() )
 			s.push( item->firstChild() );
-		
+
 		SubprojectItem *spitem = static_cast<SubprojectItem*>( item );
 		// use URLUtil so paths in root project dir are worked out correctly
 		QString relPath = URLUtil::relativePath(m_part->projectDirectory(), spitem->path, URLUtil::SLASH_SUFFIX);
@@ -277,22 +279,22 @@ QStringList AutoProjectWidget::allFiles()
 			QPtrListIterator<FileItem> fit( tit.current() ->sources );
 			for ( ; fit.current(); ++fit )
 			{
-				
+
 				if((*fit)->is_subst)
 					continue;
-				
+
 				QFileInfo fileInfo( (*fit)->name );
 				if( fileInfo.extension() == "ui" )
 				{
 					dict.insert( relPath + fileInfo.baseName() + ".h", true );
 					dict.insert( relPath + fileInfo.baseName() + ".cpp", true );
 				}
-				
+
 				dict.insert( relPath + ( *fit ) ->name, true );
 			}
 		}
 	}
-	
+
 	// Files may be in multiple targets, so we have to remove
 	// duplicates
 	QStringList res;
@@ -301,7 +303,7 @@ QStringList AutoProjectWidget::allFiles()
 		res << it.key();
 		++it;
 	}
-	
+
 	return res;
 }
 
@@ -310,7 +312,7 @@ QString AutoProjectWidget::subprojectDirectory()
 {
 	if ( !selectedSubproject() )
 		return QString::null;
-	
+
 	return selectedSubproject()->path;
 }
 
@@ -440,18 +442,18 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 					autoAdded = true;
 				}
 			}
-			
+
 			// add to manual list if this file wasn't auto-added
 			if (!autoAdded) doManually.append(*it);
 		}
 		if (doneAutomatically.count()>0) emitAddedFiles(doneAutomatically);
-		
+
                 // raise dialog for any files that weren't added automatically
 		if (doManually.count()>0) {
 			ChooseTargetDialog chooseTargetDlg ( this, m_part, doManually, this, "choose target dialog" );
-			
+
 		        //chooseTargetDlg = new ChooseTargetDialog ( this, this, "choose target dialog" );
-			
+
 			if ( chooseTargetDlg.exec() && chooseTargetDlg.alwaysUseActiveTarget() )
 				DomUtil::writeBoolEntry( dom, "/kdevautoproject/general/useactivetarget", true );
 		}
@@ -477,17 +479,17 @@ void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* sp
 		FileItem * fitem = createFileItem( fileName, spitem );
 		titem->sources.append( fitem );
 		titem->insertItem( fitem );
-		
+
 		QString canontargetname = AutoProjectTool::canonicalize( titem->name );
 		varname = canontargetname + "_SOURCES";
 	}
 	spitem->variables[ varname ] += ( " " + fileName );
-	
+
 	QMap<QString, QString> replaceMap;
 	replaceMap.insert( varname, spitem->variables[ varname ] );
-	
+
 	AutoProjectTool::modifyMakefileam( spitem->path + "/Makefile.am", replaceMap );
-	
+
 	m_detailView->slotSelectionChanged( spitem );
 }
 
@@ -500,13 +502,13 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 {
 	if ( !item )
 		return;
-	
+
 	// Delete the items from the details view first.
 	if ( m_shownSubproject )
 	{
 		// Remove all TargetItems and all of their children from the view
 		kdDebug ( 9020 ) << "m_shownSubproject (before takeItem()): " << m_shownSubproject->subdir << endl;
-		
+
 		QPtrListIterator<TargetItem> it1( m_shownSubproject->targets );
 		for ( ; it1.current(); ++it1 )
 		{
@@ -524,13 +526,13 @@ void AutoProjectWidget::slotOverviewSelectionChanged( QListViewItem *item )
 			m_detailView->listView()->takeItem( *it1 );
 		}
 	}
-	
+
 	// We assume here that ALL items in the over list view
 	// are SubprojectItem's
 	m_shownSubproject = dynamic_cast<SubprojectItem*>( item );
 	if ( !m_shownSubproject) return;
 	kdDebug ( 9020 ) << "m_shownSubproject (after takeItem()):  " << selectedSubproject()->subdir << endl;
-	
+
 	// Insert all TargetItems and all of their children into the view
 	QPtrListIterator<TargetItem> it2( selectedSubproject()->targets );
 	for ( ; it2.current(); ++it2 )
@@ -552,7 +554,7 @@ TargetItem *AutoProjectWidget::selectedTarget()
 	ProjectItem * pvitem = static_cast<ProjectItem*>( m_detailView->listView()->selectedItem() );
 	if ( !pvitem || ( pvitem->type() != ProjectItem::Target ) )
 		return 0;
-	
+
 	return static_cast<TargetItem*>( pvitem );
 }
 
@@ -562,17 +564,17 @@ FileItem *AutoProjectWidget::selectedFile()
 	ProjectItem * pvitem = static_cast<ProjectItem*>( m_detailView->listView()->selectedItem() );
 	if ( !pvitem || ( pvitem->type() != ProjectItem::File ) )
 		return 0;
-	
+
 	return static_cast<FileItem*>( pvitem );
 }
 
 SubprojectItem* AutoProjectWidget::selectedSubproject()
 {
 	ProjectItem * pvitem = static_cast <SubprojectItem*> ( m_subprojectView->listView()->selectedItem() );
-	
+
 	if ( !pvitem || ( pvitem->type() != ProjectItem::Subproject ) )
 		return 0;
-	
+
 	return static_cast <SubprojectItem*> ( pvitem );
 }
 
@@ -615,12 +617,12 @@ FileItem *AutoProjectWidget::createFileItem( const QString &name, SubprojectItem
 		is_subst = true;
 	else
 		is_subst = false;
-	
+
 	FileItem * fitem = new FileItem( m_subprojectView->listView(), name, is_subst );
 	fitem->uiFileLink = m_detailView->getUiFileLink(subproject->relativePath()+"/", name );
 	m_subprojectView->listView()->takeItem( fitem );
 	fitem->name = name;
-	
+
 	return fitem;
 }
 

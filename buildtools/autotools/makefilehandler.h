@@ -37,7 +37,7 @@ public:
      * Get the AST for a certain path
      * \param folderPath the path of the folder to get an AST for
      */
-    void astForFolder( const QString& folderPath );
+    ProjectAST* astForFolder( const QString& folderPath );
 
 
 private:

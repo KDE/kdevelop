@@ -67,7 +67,6 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
 
     if ( ret != 0 )
     {
-        kdDebug(9020) << k_funcinfo << filePath << " is valid, but could not be parsed" << endl;
         return;
     }
 
@@ -90,9 +89,12 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
                     kdDebug(9020) << k_funcinfo << "found SUBDIRS assignment '"
                                   << assignment->scopedID << "'" << endl;
                     kdDebug(9020) << k_funcinfo << "subdirs is " << assignment->values << endl;
-                    QStringList::iterator vit = assignment->values.begin();
-                    for ( ; vit != assignment->values.end(); ++vit )
+                    QString list = assignment->values.join( QString::null );
+                    QStringList subdirList = QStringList::split( " ",  list );
+                    QStringList::iterator vit = subdirList.begin();
+                    for ( ; vit != subdirList.end(); ++vit )
 		    {
+                        kdDebug(9020) << k_funcinfo << "Beginning parsing of " << ( *vit ) << endl;
                         parse( folder + '/' + ( *vit ), recursive );
 		    }
 		}
@@ -101,9 +103,12 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
     }
 }
 
-void MakefileHandler::astForFolder( const QString& folderPath )
+ProjectAST* MakefileHandler::astForFolder( const QString& folderPath )
 {
-    Q_UNUSED( folderPath );
+    if ( d->projects.contains( folderPath ) )
+        return d->projects[folderPath];
+    else
+        return 0;
 }
 
 //kate: space-indent off; tab-width 4; indent-mode csands;

@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 #include "domutil.h"
+#include "makefilehandler.h"
 
 class AutoProjectPart;
 class AutoSubprojectView;
@@ -217,6 +218,8 @@ private:
 	SubprojectItem *m_shownSubproject;
 
 	AutoProjectView m_lastFocusedView;
+
+	MakefileHandler *m_makefileHandler;
 };
 
 #endif 
