@@ -378,27 +378,46 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
   aClass = class_tree->store->getClassByName( aClassName );
 
   if( aClass != NULL )
+  {
     aMethod = aClass->getMethodByNameAndArg( aMethodName );
 
-  if( aClass != NULL && aMethod != NULL )
-  {
-    if( KMsgBox::yesNo( this, i18n("Delete method"),
-                        i18n("Are you sure you want to delete this method?"),
-                        KMsgBox::QUESTION ) == 1 )
-    {
-      // Start by deleting the declaration.
-      switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
-      edit_widget->deleteInterval( aMethod->declaredOnLine, 
-                                   aMethod->declarationEndsOnLine );
+    // If we don't find the method, we try to find a slot with the same name.
+    if( aMethod == NULL )
+      aMethod = aClass->getSlotByNameAndArg( aMethodName );
 
-      // Comment out the definition.
-      switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
-      for( line = aMethod->definedOnLine; 
-           line <= aMethod->definitionEndsOnLine;
-           line++ )
-        edit_widget->insertAtLine( i18n("//Del by KDevelop: "), line );
+    // If it isn't a method or a slot we go for a signal. 
+    if( aMethod == NULL )
+      aMethod = aClass->getSignalByNameAndArg( aMethodName );
+
+    // If everything fails notify the user.
+    if( aMethod != NULL )
+    {
+      if( KMsgBox::yesNo( this, i18n("Delete method"),
+                          i18n("Are you sure you want to delete this method?"),
+                          KMsgBox::QUESTION ) == 1 )
+      {
+        // Start by deleting the declaration.
+        switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
+        edit_widget->deleteInterval( aMethod->declaredOnLine, 
+                                     aMethod->declarationEndsOnLine );
+
+        // Comment out the definition if it isn't a signal.
+        if( !aMethod->isSignal )
+        {
+          switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+          for( line = aMethod->definedOnLine; 
+               line <= aMethod->definitionEndsOnLine;
+               line++ )
+            edit_widget->insertAtLine( i18n("//Del by KDevelop: "), line );
+        }
+      }
     }
+    else
+      QMessageBox::warning( NULL, i18n( "Method missing" ), i18n( "Couldn't find the method to delete." ) );
   }
+  else
+      QMessageBox::warning( NULL, i18n( "Class missing" ), i18n( "Couldn't find the class which has the method to delete." ) );
+
 }
 
 /*********************************************************************
@@ -597,9 +616,7 @@ void CKDevelop::CVGotoDeclaration( const char *className,
     case THPRIVATE_SLOT:
       aAttr = aClass->getSlotByNameAndArg( declName );
       break;
-    case THPUBLIC_SIGNAL:
-    case THPROTECTED_SIGNAL:
-    case THPRIVATE_SIGNAL:
+    case THSIGNAL:
       aAttr = aClass->getSignalByNameAndArg( declName );
       break;
     case THGLOBAL_FUNCTION:
