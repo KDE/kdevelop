@@ -7,9 +7,13 @@
 #if KDE_VERSION <= 305
 # include <qgroupbox.h>
 # include <qobjectlist.h>
+# include <qlistbox.h>
+# include <klineedit.h>
 # include <knotifyclient.h>
 # include <kcombobox.h>
 # include <assert.h>
+
+class QPushButton;
 
 class KEditListBoxPrivate
 {

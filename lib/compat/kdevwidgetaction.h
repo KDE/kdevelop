@@ -13,7 +13,8 @@
 #include <kdeversion.h>
 
 #if !(KDE_VERSION > 305)
-#include <qguardedptr.h>
+# include <qguardedptr.h>
+# include <kaction.h>
 //--------------------begin-of-copy-of-kde-3.1-----------
 /**
  * An action that automatically embeds a widget into a

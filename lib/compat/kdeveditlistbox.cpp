@@ -1,6 +1,10 @@
 #include <kdeveditlistbox.h>
 
 #if KDE_VERSION <= 305
+# include <qlayout.h>
+# include <qpushbutton.h>
+# include <kdialog.h>
+# include <klocale.h>
 
 KEditListBox::KEditListBox(QWidget *parent, const char *name,
 			   bool checkAtEntering, int buttons )
