@@ -73,6 +73,8 @@ private slots:
   void slotCloseAllWindows();
   void slotCloseOtherWindows();
 
+  void slotPopupAboutToShow();
+  void slotPopupAboutToHide();
 
 private:
 

@@ -1,5 +1,6 @@
 #include <qlayout.h>
 #include <qtabwidget.h>
+#include <qpopupmenu.h>
 
 
 #include <kmimetype.h>
@@ -18,6 +19,7 @@
 
 #include <ktexteditor/viewcursorinterface.h>
 #include <ktexteditor/popupmenuinterface.h>
+#include <ktexteditor/editinterface.h>
 
 
 #include "toplevel.h"
@@ -232,7 +234,12 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
   {
     KTextEditor::PopupMenuInterface *iface = dynamic_cast<KTextEditor::PopupMenuInterface*>(part->widget());
     if (iface)
-      iface->installPopup((QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main()));
+    {
+      QPopupMenu *popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
+      iface->installPopup(popup);
+      connect(popup, SIGNAL(aboutToShow()), this, SLOT(slotPopupAboutToShow()));
+      connect(popup, SIGNAL(aboutToHide()), this, SLOT(slotPopupAboutToHide()));
+    }
   }
 }
 
@@ -490,6 +497,65 @@ bool PartController::closeDocuments(const QStringList &documents)
   }
 
   return true;
+}
+
+
+void PartController::slotPopupAboutToShow()
+{
+  QPopupMenu *popup = (QPopupMenu*)sender();
+  if (!popup)
+    return;
+
+  // ugly hack: mark the "original" items 
+  for (uint index=0; index<popup->count(); ++index)
+    popup->setItemParameter(popup->idAt(index), popup->idAt(index)+1);
+  
+  // first fill the menu in the file context
+
+  if (!activePart())
+    return;
+
+  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(activePart());
+  if (ro_part)
+  {
+    FileContext context(ro_part->url().path());
+    Core::getInstance()->fillContextMenu(popup, &context);
+  }
+  
+  // second, fill the menu in the editor context
+
+  if (!activePart()->widget())
+    return;
+
+  KTextEditor::ViewCursorInterface *cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(activePart()->widget());
+  KTextEditor::EditInterface *editIface = dynamic_cast<KTextEditor::EditInterface*>(activePart());
+
+  if (!cursorIface || !editIface)
+  {
+    Core::getInstance()->fillContextMenu(popup, 0);
+    kdDebug() << "fillContextMenu with empty context" << endl;
+  }
+  else
+  {
+    uint line, col;
+    cursorIface->cursorPosition(&line, &col);
+    EditorContext context(editIface->textLine(line), col);
+    Core::getInstance()->fillContextMenu(popup, &context);
+    kdDebug() << "fillContextMenu with Editor context" << endl;
+  }
+}
+
+
+void PartController::slotPopupAboutToHide()
+{
+  QPopupMenu *popup = (QPopupMenu*)sender();
+  if (!popup)
+    return;
+
+  // ugly hack: remove all but the "original" items
+  for (uint index=0; index<popup->count(); ++index)
+    if (popup->itemParameter(popup->idAt(index) != popup->idAt(index)+1))
+      popup->removeItemAt(index);
 }
 
 
