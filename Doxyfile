@@ -114,6 +114,8 @@ EXCLUDE                = parts/appwizard/adahello/ \
                          parts/appwizard/kateplugin/ \
                          parts/appwizard/common/ \
                          parts/appwizard/kapp/ \
+                         parts/appwizard/haskellhello/ \
+                         parts/appwizard/xulhello/ \
                          parts/appwizard/kappjava/
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
