@@ -21,6 +21,7 @@
 #include <qstrlist.h>
 #include <qtooltip.h>
 #include <qtimer.h>
+#include <qstringlist.h>
 
 #include <kiconloader.h>
 #include <kurlcombobox.h>
@@ -32,7 +33,7 @@
 #include <kcombobox.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
-
+#include <kapp.h>
 
 
 #include "kdevcore.h"
@@ -113,6 +114,10 @@ FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
 	filterIcon->setPixmap( BarIcon("filter") );
 	filter = new KHistoryCombo(filterBox, "filter");
 	filter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ));
+	QString group = kapp->config()->group();
+	kapp->config()->setGroup( "FileSelector Plugin" );
+	filter->setHistoryItems( kapp->config()->readListEntry("FilterHistory") );
+	kapp->config()->setGroup( group );
 	filterBox->setStretchFactor(filter, 2);
 	lo->addWidget(filterBox);
 
@@ -153,7 +158,12 @@ FileSelectorWidget::FileSelectorWidget(FileSelectorPart *part)
 
 
 FileSelectorWidget::~FileSelectorWidget()
-{}
+{
+  QString group = kapp->config()->group();
+  kapp->config()->setGroup( "FileSelector Plugin" );
+  kapp->config()->writeEntry( "FilterHistory", filter->historyItems() );
+  kapp->config()->setGroup( group );
+}
 
 
 void FileSelectorWidget::popupAboutToShow()
