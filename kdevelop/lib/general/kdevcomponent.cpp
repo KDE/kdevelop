@@ -15,11 +15,11 @@ void KDevComponent::setupGUI()
 {
 }
 
-void KDevComponent::configWidgetRequested(KDialogBase *dlg)
+void KDevComponent::configWidgetRequested(KDialogBase*)
 {
 }
 
-void KDevComponent::commandRequested(const QString &command)
+void KDevComponent::commandRequested(const QString&)
 {
 }
 
@@ -27,7 +27,7 @@ void KDevComponent::stopButtonClicked()
 {
 }
 
-void KDevComponent::projectOpened(CProject *prj)
+void KDevComponent::projectOpened(CProject*)
 {
 }
 
@@ -35,7 +35,7 @@ void KDevComponent::projectClosed()
 {
 }
 
-void KDevComponent::versionControlOpened(KDevVersionControl *vc)
+void KDevComponent::versionControlOpened(KDevVersionControl*)
 {
 }
 
@@ -43,7 +43,7 @@ void KDevComponent::versionControlClosed()
 {
 }
 
-void KDevComponent::languageSupportOpened(KDevLanguageSupport *ls)
+void KDevComponent::languageSupportOpened(KDevLanguageSupport*)
 {
 }
 
@@ -52,7 +52,7 @@ void KDevComponent::languageSupportClosed()
 }
 
 
-void KDevComponent::classStoreOpened(ClassStore *store)
+void KDevComponent::classStoreOpened(ClassStore*)
 {
 }
 
@@ -73,7 +73,7 @@ void KDevComponent::savedFile(const QString&)
 }
 
 
-void KDevComponent::setWidget(QWidget *w)
+void KDevComponent::setWidget(QWidget*)
 {
 }
 
@@ -84,3 +84,13 @@ QWidget *KDevComponent::widget()
 KAboutData* KDevComponent::aboutPlugin(){
   return 0;
 }
+
+void KDevComponent::writeProjectSpaceGlobalConfig(QDomDocument&){
+}
+void KDevComponent::writeProjectSpaceUserConfig(QDomDocument&){
+}
+void KDevComponent::readProjectSpaceGlobalConfig(QDomDocument&){
+}
+void KDevComponent::readProjectSpaceUserConfig(QDomDocument&){
+}
+

@@ -20,6 +20,7 @@
 
 #include <qstring.h>
 #include <kparts/part.h>
+#include <qdom.h>
 
 class KDevVersionControl;
 class KDevLanguageSupport;
@@ -110,6 +111,22 @@ public:
 
     /** returns some data about this Component, should be static?*/
     virtual KAboutData* aboutPlugin();
+
+    /** write the ProjectSpace related configuration to the document
+     , but only user independent data (important for multiuser projects)*/
+    virtual void writeProjectSpaceGlobalConfig(QDomDocument& doc);
+
+    /** write the ProjectSpace related configuration to the document
+	, saves user dependent data */
+    virtual void writeProjectSpaceUserConfig(QDomDocument& doc);
+    
+    /** read the ProjectSpace related configuration from the document
+	, but only user independent data (important for multiuser projects)*/
+    virtual void readProjectSpaceGlobalConfig(QDomDocument& doc);
+
+    /** read the ProjectSpace related configuration from the document
+	, read user dependent data */
+    virtual void readProjectSpaceUserConfig(QDomDocument& doc);
 
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);

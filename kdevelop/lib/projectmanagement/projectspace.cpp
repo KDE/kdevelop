@@ -33,11 +33,10 @@
 #include <kaboutdata.h>
 
 
-ProjectSpace::ProjectSpace(QObject* parent,const char* name,QString file) : KDevComponent(parent,name){
+ProjectSpace::ProjectSpace(QObject* parent,const char* name) : KDevComponent(parent,name){
   m_pProjects = new QList<Project>;
-  if (file != ""){
-    readXMLConfig(file);
-  }
+  m_pUserDoc = 0;
+  m_pGlobalDoc = 0;
 }
 ProjectSpace::~ProjectSpace(){
 }
@@ -185,7 +184,7 @@ void ProjectSpace::setInfosInString(QString& text){
   	      
 }
 
-bool ProjectSpace::readXMLConfig(QString absFilename){
+bool ProjectSpace::readConfig(QString absFilename){
   kdDebug(9000) << "enter ProjectSpace::readXMLConfig" << endl;
   QFileInfo fileInfo(absFilename);
   m_path = fileInfo.dirPath();
@@ -198,28 +197,32 @@ bool ProjectSpace::readXMLConfig(QString absFilename){
     return false;
   }
   
+  if(m_pGlobalDoc != 0){
+    delete m_pGlobalDoc;
+  }
+  m_pGlobalDoc = new QDomDocument("KDevProjectSpace");
+  
   // Parse the XML file.
-  QDomDocument doc;
   // Read in file and check for a valid XML header.
-  if (!doc.setContent(&file)){
+  if (!m_pGlobalDoc->setContent(&file)){
     KMessageBox::sorry(0,
 		       i18n("The file %1 does not contain valid XML").arg(absFilename));
-      return false;
+    return false;
   }
   // Check for proper document type.
-  if (doc.doctype().name() != "KDevProjectSpace"){
-      KMessageBox::sorry(0,
-			 i18n("The file %1 does not contain a valid ProjectSpace\n"
-			      "definition, which must have a document type\n"
-			      "'KDevProjectSpace'").arg(absFilename));
-      return false;
-    }
-  QDomElement psElement = doc.documentElement();
+  if (m_pGlobalDoc->doctype().name() != "KDevProjectSpace"){
+    KMessageBox::sorry(0,
+		       i18n("The file %1 does not contain a valid ProjectSpace\n"
+			    "definition, which must have a document type\n"
+			    "'KDevProjectSpace'").arg(absFilename));
+    return false;
+  }
+  QDomElement psElement = m_pGlobalDoc->documentElement();
   m_name = psElement.attribute("name");
   //  m_path = psElement.attribut("path");
   m_version = psElement.attribute("version");
   QString lastActive = psElement.attribute("lastActiveProject");
-  readGlobalConfig(doc,psElement);
+  readGlobalConfig(*m_pGlobalDoc,psElement);
   setCurrentProject(lastActive);
   file.close();
 
@@ -232,28 +235,30 @@ bool ProjectSpace::readXMLConfig(QString absFilename){
     return false;
   }
   
+  if(m_pUserDoc != 0){
+    delete m_pUserDoc;
+  }
+  m_pUserDoc = new QDomDocument("KDevProjectSpace_User");
   // Parse the XML file.
-  QDomDocument userDoc;
   // Read in file and check for a valid XML header.
-  if (!userDoc.setContent(&file)){
+  if (!m_pUserDoc->setContent(&file)){
     KMessageBox::sorry(0,
 		       i18n("The file %1 does not contain valid XML").arg(m_userProjectspaceFile));
-      return false;
+    return false;
   }
   // Check for proper document type.
-  if (userDoc.doctype().name() != "KDevProjectSpace_User"){
-      KMessageBox::sorry(0,
-			 i18n("The file %1 does not contain a valid ProjectSpace\n"
-			      "definition, which must have a document type\n"
-			      "'KDevProjectSpace_User'").arg(m_userProjectspaceFile));
-      return false;
+  if (m_pUserDoc->doctype().name() != "KDevProjectSpace_User"){
+    KMessageBox::sorry(0,
+		       i18n("The file %1 does not contain a valid ProjectSpace\n"
+			    "definition, which must have a document type\n"
+			    "'KDevProjectSpace_User'").arg(m_userProjectspaceFile));
+    return false;
   }
-  QDomElement userPsElement = userDoc.documentElement();
-  readUserConfig(doc,userPsElement);
+  QDomElement userPsElement = m_pUserDoc->documentElement();
+  readUserConfig((*m_pUserDoc),userPsElement);
   fillActiveProjectPopupMenu();
   return true;
 }
-
 
 
 bool ProjectSpace::readGlobalConfig(QDomDocument& doc,QDomElement& psElement){
@@ -305,18 +310,21 @@ bool ProjectSpace::readUserConfig(QDomDocument& doc,QDomElement& psElement){
       }
     }
   }
-    return true;
+  return true;
 }
-
-// xml stuff
-bool ProjectSpace::writeXMLConfig(){
+/*
+  // xml stuff
+  bool ProjectSpace::writeXMLConfig(){
   kdDebug(9000) << "\nenter ProjectSpace::writeXMLConfig" << endl;
-
-   // the "global" one
-  QDomDocument doc("KDevProjectSpace");
-  doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+  
+  // the "global" one
+  if(m_pGlobalDoc != 0){
+  delete m_pGlobalDoc;
+  }
+  m_pGlobalDoc = new QDomDocument("KDevProjectSpace");
+  m_pGlobalDoc->appendChild(m_pGlobalDoc->createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""));
   // save work projectspace information
-  QDomElement ps = doc.appendChild(doc.createElement("ProjectSpace")).toElement();
+  QDomElement ps = m_pGlobalDoc->appendChild(m_pGlobalDoc->createElement("ProjectSpace")).toElement();
   // add Attributes
   ps.setAttribute("name",m_name);
   //  psElement.setAttribute("path",m_path);
@@ -333,7 +341,7 @@ bool ProjectSpace::writeXMLConfig(){
   ps.setAttribute("version", m_version);
   ps.setAttribute("lastActiveProject",m_pCurrentProject->name());
 
-  writeGlobalConfig(doc,ps);
+  writeGlobalConfig(*m_pGlobalDoc,ps);
 
   QString filename = m_path + "/" + m_name + ".kdevpsp";
   kdDebug(9000)  << "filename::" << filename << endl;
@@ -344,15 +352,18 @@ bool ProjectSpace::writeXMLConfig(){
     return false;
   }
   QTextStream s(&file);
-  s << doc;
+  m_pGlobalDoc->save(s,4);
   file.close();
-
+  
   // the "user" one
-  QDomDocument userDoc("KDevProjectSpace_User");
-  userDoc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+  if(m_pUserDoc != 0){
+    delete m_pUserDoc;
+  }
+  m_pUserDoc = new QDomDocument("KDevProjectSpace_User");
+  m_pUserDoc->appendChild(m_pUserDoc->createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
   // save work projectspace information
-  QDomElement userPs = userDoc.appendChild(userDoc.createElement("ProjectSpace")).toElement();
-  writeUserConfig(userDoc,userPs);
+  QDomElement userPs = m_pUserDoc->appendChild(m_pUserDoc->createElement("ProjectSpace")).toElement();
+  writeUserConfig(*m_pUserDoc,userPs);
   filename = m_path + "/." + m_name + ".kdevpsp";
   kdDebug(9000)  << "filename::" << filename << endl;
   file.setName(filename);
@@ -362,10 +373,11 @@ bool ProjectSpace::writeXMLConfig(){
     return false;
   }
   QTextStream userStream(&file);
-  userStream << userDoc;
+  m_pUserDoc->save(userStream,4);
   file.close();
   return true;
-}
+  }
+*/
 // add the data to the psElement (Projectspace)
 bool ProjectSpace::writeGlobalConfig(QDomDocument& doc, QDomElement& psElement){
   cerr << "\nenter ProjectSpace::writeGlobalConfig";
@@ -431,4 +443,82 @@ void ProjectSpace::fillActiveProjectPopupMenu(){
     }
   }
 }
+
+QDomDocument* ProjectSpace::writeGlobalDocument(){
+  kdDebug(9000) << "\nenter ProjectSpace::writeXMLConfig" << endl;
+
+   // the "global" one
+  if(m_pGlobalDoc != 0){
+    delete m_pGlobalDoc;
+  }
+  m_pGlobalDoc = new QDomDocument("KDevProjectSpace");
+  m_pGlobalDoc->appendChild(m_pGlobalDoc->createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\""));
+  // save work projectspace information
+  QDomElement ps = m_pGlobalDoc->appendChild(m_pGlobalDoc->createElement("ProjectSpace")).toElement();
+  // add Attributes
+  ps.setAttribute("name",m_name);
+  //  psElement.setAttribute("path",m_path);
+  KAboutData* pData = aboutPlugin();
+  QString pluginName;
+  if(pData !=0){
+    pluginName = pData->appName();
+  }
+  else {
+    kdDebug(9000) << "ProjectSpace::writeXMLConfig() no aboutPlugin() found :-(";
+    return false;
+  }
+  ps.setAttribute("pluginName", pluginName); // the projectspacetype name
+  ps.setAttribute("version", m_version);
+  ps.setAttribute("lastActiveProject",m_pCurrentProject->name());
+
+  writeGlobalConfig(*m_pGlobalDoc,ps);
+  return m_pGlobalDoc;
+}
+
+QDomDocument* ProjectSpace::writeUserDocument(){
+  if(m_pUserDoc != 0){
+    delete m_pUserDoc;
+  }
+  m_pUserDoc = new QDomDocument("KDevProjectSpace_User");
+  m_pUserDoc->appendChild(m_pUserDoc->createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+  // save work projectspace information
+  QDomElement userPs = m_pUserDoc->appendChild(m_pUserDoc->createElement("ProjectSpace")).toElement();
+  writeUserConfig(*m_pUserDoc,userPs);
+  return m_pUserDoc;
+}
+QDomDocument* ProjectSpace::readGlobalDocument(){
+  return m_pGlobalDoc;
+}
+QDomDocument* ProjectSpace::readUserDocument(){
+  return m_pUserDoc;
+}
+
+bool ProjectSpace::saveConfig(){
+  QString filename = m_path + "/" + m_name + ".kdevpsp";
+  kdDebug(9000)  << "filename::" << filename << endl;
+  QFile file(filename);
+  if (!file.open(IO_WriteOnly)){
+    KMessageBox::sorry(0, i18n("Can't save file %1")
+		       .arg(filename));
+    return false;
+  }
+  QTextStream s(&file);
+  m_pGlobalDoc->save(s,4);
+  file.close();
+
+  filename = m_path + "/." + m_name + ".kdevpsp";
+  kdDebug(9000)  << "filename::" << filename << endl;
+  file.setName(filename);
+  if (!file.open(IO_WriteOnly)){
+    KMessageBox::sorry(0, i18n("Can't save file %1")
+		       .arg(filename));
+    return false;
+  }
+  QTextStream userStream(&file);
+  m_pUserDoc->save(userStream,4);
+  file.close();
+  return true;
+}
+
+
 #include "projectspace.moc"

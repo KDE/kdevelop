@@ -85,7 +85,9 @@ void AppWizard::accept(){
   }
   m_pProjectspace->addProject(m_pProject);
   generateDefaultFiles();
-  if(!m_pProjectspace->writeXMLConfig()){
+  m_pProjectspace->writeGlobalDocument();
+  m_pProjectspace->writeUserDocument();
+  if(!m_pProjectspace->saveConfig()){
     kdDebug(9000) << "error in writing ConfigFile" << endl;
   }
   else{

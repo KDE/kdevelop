@@ -1,3 +1,8 @@
+2000-09-31 Sandy Meier   <smeier@kdevelop.org>
+	* KDevComponents can write their project related configuration 
+		to the ProjectSpace file now (*.kdevpsp)
+	* GrepView contains a sample implementation
+
 2000-09-30  Sandy Meier  <smeier@kdevelop.org>
 	* "set active Project" is now a KAction in Projectspace and not in KDevelopCore anymore
 	* libprojectmanagment ported to our new namingconvention

@@ -34,7 +34,7 @@ class KAboutData;
 class ProjectSpace : public KDevComponent {
   Q_OBJECT
     public: 
-  ProjectSpace(QObject* parent=0,const char* name=0,QString file="");
+  ProjectSpace(QObject* parent=0,const char* name=0);
   ~ProjectSpace();
 
   /** nesessary to bootstrap a ProjectSpace*/
@@ -92,20 +92,29 @@ class ProjectSpace : public KDevComponent {
   virtual void generateDefaultFiles();
   virtual void modifyDefaultFiles();
 	
-  virtual bool writeXMLConfig();
-  /** add the data to the psElement (Projectspace)*/
-  virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
-  virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
+  virtual QDomDocument* writeGlobalDocument();
+  virtual QDomDocument* writeUserDocument();
+  virtual bool saveConfig();
 
-  virtual bool readXMLConfig(QString abs_filename);
-  virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
-  virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
- 
+  virtual bool readConfig(QString abs_filename);
+  QDomDocument* readGlobalDocument();
+  QDomDocument* readUserDocument();
   virtual void dump();
 
   protected slots:
     void slotProjectSetActivate( int id);
 protected:
+
+  virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+  virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
+  
+  /** add the data to the psElement (Projectspace)*/
+  virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
+  virtual bool writeUserConfig(QDomDocument& doc,QDomElement& psElement);
+  
+  QDomDocument* m_pUserDoc;
+  QDomDocument* m_pGlobalDoc;
+  
   /** ProjectSpace name*/
   QString m_name;
   /** the current absolute path to the projectspace */

@@ -17,6 +17,7 @@
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <qdom.h>
 
 
 #include "classstore.h"
@@ -30,6 +31,7 @@
 #include "kdevviewhandler.h"
 #include "projectspace.h"
 #include "newprojectdlg.h"
+
 
 KDevelopCore::KDevelopCore(KDevelop *pGUI)
     : QObject(pGUI, "kdevelop core")
@@ -342,7 +344,19 @@ void KDevelopCore::newFile()
 }
 
 void KDevelopCore::unloadProjectSpace(){
-  m_pProjectSpace->writeXMLConfig();
+  QDomDocument* pDoc=0;
+  pDoc = m_pProjectSpace->writeGlobalDocument();
+  QListIterator<KDevComponent> it1(m_components);
+  for (; it1.current(); ++it1){
+    (*it1)->writeProjectSpaceGlobalConfig(*pDoc);
+  }
+  
+  pDoc = m_pProjectSpace->writeUserDocument();
+  QListIterator<KDevComponent> it2(m_components);
+  for (; it2.current(); ++it2){
+    (*it2)->writeProjectSpaceUserConfig(*pDoc);
+  }
+  m_pProjectSpace->saveConfig();
   m_components.remove(m_pProjectSpace);
   delete m_pProjectSpace;
   m_pProjectSpace = 0L;
@@ -360,10 +374,24 @@ void KDevelopCore::loadProject(const QString &fileName)
   QString projectSpace = ProjectSpace::projectSpacePluginName(fileName);
 
   if(loadProjectSpace(projectSpace)){
-    m_pProjectSpace->readXMLConfig(fileName);
+    m_pProjectSpace->readConfig(fileName);
     m_pProjectSpace->dump();
     loadLanguageSupport(m_pProjectSpace->programmingLanguage());
     loadVersionControl(vcservice);
+    
+    // read the config for all components (maybe also other plugins?)
+    QDomDocument* pDoc = m_pProjectSpace->readGlobalDocument();
+    QListIterator<KDevComponent> it1(m_components);
+    for (; it1.current(); ++it1){
+      (*it1)->readProjectSpaceGlobalConfig(*pDoc);
+    }
+
+    pDoc = m_pProjectSpace->readUserDocument();
+    QListIterator<KDevComponent> it2(m_components);
+    for (; it2.current(); ++it2){
+      (*it2)->readProjectSpaceUserConfig(*pDoc);
+    }
+   
   }
   
   QListIterator<KDevComponent> it1(m_components);
@@ -628,6 +656,30 @@ void KDevelopCore::gotoProjectManual()
 KDevViewHandler* KDevelopCore::viewHandler()
 {
    return m_pViewHandler;
+}
+void KDevelopCore::writeProjectSpaceGlobalConfig(QDomDocument& doc){
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){
+    (*it)->writeProjectSpaceGlobalConfig(doc);
+  }
+}
+void KDevelopCore::writeProjectSpaceUserConfig(QDomDocument& doc){
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){
+    (*it)->writeProjectSpaceUserConfig(doc);
+  }
+}
+void KDevelopCore::readProjectSpaceGlobalConfig(QDomDocument& doc){
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){
+    (*it)->readProjectSpaceGlobalConfig(doc);
+  }
+}
+void KDevelopCore::readProjectSpaceUserConfig(QDomDocument& doc){
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){
+    (*it)->readProjectSpaceGlobalConfig(doc);
+  }
 }
 
 #include "kdevelopcore.moc"

@@ -71,6 +71,10 @@ private slots:
     void gotoDocumentationFile(const QString &fileName);
     void gotoProjectApiDoc();
     void gotoProjectManual();
+    void writeProjectSpaceGlobalConfig(QDomDocument& doc);
+    void writeProjectSpaceUserConfig(QDomDocument& doc);
+    void readProjectSpaceGlobalConfig(QDomDocument& doc);
+    void readProjectSpaceUserConfig(QDomDocument& doc);
 
 private:
     KDevelop *m_pKDevelopGUI;

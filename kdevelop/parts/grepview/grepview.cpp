@@ -94,3 +94,18 @@ void GrepView::projectClosed()
 {
     kdDebug(9001) << "GrepView::projectClosed()" << endl;
 }
+//at the moment GrepView writes only data that are user depended,
+void GrepView::readProjectSpaceUserConfig(QDomDocument& doc){
+  // find the "GrepView" tag
+  QDomNodeList grepList = doc.elementsByTagName("GrepView");
+  QDomElement grepElement = grepList.item(0).toElement();
+  kdDebug(9001) << "GrepView::readProjectSpaceUserConfig: Value: " << grepElement.attribute("test") << endl;
+}
+
+void GrepView::writeProjectSpaceUserConfig(QDomDocument& doc){
+  kdDebug(9001) << "GrepView::writeProjectSpaceUserConfig" << endl;
+  QDomElement rootElement = doc.documentElement();
+  QDomElement elem = doc.createElement("GrepView");
+  elem.setAttribute("test", "value");
+  rootElement.appendChild( elem );
+}
