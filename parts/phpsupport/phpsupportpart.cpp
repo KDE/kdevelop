@@ -446,7 +446,11 @@ KDevLanguageSupport::Features PHPSupportPart::features()
 KMimeType::List PHPSupportPart::mimeTypes( )
 {
     KMimeType::List list;
-    KMimeType::Ptr mime = KMimeType::mimeType( "text/plain" );
+    KMimeType::Ptr mime = KMimeType::mimeType( "application/x-php" );
+    if( mime )
+	list << mime;
+
+    mime = KMimeType::mimeType( "text/plain" );
     if( mime )
 	list << mime;
     return list;
