@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Jakob Simon-Gaarde                              *
+ *   Copyright (C) 2002 by Jakob Simon-Gaarde                              *
  *   jsgaarde@tdcspace.dk                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
