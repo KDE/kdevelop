@@ -148,18 +148,18 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectTools->setMargin ( 2 );
     projectTools->setSpacing ( 2 );
     // build
-    buildButton = new QToolButton ( projectTools, "Build button" );
-    buildButton->setPixmap ( SmallIcon ( "qmake_build.png",22 ) );
+    buildButton = new QToolButton ( projectTools, "Make button" );
+    buildButton->setPixmap ( SmallIcon ( "make_kdevelop.png",22 ) );
     buildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildButton->sizePolicy().hasHeightForWidth() ) );
     buildButton->setEnabled ( true );
     // rebuild
     rebuildButton = new QToolButton ( projectTools, "Rebuild button" );
-    rebuildButton->setPixmap ( SmallIcon ( "qmake_rebuild.png",22 ) );
+    rebuildButton->setPixmap ( SmallIcon ( "rebuild.png",22 ) );
     rebuildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildButton->sizePolicy().hasHeightForWidth() ) );
     rebuildButton->setEnabled ( true );
     // run
     runButton = new QToolButton ( projectTools, "Run button" );
-    runButton->setPixmap ( SmallIcon ( "qmake_run.png",22 ) );
+    runButton->setPixmap ( SmallIcon ( "exec.png",22 ) );
     runButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, runButton->sizePolicy().hasHeightForWidth() ) );
     runButton->setEnabled ( true );
     // spacer
@@ -212,25 +212,31 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 
     // Add existing files button
     addfilesButton = new QToolButton ( fileTools, "Add existing files" );
-    addfilesButton->setPixmap ( SmallIcon ( "qmake_addexisting.png",22 ) );
+    addfilesButton->setPixmap ( SmallIcon ( "fileimport.png",22 ) );
     addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
 
     // Add new file button
     newfileButton = new QToolButton ( fileTools, "Add new file" );
-    newfileButton->setPixmap ( SmallIcon ( "qmake_addnew.png",22 ) );
+    newfileButton->setPixmap ( SmallIcon ( "filenew.png",22 ) );
     newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
     newfileButton->setEnabled ( true );
 
     // remove file button
     removefileButton = new QToolButton ( fileTools, "remove file" );
-    removefileButton->setPixmap ( SmallIcon ( "qmake_remove.png",22 ) );
+    removefileButton->setPixmap ( SmallIcon ( "stop.png",22 ) );
     removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
 
     // spacer
     spacer = new QWidget(fileTools);
     projectTools->setStretchFactor(spacer, 1);
+    
+    // Configure file button
+    configurefileButton = new QToolButton ( fileTools, "Configure file" );
+    configurefileButton->setPixmap ( SmallIcon ( "configure_file.png",22 ) );
+    configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
+    configurefileButton->setEnabled ( true );
 
     // detail tree
     details = new KListView(detailContainer, "details widget");

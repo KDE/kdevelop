@@ -208,6 +208,7 @@ private:
     QToolButton *addfilesButton;
     QToolButton *newfileButton;
     QToolButton *removefileButton;
+    QToolButton *configurefileButton;
 
     SubprojectItem *m_shownSubproject;
     TrollProjectPart *m_part;
