@@ -1628,8 +1628,8 @@ void CKAppWizard::slotDefaultClicked(int page) {
   dir = QDir::homeDirPath()+ QString("/");
   nameline->setText(0);
 //  finishButton()->setEnabled(false);
-  miniload->setPixmap(BarIcon("application_settings"));
-  iconload->setPixmap(BarIcon("edit.xpm"));
+  miniload->setPixmap(BarIcon(locate("mini","application_settings.png")));
+  iconload->setPixmap(locate("icon", "xedit.png"));
   cppedit->loadFile(locate("kdev_template", "cpp_template"),cppedit->OPEN_READWRITE);
   hedit->loadFile(locate("kdev_template", "header_template"),hedit->OPEN_READWRITE);
   authorline->setText(m_author_name);
