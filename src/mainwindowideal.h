@@ -40,11 +40,11 @@ public:
 
   MainWindowIDEAl(QWidget* parent=0, const char *name=0);
   ~MainWindowIDEAl();
-    
+
   void embedPartView(QWidget *view, const QString &title, const QString &toolTip);
   void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);
   void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);
-  
+
   void embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip);
 
   void removeView(QWidget *view);
@@ -61,15 +61,10 @@ public:
   void init();
 
   void prepareToCloseViews();
-  void realClose();
 
   bool eventFilter( QObject *watched, QEvent *e );
   bool switching(void) const { return m_bSwitching; }
   void setSwitching( const bool switching ) { m_bSwitching = switching; }
-
-signals:
-
-  void wantsToQuit();
 
 protected:
    /**
@@ -97,7 +92,6 @@ public slots:
   void restoreOutputViewTab();
 
 private slots:
-  void slotQuit();
   void slotBufferSelected();      // One entry of the Windows menu has been selected
   void slotStatusChange(KParts::Part*);
   void slotTabSelected(QWidget*);
@@ -113,6 +107,7 @@ private slots:
 private:
 
   virtual bool queryClose();
+  virtual bool queryExit();
 
   void createStatusBar();
   void createFramework();
@@ -128,10 +123,8 @@ private:
   KTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_rightBar, *m_bottomBar;
 
-  bool m_closing;
-
   MainWindowShare*   m_pMainWindowShare;
-  
+
   QMap<QWidget*, QDateTime> m_timeStamps;
   bool m_bSwitching;
 

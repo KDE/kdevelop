@@ -44,24 +44,20 @@ void Core::insertNewAction( KAction* action )
     Q_UNUSED( action );
 }
 
-void Core::wantsToQuit()
-{
-  QTimer::singleShot(0, this, SLOT(slotQuit()));
-}
 
-
-void Core::slotQuit()
+bool Core::queryClose()
 {
   // save the the project to open it automaticly on startup if needed
   KConfig* config = kapp->config();
   config->setGroup("General Options");
   config->writeEntry("Last Project",ProjectManager::getInstance()->projectFile());
 
-  if ( ProjectManager::getInstance()->projectLoaded() )
-    if ( !ProjectManager::getInstance()->closeProject() )
-      return;
-  if (PartController::getInstance()->readyToClose())
-    TopLevel::getInstance()->realClose();
+  if ( ProjectManager::getInstance()->projectLoaded()
+   && !ProjectManager::getInstance()->closeProject() )
+      return false;
+  if ( !PartController::getInstance()->readyToClose() )
+      return false;
+  return true;
 }
 
 

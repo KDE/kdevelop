@@ -229,7 +229,6 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<QextMdiChildView> *pViews):
 // ====================================================== class MainWindow
 MainWindow::MainWindow(QWidget *parent, const char *name)
   : QextMdiMainFrm(parent, name)
-  ,m_closing(false)
   ,m_myWindowsReady(false)
   ,m_pShowOutputViews(0L)
   ,m_pShowTreeViews(0L)
@@ -245,7 +244,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
 void MainWindow::init()
 {
 #if (KDE_VERSION > 305)
-//  setStandardToolBarMenuEnabled( true );
+  setStandardToolBarMenuEnabled( true );
 #endif
   setXMLFile("gideonui.rc");
 
@@ -299,30 +298,21 @@ MainWindow::~MainWindow()
   TopLevel::invalidateInstance( this );
 }
 
-
 bool MainWindow::queryClose()
 {
-  if (m_closing)
-    return true;
-
-  emit wantsToQuit();
-  return false;
+    return Core::getInstance()->queryClose();
 }
 
+bool MainWindow::queryExit()
+{
+  saveSettings();
+  return true;
+}
 
 void MainWindow::prepareToCloseViews()
 {
   writeDockConfig();
 }
-
-void MainWindow::realClose()
-{
-  saveSettings();
-
-  m_closing = true;
-  close();
-}
-
 
 KMainWindow *MainWindow::main()
 {
@@ -384,7 +374,7 @@ void MainWindow::createActions()
   connect(m_pMainWindowShare, SIGNAL(gotoPreviousWindow()), this, SLOT(gotoPreviousWindow()));
   connect(m_pMainWindowShare, SIGNAL(gotoFirstWindow()), this, SLOT(gotoFirstWindow()));
   connect(m_pMainWindowShare, SIGNAL(gotoLastWindow()), this, SLOT(gotoLastWindow()));
-  
+
   m_toggleViewbar = KStdAction::showToolbar(this, SLOT(slotToggleViewbar()),actionCollection(), "settings_viewbar");
   m_toggleViewbar->setText(i18n("Show &Viewbar"));
   m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
@@ -400,7 +390,7 @@ QextMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
   QString shortName = name;
   int length = shortName.length();
   shortName = shortName.right(length - (shortName.findRev('/') +1));
-  
+
   QextMdiChildView* pMDICover = createWrapper(view, name, shortName);
   m_widgetMap.insert(view, pMDICover);
   m_childViewMap.insert(pMDICover, view);
@@ -418,7 +408,7 @@ void MainWindow::embedPartView(QWidget *view, const QString &/*name*/, const QSt
     child->setIcon(SmallIcon("kdevelop")); // was empty or too big, take something useful
   }
 
-  
+
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::UseQextMDISizeHint;
   addWindow(child, mdiFlags);
 
@@ -832,7 +822,7 @@ void MainWindow::fillWindowMenu()
       unsigned int windowItemCount = m_pWindowMenu->count() - entryCount;
 //      bool inserted = FALSE;
       QString tmpString;
-      
+
       QValueList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
       for (indx = 0; indx < windowItemCount; indx++, ++timeStampIterator) {
         bool putHere = false;
@@ -1232,11 +1222,6 @@ void MainWindow::slotSaveAdditionalViewProperties(const QString& viewName, QDomE
   viewEl->setAttribute( "Attach", pMDICover->isAttached() || (mdiMode() == QextMdi::TabPageMode));
 }
 
-void MainWindow::slotQuit()
-{
-    (void) queryClose();
-}
-
 void MainWindow::slotToggleViewbar()
 {
     slot_toggleTaskBar();
@@ -1276,7 +1261,7 @@ void MainWindow::callCommand(const QString& command)
 		-QEXTMDI_MDI_CHILDFRM_BORDER,
 		-QEXTMDI_MDI_CHILDFRM_BORDER - pLastFrm->captionHeight() - QEXTMDI_MDI_CHILDFRM_SEPARATOR,
 		pLastFrm->parentWidget()->width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
-		pLastFrm->parentWidget()->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR 
+		pLastFrm->parentWidget()->height() + QEXTMDI_MDI_CHILDFRM_SEPARATOR
 		+ QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER + pLastFrm->captionHeight());
 	}
 	delete winListIter;

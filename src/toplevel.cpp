@@ -33,8 +33,6 @@ KDevMainWindow *TopLevel::getInstance()
       mainWindow->init();
 
       kapp->setMainWidget(mainWindow);
-
-      QObject::connect(mainWindow, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
     }
     else
     {
@@ -44,15 +42,13 @@ KDevMainWindow *TopLevel::getInstance()
       mainWindowIDEAl->init();
 
       kapp->setMainWidget(mainWindowIDEAl);
-
-      QObject::connect(mainWindowIDEAl, SIGNAL(wantsToQuit()), Core::getInstance(), SLOT(wantsToQuit()));
     }
   }
 
   return s_instance;
 }
 
-void TopLevel::invalidateInstance(KDevMainWindow *instance) 
+void TopLevel::invalidateInstance(KDevMainWindow *instance)
 {
   if ( s_instance == instance )
     s_instance = 0;

@@ -98,7 +98,6 @@ private:
 MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
  : KParts::MainWindow(parent, name)
  ,m_pWindowMenu(0L)
- ,m_closing(false)
  ,m_bSwitching(false)
 {
     resize( 800, 600 ); // starts kdevelop at 800x600 the first time
@@ -178,25 +177,20 @@ MainWindowIDEAl::~MainWindowIDEAl() {
 }
 
 
-bool MainWindowIDEAl::queryClose() {
-    if (m_closing)
-        return true;
+bool MainWindowIDEAl::queryClose()
+{
+    return Core::getInstance()->queryClose();
+}
 
-    emit wantsToQuit();
-    return false;
+bool MainWindowIDEAl::queryExit()
+{
+  saveSettings();
+  return true;
 }
 
 void MainWindowIDEAl::prepareToCloseViews()
 {
   // seems there's nothing to do here
-}
-
-void MainWindowIDEAl::realClose()
-{
-  saveSettings();
-
-  m_closing = true;
-  close();
 }
 
 
@@ -635,10 +629,6 @@ void MainWindowIDEAl::slotLeftTabsChanged() {
     if ( !m_leftBar )
         return;
     m_raiseLeftBar->setEnabled( !m_leftBar->isEmpty() );
-}
-
-void MainWindowIDEAl::slotQuit() {
-    (void) queryClose();
 }
 
 bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )

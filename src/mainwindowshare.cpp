@@ -66,7 +66,7 @@ void MainWindowShare::createActions()
 {
   ProjectManager::getInstance()->createActions( m_pMainWnd->actionCollection() );
 
-  KStdAction::quit(this->parent(), SLOT(slotQuit()), m_pMainWnd->actionCollection());
+  KStdAction::quit(this->parent(), SLOT(close()), m_pMainWnd->actionCollection());
 
   KAction* action;
 
@@ -107,6 +107,7 @@ void MainWindowShare::createActions()
   action->setStatusText( i18n("Lets you customize KDevelop") );
 
 
+#if (KDE_VERSION <= 305)
   m_toggleMainToolbar = KStdAction::showToolbar(this, SLOT(slotToggleMainToolbar()), m_pMainWnd->actionCollection(), "settings_main_toolbar");
   m_toggleMainToolbar->setText(i18n("Show &Main Toolbar"));
   m_toggleMainToolbar->setStatusText( i18n("Hides or shows the main toolbar") );
@@ -122,6 +123,7 @@ void MainWindowShare::createActions()
   m_toggleBrowserToolbar = KStdAction::showToolbar(this, SLOT(slotToggleBrowserToolbar()),m_pMainWnd->actionCollection(), "settings_browser_toolbar");
   m_toggleBrowserToolbar->setText(i18n("Show &Browser Toolbar"));
   m_toggleBrowserToolbar->setStatusText( i18n("Hides or shows the browser toolbar") );
+#endif
 
   m_toggleStatusbar = KStdAction::showToolbar(this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection(), "settings_statusbar");
   m_toggleStatusbar->setText(i18n("Show &Statusbar"));
@@ -144,7 +146,7 @@ void MainWindowShare::createActions()
 void MainWindowShare::slotReportBug()
 {
   KAboutData d2("kdevelop", i18n("Gideon"), VERSION);
-  KBugReport a(m_pMainWnd, true, &d2);  
+  KBugReport a(m_pMainWnd, true, &d2);
   a.exec();
 }
 

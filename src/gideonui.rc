@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui >
-<kpartgui version="6" name="gideon" >
+<kpartgui version="7" name="gideon" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -90,14 +90,15 @@
   <Menu name="settings" noMerge="1">
     <text>&amp;Settings</text>
     <Action name="settings_show_menubar" />
-    <DefineGroup name="show_merge" />
-    <Separator/>
+    <Merge name="StandardToolBarMenuHandler" />
     <Action name="settings_main_toolbar"/>
     <Action name="settings_build_toolbar"/>
     <Action name="settings_view_toolbar"/>
     <Action name="settings_browser_toolbar"/>
+    <DefineGroup name="show_toolbar_merge" />
     <Action name="settings_viewbar"/>
     <Action name="settings_statusbar"/>
+    <DefineGroup name="show_merge" />
     <Separator />
     <Action name="settings_configure_shortcuts" />
     <Action name="settings_configure_toolbars" />

@@ -28,12 +28,12 @@ public:
   virtual void embedPartView(QWidget *view, const QString &title, const QString& toolTip = QString::null) = 0;
   virtual void embedSelectView(QWidget *view, const QString &title, const QString &toolTip) = 0;
   virtual void embedOutputView(QWidget *view, const QString &title, const QString &toolTip) = 0;
-  
+
   virtual void embedSelectViewRight(QWidget* view, const QString& title, const QString &toolTip) = 0;
 
   virtual void removeView(QWidget *view) = 0;
   virtual void setViewAvailable(QWidget *pView, bool bEnabled) = 0;
-  
+
   virtual void raiseView(QWidget *view) = 0;
   virtual void lowerView(QWidget *view) = 0;
   virtual void lowerAllViews() = 0;
@@ -51,10 +51,9 @@ public:
   KStatusBar *statusBar();
 
   virtual void prepareToCloseViews() = 0;
-  virtual void realClose();
 
   virtual void setUserInterfaceMode(const QString& /*uiMode*/) {}
-  
+
   /** this allows to order the mainwindow to do anything special, we use it to trigger the execution of a hack */
   virtual void callCommand(const QString& /*command*/) {}
 

@@ -47,16 +47,16 @@ public:
 
   MainWindow(QWidget* parent=0, const char *name=0);
   ~MainWindow();
-    
+
   void embedPartView(QWidget *view, const QString &title, const QString &toolTip = QString::null );    //!< Embeds a view as part view in the main working area at position (0,0)
   void embedSelectView(QWidget *view, const QString &title, const QString &toolTip);  //!< Embeds a view as select view in the left docking area
   void embedOutputView(QWidget *view, const QString &title, const QString &toolTip);  //!< Embeds a view as output view in the bottom docking area
-  
+
   void embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip);  //!< We do not have a right pane so this is just a wrapper to embedSelectView(
 
   void removeView(QWidget *view);
   void setViewAvailable(QWidget *pView, bool bEnabled);
-  
+
   void raiseView(QWidget *view);
   void lowerView(QWidget *view);
   void lowerAllViews();
@@ -68,12 +68,11 @@ public:
   void init();
 
   void prepareToCloseViews();
-  void realClose();
 
   virtual void setUserInterfaceMode(const QString& uiMode);
-  
+
   virtual void callCommand(const QString& command);
-  
+
   /** Reimplemented from QextMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 
@@ -84,10 +83,6 @@ public:
 
   /** Restore the previously saved view tab/window to the output view/window */
   void restoreOutputViewTab();
-
-signals:
-
-  void wantsToQuit();
 
 public slots:
 
@@ -134,18 +129,18 @@ protected:
 
 
 private slots:
-  void slotQuit();
   void slotReactToProjectOpened();
   void slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl);
   void slotSaveAdditionalViewProperties(const QString& viewName, QDomElement* viewEl);
   void slotToggleViewbar();
-  
+
 private:
-  
+
   /** Fills the show-hide menu for a tool view (output or tree view) */
   void fillToolViewsMenu(EView eView);
 
   virtual bool queryClose();
+  virtual bool queryExit();
 
 
 /**\brief Creates a wrapper of type QextMdiChildView for the given view.
@@ -173,7 +168,7 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   void saveSettings();
   void saveMDISettings();
   void loadMDISettings();
-  
+
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;    //!< Key: QWidget* --> Data:QextMdiChildView*.\n
                                                    //!< Contains the same pairs as \ref MainWindow::m_childViewMap "m_childViewMap"
   QMap<QextMdiChildView*,QWidget*> m_childViewMap; //!< Key: QextMdiChildView* --> Data:QWidget*.\n
@@ -184,8 +179,6 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   QPtrList<QextMdiChildView> m_selectViews;        //!< Lists all select views
   QPtrList<QextMdiChildView> m_partViews;          //!< Lists all part views
   QPtrList<QextMdiChildView> m_unavailableViews;   //!< Lists all views set to unavailable
-
-  bool m_closing;                                  //!< true if we are about to close or just closing
 
   // Members for dealing with the tool views
   bool             m_myWindowsReady;               //!< true: gideon s windows are ready

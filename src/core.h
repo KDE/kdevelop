@@ -24,37 +24,29 @@ public:
   virtual void fillContextMenu(QPopupMenu *popup, const Context *context);
   virtual void openProject(const QString& projectFileName);
 
-  
+
   void doEmitProjectOpened() { emit projectOpened(); }
   void doEmitProjectClosed() { emit projectClosed(); }
   void doEmitCoreInitialized() { emit coreInitialized(); }
   void doEmitProjectConfigWidget(KDialogBase *base) { emit projectConfigWidget(base); }
   void doEmitConfigWidget(KDialogBase *base) { emit configWidget(base); };
 
+  bool queryClose();
 
-public slots:
-
-  void slotQuit();
-  
 signals:
 
   void activeProcessCountChanged( uint active );
-  
-private slots:
-
-  void wantsToQuit();
-
 
 protected:
 
   Core();
 
-  
+
 private:
   uint m_activeProcesses;
-  
+
   static Core *s_instance;
-  
+
 };
 
 

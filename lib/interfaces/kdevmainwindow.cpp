@@ -9,8 +9,3 @@ KStatusBar *KDevMainWindow::statusBar()
 {
   return main()->statusBar();
 }
-
-
-void KDevMainWindow::realClose()
-{
-}
