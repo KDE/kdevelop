@@ -418,7 +418,7 @@ void PascalProjectPart::projectConfigWidget( KDialogBase * dlg )
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(okClicked()), this, SLOT(loadProjectConfig()) );
 
-    vbox = dlg->addVBoxPage(i18n("Run Options"));
+    vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
     RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevpascalproject", buildDirectory(), vbox);
     w3->mainprogram_label->setText(i18n("Main program (relative to project directory):"));
     connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
