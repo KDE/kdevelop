@@ -145,6 +145,8 @@ protected slots:
 	void menuActivated(int id);
 signals:
    void topChildChanged(QextMdiChildView*);
+	void closeActiveView();
+	void closeAllViews();
 };
 
 #endif   // _QEXTMDICHILDAREA_H_
