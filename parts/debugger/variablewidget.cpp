@@ -586,7 +586,7 @@ void VarItem::checkForRequests()
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
                                                          // QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-                                                         QCString().sprintf("%s.local8Bit().data()",
+                                                         QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
                                                                             fullName().latin1()));
     }
     
