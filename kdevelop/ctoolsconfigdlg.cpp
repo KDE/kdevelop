@@ -268,6 +268,18 @@ void CToolsConfigDlg::slotToolsExeSelect()
 
 void CToolsConfigDlg::slotShowToolProp(int index){
 
+  //listbox is empty if index < 0
+  if ( index < 0 ) {
+    executable_edit->clear();
+    menu_text_edit->clear();
+    arguments_edit->clear();
+    output_check->setChecked( FALSE );
+    delete_button->setEnabled( FALSE );
+    move_up_button->setEnabled( FALSE );
+    move_down_button->setEnabled( FALSE );
+    return;
+  }
+
   CToolApp toolApp = toolList[index];
 
   executable_edit->setText( toolApp.getExeName() );
@@ -280,16 +292,16 @@ void CToolsConfigDlg::slotShowToolProp(int index){
   delete_button->setEnabled( TRUE );
 
   if(index != 0){
-    move_up_button->setEnabled( TRUE);
+    move_up_button->setEnabled( TRUE );
   }
   else{
-    move_up_button->setEnabled( FALSE);
+    move_up_button->setEnabled( FALSE );
   }
   if(index+1 != (int)tools_listbox->count()){
     move_down_button->setEnabled( TRUE );
   }
   else{
-    move_down_button->setEnabled( FALSE);
+    move_down_button->setEnabled( FALSE );
   }
 }
 
