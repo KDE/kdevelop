@@ -10,9 +10,11 @@
 #include <kservice.h>
 
 class KAction;
+class KSelectAction;
 class KService;
 class ProjectInfo;
 class ProjectSession;
+class KRecentFilesAction;
 
 class ProjectManager : public QObject, public KXMLGUIClient
 {
@@ -50,6 +52,9 @@ private slots:
   void loadLocalParts();
   void unloadLocalParts();
 
+  void updateActiveLangMenu();
+  void switchLanguage(const QString& lang);
+
 private:
   ProjectManager();
 
@@ -64,7 +69,7 @@ private:
   bool loadProjectPart();
   void unloadProjectPart();
 
-  bool loadLanguageSupport();
+  bool loadLanguageSupport(const QString& lang);
   void unloadLanguageSupport();
 
   bool loadCreateFileSupport();
@@ -72,8 +77,9 @@ private:
 
   ProjectInfo *m_info;
 
-  class KAction *m_closeProjectAction, *m_projectOptionsAction;
-  class KRecentFilesAction *m_openRecentProjectAction;
+  KAction *m_closeProjectAction, *m_projectOptionsAction;
+  KRecentFilesAction *m_openRecentProjectAction;
+  KSelectAction *m_activeLanguage;
 
   static ProjectManager *s_instance;
 

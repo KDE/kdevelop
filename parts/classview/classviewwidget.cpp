@@ -58,6 +58,7 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
     connect( this, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuted(QListViewItem*)) );
     connect( m_part->core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( m_part->core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
+    connect( m_part->core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
 
     QStringList lst;
     lst << i18n( "KDevelop 3.x mode" ) << i18n( "KDevelop 2.x mode" ) << i18n( "Java like mode" );

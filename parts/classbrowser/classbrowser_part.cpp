@@ -27,7 +27,7 @@
 #include <kdevcoderepository.h>
 #include <kdevlanguagesupport.h>
 
-#include <qcomboview.h>
+#include <kcomboview.h>
 #include <klistviewaction.h>
 
 
@@ -68,6 +68,7 @@ ClassBrowserPart::ClassBrowserPart( QObject* parent, const char* name, const QSt
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
+    connect( core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
 }
 
 ClassBrowserPart::~ClassBrowserPart()
@@ -96,13 +97,13 @@ void ClassBrowserPart::slotProjectClosed()
 
 void ClassBrowserPart::setupActions( )
 {
-    m_actionNamespaces = new KListViewAction( new QComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
+    m_actionNamespaces = new KListViewAction( new KComboView(true), i18n("Namespaces"), 0, 0, 0, actionCollection(), "namespaces_combo" );
     connect( m_actionNamespaces->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectNamespace(const QListViewItem*)) );
 
-    m_actionClasses = new KListViewAction( new QComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
+    m_actionClasses = new KListViewAction( new KComboView(true), i18n("Classes"), 0, 0, 0, actionCollection(), "classes_combo" );
     connect( m_actionClasses->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectClass(const QListViewItem*)) );
 
-    m_actionMethods = new KListViewAction( new QComboView(true), i18n("Methods"), 0, 0, 0, actionCollection(), "methods_combo" );
+    m_actionMethods = new KListViewAction( new KComboView(true), i18n("Methods"), 0, 0, 0, actionCollection(), "methods_combo" );
     connect( m_actionMethods->view(), SIGNAL(activated(QListViewItem*)), this, SLOT(selectMethod(QListViewItem*)) );
 }
 

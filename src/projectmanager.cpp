@@ -37,6 +37,7 @@ class QDomDocument;
 #include "partcontroller.h"
 #include "codemodel.h"
 #include "partselectwidget.h"
+#include "languageselectwidget.h"
 #include "generalinfowidget.h"
 #include "projectsession.h"
 #include "domutil.h"
@@ -49,8 +50,8 @@ class ProjectInfo
 public:
   KURL         m_projectURL;
   QDomDocument m_document;
-  QString      m_projectPlugin, m_language;
-  QStringList  m_ignoreParts, m_loadParts, m_keywords;
+  QString      m_projectPlugin, m_language, m_activeLanguage;
+  QStringList  m_ignoreParts, m_loadParts, m_keywords, m_secondaryLanguages;
   QDict<KDevPlugin> m_localParts;
 
   QString sessionFile() const;
@@ -120,6 +121,12 @@ void ProjectManager::createActions( KActionCollection* ac )
                 this, SLOT(slotProjectOptions()),
                 ac, "project_options" );
   m_projectOptionsAction->setEnabled(false);
+
+  m_activeLanguage = new KSelectAction(i18n("&Active Language"), 0, ac, "project_active_language");
+  m_activeLanguage->setWhatsThis(i18n("Sets the active programming language"));
+  m_activeLanguage->setEnabled(false);
+  connect(m_activeLanguage, SIGNAL(activated(const QString&)),
+          this, SLOT(switchLanguage(const QString&)));
 }
 
 void ProjectManager::slotOpenProject()
@@ -152,13 +159,37 @@ void ProjectManager::slotProjectOptions()
 
   QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
   PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
+  vbox = dlg.addVBoxPage(i18n("Languages"));
+  LanguageSelectWidget *lw = new LanguageSelectWidget(*API::getInstance()->projectDom(), vbox, "language selection widget");
   connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+  connect( &dlg, SIGNAL(okClicked()), lw, SLOT(accept()) );
   connect( w, SIGNAL(accepted()), this, SLOT(loadLocalParts()) );
+  connect( lw, SIGNAL(accepted()), this, SLOT(updateActiveLangMenu()) );
 
   Core::getInstance()->doEmitProjectConfigWidget(&dlg);
   dlg.exec();
 
   saveProjectFile();
+}
+
+void ProjectManager::updateActiveLangMenu()
+{
+  getGeneralInfo();
+  QStringList list( m_info->m_secondaryLanguages );
+  list.prepend( m_info->m_language ); //make sure primary lang comes first
+  m_activeLanguage->setItems( list );
+  m_activeLanguage->setEnabled( m_info->m_secondaryLanguages.count() > 0 );
+  m_activeLanguage->setCurrentItem(m_activeLanguage->items().findIndex(m_info->m_activeLanguage));
+}
+
+void ProjectManager::switchLanguage(const QString& lang)
+{
+  unloadLocalParts();
+  unloadLanguageSupport();
+  m_info->m_loadParts.clear();
+  loadLanguageSupport(lang);
+  loadLocalParts();
+  Core::getInstance()->doEmitLanguageChanged();
 }
 
 void ProjectManager::loadSettings()
@@ -223,9 +254,10 @@ bool ProjectManager::loadProject(const KURL &url)
 
   getGeneralInfo();
 
+  updateActiveLangMenu();
   loadCreateFileSupport();
 
-  if( !loadLanguageSupport() ) {
+  if( !loadLanguageSupport(m_info->m_language) ) {
     unloadCreateFileSupport();
     delete m_info; m_info = 0;
     return false;
@@ -246,7 +278,7 @@ bool ProjectManager::loadProject(const KURL &url)
   if (m_info->m_projectURL.isLocalFile()) {
     // first restore the project session stored in a .kdevses file
     if (!m_pProjectSession->restoreFromFile(m_info->sessionFile(), m_info->m_localParts)) {
-      qDebug("error during restoring of the KDevelop session !\n");
+      kdWarning() << i18n("error during restoring of the KDevelop session !") << endl;
     }
   }
 
@@ -403,6 +435,7 @@ void ProjectManager::getGeneralInfo()
 
   getAttributeList(generalEl, "ignoreparts", "part", m_info->m_ignoreParts);
   getAttributeList(generalEl, "keywords", "keyword", m_info->m_keywords);
+  getAttributeList(generalEl, "secondaryLanguages", "language", m_info->m_secondaryLanguages);
 }
 
 bool ProjectManager::loadProjectPart()
@@ -450,18 +483,22 @@ void ProjectManager::unloadProjectPart()
   API::getInstance()->setProject(0);
 }
 
-bool ProjectManager::loadLanguageSupport()
+bool ProjectManager::loadLanguageSupport(const QString& lang)
 {
+  kdDebug(9000) << "Looking for language support for " << lang << endl;
 
-  kdDebug(9000) << "Looking for language support for " << m_info->m_language << endl;
+  if (lang == m_info->m_activeLanguage)
+    // language already loaded...
+    return true;
 
   KTrader::OfferList languageSupportOffers =
     KTrader::self()->query(QString::fromLatin1("KDevelop/LanguageSupport"),
-                           QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(m_info->m_language));
+			   QString::fromLatin1("[X-KDevelop-Language] == '%1'").arg(lang));
+//                           QString::fromLatin1("[X-KDevelop-Language] == '%1' and [X-KDevelop-Version] == '%2'").arg(m_info->m_language).arg(KDEVELOP_PLUGIN_VERSION));
   if (languageSupportOffers.isEmpty()) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("No language plugin for %1 found.")
-            .arg(m_info->m_language));
+            .arg(lang));
     return false;
   }
 
@@ -481,6 +518,8 @@ bool ProjectManager::loadLanguageSupport()
 
   API::getInstance()->setLanguageSupport( langSupport );
   PluginController::getInstance()->integratePart( langSupport );
+  m_info->m_activeLanguage = lang;
+  m_activeLanguage->setCurrentItem(m_activeLanguage->items().findIndex(lang));
 
   return true;
 }
@@ -587,7 +626,7 @@ bool ProjectManager::checkNewService(const KService::Ptr &service)
   QStringList langlist = var.asStringList();
 
   // empty means it supports all languages
-  if( !langlist.isEmpty() && !langlist.contains(m_info->m_language) ) {
+  if( !langlist.isEmpty() && !langlist.contains(m_info->m_activeLanguage) ) {
     m_info->m_ignoreParts << service->name();
     return false;
   }

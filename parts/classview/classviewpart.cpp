@@ -60,6 +60,7 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(slotProjectClosed()) );
+    connect( core(), SIGNAL(languageChanged()), this, SLOT(slotProjectOpened()) );
 }
 
 

@@ -169,6 +169,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
+    connect( core(), SIGNAL(languageChanged()), this, SLOT(projectOpened()) );
     connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
@@ -234,6 +235,9 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
 CppSupportPart::~CppSupportPart()
 {
+    if (project())
+      projectClosed();
+
     delete( m_driver );
     m_driver = 0;
 
@@ -699,6 +703,8 @@ void CppSupportPart::addAttribute( ClassDom klass )
 
 void CppSupportPart::slotCompleteText()
 {
+    if (!m_pCompletion)
+        return;
     m_pCompletion->completeText();
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="12" name="gideon" >
+<kpartgui version="13" name="gideon" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -66,6 +66,7 @@
     <DefineGroup name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
+    <Action name="project_active_language"/>
     <DefineGroup name="project_import"/>
     <Separator/>
     <Merge/>
@@ -74,7 +75,7 @@
     <Action name="project_close"/>
   </Menu>
   <Menu name="build">
-    <text>B&amp;uild</text>
+    <text>Bu&amp;ild</text>
     <Merge/>
     <Separator/>
     <Action name="stop_processes"/>

@@ -340,6 +340,11 @@ signals:
     void projectClosed();
 
     /**
+     * The language support part has been changed.
+     */
+    void languageChanged();
+
+    /**
      * The user has clicked the stop button.
      * @param which is 0 if all actions should be cancelled.
      */

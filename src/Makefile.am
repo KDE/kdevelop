@@ -2,7 +2,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdi
 
 bin_PROGRAMS = gideon
 
-gideon_SOURCES = main.cpp mainwindow.cpp core.cpp partcontroller.cpp projectmanager.cpp plugincontroller.cpp api.cpp partselectwidget.cpp settingswidget.ui toplevel.cpp mainwindowideal.cpp statusbar.cpp editorproxy.cpp debugger.cpp documentationpart.cpp splashscreen.cpp projectsession.cpp mainwindowshare.cpp generalinfowidgetbase.ui generalinfowidget.cpp
+gideon_SOURCES = main.cpp mainwindow.cpp core.cpp partcontroller.cpp projectmanager.cpp plugincontroller.cpp api.cpp partselectwidget.cpp settingswidget.ui toplevel.cpp mainwindowideal.cpp statusbar.cpp editorproxy.cpp debugger.cpp documentationpart.cpp splashscreen.cpp projectsession.cpp mainwindowshare.cpp generalinfowidgetbase.ui generalinfowidget.cpp languageselectwidget.cpp
 
 gideon_METASOURCES = AUTO
 gideon_LDFLAGS = $(all_libraries) $(KDE_RPATH)
@@ -16,3 +16,4 @@ gideondatadir = $(kde_confdir)
 gideondata_DATA = gideonrc
 
 SUBDIRS = profiles
+noinst_HEADERS =  languageselectwidget.h
