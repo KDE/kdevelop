@@ -19,30 +19,15 @@
 #include "ckdevelop.h"
 #include "kstartuplogo.h"
 #include "ckdevinstall.h"
-//#include <kwmmapp.h>
+#include <kwmmapp.h>
 
-#include "./kwrite/kguicommand.h"
-#include "./kwrite/kwview.h"
-
-
-KGuiCmdManager cmdMngr; //manager for user -> gui commands
 
 
 int main(int argc, char* argv[]) {
   
   KStartupLogo* start_logo=0L;
-  KGuiCmdKWMModuleApp a(argc,argv,"kdevelop");//KWMModuleApplication a(argc,argv,"kdevelop");
+  KWMModuleApplication a(argc,argv,"kdevelop");
 	a.connectToKWM();
-
-  // commands
-  KWrite::addCursorCommands(cmdMngr);
-  KWrite::addEditCommands(cmdMngr);
-  KWrite::addFindCommands(cmdMngr);
-  KWrite::addStateCommands(cmdMngr);
-  cmdMngr.makeDefault();
-  cmdMngr.readConfig(a.getConfig());
-
-
   a.getConfig()->setGroup("General Options");
   bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
   bool bInstall=a.getConfig()->readBoolEntry("Install",true);
@@ -61,7 +46,11 @@ int main(int argc, char* argv[]) {
   else{
     if(bInstall){
       CKDevInstall* install=new CKDevInstall(0,"install");
-      start_logo->close();
+      if (bStartLogo) {
+	start_logo->close();
+	delete start_logo;
+	bStartLogo = false;
+      }
       install->show();
       delete install;
     }
