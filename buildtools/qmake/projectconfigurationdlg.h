@@ -18,11 +18,23 @@
 
 enum QMakeBuildMode    {QBM_DEBUG,QBM_RELEASE};
 enum QMakeWarnings     {QWARN_ON,QWARN_OFF};
-enum QMakeDepends      {QD_QT=1,QD_OPENGL=2,QD_THREAD=4,QD_X11=8,QD_STATIC=16,
-                        QD_SHARED=32,QD_PLUGIN=64,QD_EXCEPTIONS=128,QD_STL=256,
-                        QD_RTTI=512, QD_ORDERED=1024};
+enum QMakeDepends      {QD_QT=		1<<0,
+			QD_OPENGL=	1<<1,
+			QD_THREAD=	1<<2,
+			QD_X11=		1<<3,
+			QD_STATIC=	1<<4,
+                        QD_SHARED=	1<<5,
+			QD_PLUGIN=	1<<6,
+			QD_EXCEPTIONS=	1<<8,
+			QD_STL=		1<<9,
+			QD_RTTI=	1<<10, 
+			QD_ORDERED=	1<<11, 
+			QD_LIBTOOL=	1<<12, 
+			QD_PKGCONF=	1<<13,
+			QD_DLL=		1<<14,
+			QD_CONSOLE=	1<<15
+			};
 enum QMakeTemplate     {QTMP_APPLICATION,QTMP_LIBRARY,QTMP_SUBDIRS};
-
 #include "projectconfigurationdlgbase.h"
 #include "trollprojectwidget.h"
 

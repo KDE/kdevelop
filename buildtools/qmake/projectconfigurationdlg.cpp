@@ -562,8 +562,6 @@ void ProjectConfigurationDlg::updateLibaddControl()
         }
     }
 
-  kdDebug()<< "itemlist count =" << itemList.count()<<endl;
-
   //add all other prj in itemList unchecked
   qProjectItem *item=itemList.first();
   while(item)
@@ -636,8 +634,6 @@ void ProjectConfigurationDlg::updateDependenciesControl( )
           item=itemList.next();
         }
     }
-
-  kdDebug()<< "itemlist count =" << itemList.count()<<endl;
 
   //add all other prj in itemList unchecked
   qProjectItem *item=itemList.first();
@@ -750,7 +746,6 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
           {
 
             if((*it).find(tmpLibDir)>=0 && tmpLibDir!="" && !tmpLibDir.isEmpty()){
-              kdDebug()<<"remove from LIBDIR   "<<(*it).ascii()<<"   tmpLib="<<tmpLibDir.ascii()<<""<<endl;
               libDirList.remove(it);
               it=libDirList.begin();
             }
@@ -765,7 +760,6 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
   QStringList::Iterator it1=libDirList.begin();
   for(;it1!=libDirList.end();++it1)
   {
-      kdDebug()<<"create LIBDIR item  "<<(*it1).ascii()<<endl;
       new QListViewItem(outsidelibdir_listview,outsidelibdir_listview->lastItem(),(*it1));
   }
 

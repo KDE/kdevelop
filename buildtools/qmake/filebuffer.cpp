@@ -276,12 +276,10 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     int lineNum=eqSign.m_row;
     curValues.clear();
     curValuesIgnore.clear();
-    kdDebug() << "line before: " << line << endl;
     line = line.mid(eqSign.m_idx+1,line.length()-eqSign.m_idx);
     filterOutIgnoreValues(line,curValuesIgnore);
     while (!line.isEmpty())
     {
-      kdDebug() << "line after: " << line << endl;
       if( functionRegExp.search(line) != -1) // QMake function
       {
       	curValues += functionRegExp.cap(0);
@@ -460,7 +458,6 @@ void FileBuffer::bufferFile(const QString &fileName)
     while ( !inStream.eof() )
     {
       inLine = inStream.readLine();
-      kdDebug() << "Read Line: " << inLine << endl;
       inLine = inLine.simplifyWhiteSpace();
       m_buffer.append(inLine);
     }

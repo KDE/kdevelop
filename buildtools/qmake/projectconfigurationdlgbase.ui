@@ -351,6 +351,9 @@
                                 <property name="text">
                                     <string>S&amp;hared library</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+H</string>
+                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -365,15 +368,18 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox" row="0" column="1">
+                            <widget class="QCheckBox" row="0" column="0">
                                 <property name="name">
-                                    <cstring>checkThread</cstring>
+                                    <cstring>checkQt</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Thread</string>
+                                    <string>&amp;Qt</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+Q</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Requires support for multi-threaded application or library.</string>
+                                    <string>Requires the Qt header files/library</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="0">
@@ -383,46 +389,11 @@
                                 <property name="text">
                                     <string>Open&amp;GL</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+G</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the OpenGL (or Mesa) headers/libraries</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="3" column="0">
-                                <property name="name">
-                                    <cstring>stlCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;STL</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="3" column="1">
-                                <property name="name">
-                                    <cstring>rttiCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>RTT&amp;I</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="0" column="0">
-                                <property name="name">
-                                    <cstring>checkQt</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Qt</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Requires the Qt header files/library</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="1">
-                                <property name="name">
-                                    <cstring>checkX11</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>X&amp;11</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Support required for X11 application or library</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">
@@ -432,8 +403,61 @@
                                 <property name="text">
                                     <string>Ord&amp;ered</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+E</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="0">
+                                <property name="name">
+                                    <cstring>stlCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;STL</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+S</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>checkX11</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>X&amp;11</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+1</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="1">
+                                <property name="name">
+                                    <cstring>checkThread</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Thread</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+T</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires support for multi-threaded application or library.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="1">
+                                <property name="name">
+                                    <cstring>rttiCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>RTT&amp;I</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+I</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="1">
@@ -442,6 +466,59 @@
                                 </property>
                                 <property name="text">
                                     <string>E&amp;xceptions </string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+X</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="0" column="2">
+                                <property name="name">
+                                    <cstring>checkConsole</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Console</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Requires support for multi-threaded application or library.</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="2">
+                                <property name="name">
+                                    <cstring>checkLibtool</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Make libtool archive</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="2">
+                                <property name="name">
+                                    <cstring>exceptionPkgconf</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Create pkgconf file</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="2">
+                                <property name="name">
+                                    <cstring>rttiDll</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Build as DLL</string>
+                                </property>
+                                <property name="accel">
+                                    <string></string>
                                 </property>
                             </widget>
                         </grid>
@@ -466,6 +543,9 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Debug</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+D</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Set project to be built in debug mode</string>

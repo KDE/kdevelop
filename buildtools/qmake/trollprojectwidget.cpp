@@ -1298,7 +1298,7 @@ void TrollProjectWidget::updateProjectConfiguration(SubqmakeprojectItem *item)
   for( ; custVars != item->configuration.m_variables.end(); ++custVars )
   {
   	Buffer->removeValues( custVars.key() );
-	Buffer->setValues( custVars.key(), custVars.data(), FileBuffer::VSM_RESET);
+	Buffer->setValues( custVars.key(), QStringList(custVars.data()), FileBuffer::VSM_RESET);
   }
 
   // Write to .pro file
@@ -2977,14 +2977,12 @@ void TrollProjectWidget::parse(SubqmakeprojectItem *item)
 
     // Handle custom config vars.
     QStringList allValues = item->m_FileBuffer.getCustomValueNames();
-    kdDebug() << "Custom values: " << allValues.join(",") << endl;
     QStringList::Iterator it = allValues.begin();
     for( ; it != allValues.end(); ++it )
     {
     	item->m_FileBuffer.getValues(*it,lst,minusListDummy);
 	if( lst.count() != 0 )
 	item->configuration.m_variables[*it] = lst[0]; // Only support reading first one...
-	kdDebug() << "Custom value: " << *it << " " << lst.join(",") << endl;
     }
 
 }
