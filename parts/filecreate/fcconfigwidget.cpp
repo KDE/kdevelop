@@ -16,6 +16,7 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qcheckbox.h>
 
 #include <kstandarddirs.h>
 #include <kurl.h>
@@ -43,12 +44,14 @@ FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *pare
         fc_tabs->setTabEnabled(tab3, false);
         delete tab2;
         delete tab3;
+        sidetab_checkbox->setChecked(m_part->m_useSideTab);
     }
     else
     {
         loadGlobalConfig(fcglobal_view, true);
         loadProjectConfig(fc_view);
         loadProjectTemplates(fctemplates_view);
+        sidetab_checkbox->setEnabled(m_part->m_useSideTab);
     }
 
     m_globalfiletypes.setAutoDelete(true);
@@ -62,8 +65,11 @@ FCConfigWidget::~FCConfigWidget()
 
 void FCConfigWidget::accept()
 {
-    if (m_global)
+    if (m_global) {
+        m_part->m_useSideTab = sidetab_checkbox->isChecked();
+        m_part->setShowSideTab(m_part->m_useSideTab);
         saveGlobalConfig();
+    }
     else
         saveProjectConfig();
 
@@ -156,6 +162,9 @@ void FCConfigWidget::saveGlobalConfig()
     globalDom.appendChild(element);
     QDomElement  apPart  = globalDom.createElement("kdevfilecreate");
     element.appendChild(apPart);
+    QDomElement useST = globalDom.createElement("sidetab");
+    useST.setAttribute("active", m_part->m_useSideTab ? "yes" : "no" );
+    apPart.appendChild(useST);
     QDomElement fileTypes = globalDom.createElement( "filetypes" );
     apPart.appendChild( fileTypes );
 

@@ -59,6 +59,11 @@ public:
                      QString subtype = QString::null);
 
   /**
+   * Show file creation friendly side tab, yes or no
+   */
+  void setShowSideTab(bool on);
+
+  /**
    * Selects a docked widget.
    */
   void selectWidget(int widgetNumber);
@@ -125,7 +130,7 @@ private:
   void addFileType(const QString & filename);
 
   /**
-   * The number (index to m_availableWidgets) of the widget currently in use
+   * The number (index to m_availableWidgets) of the widget currently in use, or -1 if none
    */
   int m_selectedWidget;
 
@@ -145,7 +150,7 @@ private:
   int m_numWidgets;
 
   /**
-   * Set the current widget. Returns false if failed.
+   * Set the current widget. Argument of null sets no widget.
    */
   bool setWidget(TypeChooser * widget);
 
@@ -158,6 +163,8 @@ private:
    * The file type selected by the new file dialog, if appropriate.
    */
   const FileType * m_filedialogFiletype;
+
+  bool m_useSideTab;
 
 };
 

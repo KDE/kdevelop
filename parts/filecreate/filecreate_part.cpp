@@ -47,7 +47,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreat
 using namespace FileCreate;
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
-  : KDevCreateFile(parent, name ? name : "FileCreatePart"), m_selectedWidget(-1)
+    : KDevCreateFile(parent, name ? name : "FileCreatePart"), m_selectedWidget(-1), m_useSideTab(true)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc");
@@ -100,29 +100,35 @@ void FileCreatePart::projectConfigWidget( KDialogBase* dlg )
 
 
 void FileCreatePart::selectWidget(int widgetNumber) {
-  if (widgetNumber<0 || widgetNumber>=m_numWidgets) return;
-  if (setWidget(m_availableWidgets[widgetNumber]))
+  if (m_selectedWidget==widgetNumber) return;
+  if (widgetNumber<-1 || widgetNumber>=m_numWidgets) return;
+  if (setWidget(widgetNumber==-1 ? NULL : m_availableWidgets[widgetNumber]))
     m_selectedWidget = widgetNumber;
 }
 
 
 bool FileCreatePart::setWidget(TypeChooser * widg) {
 
-  if (!widg) return false;
-
-  // the type chooser must of course also be derived from QWidget
-  QWidget * as_widget = dynamic_cast<QWidget*>(widg);
-  if (!as_widget) return false;
+  QWidget *as_widget = widg ? dynamic_cast<QWidget*>(widg) : NULL;
 
   // remove the existing widget
-  if (typeChooserWidget()) {
-    disconnect( typeChooserWidget()->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
-    QWidget * as_widget2 = typeChooserWidgetAsQWidget();
-    if (as_widget2)
+  TypeChooser *tc = typeChooserWidget();
+  if (tc) {
+    disconnect( tc->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
+    QWidget *as_widget2 = dynamic_cast<QWidget*>(tc);
+    if (as_widget2) {
+        kdDebug(9034) << "filecreate_part: Removing as_widget2" << endl;
       mainWindow()->removeView(as_widget2);
+    } else
+      kdWarning(9034) << "WARNING: could not cast to as_widget2" << endl;
+
   }
-  connect( widg->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
-  mainWindow()->embedSelectView(as_widget, i18n("New File"), i18n("file creation"));
+
+  if (widg && as_widget) {
+    connect( widg->signaller(), SIGNAL(filetypeSelected(const FileType *)), this, SLOT(slotFiletypeSelected(const FileType *)) );
+    mainWindow()->embedSelectView(as_widget, i18n("New File"), i18n("file creation"));
+  }
+
   return true;
 }
 
@@ -145,7 +151,14 @@ void FileCreatePart::slotProjectOpened() {
       DomUtil::openDOMFile(globalDom,globalXMLFile)) {
     kdDebug(9034) << "Reading global template info..." << endl;
     readTypes(globalDom, m_filetypes, false);
+
+    // use side tab or not?
+    QDomElement useSideTab = DomUtil::elementByPath(globalDom,"/kdevfilecreate/sidetab");
+    if (!useSideTab.isNull() && useSideTab.attribute("active")=="no") {
+        m_useSideTab = false;
+    }
   }
+
 
   // read in which global templates are to be used for this project
   QDomElement useGlobalTypes =
@@ -202,6 +215,8 @@ void FileCreatePart::slotProjectOpened() {
       addFileType( "h" );
     }
   }
+
+  setShowSideTab(m_useSideTab);
 
   // refresh view
   refresh();
@@ -512,6 +527,9 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
   return result;
 }
 
+void FileCreatePart::setShowSideTab(bool on) {
+  selectWidget(on ? 1 : -1 );
+}
 
 void FileCreatePart::slotNoteFiletype(const FileType * filetype) {
   kdDebug(9034) << "Noting file type: " << (filetype ? filetype->ext() : QString::fromLatin1("Null") ) << endl;

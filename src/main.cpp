@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Yann Hodique", I18N_NOOP("Patches"), "Yann.Hodique@lifl.fr");
   aboutData.addAuthor("F@lk Brettschneider", I18N_NOOP("MDI modes, QEditor, bugfixes"), "falkbr@kdevelop.org");
   aboutData.addAuthor("Alexander Dymo", I18N_NOOP("Help with C++ support, Filecreate and Doctreeview components"), "cloudtemple@mksat.net");
-  
+
   aboutData.addCredit("The KWrite authors", I18N_NOOP("Kate editor component"), "kwrite-devel@kde.org");
   aboutData.addCredit("The KHTML authors", I18N_NOOP("HTML documentation component"), "kwrite-devel@kde.org");
   aboutData.addCredit("Robert Moniot", I18N_NOOP("Fortran documentation"), "moniot@fordham.edu");
@@ -56,14 +56,15 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Trolltech AS", I18N_NOOP("Designer code"), "info@trolltech.com");
   aboutData.addCredit("Stephane ANCELOT", I18N_NOOP("Patches"), "sancelot@free.fr");
   aboutData.addCredit("Jens Zurheide", I18N_NOOP("Patches"), "jens.zurheide@gmx.de");
-  
+  aboutData.addCredit("Julian Rockey", I18N_NOOP("Filecreate part and other bits and patches"), "linux@jrockey.com");
+
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
-  
+
   KApplication app;
 
   SplashScreen *splash = new SplashScreen;
- 
+
   app.processEvents();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
@@ -75,7 +76,7 @@ int main(int argc, char *argv[])
   ProjectManager::getInstance()->loadDefaultProject();
   TopLevel::getInstance()->main()->show();
   Core::getInstance()->doEmitCoreInitialized();
-  
+
   delete splash;
 
   kapp->dcopClient()->registerAs("gideon");

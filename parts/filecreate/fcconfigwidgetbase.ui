@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>512</width>
-            <height>389</height>
+            <width>505</width>
+            <height>388</height>
         </rect>
     </property>
     <property name="caption">
@@ -37,23 +37,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QPushButton" row="7" column="1">
-                        <property name="name">
-                            <cstring>moveup_button</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Move &amp;Up</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="8" column="1">
-                        <property name="name">
-                            <cstring>movedown_button</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Move &amp;Down</string>
-                        </property>
-                    </widget>
-                    <spacer row="6" column="1">
+                    <spacer row="4" column="1">
                         <property name="name">
                             <cstring>spacer1</cstring>
                         </property>
@@ -70,7 +54,7 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QPushButton" row="5" column="1">
+                    <widget class="QPushButton" row="3" column="1">
                         <property name="name">
                             <cstring>remove_button</cstring>
                         </property>
@@ -78,7 +62,7 @@
                             <string>Re&amp;move Type</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="4" column="1">
+                    <widget class="QPushButton" row="2" column="1">
                         <property name="name">
                             <cstring>edittype_button</cstring>
                         </property>
@@ -86,7 +70,7 @@
                             <string>&amp;Edit Type...</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="3" column="1">
+                    <widget class="QPushButton" row="1" column="1">
                         <property name="name">
                             <cstring>newsubtype_button</cstring>
                         </property>
@@ -94,7 +78,7 @@
                             <string>New &amp;Subtype...</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="2" column="1">
+                    <widget class="QPushButton" row="0" column="1">
                         <property name="name">
                             <cstring>newtype_button</cstring>
                         </property>
@@ -102,24 +86,7 @@
                             <string>New &amp;Type...</string>
                         </property>
                     </widget>
-                    <spacer row="9" column="1">
-                        <property name="name">
-                            <cstring>spacer2</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>75</height>
-                            </size>
-                        </property>
-                    </spacer>
-                    <widget class="QListView" row="2" column="0" rowspan="8" colspan="1">
+                    <widget class="QListView" row="0" column="0" rowspan="9" colspan="1">
                         <column>
                             <property name="text">
                                 <string>Type Extension</string>
@@ -178,6 +145,47 @@
                         </property>
                         <property name="resizeMode">
                             <enum>AllColumns</enum>
+                        </property>
+                    </widget>
+                    <spacer row="7" column="1">
+                        <property name="name">
+                            <cstring>spacer2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>60</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton" row="6" column="1">
+                        <property name="name">
+                            <cstring>movedown_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Move &amp;Down</string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="5" column="1">
+                        <property name="name">
+                            <cstring>moveup_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Move &amp;Up</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox" row="8" column="1">
+                        <property name="name">
+                            <cstring>sidetab_checkbox</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Use side tab</string>
                         </property>
                     </widget>
                 </grid>
