@@ -1667,21 +1667,23 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   if (objc) {
     if (dlg.baseclasses_view->firstChild())
       if (dlg.baseclasses_view->firstChild()->text(0) != "NSObject")
-        includeBaseHeader = "#include "
-            + (dlg.baseclasses_view->firstChild()->text(2).toInt() == 0 ? QString("<") : QString("\""))
-            + dlg.baseclasses_view->firstChild()->text(3)
-            + (dlg.baseclasses_view->firstChild()->text(2).toInt() == 0 ? QString(">") : QString("\""));
+        if (!dlg.baseclasses_view->firstChild()->text(3).isEmpty())
+          includeBaseHeader = "#include "
+              + (dlg.baseclasses_view->firstChild()->text(2).toInt() == 0 ? QString("<") : QString("\""))
+              + dlg.baseclasses_view->firstChild()->text(3)
+              + (dlg.baseclasses_view->firstChild()->text(2).toInt() == 0 ? QString(">") : QString("\""));
   } else
   {
     QListViewItemIterator it( dlg.baseclasses_view );
     while ( it.current() )
     {
       if (!it.current()->text(0).isEmpty())
-//        if ((!childClass) || (it.current()->text(0) != "QWidget"))
-          includeBaseHeader += (includeBaseHeader.isEmpty() ? QString(""): QString("\n")) + QString::fromLatin1( "#include " ) +
-            (it.current()->text(2).toInt() == 0 ? QString("<") : QString("\""))
-            + it.current()->text(3)
-            + (it.current()->text(2).toInt() == 0 ? QString(">") : QString("\""));
+        if (!it.current()->text(3).isEmpty())
+//          if ((!childClass) || (it.current()->text(0) != "QWidget"))
+            includeBaseHeader += (includeBaseHeader.isEmpty() ? QString(""): QString("\n")) + QString::fromLatin1( "#include " ) +
+              (it.current()->text(2).toInt() == 0 ? QString("<") : QString("\""))
+              + it.current()->text(3)
+              + (it.current()->text(2).toInt() == 0 ? QString(">") : QString("\""));
       ++it;
     }
   }
