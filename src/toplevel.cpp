@@ -1,265 +1,271 @@
-/***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
- *   bernd@kdevelop.org                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
-#include <qapplication.h>
 #include <qlayout.h>
-#include <qsplitter.h>
-#include <qtabwidget.h>
-#include <kdebug.h>
-#include <kedittoolbar.h>
-#include <klocale.h>
-#include <kstdaction.h>
-#include <kconfig.h>
-#include <kapplication.h>
+#include <qstatusbar.h>
+#include <qmultilineedit.h>
+#include <qvbox.h>
+#include <qcheckbox.h>
 
-#include "splitter.h"
-#include "statusbar.h"
+
+#include <kapplication.h>
+#include <kstdaction.h>
+#include <kdebug.h>
+#include <kaction.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kfiledialog.h>
+
+
+#include "widgets/ktabzoomwidget.h"
+
+
+#include "projectmanager.h"
+#include "partcontroller.h"
+#include "partselectwidget.h"
+#include "api.h"
+#include "core.h"
+#include "settingswidget.h"
+
+
 #include "toplevel.h"
 
 
+TopLevel *TopLevel::s_instance = 0;
+
+
 TopLevel::TopLevel(QWidget *parent, const char *name)
-    : KParts::MainWindow(parent, name)
+  : KParts::MainWindow(parent, name)
 {
-    setXMLFile("gideonui.rc");
+  s_instance = this;
 
-    KToggleAction *action;
-    KConfig* config = kapp->config();
+  setXMLFile("gideonui.rc");
 
-    action = new KToggleAction( i18n("&Selection views"), 0,
-                                this, SLOT(slotToggleSelectViews()),
-                                actionCollection(), "view_selectviews" );
-    action->setChecked(true);
+  createStatusBar();
+  createFramework();
+  createActions();
 
-    action = new KToggleAction( i18n("&Output views"), 0,
-                                this, SLOT(slotToggleOutputViews()),
-                                actionCollection(), "view_outputviews" );
-    action->setChecked(true);
-
-    KStdAction::showToolbar( this, SLOT(slotShowToolbar()),
-                             actionCollection(), "settings_show_toolbar" );
-    KStdAction::configureToolbars( this, SLOT(slotOptionsEditToolbars()),
-                                   actionCollection(), "settings_configure_toolbars" );
-
-    vertSplitter = new QSplitter(Vertical, this);
-    horzSplitter = new QSplitter(Horizontal, vertSplitter);
-
-    leftTabGroup =  new QTabWidget(horzSplitter);
-    mainSplitter =  new Splitter(horzSplitter, "main splitter");
-    lowerTabGroup = new QTabWidget(vertSplitter);
-
-    vertSplitter->setResizeMode(horzSplitter, QSplitter::Stretch);
-    vertSplitter->setResizeMode(lowerTabGroup, QSplitter::KeepSize);
-    horzSplitter->setResizeMode(leftTabGroup, QSplitter::KeepSize);
-    horzSplitter->setResizeMode(mainSplitter, QSplitter::Stretch);
-
-    setCentralWidget(vertSplitter);
-
-    (void) new StatusBar(this);
-
-    config->setGroup("General Options");
-    setGeometry(config->readRectEntry("Geomentry"));
-    vertSplitter->setSizes(config->readIntListEntry("Vertical Splitter"));
-    horzSplitter->setSizes(config->readIntListEntry("Horizontal Splitter"));
-    closing = false;
+  createGUI(0);
 }
 
 
 TopLevel::~TopLevel()
-{}
+{
+}
+
+
+void TopLevel::createInstance(QWidget *parent, const char *name)
+{
+  if (!s_instance)
+    s_instance = new TopLevel(parent, name);
+}
+
+
+TopLevel *TopLevel::getInstance()
+{
+  return s_instance;
+}
+
+
+void TopLevel::createStatusBar()
+{
+  (void) new QStatusBar(this);
+}
+
+
+void TopLevel::createFramework()
+{
+  m_leftBar = new KTabZoomWidget(this, KTabZoomPosition::Left);
+  setCentralWidget(m_leftBar);
+
+  m_bottomBar = new KTabZoomWidget(m_leftBar, KTabZoomPosition::Bottom);
+  m_leftBar->addContent(m_bottomBar);
+
+  PartController::createInstance(m_bottomBar, this);
+
+  m_bottomBar->addContent(PartController::getInstance());
+}
+
+
+void TopLevel::createActions()
+{
+  KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
+
+  KAction *action;
+
+  action = new KAction(i18n("&Open project..."), "project_open", 0,
+                       this, SLOT(slotOpenProject()),
+                       actionCollection(), "project_open");
+  action->setStatusText( i18n("Opens a project"));
+
+  m_openRecentProjectAction =
+    new KRecentFilesAction(i18n("Open &recent project..."), 0,
+                          this, SLOT(slotOpenRecentProject(const KURL &)),
+                          actionCollection(), "project_open_recent");
+  m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
+
+  m_closeProjectAction =
+    new KAction(i18n("C&lose project"), "fileclose",0,
+                this, SLOT(slotCloseProject()),
+                actionCollection(), "project_close");
+  m_closeProjectAction->setEnabled(false);
+  m_closeProjectAction->setStatusText(i18n("Closes the current project"));
+
+  m_projectOptionsAction = new KAction(i18n("Project &Options..."), 0,
+                this, SLOT(slotProjectOptions()),
+                actionCollection(), "project_options" );
+  m_projectOptionsAction->setEnabled(false);
+  
+  action = KStdAction::preferences(this, SLOT(slotSettings()),
+                actionCollection(), "settings_configure" );
+  action->setStatusText( i18n("Lets you customize KDevelop") );
+}
+
+
+
+void TopLevel::slotQuit()
+{
+  saveSettings();
+
+  kapp->quit();
+}
+
+
+void TopLevel::embedSelectView(QWidget *view, const QString &name)
+{
+  m_leftBar->addTab(view, name);
+}
+
+
+void TopLevel::embedOutputView(QWidget *view, const QString &name)
+{
+  m_bottomBar->addTab(view, name);
+}
+
+
+void TopLevel::removeView(QWidget *view)
+{
+}
+
+
+void TopLevel::raiseView(QWidget *view)
+{
+  m_leftBar->raiseWidget(view);
+  m_bottomBar->raiseWidget(view);
+}
 
 
 void TopLevel::createGUI(KParts::Part *part)
 {
-    KParts::MainWindow::createGUI(part);
+  KParts::MainWindow::createGUI(part);
 }
 
 
-bool TopLevel::queryClose()
+void TopLevel::loadSettings()
 {
-    if (closing)
-        return true;
+  KConfig *config = kapp->config();
+  config->setGroup("General Options");
+  QString project = config->readEntry("Last Project", "");
+  bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
+  if (!project.isEmpty() && readProject)
+    ProjectManager::getInstance()->loadProject(project);
 
-    emit wantsToQuit();
-    return false;
+  m_openRecentProjectAction->loadEntries(config, "RecentProjects");
 }
 
 
-void TopLevel::splitterCollapsed(Splitter *splitter)
+void TopLevel::saveSettings()
 {
-    if (splitter!=mainSplitter && !splitter->hasMultipleChildren()) {
-        // The splitter has 'collapsed' to have only one child
-        // So we can destroy it and let the only child be
-        // adopted by the splitter one level higher
-        if (!splitter->parentWidget()->inherits("Splitter")) {
-            kdDebug(9000) << "Hmm, splitter is not nested in another one?" << endl;
-            return;
-        }
-        Splitter *umbrellaSplitter = static_cast<Splitter*>(splitter->parentWidget());
-        QWidget *single = splitter->firstChild();
-        single->reparent(umbrellaSplitter, QPoint(0, 0));
-        umbrellaSplitter->replaceChild(splitter, single);
-        single->show();
-        delete splitter;
-        return;
-    }
+  KConfig *config = kapp->config();
+
+  if (ProjectManager::getInstance()->projectLoaded())
+  {
+    config->setGroup("General Options");
+    config->writeEntry("Last Project", ProjectManager::getInstance()->projectFile());
+  }
+
+  m_openRecentProjectAction->saveEntries(config, "RecentProjects");
 }
 
 
-void TopLevel::closeReal()
+void TopLevel::slotOpenProject()
 {
-  // store the widget configuration
+  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", TopLevel::getInstance(), i18n("Open project"));
+  if (fileName.isNull())
+    return;
+
+  ProjectManager::getInstance()->loadProject(fileName);
+
+  QString pf = ProjectManager::getInstance()->projectFile();
+  if (ProjectManager::getInstance()->projectLoaded())
+  {
+    m_openRecentProjectAction->addURL(KURL(pf));
+    m_closeProjectAction->setEnabled(true);
+    m_projectOptionsAction->setEnabled(true);
+  }
+}
+
+
+void TopLevel::slotOpenRecentProject(const KURL &url)
+{
+  ProjectManager::getInstance()->loadProject(url.path());
+
+  QString pf = ProjectManager::getInstance()->projectFile();
+  if (ProjectManager::getInstance()->projectLoaded())
+  {
+    m_openRecentProjectAction->addURL(KURL(pf));
+    m_closeProjectAction->setEnabled(true);
+    m_projectOptionsAction->setEnabled(true);
+  }
+
+}
+
+
+void TopLevel::slotCloseProject()
+{
+  ProjectManager::getInstance()->closeProject();
+  m_closeProjectAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
+  m_projectOptionsAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
+}
+
+
+void TopLevel::slotProjectOptions()
+{
+  KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
+                  KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
+                  "project options dialog");
+
+  QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
+  PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom, vbox, "part selection widget");
+  connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+
+  Core::getInstance()->doEmitProjectConfigWidget(&dlg);
+  dlg.exec();
+}
+
+
+void TopLevel::slotSettings()
+{
+  KDialogBase dlg(KDialogBase::TreeList, i18n("Customize KDevelop"),
+                  KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
+                  "customization dialog");
+
+  QVBox *vbox = dlg.addVBoxPage(i18n("General"));
+  SettingsWidget *gsw = new SettingsWidget(vbox, "general settings widget");
+  
   KConfig* config = kapp->config();
   config->setGroup("General Options");
-  config->writeEntry("Geomentry",geometry());
-  config->writeEntry("Vertical Splitter",vertSplitter->sizes());
-  config->writeEntry("Horizontal Splitter",horzSplitter->sizes());
-  closing = true;
-  close();
+  gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
+
+
+  vbox = dlg.addVBoxPage(i18n("Plugins"));
+  PartSelectWidget *w = new PartSelectWidget(vbox, "part selection widget");
+  connect( &dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+
+  Core::getInstance()->doEmitConfigWidget(&dlg);
+  dlg.exec();
+
+  config->setGroup("General Options");
+  config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
 }
 
 
-void TopLevel::splitDocumentWidget(QWidget *w, QWidget *old, Orientation orient)
-{
-    kdDebug(9000) << "splitting widget" << endl;
-
-    // Note: old must be != w
-    Splitter *splitter = mainSplitter;
-    if (old)
-        splitter = static_cast<Splitter*>(old->parentWidget());
-
-    if (orient == splitter->orientation()) {
-        w->reparent(splitter, QPoint(0, 0));
-        splitter->splitChild(old, w);
-    } else {
-        if (splitter->hasMultipleChildren()) {
-            // orthogonal to the splitter's direction
-            // => create nested splitter and embed both the
-            // old widget and the new one in it.
-            Splitter *nestedSplitter = new Splitter(splitter, "splitter");
-            nestedSplitter->setOrientation(orient);
-            connect( nestedSplitter, SIGNAL(collapsed(Splitter*)),
-                     this, SLOT(splitterCollapsed(Splitter*)) );
-            // The order of the following instructions is important
-            splitter->replaceChild(old, nestedSplitter);
-            old->reparent(nestedSplitter, QPoint(0, 0));
-            nestedSplitter->addChild(old);
-            w->reparent(nestedSplitter, QPoint(0, 0));
-            nestedSplitter->addChild(w);
-            nestedSplitter->show();
-        } else {
-            splitter->setOrientation(orient);
-            w->reparent(splitter, QPoint(0, 0));
-            splitter->splitChild(old, w);
-        }
-    }
-}
-
-
-void TopLevel::embedDocumentWidget(QWidget *w, QWidget *old)
-{
-    // Note: old must be != w
-    Splitter *splitter = mainSplitter;
-    if (old)
-        splitter = static_cast<Splitter*>(old->parentWidget());
-
-    w->reparent(splitter, QPoint(0, 0));
-
-    if (old) {
-        kdDebug(9000) << "replacing widget" << endl;
-        splitter->replaceChild(old, w);
-    // TODO: WHAT WAS THIS?!?        delete old;
-    } else {
-        kdDebug(9000) << "adding widget" << endl;
-        splitter->addChild(w);
-    }
-}
-
-
-void TopLevel::embedToolWidget(QWidget *w, KDevCore::Role role, const QString &shortCaption)
-{
-    switch (role) {
-    case KDevCore::SelectView:
-        w->reparent(leftTabGroup, QPoint(0, 0));
-        leftTabGroup->addTab(w, shortCaption);
-        leftWidgets.append(w);
-        break;
-    case KDevCore::OutputView:
-        w->reparent(lowerTabGroup, QPoint(0, 0));
-        lowerTabGroup->addTab(w, shortCaption);
-        lowerWidgets.append(w);
-        break;
-    default:
-        return;
-    }
-}
-
-
-void TopLevel::raiseWidget(QWidget *w)
-{
-    w->show();
-    w->setFocus();
-
-    if (leftWidgets.contains(w))
-        leftTabGroup->showPage(w);
-    else if (lowerWidgets.contains(w))
-        lowerTabGroup->showPage(w);
-}
-
-void
-TopLevel::removeToolWidget( QWidget* w, KDevCore::Role role )
-{
-    switch( role ){
-	case KDevCore::OutputView:
-	    lowerTabGroup->removePage( w );
-	    lowerWidgets.remove( w );
-	    break;
-	    
-	case KDevCore::SelectView:
-	    leftTabGroup->removePage( w );
-	    leftWidgets.remove( w );
-	    break;
-	    
-	default:
-	    kdDebug( 9000 ) << "removeToolWidget - unknown role '" << role << "'" << endl;
-	    break;
-    }
-}
-
-void TopLevel::slotToggleSelectViews()
-{
-    if (leftTabGroup->isVisible())
-        leftTabGroup->hide();
-    else
-        leftTabGroup->show();
-    KToggleAction *toggleAction = static_cast<KToggleAction*>(action("view_selectviews"));
-    toggleAction->setChecked(leftTabGroup->isVisible());
-}
-
-
-void TopLevel::slotToggleOutputViews()
-{
-    if (lowerTabGroup->isVisible())
-        lowerTabGroup->hide();
-    else
-        lowerTabGroup->show();
-    KToggleAction *toggleAction = static_cast<KToggleAction*>(action("view_outputviews"));
-    toggleAction->setChecked(lowerTabGroup->isVisible());
-}
-
-
-void TopLevel::slotOptionsEditToolbars()
-{
-    KEditToolbar dlg(factory());
-    if (dlg.exec())
-        createGUI(0);
-}
 
 #include "toplevel.moc"

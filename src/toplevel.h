@@ -1,74 +1,67 @@
-/***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
- *   bernd@kdevelop.org                                                    *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
 #ifndef _TOPLEVEL_H_
 #define _TOPLEVEL_H_
 
-#include <qglobal.h>
-#if (QT_VERSION >= 300)
-#include <qptrlist.h>
-#else
-#include <qlist.h>
-#define QPtrList QList
-#define QPtrListIterator QListIterator
-#endif
+
 #include <kparts/mainwindow.h>
-#include "statusbar.h"
-#include "kdevcore.h"
 
-class Splitter;
-class QSplitter;
-class QTabWidget;
 
-// 2002-02-08 added removeToolWidget( ) - daniel
+class KTabZoomWidget;
+
+
 class TopLevel : public KParts::MainWindow
 {
-    Q_OBJECT
-    
+  Q_OBJECT
+
 public:
-    TopLevel(QWidget* parent=0, const char *name=0);
-    ~TopLevel();
 
-    // Updated to public, so it is accessible from the core class
-    void createGUI(KParts::Part *part);
-    void closeReal();
+  void embedSelectView(QWidget *view, const QString &title);
+  void embedOutputView(QWidget *view, const QString &title);
 
-    StatusBar *statusBar() const
-    { return static_cast<StatusBar*>(QMainWindow::statusBar()); }
-    
-signals:
-    void wantsToQuit();
-    
-public slots:
-    void splitDocumentWidget(QWidget *w, QWidget *old, Orientation orient);
-    void embedDocumentWidget(QWidget *w, QWidget *old);
-    void embedToolWidget(QWidget *w, KDevCore::Role role, const QString &shortCaption);
-    void raiseWidget(QWidget *w);
-    // daniel
-    void removeToolWidget( QWidget* w, KDevCore::Role role );
+  void removeView(QWidget *view);
+
+  void raiseView(QWidget *view);
+
+  static void createInstance(QWidget *parent=0, const char *name=0);
+  static TopLevel *getInstance();
+
+  void createGUI(KParts::Part *part);
+
+  void loadSettings();
+
+
+protected:
+
+  TopLevel(QWidget* parent=0, const char *name=0);
+  ~TopLevel();
+
 
 private slots:
-void splitterCollapsed(Splitter *splitter);
-    void slotToggleSelectViews();
-    void slotToggleOutputViews();
-    void slotOptionsEditToolbars();
+
+  void slotQuit();
+  void slotOpenProject();
+  void slotOpenRecentProject(const KURL &url);
+  void slotCloseProject();
+  void slotProjectOptions();
+  void slotSettings();
+
 
 private:
-    virtual bool queryClose();
 
-    bool closing;
-    QSplitter *vertSplitter, *horzSplitter;
-    QTabWidget *leftTabGroup, *lowerTabGroup;
-    Splitter *mainSplitter;
-    QPtrList<QWidget> leftWidgets, lowerWidgets;
+  void createStatusBar();
+  void createFramework();
+  void createActions();
+
+  void saveSettings();
+
+  KTabZoomWidget *m_leftBar, *m_bottomBar;
+
+  static TopLevel *s_instance;
+
+  
+  KAction *m_closeProjectAction, *m_projectOptionsAction;
+  KRecentFilesAction *m_openRecentProjectAction;
+
 };
+
 
 #endif
