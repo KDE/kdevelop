@@ -3,14 +3,13 @@
  <Template code="if( | ){
 } else {
 }" name="ife" description="if else" suffixes="C++ (h,cpp)"/>
- <Template code="private" name="pr" description="private" suffixes="C++ (h,cpp)"/>
+ <Template code="private|" name="pr" description="private" suffixes="C++ (h,cpp)"/>
  <Template code="while( | ){
 }" name="whileb" description="while statement" suffixes="C++ (h,cpp)"/>
- <Template code="public |" name="pu" description="public"  suffixes="C++ (h,cpp)"/>
+ <Template code="public|" name="pu" description="public"  suffixes="C++ (h,cpp)"/>
  <Template code="switch( | ){
 }" name="switchb" description="switch statement" suffixes="C++ (h,cpp)"/>
- <Template code="protected " name="pro" description="protected" suffixes="C++ (h,cpp)"/>
- <Template code="class |" name="cl" description="class" suffixes="C++ (h,cpp)"/>
+ <Template code="protected|" name="pro" description="protected" suffixes="C++ (h,cpp)"/>
  <Template code="for( |; ; ){
 }" name="forb" description="for statement" suffixes="C++ (h,cpp)"/>
  <Template code="class | {
