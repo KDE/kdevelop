@@ -1,3 +1,6 @@
+2000-01-19
+	*a better workaround for the doc tab bug, I now have an explanation why it happened.
+
 2000-01-19 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * updated KDE 2 Developer's Guide with Preston Brown's DCOP HOWTO
   * added qt2.x normal frameapp to appwizard
