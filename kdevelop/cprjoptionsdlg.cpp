@@ -20,8 +20,10 @@
 #include "vc/versioncontrol.h"
 #include <iostream.h>
 #include <qstrlist.h>
+#include <qmessagebox.h>
 #include <klocale.h>
 #include "debug.h"
+#include "ctoolclass.h"
 
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
@@ -1663,13 +1665,31 @@ void CPrjOptionsDlg::ok(){
 
   prj_info->setMakeOptions (text);
 
-  if (m_makestartpoint_line->text() != prj_info->getProjectDir())
-    prj_info->setDirWhereMakeWillBeCalled(m_makestartpoint_line->text());
+  QString makeDir = m_makestartpoint_line->text();
+  bool isRelativePath = false;
+  if (makeDir.length() > 0)
+    if ('/' != makeDir[0])
+      isRelativePath = true;
+  if (!isRelativePath) {
+    if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + makeDir + i18n("\n\nwhich you set as directory where make should run is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
+      makeDir = CToolClass::getRelativePath(prj_info->getProjectDir(), makeDir);
+  }
+  if (makeDir != prj_info->getProjectDir())
+    prj_info->setDirWhereMakeWillBeCalled(makeDir);
   else
     prj_info->setDirWhereMakeWillBeCalled("");
 
   /******** binary options *********/
-  prj_info->setBinPROGRAM( binary_edit->text());
+  QString binaryDir = binary_edit->text();
+  isRelativePath = false;
+  if (binaryDir.length() > 0)
+    if ('/' != binaryDir[0])
+      isRelativePath = true;
+  if (!isRelativePath) {
+    if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + binaryDir + i18n("\n\nto your binary which should be run on 'Execute' is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
+      binaryDir = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryDir);
+  }
+  prj_info->setBinPROGRAM( binaryDir);
 
   // write it to the disk
   prj_info->writeProject();
@@ -1696,6 +1716,14 @@ void CPrjOptionsDlg::slotBinaryClicked(){
   QString dir;
   dir = KFileDialog::getOpenFileName(prj_info->getBinPROGRAM());
   if (!dir.isEmpty()){
+    bool isRelativePath = false;
+    if (dir.length() > 0)
+      if ('/' != dir[0])
+        isRelativePath = true;
+    if (!isRelativePath) {
+      if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + dir + i18n("\n\nto your binary which should be run on 'Execute' is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
+        dir = CToolClass::getRelativePath(prj_info->getProjectDir(), dir);
+    }
     binary_edit->setText(dir);
   }
 }
@@ -1704,5 +1732,15 @@ void CPrjOptionsDlg::slotFileDialogMakeStartPointClicked() {
   QString file,dir;
   dir = prj_info->getProjectDir();
   file = filedialog->getDirectory(dir,this,"Dir");
-  m_makestartpoint_line->setText(file);
+  if (!file.isEmpty()){
+    bool isRelativePath = false;
+    if (file.length() > 0)
+      if ('/' != dir[0])
+        isRelativePath = true;
+    if (!isRelativePath) {
+      if(QMessageBox::warning(this,i18n("Path decision"),i18n("The path\n\n") + file + i18n("\n\nwhich you set as directory where make should run is not a relative path.\nThis can cause problems, if you move the project.\nWhat path do you want to save to your project file?"),i18n("&Absolute path"),i18n("&Relative path")))
+        file = CToolClass::getRelativePath(prj_info->getProjectDir(), file);
+    }
+    m_makestartpoint_line->setText(file);
+  }
 }
