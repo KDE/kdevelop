@@ -34,6 +34,7 @@
 #include "doctreeview.h"
 #include "clogfileview.h"
 #include "crealfileview.h"
+#include "ceditwidget.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
 
@@ -926,6 +927,8 @@ void CKDevelop::showTreeView(bool show){
     }
   }
 }
+
+
 void CKDevelop::showOutputView(bool show){
   if(bAutoswitch){
   	if(show){
@@ -946,6 +949,8 @@ void CKDevelop::showOutputView(bool show){
     }
   }
 }
+
+
 void CKDevelop::readOptions(){
   config->setGroup("General Options");
 
@@ -990,69 +995,62 @@ void CKDevelop::readOptions(){
 	// Dialogedit Toolbar	
   KToolBar::BarPosition kdlg_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("KDlgEdit ToolBar Position", KToolBar::Top);
   toolBar(ID_KDLG_TOOLBAR)->setBarPos(kdlg_tool_bar_pos);
-	bool kdlg_toolbar=config->readBoolEntry("show_kdlg_toolbar", true);
+  bool kdlg_toolbar=config->readBoolEntry("show_kdlg_toolbar", true);
   if(kdlg_toolbar){
-		kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
+    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
     enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
   }
   else{
     enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
   }
 	// Statusbar
-	bool statusbar=config->readBoolEntry("show_statusbar",true);
-	if(statusbar){
-	  view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
+  bool statusbar=config->readBoolEntry("show_statusbar",true);
+  if(statusbar){
+    view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
-	}
-	else{
-		enableStatusBar();
-	}
+  }
+  else{
+    enableStatusBar();
+  }
 	
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
-#warning FIXME: no separatorPos() in QSplitter
-#if 0
-	view->setSeparatorPos(config->readNumEntry("view_panner_pos",80));
-#endif
-	bool outputview= config->readBoolEntry("show_output_view", true);
-	if(outputview){
-	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
+  QValueList<int> sizes;   
+  sizes << config->readNumEntry("view_panner_pos", 80);
+  view->setSizes(sizes);
+  bool outputview= config->readBoolEntry("show_output_view", true);
+  if(outputview){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
-#if 0
-    output_view_pos=view->separatorPos();
-#endif
-	}
-	else{
+    toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
+    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
+    output_view_pos=view->sizes()[0];
+  }
+  else{
     output_view_pos=config->readNumEntry("output_view_pos", 80);
-	}
-#if 0	
-  top_panner->setSeparatorPos(config->readNumEntry("top_panner_pos", 213));
-#endif
-	bool treeview=config->readBoolEntry("show_tree_view", true);
-	if(treeview){
-	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
+  }
+  QValueList<int> top_panner_sizes;
+  top_panner_sizes << config->readNumEntry("top_panner_pos", 213);
+  top_panner->setSizes(top_panner_sizes);
+  bool treeview=config->readBoolEntry("show_tree_view", true);
+  if(treeview){
+    view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
-		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
-#if 0
-    tree_view_pos=top_panner->separatorPos();
-#endif
-	}
+    toolBar()->setButton(ID_VIEW_TREEVIEW, true);
+    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
+    tree_view_pos=top_panner->sizes()[0];
+  }
   else{
     tree_view_pos=config->readNumEntry("tree_view_pos", 213);
   }
 	
-#if 0
-  kdlg_top_panner->setSeparatorPos(config->readNumEntry("kdlg_top_panner_pos", 80));
-#endif
-	if(config->readBoolEntry("show_properties_view",true)){
-	  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-#if 0
-    properties_view_pos=kdlg_top_panner->separatorPos();
-#endif
-	}	
+  QValueList<int> kdlg_panner_sizes;
+  kdlg_panner_sizes << config->readNumEntry("kdlg_top_panner_pos", 80);
+  kdlg_top_panner->setSizes(kdlg_panner_sizes);
+  if(config->readBoolEntry("show_properties_view",true)){
+    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
+    properties_view_pos=kdlg_top_panner->sizes()[0];
+  }	
   else{
     properties_view_pos=config->readNumEntry("properties_view_pos", 80);
   }
@@ -1130,12 +1128,9 @@ void CKDevelop::saveOptions(){
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
   config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
 
-#warning FIXME: no separatorPos() in QSplitter
-#if 0
-  config->writeEntry("view_panner_pos",view->separatorPos());
-  config->writeEntry("top_panner_pos",top_panner->separatorPos());
-  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->separatorPos());
-#endif
+  config->writeEntry("view_panner_pos",view->sizes()[0]);
+  config->writeEntry("top_panner_pos",top_panner->sizes()[0]);
+  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->sizes()[0]);
 
   config->writeEntry("tree_view_pos",tree_view_pos);
   config->writeEntry("output_view_pos",output_view_pos);

@@ -59,7 +59,7 @@ class CAddExistingFileDlg;
 class QListViewItem;
 class CErrorMessageParser;
 class GrepDialog;
-#include "ceditwidget.h"
+class CEditWidget;
 #include "coutputwidget.h"
 #include "ctabctl.h"
 //#include "crealfileview.h"

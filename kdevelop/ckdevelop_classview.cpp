@@ -20,6 +20,7 @@
 #include <qcombobox.h>
 #include <qmessagebox.h>
 #include "ckdevelop.h"
+#include "ceditwidget.h"
 #include "cclassview.h"
 #include "caddclassmethoddlg.h"
 #include "caddclassattributedlg.h"

@@ -22,6 +22,7 @@
 #include "crealfileview.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
+#include "ceditwidget.h"
  
 void CKDevelop::initWhatsThis(){
   QWhatsThis::add(toolBar()->getButton(ID_PROJECT_OPEN), i18n("Open project\n\n"

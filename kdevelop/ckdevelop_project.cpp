@@ -28,6 +28,7 @@
 #include "cclassview.h"
 #include "crealfileview.h"
 #include "clogfileview.h"
+#include "ceditwidget.h"
 #include "cprjoptionsdlg.h"
 #include "caddexistingfiledlg.h"
 #include "cfilepropdlg.h"
@@ -813,10 +814,9 @@ void CKDevelop::slotProjectManual(){
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-#warning FIXME: no separatorPos in QSplitter
-#if 0
-    view->setSeparatorPos(output_view_pos);
-#endif
+    QValueList<int> sizes;
+    sizes << output_view_pos;
+    view->setSizes(sizes);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     QRect rMainGeom= view->geometry();
     view->resize(rMainGeom.width()-1,rMainGeom.height());

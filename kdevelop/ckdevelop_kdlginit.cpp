@@ -29,7 +29,7 @@
 #include "./kdlgedit/kdlgwidgets.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgitems.h"
-
+#include "./kwrite/kwview.h"
 #include "./kwrite/kguicommand.h"
 
 extern KGuiCmdManager cmdMngr;

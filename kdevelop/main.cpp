@@ -18,7 +18,7 @@
 #include "kstartuplogo.h"
 #include "ckdevinstall.h"
 #include "ckdevelop.h"
-
+#include "kwrite/kwview.h"
 
 
 

@@ -41,6 +41,7 @@
 #include "doctreeview.h"
 #include "clogfileview.h"
 #include "crealfileview.h"
+#include "ceditwidget.h"
 #include "ctoolclass.h"	
 #include "kswallow.h"
 #include "ctabctl.h"

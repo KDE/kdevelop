@@ -17,7 +17,7 @@
  ***************************************************************************/
 
 #include <iostream.h>
-
+#include <qdir.h>
 #include <qclipbrd.h>
 #include <qevent.h>
 #include <qfile.h>
@@ -53,6 +53,7 @@
 #include "ctoolclass.h"
 #include "cdocbrowser.h"
 #include "doctreeview.h"
+#include "ceditwidget.h"
 #include "cfinddoctextdlg.h"
 #include "cexecuteargdlg.h"
 #include "./kwrite/kwdoc.h"
@@ -667,17 +668,15 @@ void CKDevelop::slotViewTTreeView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
-#warning FIXME: no separatorPos() in QSplitter
-#if 0
-    tree_view_pos=top_panner->separatorPos();
-    top_panner->setSeparatorPos(0);
-#endif
+    tree_view_pos=top_panner->sizes()[0];
+    QValueList<int> sizes;
+    sizes << 0;
+    top_panner->setSizes(sizes);
   }
   else{
-#warning FIXME: no separatorPos() in QSplitter
-#if 0
-    top_panner->setSeparatorPos(tree_view_pos);
-#endif
+    QValueList<int> sizes;
+    sizes << tree_view_pos;
+    top_panner->setSizes(sizes);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW,true);
@@ -694,17 +693,15 @@ void CKDevelop::slotViewTOutputView(){
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
-#warning FIXME: no separatorPos() in QSplitter
-#if 0
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-#endif
+    output_view_pos=view->sizes()[0];
+    QValueList<int> sizes;
+    sizes << 100;
+    view->setSizes(sizes);
   }
   else{
-#warning FIXME: no separatorPos() in QSplitter
-#if 0
-    view->setSeparatorPos(output_view_pos);
-#endif
+    QValueList<int> sizes;
+    sizes << output_view_pos;
+    view->setSizes(sizes);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
@@ -1688,17 +1685,16 @@ void CKDevelop::slotHelpAbout(){
 void CKDevelop::slotKDlgViewPropView(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
-#warning FIXME: no separatorPos( in QSplitter
-#if 0
-    properties_view_pos=kdlg_top_panner->separatorPos();
-    kdlg_top_panner->setSeparatorPos(100);
-#endif
+    properties_view_pos=kdlg_top_panner->sizes()[0];
+    QValueList<int> sizes;
+    sizes << 100;
+    kdlg_top_panner->setSizes(sizes);
   }
   else{
-#if 0
-    kdlg_top_panner->setSeparatorPos(properties_view_pos);
+    QValueList<int> sizes;
+    sizes << properties_view_pos;
+    kdlg_top_panner->setSizes(sizes);
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-#endif
   }
   QRect rMainGeom= kdlg_top_panner->geometry();
   kdlg_top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
