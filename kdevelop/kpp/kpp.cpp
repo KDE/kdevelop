@@ -176,7 +176,7 @@ void Kpp::notYet(){
 /** Change the template that we will use to generate the spec file. */
 void Kpp::changeSpec(){
   QString qsTempFileName = "";
-  QString qsPath = locate("data", "kpp");
+  QString qsPath = locate("appdata", "kdevelop");
   cerr << "Path: " << qsPath << endl;
   qsTempFileName = KFileDialog::getOpenFileName(qsPath, "*.spec");
   if (qsTempFileName)
@@ -187,7 +187,7 @@ bool Kpp::loadPrefs(){
 // Here we want to load the default template for the application
 // The default packager
 // The default URL
-QString tempqsSpecTemplate = locate("data","template.spec");
+QString tempqsSpecTemplate = locate("appdata","template.spec");
 qsSpecTemplate = kcConfig->readEntry( "specTemplate", tempqsSpecTemplate);
 QLineEdit_8->setText(kcConfig->readEntry("url", "none"));
 QLineEdit_9->setText(kcConfig->readEntry("vendor", "none"));

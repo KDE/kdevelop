@@ -13,7 +13,7 @@ templates_DATA = AUTHORS_template COPYING_template ChangeLog_template \
                  icon_template  c.tar.gz nif_template lexical_template \
                  admin.tar.gz cvsignore_template qt2.tar.gz mini2.tar.gz \
                  normal2.tar.gz kdemdi.tar.gz qtmdi.tar.gz \
-                 qextmdi.tar.gz gnome.tar.gz
+                 qextmdi.tar.gz gnome.tar.gz kicker.tar.gz
 
 templatesdir = $(kde_datadir)/kdevelop/templates
 

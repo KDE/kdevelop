@@ -213,7 +213,7 @@ void CKAppWizard::initPages()
   kde2mdiitem = new QListViewItem (kdeentry,i18n("KDE 2 MDI"));
   kde2normalitem = new QListViewItem (kdeentry,i18n("KDE 2 Normal"));
   kde2miniitem = new QListViewItem (kdeentry,i18n("KDE 2 Mini"));
-
+  kickeritem = new QListViewItem( kdeentry, i18n("KDE 2 Kicker Applet"));
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
 
@@ -1148,11 +1148,14 @@ void CKAppWizard::generateEntries(const QString &filename) {
       else if (gtkminiitem->isSelected()) {
       entries << "gtkmini\n";
       }*/
+    else if (kickeritem->isSelected()) {
+      entries << "kickerapp\n";
+    }
     else if (customprojitem->isSelected()) {
       entries << "customproj\n";
     }
 
-    if (qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
+    if (kickeritem->isSelected()||qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
     kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
     {
       entries << "CONFIGARG\n";
@@ -1396,6 +1399,9 @@ void CKAppWizard::okPermited()
   else if (gnomenormalitem->isSelected()) {
     copysrc = locate("appdata", "templates/gnome.tar.gz");
   }
+  else if (kickeritem->isSelected()) {
+    copysrc = locate("appdata", "templates/kicker.tar.gz");
+  }
   else {
     hasTemplate = false;
   }
@@ -1410,7 +1416,7 @@ void CKAppWizard::okPermited()
 		p << "'" + copysrc + "'";
 		p << "'" + copydes + "';";
 
-    if(kde2miniitem->isSelected()||kde2normalitem->isSelected()||kde2mdiitem->isSelected()||qt2normalitem->isSelected()||qt2mdiitem->isSelected())
+    if(kickeritem->isSelected()||kde2miniitem->isSelected()||kde2normalitem->isSelected()||kde2mdiitem->isSelected()||qt2normalitem->isSelected()||qt2mdiitem->isSelected())
     {
       p << "cp";
 			p << "'" + adminsrc + "'";
@@ -1637,6 +1643,29 @@ void CKAppWizard::slotApplicationClicked() {
     apphelp->setText (i18n("Create a KDE-2 MDI (Multiple Document Interface) application with "
          "menubar, toolbar, statusbar and support for a "
          "document-view codeframe model."));
+  }
+  else if (kickeritem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  {
+    pm.load(locate("appdata", "pics/kicker.png"));
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setChecked(true);
+    datalink->setEnabled(true);
+    datalink->setChecked(true);
+    progicon->setEnabled(true);
+    progicon->setChecked(true);
+    miniicon->setEnabled(false);
+    miniicon->setChecked(false);
+    miniload->setEnabled(true);
+    iconload->setEnabled(false);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
+       m_finishButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a KDE-2kicker applet."));
   }
   else if (qt2normalitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -2131,6 +2160,9 @@ void CKAppWizard::slotProcessExited() {
   else if (gnomenormalitem->isSelected()) {
     project->setProjectType("normal_gnome");
   }
+  else if (kickeritem->isSelected()){
+   project->setProjectType("mini_kde2");
+  }
   else if (customprojitem->isSelected()) {
     project->setProjectType("normal_empty");
   }
@@ -2150,7 +2182,9 @@ void CKAppWizard::slotProcessExited() {
   project->setLDFLAGS (" ");
   project->setCXXFLAGS ("-O0 -g3 -Wall");
 
-
+  if ( kickeritem->isSelected()) {
+   project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11");
+  }
   if ( kde2miniitem->isSelected()) {
     project->setLDADD (" -lkdeui -lkdecore $(LIB_QT)");
   }
@@ -2167,7 +2201,7 @@ void CKAppWizard::slotProcessExited() {
     project->setLDADD (" $(GNOMEUI_LIBS) $(GNOME_LIBDIR)");
   }
 
-  if(project->isQt2Project() || project->isKDE2Project() || qextmdiitem->isSelected())
+  if(kickeritem->isSelected()||project->isQt2Project() || project->isKDE2Project() || qextmdiitem->isSelected())
   {
     KConfig * config = KGlobal::config();
     config->setGroup("QT2");
@@ -2192,7 +2226,7 @@ void CKAppWizard::slotProcessExited() {
   sub_dir_list.append(namelow);
   // Added 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
   if (kde2normalitem->isSelected() || kde2miniitem->isSelected()  ||
-    kde2mdiitem->isSelected())
+    kde2mdiitem->isSelected() || kickeritem->isSelected())
   {
      sub_dir_list.append("po");
   }
@@ -2204,7 +2238,12 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
-  makeAmInfo.type = "prog_main";
+  if(kickeritem->isSelected()){
+   makeAmInfo.type = "shared_library";
+  }
+  else {
+   makeAmInfo.type = "prog_main";
+  }
   sub_dir_list.clear();
   if (userdoc->isChecked()) {
     //    sub_dir_list.append("docs");
@@ -2496,7 +2535,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.type = DATA;
     fileInfo.dist = true;
     fileInfo.install = true;
-    if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
+    if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
       fileInfo.rel_name = namelow + "/" + namelow + ".desktop";
       fileInfo.install_location = "$(kde_appsdir)/Applications/" + namelow + ".desktop";
       project->addFileToProject (namelow + "/" + namelow + ".desktop",fileInfo);
@@ -2514,7 +2553,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
     if (!(qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
-      if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+      if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
         fileInfo.install_location = "$(kde_icondir)/medium/locolor/apps/" + namelow + ".xpm";
       else
         fileInfo.install_location = "$(kde_icondir)/" + namelow + ".xpm";
@@ -2532,7 +2571,7 @@ void CKAppWizard::slotProcessExited() {
     fileInfo.dist = true;
     if (!( qt2normalitem->isSelected()|| qt2mdiitem->isSelected() || qextmdiitem->isSelected())) {
       fileInfo.install = true;
-      if (kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
+      if (kickeritem->isSelected()||kde2miniitem->isSelected() || kde2normalitem->isSelected() || kde2mdiitem->isSelected())
         fileInfo.install_location = "$(kde_icondir)/small/locolor/apps/" + namelow + ".xpm";
       else
         fileInfo.install_location = "$(kde_minidir)/" + namelow + ".xpm";
@@ -2616,7 +2655,7 @@ void CKAppWizard::slotProcessExited() {
     project->setFilters("GNU",group_filters);
   }
 
-  if (project->isKDE2Project() || project->isKDEProject())
+  if (kickeritem->isSelected()||project->isKDE2Project() || project->isKDEProject())
   {
     group_filters.clear();
     group_filters.append("*.po");
