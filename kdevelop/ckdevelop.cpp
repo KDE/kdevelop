@@ -3315,7 +3315,8 @@ void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
 //
 //
 //}
-void CKDevelop::slotProcessExited(KProcess* proc){
+void CKDevelop::slotProcessExited(KProcess* proc)
+{
   setToolMenuProcess(true);
   slotStatusMsg(i18n("Ready."));
   bool ready = true;
@@ -3328,8 +3329,8 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       result.sprintf(i18n("*** exit-code: %i ***\n"),
          proc->exitStatus());
 
-    // 0x0 access test
-    if (prj == 0L) return;
+    // 0x0 access test.
+    if (prj == 0 && next_job != "load_new_prj" ) return;
 
     if (next_job=="doc_refresh")
     {
@@ -3414,7 +3415,6 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     }
     else if( next_job == "load_new_prj")
     {
-
       if(project) {  //now that we know that a new project will be built we can close the previous one   {
         QString old_project = prj->getProjectFile();
         if(!slotProjectClose()) {      //the user may have pressed cancel in which case the state is undetermined
@@ -3422,7 +3422,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
           if (pProj != 0L) {
             readProjectFile(old_project, pProj);
             slotViewRefresh();
-					}
+          }
         }
         else {
           QDir dir(QDir::current());
