@@ -13,6 +13,8 @@
 #include "cppsupportpart.h"
 #include "backgroundparser.h"
 #include "store_walker.h"
+#include "cppsupportfactory.h"
+#include "kdevsourceformatter.h"
 
 #include <qradiobutton.h>
 #include <qstringlist.h>
@@ -28,6 +30,7 @@
 #include <klocale.h>
 #include <qfile.h>
 #include <qregexp.h>
+#include <kconfig.h>
 
 
 #define WIDGET_CAPTION_NAME "widget/property|name=caption/string"
@@ -94,6 +97,15 @@ m_newFileNames(newFileNames), m_cppSupport( cppSupport )
   m_formFile = formFile;
   readUiFile();
   m_creatingNewSubclass = true;
+
+  KConfig *config = CppSupportFactory::instance()->config();
+  if (config)
+  {
+    config->setGroup("Subclassing");
+    reformatDefault_box->setChecked(config->readBoolEntry("Reformat Source", 0));
+    if (reformatDefault_box->isChecked())
+        reformat_box->setChecked(true);
+  }
 }
 
 
@@ -106,8 +118,17 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
   m_formFile = formFile;
   m_creatingNewSubclass = false;
   m_filename = filename;
-  ClassStore classcontainer;
 
+  KConfig *config = CppSupportFactory::instance()->config();
+  if (config)
+  {
+    config->setGroup("Subclassing");
+    reformatDefault_box->setChecked(config->readBoolEntry("Reformat Source", 0));
+    if (reformatDefault_box->isChecked())
+        reformat_box->setChecked(true);
+  }
+
+  ClassStore classcontainer;
 
   // sync
   while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
@@ -346,6 +367,13 @@ bool SubclassingDlg::saveBuffer(QString &buffer, const QString& filename)
 void SubclassingDlg::accept()
 //===========================
 {
+  KConfig *config = CppSupportFactory::instance()->config();
+  if (config)
+  {
+    config->setGroup("Subclassing");
+    config->writeEntry("Reformat Source", reformatDefault_box->isChecked());
+  }
+
   unsigned int i;
 
   // h - file
@@ -417,6 +445,9 @@ void SubclassingDlg::accept()
     }
   }
 
+  if (reformat_box->isChecked())
+    buffer = m_cppSupport->sourceFormatter()->formatSource(buffer);
+
   if (m_creatingNewSubclass)
     saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".h");
   else
@@ -456,6 +487,10 @@ void SubclassingDlg::accept()
     replace(impl,"$QTBASECLASS$", m_qtBaseClassName);
     replace(buffer,"/*$SPECIALIZATION$*/",impl);
   }
+
+  if (reformat_box->isChecked())
+    buffer = m_cppSupport->sourceFormatter()->formatSource(buffer);
+
   if (m_creatingNewSubclass)
     saveBuffer(buffer,m_formPath + "/" + m_edFileName->text()+".cpp");
   else

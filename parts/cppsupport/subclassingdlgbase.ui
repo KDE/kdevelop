@@ -30,7 +30,7 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+                <widget class="QLabel" row="2" column="0" rowspan="1" colspan="3">
                     <property name="name">
                         <cstring>textLabel1</cstring>
                     </property>
@@ -38,7 +38,49 @@
                         <string>Specialize following slots:</string>
                     </property>
                 </widget>
-                <widget class="QListView" row="3" column="0" rowspan="1" colspan="2">
+                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_edClassName</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Class name:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>File name:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>m_edFileName</cstring>
+                    </property>
+                </widget>
+                <widget class="QListView" row="3" column="0" rowspan="1" colspan="3">
                     <column>
                         <property name="text">
                             <string>Method</string>
@@ -98,30 +140,28 @@
                         <cstring>m_slotView</cstring>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1">
+                <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>m_edClassName</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel2</cstring>
+                        <cstring>reformat_box</cstring>
                     </property>
                     <property name="text">
-                        <string>Class name:</string>
+                        <string>Reformat Source</string>
                     </property>
                 </widget>
-                <widget class="QLabel" row="1" column="0">
+                <widget class="QCheckBox" row="4" column="2">
                     <property name="name">
-                        <cstring>textLabel3</cstring>
+                        <cstring>reformatDefault_box</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>4</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>File name:</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>m_edFileName</cstring>
+                        <string>Reformat Source by Default</string>
                     </property>
                 </widget>
             </grid>
