@@ -167,12 +167,12 @@ void KTabZoomWidget::selected(int index)
     }
 }
 
-void KTabZoomWidget::isDocked() const
+bool KTabZoomWidget::isDocked() const
 {
   return d->m_docked;
 }
 
-void KTabZoomWidget::isRaised() const
+bool KTabZoomWidget::isRaised() const
 {
   return d->m_popup->isVisible();
 }
