@@ -1033,7 +1033,7 @@ void CClassView::buildInitalClassTree()
 // CClassToolDlg*
 CClassPropertiesDlgImpl *CClassView::createCTDlg(CParsedClass* aClass, int pgn)
 {
-  CClassPropertiesDlgImpl *ctDlg = new CClassPropertiesDlgImpl( (CTPACTION) pgn, NULL );
+  CClassPropertiesDlgImpl *ctDlg = new CClassPropertiesDlgImpl( this, (CTPACTION) pgn, NULL );
 
   cerr << "CClassView::createCTDlg() : creating CClassToolDlg as child of CClassPropertiesDlgImpl::*tpgClassView:"<< endl;
   CClassToolDlg* tool = new CClassToolDlg( ctDlg -> CVLayout );

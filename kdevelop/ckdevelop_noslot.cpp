@@ -367,7 +367,7 @@ bool CKDevelop::fileSaveAs(){
   TEditInfo* actual_info=0;
   TEditInfo* old_info=0;
   TEditInfo* search_info;
-  int message_result=1; // simulate ok state... this could change by one of the following messageboxes
+  int message_result=KMessageBox::Yes; // simulate ok state... this could change by one of the following messageboxes
 
   oldName=edit_widget->getName();
   if (bAutosave)
@@ -394,7 +394,7 @@ bool CKDevelop::fileSaveAs(){
                             i18n("Do you really want to save the file\nas another type of document?"),
                             i18n("Save as new type of document?"));
 
-    if(message_result==1 && QFile::exists(name))
+    if(message_result==KMessageBox::Yes && QFile::exists(name))
     {
       message_result=KMessageBox::warningYesNoCancel(this,
                         i18n("\nThe file\n\n")+name+
@@ -402,10 +402,10 @@ bool CKDevelop::fileSaveAs(){
                         i18n("File exists!"));
     }
     
-  } while (message_result == 2); // repeat it on 'no'
+  } while (message_result == KMessageBox::No); // repeat it on 'no'
 
 
-  if (message_result==3){
+  if (message_result==KMessageBox::Cancel){
      //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
       if (bAutosave)
        saveTimer->start(saveTimeout);

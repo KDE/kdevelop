@@ -1242,6 +1242,9 @@ void CKDevelop::initConnections(){
           SLOT(slotCVViewDefinition(const char *, const char *,THType,THType)));
   connect(class_tree, SIGNAL(signalAddMethod(const char *)), SLOT(slotCVAddMethod(const char * )));
   connect(class_tree, SIGNAL(signalAddAttribute(const char *)), SLOT(slotCVAddAttribute(const char * )));
+  connect(class_tree,
+          SIGNAL(sigAddAttribute( const char*, CParsedAttribute*)),
+		     SLOT( slotCVAddAttribute( const char*, CParsedAttribute*)));
   connect(class_tree, SIGNAL(signalMethodDelete(const char *,const char *)), SLOT(slotCVDeleteMethod(const char *,const char *)));
   connect(class_tree, SIGNAL(popupHighlighted(int)), SLOT(statusCallback(int)));
   connect(class_tree, SIGNAL(selectFile(const QString &, int)), SLOT(slotSwitchToFile(const QString &, int)));

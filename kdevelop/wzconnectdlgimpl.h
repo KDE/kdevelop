@@ -36,7 +36,7 @@ enum CTPACTION {CTPVIEW=0, CTPADDATTR, CTPADDMETH, CTPADDSIGNAL, CTPADDSLOT, CTP
 #include <kconfig.h>
 
 class CClassToolDlg;
-
+class CClassView;
 class CClassPropertiesDlgImpl : public CClassPropertiesDlg
 { 
     Q_OBJECT
@@ -44,6 +44,7 @@ class CClassPropertiesDlgImpl : public CClassPropertiesDlg
 public:
         CClassPropertiesDlgImpl( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
         CClassPropertiesDlgImpl( CTPACTION action, CClassToolDlg* ctdlg, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+	     CClassPropertiesDlgImpl( CClassView* cv, CTPACTION action, CClassToolDlg* ctdlg, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
     ~CClassPropertiesDlgImpl();
   /**  */
   void setCurrentClassName ( const QString& );
@@ -74,6 +75,7 @@ public:
   /**  */
   void setClassToolDlg( CClassToolDlg* ct);
 public slots:
+    void slotClone();
     void slotBtnApply();
     void slotBtnUndo();
     void slotSigClassNameEditEnter();
@@ -154,6 +156,9 @@ signals: // Signals
   void sigAddMethod( const char *, CParsedMethod*);
   void sigAddAttribute( const char*, CParsedAttribute*);
   void sigSigSlotMapImplement ( CParsedClass*, const QString&, CParsedMethod* );
+public: // Public attributes
+  /**  */
+  CClassView* class_tree;
 };
 
 #endif // CCLASSPROPERTIESDLGIMPL_H

@@ -17,7 +17,7 @@ All in one dialog.</comment>
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>541</width>
+            <width>533</width>
             <height>499</height>
         </rect>
     </property>
@@ -582,34 +582,6 @@ All in one dialog.</comment>
                             </widget>
                         </hbox>
                     </widget>
-                    <widget row="2"  column="0"  rowspan="1"  colspan="3" >
-                        <class>QGroupBox</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>GroupBox3_2_2</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>title</name>
-                            <string>Documentation:</string>
-                        </property>
-                        <hbox>
-                            <property stdset="1">
-                                <name>margin</name>
-                                <number>11</number>
-                            </property>
-                            <property stdset="1">
-                                <name>spacing</name>
-                                <number>6</number>
-                            </property>
-                            <widget>
-                                <class>QMultiLineEdit</class>
-                                <property stdset="1">
-                                    <name>name</name>
-                                    <cstring>meMethDoc_2</cstring>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
                     <widget row="0"  column="1"  rowspan="2"  colspan="1" >
                         <class>Line</class>
                         <property stdset="1">
@@ -621,7 +593,7 @@ All in one dialog.</comment>
                             <enum>Vertical</enum>
                         </property>
                     </widget>
-                    <widget row="0"  column="2" >
+                    <widget row="0"  column="2"  rowspan="1"  colspan="3" >
                         <class>QButtonGroup</class>
                         <property stdset="1">
                             <name>name</name>
@@ -679,7 +651,7 @@ All in one dialog.</comment>
                             </widget>
                         </hbox>
                     </widget>
-                    <widget row="1"  column="2" >
+                    <widget row="1"  column="2"  rowspan="1"  colspan="3" >
                         <class>QButtonGroup</class>
                         <property stdset="1">
                             <name>name</name>
@@ -748,6 +720,87 @@ All in one dialog.</comment>
                             </widget>
                         </hbox>
                     </widget>
+                    <widget row="3"  column="0"  rowspan="1"  colspan="5" >
+                        <class>QGroupBox</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>GroupBox3_2_2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>title</name>
+                            <string>Documentation:</string>
+                        </property>
+                        <hbox>
+                            <property stdset="1">
+                                <name>margin</name>
+                                <number>11</number>
+                            </property>
+                            <property stdset="1">
+                                <name>spacing</name>
+                                <number>6</number>
+                            </property>
+                            <widget>
+                                <class>QMultiLineEdit</class>
+                                <property stdset="1">
+                                    <name>name</name>
+                                    <cstring>meMethDoc_2</cstring>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <spacer row="2"  column="4" >
+                        <property>
+                            <name>name</name>
+                            <cstring>Spacer2_2</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>sizeType</name>
+                            <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget row="2"  column="3" >
+                        <class>QPushButton</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>btnClone</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>text</name>
+                            <string>Clone a function...</string>
+                        </property>
+                    </widget>
+                    <spacer row="2"  column="0" >
+                        <property>
+                            <name>name</name>
+                            <cstring>Spacer1</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property stdset="1">
+                            <name>sizeType</name>
+                            <enum>Expanding</enum>
+                        </property>
+                        <property>
+                            <name>sizeHint</name>
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </grid>
             </widget>
             <widget>
@@ -1323,6 +1376,13 @@ All in one dialog.</comment>
                             <name>name</name>
                             <cstring>cbImplMethodList_2</cstring>
                         </property>
+                        <property stdset="1">
+                            <name>maximumSize</name>
+                            <size>
+                                <width>500</width>
+                                <height>100</height>
+                            </size>
+                        </property>
                     </widget>
                     <widget>
                         <class>QGroupBox</class>
@@ -1523,7 +1583,13 @@ function member.</string>
         <receiver>CClassPropertiesDlg</receiver>
         <slot>slotImplMethodSelected(const QString&amp;)</slot>
     </connection>
-    <slot access="protected">slotMethVirtualState(int)</slot>
+    <connection>
+        <sender>btnClone</sender>
+        <signal>clicked()</signal>
+        <receiver>CClassPropertiesDlg</receiver>
+        <slot>slotClone()</slot>
+    </connection>
+    <slot access="public">slotClone()</slot>
     <slot access="protected">slotAddSlotState(int)</slot>
     <slot access="public">slotBtnApply()</slot>
     <slot access="public">slotBtnUndo()</slot>
@@ -1532,6 +1598,7 @@ function member.</string>
     <slot access="protected">slotMethModifierChanged(int)</slot>
     <slot access="protected">slotMethNameChanged( const QString &amp; )</slot>
     <slot access="protected">slotMethTypeChanged( const QString &amp; )</slot>
+    <slot access="protected">slotMethVirtualState(int)</slot>
     <slot access="protected">slotSigAccessChanged(int)</slot>
     <slot access="protected">slotSigAddSignalState(int)</slot>
     <slot access="public">slotSigClassNameEditEnter()</slot>

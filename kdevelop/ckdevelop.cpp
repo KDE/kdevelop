@@ -178,22 +178,22 @@ void CKDevelop::slotFileClose()
     if (bAutosave)
       saveTimer->start(saveTimeout);
   
-    if (message_result == 1)
+    if (message_result == KMessageBox::Yes)
     { // yes
       if (isUntitled(filename))
       {
         if (!fileSaveAs())
-          message_result=3;    // simulate here cancel because fileSaveAs failed....
+          message_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
       }
       else
       {
         saveFileFromTheCurrentEditWidget();
         if (edit_widget->isModified())
-          message_result=3;       // simulate cancel because doSave went wrong!
+          message_result=KMessageBox::Cancel;       // simulate cancel because doSave went wrong!
       }
     }
   
-    if (message_result == 3) // cancel
+    if (message_result == KMessageBox::Cancel) // cancel
     {
       setInfoModified(filename, edit_widget->isModified());
       slotStatusMsg(i18n("Ready."));
@@ -248,7 +248,7 @@ void CKDevelop::slotFileCloseAll()
       // create the save project messagebox
 
       // what to do
-      if(result==1) // Yes- only save the actual file
+      if(result==KMessageBox::Yes) // Yes- only save the actual file
       {
         // save file as if Untitled and close file
         if(isUntitled(actual_info->filename))
@@ -268,7 +268,7 @@ void CKDevelop::slotFileCloseAll()
         }
       }
 
-      if(result==2) // No - no save but close
+      if(result==KMessageBox::No) // No - no save but close
       {
         handledNames.append(actual_info->filename);
         actual_info->modified=false;
@@ -276,13 +276,13 @@ void CKDevelop::slotFileCloseAll()
         next_info=edit_infos.first(); // start again... 'cause we deleted an entry
       }
 
-      if(result==3) // Save all
-      {
-        slotFileSaveAll();
-        break;
-      }
+//      if(result==3) // Save all
+//      {
+//        slotFileSaveAll();
+//        break;
+//      }
 
-      if(result==4) // Cancel
+      if(result==KMessageBox::Cancel) // Cancel
       {
         cont=false;
         break;

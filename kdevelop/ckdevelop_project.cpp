@@ -344,11 +344,11 @@ void CKDevelop::slotAddExistingFiles(){
 				                            source_name+
 				                            i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"),
 				                        i18n("File exists!"));
-      if(result==1)
+      if(result==KMessageBox::Yes)
         copy = true;
-      if(result==2)
+      if(result==KMessageBox::No)
         copy = false;
-      if(result==3){
+      if(result==KMessageBox::Cancel){
         setCursor( KCursor::arrowCursor() );
         break;;
       }
