@@ -1,3 +1,8 @@
+1999-12-20 jbb <jbb@ihug.co.nz>
+	* added debugger configuration - allows user to select between
+      an external debugger of their choice or the internal debugger.
+      Internal debug options are still to be added.
+
 1999-12-18 jbb <jbb@ihug.co.nz>
 	* update to kwrite icon border code adding
       more debug menu items
