@@ -1,5 +1,6 @@
 EXTRA_DIST =tip.database
 
+SUBDIRS = welcome
 
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/nl/kdevelop/
