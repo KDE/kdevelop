@@ -33,30 +33,32 @@
                 <attribute name="title">
                     <string>&amp;Documentation Collections</string>
                 </attribute>
-                <grid>
+                <hbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QToolBox" row="0" column="0">
+                    <widget class="QWidgetStack">
                         <property name="name">
-                            <cstring>collectionsBox</cstring>
+                            <cstring>viewHolder</cstring>
                         </property>
-                        <property name="currentIndex">
-                            <number>0</number>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <widget class="QWidget">
                             <property name="name">
-                                <cstring>page2</cstring>
+                                <cstring>WStackPage</cstring>
                             </property>
-                            <property name="backgroundMode">
-                                <enum>PaletteBackground</enum>
-                            </property>
-                            <attribute name="label">
-                                <string>No Collections</string>
+                            <attribute name="id">
+                                <number>0</number>
                             </attribute>
                         </widget>
                     </widget>
-                    <widget class="QLayoutWidget" row="0" column="1">
+                    <widget class="QLayoutWidget">
                         <property name="name">
                             <cstring>layout1</cstring>
                         </property>
@@ -107,7 +109,7 @@
                             </spacer>
                         </vbox>
                     </widget>
-                </grid>
+                </hbox>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -522,12 +524,6 @@
         <signal>clicked()</signal>
         <receiver>DocGlobalConfigWidgetBase</receiver>
         <slot>removeCollectionButtonClicked()</slot>
-    </connection>
-    <connection>
-        <sender>collectionsBox</sender>
-        <signal>currentChanged(int)</signal>
-        <receiver>DocGlobalConfigWidgetBase</receiver>
-        <slot>collectionsBoxCurrentChanged(int)</slot>
     </connection>
 </connections>
 <tabstops>

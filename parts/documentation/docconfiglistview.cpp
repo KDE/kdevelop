@@ -38,6 +38,7 @@ DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
     setColumnWidthMode(3, QListView::Maximum);
 //    setColumnWidthMode(4, QListView::Maximum);
     setAllColumnsShowFocus(true);
+    setResizeMode( QListView::LastColumn );
 
     connect(this, SIGNAL(clicked(QListViewItem*, const QPoint&, int)),
         this, SLOT(clickedItem(QListViewItem*, const QPoint&, int )));

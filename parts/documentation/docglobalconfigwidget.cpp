@@ -26,6 +26,7 @@
 #include <qlayout.h>
 #include <qtoolbox.h>
 #include <qcheckbox.h>
+#include <qwidgetstack.h>
 
 #include <kdebug.h>
 #include <kconfig.h>
@@ -44,6 +45,7 @@
 #include "documentation_part.h"
 #include "documentation_widget.h"
 #include "editcatalogdlg.h"
+#include "addcatalogdlg.h"
 #include "contentsview.h"
 #include "indexview.h"
 #include "docutils.h"
@@ -52,20 +54,13 @@ DocGlobalConfigWidget::DocGlobalConfigWidget(DocumentationPart *part,
     DocumentationWidget *widget, QWidget *parent, const char *name, WFlags fl)
     :DocGlobalConfigWidgetBase(parent, name, fl), m_part(part), m_widget(widget)
 {
-    //load catalog settings
-    if (collectionsBox->currentItem())
-        collectionsBox->removeItem(collectionsBox->currentItem());
+    m_View = new DocConfigListView( viewHolder );
+    viewHolder->addWidget( m_View );
+    viewHolder->raiseWidget( m_View );
     for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
         it != m_part->m_plugins.constEnd(); ++it)
     {
-        QWidget *contentsContainter = new QWidget(this);
-        QVBoxLayout *cl = new QVBoxLayout(contentsContainter, 0, 0);
-        DocConfigListView *view = new DocConfigListView(contentsContainter);
-        cl->addWidget(view);
-        int box = collectionsBox->addItem(contentsContainter, (*it)->pluginName());
-        m_pluginBoxes[box] = *it;
-        m_pluginViews[box] = view;
-        (*it)->loadCatalogConfiguration(m_pluginViews[box]);
+        (*it)->loadCatalogConfiguration( m_View );
     }
 
     KConfig *config = m_part->config();
@@ -134,7 +129,7 @@ void DocGlobalConfigWidget::removeCollectionButtonClicked()
     ConfigurationItem *item = dynamic_cast<ConfigurationItem*>(activeView()->currentItem());
     if (!item)
         return;
-    activePlugin()->deleteCatalogConfiguration(item);
+    item->docPlugin()->deleteCatalogConfiguration(item);
     delete activeView()->currentItem();
 }
 
@@ -143,40 +138,37 @@ void DocGlobalConfigWidget::editCollectionButtonClicked()
     ConfigurationItem *item = dynamic_cast<ConfigurationItem*>(activeView()->currentItem());
     if (!item)
         return;
-    EditCatalogDlg dlg(activePlugin(), this, "edit collection dlg", true);
+    EditCatalogDlg dlg( item->docPlugin(), this, "edit collection dlg", true);
     dlg.setURL(item->url());
     dlg.setTitle(item->title());
     if (dlg.exec())
-        activePlugin()->editCatalogConfiguration(item, dlg.title(), dlg.url());
+        item->docPlugin()->editCatalogConfiguration(item, dlg.title(), dlg.url());
 }
 
 void DocGlobalConfigWidget::addCollectionButtonClicked()
 {
-    EditCatalogDlg dlg(activePlugin(), this, "edit collection dlg", true);
-    if (dlg.exec())
-        activePlugin()->addCatalogConfiguration(activeView(), dlg.title(), dlg.url());
-}
-
-DocumentationPlugin *DocGlobalConfigWidget::activePlugin()
-{
-    return m_pluginBoxes[collectionsBox->currentIndex()];
+	AddCatalogDlg dlg( m_part->m_plugins, this, "add collection dlg", true);
+	if (dlg.exec())
+	{
+		dlg.plugin()->addCatalogConfiguration(activeView(), dlg.title(), dlg.url());
+	}
 }
 
 KListView *DocGlobalConfigWidget::activeView()
 {
-    return m_pluginViews[collectionsBox->currentIndex()];
+    return m_View;
 }
 
 void DocGlobalConfigWidget::accept()
 {
     //write catalog settings
-    for (QMap<int, DocumentationPlugin*>::const_iterator it = m_pluginBoxes.constBegin();
-        it != m_pluginBoxes.constEnd(); ++ it)
-    {
-        it.data()->saveCatalogConfiguration(m_pluginViews[it.key()]);
-        //@todo: take restrictions into account
-        it.data()->reinit(m_widget->contents(), m_widget->index(), QStringList());
-    }
+	for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin(); 
+		it != m_part->m_plugins.constEnd(); ++it)
+	{
+		(*it)->saveCatalogConfiguration( m_View );
+		//@todo: take restrictions into account
+		(*it)->reinit(m_widget->contents(), m_widget->index(), QStringList());
+	}
 
     KConfig *config = m_part->config();
     //write full text search settings

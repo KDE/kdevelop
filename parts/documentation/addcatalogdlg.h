@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2004 by Alexander Dymo                                  *
- *   cloudtemple@mksat.net                                                 *
+ *   Copyright (C) 2005 by Jens Dagerbo                                    *
+ *   jens.dagerbo@swipnet.se                                               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,51 +17,37 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef DOCGLOBALCONFIGWIDGET_H
-#define DOCGLOBALCONFIGWIDGET_H
+ 
+#ifndef ADDCATALOGDLG_H
+#define ADDCATALOGDLG_H
 
-#include "docglobalconfigwidgetbase.h"
+#include <qvaluelist.h>
+#include "addcatalogdlgbase.h"
 
-#include <qmap.h>
-
-class DocumentationPart;
-class DocumentationWidget;
 class DocumentationPlugin;
-class KListView;
 
-class DocGlobalConfigWidget : public DocGlobalConfigWidgetBase
+class AddCatalogDlg: public AddCatalogDlgBase
 {
-    Q_OBJECT
-public:
-    DocGlobalConfigWidget(DocumentationPart *part, DocumentationWidget *widget,
-        QWidget *parent = 0, const char *name = 0, WFlags fl = 0);
-    ~DocGlobalConfigWidget();
-    /*$PUBLIC_FUNCTIONS$*/
-
-public slots:
-    /*$PUBLIC_SLOTS$*/
-    virtual void collectionsBoxCurrentChanged(int box);
-    
-    virtual void removeCollectionButtonClicked();
-    virtual void editCollectionButtonClicked();
-    virtual void addCollectionButtonClicked();
-    
-    virtual void accept();
-
-protected:
-    /*$PROTECTED_FUNCTIONS$*/
-    KListView *activeView();
-    void updateConfigForHTMLParts();
-        
-protected slots:
-    /*$PROTECTED_SLOTS$*/
-
-private:
-    DocumentationPart *m_part;
-    DocumentationWidget *m_widget;
-    
-    KListView * m_View;
+	Q_OBJECT
+	public:
+		AddCatalogDlg( QValueList<DocumentationPlugin*> const & plugins, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+		~AddCatalogDlg();
+	
+		QString title() const;
+		void setTitle(const QString &title);
+		QString url() const;
+		void setURL(const QString &url);
+		DocumentationPlugin * plugin();
+		
+	public slots:
+		virtual void locationURLChanged(const QString &text);
+		virtual void docTypeChanged( const QString & );
+	
+	protected slots:
+		virtual void accept();
+	
+	private:
+		QValueList<DocumentationPlugin*> const & m_plugins;
 };
 
 #endif
-
