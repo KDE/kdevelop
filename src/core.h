@@ -23,6 +23,7 @@ class KDevFactory;
 class DocumentationPart;
 class KAction; 
 
+
 #include "keditor/editor.h"
 
 
@@ -53,7 +54,10 @@ protected:
     virtual KParts::PartManager *partManager() const { return manager; };
 
     KEditor::Editor *editor();
-        
+    
+    virtual QStatusBar *statusBar() const;
+
+    
 private slots:
     void activePartChanged(KParts::Part *part);
     void partCountChanged();

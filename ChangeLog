@@ -1,3 +1,8 @@
+2001-08-02  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
+    
+    * Exposed the status bar through the kdevcore interface
+    * Made cppsupport display the parsing progress in the statusbar
+ 
 2001-08-02  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Distpart:

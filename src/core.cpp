@@ -1286,4 +1286,10 @@ void Core::slotDocumentSaved(KEditor::Document *doc)
 }
 
 
+QStatusBar *Core::statusBar() const
+{
+  return win->statusBar();
+}
+
+
 #include "core.moc"

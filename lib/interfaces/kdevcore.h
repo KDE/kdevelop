@@ -15,6 +15,9 @@ namespace KEditor {
 }
 
 
+class QStatusBar;
+
+
 class Context
 {
 public:
@@ -217,7 +220,14 @@ public:
      * The interface to the editor used
      */
     virtual KEditor::Editor *editor() = 0;
-	
+
+
+    /**
+     * The statusbar used
+     */
+    virtual QStatusBar *statusBar() const = 0;
+
+      
 signals:
 
     /**
