@@ -205,6 +205,8 @@ public: // Methods to store project options
   
   void setBinPROGRAM(const char *name)        { writeGroupEntry( "Config for BinMakefileAm", "bin_program", name ); }
 
+  void setDirWhereMakeWillBeCalled(const char *name)        { writeGroupEntry( "General", "dir_where_make_will_be_called", name ); }
+
 
   /** Store all open groups in the LFV*/
   void setLFVOpenGroups(QStrList groups);
@@ -269,6 +271,8 @@ public: // Methods to fetch project options
   QString getConfigureArgs()  { return readGroupEntry( "General", "configure_args" ); }
 
   QString getBinPROGRAM()     { return readGroupEntry( "Config for BinMakefileAm", "bin_program" ); }
+
+  QString getDirWhereMakeWillBeCalled() { return readGroupEntry( "General", "dir_where_make_will_be_called" ); }
 
   /** Fetch all groups in the logic file view. */
   void getLFVGroups(QStrList& groups);
