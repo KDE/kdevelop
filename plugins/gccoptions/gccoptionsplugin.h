@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _GCCOPTIONS_H_
-#define _GCCOPTIONS_H_
+#ifndef _GCCOPTIONSPLUGIN_H_
+#define _GCCOPTIONSPLUGIN_H_
 
 #include <qlist.h>
 #include <kdialogbase.h>
@@ -19,8 +19,8 @@
 
 
 class GeneralTab;
-class CodeGenTab;
 class OptimizationTab;
+class G77Tab;
 class Warnings1Tab;
 class Warnings2Tab;
 
@@ -30,20 +30,23 @@ class GccOptionsPlugin : public KDevCompilerOptions
     Q_OBJECT
 
 public:
-    GccOptionsPlugin( bool cpp, QObject *parent=0, const char *name=0 );
+    enum Type { GCC, GPP, G77 };
+    GccOptionsPlugin( Type type, QObject *parent=0, const char *name=0 );
     ~GccOptionsPlugin();
 
+    static QString captionForType(Type type);
+    
     virtual QString exec(QWidget *parent, const QString &flags);
 
 private:
-    bool withcpp;
+    Type gcctype;
 };
 
 
 class GccOptionsDialog : public KDialogBase
 {
 public:
-    GccOptionsDialog(bool cpp, QWidget *parent=0, const char *name=0 );
+    GccOptionsDialog( GccOptionsPlugin::Type type, QWidget *parent=0, const char *name=0 );
     ~GccOptionsDialog();
 
     void setFlags(const QString &flags);
@@ -51,8 +54,8 @@ public:
 
 private:
     GeneralTab *general;
-    CodeGenTab *codegen;
     OptimizationTab *optimization;
+    G77Tab *g77;
     Warnings1Tab *warnings1;
     Warnings2Tab *warnings2;
 };

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Portland Group Fortran77 compiler
+Name=Pgf77Options
+ServiceTypes=KDevelop/CompilerOptions
+X-KDE-Library=libkdevpgioptions
+X-KDevelop-Language=Fortran
+X-KDevelop-Args=pgf77

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Portland Group High Performance Fortran compiler
+Name=PghpfOptions
+ServiceTypes=KDevelop/CompilerOptions
+X-KDE-Library=libkdevpgioptions
+X-KDevelop-Language=Fortran
+X-KDevelop-Args=pghpf

@@ -9,27 +9,26 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FIXEDFORMPARSER_H_
-#define _FIXEDFORMPARSER_H_
+#ifndef _PGIOPTIONSFACTORY_H_
+#define _PGIOPTIONSFACTORY_H_
 
-#include <qstring.h>
-#include <qtextstream.h>
-#include <kregexp.h>
-
-class ClassStore;
+#include <klibloader.h>
 
 
-class FixedFormParser
+class PgiOptionsFactory : public KLibFactory
 {
-public:
-    FixedFormParser(ClassStore *classstore);
+    Q_OBJECT
 
-    void parse(const QString &fileName);
-    
+public:
+    PgiOptionsFactory( QObject *parent=0, const char *name=0 );
+    ~PgiOptionsFactory();
+
+    virtual QObject* createObject( QObject *parent, const char *name,
+                                   const char *classname, const QStringList &args);
+    static KInstance *instance();
+
 private:
-    void process(const QCString &line, const QString &fileName, int lineNum);
-    ClassStore *store;
-    KRegExp functionre, subroutinere;
+    static KInstance *s_instance;
 };
 
 #endif

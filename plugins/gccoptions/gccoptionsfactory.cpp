@@ -44,10 +44,13 @@ QObject *GccOptionsFactory::createObject(QObject *parent, const char *name,
 {
     if (args.count() > 0 && qstrcmp(args[0].latin1(), "gcc") == 0) {
         kdDebug(9008) << "Building GccOptions" << endl;
-        return new GccOptionsPlugin(false, parent, name);
+        return new GccOptionsPlugin(GccOptionsPlugin::GCC, parent, name);
     } else if (args.count() > 0 && qstrcmp(args[0].latin1(), "g++") == 0) {
         kdDebug(9008) << "Building GppOptions" << endl;
-        return new GccOptionsPlugin(true, parent, name);
+        return new GccOptionsPlugin(GccOptionsPlugin::GPP, parent, name);
+    } else if (args.count() > 0 && qstrcmp(args[0].latin1(), "g77") == 0) {
+        kdDebug(9008) << "Building G77Options" << endl;
+        return new GccOptionsPlugin(GccOptionsPlugin::G77, parent, name);
     } else {
         kdDebug(9008) << "Wrong args for kdevgccoptions library" << endl;
         if (args.count() > 0)

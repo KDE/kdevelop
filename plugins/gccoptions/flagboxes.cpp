@@ -75,6 +75,11 @@ void FlagListBox::readFlags(QStringList *list)
             flitem->setOn(true);
             list->remove(sli);
         }
+        sli = list->find(flitem->off);
+        if (sli != list->end()) {
+            flitem->setOn(false);
+            list->remove(sli);
+        }
     }
 }
 
@@ -99,6 +104,16 @@ FlagCheckBox::FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
 }
 
 
+FlagCheckBox::FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
+                           const QString &flagstr, const QString &description,
+                           const QString &offstr)
+    : QCheckBox(description, parent), flag(flagstr), off(offstr)
+{
+    QToolTip::add(this, flagstr);
+    controller->addCheckBox(this);
+}
+
+
 FlagCheckBoxController::FlagCheckBoxController()
 {}
 
@@ -117,6 +132,11 @@ void FlagCheckBoxController::readFlags(QStringList *list)
         QStringList::Iterator sli = list->find(fitem->flag);
         if (sli != list->end()) {
             fitem->setChecked(true);
+            list->remove(sli);
+        }
+        sli = list->find(fitem->off);
+        if (sli != list->end()) {
+            fitem->setChecked(false);
             list->remove(sli);
         }
     }

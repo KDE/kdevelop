@@ -234,7 +234,7 @@ void FortranSupportPart::savedFile(const QString &fileName)
 
 KDevLanguageSupport::Features FortranSupportPart::features()
 {
-    return Features(Classes | Functions);
+    return Features(Functions);
 }
 
 #include "fortransupportpart.moc"

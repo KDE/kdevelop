@@ -1,11 +1,19 @@
+2001-05-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added FORTRAN 77 parser
+	* Added plugins for g77 and the Portland Group's
+	  f77 compiler and High Performance Fortran 
+	  compiler driver
+
 2001-05-24 Sandy Meier   <smeier@kdevelop.org>
+	
 	* added option (load last project on startup)
 	* saved mainview configuration on exit
 
 2001-05-24  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added templates for GNOME app and simple automake-
-	  base C and C++ programs
+	  based C and C++ programs
 
 2001-05-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 

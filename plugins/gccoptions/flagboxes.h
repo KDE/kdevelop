@@ -58,11 +58,15 @@ class FlagCheckBox : public QCheckBox
 public:
     FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
                  const QString &flagstr, const QString &description);
+    FlagCheckBox(QWidget *parent, FlagCheckBoxController *controller,
+                 const QString &flagstr, const QString &description,
+                 const QString &offstr);
     ~FlagCheckBox()
         {}
 
 private:
     QString flag;
+    QString off;
     friend class FlagCheckBoxController;
 };
 

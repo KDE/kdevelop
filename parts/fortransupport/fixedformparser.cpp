@@ -11,6 +11,7 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
+#include <kdebug.h>
 #include "classstore.h"
 
 #include "fixedformparser.h"
@@ -19,7 +20,41 @@
 FixedFormParser::FixedFormParser(ClassStore *classstore)
 {
     store = classstore;
-    stream = 0;
+
+    functionre.compile("(integer|real|logical|complex|character|"
+                       "double(precision)?)function([^(]+).*");
+    subroutinere.compile("subroutine([^(]+).*");
+}
+
+
+void FixedFormParser::process(const QCString &line, const QString &fileName, int lineNum)
+{
+    if (line.isEmpty())
+        return;
+    
+    QCString simplified;
+    int l = line.length();
+    for (int i=0; i < l; ++i)
+        if (line[i] != ' ')
+            simplified += line[i];
+
+    kdDebug(9019) << "Matching " << line << endl;
+    QCString name;
+    if (functionre.match(simplified))
+        name = functionre.group(3);
+    else if (subroutinere.match(simplified))
+        name = subroutinere.group(1);
+    else
+        return;
+    
+    ParsedMethod *method = new ParsedMethod;
+    method->setName(name);
+    method->setDefinedInFile(fileName);
+    method->setDefinedOnLine(lineNum);
+            
+    ParsedMethod *old = store->globalContainer.getMethod(method);
+    if (!old)
+        store->globalContainer.addMethod(method);
 }
 
 
@@ -28,15 +63,28 @@ void FixedFormParser::parse(const QString &fileName)
     QFile f(QFile::encodeName(fileName));
     if (!f.open(IO_ReadOnly))
         return;
-    stream = new QTextStream(&f);
+    QTextStream stream(&f);
 
     QCString line;
-    int lineNo = 0;
-    while (!stream->atEnd()) {
-        line = stream->readLine();
-        ++lineNo;
+    int lineNum=0, startLineNum=0;
+    while (!stream.atEnd()) {
+        ++lineNum;
+        QCString str = stream.readLine().latin1();
+        kdDebug(9019) << "Got line " << str << " at " << lineNum << endl;
+        if (!str.isEmpty() && QCString("*Cc#!").find(str[0]) != -1)
+            continue;
+        // Continuation line
+        if (str.length() > 6 && str.left(5) == "     " && str[5] != ' ') {
+            line += str.right(str.length()-6);
+            continue;
+        }
+        // An initial or invalid line. We don't care
+        // about validity
+        process(line, fileName, startLineNum);
+        line = str.right(str.length()-6);
+        startLineNum = lineNum-1;
     }
+    process(line, fileName, startLineNum);
 
-    delete stream;
     f.close();
 }

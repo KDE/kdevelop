@@ -9,27 +9,48 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _FIXEDFORMPARSER_H_
-#define _FIXEDFORMPARSER_H_
+#ifndef _PGIOPTIONSPLUGIN_H_
+#define _PGIOPTIONSPLUGIN_H_
 
-#include <qstring.h>
-#include <qtextstream.h>
-#include <kregexp.h>
+#include <qlist.h>
+#include <kdialogbase.h>
 
-class ClassStore;
+#include "kdevcompileroptions.h"
+
+class GeneralTab;
+class OptimizationTab;
+class HpfTab;
 
 
-class FixedFormParser
+class PgiOptionsPlugin : public KDevCompilerOptions
+{
+    Q_OBJECT
+
+public:
+    enum Type { PGHPF, PGF77 };
+    
+    PgiOptionsPlugin( Type type, QObject *parent=0, const char *name=0 );
+    ~PgiOptionsPlugin();
+
+    virtual QString exec(QWidget *parent, const QString &flags);
+
+private:
+    Type pgitype;
+};
+
+
+class PgiOptionsDialog : public KDialogBase
 {
 public:
-    FixedFormParser(ClassStore *classstore);
+    PgiOptionsDialog(PgiOptionsPlugin::Type type, QWidget *parent=0, const char *name=0 );
+    ~PgiOptionsDialog();
 
-    void parse(const QString &fileName);
-    
+    void setFlags(const QString &flags);
+    QString flags() const;
+
 private:
-    void process(const QCString &line, const QString &fileName, int lineNum);
-    ClassStore *store;
-    KRegExp functionre, subroutinere;
+    OptimizationTab *optimization;
+    HpfTab *hpf;
 };
 
 #endif

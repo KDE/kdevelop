@@ -13,4 +13,4 @@ libkdevgccoptions_la_SOURCES = gccoptionsfactory.cpp \
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
-service_DATA = kdevgccoptions.desktop kdevgppoptions.desktop
+service_DATA = kdevgccoptions.desktop kdevgppoptions.desktop kdevg77options.desktop

@@ -27,7 +27,7 @@
 class GeneralTab : public QWidget
 {
 public:
-    GeneralTab( bool cpp, QWidget *parent=0, const char *name=0 );
+    GeneralTab( GccOptionsPlugin::Type type, QWidget *parent=0, const char *name=0 );
     ~GeneralTab();
 
     void readFlags(QStringList *str);
@@ -38,24 +38,10 @@ private:
 };
 
 
-class CodeGenTab : public QWidget
-{
-public:
-    CodeGenTab( bool cpp, QWidget *parent=0, const char *name=0 );
-    ~CodeGenTab();
-
-    void readFlags(QStringList *str);
-    void writeFlags(QStringList *str);
-
-private:
-    FlagListBox *genBox;
-};
-
-
 class OptimizationTab : public QWidget
 {
 public:
-    OptimizationTab( bool cpp, QWidget *parent=0, const char *name=0 );
+    OptimizationTab( GccOptionsPlugin::Type type, QWidget *parent=0, const char *name=0 );
     ~OptimizationTab();
 
     void readFlags(QStringList *str);
@@ -67,10 +53,24 @@ private:
 };
 
 
+class G77Tab : public QWidget
+{
+public:
+    G77Tab( QWidget *parent=0, const char *name=0 );
+    ~G77Tab();
+
+    void readFlags(QStringList *str);
+    void writeFlags(QStringList *str);
+
+private:
+    FlagCheckBoxController *controller;
+};
+
+
 class Warnings1Tab : public QWidget
 {
 public:
-    Warnings1Tab( bool cpp, QWidget *parent=0, const char *name=0 );
+    Warnings1Tab( GccOptionsPlugin::Type type, QWidget *parent=0, const char *name=0 );
     ~Warnings1Tab();
 
     void readFlags(QStringList *str);
@@ -85,7 +85,7 @@ private:
 class Warnings2Tab : public QWidget
 {
 public:
-    Warnings2Tab( bool cpp, QWidget *parent=0, const char *name=0 );
+    Warnings2Tab( GccOptionsPlugin::Type type, QWidget *parent=0, const char *name=0 );
     ~Warnings2Tab();
 
     void readFlags(QStringList *str);
@@ -96,21 +96,46 @@ private:
 };
 
 
-
-GeneralTab::GeneralTab(bool /*cpp*/, QWidget *parent, const char *name)
+GeneralTab::GeneralTab(GccOptionsPlugin::Type type, QWidget *parent, const char *name)
     : QWidget(parent, name), controller(new FlagCheckBoxController)
 {
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
     layout->setAutoAdd(true);
-    
-    new FlagCheckBox(this, controller,
+    layout->addSpacing(10);
+
+    QVButtonGroup *output_group = new QVButtonGroup(i18n("Output"), this);
+    new FlagCheckBox(output_group, controller,
                      "-fsyntax-only", i18n("Only check the code for syntax errors. Don't produce object code"));
-    new FlagCheckBox(this, controller,
+    new FlagCheckBox(output_group, controller,
                      "-fg",           i18n("Generate extra code to write profile information for gprof."));
-    new FlagCheckBox(this, controller,
+    new FlagCheckBox(output_group, controller,
                      "-save-temps",   i18n("Do not delete intermediate output like assembler files."));
 
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
+
+    QVButtonGroup *codegen_group = new QVButtonGroup(i18n("Code generation"), this);
+    if (type != GccOptionsPlugin::GPP) {
+    new FlagCheckBox(codegen_group, controller,
+                     "-fexceptions",        i18n("Enable exception handling."),
+                     "-fno-exception");
+    } else {
+    new FlagCheckBox(codegen_group, controller,
+                     "-fno-exceptions",     i18n("Enable exception handling."),
+                     "-fexception");
+    }
+    // The following two are somehow mutually exclusive, but the default is
+    // platform-dependent, so if we would leave out one of them, we wouldn't
+    // know how to set the remaining one.
+    new FlagCheckBox(codegen_group, controller,
+                     "-fpcc-struct-return", i18n("Return certain struct and union values in memory rather than in registers."));
+    new FlagCheckBox(codegen_group, controller,
+                     "-freg-struct-return", i18n("Return certain struct and union values in registers when possible."));
+    new FlagCheckBox(codegen_group, controller,
+                     "-short-enums",        i18n("For an enum, choose the smallest possible integer type."));
+    new FlagCheckBox(codegen_group, controller,
+                     "-short-double",       i18n("Make 'double' the same as 'float'."));
+    
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addStretch();
 }
@@ -134,59 +159,7 @@ void GeneralTab::writeFlags(QStringList *list)
 }
 
 
-CodeGenTab::CodeGenTab(bool cpp, QWidget *parent, const char *name)
-    : QWidget(parent, name)
-{
-    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
-    layout->setAutoAdd(true);
-
-    genBox = new FlagListBox(this);
-
-    if (!cpp) {
-    new FlagListItem(genBox,
-                     "-fexceptions",        i18n("Enable exception handling."),
-                     "-fno-exception");
-    } else {
-    new FlagListItem(genBox,
-                     "-fno-exceptions",     i18n("Enable exception handling."),
-                     "-fexception");
-    }
-    // The following two are somehow mutually exclusive, but the default is
-    // platform-dependent, so if we would leave out one of them, we wouldn't
-    // know how to set the remaining one.
-    new FlagListItem(genBox,
-                     "-fpcc-struct-return", i18n("<qt>Return certain struct and union values in memory rather than in registers.</qt>"));
-    new FlagListItem(genBox,
-                     "-freg-struct-return", i18n("<qt>Return certain struct and union values in registers when possible.</qt>"));
-    new FlagListItem(genBox,
-                     "-short-enums",        i18n("<qt>For an enum, choose the smallest possible integer type.</qt>"));
-    new FlagListItem(genBox,
-                     "-short-double",       i18n("<qt>Make <i>double</i> the same as <i>float</i>.</qt>"));
-
-    layout->addSpacing(10);
-    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
-    layout->addStretch();
-}
-
-
-CodeGenTab::~CodeGenTab()
-{
-}
-
-
-void CodeGenTab::readFlags(QStringList *list)
-{
-    genBox->readFlags(list);
-}
-
-
-void CodeGenTab::writeFlags(QStringList *list)
-{
-    genBox->writeFlags(list);
-}
-
-
-OptimizationTab::OptimizationTab(bool cpp, QWidget *parent, const char *name)
+OptimizationTab::OptimizationTab(GccOptionsPlugin::Type type, QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
@@ -224,7 +197,7 @@ OptimizationTab::OptimizationTab(bool cpp, QWidget *parent, const char *name)
                      "-no-inline",          i18n("<qt>Ignore the <i>inline</i> keyword.</qt>"),
                      "-finline");
 
-    if (cpp) {
+    if (type == GccOptionsPlugin::GPP) {
     new FlagListItem(optBox,
                      "-fno-default-inline", i18n("<qt>Do not make members functions inline merely because they "
                                                  "are defined inside the class scope.</qt>"),
@@ -276,7 +249,62 @@ void OptimizationTab::writeFlags(QStringList *list)
 }
 
 
-Warnings1Tab::Warnings1Tab(bool cpp, QWidget *parent, const char *name)
+G77Tab::G77Tab(QWidget *parent, const char *name)
+    : QWidget(parent, name), controller(new FlagCheckBoxController)
+{
+    QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
+    layout->setAutoAdd(true);
+    layout->addSpacing(10);
+
+    QVButtonGroup *dialect_group = new QVButtonGroup(i18n("Dialect"), this);
+    new FlagCheckBox(dialect_group, controller,
+                     "-ffree-form",       i18n("Interpret source code as Fortran 90 free form."),
+                     "-fno-exception");
+    new FlagCheckBox(dialect_group, controller,
+                     "-ff90",             i18n("Allow certain Fortran 90 constructs."));
+    new FlagCheckBox(dialect_group, controller,
+                     "-fdollar-ok",       i18n("Allow '$' in symbol names."));
+    new FlagCheckBox(dialect_group, controller,
+                     "-fbackslash",       i18n("Allow '\' in character constants to escape special characters."),
+                     "-fno-backslah");
+    new FlagCheckBox(dialect_group, controller,
+                     "-fonetrip",         i18n("DO loops are executed at least once."));
+    
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addSpacing(10);
+
+    QVButtonGroup *codegen_group = new QVButtonGroup(i18n("Code generation"), this);
+    new FlagCheckBox(codegen_group, controller,
+                     "-fno-automatic",    i18n("Treat local variables as if SAVE statement had been specified."));
+    new FlagCheckBox(codegen_group, controller,
+                     "-finit-local-zero", i18n("Init local variables to zero."));
+    new FlagCheckBox(codegen_group, controller,
+                     "-fbounds-check",    i18n("Generate run-time checks for array subscripts."));
+
+    QApplication::sendPostedEvents(this, QEvent::ChildInserted);
+    layout->addStretch();
+}
+
+
+G77Tab::~G77Tab()
+{
+    delete controller;
+}
+
+
+void G77Tab::readFlags(QStringList *list)
+{
+    controller->readFlags(list);
+}
+
+
+void G77Tab::writeFlags(QStringList *list)
+{
+    controller->writeFlags(list);
+}
+
+
+Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const char *name)
     : QWidget(parent, name), controller(new FlagCheckBoxController)
 {
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
@@ -327,7 +355,7 @@ Warnings1Tab::Warnings1Tab(bool cpp, QWidget *parent, const char *name)
                      "-Wuninitialized",      i18n("<qt>Warn when a variable is used without being initialized before.</qt>"));
     new FlagListItem(wallBox,
                      "-Wunknown-pragmas",    i18n("<qt>Warn when an unknown #pragma statement is encountered.</qt>"));
-    if (cpp) { 
+    if (type == GccOptionsPlugin::GPP) { 
     new FlagListItem(wallBox,
                      "-Wreorder",            i18n("<qt>Warn when the order of member initializers is different from\n"
                                                   "the order in the class declaration.</qt>"));
@@ -355,7 +383,7 @@ void Warnings1Tab::writeFlags(QStringList *list)
 }
 
 
-Warnings2Tab::Warnings2Tab(bool cpp, QWidget *parent, const char *name)
+Warnings2Tab::Warnings2Tab(GccOptionsPlugin::Type type, QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
     QBoxLayout *layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
@@ -415,7 +443,7 @@ Warnings2Tab::Warnings2Tab(bool cpp, QWidget *parent, const char *name)
     new FlagListItem(wrestBox,
                      "-Wlong-long",           i18n("<qt>Warn if the <i>long long</i> type is used.</qt>"));
     
-    if (cpp) {
+    if (type == GccOptionsPlugin::GPP) {
     new FlagListItem(wrestBox,
                      "-Woverloaded-virtual",  i18n("<qt>Warn when a derived class function declaration may be an\n"
                                                    "error in defining a virtual function.</qt>"));
@@ -443,26 +471,28 @@ void Warnings2Tab::writeFlags(QStringList *list)
 
 
 // Last but not least... :-)
-GccOptionsDialog::GccOptionsDialog(bool cpp, QWidget *parent, const char *name)
-    : KDialogBase(Tabbed, cpp? i18n("GNU C++ Compiler Options") : i18n("GNU C Compiler Options"),
-                  Ok|Cancel, Ok, parent, name, true)
+GccOptionsDialog::GccOptionsDialog(GccOptionsPlugin::Type type, QWidget *parent, const char *name)
+    : KDialogBase(Tabbed, GccOptionsPlugin::captionForType(type), Ok|Cancel, Ok, parent, name, true)
 {
     QVBox *vbox;
 
     vbox = addVBoxPage(i18n("General"));
-    general = new GeneralTab(cpp, vbox, "general tab");
-
-    vbox = addVBoxPage(i18n("Code Generation"));
-    codegen = new CodeGenTab(cpp, vbox, "codegen tab");
+    general = new GeneralTab(type, vbox, "general tab");
 
     vbox = addVBoxPage(i18n("Optimization"));
-    optimization = new OptimizationTab(cpp, vbox, "optimization tab");
+    optimization = new OptimizationTab(type, vbox, "optimization tab");
 
+    if (type = GccOptionsPlugin::G77) {
+        vbox = addVBoxPage(i18n("Fortran specifics"));
+        g77 = new G77Tab(vbox, "g77 tab");
+    } else
+        g77 = 0;
+        
     vbox = addVBoxPage(i18n("Warnings I"));
-    warnings1 = new Warnings1Tab(cpp, vbox, "warnings1 tab");
+    warnings1 = new Warnings1Tab(type, vbox, "warnings1 tab");
         
     vbox = addVBoxPage(i18n("Warnings II"));
-    warnings2 = new Warnings2Tab(cpp, vbox, "warnings2 tab");
+    warnings2 = new Warnings2Tab(type, vbox, "warnings2 tab");
 }
 
 
@@ -477,10 +507,11 @@ void GccOptionsDialog::setFlags(const QString &flags)
 
     // Hand them to 'general' at last, so it can make a line edit
     // with the unprocessed items
+    if (g77)
+        g77->readFlags(&flaglist);
     optimization->readFlags(&flaglist);
     warnings1->readFlags(&flaglist);
     warnings2->readFlags(&flaglist);
-    codegen->readFlags(&flaglist);
     general->readFlags(&flaglist);
 }
 
@@ -488,11 +519,12 @@ void GccOptionsDialog::setFlags(const QString &flags)
 QString GccOptionsDialog::flags() const
 {
     QStringList flaglist;
-    
+
+    if (g77)
+        g77->writeFlags(&flaglist);
     optimization->writeFlags(&flaglist);
     warnings1->writeFlags(&flaglist);
     warnings2->writeFlags(&flaglist);
-    codegen->writeFlags(&flaglist);
     general->writeFlags(&flaglist);
 
     QString flags;
@@ -507,10 +539,10 @@ QString GccOptionsDialog::flags() const
 }
 
 
-GccOptionsPlugin::GccOptionsPlugin(bool cpp, QObject *parent, const char *name)
+GccOptionsPlugin::GccOptionsPlugin(Type type, QObject *parent, const char *name)
     : KDevCompilerOptions(parent, name)
 {
-    withcpp = cpp;
+    gcctype = type;
 }
 
 
@@ -518,9 +550,21 @@ GccOptionsPlugin::~GccOptionsPlugin()
 {}
 
 
+QString GccOptionsPlugin::captionForType(Type type)
+{
+    switch (type)
+        {
+        case GCC: return i18n("GNU C Compiler Options");
+        case GPP: return i18n("GNU C++ Compiler Options");
+        case G77: return i18n("GNU Fortran 77 Compiler Options");
+        default: return QString::null;
+        }
+}
+
+
 QString GccOptionsPlugin::exec(QWidget *parent, const QString &flags)
 {
-    GccOptionsDialog *dlg = new GccOptionsDialog(withcpp, parent, "gcc options dialog");
+    GccOptionsDialog *dlg = new GccOptionsDialog(gcctype, parent, "gcc options dialog");
     dlg->setFlags(flags);
     dlg->exec();
     QString newFlags = dlg->flags();
