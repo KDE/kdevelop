@@ -1,5 +1,3 @@
-#SUBDIRS = . test
-
 INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkeditorinterface.la
