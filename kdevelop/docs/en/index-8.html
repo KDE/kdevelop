@@ -100,25 +100,42 @@ will be copied into your project directory and the makefile.am's are updated.   
 before the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be
 compiled and installed after the conversion to ensure the project's consistancy.
 <P>
+<P>
+<P>
 <H3><A NAME="ss8.4">8.4 Adding Files and Classes</A>
 </H3>
 
+<P>Adding a new file is often used when you think that you should separate your class implementation file into several ones. Then you
+need to create an new file which will get the part of the class implementation you want to move. You can specify which type the
+new file will be, including a template for pixmap files often needed to create new toolbar icons. The new file will be added to
+the project and all affected project files like Makefile.am etc will be updated.
 <P>
 <H3><A NAME="ss8.5">8.5 Generating new Classes</A>
 </H3>
 
+<P>
 <P>
 <H3><A NAME="ss8.6">8.6 Adding Translations</A>
 </H3>
 
 <P>
 <P>
-<H3><A NAME="ss8.7">8.7 Setting Project File Options</A>
+<H3><A NAME="ss8.7">8.7 Extending the Project Documentation</A>
 </H3>
 
 <P>
 <P>
-<H3><A NAME="ss8.8">8.8 General Project Options</A>
+<H3><A NAME="ss8.8">8.8 Setting Project File Options</A>
+</H3>
+
+<P>The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project
+files in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is
+included in the project as well as the installation path if the file is going to be installed by the end-user's make install
+command.  It is important for documentation files as well as pixmaps to specify the location where the files should go when the
+project is build and installed by end users, so you have to set up those locations.   For standard KDE location macros you should
+look in your Makefile.am where the location macros are specified.
+<P>
+<H3><A NAME="ss8.9">8.9 General Project Options</A>
 </H3>
 
 <P>
@@ -129,15 +146,15 @@ debugging is only available if the project options are set to create debugging i
 level (0-3). If you add functions that belong to a library that is not included in the linker flags, your program will not link
 correctly if those are not updated, so keep track of your library linking.
 <P>
-<H3><A NAME="ss8.9">8.9 Compiler Options</A>
+<H3><A NAME="ss8.10">8.10 Compiler Options</A>
 </H3>
 
 <P>
-<H3><A NAME="ss8.10">8.10 Compiler Warnings</A>
+<H3><A NAME="ss8.11">8.11 Compiler Warnings</A>
 </H3>
 
 <P>
-<H3><A NAME="ss8.11">8.11 Linker Options</A>
+<H3><A NAME="ss8.12">8.12 Linker Options</A>
 </H3>
 
 <P>

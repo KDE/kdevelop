@@ -42,14 +42,20 @@ locate libjpeg
 locate jpeglib
 </LI>
 <LI> You must recompiled kdesupport without jpeg
-library (configure --with-libjpeg --with-libgif).</LI>
+library (./configure --with-libjpeg --with-libgif).</LI>
 </OL>
 <P>
-<P><B>Q:</B>  make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
-cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
-aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
-make[2]: *** [Makefile.in] Error 1
-<P><B>A:</B>  Workaround for automake-1.4/automake-2.13 users: Just run
+<P><B>Q:</B>
+<BLOCKQUOTE><CODE>
+<PRE>
+make[2]: Entering directory `/usr/local/src/kdevelop-0.3/po'
+ cd .. &amp;&amp; automake --gnu --include-deps po/Makefile
+ aclocal.m4: 2709: `AM_PROG_INSTALL' is obsolete; use `AC_PROG_INSTALL'
+ make[2]: *** [Makefile.in] Error 1
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<B>A:</B>  Workaround for automake-1.4/automake-2.13 users: Just run
 "aclocal" manually, then it will compile.
 <P>
 <P><B>Q:</B>  What must i do, if configure said ,that i need giflib23.
@@ -58,16 +64,28 @@ make[2]: *** [Makefile.in] Error 1
 <P><B>Q:</B> How can I convert a KDevelop 0.2 project to a 0.3 one?
 <P><B>A:</B> Please change the AC_OUTPUT in the configure.in to a oneline version
 <P>for example:
-old version AC_OUTPUT(Makefile \
+old version:
+<BLOCKQUOTE><CODE>
+<PRE>
+AC_OUTPUT(Makefile \
 kdevelop/kwrite/Makefile \
 kdevelop/templates/Makefile
 )
-new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
+</PRE>
+</CODE></BLOCKQUOTE>
+
+new version:
+<BLOCKQUOTE><CODE>
+<PRE>
+AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
+</PRE>
+</CODE></BLOCKQUOTE>
 <P>
-<P>
-<P><B>Q:</B>  I  get the following linker errors, what do I have to do to get KDevelop linked ?
-/usr/lib/libqt.so:
-warning: multiple common of `QArrayT&lt;char&gt; type_info node'
+<P><B>Q:</B>  I  get the following linker errors when using SuSE Linux with KDE 1.1, what do I have to do to get KDevelop linked ?
+<BLOCKQUOTE><CODE>
+<PRE>
+ /usr/lib/libqt.so:
+ warning: multiple common of `QArrayT&lt;char&gt; type_info node'
 ckdevelop.o: warning: previous common is here
 ckdevelop.o: In function `CKDevelop::slotFileSaveAll(void)':
 ckdevelop.o(.text+0x784): undefined reference to `kdebug(unsigned short,
@@ -90,10 +108,12 @@ exit status  make[2]: ***
 make[1]: *** [all-recursive] Error 1  make[1]: Leaving directory
 `/home/LinuXDaten/Programme_Updates_Packete/KDE_Updates/Kdevelop_actual_snapshot/kdevelop-0.3'
 make: *** [all-recursive-am] Error 2
-<P><B>A:</B> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall them.  .:-(
-It's a bug in the SuSE rpm's.
-<P>
-<P><B>Q:</B> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
+</PRE>
+</CODE></BLOCKQUOTE>
+
+<B>A:</B> If you have the SuSE rpm´s of KDE-1.1, you must recompile the kdelibs without the patch commited by SuSE and reinstall
+them or get an updated rpm of the kdelibs from 
+<A HREF="ftp://ftp.suse.com">ftp://ftp.suse.com</A><P><B>Q:</B> I see the KDevelop does not allow for usage of the delete key (or backspace deleting when text is marked).
 <P><B>A:</B>  go to "Options"->"Editor" and make sure that "Delete on Input" is enabled, then backspace and delete works.
 <P>
 <P><B>Q:</B> If I add files to my project, will they be automatically included and compiled ?
