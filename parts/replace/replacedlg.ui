@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>420</width>
-            <height>500</height>
+            <width>432</width>
+            <height>538</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -52,12 +52,12 @@
                         <string>Find</string>
                     </property>
                 </widget>
-                <widget class="QComboBox">
+                <widget class="KHistoryCombo">
                     <property name="name">
                         <cstring>find_combo</cstring>
                     </property>
-                    <property name="editable">
-                        <bool>true</bool>
+                    <property name="toolTip" stdset="0">
+                        <string>Target string</string>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -68,12 +68,12 @@
                         <string>Replacement</string>
                     </property>
                 </widget>
-                <widget class="QComboBox">
+                <widget class="KHistoryCombo">
                     <property name="name">
                         <cstring>replacement_combo</cstring>
                     </property>
-                    <property name="editable">
-                        <bool>true</bool>
+                    <property name="toolTip" stdset="0">
+                        <string>The replacement string</string>
                     </property>
                 </widget>
             </vbox>
@@ -148,6 +148,9 @@
                                     <property name="text">
                                         <string>Regular expression:</string>
                                     </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Use regexp to specify target</string>
+                                    </property>
                                 </widget>
                                 <widget class="QPushButton">
                                     <property name="name">
@@ -159,20 +162,23 @@
                                     <property name="text">
                                         <string>Editor</string>
                                     </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Opens the regexp editor. Only enabled if installed.</string>
+                                    </property>
                                 </widget>
                             </hbox>
                         </widget>
                     </vbox>
                 </widget>
-                <widget class="QComboBox">
+                <widget class="KHistoryCombo">
                     <property name="name">
                         <cstring>regexp_combo</cstring>
                     </property>
                     <property name="enabled">
                         <bool>false</bool>
                     </property>
-                    <property name="editable">
-                        <bool>true</bool>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter the regexp here</string>
                     </property>
                 </widget>
             </vbox>
@@ -198,6 +204,9 @@
                     <property name="checked">
                         <bool>true</bool>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>All files in the project will be considered.</string>
+                    </property>
                 </widget>
                 <widget class="QRadioButton">
                     <property name="name">
@@ -206,43 +215,52 @@
                     <property name="text">
                         <string>Open files only</string>
                     </property>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4</cstring>
+                    <property name="toolTip" stdset="0">
+                        <string>Only open project files will be considered.</string>
                     </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton">
-                            <property name="name">
-                                <cstring>files_path_radio</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Files under path:</string>
-                            </property>
-                        </widget>
-                        <widget class="KURLRequester">
-                            <property name="name">
-                                <cstring>path_urlreq</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                    </hbox>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>files_path_radio</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Files under path:</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Only project files in this dir and its subdirs will be considered.</string>
+                    </property>
+                </widget>
+                <widget class="KURLRequester">
+                    <property name="name">
+                        <cstring>path_urlreq</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
                 </widget>
             </vbox>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout2</cstring>
+                <cstring>layout4</cstring>
             </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>expression_varning_label</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <bold>1</bold>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Expression is invalid!!</string>
+                    </property>
+                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>spacer1</cstring>
@@ -255,7 +273,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>186</width>
+                            <width>40</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -269,6 +287,9 @@
                     </property>
                     <property name="default">
                         <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Start looking for possible replacement targets.</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -299,7 +320,13 @@
     <connection>
         <sender>strings_regexp_radio</sender>
         <signal>toggled(bool)</signal>
-        <receiver>regexp_combo</receiver>
+        <receiver>regexp_button</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>files_path_radio</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>path_urlreq</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
     <connection>
@@ -312,18 +339,6 @@
         <sender>strings_regexp_radio</sender>
         <signal>toggled(bool)</signal>
         <receiver>regexp_combo</receiver>
-        <slot>setFocus()</slot>
-    </connection>
-    <connection>
-        <sender>strings_regexp_radio</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>regexp_button</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>files_path_radio</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>path_urlreq</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
@@ -333,7 +348,6 @@
     <tabstop>case_box</tabstop>
     <tabstop>strings_all_radio</tabstop>
     <tabstop>regexp_button</tabstop>
-    <tabstop>regexp_combo</tabstop>
     <tabstop>files_all_radio</tabstop>
     <tabstop>path_urlreq</tabstop>
     <tabstop>find_button</tabstop>
@@ -344,6 +358,12 @@
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

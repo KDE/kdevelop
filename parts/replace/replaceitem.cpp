@@ -9,6 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qpainter.h>
+#include <qstyle.h>
+#include <qpalette.h>
+
 #include "replaceitem.h"
 
 bool ReplaceItem::s_listview_done = false;
@@ -30,26 +34,21 @@ bool ReplaceItem::hasCheckedChildren() const
 
 void ReplaceItem::stateChange( bool state )
 {
-    //kdDebug(0) << " ****** ReplaceItem::stateChanged() - " << state << " : " << text() << endl;
-
     if ( s_listview_done && justClicked() )
     {
-        _block = true;
         setChecked( state );
     }
 }
 
 void ReplaceItem::setChecked( bool checked )
 {
-    //kdDebug(0) << " ****** ReplaceItem::setChecked() - " << checked << " : " << text() << endl;
-
     if ( !isFile() )	// this is a child item
     {
         if ( checked || !(parent()->hasCheckedChildren()))
         {
             if ( parent()->isOn() != checked )
             {
-                parent()->_clicked = true;
+                parent()->_clicked = false;
                 parent()->setOn( checked );
             }
         }
@@ -62,11 +61,84 @@ void ReplaceItem::setChecked( bool checked )
     {
         if ( item->isOn() != checked )
         {
-            item->_clicked = true;
+            item->_clicked = false;
             item->setOn( checked );
         }
         item = item->nextSibling();
     }
 }
 
+// code mostly lifted from QCheckListItem::paintCell()
+void ReplaceItem::paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align )
+{
+    if ( !p )
+        return;
 
+    QListView *lvv = listView();
+    if ( !lvv )
+        return;
+
+    ReplaceView * lv = static_cast<ReplaceView*>(lvv);
+
+    const BackgroundMode bgmode = lv->viewport()->backgroundMode();
+    const QColorGroup::ColorRole crole = QPalette::backgroundRoleFromMode( bgmode );
+
+    if ( cg.brush( crole ) != lv->colorGroup().brush( crole ) )
+        p->fillRect( 0, 0, width, height(), cg.brush( crole ) );
+    else
+        lv->paintEmptyArea( p, QRect( 0, 0, width, height() ) );
+
+    QFontMetrics fm( lv->fontMetrics() );
+    int boxsize = lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv);
+    int marg = lv->itemMargin();
+    int r = marg;
+
+    // Draw controller / checkbox / radiobutton ---------------------
+    int styleflags = QStyle::Style_Default;
+    if ( isOn() )
+        styleflags |= QStyle::Style_On;
+    else
+        styleflags |= QStyle::Style_Off;
+    if ( isSelected() )
+        styleflags |= QStyle::Style_Selected;
+    if ( isEnabled() && lv->isEnabled() )
+        styleflags |= QStyle::Style_Enabled;
+
+    int x = 0;
+    int y = 0;
+
+    x += 3;
+
+    if ( align & AlignVCenter )
+        y = ( ( height() - boxsize ) / 2 ) + marg;
+
+    else
+        y = (fm.height() + 2 + marg - boxsize) / 2;
+
+    lv->style().drawPrimitive(QStyle::PE_CheckListIndicator, p,
+                              QRect(x, y, boxsize,
+                                    fm.height() + 2 + marg),
+                              cg, styleflags, QStyleOption(this));
+
+    r += boxsize + 4;
+
+    // Draw text ----------------------------------------------------
+    p->translate( r, 0 );
+    p->setPen( QPen( cg.text() ) );
+
+    QColorGroup mcg = cg;
+    mcg.setColor( QColorGroup::Text, ( isFile() ? Qt::darkGreen : Qt::blue ) );
+    mcg.setColor( QColorGroup::HighlightedText, ( isFile() ? Qt::darkGreen : Qt::blue ) );
+
+    QListViewItem::paintCell( p, mcg, column, width - r, align );
+}
+
+void ReplaceItem::activate( int, QPoint const & localPos )
+{
+    QListView * lv = listView();
+    int boxsize = lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv);
+    int rightside = lv->itemMargin() + boxsize + ( isFile() ? 0 : lv->treeStepSize() );
+
+    // _lineclicked indicates if the click was on the line or in the checkbox
+    _lineclicked = rightside < localPos.x();
+}

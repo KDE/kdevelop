@@ -24,12 +24,12 @@ public:
     // the file item
     ReplaceItem( ReplaceView * parent, ReplaceItem * after, QString file ) :
             QCheckListItem( parent,
-#if KDE_VERSION > 305			    
-			    after,
-#endif			    
-			    file, QCheckListItem::CheckBox ),
+#if KDE_VERSION > 305
+                            after,
+#endif
+                            file, QCheckListItem::CheckBox ),
             _file( file ), _string( file ), _line( 0 ), _isfile( true ),
-            _block( false ), _clicked( true )
+            _lineclicked( false ), _clicked( true )
     {
         setOpen( true );
         setOn( true );
@@ -38,12 +38,12 @@ public:
     // the line item
     ReplaceItem( ReplaceItem * parent, ReplaceItem * after, QString file, QString string, int line ) :
             QCheckListItem( parent,
-#if KDE_VERSION > 305			    
-			    after,
-#endif			    
-			    QString::number( line + 1 ) + ": " + string, QCheckListItem::CheckBox ),
+#if KDE_VERSION > 305
+                            after,
+#endif
+                            QString::number( line + 1 ) + ": " + string, QCheckListItem::CheckBox ),
             _file( file ), _string( string ), _line( line ), _isfile( false ),
-            _block( false ), _clicked( true )
+            _lineclicked( false ), _clicked( true )
     {
         setOn( true );
     }
@@ -75,11 +75,9 @@ public:
         return t;
     }
 
-    bool blockClick()
+    bool lineClicked()
     {
-        bool t = _block;
-        _block = false;
-        return t;
+        return _lineclicked;
     }
 
     ReplaceItem * parent() const
@@ -97,22 +95,22 @@ public:
         return static_cast<ReplaceItem*>( QListViewItem::nextSibling() );
     }
 
+    void activate( int column, QPoint const & localPos );
     bool hasCheckedChildren() const;
     virtual void stateChange( bool state );
 
     static bool s_listview_done;
 
 private:
-
+    void paintCell( QPainter * p, const QColorGroup & cg, int column, int width, int align );
     void setChecked( bool checked );
 
     QString _file;
     QString _string;
     int _line;
     bool const _isfile;
-    bool _block;
+    bool _lineclicked;
     bool _clicked;
-
 };
 
 #endif

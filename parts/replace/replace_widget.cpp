@@ -19,28 +19,27 @@
 #include <ktrader.h>
 #include <kurl.h>
 #include <kurlrequester.h>
-#include <kurlcompletion.h>
 #include <klineedit.h>
 #include <kdebug.h>
-#include <kregexpeditorinterface.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/editor.h>
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 #include <kdevproject.h>
 #include <kdevpartcontroller.h>
+#include <kcombobox.h>
+#include <klocale.h>
 
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
-#include <qcombobox.h>
 #include <qregexp.h>
 #include <qdialog.h>
 #include <qfile.h>
+#include <qdir.h>
 #include <qtextstream.h>
 #include <qdatastream.h>
 
@@ -49,43 +48,22 @@
 
 #include "replace_part.h"
 #include "replace_widget.h"
-#include "replacedlg.h"
+#include "replacedlgimpl.h"
 #include "replaceitem.h"
 #include "replaceview.h"
 
 //END Includes
 
-namespace
-{
-//TODO This is the same function as in ../grepview/grepviewwidget.cpp and
-//should probably be placed in a common place. For now it seemed like too
-//little code to bother with.
-QString escape(const QString &str)
-{
-    QString escaped("[]{}()\\^$?.+-*");
-    QString res;
-
-    for (uint i=0; i < str.length(); ++i)
-    {
-        if (escaped.find(str[i]) != -1)
-            res += "\\";
-        res += str[i];
-    }
-
-    return res;
-}
-}
-
 ReplaceWidget::ReplaceWidget(ReplacePart *part)
         : QWidget(0, "replace widget"), m_part( part ),
-        m_dialog( new ReplaceDlg( this, "replace widget" ) ),
-        _regexp_dialog( 0 )
+        m_dialog( new ReplaceDlgImpl( this, "replace widget" ) )
 {
+    // setup outputview
     QVBoxLayout * layout = new QVBoxLayout( this );
     QHBoxLayout * buttonlayout = new QHBoxLayout( layout );
 
-    _cancel = new QPushButton( "Cancel", this );
-    _replace = new QPushButton( "Replace", this );
+    _cancel = new QPushButton( i18n("Cancel"), this );
+    _replace = new QPushButton( i18n("Replace"), this );
 
     _cancel->setEnabled( false );
     _replace->setEnabled( false );
@@ -96,122 +74,54 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
     _listview = new ReplaceView( this );
     layout->addWidget( _listview );
 
+    //  setup signals
     connect( m_dialog->find_button, SIGNAL( clicked() ), SLOT( find() ) );
+
     connect( _replace, SIGNAL( clicked() ), SLOT( replace() ) );
     connect( _cancel, SIGNAL( clicked() ), SLOT( clear() ) );
-//    connect( _listview, SIGNAL( executed(QListViewItem*) ), SLOT( clicked(QListViewItem*) ) );
-    connect( _listview, SIGNAL( clicked(QListViewItem*) ), SLOT( clicked(QListViewItem*) ) );
-    connect( m_dialog->regexp_button, SIGNAL( clicked() ), SLOT( showRegExpEditor() ) );
-
-    // disable the editor button if the regexp editor isn't installed
-    if ( KTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty() )
-    {
-        m_dialog->strings_regexp_radio->disconnect( m_dialog->regexp_button );
-    }
-
-    m_dialog->path_urlreq->completionObject()->setMode(KURLCompletion::DirCompletion);
-    m_dialog->path_urlreq->setMode( KFile::Directory | KFile::LocalOnly );
+    connect( _listview, SIGNAL( editDocument( const QString &, int ) ), SLOT( editDocument( const QString &, int ) ) );
 }
 
 //BEGIN Slots
 
 void ReplaceWidget::showDialog()
 {
-    //kdDebug(0) << " ******* ReplaceWidget::showDialog()" << endl;
-
     if ( ! m_part->project() )
-        return; //TODO some feedback here?
+        return; // This shouldn't happen, since the part only has project scope
 
-    m_dialog->path_urlreq->lineEdit()->setText( fullProjectPath( m_part->project()->projectDirectory() + "/" ) );
-    m_dialog->show();
+    m_dialog->show( m_part->project()->projectDirectory() + "/" );
 }
 
 void ReplaceWidget::find()
 {
-    //kdDebug(0) << " ******* ReplaceWidget::find()" << endl;
-
-    QString pattern = escape( m_dialog->find_combo->currentText() );
-    QString replacement = m_dialog->replacement_combo->currentText();
-
     _listview->clear();
     m_part->mainWindow()->raiseView(this);
 
-    QRegExp re;
-    re.setCaseSensitive( m_dialog->case_box->isChecked() );
-    re.setMinimal( true );
-
-    if ( m_dialog->strings_wholewords_radio->isChecked() )
-    {
-        pattern = "\\b" + pattern + "\\b";
-    }
-    else if ( m_dialog->strings_regexp_radio->isChecked() )
-    {
-        pattern = m_dialog->regexp_combo->currentText();
-    }
-
-    if ( ! re.isValid() )
-        return; //TODO handle this better, user needs feedback
-
-    re.setPattern( pattern );
-
-    _listview->setReplacementData( re, replacement );
+    _listview->setReplacementData( m_dialog->expressionPattern(), m_dialog->replacementString() );
 
     showReplacements();
 
     _cancel->setEnabled( true );
     _replace->setEnabled( true );
-    //    _replace->setEnabled( false );
 }
 
 void ReplaceWidget::replace()
 {
-    //kdDebug(0) << " ******* ReplaceWidget::replace()" << endl;
-
     makeReplacements();
-
     clear();
 }
 
 void ReplaceWidget::clear()
 {
-    //kdDebug(0) << " ******* ReplaceWidget::clear()" << endl;
-
     _listview->clear();
 
     _cancel->setEnabled( false );
     _replace->setEnabled( false );
 }
 
-void ReplaceWidget::clicked( QListViewItem * item )
+void ReplaceWidget::editDocument( QString const & file, int line )
 {
-    //kdDebug(0) << " ******* ReplaceWidget::clicked()" << endl;
-
-    if ( ReplaceItem * rii = dynamic_cast<ReplaceItem*>( item ) )
-    {
-        //kdDebug(0) << "File: " << rii->file() << " Line: " << rii->line() << endl;
-        if ( !rii->blockClick() )
-        {
-            m_part->partController()->editDocument( rii->file(), rii->line() );
-        }
-    }
-}
-
-void ReplaceWidget::showRegExpEditor()
-{
-    _regexp_dialog = KParts::ComponentFactory::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor" );
-
-    if ( _regexp_dialog )
-    {
-        KRegExpEditorInterface *editor =
-            static_cast<KRegExpEditorInterface *>( _regexp_dialog->qt_cast( "KRegExpEditorInterface" ) );
-
-        editor->setRegExp( m_dialog->regexp_combo->currentText() );
-
-        if ( _regexp_dialog->exec() == QDialog::Accepted )
-        {
-            m_dialog->regexp_combo->setCurrentText( editor->regExp() );
-        }
-    }
+    m_part->partController()->editDocument( file, line );
 }
 
 //END Slots
@@ -245,6 +155,8 @@ void ReplaceWidget::showReplacements()
             }
         }
         ++it;
+
+        kapp->processEvents( 100 );
     }
 
     ReplaceItem::s_listview_done = true;
@@ -260,8 +172,6 @@ void ReplaceWidget::makeReplacements()
         if ( fileitem->isOn() )
         {
             QString currentfile = fileitem->file();
-
-            //kdDebug(0) << " ## " << currentfile << endl;
 
             if ( openfiles.contains( currentfile ) )
             {
@@ -296,11 +206,19 @@ void ReplaceWidget::makeReplacements()
                     QDir().rename( newfile, currentfile, true );
                 }
             }
+            //Telling the project about the edited file
+//TODO enable this            m_part->project()->changedFile( relativeProjectPath( ( currentfile ) ) );
         }
 
         fileitem = fileitem->nextSibling();
+
+        kapp->processEvents( 100 );
     }
 
+    m_part->partController()->saveAllFiles();
+
+    //BEGIN *** remove this ***
+    //TODO - remove this when the parser supports the changedFile() signal
     QCString appName;
     appName.sprintf( "gideon-%d", getpid() );
 
@@ -309,9 +227,10 @@ void ReplaceWidget::makeReplacements()
     QDataStream arg(  data, IO_WriteOnly );
 
     (void) kapp->dcopClient()->call( appName,
-    		"KDevCppSupport",   // ## TODO: fix me!! it is not very generic :(
-		"parseProject()",
-		data, replyType, replyData );
+                                     "KDevCppSupport",
+                                     "parseProject()",
+                                     data, replyType, replyData );
+    //END *** remove this ***
 }
 
 //BEGIN Helpers
@@ -352,36 +271,30 @@ QString ReplaceWidget::fullProjectPath( QString path )
 
 QStringList ReplaceWidget::allProjectFiles()
 {
-    _list = m_part->project()->allFiles();
+    QStringList allfiles = m_part->project()->allFiles();
 
-    QStringList::iterator it = _list.begin();
-    while ( it != _list.end() )
+    QStringList::iterator it = allfiles.begin();
+    while ( it != allfiles.end() )
     {
         *it = fullProjectPath( *it );
         ++it;
     }
-    return _list;
+    return allfiles;
 }
 
 QStringList ReplaceWidget::subProjectFiles( QString const & subpath )
 {
-    //kdDebug(0) << " ***** ReplaceWidget::subProjectFiles() - subpath == " << subpath << endl;
-
     QStringList projectfiles = allProjectFiles();
 
     QStringList::Iterator it = projectfiles.begin();
     while ( it != projectfiles.end() )
     {
-        //kdDebug(0) << " ## " << *it << endl;
-
         if ( (*it).left( subpath.length() ) != subpath)
         {
-            //kdDebug(0) << " - removing " << endl;
             it = projectfiles.remove( it );
         }
         else
         {
-            //kdDebug(0) << " - keeping " << endl;
             ++it;
         }
     }
@@ -391,10 +304,11 @@ QStringList ReplaceWidget::subProjectFiles( QString const & subpath )
 QStringList ReplaceWidget::openProjectFiles()
 {
     QStringList projectfiles = allProjectFiles();
+    QStringList openfiles;
 
-    _list.clear();
-
-    if( const QPtrList<KParts::Part> * partlist = m_part->partController()->parts() ){
+    if( const QPtrList<KParts::Part> * partlist = m_part->
+            partController()->parts() )
+    {
         QPtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
         {
@@ -403,19 +317,20 @@ QStringList ReplaceWidget::openProjectFiles()
                 QString editorpath = ed->url().path();
                 if ( projectfiles.contains( editorpath ) )
                 {
-                    _list.append( editorpath );
+                    openfiles.append( editorpath );
                 }
             }
-	    ++it;
+            ++it;
         }
     }
-
-    return _list;
+    return openfiles;
 }
 
 KTextEditor::EditInterface * ReplaceWidget::getEditInterfaceForFile( QString const & file )
 {
-    if( const QPtrList<KParts::Part> * partlist = m_part->partController()->parts() ){
+    if( const QPtrList<KParts::Part> * partlist = m_part->
+            partController()->parts() )
+    {
         QPtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
         {

@@ -23,6 +23,11 @@ class ReplaceItem;
 
 class ReplaceView : public KListView
 {
+    Q_OBJECT
+
+signals:
+    void editDocument( const QString &, int );
+
 public:
     ReplaceView( QWidget *);
     ReplaceItem * firstChild() const;
@@ -30,10 +35,16 @@ public:
     void showReplacementsForFile( QTextStream &, QString const & );
     void makeReplacementsForFile( QTextStream & istream, QTextStream & ostream, ReplaceItem const * fileitem );
 
+private slots:
+    void slotMousePressed(int, QListViewItem *, const QPoint &, int);
+    void slotClicked( QListViewItem * );
+
 private:
     QRegExp _regexp;
     QString _replacement;
     ReplaceItem * _latestfile;
+
+friend class ReplaceItem;
 
 };
 

@@ -22,7 +22,7 @@ class QListViewItem;
 class QDialog;
 
 class ReplacePart;
-class ReplaceDlg;
+class ReplaceDlgImpl;
 class ReplaceItem;
 class ReplaceView;
 
@@ -35,12 +35,12 @@ public:
 
 public slots:
     void showDialog();
+    
+private slots:
     void find();
     void replace();
     void clear();
-
-    void clicked( QListViewItem * );
-    void showRegExpEditor();
+    void editDocument( const QString & ,int );
 
 private:
     void showReplacements();
@@ -57,14 +57,11 @@ private:
     KTextEditor::EditInterface * getEditInterfaceForFile( QString const & file );
 
     ReplacePart * m_part;
-    ReplaceDlg * m_dialog;
+    ReplaceDlgImpl * m_dialog;
+
     ReplaceView * _listview;
-    QDialog * _regexp_dialog;
     QPushButton * _cancel;
     QPushButton * _replace;
-
-    QStringList _list;
-
 };
 
 

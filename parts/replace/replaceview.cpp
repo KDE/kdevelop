@@ -14,6 +14,7 @@
 #include <qdir.h>
 #include <qstringlist.h>
 #include <qregexp.h>
+#include <qpalette.h>
 
 #include "replaceitem.h"
 #include "replaceview.h"
@@ -32,6 +33,16 @@ ReplaceView::ReplaceView( QWidget * parent ) : KListView( parent ), _latestfile(
     addColumn( "" );
     header()->hide();
     setFullWidth();
+
+    QPalette pal = palette();
+    QColorGroup cg = pal.active();
+    cg.setColor( QColorGroup::Highlight, Qt::lightGray );
+    pal.setActive( cg );
+    setPalette( pal );
+
+    connect( this, SIGNAL( clicked( QListViewItem * ) ), SLOT( slotClicked( QListViewItem * ) ) );
+    connect( this, SIGNAL( mouseButtonPressed( int, QListViewItem *, const QPoint &, int) ),
+             SLOT( slotMousePressed(int, QListViewItem *, const QPoint &, int) ) );
 }
 
 void ReplaceView::makeReplacementsForFile( QTextStream & istream, QTextStream & ostream, ReplaceItem const * fileitem )
@@ -43,15 +54,12 @@ void ReplaceView::makeReplacementsForFile( QTextStream & istream, QTextStream & 
     {
         if ( lineitem->isOn() )
         {
-            //kdDebug(0) << " #### " << lineitem->text() << endl;
-
             while ( line < lineitem->line() )
             {
                 ostream << istream.readLine() << "\n";
                 line++;
             }
-            // here is the hit
-            Q_ASSERT( line == lineitem->line() );
+            // this is the hit
             ostream << istream.readLine().replace( _regexp, _replacement ) << "\n";
             line++;
         }
@@ -97,3 +105,37 @@ void ReplaceView::setReplacementData( QRegExp const & re, QString const & replac
     _regexp = re;
     _replacement = replacement;
 }
+
+void ReplaceView::slotMousePressed(int btn, QListViewItem* i, const QPoint& pos, int col)
+{
+    kdDebug(0) << "ReplaceView::slotMousePressed()" << endl;
+
+    if ( ReplaceItem * item = dynamic_cast<ReplaceItem*>( i ) )
+    {
+        if ( btn == Qt::RightButton )
+        {
+            //        popup menu?
+        }
+        else if ( btn == Qt::LeftButton )
+        {
+            // map pos to item/column and call ReplacetItem::activate(pos)
+            item->activate( col, viewport()->mapFromGlobal( pos ) - QPoint( 0, itemRect(item).top() ) );
+        }
+    }
+}
+
+void ReplaceView::slotClicked( QListViewItem * item )
+{
+    kdDebug(0) << "ReplaceView::slotClicked()" << endl;
+
+    if ( ReplaceItem * ri = dynamic_cast<ReplaceItem*>( item ) )
+    {
+        if ( ri->lineClicked() )
+        {
+            kdDebug(0) << "emitting editDocument" << endl;
+            emit editDocument( ri->file(), ri->line() );
+        }
+    }
+}
+
+#include "replaceview.moc"

@@ -35,12 +35,19 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     m_widget = new ReplaceWidget(this);
 
     QWhatsThis::add
-        (m_widget, i18n("WHAT DOES THIS PART DO?"));
+        (m_widget, i18n("Replace\n\n"
+                        "This window shows a preview of a string replace "
+                        "operation. Uncheck a line to exclude that replacement. "
+                        "Uncheck a file to exclude the whole file from the "
+                        "operation. "
+                        "Clicking on a line in the list will automatically "
+                        "open the corresponding source file and set the "
+                        "cursor to the line with the match." ));
 
-    mainWindow()->embedOutputView( m_widget, "Replace", "Project wide string replacement" );
+    mainWindow()->embedOutputView( m_widget, "Replace", "project wide string replacement" );
 
-    KAction * action = new KAction(i18n("Re&place String Across Project..."), "replace project",
-                                   CTRL+ALT+Key_P, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
+    KAction * action = new KAction(i18n("Project Wide Replace..."), "replace project",
+                                   CTRL+ALT+Key_R, this, SLOT(slotReplace()), actionCollection(), "edit_replace_across");
     action->setStatusText( i18n("Replaces a string across the projcect") );
     action->setWhatsThis( i18n("Replace across project\n\n"
                                "Bla, bla, bla....") );
@@ -56,7 +63,6 @@ ReplacePart::~ReplacePart()
 
 void ReplacePart::slotReplace()
 {
-    //kdDebug(0) << " ******* ReplacePart::slotReplace()" << endl;
     m_widget->showDialog();
 }
 

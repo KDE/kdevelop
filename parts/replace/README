@@ -11,26 +11,18 @@ by Jens Dagerbo <jens.dagerbo@swipnet.se> aka teatime
 
 Planned development:
 
-# Colorization of the output view.
- It would be nice to match the colors of the grepview, and to specifically
- differentiate between the replacement string and the remaining text.
+# Make it possible to stop a find operation
 
-# GUI redraws during operation. (See Limitations.)
+# Better user feedback
 
-# Better tooltips. i18n wrappers.
+# Some more code cleanups (Subclass the .ui generated file)
 
-# Look into using the QPoint info of the clicked signal, instead of the current
- stateChanged/blockClick() hack.
+# Better commenting (doxygen style comments).
 
-# Some more code cleanups and better commenting (doxygen style comments).
 
 
 
 Current limitations:
-
-# Doesn't update the GUI during search and replace operation.
- This should probably be fixed, but isn't really much of a problem, unless work
- is done on a large project and a slow machine.
 
 # Search/Replace will work on all matches on a line.
  There is no (nor will there likely be) a way to limit matching to only some
