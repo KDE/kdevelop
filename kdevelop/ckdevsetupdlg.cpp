@@ -24,7 +24,7 @@
 #include <qbuttongroup.h>
 #include <qfileinfo.h>
 
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <klocale.h>
 
 // SETUP DIALOG
@@ -484,9 +484,9 @@ void CKDevSetupDlg::slotQtClicked(){
     if(QFileInfo(qt_testfile).exists())
       config->writeEntry("doc_qt",dir);
     else{
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
+      QMessageBox::information(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
                                                               "Qt-library documentation. Please choose the\n"
-                                                              "correct path."),KMsgBox::EXCLAMATION);
+                                                              "correct path."));
     }
   }
 }
@@ -501,13 +501,14 @@ void CKDevSetupDlg::slotKDEClicked(){
     if(QFileInfo(kde_testfile).exists())
       config->writeEntry("doc_kde",dir);
     else{
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
+      QMessageBox::information(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
                                                               "KDE-library documentation. Please choose the\n"
                                                               "correct path or choose 'Update' to create a new\n"
-                                                              "documentation"),KMsgBox::EXCLAMATION);
+                                                              "documentation"));
     }
   }
 }
+
 
 
 

@@ -19,7 +19,7 @@
 #include "ctoolclass.h"
 #include <iostream.h>
 #include <qfile.h>
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 
 bool CToolClass::searchProgram(QString name){
   StringTokenizer tokener;
@@ -37,7 +37,7 @@ bool CToolClass::searchProgram(QString name){
     }
   }
   if(!found){
-    KMsgBox::message(0,"Program not found!","KDevelop needs \""+name+"\" to work properly.\n\tPlease install it!",KMsgBox::EXCLAMATION);
+    QMessageBox::warning(0,"Program not found!","KDevelop needs \""+name+"\" to work properly.\n\tPlease install it!");
   }
   return found;
 }
@@ -76,3 +76,4 @@ QString CToolClass::findProgram(QString name){
   }
   return "";
 }
+

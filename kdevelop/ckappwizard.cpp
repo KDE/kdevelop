@@ -24,6 +24,7 @@
 #include "ckappwizard.h"
 #include "debug.h"
 #include "ctoolclass.h"
+#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <klocale.h>
 
@@ -2379,5 +2380,7 @@ void CKAppWizard::slotVendorEntry() {
   	modifyVendor = true;
   }
 }
+
+
 
 

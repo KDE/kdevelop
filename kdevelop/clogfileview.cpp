@@ -19,6 +19,7 @@
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <kprocess.h>
+#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <klocale.h>
 #include <assert.h>
@@ -500,6 +501,8 @@ void CLogFileView::slotCommit()
 {
     emit commitFileToVCS(getFullFilename(currentItem()));
 }
+
+
 
 
 

@@ -17,7 +17,7 @@
 
 #include "cmakemanualdlg.h"
 #include "ctoolclass.h"
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kfiledialog.h>
 #include <qfile.h>
 #include <kapp.h>
@@ -69,9 +69,8 @@ void CMakeManualDlg::slotOkClicked(){
     }
     file = file_edit->text();
     if(!QFile::exists(file)){
-      KMsgBox::message(this,i18n("Error..."),
-		       i18n("You must choose an existing file!")
-		       ,KMsgBox::EXCLAMATION);
+      QMessageBox::warning(this,i18n("Error..."),
+		       i18n("You must choose an existing file!"));
       return;
     }
     accept();
@@ -82,6 +81,7 @@ void CMakeManualDlg::slotFileButtonClicked(){
 	file_edit->setText(str);
     }    
 }
+
 
 
 

@@ -24,7 +24,7 @@
 #include <qframe.h>
 #include <qclipbrd.h>
 
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kaccel.h>
 #include <kcursor.h>
 #include <klocale.h>
@@ -1085,7 +1085,7 @@ void CKDevelop::initProject(bool witharg){
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
-      KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+      QMessageBox::warning(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
       refreshTrees();
     }
     else{
@@ -1257,6 +1257,7 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
 
 
 

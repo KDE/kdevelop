@@ -19,6 +19,7 @@
 
 #include "cclassview.h"
 #include <assert.h>
+#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <klocale.h>
 #include <qheader.h>
@@ -924,7 +925,7 @@ void CClassView::slotClassDelete()
                       i18n("Are you sure you want to delete this class?"),
                       KMsgBox::QUESTION ) == 1 )
   {
-    KMsgBox::message( this, "Not implemented",
+    QMessageBox::information( this, "Not implemented",
                       "This function isn't implemented yet." );
   }
                       
@@ -1082,5 +1083,7 @@ void CClassView::slotClassWizard()
   dlg.setStore( store );
   dlg.exec();
 }
+
+
 
 

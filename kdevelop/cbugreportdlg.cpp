@@ -28,7 +28,6 @@
 #include <klocale.h>
 #include <qdatetime.h>
 #include <iostream.h>
-#include <kmsgbox.h>
 #include <qmessagebox.h>
 
 CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo buginfo, QString bug_email) : QTabDialog(parent,name,true) {
@@ -584,7 +583,7 @@ CBugReportDlg::~CBugReportDlg(){
 void CBugReportDlg::ok() {
 
   if (description_mledit->text() == ""  ||  subject_edit->text() == "") {
-    KMsgBox::message(this,i18n("Information"),i18n("Please fill in at least the subject and bug description!"));
+    QMessageBox::information(this,i18n("Information"),i18n("Please fill in at least the subject and bug description!"));
     return;
   }
   //  cerr << endl << "slot ok()"
@@ -597,7 +596,7 @@ void CBugReportDlg::ok() {
   
   if (generateEmail()) {
     if(sendEmail()){
-      KMsgBox::message(this,i18n("Bug Report"),i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
+      QMessageBox::information(this,i18n("Bug Report"),i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
     }
   }
   accept();
@@ -670,5 +669,6 @@ bool CBugReportDlg::sendEmail() {
 
   return true;
 }
+
 
 

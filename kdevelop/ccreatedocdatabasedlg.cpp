@@ -17,7 +17,7 @@
  ***************************************************************************/
 
 #include <qdir.h>
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kfiledialog.h>
 #include "ccreatedocdatabasedlg.h"
 #include <iostream.h>
@@ -268,12 +268,12 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   conf->setGroup("Doc_Location");
   QString filename = conf->readEntry("doc_kde", KDELIBS_DOCDIR) +"/kdeui/KDialog.html";
   if(!QFile::exists(filename) && kde_checkbox->isChecked()){
-    KMsgBox::message(0,i18n("No Database created!"),i18n("The KDE-Documentation-Path isn't set correctly."));
+    QMessageBox::information(0,i18n("No Database created!"),i18n("The KDE-Documentation-Path isn't set correctly."));
     return;
   }
   filename = conf->readEntry("doc_qt", QT_DOCDIR) +"/qtabbar.html";
   if(!QFile::exists(filename) && qt_checkbox->isChecked()){
-    KMsgBox::message(0,i18n("No Database created!"),i18n("The Qt-Documentation-Path isn't set correctly."));
+    QMessageBox::information(0,i18n("No Database created!"),i18n("The Qt-Documentation-Path isn't set correctly."));
     return;
   }
   
@@ -333,6 +333,7 @@ void CCreateDocDatabaseDlg::slotDirButtonClicked(){
     dir_edit->setText(name);
   }
 }
+
 
 
 

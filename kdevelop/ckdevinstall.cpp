@@ -24,6 +24,7 @@
 #include <qprogressdialog.h>
 
 #include <kapp.h>
+#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
@@ -43,7 +44,7 @@ void CKDevInstall::slotProcessExited(KProcess*){
     if (!finished_glimpse){
 	finished_glimpse=true;
 	if(!glimpse && !glimpseindex){
-	    KMsgBox::message(this,i18n("Information"), i18n("The program glimpse is not installed,\n"
+	    QMessageBox::information(this,i18n("Information"), i18n("The program glimpse is not installed,\n"
 							    "therefore KDevelop can not index your\n"
 							    "documentation to provide a proper help\n"
 							    "functionality. We advise to install glimpse\n"
@@ -52,7 +53,7 @@ void CKDevInstall::slotProcessExited(KProcess*){
 							    "As this is the last step of the Installation\n"
 							    "process, KDevelop will be started now.\n\n"
 							    "We hope you enjoy KDevelop and that it is a useful\n"
-							    "help to create new software.\n\nThe KDevelop Team"),KMsgBox::INFORMATION);
+							    "help to create new software.\n\nThe KDevelop Team"));
 	    
 	    config->setGroup("General Options");
 	    config->writeEntry("Install",false);
@@ -61,11 +62,11 @@ void CKDevInstall::slotProcessExited(KProcess*){
 	    accept();
 	}
 	else{
-	    KMsgBox::message(this,i18n("Information"),i18n("Now KDevelop will perform the last step\n"
+	    QMessageBox::information(this,i18n("Information"),i18n("Now KDevelop will perform the last step\n"
 							   "of the installation process with indexing\n"
 							   "your documentation. This will provide an extended\n"
 							   "help functionality and will give you the information\n"
-							   "you need."), KMsgBox::INFORMATION);
+							   "you need."));
 	    
 	    CCreateDocDatabaseDlg dlg(this,"DLG",shell_process,config);
 	    if(!dlg.exec()){
@@ -82,10 +83,10 @@ void CKDevInstall::slotProcessExited(KProcess*){
     }
     
     
-    KMsgBox::message(this,i18n("Installation successful !"), i18n("\nThe installation process finished successfully.\n\n"
+    QMessageBox::information(this,i18n("Installation successful !"), i18n("\nThe installation process finished successfully.\n\n"
                                                           "The KDevelop Team wishes that you will enjoy our\n"
                                                           "program and we would be honoured for any feedback.\n\n"
-                                                          "The KDevelop Team"), KMsgBox::INFORMATION);
+                                                          "The KDevelop Team"));
 
   config->setGroup("General Options");
   config->writeEntry("Install",false);
@@ -294,9 +295,9 @@ void CKDevInstall::slotQTpressed()
       qt_test=false;
     }
     else{
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("\nThe chosen path does not lead to the\n"
+      QMessageBox::information(this,i18n("The selected path is not correct!"),i18n("\nThe chosen path does not lead to the\n"
                                                               "Qt-library documentation. Please choose the\n"
-                                                              "correct path."),KMsgBox::EXCLAMATION);
+                                                              "correct path."));
     }
   }
 }
@@ -315,11 +316,11 @@ void CKDevInstall::slotKDEpressed()
       kde_test=false;
     }
     else{
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("\nThe chosen path does not lead to the\n"
+      QMessageBox::information(this,i18n("The selected path is not correct!"),i18n("\nThe chosen path does not lead to the\n"
                                                               "KDE-library documentation. Please choose 'Proceed'\n"
                                                               "in any case. If you don't have a documentation,\n"
                                                               "it will be generated automatically in one of the\n"
-                                                              "next steps"),KMsgBox::EXCLAMATION);
+                                                              "next steps"));
     }
   }
 
@@ -702,9 +703,9 @@ void CKDevInstall::slotAuto() // proceed >>
     print_str="a2ps / enscript"+not_found+ i18n(" -- printing can only use lpr\n");
 
 
-  KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
+  QMessageBox::information(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
-                  +print_str+kdbg_str+kiconedit_str+kpaint_str+ktranslator_str, KMsgBox::INFORMATION);
+                  +print_str+kdbg_str+kiconedit_str+kpaint_str+ktranslator_str);
 
 	config->setGroup("ToolsMenuEntries");
 	config->writeEntry("Tools_exe",tools_exe);
@@ -755,8 +756,8 @@ void CKDevInstall::slotAuto() // proceed >>
 	if(!qt_test){
   	  config->setGroup("Doc_Location");
 	  config->writeEntry("doc_qt",qt);
-	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n")+qt
-								     +i18n("\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
+	  QMessageBox::information(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n")+qt
+								     +i18n("\n\nThe correct path has been set.\n "));
 	}
   	else{  // return to the setup to set it manually ?
 	  int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
@@ -803,8 +804,8 @@ void CKDevInstall::slotAuto() // proceed >>
   }
   
   if (kde_test) {
-    KMsgBox::message(0, i18n("KDE-Library Documentation found"),i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
-								     +"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
+    QMessageBox::information(0, i18n("KDE-Library Documentation found"),i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
+								     +"\n\nThe correct path has been set.\n "));
      slotProcessExited(0);
      return; //ok, nothing more to do, we are leaving	
   }
@@ -816,17 +817,17 @@ void CKDevInstall::slotAuto() // proceed >>
   QDir* kde_dir=new QDir();
 
   if(!kdoc && !perl)
-    KMsgBox::message(this,i18n("Information"),i18n("\nThe Program KDoc was not found on your system,\n"
+    QMessageBox::information(this,i18n("Information"),i18n("\nThe Program KDoc was not found on your system,\n"
                                                 "a library documentation update can not be performed.\n"
                                                 "KDoc is part of the kdesdk package that can be obtained\n"
-                                                "from www.kde.org.\n\n "),KMsgBox::INFORMATION);
+                                                "from www.kde.org.\n\n "));
   else{
-    KMsgBox::message(this,i18n("Information"), i18n("\nNow KDevelop will create a new KDE-library\n"
+    QMessageBox::information(this,i18n("Information"), i18n("\nNow KDevelop will create a new KDE-library\n"
                                                     "documentation. For that, you need the kdelibs\n"
                                                     "package as the source package. If you don't have\n"
                                                     "the kdelibs as sources, we advise to obtain them\n"
                                                     "from www.kde.org. Mind that the sources should match\n"
-                                                    "your installed kdelibs version.\n\n "), KMsgBox::INFORMATION);
+                                                    "your installed kdelibs version.\n\n "));
 
     kde_dir->setCurrent(QDir::homeDirPath ());
     kde_dir->mkdir(".kde",false);
@@ -870,6 +871,7 @@ void CKDevInstall::slotCancel()
   else
     return;
 }
+
 
 
 

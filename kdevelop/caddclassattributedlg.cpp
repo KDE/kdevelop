@@ -21,7 +21,7 @@
 
 
 #include "caddclassattributedlg.h"
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kapp.h>
 #include <kquickhelp.h>
 #include <klocale.h>
@@ -221,10 +221,10 @@ void CAddClassAttributeDlg::OK()
 {
 
   if( strlen( typeEdit.text() ) == 0 )
-    KMsgBox::message( this, i18n("No type"),
+    QMessageBox::information( this, i18n("No type"),
                       i18n("You have to specify a variable type.") );
   else if( strlen( nameEdit.text() ) == 0 )
-    KMsgBox::message( this, i18n("No name"),
+    QMessageBox::information( this, i18n("No name"),
                       i18n("You have to specify a variable name.") );
   else
     accept();

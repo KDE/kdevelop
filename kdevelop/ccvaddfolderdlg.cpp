@@ -21,7 +21,7 @@
 
 
 #include "ccvaddfolderdlg.h"
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <qlayout.h>
@@ -99,11 +99,12 @@ void CCVAddFolderDlg::OK()
 {
 
   if( strlen( folderEdit.text() ) == 0 )
-    KMsgBox::message( this, i18n("No name"),
+    QMessageBox::information( this, i18n("No name"),
                       i18n("You have to specify a foldername.") );
   else
     accept();
 }
+
 
 
 

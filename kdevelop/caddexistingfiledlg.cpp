@@ -21,7 +21,7 @@
 #include <qfileinfo.h>
 #include <qfiledialog.h>
 #include <kfiledialog.h>
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include "caddexistingfiledlg.h"
@@ -204,15 +204,13 @@ void CAddExistingFileDlg::OK(){
 //     return;
 //   }
   if(dest_name.contains(prj->getProjectDir()) == 0 ){
-    KMsgBox::message(this,i18n("Error..."),
-		     i18n("You must choose a destination, that is in your project-dir!")
-		     ,KMsgBox::EXCLAMATION);
+    QMessageBox::warning(this,i18n("Error..."),
+		     i18n("You must choose a destination, that is in your project-dir!"));
     return;
   }
   if(!dir.exists()){
-    KMsgBox::message(this,i18n("Error..."),
-		     i18n("You must choose a valid dir as a destination!")
-		     ,KMsgBox::EXCLAMATION);
+    QMessageBox::warning(this,i18n("Error..."),
+		     i18n("You must choose a valid dir as a destination!"));
     return;
   }
   
@@ -224,6 +222,7 @@ bool CAddExistingFileDlg::isTemplateChecked()
 {
  return template_checkbox->isChecked();
 }
+
 
 
 

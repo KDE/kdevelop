@@ -36,7 +36,7 @@
 #include <kapp.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kfm.h>
 #include <kcolorbtn.h>
 #include <kcursor.h>
@@ -148,7 +148,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       file.close();
     }
     else{
-      KMsgBox::message(0,i18n("Not found!"),"file: \"" + str + i18n("\" not found!"),KMsgBox::INFORMATION);
+      QMessageBox::information(0,i18n("Not found!"),"file: \"" + str + i18n("\" not found!"));
        return;
     }
 //  htmlview->setCursor( KCursor::arrowCursor() );
@@ -659,6 +659,7 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
 
 
 

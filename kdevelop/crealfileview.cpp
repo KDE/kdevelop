@@ -19,6 +19,7 @@
 
 #include "qdir.h"
 #include "qstrlist.h"
+#include <qmessagebox.h>
 #include <kmsgbox.h>
 #include <qfile.h>
 #include <qfileinfo.h>
@@ -375,6 +376,7 @@ void CRealFileView::slotCommit()
     }
 }
  
+
 
 
 

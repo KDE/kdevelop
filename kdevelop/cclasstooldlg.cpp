@@ -21,7 +21,7 @@
 
 
 #include "cclasstooldlg.h"
-#include <kmsgbox.h>
+#include <qmessagebox.h>
 #include <kapp.h>
 #include <klocale.h>
 #include <qtooltip.h>
@@ -662,4 +662,5 @@ void CClassToolDlg::OK()
 {
   accept();
 }
+
 
