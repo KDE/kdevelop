@@ -127,7 +127,7 @@ void ProgressDialog::setFilesScanned(int n)
 
 void ProgressDialog::setFilesToDig(int n)
 {
-    bar->setTotalSteps(0, n);
+    bar->setTotalSteps(n);
 }
 
 void ProgressDialog::setFilesDigged(int n)
