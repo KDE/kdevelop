@@ -620,15 +620,18 @@ void CKDevelop::CVGotoDeclaration( const char *parentPath,
     case THPUBLIC_METHOD:
     case THPROTECTED_METHOD:
     case THPRIVATE_METHOD:
-      aAttr = aContainer->getMethodByNameAndArg( itemName );
+      if( aContainer != NULL )
+        aAttr = aContainer->getMethodByNameAndArg( itemName );
       break;
     case THPUBLIC_SLOT:
     case THPROTECTED_SLOT:
     case THPRIVATE_SLOT:
-      aAttr = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
+      if( aContainer != NULL )
+        aAttr = ((CParsedClass *)aContainer)->getSlotByNameAndArg( itemName );
       break;
     case THSIGNAL:
-      aAttr = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
+      if( aContainer != NULL )
+        aAttr = ((CParsedClass *)aContainer)->getSignalByNameAndArg( itemName );
       break;
     case THGLOBAL_FUNCTION:
       aAttr = class_tree->store->globalContainer.getMethodByNameAndArg( itemName );
