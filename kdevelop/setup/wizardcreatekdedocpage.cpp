@@ -66,7 +66,7 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
 //    kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
 
     m_pInstallState->kde = docDir;
-    CUpdateKDEDocDlg* pDlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, false, "test");
+    pDlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, false, "test");
     vl->addWidget(pDlg);
     QObject::connect(pDlg, SIGNAL(newDocIsCreatedNow(const QString&)), SLOT(slotSetKDEDocPath(const QString&)) );
     QObject::connect(pDlg, SIGNAL(newDocCreationStartedNow()), SLOT(slotDisableButton()) );
@@ -84,6 +84,12 @@ void WizardCreateKDEDocPage::slotDisableButton()
 {
   setValid(false);
   setBackButtonEnabled(false);
+}
+
+void WizardCreateKDEDocPage::showEvent(QShowEvent*)
+{
+  if (pDlg && m_pInstallState)
+    pDlg->setQtDocDir(m_pInstallState->qt);
 }
 
 #include "wizardcreatekdedocpage.moc"

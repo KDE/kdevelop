@@ -152,7 +152,6 @@ protected slots:
   void slotClassDelete();
   void slotClassViewSelected();
 
-  void slotFolderNew();
   void slotFolderDelete();
 
   void slotClassBaseClasses();

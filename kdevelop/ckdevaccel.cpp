@@ -153,7 +153,7 @@ void CKDevAccel::disconnectItem(const QString& action,
 #if QT_VERSION < 300
   KAccel::disconnectItem(action, receiver, member);
 #else
-  setActionSlot(action, 0, 0);
+  setSlot(action, 0, 0);
 #endif
 }
 

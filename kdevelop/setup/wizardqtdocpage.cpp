@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <stdlib.h>
+
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -43,8 +45,17 @@ void WizardQtDocPage::showEvent(QShowEvent*)
   int i;
   m_pInstallState->qt_test = true;
 
+  // try to get the path from the QTDIR environment variable
+  char* qt_dir_env = getenv( "QTDIR" );
+  QCString qt_dir;
+  if (qt_dir_env) {
+    qt_dir = QCString(qt_dir_env);
+  }
+  qt_dir += "/doc/html";
+
   QString qt_testfile; // for tests if the path really is the qt-doc path
   const char *qt_dirs[]={
+    qt_dir,
     "/usr/local/qt-2.2.3/html",
     "/usr/local/lib/qt-2.2.3/html",
     "/usr/lib/qt-2.2.3/html",
@@ -57,7 +68,9 @@ void WizardQtDocPage::showEvent(QShowEvent*)
     "/usr/lib/qt/html",
     "/usr/lib/qt/doc/html",
     "/usr/local/qt/html",
+    "/usr/local/qt/doc/html",
     "/usr/local/lib/qt/html",
+    "/usr/local/lib/qt/doc/html",
     "/usr/X11/lib/qt/html",
     "/usr/X11/lib/qt/doc/html",
     "/usr/doc/qt-doc/html",
@@ -78,8 +91,9 @@ void WizardQtDocPage::showEvent(QShowEvent*)
     m_pInstallState->qt = qt_dirs[i];
     qt_testfile=m_pInstallState->qt+"/classes.html";
 
-    if(QFileInfo(qt_testfile).exists())
+    if(QFileInfo(qt_testfile).exists()) {
       m_pInstallState->qt_test=false;
+    }
   };
 
   // create the widgets of this page
@@ -147,6 +161,7 @@ void WizardQtDocPage::hideEvent(QHideEvent*)
   if (qt_edit)
     m_pInstallState->qt = qt_edit->text();
   delete m_vbox;
+  qt_edit = 0;
 }
 
 void WizardQtDocPage::slotQTpressed()

@@ -31,6 +31,7 @@
 WizardIndexDocuPage::WizardIndexDocuPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState)
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
 {
+  pDlg = 0;
   pInstallState->finish_dir = new QDir();
 
   QLabel* label;
@@ -61,7 +62,7 @@ WizardIndexDocuPage::WizardIndexDocuPage(QWidget* parent, const char* name, cons
                               "This will provide an extended help functionality and will give you the information you need."), wdg);
       label->setAlignment(WordBreak);
 
-      CCreateDocDatabaseDlg* pDlg = new CCreateDocDatabaseDlg(wdg,"DLG", m_pInstallState->shell_process, m_pInstallState->kde, m_pInstallState->qt, m_pInstallState->glimpse | m_pInstallState->glimpseindex, m_pInstallState->htdig);
+      pDlg = new CCreateDocDatabaseDlg(wdg,"DLG", m_pInstallState->shell_process, m_pInstallState->kde, m_pInstallState->qt, m_pInstallState->glimpse | m_pInstallState->glimpseindex, m_pInstallState->htdig);
       vl->addWidget(label);
       vl->addWidget(pDlg);
 
@@ -82,6 +83,12 @@ void WizardIndexDocuPage::slotDisableButton()
 {
   setValid(false);
   setBackButtonEnabled(false);
+}
+
+void WizardIndexDocuPage::showEvent( QShowEvent * e)
+{
+  if (pDlg && m_pInstallState)
+    pDlg->setQtDocDir(m_pInstallState->qt);  
 }
 
 #include "wizardindexdocupage.moc"

@@ -1,1 +1,10 @@
-
+/- indentation
+  - fix: leftmost { doesn't autoindent
+  - indent-region
+  - indent open paren/close paren, etc.
+  - indent << 
+  - indent public:, ...
+  - display modes in status bar
+  + undo doesn't work after indent
+  + add a TabIndent mode (not the same thing as AutoIndent)
+  - (maybe) a way to insert Tab when in TabIndent mode

@@ -87,6 +87,10 @@ signals:
   void selectedFileNew(const char* dir);
   void selectedClassNew(const char* dir);
 
+  /** This signal is emitted when the "Make" entry of the context
+      menu us selected */
+  void makeDir(const QString& target);
+
 protected slots:
   /** emits signal "fileSelected" when it gets the selectionChanged-signal from itself */
   void slotSelectionChanged(QListViewItem* selection);
@@ -108,6 +112,7 @@ protected slots:
   /**  */
   void slotFileNew();
   void slotUpdateMakefileAm();
+  void slotMakeDir();
 //  void slotChangeToStatic();
 //  void slotChangeToShared();
   void slotLibProperties();

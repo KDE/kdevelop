@@ -1,3 +1,9 @@
+kdevelop (1:2.0.3b) unstable; urgency=low
+
+  * New version.
+
+ -- Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>  Thu, 22 Nov 2001 01:40:05 +0200
+
 kdevelop (1:2.0b1-2) unstable; urgency=low
 
   * Renamed debian doc-base entries to standard ones.

@@ -128,6 +128,7 @@ void CKDevInstall::slotFinished()
     m_config->writeEntry("Color2","0,0,0");
     m_config->writeEntry("Color3","0,0,0");
     m_config->writeEntry("TabWidth","2");
+    m_config->writeEntry("IndentLength","2");
     m_config->writeEntry("Color4","255,255,255");
 
     m_config->setGroup("C Highlight");
@@ -169,7 +170,7 @@ void CKDevInstall::slotFinished()
   else if (m_pInstallState->highlightStyle == 1) {
     m_config->setGroup("Perl Highlight");
     m_config->writeEntry("Mimetypes","application/x-perl");
-    m_config->writeEntry("Wildcards","");
+    m_config->writeEntry("Wildcards","*.pl;*.pm");
     m_config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");
@@ -301,9 +302,9 @@ void CKDevInstall::slotFinished()
 
     m_config->setGroup("Bash Highlight");
     m_config->writeEntry("Integer","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Mimetypes","text/x-shellscript");
+    m_config->writeEntry("Mimetypes","text/x-shellscript;application/x-shellscript");
     m_config->writeEntry("Substitution","1,0,FFFFFF,0,0,1,courier,12,");
-    m_config->writeEntry("Wildcards","");
+    m_config->writeEntry("Wildcards","*.sh");
     m_config->writeEntry("Comment","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("String","1,0,FFFFFF,0,0,1,courier,12,");
     m_config->writeEntry("Normal Text","1,0,FFFFFF,0,0,1,courier,12,");

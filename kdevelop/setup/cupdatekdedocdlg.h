@@ -44,6 +44,7 @@ public:
   ~CUpdateKDEDocDlg();
   bool isUpdated() const {return bUpdated;};
   QString getDocPath() const {return kde_doc_path;};
+  void setQtDocDir(const QString& qtDocDir);
 
   QButtonGroup* install_box;
   QLineEdit* source_edit;
@@ -59,7 +60,7 @@ public:
   QRadioButton* leave_new_radio_button;
 
 signals:
-	void newDocIsCreatedNow(const QString&);
+  void newDocIsCreatedNow(const QString&);
   void newDocCreationStartedNow();
 
 public slots:

@@ -1763,16 +1763,16 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
 
   // view activation via alt+numberkey for tabpage mode
   // (Note: the program will call the index ( = viewnumber - 1))
-  accel->insertItem( QString::null, "ActivateView1", IDK_GOTO_EDITORVIEW1);
-  accel->insertItem( QString::null, "ActivateView2", IDK_GOTO_EDITORVIEW2);
-  accel->insertItem( QString::null, "ActivateView3", IDK_GOTO_EDITORVIEW3);
-  accel->insertItem( QString::null, "ActivateView4", IDK_GOTO_EDITORVIEW4);
-  accel->insertItem( QString::null, "ActivateView5", IDK_GOTO_EDITORVIEW5);
-  accel->insertItem( QString::null, "ActivateView6", IDK_GOTO_EDITORVIEW6);
-  accel->insertItem( QString::null, "ActivateView7", IDK_GOTO_EDITORVIEW7);
-  accel->insertItem( QString::null, "ActivateView8", IDK_GOTO_EDITORVIEW8);
-  accel->insertItem( QString::null, "ActivateView9", IDK_GOTO_EDITORVIEW9);
-  accel->insertItem( QString::null, "ActivateView10", IDK_GOTO_EDITORVIEW10);
+  accel->insertItem( i18n("Activate view 1"), "ActivateView1", IDK_GOTO_EDITORVIEW1);
+  accel->insertItem( i18n("Activate view 2"), "ActivateView2", IDK_GOTO_EDITORVIEW2);
+  accel->insertItem( i18n("Activate view 3"), "ActivateView3", IDK_GOTO_EDITORVIEW3);
+  accel->insertItem( i18n("Activate view 4"), "ActivateView4", IDK_GOTO_EDITORVIEW4);
+  accel->insertItem( i18n("Activate view 5"), "ActivateView5", IDK_GOTO_EDITORVIEW5);
+  accel->insertItem( i18n("Activate view 6"), "ActivateView6", IDK_GOTO_EDITORVIEW6);
+  accel->insertItem( i18n("Activate view 7"), "ActivateView7", IDK_GOTO_EDITORVIEW7);
+  accel->insertItem( i18n("Activate view 8"), "ActivateView8", IDK_GOTO_EDITORVIEW8);
+  accel->insertItem( i18n("Activate view 9"), "ActivateView9", IDK_GOTO_EDITORVIEW9);
+  accel->insertItem( i18n("Activate view 10"), "ActivateView10", IDK_GOTO_EDITORVIEW10);
   accel->connectItem("ActivateView1", this, SLOT(activateView1()), true, 0);
   accel->connectItem("ActivateView2", this, SLOT(activateView2()), true, 0);
   accel->connectItem("ActivateView3", this, SLOT(activateView3()), true, 0);
@@ -1942,7 +1942,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->insertItem(i18n("Project options"), "ProjectOptions", IDK_PROJECT_OPTIONS);
   accel->connectItem("ProjectOptions", m_pParent, SLOT(slotProjectOptions() ), true, ID_PROJECT_OPTIONS );
 
-  accel->insertItem(i18n("Make tags file"), "MakeTagsfile", ID_PROJECT_MAKE_TAGS);
+  accel->insertItem(i18n("Make tags file"), "MakeTagsfile", 0);
   accel->connectItem("MakeTagsfile", m_pParent, SLOT(slotProjectMakeTags() ), true, ID_PROJECT_MAKE_TAGS );
 
   accel->insertItem(i18n("Load tags file"), "LoadTagsfile", ID_PROJECT_LOAD_TAGS);

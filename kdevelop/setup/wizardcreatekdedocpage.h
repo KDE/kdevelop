@@ -20,14 +20,21 @@
 
 #include "wizardbasepage.h"
 
+class CUpdateKDEDocDlg;
+
 class WizardCreateKDEDocPage : public WizardBasePage
 {
 	Q_OBJECT
 public:
 	WizardCreateKDEDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState);
+
 protected slots:	
-	void slotSetKDEDocPath(const QString& newKDEDocPath);
+  void slotSetKDEDocPath(const QString& newKDEDocPath);
   void slotDisableButton();
+  virtual void showEvent( QShowEvent * e);
+
+private:
+  CUpdateKDEDocDlg* pDlg;
 };
 
 #endif  // WIZARDCREATEKDEDOCPAGE_H

@@ -20,14 +20,21 @@
 
 #include "wizardbasepage.h"
 
+class CCreateDocDatabaseDlg;
+
 class WizardIndexDocuPage : public WizardBasePage
 {
 	Q_OBJECT
 public:
 	WizardIndexDocuPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState);
+
 protected slots:	
-	void indexingFinished(const QString&);
+  void indexingFinished(const QString&);
   void slotDisableButton();
+  virtual void showEvent(QShowEvent * e);
+
+private:
+  CCreateDocDatabaseDlg* pDlg;
 };
 
 #endif  // WIZARDINDEXDOCUPAGE_H

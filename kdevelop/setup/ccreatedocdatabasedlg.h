@@ -41,7 +41,8 @@ class CCreateDocDatabaseDlg : public QWidget  {
    Q_OBJECT
 public: 
 	CCreateDocDatabaseDlg(QWidget *parent=0, const char *name=0,KShellProcess* proc=0, const QString& kdeDocDir = QString::null, const QString& qtDocDir = QString::null,
-		bool foundGlimpse=false, bool foundHtDig=false, bool bShowIndexingButton = true);
+	      bool foundGlimpse=false, bool foundHtDig=false, bool bShowIndexingButton = true);
+        void setQtDocDir(const QString& qtDocDir);
 	~CCreateDocDatabaseDlg();
 	
 public slots:
