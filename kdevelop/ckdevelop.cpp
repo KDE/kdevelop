@@ -763,11 +763,15 @@ void CKDevelop::slotBuildDebug(){
   if(!CToolClass::searchProgram("kdbg")){
     return;
   }
-  if(!prj->getBinPROGRAM()){
-    slotBuildMake();
-  }
+
   if(!bKDevelop)
     switchToKDevelop();
+
+//   maybe the sources have changed, so it has to be compiled
+//
+//  if(!prj->getBinPROGRAM()){
+    slotBuildMake();
+//  }
 
   showOutputView(false);
   showTreeView(false);
