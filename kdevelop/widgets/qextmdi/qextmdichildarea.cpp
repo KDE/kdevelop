@@ -81,8 +81,7 @@ void QextMdiChildArea::manageChild(QextMdiChildFrm *lpC,bool bShow,bool bCascade
       }
       lpC->show();
    }
-   focusTopChild();  //F.B.
-   //if(bShow) lpC->setFocus();
+   focusTopChild();
 }
 
 //============= focusInEvent ===============//
@@ -108,10 +107,10 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
       QextMdiChildFrm * c=topChild();
       if(c)c->setState(QextMdiChildFrm::Maximized,FALSE);
    }
-   if(bFocusTopChild)focusTopChild();
-   QextMdiChildFrm* pTopChild = 0;
-   if( bWasMaximized && (pTopChild = topChild()) )
-      emit nowMaximized(); 
+   if(bFocusTopChild)
+      focusTopChild();
+   if( bWasMaximized && topChild() )
+      emit nowMaximized();
 }
 
 //============ destroyChildButNotItsView ============//
@@ -133,9 +132,9 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
       QextMdiChildFrm * c=topChild();
       if(c)c->setState(QextMdiChildFrm::Maximized,FALSE);
    }
-   if(bFocusTopChild)focusTopChild();
-   QextMdiChildFrm* pTopChild = 0;
-   if( bWasMaximized && (pTopChild = topChild()) )
+   if(bFocusTopChild)
+      focusTopChild();
+   if( bWasMaximized && topChild() )
       emit nowMaximized(); 
 }
 
@@ -163,14 +162,13 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       if(bSetFocus){
          if(!lpC->hasFocus())lpC->setFocus();
       }
-      ///emit topChildChanged( lpC->m_pClient);
       lpC->m_pClient->setFocus();
    }
 }
 
 //============== resizeEvent ================//
 
-void QextMdiChildArea::resizeEvent(QResizeEvent *e)
+void QextMdiChildArea::resizeEvent(QResizeEvent* /*e*/)
 {
    //If we have a maximized children at the top , adjust its size
    QextMdiChildFrm *lpC=m_pZ->last();
@@ -180,7 +178,6 @@ void QextMdiChildArea::resizeEvent(QResizeEvent *e)
                       height() + lpC->height() - lpC->m_pClient->height());
    }
    layoutMinimizedChildren();
-   e = 0; // dummy!, only to avoid "unused parameters"
 }
 
 //=============== mousePressEvent =============//
@@ -243,7 +240,10 @@ void QextMdiChildArea::childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized)
 void QextMdiChildArea::focusTopChild()
 {
    QextMdiChildFrm *lpC=m_pZ->last();
-   if(!lpC)return;
+   if(!lpC) {
+      emit lastChildFrmClosed();
+      return;
+   }
    if(lpC->m_state==QextMdiChildFrm::Minimized)return;
    //disable the labels of all the other children
    for(QextMdiChildFrm *pC=m_pZ->first();pC;pC=m_pZ->next()){
@@ -251,7 +251,6 @@ void QextMdiChildArea::focusTopChild()
    }
    lpC->raise();
    if(!lpC->hasFocus())lpC->setFocus();
-   ///emit topChildChanged(lpC->m_pClient);
    lpC->m_pClient->setFocus();
 }
 

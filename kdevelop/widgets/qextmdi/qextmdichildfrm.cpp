@@ -434,6 +434,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
    case Normal:
       switch(m_state){
       case Maximized:
+         m_pClient->m_stateChanged = true;
          m_state=state;
          //F.B. if(bAnimate)m_pManager->animate(begin,m_restoredRect);
          m_pClient->setMinimumSize(m_oldClientMinSize.width(),m_oldClientMinSize.height());
@@ -443,6 +444,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          setGeometry(m_restoredRect);
          break;
       case Minimized:
+         m_pClient->m_stateChanged = true;
          m_state=state;
          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
          //if(bAnimate)m_pManager->animate(begin,end);
@@ -465,6 +467,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
       //end=QRect(0,0,m_pManager->width(),m_pManager->height());
       switch(m_state){
       case Minimized:
+         m_pClient->m_stateChanged = true;
          //begin=QRect(x()+width()/2,y()+height()/2,1,1);
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pClient->show();
@@ -483,6 +486,7 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
          raise();
          break;
       case Normal:
+         m_pClient->m_stateChanged = true;
          m_state=state;
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
@@ -504,12 +508,14 @@ void QextMdiChildFrm::setState(MdiWindowState state,bool bAnimate)
       //end=QRect(x()+width()/2,y()+height()/2,1,1);
       switch(m_state){
       case Maximized:
+         m_pClient->m_stateChanged = true;
          m_state=state;
          switchToMinimizeLayout();
          //if(bAnimate)m_pManager->animate(begin,end);
          m_pManager->childMinimized(this,TRUE);
          break;
       case Normal:
+         m_pClient->m_stateChanged = true;
          m_state=state;
          m_oldClientMinSize = m_pClient->minimumSize();
          m_oldClientMaxSize = m_pClient->maximumSize();
@@ -900,7 +906,7 @@ void QextMdiChildFrm::switchToMinimizeLayout()
 {
    int clientMinWidth = m_pClient->minimumWidth();
    if( clientMinWidth == 0)
-      clientMinWidth = m_pManager->m_defaultChildFrmSize.width();
+      clientMinWidth = 300;
    m_pClient->hide();
 
    setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);

@@ -153,13 +153,13 @@ protected:
    void undockWindow(QWidget *lpC);
 
 signals:
-   void topChildChanged(QextMdiChildView*);
    /** signalizes that the child frames are no longer maximized */
    void noLongerMaximized(QextMdiChildFrm*);
    /** signalizes that the child frames are maximized now*/
    void nowMaximized();
    void sysButtonConnectionsMustChange(QextMdiChildFrm*, QextMdiChildFrm*);
    void popupWindowMenu( QPoint);
+   void lastChildFrmClosed();
 };
 
 #endif   // _QEXTMDICHILDAREA_H_

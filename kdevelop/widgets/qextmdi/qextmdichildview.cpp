@@ -41,6 +41,7 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_focusedChildWidget(0L)
   ,m_firstFocusableChildWidget(0L)
   ,m_lastFocusableChildWidget(0L)
+  ,m_stateChanged(true)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if( caption) 
@@ -157,6 +158,13 @@ void QextMdiChildView::minimize(bool bAnimate)
    } else showMinimized();
 }
 
+void QextMdiChildView::showMinimized()
+{
+   qDebug("is minimized now");
+   emit isMinimizedNow();
+   QWidget::showMinimized();
+}
+
 void QextMdiChildView::minimize(){ minimize(TRUE); }
 
 //============= maximize ==============//
@@ -169,6 +177,13 @@ void QextMdiChildView::maximize(bool bAnimate)
          emit mdiParentNowMaximized();
       }
    } else showMaximized();
+}
+
+void QextMdiChildView::showMaximized()
+{
+   qDebug("is maximized now");
+   emit isMaximizedNow();
+   QWidget::showMaximized();
 }
 
 void QextMdiChildView::maximize(){ maximize(TRUE); }
@@ -213,6 +228,13 @@ void QextMdiChildView::restore()
          emit mdiParentNoLongerMaximized(mdiParent());
       if(isMinimized()||isMaximized())mdiParent()->setState(QextMdiChildFrm::Normal);
    } else showNormal();
+}
+
+void QextMdiChildView::showNormal()
+{
+   qDebug("is restored now");
+   emit isRestoredNow();
+   QWidget::showNormal();
 }
 
 //=============== youAreAttached ============//
@@ -281,6 +303,29 @@ void QextMdiChildView::focusInEvent(QFocusEvent *)
          m_firstFocusableChildWidget->setFocus();
          m_focusedChildWidget = m_firstFocusableChildWidget;
       }
+}
+
+//============= focusInEvent ===============//
+
+void QextMdiChildView::resizeEvent(QResizeEvent* e)
+{
+   QWidget::resizeEvent( e);
+
+   if( m_stateChanged) {
+      m_stateChanged = false;
+      if( isMaximized()) {
+         qDebug("is maximized now");
+         emit isMaximizedNow();
+      }
+      else if( isMinimized()) {
+         qDebug("is minimized now");
+         emit isMinimizedNow();
+      }
+      else {   // is restored
+         qDebug("is restored now");
+         emit isRestoredNow();
+      }
+   }
 }
 
 //============= eventFilter ===============//

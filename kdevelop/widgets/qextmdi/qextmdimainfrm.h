@@ -243,6 +243,12 @@ protected slots: // Protected slots
    void windowMenuItemActivated(int id);
    void dockMenuItemActivated(int id);
    void popupWindowMenu(QPoint p);
+
+signals:
+   /** Signals the last attached @ref QextMdiChildView has been closed */
+   void lastChildFrmClosed();
+   /** Signals the last QextMdiChildView (that is under MDI control) has been closed */
+   void lastChildViewClosed();
 };
 
 #endif //_QEXTMDIMAINFRM_H_

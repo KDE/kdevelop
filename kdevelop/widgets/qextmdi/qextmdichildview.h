@@ -47,6 +47,7 @@
 
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget
 {
+   friend class QextMdiChildFrm;
    Q_OBJECT
 
 public:     // Consruction & Destruction
@@ -59,7 +60,8 @@ protected:     // Fields
    QWidget*    m_firstFocusableChildWidget;
    QWidget*    m_lastFocusableChildWidget;
    /** every child view window has an temporary ID in the Window menu of the main frame. */
-   int            m_windowMenuID;
+   int         m_windowMenuID;
+   bool        m_stateChanged;
 
 public:     // Methods
    /**
@@ -201,16 +203,20 @@ public slots:
    virtual void slot_clickedInDockMenu();
    /** calls QWidget::show but also for it's parent widget if attached */
    virtual void show();
+   virtual void showMinimized();
+   virtual void showMaximized();
+   virtual void showNormal();
 
-protected:  // Protected methods
+protected:
    /**
     * Ignores the event and calls QextMdiMainFrm::childWindowCloseRequest
     * @see QextMdiMainFrm::childWindowCloseRequest
     */
    virtual void closeEvent(QCloseEvent *e);
    virtual bool eventFilter(QObject *obj, QEvent *e);
-   virtual void focusInEvent(QFocusEvent *);
-   
+   virtual void focusInEvent(QFocusEvent *e);
+   virtual void resizeEvent(QResizeEvent *e);
+
 signals:
    void attachWindow( QextMdiChildView*,bool);
    void detachWindow( QextMdiChildView*,bool);
@@ -229,6 +235,12 @@ signals:
    void clickedInWindowMenu(int);
    /** is automatically emitted when slot_clickedInDockMenu is called */
    void clickedInDockMenu(int);
+   /** Signals this has been maximized */
+   void isMaximizedNow();
+   /** Signals this has been minimized */
+   void isMinimizedNow();
+   /** Signals this has been restored (normalized) */
+   void isRestoredNow();
 };
 
 inline bool QextMdiChildView::isAttached(){ return (parent() != 0); }
