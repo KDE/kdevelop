@@ -36,7 +36,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>load last project on startup</string>
+                <string>Load last project on startup</string>
             </property>
         </widget>
         <spacer row="1"  column="0" >
