@@ -70,6 +70,7 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
   pop->insertSeparator();
   pop->insertItem(SmallIconSet("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
   pop->insertItem(SmallIconSet("help"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
+  pop->insertItem(SmallIconSet("help"),"",this,SLOT(slotManpage()),0,ID_HELP_MANPAGE);
 //  bookmarks.setAutoDelete(true);
   pop->insertSeparator();
   pop->insertItem(SmallIconSet("dbgrunto"),i18n("Run to cursor"),this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
@@ -333,6 +334,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 
     pop->setItemEnabled(ID_HELP_SEARCH_TEXT, !str.isEmpty());
     pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES, !str.isEmpty());
+    pop->setItemEnabled(ID_HELP_MANPAGE, !str.isEmpty());
 
     pop->setItemEnabled(ID_EDIT_ADD_WATCH_VARIABLE, !str.isEmpty());  // TODO: only enable in debugger mode
     pop->setItemEnabled(ID_EDIT_RUN_TO_CURSOR, true);	                // TODO: only enable in debugger mode
@@ -340,6 +342,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 
     pop->changeItem(SmallIconSet("grep"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
     pop->changeItem(SmallIconSet("help"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
+    pop->changeItem(SmallIconSet("help"),i18n("manpage: ") + str,ID_HELP_MANPAGE);
     pop->changeItem(SmallIconSet("dbgwatchvar"),i18n("Watch: ") + str,ID_EDIT_ADD_WATCH_VARIABLE); // the lookup entry
 
     pop->popup(this->mapToGlobal(event->pos()));
@@ -352,11 +355,14 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
  *                                                                   *
  ********************************************************************/
 
+void CEditWidget::slotManpage(){
+  emit manpage("man:/"+searchtext+"(3)");
+}
 void CEditWidget::slotLookUp(){
-    emit lookUp(searchtext);
+  emit lookUp(searchtext);
 }
 void CEditWidget::slotGrepText(){
-    emit grepText(searchtext);
+  emit grepText(searchtext);
 }
 
 // Support for debugging the current project

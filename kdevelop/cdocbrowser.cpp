@@ -82,7 +82,8 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
   doc_pop->insertSeparator();
   doc_pop->insertItem(SmallIconSet("grep"),i18n("grep: "), this, SLOT(slotGrepText()), 0, ID_EDIT_SEARCH_IN_FILES);
   doc_pop->insertItem(SmallIconSet("help"),i18n("look up: "),this, SLOT(slotSearchText()),0,ID_HELP_SEARCH_TEXT);
-  
+  doc_pop->insertItem(SmallIconSet("help"),i18n("manpage: "),this, SLOT(slotManpage()),0,ID_HELP_MANPAGE);
+
 //  view()->setFocusPolicy( QWidget::StrongFocus );
   connect(this, SIGNAL( popupMenu( const QString&, const QPoint & ) ),
           this, SLOT( slotPopupMenu( const QString&, const QPoint & ) ) );
@@ -135,8 +136,11 @@ void CDocBrowser::showURL(const QString& url, bool reload)
 
   if(complete_url.left(7) == "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1)
   {
-    new KRun(complete_url);
-    return;
+    if (complete_url.left(5) != "man:/")
+    {
+      new KRun(complete_url);
+      return;
+    }
   }
   // workaround for kdoc2 malformed urls in crossreferences to Qt-documentation
   if(complete_url.contains("file%253A/"))
@@ -306,6 +310,7 @@ void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
   if (!text.isEmpty())
   {
     doc_pop->setItemEnabled(ID_EDIT_COPY,true);
+    doc_pop->setItemEnabled(ID_HELP_MANPAGE,true);
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,true);
     doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,true);
 
@@ -314,14 +319,17 @@ void CDocBrowser::slotPopupMenu( const QString&/*url*/, const QPoint & pnt){
     }
     doc_pop->changeItem(SmallIconSet("grep"),i18n("grep: ")+text, ID_EDIT_SEARCH_IN_FILES);
     doc_pop->changeItem(SmallIconSet("help"),i18n("look up: ")+ text,ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(SmallIconSet("help"),i18n("manpage: ")+ text,ID_HELP_MANPAGE);
   }
   else
   {
     doc_pop->setItemEnabled(ID_EDIT_COPY,false);
+    doc_pop->setItemEnabled(ID_HELP_MANPAGE,false);
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,false);
     doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,false);
     doc_pop->changeItem(SmallIconSet("grep"),i18n("grep: "), ID_EDIT_SEARCH_IN_FILES);
     doc_pop->changeItem(SmallIconSet("help"),i18n("look up: "),ID_HELP_SEARCH_TEXT);
+    doc_pop->changeItem(SmallIconSet("help"),i18n("manpage: "),ID_HELP_MANPAGE);
   }
   doc_pop->popup(pnt);
 }
@@ -351,6 +359,14 @@ void CDocBrowser::slotSearchText(){
 
   emit signalSearchText();
 }
+
+void CDocBrowser::slotManpage()
+{
+  debug("CDocBrowser::slotManpage\n");
+  QString text = "man:/"+selectedText()+"(3)";
+  emit signalManpage(text);
+}
+
 void CDocBrowser::slotGrepText(){
 
   debug("CDocBrowser::slotGrepText !\n");

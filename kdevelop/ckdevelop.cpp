@@ -1989,7 +1989,7 @@ void CKDevelop::slotBookmarksClear(){
 void CKDevelop::openBrowserBookmark(const QString& file)
 {
   slotStatusMsg(i18n("Opening bookmark..."));
-  slotURLSelected(file,1,"test");
+  slotURLSelected(file);
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -2140,6 +2140,13 @@ QString encodeURL(const QString &str)
     return temp;
 }
 
+void CKDevelop::slotHelpManpage(const QString& text)
+{
+  slotStatusMsg(i18n("Display manpage..."));
+  slotURLSelected(text);
+  slotStatusMsg(i18n("Ready."));
+}
+
 void CKDevelop::slotHelpSearchText(QString text){
   int pos;
 
@@ -2236,7 +2243,7 @@ void CKDevelop::showDocHelp(const QString& filename)
 {
   QString file = DocTreeKDevelopBook::locatehtml(filename);
   if (!file.isEmpty())
-    slotURLSelected(file, 1, "test");
+    slotURLSelected(file);
 }
 
 void CKDevelop::slotHelpContents(){
@@ -2302,7 +2309,7 @@ void CKDevelop::slotHelpAPI(){
     }
     else{
       slotStatusMsg(i18n("Switching to project API Documentation..."));
-      slotURLSelected(api_file,1,"test");
+      slotURLSelected(api_file);
       slotStatusMsg(i18n("Ready.")); 
     }
   }
@@ -2320,11 +2327,11 @@ void CKDevelop::slotHelpManual(){
       if(!QFileInfo(doc_file).exists())
         return;   // replaced by right mouse button handling to generate the help manual in DocTreeView
       else
-        slotURLSelected(doc_file,1,"test");
+        slotURLSelected(doc_file);
     }
     else{
       slotStatusMsg(i18n("Switching to project Manual..."));
-      slotURLSelected(doc_file,1,"test");
+      slotURLSelected(doc_file);
       slotStatusMsg(i18n("Ready."));
     }
   }
@@ -2637,7 +2644,7 @@ void CKDevelop::slotNewUndo()
 }
 
 
-void CKDevelop::slotURLSelected(const QString& url,int,const char*)
+void CKDevelop::slotURLSelected(const QString& url)
 {
   if (url.isEmpty())
     return;
@@ -2972,7 +2979,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*)
     stream << "\n</TABLE></BODY></HTML>";
 
     file.close();
-    slotURLSelected(filename, 1,"test");
+    slotURLSelected(filename);
     return;
   }
   else
@@ -2980,7 +2987,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*)
     ASSERT (useHtDig);
     filename = locateLocal("appdata", "search_result.html");
     if (QFile::exists(filename))
-      slotURLSelected(filename, 1,"test");
+      slotURLSelected(filename);
   }
 }
 
@@ -3439,7 +3446,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
       return;
     }
   }
-  slotURLSelected(url_file, 1, "test");
+  slotURLSelected(url_file);
   
 }
 

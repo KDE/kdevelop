@@ -285,6 +285,8 @@
 
 #define ID_HELP_WHATS_THIS              18160
 
+#define ID_HELP_MANPAGE                 18170
+
 ///////////////////////////////////////////////////////////////////
 // Popup menu id's
 #define ID_LFV_NEW_GROUP						30110

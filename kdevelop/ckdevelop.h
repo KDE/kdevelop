@@ -547,6 +547,8 @@ public:
   void slotHelpSearchText();
   /** search marked text with a text string */
   void slotHelpSearchText(QString text);
+  /** display manpage */
+  void slotHelpManpage(const QString& text);
   /** shows the Search for Help on.. dialog to insert a search expression */
   void slotHelpSearch();
   /** shows the KDevelop manual */
@@ -651,7 +653,7 @@ public:
 
   //  void slotClickedOnMessagesWidget();  
 
-  void slotURLSelected(const QString& url,int,const char*);
+  void slotURLSelected(const QString& url);
   void slotDocumentDone();
   void slotURLonURL(const QString& url);
 

@@ -55,25 +55,28 @@ public slots:
   void slotDocStandardFont(const QString&);
   void slotDocFixedFont(const QString&);
   void slotDocColorsChanged(const QColor&, const QColor&,
-            		const QColor&, const QColor&, const bool, const bool);
+                            const QColor&, const QColor&, const bool, const bool);
   void slotPopupMenu( const QString&, const QPoint & );
   void slotCopyText();
   void slotURLBack();
   void slotURLForward();
   void slotSearchText();
   void slotGrepText();
+  void slotManpage();
   void slotSetFileTitle(const QString& title);
   void slotViewInKFM();
 
   void slotFindTextNext(QString);
-		
- signals:
+
+signals:
   void signalURLBack();
   void signalURLForward();
   void signalSearchText();
   void signalGrepText(QString text);
-	void signalBookmarkToggle();
-	void enableStop(int);	
+  void signalManpage(const QString& text);
+  void signalBookmarkToggle();
+  void enableStop(int);
+
 protected:
   QString old_url, complete_url;
   QString m_title, m_refTitle;
@@ -82,17 +85,17 @@ protected:
 
 
 private:
-	// html view preferences
-	static int  fSize;
-	static QString standardFont;
-	static QString fixedFont;
+  // html view preferences
+  static int  fSize;
+  static QString standardFont;
+  static QString fixedFont;
 
-	static QColor bgColor;
-	static QColor textColor;
-	static QColor linkColor;
-	static QColor vLinkColor;
-	static bool   underlineLinks;
-	static bool   forceDefaults;
+  static QColor bgColor;
+  static QColor textColor;
+  static QColor linkColor;
+  static QColor vLinkColor;
+  static bool   underlineLinks;
+  static bool   forceDefaults;
 };
 
 

@@ -1,3 +1,6 @@
+2001-04-06  jbb <jbb@kdevelop.org>
+    * Add manpages
+
 2001-04-04  jbb <jbb@kdevelop.org>
     * More improvements in class parser (handle throw() better) from
     *               Daniel Engelschalt <s2697@htw-dresden.de>

@@ -710,6 +710,7 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc)
   pEW->setCaption(pDoc->fileName());
 
   //connect the editor lookup function with slotHelpSText
+  connect( pEW, SIGNAL(manpage(const QString&)),m_pParent, SLOT(slotHelpManpage(const QString&)));
   connect( pEW, SIGNAL(lookUp(QString)),m_pParent, SLOT(slotHelpSearchText(QString)));
   connect( pEW, SIGNAL(newCurPos()), m_pParent, SLOT(slotNewLineColumn()));
   connect( pEW, SIGNAL(newStatus()),m_pParent, SLOT(slotNewStatus()));

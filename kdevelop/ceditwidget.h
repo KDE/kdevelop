@@ -205,7 +205,8 @@ protected: // Protected methods
   int getLinePos( const char *buf, uint aLine );
 
 protected slots:
- void slotLookUp();
+  void slotLookUp();
+  void slotManpage();
 
 public slots:
 	/** user wants run to the cursor position */
@@ -214,6 +215,7 @@ public slots:
 	void slotAddWatchVariable();
 
 signals:
+ void manpage(const QString& text);
  void lookUp(QString text);
  void grepText(QString text);
  void bufferMenu(const QPoint&);
