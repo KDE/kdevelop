@@ -51,7 +51,7 @@ void kio_$APPNAMELC$Protocol::get(const KURL& url )
     // Send the mimeType as soon as it is known
     mimeType("text/plain");
     // Send the data
-    QString theData = "This is a test of $NAME$";
+    QString theData = "This is a test of kio_$APPNAMELC$";
     data(QCString(theData.local8Bit()));
     data(QByteArray()); // empty array means we're done sending the data
     finished();
