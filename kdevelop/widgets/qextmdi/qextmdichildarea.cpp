@@ -51,7 +51,8 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
 	m_pZ->setAutoDelete(true);
 	setFocusPolicy(ClickFocus);
 	m_pWindowMenu = new QPopupMenu();
-	connect(m_pWindowMenu,SIGNAL(activated(int)),this,SLOT(menuActivated(int)));
+	m_pWindowMenu->setCheckable( true);
+	//QObject::connect(m_pWindowMenu,SIGNAL(activated(int)),this,SLOT(menuActivated(int)));
 	fillWindowMenu();
 }
 
@@ -113,7 +114,7 @@ void QextMdiChildArea::focusInEvent(QFocusEvent *)
 void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 {
 	bool bWasMaximized = lpC->state() == QextMdiChildFrm::Maximized;
-	disconnect(lpC);
+	QObject::disconnect(lpC);
 	lpC->blockSignals(true);
 	m_pZ->removeRef(lpC);
 	if(bWasMaximized){
@@ -129,7 +130,7 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
 void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocusTopChild)
 {
 	bool bWasMaximized = lpC->state() == QextMdiChildFrm::Maximized;
-	disconnect(lpC);
+	QObject::disconnect(lpC);
 
    lpC->unsetClient();
 
@@ -217,34 +218,71 @@ QPoint QextMdiChildArea::getCascadePoint(int indexOfWindow)
 }
 
 //=============== fillWindowMenu ===============//
-
+#include "iostream.h"
 void QextMdiChildArea::fillWindowMenu()
 {
 	m_pWindowMenu->clear();
-	int i=100;
-	for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
-		QString szItem;
-		szItem.setNum(((uint)i)-99);
-		szItem+=". ";
-		if(lpC->m_state==QextMdiChildFrm::Minimized){
-			szItem+="( ";
-			szItem+=lpC->caption();
-			szItem+=" )";
-		} else if(((uint)i)==(m_pZ->count()+99)){ //Active item :)
-			szItem+="* ";
-			szItem+=lpC->caption();
-			szItem+=" *";
-		} else szItem+=lpC->caption();
-		m_pWindowMenu->insertItem(szItem,i);
-		i++;
-	}
+	m_pWindowMenu->insertItem(tr("&Close Window"),this, SIGNAL(closeActiveView()));
+	m_pWindowMenu->insertItem(tr("Close &All Windows"), this, SIGNAL(closeAllViews()));
 	m_pWindowMenu->insertSeparator();
-	m_pWindowMenu->insertItem(tr("&Cascade windows"),this,SLOT(cascadeWindows()));
+
+	m_pWindowMenu->insertItem(tr("Ca&scade windows"),this,SLOT(cascadeWindows()));
 	m_pWindowMenu->insertItem(tr("Cascade &maximized"),this,SLOT(cascadeMaximized()));
 	m_pWindowMenu->insertItem(tr("Expand &vertical"),this,SLOT(expandVertical()));
 	m_pWindowMenu->insertItem(tr("Expand &horizontal"),this,SLOT(expandHorizontal()));
-	m_pWindowMenu->insertItem(tr("&Anodine's tile"),this,SLOT(tileAnodine()));
+	m_pWindowMenu->insertItem(tr("A&nodine's tile"),this,SLOT(tileAnodine()));
 	m_pWindowMenu->insertItem(tr("&Pragma's tile"),this,SLOT(tilePragma()));
+	m_pWindowMenu->insertSeparator();
+
+	// for all child frame windows: give an ID to every window and connect them in the end with menuActivated()
+	int i=100;
+	bool isTheActiveOne;
+	for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next())
+	{
+	   isTheActiveOne = false;
+		QString szItem;
+		//szItem.setNum(((uint)i)-99);
+		//szItem+=". ";
+		if(lpC->m_state==QextMdiChildFrm::Minimized){
+			szItem+="(";
+			szItem+=lpC->caption();
+			szItem+=")";
+		}
+		else
+			if(((uint)i)==(m_pZ->count()+99)){ //Active item :)
+				szItem+=" ";
+				szItem+=lpC->caption();
+				isTheActiveOne = true;
+			}
+			else {
+				szItem+=" ";
+				szItem+=lpC->caption();
+			}
+
+		// insert the window entry sorted in alphabetical order
+		unsigned int indx;
+		unsigned int windowItemCount = m_pWindowMenu->count() - 10;
+		bool inserted = false;
+		QString tmpString;
+		for( indx = 0; indx <= windowItemCount; indx++) {
+			tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+10));
+			if( tmpString.right( tmpString.length()-2) > szItem.right( szItem.length()-2)) {
+				m_pWindowMenu->insertItem(szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,indx+10);
+      		if( isTheActiveOne)
+      		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+10), true);
+				lpC->setWindowMenuID( i);
+				inserted = true;
+				indx = windowItemCount+1;	// break the loop
+			}
+		}
+		if( !inserted) {	// append it
+			m_pWindowMenu->insertItem( szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,windowItemCount+10);
+     		if( isTheActiveOne)
+     		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+10), true);
+			lpC->setWindowMenuID( i);
+		}
+		i++;
+	}
 }
 
 //================ menuActivated ===============//
