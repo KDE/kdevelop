@@ -16,11 +16,13 @@
  ***************************************************************************/
 
 
-#include "ktipofday.h"
-#include <kapp.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qtextstream.h>
 #include <klocale.h>
+#include <kconfig.h>
+#include <kapp.h>
+#include "ktipofday.h"
 
 
 KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name, true) {

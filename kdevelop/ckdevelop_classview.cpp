@@ -17,6 +17,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcombobox.h>
+#include <qmessagebox.h>
 #include "ckdevelop.h"
 #include "cclassview.h"
 #include "caddclassmethoddlg.h"
@@ -57,7 +59,7 @@ void CKDevelop::slotClassbrowserViewTree()
 void CKDevelop::slotClassChoiceCombo(int index)
 {
   CParsedClass *aClass;
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->text( index );
 
   if ( !classname.isEmpty() )
@@ -79,8 +81,8 @@ void CKDevelop::slotClassChoiceCombo(int index)
  *-----------------------------------------------------------------*/
 void CKDevelop::slotMethodChoiceCombo(int index)
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  QComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->text( index );
 
@@ -403,9 +405,8 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
     // If everything fails notify the user.
     if( aMethod != NULL )
     {
-      if( KMsgBox::yesNo( this, i18n("Delete method"),
-                          i18n("Are you sure you want to delete this method?"),
-                          KMsgBox::QUESTION ) == 1 )
+      if( KMessageBox::questionYesNo( this, i18n("Are you sure you want to delete this method?"))
+          == KMessageBox::Yes )
       {
         // Start by deleting the declaration.
         switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
@@ -424,10 +425,10 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
       }
     }
     else
-      QMessageBox::warning( NULL, i18n( "Method missing" ), i18n( "Couldn't find the method to delete." ) );
+      KMessageBox::error( NULL, i18n("Method missing - Couldn't find the method to delete.") );
   }
   else
-      QMessageBox::warning( NULL, i18n( "Class missing" ), i18n( "Couldn't find the class which has the method to delete." ) );
+      KMessageBox::warning( NULL, i18n( "Class missing - Couldn't find the class which has the method to delete.") );
 
 }
 
@@ -449,7 +450,7 @@ void CKDevelop::slotCVDeleteMethod( const char *aClassName,const char *aMethodNa
  *-----------------------------------------------------------------*/
 void CKDevelop::CVClassSelected( const char *aName )
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox *classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   bool found = false;
   int i;
 
@@ -481,7 +482,7 @@ void CKDevelop::CVClassSelected( const char *aName )
  *-----------------------------------------------------------------*/
 void CKDevelop::CVMethodSelected( const char *aName )
 {
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  QComboBox *methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   bool found = false;
   int i;
 
@@ -651,8 +652,8 @@ void CKDevelop::CVRefreshClassCombo()
 {
   CParsedClass *aClass;
   QList<CParsedClass> *classList;
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  QComboBox *classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  QComboBox *methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString savedClass;
   int savedIdx = -1;
   int i;
@@ -699,7 +700,7 @@ void CKDevelop::CVRefreshClassCombo()
 void CKDevelop::CVRefreshMethodCombo( CParsedClass *aClass )
 {
   QListBox *lb;
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  QComboBox *methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString str;
   QString savedMethod;
 

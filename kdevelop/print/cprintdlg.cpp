@@ -20,6 +20,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
+#include <qmessagebox.h>
 #include <iostream.h>
 #include <string.h>
 #include <kapp.h>
@@ -207,9 +208,7 @@ void CPrintDlg::init(){
   printToFileDlg->setBackgroundMode( QWidget::PaletteBackground );
   printToFileDlg->setFontPropagation( QWidget::NoChildren );
   printToFileDlg->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  printToFileDlg->setPixmap(pix);
+  printToFileDlg->setPixmap(BarIcon("open"));
   printToFileDlg->setAutoRepeat( FALSE );
   printToFileDlg->setAutoResize( FALSE );
   connect (printToFileDlg,SIGNAL(clicked()),SLOT(slotPrintToFileDlgClicked()));
@@ -996,7 +995,7 @@ void CPrintDlg::slotCreateParameters() {
 
 void CPrintDlg::slotPreviewClicked() {
   if (!(lookProgram("gv") || lookProgram("ghostview") || lookProgram("kghostview"))) {
-    QMessageBox::information(0,i18n("Program not found!"),i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
+    KMessageBox::sorry(0, i18n("KDevelop needs \"gv\" or \"ghostview\" or \"kghostview\" to work properly.\n\t\t    Please install one!")); 
     return;
   }
   files = createFileString();
@@ -1006,6 +1005,8 @@ void CPrintDlg::slotPreviewClicked() {
   }
   else {
     QString dir,data1,data2,text;
+#warning FIXME: why not create this in /tmp?
+#if 0
     if ((programCombBox->currentItem()==1) && (formatCombBox->currentItem()==1)) {
       dir =  KApplication::localkdedir() + (QString) "/share/apps/kdevelop/preview.html";
     }
@@ -1014,6 +1015,7 @@ void CPrintDlg::slotPreviewClicked() {
     }
     data1 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview1";
     data2 = KApplication::kde_datadir() + (QString) "/kdevelop/templates/preview2";
+#endif
     process = new KShellProcess();
     if (programCombBox->currentItem()==1) {
       text = (QString) " --output="+ dir;

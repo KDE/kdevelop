@@ -1,5 +1,9 @@
 #warning Consider switching to QStringList::split
 
+#include "misc.h"
+#include <string.h>
+
+enum quoteEnum { NO_QUOTE=0, SINGLE_QUOTE, DOUBLE_QUOTE };
 
 StringTokenizer::StringTokenizer()
 {

@@ -94,7 +94,7 @@ public: // Public widgets
 
   QPushButton okBtn;
   QPushButton cancelBtn;
-  QLabel btnFill;
+    //  QLabel btnFill;
 
 protected:
  protected slots:

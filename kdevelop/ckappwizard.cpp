@@ -1598,8 +1598,8 @@ void CKAppWizard::slotDefaultClicked(int page) {
   dir = QDir::homeDirPath()+ QString("/");
   nameline->setText(0);
   finishButton()->setEnabled(false);
-  miniload->setPixmap(QPixmap(KApplication::kde_icondir() + "/mini/application_settings.xpm"));
-  iconload->setPixmap(QPixmap(KApplication::kde_icondir() + "/edit.xpm"));
+  miniload->setPixmap(BarIcon("application_settings"));
+  iconload->setPixmap(BarIcon("edit.xpm"));
   cppedit->loadFile(KApplication::kde_datadir() + "/kdevelop/templates/cpp_template",cppedit->OPEN_READWRITE);
   hedit->loadFile(KApplication::kde_datadir() + "/kdevelop/templates/header_template",hedit->OPEN_READWRITE);
   authorline->setText(m_author_name);

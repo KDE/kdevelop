@@ -16,28 +16,23 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
+
 #ifndef __CKDEVSETUPDLG_H_
 #define __CKDEVSETUPDLG_H_
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qlistbox.h>
-#include <qtabdialog.h>
-#include <qmultilinedit.h>
 
-#include <kapp.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <kmsgbox.h>
-#include <kfiledialog.h>
-#include <kquickhelp.h>
-#include <kaccel.h>
+#include <qtabdialog.h>
 #include <qdict.h>
-#include <kkeydialog.h>
-#include <kaccel.h>
 
 #include "./kwrite/kguicommand.h"
+
+class QCheckBox;
+class QComboBox;
+class QLineEdit;
+class KConfig;
+class KAccel;
+class KKeyChooser;
+class KKeyEntry;
 
 /** the setup dialog for kdevelop
   *@author Sandy Meier
@@ -76,10 +71,6 @@ private:
   void slotDefault();
   void slotQtClicked();
   void slotKDEClicked();
-
-
 };
 
 #endif
-
-

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 
+#include "items.h"
 #include <qstring.h>
 #include <qheader.h>
 #include <kiconloader.h>
@@ -25,7 +26,6 @@
 #include "../ckdevelop.h"
 #include "kdlgproplvis.h"
 #include "kdlgeditwidget.h"
-#include "items.h"
 #include "kdlgitems.h"
 
 

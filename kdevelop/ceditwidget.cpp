@@ -54,18 +54,18 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
   //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
-  pop->insertItem(Icon("undo.xpm"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
-  pop->insertItem(Icon("redo.xpm"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
+  pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
+  pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
   pop->insertSeparator();
-  pop->insertItem(Icon("cut.xpm"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
-  pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
-  pop->insertItem(Icon("paste.xpm"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+  pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
+  pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
+  pop->insertItem(BarIcon("past"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
   pop->setItemEnabled(ID_EDIT_CUT,false);
   pop->setItemEnabled(ID_EDIT_COPY,false);
   pop->setItemEnabled(ID_EDIT_PASTE,false);
   pop->insertSeparator();
-  pop->insertItem(Icon("grep.xpm"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
-  pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
+  pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
+  pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
   bookmarks.setAutoDelete(true);
 
 
@@ -151,7 +151,7 @@ void CEditWidget::gotoPos(int pos,QString text_str){
   
   //  cerr << endl << "POS: " << pos;
   // calculate the line
-  QString last_textpart = text_str.right(text_str.size()-pos); // the second part of the next,after the pos
+  QString last_textpart = text_str.right(text_str.length()+1-pos); // the second part of the next,after the pos
   int line = text_str.contains("\n") - last_textpart.contains("\n");
   //  cerr << endl << "LINE:" << line;
   setCursorPosition(line,0);
@@ -386,8 +386,8 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     pop->setItemEnabled(ID_HELP_SEARCH_TEXT, !str.isEmpty());
     pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES, !str.isEmpty());
 
-    pop->changeItem(Icon("grep.xpm"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
-    pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
+    pop->changeItem(BarIcon("grep"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
+    pop->changeItem(BarIcon("lookup"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
 
     pop->popup(this->mapToGlobal(event->pos()));
   }

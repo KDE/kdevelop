@@ -19,11 +19,16 @@
 #include <qdir.h>
 #include <qmessagebox.h>
 #include <kfiledialog.h>
-#include "ccreatedocdatabasedlg.h"
 #include <iostream.h>
 #include <kquickhelp.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kiconloader.h>
+#include "ccreatedocdatabasedlg.h"
+
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
 
 CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config ) : QDialog(parent,name,true) {
 
@@ -154,9 +159,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_button->setBackgroundMode( QWidget::PaletteBackground );
 	dir_button->setFontPropagation( QWidget::NoChildren );
 	dir_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-	dir_button->setPixmap(pix);
+	dir_button->setPixmap(BarIcon("open"));
 	dir_button->setAutoRepeat( FALSE );
 	dir_button->setAutoResize( FALSE );
 
@@ -268,12 +271,12 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   conf->setGroup("Doc_Location");
   QString filename = conf->readEntry("doc_kde", KDELIBS_DOCDIR) +"/kdeui/KDialog.html";
   if(!QFile::exists(filename) && kde_checkbox->isChecked()){
-    QMessageBox::information(0,i18n("No Database created!"),i18n("The KDE-Documentation-Path isn't set correctly."));
+    KMessageBox::error(0, i18n("No Database created!\nThe KDE-Documentation-Path isn't set correctly."));
     return;
   }
   filename = conf->readEntry("doc_qt", QT_DOCDIR) +"/qtabbar.html";
   if(!QFile::exists(filename) && qt_checkbox->isChecked()){
-    QMessageBox::information(0,i18n("No Database created!"),i18n("The Qt-Documentation-Path isn't set correctly."));
+    KMessageBox::error(0, i18n("No Database created!\nThe Qt-Documentation-Path isn't set correctly."));
     return;
   }
   

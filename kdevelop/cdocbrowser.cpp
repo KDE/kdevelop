@@ -149,7 +149,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       file.close();
     }
     else{
-      QMessageBox::information(0,i18n("Not found!"),"file: \"" + str + i18n("\" not found!"));
+      KMessageBox::error(0, i18n("file \"%1\" not found!").arg(str));
        return;
     }
 //  htmlview->setCursor( KCursor::arrowCursor() );

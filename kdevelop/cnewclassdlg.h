@@ -17,25 +17,23 @@
  *                                                                         *
  ***************************************************************************/
 
+
 #ifndef __CNEWCLASSDLG_H_
 #define __CNEWCLASSDLG_H_
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qlistbox.h>
-#include <qtabdialog.h>
-#include <qmultilinedit.h>
-#include <kapp.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <kmsgbox.h>
-#include <kfiledialog.h>
-#include <qcheckbox.h>
-#include "cgeneratenewfile.h"
 
-//#include "cproject.h"
+
+#include <qtabdialog.h>
+
+class QButtonGroup;
+class QLineEdit;
+class QMultiLineEdit;
+class QPushButton;
+class QRadioButton;
+class QLabel;
+class QCheckBox;
+class KConfig;
 class CProject;
+
 
 /** generates new class-skeletons (a header and a implementation file)
   *@author Sandy Meier
@@ -48,7 +46,7 @@ public:
   QString getHeaderFile();
   QString getImplFile();
 private:
-  KConfig* config;
+    //  KConfig* config;
   QButtonGroup* add_group;
   QButtonGroup* doc_group;
   QButtonGroup* inher_group;

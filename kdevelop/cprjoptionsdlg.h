@@ -22,28 +22,6 @@
 #define __CPRJOPTIONSDLG_H_
 
 #include <qtabdialog.h>
-//#include "cproject.h"
-#if 0
-#include <kfiledialog.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qlistbox.h>
-#include <qlineedit.h>
-#include <qmultilinedit.h>
-#include <qtabdialog.h>
-#include <kapp.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <kmsgbox.h>
-#include <klined.h>
-#include <kspinbox.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <kquickhelp.h>
-#include <qspinbox.h>
-#endif
 
 class CProject;
 class QLineEdit;
@@ -154,8 +132,6 @@ private:
   QString old_cxxflags;
   bool need_configure_in_update;
   bool need_makefile_generation;
-    //  KFileDialog *filedialog;
-	KConfig *settings;
 	
 protected slots:
    /** is called, if the ok-button were clicked*/

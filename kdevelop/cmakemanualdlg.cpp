@@ -68,8 +68,7 @@ void CMakeManualDlg::slotOkClicked(){
     }
     file = file_edit->text();
     if(!QFile::exists(file)){
-      QMessageBox::warning(this,i18n("Error..."),
-		       i18n("You must choose an existing file!"));
+      KMessageBox::error(this, i18n("You must choose an existing file!"));
       return;
     }
     accept();
@@ -80,23 +79,3 @@ void CMakeManualDlg::slotFileButtonClicked(){
 	file_edit->setText(str);
     }    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

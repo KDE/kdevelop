@@ -174,7 +174,7 @@ void CAddClassAttributeDlg::setWidgetValues()
 
   // Button layout
   buttonLayout.addWidget( &okBtn );
-  buttonLayout.addWidget( &btnFill );
+  //  buttonLayout.addWidget( &btnFill );
   buttonLayout.addWidget( &cancelBtn );
 
   // Set the default focus.

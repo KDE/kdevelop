@@ -37,7 +37,9 @@
 #endif
 
 
-CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config) : QDialog(parent,name,true) {
+CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,
+                                   KShellProcess* proc,KConfig* config)
+    : QDialog(parent,name,true) {
     
     conf = config;
     config->setGroup("Doc_Location");

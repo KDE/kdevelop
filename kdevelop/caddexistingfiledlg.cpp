@@ -212,13 +212,11 @@ void CAddExistingFileDlg::OK(){
 //     return;
 //   }
   if(dest_name.contains(prj->getProjectDir()) == 0 ){
-    QMessageBox::warning(this,i18n("Error..."),
-		     i18n("You must choose a destination, that is in your project-dir!"));
+    KMessageBox::sorry(this, i18n("You must choose a destination, that is in your project-dir!"));
     return;
   }
   if(!dir.exists()){
-    QMessageBox::warning(this,i18n("Error..."),
-		     i18n("You must choose a valid dir as a destination!"));
+    KMessageBox::warning(this, i18n("You must choose a valid dir as a destination!"));
     return;
   }
   

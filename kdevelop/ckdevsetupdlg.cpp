@@ -16,16 +16,25 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qlineedit.h>
+#include <qbuttongroup.h>
+#include <qfileinfo.h>
+#include <qmessagebox.h>
+#include <klocale.h>
+#include <kaccel.h>
+#include <kkeydialog.h>
+#include <kquickhelp.h>
+#include <kfiledialog.h>
+#include <kiconloader.h>
 #include "ckdevsetupdlg.h"
 #include "resource.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qfileinfo.h>
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
 
-#include <qmessagebox.h>
-#include <klocale.h>
 
 // SETUP DIALOG
 CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
@@ -264,9 +273,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   QPushButton* qt_button;
   qt_button = new QPushButton( w, "qt_button" );
   qt_button->setGeometry( 370, 40, 30, 30 );
-  QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
-  qt_button->setPixmap(pix);
+  qt_button->setPixmap(BarIcon("open"));
   connect(qt_button,SIGNAL(clicked()),SLOT(slotQtClicked()));
   
   QLabel* qt_label;
@@ -294,7 +301,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, KAccel* accel_pa,
   QPushButton* kde_button;
   kde_button = new QPushButton( w, "kde_button" );
   kde_button->setGeometry( 370, 90, 30, 30 );
-  kde_button->setPixmap(pix);
+  kde_button->setPixmap(BarIcon("open"));
   connect(kde_button,SIGNAL(clicked()),SLOT(slotKDEClicked()));
   
   QLabel* kde_label;
@@ -489,12 +496,14 @@ void CKDevSetupDlg::slotQtClicked(){
     if(QFileInfo(qt_testfile).exists())
       config->writeEntry("doc_qt",dir);
     else{
-      QMessageBox::information(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "Qt-library documentation. Please choose the\n"
-                                                              "correct path."));
+      KMessageBox::information(this, i18n("The chosen path does not lead to the\n"
+                                          "Qt-library documentation. Please choose the\n"
+                                          "correct path."));
     }
   }
 }
+
+
 void CKDevSetupDlg::slotKDEClicked(){
   QString dir;
   dir = KFileDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
@@ -506,24 +515,10 @@ void CKDevSetupDlg::slotKDEClicked(){
     if(QFileInfo(kde_testfile).exists())
       config->writeEntry("doc_kde",dir);
     else{
-      QMessageBox::information(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "KDE-library documentation. Please choose the\n"
-                                                              "correct path or choose 'Update' to create a new\n"
-                                                              "documentation"));
+      KMessageBox::information(this, i18n("The chosen path does not lead to the\n"
+                                          "KDE-library documentation. Please choose the\n"
+                                          "correct path or choose 'Update' to create a new\n"
+                                          "documentation"));
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

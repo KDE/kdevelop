@@ -19,9 +19,10 @@
 #include <iostream.h>
 
 #include <qprogressdialog.h>
-
-#include <kmsgbox.h>
+#include <qsplitter.h>
+#include <kmessagebox.h>
 #include <kcursor.h>
+#include <kmenubar.h>
 
 #include "debug.h"
 #include "ckdevelop.h"
@@ -235,7 +236,7 @@ bool CKDevelop::fileSaveAs(){
   TEditInfo* actual_info=0;
   TEditInfo* old_info=0;
   TEditInfo* search_info;
-  int message_result=1; // simulate ok state... this could change by one of the following messageboxes
+  int msg_result=KMessageBox::Ok; // simulate ok state... this could change by one of the following messageboxes
 
   oldName=edit_widget->getName();
   if (bAutosave)
@@ -259,21 +260,20 @@ bool CKDevelop::fileSaveAs(){
 
     // check if the extension is changed and the widget or program to view must change
     if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
-      message_result = KMsgBox::yesNoCancel(this,i18n("Save as new type of document?"),
-                                                                  i18n("Do you really want to save the file\n"
-                                                                  "as another type of document?"),
-                                                                  KMsgBox::QUESTION);
-    if(message_result==1 && QFile::exists(name))
+      msg_result = KMessageBox::warningYesNoCancel(this, 
+                                                   i18n("Do you really want to save the file\n"
+                                                        "as another type of document?"));
+    if(msg_result==KMessageBox::Yes && QFile::exists(name))
     {
-      message_result=KMsgBox::yesNoCancel(this,i18n("File exists!"),
-                    QString(i18n("\nThe file\n\n"))+name+
-		i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"));
+      msg_result=KMessageBox::warningYesNoCancel(this,
+                                                 i18n("\nThe file\n\n%1\n\nalready exists.\n"
+                                                      "Do you want overwrite the old one?\n").arg(name));
     }
     
-  } while (message_result == 2); // repeat it on 'no'
+  } while (msg_result == KMessageBox::No); // repeat it on 'no'
 
 
-  if (message_result==3){
+  if (msg_result==KMessageBox::Cancel){
      //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
       if (bAutosave)
        saveTimer->start(saveTimeout);
@@ -484,7 +484,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
 
   // check if the file exists
   if(!QFile::exists(filename) && !isUntitled(filename)){
-    KMsgBox::message(this,i18n("Attention"),filename +i18n("\n\nFile does not exist!"));
+    KMessageBox::sorry(this, i18n("File %1 does not exist!").arg(filename));
     return;
   }
 
@@ -577,7 +577,9 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   QFileInfo file_info(edit_widget->fileName());
 
   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
-      if(QMessageBox::warning(this,i18n("File modified"),"The file " + filename +" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes){
+      if(KMessageBox::questionYesNo(this,
+                                    i18n("The file %1 was modified outside this editor.\n"
+                                         "Open the file from disk and delete the current Buffer?").arg(filename)) == KMessageBox::Yes){
 	  bForceReload = true;
 	  actual_info->last_modified = file_info.lastModified();
       }
@@ -678,7 +680,7 @@ void CKDevelop::switchToKDevelop(){
   t_tab_view->show();
 
   top_panner->hide();
-  top_panner->deactivate();
+  //  top_panner->deactivate();
   //  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
   top_panner->show();
 
@@ -757,7 +759,7 @@ void CKDevelop::switchToKDlgEdit(){
   kdlg_top_panner->show();
 
   top_panner->hide();
-  top_panner->deactivate();
+  //  top_panner->deactivate();
   //  top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
   top_panner->show();
 
@@ -1078,7 +1080,7 @@ void CKDevelop::readOptions(){
 	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
 	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
 	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
-    doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
+    doc_bookmarks->insertItem(BarIcon("html.xpm"),doc_bookmarks_title_list.at(i));
   }
 	
   QString filename;
@@ -1178,7 +1180,7 @@ bool CKDevelop::queryClose(){
   }
   else{
     TEditInfo* actual_info;
-    int message_result=1;
+    int msg_result = KMessageBox::Yes;
     int save=true;
 
     config->writeEntry("project_file","");
@@ -1195,12 +1197,11 @@ bool CKDevelop::queryClose(){
 
     if (!save)
     {
-      message_result = KMsgBox::yesNo(this,i18n("Exit KDevelop"),
-                                         i18n("There is unsaved data.\n"
-					      "Do you really want to quit?"),
-                                         KMsgBox::QUESTION);
+      msg_result = KMessageBox::questionYesNo(this, 
+                                              i18n("There is unsaved data.\n"
+                                                   "Do you really want to quit?"));
     }
-    return message_result==1;
+    return msg_result==KMessageBox::Yes;
   }
   return true;
 }
@@ -1212,7 +1213,7 @@ void CKDevelop::readProperties(KConfig* sess_config){
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
-      KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+      KMessageBox::sorry(0, "This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
       refreshTrees();
     }
     else{

@@ -27,11 +27,12 @@
 #include <qtextstream.h>
 #include <qtoolbar.h>
 #include <qmessagebox.h>
+#include <qsplitter.h>
 
 #include <kcursor.h>
 #include <kfiledialog.h>
 #include <kkeydialog.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <ktabctl.h>
 #include <stdlib.h>
 
@@ -59,8 +60,8 @@
 #include "../config.h"
 #include "structdef.h"
 #include "vc/versioncontrol.h"
-#include "print/configenscriptdlg.h"
-#include "print/configa2psdlg.h"
+#include "print/cconfigenscriptdlg.h"
+#include "print/cconfiga2psdlg.h"
 
 
 extern KGuiCmdManager cmdMngr;
@@ -126,7 +127,7 @@ void CKDevelop::slotFileOpen( int id_ ){
 void CKDevelop::slotFileClose(){
     slotStatusMsg(i18n("Closing file..."));
     QString filename = edit_widget->getName();
-    int message_result;
+    int msg_result;
 
     if(edit_widget->isModified()){
 	
@@ -134,29 +135,27 @@ void CKDevelop::slotFileClose(){
 	if (bAutosave)
 	    saveTimer->stop();
 	
-	message_result = KMsgBox::yesNoCancel(this,i18n("Save?"),
-					      i18n("The document was modified,save?"),KMsgBox::QUESTION);
+	msg_result = KMessageBox::warningYesNoCancel(this, i18n("The document was modified,save?"));
 	// restart autosaving
 	if (bAutosave)
 	    saveTimer->start(saveTimeout);
 	
-	if (message_result == 1){ // yes
+	if (msg_result == KMessageBox::Yes){ // yes
 	
 	    if (isUntitled(filename))
 		{
 		    if (!fileSaveAs())
-			message_result=3;    // simulate here cancel because fileSaveAs failed....
+			msg_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
 		}
 	    else
 		{
-		
 		    saveFileFromTheCurrentEditWidget();
 		    if (edit_widget->isModified())
-			message_result=3;		   // simulate cancel because doSave went wrong!
+			msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
 		}
 	}
 	
-	if (message_result == 3) // cancel
+	if (msg_result == KMessageBox::Cancel) // cancel
 	    {
 		setInfoModified(filename, edit_widget->isModified());
 		slotStatusMsg(i18n("Ready."));
@@ -184,17 +183,23 @@ void CKDevelop::slotFileCloseAll()
     TEditInfo *next_info=edit_infos.next();
     if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
     {
-      KMsgBox *files_close=new KMsgBox(this,i18n("Save changed files ?"),
-		    	   i18n("The project\n\n")+prj->getProjectName()
-					   +i18n("\n\ncontains changed files. Save modified file\n\n")
-					   +actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
-					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+#warning FIXME: QMessageBox has 3 buttons maximum
+#if 0
+        KMsgBox *files_close=new KMsgBox(this,i18n("Save changed files ?"),
+                                         i18n("The project\n\n%1\n\ncontains changed files."
+                                              "Save modified file\n\n%2?\n\n")
+                                         .arg(prj->getProjectName).arg(actual_info->filename),
+                                         KMsgBox::QUESTION,
+                                         i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
 
       // show the messagea and store result in result:
 
       files_close->show();
 
       int result=files_close->result();
+#else
+      int result = 0; // until problem above is resolved
+#endif
 
       // create the save project messagebox
 
@@ -295,21 +300,24 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
   if(actual_info == 0) return false; //oops :-(
 
   if(file_info.lastModified() != actual_info->last_modified){
-    if(QMessageBox::warning(this,i18n("File modified"),"The file " + filename +" was modified outside\n this editor.Save anyway?",QMessageBox::Yes,QMessageBox::No) == QMessageBox::No) return false;
+    if (KMessageBox::questionYesNo(this, i18n("File modified"),
+                                   i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
+        == QMessageBox::No)
+        return false;
   }
   edit_widget->doSave();
   QFileInfo file_info2(filename);
   actual_info->last_modified = file_info2.lastModified();
   return true;
 }
+
+
 void CKDevelop::slotFileSave(){
 
   QString filename=edit_widget->getName();
   QString sShownFilename=QFileInfo(filename).fileName();
   slotStatusMsg(i18n("Saving file ")+sShownFilename);
   
- 
-
   if(isUntitled(filename)){
     slotFileSaveAs();
   }
@@ -322,14 +330,8 @@ void CKDevelop::slotFileSave(){
       }
   }
   slotStatusMsg(i18n("Ready."));
-  QString sHelpMsg=i18n("File ");
-  sHelpMsg+=sShownFilename;
-  if (edit_widget->isModified())
-    sHelpMsg+=i18n(" not saved.");
-  else
-      sHelpMsg+=i18n(" saved.");
-
-  slotStatusHelpMsg(sHelpMsg);
+  QString sHelpMsg = edit_widget->isModified()? i18n("File %1 not saved.") : i18n("File %1 saved.");
+  slotStatusHelpMsg(sHelpMsg.arg(sShownFilename));
 }
 
 void CKDevelop::slotFileSaveAs(){
@@ -453,14 +455,20 @@ void CKDevelop::slotFileQuit(){
 void CKDevelop::slotEditUndo(){
   edit_widget->undo();
 }
+
+
 void CKDevelop::slotEditRedo(){
   edit_widget->redo();
 }
+
+
 void CKDevelop::slotEditCut(){
   slotStatusMsg(i18n("Cutting..."));
   edit_widget->cut();
   slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditCopy(){
 //slotStatusMsg(i18n("Copying..."));
   if(s_tab_view->getCurrentTab() == 2) {
@@ -472,21 +480,29 @@ void CKDevelop::slotEditCopy(){
 //    edit_widget->copyText();
 //slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditPaste(){
   slotStatusMsg(i18n("Pasting selection..."));
   edit_widget->paste();
   slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditInsertFile(){
   slotStatusMsg(i18n("Inserting file contents..."));
   edit_widget->insertFile();
   slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditSearch(){
   slotStatusMsg(i18n("Searching..."));
   edit_widget->search();
   slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditRepeatSearch(){
   slotStatusMsg(i18n("Repeating last search..."));
   if(s_tab_view->getCurrentTab()==BROWSER){
@@ -497,6 +513,8 @@ void CKDevelop::slotEditRepeatSearch(){
   }
   slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditSearchInFiles(){
   slotStatusMsg(i18n("Searching in Files..."));
   if(project){
@@ -505,6 +523,7 @@ void CKDevelop::slotEditSearchInFiles(){
   grep_dlg->show();
   slotStatusMsg(i18n("Ready."));
 }
+
 
 void CKDevelop::slotEditSearchInFiles(QString search){
   int pos;
@@ -523,7 +542,7 @@ void CKDevelop::slotEditSearchInFiles(QString search){
   search=realSearchText2regExp(search, true);
   grep_dlg->slotSearchFor(search);
   slotStatusMsg(i18n("Ready."));
-	}
+}
 
 void CKDevelop::slotEditSearchText(){
   QString text;
@@ -545,6 +564,8 @@ void CKDevelop::slotEditReplace(){
   edit_widget->replace();
   slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditIndent(){
 	edit_widget->indent();
 }
@@ -555,14 +576,20 @@ void CKDevelop::slotEditUnindent(){
 void CKDevelop::slotEditSpellcheck(){
 	edit_widget->spellcheck();
 }
+
+
 void CKDevelop::slotEditSelectAll(){
   slotStatusMsg(i18n("Selecting all..."));
   edit_widget->selectAll();
   slotStatusMsg(i18n("Ready."));
 }
+
+
 void CKDevelop::slotEditInvertSelection(){
     edit_widget->invertSelection();
 }
+
+
 void CKDevelop::slotEditDeselectAll(){
     edit_widget->deselectAll();
 }
@@ -576,6 +603,8 @@ void CKDevelop::slotViewGotoLine(){
   edit_widget->gotoLine();
   slotStatusMsg(i18n("Ready."));
 }
+
+
 /** jump to the next error, based on the make output*/
 void CKDevelop::slotViewNextError(){
   TErrorMessageInfo info = error_parser->getNext();
@@ -606,6 +635,8 @@ void CKDevelop::slotViewNextError(){
     disableCommand(ID_VIEW_PREVIOUS_ERROR);
   }
 }
+
+
 /** jump to the previews error, based on the make output*/
 void CKDevelop::slotViewPreviousError(){
   TErrorMessageInfo info = error_parser->getPrev();
@@ -777,7 +808,7 @@ void CKDevelop::slotBuildDebug(){
   showOutputView(false);
   showTreeView(false);
   
-  slotStatusMsg(i18n("Running  ")+prj->getBinPROGRAM()+i18n("  in KDbg"));
+  slotStatusMsg(i18n("Running %1 in KDbg").arg(prj->getBinPROGRAM()));
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
@@ -854,7 +885,7 @@ void CKDevelop::slotBuildRebuildAll(){
 
   setToolMenuProcess(false);
   slotFileSaveAll();
-  slotStatusMsg(i18n("Running make clean-command "));
+  slotStatusMsg(i18n("Running make clean command "));
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   process.clearArguments();
@@ -864,7 +895,9 @@ void CKDevelop::slotBuildRebuildAll(){
   beep = true;
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
-void CKDevelop::slotBuildCleanRebuildAll(){
+
+
+ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
@@ -922,7 +955,9 @@ void CKDevelop::slotBuildDistClean(){
   process << make_cmd << "distclean";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
-void CKDevelop::slotBuildAutoconf(){
+
+
+ void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
@@ -1103,7 +1138,9 @@ void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
   header_widget->doc()->readConfig(config);
   slotStatusMsg(i18n("Ready."));
 }
-void CKDevelop::slotOptionsSyntaxHighlighting(){
+
+
+ void CKDevelop::slotOptionsSyntaxHighlighting(){
   slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
   cpp_widget->hlDlg();
   config->setGroup("KWrite Options");
@@ -1115,7 +1152,9 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
   header_widget->doc()->readConfig(config);
   slotStatusMsg(i18n("Ready."));
 }
-void CKDevelop::slotOptionsDocBrowser(){
+
+
+ void CKDevelop::slotOptionsDocBrowser(){
    slotStatusMsg(i18n("Configuring Documentation Browser..."));
 
    CDocBrowserOptionsDlg browserOptions;
@@ -1276,7 +1315,7 @@ void CKDevelop::slotBookmarksAdd(){
 		
 		uint i;
     for ( i =0 ; i < doc_bookmarks_list.count(); i++){
-      doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
+      doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
     }
 	}
 	if(edit_widget==header_widget)
@@ -1396,7 +1435,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   }
 
   if(text.isEmpty()){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must select a text for searching the documentation!"));
+    KMessageBox::sorry(this, i18n("You must select a text for searching the documentation!"));
     return;
   }
   //  cerr << ":" << text << ":" << endl;
@@ -1407,7 +1446,8 @@ void CKDevelop::slotHelpSearchText(QString text){
 
   slotStatusMsg(i18n("Searching selected text in documentation..."));
   if(!QFile::exists(KApplication::localkdedir()+"/share/apps" + "/kdevelop/.glimpse_index")){
-    if(KMsgBox::yesNo(this,i18n("Error..."),i18n("KDevelop couldn't find the search database.\n Do you want to generate it now?")) == 1){
+    if(KMessageBox::questionYesNo(this, i18n("KDevelop couldn't find the search database.\n"
+                                             "Do you want to generate it now?")) == KMessageBox::Yes){
       slotOptionsCreateSearchDatabase();
     }
     return;
@@ -1508,22 +1548,22 @@ void CKDevelop::slotHelpAPI(){
   if(project){
     QString api_file=prj->getProjectDir() + prj->getSubDir() +  "api/index.html";
     if(!QFileInfo(api_file).exists()){
-    	int result=KMsgBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
-    																																	"Would you like to generate it now ?"), KMsgBox::QUESTION);
-    	if(result==1){
-    		slotProjectAPI();
-			}
-			else{
-				return;
-			}
-		}
-		else{
-	    slotStatusMsg(i18n("Switching to project API Documentation..."));
-	    slotURLSelected(browser_widget,api_file,1,"test");     
-			slotStatusMsg(i18n("Ready.")); 
-		}
+        if (KMessageBox::questionYesNo(this, i18n("The Project API documentation is not present.\n" 
+                                                  "Would you like to generate it now ?"))
+            == KMessageBox::No)
+            return;
+        
+        slotProjectAPI();
+    }
+    else{
+        slotStatusMsg(i18n("Switching to project API Documentation..."));
+        slotURLSelected(browser_widget,api_file,1,"test");     
+        slotStatusMsg(i18n("Ready.")); 
+    }
   }
 }
+
+
 void CKDevelop::slotHelpManual(){
   if(project){
 
@@ -1532,21 +1572,18 @@ void CKDevelop::slotHelpManual(){
  
     QString doc_file = finfo.dirPath() +"/"+finfo.baseName()+ ".html";
     if(!QFileInfo(doc_file).exists()){
-    	int result=KMsgBox::yesNo( this, i18n("No Project manual found !"),
-    				i18n("The Project manual documentation is not present.\n" 
-    							"Would you like to generate the handbook  now ?"), KMsgBox::QUESTION);
-    	if(result==1){
-    		slotProjectManual();
-			}
-			else{
-				return;
-			}
-		}
-		else{
-	    slotStatusMsg(i18n("Switching to project Manual..."));
-  	  slotURLSelected(browser_widget,doc_file,1,"test");
+    	if (KMessageBox::questionYesNo(this, i18n("The Project manual documentation is not present.\n" 
+                                                         "Would you like to generate the handbook now?"))
+            == KMessageBox::No)
+            return;
+        
+        slotProjectManual();
+    }
+    else{
+        slotStatusMsg(i18n("Switching to project Manual..."));
+        slotURLSelected(browser_widget,doc_file,1,"test");
     	slotStatusMsg(i18n("Ready."));
-  	}
+    }
   }
 }
 
@@ -1578,6 +1615,8 @@ void CKDevelop::slotHelpTutorial(){
   slotURLSelected(browser_widget,"file:" + file,1,"test");
 	
 }
+
+
 void CKDevelop::slotHelpTipOfDay(){
 	KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
 	tipdlg->show();
@@ -1598,6 +1637,8 @@ void CKDevelop::slotHelpHomepage(){
     _exit(0);
   }
 }
+
+
 void CKDevelop::slotHelpBugReport(){
     
     config->setGroup("General Options");
@@ -1621,6 +1662,8 @@ void CKDevelop::slotHelpBugReport(){
     
     
 }
+
+
 void CKDevelop::slotHelpAbout(){
   QMessageBox aboutmsg(this, "About KDevelop");
   aboutmsg.setCaption(i18n("About KDevelop..."));
@@ -2140,6 +2183,8 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
 //     disableCommand(ID_VIEW_PREVIOUS_ERROR);
 //   }
 }
+
+
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
   messages_widget->cursorPosition(&x,&y);
@@ -2169,6 +2214,8 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
 //     disableCommand(ID_VIEW_PREVIOUS_ERROR);
 //   }
 }
+
+
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   int x,y;
   showOutputView(true);
@@ -2176,6 +2223,8 @@ void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   stdin_stdout_widget->insertAt(str,x,y);
 }
+
+
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
   showOutputView(true);
@@ -2189,6 +2238,8 @@ void CKDevelop::slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen)
   QString str(buffer,buflen+1);
   search_output = search_output + str;
 }
+
+
 void CKDevelop::slotSearchProcessExited(KProcess*){
 	disableCommand(ID_HELP_BROWSER_STOP);
   //  cerr << search_output;
@@ -2208,7 +2259,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   }
   if (list.isEmpty()){
 
-     KMsgBox::message(0,i18n("Not found!"),"\"" + doc_search_display_text + i18n("\" not found in documentation!"),KMsgBox::INFORMATION);
+     KMesageBox::sorry(0, i18n("\"%1\" not found in documentation!").arg(doc_search_display_text));
     return;
   }
 
@@ -2251,16 +2302,22 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
    slotURLSelected(browser_widget,"file:" + filename,1,"test");
 
 }
+
+
 QString CKDevelop::searchToolGetTitle(QString str){
   int pos = str.find(' ');
   pos = str.find(' ',pos);
   int end_pos = str.find(':',pos);
   return str.mid(pos,end_pos-pos);
 }
+
+
 QString CKDevelop::searchToolGetURL(QString str){
   int pos = str.find(' ');
   return str.left(pos);
 }
+
+
 int CKDevelop::searchToolGetNumber(QString str){
   int pos =str.findRev(':');
   QString sub = str.right((str.length()-pos-2));
@@ -2272,6 +2329,8 @@ void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
   appl_process.writeStdin(&a,1);
 }
 */
+
+
 void CKDevelop::slotClickedOnMessagesWidget(){
   TErrorMessageInfo info;
   int x,y;

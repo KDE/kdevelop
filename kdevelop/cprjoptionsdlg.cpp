@@ -38,6 +38,23 @@
 #include "vc/versioncontrol.h"
 #include "debug.h"
 
+
+class Flagbox : public QCheckBox
+{
+public:
+    Flagbox(const char *flag, const char *cxxflags,
+            QWidget *parent, const char *name=0);
+};
+
+
+Flagbox:: Flagbox(const char *flag, const char *cxxflags,
+                  QWidget *parent, const char *name=0)
+    : QCheckBox(flag, parent, name)
+{
+    setChecked(cxxflags.contains(flag));
+}
+
+
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj )
     : QTabDialog( parent, name,TRUE )
@@ -195,10 +212,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 			       "cross-compilers to build a binary for an intel\n"
 			       "machine running Unix System V.")));
 
-  syntax_check=new QCheckBox(w2,"syntax_check");
+  syntax_check=new FlagBox("-fsyntax-only", cxxflags, w2,"syntax_check");
   syntax_check->setGeometry(20,60,220,20);
   syntax_check->setText(i18n("only syntax check"));
-  syntax_check->setChecked(cxxflags.contains("-fsyntax-only"));
   KQuickHelp::add(syntax_check, i18n("This option sets the compiler\n"
 			     	"to <i>-fsyntax-only</i>\n"
 				"which lets you check your code for\n"
@@ -313,64 +329,34 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(w3, i18n("Set the Compiler warnings here by checking\n"
 			"the -W options you want to use."));
  
-  w_all=new QCheckBox(w3,"w_all");
+  w_all=new FlagBox("-Wall", cxxflags, w3,"w_all");
   w_all->setGeometry(10,10,230,20);
-  w_all->setText("-Wall");
-  if (cxxflags.contains("-Wall")) {
-    w_all->setChecked(true);
-  } else {
-    w_all->setChecked(false);
-  }
   KQuickHelp::add(w_all, i18n("Compile with -Wall. This option\n"
 			"includes several different warning\n"
 			"parameters which are recommended to\n"
 			"turn on."));
 
-  w_=new QCheckBox(w3,"w_");
+  w_=new FlagBox("-W", cxxflags, w3,"w_");
   w_->setGeometry(10,30,230,20);
-  w_->setText("-W");
-  if (cxxflags.contains("-W ")) {
-    w_->setChecked(true);
-  } else {
-    w_->setChecked(false);
-  }
   KQuickHelp::add(w_, i18n("Compile with -W. This option\n"
 			"sets options not included in -Wall\n"
 			"which are very specific. Please read\n"
 			"GCC-Info for more information."));
 
-  w_traditional=new QCheckBox(w3,"w_traditional");
+  w_traditional=new FlagBox("-Wtraditional", cxxflags, w3,"w_traditional");
   w_traditional->setGeometry(10,50,230,20);
-  w_traditional->setText("-Wtraditional");
-  if (cxxflags.contains("-Wtraditional")) {
-    w_traditional->setChecked(true);
-  } else {
-    w_traditional->setChecked(false);
-  }
   KQuickHelp::add(w_traditional, i18n("Warn about certain constructs\n"
 				"that behave differently in traditional\n"
 				"and ANSI C."));
 
 
-  w_undef=new QCheckBox(w3,"w_undef");
+  w_undef=new FlagBox("-Wundef", cxxflags, w3,"w_undef");
   w_undef->setGeometry(10,70,230,20);
-  w_undef->setText("-Wundef");
-  if (cxxflags.contains("-Wundef")) {
-    w_undef->setChecked(true);
-  } else {
-    w_undef->setChecked(false);
-  }
   KQuickHelp::add(w_undef, i18n("Warn if an undefined identifier is\n"
 				"evaluated in an `#if' directive"));
 
-  w_shadow=new QCheckBox(w3,"w_shadow");
+  w_shadow=new FlagBox("-Wshadow", cxxflags, w3,"w_shadow");
   w_shadow->setGeometry(10,90,230,20);
-  w_shadow->setText("-Wshadow");
-  if (cxxflags.contains("-Wshadow")) {
-    w_shadow->setChecked(true);
-  } else {
-    w_shadow->setChecked(false);
-  }
   KQuickHelp::add(w_shadow, i18n("Warn whenever a local variable\n"
 				"shadows another local variable."));
 
@@ -402,14 +388,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 					"is defined."));
   */
 
-  w_pointer_arith=new QCheckBox(w3,"w_pointer_arith");
+  w_pointer_arith=new FlagBox("-Wpointer-arith", cxxflags, w3,"w_pointer_arith");
   w_pointer_arith->setGeometry(10,110,230,20);
-  w_pointer_arith->setText("-Wpointer-arith");
-  if (cxxflags.contains("-Wpointer-arith")) {
-    w_pointer_arith->setChecked(true);
-  } else {
-    w_pointer_arith->setChecked(false);
-  }
   KQuickHelp::add(w_pointer_arith, i18n("Warn about anything that\n"
 				"depends on the <i>size of</i> a\n"
 				"function type or of <i>void</i>.\n"
@@ -419,28 +399,16 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 				"to functions."));
 
 
-  w_bad_function_cast=new QCheckBox(w3,"w_bad_function_cast");
+  w_bad_function_cast=new FlagBox("-Wbad-function-cast", cxxflags, w3,"w_bad_function_cast");
   w_bad_function_cast->setGeometry(10,130,230,20);
-  w_bad_function_cast->setText("-Wbad-function-cast");
-  if (cxxflags.contains("-Wbad-function-cast")) {
-    w_bad_function_cast->setChecked(true);
-  } else {
-    w_bad_function_cast->setChecked(false);
-  }
   KQuickHelp::add(w_bad_function_cast, i18n("Warn whenever a function call is\n"
 					"cast to a non-matching type. For\n"
 					"example, warn if <i>int malloc()</i>\n"
 					"is cast to <i>anything *."));
 
 
-  w_cast_qual=new QCheckBox(w3,"w_cast_qual");
+  w_cast_qual=new FlagBox("-Wcast-equal", cxxflags, w3,"w_cast_qual");
   w_cast_qual->setGeometry(10,150,230,20);
-  w_cast_qual->setText("-Wcast-qual");
-  if (cxxflags.contains("-Wcast-qual")) {
-    w_cast_qual->setChecked(true);
-  } else {
-    w_cast_qual->setChecked(false);
-  }
   KQuickHelp::add(w_cast_qual, i18n("Warn whenever a pointer is cast\n"
 				"so as to remove a type qualifier\n"
 				"from the target type. For example,\n"
@@ -448,14 +416,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 				"cast to an ordinary <i>char *."));
 
 
-  w_cast_align=new QCheckBox(w3,"w_cast_align");
+  w_cast_align=new FlagBox("-Wcast-align", cxxflags, w3,"w_cast_align");
   w_cast_align->setGeometry(10,170,230,20);
-  w_cast_align->setText("-Wcast-align");
-  if (cxxflags.contains("-Wcast-align")) {
-    w_cast_align->setChecked(true);
-  } else {
-    w_cast_align->setChecked(false);
-  }
   KQuickHelp::add(w_cast_align, i18n("Warn whenever a pointer is cast such\n"
 				"that the required alignment of the target\n"
 				"is increased. For example, warn if a\n"
@@ -464,14 +426,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 				"at two- or four-byte boundaries."));
 
 
-  w_write_strings=new QCheckBox(w3,"w_write_strings");
+  w_write_strings=new FlagBox("-Wwrite-strings", cxxflags, w3,"w_write_strings");
   w_write_strings->setGeometry(10,190,230,20);
-  w_write_strings->setText("-Wwrite-strings");
-  if (cxxflags.contains("-Wwrite-strings")) {
-    w_write_strings->setChecked(true);
-  } else {
-    w_write_strings->setChecked(false);
-  }
   KQuickHelp::add(w_write_strings, 
 	i18n("Give string constants the type <i>const char[LENGTH]</i>\n"
 	     	"so that copying the address of one into a non-<i>const\n"
@@ -484,14 +440,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
           	"warnings."));
 
 
-  w_conversion=new QCheckBox(w3,"w_conversion");
+  w_conversion=new FlagBox("-Wconversion", cxxflags, w3,"w_conversion");
   w_conversion->setGeometry(10,210,230,20);
-  w_conversion->setText("-Wconversion");
-  if (cxxflags.contains("-Wconversion")) {
-    w_conversion->setChecked(true);
-  } else {
-    w_conversion->setChecked(false);
-  }
   KQuickHelp::add(w_conversion,
 	 i18n("Warn if a prototype causes a type conversion that is different\n"
 		"from what would happen to the same argument in the absence\n"
@@ -503,42 +453,25 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 		"type."));
 
 
-  w_sign_compare=new QCheckBox(w3,"w_sign_compare");
+  w_sign_compare=new FlagBox("-Wsign-compare", cxxflags, w3,"w_sign_compare");
   w_sign_compare->setGeometry(260,10,230,20);
-  w_sign_compare->setText("-Wsign-compare");
-  if (cxxflags.contains("-Wsign-compare")) {
-    w_sign_compare->setChecked(true);
-  } else {
-    w_sign_compare->setChecked(false);
-  }
   KQuickHelp::add(w_sign_compare,
 	i18n("Warn when a comparison between signed and unsigned values\n"
 	     "could produce an incorrect result when the signed value\n"
 	     "is converted to unsigned."));
 
 
-  w_aggregate_return=new QCheckBox(w3,"w_aggregate_return");
+  w_aggregate_return=new FlagBox("-Waggregate-return", cxxflags, w3,"w_aggregate_return");
   w_aggregate_return->setGeometry(260,30,230,20);
-  w_aggregate_return->setText("-Waggregate-return");
-  if (cxxflags.contains("-Waggregate-return")) {
-    w_aggregate_return->setChecked(true);
-  } else {
-    w_aggregate_return->setChecked(false);
-  }
   KQuickHelp::add(w_aggregate_return,
 	i18n("Warn if any functions that return structures or unions are\n"
 		"defined or called. (In languages where you can return an\n"
 		"array, this also elicits a warning.)"));
 
 
-  w_strict_prototypes=new QCheckBox(w3,"w_strict_prototypes");
+  w_strict_prototypes=new FlagBox("-Wstrict-prototypes", cxxflags, w3,"w_strict_prototypes");
   w_strict_prototypes->setGeometry(260,50,230,20);
   w_strict_prototypes->setText("-Wstrict-prototypes");
-  if (cxxflags.contains("-Wstrict-prototypes")) {
-    w_strict_prototypes->setChecked(true);
-  } else {
-    w_strict_prototypes->setChecked(false);
-  }
   KQuickHelp::add(w_strict_prototypes,
 	i18n("Warn if a function is declared or defined without specifying\n"
 		"the argument types. (An old-style function definition is\n"
@@ -546,14 +479,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 		"which specifies the argument types.)"));
 
 
-  w_missing_prototypes=new QCheckBox(w3,"w_missing_prototypes");
+  w_missing_prototypes=new FlagBox("-Wmisssing-prototypes", cxxflags, w3,"w_missing_prototypes");
   w_missing_prototypes->setGeometry(260,70,230,20);
-  w_missing_prototypes->setText("-Wmissing-prototypes");
-  if (cxxflags.contains("-Wmissing-prototypes")) {
-    w_missing_prototypes->setChecked(true);
-  } else {
-    w_missing_prototypes->setChecked(false);
-  }
   KQuickHelp::add(w_missing_prototypes,
 	i18n("Warn if a global function is defined without a previous\n"
 		"prototype declaration. This warning is issued even if\n"
@@ -562,14 +489,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 		"in header files."));
 
 
-  w_missing_declarations=new QCheckBox(w3,"w_missing_declarations");
+  w_missing_declarations=new FlagBox("-Wmissing-declarations", cxxflags, w3,"w_missing_declarations");
   w_missing_declarations->setGeometry(260,90,230,20);
-  w_missing_declarations->setText("-Wmissing-declarations");
-  if (cxxflags.contains("-Wmissing-declarations")) {
-    w_missing_declarations->setChecked(true);
-  } else {
-    w_missing_declarations->setChecked(false);
-  }
   KQuickHelp::add(w_missing_declarations,
 	i18n("Warn if a global function is defined without a previous\n"
 		"declaration. Do so even if the definition itself pro-\n"
@@ -577,68 +498,38 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 		"functions that are not declared in header files."));
 
 
-  w_redundant_decls=new QCheckBox(w3,"w_redundant_decls");
+  w_redundant_decls=new FlagBox("-Wredundant-decls", cxxflags, w3,"w_redundant_decls");
   w_redundant_decls->setGeometry(260,110,230,20);
-  w_redundant_decls->setText("-Wredundant-decls");
-  if (cxxflags.contains("-Wredundant-decls")) {
-    w_redundant_decls->setChecked(true);
-  } else {
-    w_redundant_decls->setChecked(false);
-  }
   KQuickHelp::add(w_redundant_decls,
 	i18n("Warn if anything is declared more than once in the same scope\n"
 		"even in cases where multiple declaration is valid and\n"
 		"changes nothing."));
 
 
-  w_nested_externs=new QCheckBox(w3,"w_nested_externs");
+  w_nested_externs=new FlagBox("-Wnested-externs", cxxflags, w3,"w_nested_externs");
   w_nested_externs->setGeometry(260,130,230,20);
-  w_nested_externs->setText("-Wnested-externs");
-  if (cxxflags.contains("-Wnested-externs")) {
-    w_nested_externs->setChecked(true);
-  } else {
-    w_nested_externs->setChecked(false);
-  }
   KQuickHelp::add(w_nested_externs,
 	i18n("Warn if an <i>extern</i> declaration is\n"
 		"encountered within a function."));
 
 
-  w_inline=new QCheckBox(w3,"w_inline");
+  w_inline=new FlagBox("-Winline", cxxflags, w3,"w_inline");
   w_inline->setGeometry(260,150,230,20);
-  w_inline->setText("-Winline");
-  if (cxxflags.contains("-Winline")) {
-    w_inline->setChecked(true);
-  } else {
-    w_inline->setChecked(false);
-  }
   KQuickHelp::add(w_inline,
 	i18n("Warn if a function can not be inlined, and either\n"
 		"it was declared as inline, or else the\n"
 		"<i>-finline-functions</i> option was given."));
 
 
-  w_old_style_cast=new QCheckBox(w3,"w_old_style_cast");
+  w_old_style_cast=new FlagBox("-Wold-style-cast", cxxflags, w3,"w_old_style_cast");
   w_old_style_cast->setGeometry(260,170,230,20);
-  w_old_style_cast->setText("-Wold-style-cast");
-  if (cxxflags.contains("-Wold-style-cast")) {
-    w_old_style_cast->setChecked(true);
-  } else {
-    w_old_style_cast->setChecked(false);
-  }
   KQuickHelp::add(w_old_style_cast,
 	i18n("Warn if an old-style (C-style) cast is used\n"
 	     "within a program"));
 
 
-  w_overloaded_virtual=new QCheckBox(w3,"w_overloaded_virtual");
+  w_overloaded_virtual=new FlagBox("-Woverloaded-virtual", cxxflags, w3,"w_overloaded_virtual");
   w_overloaded_virtual->setGeometry(260,190,230,20);
-  w_overloaded_virtual->setText("-Woverloaded-virtual");
-  if (cxxflags.contains("-Woverloaded-virtual")) {
-    w_overloaded_virtual->setChecked(true);
-  } else {
-    w_overloaded_virtual->setChecked(false);
-  }
   KQuickHelp::add(w_overloaded_virtual,
 	i18n("Warn when a derived class function declaration may be an\n"
 		"error in defining a virtual function (C++ only). In\n"
@@ -650,27 +541,16 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 		"does not match any declarations from the base class."));
 
 
-  w_synth=new QCheckBox(w3,"w_synth");
+  w_synth=new FlagBox("-Wsynth", cxxflags, w3,"w_synth");
   w_synth->setGeometry(260,210,230,20);
-  w_synth->setText("-Wsynth");
-  if (cxxflags.contains("-Wsynth")) {
-    w_synth->setChecked(true);
-  } else {
-    w_synth->setChecked(false);
-  }
   KQuickHelp::add(w_synth,
 	i18n("Warn when g++'s synthesis behavoir does\n"
 		"not match that of cfront."));
 
 
-  w_error=new QCheckBox(w3,"w_error");
+  w_error=new FlagBox("-Werror", cxxflags, w3,"w_error");
   w_error->setGeometry(260,250,230,20);
   w_error->setText(i18n("make all Warnings into errors"));
-  if (cxxflags.contains("-Werror")) {
-    w_error->setChecked(true);
-  } else {
-    w_error->setChecked(false);
-  }
   KQuickHelp::add(w_error,
 	i18n("Make all warnings into errors."));
 
@@ -1160,57 +1040,21 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 
   connect(m_set_modify_dir,SIGNAL(clicked()),SLOT(slotFileDialogClicked()));
 
-  settings = kapp->getConfig();
+  KConfig *settings = kapp->getConfig();
   settings->setGroup("MakeOptionsSettings");
 
-  if (settings->readBoolEntry("PrintDebugInfo")) {
-  	m_print_debug_info->setChecked(TRUE);
-  }
- 	else m_print_debug_info->setChecked(FALSE);
- 	
- 	if (settings->readBoolEntry("PrintDataBase")) {
- 	  m_print_data_base->setChecked(TRUE);
-  }
-  else m_print_data_base->setChecked(FALSE);
-
-  if (settings->readBoolEntry("NoRules")) {
-  	m_no_rules->setChecked(TRUE);
-  }
-  else m_no_rules->setChecked(FALSE);
-
-  if (settings->readBoolEntry("EnvVariables")) {
-  	m_env_variables->setChecked(TRUE);
-  }
-  else m_env_variables->setChecked(FALSE);
-
-  if (settings->readBoolEntry("ContAfterError")) {
-  	m_cont_after_error->setChecked(TRUE);
-	}
-	else m_cont_after_error->setChecked(FALSE);
-	
-	if (settings->readBoolEntry("TouchFiles")) {
-		m_touch_files->setChecked(TRUE);
-  }
-	else m_touch_files->setChecked(FALSE);
-
-	if (settings->readBoolEntry("PrintWorkDir")){
-		m_print_work_dir->setChecked(TRUE);
-	}
-	else m_print_work_dir->setChecked(FALSE);
-	
-	if (settings->readBoolEntry("SilentOperation")) {
-		m_silent_operation->setChecked(TRUE);
-	}
-	else m_silent_operation->setChecked(FALSE);
-	
-	if (settings->readBoolEntry("IgnorErrors")) {
-		m_ignor_errors->setChecked(TRUE);
-	}
-	else m_ignor_errors->setChecked(FALSE);
-	
-	m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
-	m_optional_line->setText(settings->readEntry("OptionalLine"));
-	m_job_number->setValue(settings->readNumEntry ("JobNumber"));	
+  m_print_debug_info->setChecked(settings->readBoolEntry("PrintDebugInfo"));
+  m_print_data_base->setChecked(settings->readBoolEntry("PrintDataBase"));
+  m_no_rules->setChecked(settings->readBoolEntry("NoRules"));
+  m_env_variables->setChecked(settings->readBoolEntry("EnvVariables"));
+  m_cont_after_error->setChecked(settings->readBoolEntry("ContAfterError"));
+  m_touch_files->setChecked(settings->readBoolEntry("TouchFiles"));
+  m_print_work_dir->setChecked(settings->readBoolEntry("PrintWorkDir"));
+  m_silent_operation->setChecked(settings->readBoolEntry("SilentOperation"));
+  m_ignor_errors->setChecked(settings->readBoolEntry("IgnorErrors"));
+  m_set_modify_line->setText(settings->readEntry("SetModifyLine"));
+  m_optional_line->setText(settings->readEntry("OptionalLine"));
+  m_job_number->setValue(settings->readNumEntry ("JobNumber"));	
 
   // **************set the button*********************
   setOkButton(i18n("OK"));
@@ -1450,57 +1294,21 @@ void CPrjOptionsDlg::ok(){
   }
 
   //**********make options*************
-  settings = kapp->getConfig();
+  KConfig *settings = kapp->getConfig();
   settings->setGroup("MakeOptionsSettings");
 
-  if (m_print_debug_info->isChecked()) {
-    settings->writeEntry("PrintDebugInfo",TRUE);
-  }
-  else settings->writeEntry("PrintDebugInfo",FALSE);
-  
-  if (m_print_data_base->isChecked()) {
-    settings->writeEntry("PrintDataBase",TRUE);
-  }
-  else settings->writeEntry("PrintDataBase",FALSE);
-
-  if (m_no_rules->isChecked()) {
-    settings->writeEntry("NoRules",TRUE);
-  }
-  else settings->writeEntry("NoRules",FALSE);
-
-  if (m_env_variables->isChecked()) {
-    settings->writeEntry("EnvVariables",TRUE);
-  }
-  else settings->writeEntry("EnvVariables",FALSE);
-
-  if (m_cont_after_error->isChecked()) {
-		settings->writeEntry("ContAfterError",TRUE);
-	}
-	else settings->writeEntry("ContAfterError",FALSE);
-	
-	if (m_touch_files->isChecked()) {
-		settings->writeEntry("TouchFiles", TRUE);
-  }
-  else settings->writeEntry("TouchFiles", FALSE);
-
-	if (m_print_work_dir->isChecked()){
-  	settings->writeEntry("PrintWorkDir", TRUE);
-	}
-	else settings->writeEntry("PrintWorkDir", FALSE);
-	
-	if (m_silent_operation->isChecked()) {
-		settings->writeEntry("SilentOperation", TRUE);
-	}
-	else settings->writeEntry("SilentOperation", FALSE);
-	
-	if (m_ignor_errors->isChecked()) {
-		settings->writeEntry("IgnorErrors", TRUE);
-	}
-	else settings->writeEntry("IgnorErrors", FALSE);
-	
-	settings->writeEntry("SetModifyLine", m_set_modify_line->text());
-	settings->writeEntry("OptionalLine", m_optional_line->text());
-	settings->writeEntry("JobNumber", m_job_number->text());	
+  settings->writeEntry("PrintDebugInfo", m_print_debug_info->isChecked());
+  settings->writeEntry("PrintDataBase", m_print_data_base->isChecked());
+  settings->writeEntry("NoRules", m_no_rules->isChecked());
+  settings->writeEntry("EnvVariables", m_env_variables->isChecked());
+  settings->writeEntry("ContAfterError", m_cont_after_error->isChecked());
+  settings->writeEntry("TouchFiles", m_touch_files->isChecked());
+  settings->writeEntry("PrintWorkDir", m_print_work_dir->isChecked());
+  settings->writeEntry("SilentOperation", m_silent_operation->isChecked());
+  settings->writeEntry("IgnorErrors", m_ignor_errors->isChecked());
+  settings->writeEntry("SetModifyLine", m_set_modify_line->text());
+  settings->writeEntry("OptionalLine", m_optional_line->text());
+  settings->writeEntry("JobNumber", m_job_number->text());	
   settings->sync();
   // reject();	
 

@@ -27,17 +27,17 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kglobal.h>
 
 #include "cfinddoctextdlg.h"
+
 
 CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
     // mimimise initial size of dialog
 //    resize( 0, 0 );
-    icon_loader = KApplication::getKApplication()->getIconLoader();
     resize(250,120);
     setCaption(i18n("Search for Help on..."));
-    QPixmap question_pix = icon_loader->loadMiniIcon("contents.xpm");
-    setIcon(question_pix);
+    setIcon(BarIcon("contents"));
     QVBoxLayout *vl = new QVBoxLayout( this, 15 );
 
     QHBoxLayout *hl = new QHBoxLayout( 15 );

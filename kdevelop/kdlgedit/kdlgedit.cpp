@@ -1360,13 +1360,16 @@ void KDlgEdit::slotViewPreview()
 
   QDir dir(KApplication::localkdedir()+"/share/apps/");
   dir.mkdir("kdevelop");
-  
+
+#warning Why not save this in /tmp?
+#if 0
   if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg"))
     {
       QMessageBox::warning(((CKDevelop*)parent())->kdlg_get_edit_widget(),i18n("Dialog editor (WYSIWYG Preview)"),
                            i18n("Error saving temporary dialog file."));
       return;
     }
+#endif
 
   PreviewDlg dlg;
   dlg.move(100,100);

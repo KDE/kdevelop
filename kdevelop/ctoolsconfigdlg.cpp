@@ -167,19 +167,21 @@ void CToolsConfigDlg::slotToolAdd()
 	QString exe_file=QFileInfo(executable).fileName();
 		
 	if(executable.isEmpty()){
-		QMessageBox::warning(this,i18n("Executable not set!"), i18n("You have to set an executable to add to the Tools-Menu first."));
+		KMessageBox::sorry(this, i18n("You have to set an executable to add to the Tools-Menu first."));
 		return;
 	}
 	if(!QFileInfo(CToolClass::findProgram(executable)).isExecutable()){
-	  QMessageBox::warning(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
+	  KMessageBox::sorry(this, i18n("The selected file is not an executable. Please choose an executable filename."));
 	  return;
 	}
 	if(!CToolClass::searchInstProgram(exe_file) ){
-	  QMessageBox::warning(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"																							"to execute the selected program as a tool."));
+	  KMessageBox::sorry(this, i18n("The selected executable is not in your path.\n"
+                                        "Please update your $PATH environment variable"
+                                        "to execute the selected program as a tool."));
 	  return;
  	}
 	if(menutext.isEmpty()){
-	  QMessageBox::warning(this,i18n("Menu text not set!"), i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."));
+	  KMessageBox::sorry(this, i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."));
 	  return;
 	}
 	
@@ -239,12 +241,13 @@ void CToolsConfigDlg::slotToolsExeSelect()
   if (!exe_file_name.isEmpty()){
     QString exe_file=QFileInfo(exe_file_name).fileName();
     if(!QFileInfo(exe_file_name).isExecutable()){
-      QMessageBox::warning(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
+      KMessageBox::error(this, i18n("The selected file is not an executable. Please choose an executable filename."));
       return;
     }
     else if(!CToolClass::searchInstProgram(exe_file) ){
-      QMessageBox::warning(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
-						 "to execute the selected program as a tool."));
+      QMessageBox::sorry(this, i18n("The selected executable is not in your path.\n"
+                                    "Please update your $PATH environment variable"
+                                    "to execute the selected program as a tool."));
       return;
     }
     else{

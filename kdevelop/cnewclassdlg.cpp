@@ -16,12 +16,24 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <kquickhelp.h>
+
+#include <qlineedit.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qlistbox.h>
+#include <qmultilinedit.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qcheckbox.h>
 #include <qlayout.h>
+#include <kapp.h>
+#include <kquickhelp.h>
 #include <klocale.h>
-#define LAYOUT_BORDER (10)
+#include <kmessagebox.h>
+#include "cgeneratenewfile.h"
 #include "cnewclassdlg.h"
 #include "cproject.h"
+#define LAYOUT_BORDER (10)
 
 // SETUP DIALOG
 CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
@@ -122,7 +134,7 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
                                 "after the class is created.")));
 	
   inher_group = new QButtonGroup( this, "inher_group" );
-  inher_group->setTitle( i18n("Inheritence") );
+  inher_group->setTitle( i18n("Inheritance") );
   main_layout->addWidget( inher_group, 1, 1 );
 
   layout = new QVBoxLayout( inher_group, LAYOUT_BORDER );
@@ -227,18 +239,17 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
 void CNewClassDlg::ok(){
   QString text = classname_edit->text(); 
   if (text.isEmpty() ){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a classname!"),KMsgBox::EXCLAMATION);
+    KMessageBox::sorry(this, i18n("You must enter a classname!"));
     return;
    }
   text = header_edit->text(); 
   if (text.isEmpty() ){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the header-file!"),KMsgBox::EXCLAMATION);
+    KMessageBox::sorry(this, i18n("You must enter a name for the header-file!"));
     return;
    }
   text = impl_edit->text(); 
   if (text.isEmpty() ){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the implementation-file!")
-		     ,KMsgBox::EXCLAMATION);
+    KMessageBox::sorry(this, i18n("You must enter a name for the implementation-file!"));
     return;
   }
   // text = baseclass_edit->text(); 
@@ -389,11 +400,15 @@ void CNewClassDlg::slotClassEditChanged(const char* text){
   }
   
 }
+
+
 void CNewClassDlg::slotHeaderEditChanged(const char*){
   if(header_edit->hasFocus()){
     header_modified = true;
   }
 }
+
+
 void CNewClassDlg::slotImplEditChanged(const char*){
   if(impl_edit->hasFocus()){
     impl_modified = true;

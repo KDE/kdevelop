@@ -15,7 +15,10 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
+
 #include <qprogressdialog.h>
+#include <qsplitter.h>
 #include <kcursor.h>
 
 #include "ckdevelop.h"
@@ -62,7 +65,9 @@ bool CKDevelop::slotProjectClose(){
 //      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
       TEditInfo *next_info=edit_infos.next();
       if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
-	
+
+#warning FIXME: QMessageBox has 3 buttons maximum
+#if 0
 	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
 					   i18n("The project\n\n")+prj->getProjectName()
 					   +i18n("\n\ncontains changed files. Save modified file\n\n")
@@ -71,6 +76,9 @@ bool CKDevelop::slotProjectClose(){
  				// show the messagea and store result in result:
 	project_close->show();
     	int result=project_close->result();
+#else
+        int result = 0; // until problem above is resolved
+#endif
 	
 //	KDEBUG(KDEBUG_INFO,CKDEVELOP,"Msgbox");
 	// create the save project messagebox
@@ -273,7 +281,7 @@ void CKDevelop::slotAddExistingFiles(){
     copy = false;
     progress.setProgress( i );
     if (!QFile::exists((const char*)file)) {
-        KMsgBox::message(this,i18n("Attention"),file +i18n("\n\nFile does not exist!"));
+        KMessageBox::sorry(this, i18n("File %1does not exist!").arg(file));
         continue;
     }
     file_info.setFile(file);
@@ -284,13 +292,12 @@ void CKDevelop::slotAddExistingFiles(){
     type = CProject::getType( dest_name );
       
     if(QFile::exists(dest_name)){
-      int result=KMsgBox::yesNoCancel(this,i18n("File exists!"),
-                                      QString(i18n("\nThe file\n\n"))+
-				      source_name+
-				      i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"));
-      if(result==1)
+        int result=KMessageBox::warningYesNoCancel(this,
+                                                   i18n("The file\n\n%1\n\n"
+                                                        "already exists.\nDo you want overwrite the old one?").arg(source_name));
+      if(result==KMessageBox::Yes)
         copy = true;
-      if(result==2)
+      if(result==KMessageBox::No)
         copy = false;
       if(result==3){
         setCursor( KCursor::arrowCursor() );
@@ -371,7 +378,8 @@ void CKDevelop::slotProjectOptions(){
   if(prjdlg.exec()){
     if (prjdlg.needConfigureInUpdate()){
       prj->updateConfigureIn();
-      KMsgBox::message(0,i18n("Information"),i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+      KMessageBox::information(0, i18n("You have modified the projectversion.\n"
+                                       "We will regenerate all Makefiles now."));
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
       messages_widget->clear();
@@ -486,7 +494,8 @@ void CKDevelop::slotProjectOpen(){
   if (info.isFile()){
     if(!(readProjectFile(str))){
 
-    KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+    KMessageBox::sorry(0, i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
+                               "Please use only new generated projects!"));
     readProjectFile(old_project);
 		slotViewRefresh();
     }
@@ -520,9 +529,9 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname){
 
   if (info.isFile()){
     if(!(readProjectFile(prjname))){
-
-    KMsgBox::message(0,prjname,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
-    readProjectFile(old_project);
+      KMessageBox::sorry(0, "This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\n"
+                         "Please use only new generated projects!");
+      readProjectFile(old_project);
     }
 
     slotViewRefresh();
@@ -1079,7 +1088,7 @@ void CKDevelop::newSubDir(){
   if(prj->getProjectType() == "normal_empty"){
     return; // no makefile handling
   }
-  KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+  KMessageBox::information(0, i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."));
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));
   messages_widget->clear();

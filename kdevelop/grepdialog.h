@@ -42,7 +42,7 @@ signals:
     void itemSelected(QString abs_filename, int line);
     
 public slots:
-		void slotSearchFor(QString pattern);
+    void slotSearchFor(QString pattern);
 		
 private slots:
     void dirButtonClicked();
@@ -65,7 +65,7 @@ private:
     QPushButton *search_button, *cancel_button;
     QLabel *status_label, *matches_label;
     KProcess *childproc;
-    QString buf;
+    QCString buf;
 };
 
 

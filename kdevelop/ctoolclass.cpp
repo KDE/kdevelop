@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include <iostream.h>
+#include <stdlib.h>
 #include <qfile.h>
 #include <qmessagebox.h>
 #include "ctoolclass.h"
@@ -39,7 +40,7 @@ bool CToolClass::searchProgram(QString name){
     }
   }
   if(!found){
-    QMessageBox::warning(0,"Program not found!","KDevelop needs \""+name+"\" to work properly.\n\tPlease install it!");
+    KMessageBox::error(0, i18n("KDevelop needs \"%1\" to work properly.\n\tPlease install it!").arg(name));
   }
   return found;
 }

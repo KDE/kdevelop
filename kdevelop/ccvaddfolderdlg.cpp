@@ -99,8 +99,7 @@ void CCVAddFolderDlg::OK()
 {
 
   if( strlen( folderEdit.text() ) == 0 )
-    QMessageBox::information( this, i18n("No name"),
-                      i18n("You have to specify a foldername.") );
+    KMessageBox::information(this, i18n("You have to specify a foldername."));
   else
     accept();
 }

@@ -260,43 +260,43 @@ void CNewFileDlg::slotOKClicked(){
   if ( (fileType() == "CPP") && 
        !(text.right(4) == ".cpp" || text.right(3) == ".cc" 
 	|| text.right(2) == ".C" || text.right(2) == ".c" || text.right(4) == ".cxx" || text.right(3) == ".ec" || text.right(5) == ".ecpp" )){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"));
+    KMessageBox::sorry(this, i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"));
     return;
   }
   if ( (fileType() == "HEADER") && !(text.right(2) == ".h" || (text.right(4) == ".hxx"))){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .h or .hxx!"));
+    KMessageBox::sorry(this, i18n("The filename must end with .h or .hxx!"));
     return;
   }
   if ( (fileType() == "LSM") && (text.right(4) != ".lsm")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .lsm !"));
+    KMessageBox::sorry(this, i18n("The filename must end with .lsm !"));
     return;
    }
   if ( (fileType() == "KDELNK") && (text.right(7) != ".kdelnk")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .kdelnk !"));
+    KMessageBox::sorry(this, i18n("The filename must end with .kdelnk !"));
     return;
   }
   if ( (fileType() == "EN_SGML") && (text.right(5) != ".sgml")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .sgml !"));
+    KMessageBox::sorry(this, i18n("The filename must end with .sgml !"));
     return;
   }
   if ( (fileType() == "DIALOG") && (text.right(8) != ".kdevdlg")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .kdevdlg !"));
+    KMessageBox::sorry(this, i18n("The filename must end with .kdevdlg !"));
     return;
   }
   if ( (fileType() == "ICON") && (text.right(4) != ".xpm")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .xpm !"));
+    KMessageBox::sorry(this, i18n("The filename must end with .xpm !"));
     return;
   }
   if ( (fileType() == "LEXICAL") && !(text.right(4) == ".l++" || text.right(4) == ".lxx" || text.right(3) == ".ll" || text.right(2) == ".l")){
-    QMessageBox::warning(this,i18n("Error..."),i18n("The filename must end with .l, .ll, .lxx or .l++ !"));
+    KMessageBox::sorry(this, i18n("The filename must end with .l, .ll, .lxx or .l++ !"));
     return;
   }
   if (text.isEmpty()){
-    QMessageBox::warning(this,i18n("Error..."),i18n("You must enter a filename!"));
+    KMessageBox::information(this, i18n("You must enter a filename!"));
     return;
   }
   if(addToProject() == true && (location().contains(prj->getProjectDir())) == 0 ){
-    QMessageBox::warning(this,i18n("Error..."),i18n("You must choose a location,that is in your project-dir!"));
+    QMessageBox::information(this, i18n("You must choose a location,that is in your project-dir!"));
     return;
   }
   QString filename = fileName();
@@ -350,7 +350,7 @@ void CNewFileDlg::slotOKClicked(){
       if ((prj->getLDADD()).contains( "@LEXLIB@", FALSE ) == 0){
 	prj->setLDADD( prj->getLDADD() + " @LEXLIB@ ");
       }
-      QMessageBox::information(this,i18n("Information..."),i18n("Please make sure, that you have added\n\"AM_LEX_PROG\" to your configure.in!"));
+      KMessageBox::information(this, i18n("Please make sure, that you have added\n\"AM_LEX_PROG\" to your configure.in!"));
     }
   }
   else { // no template, -> empty file or icon

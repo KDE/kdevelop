@@ -693,7 +693,7 @@ private:
   QPopupMenu* options_menu;
   QPopupMenu* menu_buffers;
   QPopupMenu* help_menu;
-  QWhatsThis* whats_this;
+    //  QWhatsThis* whats_this;
 	
   QPopupMenu* history_prev;
   QPopupMenu* history_next;

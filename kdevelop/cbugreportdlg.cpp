@@ -570,7 +570,9 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   // save bugreport-email
   BugEmail=bug_email;
 
-  QMessageBox::information(0,"Bugreport Dialog","Please remember writing your bugreport in english,\nso every developer is able to understand it. Thanks!",QMessageBox::Ok);
+  KMessageBox::information(0, "Bugreport Dialog",
+                           i18n("Please remember writing your bugreport in english,\n"
+                                "so every developer is able to understand it. Thanks!"));
 
 
   // cerr << endl << "init dialog";
@@ -587,7 +589,7 @@ CBugReportDlg::~CBugReportDlg(){
 void CBugReportDlg::ok() {
 
   if (description_mledit->text() == ""  ||  subject_edit->text() == "") {
-    QMessageBox::information(this,i18n("Information"),i18n("Please fill in at least the subject and bug description!"));
+    KMessageBox::information(this, i18n("Please fill in at least the subject and bug description!"));
     return;
   }
   //  cerr << endl << "slot ok()"
@@ -600,7 +602,8 @@ void CBugReportDlg::ok() {
   
   if (generateEmail()) {
     if(sendEmail()){
-      QMessageBox::information(this,i18n("Bug Report"),i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
+      KMessageBox::information(this, i18n("Bug Report"),
+                               i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
     }
   }
   accept();

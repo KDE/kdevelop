@@ -212,7 +212,7 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 	  lang_list.append("et");
 	}
 	if(lang_list.isEmpty()){
-	  QMessageBox::information(0,i18n("Information"),i18n("Your sourcecode is already translated to all supported languages."));
+	  KMessageBox::information(0, i18n("Your sourcecode is already translated to all supported languages."));
 	  ok_button->setEnabled(false);
 	}
 }

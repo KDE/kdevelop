@@ -20,7 +20,7 @@
 #include "cclassview.h"
 #include <assert.h>
 #include <qmessagebox.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <klocale.h>
 #include <qheader.h>
 #include <qprogressdialog.h> 
@@ -870,20 +870,13 @@ bool CClassView::validClassDecl( const char *className,
 
   if( retVal && className != NULL )
   {
-    str.sprintf( "%s '%s' %s", 
-                 i18n("The class:"), 
-                 className == NULL ? "" : className, 
-                 i18n("couldn't be found."));
-      
+    str = i18n("The class '%1' cound not be found.").arg(className == NULL ? "" : className);
     retVal = store->hasClass( className );
 
     if( !retVal )
     {
-      str.sprintf( "%s '%s' %s", 
-                   i18n("The struct:"), 
-                   className == NULL ? "" : className, 
-                   i18n("couldn't be found."));
-      retVal = store->hasStruct( className );
+        str = i18n("The struct '%1' cound not be found.").arg(className == NULL ? "" : className);
+        retVal = store->hasStruct( className );
     }
   }
 
@@ -921,12 +914,10 @@ void CClassView::slotClassNew()
 
 void CClassView::slotClassDelete()
 {
-  if( KMsgBox::yesNo( this, i18n("Delete class"),
-                      i18n("Are you sure you want to delete this class?"),
-                      KMsgBox::QUESTION ) == 1 )
+  if (KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete this class?"))
+      == KMessageBox::Yes)
   {
-    QMessageBox::information( this, "Not implemented",
-                      "This function isn't implemented yet." );
+    KMessageBox::sorry( this, "This function isn't implemented yet." );
   }
                       
 }
@@ -985,12 +976,10 @@ void CClassView::slotAttributeNew()
 
 void CClassView::slotAttributeDelete()
 {
-  if( KMsgBox::yesNo( this, i18n("Delete attribute"), 
-                      i18n("Are you sure you want to delete this attribute?"),
-                      KMsgBox::QUESTION ) == 1 )
+  if (KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete this attribute?"))
+      == KMessageBox::Yes)
   {
-    KMsgBox::message( this, "Not implemented",
-                      "This function isn't implemented yet." );
+    KMessageBox::sorry(this, i18n("This function isn't implemented yet."));
   }
 }
 
@@ -1020,9 +1009,8 @@ void CClassView::slotFolderDelete()
 {
   QListViewItem *parent;
 
-  if( KMsgBox::yesNo( this, i18n("Delete folder"), 
-                      i18n("Are you sure you want to delete this folder?"),
-                      KMsgBox::QUESTION ) == 1 )
+  if (KMessageBox::questionYesNo(this, i18n("Are you sure you want to delete this folder?"))
+      == KMessageBox::Yes)
   {
     parent = currentItem()->parent();
     parent->removeItem( currentItem() );

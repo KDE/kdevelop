@@ -49,9 +49,6 @@ protected:
   QLabel* tip_label;
   QPushButton* ok_button;
   QPushButton* next_button;
-
-
-
 };
 
 #endif

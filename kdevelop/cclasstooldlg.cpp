@@ -20,14 +20,14 @@
  ***************************************************************************/
 
 
-#include "cclasstooldlg.h"
-#include <qmessagebox.h>
-#include <kapp.h>
-#include <klocale.h>
-#include <qtooltip.h>
 #include <assert.h>
+#include <qtooltip.h>
 #include <qlistbox.h>
 #include <qheader.h>
+#include <kapp.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include "cclasstooldlg.h"
 
 /*********************************************************************
  *                                                                   *
@@ -158,30 +158,13 @@ void CClassToolDlg::setWidgetValues()
  *-----------------------------------------------------------------*/
 void CClassToolDlg::readIcons()
 {
-  QString PIXPREFIX = "/kdevelop/pics/mini/";
-  QString pixDir = KApplication::kde_datadir() + PIXPREFIX;
-  QPixmap pm;
-  
-  pm.load( pixDir + "CTparents.xpm" );
-  parentsBtn.setPixmap( pm );
-  
-  pm.load( pixDir + "CTchildren.xpm" );
-  childrenBtn.setPixmap( pm );
-
-  pm.load( pixDir + "CTclients.xpm" );
-  clientsBtn.setPixmap( pm );
-
-  pm.load( pixDir + "CTsuppliers.xpm" );
-  suppliersBtn.setPixmap( pm );
-
-  pm.load( pixDir + "CVpublic_var.xpm" );
-  attributesBtn.setPixmap( pm );
-
-  pm.load( pixDir + "CVpublic_meth.xpm" );
-  methodsBtn.setPixmap( pm );
-
-  pm.load( pixDir + "CTvirtuals.xpm" );
-  virtualsBtn.setPixmap( pm );
+  parentsBtn.setPixmap( BarIcon("CTparents") );
+  childrenBtn.setPixmap( BarIcon("CTchildren") );
+  clientsBtn.setPixmap( BarIcon("CTclients"));
+  suppliersBtn.setPixmap( BarIcon("CTsuppliers") );
+  attributesBtn.setPixmap( BarIcon("CVpublic_var") );
+  methodsBtn.setPixmap( BarIcon("CVpublic_meth"));
+  virtualsBtn.setPixmap( BarIcon("CTvirtuals") );
 }
 
 /*---------------------------------- CClassToolDlg::setTooltips()

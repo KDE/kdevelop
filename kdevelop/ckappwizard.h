@@ -21,6 +21,7 @@
 #define CKAPPWIZARD_H
 
 #include <qstrlist.h>
+#include <qpixmap.h>
 #include <kwizard.h>
 
 class CProject;
@@ -129,7 +130,7 @@ private:
   QMultiLineEdit* errOutput;
   KSeparator *separator0,*separator1,*separator2;
   QPixmap pm,iconpm,minipm,*icontemp,*minitemp;
-  KApplication* help;
+    //  KApplication* help;
   QString dir,nametext,directorytext,name1,name2,namelow,nameold;
   KEdit *cppedit,*hedit;
   KShellProcess *q;

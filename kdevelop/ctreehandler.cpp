@@ -18,8 +18,10 @@
 #include "ctreehandler.h"
 #include <assert.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
-QPixmap **CTreeHandler::icons = new QPixmap *[ THEND_POS ];
+
+QPixmap *CTreeHandler::icons = new QPixmap[ THEND_POS ];
 bool CTreeHandler::iconsRead = false;
 
 
@@ -118,7 +120,7 @@ void CTreeHandler::setLastItem( QListViewItem *aItem )
  *-----------------------------------------------------------------*/
 QPixmap *CTreeHandler::getIcon( THType anIcon )
 {
-  return icons[ anIcon ];
+  return &icons[ anIcon ];
 }
 
 /*-------------------------------------------- CTreeHandler::itemType()
@@ -153,7 +155,7 @@ THType CTreeHandler::itemType( QListViewItem *item )
   
   p = item->pixmap( 0 );
   for( idx=0; 
-       idx < THEND_POS && p->serialNumber() != icons[ idx ]->serialNumber();
+       idx < THEND_POS && p->serialNumber() != icons[ idx ].serialNumber();
        idx++ )
     ;
 
@@ -264,43 +266,37 @@ QListViewItem *CTreeHandler::addItem( const char *aName,
  *-----------------------------------------------------------------*/
 void CTreeHandler::readIcons()
 {
-  QString PIXPREFIX = "/kdevelop/pics/mini/";
-  QString pixDir;
-  KIconLoader *il;
-
   // Allocate the array.
-  icons = new QPixmap *[ THEND_POS ];
+  icons = new QPixmap[ THEND_POS ];
   for( int i=0; i<THEND_POS; i++ )
     icons[ i ] = NULL;
 
-  pixDir = KApplication::kde_datadir() + PIXPREFIX;
-
-  il = KGlobal::iconLoader();
+  KIconLoader *il = KGlobal::iconLoader();
 
   // Load the icons
-  icons[ THFOLDER ] = new QPixmap( il->loadMiniIcon( "folder.xpm" ) );
-  icons[ THFOLDER_OPEN ] = new QPixmap( il->loadMiniIcon( "folder_open.xpm" ) );
-  icons[ THCLASS ] = new QPixmap(pixDir + "CVclass.xpm");
-  icons[ THPROJECT ] = new QPixmap( il->loadMiniIcon( "kwm.xpm" ) );
-  icons[ THBOOK ] = new QPixmap( il->loadMiniIcon( "mini-book1.xpm" ) );
-  icons[ THBOOK_OPEN ] = new QPixmap( il->loadMiniIcon( "mini-book2.xpm" ) );
-  icons[ THDOC ] = new QPixmap( il->loadMiniIcon( "mini-doc.xpm") );
-  icons[ THSTRUCT ] = new QPixmap(pixDir + "CVstruct.xpm");
-  icons[ THPUBLIC_ATTR ] = new QPixmap(pixDir + "CVpublic_var.xpm");
-  icons[ THPROTECTED_ATTR ] = new QPixmap(pixDir + "CVprotected_var.xpm");
-  icons[ THPRIVATE_ATTR ] = new QPixmap(pixDir + "CVprivate_var.xpm");
-  icons[ THPUBLIC_SLOT ] = new QPixmap(pixDir + "CVpublic_slot.xpm");
-  icons[ THPROTECTED_SLOT ] = new QPixmap(pixDir + "CVprotected_slot.xpm");
-  icons[ THPRIVATE_SLOT ] = new QPixmap(pixDir + "CVprivate_slot.xpm");
-  icons[ THSIGNAL ] = new QPixmap(pixDir + "CVpublic_signal.xpm");
-  icons[ THGLOBAL_VARIABLE ] = new QPixmap( pixDir + "CVglobal_var.xpm");
-  icons[ THPUBLIC_METHOD ] = new QPixmap(pixDir + "CVpublic_meth.xpm");
-  icons[ THPROTECTED_METHOD ] = new QPixmap(pixDir + "CVprotected_meth.xpm");
-  icons[ THPRIVATE_METHOD ] = new QPixmap(pixDir + "CVprivate_meth.xpm");
-  icons[ THGLOBAL_FUNCTION ] = new QPixmap( pixDir + "CVglobal_meth.xpm");
-  icons[ THC_FILE ] = new QPixmap( il->loadMiniIcon( "c_src.xpm" ) );
-  icons[ THINSTALLED_FILE ] = new QPixmap( pixDir + "inst_file.xpm");
-  icons[ THDELETE ] = new QPixmap( il->loadMiniIcon( "delete.xpm" ) );
+  icons[ THFOLDER ] = BarIcon("folder.xpm");
+  icons[ THFOLDER_OPEN ] = BarIcon("folder_open");
+  icons[ THCLASS ] = BarIcon("CVclass");
+  icons[ THPROJECT ] = BarIcon("kwm");
+  icons[ THBOOK ] = BarIcon("mini-book1");
+  icons[ THBOOK_OPEN ] = BarIcon("mini-book2");
+  icons[ THDOC ] = BarIcon("mini-doc");
+  icons[ THSTRUCT ] = BarIcon("CVstructm");
+  icons[ THPUBLIC_ATTR ] = BarIcon("CVpublic_var");
+  icons[ THPROTECTED_ATTR ] = BarIcon("CVprotected_var");
+  icons[ THPRIVATE_ATTR ] = BarIcon("CVprivate_var");
+  icons[ THPUBLIC_SLOT ] = BarIcon("CVpublic_slot");
+  icons[ THPROTECTED_SLOT ] = BarIcon("CVprotected_slot");
+  icons[ THPRIVATE_SLOT ] = BarIcon("CVprivate_slot");
+  icons[ THSIGNAL ] = BarIcon("CVpublic_signal");
+  icons[ THGLOBAL_VARIABLE ] = BarIcon("CVglobal_var");
+  icons[ THPUBLIC_METHOD ] = BarIcon("CVpublic_meth");
+  icons[ THPROTECTED_METHOD ] = BarIcon("CVprotected_meth");
+  icons[ THPRIVATE_METHOD ] = BarIcon("CVprivate_meth");
+  icons[ THGLOBAL_FUNCTION ] = BarIcon("CVglobal_meth");
+  icons[ THC_FILE ] = BarIcon("c_src");
+  icons[ THINSTALLED_FILE ] = BarIcon("inst_file");
+  icons[ THDELETE ] = BarIcon("delete");
 
   CTreeHandler::iconsRead = true;
 }
