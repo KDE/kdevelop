@@ -1753,6 +1753,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
     QStringList::Iterator it = path.begin();
     while( it != path.end() ){
         QString s = *it;
+        QStringList::Iterator sv_it = it;
         ++it;
 
 	kdDebug(9007) << "has namespace " << s << ": " << container->hasNamespace( s ) << endl;
@@ -1761,7 +1762,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
 
         NamespaceDom scope = container->namespaceByName( s );
 
-        path.remove( s );
+        path.remove( sv_it );
         container = scope;
     }
 
