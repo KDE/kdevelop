@@ -23,6 +23,7 @@
 
 #include "ckappwizard.h"
 #include "debug.h"
+#include "ctoolclass.h"
 #include <kmsgbox.h>
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QString author_email) : KWizard(parent,name,true){
@@ -35,7 +36,6 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   m_author_name = author_name;
   //cerr << ":" << m_author_name << ":";
   //cerr << ":" << m_author_email << ":";
-  
   slotDefaultClicked(0);
 }
 
@@ -508,7 +508,6 @@ void CKAppWizard::initPages(){
   														"Wizard."));
   
   
-  
 
   connect(nameline,SIGNAL(textChanged(const char*)),SLOT(slotProjectnameEntry()));
   connect(directoryload,SIGNAL(clicked()),SLOT(slotDirDialogClicked()));
@@ -755,6 +754,30 @@ void CKAppWizard::slotNewCppButtonClicked() {
 
 // connection of this (defaultButton)
 void CKAppWizard::slotOkClicked() {
+
+  StringTokenizer tokener;
+  bool found=false;
+  QString file;
+  QString complete_path = getenv("PATH");
+
+  tokener.tokenize(complete_path,":");
+
+  while(tokener.hasMoreTokens()){
+    file = QString(tokener.nextToken()) + "/sgml2html";
+    if(QFile::exists(file)){
+      found = true;
+      break;
+    }
+  }
+
+  if (!found) {
+  	userdoc->setChecked(false);
+  	KMsgBox msg (0,i18n("sgml2html does not exists!"),
+    i18n("If you want to generate the user-documentation, you need sgml2html.\n"
+    		 "If you do not have it, the user-documentation will not be generate."),16,i18n("Ok"));
+    msg.show();
+  }
+
   QDir dir;
   QString direct = directoryline->text();
   
@@ -775,10 +798,10 @@ void CKAppWizard::slotOkClicked() {
   dir.setPath(directoryline->text());
   if (dir.exists()) {
     if(KMsgBox::yesNo(0,i18n("Directory exists!"),
-    	i18n("The selected project directory already exists. If you "
-    	"click 'OK', all files and subdirectories of the currently chosen "
-			"project directory will be deleted before a new project is going "
-			"to be generated"),     	
+    	i18n("The selected project directory already exists. If you\n "
+    	"click 'OK', all files and subdirectories of the currently chosen\n "
+			"project directory will be deleted before a new project is going\n "
+			"to be generated."),     	
 			
 KMsgBox::EXCLAMATION,i18n("Ok"),i18n("Cancel"))==2) {        return;
     }
@@ -1207,7 +1230,8 @@ void CKAppWizard::slotApplicationClicked() {
     iconload->setEnabled(false);
     lsmfile->setChecked(true);
     gnufiles->setChecked(true);
-    userdoc->setChecked(true);
+    userdoc->setChecked(false);
+    userdoc->setEnabled(false);
     generatesource->setChecked(false);
     generatesource->setEnabled(false);
     if (strcmp(nameline->text(), "") && strcmp (cancelButton->text(), i18n("Exit"))) {
@@ -1308,23 +1332,42 @@ void CKAppWizard::slotDefaultClicked(int page) {
 void CKAppWizard::slotProjectnameEntry() {
   nametext = nameline->text();
   nametext = nametext.stripWhiteSpace();
-  if (nametext.length() == 1) {
-    QRegExp regexp ("[a-zA-Z0-9]");
-    if (regexp.match(nametext) == -1) {
-      nametext = "";
-    }
-    else {
-      nametext = nametext.upper();
+  int length = nametext.length();
+  int i = 0;
+  QString endname = "";
+  QString first = "";
+  QString end = nametext;
+  QRegExp regexp1 ("[a-zA-Z]");
+  QRegExp regexp2 ("[a-zA-Z0-9]");
+  if (!length==0) {
+  	for (i=0;i<length;i++) {
+  	  first = end.left(1);
+  	  end = end.right(length-i-1);
+    	if (i==0) {	
+    		if (regexp1.match(first) == -1) {
+     	 		first = "";
+    		}
+    		else {
+
+      		first = first.upper();
+    		}
+    	}
+    	else {
+    	  if (regexp2.match(first) == -1) {
+     	 		first = "";
+    		}		
+    	}
+    	endname = endname.append(first);
     }
   }
-  nameline->setText(nametext);
-  directoryline->setText(dir + nametext.lower());
-  if (nametext == "" || kdeentry->isSelected() || qtentry->isSelected() || 
-      ccppentry->isSelected() || othersentry->isSelected()) {
-    okButton->setEnabled(false);
+  nameline->setText(endname);
+  directoryline->setText(dir + endname.lower());
+  if (nametext == "" || kdeentry->isSelected() || qtentry->isSelected() ||
+   	  ccppentry->isSelected() || othersentry->isSelected()) {
+   	okButton->setEnabled(false);
   }
   else {
-    okButton->setEnabled(true);
+   	okButton->setEnabled(true);
   }
 }
 
@@ -1917,6 +1960,12 @@ QString CKAppWizard::getProjectFile() {
 bool CKAppWizard::generatedProject(){
   return gen_prj;
 }
+
+
+
+
+
+
 
 
 
