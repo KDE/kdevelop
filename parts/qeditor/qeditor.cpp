@@ -246,8 +246,7 @@ void QEditor::drawCursor( bool visible )
 void QEditor::configChanged()
 {
     updateStyles();
-    document()->invalidate();
-    viewport()->repaint( TRUE );
+    internalRefresh();
 }
 
 void QEditor::zoomIn()
@@ -264,6 +263,7 @@ void QEditor::zoomOut()
 
 void QEditor::updateStyles()
 {
+    kdDebug() << "QEditor::updateStyles()" << endl;
     int tabwidth = tabStop();
     QSourceColorizer* colorizer = dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
     if( colorizer ){
@@ -347,20 +347,6 @@ bool QEditor::replace( const QString &text, const QString &replace,
 void QEditor::setDocument( QTextDocument* doc )
 {
     KTextEdit::setDocument( doc );
-}
-
-void QEditor::refresh()
-{
-    QTextParag* p = document()->firstParag();
-    while( p ){
-	if( p->endState() == -1 ){
-	    break;
-	}
-	p->setEndState( -1 );
-	p = p->next();
-    }
-    document()->invalidate();
-    repaintChanged();
 }
 
 void QEditor::repaintChanged()
@@ -464,61 +450,23 @@ void QEditor::setLevel( int line, int lev )
     }
 }
 
-void QEditor::expandBlock( QTextParag* p )
+QSourceColorizer* QEditor::colorizer() const
 {
-    int lev = level( p->paragId() ) - 1;
-    ParagData* data = (ParagData*) p->extraData();
-    if( !data ){
-        return;
-    }
-
-    data->setOpen( true );
-
-    p = p->next();
-    while( p ){
-        ParagData* data = (ParagData*) p->extraData();
-        if( data ){
-            p->show();
-            data->setOpen( true );
-
-            if( data->level() == lev ){
-                break;
-            }
-            p = p->next();
-        }
-    }
-
-    document()->invalidate();
-    viewport()->repaint( true );
-    ensureCursorVisible();
+    return dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
 }
 
-void QEditor::collapseBlock( QTextParag* p )
+void QEditor::internalRefresh()
 {
-    int lev = level( p->paragId() ) - 1;
-
-    ParagData* data = (ParagData*) p->extraData();
-    if( !data ){
-        return;
-    }
-
-    data->setOpen( false );
-
-    p = p->next();
+    QTextParag* p = document()->firstParag();
     while( p ){
-        ParagData* data = (ParagData*) p->extraData();
-        if( data ){
-            p->hide();
-
-            if( data->level() == lev ){
-                break;
-            }
-            p = p->next();
-        }
+	if( p->endState() == -1 ){
+	    break;
+	}
+	p->setEndState( -1 );
+        p->invalidate( 0 );
+	p = p->next();
     }
-
-    document()->invalidate();
+    sync();
     viewport()->repaint( true );
-    setCursorPosition( p->paragId(), 0 );
     ensureCursorVisible();
 }

@@ -55,6 +55,7 @@
 
 class ParenMatcher;
 class QPopupMenu;
+class QSourceColorizer;
 
 class QEditor: public KTextEdit
 {
@@ -98,16 +99,15 @@ public:
 
     virtual int level( int ) const;
     virtual void setLevel( int, int );
-    
+
     virtual void setApplicationMenu( QPopupMenu* menu ) { m_applicationMenu = menu; }
     virtual QPopupMenu* createPopupMenu( const QPoint& );
 
+    QSourceColorizer* colorizer() const;
+
 public slots:
-    void refresh();
     void doGotoLine( int line );
     void configChanged();
-    void expandBlock( QTextParag* );
-    void collapseBlock( QTextParag* );
 
 private slots:
     void doMatch( QTextCursor* );
@@ -116,6 +116,7 @@ private slots:
 protected:
     virtual void keyPressEvent( QKeyEvent* );
     virtual void backspaceIndent( QKeyEvent* );
+    void internalRefresh();
 
 private:
     ParenMatcher* parenMatcher;

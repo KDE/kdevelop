@@ -106,7 +106,7 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParag* parag, int,
     }
 
     HLItemCollection* ctx = m_items.at( state );
-    while( pos < parag->length() ){
+    while( pos < parag->length() - 1 ){
         int attr = 0;
         int next = state;
         int npos = ctx->checkHL( doc, parag, pos, &attr, &next );
@@ -192,4 +192,17 @@ QTextFormat* QSourceColorizer::formatFromId( const QString& id )
         ++it;
     }
     return 0;
+}
+
+QStringList QSourceColorizer::styleList() const
+{
+    QStringList lst;
+
+    QMap<int, QPair<QString, QTextFormat*> >::ConstIterator it = m_formats.begin();
+    while( it != m_formats.end() ){
+        lst << (*it).first;
+        ++it;
+    }
+
+    return lst;
 }

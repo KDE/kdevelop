@@ -41,6 +41,7 @@ class QEditorView;
 class KAboutData;
 class HLMode;
 class KConfig;
+class QSourceColorizer;
 
 /**
  * This is a "Part".  It that does all the real work in a KPart
@@ -85,6 +86,8 @@ public:
      */
     virtual void setModified(bool modified);
     virtual bool isModified() const;
+
+    QSourceColorizer* colorizer() const;
 
     static KAboutData *createAboutData();
 

@@ -24,6 +24,7 @@
 #include "qeditor.h"
 #include "paragdata.h"
 #include "settingsdialog.h"
+#include "qsourcecolorizer.h"
 
 #include <kinstance.h>
 #include <kaction.h>
@@ -740,5 +741,12 @@ void QEditorPart::configDialog()
 {
     SettingsDialog dlg;
     dlg.setEditor( this );
-    dlg.exec();
+    if( dlg.exec() ){
+        m_editor->editor()->configChanged();
+    }
+}
+
+QSourceColorizer* QEditorPart::colorizer() const
+{
+    return m_editor->editor()->colorizer();
 }

@@ -80,6 +80,8 @@ public slots:
     void doFind();
     void doReplace();
     void indent();
+    void expandBlock( QTextParag* );
+    void collapseBlock( QTextParag* );
 
 protected slots:
     void highlight( const QString&, int, int, const QRect& );
@@ -90,6 +92,7 @@ protected:
     bool find_real( QTextParag* firstParag, int firstIndex,
                     QTextParag* lastParag, int lastIndex );
     bool process( const QString& );
+    void doRepaint();
 
 private:
     QTextParag* m_currentParag;

@@ -29,6 +29,7 @@
 #include "qeditor_view.h"
 #include "qeditor_part.h"
 #include "qeditor.h"
+#include "paragdata.h"
 #include "qeditorcodecompletion_iface_impl.h"
 #include "linenumberwidget.h"
 #include "markerwidget.h"
@@ -69,20 +70,11 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     connect( document, SIGNAL(marksChanged()),
              m_markerWidget, SLOT(doRepaint()) );
 
-
     m_levelWidget = new LevelWidget( m_editor, this );
     connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
-	     m_editor, SLOT(expandBlock(QTextParag*)) );
+	     this, SLOT(expandBlock(QTextParag*)) );
     connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
-	     m_editor, SLOT(collapseBlock(QTextParag*)) );
-    connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
-	     m_lineNumberWidget, SLOT(doRepaint()) );
-    connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
-	     m_lineNumberWidget, SLOT(doRepaint()) );
-    connect( m_levelWidget, SIGNAL(expandBlock(QTextParag*)),
-	     m_markerWidget, SLOT(doRepaint()) );
-    connect( m_levelWidget, SIGNAL(collapseBlock(QTextParag*)),
-	     m_markerWidget, SLOT(doRepaint()) );
+	     this, SLOT(collapseBlock(QTextParag*)) );
 
     lay->addWidget( m_markerWidget );
     lay->addWidget( m_lineNumberWidget );
@@ -454,4 +446,75 @@ void QEditorView::replace( const QString&, int matchingIndex,
     m_editor->insertAt( m_replaceDialog->replacement(),
                         m_currentParag->paragId(),
                         matchingIndex );
+}
+
+void QEditorView::expandBlock( QTextParag* p )
+{
+    ParagData* data = (ParagData*) p->extraData();
+    if( !data ){
+        return;
+    }
+    int lev = QMAX( data->level() - 1, 0 );
+
+    data->setOpen( true );
+
+    p = p->next();
+    while( p ){
+        ParagData* data = (ParagData*) p->extraData();
+        if( data ){
+            p->show();
+            data->setOpen( true );
+
+            if( data->level() == lev ){
+                break;
+            }
+            p = p->next();
+        }
+    }
+
+    doRepaint();
+
+    m_editor->document()->invalidate();
+    m_editor->viewport()->repaint( true );
+    m_editor->setCursorPosition( p->paragId(), 0 );
+    m_editor->viewport()->setFocus();
+
+}
+
+void QEditorView::collapseBlock( QTextParag* p )
+{
+    ParagData* data = (ParagData*) p->extraData();
+    if( !data ){
+        return;
+    }
+
+    int lev = QMAX( data->level() - 1, 0 );
+    data->setOpen( false );
+
+    p = p->next();
+    while( p ){
+        ParagData* data = (ParagData*) p->extraData();
+        if( data ){
+            p->hide();
+
+            if( data->level() == lev ){
+                break;
+            }
+            p = p->next();
+        }
+    }
+
+    doRepaint();
+
+    m_editor->document()->invalidate();
+    m_editor->viewport()->repaint( true );
+    m_editor->setCursorPosition( p->paragId(), 0 );
+    m_editor->viewport()->setFocus();
+}
+
+void QEditorView::doRepaint()
+{
+    m_markerWidget->doRepaint();
+    m_lineNumberWidget->doRepaint();
+    m_levelWidget->doRepaint();
 }

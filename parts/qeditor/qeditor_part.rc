@@ -31,6 +31,7 @@
   </Menu>
 
   <Menu name="settings" noMerge="1"><text>&amp;Settings</text>
+    <Action name="settings_configure_editor" group="settings_operations">
   </Menu>
 </MenuBar>
 

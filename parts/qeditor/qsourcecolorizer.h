@@ -84,7 +84,7 @@ public:
     }
 
     int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
-        while( pos < p->length() ){
+        while( pos < p->length()-1 ){
             QChar ch = p->string()->at(pos).c;
             if( ch.isLetterOrNumber() || ch == '_' )
                 ++pos;
@@ -101,7 +101,7 @@ public:
         : HLItem( state, context ) {}
 
     int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
-        while( pos < p->length() ){
+        while( pos < p->length()-1 ){
             if( p->string()->at(pos).c.isNumber() )
                 ++pos;
             else
@@ -119,7 +119,7 @@ public:
     int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
         QChar ch = p->string()->at( pos ).c;
         if( ch == m_char1 )
-            return p->length();
+            return p->length() - 1;
         return pos;
     }
 
@@ -145,7 +145,7 @@ public:
     int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
         int save_pos = pos;
         QString word;
-        while( pos < p->length() ){
+        while( pos < p->length() - 1 ){
             QChar ch = p->string()->at(pos).c;
             if( ch.isLetterOrNumber() || ch == '_' ){
                 word += ch;
@@ -171,6 +171,7 @@ public:
     QString text() const { return m_text; }
     int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
         QString s = p->string()->toString();
+        s.truncate( s.length() - 1 );
         if( s.mid( pos, m_text.length() ) == m_text )
             return pos + m_text.length();
         return pos;
@@ -187,6 +188,7 @@ public:
 
     int checkHL( QTextDocument*, QTextParag* p, int pos, int*, int* ){
         QString s = p->string()->toString();
+        s.truncate( s.length() - 1 );
         int idx = m_rx.search(s, pos);
         if( idx == pos )
             return pos + m_rx.matchedLength();
@@ -264,6 +266,7 @@ public:
     virtual QTextFormat* format( int key ) { return m_formats[ key ].second; }
     virtual QTextFormat* formatFromId( const QString& id );
 
+    QStringList styleList() const;
     virtual void updateStyles( QMap<QString, QPair<QFont, QColor> >& values );
     virtual void process( QTextDocument*, QTextParag*, int, bool=FALSE );
     virtual int computeLevel( QTextParag*, int );
