@@ -22,8 +22,11 @@
 #include <kprocess.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
+#include <kaction.h>
+#include <kurl.h>
+#include <kparts/part.h>
 
-
+#include "kdevpartcontroller.h"
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
 #include "kdevdifffrontend.h"
@@ -37,6 +40,9 @@ PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList
     : KDevPlugin( "Perforce", "perforce", parent, name ? name : "PerforcePart" )
 {
     setInstance(PerforceFactory::instance());
+    setXMLFile( "kdevperforcepart.rc" );
+
+    setupActions();
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
@@ -46,18 +52,36 @@ PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList
 PerforcePart::~PerforcePart()
 {}
 
+void PerforcePart::setupActions()
+{
+    actionEdit = new KAction( i18n("Edit"), 0, this, SLOT(slotActionEdit()),
+                actionCollection(), "perforce_edit" );
+    actionRevert = new KAction( i18n("Revert"), 0, this, SLOT(slotActionRevert()),
+                actionCollection(), "perforce_revert" );
+    actionSubmit = new KAction( i18n("Submit"), 0, this, SLOT(slotActionCommit()),
+                actionCollection(), "perforce_submit" );
+    actionSync = new KAction( i18n("Sync"), 0, this, SLOT(slotActionUpdate()),
+                actionCollection(), "perforce_sync" );
+    actionDiff = new KAction( i18n("Diff Against Repository"), 0, this, SLOT(slotActionDiff()),
+                actionCollection(), "perforce_diff" );
+    actionAdd = new KAction( i18n("Add to Repository"), 0, this, SLOT(slotActionAdd()),
+                actionCollection(), "perforce_add" );
+    actionRemove = new KAction( i18n("Remove from Repository"), 0, this, SLOT(slotActionRemove()),
+                actionCollection(), "perforce_remove" );
+}
 
 void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType("file")) {
         const FileContext *fcontext = static_cast<const FileContext*>(context);
         popupfile = fcontext->fileName();
-        QFileInfo fi(popupfile);
+        QFileInfo fi( popupfile );
         popup->insertSeparator();
 
         KPopupMenu *sub = new KPopupMenu(popup);
         QString name = fi.fileName();
         sub->insertTitle( i18n("Actions for %1").arg(name) );
+	
         sub->insertItem( i18n("Edit"),
                            this, SLOT(slotEdit()) );
         sub->insertItem( i18n("Revert"),
@@ -68,19 +92,21 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
                            this, SLOT(slotUpdate()) );
         sub->insertSeparator();
         sub->insertItem( i18n("Diff Against Repository"),
-			   this, SLOT(slotDiff()) );
+                          this, SLOT(slotDiff()) );
         sub->insertItem( i18n("Add to Repository"),
                            this, SLOT(slotAdd()) );
         sub->insertItem( i18n("Remove From Repository"),
                            this, SLOT(slotRemove()) );
         popup->insertItem(i18n("Perforce"), sub);
-
     }
 }
 
-void PerforcePart::execCommand( const QString& cmd )
+void PerforcePart::execCommand( const QString& cmd, const QString& filename )
 {
-    QFileInfo fi(popupfile);
+    if ( filename.isEmpty() )
+        return;
+
+    QFileInfo fi( filename );
     if (fi.isDir()) {
         KMessageBox::error( 0, i18n("Cannot handle directories, please select single files") );
         return;
@@ -96,31 +122,34 @@ void PerforcePart::execCommand( const QString& cmd )
     makeFrontend()->queueCommand(dir, command);
 }
 
-void PerforcePart::slotEdit()
+void PerforcePart::edit( const QString& filename )
 {
-    execCommand( "edit" );
+    execCommand( "edit", filename );
 }
 
-void PerforcePart::slotRevert()
+void PerforcePart::revert( const QString& filename )
 {
     if ( KMessageBox::questionYesNo( 0,
             i18n("Do you really want to revert "
-                 "the file %1 and lose all your changes?").arg(popupfile) ) == KMessageBox::Yes ) {
-        execCommand( "revert" );
+                 "the file %1 and lose all your changes?").arg( filename ) ) == KMessageBox::Yes ) {
+        execCommand( "revert", filename );
     }
 }
 
-void PerforcePart::slotCommit()
+void PerforcePart::commit( const QString& filename )
 {
-    QFileInfo fi(popupfile);
-    if (fi.isDir()) {
+    if ( filename.isEmpty() )
+        return;
+
+    QFileInfo fi( filename );
+    if ( fi.isDir() ) {
         KMessageBox::error( 0, i18n("Submitting of subdirectories is not supported") );
         return;
     }
 
     CommitDialog d;
     QStringList lst;
-    lst << popupfile;
+    lst << filename;
     d.setFiles( lst );
     if (d.exec() == QDialog::Rejected)
         return;
@@ -136,10 +165,13 @@ void PerforcePart::slotCommit()
 }
 
 
-void PerforcePart::slotUpdate()
+void PerforcePart::update( const QString& filename )
 {
+    if ( filename.isEmpty() )
+        return;
+
     QString dir, name;
-    QFileInfo fi(popupfile);
+    QFileInfo fi( filename );
     if (fi.isDir()) {
         dir = fi.absFilePath();
         name = "..."; // three dots means "recoursive"
@@ -157,26 +189,29 @@ void PerforcePart::slotUpdate()
 }
 
 
-void PerforcePart::slotAdd()
+void PerforcePart::add( const QString& filename )
 {
-    execCommand( "add" );
+    execCommand( "add", filename );
 }
 
 
-void PerforcePart::slotRemove()
+void PerforcePart::remove( const QString& filename )
 {
-    execCommand( "delete" );
+    execCommand( "delete", filename );
 }
 
-void PerforcePart::slotDiff()
+void PerforcePart::diff( const QString& filename )
 {
+    if ( filename.isEmpty() )
+        return;
+
     QString name;
-    QFileInfo fi(popupfile);
+    QFileInfo fi( filename );
 
     if ( fi.isDir() ) {
 	name = fi.absFilePath() + "...";
     } else {
-	name = popupfile;
+	name = filename;
     }
     QStringList args;
 
@@ -219,6 +254,86 @@ void PerforcePart::slotDiffFinished( const QString& diff, const QString& err )
 
     Q_ASSERT( diffFrontend() );
     diffFrontend()->showDiff( strippedDiff );
+}
+
+QString PerforcePart::currentFile()
+{
+    KParts::ReadOnlyPart *part = dynamic_cast<KParts::ReadOnlyPart*>( partController()->activePart() );
+    if ( part ) {
+        KURL url = part->url();
+        if ( url.isLocalFile() )
+            return url.path();
+    }
+    return QString::null;
+}
+
+void PerforcePart::slotActionCommit()
+{
+    commit( currentFile() );
+}
+
+void PerforcePart::slotActionUpdate()
+{
+    update( currentFile() );
+}
+void PerforcePart::slotActionAdd()
+{
+    add( currentFile() );
+}
+
+void PerforcePart::slotActionRemove()
+{
+    remove( currentFile() );
+}
+
+void PerforcePart::slotActionEdit()
+{
+    edit( currentFile() );
+}
+
+void PerforcePart::slotActionRevert()
+{
+    revert( currentFile() );
+}
+
+void PerforcePart::slotActionDiff()
+{
+    diff( currentFile() );
+}
+
+void PerforcePart::slotCommit()
+{
+    commit( popupfile );
+}
+
+void PerforcePart::slotUpdate()
+{
+    update( popupfile );
+}
+
+void PerforcePart::slotAdd()
+{
+    add( popupfile );
+}
+
+void PerforcePart::slotRemove()
+{
+    remove( popupfile );
+}
+
+void PerforcePart::slotEdit()
+{
+    edit( popupfile );
+}
+
+void PerforcePart::slotRevert()
+{
+    revert( popupfile );
+}
+
+void PerforcePart::slotDiff()
+{
+    diff( popupfile );
 }
 
 #include "perforcepart.moc"

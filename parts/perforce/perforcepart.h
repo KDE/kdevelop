@@ -17,7 +17,7 @@
 
 class Context;
 class QPopupMenu;
-
+class KAction;
 
 class PerforcePart : public KDevPlugin
 {
@@ -39,12 +39,34 @@ private slots:
     void slotEdit();
     void slotRevert();
     void slotDiff();
+
+    void slotActionCommit();
+    void slotActionUpdate();
+    void slotActionAdd();
+    void slotActionRemove();
+    void slotActionEdit();
+    void slotActionRevert();
+    void slotActionDiff();
+
     void slotDiffFinished( const QString&, const QString& );
 
 private:
+    void commit( const QString& filename );
+    void update( const QString& filename );
+    void add( const QString& filename );
+    void remove( const QString& filename );
+    void edit( const QString& filename );
+    void revert( const QString& filename );
+    void diff( const QString& filename );
+    QString currentFile();
+
     /** calls p4 with the command cmd and appends the filename */
-    void execCommand( const QString& cmd );
+    void execCommand( const QString& cmd, const QString& filename );
+    void setupActions();
     QString popupfile;
+    KAction *actionEdit, *actionRevert,
+            *actionSubmit, *actionSync,
+            *actionDiff, *actionAdd, *actionRemove;
 };
 
 #endif
