@@ -71,9 +71,13 @@ void DocTreeViewTool::readLibraryDocs(QString dir, QStringList *itemNames, QStri
     QStringList privateentries =
         privatedir.exists()? privatedir.entryList("*", QDir::Files) : QStringList();
     for (QStringList::Iterator it = privateentries.begin(); it != privateentries.end(); ++it) {
-        *itemNames += i18n("%1 (private)").arg(QFileInfo(*it).baseName());
-        *fileNames += privatedir.filePath(*it);
-                kdDebug(9002) << "Local: " << privatedir.filePath(*it) << endl;
+        QDir libdir(dir + "/" + QFileInfo(*it).baseName());
+        if (libdir.exists())
+        {
+            *itemNames += i18n("%1 (private)").arg(QFileInfo(*it).baseName());
+            *fileNames += privatedir.filePath(*it);
+            kdDebug(9002) << "Local: " << privatedir.filePath(*it) << endl;
+        }
     } 
 }
 
