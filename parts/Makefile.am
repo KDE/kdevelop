@@ -3,7 +3,6 @@
 # from KPart. 
 
 #kdevelop: SCRIPTING_SUBDIR = scripting
-#kdevelop: JAVA_SUBDIRS = javasupport javadebugger
 
 SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  cppsupport pythonsupport perlsupport phpsupport fortransupport \
@@ -12,6 +11,6 @@ SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
 	  debugger distpart konsole astyle tools ctags regexptest doxygen \
 	  manager fileselector visualboyadvance tipofday abbrev filter \
 	  uimode editor-chooser openwith windowmenu history \
-          sourcenav texttools qeditor buglist \
-	  $(SCRIPTING_SUBDIR) $(JAVA_SUBDIRS) 
+          sourcenav texttools qeditor buglist javasupport javadebugger \
+	  $(SCRIPTING_SUBDIR)
 
