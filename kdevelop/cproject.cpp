@@ -797,8 +797,9 @@ void CProject::updateMakefileAm(const QString& makefile)
   QString str2;
   QString dist_str;
   QTextStream stream(&file);
-  bool found=false, customfile=false;
-
+  bool found=false, customfile=false, insideKDevControlled=false, 
+       foundINCLUDES=false;
+  
   QString libname;
   QStrList static_libs;
   getAllStaticLibraries(static_libs);
@@ -819,10 +820,27 @@ void CProject::updateMakefileAm(const QString& makefile)
   }
   file.close();
 
-  for(str = list.first(); !customfile && str != 0;str = list.next())
+  /* Now check the content of Makefile.am
+     - is it a custom file?
+     - are INCLUDES present outside the kdevelop specific part?
+  */  
+  for(str = list.first(); str != 0; str = list.next())
   {
-    if (str.find(QRegExp("^\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
+    if (!customfile && str.find(QRegExp("^\\s*#+\\s*kdevelop-pragma:\\s*custom",false))>=0)
       customfile=true;
+    if (str == "####### kdevelop will overwrite this part!!! (begin)##########")
+      insideKDevControlled=true;
+    if (str == "####### kdevelop will overwrite this part!!! (end)############")    
+      insideKDevControlled=false;
+      
+    /* To maintain compatibility with older project
+       we have to search INCLUDES in the non-kdevelop controlled part
+       of Makefile.am
+     
+       If these flags are found, so don't add these to the kdevelop-controlled part
+    */
+    if (!insideKDevControlled && str.find(QRegExp("^\\s*INCLUDES\\s*="))>=0)
+       foundINCLUDES=true;    
   }
 
   if(file.open(IO_WriteOnly))
@@ -844,7 +862,12 @@ void CProject::updateMakefileAm(const QString& makefile)
 
           //    stream << "CXXFLAGS = " << getCXXFLAGS()+" "+getAdditCXXFLAGS() << "\n";
           //stream << "LDFLAGS = " << getLDFLAGS()  << "\n";
-          stream << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
+          if (!foundINCLUDES)
+            stream << "\nINCLUDES = $(all_includes)\n";
+          else
+            stream << "\n## INCLUDES were found outside kdevelop specific part\n";
+          
+          stream << "\n" << getBinPROGRAM()  <<  "_SOURCES = " << sources << "\n";
           /********************* QT 2 INTERNATIONALIZATION **************/
           if(isQt2Project())
           {
@@ -905,17 +928,22 @@ void CProject::updateMakefileAm(const QString& makefile)
 
           QDir dir(getDir(makefile));
           QString type=getProjectType();
-          if (type!="normal_cpp" && type != "normal_c")
-            stream << "\nINCLUDES = $(all_includes)\n\n";
-
-          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
-            stream << "lib" << canonicalizeDirName(dir.dirName()) << "_a_METASOURCES = AUTO\n\n";
-          else
-            if (QFileInfo(getProjectDir() + "automoc").exists())
-              stream << "lib" << canonicalizeDirName(dir.dirName()) << "_a_METASOURCES = USE_AUTOMOC\n\n";
-
+          
           stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
-          stream << "lib" << canonicalizeDirName(dir.dirName()) << "_a_SOURCES = " << sources << "\n";
+          
+          if (!foundINCLUDES)
+            stream << "INCLUDES = $(all_includes)\n";
+          else
+            stream << "## INCLUDES were found outside kdevelop specific part\n";
+          
+          if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
+            stream << "\nlib" << canonicalizeDirName(dir.dirName()) << "_a_METASOURCES = AUTO\n";
+           else
+             if (QFileInfo(getProjectDir() + "automoc").exists())
+               stream << "\nlib" << canonicalizeDirName(dir.dirName()) << "_a_METASOURCES = USE_AUTOMOC\n";
+ 
+
+          stream << "\nlib" << canonicalizeDirName(dir.dirName()) << "_a_SOURCES = " << sources << "\n";
           if(isQt2Project())
             // am_edit used only for qt apps requires this switch in Makefile.am´s to use tr instead of i18n and other specific stuff
             stream << "KDE_OPTIONS = qtonly\n";
@@ -956,9 +984,13 @@ void CProject::updateMakefileAm(const QString& makefile)
           else
             stream << "lib_LTLIBRARIES = lib" << libRootName << ".la\n\n";
 
-          stream << "\nINCLUDES = $(all_includes)\n\n";
-          stream << "\nLDFLAGS = " << getLDFLAGS() << "\n\n";
-
+          if (!foundINCLUDES)
+            stream << "\nINCLUDES = $(all_includes)\n";
+          else
+            stream << "\n## INCLUDES were found outside kdevelop specific part\n";
+          
+          stream << "\n\nLDFLAGS = " << getLDFLAGS() << "\n\n";
+          
           if (sharedLibSubDir)
             stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = " << sharedlibLDFLAGS << "\n\n";
 
