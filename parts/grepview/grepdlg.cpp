@@ -139,20 +139,23 @@ GrepDialog::GrepDialog( GrepViewPart * part, QWidget *parent, const char *name )
 	QToolTip::add( synch_button, i18n("Set directory to that of the current file") );
 	dir_layout->addWidget( synch_button );
 
+    QBoxLayout *dir_checks_layout = new QHBoxLayout(4);
+    layout->addLayout(dir_checks_layout, 4, 1);
+	
     recursive_box = new QCheckBox(i18n("&Recursive"), this);
     recursive_box->setChecked(true);
-    dir_layout->addSpacing(10);
-    dir_layout->addWidget(recursive_box);
+    dir_checks_layout->addSpacing(10);
+    dir_checks_layout->addWidget(recursive_box);
 
     ignore_scm_box = new QCheckBox(i18n("S&kip VCS dirs"), this);
     ignore_scm_box->setChecked(true);
-    dir_layout->addSpacing(10);
-    dir_layout->addWidget(ignore_scm_box);
+    dir_checks_layout->addSpacing(10);
+    dir_checks_layout->addWidget(ignore_scm_box);
 
     case_sens_box = new QCheckBox(i18n("Case &sensitive"), this);
     case_sens_box->setChecked(true);
-    dir_layout->addSpacing(10);
-    dir_layout->addWidget(case_sens_box);
+    dir_checks_layout->addSpacing(10);
+    dir_checks_layout->addWidget(case_sens_box);
     
     QBoxLayout *button_layout = new QHBoxLayout(4);
     layout->addLayout(button_layout, 5, 1);
