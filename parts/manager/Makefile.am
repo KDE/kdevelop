@@ -1,6 +1,6 @@
 
 INCLUDES=  $(all_includes)
-LDFLAGS	= $(all_libraries) -L/usr/lib
+#LDFLAGS	= $(all_libraries) -L/usr/lib
 LDADD = -lkparts -lkdecore -lkdeui -lktexteditor
 
 check_PROGRAMS = manager

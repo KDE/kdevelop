@@ -57,7 +57,8 @@ public:
 public slots:
 
   void slotCurrentChanged(QWidget *w);
-
+  void slotClosePartForWidget(const QWidget *widget);
+  void slotCloseAllButPartForWidget(const QWidget *widget);
 
 protected:
 

@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Jakob Simon-Gaarde", "QMake projectmanager", "jsgaarde@tdcspace.dk");
   aboutData.addAuthor("Yann Hodique", "patches", "Yann.Hodique@lifl.fr");
   aboutData.addAuthor("F@lk Brettschneider", "MDI modes, bugfixes", "falk@kdevelop.org");
+  aboutData.addAuthor("Caleb Tennis", "KTabBar, bugfixes, Gideon release", "caleb@aei-tech.com");
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
   

@@ -40,6 +40,7 @@
 
 
 #include "widgets/ktabzoomwidget.h"
+#include "widgets/ktabwidget.h"
 #include "kdevplugin.h"
 
 
@@ -181,7 +182,7 @@ void MainWindowIDEAl::createFramework() {
     m_rightBar = new KTabZoomWidget ( m_bottomBar, KTabZoomPosition::Right );
     m_bottomBar->addContent ( m_rightBar );
 
-    m_tabWidget = new QTabWidget(m_rightBar);
+    m_tabWidget = new KTabWidget(m_rightBar);
     m_tabWidget->setMargin(2);
 
     PartController::createInstance(m_tabWidget);
@@ -191,6 +192,8 @@ void MainWindowIDEAl::createFramework() {
 
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)),
             PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
+    connect(m_tabWidget, SIGNAL(closeWindow(const QWidget *)), PartController::getInstance(),SLOT(slotClosePartForWidget(const QWidget *)));
+    connect(m_tabWidget, SIGNAL(closeOthers(const QWidget *)), PartController::getInstance(), SLOT(slotCloseAllButPartForWidget(const QWidget *)));
 
     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
             this, SLOT(createGUI(KParts::Part*)));

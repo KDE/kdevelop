@@ -57,7 +57,7 @@ void MainWindowShare::createActions()
 {
   ProjectManager::getInstance()->createActions( m_pMainWnd->actionCollection() );
 
-  KStdAction::quit(this, SLOT(slotQuit()), m_pMainWnd->actionCollection());
+  KStdAction::quit(this->parent(), SLOT(slotQuit()), m_pMainWnd->actionCollection());
 
   KAction* action;
 

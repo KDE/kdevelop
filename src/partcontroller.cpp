@@ -78,12 +78,12 @@ void PartController::setupActions()
     ac, "file_open_recent" );
   m_openRecentAction->loadEntries( kapp->config(), "RecentFiles" );
 
-  m_saveAllFilesAction = new KAction(i18n("Save &All"), 0,
+  m_saveAllFilesAction = new KAction(i18n("Save Al&l"), 0,
     this, SLOT(slotSaveAllFiles()),
     ac, "file_save_all");
   m_saveAllFilesAction->setEnabled(false);
 
-  m_revertAllFilesAction = new KAction(i18n("&Revert All"), 0,
+  m_revertAllFilesAction = new KAction(i18n("Rever&t All"), 0,
     this, SLOT(slotRevertAllFiles()),
     ac, "file_revert_all");
   m_revertAllFilesAction->setEnabled(false);
@@ -98,7 +98,7 @@ void PartController::setupActions()
     ac, "file_close_all");
   m_closeAllWindowsAction->setEnabled(false);
 
-  m_closeOtherWindowsAction = new KAction(i18n("Close All &Others"), 0,
+  m_closeOtherWindowsAction = new KAction(i18n("Close All Others"), 0,
     this, SLOT(slotCloseOtherWindows()),
     ac, "file_closeother");
   m_closeOtherWindowsAction->setEnabled(false);
@@ -597,8 +597,21 @@ bool PartController::closeDocuments(const QStringList &documents)
   return true;
 }
 
+void PartController::slotClosePartForWidget( const QWidget* w) 
+{
+  closePartForWidget(w);
+}
+
+void PartController::slotCloseAllButPartForWidget(const QWidget* w)
+{
+  QWidget *w2 = w;
+  slotCurrentChanged(w2);
+  slotCloseOtherWindows();  
+}
+
 bool PartController::closePartForWidget( const QWidget* w )
 {
+  qDebug("in close part for widget");
   QPtrListIterator<KParts::Part> it(*parts());
   for ( ; it.current(); ++it)
     if (it.current()->widget() == w)

@@ -18,7 +18,7 @@
 #define _MAINWINDOWIDEAL_H_
 
 
-#include <qtabwidget.h>
+#include "widgets/ktabwidget.h"
 
 
 #include <kparts/mainwindow.h>
@@ -109,7 +109,7 @@ private:
 
   KAction *m_raiseLeftBar, *m_raiseRightBar, *m_raiseBottomBar, *m_raiseEditor;
 
-  QTabWidget *m_tabWidget;
+  KTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_rightBar, *m_bottomBar;
 
   bool m_closing;

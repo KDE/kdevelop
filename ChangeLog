@@ -1,3 +1,8 @@
+2002-12-31 Caleb Tennis <caleb@aei-tech.com>
+	* Fix keyboard accelerator keys for File menu..no conflicts
+	* Fix broken signal/slot connections in code
+	* Add RMB context menu to ideal mode tabs to allow file closing
+
 2002-12-29 Harald Fernengel <harry@kdevelop.org>
 	* Added valgrind part, requires installed valgrind
 	  parses and displays valgrind's output in a listview,
