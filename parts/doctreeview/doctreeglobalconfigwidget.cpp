@@ -424,7 +424,7 @@ void DocTreeGlobalConfigWidget::qtdocsedit_button_clicked( )
 {
     if (qtdocs_view->currentItem())
     {
-        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "text/xml", AddDocItemDialog::Qt,
+        AddDocItemDialog *dialog = new AddDocItemDialog(KFile::File, "*.xml *.dcf", AddDocItemDialog::Qt,
             qtdocs_view->currentItem()->text(0), qtdocs_view->currentItem()->text(1));
         if (dialog->exec())
         {
