@@ -250,7 +250,7 @@ void MakeWidget::slotProcessExited(KProcess *)
         } else {
             s = i18n("*** Success ***");
             t = Diagnostic;
-	    m_part->sendSignalCommandFinished(currentCommand);
+	    emit m_part->commandFinished(currentCommand);
         }
     } else {
         s = i18n("*** Compilation aborted ***");
