@@ -1,3 +1,10 @@
+2004-11-17 Alexander Dymo <adymo@kdevelop.org>
+ * Added KDevVCSIntegrator extra interface. VCS Integrator is a plugin which is used by
+   application wizard to select a version control and possibly import newly created project
+   into the VCS.
+ * Implemented VCS integrator for CVS (Cervisia).
+ * Patched ProjectManager to load selected VCS plugin.
+
 2004-11-20  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Ruby Source Code Debugger initial checkin
@@ -18,6 +25,11 @@
    commands are sent, and the replies are parsed in KDevelop in much the same way
    as the gdb debugger uses stdin and stdout to send and receive.
 
+2004-11-17 Alexander Dymo <adymo@kdevelop.org>
+ * KDevelop interfaces cleanup and enchancements. Interfaces are now smaller, additional, not so important
+   interfaces are available through extension mechanism (see KDevPlugin::extension() methods).
+   Also added a lot of API documentation.
+   
 2004-10-30 Robert Gruber <rgruber@users.sourceforge.net>
  * Implemented "grouping of snippets" feature for SnippetPart
 
