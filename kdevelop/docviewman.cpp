@@ -788,8 +788,6 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
 //-----------------------------------------------------------------------------
 bool DocViewMan::closeView(QWidget* pWnd)
 {
-	if (!pWnd) return;
-
   // get the embedded view
   if (!pWnd) return true; // I ran into this case also, yuck!
   QObjectList* pL = (QObjectList*) (pWnd->children());
