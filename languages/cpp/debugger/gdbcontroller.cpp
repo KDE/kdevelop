@@ -1238,7 +1238,7 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
     {
         *dbgProcess_ << config_gdbPath_ + "gdb" << application
                         << "-fullname" << "-nx" << "-quiet";
-        emit gdbStdout(QString( config_gdbPath_ + " gdb " + application +
+        emit gdbStdout(QString( config_gdbPath_ + "gdb " + application +
                         " -fullname -nx -quiet" ).latin1());
     }
 
