@@ -48,6 +48,7 @@
 #include "python_colorizer.h"
 #include "xml_colorizer.h"
 #include "qmake_colorizer.h"
+#include "cs_colorizer.h"
 
 #if defined(HAVE_PERL_MODE)
 #  include "perl_colorizer.h"
@@ -375,6 +376,10 @@ void QEditor::setLanguage( const QString& l )
     } else if( m_language == "java" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
+	document()->setIndent( new CIndent() );
+    } else if( m_language == "csharp" ){
+        setElectricKeys( "{}" );
+	document()->setPreProcessor( new CSharpColorizer(this) );
 	document()->setIndent( new CIndent() );
 #if defined(HAVE_PERL_MODE)
     } else if( m_language == "perl" ){

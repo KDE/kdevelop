@@ -531,6 +531,12 @@ void QEditorPart::setupHighlighting()
     mode->extensions = QStringList() << "*.java";
     m_modes.append( mode );
 
+    mode = new HLMode;
+    mode->name = "csharp";
+    mode->section = "Programming";
+    mode->extensions = QStringList() << "*.cs";
+    m_modes.append( mode );
+
 #if defined(HAVE_PERL_MODE)
     mode = new HLMode;
     mode->name = "perl";
