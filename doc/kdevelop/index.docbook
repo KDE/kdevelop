@@ -27,6 +27,13 @@
 </author>
 </authorgroup>
 
+<copyright>
+<year>2002></year>
+<holder>Bernd Gehrmann</holder>
+</copyright>
+
+<legalnoctice>&FDLNotice;</legalnotice>
+
 <abstract>
 <para>This documentation describes the &kdevelop; Integrated
 Development Environment (Gideon)</para>
@@ -36,6 +43,7 @@ Development Environment (Gideon)</para>
 <keyword>KDE</keyword>
 <keyword>KDevelop</keyword>
 <keyword>IDE</keyword>
+<keyword>programming</keyword>
 </keywordset>
 
 </bookinfo>
@@ -934,7 +942,7 @@ dialog under <guibutton>External tools</guibutton>.
 </para>
 
 <para>
-Other tools will be discussed in the chapter "Plugin Tools".
+Other tools will be discussed in the chapter <xref linkend="plugintools"/>.
 </para>
 
 </chapter>
