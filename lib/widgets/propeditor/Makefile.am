@@ -1,4 +1,4 @@
-INCLUDES = $(all_includes) -I$(top_srcdir)/lib/compat
+INCLUDES = -I$(top_srcdir)/lib/compat $(all_includes)
 METASOURCES = AUTO
 
 lib_LTLIBRARIES =  libpropertyeditor.la
