@@ -486,8 +486,17 @@ void CKDevelop::slotEditInsertFile(){
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditSearch(){
+  
   slotStatusMsg(i18n("Searching..."));
-  edit_widget->search();
+  if(s_tab_view->getCurrentTab()==BROWSER){
+      CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
+      connect(help_srch_dlg,SIGNAL(signalFind(QString)),browser_widget,SLOT(slotFindTextNext(QString)));
+      help_srch_dlg->exec();
+      delete help_srch_dlg;
+  }
+  else {
+      edit_widget->search();
+  }
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditRepeatSearch(){
@@ -3124,7 +3133,7 @@ void CKDevelop::slotSTabSelected(int item){
     disableCommand(ID_EDIT_CUT);
     disableCommand(ID_EDIT_PASTE);
     disableCommand(ID_EDIT_INSERT_FILE);
-    disableCommand(ID_EDIT_SEARCH);
+    // disableCommand(ID_EDIT_SEARCH);
     disableCommand(ID_EDIT_REPEAT_SEARCH);
     disableCommand(ID_EDIT_REPLACE);
     disableCommand(ID_EDIT_SPELLCHECK);
