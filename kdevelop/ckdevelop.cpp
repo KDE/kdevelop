@@ -4145,6 +4145,30 @@ bool CKDevelop::isToolViewVisible(QWidget* pToolView)
   return bIsVisible;
 }
 
+/** checks if any of the tool views is visible */
+bool CKDevelop::isAnyToolViewVisible(){
+  return ( isToolViewVisible(class_tree)
+        || isToolViewVisible(log_file_tree)
+        || isToolViewVisible(real_file_tree)
+        || isToolViewVisible(doc_tree)
+        || ((dbgController != 0L) && isToolViewVisible(var_viewer)));
+}
+
+/** checks if any of the output view widget is visible */
+bool CKDevelop::isAnyOutputWindowVisible(){
+  return ( isToolViewVisible(messages_widget)
+        || isToolViewVisible(stdin_stdout_widget)
+        || isToolViewVisible(stderr_widget)
+        || isToolViewVisible(konsole_widget)
+        || isToolViewVisible(brkptManager)
+        || ((dbgController != 0L) && isToolViewVisible(disassemble))
+        || ((dbgController != 0L) && isToolViewVisible(frameStack))
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+        || ((dbgController != 0L) && isToolViewVisible(dbg_widget))
+#endif
+          );
+}
+
 void CKDevelop::fillToggleTreeViewsMenu()
 {
   toggletreeviews_popup->clear();
@@ -4190,8 +4214,13 @@ void CKDevelop::slotViewTClassesView()
   KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(2)))
     pDock->undock();
-  else
-    pDock->dockBack();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_Class();
+    } else
+      pDock->dockBack();
+  }
 	adjustTTreesToolButtonState();
 }
 
@@ -4200,8 +4229,13 @@ void CKDevelop::slotViewTGroupsView()
   KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(3)))
     pDock->undock();
-  else
-    pDock->dockBack();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_LFV();
+    } else
+      pDock->dockBack();
+  }
 	adjustTTreesToolButtonState();
 }
 
@@ -4210,8 +4244,13 @@ void CKDevelop::slotViewTFilesView()
   KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(4)))
     pDock->undock();
-  else
-    pDock->dockBack();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_RFV();
+    } else
+      pDock->dockBack();
+  }
 	adjustTTreesToolButtonState();
 }
 
@@ -4220,8 +4259,13 @@ void CKDevelop::slotViewTBooksView()
   KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(5)))
     pDock->undock();
-  else
-    pDock->dockBack();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_Doc();
+    } else
+      pDock->dockBack();
+  }
 	adjustTTreesToolButtonState();
 }
 
@@ -4230,8 +4274,13 @@ void CKDevelop::slotViewTWatchView()
   KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
   if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(6)))
     pDock->undock();
-  else
-    pDock->dockBack();
+  else {
+    if (! isAnyToolViewVisible()) {
+      slotViewTTreeView();
+      slotActivateTView_VAR();
+    } else
+      pDock->dockBack();
+  }
 	adjustTTreesToolButtonState();
 }
 
@@ -4302,7 +4351,11 @@ void CKDevelop::slotViewOMessagesView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(2)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_Messages();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 
@@ -4312,7 +4365,11 @@ void CKDevelop::slotViewOStdOutView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(3)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_StdInStdOut();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 
@@ -4322,7 +4379,11 @@ void CKDevelop::slotViewOStdErrView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(4)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_StdErr();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 
@@ -4332,7 +4393,11 @@ void CKDevelop::slotViewOKonsoleView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(5)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_Konsole();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 
@@ -4342,7 +4407,11 @@ void CKDevelop::slotViewOBreakpointView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(6)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_BrkptManager();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 
@@ -4352,7 +4421,11 @@ void CKDevelop::slotViewODisassembleView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(7)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_Disassemble();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 
@@ -4362,7 +4435,11 @@ void CKDevelop::slotViewOFrameStackView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(8)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_FrameStack();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 
@@ -4372,7 +4449,11 @@ void CKDevelop::slotViewODebuggerView()
   if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(9)))
     pDock->undock();
   else
-    pDock->dockBack();
+    if (! isAnyOutputWindowVisible() ) {
+      slotViewTOutputView();
+      slotActivateOView_Dbg();
+    } else
+      pDock->dockBack();
   adjustTOutputToolButtonState();
 }
 

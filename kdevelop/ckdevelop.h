@@ -899,6 +899,10 @@ private:
   void printImpl(QStringList& list, KPrinter* printer);
   /** */
   bool isToolViewVisible(QWidget* pToolView);
+  /** checks if any of the tool views is visible */
+  bool isAnyToolViewVisible();
+  /** checks if any of the output view widget is visible */
+  bool isAnyOutputWindowVisible();
   /** */
 	void adjustTTreesToolButtonState();
   /** */

@@ -1,3 +1,6 @@
+2002-03-09  August Hörandl  <august.hoerandl@gmx.at>
+    * bugfix: strange effects when switching on single views and output windows
+
 2002-03-08  Roberto Raggi <raggi@cli.di.unipi.it>
     * bugfix: menu entries for code completion now shows keyboard accelerator
     * bugfix: argshint is showed when "automatic arguments hint" is activated
