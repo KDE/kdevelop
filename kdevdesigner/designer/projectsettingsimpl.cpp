@@ -93,7 +93,7 @@ ProjectSettings::~ProjectSettings()
 
 void ProjectSettings::chooseDatabaseFile()
 {
-    QString fn = KFileDialog::getSaveFileName( QString::null, i18n( "*.db|Database Files\n*|All Files" ), this );
+    QString fn = KFileDialog::getSaveFileName( editDatabaseFile->text(), i18n( "*.db|Database Files\n*|All Files" ), this );
     if ( fn.isEmpty() )
 	return;
     editDatabaseFile->setText( fn );
@@ -101,7 +101,7 @@ void ProjectSettings::chooseDatabaseFile()
 
 void ProjectSettings::chooseProjectFile()
 {
-    QString fn = KFileDialog::getSaveFileName( QString::null, i18n( "*.pro|Project Files\n*|All Files" ), this );
+    QString fn = KFileDialog::getSaveFileName( editDatabaseFile->text(), i18n( "*.pro|Project Files\n*|All Files" ), this );
     if ( fn.isEmpty() )
 	return;
     editProjectFile->setText( fn );

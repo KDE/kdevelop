@@ -1419,13 +1419,13 @@ void MainWindow::fileCreateTemplate()
 
     int i = 0;
     for ( i = 0; i < WidgetDatabase::count(); ++i ) {
-	if ( WidgetDatabase::isForm( i ) && WidgetDatabase::widgetGroup( i ) != "Temp") {
+	if ( WidgetDatabase::isForm( i ) && WidgetDatabase::group( i ) != "Temp") {
 	    dia.listClass->insertItem( WidgetDatabase::className( i ) );
 	}
     }
     for ( i = 0; i < WidgetDatabase::count(); ++i ) {
 	if ( WidgetDatabase::isContainer( i ) && !WidgetDatabase::isForm(i) &&
-	     WidgetDatabase::className( i ) != "QTabWidget" && WidgetDatabase::widgetGroup( i ) != "Temp" ) {
+	     WidgetDatabase::className( i ) != "QTabWidget" && WidgetDatabase::group( i ) != "Temp" ) {
 	    dia.listClass->insertItem( WidgetDatabase::className( i ) );
 	}
     }
@@ -1793,6 +1793,8 @@ SourceEditor *MainWindow::editSource( SourceFile *f )
 	editor = f->editor();
     if ( !editor )
 	editor = createSourceEditor( f, currentProject, lang );
+    editor->setActiveWindow();
+    editor->setFocus();
     return editor;
 }
 

@@ -303,6 +303,7 @@ void ConnectionDialog::updateConnectionContainers()
 	    if ( c->senderItem() == connectionsTable->item( i, 0 ) ) {
 		newContainers.append( c );
 		c->setRow( i );
+                updateConnectionState(c);
 		break;
 	    }
 	}

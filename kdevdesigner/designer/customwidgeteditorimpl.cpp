@@ -497,6 +497,7 @@ void CustomWidgetEditor::slotNameChanged( const QString &s )
     MetaDataBase::Function slot;
     slot.function = listSlots->currentItem()->text( 0 );
     slot.access = listSlots->currentItem()->text( 1 );
+    slot.type = "slot";
     QValueList<MetaDataBase::Function>::Iterator it = w->lstSlots.find( slot );
     if ( it != w->lstSlots.end() )
 	w->lstSlots.remove( it );

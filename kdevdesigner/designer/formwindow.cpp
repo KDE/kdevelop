@@ -445,31 +445,34 @@ void FormWindow::insertWidget()
     }
 
     if ( !lst.isEmpty() ) {
-	QWidget *pw = WidgetFactory::containerOfWidget( w );
-	QValueList<QPoint> op, np;
-	for ( QWidget *i = lst.first(); i; i = lst.next() ) {
-	    op.append( i->pos() );
-	    QPoint pos = pw->mapFromGlobal( i->mapToGlobal( QPoint( 0, 0 ) ) );
-	    pos -= r.topLeft();
-	    np.append( pos );
-	}
+        QWidget *pw = WidgetFactory::containerOfWidget( w );
+        if (pw) {
+            QValueList<QPoint> op, np;
+            for ( QWidget *i = lst.first(); i; i = lst.next() ) {
+                op.append( i->pos() );
+                QPoint pos = pw->mapFromGlobal( i->mapToGlobal( QPoint( 0, 0 ) ) );
+                pos -= r.topLeft();
+                np.append( pos );
+            }
+            
+            MoveCommand *mv = new MoveCommand( i18n( "Reparent Widgets" ), this,
+                                               lst, op, np, insertParent, pw );
 
-	MoveCommand *mv = new MoveCommand( i18n( "Reparent Widgets" ), this, lst, op, np, insertParent, pw );
-
-	if ( !toolFixed )
-	    mainwindow->resetTool();
-	else
-	    setCursorToAll( CrossCursor, w );
-
-	InsertCommand *cmd = new InsertCommand( i18n( "Insert %1" ).arg( w->name() ), this, w, r );
-
-	QPtrList<Command> commands;
-	commands.append( mv );
-	commands.append( cmd );
-
-	MacroCommand *mc = new MacroCommand( i18n( "Insert %1" ).arg( w->name() ), this, commands );
-	commandHistory()->addCommand( mc );
-	mc->execute();
+            if ( !toolFixed )
+                mainwindow->resetTool();
+            else
+                setCursorToAll( CrossCursor, w );
+            
+            InsertCommand *cmd = new InsertCommand( i18n( "Insert %1" ).arg( w->name() ), this, w, r );
+            
+            QPtrList<Command> commands;
+            commands.append( mv );
+            commands.append( cmd );
+            
+            MacroCommand *mc = new MacroCommand( i18n( "Insert %1" ).arg( w->name() ), this, commands );
+            commandHistory()->addCommand( mc );
+            mc->execute();
+        }
     } else {
 	if ( !toolFixed )
 	    mainwindow->resetTool();

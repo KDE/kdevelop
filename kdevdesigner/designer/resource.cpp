@@ -334,7 +334,6 @@ bool Resource::load( FormFile *ff, QIODevice* dev, Project *defProject )
     QString errMsg;
     int errLine;
     if ( !doc.setContent( dev, &errMsg, &errLine ) ) {
-	qDebug( QString("Parse error: ") + errMsg + QString(" in line %d"), errLine );
 	return FALSE;
     }
 
@@ -772,9 +771,7 @@ void Resource::paste( const QString &cb, QWidget *parent )
     QDomDocument doc;
     QString errMsg;
     int errLine;
-    if ( !doc.setContent( cb, &errMsg, &errLine ) ) {
-	qDebug( QString("Parse error: ") + errMsg + QString(" in line %d"), errLine );
-    }
+    doc.setContent( cb, &errMsg, &errLine );
 
     QDomElement firstWidget = doc.firstChild().toElement().firstChild().toElement();
 

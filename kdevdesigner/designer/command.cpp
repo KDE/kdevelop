@@ -553,6 +553,9 @@ bool SetPropertyCommand::checkProperty()
 
 void SetPropertyCommand::setProperty( const QVariant &v, const QString &currentItemText, bool select )
 {
+    if ( !widget )
+        return;
+
     if ( !formWindow()->isWidgetSelected( widget ) && !formWindow()->isMainContainer( widget ) && select )
 	formWindow()->selectWidget( widget );
     if ( editor->widget() != widget && select )

@@ -1220,7 +1220,9 @@ const char* WidgetFactory::classNameOf( QObject* o )
 {
     if ( o->isA( "PropertyObject" ) )
 	return o->className();
-    if ( ::qt_cast<QDesignerTabWidget*>(o) )
+    if (WidgetDatabase::isCustomPluginWidget(WidgetDatabase::idFromClassName(o->className())))
+        return o->className();
+    else if ( ::qt_cast<QDesignerTabWidget*>(o) )
 	return "QTabWidget";
     else if ( ::qt_cast<QDesignerWidgetStack*>(o) )
 	return "QWidgetStack";

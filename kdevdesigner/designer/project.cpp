@@ -581,8 +581,7 @@ static void remove_contents( QString &contents, const QString &s )
 
 static void remove_multiline_contents( QString &contents, const QString &s, int *strt = 0 )
 {
-    int i;
-    parse_multiline_part( contents, s, &i );
+    int i = contents.find( s );
     if ( strt )
 	*strt = i;
     int start = i;
@@ -1254,8 +1253,9 @@ void Project::writePlatformSettings( QString &contents, const QString &setting,
 {
     const QString platforms[] = { "", "win32", "unix", "mac", QString::null };
     int i;
-    if (setting == "SOURCES" || setting == "HEADERS") // The (all) part will be saved later on
-	i = 1;
+    LanguageInterface *iface = MetaDataBase::languageInterface( lang );
+    if (iface && (setting == "SOURCES" || setting == "HEADERS")) // The (all) part will be saved later on
+        i = 1;
     else
 	i = 0;
     for (; platforms[ i ] != QString::null; ++i ) {

@@ -1625,7 +1625,7 @@ void MainWindow::setupRMBSpecialCommands( QValueList<uint> &ids,
 	}
 	ids << ( id = rmbWidgets->insertItem( i18n("Add Page"), -1, 0 ) );
 	commands.insert( "add", id );
-    } else if ( ::qt_cast<QWidgetStack*>(w) ) {
+    } else if ( ::qt_cast<QDesignerWidgetStack*>(w) ) {
 	if ( ids.isEmpty() )
 	    ids << rmbWidgets->insertSeparator( 0 );
 	if ( ( (QDesignerWidgetStack*)w )->count() > 1) {
