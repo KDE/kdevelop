@@ -39,6 +39,7 @@ class KURL;
 class QEditorView;
 class KAboutData;
 class HLMode;
+class KConfig;
 
 /**
  * This is a "Part".  It that does all the real work in a KPart
@@ -84,7 +85,13 @@ public:
 	virtual bool isModified() const;
 
 	static KAboutData *createAboutData();
-
+	
+public slots:
+	void readConfig();
+	void writeConfig();
+    	void readConfig( KConfig* );
+	void writeConfig( KConfig* );
+	
 private:
 	void setupActions();
 

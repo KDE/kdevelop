@@ -28,7 +28,7 @@
 
 class JavaColorizer: public QSourceColorizer{
 public:
-    JavaColorizer();
+    JavaColorizer( QEditor* );
     virtual ~JavaColorizer();
 
     virtual void refresh();

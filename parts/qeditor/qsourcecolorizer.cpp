@@ -23,12 +23,13 @@
 
 #include "qsourcecolorizer.h"
 #include "paragdata.h"
+#include "qeditor.h"
 
 #include <qapplication.h>
 #include <qregexp.h>
 
-QSourceColorizer::QSourceColorizer()
-    : QTextPreProcessor()
+QSourceColorizer::QSourceColorizer( QEditor* editor )
+    : QTextPreProcessor(), m_editor( editor )
 {
     m_formats.setAutoDelete( TRUE );
     m_items.setAutoDelete( TRUE );
@@ -94,7 +95,7 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParag* parag, int,
 
     int oldLevel = extra->level();
     int level = computeLevel( parag, startLevel );
-    extra->setLevel( level );
+    extra->setLevel( level > 0 ? level : 0 );
 
     if ( invalidate && parag->next() &&
 	 !parag->next()->firstPreProcess() &&

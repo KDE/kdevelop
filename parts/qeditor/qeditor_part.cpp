@@ -28,6 +28,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kfiledialog.h>
+#include <kconfig.h>
 #include <kdebug.h>
 #include <kparts/genericfactory.h>
 
@@ -100,6 +101,8 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
 	// we need an instance
 	setInstance( QEditorPartFactory::instance() );
 
+	readConfig();
+	
 	m_editor = (QEditorView*) createView( parentWidget, widgetName );
 	m_editor->editor()->show();
 	setWidget( m_editor );
@@ -137,13 +140,16 @@ void QEditorPart::setupActions()
 
 	KStdAction::undo( this, SLOT(undo()), actionCollection() );
 	KStdAction::redo( this, SLOT(redo()), actionCollection() );
+	
 	KStdAction::cut( m_editor, SLOT(cut()), actionCollection() );
 	KStdAction::copy( m_editor, SLOT(copy()), actionCollection() );
 	KStdAction::paste( m_editor, SLOT(paste()), actionCollection() );
 	KStdAction::selectAll( m_editor, SLOT(selectAll()), actionCollection() );
+	
 	KStdAction::gotoLine( m_editor, SLOT(gotoLine()), actionCollection() );
 	KStdAction::find( m_editor, SLOT(doFind()), actionCollection() );
 	KStdAction::replace( m_editor, SLOT(doReplace()), actionCollection() );
+	
 }
 
 void QEditorPart::setReadWrite(bool rw)
@@ -187,10 +193,34 @@ KAboutData *QEditorPart::createAboutData()
 	// the non-i18n name here must be the same as the directory in
 	// which the part's rc file is installed ('partrcdir' in the
 	// Makefile)
-	KAboutData *aboutData = new KAboutData("qeditorpart", I18N_NOOP("QEditorPart"), "0.1");
+	KAboutData *aboutData = new KAboutData("qeditorpart", I18N_NOOP("Qt Designer Based Text Editor"), "0.1");
 	aboutData->addAuthor("Roberto Raggi", 0, "raggi@cli.di.unipi.it");
 	aboutData->addAuthor("Trolltech AS", 0, "");
 	return aboutData;
+}
+
+void QEditorPart::readConfig()
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "QEditor Part" );
+    readConfig( config );
+    config->sync();
+}
+
+void QEditorPart::writeConfig()
+{
+    KConfig* config = QEditorPartFactory::instance()->config();
+    config->setGroup( "QEditor Part" );
+    writeConfig( config );
+    config->sync();
+}
+
+void QEditorPart::readConfig( KConfig* )
+{
+}
+
+void QEditorPart::writeConfig( KConfig* )
+{
 }
 
 bool QEditorPart::openFile()

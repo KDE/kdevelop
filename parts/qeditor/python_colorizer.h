@@ -28,7 +28,7 @@
 
 class PythonColorizer: public QSourceColorizer{
 public:
-    PythonColorizer();
+    PythonColorizer( QEditor* );
     virtual ~PythonColorizer();
 
     virtual void refresh();

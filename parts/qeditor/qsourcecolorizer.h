@@ -29,6 +29,8 @@
 #include <qmap.h>
 #include <qregexp.h>
 
+class QEditor;
+
 class HLItem{
 public:
     HLItem( int state=0, int context=0 )
@@ -211,8 +213,10 @@ private:
 
 class QSourceColorizer: public QTextPreProcessor{
 public:
-    QSourceColorizer();
+    QSourceColorizer( QEditor* );
     virtual ~QSourceColorizer();
+
+    QEditor* editor() const { return m_editor; }
 
     void insertHLItem( int, HLItemCollection* );
 
@@ -226,6 +230,7 @@ public:
     virtual int computeLevel( QTextParag*, int );
 
 protected:
+    QEditor* m_editor;
     QIntDict<QTextFormat> m_formats;
     QList<HLItemCollection> m_items;
     QString m_left;

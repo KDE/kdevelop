@@ -95,7 +95,8 @@ static const char *keywords[] = {
     0
 };
 
-JavaColorizer::JavaColorizer()
+JavaColorizer::JavaColorizer( QEditor* editor )
+    : QSourceColorizer( editor )
 {
     refresh();
 

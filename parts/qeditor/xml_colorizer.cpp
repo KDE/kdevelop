@@ -43,7 +43,8 @@ static const char *keywords[] = {
   0
 };
 
-XMLColorizer::XMLColorizer()
+XMLColorizer::XMLColorizer( QEditor* editor )
+    : QSourceColorizer( editor )
 {
     refresh();
 

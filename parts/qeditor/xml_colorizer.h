@@ -28,7 +28,7 @@
 
 class XMLColorizer: public QSourceColorizer{
 public:
-    XMLColorizer();
+    XMLColorizer( QEditor* );
     virtual ~XMLColorizer();
 
     virtual void refresh();

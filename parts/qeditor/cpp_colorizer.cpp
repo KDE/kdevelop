@@ -62,7 +62,8 @@ static const char *keywords[] = {
 
 using namespace std;
 
-CppColorizer::CppColorizer()
+CppColorizer::CppColorizer( QEditor* editor )
+    : QSourceColorizer( editor )
 {
 	refresh();
 

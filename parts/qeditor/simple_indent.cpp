@@ -45,9 +45,10 @@
 #include "simple_indent.h"
 #include "qsourcecolorizer.h"
 #include "paragdata.h"
+#include "qeditor.h"
 
 // from trolltech's editor -- START
-static int indentation( const QString &s )
+static int indentation( const QString &s, int tabwidth )
 {
     if ( s.simplifyWhiteSpace().length() == 0 )
         return 0;
@@ -58,7 +59,7 @@ static int indentation( const QString &s )
         if ( c == ' ' ){
             ind++;
         } else if ( c == '\t' ){
-            ind += 4;
+            ind += tabwidth;
         } else {
             break;
         }
@@ -67,10 +68,10 @@ static int indentation( const QString &s )
     return ind;
 }
 
-void tabify( QString &s )
+void tabify( QString &s, int tabwidth )
 {
     int i = 0;
-    int tabwidth = 8;
+
     for ( ;; ) {
         for ( int j = i; j < (int)s.length(); ++j ) {
             if ( s[ j ] != ' ' && s[ j ] != '\t' ) {
@@ -100,12 +101,12 @@ void tabify( QString &s )
     }
 }
 
-void indentLine( QTextParag *p, int &oldIndent, int &newIndent )
+void indentLine( QTextParag *p, int tabwidth, int &oldIndent, int &newIndent )
 {
     QString indentString;
     indentString.fill( ' ', newIndent );
     indentString.append( "a" );
-    tabify( indentString );
+    tabify( indentString, tabwidth );
     indentString.remove( indentString.length() - 1, 1 );
     newIndent = indentString.length();
     oldIndent = 0;
@@ -120,7 +121,8 @@ void indentLine( QTextParag *p, int &oldIndent, int &newIndent )
 }
 // from trolltech's editor -- END
 
-SimpleIndent::SimpleIndent()
+SimpleIndent::SimpleIndent( QEditor* editor )
+    : m_editor( editor )
 {
 
 }
@@ -130,7 +132,7 @@ SimpleIndent::~SimpleIndent()
 
 }
 
-static int indentForLine( QTextParag* parag )
+static int indentForLine( QTextParag* parag, int tabwidth )
 {
     int ind = 0;
     QTextParag* p = parag->prev();
@@ -138,7 +140,7 @@ static int indentForLine( QTextParag* parag )
         QString raw_text = p->string()->toString();
         QString line = raw_text.stripWhiteSpace();
         if( !line.isEmpty() ){
-            ind = indentation( raw_text );
+            ind = indentation( raw_text, tabwidth );
             break;
         }
         p = p->prev();
@@ -149,11 +151,12 @@ static int indentForLine( QTextParag* parag )
 void SimpleIndent::indent( QTextDocument* doc, QTextParag* parag,
                            int* oldIndent, int* newIndent )
 {
+    int tabwidth = m_editor->tabStop();
     QString s = parag->string()->toString();
-    int oi = indentation( s );
-    int ind = indentForLine( parag );
+    int oi = indentation( s, tabwidth );
+    int ind = indentForLine( parag, tabwidth );
 
-    indentLine( parag, oi, ind );
+    indentLine( parag, tabwidth, oi, ind );
     if( oldIndent ){
         *oldIndent = oi;
     }

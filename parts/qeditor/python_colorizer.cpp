@@ -22,6 +22,8 @@
 
 
 #include "python_colorizer.h"
+#include "qeditor.h"
+#include "paragdata.h"
 
 #include <qfont.h>
 #include <qapplication.h>
@@ -71,7 +73,8 @@ static const char *keywords[] = {
   0
 };
 
-PythonColorizer::PythonColorizer()
+PythonColorizer::PythonColorizer( QEditor* editor )
+    : QSourceColorizer( editor )
 {
     refresh();
 
@@ -144,7 +147,7 @@ void PythonColorizer::refresh()
     m_formats.insert( Hilite, new QTextFormat( font, QColor( 0x00, 0x00, 0x68 ) ) );
 }
 
-int PythonColorizer::computeLevel( QTextParag* parag, int startLevel )
+int PythonColorizer::computeLevel( QTextParag*, int startLevel )
 {
     int level = startLevel;
 

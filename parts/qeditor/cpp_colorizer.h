@@ -28,7 +28,7 @@
 
 class CppColorizer: public QSourceColorizer{
 public:
-    CppColorizer();
+    CppColorizer( QEditor* );
     virtual ~CppColorizer();
 
     virtual void refresh();

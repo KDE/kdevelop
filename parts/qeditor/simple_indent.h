@@ -46,15 +46,21 @@
 
 #include <private/qrichtext_p.h>
 
+class QEditor;
+
 class SimpleIndent: public QTextIndent{
 public:
-    SimpleIndent();
+    SimpleIndent( QEditor* );
     virtual ~SimpleIndent();
 
+    QEditor* editor() const { return m_editor; }
     void indent( QTextDocument*, QTextParag*, int* =0, int* =0 );
+
+private:
+    QEditor* m_editor;
 };
 
-void tabify( QString& );
-void indentLine( QTextParag *p, int &oldIndent, int &newIndent );
+void tabify( QString& text, int tabwidth );
+void indentLine( QTextParag *p, int tabwidth, int &oldIndent, int &newIndent );
 
 #endif

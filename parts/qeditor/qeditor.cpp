@@ -62,343 +62,354 @@
 using namespace std;
 
 // from trolltech's editor -- START
-static int backspace_indentation( const QString &s )
+static int backspace_indentation( const QString &s, int tabwidth )
 {
-	int i = 0;
-	int ind = 0;
-	while ( i < (int)s.length() ) {
-		QChar c = s.at( i );
-		if ( c == ' ' ){
-			ind++;
-		} else if ( c == '\t' ){
-			ind += 4;
-		} else {
-			break;
-		}
-		++i;
+    int i = 0;
+    int ind = 0;
+    while ( i < (int)s.length() ) {
+	QChar c = s.at( i );
+	if ( c == ' ' ){
+	    ind++;
+	} else if ( c == '\t' ){
+	    ind += tabwidth;
+	} else {
+	    break;
 	}
-	return ind;
+	++i;
+    }
+    return ind;
 }
 
 
-static int backspace_indentForLine( QTextParag* parag )
+static int backspace_indentForLine( QTextParag* parag, int tabwidth )
 {
-	int line_ind = backspace_indentation( parag->string()->toString() );
-	line_ind = line_ind > 0 ? line_ind-1 : 0;
-	int ind = 0;
-	QTextParag* p = parag->prev();
-	while( p ){
-		QString raw_text = p->string()->toString();
-		QString line = raw_text.stripWhiteSpace();
-		if( !line.isEmpty() ){
-			int new_ind = backspace_indentation( raw_text );
-			if( new_ind < line_ind ){
-				ind = new_ind;
-				break;
-			}
-		}
-		p = p->prev();
+    int line_ind = backspace_indentation( parag->string()->toString(), tabwidth );
+    line_ind = line_ind > 0 ? line_ind-1 : 0;
+    int ind = 0;
+    QTextParag* p = parag->prev();
+    while( p ){
+	QString raw_text = p->string()->toString();
+	QString line = raw_text.stripWhiteSpace();
+	if( !line.isEmpty() ){
+	    int new_ind = backspace_indentation( raw_text, tabwidth );
+	    if( new_ind < line_ind ){
+		ind = new_ind;
+		break;
+	    }
 	}
-	return ind;
+	p = p->prev();
+    }
+    return ind;
 }
 
 QEditor::QEditor( QWidget* parent, const char* name )
 	: QTextEdit( parent, name )
 {
-	setWordWrap( NoWrap );
-	setHScrollBarMode( QScrollView::AlwaysOn );
-	setVScrollBarMode( QScrollView::AlwaysOn );
-	document()->setUseFormatCollection( FALSE );
+    setWordWrap( NoWrap );
+    setHScrollBarMode( QScrollView::AlwaysOn );
+    setVScrollBarMode( QScrollView::AlwaysOn );
+    document()->setUseFormatCollection( FALSE );
 
-	parenMatcher = new ParenMatcher();
+    parenMatcher = new ParenMatcher();
 
-	m_tabIndent = TRUE;
-	m_backspaceIndent = TRUE;
-	m_currentLine = -1;
+    m_tabIndent = TRUE;
+    m_backspaceIndent = TRUE;
+    m_currentLine = -1;
+    m_tabStop = 8;
 
-	document()->addSelection( ParenMatcher::Match );
-	document()->addSelection( ParenMatcher::Mismatch );
-	document()->setSelectionColor( ParenMatcher::Match, QColor( 204, 232, 195 ) );
-	document()->setSelectionColor( ParenMatcher::Mismatch, Qt::magenta );
-	document()->setInvertSelectionText( ParenMatcher::Match, FALSE );
-	document()->setInvertSelectionText( ParenMatcher::Mismatch, FALSE );
+    document()->addSelection( ParenMatcher::Match );
+    document()->addSelection( ParenMatcher::Mismatch );
+    document()->setSelectionColor( ParenMatcher::Match, QColor( 204, 232, 195 ) );
+    document()->setSelectionColor( ParenMatcher::Mismatch, Qt::magenta );
+    document()->setInvertSelectionText( ParenMatcher::Match, FALSE );
+    document()->setInvertSelectionText( ParenMatcher::Mismatch, FALSE );
 
-	document()->addSelection( 1000 );
-	document()->setSelectionColor( 1000, QColor( 204, 232, 195 ) );
+    document()->addSelection( 1000 );
+    document()->setSelectionColor( 1000, QColor( 204, 232, 195 ) );
 
-	connect( this, SIGNAL(cursorPositionChanged(QTextCursor*) ),
-			 this, SLOT(doMatch(QTextCursor*)) );
-	connect( this, SIGNAL(cursorPositionChanged(int, int) ),
-			 this, SLOT(slotCursorPositionChanged(int, int)) );
+    connect( this, SIGNAL(cursorPositionChanged(QTextCursor*) ),
+	     this, SLOT(doMatch(QTextCursor*)) );
+    connect( this, SIGNAL(cursorPositionChanged(int, int) ),
+	     this, SLOT(slotCursorPositionChanged(int, int)) );
 }
 
 QEditor::~QEditor()
 {
-	if( parenMatcher ){
-		delete( parenMatcher );
-	}
+    if( parenMatcher ){
+	delete( parenMatcher );
+    }
+}
+
+int QEditor::tabStop() const
+{
+    return m_tabStop;
+}
+
+void QEditor::setTabStop( int tabStop )
+{
+    m_tabStop = tabStop;
 }
 
 void QEditor::keyPressEvent( QKeyEvent* e )
 {
-	if( e->key() == Key_Tab ){
-		if( tabIndentEnabled() ){
-			int parag, index;
-			getCursorPosition( &parag, &index );
-			QString s = textLine( parag ).mid( index ).stripWhiteSpace();
-			if( s.isEmpty() ){
-				insert( "\t" );
-			} else {
-				indent();
-			}
-		} else {
-			insert( "\t" );
-		}
-		e->accept();
-	} else if( e->ascii() == '{' || e->ascii() == '}' || e->ascii() == '#' ){
-            // electric keys
-		insert( e->text(), TRUE );
-		e->accept();
-	} else if( e->ascii() == ':' || e->ascii() == '#' ){
-		insert( e->text(), FALSE );
-		e->accept();
-	} else if( e->key() == Key_Backspace ){
-		if( backspaceIndentEnabled() ){
-			backspaceIndent( e );
-		} else {
-			QTextEdit::keyPressEvent( e );
-		}
+    if( e->key() == Key_Tab ){
+	if( tabIndentEnabled() ){
+	    int parag, index;
+	    getCursorPosition( &parag, &index );
+	    QString s = textLine( parag ).mid( index ).stripWhiteSpace();
+	    if( s.isEmpty() ){
+		insert( "\t" );
+	    } else {
+		indent();
+	    }
 	} else {
-		QTextEdit::keyPressEvent( e );
+	    insert( "\t" );
 	}
+	e->accept();
+    } else if( e->ascii() == '{' || e->ascii() == '}' || e->ascii() == '#' ){
+	// electric keys
+	insert( e->text(), TRUE );
+	e->accept();
+    } else if( e->ascii() == ':' || e->ascii() == '#' ){
+	insert( e->text(), FALSE );
+	e->accept();
+    } else if( e->key() == Key_Backspace ){
+	if( backspaceIndentEnabled() ){
+	    backspaceIndent( e );
+	} else {
+	    QTextEdit::keyPressEvent( e );
+	}
+    } else {
+	QTextEdit::keyPressEvent( e );
+    }
 }
 
 void QEditor::doMatch( QTextCursor* c )
 {
-	if( parenMatcher->match(c) ){
-		repaintChanged();
-	}
+    if( parenMatcher->match(c) ){
+	repaintChanged();
+    }
 }
 
 void QEditor::doGotoLine( int line )
 {
-	setCursorPosition( line, 0 );
-	QTextParag *p = document()->paragAt( line );
-	if ( !p )
-		return;
-	QTextCursor c( document() );
-	c.setParag( p );
-	c.setIndex( 0 );
-	document()->removeSelection( 1000 );
-	document()->setSelectionStart( 1000, &c );
-	c.gotoLineEnd();
-	document()->setSelectionEnd( 1000, &c );
-	viewport()->repaint( FALSE );
+    setCursorPosition( line, 0 );
+    QTextParag *p = document()->paragAt( line );
+    if ( !p )
+	return;
+    QTextCursor c( document() );
+    c.setParag( p );
+    c.setIndex( 0 );
+    document()->removeSelection( 1000 );
+    document()->setSelectionStart( 1000, &c );
+    c.gotoLineEnd();
+    document()->setSelectionEnd( 1000, &c );
+    viewport()->repaint( FALSE );
 }
 
 QTextCursor* QEditor::textCursor() const
 {
-	return QTextEdit::textCursor();
+    return QTextEdit::textCursor();
 }
 
 QTextDocument* QEditor::document() const
 {
-	return QTextEdit::document();
+    return QTextEdit::document();
 }
 
 void QEditor::drawCursor( bool visible )
 {
-	QTextEdit::drawCursor( visible );
+    QTextEdit::drawCursor( visible );
 }
 
 void QEditor::configChanged()
 {
-	updateStyles();
-	document()->invalidate();
-	viewport()->repaint( TRUE );
+    updateStyles();
+    document()->invalidate();
+    viewport()->repaint( TRUE );
 }
 
 void QEditor::zoomIn()
 {
-	QTextEdit::zoomIn();
-	updateStyles();
+    QTextEdit::zoomIn();
+    updateStyles();
 }
 
 void QEditor::zoomOut()
 {
-	QTextEdit::zoomOut();
-	updateStyles();
+    QTextEdit::zoomOut();
+    updateStyles();
 }
 
 void QEditor::updateStyles()
 {
-    int tabwidth = 8;
-	QSourceColorizer* colorizer = dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
-	if( colorizer ){
-		setTabStopWidth( colorizer->format(0)->width('x') * tabwidth );
-		document()->setTabStops( colorizer->format(0)->width('x') * tabwidth );
-		setFont( colorizer->format( 0 )->font() );
-	}
-	QTextEdit::updateStyles();
+    int tabwidth = tabStop();
+    QSourceColorizer* colorizer = dynamic_cast<QSourceColorizer*>( document()->preProcessor() );
+    if( colorizer ){
+	setTabStopWidth( colorizer->format(0)->width('x') * tabwidth );
+	document()->setTabStops( colorizer->format(0)->width('x') * tabwidth );
+	setFont( colorizer->format( 0 )->font() );
+    }
+    QTextEdit::updateStyles();
 }
 
 void QEditor::backspaceIndent( QKeyEvent* e )
 {
-	QTextCursor* c = textCursor();
-	QTextParag* p = c->parag();
-	QString raw_text = p->string()->toString();
-	QString line = raw_text.stripWhiteSpace();
+    QTextCursor* c = textCursor();
+    QTextParag* p = c->parag();
+    QString raw_text = p->string()->toString();
+    QString line = raw_text.stripWhiteSpace();
 
-	if( raw_text.left(c->index()).stripWhiteSpace().isEmpty()
-		&& c->index() > 0 && !hasSelectedText() ){
-		drawCursor( FALSE );
-		int oi = backspace_indentation( raw_text );
-		int ni = backspace_indentForLine( p );
+    if( raw_text.left(c->index()).stripWhiteSpace().isEmpty()
+	&& c->index() > 0 && !hasSelectedText() ){
+	    drawCursor( FALSE );
+	    int oi = backspace_indentation( raw_text, tabStop() );
+	    int ni = backspace_indentForLine( p, tabStop() );
 
-		indentLine( p, oi, ni );
+	    indentLine( p, tabStop(), oi, ni );
 
-		int idx = c->index();
-		if ( idx >= oi )
-			idx += ni - oi;
-		else
-			idx = ni;
-		c->setIndex( idx );
-		repaintChanged();
-		drawCursor( TRUE );
-		e->accept();
+	    int idx = c->index();
+	    if ( idx >= oi )
+		idx += ni - oi;
+	    else
+		idx = ni;
+	    c->setIndex( idx );
+	    repaintChanged();
+	    drawCursor( TRUE );
+	    e->accept();
 	} else {
-		// doKeyboardAction( QTextEdit::ActionBackspace );
-		QTextEdit::keyPressEvent( e );
+	    // doKeyboardAction( QTextEdit::ActionBackspace );
+	    QTextEdit::keyPressEvent( e );
 	}
-}
+    }
 
 bool QEditor::replace( const QString &text, const QString &replace,
-					  bool cs, bool wo, bool forward, bool startAtCursor,
-					  bool replaceAll )
+		       bool cs, bool wo, bool forward, bool startAtCursor,
+		       bool replaceAll )
 {
-	// from trolltech's editor sources -- START
-	bool ok = FALSE;
-	if ( startAtCursor ) {
-		ok = find( text, cs, wo, forward );
-	} else {
-		int dummy = 0;
-		ok =  find( text, cs, wo, forward, &dummy, &dummy );
-	}
+    // from trolltech's editor sources -- START
+    bool ok = FALSE;
+    if ( startAtCursor ) {
+	ok = find( text, cs, wo, forward );
+    } else {
+	int dummy = 0;
+	ok =  find( text, cs, wo, forward, &dummy, &dummy );
+    }
 
-	if ( ok ) {
-		removeSelectedText();
-		insert( replace, FALSE, FALSE );
-	}
+    if ( ok ) {
+	removeSelectedText();
+	insert( replace, FALSE, FALSE );
+    }
 
-	if ( !replaceAll || !ok ) {
-		if ( ok )
-			setSelection( textCursor()->parag()->paragId(),
-						  textCursor()->index() - replace.length(),
-						  textCursor()->parag()->paragId(),
-						  textCursor()->index() );
-		return ok;
-	}
+    if ( !replaceAll || !ok ) {
+	if ( ok )
+	    setSelection( textCursor()->parag()->paragId(),
+			  textCursor()->index() - replace.length(),
+			  textCursor()->parag()->paragId(),
+			  textCursor()->index() );
+	return ok;
+    }
 
-	bool ok2 = TRUE;
-	while ( ok2 ) {
-		ok2 = find( text, cs, wo, forward );
-		if ( ok2 ) {
-			removeSelectedText();
-			insert( replace, FALSE, FALSE );
-		}
+    bool ok2 = TRUE;
+    while ( ok2 ) {
+	ok2 = find( text, cs, wo, forward );
+	if ( ok2 ) {
+	    removeSelectedText();
+	    insert( replace, FALSE, FALSE );
 	}
+    }
 
-	return TRUE;
-	// from trolltech's editor sources -- END
+    return TRUE;
+    // from trolltech's editor sources -- END
 }
 
 void QEditor::setDocument( QTextDocument* doc )
 {
-	QTextEdit::setDocument( doc );
+    QTextEdit::setDocument( doc );
 }
 
 void QEditor::refresh()
 {
-	QTextParag* p = document()->firstParag();
-	while( p ){
-		if( p->endState() == -1 ){
-			break;
-		}
-		p->setEndState( -1 );
-		p = p->next();
+    QTextParag* p = document()->firstParag();
+    while( p ){
+	if( p->endState() == -1 ){
+	    break;
 	}
-	document()->invalidate();
-	repaintChanged();
+	p->setEndState( -1 );
+	p = p->next();
+    }
+    document()->invalidate();
+    repaintChanged();
 }
 
 void QEditor::repaintChanged()
 {
-	QTextEdit::repaintChanged();
+    QTextEdit::repaintChanged();
 }
 
 QString QEditor::textLine( uint line ) const
 {
-	if ( line < 0 || line >= lines() )
-		return QString::null;
+    if ( line < 0 || line >= lines() )
+	return QString::null;
 
-	QString str = document()->paragAt( line )->string()->toString();
-	str.truncate( str.length() - 1 );
-	return str;
+    QString str = document()->paragAt( line )->string()->toString();
+    str.truncate( str.length() - 1 );
+    return str;
 }
 
 void QEditor::setLanguage( const QString& l )
 {
-	kdDebug() << "QEditor::setLanguage(" << l << ")" << endl;
-	m_language = l;
-	if( m_language == "c++" ){
-		document()->setPreProcessor( new CppColorizer() );
-                document()->setIndent( new CIndent() );
-	} else if( m_language == "java" ){
-		document()->setPreProcessor( new JavaColorizer() );
-                document()->setIndent( new CIndent() );
-	} else if( m_language == "python" ){
-		document()->setPreProcessor( new PythonColorizer() );
-                document()->setIndent( new SimpleIndent() );
-	} else if( m_language == "xml" ){
-		document()->setPreProcessor( new XMLColorizer() );
-                document()->setIndent( new SimpleIndent() );
-	} else if( m_language == "qmake" ){
-		document()->setPreProcessor( new QMakeColorizer() );
-                document()->setIndent( new SimpleIndent() );
-	} else {
-		document()->setPreProcessor( 0 );
-                document()->setIndent( new SimpleIndent() );
-	}
+    kdDebug() << "QEditor::setLanguage(" << l << ")" << endl;
+    m_language = l;
+    if( m_language == "c++" ){
+	document()->setPreProcessor( new CppColorizer(this) );
+	document()->setIndent( new CIndent() );
+    } else if( m_language == "java" ){
+	document()->setPreProcessor( new JavaColorizer(this) );
+	document()->setIndent( new CIndent() );
+    } else if( m_language == "python" ){
+	document()->setPreProcessor( new PythonColorizer(this) );
+	document()->setIndent( new SimpleIndent(this) );
+    } else if( m_language == "xml" ){
+	document()->setPreProcessor( new XMLColorizer(this) );
+	document()->setIndent( new SimpleIndent(this) );
+    } else if( m_language == "qmake" ){
+	document()->setPreProcessor( new QMakeColorizer(this) );
+	document()->setIndent( new SimpleIndent(this) );
+    } else {
+	document()->setPreProcessor( 0 );
+	document()->setIndent( new SimpleIndent(this) );
+    }
 
-	configChanged();
-	sync();
+    configChanged();
+    sync();
 }
 
 QString QEditor::language() const
 {
-	return m_language;
+    return m_language;
 }
 
 void QEditor::setText( const QString& text )
 {
-	setTextFormat( QTextEdit::PlainText );
-	QString s = text;
-	// tabify( s );
-	QTextEdit::setText( s );
-	setTextFormat( QTextEdit::AutoText );
+    setTextFormat( QTextEdit::PlainText );
+    QString s = text;
+    // tabify( s );
+    QTextEdit::setText( s );
+    setTextFormat( QTextEdit::AutoText );
 }
 
 void QEditor::slotCursorPositionChanged( int line, int )
 {
 #if 0
-	if( line != m_currentLine ){
-		if( m_currentLine != -1 ){
-			clearParagraphBackground( m_currentLine );
-		}
-		m_currentLine = line;
-		setParagraphBackgroundColor( m_currentLine,
-			palette().active().mid() );
+    if( line != m_currentLine ){
+	if( m_currentLine != -1 ){
+	    clearParagraphBackground( m_currentLine );
 	}
+	m_currentLine = line;
+	setParagraphBackgroundColor( m_currentLine,
+				     palette().active().mid() );
+    }
 #endif
 }
 
@@ -406,7 +417,7 @@ int QEditor::level( int line) const
 {
     ParagData* data = (ParagData*) document()->paragAt( line )->extraData();
     if( data ){
-        return data->level();
+	return data->level();
     }
     return 0;
 }

@@ -43,7 +43,8 @@ static const char *keywords[] = {
   0
 };
 
-QMakeColorizer::QMakeColorizer()
+QMakeColorizer::QMakeColorizer( QEditor* editor )
+    : QSourceColorizer( editor )
 {
     refresh();
 

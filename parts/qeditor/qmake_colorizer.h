@@ -28,7 +28,7 @@
 
 class QMakeColorizer: public QSourceColorizer{
 public:
-    QMakeColorizer();
+    QMakeColorizer( QEditor* );
     virtual ~QMakeColorizer();
 
     virtual void refresh();
