@@ -57,6 +57,8 @@ dnl Image readers/writers
 dnl AC_FIND_JPEG   will be checked by KDE_CHECK_KIMGIO
 dnl AC_FIND_TIFF               -- " --
 KDE_CHECK_KIMGIO 
+
+CPPFLAGS="$CPPFLAGS $all_includes"
 AC_CHECK_HEADERS(nkf.h)
 
 dnl in this space add everything you want to check for
