@@ -406,6 +406,8 @@ void DebuggerPart::setupController()
     // gdbOutputWidget -> controller
     connect( gdbOutputWidget,       SIGNAL(userGDBCmd(const QString &)),
              controller,            SLOT(slotUserGDBCmd(const QString&)));
+    connect( gdbOutputWidget,       SIGNAL(breakInto()),
+             controller,            SLOT(slotBreakInto()));
 
     // controller -> gdbBreakpointWidget
     connect( controller,            SIGNAL(acceptPendingBPs()),
@@ -440,6 +442,8 @@ void DebuggerPart::setupController()
              gdbOutputWidget,       SLOT(slotReceivedStdout(const char*)) );
     connect( controller,            SIGNAL(gdbStderr(const char*)),
              gdbOutputWidget,       SLOT(slotReceivedStderr(const char*)) );
+    connect( controller,            SIGNAL(dbgStatus(const QString&, int)),
+             gdbOutputWidget,       SLOT(slotDbgStatus(const QString&, int)));
 
     // gdbBreakpointWidget -> disassembleWidget
     connect( gdbBreakpointWidget,   SIGNAL(publishBPState(const Breakpoint&)),
@@ -510,7 +514,7 @@ void DebuggerPart::startDebugger()
 
 void DebuggerPart::stopDebugger()
 {
-    controller->slotStop();
+    controller->slotStopDebugger();
     debugger()->clearExecutionPoint();
 
     delete floatingToolBar;
@@ -601,7 +605,7 @@ void DebuggerPart::slotStop(KDevPlugin* which)
     if( which != 0 && which != this )
         return;
 
-    if( !controller->stateIsOn( s_dbgNotStarted ) && !controller->stateIsOn( s_shuttingDown ) )
+//    if( !controller->stateIsOn( s_dbgNotStarted ) && !controller->stateIsOn( s_shuttingDown ) )
         stopDebugger();
 }
 

@@ -89,7 +89,7 @@ public slots:
     void slotCoreFile(const QString &coreFile);
     void slotAttachTo(int pid);
 
-    void slotStop();
+    void slotStopDebugger();
 
     void slotRun();
     void slotRunUntil(const QString &filename, int lineNum);

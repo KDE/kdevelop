@@ -20,8 +20,10 @@
 
 #include <qwidget.h>
 
-class QTextEdit;
 class KHistoryCombo;
+
+class QTextEdit;
+class QToolButton;
 
 namespace GDBDebugger
 {
@@ -39,15 +41,18 @@ public:
 public slots:
     void slotReceivedStdout(const char* line);
     void slotReceivedStderr(const char* line);
+    void slotDbgStatus     (const QString &status, int statusFlag);
 
     void slotGDBCmd();
 
 signals:
     void userGDBCmd(const QString &cmd);
+    void breakInto();
 
 private:
-    QTextEdit *gdbView_;
-    KHistoryCombo *userGDBCmdEditor_;
+    KHistoryCombo*  m_userGDBCmdEditor;
+    QToolButton*    m_Interrupt;
+    QTextEdit*      m_gdbView;
 };
 
 }

@@ -150,7 +150,7 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
     if (!viewedThread_)
         clear();
 
-    if(strstr(str, "No stack."))
+    if(strstr(str, "No stack.") || !strlen(str))
         return;
 
     while (char* end = strchr(str, '\n'))
@@ -176,8 +176,8 @@ void FramestackWidget::parseGDBBacktraceList(char *str)
         viewedThread_->setOpen(true);
     else
     {
-        FrameStackItem* frame = (FrameStackItem*) firstChild();
-        frame->setOpen(true);
+        if (FrameStackItem* frame = (FrameStackItem*) firstChild())
+            frame->setOpen(true);
     }
 }
 

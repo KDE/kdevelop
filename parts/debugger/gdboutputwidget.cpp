@@ -16,14 +16,18 @@
 // **************************************************************************
 
 #include "gdboutputwidget.h"
+#include "dbgcontroller.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 #include <klocale.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtextedit.h>
+#include <qtoolbutton.h>
+#include <qtooltip.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -36,43 +40,58 @@ namespace GDBDebugger
 
 GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
     QWidget(parent, name),
-    gdbView_(0),
-    userGDBCmdEditor_(0)
+    m_userGDBCmdEditor(0),
+    m_Interrupt(0),
+    m_gdbView(0)
 {
 
-    gdbView_ = new QTextEdit (this, name);
-    gdbView_->setReadOnly(true);
+    m_gdbView = new QTextEdit (this, name);
+    m_gdbView->setReadOnly(true);
 
     QBoxLayout *userGDBCmdEntry = new QHBoxLayout();
-    userGDBCmdEditor_ = new KHistoryCombo (this, "gdb-user-cmd-editor");
+    m_userGDBCmdEditor = new KHistoryCombo (this, "gdb-user-cmd-editor");
 
     QLabel *label = new QLabel(i18n("GDB Cmd:"), this);
     userGDBCmdEntry->addWidget(label);
 
-    userGDBCmdEntry->addWidget(userGDBCmdEditor_);
-    userGDBCmdEntry->setStretchFactor(userGDBCmdEditor_, 1);
+    userGDBCmdEntry->addWidget(m_userGDBCmdEditor);
+    userGDBCmdEntry->setStretchFactor(m_userGDBCmdEditor, 1);
+
+    m_Interrupt = new QToolButton( this, "add breakpoint" );
+    m_Interrupt->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0,
+                                         ( QSizePolicy::SizeType)0,
+                                         0,
+                                         0,
+                                         m_Interrupt->sizePolicy().hasHeightForWidth())
+                                         );
+    m_Interrupt->setPixmap ( SmallIcon ( "player_pause" ) );
+    userGDBCmdEntry->addWidget(m_Interrupt);
+    QToolTip::add ( m_Interrupt, i18n ( "Pause execution of the app to enter gdb commands" ) );
 
     QVBoxLayout *topLayout = new QVBoxLayout(this, 2);
-    topLayout->addWidget(gdbView_, 10);
+    topLayout->addWidget(m_gdbView, 10);
     topLayout->addLayout(userGDBCmdEntry);
 
-    connect( userGDBCmdEditor_, SIGNAL(returnPressed()), SLOT(slotGDBCmd()) );
+    slotDbgStatus( "", s_dbgNotStarted);
+
+    connect( m_userGDBCmdEditor, SIGNAL(returnPressed()), SLOT(slotGDBCmd()) );
+    connect( m_Interrupt,        SIGNAL(clicked()),       SIGNAL(breakInto()));
 }
 
 /***************************************************************************/
 
 GDBOutputWidget::~GDBOutputWidget()
 {
-    delete gdbView_;
-    delete userGDBCmdEditor_;
+    delete m_gdbView;
+    delete m_userGDBCmdEditor;
 }
 
 /***************************************************************************/
 
 void GDBOutputWidget::clear()
 {
-    if (gdbView_)
-        gdbView_->clear();
+    if (m_gdbView)
+        m_gdbView->clear();
 }
 
 /***************************************************************************/
@@ -80,28 +99,51 @@ void GDBOutputWidget::clear()
 void GDBOutputWidget::slotReceivedStdout(const char* line)
 {
     if (strncmp(line, "(gdb) ", 5) == 0)
-        gdbView_->append(QString("<font color=\"blue\">").append( line ).append("</font>") );
+        m_gdbView->append(QString("<font color=\"blue\">").append( line ).append("</font>") );
     else
-        gdbView_->append(line);
+        m_gdbView->append(line);
 }
 
 /***************************************************************************/
 
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
-    gdbView_->append(QString("<font color=\"red\">").append( line ).append("</font>") );
+    m_gdbView->append(QString("<font color=\"red\">").append( line ).append("</font>") );
 }
 
 /***************************************************************************/
 
 void GDBOutputWidget::slotGDBCmd()
 {
-    QString GDBCmd(userGDBCmdEditor_->currentText());
+    QString GDBCmd(m_userGDBCmdEditor->currentText());
     if (!GDBCmd.isEmpty())
     {
-        userGDBCmdEditor_->clearEdit();
-        userGDBCmdEditor_->addToHistory(GDBCmd);
+        m_userGDBCmdEditor->clearEdit();
+        m_userGDBCmdEditor->addToHistory(GDBCmd);
         emit userGDBCmd(GDBCmd);
+    }
+}
+
+/***************************************************************************/
+
+void GDBOutputWidget::slotDbgStatus(const QString &, int statusFlag)
+{
+    if (statusFlag & s_dbgNotStarted)
+    {
+        m_Interrupt->setEnabled(false);
+        m_userGDBCmdEditor->setEnabled(false);
+        return;
+    }
+
+    if (statusFlag & s_appBusy)
+    {
+        m_Interrupt->setEnabled(true);
+        m_userGDBCmdEditor->setEnabled(false);
+    }
+    else
+    {
+        m_Interrupt->setEnabled(false);
+        m_userGDBCmdEditor->setEnabled(true);
     }
 }
 

@@ -456,14 +456,14 @@ void GDBController::parseLine(char* buf)
             if (strstr(buf+23, "SIGINT") && stateIsOn(s_silent))
                 return;
 
-            if (strstr(buf+23, "SIGSEGV"))
+            if (strstr(buf+23, "SIGSEGV") || strstr(buf+23, "SIGFPE"))
             {
                 // Oh, shame, shame. The app has died a horrible death
                 // Lets remove the pending commands and get the current
                 // state organised for the user to figure out what went
                 // wrong.
                 // Note we're not quite dead yet...
-                DBG_DISPLAY("Parsed (SIGSEGV) <" + QString(buf) + ">");
+                DBG_DISPLAY("Parsed (SIG...) <" + QString(buf) + ">");
                 destroyCmds();
                 actOnProgramPause(QString(buf));
                 programHasExited_ = true;   // FIXME - a nasty switch
@@ -548,17 +548,27 @@ void GDBController::parseLine(char* buf)
             {
                 queueCmd(new GDBCommand(QCString().sprintf("delete %d",BPNo),
                                                 NOTRUNCMD, NOTINFOCMD));
-                queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD,
-                                                NOTINFOCMD, BPLIST));
             }
-            else
-                Q_ASSERT(false);
-
             actOnProgramPause(QString(buf));
-            return;
         }
-        actOnProgramPause(QString(buf));
-        DBG_DISPLAY("Unparsed (START_Watc)<" + QString(buf) + ">");
+
+        queueCmd(new GDBCommand("info breakpoints",
+                                        NOTRUNCMD, NOTINFOCMD, BPLIST));
+
+        DBG_DISPLAY("Parsed (START_Watc)<" + QString(buf) + ">");
+        return;
+    }
+
+    if (strncmp(buf, "Brea", 4) == 0 ||
+        strncmp(buf, "Hard", 4) == 0)
+    {
+        // Starts with "Brea" so assume "Breakpoint" and just get a full
+        // breakpoint list. Note that the state is unchanged.
+        // Much later: I forget why I did it like this :-o
+        queueCmd(new GDBCommand("info breakpoints",
+                                        NOTRUNCMD, NOTINFOCMD, BPLIST));
+
+        DBG_DISPLAY("Parsed (BP) <" + QString(buf) + ">");
         return;
     }
 
@@ -607,27 +617,11 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
-    if (strncmp(buf, "Brea", 4) == 0 ||
-        strncmp(buf, "Watc", 4) == 0 ||
-        strncmp(buf, "Hard", 4) == 0)
-    {
-        // Starts with "Brea" so assume "Breakpoint" and just get a full
-        // breakpoint list. Note that the state is unchanged.
-        // Much later: I forget why I did it like this :-o
-        queueCmd(new GDBCommand("info breakpoints",
-                                        NOTRUNCMD, NOTINFOCMD, BPLIST));
-
-        DBG_DISPLAY("Parsed (BP) <" + QString(buf) + ">");
-        return;
-    }
-
     if (strncmp(buf, "No s", 4) == 0 ||      // "No symbols loaded"
             strncmp(buf, "Sing", 4) == 0)        // Single stepping
     {
         // We don't change state, because this falls out when a run command
         // starts rather than when a run command stops.
-        // We do let the user know what is happening though.
-        //    emit dbgStatus (QString(buf), state_);
         return;
     }
 
@@ -941,10 +935,6 @@ char *GDBController::parseCmdBlock(char *buf)
             char lookup[3] = {BLOCK_START, *(buf+1), 0};
             if ((end = strstr(buf+2, lookup)))
             {
-                // fix this by clobbering the new line
-                // Hmm What did this fix? - it breaks thread handling
-                //FIXME         if (*(end-1) == '\n')
-                //FIXME            *(end-1) = 0;
                 *end = 0;         // Make a null terminated c-string
                 end++;            // The real end!
             }
@@ -1291,14 +1281,13 @@ void GDBController::slotStart(const QString& shell, const QString &application)
 
 // **************************************************************************
 
-void GDBController::slotStop()
+void GDBController::slotStopDebugger()
 {
-    setStateOn(s_shuttingDown);
-    destroyCmds();
-
-    if (dbgProcess_)
+    if (!stateIsOn(s_shuttingDown) && dbgProcess_)
     {
-        setStateOn(s_silent);
+        setStateOn(s_shuttingDown|s_silent);
+        destroyCmds();
+
         pauseApp();
         setStateOn(s_waitTimer);
 
@@ -1336,16 +1325,15 @@ void GDBController::slotStop()
         // We cannot wait forever.
         if (!stateIsOn(s_programExited))
             dbgProcess_->kill(SIGKILL);
+
+        delete dbgProcess_;
+        dbgProcess_ = 0;
+        delete tty_;
+        tty_ = 0;
+
+        state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
+        emit dbgStatus (i18n("Debugger stopped"), state_);
     }
-
-    delete dbgProcess_;
-    dbgProcess_ = 0;
-    delete tty_;
-    tty_ = 0;
-
-    state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
-
-    emit dbgStatus (i18n("Debugger stopped"), state_);
 }
 
 // **************************************************************************
@@ -1937,7 +1925,7 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
 
     if (cmd.startsWith("qu"))
     {
-        slotStop();
+        slotStopDebugger();
         return;
     }
 
