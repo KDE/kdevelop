@@ -386,11 +386,12 @@ void NewMainWindow::fillWindowMenu()
 		list.append(map[string_list[i]]);
 	
 	itt = list.begin();
+	int i = 0;
 	while ( itt != list.end() )
 	{
-		temp = m_pWindowMenu->insertItem( (*itt).fileName() );
+		temp = m_pWindowMenu->insertItem( i < 10 ? QString("&%1 %2").arg(i).arg((*itt).fileName()) : (*itt).fileName() );
 		m_windowList << qMakePair( temp, *itt );
-		
+		++i;
 		++itt;
 	}
 }
