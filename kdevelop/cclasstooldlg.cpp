@@ -34,6 +34,7 @@
 #include <qtooltip.h>
 #include <qpopupmenu.h>
 
+using namespace std;
 
 /*********************************************************************
  *                                                                   *
