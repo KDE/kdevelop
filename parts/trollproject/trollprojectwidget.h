@@ -61,8 +61,10 @@ public:
     QString path;
     QList<GroupItem> groups;
 
+    QStringList subdirs;
     QStringList sources;
     QStringList headers;
+    QStringList forms;
     QStringList interfaces;
 
     FileBuffer m_FileBuffer;
@@ -75,7 +77,7 @@ private:
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType { Sources, Headers, Interfaces };
+    enum GroupType { Sources, Headers, Interfaces, Forms };
 
     GroupItem(QListView *lv, GroupType type, const QString &text);
 
@@ -129,6 +131,8 @@ public:
     GroupItem *createGroupItem(GroupItem::GroupType groupType, const QString &name);
     FileItem *createFileItem(const QString &name);
 
+    void updateProjectFile(QListViewItem *item);
+    void addFileToCurrentSubProject(GroupItem *titem,QString &filename);
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
 

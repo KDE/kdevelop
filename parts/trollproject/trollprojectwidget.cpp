@@ -22,6 +22,9 @@
 #include <qptrstack.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+#include <qdir.h>
+#include <qinputdialog.h>
+#include <qfiledialog.h>
 #include <kdebug.h>
 #include <klistview.h>
 #include <kmessagebox.h>
@@ -120,7 +123,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
              this, SLOT(slotOverviewSelectionChanged(QListViewItem*)) );
     connect( overview, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotOverviewContextMenu(KListView*, QListViewItem*, const QPoint&)) );
-    
+
     //    connect( details, SIGNAL(selectionChanged(QListViewItem*)),
     //             this, SLOT(slotDetailsSelectionChanged(QListViewItem*)) );
     connect( details, SIGNAL(executed(QListViewItem*)),
@@ -140,7 +143,7 @@ TrollProjectWidget::~TrollProjectWidget()
 void TrollProjectWidget::openProject(const QString &dirName)
 {
     SubprojectItem *item = new SubprojectItem(overview, "/");
-    item->subdir = "/";
+    item->subdir = dirName.right(dirName.length()-dirName.findRev('/'));
     item->path = dirName;
     parse(item);
     item->setOpen(true);
@@ -159,7 +162,7 @@ QStringList TrollProjectWidget::allSubprojects()
 {
     int prefixlen = projectDirectory().length()+1;
     QStringList res;
-    
+
     QListViewItemIterator it(overview);
     for (; it.current(); ++it) {
         if (it.current() == overview->firstChild())
@@ -167,7 +170,7 @@ QStringList TrollProjectWidget::allSubprojects()
         QString path = static_cast<SubprojectItem*>(it.current())->path;
         res.append(path.mid(prefixlen));
     }
-    
+
     return res;
 }
 
@@ -176,12 +179,12 @@ QStringList TrollProjectWidget::allFiles()
 {
     QStack<QListViewItem> s;
     QStringList res;
-    
+
     for ( QListViewItem *item = overview->firstChild(); item;
           item = item->nextSibling()? item->nextSibling() : s.pop() ) {
         if (item->firstChild())
             s.push(item->firstChild());
-        
+
         SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
         QString path = spitem->path;
         QListIterator<GroupItem> tit(spitem->groups);
@@ -194,10 +197,9 @@ QStringList TrollProjectWidget::allFiles()
             }
         }
     }
-    
+
     return res;
 }
-
 
 QString TrollProjectWidget::projectDirectory()
 {
@@ -234,9 +236,9 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
             details->takeItem(*it1);
         }
     }
-    
+
     m_shownSubproject = static_cast<SubprojectItem*>(item);
-    
+
     // Insert all GroupItems and all of their children into the view
     QListIterator<GroupItem> it2(m_shownSubproject->groups);
     for (; it2.current(); ++it2) {
@@ -259,7 +261,7 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
     if (pvitem->type() != ProjectItem::File)
         return;
-    
+
     QString dirName = m_shownSubproject->path;
     FileItem *fitem = static_cast<FileItem*>(pvitem);
     m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
@@ -271,26 +273,92 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 {
     if (!item)
         return;
-    
+
     SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
-        
+
     KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
     int idAddSubproject = popup.insertItem(i18n("Add Subproject..."));
     int idBuild = popup.insertItem(i18n("Build"));
     int idQmake = popup.insertItem(i18n("Run qmake"));
     int r = popup.exec(p);
 
-    if (r == idAddSubproject) {
-        ;
-    } else if (r == idBuild) {
-        QString relpath = spitem->path.mid(projectDirectory().length());
+    QString relpath = spitem->path.mid(projectDirectory().length());
+    if (r == idAddSubproject)
+    {
+
+      bool ok = FALSE;
+      QString subdirname = QInputDialog::getText(
+                        tr( "Add Subdir" ),
+                        tr( "Please enter a name for the new subdir." ),
+                        QLineEdit::Normal, QString::null, &ok, this );
+      if ( ok && !subdirname.isEmpty() )
+      {
+        QDir dir(projectDirectory()+relpath);
+        if (!dir.mkdir(subdirname))
+        {
+          KMessageBox::error(this,i18n("Failed to create subdirectory. "
+                                       "Do you have write permission "
+                                       "in the projectfolder?" ));
+          return;
+        }
+        spitem->subdirs.append(subdirname);
+        updateProjectFile(spitem);
+        SubprojectItem *newitem = new SubprojectItem(spitem, subdirname);
+        newitem->subdir = subdirname;
+        newitem->path = spitem->path + "/" + subdirname;
+
+      }
+      else
+        return;
+    }
+    else if (r == idBuild)
+    {
         m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
         m_part->topLevel()->lowerView(this);
-    } else if (r == idQmake) {
-        QString relpath = spitem->path.mid(projectDirectory().length());
+    }
+    else if (r == idQmake)
+    {
         m_part->startQMakeCommand(projectDirectory() + relpath);
         m_part->topLevel()->lowerView(this);
     }
+}
+
+void TrollProjectWidget::updateProjectFile(QListViewItem *item)
+{
+  SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
+  QString relpath = spitem->path.mid(projectDirectory().length());
+  spitem->m_FileBuffer.removeValues("SUBDIRS");
+  spitem->m_FileBuffer.setValues("SUBDIRS",spitem->subdirs,4);
+  spitem->m_FileBuffer.removeValues("SOURCES");
+  spitem->m_FileBuffer.setValues("SOURCES",spitem->sources,4);
+  spitem->m_FileBuffer.removeValues("HEADERS");
+  spitem->m_FileBuffer.setValues("HEADERS",spitem->headers,4);
+  spitem->m_FileBuffer.removeValues("FORMS");
+  spitem->m_FileBuffer.setValues("FORMS",spitem->headers,4);
+  spitem->m_FileBuffer.removeValues("INTERFACES");
+  spitem->m_FileBuffer.setValues("INTERFACES",spitem->headers,4);
+  spitem->m_FileBuffer.saveBuffer(projectDirectory()+relpath+"/"+spitem->subdir+".pro");
+}
+
+void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,QString &filename)
+{
+  FileItem *fitem = createFileItem(filename);
+  titem->files.append(fitem);
+  switch (titem->groupType)
+  {
+    case GroupItem::Interfaces:
+      m_shownSubproject->interfaces.append(filename);
+      break;
+    case GroupItem::Sources:
+      m_shownSubproject->sources.append(filename);
+      break;
+    case GroupItem::Headers:
+      m_shownSubproject->headers.append(filename);
+      break;
+    case GroupItem::Forms:
+      m_shownSubproject->forms.append(filename);
+      break;
+  }
 }
 
 
@@ -300,34 +368,83 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         return;
 
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
-    
+
     if (pvitem->type() == ProjectItem::Group) {
-        
+
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
-        QString title;
+        QString title,ext;
         switch (titem->groupType) {
         case GroupItem::Interfaces:
             title = i18n("Interfaces");
+            ext = "*.*";
             break;
         case GroupItem::Sources:
             title = i18n("Sources");
+            ext = "*.cpp *.c";
             break;
         case GroupItem::Headers:
             title = i18n("Headers");
+            ext = "*.h *.hpp";
+            break;
+        case GroupItem::Forms:
+            title = i18n("Forms");
+            ext = "*.ui";
             break;
         default: ;
         }
-            
+
         KPopupMenu popup(title, this);
-        int idAddFile = popup.insertItem(i18n("Add File..."));
+        int idInsExistingFile = popup.insertItem(i18n("Insert existing files..."));
+        int idInsNewFile = popup.insertItem(i18n("Insert new file..."));
         int r = popup.exec(p);
-        if (r == idAddFile) {
-            ;
-                //   slotItemExecuted(m_shownSubproject); // update list view
+        QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+        if (r == idInsExistingFile)
+        {
+          QFileDialog *dialog = new QFileDialog(projectDirectory()+relpath,
+                                                "Images ("+ext+")",
+                                                this,
+                                                "Insert existing "+ title,
+                                                TRUE);
+          dialog->setMode(QFileDialog::ExistingFiles);
+          dialog->exec();
+          QStringList files = dialog->selectedFiles();
+          QString s;
+          for (unsigned int i=0;i<files.count();i++)
+          {
+            QString copyCommand("cp " + files[i] + " " + projectDirectory()+relpath);
+            //m_part->makeFrontend()->queueCommand(projectDirectory()+relpath,copyCommand);
+            QString filename = files[i].right(files[i].length()-files[i].findRev('/'));
+            addFileToCurrentSubProject(titem,filename);
+          }
+
+          updateProjectFile(m_shownSubproject);
+          slotOverviewSelectionChanged(m_shownSubproject);
         }
-        
+        if (r == idInsNewFile)
+        {
+          bool ok = FALSE;
+          QString filename = QInputDialog::getText(
+                            tr( "Insert New File"),
+                            tr( "Please enter a name for the new file." ),
+                            QLineEdit::Normal, QString::null, &ok, this );
+          if ( ok && !filename.isEmpty() )
+          {
+            QFile newfile(projectDirectory()+relpath+'/'+filename);
+            if (!newfile.open(IO_WriteOnly))
+            {
+              KMessageBox::error(this,i18n("Failed to create new file. "
+                                           "Do you have write permission "
+                                           "in the projectfolder?" ));
+              return;
+            }
+            addFileToCurrentSubProject(titem,filename);
+            updateProjectFile(m_shownSubproject);
+            slotOverviewSelectionChanged(m_shownSubproject);
+          }
+        }
+
     } else if (pvitem->type() == ProjectItem::File) {
-        
+
         FileItem *fitem = static_cast<FileItem*>(pvitem);
 
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
@@ -335,11 +452,11 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
-        
+
         int r = popup.exec(p);
         if (r == idRemoveFile)
             removeFile(m_shownSubproject, fitem);
-        
+
     }
 }
 
@@ -373,7 +490,6 @@ FileItem *TrollProjectWidget::createFileItem(const QString &name)
     return fitem;
 }
 
-
 void TrollProjectWidget::emitAddedFile(const QString &fileName)
 {
     emit m_part->addedFileToProject(fileName);
@@ -399,6 +515,9 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     if (values != "")
       item->interfaces = QStringList::split(' ',values);
 
+    values = item->m_FileBuffer.getValues("FORMS");
+    if (values != "")
+      item->forms = QStringList::split(' ',values);
 
     values = item->m_FileBuffer.getValues("SOURCES");
     if (values != "")
@@ -411,9 +530,9 @@ void TrollProjectWidget::parse(SubprojectItem *item)
 
 
     // Create list view items
+    GroupItem *titem = createGroupItem(GroupItem::Interfaces, "Interfaces");
+    item->groups.append(titem);
     if (!item->interfaces.isEmpty()) {
-        GroupItem *titem = createGroupItem(GroupItem::Interfaces, "Interfaces");
-        item->groups.append(titem);
         QStringList l = item->interfaces;
         QStringList::Iterator it;
         for (it = l.begin(); it != l.end(); ++it) {
@@ -421,9 +540,19 @@ void TrollProjectWidget::parse(SubprojectItem *item)
             titem->files.append(fitem);
         }
     }
+    titem = createGroupItem(GroupItem::Forms, "Forms");
+    item->groups.append(titem);
+    if (!item->forms.isEmpty()) {
+        QStringList l = item->forms;
+        QStringList::Iterator it;
+        for (it = l.begin(); it != l.end(); ++it) {
+            FileItem *fitem = createFileItem(*it);
+            titem->files.append(fitem);
+        }
+    }
+    titem = createGroupItem(GroupItem::Sources, "Sources");
+    item->groups.append(titem);
     if (!item->sources.isEmpty()) {
-        GroupItem *titem = createGroupItem(GroupItem::Sources, "Sources");
-        item->groups.append(titem);
         QStringList l = item->sources;
         QStringList::Iterator it;
         for (it = l.begin(); it != l.end(); ++it) {
@@ -431,9 +560,9 @@ void TrollProjectWidget::parse(SubprojectItem *item)
             titem->files.append(fitem);
         }
     }
+    titem = createGroupItem(GroupItem::Headers, "Headers");
+    item->groups.append(titem);
     if (!item->headers.isEmpty()) {
-        GroupItem *titem = createGroupItem(GroupItem::Headers, "Headers");
-        item->groups.append(titem);
         QStringList l = item->headers;
         QStringList::Iterator it;
         for (it = l.begin(); it != l.end(); ++it) {
@@ -448,6 +577,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     if (values != "")
     {
         QStringList lst = QStringList::split( ' ', values );
+        item->subdirs = lst;
         QStringList::Iterator it;
         for (it = lst.begin(); it != lst.end(); ++it) {
             SubprojectItem *newitem = new SubprojectItem(item, (*it));
