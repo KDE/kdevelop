@@ -20,14 +20,21 @@
   #include <string.h>
   #include <ctype.h>
   #include "tokenizer.h"
+  #include "FlexLexer.h"
 
+  class MyLexer : yyFlexLexer
+  {
+    public:
+    int yyinput() { return yyFlexLexer::yyinput(); }
+  };
 
   int cont=0;           /* Continue parsing defines. */
   int line_num=1;       /* Counter for the current line being parsed         */
   int comment_start=0;  /* Line where a comment starts (for nested comments) */
 
   /* Function prototypes */
-  char *return_id(char *yytext_id);
+  void eatPreparser(MyLexer *lex);
+  void eatComment(MyLexer *lex);
 %}
 
 WS           [ \t\r]+
@@ -45,10 +52,8 @@ CCHAR [^'\\\n]|{ESCAPE_SEQUENCE}
 SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %option yylineno
-%x comment
-%x define
 %%
-    /*==============> Strip whitespace and tabs <==============*/
+    /*==============> Strip whitespace <==============*/
 {WS}         {}
 
     /*==============> Special keyword <==============*/
@@ -75,6 +80,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "__BEGIN_DECLS"  {}
 "__END_DECLS"    {}
 "inline"         {}
+"volatile"       {}
 
     /*==============> String <==============*/
 "L"?["]{SCHAR}*["]     {return STRING;}
@@ -121,27 +127,84 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
     /*==============> Inrease the line counter at CR <==============*/
 "\n"         {line_num++;}
  
-    /*==============> Skip defines <==============*/   
-"#"[acdeimpsuw ]       BEGIN(define);
-<define>[^\\\n]*       
-<define><<EOF>>        yyterminate();
-<define>"\\"           {cont=1;}
-<define>"\n"           {if(cont==1) 
-                          cont=0;
-                        else 
-                          BEGIN(INITIAL);}
+    /*==============> Skip preprocessor directives <==============*/   
+"#"[acdeimpsuw ]     eatPreparser((MyLexer *)this);
  
     /*==============> Strip // comments <==============*/
 "//"(.)*[\n<<EOF>>] {line_num++;}
 
     /*==============> Strip comments <==============*/
-"/*"                   BEGIN(comment);
-<comment>[^*\n]*        /* eat anything that's not a '*' */ 
-<comment>"*"+[^*/\n]*   /* eat up '*'s not followed by '/'s */ 
-<comment>\n             ++line_num;
-<comment>"*"+"/"        BEGIN(INITIAL);
+"/*"                 eatComment((MyLexer *)this);
 
     /*==============> All other characters are ignored <==============*/
 .            {}
 
 %%
+
+void eatPreparser(MyLexer *lex)
+{
+  char c='\0'; /* The current character from the input stream */
+  bool foundSlash=false;
+  bool cont=false;
+  bool done=false;
+
+  while ( !done )
+  {
+    c=lex->yyinput();
+
+    switch( c )
+    {
+      case '\\':
+        // Take care of escaped '\'
+        cont = !cont;
+        break;
+      case '\n':
+        done = !cont;
+        cont = false;
+        break;
+      case '/':
+        foundSlash = true;
+        break;
+      case '*':
+        if( foundSlash )
+          eatComment(lex);
+
+        foundSlash = false;
+        break;
+      case EOF:
+        done = 1;
+      default:
+        foundSlash = false;
+        break;
+    }
+  }
+}
+
+void eatComment(MyLexer *lex)
+{
+  bool done = false;  /* Tells when to exit the loop */
+  bool asteriscFound = false; /* Flags that we have found an asterisc. */
+  char c='\0'; /* The current character from the input stream */
+ 
+  while ( !done )
+  {
+    c=lex->yyinput();
+
+    switch( c )
+    {
+      case '*':
+        asteriscFound = 1;
+        break;
+      case '/':
+        done = asteriscFound;
+        asteriscFound = 0;
+        break;
+      case EOF:
+        done = 1;
+        break;
+      default:
+        asteriscFound = 0;
+        break;
+    }
+  }
+}
