@@ -1,3 +1,13 @@
+/***************************************************************************
+ *   Copyright (C) 2003 by Jens Dagerbo                                    *
+ *   jens.dagerbo@swipnet.se                                               *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #include <qwhatsthis.h>
 
@@ -6,13 +16,13 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <ktexteditor/markinterface.h>
+#include <ktexteditor/editinterface.h>
 #include <ktexteditor/document.h>
 #include <kaction.h>
 
 #include <kdevpartcontroller.h>
-#include "kdevcore.h"
-#include "kdevmainwindow.h"
-
+#include <kdevcore.h>
+#include <kdevmainwindow.h>
 
 #include "bookmarks_widget.h"
 #include "bookmarks_part.h"
@@ -25,7 +35,6 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 	: KDevPlugin("bookmarks", "bookmarks", parent, name ? name : "BookmarksPart" )
 {
 	setInstance(BookmarksFactory::instance());
-//	setXMLFile("kdevpart_bookmarks.rc");
 
 	_widget = new BookmarksWidget(this);
 
@@ -35,11 +44,7 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 	QWhatsThis::add(_widget, i18n("Bookmarks\n\n"
 			"The bookmark viewer shows all the source bookmarks in the project."));
 
-	mainWindow()->embedSelectView(_widget, i18n("Bookmarks"), i18n("source bookmarks in the project"));
-
-//	KAction * action = new KAction( i18n("Testing bookmarks..."), CTRL+ALT+Key_L, this,
-//		SLOT( marksChanged() ), actionCollection(), "bookmarks" );
-
+	mainWindow()->embedSelectView(_widget, i18n("Bookmarks"), i18n("source bookmarks"));
 
 	// ===================
 
@@ -52,10 +57,19 @@ BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringLis
 
 	connect( partController(), SIGNAL( partAdded( KParts::Part * ) ), this, SLOT( partAdded( KParts::Part * ) ) );
 
-	// load bookmarks from file
+	connect( _widget, SIGNAL( removeAllBookmarksForURL( const KURL & ) ),
+		this, SLOT( removeAllBookmarksForURL( const KURL & ) ) );
+	connect( _widget, SIGNAL( removeBookmarkForURL( const KURL &, int ) ),
+		this, SLOT( removeBookmarkForURL( const KURL &, int ) ) );
+
+	// if there is a project loaded, read bookmarks from project file
+
+	// then ... setBookmarksForAllURLs();
+
+	// and ... storeBookmarksForAllURLs();
+
 
 }
-
 
 BookmarksPart::~BookmarksPart()
 {
@@ -66,30 +80,28 @@ void BookmarksPart::partAdded( KParts::Part * part )
 {
 	kdDebug(0) << "BookmarksPart::partAdded()" << endl;
 
-	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>(part) )
+	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( part ) )
 	{
-		if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>(ro_part) )
+		if ( setBookmarksForURL( ro_part ) )
 		{
-			if ( EditorData * data = _editorMap.find( ro_part->url().path() ) )
-			{
-				// we've seen this one before, apply stored bookmarks
-				_settingMarks = true;
-
-				QValueListIterator<int> it = data->marks.begin();
-				while ( it != data->marks.end() )
-				{
-					kdDebug(0) << "Setting bookmark. Line: " << *it << endl;
-					mi->addMark( *it, KTextEditor::MarkInterface::markType01 );
-					++it;
-				}
-
-				_settingMarks = false;
-			}
-
 			// connect to this editor
 			KTextEditor::Document * doc = static_cast<KTextEditor::Document*>( ro_part );
 			connect( doc, SIGNAL( marksChanged() ), this, SLOT( marksChanged() ) );
+
+			// workaround for a katepart oddity where it drops all bookmarks on 'reload'
+			connect( doc, SIGNAL( completed() ), this, SLOT( reload() ) );
 		}
+	}
+}
+
+void BookmarksPart::reload()
+{
+	kdDebug(0) << "BookmarksPart::reload()" << endl;
+
+    QObject * senderobj = const_cast<QObject*>( sender() );
+	if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( senderobj ) )
+	{
+		setBookmarksForURL( ro_part );
 	}
 }
 
@@ -112,10 +124,10 @@ void BookmarksPart::marksChanged()
 			{
 				_widget->updateURL( data );
 			}
-            else
-            {
-                _widget->removeURL( ro_part->url() );
-            }
+			else
+			{
+				_widget->removeURL( ro_part->url() );
+			}
 		}
 		else
 		{
@@ -123,7 +135,7 @@ void BookmarksPart::marksChanged()
 				<< "MarkInterface == " << mi << endl
 				<< "examining all loaded parts instead" << endl;
 
-			examineLoadedParts();
+			storeBookmarksForAllURLs();
 			_widget->update( _editorMap );
 
 			return;
@@ -139,7 +151,7 @@ void BookmarksPart::projectOpened()
 {
 	kdDebug(0) << "BookmarksPart::projectOpened()" << endl;
 
-	// here we need to retrieved saved bookmarks
+	// here we need to retrieve saved bookmarks
 }
 
 void BookmarksPart::projectClosed()
@@ -149,10 +161,71 @@ void BookmarksPart::projectClosed()
 	// here we need to save bookmarks
 }
 
+void BookmarksPart::removeAllBookmarksForURL( KURL const & url )
+{
+	kdDebug(0) << "BookmarksPart::removeAllBookmarksForURL()" << endl;
+
+	_editorMap.remove( url.path() );
+
+	setBookmarksForURL( partForURL( url ) );
+	_widget->removeURL( url );
+}
+
+void BookmarksPart::removeBookmarkForURL( KURL const & url, int line )
+{
+	kdDebug(0) << "BookmarksPart::removeBookmarkForURL()" << endl;
+
+	if ( EditorData * data = _editorMap.find( url.path() ) )
+	{
+		QValueListIterator< QPair<int,QString> > it = data->marks.begin();
+		while ( it != data->marks.end() )
+		{
+			if ( (*it).first == line )
+			{
+				kdDebug(0) << "removing bookmark. Line: " << line << endl;
+				data->marks.remove( it );
+				break;
+			}
+			++it;
+		}
+		setBookmarksForURL( partForURL( url ) );
+		_widget->updateURL( data );
+	}
+}
+
+bool BookmarksPart::setBookmarksForURL( KParts::ReadOnlyPart * ro_part )
+{
+	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>(ro_part) )
+	{
+		_settingMarks = true;
+
+		mi->clearMarks();
+
+		if ( EditorData * data = _editorMap.find( ro_part->url().path() ) )
+		{
+			// we've seen this one before, apply stored bookmarks
+
+			QValueListIterator< QPair<int,QString> > it = data->marks.begin();
+			while ( it != data->marks.end() )
+			{
+				kdDebug(0) << "Setting bookmark. Line: " << (*it).first << endl;
+				mi->addMark( (*it).first, KTextEditor::MarkInterface::markType01 );
+				++it;
+			}
+		}
+		_settingMarks = false;
+
+		// true == this is a MarkInterface
+		return true;
+	}
+	return false;
+}
 
 EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part )
 {
-	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>(ro_part) )
+	KTextEditor::EditInterface * ed = dynamic_cast<KTextEditor::EditInterface *>( ro_part );
+
+	if ( KTextEditor::MarkInterface * mi = dynamic_cast<KTextEditor::MarkInterface *>( ro_part ) )
 	{
 		EditorData * data = new EditorData;
 		data->url = ro_part->url();
@@ -169,8 +242,16 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 		{
 			if ( it.current()->type == KTextEditor::MarkInterface::markType01 )
 			{
-				kdDebug(0) << "Found bookmark. Line: " << it.current()->line << endl;
-				data->marks.append( it.current()->line );
+				int line = it.current()->line;
+				QString textLine;
+				if ( ed )
+				{
+					textLine = ed->textLine( line );
+				}
+
+				kdDebug(0) << "Found bookmark. Line: " << line << endl;
+
+				data->marks.append( qMakePair( line, textLine) );
 			}
 			++it;
 		}
@@ -193,7 +274,23 @@ EditorData * BookmarksPart::storeBookmarksForURL( KParts::ReadOnlyPart * ro_part
 	return 0;
 }
 
-void BookmarksPart::examineLoadedParts()
+void BookmarksPart::setBookmarksForAllURLs()
+{
+	if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
+	{
+		QPtrListIterator<KParts::Part> it( *partlist );
+		while ( KParts::Part* part = it.current() )
+		{
+			if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart *>( part ) )
+			{
+				setBookmarksForURL( ro_part );
+			}
+			++it;
+		}
+	}
+}
+
+void BookmarksPart::storeBookmarksForAllURLs()
 {
 	if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
 	{
@@ -209,6 +306,21 @@ void BookmarksPart::examineLoadedParts()
 	}
 }
 
+// reimplemented from PartController::partForURL to avoid linking
+KParts::ReadOnlyPart * BookmarksPart::partForURL( KURL const & url )
+{
+    QPtrListIterator<KParts::Part> it( *partController()->parts() );
+    while( it.current() )
+    {
+        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
+        if (ro_part && url == ro_part->url())
+        {
+            return ro_part;
+        }
+        ++it;
+    }
+    return 0;
+}
 
 
 #include "bookmarks_part.moc"

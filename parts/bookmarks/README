@@ -15,8 +15,6 @@ Planned development:
 
 # Real persistance - store the bookmarks to the .kdevelop file
 
-# Tooltips to display full path
+# Grouping of bookmarks (?)
 
-# Rightclick events for the navigation view to clear bookmarks (?)
-
-# Tooltips to display source context for bookmark (?)
+# Possibility of adding a "comment" to a bookmark (?)
