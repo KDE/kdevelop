@@ -1,3 +1,12 @@
+2002-10-14 Victor Röder <victor_roeder@gmx.de>
+	* beautified some dialogs
+	  - cppsupport/cppaddmethoddlgbase.ui
+	  - tools/addtooldlg.ui (again)
+	  - autoproject/addaplicationdlgbase.ui
+	  - autoproject/addservicedlgbase.ui
+	  - autoproject/addsubprojectdlgbase.ui
+	* added README to autoproject directory
+	  
 2002-10-11 Caleb Tennis <caleb@aei-tech.com>
 	* modified the splashscreen to not stradle multiple screens
 	  with Xinerama installed
