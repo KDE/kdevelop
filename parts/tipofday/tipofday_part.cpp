@@ -12,6 +12,8 @@
 
 
 #include <kdevcore.h>
+#include <kdevapi.h>
+#include <kdevcore.h>
 
 
 #include "tipofday_factory.h"
@@ -35,6 +37,8 @@ TipOfDayPart::TipOfDayPart(KDevApi *api, QObject *parent, const char *name)
   action->setWhatsThis(i18n("Tip of the day\n\n"
                             "Will display another good tip \n"
                             "contributed by KDevelop users."));
+
+  connect(api->core, SIGNAL(coreInitialized()), this, SLOT(showOnStart()));
 }
 
 
@@ -64,6 +68,7 @@ void TipOfDayPart::showTip()
       QObject::connect(_tipWidget->NextButton, SIGNAL(clicked()), this, SLOT(nextTip()));
       QObject::connect(_tipWidget->RunOnStart, SIGNAL(toggled(bool)), this, SLOT(toggleOnStart(bool)));
     }
+
   if (!_tipDatabase)
     _tipDatabase = new KTipDatabase("kdevelop/tips");
 
@@ -86,6 +91,15 @@ void TipOfDayPart::toggleOnStart(bool on)
   config->setGroup("TipOfDay");
   config->writeEntry("RunOnStart", on);
   config->sync();
+}
+
+
+void TipOfDayPart::showOnStart()
+{
+  KConfig *config = kapp->config();
+  config->setGroup("TipOfDay");
+  if (config->readBoolEntry("RunOnStart", true))
+    showTip();
 }
 
 

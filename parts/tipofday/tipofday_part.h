@@ -34,6 +34,7 @@ private slots:
 
   void nextTip();
   void toggleOnStart(bool on);
+  void showOnStart();
 
 
 private:
