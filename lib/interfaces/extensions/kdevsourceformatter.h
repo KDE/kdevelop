@@ -28,6 +28,7 @@ public:
 	:KDevPlugin(info, parent, name) {}
 
     virtual QString formatSource(const QString text) = 0;
+    virtual QString indentString() const = 0;
 };
 
 #endif
