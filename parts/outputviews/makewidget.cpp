@@ -439,8 +439,8 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     }
     else if ( fName.contains( "/" ) )
     {
-        // assume relative path to the project dir
-        name = m_part->project()->projectDirectory() + "/" + fName;
+        // assume relative path to the build dir
+        name = m_part->project()->buildDirectory() + "/" + fName;
     }
     else
     {
