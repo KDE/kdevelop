@@ -875,6 +875,8 @@ void CProject::updateMakefileAm(const QString& makefile)
           QString type=getProjectType();
           if( (type == "kio_slave") )
             stream << "kde_module_LTLIBRARIES = kio_" << libRootName << ".la\n\n";
+          else if( (type == "kc_module") )
+            stream << "kde_module_LTLIBRARIES = kcm_" << libRootName << ".la\n\n";
           else
             stream << "lib_LTLIBRARIES = lib" << libRootName << ".la\n\n";
 
@@ -899,6 +901,8 @@ void CProject::updateMakefileAm(const QString& makefile)
           {
             if( (type == "kio_slave") )
               stream << "kio_" << libRootName << "_la_METASOURCES=AUTO\n\n";
+            else if( (type == "kc_module") )
+              stream << "libkcm_" << libRootName << "_la_METASOURCES=AUTO\n\n";
             else
               stream << "lib" << libRootName << "_la_METASOURCES = AUTO\n\n";
           }
@@ -908,6 +912,8 @@ void CProject::updateMakefileAm(const QString& makefile)
             {
               if( (type == "kio_slave") )
                 stream << "kio_" << libRootName <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
+              else if( (type == "kc_module") )
+                stream << "libkcm_" << libRootName <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
               else
                 stream << "lib" << libRootName << "_la_METASOURCES = USE_AUTOMOC\n\n";
             }
@@ -918,6 +924,12 @@ void CProject::updateMakefileAm(const QString& makefile)
             stream << "kio_" << libRootName << "_la_SOURCES = " << sources << "\n";
             stream << "kio_" << libRootName << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
             stream << "kio_" << libRootName << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+          }
+          else if( (type == "kc_module") )
+          {
+            stream << "libkcm_" << libRootName << "_la_SOURCES = " << sources << "\n";
+            stream << "libkcm_" << libRootName << "_la_LIBADD = " << getLDADD() << "\n\n";
+            stream << "libkcm_" << libRootName << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else
             stream << "lib" << libRootName << "_la_SOURCES = " << sources << "\n";
@@ -1565,8 +1577,8 @@ bool CProject::isKDEProject()
 }
 bool CProject::isKDE2Project()
 {
-  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kpart_plugin")
-      return true;
+  if (getProjectType()=="normal_kde2" || getProjectType()=="mini_kde2" || getProjectType()=="mdi_kde2" || getProjectType()=="kicker_app" || getProjectType()=="kio_slave" || getProjectType()=="kc_module" || getProjectType()=="kpart_plugin")
+     return true; 
   return false;
 }
 bool CProject::isQtProject(){

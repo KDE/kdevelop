@@ -75,11 +75,11 @@ if ($processes{APPLICATION} =~/customproj/){
 }
 else{
   unpackFiles ("template.tar");
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|sharedlib/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|kcmodule|sharedlib/) {
     unpackFiles ("admin.tar");
   }
 
-  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|^kpart$|kioslave/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|^kpart$|kioslave|kcmodule/) {
     changeMiniApp();
   }
   elsif ($processes{APPLICATION} =~ /kde2normal|kde2mdi/)
@@ -163,6 +163,7 @@ sub setupDefaultChangings
   $changings{"hello_"}= $nameLittle . "_";
   $changings{"gnome-hello"}= $nameLittle;
   $changings{"GNOMEHELLO"}= $nameBig;
+  $changings{"LOCATION"}= "Internet"; ############# FIX ME
 }
 
 #the subroutine for replacing words in files
@@ -490,7 +491,7 @@ sub changeNormalApp {
   {
     replaceValuesInFile(\%changings, "configure.in");
   }
-  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi|kickerapp|kpart|kioslave/)
+  if ($processes{APPLICATION} =~ /kde2normal|kde2mdi|kickerapp|kpart|kioslave|kcmodule/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
@@ -582,7 +583,7 @@ sub changeMiniApp {
   #Replacements in overDirectory
   chdir ($overDirectory);
   replaceValuesInFile(\%changings, "Makefile.am");
-  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|kpart|kioslave/)
+  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|kpart|kioslave|kcmodule/)
   {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
@@ -592,12 +593,12 @@ sub changeMiniApp {
   chdir ($underDirectory);
 
 
-  if ($processes{APPLICATION} =~ /kickerapp/)
+  if ($processes{APPLICATION} =~ /kickerapp|kcmodule/)
   {
     rename ("skel.desktop", $nameLittle.".desktop");
     replaceValuesInFile(\%changings, "$nameLittle.desktop");
   }
-  if ($processes{APPLICATION} =~ /kpart|kioslave/)
+  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule/)
   {
     if ($processes{APPLICATION} =~ /kpart/)
         {

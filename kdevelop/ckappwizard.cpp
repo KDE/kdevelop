@@ -208,6 +208,7 @@ void CKAppWizard::initPages()
   kickeritem = new QListViewItem( kdeentry, i18n("KDE 2 Kicker Applet"));
   kpartitem = new QListViewItem( kdeentry, i18n("Konqueror Plugin"));
   kioslaveitem = new QListViewItem(kdeentry, i18n("KDE 2 Kio Slave"));
+  kcmoduleitem = new QListViewItem(kdeentry, i18n("KDE 2 KControl Module"));
   applications->setFrameStyle( QListView::Panel | QListView::Sunken );
   applications->setLineWidth( 2 );
 
@@ -1148,6 +1149,9 @@ void CKAppWizard::generateEntries(const QString &filename) {
     else if (kioslaveitem->isSelected()) {
       entries << "kioslave\n";
     }
+    else if (kcmoduleitem->isSelected()) {
+      entries << "kcmodule\n";
+    }
 //    else if (sharedlibitem->isSelected()) {
 //      entries << "sharedlib\n";
 //    }
@@ -1159,7 +1163,7 @@ void CKAppWizard::generateEntries(const QString &filename) {
     }
 
     if (kpartitem->isSelected()||kickeritem->isSelected()||qt2normalitem->isSelected() || qt2mdiitem->isSelected() || kde2miniitem->isSelected() ||
-    kioslaveitem->isSelected()||kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
+    kioslaveitem->isSelected()||kcmoduleitem->isSelected()||kde2normalitem->isSelected() || kde2mdiitem->isSelected() || qextmdiitem->isSelected())
     {
       entries << "CONFIGARG\n";
 
@@ -1414,6 +1418,9 @@ void CKAppWizard::okPermited()
   else if (kioslaveitem->isSelected()) {
     copysrc = locate("appdata", "templates/kioslave.tar.gz");
   }
+  else if (kcmoduleitem->isSelected()) {
+    copysrc = locate("appdata", "templates/kcmodule.tar.gz");
+  }
 //  else if (sharedlibitem->isSelected()) {
 //    copysrc = locate("appdata", "templates/sharedlib.tar.gz");
 //  }
@@ -1436,7 +1443,7 @@ void CKAppWizard::okPermited()
         if (QFileInfo(adminsrc).exists())
         {
           p << "cp";
-          p << "'" + adminsrc + "'"; 			
+          p << "'" + adminsrc + "'";
           p << "'" + admindes + "'";
         }
         else
@@ -1576,7 +1583,7 @@ void CKAppWizard::removeSources(const QString &dir)
     file.remove (dir + "/" + nametext + "/app.c");
     file.remove (dir + "/" + nametext + "/app.h");
   }
-  if( kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected()/*||sharedlibitem->isSelected()*/){
+  if( kickeritem->isSelected() || kpartitem->isSelected()||kioslaveitem->isSelected()||kcmoduleitem->isSelected()/*||sharedlibitem->isSelected()*/){
         file.remove (dir + "/" + nametext + "/main.cpp");
   }
 }
@@ -1720,7 +1727,33 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 KIO Slave.\nKIOSlaves are the foundation for all protocols in KDE2."));
+    apphelp->setText (i18n("Create a KDE-2 KIO Slave.\n"
+                      "KIOSlaves are the foundation for all protocols in KDE2."));
+  }
+  else if (kcmoduleitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
+  {
+    pm.load(locate("appdata", "pics/kcmodule.png"));
+    widget1b->setBackgroundPixmap(pm);
+    apidoc->setChecked(true);
+    datalink->setEnabled(false);
+    datalink->setChecked(false);
+    progicon->setEnabled(false);
+    progicon->setChecked(false);
+    miniicon->setEnabled(false);
+    miniicon->setChecked(false);
+    miniload->setEnabled(false);
+    iconload->setEnabled(false);
+    lsmfile->setChecked(true);
+    gnufiles->setChecked(true);
+    userdoc->setChecked(true);
+    generatesource->setChecked(true);
+    generatesource->setEnabled(true);
+    if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
+       m_finishButton->setEnabled(true);
+    }
+    apphelp->setText (i18n("Create a KDE-2 Control Center Module.\n"
+    									"This template enables you to write your own modules"
+    									"to add new system-wide configuration dialogs."));
   }
   else if (kpartitem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -1743,7 +1776,9 @@ void CKAppWizard::slotApplicationClicked() {
     if (strcmp(nameline->text(), "") && strcmp (m_cancelButton->text(), i18n("Exit"))) {
        m_finishButton->setEnabled(true);
     }
-    apphelp->setText (i18n("Create a KDE-2 KPart Plugin. \nTo create a generic plugin for the Konqeror web browser use this template.  This template can also be modified to create generic plugins."));
+    apphelp->setText (i18n("Create a KDE-2 KPart Plugin. \nTo create a generic plugin "
+    									"for the Konqeror web browser use this template.  This template"
+    									"can also be modified to create generic plugins."));
   }
   else if (kickeritem->isSelected() && strcmp (m_cancelButton->text(), i18n("Exit")))
   {
@@ -2266,6 +2301,9 @@ void CKAppWizard::slotProcessExited() {
   }
   else if (kioslaveitem->isSelected()){
     project->setProjectType("kio_slave");
+  }
+  else if (kcmoduleitem->isSelected()){
+    project->setProjectType("kc_module");
   }
 //  else if (sharedlibitem->isSelected()){
 //    project->setProjectType("shared_lib");

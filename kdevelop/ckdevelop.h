@@ -613,7 +613,7 @@ public:
   /** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
   /** click on the main window tabs: header, source,documentation or tools*/
-  void slotViewSelected(QWidget* pView, int docType);
+  void slotViewSelected(QWidget* pView/*, int docType*/);
   /** click on the output window tabs: messages, stdout, stderr, breakpoint,
       disassemble, frame stack*/
   void slotOTabSelected(int item);

@@ -57,7 +57,7 @@ DocViewMan::DocViewMan( CKDevelop* parent)
 
   m_MDICoverList.setAutoDelete(true);
 
-  connect( this, SIGNAL(sig_viewGotFocus(QWidget*,int)), m_pParent, SLOT(slotViewSelected(QWidget*,int)) );
+  connect( this, SIGNAL(sig_viewGotFocus(QWidget*)), m_pParent, SLOT(slotViewSelected(QWidget*)) );
 }
 
 //------------------------------------------------------------------------------

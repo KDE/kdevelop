@@ -3570,7 +3570,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   
 }
 
-void CKDevelop::slotViewSelected(QWidget* /*pView*/, int /* docType */)
+void CKDevelop::slotViewSelected(QWidget* pView /*, int docType */)
 {
   debug("CKDevelop::slotViewSelected !\n");
 

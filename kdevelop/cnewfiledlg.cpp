@@ -57,7 +57,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
   list_linux->insertItem(i18n("lsm File - Linux Software Map"));
   list_linux->insertItem(i18n("kdelnk-File - for the KDE-Menu"));
   list_linux->insertItem(i18n("desktop-File - for the KDE-Menu"));
-  list_linux->insertItem(i18n("Icon (*.xpm)"));
+  list_linux->insertItem(i18n("Icon (*.png, *.xpm)"));
   list_linux->setMultiSelection( FALSE );
   list_linux->setCurrentItem(0);
 
@@ -298,8 +298,8 @@ void CNewFileDlg::slotOKClicked(){
     KMessageBox::error(this,i18n("The filename must end with .ui !"));
     return;
   }
-  if ( (fileType() == "ICON") && (text.right(4) != ".xpm")){
-    KMessageBox::error(this,i18n("The filename must end with .xpm !"));
+  if ( (fileType() == "ICON") && (text.right(4) != ".png" || text.right(4) != ".xpm")){
+    KMessageBox::error(this,i18n("The filename must end with .png or .xpm !"));
     return;
   }
   if ( (fileType() == "LEXICAL") && !(text.right(4) == ".l++" || text.right(4) == ".lxx" || text.right(3) == ".ll" || text.right(2) == ".l")){
@@ -442,7 +442,7 @@ QString CNewFileDlg::fileType(){
     if (str == i18n("lsm File - Linux Software Map")){
       return "LSM";
     }
-    if (str == i18n("Icon (*.xpm)")){
+    if (str == i18n("Icon (*.png, *.xpm)")){
       return "ICON";
     }
     
@@ -524,7 +524,7 @@ void CNewFileDlg::slotEditTextChanged(const QString& text)
 	  }
 	if (filetype == "ICON" ) 
 	  {
-	    edit->setText(text + QString(".xpm"));
+	    edit->setText(text + QString(".png"));
 	  }
 	if (filetype == "DIALOG" ) 
 	  {
