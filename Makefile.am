@@ -8,6 +8,19 @@ appsdir = $(kde_appsdir)/Development
 mime_DATA = x-kdevelop.desktop
 mimedir = $(kde_mimedir)/application
 
+install-data-local:
+	@echo ""
+	@echo ""
+	@echo "******************* Important *********************"
+	@echo ""
+	@echo "KDevelop 3.0 alpha1 has been installed."
+	@echo ""
+	@echo "Note: The binary name for the alpha releases is"
+	@echo "      'gideon'.  This will revert to 'kdevelop'"
+	@echo "      once 3.0 is considered stable."
+	@echo ""
+	@echo "***************************************************"
+
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
 	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in
 
