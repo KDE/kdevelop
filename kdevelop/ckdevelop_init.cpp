@@ -280,7 +280,7 @@ void CKDevelop::init(){
   initMenu();
   initToolbar();
   initStatusBar();
-
+	initWhatsThis();
 
   // initialize output_view_pos
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
@@ -684,7 +684,7 @@ void CKDevelop::initMenu(){
 void CKDevelop::initToolbar(){
   QPixmap pix;
   QString  path;
-  
+ 
 //  toolBar()->insertButton(Icon("filenew.xpm"),ID_FILE_NEW, false,i18n("New"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/openprj.xpm");
   toolBar()->insertButton(pix,ID_PROJECT_OPEN, true,i18n("Open Project"));
@@ -719,11 +719,21 @@ void CKDevelop::initToolbar(){
   toolBar()->insertButton(pix,ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/make.xpm");
   toolBar()->insertButton(pix,ID_BUILD_MAKE, false,i18n("Make"));
+  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/rebuild.xpm");
+  toolBar()->insertButton(pix,ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/run.xpm");
   toolBar()->insertButton(pix,ID_BUILD_RUN, false,i18n("Run"));
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/stop.xpm");
   toolBar()->insertButton(pix,ID_BUILD_STOP, false,i18n("Stop"));
+  toolBar()->insertSeparator();
+  
+  whats_this = new QWhatsThis;  
+  QWidget *btnwhat = (QWidget*)whats_this->whatsThisButton(toolBar());
+  QToolTip::add(btnwhat, i18n("What's this...?"));
+  toolBar()->insertWidget(ID_HELP_WHATS_THIS, btnwhat->sizeHint().width(), btnwhat);
+  toolBar()->alignItemRight(ID_HELP_WHATS_THIS);
 
+  btnwhat->setFocusPolicy(QWidget::ClickFocus);
   connect(toolBar(), SIGNAL(clicked(int)), SLOT(slotToolbarClicked(int)));
   config->setGroup("General Options");
   if(config->readBoolEntry("show_std_toolbar", true)){
@@ -772,6 +782,7 @@ void CKDevelop::initStatusBar(){
   enableStatusBar();
 }
 
+
 void CKDevelop::initProject(){
   config->setGroup("Files");
   QString filename = config->readEntry("project_file","");
@@ -799,6 +810,10 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
 
 
 

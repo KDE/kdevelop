@@ -1513,6 +1513,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_MAKE:
     slotBuildMake();
     break;
+  case ID_BUILD_REBUILD_ALL:
+  	slotBuildRebuildAll();
+  	break;
   case ID_BUILD_RUN:
     slotBuildRun();
     break;

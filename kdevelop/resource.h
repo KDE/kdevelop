@@ -163,6 +163,7 @@
 #define ID_HELP_CONTENT             18010
 #define ID_HELP_HOMEPAGE            18020
 #define ID_HELP_ABOUT               18030
+#define ID_HELP_WHATS_THIS     			18040
 
 
 ///////////////////////////////////////////////////////////////////
@@ -298,5 +299,6 @@
 ///////////////////////////////////////////////////////////////////
 // End class member in implementation for statusCallback
 #define END_STATUS_MSG()         default: slotStatusMsg(IDS_DEFAULT);}}
+
 
 

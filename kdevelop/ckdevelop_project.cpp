@@ -282,9 +282,9 @@ void CKDevelop::slotProjectAddExistingFiles(){
       files.append(token);
     }
     QString dest = dlg.destination_edit->text();
-    if(dest.right(1) != '/'){
+/*    if(dest.right(1) != '/'){
       dest = dest + '/';
-    }
+    }*/
     QString source_name;
     QString dest_name ;
     QString file;
@@ -529,6 +529,7 @@ void CKDevelop::slotProjectNewAppl(){
   //cerr << kappw->getProjectFile();
   slotStatusMsg(IDS_DEFAULT); 
 }
+
 
 
 

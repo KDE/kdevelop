@@ -1,7 +1,7 @@
 
 toolbar_DATA = make.xpm stop.xpm run.xpm copy.xpm paste.xpm \
 	       open.xpm cut.xpm save.xpm save_all.xpm undo.xpm redo.xpm \
-	       openprj.xpm compfile.xpm
+	       openprj.xpm compfile.xpm rebuild.xpm
 
 toolbardir = $(kde_datadir)/kdevelop/toolbar
 

@@ -29,6 +29,7 @@ class CKDevelop;
 #include <qlist.h>
 #include <qstring.h>
 #include <qstrlist.h>
+#include <qwhatsthis.h>
 
 #include <keditcl.h>
 #include <kapp.h>
@@ -82,6 +83,7 @@ public:
   void initMenu();
   void initToolbar();
   void initStatusBar();
+  void initWhatsThis();
   void initProject();
   void refreshTrees();
 
@@ -286,7 +288,8 @@ private:
   QPopupMenu* tools_menu;
   QPopupMenu* menu_buffers;
   QPopupMenu* menu_help;
-
+	QWhatsThis* whats_this;
+  
   KNewPanner* view;
   KNewPanner* top_panner;
   
