@@ -17,6 +17,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
 #include "ckdevelop.h"
 #include <kwmmapp.h>
 
@@ -40,4 +41,5 @@ int main(int argc, char* argv[]) {
     int rc = a.exec();
     return rc;
 }
+
 

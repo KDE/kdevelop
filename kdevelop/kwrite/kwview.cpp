@@ -1603,7 +1603,7 @@ void KWrite::gotoLine() {
   GotoLineDialog *dlg;
   PointStruc cursor;
 
-  dlg = new GotoLineDialog(kWriteView->cursor.y + 1,this);
+  dlg = new GotoLineDialog(kWriteView->cursor.y + 1 ,this);
   if (dlg->exec() == QDialog::Accepted) {
     cursor.x = 0;
     cursor.y = dlg->getLine() - 1;
@@ -2259,6 +2259,8 @@ void KWrite::resizeEvent(QResizeEvent *) {
   kWriteView->tagAll();//updateState = 3;
   kWriteView->updateView(0/*ufNoScroll*/);
 }
+
+
 
 
 

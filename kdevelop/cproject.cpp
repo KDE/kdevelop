@@ -517,10 +517,10 @@ void CProject::setSourcesHeaders(){
   for(str = files.first();str != 0;str = files.next()){
     filename = getName(str);
     if(filename.right(4) == ".cpp" || filename.right(3) == ".cc" || filename.right(2) == ".C"
-       || filename.right(2) == ".c"){
+       || filename.right(2) == ".c" || filename.right(4) == ".cxx"){    // added .cxx    990204 rnolden
       cpp_files.append(filename);
     }
-    if(filename.right(2) == ".h"){
+    if(filename.right(2) == ".h" || filename.right(4) == ".hxx"){       // added .hxx    990204 rnolden
       header_files.append(filename);
     }
   }
@@ -611,3 +611,5 @@ bool CProject::isDirInProject(QString rel_name){
     cerr << endl << str;
   }
 }
+
+

@@ -128,3 +128,10 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
+
+
+
+
+
+
+

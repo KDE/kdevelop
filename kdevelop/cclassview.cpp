@@ -18,7 +18,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #include "cclassview.h"
 #include "ckdevelop.h"
 #include <qstrlist.h>

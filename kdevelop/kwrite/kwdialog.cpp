@@ -452,3 +452,4 @@ void ColorDialog::getColors(QColor *colors) {
   colors[2] = found->color();
   colors[3] = selFound->color();
 }
+

@@ -21,10 +21,7 @@
 
 void CKDevelop::slotProjectNew(){
 	// Currently a project open ?
-  if(project){
-  	int message_result=KMsgBox::yesNo(this,i18n("Close Project ?"),i18n("Currently,Project\n\n")+prj.getProjectName()+
-									i18n("\n\nis open. Close it ?\n\n"),KMsgBox::QUESTION);
-    if(message_result ==1){    // Yes !
+  if(project)
 			slotProjectClose();      // close current project
 
 /* TODO:
@@ -35,11 +32,6 @@ void CKDevelop::slotProjectNew(){
   Makefile.am - don't know yet how to create it for the project Type. Maybe Prototypes ?
   Ralf */
 			
-		}
-		else{   // Cancel
-      return;
-		}
-	}  
 
 }
 
@@ -57,7 +49,7 @@ void CKDevelop::slotProjectClose(){
 	if(header_widget->isModified()){
 	  cerr << "header_widget modified file" << endl;
 	  KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
-				+i18n("\n\ncontains changed files. Save modified file\n")+header_widget->getName()+" ?",KMsgBox::QUESTION,
+				+i18n("\n\ncontains changed files. Save modified file\n\n")+header_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
 				i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
  			// show the messagea and store result in result:
     project_close->show();
@@ -99,7 +91,7 @@ void CKDevelop::slotProjectClose(){
   
   if(cpp_widget->isModified()){
 	  KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
-				+i18n("\n\ncontains changed files. Save modified file\n")+cpp_widget->getName()+" ?",KMsgBox::QUESTION,
+				+i18n("\n\ncontains changed files. Save modified file\n\n")+cpp_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
 				i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
  			// show the messagea and store result in result:
 		project_close->show();
@@ -147,7 +139,7 @@ void CKDevelop::slotProjectClose(){
     if(actual_info->modified){
 
 		  KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
-					+i18n("\n\ncontains changed files. Save modified file\n")+actual_info->filename+" ?",KMsgBox::QUESTION,
+					+i18n("\n\ncontains changed files. Save modified file\n\n")+actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
 					i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
  				// show the messagea and store result in result:
 			project_close->show();
@@ -199,6 +191,8 @@ void CKDevelop::slotProjectClose(){
 	} // end the if cppCancel && headerCancel
  
   if(mod){
+    // not cancel pressed - project closed
+		// clear all widgets
     header_widget->clear();
     cpp_widget->clear();
     class_tree->clear();
@@ -209,8 +203,7 @@ void CKDevelop::slotProjectClose(){
 	  toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_CLASS_CHOICE);
   	toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_METHOD_CHOICE);
 
-
-
+    // re-inititalize the edit widgets
   	header_widget->setName("Untitled.h");
   	cpp_widget->setName("Untitled.cpp");
   	TEditInfo* edit1 = new TEditInfo;
@@ -224,37 +217,35 @@ void CKDevelop::slotProjectClose(){
   	edit2->modified=false;
   	edit_infos.append(edit1);
   	edit_infos.append(edit2);
+
+    // set project to false and disable all ID_s related to project=true	
+  	project=false;
+    prj.valid = false;
+
+  	switchToFile(header_widget->getName());
+
+  	disableCommand(ID_FILE_NEW);
+  	// doc menu
+  	disableCommand(ID_DOC_PROJECT_API_DOC);
+  	disableCommand(ID_DOC_USER_MANUAL);
+  	// build menu
+  	setToolMenuProcess(false);  
+    disableCommand(ID_BUILD_STOP);
+  	disableCommand(ID_BUILD_AUTOCONF);
+
+  	// prj menu
+  	disableCommand(ID_PROJECT_CLOSE);
+  	disableCommand(ID_PROJECT_ADD_FILE);
+  	disableCommand(ID_PROJECT_ADD_FILE_NEW);
+  	disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+  	disableCommand(ID_PROJECT_REMOVE_FILE);
+  	disableCommand(ID_PROJECT_NEW_CLASS);
+  	disableCommand(ID_PROJECT_FILE_PROPERTIES);
+  	disableCommand(ID_PROJECT_OPTIONS);
+
 	}
-  project=false;
-  prj.valid = false;
-  switchToFile(header_widget->getName());
-
-  disableCommand(ID_FILE_NEW_FILE);
-  // doc menu
-  disableCommand(ID_DOC_PROJECT_API_DOC);
-  disableCommand(ID_DOC_USER_MANUAL);
-  // build menu
-  setToolMenuProcess(false);
-  disableCommand(ID_BUILD_STOP);
-  // prj menu
-  disableCommand(ID_PROJECT_CLOSE);
-  disableCommand(ID_PROJECT_ADD_FILE);
-  disableCommand(ID_PROJECT_ADD_FILE_NEW);
-  disableCommand(ID_PROJECT_ADD_FILE_EXIST);
-  disableCommand(ID_PROJECT_REMOVE_FILE);
-  disableCommand(ID_PROJECT_NEW_CLASS);
-  disableCommand(ID_PROJECT_FILE_PROPERTIES);
-  disableCommand(ID_PROJECT_OPTIONS);
-
-  disableCommand(ID_BUILD_AUTOCONF);
   slotStatusMsg(IDS_DEFAULT);
   refreshTrees();
-}
-void CKDevelop::slotProjectCompileFile(){
-/* TODO: add a process reading the filename and compiler options->gcc -options -filename ...*/
-  slotFileSave();
-
-
 }
 
 void CKDevelop::slotProjectAddNewFile(){
@@ -389,10 +380,13 @@ bool CKDevelop::readProjectFile(QString file){
   if(QFile::exists(str)){
     switchToFile(str);
   }
+
+// TODO: Add function to read last opened files from project to restore project workspace
+
   // set the menus enable
   // file menu
   
-  enableCommand(ID_FILE_NEW_FILE);
+  enableCommand(ID_FILE_NEW);
   // doc menu
   enableCommand(ID_DOC_PROJECT_API_DOC);
   enableCommand(ID_DOC_USER_MANUAL);
@@ -450,6 +444,24 @@ void CKDevelop::slotProjectFileProperties(){
   CFilePropDlg dlg(this,"DLG",&prj);
   dlg.show();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

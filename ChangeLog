@@ -1,6 +1,15 @@
+1999-02-04 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  			* implemented Build->CompileFile functionality to
+	  			compile the actual cpp_widget file
+				* added slotProjectClose to closeEvent
+  			* changed all keys to the resource.h file and replaced them with IDK_ macros-
+	  			please add any other keys this way to keep overview over used keys.
+				* found bug in slotProcessExited- if next_job is "run" and a configuration dialog is
+	 	 			shown in kdevelop, KDE freezes completely...anyone has the same occurence ?
+			
 1999-02-03  Sandy Meier  <smeier@rz.uni-potsdam.de>
 
-	* implemented a configurable doc-tree
+				* implemented a configurable doc-tree
 
 1999-02-03  Ralf Nolden  <Ralf.Nolden@post.rwth-aachen.de>
 
@@ -196,3 +205,5 @@
 	
 1998-07-20 KDevelop-Team
   	* begin kdevelop-project (yet another IDE for Unix)
+
+

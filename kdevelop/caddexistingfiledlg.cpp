@@ -2,6 +2,8 @@
                           caddexistingfiledlg.cpp  -                              
                              -------------------                                         
 
+
+
     version              :                                   
     begin                : Tue Oct 20 1998                                           
     copyright            : (C) 1998 by Sandy Meier                         
@@ -25,7 +27,6 @@
 #include <qfileinfo.h>
 #include <iostream.h>
 #include <qfiledialog.h>
-
 
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 

@@ -156,8 +156,6 @@ public:
   /** open a projectfile and close the old one*/
   void slotFileOpenPrj();
   void slotProjectClose();
-  /** compile the actual sourcefile using setted options */
-  void slotProjectCompileFile();
   void slotProjectAddNewFile();
   void slotProjectAddExistingFiles();
   void slotProjectRemoveFile();
@@ -165,6 +163,8 @@ public:
   void slotProjectFileProperties();
   void slotProjectOptions();
 
+  /** compile the actual sourcefile using setted options */
+  void slotBuildCompileFile();
   void slotBuildRun();
   void slotBuildDebug();
   void slotBuildMake();
@@ -351,6 +351,7 @@ private:
 };
 
 #endif
+
 
 
 

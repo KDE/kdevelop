@@ -39,11 +39,9 @@ int CKDevelop::getTabLocation(QString filename){
   
   if(filename.right(4) == ".cpp" || filename.right(3) == ".cc" || filename.right(2) == ".C"
      || filename.right(2) == ".c"){
-    enableCommand(ID_PROJECT_COMPILE_FILE);
     return CPP;
   }
   else{
-    disableCommand(ID_PROJECT_COMPILE_FILE);
     return HEADER;
   }
   
@@ -63,11 +61,14 @@ void CKDevelop::switchToFile(QString filename){
   if (getTabLocation(filename) == HEADER){
     edit_widget = header_widget;
     s_tab_view->setCurrentTab(HEADER);
+    disableCommand(ID_BUILD_COMPILE_FILE);
+
     //output_widget->append("current edit_widget = header_widget");
   }
   else{
     edit_widget = cpp_widget;
     s_tab_view->setCurrentTab(CPP);
+    enableCommand(ID_BUILD_COMPILE_FILE);
     //output_widget->append("current edit_widget = cpp_widget");
   }
   edit_widget->setFocus();
@@ -138,7 +139,7 @@ void CKDevelop::switchToFile(QString filename){
 void CKDevelop::setToolMenuProcess(bool enable){
 
   if (enable){
-    
+    enableCommand(ID_BUILD_COMPILE_FILE);
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_DEBUG);
     enableCommand(ID_BUILD_MAKE);
@@ -154,6 +155,7 @@ void CKDevelop::setToolMenuProcess(bool enable){
   else {
     
     // set the popupmenus enable or disable
+    disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN);
     disableCommand(ID_BUILD_DEBUG);
     disableCommand(ID_BUILD_MAKE);
@@ -167,6 +169,18 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
