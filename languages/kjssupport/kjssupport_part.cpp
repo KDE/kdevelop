@@ -71,7 +71,7 @@ kjsSupportPart::kjsSupportPart(QObject *parent, const char *name, const QStringL
 	mainWindow()->embedOutputView( m_js->view() , i18n("KJS Console"),i18n("KJS Embed Console") );
 
     // get the problem reporter
-        m_problemReporter = new KJSProblems( this );
+        m_problemReporter = new KJSProblems( this, 0, "problems" );
 	m_problemReporter->setIcon( SmallIcon("info") );
 	mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("Problem reporter"));
 
