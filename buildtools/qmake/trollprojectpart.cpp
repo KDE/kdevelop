@@ -219,10 +219,10 @@ QString TrollProjectPart::makeEnvironment()
 void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
-    vbox = dlg->addVBoxPage(i18n("Run Options"));
+    vbox = dlg->addVBoxPage(i18n("Run Options"), i18n("Run Options"), BarIcon( "make", KIcon::SizeMedium ));
     RunOptionsWidget *optdlg = new RunOptionsWidget(*projectDom(), "/kdevtrollproject", buildDirectory(), vbox);
 
-    vbox = dlg->addVBoxPage(i18n("Make Options"));
+    vbox = dlg->addVBoxPage(i18n("Make Options"), i18n("Build Options"), BarIcon( "make", KIcon::SizeMedium ));
     MakeOptionsWidget *w4 = new MakeOptionsWidget(*projectDom(), "/kdevtrollproject", vbox);
     connect( dlg, SIGNAL(okClicked()), w4, SLOT(accept()) );
 
