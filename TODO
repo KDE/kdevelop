@@ -4,9 +4,6 @@ High priority tasks!
 1. Fixing major/annoying bugs
 -----------------------------
 
-* crashes:
-  - crashes when quit with 'close window' button
-
 * konsole part:
   - cd's when selecting a file, but doesn't when selecting a dir
     desired: a menu option to "cd" to that directory

@@ -1,3 +1,7 @@
+2002-08-22 Harald Fernengel <harry@kdevelop.org>
+	* applyed patches by Hornung-Heinz@t-online.de (Heinz Hornung):
+	  don't crash on exit
+	
 2002-08-19 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * trollproject:
         * File exclusion on qmake-scope-level now working
@@ -9,7 +13,7 @@
   * trollproject:
 	* Added toolbar to file tree
 
-2002-08-13 Harald Fernengel <harry@bnro.de>
+2002-08-13 Harald Fernengel <harry@kdevelop.org>
 	* Applied goto next / prev window patch by Yann Hodique
 
 2002-08-11 Victor Röder <victor_roeder@gmx.de>
