@@ -25,10 +25,6 @@ public:
     virtual ~CCConfigWidget( );
 
 public slots:
-    void slotSelectTemplateGroup( const QString & );
-    void interfaceFile();
-    void implementationFile();
-    void slotEnableChooseFiles( bool c );
 
     void accept( );
 

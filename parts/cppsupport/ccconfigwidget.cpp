@@ -53,93 +53,25 @@ CCConfigWidget::CCConfigWidget( CppSupportPart* part, QWidget* parent, const cha
 void CCConfigWidget::initFileTemplatesTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
-    bool files = DomUtil::readBoolEntry(dom, "/cppsupportpart/filetemplates/choosefiles");
-    slotEnableChooseFiles(files);
-    // read in template groups
-    QStringList interface_files = KGlobal::dirs()->findAllResources( "data", "kdevcppsupport/templates/*.h", false, true);
-    QStringList::iterator i;
-    for (i=interface_files.begin();i!=interface_files.end();i++) {
-      QString & file = *i;
-      QString interface_file = file;
-      file.remove(file.length()-2, 2);
-      QString impl_filename = file + ".cpp";
-      KFileItem impl_file(KFileItem::Unknown, KFileItem::Unknown, impl_filename);
-      if (impl_file.isReadable()) {
-        template_groups->insertItem(file);
-      }
-    }
-    interface_url->setURL(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/interfaceURL"));
-    implementation_url->setURL(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/implementationURL"));
     interface_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/interfacesuffix", ".h"));
     implementation_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/implementationsuffix", ".cpp"));
-    lowercase_filenames->setChecked(DomUtil::readBoolEntry(dom, "/cppsupportpart/filetemplates/lowercasefilenames", true));
-    interface_url->fileDialog()->setURL(KURL(m_pPart->project()->projectDirectory()));
-    implementation_url->fileDialog()->setURL(KURL(m_pPart->project()->projectDirectory()));
 }
-    
+
 CCConfigWidget::~CCConfigWidget( )
 {
 }
 
 void CCConfigWidget::accept( )
 {
-    saveFileTemplatesTab();    
+    saveFileTemplatesTab();
     saveCodeCompletionTab();
 }
 
 void CCConfigWidget::saveFileTemplatesTab( )
 {
     QDomDocument dom = *m_pPart->projectDom();
-    DomUtil::writeBoolEntry(dom, "/cppsupportpart/filetemplates/choosefiles", choose_files->isChecked());
-    DomUtil::writeEntry(dom, "/cppsupportpart/filetemplates/interfaceURL", interface_url->url());
-    DomUtil::writeEntry(dom, "/cppsupportpart/filetemplates/implementationURL", implementation_url->url());
     DomUtil::writeEntry(dom, "/cppsupportpart/filetemplates/interfacesuffix",interface_suffix->text());
     DomUtil::writeEntry(dom, "/cppsupportpart/filetemplates/implementationsuffix",implementation_suffix->text());
-    DomUtil::writeBoolEntry(dom, "/cppsupportpart/filetemplates/lowercasefilenames",lowercase_filenames->isChecked());
-}
-
-void CCConfigWidget::interfaceFile()
-{
-    QFile f(interface_url->url());
-    if ( f.open(IO_ReadOnly) ) { 
-        int size = f.size();
-        char *buf = new char[size];
-        f.readBlock(&buf[0], size);
-        QString text = QString::fromLocal8Bit(buf, size);
-	f.close();
-        interface_file->setText(text);
-	delete[] buf;
-    }
-}
-
-void CCConfigWidget::implementationFile()
-{
-    QFile f(implementation_url->url());
-    if ( f.open(IO_ReadOnly) ) { 
-        int size = f.size();
-        char *buf = new char[size];
-        f.readBlock(&buf[0], size);
-        QString text = QString::fromLocal8Bit(buf, size);
-        f.close();
-        implementation_file->setText(text);
-	delete[] buf;
-    }
-}
-
-void CCConfigWidget::slotEnableChooseFiles(bool c)
-{
-    choose_files->setChecked(c);
-    template_groups->setEnabled(!c);
-    interface_url->setEnabled(c);
-    implementation_url->setEnabled(c);
-}
-
-void CCConfigWidget::slotSelectTemplateGroup( const QString & str)
-{
-    interface_url->setURL(str + ".h");
-    interfaceFile();
-    implementation_url->setURL(str + ".cpp");
-    implementationFile();
 }
 
 void CCConfigWidget::initCodeCompletionTab( )

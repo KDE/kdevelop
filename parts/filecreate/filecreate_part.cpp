@@ -262,6 +262,33 @@ FileType * FileCreatePart::getType(const QString & ex, const QString subtRef) {
   return NULL;
 }
 
+FileType * FileCreatePart::getEnabledType(const QString & ex, const QString subtRef) {
+
+  QString subtypeRef = subtRef;
+  QString ext = ex;
+  int dashPos = ext.find('-');
+  if (dashPos>-1 && subtRef.isNull()) {
+    ext = ex.left(dashPos);
+    subtypeRef = ex.mid(dashPos+1);
+  }
+
+  QPtrList<FileType> filetypes = getFileTypes();
+  for(FileType * filetype = filetypes.first();
+      filetype;
+      filetype=filetypes.next()) {
+    if (filetype->ext()==ext) {
+      if ( (subtypeRef.isNull()) && (filetype->enabled()) ) return filetype;
+      QPtrList<FileType> subtypes = filetype->subtypes();
+      for(FileType * subtype = subtypes.first();
+          subtype;
+          subtype=subtypes.next()) {
+        if ( (subtypeRef==subtype->subtypeRef()) && (filetype->enabled()) ) return subtype;
+      }
+    }
+  }
+  return NULL;
+}
+
 // KDevFileCreate interface
 
 // This is the old way -- to be removed if everyone's OK with the new way!
@@ -393,7 +420,7 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
 
   NewFileChooser dialog;
   dialog.setFileTypes(m_filetypes);
-  const FileType *filetype = getType(ext,subtype);
+  const FileType *filetype = getEnabledType(ext,subtype);
   kdDebug(9034) << "Looking for filetype pointer for " << ext << "/" << subtype << endl;
   if (filetype) {
     kdDebug(9034) << "found filetype" << endl;
@@ -494,7 +521,6 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
     }
     KURL url;
     url.setPath(fullPath);
-    qWarning("url: %s", url.url().latin1());
     partController()->editDocument(url);
     result.filename = filename;
     result.dir = URLUtil::directory(fullPath);

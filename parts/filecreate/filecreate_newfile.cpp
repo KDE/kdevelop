@@ -48,7 +48,7 @@ namespace FileCreate {
       lay->addWidget( hbox );
       
       lay->addItem( new QSpacerItem(10, 20, QSizePolicy::Minimum, QSizePolicy::Expanding) );
-      
+
       m_filename->setFocus();
       m_addToProject->setChecked( true );
 
@@ -110,7 +110,7 @@ namespace FileCreate {
     QMap<int,const FileType*>::Iterator it;
     for ( it = m_typeInCombo.begin(); it != m_typeInCombo.end() && changeToRow==-1; ++it ) {
       if (it.data()==filetype)
-	changeToRow=it.key();
+        changeToRow=it.key();
     }
     if (changeToRow>-1) m_filetypes->setCurrentItem(changeToRow);
   }

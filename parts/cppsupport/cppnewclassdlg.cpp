@@ -1270,16 +1270,18 @@ void CppNewClassDialog::ClassGenerator::gen_implementation()
   // implementation
 
   QString classImpl;
-  if (dlg.filetemplate_box->isChecked()) {
-    QDomDocument dom = *dlg.m_part->projectDom();
-    if(DomUtil::readBoolEntry(dom,"/cppsupportpart/filetemplates/choosefiles",false))
-      classImpl = FileTemplate::read(dlg.m_part, DomUtil::readEntry(dom,"/cppsupportpart/filetemplates/implementationURL",""), FileTemplate::Custom);
-    else
-      classImpl = FileTemplate::read(dlg.m_part, "cpp");
-  }
   QFileInfo fi(implementationPath);
   QString module = fi.baseName();
   QString basefilename = fi.baseName(true);
+
+  if (dlg.filetemplate_box->isChecked()) {
+/*    QDomDocument dom = *dlg.m_part->projectDom();
+    if(DomUtil::readBoolEntry(dom,"/cppsupportpart/filetemplates/choosefiles",false))
+      classImpl = FileTemplate::read(dlg.m_part, DomUtil::readEntry(dom,"/cppsupportpart/filetemplates/implementationURL",""), FileTemplate::Custom);
+    else*/
+      classImpl = FileTemplate::read(dlg.m_part, fi.extension(true));
+  }
+
   classImpl.replace(QRegExp("\\$MODULE\\$"),module);
   classImpl.replace(QRegExp("\\$FILENAME\\$"),basefilename);
 
@@ -1423,16 +1425,18 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   // interface
 
   QString classIntf;
-  if (dlg.filetemplate_box->isChecked()) {
-    QDomDocument dom = *dlg.m_part->projectDom();
-    if(DomUtil::readBoolEntry(dom,"/cppsupportpart/filetemplates/choosefiles",false))
-      classIntf = FileTemplate::read(dlg.m_part, DomUtil::readEntry(dom,"/cppsupportpart/filetemplates/interfaceURL",""), FileTemplate::Custom);
-    else
-      classIntf  = FileTemplate::read(dlg.m_part, "h");
-  }
   QFileInfo fi(headerPath);
   QString module = fi.baseName();
   QString basefilename = fi.baseName(true);
+
+  if (dlg.filetemplate_box->isChecked()) {
+/*    QDomDocument dom = *dlg.m_part->projectDom();
+    if(DomUtil::readBoolEntry(dom,"/cppsupportpart/filetemplates/choosefiles",false))
+      classIntf = FileTemplate::read(dlg.m_part, DomUtil::readEntry(dom,"/cppsupportpart/filetemplates/interfaceURL",""), FileTemplate::Custom);
+    else*/
+      classIntf  = FileTemplate::read(dlg.m_part, fi.extension(true));
+  }
+
   classIntf.replace(QRegExp("\\$MODULE\\$"),module);
   classIntf.replace(QRegExp("\\$FILENAME\\$"),basefilename);
 

@@ -12,7 +12,10 @@
 #define FCCONFIGWIDGET_H
 
 #include <qwidget.h>
-#include <fcconfigwidgetbase.h>
+#include <qvaluelist.h>
+#include <kurl.h>
+
+#include "fcconfigwidgetbase.h"
 
 class FileCreatePart;
 class QListView;
@@ -33,6 +36,18 @@ public:
 
 public slots:
     void accept();
+    void removetemplate_button_clicked();
+    void copyToProject_button_clicked();
+    void newtype_button_clicked();
+    void newsubtype_button_clicked();
+    void remove_button_clicked();
+    void moveup_button_clicked();
+    void movedown_button_clicked();
+    void edittype_button_clicked();
+    void newtemplate_button_clicked();
+    void edittemplate_button_clicked();
+    void edit_template_content_button_clicked();
+    void edit_type_content_button_clicked();
 
 protected:
     void loadGlobalConfig(QListView *view, bool checkmarks = false);
@@ -50,6 +65,8 @@ private:
     QPtrList<FileCreate::FileType> m_projectfiletypes;
     QPtrList<FileCreate::FileType> m_projectfiletemplates;
     bool m_global;
+
+    QValueList<KURL> urlsToEdit;
 };
 
 #endif

@@ -17,16 +17,25 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qcheckbox.h>
+#include <qlineedit.h>
+#include <qlabel.h>
 
 #include <kstandarddirs.h>
-#include <kurl.h>
 #include <kio/netaccess.h>
+#include <kurlrequester.h>
+#include <kicondialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kiconloader.h>
 
+#include "fctypeedit.h"
+#include "fctemplateedit.h"
 #include "domutil.h"
 #include "fcconfigwidget.h"
 #include "filecreate_part.h"
 #include "filecreate_filetype.h"
 #include "kdevproject.h"
+#include "kdevpartcontroller.h"
 
 using namespace FileCreate;
 
@@ -52,6 +61,7 @@ FCConfigWidget::FCConfigWidget(FileCreatePart * part, bool global, QWidget *pare
         loadProjectConfig(fc_view);
         loadProjectTemplates(fctemplates_view);
         sidetab_checkbox->setEnabled(false);
+        templatesDir_label->setText(i18n("Project templates in ") + m_part->project()->projectDirectory() + "/templates");
     }
 
     m_globalfiletypes.setAutoDelete(true);
@@ -75,6 +85,11 @@ void FCConfigWidget::accept()
 
     m_part->m_filetypes.clear();
     m_part->slotProjectOpened();
+
+    for (QValueList<KURL>::iterator it = urlsToEdit.begin(); it != urlsToEdit.end(); ++it )
+    {
+        m_part->partController()->editDocument(*it);
+    }
 }
 
 void FCConfigWidget::loadGlobalConfig(QListView *view, bool checkmarks)
@@ -243,7 +258,7 @@ void FCConfigWidget::saveProjectConfig()
     // project template files
 
     //check for removed templates
-    QDir templDir( m_part->project()->projectDirectory() + "/templates/" );
+/*    QDir templDir( m_part->project()->projectDirectory() + "/templates/" );
     templDir.setFilter( QDir::Files );
     const QFileInfoList * list = templDir.entryInfoList();
     if( list )
@@ -252,7 +267,8 @@ void FCConfigWidget::saveProjectConfig()
         QFileInfo *fi;
         while ( (fi = it.current()) != 0 )
         {
-            if ( !(fctemplates_view->findItem(fi->fileName(), 0)) )
+            if ( ( !(fctemplates_view->findItem(fi->fileName(), 0)) ) &&
+                ( !(fc_view->findItem(fi->fileName(), 0)) ) )
             {
                 KURL removedTemplate;
                 removedTemplate.setPath(m_part->project()->projectDirectory() + "/templates/" + fi->fileName());
@@ -260,7 +276,7 @@ void FCConfigWidget::saveProjectConfig()
             }
             ++it;
         }
-    }
+    }*/
     //check for new templates and those with location changed
     QListViewItemIterator it2(fctemplates_view);
     while (it2.current())
@@ -412,6 +428,298 @@ void FCConfigWidget::loadFileTypes(QPtrList<FileType> list, QListView *view, boo
                     sit->setText(4, "");
                 }
             }
+        }
+    }
+}
+
+void FCConfigWidget::removetemplate_button_clicked( )
+{
+    if (fctemplates_view->currentItem())
+    {
+        KURL removedTemplate;
+        removedTemplate.setPath(m_part->project()->projectDirectory() + "/templates/" + fctemplates_view->currentItem()->text(0));
+        KIO::NetAccess::del(removedTemplate);
+        QListViewItem *it = fctemplates_view->currentItem();
+        if (it->itemBelow())
+        {
+            fc_view->setSelected(it->itemBelow(), true);
+            fc_view->setCurrentItem(it->itemBelow());
+        }
+        else if (it->itemAbove())
+        {
+            fc_view->setSelected(it->itemAbove(), true);
+            fc_view->setCurrentItem(it->itemAbove());
+        }
+        delete it;
+    }
+}
+
+void FCConfigWidget::copyToProject_button_clicked()
+{
+    QListViewItem *it = fcglobal_view->currentItem();
+    if (it)
+    {
+        QListViewItem *it_copy_parent = 0;
+        QString destParent;
+        if (it->parent())
+        {
+            it_copy_parent = new QListViewItem(fc_view, it->parent()->text(0),
+                it->parent()->text(1),
+                it->parent()->text(2),
+                it->parent()->text(3),
+                locate("data", "kdevfilecreate/file-templates/"+ it->parent()->text(0)));
+            destParent += it->parent()->text(0) + "-";
+        }
+        QListViewItem *it_copy = 0;
+        if (it_copy_parent)
+            it_copy = new QListViewItem(it_copy_parent, it->text(0),
+                it->text(1),
+                it->text(2),
+                it->text(3),
+                locate("data", "kdevfilecreate/file-templates/"+destParent + it->text(0)));
+        else
+            it_copy = new QListViewItem(fc_view, it->text(0),
+                it->text(1),
+                it->text(2),
+                it->text(3),
+                locate("data", "kdevfilecreate/file-templates/" +destParent+ it->text(0)));
+        fc_view->setSelected(it_copy, true);
+        fc_view->setCurrentItem(it_copy);
+        QListViewItem * it_child = it->firstChild();
+        while( it_child ) {
+            new QListViewItem(it_copy, it_child->text(0),
+                it_child->text(1),
+                it_child->text(2),
+                it_child->text(3),
+                locate("data", "kdevfilecreate/file-templates/"+ it_copy->text(0) + "-" + it_child->text(0)));
+            it_child = it_child->nextSibling();
+        }
+    }
+}
+
+void FCConfigWidget::newtype_button_clicked()
+{
+    FCTypeEdit *te = new FCTypeEdit();
+    if (te->exec() == QDialog::Accepted )
+    {
+        QListViewItem *it = new QListViewItem(fc_view, te->typeext_edit->text(),
+            te->typename_edit->text(),
+            te->icon_url->icon(),
+            te->typedescr_edit->text(),
+            te->template_url->url().isEmpty() ? QString("create") : te->template_url->url());
+        fc_view->setSelected(it, true);
+        fc_view->setCurrentItem(it);
+    }
+    delete te;
+}
+
+void FCConfigWidget::newsubtype_button_clicked()
+{
+    if (fc_view->currentItem() && (!fc_view->currentItem()->parent()))
+    {
+        FCTypeEdit *te = new FCTypeEdit(this);
+        if (te->exec() == QDialog::Accepted )
+        {
+            QListViewItem *it = new QListViewItem(fc_view->currentItem(),
+                te->typeext_edit->text(),
+                te->typename_edit->text(),
+                te->icon_url->icon(),
+                te->typedescr_edit->text(),
+                te->template_url->url().isEmpty() ? QString("create") : te->template_url->url());
+            fc_view->currentItem()->setOpen(true);
+        }
+        delete te;
+    }
+}
+
+void FCConfigWidget::remove_button_clicked()
+{
+    if (fc_view->currentItem())
+    {
+        QListViewItem *it = fc_view->currentItem();
+        if (it->itemBelow())
+        {
+            fc_view->setSelected(it->itemBelow(), true);
+            fc_view->setCurrentItem(it->itemBelow());
+        }
+        else if (it->itemAbove())
+        {
+            fc_view->setSelected(it->itemAbove(), true);
+            fc_view->setCurrentItem(it->itemAbove());
+        }
+        delete it;
+    }
+}
+
+
+void FCConfigWidget::moveup_button_clicked()
+{
+    QListViewItem *i = fc_view->currentItem();
+    if ( !i )
+        return;
+
+    QListViewItemIterator it( i );
+    QListViewItem *parent = i->parent();
+    --it;
+    while ( it.current() ) {
+        if ( it.current()->parent() == parent )
+            break;
+        --it;
+    }
+
+    if ( !it.current() )
+        return;
+    QListViewItem *other = it.current();
+
+    other->moveItem( i );
+}
+
+
+void FCConfigWidget::movedown_button_clicked()
+{
+    QListViewItem *i = fc_view->currentItem();
+    if ( !i )
+        return;
+
+    QListViewItemIterator it( i );
+    QListViewItem *parent = i->parent();
+    it++;
+    while ( it.current() ) {
+        if ( it.current()->parent() == parent )
+            break;
+        it++;
+    }
+
+    if ( !it.current() )
+        return;
+    QListViewItem *other = it.current();
+
+    i->moveItem( other );
+}
+
+
+void FCConfigWidget::edittype_button_clicked()
+{
+    QListViewItem *it = fc_view->currentItem();
+    if ( it )
+    {
+        FCTypeEdit *te = new FCTypeEdit(this);
+
+        te->typeext_edit->setText(it->text(0));
+        te->typename_edit->setText(it->text(1));
+        te->icon_url->setIcon(it->text(2));
+        te->typedescr_edit->setText(it->text(3));
+        if (it->text(4) != "create")
+            te->template_url->setURL(it->text(4));
+
+        if (te->exec() == QDialog::Accepted )
+        {
+            it->setText(0, te->typeext_edit->text());
+            it->setText(1, te->typename_edit->text());
+            it->setText(2, te->icon_url->icon());
+            it->setText(3, te->typedescr_edit->text());
+            if ((te->template_url->url() == "") && ((it->text(4) == "create")))
+                it->setText(4, "create");
+            else
+                it->setText(4, te->template_url->url());
+        }
+    }
+}
+
+
+void FCConfigWidget::newtemplate_button_clicked()
+{
+    FCTemplateEdit *te = new FCTemplateEdit;
+    if (te->exec() == QDialog::Accepted)
+    {
+        QListViewItem *it = new QListViewItem(fctemplates_view, te->templatename_edit->text(),
+            te->template_url->url().isEmpty() ? QString("create") : te->template_url->url());
+    }
+}
+
+
+void FCConfigWidget::edittemplate_button_clicked()
+{
+    QListViewItem *it;
+    if ( (it = fctemplates_view->currentItem()) )
+    {
+        FCTemplateEdit *te = new FCTemplateEdit;
+        te->templatename_edit->setText(it->text(0));
+        te->templatename_edit->setEnabled(false);
+        if (te->exec() == QDialog::Accepted)
+        {
+            if ((te->template_url->url() == "") && ((it->text(1) == "create")))
+                it->setText(1, "create");
+            else
+                it->setText(1, te->template_url->url());
+        }
+    }
+}
+
+void FCConfigWidget::edit_template_content_button_clicked( )
+{
+    if (fctemplates_view->currentItem())
+    {
+        QFileInfo fi(m_part->project()->projectDirectory() + "/templates/" + fctemplates_view->currentItem()->text(0));
+        KURL content;
+        content.setPath(m_part->project()->projectDirectory() + "/templates/" + fctemplates_view->currentItem()->text(0));
+        if (fi.exists())
+            m_part->partController()->editDocument(content);
+        else
+        {
+            KMessageBox::information(this, i18n("Requested template does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit template content warning");
+            fctemplates_view->currentItem()->setPixmap(0, SmallIcon("edit"));
+            urlsToEdit.append(content);
+        }
+    }
+}
+
+void FCConfigWidget::edit_type_content_button_clicked( )
+{
+    if (!fc_view->currentItem())
+        return;
+    QListViewItem *it = fc_view->currentItem();
+    QString type_name = it->text(0);
+    if (it->parent())
+        type_name.prepend(it->parent()->text(0) + "-");
+    if (!m_global)
+    {
+        QString typePath = m_part->project()->projectDirectory() + "/templates/" + type_name;
+        KURL content;
+        content.setPath(typePath);
+        if (it->text(4).isEmpty())
+            m_part->partController()->editDocument(content);
+        else
+        {
+            if (it->text(4) == "create")
+                KMessageBox::information(this, i18n("Template for the selected file type does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit type template content warning");
+            else
+                KMessageBox::information(this, i18n("Template for the selected file type has been changed.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit type template content warning");
+            fc_view->currentItem()->setPixmap(0, SmallIcon("edit"));
+            urlsToEdit.append(content);
+        }
+    }
+    else
+    {
+        QString dest = KGlobal::dirs()->saveLocation("data", "/kdevfilecreate/file-templates/", true);
+        QString typePath = dest + type_name;
+        KURL content;
+        content.setPath(typePath);
+        if (it->text(4).isEmpty())
+        {
+            QFileInfo fi(dest+type_name);
+            if (!fi.exists())
+                copyTemplate(locate("data", "kdevfilecreate/file-templates/" + type_name), dest, type_name);
+            m_part->partController()->editDocument(content);
+        }
+        else
+        {
+            if (it->text(4) == "create")
+                KMessageBox::information(this, i18n("Template for the selected file type does not exist yet.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit global type template content warning");
+            else
+                KMessageBox::information(this, i18n("Template for the selected file type has been changed.\nIt will be opened immediately after accepting the configuration dialog."), QString::null, "Edit global type template content warning");
+            fc_view->currentItem()->setPixmap(0, SmallIcon("edit"));
+            urlsToEdit.append(content);
         }
     }
 }

@@ -90,6 +90,12 @@ public:
    * You can omit the subtype and specify the extension as ext-subtype if you wish.
    */
   FileType * getType(const QString & ext, const QString subtype = QString::null);
+  /**
+   * Finds the file type object for a given extension and optionally subtype.
+   * You can omit the subtype and specify the extension as ext-subtype if you wish.
+   * Returns only enabled type (i.e. used in the project).
+   */
+  FileType * getEnabledType(const QString & ext, const QString subtype = QString::null);
 
 public slots:
 

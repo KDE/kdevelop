@@ -37,23 +37,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="4" column="1">
-                        <property name="name">
-                            <cstring>spacer1</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Fixed</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>20</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget class="QPushButton" row="3" column="1">
                         <property name="name">
                             <cstring>remove_button</cstring>
@@ -86,7 +69,7 @@
                             <string>New &amp;Type...</string>
                         </property>
                     </widget>
-                    <widget class="QListView" row="0" column="0" rowspan="9" colspan="1">
+                    <widget class="QListView" row="0" column="0" rowspan="11" colspan="1">
                         <column>
                             <property name="text">
                                 <string>Type Extension</string>
@@ -147,7 +130,15 @@
                             <enum>AllColumns</enum>
                         </property>
                     </widget>
-                    <spacer row="7" column="1">
+                    <widget class="QCheckBox" row="10" column="1">
+                        <property name="name">
+                            <cstring>sidetab_checkbox</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Use side tab</string>
+                        </property>
+                    </widget>
+                    <spacer row="9" column="1">
                         <property name="name">
                             <cstring>spacer2</cstring>
                         </property>
@@ -160,19 +151,11 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>60</height>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>
-                    <widget class="QPushButton" row="6" column="1">
-                        <property name="name">
-                            <cstring>movedown_button</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Move &amp;Down</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="5" column="1">
+                    <widget class="QPushButton" row="7" column="1">
                         <property name="name">
                             <cstring>moveup_button</cstring>
                         </property>
@@ -180,12 +163,54 @@
                             <string>Move &amp;Up</string>
                         </property>
                     </widget>
-                    <widget class="QCheckBox" row="8" column="1">
+                    <widget class="QPushButton" row="8" column="1">
                         <property name="name">
-                            <cstring>sidetab_checkbox</cstring>
+                            <cstring>movedown_button</cstring>
                         </property>
                         <property name="text">
-                            <string>Use side tab</string>
+                            <string>Move &amp;Down</string>
+                        </property>
+                    </widget>
+                    <spacer row="6" column="1">
+                        <property name="name">
+                            <cstring>spacer1</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <spacer row="4" column="1">
+                        <property name="name">
+                            <cstring>spacer1_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton" row="5" column="1">
+                        <property name="name">
+                            <cstring>edit_type_content_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Edit Temp&amp;late</string>
                         </property>
                     </widget>
                 </grid>
@@ -201,7 +226,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QListView" row="0" column="0">
+                    <widget class="QListView" row="0" column="0" rowspan="1" colspan="2">
                         <column>
                             <property name="text">
                                 <string>Type Extension</string>
@@ -259,6 +284,31 @@
                             <enum>AllColumns</enum>
                         </property>
                     </widget>
+                    <spacer row="1" column="0">
+                        <property name="name">
+                            <cstring>spacer4_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>330</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton" row="1" column="1">
+                        <property name="name">
+                            <cstring>copyToProject_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Copy to &amp;Project Types</string>
+                        </property>
+                    </widget>
                 </grid>
             </widget>
             <widget class="QWidget">
@@ -272,7 +322,7 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QListView" row="0" column="0" rowspan="4" colspan="1">
+                    <widget class="QListView" row="1" column="0" rowspan="6" colspan="1">
                         <column>
                             <property name="text">
                                 <string>Template Name</string>
@@ -297,15 +347,7 @@
                             <enum>AllColumns</enum>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="0" column="1">
-                        <property name="name">
-                            <cstring>newtemplate_button</cstring>
-                        </property>
-                        <property name="text">
-                            <string>New &amp;Template...</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton" row="1" column="1">
+                    <widget class="QPushButton" row="2" column="1">
                         <property name="name">
                             <cstring>edittemplate_button</cstring>
                         </property>
@@ -313,7 +355,23 @@
                             <string>C&amp;hange Target...</string>
                         </property>
                     </widget>
-                    <widget class="QPushButton" row="2" column="1">
+                    <widget class="QPushButton" row="1" column="1">
+                        <property name="name">
+                            <cstring>newtemplate_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>New &amp;Template...</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+                        <property name="name">
+                            <cstring>templatesDir_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string></string>
+                        </property>
+                    </widget>
+                    <widget class="QPushButton" row="3" column="1">
                         <property name="name">
                             <cstring>removetemplate_button</cstring>
                         </property>
@@ -321,7 +379,7 @@
                             <string>Re&amp;move Template</string>
                         </property>
                     </widget>
-                    <spacer row="3" column="1">
+                    <spacer row="6" column="1">
                         <property name="name">
                             <cstring>spacer4</cstring>
                         </property>
@@ -334,7 +392,32 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>190</height>
+                                <height>150</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QPushButton" row="5" column="1">
+                        <property name="name">
+                            <cstring>edit_template_content_button</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Edit Template</string>
+                        </property>
+                    </widget>
+                    <spacer row="4" column="1">
+                        <property name="name">
+                            <cstring>spacer6</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Fixed</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>20</height>
                             </size>
                         </property>
                     </spacer>
@@ -398,6 +481,24 @@
         <receiver>FCConfigWidgetBase</receiver>
         <slot>removetemplate_button_clicked()</slot>
     </connection>
+    <connection>
+        <sender>copyToProject_button</sender>
+        <signal>clicked()</signal>
+        <receiver>FCConfigWidgetBase</receiver>
+        <slot>copyToProject_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>edit_template_content_button</sender>
+        <signal>clicked()</signal>
+        <receiver>FCConfigWidgetBase</receiver>
+        <slot>edit_template_content_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>edit_type_content_button</sender>
+        <signal>clicked()</signal>
+        <receiver>FCConfigWidgetBase</receiver>
+        <slot>edit_type_content_button_clicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>fc_view</tabstop>
@@ -416,11 +517,8 @@
 </tabstops>
 <includes>
     <include location="local" impldecl="in implementation">addglobaldlg.h</include>
-    <include location="local" impldecl="in implementation">fcconfigwidgetbase.ui.h</include>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
-<layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <forwards>
     <forward>class AddGlobalDlg;</forward>
 </forwards>
@@ -428,17 +526,20 @@
     <variable>AddGlobalDlg *global_dlg;</variable>
 </variables>
 <slots>
+    <slot>removetemplate_button_clicked()</slot>
+    <slot>copyToProject_button_clicked()</slot>
     <slot>newtype_button_clicked()</slot>
     <slot>newsubtype_button_clicked()</slot>
     <slot>remove_button_clicked()</slot>
     <slot>moveup_button_clicked()</slot>
     <slot>movedown_button_clicked()</slot>
-    <slot>moveleft_button_clicked()</slot>
-    <slot>moveright_button_clicked()</slot>
-    <slot>useglobal_button_clicked()</slot>
     <slot>edittype_button_clicked()</slot>
     <slot>newtemplate_button_clicked()</slot>
     <slot>edittemplate_button_clicked()</slot>
-    <slot>removetemplate_button_clicked()</slot>
+    <slot>edit_template_contents_button_clicked()</slot>
+    <slot>edit_template_content_button_clicked()</slot>
+    <slot>edit_type_content_button_clicked()</slot>
 </slots>
+<layoutdefaults spacing="6" margin="11"/>
+<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 </UI>

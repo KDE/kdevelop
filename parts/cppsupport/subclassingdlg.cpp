@@ -16,6 +16,7 @@
 #include "cppsupportfactory.h"
 #include "kdevsourceformatter.h"
 #include "kdevproject.h"
+#include "filetemplate.h"
 
 #include <qradiobutton.h>
 #include <qstringlist.h>
@@ -394,7 +395,10 @@ void SubclassingDlg::accept()
 
   QString buffer;
   if (m_creatingNewSubclass)
+  {
     loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.h"));
+    buffer = FileTemplate::read(m_cppSupport, "h") + buffer;
+  }
   else
     loadBuffer(buffer,m_filename+".h");
   replaceKeywords(buffer,m_canBeModal);
@@ -474,6 +478,7 @@ void SubclassingDlg::accept()
   if (m_creatingNewSubclass)
   {
     loadBuffer(buffer,::locate("data", "kdevcppsupport/subclassing/subclass_template.cpp"));
+    buffer = FileTemplate::read(m_cppSupport, "cpp") + buffer;
     if ( (m_cppSupport->project()) && (m_cppSupport->project()->options() & KDevProject::UsesAutotoolsBuildSystem))
     {
         buffer += "\n#include \"$NEWFILENAMELC$.moc\"\n";
