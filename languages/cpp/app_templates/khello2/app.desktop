@@ -1,0 +1,22 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=$APPNAME$
+Name[xx]=xx$APPNAME$xx
+Exec=$APPNAMELC$
+Icon=$APPNAMELC$
+Type=Application
+Comment=A simple KDE Application
+Comment[ca]=Una simple aplicació KDE
+Comment[da]=Et simpelt KDE program
+Comment[de]=Eine einfache KDE-Anwendung
+Comment[es]=Una aplicación de KDE sencilla
+Comment[et]=Lihtne KDE rakendus
+Comment[fr]=Une application simple pour KDE.
+Comment[hu]=Egyszerű KDE-alkalmazás
+Comment[it]=Una semplice applicazione KDE
+Comment[pt]=Uma aplicação KDE simples
+Comment[pt_BR]=Um simples Aplicativo do KDE
+Comment[sl]=Preprost program za KDE
+Comment[sr]=Проста KDE-ова апликација
+Comment[sv]=Ett enkelt KDE-program
+Comment[xx]=xxA simple KDE Applicationxx

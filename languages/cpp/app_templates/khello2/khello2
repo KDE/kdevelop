@@ -1,0 +1,8 @@
+# KDE Config File
+[General]
+Name=Simple Designer based KDE Application
+Category=C++/KDE
+Icon=preview.png
+Comment=Generates a simple KDE application with one Qt-designer based widget.
+FileTemplates=h,CStyle,cpp,CStyle
+ShowFilesAfterGeneration=src/APPNAMELC.cpp
