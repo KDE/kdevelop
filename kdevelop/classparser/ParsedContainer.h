@@ -47,48 +47,69 @@ public: // Public attributes
 
 public: // Metods to set attribute values
 
-  /** Add a struct. */
+  /** Add a struct. 
+   * @param aStruct The structure to add to the container.
+   */
   void addStruct( CParsedStruct *aStruct );
 
-  /** Add an attribute. */
+  /** Add an attribute. 
+   * @param anAttribute Attribute to add to the container.
+   */
   void addAttribute( CParsedAttribute *anAttribute );
 
-  /** Add a method. */
+  /** Add a method. 
+   * @param aMethod Method to add to the container.
+   */
   void addMethod( CParsedMethod *aMethod );
 
 public: // Public queries
 
   /** Get all methods matching the supplied name. 
    * @param aName Name of the method.
+   * @return List of methods matching the name.
    */
   QList<CParsedMethod> *getMethodByName( const char *aName );
 
   /** Get a method by using its' name and arguments. 
    * @param aName Output from a CParsedMethod->asString() call.
+   * @return Pointer to the method or NULL if not found.
    */
   CParsedMethod *getMethodByNameAndArg( const char *aName );
 
   /** Get a struct by using it's name. 
    * @param aName Name of the struct to fetch.
+   * @return Pointer to the struct or NULL if not found.
    */
   CParsedStruct *getStructByName( const char *aName );
 
   /** Get a attribute by using its' name. 
    * @param aName Name of the attribute to fetch.
+   * @return Pointer to the attribute or NULL if not found.
    */
   CParsedAttribute *getAttributeByName( const char *aName );
 
   /** Get all methods in sorted order. */
   QList<CParsedMethod> *getSortedMethodList();
 
+  /** Get all attributes in their string reprentation in sorted order. 
+   * @return List of attributes in sorted order.
+   */
+  QStrList *getSortedAttributeAsStringList();
+
   /** Get all attributes in sorted order. */
   QList<CParsedAttribute> *getSortedAttributeList();
+
+  /** Get the names of all structures in a sorted list.
+   * @return List of all structs in alpabetical order.
+   */
+  QStrList *getSortedStructNameList();
 
   /** Get all structs in sorted order. */
   QList<CParsedStruct> *getSortedStructList();
 
   /** Does a attribute exist in the store? 
    * @param aName Name of the attribute to check if it exists.
+   * @return Does the attribute exist in the container.
    */
   bool hasAttribute( const char *aName ) { return attributes.find( aName ) != NULL; }
 

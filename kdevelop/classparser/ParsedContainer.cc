@@ -215,6 +215,31 @@ CParsedAttribute *CParsedContainer::getAttributeByName( const char *aName )
 
 /*------------------------ CParsedContainer::getSortedAttributeList()
  * getSortedAttributeList()
+ *   Get all attributes in their string reprentation in sorted order.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QStrList *         List of attributes in sorted order.
+ *-----------------------------------------------------------------*/
+QStrList *CParsedContainer::getSortedAttributeAsStringList()
+{
+  QStrList *retVal = new QStrList();
+  QString str;
+
+  // Iterate over all attributes.
+  for( attributeIterator.toFirst();
+       attributeIterator.current();
+       ++attributeIterator )
+  {
+    retVal->inSort( attributeIterator.current()->asString( str ) );
+  }
+
+  return retVal;
+}
+
+/*------------------------ CParsedContainer::getSortedAttributeList()
+ * getSortedAttributeList()
  *   Get all attributes in sorted order. 
  *
  * Parameters:
@@ -230,7 +255,7 @@ QList<CParsedAttribute> *CParsedContainer::getSortedAttributeList()
   
   retVal->setAutoDelete( false );
 
-  // Ok... This sucks. But I'm lazy.
+  // Iterate over all attributes.
   for( attributeIterator.toFirst();
        attributeIterator.current();
        ++attributeIterator )
@@ -264,6 +289,30 @@ CParsedStruct *CParsedContainer::getStructByName( const char *aName )
   assert( aName != NULL );
 
   return structs.find( aName );
+}
+
+/*----------------------- CParsedContainer::getSortedStructNameList()
+ * getSortedStructNameList()
+ *   Get the names of all structures in a sorted list.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QStrList *       List of all structs in alpabetical order.
+ *-----------------------------------------------------------------*/
+QStrList *CParsedContainer::getSortedStructNameList()
+{
+  QStrList *retVal = new QStrList();
+
+  // Iterate over all structures.
+  for( structIterator.toFirst();
+       structIterator.current();
+       ++structIterator )
+  {
+    retVal->inSort( structIterator.current()->name );
+  }
+
+  return retVal;
 }
 
 /*---------------------------- CParsedContainer::getSortedStructList()
