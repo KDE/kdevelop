@@ -4,4 +4,4 @@ Name=Simple Hello world program
 Icon=fortranhello.png
 Category=Fortran
 Comment=Generates a simple Hello world program in Fortran
-FileTemplates=f77,CStyle
+FileTemplates=f,CStyle

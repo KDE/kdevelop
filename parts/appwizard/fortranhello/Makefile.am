@@ -3,7 +3,7 @@ commondatadir = ${appwizarddatadir}/template-common
 fortranhellodir = ${appwizarddatadir}/template-fortranhello
 templatedir = ${appwizarddatadir}/templates
 
-fortranhello_DATA = main.f77 src-Makefile.am fortran-Makefile.am fortran-Makefile.cvs \
+fortranhello_DATA = main.f src-Makefile.am fortran-Makefile.am fortran-Makefile.cvs \
 		configure.in fortranhello.png app.kdevelop
 template_DATA = fortranhello
 
