@@ -1,3 +1,11 @@
+2003-07-14 Amilcar Lucas <a.lucas@tu-bs.de>
+    * If no Main Program was selected in Project Options...-> Run Options, then use the
+    * currently selected active target. This is valid for execution and for debugging.
+    * So no more need to goto the menu every time you want to debug a new target! Just
+    * activate it and you're done! :)
+    * Currently only in Automake based project because AFAIK it the only one that has
+    * the concept of active targets. Correct me if I'm wrong.
+
 2003-07-13 Andras Mantia <amantia@freemail.hu>
      * don't treat libtool link messages for modules as errors.
      * recognize libtool warning messages.
