@@ -25,6 +25,8 @@
 
 
 void CKDevelop::slotClassTreeSelected(int index){
+  if(!class_tree->leftButton()) return; // not pressed the left button
+
   KPath* path;
   QString* name,*name2;
   int level;
@@ -50,6 +52,67 @@ void CKDevelop::slotClassTreeSelected(int index){
       //cerr << endl << "VARNAME: " << *name; 
     }
   } // end level 2
+
+}
+
+void CKDevelop::slotCVViewDeclaration(int index){
+  KPath* path;
+  QString* name,*name2;
+  int level;
+  QString type;
+  QString text,last_textpart;
+  QRegExp regexp;
+  path = class_tree->itemPath(index);
+  name = path->pop();
+  
+  level = path->count();
+  if (level == 1) { // class,struct,or global
+    CVGotoClassDecl(*name);
+  }
+  if (level == 2) { // methods or variables
+    if (name->contains("(") != 0){ // it is a method
+      name2 = path->pop();// get the classname
+      CVGotoMethodeImpl(*name2,*name);
+      //cerr << endl << "METHNAME: " << *name;
+    }
+    else { // it is a variable
+      name2 = path->pop();// get the classname
+      CVGotoClassVarDecl(*name2,*name);
+      //cerr << endl << "VARNAME: " << *name; 
+    }
+  } // end level 2
+
+
+}
+
+void CKDevelop::slotCVViewDefinition(int index){
+
+  KPath* path;
+  QString* name,*name2;
+  int level;
+  QString type;
+  QString text,last_textpart;
+  QRegExp regexp;
+  path = class_tree->itemPath(index);
+  name = path->pop();
+  
+  level = path->count();
+  if (level == 1) { // class,struct,or global
+    CVGotoClassDecl(*name);
+  }
+  if (level == 2) { // methods or variables
+    if (name->contains("(") != 0){ // it is a method
+      name2 = path->pop();// get the classname
+      CVGotoMethodeImpl(*name2,*name);
+      //cerr << endl << "METHNAME: " << *name;
+    }
+    else { // it is a variable
+      name2 = path->pop();// get the classname
+      CVGotoClassVarDecl(*name2,*name);
+      //cerr << endl << "VARNAME: " << *name; 
+    }
+  } // end level 2
+
 }
 
 int CKDevelop::CVGotoClassDecl(QString classname){
@@ -219,3 +282,14 @@ void CKDevelop::refreshClassCombos(){
     method_combo->insertItem(method_info->name);
   }
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -147,6 +147,7 @@ public:
 
   void slotToolsKIconEdit();
   void slotToolsKDbg();
+  void slotToolsKTranslator();
 
   void slotDocBack();
   void slotDocForward();
@@ -195,6 +196,10 @@ public:
   void slotLogFileTreeSelected(int index);
   void slotRealFileTreeSelected(int index);
   void slotDocTreeSelected(int index);
+  void slotClassTreeSelected(int);
+
+  void slotCVViewDeclaration(int index);
+  void slotCVViewDefinition(int index);
 
   void slotSTabSelected(int item);
   void slotMenuBuffersSelected(int id);
@@ -202,7 +207,6 @@ public:
 
   void slotClassChoiceCombo(int index);
   void slotMethodChoiceCombo(int index);
-  void slotClassTreeSelected(int);
 
   /** change the status message to text */
   void slotStatusMsg(const char *text);
@@ -221,6 +225,7 @@ public:
   int CVGotoClassDecl(QString classname);
   void CVGotoClassVarDecl(QString classname,QString var_name);
   void CVGotoMethodeImpl(QString classname,QString name);
+
   /** a tool meth,used in the search engine*/
   int searchToolGetNumber(QString str);
   QString searchToolGetTitle(QString str);
@@ -300,4 +305,8 @@ private:
 };
 
 #endif
+
+
+
+
 

@@ -50,7 +50,7 @@ public:
   void mousePressEvent(QMouseEvent* event);
   void split(QString str,QStrList& filters);
  protected slots:
- void  slotSingleSelected(int index);
+  void  slotSingleSelected(int index);
   void slotNewClass();
   void slotNewFile();
   void slotNewGroup();
@@ -60,7 +60,7 @@ public:
   void slotGroupProp();
   void slotGroupRemove();
   signals:
- void selectedNewClass();
+  void selectedNewClass();
   void selectedNewFile();
   void selectedFileProp();
   void selectedFileRemove();
@@ -78,3 +78,12 @@ KIconLoader* icon_loader;
 
 };
 #endif
+
+
+
+
+
+
+
+
+

@@ -32,9 +32,6 @@ CLogFileView::CLogFileView(QWidget*parent,const char* name) : KTreeList(parent,n
   file_pop = new KPopupMenu();
   file_pop->setTitle("File:");
   file_pop->insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
-  file_pop->insertItem(i18n("New Class..."),this,SLOT(slotNewClass()));
-  file_pop->insertItem(i18n("New LFV-Group..."),this,SLOT(slotNewGroup()));
-  file_pop->insertSeparator();
   file_pop->insertItem(i18n("Remove File"),this,SLOT(slotFileRemove()));
   file_pop->insertItem(i18n("Delete File..."),this,SLOT(slotFileDelete()));
   file_pop->insertSeparator();
@@ -42,8 +39,6 @@ CLogFileView::CLogFileView(QWidget*parent,const char* name) : KTreeList(parent,n
   group_pop = new KPopupMenu();
   
   group_pop->setTitle("LFV-Group:");
-  group_pop->insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
-  group_pop->insertItem(i18n("New Class..."),this,SLOT(slotNewClass()));
   group_pop->insertItem(i18n("New LFV-Group..."),this,SLOT(slotNewGroup()));
   group_pop->insertSeparator();
   group_pop->insertItem(i18n("Remove Group"),this,SLOT(slotGroupRemove()));
@@ -290,3 +285,14 @@ void CLogFileView::split(QString str,QStrList& filters){
   //   }
   return ;
 }
+
+
+
+
+
+
+
+
+
+
+

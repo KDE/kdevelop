@@ -951,13 +951,14 @@ void CKDevelop::slotMenuBuffersSelected(int id){
 
 
 void CKDevelop::slotLogFileTreeSelected(int index){
+  // no action on Project or Group click with left button
   cerr << "SELECTED\n";
+  if (log_file_tree->itemAt(index)->hasChild() == true) return; // no action on child
+  if(!(log_file_tree->isFile(index))) return; // it is not file
+
+  if(!log_file_tree->leftButton()) return; // right button: return
   KPath* path;
   QString* str;
-  if (log_file_tree->itemAt(index)->hasChild() == true) return; // no action
-  if(!(log_file_tree->isFile(index))) return; // it is not file
-  
-  if(!log_file_tree->leftButton()) return; // not pressed the left button
   path = log_file_tree->itemPath(index);
   str = path->pop();
   switchToFile(prj.getProjectDir() + *str);
@@ -1038,6 +1039,14 @@ void CKDevelop::slotDocTreeSelected(int index){
   }
 }
 void CKDevelop::slotToolsKIconEdit(){
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    config->writeEntry("output_view_pos",view->separatorPos());
+    view->setSeparatorPos(view->height());
+  }
+  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+  resize (width()+1,height());
+
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("kiconedit");
@@ -1046,12 +1055,38 @@ void CKDevelop::slotToolsKIconEdit(){
 }
 
 void CKDevelop::slotToolsKDbg(){
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    config->writeEntry("output_view_pos",view->separatorPos());
+    view->setSeparatorPos(view->height());
+  }
+  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+  resize (width()+1,height());
+
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("kdbg");
   swallow_widget->sWExecute();
   swallow_widget->init();
 }
+
+void CKDevelop::slotToolsKTranslator(){
+  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+    config->writeEntry("output_view_pos",view->separatorPos());
+    view->setSeparatorPos(view->height());
+  }
+  resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
+  resize (width()+1,height());
+
+  s_tab_view->setCurrentTab(TOOLS);
+  swallow_widget->sWClose(false);
+  swallow_widget->setExeString("ktranslator");
+  swallow_widget->sWExecute();
+  swallow_widget->init();
+
+}
+
 void CKDevelop::slotHelpContent(){
   slotURLSelected(browser_widget,"file:" + KApplication::kde_htmldir() + 
 		  "/en/kdevelop/index.html",1,"test");
@@ -1277,6 +1312,13 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
 
 
 

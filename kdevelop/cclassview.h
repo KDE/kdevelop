@@ -32,6 +32,7 @@ class CClassView;
 #include <kiconloader.h>
 #include "structdef.h"
 #include "cproject.h"
+#include <kpopmenu.h>
 
 /** 
   *the classview in kdevelop attention: only a prototype 
@@ -46,13 +47,36 @@ public:
   /** destructor */
   ~CClassView();
   void refresh(CProject* prj);
+  bool isClass(int index);
+  bool isMethod(int index);
   void CVRemoveAllComments(QString* str);
   // variables for the classview
   QList<TStreamedFile>* streamed_files;
   QList<TClassInfo>* class_infos;
- public slots:
- 
+  bool leftButton();
+  bool rightButton();
 protected:
+protected slots:
+  void slotSingleSelected(int index);
+  void slotProjectOptions();
+  void slotFileNew();
+  void slotClassNew();
+  void slotClassRemove();
+  void slotClassDelete();
+  void slotMethodNew();
+  void slotVariableNew();
+  void slotViewDeclaration();
+  void slotViewDefinition();
+
+  signals:
+  void selectedFileNew();
+  void selectedClassNew();
+  void selectedProjectOptions();
+  void selectedViewDeclaration(int index);
+  void selectedViewDefinition(int index);
+
+protected:
+  void mousePressEvent(QMouseEvent* event);
   
   void CVReadAllFiles();
   void CVFindTheClasses();
@@ -69,7 +93,32 @@ protected:
   QString CVGetVisibility(QString str);
 
   CProject* prj_info;
+  KPopupMenu*  class_pop;
+  KPopupMenu*  member_pop;  
+  KPopupMenu* project_pop;
+  bool left_button;
+  bool right_button;
+  QPoint mouse_pos; // the position at the last mousepress-event
+
 private:
   KIconLoader* icon_loader;  
 };
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -140,7 +140,13 @@ void CKDevelop::init(){
   t_tab_view->addTab(real_file_tree,"RFV");
   t_tab_view->addTab(doc_tree,"DOC");
 
-  connect(class_tree, SIGNAL(singleSelected(int)),this, SLOT(slotClassTreeSelected(int)));
+  connect(class_tree, SIGNAL(singleSelected(int)), SLOT(slotClassTreeSelected(int)));
+  connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
+  connect(class_tree, SIGNAL(selectedClassNew()), SLOT(slotProjectNewClass()));
+  connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
+  connect(class_tree, SIGNAL(selectedViewDeclaration(int)), SLOT(slotCVViewDeclaration(int)));
+  connect(class_tree, SIGNAL(selectedViewDefinition(int)), SLOT(slotCVViewDefinition(int)));
+
   connect(log_file_tree, SIGNAL(singleSelected(int)), SLOT(slotLogFileTreeSelected(int)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
@@ -148,7 +154,9 @@ void CKDevelop::init(){
   connect(log_file_tree, SIGNAL(selectedFileProp()),SLOT(slotProjectFileProperties()));
 
   connect(real_file_tree, SIGNAL(singleSelected(int)), SLOT(slotRealFileTreeSelected(int)));
+
   connect(doc_tree, SIGNAL(singleSelected(int)), SLOT(slotDocTreeSelected(int)));
+
 
   // the tabbar + tabwidgets for edit and browser
   s_tab_view = new CTabCtl(top_panner);
@@ -186,7 +194,7 @@ void CKDevelop::init(){
   edit2->filename = cpp_widget->getName();
   
 
-  //  swallow_widget = new KSwallowWidget(s_tab_view);
+  swallow_widget = new KSwallowWidget(s_tab_view);
 
   browser_widget = new CDocBrowser(s_tab_view,"browser");  
   prev_was_search_result= false;
@@ -201,7 +209,7 @@ void CKDevelop::init(){
 
   s_tab_view->addTab(header_widget,"Header/Resource Files");
   s_tab_view->addTab(cpp_widget,"C/C++ Files");
-  //  s_tab_view->addTab(swallow_widget,"Tools");
+  s_tab_view->addTab(swallow_widget,"Tools");
   s_tab_view->addTab(browser_widget,"Documentation-Browser");
  
   top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
@@ -233,12 +241,15 @@ void CKDevelop::initMenu(){
  
   file_menu->insertItem(Icon("filenew.xpm"),i18n("&New File..."), this, SLOT(slotFileNewFile()),
 			CTRL+Key_N,ID_FILE_NEW_FILE);
+
   file_menu->insertItem(i18n("N&ew Project..."), this, SLOT(slotFileNewAppl()),0,ID_FILE_NEW_PROJECT);
+
   file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
   file_menu->insertItem(pix,i18n("&Open File..."), this, SLOT(slotFileOpenFile()),
 			CTRL+Key_O,ID_FILE_OPEN_FILE);
   file_menu->insertItem(i18n("Open &Project..."), this, SLOT(slotFileOpenPrj()),0,ID_FILE_OPEN_PROJECT);
+
   file_menu->insertSeparator();
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/save.xpm");
   file_menu->insertItem(pix,i18n("&Save"), this, SLOT(slotFileSave()), CTRL+Key_S,ID_FILE_SAVE);
@@ -328,6 +339,7 @@ void CKDevelop::initMenu(){
   p2->insertItem(i18n("&Existing File(s)..."), this,
 		 SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
 
+
   project_menu = new QPopupMenu;
   project_menu->insertItem(i18n("&New Class..."), this,
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
@@ -390,10 +402,11 @@ void CKDevelop::initMenu(){
 
   //the tools menu
   tools_menu = new QPopupMenu;
-  //  tools_menu->insertItem(i18n("&KIconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
-  // tools_menu->insertItem(i18n("&Kdbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
-//  menuBar()->insertItem(i18n("&Tools"), tools_menu);
- // menuBar()->insertSeparator();
+  tools_menu->insertItem(i18n("&KIconedit"),this, SLOT(slotToolsKIconEdit()),0,ID_TOOLS_KICONEDIT);
+  tools_menu->insertItem(i18n("KTranslator"),this, SLOT(slotToolsKTranslator()),0,ID_TOOLS_KTRANSLATOR);
+  tools_menu->insertItem(i18n("&Kdbg"),this, SLOT(slotToolsKDbg()),0,ID_TOOLS_KDBG);
+  menuBar()->insertItem(i18n("&Tools"), tools_menu);
+  menuBar()->insertSeparator();
 
   
 
@@ -582,6 +595,20 @@ void CKDevelop::initProject(){
   }
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

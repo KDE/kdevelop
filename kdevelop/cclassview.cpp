@@ -34,6 +34,36 @@ CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name)
   class_infos->setAutoDelete(true);
 
   icon_loader = KApplication::getKApplication()->getIconLoader();
+  left_button = true;
+  right_button = false;
+  class_pop = new KPopupMenu();
+  class_pop->setTitle("Class:");
+  class_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
+  class_pop->insertSeparator();
+  class_pop->insertItem(i18n("New Class..."),this,SLOT(slotClassNew()));
+  class_pop->insertItem(i18n("Remove Class "),this,SLOT(slotClassRemove()));
+  class_pop->insertItem(i18n("Delete Class..."),this,SLOT(slotClassDelete()));
+  class_pop->insertSeparator();
+  class_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
+  class_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
+
+
+  member_pop = new KPopupMenu();
+  member_pop->setTitle("Method:");
+  member_pop->insertItem(i18n("Declaration"),this,SLOT(slotViewDeclaration()));
+  member_pop->insertItem(i18n("Definition"),this,SLOT(slotViewDefinition()));
+  member_pop->insertSeparator();
+  member_pop->insertItem(i18n("New Method"),this,SLOT(slotMethodNew()));
+  member_pop->insertItem(i18n("New Variable"),this,SLOT(slotVariableNew()));
+
+  project_pop = new KPopupMenu();
+  project_pop->setTitle("Project:");
+  project_pop->insertItem(i18n("New File..."),this,SLOT(slotFileNew()));
+  project_pop->insertItem(i18n("New Class..."),this,SLOT(slotClassNew()));
+  project_pop->insertSeparator();
+  project_pop->insertItem(i18n("Options..."),this,SLOT(slotProjectOptions()));
+
+  connect(this,SIGNAL(singleSelected(int)),SLOT(slotSingleSelected(int)));
   
 }
 CClassView::~CClassView(){
@@ -191,6 +221,92 @@ void CClassView::refresh(CProject* prj){
 
  
 }
+
+bool CClassView::leftButton(){
+  return left_button;
+}
+bool CClassView::rightButton(){
+  return right_button;
+}
+void CClassView::mousePressEvent(QMouseEvent* event){
+  if(event->button() == RightButton){    
+    left_button = false;
+    right_button = true;
+  }
+  if(event->button() == LeftButton){
+    left_button = true;
+    right_button = false;
+  }
+  mouse_pos.setX(event->pos().x());
+  mouse_pos.setY(event->pos().y());
+  KTreeList::mousePressEvent(event); 
+}
+
+void CClassView::slotSingleSelected(int index){
+  if(rightButton()){
+    if(isMethod(index)){
+      member_pop->popup(this->mapToGlobal(mouse_pos));
+    } 
+    else if(isClass(index)){
+      class_pop->popup(this->mapToGlobal(mouse_pos));
+
+    }
+    else{
+      project_pop->popup(this->mapToGlobal(mouse_pos));
+    }
+  }
+}
+
+bool CClassView::isClass(int index){
+  KTreeListItem* current = itemAt(index);
+  if(current == 0) return false;
+  KTreeListItem* parent = current->getParent();
+  if(parent == 0) return false;
+  KTreeListItem* pparent = parent->getParent();
+  if(pparent == 0) return false;  
+  KTreeListItem* ppparent = pparent->getParent();
+  if(ppparent == 0) return true;
+  return false;
+}
+
+bool CClassView::isMethod(int index){
+  KTreeListItem* current = itemAt(index);
+  if(current == 0) return false;
+  KTreeListItem* parent = current->getParent();
+  if(parent == 0) return false;
+  KTreeListItem* pparent = parent->getParent();
+  if(pparent == 0) return false;  
+  KTreeListItem* ppparent = pparent->getParent();
+  if(ppparent == 0) return false;
+  return true;
+}
+
+void CClassView::slotProjectOptions(){
+  emit selectedProjectOptions();
+}
+void CClassView::slotFileNew(){
+  emit selectedFileNew();
+}
+void CClassView::slotClassNew(){
+  emit selectedClassNew();
+}
+void CClassView::slotClassRemove(){
+}
+void CClassView::slotClassDelete(){
+}
+void CClassView::slotMethodNew(){
+}
+void CClassView::slotVariableNew(){
+}
+void CClassView::slotViewDeclaration(){
+  int index=currentItem();
+  emit selectedViewDeclaration(index);
+}
+void CClassView::slotViewDefinition(){
+  int index=currentItem();
+  emit selectedViewDefinition(index);
+}
+
 void CClassView::CVFindTheClasses(){
 
 
@@ -465,3 +581,30 @@ QString CClassView::CVGetVariable(QString str){
   }
   return str.mid(begin+1,end-begin+1);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
