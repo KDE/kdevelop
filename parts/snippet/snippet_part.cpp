@@ -30,7 +30,7 @@
 #include "snippetsettings.h"
 
 typedef KGenericFactory<SnippetPart> snippetFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevsnippet, snippetFactory( "kdevsnippet" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevsnippet, snippetFactory( "kdevsnippet" ) )
 
 SnippetPart::SnippetPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin("CodeSnippet", "snippet", parent, name ? name : "SnippetPart" )
