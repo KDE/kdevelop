@@ -1,3 +1,8 @@
+2002-11-26 Caleb Tennis <caleb@aei-tech.com
+    * Added documentation to KDevelop 3.0 Manual
+    * Reworked doc directories for doctreeviewpart - now external
+      documentation is remotely hosted by default
+
 2002-11-26 F@lk Brettschneider <falk@kdevelop.org>
     * bugfixes in TopLevelMDI; Remove the docking section from gideonrc!
       Then the state of tool-views should be properly restored when starting
