@@ -1100,6 +1100,14 @@ void CKDevelop::slotDebugStepOutOff()
   dbgController->slotStepOutOff();
 }
 
+void CKDevelop::slotDebugInterrupt()
+{
+  if (!dbgController)
+    return;
+
+  dbgController->slotBreakInto();
+}
+
 void CKDevelop::slotDebugToggleBreakpoint()
 {
   if (!brkptManager)
@@ -1348,6 +1356,12 @@ void CKDevelop::slotDebugNamedFile()
   }
   else
     slotBuildDebug();   // Starts a debugger (external in this case)
+}
+
+// I need this one for the accel keys
+void CKDevelop::slotBuildDebugStart()
+{
+  slotBuildDebug();
 }
 
 void CKDevelop::slotBuildDebug(bool bWithArgs)

@@ -375,6 +375,7 @@ public:
   void slotBuildRunWithArgs();
   void slotStartRun(bool bWithArgs=false);
   void slotBuildDebug(bool bWithArgs=false);
+  void slotBuildDebugStart();
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
@@ -435,6 +436,7 @@ public:
   void slotDebugBreakInto();
   void slotDebugStepOutOff();
   void slotDebugToggleBreakpoint();
+  void slotDebugInterrupt();
 
   ////////////////////////
   // TOOLS-Menu entries

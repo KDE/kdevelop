@@ -500,7 +500,7 @@ void CKDevelop::initKeyAccel(){
 
   // Debugger startups
   accel->insertItem( i18n("Debug start"), "DebugStart", (unsigned int) 0);
-  accel->connectItem( "DebugStart", this, SLOT(slotBuildDebug()), true, ID_DEBUG_START);
+  accel->connectItem( "DebugStart", this, SLOT(slotBuildDebugStart()), true, ID_DEBUG_START);
 
   accel->insertItem( i18n("Debug start other"), "DebugStartOther", (unsigned int) 0);
   accel->connectItem( "DebugStartOther", this, SLOT(slotDebugNamedFile()), true, ID_DEBUG_START_OTHER);
@@ -531,19 +531,19 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( "DebugStepInto", this, SLOT(slotDebugStepInto()), true, ID_DEBUG_STEP);
 
   accel->insertItem( i18n("Debug step into instr"), "DebugStepIntoInstr", (unsigned int) 0);
-  accel->connectItem( "DebugStepIntoInstr", this, SLOT(slotDebugStepIntoInstr()), true, ID_DEBUG_STEP_INST);
+  accel->connectItem( "DebugStepIntoInstr", this, SLOT(slotDebugStepIntoIns()), true, ID_DEBUG_STEP_INST);
 
   accel->insertItem( i18n("Debug step over"), "DebugStepOver", (unsigned int) 0);
   accel->connectItem( "DebugStepOver", this, SLOT(slotDebugStepOver()), true, ID_DEBUG_NEXT);
 
   accel->insertItem( i18n("Debug step over instr"), "DebugStepOverInstr", (unsigned int) 0);
-  accel->connectItem( "DebugStepOverInstr", this, SLOT(slotDebugStepOverInstr()), true, ID_DEBUG_NEXT_INST);
+  accel->connectItem( "DebugStepOverInstr", this, SLOT(slotDebugStepOverIns()), true, ID_DEBUG_NEXT_INST);
 
   accel->insertItem( i18n("Debug step out"), "DebugStepOut", (unsigned int) 0);
-  accel->connectItem( "DebugStepOut", this, SLOT(slotDebugStepOut()), true, ID_DEBUG_FINISH);
+  accel->connectItem( "DebugStepOut", this, SLOT(slotDebugStepOutOff()), true, ID_DEBUG_FINISH);
 
   accel->insertItem( i18n("Debug viewers"), "DebugViewer", (unsigned int) 0);
-  accel->connectItem( "DebugViewer", this, SLOT(slotDebugMemview()), true, ID_DEBUG_MEMVIEW);
+  accel->connectItem( "DebugViewer", this, SLOT(slotDebugMemoryView()), true, ID_DEBUG_MEMVIEW);
 
   accel->insertItem( i18n("Debug interrupt"), "DebugInterrupt", (unsigned int) 0);
   accel->connectItem( "DebugInterrupt", this, SLOT(slotDebugInterrupt()), true, ID_DEBUG_BREAK_INTO);
