@@ -44,7 +44,9 @@ void FileSelectorPart::fileSelected(const KFileItem *file)
   KURL u(file->url());
 
   core()->gotoSourceFile( u );
+  core()->lowerWidget(m_filetree);
 }
+
 void FileSelectorPart::slotProjectOpened(){
   KURL u;
   u.setPath(project()->projectDirectory());

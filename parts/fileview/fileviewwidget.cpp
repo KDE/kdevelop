@@ -130,6 +130,7 @@ void FileViewWidget::slotItemExecuted(QListViewItem *item)
 
     FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(item);
     m_part->core()->gotoFile(QString("file://") + fvfitem->fileName());
+    m_part->core()->lowerWidget(this);
 }
 
 

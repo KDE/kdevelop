@@ -587,6 +587,7 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
         return;
     
     m_part->core()->gotoDocumentationFile(ident);
+    m_part->core()->lowerWidget(this);
 }
 
 

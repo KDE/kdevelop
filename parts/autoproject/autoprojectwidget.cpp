@@ -331,6 +331,7 @@ void AutoProjectWidget::slotItemExecuted(QListViewItem *item)
         QString dirName = activeSubproject->path;
         FileItem *fitem = static_cast<FileItem*>(pvitem);
         m_part->core()->gotoFile(KURL(dirName + "/" + QString(fitem->name)));
+	m_part->core()->lowerWidget(this);
     }
 }
 
