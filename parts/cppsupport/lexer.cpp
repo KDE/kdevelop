@@ -152,7 +152,7 @@ void Lexer::nextToken( Token& tk )
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	} else if( m_driver->macros( m_driver->currentFileName() ).contains(ide) ){
-	    const Macro& m = m_driver->macros( m_driver->currentFileName() )[ ide ];
+	    Macro m = m_driver->macros( m_driver->currentFileName() )[ ide ];
 	    if( m.hasArguments() ){
 		readWhiteSpaces();
 		if( currentChar() == '(' )
