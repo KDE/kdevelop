@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The KDevelop Programming Handbook: Additional Information</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="">
+<META NAME="description" CONTENT="">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+Next <A HREF="index-18.html">Previous</A>
+ <A HREF="index.html#toc19">Table of Contents</A>
+</P>
+<H3><A NAME="s19">19. Additional Information</A></H3>
+
+<P>
+<H3><A NAME="ss19.1">19.1 Example Makefile.am for a Shared Library</A>
+</H3>
+
+<P>
+<BLOCKQUOTE><CODE>
+<PRE>
+# Example Makefile.am for a shared library.  It makes a library
+#  called "example" as libexample.so.2.1.2
+# This Makefile.am was taken from the kdelibs distribution and modified
+#  to serve as an example.
+#
+# David Sweet
+#
+
+INCLUDES=  $(all_includes)
+
+lib_LTLIBRARIES  = libexample.la
+
+# Note:  If you specify a:b:c as the version in the next line,
+#  the library that is made has version (a-c).c.b.  In this
+#  example, the version is 2.1.2.
+libexample_la_LDFLAGS = -version-info 3:2:1 $(all_libraries)
+
+include_HEADERS = header1.h header2.h\
+                  header3.h
+
+# Which headers shouldn't be installed when a   make install  is done?
+noinst_HEADERS = version.h
+
+libexample_la_SOURCES = code1.cpp code2.cpp
+                        code3.cpp
+
+#  USE_AUTOMOC is great.  This takes care of all of your  moc'ing
+#   dependencies.
+#  (You still need to include, for example, header1.moc in code1.cpp.)
+libexample_la_METASOURCES = USE_AUTOMOC
+</PRE>
+</CODE></BLOCKQUOTE>
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+Next <A HREF="index-18.html">Previous</A>
+ <A HREF="index.html#toc19">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
