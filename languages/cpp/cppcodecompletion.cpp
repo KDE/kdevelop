@@ -441,8 +441,9 @@ void CppCodeCompletion::slotTextChanged()
 	m_ccColumn = 0;
 
 	if ( ( m_pSupport->codeCompletionConfig() ->automaticCodeCompletion() &&
-	        ( !ch.isEmpty() && ch != "\n" && ch != " " && ch != "\t" && ch != ";" )  /*
-	        	(ch == "." || ch2 == "->" || ch2 == "::") */ ) || 
+	        ( !ch.isEmpty() && ch != "\n" && ch != " " && ch != "\t" &&
+		  ch != ";" && ch != "{" && ch != "}" ) //TODO optimize, maybe use a qregexp
+		/*(ch == "." || ch2 == "->" || ch2 == "::") */ ) || 
 			( strCurLine.simplifyWhiteSpace().contains("virtual") ) ||
 	        ( m_pSupport->codeCompletionConfig() ->automaticArgumentsHint() && ch == "(" ) ||
 	        ( m_pSupport->codeCompletionConfig() ->automaticHeaderCompletion() && ( ch == "\"" || ch == "<" ) &&
