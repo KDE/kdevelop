@@ -1,4 +1,4 @@
-SUBDIRS = welcome manual tutorial programming cref
+SUBDIRS = welcome manual tutorial cref programming
 
 EXTRA_DIST = tip.database
 
