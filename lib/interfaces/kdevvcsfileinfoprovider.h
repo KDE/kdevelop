@@ -12,19 +12,12 @@
 #ifndef KDEVVCSFILEINFOPROVIDER_H
 #define KDEVVCSFILEINFOPROVIDER_H
 
-/**
-This is a basic interface for providing information about the file
-state in respect to repository.
-
-@author KDevelop Authors
-*/
 #include <qobject.h>
 #include <qmap.h>
 
 /**
 * Info about file state
 */
-
 struct VCSFileInfo
 {
     enum FileState { Unknown, Added, Uptodate, Modified, Conflict, Sticky, Directory };
@@ -39,9 +32,8 @@ struct VCSFileInfo
     FileState state;
 
     QString toString() const;
-    QString state2String() const;
 
-    static QString vcsState2String( FileState state );
+    static QString state2String( FileState state );
 };
 
 /**

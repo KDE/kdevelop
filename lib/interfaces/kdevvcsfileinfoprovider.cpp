@@ -18,19 +18,12 @@
 
 QString VCSFileInfo::toString() const
 {
-    return "(" + fileName + ", " + workRevision + ", " + repoRevision + ", " + state2String() + ")";
+    return "(" + fileName + ", " + workRevision + ", " + repoRevision + ", " + state2String( state ) + ")";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString VCSFileInfo::state2String() const
-{
-    return vcsState2String( state );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QString VCSFileInfo::vcsState2String( FileState state )
+QString VCSFileInfo::state2String( FileState state )
 {
     switch (state)
     {
