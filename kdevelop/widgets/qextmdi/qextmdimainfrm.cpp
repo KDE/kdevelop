@@ -195,17 +195,37 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, QPoint pos, int flags)
 //============ attachWindow ============//
 void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
 {
-   QextMdiChildFrm *lpC=new QextMdiChildFrm(m_pMdi);
-   lpC->setClient(pWnd);
+   // decide whether window shall be cascaded 
+   bool bCascade = false;
+   QRect frameGeo = pWnd->frameGeometry();
+   QPoint topLeftScreen = pWnd->mapToGlobal(QPoint(0,0));
+   QPoint topLeftMdiChildArea = m_pMdi->mapFromGlobal(topLeftScreen);
+   QRect childAreaGeo = m_pMdi->geometry();
+   if ( (topLeftMdiChildArea.x() < 0) || (topLeftMdiChildArea.y() < 0) ||
+        (topLeftMdiChildArea.x()+frameGeo.width() > childAreaGeo.width()) ||
+        (topLeftMdiChildArea.y()+frameGeo.height() > childAreaGeo.height()) ) {
+      bCascade = true;
+   }
 
+   // create frame and insert child view
+   QextMdiChildFrm *lpC=new QextMdiChildFrm(m_pMdi);
+   pWnd->hide();
+   if (!bCascade) {
+      lpC->move(topLeftMdiChildArea);
+   }
+   lpC->setClient(pWnd);
    pWnd->youAreAttached(lpC);
 
    // this is done in activateView
    //  m_pTaskBar->setActiveButton(pWnd);
 
+   // position and really attach to MDI
 	// this should add all the frame stuff but nothing more
 	// remove the bShow from here
-   m_pMdi->manageChild(lpC,bShow);
+   m_pMdi->manageChild(lpC,false,bCascade);
+   if (bShow) {
+      lpC->show();
+   }
 
    // now you set the attribute like position and cascadin/maximize etc...
    // arrangeWindow(pWnd);

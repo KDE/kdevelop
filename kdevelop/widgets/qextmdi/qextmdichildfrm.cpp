@@ -247,7 +247,7 @@ void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
    }
 }
 
-//============= mouseMoveEvent ===============//
+//============= moveEvent ===============//
 
 void QextMdiChildFrm::moveEvent(QMoveEvent* me)
 {
@@ -271,7 +271,7 @@ void QextMdiChildFrm::leaveEvent(QEvent *)
 #include <iostream.h>
 void QextMdiChildFrm::resizeWindow(int resizeCorner, int xPos, int yPos)
 {
-	QRect resizeRect(x(),y(),width(),height());
+   QRect resizeRect(x(),y(),width(),height());
 
 	// Calculate the minimum width & height
 	int minWidth=0;
@@ -579,7 +579,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 	if(w->parent()!=this){
 		//reparent to this widget , no flags , point , show it
       QPoint pnt2(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
-     	w->reparent(this,0,pnt2,TRUE); //Flags get lost thru recreate! (DND too!)
+     	w->reparent(this,0,pnt2,w->isVisible()); //Flags get lost thru recreate! (DND too!)
    } else w->move(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
 	
    linkChildren( pFocPolDict);
