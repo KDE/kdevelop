@@ -577,11 +577,11 @@ void DebuggerPart::slotRun()
 {
     if( controller->stateIsOn( s_dbgNotStarted ) ) {
       mainWindow()->statusBar()->message(i18n("Debugging program"), 1000);
+      mainWindow()->raiseView(gdbOutputWidget);
       startDebugger();
     } else {
       mainWindow()->statusBar()->message(i18n("Continuing program"), 1000);
     }
-    mainWindow()->raiseView(gdbOutputWidget);
     controller->slotRun();
 }
 
