@@ -1,6 +1,11 @@
 2003-04-11 Alexander Dymo <cloudtemple@mksat.net>
     * Applied rubysupport part, including application and filecreate templates
-      Ruby support is created by Marek Janukowicz <child@t17.ds.pwr.wroc.pl>
+      Ruby support is created by Marek Janukowicz <child@t17.ds.pwr.wroc.pl>.
+    * Implemented CPPFLAGS and LDFLAGS input fields in "Configure Options"
+      dialog for Automake Manager.
+    * plugins/gccoptions:
+      "Compiler Options" dialog now honors unrecognized user-defined options,
+      more predefined compiler warnings are available.
 
 2003-04-10  luc willems  <Willems.luc@pandora.be>
 	* add support for perl filecreate templates
