@@ -253,6 +253,9 @@ void CClassParser::skipBlock()
       depth--;
       exit = ( depth == 0 );
     }
+
+    if( lexem == 0 )
+      exit = true;
   }
 }
 
