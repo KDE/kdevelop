@@ -3,7 +3,7 @@ dist-hook:
 
 
 # This file you have to edit. Change the name here
-SUBDIRS =  kdevelop kdlgloader po
+SUBDIRS =  doc kdevelop kdlgloader po
 
 # not a GNU package. You can remove this line, if 
 # have all needed files, that a GNU package needs
