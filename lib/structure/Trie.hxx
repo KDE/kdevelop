@@ -196,7 +196,8 @@ namespace Structure {
     void apply(Node_Fun& fun) {
       for (typename Subtries::iterator i=children.begin();
 	   i!=children.end(); i++) {
-        fun(*i);
+	if (!(*i)->empty_comp)
+	  fun(*i);
       }
     }
 
@@ -256,7 +257,7 @@ namespace Structure {
     }
 
     unsigned int size() const {
-      return num_components(); // there is one blank component
+      return num_components();
     }
 
   private:

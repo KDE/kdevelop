@@ -26,17 +26,22 @@ class KDict : private Structure::Trie_Impl<char, QString, type*>
 
   KDict(bool cs = true) : Impl(' '), case_sensitive(cs), auto_delete(false) {
     // TODO: actually handle case sensitivity
+    component = 0;
   }
   KDict(int sz, bool cs = true) : Impl(' '), case_sensitive(cs), auto_delete(false) {
     // this is simply for compatibility, has no function
     depreceated("KDict(int sz,...)");
+    component = 0;
   }
   KDict ( const KDict<type> & dict ) {
-    kDebug() << "NOT IMPLEMENTED!" << endl;
+    kDebug() << "KDict: COPY CONSTRUCTOR NOT IMPLEMENTED!" << endl;
+    component = 0;
   }
 
   struct Delete_Pointer {
     void operator() (Impl* node) {
+      kdDebug() << "KDict: deleting pointer " << node->component;
+      assert(node->component);
       delete node->component;
     }
   };

@@ -12,6 +12,8 @@
         * lib/structure:
           - implemented take(), I wonder why I left it like that
           - fix: size() returns number of components
+	  - fix: Trie_Impl apply() should apply only to non_empty
+	    components
 
 2003-02-11 Mickael Marchand <marchand@kde.org>
 	* parts/svn:
