@@ -110,6 +110,27 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    tk.setStartPosition( startLine, startColumn );
 	    tk.setEndPosition( m_currentLine, m_currentColumn );
 	}
+#if 0
+    } else if( !m_skipping[ m_ifLevel ] && !m_inPreproc && ch == '#' && peekChar() == '#' ){
+        // TODO: check m_size
+        Token lastTok = m_tokens[ --m_size ];
+
+        nextChar( 2 );
+        readWhiteSpaces();
+        QString lastTokText = toString( lastTok );
+        qDebug( "lastTokText = %s", lastTokText.latin1() );
+
+        Token tok;
+        nextToken( tok );
+
+        QString expandedText = lastTokText + toString( tok );
+        qDebug( "expandedText = %s", expandedText.latin1() );
+        m_source.insert( currentPosition(), expandedText );
+
+        lastTok.getStartPosition( &m_currentLine, &m_currentColumn );
+
+        m_endPtr += expandedText.length();
+#endif
     } else if( m_startLine && ch == '#' ){
 
 	nextChar(); // skip #
@@ -210,14 +231,39 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
             m_endPtr = currentPosition() + m.body().length();
             while( !currentChar().isNull() ){
+
+                readWhiteSpaces();
+
+                bool mergeToken = false;
+                bool stringify = false;
+                QString textToInsert = QString::null;
+
+		if( currentChar() == '#' && peekChar() == '#' ){
+                	// TODO: check m_size
+        		Token lastTok = m_tokens[ --m_size ];
+
+        		nextChar( 2 );
+
+		        readWhiteSpaces();
+        		textToInsert = toString( lastTok );
+                        mergeToken = true;
+		} else if( currentChar() == '#' ){
+        		nextChar();
+  			stringify = true;
+                }
+
                 Token tok;
                 nextToken( tok );
-
                 QString s = toString( tok );
+
                 if( tok == Token_eof ){
                      break;
 		} else if( tok == Token_identifier && map.contains(s) ){
 		    QString v = map[ s ];
+                    if( mergeToken )
+                        v = textToInsert + v;
+                    else if( stringify )
+                        v = QString("\"") + v + QString("\"");
 
 		    m_source.insert( currentPosition(), v );
 
