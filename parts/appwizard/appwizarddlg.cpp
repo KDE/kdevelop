@@ -396,7 +396,7 @@ void AppWizardDialog::accept()
 		QTextStream temps(&f);
 		temps << templateText;
 		f.flush();
-		subMap.insert( QString( "TEMPLATE_FOR_%1" ).arg( (*it).suffix ), templateText );
+		subMap.insert( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper(), templateText );
 
 		installFile file;
 		file.source = tempFile->name();
