@@ -1,0 +1,10 @@
+CTags is a source navigation tool with support for many languages.
+
+Features:
+- Provides a context menu for finding type declarations/definitions.
+- Provides query dialog in the Tools menu.
+- When more than one declaration/definition is found, presets a dialog
+  so that the user can select which one to goto.
+
+More info on ctags:
+http://ctags.sourceforge.net/

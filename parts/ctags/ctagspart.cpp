@@ -46,6 +46,12 @@ CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
                           this, SLOT(slotSearchTags()),
                           actionCollection(), "tools_ctags" );
 
+    mOccuresTagsDlg = 0;
+    mOccuresTagsDlg = new OccuresTagsDlg;
+    mOccuresTagsDlg->hide();
+
+    connect( mOccuresTagsDlg->mOcurresList, SIGNAL(clicked( QListBoxItem * )), 
+             this, SLOT(slotGotoTag( QListBoxItem * )) );
     connect( core(), SIGNAL(projectClosed()),
              this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
@@ -60,6 +66,7 @@ CTagsPart::~CTagsPart()
 {
     delete m_dialog;
     delete m_tags;
+    delete mOccuresTagsDlg;
 }
 
 
@@ -67,8 +74,10 @@ void CTagsPart::projectClosed()
 {
     delete m_dialog;
     delete m_tags;
+    delete mOccuresTagsDlg;
     m_dialog = 0;
     m_tags = 0;
+    mOccuresTagsDlg = 0;
 }
 
 
@@ -96,23 +105,48 @@ void CTagsPart::gotoTag(const QString &tag, const QString &kindChars)
         return;
     
     QString fileName, pattern;
+    QStringList occuresList;
 
     CTagsMapIterator result = m_tags->find(tag);
     if (result != m_tags->end()) {
         CTagsTagInfoListConstIterator it;
         for (it = (*result).begin(); it != (*result).end(); ++it)
+        {
             if (kindChars.find((*it).kind) != -1) {
                 fileName = (*it).fileName;
                 pattern = (*it).pattern;
-                break;
+                occuresList.append( fileName+":"+pattern );
             }
+        }
     }
 
     if (fileName.isNull()) {
         KMessageBox::sorry(0, i18n("Tag not found"));
         return;
     }
-    
+
+    if ( occuresList.count() > 1 ) {
+        mOccuresTagsDlg->mOcurresList->clear();
+        mOccuresTagsDlg->mOcurresList->insertStringList( occuresList );
+        mOccuresTagsDlg->show();
+    }
+    else
+       gotoFinalTag( occuresList[0] );
+}
+
+void CTagsPart::slotGotoTag( QListBoxItem *item )
+{
+    if ( item )
+       gotoFinalTag( item->text() );
+}
+
+void CTagsPart::gotoFinalTag( const QString & contextStr )
+{
+    mOccuresTagsDlg->hide();
+
+    QString fileName = contextStr.section( ':', 0, 0 );
+    QString pattern  = contextStr.section( ':', -1 );
+
     bool ok;
     int lineNum = pattern.toInt(&ok);
     if (!ok) {

@@ -15,6 +15,7 @@
 #include <qguardedptr.h>
 #include <kdialogbase.h>
 #include "kdevplugin.h"
+#include "occurestagsdlg.h"
 
 struct CTagsTagInfo
 {
@@ -59,14 +60,19 @@ private slots:
     void slotSearchTags();
     void slotGotoDeclaration();
     void slotGotoDefinition();
-    
+    void slotGotoTag( QListBoxItem *item );
+
 private:
     void gotoTag(const QString &tag, const QString &kindChars);
-    
+    void gotoFinalTag( const QString &contextStr );
+
     CTagsDialog *m_dialog;
     CTagsMap *m_tags;
     QStringList m_kindStrings;
     QString m_contextString;
+
+    OccuresTagsDlg *mOccuresTagsDlg;
+
 };
 
 #endif
