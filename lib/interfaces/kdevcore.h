@@ -9,6 +9,13 @@
 #include "kdevpart.h"
 
 
+#ifdef NEW_EDITOR
+namespace KEditor {
+class Editor;
+}
+#endif
+
+
 class Context
 {
 public:
@@ -146,6 +153,14 @@ public:
 	 * The manager used to manage the parts.
 	 */
     virtual KParts::PartManager *partManager() const = 0;	
+
+
+#ifdef NEW_EDITOR
+	/**
+	 * The interface to the editor used
+	 */
+	virtual KEditor::Editor *editor() = 0;
+#endif
 	
 signals:
 
