@@ -27,10 +27,11 @@ DocManager::~DocManager ()
 KTextEditor::Document *DocManager::createDoc (QString type)
 {
   KLibFactory *factory = 0;
+  KTrader::OfferList offers = KTrader::self()->query("KTextEditor/Document");
+  KService::Ptr service = *offers.begin();
 
-  factory = KLibLoader::self()->factory( "libkatecore" );
-
-  KTextEditor::Document *doc = static_cast<KTextEditor::Document *>(factory->create(this, 0, "Kate::Document"));
+  factory = KLibLoader::self()->factory( service->library().latin1() );
+  KTextEditor::Document *doc = static_cast<KTextEditor::Document *>(factory->create(this, 0, "KTextEditor::Document"));
 
   docs.append (doc);
   return doc;
