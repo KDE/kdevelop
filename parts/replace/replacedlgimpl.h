@@ -25,6 +25,7 @@ protected:
 protected slots:
     void showRegExpEditor();
     void validateExpression( const QString & );
+    void validateFind( const QString & );
     void toggleExpression( bool );
     void saveComboHistories();
 

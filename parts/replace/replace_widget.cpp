@@ -90,7 +90,7 @@ ReplaceWidget::ReplaceWidget(ReplacePart *part)
 void ReplaceWidget::showDialog()
 {
     if ( ! m_part->project() )
-        return; // This shouldn't happen, since the part only has project scope
+        return; // TODO feedback?
 
     m_dialog->show( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" );
 }
@@ -201,17 +201,11 @@ bool ReplaceWidget::makeReplacements()
     _terminateOperation = false;
 
     QStringList openfiles = openProjectFiles();
+    QStringList changedFiles;
 
     ReplaceItem const * fileitem = _listview->firstChild();
     while ( fileitem )
     {
-        // is this a good idea? should the replace operation be interruptable?
-//         if ( shouldTerminate() )
-//         {
-//             completed = false;
-//             break;
-//         }
-
         if ( fileitem->isOn() )
         {
             QString currentfile = fileitem->file();
@@ -233,47 +227,40 @@ bool ReplaceWidget::makeReplacements()
             }
             else
             {
-                QString newfile = currentfile + "_kdevreplace_tempfile";
-                QFile ifile( currentfile );
-                QFile ofile( newfile );
-                if ( ifile.open( IO_ReadOnly ) && ofile.open( IO_WriteOnly ) )
+                QFile file( currentfile );
+                QString buffer;
+
+                if ( file.open( IO_ReadOnly ) )
                 {
-                    QTextStream istream( &ifile );
-                    QTextStream ostream( &ofile );
+                    QTextStream istream( &file );
+                    QTextStream buffer_stream( &buffer, IO_WriteOnly );
 
-                    _listview->makeReplacementsForFile( istream, ostream, fileitem );
+                    _listview->makeReplacementsForFile( istream, buffer_stream, fileitem );
 
-                    ifile.close();
-                    ofile.close();
+                    file.close();
 
-                    QDir().rename( newfile, currentfile, true );
+                    if ( file.open( IO_WriteOnly ) )
+                    {
+                        QTextStream ostream( &file );
+                        ostream << buffer;
+                        file.close();
+                    }
                 }
             }
-            //Telling the project about the edited file
-            m_part->project()->changedFile( relativeProjectPath( ( currentfile ) ) );
+            changedFiles << relativeProjectPath( ( currentfile ) );
         }
-
         fileitem = fileitem->nextSibling();
 
         kapp->processEvents( 100 );
     }
 
+    // Telling the project about the edited files
+    if ( ! changedFiles.isEmpty() )
+    {
+        m_part->project()->changedFiles( changedFiles );
+    }
+
     m_part->partController()->saveAllFiles();
-
-    //BEGIN *** remove this ***
-    //TODO - remove this when the parser supports the changedFile() signal
-    QCString appName;
-    appName.sprintf( "gideon-%d", getpid() );
-
-    QCString replyType;
-    QByteArray data, replyData;
-    QDataStream arg(  data, IO_WriteOnly );
-
-    (void) kapp->dcopClient()->call( appName,
-                                     "KDevCppSupport",
-                                     "parseProject()",
-                                     data, replyType, replyData );
-    //END *** remove this ***
 
     m_part->core()->running( m_part, false );
 

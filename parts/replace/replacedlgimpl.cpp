@@ -11,6 +11,7 @@
 #include <kurlcompletion.h>
 #include <klineedit.h>
 #include <kcombobox.h>
+#include <kdebug.h>
 
 #include "replacedlgimpl.h"
 
@@ -42,6 +43,8 @@ ReplaceDlgImpl::ReplaceDlgImpl(QWidget* parent, const char* name, bool modal, WF
 {
     connect( find_button, SIGNAL( clicked() ), SLOT( saveComboHistories() ) );
     connect( regexp_button, SIGNAL( clicked() ), SLOT( showRegExpEditor() ) );
+    connect( find_combo, SIGNAL( textChanged( const QString & ) ),
+        SLOT( validateFind( const QString & ) ) );
     connect( regexp_combo, SIGNAL( textChanged ( const QString & ) ),
              SLOT( validateExpression( const QString & ) ) );
     connect( strings_regexp_radio, SIGNAL( toggled( bool ) ), SLOT( toggleExpression( bool ) ) );
@@ -69,10 +72,12 @@ void ReplaceDlgImpl::show( QString const & path )
     replacement_combo->setCurrentText( "" );
     regexp_combo->setCurrentText( "" );
 
-    QDialog::show();
-    
     strings_all_radio->setChecked( true );
     find_combo->setFocus();
+    
+    find_button->setEnabled( false );
+
+    QDialog::show();
 }
 
 
@@ -92,6 +97,14 @@ void ReplaceDlgImpl::showRegExpEditor()
             regexp_combo->setCurrentText( editor->regExp() );
         }
     }
+}
+
+void ReplaceDlgImpl::validateFind( const QString & )
+{
+    //kdDebug(0) << "ReplaceWidget::validateFind()" << endl;
+
+    bool x = find_combo->currentText().isEmpty() && ! strings_regexp_radio->isOn();
+    find_button->setEnabled( !x );
 }
 
 void ReplaceDlgImpl::validateExpression( const QString & )
