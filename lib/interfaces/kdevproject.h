@@ -3,7 +3,7 @@
 
 #include <qstringlist.h>
 #include "kdevplugin.h"
-#include <domutil.h>
+#include "domutil.h"
 
 
 class KDevProject : public KDevPlugin

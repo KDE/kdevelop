@@ -139,7 +139,7 @@
 </ToolBar>
 
 <ToolBar name="buildToolBar" position="Top" noMerge="1">
-  <text>Main Toolbar</text>
+  <text>Build Toolbar</text>
   <DefineGroup name="build_operations"/>
   <DefineGroup name="debug_operations"/>
   <Action name="stop_processes"/>

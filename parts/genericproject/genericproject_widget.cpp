@@ -1,0 +1,791 @@
+/***************************************************************************
+ *   Copyright (C) 2003 Roberto Raggi                                      *
+ *   roberto@kdevelop.org                                                  *
+ *   Copyright (C) 2003 Alexander Dymo                                     *
+ *   cloudtemple@mksat.net                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "genericproject_part.h"
+#include "genericproject_widget.h"
+#include "overviewlistview.h"
+#include "detailslistview.h"
+#include "genericlistviewitem.h"
+
+#include "kdevcore.h"
+#include "kdevpartcontroller.h"
+
+#include <kparts/part.h>
+#include <klibloader.h>
+#include <kurl.h>
+#include <kdebug.h>
+#include <kiconloader.h>
+#include <kaction.h>
+#include <kpopupmenu.h>
+#include <klistview.h>
+#include <klocale.h>
+#include <klineeditdlg.h>
+#include <kmessagebox.h>
+#include <kio/netaccess.h>
+#include <kfiledialog.h>
+
+#include <qsplitter.h>
+#include <qtooltip.h>
+#include <qtoolbutton.h>
+#include <qheader.h>
+#include <qdir.h>
+#include <qfile.h>
+
+#include "kdevbuildsystem.h"
+#include "removesubprojectdialog.h"
+#include "kdevcreatefile.h"
+
+GenericProjectWidget::GenericProjectWidget(GenericProjectPart *part)
+    : QVBox( 0, "GenericProjectWidget" ), m_part( part ), m_activeGroup( 0 ), m_activeTarget( 0 )
+{
+    QSplitter* splitter = new QSplitter( Vertical, this );
+    initOverviewListView( splitter );
+    initDetailsListView( splitter );
+
+    initActions();
+
+    connect( m_part, SIGNAL(mainGroupChanged(BuildGroupItem*)),
+        this, SLOT(slotMainGroupChanged(BuildGroupItem*)) );
+}
+
+GenericProjectWidget::~GenericProjectWidget()
+{
+}
+
+void GenericProjectWidget::initOverviewListView( QSplitter * splitter )
+{
+    QVBox* vbox = new QVBox( splitter );
+    
+    QHBox* buttonBox = new QHBox( vbox );
+    buttonBox->setMargin( 2 );
+    buttonBox->setSpacing( 2 );
+ 
+    QToolButton* btn = 0;
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("group_new") );
+    QToolTip::add( btn, i18n("Add new group") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotNewGroup()));
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("targetnew_kdevelop") );
+    QToolTip::add( btn, i18n("Add new target") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotNewTarget()));
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("launch") );
+    QToolTip::add( btn, i18n("Build") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotBuildGroup()));
+
+    QWidget *spacer1 = new QWidget( buttonBox );
+    buttonBox->setStretchFactor( spacer1, 1 );
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("configure") );
+    QToolTip::add( btn, i18n("Configure group") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotConfigureGroup()));
+
+    buttonBox->setMaximumHeight( btn->height() );
+
+    m_overviewListView = new OverviewListView( m_part, vbox, "GroupListView" );
+
+    m_overviewListView->setResizeMode( QListView::LastColumn );
+    m_overviewListView->setSorting( -1 );
+    m_overviewListView->header()->hide();
+    m_overviewListView->addColumn( QString::null );
+
+    connect( m_overviewListView, SIGNAL(clicked(QListViewItem*)),
+	     this, SLOT(slotItemSelected(QListViewItem*)) );
+
+    connect( this, SIGNAL(groupSelected(BuildGroupItem*)),
+	     this, SLOT(showDetails(BuildGroupItem*)) );
+
+    connect(m_overviewListView, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+        this, SLOT(showGroupContextMenu(KListView *, QListViewItem *, const QPoint &)));
+}
+
+void GenericProjectWidget::initDetailsListView( QSplitter * splitter )
+{
+    QVBox* vbox = new QVBox( splitter );
+
+    QHBox* buttonBox = new QHBox( vbox );
+    buttonBox->setMargin( 2 );
+    buttonBox->setSpacing( 2 );
+
+    QToolButton* btn = 0;
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("filenew") );
+    QToolTip::add( btn, i18n("New file") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotNewFile()));
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("fileimport") );
+    QToolTip::add( btn, i18n("Add files") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotAddFiles()));
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("editdelete") );
+    QToolTip::add( btn, i18n("Remove target") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotDeleteTarget()));
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("editdelete") );
+    QToolTip::add( btn, i18n("Remove file") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotDeleteFile()));
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("launch") );
+    QToolTip::add( btn, i18n("Build target") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotBuildTarget()));
+
+
+    QWidget *spacer1 = new QWidget( buttonBox );
+    buttonBox->setStretchFactor( spacer1, 1 );
+
+    btn = new QToolButton( buttonBox );
+    btn->setPixmap( SmallIcon("configure") );
+    QToolTip::add( btn, i18n("Configure target") );
+    connect(btn, SIGNAL(clicked()), this, SLOT(slotConfigureTarget()));
+
+    buttonBox->setMaximumHeight( btn->height() );
+
+    m_detailsListView = new DetailsListView( m_part, vbox, "DetailsListView" );
+
+    m_detailsListView->setResizeMode( QListView::LastColumn );
+    m_detailsListView->setSorting( -1 );
+    m_detailsListView->header()->hide();
+    m_detailsListView->addColumn( QString::null );
+
+    connect( m_detailsListView, SIGNAL(clicked(QListViewItem*)),
+        this, SLOT(slotItemSelected(QListViewItem*)) );
+    connect( m_detailsListView, SIGNAL(executed(QListViewItem*)),
+        this, SLOT(slotItemExecuted(QListViewItem*)) );
+
+    connect( this, SIGNAL(targetSelected(BuildTargetItem*)),
+        this, SLOT(showTargetDetails(BuildTargetItem*)) );
+    connect( this, SIGNAL(fileExecuted(BuildFileItem*)),
+        this, SLOT(showFileDetails(BuildFileItem*)) );
+    connect(m_detailsListView, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
+        this, SLOT(showDetailContextMenu(KListView *, QListViewItem *, const QPoint &)));
+
+}
+
+void GenericProjectWidget::slotMainGroupChanged( BuildGroupItem * mainGroup )
+{
+    m_overviewListView->clear();
+
+    m_itemToGroup.clear();
+    m_groupToItem.clear();
+    m_itemToTarget.clear();
+    m_targetToItem.clear();
+    m_itemToFile.clear();
+    m_fileToItem.clear();
+
+    if( !mainGroup )
+	return;
+
+    GenericGroupListViewItem* mainItem = new GenericGroupListViewItem( m_overviewListView, mainGroup );
+    mainItem->setOpen( true );
+    fillGroupItem( mainGroup, mainItem );
+}
+
+void GenericProjectWidget::fillGroupItem( BuildGroupItem * group, GenericGroupListViewItem * item )
+{
+    m_itemToGroup.insert( item, group );
+    m_groupToItem.insert( group, item );
+    
+    QValueList<BuildGroupItem*> groups = group->groups();
+    QValueListIterator<BuildGroupItem*> it = groups.begin();
+    while( it != groups.end() ){
+	GenericGroupListViewItem* createdItem = new GenericGroupListViewItem( item, *it );
+	createdItem->setOpen( (*it)->groups().size() > 0 );
+	fillGroupItem( *it, createdItem );
+	
+	++it;	
+    }
+}
+
+void GenericProjectWidget::slotItemSelected( QListViewItem * item )
+{
+    GenericGroupListViewItem* groupItem = dynamic_cast<GenericGroupListViewItem*>( item );
+    GenericTargetListViewItem* targetItem = dynamic_cast<GenericTargetListViewItem*>( item );
+    GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
+
+    if( groupItem && m_itemToGroup.contains(groupItem) )
+        emit groupSelected( m_itemToGroup[groupItem] );
+    else if( targetItem && m_itemToTarget.contains(targetItem) ){
+        kdDebug() << "set active target" << endl;
+        m_activeTarget = m_itemToTarget[ targetItem ];
+        emit targetSelected( m_activeTarget );
+    }
+//    else if( fileItem && m_itemToFile.contains(fileItem) )
+//	emit fileSelected( m_itemToFile[fileItem] );
+}
+
+void GenericProjectWidget::showDetails( BuildGroupItem * groupItem )
+{
+    m_activeGroup = groupItem;
+    kdDebug() << "unset active target" << endl;
+    m_activeTarget = 0;
+    
+    m_detailsListView->clear();
+    
+    m_itemToTarget.clear();
+    m_targetToItem.clear();
+    m_itemToFile.clear();
+    m_fileToItem.clear();
+    
+    if( !groupItem )
+	return; 
+    
+    QValueList<BuildTargetItem*> targets = groupItem->targets();
+    QValueListIterator<BuildTargetItem*> it = targets.begin();
+    while( it != targets.end() ){
+	GenericTargetListViewItem* createdItem = new GenericTargetListViewItem( m_detailsListView, *it );
+	m_targetToItem.insert( *it, createdItem );
+	m_itemToTarget.insert( createdItem, *it );
+	fillTarget( *it, createdItem );
+	createdItem->setOpen( true );
+	++it;
+    }
+}
+
+void GenericProjectWidget::fillTarget( BuildTargetItem * target, GenericTargetListViewItem * targetItem )
+{
+    QValueList<BuildFileItem*> files = target->files();
+    QValueListIterator<BuildFileItem*> it = files.begin();
+    while( it != files.end() ){
+	GenericFileListViewItem* createdItem = new GenericFileListViewItem( targetItem, *it );
+	m_fileToItem.insert( *it, createdItem );
+	m_itemToFile.insert( createdItem, *it );
+	++it;
+    }
+}
+
+BuildGroupItem * GenericProjectWidget::activeGroup( )
+{
+    return m_activeGroup;
+}
+
+GenericGroupListViewItem * GenericProjectWidget::addGroup( BuildGroupItem * group )
+{
+    if( !group )
+        return 0;
+
+    GenericGroupListViewItem* createdItem = 0;
+    if( group->parentGroup() && m_groupToItem.contains(group->parentGroup()) ){
+        kdDebug() << "creating GenericGroupListViewItem from parent group" << endl;
+        createdItem = new GenericGroupListViewItem( m_groupToItem[group->parentGroup()], group );
+        m_groupToItem.insert( group, createdItem );
+        m_itemToGroup.insert( createdItem, group );
+    } else if( group->parentGroup() ){
+        kdDebug() << "creating GenericGroupListViewItem from parent group (wo map)" << endl;
+        addGroup( group->parentGroup() );
+        createdItem = new GenericGroupListViewItem( m_groupToItem[group->parentGroup()], group );
+        m_groupToItem.insert( group, createdItem );
+        m_itemToGroup.insert( createdItem, group );
+        m_groupToItem[group->parentGroup()]->setExpandable( true );
+    } else {
+        kdDebug() << "creating GenericGroupListViewItem standalone" << endl;
+        createdItem = new GenericGroupListViewItem( m_overviewListView, group );
+        m_groupToItem.insert( group, createdItem );
+        m_itemToGroup.insert( createdItem, group );
+    }
+    return createdItem;
+}
+
+void GenericProjectWidget::addTarget( BuildTargetItem * target )
+{
+    if( !target || !target->parentGroup() || activeGroup() != target->parentGroup() )
+        return;
+
+    if(  m_groupToItem.contains(target->parentGroup()) ){
+//        GenericTargetListViewItem* createdItem = new GenericTargetListViewItem( m_groupToItem[target->parentGroup()], target );
+        GenericTargetListViewItem* createdItem = new GenericTargetListViewItem( m_detailsListView, target );
+        m_detailsListView->takeItem(createdItem);
+        m_targetToItem.insert( target, createdItem );
+        m_itemToTarget.insert( createdItem, target );
+
+        showDetails(target->parentGroup());
+    }
+}
+
+void GenericProjectWidget::addFile( BuildFileItem * file )
+{
+    if( !file || !file->parentTarget() || file->parentTarget()->parentGroup() != activeGroup() )
+	return;
+
+    if( m_targetToItem.contains(file->parentTarget()) ){
+	GenericFileListViewItem* createdItem = new GenericFileListViewItem( m_targetToItem[file->parentTarget()], file );
+	m_fileToItem.insert( file, createdItem );
+	m_itemToFile.insert( createdItem, file );
+    }
+}
+
+BuildTargetItem * GenericProjectWidget::activeTarget( )
+{
+    return m_activeTarget;
+}
+
+void GenericProjectWidget::showTargetDetails( BuildTargetItem * targetItem )
+{
+}
+
+void GenericProjectWidget::showFileDetails( BuildFileItem * fileItem )
+{
+    kdDebug() << "GenericProjectWidget::showFileDetails" << endl;
+    m_part->partController()->editDocument(fileItem->url());
+}
+
+void GenericProjectWidget::initActions( )
+{
+    newGroupAction = new KAction (i18n("New Group"), "group_new", 0,
+        this, SLOT( slotNewGroup() ), m_part->actionCollection(), "new_group" );
+    newTargetAction = new KAction (i18n("New Target"), "targetnew_kdevelop", 0,
+        this, SLOT( slotNewTarget() ), m_part->actionCollection(), "new_target" );
+    buildGroupAction = new KAction (i18n("Build Group"), "launch", 0,
+        this, SLOT( slotBuildGroup() ), m_part->actionCollection(), "build_group" );
+    buildAction = new KAction (i18n("Build"), "launch", 0,
+        this, SLOT( slotBuild() ), m_part->actionCollection(), "build" );
+    buildTargetAction = new KAction (i18n("Build Target"), "launch", 0,
+        this, SLOT( slotBuildTarget() ), m_part->actionCollection(), "build_target" );
+    buildFileAction = new KAction (i18n("Build File"), "launch", 0,
+        this, SLOT( slotBuildFile() ), m_part->actionCollection(), "build_file" );
+    installGroupAction = new KAction (i18n("Install Group"), 0, 0,
+        this, SLOT( slotInstallGroup() ), m_part->actionCollection(), "install_group" );
+    installAction = new KAction (i18n("Install"), 0, 0,
+        this, SLOT( slotInstall() ), m_part->actionCollection(), "install" );
+    newFileAction = new KAction (i18n("New File"), "filenew", 0,
+        this, SLOT( slotNewFile() ), m_part->actionCollection(), "new_file" );
+    addFilesAction = new KAction (i18n("Add Files"), "fileimport", 0,
+        this, SLOT( slotAddFiles() ), m_part->actionCollection(), "add_files" );
+    deleteGroupAction = new KAction (i18n("Remove Group"), 0, 0,
+        this, SLOT( slotDeleteGroup() ), m_part->actionCollection(), "remove_group" );
+    deleteTargetAction = new KAction (i18n("Remove Target"), 0, 0,
+        this, SLOT( slotDeleteTarget() ), m_part->actionCollection(), "remove_target" );
+    deleteFileAction = new KAction (i18n("Remove File"), 0, 0,
+        this, SLOT( slotDeleteFile() ), m_part->actionCollection(), "remove_file" );
+    configureGroupAction = new KAction (i18n("Options..."), "configure", 0,
+        this, SLOT( slotConfigureGroup() ), m_part->actionCollection(), "configure_group" );
+    configureTargetAction = new KAction (i18n("Options..."), "configure", 0,
+        this, SLOT( slotConfigureTarget() ), m_part->actionCollection(), "configure_target" );
+    configureFileAction = new KAction (i18n("Options..."), "configure", 0,
+        this, SLOT( slotConfigureFile() ), m_part->actionCollection(), "configure_item" );
+    executeAction = new KAction (i18n("Execute"), "exec", 0,
+        this, SLOT( slotExecute() ), m_part->actionCollection(), "execute" );
+    executeGroupAction = new KAction (i18n("Execute"), "exec", 0,
+        this, SLOT( slotExecuteGroup() ), m_part->actionCollection(), "execute_group" );
+    executeTargetAction = new KAction (i18n("Execute"), "exec", 0,
+        this, SLOT( slotExecuteTarget() ), m_part->actionCollection(), "execute_target" );
+    cleanAction = new KAction (i18n("Clean"), 0, 0,
+        this, SLOT( slotClean() ), m_part->actionCollection(), "clean" );
+    cleanGroupAction = new KAction (i18n("Clean"), 0, 0,
+        this, SLOT( slotCleanGroup() ), m_part->actionCollection(), "clean_group" );
+    cleanTargetAction = new KAction (i18n("Clean"), 0, 0,
+        this, SLOT( slotCleanTarget() ), m_part->actionCollection(), "clean_target" );
+
+}
+
+void GenericProjectWidget::showGroupContextMenu( KListView * l, QListViewItem * i, const QPoint & p )
+{
+    if (( !l ) || (!i) )
+        return ;
+
+    KPopupMenu popup( i18n( "Group: %1" ).arg( i->text( 0 ) ), this );
+
+    configureGroupAction->plug(&popup);
+    popup.insertSeparator();
+    newGroupAction->plug(&popup);
+    newTargetAction->plug(&popup);
+    popup.insertSeparator();
+    deleteGroupAction->plug(&popup);
+    popup.insertSeparator();
+    buildGroupAction->plug(&popup);
+    cleanGroupAction->plug(&popup);
+    executeGroupAction->plug(&popup);
+
+    popup.exec(p);
+}
+
+void GenericProjectWidget::showDetailContextMenu( KListView * l, QListViewItem * i, const QPoint & p )
+{
+    if (( !l ) || (!i) )
+        return ;
+
+    GenericTargetListViewItem *t = dynamic_cast<GenericTargetListViewItem*>(i);
+    GenericFileListViewItem *f = dynamic_cast<GenericFileListViewItem*>(i);
+
+    if (t)
+    {
+        KPopupMenu popup( i18n( "Target: %1" ).arg( t->text( 0 ) ), this );
+
+        configureTargetAction->plug(&popup);
+        popup.insertSeparator();
+        newFileAction->plug(&popup);
+        addFilesAction->plug(&popup);
+        popup.insertSeparator();
+        deleteTargetAction->plug(&popup);
+        popup.insertSeparator();
+        buildTargetAction->plug(&popup);
+        cleanTargetAction->plug(&popup);
+        executeTargetAction->plug(&popup);
+
+        popup.exec(p);
+    }
+    if (f)
+    {
+        KPopupMenu popup( i18n( "File: %1" ).arg( f->text( 0 ) ), this );
+
+        configureFileAction->plug(&popup);
+        popup.insertSeparator();
+        deleteFileAction->plug(&popup);
+
+        popup.exec(p);
+    }
+}
+
+
+
+//Important slot definitions:
+
+void GenericProjectWidget::slotNewGroup( )
+{
+    if (!m_overviewListView->currentItem())
+        return;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+    bool ok;
+    QString groupName = KLineEditDlg::getText(i18n("Group Name"), "", &ok, this );
+    if (!ok)
+        return;
+    QDir dir;
+    if (!dir.mkdir( QDir::cleanDirPath(m_part->projectDirectory() + "/" + git->groupItem()->path() + "/" + groupName)) )
+        return;
+    BuildGroupItem *bit = new BuildGroupItem(groupName, git->groupItem());
+    addGroup(bit);
+}
+
+void GenericProjectWidget::slotNewTarget( )
+{
+    if (!m_overviewListView->currentItem())
+        return;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+    bool ok;
+    QString targetName = KLineEditDlg::getText(i18n("Target Name"), "", &ok, this );
+    if (!ok)
+        return;
+    BuildTargetItem *tit = new BuildTargetItem(targetName, git->groupItem());
+    addTarget(tit);
+}
+
+void GenericProjectWidget::slotBuild( )
+{
+    m_part->buildSystem()->build();
+}
+
+void GenericProjectWidget::slotBuildGroup( )
+{
+    if (!m_overviewListView->currentItem())
+        return;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+    m_part->buildSystem()->build(git->groupItem());
+}
+
+void GenericProjectWidget::slotBuildTarget( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericTargetListViewItem *tit = dynamic_cast<GenericTargetListViewItem *>(m_detailsListView->currentItem());
+    if (!tit)
+        return;
+    m_part->buildSystem()->build(tit->targetItem());
+}
+
+void GenericProjectWidget::slotBuildFile( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericFileListViewItem *fit = dynamic_cast<GenericFileListViewItem *>(m_detailsListView->currentItem());
+    if (!fit)
+        return;
+    m_part->buildSystem()->build(fit->fileItem());
+}
+
+void GenericProjectWidget::slotInstall( )
+{
+    m_part->buildSystem()->install();
+}
+
+void GenericProjectWidget::slotInstallGroup( )
+{
+    if (!m_overviewListView->currentItem())
+        return;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+    m_part->buildSystem()->install(git->groupItem());
+}
+
+void GenericProjectWidget::slotInstallTarget( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericTargetListViewItem *tit = dynamic_cast<GenericTargetListViewItem *>(m_detailsListView->currentItem());
+    if (!tit)
+        return;
+    m_part->buildSystem()->install(tit->targetItem());
+}
+
+void GenericProjectWidget::slotExecute( )
+{
+    m_part->buildSystem()->execute();
+}
+
+void GenericProjectWidget::slotExecuteGroup( )
+{
+    if (!m_overviewListView->currentItem())
+        return;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+    m_part->buildSystem()->execute(git->groupItem());
+}
+
+void GenericProjectWidget::slotExecuteTarget( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericTargetListViewItem *tit = dynamic_cast<GenericTargetListViewItem *>(m_detailsListView->currentItem());
+    if (!tit)
+        return;
+    m_part->buildSystem()->execute(tit->targetItem());
+}
+
+void GenericProjectWidget::slotNewFile( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericTargetListViewItem *tit = dynamic_cast<GenericTargetListViewItem *>(m_detailsListView->currentItem());
+    if (!tit)
+        return;
+
+    KDevCreateFile * createFileSupport = m_part->createFileSupport();
+    if (createFileSupport)
+    {
+        kdDebug() << "GenericProjectWidget::slotNewFile " << tit->targetItem()->parentGroup()->name() << endl;
+        KDevCreateFile::CreatedFile crFile =
+            createFileSupport->createNewFile(QString::null, QDir::cleanDirPath(m_part->projectDirectory() + "/" + tit->targetItem()->parentGroup()->path()));
+        kdDebug() << "status for " << QDir::cleanDirPath(m_part->projectDirectory() + "/" + tit->targetItem()->parentGroup()->path()) << " is " << crFile.status << endl;
+//        KURL url;
+//        url.setPath(QDir::cleanDirPath(crFile.dir + "/" + crFile.filename));
+//        BuildFileItem *fit = new BuildFileItem(url, tit->targetItem());
+//        addFile(fit);
+    }
+}
+
+void GenericProjectWidget::slotAddFiles( )
+{
+    QString startDir = m_part->projectDirectory();
+    if (activeTarget())
+        startDir += "/" + activeTarget()->path();
+    else if (activeGroup())
+        startDir += "/" + activeGroup()->path();
+
+    m_part->addFiles(KFileDialog::getOpenFileNames(startDir));
+}
+
+void GenericProjectWidget::slotDeleteGroup( )
+{
+    if (!m_overviewListView->currentItem())
+        return;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+
+    RemoveSubprojectDialog dia(i18n("Remove Group"), i18n("Remove group?"), this);
+    if (dia.exec() == QDialog::Accepted)
+    {
+        if (dia.removeFromDisk())
+        {
+            QDir d;
+            d.rmdir( QDir::cleanDirPath(m_part->projectDirectory() + "/" + git->groupItem()->path()));
+        }
+        takeGroup(git);
+    }
+}
+
+void GenericProjectWidget::slotDeleteTarget( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericTargetListViewItem *tit = dynamic_cast<GenericTargetListViewItem *>(m_detailsListView->currentItem());
+    if (!tit)
+        return;
+
+    if (KMessageBox::questionYesNo(this, i18n("Remove target?")) == KMessageBox::Yes)
+    {
+        takeTarget(tit);
+    }
+}
+
+void GenericProjectWidget::slotDeleteFile( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericFileListViewItem *fit = dynamic_cast<GenericFileListViewItem *>(m_detailsListView->currentItem());
+    if (!fit)
+        return;
+
+    RemoveSubprojectDialog dia(i18n("Remove File"), i18n("Remove file?"), this);
+    if (dia.exec() == QDialog::Accepted)
+    {
+        if (dia.removeFromDisk())
+        {
+            kdDebug() << "GenericProjectWidget::slotDeleteFile " << fit->fileItem()->url().url() << endl;
+            KIO::NetAccess::del(fit->fileItem()->url());
+        }
+        takeFile(fit);
+    }
+}
+
+void GenericProjectWidget::slotConfigureGroup( )
+{
+    kdDebug() << "GenericProjectWidget::slotConfigureGroup 1" << endl;
+    if (!m_overviewListView->currentItem())
+        return;
+    kdDebug() << "GenericProjectWidget::slotConfigureGroup 2" << endl;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+    kdDebug() << "GenericProjectWidget::slotConfigureGroup 3" << endl;
+
+    KDialogBase *dia = new KDialogBase(0, "configure_group_dia", true, i18n("Group Options"),
+        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+    kdDebug() << "GenericProjectWidget::slotConfigureGroup 4" << endl;
+
+    m_part->buildSystem()->configureBuildItem(dia, git->buildItem());
+    kdDebug() << "GenericProjectWidget::slotConfigureGroup 5" << endl;
+}
+
+void GenericProjectWidget::slotConfigureTarget( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericTargetListViewItem *tit = dynamic_cast<GenericTargetListViewItem *>(m_detailsListView->currentItem());
+    if (!tit)
+        return;
+
+    KDialogBase *dia = new KDialogBase(0, "configure_target_dia", true, i18n("Target Options"),
+        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+
+    m_part->buildSystem()->configureBuildItem(dia, tit->buildItem());
+}
+
+void GenericProjectWidget::slotConfigureFile( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericFileListViewItem *fit = dynamic_cast<GenericFileListViewItem *>(m_detailsListView->currentItem());
+    if (!fit)
+        return;
+
+    KDialogBase *dia = new KDialogBase(0, "configure_file_dia", true, i18n("File Options"),
+        KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, true);
+
+    m_part->buildSystem()->configureBuildItem(dia, fit->buildItem());
+}
+
+void GenericProjectWidget::slotClean( )
+{
+    m_part->buildSystem()->clean();
+}
+
+void GenericProjectWidget::slotCleanGroup( )
+{
+    if (!m_overviewListView->currentItem())
+        return;
+    GenericGroupListViewItem *git = dynamic_cast<GenericGroupListViewItem *>(m_overviewListView->currentItem());
+    if (!git)
+        return;
+    m_part->buildSystem()->clean(git->groupItem());
+}
+
+void GenericProjectWidget::slotCleanTarget( )
+{
+    if (!m_detailsListView->currentItem())
+        return;
+    GenericTargetListViewItem *tit = dynamic_cast<GenericTargetListViewItem *>(m_detailsListView->currentItem());
+    if (!tit)
+        return;
+    m_part->buildSystem()->clean(tit->targetItem());
+}
+
+
+void GenericProjectWidget::takeGroup( GenericGroupListViewItem * it )
+{
+    //TODO: adymo: allow to remove nested subdirs
+    BuildGroupItem *group = it->groupItem();
+    if (group->groups().count() == 0)
+    {
+        m_groupToItem.remove( group );
+        m_itemToGroup.remove( it );
+        delete group;
+        delete it;
+    }
+}
+
+void GenericProjectWidget::takeTarget( GenericTargetListViewItem * it )
+{
+    BuildTargetItem *target = it->targetItem();
+    m_targetToItem.remove( target );
+    m_itemToTarget.remove( it );
+    delete target;
+    delete it;
+}
+
+void GenericProjectWidget::takeFile( GenericFileListViewItem * it )
+{
+    BuildFileItem *file = it->fileItem();
+    m_fileToItem.remove( file );
+    m_itemToFile.remove( it );
+    delete file;
+    delete it;
+}
+
+void GenericProjectWidget::slotItemExecuted( QListViewItem * item )
+{
+    GenericGroupListViewItem* groupItem = dynamic_cast<GenericGroupListViewItem*>( item );
+    GenericTargetListViewItem* targetItem = dynamic_cast<GenericTargetListViewItem*>( item );
+    GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
+
+    if( groupItem && m_itemToGroup.contains(groupItem) )
+        emit groupExecuted( m_itemToGroup[groupItem] );
+    else if( targetItem && m_itemToTarget.contains(targetItem) ){
+        kdDebug() << "set active target while execute" << endl;
+        m_activeTarget = m_itemToTarget[ targetItem ];
+        emit targetExecuted( m_activeTarget );
+    }
+    else if( fileItem && m_itemToFile.contains(fileItem) )
+    {
+        kdDebug() << "emit fileExecuted()" << endl;
+        emit fileExecuted( m_itemToFile[fileItem] );
+    }
+}
+
+#include "genericproject_widget.moc"

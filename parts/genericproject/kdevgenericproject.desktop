@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=blubb
+Icon=kdevelop
+Type=Service
+Name=KDevGenericProject
+Comment=GenericProject
+ServiceTypes=KDevelop/Project
+X-KDE-Library=libkdevgenericproject
+X-KDevelop-Version=1

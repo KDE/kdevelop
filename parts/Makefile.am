@@ -25,14 +25,5 @@ endif
 
 TODO_SUBDIRS = adasupport perlsupport javasupport
 
-SUBDIRS = doctreeview classview appwizard outputviews grepview fileview \
-    adaproject cppsupport \
-    autoproject scriptproject trollproject customproject \
-    cvs perforce clearcase antproject diff valgrind \
-    debugger distpart konsole astyle tools ctags regexptest doxygen \
-    manager fileselector visualboyadvance tipofday abbrev filter \
-    uimode editor-chooser openwith history filecreate \
-    texttools javadebugger replace closer \
-    pascalproject pascalsupport pythonsupport rubysupport bashsupport fortransupport phpsupport javasupport \
-    partexplorer bookmarks fullscreen $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR) $(CVSSERVICE_SUBDIR)
+SUBDIRS = doctreeview classview appwizard outputviews grepview fileview     adaproject cppsupport     autoproject scriptproject trollproject customproject     cvs perforce clearcase antproject diff valgrind     debugger distpart konsole astyle tools ctags regexptest doxygen     manager fileselector visualboyadvance tipofday abbrev filter     uimode editor-chooser openwith history filecreate     texttools javadebugger replace closer     pascalproject pascalsupport pythonsupport rubysupport bashsupport fortransupport phpsupport javasupport     partexplorer bookmarks fullscreen $(QEDITOR_SUBDIR) $(SVN_SUBDIR) $(SCRIPTING_SUBDIR) $(CVSSERVICE_SUBDIR) genericproject
 

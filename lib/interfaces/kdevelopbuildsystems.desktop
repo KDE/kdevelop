@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/BuildSystems
+X-KDE-Derived=KDevelop/Plugin
+Name=KDevelop Build System Interface
+
+[PropertyDef::X-KDevelop-BuildSystem]
+Type=QString

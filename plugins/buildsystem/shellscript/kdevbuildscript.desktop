@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Name=KDevBuildShellScript
+Comment=Shell script based build system
+ServiceTypes=KDevelop/BuildSystems
+X-KDevelop-Version=1
+X-KDevelop-BuildSystem=ShellScript
+X-KDE-Library=libkdevbuildscript
