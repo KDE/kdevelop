@@ -225,13 +225,15 @@ void QextMdiChildArea::fillWindowMenu()
 	m_pWindowMenu->insertItem(tr("&Close Window"),this, SIGNAL(closeActiveView()));
 	m_pWindowMenu->insertItem(tr("Close &All Windows"), this, SIGNAL(closeAllViews()));
 	m_pWindowMenu->insertSeparator();
-
 	m_pWindowMenu->insertItem(tr("Ca&scade windows"),this,SLOT(cascadeWindows()));
 	m_pWindowMenu->insertItem(tr("Cascade &maximized"),this,SLOT(cascadeMaximized()));
 	m_pWindowMenu->insertItem(tr("Expand &vertical"),this,SLOT(expandVertical()));
 	m_pWindowMenu->insertItem(tr("Expand &horizontal"),this,SLOT(expandHorizontal()));
 	m_pWindowMenu->insertItem(tr("A&nodine's tile"),this,SLOT(tileAnodine()));
 	m_pWindowMenu->insertItem(tr("&Pragma's tile"),this,SLOT(tilePragma()));
+	m_pWindowMenu->insertSeparator();
+	m_pWindowMenu->insertItem(tr("&Toplevel mode"),this, SIGNAL(switchToToplevelMode()));
+	m_pWindowMenu->insertItem(tr("C&hildframe mode"), this, SIGNAL(switchToChildframeMode()));
 	m_pWindowMenu->insertSeparator();
 
 	// for all child frame windows: give an ID to every window and connect them in the end with menuActivated()
@@ -261,24 +263,24 @@ void QextMdiChildArea::fillWindowMenu()
 
 		// insert the window entry sorted in alphabetical order
 		unsigned int indx;
-		unsigned int windowItemCount = m_pWindowMenu->count() - 10;
+		unsigned int windowItemCount = m_pWindowMenu->count() - 13;
 		bool inserted = false;
 		QString tmpString;
 		for( indx = 0; indx <= windowItemCount; indx++) {
-			tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+10));
+			tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+13));
 			if( tmpString.right( tmpString.length()-2) > szItem.right( szItem.length()-2)) {
-				m_pWindowMenu->insertItem(szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,indx+10);
+				m_pWindowMenu->insertItem(szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,indx+13);
       		if( isTheActiveOne)
-      		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+10), true);
+      		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+13), true);
 				lpC->setWindowMenuID( i);
 				inserted = true;
 				indx = windowItemCount+1;	// break the loop
 			}
 		}
 		if( !inserted) {	// append it
-			m_pWindowMenu->insertItem( szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,windowItemCount+10);
+			m_pWindowMenu->insertItem( szItem,lpC,SLOT(slot_clickedInWindowMenu()),0,-1,windowItemCount+13);
      		if( isTheActiveOne)
-     		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+10), true);
+     		   m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+13), true);
 			lpC->setWindowMenuID( i);
 		}
 		i++;

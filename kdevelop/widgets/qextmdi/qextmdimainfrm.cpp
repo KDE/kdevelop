@@ -103,6 +103,8 @@ void QextMdiMainFrm::createMdiManager()
 	QObject::connect( m_pMdi, SIGNAL(topChildChanged(QextMdiChildView*)), this, SLOT(pushNewTaskBarButton(QextMdiChildView*)) );
 	QObject::connect( m_pMdi, SIGNAL(closeActiveView()), this, SLOT(closeActiveView()) );
 	QObject::connect( m_pMdi, SIGNAL(closeAllViews()), this, SLOT(closeAllViews()) );
+	QObject::connect( m_pMdi, SIGNAL(switchToToplevelMode()), this, SLOT(switchToToplevelMode()) );
+	QObject::connect( m_pMdi, SIGNAL(switchToChildframeMode()), this, SLOT(switchToChildframeMode()) );
 }
 
 //============ createTaskBar ==============//
@@ -413,4 +415,26 @@ void QextMdiMainFrm::closeActiveView()
 {
 	if( m_pCurrentWindow != 0)
 		m_pCurrentWindow->close();
+}
+
+/**
+ * undocks all view windows (unix-like)
+ */
+void QextMdiMainFrm::switchToToplevelMode()
+{
+	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
+		if( w->isAttached())
+			detachWindow(w);
+	}
+}
+
+/**
+ * docks all view windows (Windows-like)
+ */
+void QextMdiMainFrm::switchToChildframeMode()
+{
+	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
+		if( !w->isAttached())
+			attachWindow(w, true, true, 0);
+	}
 }

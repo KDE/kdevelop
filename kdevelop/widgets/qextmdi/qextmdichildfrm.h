@@ -33,6 +33,7 @@
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qtoolbutton.h>
+#include <qlabel.h>
 #include <qdict.h>
 
 #include "qextmdichildfrmcaption.h" //cross ref
@@ -70,7 +71,7 @@ protected:
 	/**
 	* This is a POINTER to an icon 16x16. If this is 0 no icon is painted.
 	*/
-	QPushButton   *m_pIcon;
+	QLabel        *m_pIcon;
 	QPushButton   *m_pMinimize;
 	QPushButton   *m_pMaximize;
 	QPushButton   *m_pClose;

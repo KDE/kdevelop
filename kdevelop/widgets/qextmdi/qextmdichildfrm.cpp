@@ -79,7 +79,7 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pManager  = parent;
 
 #ifdef WIN32
-	m_pIcon	   = new QPushButton(m_pCaption, "qextmdi_pushbutton_icon");
+	m_pIcon	   = new QLabel(m_pCaption, "qextmdi_pushbutton_icon");
    m_pMinimize = new QPushButton(m_pCaption, "qextmdi_pushbutton_min");
    m_pMaximize = new QPushButton(m_pCaption, "qextmdi_pushbutton_max");
    m_pClose    = new QPushButton(m_pCaption, "qextmdi_pushbutton_close");
@@ -92,7 +92,7 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    m_pUndock   = new QToolButton(m_pCaption, "qextmdi_toolbutton_undock");
 #endif
 
-   QObject::connect(m_pIcon,SIGNAL(clicked()),this,SLOT(minimizePressed()));
+//how do I do this with QLabel?   QObject::connect(m_pIcon,SIGNAL(clicked()),this,SLOT(showSystemMenu()));
    QObject::connect(m_pMinimize,SIGNAL(clicked()),this,SLOT(minimizePressed()));
    QObject::connect(m_pMaximize,SIGNAL(clicked()),this,SLOT(maximizePressed()));
    QObject::connect(m_pClose,SIGNAL(clicked()),this,SLOT(closePressed()));
@@ -554,9 +554,9 @@ void QextMdiChildFrm::unsetClient()
 	//Kewl...the reparent function has a small prob now..
 	//the new toplelvel widgets gets not reenabled for dnd
 #if QT_VERSION >= 200
-	m_pClient->reparent(0,0,QPoint(0,0),true);
+	m_pClient->reparent(0,0,mapToGlobal(pos())-pos(),true);
 #else
-	m_pClient->recreate(0,0,QPoint(0,0),true);
+	m_pClient->recreate(0,0,mapToGlobal(pos())-pos(),true);
 #endif
 
    // remember the focus policies using the dictionary and reset them

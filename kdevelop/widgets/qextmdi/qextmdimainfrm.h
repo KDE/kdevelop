@@ -142,6 +142,10 @@ protected slots:
   virtual void closeAllViews();
   /** closes the view of the active (topchild) window */
   virtual void closeActiveView();
+  /** undocks all view windows (unix-like) */
+  virtual void switchToToplevelMode();
+  /** docks all view windows (Windows-like) */
+  virtual void switchToChildframeMode();
 };
 
 #endif //_QEXTMDIMAINFRM_H_

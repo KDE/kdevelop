@@ -144,9 +144,11 @@ protected:	// Protected methods
 protected slots:
 	void menuActivated(int id);
 signals:
-   void topChildChanged(QextMdiChildView*);
+  void topChildChanged(QextMdiChildView*);
 	void closeActiveView();
 	void closeAllViews();
+	void switchToToplevelMode();
+	void switchToChildframeMode();
 };
 
 #endif   // _QEXTMDICHILDAREA_H_
