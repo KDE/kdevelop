@@ -157,6 +157,12 @@ void PHPSupportPart::slotTextChanged(){
   kdDebug(9018) << "filename:" << fileName << endl;
   int numLines = m_editInterface->numLines();
 
+  //Abort if the file which was changed is not part of the project
+  if (!project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
+    kdDebug(9018) << "Not Parsing file " << fileName << ", file is not part of the project" << endl;
+    return;
+  }
+
   QStringList lines;
   for(int i=0;i<numLines;i++){
     lines.append(m_editInterface->textLine(i));
