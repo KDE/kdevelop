@@ -182,10 +182,10 @@ MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
 	: QWidget( parent, name, WRepaintNoErase | WStaticContents | WResizeNoErase ),
 	  m_editor( editor )
 {
-    if ( !bookmarkPixmap ){
+	if ( !bookmarkPixmap ){
 		bookmarkPixmap = new QPixmap( bookmark_xpm );
-                breakpointPixmap = new QPixmap( breakpoint_xpm );
-                execPixmap = new QPixmap( exec_xpm );
+				breakpointPixmap = new QPixmap( breakpoint_xpm );
+				execPixmap = new QPixmap( exec_xpm );
 	}
 
 	setFixedWidth( 20 );
@@ -220,30 +220,30 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
 			break;
 
 
-                painter.drawLine( 0, p->rect().y() - yOffset,
-                                  0, p->rect().y() - yOffset + p->rect().height() );
+		//painter.drawLine( 0, p->rect().y() - yOffset,
+		//				  0, p->rect().y() - yOffset + p->rect().height() );
 
 		ParagData* paragData = (ParagData*) p->extraData();
 		if( paragData ){
-                    switch( paragData->mark() ){
-                    case 0x01:
+					switch( paragData->mark() ){
+					case 0x01:
 			painter.drawPixmap( 3, p->rect().y() +
 				( p->rect().height() - bookmarkPixmap->height() ) / 2 -
 				yOffset, *bookmarkPixmap );
-                        break;
-                    case 0x02:
+						break;
+					case 0x02:
 			painter.drawPixmap( 3, p->rect().y() +
 				( p->rect().height() - breakpointPixmap->height() ) / 2 -
 				yOffset, *breakpointPixmap );
-                        break;
-                    case 0x05:
+						break;
+					case 0x05:
 			painter.drawPixmap( 3, p->rect().y() +
 				( p->rect().height() - execPixmap->height() ) / 2 -
 				yOffset, *execPixmap );
-                        break;
-                    default:
-                        break;
-                    }
+						break;
+					default:
+						break;
+					}
 		}
 
 		p = p->next();
@@ -261,52 +261,52 @@ void MarkerWidget::resizeEvent( QResizeEvent *e )
 
 void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
 {
-    QPopupMenu m( 0, "editor_breakpointsmenu" );
+	QPopupMenu m( 0, "editor_breakpointsmenu" );
 
-    int toggleBreakPoint = 0;
-    int toggleBookmark = 0;
+	int toggleBreakPoint = 0;
+	int toggleBookmark = 0;
 
-    QTextParag *p = m_editor->document()->firstParag();
-    int yOffset = m_editor->contentsY();
-    while ( p ) {
-        if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
-            ParagData* data = (ParagData*) p->extraData();
-            if ( data->mark() & 0x02 )
-                toggleBreakPoint = m.insertItem( tr( "Clear Breakpoint" ) );
-            else
-                toggleBreakPoint = m.insertItem( tr( "Set Breakpoint" ) );
+	QTextParag *p = m_editor->document()->firstParag();
+	int yOffset = m_editor->contentsY();
+	while ( p ) {
+		if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
+			ParagData* data = (ParagData*) p->extraData();
+			if ( data->mark() & 0x02 )
+				toggleBreakPoint = m.insertItem( tr( "Clear Breakpoint" ) );
+			else
+				toggleBreakPoint = m.insertItem( tr( "Set Breakpoint" ) );
 
-            m.insertSeparator();
+			m.insertSeparator();
 
-            if ( data->mark() & 0x01 )
-                toggleBookmark = m.insertItem( tr( "Clear Bookmark" ) );
-            else
-                toggleBookmark = m.insertItem( tr( "Set Bookmark" ) );
+			if ( data->mark() & 0x01 )
+				toggleBookmark = m.insertItem( tr( "Clear Bookmark" ) );
+			else
+				toggleBookmark = m.insertItem( tr( "Set Bookmark" ) );
 
-            //m.insertSeparator();
-            break;
-        }
-        p = p->next();
-    }
+			//m.insertSeparator();
+			break;
+		}
+		p = p->next();
+	}
 
-    int res = m.exec( e->globalPos() );
-    if ( res == -1)
-        return;
+	int res = m.exec( e->globalPos() );
+	if ( res == -1)
+		return;
 
-    ParagData* data = (ParagData*) p->extraData();
+	ParagData* data = (ParagData*) p->extraData();
 
-    if ( res == toggleBookmark ) {
-        if ( data->mark() & 0x01 )
-            data->setMark( 0 );
-        else
-            data->setMark( 0x01 );
-    } else if ( res == toggleBreakPoint ) {
-        if ( data->mark() & 0x02 )
-            data->setMark( 0 );
-        else
-            data->setMark( 0x02 );
-    }
+	if ( res == toggleBookmark ) {
+		if ( data->mark() & 0x01 )
+			data->setMark( 0 );
+		else
+			data->setMark( 0x01 );
+	} else if ( res == toggleBreakPoint ) {
+		if ( data->mark() & 0x02 )
+			data->setMark( 0 );
+		else
+			data->setMark( 0x02 );
+	}
 
-    doRepaint();
-    // emit markersChanged();
+	doRepaint();
+	// emit markersChanged();
 }
