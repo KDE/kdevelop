@@ -16,6 +16,7 @@
 #include <qstringlist.h>
 
 #include "cvsservicedcopIface.h"
+#include "bufferedstringreader.h"
 
 class CvsServicePart;
 class DCOPRef;
@@ -63,15 +64,13 @@ private:
     CvsService_stub *m_service;
     CvsJob_stub *m_job;
 
-    //! A temporary buffer for storing characters as they arrive. CVS is not
-    //! kind enough to present us whole strings :-(
-    QString m_outputBuffer,
+    //! Buffered reader for safely reading stdout and stderr from cvs
+    //! commands' output
+    BufferedStringReader m_outputBuffer,
         m_errorBuffer;
 
     QStringList m_output,
         m_errors;
-
-    QStringList processBuffer( QString &buffer );
 };
 
 #endif

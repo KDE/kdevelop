@@ -97,12 +97,12 @@ void CVSFileInfoProvider::slotJobExited( bool normalExit, int /*exitStatus*/ )
     kdDebug(9006) << "CVSFileInfoProvider::slotJobExited(bool,int)" << endl;
     if (!normalExit)
         return;
-    
+
 //    m_cachedDirEntries = parse( m_requestStatusJob->output() );
     m_cachedDirEntries = parse( m_statusLines );
     // Remove me when not debugging
     printOutFileInfoMap( *m_cachedDirEntries );
-    
+
     emit statusReady( *m_cachedDirEntries, m_savedCallerData );
 }
 
@@ -110,8 +110,7 @@ void CVSFileInfoProvider::slotJobExited( bool normalExit, int /*exitStatus*/ )
 
 void CVSFileInfoProvider::slotReceivedOutput( QString someOutput )
 {
-    m_stringBuffer += someOutput;
-    QStringList strings = processBuffer( m_stringBuffer );
+    QStringList strings = m_bufferedReader.process( someOutput );
     if (strings.count() > 0)
     {
         m_statusLines += strings;
@@ -162,7 +161,7 @@ VCSFileInfoMap *CVSFileInfoProvider::parse( QStringList stringStream )
     for (QStringList::const_iterator it=stringStream.begin(); it != stringStream.end(); ++it)
     {
         const QString &s = (*it);
-        
+
 
         kdDebug(9006) << ">> Parsing: " << s << endl;
 
@@ -223,7 +222,7 @@ VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsStr
         return VCSFileInfo::Conflict;
     else if (stateAsString == "Needs Patch" || stateAsString == "Needs Checkout")
         return VCSFileInfo::Unknown;
-    else 
+    else
         return VCSFileInfo::Unknown; /// \FIXME exhaust all the previous cases first ;-)
 }
 
@@ -231,31 +230,12 @@ VCSFileInfo::FileState CVSFileInfoProvider::String2EnumState( QString stateAsStr
 
 void CVSFileInfoProvider::printOutFileInfoMap( const VCSFileInfoMap &map )
 {
-    kdDebug(9006) << "Files parsed:" << endl; 
+    kdDebug(9006) << "Files parsed:" << endl;
     for (VCSFileInfoMap::const_iterator it = map.begin(); it != map.end(); ++it)
     {
         const VCSFileInfo &vcsInfo = *it;
         kdDebug(9006) << vcsInfo.toString() << endl;
-    }   
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QStringList CVSFileInfoProvider::processBuffer( QString &buffer )
-{
-    QStringList strings;
-    int pos;
-    while ( (pos = buffer.find('\n')) != -1)
-    {
-        QString line = buffer.left( pos );
-        if (!line.isEmpty())
-        {
-            strings.append( line );
-        }
-        buffer = buffer.right( buffer.length() - pos - 1 );
     }
-    return strings;
 }
-
 
 #include "cvsfileinfoprovider.moc"

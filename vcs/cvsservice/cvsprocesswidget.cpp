@@ -204,8 +204,8 @@ void CvsProcessWidget::slotReceivedOutput( QString someOutput )
     g_dcopOutCounter++;
     kdDebug(9006) << "MYDCOPDEBUG: dcopOutCounter == " << g_dcopOutCounter << endl;
 #endif
-    m_outputBuffer += someOutput;
-    QStringList strings = processBuffer( m_outputBuffer );
+
+    QStringList strings = m_outputBuffer.process( someOutput );
     if (strings.count() > 0)
     {
         m_output += strings;
@@ -224,32 +224,13 @@ void CvsProcessWidget::slotReceivedErrors( QString someErrors )
     kdDebug(9006) << "MYDCOPDEBUG: dcopErrCounter == " << g_dcopErrCounter << endl;
 #endif
 
-    m_errorBuffer += someErrors;
-    QStringList strings = processBuffer( m_errorBuffer );
+    QStringList strings = m_errorBuffer.process( someErrors );
     if (strings.count() > 0)
     {
         m_errors += strings;
         showError( strings );
         scrollToBottom();
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QStringList CvsProcessWidget::processBuffer( QString &buffer )
-{
-    QStringList strings;
-    int pos;
-    while ( (pos = buffer.find('\n')) != -1)
-    {
-        QString line = buffer.left( pos );
-        if (!line.isEmpty())
-        {
-            strings.append( line );
-        }
-        buffer = buffer.right( buffer.length() - pos - 1 );
-    }
-    return strings;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
