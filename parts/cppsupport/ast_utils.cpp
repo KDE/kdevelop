@@ -59,7 +59,8 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
     ast->getStartPosition( &startLine, &startColumn );
     ast->getEndPosition( &endLine, &endColumn );
     
-    QListViewItem* item = new QListViewItem( parent, editIface->textLine(startLine),
+    QString nodeDescription = ast->nodeType() == NodeType_TranslationUnit ? QString::fromLatin1("TranslationUnit") : editIface->textLine( startLine );
+    QListViewItem* item = new QListViewItem( parent, nodeDescription,
 					     QString::number(startLine), QString::number(startColumn),
 					     QString::number(endLine), QString::number(endColumn) );
     
