@@ -199,7 +199,7 @@ bool QEditorView::setCursorPosition(unsigned int line, unsigned int col)
 #warning "TODO: implement QEditorView::setCursorPosition"
     kdDebug() << "TODO: implement QEditorView::setCursorPosition" << endl;
 
-    m_editor->setCursorPosition( line-1, col );
+    m_editor->setCursorPosition( line, col );
     m_editor->ensureCursorVisible();
 
     return true;
