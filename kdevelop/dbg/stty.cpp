@@ -64,21 +64,6 @@
 #include <qintdict.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
-/*
-
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdlib.h>
-
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <sys/stat.h>
-*/
-
-#define FIFO_FILE "/tmp/debug_tty"
 
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
@@ -136,9 +121,7 @@ STTY::STTY(bool ext, const QString &termAppName) :
 {
   if (ext)
   {
-    ::unlink(FIFO_FILE);
     findExternalTTY(termAppName);
-    ::unlink(FIFO_FILE);
   }
   else
   {
@@ -297,22 +280,32 @@ void STTY::OutReceived(int f)
 
 // **************************************************************************
 
+#define FIFO_FILE "/tmp/debug_tty.XXXXXX"
+
 bool STTY::findExternalTTY(const QString &termApp)
 {
   QString appName(termApp.isEmpty() ? QString("xterm") : termApp);
 
+  char fifo[] = FIFO_FILE;
+  int fifo_fd;
+  if ((fifo_fd = mkstemp(fifo)) == -1)
+    return false;
+
+  ::close(fifo_fd);
+  ::unlink(fifo);
+
   // create a fifo that will pass in the tty name
 #ifdef HAVE_MKFIFO
-  if (::mkfifo(FIFO_FILE, S_IRUSR|S_IWUSR) < 0)
+  if (::mkfifo(fifo, S_IRUSR|S_IWUSR) < 0)
 #else
-  if (::mknod(FIFO_FILE, S_IFIFO | S_IRUSR|S_IWUSR, 0) < 0)
+  if (::mknod(fifo, S_IFIFO | S_IRUSR|S_IWUSR, 0) < 0)
 #endif
     return false;
 
   int pid = ::fork();
   if (pid < 0)              // No process
   {
-    ::unlink(FIFO_FILE);
+    ::unlink(fifo);
     return false;
   }
 
@@ -324,16 +317,17 @@ bool STTY::findExternalTTY(const QString &termApp)
     */
 
     const char* prog      = appName;
-    const char* scriptStr = "tty>"FIFO_FILE";"            // fifo name
+    QString script = QString("tty>") + QString(fifo) + QString(";"                  // fifo name
                             "trap \"\" INT QUIT TSTP;"	  // ignore various signals
                             "exec<&-;exec>&-;"		        // close stdin and stdout
-                            "while :;do sleep 3600;done";
+                            "while :;do sleep 3600;done");
+    const char* scriptStr = script.data();
     const char* end       = 0;
 
     ::execlp( prog,       prog,
 //              "-name",    "debugio",
 //              "-title",   "kdevelop: Program output",
-              "-caption", "kdevelop: Debug application console",
+              "-caption", i18n("kdevelop: Debug application console"),
               "-e",       "sh",
               "-c",       scriptStr,
               end);
@@ -348,17 +342,17 @@ bool STTY::findExternalTTY(const QString &termApp)
 
   // Open the communication between us (the parent) and the
   // child (the process running on a tty console)
-  int f = ::open(FIFO_FILE, O_RDONLY);
-  if (f < 0)
+  fifo_fd = ::open(fifo, O_RDONLY);
+  if (fifo_fd < 0)
     return false;
 
   // Get the ttyname from the fifo buffer that the child process
   // has sent.
   char ttyname[50];
-  int n = ::read(f, ttyname, sizeof(ttyname)-sizeof(char));
+  int n = ::read(fifo_fd, ttyname, sizeof(ttyname)-sizeof(char));
 
-  ::close(f);
-  ::unlink(FIFO_FILE);
+  ::close(fifo_fd);
+  ::unlink(fifo);
 
   // No name??
   if (n <= 0)

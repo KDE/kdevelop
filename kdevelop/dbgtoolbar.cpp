@@ -289,7 +289,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
   bPrevFocus_ = new DbgButton(0, pm,  this);
 
-  bStep->setAccel(CTRL+'S');
+//  bStep->setAccel(CTRL+'S');
 
   connect(bRun,         SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugRun()));
   connect(bInterrupt,   SIGNAL(clicked()),  dbgController,  SLOT(slotBreakInto()));
