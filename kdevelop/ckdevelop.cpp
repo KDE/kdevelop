@@ -1126,30 +1126,6 @@ void CKDevelop::slotDebugAttach()
 }
 
 
-void CKDevelop::slotDebugRunWithArgs()
-{
-  QString args=prj->getDebugArgs();
-  if (args.isEmpty())
-    QString args=prj->getExecuteArgs();
-
-  CExecuteArgDlg argdlg(this,"Arguments",i18n("Debug with arguments"), args);
-  if (argdlg.exec())
-  {
-    args = argdlg.getArguments();
-    prj->setDebugArgs(args);		
-    prj->writeProject();
-
-    slotStatusMsg(QString().sprintf(i18n("Debug with arguments (%s) in %s"),
-                            args.data(), dbgExternalCmd.data()));
-
-    setupInternalDebugger();
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    dbgController->slotStart(prj->getBinPROGRAM(), args);
-    brkptManager->slotSetPendingBPs();
-    slotDebugRun();
-  }
-}
-
 void CKDevelop::slotDebugExamineCore()
 {
   if (dbgInternal)
@@ -1204,22 +1180,80 @@ void CKDevelop::slotDebugNamedFile()
     slotBuildDebug();
 }
 
-void CKDevelop::slotBuildDebug()
+void CKDevelop::slotBuildDebug(bool bWithArgs)
 {
-  if(!bKDevelop)
-    switchToKDevelop();
+  bool isDirty=isProjectDirty();
+  int qYesNoCancel=QMessageBox::Yes;
 
-// TODO: jbb-991220 - This code isn't quite right
-// The slotBuildMake might need to be above the Internal debugger but it must
-// run to completion _before_ starting _any_ debugger. I've put the internal
-// debugger above the make for now.
-// If fact we should only "make" when "dirty" and we should probably ask
-// before "make"ing.
+  if (isDirty)
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
+                    i18n("Should the project be rebuild before starting the debug session?"),
+                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
 
+  if (qYesNoCancel!=QMessageBox::Cancel)
+  {
+    if(!bKDevelop)
+      switchToKDevelop();
+
+    if (isDirty && qYesNoCancel==QMessageBox::Yes)
+    {
+      if (bWithArgs)
+        next_job="debug_with_args";
+      else
+        next_job="debug";
+      slotBuildMake();
+    }
+    else
+    {
+      if (bWithArgs)
+        slotStartDebugRunWithArgs();
+      else
+        slotStartDebug();
+    }
+  }
+}
+
+void CKDevelop::slotDebugRunWithArgs()
+{
+  slotBuildDebug(true);
+}
+
+void CKDevelop::slotStartDebugRunWithArgs()
+{
+  QString args=prj->getDebugArgs();
+  if (args.isEmpty())
+    QString args=prj->getExecuteArgs();
+
+  CExecuteArgDlg argdlg(this,"Arguments",i18n("Debug with arguments"), args);
+  if (argdlg.exec())
+  {
+    args = argdlg.getArguments();
+    prj->setDebugArgs(args);		
+    prj->writeProject();
+
+    slotStatusMsg(QString().sprintf(i18n("Debug with arguments (%s) in %s"),
+                            args.data(), dbgExternalCmd.data()));
+
+    stdin_stdout_widget->clear();
+    stderr_widget->clear();
+
+    setupInternalDebugger();
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    dbgController->slotStart(prj->getBinPROGRAM(), args);
+    brkptManager->slotSetPendingBPs();
+    slotDebugRun();
+  }
+}
+
+void CKDevelop::slotStartDebug()
+{
   if (dbgInternal)
   {
     if (dbgController)
       slotDebugStop();
+
+    stdin_stdout_widget->clear();
+    stderr_widget->clear();
 
     setupInternalDebugger();
     QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
@@ -1232,20 +1266,6 @@ void CKDevelop::slotBuildDebug()
   if(!CToolClass::searchProgram(dbgExternalCmd)){
     return;
   }
-
-// TODO: jbb-990115 I've remove the make before debugging. See above and...
-// this does not run to completion before kdbg (or whatever) is started up
-// so it may not be working properly. Also, it often isn't appropriate
-// doing a make before debugging, as this can just slow the debugging cycle
-// down, _if_ the user is savvy enough to understand what limitations they
-// are pushing when they do that.(that means me!!) I can imagine people will
-// complain about this, so some config option would be best.
-
-//   maybe the sources have changed, so it has to be compiled
-//
-//  if(!prj->getBinPROGRAM()){
-//    slotBuildMake();
-//  }
 
   showOutputView(false);
   showTreeView(false);
@@ -3153,7 +3173,20 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job = "";
       ready=false;
     }
-    if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0){ 
+
+    if (next_job == "debug"  && process.exitStatus() == 0)
+    {
+      next_job = "";
+      slotStartDebug();
+    }
+
+    if (next_job == "debug_with_args"  && process.exitStatus() == 0)
+    {
+      next_job = "";
+      slotStartDebugRunWithArgs();
+    }
+
+    if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0){
       // rest from the buildRun
       appl_process.clearArguments();
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());

@@ -134,6 +134,10 @@ public:
    */
   bool setInfoModified(const QString &sFilename, bool bModified=true);
 
+  /** checks the project files
+   *  if there is one file modified or younger than the binary
+   */
+  bool isProjectDirty();
   /*
      parses only the files listed in the stringlist
   */
@@ -359,7 +363,7 @@ public:
   void slotBuildStop();
   void slotBuildRun();
   void slotBuildRunWithArgs();
-  void slotBuildDebug();
+  void slotBuildDebug(bool bWithArgs=false);
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
@@ -368,6 +372,18 @@ public:
       Most functions are in dbgController which is constructed when
       the user wants the debugger */
   void slotDebugActivator(int id);
+  /** this starts the "real" debug session
+      it is a successor for slotBuildDebug(true)
+      if you start this version instead of slotBuildDebug()
+      no check for rebuilding will be made
+  */
+  void slotStartDebugRunWithArgs();
+  /** this starts the "real" debug session
+      it is a successor for slotBuildDebug(false)
+      if you start this version instead of slotBuildDebug()
+      no check for rebuilding will be made
+  */
+  void slotStartDebug();
   /** Starts up the debugger, and gets it running. This may
       instantiate a debugger if it doesn't exist */
   void slotDebugRun();

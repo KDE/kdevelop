@@ -1,3 +1,7 @@
+2000-02-17 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* Starting a debug session now checks if the project
+	  has to be rebuild
+
 2000-02-16 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* implementing a "silent" autosave/save all
 	  which doesn´t switch between the edit-widgets

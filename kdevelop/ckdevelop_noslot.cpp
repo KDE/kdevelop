@@ -54,7 +54,16 @@ void CKDevelop::addRecentProject(const char* file)
 	}
 }
 
-/* get the info structure from the filename */
+/*---------------------------------------- getInfoFromFilename
+ * TEditInfo *CKDevelop::projectIsDirty(const QString &filename)
+ *
+ * searches for the edit_info-element
+ *
+ * Returns:
+ *       returns either 0l if the filename wasn't found
+ *       or the pointer of the first occurence inside
+ *       the TEditInfoList
+ *-----------------------------------------------------------------*/
 TEditInfo *CKDevelop::getInfoFromFilename(const QString &filename)
 {
   TEditInfo *pRetVal=0l;
@@ -68,6 +77,40 @@ TEditInfo *CKDevelop::getInfoFromFilename(const QString &filename)
       pRetVal=edit_infos.next();
   }
   return pRetVal;
+}
+/*---------------------------------------- isProjectDirty()
+ * bool CKDevelop::isProjectDirty()
+ *
+ *  search all edit_infos for any files that have the modified flag set
+ *  and if one of these files are younger than the target file
+ *
+ *  restrictions: this needs a project to be opened!!!
+ *
+ * Returns:
+ *       returns true if there is at least one file that has been modified.
+ *-----------------------------------------------------------------*/
+bool CKDevelop::isProjectDirty()
+{
+  TEditInfo *actual_info;
+  bool isClean=true;
+
+  QFileInfo file_info(prj->getProjectDir() + prj->getSubDir() + prj->getBinPROGRAM());
+
+  if (!file_info.exists())
+    isClean=false;
+
+  setInfoModified(header_widget->getName(), header_widget->isModified());
+  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+
+  for(actual_info=edit_infos.first(); isClean && actual_info != 0;)
+  {
+    TEditInfo *next_info=edit_infos.next();
+    if (actual_info->modified || file_info.lastModified()<actual_info->last_modified)
+      isClean=false;
+    actual_info=next_info;
+  }
+
+  return !isClean;
 }
 
 void CKDevelop::removeFileFromEditlist(const char *filename){
