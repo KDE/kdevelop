@@ -180,7 +180,13 @@ QString QextMdiChildFrmCaption::abbreviateText(QString origStr, int maxWidth)
    int actualWidth = fm.width( origStr);
 
    int realLetterCount = origStr.length();
-   int newLetterCount = (maxWidth * realLetterCount) / actualWidth;
+   int newLetterCount;
+   if (actualWidth != 0) {
+      newLetterCount = (maxWidth * realLetterCount) / actualWidth;
+   }
+   else {
+      newLetterCount = realLetterCount; // should be 0 anyway
+   }
    int w = maxWidth+1;
    QString s = origStr;
    while((w > maxWidth) && (newLetterCount >= 1)) {
