@@ -96,7 +96,7 @@ private:
     QGuardedPtr<DisassembleWidget> disassembleWidget;
     QGuardedPtr<GDBOutputWidget> gdbOutputWidget;
     DbgController *controller;
-    QLabel *statusBarIndicator;
+    QGuardedPtr<QLabel> statusBarIndicator;
     QGuardedPtr<DbgToolBar> floatingToolBar;
     ProcessLineMaker* procLineMaker;
     ProcessLineMaker* gdbLineMaker;
