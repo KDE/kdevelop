@@ -21,6 +21,7 @@
 #include <qsplitter.h>
 #include <kcursor.h>
 #include <kstddirs.h>
+#include <kmessagebox.h>
 
 #include "ckdevelop.h"
 #include "ctoolclass.h"
@@ -61,10 +62,8 @@ bool CKDevelop::slotProjectClose(){
 //   QStrList handledNames;
    bool cont=true;
 
-//   log_file_tree->storeState(prj);
+   log_file_tree->storeState(prj);
 
-//   setInfoModified(header_widget->getName(), header_widget->isModified());
-//   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
 //   for(actual_info=edit_infos.first();cont && actual_info != 0;){
 //       TEditInfo *next_info=edit_infos.next();

@@ -34,6 +34,7 @@
 #include <kiconloader.h>
 #include <kglobal.h>
 #include <kstddirs.h>
+#include <kmessagebox.h>
 
 
 #include "./kwrite/kwdoc.h"
@@ -167,39 +168,7 @@ void CKDevelop::initView(){
   ////////////////////////
   // Right main window
   ////////////////////////
-#warning FIXME MDI stuff
-  // the tabbar + tabwidgets for edit and browser
-  // s_tab_view = new CTabCtl(top_panner);
-//   s_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
-//   header_widget = new CEditWidget(kapp,s_tab_view,"header");
-//   header_widget->setFocusPolicy(QWidget::StrongFocus);
-
-//   header_widget->setFont(font);
-//   header_widget->setName(i18n("Untitled.h"));
-//   config->setGroup("KWrite Options");
-//   header_widget->readConfig(config);
-//   header_widget->doc()->readConfig(config);
-
-
-//   edit_widget=header_widget;
-//   cpp_widget = new CEditWidget(kapp,s_tab_view,"cpp");
-//   cpp_widget->setFocusPolicy(QWidget::StrongFocus);
-//   cpp_widget->setFont(font);
-//   cpp_widget->setName(i18n("Untitled.cpp"));
-//   config->setGroup("KWrite Options");
-//   cpp_widget->readConfig(config);
-//   cpp_widget->doc()->readConfig(config);
-
-
-
-
-
-  // init the 2 first kedits
-  // TEditInfo* edit1 = new TEditInfo;
-//   TEditInfo* edit2 = new TEditInfo;
-//   edit1->filename = header_widget->getName();
-//   edit2->filename = cpp_widget->getName();
 
   mdi_main_frame = new MdiFrame(top_panner, "mdi_frame");
 
@@ -219,20 +188,13 @@ void CKDevelop::initView(){
   //init
   browser_widget->setDocBrowserOptions();
 
-#warning FIXME MDI stuff
+#warning FIXME should we swallow tools in KDevelop 2??
   //  swallow_widget = new KSwallowWidget(t_tab_view);
   //  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
     
 //  swallow_widget = new KSwallowWidget(s_tab_view);
 //  swallow_widget->setFocusPolicy(QWidget::StrongFocus);
 
-
-#warning FIXME MDI stuff
- //  s_tab_view->addTab(header_widget,i18n("Header/Reso&urce Files"));
-//   s_tab_view->addTab(cpp_widget,i18n("&C/C++ Files"));
-//   s_tab_view->addTab(browser_widget,i18n("&Documentation-Browser"));
-//   s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
-//   s_tab_view->addTab(mdi_main_frame,i18n("Tdsfksjd&s"));
 
   ComponentManager *manager = ComponentManager::self();
   manager->registerComponent(class_tree);
@@ -250,14 +212,7 @@ void CKDevelop::initView(){
   initMenuBar();
   initToolBar();
   initStatusBar();
-#warning FIXME MDI stuff
-  // the rest of the init for the kedits
-  // edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-//   edit1->modified=false;
-//   edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-//   edit2->modified=false;
-//   edit_infos.append(edit1);
-//   edit_infos.append(edit2);
+
   
 }
 
@@ -433,9 +388,7 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Search for Help on"), "HelpSearch", 0);
   accel->connectItem( "HelpSearch", this, SLOT(slotHelpSearch()), true, ID_HELP_SEARCH);
   
-  // Tab-Switch
-  accel->insertItem( i18n("Toggle Last"), "ToggleLast",IDK_TOGGLE_LAST);
-  accel->connectItem( "ToggleLast", this, SLOT(slotToggleLast()));
+ 
 
 
   accel->readSettings(0, false);
@@ -700,7 +653,6 @@ void CKDevelop::initMenuBar(){
   
   ///////////////////////////////////////////////////////////////////
   // Window-menu entries
-  menu_buffers = new QPopupMenu;
   kdev_menubar->insertItem(i18n("&Window"), mdi_main_frame->m_pMdi->m_pWindowMenu);
   kdev_menubar->insertSeparator();
 
@@ -720,7 +672,7 @@ void CKDevelop::initMenuBar(){
   bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
   bookmarks_menu->insertSeparator();
 
-#warning FIXME MDI stuff
+#warning FIXME Bookmarks need new implementation
   // KGuiCmdPopup* header_bookmarks = new KGuiCmdPopup(kdev_dispatcher);//new QPopupMenu();
 //   header_widget->installBMPopup(header_bookmarks);
 //   KGuiCmdPopup* cpp_bookmarks = new KGuiCmdPopup(kdev_dispatcher);//new QPopupMenu();
@@ -1032,25 +984,6 @@ void CKDevelop::initConnections(){
   connect(doc_tree, SIGNAL(projectAPISelected()), SLOT(slotHelpAPI()));
   connect(doc_tree, SIGNAL(projectManualSelected()), SLOT(slotHelpManual()));
 
-  //connect the editor lookup function with slotHelpSText
-#warning FIXME MDI stuff
- //  connect(cpp_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-//   connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-//   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-//   connect(cpp_widget, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
-//   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-//   connect(cpp_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-//   connect(cpp_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//   connect(cpp_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
-
-//   connect(header_widget, SIGNAL(lookUp(QString)),this, SLOT(slotHelpSearchText(QString)));
-//   connect(header_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
-//   connect(header_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
-//   connect(header_widget, SIGNAL(newMarkStatus()), this, SLOT(slotMarkStatus()));
-//   connect(header_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-//   connect(header_widget, SIGNAL(bufferMenu(const QPoint&)),this, SLOT(slotBufferMenu(const QPoint&)));
-//   connect(header_widget, SIGNAL(grepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));
-//   connect(header_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
 
   // connect Docbrowser rb menu
 

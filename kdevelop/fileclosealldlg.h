@@ -1,9 +1,8 @@
 /***************************************************************************
-                     structdef.h -- some important struct definitions
-                             -------------------                                         
+     
 
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
+    begin                : Wed Jan 5 2000
+    copyright            : (C) 2000 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
@@ -15,30 +14,31 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+#ifndef FILECLOSEALLDLG_H
+#define FILECLOSEALLDLG_H
 
-#ifndef STRUCTDEF_H
-#define STRUCTDEF_H
+#include <qdialog.h>
+#include <qlistview.h>
+#include <qpushbutton.h>
+#include <qstringlist.h>
 
-#include <qlist.h>
-#include <qstring.h>
-#include <qdatetime.h>
+class FileCloseAllDlg : public QDialog
+{
+    Q_OBJECT
 
-class CKDevelop;
-class QPopupMenu;
+public:
 
-
-struct TBugReportInfo {
-    QString email;
-    QString author;
-    QString kde_version;
-    QString qt_version;
-    QString os;
-    QString compiler;
+    FileCloseAllDlg(QWidget* parent =0,const char* name = 0,QStringList* files=0);
+    
+ protected:
+    QPushButton* sellect_all_button;
+    QPushButton* sellect_none_button;
+    QPushButton* ok_button;
+    QPushButton* cancel_button;
+    QListView* files_listview;
+    protected slots:
+    void slotSelectAll();
+    void slotSelectNone();
+    void slotOK();
 };
-struct TImportantPtrInfo{
-	CKDevelop* kdev;
-	QPopupMenu* plugin_menu;
-	
-
-};
-#endif
+#endif 

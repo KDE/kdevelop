@@ -76,6 +76,7 @@
 #include "mdiframe.h"
 #include "docbrowserview.h"
 #include "componentmanager.h"
+#include "fileclosealldlg.h"
 
 
 
@@ -168,34 +169,33 @@ void CKDevelop::slotFileClose(){
 	
 	if (msg_result == KMessageBox::Yes){ // yes
 	
-	    if (isUntitled(filename))
-		{
-		    if (!fileSaveAs())
-			msg_result=KMessageBox::Cancel;    // simulate here cancel because fileSaveAs failed....
-		}
-	    else
-		{
-		    saveFileFromTheCurrentEditWidget();
-		    if (editor_view->currentEditor()->isModified())
-			msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
-		}
+	    {
+		saveFileFromTheCurrentEditWidget();
+		if (editor_view->currentEditor()->isModified())
+		    msg_result=KMessageBox::Cancel;		   // simulate cancel because doSave went wrong!
+	    }
 	}
 	
 	if (msg_result == KMessageBox::Cancel) // cancel
 	    {
-		setInfoModified(filename, editor_view->currentEditor()->isModified());
 		slotStatusMsg(i18n("Ready."));
 		return;
 	    }
     }
 
-    removeFileFromEditlist(filename);
     setMainCaption();
     slotStatusMsg(i18n("Ready."));
 }
 
-void CKDevelop::slotFileCloseAll()
-{
+void CKDevelop::slotFileCloseAll(){
+    QStringList files;
+    files.append("KJKL");
+    files.append("KJKL");
+    files.append("KJKL");
+    FileCloseAllDlg dlg(this,"DLG",&files);
+    dlg.exec();
+    return;
+    
 #warning FIXME MDI stuff
   // slotStatusMsg(i18n("Closing all files..."));
 //   TEditInfo* actual_info;
@@ -315,9 +315,6 @@ void CKDevelop::slotFileCloseAll()
 }
 
 bool CKDevelop::saveFileFromTheCurrentEditWidget(){
-#warning FIXME: MDI stuff
-   // if editor_view->editor isn't shown don't proceed
-    //    EditorView* current_editor_view = getCurrentEditorView();
     if (editor_view==0)
 	return false;
     
@@ -326,7 +323,7 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
     if (editor_view->currentEditor()->modifiedOnDisk()) {
 	if (KMessageBox::questionYesNo(this, 
 				       i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(filename))
-	    == QMessageBox::No)
+	    == KMessageBox::No)
 	    return false;
     }
     editor_view->currentEditor()->doSave();
@@ -344,7 +341,6 @@ void CKDevelop::slotFileSave(){
    slotStatusMsg(i18n("Saving file ")+sShownFilename);
 
    saveFileFromTheCurrentEditWidget(); // save the current file
-   setInfoModified(filename, editor_view->currentEditor()->isModified());
    ComponentManager::self()->notifySavedFile(filename);
 
    slotStatusMsg(i18n("Ready."));
@@ -362,83 +358,48 @@ void CKDevelop::slotFileSaveAs(){
 }
 
 void CKDevelop::slotFileSaveAll(){
-  #warning FIXME MDI stuff
-    // QStrList handledNames;
-//     // ok,its a dirty implementation  :-)
-//     if(!bAutosave || !saveTimer->isActive()){
-// 	slotStatusMsg(i18n("Saving all changed files..."));
-//     }
-//     else{
-// 	slotStatusMsg(i18n("Autosaving..."));
-//     }
-//     TEditInfo* actual_info;
-//     bool mod = false;
-//     // save current filename to switch back after saving
-//     QString visibleFile = (editor_view->editor) ? editor_view->editor->getName() : QString("");
-//     // ooops...autosave switches tabs...
-//     int visibleTab=s_tab_view->getCurrentTab();
-//     // first the 2 current edits
-//     view->setUpdatesEnabled(false);
+    if(!bAutosave || !saveTimer->isActive()){
+ 	slotStatusMsg(i18n("Saving all changed files..."));
+    }
+    else{
+ 	slotStatusMsg(i18n("Autosaving..."));
+    }
     
-//     setInfoModified(header_widget->getName(), header_widget->isModified());
-//     setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+    view->setUpdatesEnabled(false);
     
-//     statProg->setTotalSteps(edit_infos.count());
-//     statProg->show();
-//     statProg->setProgress(0);
-//     int i=0;
-//     for(actual_info=edit_infos.first();actual_info != 0;){
-
-// 	TEditInfo *next_info=edit_infos.next();
-// 	// get now the next info... fileSaveAs can delete the actual_info
-// 	i++;
-// 	statProg->setProgress(i);
-// 	if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
-// 	    if(isUntitled(actual_info->filename)){
-// 		switchToFile(actual_info->filename);
-// 		handledNames.append(actual_info->filename);
-// 		if (fileSaveAs())
-// 		    {
-// 			// maybe saved with another name... so we have to start again
-// 			next_info=edit_infos.first();
-// 			i=0;
-// 		    }
-	    
-	       
-// 	    }
-// 	    else{
-// 		switchToFile(actual_info->filename,false,false);
-// 		handledNames.append(actual_info->filename);
-// 		saveFileFromTheCurrentEditWidget();
-// 		actual_info->modified=editor_view->editor->isModified();
-// 		// 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
-// 		if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
-// 		    mod = true;
-// 	    }
-// 	}
-// 	actual_info=next_info;
-//     }
-//     statProg->hide();
-//     statProg->reset();
-//     if(mod){
-// 	slotViewRefresh();
-//     }
-//     // switch back to visible file
-//     if (visibleTab == CPP || visibleTab == HEADER)
-// 	{
-// 	    // Does the visible file still exist??
-// 	    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename != visibleFile;
-// 		actual_info=edit_infos.next());
-	    
-// 	    if (actual_info)
-// 		switchToFile(visibleFile,false,false); // no force reload and no box if modified outside
-	    
-// 	    view->repaint();
-// 	}
-//     view->setUpdatesEnabled(true);
-//     // switch back to visible tab
-//     s_tab_view->setCurrentTab(visibleTab);
-//     slotStatusMsg(i18n("Ready."));
+    // Editors...
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    statProg->setTotalSteps(editorviews.count());
+    statProg->show();
+    statProg->setProgress(0);
+    int i = 0;
+    QListIterator<QextMdiChildView> it(editorviews);
+    
+    for (; it.current(); ++it) {
+	EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
+	if(tmp_editor_view->currentEditor()->isModified()){
+	    if (tmp_editor_view->currentEditor()->modifiedOnDisk()) {
+		if (KMessageBox::questionYesNo(this, i18n("The file %1 was modified outside\n this editor. Save anyway?").arg(tmp_editor_view->currentEditor()->getName())) == KMessageBox::No){
+		}
+		else{
+		    tmp_editor_view->currentEditor()->doSave();
+		}
+	    }
+	    else{
+		tmp_editor_view->currentEditor()->doSave();
+	    }
+	}
+	
+	
+	i++;
+	statProg->setProgress(i);
+    }
+    
+    statProg->hide();
+    statProg->reset();
+    
+    view->setUpdatesEnabled(true);
+    slotStatusMsg(i18n("Ready."));
 }
 
 
@@ -839,32 +800,10 @@ void CKDevelop::slotBuildRunWithArgs(){
 
 /**
  * a) make
- * b) run kdbg
+ * b) run a debugger
  */
 void CKDevelop::slotBuildDebug(){
-
-  if(!CToolClass::searchProgram("kdbg")){
-    return;
-  }
-  if(!prj->getBinPROGRAM()){
-    slotBuildMake();
-  }
-  if(!bKDevelop)
-    switchToKDevelop();
-
-  showOutputView(false);
-  showTreeView(false);
-  
-  slotStatusMsg(i18n("Running %1 in KDbg").arg(prj->getBinPROGRAM()));
-
-#warning FIXME MDI stuff 
-  //  s_tab_view->setCurrentTab(TOOLS);
-  //  swallow_widget->sWClose(false);
-  //   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  //   swallow_widget->setExeString("kdbg "+ prj->getBinPROGRAM());
-  //   swallow_widget->sWExecute();
-  //   swallow_widget->init();
-  
+    // integrated debugger and external tools
 }
 
 /**
@@ -1029,7 +968,7 @@ void CKDevelop::slotToolsTool(int tool){
     showOutputView(false);
 
     
-#warning FIXME MDI stuff
+#warning FIXME should we swallow tools in KDevelop 2 too?
    //  QString argument=tools_argument.at(tool);
  		
 //     // This allows us to replace the macro %H with the header file name, %S with the source file name
@@ -1369,7 +1308,7 @@ void CKDevelop::slotPluginPluginManager(){
 }
 
 void CKDevelop::slotBookmarksSet(){
-#warning FIXME MDI stuff
+#warning FIXME Bookmarks: need new implemation
 // 	if(s_tab_view->getCurrentTab()==BROWSER)
 // 		slotBookmarksAdd();
 // 	else{
@@ -1380,7 +1319,7 @@ void CKDevelop::slotBookmarksSet(){
 // 	}
 }
 void CKDevelop::slotBookmarksAdd(){
-#warning FIXME MDI stuff
+#warning FIXME Booksmarks need new implemation
 // 	if(s_tab_view->getCurrentTab()==BROWSER){
 // 		doc_bookmarks->clear();
 // 		doc_bookmarks_list.append(browser_widget->currentURL());
@@ -1398,7 +1337,7 @@ void CKDevelop::slotBookmarksAdd(){
 
 }
 void CKDevelop::slotBookmarksClear(){
-#warning FIXME MDI stuff
+#warning FIXME Booksmarks need new implemation
 	// if(s_tab_view->getCurrentTab()==BROWSER){
 // 		doc_bookmarks_list.clear();
 // 		doc_bookmarks_title_list.clear();
@@ -1978,38 +1917,28 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
   }
 }
 */
-void CKDevelop::slotBROWSERMarkStatus(bool bMarked)
-{
-#warning FIXME MDI stuff
-  // int item=s_tab_view->getCurrentTab();
-//   if (item==BROWSER)
-//   {
-//       if(bMarked){
-//         enableCommand(ID_EDIT_COPY);
-//       }
-//       else{
-//         disableCommand(ID_EDIT_COPY);
-//       }		
-//   }
+void CKDevelop::slotBROWSERMarkStatus(bool bMarked){
+    if (browser_view->hasFocus()){
+	if(bMarked){
+	    enableCommand(ID_EDIT_COPY);
+	}
+	else{
+	    disableCommand(ID_EDIT_COPY);
+	}		
+    }
 }
 
 void CKDevelop::slotClipboardChanged()
 {
-#warning FIXME MDI stuff
-  // int item = s_tab_view->getCurrentTab();
-//   QString text = QApplication::clipboard()->text();
-// //  if(!bContents || item==BROWSER || item==TOOLS)
-//   if(text.isEmpty() || item==BROWSER || item==TOOLS)
-//     disableCommand(ID_EDIT_PASTE);
-//   else
-  //     enableCommand(ID_EDIT_PASTE);
+    QString text = QApplication::clipboard()->text();
+    if(text.isEmpty() || browser_view->hasFocus())
+	disableCommand(ID_EDIT_PASTE);
+    else
+	enableCommand(ID_EDIT_PASTE);
 }
 
 void CKDevelop::slotNewLineColumn()
 {
-    //    EditorView* editor_view = getCurrentEditorView();
-    
-    // if editor_view->editor isn't shown don't proceed
     if (editor_view==0)
 	return;
     QString str = i18n("Line: %1 Col: %2")
@@ -2018,7 +1947,6 @@ void CKDevelop::slotNewLineColumn()
     statusBar()->changeItem(str, ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo(){
-    //    EditorView* editor_view = getCurrentEditorView();
     if(editor_view !=0){
 	int state;
 	state = (editor_view->currentEditor()) ? editor_view->currentEditor()->undoState() : 0;
@@ -2080,10 +2008,6 @@ void CKDevelop::slotDocumentDone(){
     browser_widget->findTextBegin();
     browser_widget->findTextNext(QRegExp(doc_search_text));
   }
-
-#warning FIXME MDI stuff
- //  if (s_tab_view->getCurrentTab()==BROWSER)
-//      setMainCaption(BROWSER);
 
   if (pos!=-1)
    url_wo_ref = actualURL.left(pos);
@@ -2373,39 +2297,24 @@ void CKDevelop::slotCommitFileToVCS(QString file){
 
 void CKDevelop::slotUpdateDirFromVCS(QString dir){
     slotFileSaveAll();
-
-    prj->getVersionControl()->update(dir);
-    TEditInfo* actual_info;
     
-#warning FIXME MDI stuff
-   //  QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
-
-//     for ( ; it.current(); ++it ) {
-// 	actual_info = it.current();
-// 	QFileInfo file_info(actual_info->filename);
-// 	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-// 	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-// 	}
-//     }
+    prj->getVersionControl()->update(dir);
+    
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QListIterator<QextMdiChildView> it(editorviews);
+    for (; it.current(); ++it) {
+	EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
+	if(tmp_editor_view->currentEditor()->modifiedOnDisk()){
+	    //force reload, no modified on disc messagebox
+	    switchToFile(tmp_editor_view->currentEditor()->getName(),true,false);
+	}
+    }
 }
 
 void CKDevelop::slotCommitDirToVCS(QString dir){
     slotFileSaveAll();
     prj->getVersionControl()->commit(dir);
-
-    TEditInfo* actual_info;
-    
-#warning FIXME MDI stuff
-    // QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
-
-//     for ( ; it.current(); ++it ) {
-// 	actual_info = it.current();
-// 	QFileInfo file_info(actual_info->filename);
-// 	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-// 	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-// 	}
-//     }
-    
+    //?? can files change on disc, so we must reload them?
 }
 void CKDevelop::slotDocTreeSelected(const QString &filename){
   slotURLSelected("file:" + filename, QString(), 1);
@@ -2416,24 +2325,15 @@ void CKDevelop::slotTCurrentTab(int item){
 }
 
 
-void CKDevelop::slotToggleLast() {
-#warning FIXME MDI stuff
- //  if ( lasttab != s_tab_view->getCurrentTab() )
-//     s_tab_view->setCurrentTab( lasttab );
-//   else
-//     switchToFile( lastfile );
-}
-
-void CKDevelop::slotBufferMenu( const QPoint& point ) {
-  menu_buffers->popup( point );
-}
-
 void CKDevelop::slotSwitchFileRequest(const QString &filename,int linenumber){
   switchToFile(filename,linenumber);
 }
 
 void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
-    editor_view = getCurrentEditorView();
+    editor_view = 0;
+    if ( item->inherits("EditorView"))
+	editor_view =  static_cast<EditorView*>(item);
+   
     int type = CPP_HEADER;
     if(editor_view !=0) {
 	type = CProject::getType(editor_view->currentEditor()->getName());
@@ -2485,6 +2385,7 @@ void CKDevelop::slotMDIGetFocus(QextMdiChildView* item){
 	    else
 		t_tab_view->setCurrentTab(LFV);
 	}
+	cerr << "CPP_SOURCE\n";
 	if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
 	    enableCommand(ID_BUILD_COMPILE_FILE);
 	}

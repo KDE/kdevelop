@@ -61,108 +61,8 @@ void CKDevelop::addRecentProject(const char* file)
 	}
 }
 
-void CKDevelop::removeFileFromEditlist(const char *filename){
-#warning FIXME MDI stuff
 
-  // TEditInfo* actual_info;
 
-// //search the actual edit_info and remove it
-//   for(actual_info=edit_infos.first();actual_info != 0;){
-//     TEditInfo* next_info=edit_infos.next();
-//     if (actual_info->filename == filename){ // found
-
-//       menu_buffers->removeItem(actual_info->id);
-//       if(edit_infos.removeRef(actual_info)){
-//       }
-//     }
-//     actual_info=next_info;
-//   }
-
-//   // was this file in the cpp_widget?
-//   if (cpp_widget->getName() == filename)
-//   {
-//     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-//       // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
-//       if ( CProject::getType( actual_info->filename ) == CPP_SOURCE)
-//       { // found
-//         cpp_widget->setText(actual_info->text);
-//         cpp_widget->toggleModified(actual_info->modified);
-//         cpp_widget->setName(actual_info->filename);
-//   //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
-//         return;
-//       }
-//     }
-
-//     // if not found a successor create an new file
-//     actual_info = new TEditInfo;
-//     actual_info->modified=false;
-//     QString sCFilename= (project && prj->getProjectType()=="normal_c") ? i18n("Untitled.c") : i18n("Untitled.cpp");
-//     actual_info->id = menu_buffers->insertItem(sCFilename,-2,0);
-//     actual_info->filename = sCFilename;
-
-//     edit_infos.append(actual_info);
-
-//     cpp_widget->clear();
-//     cpp_widget->setName(actual_info->filename);
-//   }
-
-//   // was this file in the header_widget?
-//   if (header_widget->getName() == filename)
-//   {
-//     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-//       // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
-//       if ( CProject::getType( actual_info->filename ) != CPP_SOURCE)
-//       { // found
-//         header_widget->setText(actual_info->text);
-//         header_widget->toggleModified(actual_info->modified);
-//         header_widget->setName(actual_info->filename);
-//   //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
-//         return;
-//       }
-//     }
-
-//     // if not found a successor create an new file
-//     actual_info = new TEditInfo;
-//     actual_info->modified=false;
-//     actual_info->id = menu_buffers->insertItem(i18n("Untitled.h"),-2,0);
-//     actual_info->filename = i18n("Untitled.h");
-
-//     edit_infos.append(actual_info);
-
-//     header_widget->clear();
-//     header_widget->setName(actual_info->filename);
-//   }
-
-}
-
-/*---------------------------------------- setInfoModified()
- * setInfoModified(const QString &sFilename, bool bModified)
- *
- *  search all edit_infos for the file named "sFilename", the first
- *  match will change 'modified'
- *
- * Parameters:
- *  sFilename   filename to search in the EditInfos
- *  bModified   sets editinfo->modified
- * Returns:
- *       returns true if a struct-element was changed
- *-----------------------------------------------------------------*/
-bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
-{
-#warning FIXME MDI stuff
-  // bool bChanged=false;
-//   TEditInfo* actual_info;
-//   for(actual_info=edit_infos.first();!bChanged && actual_info != 0;actual_info=edit_infos.next())
-//   {
-//    if ( actual_info->filename == sFilename)
-//       { // found
-//         actual_info->modified=bModified;
-//         bChanged=true;
-//       }
-//   }
-
-//   return bChanged;
-}
 
 /*---------------------------------------- CKDevelop::setMainCaption()
  * setMainCaption()
@@ -210,24 +110,6 @@ void CKDevelop::setMainCaption(int tab_item){
 }
 
 
-/*---------------------------------------- CKDevelop::isUntitled()
- * isUntitled()
- *
- *  static method
- *  checks if the passed name
- *  is defined by KDevelop (should be changed by the user)
- *
- * Parameters:
- *  filename to check
- * Returns:
- *   true if filename isn´t still defined by user
- *        (means some Untitled-name)
- *-----------------------------------------------------------------*/
-bool CKDevelop::isUntitled(const char* name)
-{
-  QString s=(name) ? name : "";
-  return (s==i18n("Untitled.h") || s==i18n("Untitled.c") || s==i18n("Untitled.cpp"));
-}
 
 /*---------------------------------------- CKDevelop::fileSaveAs()
  * fileSaveAs()
@@ -242,111 +124,44 @@ bool CKDevelop::isUntitled(const char* name)
  *-----------------------------------------------------------------*/
 bool CKDevelop::fileSaveAs(){
 
-#warning FIXME MDI stuff
- //  QString name, oldName;
-//   TEditInfo* actual_info=0;
-//   TEditInfo* old_info=0;
-//   TEditInfo* search_info;
-//   int msg_result=KMessageBox::Ok; // simulate ok state... this could change by one of the following messageboxes
+   QString name,oldName;
+   int msg_result = KMessageBox::Ok;
 
-//   // if edit_widget isn't shown don't proceed
+   if (bAutosave) saveTimer->stop();
+   
+   oldName = editor_view->currentEditor()->getName();
+
+   do {
+       name = KFileDialog::getSaveFileName(oldName,0,this,oldName);
+       if (name.isNull()){
+	   if (bAutosave) {
+	       saveTimer->start(saveTimeout);
+	   }
+	   return false;
+       }
+       if(QFile::exists(name)){
+	   msg_result=KMessageBox::warningYesNoCancel(this,
+						      i18n("\nThe file\n\n%1\n\nalready exists.\n"
+							   "Do you want overwrite the old one?\n").arg(name));
+	   
+	   if (msg_result==KMessageBox::Cancel){
+	       if (bAutosave)
+		   saveTimer->start(saveTimeout);
+	       return false;
+	   } 
+       }
+   }
+   while(msg_result == KMessageBox::No);
+   
+   editor_view->setWindowCaption(QFileInfo(name).fileName());
+   editor_view->currentEditor()->setName(name);
+   editor_view->currentEditor()->doSave();
   
-//   if (edit_widget==0l)
-//       return false;
+   slotViewRefresh();
+   if (bAutosave)
+       saveTimer->start(saveTimeout);
 
-//   oldName=edit_widget->getName();
-//   if (bAutosave)
-//     saveTimer->stop();
-
-//   do
-//   {
-//     if (!isUntitled(oldName))
-//       name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
-//     else
-//       name = KFileDialog::getSaveFileName((const char *)
-//                                           ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
-//                                           0,this,oldName);
-
-//     if (name.isNull()){
-//     // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
-//       if (bAutosave)
-//        saveTimer->start(saveTimeout);
-//      return false;
-//     }
-
-//     // check if the extension is changed and the widget or program to view must change
-//     if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
-//       msg_result = KMessageBox::warningYesNoCancel(this, 
-//                                                    i18n("Do you really want to save the file\n"
-//                                                         "as another type of document?"));
-//     if(msg_result==KMessageBox::Yes && QFile::exists(name))
-//     {
-//       msg_result=KMessageBox::warningYesNoCancel(this,
-//                                                  i18n("\nThe file\n\n%1\n\nalready exists.\n"
-//                                                       "Do you want overwrite the old one?\n").arg(name));
-//     }
-    
-//   } while (msg_result == KMessageBox::No); // repeat it on 'no'
-
-
-//   if (msg_result==KMessageBox::Cancel){
-//      //KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel on new type question");
-//       if (bAutosave)
-//        saveTimer->start(saveTimeout);
-//      return false;
-//   }
-
-
-//    // search if we can find the new desired filename in edit_infos ...
-//    // means already loaded
-//   for(search_info=edit_infos.first(); search_info!=0 && (actual_info == 0 || old_info == 0);
-//       search_info=edit_infos.next()){
-//      if (search_info->filename == name)
-//        actual_info=search_info;
-//      if (search_info->filename == oldName)
-//        old_info=search_info;
-//   }
-
-//   // now that all cancel possibilities are handled simulate a changed file
-//   // edit_widget->toggleModified(true);
-
-//   if (!edit_widget->KWrite::writeFile(name)){
-//   // if saving failed
-//       if (bAutosave)
-//        saveTimer->start(saveTimeout);
-//      return false;
-//   }
-
-//   if (actual_info != 0l && actual_info==old_info)
-//   {
-//     // here we are ... saving the file with the same name
-//     //   so only the modified-flags have to be changed
-//     actual_info->modified = false;
-//     edit_widget->toggleModified(false);
-//   }
-//   else
-//   {
-//     // now open this file as new file in edit_infos
-//     //    if an widget still contains the file then update the contents in the widget from file
-//     switchToFile(name, true);
-
-//     if (oldName!=name)
-//     {
-//       // here we are... and any Untitled-file was saved with another name
-//       //   and now we can remove the untitled file
-//       if (isUntitled(oldName))
-//       {
-//           removeFileFromEditlist(oldName);
-//       }
-//     }
-
-//     slotViewRefresh();
-//   }
-
-//   if (bAutosave)
-//      saveTimer->start(saveTimeout);
-
-//   return true;
+   return true;
 }
 
 
@@ -452,17 +267,12 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 }
 
 void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModifiedBox){
-    //    EditorView* editor_view = getCurrentEditorView();
     
     cerr << "enter switchtofile\n";
-    filename = (isUntitled(filename)) ? filename : QFileInfo(filename).absFilePath();
-
-   
-#warning FIXME MDI stuff
- 
+    filename =  QFileInfo(filename).absFilePath();
 
   // check if the file exists
-  if(!QFile::exists(filename) && !isUntitled(filename)){
+  if(!QFile::exists(filename)){
     KMessageBox::sorry(this, i18n("File %1 does not exist!").arg(filename));
     return;
   }
@@ -524,91 +334,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
     return;
   }
 
-  
-  // set the correct edit_widget
-  // if (CProject::getType(filename) == CPP_SOURCE){
-//     //    edit_widget = cpp_widget;
-//     //    s_tab_view->setCurrentTab(CPP);
-    
-//     if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
-//       enableCommand(ID_BUILD_COMPILE_FILE);
-//   }
-//   else{
-//     //    edit_widget = header_widget;
-//     //    s_tab_view->setCurrentTab(HEADER);
-//     disableCommand(ID_BUILD_COMPILE_FILE);
-//   }
-  
-//   // search the current file which would be changed
-  
-//   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-//     if (actual_info->filename == edit_widget->getName() ){
-//       break;
-//     }
-//   }
-  
-//   if(actual_info == 0){
-// //    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
-//   }
-
-
-//   // handle file if it was modified on disk by another editor/cvs
-//   QFileInfo file_info(edit_widget->fileName());
-
-//   if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
-//       if(KMessageBox::questionYesNo(this,
-//                                     i18n("The file %1 was modified outside this editor.\n"
-//                                          "Open the file from disk and delete the current Buffer?").arg(filename)) == KMessageBox::Yes){
-// 	  bForceReload = true;
-// 	  actual_info->last_modified = file_info.lastModified();
-//       }
-//   }
-//   if (!bShowModifiedBox){
-//      actual_info->last_modified = file_info.lastModified(); 
-//   }
-  
-//   if (!bForceReload && filename == edit_widget->getName()){
-//       //    cerr << endl <<endl << "Filename:" << filename 
-//       // << "EDITNAME:" << edit_widget->getName() <<"no action---:" << endl;
-//       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-//       edit_widget->setFocus();
-//       return;
-//   }
-
-//     // rescue the old file
-//   actual_info->text = edit_widget->text();
-//   actual_info->modified = edit_widget->isModified();
-//   actual_info->cursor_line = edit_widget->currentLine();
-//   actual_info->cursor_col = edit_widget->currentColumn();
-//   // output_widget->append("auszuwechseldes file:" + actual_info->filename);
-
-//   // already in the list ?
-//   for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-//     if (info->filename == filename ) { // if found in list
-      
-//       //      cerr << "******already****\n" << info->text << "**************\n";
-//       if (bForceReload)
-//       {
-// 	  QFileInfo fileinfo(filename);
-//                edit_widget->clear();
-//                edit_widget->loadFile(filename,1);
-//                info->modified=false;
-//                info->cursor_line=info->cursor_col=0;
-//                info->text = edit_widget->text();
-//       }
-//       else
-//       {
-//          edit_widget->setName(filename);     // inserted to stop flickering of caption
-//          edit_widget->setText(info->text);
-//       }
-//       edit_widget->setName(filename);
-//       edit_widget->toggleModified(info->modified);
-//       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
-
-//       //      output_widget->append ("File: was was already there");
-//       //      setMainCaption();  is handled by setCurrentTab()
-//       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-//       edit_widget->setFocus();
+ 
 
 
   // and now MDI
@@ -616,39 +342,32 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
   QListIterator<QextMdiChildView> it(editorviews);
   for (; it.current(); ++it) {
-      EditorView *editor_view = static_cast<EditorView*>(it.current());
-      if (editor_view->currentEditor()->isEditing(filename) ) { 
+      EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
+      if (tmp_editor_view->currentEditor()->isEditing(filename) ) { 
 	  
-          cerr << "Already edited with name:" << editor_view->currentEditor()->fileName() << endl;
-          // This looks odd:
-	  //--Falk Br.-- setFocus() sets the taskbar button, too//    mdi_main_frame->m_pTaskBar->setActiveButton(editor_view);	
-	  editor_view->setFocus();
+          cerr << "Already edited with name:" << tmp_editor_view->currentEditor()->fileName() << endl;          
+	  tmp_editor_view->setFocus();
+	  
+	  //ok, and now the modified outside the editor stuff
+	  
+	  //   // handle file if it was modified on disk by another editor/cvs
+	  
+	  
+	  if(editor_view->currentEditor()->modifiedOnDisk() && bShowModifiedBox){
+	      if(KMessageBox::questionYesNo(this,
+					    i18n("The file %1 was modified outside this editor.\n"
+						 "Open the file from disk and delete the current Buffer?").arg(filename)) == KMessageBox::Yes){
+		  bForceReload = true;
+	      }
+	  }
+	      
+	  if(bForceReload){
+	      tmp_editor_view->currentEditor()->loadFile(filename,1);  
+	      tmp_editor_view->currentEditor()->setName(filename);
+	  }
 	  return;
       }
   }
-      
-  // build a new info
- //  QFileInfo fileinfo(filename);
-//   info = new TEditInfo;
-  
-//   info->id = menu_buffers->insertItem(fileinfo.fileName(),-2,0); // insert at first index
-//   info->filename = filename.copy(); // a bugfix,that takes me 30 mins :-( -Sandy 
-//   info->modified = false;
-//   info->cursor_line = 0;
-//   info->cursor_col = 0;
-//   info->last_modified = fileinfo.lastModified();
-
-//   // update the widget
-
-//   edit_widget->clear();
-//   edit_widget->loadFile(filename,1);
-//   edit_widget->setName(filename);
-//   info->text = edit_widget->text();
-//   edit_infos.append(info); // add to the list
- 
-//   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
-//   edit_widget->setFocus();
-
 
   //  //MDI
   cerr << "new mdi window";
@@ -660,15 +379,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
   }
   QFileInfo fileinfo(filename);
   EditorView* new_editorview = new EditorView(mdi_main_frame,QFileInfo(filename).fileName());
-#warning FIXME MDI stuff
-  QFont font("Fixed",10);
-  new_editorview->editorfirstview->setFont(font);
   config->setGroup("KWrite Options");
   new_editorview->currentEditor()->readConfig(config);
   new_editorview->currentEditor()->doc()->readConfig(config);
   new_editorview->currentEditor()->loadFile(filename,1);  
   new_editorview->currentEditor()->setName(filename);
-
 
   //connections
   connect(new_editorview,SIGNAL(focusInEventOccurs(QextMdiChildView*)),this,SLOT(slotMDIGetFocus(QextMdiChildView*)));
@@ -693,7 +408,6 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
     new_editorview->maximize(true);
   }
   new_editorview->setFocus();
-  //  new_editorview->setFocus();
   
 }
 
@@ -1222,8 +936,6 @@ void CKDevelop::saveOptions(){
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("show_mdiviewtaskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
-#warning FIXME MDI stuff
-  //  config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
   config->writeEntry("show_kdevelop",bKDevelop);
@@ -1254,9 +966,6 @@ bool CKDevelop::queryClose(){
   config->setGroup("Files");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());
-#warning FIXME MDI stuff
-    //    config->writeEntry("cpp_file",cpp_widget->getName());
-    //    config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
@@ -1265,28 +974,25 @@ bool CKDevelop::queryClose(){
     }
   }
   else{
-    TEditInfo* actual_info;
     int msg_result = KMessageBox::Yes;
     int save=true;
 
     config->writeEntry("project_file","");
-#warning FIXME MDI stuff
-    //    setInfoModified(header_widget->getName(), header_widget->isModified());
-    //    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
-    // for(actual_info=edit_infos.first();save && actual_info != 0;
-// 		actual_info=edit_infos.next())
-//     {
-//        if (actual_info->modified)
-//          save=false;
-//     }
-
-//     if (!save)
-//     {
-//       msg_result = KMessageBox::questionYesNo(this, 
-//                                               i18n("There is unsaved data.\n"
-//                                                    "Do you really want to quit?"));
-//     }
+    QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+    QListIterator<QextMdiChildView> it(editorviews);
+    for (; it.current(); ++it) {
+	EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
+	if(tmp_editor_view->currentEditor()->isModified()){
+	    save=false;     
+	}
+	
+    }
+    if (!save)  {
+	msg_result = KMessageBox::questionYesNo(this, 
+						i18n("There is unsaved data.\n"
+						     "Do you really want to quit?"));
+    }
     return msg_result==KMessageBox::Yes;
   }
   return true;
@@ -1335,9 +1041,6 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 	
   if(project){
     sess_config->writeEntry("project_file",prj->getProjectFile());
-#warning FIXME MDI stuff
-    //    sess_config->writeEntry("cpp_file",cpp_widget->getName());
-    //    sess_config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
@@ -1345,15 +1048,16 @@ void CKDevelop::saveProperties(KConfig* sess_config){
   if(bAutosave)
     slotFileSaveAll();
   else{
-#warning FIXME MDI stuff
-    // TEditInfo* info;
-//     for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-//       if(info->modified){
-// #warning FIXME: Port to new session management
-//           //	setUnsavedData ( true );
-// 	break;
-//       }
-//     }
+      QList<QextMdiChildView> editorviews = mdi_main_frame->childrenOfType("EditorView");
+      QListIterator<QextMdiChildView> it(editorviews);
+      for (; it.current(); ++it) {
+	  EditorView *tmp_editor_view = static_cast<EditorView*>(it.current());
+	  if(tmp_editor_view->currentEditor()->isModified()){
+#warning FIXME new session managment?
+	      //	setUnsavedData ( true );
+	      break;
+	  }
+      }  
   }
 }
 

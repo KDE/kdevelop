@@ -27,6 +27,7 @@
 #include <kprocess.h>
 #include <kconfig.h>
 #include <unistd.h>
+#include <kmessagebox.h>
 #include "../ckdevelop.h"
 #include "../cgeneratenewfile.h"
 #include "../cproject.h"
@@ -42,6 +43,7 @@
 #include "kdlgwidgets.h"
 #include "kdlgproplv.h"
 #include "kdlgloader.h"
+
 
 
 KDlgEdit::KDlgEdit(CKDevelop *ckdevelop, QWidget *parent, const char *name)

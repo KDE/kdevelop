@@ -357,8 +357,6 @@
 
 #define IDK_EDIT_INDENT								CTRL+Key_I
 
-#define IDK_TOGGLE_LAST        				CTRL+Key_L
-
 #define IDK_FILE_NEW	       					CTRL+Key_N						// standard key
 #define IDK_FILE_OPEN	       					CTRL+Key_O						// standard key
 #define IDK_FILE_PRINT         				CTRL+Key_P						// standard key

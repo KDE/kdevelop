@@ -26,6 +26,7 @@
 #include <string.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include "../misc.h"
 #include "../ctoolclass.h"
 #include "../cproject.h"
@@ -36,6 +37,7 @@
 #include "cfileprintdlg.h"
 #include "cconfigenscriptdlg.h"
 #include "cconfiga2psdlg.h"
+
 
 
 CPrintDlg::CPrintDlg(QWidget* parent,const char* edittab,const char* name, bool html) : QDialog(parent, name, true){
