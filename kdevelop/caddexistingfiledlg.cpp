@@ -1,10 +1,10 @@
 /***************************************************************************
-                          caddexistingfiledlg.cpp  -                              
-                             -------------------                                         
+                          caddexistingfiledlg.cpp  -
+                             -------------------
 
-    begin                : Tue Oct 20 1998                                           
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : Tue Oct 20 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -38,16 +38,18 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qstringlist.h>
+#include <kurlrequester.h>
+#include <qgrid.h>
+#include <qlayout.h>
+#include <klineedit.h>
 
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
   prj = p_prj;
   setCaption(i18n("Add existing files to project"));
 
+  QGridLayout *grid1 = new QGridLayout(this,2,4,15,7);
   source_label = new QLabel( this, "source_label" );
-  source_label->setGeometry( 20, 30, 90, 30 );
-  source_label->setMinimumSize( 0, 0 );
-  source_label->setMaximumSize( 32767, 32767 );
   source_label->setFocusPolicy( QWidget::NoFocus );
   source_label->setBackgroundMode( QWidget::PaletteBackground );
   source_label->setFontPropagation( QWidget::NoChildren );
@@ -55,37 +57,19 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_label->setText(i18n("Sourcefile(s):") );
   source_label->setAlignment( 289 );
   source_label->setMargin( -1 );
+  grid1->addWidget(source_label,0,0);
 
-  source_edit = new QLineEdit( this, "source_edit" );
-  source_edit->setGeometry( 120, 30, 230, 30 );
-  source_edit->setMinimumSize( 0, 0 );
-  source_edit->setMaximumSize( 32767, 32767 );
+  source_edit = new KURLRequester( this, "source_edit" );
   source_edit->setFocusPolicy( QWidget::StrongFocus );
-  source_edit->setBackgroundMode( QWidget::PaletteBase );
+  //source_edit->setBackgroundMode( QWidget::PaletteBase );
   source_edit->setFontPropagation( QWidget::NoChildren );
   source_edit->setPalettePropagation( QWidget::NoChildren );
-  source_edit->setText( "" );
-  source_edit->setMaxLength( 32767 );
-  source_edit->setEchoMode( QLineEdit::Normal );
-  source_edit->setFrame( TRUE );
+  source_edit->lineEdit()->setText( "" );
+  source_edit->fileDialog()->setMode(KFile::Files);
 
-  source_button = new QPushButton( this, "source_button" );
-  source_button->setGeometry( 360, 30, 30, 30 );
-  source_button->setMinimumSize( 0, 0 );
-  source_button->setMaximumSize( 32767, 32767 );
-  source_button->setFocusPolicy( QWidget::TabFocus );
-  source_button->setBackgroundMode( QWidget::PaletteBackground );
-  source_button->setFontPropagation( QWidget::NoChildren );
-  source_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix(BarIcon("open"));
-  source_button->setPixmap(pix);
-  source_button->setAutoRepeat( FALSE );
-  source_button->setAutoResize( FALSE );
+  grid1->addWidget(source_edit,0,1);
 
   destination_label = new QLabel( this, "destination_label" );
-  destination_label->setGeometry( 20, 80, 90, 30 );
-  destination_label->setMinimumSize( 0, 0 );
-  destination_label->setMaximumSize( 32767, 32767 );
   destination_label->setFocusPolicy( QWidget::NoFocus );
   destination_label->setBackgroundMode( QWidget::PaletteBackground );
   destination_label->setFontPropagation( QWidget::NoChildren );
@@ -93,47 +77,26 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   destination_label->setText(i18n("Destinationdir:") );
   destination_label->setAlignment( 289 );
   destination_label->setMargin( -1 );
+  grid1->addWidget(destination_label,1,0);
 
-  destination_edit = new QLineEdit( this, "destination_edit" );
-  destination_edit->setGeometry( 120, 80, 230, 30 );
-  destination_edit->setMinimumSize( 0, 0 );
-  destination_edit->setMaximumSize( 32767, 32767 );
+  destination_edit = new KURLRequester( this, "destination_edit" );
   destination_edit->setFocusPolicy( QWidget::StrongFocus );
-  destination_edit->setBackgroundMode( QWidget::PaletteBase );
   destination_edit->setFontPropagation( QWidget::NoChildren );
   destination_edit->setPalettePropagation( QWidget::NoChildren );
-  destination_edit->setText( "" );
-  destination_edit->setMaxLength( 32767 );
-  destination_edit->setEchoMode( QLineEdit::Normal );
-  destination_edit->setFrame( TRUE );
-  	
-  destination_button = new QPushButton( this, "destination_button" );
-  destination_button->setGeometry( 360, 80, 30, 30 );
-  destination_button->setMinimumSize( 0, 0 );
-  destination_button->setMaximumSize( 32767, 32767 );
-  destination_button->setFocusPolicy( QWidget::TabFocus );
-  destination_button->setBackgroundMode( QWidget::PaletteBackground );
-  destination_button->setFontPropagation( QWidget::NoChildren );
-  destination_button->setPalettePropagation( QWidget::NoChildren );
-  destination_button->setPixmap(pix);
-  destination_button->setAutoRepeat( FALSE );
-  destination_button->setAutoResize( FALSE );
-  
+  destination_edit->lineEdit()->setText( "" );
+  destination_edit->fileDialog()->setMode(KFile::Directory);
+  grid1->addWidget(destination_edit,1,1);
+
   QString sourceMsg = i18n("Select the source files to be added\nto the project here.");
   QWhatsThis::add(source_edit, sourceMsg);
   QWhatsThis::add(source_label, sourceMsg);
-  QWhatsThis::add(source_button, sourceMsg);
 
   QString destinationMsg = i18n("Select the directory where the new\n"
                                 "source files will be copied to here.");
   QWhatsThis::add(destination_edit, destinationMsg);
   QWhatsThis::add(destination_label, destinationMsg);
-  QWhatsThis::add(destination_button, destinationMsg);
 
   template_checkbox = new QCheckBox( this, "addTemplate_checkbox");
-  template_checkbox->setGeometry(20, 130, 440, 30);
-  template_checkbox->setMinimumSize( 0, 0 );
-  template_checkbox->setMaximumSize( 32767, 32767 );
   template_checkbox->setFocusPolicy( QWidget::TabFocus );
   template_checkbox->setBackgroundMode( QWidget::PaletteBackground );
   template_checkbox->setFontPropagation( QWidget::NoChildren );
@@ -143,12 +106,9 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   template_checkbox->setAutoResize( FALSE );
   template_checkbox->setChecked( TRUE );
   QWhatsThis::add(template_checkbox, i18n("Check this if you want to insert your template to the added files."));
+   grid1->addMultiCellWidget(template_checkbox,2,2,0,1);
 
-
-  ok_button = new QPushButton( this, "ok_button" );
-  ok_button->setGeometry( 90, 180, 100, 25 );
-  ok_button->setMinimumSize( 0, 0 );
-  ok_button->setMaximumSize( 32767, 32767 );
+   ok_button = new QPushButton( this, "ok_button" );
   ok_button->setFocusPolicy( QWidget::TabFocus );
   ok_button->setBackgroundMode( QWidget::PaletteBackground );
   ok_button->setFontPropagation( QWidget::NoChildren );
@@ -156,12 +116,10 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   ok_button->setText( i18n("OK") );
   ok_button->setAutoRepeat( FALSE );
   ok_button->setAutoResize( FALSE );
-	ok_button->setDefault( TRUE );
-	
+  ok_button->setDefault( TRUE );
+  grid1->addWidget(ok_button,3,0);
+
   cancel_button = new QPushButton( this, "cancel_button" );
-  cancel_button->setGeometry( 220, 180, 100, 25 );
-  cancel_button->setMinimumSize( 0, 0 );
-  cancel_button->setMaximumSize( 32767, 32767 );
   cancel_button->setFocusPolicy( QWidget::TabFocus );
   cancel_button->setBackgroundMode( QWidget::PaletteBackground );
   cancel_button->setFontPropagation( QWidget::NoChildren );
@@ -169,42 +127,43 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   cancel_button->setText(i18n("Cancel") );
   cancel_button->setAutoRepeat( FALSE );
   cancel_button->setAutoResize( FALSE );
-  
-  connect(source_button,SIGNAL(clicked()),SLOT(sourceButtonClicked()));
-  connect(destination_button,SIGNAL(clicked()),SLOT(destinationButtonClicked()));
+  grid1->addWidget(cancel_button,3,1);
+
   connect(ok_button,SIGNAL(clicked()),SLOT(OK()));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
-  resize( 410,225 );
-  setMinimumSize( 0, 0 );
-  setMaximumSize( 32767, 32767 );
-  
+  connect(source_edit,SIGNAL(textChanged(const QString &)),SLOT(sourceTextChanged(const QString &)));
+  connect(destination_edit,SIGNAL(textChanged(const QString &)),SLOT(destinationTextChanged(const QString &)));
 }
+
+
 CAddExistingFileDlg::~CAddExistingFileDlg(){
 }
-void CAddExistingFileDlg::sourceButtonClicked(){
- 
-  QStringList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,i18n("Source File(s)...")) );
-//  files.setAutoDelete(true);
 
+void CAddExistingFileDlg::sourceTextChanged(const QString &)
+{
+QStringList files(source_edit->fileDialog()->selectedFiles());
+//  files.setAutoDelete(true);
   QString comp_str;
   for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
       comp_str = comp_str + (*it) + ",";
   }
-  source_edit->setText(comp_str);
+  source_edit->lineEdit()->setText(comp_str);
   files.clear();
-
 }
-void CAddExistingFileDlg::destinationButtonClicked(){
- QString name=KFileDialog::getExistingDirectory(destination_edit->text(),0,i18n("Destination Directory"));
+
+
+void CAddExistingFileDlg::destinationTextChanged(const QString &name)
+{
  if(!name.isEmpty()){
-    destination_edit->setText(name);
+    destination_edit->lineEdit()->setText(name);
   }
 }
+
 void CAddExistingFileDlg::OK(){
-  QFileInfo file_info(source_edit->text());
-  QDir dir(destination_edit->text());
+  QFileInfo file_info(source_edit->lineEdit()->text());
+  QDir dir(destination_edit->lineEdit()->text());
   //   QString source_name = file_info.fileName();
-  QString dest_name = destination_edit->text();// + source_name
+  QString dest_name = destination_edit->lineEdit()->text();// + source_name
 
   // if (!file_info.exists()){
 //     KMessageBox::message(this,i18n("Error..."),i18n("You must choose an existing sourcefile!")
@@ -221,23 +180,12 @@ void CAddExistingFileDlg::OK(){
 		     i18n("You must choose a valid dir as a destination!"));
     return;
   }
-  
+
   accept();
 }
-
 
 bool CAddExistingFileDlg::isTemplateChecked()
 {
  return template_checkbox->isChecked();
 }
-
-
-
-
-
-
-
-
-
-
 

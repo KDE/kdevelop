@@ -1,11 +1,11 @@
 /***************************************************************************
 
                     kappwizard.cpp - the kde-application-wizard
-                             -------------------                                         
+                             -------------------
 
-    begin                : 9 Sept 1998                                        
-    copyright            : (C) 1998 by Stefan Heidrich                         
-    email                : sheidric@rz.uni-potsdam.de                                     
+    begin                : 9 Sept 1998
+    copyright            : (C) 1998 by Stefan Heidrich
+    email                : sheidric@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,7 +13,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -46,6 +46,7 @@
 #include <qtextstream.h>
 #include <qtooltip.h>
 #include <qwhatsthis.h>
+#include <knumvalidator.h>
 
 //#include <iostream.h>
 
@@ -238,7 +239,7 @@ void CKAppWizard::initPages()
   name->setBackgroundMode( QWidget::PaletteBackground );
   name->setFontPropagation( QWidget::NoChildren );
   name->setPalettePropagation( QWidget::NoChildren );
-  name->setText( i18n("Projectname:") );
+  name->setText( i18n("Project name:") );
   name->setAlignment( 289 );
   name->setMargin( -1 );
 
@@ -263,7 +264,7 @@ void CKAppWizard::initPages()
   directory->setBackgroundMode( QWidget::PaletteBackground );
   directory->setFontPropagation( QWidget::NoChildren );
   directory->setPalettePropagation( QWidget::NoChildren );
-  directory->setText( i18n("Projectdirectory:") );
+  directory->setText( i18n("Project directory:") );
   directory->setAlignment( 289 );
   directory->setMargin( -1 );
 
@@ -300,7 +301,7 @@ void CKAppWizard::initPages()
   versionnumber->setBackgroundMode( QWidget::PaletteBackground );
   versionnumber->setFontPropagation( QWidget::NoChildren );
   versionnumber->setPalettePropagation( QWidget::NoChildren );
-  versionnumber->setText( i18n("Versionnumber:") );
+  versionnumber->setText( i18n("Version number:") );
   versionnumber->setAlignment( 289 );
   versionnumber->setMargin( -1 );
 
@@ -313,6 +314,7 @@ void CKAppWizard::initPages()
   versionline->setFontPropagation( QWidget::NoChildren );
   versionline->setPalettePropagation( QWidget::NoChildren );
   versionline->setText( "" );
+  versionline->setValidator( new KFloatValidator( versionline ) );
   versionline->setMaxLength( 32767 );
   versionline->setEchoMode( QLineEdit::Normal );
   versionline->setFrame( TRUE );

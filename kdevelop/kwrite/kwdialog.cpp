@@ -15,6 +15,7 @@
 #include "kwdialog.h"
 #include "kwdoc.h"
 #include <klocale.h>
+#include <knumvalidator.h>
 
 SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   int flags, QWidget *parent, const char *name)
@@ -256,6 +257,7 @@ GotoLineDialog::GotoLineDialog(int line, QWidget *parent, const char *name)
   QVBoxLayout *mainLayout = new QVBoxLayout(this, 10);
 
   e1 = new QLineEdit(this);
+  e1->setValidator( new KIntValidator( e1 ) );
   sprintf(buf,"%d",line);
   e1->setText(buf);
   e1->selectAll();
@@ -286,7 +288,7 @@ GotoLineDialog::GotoLineDialog(int line, QWidget *parent, const char *name)
   mainLayout->activate();
   mainLayout->freeze();
 //  resize(minimumSize());
-  
+
   e1->setFocus();
 }
 
@@ -359,12 +361,14 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   e1 = new QLineEdit(this);
   sprintf(buf,"%d",wrapAt);
   e1->setText(buf);
+  e1->setValidator( new KIntValidator( e1 ) );
   label1 = new QLabel(e1,i18n("Wrap Words At:"),this);
   int max = label1->sizeHint().width();
 
   e2 = new QLineEdit(this);
   sprintf(buf,"%d",tabWidth);
   e2->setText(buf);
+  e2->setValidator( new KIntValidator( e2 ) );
   label2 = new QLabel(e2,i18n("Tab Width:"),this);
   if (label2->sizeHint().width()>max)
     max = label2->sizeHint().width();
@@ -372,6 +376,7 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   e3 = new QLineEdit(this);
   sprintf(buf,"%d",undoSteps);
   e3->setText(buf);
+  e3->setValidator( new KIntValidator( e3 ) );
   label3 = new QLabel(e3,i18n("Undo steps:"),this);
   if (label3->sizeHint().width()>max)
     max = label3->sizeHint().width();

@@ -4,7 +4,7 @@
 
     version              :     
     begin                : Tue Oct 20 1998                                           
-    copyright            : (C) 1998 by Sandy Meier                         
+    copyright            : (C) 1998 by Sandy Meier
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
@@ -22,6 +22,7 @@
 #define CADDEXISTINGFILEDLG_H
 
 #include <qdialog.h>
+#include <kurlrequester.h>
 
 class CProject;
 class QCheckBox;
@@ -38,16 +39,16 @@ class CProject;
 
 class CAddExistingFileDlg : public QDialog  {
    Q_OBJECT
-public: 
+public:
    CAddExistingFileDlg(QWidget *parent=0, const char *name=0,CProject* p_prj=0);
   ~CAddExistingFileDlg();
-  QLineEdit* source_edit;
-  QLineEdit* destination_edit;
+  KURLRequester * source_edit;
+  KURLRequester* destination_edit;
   bool isTemplateChecked();
 protected:
   CProject* prj;
   QLabel* source_label;
-  
+
   QLabel* destination_label;
   QPushButton* source_button;
   QPushButton* destination_button;
@@ -55,8 +56,8 @@ protected:
   QPushButton* ok_button;
   QPushButton* cancel_button;
  protected slots:
- void sourceButtonClicked();
-  void destinationButtonClicked();
+  void sourceTextChanged(const QString &);
+  void destinationTextChanged(const QString &);
   void OK();
 };
 

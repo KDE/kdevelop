@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -28,74 +28,68 @@
 
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <qlayout.h>
+#include <qgrid.h>
+#include <kbuttonbox.h>
 
 
 /*********************************************************************
  *                                                                   *
  *                     CREATION RELATED METHODS                      *
  *                                                                   *
- ********************************************************************/ 
+ ********************************************************************/
 
-CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, CProject* p_prj) 
+CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, CProject* p_prj)
   : QDialog(parent,name,true) {
-  
+
   prj= p_prj;
   setCaption(i18n("Add new Translation File"));
+  QGridLayout *grid1 = new QGridLayout(this,2,2,15,7);
+  QLabel* qtarch_Label_1;
+  qtarch_Label_1 = new QLabel( this, "Label_1" );
+  qtarch_Label_1->setFocusPolicy( QWidget::NoFocus );
+  qtarch_Label_1->setBackgroundMode( QWidget::PaletteBackground );
+  qtarch_Label_1->setFontPropagation( QWidget::NoChildren );
+  qtarch_Label_1->setPalettePropagation( QWidget::NoChildren );
+  qtarch_Label_1->setText( i18n("Language:") );
+  qtarch_Label_1->setAlignment( 289 );
+  qtarch_Label_1->setMargin( -1 );
+  grid1->addWidget(qtarch_Label_1,0,0);
 
-	QLabel* qtarch_Label_1;
-	qtarch_Label_1 = new QLabel( this, "Label_1" );
-	qtarch_Label_1->setGeometry( 20, 30, 90, 30 );
-	qtarch_Label_1->setMinimumSize( 0, 0 );
-	qtarch_Label_1->setMaximumSize( 32767, 32767 );
-	qtarch_Label_1->setFocusPolicy( QWidget::NoFocus );
-	qtarch_Label_1->setBackgroundMode( QWidget::PaletteBackground );
-	qtarch_Label_1->setFontPropagation( QWidget::NoChildren );
-	qtarch_Label_1->setPalettePropagation( QWidget::NoChildren );
-	qtarch_Label_1->setText( i18n("Language:") );
-	qtarch_Label_1->setAlignment( 289 );
-	qtarch_Label_1->setMargin( -1 );
+  lang_combo = new KLanguageCombo(this, "lang_combo" );
+  grid1->addWidget(lang_combo,0,1);
 
-	lang_combo = new KLanguageCombo(this, "lang_combo" );
-	lang_combo->setGeometry( 110, 30, 240, 25 );
-
-	ok_button = new QPushButton( this, "ok_button" );
-	ok_button->setGeometry( 60, 100, 100, 25 );
-	ok_button->setMinimumSize( 0, 0 );
-	ok_button->setMaximumSize( 32767, 32767 );
-	ok_button->setFocusPolicy( QWidget::TabFocus );
-	ok_button->setBackgroundMode( QWidget::PaletteBackground );
-	ok_button->setFontPropagation( QWidget::NoChildren );
-	ok_button->setPalettePropagation( QWidget::NoChildren );
-	ok_button->setText( i18n("OK") );
-	ok_button->setAutoRepeat( FALSE );
-	ok_button->setAutoResize( FALSE );
-	ok_button->setDefault(true);
-	
-	cancel_button = new QPushButton( this, "cancel_button" );
-	cancel_button->setGeometry( 210, 100, 100, 25 );
-	cancel_button->setMinimumSize( 0, 0 );
-	cancel_button->setMaximumSize( 32767, 32767 );
-	cancel_button->setFocusPolicy( QWidget::TabFocus );
-	cancel_button->setBackgroundMode( QWidget::PaletteBackground );
-	cancel_button->setFontPropagation( QWidget::NoChildren );
-	cancel_button->setPalettePropagation( QWidget::NoChildren );
-	cancel_button->setText( i18n("Cancel") );
-	cancel_button->setAutoRepeat( FALSE );
-	cancel_button->setAutoResize( FALSE );
-
-	resize( 370,145 );
-	setMinimumSize( 0, 0 );
-	setMaximumSize( 32767, 32767 );
+  KButtonBox *bb = new KButtonBox( this );
+  bb->addStretch();
+  ok_button = bb->addButton( i18n("OK") );
+  ok_button->setAutoRepeat( FALSE );
+  ok_button->setAutoResize( FALSE );
+  ok_button->setDefault(true);
+  ok_button->setFocusPolicy( QWidget::TabFocus );
+  ok_button->setBackgroundMode( QWidget::PaletteBackground );
+  ok_button->setFontPropagation( QWidget::NoChildren );
+  ok_button->setPalettePropagation( QWidget::NoChildren );
 
 
-	connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
-	connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
+  cancel_button = bb->addButton( i18n( "Close" ) );
+  cancel_button->setFocusPolicy( QWidget::TabFocus );
+  cancel_button->setBackgroundMode( QWidget::PaletteBackground );
+  cancel_button->setFontPropagation( QWidget::NoChildren );
+  cancel_button->setPalettePropagation( QWidget::NoChildren );
+  cancel_button->setAutoRepeat( FALSE );
+  cancel_button->setAutoResize( FALSE );
 
-	QStrList po_files;
-	lang_list.clear();
-	if(!p_prj->isQt2Project()) // KDE 1/2 project
+  bb->layout();
+  grid1->addWidget( bb,1,1 );
+
+  connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
+  connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
+
+  QStrList po_files;
+   lang_list.clear();
+   if(!p_prj->isQt2Project()) // KDE 1/2 project
 	  p_prj->getPOFiles("po/Makefile.am",po_files);
-  else // QT 2 Project
+   else // QT 2 Project
 	  p_prj->getTSFiles(p_prj->getBinPROGRAM()+"/Makefile.am",po_files);
 
 	if((po_files.contains("br.po") || po_files.contains(prj->getBinPROGRAM()+".br.ts")) == 0){
@@ -231,16 +225,17 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 	  ok_button->setEnabled(false);
 	}
 }
+
 CAddNewTranslationDlg::~CAddNewTranslationDlg(){
 }
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
  *                                                                   *
- ********************************************************************/ 
+ ********************************************************************/
 
 void CAddNewTranslationDlg::slotOkClicked(){
-	
+
 	if(!prj->isQt2Project()) // KDE 1/2 project
     langfile = lang_list.at(lang_combo->currentItem()) + QString(".po");
   else // QT 2 Project

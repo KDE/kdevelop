@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include <qobject.h>
 #include <qapp.h>
 #include <qclipbrd.h>
@@ -13,10 +15,6 @@
 
 #include "kwview.h"
 #include "kwdoc.h"
-#include <kurl.h>
-
-#include <unistd.h>
-
 
 //text attribute constants
 const int taSelected = 0x40;
@@ -342,7 +340,7 @@ void TextLine::resize(int newsize) {
     newattribs = new unsigned char[size];
 if (!newtext || !newattribs) {
   printf("error resizing textline\n");
-  _exit(1);
+  ::exit(1);
 }
     memcpy(newtext,text,len);
     memcpy(newattribs,attribs,len);
@@ -1812,7 +1810,7 @@ void KWriteDoc::selectWord(PointStruc &cursor, int flags) {
 
 QString KWriteDoc::text() {
   TextLine *textLine;
-  int len, last, z;
+  int len, last, z, end;
 
   len = 1;
   last = lastLine();
@@ -1820,33 +1818,23 @@ QString KWriteDoc::text() {
     textLine = contents.at(z);
     len += textLine->length() + 1;
   }
+  QCString s(len);
   // add first line without newline
   textLine = contents.at(0);
   len = textLine->length();
-
-  QString s =  QCString(textLine->getText(), len);
+  memcpy(s.data(), textLine->getText(), len);
   // add remaining lines separated by newlines
   for (z = 1; z <= last; z++) {
-    s += "\n";
+    s[len] = '\n';
+    len++;
     textLine = contents.at(z);
-    len = textLine->length();
-    s += QCString(textLine->getText(), len);
+    end = textLine->length();
+    memcpy(s.data()+len, textLine->getText(), end);
+    len += end;
   }
+  s.resize(len+1);
+//  s[len] = '\0';
   return s;
-
-//  memcpy(s.data(), textLine->getText(), len);
-//  // add remaining lines separated by newlines
-//  for (z = 1; z <= last; z++) {
-//    s[len] = '\n';
-//    len++;
-//    textLine = contents.at(z);
-//    end = textLine->length();
-//    memcpy(s.data()+len, textLine->getText(), end);
-//    len += end;
-//  }
-////  s.resize(len+1);
-////  s[len] = '\0';
-//  return s;
 }
 
 QString KWriteDoc::getWord(PointStruc &cursor) {
@@ -1859,7 +1847,7 @@ QString KWriteDoc::getWord(PointStruc &cursor) {
   while (start > 0 && highlight->isInWord(textLine->getChar(start - 1))) start--;
   while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
   len = end - start;
-  QString s; //(len +1);
+  QCString s;    //(len +1);
   for (z = 0; z < len; z++) s[z] = textLine->getChar(start + z);
   s[len] = '\0';
   return s;
@@ -1900,7 +1888,7 @@ QString KWriteDoc::markedText(int flags) {
       len += textLine->numSelected();
       if (textLine->isSelected()) len++;
     }
-    QString s;
+    QCString s(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);
@@ -1925,7 +1913,7 @@ QString KWriteDoc::markedText(int flags) {
       textLine = contents.at(z);
       len += textLine->numSelected() + 1;
     }
-    QString s; //(len);
+    QCString s(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);
@@ -2421,13 +2409,12 @@ QString KWriteDoc::fileName() {
   return fName;
 }
 
-void KWriteDoc::setFileName(const QString& url)
-{
+void KWriteDoc::setFileName(const QString& s) {
   int pos, hl;
   KWriteView *view;
-  QCString url_char(url);
 
-  fName = url;
+  fName = s;
+  QCString test=s.latin1();
 
   for (view = views.first(); view != 0L; view = views.next()) {
     emit view->kWrite->newCaption();
@@ -2435,10 +2422,8 @@ void KWriteDoc::setFileName(const QString& url)
 
   //highlight detection
   if (fName.isEmpty()) return;
-
-#warning FIXME Highlight stuff. You have got to be kidding - This is dreadful !!!!
   pos = fName.findRev('/') +1;
-  hl = hlManager->wildcardFind(&url_char[pos]);
+  hl = hlManager->wildcardFind(&test[pos]);
   if (hl == -1) {
     // fill the detection buffer with the contents of the text
     const int HOWMANY = 1024;
@@ -2453,12 +2438,12 @@ void KWriteDoc::setFileName(const QString& url)
       bufpos += len;
       if (bufpos >= HOWMANY) break;
     }
-    hl = hlManager->mimeFind(buf, bufpos, &url_char[pos]);
+    hl = hlManager->mimeFind(buf, bufpos, &test[pos]);
   }
   setHighlight(hl);
 
-  // Read bookmarks, breakpoints, ...
-  readFileConfig();
+	// Read bookmarks, breakpoints, ...
+	readFileConfig();
 
   updateViews();
 }

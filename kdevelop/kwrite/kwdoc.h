@@ -204,7 +204,7 @@ class KWriteDoc : QObject {
 
   public:
     int getHighlight() {return hlManager->findHl(highlight);}
-    int getFontHeight() {return fontHeight;}
+  	int getFontHeight() {return fontHeight;}
   protected:
     void setHighlight(int n);
     void makeAttribs();
@@ -250,7 +250,7 @@ class KWriteDoc : QObject {
 
     bool hasFileName();
     QString fileName();
-    void setFileName(const QString& url);
+    void setFileName(const QString&);
     void clearFileName();
 
     bool doSearch(SConfig &s, const char *searchFor);

@@ -44,6 +44,9 @@
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qradiobutton.h>
+#include <qgrid.h>
+#include <qlayout.h>
+
 
 #include <X11/Xlib.h>
 #undef Unsorted
@@ -368,31 +371,32 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
 
   QRadioButton *rb;
   QLabel *label;
-
+  QGridLayout *grid1 = new QGridLayout(this,3,2,15,7);
   QButtonGroup *bg = new QButtonGroup( i18n("Font Size"), this );
   bg->setExclusive( TRUE );
-  bg->setGeometry( 15, 15, 300, 50 );
+  grid1->addMultiCellWidget(bg,0,0,0,1);
 
+  QGridLayout *grid2 = new QGridLayout(bg,1,3,7,7);
   rb = new QRadioButton( i18n("Small"), bg );
-  rb->setGeometry( 10, 20, 80, 20 );
+  grid2->addWidget(rb,0,0);
   rb->setChecked( fSize == 3 );
 
   rb = new QRadioButton( i18n("Medium"), bg );
-  rb->setGeometry( 100, 20, 80, 20 );
+  grid2->addWidget(rb,0,1);
   rb->setChecked( fSize == 4 );
 
   rb = new QRadioButton( i18n("Large"), bg );
-  rb->setGeometry( 200, 20, 80, 20 );
+  grid2->addWidget(rb,0,2);
   rb->setChecked( fSize == 5 );
 
   label = new QLabel( i18n("Standard Font"), this );
-  label->setGeometry( 15, 90, 100, 20 );
+  grid1->addWidget(label,1,0);
 
   QComboBox *cb = new QComboBox( false, this );
-  cb->setGeometry( 120, 90, 180, 25 );
+  grid1->addWidget(cb,1,1);
   getFontList( standardFonts, "-*-*-*-*-*-*-*-*-*-*-p-*-*-*" );
   cb->insertStringList( standardFonts );
-  
+
   int i=0;
   for ( QStringList::Iterator it = standardFonts.begin(); it != standardFonts.end(); ++it, i++ )
   {
@@ -406,14 +410,14 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
             SLOT( slotStandardFont( const QString& ) ) );
 
   label = new QLabel( i18n( "Fixed Font"), this );
-  label->setGeometry( 15, 130, 100, 20 );
+  grid1->addWidget(label,2,0);
 
   cb = new QComboBox( false, this );
-  cb->setGeometry( 120, 130, 180, 25 );
+  grid1->addWidget(cb,2,1);
   getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-m-*-*-*" );
   getFontList( fixedFonts, "-*-*-*-*-*-*-*-*-*-*-c-*-*-*" );
   cb->insertStringList( fixedFonts );
-  
+
   i=0;
   for ( QStringList::Iterator it = fixedFonts.begin(); it != fixedFonts.end(); ++it, i++ )
   {
@@ -429,12 +433,12 @@ CDocBrowserFont::CDocBrowserFont( QWidget *parent, const char *name )
   connect( bg, SIGNAL( clicked( int ) ), SLOT( slotFontSize( int ) ) );
 }
 
-       
+
 void CDocBrowserFont::readOptions()
 {
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
-  
+
   QString fs = config->readEntry( "BaseFontSize" );
   if ( !fs.isEmpty() )
   {
@@ -546,52 +550,53 @@ CDocBrowserColor::CDocBrowserColor( QWidget *parent, const char *name )
     : QWidget( parent, name )
 {
   readOptions();
+  QGridLayout *grid1 = new QGridLayout(this,2,6,15,7);
 
   KColorButton *colorBtn;
   QLabel *label;
 
   label = new QLabel( i18n("Background Color:"), this );
-  label->setGeometry( 35, 20, 150, 25 );
+  grid1->addWidget(label,0,0);
 
   colorBtn = new KColorButton( bgColor, this );
-  colorBtn->setGeometry( 185, 20, 80, 30 );
+  grid1->addWidget(colorBtn,0,1);
+
   connect( colorBtn, SIGNAL( changed( const QColor & ) ),
     SLOT( slotBgColorChanged( const QColor & ) ) );
 
   label = new QLabel( i18n("Normal Text Color:"), this );
-  label->setGeometry( 35, 60, 150, 25 );
+  grid1->addWidget(label,1,0);
 
   colorBtn = new KColorButton( textColor, this );
-  colorBtn->setGeometry( 185, 60, 80, 30 );
+  grid1->addWidget(colorBtn,1,1);
   connect( colorBtn, SIGNAL( changed( const QColor & ) ),
     SLOT( slotTextColorChanged( const QColor & ) ) );
 
   label = new QLabel( i18n("URL Link Color:"), this );
-  label->setGeometry( 35, 100, 150, 25 );
+  grid1->addWidget(label,2,0);
 
   colorBtn = new KColorButton( linkColor, this );
-  colorBtn->setGeometry( 185, 100, 80, 30 );
+  grid1->addWidget(colorBtn,2,1);
+
   connect( colorBtn, SIGNAL( changed( const QColor & ) ),
     SLOT( slotLinkColorChanged( const QColor & ) ) );
 
   label = new QLabel( i18n("Followed Link Color:"), this );
-  label->setGeometry( 35, 140, 150, 25 );
+  grid1->addWidget(label,3,0);
 
   colorBtn = new KColorButton( vLinkColor, this );
-  colorBtn->setGeometry( 185, 140, 80, 30 );
+  grid1->addWidget(colorBtn,3,1);
   connect( colorBtn, SIGNAL( changed( const QColor & ) ),
     SLOT( slotVLinkColorChanged( const QColor & ) ) );
 
-  QCheckBox *underlineBox = new QCheckBox( i18n("Underline links"),
-                                          this);
-  underlineBox->setGeometry(35, 180, 250, 30 );
+  QCheckBox *underlineBox = new QCheckBox( i18n("Underline links"), this);
+  grid1->addWidget(underlineBox,4,0);
   underlineBox->setChecked(underlineLinks);
   connect( underlineBox, SIGNAL( toggled( bool ) ),
     SLOT( slotUnderlineLinksChanged( bool ) ) );
 
-  QCheckBox *forceDefaultBox = new QCheckBox(
-                    i18n("Always use my colors"), this);
-  forceDefaultBox->setGeometry(35, 210, 250, 30 );
+  QCheckBox *forceDefaultBox = new QCheckBox( i18n("Always use my colors"), this);
+  grid1->addWidget(forceDefaultBox,5,0);
   forceDefaultBox->setChecked(forceDefault);
   connect( forceDefaultBox, SIGNAL( toggled( bool ) ),
     SLOT( slotForceDefaultChanged( bool ) ) );
@@ -601,7 +606,7 @@ void CDocBrowserColor::readOptions()
 {
   KConfig *config = KGlobal::config();
   config->setGroup( "DocBrowserAppearance" );
-  
+
   bgColor = config->readColorEntry( "BgColor", &white );
   textColor = config->readColorEntry( "TextColor", &black );
   linkColor = config->readColorEntry( "LinkColor", &blue );
@@ -680,7 +685,7 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
   : QTabDialog( parent, name,TRUE ){
   setCaption( i18n("Documentation Browser Options") );
 
-  resize( 350, 330 );
+  //resize( 350, 330 );
 
         setOKButton( i18n("OK") );
         setCancelButton( i18n("Cancel") );

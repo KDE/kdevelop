@@ -263,7 +263,7 @@ QString DocTreeKDevelopBook::readIndexTitle(const char* book)
     while (fgets(buf, sizeof buf, f))
     {
       // search for the TITLE start and end tag, store title between the two positions minus the tag length
-      QString s = buf;
+      QString s(buf);
       int pos1 = s.find("<TITLE>");
       if (pos1 == -1)
           continue;

@@ -49,6 +49,7 @@
 #include <qprogressdialog.h>
 #include <qlayout.h>
 #include <qmessagebox.h>
+#include <kurlrequester.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -241,7 +242,7 @@ void CKDevelop::slotAddExistingFiles(){
   bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
   QString token;
   QStrList files;
-  QString str_files = add_dlg->source_edit->text(); 
+  QString str_files = add_dlg->source_edit->lineEdit()->text();
 
   connect(&add_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
   	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
@@ -258,7 +259,7 @@ void CKDevelop::slotAddExistingFiles(){
   for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it )
     files.append((*it));
 
-  QString dest = add_dlg->destination_edit->text();
+  QString dest = add_dlg->destination_edit->lineEdit()->text();
   if(dest.right(1) != "/"){ // I hope it works now -Sandy
     dest = dest + "/";
   }
@@ -407,7 +408,7 @@ void CKDevelop::slotAddExistingFiles(){
 void CKDevelop::slotProjectAddExistingFiles(){
   add_dlg = new CAddExistingFileDlg(this,"test",prj);
 
-  add_dlg->destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
+  add_dlg->destination_edit->lineEdit()->setText(prj->getProjectDir()+ prj->getSubDir());
 
   if(add_dlg->exec()){
 //    QTimer::singleShot(100,this,SLOT(slotAddExistingFiles()));

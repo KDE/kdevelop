@@ -11,7 +11,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -28,134 +28,136 @@
 #include <iostream.h>
 #include <kstddirs.h>
 #include <klocale.h>
+#include <qgrid.h>
+#include <qlayout.h>
 
 CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
-	setCaption(i18n("Tools-Menu Configuration"));	
-	
-	tools_listbox = new QListBox( this, "tools_listbox" );
-	tools_listbox->setGeometry( 20, 20, 220, 180 );
-	connect( tools_listbox, SIGNAL(highlighted(int)), SLOT(slotShowToolProp(int)) );
-	tools_listbox->setFrameStyle( 51 );
-	tools_listbox->setLineWidth( 2 );
-	readConfig();
-	
-	add_button = new QPushButton( this, "add_button" );
-	add_button->setGeometry( 270, 20, 100, 30 );
-	connect( add_button, SIGNAL(clicked()), SLOT(slotToolAdd()) );
-	add_button->setText(i18n( "&Add" ));
-	add_button->setAutoRepeat( FALSE );
-	add_button->setAutoResize( FALSE );
-        QWhatsThis::add(add_button,i18n("Click here to add a tool specified below."));
+	setCaption(i18n("Tools-Menu Configuration"));
 
-	delete_button = new QPushButton( this, "delete_button" );
-	delete_button->setGeometry( 270, 60, 100, 30 );
-	connect( delete_button, SIGNAL(clicked()), SLOT(slotToolDelete()) );
-	delete_button->setText(i18n( "De&lete" ));
-	delete_button->setAutoRepeat( FALSE );
-	delete_button->setAutoResize( FALSE );
-	delete_button->setEnabled( FALSE );
-	QWhatsThis::add(delete_button,i18n("Click here to delete an entry from the list."));
+ QGridLayout *grid1 = new QGridLayout(this,7,3,15,7);
+ tools_listbox = new QListBox( this, "tools_listbox" );
+ grid1->addMultiCellWidget(tools_listbox,0,3,0,1);
+ connect( tools_listbox, SIGNAL(highlighted(int)), SLOT(slotShowToolProp(int)) );
+ tools_listbox->setFrameStyle( 51 );
+ tools_listbox->setLineWidth( 2 );
+ readConfig();
 
-	move_up_button = new QPushButton( this, "move_up_button" );
-	move_up_button->setGeometry( 270, 110, 100, 30 );
-	connect( move_up_button, SIGNAL(clicked()), SLOT(slotToolMoveUp()) );
-	move_up_button->setText(i18n( "Move &Up" ));
-	move_up_button->setAutoRepeat( FALSE );
-	move_up_button->setAutoResize( FALSE );
-	move_up_button->setEnabled( FALSE );
-	QWhatsThis::add(move_up_button,i18n("Click here to move up the selected entry."));
+ add_button = new QPushButton( this, "add_button" );
+ connect( add_button, SIGNAL(clicked()), SLOT(slotToolAdd()) );
+ add_button->setText(i18n( "&Add" ));
+ add_button->setAutoRepeat( FALSE );
+ add_button->setAutoResize( FALSE );
+ QWhatsThis::add(add_button,i18n("Click here to add a tool specified below."));
+ grid1->addWidget(add_button,0,2);
 
-	move_down_button = new QPushButton( this, "move_down_button" );
-	move_down_button->setGeometry( 270, 150, 100, 30 );
-	connect( move_down_button, SIGNAL(clicked()), SLOT(slotToolMoveDown()) );
-	move_down_button->setText(i18n( "Move &Down" ));
-	move_down_button->setAutoRepeat( FALSE );
-	move_down_button->setAutoResize( FALSE );
-	move_down_button->setEnabled( FALSE );
-	QWhatsThis::add(move_down_button,i18n("Click here to move down the selected entry."));
+ delete_button = new QPushButton( this, "delete_button" );
+ connect( delete_button, SIGNAL(clicked()), SLOT(slotToolDelete()) );
+ delete_button->setText(i18n( "De&lete" ));
+ delete_button->setAutoRepeat( FALSE );
+ delete_button->setAutoResize( FALSE );
+ delete_button->setEnabled( FALSE );
+ QWhatsThis::add(delete_button,i18n("Click here to delete an entry from the list."));
+ grid1->addWidget(delete_button,1,2);
 
-	executable_label = new QLabel( this, "command_label" );
-	executable_label->setGeometry( 30, 240, 170, 30 );
-	executable_label->setText(i18n( "Executable:" ));
-	executable_label->setAlignment( 289 );
-	executable_label->setMargin( -1 );
-	
-	executable_edit = new QLineEdit( this, "LineEdit_1" );
-	executable_edit->setGeometry( 210, 240, 190, 30 );
-	executable_edit->setText( "" );
-	executable_edit->setMaxLength( 32767 );
-	executable_edit->setEchoMode( QLineEdit::Normal );
-	executable_edit->setFrame( TRUE );
-	
-	executable_button = new QPushButton( this, "executable_button" );
-	executable_button->setGeometry( 410, 240, 30, 30 );
-	QWhatsThis::add(executable_button,i18n("Here you can browse through the disc to select an executable file."));
-	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
-	QPixmap pix = BarIcon("open");
-	executable_button->setPixmap(pix);
-	executable_button->setAutoRepeat( FALSE );
-	executable_button->setAutoResize( FALSE );
-	QString executable_help = i18n("Enter the name of the executable file here.");
-    QWhatsThis::add(executable_edit,executable_help);
-    QWhatsThis::add(executable_button,executable_help);
+ move_up_button = new QPushButton( this, "move_up_button" );
+ connect( move_up_button, SIGNAL(clicked()), SLOT(slotToolMoveUp()) );
+ move_up_button->setText(i18n( "Move &Up" ));
+ move_up_button->setAutoRepeat( FALSE );
+ move_up_button->setAutoResize( FALSE );
+ move_up_button->setEnabled( FALSE );
+ QWhatsThis::add(move_up_button,i18n("Click here to move up the selected entry."));
+ grid1->addWidget(move_up_button,2,2);
 
-	menu_text_label = new QLabel( this, "Label_3" );
-	menu_text_label->setGeometry( 30, 280, 170, 30 );
-	menu_text_label->setText(i18n( "Menu Text:" ));
-	menu_text_label->setAlignment( 289 );
-	menu_text_label->setMargin( -1 );
-	
-	menu_text_edit = new QLineEdit( this, "LineEdit_2" );
-	menu_text_edit->setGeometry( 210, 280, 230, 30 );
-	menu_text_edit->setText( "" );
-	menu_text_edit->setMaxLength( 32767 );
-	menu_text_edit->setEchoMode( QLineEdit::Normal );
-	menu_text_edit->setFrame( TRUE );
-	QString menu_help=i18n("Enter a menu text for the executable here.");
-	QWhatsThis::add(menu_text_label, menu_help);
-	QWhatsThis::add(menu_text_edit,menu_help);
+ move_down_button = new QPushButton( this, "move_down_button" );
+ connect( move_down_button, SIGNAL(clicked()), SLOT(slotToolMoveDown()) );
+ move_down_button->setText(i18n( "Move &Down" ));
+ move_down_button->setAutoRepeat( FALSE );
+ move_down_button->setAutoResize( FALSE );
+ move_down_button->setEnabled( FALSE );
+ QWhatsThis::add(move_down_button,i18n("Click here to move down the selected entry."));
+ grid1->addWidget(move_down_button,3,2);
 
-	arguments_label = new QLabel( this, "Label_4" );
-	arguments_label->setGeometry( 30, 320, 170, 30 );
-	arguments_label->setText(i18n( "Arguments:" ));
-	arguments_label->setAlignment( 289 );
-	arguments_label->setMargin( -1 );
-	
-	arguments_edit = new QLineEdit( this, "LineEdit_3" );
-	arguments_edit->setGeometry( 210, 320, 230, 30 );
-	arguments_edit->setText( "" );
-	arguments_edit->setMaxLength( 32767 );
-	arguments_edit->setEchoMode( QLineEdit::Normal );
-	arguments_edit->setFrame( TRUE );
-	QString arguments_help = i18n("Enter arguments for the executable here.");
-    QWhatsThis::add(arguments_label, arguments_help);
-    QWhatsThis::add(arguments_edit,arguments_help);
+ executable_label = new QLabel( this, "command_label" );
+ executable_label->setText(i18n( "Executable:" ));
+ executable_label->setAlignment( 289 );
+ executable_label->setMargin( -1 );
+ grid1->addWidget(executable_label,4,0);
 
-	ok_button = new QPushButton( this, "ok_button" );
-	ok_button->setGeometry( 390, 20, 100, 30 );
-	connect( ok_button, SIGNAL(clicked()), SLOT(slotOK()) );
-	ok_button->setText(i18n( "OK" ));
-	ok_button->setAutoRepeat( FALSE );
-	ok_button->setAutoResize( FALSE );
-	ok_button->setDefault( TRUE );
+ executable_edit = new QLineEdit( this, "LineEdit_1" );
+ executable_edit->setText( "" );
+ executable_edit->setMaxLength( 32767 );
+ executable_edit->setEchoMode( QLineEdit::Normal );
+ executable_edit->setFrame( TRUE );
+ grid1->addWidget(executable_edit,4,1);
 
-	cancel_button = new QPushButton( this, "cancel_button" );
-	cancel_button->setGeometry( 390, 60, 100, 30 );
-	connect( cancel_button, SIGNAL(clicked()), SLOT(reject()) );
-	cancel_button->setText(i18n( "Cancel" ));
-	cancel_button->setAutoRepeat( FALSE );
-	cancel_button->setAutoResize( FALSE );
+ executable_button = new QPushButton( this, "executable_button" );
+ QWhatsThis::add(executable_button,i18n("Here you can browse through the disc to select an executable file."));
+ connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
+ QPixmap pix = BarIcon("open");
+ executable_button->setPixmap(pix);
+ executable_button->setAutoRepeat( FALSE );
+ executable_button->setAutoResize( FALSE );
+ QString executable_help = i18n("Enter the name of the executable file here.");
+ QWhatsThis::add(executable_edit,executable_help);
+ QWhatsThis::add(executable_button,executable_help);
+  grid1->addWidget(executable_button,4,2);
 
-	help_button = new QPushButton( this, "PushButton_7" );
-	help_button->setGeometry( 390, 110, 100, 30 );
-	connect( help_button, SIGNAL(clicked()), SLOT(slotHelp()) );
-	help_button->setText(i18n( "&Help" ));
-	help_button->setAutoRepeat( FALSE );
-	help_button->setAutoResize( FALSE );
+  menu_text_label = new QLabel( this, "Label_3" );
+  menu_text_label->setText(i18n( "Menu Text:" ));
+  menu_text_label->setAlignment( 289 );
+  menu_text_label->setMargin( -1 );
+  grid1->addWidget(menu_text_label,5,0);
 
-	resize( 510, 380 );
+ menu_text_edit = new QLineEdit( this, "LineEdit_2" );
+ menu_text_edit->setText( "" );
+ menu_text_edit->setMaxLength( 32767 );
+ menu_text_edit->setEchoMode( QLineEdit::Normal );
+ menu_text_edit->setFrame( TRUE );
+ QString menu_help=i18n("Enter a menu text for the executable here.");
+ QWhatsThis::add(menu_text_label, menu_help);
+ QWhatsThis::add(menu_text_edit,menu_help);
+  grid1->addWidget(menu_text_edit,5,1);
+
+ arguments_label = new QLabel( this, "Label_4" );
+ arguments_label->setText(i18n( "Arguments:" ));
+ arguments_label->setAlignment( 289 );
+ arguments_label->setMargin( -1 );
+ grid1->addWidget(arguments_label,6,0);
+
+ arguments_edit = new QLineEdit( this, "LineEdit_3" );
+ arguments_edit->setText( "" );
+ arguments_edit->setMaxLength( 32767 );
+ arguments_edit->setEchoMode( QLineEdit::Normal );
+ arguments_edit->setFrame( TRUE );
+ QString arguments_help = i18n("Enter arguments for the executable here.");
+ QWhatsThis::add(arguments_label, arguments_help);
+ QWhatsThis::add(arguments_edit,arguments_help);
+ grid1->addWidget(arguments_edit,6,1);
+
+ ok_button = new QPushButton( this, "ok_button" );
+ connect( ok_button, SIGNAL(clicked()), SLOT(slotOK()) );
+ ok_button->setText(i18n( "OK" ));
+ ok_button->setAutoRepeat( FALSE );
+ ok_button->setAutoResize( FALSE );
+ ok_button->setDefault( TRUE );
+ grid1->addWidget(ok_button,0,3);
+
+ cancel_button = new QPushButton( this, "cancel_button" );
+ connect( cancel_button, SIGNAL(clicked()), SLOT(reject()) );
+ cancel_button->setText(i18n( "Cancel" ));
+ cancel_button->setAutoRepeat( FALSE );
+ cancel_button->setAutoResize( FALSE );
+ grid1->addWidget(cancel_button,1,3);
 
 
+ help_button = new QPushButton( this, "PushButton_7" );
+ connect( help_button, SIGNAL(clicked()), SLOT(slotHelp()) );
+ help_button->setText(i18n( "&Help" ));
+ help_button->setAutoRepeat( FALSE );
+ help_button->setAutoResize( FALSE );
+ grid1->addWidget(help_button,2,3);
+
+ resize( 510, 380 );
 }
 
 CToolsConfigDlg::~CToolsConfigDlg(){
@@ -168,7 +170,7 @@ void CToolsConfigDlg::slotToolAdd()
 	QString executable=executable_edit->text();
 	QString menutext=menu_text_edit->text();
 	QString exe_file=QFileInfo(executable).fileName();
-		
+
 	if(executable.isEmpty()){
 		KMessageBox::error(this, i18n("You have to set an executable to add to the Tools-Menu first."),i18n("Executable not set!"));
 		return;
@@ -325,23 +327,4 @@ void CToolsConfigDlg::swap(int item1,int item2){
   tools_argument.remove(item2);
   tools_argument.insert(item2,str1);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
