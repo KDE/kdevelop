@@ -22,23 +22,6 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <spacer row="10" column="1">
-            <property name="name">
-                <cstring>spacer1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>160</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QLayoutWidget" row="0" column="0" rowspan="1" colspan="5">
             <property name="name">
                 <cstring>configuration_layout</cstring>
@@ -279,39 +262,6 @@
                 </size>
             </property>
         </spacer>
-        <widget class="KURLRequester" row="9" column="1" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>mainSourceUrl</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>0</width>
-                    <height>26</height>
-                </size>
-            </property>
-            <property name="focusPolicy">
-                <enum>WheelFocus</enum>
-            </property>
-        </widget>
-        <widget class="QLabel" row="9" column="0">
-            <property name="name">
-                <cstring>mainSourceLabel</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>4</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Main &amp;Source File:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>compiler_box</cstring>
-            </property>
-        </widget>
         <spacer row="8" column="2">
             <property name="name">
                 <cstring>spacer13</cstring>
@@ -354,6 +304,56 @@
                 <string>Load Default Compiler Options</string>
             </property>
         </widget>
+        <widget class="KURLRequester" row="9" column="1" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>mainSourceUrl</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>26</height>
+                </size>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
+        </widget>
+        <widget class="QLabel" row="9" column="0">
+            <property name="name">
+                <cstring>mainSourceLabel</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>4</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>Main &amp;Source File:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>compiler_box</cstring>
+            </property>
+        </widget>
+        <spacer row="12" column="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
     </grid>
 </widget>
 <connections>
@@ -447,6 +447,7 @@
     <tabstop>exec_edit</tabstop>
     <tabstop>options_edit</tabstop>
     <tabstop>options_button</tabstop>
+    <tabstop>defaultopts_button</tabstop>
     <tabstop>mainSourceUrl</tabstop>
     <tabstop>config_combo</tabstop>
     <tabstop>addconfig_button</tabstop>

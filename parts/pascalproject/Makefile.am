@@ -1,4 +1,4 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/project -I$(top_srcdir)/lib/util $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevpascalproject.la
 libkdevpascalproject_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
@@ -13,3 +13,7 @@ service_DATA = kdevpascalproject.desktop
 
 rcdir = $(kde_datadir)/kdevpascalproject
 rc_DATA = kdevpascalproject.rc
+AM_CFLAGS = 
+AM_CXXFLAGS = 
+AM_FFLAGS = 
+SUBDIRS = 

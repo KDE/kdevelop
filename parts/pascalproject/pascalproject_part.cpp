@@ -14,6 +14,7 @@
 #include <qvaluestack.h>
 #include <qregexp.h>
 #include <qvbox.h>
+#include <qlabel.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -25,6 +26,8 @@
 #include <klibloader.h>
 #include <kservice.h>
 #include <kconfig.h>
+#include <kdeversion.h>
+#include <kprocess.h>
 
 #include "domutil.h"
 #include "kdevcore.h"
@@ -34,6 +37,7 @@
 #include "kdevpartcontroller.h"
 #include "kdevlanguagesupport.h"
 #include "kdevcompileroptions.h"
+#include "runoptionswidget.h"
 
 #include "pascalproject_widget.h"
 #include "pascalproject_part.h"
@@ -155,8 +159,15 @@ void PascalProjectPart::closeProject()
 
 QString PascalProjectPart::mainProgram()
 {
-    QFileInfo fi(mainSource());
-    return buildDirectory() + "/" + fi.baseName();
+    QDomDocument &dom = *projectDom();
+    QString configMainProg = DomUtil::readEntry(dom, "/kdevpascalproject/run/mainprogram", "");
+    if (configMainProg.isEmpty())
+    {
+        QFileInfo fi(mainSource());
+        return buildDirectory() + "/" + fi.baseName();
+    }
+    else
+        return QDir::cleanDirPath(projectDirectory() + "/" + configMainProg);
 }
 
 QString PascalProjectPart::mainSource()
@@ -201,12 +212,12 @@ void PascalProjectPart::listOfFiles(QStringList &result, QString path)
     {
         if ((it->isDir()) && (!it->filePath() == path))
         {
-            qWarning("entering dir %s", it->dirPath().latin1());
+//            qWarning("entering dir %s", it->dirPath().latin1());
             listOfFiles(result, it->dirPath());
         }
         else
         {
-            qWarning("adding to result: %s", it->filePath().latin1());
+//            qWarning("adding to result: %s", it->filePath().latin1());
             result << it->filePath();
         }
     }
@@ -263,8 +274,35 @@ void PascalProjectPart::slotBuild()
 void PascalProjectPart::slotExecute()
 {
     partController()->saveAllFiles();
-    QString program = "./";
-    appFrontend()->startAppCommand(buildDirectory(), mainProgram(), true);
+
+    QDomDocument &dom = *(projectDom());
+    bool runInTerminal = DomUtil::readBoolEntry(dom, "/kdevpascalproject/run/terminal", true);
+
+    // Get the run environment variables pairs into the environstr string
+    // in the form of: "ENV_VARIABLE=ENV_VALUE"
+    // Note that we quote the variable value due to the possibility of
+    // embedded spaces
+    DomUtil::PairList envvars =
+        DomUtil::readPairListEntry(*projectDom(), "/kdevpascalproject/run/envvars", "envvar", "name", "value");
+
+    QString environstr;
+    DomUtil::PairList::ConstIterator it;
+    for (it = envvars.begin(); it != envvars.end(); ++it) {
+        environstr += (*it).first;
+        environstr += "=";
+#if (KDE_VERSION > 305)
+        environstr += KProcess::quote((*it).second);
+#else
+        environstr += KShellProcess::quote((*it).second);
+#endif
+        environstr += " ";
+    }
+
+    QString program = mainProgram();
+    program.prepend(environstr);
+    program += " " + DomUtil::readEntry(*projectDom(), "/kdevpascalproject/run/programargs");
+
+    appFrontend()->startAppCommand(buildDirectory(), program, runInTerminal);
 }
 
 void PascalProjectPart::changedFiles( const QStringList & fileList )
@@ -284,6 +322,12 @@ void PascalProjectPart::projectConfigWidget( KDialogBase * dlg )
     PascalProjectOptionsDlg *w = new PascalProjectOptionsDlg(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
     connect( dlg, SIGNAL(okClicked()), this, SLOT(loadProjectConfig()) );
+
+    vbox = dlg->addVBoxPage(i18n("Run Options"));
+    RunOptionsWidget *w3 = new RunOptionsWidget(*projectDom(), "/kdevpascalproject", projectDirectory(), vbox);
+    w3->mainprogram_label_3->setText(i18n("Main program (relative to project directory):"));
+    connect( dlg, SIGNAL(okClicked()), w3, SLOT(accept()) );
+
 }
 
 void PascalProjectPart::loadProjectConfig( )
