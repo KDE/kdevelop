@@ -10,7 +10,6 @@
  ***************************************************************************/
 
 #include <qlayout.h>
-#include <qlabel.h>
 #include <qlineedit.h>
 #include <qpainter.h>
 #include <qtimer.h>
@@ -21,119 +20,116 @@
 #include <klocale.h>
 #include <kparts/part.h>
 #include <ktexteditor/viewcursorinterface.h>
+#include <kdeversion.h>
 
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+#include <ktexteditor/viewstatusmsginterface.h>
+# endif
+#endif
 
 #include "statusbar.h"
 #include "partcontroller.h"
 
-
 StatusBar::StatusBar(QWidget *parent, const char *name)
-    : KStatusBar(parent, name), m_cursorIface(0), m_activePart(0)
+    : KStatusBar(parent, name), _cursorIface(0), _activePart(0)
 {
-  //setFixedHeight(le->sizeHint().height()+4);
+	QWidget * w = new QWidget( this );
+	addWidget( w, 1, true );
+	w->hide();
 
-  // stretcher
-  addWidget(new QWidget(this), 1);
+	_status = new QLabel( this );
+	_status->setMinimumWidth(_status->fontMetrics().width("Line: XXXXX Col: XXX  OVR NORM * "));
+	_status->setAlignment(QWidget::AlignCenter);
+	addWidget(_status, 0, true);
 
-  _status = new QLabel(this);
-  _status->setFont(KGlobalSettings::fixedFont());
-  _status->setMinimumWidth(_status->fontMetrics().width("OVR, ro"));
-  _status->setAlignment(QWidget::AlignCenter);
-  addWidget(_status, 0, true);
+	connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
+		this, SLOT(activePartChanged(KParts::Part*)));
 
-  _cursorPosition = new QLabel(this);
-  _cursorPosition->setAlignment(AlignCenter);
-  // Same string as in setCursorPosition()
-  QString s2 = i18n(" Line: %1 Col: %2 ").arg("xxxx").arg("xxxx");
-  _cursorPosition->setMinimumWidth(_cursorPosition->fontMetrics().width(s2));
-  addWidget(_cursorPosition, 0, true);
-
-  _modified = new QLabel(this);
-  _modified->setFixedWidth(_modified->fontMetrics().width("*"));
-  addWidget(_modified, 0, true);
-
-  setEditorStatusVisible(false);
-
-  connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
-          this, SLOT(activePartChanged(KParts::Part*)));
+	// TODO remove parts from the map on PartRemoved() ?
 }
 
 
 StatusBar::~StatusBar()
 {}
 
-
 void StatusBar::activePartChanged(KParts::Part *part)
 {
-  if (m_activePart)
-    disconnect(m_activePart, 0, this, 0);
+	if ( _activePart && _activePart->widget() )
+		disconnect( _activePart->widget(), 0, this, 0 );
 
-  m_activePart = part;
-  m_cursorIface = 0;
+	_activePart = part;
+	_cursorIface = 0;
+	_viewmsgIface = 0;
 
-  if (part && part->widget())
-  {
-    m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
-    if (m_cursorIface)
+	if (part && part->widget())
+	{
+
+	#if defined(KDE_MAKE_VERSION)
+	# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+	if (_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()) )
+	{
+		connect( part->widget(), SIGNAL( viewStatusMsg( const QString & ) ),
+			this, SLOT( setStatus( const QString & ) ) );
+
+		#if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+		_status->setText( _map[ _activePart ] );
+		#endif
+
+		_status->show();
+	}
+	else
+	# endif
+	#endif
+	if ( _cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()) )
     {
-      connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
+		connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
 
-      cursorPositionChanged();
+		_status->show();
+		cursorPositionChanged();
     }
+	else
+	{
+		// we can't produce any status data, hide the status box
+		_status->hide();
+	}
   }
-  else
-    _cursorPosition->setText("");
 }
 
 
 void StatusBar::cursorPositionChanged()
 {
-  if (m_cursorIface)
+  if (_cursorIface)
   {
     uint line, col;
-    m_cursorIface->cursorPosition(&line, &col);
+    _cursorIface->cursorPosition(&line, &col);
     setCursorPosition(line, col);
   }
 }
 
-
-void StatusBar::setEditorStatusVisible(bool visible)
-{
-  // Note: I tried to hide/show the widgets here, but that
-  // causes flicker, so I just set them to be empty.
-
-  if (!visible)
-	{
-	  _status->setText("");
-	  _modified->setText("");
-	  _cursorPosition->setText("");
-	}
-}
-
-
 void StatusBar::setStatus(const QString &str)
 {
-  _status->setText(str);
+	_status->setText(str);
+
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+	_map[_activePart] = str;
+# endif
+#endif
 }
 
 
 void StatusBar::setCursorPosition(int line, int col)
 {
-  _cursorPosition->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
-}
-
-
-void StatusBar::setModified(bool isModified)
-{
-  _modified->setText(isModified? "*" : "");
+	_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
 }
 
 void StatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
 {
-  KStatusBar::addWidget(widget,stretch,permanent);
+	KStatusBar::addWidget(widget,stretch,permanent);
 
-  if(widget->sizeHint().height() + 4 > height())
-    setFixedHeight(widget->sizeHint().height() + 4);
+	if(widget->sizeHint().height() + 4 > height())
+		setFixedHeight(widget->sizeHint().height() + 4);
 }
 
 #include "statusbar.moc"

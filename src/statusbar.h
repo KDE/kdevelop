@@ -13,38 +13,47 @@
 #define _STATUSBAR_H_
 
 #include <kstatusbar.h>
+#include <qmap.h>
 
 class QLabel;
-namespace KTextEditor { class ViewCursorInterface; };
-namespace KParts { class Part; };
 
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,0)
+namespace KTextEditor { class ViewStatusMsgInterface; }
+# endif
+#endif
+
+namespace KTextEditor { class ViewCursorInterface; }
+namespace KParts { class Part; }
 
 class StatusBar : public KStatusBar
 {
     Q_OBJECT
-    
+
 public:
     StatusBar( QWidget *parent=0, const char *name=0 );
     ~StatusBar();
     void addWidget ( QWidget *widget, int stretch = 0, bool permanent = FALSE );
 
-public slots:
-    void setEditorStatusVisible(bool visible);
-    void setStatus(const QString &str);
-    void setCursorPosition(int line, int col);
-    void setModified(bool isModified);
-
 private slots:
     void cursorPositionChanged();
     void activePartChanged(KParts::Part *part);
+    void setStatus(const QString &str);
+    void setCursorPosition(int line, int col);
 
 private:
-    QLabel *_modified;
-    QLabel *_cursorPosition;
     QLabel *_status;
 
-    KTextEditor::ViewCursorInterface *m_cursorIface;
-    KParts::Part *m_activePart;
+	KTextEditor::ViewCursorInterface * _cursorIface;
+	KTextEditor::ViewStatusMsgInterface * _viewmsgIface;
+	KParts::Part *_activePart;
+
+// still hoping for a fix for KDE-3.1
+#if defined(KDE_MAKE_VERSION)
+# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
+	QMap<KParts::Part*, QString> _map;
+# endif
+#endif
 
 };
 
