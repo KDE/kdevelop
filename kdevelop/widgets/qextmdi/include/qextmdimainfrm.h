@@ -615,7 +615,10 @@ protected slots: // Protected slots
    * The timer for main widget moving has elapsed -> send drag end to all concerned views.
    */
    void dragEndTimeOut();
-
+   /**
+   * internally used to handle click on view close button (TabPage mode, only)
+   */
+   void closeViewButtonPressed();
 signals:
    /** 
    * Signals the last attached @ref QextMdiChildView has been closed 

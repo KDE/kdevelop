@@ -304,7 +304,10 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          pCover->show();
       }
       pWnd->setFocus();
-   }
+      if (m_pWinList->count() == 1) {
+         m_pClose->show();  // show the close button in case it isn't already
+      }
+}
    else {
       if( (flags & QextMdi::Detach) || (m_mdiMode == QextMdi::ToplevelMode)) {
          detachWindow( pWnd, !(flags & QextMdi::Hide));
@@ -563,6 +566,7 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
          m_pDockbaseAreaOfDocumentViews->manualDock( m_pDockbaseOfTabPage, KDockWidget::DockCenter);
          m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
          m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
+         m_pClose->hide();
       }
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
@@ -585,6 +589,9 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 #endif
       }
       delete pDockW;
+      if (m_pWinList->count() == 1) {
+         m_pWinList->last()->activate(); // all other views are activated by tab switch
+      }
    }
    else if (pWnd->isAttached()) {
       pWnd->mdiParent()->hide();
@@ -637,6 +644,7 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
          m_pDockbaseAreaOfDocumentViews->manualDock( m_pDockbaseOfTabPage, KDockWidget::DockCenter);
          m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
          m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
+         m_pClose->hide();
       }
       KDockWidget* pDockW = (KDockWidget*) pWnd->parentWidget();
       pWnd->reparent(0L, QPoint(0,0));
@@ -659,6 +667,9 @@ void QextMdiMainFrm::closeWindow(QextMdiChildView *pWnd, bool layoutTaskBar)
 #endif
       }
       delete pDockW;
+      if (m_pWinList->count() == 1) {
+         m_pWinList->last()->activate(); // all other views are activated by tab switch
+      }
    }
    else if (pWnd->isAttached()) {
       m_pMdi->destroyChild(pWnd->mdiParent());
@@ -1282,6 +1293,11 @@ void QextMdiMainFrm::switchToTabPageMode()
    }
 
    m_pTaskBar->switchOn(FALSE);
+
+   QObject::connect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
+   if (m_pWinList->count() > 0) {
+      m_pClose->show();
+   }
    //qDebug("TabPageMode on");
 }
 
@@ -1289,6 +1305,9 @@ void QextMdiMainFrm::finishTabPageMode()
 {
    // if tabified, release all views from their docking covers
    if (m_mdiMode == QextMdi::TabPageMode) {
+      m_pClose->hide();
+      QObject::disconnect( m_pClose, SIGNAL(clicked()), this, SLOT(closeViewButtonPressed()) );
+      
 #if QT_VERSION < 300
       QListIterator<QextMdiChildView> it( *m_pWinList);
 #else
@@ -1850,6 +1869,14 @@ void QextMdiMainFrm::fakeSDIApplication()
       m_pTaskBar->close();
    m_pTaskBar = 0L;
 };
+
+void QextMdiMainFrm::closeViewButtonPressed()
+{
+   QextMdiChildView* pView = activeWindow();
+   if (pView) {
+      pView->close();
+   }
+}
 
 #ifndef NO_INCLUDE_MOCFILES
 #include "qextmdimainfrm.moc"

@@ -1,3 +1,5 @@
+2002-07-19  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: missed close button for TabPage UI mode is back, backported from HEAD
 2002-07-18  Roland Krause  <roland@ca.wai.com>
     * Another fine patch from our friend Kuba Ober. 
       This one is even completely self-explanatory. 
