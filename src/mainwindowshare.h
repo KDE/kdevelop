@@ -48,7 +48,6 @@ private slots:
   void slotToggleViewToolbar();
   void slotToggleBrowserToolbar();
   void slotToggleStatusbar();
-  void slotToggleViewbar();
 
 private:
   KToggleAction*   m_toggleMainToolbar;
@@ -56,7 +55,6 @@ private:
   KToggleAction*   m_toggleViewToolbar;
   KToggleAction*   m_toggleBrowserToolbar;
   KToggleAction*   m_toggleStatusbar;
-  KToggleAction*   m_toggleViewbar;
 
   KAction*         m_stopProcesses;                 //!< Stops all running processes
 

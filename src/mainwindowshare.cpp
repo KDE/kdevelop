@@ -47,7 +47,6 @@ MainWindowShare::MainWindowShare(QObject* pParent, const char* name)
   ,m_toggleViewToolbar(0L)
   ,m_toggleBrowserToolbar(0L)
   ,m_toggleStatusbar(0L)
-  ,m_toggleViewbar(0L)
   ,m_stopProcesses(0L)
 {
   m_pMainWnd = (KParts::MainWindow*)pParent;
@@ -117,10 +116,6 @@ void MainWindowShare::createActions()
   m_toggleStatusbar = KStdAction::showToolbar(this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection(), "settings_statusbar");
   m_toggleStatusbar->setText("&Statusbar");
   m_toggleStatusbar->setStatusText( i18n("Hides or shows the statusbar") );
-
-  m_toggleViewbar = KStdAction::showToolbar(this, SLOT(slotToggleViewbar()),m_pMainWnd->actionCollection(), "settings_viewbar");
-  m_toggleViewbar->setText("&Viewbar");
-  m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
 }
 
 void MainWindowShare::slotToggleMainToolbar()
@@ -162,10 +157,6 @@ void MainWindowShare::slotToggleStatusbar()
     sb->show();
   else
     sb->hide();
-}
-
-void MainWindowShare::slotToggleViewbar()
-{
 }
 
 void MainWindowShare::slotActiveProcessCountChanged( uint active )

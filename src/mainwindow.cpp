@@ -233,6 +233,7 @@ MainWindow::MainWindow(QWidget *parent, const char *name)
   ,m_myWindowsReady(false)
   ,m_pShowOutputViews(0L)
   ,m_pShowTreeViews(0L)
+  ,m_toggleViewbar(0L)
 {
   m_pMainWindowShare = new MainWindowShare(this);
 }
@@ -373,6 +374,11 @@ void MainWindow::createActions()
   actionCollection()->insert(m_pTreeToolViewsMenu);
 
   m_pMainWindowShare->createActions();
+  
+  m_toggleViewbar = KStdAction::showToolbar(this, SLOT(slotToggleViewbar()),actionCollection(), "settings_viewbar");
+  m_toggleViewbar->setText("&Viewbar");
+  m_toggleViewbar->setStatusText( i18n("Hides or shows the viewbar") );
+  showViewTaskBar(); // because start state must be equal to the action state
 }
 
 QextMdiChildView *MainWindow::wrapper(QWidget *view, const QString &name)
@@ -610,7 +616,7 @@ void MainWindow::loadMDISettings()
   KConfig *config = kapp->config();
   config->setGroup("UI");
 
-  int mdiMode = config->readNumEntry("MDI mode", QextMdi::ChildframeMode);
+  int mdiMode = config->readNumEntry("MDIMode", QextMdi::ChildframeMode);
   switch (mdiMode)
   {
   case QextMdi::ToplevelMode:
@@ -654,8 +660,6 @@ void MainWindow::saveMDISettings()
 {
   KConfig *config = kapp->config();
   config->setGroup("UI");
-
-  config->writeEntry("MDI mode", mdiMode());
 
   config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
 }
@@ -710,25 +714,6 @@ void MainWindow::fillWindowMenu()
       if (bNoViewOpened) {
          m_pWindowMenu->setItemEnabled(iconifyId, FALSE);
       }
-   }
-   m_pWindowMenu->insertSeparator();
-   m_pWindowMenu->insertItem(i18n("&MDI Mode..."), m_pMdiModeMenu);
-   m_pMdiModeMenu->clear();
-   m_pMdiModeMenu->insertItem(i18n("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
-   m_pMdiModeMenu->insertItem(i18n("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
-   m_pMdiModeMenu->insertItem(i18n("Ta&b Page mode"), this, SLOT(switchToTabPageMode()));
-   switch (m_mdiMode) {
-   case QextMdi::ToplevelMode:
-      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(0), TRUE);
-      break;
-   case QextMdi::ChildframeMode:
-      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(1), TRUE);
-      break;
-   case QextMdi::TabPageMode:
-      m_pMdiModeMenu->setItemChecked(m_pMdiModeMenu->idAt(2), TRUE);
-      break;
-   default:
-      break;
    }
    m_pWindowMenu->insertSeparator();
    if (!bTabPageMode) {
@@ -1169,6 +1154,25 @@ void MainWindow::slotSaveAdditionalViewProperties(const QString& viewName, QDomE
 void MainWindow::slotQuit()
 {
     (void) queryClose();
+}
+
+void MainWindow::slotToggleViewbar()
+{
+    slot_toggleTaskBar();
+}
+
+void MainWindow::setUserInterfaceMode(const QString& uiMode)
+{
+    // immediately switch the mode likely set in the uimode part
+    if (uiMode == "Childframe") {
+	switchToChildframeMode();
+    }
+    else if (uiMode == "TabPage") {
+	switchToTabPageMode();
+    }
+    else if (uiMode == "Toplevel") {
+	switchToToplevelMode();
+    }
 }
 
 #include "mainwindow.moc"

@@ -70,6 +70,8 @@ public:
   void prepareToCloseViews();
   void realClose();
 
+  virtual void setUserInterfaceMode(const QString& uiMode);
+  
   /** Reimplemented from QextMdiChildView to handle save prompt */
   virtual void childWindowCloseRequest(QextMdiChildView *pWnd);
 
@@ -126,6 +128,7 @@ private slots:
   void slotReactToProjectOpened();
   void slotRestoreAdditionalViewProperties(const QString& viewName, const QDomElement* viewEl);
   void slotSaveAdditionalViewProperties(const QString& viewName, QDomElement* viewEl);
+  void slotToggleViewbar();
   
 private:
   
@@ -182,6 +185,7 @@ The newly created QextMdiChildView is not yet connected to any other widget of G
   KActionMenu *    m_pOutputToolViewsMenu;         //!< Menu for changing the show-hide state of the output tool views
   QString          m_CurrentOutputTab;             //!< Holds the previously active output tool view, if all output views have been hidden
   QString          m_CurrentTreeTab;               //!< Holds the previously active tree tool view, if all output views have been hidden
+  KToggleAction*   m_toggleViewbar;
 
   MainWindowShare*   m_pMainWindowShare;
 };
