@@ -1068,10 +1068,10 @@ void JDBController::slotStart(const QString &application, const QString &args, c
     QString tty(tty_->getSlave());
 
     if (tty.isEmpty()) {
-        KMessageBox::error(0, i18n("jdb cannot use the tty* or pty* devices\n"
-                                   "Check the settings on /dev/tty* and /dev/pty*\n\n"
-                                   "As root you may need to \"chmod ug+rw\" tty* and pty* devices\n"
-                                   "and/or add the user to the tty group using\n"
+        KMessageBox::error(0, i18n("jdb cannot use the tty* or pty* devices.\n"
+                                   "Check the settings on /dev/tty* and /dev/pty*\n"
+                                   "As root you may need to \"chmod ug+rw\" tty* and pty* devices "
+                                   "and/or add the user to the tty group using "
                                    "\"usermod -G tty username\""));
 
         delete tty_;

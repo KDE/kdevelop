@@ -172,7 +172,7 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
     if (!fi1.exists()) {
         QFileInfo fi2(m_widget->buildDirectory() + "/configure");
         if (!fi2.exists()) {
-            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
+            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory "
                                                               "and no configure script for this project.\n"
                                                               "Run automake & friends and configure first?"));
             if (r == KMessageBox::No)

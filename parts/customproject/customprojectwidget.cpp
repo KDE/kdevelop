@@ -112,7 +112,7 @@ void CustomProjectWidget::openProject(const QString &dirName)
 
     if (filesEl.isNull()) {
         int r = KMessageBox::questionYesNo(this, i18n("This project doesn not contain any files yet.\n"
-                                                      "Populate it with all C/C++/Java files below\n"
+                                                      "Populate it with all C/C++/Java files below "
                                                       "the project directory?"));
         if (r == KMessageBox::Yes)
             populateProject();

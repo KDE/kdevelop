@@ -288,7 +288,7 @@ void AppWizardDialog::accept()
 {
     QFileInfo fi(dest_edit->text());
     if (fi.exists()) {
-        KMessageBox::sorry(this, i18n("The directory you have chosen as location for\n"
+        KMessageBox::sorry(this, i18n("The directory you have chosen as location for "
                                       "the project already exists."));
 	showPage(generalPage);
         dest_edit->setFocus();
@@ -305,7 +305,7 @@ void AppWizardDialog::accept()
     QString appname = appname_edit->text();
     for (uint i=0; i < appname.length(); ++i)
         if (!appname[i].isLetterOrNumber()) {
-            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers,\n"
+            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers, "
                                           "as it will be used as toplevel directory name."));
             showPage(generalPage);
             appname_edit->setFocus();
