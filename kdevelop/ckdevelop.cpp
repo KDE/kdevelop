@@ -2165,7 +2165,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   int x,y;
   messages_widget->cursorPosition(&x,&y);
   QString str;
-	str.fromLatin1(buffer,buflen);
+  str=QString::fromLatin1(buffer,buflen);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
@@ -2199,7 +2199,7 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
   messages_widget->cursorPosition(&x,&y);
   QString str;
-	str.fromLatin1(buffer,buflen+1);
+  str=QString::fromLatin1(buffer,buflen);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
