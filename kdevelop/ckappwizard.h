@@ -73,7 +73,7 @@ public:
   QString getProjectFile();
   bool generatedProject();
   void okPermited(); 
-  void generateEntries();
+  void generateEntries(const QString &);
   QString getAuthorEmail(){return m_author_email;}
   QString getAuthorName(){return m_author_name;}
   
@@ -155,6 +155,7 @@ private:
   QPainter painter;
   KApplication* help;
   QString dir,nametext,directorytext,name1,name2,namelow,nameold;
+  QString entriesfname;
   KEdit *cppedit,*hedit;
   QButton *okButton,*cancelButton,*defaultButton, *prevButton;
   KIconLoader* loader;
