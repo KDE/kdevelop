@@ -24,7 +24,7 @@
 
 
 typedef KGenericFactory<TextToolsPart> TextToolsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevtexttools, TextToolsFactory( "kdevtexttools" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevtexttools, TextToolsFactory( "kdevtexttools" ) )
 
 TextToolsPart::TextToolsPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("TextTools", "texttools", parent, name ? name : "TextToolsPart")

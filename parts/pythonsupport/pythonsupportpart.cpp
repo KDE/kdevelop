@@ -36,7 +36,7 @@
 
 
 typedef KGenericFactory<PythonSupportPart> PythonSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( "kdevpythonsupport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevpythonsupport, PythonSupportFactory( "kdevpythonsupport" ) )
 
 PythonSupportPart::PythonSupportPart(QObject *parent, const char *name, const QStringList &)
     : KDevLanguageSupport("PythonSupport", "python", parent, name ? name : "PythonSupportPart")

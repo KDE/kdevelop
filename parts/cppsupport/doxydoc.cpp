@@ -20,7 +20,7 @@
 
 void DoxyDoc::formatType( QString& str ) {
 	str.replace( QRegExp(" "),"" );
-};
+}
 
 DoxyDoc::DoxyDoc( const QStringList& dir ) {
 	for (uint i = 0; i < dir.count(); ++i)
@@ -128,6 +128,6 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 	}
 
 	return QString::null;
-};
+}
 
 

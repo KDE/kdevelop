@@ -53,7 +53,7 @@
 
 using namespace std;
 
-K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( "kdevphpsupport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevphpsupport, PHPSupportFactory( "kdevphpsupport" ) )
 
 PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringList &)
     : KDevLanguageSupport("PHPSupport", "php", parent, name ? name : "PHPSupportPart")

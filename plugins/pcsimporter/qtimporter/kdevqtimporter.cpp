@@ -18,7 +18,7 @@
 #include <qlabel.h>
 #include <qdir.h>
 
-K_EXPORT_COMPONENT_FACTORY( libkdevqtimporter, KGenericFactory<KDevQtImporter>( "kdevqtimporter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevqtimporter, KGenericFactory<KDevQtImporter>( "kdevqtimporter" ) )
 
 KDevQtImporter::KDevQtImporter( QObject * parent, const char * name, const QStringList& )
     : KDevPCSImporter( parent, name )

@@ -49,7 +49,7 @@ QWidget* KDevVersionControl::newProjectWidget( QWidget */*parent*/ )
     KMessageBox::sorry( mainWindow()->main(), i18n( "Not implemented." ) );
 
     return 0;
-};
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -13,7 +13,7 @@
 #include "editorchooser_widget.h"
 
 typedef KGenericFactory<EditorChooserPart> EditorChooserFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( "kdeveditorchooser" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdeveditorchooser, EditorChooserFactory( "kdeveditorchooser" ) )
 
 EditorChooserPart::EditorChooserPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("EditorChooser", "editorchooser", parent, name ? name : "EditorChooserPart")

@@ -25,7 +25,7 @@
 
 
 typedef KGenericFactory<AStylePart> AStyleFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( "kdevastyle" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevastyle, AStyleFactory( "kdevastyle" ) )
 
 AStylePart::AStylePart(QObject *parent, const char *name, const QStringList &)
   : KDevSourceFormatter("AStyle", "astyle", parent, name ? name : "AStylePart")

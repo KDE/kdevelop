@@ -25,7 +25,7 @@
 //#include "optiontabs.h"
 #include "ghcoptionsplugin.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevghcoptions, KGenericFactory<GhcOptionsPlugin>( "kdevghcoptions" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevghcoptions, KGenericFactory<GhcOptionsPlugin>( "kdevghcoptions" ) )
 
 GhcOptionsPlugin::GhcOptionsPlugin(QObject *parent, const char *name, const QStringList& /*args*/)
     : KDevCompilerOptions(parent, name)

@@ -114,7 +114,7 @@ QString g_tempEnvRsh( "" );
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef KGenericFactory<CvsPart> CvsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsPart

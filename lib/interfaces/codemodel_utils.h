@@ -86,6 +86,7 @@ void findFunctionDefinitions( Pred pred, const FunctionDefinitionDom& fun, Funct
 	lst << fun;
 }
 
+#if 0
 template <class Pred>
 void findFunctionDefinitions( Pred pred, FunctionDefinitionList & lst )
 {
@@ -93,6 +94,7 @@ void findFunctionDefinitions( Pred pred, FunctionDefinitionList & lst )
     for( FileList::Iterator it=fileList.begin(); it!=fileList.end(); ++it )
 	findFunctionDefinitions( pred, model_cast<NamespaceDom>(*it), lst );
 }
+#endif
 
 struct Scope{
     ClassDom klass;

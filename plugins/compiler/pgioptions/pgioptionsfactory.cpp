@@ -22,7 +22,7 @@ extern "C" {
         return new PgiOptionsFactory;
     }
     
-};
+}
 
 
 PgiOptionsFactory::PgiOptionsFactory(QObject *parent, const char *name)

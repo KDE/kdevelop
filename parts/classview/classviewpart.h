@@ -39,7 +39,7 @@ namespace KTextEditor
     class EditInterface;
     class SelectionInterface;
     class ViewCursorInterface;
-};
+}
 
 
 class ClassViewWidget;

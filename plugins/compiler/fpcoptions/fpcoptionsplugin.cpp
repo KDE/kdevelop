@@ -16,7 +16,7 @@
 #include "optiontabs.h"
 #include "fpcoptionsplugin.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevfpcoptions, KGenericFactory<FpcOptionsPlugin>( "kdevfpcoptions" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfpcoptions, KGenericFactory<FpcOptionsPlugin>( "kdevfpcoptions" ) )
 
 FpcOptionsPlugin::FpcOptionsPlugin(QObject *parent, const char *name, const QStringList& /*args*/)
     : KDevCompilerOptions(parent, name)

@@ -49,7 +49,7 @@
 
 
 typedef KGenericFactory<CustomProjectPart> CustomProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( "kdevcustomproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( "kdevcustomproject" ) )
 
 CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QStringList &)
     : KDevProject("CustomProject", "customproject", parent, name ? name : "CustomProjectPart")

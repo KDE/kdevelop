@@ -20,7 +20,7 @@
 
 #include "debuggerdcopinterface.h"
 
-namespace KParts { class Part; };
+namespace KParts { class Part; }
 
 class QLabel;
 class QPopupMenu;

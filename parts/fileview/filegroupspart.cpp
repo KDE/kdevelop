@@ -29,7 +29,7 @@
 #include "filegroupsconfigwidget.h"
 
 typedef KGenericFactory<FileGroupsPart> FileGroupsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( "kdevfilegroups" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfilegroups, FileGroupsFactory( "kdevfilegroups" ) )
 
 FileGroupsPart::FileGroupsPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("FileGroups", "filegroups", parent, name ? name : "FileGroupsPart")

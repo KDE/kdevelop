@@ -96,18 +96,6 @@
 #include <domutil.h>
 #include <config.h>
 
-#if defined(__GLIBC__)
-#include <malloc.h>
-void showMemUsage()
-{
-    struct mallinfo mi = mallinfo();
-    kdDebug(9007) << "Mem usage: " << mi.uordblks << endl;
-}
-#else
-void showMemUsage()
-{}
-#endif
-
 enum { KDEV_DB_VERSION = 5 };
 enum { KDEV_PCS_VERSION = 4 };
 

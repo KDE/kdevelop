@@ -21,7 +21,7 @@
 #include "valgrinditem.h"
 
 typedef KGenericFactory<ValgrindPart> ValgrindFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( "kdevvalgrind" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevvalgrind, ValgrindFactory( "kdevvalgrind" ) )
 
 ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList& )
   : KDevPlugin( "Valgrind", "valgrind", parent, name ? name : "ValgrindPart" )

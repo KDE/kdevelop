@@ -55,6 +55,6 @@ namespace CvsUtils
     */
     void removeFromIgnoreList( const QString &projectDirectory, const KURL &url );
     void removeFromIgnoreList( const QString &projectDirectory, const KURL::List &urls );
-};
+}
 
 #endif // CVSUTILS_H

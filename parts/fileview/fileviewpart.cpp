@@ -34,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef KGenericFactory<FileViewPart> FileViewFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( "kdevfileview" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfileview, FileViewFactory( "kdevfileview" ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class FileTreeWidget

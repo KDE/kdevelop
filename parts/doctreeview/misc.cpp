@@ -96,7 +96,7 @@ void DocTreeViewTool::getHiddenLibraries(QStringList *hiddenNames)
     KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     *hiddenNames = config->readListEntry("LibrariesHidden");
-};
+}
 
 
 void DocTreeViewTool::setHiddenLibraries(const QStringList &hiddenNames)
@@ -104,7 +104,7 @@ void DocTreeViewTool::setHiddenLibraries(const QStringList &hiddenNames)
     KConfig *config = instanceConfig();
     config->setGroup("DocTreeView");
     config->writeEntry("LibrariesHidden", hiddenNames);
-};
+}
 
 
 void DocTreeViewTool::getBookmarks(QStringList *itemNames, QStringList *fileNames)
@@ -113,7 +113,7 @@ void DocTreeViewTool::getBookmarks(QStringList *itemNames, QStringList *fileName
     config->setGroup("DocTreeView");
     *itemNames = config->readListEntry("BookmarksTitle");
     *fileNames = config->readListEntry("BookmarksURL");
-};
+}
 
 
 void DocTreeViewTool::setBookmarks(const QStringList &itemNames, const QStringList &fileNames)
@@ -122,7 +122,7 @@ void DocTreeViewTool::setBookmarks(const QStringList &itemNames, const QStringLi
     config->setGroup("DocTreeView");
     config->writeEntry("BookmarksTitle", itemNames);
     config->writeEntry("BookmarksURL", fileNames);
-};
+}
 
 void DocTreeViewTool::addBookmark(const QString& itemName, const QString & fileName)
 {

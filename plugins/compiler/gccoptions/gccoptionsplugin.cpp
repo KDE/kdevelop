@@ -24,7 +24,7 @@
 #include "flagboxes.h"
 #include "gccoptionsplugin.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevgccoptions, KGenericFactory<GccOptionsPlugin>( "kdevgccoptions" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevgccoptions, KGenericFactory<GccOptionsPlugin>( "kdevgccoptions" ) )
 
 class GeneralTab : public QWidget
 {

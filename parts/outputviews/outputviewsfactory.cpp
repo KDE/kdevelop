@@ -11,5 +11,5 @@
 
 #include "outputviewsfactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevoutputviews, OutputViewsFactory( "kdevoutputviews" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevoutputviews, OutputViewsFactory( "kdevoutputviews" ) )
 

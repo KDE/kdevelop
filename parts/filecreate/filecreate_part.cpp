@@ -44,7 +44,7 @@
 #include "fcconfigwidget.h"
 
 typedef KGenericFactory<FileCreatePart> FileCreateFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreate" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreate" ) )
 
 using namespace FileCreate;
 

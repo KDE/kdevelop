@@ -30,7 +30,7 @@ extern "C"
    {
       return new KChmPartFactory;
    }
-};
+}
 
 KInstance* KChmPartFactory::s_instance = 0L;
 KAboutData* KChmPartFactory::s_about = 0L;
@@ -38,7 +38,7 @@ KAboutData* KChmPartFactory::s_about = 0L;
 KChmPartFactory::KChmPartFactory( QObject* parent, const char* name )
    : KParts::Factory( parent, name )
 {
-};
+}
 
 KChmPartFactory::~KChmPartFactory()
 {

@@ -20,7 +20,7 @@
 
 
 typedef KGenericFactory<RegexpTestPart> RegexpTestFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevregexptest, RegexpTestFactory( "kdevregexptest" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevregexptest, RegexpTestFactory( "kdevregexptest" ) )
 
 RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("RegExpTest", "regexptest", parent, name ? name : "RegexpTestPart")

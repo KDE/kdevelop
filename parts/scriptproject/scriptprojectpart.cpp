@@ -35,7 +35,7 @@
 
 
 typedef KGenericFactory<ScriptProjectPart> ScriptProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( "kdevscriptproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevscriptproject, ScriptProjectFactory( "kdevscriptproject" ) )
 
 ScriptProjectPart::ScriptProjectPart(QObject *parent, const char *name, const QStringList &)
     : KDevProject("ScriptProject", "scriptproject", parent, name ? name : "ScriptProjectPart")

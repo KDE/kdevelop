@@ -15,7 +15,7 @@ namespace KParts
   class Factory;
   class PartManager;
   class ReadOnlyPart;
-};
+}
 
 class QTabWidget;
 class QPopupMenu;

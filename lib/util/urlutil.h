@@ -118,6 +118,6 @@ namespace URLUtil
      */
     QString envExpand ( const QString &variable );
 
-};
+}
 
 #endif

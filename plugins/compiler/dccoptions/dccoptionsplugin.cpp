@@ -19,7 +19,7 @@
 
 #include "optiontabs.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevdccoptions, KGenericFactory<DccOptionsPlugin>( "kdevdccoptions" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevdccoptions, KGenericFactory<DccOptionsPlugin>( "kdevdccoptions" ) )
 
 DccOptionsPlugin::DccOptionsPlugin(QObject *parent, const char *name, const QStringList/* &args*/)
     : KDevCompilerOptions(parent, name)

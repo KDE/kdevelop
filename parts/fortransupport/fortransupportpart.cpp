@@ -43,7 +43,7 @@
 
 
 typedef KGenericFactory<FortranSupportPart> FortranSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( "kdevfortransupport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfortransupport, FortranSupportFactory( "kdevfortransupport" ) )
 
 FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const QStringList &)
     : KDevLanguageSupport("FortranSupport", "fortran", parent, name ? name : "FortranSupportPart")

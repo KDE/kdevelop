@@ -41,7 +41,7 @@ struct PascalSupportPartData{
 };
 
 typedef KGenericFactory<PascalSupportPart> PascalSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpascalsupport, PascalSupportFactory( "kdevpascalsupport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevpascalsupport, PascalSupportFactory( "kdevpascalsupport" ) )
 
 PascalSupportPart::PascalSupportPart(QObject *parent, const char *name, const QStringList &)
   : KDevLanguageSupport("PascalSupport", "pascal", parent, name ? name : "KDevPascalSupport" ),

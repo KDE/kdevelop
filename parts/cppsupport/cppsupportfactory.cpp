@@ -13,7 +13,7 @@
 #include <kstandarddirs.h>
 #include "cppsupportfactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory );
+K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory )
 
 CppSupportFactory::CppSupportFactory()
     : KGenericFactory<CppSupportPart>( "kdevcppsupport" )

@@ -34,7 +34,7 @@
 #include "execcommand.h"
 
 typedef KGenericFactory<PerforcePart> PerforceFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( "kdevperforce" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevperforce, PerforceFactory( "kdevperforce" ) )
 
 PerforcePart::PerforcePart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin( "Perforce", "perforce", parent, name ? name : "PerforcePart" )

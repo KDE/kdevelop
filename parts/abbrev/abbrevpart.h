@@ -23,13 +23,13 @@ class KDialogBase;
 
 namespace KParts{
     class Part;
-};
+}
 
 namespace KTextEditor{
     class Document;
     class EditInterface;
     class ViewCursorInterface;
-};
+}
 
 struct CodeTemplate {
     QString description;

@@ -36,7 +36,7 @@
 #include "diffwidget.h"
 
 typedef KGenericFactory<DiffPart> DiffFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( "kdevdiff" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevdiff, DiffFactory( "kdevdiff" ) )
 
 DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
     : KDevDiffFrontend("Diff", "diff", parent, name ? name : "DiffPart"), proc(0)

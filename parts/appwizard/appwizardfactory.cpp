@@ -14,7 +14,7 @@
 
 #include "appwizardfactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevappwizard, AppWizardFactory );
+K_EXPORT_COMPONENT_FACTORY( libkdevappwizard, AppWizardFactory )
 
 AppWizardFactory::AppWizardFactory()
     : KGenericFactory<AppWizardPart>( "kdevappwizard" )

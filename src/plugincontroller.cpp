@@ -54,7 +54,7 @@ namespace
     }
     return 0;
   }
-};
+}
 
 PluginController *PluginController::s_instance = 0;
 

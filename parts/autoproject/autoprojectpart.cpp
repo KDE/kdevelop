@@ -90,7 +90,7 @@ This plugin starts a GBA binary with an emulator. -- <a href="mailto:smeier AT k
 
 */
 
-K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevautoproject, AutoProjectFactory( "kdevautoproject" ) )
 
 AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStringList &args)
     : KDevProject("AutoProject", "autoproject", parent, name ? name : "AutoProjectPart")

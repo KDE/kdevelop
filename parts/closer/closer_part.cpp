@@ -29,7 +29,7 @@
 
 
 typedef KGenericFactory<CloserPart> CloserFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcloser, CloserFactory( "kdevcloser" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevcloser, CloserFactory( "kdevcloser" ) )
 
 CloserPart::CloserPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin("Selected Window Closer", "closer", parent, name ? name : "closerPart" )

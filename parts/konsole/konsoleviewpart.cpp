@@ -23,7 +23,7 @@
 #include "konsoleviewwidget.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KGenericFactory<KonsoleViewPart>( "kdevkonsoleview" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KGenericFactory<KonsoleViewPart>( "kdevkonsoleview" ) )
 
 KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("Konsole", "konsole", parent, name ? name : "KonsoleViewPart")

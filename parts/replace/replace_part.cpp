@@ -25,7 +25,7 @@
 #include "replace_part.h"
 
 typedef KGenericFactory<ReplacePart> ReplaceFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevreplace, ReplaceFactory( "kdevreplace" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevreplace, ReplaceFactory( "kdevreplace" ) )
 
 ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
         : KDevPlugin( "Project Wide Replace", "", parent, name ? name : "ReplacePart" )

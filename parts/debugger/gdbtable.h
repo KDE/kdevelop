@@ -33,6 +33,6 @@ signals:
     void deletePressed();
 };
 
-};
+}
 
 #endif

@@ -40,7 +40,7 @@
 #include "adaglobaloptionsdlg.h"
 
 typedef KGenericFactory<AdaProjectPart> AdaProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevadaproject, AdaProjectFactory( "kdevadaproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevadaproject, AdaProjectFactory( "kdevadaproject" ) )
 
 AdaProjectPart::AdaProjectPart(QObject *parent, const char *name, const QStringList& )
     :KDevProject("AdaProject", "adaproject", parent, name ? name : "AdaProjectPart" )

@@ -61,7 +61,7 @@ namespace GDBDebugger
 {
 
 typedef KGenericFactory<DebuggerPart> DebuggerFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevdebugger, DebuggerFactory( "kdevdebugger" ) )
 
 DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList & ) :
     KDevPlugin( "CppDebugger", "debugger", parent, name ? name : "DebuggerPart" ),

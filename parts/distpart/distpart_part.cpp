@@ -14,7 +14,7 @@
 #include "lsmsupport.h"
 
 typedef KGenericFactory<DistpartPart> DistpartFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevdistpart, DistpartFactory( "kdevdistpart" ) )
 
 DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("Distribution", "dist", parent, name ? name : "DistpartPart") {

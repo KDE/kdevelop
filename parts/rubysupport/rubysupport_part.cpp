@@ -23,7 +23,7 @@
 #include "domutil.h"
 
 typedef KGenericFactory<RubySupportPart> RubySupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( "kdevrubysupport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevrubysupport, RubySupportFactory( "kdevrubysupport" ) )
 
 RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStringList& )
   : KDevLanguageSupport ("KDevPart", "kdevpart", parent, name ? name : "RubySupportPart" )

@@ -34,7 +34,7 @@
 #include <codemodel.h>
 
 typedef KGenericFactory<BashSupportPart> BashSupportFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevbashsupport, BashSupportFactory( "kdevbashsupport" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevbashsupport, BashSupportFactory( "kdevbashsupport" ) )
 
 BashSupportPart::BashSupportPart(QObject *parent, const char *name, const QStringList& )
 : KDevLanguageSupport ("KDevPart", "kdevpart", parent, name ? name : "BashSupportPart" )

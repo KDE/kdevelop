@@ -22,7 +22,7 @@
 #include "fullscreen_part.h"
 
 typedef KGenericFactory<FullScreenPart> FullScreenFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfullscreen, FullScreenFactory( "kdevfullscreen" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfullscreen, FullScreenFactory( "kdevfullscreen" ) )
 
 FullScreenPart::FullScreenPart(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "FullScreenPart" )

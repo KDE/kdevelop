@@ -13,7 +13,7 @@
 #include <kstandarddirs.h>
 #include "javasupportfactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevjavasupport, JavaSupportFactory );
+K_EXPORT_COMPONENT_FACTORY( libkdevjavasupport, JavaSupportFactory )
 
 JavaSupportFactory::JavaSupportFactory()
     : KGenericFactory<JavaSupportPart>( "kdevjavasupport" )

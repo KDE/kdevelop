@@ -49,6 +49,6 @@ void GDBTable::keyPressEvent( QKeyEvent * e )
     QTable::keyPressEvent(e);
 }
 
-};
+}
 
 #include "gdbtable.moc"

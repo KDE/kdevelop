@@ -55,7 +55,7 @@
 #include <ktexteditor/clipboardinterface.h>
 
 typedef KGenericFactory<ClassViewPart> ClassViewFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) )
 
 ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin("ClassView", "classview", parent, name ? name : "ClassViewPart" ), sync(false)

@@ -34,7 +34,7 @@
 #include <kdevproject.h>
 
 typedef KGenericFactory<QuickOpenPart> QuickOpenFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( "kdevquickopen" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( "kdevquickopen" ) )
 
 QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "QuickOpenPart" )

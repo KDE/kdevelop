@@ -27,7 +27,7 @@
 #include "fileselector_part.h"
 
 typedef KGenericFactory<FileSelectorPart> FileSelectorFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevfileselector, FileSelectorFactory( "kdevfileselector" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfileselector, FileSelectorFactory( "kdevfileselector" ) )
 
 FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("FileSelector", "fileselector", parent, name ? name : "FileSelectorPart")

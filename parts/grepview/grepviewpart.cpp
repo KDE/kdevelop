@@ -25,7 +25,7 @@
 #include "grepviewwidget.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevgrepview, GrepViewFactory( "kdevgrepview" ) )
 
 GrepViewPart::GrepViewPart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin( "GrepView", "grep", parent, name ? name : "GrepViewPart" )

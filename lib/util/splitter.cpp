@@ -271,7 +271,7 @@ SplitterBar::SplitterBar(QWidget *parent, const char *name)
     setFixedHeight(fontMetrics().lineSpacing()+2);
 
     offset = 0;
-};
+}
 
 
 SplitterBar::~SplitterBar()

@@ -31,7 +31,7 @@
 
 
 typedef KGenericFactory<AntProjectPart> AntProjectFactory;
-K_EXPORT_COMPONENT_FACTORY(libkdevantproject, AntProjectFactory("kdevantproject"));
+K_EXPORT_COMPONENT_FACTORY(libkdevantproject, AntProjectFactory("kdevantproject"))
 
 
 AntOptions::AntOptions()

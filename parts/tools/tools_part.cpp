@@ -30,7 +30,7 @@
 #include "toolsconfigwidget.h"
 
 
-K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( "kdevtools" ) )
 
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin( "Tools", "tools", parent, name ? name : "ToolsPart")

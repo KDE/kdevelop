@@ -52,7 +52,7 @@ public:
     }
 };
 
-K_EXPORT_COMPONENT_FACTORY( libkdevabbrev, AbbrevFactory );
+K_EXPORT_COMPONENT_FACTORY( libkdevabbrev, AbbrevFactory )
 
 AbbrevPart::AbbrevPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("Abbrev", "abbrev", parent, name ? name : "AbbrevPart")

@@ -19,7 +19,7 @@
 using namespace VisualBoyAdvance;
 
 typedef KGenericFactory<VisualBoyAdvancePart> VisualBoyAdvanceFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevvisualboyadvance, VisualBoyAdvanceFactory( "kdevvisualboyadvance" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevvisualboyadvance, VisualBoyAdvanceFactory( "kdevvisualboyadvance" ) )
   
 VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("VisualBoyAdvance", "vbadvance", parent, name){

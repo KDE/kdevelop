@@ -19,7 +19,7 @@
 
 
 typedef KGenericFactory<TipOfDayPart> TipOfDayFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevtipofday, TipOfDayFactory( "kdevtipofday" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevtipofday, TipOfDayFactory( "kdevtipofday" ) )
 
 TipOfDayPart::TipOfDayPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("TopOfDay", "tipofday", parent, name ? name : "TipOfDayPart")

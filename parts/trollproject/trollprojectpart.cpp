@@ -45,7 +45,7 @@
 
 
 typedef KGenericFactory<TrollProjectPart> TrollProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( "kdevtrollproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevtrollproject, TrollProjectFactory( "kdevtrollproject" ) )
 
 TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStringList& args )
     : KDevProject("TrollProject", "trollproject", parent, name ? name : "TrollProjectPart")

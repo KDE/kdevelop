@@ -13,7 +13,7 @@
 #include <kstandarddirs.h>
 #include "doctreeviewfactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevdoctreeview, DocTreeViewFactory );
+K_EXPORT_COMPONENT_FACTORY( libkdevdoctreeview, DocTreeViewFactory )
 
 DocTreeViewFactory::DocTreeViewFactory()
     : KGenericFactory<DocTreeViewPart>( "kdevdoctreeview" )

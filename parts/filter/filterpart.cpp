@@ -25,7 +25,7 @@
 #include "shellinsertdlg.h"
 #include "kdevfilteriface.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevfilter, FilterFactory( "kdevfilter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevfilter, FilterFactory( "kdevfilter" ) )
 
 FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("Filter", "filter", parent, name ? name : "FilterPart")

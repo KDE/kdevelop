@@ -42,7 +42,7 @@
 namespace JAVADebugger
 {
 
-K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) )
 
 JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStringList &)
     : KDevPlugin("JavaDebugger", "debugger", parent, name ? name : "JavaDebuggerPart"),

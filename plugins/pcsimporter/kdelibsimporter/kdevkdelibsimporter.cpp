@@ -21,7 +21,7 @@
 #include <qdir.h>
 #include <qcombobox.h>
 
-K_EXPORT_COMPONENT_FACTORY( libkdevkdelibsimporter, KGenericFactory<KDevKDELibsImporter>( "kdevkdelibsimporter" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevkdelibsimporter, KGenericFactory<KDevKDELibsImporter>( "kdevkdelibsimporter" ) )
 
 KDevKDELibsImporter::KDevKDELibsImporter( QObject * parent, const char * name, const QStringList& )
     : KDevPCSImporter( parent, name )

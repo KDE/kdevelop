@@ -14,7 +14,7 @@
 #include "kdevcore.h"
 
 
-K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KGenericFactory<OpenWithPart>("kdevopenwith"));
+K_EXPORT_COMPONENT_FACTORY(libkdevopenwith, KGenericFactory<OpenWithPart>("kdevopenwith"))
 
 OpenWithPart::OpenWithPart(QObject *parent, const char *name, const QStringList &)
   : KDevPlugin("OpenWith", "openwith", parent, name ? name : "OpenWithPart")

@@ -46,7 +46,7 @@
 #include "pascalglobaloptionsdlg.h"
 
 typedef KGenericFactory<PascalProjectPart> PascalProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevpascalproject, PascalProjectFactory( "kdevpascalproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevpascalproject, PascalProjectFactory( "kdevpascalproject" ) )
 
 PascalProjectPart::PascalProjectPart(QObject *parent, const char *name, const QStringList& )
     :KDevProject("PascalProject", "pascalproject", parent, name ? name : "PascalProjectPart" )

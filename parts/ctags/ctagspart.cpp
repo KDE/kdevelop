@@ -32,7 +32,7 @@
 
 
 typedef KGenericFactory<CTagsPart> CTagsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevctags, CTagsFactory( "kdevctags" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevctags, CTagsFactory( "kdevctags" ) )
 
 CTagsPart::CTagsPart( QObject *parent, const char *name, const QStringList & )
     : KDevPlugin("CTags", "ctags", parent, name ? name : "CTagsPart")

@@ -83,18 +83,6 @@
 #include <urlutil.h>
 #include <config.h>
 
-#if defined(__GLIBC__)
-#include <malloc.h>
-void showMemUsage()
-{
-    struct mallinfo mi = mallinfo();
-    kdDebug(9013) << "Mem usage: " << mi.uordblks << endl;
-}
-#else
-void showMemUsage()
-{}
-#endif
-
 enum { KDEV_DB_VERSION = 3 };
 enum { KDEV_PCS_VERSION = 2 };
 

@@ -45,7 +45,7 @@ inline QString QDomDocument_toString(QDomDocument & cQDomDocument, int indent )
 #endif // Qt<3.1.0
 
 typedef KGenericFactory<GenericProjectPart> GenericProjectFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevgenericproject, GenericProjectFactory( "kdevgenericproject" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevgenericproject, GenericProjectFactory( "kdevgenericproject" ) )
 
 GenericProjectPart::GenericProjectPart(QObject *parent, const char *name, const QStringList& )
     : KDevProject("KDevPart", "kdevpart", parent, name ? name : "GenericProjectPart" )

@@ -30,7 +30,7 @@
 
 
 typedef KGenericFactory<BookmarksPart> BookmarksFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( "kdevbookmarks" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevbookmarks, BookmarksFactory( "kdevbookmarks" ) )
 
 BookmarksPart::BookmarksPart(QObject *parent, const char *name, const QStringList& )
 	: KDevPlugin("bookmarks", "bookmarks", parent, name ? name : "BookmarksPart" )

@@ -80,7 +80,7 @@ bool g_projectWasJustCreated = false;
 ///////////////////////////////////////////////////////////////////////////////
 
 typedef KGenericFactory<CvsServicePart> CvsFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( "kdevcvsservice" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevcvsservice, CvsFactory( "kdevcvsservice" ) )
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CvsServicePart

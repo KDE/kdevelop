@@ -44,7 +44,7 @@ namespace KTextEditor
     class EditInterface;
     class SelectionInterface;
     class ViewCursorInterface;
-};
+}
 
 class JavaSupportPart : public KDevLanguageSupport
 {

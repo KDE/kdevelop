@@ -16,7 +16,7 @@
 
 #include "projectconfigurationwidget.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkdevbuildscript, KGenericFactory<ShellScriptBuildSystem>( "kdevbuildscript" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevbuildscript, KGenericFactory<ShellScriptBuildSystem>( "kdevbuildscript" ) )
 
 ShellScriptBuildSystem::ShellScriptBuildSystem(QObject *parent, const char *name, const QStringList )
  : KDevBuildSystem(parent, name)

@@ -32,7 +32,7 @@
 #include "kdevmainwindow.h"
 
 typedef KGenericFactory<ClearcasePart> ClearcaseFactory;
-K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( "kdevclearcase" ) );
+K_EXPORT_COMPONENT_FACTORY( libkdevclearcase, ClearcaseFactory( "kdevclearcase" ) )
 
 ClearcasePart::ClearcasePart( QObject *parent, const char *name, const QStringList & )
         : KDevPlugin( "Clearcase", "clearcase", parent, name ? name : "ClearcasePart" ),
