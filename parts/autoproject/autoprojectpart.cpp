@@ -46,7 +46,7 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
 
     KAction *action;
 
-    action = new KAction( i18n("&Build project"), Key_F9,
+    action = new KAction( i18n("&Build project"), Key_F8,
                           this, SLOT(slotBuild()),
                           actionCollection(), "project_build" );
     
@@ -54,6 +54,10 @@ AutoProjectPart::AutoProjectPart(KDevApi *api, bool kde, QObject *parent, const 
                           this, SLOT(slotClean()),
                           actionCollection(), "project_clean" );
     
+    action = new KAction( i18n("&Distclean"), 0,
+                          this, SLOT(slotDistClean()),
+                          actionCollection(), "project_distclean" );
+
     action = new KAction( i18n("Run automake & friends"), 0,
                           this, SLOT(slotMakefilecvs()),
                           actionCollection(), "project_makefilecvs" );
@@ -173,9 +177,25 @@ void AutoProjectPart::slotClean()
 }
 
 
+void AutoProjectPart::slotDistClean()
+{
+    startMakeCommand(projectDirectory(), QString::fromLatin1("distclean"));
+}
+
+
 void AutoProjectPart::slotMakefilecvs()
 {
     QString cmdline = "make -f Makefile.cvs";
+    QFileInfo fi(projectDirectory() + "/Makefile.cvs");
+    if (!fi.exists()) {
+        fi.setFile(projectDirectory() + "/autogen.sh");
+        if (!fi.exists()) {
+            KMessageBox::sorry(m_widget, i18n("There is neither a Makefile.cvs file nor an "
+                                              "autogen.sh script in the project directory"));
+            return;
+            cmdline = "autogen.sh";
+        }
+    }
 
     QString dircmd = "cd ";
     dircmd += projectDirectory();

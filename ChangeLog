@@ -3,6 +3,11 @@
 	* phpsupport: configuration handling now in PHPConfigData
 	* phpsupport: web and shell invocation works now 
 
+2001-06-14  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Implemented distclean
+	* Support for autogen.sh in addition to Makefile.cvs
+
 2001-06-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Rewritten Add target dialog. Supports additional
