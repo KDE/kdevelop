@@ -144,6 +144,9 @@ void VarTree::slotRightButtonClicked( QListViewItem* selectedItem,
                                       const QPoint &,
                                       int)
 {
+  if (!selectedItem)
+    return;
+
   setSelected (selectedItem, true);    // Need to select this item.
   if (selectedItem->parent())
   {
