@@ -624,7 +624,9 @@ void ProjectConfigurationDlg::updateIncludeControl()
 
           for(;it!=incList.end();++it)
           {
-            if((*it).find(tmpInc)>=0){
+             // we need an exact, case sensitive match here
+            if ((*it).contains(tmpInc, true) && ((*it).length() == tmpInc.length())) 
+            {            
               incList.remove(it);
               newItem->setOn(true);
               it=incList.begin();
