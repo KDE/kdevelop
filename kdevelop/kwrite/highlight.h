@@ -1,4 +1,6 @@
 /*
+  $Id$
+
    Copyright (C) 1998, 1999 Jochen Wilhelmy
                             digisnap@cs.tu-berlin.de
 
@@ -32,14 +34,14 @@
 class TextLine;
 class Attribute;
 
-bool testWw(char c); //whole word check: false for '_','0'-'9','A'-'Z','a'-'z'
+bool isInWord(QChar); //true for '_','0'-'9','A'-'Z','a'-'z'
 
 class HlItem {
   public:
     HlItem(int attribute, int context);
-    virtual bool startEnable(char) {return true;}
-    virtual bool endEnable(char) {return true;}
-    virtual const char *checkHgl(const char *) = 0;
+    virtual bool startEnable(QChar) {return true;}
+    virtual bool endEnable(QChar) {return true;}
+    virtual const QChar *checkHgl(const QChar *) = 0;
     int attr;
     int ctx;
 };
@@ -47,152 +49,153 @@ class HlItem {
 class HlItemWw : public HlItem {
   public:
     HlItemWw(int attribute, int context);
-    virtual bool startEnable(char c) {return testWw(c);}
-    virtual bool endEnable(char c) {return testWw(c);}
+    virtual bool startEnable(QChar c) {return !isInWord(c);}
+    virtual bool endEnable(QChar c) {return !isInWord(c);}
 };
 
 
 class HlCharDetect : public HlItem {
   public:
-    HlCharDetect(int attribute, int context, char);
-    virtual const char *checkHgl(const char *);
+    HlCharDetect(int attribute, int context, QChar);
+    virtual const QChar *checkHgl(const QChar *);
   protected:
-    char sChar;
+    QChar sChar;
 };
 
 class Hl2CharDetect : public HlItem {
   public:
-    Hl2CharDetect(int attribute, int context, const char *);
-    virtual const char *checkHgl(const char *);
+    Hl2CharDetect(int attribute, int context,  QChar ch1, QChar ch2);
+    virtual const QChar *checkHgl(const QChar *);
   protected:
-    char sChar[2];
+    QChar sChar1;
+    QChar sChar2;
 };
 
 class HlStringDetect : public HlItem {
   public:
-    HlStringDetect(int attribute, int context, const char *);
+    HlStringDetect(int attribute, int context, const QString &);
     virtual ~HlStringDetect();
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
   protected:
-    char *str;
-    int len;
+    const QString str;
 };
 
 class HlRangeDetect : public HlItem {
   public:
-    HlRangeDetect(int attribute, int context, const char *);
-    virtual const char *checkHgl(const char *);
+    HlRangeDetect(int attribute, int context, QChar ch1, QChar ch2);
+    virtual const QChar *checkHgl(const QChar *);
   protected:
-    char sChar[2];
+    QChar sChar1;
+    QChar sChar2;
 };
 
-
+/*
 class KeywordData {
   public:
-    KeywordData(const char *);
+    KeywordData(const QString &);
     ~KeywordData();
     char *s;
     int len;
 };
-
+*/
 class HlKeyword : public HlItemWw {
   public:
     HlKeyword(int attribute, int context);
     virtual ~HlKeyword();
-    void addWord(const char *);
+    void addWord(const QString &);
     void addList(const char **);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
   protected:
-    QList<KeywordData> words;
+    QStringList words;
 };
 
 class HlInt : public HlItemWw {
   public:
     HlInt(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlFloat : public HlItemWw {
   public:
     HlFloat(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlCInt : public HlInt {
   public:
     HlCInt(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlCOct : public HlItemWw {
   public:
     HlCOct(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlCHex : public HlItemWw {
   public:
     HlCHex(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlCFloat : public HlFloat {
   public:
     HlCFloat(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlLineContinue : public HlItem {
   public:
     HlLineContinue(int attribute, int context);
-    virtual bool endEnable(char c) {return c == '\0';}
-    virtual const char *checkHgl(const char *);
+    virtual bool endEnable(QChar c) {return c == '\0';}
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlCStringChar : public HlItem {
   public:
     HlCStringChar(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlCChar : public HlItemWw {
   public:
     HlCChar(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlCPrep : public HlItem {
   public:
     HlCPrep(int attribute, int context);
-    virtual bool startEnable(char c) {return c == '\0';}
-    virtual const char *checkHgl(const char *);
+    virtual bool startEnable(QChar c) {return c == '\0';}
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlHtmlTag : public HlItem {
   public:
     HlHtmlTag(int attribute, int context);
-    virtual bool startEnable(char c) {return c == '<';}
-    virtual const char *checkHgl(const char *);
+    virtual bool startEnable(QChar c) {return c == '<';}
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlHtmlValue : public HlItem {
   public:
     HlHtmlValue(int attribute, int context);
-    virtual bool startEnable(char c) {return c == '=';}
-    virtual const char *checkHgl(const char *);
+    virtual bool startEnable(QChar c) {return c == '=';}
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlShellComment : public HlCharDetect {
   public:
     HlShellComment(int attribute, int context);
-    virtual bool startEnable(char c) {return testWw(c);}
+    virtual bool startEnable(QChar c) {return !isInWord(c);}
 };
 
 //modula 2 hex
 class HlMHex : public HlItemWw {
   public:
     HlMHex(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 
@@ -200,89 +203,89 @@ class HlMHex : public HlItemWw {
 class HlAdaDec : public HlItemWw {
   public:
     HlAdaDec(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 //ada base n
 class HlAdaBaseN : public HlItemWw {
   public:
     HlAdaBaseN(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 //ada float
 class HlAdaFloat : public HlItemWw {
   public:
     HlAdaFloat(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
-//ada char
+//ada character
 class HlAdaChar : public HlItemWw {
   public:
     HlAdaChar(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlSatherClassname : public HlItemWw {
   public:
     HlSatherClassname(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlSatherIdent : public HlItemWw {
   public:
     HlSatherIdent(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlSatherDec : public HlItemWw {
   public:
     HlSatherDec(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlSatherBaseN : public HlItemWw {
   public:
     HlSatherBaseN(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlSatherFloat : public HlItemWw {
   public:
     HlSatherFloat(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlSatherChar : public HlItemWw {
   public:
     HlSatherChar(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlSatherString : public HlItemWw {
   public:
     HlSatherString(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlLatexTag : public HlItem {
   public:
     HlLatexTag(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlLatexChar : public HlItem {
   public:
     HlLatexChar(int attribute, int context);
-    virtual const char *checkHgl(const char *);
+    virtual const QChar *checkHgl(const QChar *);
 };
 
 class HlLatexParam : public HlItem {
   public:
     HlLatexParam(int attribute, int context);
-    virtual const char *checkHgl(const char *);
-    virtual bool endEnable(char c) {return testWw(c);}
+    virtual const QChar *checkHgl(const QChar *);
+    virtual bool endEnable(QChar c) {return !isInWord(c);}
 };
 
 //--------
@@ -308,7 +311,7 @@ class ItemFont {
   public:
     ItemFont();
 //    ItemFont(const ItemFont &);
-//    ItemFont(const char *family, int size, const char *charset);
+//    ItemFont(const QString & family, int size, const char *charset);
 //    void setData(const ItemFont &);
     QString family;
     int size;
@@ -318,8 +321,8 @@ class ItemFont {
 //Item Properties: name, Item Style, Item Font
 class ItemData : public ItemStyle, public ItemFont {
   public:
-    ItemData(const char *name, int defStyleNum);
-    ItemData(const char *name, int defStyleNum,
+    ItemData(const QString &name, int defStyleNum);
+    ItemData(const QString &name, int defStyleNum,
       const QColor&, const QColor&, bool bold, bool italic);
 
     QString name;
@@ -332,7 +335,7 @@ typedef QList<ItemData> ItemDataList;
 
 class HlData {
   public:
-    HlData(const char *wildcards, const char *mimetypes);
+    HlData(const QString &wildcards, const QString &mimetypes);
     ItemDataList itemDataList;
     QString wildcards;
     QString mimetypes;
@@ -346,22 +349,22 @@ class KConfig;
 class Highlight {
     friend HlManager;
   public:
-    Highlight(const char *name);
+    Highlight(const QString &name);
     virtual ~Highlight();
     KConfig *getKConfig();
-    void getWildcards(QString &);
-    void getMimetypes(QString &);
+    QString getWildcards();
+    QString getMimetypes();
     HlData *getData();
     void setData(HlData *);
     void getItemDataList(ItemDataList &);
     virtual void getItemDataList(ItemDataList &, KConfig *);
     virtual void setItemDataList(ItemDataList &, KConfig *);
-    const char *name();
-//    const char *extensions();
-//    const char *mimetypes();
+    QString name() {return iName;}
+//    QString extensions();
+//    QString mimetypes();
     void use();
     void release();
-    virtual bool isInWord(char c) {return !testWw(c);}
+    virtual bool isInWord(QChar c) {return ::isInWord(c);}
     virtual int doHighlight(int ctxNum, TextLine *textLine);
   protected:
     virtual void createItemData(ItemDataList &);
@@ -369,9 +372,8 @@ class Highlight {
     virtual void done();
 
     QString iName;
-    QString dw;
-    QString dm;
-//    QString iMimetypes;
+    QString iWildcards;
+    QString iMimetypes;
     int refCount;
 };
 
@@ -387,13 +389,14 @@ class HlContext {
 
 class GenHighlight : public Highlight {
   public:
-    GenHighlight(const char *name);
+    GenHighlight(const QString &name);
 
     virtual int doHighlight(int ctxNum, TextLine *);
   protected:
     virtual void makeContextList() = 0;
     virtual void init();
     virtual void done();
+
     static const int nContexts = 32;
     HlContext *contextList[nContexts];
 };
@@ -402,7 +405,7 @@ class GenHighlight : public Highlight {
 
 class CHighlight : public GenHighlight {
   public:
-    CHighlight(const char *name);
+    CHighlight(const QString &name);
     virtual ~CHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -412,7 +415,7 @@ class CHighlight : public GenHighlight {
 
 class CppHighlight : public CHighlight {
   public:
-    CppHighlight(const char *name);
+    CppHighlight(const QString &name);
     virtual ~CppHighlight();
   protected:
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
@@ -420,7 +423,7 @@ class CppHighlight : public CHighlight {
 
 class IdlHighlight : public CHighlight {
   public:
-    IdlHighlight(const char *name);
+    IdlHighlight(const QString &name);
     virtual ~IdlHighlight();
   protected:
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
@@ -428,7 +431,7 @@ class IdlHighlight : public CHighlight {
 
 class JavaHighlight : public CHighlight {
   public:
-    JavaHighlight(const char *name);
+    JavaHighlight(const QString &name);
     virtual ~JavaHighlight();
   protected:
     virtual void setKeywords(HlKeyword *keyword, HlKeyword *dataType);
@@ -436,7 +439,7 @@ class JavaHighlight : public CHighlight {
 
 class HtmlHighlight : public GenHighlight {
   public:
-    HtmlHighlight(const char *name);
+    HtmlHighlight(const QString &name);
     virtual ~HtmlHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -445,7 +448,7 @@ class HtmlHighlight : public GenHighlight {
 
 class BashHighlight : public GenHighlight {
   public:
-    BashHighlight(const char *name);
+    BashHighlight(const QString &name);
     virtual ~BashHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -454,7 +457,7 @@ class BashHighlight : public GenHighlight {
 
 class ModulaHighlight : public GenHighlight {
   public:
-    ModulaHighlight(const char *name);
+    ModulaHighlight(const QString &name);
     virtual ~ModulaHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -463,7 +466,7 @@ class ModulaHighlight : public GenHighlight {
 
 class AdaHighlight : public GenHighlight {
   public:
-    AdaHighlight(const char *name);
+    AdaHighlight(const QString &name);
     virtual ~AdaHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -472,7 +475,7 @@ class AdaHighlight : public GenHighlight {
 
 class PythonHighlight : public GenHighlight {
   public:
-    PythonHighlight(const char *name);
+    PythonHighlight(const QString &name);
     virtual ~PythonHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -481,7 +484,7 @@ class PythonHighlight : public GenHighlight {
 
 class PerlHighlight : public Highlight {
   public:
-    PerlHighlight(const char *name);
+    PerlHighlight(const QString &name);
 
     virtual int doHighlight(int ctxNum, TextLine *);
   protected:
@@ -493,7 +496,7 @@ class PerlHighlight : public Highlight {
 
 class SatherHighlight : public GenHighlight {
   public:
-    SatherHighlight(const char *name);
+    SatherHighlight(const QString &name);
     virtual ~SatherHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -502,7 +505,7 @@ class SatherHighlight : public GenHighlight {
 
 class LatexHighlight : public GenHighlight {
   public:
-    LatexHighlight(const char *name);
+    LatexHighlight(const QString &name);
     virtual ~LatexHighlight();
   protected:
     virtual void createItemData(ItemDataList &);
@@ -519,21 +522,21 @@ class HlManager : public QObject {
 
     Highlight *getHl(int n);
     int defaultHl();
-    int nameFind(const char *name);
+    int nameFind(const QString &name);
     
-    int wildcardFind(const char *fileName);
-    int mimeFind(const char *contents, int len, const char *fname);
+    int wildcardFind(const QString &fileName);
+    int mimeFind(const QString &contents, int len, const QString &fname);
     int findHl(Highlight *h) {return hlList.find(h);}
     
     void makeAttribs(Highlight *, Attribute *, int n);
 
     int defaultStyles();
-    const char *defaultStyleName(int n);
+    QString defaultStyleName(int n);
     void getDefaults(ItemStyleList &, ItemFont &);
     void setDefaults(ItemStyleList &, ItemFont &);
 
     int highlights();
-    const char *hlName(int n);
+    QString hlName(int n);
     void getHlDataList(HlDataList &);
     void setHlDataList(HlDataList &);
   signals:
@@ -567,9 +570,9 @@ class FontChanger : public QObject {
     FontChanger(QWidget *parent, int x, int y);
     void setRef(ItemFont *);
   protected slots:
-    void familyChanged(const char *);
+    void familyChanged(const QString &);
     void sizeChanged(int);
-    void charsetChanged(const char *);
+    void charsetChanged(const QString &);
   protected:
     void displayCharsets();
     ItemFont *font;

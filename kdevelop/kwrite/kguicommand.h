@@ -327,7 +327,7 @@ class KGuiCmdPopupItem : public QObject {
    public slots:
      void setAccel(const QString &);
    protected:
-     KGuiCmdPopup *popup; // pointer to host popup menu
+     KGuiCmdPopup *popup;
      QMenuItem *menuItem;
 };
 
@@ -346,11 +346,11 @@ class KGuiCmdPopup : public QPopupMenu {
         automatically
     */
     int addCommand(int catNum, int cmdNum, int id = -1, int index = -1);
-    int addCommand(int catNum, int cmdNum, const QPixmap &pixmap,
+    int addCommand(int catNum, int cmdNum, QPixmap &pixmap,
       int id = -1, int index = -1);
     int addCommand(int catNum, int cmdNum, const QObject *receiver,
       const char *member, int id = -1, int index = -1);
-    int addCommand(int catNum, int cmdNum, const QPixmap &pixmap,
+    int addCommand(int catNum, int cmdNum, QPixmap &pixmap,
       const QObject *receiver, const char *member, int id = -1, int index = -1);
 
     /** Sets the text. changeItem() removes the accelerator string, so don't

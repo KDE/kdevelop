@@ -83,8 +83,9 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_dispatcher->setEnabled(false);
 
   kdlg_menubar=new KMenuBar(this,"KDlg_menubar");
-  QPixmap pix;
+  QPixmap pixmap;
   QString  path;
+  KIconLoader *loader = KGlobal::iconLoader();
 
   ///////////////////////////////////////////////////////////////////
   // File-menu entries
@@ -104,12 +105,17 @@ void CKDevelop::initKDlgMenuBar(){
   // Edit-menu entries
 
   kdlg_edit_menu = new KGuiCmdPopup(kdev_dispatcher);//new QPopupMenu;
-  kdlg_edit_menu->addCommand(ctEditCommands, cmUndo, BarIcon("undo"), kdlgedit, SLOT(slotEditUndo()), ID_KDLG_EDIT_UNDO);
-  kdlg_edit_menu->addCommand(ctEditCommands, cmRedo, BarIcon("redo"), kdlgedit, SLOT(slotEditRedo()), ID_KDLG_EDIT_REDO);
+  pixmap = loader->loadIcon("undo");
+  kdlg_edit_menu->addCommand(ctEditCommands, cmUndo, pixmap, kdlgedit, SLOT(slotEditUndo()), ID_KDLG_EDIT_UNDO);
+  pixmap = loader->loadIcon("redo");
+  kdlg_edit_menu->addCommand(ctEditCommands, cmRedo, pixmap, kdlgedit, SLOT(slotEditRedo()), ID_KDLG_EDIT_REDO);
   kdlg_edit_menu->insertSeparator();
-  kdlg_edit_menu->addCommand(ctEditCommands, cmCut, BarIcon("cut"), kdlgedit, SLOT(slotEditCut()), ID_KDLG_EDIT_CUT);
-  kdlg_edit_menu->addCommand(ctEditCommands, cmCopy, BarIcon("copy"), kdlgedit, SLOT(slotEditCopy()), ID_KDLG_EDIT_COPY);
-  kdlg_edit_menu->addCommand(ctEditCommands, cmPaste, BarIcon("paste"), kdlgedit, SLOT(slotEditPaste()), ID_KDLG_EDIT_PASTE);
+  pixmap = loader->loadIcon("cut");
+  kdlg_edit_menu->addCommand(ctEditCommands, cmCut,pixmap, kdlgedit, SLOT(slotEditCut()), ID_KDLG_EDIT_CUT);
+  pixmap = loader->loadIcon("copy");
+  kdlg_edit_menu->addCommand(ctEditCommands, cmCopy,pixmap, kdlgedit, SLOT(slotEditCopy()), ID_KDLG_EDIT_COPY);
+  pixmap = loader->loadIcon("paste");
+  kdlg_edit_menu->addCommand(ctEditCommands, cmPaste, pixmap, kdlgedit, SLOT(slotEditPaste()), ID_KDLG_EDIT_PASTE);
   kdlg_edit_menu->insertSeparator();
   kdlg_edit_menu->insertItem(BarIcon("delete"), i18n("&Delete"), kdlgedit, SLOT(slotEditDelete()), 0, ID_KDLG_EDIT_DELETE);
 

@@ -1,4 +1,6 @@
 /*
+  $Id$
+
    Copyright (C) 1998, 1999 Jochen Wilhelmy
                             digisnap@cs.tu-berlin.de
 
@@ -21,69 +23,88 @@
 #ifndef _KWVIEV_H_
 #define _KWVIEV_H_
 
+#define i18nop // a no-operation i18n()
+
+#include <list>
+
 #include <qscrollbar.h>
 #include <qiodevice.h>
 #include <qpopupmenu.h>
 #include <qkeycode.h>
+#include <qintdict.h>
+#include <qstring.h>
+#include <qdropsite.h>
+#include <qdragobject.h>
 
 #include <kconfig.h>
-#include <kio_job.h>
+#include <kspell.h>
+#include <ksconfig.h>
 
-#include "kwdialog.h"
 #include "kguicommand.h"
 
 class KWriteDoc;
 class Highlight;
 
 //search flags
-const int sfCaseSensitive   = 1;
-const int sfWholeWords      = 2;
-const int sfFromCursor      = 4;
-const int sfBackward        = 8;
-const int sfSelected        = 16;
-const int sfPrompt          = 32;
-const int sfReplace         = 64;
-const int sfAgain           = 128;
-const int sfWrapped         = 256;
-const int sfFinished        = 512;
+const int sfCaseSensitive     = 1;
+const int sfWholeWords        = 2;
+const int sfFromCursor        = 4;
+const int sfBackward          = 8;
+const int sfSelected          = 16;
+const int sfPrompt            = 32;
+const int sfReplace           = 64;
+const int sfAgain             = 128;
+const int sfWrapped           = 256;
+const int sfFinished          = 512;
 //dialog results
-const int srYes             = QDialog::Accepted;
-const int srNo              = 10;
-const int srAll             = 11;
-const int srCancel          = QDialog::Rejected;
+const int srYes               = QDialog::Accepted;
+const int srNo                = 10;
+const int srAll               = 11;
+const int srCancel            = QDialog::Rejected;
 
 //config flags
-const int cfAutoIndent      = 1;
-const int cfBackspaceIndent = 2;
-const int cfWordWrap        = 4;
-const int cfReplaceTabs     = 8;
-const int cfRemoveSpaces    = 16;
-const int cfWrapCursor      = 32;
-const int cfAutoBrackets    = 64;
+const int cfAutoIndent        = 0x1;
+const int cfBackspaceIndents  = 0x2;
+const int cfTabIndents        = 0x80000;
+const int cfKeepIndentProfile = 0x8000;
+const int cfKeepExtraSpaces   = 0x10000;
 
-const int cfPersistent      = 128;
-const int cfKeepSelection   = 256;
-const int cfVerticalSelect  = 512;
-const int cfDelOnInput      = 1024;
-const int cfXorSelect       = 2048;
+const int cfPersistent        = 0x80;
+const int cfKeepSelection     = 0x100;
+const int cfVerticalSelect    = 0x200;
+const int cfDelOnInput        = 0x400;
+const int cfXorSelect         = 0x800;
+const int cfMouseAutoCopy     = 0x20000;
+const int cfSingleSelection   = 0x40000;
 
-const int cfOvr             = 4096;
-const int cfMark            = 8192;
+const int cfWordWrap          = 0x4;
+const int cfReplaceTabs       = 0x8;
+const int cfRemoveSpaces      = 0x10;
+const int cfAutoBrackets      = 0x40;
+const int cfGroupUndo         = 0x4000;
+const int cfWrapCursor        = 0x20;
+const int cfPageUDMovesCursor = 0x100000;
+
+const int cfOvr               = 0x1000;
+const int cfMark              = 0x2000;
+
+
+
 
 //update flags
-const int ufDocGeometry     = 1;
-const int ufUpdateOnScroll  = 2;
-const int ufPos             = 4;
+const int ufDocGeometry       = 1;
+const int ufUpdateOnScroll    = 2;
+const int ufPos               = 4;
 
 //load flags
-const int lfInsert          = 1;
-const int lfNewFile         = 2;
-const int lfNoAutoHl        = 4;
+const int lfInsert            = 1;
+const int lfNewFile           = 2;
+const int lfNoAutoHl          = 4;
 
 //end of line settings
-const int eolUnix           = 0;
-const int eolMacintosh      = 1;
-const int eolDos            = 2;
+const int eolUnix             = 0;
+const int eolMacintosh        = 1;
+const int eolDos              = 2;
 
 //command categories
 const int ctCursorCommands    = 0;
@@ -93,55 +114,56 @@ const int ctBookmarkCommands  = 3;
 const int ctStateCommands     = 4;
 
 //cursor movement commands
-const int selectFlag        = 0x100000;
-const int multiSelectFlag   = 0x200000;
-const int cmLeft            = 1;
-const int cmRight           = 2;
-const int cmWordLeft        = 3;
-const int cmWordRight       = 4;
-const int cmHome            = 5;
-const int cmEnd             = 6;
-const int cmUp              = 7;
-const int cmDown            = 8;
-const int cmScrollUp        = 9;
-const int cmScrollDown      = 10;
-const int cmTopOfView       = 11;
-const int cmBottomOfView    = 12;
-const int cmPageUp          = 13;
-const int cmPageDown        = 14;
-const int cmCursorPageUp    = 15;
-const int cmCursorPageDown  = 16;
-const int cmTop             = 17;
-const int cmBottom          = 18;
+const int selectFlag          = 0x100000;
+const int multiSelectFlag     = 0x200000;
+const int cmLeft              = 1;
+const int cmRight             = 2;
+const int cmWordLeft          = 3;
+const int cmWordRight         = 4;
+const int cmHome              = 5;
+const int cmEnd               = 6;
+const int cmUp                = 7;
+const int cmDown              = 8;
+const int cmScrollUp          = 9;
+const int cmScrollDown        = 10;
+const int cmTopOfView         = 11;
+const int cmBottomOfView      = 12;
+const int cmPageUp            = 13;
+const int cmPageDown          = 14;
+const int cmCursorPageUp      = 15;
+const int cmCursorPageDown    = 16;
+const int cmTop               = 17;
+const int cmBottom            = 18;
 //edit commands
-const int cmReturn          = 1;
-const int cmDelete          = 2;
-const int cmBackspace       = 3;
-const int cmKillLine        = 4;
-const int cmUndo            = 5;
-const int cmRedo            = 6;
-const int cmCut             = 7;
-const int cmCopy            = 8;
-const int cmPaste           = 9;
-const int cmIndent          = 10;
-const int cmUnindent        = 11;
-const int cmSelectAll       = 12;
-const int cmDeselectAll     = 13;
-const int cmInvertSelection = 14;
+const int cmReturn            = 1;
+const int cmDelete            = 2;
+const int cmBackspace         = 3;
+const int cmKillLine          = 4;
+const int cmUndo              = 5;
+const int cmRedo              = 6;
+const int cmCut               = 7;
+const int cmCopy              = 8;
+const int cmPaste             = 9;
+const int cmIndent            = 10;
+const int cmUnindent          = 11;
+const int cmCleanIndent       = 12;
+const int cmSelectAll         = 13;
+const int cmDeselectAll       = 14;
+const int cmInvertSelection   = 15;
 //find commands
-const int cmFind            = 1;
-const int cmReplace         = 2;
-const int cmFindAgain       = 3;
-const int cmGotoLine        = 4;
+const int cmFind              = 1;
+const int cmReplace           = 2;
+const int cmFindAgain         = 3;
+const int cmGotoLine          = 4;
 //bookmark commands
-const int cmSetBookmark     = 1;
-const int cmAddBookmark     = 2;
-const int cmClearBookmarks  = 3;
-const int cmSetBookmarks    = 10;
-const int cmGotoBookmarks   = 20;
+const int cmSetBookmark       = 1;
+const int cmAddBookmark       = 2;
+const int cmClearBookmarks    = 3;
+const int cmSetBookmarks      = 10;
+const int cmGotoBookmarks     = 20;
 //state commands
-const int cmToggleInsert    = 1;
-const int cmToggleVertical  = 2;
+const int cmToggleInsert      = 1;
+const int cmToggleVertical    = 2;
 
 
 void resizeBuffer(void *user, int w, int h);
@@ -184,7 +206,10 @@ class KWriteView : public QWidget {
     friend KWriteDoc;
     friend KWrite;
   public:
-    KWriteView(KWrite *, KWriteDoc *);
+    // a drop-aware container should set HandleOwnURIDrops = false and handle all URI drops
+    // KWriteView will otherwise handle URI drops, but is slightly limited
+    // KWriteView always handles text drops
+    KWriteView(KWrite *, KWriteDoc *, bool HandleOwnURIDrops);
     ~KWriteView();
 
     virtual void doCursorCommand(VConfig &, int cmdNum);
@@ -220,6 +245,7 @@ class KWriteView : public QWidget {
     void delLine(int line);
     void updateCursor();
     void updateCursor(PointStruc &newCursor);
+    void updateCursor(PointStruc &newCursor, int flags);
 
     void lineValues(int h);
     void tagLines(int start, int end, int x1, int x2);
@@ -233,7 +259,7 @@ class KWriteView : public QWidget {
     void paintCursor();
     void paintBracketMark();
 
-    void placeCursor(int x, int y, int flags);
+    void placeCursor(int x, int y, int flags = 0);
 
     virtual void focusInEvent(QFocusEvent *);
     virtual void focusOutEvent(QFocusEvent *);
@@ -245,6 +271,11 @@ class KWriteView : public QWidget {
     virtual void paintEvent(QPaintEvent *);
     virtual void resizeEvent(QResizeEvent *);
     virtual void timerEvent(QTimerEvent *);
+
+    virtual void dragEnterEvent( QDragEnterEvent * );
+//  virtual void dragMoveEvent( QDragMoveEvent * );
+//  virtual void dragLeaveEvent( QDragLeaveEvent * );
+    virtual void dropEvent( QDropEvent * );
 
     KWrite *kWrite;
     KWriteDoc *kWriteDoc;
@@ -280,6 +311,13 @@ class KWriteView : public QWidget {
     QPixmap *drawBuffer;
 
     BracketMark bm;
+
+    bool HandleURIDrops;
+
+  signals:
+    // emitted when KWriteView is not handling its own URI drops
+    void dropEventPass(QDropEvent*);
+
 };
 
 class KWBookmark {
@@ -301,9 +339,11 @@ class KWrite : public QWidget {
     friend KWriteView;
     friend KWriteDoc;
   public:
-    /** The document can be used by more than one KWrite objects
+    /** The document can be used by more than one KWrite objects.
+        HandleOwnURIDrops should be set to false for a container that can handle URI drops
+        better than KWriteView does.
     */
-    KWrite(KWriteDoc *, QWidget *parent = 0L, const char *name = 0L);
+    KWrite(KWriteDoc *, QWidget *parent = 0L, const QString &name = QString::null, bool HandleOwnURIDrops = true);
     /** The destructor does not delete the document
     */
     ~KWrite();
@@ -314,7 +354,7 @@ class KWrite : public QWidget {
     static void addBookmarkCommands(KGuiCmdManager &);
     static void addStateCommands(KGuiCmdManager &);
 
-//status functions
+//status and config functions
     /** Returns the current line number, that is the line the cursor is on.
         For the first line it returns 0. Signal newCurPos() is emitted on
         cursor position changes.
@@ -332,14 +372,28 @@ class KWrite : public QWidget {
     void setCursorPosition(int line, int col);
     /** Returns the config flags. See the cfXXX constants in the .h file.
     */
-    int config();
+    int config() {return configFlags;}
     /** Sets the config flags
     */
     void setConfig(int);
+
+    int wordWrapAt() {return wrapAt;}
+    void setWordWrapAt(int at) {wrapAt = at;}
+    int tabWidth();
+    void setTabWidth(int);
+    int undoSteps();
+    void setUndoSteps(int);
+
   //    bool isOverwriteMode();
+    /** Returns true if the document is in read only mode.
+    */
+    bool isReadOnly();
     /** Returns true if the document has been modified.
     */
     bool isModified();
+    /** Sets the read-only flag of the document
+    */
+    void setReadOnly(bool);
     /** Sets the modification status of the document
     */
     void setModified(bool m = true);
@@ -349,15 +403,38 @@ class KWrite : public QWidget {
     /** Returns the document object
     */
     KWriteDoc *doc();
+    /** Returns the view object
+    */
+    KWriteView *view();
     /** Bit 0 : undo possible, Bit 1 : redo possible.
         Used to enable/disable undo/redo menu items and toolbar buttons
     */
     int undoState();
+    /** Returns the type of the next undo group.
+    */
+    int nextUndoType();
+    /** Returns the type of the next redo group.
+    */
+    int nextRedoType();
+    /** Returns a list of all available undo types, in undo order.
+    */
+    void undoTypeList(std::list<int> &lst);
+    /** Returns a list of all available redo types, in redo order.
+    */
+    void redoTypeList(std::list<int> &lst);
+    /** Returns a short text description of the given undo type,
+        which is obtained with nextUndoType(), nextRedoType(), undoTypeList(), and redoTypeList(),
+        suitable for display in a menu entry.  It is not translated;
+        use i18n() before displaying this string.
+    */
+    QString undoTypeName(int undoType);
+
     void copySettings(KWrite *);
+
   public slots:
     /** Presents a options dialog to the user
     */
-    void optDlg();
+//    void optDlg();
     /** Presents a color dialog to the user
     */
     void colDlg();
@@ -391,10 +468,18 @@ class KWrite : public QWidget {
     void fileChanged();
     /** Emits messages for the status line
     */
-    void statusMsg(const char *);
+    void statusMsg(const QString &);
   protected:
     int configFlags;
     int wrapAt;
+
+    /*
+     * The source, the destination of the copy, and the flags
+     * for each job being run (job id is the dict key).
+     */
+    QIntDict <QString> m_sNet;
+    QIntDict <QString> m_sLocal;
+    QIntDict <int> m_flags; 
 
 //text access
   public:
@@ -419,21 +504,21 @@ class KWrite : public QWidget {
      QString word(int x, int y);
      /** Discard old text without warning and set new text
      */
-     void setText(const char *);
+     void setText(const QString &);
      /** Insert text at the current cursor position. If length is a positive
          number, it restricts the number of inserted characters
      */
-     void insertText(const char *, int len = -1);
+     void insertText(const QString &);
      /** Queries if there is marked text
      */
      bool hasMarkedText();
      /** Gets the marked text as string
      */
      QString markedText();
-     int tabWidth();
+
 //url aware file functions
   public:
-    enum fileAction{GET, PUT}; //tells us what kind of job kwrite is waiting for
+//    enum fileAction{GET, PUT}; //tells us what kind of job kwrite is waiting for
     enum fileResult{OK, CANCEL, RETRY, ERROR};
     /** Loads a file from the given QIODevice. For insert = false the old
         contents will be lost.
@@ -444,30 +529,32 @@ class KWrite : public QWidget {
     void writeFile(QIODevice &);
     /** Loads the file given in name into the editor
     */
-    bool loadFile(const char *name, int flags = 0);
+    bool loadFile(const QString &name, int flags = 0);
     /** Saves the file as given in name
     */
-    bool writeFile(const char *name);
+    bool writeFile(const QString &name);
     /** Loads the file given in url into the editor.
         See the lfXXX constants in the .h file.
     */
-    void loadURL(const char *url, int flags = 0);
+    void loadURL(const QString &url, int flags = 0);
     /** Saves the file as given in url
     */
-    void writeURL(const char *url, int flags = 0);
+    void writeURL(const QString &url, int flags = 0);
   protected slots:
-    void kfmFinished();
-    void kfmError(int, const char *);
+      /// Gets signals from iojob
+    void slotGETFinished( int id );
+    void slotPUTFinished( int id ); 
+    void slotIOJobError(int, const char *);
   public:
     /** Returns true if the document has a filename (not counting the path).
     */
     bool hasFileName();
     /** Returns the URL of the currnet file
     */
-    const char *fileName();
+    const QString fileName();
     /** Set the file name. This starts the automatic highlight selection.
     */
-    void setFileName(const char *);
+    void setFileName(const QString &);
     /** Mainly for internal use. Returns true if the current document can be
         discarded. If the document is modified, the user is asked if he wants
         to save it. On "cancel" the function returns false.
@@ -499,11 +586,11 @@ class KWrite : public QWidget {
     */
     fileResult saveAs();
   protected:
-    KIOJob *kfm;
-    QString kfmURL;
-    QString kfmFile;
-    fileAction kfmAction;
-    int kfmFlags;
+//    KFM *kfm;
+//    QString kfmURL;
+//    QString kfmFile;
+//    fileAction kfmAction;
+//    int kfmFlags;
 
 //command processors
   public slots:
@@ -535,12 +622,26 @@ class KWrite : public QWidget {
     /** Repeats an operation which has been undone before.
     */
     void redo() {doEditCommand(cmRedo);}
+    /** Undoes <count> operations.
+        Called by slot undo().
+    */
+    void undoMultiple(int count);
+    /** Repeats <count> operation which have been undone before.
+        Called by slot redo().
+    */
+    void redoMultiple(int count);
+    /** Displays the undo history dialog
+    */
+    void undoHistory();
     /** Moves the current line or the selection one position to the right
     */
-    void indent() {doEditCommand(cmIndent);}
+//    void indent();
     /** Moves the current line or the selection one position to the left
     */
-    void unIndent() {doEditCommand(cmUnindent);}
+//    void unIndent();
+    /** Optimizes the selected indentation, replacing tabs and spaces as needed
+    */
+//    void cleanIndent();
     /** Selects all text
     */
     void selectAll() {doEditCommand(cmSelectAll);}
@@ -549,7 +650,7 @@ class KWrite : public QWidget {
     void deselectAll() {doEditCommand(cmDeselectAll);}
     /** Inverts the current selection
     */
-    void invertSelection() {doEditCommand(cmInvertSelection);}
+//    void invertSelection();
 
 //search/replace functions
   public slots:
@@ -578,9 +679,8 @@ class KWrite : public QWidget {
   protected slots:
     void replaceSlot();
   protected:
-    QStrList searchForList;
-//    QString replaceWith;
-    QStrList replaceWithList;
+    QStringList searchForList;
+    QStringList replaceWithList;
     int searchFlags;
     int replaces;
     SConfig s;
@@ -673,12 +773,47 @@ class KWrite : public QWidget {
 
 //internal
   protected:
-//    virtual void keyPressEvent(QKeyEvent *);
     virtual void paintEvent(QPaintEvent *);
     virtual void resizeEvent(QResizeEvent *);
 
     KWriteView *kWriteView;
     KWriteDoc *kWriteDoc;
+
+//spell checker
+  public:
+    /**
+     * Returns the KSpellConfig object
+     */
+    KSpellConfig *ksConfig(void) {return ksc;}
+    /**
+     * Sets the KSpellConfig object.  (The object is
+     *  copied internally.)
+     */
+    void setKSConfig (const KSpellConfig _ksc) {*ksc=_ksc;}
+
+  public slots:    //please keep prototypes and implementations in same order
+    void spellcheck();
+    void spellcheck2(KSpell*);
+    void misspelling (QString word, QStrList *, unsigned pos);
+    void corrected (QString originalword, QString newword, unsigned pos);
+    void spellResult (const char *newtext);
+    void spellCleanDone();
+  signals:
+    /** This says spellchecking is <i>percent</i> done.
+      */
+    void  spellcheck_progress (unsigned int percent);
+    /** Emitted when spellcheck is complete.
+     */
+    void spellcheck_done ();
+
+  protected:
+    KSpell *kspell;
+    KSpellConfig *ksc;
+    QString spell_tmptext;
+    bool kspellon;
+    int kspellMispellCount;
+    int kspellReplaceCount;
+    bool kspellPristine;       // doing spell check on a clean document?
 };
 
 

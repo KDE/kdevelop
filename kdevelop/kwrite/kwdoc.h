@@ -1,4 +1,6 @@
 /*
+  $Id$
+
    Copyright (C) 1998, 1999 Jochen Wilhelmy
                             digisnap@cs.tu-berlin.de
 
@@ -21,6 +23,7 @@
 #ifndef _KWDOC_H_
 #define _KWDOC_H_
 
+#include <list>
 
 #include <qobject.h>
 #include <qlist.h>
@@ -35,7 +38,8 @@
     text, an attribute for each character, an attribute for the free space
     behind the last character and a context number for the syntax highlight.
     The attribute stores the index to a table that contains fonts and colors
-    and also if a character is selected
+    and also if a character is selected.
+The text will be changed from char * to QChar *
 */
 class TextLine {
   public:
@@ -44,42 +48,26 @@ class TextLine {
     */
     TextLine(int attribute = 0, int context = 0);
     ~TextLine();
-    /** Moves the contents of the text line beginning at the given position by
-        the given offset. If the position is behind the end, spaces are added
-    */
-    void move(int pos, int offs);
-    /** Inserts text at the given position. If the text line is shorter than
-        the position it is filled up with spaces
-    */
-    void insert(int pos, const char *, int l);
-    /** Overwrites text at the given position. If the text line is shorter than
-        the position it is filled up with spaces. The new text also can extend
-        the text line
-    */
-    void overwrite(int pos, const char *, int l);
-    /** Appends a character to the textline
-    */
-    void append(char, int n = 1);
-    /** Appends a string of length l to the textline
-    */
-    void append(const char *s, int l) {insert(len, s, l);}
-    /** Deletes text at the given position and length. Nothing happens if the
-        area to delete is behind the end
-    */
-    void del(int pos, int l = 1);
+
     /** Returns the length
     */
-    int length() const;
-    /** Sets the length. If the text line was shorter, spaces are added
+    int length() const {return len;}
+    /** Universal text manipulation method. It can be used to insert, delete
+        or replace text.
     */
-    void setLength(int l);
+    void replace(int pos, int delLen, const QChar *insText, int insLen,
+      uchar *insAttribs = 0L);
+
+    /** Appends a string of length l to the textline
+    */
+    void append(const QChar *s, int l) {replace(len, 0, s, l);}
     /** Wraps the text from the given position to the end to the next line
     */
     void wrap(TextLine *nextLine, int pos);
-    /** Wraps the text from the beginning of the next line to the position to
-        this line
+    /** Wraps the text of given length from the beginning of the next line to
+        this line at the given position
     */
-    void unWrap(TextLine *nextLine, int pos);
+    void unWrap(int pos, TextLine *nextLine, int len);
     /** Removes trailing spaces
     */
     void removeSpaces();
@@ -88,7 +76,7 @@ class TextLine {
     int firstChar() const;
     /** Gets the char at the given position
     */
-    char getChar(int pos) const;
+    QChar getChar(int pos) const;
 
     /** Sets the attributes from start to end -1
     */
@@ -119,10 +107,10 @@ class TextLine {
 
     /** Gets a C-like null terminated string
     */
-    const char *getString();
+    const QChar *getString();
     /** Gets the text. WARNING: it is not null terminated
     */
-    const char *getText() const;
+    const QChar *getText() const;
 
     /** Sets the select state from start to end -1
     */
@@ -152,13 +140,13 @@ class TextLine {
     int findSelected(int pos) const;
     /** Finds the next unselected character, starting at the given position
     */
-    int findUnSelected(int pos) const;
+    int findUnselected(int pos) const;
     /** Finds the previous selected character, starting at the given position
     */
     int findRevSelected(int pos) const;
     /** Finds the previous unselected character, starting at the given position
     */
-    int findRevUnSelected(int pos) const;
+    int findRevUnselected(int pos) const;
 
     /** Returns the x position of the cursor at the given position, which
         depends on the number of tab characters
@@ -173,28 +161,21 @@ class TextLine {
     void unmarkFound();
 
   protected:
-    /** Ensures that the text line has at least the given size. To speed this
-        up, resize() aligns the size so that many calls to resize() do not
-        lead to a memory reallocation. FIXME: at the moment the size can only
-        grow
-    */
-    void resize(int);
-
     /** Length of the text line
     */
     int len;
     /** Memory Size of the text line
     */
     int size;
-    /** The text
+    /** The text *)
     */
-    char *text;
+    QChar *text;
     /** The attributes
     */
-    unsigned char *attribs;
+    uchar *attribs;
     /** The attribute of the free space behind the end
     */
-    unsigned char attr;
+    uchar attr;
     /** The syntax highlight context
     */
     int ctx;
@@ -214,6 +195,11 @@ class Attribute {
     void setFont(const QFont &);
     QFont font;
     QFontMetrics fm;
+    //workaround for slow QFontMetrics::width()
+    int width(QChar c) {return (fontWidth < 0) ? fm.width(c) : fontWidth;}
+    int width(QString s) {return (fontWidth < 0) ? fm.width(s) : s.length()*fontWidth;}
+  protected:
+    int fontWidth;
 };
 
 class KWAction {
@@ -221,26 +207,42 @@ class KWAction {
     enum Action {replace, wordWrap, wordUnWrap, newLine, delLine,
       insLine, killLine};//, doubleLine, removeLine};
 
-    KWAction(Action, PointStruc &aCursor);
-    ~KWAction();
-    void setData(int aLen, const char *aText, int aTextLen);
+    KWAction(Action, PointStruc &cursor, int len = 0,
+      const QString &text = QString::null);
+
     Action action;
     PointStruc cursor;
     int len;
-    const char *text;
-    int textLen;
+    QString text;
     KWAction *next;
 };
 
 class KWActionGroup {
   public:
-    KWActionGroup(PointStruc &aStart);
+    // the undo group types
+    enum {  ugNone,         //
+            ugPaste,        // paste
+            ugDelBlock,     // delete/replace selected text
+            ugIndent,       // indent
+            ugUnindent,     // unindent
+            ugReplace,      // text search/replace
+            ugSpell,        // spell check
+            ugInsChar,      // char type/deleting
+            ugDelChar,      // ''  ''
+            ugInsLine,      // line insert/delete
+            ugDelLine       // ''  ''
+         };
+
+    KWActionGroup(PointStruc &aStart, int type = ugNone);
     ~KWActionGroup();
     void insertAction(KWAction *);
+
+    static QString typeName(int type);
 
     PointStruc start;
     PointStruc end;
     KWAction *action;
+    int undoType;
 };
 
 /** The text document. It contains the textlines, controls the
@@ -257,7 +259,7 @@ class KWriteDoc : QObject {
     friend KWrite;
 
   public:
-    KWriteDoc(HlManager *, const char *path = 0L);
+    KWriteDoc(HlManager *, const QString &path = QString::null);
     ~KWriteDoc();
 
     /** gets the number of lines */
@@ -278,27 +280,25 @@ class KWriteDoc : QObject {
     void removeView(KWriteView *);
 
     int currentColumn(PointStruc &cursor);
-    void wordLeft(PointStruc &cursor);
-    void wordRight(PointStruc &cursor);
 
-    void insert(VConfig &, const char *, int len = -1);
+    void insert(VConfig &, const QString &);
     void insertFile(VConfig &, QIODevice &);
     void loadFile(QIODevice &);
     void writeFile(QIODevice &);
 
-    void insertChar(VConfig &, char);
+    bool insertChars(VConfig &, const QString &chars);
     void newLine(VConfig &);
     void killLine(VConfig &);
     void backspace(VConfig &);
     void del(VConfig &);
 
-
+    Highlight *getHighlight() {return highlight;}
   protected slots:
     void clipboardChanged();
     void hlChanged();
 
   public:
-    int getHighlight() {return hlManager->findHl(highlight);}
+    int getHighlightNum() {return hlManager->findHl(highlight);}
   protected:
     void setHighlight(int n);
     void makeAttribs();
@@ -312,7 +312,7 @@ class KWriteDoc : QObject {
     int textWidth(PointStruc &cursor);
     int textWidth(bool wrapCursor, PointStruc &cursor, int xPos);
     int textPos(TextLine *, int xPos);
-    int textPos(TextLine *, int xPos, int &newXPos);
+//    int textPos(TextLine *, int xPos, int &newXPos);
 
     int textWidth();
     int textHeight();
@@ -330,25 +330,28 @@ class KWriteDoc : QObject {
 
     QString text();
     QString getWord(PointStruc &cursor);
-    void setText(const char *);
+    void setText(const QString &);
     bool hasMarkedText() {return (selectEnd >= selectStart);}
     QString markedText(int flags);
-    void delMarkedText(VConfig &);
+    void delMarkedText(VConfig &/*, bool undo = true*/);
 
     QColor &cursorCol(int x, int y);
     void paintTextLine(QPainter &, int line, int xStart, int xEnd);
     void printTextLine(QPainter &, int line, int xEnd, int y);
 
+    void setReadOnly(bool);
+    bool isReadOnly();
     void setModified(bool);
-//    bool isModified();
+    bool isModified();
+
     bool isLastView(int numViews);
 
     bool hasFileName();
-    const char *fileName();
-    void setFileName(const char *);
+    const QString fileName();
+    void setFileName(const QString&);
     void clearFileName();
 
-    bool doSearch(SConfig &s, const char *searchFor);
+    bool doSearch(SConfig &s, const QString &searchFor);
     void unmarkFound();
     void markFound(PointStruc &cursor, int len);
 
@@ -358,7 +361,7 @@ class KWriteDoc : QObject {
     void optimizeSelection();
     
     void doAction(KWAction *);
-    const char *doReplace(KWAction *);
+    void doReplace(KWAction *);
     void doWordWrap(KWAction *);
     void doWordUnWrap(KWAction *);
     void doNewLine(KWAction *);
@@ -366,21 +369,41 @@ class KWriteDoc : QObject {
     void doInsLine(KWAction *);
     void doKillLine(KWAction *);
     void newUndo();
-    void recordStart(PointStruc &, bool keepModal = false);
+
+    void recordStart(VConfig &, int newUndoType);
+    void recordStart(KWriteView *, PointStruc &, int flags, int newUndoType,
+      bool keepModal = false, bool mergeUndo = false);
     void recordAction(KWAction::Action, PointStruc &);
-    void recordReplace(PointStruc &, int len, const char *text = 0L, int textLen = 0);
+    void recordInsert(PointStruc &, const QString &text);
+    void recordDelete(PointStruc &, int len);
+    void recordReplace(PointStruc &, int len, const QString &text);
     void recordEnd(VConfig &);
     void recordEnd(KWriteView *, PointStruc &, int flags);
-    void doActionGroup(KWActionGroup *, int flags);
-    void undo(VConfig &);
-    void redo(VConfig &);
+//  void recordReset();
+    void doActionGroup(KWActionGroup *, int flags, bool undo = false);
+    int nextUndoType();
+    int nextRedoType();
+    void undoTypeList(std::list<int> &lst);
+    void redoTypeList(std::list<int> &lst);
+    void undo(VConfig &, int count = 1);
+    void redo(VConfig &, int count = 1);
+    void clearRedo();
     void setUndoSteps(int steps);
+
 
     void setPseudoModal(QWidget *);
 
-    void indent(VConfig &);
-    void unIndent(VConfig &);
-  void newBracketMark(PointStruc &, BracketMark &);
+    void indent(VConfig &c) {doIndent(c, 1);}
+    void unIndent(VConfig &c) {doIndent(c, -1);}
+    void cleanIndent(VConfig &c) {doIndent(c, 0);}
+    // called by indent/unIndent/cleanIndent
+    // just does some setup and then calls optimizeLeadingSpace()
+    void doIndent(VConfig &, int change);
+    // optimize leading whitespace on a single line - see kwdoc.cpp for full description
+//    bool optimizeLeadingSpace(VConfig &, TextLine *, int, bool);
+    void optimizeLeadingSpace(int line, int flags, int change);
+
+    void newBracketMark(PointStruc &, BracketMark &);
 
     QList<TextLine> contents;
     QColor colors[5];
@@ -408,6 +431,7 @@ class KWriteDoc : QObject {
     int selectEnd;
     bool oldMarkState;
 
+    bool readOnly;
     bool modified;
     QString fName;
 
@@ -420,7 +444,12 @@ class KWriteDoc : QObject {
     int tagStart;
     int tagEnd;
 
-    QWidget *pseudoModal;
+//    int undoType;           // what kind of undo is active
+    int undoCount;          //counts merged undo steps
+//    bool undoReported;      // true if the current undo has been reported to the views
+//    KWriteView* undoView;   // the KWriteView that owns the undo group
+
+    QWidget *pseudoModal;   //the replace prompt is pseudo modal
 };
 
 #endif //KWDOC_H

@@ -86,7 +86,10 @@ public: // Selection related methods
   void copyText()                 { KWrite::copy(); }
 
   /** Inverts the current selection. */
-  void invertSelection()          { KWrite::invertSelection(); }
+  void invertSelection()          {
+      #warning FIXME KWrite
+// KWrite::invertSelection(); 
+}
 
   /** Deselects all text. */
   void deselectAll()              { KWrite::deselectAll(); }
@@ -110,12 +113,19 @@ public: // Indent methods
   /** Moves the current line or the selection one position to the 
    * right
    */
-  void indent()                   { KWrite::indent(); }
+  void indent()                   { 
+#warning FIXME KWrite
+//KWrite::indent(); 
+}
 
   /** Moves the current line or the selection one position to the 
    * left
    */
-  void unIndent()                 { KWrite::unIndent(); }
+
+      void unIndent()                 { 
+#warning FIXME KWrite
+//KWrite::unIndent(); 
+}
 
 public: // Queries
 

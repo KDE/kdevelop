@@ -1,4 +1,6 @@
 /*
+  $Id$
+
    Copyright (C) 1998, 1999 Jochen Wilhelmy
                             digisnap@cs.tu-berlin.de
 
@@ -20,26 +22,28 @@
 
 #include <string.h>
 
-#include <qnamespace.h>
+//#include <qcombobox.h>
 #include <qgroupbox.h>
 #include <qtextstream.h>
 #include <qregexp.h>
 #include <qfile.h>
 
 #include <kapp.h>
+#include <kconfig.h>
+#include <kglobal.h>
 #include <kfontdialog.h>
 #include <kcharsets.h>
-#include <kglobal.h>
-#include <kstddirs.h>
+#include <kmimemagic.h>
+#include <klocale.h>
 
 #include <X11/Xlib.h> //used in getXFontList()
 
 #include "highlight.h"
 #include "kwdoc.h"
-#include "kmimemagic.h"
+#include <kstddirs.h>
 
-//colors with Qt-scope do not work with Qt 1.42
-//#define Qt
+// general rule for keywords: if one keyword contains another at the beginning,
+// the long one has to come first (eg. "const_cast", "const")
 
 // ISO/IEC 9899:1990 (aka ANSI C)
 // "interrupt" isn´t an ANSI keyword, but an extension of some C compilers
@@ -70,14 +74,13 @@ const char *cppTypes[] = {
   "bool", "wchar_t", "mutable", 0L};
 
 const char *idlKeywords[] = {
-  "module", "interface", "struct", "case", "enum", "typedef", "signal", "slot",
+  "module", "interface", "struct", "case", "enum", "typedef","signal", "slot",
   "attribute", "readonly", "context", "oneway", "union", "in", "out", "inout",
   0L};
 
 const char *idlTypes[] = {
   "long", "short", "unsigned", "double", "octet", "sequence", "char", "wchar",
   "string", "wstring", "any", "fixed", "Object", "void", "boolean", 0L};
-
 
 const char *javaKeywords[] = {
   "abstract", "break", "case", "cast", "catch", "class", "continue",
@@ -148,10 +151,6 @@ const char *satherSpecFeatureNames[] = {
   "minus","mod","negate","not","plus","pow","times", 0L};
 
 
-//char cEscapeChars[] = "abefnrtv\"\'\\";
-//char perlEscapeChars[] = "tnrfbaeluLUEQ";
-
-
 char fontSizes[] = {4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,22,24,26,28,32,48,64,0};
 
 //default item style indexes
@@ -167,10 +166,11 @@ const int dsComment = 8;
 const int dsOthers = 9;
 
 
-bool testWw(char c) {
-  static char data[] = {0,0,0,0,0,0,255,3,254,255,255,135,254,255,255,7};
+bool isInWord(QChar ch) {
+  return ch.isLetter() || ch.isNumber() || ch == '_';
+/*  static unsigned char data[] = {0,0,0,0,0,0,255,3,254,255,255,135,254,255,255,7};
   if (c & 128) return false;
-  return !(data[c >> 3] & (1 << (c & 7)));
+  return !(data[c >> 3] & (1 << (c & 7)));*/
 }
 
 
@@ -183,60 +183,56 @@ HlItemWw::HlItemWw(int attribute, int context)
 }
 
 
-HlCharDetect::HlCharDetect(int attribute, int context, char c)
+HlCharDetect::HlCharDetect(int attribute, int context, QChar c)
   : HlItem(attribute,context), sChar(c) {
 }
 
-const char *HlCharDetect::checkHgl(const char *str) {
+const QChar *HlCharDetect::checkHgl(const QChar *str) {
   if (*str == sChar) return str + 1;
   return 0L;
 }
 
-Hl2CharDetect::Hl2CharDetect(int attribute, int context, const char *s)
+Hl2CharDetect::Hl2CharDetect(int attribute, int context, QChar ch1, QChar ch2)
   : HlItem(attribute,context) {
-  sChar[0] = s[0];
-  sChar[1] = s[1];
+  sChar1 = ch1;
+  sChar2 = ch2;
 }
 
-const char *Hl2CharDetect::checkHgl(const char *str) {
-  if (str[0] == sChar[0] && str[1] == sChar[1]) return str + 2;
+const QChar *Hl2CharDetect::checkHgl(const QChar *str) {
+  if (str[0] == sChar1 && str[1] == sChar2) return str + 2;
   return 0L;
 }
 
-HlStringDetect::HlStringDetect(int attribute, int context, const char *s)
-  : HlItem(attribute,context) {
-  len = strlen(s);
-  str = new char[len];
-  memcpy(str,s,len);
+HlStringDetect::HlStringDetect(int attribute, int context, const QString &s)
+  : HlItem(attribute, context), str(s) {
 }
 
 HlStringDetect::~HlStringDetect() {
-  delete str;
 }
 
-const char *HlStringDetect::checkHgl(const char *s) {
-  if (memcmp(s,str,len) == 0) return s + len;
+const QChar *HlStringDetect::checkHgl(const QChar *s) {
+  if (memcmp(s, str.unicode(), str.length()*sizeof(QChar)) == 0) return s + str.length();
   return 0L;
 }
 
-HlRangeDetect::HlRangeDetect(int attribute, int context, const char *s)
+HlRangeDetect::HlRangeDetect(int attribute, int context, QChar ch1, QChar ch2)
   : HlItem(attribute,context) {
-  sChar[0] = s[0];
-  sChar[1] = s[1];
+  sChar1 = ch1;
+  sChar2 = ch2;
 }
 
-const char *HlRangeDetect::checkHgl(const char *s) {
-  if (*s == sChar[0]) {
+const QChar *HlRangeDetect::checkHgl(const QChar *s) {
+  if (*s == sChar1) {
     do {
       s++;
-      if (!*s) return 0L;
-    } while (*s != sChar[1]);
+      if (*s == '\0') return 0L;
+    } while (*s != sChar2);
     return s + 1;
   }
   return 0L;
 }
 
-
+/*
 KeywordData::KeywordData(const char *str) {
   len = strlen(str);
   s = new char[len];
@@ -246,39 +242,36 @@ KeywordData::KeywordData(const char *str) {
 KeywordData::~KeywordData() {
   delete s;
 }
-
+*/
 HlKeyword::HlKeyword(int attribute, int context)
   : HlItemWw(attribute,context) {
-  words.setAutoDelete(true);
+//  words.setAutoDelete(true);
 }
 
 HlKeyword::~HlKeyword() {
 }
 
 
-void HlKeyword::addWord(const char *s) {
-  KeywordData *word;
-  word = new KeywordData(s);
+void HlKeyword::addWord(const QString &word) {
+//  KeywordData *word;
+//  word = new KeywordData(s);
   words.append(word);
 }
 
 void HlKeyword::addList(const char **list) {
 
   while (*list) {
-    addWord(*list);
+    words.append(*list);
+//    addWord(*list);
     list++;
   }
 }
 
-const char *HlKeyword::checkHgl(const char *s) {
-  int z, count;
-  KeywordData *word;
-
-  count = words.count();
-  for (z = 0; z < count; z++) {
-    word = words.at(z);
-    if (memcmp(s,word->s,word->len) == 0) {
-      return s + word->len;
+const QChar *HlKeyword::checkHgl(const QChar *s) {
+    
+  for (QStringList::Iterator it = words.begin(); it != words.end(); ++it) {
+    if (memcmp(s, (*it).unicode(), (*it).length()*sizeof(QChar)) == 0) {
+      return s + (*it).length();
     }
   }
   return 0L;
@@ -289,8 +282,8 @@ HlInt::HlInt(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlInt::checkHgl(const char *str) {
-  const char *s;
+const QChar *HlInt::checkHgl(const QChar *str) {
+  const QChar *s;
 
   s = str;
   while (*s >= '0' && *s <= '9') s++;
@@ -302,7 +295,7 @@ HlFloat::HlFloat(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlFloat::checkHgl(const char *s) {
+const QChar *HlFloat::checkHgl(const QChar *s) {
   bool b, p;
 
   b = false;
@@ -333,10 +326,29 @@ HlCInt::HlCInt(int attribute, int context)
   : HlInt(attribute,context) {
 }
 
-const char *HlCInt::checkHgl(const char *s) {
+const QChar *HlCInt::checkHgl(const QChar *s) {
 
-  if (*s == '0') s++; else s = HlInt::checkHgl(s);
-  if (s && (*s == 'L' || *s == 'l' || *s == 'U' || *s == 'u')) s++;
+//  if (*s == '0') s++; else s = HlInt::checkHgl(s);
+  s = HlInt::checkHgl(s);
+  if (s != 0L) {
+    int l = 0;
+    int u = 0;
+    const QChar *str;
+
+    do {
+      str = s;
+      if (*s == 'L' || *s == 'l') {
+        l++;
+        if (l > 2) return 0L;
+        s++;
+      }
+      if (*s == 'U' || *s == 'u') {
+        u++;
+        if (u > 1) return 0L;
+        s++;
+      }
+    } while (s != str);
+  }
   return s;
 }
 
@@ -344,8 +356,8 @@ HlCOct::HlCOct(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlCOct::checkHgl(const char *str) {
-  const char *s;
+const QChar *HlCOct::checkHgl(const QChar *str) {
+  const QChar *s;
 
   if (*str == '0') {
     str++;
@@ -363,8 +375,8 @@ HlCHex::HlCHex(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlCHex::checkHgl(const char *str) {
-  const char *s;
+const QChar *HlCHex::checkHgl(const QChar *str) {
+  const QChar *s;
 
   if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
     str += 2;
@@ -382,7 +394,7 @@ HlCFloat::HlCFloat(int attribute, int context)
   : HlFloat(attribute,context) {
 }
 
-const char *HlCFloat::checkHgl(const char *s) {
+const QChar *HlCFloat::checkHgl(const QChar *s) {
 
   s = HlFloat::checkHgl(s);
   if (s && (*s == 'F' || *s == 'f')) s++;
@@ -393,7 +405,7 @@ HlLineContinue::HlLineContinue(int attribute, int context)
   : HlItem(attribute,context) {
 }
 
-const char *HlLineContinue::checkHgl(const char *s) {
+const QChar *HlLineContinue::checkHgl(const QChar *s) {
   if (*s == '\\') return s + 1;
   return 0L;
 }
@@ -404,8 +416,8 @@ HlCStringChar::HlCStringChar(int attribute, int context)
 }
 
 //checks for hex and oct (for example \x1b or \033)
-const char *checkCharHexOct(const char *str) {
-  const char *s;
+const QChar *checkCharHexOct(const QChar *str) {
+  const QChar *s;
   int n;
 
   s = str;
@@ -435,9 +447,9 @@ const char *checkCharHexOct(const char *str) {
 }
 
 //checks for C escape chars like \n
-const char *checkEscapedChar(const char *s) {
+const QChar *checkEscapedChar(const QChar *s) {
 
-  if (s[0] == '\\' && s[1] != 0) {
+  if (s[0] == '\\' && s[1] != '\0' ){
     s++;
     if (strchr("abefnrtv\"\'\\",*s)) {
       s++;
@@ -468,7 +480,7 @@ const char *checkEscapedChar(const char *s) {
   return 0L;
 }
 
-const char *HlCStringChar::checkHgl(const char *str) {
+const QChar *HlCStringChar::checkHgl(const QChar *str) {
   return checkEscapedChar(str);
 }
 
@@ -477,10 +489,10 @@ HlCChar::HlCChar(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlCChar::checkHgl(const char *str) {
-  const char *s;
+const QChar *HlCChar::checkHgl(const QChar *str) {
+  const QChar *s;
 
-  if (str[0] == '\'' && str[1] != 0 && str[1] != '\'') {
+  if (str[0] == '\'' && str[1] != '\0' && str[1] != '\'') {
     s = checkEscapedChar(&str[1]); //try to match escaped char
     if (!s) s = &str[2];           //match single non-escaped char
     if (*s == '\'') return s + 1;
@@ -492,7 +504,7 @@ HlCPrep::HlCPrep(int attribute, int context)
   : HlItem(attribute,context) {
 }
 
-const char *HlCPrep::checkHgl(const char *s) {
+const QChar *HlCPrep::checkHgl(const QChar *s) {
 
   while (*s == ' ' || *s == '\t') s++;
   if (*s == '#') {
@@ -506,7 +518,7 @@ HlHtmlTag::HlHtmlTag(int attribute, int context)
   : HlItem(attribute,context) {
 }
 
-const char *HlHtmlTag::checkHgl(const char *s) {
+const QChar *HlHtmlTag::checkHgl(const QChar *s) {
   while (*s == ' ' || *s == '\t') s++;
   while (*s != ' ' && *s != '\t' && *s != '>' && *s != '\0') s++;
   return s;
@@ -516,12 +528,12 @@ HlHtmlValue::HlHtmlValue(int attribute, int context)
   : HlItem(attribute,context) {
 }
 
-const char *HlHtmlValue::checkHgl(const char *s) {
+const QChar *HlHtmlValue::checkHgl(const QChar *s) {
   while (*s == ' ' || *s == '\t') s++;
   if (*s == '\"') {
     do {
       s++;
-      if (!*s) return 0L;
+      if (*s == '\0') return 0L;
     } while (*s != '\"');
     s++;
   } else {
@@ -538,7 +550,7 @@ HlMHex::HlMHex(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlMHex::checkHgl(const char *s) {
+const QChar *HlMHex::checkHgl(const QChar *s) {
 
   if (*s >= '0' && *s <= '9') {
     s++;
@@ -552,8 +564,8 @@ HlAdaDec::HlAdaDec(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlAdaDec::checkHgl(const char *s) {
-  const char *str;
+const QChar *HlAdaDec::checkHgl(const QChar *s) {
+  const QChar *str;
 
   if (*s >= '0' && *s <= '9') {
     s++;
@@ -571,10 +583,10 @@ HlAdaBaseN::HlAdaBaseN(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlAdaBaseN::checkHgl(const char *s) {
+const QChar *HlAdaBaseN::checkHgl(const QChar *s) {
   int base;
-  char c1, c2, c3;
-  const char *str;
+  QChar c1, c2, c3;
+  const QChar *str;
 
   base = 0;
   while (*s >= '0' && *s <= '9') {
@@ -608,8 +620,8 @@ HlAdaFloat::HlAdaFloat(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlAdaFloat::checkHgl(const char *s) {
-  const char *str;
+const QChar *HlAdaFloat::checkHgl(const QChar *s) {
+  const QChar *str;
 
   str = s;
   while (*s >= '0' && *s <= '9') s++;
@@ -633,7 +645,7 @@ HlAdaChar::HlAdaChar(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlAdaChar::checkHgl(const char *s) {
+const QChar *HlAdaChar::checkHgl(const QChar *s) {
   if (s[0] == '\'' && s[1] && s[2] == '\'') return s + 3;
   return 0L;
 }
@@ -642,7 +654,7 @@ HlSatherClassname::HlSatherClassname(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlSatherClassname::checkHgl(const char *s) {
+const QChar *HlSatherClassname::checkHgl(const QChar *s) {
   if (*s == '$') s++;
   if (*s >= 'A' && *s <= 'Z') {
     s++;
@@ -658,7 +670,7 @@ HlSatherIdent::HlSatherIdent(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlSatherIdent::checkHgl(const char *s) {
+const QChar *HlSatherIdent::checkHgl(const QChar *s) {
   if ((*s >= 'a' && *s <= 'z') || (*s >= 'A' && *s <= 'Z')) {
     s++;
     while ((*s >= 'a' && *s <= 'z')
@@ -675,7 +687,7 @@ HlSatherDec::HlSatherDec(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlSatherDec::checkHgl(const char *s) {
+const QChar *HlSatherDec::checkHgl(const QChar *s) {
   if (*s >= '0' && *s <= '9') {
     s++;
     while ((*s >= '0' && *s <= '9') || *s == '_') s++;
@@ -689,7 +701,7 @@ HlSatherBaseN::HlSatherBaseN(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlSatherBaseN::checkHgl(const char *s) {
+const QChar *HlSatherBaseN::checkHgl(const QChar *s) {
   if (*s == '0') {
     s++;
     if (*s == 'x') {
@@ -716,7 +728,7 @@ HlSatherFloat::HlSatherFloat(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlSatherFloat::checkHgl(const char *s) {
+const QChar *HlSatherFloat::checkHgl(const QChar *s) {
   if (*s >= '0' && *s <= '9') {
     s++;
     while ((*s >= '0' && *s <= '9') || *s == '_') s++;
@@ -746,7 +758,7 @@ HlSatherChar::HlSatherChar(int attribute, int context)
   : HlItemWw(attribute,context) {
 }
 
-const char *HlSatherChar::checkHgl(const char *s) {
+const QChar *HlSatherChar::checkHgl(const QChar *s) {
   if (*s == '\'') {
     s++;
     if (*s == '\\') {
@@ -770,7 +782,7 @@ HlSatherString::HlSatherString(int attribute, int context)
   : HlItemWw(attribute, context) {
 }
 
-const char *HlSatherString::checkHgl(const char *s) {
+const QChar *HlSatherString::checkHgl(const QChar *s) {
   if (*s == '\"') {
     s++;
     while (*s != '\"') {
@@ -790,8 +802,8 @@ HlLatexTag::HlLatexTag(int attribute, int context)
   : HlItem(attribute, context) {
 }
 
-const char *HlLatexTag::checkHgl(const char *s) {
-  const char *str;
+const QChar *HlLatexTag::checkHgl(const QChar *s) {
+  const QChar *str;
 
   if (*s == '\\') {
     s++;
@@ -810,7 +822,7 @@ HlLatexChar::HlLatexChar(int attribute, int context)
   : HlItem(attribute, context) {
 }
 
-const char *HlLatexChar::checkHgl(const char *s) {
+const QChar *HlLatexChar::checkHgl(const QChar *s) {
   if (*s == '\\') {
     s++;
     if (*s && strchr("{}$&#_%", *s)) return s +1;
@@ -825,7 +837,7 @@ HlLatexParam::HlLatexParam(int attribute, int context)
   : HlItem(attribute, context) {
 }
 
-const char *HlLatexParam::checkHgl(const char *s) {
+const QChar *HlLatexParam::checkHgl(const QChar *s) {
   if (*s == '#') {
     s++;
     while (*s >= '0' && *s <= '9') {
@@ -848,23 +860,23 @@ ItemStyle::ItemStyle(const QColor &col, const QColor &selCol,
 ItemFont::ItemFont() : family("courier"), size(12), charset("") {
 }
 
-ItemData::ItemData(const char *name, int defStyleNum)
+ItemData::ItemData(const QString &name, int defStyleNum)
   : name(name), defStyleNum(defStyleNum), defStyle(true), defFont(true) {
 }
 
-ItemData::ItemData(const char *name, int defStyleNum,
+ItemData::ItemData(const QString &name, int defStyleNum,
   const QColor &col, const QColor &selCol, bool bold, bool italic)
   : ItemStyle(col,selCol,bold,italic), name(name), defStyleNum(defStyleNum),
   defStyle(false), defFont(true) {
 }
 
-HlData::HlData(const char *wildcards, const char *mimetypes)
+HlData::HlData(const QString &wildcards, const QString &mimetypes)
   : wildcards(wildcards), mimetypes(mimetypes) {
 
   itemDataList.setAutoDelete(true);
 }
 
-Highlight::Highlight(const char *name) : iName(name), refCount(0) {
+Highlight::Highlight(const QString &name) : iName(name), refCount(0) {
 }
 
 Highlight::~Highlight() {
@@ -874,27 +886,26 @@ KConfig *Highlight::getKConfig() {
   KConfig *config;
 
   config = kapp->getConfig();
-  config->setGroup((QString) iName + " Highlight");
+  config->setGroup(iName + " Highlight");
   return config;
 }
 
-void Highlight::getWildcards(QString &w) {
+QString Highlight::getWildcards() {
   KConfig *config;
 
   config = getKConfig();
 
-//  iWildcards
-  w = config->readEntry("Wildcards",dw);
-//  iMimetypes = config->readEntry("Mimetypes");
+  //if wildcards not yet in config, then use iWildCards as default
+  return config->readEntry("Wildcards", iWildcards);
 }
 
 
-void Highlight::getMimetypes(QString &w) {
+QString Highlight::getMimetypes() {
   KConfig *config;
 
   config = getKConfig();
 
-  w = config->readEntry("Mimetypes",dm);
+  return config->readEntry("Mimetypes", iMimetypes);
 }
 
 
@@ -908,8 +919,9 @@ HlData *Highlight::getData() {
 //  iMimetypes = config->readEntry("Mimetypes");
 //  hlData = new HlData(iWildcards,iMimetypes);
   hlData = new HlData(
-    config->readEntry("Wildcards",dw),config->readEntry("Mimetypes",dm));
-  getItemDataList(hlData->itemDataList,config);
+    config->readEntry("Wildcards", iWildcards),
+    config->readEntry("Mimetypes", iMimetypes));
+  getItemDataList(hlData->itemDataList, config);
   return hlData;
 }
 
@@ -971,10 +983,6 @@ void Highlight::setItemDataList(ItemDataList &list, KConfig *config) {
   }
 }
 
-const char *Highlight::name() {
-  return iName;
-}
-
 void Highlight::use() {
   if (refCount == 0) init();
   refCount++;
@@ -1001,7 +1009,7 @@ int Highlight::doHighlight(int, TextLine *textLine) {
 
 void Highlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text",dsNormal));
+  list.append(new ItemData(i18nop("Normal Text"), dsNormal));
 }
 
 
@@ -1018,23 +1026,22 @@ HlContext::HlContext(int attribute, int lineEndContext)
 }
 
 
-GenHighlight::GenHighlight(const char *name) : Highlight(name) {
+GenHighlight::GenHighlight(const QString &name) : Highlight(name) {
 }
 
 
 int GenHighlight::doHighlight(int ctxNum, TextLine *textLine) {
   HlContext *context;
-  const char *str, *s1, *s2;
-  char lastChar;
+  const QChar *str, *s1, *s2;
+  QChar lastChar;
   HlItem *item;
 
   context = contextList[ctxNum];
-
   str = textLine->getString();
-  lastChar = 0;
+  lastChar = '\0';
 
   s1 = str;
-  while (*s1) {
+  while (*s1 != '\0') {
     for (item = context->items.first(); item != 0L; item = context->items.next()) {
       if (item->startEnable(lastChar)) {
         s2 = item->checkHgl(s1);
@@ -1077,9 +1084,9 @@ void GenHighlight::done() {
 }
 
 
-CHighlight::CHighlight(const char *name) : GenHighlight(name) {
-  dw = "*.c";
-  dm = "text/x-c-src";
+CHighlight::CHighlight(const QString &name) : GenHighlight(name) {
+  iWildcards = "*.c";
+  iMimetypes = "text/x-c-src";
 }
 
 CHighlight::~CHighlight() {
@@ -1087,19 +1094,19 @@ CHighlight::~CHighlight() {
 
 void CHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text" ,dsNormal));
-  list.append(new ItemData("Keyword"     ,dsKeyword));
-  list.append(new ItemData("Data Type"   ,dsDataType));
-  list.append(new ItemData("Decimal"     ,dsDecVal));
-  list.append(new ItemData("Octal"       ,dsBaseN));
-  list.append(new ItemData("Hex"         ,dsBaseN));
-  list.append(new ItemData("Float"       ,dsFloat));
-  list.append(new ItemData("Char"        ,dsChar));
-  list.append(new ItemData("String"      ,dsString));
-  list.append(new ItemData("String Char" ,dsChar));
-  list.append(new ItemData("Comment"     ,dsComment));
-  list.append(new ItemData("Preprocessor",dsOthers));
-  list.append(new ItemData("Prep. Lib"   ,dsOthers,Qt::darkYellow,Qt::yellow,false,false));
+  list.append(new ItemData(i18nop("Normal Text" ),dsNormal));
+  list.append(new ItemData(i18nop("Keyword"     ),dsKeyword));
+  list.append(new ItemData(i18nop("Data Type"   ),dsDataType));
+  list.append(new ItemData(i18nop("Decimal"     ),dsDecVal));
+  list.append(new ItemData(i18nop("Octal"       ),dsBaseN));
+  list.append(new ItemData(i18nop("Hex"         ),dsBaseN));
+  list.append(new ItemData(i18nop("Float"       ),dsFloat));
+  list.append(new ItemData(i18nop("Char"        ),dsChar));
+  list.append(new ItemData(i18nop("String"      ),dsString));
+  list.append(new ItemData(i18nop("String Char" ),dsChar));
+  list.append(new ItemData(i18nop("Comment"     ),dsComment));
+  list.append(new ItemData(i18nop("Preprocessor"),dsOthers));
+  list.append(new ItemData(i18nop("Prep. Lib"   ),dsOthers,Qt::darkYellow,Qt::yellow,false,false));
 }
 
 void CHighlight::makeContextList() {
@@ -1116,8 +1123,8 @@ void CHighlight::makeContextList() {
     c->items.append(new HlCInt(3,0));
     c->items.append(new HlCChar(7,0));
     c->items.append(new HlCharDetect(8,1,'"'));
-    c->items.append(new Hl2CharDetect(10,2,"//"));
-    c->items.append(new Hl2CharDetect(10,3,"/*"));
+    c->items.append(new Hl2CharDetect(10,2, '/', '/'));
+    c->items.append(new Hl2CharDetect(10,3, '/', '*'));
     c->items.append(new HlCPrep(11,4));
   //string context
   contextList[1] = c = new HlContext(8,0);
@@ -1128,17 +1135,17 @@ void CHighlight::makeContextList() {
   contextList[2] = new HlContext(10,0);
   //multi line comment context
   contextList[3] = c = new HlContext(10,3);
-    c->items.append(new Hl2CharDetect(10,0,"*/"));
+    c->items.append(new Hl2CharDetect(10,0, '*', '/'));
   //preprocessor context
   contextList[4] = c = new HlContext(11,0);
     c->items.append(new HlLineContinue(11,7));
-    c->items.append(new HlRangeDetect(12,4,"\"\""));
-    c->items.append(new HlRangeDetect(12,4,"<>"));
-    c->items.append(new Hl2CharDetect(10,2,"//"));
-    c->items.append(new Hl2CharDetect(10,5,"/*"));
+    c->items.append(new HlRangeDetect(12,4, '\"', '\"'));
+    c->items.append(new HlRangeDetect(12,4, '<', '>'));
+    c->items.append(new Hl2CharDetect(10,2, '/', '/'));
+    c->items.append(new Hl2CharDetect(10,5, '/', '*'));
   //preprocessor multiline comment context
   contextList[5] = c = new HlContext(10,5);
-    c->items.append(new Hl2CharDetect(10,4,"*/"));
+    c->items.append(new Hl2CharDetect(10,4, '*', '/'));
   //string line continue
   contextList[6] = new HlContext(0,1);
   //preprocessor string line continue
@@ -1154,9 +1161,9 @@ void CHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 }
 
 
-CppHighlight::CppHighlight(const char *name) : CHighlight(name) {
-  dw = "*.cpp;*.h;*.C";
-  dm = "text/x-c++-src;text/x-c++-hdr;text/x-c-hdr";
+CppHighlight::CppHighlight(const QString &name) : CHighlight(name) {
+  iWildcards = "*.cpp;*.h;*.C";
+  iMimetypes = "text/x-c++-src;text/x-c++-hdr;text/x-c-hdr";
 }
 
 CppHighlight::~CppHighlight() {
@@ -1170,9 +1177,9 @@ void CppHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(cppTypes);
 }
 
-IdlHighlight::IdlHighlight(const char *name) : CHighlight(name) {
-  dw = "*.idl";
-  dm = "text/x-idl-src";
+IdlHighlight::IdlHighlight(const QString &name) : CHighlight(name) {
+  iWildcards = "*.idl";
+  iMimetypes = "text/x-idl-src";
 }
 
 IdlHighlight::~IdlHighlight() {
@@ -1183,9 +1190,9 @@ void IdlHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
   dataType->addList(idlTypes);
 }
 
-JavaHighlight::JavaHighlight(const char *name) : CHighlight(name) {
-  dw = "*.java";
-  dm = "text/x-java-src";
+JavaHighlight::JavaHighlight(const QString &name) : CHighlight(name) {
+  iWildcards = "*.java";
+  iMimetypes = "text/x-java-src";
 }
 
 JavaHighlight::~JavaHighlight() {
@@ -1198,9 +1205,9 @@ void JavaHighlight::setKeywords(HlKeyword *keyword, HlKeyword *dataType) {
 }
 
 
-HtmlHighlight::HtmlHighlight(const char *name) : GenHighlight(name) {
-  dw = "*.html;*.htm";
-  dm = "text/html";
+HtmlHighlight::HtmlHighlight(const QString &name) : GenHighlight(name) {
+  iWildcards = "*.html;*.htm";
+  iMimetypes = "text/html";
 }
 
 HtmlHighlight::~HtmlHighlight() {
@@ -1208,19 +1215,19 @@ HtmlHighlight::~HtmlHighlight() {
 
 void HtmlHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text",dsNormal));
-  list.append(new ItemData("Char"       ,dsChar,Qt::darkGreen,Qt::green,false,false));
-  list.append(new ItemData("Comment"    ,dsComment));
-  list.append(new ItemData("Tag Text"   ,dsOthers,Qt::black,Qt::white,true,false));
-  list.append(new ItemData("Tag"        ,dsKeyword,Qt::darkMagenta,Qt::magenta,true,false));
-  list.append(new ItemData("Tag Value"  ,dsDecVal,Qt::darkCyan,Qt::cyan,false,false));
+  list.append(new ItemData(i18nop("Normal Text"),dsNormal));
+  list.append(new ItemData(i18nop("Char"       ),dsChar,Qt::darkGreen,Qt::green,false,false));
+  list.append(new ItemData(i18nop("Comment"    ),dsComment));
+  list.append(new ItemData(i18nop("Tag Text"   ),dsOthers,Qt::black,Qt::white,true,false));
+  list.append(new ItemData(i18nop("Tag"        ),dsKeyword,Qt::darkMagenta,Qt::magenta,true,false));
+  list.append(new ItemData(i18nop("Tag Value"  ),dsDecVal,Qt::darkCyan,Qt::cyan,false,false));
 }
 
 void HtmlHighlight::makeContextList() {
   HlContext *c;
 
   contextList[0] = c = new HlContext(0,0);
-    c->items.append(new HlRangeDetect(1,0,"&;"));
+    c->items.append(new HlRangeDetect(1,0, '&', ';'));
     c->items.append(new HlStringDetect(2,1,"<!--"));
     c->items.append(new HlStringDetect(2,2,"<COMMENT>"));
     c->items.append(new HlCharDetect(3,3,'<'));
@@ -1235,8 +1242,9 @@ void HtmlHighlight::makeContextList() {
 }
 
 
-BashHighlight::BashHighlight(const char *name) : GenHighlight(name) {
-  dm = "text/x-shellscript";
+BashHighlight::BashHighlight(const QString &name) : GenHighlight(name) {
+//  iWildcards = "";
+  iMimetypes = "text/x-shellscript";
 }
 
 
@@ -1245,12 +1253,12 @@ BashHighlight::~BashHighlight() {
 
 void BashHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text" ,dsNormal));
-  list.append(new ItemData("Keyword"     ,dsKeyword));
-  list.append(new ItemData("Integer"     ,dsDecVal));
-  list.append(new ItemData("String"      ,dsString));
-  list.append(new ItemData("Substitution",dsOthers));//darkCyan,cyan,false,false);
-  list.append(new ItemData("Comment"     ,dsComment));
+  list.append(new ItemData(i18nop("Normal Text" ),dsNormal));
+  list.append(new ItemData(i18nop("Keyword"     ),dsKeyword));
+  list.append(new ItemData(i18nop("Integer"     ),dsDecVal));
+  list.append(new ItemData(i18nop("String"      ),dsString));
+  list.append(new ItemData(i18nop("Substitution"),dsOthers));//darkCyan,cyan,false,false);
+  list.append(new ItemData(i18nop("Comment"     ),dsComment));
 }
 
 void BashHighlight::makeContextList() {
@@ -1273,9 +1281,9 @@ void BashHighlight::makeContextList() {
 }
 
 
-ModulaHighlight::ModulaHighlight(const char *name) : GenHighlight(name) {
-  dw = "*.md;*.mi";
-  dm = "text/x-modula-2-src";
+ModulaHighlight::ModulaHighlight(const QString &name) : GenHighlight(name) {
+  iWildcards = "*.md;*.mi";
+  iMimetypes = "text/x-modula-2-src";
 }
 
 ModulaHighlight::~ModulaHighlight() {
@@ -1283,13 +1291,13 @@ ModulaHighlight::~ModulaHighlight() {
 
 void ModulaHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text",dsNormal));
-  list.append(new ItemData("Keyword"    ,dsKeyword));
-  list.append(new ItemData("Decimal"    ,dsDecVal));
-  list.append(new ItemData("Hex"        ,dsBaseN));
-  list.append(new ItemData("Float"      ,dsFloat));
-  list.append(new ItemData("String"     ,dsString));
-  list.append(new ItemData("Comment"    ,dsComment));
+  list.append(new ItemData(i18nop("Normal Text"),dsNormal));
+  list.append(new ItemData(i18nop("Keyword"    ),dsKeyword));
+  list.append(new ItemData(i18nop("Decimal"    ),dsDecVal));
+  list.append(new ItemData(i18nop("Hex"        ),dsBaseN));
+  list.append(new ItemData(i18nop("Float"      ),dsFloat));
+  list.append(new ItemData(i18nop("String"     ),dsString));
+  list.append(new ItemData(i18nop("Comment"    ),dsComment));
 }
 
 void ModulaHighlight::makeContextList() {
@@ -1302,19 +1310,19 @@ void ModulaHighlight::makeContextList() {
     c->items.append(new HlMHex(3,0));
     c->items.append(new HlInt(2,0));
     c->items.append(new HlCharDetect(5,1,'"'));
-    c->items.append(new Hl2CharDetect(6,2,"(*"));
+    c->items.append(new Hl2CharDetect(6,2, '(', '*'));
   contextList[1] = c = new HlContext(5,0);
     c->items.append(new HlCharDetect(5,0,'"'));
   contextList[2] = c = new HlContext(6,2);
-    c->items.append(new Hl2CharDetect(6,0,"*)"));
+    c->items.append(new Hl2CharDetect(6,0, '*', ')'));
 
   keyword->addList(modulaKeywords);
 }
 
 
-AdaHighlight::AdaHighlight(const char *name) : GenHighlight(name) {
-  dw = "*.a";
-  dm = "text/x-ada-src";
+AdaHighlight::AdaHighlight(const QString &name) : GenHighlight(name) {
+  iWildcards = "*.a";
+  iMimetypes = "text/x-ada-src";
 }
 
 AdaHighlight::~AdaHighlight() {
@@ -1322,14 +1330,14 @@ AdaHighlight::~AdaHighlight() {
 
 void AdaHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text",dsNormal));
-  list.append(new ItemData("Keyword"    ,dsKeyword));
-  list.append(new ItemData("Decimal"    ,dsDecVal));
-  list.append(new ItemData("Base-N"     ,dsBaseN));
-  list.append(new ItemData("Float"      ,dsFloat));
-  list.append(new ItemData("Char"       ,dsChar));
-  list.append(new ItemData("String"     ,dsString));
-  list.append(new ItemData("Comment"    ,dsComment));
+  list.append(new ItemData(i18nop("Normal Text"),dsNormal));
+  list.append(new ItemData(i18nop("Keyword"    ),dsKeyword));
+  list.append(new ItemData(i18nop("Decimal"    ),dsDecVal));
+  list.append(new ItemData(i18nop("Base-N"     ),dsBaseN));
+  list.append(new ItemData(i18nop("Float"      ),dsFloat));
+  list.append(new ItemData(i18nop("Char"       ),dsChar));
+  list.append(new ItemData(i18nop("String"     ),dsString));
+  list.append(new ItemData(i18nop("Comment"    ),dsComment));
 }
 
 void AdaHighlight::makeContextList() {
@@ -1339,11 +1347,11 @@ void AdaHighlight::makeContextList() {
   contextList[0] = c = new HlContext(0,0);
     c->items.append(keyword = new HlKeyword(1,0));
     c->items.append(new HlAdaBaseN(3,0));
-    c->items.append(new HlAdaDec(2,0));
     c->items.append(new HlAdaFloat(4,0));
+    c->items.append(new HlAdaDec(2,0));
     c->items.append(new HlAdaChar(5,0));
     c->items.append(new HlCharDetect(6,1,'"'));
-    c->items.append(new Hl2CharDetect(7,2,"--"));
+    c->items.append(new Hl2CharDetect(7,2, '-', '-'));
   contextList[1] = c = new HlContext(6,0);
     c->items.append(new HlCharDetect(6,0,'"'));
   contextList[2] = c = new HlContext(7,0);
@@ -1352,9 +1360,9 @@ void AdaHighlight::makeContextList() {
 }
 
 
-PythonHighlight::PythonHighlight(const char *name) : GenHighlight(name) {
-  dw = "*.py";
-  dm = "text/x-python-src";
+PythonHighlight::PythonHighlight(const QString &name) : GenHighlight(name) {
+  iWildcards = "*.py";
+  iMimetypes = "text/x-python-src";
 }
 
 PythonHighlight::~PythonHighlight() {
@@ -1362,16 +1370,16 @@ PythonHighlight::~PythonHighlight() {
 
 void PythonHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text",dsNormal));
-  list.append(new ItemData("Keyword"    ,dsKeyword));
-  list.append(new ItemData("Decimal"    ,dsDecVal));
-  list.append(new ItemData("Octal"      ,dsBaseN));
-  list.append(new ItemData("Hex"        ,dsBaseN));
-  list.append(new ItemData("Float"      ,dsFloat));
-  list.append(new ItemData("Char"       ,dsChar));
-  list.append(new ItemData("String"     ,dsString));
-  list.append(new ItemData("String Char",dsChar));
-  list.append(new ItemData("Comment"    ,dsComment));
+  list.append(new ItemData(i18nop("Normal Text"),dsNormal));
+  list.append(new ItemData(i18nop("Keyword"    ),dsKeyword));
+  list.append(new ItemData(i18nop("Decimal"    ),dsDecVal));
+  list.append(new ItemData(i18nop("Octal"      ),dsBaseN));
+  list.append(new ItemData(i18nop("Hex"        ),dsBaseN));
+  list.append(new ItemData(i18nop("Float"      ),dsFloat));
+  list.append(new ItemData(i18nop("Char"       ),dsChar));
+  list.append(new ItemData(i18nop("String"     ),dsString));
+  list.append(new ItemData(i18nop("String Char"),dsChar));
+  list.append(new ItemData(i18nop("Comment"    ),dsComment));
 }
 
 void PythonHighlight::makeContextList() {
@@ -1410,20 +1418,40 @@ void PythonHighlight::makeContextList() {
   keyword->addList(pythonKeywords);
 }
 
-PerlHighlight::PerlHighlight(const char *name) : Highlight(name) {
-  dm = "application/x-perl";
+PerlHighlight::PerlHighlight(const QString &name) : Highlight(name) {
+  iWildcards = "";
+  iMimetypes = "application/x-perl";
 }
 
 void PerlHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text",dsNormal));
-  list.append(new ItemData("Keyword"    ,dsKeyword));
-  list.append(new ItemData("Variable"   ,dsDecVal));
-  list.append(new ItemData("Operator"   ,dsOthers));
-  list.append(new ItemData("String"     ,dsString));
-  list.append(new ItemData("String Char",dsChar));
-  list.append(new ItemData("Comment"    ,dsComment));
-  list.append(new ItemData("Pod"        ,dsOthers,Qt::darkYellow,Qt::yellow,false,true));
+  list.append(new ItemData(i18nop("Normal Text"),dsNormal));
+  list.append(new ItemData(i18nop("Keyword"    ),dsKeyword));
+  list.append(new ItemData(i18nop("Variable"   ),dsDecVal));
+  list.append(new ItemData(i18nop("Operator"   ),dsOthers));
+  list.append(new ItemData(i18nop("String"     ),dsString));
+  list.append(new ItemData(i18nop("String Char"),dsChar));
+  list.append(new ItemData(i18nop("Comment"    ),dsComment));
+  list.append(new ItemData(i18nop("Pod"        ),dsOthers, Qt::darkYellow, Qt::yellow, false, true));
+}
+
+
+bool ucmp(const QChar *u, const char *s, int len) {
+  while (len > 0) {
+    if (*u != *s) return false;
+    u++;
+    s++;
+    len--;
+  }
+  return true;
+}
+
+bool ustrchr(const char *s, QChar c) {
+  while (*s != '\0') {
+    if (*s == c) return true;
+    s++;
+  }
+  return false;
 }
 
 /*
@@ -1440,19 +1468,19 @@ Op Customary  Generic     Meaning    Interpolates         Modifiers
 7              y{}{}   Translation       no               cds
 */
 int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
-  static char *opList[] = {"q", "qq", "qx", "qw", "m", "s", "tr", "y"};
+  static const char *opList[] = {"q", "qq", "qx", "qw", "m", "s", "tr", "y"};
   static int opLenList[] = {1, 2, 2, 2, 1, 1, 2, 1};
-  char delimiter;
+  QChar delimiter;
   int op;
   int argCount;
   bool interpolating, brackets, pod;
 
-  const char *str, *s, *s2;
+  const QChar *str, *s, *s2;
   bool lastWw;
   int pos, z, l;
 
   //extract some states out of the context number
-  delimiter = ctxNum >> 8;
+  delimiter = QChar(ctxNum >> 8);
   op = (ctxNum >> 5) & 7;
   argCount = (ctxNum >> 3) & 3;
   interpolating = !(ctxNum & 4);
@@ -1469,7 +1497,7 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
   if (*s == '=') {
     s++;
     pod = true;
-    if (!strncmp(s, "cut", 3)) {
+    if (ucmp(s, "cut", 3)) {
       pod = false;
       s += 3;
       textLine->setAttribs(7, 0, 4);
@@ -1485,7 +1513,7 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
     if (op == 0 && lastWw) {
       //match keyword
       s2 = keyword->checkHgl(s);
-      if (s2 && testWw(*s2)) {
+      if (s2 && !isInWord(*s2)) {
         s = s2;
         textLine->setAttribs(1, pos, s - str);
         goto newContext;
@@ -1493,7 +1521,7 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
       //match perl operator
       for (z = 0; z < 8; z++) {
         l = opLenList[z];
-        if (!memcmp(s,opList[z],l) && testWw(s[l])) {
+        if (ucmp(s, opList[z], l) && !isInWord(s[l])) {
           //operator found
           if (z < 7) z++;
           op = z;
@@ -1525,7 +1553,7 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         goto newContext;
       }
     }
-    if (!delimiter) { //not in string
+    if (delimiter == '\0') { //not in string
       //match comment
       if (lastWw && *s == '#') {
         textLine->setAttribs(6, pos, textLine->length());
@@ -1533,7 +1561,7 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         goto finished;
       }
       //match delimiter
-      if (op != 0 && (unsigned char) *s > 32) {
+      if (op != 0 && !s->isSpace()) {
         delimiter = *s;
         if (delimiter == '(') {
           delimiter = ')';
@@ -1564,7 +1592,7 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         s2 = s;
         do {
           s2++;
-        } while ((!testWw(*s2) || *s2 == '#') && *s2 != delimiter);
+        } while ((isInWord(*s2) || *s2 == '#') && *s2 != delimiter);
         if (s2 - s > 1) {
           s = s2;
           textLine->setAttribs(2, pos, s2 - str);
@@ -1573,14 +1601,14 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
       }
       //match special variables
       if (s[0] == '$' && s[1] != '\0' && s[1] != delimiter) {
-        if (strchr("&`'+*./|,\\;#%=-~^:?!@$<>()[]", s[1])) {
+        if (ustrchr("&`'+*./|,\\;#%=-~^:?!@$<>()[]", s[1])) {
           s += 2;
           textLine->setAttribs(2, pos, pos + 2);
           goto newContext;
         }
       }
     }
-    if (delimiter) { //in string
+    if (delimiter != '\0') { //in string
       //match escaped char
       if (interpolating) {
         if (*s == '\\' && s[1] != '\0') {
@@ -1597,9 +1625,9 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         argCount--;
         if (argCount < 1) {
           //match operator modifiers
-          if (op == 5) while (*s && strchr("cgimosx", *s)) s++;
-          if (op == 6) while (*s && strchr("egimosx", *s)) s++;
-          if (op == 7) while (*s && strchr("cds", *s)) s++;
+          if (op == 5) while (*s && ustrchr("cgimosx", *s)) s++;
+          if (op == 6) while (*s && ustrchr("egimosx", *s)) s++;
+          if (op == 7) while (*s && ustrchr("cds", *s)) s++;
           op = 0;
         }
         textLine->setAttribs(3, pos, s - str);
@@ -1618,13 +1646,13 @@ int PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
     s++;
     textLine->setAttribs(0, pos, pos + 1);
     newContext:
-    lastWw = testWw(s[-1]);
+    lastWw = !isInWord(s[-1]);
   }
   textLine->setAttr(0);
   finished:
 
   //compose new context number
-  ctxNum = delimiter << 8;
+  ctxNum = delimiter.unicode() << 8;
   ctxNum |= op << 5;
   ctxNum |= argCount << 3;
   if (!interpolating) ctxNum |= 4;
@@ -1643,9 +1671,9 @@ void PerlHighlight::done() {
   delete keyword;
 }
 
-SatherHighlight::SatherHighlight(const char *name) : GenHighlight(name) {
-  dw = "*.sa";
-  dm = "text/x-sather-src";
+SatherHighlight::SatherHighlight(const QString &name) : GenHighlight(name) {
+  iWildcards = "*.sa";
+  iMimetypes = "text/x-sather-src";
 }
 
 SatherHighlight::~SatherHighlight() {
@@ -1653,18 +1681,18 @@ SatherHighlight::~SatherHighlight() {
 
 void SatherHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text"        ,dsNormal)); // 0
-  list.append(new ItemData("Keyword"            ,dsKeyword));// 1
-  list.append(new ItemData("Special Classname"  , dsNormal));// 2
-  list.append(new ItemData("Classname"          ,dsNormal)); // 3
-  list.append(new ItemData("Special Featurename",dsOthers)); // 4
-  list.append(new ItemData("Identifier"         ,dsOthers)); // 5
-  list.append(new ItemData("Decimal"            ,dsDecVal)); // 6
-  list.append(new ItemData("Base-N"             ,dsBaseN));  // 7
-  list.append(new ItemData("Float"              ,dsFloat));  // 8
-  list.append(new ItemData("Char"               ,dsChar));   // 9
-  list.append(new ItemData("String"             ,dsString)); // 10
-  list.append(new ItemData("Comment"            ,dsComment));// 11
+  list.append(new ItemData(i18nop("Normal Text"        ),dsNormal)); // 0
+  list.append(new ItemData(i18nop("Keyword"            ),dsKeyword));// 1
+  list.append(new ItemData(i18nop("Special Classname"  ), dsNormal));// 2
+  list.append(new ItemData(i18nop("Classname"          ),dsNormal)); // 3
+  list.append(new ItemData(i18nop("Special Featurename"),dsOthers)); // 4
+  list.append(new ItemData(i18nop("Identifier"         ),dsOthers)); // 5
+  list.append(new ItemData(i18nop("Decimal"            ),dsDecVal)); // 6
+  list.append(new ItemData(i18nop("Base-N"             ),dsBaseN));  // 7
+  list.append(new ItemData(i18nop("Float"              ),dsFloat));  // 8
+  list.append(new ItemData(i18nop("Char"               ),dsChar));   // 9
+  list.append(new ItemData(i18nop("String"             ),dsString)); // 10
+  list.append(new ItemData(i18nop("Comment"            ),dsComment));// 11
 }
 
 void SatherHighlight::makeContextList() {
@@ -1683,7 +1711,7 @@ void SatherHighlight::makeContextList() {
     c->items.append(new HlSatherDec(6,0));
     c->items.append(new HlSatherChar(9,0));
     c->items.append(new HlSatherString(10,0));
-    c->items.append(new Hl2CharDetect(11,1,"--"));
+    c->items.append(new Hl2CharDetect(11,1, '-', '-'));
   //Comment Context
   contextList[1] = c = new HlContext(11,0);
 
@@ -1692,9 +1720,9 @@ void SatherHighlight::makeContextList() {
   spec_feat->addList(satherSpecFeatureNames);
 }
 
-LatexHighlight::LatexHighlight(const char *name) : GenHighlight(name) {
-  dw = "*.tex;*.sty";
-  dm = "text/x-tex";
+LatexHighlight::LatexHighlight(const QString &name) : GenHighlight(name) {
+  iWildcards = "*.tex;*.sty";
+  iMimetypes = "text/x-tex";
 }
 
 LatexHighlight::~LatexHighlight() {
@@ -1702,11 +1730,11 @@ LatexHighlight::~LatexHighlight() {
 
 void LatexHighlight::createItemData(ItemDataList &list) {
 
-  list.append(new ItemData("Normal Text", dsNormal));
-  list.append(new ItemData("Tag/Keyword", dsKeyword));
-  list.append(new ItemData("Char"       , dsChar));
-  list.append(new ItemData("Parameter"  , dsDecVal));
-  list.append(new ItemData("Comment"    , dsComment));
+  list.append(new ItemData(i18nop("Normal Text"), dsNormal));
+  list.append(new ItemData(i18nop("Tag/Keyword"), dsKeyword));
+  list.append(new ItemData(i18nop("Char"       ), dsChar));
+  list.append(new ItemData(i18nop("Parameter"  ), dsDecVal));
+  list.append(new ItemData(i18nop("Comment"    ), dsComment));
 }
 
 void LatexHighlight::makeContextList() {
@@ -1729,7 +1757,7 @@ void LatexHighlight::makeContextList() {
 HlManager::HlManager() : QObject(0L) {
 
   hlList.setAutoDelete(true);
-  hlList.append(new Highlight(      "Normal"   ));
+  hlList.append(new Highlight(i18nop("Normal")));
   hlList.append(new CHighlight(     "C"        ));
   hlList.append(new CppHighlight(   "C++"      ));
   hlList.append(new JavaHighlight(  "Java"     ));
@@ -1761,7 +1789,7 @@ int HlManager::defaultHl() {
 }
 
 
-int HlManager::nameFind(const char *name) {
+int HlManager::nameFind(const QString &name) {
   int z;
 
   for (z = hlList.count() - 1; z > 0; z--) {
@@ -1770,13 +1798,13 @@ int HlManager::nameFind(const char *name) {
   return z;
 }
 
-int HlManager::wildcardFind(const char *fileName) {
+int HlManager::wildcardFind(const QString &fileName) {
   Highlight *highlight;
   int p1, p2;
   QString w;
   for (highlight = hlList.first(); highlight != 0L; highlight = hlList.next()) {
     p1 = 0;
-    highlight->getWildcards(w);
+    w = highlight->getWildcards();
     while (p1 < (int) w.length()) {
       p2 = w.find(';',p1);
       if (p2 == -1) p2 = w.length();
@@ -1790,12 +1818,8 @@ int HlManager::wildcardFind(const char *fileName) {
   return -1;
 }
 
-int HlManager::mimeFind(const char *contents, int len, const char *fname)
+int HlManager::mimeFind(const QString &contents, int len, const QString &fname)
 {
-  // Magic file detection init (from kfm/kbind.cpp)    
-  QString mimefile = locate("mime", "magic");
-  KMimeMagic magic(mimefile);    
-  magic.setFollowLinks(true);      
 /*
   // fill the detection buffer with the contents of the text
   const int HOWMANY = 1024;
@@ -1815,7 +1839,7 @@ int HlManager::mimeFind(const char *contents, int len, const char *fname)
 */
   // detect the mime type
   KMimeMagicResult *result;
-  result = magic.findBufferFileType(contents, len, fname);
+  result = KMimeMagic::self()->findBufferFileType(contents, len, fname);
 
   Highlight *highlight;
   int p1, p2;
@@ -1823,7 +1847,7 @@ int HlManager::mimeFind(const char *contents, int len, const char *fname)
 
   for (highlight = hlList.first(); highlight != 0L; highlight = hlList.next()) 
   {
-    highlight->getMimetypes(w);
+    w = highlight->getMimetypes();
 
     p1 = 0;
     while (p1 < (int) w.length()) {
@@ -1871,12 +1895,10 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
-#warning FIXME
 //      KCharset(defaultFont.charset).setQFont(font);
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
-#warning FIXME
 //      KCharset(itemData->charset).setQFont(font);
     }
     a[z].setFont(font);
@@ -1892,20 +1914,20 @@ int HlManager::defaultStyles() {
   return 10;
 }
 
-const char *HlManager::defaultStyleName(int n) {
+QString HlManager::defaultStyleName(int n) {
   static const char *names[] = {
-    "Normal",
-    "Keyword",
-    "Data Type",
-    "Decimal/Value",
-    "Base-N Integer",
-    "Floating Point",
-    "Character",
-    "String",
-    "Comment",
-    "Others"};
+    i18nop("Normal"),
+    i18nop("Keyword"),
+    i18nop("Data Type"),
+    i18nop("Decimal/Value"),
+    i18nop("Base-N Integer"),
+    i18nop("Floating Point"),
+    i18nop("Character"),
+    i18nop("String"),
+    i18nop("Comment"),
+    i18nop("Others")};
 
-  return names[n];
+  return QString(names[n]);
 }
 
 void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
@@ -1917,16 +1939,16 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
 
   list.setAutoDelete(true);
   //ItemStyle(color, selected color, bold, italic)
-  list.append(new ItemStyle(Qt::black,Qt::white,false,false));     //normal
-  list.append(new ItemStyle(Qt::black,Qt::white,true,false));      //keyword
-  list.append(new ItemStyle(Qt::darkRed,Qt::white,false,false));   //datatype
-  list.append(new ItemStyle(Qt::blue,Qt::cyan,false,false));       //decimal/value
-  list.append(new ItemStyle(Qt::darkCyan,Qt::cyan,false,false));   //base n
-  list.append(new ItemStyle(Qt::darkMagenta,Qt::cyan,false,false));//float
-  list.append(new ItemStyle(Qt::magenta,Qt::magenta,false,false)); //char
-  list.append(new ItemStyle(Qt::red,Qt::red,false,false));         //string
-  list.append(new ItemStyle(Qt::darkGray,Qt::gray,false,true));    //comment
-  list.append(new ItemStyle(Qt::darkGreen,Qt::green,false,false)); //others
+  list.append(new ItemStyle(black,white,false,false));     //normal
+  list.append(new ItemStyle(black,white,true,false));      //keyword
+  list.append(new ItemStyle(darkRed,white,false,false));   //datatype
+  list.append(new ItemStyle(blue,cyan,false,false));       //decimal/value
+  list.append(new ItemStyle(darkCyan,cyan,false,false));   //base n
+  list.append(new ItemStyle(darkMagenta,cyan,false,false));//float
+  list.append(new ItemStyle(magenta,magenta,false,false)); //char
+  list.append(new ItemStyle(red,red,false,false));         //string
+  list.append(new ItemStyle(darkGray,gray,false,true));    //comment
+  list.append(new ItemStyle(darkGreen,green,false,false)); //others
 
   config = kapp->getConfig();
   config->setGroup("Default Item Styles");
@@ -1973,7 +1995,7 @@ int HlManager::highlights() {
   return (int) hlList.count();
 }
 
-const char *HlManager::hlName(int n) {
+QString HlManager::hlName(int n) {
   return hlList.at(n)->iName;
 }
 
@@ -1996,13 +2018,17 @@ void HlManager::setHlDataList(HlDataList &list) {
 }
 
 
+#warning there is also KApplication::getKDEFonts. Is this the same?
+//what should happen if KApplication::getKDEFonts returns false?
+//the current implementation gets the X11 fonts
+
 //-----
 
 //"ripped" from kfontdialog
-bool getKDEFontList(QStrList &fontList) {
+/*
+bool getKDEFontList(QStringList &fontList) {
   QString s;
 
-  //TODO replace by QDir::homePath();
   s = locate("config", "kdefonts");
   QFile fontfile(s);
 //  if (!fontfile.exists()) return false;
@@ -2018,8 +2044,8 @@ bool getKDEFontList(QStrList &fontList) {
   fontfile.close();
   return true;
 }
-
-void getXFontList(QStrList &fontList) {
+*/
+void getXFontList(QStringList &fontList) {
   Display *kde_display;
   int numFonts;
   char** fontNames;
@@ -2038,11 +2064,8 @@ void getXFontList(QStrList &fontList) {
       // behaviour so I leave the following snippet of code around.
       // Just uncomment it if you want those aliases to be inserted as well.
 
-      /*
-      qfontname = fontName;
-      if(fontlist.find(qfontname) == -1)
-          fontlist.inSort(qfontname);
-      */
+//      qfontname = fontName;
+//      if(fontlist.find(qfontname) == -1) fontlist.inSort(qfontname);
       continue;
     }
 
@@ -2061,19 +2084,21 @@ void getXFontList(QStrList &fontList) {
     qfontname = qfontname.mid(dash +1, dash_two - dash -1);
     if (!qfontname.contains("open look", TRUE)) {
       if (qfontname != "nil") {
-        if (fontList.find(qfontname) == -1) fontList.inSort(qfontname);
+        if (!fontList.contains(qfontname)) fontList.append(qfontname);
       }
     }
   }
 
   XFreeFontNames(fontNames);
   XCloseDisplay(kde_display);
+  fontList.sort();
 }
 
-void getFontList(QStrList &fontList) {
+void getFontList(QStringList &fontList) {
 
   //try to get KDE fonts
-  if (getKDEFontList(fontList)) return;
+  if (kapp->getKDEFonts(fontList)) return;
+//  if (getKDEFontList(fontList)) return;
   //not successful: get X fonts
   getXFontList(fontList);
 }
@@ -2143,18 +2168,19 @@ void StyleChanger::changed() {
 FontChanger::FontChanger(QWidget *parent, int x, int y)
   : QObject(parent) {
 
-  QStrList fontList(true);
+  QStringList fontList;
   QRect r;
   QLabel *label;
   int z;
   char s[4];
 
   getFontList(fontList);
+//  kapp->getKDEFonts(fontList);
 
   familyCombo = new QComboBox(true,parent);
   label = new QLabel(familyCombo,i18n("Family:"),parent);
-  connect(familyCombo,SIGNAL(activated(const char *)),SLOT(familyChanged(const char *)));
-  familyCombo->insertStrList(&fontList);
+  connect(familyCombo,SIGNAL(activated(const QString&)),SLOT(familyChanged(const QString&)));
+  familyCombo->insertStringList(fontList);
 
   r.setRect(x,y,160,25);
   label->setGeometry(r);
@@ -2178,7 +2204,7 @@ FontChanger::FontChanger(QWidget *parent, int x, int y)
 
   charsetCombo = new QComboBox(true,parent);
   label = new QLabel(charsetCombo,i18n("Charset:"),parent);
-  connect(charsetCombo,SIGNAL(activated(const char *)),SLOT(charsetChanged(const char *)));
+  connect(charsetCombo,SIGNAL(activated(const QString&)),SLOT(charsetChanged(const QString&)));
 
 //  KCharsets *charsets=KApplication::getKApplication()->getCharsets();
 //  QStrList lst = charsets->displayable(selFont.family());
@@ -2212,7 +2238,7 @@ found:
   displayCharsets();
 }
 
-void FontChanger::familyChanged(const char *family) {
+void FontChanger::familyChanged(const QString& family) {
 
   font->family = family;
   displayCharsets();
@@ -2223,7 +2249,7 @@ void FontChanger::sizeChanged(int n) {
   font->size = fontSizes[n];;
 }
 
-void FontChanger::charsetChanged(const char *charset) {
+void FontChanger::charsetChanged(const QString& charset) {
 
   font->charset = charset;
   //KCharset(chset).setQFont(font);
@@ -2231,21 +2257,21 @@ void FontChanger::charsetChanged(const char *charset) {
 
 void FontChanger::displayCharsets() {
   int z;
-  const char *charset;
+  QString charset;
   KCharsets *charsets;
 
   charsets = KGlobal::charsets();
-#warning FIXME
-  QStrList lst; // = charsets->displayable(font->family);
+  QStringList lst = charsets->availableCharsetNames(font->family);
+//  QStrList lst = charsets->displayable(font->family);
   charsetCombo->clear();
   for(z = 0; z < (int) lst.count(); z++) {
-    charset = lst.at(z);
+    charset = *lst.at(z);
     charsetCombo->insertItem(charset);
-    if ((QString) font->charset == charset) charsetCombo->setCurrentItem(z);
+    if (/*(QString)*/ font->charset == charset) charsetCombo->setCurrentItem(z);
   }
   charset = "any";
   charsetCombo->insertItem(charset);
-  if ((QString) font->charset == charset) charsetCombo->setCurrentItem(z);
+  if (/*(QString)*/ font->charset == charset) charsetCombo->setCurrentItem(z);
 }
 
 //---------

@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 
-// #include "kckey.h"
+#include "kckey.h"
 
 #include "kguicommand.h"
 
@@ -51,8 +51,8 @@ const int modifierMask = SHIFT | CTRL | ALT | META;// | MOD2 | MOD3 | MOD5;
 int globalModifiers;
 
 bool isSpecialKey(int keyCode) {
-  int special[] = {Key_CapsLock, Key_NumLock, Key_ScrollLock,
-    Key_unknown, 0};
+  int special[] = {Qt::Key_CapsLock, Qt::Key_NumLock, Qt::Key_ScrollLock, 
+    Qt::Key_unknown, 0};
 //    Key_Shift, Key_Control, Key_Meta, Key_Alt, 0};
   int *i;
 
@@ -66,10 +66,10 @@ bool isSpecialKey(int keyCode) {
 
 
 int modifier2Flag(int keyCode) {
-  if (keyCode == Key_Shift) return SHIFT;
-  if (keyCode == Key_Control) return CTRL;
-  if (keyCode == Key_Meta) return META;
-  if (keyCode == Key_Alt) return ALT;
+  if (keyCode == Qt::Key_Shift) return SHIFT;
+  if (keyCode == Qt::Key_Control) return CTRL;
+  if (keyCode == Qt::Key_Meta) return META;
+  if (keyCode == Qt::Key_Alt) return ALT;
   return 0;
 }
 
@@ -109,9 +109,9 @@ const QString keyToLanguage(int keyCode) {
   keyCode &= ~modifierMask;
   if (keyCode != 0) {
     for (z = 0; z < NB_KEYS; z++) {
-      if (keyCode == KKeys[z].code) {
+      if (keyCode == KKEYS[z].code) {
         if (!s.isEmpty()) s += '+';
-        s += i18n(KKeys[z].name);
+        s += i18n(KKEYS[z].name);
         break;
       }
     }
@@ -154,9 +154,9 @@ const QString keyToString(int keyCode) {
   keyCode &= ~modifierMask;
   if (keyCode != 0) {
     for (z = 0; z < NB_KEYS; z++) {
-      if (keyCode == KKeys[z].code) {
+      if (keyCode == KKEYS[z].code) {
         if (!s.isEmpty()) s += '+';
-        s += KKeys[z].name;
+        s += KKEYS[z].name;
         break;
       }
     }
@@ -168,7 +168,7 @@ int myStringToKey(QString s) {
   int keyCode, modifier, z;
   QString keyStr;
 
-  s.detach(); //for QT < 2
+//  s.detach(); //for QT < 2
 //printf("stringtokey %s\n", s);
   keyCode = 0;
   do {
@@ -188,8 +188,8 @@ int myStringToKey(QString s) {
     if (z < 0) {
       if (!modifier) {
         for (z = 0; z < NB_KEYS; z++) {
-          if (keyStr == KKeys[z].name) {
-            keyCode |= KKeys[z].code;
+          if (keyStr == KKEYS[z].name) {
+            keyCode |= KKEYS[z].code;
             break;
           }
         }
@@ -202,7 +202,7 @@ int myStringToKey(QString s) {
 QString removeAnd(QString s) {
   int pos;
 
-  s.detach(); //for QT < 2
+//  s.detach(); //for QT < 2
   while ((pos = s.find('&')) != -1) s.remove(pos, 1);
   return s;
 }
@@ -327,7 +327,7 @@ void KGuiCmd::readConfig(KConfig *config) {
   s = removeAnd(name);
   if (!config->hasKey(s)) return;
   s = config->readEntry(s);
-  s.detach(); //for QT < 2
+//  s.detach(); //for QT < 2
   while ((z = s.find(' ')) != -1) s.remove(z, 1);
 
   if (s == "(Default)") return;
@@ -867,7 +867,7 @@ KGuiCmdActivator *KGuiCmdDispatcher::getCommand(int catNum, int cmdNum) {
 
 bool KGuiCmdDispatcher::eventFilter(QObject *, QEvent *e) {
 
-  if (enabled && e->type() == Event_Accel) {    // key press
+  if (enabled && e->type() == QEvent::Accel) {    // key press
     int keyCode, modifiers, z;
     KGuiCmdMatch match;
 
@@ -1100,11 +1100,11 @@ void KGuiCmdConfigTab::accelChanged() {
   if (command != 0L) {
     QString s;
 
-    s.sprintf(i18n("Key Binding used in:\n%s\n%s"),
-      command->getCategoryName().data(), removeAnd(command->getName()).data());
-    currentBinding->setText(s);
-//    currentBinding->setText(i18n("Key Binding used in:\n%1\n%2")
-//      .arg(command->getCategoryName()).arg(removeAnd(command->getName())));
+//    s.sprintf(i18n("Key Binding used in:\n%s\n%s"),
+//      command->getCategoryName(), removeAnd(command->getName()).data());
+//    currentBinding->setText(s);
+    currentBinding->setText(i18n("Key Binding used in:\n%1\n%2")
+      .arg(command->getCategoryName()).arg(removeAnd(command->getName())));
   } else {
     if (accelInput->getKeyCode1() == Key_Escape+META+ALT+CTRL+SHIFT)
       currentBinding->setText(i18n("Hi Emacs Fan! ;-)"));
@@ -1167,20 +1167,20 @@ int KGuiCmdPopup::addCommand(int catNum, int cmdNum, int id, int index) {
   return id;
 }
 
-int KGuiCmdPopup::addCommand(int catNum, int cmdNum, const QPixmap &pixmap,
+int KGuiCmdPopup::addCommand(int catNum, int cmdNum, QPixmap &pixmap,
   int id, int index) {
 
   KGuiCmd *command;
   KGuiCmdActivator *commandActivator;
   KGuiCmdPopupItem *item;
-//  QIconSet icon(pixmap);
+  QIconSet icon(pixmap);
 
   command = dispatcher->getManager()->getCommand(catNum, cmdNum);
   if (command == 0L) return 0;
   commandActivator = dispatcher->getCommand(catNum, cmdNum);
 
   item = new KGuiCmdPopupItem(this);
-  id = insertItem(pixmap, command->getName(), commandActivator, SLOT(trigger()),
+  id = insertItem(icon, command->getName(), commandActivator, SLOT(trigger()),
     0, id, index);
 
   item->menuItem = findItem(id);
@@ -1215,13 +1215,13 @@ int KGuiCmdPopup::addCommand(int catNum, int cmdNum,
   return id;
 }
 
-int KGuiCmdPopup::addCommand(int catNum, int cmdNum, const QPixmap &pixmap,
+int KGuiCmdPopup::addCommand(int catNum, int cmdNum, QPixmap &pixmap,
   const QObject *receiver, const char *member, int id, int index) {
 
   KGuiCmd *command;
   KGuiCmdActivator *commandActivator;
   KGuiCmdPopupItem *item;
-//  QIconSet icon(pixmap);
+  QIconSet icon(pixmap);
 
   command = dispatcher->getManager()->getCommand(catNum, cmdNum);
   if (command == 0L) return 0;
@@ -1229,7 +1229,7 @@ int KGuiCmdPopup::addCommand(int catNum, int cmdNum, const QPixmap &pixmap,
 
   item = new KGuiCmdPopupItem(this);
   connect(commandActivator, SIGNAL(activated(int)), receiver, member);
-  id = insertItem(pixmap, command->getName(), commandActivator, SLOT(trigger()),
+  id = insertItem(icon, command->getName(), commandActivator, SLOT(trigger()),
     0, id, index);
 
   item->menuItem = findItem(id);
@@ -1248,7 +1248,6 @@ void KGuiCmdPopup::setText(const QString &text, int id) {
   QString s;
   int i;
 
-QPixmap *p = pixmap(id);
   s = this->text(id);
   i = s.find('\t');
   if (i >= 0) {
@@ -1256,14 +1255,13 @@ QPixmap *p = pixmap(id);
   } else {
     s = text;
   }
-if (p != 0L) changeItem(*p, s, id); else changeItem(s, id);
+  changeItem(s, id);
 }
 
 void KGuiCmdPopup::setAccel(const QString &accelString, int id) {
   QString s;
   int i;
 
-QPixmap *p = pixmap(id);
   s = text(id);
   i = s.find('\t');
   if (i >= 0) {
@@ -1272,7 +1270,7 @@ QPixmap *p = pixmap(id);
     s += '\t';
     s += accelString;
   }
-if (p != 0L) changeItem(*p, s, id); else changeItem(s, id);
+  changeItem(s, id);
 }
 
 void KGuiCmdPopup::clear() {

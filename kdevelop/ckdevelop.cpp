@@ -1114,7 +1114,8 @@ void CKDevelop::slotToolsTool(int tool){
 
 void CKDevelop::slotOptionsEditor(){
   slotStatusMsg(i18n("Setting up the Editor..."));
-  cpp_widget->optDlg();
+  #warning FIXME
+  //  cpp_widget->optDlg();
   config->setGroup("KWrite Options");
   cpp_widget->writeConfig(config);
   cpp_widget->doc()->writeConfig(config);

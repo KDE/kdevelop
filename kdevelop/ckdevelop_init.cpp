@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kmenubar.h>
 #include <kiconloader.h>
+#include <kglobal.h>
 
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/kguicommand.h"
@@ -446,24 +447,28 @@ void CKDevelop::initKeyAccel(){
  *   -
  *-----------------------------------------------------------------*/
 void CKDevelop::initMenuBar(){
-  //  KDEVELOP MENUBAR //
-  // NOTE: ALL disableCommand(ID_XX) are placed in initKDlgMenuBar() at the end !!!
-  // NEW DISABLES HAVE TO BE ADDED THERE AFTER BOTH MENUBARS ARE CREATED COMPLETELY,
-  // OTHERWISE KDEVELOP CRASHES !!!
-
-
-  // the command dispatcher for this instance of CKDevelop (i
-  // think for KDevelop this is always only one) gets its information
-  // from the command manager. at the moment only the kwrite related
-  // commands are done with this (jochen)
-  kdev_dispatcher = new KGuiCmdDispatcher(this, &cmdMngr);
-  kdev_dispatcher->connectCategory(ctCursorCommands, this, SLOT(doCursorCommand(int)));
-  kdev_dispatcher->connectCategory(ctEditCommands, this, SLOT(doEditCommand(int)));
-  kdev_dispatcher->connectCategory(ctStateCommands, this, SLOT(doStateCommand(int)));
-
-  kdev_menubar=new KMenuBar(this,"KDevelop_menubar");
-
-///////////////////////////////////////////////////////////////////
+    //  KDEVELOP MENUBAR //
+    // NOTE: ALL disableCommand(ID_XX) are placed in initKDlgMenuBar() at the end !!!
+    // NEW DISABLES HAVE TO BE ADDED THERE AFTER BOTH MENUBARS ARE CREATED COMPLETELY,
+    // OTHERWISE KDEVELOP CRASHES !!!
+    
+    
+    // the command dispatcher for this instance of CKDevelop (i
+    // think for KDevelop this is always only one) gets its information
+    // from the command manager. at the moment only the kwrite related
+    // commands are done with this (jochen)
+    
+    
+    QPixmap pixmap;
+    KIconLoader *loader = KGlobal::iconLoader();
+    kdev_dispatcher = new KGuiCmdDispatcher(this, &cmdMngr);
+    kdev_dispatcher->connectCategory(ctCursorCommands, this, SLOT(doCursorCommand(int)));
+    kdev_dispatcher->connectCategory(ctEditCommands, this, SLOT(doEditCommand(int)));
+    kdev_dispatcher->connectCategory(ctStateCommands, this, SLOT(doStateCommand(int)));
+    
+    kdev_menubar=new KMenuBar(this,"KDevelop_menubar");
+    
+    ///////////////////////////////////////////////////////////////////
 // File-menu entries
   file_menu = new QPopupMenu;
   file_menu->insertItem(BarIcon("filenew"),i18n("&New..."),this,SLOT(slotFileNew()),0,ID_FILE_NEW);
@@ -484,24 +489,30 @@ void CKDevelop::initMenuBar(){
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
-
+  pixmap = loader->loadIcon("undo");
   edit_menu = new KGuiCmdPopup(kdev_dispatcher);//QPopupMenu;
-  edit_menu->addCommand(ctEditCommands, cmUndo, BarIcon("undo"), ID_EDIT_UNDO);
-//  edit_menu->insertItem(Icon("undo.xpm"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_UNDO);
-  edit_menu->addCommand(ctEditCommands, cmRedo, BarIcon("redo"), ID_EDIT_REDO);
+  edit_menu->addCommand(ctEditCommands, cmUndo,pixmap, ID_EDIT_UNDO);
+//  edit_menu->insertItem(Icon("undo.xpm"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_;
+  pixmap = loader->loadIcon("redo");
+  edit_menu->addCommand(ctEditCommands, cmRedo, pixmap, ID_EDIT_REDO);
 //  edit_menu->insertItem(Icon("redo.xpm"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
 
   edit_menu->insertSeparator();
-  edit_menu->addCommand(ctEditCommands, cmCut, BarIcon("cut"), ID_EDIT_CUT);
-  edit_menu->addCommand(ctEditCommands, cmCopy, BarIcon("copy"), this, SLOT(slotEditCopy()), ID_EDIT_COPY);
-  edit_menu->addCommand(ctEditCommands, cmPaste, BarIcon("paste"), ID_EDIT_PASTE);
+  pixmap = loader->loadIcon("cut");
+  edit_menu->addCommand(ctEditCommands, cmCut, pixmap, ID_EDIT_CUT);
+  pixmap = loader->loadIcon("copy");
+  edit_menu->addCommand(ctEditCommands, cmCopy, pixmap, this, SLOT(slotEditCopy()), ID_EDIT_COPY);
+  pixmap = loader->loadIcon("paste");
+  edit_menu->addCommand(ctEditCommands, cmPaste, pixmap, ID_EDIT_PASTE);
 //  edit_menu->insertItem(Icon("cut.xpm"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
 //  edit_menu->insertItem(Icon("copy.xpm"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
 //  edit_menu->insertItem(Icon("paste.xpm"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
 
   edit_menu->insertSeparator();
-  edit_menu->addCommand(ctEditCommands, cmIndent, BarIcon("indent"), ID_EDIT_INDENT);
-  edit_menu->addCommand(ctEditCommands, cmUnindent, BarIcon("unindent"), ID_EDIT_UNINDENT);
+  pixmap = loader->loadIcon("indent");
+  edit_menu->addCommand(ctEditCommands, cmIndent, pixmap, ID_EDIT_INDENT);
+  pixmap = loader->loadIcon("unindent");
+  edit_menu->addCommand(ctEditCommands, cmUnindent, pixmap, ID_EDIT_UNINDENT);
 //  edit_menu->insertItem(Icon("indent.xpm"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
 //  edit_menu->insertItem(Icon("unindent.xpm"),i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
 
@@ -509,7 +520,8 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertItem(i18n("&Insert File..."), this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
 
   edit_menu->insertSeparator();
-  edit_menu->addCommand(ctFindCommands, cmFind, BarIcon("search"), this, SLOT(slotEditSearch()), ID_EDIT_SEARCH);
+  pixmap = loader->loadIcon("search");
+  edit_menu->addCommand(ctFindCommands, cmFind, pixmap, this, SLOT(slotEditSearch()), ID_EDIT_SEARCH);
   edit_menu->addCommand(ctFindCommands, cmFindAgain, this, SLOT(slotEditRepeatSearch()), ID_EDIT_REPEAT_SEARCH);
 //  edit_menu->insertItem(Icon("search.xpm"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
 //  edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);

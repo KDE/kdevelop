@@ -15,17 +15,16 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
-#include "ckdevelop.h"
 #include "kstartuplogo.h"
 #include "ckdevinstall.h"
-//#include <kwmmapp.h>
+#include "ckdevelop.h"
 
-#include "./kwrite/kguicommand.h"
-#include "./kwrite/kwview.h"
+
+
 
 
 KGuiCmdManager cmdMngr; //manager for user -> gui commands
+
 
 
 int main(int argc, char* argv[]) {
@@ -97,5 +96,6 @@ int main(int argc, char* argv[]) {
   int rc = a.exec();
   return rc;
 }
+
 
 

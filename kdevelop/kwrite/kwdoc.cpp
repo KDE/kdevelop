@@ -1,4 +1,6 @@
 /*
+  $Id$
+
    Copyright (C) 1998, 1999 Jochen Wilhelmy
                             digisnap@cs.tu-berlin.de
 
@@ -17,10 +19,14 @@
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 */
-//   #include <sys/time.h>
-//   #include <unistd.h>
+
+#include <sys/time.h>
+#include <unistd.h>
 
 #include <stdio.h>
+
+#include <list>
+
 #include <qobject.h>
 #include <qapplication.h>
 #include <qclipboard.h>
@@ -48,122 +54,107 @@ TextLine::~TextLine() {
   delete attribs;
 }
 
-void TextLine::move(int pos, int n) {
+void TextLine::replace(int pos, int delLen, const QChar *insText, int insLen,
+  uchar *insAttribs) {
 
-  if (pos >= len) {
-    resize(pos + n);
-    memset(&text[len],' ',pos - len);
-    memset(&attribs[len],attr,pos - len + n);
-    len = pos;
+  int newLen, i, z;
+  uchar newAttr;
+  bool realloc;
+  QChar *newText;
+  uchar *newAttribs;
+
+  //find new length
+  newLen = len - delLen;
+  if (newLen < pos) newLen = pos;
+  newLen += insLen;
+//printf("len %d, pos %d, delLen %d, insLen %d, newLen %d\n",
+//  len, pos, delLen, insLen, newLen);
+
+  newAttr = (pos < len) ? attribs[pos] : attr;
+
+  if (newLen > size) {
+    //reallocate data
+    realloc = true;
+    size = size*3 >> 1;
+    if (size < newLen) size = newLen;
+    size = (size + 15) & (~15);
+
+    newText = new QChar[size];
+    newAttribs = new uchar[size];
+  ASSERT(newText);
+  ASSERT(newAttribs);
+
+    i = QMIN(len, pos);
+    for (z = 0; z < i; z++) {
+      newText[z] = text[z];
+      newAttribs[z] = attribs[z];
+    }
   } else {
-    resize(len + n);
-    memmove(&text[pos + n],&text[pos],len - pos);
-    memmove(&attribs[pos + n],&attribs[pos],len - pos);
-    memset(&attribs[pos],attribs[pos],n);
+    realloc = false;
+    newText = text;
+    newAttribs = attribs;
   }
-  len += n;
-}
 
-/*
-void TextLine::ins(int pos, char c, int n) {
-
-  move(pos,n);
-  memset(&text[pos],c,n);
-}
-
-void TextLine::ovr(int pos, char c, int n) {
-
-  if (pos + n > len) {
-    resize(pos + n);
-    if (pos > len) memset(&text[len],' ',pos - len);
-    memset(&attribs[len],attr,pos + n - len);
-    len = pos + n;
+  //fill up with spaces and attribute
+  for (z = len; z < pos; z++) {
+    newText[z] = ' ';
+    newAttribs[z] = attr;
   }
-  memset(&text[pos],c,n);
-}
-*/
 
-void TextLine::insert(int pos, const char *s, int l) {
-
-  move(pos,l);
-  memcpy(&text[pos],s,l);
-}
-
-
-void TextLine::overwrite(int pos, const char *s, int l) {
-
-  if (pos + l > len) {
-    resize(pos + l);
-    if (pos > len) memset(&text[len],' ',pos - len);
-    memset(&attribs[len],attr,pos + l - len);
-    len = pos + l;
+  i = (insLen - delLen);
+  if (i != 0 || realloc) {
+    if (i <= 0) {
+      //text to replace longer than new text
+      for (z = pos + delLen; z < len; z++) {
+        newText[z + i] = text[z];
+        newAttribs[z + i] = attribs[z];
+      }
+    } else {
+      //text to replace shorter than new text
+      for (z = len -1; z >= pos + delLen; z--) {
+        newText[z + i] = text[z];
+        newAttribs[z + i] = attribs[z];
+      }
+    }
   }
-  memcpy(&text[pos],s,l);
-}
 
-void TextLine::append(char c, int n) {
+  if (realloc) {
+    delete text;
+    delete attribs;
+    text = newText;
+    attribs = newAttribs;
+  }
 
-  resize(len + n);
-  memset(&text[len],c,n);
-  memset(&attribs[len],attr,n);
-  len += n;
-}
-
-void TextLine::del(int pos, int n) {
-  int count;
-
-  count = len - (pos + n);
-  if (count <= 0) {
-    if (len > pos) len = pos;
+  if (insAttribs == 0L) {
+    for (z = 0; z < insLen; z++) {
+      text[pos + z] = insText[z];
+      attribs[pos + z] = newAttr;
+    }
   } else {
-    memmove(&text[pos],&text[pos + n],count);
-    memmove(&attribs[pos],&attribs[pos + n],count);
-    len -= n;
+    for (z = 0; z < insLen; z++) {
+      text[pos + z] = insText[z];
+      attribs[pos + z] = insAttribs[z];
+    }
   }
+  len = newLen;
 }
 
-int TextLine::length() const {
-  return len;
-}
-
-void TextLine::setLength(int l) {
-  if (l >= len) {
-    resize(l);
-    memset(&text[len],' ',l - len);
-    memset(&attribs[len],attr,l - len);
-  } else attr = attribs[l];
-  len = l;
-}
-/*
-void TextLine::truncate(int l) {
-  if (l < len) {
-    attr = attribs[l];
-    len = l;
-  }
-}
-*/
 void TextLine::wrap(TextLine *nextLine, int pos) {
   int l;
 
   l = len - pos;
   if (l > 0) {
-    nextLine->move(0,l);
-    memcpy(nextLine->text,&text[pos],l);
-    memcpy(nextLine->attribs,&attribs[pos],l);
+    nextLine->replace(0, 0, &text[pos], l, &attribs[pos]);
     attr = attribs[pos];
     len = pos;
   }
 }
 
-void TextLine::unWrap(TextLine *nextLine, int pos) {
-  
-  if (nextLine->len < pos) pos = nextLine->len;
-  resize(len + pos);
-  memcpy(&text[len],nextLine->text,pos);
-  memcpy(&attribs[len],nextLine->attribs,pos);
-  len += pos;
-  attr = nextLine->getRawAttr(pos);
-  nextLine->del(0,pos);
+void TextLine::unWrap(int pos, TextLine *nextLine, int len) {
+
+  replace(pos, 0, nextLine->text, len, nextLine->attribs);
+  attr = nextLine->getRawAttr(len);
+  nextLine->replace(0, len, 0L, 0);
 }
 
 void TextLine::removeSpaces() {
@@ -175,11 +166,11 @@ int TextLine::firstChar() const {
   int z;
 
   z = 0;
-  while (z < len && (unsigned char) text[z] <= 32) z++;
+  while (z < len && text[z].isSpace()) z++;
   return (z < len) ? z : -1;
 }
 
-char TextLine::getChar( int pos ) const {
+QChar TextLine::getChar(int pos) const {
   if (pos < len) return text[pos];
   return ' ';
 }
@@ -221,13 +212,16 @@ int TextLine::getContext() const {
   return ctx;
 }
 
-const char* TextLine::getString() {
-  resize(len+1);
-  text[len] = '\0';
+const QChar* TextLine::getString() {
+  QChar ch = QChar('\0');
+  replace(len, 0, &ch, 1);
+  len--;
+//  resize(len+1);
+//  text[len] = '\0';
   return text;
 }
 
-const char* TextLine::getText() const {
+const QChar* TextLine::getText() const {
   return text;
 }
 
@@ -294,7 +288,7 @@ int TextLine::findSelected(int pos) const {
   return pos;
 }
 
-int TextLine::findUnSelected(int pos) const {
+int TextLine::findUnselected(int pos) const {
   while (pos < len && !(attribs[pos] & taSelected)) pos++;
   return pos;
 }
@@ -304,7 +298,7 @@ int TextLine::findRevSelected(int pos) const {
   return pos;
 }
 
-int TextLine::findRevUnSelected(int pos) const {
+int TextLine::findRevUnselected(int pos) const {
   while (pos > 0 && !(attribs[pos - 1] & taSelected)) pos--;
   return pos;
 }
@@ -335,62 +329,36 @@ void TextLine::unmarkFound() {
   for (z = 0; z < len; z++) attribs[z] &= ~taFound;
 }
 
-
-void TextLine::resize(int newsize) {
-  char *newtext;
-  unsigned char *newattribs;
-
-  if (newsize > size) {
-    if (newsize*2 < size*3) newsize = (size*3)/2;
-    size = (newsize + 15) & (~15);
-
-    newtext = new char[size];
-    newattribs = new unsigned char[size];
-if (!newtext || !newattribs) {
-  printf("error resizing textline\n");
-  exit(1);
-}
-    memcpy(newtext,text,len);
-    memcpy(newattribs,attribs,len);
-    delete text;
-    delete attribs;
-    text = newtext;
-    attribs = newattribs;
-  }
-}
-
-
 Attribute::Attribute() : font(), fm(font) {
 }
 
 void Attribute::setFont(const QFont &f) {
   font = f;
   fm = QFontMetrics(f);
+//workaround for slow QFontMetrics::width(), QFont::fixedPitch() doesn't seem to work
+  if ((fontWidth = fm.width('W')) != fm.width('i')) fontWidth = -1;
 }
 
 
-KWAction::KWAction(Action a, PointStruc &aCursor)
-  : action(a), cursor(aCursor), len(0), text(0L), textLen(0) {
+KWAction::KWAction(Action a, PointStruc &cursor, int len, const QString &text)
+  : action(a), cursor(cursor), len(len), text(text) {
 }
-
-KWAction::~KWAction() {
-  delete text;
-}
-
-void KWAction ::setData(int aLen, const char *aText, int aTextLen) {
+/*
+void KWAction ::setData(int aLen, const QChar *aText, int aTextLen) {
 
   len = aLen;
   if (aTextLen > 0) {
-    text = new char[aTextLen];
-    memcpy((char *) text,aText,aTextLen);
+    text = new QChar[aTextLen];
+    memcpy((QChar *) text, aText, aTextLen*sizeof(QChar));
     textLen = aTextLen;
   } else {
     text = 0L;
     textLen = 0;
   }
-}
+} */
 
-KWActionGroup::KWActionGroup(PointStruc &aStart) : start(aStart), action(0L) {
+KWActionGroup::KWActionGroup(PointStruc &aStart, int type)
+  : start(aStart), action(0L), undoType(type) {
 }
 
 KWActionGroup::~KWActionGroup() {
@@ -409,8 +377,26 @@ void KWActionGroup::insertAction(KWAction *a) {
   action = a;
 }
 
+QString KWActionGroup::typeName(int type)
+{
+  // return a short text description of the given undo group type suitable for a menu
+  // not the lack of i18n's, the caller is expected to handle translation
+  switch (type) {
+  case ugPaste : return "Paste Text";
+  case ugDelBlock : return "Selection Overwrite";
+  case ugIndent : return "Indent";
+  case ugUnindent : return "Unindent";
+  case ugReplace : return "Text Replace";
+  case ugSpell : return "Spell Check";
+  case ugInsChar : return "Typing";
+  case ugDelChar : return "Delete Text";
+  case ugInsLine : return "New Line";
+  case ugDelLine : return "Delete Line";
+  }
+  return "";
+}
 
-KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
+KWriteDoc::KWriteDoc(HlManager *hlManager, const QString &path)
   : QObject(0L), hlManager(hlManager), fName(path) {
 
   contents.setAutoDelete(true);
@@ -424,11 +410,16 @@ KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
   highlight = 0L;
   tabChars = 8;
 
+  newDocGeometry = false;
+  readOnly = false;
+
   modified = false;
 
   undoList.setAutoDelete(true);
   undoState = 0;
   undoSteps = 50;
+
+//  recordReset();
 
   pseudoModal = 0L;
   clear();
@@ -521,6 +512,7 @@ void KWriteDoc::registerView(KWriteView *view) {
 }
 
 void KWriteDoc::removeView(KWriteView *view) {
+//  if (undoView == view) recordReset();
   views.remove(view);
 }
 
@@ -529,61 +521,32 @@ int KWriteDoc::currentColumn(PointStruc &cursor) {
   return contents.at(cursor.y)->cursorX(cursor.x,tabChars);
 }
 
-void KWriteDoc::wordLeft(PointStruc &cursor) {
-  TextLine *textLine;
-
-  textLine = contents.at(cursor.y);
-  while (cursor.x > 0 && !highlight->isInWord(textLine->getChar(cursor.x -1))) {
-    cursor.x--;
-  }
-  while (cursor.x <= 0 && cursor.y > 0) {
-    cursor.y--;
-    textLine = contents.at(cursor.y);
-    cursor.x = textLine->length();
-    while (cursor.x > 0 && !highlight->isInWord(textLine->getChar(cursor.x -1))) {
-      cursor.x--;
-    }
-  }
-  while (cursor.x > 0 && highlight->isInWord(textLine->getChar(cursor.x -1))) {
-    cursor.x--;
-  }
-}
-
-void KWriteDoc::wordRight(PointStruc &cursor) {
-  TextLine *textLine;
-  int len;
-
-  textLine = contents.at(cursor.y);
-  len = textLine->length();
-  while (cursor.x < len && highlight->isInWord(textLine->getChar(cursor.x))) {
-    cursor.x++;
-  }
-  while (cursor.x < len && !highlight->isInWord(textLine->getChar(cursor.x))) {
-    cursor.x++;
-  }
-  while (cursor.x >= len && cursor.y < lastLine()) {
-    cursor.y++;
-    textLine = contents.at(cursor.y);
-    len = textLine->length();
-    cursor.x = 0;
-    while (cursor.x < len && !highlight->isInWord(textLine->getChar(cursor.x))) {
-      cursor.x++;
-    }
-  }
-}
-
-void KWriteDoc::insert(VConfig &c, const char *s, int len) {
-  char b[256];
+void KWriteDoc::insert(VConfig &c, const QString &s) {
+//  char b[256];
   int pos;
+  QChar ch;
+  QString buf;
 
-  if (!s || !*s || !len) return;
-//  if (c.flags & cfDelOnInput) delMarkedText(c);
+  if (s.isEmpty()) return;
 
-  recordStart(c.cursor);
+  recordStart(c, KWActionGroup::ugPaste);
+
   pos = 0;
   if (!(c.flags & cfVerticalSelect)) {
     do {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
+      ch = s[pos];
+      if (ch.isPrint() || ch == '\t') {
+        buf += ch;
+      } else if (ch == '\n') {
+        recordAction(KWAction::newLine, c.cursor);
+        recordInsert(c.cursor, buf);
+        c.cursor.x += buf.length();
+        buf.truncate(0);
+        c.cursor.y++;
+        c.cursor.x = 0;
+      }
+      pos++;
+/*      if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
         if (pos >= 256) {
@@ -600,12 +563,27 @@ void KWriteDoc::insert(VConfig &c, const char *s, int len) {
       }
       s++;
       len--;
-    } while (*s != 0 && len != 0);
+    } while (*s != 0 && len != 0);*/
+    } while (pos < (int) s.length());
   } else {
     int xPos;
 
     xPos = textWidth(c.cursor);
     do {
+      ch = s[pos];
+      if (ch.isPrint() || ch == '\t') {
+        buf += ch;
+      } else if (ch == '\n') {
+        recordInsert(c.cursor, buf);
+        c.cursor.x += buf.length();
+        buf.truncate(0);
+        c.cursor.y++;
+        if (c.cursor.y >= numLines())
+          recordAction(KWAction::insLine, c.cursor);
+        c.cursor.x = textPos(contents.at(c.cursor.y), xPos);
+      }
+      pos++;
+/*
       if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
@@ -624,86 +602,91 @@ void KWriteDoc::insert(VConfig &c, const char *s, int len) {
       }
       s++;
       len--;
-    } while (*s != 0 && len != 0);
+    } while (*s != 0 && len != 0);*/
+    } while (pos < (int) s.length());
   }
-  if (pos > 0) {
+  recordInsert(c.cursor, buf);
+  c.cursor.x += buf.length();
+/*  if (pos > 0) {
     recordReplace(c.cursor, 0, b, pos);
     c.cursor.x += pos;
-  }
+  }*/
   recordEnd(c);
 }
 
 void KWriteDoc::insertFile(VConfig &c, QIODevice &dev) {
-  char buf[256];
+  char block[256];
   int len;
-  char b[256];
-  int pos;
   char *s;
+  QChar ch;
+  QString buf;
   char last = '\0';
 
-  recordStart(c.cursor);
-  pos = 0;
+  recordStart(c, KWActionGroup::ugPaste);
+
   do {
-    len = dev.readBlock(buf, 256);
-    s = buf;
+    len = dev.readBlock(block, 256);
+    s = block;
     while (len > 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
-        b[pos] = *s;
+      ch = *s;
+      if (ch.isPrint() || *s == '\t') {
+        buf += ch;
+/*        b[pos] = *s;
         pos++;
         if (pos >= 256) {
           recordReplace(c.cursor, 0, b, pos);
           c.cursor.x += pos;
           pos = 0;
-        }
+        }*/
       } else if (*s == '\n' || *s == '\r') {
         if (last != '\r' || *s != '\n') {
           recordAction(KWAction::newLine, c.cursor);
-          recordReplace(c.cursor, 0, b, pos);
+          recordInsert(c.cursor, buf);
+          buf.truncate(0);
+//          recordReplace(c.cursor, 0, b, pos);
           c.cursor.y++;
           c.cursor.x = 0;
-          pos = 0;
+//          pos = 0;
         }
         last = *s;
       }
       s++;
       len--;
     }
-  } while (s != buf);
-  if (pos > 0) {
-    recordReplace(c.cursor, 0, b, pos);
-    c.cursor.x += pos;
-  }
+  } while (s != block);
+  recordInsert(c.cursor, buf);
   recordEnd(c);
 }
 
 void KWriteDoc::loadFile(QIODevice &dev) {
   TextLine *textLine;
-  char buf[256];
+  char block[256];
   int len;
-  char b[256];
-  int pos;
   char *s;
+  QChar ch;
   char last = '\0';
 
   clear();
 
   textLine = contents.getFirst();
-  pos = 0;
+//  pos = 0;
   do {
-    len = dev.readBlock(buf, 256);
-    s = buf;
+    len = dev.readBlock(block, 256);
+    s = block;
     while (len > 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
-        b[pos] = *s;
+      ch = *s;
+      if (ch.isPrint() || *s == '\t') {
+        textLine->append(&ch, 1);
+/*        b[pos] = ch;
         pos++;
         if (pos >= 256) {
           textLine->append(b, pos);
           pos = 0;
-        }
+        }*/
       } else if (*s == '\n' || *s == '\r') {
         if (last != '\r' || *s != '\n') {
-          textLine->append(b, pos);
-          pos = 0;
+//          textLine->append(b, pos);
+//          pos = 0;
           textLine = new TextLine();
           contents.append(textLine);
           if (*s == '\r') eolMode = eolMacintosh;
@@ -713,41 +696,9 @@ void KWriteDoc::loadFile(QIODevice &dev) {
       s++;
       len--;
     }
-  } while (s != buf);
-  textLine->append(b, pos);
-//
-/*
-  TextLine *textLine;
-  char buf[512];
-  int len;
-  char *s;
+  } while (s != block);
+//  textLine->append(b, pos);
 
-  clear();
-
-  textLine = contents.getFirst();
-  do {
-    len = dev.readBlock(buf,512);
-    s = buf;
-    while (len > 0) {
-      if ((unsigned char) *s >= 32 || *s == '\t') {
-        textLine->append(*s);
-      } else if (*s == '\n' || *s == '\r') {
-        textLine = new TextLine();
-        contents.append(textLine);
-        if (*s == '\r') {
-          eolMode = eolMacintosh;
-          if (len > 1 && s[1] == '\n') {
-            eolMode = eolDos;
-            s++;
-            len--;
-          }
-        }
-      }
-      s++;
-      len--;
-    }
-  } while (s != buf);
-*/
 //  updateLines();
 }
 
@@ -756,7 +707,10 @@ void KWriteDoc::writeFile(QIODevice &dev) {
 
   textLine = contents.first();
   do {
-    dev.writeBlock(textLine->getText(),textLine->length());
+    QConstString str((QChar *) textLine->getText(), textLine->length());
+    dev.writeBlock(str.string().latin1(), textLine->length());
+//    dev.writeBlock(QString(textLine->getText(),
+//      textLine->length()).latin1(), textLine->length());
     textLine = contents.next();
     if (!textLine) break;
     if (eolMode != eolUnix) dev.putch('\r');
@@ -764,109 +718,139 @@ void KWriteDoc::writeFile(QIODevice &dev) {
   } while (true);
 }
 
-void KWriteDoc::insertChar(VConfig &c, char ch) {
+bool KWriteDoc::insertChars(VConfig &c, const QString &chars) {
   TextLine *textLine;
-  int l, z;
-  char buf[20];
+  int z, pos, l;
+  bool onlySpaces;
+  QChar ch;
+  QString buf;
 
   textLine = contents.at(c.cursor.y);
 
-  if (ch == '\t' && c.flags & cfReplaceTabs) {
-    l = tabChars - (textLine->cursorX(c.cursor.x,tabChars) % tabChars);
-    for (z = 0; z < l; z++) buf[z] = ' ';
-  } else {
-    z = l = 1;
-    buf[0] = ch;
-    if (c.flags & cfAutoBrackets) {
-      if (ch == '(') buf[l++] = ')';
-      if (ch == '[') buf[l++] = ']';
-      if (ch == '{') buf[l++] = '}';
+  pos = 0;
+  onlySpaces = true;
+  for (z = 0; z < (int) chars.length(); z++) {
+    ch = chars[z];
+    if (ch == '\t' && c.flags & cfReplaceTabs) {
+      l = tabChars - (textLine->cursorX(c.cursor.x, tabChars) % tabChars);
+      while (l > 0) {
+        buf.insert(pos, ' ');
+        pos++;
+        l--;
+      }
+    } else if (ch.isPrint() || ch == '\t') {
+      buf.insert(pos, ch);
+      pos++;
+      if (ch != ' ') onlySpaces = false;
+      if (c.flags & cfAutoBrackets) {
+        if (ch == '(') buf.insert(pos, ')');
+        if (ch == '[') buf.insert(pos, ']');
+        if (ch == '{') buf.insert(pos, '}');
+      }
+      /*
+      if (ch == 'ä') {
+        strcpy(buf,"&auml;");
+        l = z = 6;
+      }
+      if (ch == 'ö') {
+        strcpy(buf,"&ouml;");
+        l = z = 6;
+      }
+      if (ch == 'ü') {
+        strcpy(buf,"&uuml;");
+        l = z = 6;
+      }
+      if (ch == 'Ä') {
+        strcpy(buf,"&Auml;");
+        l = z = 6;
+      }
+      if (ch == 'Ö') {
+        strcpy(buf,"&Ouml;");
+        l = z = 6;
+      }
+      if (ch == 'Ü') {
+        strcpy(buf,"&Uuml;");
+        l = z = 6;
+      }*/
+      /*
+      if (ch == 'ä') {
+        strcpy(buf,"\"a");
+        l = z = 2;
+      }
+      if (ch == 'ö') {
+        strcpy(buf,"\"o");
+        l = z = 2;
+      }
+      if (ch == 'ü') {
+        strcpy(buf,"\"u");
+        l = z = 2;
+      }
+      if (ch == 'Ä') {
+        strcpy(buf,"\"A");
+        l = z = 2;
+      }
+      if (ch == 'Ö') {
+        strcpy(buf,"\"O");
+        l = z = 2;
+      }
+      if (ch == 'Ü') {
+        strcpy(buf,"\"U");
+        l = z = 2;
+      }
+      if (ch == 'ß') {
+        strcpy(buf,"\"s");
+        l = z = 2;
+      }*/
     }
-    /*
-    if (ch == 'ä') {
-      strcpy(buf,"&auml;");
-      l = z = 6;
-    }
-    if (ch == 'ö') {
-      strcpy(buf,"&ouml;");
-      l = z = 6;
-    }
-    if (ch == 'ü') {
-      strcpy(buf,"&uuml;");
-      l = z = 6;
-    }
-    if (ch == 'Ä') {
-      strcpy(buf,"&Auml;");
-      l = z = 6;
-    }
-    if (ch == 'Ö') {
-      strcpy(buf,"&Ouml;");
-      l = z = 6;
-    }
-    if (ch == 'Ü') {
-      strcpy(buf,"&Uuml;");
-      l = z = 6;
-    }*/
-    /*
-    if (ch == 'ä') {
-      strcpy(buf,"\"a");
-      l = z = 2;
-    }
-    if (ch == 'ö') {
-      strcpy(buf,"\"o");
-      l = z = 2;
-    }
-    if (ch == 'ü') {
-      strcpy(buf,"\"u");
-      l = z = 2;
-    }
-    if (ch == 'Ä') {
-      strcpy(buf,"\"A");
-      l = z = 2;
-    }
-    if (ch == 'Ö') {
-      strcpy(buf,"\"O");
-      l = z = 2;
-    }
-    if (ch == 'Ü') {
-      strcpy(buf,"\"U");
-      l = z = 2;
-    }
-    if (ch == 'ß') {
-      strcpy(buf,"\"s");
-      l = z = 2;
-    }*/
   }
-  //l = length of string in buf[], z = cursor increment
+  //pos = cursor increment
 
-  if (buf[0] == ' ' && c.flags & cfRemoveSpaces && c.cursor.x >= textLine->length()) {
-    //do nothing if spaces will be removed and cursor behind end of line
-    c.cursor.x += z;
+  //return false if nothing has to be inserted
+  if (buf.isEmpty()) return false;
+
+  //auto deletion of the marked text occurs not very often and can therefore
+  //  be recorded separately
+  if (c.flags & cfDelOnInput) delMarkedText(c);
+
+  //do nothing if spaces will be removed
+  if (onlySpaces && c.flags & cfRemoveSpaces && c.cursor.x >= textLine->length()) {
+    //no trailing space, but move the cursor
+
+    if (c.flags & cfGroupUndo) {
+      //modify last undo step that it includes the cursor motion
+      KWActionGroup *g = undoList.getLast();
+      if (undoCount < 1024 && g != 0L && g->undoType == KWActionGroup::ugInsChar
+        && g->end.x == c.cursor.x && g->end.y == c.cursor.y) {
+
+        g->end.x += pos;
+      }
+    }
+
+    c.cursor.x += pos;
     c.view->updateCursor(c.cursor);
-    return;
+    return true;
   }
 
-  recordStart(c.cursor);
-  recordReplace(c.cursor,(c.flags & cfOvr) ? l : 0,buf,l);
-  c.cursor.x += z;
+  recordStart(c, KWActionGroup::ugInsChar);
+  recordReplace(c.cursor, (c.flags & cfOvr) ? buf.length() : 0, buf);
+  c.cursor.x += pos;
 
-  if (c.flags & cfWordWrap) {
+  if (c.flags & cfWordWrap && c.wrapAt > 0) {
     int line;
-    const unsigned char *s;
-    int pos;
+    const QChar *s;
+//    int pos;
     PointStruc actionCursor;
 
-    if (!(c.flags & cfPersistent)) deselectAll();
     line = c.cursor.y;
     do {
       textLine = contents.at(line);
-      s = (unsigned char *) textLine->getText();
+      s = textLine->getText();
       l = textLine->length();
-      for (z = c.wrapAt; z < l; z++) if (s[z] > 32) break; //search for text to wrap
+      for (z = c.wrapAt; z < l; z++) if (!s[z].isSpace()) break; //search for text to wrap
       if (z >= l) break; // nothing more to wrap
       pos = c.wrapAt;
       for (; z >= 0; z--) { //find wrap position
-        if (s[z] <= 32) {
+        if (s[z].isSpace()) {
           pos = z + 1;
           break;
         }
@@ -887,22 +871,26 @@ void KWriteDoc::insertChar(VConfig &c, char ch) {
       } else {
         //wrap
         actionCursor.y = line + 1;
-        if (s[l - 1] > 32) { //add space in next line if necessary
+        if (!s[l - 1].isSpace()) { //add space in next line if necessary
           actionCursor.x = 0;
-          recordReplace(actionCursor,0," ",1);
+//          recordReplace(actionCursor, 0, " ", 1);
+          recordInsert(actionCursor, " ");
         }
         actionCursor.x = textLine->length() - pos;
-        recordAction(KWAction::wordWrap,actionCursor);
+        recordAction(KWAction::wordWrap, actionCursor);
       }
       line++;
     } while (true);
   }
   recordEnd(c);
+  return true;
 }
 
 void KWriteDoc::newLine(VConfig &c) {
 
-  recordStart(c.cursor);
+  //auto deletion of marked text is done by the view to have a more
+  // "low level" KWriteDoc::newLine method
+  recordStart(c, KWActionGroup::ugInsLine);
 
   if (!(c.flags & cfAutoIndent)) {
     recordAction(KWAction::newLine,c.cursor);
@@ -911,6 +899,7 @@ void KWriteDoc::newLine(VConfig &c) {
   } else {
     TextLine *textLine;
     int pos;
+
     textLine = contents.at(c.cursor.y);
     pos = textLine->firstChar();
     if (pos > c.cursor.x) c.cursor.x = pos;
@@ -924,7 +913,7 @@ void KWriteDoc::newLine(VConfig &c) {
     c.cursor.y++;
     c.cursor.x = 0;
     if (pos > 0) {
-      recordReplace(c.cursor,0,textLine->getText(),pos);
+      recordInsert(c.cursor, QString(textLine->getText(), pos));
       c.cursor.x = pos;
     }
   }
@@ -934,11 +923,11 @@ void KWriteDoc::newLine(VConfig &c) {
 
 void KWriteDoc::killLine(VConfig &c) {
 
-  recordStart(c.cursor);
+  recordStart(c, KWActionGroup::ugDelLine);
   c.cursor.x = 0;
-  recordReplace(c.cursor,0xffffff);
-  if (c.cursor.y < (int) contents.count() - 1) {
-    recordAction(KWAction::killLine,c.cursor);
+  recordDelete(c.cursor, 0xffffff);
+  if (c.cursor.y < (int) contents.count() -1) {
+    recordAction(KWAction::killLine, c.cursor);
   }
   recordEnd(c);
 }
@@ -946,11 +935,12 @@ void KWriteDoc::killLine(VConfig &c) {
 void KWriteDoc::backspace(VConfig &c) {
 
   if (c.cursor.x <= 0 && c.cursor.y <= 0) return;
-  recordStart(c.cursor);
+
   if (c.cursor.x > 0) {
-    if (!(c.flags & cfBackspaceIndent)) {
+    recordStart(c, KWActionGroup::ugDelChar);
+    if (!(c.flags & cfBackspaceIndents)) {
       c.cursor.x--;
-      recordReplace(c.cursor,1);
+      recordDelete(c.cursor, 1);
     } else {
       TextLine *textLine;
       int pos, l;
@@ -968,9 +958,10 @@ void KWriteDoc::backspace(VConfig &c) {
       l = 1;//del one char
       found:
       c.cursor.x -= l;
-      recordReplace(c.cursor,l);
+      recordDelete(c.cursor, l);
     }
   } else {
+    recordStart(c, KWActionGroup::ugDelLine);
     c.cursor.y--;
     c.cursor.x = contents.at(c.cursor.y)->length();
     recordAction(KWAction::delLine,c.cursor);
@@ -982,12 +973,12 @@ void KWriteDoc::backspace(VConfig &c) {
 void KWriteDoc::del(VConfig &c) {
 
   if (c.cursor.x < contents.at(c.cursor.y)->length()) {
-    recordStart(c.cursor);
-    recordReplace(c.cursor,1);
+    recordStart(c, KWActionGroup::ugDelChar);
+    recordDelete(c.cursor, 1);
     recordEnd(c);
   } else {
     if (c.cursor.y < (int) contents.count() -1) {
-      recordStart(c.cursor);
+      recordStart(c, KWActionGroup::ugDelLine);
       recordAction(KWAction::delLine,c.cursor);
       recordEnd(c);
     }
@@ -1207,7 +1198,7 @@ int KWriteDoc::textWidth(TextLine *textLine, int cursorX) {
   for (z = 0; z < cursorX; z++) {
     ch = textLine->getChar(z);
     a = &attribs[textLine->getAttr(z)];
-    x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
+    x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->width(ch);//a->fm.width(ch);
   }
   return x;
 }
@@ -1237,7 +1228,7 @@ int KWriteDoc::textWidth(bool wrapCursor, PointStruc &cursor, int xPos) {
     oldX = x;
     ch = textLine->getChar(z);
     a = &attribs[textLine->getAttr(z)];
-    x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
+    x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->width(ch);//a->fm.width(ch);
     z++;
   }
   if (xPos - oldX < x - xPos && z > 0) {
@@ -1248,13 +1239,15 @@ int KWriteDoc::textWidth(bool wrapCursor, PointStruc &cursor, int xPos) {
   return x;
 }
 
+
 int KWriteDoc::textPos(TextLine *textLine, int xPos) {
-  int newXPos;
+/*  int newXPos;
 
   return textPos(textLine, xPos, newXPos);
 }
 
 int KWriteDoc::textPos(TextLine *textLine, int xPos, int &newXPos) {
+*/
 //  int len;
   int x, oldX;
   int z;
@@ -1268,13 +1261,13 @@ int KWriteDoc::textPos(TextLine *textLine, int xPos, int &newXPos) {
     oldX = x;
     ch = textLine->getChar(z);
     a = &attribs[textLine->getAttr(z)];
-    x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->fm.width(&ch,1);
+    x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->width(ch);//a->fm.width(ch);
     z++;
   }
   if (xPos - oldX < x - xPos && z > 0) {
     z--;
-    newXPos = oldX;
-  } else newXPos = x;
+   // newXPos = oldX;
+  }// else newXPos = x;
   return z;
 }
 
@@ -1287,10 +1280,8 @@ int KWriteDoc::textHeight() {
 }
 
 void KWriteDoc::toggleRect(int start, int end, int x1, int x2) {
-  int z;
+  int z, line;
   bool t;
-  int s, e, newX1, newX2;
-  TextLine *textLine;
 
   if (x1 > x2) {
     z = x1;
@@ -1304,13 +1295,47 @@ void KWriteDoc::toggleRect(int start, int end, int x1, int x2) {
   }
 
   t = false;
-  for (z = start; z < end; z++) {
-    textLine = contents.at(z);
-    s = textPos(textLine, x1, newX1);
-    e = textPos(textLine, x2, newX2);
+  for (line = start; line < end; line++) {
+    int x, oldX, s, e, newX1, newX2;
+    TextLine *textLine;
+    char ch;
+    Attribute *a;
+
+    textLine = contents.at(line);
+
+    //--- speed optimization
+    //s = textPos(textLine, x1, newX1);
+    x = oldX = z = 0;
+    while (x < x1) { // && z < len) {
+      oldX = x;
+      ch = textLine->getChar(z);
+      a = &attribs[textLine->getAttr(z)];
+      x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->width(ch);//a->fm.width(ch);
+      z++;
+    }
+    s = z;
+    if (x1 - oldX < x - x1 && z > 0) {
+      s--;
+      newX1 = oldX;
+    } else newX1 = x;
+    //e = textPos(textLine, x2, newX2);
+    while (x < x2) { // && z < len) {
+      oldX = x;
+      ch = textLine->getChar(z);
+      a = &attribs[textLine->getAttr(z)];
+      x += (ch == '\t') ? tabWidth - (x % tabWidth) : a->width(ch);//a->fm.width(ch);
+      z++;
+    }
+    e = z;
+    if (x2 - oldX < x - x2 && z > 0) {
+      e--;
+      newX2 = oldX;
+    } else newX2 = x;
+    //---
+
     if (e > s) {
       textLine->toggleSelect(s, e);
-      tagLineRange(z, newX1, newX2);
+      tagLineRange(line, newX1, newX2);
       t = true;
     }
   }
@@ -1329,7 +1354,10 @@ void KWriteDoc::selectTo(VConfig &c, PointStruc &cursor, int cXPos) {
 
   if (c.cursor.x != select.x || c.cursor.y != select.y) {
     //new selection
+
     if (!(c.flags & cfKeepSelection)) deselectAll();
+//      else recordReset();
+
     anchor = c.cursor;
     aXPos = c.cXPos;
   }
@@ -1450,6 +1478,7 @@ void KWriteDoc::clear() {
 
   undoList.clear();
   currentUndo = 0;
+//  recordReset();
   newUndo();
 }
 
@@ -1496,6 +1525,8 @@ void KWriteDoc::selectAll() {
   select.x = -1;
 
   unmarkFound();
+//  if (selectStart != 0 || selectEnd != lastLine()) recordReset();
+
   selectStart = 0;
   selectEnd = lastLine();
 
@@ -1517,6 +1548,8 @@ void KWriteDoc::deselectAll() {
   if (selectEnd < selectStart) return;
 
   unmarkFound();
+//  recordReset();
+
   tagLines(selectStart,selectEnd);
 
   for (z = selectStart; z <= selectEnd; z++) {
@@ -1534,6 +1567,8 @@ void KWriteDoc::invertSelection() {
   select.x = -1;
 
   unmarkFound();
+//  if (selectStart != 0 || selectEnd != lastLine()) recordReset();
+
   selectStart = 0;
   selectEnd = lastLine();
 
@@ -1552,7 +1587,6 @@ void KWriteDoc::selectWord(PointStruc &cursor, int flags) {
   TextLine *textLine;
   int start, end, len;
 
-
   textLine = contents.at(cursor.y);
   len = textLine->length();
   start = end = cursor.x;
@@ -1560,6 +1594,8 @@ void KWriteDoc::selectWord(PointStruc &cursor, int flags) {
   while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
   if (end <= start) return;
   if (!(flags & cfKeepSelection)) deselectAll();
+//    else recordReset();
+
   textLine->select(true, start, end);
 
   anchor.x = start;
@@ -1572,33 +1608,21 @@ void KWriteDoc::selectWord(PointStruc &cursor, int flags) {
 
 QString KWriteDoc::text() {
   TextLine *textLine;
-  int len, lines, z, end, i;
-
-  len = 1;
-  lines = numLines();
-  for (z = 0; z < lines; z++) {
-    textLine = contents.at(z);
-    len += textLine->length() + 1;
-  }
   QString s;
-#warning FIXME
-//  s.resize(len);
-  len = 0;
-  for (z = 0; z < lines; z++) {
-    textLine = contents.at(z);
-    end = textLine->length();
-    for (i = 0; i < end; i++) s[len + i] = textLine->getChar(i);
-    len += end;
-    s[len] = '\n';
-    len++;
-  }
-  s[len] = '\0';
+
+  textLine = contents.first();
+  do {
+    s.insert(s.length(), textLine->getText(), textLine->length());
+    textLine = contents.next();
+    if (!textLine) break;
+    s.append('\n');
+  } while (true);
   return s;
 }
 
 QString KWriteDoc::getWord(PointStruc &cursor) {
   TextLine *textLine;
-  int start, end, len, z;
+  int start, end, len;
 
   textLine = contents.at(cursor.y);
   len = textLine->length();
@@ -1606,28 +1630,25 @@ QString KWriteDoc::getWord(PointStruc &cursor) {
   while (start > 0 && highlight->isInWord(textLine->getChar(start - 1))) start--;
   while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
   len = end - start;
-  QString s;
-#warning FIXME
-  //s.resize(len +1);
-  for (z = 0; z < len; z++) s[z] = textLine->getChar(start + z);
-  s[len] = '\0';
-  return s;
+  return QString(&textLine->getText()[start], len);
 }
 
-void KWriteDoc::setText(const char *s) {
+void KWriteDoc::setText(const QString &s) {
   TextLine *textLine;
+  int pos;
+  QChar ch;
 
   clear();
 
   textLine = contents.getFirst();
-  while (*s) {
-    if ((unsigned char) *s >= 32 || *s == '\t') {
-      textLine->append(*s);
-    } else if (*s == '\n') {
+  for (pos = 0; pos <= (int) s.length(); pos++) {
+    ch = s[pos];
+    if (ch.isPrint() || ch == '\t') {
+      textLine->append(&ch, 1);
+    } else if (ch == '\n') {
       textLine = new TextLine();
       contents.append(textLine);
     }
-    s++;
   }
   updateLines();
 }
@@ -1645,14 +1666,12 @@ QString KWriteDoc::markedText(int flags) {
       if (textLine->isSelected()) len++;
     }
     QString s;
-#warning FIXME
-//    s.resize(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);
       end = 0;
       do {
-        start = textLine->findUnSelected(end);
+        start = textLine->findUnselected(end);
         end = textLine->findSelected(start);
         for (i = start; i < end; i++) {
           s[len] = textLine->getChar(i);
@@ -1672,14 +1691,12 @@ QString KWriteDoc::markedText(int flags) {
       len += textLine->numSelected() + 1;
     }
     QString s;
-#warning FIXME
-//    s.resize(len);
     len = 0;
     for (z = selectStart; z <= selectEnd; z++) {
       textLine = contents.at(z);
       end = 0;
       do {
-        start = textLine->findUnSelected(end);
+        start = textLine->findUnselected(end);
         end = textLine->findSelected(start);
         for (i = start; i < end; i++) {
           s[len] = textLine->getChar(i);
@@ -1694,23 +1711,28 @@ QString KWriteDoc::markedText(int flags) {
   }
 }
 
-void KWriteDoc::delMarkedText(VConfig &c) {
+void KWriteDoc::delMarkedText(VConfig &c/*, bool undo*/) {
   TextLine *textLine;
   int end = 0;
 
   if (selectEnd < selectStart) return;
 
-  recordStart(c.cursor);
+  // the caller may have already started an undo record for the current action
+//  if (undo)
+
+  //auto deletion of the marked text occurs not very often and can therefore
+  //  be recorded separately
+  recordStart(c, KWActionGroup::ugDelBlock);
 
   for (c.cursor.y = selectEnd; c.cursor.y >= selectStart; c.cursor.y--) {
     textLine = contents.at(c.cursor.y);
 
     c.cursor.x = textLine->length();
     do {
-      end = textLine->findRevUnSelected(c.cursor.x);
+      end = textLine->findRevUnselected(c.cursor.x);
       if (end == 0) break;
       c.cursor.x = textLine->findRevSelected(end);
-      recordReplace(c.cursor,end - c.cursor.x);
+      recordDelete(c.cursor, end - c.cursor.x);
     } while (true);
     end = c.cursor.x;
     c.cursor.x = textLine->length();
@@ -1722,7 +1744,7 @@ void KWriteDoc::delMarkedText(VConfig &c) {
   selectEnd = -1;
   select.x = -1;
 
-  recordEnd(c);
+  /*if (undo)*/ recordEnd(c);
 }
 
 QColor &KWriteDoc::cursorCol(int x, int y) {
@@ -1730,99 +1752,18 @@ QColor &KWriteDoc::cursorCol(int x, int y) {
   int attr;
   Attribute *a;
 
-//  if (x > 0) x--;
   textLine = contents.at(y);
   attr = textLine->getRawAttr(x);
   a = &attribs[attr & taAttrMask];
   if (attr & taSelectMask) return a->selCol; else return a->col;
 }
 
-/*
-void KWriteDoc::paintTextLine(QPainter &paint, int line,
-                              int xPos, int xStart, int xEnd, int yPos) {
-  int y;
-  TextLine *textLine;
-  int z, x;
-  char ch;
-  Attribute *a = 0;
-  int attr, nextAttr;
-  int xs;
-  int xc, zc;
-
-  y = line*fontHeight - yPos;
-  if (line >= (int) contents.count()) {
-    paint.fillRect(xStart - xPos,y,xEnd - xStart,fontHeight,colors[4]);
-    return;
-  }
-//printf("xStart = %d, xEnd = %d, line = %d\n",xStart,xEnd,line);
-//printf("text = ");
-  textLine = contents.at(line);
-
-  z = 0;
-  x = 0;
-  do {
-    xc = x;
-    ch = textLine->getChar(z);
-    if (ch == '\t') {
-      x += tabWidth - (x % tabWidth);
-    } else {
-      a = attribs[textLine->getAttr(z)];
-      x += a->fm.width(&ch,1);
-    }
-    z++;
-  } while (x <= xStart);
-  zc = z - 1;
-
-  xs = xStart;
-  attr = textLine->getRawAttr(zc);
-  while (x < xEnd) {
-    nextAttr = textLine->getRawAttr(z);
-    if ((nextAttr ^ attr) & taSelectMask) {
-      paint.fillRect(xs - xPos,y,x - xs,fontHeight,colors[attr >> taShift]);
-      xs = x;
-      attr = nextAttr;
-    }
-    ch = textLine->getChar(z);
-    if (ch == '\t') {
-      x += tabWidth - (x % tabWidth);
-    } else {
-      a = attribs[attr & taAttrMask];
-      x += a->fm.width(&ch,1);
-    }
-    z++;
-  }
-  paint.fillRect(xs - xPos,y,xEnd - xs,fontHeight,colors[attr >> taShift]);
-//int len = textLine->length();
-  y += fontAscent -1;
-  attr = -1;
-  while (xc < xEnd) {
-    ch = textLine->getChar(zc);
-    if (ch == '\t') {
-      xc += tabWidth - (xc % tabWidth);
-    } else {
-      nextAttr = textLine->getRawAttr(zc);
-      if (nextAttr != attr) {
-        attr = nextAttr;
-        a = attribs[attr & taAttrMask];
-        if (attr & taSelectMask) paint.setPen(a->selCol); else paint.setPen(a->col);
-        paint.setFont(a->font);
-      }
-      paint.drawText(xc - xPos,y,&ch,1);
-      xc += a->fm.width(&ch,1);
-//if (zc < len) printf("%c",ch);
-    }
-    zc++;
-  }
-
-//printf("\n");
-}
-*/
 
 void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
   int y;
   TextLine *textLine;
   int len;
-  const char *s;
+  const QChar *s;
   int z, x;
   char ch;
   Attribute *a = 0L;
@@ -1830,12 +1771,12 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
   int xs;
   int xc, zc;
 
-//  struct timeval tv1, tv2, tv3;
+//  struct timeval tv1, tv2, tv3; //for profiling
 //  struct timezone tz;
 
   y = 0;//line*fontHeight - yPos;
   if (line >= (int) contents.count()) {
-    paint.fillRect(0, y, xEnd - xStart,fontHeight,colors[4]);
+    paint.fillRect(0, y, xEnd - xStart,fontHeight, colors[4]);
     return;
   }
 
@@ -1843,6 +1784,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
   len = textLine->length();
   s = textLine->getText();
 
+  // skip to first visible character
   x = 0;
   z = 0;
   do {
@@ -1854,13 +1796,14 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
       x += tabWidth - (x % tabWidth);
     } else {
       a = &attribs[textLine->getAttr(z)];
-      x += a->fm.width(&ch, 1);
+      x += a->width(ch);//a->fm.width(ch);
     }
     z++;
   } while (x <= xStart);
 
 //gettimeofday(&tv1, &tz);
 
+  // draw background
   xs = xStart;
   attr = textLine->getRawAttr(zc);
   while (x < xEnd) {
@@ -1876,26 +1819,29 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
       x += tabWidth - (x % tabWidth);
     } else {
       a = &attribs[attr & taAttrMask];
-      x += a->fm.width(&ch, 1);
+      x += a->width(ch);//a->fm.width(ch);
     }
     z++;
   }
   paint.fillRect(xs - xStart, y, xEnd - xs, fontHeight, colors[attr >> taShift]);
-  len = z;
+  len = z; //reduce length to visible length
 
 //gettimeofday(&tv2, &tz);
 
+  // draw text
   x = xc;
   z = zc;
   y += fontAscent -1;
   attr = -1;
-
   while (z < len) {
     ch = s[z];//textLine->getChar(z);
     if (ch == '\t') {
       if (z > zc) {
-        paint.drawText(x - xStart, y, &s[zc], z - zc);
-        x += a->fm.width(&s[zc], z - zc);
+        //this should cause no copy at all
+        QConstString str((QChar *) &s[zc], z - zc /*+1*/);
+        QString s = str.string();
+        paint.drawText(x - xStart, y, s);
+        x += a->width(s);//a->fm.width(str);//&s[zc], z - zc);
       }
       zc = z +1;
       x += tabWidth - (x % tabWidth);
@@ -1903,8 +1849,10 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
       nextAttr = textLine->getRawAttr(z);
       if (nextAttr != attr) {
         if (z > zc) {
-          paint.drawText(x - xStart, y, &s[zc], z - zc);
-          x += a->fm.width(&s[zc], z - zc);
+          QConstString str((QChar *) &s[zc], z - zc /*+1*/);
+          QString s = str.string();
+          paint.drawText(x - xStart, y, s);
+          x += a->width(s);//a->fm.width(str);//&s[zc], z - zc);
           zc = z;
         }
         attr = nextAttr;
@@ -1917,12 +1865,14 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line, int xStart, int xEnd) {
     }
     z++;
   }
-  if (z > zc) paint.drawText(x - xStart, y, &s[zc], z - zc);
-
+  if (z > zc) {
+    QConstString str((QChar *) &s[zc], z - zc /*+1*/);
+    paint.drawText(x - xStart, y, str.string());
+  }
 //gettimeofday(&tv3, &tz);
 //printf(" %d %d\n", tv2.tv_usec - tv1.tv_usec, tv3.tv_usec - tv2.tv_usec);
-//printf("\n");
 }
+
 
 void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
   TextLine *textLine;
@@ -1970,6 +1920,22 @@ void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
   if (bufp > 0) paint.drawText(x, y, buf, bufp);
 }
 
+void KWriteDoc::setReadOnly(bool m) {
+  KWriteView *view;
+
+  if (m != readOnly) {
+    readOnly = m;
+//    if (readOnly) recordReset();
+    for (view = views.first(); view != 0L; view = views.next()) {
+      emit view->kWrite->newStatus();
+    }
+  }
+}
+
+bool KWriteDoc::isReadOnly() {
+  return readOnly;
+}
+
 void KWriteDoc::setModified(bool m) {
   KWriteView *view;
 
@@ -1981,9 +1947,9 @@ void KWriteDoc::setModified(bool m) {
   }
 }
 
-//bool KWriteDoc::isModified() {
-//  return modified;
-//}
+bool KWriteDoc::isModified() {
+  return modified;
+}
 
 bool KWriteDoc::isLastView(int numViews) {
   return ((int) views.count() == numViews);
@@ -1994,11 +1960,11 @@ bool KWriteDoc::hasFileName() {
   return fName.findRev('/') +1 < (int) fName.length();
 }
 
-const char *KWriteDoc::fileName() {
+const QString KWriteDoc::fileName() {
   return fName;
 }
 
-void KWriteDoc::setFileName(const char *s) {
+void KWriteDoc::setFileName( const QString& s ) {
   int pos, hl;
   KWriteView *view;
 
@@ -2010,7 +1976,7 @@ void KWriteDoc::setFileName(const char *s) {
   //highlight detection
   pos = fName.findRev('/') +1;
   if (pos >= (int) fName.length()) return; //no filename
-  hl = hlManager->wildcardFind(&s[pos]);
+  hl = hlManager->wildcardFind(s.right(pos));
   if (hl == -1) {
     // fill the detection buffer with the contents of the text
     const int HOWMANY = 1024;
@@ -2025,7 +1991,7 @@ void KWriteDoc::setFileName(const char *s) {
       bufpos += len;
       if (bufpos >= HOWMANY) break;
     }
-    hl = hlManager->mimeFind(buf, bufpos, &s[pos]);
+    hl = hlManager->mimeFind(buf, bufpos, s.right(pos));
   }
   setHighlight(hl);
   updateViews();
@@ -2041,6 +2007,157 @@ void KWriteDoc::clearFileName() {
 }
 
 
+
+bool KWriteDoc::doSearch(SConfig &sc, const QString &searchFor) {
+  int line, col;
+  int searchEnd;
+//  int slen, blen, tlen;
+//  char *s, *b, *t;
+  QString str;
+  int slen, smlen, bufLen, tlen;
+  const QChar *s;
+  QChar *t;
+  TextLine *textLine;
+  int z, pos, newPos;
+
+  if (searchFor.isEmpty()) return false;
+  str = (sc.flags & sfCaseSensitive) ? searchFor : searchFor.lower();
+
+  s = str.unicode();
+  slen = str.length();
+  smlen = slen*sizeof(QChar);
+  bufLen = 0;
+  t = 0L;
+
+  line = sc.cursor.y;
+  col = sc.cursor.x;
+  if (!(sc.flags & sfBackward)) {
+    //forward search
+    if (sc.flags & sfSelected) {
+      if (line < selectStart) {
+        line = selectStart;
+        col = 0;
+      }
+      searchEnd = selectEnd;
+    } else searchEnd = lastLine();
+
+    while (line <= searchEnd) {
+      textLine = contents.at(line);
+      tlen = textLine->length();
+      if (tlen > bufLen) {
+        delete t;
+        bufLen = (tlen + 255) & (~255);
+        t = new QChar[bufLen];
+      }
+      memcpy(t, textLine->getText(), tlen*sizeof(QChar));
+      if (sc.flags & sfSelected) {
+        pos = 0;
+        do {
+          pos = textLine->findSelected(pos);
+          newPos = textLine->findUnselected(pos);
+          memset(&t[pos], 0, (newPos - pos)*sizeof(QChar));
+          pos = newPos;
+        } while (pos < tlen);
+      }
+      if (!(sc.flags & sfCaseSensitive)) for (z = 0; z < tlen; z++) t[z] = t[z].lower();
+
+      tlen -= slen;
+      if (sc.flags & sfWholeWords && tlen > 0) {
+        //whole word search
+        if (col == 0) {
+          if (!highlight->isInWord(t[slen])) {
+            if (memcmp(t, s, smlen) == 0) goto found;
+          }
+          col++;
+        }
+        while (col < tlen) {
+          if (!highlight->isInWord(t[col -1]) && !highlight->isInWord(t[col + slen])) {
+            if (memcmp(&t[col], s, smlen) == 0) goto found;
+          }
+          col++;
+        }
+        if (!highlight->isInWord(t[col -1]) && memcmp(&t[col], s, smlen) == 0)
+          goto found;
+      } else {
+        //normal search
+        while (col <= tlen) {
+          if (memcmp(&t[col], s, smlen) == 0) goto found;
+          col++;
+        }
+      }
+      col = 0;
+      line++;
+    }
+  } else {
+    // backward search
+    if (sc.flags & sfSelected) {
+      if (line > selectEnd) {
+        line = selectEnd;
+        col = -1;
+      }
+      searchEnd = selectStart;
+    } else searchEnd = 0;;
+
+    while (line >= searchEnd) {
+      textLine = contents.at(line);
+      tlen = textLine->length();
+      if (tlen > bufLen) {
+        delete t;
+        bufLen = (tlen + 255) & (~255);
+        t = new QChar[bufLen];
+      }
+      memcpy(t, textLine->getText(), tlen*sizeof(QChar));
+      if (sc.flags & sfSelected) {
+        pos = 0;
+        do {
+          pos = textLine->findSelected(pos);
+          newPos = textLine->findUnselected(pos);
+          memset(&t[pos], 0, (newPos - pos)*sizeof(QChar));
+          pos = newPos;
+        } while (pos < tlen);
+      }
+      if (!(sc.flags & sfCaseSensitive)) for (z = 0; z < tlen; z++) t[z] = t[z].lower();
+
+      if (col < 0 || col > tlen) col = tlen;
+      col -= slen;
+      if (sc.flags & sfWholeWords && tlen > slen) {
+        //whole word search
+        if (col + slen == tlen) {
+          if (!highlight->isInWord(t[col -1])) {
+            if (memcmp(&t[col], s, smlen) == 0) goto found;
+          }
+          col--;
+        }
+        while (col > 0) {
+          if (!highlight->isInWord(t[col -1]) && !highlight->isInWord(t[col+slen])) {
+            if (memcmp(&t[col],s,smlen) == 0) goto found;
+          }
+          col--;
+        }
+        if (!highlight->isInWord(t[slen]) && memcmp(t, s, smlen) == 0)
+          goto found;
+      } else {
+        //normal search
+        while (col >= 0) {
+          if (memcmp(&t[col],s,slen) == 0) goto found;
+          col--;
+        }
+      }
+      line--;
+    }
+  }
+  sc.flags |= sfWrapped;
+  return false;
+found:
+  if (sc.flags & sfWrapped) {
+    if ((line > sc.startCursor.y || (line == sc.startCursor.y && col >= sc.startCursor.x))
+      ^ ((sc.flags & sfBackward) != 0)) return false;
+  }
+  sc.cursor.x = col;
+  sc.cursor.y = line;
+  return true;
+}
+/*
 void downcase(char *s, int len) {
   while (len > 0) {
     if (*s >= 'A' && *s <= 'Z') *s += 32;
@@ -2097,7 +2214,7 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
         pos = 0;
         do {
           pos = textLine->findSelected(pos);
-          newPos = textLine->findUnSelected(pos);
+          newPos = textLine->findUnselected(pos);
           memset(&t[pos],0,newPos - pos);
           pos = newPos;
         } while (pos < tlen);
@@ -2149,7 +2266,7 @@ bool KWriteDoc::doSearch(SConfig &sc, const char *searchFor) {
         pos = 0;
         do {
           pos = textLine->findSelected(pos);
-          newPos = textLine->findUnSelected(pos);
+          newPos = textLine->findUnselected(pos);
           memset(&t[pos],0,newPos - pos);
           pos = newPos;
         } while (pos < tlen);
@@ -2184,7 +2301,7 @@ found:
   sc.cursor.x = col;
   sc.cursor.y = line;
   return true;
-}
+} */
 
 void KWriteDoc::unmarkFound() {
   if (pseudoModal) return;
@@ -2197,6 +2314,7 @@ void KWriteDoc::unmarkFound() {
 
 void KWriteDoc::markFound(PointStruc &cursor, int len) {
 //  unmarkFound();
+//  recordReset();
   if (foundLine != -1) {
     contents.at(foundLine)->unmarkFound();
     tagLines(foundLine,foundLine);
@@ -2208,14 +2326,14 @@ void KWriteDoc::markFound(PointStruc &cursor, int len) {
 
 
 void KWriteDoc::tagLine(int line) {
-  
+
   if (tagStart > line) tagStart = line;
   if (tagEnd < line) tagEnd = line;
 }
 
 void KWriteDoc::insLine(int line) {
   KWriteView *view;
-  
+
   if (selectStart >= line) selectStart++;
   if (selectEnd >= line) selectEnd++;
   if (tagStart >= line) tagStart++;
@@ -2229,12 +2347,12 @@ void KWriteDoc::insLine(int line) {
 
 void KWriteDoc::delLine(int line) {
   KWriteView *view;
-  
+
   if (selectStart >= line && selectStart > 0) selectStart--;
   if (selectEnd >= line) selectEnd--;
   if (tagStart >= line && tagStart > 0) tagStart--;
   if (tagEnd >= line) tagEnd--;
-  
+
   newDocGeometry = true;
   for (view = views.first(); view != 0L; view = views.next()) {
     view->delLine(line);
@@ -2243,7 +2361,7 @@ void KWriteDoc::delLine(int line) {
 
 void KWriteDoc::optimizeSelection() {
   TextLine *textLine;
-  
+
   while (selectStart <= selectEnd) {
     textLine = contents.at(selectStart);
     if (textLine->isSelected() || textLine->numSelected() > 0) break;
@@ -2264,7 +2382,7 @@ void KWriteDoc::doAction(KWAction *a) {
 
   switch (a->action) {
     case KWAction::replace:
-      delete doReplace(a);
+      doReplace(a);
       break;
     case KWAction::wordWrap:
       doWordWrap(a);
@@ -2291,33 +2409,23 @@ void KWriteDoc::doAction(KWAction *a) {
   }
 }
 
-const char *KWriteDoc::doReplace(KWAction *a) {
-  const char *text;
-  int textLen;
-  int len, pos;
+void KWriteDoc::doReplace(KWAction *a) {
   TextLine *textLine;
   int l;
 
-  pos = a->cursor.x;    //position where to replace
-  len = a->len;         //length of old text
-  text = a->text;       //new text
-  textLen = a->textLen; //length of new text
+  //exchange current text with stored text in KWAction *a
 
   textLine = contents.at(a->cursor.y);
-  l = textLine->length() - pos;
-  if (l > len) l = len;
-  a->setData(textLen,&textLine->getText()[pos],l); //save old text
+  l = textLine->length() - a->cursor.x;
+  if (l > a->len) l = a->len;
 
-  if (textLen > len) { //new text longer than old text
-    textLine->move(pos + len - (len > 0),textLen - len); //move right
-  } else {
-    textLine->del(pos + textLen,len - textLen);
-  }
-  textLine->overwrite(pos,text,textLen);
+  QString oldText(&textLine->getText()[a->cursor.x], (l < 0) ? 0 : l);
+  textLine->replace(a->cursor.x, a->len, a->text.unicode(), a->text.length());
+
+  a->len = a->text.length();
+  a->text = oldText;
 
   tagLine(a->cursor.y);
-
-  return text;
 }
 
 void KWriteDoc::doWordWrap(KWAction *a) {
@@ -2338,8 +2446,8 @@ void KWriteDoc::doWordUnWrap(KWAction *a) {
   TextLine *textLine;
 
   textLine = contents.at(a->cursor.y - 1);
-  textLine->setLength(a->len);
-  textLine->unWrap(contents.next(),a->cursor.x);
+//  textLine->setLength(a->len);
+  textLine->unWrap(a->len, contents.next(),a->cursor.x);
 
   tagLine(a->cursor.y - 1);
   tagLine(a->cursor.y);
@@ -2368,8 +2476,8 @@ void KWriteDoc::doDelLine(KWAction *a) {
 
   textLine = contents.at(a->cursor.y);
   nextLine = contents.next();
-  textLine->setLength(a->cursor.x);
-  textLine->unWrap(nextLine,nextLine->length());
+//  textLine->setLength(a->cursor.x);
+  textLine->unWrap(a->cursor.x, nextLine,nextLine->length());
   textLine->setContext(nextLine->getContext());
   if (longestLine == nextLine) longestLine = 0L;
   contents.remove();
@@ -2409,26 +2517,80 @@ void KWriteDoc::newUndo() {
   state = 0;
   if (currentUndo > 0) state |= 1;
   if (currentUndo < (int) undoList.count()) state |= 2;
-  if (state != undoState) {
-    undoState = state;
-    for (view = views.first(); view != 0L; view = views.next()) {
-      emit view->kWrite->newUndo();
-    }
+  undoState = state;
+  for (view = views.first(); view != 0L; view = views.next()) {
+    emit view->kWrite->newUndo();
   }
 }
 
-void KWriteDoc::recordStart(PointStruc &cursor, bool keepModal) {
+void KWriteDoc::recordStart(VConfig &c, int newUndoType) {
+  recordStart(c.view, c.cursor, c.flags, newUndoType);
+}
+
+void KWriteDoc::recordStart(KWriteView *, PointStruc &cursor, int flags,
+  int newUndoType, bool keepModal, bool mergeUndo) {
+
   KWActionGroup *g;
 
+//  if (newUndoType == KWActionGroup::ugNone) {
+    // only a bug would cause this
+//why should someone do this? we can't prevent all programming errors :) (jochen whilhelmy)
+//    debug("KWriteDoc::recordStart() called with no undo group type!");
+//    return;
+//  }
+
   if (!keepModal) setPseudoModal(0L);
+
+  //i optimized the group undo stuff a bit (jochen wilhelmy)
+  //  recordReset() is not needed any more
+  g = undoList.getLast();
+  if (g != 0L && ((undoCount < 1024 && flags & cfGroupUndo
+    && g->end.x == cursor.x && g->end.y == cursor.y) || mergeUndo)) {
+
+    //undo grouping : same actions are put into one undo step
+    //precondition : new action starts where old stops or mergeUndo flag
+    if (g->undoType == newUndoType
+      || (g->undoType == KWActionGroup::ugInsChar
+        && newUndoType == KWActionGroup::ugInsLine)
+      || (g->undoType == KWActionGroup::ugDelChar
+        && newUndoType == KWActionGroup::ugDelLine)) {
+
+      undoCount++;
+      if (g->undoType != newUndoType) undoCount = 0xffffff;
+      return;
+    }
+  }
+  undoCount = 0;
+/*
+  if (undoView != view) {
+    // always kill the current undo group if the editing view changes
+    recordReset();
+    undoType = newUndoType;
+  } else if (newUndoType == undoType) {
+printf("bla!!!\n");
+    // same as current type, keep using it
+    return;
+  } else if  ( (undoType == KWActionGroup::ugInsChar && newUndoType == KWActionGroup::ugInsLine) ||
+               (undoType == KWActionGroup::ugDelChar && newUndoType == KWActionGroup::ugDelLine) ) {
+    // some type combinations can run together...
+    undoType += 1000;
+    return;
+  } else {
+    recordReset();
+    undoType = newUndoType;
+  }
+
+  undoView = view;
+*/
   while ((int) undoList.count() > currentUndo) undoList.removeLast();
   while ((int) undoList.count() > undoSteps) {
     undoList.removeFirst();
     currentUndo--;
   }
-  g = new KWActionGroup(cursor);
+
+  g = new KWActionGroup(cursor, newUndoType);
   undoList.append(g);
-  currentUndo++;
+//  currentUndo++;
 
   unmarkFound();
   tagEnd = 0;
@@ -2438,21 +2600,45 @@ void KWriteDoc::recordStart(PointStruc &cursor, bool keepModal) {
 void KWriteDoc::recordAction(KWAction::Action action, PointStruc &cursor) {
   KWAction *a;
 
-  a = new KWAction(action,cursor);
+  a = new KWAction(action, cursor);
   doAction(a);
   undoList.getLast()->insertAction(a);
 }
 
-void KWriteDoc::recordReplace(PointStruc &cursor,
-      int len, const char *text, int textLen) {
-  KWAction *a;
+void KWriteDoc::recordInsert(PointStruc &cursor, const QString &text) {
+  recordReplace(cursor, 0, text);
+}
 
-  a = new KWAction(KWAction::replace,cursor);
-  a->len = len;
-  a->text = text;
-  a->textLen = textLen;
-  doReplace(a);
-  undoList.getLast()->insertAction(a);
+void KWriteDoc::recordDelete(PointStruc &cursor, int len) {
+  recordReplace(cursor, len, QString::null);
+}
+
+void KWriteDoc::recordReplace(PointStruc &cursor, int len, const QString &text) {
+  KWAction *a;
+  TextLine *textLine;
+  int l;
+
+  if (len == 0 && text.isEmpty()) return;
+
+  //try to append to last replace action
+  a = undoList.getLast()->action;
+  if (a == 0L || a->action != KWAction::replace
+    || a->cursor.x + a->len != cursor.x || a->cursor.y != cursor.y) {
+
+//if (a != 0L) printf("new %d %d\n", a->cursor.x + a->len, cursor.x);
+    a = new KWAction(KWAction::replace, cursor);
+    undoList.getLast()->insertAction(a);
+  }
+
+  //replace
+  textLine = contents.at(cursor.y);
+  l = textLine->length() - cursor.x;
+  if (l > len) l = len;
+  a->text.insert(a->text.length(), &textLine->getText()[cursor.x], (l < 0) ? 0 : l);
+  textLine->replace(cursor.x, len, text.unicode(), text.length());
+  a->len += text.length();
+
+  tagLine(a->cursor.y);
 }
 
 void KWriteDoc::recordEnd(VConfig &c) {
@@ -2460,23 +2646,64 @@ void KWriteDoc::recordEnd(VConfig &c) {
 }
 
 void KWriteDoc::recordEnd(KWriteView *view, PointStruc &cursor, int flags) {
+  KWActionGroup *g;
 
-  //clear selection if option "persistent selections" is off
-  if (!(flags & cfPersistent)) deselectAll();
-  //store end cursor position for redo
-  undoList.getLast()->end = cursor;
-  view->updateCursor(cursor);
+  // clear selection if option "persistent selections" is off
+//  if (!(flags & cfPersistent)) deselectAll();
+
+  g = undoList.getLast();
+  if (g->action == 0L) {
+    // no action has been done: remove empty undo record
+    undoList.removeLast();
+    return;
+  }
+  // store end cursor position for redo
+  g->end = cursor;
+  currentUndo = undoList.count();
+
+  view->updateCursor(cursor, flags);
 
   if (tagStart <= tagEnd) {
     optimizeSelection();
     updateLines(tagStart,tagEnd,flags);
     setModified(true);
   }
-  newUndo();
+
+//  newUndo();
+/*
+  undoCount++;
+  // we limit the number of individual undo operations for sanity - is 1K reasonable?
+  // this is also where we handle non-group undo preference
+  // if the undo type is singlular, we always finish it now
+  if ( undoType == KWActionGroup::ugPaste ||
+       undoType == KWActionGroup::ugDelBlock ||
+       undoType > 1000 ||
+       undoCount > 1024 || !(flags & cfGroupUndo) ) {
+printf("recordend %d %d\n", undoType, undoCount);
+    recordReset();
+  }
+*/
+
+  // this should keep the flood of signals down a little...
+  if (undoCount == 0) newUndo();
 }
+/*
+void KWriteDoc::recordReset()
+{
+  if (pseudoModal)
+    return;
+
+  // forces the next call of recordStart() to begin a new undo group
+  // not used in normal editing, but used by markFound(), etc.
+  undoType = KWActionGroup::ugNone;
+  undoCount = 0;
+  undoView = NULL;
+  undoReported = false;
+printf("recordreset\n");
+}
+*/
 
 /*
-
 void KWriteDoc::recordDel(PointStruc &cursor, TextLine *textLine, int l) {
   int len;
 
@@ -2489,7 +2716,7 @@ void KWriteDoc::recordDel(PointStruc &cursor, TextLine *textLine, int l) {
 */
 
 
-void KWriteDoc::doActionGroup(KWActionGroup *g, int flags) {
+void KWriteDoc::doActionGroup(KWActionGroup *g, int flags, bool undo) {
   KWAction *a, *next;
 
   setPseudoModal(0L);
@@ -2508,29 +2735,125 @@ void KWriteDoc::doActionGroup(KWActionGroup *g, int flags) {
   }
   optimizeSelection();
   if (tagStart <= tagEnd) updateLines(tagStart,tagEnd,flags);
-  setModified(true);
-  newUndo();
+
+  // the undo/redo functions set undo to true, all others should leave it
+  // alone (default)
+  if (! undo) {
+    setModified(true);
+    newUndo();
+  }
 }
 
-void KWriteDoc::undo(VConfig &c) {
+int KWriteDoc::nextUndoType()
+{
   KWActionGroup *g;
 
-  if (currentUndo <= 0) return;
-  currentUndo--;
-  g = undoList.at(currentUndo);
-  doActionGroup(g, c.flags);
-  c.view->updateCursor(g->start);
+  if (currentUndo <= 0) return KWActionGroup::ugNone;
+  g = undoList.at(currentUndo - 1);
+  return g->undoType;
 }
 
-void KWriteDoc::redo(VConfig &c) {
+int KWriteDoc::nextRedoType()
+{
   KWActionGroup *g;
 
-  if (currentUndo >= (int) undoList.count()) return;
+  if (currentUndo >= (int) undoList.count()) return KWActionGroup::ugNone;
   g = undoList.at(currentUndo);
-  if (!g) return;
-  currentUndo++;
-  doActionGroup(g, c.flags);
-  c.view->updateCursor(g->end);
+//  if (!g) return KWActionGroup::ugNone;
+  return g->undoType;
+}
+
+void KWriteDoc::undoTypeList(std::list<int> &lst)
+{
+  KWActionGroup *g;
+  int   currUndo = currentUndo;
+
+  lst.clear();
+
+  while (1) {
+    if (currUndo <= 0) return;
+    currUndo--;
+    g = undoList.at(currUndo);
+    lst.push_back(g->undoType);
+  }
+}
+
+void KWriteDoc::redoTypeList(std::list<int> &lst)
+{
+  KWActionGroup *g;
+  int   currUndo = currentUndo;
+
+  lst.clear();
+
+  while (1) {
+    if (currUndo+1 > (int)undoList.count()) return;
+    g = undoList.at(currUndo);
+    currUndo++;
+    lst.push_back(g->undoType);
+  }
+}
+
+void KWriteDoc::undo(VConfig &c, int count) {
+  KWActionGroup *g = 0L;
+  int num;
+  bool needUpdate = false; // don't update the cursor until completely done
+
+  if (count <= 0) return;
+
+  for (num = 0 ; num < count ; num++) {
+    if (currentUndo <= 0) break;
+    currentUndo--;
+    g = undoList.at(currentUndo);
+    doActionGroup(g, c.flags, true); // do not setModified() or newUndo()
+    needUpdate = true;
+
+//    if (num == 0) recordReset();
+  }
+
+  if (needUpdate) {
+    // since we told doActionGroup() not to do this stuff, we need to do it now
+    c.view->updateCursor(g->start);
+    setModified(true);
+    newUndo();
+  }
+}
+
+void KWriteDoc::redo(VConfig &c, int count) {
+  KWActionGroup *g = 0L;
+  int num;
+  bool needUpdate = false; // don't update the cursor until completely done
+
+  if (count <= 0) return;
+
+  for (num = 0 ; num < count ; num++) {
+    if (currentUndo+1 > (int)undoList.count()) break;
+    g = undoList.at(currentUndo);
+    currentUndo++;
+    doActionGroup(g, c.flags, true); // do not setModified() or newUndo()
+    needUpdate = true;
+
+//    if (num == 0) recordReset();
+  }
+
+  if (needUpdate) {
+    // since we told doActionGroup() not to do this stuff, we need to do it now
+    c.view->updateCursor(g->end);
+    setModified(true);
+    newUndo();
+  }
+}
+
+void KWriteDoc::clearRedo() {
+  // disable redos
+  // this was added as an assist to the spell checker
+  bool deleted = false;
+
+  while ((int) undoList.count() > currentUndo) {
+    deleted = true;
+    undoList.removeLast();
+  }
+
+  if (deleted) newUndo();
 }
 
 void KWriteDoc::setUndoSteps(int steps) {
@@ -2539,73 +2862,238 @@ void KWriteDoc::setUndoSteps(int steps) {
 }
 
 void KWriteDoc::setPseudoModal(QWidget *w) {
-  delete pseudoModal;
+//  QWidget *old = pseudoModal;
+
+  // (glenebob)
+  // this is a temporary hack to make the spell checker work a little
+  // better - as kspell progresses, this sort of thing should become
+  // obsolete or worked around more cleanly
+  // this is relied upon *only* by the spell-check code
+  if (pseudoModal && pseudoModal != (QWidget*)1L)
+    delete pseudoModal;
+
+//  pseudoModal = 0L;
+//  if (old || w) recordReset();
+
   pseudoModal = w;
 }
 
-void KWriteDoc::indent(VConfig &c) {
-  TextLine *textLine;
+void KWriteDoc::doIndent(VConfig &c, int change) {
 
-  c.flags |= cfPersistent;
-  recordStart(c.cursor);
+//  int cursor_y = c.cursor.y;
+// c.flags |= cfKeepIndentProfile;// | cfKeepExtraSpaces;
   c.cursor.x = 0;
-  if (selectEnd < selectStart) {
-    //indent single line
-    textLine = contents.at(c.cursor.y);
-    recordReplace(c.cursor,0," ",1);
-  } else {
-    //indent selection
-    for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
-      textLine = contents.at(c.cursor.y);
-      if (textLine->isSelected() || textLine->numSelected()) recordReplace(c.cursor,0," ",1);
-    }
-    c.cursor.y--;
-  }
-  recordEnd(c);
-}
 
-void KWriteDoc::unIndent(VConfig &c) {
-  char s[16];
-  PointStruc cursor;
-  TextLine *textLine;
-  int l;
-  bool started;
+  recordStart(c, (change < 0) ? KWActionGroup::ugUnindent
+    : KWActionGroup::ugIndent);
 
-  c.flags |= cfPersistent;
-  memset(s,' ',16);
-  cursor = c.cursor;
-  c.cursor.x = 0;
   if (selectEnd < selectStart) {
-    //unindent single line
-    textLine = contents.at(c.cursor.y);
-    if (textLine->firstChar() == 0) return;
-    recordStart(cursor);
-    l = (textLine->getChar(0) == '\t') ? tabChars - 1 : 0;
-    recordReplace(c.cursor,1,s,l);
+    // single line
+    optimizeLeadingSpace(c.cursor.y, c.flags, change);
   } else {
-    //unindent selection
-/*    for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
-      textLine = contents.at(c.cursor.y);
-      if ((textLine->isSelected() || textLine->numSelected())
-        && textLine->firstChar() == 0) return;
-    }*/
-    started = false;
-    for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
-      textLine = contents.at(c.cursor.y);
-      if ((textLine->isSelected() || textLine->numSelected())
-        && textLine->firstChar() > 0) {
-        if (!started) {
-          recordStart(cursor);
-          started = true;
+    // entire selection
+    TextLine *textLine;
+    int line, z;
+    QChar ch;
+
+    if (c.flags & cfKeepIndentProfile && change < 0) {
+      // unindent so that the existing indent profile doesn´t get screwed
+      // if any line we may unindent is already full left, don't do anything
+      for (line = selectStart; line <= selectEnd; line++) {
+        textLine = contents.at(line);
+        if (textLine->isSelected() || textLine->numSelected()) {
+          for (z = 0; z < tabChars; z++) {
+            ch = textLine->getChar(z);
+            if (ch == '\t') break;
+            if (ch != ' ') {
+              change = 0;
+              goto jumpOut;
+            }
+          }
         }
-        l = (textLine->getChar(0) == '\t') ? tabChars - 1 : 0;
-        recordReplace(c.cursor,1,s,l);
+      }
+      jumpOut:;
+    }
+
+    for (line = selectStart; line <= selectEnd; line++) {
+      textLine = contents.at(line);
+      if (textLine->isSelected() || textLine->numSelected()) {
+        optimizeLeadingSpace(line, c.flags, change);
       }
     }
-    c.cursor.y--;
   }
-  recordEnd(c);
+  // recordEnd now removes empty undo records
+  recordEnd(c.view, c.cursor, c.flags | cfPersistent);
 }
+
+/*
+  Optimize the leading whitespace for a single line.
+  If change is > 0, it adds indentation units (tabChars)
+  if change is == 0, it only optimizes
+  If change is < 0, it removes indentation units
+  This will be used to indent, unindent, and optimal-fill a line.
+  If excess space is removed depends on the flag cfKeepExtraSpaces
+  which has to be set by the user
+*/
+void KWriteDoc::optimizeLeadingSpace(int line, int flags, int change) {
+  TextLine *textLine;
+  int len;
+  int chars, space, okLen;
+  QChar ch;
+  int extra;
+  QString s;
+  PointStruc cursor;
+
+  textLine = contents.at(line);
+  len = textLine->length();
+  space = 0; // length of space at the beginning of the textline
+  okLen = 0; // length of space which does not have to be replaced
+  for (chars = 0; chars < len; chars++) {
+    ch = textLine->getChar(chars);
+    if (ch == ' ') {
+      space++;
+      if (flags & cfReplaceTabs && okLen == chars) okLen++;
+    } else if (ch == '\t') {
+      space += tabChars - space % tabChars;
+      if (!(flags & cfReplaceTabs) && okLen == chars) okLen++;
+    } else break;
+  }
+
+  space += change*tabChars; // modify space width
+  // if line contains only spaces it will be cleared
+  if (space < 0 || chars == len) space = 0;
+
+  extra = space % tabChars; // extra spaces which don´t fit the indentation pattern
+  if (flags & cfKeepExtraSpaces) chars -= extra;
+
+  if (flags & cfReplaceTabs) {
+    space -= extra;
+    ch = ' ';
+  } else {
+    space /= tabChars;
+    ch = '\t';
+  }
+
+  // don´t replace chars which are already ok
+  cursor.x = QMIN(okLen, QMIN(chars, space));
+  chars -= cursor.x;
+  space -= cursor.x;
+  if (chars == 0 && space == 0) return; //nothing to do
+
+  s.fill(ch, space);
+
+//printf("chars %d insert %d cursor.x %d\n", chars, insert, cursor.x);
+  cursor.y = line;
+  recordReplace(cursor, chars, s);
+}
+
+/*
+  Optimize the leading whitespace for a single provided line,
+  and can also add or delete one unit of indentation (tabChars).
+  This will be used to indent, unindent, and optimal-fill a line.
+  In the case where this is used to indent/unindent a line, we always want
+  to remove excess space, leaving only an optimized amount of whitespace.
+  If an optimization is actually done and bool undo is true, recordStart()
+  is called and true is returned, otherwise false is returned.
+
+  glenebob@nwlink.com
+*/
+/*
+bool KWriteDoc::optimizeLeadingSpace(VConfig &c, TextLine *textLine, int change, bool undo)
+{
+  int len = textLine->length();
+
+  // if this line is empty, bail now
+  if (! len)
+    return false;
+
+  int space = 0;      // existing space
+  int optimized = 0;  // how much space we want
+  int excess = 0;     // how much space in excess of an even optimized amount we have
+  QString oldWS;      // the actual whitespace text we have
+    */
+  /*
+    calculate three things:
+    1) the whitespace char count we currently have.
+    2) the optimized whitespace we want to have.
+    3) the excess white space we have that does not add up to a full
+       tabChar width - this will be removed.
+    */ /*
+  for (int i = 0 ;; i++) {
+    if (i == len) {
+      // line is only white space - it will be cleared
+      optimized = 0;
+      excess = 0;
+      break;
+    } else if (textLine->getChar(i) == '\t') {
+      space++;
+      optimized++;
+      excess = 0;
+      oldWS += '\t';
+    } else if (textLine->getChar(i) == ' ') {
+      space++;
+      excess++;
+      if (excess == tabChars) {
+        optimized++;
+        excess = 0;
+      }
+      oldWS += ' ';
+    } else {
+      // no more whitespace
+      break;
+    }
+  }
+
+  // bail if there is nothing to actually be done
+  if (change <= 0 && ! space)
+    return false;
+
+  // now we do the actual optimization based on our calculations
+
+  QString     newWS;
+  QString     newExc;
+
+  if (space && ! optimized && ! excess) {
+    // this was a white-space only line - clear it
+    newWS = "";
+  } else if (! change) {
+    // no change - just optimize, so that the line still *looks* the same
+    if (c.flags & cfReplaceTabs) {
+      newWS.fill(' ', optimized * tabChars + excess);
+    } else {
+      newWS.fill('\t', optimized);
+      newExc.fill(' ', excess);
+      newWS += newExc;
+    }
+  } else if (change > 0) {
+    // add 1 optimized space to the line
+    optimized ++;
+    if (c.flags & cfReplaceTabs)
+      newWS.fill(' ', optimized * tabChars);
+    else
+      newWS.fill('\t', optimized);
+  } else if (change < 0) {
+    // remove 1 optimized space from the line
+    if (! excess)
+      optimized --;
+    if (c.flags & cfReplaceTabs)
+      newWS.fill(' ', optimized * tabChars);
+    else
+      newWS.fill('\t', optimized);
+  }
+
+  // make sure our optimized indent is actually different than what was there
+  if (oldWS == newWS)
+    return false;
+
+  // replace the current whitespace with the optimized whitespace
+  if (undo) // start an undo record
+    recordStart(c, (change < 0 ? KWActionGroup::ugUnindent : KWActionGroup::ugIndent));
+
+  recordReplace(c.cursor, space, newWS);
+
+  return undo;
+} */
 
 void KWriteDoc::newBracketMark(PointStruc &cursor, BracketMark &bm) {
   TextLine *textLine;
@@ -2613,9 +3101,9 @@ void KWriteDoc::newBracketMark(PointStruc &cursor, BracketMark &bm) {
   char bracket, opposite, ch;
   Attribute *a;
 
-  bm.eXPos = -1;
+  bm.eXPos = -1; //mark bracked mark as invalid
 
-  x = cursor.x -1;
+  x = cursor.x -1; // -1 to look at left side of cursor
   if (x < 0) return;
   line = cursor.y; //current line
   count = 0; //bracket counter for nested brackets
@@ -2629,7 +3117,7 @@ void KWriteDoc::newBracketMark(PointStruc &cursor, BracketMark &bm) {
     if (bracket == '{') opposite = '}';
     //get attribute of bracket (opposite bracket must have the same attribute)
     x++;
-    while (line - cursor.y < 20) {
+    while (line - cursor.y < 40) {
       //go to next line on end of line
       while (x >= textLine->length()) {
         line++;
@@ -2681,5 +3169,5 @@ found:
   //x position (start and end) of related bracket
   bm.sXPos = textWidth(textLine, x);
   a = &attribs[attr];
-  bm.eXPos = bm.sXPos + a->fm.width(bracket);
+  bm.eXPos = bm.sXPos + a->width(bracket);//a->fm.width(bracket);
 }
