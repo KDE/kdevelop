@@ -720,6 +720,8 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
   QStringList libDirList=myProjectItem->configuration.m_librarypath;
 
   QPtrList <ProjectItem> itemList=getAllProjects();
+  outsidelibdir_listview->setSorting(-1,false);
+
   ProjectItem *item=itemList.first();
   
   while(item){

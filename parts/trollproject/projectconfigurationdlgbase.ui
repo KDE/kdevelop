@@ -1821,6 +1821,18 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>extMoveDown_button_clicked()</slot>
     </connection>
+    <connection>
+        <sender>outsideLibDirMoveUpBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirMoveUpClicked()</slot>
+    </connection>
+    <connection>
+        <sender>outsideLibDirMoveDownBtn</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>outsideLibDirMoveDownClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>radioApplication</tabstop>
