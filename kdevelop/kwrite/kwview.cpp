@@ -760,8 +760,8 @@ X      : cut
             t = false;
       }
     }
-    if (e->state() & ControlButton) c.flags |= cfMark | cfKeepSelection;
     if (!t) {
+      if (e->state() & ControlButton) c.flags |= cfMark | cfKeepSelection;
       switch ( e->key() ) {
         case Key_Left:
             cursorLeft(c);
@@ -805,6 +805,12 @@ X      : cut
         case Key_Insert:
             if (e->state() & ShiftButton) kWriteDoc->paste(this,c);
               else kWrite->toggleOverwrite();
+/*        case Key_F9:
+            printf("text() %s\n", kWrite->text().data());
+            break;
+        case Key_F10:
+            printf("currentWord() %s\n", kWrite->currentWord().data());
+            break;*/
       }
     }
   }
@@ -832,7 +838,7 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
     placeCursor(e->x(),e->y(),0);
     kWrite->paste();
   }
-
+//if (e->button() == RightButton) printf("word %s\n", kWrite->word(e->x(), e->y()).data());
   if (kWrite->popup && e->button() == RightButton) {
     kWrite->popup->popup(mapToGlobal(e->pos()));
   }
@@ -1061,6 +1067,18 @@ QString KWrite::text() {
 
 QString KWrite::markedText() {
   return kWriteDoc->markedText(configFlags);
+}
+
+QString KWrite::currentWord() {
+  return kWriteDoc->currentWord(kWriteView->cursor);
+}
+
+QString KWrite::word(int x, int y) {
+  PointStruc cursor;
+  cursor.y = (kWriteView->yPos + y)/kWriteDoc->fontHeight;
+  if (cursor.y < 0 || cursor.y > kWriteDoc->lastLine()) return QString();
+  cursor.x = kWriteDoc->textPos(kWriteDoc->textLine(cursor.y), kWriteView->xPos-2 + x);
+  return kWriteDoc->currentWord(cursor);
 }
 
 void KWrite::setText(const char *s) {

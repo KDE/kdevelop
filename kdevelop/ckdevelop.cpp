@@ -33,6 +33,7 @@
 #include "cupdatekdedocdlg.h"
 #include <kdebug.h>
 #include "./kwrite/kwdoc.h"
+#include "ccreatedocdatabasedlg.h"
 
 
 
@@ -248,6 +249,8 @@ void CKDevelop::slotFileClose(){
 void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(i18n("Closing all files..."));
   slotStatusMsg(IDS_DEFAULT); 
+}
+void CKDevelop::slotFilePrint(){
 }
 void CKDevelop::closeEvent(QCloseEvent* e){
   e->accept();
@@ -561,31 +564,22 @@ int CKDevelop::searchToolGetNumber(QString str){
   return sub.toInt();
 }
 void CKDevelop::slotCreateSearchDatabase(){
-  config->setGroup("Doc_Location");
-  QString filename = config->readEntry("doc_kde") +"/kdeui/KButton.html";
-  cerr << "\n"+filename+"\n";
-  if(!QFile::exists(filename)){
-    KMsgBox::message(0,"No Database created!","The KDE-Documentation-Path isn't set correctly.");
-    return;
+
+  CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config);
+  if(dlg.exec()){
+    slotStatusMsg(i18n("Creating Search Database..."));
   }
-  filename = config->readEntry("doc_qt") +"/qtabbar.html";
-  if(!QFile::exists(filename)){
-    KMsgBox::message(0,"No Database created!","The Qt-Documentation-Path isn't set correctly.");
-    return;
-  }
-  slotStatusMsg(i18n("Creating Search Database..."));
-  QDir dir(QDir::home());
-  dir.mkdir(".kdevelop");
- 
-  QString kde_doc_dir = config->readEntry("doc_kde");
-  QString qt_doc_dir = config->readEntry("doc_qt");
-  shell_process.clearArguments();
-  shell_process <<  "find "+ qt_doc_dir+" "+kde_doc_dir+" -name '*.html' | glimpseindex -F -X -H "+ QDir::homeDirPath() + "/.kdevelop";
-  shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+
+  return;
+  
 }
 void CKDevelop::slotDocSText(){
   slotStatusMsg(i18n("Searching selected text in documentation..."));
   QString text = edit_widget->markedText();
+  if(text == ""){
+    text = edit_widget->currentWord();
+  }
+  
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
   search_process << "glimpse  -H "+ QDir::homeDirPath() + "/.kdevelop -U -c -y '"+ text +"'";
@@ -847,19 +841,28 @@ void CKDevelop::slotProcessExited(KProcess*){
 }
 
 void CKDevelop::slotSTabSelected(int item){
-  if (item == 0){
+  if (item == HEADER){
     edit_widget = header_widget;
+    edit_widget->setFocus();
+    slotNewUndo();
+    slotNewStatus();
+    slotNewLineColumn();
+    setCaption("KDevelop V" + version + ": " + edit_widget->getName());
   }
-  if (item == 1){
+  if (item == CPP){
     edit_widget = cpp_widget;
+    edit_widget->setFocus();
+    slotNewUndo();
+    slotNewStatus();
+    slotNewLineColumn();
+    setCaption("KDevelop V" + version + ": " + edit_widget->getName());
   }
-  setCaption("KDevelop V" + version + ": " + edit_widget->getName());
+  if(item == BROWSER){
+    browser_widget->setFocus();
+  }
+ 
   //  s_tab_current = item;
-  edit_widget->setFocus();
-
-  slotNewUndo();
-  slotNewStatus();
-  slotNewLineColumn();
+  
 }
 
 void CKDevelop::slotMenuBuffersSelected(int id){

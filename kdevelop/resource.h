@@ -40,6 +40,8 @@
 #define ID_FILE_CLOSE               10070
 #define ID_FILE_CLOSE_ALL           10075
 
+#define ID_FILE_PRINT               10077
+
 #define ID_FILE_QUIT                10080
 
 

@@ -9,7 +9,6 @@
 
 #include "kwview.h"
 #include "kwdoc.h"
-#include "iostream.h"
 
 //text attribute constants
 const int taSelected = 0x40;
@@ -427,15 +426,9 @@ int KWriteDoc::lastLine() const {
 }
 
 TextLine *KWriteDoc::textLine(int line) {
+//  if (line < 0) line = 0;
+//  if (line >= (int) contents.count()) line = contents.count() -1;
   return contents.at(line);
-/*
-  TextLine *textLine;
-
-  if (line < 0 || line >= (int) contents.count()) line = contents.count() -1;
-  textLine = contents.at(line);
-
-  return textLine->getString();
-*/
 }
 
 int KWriteDoc::textLength(int line) {
@@ -1377,14 +1370,27 @@ QString KWriteDoc::text() {
   for (z = 0; z <= last; z++) {
     textLine = contents.at(z);
     end = textLine->length();
-    
-    for (i = 0; i < end; i++) {
-       s[len+i] = textLine->getChar(i);
-    }
+    for (i = 0; i < end; i++) s[len + i] = textLine->getChar(i);
     len += end;
     s[len] = '\n';
     len++;
   }
+  s[len] = '\0';
+  return s;
+}
+
+QString KWriteDoc::currentWord(PointStruc &cursor) {
+  TextLine *textLine;
+  int start, end, len, z;
+
+  textLine = contents.at(cursor.y);
+  len = textLine->length();
+  start = end = cursor.x;
+  while (start > 0 && highlight->isInWord(textLine->getChar(start - 1))) start--;
+  while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
+  len = end - start;
+  QString s(len +1);
+  for (z = 0; z < len; z++) s[z] = textLine->getChar(start + z);
   s[len] = '\0';
   return s;
 }
@@ -1995,7 +2001,8 @@ void KWriteDoc::doWordWrap(KWAction *a) {
   TextLine *textLine;
 
   textLine = contents.at(a->cursor.y - 1);
-  textLine->wrap(contents.next(),textLine->length() - a->cursor.x);
+  a->len = textLine->length() - a->cursor.x;
+  textLine->wrap(contents.next(),a->len);
 
   tagLine(a->cursor.y - 1);
   tagLine(a->cursor.y);
@@ -2008,6 +2015,7 @@ void KWriteDoc::doWordUnWrap(KWAction *a) {
   TextLine *textLine;
 
   textLine = contents.at(a->cursor.y - 1);
+  textLine->setLength(a->len);
   textLine->unWrap(contents.next(),a->cursor.x);
 
   tagLine(a->cursor.y - 1);

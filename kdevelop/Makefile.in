@@ -188,8 +188,8 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
 		   clogfileview.cpp cdocbrowser.cpp cproject.cpp \
 		   kswallow.cpp cgeneratenewfile.cpp \
-		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp \
-kdevelop_METASOURCES =  caddexistingfiledlg.moc.cpp cclassview.moc.cpp cdocbrowser.moc.cpp cdoctree.moc.cpp ceditwidget.moc.cpp cfilepropdlg.moc.cpp cgrouppropertiesdlg.moc.cpp ckappwizard.moc.cpp ckdevelop.moc.cpp ckdevsetupdlg.moc.cpp clogfileview.moc.cpp cnewclassdlg.moc.cpp cnewfiledlg.moc.cpp coutputwidget.moc.cpp cprjoptionsdlg.moc.cpp crealfileview.moc.cpp ctabctl.moc.cpp cupdatekdedocdlg.moc.cpp kswallow.moc.cpp 
+		   cdoctree.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
+kdevelop_METASOURCES =  caddexistingfiledlg.moc.cpp cclassview.moc.cpp ccreatedocdatabasedlg.moc.cpp cdocbrowser.moc.cpp cdoctree.moc.cpp ceditwidget.moc.cpp cfilepropdlg.moc.cpp cgrouppropertiesdlg.moc.cpp ckappwizard.moc.cpp ckdevelop.moc.cpp ckdevsetupdlg.moc.cpp clogfileview.moc.cpp cnewclassdlg.moc.cpp cnewfiledlg.moc.cpp coutputwidget.moc.cpp cprjoptionsdlg.moc.cpp crealfileview.moc.cpp ctabctl.moc.cpp cupdatekdedocdlg.moc.cpp kswallow.moc.cpp 
 
 # the library search path. 
 kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
@@ -202,7 +202,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
 		clogfileview.h structdef.h cdocbrowser.h cproject.h \
 		cclassview.h kswallow.h cgeneratenewfile.h \
-		cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk ckappwizard.h
+		cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk ckappwizard.h ccreatedocdatabasedlg.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc
 
@@ -219,13 +219,13 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-kdevelop_OBJECTS =  ckdevelop.o main.o cnewfiledlg.o coutputwidget.o  caddexistingfiledlg.moc.o cclassview.moc.o cdocbrowser.moc.o cdoctree.moc.o ceditwidget.moc.o cfilepropdlg.moc.o cgrouppropertiesdlg.moc.o ckappwizard.moc.o ckdevelop.moc.o ckdevsetupdlg.moc.o clogfileview.moc.o cnewclassdlg.moc.o cnewfiledlg.moc.o coutputwidget.moc.o cprjoptionsdlg.moc.o crealfileview.moc.o ctabctl.moc.o cupdatekdedocdlg.moc.o kswallow.moc.o \
+kdevelop_OBJECTS =  ckdevelop.o main.o cnewfiledlg.o coutputwidget.o  caddexistingfiledlg.moc.o cclassview.moc.o ccreatedocdatabasedlg.moc.o cdocbrowser.moc.o cdoctree.moc.o ceditwidget.moc.o cfilepropdlg.moc.o cgrouppropertiesdlg.moc.o ckappwizard.moc.o ckdevelop.moc.o ckdevsetupdlg.moc.o clogfileview.moc.o cnewclassdlg.moc.o cnewfiledlg.moc.o coutputwidget.moc.o cprjoptionsdlg.moc.o crealfileview.moc.o ctabctl.moc.o cupdatekdedocdlg.moc.o kswallow.moc.o \
 ckdevelop_init.o ctabctl.o ckdevelop_noslot.o ckdevelop_project.o \
 cclassview.o ceditwidget.o ckdevsetupdlg.o ckdevelop_classview.o \
 cprjoptionsdlg.o ckappwizard.o crealfileview.o clogfileview.o \
 cdocbrowser.o cproject.o kswallow.o cgeneratenewfile.o cdoctree.o \
 cnewclassdlg.o cfilepropdlg.o caddexistingfiledlg.o \
-cgrouppropertiesdlg.o cupdatekdedocdlg.o
+cgrouppropertiesdlg.o cupdatekdedocdlg.o ccreatedocdatabasedlg.o
 kdevelop_DEPENDENCIES =  ./kwrite/libkwrite.a
 CXXFLAGS = @CXXFLAGS@
 CXXCOMPILE = $(CXX) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CXXFLAGS)
@@ -241,8 +241,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP = --best
 DEP_FILES =  .deps/caddexistingfiledlg.P .deps/cclassview.P \
-.deps/cdocbrowser.P .deps/cdoctree.P .deps/ceditwidget.P \
-.deps/cfilepropdlg.P .deps/cgeneratenewfile.P \
+.deps/ccreatedocdatabasedlg.P .deps/cdocbrowser.P .deps/cdoctree.P \
+.deps/ceditwidget.P .deps/cfilepropdlg.P .deps/cgeneratenewfile.P \
 .deps/cgrouppropertiesdlg.P .deps/ckappwizard.P .deps/ckdevelop.P \
 .deps/ckdevelop_classview.P .deps/ckdevelop_init.P \
 .deps/ckdevelop_noslot.P .deps/ckdevelop_project.P \
@@ -260,7 +260,7 @@ all: all-recursive all-am
 .SUFFIXES: .S .c .cpp .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu kdevelop/Makefile
-	perl $(top_builddir)/automoc /home/smeier/test/kdevelop_kwrite/kdevelop/Makefile.in
+	perl $(top_builddir)/automoc /home/smeier/devel/kdevelop/kdevelop/Makefile.in
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
@@ -583,6 +583,9 @@ caddexistingfiledlg.moc.cpp: caddexistingfiledlg.h
 
 cclassview.moc.cpp: cclassview.h
 	$(MOC) cclassview.h -o cclassview.moc.cpp
+
+ccreatedocdatabasedlg.moc.cpp: ccreatedocdatabasedlg.h
+	$(MOC) ccreatedocdatabasedlg.h -o ccreatedocdatabasedlg.moc.cpp
 
 cdocbrowser.moc.cpp: cdocbrowser.h
 	$(MOC) cdocbrowser.h -o cdocbrowser.moc.cpp

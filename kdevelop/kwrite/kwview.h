@@ -262,12 +262,19 @@ class KWrite : public QWidget {
      /** Gets the complete document content as string
      */
      QString text();
-     /** Gets the marked text as string
+     /** Gets the word where the cursor is on
      */
-     QString markedText();
+     QString currentWord();
+     /** Gets the word at position x, y. Can be used to find
+         the word under the mouse cursor
+     */
+     QString word(int x, int y);
      /** Discard old text without warning and set new text
      */
      void setText(const char *);
+     /** Gets the marked text as string
+     */
+     QString markedText();
 //url aware file functions
   public:
     enum action{GET, PUT}; //tells us what kind of job kwrite is waiting for

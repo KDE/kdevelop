@@ -203,7 +203,7 @@ all: Makefile $(LIBRARIES)
 .SUFFIXES: .S .c .cpp .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu kdevelop/kwrite/Makefile
-	perl $(top_builddir)/automoc /home/smeier/test/kdevelop_kwrite/kdevelop/kwrite/Makefile.in
+	perl $(top_builddir)/automoc /home/smeier/devel/kdevelop/kdevelop/kwrite/Makefile.in
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \

@@ -186,6 +186,7 @@ class KWriteDoc : QObject {
     void invertSelection();
 
     QString text();
+    QString currentWord(PointStruc &cursor);
     void setText(const char *);
     bool hasMarkedText() {return (selectEnd >= selectStart);}
     QString markedText(int flags);

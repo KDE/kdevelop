@@ -25,6 +25,8 @@ HlManager hlManager; //highlight manager
 
 CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   : KWrite(new KWriteDoc(&hlManager),parent,name) {
+  setFocusProxy (kWriteView); 
+
 }
 
 CEditWidget::~CEditWidget() {
@@ -94,3 +96,6 @@ void CEditWidget::gotoLine(){
   KWrite::gotoLine();
 }
 
+void CEditWidget::enterEvent ( QEvent * e){
+  setFocus();
+}

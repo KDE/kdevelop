@@ -112,6 +112,7 @@ public:
   /** close the cuurent file*/
   void slotFileClose();
   void slotFileCloseAll();
+  void slotFilePrint();
   /** quit kdevelop*/
   void slotFileQuit();
 

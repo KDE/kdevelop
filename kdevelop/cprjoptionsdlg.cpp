@@ -322,8 +322,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   } else {
     w_undef->setChecked(false);
   }
-  KQuickHelp::add(w_undef, i18n("Don't know what that means.\n"
-				"Can't help you here :-)"));
+  KQuickHelp::add(w_undef, i18n("Warn if an undefined identifier is\n"
+				"evaluated in an `#if' directive"));
 
   w_shadow=new QCheckBox(w3,"w_shadow");
   w_shadow->setGeometry(10,90,230,20);
@@ -474,8 +474,9 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
     w_sign_compare->setChecked(false);
   }
   KQuickHelp::add(w_sign_compare,
-	i18n("Don't know what that is good for. Anyway, it must\n"
-		"be some kind of warning...."));
+	i18n("Warn when a comparison between signed and unsigned values\n"
+	     "could produce an incorrect result when the signed value\n"
+	     "is converted to unsigned."));
 
 
   w_aggregate_return=new QCheckBox(w3,"w_aggregate_return");
@@ -588,8 +589,8 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
     w_old_style_cast->setChecked(false);
   }
   KQuickHelp::add(w_old_style_cast,
-	i18n("No Quickhelp available here because I again\n"
-		"don't know what that is good for....\n"));
+	i18n("Warn if an old-style (C-style) cast is used\n"
+	     "within a program"));
 
 
   w_overloaded_virtual=new QCheckBox(w3,"w_overloaded_virtual");
@@ -819,7 +820,7 @@ ldadd = " " + ldadd + " ";
   } else {
     l_kspell->setChecked(false);
   }
-  KQuickHelp::add(l_kspell, i18n("KDE translation"));
+  KQuickHelp::add(l_kspell, i18n("KDE Spell checking"));
  
   l_kab=new QCheckBox(w4,"l_kab");
   l_kab->setGeometry(260,160,110,20);

@@ -1152,7 +1152,8 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
   int op;
   int argCount;
   bool interpolating;
-  bool string;
+//  bool string;
+  bool brackets;
 
   const char *str, *s, *s2;
   bool lastWw;
@@ -1162,7 +1163,8 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
   op = (ctxNum >> 5) & 7;
   argCount = (ctxNum >> 3) & 3;
   interpolating = !((ctxNum >> 2) & 1);
-  string = ctxNum & 1;
+//  string = ctxNum & 1;
+  brackets = ctxNum & 1;
 
   str = textLine->getString();
   lastWw = true;
@@ -1209,12 +1211,12 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         delimiter = *s;
         s++;
         argCount = 1;
-        string = true;
+//        string = true;
         textLine->setAttribs(3, pos, pos + 1);
         goto newContext;
       }
     }
-    if (!string) {
+    if (!delimiter/*string*/) {
       //comment
       if (lastWw && *s == '#') {
         do {
@@ -1227,8 +1229,24 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
       //delimiter
       if (op != 0 && (unsigned char) *s > 32) {
         delimiter = *s;
+        if (delimiter == '(') {
+          delimiter = ')';
+          brackets = true;
+        }
+        if (delimiter == '<') {
+          delimiter = '>';
+          brackets = true;
+        }
+        if (delimiter == '[') {
+          delimiter = ']';
+          brackets = true;
+        }
+        if (delimiter == '{') {
+          delimiter = '}';
+          brackets = true;
+        }
         s++;
-        string = true;
+//        string = true;
         if (op == 1 || op == 4 || op == 7 || (delimiter == '\'' && op != 2))
           interpolating = false;
         textLine->setAttribs(3, pos, pos + 1);
@@ -1241,15 +1259,22 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         s2 = s;
         do {
           s2++;
-        } while ((!testWw(*s2) || *s2 == '#') && (!string || *s2 != delimiter));
+        } while ((!testWw(*s2) || *s2 == '#') && *s2 != delimiter);
         if (s2 - s > 1) {
           s = s2;
           textLine->setAttribs(2, pos, s2 - str);
           goto newContext;
         }
       }
+      if (s[0] == '$' && s[1] != '\0' && s[1] != delimiter) {
+        if (strchr("&`'+*./|,\\;#%=-~^:?!@$<>()[]", s[1])) {
+          s += 2;
+          textLine->setAttribs(2, pos, pos + 2);
+          goto newContext;
+        }
+      }
     }
-    if (string) {
+    if (delimiter/*string*/) {
       //escaped char
       if (interpolating) {
         if (*s == '\\' && s[1] != '\0') {
@@ -1261,7 +1286,7 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         }
       }
       //string end
-      z = 0;
+/*      z = 0;
       if (delimiter == '(' && *s == ')') {
         z = 1;
       } else if (delimiter == '<' && *s == '>') {
@@ -1272,9 +1297,9 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
         z = 1;
       } else if (delimiter == *s) {
         z = 2;
-      }
-      s++;
-      if (z) {
+      }*/
+      if (delimiter == *s) {
+        s++;
         argCount--;
         if (argCount < 1) {
           //match operator modifiers
@@ -1284,11 +1309,14 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
           op = 0;
         }
         textLine->setAttribs(3, pos, s - str);
-        if (z == 1 || op == 0) {
+        if (brackets/*z == 1*/ || op == 0) {
           interpolating = true;
-          string = false;
+//          string = false;
+          delimiter = '\0';
+          brackets = false;
         }
       } else {
+        s++;
         textLine->setAttribs(4, pos, pos + 1);
       }
       goto newContext;
@@ -1305,7 +1333,8 @@ void PerlHighlight::doHighlight(int ctxNum, TextLine *textLine) {
   ctxNum |= op << 5;
   ctxNum |= argCount << 3;
   if (!interpolating) ctxNum |= 1 << 2;
-  if (string) ctxNum |= 1;
+//  if (string) ctxNum |= 1;
+  if (brackets) ctxNum |= 1;
   textLine->setContext(ctxNum);
 }
 

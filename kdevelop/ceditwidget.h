@@ -48,6 +48,7 @@ public:
   void gotoLine();
 protected:
 //  QString filename;
+void enterEvent ( QEvent * e); 
 };
 
 #endif

@@ -266,6 +266,8 @@ void CKDevelop::initMenu(){
   file_menu->insertItem(i18n("&Close"), this, SLOT(slotFileClose()), CTRL+Key_W,ID_FILE_CLOSE);
   //  file_menu->insertItem(i18n("Close All"), this, SLOT(slotFileCloseAll()),0,ID_FILE_CLOSE_ALL);
   file_menu->insertSeparator();
+  file_menu->insertItem(i18n("&Print..."), this, SLOT(slotFilePrint()),0,ID_FILE_PRINT);
+  file_menu->insertSeparator();
   file_menu->insertItem(i18n("&Quit"),this, SLOT(slotFileQuit()), CTRL+Key_Q,ID_FILE_QUIT);
 
   // put the popupmenu as File-menu into the menu bar
@@ -334,7 +336,7 @@ void CKDevelop::initMenu(){
   documentation_menu->insertSeparator();
   documentation_menu->insertItem(i18n("Update KDE-Documentation..."),this, 
 				 SLOT(slotDocUpdateKDEDocumentation()),0,ID_DOC_UPDATE_KDE_DOCUMENTATION);
-  documentation_menu->insertItem(i18n("Create Searchdatabase"),this, 
+  documentation_menu->insertItem(i18n("Create Searchdatabase..."),this, 
 				 SLOT(slotCreateSearchDatabase()),0,ID_DOC_CREATE_SEARCHDATABASE);
  
   menuBar()->insertItem(i18n("&Documentation"), documentation_menu);
