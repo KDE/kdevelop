@@ -512,6 +512,10 @@ QString VarItem::fullName() const
 		item = (VarItem*) item->parent();
     }
 
+	// Change 'self.@foobar' to '@foobar'
+	vPath.replace(QRegExp("^self\\.@"), "@");
+	
+	// Strip out any '@'s in the middle of a path	
 	vPath.replace(QRegExp("\\.@+"), ".");		
 
     return vPath;
@@ -608,7 +612,11 @@ QCString VarItem::cache()
 
 void VarItem::checkForRequests()
 {
-    if (dataType_ == REFERENCE_TYPE || dataType_ == ARRAY_TYPE || dataType_ == HASH_TYPE) {
+    if (	dataType_ == REFERENCE_TYPE 
+			|| dataType_ == ARRAY_TYPE 
+			|| dataType_ == HASH_TYPE
+			|| dataType_ == STRUCT_TYPE ) 
+	{
         startWaitingForData();
         emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
     }
@@ -723,9 +731,14 @@ void VarFrameRoot::setOpen(bool open)
 }
 
 void VarFrameRoot::setFrameName(const QString &frameName)
-{ 
-	cache_ = "";
+{
 	setActivationId();
+	
+	if (frameName != text(VAR_NAME_COLUMN)) {
+		prune();
+	}
+	 
+	cache_ = "";
 	setText(VAR_NAME_COLUMN, frameName); 
 	setText(VALUE_COLUMN, "");
 	

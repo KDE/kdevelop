@@ -53,6 +53,7 @@ void RDBParser::parseVariables(LazyFetchItem *parent, char *buf)
 		
 	QRegExp var_re("\\s*([^\\n\\s]+) => ([^\\n]+)");
 	QRegExp ref_re("(#<[^:]+:0x[\\da-f]+)\\s*([^=]*)>?");
+	QRegExp struct_re("#<struct Struct::(\\w+)");
 	
 	// Look for 'dataitem => value' pairs. For example:
 	// 	a => 1
@@ -64,6 +65,8 @@ void RDBParser::parseVariables(LazyFetchItem *parent, char *buf)
 			varName = var_re.cap(1);
 			if (ref_re.search(var_re.cap(2)) != -1) {
 				value = (ref_re.cap(1) + ">").latin1();
+			} else if (struct_re.search(var_re.cap(2)) != -1) {
+				value = (QString("#<Struct::") + struct_re.cap(1) + ">").latin1();
 			} else {
 				value = var_re.cap(2).latin1();
 			}
@@ -108,7 +111,6 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 				//     #<MyClass:0x30094b90 @foobar="hello">
 				// So search for '@foobar="hello"', to use as the
 				// first name=value pair
-				parent->setText(VALUE_COLUMN, ppref_re.cap(1) + ">");
 				pos = 0;
 			} else {
 				// Either a single line like:
@@ -116,7 +118,6 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 				// Or on multiple lines with name=value pairs:
 				//     #<MyClass:0x30093540
 				//		@foobar="hello",
-				parent->setText(VALUE_COLUMN, QString("%1%2>").arg(ppref_re.cap(1)).arg(ppref_re.cap(2)));
 				pos = ppvalue_re.search(buf, pos);
 			}
 					
@@ -180,6 +181,49 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 		
 		return;
 	}
+	
+    case STRUCT_TYPE:
+	{
+		// Look for a reference type which has been printed via a 'pp' command, to
+		// expand its sub items. For example:
+		//     #<Struct::Customer
+		//		@foobar="hello",
+		//		@sleeper=#<Thread:0x3008fd18 sleep>,
+		//		@temp={"z"=>"zed", "p"=>"pee"}>
+		//
+		QRegExp ppstruct_re("(#<Struct::\\w+)\\s([^\\n>]*)(>?)");
+		QRegExp ppvalue_re("\\s*([^\\n\\s=]+)=([^\\n]+)[,>]");
+	
+		pos = ppstruct_re.search(buf);
+		if (pos != -1) {
+			if (ppstruct_re.cap(3) != "" && ppvalue_re.search(ppstruct_re.cap(0)) != -1) {
+				// The line ends with a '>', but we have this case now..
+				// If there is only one instance variable, pp puts everything
+				// on a single line:
+				//     #<Struct::Customer @foobar="hello">
+				// So search for '@foobar="hello"', to use as the
+				// first name=value pair
+				pos = 0;
+			} else {
+				// Mltiple lines with name=value pairs:
+				//     #<Struct::Customer
+				//		@foobar="hello",
+				pos = ppvalue_re.search(buf, pos);
+			}
+					
+			while (pos != -1) {
+				varName = ppvalue_re.cap(1);
+				value = ppvalue_re.cap(2).latin1();
+				dataType = determineType(value.data());
+				setItem(parent, varName, dataType, value);
+				
+				pos += ppvalue_re.matchedLength();
+				pos = ppvalue_re.search(buf, pos);
+			}
+			
+		}
+		return;
+	}
 		
 	default:
 		Q_ASSERT(false);
@@ -210,6 +254,12 @@ void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
         break;
 
     case REFERENCE_TYPE:
+        item->setText(VALUE_COLUMN, value);
+        item->setCache("");
+        break;
+
+    case STRUCT_TYPE:
+        item->setText(VALUE_COLUMN, value);
         item->setCache("");
         break;
 
@@ -230,7 +280,9 @@ DataType RDBParser::determineType(char *buf)
 	QRegExp array_re("(Array \\(\\d+ element\\(s\\)\\))");
 	QRegExp hash_re("(Hash \\(\\d+ element\\(s\\)\\))");
 	
-	if (qstrncmp(buf, "#<", strlen("#<")) == 0 && strstr(buf, "=") != 0) {
+	if (qstrncmp(buf, "#<struct", strlen("#<struct")) == 0) {
+		return STRUCT_TYPE;
+	} else if (qstrncmp(buf, "#<", strlen("#<")) == 0 && strstr(buf, "=") != 0) {
 		// An object instance reference is only expandable and a 'REFERENCE_TYPE'
 		// if it contains an '=' (ie it has at least one '@instance_variable=value').
 		// Otherwise, treat it as a 'VALUE_TYPE'.

@@ -191,7 +191,42 @@ class Context
       nil
     end
   end
+  
+    # Temporarily change the pretty_print methods to not expand arrays
+	# and hashes, just give the length
+	def customize_debug_pp
+		Array.module_eval %q{
+			def pretty_print(pp)
+				pp.pp "Array (%d element(s))" % length
+			end
+		}
+		
+		Hash.module_eval %q{
+			def pretty_print(pp)
+				pp.pp "Hash (%d element(s))" % length
+			end
+		}
+	end
 
+    # Restore the original pretty_print methods for arrays and hashes
+	def restore_debug_pp
+		Array.module_eval %q{
+			def pretty_print(q)
+				q.group(1, '[', ']') {
+				self.each {|v|
+					q.comma_breakable unless q.first?
+					q.pp v
+				}
+				}
+			end
+		}
+		Hash.module_eval %q{
+			def pretty_print(q)
+				q.pp_hash self
+			end
+		}
+	end
+	
   # Prevent the 'var *' commands from expanding Arrays and Hashes
   # This could be done by redefining inspect, but that would affect
   # everywhere not just here and in the pp command.
@@ -562,6 +597,7 @@ class Context
 
 	when /^\s*pp\s+/
 	  obj = debug_eval($', binding)
+	  customize_debug_pp
 	  if obj.kind_of? Array
 	  	obj.each_index { |i| stdout.printf "[%d]=%s\n", i.to_s, debug_inspect(obj[i]) }
 	  elsif obj.kind_of? Hash
@@ -569,6 +605,7 @@ class Context
 	  else
 	    PP.pp(obj, stdout)
 	  end
+	  restore_debug_pp
 
 	when /^\s*p\s+/
 	  stdout.printf "%s\n", debug_eval($', binding).inspect

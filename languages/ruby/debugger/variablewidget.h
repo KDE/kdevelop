@@ -55,7 +55,8 @@ enum DataType {
 	VALUE_TYPE, 
 	REFERENCE_TYPE,
 	ARRAY_TYPE, 
-	HASH_TYPE
+	HASH_TYPE,
+	STRUCT_TYPE
 };		   
 
 class VariableWidget : public QWidget
