@@ -1677,6 +1677,7 @@ void CKDevelop::slotTagSwitchTo()
   else {
     kdDebug() << "lookup file in current Project, slow.\n";
     CProject* pPrj=getProject();
+    bool found=false;
     if (pPrj) {
       QStrList* sfiles = (bToHeader?&pPrj->getHeaders():&pPrj->getSources());
       QString fName=QString::null;
@@ -1687,13 +1688,14 @@ void CKDevelop::slotTagSwitchTo()
         //kdDebug() << "fName= " << fName << " pFile= " << pFile << "\n";
         if (fName==switchToName) {
           //kdDebug() << "gotcha! switching to " << pFile << "\n";
+          found=true;
           switchToFile(QString(pFile));
           break;
         }
         pFile = sfiles->next();
       }
     }
-    else {
+    if (!pPrj || (pPrj&&!found)) {
       // simple workaround for when there is no project loaded
       QString fName = curFileDir + "/" + QFileInfo(switchToName).fileName();
       if (!fName.isEmpty()) {
