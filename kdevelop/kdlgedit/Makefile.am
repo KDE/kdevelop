@@ -15,5 +15,5 @@ libkdlgedit_a_SOURCES = kdlgedit.cpp kdlgeditwidget.cpp kdlgpropwidget.cpp kdlgw
 
 noinst_HEADERS = kdlgedit.h kdlgeditwidget.h kdlgpropwidget.h kdlgwidgets.h kdlgdialogs.h \
   kdlgitems.h kdlgnewwidget.h kdlgproplvis.h kdlgproplv.h items.h itemsglobal.h kdlgotherdlgs.h \
-  kdlgnewdialogdlg.h kdlgreadmedlg.h kdlgloader.h kdlgpropertybase.h kdlgitembase.h defines.h item_class.cpp.inc
+  kdlgnewdialogdlg.h kdlgreadmedlg.h kdlgloader.h kdlgpropertybase.h kdlgitembase.h defines.h 
 
