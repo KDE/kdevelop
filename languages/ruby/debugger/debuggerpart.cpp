@@ -102,7 +102,7 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
                               "this view to get a popup menu.\n"
                               "To speed up stepping through your code "
                               "leave the tree items closed.\n"));
-    mainWindow()->embedSelectView(variableWidget, i18n("Variables / Watch"), i18n("Debugger variable-view"));
+    mainWindow()->embedSelectView(variableWidget, i18n("Variables"), i18n("Debugger variable-view"));
 
 //    mainWindow()->setViewAvailable(variableWidget, false);
 
