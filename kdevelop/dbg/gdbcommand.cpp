@@ -21,6 +21,10 @@
 
 /***************************************************************************/
 
+QString  GDBCommand::idlePrompt_ = QString().sprintf("\nset prompt %c%c\n", BLOCK_START, IDLE);
+
+/***************************************************************************/
+
 GDBCommand::GDBCommand(const QString& setCommand, bool isRunCmd, bool isInfoCmd, char setPrompt) :
   DbgCommand(setCommand, isRunCmd, isInfoCmd, setPrompt)
 {
@@ -39,10 +43,10 @@ QString GDBCommand::cmdToSend()
   sent_ = true;
 
   if (prompt_)
-    return QString().sprintf("set prompt %c%c\n%s\nset prompt %c%c\n",
-                                          BLOCK_START, prompt_,
-                                          command_.data(),
-                                          BLOCK_START, IDLE);
+  {
+    QString startPrompt = QString().sprintf("set prompt %c%c\n", BLOCK_START, prompt_);
+    return startPrompt + command_ + idlePrompt_;
+  }
 
   return command_+"\n";
 }

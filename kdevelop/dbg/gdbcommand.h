@@ -81,6 +81,9 @@ public:
 	virtual ~GDBCommand();
 	
 	virtual QString cmdToSend();
+	
+private:
+  static QString idlePrompt_;
 };
 
 /***************************************************************************/

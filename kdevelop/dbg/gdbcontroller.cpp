@@ -1110,8 +1110,8 @@ void GDBController::modifyBreakpoint(Breakpoint* BP)
   if (BP->dbgId())
   {
     if (BP->changedCondition())
-      queueCmd(new GDBCommand(QString().sprintf(
-                  "condition %d %s",  BP->dbgId(), BP->conditional().data()), NOTRUNCMD, NOTINFOCMD));
+      queueCmd(new GDBCommand(QString().sprintf("condition %d ",  BP->dbgId()) +
+                                BP->conditional(), NOTRUNCMD, NOTINFOCMD));
 
     if (BP->changedIgnoreCount())
       queueCmd(new GDBCommand(QString().sprintf(
@@ -1189,7 +1189,6 @@ void GDBController::slotStart(const QString& application, const QString& args)
   // and to whom. Organise a few things, then set up the tty for the application,
   // and the application itself
   queueCmd(new GDBCommand("set edit off", NOTRUNCMD, NOTINFOCMD, 0));
-//  queueCmd(new GDBCommand(QString().sprintf("set prompt \32%c", IDLE), NOTRUNCMD, NOTINFOCMD));
   queueCmd(new GDBCommand("set confirm off", NOTRUNCMD, NOTINFOCMD));
 
   if (config_displayStaticMembers_)
@@ -1200,7 +1199,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
   queueCmd(new GDBCommand(QString("tty ")+tty, NOTRUNCMD, NOTINFOCMD));
 
   if (!args.isEmpty())
-    queueCmd(new GDBCommand(QString().sprintf("set args %s", args.data()), NOTRUNCMD, NOTINFOCMD));
+    queueCmd(new GDBCommand("set args " + args, NOTRUNCMD, NOTINFOCMD));
 
   // This makes gdb pump a variable out on one line.
   queueCmd(new GDBCommand("set width 0", NOTRUNCMD, NOTINFOCMD));
@@ -1222,7 +1221,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
     queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
   // Load the file into gdb
-  QString fileCmd = QString().sprintf("file %s", application.data());
+  QString fileCmd = "file " + application;
   queueCmd(new GDBCommand(fileCmd, NOTRUNCMD, NOTINFOCMD));
 
   // Organise any breakpoints.
