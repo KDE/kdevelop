@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Application Wizard
+Comment[fr]=Assistant de création d'application
 Name=KDevAppWizard
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevappwizard
