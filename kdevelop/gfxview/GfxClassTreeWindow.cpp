@@ -126,6 +126,8 @@ void CGfxClassTreeWindow::InitializeTree(QList<CClassTreeNode> *forest)
   while(node != NULL)
   {
     m_classcombo->insertItem(node->m_name,-1);
+    connect(node, SIGNAL(gotoClassDefinition(CParsedClass *)),
+	SLOT(slotGotoClassDefinition(CParsedClass *)));
     node = m_treescrollview->m_classtree->m_boxlist.next();
   }      
 
@@ -236,4 +238,10 @@ void CGfxClassTreeWindow::printClicked()
   if(QPrintDialog::getPrinterSetup( &pr ))
     m_treescrollview->m_classtree->onPrintTree( &pr, tmp );
 }
+
+void CGfxClassTreeWindow::slotGotoClassDefinition(CParsedClass *pClass)
+{
+  emit gotoClassDefinition(pClass);
+}
+
 
