@@ -13,6 +13,13 @@
 #include <kdevpart.h>
 
 
+#ifdef NEW_EDITOR
+#include "keditor/editor.h"
+#else
+namespace KEditor { class Document; }
+#endif
+
+
 class AStylePart : public KDevPart
 {
   Q_OBJECT
@@ -26,7 +33,8 @@ public:
 private slots:
 
   void activePartChanged(KParts::Part *newPart);
-
+  void documentActivated(KEditor::Document *doc);
+		  
   void beautifySource();
  
   void configWidget(KDialogBase *dlg);
