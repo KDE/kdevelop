@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Bash Support
+Comment[fr]=Gestion de l'interpréteur BASH.
 Name=KDevBashSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevbashsupport

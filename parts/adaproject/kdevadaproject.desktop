@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Ada Project
+Comment[fr]=Gestion de projet avec le langage ADA.
 Name=KDevAdaProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevadaproject

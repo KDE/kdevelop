@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Ant Project
+Comment[fr]=Gestion de projet avec Ant.
 Name=KDevAntProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevantproject

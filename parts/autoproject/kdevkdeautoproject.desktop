@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=KDE Automake Project
+Comment[fr]=Gestion de projet avec Automake pour KDE.
 Name=KDevKDEAutoProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevautoproject

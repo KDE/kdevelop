@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=CVS Integration using Cervisia's cvsservice (needs KDE 3.2)
+Comment[fr]=Intégration du service CVS via le programme « Cervisia » (nécessite KDE 3.2).
 Name=CvsService
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevcvsservice

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=ClassBrowser
+Comment[fr]=Afficheur de classes.
 Name=KDevClassBrowser
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin

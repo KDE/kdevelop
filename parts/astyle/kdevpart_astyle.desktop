@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=A plugin for formatting of sourcecode according to a specified set of rules. When loaded it is found in the Tools menu.
+Comment[fr]=Un module externe pour le formatage des sources d'un programme. Ce module est disponible dans le menu « Outils ».
 Name=KDevAStyle
 GenericName=Source Code Formatter
 Icon=kdevelop

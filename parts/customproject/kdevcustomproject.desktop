@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Custom Project
+Comment[fr]=Gestion de projet personnalisé.
 Name=KDevCustomProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevcustomproject

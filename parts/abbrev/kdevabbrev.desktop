@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Abbrevation Expansion
+Comment[fr]=Extension des abréviations.
 Name=KDevAbbrev
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevabbrev

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=Ada Language Support
+Comment[fr]=Gestion du langage ADA.
 Name=KDevAdaSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevadasupport

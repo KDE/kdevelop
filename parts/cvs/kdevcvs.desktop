@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=CVS Integration
+Comment[fr]=Intégration de « CVS »
 Name=CVS
 ServiceTypes=KDevelop/VersionControl
 X-KDE-Library=libkdevcvs

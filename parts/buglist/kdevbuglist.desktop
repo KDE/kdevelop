@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Bug Tracking Application
+Comment[fr]=Recherche de bogues dans une application.
 Exec=blubb
 Icon=find
 Name=KDevBugList

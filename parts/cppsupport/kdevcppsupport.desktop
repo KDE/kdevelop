@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Exec=blubb
 Comment=C++ Support
+Comment[fr]=Gestion du language C++.
 Name=KDevCppSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevcppsupport
