@@ -22,7 +22,6 @@
 #include <kgenericfactory.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
-#include <kregexp.h>
 #include <qregexp.h>
 
 #include <qprogressbar.h>
@@ -278,18 +277,18 @@ void PerlSupportPart::parse(const QString &fileName){
 
 void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
 {
-  KRegExp  packagere("^[ \t]*package[ \t]+([+A-Za-z0-9_:]*).*\\;");
-  KRegExp     basere("^[ \t]*use[ \t]+base[ \t]*\\(\'*\"*([A-Za-z0-9_:]*)");
-  KRegExp      libre("^[ \t]*use[ \t]+lib[ \t]*\\(\'*\"*([A-Za-z0-9_:]*)");
-  KRegExp      usere("^[ \t]*use[ \t]+([+A-Za-z0-9_:]*).*\\;");
-  KRegExp      isare("^[ \t]*@ISA[ \t=qw\\(\'\"]*([A-Za-z0-9_: ]*)");
-  KRegExp   globalre("^[ \t]*our[ \t]+\\(*([ \t,$%@*+A-Za-z0-9_]*)\\)*.*");
-  KRegExp      subre("^[ \t]*sub[ \t]+([A-Za-z0-9_]*).*$");
-  KRegExp    blessre("bless[ \t]*[\\( ]*([,$%@*+A-Za-z0-9_]*).*;");
-  KRegExp     namere("^[ \t]*([$%@*])([A-Za-z0-9_]*).*$");
-  KRegExp  privatere("^_([A-Za-z0-9_]*)");
-  KRegExp  startpod("^=[a-z0-9]+ [a-z0-9]*");
-  KRegExp  cutpod("^=cut");
+  QRegExp  packagere("^[ \t]*package[ \t]+([+A-Za-z0-9_:]*).*\\;");
+  QRegExp     basere("^[ \t]*use[ \t]+base[ \t]*\\(\'*\"*([A-Za-z0-9_:]*)");
+  QRegExp      libre("^[ \t]*use[ \t]+lib[ \t]*\\(\'*\"*([A-Za-z0-9_:]*)");
+  QRegExp      usere("^[ \t]*use[ \t]+([+A-Za-z0-9_:]*).*\\;");
+  QRegExp      isare("^[ \t]*@ISA[ \t=qw\\(\'\"]*([A-Za-z0-9_: ]*)");
+  QRegExp   globalre("^[ \t]*our[ \t]+\\(*([ \t,$%@*+A-Za-z0-9_]*)\\)*.*");
+  QRegExp      subre("^[ \t]*sub[ \t]+([A-Za-z0-9_]*).*$");
+  QRegExp    blessre("bless[ \t]*[\\( ]*([,$%@*+A-Za-z0-9_]*).*;");
+  QRegExp     namere("^[ \t]*([$%@*])([A-Za-z0-9_]*).*$");
+  QRegExp  privatere("^_([A-Za-z0-9_]*)");
+  QRegExp  startpod("^=[a-z0-9]+ [a-z0-9]*");
+  QRegExp  cutpod("^=cut");
 
   QString line;
 
@@ -322,15 +321,15 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
     //some POD checking , quick and dirty but it seams to work
     if(inpod && endpod) { inpod=false; endpod=false;}
     //are we in pod documentation ?
-    if (startpod.match(line)) {inpod=true; continue;}
+    if (startpod.search(line)>=0) {inpod=true; continue;}
     //are we in pod documentation ?
-    if (inpod) { endpod= cutpod.match(line); continue; }
+    if (inpod) { endpod=( cutpod.search(line)>=0 ); continue; }
 
     //sub matching
-    if (subre.match(line)) {
-          QString subname=subre.group(1);
+    if (subre.search(line)>=0) {
+          QString subname=subre.cap(1);
           kdDebug(9016) << "subre match [" << subname << "]" << endl;
-          bool prive = privatere.match(subname);
+          bool prive = privatere.search(subname) >= 0;
           kdDebug(9016) << "prive match [" << prive << "]" << endl;
           if (m_inscript)      { addScriptSub(fileName,lineNo,subname,prive);}
           else {
@@ -341,16 +340,16 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
     } //sub
 
     //our matching
-    if (globalre.match(line)) {
+    if (globalre.search(line)>=0) {
         //splitup multible ours
-        QString varlist=globalre.group(1);
+        QString varlist=globalre.cap(1);
         kdDebug(9016) << "globalre match [" << varlist <<"]" << endl;
         QStringList vars=QStringList::split(",",varlist);
         for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
-            if (namere.match(*it)) {
-              QString var = namere.group(2);
+            if (namere.search(*it)>=0) {
+              QString var = namere.cap(2);
               kdDebug(9016) << "namere match [" << var << "]" << endl;
-              if (m_lastpackage) { addAttributetoPackage(fileName,lineNo,var); }
+              if (!m_lastpackage.isNull()) { addAttributetoPackage(fileName,lineNo,var); }
               else               { addAttributetoScript(fileName,lineNo,var); }
             }
         }
@@ -358,7 +357,7 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
     } //globalre
 
     //bless matching
-    if (blessre.match(line)) {
+    if (blessre.search(line)>=0) {
          kdDebug(9016) << "blessre match [" << m_lastpackage << "]" << endl;
          addClass(fileName,lineNo,m_lastpackage);
          addConstructor(m_lastclass,m_lastsub);
@@ -366,24 +365,24 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
     } //bless
 
     //base matching
-    if (basere.match(line)) {
-         QString parent = basere.group(1);
+    if (basere.search(line)>=0) {
+         QString parent = basere.cap(1);
          //create child & parent classes
          kdDebug(9016) << "basere match [" << parent << "]" << endl;
          addClass(fileName,lineNo,m_lastpackage);
          addParentClass(parent,m_lastpackage);
          continue;
     } else {
-      if (libre.match(line)) {
-         QString path = libre.group(1);
+      if (libre.search(line)>=0) {
+         QString path = libre.cap(1);
          //add lib to INC path list
          kdDebug(9016) << "libre match [" << path << "]" << endl;
          m_INClist.append(path);
          continue;
       } else {
-         if (usere.match(line)) {
+         if (usere.search(line)>=0) {
            //add lib to use list for later parsing
-           QString lib = usere.group(1);
+           QString lib = usere.cap(1);
            kdDebug(9016) << "usere match [" << lib << "]" << endl;
            m_usefiles.append(lib);
            continue;
@@ -391,8 +390,8 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
      }
     } //base
 
-    if (isare.match(line)) {
-         QString parent = isare.group(1);
+    if (isare.search(line)>=0) {
+         QString parent = isare.cap(1);
          //create child & parent classes
          kdDebug(9016) << "isare match [" << parent << "]" << endl;
          addClass(fileName,lineNo,m_lastpackage);
@@ -400,8 +399,8 @@ void PerlSupportPart::parseLines(QStringList* lines,const QString &fileName)
          continue;
     } //isa
 
-    if (packagere.match(line)) {
-         QString package=packagere.group(1);
+    if (packagere.search(line)>=0) {
+         QString package=packagere.cap(1);
          kdDebug(9016) << "packagere match [" << package << "]" << endl;
          addPackage(fileName,lineNo,package);
          continue;

@@ -21,7 +21,7 @@
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kprocess.h>
-#include <kregexp.h>
+#include <qregexp.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -188,20 +188,20 @@ bool CTagsPart::loadTagsFile()
     m_kindStrings.clear();
     
     QTextStream stream(&f);
-    KRegExp re("^([^\t]*)\t([^\t]*)\t([^;]*);\"\t(.*)$");
+    QRegExp re("^([^\t]*)\t([^\t]*)\t([^;]*);\"\t(.*)$");
         
-    QCString line;
+    QString line;
     while (!stream.atEnd()) {
         line = stream.readLine().latin1();
         //        kdDebug() << "Line: " << line << endl;
-        if (!re.match(line))
+        if (re.search(line) == -1)
             continue;
 
         
-        QString tag = re.group(1);
-        QString file = re.group(2);
-        QString pattern = re.group(3);
-        QString extfield = re.group(4);
+        QString tag = re.cap(1);
+        QString file = re.cap(2);
+        QString pattern = re.cap(3);
+        QString extfield = re.cap(4);
         //        kdDebug() <<"Tag " << tag << ", file " << file << ", pattern "
         //                  << pattern << ", extfield " << extfield << endl;
         CTagsMapIterator tiit = m_tags->find(tag);
@@ -209,9 +209,9 @@ bool CTagsPart::loadTagsFile()
             tiit = m_tags->insert(tag, CTagsTagInfoList());
 
         CTagsTagInfo ti;
-        ti.fileName = re.group(2);
-        ti.pattern = re.group(3);
-        ti.kind = re.group(4)[0];
+        ti.fileName = re.cap(2);
+        ti.pattern = re.cap(3);
+        ti.kind = re.cap(4)[0].latin1();
         (*tiit).append(ti);
         
         // Put kind in kind list if not already there
