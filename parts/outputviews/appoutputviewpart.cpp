@@ -58,7 +58,7 @@ void AppOutputViewPart::startAppCommand(const QString &program, bool inTerminal)
     if (inTerminal) {
         cmd = "konsole -e /bin/sh -c '";
         cmd += program;
-        cmd += "; echo \"\n";
+        cmd += "; echo \"";
         cmd += i18n("Press Enter to continue!");
         cmd += "\";read'";
     } else {
