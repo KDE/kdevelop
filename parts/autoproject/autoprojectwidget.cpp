@@ -627,9 +627,9 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 				fileName = ( *it );
 			}
 			
-			FileItem * fitem = createFileItem( fileName );
-			m_activeTarget->sources.append( fitem );
-			m_activeTarget->insertItem( fitem );
+                        //FileItem * fitem = createFileItem( fileName );
+			//m_activeTarget->sources.append( fitem );
+			//m_activeTarget->insertItem( fitem );
 
 			// TODO: Merge with code in addfiledlg.cpp
                         addToTarget(fileName, m_activeSubproject, m_activeTarget);
@@ -686,6 +686,10 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 
 void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem)
 {
+        FileItem * fitem = createFileItem( fileName );
+        titem->sources.append( fitem );
+        titem->insertItem( fitem );
+
 	QString canontargetname = AutoProjectTool::canonicalize( titem->name );
 	QString varname = canontargetname + "_SOURCES";
         spitem->variables[ varname ] += ( " " + fileName );
@@ -693,7 +697,9 @@ void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* sp
 	QMap<QString, QString> replaceMap;
 	replaceMap.insert( varname, spitem->variables[ varname ] );
 	
-        AutoProjectTool::modifyMakefileam( spitem->path + "/Makefile.am", replaceMap );       
+        AutoProjectTool::modifyMakefileam( spitem->path + "/Makefile.am", replaceMap );
+
+        slotDetailsSelectionChanged(spitem);
 }
 
 void AutoProjectWidget::removeFiles( const QStringList &list )

@@ -192,8 +192,10 @@ public:
 	QString activeDirectory();
 
 	/**
-	* Adds a file to the active target. The argument must
-	* not contain / characters.
+	* Adds a file to the active target.
+        * If the file does not contain a "/" character, it is added
+        * to the active target.
+        * If it does contain "/" character(s), ... TODO.. add to appropriate target
 	*/
 	void addFiles(const QStringList &list);
 	/**
@@ -248,8 +250,12 @@ public:
          * path, null is returned.
          */
         SubprojectItem* subprojectItemForPath(const QString & path, bool pathIsAbsolute=false);
-	
+
+        /**
+         * Adds file fileName to target titem in subproject spitem
+         */
         void addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem);
+  
         /**
 	 * Restores the last settings of the AutoProjectWidget
 	 */

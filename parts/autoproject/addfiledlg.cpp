@@ -29,6 +29,7 @@
 
 #include "filetemplate.h"
 #include "misc.h"
+#include "urlutil.h"
 #include "autoprojectpart.h"
 #include "autoprojectwidget.h"
 
@@ -87,7 +88,7 @@ void AddFileDialog::accept()
 			KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
 			return;
 		}
-		if( !FileTemplate::copy(m_part, "cpp", destpath) )
+		if( !FileTemplate::copy(m_part, URLUtil::getExtension(name), destpath) )
 		    kdDebug(9020) << "cannot create file " << destpath << endl;
 	} else {
 		// create an empty file
