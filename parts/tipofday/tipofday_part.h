@@ -7,12 +7,7 @@
 #define __KDEVPART_TIPOFDAY_H__
 
 
-#include <qguardedptr.h>
 #include <kdevpart.h>
-
-
-class TipOfDay;
-class KTipDatabase;
 
 
 class TipOfDayPart : public KDevPart
@@ -22,25 +17,12 @@ class TipOfDayPart : public KDevPart
 public:
    
   TipOfDayPart(KDevApi *api, QObject *parent=0, const char *name=0);
-  ~TipOfDayPart();
 
 
 public slots:
 
   void showTip();
-
-
-private slots:
-
-  void nextTip();
-  void toggleOnStart(bool on);
   void showOnStart();
-
-
-private:
-
- TipOfDay *_tipWidget;
- KTipDatabase *_tipDatabase;
 
 };
 

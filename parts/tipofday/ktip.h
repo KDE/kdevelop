@@ -21,34 +21,77 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  
 ******************************************************************/
 
-#ifndef __K_TIPDATABASE_H__
-#define __K_TIPDATABASE_H__
+#ifndef __K_TIP_H__
+#define __K_TIP_H__
 
 
 #include <qstringlist.h>
 
 
+class QCheckBox;
+
+
+#include <kdialog.h>
+
+
+class KTextBrowser;
+
+
 class KTipDatabase
-  {
+{
 public:
 
-    KTipDatabase(QString tipFile);
+  KTipDatabase(QString tipFile=QString::null);
 
-    QString tip();
+  QString tip();
 
-    void nextTip();
-    void prevTip();
+  void nextTip();
+  void prevTip();
 
 
 private:
 
-    void loadTips(QString tipFile);
+  void loadTips(QString tipFile);
 
-    QStringList tips;
+  QStringList tips;
 
-    int current;
+  int current;
 
-  };
+};
+
+
+class KTipDialog : public KDialog
+{
+  Q_OBJECT
+
+public:
+
+  static void showTip(QString tipFile=QString::null, bool force=false);
+
+  static void setShowOnStart(bool show);
+
+ 
+protected:
+
+  KTipDialog(KTipDatabase *db, QWidget *parent=0, const char *name=0);
+
+
+private slots:
+
+  void nextTip();
+  void showOnStart(bool);
+
+  
+private:
+
+  KTipDatabase *_database;
+
+  QCheckBox *_tipOnStart;
+  KTextBrowser *_tipText;
+  
+  static KTipDialog *_instance;
+
+};
 
 
 #endif
