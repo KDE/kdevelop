@@ -196,7 +196,8 @@ void ProjectManager::switchLanguage(const QString& lang)
   // make sure there is a project loaded
   if ( !m_info ) return;
 
-  PluginController::getInstance()->unloadAllLocalParts();
+//  PluginController::getInstance()->unloadAllLocalParts();
+  PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );
   unloadLanguageSupport();
   m_info->m_loadParts.clear();
   loadLanguageSupport(lang);
@@ -326,19 +327,20 @@ void ProjectManager::slotLoadProject( )
 }
 
 
-bool ProjectManager::closeProject()
+bool ProjectManager::closeProject( bool exiting )
 {
   if( !projectLoaded() )
-    return false;
+    return true;
 
-  Q_ASSERT( API::getInstance()->project() );
-  
   // save the session if it is a local file
 	if (m_info->m_projectURL.isLocalFile()) 
 	{
 		m_pProjectSession->saveToFile(m_info->sessionFile(), PluginController::getInstance()->loadedPlugins() );
 	}
   
+//  if ( !PartController::getInstance()->querySaveFiles() )	
+// @todo - use querySaveFiles instead, less confusing name. 
+// closeAllFiles() doesn't actually close, it only asks
   if ( !PartController::getInstance()->closeAllFiles() )
     return false;
 
@@ -346,7 +348,8 @@ bool ProjectManager::closeProject()
 
   TopLevel::getInstance()->prepareToCloseViews();
 
-  PluginController::getInstance()->unloadAllLocalParts();
+//  PluginController::getInstance()->unloadAllLocalParts();
+  PluginController::getInstance()->unloadPlugins( m_info->m_loadParts );
   unloadLanguageSupport();
   unloadProjectPart();
 
@@ -363,8 +366,11 @@ bool ProjectManager::closeProject()
   m_projectOptionsAction->setEnabled(false);
   m_activeLanguage->setEnabled(false);
 
-  PartController::getInstance()->slotCloseAllWindows();
-
+  if ( !exiting )
+  {
+    PartController::getInstance()->slotCloseAllWindows();
+  }
+  
   return true;
 }
 
@@ -584,7 +590,7 @@ void ProjectManager::loadLocalParts()
 	// Make sure to refresh load/ignore lists
 	getGeneralInfo();
 	
-	PluginController::getInstance()->unloadLocalParts( m_info->m_ignoreParts );
+	PluginController::getInstance()->unloadPlugins( m_info->m_ignoreParts );
 	PluginController::getInstance()->loadLocalParts( m_info, m_info->m_loadParts, m_info->m_ignoreParts );
 }
 

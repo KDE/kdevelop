@@ -58,7 +58,7 @@ public:
 public slots:
   bool loadProject( const KURL& url);
   bool loadKDevelop2Project( const KURL& url);
-  bool closeProject();
+  bool closeProject( bool exiting = false );
 
 private slots:
   void slotOpenProject();

@@ -115,7 +115,8 @@ void PluginController::loadInitialPlugins()
 
 PluginController::~PluginController()
 {
-  unloadGlobalPlugins();
+//  unloadGlobalPlugins();
+  unloadPlugins();
 }
 
 
@@ -179,7 +180,8 @@ void PluginController::loadCorePlugins()
     QString name = (*it)->name();
 
     // Check if it is already loaded
-    if( m_globalParts[ name ] != 0 )
+//    if( m_globalParts[ name ] != 0 )
+    if( m_parts[ name ] != 0 )
       continue;
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
@@ -189,7 +191,8 @@ void PluginController::loadCorePlugins()
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin )
     {
-        m_globalParts.insert( name, plugin );
+//        m_globalParts.insert( name, plugin );
+        m_parts.insert( name, plugin );
         integratePart( plugin );
     }
   }
@@ -205,19 +208,22 @@ void PluginController::loadGlobalPlugins()
 
     QString name = (*it)->name();
 
-    // Unload it it is marked as ignored and loaded
+    // Unload it if is marked as ignored and loaded
     if (!config.readBoolEntry( name, true)) {
-      KDevPlugin* part = m_globalParts[name];
+//      KDevPlugin* part = m_globalParts[name];
+      KDevPlugin* part = m_parts[name];
       if( part ) {
         removePart( part );
-        m_globalParts.remove( name );
+//        m_globalParts.remove( name );
+        m_parts.remove( name );
         part->deleteLater();
       }
       continue;
     }
 
     // Check if it is already loaded
-    if( m_globalParts[ name ] != 0 )
+//    if( m_globalParts[ name ] != 0 )
+    if( m_parts[ name ] != 0 )
       continue;
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
@@ -226,19 +232,23 @@ void PluginController::loadGlobalPlugins()
 
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin ) {
-	m_globalParts.insert( name, plugin );
+//	m_globalParts.insert( name, plugin );
+	m_parts.insert( name, plugin );
 	integratePart( plugin );
     }
   }
 }
 
-void PluginController::unloadGlobalPlugins()
+//void PluginController::unloadGlobalPlugins()
+void PluginController::unloadPlugins()
 {
-  for( QDictIterator<KDevPlugin> it( m_globalParts ); !it.isEmpty(); )
+//  for( QDictIterator<KDevPlugin> it( m_globalParts ); !it.isEmpty(); )
+  for( QDictIterator<KDevPlugin> it( m_parts ); !it.isEmpty(); )
   {
     KDevPlugin* part = it.current();
     removePart( part );
-    m_globalParts.remove( it.currentKey() );
+//    m_globalParts.remove( it.currentKey() );
+    m_parts.remove( it.currentKey() );
     delete part;
   }
 }
@@ -254,7 +264,8 @@ void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList co
 		kdDebug(9000) << "-----------------------------> load part " << name << endl;
 		
 		// Check if it is already loaded or should be ignored
-		if( m_localParts[ name ] != 0 || ignorePlugins.contains( name ) )
+//		if( m_localParts[ name ] != 0 || ignorePlugins.contains( name ) )
+		if( m_parts[ name ] != 0 || ignorePlugins.contains( name ) )
 			continue;
 	
 		if( loadPlugins.contains( name ) || checkNewService( projectInfo, *it ) )
@@ -263,11 +274,12 @@ void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList co
 			if ( !part ) continue;
 		
 			integratePart( part );
-			m_localParts.insert( name, part );
+//			m_localParts.insert( name, part );
+			m_parts.insert( name, part );
 		}
 	}
 }
-
+/*
 void PluginController::unloadAllLocalParts( )
 {
 	for( QDictIterator<KDevPlugin> it(m_localParts); !it.isEmpty(); )
@@ -278,18 +290,23 @@ void PluginController::unloadAllLocalParts( )
 		delete part;
 	}
 }
+*/
 
-void PluginController::unloadLocalParts( QStringList const & unloadParts )
+//void PluginController::unloadLocalParts( QStringList const & unloadParts )
+void PluginController::unloadPlugins( QStringList const & unloadParts )
 {
 	QStringList::ConstIterator it = unloadParts.begin();
 	while ( it != unloadParts.end() )
 	{
-		KDevPlugin* part = m_localParts[ *it ];
+//		KDevPlugin* part = m_localParts[ *it ];
+		KDevPlugin* part = m_parts[ *it ];
 		if( part ) 
 		{
 			removePart( part );
-			m_localParts.remove( *it );
-			part->deleteLater();
+//			m_localParts.remove( *it );
+			m_parts.remove( *it );
+//			part->deleteLater();
+			delete part;
 		}
 		++it;
 	}
@@ -380,15 +397,16 @@ void PluginController::removePart(KXMLGUIClient *part)
 const QValueList<KDevPlugin*> PluginController::loadedPlugins()
 {
 	QValueList<KDevPlugin*> plugins;
-
+/*
 	QDictIterator<KDevPlugin> it(m_localParts);
 	while( it.current() )
 	{
 		plugins.append( it.current() );
 		++it;
 	}
-
-	QDictIterator<KDevPlugin> itt(m_globalParts);
+*/
+//	QDictIterator<KDevPlugin> itt(m_globalParts);
+	QDictIterator<KDevPlugin> itt(m_parts);
 	while( itt.current() )
 	{
 		plugins.append( itt.current() );
@@ -397,6 +415,21 @@ const QValueList<KDevPlugin*> PluginController::loadedPlugins()
 
 	return plugins;
 }
-
+/*
+KDevPlugin * PluginController::getPlugin( const KService::Ptr & service )
+{
+	KDevPlugin * plugin = m_parts[ (*it)->name() ];
+	if ( !plugin )
+	{
+		KDevPlugin * plugin = loadPlugin( *it );
+		if ( plugin )
+		{
+			integratePart( plugin );
+			m_parts.insert( (*it)->name(), plugin );
+		}
+	}
+	return plugin;
+}
+*/
 #include "plugincontroller.moc"
 
