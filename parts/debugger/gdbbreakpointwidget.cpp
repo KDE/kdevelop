@@ -139,23 +139,7 @@ void BreakpointTableRow::setRow()
         Q_ASSERT(item->rtti() == 2);
         ((QCheckTableItem*)item)->setChecked(m_breakpoint->isEnabled());
 
-        QString status="";
-        if (!m_breakpoint->isEnabled())
-            status = i18n("Disabled");
-        else
-        if (m_breakpoint->isActive(m_activeFlag))
-          status = i18n("Active");
-        else
-        if (m_breakpoint->isPending())
-        {
-            status = i18n("Pending");
-            if (m_breakpoint->isActionAdd())
-                status += i18n(" add");
-//            if (m_breakpoint->isActionClear())
-//                status += i18n(" clear");
-//            if (m_breakpoint->isActionModify())
-//                status += i18n(" modify");
-        }
+        QString status=m_breakpoint->statusDisplay(m_activeFlag);
 
         table()->setText(row(), Status, status);
         table()->setText(row(), Condition, m_breakpoint->conditional());
@@ -287,8 +271,8 @@ void GDBBreakpointWidget::slotRefreshBP(const QString &filename)
         BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
         if (btr)
         {
-            Breakpoint* bp = btr->breakpoint();
-            if (bp->type() == BP_TYPE_FilePos && (bp->fileName() == filename))
+            FilePosBreakpoint* bp = dynamic_cast<FilePosBreakpoint*>(btr->breakpoint());
+            if (bp && (bp->fileName() == filename))
                 emit refreshBPState(*bp);
         }
     }
@@ -540,8 +524,7 @@ void GDBBreakpointWidget::slotParseGDBBrkptList(char *str)
         if (btr)
         {
             Breakpoint* bp = btr->breakpoint();
-            if (!(bp->isActive(m_activeFlag) || bp->isPending()) ||
-                  (bp->isActionClear() && bp->isPending()))
+            if (!(bp->isActive(m_activeFlag)))
                 removeBreakpoint(btr);
         }
     }
@@ -654,8 +637,8 @@ void GDBBreakpointWidget::slotRowSelected(int row, int col, int, const QPoint &)
     BreakpointTableRow* btr = (BreakpointTableRow *) m_table->item(row, Control);
     if (btr)
     {
-        Breakpoint *bp = btr->breakpoint();
-        if (bp->type() == BP_TYPE_FilePos)
+        FilePosBreakpoint* bp = dynamic_cast<FilePosBreakpoint*>(btr->breakpoint());
+        if (bp)
             emit gotoSourcePosition(bp->fileName(), bp->lineNum()-1);
 
         // put the focus back on the clicked item if appropriate
@@ -775,8 +758,8 @@ void GDBBreakpointWidget::slotEditBreakpoint(const QString &fileName, int lineNu
     if (btr)
     {
         QTableSelection ts;
-    ts.init(btr->row(), 0);
-    ts.expandTo(btr->row(), numCols);
+        ts.init(btr->row(), 0);
+        ts.expandTo(btr->row(), numCols);
         m_table->addSelection(ts);
         m_table->editCell(btr->row(), Location, false);
     }

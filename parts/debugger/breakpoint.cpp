@@ -120,6 +120,31 @@ void Breakpoint::setActive(int active, int id)
 }
 
 /***************************************************************************/
+
+QString Breakpoint::statusDisplay(int activeFlag) const
+{
+    QString status="";
+    if (!s_enabled_)
+        status = i18n("Disabled");
+    else
+    if (s_pending_)
+    {
+        status = i18n("Pending");
+        if (s_actionAdd_)
+            status += i18n(" add");
+        if (s_actionClear_)
+            status += i18n(" clear");
+        if (s_actionModify_)
+            status += i18n(" modify");
+    }
+    else
+    if (isActive(activeFlag))
+        status = i18n("Active");
+
+    return status;
+}
+
+/***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 

@@ -692,12 +692,15 @@ void DebuggerPart::slotMemoryView()
 
 void DebuggerPart::slotRefreshBPState( const Breakpoint& BP)
 {
-    if (BP.isActionDie())
-        debugger()->setBreakpoint(BP.fileName(), BP.lineNum()-1,
-                                  -1, true, false);
-    else
-        debugger()->setBreakpoint(BP.fileName(), BP.lineNum()-1,
-                                  1/*BP->id()*/, BP.isEnabled(), BP.isPending() );
+    if (BP.type() == BP_TYPE_FilePos)
+    {
+        const FilePosBreakpoint& bp = dynamic_cast<const FilePosBreakpoint&>(BP);
+        if (bp.isActionDie())
+            debugger()->setBreakpoint(bp.fileName(), bp.lineNum()-1, -1, true, false);
+        else
+            debugger()->setBreakpoint(bp.fileName(), bp.lineNum()-1,
+                                  1/*bp->id()*/, bp.isEnabled(), bp.isPending() );
+    }
 }
 
 

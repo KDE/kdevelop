@@ -48,7 +48,8 @@ public:
     virtual void reset();
 
     void setActive(int active, int id);
-    bool isActive(int active) const                 { return (active_ == active); }
+    bool isActive(int active) const                 { return (active_ == active) ||
+                                                        (s_pending_ && !s_actionClear_); }
     void setEnabled(bool enabled)                   { s_changedEnable_ = (s_enabled_ != enabled);
                                                       s_enabled_ = enabled; }
     bool isEnabled() const                          { return s_enabled_; }
@@ -93,19 +94,12 @@ public:
     void setHits(int hits)                          { hits_ = hits; }
     int  hits() const                               { return hits_; }
 
+    virtual QString statusDisplay(int activeFlag) const;
     virtual BP_TYPES type() const                   { return BP_TYPE_Invalid; }
     virtual QString displayType() const             { return i18n( "Invalid" ); }
 
-    virtual QString fileName() const                { return ""; }
-    virtual int lineNum() const                     { return 0; }
-    virtual QString varName() const                 { return ""; }
-    virtual QString breakAddress() const            { return ""; }
-    virtual void setFileName(const QString&)        {}
-    virtual void setVarName(const QString&)         {}
-    virtual void setBreakAddress(const QString&)    {}
-    virtual void setLineNum(int)                    {}
-    virtual QString location(bool compact=true)     { return ""; }
-    virtual void setLocation(const QString& )       {}
+    virtual QString location(bool compact=true)     = 0;
+    virtual void setLocation(const QString& )       = 0;
     virtual bool isValid() const                    = 0;
 
 private:
@@ -131,7 +125,7 @@ private:
     int ignoreCount_;
     QString address_;
     QString condition_;
-    QString type_;
+//    QString type_;
 };
 
 /***************************************************************************/
