@@ -44,7 +44,7 @@ class CKDevSetupDlg : public QTabDialog
 {
     Q_OBJECT
 public:
-    CKDevSetupDlg( QWidget *parent=0, const char *name=0,KAccel* accel=0);
+    CKDevSetupDlg( KAccel* accel=0, QWidget *parent=0, const char *name=0);
     bool hasChangedPath() const {return wantsTreeRefresh;};
 
 private:

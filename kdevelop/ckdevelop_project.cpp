@@ -416,7 +416,7 @@ void CKDevelop::slotProjectRemoveFile(){
 }
 
 void CKDevelop::slotProjectOptions(){
-  CPrjOptionsDlg prjdlg(this,"optdialog",prj);
+  CPrjOptionsDlg prjdlg(prj,this,"optdialog");
   QString shell = getenv("SHELL");
   QString flagclabel;
   QString flagcpplabel;
@@ -509,12 +509,33 @@ void CKDevelop::slotProjectOptions(){
   
 }
 
+void CKDevelop::slotProjectNewClass(const char* folder)
+{
+  CNewClassDlg dlg(prj,folder,this,"newclass");
+  if(dlg.exec()){
+    QString source_file=dlg.getImplFile() ;
+    QString header_file=dlg.getHeaderFile();
+    switchToFile(source_file);
+    switchToFile(header_file);
+    bool new_subdir1, new_subdir2;
+    new_subdir1 = addFileToProject(source_file, CPP_SOURCE, false);
+    new_subdir2 = addFileToProject(header_file, CPP_HEADER, false);
+    if(new_subdir1 || new_subdir2)
+      newSubDir();
+    prj->updateMakefilesAm();
+  	QStrList lToRefresh;
+  	lToRefresh.autoDelete();
+  	lToRefresh.append(source_file);
+  	lToRefresh.append(header_file);
+  	refreshTrees(&lToRefresh);
+  }
+}
 
 void CKDevelop::slotProjectNewClass(){
-  CNewClassDlg* dlg = new CNewClassDlg(this,"newclass",prj);
-  if(dlg->exec()){
-    QString source_file=dlg->getImplFile() ;
-    QString header_file=dlg->getHeaderFile();
+  CNewClassDlg dlg(prj,this,"newclass");
+  if(dlg.exec()){
+    QString source_file=dlg.getImplFile() ;
+    QString header_file=dlg.getHeaderFile();
     switchToFile(source_file);
     switchToFile(header_file);
 // added by Alex Kern, Alexander.Kern@saarsoft.de
@@ -946,11 +967,13 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CKDevelop::newFile(bool add_to_project){
+void CKDevelop::newFile(bool add_to_project, const char* dir/*=0*/){
   ProjectFileType type;
   bool new_subdir=false;
   QString complete_filename;
-  CNewFileDlg dlg(this,"test",true,0,prj);
+  CNewFileDlg dlg(prj,this,"test",true,0);
+  if(dir)
+    dlg.setLocation(dir);
 
   dlg.setUseTemplate();
   if (add_to_project){
@@ -968,9 +991,7 @@ void CKDevelop::newFile(bool add_to_project){
   }
   // load into the widget
   switchToFile(complete_filename);
-  
-  
-  
+
   // add the file to the project if necessary
   if (dlg.addToProject() == true){
     new_subdir = addFileToProject(complete_filename,type);

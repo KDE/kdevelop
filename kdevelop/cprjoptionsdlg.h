@@ -47,8 +47,8 @@ class CPrjOptionsDlg : public QTabDialog
 {
     Q_OBJECT
 public:
-    /**constructor*/
-    CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj );
+  /**constructor*/
+  CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name );
   bool needConfigureInUpdate();
   bool needMakefileUpdate(){return need_makefile_generation;}
 protected:

@@ -614,7 +614,6 @@ void CKDevelop::refreshTrees(TFileInfo *info)
   }
 }
 
-#include <iostream.h>
 void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModifiedBox){
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
@@ -623,8 +622,8 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     QFileInfo fi(filename);
     QString dirpart = fi.dir(true).canonicalPath();
     QString filepart = fi.fileName();
-    cout << "Path: " << dirpart << endl;
-    cout << "File: " << filepart << endl;
+//    cout << "Path: " << dirpart << endl;
+//    cout << "File: " << filepart << endl;
     filename = dirpart + "/" + filepart;
   }
 

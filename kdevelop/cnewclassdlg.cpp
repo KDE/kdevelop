@@ -19,16 +19,32 @@
 #include <kquickhelp.h>
 #include <qlayout.h>
 #include <klocale.h>
+#include <qdir.h>
+
 #define LAYOUT_BORDER (10)
 #include "cnewclassdlg.h"
 #include "cproject.h"
 #include "cgeneratenewfile.h"
 
 // SETUP DIALOG
-CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
+CNewClassDlg::CNewClassDlg(CProject* prj, QWidget *parent, const char *name )
     : QDialog( parent, name,TRUE )
 {
   prj_info = prj;
+  initDialog();
+}
+
+// constructor to call when the dialog is called from within a directory (classviewer, realfileviewer)
+CNewClassDlg::CNewClassDlg( CProject* prj, const char* dir, QWidget *parent, const char *name)
+    : QDialog( parent, name,TRUE )
+{
+  prj_info = prj;
+  initDialog(dir);
+}
+
+/** constructs the dialog. If dir is != 0, the class is generated in dir */
+void CNewClassDlg::initDialog(const char* dir=0){
+  subdirName = dir;
   header_modified =false;
   impl_modified = false;
   setCaption(i18n("Class Generator" ));
@@ -44,12 +60,6 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   classname_edit = new QLineEdit( classname_group, "classname_edit" );
   classname_edit->setMinimumSize( classname_edit->sizeHint() );
   layout->addWidget( classname_edit );
-	KQuickHelp::add(classname_group,
-	KQuickHelp::add(classname_edit, i18n("Insert your new classname here.\n"
-	                                    "Please try to keep some standards\n"
-	                                    "like using an upper `K` as the first\n"
-	                                    "letter for your new class, if it is\n"
-	                                    "a class for a KDE-project.")));
 
 
   baseclass_group = new QButtonGroup( this, "baseclass_group" );
@@ -62,11 +72,6 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   baseclass_edit = new QLineEdit( baseclass_group, "baseclass_edit" );
   baseclass_edit->setMinimumSize( baseclass_edit->sizeHint() );
   layout->addWidget( baseclass_edit );
-  KQuickHelp::add(baseclass_edit, i18n("Insert the baseclass from which your new class\n"
-                                    "will be derived from. If you have checked\n"
-                                    "`generate a QWidget-Childclass`, the new class will\n"
-                                    "be derived from QWidget. If no baseclass is named, the\n"
-                                    "new class will not have a parent class."));
 
   files_group = new QButtonGroup( this, "files_group" );
   files_group->setTitle( i18n("Files") );
@@ -85,11 +90,6 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   header_edit->setMinimumSize( header_edit->sizeHint() );
   layout->addWidget( header_edit );
 
-  KQuickHelp::add(header_label,
-  KQuickHelp::add(header_edit, i18n("Insert your header filename here.\n"
-                                    "It is automatically inserted while\n"
-                                    "you select the classname, but you can\n"
-                                    "still edit it afterwards.")));
 
   impl_label = new QLabel( files_group, "impl_label" );
   impl_label->setText( i18n("Impl.") );
@@ -100,11 +100,6 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   impl_edit->setMinimumSize( impl_edit->sizeHint() );
   layout->addWidget( impl_edit );
 
-  KQuickHelp::add(impl_label,
-  KQuickHelp::add(impl_edit, i18n("Insert your implementation filename here.\n"
-                                  "It is automatically inserted while\n"
-                                  "you select the classname, but you can\n"
-                                  "still edit it afterwards.")));
 
   doc_group = new QButtonGroup( this, "doc_group" );
   doc_group->setTitle( i18n("Documentation") );
@@ -116,11 +111,6 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   doc_edit = new QMultiLineEdit( doc_group, "doc_edit" );
   doc_edit->setMinimumSize( doc_edit->sizeHint() );
   layout->addWidget( doc_edit );
-  KQuickHelp::add(doc_group,
-  KQuickHelp::add(doc_edit, i18n("Insert a short description for your new class\n"
-                                "here for documenation purposes. This will be used\n"
-                                "for the API-documentation you can create or update\n"
-                                "after the class is created.")));
 	
   inher_group = new QButtonGroup( this, "inher_group" );
   inher_group->setTitle( i18n("Inheritance") );
@@ -165,26 +155,12 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
 
   add_group->insert( template_check );
   add_group->insert( qwidget_check );
-  KQuickHelp::add(add_group,
-  KQuickHelp::add(template_check,
-  KQuickHelp::add(qwidget_check, i18n("This offers additional options to your new class.\n"
-                                    "If you check `use header/cpp-templates`, your name and\n"
-                                    "email adress will be added into the new generated files\n"
-                                    "If you check `generate a QWidget-Childclass`, the new class\n"
-                                    "will use QWidget as the baseclass. This is also useful for\n"
-                                    "using baseclasses derived from QWidget, e.g. QDialog."))));
 
 
   inher_group->insert( public_button );
   inher_group->insert( protected_button );
   inher_group->insert( private_button );
 
-  KQuickHelp::add(inher_group,
-  KQuickHelp::add(protected_button,
-  KQuickHelp::add(public_button,
-  KQuickHelp::add(private_button, i18n("Check here your inheritance from the chosen baseclass.\n"
-                                      "You can derive from a baseclass as public,protected\n"
-                                      "or private.")))));
 
 
   layout = new QHBoxLayout;
@@ -219,10 +195,12 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   connect(impl_edit,SIGNAL(textChanged(const char*)),SLOT(slotImplEditChanged(const char*)));
   connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
   connect(ok_button,SIGNAL(clicked()),SLOT(ok()));
-  
+
   //setOkButton(i18n("OK"));
   // setCancelButton(i18n("Cancel"));
   //connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
+  initQuickHelp();
+
 }
 
 void CNewClassDlg::ok(){
@@ -242,16 +220,22 @@ void CNewClassDlg::ok(){
 		     ,KMsgBox::EXCLAMATION);
     return;
   }
-  // text = baseclass_edit->text(); 
-//   if (text.isEmpty() && qwidget_check->isChecked()){
-//     KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the baseclass!")
-// 		     ,KMsgBox::EXCLAMATION);
-//     return;
-//   }
-
- 
-  QString headername = prj_info->getProjectDir() + prj_info->getSubDir() + header_edit->text();
-  QString implname = prj_info->getProjectDir() + prj_info->getSubDir() + impl_edit->text();
+  QString headername,implname;
+  if(subdirName.isEmpty())
+  {
+    headername = prj_info->getProjectDir() + prj_info->getSubDir() + header_edit->text();
+    implname = prj_info->getProjectDir() + prj_info->getSubDir() + impl_edit->text();
+  }
+  else
+  {
+    QDir dir;
+    headername = prj_info->getProjectDir() + subdirName;
+    dir.setPath(headername);
+    if(!dir.exists())
+      dir.mkdir(headername);
+    headername += header_edit->text();
+    implname = prj_info->getProjectDir() + subdirName + impl_edit->text();
+  }
   QString headerfile = header_edit->text();
   QString classname = classname_edit->text();
   QString basename = baseclass_edit->text();
@@ -293,15 +277,6 @@ void CNewClassDlg::ok(){
   	QString empty("");
   	handleCreateSubDirectory(prj_info, name,  headername, empty);
   	handleCreateSubDirectory(prj_info, name,  implname, empty);
-//	not needed anymore  	
-/*
-    QFile file(headername);
-    file.open(IO_ReadWrite);
-    file.close();
-    file.setName(implname);
-    file.open(IO_ReadWrite);
-    file.close();
-*/
   }
 
 
@@ -453,3 +428,47 @@ void CNewClassDlg::slotImplEditChanged(const char*){
 
 
 
+/** adds KQuickHelp to the dialog */
+void CNewClassDlg::initQuickHelp(){
+	KQuickHelp::add(classname_group,
+	KQuickHelp::add(classname_edit, i18n("Insert your new classname here.\n"
+	                                    "Please try to keep some standards\n"
+	                                    "like using an upper `K` as the first\n"
+	                                    "letter for your new class, if it is\n"
+	                                    "a class for a KDE-project.")));
+  KQuickHelp::add(baseclass_edit, i18n("Insert the baseclass from which your new class\n"
+                                    "will be derived from. If you have checked\n"
+                                    "`generate a QWidget-Childclass`, the new class will\n"
+                                    "be derived from QWidget. If no baseclass is named, the\n"
+                                    "new class will not have a parent class."));
+  KQuickHelp::add(header_label,
+  KQuickHelp::add(header_edit, i18n("Insert your header filename here.\n"
+                                    "It is automatically inserted while\n"
+                                    "you select the classname, but you can\n"
+                                    "still edit it afterwards.")));
+  KQuickHelp::add(impl_label,
+  KQuickHelp::add(impl_edit, i18n("Insert your implementation filename here.\n"
+                                  "It is automatically inserted while\n"
+                                  "you select the classname, but you can\n"
+                                  "still edit it afterwards.")));
+  KQuickHelp::add(doc_group,
+  KQuickHelp::add(doc_edit, i18n("Insert a short description for your new class\n"
+                                "here for documenation purposes. This will be used\n"
+                                "for the API-documentation you can create or update\n"
+                                "after the class is created.")));
+  KQuickHelp::add(add_group,
+  KQuickHelp::add(template_check,
+  KQuickHelp::add(qwidget_check, i18n("This offers additional options to your new class.\n"
+                                    "If you check `use header/cpp-templates`, your name and\n"
+                                    "email adress will be added into the new generated files\n"
+                                    "If you check `generate a QWidget-Childclass`, the new class\n"
+                                    "will use QWidget as the baseclass. This is also useful for\n"
+                                    "using baseclasses derived from QWidget, e.g. QDialog."))));
+  KQuickHelp::add(inher_group,
+  KQuickHelp::add(protected_button,
+  KQuickHelp::add(public_button,
+  KQuickHelp::add(private_button, i18n("Check here your inheritance from the chosen baseclass.\n"
+                                      "You can derive from a baseclass as public,protected\n"
+                                      "or private.")))));
+
+}

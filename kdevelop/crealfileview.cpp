@@ -16,16 +16,19 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <assert.h>
+#include <iostream.h>
 
-#include "qdir.h"
-#include "qstrlist.h"
-#include <kmsgbox.h>
+#include <qdir.h>
+#include <qstrlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+
+#include <kmsgbox.h>
 #include <klocale.h>
-#include <iostream.h>
-#include <assert.h>
+
 #include "crealfileview.h"
+#include "ccvaddfolderdlg.h"
 #include "cproject.h"
 #include "vc/versioncontrol.h"
 #include "resource.h"
@@ -239,6 +242,8 @@ KPopupMenu *CRealFileView::getCurrentPopup()
   if (popup)
     delete popup;
   bool cvs=project->getVersionControl();
+  QString dir_name = getFullFilename(currentItem());
+  QString prjdir=project->getProjectDir()+"po";
 
   switch( treeH->itemType() )
   {
@@ -280,17 +285,29 @@ KPopupMenu *CRealFileView::getCurrentPopup()
     break;
 
   case THFOLDER:
+    popup = new KPopupMenu(i18n("Folder"));
+    popup->insertItem(i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+    popup->insertItem(i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+    popup->insertSeparator();
+    popup->insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
+//    popup->insertItem(i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
     if (cvs)
     {
-      popup = new KPopupMenu(i18n("Folder"));
+    	popup->insertSeparator();
       popup->insertItem( i18n("Update"),this, SLOT(slotUpdate()),0,ID_PROJECT_CVS_UPDATE);
       popup->insertItem( i18n("Commit"),this, SLOT(slotCommit()),0,ID_PROJECT_CVS_COMMIT );
       popup->insertItem( i18n("Add to Repository"),this,
           SLOT(slotAddToRepository()),0,ID_PROJECT_CVS_ADD);
       popup->insertItem( i18n("Remove from Repository (and Disk)"),this,
           SLOT(slotRemoveFromRepository()),0,ID_PROJECT_CVS_REMOVE );
-      break;
+
      }
+    if(dir_name.contains(prjdir)){
+      popup->setItemEnabled(ID_FILE_NEW, false);
+      popup->setItemEnabled(ID_PROJECT_NEW_CLASS, false);
+      popup->setItemEnabled(ID_CV_FOLDER_NEW, false);
+    }
+    break;
   default:
     popup = 0;
   }
@@ -451,23 +468,36 @@ void CRealFileView::slotShowNonPrjFiles() {
 	refresh(project);
 }
 
+/**  */
+void CRealFileView::slotFileNew(){
 
+  QString dir_name = getFullFilename(currentItem());
+  emit selectedFileNew(dir_name);
+}
+/**  */
+void CRealFileView::slotClassNew(){
+  QString prjdir=project->getProjectDir();
+  QString dir_name = getFullFilename(currentItem());
 
+  dir_name.remove(0,prjdir.length());
+  emit selectedClassNew(dir_name+"/");
+}
+/**  */
+void CRealFileView::slotFolderNew(){
 
+  CCVAddFolderDlg dlg;
 
+  if( dlg.exec() )
+  {
+    QString dir_name = getFullFilename(currentItem())+"/"+dlg.folderEdit.text();
+    QDir dir;
+    dir.setPath(dir_name);
+    if(!dir.exists())
+      dir.mkdir(dir_name);
+  }
+  refresh(project);
+}
+/**  */
+void CRealFileView::slotFolderDelete(){
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

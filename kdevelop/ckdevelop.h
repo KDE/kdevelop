@@ -171,7 +171,7 @@ public:
   /** sets the Main window caption for KDevelop */
   void setMainCaption(int tab_item=-1);
   			
-  void newFile(bool add_to_project);
+  void newFile(bool add_to_project,const char* dir=0);
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
 
@@ -228,6 +228,8 @@ public:
  
   /** generate a new file*/
   void slotFileNew();
+  /** generate a new file in dir*/
+  void slotFileNew(const char* dir);
   /**open a file*/
   void slotFileOpen();
   /** opens a file from the file_open_popup that is a delayed popup menu 
@@ -338,6 +340,8 @@ public:
   void slotProjectRemoveFile();
   /** opens the New class dialog */
   void slotProjectNewClass();
+  /** opens the new class dialog when called from file/classviewer with directory where to create the new class*/
+  void slotProjectNewClass(const char* folder);
   /** opens the properties dialog for the project files */
   void slotProjectFileProperties();
   /** opens the properties dialog for project files,rel_name is selected, used by RFV,LFV*/

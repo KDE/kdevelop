@@ -29,7 +29,7 @@
 #include <klocale.h>
 
 // SETUP DIALOG
-CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name, KAccel* accel_pa )
+CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name )
   : QTabDialog( parent, name,TRUE )
 {
   accel = accel_pa;

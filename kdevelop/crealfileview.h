@@ -78,6 +78,8 @@ signals:
   void commitDirToVCS(QString dir);
   void updateDirFromVCS(QString dir);
   void menuItemHighlighted(int);
+  void selectedFileNew(const char* dir);
+  void selectedClassNew(const char* dir);
 
 protected slots:
   /** emits signal "fileSelected" when it gets the selectionChanged-signal from itself */
@@ -91,6 +93,14 @@ protected slots:
   void slotUpdate();
   void slotCommit();
 	void slotShowNonPrjFiles();
+  /**  */
+  void slotFolderDelete();
+  /**  */
+  void slotFolderNew();
+  /**  */
+  void slotClassNew();
+  /**  */
+  void slotFileNew();
 
 private: // Popupmenus
   KPopupMenu *popup;

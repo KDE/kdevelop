@@ -169,7 +169,7 @@ void CKDevelop::initView(){
   class_tree = new CClassView(t_tab_view,"cv");
   class_tree->setFocusPolicy(QWidget::NoFocus);
 
-  log_file_tree = new CLogFileView(t_tab_view,"lfv",config->readBoolEntry("lfv_show_path",false));
+  log_file_tree = new CLogFileView(config->readBoolEntry("lfv_show_path",false),t_tab_view,"lfv");
   log_file_tree->setFocusPolicy(QWidget::NoFocus);
 
   real_file_tree = new CRealFileView(t_tab_view,"RFV");
@@ -1114,7 +1114,9 @@ void CKDevelop::initConnections(){
   connect(class_tree,SIGNAL(setStatusbarProgress(int)),statProg,SLOT(setProgress(int)));
   connect(class_tree,SIGNAL(resetStatusbarProgress()),statProg,SLOT(reset()));
   connect(class_tree, SIGNAL(selectedFileNew()), SLOT(slotProjectAddNewFile()));
+  connect(class_tree, SIGNAL(selectedFileNew(const char*)), SLOT(slotFileNew(const char*)));
   connect(class_tree, SIGNAL(selectedClassNew()), SLOT(slotProjectNewClass()));
+  connect(class_tree, SIGNAL(selectedClassNew(const char*)), SLOT(slotProjectNewClass(const char*)));
   connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
   connect(class_tree, 
           SIGNAL(selectedViewDeclaration(const char *, const char *,THType,THType)), 
@@ -1146,6 +1148,8 @@ void CKDevelop::initConnections(){
   connect(real_file_tree, SIGNAL(commitDirToVCS(QString)), SLOT(slotCommitDirToVCS(QString)));
   connect(real_file_tree, SIGNAL(updateDirFromVCS(QString)), SLOT(slotUpdateDirFromVCS(QString))); 
   connect(real_file_tree, SIGNAL(menuItemHighlighted(int)), SLOT(statusCallback(int)));
+  connect(real_file_tree, SIGNAL(selectedFileNew(const char*)), SLOT(slotFileNew(const char*)));
+  connect(real_file_tree, SIGNAL(selectedClassNew(const char*)), SLOT(slotProjectNewClass(const char*)));
 
 
   connect(doc_tree, SIGNAL(fileSelected(QString)), SLOT(slotDocTreeSelected(QString)));

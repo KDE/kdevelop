@@ -24,7 +24,7 @@
 #include "debug.h"
 
 // OPTIONS DIALOG
-CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj )
+CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj, QWidget *parent, const char *name)
     : QTabDialog( parent, name,TRUE )
 {
   prj_info = prj;

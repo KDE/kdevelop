@@ -26,8 +26,8 @@
 #include "cupdatekdedocdlg.h"
 
 
-CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config) : QDialog(parent,name,true) {
-    
+CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc,KConfig* config, QWidget *parent, const char *name) : QDialog(parent,name,true)
+{
     conf = config;
     config->setGroup("Doc_Location");
     this->doc_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);

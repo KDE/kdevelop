@@ -82,6 +82,12 @@ void CKDevelop::slotFileNew(){
   slotStatusMsg(i18n("Ready."));
 }
 
+void CKDevelop::slotFileNew(const char* dir){
+
+  slotStatusMsg(i18n("Creating new file..."));
+  newFile(false, dir);
+  slotStatusMsg(i18n("Ready."));
+}
 
 void CKDevelop::slotFileOpen(){
   slotStatusMsg(i18n("Opening file..."));
@@ -1952,7 +1958,7 @@ void CKDevelop::slotOptionsConfigureA2ps(){
 void CKDevelop::slotOptionsKDevelop(){
   slotStatusMsg(i18n("Setting up KDevelop..."));
 
-  CKDevSetupDlg* setup= new CKDevSetupDlg(this,"Setup",accel);
+  CKDevSetupDlg* setup= new CKDevSetupDlg(accel,this,"Setup");
   // setup->show();
   if (setup->exec())
   {
@@ -2021,7 +2027,7 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
   }
   slotStatusMsg(i18n("Updating KDE-Libs documentation..."));
   config->setGroup("Doc_Location");
-  CUpdateKDEDocDlg dlg(this,"test",&shell_process, config);
+  CUpdateKDEDocDlg dlg(&shell_process, config, this,"test");
   if(dlg.exec()){
     slotStatusMsg(i18n("Generating Documentation..."));
     setToolMenuProcess(false);

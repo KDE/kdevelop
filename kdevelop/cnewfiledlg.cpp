@@ -26,7 +26,7 @@
 #include <qlayout.h>
 #define LAYOUT_BORDER (10)
 
-CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CProject* p_prj) 
+CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool modal,WFlags f)
   : QDialog(parent,name,modal,f){
   
   prj = p_prj;
@@ -504,7 +504,7 @@ void CNewFileDlg::slotListHighlighted(int){
   autocompletion = true;
 }
 
-
-
-
-
+/** sets the location for the dialog to start from */
+void CNewFileDlg::setLocation(QString location){
+	prj_loc_edit->setText(location);
+}

@@ -884,7 +884,7 @@ void CKDevInstall::slotAuto() // proceed >>
     config->setGroup("Doc_Location");
     config->writeEntry("doc_kde",QDir::homeDirPath ()+"/.kde/share/apps/kdevelop/KDE-Documentation/");
     config->sync();
-    CUpdateKDEDocDlg dlg(this,"test",shell_process, config);
+    CUpdateKDEDocDlg dlg(shell_process, config,this,"test");
     if(!dlg.exec()){
       slotProcessExited(shell_process);
     }

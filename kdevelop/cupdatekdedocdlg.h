@@ -39,7 +39,7 @@
 class CUpdateKDEDocDlg : public QDialog  {
    Q_OBJECT
 public: 
-   CUpdateKDEDocDlg(QWidget *parent=0, const char *name=0,KShellProcess* proc=0,KConfig* config=0);
+   CUpdateKDEDocDlg(KShellProcess* proc=0,KConfig* config=0, QWidget *parent=0, const char *name=0);
   ~CUpdateKDEDocDlg();
   bool isUpdated() const {return bUpdated;};
   QString getDocPath() const {return doc_path;};

@@ -102,8 +102,6 @@ signals:
   void setStatusbarProgressSteps(int);
   void setStatusbarProgress(int);
   void resetStatusbarProgress();
- // Added by Pau Estalella pau.estalella@upcnet.es
-  void signalNewClassFolderChanged(QString);
 
 protected slots:
   void slotProjectOptions();
@@ -138,7 +136,9 @@ protected slots:
 
 signals:
   void selectedFileNew();
+  void selectedFileNew(const char* dir);
   void selectedClassNew();
+  void selectedClassNew(const char* dir);
   void selectedProjectOptions();
   void selectedViewDeclaration(const char *, const char *,THType,THType);
   void selectedViewDefinition(const char *, const char *,THType,THType);

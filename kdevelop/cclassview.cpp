@@ -216,6 +216,9 @@ void CClassView::initPopups()
 
   // Folder popup
   folderPopup.setTitle( i18n( "Folder" ) );
+  folderPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()),0, ID_FILE_NEW);
+  folderPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()), 0, ID_PROJECT_NEW_CLASS);
+  folderPopup.insertSeparator();
   folderPopup.insertItem( i18n("Add Folder..."), this, SLOT( slotFolderNew()),0, ID_CV_FOLDER_NEW);
   id = folderPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n("Delete Folder..."), this, SLOT( slotFolderDelete()),0, ID_CV_FOLDER_DELETE);
 
@@ -1019,12 +1022,62 @@ void CClassView::slotGraphicalView()
 
 void CClassView::slotFileNew()
 {
-  emit selectedFileNew();
+  THType type = treeH->itemType();
+  if (type == THCLASS)
+  {
+    QListViewItem *cur=currentItem();
+    if( strcmp( currentItem()->parent()->text(0), i18n( CLASSROOTNAME ) ) == 0 )
+      emit selectedFileNew();
+    else
+    {
+      QString dir;
+      cur = cur->parent();
+      while ((cur != 0) && (strcmp( cur->text(0), i18n( CLASSROOTNAME )) != 0))
+      {
+        dir = cur->text(0) + ("/" + dir);
+        cur = cur->parent();
+      }
+      emit selectedFileNew(dir);
+    }
+  }
+  if (type == THFOLDER)
+  {
+    if( strcmp( currentItem()->text(0), i18n( CLASSROOTNAME ) ) == 0 )
+      emit selectedFileNew();
+    else
+    {
+      QString dir;
+      QListViewItem *cur=currentItem();
+      while ((cur != 0) && (strcmp( cur->text(0), i18n( CLASSROOTNAME )) != 0))
+      {
+        dir = cur->text(0) + ("/" + dir);
+        cur = cur->parent();
+      }
+      emit selectedFileNew(dir);
+    }
+  }
 }
 
 void CClassView::slotClassNew()
 {
-  emit selectedClassNew();
+  THType type = treeH->itemType();
+  QString path;
+  if (type == THFOLDER)
+  {
+    if( strcmp( currentItem()->text(0), i18n( CLASSROOTNAME ) ) == 0 )
+      emit selectedClassNew();
+    else
+    {
+      QString dir;
+      QListViewItem *cur=currentItem();
+      while ((cur != 0) && (strcmp( cur->text(0), i18n( CLASSROOTNAME )) != 0))
+      {
+        dir = cur->text(0) + ("/" + dir);
+        cur = cur->parent();
+      }
+      emit selectedClassNew(project->getSubDir()+dir);
+    }
+  }
 }
 
 void CClassView::slotClassDelete()

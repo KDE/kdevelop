@@ -1,3 +1,8 @@
+2000-02-25 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* added new class support and new file support to real file view and classviewer
+	* added mkdir in realfileview
+	* the original idea is from Pau Estellela, but the foldersPatch didn´t work out as expected, so I coded this new.
+		
 2000-02-24 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* implementing fallback to english documentation
 	  if klocale-language or default-language documentation
