@@ -251,7 +251,7 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
 
   macroAddButton("kdlg_QLabel.xpm",         "QLabel",          clicked_QLabel         ,i18n("A QLabel can be used in order to display\nsome text or pixmap information in the dialog."));
   macroAddButton("kdlg_QPushButton.xpm",    "QPushButton",     clicked_QPushButton    ,i18n("This is the normal button often used in\ndialogs (i.e. the \"Ok\"-Button)."));
-  macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox      ,i18n("Lets user can (de-)select some settings."));
+  macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox      ,i18n("Enables the user to (de-)select some settings."));
   macroAddButton("kdlg_QRadioButton.xpm",   "QRadioButton",    clicked_QRadioButton   ,i18n("Lets the user choose between several options."));
   macroAddButton("kdlg_QComboBox.xpm",      "QComboBox",       clicked_QComboBox      ,i18n("A combo box lets the user set a value by selecting\nit from a drop-down menu or by inserting the value,\nif the box is write enabled"));
   macroAddButton("kdlg_QSpinBox.xpm",      "QSpinBox",       clicked_QSpinBox      ,i18n("Allows choosing numeric values by up-\nand down buttons or insertion if write enabled."));

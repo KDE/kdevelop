@@ -2905,6 +2905,8 @@ bereitzustellen:
 
 <sect2>Menüleiste
 <p>
+<bf/<idx/"Datei"-Menü/:/ "Öffnen" ermöglicht das Öffnen einer Dialogdefinitionsdatei.
+
 <bf/"Ansicht"-Menü:/ Ersetzt "Baumansicht" durch "Widgetsansicht", ermöglicht ein/auschalten der Widgets Tabulatoren; fügt die "Eigenschaften-Ansicht" hinzu und ermöglicht
 ein/auschalten dieser Ansicht; fügt "Gitter" hinzu, damit Sie die Gittergröße in horizontalen und vertikalen Pixeln angeben können.
 
@@ -2927,8 +2929,12 @@ Nachdem Sie Ihr Projektgerüst erstellt haben, haben Sie eine lauffähige Anwendun
 stellt, erkennt der Dialog Editor dies und bietet <em/die/ Widgets an, die in der verwendeten Bibliothek vorhanden sind. Um Zeit zu sparen, sollten Sie bereits ein Design 
 im Kopf haben, das die beabsichtigten Aktionen ermöglicht. Lesen Sie zum Widget Design auch das <htmlurl url="programming/index-6.html" name="KDevelop Programming Handbook">.
 
-Zum Erzeugen eines neuen Dialogs, wählen Sie "Neu" aus dem "Datei"-Menü oder wählen Sie "Neu" aus dem Kontextmenü im "Dialoge"-Tab. Im erscheinenden Dialog, 
-müssen Sie KDevelop die nötigen Informationen zu Basisklasse, Quelldateinamen und Ziel geben.
+Zum Erzeugen eines neuen Dialogs, wählen Sie "Neu" aus dem "Datei"-Menü oder wählen Sie "Neu" aus dem Kontextmenü im
+"Dialoge"-Tab. Der "neue Datei" Dialog, in dem Sie das Element Qt/KDE Dialog(*.kdevdlg) wählen können, erscheint. Geben Sie den
+Dateinamen für Ihren Dialog ein. In dieser Datei wird Ihr Layout gespeichert. Dann drücken Sie OK und Ihr neuer Dialog erscheint.
+Wenn Sie den Dialog fertig bearbeitet haben, wählen Sie "Alle Quellen erzeugen" aus dem "Erstellen"-Menü. Der Dialog zur
+Erzeugung der Widgetquellen wird angezeigt. Dort müssen Sie KDevelop die nötigen Informationen zu Basisklasse, Quelldateinamen und
+Ziel geben.
 
 <sect1>Dialog Klasse
 <p>

@@ -1070,14 +1070,14 @@ void CKDevelop::initStatusBar(){
   statProg->setLineWidth( 1 );                // hehe, this *is* tricky...
 */
   statProg = new QProgressBar(kdev_statusbar,"Progressbar");
-  kdev_statusbar->insertItem(i18n("xxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
+  kdev_statusbar->insertItem("xxxxxxxxxxxxxxxxxxxx", ID_STATUS_EMPTY);
   kdev_statusbar->insertItem(i18n("Line: 00000 Col: 000"), ID_STATUS_LN_CLM);
   kdev_statusbar->changeItem("", ID_STATUS_EMPTY);
   kdev_statusbar->changeItem("", ID_STATUS_LN_CLM);
 
   kdev_statusbar->insertItem(i18n(" INS "), ID_STATUS_INS_OVR);
 //  kdev_statusbar->insertItem(i18n(" CAPS "), ID_STATUS_CAPS);
-  kdev_statusbar->insertItem(i18n("yyyyyyyyyyyyyy"),ID_STATUS_EMPTY_2);
+  kdev_statusbar->insertItem("yyyyyyyyyyyyyy",ID_STATUS_EMPTY_2);
   kdev_statusbar->changeItem("", ID_STATUS_EMPTY_2);
 
   kdev_statusbar->insertWidget(statProg,150, ID_STATUS_PROGRESS);

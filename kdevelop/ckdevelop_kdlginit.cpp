@@ -430,12 +430,12 @@ void CKDevelop::initKDlgToolBar(){
 void CKDevelop::initKDlgStatusBar(){
   kdlg_statusbar= new KStatusBar(this,"KDlgEdit_statusbar");
 
-  kdlg_statusbar->insertItem(i18n("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY);
+  kdlg_statusbar->insertItem("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", ID_STATUS_EMPTY);
   kdlg_statusbar->changeItem("", ID_STATUS_EMPTY);
 	
-  kdlg_statusbar->insertItem(i18n("xxxxxxxxxxxxxx"), ID_KDLG_STATUS_WH);
-  kdlg_statusbar->insertItem(i18n("xxxxxxxxxxxxxx"), ID_KDLG_STATUS_XY);
-  kdlg_statusbar->insertItem(i18n("xxxxxxxxxxxxxxxxxxxxxxxxxxx"), ID_STATUS_EMPTY_2);
+  kdlg_statusbar->insertItem("xxxxxxxxxxxxxx", ID_KDLG_STATUS_WH);
+  kdlg_statusbar->insertItem("xxxxxxxxxxxxxx", ID_KDLG_STATUS_XY);
+  kdlg_statusbar->insertItem("xxxxxxxxxxxxxxxxxxxxxxxxxxx", ID_STATUS_EMPTY_2);
   kdlg_statusbar->changeItem("", ID_STATUS_EMPTY_2);
   kdlg_statusbar->changeItem("", ID_KDLG_STATUS_WH);
   kdlg_statusbar->changeItem("", ID_KDLG_STATUS_XY);
