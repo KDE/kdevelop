@@ -619,8 +619,7 @@ void VarItem::updateType(char *buf)
     int eq = str.find('=');
     if (eq < 0)
         return;
-    str.remove('\n');
-    str.remove('\r');
+    str.replace(QRegExp("[\n\r]"),"");
     str = str.mid(eq + 1, 0xffff).stripWhiteSpace();
 
     originalValueType_ = str.latin1();
