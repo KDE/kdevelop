@@ -6,255 +6,303 @@
 <subtitle>The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment
 <author>Ralf Nolden <htmlurl url="mailto:Ralf.Nolden@post.rwth-aachen.de" name = "<Ralf.Nolden@post.rwth-aachen.de>">
 <inst>The KDevelop Team
-<date>Version 0.1 , Mon Jun 21 1999
+<date>Version 0.2 , Thu Jan 27 2000
 <abstract>
 The KDE Application Tutorials Handbook for the KDevelop Integrated Development Environment, a tutorial collection on how to create KDE
-applications by examples and describes how to build the tutorial examples included with the Qt library. This handbook itself is part
-of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General Public License; see <ref
-id="Copyright" name="Copyright"> for more information.
+applications by examples. This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also
+licensed under the GNU General Public License; see <ref id="Copyright" name="Copyright"> for more information.
 </abstract>
 
 <toc>
 
 <chapt>Introduction
 <p>
-As KDE is currently becoming a standard for Unix System's desktops, more and more developers want to take advantage of the well-written
-API that the KDE project includes to create new applications that offer a GUI as well as an easy use of the classes provided with
-Qt/KDE. The KDevelop project therefore intends to provide an IDE which enables developers to create and extend their applications
-rapidly with the main focus on KDE. As beginners always have difficulties to get started, this handbook tries to explain certain
-aspects of application creation for KDE by describing how to create running applications with the sample code included with the Qt
-library by using the KDevelop IDE as well as creating KDE applications by examples.
+This handbook will try to teach you KDE/Qt application design by creating an example application step-by-step. The major intention is
+to gain a certain understanding how two of the most important ideas of graphical user interface programming work: the document-view
+model and the multiple document interface (MDI) model.
 
-Therefore, the next chapter will explain you how to create a project with KDevelop that is already a complete application; then we'll
-walk on to the Qt online documentation containing the sources for examples on how to use the Qt library.
+By this, you will also get a good idea of concepts that are coming up ahead: KDE 2 and the Qt 2.1 library, bringing new enhancements
+and technology to the programmer's hands that will improve application design and widen the possibilities that are open to use.
+Keywords such as widget themes, Inter-Process Communication and embedded applications are popularly talked about and will allow even
+more than one can think about right now.
 
-This will give you a first understanding how the underlying Qt library functions and how to use the classes provided with it; Qt is the
-point where to get started as KDE is on top of the Qt library classes and KDE applications make a wide use of them.
+Therefore, KDevelop 1.1, still based on KDE 1.1.x, provides developers some of the most requested possibilities: developing
+applications for KDE 2, while still running a stable desktop environment. This also implies that this tutorial will be based on a KDE 2
+application that already makes use of Qt-2.1, offering a solution for the mentioned MDI model - which we provide as a ready-to-go frame
+application. During this tutorial you will get a clear insight on how it works and this will also make it much easier to understand the
+document-view model as well - which is hard to understand even for advanced programmers. That will help you create other type of
+applications, which use the document-view model even if they only contain one window and you wouldn't obviously see a need for it. But
+let's just go inside it - you will see what's coming up on you and how easy it actually is.
 
-Further, we'll cover on how to create a mini-KDE application with KDevelop's application wizard. From the minimum framework provided,
-we will create a running example KDE application that makes use of the KDE libraries and will explain the different parts of a KDE
-application in detail.
-
-The KDevelop Team wishes you success in learing about KDE and Qt with this handbook and hope it will enable you to become another
-programmer contributing to the KDE project.
-
-<sect>What you should know already
-<p>
-This handbook requires a base knowledge about the C++ programming language as a minimum to understand the code examples and their
-functionality. Further, it is assumed that you have read <htmlurl url="../index.html" name="The User Manual to KDevelop"> as well as
-<htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook"> and know how the KDevelop IDE works in general and
-what generated projects are.
-
-<chapt>Getting Started
-<p>
-Getting Started- that means, you should have set up KDevelop to work correctly first. Ensure you have access to the Qt online reference
-documentation by the "Help" menu or the according book in the documentation tree. When looking a the first page of the Ot
-documentation, you will see that it contains a link to a section "Tutorials" and "Examples". Under "Tutorials", you will find a 14-step
-introduction into using the Qt library to build applications. On the other hand, "Examples" will lead you to a list of example
-programs that Qt includes and takes for example usage reference in certain classes. Now, if you are an absolute beginner, you should be
-comfortable with the idea behind Qt- providing a library that offers:
-
+The tutorial covers several steps:
 <itemize>
-<item>a base application class (<tt/QApplication/)
-<item>a widget library for graphical user interfaces
-<item>a set of additional helper classes for graphics, file and data handling
-<item>the signal-slot mechanism for object communication
-<item>event controlling by event loops and virtual methods
+<item>installing KDE 2 (libraries) and setting up KDevelop to create KDE 2 applications.
+<item>understanding the basic concepts of MDI and document-view model.
+<item>creating the generic framework for <em>KScribble</em> and explaining the concept of the framework.
+<item>implementing the document class, who will provide the interface to read and write the document data as well as maintaining the
+document.
+<item>implementing the view class to visualize the data. This class also takes over the interaction with the user.
 </itemize>
 
-If that doesn't tell you anything right now, you should read about the Qt library in <htmlurl url="../programming/index-2.html#ss2.1"
-name="The KDevelop Programming Handbook"> where the basics for a Qt application are described in detail. There, you will also find and
-introduction about the difference between a Qt and a KDE application, which is not much at the first level of the Qt tutorial step.
-
-Now, to learn about Qt first would be a good start for programming KDE applications as well, so we will create a project that will
-produce the tutorial applications after editing.
-
-To do this, start with opening KDevelop and select "Project"-"New" from the menubar. The application wizard opens and you have to
-select which type of project you want to build. For Qt applications, you would choose the Qt application, but we will use the mini-KDE
-project to build our examples. The reason is simple: the Qt tutorials don't contain much code, and  by choosing the Qt application in
-the application wizard, we would have to do a lot of changing on the provided code to create the "true" examples.
-
-But as the mini-KDE application only consists of an empty main window but also checks for the Qt library and header files, it will fit
-for our purposes and doesn't require much changes.
-
-When entering the next wizard page, we have to enter the project-specific information. There, we can leave out any KDE-specific
-additions such as a mini-icon and a main icon, documentation etc. We just fill in the information that will be useful for building a
-suitable base for the tutorials. As the structure of the tutorial steps builds the next step on the previously created code, we can
-start with <tt/MyWidget/ as the project name. This will already build us the base class that is needed in chapter 4, so we don't have
-to care for that later. As we want to start with the first tutorial step, we will use '1' as the project number, which we can increase
-later when moving to the next step.
-
-Then, fill in the other required information such as your name, email address and project directory. That would be all we need and we
-can flip to the next page. Insert your header for the project's header file here or use the given example. The same is done with the
-4th page, where the same has to be set for the source files. Finally, the last page is entered, where you have to press "Create" to
-build the project. If the button is not available, start at the first page again and make sure you didn't miss to insert any required
-information.
-
-If everything went OK, the project has been build and the messages window in the application wizard will have "READY" at it's last
-line.  Select "Exit" to finish the wizard.
-
-When looking at the treeview on the left, you will see that the project alreay includes a class "MyWidget"- this is because we chose
-this to be the application name. Further, when opening "Functions" in the classviewer's "Globals" folder, you will see that the
-application already contains a <tt/main()/ function where the execution will start.
-
-Now the application is already set up. You could do an "Execute" or "Make", but as we want to create the tutorial applications, we can
-go ahead and change the code first to create our tutorial examples- which we'll do in the next step.
-
-
-<chapt>Building the Qt Tutorials
+<chapt>Installing KDE 2
 <p>
-<sect>Step One: Hello World!
+In this chapter we will first go through a couple of steps that will help you set up KDevelop for creating KDE 2 / Qt 2.x
+applications. The requirements are:
+<itemize>
+<item>a current Qt-2.1 snapshot available at <htmlurl url="http://www.troll.no" name="http://www.troll.no">
+<item>a current KDE 2 snapshot of the packages <tt>kdesupport</tt> and <tt>kdelibs</tt>
+</itemize>
+
+Both the Qt-2.1 and KDE 2 libraries are currently under development but are to be expected as final and changes to be expected for the
+final versions are marginal and may not even affect your application. This means you're getting to know the newest libraries coming up-
+and you're in charge of a valuable time-saving to create your application even before the libraries are completed.
+
+The following sections describe what to do in detail within three steps:
+<itemize>
+<item>installing the Qt library
+<item>installing the KDE libraries
+<item>setting up KDevelop
+</itemize>
+
+Then you're ready to go and we'll proceed with creating the first step of the example program <em>KScribble</em> in the next chapter.
+
+
+<sect>Setting up Qt-2.1
 <p>
-As the previous chapter explains, we created a project called <tt/MyWidget/- now, when looking at the first tutorial page of the Qt
-documentation, you will see that the first application only uses a <tt/main()/ function. Therefore, we only have to change the given
-<tt/main()/ function of our generated project to get the first tutorial step running.
+This first step will lead you to the minimum requirement to follow our example- which implies that there is a possibility to avoid
+installing KDE 2 if you're only interested in creating Qt-only programs. As Qt-2.1 contains all needed classes and KDevelop providing a
+project template for multiple document interface applications for Qt-2.1 as well based on the same framecode that is used in the KDE 2
+template, you should have no problem at all following the example with a Qt-only application.
 
-To access the <tt/main()/ function, select it from the classviewer's "Globals" folder, which contains a subfolder for "Functions" where
-all non-class functions are listed. This will open the file <tt/main.cpp/ in the "C/C++ Files" window and the editing cursor is already
-set in front of the first line of <tt/main()/.
+Now, to get the newest Qt library, get a recent version from the Troll Tech website at <htmlurl url="http://www.troll.no"
+name="http://www.troll.no">, section download. Then change to root and copy the tarball to the directory where your currently used Qt
+version is placed as well - on a SuSE Linux system this would be <tt>/usr/lib</tt>, where you should have a directory for either
+qt-1.44 or qt-2.0.2, depending on the distribution version. Untar the library sources with
 
-<sect1>What to change first
-<p>
-We could start changing the given code towards the desired one which is listed in the tutorial- but it can be even easier. Select the
-contents of the <tt/main()/ function with the mouse or by holding the Shift-key pressed while selecting the lines with the down-arrow
-key. Then select "Cut" from the "Edit" menu or press the DEL-key to remove the selected code. This will clear the main function and we
-can start from scratch to build our first tutorial.
+<tt>tar zxvf qtxxx.tar.gz</tt>
 
-<sect1>Entering the tutorial code
-<p>
-Now, to insert the code from the tutorial, you could first read it carefully and try to remember which line contained which code. Then,
-after reading the tutorial's line-by-line description, you could use it as an example to write the tutorial by yourself.
+depending on the name of the tarball. Then set the environment variable <tt>QTDIR</tt> to point to the directory where your new Qt-2.1
+library is placed with e.g. <tt>setenv QTDIR=/usr/lib/qt-2.1</tt>. Another solution would be to move the qt-1.44 directory, usually
+just named qt, to qt-1.44 and create a symlink that for now has to point to qt-2.1, after the library is build, change it back to
+point to the qt-1.44 directory.
 
-Those who want to go the easy way: select the contents of the listed <tt/main()/ function in the documentation browser and press the
-"Copy"-icon from the toolbar. Optionally, you could use the context-menu or the according entry in the "Edit" menu. This will copy the
-selection into the clipboard and, after switching back to the sourcecode window, can be inserted with "Paste" (either from the context
-menu, the toolbar icon or the according entry in the "Edit" menu).
-
-Finally, add the according header files outside the <tt/main()/ function:
-
+Change to the Qt-2.1 directory and type:
 <tscreen><verb>
-#include <qapplication.h>
-#include <qpushbutton.h>
+./configure
+make
 </verb></tscreen>
 
-That's it ! The source code is done for your first tutorial application.
+You can change back your QTDIR variable to point to your qt-1.44 installation after successfully
+compiling the Qt-2.1 library.
 
-<sect1>Building Hello World!
+Now switch to the directory <tt>/usr/lib/qt-2.1/lib</tt> and copy the created libraries to <tt>/usr/lib</tt> <bf>exept</bf> the
+symbolic link <tt>libqt.so</tt>.
+
+Then you're done with Qt and you can proceed to the next step, setting up KDE 2 libraries. If you want to develop for Qt only, proceed
+to section Setting up KDevelop.
+
+<sect>Setting up KDE 2 Libraries
 <p>
-To build the first tutorial, select "Make" from the "Build" menu or press the according toolbar icon. Optionally, you could choose
-"Execute" as well, which results in running the application after the build was successful.
 
-If the build stops due to an error, be assured the fault was on the programmer's side, not on the tutorial ! This would be sad to
-search for an error just when you decided to program for KDE and/or Qt, but you can use this to train yourself to use KDevelop. Now, to
-find an error, you have two options: either select the according error message in the output window, which will bring you to the
-according line the error occured, or press the F4 key; optionally you could use the "Next Error" entry in the "View" menu.
+The second step leads you to install the needed KDE libraries. Download a recent snapshot of the library packages <tt>kdesupport</tt>
+and <tt>kdelibs</tt> from <htmlurl url="http://www.kde.org" name="http://www.kde.org">. Then things will go a bit easier than for the
+Qt library. Just untar the sources to your directory and change to the kdesupport directory first. There, type:
 
-<sect1>Exercises
+<tscreen><verb>
+./configure --with-qt-dir=/usr/lib/qt-2.1 --prefix=/opt/kde2
+make
+
+and as root:
+
+make install
+</verb></tscreen>
+
+This will install the kdesupport package to the directory given in the --prefix option and compile using the new build Qt-2.1 library,
+to which you give the path to configure by the option --with-qt-dir.
+
+The same applies to the kdelibs package, just change to the kdelibs directory and type the same as above for the kdesupport package.
+
+Then you're done with setting up the requirements for the needed libraries to build a KDE 2 application.
+
+As a note aside, the KDE library package contains support for automatic HTML documentation generation, which you can easily get by
+installing KDoc, version 2.x. Then type <tt>makekdedoc</tt> in your kdelibs directory and KDoc will create the HTML documentation in a
+subdirectory <tt>srcdoc</tt>. In KDevelop you can access the KDE library documentation online with setting the KDE library
+documentation path in the KDevelop Setup dialog to point to <tt>kdelibs/srcdoc</tt>. On the same way set your Qt-Online documentation
+path in KDevelop to point to <tt>/usr/lib/qt-2.1/html</tt>, so you can access the documentation right away from within KDevelop.
+
+If you successfully installed the Qt-2.1 and KDE 2 libraries, you're just one step away from creating your first KDE 2 application, you
+just need to give KDevelop the needed information where you installed the libraries - which we'll do in the next section.
+
+<sect>Setting up KDevelop
 <p>
-You may ask "Exercises ? This one was so simple, I don't need to excercise !", but be assured, things will get more complicated. This
-one was the easiest example, but the more complex they will get the more thinking is asked on your side to understand and follow the
-tutorial steps. Also the excercises will enable you to learn how to acutally use KDevelop and it's features.
+This part is somewhat the easiest in the whole configuration process for KDE 2 development: Setting up KDevelop. Just open KDevelop,
+then select "Options"->"KDevelop Setup" to access the KDevelop configuration. There, change to the last page, titled "Path". This page
+contains two entry fields, one for the Qt library and one for the KDE 2 libraries. As you have successfully installed everything,
+select <tt>/usr/lib/qt-2.1</tt> for the Qt-2.x library path and <tt>/opt/kde2</tt> for the KDE 2 library path. Press the "OK" button
+and you're done.
 
-To teach yourself more with the first tutorial, you should try to do the following changes to the given code and see how this will
-influence the application behavoir:
+Users that only want to develop for Qt-2.x (including the current Qt-2.0.2 version) just have to set the Qt-2.x library path.
 
-<enum>
-<item>change the pushbutton to a QLabel.
-<item>use <tt/setText()/ instead of directly setting the text in the pushbutton's constructor
-<item>use <tt/QPushButton::resize ( const QSize & s )/ instead of setting the size by width and height directly. Create a <tt/QSize/
-instance first that contains the size
-<item>play with the sizes to see which is width and heigth
-</enum>
+Now we can proceed to the next chapter where we will create the first step of the <em>KScribble</em> example.
 
-<sect>Step 2 and 3: Extensions
+
+<chapt>Application Concepts
 <p>
-The tutorial steps 2 and 3 are extending the facilities of the first tutorial. There, you will learn about signals and slots as well as
-parent-child relationships between widgets.
+This chapter now introduces you into the ideas of the application models mentioned already: the MDI (Multiple Document Interface) and
+the Document-View model. A basic introduction into the Document-View model and the generating of a project with KDevelop is already
+given in <htmlurl url="../programming/index.html" name="The KDevelop Programming Handbook">, but based on a Single Document Interface
+(SDI). In any case, you should be familiar with the basics of the KDE and Qt classes that are explained in <htmlurl
+url="../kde_libref/index.html" name="The KDE Library Reference Guide">, there the base classes of the underlying libraries are
+explained in detail and how to use them, with an additional description of the Qt signal-slot mechanism and event handling.
 
-Now, why is it important to learn about that ? Well, the signals and slots are building the technology which make the difference when
-comparing the Qt library to other widget library.  Whenever you will hit an implementation problem where you want to communicate
-between objects, this will make your work incredible short and nothing serious will happen if something went wrong, even misconnections
-don't lead to a segmentation fault. This is the strength of the Qt library and a lot of KDE/Qt developer's won't want to miss it
-anymore because of it's flexibility. Understanding the signal/slot mechanism therefore is essential to create any KDE/Qt application.
-
-Another thing to watch out for is the fact that the button terminates the <tt/QApplication/ instance by calling <tt/quit()/. You will
-meet <tt/quit()/ again when working with <tt/QApplication/'s KDE-pendant, <tt/KApplication/
-
-<sect>Writing your own Widgets
-<p>
-Now, after having successfully modified and extended the <tt/main()/ function, you will hit the point to create a new widget- a unique
-widget that only can be constructed with the class you're about to write in step 4.  Actually, the class has been created by the
-application wizard for you, so there is not much to add- just that you have to insert the code that lesson 4 places in the
-<tt/main.cpp/ file into the <tt/MyWidget/ classes' header and implementation file. Fortunately, you only have to add the implementation
-to the constructor code.
-
-To access the constructor, select it from the classviewer. This will automatically bring you to the implementation where you have to
-add the code.
-
-Here, you only have to watch out for the include of <tt/qfont.h/- <tt/QFont/ is only used in the constructor code of <tt/MyWidget/.
-Therefore, add <tt/#include &lt;qfont.h&gt;/ to the top of the <tt/mywidget.cpp/ file.
-
-To run the new application, just hit "Execute". This will result in compling the changes after an autosaving.
-
-<sect>Extending the Widget Class
-<p>
-Now, in lesson 5 the target is to extend the widget class. Therefore, you will learn about virtual functions as well. Here, the
-<tt/resizeEvent()/ is reimplemented. What is important to learn here (besides extending a class) is that Qt works with user events by
-virtual functions that take an event as a parameter. Therefore, you should make yourself comfortable with the following classes of the
-Qt library:
-
+As a guideline, you should know already:
 <itemize>
-<item>QEvent
-<item>QChildEvent
-<item>QCloseEvent
-<item>QFocusEvent
-<item>QKeyEvent
-<item>QMouseEvent
-<item>QMoveEvent
-<item>QPaintEvent
-<item>QResizeEvent
-<item>QTimerEvent
+<item>that every KDE application needs one instance of <tt>KApplication</tt> (for a Qt application one instance of
+<tt>QApplication</tt>)
+<item>generally a main window is inherited from <tt>KTMainWindow</tt> for KDE (for a Qt application inherited from
+<tt>QMainWindow</tt>)
+<item>that events (e.g. keyboard presses or mouse movements) are sent to the application by the underlying window system
+<item>that <tt>QWidget</tt> as the base class for all visible Graphical User Interface (GUI) components provides specialized event
+handlers by virtual functions that filter out the according events by reimplementing <tt>QObject::event()</tt>
+<item>that the Qt signal-slot mechanism means basically that a component can send out signals and a receiver can connect to those
+signals to process some actions
+<item>that this mechanism avoids inheriting classes for GUI components because the signals inform you about e.g. mouse presses  where
+appropriate for a wiget
 </itemize>
 
-Whenever writing custom widgets, especially view areas of applications, you will have to overwrite the default implementation of the
-widget's event-methods by your own for certain events that have to be processed. Those would be e.g.
-
-<tt/virtual void mousePressEvent ( QMouseEvent * )/ for processing a mouse event to pop up a context menu. In the implementation, you
-have to insert a formal parameter into the function header, most developers either use <tt/event/ or just <tt/e/ as the parameter name.
-
-Then, you can process the event's parameters. For a <tt/QMouseEvent/, you have to ask if the right, middle or left mouse button was the
-one that caused the event.
-
-<sect>Adding a new Class
+<sect>The Document-View Model
 <p>
-With lesson 6, you will have to add a class to the tutorial application. Now, normally you would think "I just will create a header
-file and an implementation file- then I'm done"- but KDevelop will make it easier for you. When adding a class, you should always use
-the Classgenerator. This will do all the work for you so you just will have to add the specific code.
+The Document-View Model is one of the most basic concepts in application design that rely on graphical user interfaces. Therefore, a
+certain understanding of the why is needed to see that although the programmer has other possibilities, it makes sense to make use of
+it. But first let's follow the usual design of a typical KDE / Qt application:
 
-To add a class with the Classgenerator, choose "Project"-"New Class", which will open a dialog to enter all needed values for the class
-you want to add. The first thing we have to insert is the classname. The tutorial name this <tt/LCDRange/, so this has to be inserted
-first. Then proceed to the baseclass. The baseclass is the one that the new class inherits. Looking at the tutorial (Qt 1.42), this is
-<tt/QWidget/.  Now, as most GUI classes to add would inherit QWidget, the Classgenerator makes it even easier. Leave the baseclass
-empty and instead check "QWidget child class" in the "Additional Options" section. This will automatically add the required
-<tt/Q_OBJECT/ macro to the headerfile to add slots and signals later (which is required in chapter 7).
+Your application instance provides the first connection to your application and is the starting point of the event handling for a
+program. The program itself represents itself to the user by a Graphical User Interface which is most often called a main-window. The
+main window then provides the appropriate functions for the user such as key accelerators, a menubar, toolbar and a statusbar. In the
+center it contains a so-called "view-area" which means that this part is an instance of another class, usually called a "View". The
+view instance is created when the main window gets constructed at program start and has to be set as the view area component with a
+method provided by the main window: <tt>setView(your_view)</tt> for KDE applications using <tt>KTMainWindow</tt>,
+<tt>setCentralWidget(your_view)</tt> for a Qt application using <tt>QMainWindow</tt>. Now, the view obviously is the area that is
+responsible for interacting with the user to manipulate the data that it represents. As an example, you could use a
+<tt>QMultiLineEdit</tt> as a view and you will have an editor. Then you can use the provided slots of the view for connections to
+menubar or toolbar command like this:
 
-As the filenames are automatically inserted, you don't have to care for that. The only thing that we would suggest adding is the
-documentation. It is always a good style to add a desciptive documentation to the class, especially as the classname <tt/LCDRange/
-doesn't inform you specifically about the purpose of the widget.
+While creating the menubar, you want to provide a method for the command "cut" in the "Edit" menu:
+<tscreen><verb>
+  pEditMenu->insertItem(BarIcon("editcut"), i18n("Cu&amp;t"),view, SLOT(cut()),KAccel::Cut, ID_EDIT_CUT);
+</verb></tscreen>
 
-<sect>Step 7-14
+This creates a menu item in the "Edit" menu, that, when activated, directly calls the slot <tt>cut()</tt> of the instance
+<tt>view</tt>, whereby we suppose you have created this instance as a <tt>QMultiLineEdit</tt> and set as the view area. The
+multilineedit's slot gets called and cuts out the selected text as a reaction, the functionality is already provided by the class
+itself and so there is no need to inherit from <tt>QMultiLineEdit</tt> to create a view area that is capable of such actions. They are
+ready to use and make application development very fast- you just need the application instance and the main window including the
+connections to your view area and you're done ! That means, a simple editor can be written by creating one single class that defines
+the main window behavoir and how to save and read files into the editor - just some basic slots your main view has to implement itself.
+
+But here is the reason why we're now introducing this mysterious Document-View model: You have to provide methods by your own to read
+and write the actual files you want to edit with the <tt>QMultiLineEdit</tt> view-area <bf>within</bf> the main window's interface.
+Yes, this is obviously the easiest thing to do in this case, and the most logic. Now, if we have a look at the files and their contents
+as a so-called "Document", which we can subscribe with the attribute of an "Object" in C++ terminology, the next step is just a little
+one: If I have a document, a view and a main window- why don't I separate these three objects from each other ? We could easily create
+a small class that is responsible for reading in a file into a text stream and then call the view to draw the text visible to the user.
+The same applies to saving the file again- the document class should then provide a saving method that retrieves the text from the view
+again and saves it as a file. In the example these two methods would be the only actions that are needed to be done by a document
+class, because the edit-view already provides all methods basically needed for and editor by slots and you can manipulate the content
+of the view by them directly.
+
+Now, the main idea behind the need for this separation into three objects (document, view, main window) instead of the minimum of two,
+the view and the main window, is the question: what if I want to give the user the possibility to work with a file by <bf>two</bf> or
+even more views ? Such things can even be done within one main window by splitters or deviders containing two view instances which
+shall both display <bf>one</bf> file. There it is: the solution can only be that if the user manipulates the file contents in one view,
+the other view has to be notified about that and to actualize its contents. Otherwise a bad scenario will occur: if the user closes one
+view where he added something at the end of the file which he cutted out at the beginning of the file <bf>in</bf> the other view, the
+file will be saved later by still containing the cutted section, because if the second and last view did not recognize this, it still
+contains the text without modification from the beginning plus the inserted one. This means that both views have to be synchronized by
+their contents they are displaying and that can be done if all views get notified about each action that the user does, which view he
+actually uses should be equal. That means that finally a document class is needed to be the one and only holder of the true contents of
+the document and is providing the views the possibility to manipulate the contents.
+
+I hope this has given some insight into this model, although in most cases it seems that the programmer can live without it - equally
+to just using a provided class as the view area or writing a widget on his own to handle user interaction, as long as you represent
+<bf>one</bf> document or file by <bf>one</bf> view area, the view can be responsible for the data as well and only provide methods to
+retrieve or set the document contents for actions like reading a file or saving it. The next model to describe, the Multiple Document
+Interface, will make a difference at this point- there you will see the actual need and the functionality the Document-View model
+provides.
+
+<sect>The Multiple Document Interface (MDI)
 <p>
-For the rest of the tutorial steps, you are prepared and know everything you have to know- adding the classes required and doing the
-changes.
+As the last section described the Document-View model, you will probably guess what MDI means. Users that come from other Operating
+Systems than Unix/Linux are used to it as well as programmers developing for those platforms. While X-Window applications traditionally
+are more targeting towards functionality and stability, Unix users are used to single windows that provide functionality, therefore
+even the Document-View model is often not needed to create applications. With Qt as a multi-platform toolkit, developers are having
+even more choice - developing for MS Windows(tm) as well as for Unix systems. While on Windows the lack of creating applications that
+are capable of handling so-called child windows has been getting to some kind of standard, this is adressed by the Qt 2.1 library, but
+on the other hand Unix users can profit from this architecture as well.
 
-After each change you should do a new build and check your code for errors. Run the application and follow it's execution;
-additionally, you should play with KDevelop's options for "Build"- execute the application with a commandline argument such as
---geometry and debug it with KDbg in the Tools-window. Then you should be able to proceed with the Qt examples that will be discussed
-in the next chapter.
+What is now the meaning of MDI ? An MDI application generally has the same concept of a usual application that has, as described above,
+one application instance and a main window. The view area now make the difference: you don't directly use a view that represents data
+and provides interaction to manipulate that data but a view that handles other windows looking like top-level windows. These windows
+are now representing the former view area and the main difference is that the interaction chain changes from
 
+<tscreen><verb>
+application instance -> main window -> view
 
-<chapt>Copyright <label id="Copyright">
+to
+
+appliation instance -> main window -> view -> active child window
+</verb></tscreen>
+
+The view now is capable of several actions:
+<itemize>
+<item>creating as much child windows as the user requests
+<item>providing methods to retrieve the currently active child window
+<item>maintaining a list of open views
+<item>managing the child window behavoir for maximize, minimize such as a window manager does for top-level windows
+</itemize>
+
+Now, you can use "complete" widgets like the <tt>QMultiLineEdit</tt> as child windows like for an application that only provides one
+window and each child window is responsible for it's own data. That could be described as "Multiple Document Interface", whereby each
+child window is equal to a single document. The application then manages the usual actions such as providing methods for the child
+window interaction such as cut or copy. Extending this concept with the document-view model enhances the possibilities by far: imagine
+that you can open as much windows as you like within the main window and that a new child window can be a new view of a document that
+is already shown by another child window. The management for this requires a separation into the already described three objects model,
+but doesn't limit the actual number of instances of the documents as well as the views.
+
+Fortunately, Qt 2.1 contains the possibility to create such applications and KDevelop provides you with the according application
+frameworks for both, Qt-only programs as well as KDE 2 applications with the same interface methods- so it is adequate wether you want
+to develop for one of these. Using KDE 2 interfaces will offer you still more possibilites by library functions as well as
+inter-process communication, but those are special aspects that are to cover by separate introductions to these techniques.
+
+Now you are prepared for following the development for KDE 2 - just follow the next chapter to get a first look at the functionality
+already provided by KDevelop when creating applications. There, we will generate the framework for our tutorial application
+<em>KScribble</em> and describe the practical aspects of programming MDI applications.
+
+<chapt>The MDI Framework
 <p>
+If you're already familiar with previous versions of KDevelop, you will know that your IDE uses so-called "frameworks" as a starting
+point of application development. These frameworks by default contain a support for a generic document-view model, but were limited to
+SDI (Single Document Interface, one window with one view area) model structures. From KDevelop 1.1 on, the application wizard is
+capable of a lot more than the previous versions: it offers some new project types especially for those developers that want to stay
+up-to-date with the upcoming KDE 2 as well as for Qt 2.1. One major extension are MDI application frameworks for both, KDE 2 and Qt
+2.1. These frameworks differ only in the use of some library functions such as file dialogs or message boxes as well as the used
+toolbar and statusbar classes - the KDE version uses KDE 2 methods, the Qt version the according Qt functions.
+
+To create the fist step of this tutorial application <em>KScribble</em>, be sure that you have followed the instructions in chapter 2
+of this tutorial handbook: setting up KDE 2. If that went all right, nothing can go wrong. If you couldn't set up the KDE 2 libraries,
+be sure that you have Qt-2.1 installed and set up KDevelop for that at least. You can follow this tutorial by choosing the according Qt
+framework as well (which has the differences as mentioned above: other method calls for dialogs and GUI components).
+
+<sect>Creating an MDI Framework
+<p>
+Now we will start jumping into development by creating the frame application for <em>KScribble</em>. Start KDevelop and choose
+"Project"-"New" from the menubar to invoke the application wizard. On the first page, you will be shown a tree of project types. These
+contain KDE and Qt projects. There, select "KDE 2 MDI" from the KDE section. If you only have Qt 2.1 installed, choose "Qt 2.1 MDI"
+from the Qt section.
+
+
+
+<chapt>Copyright <label id="Copyright"> <p>
 <tscreen><verb>
 
 KDevelop Copyright 1998,1999 The KDevelop Team.
