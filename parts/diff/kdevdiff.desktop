@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Difference between files
+Name=KDevDiff
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=libkdevdiff
+X-KDevelop-Scope=Global
+
