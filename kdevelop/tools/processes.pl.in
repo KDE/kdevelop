@@ -13,7 +13,8 @@ $local_miniicondir = $local_icondir ."/mini";
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
-open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") || die "can not open file: $!";
+open (PROCESSLIST,$homedirectory . "/.kde/share/apps/kdevelop/entries") 
+  || die "can not open file $file: $!";
 while ( defined ($name = <PROCESSLIST> )) {
   chomp ($name);
   $process = <PROCESSLIST>;
@@ -65,7 +66,6 @@ sub replaceOldFile {
   my ( $word, $replace, $oldfile ) = @_;
 
   $where = 0;
-  $counter = 0;
   $wordlength = length($word);
   $newfile = "newfile.txt";
   open (INPUT,$oldfile) || die "can not open file: $oldfile";
@@ -73,15 +73,12 @@ sub replaceOldFile {
   while ( defined ($line = <INPUT> )) {
     while ($where != -1) {
       $where = index($line,$word,$where);
-      if ($where == -1) {
-	++$counter;
-	print OUTPUT $line;
-      }
-      else {
+      if ($where != -1) {
 	substr($line,$where,$wordlength) = $replace;
 	++$where;
       }
     }
+    print OUTPUT $line;
     $where = 0;
   }
   close (INPUT);
@@ -294,7 +291,7 @@ sub processCppTemplate {
     replaceOldFile("|DATE|",     $date,              "cpp");
     replaceOldFile("|YEAR|",     $year,              "cpp");
     
-    open (INPUT,"$file") || die "can not open file: $!";
+    open (INPUT,"$file") || die "can not open file $file: $!";
     open (OUTPUT,">>cpp");
     while ( defined ($line = <INPUT> )) {
 	print OUTPUT $line;
@@ -319,7 +316,7 @@ sub processHeaderTemplate {
     replaceOldFile("|DATE|",     $date,              "header");
     replaceOldFile("|YEAR|",     $year,              "header");
     
-    open (INPUT,"$file") || die "can not open file: $!";
+    open (INPUT,"$file") || die "can not open file $file: $!";
     open (OUTPUT,">>header");
     while ( defined ($line = <INPUT> )) {
 	print OUTPUT $line;
@@ -520,7 +517,7 @@ sub changeTerminalApp {
     
     if ($processes{CPP} eq "yes") {
         processCppTemplate("main.cpp");
-	processCppTemplate("$nameLittle.cpp");
+#	processCppTemplate("$nameLittle.cpp");
     }
     
     condCopyKdelnkFile();
