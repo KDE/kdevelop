@@ -1686,20 +1686,11 @@ void CClassParser::parseTopLevelLexem( CParsedScopeContainer *scope )
       {
         QString scopePath = scope->path();
 
-        // We must always append the current scope to all declarations.
+        // Check if the class is declared in an scope.
         if( !scopePath.isEmpty() )
         {
-          if( aClass->declaredInScope.isEmpty() )
-            aClass->setDeclaredInScope( scopePath );
-          else
-            aClass->setDeclaredInScope( scopePath + QString( "." ) + aClass->declaredInScope );
-        }
-
-        // Check if the class is declared in an scope.
-        if( !aClass->declaredInScope.isEmpty() )
-        {
           // Get the parent class;
-          parentClass = store.getClassByName( aClass->declaredInScope );
+          parentClass = store.getClassByName( scopePath );
 
           // If we didn't find a parent class, try to find a namespace.
           if( parentClass == NULL )
