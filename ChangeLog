@@ -1,3 +1,8 @@
+2000-02-18 Ralf Funken <funken.ruk@netcologne.de>
+	* joined translated german tutorial with new en chapters
+	* added Menushortcuts.html to kdevelop folder.
+
+
 2000-02-18 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed KDE2 mini template error with missing config.h include for VERSION
 	* added .desktop file support for KDE 2 apps, including installation destination
