@@ -28,10 +28,12 @@
 #include <kmessagebox.h>
 #include <kurl.h>
 
+#include <rurl.h>
 #include <domutil.h>
 #include <kdevpartcontroller.h>
 #include <kdevcreatefile.h>
 #include <kdevlanguagesupport.h>
+#include <kdevproject.h>
 
 #include "codemodel_utils.h"
 #include "implementationwidget.h"
@@ -102,12 +104,16 @@ void QtDesignerIntegration::loadSettings(QDomDocument dom, QString path)
         QDomElement el = impls.item(i).toElement();
         if (el.isNull())
             continue;
-        FileDom file = m_part->codeModel()->fileByName(el.attribute("implementationpath"));
+        QString implementationPath = Relative::File(m_part->project()->projectDirectory(),
+            el.attribute("implementationpath"), true).urlPath();
+        FileDom file = m_part->codeModel()->fileByName(implementationPath);
         if (!file)
             continue;
         ClassList cllist = file->classByName(el.attribute("class"));
+        QString uiPath = Relative::File(m_part->project()->projectDirectory(),
+            el.attribute("path"), true).urlPath();
         if (cllist.count() > 0)
-            m_implementations[el.attribute("path")] = cllist.first();
+            m_implementations[uiPath] = cllist.first();
     }
 }
 
@@ -120,8 +126,10 @@ void QtDesignerIntegration::saveSettings(QDomDocument dom, QString path)
     {
         QDomElement il = dom.createElement("implementation");
         el.appendChild(il);
-        il.setAttribute("path", it.key());
-        il.setAttribute("implementationpath", it.data()->fileName());
+        il.setAttribute("path", 
+            Relative::File(m_part->project()->projectDirectory(), it.key()).rurl());
+        il.setAttribute("implementationpath",
+            Relative::File(m_part->project()->projectDirectory(), it.data()->fileName()).rurl());
         il.setAttribute("class", it.data()->name());
     }
 }
