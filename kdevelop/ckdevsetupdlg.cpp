@@ -416,12 +416,13 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   // ****************** the Debugger Tab ***************************
 
   config->setGroup("Debug");
-  bool useExternalDbg = config->readBoolEntry("Use external debugger", false);
-  QString dbg_cmd=config->readEntry("External debugger program","kdbg");
-  bool displayMangledNames = config->readBoolEntry("Display mangled names", false);
+  bool useExternalDbg       = config->readBoolEntry("Use external debugger", false);
+  QString dbg_cmd           = config->readEntry("External debugger program","kdbg");
+  bool displayMangledNames  = config->readBoolEntry("Display mangled names", false);
   bool displayStaticMembers = config->readBoolEntry("Display static members", false);
-  bool setBPsOnLibLoad = config->readBoolEntry("Break on loading libs", false);
-  bool dbgFloatingToolbar = config->readBoolEntry("Enable floating toolbar", false);
+  bool setBPsOnLibLoad      = config->readBoolEntry("Break on loading libs", false);
+  bool dbgFloatingToolbar   = config->readBoolEntry("Enable floating toolbar", false);
+  bool dbgTerminal          = config->readBoolEntry("Debug on separate tty console", false);
 
   w3 = new QWidget( this, "debug" );
 
@@ -461,7 +462,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 	                  "as your debugger")));
 
   dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
-  dbgInternalGroup->setGeometry( 10, 130, 400, 150 );
+  dbgInternalGroup->setGeometry( 10, 130, 400, 180 );
   dbgInternalGroup->setFrameStyle( 49 );
   dbgInternalGroup->setTitle(i18n( "Internal" ));
   dbgInternalGroup->setAlignment( 1 );
@@ -512,12 +513,24 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgFloatCheck->setAutoRepeat( FALSE );
   dbgFloatCheck->setAutoResize( FALSE );
   dbgFloatCheck->setChecked(dbgFloatingToolbar);
-  KQuickHelp::add(dbgFloatCheck, i18n("Enable flaoting toolbar\n\n"
+  KQuickHelp::add(dbgFloatCheck, i18n("Enable floating toolbar\n\n"
 	                  "Use the floating toolbar. This toolbar always stays\n"
                     "on top of all windows so that if the app covers KDevelop\n"
                     "you have control of the app though the small toolbar\n"
                     "Also this toolbar can be docked to the panel\n"
                     "This toolbar is in addition to the toolbar in KDevelop" ));
+
+  dbgTerminalCheck = new QCheckBox( w3, "dbgTerminalCheck" );
+  dbgTerminalCheck->setGeometry( 20, 270, 310, 25 );
+  dbgTerminalCheck->setText(i18n("Enable separate terminal for application i/o"));
+  dbgTerminalCheck->setAutoRepeat( FALSE );
+  dbgTerminalCheck->setAutoResize( FALSE );
+  dbgTerminalCheck->setChecked(dbgTerminal);
+  KQuickHelp::add(dbgTerminalCheck, i18n("Enable separate terminal for application i/o\n\n"
+                    "This allows you to enter terminal input when your\n"
+                    "application contains terminal input code (eg cin, fgets etc.) \n"
+                    "If you use terminal input in your app, then tick this option.\n"
+                    "Otherwise leave this off." ));
 
   slotSetDebug();
   connect( dbgExternalCheck, SIGNAL(toggled(bool)), SLOT(slotSetDebug()));
@@ -738,6 +751,7 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("Display static members", dbgMembersCheck->isChecked());
   config->writeEntry("Break on loading libs", dbgLibCheck->isChecked());
   config->writeEntry("Enable floating toolbar", dbgFloatCheck->isChecked());
+  config->writeEntry("Debug on separate tty console", dbgTerminalCheck->isChecked());
 
   config->setGroup("QT2");
   config->writeEntry("qt2dir", qt2_edit->text());
@@ -818,6 +832,7 @@ void CKDevSetupDlg::slotSetDebug()
   dbgAsmCheck->setEnabled(!externalDbg);
   dbgLibCheck->setEnabled(!externalDbg);
   dbgFloatCheck->setEnabled(!externalDbg);
+  dbgTerminalCheck->setEnabled(!externalDbg);
 }
 
 void CKDevSetupDlg::slotQt2Clicked(){

@@ -94,6 +94,7 @@ private:
   QCheckBox* dbgAsmCheck;
   QCheckBox* dbgLibCheck;
   QCheckBox* dbgFloatCheck;
+  QCheckBox* dbgTerminalCheck;
 
  private slots:
   void slotOkClicked();
