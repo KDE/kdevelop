@@ -945,11 +945,8 @@ void CProject::updateMakefileAm(const QString& makefile)
           else
             stream << "lib_LTLIBRARIES = lib" << libRootName << ".la\n\n";
 
-          if (type!="normal_cpp" && type != "normal_c")
-          {
-            stream << "\nINCLUDES = $(all_includes)\n\n";
-            stream << "\nLDFLAGS = " << getLDFLAGS() << "\n\n";
-          }
+          stream << "\nINCLUDES = $(all_includes)\n\n";
+          stream << "\nLDFLAGS = " << getLDFLAGS() << "\n\n";
 
           if (sharedLibSubDir)
             stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = " << sharedlibLDFLAGS << "\n\n";
