@@ -18,9 +18,9 @@ wxwindows.tar.gz:
 	gzip wxwindows.tar
 
 incadmin.tar.gz:
-	$(TAR) -cf incadmin.tar -C $(srcdir)/incadmin acconfig.h  \
+	$(TAR) -cf incadmin.tar -C $(srcdir)/incadmin \
 		config.guess  config.sub  depcomp install-sh  \
-		ltconfig  ltmain.sh  missing  mkinstalldirs
+		ltmain.sh  missing  mkinstalldirs
 	gzip incadmin.tar
 
 appwizarddatadir = ${kde_datadir}/kdevappwizard
