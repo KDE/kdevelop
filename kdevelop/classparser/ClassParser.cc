@@ -29,6 +29,7 @@
 *********************************************************************/
 
 #include <iostream.h>
+#include <qregexp.h> 
 #include <assert.h>
 #include "ClassParser.h"
 
@@ -386,6 +387,56 @@ void CClassParser::addDeclaration( CParsedMethod *method,
   }
 }
 
+/*------------------------------------ CClassParser::parseVariableList()
+ * parseVariableList()
+ *   Parse a whole list of variables declared on one line.
+ *
+ * Parameters:
+ *   type             The original type of the attributes.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseVariableList( QString &type )
+{
+  QString realType = type;
+  QString currentT;
+  CParsedMethod *aAttr;
+  
+  // Remove all special chars from the type.
+  realType = realType.replace( "[\*&]", "" );
+
+  getNextLexem();
+
+  // Parse until we find an ';'.
+  while( lexem != ';' )
+  {
+    currentT = realType;
+    while( lexem != ID )
+    {
+      currentT.append( getText() );
+      getNextLexem();
+    }
+
+    // Add the new attribute.
+    aAttr = new CParsedMethod();
+    aAttr->setDefinedInFile( currentFile );
+    aAttr->setDeclaredInFile( currentFile );
+    aAttr->setExport( declaredScope );
+    aAttr->setType( currentT );
+    aAttr->setName( getText() );
+    aAttr->setDeclaredOnLine( getLineno() );
+    aAttr->setDefinedOnLine( getLineno() );
+    addDeclaration( aAttr, true, false );
+
+    getNextLexem();
+
+    // Skip ','. We can't just skip two chars since it could be ';'.
+    if( lexem == ',' )
+      getNextLexem();
+  }
+}
+
 /*---------------------------------- CClassParser::parseDeclaration()
  * parseDeclaration()
  *   Parses some sort of declaration(methods/attributes/function/vars).
@@ -446,6 +497,10 @@ void CClassParser::parseDeclaration()
 
   switch( lexem )
   {
+    case ',': // Variable with multiple declarations on one row.
+      isAttr = true;
+      parseVariableList( type );
+      break;
     case ';': // Variable 
       isAttr = true;
       break;
@@ -595,6 +650,35 @@ void CClassParser::parseSignalTextMap()
   currentClass->addSignalTextMap( aST );
 }
 
+/*---------------------------------------- CClassParser::parseStruct()
+ * parseStruct()
+ *   Parse a struct header.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassParser::parseStruct()
+{
+  CParsedStruct *aStruct = new CParsedStruct();
+
+  // Set the name
+  getNextLexem();
+  assert( lexem == ID );
+  aStruct->setName( getText() );
+
+  getNextLexem();
+  assert( lexem == '{' );
+
+  // TODO! Add parsing of members by adding isParsingStruct and
+  // currentStruct.
+  while( lexem != '}' )
+    getNextLexem();
+
+  store.addGlobalStruct( aStruct );
+}
+
 /*------------------------------------- CClassParser::parseToplevel()
  * parseToplevel()
  *   Parse and add all toplevel definitions i.e classes, global
@@ -622,9 +706,7 @@ void CClassParser::parseToplevel()
     switch( lexem )
     {
       case CPSTRUCT:
-        // Skip until end of declaration.
-        while( lexem != ';' )
-          getNextLexem();
+        parseStruct();
         break;
       case CLASS:
         getNextLexem();
@@ -658,12 +740,12 @@ void CClassParser::parseToplevel()
           methodType = 0;
         break;
       case SIGNALSLOT_MAP:
-        if( !isDefiningClass )
-          parseSignalSlotMap();
+        //        if( !isDefiningClass )
+        //  parseSignalSlotMap();
         break;
       case SIGNALTEXT_MAP:
-        if( !isDefiningClass )
-          parseSignalTextMap();
+        //if( !isDefiningClass )
+        //  parseSignalTextMap();
         break;
       case '{':
         scopedepth++;

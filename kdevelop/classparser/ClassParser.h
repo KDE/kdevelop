@@ -134,6 +134,12 @@ private: // Private methods
   /** Parse the relation between a signal and a text. */
   void parseSignalTextMap();
 
+  /** Parse a list of variable declarations. */
+  void parseVariableList( QString &type );
+
+  /** Parse a struct header. */
+  void parseStruct();
+
   /** Parse toplevel statements */
   void parseToplevel();
 
