@@ -2,7 +2,7 @@
   * \brief KDevelop architecture
   */
 
-/** \page KDev3Arch KDevelop 3 Architecture
+/** \page architecture KDevelop 3 Architecture
 
 KDevelop uses a plugin based architecture. This will be explained in more
 detail in the next sections. To add a new plugin check the \ref howToAddPlugins page.

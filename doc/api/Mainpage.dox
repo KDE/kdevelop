@@ -29,7 +29,7 @@ There is also a \ref LangSupportStatus (doc/api/LangSupportStatus.dox file) page
 
 \section expand How to expand KDevelop
 
-First of all read the \ref KDev3Arch (doc/api/Architecture.dox file) then you can find more information on how to expand KDevelop:
+First of all read the \ref architecture (doc/api/Architecture.dox file) then you can find more information on how to expand KDevelop:
   - \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file)
   - \ref howToAddProgrammingLanguages (doc/api/HowToAddProgrammingLanguages.dox file)
   - \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
@@ -51,6 +51,25 @@ We also have a list of \ref unmaintained parts in KDevelop. You migth want to "a
   - \ref maintainers
   - \ref FAQ
   - \ref deprecated
+
+\section howTobuildAPIlocalcopy How to build a local copy of this documentation
+
+This documentation is very large and changes with every cvs commit, therefore is not available for download.
+To build your local copy of this documentation you have two choices, depending on your system configuration.
+  - If you have KDE >= 3.2 , doxygen >= 1.3.4 , PHP >= 4.10 and a local running webserver then
+    - make apidox
+    - make install-apidox (as root)
+    .
+  - If you have an older system then
+    - setenv KDEDIR=/location_of_your_kde_instalation
+    - setenv QTDIR=/location_of_your_qt_instalation
+    - doxygen Doxyfile
+    - make install-apidox (as root)
+    .
+  .
+
+The advantage of the first method is that you'll get a search engine in your documentation if you read your
+documentation using your local webserver.
 
 \section License
 
