@@ -44,7 +44,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevfilecreate, FileCreateFactory( "kdevfilecreat
 using namespace FileCreate;
 
 FileCreatePart::FileCreatePart(QObject *parent, const char *name, const QStringList & )
-  : KDevPlugin(parent, name ? name : "FileCreatePart"), KDevCreateFile(), m_selectedWidget(-1)
+  : KDevCreateFile(parent, name ? name : "FileCreatePart"), m_selectedWidget(-1)
 {
   setInstance(FileCreateFactory::instance());
   setXMLFile("kdevpart_filecreate.rc");
@@ -298,6 +298,10 @@ KDevCreateFile::CreatedFile FileCreatePart::createNewFile(QString ext, QString d
              this, SLOT(slotNoteFiletype(const FileType *)) );
     filetypeWidget->refresh();
   }
+
+
+  // If the directory was supplied, it was relative to the project dir
+  if (dir!=QString::null) dir = project()->projectDirectory() + "/" + dir;
 
   // If the file name or path is unknown, we're going to need to ask
   if (dir==QString::null || name==QString::null) {

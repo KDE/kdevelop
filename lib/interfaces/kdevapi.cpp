@@ -5,10 +5,10 @@ class KDevApiPrivate
 {
 public:
 
-  KDevApiPrivate() 
+  KDevApiPrivate()
     : m_projectDom(0), m_project(0), m_makeFrontend(0),
       m_appFrontend(0), m_languageSupport(0), m_versionControl(0),
-      m_diffFrontend(0)
+      m_diffFrontend(0), m_createFile(0)
   {}
 
   QDomDocument *m_projectDom;
@@ -18,6 +18,7 @@ public:
   KDevLanguageSupport *m_languageSupport;
   KDevVersionControl *m_versionControl;
   KDevDiffFrontend *m_diffFrontend;
+  KDevCreateFile *m_createFile;
 
 };
 
@@ -103,7 +104,7 @@ void KDevApi::setDiffFrontend(KDevDiffFrontend *diffFrontend)
   d->m_diffFrontend = diffFrontend;
 }
 
-QDomDocument *KDevApi::projectDom() 
+QDomDocument *KDevApi::projectDom()
 {
   return d->m_projectDom;
 }
@@ -113,6 +114,16 @@ void KDevApi::setProjectDom(QDomDocument *dom)
 {
   d->m_projectDom = dom;
 }
+
+
+void KDevApi::setCreateFile(KDevCreateFile *createFile) {
+  d->m_createFile = createFile;
+}
+
+KDevCreateFile *KDevApi::createFile() {
+  return d->m_createFile;
+}
+
 
 #include "kdevapi.moc"
 

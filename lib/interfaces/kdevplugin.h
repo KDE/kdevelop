@@ -29,6 +29,7 @@ class KDevPartController;
 class KDevTopLevel;
 class KDevDebugger;
 class KDevDiffFrontend;
+class KDevCreateFile;
 
 
 // 2002-02-08 added ccClassStore( ) - daniel
@@ -40,7 +41,7 @@ class KDevDiffFrontend;
 class KDevPlugin : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
-    
+
 public:
     /**
      * Constructs a component.
@@ -92,13 +93,13 @@ public:
      * Gives a reference to the class store
      */
     ClassStore *classStore();
-    
+
     /**
      * Gives a reference to the codecompletion classstore
      * added by daniel
      */
-    ClassStore* ccClassStore( ); 
-    
+    ClassStore* ccClassStore( );
+
     /**
      * Gives a reference to the DOM tree that represents
      * the project file.
@@ -108,12 +109,17 @@ public:
     /**
      * Returns a reference to the part controller.
      */
-    KDevPartController *partController(); 
+    KDevPartController *partController();
 
     /**
      * Returns a reference to the debugger API.
      */
     KDevDebugger *debugger();
+
+    /**
+     * Returns a reference to the Create File API.
+     */
+    KDevCreateFile *createFileSupport();
 
     /**
      * To restore any settings which differs from project to project,
@@ -133,7 +139,7 @@ public:
      * See @ restorePartialProjectSession. This is the other way round, the same just for saving.
      */
     virtual void savePartialProjectSession(QDomElement* el);
-    
+
 private:
     KDevApi *m_api;
     class Private;

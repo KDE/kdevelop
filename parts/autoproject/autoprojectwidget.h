@@ -143,7 +143,7 @@ class AutoProjectWidget : public QVBox
 {
 	Q_OBJECT
 
-public: 
+public:
 	AutoProjectWidget(AutoProjectPart *part, bool kde);
 	~AutoProjectWidget();
 
@@ -169,7 +169,7 @@ public:
 	/**
 	* The top level directory of the project.
 	**/
-	QString projectDirectory();
+	QString projectDirectory() const;
 	/**
 	* The directory of the currently shown subproject.
 	*/
@@ -231,36 +231,41 @@ public:
 	* Creates a FileItem instance without a parent item.
 	*/
 	FileItem *createFileItem(const QString &name);
-	
+
 	/**
 	 * Returns the Subproject that contains the Active Target. The Active Target is a special target
 	 * to which e.g. all files are added to.
 	 */
 	SubprojectItem* activeSubproject ();
-	
+
 	/**
 	 * Returns the Active Target. The Active Target is a special target
 	 * to which e.g. all files are added to.
 	 */
 	TargetItem* activeTarget();
-        
+
         /**
          * Returns the sub project item, if any, for a given path. The path supplied can be either
          * absolute, or relative to the project directory. If no subproject item is found for the
          * path, null is returned.
          */
-        SubprojectItem* subprojectItemForPath(const QString & path, bool pathIsAbsolute=false);
+        SubprojectItem* subprojectItemForPath(const QString & path, bool pathIsAbsolute=false) const;
+
+        /**
+         * Returns the projectdir-relative path for a target item
+         */
+        QString pathForTarget(const TargetItem *item) const;
 
         /**
          * Adds file fileName to target titem in subproject spitem
          */
         void addToTarget(const QString & fileName, SubprojectItem* spitem, TargetItem* titem);
-  
+
         /**
 	 * Restores the last settings of the AutoProjectWidget
 	 */
 	void restoreSession ( const QDomElement* el );
-	
+
 	/**
 	 * Saves the latest changes of the AutoProjectWidget to the session file.
 	 */
@@ -339,7 +344,7 @@ private:
 
 	KListView *overview;
 	KListView *details;
-	
+
 	bool m_kdeMode;
 	AutoProjectPart *m_part;
 	SubprojectItem *m_activeSubproject;

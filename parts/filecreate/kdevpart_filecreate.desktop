@@ -5,6 +5,5 @@ Exec=blubb
 Comment=FileCreate
 Name=KDevFileCreate
 Icon=kdevelop
-ServiceTypes=KDevelop/Plugin
-X-KDevelop-Scope=Project
+ServiceTypes=KDevelop/CreateFile
 X-KDE-Library=libkdevfilecreate

@@ -35,7 +35,7 @@ public:
   void createActions( KActionCollection* ac );
 
   ProjectSession* projectSession() const;
-  
+
 public slots:
   bool loadProject( const KURL& url);
   bool closeProject();
@@ -43,7 +43,7 @@ public slots:
 private slots:
   void slotOpenProject();
   void slotProjectOptions();
-  
+
   void loadLocalParts();
   void unloadLocalParts();
 
@@ -57,12 +57,15 @@ private:
 
   bool loadProjectFile();
   bool saveProjectFile();
-  
+
   bool loadProjectPart();
   void unloadProjectPart();
-  
+
   bool loadLanguageSupport();
   void unloadLanguageSupport();
+
+  bool loadCreateFileSupport();
+  void unloadCreateFileSupport();
 
   ProjectInfo *m_info;
 

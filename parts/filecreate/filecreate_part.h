@@ -30,7 +30,7 @@ namespace FileCreate {
 
 using namespace FileCreate;
 
-class FileCreatePart : public KDevPlugin, public KDevCreateFile
+class FileCreatePart : public KDevCreateFile
 {
   Q_OBJECT
 

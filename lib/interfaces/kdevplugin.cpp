@@ -90,6 +90,11 @@ KDevDebugger *KDevPlugin::debugger()
     return m_api->debugger();
 }
 
+KDevCreateFile *KDevPlugin::createFileSupport()
+{
+    return m_api->createFile();
+}
+
 void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
 {
   // there's still nothing to do in the base class

@@ -10,7 +10,7 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp kdevlanguagesupport.
 			       KDevCoreIface.skel KDevCoreIface.cpp kdevtoplevel.cpp \
 			       KDevPartControllerIface.skel KDevPartControllerIface.cpp \
 			       kdevplugin.cpp kdevdebugger.cpp kdevglobalversioncontrol.cpp \
-			       kdevglobalversioncontrol.h \
+			       kdevglobalversioncontrol.h kdevcreatefile.cpp \
 			       kde30x_markinterfaceextension.cpp
 
 kdevelopincludedir = $(includedir)/kdevelop
@@ -27,6 +27,8 @@ servicetypedir = $(kde_servicetypesdir)
 servicetype_DATA = kdevelopcompileroptions.desktop \
 		   kdevelopmakefrontend.desktop kdevelopappfrontend.desktop \
 		   kdevelopproject.desktop kdeveloplanguagesupport.desktop \
-		   kdevelopplugin.desktop kdevelopdifffrontend.desktop
+		   kdevelopplugin.desktop kdevelopdifffrontend.desktop \
+		   kdevelopcreatefile.desktop
+
 
 METASOURCES = AUTO

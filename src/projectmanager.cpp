@@ -23,6 +23,7 @@ class QDomDocument;
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
 #include "kdevplugin.h"
+#include "kdevcreatefile.h"
 
 
 #include "toplevel.h"
@@ -192,6 +193,8 @@ bool ProjectManager::loadProject(const KURL &url)
     return false;
   }
 
+  loadCreateFileSupport();
+
   loadLocalParts();
 
   Core::getInstance()->doEmitProjectOpened();
@@ -229,8 +232,9 @@ bool ProjectManager::closeProject()
   Core::getInstance()->doEmitProjectClosed();
 
   TopLevel::getInstance()->prepareToCloseViews();
-  
+
   unloadLocalParts();
+  unloadCreateFileSupport();
   unloadLanguageSupport();
   unloadProjectPart();
 
@@ -423,6 +427,43 @@ void ProjectManager::unloadLanguageSupport()
   API::getInstance()->setLanguageSupport(0);
 }
 
+bool ProjectManager::loadCreateFileSupport() {
+  kdDebug(9000) << "Looing for CreateFile support" << endl;
+  KTrader::OfferList createFileOffers =
+    KTrader::self()->query(QString::fromLatin1("KDevelop/CreateFile"));
+
+  if (createFileOffers.isEmpty()) {
+    kdDebug(9000) << "No offers found" << endl;
+    API::getInstance()->setCreateFile(0);
+    return false;
+  }
+
+  KService::Ptr createFileService = *createFileOffers.begin();
+  KDevCreateFile *crfileSupport =
+    KParts::ComponentFactory::createInstanceFromService<KDevCreateFile>(createFileService,
+                                                                        API::getInstance(),
+                                                                        0,
+                                                                        PluginController::argumentsFromService(createFileService) );
+  API::getInstance()->setCreateFile(crfileSupport);
+  if (!crfileSupport) {
+    kdDebug(9000) << "Could not load CreateFile plugin" << endl;
+    return false;
+  }
+  PluginController::getInstance()->integratePart( crfileSupport );
+  kdDebug(9000) << "CreateFile support loaded OK" << endl;
+  return true;
+
+
+}
+
+void ProjectManager::unloadCreateFileSupport() {
+  KDevCreateFile *crfileSupport = API::getInstance()->createFile();
+  if (!crfileSupport) return;
+  PluginController::getInstance()->removePart(crfileSupport);
+  delete crfileSupport;
+  API::getInstance()->setCreateFile(0);
+}
+
 void ProjectManager::loadLocalParts()
 {
   // Make sure to refresh load/ignore lists
@@ -509,7 +550,7 @@ bool ProjectManager::closeProjectSources()
 		( *it ).prepend ( "/" );
 		( *it ).prepend ( API::getInstance()->project()->projectDirectory() );
 	}
-	
+
 	return PartController::getInstance()->closeDocuments(sources);
 }
 

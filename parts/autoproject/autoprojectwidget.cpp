@@ -58,6 +58,7 @@
 #include "choosetargetdialog.h"
 #include "autoprojectpart.h"
 #include "urlutil.h"
+#include "kdevcreatefile.h"
 
 static QString nicePrimary( const QString &primary )
 {
@@ -443,9 +444,9 @@ QPtrList <SubprojectItem> AutoProjectWidget::allSubprojectItems()
 	return res;
 }
 
-SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, bool pathIsAbsolute)
+SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, bool pathIsAbsolute) const
 {       kdDebug(9020) << "Looking for path " << path << endl;
-        
+
         int prefixLen = projectDirectory().length() + 1;
         for(QListViewItemIterator it = overview;it.current();++it)
         {
@@ -462,6 +463,26 @@ SubprojectItem* AutoProjectWidget::subprojectItemForPath(const QString & path, b
         }
         kdDebug(9020) << "Not found" << endl;
         return NULL;
+}
+
+QString AutoProjectWidget::pathForTarget(const TargetItem *titem) const {
+
+  if (!titem) return QString::null;
+
+  kdDebug(9020) << "Looking for target " << titem->name << endl;
+  int prefixLen = projectDirectory().length() + 1;
+  for(QListViewItemIterator it = overview;it.current();++it)
+  {
+    SubprojectItem* spitem = static_cast<SubprojectItem*>(it.current() );
+    kdDebug(9020) << "Checking: " << spitem->path << endl;
+    if (spitem->targets.containsRef(titem)) {
+      kdDebug(9020) << "Found it!" << endl;
+      QString relpath = (spitem->path).mid(prefixLen);
+      return (relpath==QString::null) ? QString("") : relpath;
+    }
+  }
+  kdDebug(9020) << "Not found" << endl;
+  return QString::null;
 }
 
 QStringList AutoProjectWidget::allLibraries()
@@ -519,14 +540,14 @@ QStringList AutoProjectWidget::allFiles()
 
 	QStringList::ConstIterator it;
 	for ( it = list.begin(); it != list.end(); ++it )
-		if ( !res.contains( *it ) ) 
+		if ( !res.contains( *it ) )
                 { res.append( *it ); kdDebug(9020) << "***INCLUDING " << (*it) << " in allFiles()" << endl; }
 
 	return res;
 }
 
 
-QString AutoProjectWidget::projectDirectory()
+QString AutoProjectWidget::projectDirectory() const
 {
 	if ( !overview->firstChild() )
 		return QString::null; //confused
@@ -565,7 +586,7 @@ void AutoProjectWidget::setActiveTarget( const QString &targetPath )
 				continue;
 
 			QString currentTargetPath = ( path + "/" + ( *tit ) ->name ).mid( prefixlen );
-			
+
 			bool hasTarget = ( targetPath == currentTargetPath );
 			( *tit )->setBold( hasTarget );
 			if ( hasTarget )
@@ -608,13 +629,13 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 {
 	QDomDocument &dom = *m_part->projectDom();
 	QStringList fileList = list;
-        
+
 	if ( DomUtil::readBoolEntry( dom, "/kdevautoproject/general/useactivetarget" ) )
 	{
 		QStringList::iterator it;
-		
+
 		QString fileName;
-		
+
 		for ( it = fileList.begin(); it != fileList.end(); ++it )
 		{
 			int pos = ( *it ).findRev('/');
@@ -626,7 +647,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 			{
 				fileName = ( *it );
 			}
-			
+
                         //FileItem * fitem = createFileItem( fileName );
 			//m_activeTarget->sources.append( fitem );
 			//m_activeTarget->insertItem( fitem );
@@ -642,7 +663,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 //
 //			AutoProjectTool::modifyMakefileam( m_activeSubproject->path + "/Makefile.am", replaceMap );
 		}
-	
+
 		emitAddedFiles ( list );
 	}
 	else
@@ -669,7 +690,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
                         if (!autoAdded) doManually.append(*it);
                 }
                 if (doneAutomatically.count()>0) emitAddedFiles(doneAutomatically);
-                                        
+
                 // raise dialog for any files that weren't added automatically
                 if (doManually.count()>0) {
 		        ChooseTargetDialog chooseTargetDlg ( this, doManually, this, "choose target dialog" );
@@ -696,7 +717,7 @@ void AutoProjectWidget::addToTarget(const QString & fileName, SubprojectItem* sp
 
 	QMap<QString, QString> replaceMap;
 	replaceMap.insert( varname, spitem->variables[ varname ] );
-	
+
         AutoProjectTool::modifyMakefileam( spitem->path + "/Makefile.am", replaceMap );
 
         slotDetailsSelectionChanged(spitem);
@@ -850,11 +871,11 @@ void AutoProjectWidget::slotAddExistingSubproject()
 	SubprojectItem* spitem = selectedSubproject();
 	if ( !spitem )
 		return;
-		
+
 	AddExistingDirectoriesDialog dlg ( m_part, this, spitem, this, "add existing subprojects" );
-	
+
 	dlg.setCaption ( i18n ( "Add Existing Subproject to '%1'" ).arg ( spitem->subdir ) );
-	
+
 	if ( dlg.exec() )
 		slotOverviewSelectionChanged ( spitem );
 }
@@ -945,21 +966,31 @@ void AutoProjectWidget::slotAddNewFile()
 {
 	TargetItem * titem = selectedTarget();
 	if ( !titem )
-		return ;
+          return ;
 
-	AddFileDialog dlg( m_part, this, m_shownSubproject, titem,
-	                   this, "add file dialog" );
+        KDevCreateFile * createFileSupport = m_part->createFileSupport();
+        if (createFileSupport) {
+          KDevCreateFile::CreatedFile crFile =
+            createFileSupport->createNewFile(QString::null, pathForTarget(titem) );
 
-	QString caption;
-	if ( selectedTarget()->name.isEmpty() )
-		caption = i18n ( "%1 in %2" ).arg ( selectedTarget()->primary ).arg ( selectedTarget()->prefix );
-	else
-		caption = selectedTarget()->name;
-	
-	dlg.setCaption ( i18n ( "Add New File to '%1'" ).arg ( caption ) );
 
-	if ( dlg.exec() )
-		slotDetailsSelectionChanged( m_shownSubproject ); // update list view
+        } else {
+          // No create-file plugin available; use our own code
+
+          AddFileDialog dlg( m_part, this, m_shownSubproject, titem,
+                             this, "add file dialog" );
+
+          QString caption;
+          if ( selectedTarget()->name.isEmpty() )
+            caption = i18n ( "%1 in %2" ).arg ( selectedTarget()->primary ).arg ( selectedTarget()->prefix );
+          else
+            caption = selectedTarget()->name;
+
+          dlg.setCaption ( i18n ( "Add New File to '%1'" ).arg ( caption ) );
+
+          if ( dlg.exec() )
+            slotDetailsSelectionChanged( m_shownSubproject ); // update list view
+        }
 }
 
 
@@ -1036,7 +1067,7 @@ void AutoProjectWidget::slotRemoveDetail()
 		if ( dlg.exec() )
 		{
 			slotDetailsSelectionChanged( selectedSubproject() );
-			
+
 			if ( sibling)
 			{
 				details->setSelected ( sibling, true );
@@ -1066,7 +1097,7 @@ void AutoProjectWidget::slotRemoveDetail()
 			//details->takeItem ( titem );
 
 			slotDetailsSelectionChanged ( selectedSubproject() );
-			
+
 			if ( sibling)
 			{
 				details->setSelected ( sibling, true );
@@ -1306,18 +1337,18 @@ void AutoProjectWidget::restoreSession ( const QDomElement* el )
 void AutoProjectWidget::saveSession ( QDomElement* el )
 {
 	kdDebug ( 9020 ) << "************** Saving session data of AutoProjectWidget: " << endl;
-	
+
 	if ( m_activeTarget && m_activeSubproject )
 	{
 		QDomDocument domDoc = el->ownerDocument();
-		
+
 		QString activeTargetPath = m_activeSubproject->path.mid ( m_part->project()->projectDirectory().length() + 1 );
 		activeTargetPath = activeTargetPath + "/" + m_activeTarget->name;
-		
+
 		QDomElement generalEl = domDoc.createElement("general");
-		
+
 		kdDebug ( 9020 ) << "************** Saving session data of AutoProjectWidget: " << activeTargetPath << endl;
-		
+
 		generalEl.setAttribute("activetarget", activeTargetPath);
 		el->appendChild(generalEl);
 	}

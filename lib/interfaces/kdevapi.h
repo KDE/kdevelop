@@ -26,7 +26,7 @@ class KDevPartController;
 class KDevTopLevel;
 class KDevDebugger;
 class KDevDiffFrontend;
-
+class KDevCreateFile;
 
 class KDevApiPrivate;
 
@@ -51,13 +51,13 @@ public:
 
     KDevProject *project();
     void setProject(KDevProject *project);
-   
+
     KDevMakeFrontend *makeFrontend();
     void setMakeFrontend(KDevMakeFrontend *makeFrontend);
 
     KDevAppFrontend *appFrontend();
     void setAppFrontend(KDevAppFrontend *appFrontend);
-   
+
     KDevLanguageSupport *languageSupport();
     void setLanguageSupport(KDevLanguageSupport *languageSupport);
 
@@ -67,8 +67,11 @@ public:
     KDevDiffFrontend *diffFrontend();
     void setDiffFrontend(KDevDiffFrontend *diffFrontend);
 
+    KDevCreateFile *createFile();
+    void setCreateFile(KDevCreateFile *createFile);
+
 private:
-    
+
     KDevApiPrivate *d;
 
 };
