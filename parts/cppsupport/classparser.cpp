@@ -1154,8 +1154,8 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
       }
       else
       {
-        warning( "No method by the name %s found in class %s", 
-                 name.data(), className.data() );
+        qWarning( "No method by the name %s found in class %s", 
+                  name.data(), className.data() );
         aMethod.out();
       }
     }
@@ -1163,7 +1163,7 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
 // EO
   	{
   	  QString path = className;
-  	  if (scope->path())        // Don't produce bad class names
+  	  if (!scope->path().isEmpty())        // Don't produce bad class names
   	    path = scope->path() + "." + path;
   	
       kdDebug(9007) << "scope path is " << path << endl;
@@ -1181,13 +1181,13 @@ void CClassParser::parseMethodImpl(bool isOperator, ParsedContainer *scope)
         }
         else
         {
-          warning( "No method by the name %s found in class %s",
-                 name.data(), path.data() );
+          qWarning( "No method by the name %s found in class %s",
+                    name.data(), path.data() );
           aMethod.out();
         }
       }
       else
-        warning( "No class by the name %s found", path.data() );
+        qWarning( "No class by the name %s found", path.data() );
     }
   }
 }
@@ -2318,8 +2318,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcImplementation();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-            cout << "Storing objective implementation with path: " << aClass->path() << endl;
-			store->addClass(aClass);
+                    cout << "Storing objective implementation with path: " << aClass->path().latin1() << endl;
+                    store->addClass(aClass);
 		}
 		break;
 	case CPOBJCINTERFACE:
@@ -2327,8 +2327,8 @@ void CClassParser::parseTopLevelLexem( ParsedScopeContainer *scope )
 		aClass = parseObjcClass();
 		
 		if (aClass != NULL && !store->hasClass(aClass->name())) {
-            cout << "Storing objective interface with path: " << aClass->path() << endl;
-			store->addClass(aClass);
+                    cout << "Storing objective interface with path: " << aClass->path().latin1() << endl;
+                    store->addClass(aClass);
 		}
     		break;
     case CPOBJCCLASS:

@@ -49,7 +49,7 @@ private: // Private classes
   {
   public: // Constructor & destructor
     
-    CParsedLexem( int aType, const char *aText) { type = aType; text = aText; }
+    CParsedLexem( int aType, const QString &aText) { type = aType; text = aText; }
     ~CParsedLexem() {}
     
   public: // Public attributes

@@ -33,7 +33,7 @@ public:
     * parse: the file we'll have to parse
     * @param file file to parse
     */
-    bool parse( const char* file = NULL, int _iCCLine = 999999 );
+    bool parse( const QString &file = QString::null, int _iCCLine = 999999 );
 
 public:
     // public variables

@@ -352,7 +352,7 @@ QString CppCodeCompletion::createTmpFileForParser (int iLine)
 	{
 		strLine = m_pEditIface->line (i);
 
-		if (regMethod.match (strLine) )
+		if (regMethod.match (strLine.latin1()) )
 		{
 			iMethodBegin = i;
 
@@ -384,7 +384,8 @@ QString CppCodeCompletion::createTmpFileForParser (int iLine)
 //	QDataStream *pDataStream = tmpFile.dataStream();
 	//DataStream << strCopy;
 
-	pFile->writeBlock (strCopy, strCopy.length());
+        #warning Doesnt make sense as strCopy is a QString - FIXME
+	pFile->writeBlock (strCopy.latin1(), strCopy.length());
 
 	pFile->flush();
 

@@ -12,9 +12,9 @@ CppCCParser::~CppCCParser( )
 }
 
 bool
-CppCCParser::parse( const char* file, const int _iCCLine )
+CppCCParser::parse( const QString &file, const int _iCCLine )
 {
-    ifstream f( file );
+    ifstream f( file.latin1() );
     if( f.is_open( ) ){
         iCCLine = _iCCLine;
         currentFile = file;
@@ -22,7 +22,7 @@ CppCCParser::parse( const char* file, const int _iCCLine )
         return true;
     }
     else {
-        cerr << "EE: CppCCParser::parse file '" << file << "' couldn't opened" << endl;
+        cerr << "EE: CppCCParser::parse file '" << file.latin1() << "' couldn't opened" << endl;
     }
 
     return false;
@@ -454,7 +454,7 @@ CppCCParser::debugPrint( )
     cerr << "Number of variables (" << varList.count( ) << ")" << endl;
     for( int i = 0; i < varList.count( ); i++ ){
         cerr << "Variable found @line: " << varList.at( i )->iLine << endl;
-        cerr << "  Variable name          : " << varList.at( i )->sVariableName << endl;
+        cerr << "  Variable name          : " << varList.at( i )->sVariableName.latin1() << endl;
         cerr << "  Variable value         : " <<  varList.at( i )->iVariableValue;
         switch( varList.at( i )->iVariableValue ){
             case CPBOOL   : cerr << " ( bool )"  << endl; break;
@@ -478,7 +478,7 @@ CppCCParser::debugPrint( )
         if( varList.at( i )->sVariableType == "" )
             cerr << "( standard type )" << endl;
         else
-            cerr << varList.at( i )->sVariableType << endl;
+            cerr << varList.at( i )->sVariableType.latin1() << endl;
         cerr << "  Scope                  : "; varList.at( i )->scope.debugOutput( ); cerr << endl;
     }
 
