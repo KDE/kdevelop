@@ -12,7 +12,6 @@
 #ifndef _DIFFWIDGET_H_
 #define _DIFFWIDGET_H_
 
-#include <qptrlist.h>
 #include <qwidget.h>
 
 #include <kurl.h>
@@ -62,7 +61,7 @@ private:
     QTextEdit* te;
     KIO::Job* job;
     KParts::ReadOnlyPart* komparePart;
-    QPtrList<KTempFile> fileCleanupHandler;
+    KTempFile* tempFile;
 
 };
 

@@ -25,12 +25,10 @@
 #include "diffwidget.h"
 
 DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
-    QWidget( parent, name, f )
+    QWidget( parent, name, f ), tempFile( 0 )
 {
   job = 0;
   komparePart = 0;
-
-  fileCleanupHandler.setAutoDelete( true );
 
   loadKomparePart( this );
 
@@ -50,7 +48,6 @@ DiffWidget::DiffWidget( QWidget *parent, const char *name, WFlags f ):
 
 DiffWidget::~DiffWidget()
 {
-  fileCleanupHandler.clear();
 }
 
 void DiffWidget::loadKomparePart( QWidget* parent )
@@ -78,7 +75,7 @@ void DiffWidget::slotClear()
 // internally for the TextEdit only!
 void DiffWidget::slotAppend( const QString& str )
 {
-  te->append( QStyleSheet::escape( str ) );
+  te->append( str );
 }
 
 // internally for the TextEdit only!
@@ -111,13 +108,13 @@ void DiffWidget::slotFinished()
 void DiffWidget::setDiff( const QString& diff )
 {
   if ( komparePart ) {
+    delete tempFile;
     // workaround until kompare can view patches directly from a QString
-    KTempFile* tmpFile = new KTempFile();
-    fileCleanupHandler.append( tmpFile ); // make sure it gets erased
-    tmpFile->setAutoDelete( true );
-    *(tmpFile->textStream()) << diff;
-    tmpFile->close();
-    openURL( tmpFile->name() );
+    tempFile = new KTempFile();
+    tempFile->setAutoDelete( true );
+    *(tempFile->textStream()) << diff;
+    tempFile->close();
+    openURL( tempFile->name() );
     return;
   }
 
