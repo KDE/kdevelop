@@ -74,18 +74,18 @@ void CppNewClassDialog::implementationChanged()
 
 void CppNewClassDialog::accept()
 {
-    QString className = classname_edit->text();
+    QString className = classname_edit->text().simplifyWhiteSpace();
     if (className.isEmpty()) {
         KMessageBox::error(this, i18n("You must enter a classname."));
         return;
     }
     
-    QString header = header_edit->text(); 
+    QString header = header_edit->text().simplifyWhiteSpace(); 
     if (header.isEmpty()) {
         KMessageBox::error(this, i18n("You must enter a name for the header file."));
         return;
     }
-    QString implementation = implementation_edit->text(); 
+    QString implementation = implementation_edit->text().simplifyWhiteSpace(); 
     if (implementation.isEmpty() ){
         KMessageBox::error(this,i18n("You must enter a name for the implementation file."));
         return;
