@@ -65,8 +65,8 @@ enum NodeType
     NodeType_DoStatement,
     NodeType_ForStatement,
     NodeType_SwitchStatement,
+    NodeType_DeclarationStatement,
     NodeType_TranslationUnit,
-    NodeType_FunctionDeclaration,
     NodeType_FunctionDefinition,
 
     NodeType_Custom = 2000
@@ -676,6 +676,9 @@ public:
     SimpleDeclarationAST();
     virtual ~SimpleDeclarationAST();
     
+    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
+    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
+    
     TypeSpecifierAST* typeSpec();
     void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
 
@@ -683,6 +686,7 @@ public:
     void setInitDeclaratorList( InitDeclaratorListAST::Node& initDeclaratorList );
     
 private:
+    NestedNameSpecifierAST::Node m_nestedName;
     TypeSpecifierAST::Node m_typeSpec;
     InitDeclaratorListAST::Node m_initDeclaratorList;
         
@@ -690,32 +694,6 @@ private:
     SimpleDeclarationAST( const SimpleDeclarationAST& source );
     void operator = ( const SimpleDeclarationAST& source );
 };
-
-class FunctionDeclarationAST: public DeclarationAST
-{
-public:
-    typedef std::auto_ptr<FunctionDeclarationAST> Node;
-    enum { Type = NodeType_FunctionDeclaration };
-
-public:
-    FunctionDeclarationAST();
-    virtual ~FunctionDeclarationAST();
-    
-    TypeSpecifierAST* typeSpec() { return m_typeSpec.get(); }
-    void setTypeSpec( TypeSpecifierAST::Node& typeSpec );
-    
-    NestedNameSpecifierAST* nestedName() { return m_nestedName.get(); }
-    void setNestedName( NestedNameSpecifierAST::Node& nestedName );
-    
-private:
-    TypeSpecifierAST::Node m_typeSpec;
-    NestedNameSpecifierAST::Node m_nestedName;
-                
-private:
-    FunctionDeclarationAST( const FunctionDeclarationAST& source );
-    void operator = ( const FunctionDeclarationAST& source );
-};
-
 
 class StatementAST: public AST
 {
@@ -890,6 +868,26 @@ private:
     void operator = ( const StatementListAST& source );
 };
 
+class DeclarationStatementAST: public StatementAST
+{
+public:
+    typedef std::auto_ptr<DeclarationStatementAST> Node;
+    enum { Type = NodeType_DeclarationStatement };
+
+public:
+    DeclarationStatementAST();
+    virtual ~DeclarationStatementAST();
+    
+    DeclarationAST* declaration() { return m_declaration.get(); }
+    void setDeclaration( DeclarationAST::Node& declaration );
+    
+private:
+    DeclarationAST::Node m_declaration;
+    
+private:
+    DeclarationStatementAST( const DeclarationStatementAST& source );
+    void operator = ( const DeclarationStatementAST& source );
+};
 
 class FunctionDefinitionAST: public DeclarationAST
 {

@@ -2539,21 +2539,26 @@ bool Parser::parseNamespaceAliasDefinition( DeclarationAST::Node& /*node*/ )
     
 }
 
-bool Parser::parseDeclarationStatement( StatementAST::Node& /*node*/ )
+bool Parser::parseDeclarationStatement( StatementAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarationStatement()" << endl;
     
-    int index = lex->index();
+    int start = lex->index();
     
     DeclarationAST::Node decl;
     if ( !parseBlockDeclaration(decl) )
 	return false;
     
     if ( lex->lookAhead(0) != ';' ) {
-	lex->setIndex( index );
+	lex->setIndex( start );
 	return false;
     }
     lex->nextToken();
+    
+    DeclarationStatementAST::Node ast = CreateNode<DeclarationStatementAST>();
+    ast->setDeclaration( decl );
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     
     return true;
 }
@@ -2587,8 +2592,8 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	parseNestedNameSpecifier( nestedName );
 	QString nestedNameText = toString( index, lex->index() );
 	
-	InitDeclaratorAST::Node decl;
-	if( parseInitDeclarator(decl) ){
+	InitDeclaratorAST::Node declarator;
+	if( parseInitDeclarator(declarator) ){
 	    
 	    int endSignature = lex->index();
 	    
@@ -2597,8 +2602,21 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		if( !nestedNameText ){
 		    lex->nextToken();
 		    
-		    FunctionDeclarationAST::Node ast = CreateNode<FunctionDeclarationAST>();
+		    InitDeclaratorListAST::Node declarators = CreateNode<InitDeclaratorListAST>();
+		    
+		    // update declarators position
+		    int startLine, startColumn, endLine, endColumn;
+		    if( declarator.get() ){
+		        declarator->getStartPosition( &startLine, &startColumn );
+		        declarator->getEndPosition( &endLine, &endColumn );
+		        declarators->setStartPosition( startLine, startColumn );
+		        declarators->setEndPosition( endLine, endColumn );
+		    }
+		    declarators->addInitDeclarator( declarator );
+		    
+		    SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
 		    ast->setNestedName( nestedName );
+		    ast->setInitDeclaratorList( declarators );
 		    ast->setText( toString(start, endSignature) );
 		    node = ast;
 		    UPDATE_POS( node, start, lex->index() );
@@ -2613,7 +2631,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    if( parseCtorInitializer(ctorInit) && parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
 			ast->setNestedName( nestedName );
-			ast->setInitDeclarator( decl );
+			ast->setInitDeclarator( declarator );
 			ast->setFunctionBody( funBody );
 			ast->setText( toString(start, endSignature) );
 			node = ast;
@@ -2629,7 +2647,7 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 		    if( parseFunctionBody(funBody) ){
 			FunctionDefinitionAST::Node ast = CreateNode<FunctionDefinitionAST>();
 			ast->setNestedName( nestedName );
-			ast->setInitDeclarator( decl );
+			ast->setInitDeclarator( declarator );
 			ast->setText( toString(start, endSignature) );
 			ast->setFunctionBody( funBody );
 			node = ast;
@@ -2695,10 +2713,11 @@ bool Parser::parseDeclaration( DeclarationAST::Node& node )
 	case ';':
 	    {
 		lex->nextToken();
-		FunctionDeclarationAST::Node ast = CreateNode<FunctionDeclarationAST>();
+		SimpleDeclarationAST::Node ast = CreateNode<SimpleDeclarationAST>();
 		ast->setNestedName( nestedName );
 		ast->setText( toString(start, endSignature) );
 		ast->setTypeSpec( spec );
+		ast->setInitDeclaratorList( declarators );
 		node = ast;
 		UPDATE_POS( node, start, lex->index() );
 	    }

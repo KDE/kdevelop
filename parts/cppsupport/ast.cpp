@@ -78,12 +78,12 @@ QString nodeTypeToString( NodeType type )
 	return "ForStatement";
     case NodeType_SwitchStatement:
 	return "SwitchStatement";
+    case NodeType_DeclarationStatement:
+	return "DeclarationStatement";
     case NodeType_StatementList:
 	return "StatementList";
     case NodeType_TranslationUnit:
 	return "TranslationUnit";
-    case NodeType_FunctionDeclaration:
-	return "FunctionDeclaration";
     case NodeType_FunctionDefinition:
 	return "FunctionDefinition";
     case NodeType_Custom:	
@@ -715,6 +715,12 @@ SimpleDeclarationAST::~SimpleDeclarationAST()
 {
 }
 
+void SimpleDeclarationAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
+{
+    m_nestedName = nestedName;
+    if( m_nestedName.get() ) m_nestedName->setParent( this );
+}
+
 TypeSpecifierAST* SimpleDeclarationAST::typeSpec()
 {
     return m_typeSpec.get();
@@ -894,27 +900,6 @@ void InitDeclaratorAST::setInitializer( AST::Node& initializer )
 }
 
 // --------------------------------------------------------------------------
-FunctionDeclarationAST::FunctionDeclarationAST()
-{
-}
-
-FunctionDeclarationAST::~FunctionDeclarationAST()
-{
-}
-
-void FunctionDeclarationAST::setTypeSpec( TypeSpecifierAST::Node& typeSpec )
-{
-    m_typeSpec = typeSpec;
-    if( m_typeSpec.get() ) m_typeSpec->setParent( this );
-}
-
-void FunctionDeclarationAST::setNestedName( NestedNameSpecifierAST::Node& nestedName )
-{
-    m_nestedName = nestedName;
-    if( m_nestedName.get() ) m_nestedName->setParent( this );
-}
-
-// --------------------------------------------------------------------------
 FunctionDefinitionAST::FunctionDefinitionAST()
 {
 }
@@ -1087,4 +1072,19 @@ void SwitchStatementAST::setStatement( StatementAST::Node& statement )
 {
     m_statement = statement;
     if( m_statement.get() ) m_statement->setParent( this );
+}
+
+// --------------------------------------------------------------------------
+DeclarationStatementAST::DeclarationStatementAST()
+{
+}
+
+DeclarationStatementAST::~DeclarationStatementAST()
+{
+}
+
+void DeclarationStatementAST::setDeclaration( DeclarationAST::Node& declaration )
+{
+    m_declaration = declaration;
+    if( m_declaration.get() ) m_declaration->setParent( this );
 }
