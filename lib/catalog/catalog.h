@@ -23,6 +23,9 @@
 #include "gcatalog.h"
 #include "tag.h"
 
+/**
+Catalog to store symbol information.
+*/
 class Catalog: public GCatalog<Tag>
 {
 public:

@@ -86,9 +86,8 @@ public slots:
     @param functionName The name of a function to find in the source.*/
     virtual void openFunction(const QString &formName, const QString &functionName) = 0;
     
-    /**Opens the function and jumps to the line number of its definition (declaration).
-    @param formName The name of a GUI form.
-    @param functionName The name of a function to find in the source.*/
+    /**Opens the form source.
+    @param formName The name of a GUI form.*/
     virtual void openSource(const QString &formName) = 0;
 };
 

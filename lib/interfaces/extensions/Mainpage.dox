@@ -38,7 +38,7 @@ those should be loaded at a time. This can be accomplished by:
   @code
   class KDevMyExtension: public KDevPlugin {
   public:
-      KDevSourceFormatter(const KDevPluginInfo *info, QObject* parent, const char* name)
+      KDevMyExtension(const KDevPluginInfo *info, QObject* parent, const char* name)
           :KDevPlugin(info, parent, name) {}
       
       virtual void doSomething() = 0;

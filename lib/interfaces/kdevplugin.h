@@ -88,11 +88,13 @@ QPL or Custom. If this property is not set, license is considered as unknown;
 - <i>X-KDevelop-Properties</i> is a list of properties which this plugin supports, see @ref Profile class documentation for explanation (required to work with shells that support profiles).
 .
 Plugin scope can be either:
+- Core
 - Global
 - Project
 .
-Global plugins are plugins which require only shell to be loaded and do not operate on @ref KDevProject interface
-and/or do not use project wide information.
+Global plugins are plugins which require only shell to be loaded and do not operate on @ref KDevProject interface and/or do not use project wide information.\n
+Core plugins are global plugins which offer some important "core" functionality and thus
+are not selectable by user in plugin configuration pages.\n
 Project plugins require a project to be loaded and are usually loaded/unloaded among with the project.
 If your plugin use @ref KDevProject interface and/or operate on project-related information then this is the project plugin.
 

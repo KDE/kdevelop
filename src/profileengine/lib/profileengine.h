@@ -57,7 +57,14 @@ public:
     ProfileEngine();
     ~ProfileEngine();
 
-    enum OfferType { Global, Project, Core };
+    /**Type of the plugin offer. Engine will usually find profiles and return offers
+    of selected type.
+    @sa KDevPlugin class documentation for more information of plugin types.*/
+    enum OfferType { 
+        Global    /**<Global plugins.*/,
+        Project   /**<Project plugins.*/,
+        Core      /**<Core plugins.*/
+    };
     
     /**@return The list of plugin offers for given profile and type.*/
     KTrader::OfferList offers(const QString &profileName, OfferType offerType);
@@ -65,6 +72,7 @@ public:
     KTrader::OfferList allOffers(OfferType offerType);
     
     /**@return The list of URLs to the resources (files) with given @p extension.
+    @param profileName A name of a profile to find resources in.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
     KURL::List resources(const QString &profileName, const QString &nameFilter);
@@ -72,6 +80,7 @@ public:
     /**@return The list of URLs to the resources (files) with given @p extension.
     This list is obtained by a recursive search that process given profile
     and all it's subprofiles.
+    @param profileName A name of a profile to find resources in.
     @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
     for name filters syntax.*/
     KURL::List resourcesRecursive(const QString &profileName, const QString &nameFilter);
@@ -79,6 +88,9 @@ public:
     /**Gets the difference between @p profile1 and @p profile2.
     Difference is calculated as two lists of plugins to be unloaded and loaded
     in order to switch from @p profile1 to @p profile2.
+    @param offerType A type of plugin offers to list.
+    @param profile1 A name of the first profile.
+    @param profile2 A name of the second profile.
     @param unload Will be filled with a list of plugins to unload.
     @param load Will be filled with a list of plugins to load.
     @note Resulting lists are not cleared. Pass only clean lists in the
