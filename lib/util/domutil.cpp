@@ -3,6 +3,7 @@
  *   bernd@kdevelop.org                                                    *
  *   default support: Eray Ozkural (exa)                                   *
  *   additions: John Firebaugh <jfirebaugh@kde.org>                        *
+ *              Jakob Simon-Gaarde <jakob@simon-gaarde.dk>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
