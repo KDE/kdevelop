@@ -70,11 +70,11 @@ void CompileErrorFilter::processLine( const QString& line )
 	QString compiler;
 	int i = 0;
 	bool isWarning = false;
-	ErrorFormat* errFormats = errorFormats();
+	ErrorFormat* const errFormats = errorFormats();
 	ErrorFormat* format = &errFormats[i];
 	while( !format->expression.isEmpty() )
 	{
-		QRegExp regExp = format->expression;
+		QRegExp& regExp = format->expression;
 
 		if ( regExp.search( line ) != -1 ) {
 	                hasmatch = true;
