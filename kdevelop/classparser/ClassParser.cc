@@ -148,8 +148,24 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
               while( lexem != ';' && lexem != 0 && lexem != '}' )
                 getNextLexem();
           }
+          break;
         case CPENUM:
           parseEnum();
+          break;
+        case CPSTRUCT:
+          PUSH_LEXEM();
+          // Check if it's a variable declaration or a struct declaration.
+          getNextLexem();
+
+          if( lexem == '{' ) // Struct declaration.
+          {
+            skipBlock();
+            // Goto the end of the declaration.
+            while( lexem != ';' && lexem != 0 )
+              getNextLexem();
+          }
+          else
+            PUSH_LEXEM();
           break;
         default:
           debug( "Found unknow struct declaration." );
