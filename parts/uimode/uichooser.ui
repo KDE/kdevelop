@@ -30,7 +30,7 @@
                 <cstring>ButtonGroup1</cstring>
             </property>
             <property name="title">
-                <string>Major &amp;User-Interface mode</string>
+                <string>Major &amp;User-Interface Mode</string>
             </property>
             <vbox>
                 <property name="name">
@@ -47,7 +47,7 @@
                         <cstring>modeMDI</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Multiple Document Interface (MDI)</string>
+                        <string>&amp;Multiple document interface (MDI)</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -55,7 +55,7 @@
                         <cstring>modeTab</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Tabbed Document Interface</string>
+                        <string>&amp;Tabbed document interface</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -63,7 +63,7 @@
                         <cstring>modeToplevel</cstring>
                     </property>
                     <property name="text">
-                        <string>Toplevel &amp;Window Interface</string>
+                        <string>Toplevel &amp;window interface</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">
@@ -71,7 +71,7 @@
                         <cstring>modeIDEA</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;IDEAl User-Interface</string>
+                        <string>&amp;IDEAl user-interface</string>
                     </property>
                 </widget>
             </vbox>
@@ -96,7 +96,7 @@
             </property>
         </widget>
         <spacer>
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer2</cstring>
             </property>
             <property name="orientation">
@@ -104,12 +104,6 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
     </vbox>

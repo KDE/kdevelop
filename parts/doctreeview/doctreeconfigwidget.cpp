@@ -79,7 +79,7 @@ DocTreeConfigWidget::DocTreeConfigWidget(DocTreeViewWidget *widget,
 {
     m_widget = widget;
 
-    addTab(librariesTab=createLibrariesTab(), i18n("&Qt/KDE libraries (kdoc)"));
+    addTab(librariesTab=createLibrariesTab(), i18n("&Qt/KDE Libraries (kdoc)"));
     addTab(bookmarksTab=createBookmarksTab(), i18n("&Bookmarks"));
     
     readConfig();
@@ -113,9 +113,9 @@ QWidget *DocTreeConfigWidget::createLibrariesTab()
     buttonbox->setMargin(KDialog::spacingHint());
     connect( new QPushButton(i18n("&Update"), buttonbox), SIGNAL(clicked()),
              this, SLOT(updateLibrary()) );
-    connect( new QPushButton(i18n("&Edit"), buttonbox), SIGNAL(clicked()),
+    connect( new QPushButton(i18n("&Edit..."), buttonbox), SIGNAL(clicked()),
              this, SLOT(editLibrary()) );
-    connect( new QPushButton(i18n("&Add"), buttonbox), SIGNAL(clicked()),
+    connect( new QPushButton(i18n("&Add..."), buttonbox), SIGNAL(clicked()),
              this, SLOT(addLibrary()) );
     connect( new QPushButton(i18n("&Remove"), buttonbox), SIGNAL(clicked()),
              this, SLOT(removeLibrary()) );

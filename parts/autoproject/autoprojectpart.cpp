@@ -107,7 +107,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     if (!kde)
         action->setEnabled(false);
 
-    buildConfigAction = new KSelectAction( i18n("Build configuration"), 0,
+    buildConfigAction = new KSelectAction( i18n("Build Configuration"), 0,
                                            actionCollection(), "project_configuration" );
 
     QDomDocument &dom = *projectDom();

@@ -43,7 +43,7 @@
                 <cstring>buttonAddTemplate</cstring>
             </property>
             <property name="text">
-                <string>&amp;Add</string>
+                <string>&amp;Add...</string>
             </property>
         </widget>
         <widget class="QPushButton" row="3" column="1">
@@ -55,7 +55,7 @@
             </property>
         </widget>
         <spacer row="3" column="2">
-            <property name="name" stdset="0">
+            <property name="name">
                 <cstring>Spacer1</cstring>
             </property>
             <property name="orientation">
@@ -63,12 +63,6 @@
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
             </property>
         </spacer>
         <widget class="QListView" row="2" column="0" rowspan="1" colspan="3">

@@ -108,15 +108,15 @@ void AddClassAttributeDialog::setWidgetValues()
     
     publicRb.setText( "Public" );
     publicRb.setChecked( true );
-    
+
     protectedRb.setText( "Protected" );
     privateRb.setText( "Private" );
     staticCb.setText( "Static" );
     constCb.setText( "Const" );
-    
-    okBtn.setText( i18n("OK") );
+
+    okBtn.setText( i18n("&OK") );
     okBtn.setDefault( TRUE );
-    cancelBtn.setText( i18n("Cancel") );
+    cancelBtn.setText( i18n("&Cancel") );
     
     // Access group
     accessGrp.insert( &publicRb );

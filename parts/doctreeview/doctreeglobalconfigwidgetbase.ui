@@ -175,7 +175,7 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Full text search</string>
+                    <string>Full Text Search</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -277,7 +277,7 @@
                                     <cstring>PushButton1</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Update index now</string>
+                                    <string>&amp;Update Index</string>
                                 </property>
                             </widget>
                             <spacer>

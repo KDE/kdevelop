@@ -8,7 +8,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>733</width>
+            <width>765</width>
             <height>525</height>
         </rect>
     </property>
@@ -407,7 +407,7 @@
                                         <cstring>TextLabel3</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Default Value:</string>
+                                        <string>Default value:</string>
                                     </property>
                                 </widget>
                                 <widget class="QLineEdit" row="2" column="1">
@@ -504,7 +504,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="text">
-                        <string>Clone a Function...</string>
+                        <string>Clone Function...</string>
                     </property>
                 </widget>
                 <spacer>

@@ -35,11 +35,11 @@ FilterPart::FilterPart(QObject *parent, const char *name, const QStringList &)
 
     KAction *action;
     
-    action = new KAction( i18n("Execute command..."), 0,
+    action = new KAction( i18n("Execute Command..."), 0,
                           this, SLOT(slotShellInsert()),
                           actionCollection(), "tools_insertshell" );
 
-    action = new KAction( i18n("Filter selection through command..."), 0,
+    action = new KAction( i18n("Filter Selection Through Command..."), 0,
                           this, SLOT(slotShellFilter()),
                           actionCollection(), "tools_filtershell" );
 

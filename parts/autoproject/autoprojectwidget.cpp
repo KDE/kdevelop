@@ -264,7 +264,7 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
                                           this, SLOT(slotSubprojectOptions()), actions, "subproject options");
     addSubprojectAction = new KAction(i18n("Add Subproject..."), "folder_new", 0,
                                       this, SLOT(slotAddSubproject()), actions, "add subproject");
-    addExistingSubprojectAction = new KAction(i18n("Add existing subproject..."), "fileimport", 0,
+    addExistingSubprojectAction = new KAction(i18n("Add Existing Subproject..."), "fileimport", 0,
                                               this, SLOT(slotAddExistingSubproject()), actions, "add existing subproject");
     addTargetAction = new KAction(i18n("Add Target..."), "targetnew_kdevelop", 0,
                                   this, SLOT(slotAddTarget()), actions, "add target");
@@ -277,17 +277,17 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
 
     targetOptionsAction = new KAction(i18n("Options..."), "configure", 0,
                                       this, SLOT(slotTargetOptions()), actions, "target options");
-    addNewFileAction = new KAction(i18n("Create new file..."), "filenew", 0,
+    addNewFileAction = new KAction(i18n("Create new File..."), "filenew", 0,
                                    this, SLOT(slotAddNewFile()), actions, "add new file");
-    addExistingFileAction = new KAction(i18n("Add existing file(s)..."), "fileimport", 0,
+    addExistingFileAction = new KAction(i18n("Add Existing File(s)..."), "fileimport", 0,
                                         this, SLOT(slotAddExistingFile()), actions, "add existing file");
-    addIconAction = new KAction(i18n("Add icon..."), "iconadd_kdevelop", 0,
+    addIconAction = new KAction(i18n("Add Icon..."), "iconadd_kdevelop", 0,
                                 this, SLOT(slotAddIcon()), actions, "add icon");
-    buildTargetAction = new KAction(i18n("Build target..."), "launch", 0,
+    buildTargetAction = new KAction(i18n("Build Target..."), "launch", 0,
                                     this, SLOT(slotBuildTarget()), actions, "build target");
-    setActiveTargetAction = new KAction(i18n("Make target active..."), "", 0,
+    setActiveTargetAction = new KAction(i18n("Make Target Active..."), "", 0,
                                         this, SLOT(slotSetActiveTarget()), actions, "set active target");
-    removeFileAction = new KAction(i18n("Remove file..."), "editdelete", 0,
+    removeFileAction = new KAction(i18n("Remove File..."), "editdelete", 0,
                                    this, SLOT(slotRemoveFile()), actions, "remove file");
 
     connect( subProjectOptionsButton, SIGNAL(clicked()), this, SLOT(slotSubprojectOptions()) );

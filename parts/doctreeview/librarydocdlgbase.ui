@@ -65,7 +65,7 @@
                             <enum>MShadow</enum>
                         </property>
                         <property name="text">
-                            <string>Library Name</string>
+                            <string>Library name:</string>
                         </property>
                     </widget>
                     <spacer>
@@ -111,7 +111,7 @@
                             <cstring>TextLabel2</cstring>
                         </property>
                         <property name="text">
-                            <string>Documentation Path</string>
+                            <string>Documentation path:</string>
                         </property>
                     </widget>
                     <spacer>
@@ -157,7 +157,7 @@
                             <cstring>TextLabel3</cstring>
                         </property>
                         <property name="text">
-                            <string>Library Source Path</string>
+                            <string>Library source path:</string>
                         </property>
                     </widget>
                     <spacer>
@@ -208,10 +208,10 @@
                             <cstring>buttonHelp</cstring>
                         </property>
                         <property name="text">
-                            <string>Help</string>
+                            <string>&amp;Help</string>
                         </property>
                         <property name="accel">
-                            <number>4144</number>
+                            <number>276824136</number>
                         </property>
                         <property name="autoDefault">
                             <bool>true</bool>
@@ -233,10 +233,10 @@
                             <cstring>buttonOk</cstring>
                         </property>
                         <property name="text">
-                            <string>OK</string>
+                            <string>&amp;OK</string>
                         </property>
                         <property name="accel">
-                            <number>0</number>
+                            <number>276824143</number>
                         </property>
                         <property name="autoDefault">
                             <bool>true</bool>
@@ -250,10 +250,10 @@
                             <cstring>buttonCancel</cstring>
                         </property>
                         <property name="text">
-                            <string>Cancel</string>
+                            <string>&amp;Cancel</string>
                         </property>
                         <property name="accel">
-                            <number>0</number>
+                            <number>276824131</number>
                         </property>
                         <property name="autoDefault">
                             <bool>true</bool>

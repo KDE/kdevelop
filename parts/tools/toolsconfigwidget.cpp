@@ -160,7 +160,7 @@ void ToolsConfigWidget::updateListBoxes()
 void ToolsConfigWidget::toolsmenuaddClicked()
 {
     AddToolDialog dlg(this);
-    dlg.setCaption(i18n("Add to Tools menu"));
+    dlg.setCaption(i18n("Add to Tools Menu"));
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
@@ -184,7 +184,7 @@ void ToolsConfigWidget::toolsmenuremoveClicked()
 void ToolsConfigWidget::filecontextaddClicked()
 {
     AddToolDialog dlg(this);
-    dlg.setCaption(i18n("Add to file context menus"));
+    dlg.setCaption(i18n("Add to File Context Menus"));
     while (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();
@@ -208,7 +208,7 @@ void ToolsConfigWidget::filecontextremoveClicked()
 void ToolsConfigWidget::dircontextaddClicked()
 {
     AddToolDialog dlg(this);
-    dlg.setCaption(i18n("Add to directory context menus"));
+    dlg.setCaption(i18n("Add to Directory Context Menus"));
     if (dlg.exec()) {
         ToolsConfigEntry *entry = new ToolsConfigEntry;
         entry->menutext = dlg.menutextEdit->text();

@@ -111,12 +111,12 @@ CCloneFunctionDlg::CCloneFunctionDlg( ClassStore *store, const QString& currentC
 //  methods->setAutoResize(TRUE);
 
   // Buttons
-  okBtn = new QPushButton( i18n("OK"), this );
+  okBtn = new QPushButton( i18n("&OK"), this );
   okBtn->setDefault( TRUE );
 
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
 
-  cancelBtn = new QPushButton( i18n("Cancel"), this );
+  cancelBtn = new QPushButton( i18n("&Cancel"), this );
 
   // Layout
   LayoutButton->addWidget( okBtn );
@@ -173,7 +173,7 @@ void CCloneFunctionDlg::OK()
     if( methods->currentText().isEmpty() )
         KMessageBox::information( this,
                                   i18n("You have to select a method."),
-                                  i18n("No method") );
+                                  i18n("No Method") );
     else
         accept();
 }
