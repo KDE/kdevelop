@@ -1,4 +1,5 @@
-TODO_SUBDIRS = nedit
+## TODO_SUBDIRS = nedit
+TODO_SUBDIRS =
 
 if include_qeditor
 QEDITOR_SUBDIR = qeditor

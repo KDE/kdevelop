@@ -1420,7 +1420,7 @@ Once this is done, <command>make</command> will inform you about the directory w
   <primary>switch UI modes</primary></indexterm>
 
 <para>
-To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure Gideon...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand field. This will get you to the settings page shown below.
+To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu> <guimenuitem>Configure KDevelop...</guimenuitem> </menuchoice> from the menus. The <guilabel>Customize KDevelop</guilabel> dialog will pop up, where you have to select <guilabel>User Interface</guilabel> in the left hand field. This will get you to the settings page shown below.
 </para>
 
 <screenshot>
@@ -2489,12 +2489,12 @@ We will have look at the <guilabel>Messages</guilabel> outputs of both steps:
   <secondary>new project</secondary></indexterm>
 <indexterm zone="appwizard-behind-app">
   <primary>Perl</primary>
-  <secondary>gideon.pm</secondary></indexterm>
+  <secondary>kdevelop.pm</secondary></indexterm>
 <indexterm zone="appwizard-behind-app">
-  <primary>gideon.pm</primary></indexterm>
+  <primary>kdevelop.pm</primary></indexterm>
 <indexterm zone="appwizard-behind-app">
   <primary>project</primary>
-  <secondary>gideon.pm</secondary></indexterm>
+  <secondary>kdevelop.pm</secondary></indexterm>
 
 <para>
 If you set up <quote>YourNewApplication</quote> as in our previous example the &appwizard; should have printed the following messages (we re-arranged the output a bit for readability and you may click on a line to directly jump to its description):
@@ -2509,8 +2509,8 @@ If you set up <quote>YourNewApplication</quote> as in our previous example the &
   --source='/opt/kde3/share/apps/kdevappwizard' \
   --license='GPL' \
   --licensefile='COPYING' \
-  --filetemplates='h,/tmp/kde-devel/gideoncDE5Ja.tmp,\
-                   cpp,/tmp/kde-devel/gideonsRrLab.tmp'
+  --filetemplates='h,/tmp/kde-devel/kdevelopcDE5Ja.tmp,\
+                   cpp,/tmp/kde-devel/kdevelopsRrLab.tmp'
 * <link linkend="appwizard-behind-app-base">Making destination directory</link>
 * <link linkend="appwizard-behind-app-templates">Installing file templates</link>
 * <link linkend="appwizard-behind-app-license">Installing license file</link>
@@ -2539,7 +2539,7 @@ This &perl; <filename>script</filename> is called with a series of parameters, a
 The exact series of initialization steps depends on which &perl; <filename>script</filename> was called. If you want to check, just look into the <filename>script</filename> file the <computeroutput>perl</computeroutput> command on the first <guilabel>Messages</guilabel> window line did call.
 </para>
 <note><para>
-The setup scripts make use of a set of &perl; subroutines collected in the <filename>gideon.pm</filename> file which you may find in the <filename class="directory">share/apps/kdevwizard/template-common/</filename> subdirectory of your &kde; installation.
+The setup scripts make use of a set of &perl; subroutines collected in the <filename>kdevelop.pm</filename> file which you may find in the <filename class="directory">share/apps/kdevwizard/template-common/</filename> subdirectory of your &kde; installation.
 </para></note>
 
 <formalpara id="appwizard-behind-app-base">

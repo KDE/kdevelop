@@ -86,7 +86,7 @@ sub installHTML
         customizeHTML( $destfilename );
 }
 
-sub initGideon
+sub initKDevelop
 {
         autoflush STDOUT 1;
 

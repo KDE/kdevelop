@@ -251,7 +251,7 @@ void MainWindow::init()
 #if (KDE_VERSION > 305)
   setStandardToolBarMenuEnabled( true );
 #endif
-  setXMLFile("gideonui.rc");
+  setXMLFile("kdevelopui.rc");
 
   createFramework();
   createActions();
@@ -289,7 +289,7 @@ void MainWindow::init()
     KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop won't work properly!\nPlease make sure "
         "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
         "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
-        "Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
+        "Example for BASH users:\nexport KDEDIRS=/path/to/kdevelop:$KDEDIRS && kbuildsycoca"),
         i18n("Couldn't Find Plugins") );
   }
 }
@@ -342,7 +342,7 @@ void MainWindow::createFramework()
 /**
  * This function adds a number of actions to the KActionCollection of the base class
  * KXMLGUIClient.
- * They are added to menus by means of the GUI-File gideonui.rc.
+ * They are added to menus by means of the GUI-File kdevelopui.rc.
  */
 void MainWindow::createActions()
 {
@@ -522,7 +522,7 @@ void MainWindow::removeView(QWidget *view)
     QGuardedPtr<KDockWidget> pDock = dockManager->findWidgetParentDock(wrapper);
 
     // QextMDI removes and deletes the wrapper widget
-    // removed by robe.. seems that this fix the crash when exit from gideon in MDI mode
+    // removed by robe.. seems that this fix the crash when exit from kdevelop in MDI mode
     closeWindow(wrapper);
 
     if( pDock ) {

@@ -580,7 +580,7 @@ int main(int argc, char *argv[])
     };
 #endif
 
-    KAboutData aboutData("kdevdoctreeview", I18N_NOOP("Gideon"),
+    KAboutData aboutData("kdevdoctreeview", I18N_NOOP("KDevelop"),
                          "0.1", I18N_NOOP("KDE Index generator for help files."));
 
     KCmdLineArgs::init(argc, argv, &aboutData);

@@ -1,7 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=KDevelop Project File
-DefaultApp=gideon
+Comment[da]=KDevelop projektfil
+Comment[es]=Archivo de proyecto de KDevelop
+Comment[hu]=KDevelop projektfájl
+Comment[pt]=Ficheiro de Projecto do KDevelop
+Comment[pt_BR]=Arquivo de Projeto do KDevelop
+Comment[sr]=KDevelop-ов фајл пројекта
+Comment[sv]=KDevelop projektfil
+Comment[xx]=xxKDevelop Project Filexx
+DefaultApp=kdevelop
 Icon=kdevelop_project
 Type=MimeType
 MimeType=application/x-kdevelop

@@ -1,3 +1,3 @@
-TODO_SUBDIRS = ada perl
+## ada perl are out!
 
-SUBDIRS = cpp fortran haskell java pascal php python ruby sql xul $(TODO_SUBDIRS)
+SUBDIRS = cpp fortran haskell java pascal php python ruby sql xul

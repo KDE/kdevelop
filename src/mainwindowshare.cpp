@@ -185,7 +185,7 @@ void MainWindowShare::createActions()
 
 void MainWindowShare::slotReportBug()
 {
-  KAboutData d2("kdevelop", "Gideon", VERSION);
+  KAboutData d2("kdevelop", "KDevelop", VERSION);
   KBugReport a(m_pMainWnd, true, &d2);
   a.exec();
 }

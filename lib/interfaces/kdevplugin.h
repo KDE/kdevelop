@@ -204,7 +204,7 @@ public:
      * set breakpoints from the previous debug session for the certain project.
      *
      * Note: Take attention to the difference to common not-project-related session stuff.
-     *       They belong to the application rc file (kdeveloprc or gideonrc)
+     *       They belong to the application rc file (kdeveloprc)
      */
     virtual void restorePartialProjectSession(const QDomElement* el);
 

@@ -76,7 +76,7 @@ PluginController::PluginController()
   m_defaultProfile = QString::fromLatin1( "FullIDE" );
   m_defaultProfilePath = kapp->dirs()->localkdedir() + "/" + 
 			 KStandardDirs::kde_default( "data" ) + 
-			 QString::fromLatin1("/gideon/profiles/FullIDE");
+			 QString::fromLatin1("/kdevelop/profiles/FullIDE");
 }
 
 
@@ -93,12 +93,12 @@ void PluginController::loadInitialPlugins()
 	m_profilePath = m_profile;
 	
 	if( m_profile[0] != '/' )
-	    m_profilePath = locate( "data", QString::fromLatin1("gideon/profiles/") + m_profile );
+	    m_profilePath = locate( "data", QString::fromLatin1("kdevelop/profiles/") + m_profile );
 	
 	if( m_profilePath.isEmpty() )
 	    m_profilePath = kapp->dirs()->localkdedir() +
 			    KStandardDirs::kde_default( "data" ) + 
-			    QString::fromLatin1("/gideon/profiles/") + m_profile;
+			    QString::fromLatin1("/kdevelop/profiles/") + m_profile;
     }
     
     if( m_profile.isEmpty() || m_profilePath.isEmpty() ){

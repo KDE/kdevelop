@@ -141,7 +141,7 @@ void MainWindowIDEAl::init() {
     setStandardToolBarMenuEnabled( true );
 #endif
 
-    setXMLFile("gideonui.rc");
+    setXMLFile("kdevelopui.rc");
 
     createFramework();
     createActions();
@@ -173,7 +173,7 @@ void MainWindowIDEAl::init() {
         KMessageBox::sorry( this, i18n("Unable to find plugins, KDevelop won't work properly!\nPlease make sure "
                                        "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
                                        "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
-                                       "Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
+                                       "Example for BASH users:\nexport KDEDIRS=/path/to/kdevelop:$KDEDIRS && kbuildsycoca"),
                             i18n("Couldn't Find Plugins") );
     }
     kdDebug(9000) << "-> kapp = " << kapp << endl;

@@ -1,2 +1,2 @@
-picsdir = $(kde_datadir)/gideon/pics
-pics_DATA = gideon-splash.png
+picsdir = $(kde_datadir)/kdevelop/pics
+pics_DATA = kdevelop-splash.png

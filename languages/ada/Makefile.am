@@ -1,4 +1,3 @@
-# $Id$
 # Here resides the Ada support part.
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
