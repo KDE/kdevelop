@@ -131,7 +131,7 @@ void PluginController::loadGlobalPlugins(KTrader::OfferList globalOffers)
   {
 //    config.setGroup( "Plugins" );
 
-    QString name = (*it)->name();
+    QString name = (*it)->desktopEntryName();
 	
 /*    // Unload it if is marked as ignored and loaded
     if (!config.readBoolEntry( name, true)) {
@@ -164,7 +164,7 @@ void PluginController::loadCorePlugins(KTrader::OfferList coreOffers)
 {
   for (KTrader::OfferList::ConstIterator it = coreOffers.begin(); it != coreOffers.end(); ++it)
   {
-    QString name = (*it)->name();
+    QString name = (*it)->desktopEntryName();
 
     // Check if it is already loaded
     if( m_parts[ name ] != 0 )
@@ -201,7 +201,7 @@ void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList co
 	KTrader::OfferList localOffers = m_engine.offers(m_profile, ProfileEngine::Project);
 	for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
 	{
-		QString name = (*it)->name();
+		QString name = (*it)->desktopEntryName();
 		TopLevel::getInstance()->statusBar()->message( i18n("Loading: %1").arg( (*it)->genericName() ) );
 		
 		kdDebug(9000) << "-----------------------------> load part " << name << endl;
@@ -262,7 +262,7 @@ bool PluginController::checkNewService( ProjectInfo * projectInfo, const KServic
     }
   }
 */
-  projectInfo->m_loadParts << service->name();
+  projectInfo->m_loadParts << service->desktopEntryName();
   return true;
 }
 
@@ -355,7 +355,7 @@ KDevPlugin * PluginController::extension( const QString & serviceType, const QSt
     KTrader::OfferList offers = KDevPluginController::query(serviceType, constraint);
     for (KTrader::OfferList::const_iterator it = offers.constBegin(); it != offers.end(); ++it)
     {
-        KDevPlugin *ext = m_parts[(*it)->name()];
+        KDevPlugin *ext = m_parts[(*it)->desktopEntryName()];
         if (ext) return ext;
     }
     return 0;

@@ -142,13 +142,13 @@ void ProfileEditor::refreshAvailableList()
     
     KTrader::OfferList olist = engine.allOffers(ProfileEngine::Core);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
-        new KListViewItem(allCore, (*it)->name(), (*it)->genericName());
+        new KListViewItem(allCore, (*it)->desktopEntryName(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Global);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
-        new KListViewItem(allGlobal, (*it)->name(), (*it)->genericName());
+        new KListViewItem(allGlobal, (*it)->desktopEntryName(), (*it)->genericName());
     olist = engine.allOffers(ProfileEngine::Project);
     for (KTrader::OfferList::iterator it = olist.begin(); it != olist.end(); ++it)
-        new KListViewItem(allProject, (*it)->name(), (*it)->genericName());
+        new KListViewItem(allProject, (*it)->desktopEntryName(), (*it)->genericName());
 }
 
 void ProfileEditor::profileExecuted(QListViewItem *item)
@@ -207,19 +207,19 @@ void ProfileEditor::fillPluginsList(Profile *profile)
     KTrader::OfferList coreOffers = engine.offers(profile->name(), ProfileEngine::Core);
     for (KTrader::OfferList::const_iterator it = coreOffers.constBegin();
             it != coreOffers.constEnd(); ++it)
-        new KListViewItem(core, (*it)->name(), (*it)->genericName(),
+        new KListViewItem(core, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
         
     KTrader::OfferList globalOffers = engine.offers(profile->name(), ProfileEngine::Global);
     for (KTrader::OfferList::const_iterator it = globalOffers.constBegin();
             it != globalOffers.constEnd(); ++it)
-        new KListViewItem(global, (*it)->name(), (*it)->genericName(),
+        new KListViewItem(global, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
     
     KTrader::OfferList projectOffers = engine.offers(profile->name(), ProfileEngine::Project);
     for (KTrader::OfferList::const_iterator it = projectOffers.constBegin();
             it != projectOffers.constEnd(); ++it)
-        new KListViewItem(project, (*it)->name(), (*it)->genericName(),
+        new KListViewItem(project, (*it)->desktopEntryName(), (*it)->genericName(),
             (*it)->property("X-KDevelop-Properties").toStringList().join(", "));
 }
 

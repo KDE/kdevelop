@@ -185,7 +185,7 @@ void PartSelectWidget::readGlobalConfig()
 			url = re.cap();
 		}
 
-        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), Comment, url );
+        PluginItem *item = new PluginItem( _pluginList, (*it)->desktopEntryName(), (*it)->genericName(), Comment, url );
         item->setOn(/*config.readBoolEntry((*it)->name(), true)*/ true);
     }
 
@@ -234,8 +234,8 @@ void PartSelectWidget::readProjectConfig()
 			url = re.cap();
 		}
 
-        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), Comment, url );
-        item->setOn(!ignoreparts.contains((*it)->name()));
+        PluginItem *item = new PluginItem( _pluginList, (*it)->desktopEntryName(), (*it)->genericName(), Comment, url );
+        item->setOn(!ignoreparts.contains((*it)->desktopEntryName()));
     }
 
 	QListViewItem * first = _pluginList->firstChild();

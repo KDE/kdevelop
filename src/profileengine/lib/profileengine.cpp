@@ -114,7 +114,7 @@ KTrader::OfferList ProfileEngine::offers(const QString &profileName, OfferType o
     KTrader::OfferList::iterator it = list.begin();
     while (it != list.end())
     {
-        QString name = (*it)->name();
+        QString name = (*it)->desktopEntryName();
         names.append(name);
         if (profile->hasInEntryList(disableList, name))
         {
@@ -216,11 +216,11 @@ void ProfileEngine::diffProfiles(OfferType offerType, const QString &profile1,
     QStringList offers1List;
     for (KTrader::OfferList::const_iterator it = offers1.constBegin();
         it != offers1.constEnd(); ++it)
-        offers1List.append((*it)->name());
+        offers1List.append((*it)->desktopEntryName());
     QMap<QString, KService::Ptr> offers2List;
     for (KTrader::OfferList::const_iterator it = offers2.constBegin();
         it != offers2.constEnd(); ++it)
-        offers2List[(*it)->name()] = *it;
+        offers2List[(*it)->desktopEntryName()] = *it;
     
 //    kdDebug() << "OLD PROFILE: " << offers1List << endl;
 //    kdDebug() << "NEW PROFILE: " << offers2List << endl;

@@ -676,8 +676,8 @@ void ProjectManager::loadVCSSupport()
     return;
   }
 
-  PluginController::getInstance()->integrateAndRememberPart( vcsService->name(), vcsPart );
-  m_vcsName = vcsService->name();
+  PluginController::getInstance()->integrateAndRememberPart( vcsService->desktopEntryName(), vcsPart );
+  m_vcsName = vcsService->desktopEntryName();
   m_vcsPlugin = vcsPart;
 }
 
