@@ -31,6 +31,7 @@ apidox-am-yes:
 		echo "HIDE_UNDOC_CLASSES     = NO" >> Doxyfile; \
 		echo "SORT_MEMBER_DOCS       = YES" >> Doxyfile; \
 		echo "GENERATE_TODOLIST      = YES" >> Doxyfile; \
+		echo "WARN_LOGFILE           = doxygen.log" >> Doxyfile; \
 		if test -n "$(DOXYGEN_INPUT)"; then \
 			patterns= ;\
 			dirs= ;\
@@ -79,6 +80,8 @@ apidox-am-yes:
 		echo "RTF_OUTPUT             = $(subdir)/rtf" >> Doxyfile; \
 		echo "GENERATE_MAN           = NO" >> Doxyfile ;\
 		echo "MAN_OUTPUT             = $(subdir)/man" >> Doxyfile; \
+		echo "MACRO_EXPANSION = YES" >> Doxyfile ; \
+		echo "PREDEFINED = ANTLR_USE_NAMESPACE(_x_)=_x_::" >> Doxyfile ; \
 		if test "$(DOXYGEN_LINK_WITH_KDE_QT_APIDOX)" == "YES"; then \
 			echo "TAGFILES = \\" >> Doxyfile; \
 			tags='$(DOXYGEN_REFERENCES) qt'; for tag in $$tags; do \
