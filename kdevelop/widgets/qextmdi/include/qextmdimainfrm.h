@@ -207,6 +207,10 @@ public:
       }
    }
    /**
+   * Deletes an QextMdiIterator created in the QextMDI library (needed for the windows dll problem).
+   */
+   void deleteIterator(QextMdiIterator<QextMdiChildView*>* pIt) { delete pIt; }
+   /**
    * Returns a popup menu that contains the MDI controlled view list.
    * Additionally, this menu provides some placing actions for these views.
    * Usually, you insert this popup menu in your main menubar as "Window" menu.
