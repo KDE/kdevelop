@@ -84,8 +84,12 @@ The application wizard looks into this file to get
     .
 Further information could be (not required):
     - <code>Comment=</code> a small comment for the template. Longer comments should go into a README.devel and shown on startup
-    - <code>ShowFileAfterGeneration=</code> the file that should be opened after the generation, for instance a readme, the path is relative to the project directory
-    - <code>DefaultDestinatonDir</code> changes the default destination dir for the project (~) to your value, whereas HOMEDIR is a keyword
+    - <code>ShowFilesAfterGeneration=</code> a comma-separated list (without whitespaces) of files that should be opened immediately after the generation, for instance a README.devel or a source file the user has to modify, the path is relative to the project directory (example: <code>ShowFilesAfterGeneration=src/main.cpp,src/plugin.cpp</code>). And
+        - <code>APPNAMEUC</code> will be replaced with the projectname in uppercase,
+        - <code>APPNAMELC</code> will be replaced with the projectname in lowercase,
+        - <code>APPNAME</code> will be replaced with the projectname.
+        .
+    - <code>DefaultDestinatonDir</code> changes the default destination dir for the project (~) to your value, whereas <code>HOMEDIR</code> is a keyword
     .
 
 \attention The file <code>template-khello/khello</code> must have the same name as
