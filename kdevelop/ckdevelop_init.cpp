@@ -1524,16 +1524,16 @@ void CKDevelop::initDebugger()
   if (var_viewer)
   {
     // Figure out whether the tabs should be enabled or not.
-    o_tab_view->setTabEnabled(i18n("BPManager"), dbgInternal);
-    o_tab_view->setTabEnabled(i18n("FrameStack"), dbgInternal && dbgController);
-    o_tab_view->setTabEnabled(i18n("Disassemble"), dbgInternal && dbgController);
-    t_tab_view->setTabEnabled(i18n("VAR"), dbgInternal && dbgController);
+    o_tab_view->setTabEnabled("BPManager", dbgInternal);
+    o_tab_view->setTabEnabled("FrameStack", dbgInternal && dbgController);
+    o_tab_view->setTabEnabled("Disassemble", dbgInternal && dbgController);
+    t_tab_view->setTabEnabled("VAR", dbgInternal && dbgController);
     brkptManager->setEnabled(dbgInternal);
     frameStack->setEnabled(dbgInternal && dbgController);
     disassemble->setEnabled(dbgInternal && dbgController);
     var_viewer->setEnabled(dbgInternal && dbgController);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    o_tab_view->setTabEnabled(i18n("debugger"), dbgInternal);
+    o_tab_view->setTabEnabled("debugger", dbgInternal);
     dbg_widget->setEnabled(dbgInternal);
 #endif
   }
