@@ -152,7 +152,7 @@ private:
   void clearModified( KURL::List const & filelist );
   
   bool isDirty( KURL const & url );
-  bool reactToDirty( KURL const & url );
+  bool reactToDirty( KURL const & url, unsigned char reason );
     
   KURL storedURLForPart( KParts::ReadOnlyPart * );
   void updatePartURL( KParts::ReadOnlyPart * );

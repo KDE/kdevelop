@@ -1206,7 +1206,7 @@ void PartController::slotDocumentDirty( Kate::Document * d, bool isModified, uns
 			_dirtyDocuments.append( doc );
 		}
 		
-		if ( reactToDirty( url ) )
+		if ( reactToDirty( url, reason ) )
 		{
 			// file has been reloaded
 			emit documentChangedState( url, Clean );
@@ -1233,7 +1233,7 @@ bool PartController::isDirty( KURL const & url )
 	return _dirtyDocuments.contains( static_cast<KTextEditor::Document*>( partForURL( url ) ) );
 }
 
-bool PartController::reactToDirty( KURL const & url )
+bool PartController::reactToDirty( KURL const & url, unsigned char reason )
 {	
     KConfig *config = kapp->config();
     config->setGroup("Editor");
@@ -1258,6 +1258,15 @@ bool PartController::reactToDirty( KURL const & url )
 			i18n("Conflict: The file \"%1\" has changed on disc while being modified in memory.\n\n"
 					"You should investigate before saving to make sure you are not losing data.").arg( url.path() ),
 			i18n("Conflict") );
+		return false;
+	}
+	
+	if ( reason == 3 ) // means the file was deleted
+	{
+		KMessageBox::sorry( TopLevel::getInstance()->main(), 
+			i18n("Warning: The file \"%1\" has been deleted on disc.\n\n"
+					"If this was not your intention, make sure to save this file now.").arg( url.path() ),
+			i18n("File Deleted") );
 		return false;
 	}
 	
