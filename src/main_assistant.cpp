@@ -10,12 +10,12 @@
 #include <dcopclient.h>
 
 #include <qfileinfo.h>
+#include <qsplashscreen.h>
 
 #include "toplevel.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
 #include "core.h"
-#include "splashscreen.h"
 #include "projectmanager.h"
 
 static KCmdLineOptions options[] =
@@ -79,19 +79,25 @@ int main(int argc, char *argv[])
   KApplication app;
 
   TopLevel::mode = TopLevel::AssistantMode;
-  SplashScreen *splash = new SplashScreen;
+
+  QPixmap pm;
+  pm.load(locate("data", "kdevelop/pics/kdevelop-splash.png"));
+  QSplashScreen * splash = new QSplashScreen( pm );	// KSplashScreen seems broken
+  QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)), 
+    splash, SLOT(message(const QString &)));
+  splash->show();
 
   app.processEvents();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
 		   splash, SLOT(showMessage(const QString &)));
 
-  splash->showMessage( i18n( "Loading Settings" ) );
+  splash->message( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
   PluginController::getInstance()->loadInitialPlugins();
 
-  splash->showMessage( i18n( "Starting GUI" ) );
+  splash->message( i18n( "Starting GUI" ) );
   TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();

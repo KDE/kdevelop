@@ -123,7 +123,7 @@ PluginController::~PluginController()
 void PluginController::loadDefaultParts()
 {
   // Make frontend
-  emit loadingPlugin(i18n("Loading plugin: Make frontend"));
+  emit loadingPlugin(i18n("Loading: Make frontend"));
   KDevMakeFrontend *makeFrontend = loadDefaultPart< KDevMakeFrontend >( "KDevelop/MakeFrontend" );
   if ( makeFrontend ) {
     API::getInstance()->setMakeFrontend( makeFrontend );
@@ -131,7 +131,7 @@ void PluginController::loadDefaultParts()
   }
 
   // App frontend
-  emit loadingPlugin(i18n("Loading plugin: Application frontend"));
+  emit loadingPlugin(i18n("Loading: Application frontend"));
   KDevAppFrontend *appFrontend = loadDefaultPart< KDevAppFrontend >( "KDevelop/AppFrontend" );
   if ( appFrontend ) {
     API::getInstance()->setAppFrontend( appFrontend );
@@ -139,7 +139,7 @@ void PluginController::loadDefaultParts()
   }
 
   // Diff frontend
-  emit loadingPlugin(i18n("Loading plugin: Diff frontend"));
+  emit loadingPlugin(i18n("Loading: Diff frontend"));
   KDevDiffFrontend *diffFrontend = loadDefaultPart< KDevDiffFrontend >( "KDevelop/DiffFrontend" );
   if ( diffFrontend ) {
     API::getInstance()->setDiffFrontend( diffFrontend );
@@ -149,7 +149,7 @@ void PluginController::loadDefaultParts()
   }
 
   // Source formatter
-  emit loadingPlugin(i18n("Loading plugin: Source formatter"));
+  emit loadingPlugin(i18n("Loading: Source formatter"));
   KDevSourceFormatter *sourceFormatter = loadDefaultPart< KDevSourceFormatter >( "KDevelop/SourceFormatter" );
   if ( sourceFormatter ) {
     API::getInstance()->setSourceFormatter( sourceFormatter );
@@ -159,7 +159,7 @@ void PluginController::loadDefaultParts()
   }
   
   // File Create
-  emit loadingPlugin( i18n("Loading plugin: File Create") );
+  emit loadingPlugin( i18n("Loading: File Create") );
   KDevCreateFile * createFile = loadDefaultPart<KDevCreateFile>( "KDevelop/CreateFile" );
   if ( createFile ) {
     API::getInstance()->setCreateFile( createFile );
@@ -186,7 +186,7 @@ void PluginController::loadCorePlugins()
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
 
-    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->genericName()));
+    emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin )
@@ -228,7 +228,7 @@ void PluginController::loadGlobalPlugins()
 
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
 
-    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->genericName()));
+    emit loadingPlugin(i18n("Loading: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin ) {
@@ -259,7 +259,7 @@ void PluginController::loadLocalParts( ProjectInfo * projectInfo, QStringList co
 	for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
 	{
 		QString name = (*it)->name();
-		TopLevel::getInstance()->statusBar()->message( i18n("Loading plugin: %1").arg( (*it)->genericName() ) );
+		TopLevel::getInstance()->statusBar()->message( i18n("Loading: %1").arg( (*it)->genericName() ) );
 		
 		kdDebug(9000) << "-----------------------------> load part " << name << endl;
 		
