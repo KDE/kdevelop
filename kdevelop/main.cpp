@@ -19,6 +19,10 @@
 
 #include <kstddirs.h>
 #include <kglobal.h>
+#include <kaboutdata.h>
+#include <klocale.h>
+#include <kcmdlineargs.h>
+
 #include "kstartuplogo.h"
 #include "ckdevinstall.h"
 #include "ckdevelop.h"
@@ -26,16 +30,42 @@
 
 
 
-
-
 KGuiCmdManager cmdMngr; //manager for user -> gui commands
 
+static const char *description=I18N_NOOP("The KDE Integrated Development Environment");
+static const char *version="2.0pre";
 
 
-int main(int argc, char* argv[]) {
+static KCmdLineOptions options[] =
+{
+   { "setup", I18N_NOOP("Setup KDevelop"), 0 },
+   { "+[file]", I18N_NOOP("The file to open"), 0 },
+   { 0, 0, 0 }
+};
+
+
+int main(int argc, char* argv[])
+{
+  KAboutData aboutData( "kdevelop", I18N_NOOP("KDevelop"),
+    version, description, KAboutData::License_GPL,
+    "(c) 1998-2000, The KDevelop Authors");
+  aboutData.addAuthor("Sandy Meier","Maintainer", "smeier@rz.uni-potsdam.de");
+  aboutData.addAuthor("Stefab Heidrich","KAppWizard, Printing", "sheidric@rz.uni-potsdam.de");
+  aboutData.addAuthor("Ralf Nolden","KDevelop<->Dialogeditor Interface, Configuration Functionality, Online Hhelp", "");
+  aboutData.addAuthor("Jonas Nordin","Classviewer and Classparser", "jonas.nordin@syncom.se");
+  aboutData.addAuthor("Pascal Krahmer","Dialogeditor", "pascal@beast.de");
+  aboutData.addAuthor("Jörgen Olsson","Graphical Classviewer", "jorgen@trej.net");
+  aboutData.addAuthor("Stefan Bartel","Real-File-Viewer, Project Options", "bartel@rz.uni-potsdam.de");
+  aboutData.addAuthor("Bernd Gehrmann","CVS Support", "bernd@physik.hu-berlin.de");
+  aboutData.addAuthor("Walter Tasin","Many, Many Bugfixes, General Enhancements", "tasin@e-technik.fh-muenchen.de");
+  aboutData.addAuthor("John Birch","Internal Debugger", "jbb@ihug.co.nz");
+  
+  KCmdLineArgs::init( argc, argv, &aboutData );
+  KCmdLineArgs::addCmdLineOptions( options );
+  
   
   KStartupLogo* start_logo=0L;
-  KGuiCmdApp a(argc,argv,"kdevelop");
+  KGuiCmdApp a(argc, argv);
   //	a.connectToKWM();
 
   // commands
@@ -53,12 +83,13 @@ int main(int argc, char* argv[]) {
                                    + kapp->name() + "/pics/");
   
 
+  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+  
   a.config()->setGroup("General Options");
   bool bStartLogo= a.config()->readBoolEntry("Logo",true);
   bool bInstall=a.config()->readBoolEntry("Install",true);
-  if (argc > 1 ){
-    if( QString(argv[1]) == "--setup") bInstall = true; // start the setupwizard
-  }
+  
+  if (args->isSet("setup")) bInstall = true; // start the setupwizard
   
   if(bStartLogo){
     start_logo= new KStartupLogo;
@@ -91,10 +122,9 @@ int main(int argc, char* argv[]) {
     if(!a.config()->readBoolEntry("show_kdevelop",true))
       kdevelop->setKDlgCaption();
     
-    if (argc > 1){ 
-      if (QString(argv[1]) != "--setup")
+    if (!args->isSet("setup"))
 	  kdevelop->slotProjectOpenCmdl(argv[1]);
-    }
+    
     if(bStartLogo){
       start_logo->close();
       delete start_logo;
@@ -106,6 +136,7 @@ int main(int argc, char* argv[]) {
     	kdevelop->slotHelpTipOfDay();
     }
   }
+  args->clear();
   
   int rc = a.exec();
   return rc;

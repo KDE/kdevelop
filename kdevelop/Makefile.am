@@ -79,7 +79,7 @@ EXTRA_DIST = kdeveloprc \
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
 messages:
-	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` && mv messages.po $(podir)/kdevelop.pot 
+	$(XGETTEXT) -C -kI18N_NOOP -ki18n -x $(includedir)/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` && mv messages.po $(podir)/kdevelop.pot 
 
 appsdir   = $(kde_appsdir)/Applications/Development
 KDE_ICON  = kdevelop kdevelop_project development_package
