@@ -324,7 +324,7 @@ void KDevelopCore::slotFilePrint()
 
 void KDevelopCore::slotFileNew()
 {
-  kdDebug("running KDevelopCore::slotFileNew...");
+  kdDebug(9000)<<"running KDevelopCore::slotFileNew..." << endl;
   newFile();
 }
 
