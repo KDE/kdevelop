@@ -321,14 +321,12 @@ void AppWizardDialog::accept()
         return;
     }
 
-    if (!fi.dir().exists()) {
-        // create dir if it doesn't exist
-        KShellProcess p("/bin/sh");
-        p.clearArguments();
-        p << "mkdirhier";
-        p << KShellProcess::quote(finalLoc_label->text());
-        p.start(KProcess::Block,KProcess::AllOutput);
-    }
+	// create it dir
+	KShellProcess p("/bin/sh");
+	p.clearArguments();
+	p << "mkdirhier";
+	p << KShellProcess::quote(finalLoc_label->text());
+	p.start(KProcess::Block,KProcess::AllOutput);
 
     // if dir still does not exist
     if (!fi.dir().exists()) {
@@ -337,20 +335,8 @@ void AppWizardDialog::accept()
       dest_edit->setFocus();
       return;
     }
-
-/*  // this piece of code is rendered useless by the QValidator
-    QString appname = appname_edit->text();
-    for (uint i=0; i < appname.length(); ++i)
-        if (!appname[i].isLetterOrNumber() && appname[i] != '_') {
-            KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers, "
-                                          "as it will be used as the top level directory name."));
-            showPage(generalPage);
-            appname_edit->setFocus();
-            return;
-        }
-*/
-
-    QString source, script;
+    
+	QString source, script;
     QFileInfo finfo(m_pCurrentAppInfo->templateName);
     QDir dir(finfo.dir());
     dir.cdUp();
@@ -365,6 +351,8 @@ void AppWizardDialog::accept()
         KDevLicense* lic = m_part->core()->licenses()[ licenseName ];
         if( lic )
         {
+			// This is just a temporary solution, because the perl subsystem does not
+			// support more than one file
             QStringList files( lic->copyFiles() );
             licenseFile = files.first();
         }
