@@ -283,7 +283,7 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "ANTLR_END_NAMESPACE" );
     lexer->addSkipWord( "ANTLR_C_USING", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_API" );
-    
+
     // gnu
     lexer->addSkipWord( "__extension__" );
     lexer->addSkipWord( "__attribute__", SkipWordAndArguments );
@@ -326,6 +326,7 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "EXPORT_DOCKCLASS" );
     lexer->addSkipWord( "K_EXPORT_COMPONENT_FACTORY", SkipWordAndArguments );
     lexer->addSkipWord( "K_SYCOCAFACTORY", SkipWordAndArguments );
+    lexer->addSkipWord( "KDE_DEPRECATED" );
 
     // qt
     lexer->addSkipWord( "Q_OVERRIDE", SkipWordAndArguments );
