@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
-    Copyright (C) 2003-2004 Alexander Dymo <cloudtemple@mksat.net>
+    Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,24 +17,210 @@
     the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
     Boston, MA 02111-1307, USA.
 */
-
-#ifndef _CODEMODEL_UTILS_H_
-#define _CODEMODEL_UTILS_H_
+#ifndef CODEMODEL_UTILS_H
+#define CODEMODEL_UTILS_H
 
 #include "codemodel.h"
 
+/**
+@file codemodel_utils.h
+Utility functions and classes for the CodeModel.
+*/
+
+/**
+@class Pred
+The predicate. 
+Pred is not a real class, it is only a template parameter used in @ref CodeModelUtils functions.
+
+<b>How to create the predicate:</b>@n
+Predicate is simply a class that have 
+@code bool operator() (predicateArgument) @endcode.
+The return value of that operator is the result of a predicate.
+
+For example we want to find all function definitions with a particular name.
+We can use @ref CodeModelUtils::findFunctionDefinitions functions that require
+you to write a predicate for function definition DOM's.
+This can be done with following code:
+@code
+class MyPred{
+public:
+    MyPred(const QString &name): m_name(name) {}
+
+    bool operator() (const FunctionDefinitionDom &def) const
+    {
+        return def->name() == m_name;
+    }
+    
+private:
+    QString m_name;
+};
+@endcode
+*/
+
+
+/**Namespace which contains utility functions and classes for the CodeModel.*/
 namespace CodeModelUtils
 {
 
+/**Finds function definitions which match given predicate in files. 
+    
+Predicate can be considered as a condition. If it is true then the function definition is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function definition before it is returned.
+@param fileList The list of files to find function definitions in.
+@param lst The reference to a list of function definitions. Will be filled by this function.*/
 template <class Pred> void findFunctionDefinitions( Pred pred, const FileList& fileList, FunctionDefinitionList & lst );
-template <class Pred> void findFunctionDefinitions( Pred pred, const NamespaceDom& ns, FunctionDefinitionList & lst );
-template <class Pred> void findFunctionDefinitions( Pred pred, const NamespaceList& namespaceList, FunctionDefinitionList & lst );
-template <class Pred> void findFunctionDefinitions( Pred pred, const ClassList& classList, FunctionDefinitionList & lst );
-template <class Pred> void findFunctionDefinitions( Pred pred, const FunctionDefinitionList& functionDefinitionList, FunctionDefinitionList & lst );
-template <class Pred> void findFunctionDefinitions( Pred pred, const ClassDom& klass, FunctionDefinitionList & lst );
-template <class Pred> void findFunctionDefinitions( Pred pred, const FunctionDefinitionDom& fun, FunctionDefinitionList & lst );
-template <class Pred> void findFunctionDefinitions( Pred pred, FunctionDefinitionList & lst );
 
+/**Finds function definitions which match given predicate in the namespace. 
+    
+Predicate can be considered as a condition. If it is true then the function definition is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function definition before it is returned.
+@param ns The namespace to find function definitions in.
+@param lst The reference to a list of function definitions. Will be filled by this function.*/
+template <class Pred> void findFunctionDefinitions( Pred pred, const NamespaceDom& ns, FunctionDefinitionList & lst );
+
+/**Finds function definitions which match given predicate in namespaces. 
+    
+Predicate can be considered as a condition. If it is true then the function definition is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function definition before it is returned.
+@param namespaceList The list of namespaces to find function definitions in.
+@param lst The reference to a list of function definitions. Will be filled by this function.*/
+template <class Pred> void findFunctionDefinitions( Pred pred, const NamespaceList& namespaceList, FunctionDefinitionList & lst );
+
+/**Finds function definitions which match given predicate in classes. 
+    
+Predicate can be considered as a condition. If it is true then the function definition is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function definition before it is returned.
+@param classList The list of classes to find function definitions in.
+@param lst The reference to a list of function definitions. Will be filled by this function.*/
+template <class Pred> void findFunctionDefinitions( Pred pred, const ClassList& classList, FunctionDefinitionList & lst );
+
+/**Finds function definitions which match given predicate in the list of function definitions. 
+    
+Predicate can be considered as a condition. If it is true then the function definition is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function definition before it is returned.
+@param functionDefinitionList The list of function definitions to find function definitions in.
+@param lst The reference to a list of function definitions. Will be filled by this function.*/
+template <class Pred> void findFunctionDefinitions( Pred pred, const FunctionDefinitionList& functionDefinitionList, FunctionDefinitionList & lst );
+
+/**Finds function definitions which match given predicate in the class. 
+    
+Predicate can be considered as a condition. If it is true then the function definition is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function definition before it is returned.
+@param klass The class to find function definitions in.
+@param lst The reference to a list of function definitions. Will be filled by this function.*/
+template <class Pred> void findFunctionDefinitions( Pred pred, const ClassDom& klass, FunctionDefinitionList & lst );
+
+/**Applies a predicate to a function definition. 
+    
+Predicate can be considered as a condition. If it is true then the function definition is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function definition before it is returned.
+@param fun The function definition.
+@param lst The reference to a list of function definitions. Will be filled by this function.*/
+template <class Pred> void findFunctionDefinitions( Pred pred, const FunctionDefinitionDom& fun, FunctionDefinitionList & lst );
+
+
+
+
+/**Finds function declarations which match given predicate in files. 
+    
+Predicate can be considered as a condition. If it is true then the function declaration is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function declaration before it is returned.
+@param fileList The list of files to find function declarations in.
+@param lst The reference to a list of function declarations. Will be filled by this function.*/
+template <class Pred> void findFunctionDeclarations( Pred pred, const FileList& fileList, FunctionList & lst );
+
+/**Finds function declarations which match given predicate in the namespace. 
+    
+Predicate can be considered as a condition. If it is true then the function declaration is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function declaration before it is returned.
+@param ns The namespace to find function declarations in.
+@param lst The reference to a list of function declarations. Will be filled by this function.*/
+template <class Pred> void findFunctionDeclarations( Pred pred, const NamespaceDom& ns, FunctionList & lst );
+
+/**Finds function declarations which match given predicate in namespaces. 
+    
+Predicate can be considered as a condition. If it is true then the function declaration is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function declaration before it is returned.
+@param namespaceList The list of namespaces to find function declarations in.
+@param lst The reference to a list of function declarations. Will be filled by this function.*/
+template <class Pred> void findFunctionDeclarations( Pred pred, const NamespaceList& namespaceList, FunctionList & lst );
+
+/**Finds function declarations which match given predicate in classes. 
+    
+Predicate can be considered as a condition. If it is true then the function declaration is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function declaration before it is returned.
+@param classList The list of classes to find function declarations in.
+@param lst The reference to a list of function declarations. Will be filled by this function.*/
+template <class Pred> void findFunctionDeclarations( Pred pred, const ClassList& classList, FunctionList & lst );
+
+/**Finds function declarations which match given predicate in the list of function declarations. 
+    
+Predicate can be considered as a condition. If it is true then the function declaration is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function declaration before it is returned.
+@param functionList The list of function declarations to find function declarations in.
+@param lst The reference to a list of function declarations. Will be filled by this function.*/
+template <class Pred> void findFunctionDeclarations( Pred pred, const FunctionList& functionList, FunctionList & lst );
+
+/**Finds function declarations which match given predicate in the class. 
+    
+Predicate can be considered as a condition. If it is true then the function declaration is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function declaration before it is returned.
+@param klass The class to find function declarations in.
+@param lst The reference to a list of function declarations. Will be filled by this function.*/
+template <class Pred> void findFunctionDeclarations( Pred pred, const ClassDom& klass, FunctionList & lst );
+
+/**Applies a predicate to a function declaration. 
+    
+Predicate can be considered as a condition. If it is true then the function declaration is
+added to the result list otherwise it is skipped.
+@see Pred class documentation for a detailed description on how to create and use predicates.
+    
+@param pred Predicate which is applied to a function declaration before it is returned.
+@param fun The function declaration.
+@param lst The reference to a list of function declarations. Will be filled by this function.*/
+template <class Pred> void findFunctionDeclarations( Pred pred, const FunctionDom& fun, FunctionList & lst );
+
+
+//implementations of function templates defined above:
 
 template <class Pred>
 void findFunctionDefinitions( Pred pred, const FileList& fileList, FunctionDefinitionList & lst )
@@ -85,26 +271,7 @@ void findFunctionDefinitions( Pred pred, const FunctionDefinitionDom& fun, Funct
     if( pred(fun) )
 	lst << fun;
 }
-;
 
-#if 0
-template <class Pred>
-void findFunctionDefinitions( Pred pred, FunctionDefinitionList & lst )
-{
-    FileList fileList = m_store->fileList();
-    for( FileList::Iterator it=fileList.begin(); it!=fileList.end(); ++it )
-	findFunctionDefinitions( pred, model_cast<NamespaceDom>(*it), lst );
-}
-#endif
-
-template <class Pred> void findFunctionDeclarations( Pred pred, const FileList& fileList, FunctionList & lst );
-template <class Pred> void findFunctionDeclarations( Pred pred, const NamespaceDom& ns, FunctionList & lst );
-template <class Pred> void findFunctionDeclarations( Pred pred, const NamespaceList& namespaceList, FunctionList & lst );
-template <class Pred> void findFunctionDeclarations( Pred pred, const ClassList& classList, FunctionList & lst );
-template <class Pred> void findFunctionDeclarations( Pred pred, const FunctionList& functionDefinitionList, FunctionList & lst );
-template <class Pred> void findFunctionDeclarations( Pred pred, const ClassDom& klass, FunctionList & lst );
-template <class Pred> void findFunctionDeclarations( Pred pred, const FunctionDefinitionDom& fun, FunctionList & lst );
-template <class Pred> void findFunctionDeclarations( Pred pred, FunctionList & lst );
 
 
 template <class Pred>
@@ -217,4 +384,4 @@ AllFunctions allFunctionsDetailed(const FileDom &dom);
 AllFunctionDefinitions allFunctionDefinitionsDetailed(const FileDom &dom);
 }
 
-#endif // __CODEMODEL_UTILS_H
+#endif

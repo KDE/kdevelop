@@ -4,7 +4,7 @@
    Copyright (C) 2002 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
    Copyright (C) 2003 Mario Scalas <mario.scalas@libero.it>
-   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,8 +29,15 @@
 #include <qfileinfo.h>
 #include <qtimer.h>
 
+
+struct KDevProject::Private {
+    QMap<QString, QString> m_absToRel;
+    QStringList m_symlinkList;
+    QTimer *m_timer;
+};
+
 KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char *name)
-    : KDevPlugin(info, parent, name)
+    : KDevPlugin(info, parent, name), d(new KDevProject::Private())
 {
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(buildFileMap()) );
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(buildFileMap()) );
@@ -38,8 +45,8 @@ KDevProject::KDevProject(const KDevPluginInfo *info, QObject *parent, const char
     connect( this, SIGNAL(addedFilesToProject(const QStringList& )), this, SLOT(slotAddFilesToFileMap(const QStringList& )) ); 
     connect( this, SIGNAL(removedFilesFromProject(const QStringList& )), this, SLOT(slotRemoveFilesFromFileMap(const QStringList& )) ); 
     
-    m_timer = new QTimer(this);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotBuildFileMap()));
+    d->m_timer = new QTimer(this);
+    connect(d->m_timer, SIGNAL(timeout()), this, SLOT(slotBuildFileMap()));
 }
 
 KDevProject::~KDevProject()
@@ -67,37 +74,37 @@ KDevProject::Options KDevProject::options() const
 
 bool KDevProject::isProjectFile( const QString & absFileName )
 {
-    return m_absToRel.contains( absFileName );
+    return d->m_absToRel.contains( absFileName );
 }
 
 QString KDevProject::relativeProjectFile( const QString & absFileName )
 {
     if( isProjectFile(absFileName) )
-	return m_absToRel[ absFileName ];
+	return d->m_absToRel[ absFileName ];
     return QString::null;
 }
 
 void KDevProject::buildFileMap()
 {
-    m_timer->stop();
-    m_timer->start(0, true);
+    d->m_timer->stop();
+    d->m_timer->start(0, true);
 }
 
 void KDevProject::slotBuildFileMap()
 {
     kdDebug(9000) << k_funcinfo << endl;
 
-    m_absToRel.clear();
-    m_symlinkList.clear();
+    d->m_absToRel.clear();
+    d->m_symlinkList.clear();
     const QStringList fileList = allFiles();
     for( QStringList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it )
     {
 	QFileInfo fileInfo( projectDirectory() + "/" + *it );
-	m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
+	d->m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
 	
         if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
         {
-            m_symlinkList << *it;
+            d->m_symlinkList << *it;
         }
     }
 }
@@ -109,7 +116,7 @@ void KDevProject::openProject( const QString & /*dirName*/, const QString & /*pr
 
 QStringList KDevProject::symlinkProjectFiles( )
 {
-    return m_symlinkList;
+    return d->m_symlinkList;
 }
 
 void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
@@ -118,11 +125,11 @@ void KDevProject::slotAddFilesToFileMap( const QStringList & fileList )
 	while( it != fileList.end() )
 	{
 		QFileInfo fileInfo( projectDirectory() + "/" + *it );
-		m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
+		d->m_absToRel[ URLUtil::canonicalPath(fileInfo.absFilePath()) ] = *it;
 		
 		if ( URLUtil::canonicalPath( fileInfo.absFilePath() ) != fileInfo.absFilePath() )
 		{
-			m_symlinkList << *it;
+			d->m_symlinkList << *it;
 		}
 
 		++it;
@@ -135,9 +142,9 @@ void KDevProject::slotRemoveFilesFromFileMap( const QStringList & fileList )
 	while( it != fileList.end() )
 	{
 		QFileInfo fileInfo( projectDirectory() + "/" + *it );
-		m_absToRel.remove( URLUtil::canonicalPath(fileInfo.absFilePath()) );
+		d->m_absToRel.remove( URLUtil::canonicalPath(fileInfo.absFilePath()) );
 		
-		m_symlinkList.remove( *it );
+		d->m_symlinkList.remove( *it );
 
 		++it;
 	}

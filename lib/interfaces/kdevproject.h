@@ -5,7 +5,7 @@
    Copyright (C) 2002 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2003 Jens Dagerbo <jens.dagerbo@swipnet.se>
    Copyright (C) 2003 Mario Scalas <mario.scalas@libero.it>
-   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003-2004 Alexander Dymo <adymo@kdevelop.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +22,8 @@
    the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
    Boston, MA 02111-1307, USA.
 */
-#ifndef _KDEVPROJECT_H_
-#define _KDEVPROJECT_H_
+#ifndef KDEVPROJECT_H
+#define KDEVPROJECT_H
 
 #include "kdevplugin.h"
 #include "domutil.h"
@@ -31,131 +31,133 @@
 #include <qstringlist.h>
 #include <qmap.h>
 
+/**
+@file kdevproject.h
+KDevelop project interface.
+*/
+
 class QTimer;
 
 /**
 KDevelop project interface.
+Plugins implementing the KDevProject interfaces are used to manage projects.
+
+Project can be considered as a way of grouping files (in text editors) or
+as a way of providing support for a build system (like it is done in KDevelop IDE buildtools).
 */
-class KDevProject : public KDevPlugin
+class KDevProject: public KDevPlugin
 {
     Q_OBJECT
-
 public:
-    KDevProject(const KDevPluginInfo *info,
-        QObject *parent=0, const char *name=0 );
+    /**Constructs a project plugin.
+    @param info Important information about the plugin - plugin internal and generic
+    (GUI) name, description, a list of authors, etc. That information is used to show
+    plugin information in various places like "about application" dialog, plugin selector
+    dialog, etc. Plugin does not take ownership on info object, also its lifetime should
+    be equal to the lifetime of the plugin.
+    @param parent The parent object for the plugin. Parent object must implement @ref KDevApi
+    interface. Otherwise the plugin will not be constructed.
+    @param name The internal name which identifies the plugin.*/
+    KDevProject(const KDevPluginInfo *info, QObject *parent=0, const char *name=0);
+    /**Destructor.*/
     virtual ~KDevProject();
 
-    enum Options { UsesAutotoolsBuildSystem = 1, UsesQMakeBuildSystem };
+    /**Options of the project plugin.*/
+    enum Options { 
+        UsesOtherBuildSystem = 0        /**<Project uses unknown or unspecified build system or build system is not used at all.*/,
+        UsesAutotoolsBuildSystem = 1    /**<Project uses autotools for building.*/,
+        UsesQMakeBuildSystem =2         /**<Project uses qmake for building.*/
+    };
 
-    /**
-    * This method is invoked when the project is opened
-    * (i.e. actually just after this class has been
-    * instantiated). The first parameter is the project
-    * directory, which should afterwards be returned by
-    * the projectDirectory() method. The second parameter
-    * is the project name, which is equivalent with the
-    * project file name without the .kdevelop suffix.
-    */
+    /**This method is invoked when the project is opened
+    (i.e. actually just after this class has been
+    instantiated).
+    @param dirName The project directory, which should afterwards be returned by
+    the projectDirectory() method.
+    @param projectName The project name, which is equivalent
+    to the project file name without the suffix.*/
     virtual void openProject(const QString &dirName, const QString &projectName);
-    /**
-    * This method is invoked when the project is about
-    * to be closed.
-    */
+    
+    /**This method is invoked when the project is about to be closed.*/
     virtual void closeProject() = 0;
 
+    /**Reimplement this method to set project plugin options. Default implementation
+    returns KDevProject::UsesOtherBuildSystem.*/
     virtual Options options() const;
 
-    /**
-    * Returns the canonical toplevel directory of the project.
-    */
+    /**@return The canonical absolute directory of the project. Canonical means that 
+    a path does not contain symbolic links or redundant "." or ".." elements.*/
     virtual QString projectDirectory() const = 0;
-    /**
-    * Returns the name of the project.
-    */
+    
+    /**Returns the name of the project.*/
     virtual QString projectName() const = 0;
-    /**
-    * The environment variables that sould be set before running mainProgram()
-    */
+    
+    /**@return The environment variables that sould be set before running mainProgram().*/
     virtual DomUtil::PairList runEnvironmentVars() const = 0;
-    /**
-    * Returns the absolute path to main binary program of the project.
-    */
+    
+    /**@return The path to main binary program of the project.
+    @param relative if true then the path returned is relative to the project directory.*/
     virtual QString mainProgram(bool relative = false) const = 0;
-    /**
-    * Absolute path (directory) from where the mainProgram() should be run
-    */
+    
+    /**Absolute path (directory) from where the mainProgram() should be run.*/
     virtual QString runDirectory() const = 0;
-    /**
-    * The command line arguments that the mainProgram() should be run with
-    */
+    
+    /**The command line arguments that the mainProgram() should be run with.*/
     virtual QString runArguments() const = 0;
-    /**
-    * Returns the path (relative to the project directory)
-    * of the active directory. All newly generated classes
-    * are added here.
-    */
+    
+    /**Returns the path (relative to the project directory)
+    of the active directory. All newly automatically generated 
+    classes and files are usually added here.*/
     virtual QString activeDirectory() const = 0;
-    /**
-    * Returns the canonical build directory of the project.
-    * If the separate build directory is not supported, this should
-    * return the same as projectDiretory().
-    */
+    
+    /**@return The canonical build directory of the project.
+    If the separate build directory is not supported, this should 
+    return the same as projectDiretory(). Canonical means that 
+    a path does not contain symbolic links or redundant "." or ".." elements.*/
     virtual QString buildDirectory() const = 0;
-    /**
-    * Returns a list of all files in the project.
-    * The files are relative to the project directory.
-    */
+    
+    /**@return The list of all files in the project. The names are relative to 
+    the project directory.*/
     virtual QStringList allFiles() const = 0;
     
-    /**
-    * Returns a list of files that are part of the distribution
-    * but not under project control.
-    */
+    /**@return The list of files that are part of the distribution but not under 
+    project control. Used mainly to package and publish extra files among with the project.*/
     virtual QStringList distFiles() const = 0;
     
-    /**
-    * Adds a list of files to the project. Provided for convenience when adding many files.
-    * The given file names must be relative to the project directory.
-    */
-    virtual void addFiles(const QStringList &fileList ) = 0;
-    /**
-    * Adds a file to the project. The given file name
-    * must be relative to the project directory.
-    */
+    /**Adds a list of files to the project. Provided for convenience when adding many files.
+    @param fileList The list of file names relative to the project directory.*/
+    virtual void addFiles(const QStringList &fileList) = 0;
+    
+    /**Adds a file to the project.
+    @param fileName The file name relative to the project directory.*/
     virtual void addFile(const QString &fileName)= 0;
-    /**
-    * Removes a list of files from the project. Provided for convenience when removing many files.
-    * The given file names must be relative to the project directory.
-    */
-    virtual void removeFiles ( const QStringList& fileList )= 0;
-    /**
-    * Removes a file from the project. The given file name
-    * must be relative to the project directory.
-    */
+    
+    /**Removes a list of files from the project. Provided for convenience when removing many files.
+    @param fileList The list of file names relative to the project directory.*/
+    virtual void removeFiles(const QStringList& fileList)= 0;
+    
+    /**Removes a file from the project.
+    @param fileName The file name relative to the project directory.*/
     virtual void removeFile(const QString &fileName) = 0;
-    /**
-    * Notifies the project of changes to the files. Provided for convenience when changing many files.
-    * The given file names must be relative to the project directory.
-    */
-    virtual void changedFiles( const QStringList & fileList );
-    /**
-    * Notifies the project of a change to one of the files. The given file name
-    * must be relative to the project directory.
-    */
-    virtual void changedFile( const QString & fileName );
-    /**
-    * Returns true if the file absFileName is part of the project
-    */
-    virtual bool isProjectFile( const QString & absFileName );
-    /**
-    * Returns the path (relative to the project directory)
-    * of the file absFileName.
-    */
-    virtual QString relativeProjectFile( const QString & absFileName );
+    
+    /**Notifies the project about changes to the files. Provided for
+    convenience when changing many files.
+    @param fileList The list of file names relative to the project directory..*/
+    virtual void changedFiles(const QStringList &fileList);
+    
+    /**Notifies the project of a change to one of the files.
+    @param fileName The file name relative to the project directory.*/
+    virtual void changedFile(const QString &fileName);
+    
+    /**@return true if the file @p absFileName is a part of the project.
+    @param absFileName Absolute name of a file to check.*/
+    virtual bool isProjectFile(const QString &absFileName);
+    
+    /**@return The path (relative to the project directory) of the file @p absFileName.
+    @param absFileName Absolute name of a file.*/
+    virtual QString relativeProjectFile(const QString &absFileName);
 
-    /**
-     * @return a list of files know to the project through symlinks
-     */
+    /**@return The list of files known to the project through symlinks.*/
     virtual QStringList symlinkProjectFiles();
     
 private slots:
@@ -165,42 +167,27 @@ private slots:
     void slotRemoveFilesFromFileMap(const QStringList & fileList );
 
 signals:
-    /**
-    * Emitted when a new file has been added to the
-    * project. The fileName is relative to the project directory.
-    */
-    //void addedFileToProject(const QString &fileName);
-    /**
-    * Emitted when a new list of files has been added to the
-    * project. Provided for convenience when many files were added. The file names are relative to the project directory.
-    */
-    void addedFilesToProject( const QStringList& fileList );
-    /**
-    * Emitted when a file has been removed from the
-    * project. The fileName is relative to the project directory.
-    */
-    //void removedFileFromProject(const QString &fileName);
-    /**
-    * Emitted when a list of files has been removed from the project.
-    * Provided for convenience when many files were removed. The file names are relative to the project directory.
-    */
-    void removedFilesFromProject(const QStringList& fileList );
-    /**
-    * Emitted when a list of files has changed in the project.
-    * The file names are relative to the project directory.
-    */
-    void changedFilesInProject(const QStringList& fileList );
+    /**Emitted when a new list of files has been added to the
+    project. Provided for convenience when many files were added. 
+    @param fileList The file names relative to the project directory.*/
+    void addedFilesToProject(const QStringList& fileList);
+    
+    /**Emitted when a list of files has been removed from the project.
+    Provided for convenience when many files were removed. 
+    @param fileList The file names relative to the project directory.*/
+    void removedFilesFromProject(const QStringList& fileList);
+    
+    /**Emitted when a list of files has changed in the project.
+    @param fileList The file names relative to the project directory.*/
+    void changedFilesInProject(const QStringList& fileList);
 
-    /**
-    * Emitted when one compile related command (make, make install, make ...) ends sucessfuly.
-    * Used to reparse the files after a sucessful compilation
-    */
+    /**Emitted when one compile related command (make, make install, make ...) ends sucessfuly.
+    Used to reparse the files after a sucessful compilation.*/
     void projectCompiled();
     
 private:
-    QMap<QString, QString> m_absToRel;
-    QStringList m_symlinkList;
-    QTimer *m_timer;
+    class Private;
+    Private *d;
 };
 
 #endif

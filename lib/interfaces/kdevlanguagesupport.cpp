@@ -4,7 +4,7 @@
    Copyright (C) 2002-2003 Roberto Raggi <roberto@kdevelop.org>
    Copyright (C) 2002 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2002 F@lk Brettschneider <falkbr@kdevelop.org>
-   Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+   Copyright (C) 2003 Alexander Dymo <adymo@kdevelop.org>
    Copyright (C) 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
 
    This library is free software; you can redistribute it and/or

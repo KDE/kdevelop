@@ -153,8 +153,10 @@ public:
     /**Same as @ref extension(const QString & serviceType) but has one template argument.
     Template argument is used as a type to cast the result to. This is useful if extension
     is derived from a certain abstract base class.
-    @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
-    @return a KDevelop extension plugin for given service type or 0 if no plugin supports it*/
+    @param serviceType The service type of an extension (like "KDevelop/SourceFormatter").
+    @param constraint The constraint which is applied when quering for the service. This
+    constraint is a usual KTrader constraint statement (like "[X-KDevelop-Foo]=='MyFoo'").
+    @return A KDevelop extension plugin for given service type or 0 if no plugin supports it*/
     template <class Extension>
     Extension *extension(const QString &serviceType, const QString &constraint = "")
     {
@@ -170,8 +172,10 @@ public:
     All already loaded plugins will be queried and the first one to support the service type
     will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
     required in .desktop file for that plugin.
-    @param serviceType a service type of an extension (like "KDevelop/SourceFormatter")
-    @return a KDevelop extension plugin for given service type or 0 if no plugin supports it*/
+    @param serviceType The service type of an extension (like "KDevelop/SourceFormatter").
+    @param constraint The constraint which is applied when quering for the service. This
+    constraint is a usual KTrader constraint statement (like "[X-KDevelop-Foo]=='MyFoo'").
+    @return A KDevelop extension plugin for given service type or 0 if no plugin supports it*/
     KDevPlugin *extension(const QString &serviceType, const QString &constraint = "");
     
     /**Override this base class method to restore any settings which differs from project to project.

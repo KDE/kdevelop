@@ -1,6 +1,6 @@
 /* This file is part of KDevelop
     Copyright (C) 2003 Roberto Raggi <roberto@kdevelop.org>
-    Copyright (C) 2003 Alexander Dymo <cloudtemple@mksat.net>
+    Copyright (C) 2003 Alexander Dymo <adymo@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
