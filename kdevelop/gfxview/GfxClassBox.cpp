@@ -18,9 +18,12 @@
 
 
 
-
-#include "GfxClassBox.h"
+#include <kapp.h> 
 #include <qpainter.h>
+#include <qcursor.h>
+#include <qpopupmenu.h>
+#include <qprintdialog.h>
+#include "GfxClassBox.h"
 
 // 7*7 Minusbutton image
 const char * btnminus_xpm[] = {
@@ -248,6 +251,17 @@ bool CGfxClassBox::IsVisible()
   return( (m_parent == NULL) ? true : m_parent->IsUnfolded());
 }
 
+
+
+bool CGfxClassBox::hasAncestor(CGfxClassBox *abox)
+{
+  if(this == abox)
+    return(true);
+  else
+    return((m_parent != NULL) ? m_parent->hasAncestor(abox) : false);
+}
+
+
 /*--------------------------------------------- CGfxClassBox::GetY()
 * GetYDepth()
 *  Get Y top position
@@ -368,6 +382,33 @@ void CGfxClassBox::paintEvent(QPaintEvent *)
 }
 
 
+/*---------------------------------- CGfxClassBox::mousePressEvent()
+* mousePressEvent()
+*  Implementation of mousePressEvent
+* Parameters: 
+*  mouseevent   Mouse event info
+*
+*
+* Returns: 
+*  -
+*
+*-----------------------------------------------------------------*/  
+void CGfxClassBox::mousePressEvent ( QMouseEvent *mouseevent ) 
+{
+  QPopupMenu mnu(NULL);
+
+  if(mouseevent->button() != RightButton)
+    return;
+
+  mnu.insertItem(i18n("Go to definition"),this,SLOT(slotGotoDefinition()),0,0);
+  mnu.setItemEnabled(0,(m_class != NULL));
+  mnu.insertItem(i18n("Print subtree"),this,SLOT(slotPrintSubTree()),0,1);
+  mnu.exec(QCursor::pos());
+
+}
+
+
+
 
 /*-------------------------------------- CGfxClassBox::PosRefresh()
 * PosRefresh()
@@ -414,3 +455,39 @@ void CGfxClassBox::btnClicked()
   emit stateChange(this);
 }
 
+
+
+
+
+/*------------------------------ CGfxClassBox::slotGotoDefinition()
+* slotGotoDefinition()
+*  Called when user selects "Goto definition" on right-click menu
+*
+* Parameters:
+*  -
+*
+* Returns:
+*  -
+*-----------------------------------------------------------------*/    
+void CGfxClassBox::slotGotoDefinition()
+{
+  debug("emitting gotoClassDefinition");
+  emit gotoClassDefinition(m_class);
+}  
+
+
+
+/*--------------------------------- CGfxClassBox::slotPrintSubTree()
+* slotPrintSubTree()
+*  Called when user selects "Print subtree" on right-click menu
+*
+* Parameters:
+*  -
+*
+* Returns:
+*  -
+*-----------------------------------------------------------------*/    
+void CGfxClassBox::slotPrintSubTree()
+{
+  emit PrintSubTree(this);
+}

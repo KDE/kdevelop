@@ -18,6 +18,7 @@
 #include <qwidget.h>
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
+#include <qprintdialog.h>
 #include "GfxClassTree.h"
 #include <stdio.h>
 
@@ -99,6 +100,48 @@ CGfxClassBox *CGfxClassTree::GetBoxId(int boxid)
   return(box);
 }
 
+
+
+ 
+
+/*------------------------------------- CGfxClassTree::getSubtree()
+* getSubtree()
+*   Get class subtree nodes in a list
+*
+* Parameters:
+*
+*
+*
+* Returns:
+*
+*
+*
+*-----------------------------------------------------------------*/
+QList<CGfxClassBox> *CGfxClassTree::getSubtree(CGfxClassBox *abox)
+{
+  CGfxClassBox *box = m_boxlist.first();
+  QList<CGfxClassBox> *tmplist;
+
+  if((box == NULL) || (abox == NULL))
+    return(NULL);
+
+  tmplist = new QList<CGfxClassBox>();
+
+  while(box != NULL)
+  {
+    if(box->hasAncestor(abox))
+    {
+      tmplist->append(box);
+      // debug("Adding \"%s\" to tmplist",(char *)box->m_name);
+    }
+    box = m_boxlist.next();
+  }
+
+  return(tmplist);
+}
+
+
+
  
 /*-------------------------------------- CGfxClassTree::InsertBox()
 * InsertBox()
@@ -129,7 +172,12 @@ void CGfxClassTree::InsertBox(CGfxClassBox *abox,
 
   connect(abox,SIGNAL(stateChange(CGfxClassBox *)),
 	  this,SLOT(stateChange(CGfxClassBox *)));
-  connect(this,SIGNAL(PosRefresh(int)),abox,SLOT(PosRefresh(int)));
+
+  connect(this,SIGNAL(PosRefresh(int)),
+	  abox,SLOT(PosRefresh(int)));
+
+  connect(abox,SIGNAL(PrintSubTree(CGfxClassBox *)),
+	  this,SLOT(slotPrintSubTree(CGfxClassBox *)));
 
   m_boxlist.append(abox);
   abox->PosRefresh(0);
@@ -295,37 +343,51 @@ void CGfxClassTree::SetUnfoldAll(bool unfolded)
 *
 * Parameters:
 *   pr        An initialized QPrinter object
-*
+*   boxlist   A list of boxes to print
 *
 * Returns:
 *   -
 *-----------------------------------------------------------------*/  
-void CGfxClassTree::onPrintTree( QPrinter *pr )
+void CGfxClassTree::onPrintTree( QPrinter *pr , QList<CGfxClassBox> *boxlist )
 {
   QPainter p;
-  CGfxClassBox *node = m_boxlist.first();
+  CGfxClassBox *node = boxlist->first();
   QPaintDeviceMetrics pdm(pr);
-  int yoffs = 0;
+  int yoffs;
+  int xoffs;
+
+  // If the list is empty then return
+  if(node == NULL)
+    return;
+
+  // Initial x and y-offset
+  yoffs = node->y() - PRINTTREE_YOFFSET;
+  xoffs = node->x();
 
   p.begin(pr);
   p.setPen(QColor(0x00,0x00,0x00));
 
   while(node != NULL)
   {
-    if(node->y() + node->height() >= pdm.height() + yoffs)
+    if(node->y() + node->height() >= pdm.height() + yoffs - PRINTTREE_YOFFSET)
     {
-      yoffs = node->y();
+      yoffs = node->y() - PRINTTREE_YOFFSET;
       pr->newPage();
     }
 
     if(node->isVisible())
     {
       // Draw the box
-      p.drawRect(node->x(),
+      if(node->m_class != NULL)
+	p.setBrush(QBrush(PRINT_CLASSBOXCOL_INSYSTEM,SolidPattern));
+      else
+	p.setBrush(QBrush(PRINT_CLASSBOXCOL_NOTINSYSTEM,SolidPattern));
+	
+      p.drawRect(node->x() - xoffs,
 		 node->y() - yoffs,
 		 node->width(),
 		 node->height());
-      p.drawText(node->x(),
+      p.drawText(node->x() - xoffs,
 		 node->y() - yoffs,
 		 node->width(),
 		 node->height(),
@@ -334,24 +396,24 @@ void CGfxClassTree::onPrintTree( QPrinter *pr )
       // Draw the connection
       if(node->m_parent != NULL) 
       {     
-	p.moveTo(node->x() + CONN_CHILD_DELTA_STARTX,
+	p.moveTo(node->x() + CONN_CHILD_DELTA_STARTX - xoffs,
 		 node->y() + CONN_CHILD_DELTA_STARTY - yoffs);
 	
-	p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX,
+	p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX - xoffs,
 		 node->y() + CONN_CHILD_DELTA_STOPY - yoffs);
 	
 	// If abox has a sibling, draw up to sibling
 	if(node->m_sibling != NULL)
-	  p.lineTo(node->m_sibling->x() + CONN_CHILD_DELTA_STOPX,
+	  p.lineTo(node->m_sibling->x() + CONN_CHILD_DELTA_STOPX - xoffs,
 		   node->m_sibling->y() + CONN_CHILD_DELTA_STOPY - yoffs);
 	
 	// Else draw up to parent 
 	else
-	  p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX,
+	  p.lineTo(node->x() + CONN_CHILD_DELTA_STOPX - xoffs,
 		   node->m_parent->y() + CLASSBOXHEIGHT - yoffs);
       }
     }
-    node = m_boxlist.next();
+    node = boxlist->next();
   }      
 
   p.end();
@@ -468,4 +530,32 @@ void CGfxClassTree::drawConnection(CGfxClassBox *abox)
 	     abox->m_parent->y() + CLASSBOXHEIGHT);
 
   p.end();
+}
+
+
+
+
+/*------------------------------- CGfxClassTree::slotPrintSubTree()
+* slotPrintSubTree()
+*   Called from a CGfxClassBox to print its subtree
+*   (right-click menu on a class box)
+*
+* Parameters: 
+*   abox       Root node of a class subtree
+*
+*
+* Returns: 
+*   -
+*-----------------------------------------------------------------*/          
+void CGfxClassTree::slotPrintSubTree(CGfxClassBox *abox)
+{
+  QPrinter pr;
+  QList<CGfxClassBox> *tmplist;
+  
+  tmplist = getSubtree(abox);
+
+  if(QPrintDialog::getPrinterSetup( &pr ))
+    onPrintTree( &pr, tmplist );
+
+  delete tmplist;
 }

@@ -27,8 +27,10 @@
 #include "../classparser/ParsedClass.h"
 
 // Colour of boxes
-#define CLASSBOXCOL_INSYSTEM    QColor(0xd0,0xff,0xd0)
-#define CLASSBOXCOL_NOTINSYSTEM QColor(0xd0,0xd0,0xff)
+#define CLASSBOXCOL_INSYSTEM          QColor(0xd0,0xff,0xd0)
+#define CLASSBOXCOL_NOTINSYSTEM       QColor(0xd0,0xd0,0xff)
+#define PRINT_CLASSBOXCOL_INSYSTEM    QColor(0xff,0xff,0xff)
+#define PRINT_CLASSBOXCOL_NOTINSYSTEM QColor(0xd0,0xd0,0xd0)
 
 // Size of boxes
 // #define CLASSBOXWIDTH 100
@@ -43,6 +45,7 @@
 #define CONN_CHILD_DELTA_STARTY 10
 #define CONN_CHILD_DELTA_STOPX  -10
 #define CONN_CHILD_DELTA_STOPY  10
+
 
 class CGfxClassBox;
 class CGfxClassBox : public QWidget
@@ -102,6 +105,9 @@ class CGfxClassBox : public QWidget
   /** Returns TRUE if baseclass CGfxClassBox (m_parent) is unfolded */
   bool IsVisible();
 
+  /** Return TRUE if this is an ancestor to abox */
+  bool hasAncestor(CGfxClassBox *abox);
+
   /** Get Y top position */
   int GetY();
 
@@ -115,18 +121,26 @@ class CGfxClassBox : public QWidget
   int GetXDepth();
 
  protected:
+  /** Implementation of paintEvent */
   void paintEvent( QPaintEvent * );
 
+  /** Implementation of mousePressEvent */
+  void mousePressEvent ( QMouseEvent *mouseevent ); 
 
   /* ============================================================== */
 
  signals:
   void stateChange(CGfxClassBox *);
   void drawConnection(CGfxClassBox *);
+  void gotoClassDefinition(CParsedClass *);
+  void PrintSubTree(CGfxClassBox *);
 
  public slots:
   void PosRefresh(int boxid); 
   void btnClicked();
+  void slotGotoDefinition();
+  void slotPrintSubTree();
+
   
 };
 

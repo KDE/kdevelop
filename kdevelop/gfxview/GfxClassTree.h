@@ -18,6 +18,8 @@
 #ifndef GFXCLASSTREE_H_INCLUDED
 #define GFXCLASSTREE_H_INCLUDED
 
+#define PRINTTREE_YOFFSET 15
+
 #include <qwidget.h>
 #include <qprinter.h>
 #include "GfxClassBox.h"
@@ -54,6 +56,9 @@ class CGfxClassTree : public QWidget
   /** Get CGfxClassBox object on box id */
   CGfxClassBox *GetBoxId(int boxid);
 
+  /** Get class subtree nodes in a list */
+  QList<CGfxClassBox> *getSubtree(CGfxClassBox *abox);
+
   /** Insert a class tree */
   CGfxClassBox *InsertClassTree(CGfxClassBox *baseclassbox,
 				CGfxClassBox *sibclassbox,
@@ -73,7 +78,7 @@ class CGfxClassTree : public QWidget
   void SetUnfoldAll(bool unfolded);
 
   /** Print class tree */
-  void onPrintTree( QPrinter *pr );
+  void onPrintTree( QPrinter *pr, QList<CGfxClassBox> *boxlist );
 
   /** Implementation of resizeEvent() */
   virtual void resizeEvent(QResizeEvent *);
@@ -87,6 +92,7 @@ class CGfxClassTree : public QWidget
  public slots:
   void stateChange(CGfxClassBox *abox);
   void drawConnection(CGfxClassBox *abox);
+  void slotPrintSubTree(CGfxClassBox *abox);
 };
 
 

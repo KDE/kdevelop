@@ -230,7 +230,8 @@ void CGfxClassTreeWindow::itemSelected(int index)
 void CGfxClassTreeWindow::printClicked()
 {
   QPrinter pr;
+  QList<CGfxClassBox> *tmp = &m_treescrollview->m_classtree->m_boxlist;
 
   if(QPrintDialog::getPrinterSetup( &pr ))
-    m_treescrollview->m_classtree->onPrintTree( &pr );
+    m_treescrollview->m_classtree->onPrintTree( &pr, tmp );
 }
