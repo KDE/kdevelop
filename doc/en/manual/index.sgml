@@ -3014,7 +3014,7 @@ KDevelops documentation browser.
 <p>
 If you want to create a new dialog, simply add a new Designer file.  Go to the menubar and choose File -> New. From the box choose "Qt Designer file"
 and enter a name, for example ktestdlg.ui. The .ui file is where the Designer stores the information about the dialog. Now the Designer will come
-up and ask you which kind of template you want to use for your class. Let's collose "QDialog" for our example. Now the Designer will present an
+up and ask you which kind of template you want to use for your class. Let's choose "QDialog" for our example. Now the Designer will present an
 empty form called "Form1" and the <idx/Property Editor/. First, we need to give a human-readable name to our dialog, so we click on the form's
 background and choose a suitable name for it by changing the "name" property from "Form1" to something suitable. For consistancy reasons
 you might want to call the class just like the file it is stored in (or vice versa), so we call it KTestDlg.
