@@ -30,7 +30,7 @@ MakeActionFilter::ActionFormat::ActionFormat( const QString& _action, const QStr
 MakeActionFilter::MakeActionFilter( OutputFilter& next )
 	: OutputFilter( next )
 {
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 	test();
