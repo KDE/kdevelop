@@ -298,3 +298,4 @@ void TargetOptionsDialog::accept()
 }
 
 #include "targetoptionsdlg.moc"
+// kate: indent-mode csands; space-indent on; indent-width 4; replace-tabs on;

@@ -90,8 +90,8 @@ void MakefileHandler::parse( const QString& folder, bool recursive )
 					kdDebug(9020) << k_funcinfo << "found SUBDIRS assignment '"
 							<< assignment->scopedID << "'" << endl;
 					kdDebug(9020) << k_funcinfo << "subdirs is " << assignment->values << endl;
-					QStringListIterator vit = assignment->values().begin();
-					for ( ; ( *vit ); ++vit )
+					QStringList::iterator vit = assignment->values.begin();
+					for ( ; vit != assignment->values.end(); ++vit )
 					{
 					    parse( folder + '/' + ( *vit ), recursive );
 					}
