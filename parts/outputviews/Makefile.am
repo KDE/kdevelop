@@ -2,7 +2,6 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	   -I$(top_srcdir)/lib/util \
-           $(QT3STUFFINCLUDES) \
 	   $(all_includes) 
 
 kde_module_LTLIBRARIES = libkdevoutputviews.la
