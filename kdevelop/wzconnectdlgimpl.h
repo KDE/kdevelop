@@ -76,7 +76,7 @@ public:
   /**  */
   void setSigTabAttrList ( QValueList<ParsedAttribute*> AttrList );
   /**  */
-  void setClass ( ParsedClass* aClass );;
+  void setClass ( ParsedClass* aClass );
   void setStore ( ClassStore* s) { store = s; }
   void init();
   /** This function tries guess if aName is a QT or a KDE class then set filename of the include file according to the classname.
