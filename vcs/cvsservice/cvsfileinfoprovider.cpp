@@ -31,8 +31,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 CVSFileInfoProvider::CVSFileInfoProvider( CvsServicePart *parent, CvsService_stub *cvsService )
-    : KDevVCSFileInfoProvider( parent ), m_requestStatusJob( 0 ), m_cvsService( cvsService ),
-    m_cachedDirEntries( 0 )
+    : KDevVCSFileInfoProvider( parent, "cvsfileinfoprovider" ),
+    m_requestStatusJob( 0 ), m_cvsService( cvsService ), m_cachedDirEntries( 0 )
 {
 }
 

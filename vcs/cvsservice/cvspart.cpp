@@ -356,9 +356,9 @@ bool CvsServicePart::urlFocusedDocument( KURL &url )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool CvsServicePart::isValidDirectory( const QDir &dir ) const
+bool CvsServicePart::isValidDirectory( const QString &dirPath ) const
 {
-    return m_impl->isValidDirectory( dir );
+    return m_impl->isValidDirectory( dirPath );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -652,8 +652,7 @@ void CvsServicePart::slotProjectOpened()
     kdDebug(9006) << "CvsServicePart::slotProjectOpened() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
-    CVSDir cvsdir( project()->projectDirectory() );
-    if (!cvsdir.isValid())
+    if (!isValidDirectory( project()->projectDirectory() ))
     {
         kdDebug(9006) << "Project has no CVS Support: too bad!! :-(" << endl;
         return;
@@ -681,8 +680,9 @@ void CvsServicePart::slotProjectClosed()
     kdDebug(9006) << "CvsServicePart::slotProjectClosed() here!" << endl;
 
     // Avoid bothering the user if this project has no support for CVS
-    CVSDir cvsdir( project()->projectDirectory() );
-    if (!cvsdir.isValid())
+//    CVSDir cvsdir( project()->projectDirectory() );
+//    if (!cvsdir.isValid())
+    if (!isValidDirectory( project()->projectDirectory() ))
     {
         kdDebug(9006) << "Project had no CVS Support: too bad!! :-(" << endl;
         return;

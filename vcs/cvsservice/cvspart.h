@@ -60,12 +60,15 @@ public:
     * Fetch a module from remote repository, so it can be used for importing
     */
     virtual void fetchFromRepository();
-
+    /**
+    * @return the info provider for VCS sandboxes
+    */
     virtual KDevVCSFileInfoProvider *fileInfoProvider() const;
     /**
-    * Check if the directory is a valid CVS directory.
+    * @param dirPath absolute path of the directory
+    * @return true if the the directory is a valid CVS sandbox
     */
-    virtual bool isValidDirectory( const QDir &dir ) const;
+    virtual bool isValidDirectory( const QString &dirPath ) const;
 
 private slots:
     /** Add menu items binded to cvs operations' slots to @p popup, using

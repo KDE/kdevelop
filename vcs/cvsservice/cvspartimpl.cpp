@@ -100,7 +100,7 @@ CvsServicePartImpl::~CvsServicePartImpl()
         delete m_widget;
     }
     delete m_scheduler;
-    delete m_fileInfoProvider;
+    //delete m_fileInfoProvider;
     releaseCvsService();
 }
 
