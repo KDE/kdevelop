@@ -182,7 +182,8 @@ void CClassView::refresh( CProject *proj )
   QStrList src;
   QStrList header;
   char *str;
-  int i;
+  int totalCount=0;
+  int currentCount = 0;
 
   debug( "CClassView::refresh( proj )" );
 
@@ -192,36 +193,30 @@ void CClassView::refresh( CProject *proj )
   ((CClassTreeHandler *)treeH)->clear();
   cp.wipeout();
 
-  // Parse headerfiles.
+  // Get all header and src filenames.
   header = proj->getHeaders();
+  src = proj->getSources();
 
+  // Initialize progressbar.
+  totalCount = header.count() + src.count();
   emit resetStatusbarProgress();
   emit setStatusbarProgress( 0 );
-  emit setStatusbarProgressSteps(header.count());
+  emit setStatusbarProgressSteps( totalCount );
 
-  i=0;
+  // Parse headerfiles.
   for( str = header.first(); str != NULL; str = header.next() )
   {
     debug( "  parsing:[%s]", str );
     cp.parse( str );
-    i++;
-    emit setStatusbarProgress( i );
+    emit setStatusbarProgress( ++currentCount );
   }
 	
   // Parse sourcefiles.
-  src = proj->getSources();
-
-  emit resetStatusbarProgress();
-  emit setStatusbarProgress( 0 );
-  emit setStatusbarProgressSteps(src.count());
-
-  i=0;
   for( str = src.first(); str != NULL; str = src.next() )
   {
     debug( "  parsing:[%s]", str );
     cp.parse( str );
-    i++;
-    emit setStatusbarProgress( i );
+    emit setStatusbarProgress( ++currentCount );
   }
 
   refresh();
