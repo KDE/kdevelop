@@ -22,3 +22,5 @@ kdevassistant_SOURCES = api.cpp core.cpp debugger.cpp documentationpart.cpp edit
 kdevassistant_LDADD = $(top_builddir)/lib/widgets/libwidgets.la $(top_builddir)/lib/libkdevelop.la -lktexteditor $(LIB_KHTML) $(LIB_KDEVMDI) $(LIB_KPARTS) $(LIB_KDEUI)
 rc_assistantdir = $(kde_datadir)/kdevassistant
 rc_assistant_DATA =  kdevassistantui.rc
+
+KDE_OPTIONS=nofinal
