@@ -1025,6 +1025,15 @@ void CKAppWizard::slotOkClicked() {
 		p << direct;
 		p.start(KProcess::Block,KProcess::AllOutput);	
   }
+
+  if (!QFileInfo(direct).isWritable())
+  {
+    QMessageBox::information ( this, direct + (QString) i18n(" isn't writable!"), i18n("Either the desired directory cannot be created or\n"
+                    "you haven't enough rights to use it.\n"
+                    "It isn't possible to generate a new project into this directory."), QMessageBox::Ok);
+      return;
+  }
+
   // Error if project directory already exists
   dir.setPath(directoryline->text());
   if (dir.exists()) {
@@ -1207,14 +1216,21 @@ void CKAppWizard::generateEntries(const QString &filename) {
     entries << "yes\n";
   else entries << "no\n";
   entries << "PROGICON\n";
-  if (progicon->isChecked()) {
+
+  if (name1.isNull())
+    name1 = "";
+  if (progicon->isChecked())
     entries << name1 << "\n";
-  }
-  else entries << "no\n";
+  else
+    entries << "no\n";
+
   entries << "MINIICON\n";
+  if (name2.isNull())
+    name2 = "";
   if (miniicon->isChecked())
     entries << name2 << "\n";
-  else entries << "no\n";
+  else
+    entries << "no\n";
   entries << "KDELNK\n";
   if (datalink->isChecked())
     entries << "yes\n";
@@ -1509,6 +1525,36 @@ void CKAppWizard::slotAppEnd() {
   delete (locationbutton);
   delete (qtarch_ButtonGroup_1);
   reject();
+}
+
+void CKAppWizard::removeSources(const QString &dir)
+{
+  QString extension= (citem->isSelected()) ? "c" : "cpp";
+  nametext = nameline->text();
+  nametext = nametext.lower();
+  QFile file;
+  file.remove (dir + "/" + nametext + "/main."+extension);
+  if (!citem->isSelected() && !cppitem->isSelected())
+  {
+    file.remove (dir + "/" + nametext + "/" + nametext + ".cpp");
+    file.remove (dir + "/" + nametext + "/" + nametext + ".h");
+  }
+  if (kdenormalitem->isSelected()|| kdenormaloglitem->isSelected() ||
+  	kde2normalitem->isSelected()|| kde2mdiitem->isSelected() ||
+    	qtnormalitem->isSelected()|| qt2normalitem->isSelected()||
+      qt2mdiitem->isSelected() || qextmdiitem->isSelected())
+  {
+    file.remove (dir + "/" + nametext + "/" + nametext + "doc.cpp");
+    file.remove (dir + "/" + nametext + "/" + nametext + "doc.h");
+    file.remove (dir + "/" + nametext + "/" + nametext + "view.cpp");
+    file.remove (dir + "/" + nametext + "/" + nametext + "view.h");
+    file.remove (dir + "/" + nametext + "/resource.h");
+  }
+  if( qextmdiitem->isSelected())
+  {
+    file.remove (dir + "/" + nametext + "/tabprocessingeditwidget.cpp");
+    file.remove (dir + "/" + nametext + "/tabprocessingeditwidget.h");
+  }
 }
 
 // connection of this (okButton)
@@ -2039,7 +2085,7 @@ void CKAppWizard::slotIconButtonClicked() {
   iconlist.append (KApplication::localkdedir()+"/share/icons");
   iload.setDir(&iconlist);
   iload.selectIcon(name1,"*");
-  if (!name1.isNull() )   
+  if (!name1.isEmpty() )
     iconload->setPixmap(kapp->getIconLoader()->loadIcon(name1));
 }
 
@@ -2051,7 +2097,7 @@ void CKAppWizard::slotMiniIconButtonClicked() {
   miniiconlist.append (KApplication::localkdedir()+"/share/icons/mini");
   mload.setDir(&miniiconlist);
   mload.selectIcon(name2,"*");
-  if (!name2.isNull() )     
+  if (!name2.isEmpty() )
     miniload->setPixmap(kapp->getIconLoader()->loadMiniIcon(name2));
 }
 
@@ -2106,7 +2152,8 @@ void CKAppWizard::slotCppHeaderClicked() {
 void CKAppWizard::slotProcessExited() {
 
   QString directory = directoryline->text();
-  QString prj_str;
+  QString prj_str, prj_dir;
+
 
   // PLEASE
   /*
@@ -2116,14 +2163,24 @@ void CKAppWizard::slotProcessExited() {
 		because this removes "entries.XXXXXX", which is a temporary file
   */
   if (vsBox->currentItem() != 0) {
-    prj_str = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp/" + namelow + ".kdevprj";
+    prj_dir = QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp/";
+    prj_str = prj_dir + namelow + ".kdevprj";
   }
   else {
-    prj_str = directory + "/" + namelow + ".kdevprj";
+    prj_dir = directory + "/";
+    prj_str = prj_dir + namelow + ".kdevprj";
   }
   project = new CProject(prj_str);
   project->readProject();
-  project->setKDevPrjVersion("1.1 beta1");
+  project->setKDevPrjVersion("1.2");
+
+  // Remove sources now... if desired
+  if (!generatesource->isChecked())
+  {
+    removeSources(prj_dir);
+  }
+
+
   if (cppitem->isSelected()) {
     project->setProjectType("normal_cpp");
   } 
@@ -2596,50 +2653,65 @@ void CKAppWizard::slotProcessExited() {
   if ((kdenormalitem->isSelected()  || kdenormaloglitem->isSelected() || kdeminiitem->isSelected())
       && CToolClass::searchInstProgram("ksgml2html"))
   {
-    KShellProcess process;
+    KShellProcess cp_process;
     QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
-    process.clearArguments();
-    process << "cp"; // copy is your friend :-)
-    process << nif_template;
-    process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
-    process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
+    cp_process.clearArguments();
+    cp_process << "cp"; // copy is your friend :-)
+    cp_process << nif_template;
+    cp_process << prj_dir +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
+    cp_process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
   }
   
   KShellProcess p;
   QDir dir;
-	if (vsBox->currentItem() == 1) {
-	  dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
-	  QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
-	    (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
-	    (QString) " " + releaseline->text();
-	  p << import;
-	  p.start(KProcess::Block, KProcess::AllOutput);
-	}
+  if (vsBox->currentItem() == 1)
+  {
+   dir.setCurrent(QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp");
 
-	if (vsBox->currentItem() != 0) {
-		dir.setCurrent(QDir::homeDirPath());
-		QString deltemp = "rm -r -f " + QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
-		p.clearArguments();
- 	 	p << deltemp;
-    p.start(KProcess::Block, KProcess::AllOutput);
+   QString import = (QString) "cvs -d " + vsLocation->text() + (QString) " import -m \"" + messageline->text() +
+       (QString) "\" " + projectlocationline->text() + (QString) " " + vendorline->text() +
+       (QString) " " + releaseline->text();
+   p << import;
+   p.start(KProcess::Block, KProcess::AllOutput);
+   }
 
-		QString direct = directoryline->text();
-  	if (direct.right(1) == "/") {
-			direct = direct.left(direct.length() - 1);
-  	}
-		int pos;
-		pos = direct.findRev ("/");
-		direct = direct.left (pos);
-  	if(direct.right(1) != "/"){
-    	direct = direct + "/";
-  	}
 
-  	dir.setCurrent(direct);
-  	QString checkout = "cvs -d " + (QString) vsLocation->text() + " co " + (QString) projectlocationline->text();
-		p.clearArguments();
- 	 	p << checkout;
-    p.start(KProcess::Block, KProcess::AllOutput);
-  }
+   if (vsBox->currentItem() != 0)
+   {
+          // clear projectfile before removing temp project generation
+          project->writeProject();
+          delete project;
+
+          dir.setCurrent(QDir::homeDirPath());
+          QString deltemp = "rm -r -f " + QDir::homeDirPath() + "/.kde/share/apps/kdevelop/kdeveloptemp";
+          p.clearArguments();
+          p << deltemp;
+          p.start(KProcess::Block, KProcess::AllOutput);
+
+	  QString direct = directoryline->text();
+          if (direct.right(1) == "/")
+          {
+            direct = direct.left(direct.length() - 1);
+  	  }
+
+          int pos;
+          pos = direct.findRev ("/");
+          direct = direct.left (pos);
+          if(direct.right(1) != "/")
+          {
+    	    direct = direct + "/";
+          }
+
+          dir.setCurrent(direct);
+          QString checkout = "cvs -d " + (QString) vsLocation->text() + " co " + (QString) projectlocationline->text();
+          p.clearArguments();
+          p << checkout;
+          p.start(KProcess::Block, KProcess::AllOutput);
+
+        // reset now projectfile to actual directory
+        project=new CProject(QString(projectlocationline->text()) + "/" + namelow + ".kdevprj");
+        project->readProject();
+    }
 
   QString path1 = kapp->kde_datadir()+"/kdevelop/tools/";
   q->clearArguments();
@@ -2653,35 +2725,11 @@ void CKAppWizard::slotProcessExited() {
 
 // enable cancelbutton if everything is done
 void CKAppWizard::slotMakeEnd() {
-  QString extension= (citem->isSelected()) ? "c" : "cpp";
   nametext = nameline->text();
   nametext = nametext.lower();
   directorytext = directoryline->text();
-  if (!generatesource->isChecked()) {
-    QFile file;
-    q->clearArguments();
-    file.remove (directorytext + "/" + nametext + "/main."+extension);
-    if (!citem->isSelected() && !cppitem->isSelected())
-    {
-      file.remove (directorytext + "/" + nametext + "/" + nametext + ".cpp");
-      file.remove (directorytext + "/" + nametext + "/" + nametext + ".h");
-    }
-    if (kdenormalitem->isSelected()|| kdenormaloglitem->isSelected() ||
-    	kde2normalitem->isSelected()|| kde2mdiitem->isSelected() ||
-    	qtnormalitem->isSelected()|| qt2normalitem->isSelected()||
-      qt2mdiitem->isSelected() || qextmdiitem->isSelected())
-    {
-      file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.cpp");
-      file.remove (directorytext + "/" + nametext + "/" + nametext + "doc.h");
-      file.remove (directorytext + "/" + nametext + "/" + nametext + "view.cpp");
-      file.remove (directorytext + "/" + nametext + "/" + nametext + "view.h");
-    }
-    if( qextmdiitem->isSelected()) 
-    {
-      file.remove (directorytext + "/" + nametext + "/" + "tabprocessingeditwidget.cpp");
-      file.remove (directorytext + "/" + nametext + "/" + "tabprocessingeditwidget.h");
-    }
-  }
+
+  QString cvscommand="cd "+ directorytext + "/" + nametext + "/docs/en && ";
   TFileInfo fileInfo;
   QFileInfo gif (directorytext + "/" + nametext + "/docs/en/logotp3.gif");
   if (gif.exists()) {
@@ -2691,6 +2739,7 @@ void CKAppWizard::slotMakeEnd() {
     fileInfo.install = true;
   	fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.gif";
     project->addFileToProject (nametext + "/docs/en/logotp3.gif",fileInfo);
+    cvscommand += "cvs add logotp3.gif && ";
   }
   QFileInfo png (directorytext + "/" + nametext + "/docs/en/logotp3.png");
   if (png.exists()) {
@@ -2700,9 +2749,20 @@ void CKAppWizard::slotMakeEnd() {
     fileInfo.install = true;
   	fileInfo.install_location = "$(kde_htmldir)/en/"+ nametext+ "/logotp3.png";
     project->addFileToProject (nametext + "/docs/en/logotp3.png",fileInfo);
+    cvscommand += "cvs add logotp3.png && ";
   }
   project->writeProject ();
   project->updateMakefilesAm ();
+
+  if (vsBox->currentItem() == 1 && !cvscommand.isEmpty())
+  {
+   KShellProcess p;
+   cvscommand += (QString) "cvs com -m \"" + messageline->text() +
+        "\" .";
+   p.clearArguments();
+   p << cvscommand;
+   p.start(KProcess::Block, KProcess::AllOutput);
+  }
 
   cancelButton->setEnabled(true);
   gen_prj = true;
@@ -2747,33 +2807,35 @@ void CKAppWizard::slotLocationButtonClicked() {
 
 
 void CKAppWizard::slotVSBoxChanged(int item) {
-  if (item == 0) {
-  	messageline->setEnabled(false);
-  	logMessage->setEnabled(false);
-  	vendorline->setEnabled(false);
-  	vendorTag->setEnabled(false);
-  	releaseline->setEnabled(false);
-  	releaseTag->setEnabled(false);
-  	vsInstall->setEnabled(false);
-  	projectVSLocation->setEnabled(false);
-  	vsLocation->setEnabled(false);
-  	locationbutton->setEnabled(false);
-  	qtarch_ButtonGroup_1->setEnabled(false);
+  if (item == 0)
+  {
+    messageline->setEnabled(false);
+    logMessage->setEnabled(false);
+    vendorline->setEnabled(false);
+    vendorTag->setEnabled(false);
+    releaseline->setEnabled(false);
+    releaseTag->setEnabled(false);
+    vsInstall->setEnabled(false);
+    projectVSLocation->setEnabled(false);
+    vsLocation->setEnabled(false);
+    locationbutton->setEnabled(false);
+    qtarch_ButtonGroup_1->setEnabled(false);
 
   }
-	else {
-	  messageline->setEnabled(true);
-  	logMessage->setEnabled(true);
-  	vendorline->setEnabled(true);
-  	vendorTag->setEnabled(true);
-  	releaseline->setEnabled(true);
-  	releaseTag->setEnabled(true);
-  	vsInstall->setEnabled(true);
-  	projectVSLocation->setEnabled(true);
-  	vsLocation->setEnabled(true);
-  	locationbutton->setEnabled(true);
-  	qtarch_ButtonGroup_1->setEnabled(true);
-	}
+  else
+  {
+    messageline->setEnabled(true);
+    logMessage->setEnabled(true);
+    vendorline->setEnabled(true);
+    vendorTag->setEnabled(true);
+    releaseline->setEnabled(true);
+    releaseTag->setEnabled(true);
+    vsInstall->setEnabled(true);
+    projectVSLocation->setEnabled(true);
+    vsLocation->setEnabled(true);
+    locationbutton->setEnabled(true);
+    qtarch_ButtonGroup_1->setEnabled(true);
+  }
 }
 
 void CKAppWizard::slotVendorEntry() {
