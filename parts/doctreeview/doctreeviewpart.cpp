@@ -202,7 +202,7 @@ void DocTreeViewPart::slotManpage()
     bool ok;
     QString manpage = KLineEditDlg::getText(i18n("Show manpage on:"), "", &ok, 0);
     if (ok && !manpage.isEmpty()) {
-        QString url = QString::fromLatin1("man:/%1(3)").arg(manpage);
+        QString url = QString::fromLatin1("man:/%1").arg(manpage);
         partController()->showDocument(KURL(url));
     }
 }
@@ -216,7 +216,7 @@ void DocTreeViewPart::slotRaiseWidget()
 
 void DocTreeViewPart::slotContextGotoManpage()
 {
-    QString url = QString::fromLatin1("man:/%1(3)").arg(m_popupstr);
+    QString url = QString::fromLatin1("man:/%1").arg(m_popupstr);
     partController()->showDocument(KURL(url));
 }
 
