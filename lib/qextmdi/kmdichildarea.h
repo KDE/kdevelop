@@ -31,6 +31,8 @@
 #include <qframe.h>
 #include <qptrlist.h>
 
+#include <kdemacros.h>
+
 #include "kmdichildfrm.h"
 #include "kmdichildview.h"
 
@@ -49,7 +51,7 @@ class KMdiChildAreaPrivate;
   * and manages the frame widgets of attached MDI views.
   * All actions and stuff concerning only to childframes are handled here.
   */
-class KMdiChildArea : public QFrame
+class KMDI_EXPORT KMdiChildArea : public QFrame
 {
   friend class KMdiChildFrmCaption;
   friend class KMdiChildFrm;
@@ -160,15 +162,17 @@ class KMdiChildArea : public QFrame
      * Sets the background color of inactive MDI childframe window captions (no relayout)
      */
      void setMdiCaptionInactiveBackColor(const QColor &clr);
-
      /**
      * Gets all caption colors, consistent with current WM settings 
      * (or other Desktop settings e.g. system settings for win32).
      * This method is useful not only for KMDI child windows.
      * Colors are returned via activeBG, activeFG, inactiveBG, inactiveFG references.
+     * 
+     * @deprecated Use KGlobalSettings::activeTitleColor(), KGlobalSettings::activeTextColor(),
+     * KGlobalSettings::inactiveTitleColor() and KGlobalSettings::inactiveTextColor() instead.
      */
      static void getCaptionColors( const QPalette &pal, 
-         QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG );
+         QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG ) KDE_DEPRECATED;
 
   public slots:
      /**

@@ -27,6 +27,7 @@
 #include "kmdimainfrm.h"
 
 #include "kmditoolviewaccessor.h"
+#include "kmditoolviewaccessor_p.h"
 
 KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widgetToWrap, const QString& tabToolTip, const QString& tabCaption)
 : QObject(parent) 
@@ -61,7 +62,7 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widget
 	//mdiMainFrm->m_pToolViews->insert(d->widget,this);
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
-//	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
 
 	d->widget->installEventFilter(this);
 }
@@ -135,13 +136,13 @@ void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString&
 	mdiMainFrm->m_pToolViews->insert(widgetToWrap,this);
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
-//	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
+	else kdDebug(760)<<"mdiMainFrm->m_mdiGUIClient == 0 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"<<endl;
 
 	d->widget->installEventFilter(this);
 }
 
 
-bool KMdiToolViewAccessor::eventFilter(QObject *o, QEvent *e) {
+bool KMdiToolViewAccessor::eventFilter(QObject *, QEvent *e) {
 	if (e->type()==QEvent::IconChange) {
 		d->widgetContainer->setPixmap(d->widget->icon()?(*d->widget->icon()):QPixmap());
 	}

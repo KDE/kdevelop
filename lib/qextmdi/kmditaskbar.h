@@ -126,7 +126,7 @@ class KMdiTaskBarPrivate;
  * KMdiTaskBarButtons can be added or removed dynamically.<br>
  * The button sizes are adjusted dynamically, as well.
  */
-class KMdiTaskBar : public KToolBar
+class KMDI_EXPORT KMdiTaskBar : public KToolBar
 {
    Q_OBJECT
 public:

@@ -49,7 +49,9 @@ private:
         enum  KMultiTabBar::KMultiTabBarStyle m_style;
 	int m_expandedTabSize;
 	int m_lines;
+	KMultiTabBar::KMultiTabBarMode m_barMode;
 protected:
+	virtual bool eventFilter(QObject *,QEvent*);
         virtual void drawContents ( QPainter *, int, int, int, int);
 
         /**

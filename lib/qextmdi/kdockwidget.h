@@ -57,13 +57,14 @@
 #ifndef NO_KDE2
 #include <kmainwindow.h>
 #include <netwm_def.h>
-#undef  EXPORT_DOCKCLASS
-#define EXPORT_DOCKCLASS
 #else
+
 #include <qmainwindow.h>
 #include "exportdockclass.h"
 #include "dummykmainwindow.h"
 #endif
+
+#include <kdelibs_export.h>
 
 class KDockSplitter;
 class KDockManager;
@@ -88,6 +89,11 @@ class QToolBar;
 #endif
 
 class KDockContainer;
+
+namespace KMDI
+{
+  class MainWindow;
+}
 
 /**
  * An abstract base clase for all dockwidget headers (and member of the dockwidget class set).
@@ -231,7 +237,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class KDockWidgetHeader : public KDockWidgetAbstractHeader
+class KDEUI_EXPORT KDockWidgetHeader : public KDockWidgetAbstractHeader
 {
   Q_OBJECT
 public:
@@ -262,6 +268,13 @@ public:
    * @param nd A pointer to the new drag panel
    */
   void setDragPanel( KDockWidgetHeaderDrag* nd );
+
+  /**
+   * Get the drag panel of this header.
+   *
+   * @since 3.4
+   */
+   KDockWidgetHeaderDrag *dragPanel();
 
   bool dragEnabled() const;
   void setDragEnabled(bool b);
@@ -349,7 +362,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class EXPORT_DOCKCLASS KDockTabGroup : public QTabWidget
+class KDEUI_EXPORT KDockTabGroup : public QTabWidget
 {
   Q_OBJECT
 public:
@@ -409,7 +422,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class EXPORT_DOCKCLASS KDockWidget: public QWidget
+class KDEUI_EXPORT KDockWidget: public QWidget
 {
   Q_OBJECT
 friend class KDockManager;
@@ -715,6 +728,7 @@ public slots:
 
 protected:
   friend class KMdiMainFrm;
+  friend class KMDI::MainWindow;
   /**
    * Checks some conditions and shows or hides the dockwidget header (drag panel).
    * The header is hidden if:
@@ -889,7 +903,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class EXPORT_DOCKCLASS KDockManager: public QObject
+class KDEUI_EXPORT KDockManager: public QObject
 {
   Q_OBJECT
 friend class KDockWidget;
@@ -1047,10 +1061,10 @@ public:
   /**
    * @since 3.2
    */
-  void setSpecialLeftDockContainer(KDockWidget* container);  
-  void setSpecialTopDockContainer(KDockWidget* container);  
-  void setSpecialRightDockContainer(KDockWidget* container);  
-  void setSpecialBottomDockContainer(KDockWidget* container);  
+  void setSpecialLeftDockContainer(KDockWidget* container);
+  void setSpecialTopDockContainer(KDockWidget* container);
+  void setSpecialRightDockContainer(KDockWidget* container);
+  void setSpecialBottomDockContainer(KDockWidget* container);
 
   void removeFromAutoCreateList(KDockWidget* pDockWidget);
   void finishReadDockConfig();
@@ -1285,7 +1299,7 @@ private:
  *
  * @author Max Judin (documentation: Falk Brettschneider).
  */
-class EXPORT_DOCKCLASS KDockMainWindow : public KMainWindow
+class KDEUI_EXPORT KDockMainWindow : public KMainWindow
 {
   Q_OBJECT
 
@@ -1451,22 +1465,7 @@ private:
   KDockMainWindowPrivate *d;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class EXPORT_DOCKCLASS KDockArea : public QWidget
+class KDEUI_EXPORT KDockArea : public QWidget
 {
   Q_OBJECT
 

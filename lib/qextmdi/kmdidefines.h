@@ -27,7 +27,7 @@
 #ifndef _KMDI_DEFINES_H_
 #define _KMDI_DEFINES_H_
 
-#include <qglobal.h>
+#include <kdelibs_export.h>
 
 #define KMDI_CHILDFRM_SEPARATOR 2
 #define KMDI_CHILDFRM_BORDER 4
@@ -100,15 +100,16 @@ namespace KMdi
       NeverShowTabs          = 2
    };
 
-  /** The style of the toolview tabs
-        @since 3.3
-  */
+  /**
+   * The style of the toolview tabs
+   * \since 3.3
+   */
    enum ToolviewStyle {
    /** Show only icons on the toolview tabs. The visible toolviews contain both the icon and text. */
-      IconOnly	= 0,
-   /** Show only the text description on the toolview tabs. */       
-      TextOnly	= 1,
-   /** Show both the icon and description on the toolview tabs. */      
+      IconOnly = 0,
+   /** Show only the text description on the toolview tabs. */
+      TextOnly = 1,
+   /** Show both the icon and description on the toolview tabs. */
       TextAndIcon = 3
    };
 } //namespace

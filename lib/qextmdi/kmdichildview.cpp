@@ -103,7 +103,7 @@ KMdiChildView::KMdiChildView( QWidget* parentWidget, const char* name, WFlags f)
 
 KMdiChildView::~KMdiChildView()
 {
-///  kdDebug(760)<<"~KMdiChildView()"<<endl;
+  kdDebug(760)<<"~KMdiChildView()"<<endl;
 }
 
 void KMdiChildView::trackIconAndCaptionChanges(QWidget *view) {
@@ -444,7 +444,7 @@ void KMdiChildView::activate()
       if(!m_bFocusInEventIsPending) {
          setFocus();
       }
-//      kdDebug(760) << "KMdiChildView::activate() called!" << endl;
+      kdDebug(760) << "KMdiChildView::activate() called!" << endl;
       emit activated(this);
    }
 

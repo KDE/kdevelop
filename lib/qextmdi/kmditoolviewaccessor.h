@@ -34,7 +34,7 @@ namespace KMDIPrivate {
 }
 
 
-class KMdiToolViewAccessor : public QObject
+class KMDI_EXPORT KMdiToolViewAccessor : public QObject
 {
    Q_OBJECT
 

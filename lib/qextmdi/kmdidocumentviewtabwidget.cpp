@@ -15,56 +15,67 @@ KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char
 {
 	m_visibility = KMdi::ShowWhenMoreThanOneTab;
 	tabBar()->hide();
+#ifndef Q_WS_WIN //todo
 	setHoverCloseButton(true);
+#endif
         connect(this, SIGNAL(closeRequest(QWidget*)), this, SLOT(closeTab(QWidget*)));
 }
 
-KMdiDocumentViewTabWidget::~KMdiDocumentViewTabWidget() {
+KMdiDocumentViewTabWidget::~KMdiDocumentViewTabWidget()
+{
 }
 
-void KMdiDocumentViewTabWidget::closeTab(QWidget* w) {
+void KMdiDocumentViewTabWidget::closeTab(QWidget* w)
+{
 	w->close();
 }
-void KMdiDocumentViewTabWidget::addTab ( QWidget * child, const QString & label ) {
+void KMdiDocumentViewTabWidget::addTab ( QWidget * child, const QString & label )
+{
 	KTabWidget::addTab(child,label);
-    showPage(child);
+	showPage(child);
 	maybeShow();
 }
 
-void KMdiDocumentViewTabWidget::addTab ( QWidget * child, const QIconSet & iconset, const QString & label ) {
+void KMdiDocumentViewTabWidget::addTab ( QWidget * child, const QIconSet & iconset, const QString & label )
+{
 	KTabWidget::addTab(child,iconset,label);
-    showPage(child);
+	showPage(child);
 	maybeShow();
 }
 
-void KMdiDocumentViewTabWidget::addTab ( QWidget * child, QTab * tab ) {
+void KMdiDocumentViewTabWidget::addTab ( QWidget * child, QTab * tab )
+{
 	KTabWidget::addTab(child,tab);
-    showPage(child);
+	showPage(child);
 	maybeShow();
 }
 
-void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, const QString & label, int index) {
+void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, const QString & label, int index)
+{
 	KTabWidget::insertTab(child,label,index);
-    showPage(child);
+	showPage(child);
 	maybeShow();
 	tabBar()->repaint();
 }
 
-void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, const QIconSet & iconset, const QString & label, int index ) {
+void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, const QIconSet & iconset, const QString & label, int index )
+{
 	KTabWidget::insertTab(child,iconset,label,index);
-    showPage(child);
+	showPage(child);
 	maybeShow();
 	tabBar()->repaint();
 }
 
-void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, QTab * tab, int index) {
+void KMdiDocumentViewTabWidget::insertTab ( QWidget * child, QTab * tab, int index)
+{
 	KTabWidget::insertTab(child,tab,index);
-    showPage(child);
+	showPage(child);
 	maybeShow();
 	tabBar()->repaint();
 }
 
-void KMdiDocumentViewTabWidget::removePage ( QWidget * w ) {
+void KMdiDocumentViewTabWidget::removePage ( QWidget * w )
+{
 	KTabWidget::removePage(w);
 	maybeShow();
 }

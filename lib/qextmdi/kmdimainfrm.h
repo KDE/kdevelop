@@ -51,7 +51,7 @@
 class QTimer;
 class QPopupMenu;
 class QMenuBar;
-#include "kmditoolviewaccessor.h"
+#include <kmditoolviewaccessor.h>
 
 class QToolButton;
 
@@ -67,7 +67,7 @@ class KMdiMainFrmPrivate;
  *
  * This special event is needed because the view has to inform the main frame that it`s being closed.
  */
-class KMdiViewCloseEvent : public QCustomEvent
+class KMDI_EXPORT KMdiViewCloseEvent : public QCustomEvent
 {
 public:
    KMdiViewCloseEvent( KMdiChildView* pWnd) : QCustomEvent(QEvent::User,pWnd) {}
@@ -201,7 +201,7 @@ public:
   * deletes the view object. So if your application wants to control that by itself, call removeWindowFromMdi()
   * and call delete by yourself. See also KMdiChildView::closeEvent() for tat issue.
   */
-class KMdiMainFrm : public KParts::DockMainWindow
+class KMDI_EXPORT KMdiMainFrm : public KParts::DockMainWindow
 {
    friend class KMdiChildView;
    friend class KMdiTaskBar;
@@ -427,41 +427,55 @@ public:
 
 public slots:
    /** addWindow demands a KMdiChildView. This method wraps every QWidget in such an object and
-       this way you can every widget put under MDI control.
+       this way you can put every widget under MDI control.
     */
    KMdiChildView* createWrapper(QWidget *view, const QString& name, const QString& shortName);
    /**
-    * One of the most important methods at all!
-    * Adds a KMdiChildView to the MDI system. The main frame takes it under control.
-    * You can specify here whether:
-    * <UL><LI>the view should be attached or detached.</LI>
-    * <LI>shown or hidden</LI>
-    * <LI>maximized, minimized or restored (normalized)</LI>
-    * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI?
-    * </UL>
+    * Adds a KMdiChildView to the MDI system. The main frame takes control of it.
+    * \param flags the flags for the view such as:
+    * \li whether the view should be attached or detached.
+    * \li whether the view should be shown or hidden
+    * \li whether the view should be maximized, minimized or restored (normalized)
+    * \li whether the view should be added as tool view (stay-on-top and toplevel) or
+    * added as document-type view.
     */
    virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd);
    //KDE4: merge the two methods
    /**
-    * One of the most important methods at all!
-    * Adds a KMdiChildView to the MDI system. The main frame takes it under control.
+    * Adds a KMdiChildView to the MDI system. The main frame takes control of it.
+    * \param index the index of the tab we should insert the new tab after. If index == -1 then
+    * the tab will just be appended to the end. Using this parameter in childview mode has no effect.
+    * \param flags
     * You can specify here whether:
-    * <UL><LI>the view should be attached or detached.</LI>
-    * <LI>shown or hidden</LI>
-    * <LI>maximized, minimized or restored (normalized)</LI>
-    * <LI>added as tool view (stay-on-top and toplevel) or added as document-type view.</LI?
-    * </UL>
-    * @param index defines an index of tab, after which the new tab will be inserted. This param have not any sence in ChildFrame mode. If index == -1 then the tab will be appended.
-    * @since 3.3
+    * \li the view should be attached or detached.
+    * \li shown or hidden
+    * \li maximized, minimized or restored (normalized)
+    * \li added as tool view (stay-on-top and toplevel) or added as document-type view.
+    * \since 3.3
     */
    void addWindow( KMdiChildView* pView, int flags, int index);
    /**
-   * See the method above for more details. Additionally, it moves to point pos.
-   */
+    * Adds a KMdiChildView to the MDI system. The main frame takes control of it.
+    * \param pos move the child view to the specified position
+    * \param flags the flags for the view such as:
+    * \li whether the view should be attached or detached.
+    * \li whether the view should be shown or hidden
+    * \li whether the view should be maximized, minimized or restored (normalized)
+    * \li whether the view should be added as tool view (stay-on-top and toplevel) or
+    * added as document-type view.
+    * See the method above for more details. Additionally, it moves to point pos.
+    */
    virtual void addWindow( KMdiChildView* pView, QPoint pos, int flags = KMdi::StandardAdd);
    /**
-   * See the method above for more details. Additionally, it sets the geometry.
-   */
+    * Adds a KMdiChildView to the MDI system. The main frame takes control of it.
+    * \param rectNormal Sets the geometry for this child view
+    * \param flags the flags for the view such as:
+    * \li whether the view should be attached or detached.
+    * \li whether the view should be shown or hidden
+    * \li whether the view should be maximized, minimized or restored (normalized)
+    * \li whether the view should be added as tool view (stay-on-top and toplevel) or
+    * added as document-type view.
+    */
    virtual void addWindow( KMdiChildView* pView, QRect rectNormal, int flags = KMdi::StandardAdd);
    /**
    * Usually called from addWindow() when adding a tool view window. It reparents the given widget
@@ -477,7 +491,8 @@ public slots:
    KMdiToolViewAccessor *createToolWindow();
    /**
    * Removes a KMdiChildView from the MDI system and from the main frame`s control.
-   * Note: The view will not be deleted, but it's getting toplevel (reparent to 0)!
+   * The caller is responsible for deleting the view. If the view is not deleted it will
+   * be reparented to 0
    */
    virtual void removeWindowFromMdi(KMdiChildView *pWnd);
    /**

@@ -105,7 +105,7 @@ class KMdiChildViewPrivate;
   *
   */
 
-class KMdiChildView : public QWidget
+class KMDI_EXPORT KMdiChildView : public QWidget
 {
    friend class KMdiMainFrm;
    friend class KMdiChildFrm;
@@ -175,7 +175,8 @@ public:
    */
    KMdiChildView( const QString& caption, QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
    /**
-   * Constructor 2 (sets "Unnamed" as default caption)
+   * Constructor 
+   * sets "Unnamed" as default caption
    */
    KMdiChildView( QWidget* parentWidget = 0L, const char* name = 0L, WFlags f=0);
    /**
@@ -226,7 +227,7 @@ public:
    */
    virtual void setTabCaption(const QString& caption);
    /**
-   * Sets the caption of both, window and button on the taskbar (they are going to be the same)
+   * Sets the caption of both the window and the button on the taskbar
    */
    virtual void setMDICaption(const QString &caption);
    /**

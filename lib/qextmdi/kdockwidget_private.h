@@ -40,7 +40,7 @@ class KDockContainer;
  *
  * @author Max Judin.
 */
-class KDockSplitter : public QWidget
+class KDEUI_EXPORT KDockSplitter : public QWidget
 {
   Q_OBJECT
 public:
@@ -97,7 +97,6 @@ protected slots:
 
 private:
   void setupMinMaxSize();
-
   QWidget *child0, *child1;
   Orientation m_orientation;
   bool initialised;
@@ -106,6 +105,7 @@ private:
   bool mOpaqueResize, mKeepSize, mHighResolution;
   int fixedWidth0,fixedWidth1;
   int fixedHeight0,fixedHeight1;
+  bool m_dontRecalc;
 };
 
 /**
@@ -114,7 +114,7 @@ private:
  *
  * @author Max Judin.
 */
-class KDockButton_Private : public QPushButton
+class KDEUI_EXPORT KDockButton_Private : public QPushButton
 {
   Q_OBJECT
 public:
@@ -139,7 +139,7 @@ private:
 /**
  * additional KDockWidget stuff (private)
 */
-class KDockWidgetPrivate : public QObject
+class KDEUI_EXPORT KDockWidgetPrivate : public QObject
 {
   Q_OBJECT
 public:
@@ -179,7 +179,7 @@ public:
   KDockWidgetResize resizeMode;
 };
 
-class KDockWidgetHeaderPrivate
+class KDEUI_EXPORT KDockWidgetHeaderPrivate
    : public QObject
 {
 public:

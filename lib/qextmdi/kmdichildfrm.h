@@ -49,7 +49,7 @@ class QToolButton;
   * @short Internal class, only used on Win32.
   * This class provides a label widget that can process mouse click events.
   */
-class KMdiWin32IconButton : public QLabel
+class KMDI_EXPORT KMdiWin32IconButton : public QLabel
 {
    Q_OBJECT
 public:
@@ -68,7 +68,7 @@ signals:
  * @short a QCustomEvent for move
  * This special event will be useful, to inform view about child frame event.
  */
-class KMdiChildFrmMoveEvent : public QCustomEvent
+class KMDI_EXPORT KMdiChildFrmMoveEvent : public QCustomEvent
 {
 public:
    /**
@@ -82,7 +82,7 @@ public:
  * @short a QCustomEvent for begin of dragging
  * This special event will be useful, to inform view about child frame event.
  */
-class KMdiChildFrmDragBeginEvent : public QCustomEvent
+class KMDI_EXPORT KMdiChildFrmDragBeginEvent : public QCustomEvent
 {
   public:
      /**
@@ -96,7 +96,7 @@ class KMdiChildFrmDragBeginEvent : public QCustomEvent
  * @short a QCustomEvent for end of dragging
  * This special event will be useful, to inform view about child frame event.
  */
-class KMdiChildFrmDragEndEvent : public QCustomEvent
+class KMDI_EXPORT KMdiChildFrmDragEndEvent : public QCustomEvent
 {
   public:
      /**
@@ -110,7 +110,7 @@ class KMdiChildFrmDragEndEvent : public QCustomEvent
  * @short a QCustomEvent for begin of resizing
  * This special event will be useful, to inform view about child frame event.
  */
-class KMdiChildFrmResizeBeginEvent : public QCustomEvent
+class KMDI_EXPORT KMdiChildFrmResizeBeginEvent : public QCustomEvent
 {
   public:
      /**
@@ -124,7 +124,7 @@ class KMdiChildFrmResizeBeginEvent : public QCustomEvent
  * @short a QCustomEvent for end of resizing
  * This special event will be useful, to inform view about child frame event.
  */
-class KMdiChildFrmResizeEndEvent : public QCustomEvent
+class KMDI_EXPORT KMdiChildFrmResizeEndEvent : public QCustomEvent
 {
   public:
      /**
@@ -141,7 +141,7 @@ class KMdiChildFrmPrivate;
   * It's an MDI child frame widget. It contains a view widget and a frame caption. Usually you derive from its view.
   */
 //------------------------------------------------------------------------------
-class KMdiChildFrm : public QFrame
+class KMDI_EXPORT KMdiChildFrm : public QFrame
 {
   friend class KMdiChildArea;
   friend class KMdiChildFrmCaption;
@@ -191,7 +191,7 @@ class KMdiChildFrm : public QFrame
   // methods
   public:
      /**
-     * Creates a new KMdiChildFrm class.<br>
+     * Creates a new KMdiChildFrm class.
      */
      KMdiChildFrm(KMdiChildArea *parent);
      /**
@@ -291,9 +291,6 @@ class KMdiChildFrm : public QFrame
      virtual void setMinimumSize ( int minw, int minh );
 
   public slots:
-     /**
-     *
-     */
      void slot_resizeViaSystemMenu();
 
   protected:

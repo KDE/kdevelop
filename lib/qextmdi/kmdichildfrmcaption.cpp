@@ -40,6 +40,22 @@
 #include "kmdimainfrm.h"
 #include <klocale.h>
 #include <iostream>
+
+#ifdef Q_WS_WIN
+//TODO: one day gradient can be added for win98/winnt5+
+// ask system properties on windows
+#ifndef SPI_GETGRADIENTCAPTIONS
+# define SPI_GETGRADIENTCAPTIONS 0x1008
+#endif
+#ifndef COLOR_GRADIENTACTIVECAPTION
+# define COLOR_GRADIENTACTIVECAPTION 27
+#endif
+#ifndef COLOR_GRADIENTINACTIVECAPTION
+# define COLOR_GRADIENTINACTIVECAPTION 28
+#endif
+#endif
+//#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // Class   : KMdiChildFrmCaption
 // Purpose : An MDI label that draws the title

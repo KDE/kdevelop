@@ -32,6 +32,7 @@
 
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 
 #include <math.h>
 #include <qpopupmenu.h>
@@ -50,12 +51,10 @@ KMdiChildArea::KMdiChildArea(QWidget *parent)
    m_captionFont = QFont();//F.B.QFont("clean",16);
    QFontMetrics fm(m_captionFont);
    m_captionFontLineSpacing = fm.lineSpacing();
-   KMdiChildArea::getCaptionColors( palette(), m_captionActiveBackColor, m_captionActiveForeColor,
-       m_captionInactiveBackColor, m_captionInactiveForeColor );
-//   m_captionActiveBackColor = colorGroup().highlight();//QColor(0,0,128);
-//   m_captionActiveForeColor = colorGroup().highlightedText();//QColor(255,255,255);
-//   m_captionInactiveBackColor = QColor(160,160,160);
-//   m_captionInactiveForeColor = QColor( 55, 55, 55);
+   m_captionActiveBackColor = KGlobalSettings::activeTitleColor();
+   m_captionActiveForeColor = KGlobalSettings::activeTextColor();
+   m_captionInactiveBackColor = KGlobalSettings::inactiveTitleColor();
+   m_captionInactiveForeColor = KGlobalSettings::inactiveTextColor();
    m_pZ = new QPtrList<KMdiChildFrm>;
    m_pZ->setAutoDelete(true);
    setFocusPolicy(ClickFocus);
@@ -618,62 +617,14 @@ void KMdiChildArea::setMdiCaptionInactiveBackColor(const QColor &clr)
    m_captionInactiveBackColor = clr;
 }
 
-
-//=====================================================================================
-// taken from koffice/kexi/plugins/relations/kexirelationviewtable.cpp
-// author: Jaroslaw Staniek, js@iidea.pl
-
-#if defined(Q_WS_WIN)
-#include "qt_windows.h"
-QRgb qt_colorref2qrgb(COLORREF col)
-{
-    return qRgb(GetRValue(col),GetGValue(col),GetBValue(col));
-}
-
-// ask system properties on windows
-#ifndef SPI_GETGRADIENTCAPTIONS
-# define SPI_GETGRADIENTCAPTIONS 0x1008
-#endif
-#ifndef COLOR_GRADIENTACTIVECAPTION
-# define COLOR_GRADIENTACTIVECAPTION 27
-#endif
-#ifndef COLOR_GRADIENTINACTIVECAPTION
-# define COLOR_GRADIENTINACTIVECAPTION 28
-#endif
-#endif
-
-void KMdiChildArea::getCaptionColors( const QPalette &pal, 
+//KDE4: remove
+void KMdiChildArea::getCaptionColors( const QPalette & /*pal*/, 
     QColor &activeBG, QColor &activeFG, QColor &inactiveBG, QColor &inactiveFG )
 {
-    QColor def_activeBG = pal.active().highlight();
-    QColor def_activeFG = pal.active().highlightedText();
-    QColor def_inactiveBG = pal.inactive().dark();
-    QColor def_inactiveFG = pal.inactive().brightText();
-
-    if ( QApplication::desktopSettingsAware() ) {
-#if defined(Q_WS_WIN)
-        //TODO: some day gradient can be added for w98/nt5
-        activeBG = qt_colorref2qrgb(GetSysColor(COLOR_ACTIVECAPTION));
-        activeFG = qt_colorref2qrgb(GetSysColor(COLOR_CAPTIONTEXT));
-        inactiveBG = qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTION));
-        inactiveFG = qt_colorref2qrgb(GetSysColor(COLOR_INACTIVECAPTIONTEXT));
-#else
-        //get colors from WM
-        KConfig *cfg = KGlobal::config();
-        cfg->setGroup( "WM" );
-        activeBG = cfg->readColorEntry("activeBackground", &def_activeBG);
-        activeFG = cfg->readColorEntry("activeForeground", &def_activeFG);
-        inactiveBG = cfg->readColorEntry("inactiveBackground", &def_inactiveBG);
-        inactiveFG = cfg->readColorEntry("inactiveForeground", &def_inactiveFG);
-#endif
-    }
-    else {
-        activeBG = def_activeBG;
-        activeFG = def_activeFG;
-        inactiveBG = def_inactiveBG;
-        inactiveFG = def_inactiveFG;
-    }
+   activeBG = KGlobalSettings::activeTitleColor();
+   activeFG = KGlobalSettings::activeTextColor();
+   inactiveBG = KGlobalSettings::inactiveTitleColor();
+   inactiveFG = KGlobalSettings::inactiveTextColor();
 }
-
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
