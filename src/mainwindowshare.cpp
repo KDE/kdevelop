@@ -39,6 +39,7 @@
 #include <kpopupmenu.h>
 
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 #include <ktexteditor/configinterface.h>
 #include <kparts/partmanager.h>
 #include <kdevpartcontroller.h>
@@ -463,24 +464,31 @@ void MainWindowShare::slotKeyBindings()
        it.current(); ++it ) {
     dlg.insert( (*it)->actionCollection() );
   }
-  dlg.configure();
-  
-  // this is needed for when we have multiple embedded kateparts and change one of them
-  // maybe this should be done to more than ReadOnlyParts, but restricting for now keeps 
-  // it less heavy
+  if ( dlg.configure() == KKeyDialog::Accepted )
+  {
+  // this is needed for when we have multiple embedded kateparts and change one of them.
+  // it also needs to be done to their views, as they too have actioncollections to update
     if( const QPtrList<KParts::Part> * partlist = PartController::getInstance()->parts() )
     {
         QPtrListIterator<KParts::Part> it( *partlist );
         while ( KParts::Part* part = it.current() )
         {
-            if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
+            if ( KTextEditor::Document * doc = dynamic_cast<KTextEditor::Document*>( part ) )
             {
-                kdDebug(9000) << "reloading xml for: " << part->name() << endl;
-                part->reloadXML();
+                doc->reloadXML();
+
+                QPtrList<KTextEditor::View> const & list = doc->views();
+                QPtrListIterator<KTextEditor::View> itt( list );
+                while( KTextEditor::View * view = itt.current() )
+                {
+                    view->reloadXML();
+                    ++itt;
+                }
             }
             ++it;
         }
     }  
+  }
 }
 
 void MainWindowShare::slotConfigureToolbars()
