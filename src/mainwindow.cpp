@@ -1007,6 +1007,9 @@ void MainWindow::showAllToolWin(EView eView, bool show )
   QPtrListIterator<QextMdiChildView> it(*pViews);
   for( ; it.current(); ++it)                                          // Iterate through all views
   {
+     if (m_unavailableViews.find(it.current()) != -1) {
+	 continue;
+     }
      QString Name=it.current()->tabCaption();                       // Get the name of the view
      KDockWidget *pDockWidget=manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
      ViewMenuActionPrivateData ActionData;
