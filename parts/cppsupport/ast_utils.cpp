@@ -227,6 +227,13 @@ QString declaratorToString( DeclaratorAST* declarator )
    if( declarator->declaratorId() )
        text += declarator->declaratorId()->text() + " ";
 
+   QPtrList<AST> arrays = declarator->arrayDimensionList();
+   QPtrListIterator<AST> it( arrays );
+   while( it.current() ){
+       text += "[]";
+       ++it;
+   }
+
    if( declarator->parameterDeclarationClause() ){
        text += "( ";
 
