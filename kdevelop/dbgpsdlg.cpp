@@ -77,8 +77,8 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
 
   if (getuid() == 0)
   {
-    *psProc_ << "-A";
-	  pidCmd_ += " -A";
+    *psProc_ << "a";
+	  pidCmd_ += " a";
   }
 
   connect( psProc_, SIGNAL(processExited(KProcess *)),                SLOT(slotProcessExited()) );
