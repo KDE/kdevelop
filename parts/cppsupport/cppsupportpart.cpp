@@ -940,7 +940,7 @@ void CppSupportPart::slotMakeMember()
 	if( m_activeEditor )
 	    m_activeEditor->insertText( atLine, atColumn, text );
 	if( m_activeViewCursor )
-	    m_activeViewCursor->setCursorPositionReal( atLine, atColumn );
+	    m_activeViewCursor->setCursorPositionReal( atLine+2, 0 );
     }
 }
 

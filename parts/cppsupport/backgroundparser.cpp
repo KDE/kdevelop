@@ -288,6 +288,7 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 
 Unit* BackgroundParser::findOrCreateUnit( const QString& fileName, bool force )
 {
+    m_mutex.lock();
     QMap<QString, Unit*>::Iterator it = m_unitDict.find( fileName );
     Unit* unit = it != m_unitDict.end() ? *it : 0;
 
@@ -296,9 +297,13 @@ Unit* BackgroundParser::findOrCreateUnit( const QString& fileName, bool force )
 	delete( unit );
 	unit = 0;
     }
+    m_mutex.unlock();
 
-    if( !unit && 0 != (unit = parseFile(fileName)) )
+    if( !unit && 0 != (unit = parseFile(fileName)) ){
+        m_mutex.lock();
 	m_unitDict.insert( fileName, unit );
+        m_mutex.unlock();
+    }
 
     return unit;
 }
@@ -309,13 +314,9 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
     return it != m_unitDict.end() ? *it : 0;
 }
 
-TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName, bool create )
+TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
-    Unit* u = 0;
-    if (create)
-        u = findOrCreateUnit( fileName, true );
-    else
-        u = findUnit( fileName );
+    Unit* u = findUnit( fileName );
     return u ? u->translationUnit : 0;
 }
 
@@ -360,9 +361,13 @@ void BackgroundParser::run()
 
 	m_mutex.lock();
 	QString fileName = m_fileList.front();
+	fileName = QString( fileName.unicode(), fileName.length() );
 	m_fileList.pop_front();
+	m_mutex.unlock();
 
 	Unit* unit = findOrCreateUnit( fileName, true );
+
+	m_mutex.lock();
 	if( unit ){
 	    m_unitDict.insert( fileName, unit );
             KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );

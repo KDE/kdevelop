@@ -114,7 +114,18 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
       m_cppSupport->backgroundParser()->isEmpty().wait();
 
   m_cppSupport->backgroundParser()->lock();
-  TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h", true );
+  TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
+  if( !translationUnit ){
+      m_cppSupport->backgroundParser()->unlock();
+      m_cppSupport->backgroundParser()->addFile( filename + ".h" );
+
+      // sync
+      while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
+          m_cppSupport->backgroundParser()->isEmpty().wait();
+	  
+      m_cppSupport->backgroundParser()->lock();
+      translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
+  }
   if( translationUnit ){
       StoreWalker w( filename + ".h", &classcontainer );
       w.parseTranslationUnit( translationUnit );
