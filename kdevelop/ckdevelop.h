@@ -547,10 +547,12 @@ public:
   void slotHelpSearchText();
   /** search marked text with a text string */
   void slotHelpSearchText(QString text);
-  /** display manpage */
-  void slotHelpManpage(const QString& text);
   /** shows the Search for Help on.. dialog to insert a search expression */
   void slotHelpSearch();
+  /** display manpage */
+  void slotHelpManpage(QString text);
+  /** shows the Display Manpage.. dialog */
+  void slotManpage();
   /** shows the KDevelop manual */
   void slotHelpContents();
   /** shows the KDevelop Programming handbook */

@@ -96,4 +96,63 @@ void CFindDocTextDlg::slotFind()
   emit signalFind( text );
 }
 
+//***************************************************************************
+
+CManpageTextDlg::CManpageTextDlg(QWidget *parent, const char *name ) :
+  QDialog(parent,name, true)
+{
+    resize(250,120);
+    setCaption(i18n("Show Manpage on..."));
+    setIcon(SmallIcon("filefind"));
+    QVBoxLayout *vl = new QVBoxLayout( this, 15 );
+
+    QHBoxLayout *hl = new QHBoxLayout( 15 );
+    vl->addLayout( hl );
+
+    QLabel *label = new QLabel( i18n( "Manpage:" ), this );
+    label->setFixedSize( label->sizeHint() );
+
+    edit = new QLineEdit( this );
+    edit->setFixedHeight( edit->sizeHint().height() );
+    edit->setFocus();
+
+    hl->addWidget( label );
+    hl->addWidget( edit );
+
+    hl = new QHBoxLayout;
+    vl->addLayout( hl );
+
+    hl->addStretch();
+
+    hl = new QHBoxLayout( 15 );
+    vl->addLayout( hl );
+
+    QPushButton *btn = new QPushButton( i18n( "&Ok" ), this );
+    btn->setFixedSize( btn->sizeHint() );
+    btn->setDefault( true );
+    connect( btn, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    hl->addWidget( btn );
+
+    hl->addStretch();
+
+    btn = new QPushButton( i18n( "&Cancel" ), this );
+    btn->setFixedSize( btn->sizeHint() );
+    connect( btn, SIGNAL( clicked() ), this, SLOT( cancel() ) );
+    hl->addWidget( btn );
+
+    vl->activate();
+}
+
+CManpageTextDlg::~CManpageTextDlg()
+{
+}
+
+QString CManpageTextDlg::manpageText()
+{
+  QString manpage = edit->text();;
+  if (!manpage.isEmpty())
+    manpage="man:/"+manpage+"(3)";
+  return manpage;
+}
+
 #include "cfinddoctextdlg.moc"

@@ -2140,9 +2140,9 @@ QString encodeURL(const QString &str)
     return temp;
 }
 
-void CKDevelop::slotHelpManpage(const QString& text)
+void CKDevelop::slotHelpManpage(QString text)
 {
-  slotStatusMsg(i18n("Display manpage..."));
+  slotStatusMsg(i18n("Show Manpage on..."));
   slotURLSelected(text);
   slotStatusMsg(i18n("Ready."));
 }
@@ -2227,6 +2227,18 @@ void CKDevelop::slotHelpSearchText()
   QString text;
   m_docViewManager->doSearchText(text);
   slotHelpSearchText(text);
+}
+
+void CKDevelop::slotManpage()
+{
+  slotStatusMsg(i18n("Show Manpage on..."));
+  CManpageTextDlg manpageDlg(this,"Manpage");
+  if (manpageDlg.exec())
+  {
+    QString manpage = manpageDlg.manpageText();
+    if (!manpage.isEmpty())
+      slotHelpManpage(manpage);
+  }
 }
 
 void CKDevelop::slotHelpSearch()

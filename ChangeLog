@@ -1,3 +1,6 @@
+2001-04-08  jbb <jbb@kdevelop.org>
+    * Add manpage display to menu
+
 2001-04-07  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: ignore queryClose() and queryExit() at application startup time (which actually belongs to the
       closing of the KMessageBox widget), this also speeds up the startup of KDevelop because we don't save the
@@ -10,7 +13,7 @@
     * Clean the DocViewManager class.
 
 2001-04-06  jbb <jbb@kdevelop.org>
-    * Add manpages
+    * Add manpage display
 
 2001-04-04  jbb <jbb@kdevelop.org>
     * More improvements in class parser (handle throw() better) from

@@ -907,6 +907,7 @@ void CKDevelop::initMenuBar(){
   help->insertItem(SmallIconSet("help"),i18n("&Search Marked Text"),this,
 				 SLOT(slotHelpSearchText()),0,ID_HELP_SEARCH_TEXT);
   help->insertItem(SmallIconSet("filefind"),i18n("Search for Help on..."),this,SLOT(slotHelpSearch()),0,ID_HELP_SEARCH);
+  help->insertItem(SmallIconSet("help"),i18n("Show Manpage on..."),this,SLOT(slotManpage()),0,ID_HELP_MANPAGE);
   help->insertSeparator();
   QToolButton* wtb = QWhatsThis::whatsThisButton(0);
   help->insertItem( wtb->iconSet(),i18n( "What's &This" ), help_menu, SLOT(contextHelpActivated()),SHIFT + Key_F1);

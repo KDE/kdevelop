@@ -24,6 +24,8 @@
 
 #include <qdialog.h>
 
+class QLineEdit;
+
 /**
   *@author 
   */
@@ -31,8 +33,8 @@ class CFindDocTextDlg : public QDialog
 {
    Q_OBJECT
 public: 
-	CFindDocTextDlg(QWidget *parent=0, const char *name=0);
-	~CFindDocTextDlg();
+  CFindDocTextDlg(QWidget *parent=0, const char *name=0);
+  ~CFindDocTextDlg();
 
 public slots:
   void slotTextChanged( const QString& );
@@ -45,5 +47,22 @@ signals:
 private:
   QString text;
 };
+
+//***************************************************************************
+
+class CManpageTextDlg : public QDialog
+{
+   Q_OBJECT
+public:
+  CManpageTextDlg(QWidget *parent=0, const char *name=0);
+  ~CManpageTextDlg();
+
+  QString manpageText();
+
+private:
+  QLineEdit* edit;
+};
+
+//***************************************************************************
 
 #endif

@@ -215,7 +215,7 @@ public slots:
 	void slotAddWatchVariable();
 
 signals:
- void manpage(const QString& text);
+ void manpage(QString text);
  void lookUp(QString text);
  void grepText(QString text);
  void bufferMenu(const QPoint&);
