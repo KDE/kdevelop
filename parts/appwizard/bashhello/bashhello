@@ -4,5 +4,5 @@ Name=Simple Bash Shell Script
 Name[fr]=Un simple programme de test « Hello world »
 Category=Shell
 Comment=This generates a simplistic 'Hello world' program in Bash shell
-Comment[fr]=Génère un simple script de test du type « Hello world » pour l'interpréteur Bash.
+Comment[fr]=Génère un simple script de test du type « Hello world » pour l'interpréteur BASH.
 FileTemplates=sh,ShellStyle

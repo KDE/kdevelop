@@ -5,5 +5,5 @@ Name[fr]=Un simple programme de test « Hello world »
 Icon=adahello.png
 Category=Ada
 Comment=Generates a simple Hello world program in Ada
-Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language Ada.
+Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language ADA.
 FileTemplates=adb,AdaStyle
