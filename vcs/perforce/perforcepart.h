@@ -13,14 +13,14 @@
 #ifndef _PERFORCEPART_H_
 #define _PERFORCEPART_H_
 
-#include "kdevplugin.h"
+#include <kdevversioncontrol.h>
 #include <klocale.h>
 
 class Context;
 class QPopupMenu;
 class KAction;
 
-class PerforcePart : public KDevPlugin
+class PerforcePart : public KDevVersionControl
 {
     Q_OBJECT
 
@@ -31,6 +31,11 @@ public:
     virtual QString shortDescription() const
     { return i18n( "Perforce is a version control system" ); }
 
+    virtual void createNewProject(const QString& dir) {}
+    virtual bool fetchFromRepository() { return true; }
+    virtual KDevVCSFileInfoProvider *fileInfoProvider() const { return 0; }
+    virtual bool isValidDirectory(const QString &dirPath) const { return true; }
+    
 private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
     void slotCommit();
