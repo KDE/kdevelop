@@ -32,6 +32,7 @@
 #include "ckonsolewidget.h"
 #include "docviewman.h"
 #include "kwdoc.h"
+#include "docviewman.h"
 
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -165,9 +166,14 @@ bool CKDevelop::isProjectDirty()
   if (prj->getMakefileAmChanged())
     isClean=false;
 
-  setInfoModified(header_widget->getName(), header_widget->isModified());
-  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
-
+  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+    int curDocId = *(docIter.current());
+    KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
+    setInfoModified(pDoc->fileName(), pDoc->isModified());
+  }
 
   for(filename=listAllPrjFiles.first(); isClean && filename != 0; filename=listAllPrjFiles.next())
   {
@@ -215,61 +221,8 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
     actual_info=next_info;
   }
 
-  // was this file in the cpp_widget?
-  if (cpp_widget->getName() == corrAbsFilename)
-  {
-    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
-      if ( CProject::getType( actual_info->filename ) == CPP_SOURCE)
-      { // found
-        cpp_widget->setText(actual_info->text);
-        cpp_widget->toggleModified(actual_info->modified);
-        cpp_widget->setName(actual_info->filename);
-  //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
-        return;
-      }
-    }
-
-    // if not found a successor create an new file
-    actual_info = new TEditInfo;
-    actual_info->modified=false;
-    QString sCFilename= (project && prj->getProjectType()=="normal_c") ? i18n("Untitled.c") : i18n("Untitled.cpp");
-    actual_info->id = menu_buffers->insertItem(sCFilename,-2,0);
-    actual_info->filename = sCFilename;
-
-    edit_infos.append(actual_info);
-
-    cpp_widget->clear();
-    cpp_widget->setName(actual_info->filename);
-  }
-
-  // was this file in the header_widget?
-  if (header_widget->getName() == corrAbsFilename)
-  {
-    for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      // subject of change if another widget will be implemented for CORBA or KOM or YACC ecc.
-      if ( CProject::getType( actual_info->filename ) != CPP_SOURCE)
-      { // found
-        header_widget->setText(actual_info->text);
-        header_widget->toggleModified(actual_info->modified);
-        header_widget->setName(actual_info->filename);
-  //    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
-        return;
-      }
-    }
-
-    // if not found a successor create an new file
-    actual_info = new TEditInfo;
-    actual_info->modified=false;
-    actual_info->id = menu_buffers->insertItem(i18n("Untitled.h"),-2,0);
-    actual_info->filename = i18n("Untitled.h");
-
-    edit_infos.append(actual_info);
-
-    header_widget->clear();
-    header_widget->setName(actual_info->filename);
-  }
-
+  int docId = m_docViewManager->findDoc(corrAbsFilename);
+  m_docViewManager->closeDoc( docId);
 }
 
 /*---------------------------------------- setInfoModified()
@@ -815,7 +768,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
       //    cerr << endl <<endl << "Filename:" << filename
       // << "EDITNAME:" << pCurEditWidget->getName() <<"no action---:" << endl;
-      s_tab_view->setCurrentTab((pCurEditWidget==header_widget) ? HEADER : CPP);
       pCurEditWidget->setFocus();
       return;
   }
@@ -903,11 +855,11 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     qDebug("doc (and at least 1 view) did exist, raise it");
   }
 
-  // update the pointers
-  if (docType == DocViewMan::Source)
-    cpp_widget = pCurEditWidget;
-  else
-    header_widget = pCurEditWidget;
+//FB  // update the pointers
+//FB  if (docType == DocViewMan::Source)
+//FB    cpp_widget = pCurEditWidget;
+//FB  else
+//FB    header_widget = pCurEditWidget;
 
   pCurEditWidget->toggleModified(info->modified);
 
@@ -921,7 +873,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
   pCurEditWidget->setName(filename);
   info->text = pCurEditWidget->text();
-  s_tab_view->setCurrentTab((pCurEditWidget==header_widget) ? HEADER : CPP);
   pCurEditWidget->setFocus();
 
   // Need to get the breakpoints displayed in this file (if any)
@@ -951,7 +902,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //      pCurEditWidget->toggleModified(info->modified);
 //      pCurEditWidget->setName(filename);
 //
-//      s_tab_view->setCurrentTab((pCurEditWidget==header_widget) ? HEADER : CPP);
 //      pCurEditWidget->setFocus();
 //
 //      // Need to get the breakpoints displayed in this file (if any)
@@ -1288,8 +1238,8 @@ bool CKDevelop::queryClose(){
   config->setGroup("Files");
   if(project){
     config->writeEntry("project_file",prj->getProjectFile());
-    config->writeEntry("cpp_file",cpp_widget->getName());
-    config->writeEntry("header_file",header_widget->getName());
+//FB    config->writeEntry("cpp_file",cpp_widget->getName());
+//FB    config->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();
@@ -1304,8 +1254,14 @@ bool CKDevelop::queryClose(){
 
     config->writeEntry("project_file","");
 
-    setInfoModified(header_widget->getName(), header_widget->isModified());
-    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+    // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
+    QList<int> allDocs = m_docViewManager->docs();
+    QListIterator<int> docIter(allDocs);
+    for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+      int curDocId = *(docIter.current());
+      KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
+      setInfoModified(pDoc->fileName(), pDoc->isModified());
+    }
 
     for(actual_info=edit_infos.first();save && actual_info != 0;
 		actual_info=edit_infos.next())
@@ -1366,8 +1322,8 @@ void CKDevelop::saveProperties(KConfig* sess_config){
 	
   if(project){
     kapp->sessionConfig()->writeEntry("project_file",prj->getProjectFile());
-    kapp->sessionConfig()->writeEntry("cpp_file",cpp_widget->getName());
-    kapp->sessionConfig()->writeEntry("header_file",header_widget->getName());
+//FB    kapp->sessionConfig()->writeEntry("cpp_file",cpp_widget->getName());
+//FB    kapp->sessionConfig()->writeEntry("header_file",header_widget->getName());
     prj->setCurrentWorkspaceNumber(workspace);
     saveCurrentWorkspaceIntoProject();
     prj->writeProject();

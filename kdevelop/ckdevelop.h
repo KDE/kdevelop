@@ -713,6 +713,11 @@ public:
 
 protected: // Protected methods
 
+  /** shared helper function for the 4 slots slotOptionsEditor, slotOptionsEditorColors,
+   *  slotOptionsSyntaxHighlightingDefaults and slotOptionsSyntaxHighlighting
+   */
+  void globalTakeOverOfEditorOptions( CEditWidget* pEW);
+
   /** The user selected a class in the classcombo.
    * @param aName Name of the class.
    */
@@ -896,8 +901,6 @@ private:
   KDockWidget* outputdock;
   KDockWidget* maindock;
 
-  CEditWidget* header_widget; // the editwidget for the headers/resources
-  CEditWidget* cpp_widget;    //  the editwidget for cpp files
   CDocBrowser* browser_widget;
 
   /** The classview. */

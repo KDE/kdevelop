@@ -217,8 +217,14 @@ void CKDevelop::slotFileCloseAll()
   QStrList handledNames;
   bool cont=true;
 
-  setInfoModified(header_widget->getName(), header_widget->isModified());
-  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+    int curDocId = *(docIter.current());
+    KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
+    setInfoModified(pDoc->fileName(), pDoc->isModified());
+  }
 
   for(actual_info=edit_infos.first();cont && actual_info != 0;)
   {
@@ -374,7 +380,7 @@ void CKDevelop::slotFileSave(){
 #ifdef WITH_CPP_REPARSE
     if (project)
 #else
-      if (project && m_docViewManager->currentEditView()==header_widget)
+      if (project && m_docViewManager->currentEditView()->contentsType() == DocViewMan::Header)
 #endif
         refreshClassViewByFileList(&lSavedFile);
   }
@@ -399,8 +405,8 @@ void CKDevelop::slotFileSaveAs(){
 void CKDevelop::slotFileSaveAll()
 {
     QStrList handledNames;
-    TEditInfo* actual_info, *cpp_info, *header_info;
-    CEditWidget blind_widget;
+    TEditInfo* actual_info; //FB?, *cpp_info, *header_info;
+    CEditWidget blind_widget(0L,0,0,0);//FB
     QStrList iFileList(false);
     bool mod=false;
 
@@ -414,15 +420,21 @@ void CKDevelop::slotFileSaveAll()
 
 //    mainSplitter->setUpdatesEnabled(false);
 
-    setInfoModified(header_widget->getName(), header_widget->isModified());
-    setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+    // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
+    QList<int> allDocs = m_docViewManager->docs();
+    QListIterator<int> docIter(allDocs);
+    for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+      int curDocId = *(docIter.current());
+      KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
+      setInfoModified(pDoc->fileName(), pDoc->isModified());
+    }
 
-    header_info=getInfoFromFilename(header_widget->getName());
-    if (header_info)
-      header_info->text=header_widget->text();
-    cpp_info=getInfoFromFilename(cpp_widget->getName());
-    if (cpp_info)
-      cpp_info->text=cpp_widget->text();
+//FB?    header_info=getInfoFromFilename(header_widget->getName());
+//FB?    if (header_info)
+//FB?      header_info->text=header_widget->text();
+//FB?    cpp_info=getInfoFromFilename(cpp_widget->getName());
+//FB?    if (cpp_info)
+//FB?      cpp_info->text=cpp_widget->text();
 
     statProg->setTotalSteps(edit_infos.count());
     statProg->show();
@@ -462,10 +474,10 @@ void CKDevelop::slotFileSaveAll()
 //      kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
 //
 
-          if (actual_info==cpp_info)
-             cpp_widget->setModified(isModified);
-          if (actual_info==header_info)
-             header_widget->setModified(isModified);
+//FB?          if (actual_info==cpp_info)
+//FB?             cpp_widget->setModified(isModified);
+//FB?          if (actual_info==header_info)
+//FB?             header_widget->setModified(isModified);
 
           actual_info->modified = isModified;
           if (!isModified)
@@ -846,6 +858,10 @@ void CKDevelop::slotViewTabTextIcons(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotBuildCompileFile(){
+  KWriteDoc* pCurrentDoc = m_docViewManager->currentEditDoc();
+  if (!pCurrentDoc)
+    return;
+
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
@@ -855,13 +871,13 @@ void CKDevelop::slotBuildCompileFile(){
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
-  slotStatusMsg(i18n("Compiling %1").arg(cpp_widget->getName()));
+  slotStatusMsg(i18n("Compiling %1").arg(pCurrentDoc->fileName()));
   messages_widget->clear();
   process.clearArguments();
   // get the filename of the implementation file to compile and change extension for make
   //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
 //  kdDebug() << "ObjectFile= " << fileinfo.baseName()+".o";
-  QFileInfo fileinfo(cpp_widget->getName());
+  QFileInfo fileinfo(pCurrentDoc->fileName());
   QString actualDir=fileinfo.dirPath();
   QDir::setCurrent(actualDir);
   error_parser->setStartDir(actualDir);
@@ -1632,11 +1648,11 @@ void CKDevelop::setupInternalDebugger()
   connect(  var_viewer->varTree(),  SIGNAL(setLocalViewState(bool)),
             dbgController,          SLOT(slotSetLocalViewState(bool)));
 
-  connect(  header_widget,    SIGNAL(runToCursor(const QString&, int)),
-            dbgController,    SLOT(slotRunUntil(const QString&, int)));
+//FB?  connect(  header_widget,    SIGNAL(runToCursor(const QString&, int)),
+//FB?            dbgController,    SLOT(slotRunUntil(const QString&, int)));
 
-  connect(  cpp_widget,       SIGNAL(runToCursor(const QString&, int)),
-            dbgController,    SLOT(slotRunUntil(const QString&, int)));
+//FB?  connect(  cpp_widget,       SIGNAL(runToCursor(const QString&, int)),
+//FB?            dbgController,    SLOT(slotRunUntil(const QString&, int)));
 
   connect(  disassemble,    SIGNAL(disassemble(const QString&, const QString&)),
             dbgController,  SLOT(slotDisassemble(const QString&, const QString&)));
@@ -1848,8 +1864,8 @@ void CKDevelop::slotBuildStop(){
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
-void CKDevelop::slotToolsTool(int tool){
-
+void CKDevelop::slotToolsTool(int tool)
+{
   if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
     return;
   }
@@ -1862,8 +1878,8 @@ void CKDevelop::slotToolsTool(int tool){
      
   // This allows us to replace the macro %H with the header file name, %S with the source file name
   // and %D with the project directory name.  Any others we should have?
-  argument.replace( QRegExp("%H"), header_widget->getName() );
-  argument.replace( QRegExp("%S"), cpp_widget->getName() );
+//FB???  argument.replace( QRegExp("%H"), header_widget->getName() );
+//FB???  argument.replace( QRegExp("%S"), cpp_widget->getName() );
   if(project){
     argument.replace( QRegExp("%D"), prj->getProjectDir() );
   }
@@ -1891,31 +1907,9 @@ void CKDevelop::slotOptionsEditor(){
 
   slotStatusMsg(i18n("Setting up the Editor..."));
   pEW->optDlg();
-  config->setGroup("KWrite Options");
-  pEW->writeConfig(config);
-  pEW->doc()->writeConfig(config);
-
-  QList<int> allDocs = m_docViewManager->docs();
-  QListIterator<int> docIter(allDocs);
-  // for all kwrite documents
-  for ( ; docIter.current(); ++docIter) {
-    int curDocId = *(docIter.current());
-    int curDocType = m_docViewManager->docType( curDocId);
-    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
-      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
-      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
-      // for all views of the current kwrite document
-      for ( ; viewIter.current(); ++viewIter) {
-        pEW = (CEditWidget*) viewIter.current();
-        pEW->copySettings(cpp_widget);
-        config->setGroup("KWrite Options");
-        pEW->readConfig(config);
-        pEW->doc()->readConfig(config);
-      }
-    }
-  }
-  slotStatusMsg(i18n("Ready."));
+  globalTakeOverOfEditorOptions(pEW);
 }
+
 void CKDevelop::slotOptionsEditorColors(){
   CEditWidget* pEW = m_docViewManager->currentEditView();
   if (!pEW)
@@ -1923,30 +1917,7 @@ void CKDevelop::slotOptionsEditorColors(){
 
   slotStatusMsg(i18n("Setting up the Editor's colors..."));
   pEW->colDlg();
-  config->setGroup("KWrite Options");
-  pEW->writeConfig(config);
-  pEW->doc()->writeConfig(config);
-
-  QList<int> allDocs = m_docViewManager->docs();
-  QListIterator<int> docIter(allDocs);
-  // for all kwrite documents
-  for ( ; docIter.current(); ++docIter) {
-    int curDocId = *(docIter.current());
-    int curDocType = m_docViewManager->docType( curDocId);
-    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
-      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
-      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
-      // for all views of the current kwrite document
-      for ( ; viewIter.current(); ++viewIter) {
-        pEW = (CEditWidget*) viewIter.current();
-        pEW->copySettings(cpp_widget);
-        config->setGroup("KWrite Options");
-        pEW->readConfig(config);
-        pEW->doc()->readConfig(config);
-      }
-    }
-  }
-  slotStatusMsg(i18n("Ready."));
+  globalTakeOverOfEditorOptions(pEW);
 }
 
 
@@ -1957,30 +1928,7 @@ void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
 
   slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
   pEW->hlDef();
-  config->setGroup("KWrite Options");
-  pEW->writeConfig(config);
-  pEW->doc()->writeConfig(config);
-
-  QList<int> allDocs = m_docViewManager->docs();
-  QListIterator<int> docIter(allDocs);
-  // for all kwrite documents
-  for ( ; docIter.current(); ++docIter) {
-    int curDocId = *(docIter.current());
-    int curDocType = m_docViewManager->docType( curDocId);
-    if ( (curDocType == DocViewMan::Header) || (curDocType == DocViewMan::Source)) {
-      QList<QWidget> viewsOfCurrentDoc = m_docViewManager->viewsOfDoc( curDocId);
-      QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
-      // for all views of the current kwrite document
-      for ( ; viewIter.current(); ++viewIter) {
-        pEW = (CEditWidget*) viewIter.current();
-        pEW->copySettings(cpp_widget);
-        config->setGroup("KWrite Options");
-        pEW->readConfig(config);
-        pEW->doc()->readConfig(config);
-      }
-    }
-  }
-  slotStatusMsg(i18n("Ready."));
+  globalTakeOverOfEditorOptions(pEW);
 }
 
 void CKDevelop::slotOptionsSyntaxHighlighting(){
@@ -1990,6 +1938,12 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
 
   slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
   pEW->hlDlg();
+  globalTakeOverOfEditorOptions(pEW);
+}
+
+// shared helper function for the 4 functions from above
+void CKDevelop::globalTakeOverOfEditorOptions( CEditWidget* pEW)
+{
   config->setGroup("KWrite Options");
   pEW->writeConfig(config);
   pEW->doc()->writeConfig(config);
@@ -2005,11 +1959,11 @@ void CKDevelop::slotOptionsSyntaxHighlighting(){
       QListIterator<QWidget> viewIter(viewsOfCurrentDoc);
       // for all views of the current kwrite document
       for ( ; viewIter.current(); ++viewIter) {
-        pEW = (CEditWidget*) viewIter.current();
-        pEW->copySettings(cpp_widget);
+        CEditWidget* pCurEW = (CEditWidget*) viewIter.current();
+        pCurEW->copySettings(pEW);
         config->setGroup("KWrite Options");
-        pEW->readConfig(config);
-        pEW->doc()->readConfig(config);
+        pCurEW->readConfig(config);
+        pCurEW->doc()->readConfig(config);
       }
     }
   }
@@ -2184,10 +2138,7 @@ void CKDevelop::slotBookmarksSet(){
   if(s_tab_view->getCurrentTab()==BROWSER)
     slotBookmarksAdd();
   else{
-    if(m_docViewManager->currentEditView()==header_widget)
-      header_widget->setBookmark();
-    if(m_docViewManager->currentEditView()==cpp_widget)
-      cpp_widget->setBookmark();
+    m_docViewManager->currentEditView()->setBookmark();
   }
 }
 */
@@ -2220,10 +2171,7 @@ void CKDevelop::slotBookmarksToggle()
   }
   else
   {
-    if(m_docViewManager->currentEditView()==header_widget)
-      header_widget->toggleBookmark();
-    if(m_docViewManager->currentEditView()==cpp_widget)
-      cpp_widget->toggleBookmark();
+    m_docViewManager->currentEditView()->toggleBookmark();
   }
 }
 
@@ -2234,11 +2182,15 @@ void CKDevelop::slotBookmarksClear(){
     doc_bookmarks->clear();
   }    
   else{
-    if(m_docViewManager->currentEditView()==header_widget)
-      header_widget->clearBookmarks();
-    if(m_docViewManager->currentEditView()==cpp_widget)
-      cpp_widget->clearBookmarks();
-  }  
+    // clear all bookmarks
+    QList<int> allDocs = m_docViewManager->docs();
+    QListIterator<int> docIter(allDocs);
+    for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+      int curDocId = *(docIter.current());
+      KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
+      pDoc->clearBookmarks();
+    }
+  }
 }
 
 void CKDevelop::openBrowserBookmark(const QString& file)

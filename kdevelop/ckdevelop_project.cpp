@@ -39,6 +39,7 @@
 #include "debug.h"
 #include "kpp.h"
 #include "docviewman.h"
+#include "kwdoc.h"
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -78,8 +79,14 @@ bool CKDevelop::slotProjectClose()
 
   log_file_tree->storeState(prj);
 
-  setInfoModified(header_widget->getName(), header_widget->isModified());
-  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
+  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+    int curDocId = *(docIter.current());
+    KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
+    setInfoModified(pDoc->fileName(), pDoc->isModified());
+  }
 
   for(actual_info=edit_infos.first();cont && actual_info != 0;)
 	{
@@ -158,8 +165,6 @@ bool CKDevelop::slotProjectClose()
     real_file_tree->clear();
     menu_buffers->clear();
 
-    header_widget->clear();
-    cpp_widget->clear();
     messages_widget->clear();
     stdin_stdout_widget->clear();
     stderr_widget->clear();
@@ -173,29 +178,21 @@ bool CKDevelop::slotProjectClose()
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
     
-    // re-inititalize the edit widgets
-    header_widget->setName(i18n("Untitled.h"));
-    cpp_widget->setName(i18n("Untitled.cpp"));
-    TEditInfo* edit1 = new TEditInfo;
-    TEditInfo* edit2 = new TEditInfo;
-    edit1->filename = header_widget->getName();
-    edit2->filename = cpp_widget->getName();
-    
-    edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
-    edit1->modified=false;
-    edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
-    edit2->modified=false;
-    edit_infos.append(edit1);
-    edit_infos.append(edit2);
-    
+    // close all documents
+    QList<int> allDocs = m_docViewManager->docs();
+    QListIterator<int> docIter(allDocs);
+    // for all kwrite documents
+    for ( ; docIter.current(); ++docIter) {
+      int curDocId = *(docIter.current());
+      m_docViewManager->closeDoc( curDocId);
+    }
+
     // set project to false and disable all ID_s related to project=true	
     prj->writeProject();
     project=false;
 //    prj->valid = false;   wtf!!!!
     delete prj;
     prj = 0;
-    
-    switchToFile(header_widget->getName());
     
     disableCommand(ID_FILE_NEW);
     // doc menu
@@ -629,7 +626,8 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
 	QString old_project;
 	if (project)
 	{
-		old_project = prj->getProjectFile();
+	  if (prj)
+  		old_project = prj->getProjectFile();
 		//the user may have pressed cancel in which case we want to reload
 		// the old project
 		if (!slotProjectClose())
@@ -1449,21 +1447,7 @@ bool CKDevelop::readProjectFile(QString file)
   lNewProject->setTopMakefile();
   lNewProject->setCvsMakefile();
 
-  // if this is a c project then change Untitled.cpp to Untitled.c
-  if (prj->getProjectType()=="normal_c")
-  {
-    TEditInfo *actual_info=0l;
-    for(actual_info=edit_infos.first();actual_info != 0 && actual_info->filename!=i18n("Untitled.cpp");
-         actual_info=edit_infos.next());
-    if (actual_info)
-    {
-      actual_info->filename = i18n("Untitled.c");
-      menu_buffers->changeItem(actual_info->filename, actual_info->id);
-      if (cpp_widget->getName()==i18n("Untitled.cpp"))
-        cpp_widget->setName(actual_info->filename);
-    }
-   }
-
+//FB: really switch to the 2 files below? That's very special...
   extension=(prj->getProjectType()=="normal_c") ? "c" : "cpp";
   str = prj->getProjectDir() + prj->getSubDir() + prj->getProjectName().lower() + ".h";
   if(QFile::exists(str)){
@@ -1537,8 +1521,8 @@ void  CKDevelop::saveCurrentWorkspaceIntoProject(){
   current.openfiles.removeRef(i18n("Untitled.h"));
   current.openfiles.removeRef(i18n("Untitled.cpp"));
   current.openfiles.removeRef(i18n("Untitled.c"));
-  current.header_file = header_widget->getName();
-  current.cpp_file = cpp_widget->getName();
+//FB  current.header_file = header_widget->getName();
+//FB  current.cpp_file = cpp_widget->getName();
   current.browser_file =history_list.current();
   current.show_treeview =view_menu->isItemChecked(ID_VIEW_TREEVIEW);
   current.show_output_view = view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW);

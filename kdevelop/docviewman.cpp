@@ -303,7 +303,7 @@ QWidget* DocViewMan::createView(int docId)
     {
       KWriteDoc* pDoc = (KWriteDoc*) pDocViewNode->pDoc;
       // create the view and add to MDI
-      pNewView = new CEditWidget(0L, "autocreatedview", pDoc);
+      pNewView = new CEditWidget(0L, "autocreatedview", pDoc, pDocViewNode->docType);
       pNewView->setCaption( pDoc->fileName());
     }
     break;

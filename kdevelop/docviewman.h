@@ -25,12 +25,14 @@
 #include <qmap.h>
 
 //------------------------------------------------------------------------------
-#include "ceditwidget.h"
 #include "qextmdichildview.h"
 #include "highlight.h"
 
 class KWriteDoc;
+class CEditWidget;
 class CKDevelop;
+class KHTMLView;
+class CDocBrowser;
 
 //==============================================================================
 // class DocViewMan
