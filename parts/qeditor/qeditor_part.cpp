@@ -260,6 +260,7 @@ QString QEditorPart::text() const
 QString QEditorPart::text( unsigned int startLine, unsigned int startCol,
 						   unsigned int endLine, unsigned int endCol ) const
 {
+#warning "TODO: QEditorPart::text( unsigned int startLine, unsigned int startCol, unsigned int endLine, unsigned int endCol ) const"
 	kdDebug() << "EditInterface::text() -- not implemented yet!!" << endl;
 	return QString::null;
 }
@@ -529,16 +530,16 @@ int QEditorPart::findMode( const QString& filename )
 	return -1;
 }
 
-bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol, 
-			const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol, 
+bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
+			const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol,
 			unsigned int *matchLen, bool casesensitive, bool backwards )
 {
 #warning "TODO: implement QEditorPart::searchText()"
 	return false;
 }
-			
-bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol, 
-			const QRegExp &regexp, unsigned int *foundAtLine, 
+
+bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
+			const QRegExp &regexp, unsigned int *foundAtLine,
 			unsigned int *foundAtCol, unsigned int *matchLen, bool backwards )
 {
 #warning "TODO: implement QEditorPart::searchText()"
@@ -548,7 +549,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
 uint QEditorPart::mark (uint line)
 {
 #warning "TODO: implement uint QEditorPart::mark (uint line)"
-	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextDocument* textDoc = m_editor->editor()->document();
 	QTextParag* parag = textDoc->paragAt( line );
 	if( parag ){
 		ParagData* data = (ParagData*) parag->extraData();
@@ -561,7 +562,7 @@ uint QEditorPart::mark (uint line)
 
 void QEditorPart::setMark (uint line, uint markType)
 {
-	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextDocument* textDoc = m_editor->editor()->document();
 	QTextParag* parag = textDoc->paragAt( line );
 	if( parag ){
 		ParagData* data = (ParagData*) parag->extraData();
@@ -579,7 +580,7 @@ void QEditorPart::clearMark (uint line)
 
 void QEditorPart::addMark (uint line, uint markType)
 {
-	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextDocument* textDoc = m_editor->editor()->document();
 	QTextParag* parag = textDoc->paragAt( line );
 	if( parag ){
 		ParagData* data = (ParagData*) parag->extraData();
@@ -592,7 +593,7 @@ void QEditorPart::addMark (uint line, uint markType)
 
 void QEditorPart::removeMark (uint line, uint markType)
 {
-	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextDocument* textDoc = m_editor->editor()->document();
 	QTextParag* parag = textDoc->paragAt( line );
 	if( parag ){
 		ParagData* data = (ParagData*) parag->extraData();
@@ -607,11 +608,11 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 {
 	QPtrList<KTextEditor::Mark> marks;
 	marks.setAutoDelete( TRUE );
-	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextDocument* textDoc = m_editor->editor()->document();
 	QTextParag* p = textDoc->firstParag();
 	while( p ){
 		ParagData* data = (ParagData*) p->extraData();
-		if( data && data->mark() ){		
+		if( data && data->mark() ){
 			KTextEditor::Mark* mark = new KTextEditor::Mark;
 			mark->type = data->mark();
 			mark->line = p->paragId();
@@ -624,11 +625,11 @@ QPtrList<KTextEditor::Mark> QEditorPart::marks ()
 
 void QEditorPart::clearMarks ()
 {
-	QTextDocument* textDoc = m_editor->editor()->document();	
+	QTextDocument* textDoc = m_editor->editor()->document();
 	QTextParag* p = textDoc->firstParag();
 	while( p ){
 		ParagData* data = (ParagData*) p->extraData();
-		if( data ){		
+		if( data ){
 			data->setMark( 0 );
 		}
 		p = p->next();
