@@ -118,8 +118,8 @@ void GDBOutputWidget::slotGDBCmd()
     QString GDBCmd(m_userGDBCmdEditor->currentText());
     if (!GDBCmd.isEmpty())
     {
-        m_userGDBCmdEditor->clearEdit();
         m_userGDBCmdEditor->addToHistory(GDBCmd);
+        m_userGDBCmdEditor->clearEdit();
         emit userGDBCmd(GDBCmd);
     }
 }

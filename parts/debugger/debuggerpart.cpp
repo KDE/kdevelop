@@ -825,7 +825,14 @@ void DebuggerPart::slotStatus(const QString &msg, int state)
     else if (state & s_programExited)
     {
         stateIndicator = "E";
-        slotStop();
+        stateChanged( QString("stopped") );
+        KActionCollection *ac = actionCollection();
+        ac->action("debug_run")->setText( i18n("Restart") );
+        ac->action("debug_run")->setIcon( "1rightarrow" );
+        ac->action("debug_run")->setStatusText( i18n("Restart the program in the debugger") );
+        ac->action("debug_run")->setWhatsThis( i18n("Restart in debugger\n\n"
+                                           "Restarts the program in the debugger") );
+//        slotStop();
     }
     else
     {

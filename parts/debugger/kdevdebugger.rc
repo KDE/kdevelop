@@ -22,7 +22,7 @@
   <Action name="debug_attach"/>
  </Menu>
 </MenuBar>
-<ToolBar name="browserToolBar">
+<ToolBar name="Debug Toolbar">
   <Action name="debug_run"/>
   <Action name="debug_stepover"/>
   <Action name="debug_stepinto"/>

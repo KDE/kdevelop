@@ -122,6 +122,10 @@ using namespace std;
 namespace GDBDebugger
 {
 
+// This is here so we can check for startup /shutdown problems
+int debug_controllerExists = false;
+
+
 GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack, QDomDocument &projectDom)
         : DbgController(),
         frameStack_(frameStack),
@@ -147,6 +151,9 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
 {
     configure();
     cmdList_.setAutoDelete(true);
+
+    ASSERT(! debug_controllerExists);
+    debug_controllerExists = true;
 }
 
 // **************************************************************************
@@ -159,6 +166,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
 GDBController::~GDBController()
 {
     delete[] gdbOutput_;
+    debug_controllerExists = false;
 }
 
 // **************************************************************************
@@ -255,7 +263,7 @@ void GDBController::queueCmd(DbgCommand *cmd, bool executeNext)
 // state will get updated.
 void GDBController::executeCmd()
 {
-    if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_appBusy))
+    if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_appBusy|s_shuttingDown) || !dbgProcess_)
         return;
 
     if (!currentCmd_)
@@ -400,7 +408,6 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
 {
     state_ = (s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown)));
     destroyCmds();
-    emit dbgStatus (msg, state_);
 
     // We're always at frame zero when the program stops
     // and we must reset the active flag
@@ -418,6 +425,8 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
 
     if (msgBox)
         KMessageBox::error(0, i18n("gdb message:\n")+msg);
+
+    emit dbgStatus (msg, state_);
 }
 
 // **************************************************************************
@@ -437,7 +446,7 @@ void GDBController::parseLine(char* buf)
         programHasExited_ = true;   // FIXME: - a nasty switch
         return;
     }
-    
+
     if (strncmp(buf, "Prog", 4) == 0)
     {
         if ((strncmp(buf, "Program exited", 14) == 0))
@@ -452,7 +461,7 @@ void GDBController::parseLine(char* buf)
         {
             if (stateIsOn(s_core))
             {
-            	KMessageBox::information(0, QString(buf));
+                KMessageBox::information(0, QString(buf));
                 destroyCmds();
                 actOnProgramPause(QString(buf));
             }
@@ -476,7 +485,7 @@ void GDBController::parseLine(char* buf)
             // end the program as we want to allow the user to look at why the
             // program has a signal that's caused the prog to stop.
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
-	    // that'll end the program.
+            // that'll end the program.
             KMessageBox::information(0, QString(buf));
             actOnProgramPause(QString(buf));
             return;
@@ -524,7 +533,7 @@ void GDBController::parseLine(char* buf)
         }
 
         // When the program Seg faults (SEGV, FPE etc) and is then continued
-        // we get this. The program is now dead.
+        // we get this for threaded programs. The program is now dead.
         if ( strncmp(buf, "Cannot find user-level thread for LWP", 37)==0)
         {
             programNoApp(QString(buf), false);
@@ -539,20 +548,8 @@ void GDBController::parseLine(char* buf)
 
     if ( strncmp(buf, "[New Thread", 11)==0)
     {
-        DBG_DISPLAY("Parsed (START_[New)<ignored><" + QString(buf) + ">");
+        DBG_DISPLAY("Parsed (START_[New)<" + QString(buf) + ">");
         setStateOn(s_viewThreads);
-        return;
-    }
-
-    if ( strncmp(buf, "[Switching to Thread", 20)==0)
-    {
-        DBG_DISPLAY("Parsed (START_[Swi)<ignored><" + QString(buf) + ">");
-        return;
-    }
-
-    if ( strncmp(buf, "Current language:", 17)==0)
-    {
-        DBG_DISPLAY("Parsed (START_Curr)<ignored><" + QString(buf) + ">");
         return;
     }
 
@@ -637,14 +634,6 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
-    if (strncmp(buf, "No symbols loaded", 17) == 0 ||
-            strncmp(buf, "Single", 6) == 0)        // Single stepping
-    {
-        // We don't change state, because this falls out when a run command
-        // starts rather than when a run command stops.
-        return;
-    }
-
     if (strncmp(buf, "warn", 4) == 0)
     {
         if (strncmp(buf, "warning: core file may not match", 32) == 0 ||
@@ -671,6 +660,18 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
+    if (strncmp(buf, "No symbol", 9) == 0 ||                    // watch point failed
+            strncmp(buf, "Single", 6) == 0 ||                   // Single stepping
+            strncmp(buf, "No source file named", 20) == 0  ||   // breakpoint not set
+            strncmp(buf, "[Switching to Thread", 20) == 0 ||    //
+            strncmp(buf, "Current language:", 17) == 0)         //
+    {
+        // We don't change state, because this falls out when a run command
+        // starts rather than when a run command stops.
+        // Or.... it falls out with other messages that _are_ handled.
+        return;
+    }
+
     // The first "step into" into a source file that is missing
     // prints on stderr with a message that there's no source. Subsequent
     // "step into"s just print line number at filename. Both start with a
@@ -688,13 +689,14 @@ void GDBController::parseLine(char* buf)
     }
 
     /// @todo - Only do this at start up
-    if (//strncmp(buf, "No executable file specified.", 29) ==0   ||
+    if (
         strstr(buf, "not in executable format:")                ||
-        strstr(buf, "No such file or directory.")               ||  // does this fall out?
+//        strstr(buf, "No such file or directory.")               ||  // does this fall out?
         strstr(buf, i18n("No such file or directory.").local8Bit())||  // from system via gdb
         strstr(buf, "is not a core dump:")                      ||
         strncmp(buf, "ptrace: No such process.", 24)==0         ||
-        strncmp(buf, "ptrace: Operation not permitted.", 32)==0)
+        strncmp(buf, "ptrace: Operation not permitted.", 32)==0 ||
+        strncmp(buf, "No executable file specified.", 29)==0)
     {
         programNoApp(QString(buf), true);
         DBG_DISPLAY("Bad file <" + QString(buf) + ">");
@@ -1008,10 +1010,12 @@ char *GDBController::parseCmdBlock(char *buf)
         case LIBRARIES:
             emit rawGDBLibraries      (buf);
             break;
-        case DETACH:
-            setStateOff(s_attached);
-            break;
-            //      case FILE_START:      parseFileStart            (buf);      break;
+//         case DETACH:
+//             setStateOff(s_attached);
+//             break;
+//         case FILE_START:
+//             parseFileStart            (buf);
+//             break;
         default:
             break;
         }
@@ -1299,9 +1303,11 @@ void GDBController::slotStart(const QString& shell, const DomUtil::PairList& run
 
 void GDBController::slotStopDebugger()
 {
+    DBG_DISPLAY("GDBController::slotStopDebugger() called");
     if (!stateIsOn(s_shuttingDown) && dbgProcess_)
     {
         setStateOn(s_shuttingDown|s_silent);
+        DBG_DISPLAY("GDBController::slotStopDebugger() executing");
         destroyCmds();
 
         pauseApp();
@@ -1314,9 +1320,12 @@ void GDBController::slotStopDebugger()
 
         if (stateIsOn(s_attached))
         {
-            queueCmd(new GDBCommand("detach", NOTRUNCMD, NOTINFOCMD, DETACH));
+            setStateOn(s_waitTimer|s_appBusy);
+            const char *detach="detach\n";
+            dbgProcess_->writeStdin(detach, strlen(detach));
+            emit gdbStdout(detach);
             timer->start(3000, TRUE);
-            DBG_DISPLAY("<attached wait>");
+            DBG_DISPLAY("<detach wait>");
             while (stateIsOn(s_waitTimer))
             {
                 if (!stateIsOn(s_attached))
@@ -1324,6 +1333,14 @@ void GDBController::slotStopDebugger()
                 kapp->processEvents(20);
             }
         }
+
+//         if (!dbgProcess_)
+//         {
+//             DBG_DISPLAY("GDBController::slotStopDebugger(): ERROR: no dbgProcess_");
+//             state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
+//             emit dbgStatus (i18n("Debugger stopped"), state_);
+//             return;
+//         }
 
         setStateOn(s_waitTimer|s_appBusy);
         const char *quit="quit\n";
@@ -1342,10 +1359,8 @@ void GDBController::slotStopDebugger()
         if (!stateIsOn(s_programExited))
             dbgProcess_->kill(SIGKILL);
 
-        delete dbgProcess_;
-        dbgProcess_ = 0;
-        delete tty_;
-        tty_ = 0;
+        delete dbgProcess_;    dbgProcess_ = 0;
+        delete tty_;           tty_ = 0;
 
         state_ = s_dbgNotStarted | s_appNotStarted | s_silent;
         emit dbgStatus (i18n("Debugger stopped"), state_);
@@ -1382,6 +1397,7 @@ void GDBController::slotAttachTo(int pid)
     setStateOn(s_attached);
     queueCmd(new GDBCommand(
         QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
+
     if (stateIsOn(s_viewThreads))
         queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, INFOTHREAD),
                                         true);
