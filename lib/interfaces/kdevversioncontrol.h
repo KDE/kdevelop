@@ -49,6 +49,7 @@ public:
     *   @p name     a name for this object; it may be null since it is usefull for debugging
     */
     KDevVersionControl( const QString& pluginName, const QString& icon, QObject *parent, const char *name );
+
     /**
     * Destructor. Removes current VCS from the list of available ones.
     */
@@ -58,18 +59,22 @@ public:
     * Return a pointer to the associated configuration widget for this vcs.
     */
     virtual QWidget* newProjectWidget( QWidget */*parent*/ );
+
     /**
     * Creates a new project in the passed path @p dir.
     */
     virtual void createNewProject( const QString&/* dir*/ );
+
     /**
     * Fetch a module from remote repository, so it can be used for importing
     */
     virtual bool fetchFromRepository();
+
     /**
     * @return the file info provider for this version control (0 if none is available)
     */
     virtual KDevVCSFileInfoProvider *fileInfoProvider() const;
+
     /**
     * Checks if the directory is valid for this version control (for example
     * CVS may check for the presence of "<dirPath>/CVS/" subdir and something else)
@@ -78,11 +83,39 @@ public:
     *     <b>warning</b>: this returns false by default
     */
     virtual bool isValidDirectory( const QString &dirPath ) const;
+
     /**
     * @return the unique identifier for this plugin (so it can be used for retrieving
     * it from collections).
     */
     QString uid() const;
+
+    /**
+     * Add @p vcs to the list of the registered VCS.
+     */
+    void registerVersionControl( KDevVersionControl *vcs );
+
+    /**
+     * Use the specified version control object as default vcs
+     * @param vcsToUse
+     */
+    void setVersionControl( KDevVersionControl *vcsToUse );
+
+    /**
+     * Returns the Version Control System having the specified uinque identifier @p uid.
+     */
+    KDevVersionControl *versionControlByName( const QString &uid ) const;
+
+    /**
+     * Returns a list with unique identifiers among the version control systems.
+     */
+    QStringList registeredVersionControls() const;
+
+    /**
+     * Remove (<B>not</B> delete) @p vcs from the list of the registered VCS.
+     */
+    void unregisterVersionControl( KDevVersionControl *vcs );
+
 
 signals:
     /**
@@ -91,13 +124,12 @@ signals:
     * @param destinationDir is the directory where the module has been fetched
     */
     void finishedFetching( QString destinationDir );
-    /**
-    * Emitted when files registered into repository have been modified: registered
-    * clients can update their state accordingly with the info provided
-    * @param modifiedFiles files which have got modified
-    * @deprecated
-    */
-//    void fileStateChanged( const VCSFileInfoMap &modifiedFiles );
+
+private:
+    //@fixme - This is the same pointer as in the KDevPlugin baseclass, it is duplicated here 
+	// to maintain the encapsulation without redesigning the whole thing... // teatime
+    class KDevApi * m_api;
+
 };
 
 #endif

@@ -218,41 +218,6 @@ KDevVersionControl *KDevPlugin::versionControl() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void KDevPlugin::setVersionControl( KDevVersionControl *vcsToUse )
-{
-    return m_api->setVersionControl( vcsToUse );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void KDevPlugin::registerVersionControl( KDevVersionControl *vcs )
-{
-    m_api->registerVersionControl( vcs );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void KDevPlugin::unregisterVersionControl( KDevVersionControl *vcs )
-{
-    m_api->unregisterVersionControl( vcs );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-QStringList KDevPlugin::registeredVersionControls() const
-{
-    return m_api->registeredVersionControls();
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-KDevVersionControl *KDevPlugin::versionControlByName( const QString &uid ) const
-{
-    return m_api->versionControlByName( uid );
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void KDevPlugin::restorePartialProjectSession(const QDomElement* /*el*/)
 {
     // there's still nothing to do in the base class

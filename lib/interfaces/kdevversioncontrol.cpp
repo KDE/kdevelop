@@ -26,6 +26,7 @@
 
 #include <kdevmainwindow.h>
 #include <kmainwindow.h>
+#include <kdevapi.h>
 
 #include "kdevversioncontrol.h"
 
@@ -33,6 +34,8 @@ KDevVersionControl::KDevVersionControl( const QString& pluginName,
     const QString& icon, QObject *parent, const char *name )
     : KDevPlugin( pluginName, icon, parent, name )
 {
+    m_api = static_cast<KDevApi *>( parent );
+
     kdDebug( 9000 ) << "Registering Version Control System: " << uid() << endl;
 
     registerVersionControl( this );
@@ -93,5 +96,42 @@ KDevVCSFileInfoProvider *KDevVersionControl::fileInfoProvider() const
 {
     return 0;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+void KDevVersionControl::setVersionControl( KDevVersionControl *vcsToUse )
+{
+    return m_api->setVersionControl( vcsToUse );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void KDevVersionControl::registerVersionControl( KDevVersionControl *vcs )
+{
+    m_api->registerVersionControl( vcs );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void KDevVersionControl::unregisterVersionControl( KDevVersionControl *vcs )
+{
+    m_api->unregisterVersionControl( vcs );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QStringList KDevVersionControl::registeredVersionControls() const
+{
+    return m_api->registeredVersionControls();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+KDevVersionControl *KDevVersionControl::versionControlByName( const QString &uid ) const
+{
+    return m_api->versionControlByName( uid );
+}
+
+
 
 #include "kdevversioncontrol.moc"

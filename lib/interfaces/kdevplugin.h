@@ -222,36 +222,9 @@ public:
     virtual void savePartialProjectSession(QDomElement* el);
 
     /**
-     * Add @p vcs to the list of the registered VCS.
-     */
-    void registerVersionControl( KDevVersionControl *vcs );
-
-    /**
-     * Add to the list of the registered VCS.
      * @return a reference to the current vcs, 0 if no VCS is used
      */
-    KDevVersionControl *versionControl() const;
-
-    /**
-     * Use the specified version control object as default vcs
-     * @param vcsToUse
-     */
-    void setVersionControl( KDevVersionControl *vcsToUse );
-
-    /**
-     * Returns the Version Control System having the specified uinque identifier @p uid.
-     */
-    KDevVersionControl *versionControlByName( const QString &uid ) const;
-
-    /**
-     * Returns a list with unique identifiers among the version control systems.
-     */
-    QStringList registeredVersionControls() const;
-
-    /**
-     * Remove (<B>not</B> delete) @p vcs to the list of the registered VCS.
-     */
-    void unregisterVersionControl( KDevVersionControl *vcs );
+    KDevVersionControl *versionControl() const;   // used by the FileTree
 
     /**
     * @return
