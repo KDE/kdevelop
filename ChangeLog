@@ -1,3 +1,13 @@
+2004-05-31 Alexander Dymo <cloudtemple@mksat.net>
+    * KDevelop has made a large step towards being the RAD tool for KDE.
+      Qt Designer is ported to KParts and KXMLGUI technology and can now
+      be embedded into KDevelop and integrated with it. It consists of
+      KDevDesignerPart and KDevDesigner shell program. Part is embeddable
+      everywhere and shell can be launched as standalone designer (run kdevdesigner).
+    * The first step to integration between KDevDesigner and KDevelop is done.
+      CppSupport can now automatically create implementation files (subclasses) for forms
+      and automatically add slot implementations.
+
 2004-05-27 Sascha Cunz <scunz@ng-projekt.de>
     * Change "New File" in the toolbar to popup a menu with all available file templates,
       if one clicks on it.
