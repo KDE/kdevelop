@@ -738,7 +738,9 @@ CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
   connect( pEW, SIGNAL(runToCursor(const QString&, int)), m_pParent, SLOT(slotDebugRunUntil(const QString&, int)));
 
   // connect adding watch variable from the rmb in the editors
-  connect( pEW, SIGNAL(addWatchVariable(const QString&)), m_pParent->getVarViewer()->varTree(), SLOT(slotAddWatchVariable(const QString&)));
+  if (m_pParent->getVarViewer()) {
+    connect( pEW, SIGNAL(addWatchVariable(const QString&)), m_pParent->getVarViewer()->varTree(), SLOT(slotAddWatchVariable(const QString&)));
+  }
 
   if (getKWriteDocType(pDoc)==CPP_SOURCE||getKWriteDocType(pDoc)==FTN_SOURCE) {
     connect( pEW, SIGNAL(markStatus(KWriteView *, bool)), m_pParent, SLOT(slotCPPMarkStatus(KWriteView *, bool)));
