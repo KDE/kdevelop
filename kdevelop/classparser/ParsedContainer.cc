@@ -35,7 +35,7 @@
  *   -
  *-----------------------------------------------------------------*/
 CParsedContainer::CParsedContainer()
-  : useFullPath( true ),
+  : useFullPath( false ),
     methodIterator( methods ),
     attributeIterator( attributes ),
     structIterator( structs )
