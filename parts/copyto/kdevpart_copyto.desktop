@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Comment=Simple file uploader plugin. It does a file copy over any KIO supported protocol.
+Comment[xx]=xxcopytoxx
+Name=KDevcopyto
+Name[xx]=xxKDevcopytoxx
+GenericName=CopyTo
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+X-KDevelop-Scope=Project
+X-KDE-Library=libkdevcopyto
+X-KDevelop-Version=1

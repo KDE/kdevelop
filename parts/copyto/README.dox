@@ -1,0 +1,19 @@
+/** \class CopyToPart
+Plugin that does basic filecopying using KIO.
+
+This plugin can be used in webbased projects (PHP) to upload a local file to the server.
+It also makes a nice compilment to the FileSelector plugin which can browser remote filesystems.
+Using the CopyTo plugin it is now possible to download what you find.. ;)
+
+Still very basic, doesn't do a lot of the niceties one expects (history, error checking..)
+
+'Traditional' works like 'cp'. All selected files are copied to one target directory.
+
+'Relative' copies files to the target directories maintaining the relative path of the
+files. This only works if the target directories already exists and will silently fail if not.
+
+
+
+\authors <a href="mailto:jens.dagerbo AT swipnet.se">Jens Dagerbo</a> aka teatime
+
+*/
