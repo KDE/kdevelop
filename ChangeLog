@@ -2,6 +2,7 @@
 	* fixed so that nested classes are handled correctly, both of the
 	  parser and in the CV.
 	* added popupmenu for structs in the CV.
+	* fixed parsing of subclasses declared outside of parent class(Bug#1655)
 
 1999-08-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Workaround for the bug that KApplication does not
