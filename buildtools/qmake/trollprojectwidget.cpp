@@ -655,7 +655,7 @@ void TrollProjectWidget::setupContext()
     if (m_shownSubproject->isScope)
     {
       runable = false;
-      projectconfigurable = false;
+      projectconfigurable = true;
       buildable = false;
     }
 

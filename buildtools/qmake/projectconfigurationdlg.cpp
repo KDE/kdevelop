@@ -186,31 +186,32 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
 {
   // Template
   myProjectItem->configuration.m_requirements = 0;
-
-  if (radioApplication->isChecked())
+  if( !myProjectItem->isScope )
   {
-    myProjectItem->configuration.m_template = QTMP_APPLICATION;
-    myProjectItem->setPixmap(0,SmallIcon("qmake_app"));
+	if (radioApplication->isChecked())
+	{
+	myProjectItem->configuration.m_template = QTMP_APPLICATION;
+	myProjectItem->setPixmap(0,SmallIcon("qmake_app"));
+	}
+	else if (radioLibrary->isChecked())
+	{
+	myProjectItem->configuration.m_template = QTMP_LIBRARY;
+	if (staticRadio->isOn())
+	myProjectItem->configuration.m_requirements += QD_STATIC;
+	if (sharedRadio->isOn()){
+	myProjectItem->configuration.m_requirements += QD_SHARED;
+	myProjectItem->configuration.m_libraryversion = m_targetLibraryVersion->text();
+	}
+	if (pluginRadio->isOn())
+	myProjectItem->configuration.m_requirements += QD_PLUGIN;
+	myProjectItem->setPixmap(0,SmallIcon("qmake_lib"));
+	}
+	else if (radioSubdirs->isChecked())
+	{
+	myProjectItem->configuration.m_template = QTMP_SUBDIRS;
+	myProjectItem->setPixmap(0,SmallIcon("qmake_sub"));
+	}
   }
-  else if (radioLibrary->isChecked())
-  {
-    myProjectItem->configuration.m_template = QTMP_LIBRARY;
-    if (staticRadio->isOn())
-      myProjectItem->configuration.m_requirements += QD_STATIC;
-    if (sharedRadio->isOn()){
-      myProjectItem->configuration.m_requirements += QD_SHARED;
-      myProjectItem->configuration.m_libraryversion = m_targetLibraryVersion->text();
-    }
-    if (pluginRadio->isOn())
-      myProjectItem->configuration.m_requirements += QD_PLUGIN;
-    myProjectItem->setPixmap(0,SmallIcon("qmake_lib"));
-  }
-  else if (radioSubdirs->isChecked())
-  {
-    myProjectItem->configuration.m_template = QTMP_SUBDIRS;
-    myProjectItem->setPixmap(0,SmallIcon("qmake_sub"));
-  }
-
   // Buildmode
   if (radioDebugMode->isChecked())
     myProjectItem->configuration.m_buildMode = QBM_DEBUG;
@@ -430,38 +431,41 @@ void ProjectConfigurationDlg::UpdateControls()
   QRadioButton *activateRadiobutton=NULL;
   // Project template
   libGroup->setEnabled(false);
-  switch (myProjectItem->configuration.m_template)
+  if( !myProjectItem->isScope )
   {
-    case QTMP_APPLICATION:
-      activateRadiobutton = radioApplication;
-      if (myProjectItem->configuration.m_requirements & QD_CONSOLE )
-         checkConsole->setChecked(true);
-      break;
-    case QTMP_LIBRARY:
-      libGroup->setEnabled(true);
+	switch (myProjectItem->configuration.m_template)
+	{
+	case QTMP_APPLICATION:
+	activateRadiobutton = radioApplication;
+	if (myProjectItem->configuration.m_requirements & QD_CONSOLE )
+		checkConsole->setChecked(true);
+	break;
+	case QTMP_LIBRARY:
+	libGroup->setEnabled(true);
 
-      activateRadiobutton = radioLibrary;
-      staticRadio->setChecked(true); //default
-      if (myProjectItem->configuration.m_requirements & QD_STATIC){
-        staticRadio->setChecked(true);
-      }
-      if (myProjectItem->configuration.m_requirements & QD_SHARED){
-        sharedRadio->setChecked(true);
-        m_targetLibraryVersion->setText(myProjectItem->configuration.m_libraryversion);
-      }
+	activateRadiobutton = radioLibrary;
+	staticRadio->setChecked(true); //default
+	if (myProjectItem->configuration.m_requirements & QD_STATIC){
+		staticRadio->setChecked(true);
+	}
+	if (myProjectItem->configuration.m_requirements & QD_SHARED){
+		sharedRadio->setChecked(true);
+		m_targetLibraryVersion->setText(myProjectItem->configuration.m_libraryversion);
+	}
 
-      if (myProjectItem->configuration.m_requirements & QD_PLUGIN)
-        pluginRadio->setChecked(true);
-      if (myProjectItem->configuration.m_requirements & QD_DLL )
-        checkDll->setChecked(true);
-      if (myProjectItem->configuration.m_requirements & QD_LIBTOOL )
-        checkLibtool->setChecked(true);
-      if (myProjectItem->configuration.m_requirements & QD_PKGCONF )
-        checkPkgconf->setChecked(true);
-      break;
-    case QTMP_SUBDIRS:
-      activateRadiobutton = radioSubdirs;
-      break;
+	if (myProjectItem->configuration.m_requirements & QD_PLUGIN)
+		pluginRadio->setChecked(true);
+	if (myProjectItem->configuration.m_requirements & QD_DLL )
+		checkDll->setChecked(true);
+	if (myProjectItem->configuration.m_requirements & QD_LIBTOOL )
+		checkLibtool->setChecked(true);
+	if (myProjectItem->configuration.m_requirements & QD_PKGCONF )
+		checkPkgconf->setChecked(true);
+	break;
+	case QTMP_SUBDIRS:
+	activateRadiobutton = radioSubdirs;
+	break;
+	}
   }
   // Buildmode
   if (activateRadiobutton)
