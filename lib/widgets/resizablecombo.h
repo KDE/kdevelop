@@ -22,12 +22,7 @@ class ResizableCombo: public QWidget{
 public:
     ResizableCombo(KComboView *view, QWidget *parent = 0, const char *name = 0);
 
-public slots:
-    void startResize();
-    void stopResize();
-
 private:
-    bool m_resizing;
     MyPushButton *m_sizer;
     KComboView *m_combo;
 
@@ -45,10 +40,12 @@ public:
     }
 
 protected:
+    virtual void mouseReleaseEvent ( QMouseEvent * e );
     virtual void mousePressEvent ( QMouseEvent * e );
     virtual void mouseMoveEvent ( QMouseEvent * e );
 
 private:
+    bool m_resizing;
     QPoint m_pressedPos;
     int m_width;
     ResizableCombo *m_combo;
