@@ -53,8 +53,8 @@ DocProjectConfigWidget::DocProjectConfigWidget(DocumentationPart *part, QWidget 
         if (docSystemCombo->text(i) == projectDocSystem)
         {
             docSystemCombo->setCurrentItem(i);
-	    hasProjectDoc = true;
-	    changeDocSystem(docSystemCombo->currentText());
+            hasProjectDoc = true;
+            changeDocSystem(docSystemCombo->currentText());
             break;
         }
     }
@@ -63,6 +63,8 @@ DocProjectConfigWidget::DocProjectConfigWidget(DocumentationPart *part, QWidget 
         docSystemCombo->setCurrentItem(0);
         changeDocSystem(docSystemCombo->currentText());
     }
+
+    manualURL->setURL(DomUtil::readEntry(*(m_part->projectDom()), "/kdevdocumentation/projectdoc/usermanualurl"));
 }
 
 void DocProjectConfigWidget::changeDocSystem(const QString &text)
@@ -87,6 +89,32 @@ void DocProjectConfigWidget::changeDocSystem(const QString &text)
 
 void DocProjectConfigWidget::accept()
 {
+    if (manualURL->url().isEmpty())
+    {
+        if (m_part->m_userManualPlugin)
+        {
+            delete m_part->m_userManualPlugin;
+            m_part->m_userManualPlugin = 0;
+        }
+    }
+    else
+    {
+        if (m_part->m_userManualPlugin)
+        {
+            delete m_part->m_userManualPlugin;
+            m_part->m_userManualPlugin = 0;
+        }
+        for (QValueList<DocumentationPlugin*>::const_iterator it = m_part->m_plugins.constBegin();
+            it != m_part->m_plugins.constEnd(); ++it)
+        {
+            if ((*it)->hasCapability(DocumentationPlugin::ProjectUserManual))
+                m_part->m_userManualPlugin = (*it)->projectDocumentationPlugin(DocumentationPlugin::UserManual);
+        }
+        if (m_part->m_userManualPlugin)
+            m_part->m_userManualPlugin->init(m_part->m_widget->contents(), m_part->m_widget->index(), manualURL->url());
+    }
+    m_part->saveProjectDocumentationInfo();
+    
     if (docSystemCombo->currentText().isEmpty())
         return;
     if (catalogURL->url().isEmpty())
@@ -99,7 +127,7 @@ void DocProjectConfigWidget::accept()
         m_part->saveProjectDocumentationInfo();
         return;
     }
-    
+        
     DocumentationPlugin *plugin = m_plugins[docSystemCombo->currentText()];
     if (!plugin)
         return;
@@ -109,8 +137,9 @@ void DocProjectConfigWidget::accept()
         delete m_part->m_projectDocumentationPlugin;
         m_part->m_projectDocumentationPlugin = 0;
     }
-    m_part->m_projectDocumentationPlugin = plugin->projectDocumentationPlugin();
+    m_part->m_projectDocumentationPlugin = plugin->projectDocumentationPlugin(DocumentationPlugin::APIDocs);
     m_part->m_projectDocumentationPlugin->init(m_part->m_widget->contents(), m_part->m_widget->index(), catalogURL->url());
+    
     m_part->saveProjectDocumentationInfo();
 }
 

@@ -195,7 +195,10 @@ public:
     enum Capability { Index=1 /**<index can be built for catalogs*/,
                       FullTextSearch=2 /**<full text search is possible in catalog locations*/,
                       CustomDocumentationTitles=4 /**<user can specify titles for documentation catalogs*/,
-                      ProjectDocumentation=8 /**<plugin can handle project documentation*/ };
+                      ProjectDocumentation=8 /**<plugin can handle project API documentation*/,
+                      ProjectUserManual=16 /**<plugin can handle project user manual*/ };
+    /**Possible project documentation types.*/
+    enum ProjectDocType { APIDocs, UserManual };
     
     /**Constructor. Should initialize capabilities of the plugin by using setCapabilities
     protected method. For example,
@@ -306,7 +309,7 @@ public:
     
     /**Returns associated project documentation plugin. Default implementation returns zero.
     Reimplement this if the documentation plugin can also handle project documentation.*/
-    virtual ProjectDocumentationPlugin *projectDocumentationPlugin() { return 0; }
+    virtual ProjectDocumentationPlugin *projectDocumentationPlugin(ProjectDocType type) { return 0; }
     
 public slots:
     /**Creates index and fills index listbox. Reimplement this only if custom
@@ -359,7 +362,7 @@ Represents functionality to display project documentation catalog and index in d
 class ProjectDocumentationPlugin: public QObject {
     Q_OBJECT
 public:
-    ProjectDocumentationPlugin(DocumentationPlugin *docPlugin);
+    ProjectDocumentationPlugin(DocumentationPlugin *docPlugin, DocumentationPlugin::ProjectDocType type);
     virtual ~ProjectDocumentationPlugin();
 
     /**Initializes project documentation plugin - creates documentation catalog.*/
@@ -379,6 +382,8 @@ protected:
     DocumentationCatalogItem *m_catalog;
     
 private:
+    DocumentationPlugin::ProjectDocType m_type;
+
     class KDirWatch *m_watch;
     class KListView *m_contents;
     class IndexBox *m_index;

@@ -68,7 +68,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevdocumentation, DocumentationFactory( &data ) 
 
 DocumentationPart::DocumentationPart(QObject *parent, const char *name, const QStringList& )
     :KDevPlugin("Documentation", "doctree", parent, name ? name : "DocumentationPart" ),
-    m_projectDocumentationPlugin(0), m_hasIndex(false)
+    m_projectDocumentationPlugin(0), m_userManualPlugin(0), m_hasIndex(false)
 {
     setInstance(DocumentationFactory::instance());
     setXMLFile("kdevpart_documentation.rc");
@@ -424,16 +424,24 @@ void DocumentationPart::projectOpened()
     QString projectDocURL = DomUtil::readEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docurl");
     if (!projectDocURL.isEmpty())
         projectDocURL = QDir::cleanDirPath(project()->projectDirectory() + "/" + projectDocURL);
+    QString userManualURL = DomUtil::readEntry(*(projectDom()), "/kdevdocumentation/projectdoc/usermanualurl");
     
     for (QValueList<DocumentationPlugin*>::const_iterator it = m_plugins.constBegin();
         it != m_plugins.constEnd(); ++it)
     {
         if ((*it)->hasCapability(DocumentationPlugin::ProjectDocumentation) &&
             ((*it)->pluginName() == projectDocSystem))
-            m_projectDocumentationPlugin = (*it)->projectDocumentationPlugin();
+            m_projectDocumentationPlugin = (*it)->projectDocumentationPlugin(DocumentationPlugin::APIDocs);
+        if ((*it)->hasCapability(DocumentationPlugin::ProjectUserManual))
+        {
+            kdDebug() << "creating user manual for type: " << DocumentationPlugin::UserManual << endl;
+            m_userManualPlugin = (*it)->projectDocumentationPlugin(DocumentationPlugin::UserManual);
+        }
     }
     if (m_projectDocumentationPlugin)
         m_projectDocumentationPlugin->init(m_widget->contents(), m_widget->index(), projectDocURL);
+    if (m_userManualPlugin && !userManualURL.isEmpty())
+        m_userManualPlugin->init(m_widget->contents(), m_widget->index(), userManualURL);
 }
 
 void DocumentationPart::projectClosed()
@@ -442,6 +450,8 @@ void DocumentationPart::projectClosed()
         
     delete m_projectDocumentationPlugin;
     m_projectDocumentationPlugin = 0;
+    delete m_userManualPlugin;
+    m_userManualPlugin = 0;
 }
 
 void DocumentationPart::saveProjectDocumentationInfo()
@@ -459,7 +469,10 @@ void DocumentationPart::saveProjectDocumentationInfo()
         DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docsystem", "");
         DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/docurl", "");
     }
-        
+    if (m_userManualPlugin)
+        DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/usermanualurl", m_userManualPlugin->catalogURL());
+    else
+        DomUtil::writeEntry(*(projectDom()), "/kdevdocumentation/projectdoc/usermanualurl", "");
 }
 
 #include "documentation_part.moc"

@@ -92,6 +92,7 @@ private:
     
     QValueList<DocumentationPlugin*> m_plugins;
     ProjectDocumentationPlugin *m_projectDocumentationPlugin;
+    ProjectDocumentationPlugin *m_userManualPlugin;
     
     QString m_contextStr;
     bool m_hasIndex;

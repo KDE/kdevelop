@@ -649,9 +649,11 @@ void IndexBox::refill()
 }
 
 
-ProjectDocumentationPlugin::ProjectDocumentationPlugin(DocumentationPlugin *docPlugin)
-    :QObject(0, 0), m_docPlugin(docPlugin), m_catalog(0), m_contents(0), m_index(0)
+ProjectDocumentationPlugin::ProjectDocumentationPlugin(DocumentationPlugin *docPlugin, DocumentationPlugin::ProjectDocType type)
+    :QObject(0, 0), m_docPlugin(docPlugin), m_catalog(0), m_type(type), m_contents(0), m_index(0)
 {
+    kdDebug() << "ProjectDocumentationPlugin::ProjectDocumentationPlugin for type " << type << endl;
+    
     m_watch = new KDirWatch(this);
     connect(m_watch, SIGNAL(dirty(const QString&)), this, SLOT(reinit()));
     m_watch->startScan();
@@ -670,7 +672,9 @@ void ProjectDocumentationPlugin::init(KListView *contents, IndexBox *index, cons
     
     if (m_catalog)
         deinit();
-    m_catalog = m_docPlugin->createCatalog(contents, i18n("Project API Documentation"), url);
+    m_catalog = m_docPlugin->createCatalog(contents, 
+        m_type == DocumentationPlugin::APIDocs ? i18n("Project API Documentation")
+        : i18n("Project User Manual"), url);
     if (m_catalog)
     {
         m_catalog->setProjectDocumentationItem(true);

@@ -417,9 +417,11 @@ void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
     }
 }
 
-ProjectDocumentationPlugin *DocDoxygenPlugin::projectDocumentationPlugin()
+ProjectDocumentationPlugin *DocDoxygenPlugin::projectDocumentationPlugin(ProjectDocType type)
 {
-    return new ProjectDocumentationPlugin(this);
+    if (type == APIDocs)
+        return new ProjectDocumentationPlugin(this, type);
+    return DocumentationPlugin::projectDocumentationPlugin(type);
 }
 
 #include "docdoxygenplugin.moc"

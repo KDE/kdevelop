@@ -48,7 +48,9 @@ public:
     virtual void autoSetupPlugin();
     
     virtual QPair<KFile::Mode, QString> catalogLocatorProps();
-    
+
+    virtual ProjectDocumentationPlugin *projectDocumentationPlugin(ProjectDocType type);
+        
 protected:
     void pushToScanStack(QValueStack<QString> &stack, const QString &value);
     void scanDevHelpDir(const QString &path);

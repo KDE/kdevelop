@@ -64,7 +64,7 @@ DocDevHelpPlugin::DocDevHelpPlugin(QObject* parent, const char* name,
     const QStringList /*args*/)
     :DocumentationPlugin(DocDevHelpPluginFactory::instance()->config(), parent, name)
 {
-    setCapabilities(Index | FullTextSearch);
+    setCapabilities(Index | FullTextSearch | ProjectDocumentation);
     autoSetup();
 }
 
@@ -360,6 +360,13 @@ void DocDevHelpPlugin::setCatalogURL(DocumentationCatalogItem* item)
         KURL url(fi.dirPath(true) + "/" + docEl.attribute("link", QString::null));
         item->setURL(url);
     }
+}
+
+ProjectDocumentationPlugin *DocDevHelpPlugin::projectDocumentationPlugin(ProjectDocType type)
+{
+    if (type == APIDocs)
+        return new ProjectDocumentationPlugin(this, type);
+    return DocumentationPlugin::projectDocumentationPlugin(type);
 }
 
 #include "docdevhelpplugin.moc"

@@ -49,7 +49,7 @@ public:
     
     virtual void autoSetupPlugin();
 
-    virtual ProjectDocumentationPlugin *projectDocumentationPlugin();
+    virtual ProjectDocumentationPlugin *projectDocumentationPlugin(ProjectDocType type);
         
 protected:
     void createBookTOC(DocumentationItem* item, const QString &tagUrl = QString::null, 
