@@ -94,6 +94,8 @@ int main(int argc, char *argv[])
 
   splash->showMessage( i18n( "Loading Project" ) );
 
+  delete splash;
+
   for( int i=0; i<args->count(); ++i ){
       kdDebug(9000) << "------> arg " << args->arg(i) << endl;
   }
@@ -116,8 +118,6 @@ int main(int argc, char *argv[])
 	  PartController::getInstance()->editDocument( KURL(args->url(a)) );
       }
   }
-
-  delete splash;
 
   kapp->dcopClient()->registerAs("gideon");
 
