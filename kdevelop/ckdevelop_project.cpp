@@ -983,7 +983,7 @@ void CKDevelop::slotProjectAPI(){
 void CKDevelop::slotConfigureDoxygen(){
 	// check for Doxyfile
 	KProcess process;
-  QString dir = prj->getProjectDir() + prj->getSubDir() + "/";
+  QString dir = prj->getProjectDir() + prj->getSubDir();
   QString file= dir + "Doxyfile";
   if(!QFileInfo(file).exists())
   {
@@ -1043,12 +1043,12 @@ void CKDevelop::slotConfigureDoxygen(){
 							i18n("Program not found -- doxywizard "));
   	return; 	
 	}
-  KProcess	dox_process;
-  QString s =  "cd '" + dir + "' && ";
-  s += "doxywizard Doxyfile";
-  cerr << s << endl;
- 	dox_process << s;
-  dox_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+
+  KShellProcess	shell_process;
+  shell_process.clearArguments();
+  shell_process << QString("cd '")+ dir + "' && ";
+  shell_process << "doxywizard Doxyfile";
+  shell_process.start(KProcess::DontCare);
 }
 
 //MB end
