@@ -379,6 +379,7 @@ void CParsedClass::out()
   CParsedMethod *aMethod;
   CParsedSignalSlot *aSS;
   CParsedSignalText *aST;
+  char *str;
 
   sprintf( buf, "%d", definedOnLine );
   cout << "Class " << name << " @ line " << buf << "\n";
@@ -388,6 +389,9 @@ void CParsedClass::out()
   cout << "  Parents:\n";
   for( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
     aParent->out();
+  cout << "  Friends:\n";
+  for( str = friends.first(); str != NULL; str = friends.next() )
+    cout << "   " << str << "\n";
   cout << "  Attributes:\n";
   for( ait.toFirst(); ait.current(); ++ait )
     ait.current()->out();

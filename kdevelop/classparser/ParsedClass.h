@@ -41,6 +41,7 @@
 #define _CPARSEDCLASS_H_INCLUDED
 
 #include <qlist.h>
+#include <qstrlist.h>
 #include <qdict.h>
 #include <qstring.h>
 #include "ParsedParent.h"
@@ -74,6 +75,9 @@ public: // Public attributes
 
   /** List with names of parentclasses(if any). */
   QList<CParsedParent> parents;
+
+  /** List iwth names of frientclasses(if any). */
+  QStrList friends;
 
   /** All methods ordered by name and argument. */
   QDict<CParsedMethod> methodsByNameAndArg;
@@ -115,6 +119,9 @@ public: // Metods to set attribute values
 
   /** Add a parent. */
   void addParent( CParsedParent *aParent );
+
+  /** Add a friend. */
+  void addFriend( const char *aName ) { friends.append( aName ); }
 
   /** Add an attribute. */
   void addAttribute( CParsedAttribute *anAttribute );
