@@ -823,8 +823,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
   if (!item->configuration.m_target.simplifyWhiteSpace().isEmpty())
     Buffer->setValues("TARGET",QString(item->configuration.m_target),FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("INCLUDEPATH");
-  if (!item->configuration.m_includepath.simplifyWhiteSpace().isEmpty())
-    Buffer->setValues("INCLUDEPATH",QString(item->configuration.m_includepath),FileBuffer::VSM_RESET,VALUES_PER_ROW);
+  if (!item->configuration.m_includepath.count())
+      Buffer->setValues("INCLUDEPATH",item->configuration.m_includepath,FileBuffer::VSM_RESET,VALUES_PER_ROW);
   Buffer->removeValues("DEFINES");
   if (item->configuration.m_defines.count())
     Buffer->setValues("DEFINES",item->configuration.m_defines,FileBuffer::VSM_RESET,VALUES_PER_ROW);
@@ -1530,6 +1530,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
 {
     QFileInfo fi(item->path);
     QString proname = item->path + "/" + fi.baseName() + ".pro";
+    
     kdDebug(9024) << "Parsing " << proname << endl;
 
 
@@ -1601,8 +1602,7 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     if (lst.count())
       item->configuration.m_target = lst[0];
     item->m_FileBuffer.getValues("INCLUDEPATH",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_includepath = lst[0];
+    item->configuration.m_includepath = lst;
     item->m_FileBuffer.getValues("DEFINES",lst,minusListDummy);
     item->configuration.m_defines = lst;
     item->m_FileBuffer.getValues("QMAKE_CXXFLAGS_DEBUG",lst,minusListDummy);

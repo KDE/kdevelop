@@ -10,8 +10,12 @@
  ***************************************************************************/
 
 #include <qtextstream.h>
-#include "filebuffer.h"
 #include <qmessagebox.h>
+#include <qregexp.h>
+
+#include <iostream>
+
+#include "filebuffer.h"
 
 /**
  * Destructor
@@ -58,6 +62,18 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
     return Caret(m_buffer.count(),0);
   else
     return Caret(-1,-1);
+}
+
+Caret FileBuffer::findWrittenVariableInBuffer(const QString &substring, const Caret& startPos) {
+    Caret c(startPos);
+    while(true) {
+	c = findInBuffer(substring,c);
+	if(c==Caret(-1,-1)) return c;
+	QRegExp re("[ \t]*" + substring + "[ \t]*(-|\\+)?=.*");
+	if(re.exactMatch(m_buffer[c.m_row])) return c;
+	c.m_idx += substring.length();
+    }
+    return c; // make compiler happy
 }
 
 /**
@@ -228,7 +244,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
   bool finished = false;
   while (!finished)
   {
-    Caret variablePos(findInBuffer(variable,curPos));
+    Caret variablePos(findWrittenVariableInBuffer(variable,curPos));
     if (variablePos==Caret(-1,-1))
     {
       finished=true;
@@ -294,7 +310,7 @@ void FileBuffer::removeValues(const QString &variable)
   bool finished = false;
   while (!finished)
   {
-    Caret variablePos = findInBuffer(variable,curPos);
+    Caret variablePos = findWrittenVariableInBuffer(variable,curPos);
     if (variablePos==Caret(-1,-1))
     {
       finished = true;
@@ -400,7 +416,7 @@ void FileBuffer::dumpBuffer()
 //===========================
 {
   for ( unsigned int i=0; i<m_buffer.count(); i++ )
-    printf(m_buffer[i]+"\n");
+    std::cout << m_buffer[i] << std::endl;
 }
 
 Caret FileBuffer::findScopeEnd(Caret pos)

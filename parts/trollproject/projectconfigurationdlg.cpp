@@ -100,7 +100,7 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   }*/
   m_projectConfiguration->m_target = m_targetOutputFile->text();
   m_projectConfiguration->m_destdir = m_targetPath->text();
-  m_projectConfiguration->m_includepath = m_includePath->text();
+  m_projectConfiguration->m_includepath = QStringList::split(" ",m_includePath->text());
   m_projectConfiguration->m_defines = QStringList::split(" ",m_defines->text());
   m_projectConfiguration->m_cxxflags_debug = QStringList::split(" ",m_debugFlags->text());
   m_projectConfiguration->m_cxxflags_release = QStringList::split(" ",m_releaseFlags->text());
@@ -181,7 +181,7 @@ void ProjectConfigurationDlg::UpdateControls()
   clickSubdirsTemplate();
 
   // Includepath
-  m_includePath->setText(m_projectConfiguration->m_includepath);    
+  m_includePath->setText(m_projectConfiguration->m_includepath.join(" "));      
   m_defines->setText(m_projectConfiguration->m_defines.join(" "));
   m_debugFlags->setText(m_projectConfiguration->m_cxxflags_debug.join(" "));
   m_releaseFlags->setText(m_projectConfiguration->m_cxxflags_release.join(" "));
