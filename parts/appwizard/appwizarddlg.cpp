@@ -692,6 +692,10 @@ bool AppWizardDialog::copyFile( const installFile& file )
 		copyFile( file.source, file.dest, file.isXML, file.process );
 }
 
+#include <sys/types.h> 
+#include <sys/stat.h> 
+#include <unistd.h> 
+
 bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool isXML, bool process )
 {
 	kdDebug( 9010 ) << "Copy: " << source << " to " << dest << endl;
@@ -700,6 +704,7 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool
 		// Process the file and save it at the destFile location
 		QFile inputFile( source);
 		QFile outputFile( dest );
+
 		const QMap<QString,QString> &subMap = isXML ?
 			m_pCurrentAppInfo->subMapXML : m_pCurrentAppInfo->subMap;
 		if( inputFile.open( IO_ReadOnly ) && outputFile.open(IO_WriteOnly) )
@@ -708,6 +713,11 @@ bool AppWizardDialog::copyFile( const QString &source, const QString &dest, bool
 			QTextStream output( &outputFile );
 			while( !input.atEnd() )
 				output << KMacroExpander::expandMacros(input.readLine(), subMap) << "\n";
+			// Preserve file mode...
+			struct stat fmode;
+			::fstat( inputFile.handle(), &fmode);
+			::fchmod( outputFile.handle(), fmode.st_mode );
+
 		}
 		else
 		{
