@@ -27,9 +27,6 @@ DocumentImpl::DocumentImpl(KEditor::Editor *parent)
   m_view = static_cast<KWrite*>(m_document->createView(0, ""));
   setWidget(m_view);
 
-  // register with the view manager
-  parent->addView(m_view);
-     
   // create interfaces
   new ClipboardIfaceImpl(m_view, this, parent);
   new CursorIfaceImpl(m_view, this, parent);
@@ -37,9 +34,6 @@ DocumentImpl::DocumentImpl(KEditor::Editor *parent)
 
   setXMLFile("kwriteeditor_part.rc", true);
    
-  // register with the part manager
-  parent->addPart(this);
-  
   m_view->setFocus();
 }
 
@@ -50,9 +44,9 @@ kdDebug() << "DocumentImpl " << this << " desctructed!!!" << endl;
 }
 
 
-bool DocumentImpl::load(const QString &filename)
+bool DocumentImpl::openFile()
 {
-  QFile f(filename);
+  QFile f(m_file);
   if (!f.open(IO_ReadOnly))
 	return false;
 
@@ -61,15 +55,13 @@ bool DocumentImpl::load(const QString &filename)
 
   f.close();
 
-  rename(filename);
-  
   return true;
 }
 
 
-bool DocumentImpl::save(const QString &filename)
+bool DocumentImpl::saveFile()
 {
-  QFile f(filename);
+  QFile f(m_file);
   if (!f.open(IO_WriteOnly))
 	return false;
 
@@ -77,8 +69,6 @@ bool DocumentImpl::save(const QString &filename)
   ts << m_document->text();
 
   f.close();
-
-  rename(filename);
 
   return true;
 }

@@ -24,22 +24,9 @@ public:
   KWritePart(QObject *parent, const char *name);
   virtual ~KWritePart();
 
-
-  virtual KEditor::Document *getDocument(const QString &filename=QString::null);
+  virtual KEditor::Document *document(const KURL &url);
+  virtual KEditor::Document *createDocument(const KURL &url="");
   virtual KEditor::Document *currentDocument();
-
-  QList<DocumentImpl> _documents;
-
-
-private slots:
-
-  void activePartChanged(KParts::Part *part);
-
-
-private:
-		
-  KEditor::Document *_currentDocument;
-
 
 };
 

@@ -10,20 +10,12 @@
 #include "kwrite_factory.h"
 
 
-#include "documents_iface_impl.h"
-
-
 KWritePart::KWritePart(QObject *parent, const char *name )
-  : KEditor::Editor(parent, name), _currentDocument(0)
+  : KEditor::Editor(parent, name)
 {
   setInstance(KWritePartFactory::instance());
 
-  // create the interfaces
-  (void) new DocumentsIfaceImpl(this);
-
   setXMLFile("kwriteeditor_part.rc");
-
-  _documents.setAutoDelete(true);
 }
 
 
@@ -32,11 +24,15 @@ KWritePart::~KWritePart()
 }
 
 
-KEditor::Document *KWritePart::getDocument(const QString &filename)
+KEditor::Document *KWritePart::document(const KURL &url)
 {
   DocumentImpl *impl = 0;
+  return impl;
 
+  // impl = KEditor::Editor::getDocument(filename)
+ 
   // look for an existing document with that name
+  /* TODO: Use part manager, put into base class
   if (!filename.isEmpty())
   {
     QListIterator<DocumentImpl> it(_documents);
@@ -52,52 +48,33 @@ KEditor::Document *KWritePart::getDocument(const QString &filename)
 	}
     }
   }
-
+*/
   // if there was none, create a new one
-  bool created = false;
   if (!impl)
   {
     impl = new DocumentImpl(this);
 
-    if (!filename.isEmpty())
-	impl->load(filename);
-	
-    connect(impl->manager(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
-
-    _documents.append(impl);
-    _currentDocument = impl;
-
-    created = true;
+    if (!url.isEmpty())
+	impl->openURL(url);
   }
 
-  if (created)
-	emit Editor::documentAdded();
-  
-  emit Editor::activatePart(impl);
-   
-  if (impl->widget())
-    emit Editor::activateView(impl->widget());
-	
   return impl;
 }
 
 
-void KWritePart::activePartChanged(KParts::Part *part)
+KEditor::Document *KWritePart::createDocument(const KURL &url)
 {
-kdDebug() << "NEW CURRENT DOCUMENT: " << part << endl;
-
-  if (part && part->inherits("KEditor::Document"))
-	_currentDocument = (KEditor::Document*)part;
-  else
-	_currentDocument = 0;
-
-  emit Editor::documentActivated(_currentDocument);
+  DocumentImpl *impl = new DocumentImpl(this);
+  if (!url.isEmpty())
+    impl->openURL(url);
+  return impl;
 }
 
 
 KEditor::Document *KWritePart::currentDocument()
 {
-  return _currentDocument;
+  // TODO: use part manager to look up
+  return 0;
 }
 
 

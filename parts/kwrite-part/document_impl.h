@@ -18,8 +18,12 @@ public:
   DocumentImpl(KEditor::Editor *parent);
   virtual ~DocumentImpl();
   
-  virtual bool load(const QString &filename);
-  virtual bool save(const QString &filename);
+  virtual bool saveFile();
+
+
+protected:
+
+  virtual bool openFile();
 
 
 private:

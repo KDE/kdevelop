@@ -1,3 +1,6 @@
+#include <kdebug.h>
+
+
 #include "kwrite/kwview.h"
 
 
@@ -12,6 +15,8 @@ CursorIfaceImpl::CursorIfaceImpl(KWrite *edit, KEditor::Document *parent, KEdito
 
 bool CursorIfaceImpl::setCursorPosition(int line, int col)
 {
+kdDebug() << "Set cursor position: " << line << ", " << col << endl;
+
   m_edit->setCursorPosition(line, col);
   m_edit->setFocus();
 
