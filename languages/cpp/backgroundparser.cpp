@@ -242,7 +242,8 @@ void BackgroundParser::removeFile( const QString& fileName )
 {
     QMutexLocker locker( &m_mutex );
 
-    if( Unit* unit = findUnit(fileName) ){
+    Unit* unit = findUnit(fileName);
+    if( unit ){
         m_driver->remove( fileName );
         m_unitDict.remove( fileName );
         delete( unit );
@@ -304,8 +305,8 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
 
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
-    Unit* u = 0;
-    if( (u = findUnit(fileName)) == 0 ){
+    Unit* u = findUnit(fileName);
+    if( u == 0 ){
 	m_fileList->remove( fileName );
 	u = parseFile( fileName, false );
     }
@@ -315,8 +316,8 @@ TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 
 QValueList<Problem> BackgroundParser::problems( const QString& fileName, bool readFromDisk, bool forceParse )
 {
-    Unit* u = 0;
-    if( (u = findUnit(fileName)) == 0 || forceParse ){
+    Unit* u = findUnit(fileName);
+    if( u == 0 || forceParse ){
 	m_fileList->remove( fileName );
 	u = parseFile( fileName, readFromDisk );
     }
@@ -381,3 +382,5 @@ void BackgroundParser::run()
 
     QThread::exit();
 }
+
+// kate: space-indent on; indent-width 4; mixed-indent on;
