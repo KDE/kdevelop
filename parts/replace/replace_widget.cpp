@@ -132,12 +132,11 @@ void ReplaceWidget::editDocument( QString const & file, int line )
     m_part->partController()->editDocument( file, line );
 }
 
-void ReplaceWidget::stopButtonClicked(KDevPlugin* which)
+void ReplaceWidget::stopButtonClicked( KDevPlugin * which )
 {
-    kdDebug(0) << "ReplaceWidget::stopButtonClicked()" << endl;
-
     if ( which != 0 && which != m_part )
         return;
+        
     _terminateOperation = true;
 }
 
