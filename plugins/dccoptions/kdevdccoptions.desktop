@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=dcc
+Comment=Borland Delphi Compiler
+Name=DccOptions
+ServiceTypes=KDevelop/CompilerOptions
+X-KDE-Library=libkdevdccoptions
+X-KDevelop-Language=Pascal
+X-KDevelop-Args=dcc
