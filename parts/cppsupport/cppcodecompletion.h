@@ -51,6 +51,7 @@ public slots:
     void expandText();
     void completeText();
     void typeOf();
+    QString typingTypeOf( int, int );
 
 protected slots:
     void slotDocumentActivated ( KEditor::Document* pDoc );
@@ -86,6 +87,10 @@ protected:
     /* methods which are called recursively by getEntryListForClass(...) */
     QList<ParsedMethod>* getParentMethodListForClass( ParsedClass* pClass, QList<ParsedMethod>* pList );
     QList<ParsedAttribute>* getParentAttributeListForClass( ParsedClass* pClass, QList<ParsedAttribute>* pList );
+
+    QStringList getMethodListForClass( QString strClass, QString strMethod );
+    void getParentMethodListForClass( ParsedClass* pClass, QString strMethod, QStringList& methodList );
+
 private:
     KEditor::Editor* m_pEditor;
     CppSupportPart* m_pSupport;
@@ -104,7 +109,7 @@ private:
     bool m_bCodeCompletion;
 
     QStringList m_CHCommentList;
-    
+
     QString getTypeOfMethod( ParsedClass*, const QString& );
     QString getTypeOfAttribute( ParsedClass*, const QString& );
 };

@@ -17,5 +17,8 @@
   <Menu noMerge="1" name="go_document"><text>&amp;Go</text>
     <Action name="go_goto_line"/>
   </Menu>
+  <Menu name="settings"><text>&amp;Settings</text>
+    <Action name="settings_font" group="config-merge"/>
+  </Menu>
 </MenuBar>
 </kpartgui>

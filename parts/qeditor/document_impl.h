@@ -4,9 +4,8 @@
 
 class QEditor;
 
-
 #include <keditor/editor.h>
-
+#include <qfont.h>
 
 class DocumentImpl : public KEditor::Document
 {
@@ -22,11 +21,15 @@ public:
 protected:
 
   virtual bool openFile();
+  
+protected slots:
+  void slotFontSettings( );
 
 
 private:
 
   QEditor *_widget;
+  QFont   m_font;
 
 };
 

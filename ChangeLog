@@ -1,3 +1,7 @@
+2002-02-24  Roberto Raggi <ragi@cli.di.unipi.it>
+	* improved code completion
+	* added quick hack for configuring the fonts for qeditor
+
 2002-16-02  Daniel Engelschalt <daniel.engelschalt@gmx.net>
 	* added codecompletion-classstore
 	* added removeWidget( )

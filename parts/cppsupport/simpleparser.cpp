@@ -74,36 +74,30 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
     QRegExp ws( "[ \t]+" );
     QRegExp qt( "Q_[A-Z]+" );
-    QRegExp comment( "//[^\\n]*" );
-    QRegExp preproc( "^\\s*#[^\\n]*$" );
     QRegExp rx( "[\n|&|\\*]" );
-    QRegExp strconst( "\\\"([^\"]|\\\\\\\")*\\\"" );
+    QRegExp strconst( "\"[^\"]*\"" );
     QRegExp chrconst( "'[^']*'" );
-    QRegExp keywords( "\\b(public|protected|private|mutable|typename|case|new|delete|enum|class|virtual|const|extern|static|struct|if|else|return|while|for|do)\\b" ); // etc...
     QRegExp assign( "=[^,;]*" );
+    QStringList keywords = QStringList::split( "|", "case|new|delete|const|static|struct|if|else|return|while|for|do" );
 
-    contents = remove_comment( contents );
-//    contents = remove( contents, '(', ')' );
-    contents = remove( contents, '[', ']' );
+//    contents = remove_comment( contents );
+//    contents = remove( contents, '[', ']' );
 
     contents
         .replace( ws, " " )
-        .replace( qt, "" )
-        .replace( preproc, "" )
-        .replace( comment, "" )
         .replace( rx, "" )
         .replace( strconst, "" )
         .replace( chrconst, "" )
-        .replace( keywords, "" )
+        .replace( QRegExp("static"), "" )
         .replace( QRegExp("\\{"), "{;" )
         .replace( QRegExp("\\}"), ";};" )
         ;
 
+    kdDebug() << "contents = " << contents << endl;
+
     QStringList lines = QStringList::split( ";", contents );
 
-    QRegExp decl_rx( "^\\s*(([\\w_<>]|::)+)\\s+([\\w_]+)\\b[^{]*$" );
-    QRegExp method_rx( "^\\s*((?:[\\w_]|::)+).*{$" );
-    // QRegExp ide_rx( "\\b(([\\w_<>]|::)+)\\s*\\(" );
+    QRegExp decl_rx( "^[ \t]*([a-zA-Z0-9_<>:]+)[ \t]+([a-zA-Z0-9_]+)[^{]*$" );
 
     int lev = 0;
     QStringList::Iterator it = lines.begin();
@@ -114,32 +108,37 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
         QString simplifyLine = remove( line, '(', ')' );
         simplifyLine.replace( assign, "" );
 
+        kdDebug() << "line = |" << line << "|" << endl;
+
         if( line.find("{") != -1 ){
             ++lev;
         } else if( line.find("}") != -1 ){
             --lev;
         }
 
-        if( line.startsWith("(") ){
+        if( line.startsWith("(") || line.isEmpty() ){
             // pass
-        } else if( decl_rx.exactMatch(simplifyLine) ){
+        }
+        else if( decl_rx.exactMatch(simplifyLine) ){
             // parse a declaration
             QString type = QString::fromLatin1( decl_rx.cap( 1 ) );
-            QString rest = simplifyLine.mid( decl_rx.pos(2) + 1 )
+            QString rest = simplifyLine.mid( decl_rx.pos(2) )
                            .replace( ws, "" );
+            if( keywords.findIndex(type) == -1 ){
 
-            QStringList vlist = QStringList::split( ",", rest);
-            for( QStringList::Iterator it=vlist.begin(); it!=vlist.end(); ++it ){
-                SimpleVariable var;
-                var.scope = lev;
-                var.type = type;
-                var.name = *it;
-                vars.append( var );
+                QStringList vlist = QStringList::split( ",", rest);
+                for( QStringList::Iterator it=vlist.begin(); it!=vlist.end(); ++it ){
+                    SimpleVariable var;
+                    var.scope = lev;
+                    var.type = type;
+                    var.name = *it;
+                    vars.append( var );
+                }
+//                qDebug( "lev = %d - type = %s - vars = %s",
+//                        lev,
+//                        type.latin1(),
+//                        vlist.join(", ").latin1() );
             }
-//            qDebug( "lev = %d - type = %s - vars = %s",
-//                    lev,
-//                    type.latin1(),
-//                    vlist.join(", ").latin1() );
         }
     }
     return vars;
@@ -163,9 +162,10 @@ QValueList<SimpleVariable> SimpleParser::parseFile( const QString& filename ){
 SimpleVariable SimpleParser::findVariable( const QValueList<SimpleVariable>& vars,
                                            const QString& varname )
 {
-    for( QValueList<SimpleVariable>::ConstIterator it=vars.begin(); it!=vars.end(); ++it ){
-        if( (*it).name == varname )
-            return (*it);
+    for( int i=vars.count() - 1; i>=0; --i ){
+        SimpleVariable v = vars[ i ];
+        if( v.name == varname ) // TODO: check variable's scope
+            return v;
     }
     return SimpleVariable();
 }

@@ -16,6 +16,12 @@
 #include "edit_iface_impl.h"
 #include "codecompletion_iface_impl.h"
 
+#include <kdebug.h>
+#include <klocale.h>
+#include <kaction.h>
+#include <kconfig.h>
+#include <kinstance.h>
+#include <kfontdialog.h>
 
 using namespace KEditor;
 
@@ -25,9 +31,14 @@ DocumentImpl::DocumentImpl(Editor *parent, QWidget *parentWidget)
 {
   setInstance(QEditorPartFactory::instance());
 
+    KConfig* config = QEditorPartFactory::instance( )->config( );
+    config->setGroup( "Font" );
+    m_font.setFamily( config->readEntry( "Family" ) );
+    m_font.setPointSize( config->readEntry( "Size" ).toInt( ) );
+
   // create the editor
   _widget = new QEditor(parentWidget);
-  _widget->setFont(QFont("courier", 12));
+  _widget->setFont( m_font );
   setWidget(_widget);
 
   // create interfaces
@@ -38,8 +49,30 @@ DocumentImpl::DocumentImpl(Editor *parent, QWidget *parentWidget)
   new CodeCompletionDocumentIfaceImpl(_widget, this, parent );
 
   setXMLFile("qeditor_part.rc", true);
+  
+  KAction* action;
+  action = new KAction( i18n( "Font settings..." ), 0,
+			this, SLOT( slotFontSettings( ) ),
+			actionCollection( ), "settings_font" );
 }
 
+void
+DocumentImpl::slotFontSettings( )
+{
+    KFontDialog* d = new KFontDialog( );
+    d->setFont( _widget->font( ) );
+
+    if( d->exec( ) == KFontDialog::Accepted ){
+	m_font = d->font( );
+	_widget->setFont( m_font );
+	emit _widget->refresh( );
+
+	KConfig* config = QEditorPartFactory::instance( )->config( );
+	config->setGroup  ( "Font" );
+	config->writeEntry( "Family", m_font.family( ) );
+	config->writeEntry( "Size"  , m_font.pointSize( ) );
+    }
+}
 
 bool DocumentImpl::openFile()
 {

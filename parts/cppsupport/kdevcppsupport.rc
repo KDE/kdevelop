@@ -3,6 +3,10 @@
 <MenuBar>
  <Menu name="edit">
   <Action name="edit_switchheader"/>
+  <Separator />
+  <Action name="edit_expand_text"/>
+  <Action name="edit_complete_text"/>
+  <Action name="edit_type_of_expression"/>
  </Menu>
 </MenuBar>
 </kpartgui>
