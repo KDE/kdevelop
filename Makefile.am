@@ -24,7 +24,7 @@ $(top_srcdir)/acinclude.m4: $(top_srcdir)/kdevelop.m4.in
 MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files
 
 package-messages:
-	$(MAKE) -f admin/Makefile.common package-messages
+	$(MAKE) -f $(top_srcdir)/admin/Makefile.common package-messages
 	$(MAKE) -C po merge
 
 dist-hook:
