@@ -1,3 +1,6 @@
+2002-03-26  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: corrupted .kdevses file shouldn't confuse KDevelop any more
+
 2002-03-15  Harald Fernengel <harry@kdevelop.org>
     * applied patch from John Birch: removed flickering in output-view, highlight error messages and fix memory leak
 
