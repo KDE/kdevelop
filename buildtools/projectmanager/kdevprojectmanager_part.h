@@ -26,6 +26,7 @@
 
 class KDevProjectManagerWidget;
 class KDevProjectImporter;
+class KDevProjectBuilder;
 class ProjectModel;
 
 /*
@@ -89,12 +90,14 @@ protected:
     QStringList fileList(ProjectItemDom item);
     QStringList allFiles();
     KDevProjectImporter *defaultImporter() const;
+    KDevProjectBuilder *defaultBuilder() const;
     
 private:
     ProjectModel *m_projectModel;
     ProjectWorkspaceDom m_workspace;
     QGuardedPtr<KDevProjectManagerWidget> m_widget;
     QMap<QString, KDevProjectImporter*> m_importers;
+    QMap<QString, KDevProjectBuilder*> m_builders;
     QStringList m_cachedFileList;
     
     QString m_projectDirectory;

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KDevMakeBuilder
+Comment=KDevelop Automake Importer
+Icon=gear
+ServiceTypes=KDevelop/ProjectBuilder
+X-KDE-Library=libkdevautomakeimporter
+X-KDevelop-ProjectImporter=

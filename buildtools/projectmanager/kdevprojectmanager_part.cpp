@@ -19,6 +19,7 @@
 #include "kdevprojectmanager_widget.h"
 #include "kdevprojectmanager_part.h"
 #include "kdevprojectimporter.h"
+#include "kdevprojectbuilder.h"
 #include "kdevprojecteditor.h"
 
 #include <kdevcore.h>
@@ -60,20 +61,39 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     m_workspace->setName("Workspace (kdevelop)");
     m_projectModel->addItem(m_workspace->toItem());    
     
-    KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectImporter");
+    { // load the importers
+        KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectImporter");
+        
+        for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it) {
+            KService::Ptr ptr = *it;
     
-    for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it){
-        KService::Ptr ptr = *it;
-
-        int error = 0;
-        if (KDevProjectImporter *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectImporter>(ptr, this, 
-                                             ptr->name().latin1(), QStringList(), &error)) 
-        {
-            m_importers.insert(ptr->name(), i);            
-        } else {
-            kdDebug(9000) << "error:" << error << endl;
-        }
-    }    
+            int error = 0;
+            if (KDevProjectImporter *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectImporter>(ptr, this, 
+                                                ptr->name().latin1(), QStringList(), &error)) 
+            {
+                m_importers.insert(ptr->name(), i);            
+            } else {
+                kdDebug(9000) << "error:" << error << endl;
+            }
+        }    
+    }
+    
+    { // load the builders
+        KTrader::OfferList lst = KTrader::self()->query("KDevelop/ProjectBuilder");
+        
+        for (KTrader::OfferList::Iterator it = lst.begin(); it != lst.end(); ++it) {
+            KService::Ptr ptr = *it;
+    
+            int error = 0;
+            if (KDevProjectBuilder *i = KParts::ComponentFactory::createInstanceFromService<KDevProjectBuilder>(ptr, this, 
+                                                ptr->name().latin1(), QStringList(), &error)) 
+            {
+                m_builders.insert(ptr->name(), i);            
+            } else {
+                kdDebug(9000) << "error:" << error << endl;
+            }
+        }    
+    }
 }
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
@@ -195,6 +215,19 @@ KDevProjectImporter *KDevProjectManagerPart::defaultImporter() const
         return m_importers[kind];
         
     kdDebug(9000) << "error: no default importer!" << endl;
+    return 0;
+}
+
+KDevProjectBuilder *KDevProjectManagerPart::defaultBuilder() const
+{
+    QDomDocument &dom = *projectDom();
+    QString kind = DomUtil::readEntry(dom, "/general/builder");
+    Q_ASSERT(!kind.isEmpty());
+    
+    if (m_builders.contains(kind))
+        return m_builders[kind];
+        
+    kdDebug(9000) << "error: no default builder!" << endl;
     return 0;
 }
 

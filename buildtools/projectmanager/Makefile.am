@@ -5,7 +5,7 @@ INCLUDES = \
     -I$(top_srcdir)/lib/util \
     $(all_includes)
 
-SUBDIRS = interfaces . importers 
+SUBDIRS = interfaces . importers builders 
 
 kde_module_LTLIBRARIES = libkdevprojectmanager.la
 libkdevprojectmanager_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
