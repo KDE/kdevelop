@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kprocess.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kurlrequester.h>
 #include <kfontcombo.h>

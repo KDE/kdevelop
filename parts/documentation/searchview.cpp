@@ -38,7 +38,7 @@
 #include <kdialog.h>
 #include <kprocess.h>
 #include <kapplication.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kdebug.h>

@@ -23,7 +23,6 @@
 #include "konsoleviewpart.h"
 #include "kdevpartcontroller.h"
 
-#include "konsoleviewpart.h"
 #include "konsoleviewwidget.h"
 
 KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)

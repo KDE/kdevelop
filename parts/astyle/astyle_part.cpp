@@ -23,7 +23,7 @@
 #include <kdevplugininfo.h>
 
 #include "astyle_widget.h"
-#include <astyle_adaptor.h>
+#include "astyle_adaptor.h"
 
 static const KDevPluginInfo data("kdevastyle");
 

@@ -21,7 +21,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kaboutdata.h>
 
 extern "C"

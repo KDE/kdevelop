@@ -53,8 +53,6 @@
 #include <kparts/componentfactory.h>
 #include <kio/netaccess.h>
 #include <qfile.h>
-#include <qdir.h>
-#include <qtextstream.h>
 #include <kmacroexpander.h>
 #include <karchive.h>
 #include <ktar.h>

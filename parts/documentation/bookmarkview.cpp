@@ -24,7 +24,7 @@
 #include <qlineedit.h>
 #include <qpoint.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kdialog.h>
 #include <kpushbutton.h>

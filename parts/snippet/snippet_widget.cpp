@@ -28,22 +28,19 @@
 #include <kpopupmenu.h>
 #include <qregexp.h>
 #include <qinputdialog.h>
-#include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qwhatsthis.h>
-#include <kdebug.h>
 #include <qdragobject.h>
 #include <qtimer.h>
 #include <kcombobox.h>
 
 #include <kdevcore.h>
-#include "kdevcore.h"
 #include <kdevproject.h>
 #include <kdevpartcontroller.h>
 
-#include <snippetdlg.h>
-#include <snippetitem.h>
+#include "snippetdlg.h"
+#include "snippetitem.h"
 
 #include "snippet_part.h"
 #include "snippet_widget.h"

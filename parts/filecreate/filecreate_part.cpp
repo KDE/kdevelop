@@ -27,7 +27,6 @@
 #include <kapplication.h>
 #include <kactionclasses.h>
 #include <kpopupmenu.h>
-#include <kiconloader.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"

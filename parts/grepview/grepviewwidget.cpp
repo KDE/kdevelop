@@ -11,7 +11,6 @@
 
 #include <qdir.h>
 #include <qlayout.h>
-#include <qlayout.h>
 #include <qregexp.h>
 #include <qpainter.h>
 #include <qtoolbutton.h>

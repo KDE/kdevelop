@@ -17,7 +17,6 @@
 #include "makeitem.h"
 
 #include <klocale.h>
-#include <kdebug.h>
 
 //#define DEBUG
 

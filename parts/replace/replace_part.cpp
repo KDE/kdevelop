@@ -17,7 +17,6 @@
 #include <kdevgenericfactory.h>
 #include <kdevplugininfo.h>
 #include <kdebug.h>
-#include <kiconloader.h>
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>

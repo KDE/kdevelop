@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include <kapp.h>
+#include <kapplication.h>
 #include <kdebug.h>
 #include <kinstance.h>
 #include <kglobal.h>
