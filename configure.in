@@ -10,7 +10,7 @@ AM_CONFIG_HEADER(config.h)
 dnl inits some variables needed by automake's Makefiles.
 dnl add here the package name and it's version number. It will
 dnl be defined in config.h and in the Makefiles
-AM_INIT_AUTOMAKE(kdevelop,'1.0')
+AM_INIT_AUTOMAKE(kdevelop,'1.1-beta1.0')
 
 dnl sets the prefix to $KDEDIR or /usr/local/kde (if no $KDEDIR
 dnl set) for the case, that there is no --prefix
@@ -27,9 +27,9 @@ dnl don't build libraries. This mainly disables the configure switches
 dnl --enable-shared and --enable-static, since they don't make that much
 dnl sense then :)
 dnl AM_DISABLE_LIBRARIES
-
-
+dnl But contrary to above we _will_ enable shared libs
 AM_ENABLE_SHARED
+
 dnl let libtool configure. Checks for the way to handle your compiler
 dnl to do some magic 
 KDE_PROG_LIBTOOL
@@ -39,6 +39,7 @@ dnl don't have i18n support, you may want to remove this, but leaving it
 dnl here doesn't hurt
 AM_KDE_WITH_NLS
 
+dnl This uses qt1. Make sure it's valid
 KDE_USE_QT(1)
 
 dnl definitly the biggest macro. Checks for X, qt, moc, KDE and the
