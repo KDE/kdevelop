@@ -101,16 +101,20 @@ void PartController::setupActions()
 {
   KActionCollection *ac = TopLevel::getInstance()->main()->actionCollection();
 
-  (void) KStdAction::open(this, SLOT(slotOpenFile()),
+  KAction* newAction = KStdAction::open(this, SLOT(slotOpenFile()),
     ac, "file_open");
+  newAction->setToolTip( i18n("Open an existing file") );
+  newAction->setWhatsThis( i18n("<b>Open file</b><p>Opens an existing file without adding it to the project.</p>") );
 
   m_openRecentAction = KStdAction::openRecent( this, SLOT(slotOpenRecent(const KURL&) ),
     ac, "file_open_recent" );
+  m_openRecentAction->setToolTip( i18n("Open a recent file") );
   m_openRecentAction->loadEntries( kapp->config(), "RecentFiles" );
 
   m_saveAllFilesAction = new KAction(i18n("Save Al&l"), 0,
     this, SLOT(slotSaveAllFiles()),
     ac, "file_save_all");
+  m_saveAllFilesAction->setToolTip( i18n("Save all modified files") );
   m_saveAllFilesAction->setEnabled(false);
 
   m_revertAllFilesAction = new KAction(i18n("Rever&t All"), 0,
@@ -121,16 +125,19 @@ void PartController::setupActions()
   m_closeWindowAction = KStdAction::close(
     this, SLOT(slotCloseWindow()),
     ac, "file_close");
+  m_closeWindowAction->setToolTip( i18n("Close current file") );
   m_closeWindowAction->setEnabled(false);
 
   m_closeAllWindowsAction = new KAction(i18n("Close All"), 0,
     this, SLOT(slotCloseAllWindows()),
     ac, "file_close_all");
+  m_closeAllWindowsAction->setToolTip( i18n("Close all files") );
   m_closeAllWindowsAction->setEnabled(false);
 
   m_closeOtherWindowsAction = new KAction(i18n("Close All Others"), 0,
     this, SLOT(slotCloseOtherWindows()),
     ac, "file_closeother");
+  m_closeOtherWindowsAction->setToolTip( i18n("Close other files") );
   m_closeOtherWindowsAction->setEnabled(false);
 
   m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
