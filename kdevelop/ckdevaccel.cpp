@@ -144,14 +144,17 @@ void CKDevAccel::connectItem(KStdAccel::StdAccel accel,
 }
 
 void CKDevAccel::disconnectItem(const QString& action,
-                  const QObject* /*receiver*/, const char */*member*/)
+                  const QObject* receiver, const char *member)
 {
   int uMenuId=getMenuID(action);
   if (uMenuId!=0)
        m_Assoc.remove( uMenuId );
 
-  //KAccel::disconnectItem(action, receiver, member);
+#if QT_VERSION < 300
+  KAccel::disconnectItem(action, receiver, member);
+#else
   setActionSlot(action, 0, 0);
+#endif
 }
 
 //void CKDevAccel::reconnectItem(const QString& action,

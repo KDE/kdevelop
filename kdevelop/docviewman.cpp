@@ -1763,7 +1763,7 @@ void DocViewMan::initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget)
   accel->connectItem( "Grep", m_pParent, SLOT(slotEditSearchInFiles() ), true, ID_EDIT_SEARCH_IN_FILES );
 
   accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_SEARCH_GREP_IN_FILES );
-  accel->connectItem( i18n("GrepSearch"), m_pParent, SLOT(slotEditSearchText() ) );
+  accel->connectItem( "GrepSearch", m_pParent, SLOT(slotEditSearchText() ) );
 
   accel->insertItem( i18n("Search CTags Database"), "CTagsSearch", IDK_EDIT_TAGS_SEARCH );
   accel->connectItem( "CTagsSearch", m_pParent, SLOT(slotTagSearch() ), true, ID_EDIT_TAGS_SEARCH );

@@ -84,8 +84,9 @@ private:
 
 
   KKeyChooser* keyChooser;
-  //KKeyEntryMap keyMap;
-
+#if QT_VERSION < 300
+  KKeyEntryMap keyMap;
+#endif
   QCheckBox* autoSaveCheck;
   QComboBox* autosaveTimeCombo;
   QLineEdit* makeSelectLineEdit;

@@ -286,12 +286,18 @@ void CKDevSetupDlg::addGeneralTab()
 void CKDevSetupDlg::addKeysTab()
 {
 
-  //keyMap = m_accel->keyDict();
+#if QT_VERSION < 300
+  keyMap = m_accel->keyDict();
+#endif
   keysPage = addPage(i18n("Keys"),i18n("Configuration of KDevelop Hot-Keys"),
   KGlobal::instance()->iconLoader()->loadIcon( "key_bindings", KIcon::NoGroup, KIcon::SizeMedium ));
   QGridLayout *grid = new QGridLayout(keysPage,2,1,15,7);
 
+#if QT_VERSION < 300
+  keyChooser = new KKeyChooser ( &keyMap, keysPage, true);
+#else
   keyChooser = new KKeyChooser ( m_accel->actions(), keysPage, true);
+#endif
   grid->addWidget(keyChooser,0,0);
 }
 
@@ -929,8 +935,11 @@ void CKDevSetupDlg::slotOkClicked(){
     break;
   }
 
-  //m_accel->setKeyDict(keyMap);
+#if QT_VERSION < 300
+  m_accel->setKeyDict(keyMap);
+#else
   keyChooser->commitChanges();
+#endif
   m_accel->writeSettings(config);
   config->sync();
   accept();
