@@ -149,7 +149,7 @@ void CvsPart::init()
 
     m_widget = new CvsProcessWidget( appId, this, 0, "cvsprocesswidget" );
 
-    mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("cvs output") ); // i18n("CVS") ?!?? ;)
+    mainWindow()->embedOutputView( m_widget, i18n("CvsService"), i18n("cvs output") );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -321,11 +321,14 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
         kdDebug(9000) << "contextMenu()" << endl;
 
         const FileContext *fcontext = static_cast<const FileContext*>( context );
-        // FIXME: Here we must hope that fcontext->fileName() returns an absolute path ;(
 
         // THis stuff should end up into prepareOperation()
         urls = fcontext->urls();
         URLUtil::dump( urls );
+        // FIXME: Here we currently avoid context menu on document because there is no document
+        // selected and we'll need to connect slotAction*() instead of these.
+        if (urls.count() <= 0)
+            return;
 
         KPopupMenu *subMenu = new KPopupMenu( popup );
 //        subMenu->insertTitle( i18n("Available actions") );
@@ -350,7 +353,7 @@ void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 
         // Now insert in parent menu
         popup->insertSeparator();
-        popup->insertItem( i18n("CVS"), subMenu );
+        popup->insertItem( i18n("CvsService"), subMenu );
     }
 }
 
