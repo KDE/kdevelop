@@ -1,3 +1,10 @@
+2000-03-29 Walter Tasin  <tasin@kdevelop.de>
+	* correcting some other stuff on the application wizard:
+	* API documentation will not be included in the repository
+	* correcting argument strings for the first configure call
+	  sometimes it was "(null)"
+	* if project path field is empty it takes "/"
+
 2000-03-29 Falk Brettschneider <gigafalk@yahoo.com>
         * correct error message and installation guide for the case
 	  that the C/C++ reference is not installed (en and de)
