@@ -179,8 +179,6 @@
         </property>
     </widget>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>okBtn</sender>
@@ -232,9 +230,10 @@
     </connection>
 </connections>
 <tabstops>
+    <tabstop>fileBox</tabstop>
     <tabstop>argBox</tabstop>
     <tabstop>okBtn</tabstop>
-    <tabstop>fileBox</tabstop>
+    <tabstop>cancelBtn</tabstop>
 </tabstops>
 <slots>
     <slot specifier="pure virtual">slotFileChange( int id )</slot>

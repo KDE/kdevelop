@@ -18,22 +18,18 @@
  *
  */
 
+#include <qapplication.h>
+ 
 #include <klistbox.h>
+#include <klineedit.h>
 #include <kcompletion.h>
-
-#include "doclineedit.h"
 
 #include "quickopendialog.h"
 
 QuickOpenDialog::QuickOpenDialog(QuickOpenPart* part, QWidget* parent, const char* name, bool modal, WFlags fl)
     : QuickOpenDialogBase( parent, name, modal, fl ), m_part( part )
 {
-    connect(nameEdit, SIGNAL(upPressed()), this, SLOT(moveUpInList()));
-    connect(nameEdit, SIGNAL(downPressed()), this, SLOT(moveDownInList()));
-    connect(nameEdit, SIGNAL(pgupPressed()), this, SLOT(scrollUpInList()));
-    connect(nameEdit, SIGNAL(pgdownPressed()), this, SLOT(scrollDownInList()));
-    connect(nameEdit, SIGNAL(homePressed()), this, SLOT(goToBegin()));
-    connect(nameEdit, SIGNAL(endPressed()), this, SLOT(goToEnd()));
+    nameEdit->installEventFilter(this);
 }
 
 QuickOpenDialog::~QuickOpenDialog()
@@ -47,50 +43,46 @@ void QuickOpenDialog::slotTextChanged(const QString & text)
     itemList->setCurrentItem(0);
 }
 
-void QuickOpenDialog::moveUpInList()
+bool QuickOpenDialog::eventFilter( QObject * watched, QEvent * e )
 {
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(itemList->count() - 1);
-    else
-        itemList->setCurrentItem(itemList->currentItem() - 1);
-    itemList->ensureCurrentVisible();
-}
+    if (!watched || !e)
+        return true;
 
-void QuickOpenDialog::moveDownInList()
-{
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(0);
-    else
-        itemList->setCurrentItem(itemList->currentItem() + 1);
-    itemList->ensureCurrentVisible();
-}
+    if ((watched == nameEdit) && (e->type() == QEvent::KeyPress))
+    {
+        QKeyEvent *ke = (QKeyEvent*)e;
+        if (ke->key() == Key_Up)
+        {
+            int i = itemList->currentItem();
+            if (--i >= 0)
+            {
+                itemList->setCurrentItem(i);
+                nameEdit->blockSignals(true);
+                nameEdit->setText(itemList->currentText());
+                nameEdit->blockSignals(false);
+            }
+            return true;
+        } else if (ke->key() == Key_Down)
+        {
+            int i = itemList->currentItem();
+            if ( ++i < int(itemList->count()) ) 
+            {
+                itemList->setCurrentItem(i);
+                nameEdit->blockSignals(true);
+                nameEdit->setText(itemList->currentText());
+                nameEdit->blockSignals(false);
+            }
+            return true;
+        } else if ((ke->key() == Key_Next) || (ke->key() == Key_Prior))
+        {
+            QApplication::sendEvent(itemList, e);
+            nameEdit->blockSignals(true);
+            nameEdit->setText(itemList->currentText());
+            nameEdit->blockSignals(false);
+        }
+    }
 
-void QuickOpenDialog::scrollUpInList()
-{
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(itemList->count() - 1);
-    else
-        itemList->setCurrentItem(itemList->currentItem() - (itemList->numItemsVisible()-1));
-    itemList->ensureCurrentVisible();
-}
-
-void QuickOpenDialog::scrollDownInList()
-{
-    if (itemList->currentItem() == -1)
-        itemList->setCurrentItem(0);
-    else
-        itemList->setCurrentItem(itemList->currentItem() + (itemList->numItemsVisible()-1));
-    itemList->ensureCurrentVisible();
-}
-
-void QuickOpenDialog::goToBegin()
-{
-	itemList->setCurrentItem(0);
-}
-
-void QuickOpenDialog::goToEnd()
-{
-	itemList->setCurrentItem(itemList->count()-1);
+    return QWidget::eventFilter(watched, e);    
 }
 
 #include "quickopendialog.moc"

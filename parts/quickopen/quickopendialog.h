@@ -34,17 +34,11 @@ public:
   QuickOpenDialog(QuickOpenPart* part, QWidget* parent = 0, const char* name = 0, bool modal = TRUE, WFlags fl = 0 );
   virtual ~QuickOpenDialog();
 
+  virtual bool eventFilter(QObject *watched, QEvent *e);
+  
 public slots:
   virtual void slotTextChanged(const QString&);
-  
-protected slots:
-	virtual void moveUpInList();
-	virtual void moveDownInList();
-	virtual void scrollUpInList();
-	virtual void scrollDownInList();
-	virtual void goToBegin();
-	virtual void goToEnd();
-	
+
 protected:
 	KCompletion* m_completion;
 	QuickOpenPart* m_part;

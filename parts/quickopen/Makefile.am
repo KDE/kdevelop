@@ -1,4 +1,5 @@
-INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/widgets $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util \
+	-I$(top_srcdir)/lib/widgets $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevquickopen.la
 libkdevquickopen_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)

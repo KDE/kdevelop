@@ -45,7 +45,7 @@ QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringLis
     setInstance(QuickOpenFactory::instance());
     setXMLFile("kdevpart_quickopen.rc");
 
-    m_actionQuickOpen = new KAction( i18n("Quick Open File..."), CTRL + SHIFT + Key_O,
+    m_actionQuickOpen = new KAction( i18n("Quick Open File..."), CTRL + ALT + Key_O,
 				       this, SLOT(slotQuickFileOpen()),
 				       actionCollection(), "quick_open" );
     m_actionQuickOpen->setToolTip(i18n("Quick open file in project"));
