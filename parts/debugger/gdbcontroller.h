@@ -48,7 +48,6 @@ class GDBController : public DbgController
 public:
     GDBController(VariableTree *varTree, FramestackWidget *frameStack, QDomDocument &projectDom);
     ~GDBController();
-    void configure();
 
 protected:
     void queueCmd(DbgCommand *cmd, bool executeNext=false);
@@ -85,6 +84,8 @@ private:
     bool stateIsOn(int state)       { return state_  &state; }
 
 public slots:
+    void configure();
+
     void slotStart(const QString& shell, const QString &application);
     void slotCoreFile(const QString &coreFile);
     void slotAttachTo(int pid);
