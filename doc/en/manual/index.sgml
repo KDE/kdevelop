@@ -2,10 +2,10 @@
 <book>
 <titlepag>
 <title>The User Manual to KDevelop
-<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 1.4
+<subtitle>The Reference Guide to the KDevelop Integrated Development Environment for Unix Systems, Version 2.0
 <author>Ralf Nolden <htmlurl url="mailto:nolden@kde.org" name = "<nolden@kde.org>">
 <inst>The KDevelop Team
-<date>Version 1.4 , Feb 12, 2001
+<date>Version 2.0 , Mar 20, 2001
 <abstract>
 This handbook itself is part of the KDevelop Integrated Development Environment and is therefore also licensed under the GNU General
 Public License; see <ref id="Copyright" name="Copyright"> for more information.
@@ -130,6 +130,8 @@ between declaration and definition of Symbols as well as change between the corr
 by pressing F12 or via the right mouse button menu.
 <item>Output from Tools can now be displayed in messages window.
 <item>The Grep Dialog remembers the last search items and search paths.
+<item>KDevelop now send system notifications when a build has succeeded or failed. They do not trigger an action
+by default, but you can assign a sound or a messagebox in the preferences menu.
 <item>Many more usability improvements.
 </itemize>
 
