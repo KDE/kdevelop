@@ -94,7 +94,7 @@ MemoryView::MemoryView(QWidget *parent, const char *name, DbgController* dbgCont
   topLayout->addWidget(output_, 5);
 //  output_->setFont(kapp->fixedFont);
 
-  KButtonBox *buttonbox = new KButtonBox(this, KButtonBox::HORIZONTAL, 5);
+  KButtonBox *buttonbox = new KButtonBox(this, KButtonBox::Horizontal, 5);
   QPushButton *memoryDump = buttonbox->addButton(i18n("Memory"));
   QPushButton *disassemble = buttonbox->addButton(i18n("Disassemble"));
   QPushButton *registers = buttonbox->addButton(i18n("Registers"));

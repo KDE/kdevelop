@@ -61,7 +61,7 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
   topLayout->addWidget(pids_, 5);
 //  pids_->setFont(kapp->fixedFont);
 
-  KButtonBox *buttonbox = new KButtonBox(this, KButtonBox::HORIZONTAL, 5);
+  KButtonBox *buttonbox = new KButtonBox(this, KButtonBox::Horizontal, 5);
   QPushButton *ok       = buttonbox->addButton(i18n("Ok"));
   buttonbox->addStretch();
   QPushButton *cancel   = buttonbox->addButton(i18n("Cancel"));
