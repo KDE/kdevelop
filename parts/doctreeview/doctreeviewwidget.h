@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 1999-2002 by Bernd Gehrmann                            *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2002 by Sebastian Kratzert                              *
+ *   skratzert@gmx.de                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,11 +22,10 @@
 
 
 class DocTreeItem;
-class DocTreeKDELibsFolder;
 class DocTreeDoxygenFolder;
 class DocTreeBookmarksFolder;
 class DocTreeProjectFolder;
-class DocTreeDocbaseFolder;
+//class DocTreeDocbaseFolder;
 class DocTreeTocFolder;
 class DocTreeViewPart;
 class KDevProject;
@@ -51,10 +52,10 @@ public:
     static QString locatehtml(const QString &fileName);
 
 private slots:
+    void refresh();
     void slotConfigure();
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);
-    void refresh();
 	void slotJumpToNextMatch();
 	void slotJumpToPrevMatch();
 	void slotStartSearching();
@@ -72,11 +73,10 @@ private:
     QPtrList<QListViewItem> searchResultList;
 
     QListViewItem *contextItem;
-    DocTreeItem *folder_kdevelop;
-    DocTreeKDELibsFolder *folder_kdelibs;
+    //DocTreeItem *folder_kdevelop;
     DocTreeDoxygenFolder *folder_doxygen;
     DocTreeBookmarksFolder *folder_bookmarks;
-    DocTreeDocbaseFolder *folder_docbase;
+    //DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
     QList<DocTreeTocFolder> folder_toc;
     DocTreeViewPart *m_part;

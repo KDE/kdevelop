@@ -32,7 +32,7 @@
 #include "docindexdlg.h"
 #include "doctreeviewfactory.h"
 #include "doctreeviewwidget.h"
-#include "doctreeconfigwidget.h"
+//#include "doctreeconfigwidget.h"
 #include "doctreeglobalconfigwidget.h"
 
 
@@ -121,14 +121,14 @@ void DocTreeViewPart::configWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
 
-    vbox = dlg->addVBoxPage(i18n("Documentation Tree (I)"));
+    vbox = dlg->addVBoxPage(i18n("Documentation Tree"));
     DocTreeGlobalConfigWidget *w1 = new DocTreeGlobalConfigWidget(m_widget, vbox, "doc tree global config widget");
 
-    vbox = dlg->addVBoxPage(i18n("Documentation Tree (II)"));
-    DocTreeConfigWidget *w2 = new DocTreeConfigWidget(m_widget, vbox, "documentation tree config widget");
+    //vbox = dlg->addVBoxPage(i18n("Documentation Tree (II)"));
+    //DocTreeConfigWidget *w2 = new DocTreeConfigWidget(m_widget, vbox, "documentation tree config widget");
 
     connect( dlg, SIGNAL(okClicked()), w1, SLOT(accept()) );
-    connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
+    //connect( dlg, SIGNAL(okClicked()), w2, SLOT(accept()) );
 }
 
 

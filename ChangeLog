@@ -1,3 +1,8 @@
+2002-11-02 Sebastian Kratzert <skratzert@gmx.de>
+    * Merged DoctreeConfig widget into one.
+    * Removed KDoc folder
+    * Use KURLRequester instead of LineEdits
+
 2002-11-01 Sebastian Kratzert <skratzert@gmx.de>
 	* added "Search in documentation" to editor contextmenu
 	* index kdoc folder on selection

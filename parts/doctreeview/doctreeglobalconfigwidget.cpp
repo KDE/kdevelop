@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2002 by Bernd Gehrmann                                  *
  *   bernd@kdevelop.org                                                    *
+ *   Copyright (C) 2002 by Sebastian Kratzert                              *
+ *   skratzert@gmx.de                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,15 +14,20 @@
 #include "doctreeglobalconfigwidget.h"
 
 #include <qcheckbox.h>
-#include <qlineedit.h>
 #include <kconfig.h>
 #include <kprocess.h>
+#include <kurlrequester.h>
 //#include <kdebug.h>
-#include <iostream>
 #include "../../config.h"
-#include "domutil.h"
 #include "doctreeviewpart.h"
+#include "doctreeviewwidget.h"
 #include "doctreeviewfactory.h"
+#include "adddocitemdlg.h"
+#include "misc.h"
+#include <qfileinfo.h>
+#include <kapp.h>
+#include <kstandarddirs.h>
+#include <kfiledialog.h>
 
 DocTreeGlobalConfigWidget::DocTreeGlobalConfigWidget(DocTreeViewWidget *widget,
                                                      QWidget *parent, const char *name)
@@ -40,10 +47,12 @@ void DocTreeGlobalConfigWidget::readConfig()
 {
     KConfig *config = DocTreeViewFactory::instance()->config();
 
-    config->setGroup("General");
-    qtdocdirEdit->setText(config->readEntry("qtdocdir", QT_DOCDIR));
 
-    kdelibsdoxydirEdit->setText(config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
+    config->setGroup("General");
+    qtdocdirEdit->setURL(config->readEntry("qtdocdir", QT_DOCDIR));
+    qtdocdirEdit->fileDialog()->setMode( KFile::Directory );
+    kdelibsdoxydirEdit->setURL(config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR));
+    kdelibsdoxydirEdit->fileDialog()->setMode( KFile::Directory );
     
     config->setGroup("Index");
     indexKDevelopBox->setChecked(config->readEntry("IndexKDevelop"));
@@ -53,9 +62,22 @@ void DocTreeGlobalConfigWidget::readConfig()
     indexBookmarksBox->setChecked(config->readEntry("IndexBookmarks"));
 
     config->setGroup("htdig");
-    htdigbinEdit->setText(config->readEntry("htdigbin"));
-    htmergebinEdit->setText(config->readEntry("htmergebin"));
-    htsearchbinEdit->setText(config->readEntry("htsearchbin"));
+    QString exe = kapp->dirs()->findExe("htdig");
+    htdigbinEdit->setURL(config->readEntry("htdigbin", exe));
+    exe = kapp->dirs()->findExe("htmerge");
+    htmergebinEdit->setURL(config->readEntry("htmergebin", exe));
+    exe = kapp->dirs()->findExe("htsearch");
+    htsearchbinEdit->setURL(config->readEntry("htsearchbin", exe));
+    
+    //get bookmarks
+    QStringList bookmarksTitle, bookmarksURL;
+    DocTreeViewTool::getBookmarks(&bookmarksTitle, &bookmarksURL);
+    QStringList::Iterator oit1, oit2;
+    for (oit1 = bookmarksTitle.begin(), oit2 = bookmarksURL.begin();
+         oit1 != bookmarksTitle.end() && oit2 != bookmarksURL.end();
+         ++oit1, ++oit2) {
+        new KListViewItem( bListView, *oit1, *oit2);
+    }
 }
 
 
@@ -64,8 +86,8 @@ void DocTreeGlobalConfigWidget::storeConfig()
     KConfig *config = DocTreeViewFactory::instance()->config();
 
     config->setGroup("General");
-    config->writeEntry("qtdocdir", qtdocdirEdit->text());
-    config->writeEntry("kdelibsdocdir", kdelibsdoxydirEdit->text());
+    config->writeEntry("qtdocdir", qtdocdirEdit->url());
+    config->writeEntry("kdelibsdocdir", kdelibsdoxydirEdit->url());
 
     config->setGroup("Index");
     config->writeEntry("IndexKDevelop", indexKDevelopBox->isChecked());
@@ -75,9 +97,20 @@ void DocTreeGlobalConfigWidget::storeConfig()
     config->writeEntry("IndexBookmarks", indexBookmarksBox->isChecked());
 
     config->setGroup("htdig");
-    config->writeEntry("htdigbin", htdigbinEdit->text());
-    config->writeEntry("htmergebin", htmergebinEdit->text());
-    config->writeEntry("htsearchbin", htsearchbinEdit->text());
+    config->writeEntry("htdigbin", htdigbinEdit->url());
+    config->writeEntry("htmergebin", htmergebinEdit->url());
+    config->writeEntry("htsearchbin", htsearchbinEdit->url());
+    
+    QStringList bookmarksTitle, bookmarksURL;
+    {
+        QListViewItem *item = bListView->firstChild();
+        for (; item; item = item->nextSibling()) {
+            bookmarksTitle.append(item->text(0));
+            bookmarksURL.append(item->text(1));
+        }
+    }
+    DocTreeViewTool::setBookmarks(bookmarksTitle, bookmarksURL);
+
 }
 
 
@@ -93,10 +126,28 @@ void DocTreeGlobalConfigWidget::updateIndexClicked()
     proc.start(KProcess::DontCare);
 }
 
+void DocTreeGlobalConfigWidget::addBookmarkClicked()
+{
+    AddDocItemDialog dlg;
+    if (!dlg.exec())
+        return;
+
+    (void) new KListViewItem(bListView, dlg.title(), dlg.url());
+
+}
+
+void DocTreeGlobalConfigWidget::removeBookmarkClicked()
+{
+    QListViewItem* item = bListView->currentItem();
+    if (item) {
+        bListView->removeItem(item);
+    }
+}
 
 void DocTreeGlobalConfigWidget::accept()
 {
     storeConfig();
+    m_widget->configurationChanged();
 }
 
 #include "doctreeglobalconfigwidget.moc"

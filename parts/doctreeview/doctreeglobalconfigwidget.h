@@ -30,6 +30,8 @@ public slots:
 
 private slots:
     void updateIndexClicked();
+    void removeBookmarkClicked();
+    void addBookmarkClicked();
 
 private:
     void readConfig();
