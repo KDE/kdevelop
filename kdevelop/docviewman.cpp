@@ -934,6 +934,8 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
     }
   }
 
+  if (!pView) return;
+
   if (pView->inherits("CEditWidget")) {
     m_pCurEditView = (CEditWidget*) pView;
     m_pCurEditDoc = m_pCurEditView->doc();
