@@ -118,3 +118,27 @@ KAboutData* KDEProjectSpace::aboutPlugin(){
   }
   return m_pAboutData;
 }
+QList<FileGroup> KDEProjectSpace::defaultFileGroups(){
+  QList<FileGroup> list;
+  FileGroup* pGroup = new FileGroup();
+  pGroup->setName(i18n("Source Files"));
+  pGroup->setFilter("*.cpp;*.c;*.cc;*.cxx;*.C");
+  list.append(pGroup);
+
+  pGroup = new FileGroup();
+  pGroup->setName(i18n("Header Files"));
+  pGroup->setFilter("*.h;*.hxx");
+  list.append(pGroup);
+
+  pGroup = new FileGroup();
+  pGroup->setName(i18n("Dialogs Files"));
+  pGroup->setFilter("*.ui");
+  list.append(pGroup);
+
+  pGroup = new FileGroup();
+  pGroup->setName(i18n("Resource Files"));
+  pGroup->setFilter("*.rc;*.png;*.gif;*.jpg;");
+  list.append(pGroup);
+
+  return list;
+}

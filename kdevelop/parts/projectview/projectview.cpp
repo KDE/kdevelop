@@ -19,6 +19,7 @@
 #include "projectview.h"
 #include "projecttreewidget.h"
 #include "projectspace.h"
+#include <iostream.h>
 
 ProjectView::ProjectView(QObject *parent, const char *name)
     : KDevComponent(parent, name)
@@ -54,3 +55,13 @@ void ProjectView::projectSpaceClosed(){
 
 }
 
+
+void ProjectView::readProjectSpaceGlobalConfig(QDomDocument& doc){
+  cerr << "kdevelop (projectview): readProjectSpaceGlobalConfig:" << endl;
+  m_pProjectTree->readProjectSpaceGlobalConfig(doc);
+}
+
+void ProjectView::writeProjectSpaceGlobalConfig(QDomDocument& doc){
+  cerr << "kdevelop (projectview): writeProjectSpaceGlobalConfig" << endl;
+  m_pProjectTree->writeProjectSpaceGlobalConfig(doc);
+}

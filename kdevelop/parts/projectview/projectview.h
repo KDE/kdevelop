@@ -30,6 +30,9 @@ public:
                     PublicSlot, ProtectedSlot, PrivateSlot,
                     Signal, GlobalFunction, GlobalVariable };
 
+    virtual void readProjectSpaceGlobalConfig(QDomDocument& doc);
+    virtual void writeProjectSpaceGlobalConfig(QDomDocument& doc);
+
 protected:
     virtual void setupGUI();
     virtual void projectSpaceOpened(ProjectSpace *pProjectSpace);

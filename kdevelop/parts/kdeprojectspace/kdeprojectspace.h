@@ -41,6 +41,7 @@ public:
 	virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
 	virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
 	virtual KAboutData* aboutPlugin();
+	QList<FileGroup> defaultFileGroups();
 	protected slots:
   void slotProjectAddNewTranslationFile();
  protected:

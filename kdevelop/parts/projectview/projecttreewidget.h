@@ -13,9 +13,14 @@
 #define _PROJECTTREEWIDGET_H_
 
 #include <qlistview.h>
+#include "projectspace.h"
+#include <qlist.h>
+#include <qstring.h>
 
 class ProjectView;
-class ProjectSpace;
+class KPopupMenu;
+class ProjectTreeItem;
+
 
 class ProjectTreeWidget : public QListView
 {
@@ -25,20 +30,51 @@ public:
     ProjectTreeWidget(ProjectView* pPart);
     ~ProjectTreeWidget();
     void setProjectSpace(ProjectSpace* pProjectSpace);
- protected:
+
+    // from KDevComponent
+    void readProjectSpaceGlobalConfig(QDomDocument& doc);
+    /**
+       <Project name = "">
+       <FileGroup name="" filter ="" />
+       <FileGroup name="" filter ="" />
+       </project>
+       <project name = "">
+       <FileGroup name="" filter ="" />
+       <FileGroup name="" filter ="" />
+       </project>
+    */
+    void writeProjectSpaceGlobalConfig(QDomDocument& doc);
     
+    protected slots:
+      void slotRightButtonPressed( QListViewItem* item, const QPoint&,int);
+ protected:
+    void createDefaultFileGroups();
+    KPopupMenu* createPopup(ProjectTreeItem* item);
     ProjectSpace* m_pProjectSpace;
+    // the "document"
+    QMap<QString,QList< FileGroup> > m_projectFileGroups;
 };
 
-class ProjectTreeItem : public QListViewItem {
+class ProjectTreeItem : public QObject, public QListViewItem {
+  Q_OBJECT
     public:
-  ProjectTreeItem (ProjectTreeWidget* parent) : QListViewItem(parent) {}
-  ProjectTreeItem (ProjectTreeItem* parent) : QListViewItem(parent) {}
-  ProjectTreeItem (ProjectTreeWidget* parent,ProjectTreeItem* after) : QListViewItem(parent,after) {}
-  ProjectTreeItem (ProjectTreeItem* parent,ProjectTreeItem* after) : QListViewItem(parent,after) {}
+  ProjectTreeItem (ProjectTreeWidget* parent) : QListViewItem(parent) {m_bold=false;}
+  ProjectTreeItem (ProjectTreeItem* parent) : QListViewItem(parent) {m_bold=false;}
+  ProjectTreeItem (ProjectTreeWidget* parent,ProjectTreeItem* after) 
+    : QListViewItem(parent,after) {m_bold=false;}
+  ProjectTreeItem (ProjectTreeItem* parent,ProjectTreeItem* after) 
+    : QListViewItem(parent,after) {m_bold=false;}
+  virtual void paintCell( QPainter * p, const QColorGroup & cg,
+			  int column, int width, int align );
+
+  /** set the font to bold for this treeItem if enable=true*/
+  void setBold(bool enable);
+ protected:
+  bool m_bold;
 };
 
 class ProjectSpaceItem : public  ProjectTreeItem {
+  Q_OBJECT
 public:
   ProjectSpaceItem (ProjectTreeWidget* parent) : ProjectTreeItem(parent) {}
   ProjectSpaceItem (ProjectTreeItem* parent) : ProjectTreeItem(parent) {}
@@ -47,6 +83,7 @@ public:
 };
 
 class ProjectItem : public  ProjectTreeItem {
+  Q_OBJECT
 public:
   ProjectItem (ProjectTreeWidget* parent) : ProjectTreeItem(parent) {}
   ProjectItem (ProjectTreeItem* parent) : ProjectTreeItem(parent) {}
@@ -55,6 +92,7 @@ public:
 };
 
 class GroupItem : public  ProjectTreeItem {
+  Q_OBJECT
 public:
   GroupItem (ProjectTreeWidget* parent) : ProjectTreeItem(parent) {}
   GroupItem (ProjectTreeItem* parent) : ProjectTreeItem(parent) {}
@@ -63,6 +101,7 @@ public:
 };
 
 class FileItem : public  ProjectTreeItem {
+  Q_OBJECT
 public:
   FileItem (ProjectTreeWidget* parent) : ProjectTreeItem(parent) {}
   FileItem (ProjectTreeItem* parent) : ProjectTreeItem(parent) {}

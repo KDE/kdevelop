@@ -1,3 +1,6 @@
+2000-10-29 Sandy  Meier  <smeier@kdevelop.org>
+	* implemented first version of ProjectView (similar to LFV)
+
 2000-10-28 Falk Brettschneider <falk@kdevelop.org>
 	* loads/saves the QextMDI session for the editor mode of KDevelop
 
