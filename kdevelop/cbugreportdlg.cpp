@@ -35,7 +35,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
 
 
   setCaption(i18n("Bug Report"));
-  setFixedSize(415,460);
+  setFixedSize(466,460);
 
   //+++++++++++++ TAB: Attention +++++++++++++++++++++++++++++++++++++++++
 
@@ -111,7 +111,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
 
   //+++++++++++++ TAB: General inforamtion +++++++++++++++++++++++++++++++++++++++++
 
-  QWidget* w=new QWidget(this,"General information");
+  QWidget* w=new QWidget(this,"General");
   KQuickHelp::add(w, i18n("Fill in all information,\nwe need to help you."));
 
   QButtonGroup* qtarch_severity_group;
@@ -366,11 +366,11 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   qtarch_priority_group->insert( priority_medium );
   qtarch_priority_group->insert( priority_high );
   
-  addTab(w,i18n("General information"));
+  addTab(w,i18n("General"));
   
   //+++++++++ TAB: System information ++++++++++++++++++++++++++++++++
   
-  QWidget* w2=new QWidget(this,"System information");
+  QWidget* w2=new QWidget(this,"System");
   
   QButtonGroup* qtarch_environment_group;
   qtarch_environment_group = new QButtonGroup( w2, "environment_group" );
@@ -540,7 +540,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
 	misc_mledit->setReadOnly( FALSE );
 	misc_mledit->setOverwriteMode( FALSE );
 	
-	addTab(w2,i18n("System information"));
+	addTab(w2,i18n("System"));
 
 
   //+++++++++ TAB: Problem description+++++++++++++++++++++++++++++++++++++
