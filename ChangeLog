@@ -1,3 +1,8 @@
+1999-08-03  Jonas Nordin  <jonas.nordin@cenacle.se>
+	* added possibility to add signals/slots using the add method
+	  dialog.
+	* changed the add method dialog to use layout management.
+
 1999-08-03  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Changed 'Log message' label for "bozos" who are
 	  patiently waiting for something to happen
@@ -47,8 +52,8 @@
 	* fixed some other bugs
 
 1999-07-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-  * fixed recent projects menu
-  * added welcome chapter to doctree
+	* fixed recent projects menu
+	* added welcome chapter to doctree
 
 1999-07-29 Stefan Bartel   <bartel@rz.uni-potsdam.de>
 	* fixed bug with lib-checkboxes in the project/options/linker-options dialog
