@@ -919,7 +919,7 @@ Here, the "Edit" menu and the according icons in the toolbar are covered which p
 are available via a context-menu in the <idx/editor/.
 <itemize>
 <item><bf/Undo			Ctrl+Z/ Reverts the last editing operation<p>
-<item><bf/Redo	Ctrl+Z/ lets you do the last undo step again<p>
+<item><bf/Redo	Ctrl+Y/ lets you do the last undo step again<p>
 <item><bf/Cut			Ctrl+X/ cuts out a selection and copies it to the system clipboard.<p>
 <item><bf/Copy			Ctrl+C/ copies a selection to the system clipboard. This also counts for selections made in the documentation
 browser.<p>
@@ -957,12 +957,12 @@ linenumber is remembered and marked, so you can either jump to that line again o
 give you a descriptive help what the problem is, so you can correct the error.<p>
 <item><bf/Previous Error		Shift+F4/ Jumps to the previous error that was reported.<p>
 <item><bf/Dialogeditor   Ctrl+D/ Switches to the <idx/dialog editor/ <p>
-<item><bf/Tree-View	Shift+T/en/disables the Tree window on the left side of the main view containing the Class Browser, <idx/LFV/, <idx/RFV/ and
-<idx/DOC/-tree.<p>
-<item><bf/Output-View	Shift+O/en/disables the Output window on the bottom of the main view.<p>
-<item><bf/<idx/Toolbar//en/disables the toolbar.<p>
-<item><bf/Browser-<idx/Toolbar//en/disables the browser toolbar, containing the back, forward and search buttons for the browser<p>
-<item><bf/<idx/Statusbar/	Ctrl+B/en/disables the statusbar.<p>
+<item><bf/Tree-View	CTRL+T/en/disables the Tree window on the left side of the main view containing the Class Browser, <idx/LFV/,
+<idx/RFV/ and <idx/DOC/-tree.<p>
+<item><bf/Output-View	CTRL+B/en/disables the Output window on the bottom of the main view.<p>
+<item><bf/<idx/Toolbar// en/disables the toolbar.<p>
+<item><bf/Browser-<idx/Toolbar// en/disables the browser toolbar, containing the back, forward and search buttons for the browser<p>
+<item><bf/<idx/Statusbar// en/disables the statusbar.<p>
 <item><bf/Refresh/ rescans all files to rebuild the Class Browser. The scanning progress is shown in the statusbar progress display.<p>
 </itemize>
 <p>

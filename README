@@ -1,37 +1,55 @@
-KDevelop 1.0Beta1
+README for
+
+KDevelop 1.0 Beta 1
+
+-------------------------------------
+
+1. What is KDevelop ?
 
 KDevelop is an easy to use IDE (Intergrated Development Enviroment) for
-Unix/X11.
+Unix/X11, targeting on C++ application development; specialized on the Qt and KDE libraries.
 
-KDevelop-Homepage:
+2. KDevelop-Homepage
+
 http://www.kdevelop.org
 
-Requirements:
+
+3. Requirements
+
 In order to successfully compile und use KDevelop, you need following
 programs and libraries: 	
 
-	g++ 2.8/egcs 1.1 (or compatible)
-	GNU make
-	perl 5.004
-	autoconf 2.12
-	automake 1.4
-	Qt 1.42
-	KDE 1.1 or KDE 1.2
- 	KDE-SDK  (optional)
-	sgmltools  (optional)
-	Glimpse 4.1 (optional)
-	KIconEdit (optional)
-	KDbg  (optional)
-	a2ps  (optional)
-	enscript  (optional)
-	Gv,Ghostview,KGhotsview  (optional)
-	cvs (optional)
+required:
+------------------
+g++ 2.8/egcs 1.1 (or compatible)
+GNU make
+perl 5.004
+autoconf 2.12
+automake 1.4
+Qt 1.42
+KDE 1.1 or KDE 1.2
+flex
+
+optional:
+-----------------------
+KDE-SDK
+sgmltools
+Glimpse 4.1
+KIconEdit
+KDbg
+a2ps
+enscript
+Gv,Ghostview,KGhotsview
+cvs
 
 
-Installation:
-see INSTALL in the same directory
+
+4. Installation
+
+see INSTALL in this directory
 
 Have fun!
-							 The KDevelop-Team
+							 
+The KDevelop-Team
 
 
