@@ -196,7 +196,7 @@ void PascalProjectPart::listOfFiles(QStringList &result, QString path)
     QDir d(path);
     if (!d.exists())
         return;
-    QFileInfoList *entries = d.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden);
+    QFileInfoList *entries = const_cast<QFileInfoList*>(d.entryInfoList(QDir::Dirs | QDir::Files | QDir::Hidden));
     for (QFileInfo *it = entries->first(); it; it = entries->next())
     {
         if ((it->isDir()) && (!it->filePath() == path))
