@@ -158,6 +158,8 @@ operation of KDevelop.
 
 \subsubsection language-parts Language Support Parts in KDevelop
 
+To add support for a new language check this page \ref howToAddNewLanguage
+
   - parts/cppsupport = Support for C/C++
     - (see CppSupportPart)
     .
