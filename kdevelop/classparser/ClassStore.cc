@@ -482,3 +482,83 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
   return retVal;
 }
 
+/*-------------------------- CClassStore::getVirtualMethodsForClass()
+ * getVirtualMethodsForClass()
+ *   Fetch all virtual methods, both implemented and not.
+ *
+ * Parameters:
+ *   aName      Name of the class.
+ *   implList   The list that will contain the implemented virtual 
+ *              methods.
+ *   availList  The list hat will contain the available virtual
+ *              methods.
+ * 
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::getVirtualMethodsForClass( const char *aName, 
+                                             QList<CParsedMethod> *implList,
+                                             QList<CParsedMethod> *availList )
+{
+  CParsedClass *aClass;
+  CParsedParent *aParent;
+  CParsedClass *parentClass;
+  QList<CParsedMethod> *list;
+  CParsedMethod *aMethod;
+  QDict<char> added;
+  QString str;
+
+  // Start by reseting the lists.
+  implList->setAutoDelete( false );
+  availList->setAutoDelete( false );
+  implList->clear();
+  availList->clear();
+
+  // Try to fetch the class
+  aClass = getClassByName( aName );
+  if( aClass != NULL )
+  {
+    // Iterate over all parents.
+    for( aParent = aClass->parents.first();
+         aParent != NULL;
+         aParent = aClass->parents.next() )
+    {
+      // Try to fetch the parent.
+      parentClass = getClassByName( aParent->name );
+      if( parentClass != NULL )
+      {
+        list = parentClass->getVirtualMethodList();
+
+        for( aMethod = list->first();
+             aMethod != NULL;
+             aMethod = list->next() )
+        {
+          // Check if we already have the method.
+          if( aClass->getMethod( *aMethod ) != NULL )
+          {
+            implList->append( aMethod );
+            added.insert( aMethod->asString( str ), "" );
+          }
+          else
+            availList->append( aMethod );
+        }
+        
+        delete list;
+      }
+
+    }
+
+    // Add all virtual methods defined in THIS class.
+    for( aClass->methodIterator.toFirst();
+         aClass->methodIterator.current();
+         ++aClass->methodIterator )
+    {
+      aMethod = aClass->methodIterator.current();
+      if( aMethod->isVirtual && 
+          added.find( aMethod->asString( str ) ) == NULL )
+      {
+        availList->append( aMethod );
+      }
+    }
+  }
+}

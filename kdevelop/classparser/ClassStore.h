@@ -56,6 +56,16 @@ public: // Public queries
   /** Get all classes in sorted order. */
   QList<CParsedClass> *getSortedClasslist();
 
+  /** Fetch all virtual methods, both implemented and not.
+   * @param aName The class to fetch virtual methods for
+   * @param implList The list that will contain the 
+   *  implemented virtual methods.
+   * @param availList The list hat will contain the available virtual
+   *  methods. */
+  void getVirtualMethodsForClass( const char *aName, 
+                                  QList<CParsedMethod> *implList,
+                                  QList<CParsedMethod> *availList );
+
 public: // Public Methods
 
   /** Remove all parsed classes. */
