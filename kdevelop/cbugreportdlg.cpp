@@ -16,24 +16,20 @@
  ***************************************************************************/
 
 
-#include <iostream.h>
-#include <qdatetime.h>
+#include "cbugreportdlg.h"
+
 #include <qdir.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
-#include <qwhatsthis.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <kprocess.h>
 #include <kapp.h>
 #include <klocale.h>
-#include <kmessagebox.h>
-#include "cbugreportdlg.h"
-
-#if HAVE_CONFIG_H
-#include "../config.h"
-#endif
-
+#include <qdatetime.h>
+#include <iostream.h>
+#include <kmsgbox.h>
+#include <qmessagebox.h>
 
 CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo buginfo, QString bug_email) : QTabDialog(parent,name,true) {
 
@@ -44,7 +40,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   //+++++++++++++ TAB: General inforamtion +++++++++++++++++++++++++++++++++++++++++
 
   QWidget* w=new QWidget(this,"General information");
-  QWhatsThis::add(w, i18n("Fill in all information\nwe need to help you."));
+  KQuickHelp::add(w, i18n("Fill in all information,\nwe need to help you."));
  
   QButtonGroup* qtarch_severity_group;
   qtarch_severity_group = new QButtonGroup( w, "severity_group" );
@@ -452,7 +448,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
 
   //+++++++++ TAB: Problem description+++++++++++++++++++++++++++++++++++++
   QWidget* w3=new QWidget(this,"Problem description");
-  QWhatsThis::add(w3, i18n("Insert as much information about your\nproblem, so that we are able to help by\nyour description."));
+  KQuickHelp::add(w3, i18n("Insert as much information about your\nproblem, so that we are able to help by\nyour description."));
 
 	description_mledit = new QMultiLineEdit( w3, "description_mledit" );
 	description_mledit->setGeometry( 20, 30, 360, 130 );
@@ -571,9 +567,13 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   // save bugreport-email
   BugEmail=bug_email;
 
-  KMessageBox::information(0, "Bugreport Dialog",
-                           i18n("Please remember writing your bugreport in english,\n"
-                                "so every developer is able to understand it. Thanks!"));
+  QMessageBox::information(0,"Bugreport Dialog","Please remember writing your bugreport in english,\n"
+                           "so every developer is able to understand it. Thanks!\n\n"
+                           "Note: the bug report is sent to bugs.kde.org with the 'mail' command.\n"
+                           "If for some reason this command does not work for you (e. g. because you\n"
+                           "are in an offline system), then please go to http://bugs.kde.org for\n"
+                           "instructions on how to report bugs.",
+                           QMessageBox::Ok);
 
 
   // cerr << endl << "init dialog";
@@ -590,7 +590,7 @@ CBugReportDlg::~CBugReportDlg(){
 void CBugReportDlg::ok() {
 
   if (description_mledit->text() == ""  ||  subject_edit->text() == "") {
-    KMessageBox::information(this, i18n("Please fill in at least the subject and bug description!"));
+    KMsgBox::message(this,i18n("Information"),i18n("Please fill in at least the subject and bug description!"));
     return;
   }
   //  cerr << endl << "slot ok()"
@@ -603,8 +603,7 @@ void CBugReportDlg::ok() {
   
   if (generateEmail()) {
     if(sendEmail()){
-      KMessageBox::information(this, i18n("Bug Report"),
-                               i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
+      KMsgBox::message(this,i18n("Bug Report"),i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
     }
   }
   accept();
@@ -645,7 +644,6 @@ bool CBugReportDlg::generateEmail() {
   text.append("OS/Distribution\t: ");text.append(os_edit->text());text.append("\n");
   text.append("Compiler\t\t: ");text.append(compiler_edit->text());text.append("\n\n");
 
-#warning FIXME: why not create this in /tmp?
   QDir dir(KApplication::localkdedir()+"/share/apps/");
   dir.mkdir("kdevelop");
   //  cerr << endl << " dir: " << dir.absPath();
@@ -678,6 +676,5 @@ bool CBugReportDlg::sendEmail() {
 
   return true;
 }
-
 
 

@@ -62,7 +62,7 @@ protected:
 
 private:
   KProcess *process;
-  QString app, arg, swallowTitle;
+  QString app, swallowTitle;
 
   Window  window;
   Atom ksw_save;
