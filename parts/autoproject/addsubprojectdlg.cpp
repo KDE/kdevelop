@@ -71,7 +71,7 @@ void AddSubprojectDialog::accept()
 #if 0
     // check for config.status
     if( !QFileInfo(m_part->projectDirectory(), "config.status").exists() ){
-        KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run Configure first"));
+        KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run 'Configure' first"));
         QDialog::accept();
 	return;
     }

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Regular Expression tester
+Comment=Regular Expression Tester
 Name=KDevRegexpTest
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevregexptest

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Ant project
+Comment=Ant Project
 Name=KDevAntProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevantproject

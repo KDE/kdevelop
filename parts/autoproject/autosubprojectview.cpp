@@ -283,13 +283,13 @@ void AutoSubprojectView::slotRemoveSubproject()
     
     SubprojectItem* parent = static_cast<SubprojectItem*>( spitem->parent() );
     if( !parent || !parent->listView() || spitem->childCount() != 0 ){
-	KMessageBox::error( 0, i18n("This item can't be removed"), i18n("Automake manager") );
+	KMessageBox::error( 0, i18n("This item can't be removed"), i18n("Automake Manager") );
 	return;
     }
     
     // check for config.status
     if( !QFileInfo(m_part->projectDirectory(), "config.status").exists() ){
-	KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run Configure first"));
+	KMessageBox::sorry(this, i18n("There is no config.status in the project root directory. Run 'Configure' first"));
 	return;
     }
     

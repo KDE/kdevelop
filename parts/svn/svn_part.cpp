@@ -1,4 +1,4 @@
-/* Copyright (C) 2002 
+/* Copyright (C) 2002
 	 Mickael Marchand <marchand@kde.org>
 
 	 This program is free software; you can redistribute it and/or
@@ -110,7 +110,7 @@ void SvnPart::contextMenu(QPopupMenu *popup, const Context *context) {
 		sub->insertSeparator(); sub->insertItem( i18n("Add to Repository (local)"), this, SLOT(slotAdd()) );
 		sub->insertItem( i18n("Remove From Repository (local)"), this, SLOT(slotRemove()) );
 		sub->insertSeparator();
-		sub->insertItem( i18n("Revert file (local)") , this, SLOT(slotRevert()) );
+		sub->insertItem( i18n("Revert File (local)") , this, SLOT(slotRevert()) );
 		sub->insertItem( i18n("Status (local)") , this, SLOT(slotStatusLocal()) );
 		sub->insertItem( i18n("Status (repository)") , this, SLOT(slotStatusRemote()) );
 		sub->insertSeparator();
@@ -256,12 +256,12 @@ svn_error_t *SvnPart::promptUser(char **result, const char *prompt, svn_boolean_
 	QString text;
 	bool ok = FALSE;
 	if (!hide) {
-		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
+		text = QInputDialog::getText( i18n("Subversion Authentication"), i18n(prompt_native),
 				QLineEdit::Normal, QString::null, &ok, NULL );
 		if (!ok)
-			return svn_error_create (0, NULL, "Authentification aborted"); 
+			return svn_error_create (0, NULL, "Authentification aborted");
 	} else {
-		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
+		text = QInputDialog::getText( i18n("Subversion Authentication"), i18n(prompt_native),
 				QLineEdit::Password, QString::null, &ok, NULL );
 		if (!ok)
 			return svn_error_create (0, NULL, "Authentification aborted"); 

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=C support
+Comment=C Support
 Name=KDevCppSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevcppsupport

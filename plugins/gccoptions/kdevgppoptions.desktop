@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=g++
-Comment=GNU C++ compiler
+Comment=GNU C++ Compiler
 Name=GppOptions
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevgccoptions

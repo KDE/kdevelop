@@ -16,7 +16,7 @@
 
 static const KCmdLineOptions options[]=
 {
-	{"+[file]", I18N_NOOP("File To Open"),0},
+	{"+[file]", I18N_NOOP("File to open"),0},
 	{0,0,0}
 };
 

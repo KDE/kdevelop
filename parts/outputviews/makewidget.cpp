@@ -623,19 +623,19 @@ QPopupMenu* MakeWidget::createPopupMenu( const QPoint& pos )
 	pMenu->setCheckable(true);
 
 	pMenu->insertSeparator();
-	int id = pMenu->insertItem(i18n("Line wrapping"), this, SLOT(toggleLineWrapping()) );
+	int id = pMenu->insertItem(i18n("Line Wrapping"), this, SLOT(toggleLineWrapping()) );
 	pMenu->setItemChecked(id, m_bLineWrapping);
 
 	pMenu->insertSeparator();
-	id = pMenu->insertItem(i18n("Very short compiler output"), this, SLOT(slotVeryShortCompilerOutput()) );
+	id = pMenu->insertItem(i18n("Very Short Compiler Output"), this, SLOT(slotVeryShortCompilerOutput()) );
 	pMenu->setItemChecked(id, m_compilerOutputLevel == eVeryShort);
-	id = pMenu->insertItem(i18n("Short compiler output"), this, SLOT(slotShortCompilerOutput()) );
+	id = pMenu->insertItem(i18n("Short Compiler Output"), this, SLOT(slotShortCompilerOutput()) );
 	pMenu->setItemChecked(id, m_compilerOutputLevel == eShort);
-	id = pMenu->insertItem(i18n("Full compiler output"), this, SLOT(slotFullCompilerOutput()) );
+	id = pMenu->insertItem(i18n("Full Compiler Output"), this, SLOT(slotFullCompilerOutput()) );
 	pMenu->setItemChecked(id, m_compilerOutputLevel == eFull);
 
 	pMenu->insertSeparator();
-	id = pMenu->insertItem(i18n("Show directory navigation messages"), this, SLOT(toggleShowDirNavigMessages()));
+	id = pMenu->insertItem(i18n("Show Directory Navigation Messages"), this, SLOT(toggleShowDirNavigMessages()));
 	pMenu->setItemChecked(id, DirectoryItem::getShowDirectoryMessages());
 
 	return pMenu;

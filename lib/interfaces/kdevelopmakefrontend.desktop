@@ -3,5 +3,5 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/MakeFrontend
 X-KDE-Derived=KDevelop/Plugin
-Name=Make frontend interface
+Name=Make Frontend Interface
 

@@ -77,12 +77,12 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
                           actionCollection(), "build_runinterpreter" );
     action->setStatusText( i18n("Starts the Perl interpreter without a program") );
 
-    action = new KAction( i18n("Find Perl function documentation..."), 0,
+    action = new KAction( i18n("Find Perl Function Documentation..."), 0,
                           this, SLOT(slotPerldocFunction()),
                           actionCollection(), "help_perldocfunction" );
     action->setStatusText( i18n("Show the documentation page of a Perl function") );
 
-    action = new KAction( i18n("Find Perl FAQ entry..."), 0,
+    action = new KAction( i18n("Find Perl FAQ Entry..."), 0,
                           this, SLOT(slotPerldocFAQ()),
                           actionCollection(), "help_perldocfaq" );
     action->setStatusText( i18n("Show the FAQ entry for a keyword") );

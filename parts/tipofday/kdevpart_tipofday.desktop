@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Tip of the day
+Comment=Tip of the Day
 Name=KDevTipOfDay
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin

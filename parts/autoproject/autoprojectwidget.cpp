@@ -103,7 +103,7 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	addSubprojectButton = new QToolButton( overviewButtonBox );
 	addSubprojectButton->setPixmap( SmallIcon( "folder_new" ) );
 	QToolTip::add
-		( addSubprojectButton, i18n( "Add New Subproject" ) );
+		( addSubprojectButton, i18n( "Add new subproject" ) );
 
 	/*    addExistingSubprojectButton = new QToolButton(overviewButtonBox);
 		addExistingSubprojectButton->setPixmap(SmallIcon("fileimport"));
@@ -112,17 +112,17 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	addTargetButton = new QToolButton( overviewButtonBox );
 	addTargetButton->setPixmap( SmallIcon( "targetnew_kdevelop" ) );
 	QToolTip::add
-		( addTargetButton, i18n( "Add New Target" ) );
+		( addTargetButton, i18n( "Add new target" ) );
 
 	addServiceButton = new QToolButton( overviewButtonBox );
 	addServiceButton->setPixmap( SmallIcon( "servicenew_kdevelop" ) );
 	QToolTip::add
-		( addServiceButton, i18n( "Add New Service" ) );
+		( addServiceButton, i18n( "Add new service" ) );
 
 	addApplicationButton = new QToolButton( overviewButtonBox );
 	addApplicationButton->setPixmap( SmallIcon( "window_new" ) );
 	QToolTip::add
-		( addApplicationButton, i18n( "Add New Application" ) );
+		( addApplicationButton, i18n( "Add new application" ) );
 
 	buildSubprojectButton = new QToolButton( overviewButtonBox );
 	buildSubprojectButton->setPixmap( SmallIcon( "launch" ) );
@@ -135,7 +135,7 @@ void AutoProjectWidget::initOverview ( QWidget* parent )
 	subProjectOptionsButton = new QToolButton( overviewButtonBox );
 	subProjectOptionsButton->setPixmap( SmallIcon( "configure" ) );
 	QToolTip::add
-		( subProjectOptionsButton, i18n( "Show Options" ) );
+		( subProjectOptionsButton, i18n( "Show options" ) );
 
 	overviewButtonBox->setMaximumHeight( subProjectOptionsButton->height() );
 
@@ -158,12 +158,12 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	addNewFileButton = new QToolButton( targetButtonBox );
 	addNewFileButton->setPixmap( SmallIcon( "filenew" ) );
 	QToolTip::add
-		( addNewFileButton, i18n( "Create New File" ) );
+		( addNewFileButton, i18n( "Create new file" ) );
 
 	addExistingFileButton = new QToolButton( targetButtonBox );
 	addExistingFileButton->setPixmap( SmallIcon( "fileimport" ) );
 	QToolTip::add
-		( addExistingFileButton, i18n( "Add Existing Files" ) );
+		( addExistingFileButton, i18n( "Add existing files" ) );
 
 	removeButton = new QToolButton( targetButtonBox );
 	removeButton->setPixmap( SmallIcon( "editdelete" ) );
@@ -181,7 +181,7 @@ void AutoProjectWidget::initDetailview ( QWidget* parent )
 	targetOptionsButton = new QToolButton( targetButtonBox );
 	targetOptionsButton->setPixmap( SmallIcon( "configure" ) );
 	QToolTip::add
-		( targetOptionsButton, i18n( "Show Options" ) );
+		( targetOptionsButton, i18n( "Show options" ) );
 
 	targetButtonBox->setMaximumHeight( addNewFileButton->height() );
 

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Fortran 77 support
+Comment=Fortran 77 Support
 Name=KDevFortran77Support
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevfortransupport

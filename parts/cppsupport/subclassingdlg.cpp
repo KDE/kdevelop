@@ -186,7 +186,7 @@ void SubclassingDlg::readUiFile()
   m_baseClassName = DomUtil::elementByPathExt(doc,WIDGET_CLASS_NAME).text();
 
   m_baseCaption = DomUtil::elementByPathExt(doc,WIDGET_CAPTION_NAME).text();
-  setCaption(i18n("Create subclass of ")+m_baseClassName);
+  setCaption(i18n("Create Subclass of ")+m_baseClassName);
 
   // Special widget specific slots
   SlotItem *newSlot;

@@ -33,7 +33,7 @@ KPopupMenu *ClassToolWidget::createPopup()
 {
     KPopupMenu *popup = contextItem? contextItem->createPopup() : 0;
     if (!popup) {
-        popup = new KPopupMenu(i18n("Class tool"), this);
+        popup = new KPopupMenu(i18n("Class Tool"), this);
     }
 
     return popup;

@@ -36,7 +36,7 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
 
 	KAction *action;
 	// This plugin offer only one action, a menu entry for showing the PartExplorerForm ...
-	action = new KAction( i18n("Part explorer"), 0, this, SLOT(slotShowWidget()),
+	action = new KAction( i18n("Part Explorer"), 0, this, SLOT(slotShowWidget()),
 		actionCollection(), "show_partexplorerform" );
 
 	// this should be your custom internal widget

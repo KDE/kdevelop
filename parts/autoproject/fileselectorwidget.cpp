@@ -89,7 +89,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 	QToolTip::add(back, i18n("Previous directory"));
 	forward = new QPushButton( /*i18n("&Next"),*/ hlow );
 	forward->setPixmap(SmallIcon("forward"));
-	QToolTip::add(forward, i18n("Next Directory"));
+	QToolTip::add(forward, i18n("Next directory"));
 
 	// HACK
 	QWidget* spacer = new QWidget(hlow);

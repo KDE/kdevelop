@@ -155,8 +155,8 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
             m.setItemEnabled(toggleBookmark, m_changeBookmarksAllowed);
             m.insertSeparator();
 
-            lmbClickChangesBPs = m.insertItem( i18n( "Left mouse button click sets: %1" ).arg(m_breakpointDescr) );
-            lmbClickChangesBookmarks = m.insertItem( i18n( "Left mouse button click sets: %1" ).arg(m_bookmarkDescr) );
+            lmbClickChangesBPs = m.insertItem( i18n( "Left Mouse Button Click Sets: %1" ).arg(m_breakpointDescr) );
+            lmbClickChangesBookmarks = m.insertItem( i18n( "Left Mouse Button Click Sets: %1" ).arg(m_bookmarkDescr) );
             m.setItemChecked(lmbClickChangesBPs, m_clickChangesBPs);
             m.setItemChecked(lmbClickChangesBookmarks, !m_clickChangesBPs);
 

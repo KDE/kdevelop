@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Grep frontend
+Comment=Grep Frontend
 Name=KDevGrepView
 Icon=find
 ServiceTypes=KDevelop/Plugin

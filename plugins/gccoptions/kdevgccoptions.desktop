@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=gcc
-Comment=GNU C compiler
+Comment=GNU C Compiler
 Name=GccOptions
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevgccoptions

@@ -39,7 +39,7 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 
   m_recentList = new QListBox;
-  m_recentList->setCaption(i18n("Recent files"));
+  m_recentList->setCaption(i18n("Recent Files"));
   mainWindow()->embedSelectView(m_recentList, i18n("Recent"), i18n("recent files"));
   connect(m_recentList, SIGNAL(selected(const QString &)),
 	  this, SLOT(recentFileSelected(const QString &)));

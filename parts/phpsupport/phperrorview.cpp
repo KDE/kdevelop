@@ -56,7 +56,7 @@ void PHPErrorView::parse(QString& phpOutput){
   QStringList::Iterator it;
   for( it = list.begin(); it != list.end(); ++it ){
     if(parseError.match(*it)){
-      insertItem(i18n("Parse error in %1 on line %2").arg(parseError.group(1)).arg(parseError.group(2)));
+      insertItem(i18n("Parse Error in %1 on Line %2").arg(parseError.group(1)).arg(parseError.group(2)));
       errorItem = new ErrorItem();
       errorItem->filename = QString(parseError.group(1));
       errorItem->line = QString(parseError.group(2)).toInt();
@@ -64,7 +64,7 @@ void PHPErrorView::parse(QString& phpOutput){
       currentLine++;
     }
     else if(undefFunctionError.match(*it)){
-      insertItem(i18n("Call to undefined function %1 in %2 on line %3")
+      insertItem(i18n("Call to Undefined Function %1 in %2 on Line %3")
                  .arg(undefFunctionError.group(1))
                  .arg(undefFunctionError.group(2))
                  .arg(undefFunctionError.group(3)));
@@ -75,7 +75,7 @@ void PHPErrorView::parse(QString& phpOutput){
       currentLine++;
     }
     else if(warning.match(*it)){
-      insertItem(i18n("Warning in %1 on line %2").arg(warning.group(1)).arg(warning.group(2)));
+      insertItem(i18n("Warning in %1 on Line %2").arg(warning.group(1)).arg(warning.group(2)));
       errorItem = new ErrorItem();
       errorItem->filename = QString(warning.group(1));
       errorItem->line = QString(warning.group(2)).toInt();
@@ -83,7 +83,7 @@ void PHPErrorView::parse(QString& phpOutput){
       currentLine++;
     }
     else if(generalFatalError.match(*it)){
-      insertItem(i18n("%1 in %2 on line %3")
+      insertItem(i18n("%1 in %2 on Line %3")
                  .arg(generalFatalError.group(1))
                  .arg(generalFatalError.group(2))
                  .arg((generalFatalError.group(3))));

@@ -126,7 +126,7 @@ void PartController::setupActions()
     ac, "browser_back");
   m_backAction->setEnabled( false );
 
-  m_switchToAction = new KAction(i18n("Switch to..."), KShortcut("CTRL+/"),
+  m_switchToAction = new KAction(i18n("Switch To..."), KShortcut("CTRL+/"),
     this, SLOT(slotSwitchTo()),
     ac, "file_switchto");
 
@@ -773,7 +773,7 @@ void PartController::slotSwitchTo()
 	}
     }
 
-    KDialogBase dialog(KDialogBase::Plain, i18n("Switch to..."), KDialogBase::Ok|KDialogBase::Cancel,
+    KDialogBase dialog(KDialogBase::Plain, i18n("Switch To..."), KDialogBase::Ok|KDialogBase::Cancel,
 		       KDialogBase::Ok, 0, "Switch to", true);
     QGridLayout *grid = new QGridLayout( dialog.plainPage(), 2, 1, 10, 10);
     KLineEdit *editbox = new KLineEdit(dialog.plainPage());

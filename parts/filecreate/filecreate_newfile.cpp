@@ -21,7 +21,7 @@
 namespace FileCreate {
 
   NewFileChooser::NewFileChooser(QWidget * parent) :
-    KDialogBase(KDialogBase::Plain, i18n("New file dialog (title)", "New file"), KDialogBase::Ok|KDialogBase::Cancel,
+    KDialogBase(KDialogBase::Plain, i18n("New file dialog (title)", "New File"), KDialogBase::Ok|KDialogBase::Cancel,
                 KDialogBase::Ok, parent, "New file", true)
   {
     m_grid = new QGridLayout(plainPage(), 3, 3, 10, 10);

@@ -136,7 +136,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
 
     popup->insertSeparator();
     if (inProject)
-        popup->insertItem( i18n("Remove from Project: %1").arg(popupstr),
+        popup->insertItem( i18n("Remove From Project: %1").arg(popupstr),
                            this, SLOT(slotRemoveFromProject()) );
     else
         popup->insertItem( i18n("Add to Project: %1").arg(popupstr),

@@ -2,7 +2,7 @@
 
 Type=Service
 Exec=blubb
-Comment=TMake project
+Comment=TMake Project
 Name=KDevTMakeProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevtrollproject

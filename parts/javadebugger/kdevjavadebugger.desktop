@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Java Debugger frontend
+Comment=Java Debugger Frontend
 Name=KDevJavaDebugger
 Icon=
 ServiceTypes=KDevelop/Part

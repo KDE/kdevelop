@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=g77
-Comment=GNU Fortran 77 compiler
+Comment=GNU Fortran 77 Compiler
 Name=G77Options
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevgccoptions

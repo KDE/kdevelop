@@ -75,7 +75,7 @@ QPopupMenu* KDiffTextEdit::createPopupMenu( const QPoint& p )
     popup->insertSeparator( i );
   connect( popup, SIGNAL(activated(int)), this, SLOT(popupActivated(int)) );
 
-  popup->insertItem( i18n( "Highlight syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 0 );
+  popup->insertItem( i18n( "Highlight Syntax" ), this, SLOT(toggleSyntaxHighlight()), 0, POPUP_BASE - 1, 0 );
   popup->setItemChecked( POPUP_BASE - 1, _highlight );
   popup->insertSeparator( 1 );
 
@@ -286,7 +286,7 @@ void DiffWidget::contextMenuEvent( QContextMenuEvent* /* e */ )
   QPopupMenu* popup = new QPopupMenu( this );
   
   if ( !te->isVisible() )
-    popup->insertItem( i18n("Display &raw output"), this, SLOT(showTextEdit()) );
+    popup->insertItem( i18n("Display &Raw Output"), this, SLOT(showTextEdit()) );
  
   popup->exec( QCursor::pos() );
   delete popup;

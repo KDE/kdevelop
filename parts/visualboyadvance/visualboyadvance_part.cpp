@@ -28,7 +28,7 @@ VisualBoyAdvancePart::VisualBoyAdvancePart(QObject *parent, const char *name, co
   setXMLFile("kdevpart_visualboyadvance.rc");
   
   KAction *action;
-  action = new KAction( i18n("Execute program"), "exec",  Key_F9,
+  action = new KAction( i18n("Execute Program"), "exec",  Key_F9,
 			this, SLOT(slotExecute()),
 			actionCollection(), "build_execute" );
 

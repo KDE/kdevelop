@@ -72,7 +72,7 @@ void CvsPart::setupActions()
 /*
 	KAction * action = new KAction( i18n("Import Cvs Repository..."),"wizard", 0,
 		this, SLOT(slotImportCvs()), actionCollection(), "cvs_import" );
-		action->setStatusText( i18n("Imports an existing Cvs repository.") );
+		action->setStatusText( i18n("Imports an existing CVS repository.") );
 */
 	actionCommit = new KAction( i18n("Commit"), 0, this, SLOT(slotCommit()),
 		actionCollection(), "cvs_commit" );
@@ -82,11 +82,11 @@ void CvsPart::setupActions()
 		actionCollection(), "cvs_log" );
 	actionAdd = new KAction( i18n("Add"), 0, this, SLOT(slotAdd()),
 		actionCollection(), "cvs_add" );
-	actionRemove = new KAction( i18n("Remove from repository"), 0, this, SLOT(slotRemove()),
+	actionRemove = new KAction( i18n("Remove From Repository"), 0, this, SLOT(slotRemove()),
 		actionCollection(), "cvs_remove" );
 	actionUpdate = new KAction( i18n("Update"), 0, this, SLOT(slotUpdate()),
 		actionCollection(), "cvs_update" );
-	actionReplace = new KAction( i18n("Replace with copy from repository"), 0, this, SLOT(slotReplace()),
+	actionReplace = new KAction( i18n("Replace with Copy From Repository"), 0, this, SLOT(slotReplace()),
 		actionCollection(), "cvs_replace" );
 }
 
@@ -395,7 +395,7 @@ void CvsPart::slotDiffFinished( const QString& diff, const QString& err )
     if ( !err.isEmpty() )
 	{
         int s = KMessageBox::warningContinueCancelList( 0, i18n("CVS outputted errors during diff. Do you still want to continue?"),
-                QStringList::split( "\n", err, false ), i18n("Errors during Diff") );
+                QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
         if ( s != KMessageBox::Continue )
             return;
     }

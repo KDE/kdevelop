@@ -101,10 +101,10 @@ ValgrindWidget::ValgrindWidget( ValgrindPart *part )
   vbl->addWidget( lv );
 
   popup = new QPopupMenu( lv, "valPopup" );
-  popup->insertItem( i18n( "&Open Valgrind output..." ), _part, SLOT(loadOutput()), 0, 0 );
+  popup->insertItem( i18n( "&Open Valgrind Output..." ), _part, SLOT(loadOutput()), 0, 0 );
   popup->insertSeparator();
-  popup->insertItem( i18n( "Expand all items" ), this, SLOT(expandAll()), 0, 2 );
-  popup->insertItem( i18n( "Collapse all items" ), this, SLOT(collapseAll()), 0, 3 );
+  popup->insertItem( i18n( "Expand All Items" ), this, SLOT(expandAll()), 0, 2 );
+  popup->insertItem( i18n( "Collapse All Items" ), this, SLOT(collapseAll()), 0, 3 );
 
   connect( popup, SIGNAL(aboutToShow()),
            this, SLOT(aboutToShowPopup()) );

@@ -56,7 +56,7 @@ FeedbackTab::FeedbackTab(QWidget *parent, const char *name)
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
-    QVButtonGroup *other_group = new QVButtonGroup(i18n("Other information"), this);
+    QVButtonGroup *other_group = new QVButtonGroup(i18n("Other Information"), this);
     new FlagCheckBox(other_group, controller,
                      "-vl", i18n("Show line numbers when processing files."));
     new FlagCheckBox(other_group, controller,
@@ -278,7 +278,7 @@ AssemblerTab::AssemblerTab( QWidget * parent, const char * name )
     QVButtonGroup *asm_group = new QVButtonGroup(i18n("Assembler Output"), this);
     new FlagCheckBox(asm_group, controller,
                      "-P", i18n("Use pipes instead of files when assembling."));
-    QRadioButton *m_default = new QRadioButton(i18n("Use Default Output"), asm_group);
+    QRadioButton *m_default = new QRadioButton(i18n("Use default output"), asm_group);
     m_default->setChecked(true);
     new FlagRadioButton(asm_group, asmController,
                         "-Aas", i18n("Use GNU as"));
@@ -521,7 +521,7 @@ LinkerTab::LinkerTab( QWidget * parent, const char * name )
 
     QBoxLayout *layout2 = new QHBoxLayout(layout, KDialog::spacingHint());
 
-    QVButtonGroup *link_group = new QVButtonGroup(i18n("Linking stage"), this);
+    QVButtonGroup *link_group = new QVButtonGroup(i18n("Linking Stage"), this);
     new FlagCheckBox(link_group, controller,
                      "-CD", i18n("Create dynamic library."));
     new FlagCheckBox(link_group, controller,
@@ -535,7 +535,7 @@ LinkerTab::LinkerTab( QWidget * parent, const char * name )
     layout2->addWidget(link_group);
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
 
-    QVButtonGroup *exec_group = new QVButtonGroup(i18n("Executable generation"), this);
+    QVButtonGroup *exec_group = new QVButtonGroup(i18n("Executable Generation"), this);
     new FlagCheckBox(exec_group, controller,
                      "-Xs",  i18n("Strip the symbols from the executable."));
     new FlagCheckBox(exec_group, controller,
@@ -595,7 +595,7 @@ MiscTab::MiscTab( QWidget * parent, const char * name )
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addSpacing(10);
 
-    QVButtonGroup *browser_group = new QVButtonGroup(i18n("Browser info"), this);
+    QVButtonGroup *browser_group = new QVButtonGroup(i18n("Browser Info"), this);
     QRadioButton *m_defaultBrowser = new QRadioButton(i18n("No browser info"), browser_group);
     m_defaultBrowser->setChecked(true);
     new FlagRadioButton(browser_group, radioController,

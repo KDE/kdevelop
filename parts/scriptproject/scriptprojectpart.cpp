@@ -64,7 +64,7 @@ ScriptProjectPart::~ScriptProjectPart()
 void ScriptProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
     QVBox *vbox;
-    vbox = dlg->addVBoxPage(i18n("Script project options"));
+    vbox = dlg->addVBoxPage(i18n("Script Project Options"));
     ScriptOptionsWidget *w = new ScriptOptionsWidget(this, vbox);
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }

@@ -277,7 +277,7 @@ void ChooseTargetDialog::accept ()
 			{
 				KMessageBox::error ( this, i18n ( "The file %1 already exists in the choosen target!\nThe file will be created but will not be added to the target.\n"
 																"Rename the file and select 'Add Existing Files' from the Automake Manager." ).arg ( fitem->name ),
-																i18n ( "Error while adding files" ) );
+																i18n ( "Error While Adding Files" ) );
 				found = true;
 			}
 		}

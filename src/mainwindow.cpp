@@ -291,7 +291,7 @@ void MainWindow::init()
         "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
         "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
         "Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
-        i18n("Couldn't find plugins") );
+        i18n("Couldn't Find Plugins") );
   }
 }
 
@@ -352,14 +352,14 @@ void MainWindow::createActions()
   m_pShowOutputViews = new ViewMenuAction(ViewActionData,i18n("All Output Views"), "view_bottom",
                 CTRL + SHIFT + Key_O, this, SLOT(toggleToolDockBaseState(const ViewMenuActionPrivateData &)),
                 actionCollection(), "output_view" );
-  m_pShowOutputViews->setStatusText(i18n("Output View"));
+  m_pShowOutputViews->setStatusText(i18n("Output view"));
   m_pShowOutputViews->setEnabled( true );
 
   ViewActionData.eView       = TreeView;      // The next action will be for the tree tool windows
   m_pShowTreeViews = new ViewMenuAction(ViewActionData,i18n("All Tree Views"), "tree_win",
                 CTRL + SHIFT + Key_T, this, SLOT(toggleToolDockBaseState(const ViewMenuActionPrivateData &)),
                 actionCollection(), "tree_view" );
-  m_pShowTreeViews->setStatusText(i18n("Tree View"));
+  m_pShowTreeViews->setStatusText(i18n("Tree view"));
   m_pShowTreeViews->setEnabled( true );
 
   connect(manager(), SIGNAL(change()),this, SLOT(updateActionState()));
@@ -773,13 +773,13 @@ void MainWindow::fillWindowMenu()
    if (!bTabPageMode) {
       int placMenuId = m_pWindowMenu->insertItem(i18n("&Tile..."), m_pPlacingMenu);
       m_pPlacingMenu->clear();
-      m_pPlacingMenu->insertItem(i18n("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
-      m_pPlacingMenu->insertItem(i18n("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
-      m_pPlacingMenu->insertItem(i18n("Expand &vertically"), m_pMdi,SLOT(expandVertical()));
-      m_pPlacingMenu->insertItem(i18n("Expand &horizontally"), m_pMdi,SLOT(expandHorizontal()));
-      m_pPlacingMenu->insertItem(i18n("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
-      m_pPlacingMenu->insertItem(i18n("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
-      m_pPlacingMenu->insertItem(i18n("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
+      m_pPlacingMenu->insertItem(i18n("Ca&scade Windows"), m_pMdi,SLOT(cascadeWindows()));
+      m_pPlacingMenu->insertItem(i18n("Cascade &Maximized"), m_pMdi,SLOT(cascadeMaximized()));
+      m_pPlacingMenu->insertItem(i18n("Expand &Vertically"), m_pMdi,SLOT(expandVertical()));
+      m_pPlacingMenu->insertItem(i18n("Expand &Horizontally"), m_pMdi,SLOT(expandHorizontal()));
+      m_pPlacingMenu->insertItem(i18n("Tile &Non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+      m_pPlacingMenu->insertItem(i18n("Tile Overla&pped"), m_pMdi,SLOT(tilePragma()));
+      m_pPlacingMenu->insertItem(i18n("Tile V&ertically"), m_pMdi,SLOT(tileVertically()));
       if (m_mdiMode == QextMdi::ToplevelMode) {
          m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
       }

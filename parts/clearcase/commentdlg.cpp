@@ -22,7 +22,7 @@
 CcaseCommentDlg::CcaseCommentDlg(bool bCheckin)
   : QDialog(0, "", true)
 {
-  setCaption( i18n("Clearcase comment") );
+  setCaption( i18n("Clearcase Comment") );
 
   QBoxLayout *layout = new QVBoxLayout(this, 10);
 

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=pgf77
-Comment=Portland Group Fortran77 compiler
+Comment=Portland Group Fortran77 Compiler
 Name=Pgf77Options
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevpgioptions

@@ -57,7 +57,7 @@ void RunOptionsWidget::browseMainProgram()
   QString path = KFileDialog::getOpenFileName(m_projectDirectory,
                                i18n("*|All Files"),
                                this,
-                               i18n("Select main program executable."));
+                               i18n("Select Main Program Executable"));
 
   if (path.find(m_projectDirectory)==0)
   {

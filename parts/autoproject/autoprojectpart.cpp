@@ -78,7 +78,7 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotAddTranslation()),
                           actionCollection(), "project_addtranslation" );
 
-/*	action = new KAction ( i18n("&Import existing files and directories..."), "", 0,
+/*	action = new KAction ( i18n("&Import Existing Files && Directories..."), "", 0,
 							this, SLOT ( slotImportExisting() ),
 							actionCollection(), "project_importexisting" );
 	action->setStatusText ( i18n ( "Import existing files and directories to the currently loaded project" ) );
@@ -414,7 +414,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
             preCommand += " && ";
             preCommand += configureCommand() + " && ";
         } else {
-            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run configure first?"));
+            int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory. Run 'configure' first?"));
             if (r == KMessageBox::No)
                 return 0;
             preCommand = configureCommand() + " && ";

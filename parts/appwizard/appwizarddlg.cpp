@@ -482,7 +482,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             if (it == l.end())
                 m_lastPage = edit;
             fileTemplate.edit = edit;
-            addPage(edit, i18n("Template for .%1 files").arg(fileTemplate.suffix));
+            addPage(edit, i18n("Template for .%1 Files").arg(fileTemplate.suffix));
             m_fileTemplates.append(fileTemplate);
         }
         licenseChanged(); // update template editors

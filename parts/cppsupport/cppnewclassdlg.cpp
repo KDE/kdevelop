@@ -68,20 +68,20 @@ CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const ch
     constructors_view->setSorting(-1);
 
     accessMenu = new QPopupMenu(this);
-    accessMenu->insertItem(i18n("Use as private"),
+    accessMenu->insertItem(i18n("Use as Private"),
         this, SLOT(changeToPrivate()), 0, 1);
-    accessMenu->insertItem(i18n("Use as protected"),
+    accessMenu->insertItem(i18n("Use as Protected"),
         this, SLOT(changeToProtected()), 0, 2);
-    accessMenu->insertItem(i18n("Use as public"),
+    accessMenu->insertItem(i18n("Use as Public"),
         this, SLOT(changeToPublic()), 0, 3);
     accessMenu->insertSeparator();
     accessMenu->insertItem(i18n("Unset"),
         this, SLOT(changeToInherited()), 0, 5);
 
     overMenu = new QPopupMenu(this);
-    overMenu->insertItem(i18n("Extend base class functionality"),
+    overMenu->insertItem(i18n("Extend Base Class Functionality"),
         this, SLOT(extendFunctionality()), 0, 11);
-    overMenu->insertItem(i18n("Replace base class method"),
+    overMenu->insertItem(i18n("Replace Base Class Method"),
         this, SLOT(replaceFunctionality()), 0, 12);
 
     comp = basename_edit->completionObject();

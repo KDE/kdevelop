@@ -174,7 +174,7 @@ void MainWindowShare::createActions()
   action->setStatusText( i18n("Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key") );
 
   m_configureEditorAction = new KAction( i18n("Configure &Editor..."), 0, this, SLOT( slotConfigureEditors() ), m_pMainWnd->actionCollection(), "settings_configure_editors");
-  action->setStatusText( i18n("configure editors settings") );
+  action->setStatusText( i18n("Configure editors settings") );
 }
 
 void MainWindowShare::slotReportBug()

@@ -107,10 +107,10 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
         return;
 
     if (e->button() == RightButton) {
-        KPopupMenu *menu = new KPopupMenu(i18n("Debug toolbar"), this);
-        menu->insertItem(i18n("Dock to panel"),
+        KPopupMenu *menu = new KPopupMenu(i18n("Debug Toolbar"), this);
+        menu->insertItem(i18n("Dock to Panel"),
                          parent(), SLOT(slotDock()));
-        menu->insertItem(i18n("Dock to panel and iconify KDevelop"),
+        menu->insertItem(i18n("Dock to Panel && Iconify KDevelop"),
                          parent(), SLOT(slotIconifyAndDock()));
         menu->popup(e->globalPos());
     } else {
@@ -232,7 +232,7 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
         }
     case RightButton:
         {
-            KPopupMenu* menu = new KPopupMenu(i18n("Debug toolbar"), this);
+            KPopupMenu* menu = new KPopupMenu(i18n("Debug Toolbar"), this);
             menu->insertItem(i18n("Activate"),                        toolBar_, SLOT(slotUndock()));
             menu->insertItem(i18n("Activate (KDevelop gets focus)"),  toolBar_, SLOT(slotActivateAndUndock()));
             menu->popup(e->globalPos());
@@ -294,7 +294,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     QPushButton*  bNexti      = new DbgButton(BarIcon("dbgnextinst"),   QString::null,      this);
     QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),       QString::null,      this);
     QPushButton*  bStepi      = new DbgButton(BarIcon("dbgstepinst"),   QString::null,      this);
-    QPushButton*  bFinish     = new DbgButton(BarIcon("dbgstepout"),    i18n("Step out"),   this);
+    QPushButton*  bFinish     = new DbgButton(BarIcon("dbgstepout"),    i18n("Step Out"),   this);
     QPushButton*  bView       = new DbgButton(BarIcon("dbgmemview"),    i18n("Viewers"),    this);
     bKDevFocus_ = new DbgButton(BarIcon("kdevelop"),      QString::null,      this);
     bPrevFocus_ = new DbgButton(BarIcon("dbgmemview"),    QString::null,      this);

@@ -41,8 +41,8 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args,
   bool ok = proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
 
   if ( !ok ) {
-    KMessageBox::error( 0, i18n("Could not invoke \"%1\". Please make sure it is installed correctly").arg( executable ), 
-                        i18n("Error invoking command") );
+    KMessageBox::error( 0, i18n("Could not invoke \"%1\". Please make sure it is installed correctly").arg( executable ),
+                        i18n("Error Invoking Command") );
 
     emit finished( QString::null, QString::null );
     deleteLater();

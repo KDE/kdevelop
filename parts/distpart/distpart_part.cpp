@@ -24,11 +24,11 @@ DistpartPart::DistpartPart(QObject *parent, const char *name, const QStringList 
 
     setXMLFile("kdevpart_distpart.rc");
 
-    m_action =  new KAction( i18n("Project Distribution and Publishing"), "package", 0,
+    m_action =  new KAction( i18n("Project Distribution && Publishing"), "package", 0,
                              this, SLOT(show()),
                              actionCollection(), "make_dist" );
 
-    m_action->setStatusText(i18n("Make Source and Binary Distribution"));
+    m_action->setStatusText(i18n("Make source and binary distribution"));
     m_action->setWhatsThis(i18n("Distribution and Publishing:\n\n"));
     //QWhatsThis::add(m_widget, i18n("This will help users package and publish their software."));
     

@@ -229,7 +229,7 @@ void AutoDetailsView::slotRemoveDetail()
 		else
 			caption = titem->name;
 
-		dlg.setCaption ( i18n ( "Remove File from '%1'" ).arg ( caption ) );
+		dlg.setCaption ( i18n ( "Remove File From '%1'" ).arg ( caption ) );
 
 		if ( dlg.exec() )
 		{
@@ -254,7 +254,7 @@ void AutoDetailsView::slotRemoveDetail()
 
 		RemoveTargetDialog dlg ( m_widget, m_part, m_widget->selectedSubproject(), titem, this, "remove target dialog" );
 
-		dlg.setCaption ( i18n ( "Remove Target from '%1'" ).arg ( m_widget->selectedSubproject()->subdir ) );
+		dlg.setCaption ( i18n ( "Remove Target From '%1'" ).arg ( m_widget->selectedSubproject()->subdir ) );
 
 		if ( dlg.exec() )
 		{
@@ -338,7 +338,7 @@ void AutoDetailsView::slotDetailsContextMenu( KListView *, QListViewItem *item, 
 		removeDetailAction->plug( &popup );
 		FileContext context( m_widget->selectedSubproject()->path + "/" + fitem->name, false );
 
-		int idSubclassWidget = idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass widget...") );
+		int idSubclassWidget = idSubclassWidget = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Subclass Widget...") );
         int idUISubclasses = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("List of Subclasses..."));
 		int idUpdateWidgetclass = popup.insertItem(SmallIconSet("qmake_subclass.png"),i18n("Edit ui-subclass..."));
 		int idViewUIH = popup.insertItem(SmallIconSet("qmake_ui_h.png"),i18n("Open ui.h File"));

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=KDE Automake project
+Comment=KDE Automake Project
 Name=KDevKDEAutoProject
 ServiceTypes=KDevelop/Project
 X-KDE-Library=libkdevautoproject

@@ -60,7 +60,7 @@ void ValgrindDialog::setValExecutable( const QString& ve )
   if ( vUrl.isEmpty() ) {
     KMessageBox::sorry( this, i18n( "Could not find valgrind in your $PATH. Please make "
                                     "sure it is installed properly." ),
-                        i18n( "valgrind not found" ) );
+                        i18n( "Valgrind Not Found" ) );
     w->valExecutableEdit->setURL( "valgrind" );
   } else {
     w->valExecutableEdit->setURL( vUrl );

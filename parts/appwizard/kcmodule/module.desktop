@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Comment=$APPNAME$ - a kcontol module
+Comment=$APPNAME$ - a kcontrol module
 Exec=kcmshell $APPNAMELC$
 Keywords=$APPNAME$,$APPNAMELC$
 Name=The $APPNAME$ applet

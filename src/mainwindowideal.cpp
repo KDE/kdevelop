@@ -172,7 +172,7 @@ void MainWindowIDEAl::init() {
                                        "that KDevelop is installed in your KDE directory, otherwise you have to add KDevelop's installation "
                                        "path to the environment variable KDEDIRS and run kbuildsycoca. Restart KDevelop afterwards.\n"
                                        "Example for BASH users:\nexport KDEDIRS=/path/to/gideon:$KDEDIRS && kbuildsycoca"),
-                            i18n("Couldn't find plugins") );
+                            i18n("Couldn't Find Plugins") );
     }
     kdDebug(9000) << "-> kapp = " << kapp << endl;
     kapp->installEventFilter( new IDEAlEventFilter(this) );

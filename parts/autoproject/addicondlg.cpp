@@ -45,8 +45,8 @@ AddIconDialog::AddIconDialog(AutoProjectPart *part, AutoProjectWidget *widget,
     type_combo->insertItem(i18n("Application"));
     type_combo->insertItem(i18n("Action"));
     type_combo->insertItem(i18n("Device"));
-    type_combo->insertItem(i18n("File system"));
-    type_combo->insertItem(i18n("MIME type"));
+    type_combo->insertItem(i18n("File System"));
+    type_combo->insertItem(i18n("MIME Type"));
 
     size_combo->insertItem("16");
     size_combo->insertItem("22");

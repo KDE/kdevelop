@@ -86,7 +86,7 @@ void PartSelectWidget::init()
     groupBox1Layout->addWidget( _pluginList );
     layout->addWidget( groupBox1 );
 
-    QGroupBox * groupBox2 = new QGroupBox( i18n("Description:"), this );
+    QGroupBox * groupBox2 = new QGroupBox( i18n("Description"), this );
     groupBox2->setColumnLayout(0, Qt::Vertical );
     groupBox2->layout()->setSpacing( 6 );
     groupBox2->layout()->setMargin( 11 );

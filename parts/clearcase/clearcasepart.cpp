@@ -78,9 +78,9 @@ void ClearcasePart::contextMenu(QPopupMenu *popup, const Context *context)
         sub->insertItem( i18n("Uncheckout"),
                          this, SLOT(slotUncheckout()) );
         sub->insertSeparator();
-        sub->insertItem( i18n("Create element"),
+        sub->insertItem( i18n("Create Element"),
                          this, SLOT(slotCreate()) );
-        sub->insertItem( i18n("Remove element"),
+        sub->insertItem( i18n("Remove Element"),
                          this, SLOT(slotRemove()) );
         sub->insertSeparator();
         sub->insertItem( i18n("Diff"),
@@ -274,7 +274,7 @@ void ClearcasePart::slotDiffFinished( const QString& diff, const QString& err )
 
     if ( !err.isEmpty() ) {
         int s = KMessageBox::warningContinueCancelList( 0, i18n("Clearcase outputted errors during diff. Do you still want to continue?"),
-                QStringList::split( "\n", err, false ), i18n("Errors during Diff") );
+                QStringList::split( "\n", err, false ), i18n("Errors During Diff") );
         if ( s != KMessageBox::Continue )
             return;
     }

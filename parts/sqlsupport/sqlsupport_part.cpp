@@ -123,7 +123,7 @@ void SQLSupportPart::loadConfig()
 
 void SQLSupportPart::projectConfigWidget( KDialogBase *dlg )
 {
-    QVBox *vbox = dlg->addVBoxPage( QString( "SQL" ), i18n( "Specify your database connections" ) );
+    QVBox *vbox = dlg->addVBoxPage( QString( "SQL" ), i18n( "Specify your Database Connections" ) );
     SqlConfigWidget *w = new SqlConfigWidget( (QWidget*)vbox, "SQL config widget" );
     w->setProjectDom( projectDom() );
     w->loadConfig();

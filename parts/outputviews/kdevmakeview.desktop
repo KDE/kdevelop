@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Compiler frontend
+Comment=Compiler Frontend
 Name=KDevMakeView
 Icon=
 ServiceTypes=KDevelop/MakeFrontend

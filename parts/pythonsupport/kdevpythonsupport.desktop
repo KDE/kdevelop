@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Python support
+Comment=Python Support
 Name=KDevPythonSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevpythonsupport

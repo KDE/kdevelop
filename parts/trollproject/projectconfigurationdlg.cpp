@@ -841,7 +841,7 @@ void ProjectConfigurationDlg::outsideLibMoveDownClicked()
 void ProjectConfigurationDlg::outsideLibAddClicked()
 {
     bool ok;
-    QString dir = KLineEditDlg::getText(i18n("Add Library to link:"), "-l", &ok, 0);
+    QString dir = KLineEditDlg::getText(i18n("Add library to link:"), "-l", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
         new QListViewItem(outsidelib_listview, dir);
 }
@@ -885,7 +885,7 @@ void ProjectConfigurationDlg::outsideLibDirMoveDownClicked()
 void ProjectConfigurationDlg::outsideLibDirAddClicked()
 {
     bool ok;
-    QString dir = KLineEditDlg::getText(i18n("Add Library directory:"), "", &ok, 0);
+    QString dir = KLineEditDlg::getText(i18n("Add library directory:"), "", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
         new QListViewItem(outsidelibdir_listview, dir);
 }
@@ -902,7 +902,7 @@ void ProjectConfigurationDlg::outsideIncEditClicked()
     QListViewItem *item=outsideinc_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
-    QString dir = KLineEditDlg::getText(i18n("Change Include Directory:"), text, &ok, 0);
+    QString dir = KLineEditDlg::getText(i18n("Change include directory:"), text, &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
         item->setText(0,dir);
   
@@ -914,7 +914,7 @@ void ProjectConfigurationDlg::outsideLibEditClicked()
     QListViewItem *item=outsidelib_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
-    QString dir = KLineEditDlg::getText(i18n("Change Library to link:"), text, &ok, 0);
+    QString dir = KLineEditDlg::getText(i18n("Change library to link:"), text, &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-l")
         item->setText(0,dir);
   
@@ -926,7 +926,7 @@ void ProjectConfigurationDlg::outsideLibDirEditClicked()
     QListViewItem *item=outsidelibdir_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
-    QString dir = KLineEditDlg::getText(i18n("Change Library Directory:"), text, &ok, 0);
+    QString dir = KLineEditDlg::getText(i18n("Change library directory:"), text, &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-l")
         item->setText(0,dir);
   

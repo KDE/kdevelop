@@ -260,7 +260,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 // daniel
 void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
-    QVBox* vbox = dlg->addVBoxPage( i18n( "C++ specific" ) );
+    QVBox* vbox = dlg->addVBoxPage( i18n( "C++ Specific" ) );
     CCConfigWidget* w = new CCConfigWidget( this, vbox );
     connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
 
@@ -412,7 +412,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     if (m_contextFileName.isEmpty())
         return;
 
-    popup->insertItem( i18n("Goto include file: %1").arg(popupstr),
+    popup->insertItem( i18n("Goto Include File: %1").arg(popupstr),
                        this, SLOT(slotGotoIncludeFile()) );
 }
 

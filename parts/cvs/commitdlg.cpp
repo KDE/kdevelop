@@ -57,7 +57,7 @@ void CommitDialog::accept()
 	else {
         int s = KMessageBox::warningContinueCancel( this,
 			i18n("You are committing your changes without any comment. This is not a good practice. Continue anyway?"),
-			i18n("Cvs commit warning"),
+			i18n("CVS Commit Warning"),
 			KStdGuiItem::cont(),
 			i18n("askWhenCommittingEmptyLogs") );
         if ( s == KMessageBox::Continue ) {

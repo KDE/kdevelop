@@ -652,7 +652,7 @@ void GDBController::parseLine(char* buf)
                                 i18n("gdb message:\n")+badCore_ + "\n" +
                                 QString(buf)+"\n\n"+
                                 i18n("Any symbols gdb resolves are suspect"),
-                                i18n("Mismatched core file"));
+                                i18n("Mismatched Core File"));
 
         return;
     }

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=PHP support
+Comment=PHP Support
 Name=KDevPHPSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevphpsupport

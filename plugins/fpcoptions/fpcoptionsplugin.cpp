@@ -53,7 +53,7 @@ FpcOptionsDialog::FpcOptionsDialog( QWidget *parent, const char *name )
     vbox = addVBoxPage(i18n("Locations II"));
     directories2 = new FilesAndDirectoriesTab2(vbox, "directories2 tab");
 
-    vbox = addVBoxPage(i18n("Debug and Optimization"));
+    vbox = addVBoxPage(i18n("Debug && Optimization"));
     debug_optim = new DebugOptimTab(vbox, "debug_optim tab");
 
     vbox = addVBoxPage(i18n("Code Generation"));

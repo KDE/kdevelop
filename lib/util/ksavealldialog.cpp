@@ -20,7 +20,7 @@
 
 
 KSaveAllDialog::KSaveAllDialog( const QStringList& filenames, QWidget* parent ) :
-  KDialogBase( parent, "SaveAllDialog", true, i18n("Save modified files?"),
+  KDialogBase( parent, "SaveAllDialog", true, i18n("Save Modified Files?"),
 	       Ok | User1 | Close )
 {
   m_result = Cancel;

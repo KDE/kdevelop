@@ -135,9 +135,9 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             m_popupstr = ident;
             QString squeezed = KStringHandler::csqueeze(m_popupstr, 20);
             popup->insertSeparator();
-            popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
+            popup->insertItem( i18n("Search in Documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
-            popup->insertItem( i18n("Goto manpage: %1").arg(ident),
+            popup->insertItem( i18n("Goto Manpage: %1").arg(ident),
                                this, SLOT(slotContextGotoManpage()) );
         }
     } else if (context->hasType("documentation")) {
@@ -148,7 +148,7 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
             m_popupstr = selection;
             QString squeezed = KStringHandler::csqueeze(selection, 20);
             popup->insertSeparator();
-            popup->insertItem( i18n("Search in documentation: %1").arg(squeezed),
+            popup->insertItem( i18n("Search in Documentation: %1").arg(squeezed),
                                this, SLOT(slotContextFulltextSearch()) );
         }
     }

@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Python scripting interface
+Comment=Python Scripting Interface
 Name=KDevScripting
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevscripting

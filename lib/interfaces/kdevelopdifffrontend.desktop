@@ -3,5 +3,5 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/DiffFrontend
 X-KDE-Derived=KDevelop/Plugin
-Name=Diff frontend interface
+Name=Diff Frontend Interface
 

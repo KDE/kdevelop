@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Application output view
+Comment=Application Output View
 Name=KDevAppOutputView
 Icon=
 ServiceTypes=KDevelop/AppFrontend

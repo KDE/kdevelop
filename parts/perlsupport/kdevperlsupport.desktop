@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Perl support
+Comment=Perl Support
 Name=KDevPerlSupport
 ServiceTypes=KDevelop/LanguageSupport
 X-KDE-Library=libkdevperlsupport
