@@ -3402,7 +3402,7 @@ also setting the KDE Library Doc path automatically.
 <p>
 For those users who don't have a recent documentation of the <idx/KDE-libraries/, especially the documentation for the files
 installed on the system, the Update <idx/KDE-Documentation/ dialog creates a new one or updates existing documentations. This
-function requires your system to have <idx/KDoc/ and qt2<idx/KDoc/ installed, included in the <idx/KDE-SDK/ package. First of, you have
+function requires your system to have <idx/KDoc/ and qt2kdoc installed, included in the <idx/KDE-SDK/ package. First of, you have
 to set up the path to your recent kdelibs sources, which is not the include-path for KDE ! Just enter the path to the sources, like:
 /home/rnolden/kdelibs-1.1/.
 
@@ -3425,8 +3425,18 @@ users who generate a new documentation from scratch.
 After pressing the OK button, KDevelop will create a subdirectory "<idx/KDoc/-reference" in the documentation path containing the <idx/KDoc/
 reference files.  First, the qt library documentation <idx/classes/ will be indexed to connect the Qt documentation with the
 documentation to be generated for the kdelibs.  So it is important that you have set up the Qt documentation path first to ensure
-that it can be found by <tt/<cdx/qt2kdoc//. Finally, the KDE libs will be indexed and the documentation will be build with
+that it can be found by <tt/qt2kdoc/. Finally, the KDE libs will be indexed and the documentation will be build with
 cross-references to give browsing the most functionality.
+
+<comment><bf>NOTE:</bf> When using KDoc 2, you can add a set of documentation for the the libraries in the KDE-Base and KOffice
+package. To do this, create the KDE-Libs documentation as described above. Then reopen the dialog and choose the path to the
+<tt>kdoc.rules</tt> file in the kdebase package resp. the koffice package, which is located in kdebase in the root directory of the
+sources, in KOffice in koffice/lib. Select option 3 (Leave old Documentation untouched) and leave the output path below that option as
+it is. This will keep the kdelibs documentation and generate the kdebase-libraries (resp. the koffice-libraries) documentation to the
+same location with cross-references to the kdelibs documentation additionally. After generating the documentation the libraries are
+available in the documentation tree automatically. For further KDE packages coming with additional libraries you should look for the
+<tt>kdoc.rules</tt> file to generate additional documentation as with the KDE-Base and KOffice packages.</comment>
+
 
 <sect2>Create Search Database
 <p>

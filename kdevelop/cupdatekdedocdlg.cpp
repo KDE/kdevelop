@@ -255,7 +255,11 @@ void CUpdateKDEDocDlg::OK(){
     kdelibs_path = kdelibs_path +"/";
   }
   // check if path (TO GENERATE the doc from the sources) is set correctly
+#ifdef WITH_KDOC2
+  QString kde_testfile=kdelibs_path+"kdoc.rules";
+#else
   QString kde_testfile=kdelibs_path+"kdecore/kapp.h"; // test if the path really is the kdelibs path
+#endif
   if(!QFileInfo(kde_testfile).exists()){
     KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path for the KDE-Libs does not\n"
 									 "lead to the KDE Libraries. Please choose the\n"

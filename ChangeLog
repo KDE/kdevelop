@@ -1,3 +1,10 @@
+2000-03-23 Ralf Nolden <rnolden@kdevelop.de>
+        * added "extern" to tokenizer.l (classparser) to avoid trouble with parsing extern "C" sections
+        * added support for kdoc.rules file for KDoc2 in the update kde-libs documentation dialog to
+          enable generating documentation for libraries in koffice and kdebase
+        * added comment to that in the documentation
+        * updated kdevelop.pot
+
 2000-03-21 Ralf Nolden <rnolden@kdevelop.de>
         * updated version to 1.2, updated manuals for versions and dates
 
