@@ -12,6 +12,7 @@
 #include <qdir.h>
 #include <qlayout.h>
 #include <qregexp.h>
+#include <qpainter.h>
 #include <kdialogbase.h>
 #include <klocale.h>
 #include <kprocess.h>
