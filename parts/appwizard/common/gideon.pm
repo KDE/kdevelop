@@ -125,6 +125,7 @@ sub installGNOME
         chdir( $dest ) || die "Could not chdir to $dest\n";
         system( 'gunzip', '-f', 'gnome.tar.gz' );
         system( 'tar', 'xf', 'gnome.tar' );
+        move( "macros/gnome-Makefile.am", "macros/Makefile.am" );
         unlink( "gnome.tar" );
 }
 
