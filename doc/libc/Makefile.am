@@ -16,7 +16,7 @@ EXTRA_DIST = libc.index.in
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
-	for file in *.html ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done
+	$(INSTALL_DATA) $(srcdir)/*.html $(DESTDIR)$(htmldir)
 
 #dist-hook:
 #	mkdir -p $(distdir) ; \

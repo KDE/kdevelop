@@ -12,7 +12,8 @@ stl.index: $(srcdir)/stl.index.in
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
-	for file in *.html *.gif; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done
+	$(INSTALL_DATA) $(srcdir)/*.gif $(DESTDIR)$(htmldir)
+# 	$(INSTALL_DATA) $(srcdir)/*.html $(DESTDIR)$(htmldir) ;
 
 dist-hook:
 	mkdir -p $(distdir) ; \
