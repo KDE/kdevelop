@@ -328,6 +328,9 @@ void BackgroundParser::close()
     QMutexLocker locker( &m_mutex );
     m_close = true;
     m_canParse.wakeAll();
+
+    while (running())
+        sleep(1);
 }
 
 bool BackgroundParser::filesInQueue()

@@ -238,7 +238,7 @@ CppSupportPart::~CppSupportPart()
 
     if( m_backgroundParser ){
 	m_backgroundParser->close();
-	m_backgroundParser->wait();
+//	m_backgroundParser->wait();
 	delete m_backgroundParser;
 	m_backgroundParser = 0;
     }
