@@ -25,7 +25,7 @@
 #include <kstddirs.h>
 #include <ksimpleconfig.h>
 #include <kiconloader.h>
-#include <kpopmenu.h>
+#include <kpopupmenu.h>
 #include "../config.h"
 
 #include "ctoolclass.h"
