@@ -147,6 +147,8 @@ public:
 
   /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
   void setKDlgCaption();
+  /** sets the Main window caption for KDevelop */
+  void setMainCaption(int tab_item=-1);
   			
   void newFile(bool add_to_project);
   /** read the projectfile from the disk*/
@@ -222,7 +224,7 @@ public:
   void slotFilePrint();
   /** quit kdevelop*/
   void slotFileQuit();
-  
+
   ////////////////////////
   // EDIT-Menu entries
   ///////////////////////
