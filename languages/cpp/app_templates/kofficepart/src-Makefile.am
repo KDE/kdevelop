@@ -10,7 +10,7 @@ lib%{APPNAMELC}part_la_LIBADD = -lkofficeui
 
 ## The kdeinit loadable module
 lib_LTLIBRARIES = %{APPNAMELC}.la
-%{APPNAMELC}_la_SOURCES = main.cpp
+%{APPNAMELC}_la_SOURCES = %{APPNAMELC}.cpp
 %{APPNAMELC}_la_LDFLAGS = $(all_libraries) -module -avoid-version
 %{APPNAMELC}_la_LIBADD = -lkofficecore
 
