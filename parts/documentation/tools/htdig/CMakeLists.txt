@@ -1,4 +1,8 @@
-ADD_EXECUTABLE(kdevelop-htdig htdigindex.cpp)
+SET(kdevelop-htdig_SRCS htdigindex.cpp)
+
+KDE_AUTOMOC(${kdevelop-htdig_SRCS})
+
+ADD_EXECUTABLE(kdevelop-htdig ${kdevelop-htdig_SRCS} )
 
 
 
