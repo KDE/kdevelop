@@ -102,6 +102,9 @@ private: // Private attributes
   /** Tells if this is an static declaration. */
   bool isStatic;
 
+  /** Start of a declaration that has been pushed on the stack. */
+  int declStart;
+
 private: // Private methods
 
   /** Get the next lexem from the lexer. */
@@ -199,7 +202,9 @@ private: // Private methods
    */
   bool parseClassLexem( CParsedClass *aClass );
   
-  /** Parse a class declaration. */
+  /** Parse a class declaration. 
+   * @return The parsed class or NULL if it was no class.
+   */
   CParsedClass *parseClass();
 
   /** Tells if the current lexem is generic and needs no special
@@ -222,7 +227,9 @@ private: // Private methods
   /** Parse toplevel statements */
   void parseToplevel();
 
-  /** Parse a file */
+  /** Parse a file.
+   * @param file Stream to parse from.
+   */
   void parseFile( ifstream &file );
 
   /** Reset the internal variables */

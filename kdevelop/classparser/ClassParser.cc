@@ -171,7 +171,8 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
   CParsedStruct *aStruct = new CParsedStruct();
 
   // Set some info about the struct.
-  aStruct->setDefinedOnLine( getLineno() );
+  aStruct->setDeclaredOnLine( getLineno() );
+  aStruct->setDeclaredInFile( currentFile );
   aStruct->setDefinedInFile( currentFile );
 
   // Check for a name on the stack
@@ -188,6 +189,9 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
 
   // Skip '}'
   getNextLexem();
+
+  // Set the point where the struct ends.
+  aStruct->setDeclarationEndsOnLine( getLineno() );
 
   // If we find a name here we use the typedef name as the struct name.
   if( lexem == ID )
@@ -415,8 +419,8 @@ void CClassParser::fillInParsedVariableHead( CParsedAttribute *anAttr )
     delete aLexem;
   }
 
-  anAttr->setDefinedInFile( currentFile );
-  anAttr->setDefinedOnLine( getLineno() );
+  anAttr->setDeclaredInFile( currentFile );
+  anAttr->setDeclaredOnLine( getLineno() );
   anAttr->setExport( declaredScope );
 }
 
@@ -452,6 +456,8 @@ void CClassParser::fillInParsedVariable( CParsedAttribute *anAttr )
   // If we reach end of file, this is not a valid attribute.
   if( lexem == 0 )
     anAttr->setName( "" );
+  else // Set the end of this variable declaration.
+    anAttr->setDeclarationEndsOnLine( getLineno() );
 }
 
 /*----------------------------- CClassParser::fillInMultipleVariable()
@@ -495,6 +501,9 @@ void CClassParser::fillInMultipleVariable( CParsedContainer *aContainer )
     // Remove separating ','
     if( lexemStack.top()->type == ',' )
       delete lexemStack.pop();
+
+    // Set endpoint of declaration.
+    anAttr->setDeclarationEndsOnLine( getLineno() );
 
     list.append( anAttr );
   }
@@ -579,6 +588,7 @@ CParsedAttribute *CClassParser::parseVariable()
   {
     anAttr = new CParsedAttribute();
     fillInParsedVariable( anAttr );
+    anAttr->setDeclarationEndsOnLine( getLineno() );
   }
 
   return anAttr;
@@ -711,6 +721,10 @@ void CClassParser::fillInParsedMethod(CParsedMethod *aMethod, bool isOperator)
   // Skip implementation.
   if( lexem == '{' )
     skipBlock();
+
+  // Set end of declaration and definition.
+  aMethod->setDefinitionEndsOnLine( getLineno() );
+  aMethod->setDeclarationEndsOnLine( getLineno() );  
 }
 
 /*---------------------------- CClassParser::parseMethodDeclaration()
@@ -829,10 +843,11 @@ void CClassParser::parseMethodImpl(bool isOperator)
       pm = aClass->getMethod( aMethod );
       if( pm != NULL )
       {
-        aClass->setDeclaredInFile( currentFile );
+        aClass->setDefinedInFile( currentFile );
         pm->setIsInHFile( false );
-        pm->setDeclaredInFile( currentFile );
-        pm->setDeclaredOnLine( declLine );
+        pm->setDefinedInFile( currentFile );
+        pm->setDefinedOnLine( declLine );
+        pm->setDefinitionEndsOnLine( getLineno() );
       }
       else
       {
@@ -870,6 +885,8 @@ int CClassParser::checkClassDecl()
   bool isMultiDecl = false;
   int retVal = CP_IS_OTHER;
   bool exit = false;
+
+  declStart = getLineno();
 
   while( !exit )
   {
@@ -1006,8 +1023,7 @@ CParsedClass *CClassParser::parseClassHeader()
   // Ok, this seems to be a class definition so allocate the
   // the new object and set some values.
   aClass = new CParsedClass();
-  //  aClass->setName( getText() );
-  aClass->setDefinedOnLine( getLineno() );
+  aClass->setDeclaredOnLine( getLineno() );
   aClass->setDefinedInFile( currentFile );
   aClass->setDeclaredInFile( currentFile );
   
@@ -1107,6 +1123,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
       break;
     case '}':
       exit = true;
+      aClass->setDeclarationEndsOnLine( getLineno() );
       break;
     case 0:
       exit = true;
@@ -1372,6 +1389,7 @@ void CClassParser::reset()
   lexem = -1;
   declaredScope = PIE_GLOBAL;
   isStatic=false;
+  declStart = -1;
 }
 
 /*----------------------------------------- CClassParser::parseFile()
