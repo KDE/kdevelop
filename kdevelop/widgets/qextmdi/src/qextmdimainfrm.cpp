@@ -401,7 +401,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
    m_pMdi->manageChild(lpC,FALSE,bCascade);
 
    if (m_bMaximizedChildFrmMode && (m_pMdi->m_pZ->count() > 1)) {
-     updateSysButtonConnections( m_pMdi->topChild(), lpC);
+//     updateSysButtonConnections( m_pMdi->topChild(), lpC);
    }
 
    if (bShow) {
@@ -563,10 +563,11 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
             // this should go out of here
             // (mmorin)
             if( m_pMdi->topChild()->state() == QextMdiChildFrm::Maximized) {
-               QextMdiChildFrm* pTC = m_pMdi->topChild();
-               if ( pTC != pWnd->mdiParent()) {
-                 updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
-               }
+//               QextMdiChildFrm* pTC = m_pMdi->topChild();
+//               if ( pTC != pWnd->mdiParent()) {
+//                 updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
+//               }
+               pWnd->mdiParent()->raiseAndActivate();
             }
          }
       }

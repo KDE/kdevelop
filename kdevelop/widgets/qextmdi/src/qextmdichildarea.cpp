@@ -108,7 +108,7 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
    if (bWasMaximized){
       if (c) {
          c->setState(QextMdiChildFrm::Maximized,FALSE);
-         emit sysButtonConnectionsMustChange(0L,c);
+         emit sysButtonConnectionsMustChange(lpC,c);
       }
       else {
          emit noMaximizedChildFrmLeft(0L); // last childframe removed
@@ -133,14 +133,14 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
    m_pZ->removeRef(lpC);
 
    // focus the next new childframe
-   QextMdiChildFrm* c=topChild();
+   QextMdiChildFrm* newTopChild = topChild();
    if (bWasMaximized){
-      if (c) {
-         c->setState(QextMdiChildFrm::Maximized,FALSE);
-         emit sysButtonConnectionsMustChange(0L,c);
+      if (newTopChild) {
+         newTopChild->setState(QextMdiChildFrm::Maximized,FALSE);
+         emit sysButtonConnectionsMustChange(lpC, newTopChild);
       }
       else {
-         emit noMaximizedChildFrmLeft(0L); // last childframe removed
+         emit noMaximizedChildFrmLeft(lpC); // last childframe removed
       }
    }
    delete lpC;
@@ -178,12 +178,15 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
       m_pZ->append(lpC);
       lpC->raise();
       if (pMaximizedChild) {
-         lpC->setState(QextMdiChildFrm::Maximized,FALSE); //do not animate the change
+         const bool bDontAnimate = FALSE;
+         // first maximize the new view
+         lpC->setState(QextMdiChildFrm::Maximized, bDontAnimate);
          lpC->m_pClient->resize(size());
          qApp->processOneEvent();
-      }
-      if (pMaximizedChild) {
-         pMaximizedChild->setState(QextMdiChildFrm::Normal,FALSE);
+         // then restore the old maximized view in background
+         pMaximizedChild->setState(QextMdiChildFrm::Normal, bDontAnimate);
+         qApp->processOneEvent();
+         emit sysButtonConnectionsMustChange( pMaximizedChild, lpC);
       }
       if (bSetFocus) {
          if(!lpC->hasFocus())lpC->setFocus();

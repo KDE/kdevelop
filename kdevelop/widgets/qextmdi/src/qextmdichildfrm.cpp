@@ -663,7 +663,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 
    linkChildren( pFocPolDict);
 
-   QObject::connect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
+//FALK?   QObject::connect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
 
    if( m_pClient->minimumSize().width() > m_pManager->m_defaultChildFrmSize.width()) {
@@ -681,7 +681,7 @@ void QextMdiChildFrm::unsetClient( QPoint positionOffset)
 {
   if(!m_pClient)return;
    
-  QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
+//FALK?  QObject::disconnect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
   QObject::disconnect( m_pClient, SIGNAL(mdiParentNowMaximized(bool)), m_pManager, SIGNAL(nowMaximized(bool)) );
 
   //reparent to desktop widget , no flags , point , show it

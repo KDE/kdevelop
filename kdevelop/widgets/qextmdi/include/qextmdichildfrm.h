@@ -266,6 +266,10 @@ public:
    * returns the mouse state "In Resize"
    */
    bool isInResize() const { return m_bResizing; }
+   /** Internally called from the signal focusInEventOccurs.
+   * It raises the MDI childframe to the top of all other MDI child frames and sets the focus on it.
+   */
+   void raiseAndActivate();
 
 public slots:
    /**
@@ -342,10 +346,6 @@ protected slots:
    * Handles a click on the Undock (Detach) button 
    */
    void undockPressed();
-   /** Internally called from the signal focusInEventOccurs.
-   * It raises the MDI childframe to the top of all other MDI child frames and sets the focus on it. 
-   */
-   void raiseAndActivate();
    /**
    * Shows a system menu for child frame windows.
    */
