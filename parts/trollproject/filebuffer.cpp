@@ -63,7 +63,7 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
 void FileBuffer::removeComments()
 //===============================
 {
-  for (int i=0; i<m_buffer.count(); i++)
+  for (uint i=0; i<m_buffer.count(); i++)
   {
     QString tmp = m_buffer[i].simplifyWhiteSpace();
     if (tmp[0]=='#')
@@ -258,7 +258,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     if (effectOperator=='-')
     {
       // remove from plus list if in curvalues
-      for (int i=0; i<curValues.count(); i++)
+      for (uint i=0; i<curValues.count(); i++)
         plusValues.remove(curValues[i]);
       // add curvalues to minuslist
       minusValues += curValues;
@@ -266,7 +266,7 @@ bool FileBuffer::getValues(const QString &variable, QStringList &plusList, QStri
     else
     {
       // remove from minus list if in curvalues
-      for (int i=0; i<curValues.count(); i++)
+      for (uint i=0; i<curValues.count(); i++)
         minusValues.remove(curValues[i]);
       // add curvalues to pluslist
       plusValues += curValues;
