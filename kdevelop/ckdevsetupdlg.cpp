@@ -663,7 +663,7 @@ void CKDevSetupDlg::addDebuggerTab()
 void CKDevSetupDlg::addQT2Tab()
 {
 
-  QFrame* QT2Page = addPage(i18n("Path"),i18n("Path to KDE 2 / Qt 2 installation"),
+  QFrame* QT2Page = addPage(i18n("Path"),i18n("Path to KDE 2/Qt 2 installation"),
   KGlobal::instance()->iconLoader()->loadIcon( "fileopen", KIcon::NoGroup, KIcon::SizeMedium ));
 
   config->setGroup("QT2");

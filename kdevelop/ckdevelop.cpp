@@ -4783,7 +4783,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_LFV_NEW_GROUP,                         i18n("Lets you create a new logical file group"))
     ON_STATUS_MSG(ID_LFV_REMOVE_GROUP,                      i18n("Removes the selected logical file group"))
      ON_STATUS_MSG(ID_LFV_GROUP_PROP,                       i18n("Shows the group's properties"))
-    ON_STATUS_MSG(ID_LFV_SHOW_PATH_ITEM,                    i18n("Displays the absolute / relative path"))
+    ON_STATUS_MSG(ID_LFV_SHOW_PATH_ITEM,                    i18n("Displays the absolute/relative path"))
     ON_STATUS_MSG(ID_FILE_DELETE,                           i18n("Deletes the selected file"))
 
     // RFV popups
