@@ -2498,6 +2498,61 @@ void KWriteDoc::setPseudoModal(QWidget *w) {
   pseudoModal = w;
 }
 
+void KWriteDoc::comment(KWriteView *view, VConfig &c) {
+  TextLine *textLine;
+
+  c.flags |= cfPersistent;
+  recordStart(c.cursor);
+  c.cursor.x = 0;
+  if (selectEnd < selectStart) {
+    //comment single line
+    textLine = contents.at(c.cursor.y);
+    recordReplace(c.cursor,0,"//",2);
+  } else {
+    //comment selection
+    for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
+      textLine = contents.at(c.cursor.y);
+      if (textLine->isSelected() || textLine->numSelected()) recordReplace(c.cursor,0,"//",2);
+    }
+    c.cursor.y--;
+  }
+  recordEnd(view,c);
+}
+
+void KWriteDoc::unComment(KWriteView *view, VConfig &c) {
+  PointStruc cursor;
+  TextLine *textLine;
+  bool started;
+
+  c.flags |= cfPersistent;
+  cursor = c.cursor;
+  c.cursor.x = 0;
+  if (selectEnd < selectStart) {
+    //uncomment single line
+    textLine = contents.at(c.cursor.y);
+    if ((textLine->getChar(0) != '/') || (textLine->getChar(1) != '/')) return;
+    recordStart(cursor);
+    recordReplace(c.cursor,2,"",0);
+  } else {
+    //unindent selection
+    started = false;
+    for (c.cursor.y = selectStart; c.cursor.y <= selectEnd; c.cursor.y++) {
+      textLine = contents.at(c.cursor.y);
+      if ((textLine->isSelected() || textLine->numSelected())
+        && (textLine->getChar(0) == '/')
+				&& (textLine->getChar(1) == '/')) {
+        if (!started) {
+          recordStart(cursor);
+          started = true;
+        }
+        recordReplace(c.cursor,2,"",0);
+      }
+    }
+    c.cursor.y--;
+  }
+  recordEnd(view,c);
+}
+
 void KWriteDoc::indent(KWriteView *view, VConfig &c) {
   TextLine *textLine;
 

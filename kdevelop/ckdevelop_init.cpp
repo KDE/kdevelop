@@ -280,6 +280,12 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Unindent"), "Unindent",IDK_EDIT_UNINDENT );
   accel->connectItem( "Unindent", this, SLOT(slotEditUnindent() ), true, ID_EDIT_UNINDENT );
 
+  accel->insertItem( i18n("Comment"), "Comment",IDK_EDIT_COMMENT );
+  accel->connectItem( "Comment", this, SLOT(slotEditComment() ), true, ID_EDIT_COMMENT );
+
+  accel->insertItem( i18n("Uncomment"), "Uncomment",IDK_EDIT_UNCOMMENT );
+  accel->connectItem( "Uncomment", this, SLOT(slotEditUncomment() ), true, ID_EDIT_UNCOMMENT );
+
   accel->insertItem( i18n("Insert File"), "InsertFile", (unsigned int) 0);
   accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()), true, ID_EDIT_INSERT_FILE );
   
@@ -493,6 +499,9 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertSeparator();
 	edit_menu->insertItem(Icon("indent.xpm"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
 	edit_menu->insertItem(Icon("unindent.xpm"),i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+  edit_menu->insertSeparator();
+	edit_menu->insertItem(Icon("comment.xpm"),i18n("Co&mment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
+	edit_menu->insertItem(Icon("uncomment.xpm"),i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
@@ -1200,6 +1209,8 @@ if(bKDevelop){
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_COMMENT,"Comment" );
+    accel->changeMenuAccel(edit_menu, ID_EDIT_UNCOMMENT,"Uncomment" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");
 		
     accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );

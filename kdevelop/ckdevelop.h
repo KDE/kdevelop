@@ -264,6 +264,8 @@ public:
   void slotEditReplace();
   void slotEditIndent();
   void slotEditUnindent();
+  void slotEditComment();
+  void slotEditUncomment();
   /** selects the whole editing widget text */
   void slotEditSelectAll();
   /** inverts the selection */

@@ -1942,6 +1942,20 @@ void KWrite::unIndent() {
   kWriteDoc->updateViews();
 }
 
+void KWrite::comment() {
+  VConfig c;
+  kWriteView->getVConfig(c);
+  kWriteDoc->comment(kWriteView,c);
+  kWriteDoc->updateViews();
+}
+
+void KWrite::unComment() {
+  VConfig c;
+  kWriteView->getVConfig(c);
+  kWriteDoc->unComment(kWriteView,c);
+  kWriteDoc->updateViews();
+}
+
 void KWrite::selectAll() {
   kWriteDoc->selectAll();
   kWriteDoc->updateViews();

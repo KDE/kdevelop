@@ -66,6 +66,8 @@
 
 #define ID_EDIT_INDENT             	11091
 #define ID_EDIT_UNINDENT            11092
+#define ID_EDIT_COMMENT             11093
+#define ID_EDIT_UNCOMMENT           11094
 
 #define ID_EDIT_SELECT_ALL          11100
 #define ID_EDIT_DESELECT_ALL        11110
@@ -374,7 +376,8 @@
 #define IDK_EDIT_INDENT								CTRL+Key_I
 
 #define IDK_TOGGLE_LAST        				CTRL+Key_L
-
+#define IDK_EDIT_COMMENT							CTRL+Key_M
+#define IDK_EDIT_UNCOMMENT						CTRL+ALT+Key_M
 #define IDK_FILE_NEW	       					CTRL+Key_N						// standard key
 #define IDK_FILE_OPEN	       					CTRL+Key_O						// standard key
 #define IDK_FILE_PRINT         				CTRL+Key_P						// standard key
