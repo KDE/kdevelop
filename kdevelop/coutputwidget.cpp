@@ -78,10 +78,15 @@ CMakeOutputWidget::CMakeOutputWidget(QWidget* parent, const char* name) :
 {
   it = m_errorMap.begin();
   setReadOnly(true);        // -JROC uncommented again
-  setWordWrap(WidgetWidth); // -JROC
-  setWrapPolicy(Anywhere); // -JROC
 #if QT_VERSION >= 300
   setTextFormat(Qt::RichText);
+  setWordWrap(NoWrap);
+
+  // This is necessary in order to work around a bug in Qt's RichText widget. (Marcus Gruendler)
+  styleSheet()->item( "font" )->setDisplayMode( QStyleSheetItem::DisplayBlock );
+#else
+  setWordWrap(WidgetWidth); // -JROC
+  setWrapPolicy(Anywhere); // -JROC
 #endif
 }
 
@@ -120,15 +125,15 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     switch (lineType(paraCount))
     {
       case Error:
-        line = "<font color=\"darkRed\">" + line + "</font><br>";
+        line = "<font color=\"darkRed\">" + line + "</font>";
         append(line);
         break;
       case Diagnostic:
-        line = "<font color=\"darkBlue\">" + line + "</font><br>";
+        line = "<font color=\"darkBlue\">" + line + "</font>";
         append(line);
         break;
       default:
-        append(line + "<br>");
+        append("<font color=\"black\">" + line + "</font>");
         break;
     }
 
