@@ -46,7 +46,6 @@ KDE_USE_QT(2)
 
 dnl Image readers/writers
 
-AC_FIND_GIF
 AC_FIND_JPEG
 AC_FIND_TIFF
 KDE_CHECK_KIMGIO 
