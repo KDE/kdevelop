@@ -122,9 +122,9 @@ void MdiMainFrmComponent::projectClosed()
 
 void MdiMainFrmComponent::addView( QWidget* w)
 {
-  kdDebug(9005) << "running MdiMainFrmComponent::addView..." << endl;
+  kdDebug(9005) << "running MdiMainFrmComponent::addView : " << w << endl;
 
-  MdiView* wrapper = new MdiView( w, "New Document");
+  MdiView* wrapper = new MdiView( w, w->name());
   int flags = QextMdi::StandardAdd;
   if (m_mainframe->isInMaximizedChildFrmMode())
     flags |= QextMdi::Maximize;

@@ -25,6 +25,7 @@
 
 //#include "kdevevent.h"
 
+#include <kdebug.h>
 #include <kaction.h>
 #include <kfiledialog.h>
 #include <klibloader.h>
@@ -70,7 +71,14 @@ EditorManager::EditorManager(QObject* parent, const char* name) :
   // TODO: just take the first one at the moment.
   KTrader::OfferList offers = KTrader::self()->query( "KIDETextEditor/Document" );
   assert( offers.count() >= 1 );
+
+  KTrader::OfferList::ConstIterator it;
+  for (it = offers.begin(); it != offers.end(); ++it) {
+    kdDebug(9005) << "KTextEditor service found : " << (*it)->name() << endl;
+  }
+
   KService::Ptr service = *offers.begin();
+  kdDebug(9005) << "KTextEditor service choosen : " << service->name() << endl;
 
   m_factory = KLibLoader::self()->factory( service->library() );
   assert( m_factory );
@@ -183,7 +191,7 @@ KTextEditor::Document* EditorManager::openDocument(const KURL& url)
   m_documents.append(document);
   document->openURL(url);
 
-  EditorView* view = new EditorView(document, (QWidget*)parent(), 0);
+  EditorView* view = new EditorView(document, (QWidget*)parent(), url.path());
   emit embedWidget(view, DocumentView, url.path(), i18n("Editor view"));
   return document;
 }
