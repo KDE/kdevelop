@@ -49,7 +49,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     install_box->setAlignment( 1 );
     
     source_label = new QLabel( this, "source_label" );
-    source_label->setGeometry( 30, 30, 170, 30 );
+    source_label->setGeometry( 30, 30, 210, 30 );
     source_label->setMinimumSize( 0, 0 );
     source_label->setMaximumSize( 32767, 32767 );
     source_label->setFocusPolicy( QWidget::NoFocus );
@@ -88,7 +88,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(QWidget *parent, const char *name,KShellProce
     source_button->setAutoResize( FALSE );
 
     del_recent_radio_button = new QRadioButton( this, "del_recent_radio_button" );
-    del_recent_radio_button->setGeometry( 40, 110, 430, 30 );
+    del_recent_radio_button->setGeometry( 40, 110, 450, 30 );
     del_recent_radio_button->setMinimumSize( 0, 0 );
     del_recent_radio_button->setMaximumSize( 32767, 32767 );
     del_recent_radio_button->setFocusPolicy( QWidget::TabFocus );

@@ -736,8 +736,8 @@ void CKDevInstall::slotAuto() // proceed >>
 	if(!qt_test){
   	  config->setGroup("Doc_Location");
 	  config->writeEntry("doc_qt",qt);
-	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n"+qt
-								     +"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
+	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n")+qt
+								     +i18n("\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
 	}
   	else{  // return to the setup to set it manually ?
 	  int result=KMsgBox::yesNo(this,i18n("Information"),i18n("\nThe Qt-library documentation could not\n"
