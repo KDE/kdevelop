@@ -221,7 +221,8 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
   {
     QString path = url.path();
     path = QDir(path).canonicalPath();
-    url.setPath(path);
+    if ( !path.isEmpty() )
+      url.setPath(path);
   }    
 
   KParts::Part *existingPart = partForURL(url);
