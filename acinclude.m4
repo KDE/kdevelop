@@ -1581,7 +1581,7 @@ on www.kde.org])
     if test "$ac_use_debug_code" = "yes"; then
       AC_PROG_CXX_G
       if test $ac_cv_prog_cxx_g = yes; then
-        CXXFLAGS="-g"
+        CXXFLAGS="-g -DASSERTIONS"
       fi
       if test "$ac_cv_prog_CC" = "yes"; then
         CXXFLAGS="$CXXFLAGS -pto"
