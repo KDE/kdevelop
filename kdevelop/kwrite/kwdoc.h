@@ -249,8 +249,8 @@ class KWriteDoc : QObject {
     bool isLastView(int numViews);
 
     bool hasFileName();
-    const char *fileName();
-    void setFileName(const char *);
+    QString fileName();
+    void setFileName(const QString& url);
     void clearFileName();
 
     bool doSearch(SConfig &s, const char *searchFor);

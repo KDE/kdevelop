@@ -21,35 +21,36 @@
 #ifndef CFILEPROPDLG_H
 #define CFILEPROPDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
-#include "cproject.h"
-#include <qbuttongroup.h>
-#include "clogfileview.h"
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <kquickhelp.h>
-#include <qlistview.h>
-#include <klocale.h>
 
-/** 
+#include <cproject.h>
+#include <qlist.h>
+
+class CLogFileView;
+
+class QButtonGroup;
+class QCheckBox;
+class QComboBox;
+class QLabel;
+class QLineEdit;
+class QListViewItem;
+class QPushButton;
+
+/**
  * Dlg for changing the properties of a file in an existing project
  *@author Sandy Meier
  */
 
 class CFilePropDlg : public QDialog  {
-   Q_OBJECT
+  Q_OBJECT
 public: 
 	CFilePropDlg(QWidget *parent=0, const char *name=0,CProject* prj=0,QString preselecteditem="");
 	~CFilePropDlg();
  public slots:
-       void slotSelectionChanged(QListViewItem* item );
- void  slotInstallCheckToogled(bool on);
- void slotOk();
-void  slotTypeComboActivated(int index);
+  void slotSelectionChanged(QListViewItem* item );
+  void  slotInstallCheckToogled(bool on);
+  void slotOk();
+  void  slotTypeComboActivated(int index);
 
 protected:
   QList<TFileInfo>* file_list;

@@ -20,11 +20,12 @@
 #include <qbuttongroup.h>
 #include <iostream.h>
 #include <kapp.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <qdatetime.h>
 #include "../cproject.h"
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
 #include <klocale.h>
+#include <kstddirs.h>
 
 CFilePrintDlg::CFilePrintDlg(QWidget* parent,const char* name) : QDialog(parent, name, true){
   init();
@@ -163,8 +164,7 @@ void CFilePrintDlg::init() {
   selfChoosenFilesPushButton->setBackgroundMode( QWidget::PaletteBackground );
   selfChoosenFilesPushButton->setFontPropagation( QWidget::NoChildren );
   selfChoosenFilesPushButton->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix(BarIcon("open"));
   selfChoosenFilesPushButton->setPixmap(pix);
   selfChoosenFilesPushButton->setAutoRepeat( FALSE );
   selfChoosenFilesPushButton->setAutoResize( FALSE );
@@ -512,80 +512,84 @@ void CFilePrintDlg::init() {
   cancelButton->setText(i18n("Cancel"));
   cancelButton->setGeometry( 480, 440, 100, 30 );
 
-  KQuickHelp::add(selfChoosenFilesMultiLine,
+  QWhatsThis::add(selfChoosenFilesMultiLine,
 	i18n("Here are the files which will be printed, if 'self\n"
 	     "choosen file' is checked."));
 
-  KQuickHelp::add(selfChoosenFilesCleanButton,
+  QWhatsThis::add(selfChoosenFilesCleanButton,
 	i18n("Cleans the 'self choosen file list'."));
 
-  KQuickHelp::add(selfChoosenFilesAddButton,
+  QWhatsThis::add(selfChoosenFilesAddButton,
 	i18n("Adds the selecte file to the choosen file to the list."));
 
-  KQuickHelp::add(selfChoosenFilesDeleteButton,
+  QWhatsThis::add(selfChoosenFilesDeleteButton,
 	i18n("Deletes the selected files in the filelist."));
 
-  KQuickHelp::add(qtarch_Label_79,
-  KQuickHelp::add(selfChoosenFileLine,
-	i18n("Insert the filename and path to the file you\n"
+  QString selfChoosenFileLineMsg = i18n("Insert the filename and path to the file you\n"
 				"want to add to the self-chosen file list.\n"
 				"After insertion, press the 'add' button below\n"
-				"the file list box.")));
+				"the file list box.");
+  QWhatsThis::add(qtarch_Label_79, selfChoosenFileLineMsg);
+  QWhatsThis::add(selfChoosenFileLine, selfChoosenFileLineMsg);
 
-  KQuickHelp::add(allInProjectButton,
+  QWhatsThis::add(allInProjectButton,
 	i18n("Selects all registered project files\n"
 			"for printing, including the pixmap and\n"
 			"html documentation files"));
 
-  KQuickHelp::add(selfChoosenFilesButton,
+  QWhatsThis::add(selfChoosenFilesButton,
 	i18n("Allows to set up a list of self-chosen files\n"
 				"for printing. Select your files to print below\n"
 				"and press the 'add' button on the file list."));
 
-  KQuickHelp::add(changedFilesButton,
+  QWhatsThis::add(changedFilesButton,
 	i18n("Lets you select files to print by their date of\n"
 			"the last modification. Set the modification time\n"
 			"range below by choosing the beginning and end date."));
 
-  KQuickHelp::add(headerFilesButton,
+  QWhatsThis::add(headerFilesButton,
 	i18n("Selects all registered header files for printing."));
 
-  KQuickHelp::add(cppFilesButton,
+  QWhatsThis::add(cppFilesButton,
 	i18n("Selects all registered source files for printing."));
 
-  KQuickHelp::add(qtarch_Label_83,
-  KQuickHelp::add(beginTimeButton,
-	i18n("Sets the end date of the interval. Press the button\n"
+  QString beginTimeButtonMsg = i18n("Sets the end date of the interval. Press the button\n"
 			"to pick a date by the calendar. After selection, the\n"
-			"chosen end-date will be displayed on the button.")));
+			"chosen end-date will be displayed on the button.");
+  QWhatsThis::add(qtarch_Label_83, beginTimeButtonMsg);
+  QWhatsThis::add(beginTimeButton, beginTimeButtonMsg);
 
-  KQuickHelp::add(qtarch_Label_77,
-  KQuickHelp::add(beginDateButton,
-	i18n("Sets the beginning date of the interval. Press the button\n"
+  QString beginDateButtonMsg = i18n("Sets the beginning date of the interval. Press the button\n"
 			"to pick a date by the calendar. After selection, the\n"
-			"chosen begin-date will be displayed on the button.")));
+			"chosen begin-date will be displayed on the button.");
+  QWhatsThis::add(qtarch_Label_77, beginDateButtonMsg);
+  QWhatsThis::add(beginDateButton, beginDateButtonMsg);
 
-  KQuickHelp::add(qtarch_Label_89,
-  KQuickHelp::add(beginTimeMinuteLine,
-	i18n("Sets the minute value of the beginning time.")));
+  QWhatsThis::add(qtarch_Label_89,
+	i18n("Sets the minute value of the beginning time."));
+  QWhatsThis::add(beginTimeMinuteLine,
+	i18n("Sets the minute value of the beginning time."));
 
-  KQuickHelp::add(qtarch_Label_80,
-  KQuickHelp::add(beginTimeHourLine,
-	i18n("Sets the hour value of the beginning time.")));
+  QWhatsThis::add(qtarch_Label_80,
+	i18n("Sets the hour value of the beginning time."));
+  QWhatsThis::add(beginTimeHourLine,
+	i18n("Sets the hour value of the beginning time."));
 
-  KQuickHelp::add(qtarch_Label_84,
-  KQuickHelp::add(endTimeHourLine,
-	i18n("Sets the hour value of the end time.")));
+  QWhatsThis::add(qtarch_Label_84,
+	i18n("Sets the hour value of the end time."));
+  QWhatsThis::add(endTimeHourLine,
+	i18n("Sets the hour value of the end time."));
 
-  KQuickHelp::add(qtarch_Label_90,
-  KQuickHelp::add(endTimeMinuteLine,
-	i18n("Sets the minute value of the end time.")));
+  QWhatsThis::add(qtarch_Label_90,
+	i18n("Sets the minute value of the end time."));
+  QWhatsThis::add(endTimeMinuteLine,
+	i18n("Sets the minute value of the end time."));
 
-  KQuickHelp::add(selfChoosenFilesPushButton,
+  QWhatsThis::add(selfChoosenFilesPushButton,
 	i18n("Pressing this button lets you select the file\n"
 				"by a filedialog."));
 
-  KQuickHelp::add(currentButton,
+  QWhatsThis::add(currentButton,
 	i18n("Selects the current file of the visible\n"
 			"editor window for printing."));
 
@@ -761,7 +765,7 @@ void CFilePrintDlg::slotSelfChoosenFileDeleteClicked() {
 void CFilePrintDlg::slotOkClicked() {
   beginTime.setHMS(beginTimeHourLine->value(),beginTimeMinuteLine->value(),0);
   endTime.setHMS(endTimeHourLine->value(),endTimeMinuteLine->value(),0);
-  settings = kapp->getConfig();
+  settings = KGlobal::config();
   settings->setGroup("FileDialog");
   int i=6;
   if (currentButton->isChecked()) {
@@ -815,11 +819,14 @@ void CFilePrintDlg::slotOkClicked() {
       sources = (QString) selfChoosenFileLine->text();
     }
     else {
-      KMsgBox::message(0,i18n("No File to print !"),i18n("You need to select at least one file for printing. "
-      "This can be done by entering the filename on the left at the file entry field."),KMsgBox::EXCLAMATION);
-      return;     } 			
-		settings->writeEntry("FileSettings",sources);
-		}
+      KMessageBox::error(0,i18n("You need to select at least one file for printing. "
+                                "This can be done by entering the filename on the left"
+                                " at the file entry field."),
+                            i18n("No File to print !"));
+      return;
+    } 			
+    settings->writeEntry("FileSettings",sources);
+    }
 	else {
     QStrList filelist;
     QString sources = "";
@@ -857,7 +864,7 @@ void CFilePrintDlg::slotOkClicked() {
 void CFilePrintDlg::loadSettings() {
   selfChoosenFilesMultiLine->clear();
   fileList.clear();
-  settings = kapp->getConfig();
+  settings = KGlobal::config();
   settings->setGroup("FileDialog");
   qtarch_ButtonGroup_139->setButton(settings->readNumEntry("FileSelection"));
   selfChoosenFileLine->setText(settings->readEntry("FileLine"));

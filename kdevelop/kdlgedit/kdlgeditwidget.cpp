@@ -29,19 +29,21 @@
 #include "kdlgproplv.h"
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
+#include <klocale.h>
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
    : QWidget(parent,name)
 {
-  qhw = new KQuickHelpWindow();
+#warning FIXME KQuicjHelpWindow conversion????
+//  qhw = new KQuickHelpWindow();
   dlgfilelinecnt = 0;
   pCKDevel = parCKD;
 
   setBackgroundMode(PaletteLight);
 
-  rulh = new KRuler(KRuler::horizontal, this);
-  rulh->setRulerStyle(KRuler::pixel);
+  rulh = new KRuler(Horizontal, this);
+  rulh->setRulerMetricStyle(KRuler::Pixel);
   rulh->setRange(0,400);
   rulh->setOffset(0);
   rulh->setPixelPerMark(5);
@@ -49,8 +51,8 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   rulh->setFrameStyle(0);
 
-  rulv = new KRuler(KRuler::vertical, this);
-  rulv->setRulerStyle(KRuler::pixel);
+  rulv = new KRuler(KRuler::Vertical, this);
+  rulv->setRulerMetricStyle(KRuler::Pixel);
   rulv->setRange(0,300);
   rulv->setOffset(0);
   rulv->setPixelPerMark(5);
@@ -230,10 +232,10 @@ void KDlgEditWidget::slot_copySelected()
       saveWidget((KDlgItem_Widget*)selected_widget, &t);
       f.close();
     }
-  else
-    {
-      printf("kdlgedit ERROR : Could not open temporary file for copying action !\n");
-    }
+//  else
+//    {
+//      printf("kdlgedit ERROR : Could not open temporary file for copying action !\n");
+//    }
 }
 
 void KDlgEditWidget::slot_pasteSelected()
@@ -332,7 +334,8 @@ void KDlgEditWidget::slot_helpSelected()
 
   helptext = KDlgLimitLines(helptext,60);
 
-  qhw->popup(helptext, QCursor::pos().x(),QCursor::pos().y());
+#warning FIXME KQuicjHelpWindow conversion????
+// qhw->popup(helptext, QCursor::pos().x(),QCursor::pos().y());
 }
 
 
@@ -413,7 +416,7 @@ bool KDlgEditWidget::readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString
     {
       int res = 0;
       QString errmsg = QString().sprintf(i18n("Error reading dialog file (line %d) :\n   Could not insert item (%s). Seems like I don't know it :-("), svdlc, (const char*)ctype);
-      printf("  kdlgedit ERROR : %s\n", (const char*)errmsg);
+//      printf("  kdlgedit ERROR : %s\n", (const char*)errmsg);
       res = QMessageBox::warning( this, "Error", errmsg, i18n("&Ignore"), i18n("&Cancel"),0,1 );
       if (res == 1)
         {
@@ -427,7 +430,7 @@ bool KDlgEditWidget::readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString
     s = dlgReadLine(t);
     if ((s.left(s.find(' ')).upper() == "ITEM") && (!thatsme))
       {
-        printf("  kdlgedit : ignoring item \"%s\" line %d\n", (const char*)s.right(s.length()-s.find(' ')-1).upper(), dlgfilelinecnt);
+//        printf("  kdlgedit : ignoring item \"%s\" line %d\n", (const char*)s.right(s.length()-s.find(' ')-1).upper(), dlgfilelinecnt);
         readGrp_Ignore( t );
       }
     if ((s!="}") && (thatsme))
@@ -442,7 +445,7 @@ bool KDlgEditWidget::readGrp_Item( KDlgItem_Widget* par, QTextStream *t, QString
               }
             else
               {
-                printf("  kdlgedit ERROR : line %d : \"%s\" cannot have child items.\n", dlgfilelinecnt, (const char*)ctype);
+//                printf("  kdlgedit ERROR : line %d : \"%s\" cannot have child items.\n", dlgfilelinecnt, (const char*)ctype);
                 readGrp_Ignore( t );
                 return false;
               }
@@ -477,7 +480,7 @@ bool KDlgEditWidget::readGroup( QTextStream *t )
   if ((s == "{") || (s == "}"))
     return true;
 
-  printf("  kdlgedit : reading root %s-section \"%s\"\n",(const char*)type.lower(),(const char*)name);
+//  printf("  kdlgedit : reading root %s-section \"%s\"\n",(const char*)type.lower(),(const char*)name);
 
   if (type == "DATA")
     {
@@ -493,7 +496,7 @@ bool KDlgEditWidget::readGroup( QTextStream *t )
         }
       else
         {
-          printf("  kdlgedit WARNING : line %d : unknown data type \"%s\". Section ignored.", dlgfilelinecnt, (const char*)name);
+//          printf("  kdlgedit WARNING : line %d : unknown data type \"%s\". Section ignored.", dlgfilelinecnt, (const char*)name);
           if (!readGrp_Ignore( t ))
             return false;
         }
@@ -509,7 +512,7 @@ bool KDlgEditWidget::readGroup( QTextStream *t )
 
 bool KDlgEditWidget::openFromFile( QString fname )
 {
-  printf("kdlgedit : Loading dialog file \"%s\".\n", (const char*)fname);
+//  printf("kdlgedit : Loading dialog file \"%s\".\n", (const char*)fname);
   dlgfilelinecnt = 0;
   QFile f(fname);
   if ( f.open(IO_ReadOnly) )
@@ -533,7 +536,7 @@ bool KDlgEditWidget::openFromFile( QString fname )
                 res = 1;
               if (res == 1)
                 {
-                  printf("  kdlgedit ERROR : %s \"%s\"\n", i18n("Aborted reading dialog file"), (const char*)fname);
+//                  printf("  kdlgedit ERROR : %s \"%s\"\n", i18n("Aborted reading dialog file"), (const char*)fname);
                   QMessageBox::information( this, fname,
                            i18n("Reading aborted !\n\nThe dialog has not been loaded completely."
                                 "\nOpen another dialog or create a new one\nif you don't like the result."));
@@ -547,11 +550,11 @@ bool KDlgEditWidget::openFromFile( QString fname )
     }
   else
     {
-      printf("kdlgedit ERROR : Could not open dialog file !\n");
+//      printf("kdlgedit ERROR : Could not open dialog file !\n");
       return false;
     }
 
-  printf("kdlgedit : Loading complete.\n");
+//  printf("kdlgedit : Loading complete.\n");
 
   getCKDevel()->kdlg_get_items_view()->refreshList();
   selectWidget(mainWidget());
@@ -566,14 +569,14 @@ bool KDlgEditWidget::openFromFile( QString fname )
 
 bool KDlgEditWidget::saveToFile( QString fname )
 {
-  printf("kdlgedit : Writing dialog file \"%s\".\n", (const char*)fname);
+//  printf("kdlgedit : Writing dialog file \"%s\".\n", (const char*)fname);
 
   QFile f(fname);
   if ( f.open(IO_WriteOnly) )
     {
       QTextStream t( &f );
 
-      printf("  kdlgedit : writing data sections\n");
+//      printf("  kdlgedit : writing data sections\n");
 
       t << "// " << "KDevelop Dialog Editor File (.kdevdlg)\n";
       t << "// " << "\n";
@@ -604,7 +607,7 @@ bool KDlgEditWidget::saveToFile( QString fname )
       t << "   " << "OpenedRootCount=\"" << n << "\"\n";
       t << "}\n";
 
-      printf("  kdlgedit : writing item sections\n");
+//      printf("  kdlgedit : writing item sections\n");
       saveWidget(mainWidget(), &t);
       f.close();
 
@@ -614,11 +617,11 @@ bool KDlgEditWidget::saveToFile( QString fname )
     }
   else
     {
-      printf("kdlgedit ERROR : Could not open dialog file !\n");
+//      printf("kdlgedit ERROR : Could not open dialog file !\n");
       return false;
     }
 
-  printf("kdlgedit : Saving complete.\n");
+//  printf("kdlgedit : Saving complete.\n");
 
 
   return true;
@@ -805,17 +808,17 @@ KDlgItem_Widget *KDlgEditWidget::addItem(KDlgItem_Base *par, QString Name)
     macro_CreateIfRightOne("QButtonGroup", KDlgItem_ButtonGroup )	// da
     macro_CreateIfRightOne("QListView", KDlgItem_ListView )
 #if 0
-    macro_CreateIfRightOne("KCombo", KDlgItem_KCombo )
+    macro_CreateIfRightOne("KComboBox", KDlgItem_KCombo )
 #endif
     macro_CreateIfRightOne("KDatePicker", KDlgItem_KDatePicker )
     macro_CreateIfRightOne("KDateTable", KDlgItem_KDateTable )
     macro_CreateIfRightOne("KColorButton", KDlgItem_KColorButton )
 
-    macro_CreateIfRightOne("KLedLamp", KDlgItem_KLedLamp )
+//    macro_CreateIfRightOne("KLedLamp", KDlgItem_KLedLamp )
     macro_CreateIfRightOne("KProgress", KDlgItem_KProgress )
-    macro_CreateIfRightOne("KKeyButton", KDlgItem_KKeyButton )
+//    macro_CreateIfRightOne("KKeyButton", KDlgItem_KKeyButton )
     macro_CreateIfRightOne("KRestrictedLine", KDlgItem_KRestrictedLine )
-    macro_CreateIfRightOne("KTreeList", KDlgItem_KTreeList )
+    macro_CreateIfRightOne("KListView", KDlgItem_KTreeList )
     macro_CreateIfRightOne("KSeparator", KDlgItem_KSeparator )
 
 #undef macro_CreateIfRightOne

@@ -18,19 +18,24 @@
 
 #include "ckdevelop.h"
 #include "ckdevinstall.h"
-#include <kwmmapp.h>
 
+#include <dcopclient.h>
+#include <kaboutdata.h>
+#include <kapp.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 
 int main(int argc, char* argv[]) {
   
-  KWMModuleApplication a(argc,argv,"kdevelop");
-	a.connectToKWM();
-  a.getConfig()->setGroup("General Options");
-  bool bInstall=a.getConfig()->readBoolEntry("Install",true);
+ KApplication a(argc,argv,"kdevelop");
+
+  KGlobal::config()->setGroup("General Options");
+  bool bInstall=KGlobal::config()->readBoolEntry("Install",true);
   if (argc > 1 ){
     if( QString(argv[1]) == "--setup") bInstall = true; // start the setupwizard
   }
+
   if (a.isRestored()){
     RESTORE(CKDevelop);
   }
@@ -41,25 +46,28 @@ int main(int argc, char* argv[]) {
       delete install;
     }
     CKDevelop* kdevelop = new CKDevelop( argc > 1 );
+
+		// We don't want this happening - It shouldn't - but (indirectly) KHTMLPart connects :(
+		if (a.dcopClient() && a.dcopClient()->isAttached())
+			a.dcopClient()->suspend();
+
     if(bInstall){
       kdevelop->refreshTrees();  // this is because of the new documentation
     }
     
-    a.getConfig()->setGroup("General Options");
-    kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
-    kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
+    KGlobal::config()->setGroup("General Options");
+    kdevelop->slotSCurrentTab(KGlobal::config()->readNumEntry("LastActiveTab",BROWSER));
+    kdevelop->slotTCurrentTab(KGlobal::config()->readNumEntry("LastActiveTree",DOC));
     
-    if(!a.getConfig()->readBoolEntry("show_kdevelop",true))
+    if(!KGlobal::config()->readBoolEntry("show_kdevelop",true))
       kdevelop->setKDlgCaption();
     
     if (argc > 1){ 
       if (QString(argv[1]) != "--setup")
-	  kdevelop->slotProjectOpenCmdl(argv[1]);
+        kdevelop->slotProjectOpenCmdl(argv[1]);
     }  
   }
   
   int rc = a.exec();
   return rc;
 }
-
-

@@ -21,15 +21,17 @@
 
 
 #include "keditcl.h"
+#include <qwidget.h>
 
 /** the view for the compiler and tools-output
   *@author Sandy Meier
   */
- class COutputWidget : public KEdit {
+class COutputWidget : public KEdit
+{
   Q_OBJECT
 public:
   /**contructor*/
-  COutputWidget(KApplication* a,QWidget* parent,char* name=0);
+  COutputWidget(QWidget* parent, const char* name=0);
   /**destructor*/
   ~COutputWidget(){};
 

@@ -21,11 +21,11 @@
 
 
 #include "caddclassmethoddlg.h"
-#include <kmsgbox.h>
-#include <kapp.h>
-#include <kquickhelp.h>
+#include "./classparser/ParsedMethod.h"
+
+#include <kmessagebox.h>
+#include <qwhatsthis.h>
 #include <klocale.h>
-#include <iostream.h>
 
 CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -81,21 +81,21 @@ void CAddClassMethodDlg::setWidgetValues()
   // Accessgrp
   accessGrp.setFrameStyle( 49 );
   accessGrp.setTitle( i18n("Access") );
-  KQuickHelp::add( &accessGrp,
+  QWhatsThis::add( &accessGrp,
                    i18n(
                      "You can choose here whether you want the member function\n"
                      "be declared as public, protected or private."));
 
   typeGrp.setFrameStyle( 49 );
   typeGrp.setTitle( i18n( "Type" ) );
-  KQuickHelp::add( &typeGrp,
+  QWhatsThis::add( &typeGrp,
                    i18n( "Choose the type of member object you want to create.\nThe type can be signal, slot or method." ) );
 
   // Modifier grp
   modifierGrp.setFrameStyle( 49 );
   modifierGrp.setTitle( i18n("Modifiers") );
   modifierGrp.setAlignment( 1 );
-  KQuickHelp::add( &modifierGrp,
+  QWhatsThis::add( &modifierGrp,
                    i18n("You can set modifiers for the member function here."));
   
   typeLbl.setMinimumSize( 40, 20 );
@@ -105,7 +105,8 @@ void CAddClassMethodDlg::setWidgetValues()
   typeEdit.setMinimumSize( 240, 30 );
   typeEdit.setFixedHeight( 30 );
   typeEdit.setFrame( TRUE );
-  KQuickHelp::add(&typeLbl,KQuickHelp::add(&typeEdit,i18n("Enter the type of the member function here.")));
+  QWhatsThis::add(&typeLbl,i18n("Enter the type of the member function here."));
+  QWhatsThis::add(&typeEdit,i18n("Enter the type of the member function here."));
 
   declLbl.setMinimumSize( 70, 20 );
   declLbl.setFixedHeight( 20 );
@@ -114,14 +115,16 @@ void CAddClassMethodDlg::setWidgetValues()
   declEdit.setMinimumSize( 240, 30 );
   declEdit.setFixedHeight( 30 );
   declEdit.setFrame( TRUE );
-  KQuickHelp::add(&declLbl,KQuickHelp::add(&declEdit,i18n("Enter the declaration of the member function here.")));
+  QWhatsThis::add(&declLbl,i18n("Enter the declaration of the member function here."));
+  QWhatsThis::add(&declEdit,i18n("Enter the declaration of the member function here."));
 
   docLbl.setMinimumSize( 100, 20 );
   docLbl.setFixedHeight( 20 );
   docLbl.setText( i18n("Documentation:") );
 
   docEdit.setMinimumSize( 240, 80 );
-  KQuickHelp::add(&docLbl,KQuickHelp::add(&docEdit,i18n("You can enter a description of the member function here.")));
+  QWhatsThis::add(&docLbl,i18n("You can enter a description of the member function here."));
+  QWhatsThis::add(&docEdit,i18n("You can enter a description of the member function here."));
 
   publicRb.setMinimumSize( 70, 20 );
   publicRb.setFixedHeight( 20 );
@@ -327,11 +330,13 @@ void CAddClassMethodDlg::slotVirtualClicked()
 void CAddClassMethodDlg::OK()
 {
   if( strlen( typeEdit.text() ) == 0 )
-    KMsgBox::message( this, i18n("No type"),
-                      i18n("You have to specify a function type.") );
+    KMessageBox::error( this,
+                      i18n("You have to specify a function type."),
+                      i18n("No type"));
   else if( strlen( declEdit.text() ) == 0 )
-    KMsgBox::message( this, i18n("No name"),
-                      i18n("You have to specify a function name.") );
+    KMessageBox::error( this,
+                      i18n("You have to specify a function name."),
+                      i18n("No name"));
   else
     accept();
 }

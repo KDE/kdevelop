@@ -26,6 +26,8 @@
 // added by Alex Kern, Alexander.Kern@saarsoft.de
 //
 #include <qdir.h>
+#include <klocale.h>
+#include <kstddirs.h>
 
 bool handleCreateSubDirectory(CProject* prj, QString& out_onlyname,
   QString& in_absname, QString& in_filename)
@@ -95,7 +97,7 @@ QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj, QString fi
   // local cpp_template
   QString cpp_header = prj->getProjectDir() + prj->getSubDir() +"/templates/cpp_template";
   if(!QFile::exists(cpp_header)){
-    cpp_header = KApplication::kde_datadir() + "/kdevelop/templates/cpp_template";
+    cpp_header = locate("appdata", "templates/cpp_template");
   }
 /*
      not needed anymore - handled by CProject::setInfosInString()
@@ -147,7 +149,7 @@ QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj, QString
   // local header_template
   QString template_header = prj->getProjectDir() + prj->getSubDir() +"/templates/header_template";
   if(!QFile::exists(template_header)){
-    template_header = KApplication::kde_datadir() + "/kdevelop/templates/header_template";
+    template_header = locate("appdata", "templates/header_template");
   }
 /*
      not needed anymore - handled by CProject::setInfosInString()
@@ -191,7 +193,7 @@ QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj, QString
 
 QString  CGenerateNewFile::genLEXICALFile(QString abs_name,CProject* prj){
   QString name  = QFileInfo(abs_name).fileName();
-  QString lexical_header = KApplication::kde_datadir() + "/kdevelop/templates/lexical_template";
+  QString lexical_header = locate("appdata", "templates/lexical_template");
 
   QStrList list;
   QString str;
@@ -217,8 +219,7 @@ QString  CGenerateNewFile::genLEXICALFile(QString abs_name,CProject* prj){
 
 QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   
-  QString template_handbook = KApplication::kde_datadir() + 
-    "/kdevelop/templates/handbook_en_template";
+  QString template_handbook = locate("appdata", "templates/handbook_en_template");
 /*
      not needed anymore - handled by CProject::setInfosInString()
   QString project_name = prj->getProjectName();
@@ -259,8 +260,7 @@ QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
 
 QString  CGenerateNewFile::genEngDocBook(QString abs_name,CProject* prj){
 
-  QString template_handbook = KApplication::kde_datadir() +
-    "/kdevelop/templates/docbook_en_template";
+  QString template_handbook = locate("appdata", "templates/docbook_en_template");
   QStrList list;
   QString str;
 
@@ -283,7 +283,7 @@ QString  CGenerateNewFile::genEngDocBook(QString abs_name,CProject* prj){
 }
 
 QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){
-  QString template_kdelnk = KApplication::kde_datadir() + "/kdevelop/templates/kdelnk_template";
+  QString template_kdelnk = locate("appdata", "templates/kdelnk_template");
   QString project_name = prj->getProjectName().lower();
   QString str;
   QStrList list;
@@ -309,7 +309,7 @@ QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){
   
 }
 QString  CGenerateNewFile::genLSMFile(QString abs_name,CProject* prj){
-  QString template_lsm = KApplication::kde_datadir() + "/kdevelop/templates/lsm_template";
+  QString template_lsm = locate("appdata", "templates/lsm_template");
 /*
      not needed anymore - handled by CProject::setInfosInString()
   QString project_name = prj->getProjectName();
@@ -350,7 +350,7 @@ QString  CGenerateNewFile::genLSMFile(QString abs_name,CProject* prj){
 QString CGenerateNewFile::genIcon(QString abs_name){
   QStrList list;
   QString str;
-  QString icon_template = KApplication::kde_datadir() + "/kdevelop/templates/icon_template";
+  QString icon_template = locate("appdata", "templates/icon_template");
   QFile file(icon_template);
   QTextStream stream(&file);
 
@@ -370,14 +370,14 @@ QString CGenerateNewFile::genIcon(QString abs_name){
   return file.name();
 }
 QString CGenerateNewFile::genNifFile(QString abs_name){
-    KShellProcess process;
-    QString nif_template = KApplication::kde_datadir() + "/kdevelop/templates/nif_template";
+  KShellProcess process;
+  QString nif_template = locate("appdata", "templates/nif_template");
 
-    process.clearArguments();
-    process << "cp"; // copy is your friend :-)
-    process << nif_template;
-    process << abs_name;
-    process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
+  process.clearArguments();
+  process << "cp"; // copy is your friend :-)
+  process << nif_template;
+  process << abs_name;
+  process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
 }
 
 

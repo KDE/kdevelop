@@ -18,20 +18,36 @@
 
 #include "cbugreportdlg.h"
 
+#include <kapp.h>
+#include <klocale.h>
+#include <kprocess.h>
+#include <kmessagebox.h>
+#include <kstddirs.h>
+
 #include <qdir.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <kprocess.h>
-#include <kapp.h>
-#include <klocale.h>
 #include <qdatetime.h>
-#include <iostream.h>
-#include <kmsgbox.h>
-#include <qmessagebox.h>
+#include <qmultilinedit.h>
+#include <qlineedit.h>
+#include <qradiobutton.h>
+#include <qcombo.h>
+#include <qwhatsthis.h>
+#include <qstring.h>
 
-CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo buginfo, QString bug_email) : QTabDialog(parent,name,true) {
+#include <iostream.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+CBugReportDlg::CBugReportDlg(QWidget *parent,
+                                const char *name,TBugReportInfo buginfo,
+                                const QString& bug_email) :
+  QTabDialog(parent,name,true)
+{
 
 
   setCaption(i18n("Bug Report"));
@@ -112,7 +128,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
   //+++++++++++++ TAB: General inforamtion +++++++++++++++++++++++++++++++++++++++++
 
   QWidget* w=new QWidget(this,"General");
-  KQuickHelp::add(w, i18n("Fill in all information,\nwe need to help you."));
+  QWhatsThis::add(w, i18n("Fill in all information,\nwe need to help you."));
 
   QButtonGroup* qtarch_severity_group;
   qtarch_severity_group = new QButtonGroup( w, "severity_group" );
@@ -545,7 +561,7 @@ CBugReportDlg::CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo bu
 
   //+++++++++ TAB: Problem description+++++++++++++++++++++++++++++++++++++
   QWidget* w3=new QWidget(this,"Problem description");
-  KQuickHelp::add(w3, i18n("Insert as much information about your\nproblem, so that we are able to help by\nyour description."));
+  QWhatsThis::add(w3, i18n("Insert as much information about your\nproblem, so that we are able to help by\nyour description."));
 
 	description_mledit = new QMultiLineEdit( w3, "description_mledit" );
 	description_mledit->setGeometry( 20, 30, 420, 130 );
@@ -671,17 +687,17 @@ CBugReportDlg::~CBugReportDlg(){
 void CBugReportDlg::ok() {
 
   if (description_mledit->text() == ""  ||  subject_edit->text() == "") {
-    KMsgBox::message(this,i18n("Information"),i18n("Please fill in at least the subject and bug description!"));
+    KMessageBox::information(this,i18n("Please fill in at least the subject and bug description!"));
     return;
   }
   QFile f( sendmail_edit->text() );
   if ( !f.exists() ) {
-  	KMsgBox msg;
-  	if ( 2 == msg.yesNo(this,i18n("Information"),i18n("KDevelop couldn't find sendmail at the given location.\n"\
-  																										"If you just want to generate the bugreport and send it\n"\
-  																										"by hand later, you can continue.\n"\
-  																										"Otherwise press Cancel and retype the sendmail command.")
-  																										,KMsgBox::QUESTION,i18n("Continue"),i18n("Cancel")) )
+  	if ( KMessageBox::No == KMessageBox::questionYesNo(this,
+  	                            i18n("KDevelop couldn't find sendmail at the given location.\n"\
+                                        "If you just want to generate the bugreport and send it\n"\
+                                        "by hand later, you can continue.\n"\
+                                        "Otherwise press Cancel and retype the sendmail command."),
+                                        i18n("Continue"),i18n("Cancel")) )
   	{
   		return;
   	}
@@ -696,7 +712,9 @@ void CBugReportDlg::ok() {
   
   if (generateEmail()) {
     if(sendEmail()){
-      KMsgBox::message(this,i18n("Bug Report"),i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"));
+      KMessageBox::information(this,
+                    i18n("Bugreport was successfully submitted to the KDevelop Team.\n\t\tThank you!"),
+                    i18n("Bug Report"));
     }
   }
   accept();
@@ -749,9 +767,9 @@ bool CBugReportDlg::generateEmail() {
   text.append("Compiler\t\t: ");text.append(compiler_edit->text());text.append("\n\n");
   text+="misc :\n";
   text+=misc_mledit->text();
-  QDir dir(KApplication::localkdedir()+"/share/apps/");
+  QDir dir(locateLocal("data",""));
   dir.mkdir("kdevelop");
-  QFile file(KApplication::localkdedir()+"/share/apps/kdevelop/bugreport."+strBugID);
+  QFile file(locateLocal("data", "kdevelop") + "bugreport."+strBugID);
   if (!file.open(IO_WriteOnly)) {
     return false;
   }
@@ -765,7 +783,7 @@ bool CBugReportDlg::generateEmail() {
 bool CBugReportDlg::sendEmail() {
 
 	QString command("cat ");
-	command.append(KApplication::localkdedir()+"/share/apps/kdevelop/bugreport."+strBugID);
+	command.append(locateLocal("data", "kdevelop")+ "bugreport."+strBugID);
   command+=" | ";
   command+=sendmail_edit->text();
   command+=" -t";
@@ -776,5 +794,3 @@ bool CBugReportDlg::sendEmail() {
 
   return true;
 }
-
-

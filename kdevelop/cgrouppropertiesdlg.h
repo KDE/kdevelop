@@ -21,20 +21,22 @@
 #ifndef CGROUPPROPERTIESDLG_H
 #define CGROUPPROPERTIESDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+
+class QLineEdit;
+class QLabel;
+class QPushButton;
 
 /** Dlg for change the group-properties in the LFV (logical file view)
   *@author Sandy Meier
   */
 
-class CGroupPropertiesDlg : public QDialog  {
+class CGroupPropertiesDlg : public QDialog
+{
    Q_OBJECT
+
 public: 
-   CGroupPropertiesDlg(QWidget *parent=0, const char *name=0);
+  CGroupPropertiesDlg(QWidget *parent=0, const char *name=0);
   ~CGroupPropertiesDlg();
   QLineEdit* name_edit;
   QLineEdit* filters_edit;
@@ -42,9 +44,8 @@ public:
   QLabel* filter_label;
   QPushButton* cancel_button;
   QPushButton* ok_button;
- protected slots:
- void slotOK();
-  
+protected slots:
+  void slotOK();
 };
 
 #endif

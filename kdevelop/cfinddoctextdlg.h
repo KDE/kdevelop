@@ -22,21 +22,20 @@
 #ifndef CFINDDOCTEXTDLG_H
 #define CFINDDOCTEXTDLG_H
 
-#include <kiconloader.h>
 #include <qdialog.h>
-#include <klocale.h>
 
 /**
   *@author 
   */
-class CFindDocTextDlg : public QDialog  {
+class CFindDocTextDlg : public QDialog
+{
    Q_OBJECT
 public: 
 	CFindDocTextDlg(QWidget *parent=0, const char *name=0);
 	~CFindDocTextDlg();
 
 public slots:
-  void slotTextChanged( const char *t );
+  void slotTextChanged( const QString& );
   void slotClose();
   void slotFind();
 
@@ -45,12 +44,6 @@ signals:
 
 private:
   QString text;
-  KIconLoader* icon_loader;
 };
 
 #endif
-
-
-
-
-

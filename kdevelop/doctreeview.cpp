@@ -18,19 +18,28 @@
  ***************************************************************************/
 
 
-#include <qfileinfo.h>
-#include <qheader.h>
-#include <qdir.h>
-#include <qlist.h>
-#include <qregexp.h> 
+#include "doctreeview.h"
 
-#include <kapp.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kpopmenu.h>
 #include "cdoctreepropdlg.h"
 #include "cproject.h"
-#include "doctreeview.h"
+
+//#include <kapp.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kpopupmenu.h>
+#include <kstddirs.h>
+
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qheader.h>
+#include <qlist.h>
+#include <qlineedit.h>
+#include <qregexp.h>
+
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 // There are still problems with BEN's workaround in certain circumstances
 // so for the time being I've used my solution. jbb 07-02-2000
@@ -41,28 +50,28 @@
  * A list view item that is decorated with a doc icon.
  * This typically represents a section in a manual.
  */
-class ListViewDocItem : public KListViewItem
+class ListViewDocItem : public KDevListViewItem
 {
 public:
-    ListViewDocItem( KListViewItem *parent,
+    ListViewDocItem( KDevListViewItem *parent,
                      const char *text, const char *filename );
 
     virtual void setOpen(bool o);
 };
 
 
-ListViewDocItem::ListViewDocItem(KListViewItem *parent,
+ListViewDocItem::ListViewDocItem(KDevListViewItem *parent,
                                  const char *text, const char *filename)
-    : KListViewItem(parent, text, filename)
+    : KDevListViewItem(parent, text, filename)
 {
     setOpen(false);
-//    setPixmap(0, Icon("mini/mini-doc.xpm"));
+//    setPixmap(0, BarIcon("mini-doc"));
 }
 
 void ListViewDocItem::setOpen(bool o)
 {
-    setPixmap(0, o? Icon("mini/mini-doc2.xpm") : Icon("mini/mini-doc.xpm"));
-    KListViewItem::setOpen(o);
+    setPixmap(0, o? BarIcon("mini-doc2") : BarIcon("mini-doc"));
+    KDevListViewItem::setOpen(o);
 }
 
 //
@@ -72,18 +81,18 @@ void ListViewDocItem::setOpen(bool o)
 // * This typically represents one manual. When the user "opens"
 // * the book, the according icon is changed.
 // */
-//class ListViewBookItem : public KListViewItem
+//class ListViewBookItem : public KDevListViewItem
 //{
 //public:
-//    ListViewBookItem( KListViewItem *parent,
+//    ListViewBookItem( KDevListViewItem *parent,
 //                      const char *text, const char *filename );
 //    virtual void setOpen(bool o);
 //};
 
 
-ListViewBookItem::ListViewBookItem(KListViewItem *parent,
+ListViewBookItem::ListViewBookItem(KDevListViewItem *parent,
                                    const char *text, const char *filename)
-    : KListViewItem(parent, text, filename)
+    : KDevListViewItem(parent, text, filename)
 {
     setOpen(false);
 }
@@ -91,8 +100,8 @@ ListViewBookItem::ListViewBookItem(KListViewItem *parent,
 
 void ListViewBookItem::setOpen(bool o)
 {
-    setPixmap(0, o? Icon("mini/mini-book2.xpm") : Icon("mini/mini-book1.xpm"));
-    KListViewItem::setOpen(o);
+    setPixmap(0, o? BarIcon("mini-book2") : BarIcon("mini-book1"));
+    KDevListViewItem::setOpen(o);
 }
 
 
@@ -102,17 +111,17 @@ void ListViewBookItem::setOpen(bool o)
  * Its contents can be refresh()d. The default implementation
  * simply deletes all children.
  */
-class ListViewFolderItem : public KListViewItem
+class ListViewFolderItem : public KDevListViewItem
 {
 public:
-    ListViewFolderItem( KListView *parent, const char *text );
+    ListViewFolderItem( KDevListView *parent, const char *text );
     virtual void setOpen(bool o);
     virtual void refresh();
 };
 
 
-ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
-    : KListViewItem(parent, text, "")
+ListViewFolderItem::ListViewFolderItem(KDevListView *parent, const char *text)
+    : KDevListViewItem(parent, text, "")
 {
     setOpen(false);
 }
@@ -120,8 +129,8 @@ ListViewFolderItem::ListViewFolderItem(KListView *parent, const char *text)
 
 void ListViewFolderItem::setOpen(bool o)
 {
-    setPixmap(0, o? Icon("mini/folder_open.xpm") : Icon("mini/folder.xpm"));
-    KListViewItem::setOpen(o);
+    setPixmap(0, o? BarIcon("folder_open") : BarIcon("folder"));
+    KDevListViewItem::setOpen(o);
 }
 
 
@@ -155,47 +164,39 @@ void ListViewFolderItem::refresh()
  */
 // moved class declaration to doctreeview.h because I need the static members in CKDevelop -Ralf Nolden
 
-QString DocTreeKDevelopBook::locatehtml(const char *filename)
+QString DocTreeKDevelopBook::locatehtml(const QString& filename)
 {
-    QString pathbase = KApplication::kde_htmldir() + "/";
-    QString path = pathbase + klocale->language() + "/kdevelop/" + filename;
-    QString errmsgpath = path;
-
-    if (!QFileInfo(path).exists())
-        path = pathbase + "default/kdevelop/" + filename;
-    // fall back to the english documentation
-    if (!QFileInfo(path).exists())
-        path = pathbase + "en/kdevelop/" + filename;
-    // get the index.html of the dir first for the klocal-dir,
-    //  then fallback
-    if (!QFileInfo(path).exists())
-    {
-      int pos=errmsgpath.findRev('/');
-
-      if (pos>=0)
-        errmsgpath=errmsgpath.left(pos);
-      if (QFileInfo(errmsgpath+"/index.html").exists())
-        path = errmsgpath + "/index.html";
-      else
-      {
-        errmsgpath=pathbase +"default/kdevelop/" + filename;
-        pos=errmsgpath.findRev('/');
-        if (pos>=0)
-          errmsgpath=errmsgpath.left(pos);
-        if (pos>=0 && QFileInfo(errmsgpath+"/index.html").exists())
-          path = errmsgpath + "/index.html";
-        else
-        {
-          errmsgpath=pathbase +"en/kdevelop/" + filename;
-          pos=errmsgpath.findRev('/');
-          if (pos>=0)
-            errmsgpath=errmsgpath.left(pos);
-          if (pos>=0 && QFileInfo(errmsgpath+"/index.html").exists())
-            path = errmsgpath + "/index.html";
-        }
-      }
-    }
+  QString path=locate("html", KGlobal::locale()->language() +"/kdevelop/"+filename);
+  if (!path.isEmpty())
     return path;
+
+  path=locate("html", "default/kdevelop/"+filename);
+  if (!path.isEmpty())
+    return path;
+
+  path=locate("html", "en/kdevelop/"+filename);
+  if (!path.isEmpty())
+    return path;
+
+  // The file isn't where we wanted it. We now look for an index file
+  // based on the relative path of the original file. This should contain
+  // and error message to put up.
+  if (filename.contains("/index.html"))
+    return QString::null;
+
+  QFileInfo fileInfo(filename);
+  QString errInfo = fileInfo.dirPath() + "/index.html";
+
+  path=locate("html", KGlobal::locale()->language() +"/kdevelop/"+errInfo);
+  if (!path.isEmpty())
+    return path;
+
+  path=locate("html", "default/kdevelop/"+errInfo);
+  if (!path.isEmpty())
+    return path;
+
+  path=locate("html", "en/kdevelop/"+errInfo);
+  return path;
 }
 
 
@@ -235,14 +236,14 @@ void DocTreeKDevelopBook::readSgmlIndex(FILE *f)
       int pos2 = s.find("\">", pos1+8);
       if (pos2 == -1)
           continue;
-      int pos3 = s.find(' ', pos2+1);
+      int pos3 = s.find(' ', pos2+1);             
       if(pos3 == -1)
           continue;
-      int pos4 = s.find('<', pos2+1);
+      int pos4 = s.find('<', pos2+1);             
       if(pos4 == -1)
           continue;
-
-      QString filename = s.mid(pos1+8, pos2-(pos1+8));
+      
+      QString filename = s.mid(pos1+8, pos2-(pos1+8)); 
       QString sectname = s.mid(pos3+1, pos4-(pos3+1));
       QFileInfo fi(ident());
       QString path = fi.dirPath() + "/" + filename;
@@ -317,39 +318,19 @@ void DocTreeKDevelopFolder::refresh()
   QString kdelibref=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("kde_libref/index.html"));    
   QString addendum=DocTreeKDevelopBook::readIndexTitle(DocTreeKDevelopBook::locatehtml("addendum/index.html"));    
     
-  (void) new DocTreeKDevelopBook(this, welcome,
-                                 "welcome/index.html", false);
-  (void) new DocTreeKDevelopBook(this, manual,
-                                 "index.html", true);
-  (void) new DocTreeKDevelopBook(this, programming,
-                                 "programming/index.html", true);
-  (void) new DocTreeKDevelopBook(this, tutorial,
-                                 "tutorial/index.html", true);
-  (void) new DocTreeKDevelopBook(this, kdelibref,
-                                 "kde_libref/index.html", true);
-  (void) new DocTreeKDevelopBook(this, addendum,
-                                 "addendum/index.html", true);
-//  (void) new DocTreeKDevelopBook(this, i18n("Welcome !"),
-//                                 "welcome/index.html", false);
-//  (void) new DocTreeKDevelopBook(this, i18n("User Manual"),
-//                                 "index.html", true);
-//  (void) new DocTreeKDevelopBook(this, i18n("Programming Handbook"),
-//                                 "programming/index.html", true);
-//  (void) new DocTreeKDevelopBook(this, i18n("Tutorials"),
-//                                 "tutorial/index.html", true);
-//  (void) new DocTreeKDevelopBook(this, i18n("KDE Library Reference"),
-//                                 "kde_libref/index.html", true);
-//  (void) new DocTreeKDevelopBook(this, i18n("KDE 2 Developer Guide"),
-//                                 "addendum/index.html", true);
-    
-  (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"),
-                                 "reference/C/cref.html");
+  (void) new DocTreeKDevelopBook(this, welcome,                 "welcome/index.html",     false);
+  (void) new DocTreeKDevelopBook(this, manual,                  "index.html",             true);
+  (void) new DocTreeKDevelopBook(this, programming,             "programming/index.html", true);
+  (void) new DocTreeKDevelopBook(this, tutorial,                "tutorial/index.html",    true);
+  (void) new DocTreeKDevelopBook(this, kdelibref,               "kde_libref/index.html",  true);
+  (void) new DocTreeKDevelopBook(this, addendum,                "addendum/index.html",    true);
+  (void) new DocTreeKDevelopBook(this, i18n("C/C++ Reference"), "reference/C/cref.html");
 
     //horrible hack to counter the QListView bug DO NOT CHANGE without thinking about it
     //and looking closely at the implementation of QListView, expacially how are the pointers
     //in QListView::d->drawables are managed!!!   Benoit Cerrina <benoit.cerrina@writeme.com>
-    listView()->setOpen(this, !isOpen());
-    listView()->setOpen(this, !isOpen());
+//    listView()->setOpen(this, !isOpen());
+//    listView()->setOpen(this, !isOpen());
     //end of the horrible hack
 }
 
@@ -368,22 +349,22 @@ void DocTreeKDevelopFolder::refresh()
 class DocTreeKDELibsBook : public ListViewBookItem
 {
 public:
-    DocTreeKDELibsBook( KListViewItem *parent, const char *text,
+    DocTreeKDELibsBook( KDevListViewItem *parent, const char *text,
                         const char *libname);
     void relocatehtml();
     virtual void setOpen(bool o);
 private:
     int readKdoc2Index(FILE *f);
-    static QString locatehtml(const char *libname);
+    static QString locatehtml(const QString& libname);
     QString name;
     QString idx_filename;
 };
 
-DocTreeKDELibsBook::DocTreeKDELibsBook( KListViewItem *parent, const char *text,
+DocTreeKDELibsBook::DocTreeKDELibsBook( KDevListViewItem *parent, const char *text,
                                         const char *libname )
     : ListViewBookItem(parent, text, locatehtml(libname)), name(libname)
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = KGlobal::config();
     config->setGroup("Doc_Location");
 
 #ifdef WITH_KDOC2
@@ -411,9 +392,9 @@ void DocTreeKDELibsBook::relocatehtml()
   setIdent(locatehtml(name));
 }
 
-QString DocTreeKDELibsBook::locatehtml(const char *libname)
+QString DocTreeKDELibsBook::locatehtml(const QString& libname)
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = KGlobal::config();
     config->setGroup("Doc_Location");
     QString kde_path = config->readEntry("doc_kde", KDELIBS_DOCDIR);
     QString qt_path = config->readEntry("doc_qt", QT_DOCDIR);
@@ -633,7 +614,7 @@ void DocTreeKDELibsFolder::refresh()
 #ifdef WITH_KDOC2
     // if we have kdoc2 index files, get the reference directory 
     QString docu_dir, index_path, libname, msg;
-    KConfig* config=kapp->getConfig();
+    KConfig* config=KGlobal::config();
     config->setGroup("Doc_Location");
     docu_dir = config->readEntry("doc_kde", KDELIBS_DOCDIR);
     if (!docu_dir.isEmpty())
@@ -784,7 +765,7 @@ void DocTreeOthersFolder::refresh()
 
     ListViewFolderItem::refresh();
 
-    KConfig *config = kapp->getConfig();
+    KConfig *config = KGlobal::config();
     config->setGroup("Other_Doc_Location");
     config->readListEntry("others_list", others);
     config->setGroup("Other_Doc_Location");
@@ -923,7 +904,7 @@ void DocTreeView::tip( const QPoint &p, QRect &r, QString &str )
 }
 
 DocTreeView::DocTreeView(QWidget *parent, const char *name)
-    : KListView(parent, name)
+    : KDevListView(parent, name)
 {
     setRootIsDecorated(true);
     setSorting(-1);
@@ -1018,7 +999,7 @@ void DocTreeView::slotAddDocumentation()
     if (!dlg.exec())
         return;
     
-    KConfig *config = kapp->getConfig();
+    KConfig *config = KGlobal::config();
     config->setGroup("Other_Doc_Location");
     QStrList others;
     config->readListEntry("others_list", others);
@@ -1043,7 +1024,7 @@ void DocTreeView::slotAddDocumentation()
 
 void DocTreeView::slotRemoveDocumentation()
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = KGlobal::config();
     config->setGroup("Other_Doc_Location");
     QStrList others;
     
@@ -1058,7 +1039,7 @@ void DocTreeView::slotRemoveDocumentation()
 
 void DocTreeView::slotDocumentationProp()
 {
-    KConfig *config = kapp->getConfig();
+    KConfig *config = KGlobal::config();
     config->setGroup("Other_Doc_Location");
 
     QString name = currentItem()->text(0);
@@ -1084,8 +1065,8 @@ void DocTreeView::slotDocumentationProp()
 void DocTreeView::slotSelectionChanged(QListViewItem *item)
 {
     // We assume here that ALL (!) items in the list view
-    // are KListViewItem's
-    KListViewItem *kitem = static_cast<KListViewItem*>(item);
+    // are KDevListViewItem's
+    KDevListViewItem *kitem = static_cast<KDevListViewItem*>(item);
     if (kitem && !kitem->ident().isEmpty())
     {
       QString item=kitem->ident();

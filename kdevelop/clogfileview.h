@@ -20,14 +20,13 @@
 #ifndef CLOGFILEVIEW_H
 #define CLOGFILEVIEW_H
 
-#include <qwidget.h>
-#include <kapp.h>
-#include <kpopmenu.h>
 #include "ctreeview.h"
 #include <qptrdict.h>
 
-//#include "cproject.h"
 class CProject;
+class CTreeHandler;
+class KPopupMenu;
+class QListViewItem;
 
 /** the logical-file-view,draw the contents of 
   * a cprojectinfo into a tree

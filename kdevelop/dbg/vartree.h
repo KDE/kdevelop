@@ -31,7 +31,7 @@ class WatchRoot;
 class VarItem;
 class VarTree;
 
-class KLined;
+class KLineEdit;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -51,7 +51,7 @@ private slots:
 
 private:
   VarTree* varTree_;
-  KLined* watchVarEntry_;
+  KLineEdit* watchVarEntry_;
 };
 
 /***************************************************************************/
@@ -131,7 +131,7 @@ public:
 
   virtual void setCache(const QString& value);
   virtual QString getCache();
-  virtual const char * key ( int column, bool ascending ) const;
+  virtual QString key ( int column, bool ascending ) const;
 
 private:
   int activeFlag_;
@@ -159,7 +159,7 @@ public:
   QString getCache();
 
   void setOpen(bool open);
-  void setText (int column, const char* text);
+  void setText (int column, const QString& text);
 
 private:
   void checkForRequests();
@@ -167,7 +167,7 @@ private:
                           int column, int width, int align );
 
 private:
-  QString   cache_;
+  QCString  cache_;
   DataType  dataType_;
   bool      highlight_;
 };
@@ -195,8 +195,8 @@ public:
 private:
   bool    needLocals_;
   int     frameNo_;
-  QString params_;
-  QString locals_;
+  QCString params_;
+  QCString locals_;
 };
 
 /***************************************************************************/

@@ -23,9 +23,9 @@
 #ifndef MEMVIEW_H
 #define MEMVIEW_H
 
-#include <kwizard.h>
+#include <kdialog.h>
 
-class KLined;
+class KLineEdit;
 class QMultiLineEdit;
 
 class MemoryView : public KDialog
@@ -50,8 +50,8 @@ private slots:
   void slotMemoryDump();
 
 private:
-  KLined*         start_;
-  KLined*         end_;
+  KLineEdit*         start_;
+  KLineEdit*         end_;
   QMultiLineEdit* output_;
 };
 

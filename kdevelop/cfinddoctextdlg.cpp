@@ -19,25 +19,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qpushbutton.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qlayout.h>
-
-#include <kapp.h>
-#include <klocale.h>
-
 #include "cfinddoctextdlg.h"
 
-CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
-    // mimimise initial size of dialog
-//    resize( 0, 0 );
-    icon_loader = KApplication::getKApplication()->getIconLoader();
+#include <kiconloader.h>
+#include <klocale.h>
+
+#include <qcheckbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
+
+CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) :
+  QDialog(parent,name,this)
+{
     resize(250,120);
     setCaption(i18n("Search for Help on..."));
-    QPixmap question_pix = icon_loader->loadMiniIcon("contents.xpm");
-    setIcon(question_pix);
+    setIcon(BarIcon("contents"));
     QVBoxLayout *vl = new QVBoxLayout( this, 15 );
 
     QHBoxLayout *hl = new QHBoxLayout( 15 );
@@ -49,8 +47,8 @@ CFindDocTextDlg::CFindDocTextDlg(QWidget *parent, const char *name ) : QDialog(p
     QLineEdit *edit = new QLineEdit( this );
     edit->setFixedHeight( edit->sizeHint().height() );
     edit->setFocus();
-    connect( edit, SIGNAL( textChanged( const char * ) ),
-		    SLOT( slotTextChanged( const char * ) ) );
+    connect( edit, SIGNAL( textChanged( const QString& ) ),
+		    SLOT( slotTextChanged( const QString& ) ) );
 
     hl->addWidget( label );
     hl->addWidget( edit );
@@ -83,7 +81,7 @@ CFindDocTextDlg::~CFindDocTextDlg(){
 
 
 
-void CFindDocTextDlg::slotTextChanged( const char *t )
+void CFindDocTextDlg::slotTextChanged( const QString& t )
 {
     text = t;
 }
@@ -95,7 +93,7 @@ void CFindDocTextDlg::slotClose()
 
 void CFindDocTextDlg::slotFind()
 {
-    emit signalFind( text );
+  emit signalFind( text );
 }
 
 

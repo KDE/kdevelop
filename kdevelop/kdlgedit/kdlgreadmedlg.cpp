@@ -25,11 +25,13 @@
 #include <qcolor.h>
 #include <qpalette.h>
 #include <kapp.h>
+#include <klocale.h>
+#include <kstddirs.h>
 
 KDlgReadmeDlg::KDlgReadmeDlg(QWidget *parent)
  : QDialog(parent, "readmedlg", TRUE)
 {
-  setBackgroundPixmap(QPixmap(KApplication::kde_datadir() + "/kdevelop/pics/dlg_firstrun.bmp"));
+  setBackgroundPixmap(QPixmap(locate("appdata", "pics/dlg_firstrun.bmp")));
 
   setFixedSize(460,360);
 

@@ -17,10 +17,11 @@
  ***************************************************************************/
 #include "coutputwidget.h"
 
-COutputWidget::COutputWidget(KApplication* a,QWidget* parent, char* name) :
-  KEdit(a,parent,name)
+COutputWidget::COutputWidget(QWidget* parent, const char* name) :
+  KEdit(parent,name)
 {
 }
+
 void COutputWidget::insertAtEnd(QString s)
 {
   int row = (numLines() == 0)? 0 : numLines()-1;

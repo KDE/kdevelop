@@ -16,14 +16,32 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
-#include <kmsgbox.h>
-#include <kfiledialog.h>
 #include "ccreatedocdatabasedlg.h"
-#include <iostream.h>
-#include <kquickhelp.h>
-#include <kapp.h>
+
+#include <kmessagebox.h>
+#include <kfiledialog.h>
+//#include <kapp.h>
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kprocess.h>
+//#include <kconfig.h>
+
+#include <qdir.h>
+#include <qwhatsthis.h>
+#include <qwidget.h>
+#include <qcheckbox.h>
+#include <qpushbutton.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qlistbox.h>
+#include <qradiobutton.h>
+#include <qbuttongroup.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+//#include <iostream.h>
 
 CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,KConfig* config,bool foundGlimpse,bool foundHtDig) : QDialog(parent,name,true) {
 
@@ -180,8 +198,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_button->setBackgroundMode( QWidget::PaletteBackground );
 	dir_button->setFontPropagation( QWidget::NoChildren );
 	dir_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix = BarIcon("open");
 	dir_button->setPixmap(pix);
 	dir_button->setAutoRepeat( FALSE );
 	dir_button->setAutoResize( FALSE );
@@ -274,14 +291,14 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 	dir_edit->setFocus();
 
 	/*doc*/
-	KQuickHelp::add(medium_radio_button,
+	QWhatsThis::add(medium_radio_button,
 	i18n("builds a medium-size index (20-30% of the size\n"
 	     "of all files), allowing faster search."));
-	KQuickHelp::add(small_radio_button,
+	QWhatsThis::add(small_radio_button,
 			i18n("Build a small index rather than tiny (meaning 7-9%\n"
 			     "of the sizes of all files - your mileage may vary)\n"
 			     "allowing faster search."));
-	KQuickHelp::add(tiny_radio_button,
+	QWhatsThis::add(tiny_radio_button,
 			i18n("a tiny index (2-3% of the total size of all files)"));
 	
 	
@@ -294,16 +311,16 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   conf->setGroup("Doc_Location");
   QString filename = conf->readEntry("doc_kde", KDELIBS_DOCDIR) +"/kdeui/KDialog.html";
   if(!QFile::exists(filename) && kde_checkbox->isChecked()){
-    KMsgBox::message(0,i18n("No Database created!"),i18n("The KDE-Documentation-Path isn't set correctly."));
+    KMessageBox::error(0,i18n("The KDE-Documentation-Path isn't set correctly."),i18n("No Database created!"));
     return;
   }
   filename = conf->readEntry("doc_qt", QT_DOCDIR) +"/qtabbar.html";
   if(!QFile::exists(filename) && qt_checkbox->isChecked()){
-    KMsgBox::message(0,i18n("No Database created!"),i18n("The Qt-Documentation-Path isn't set correctly."));
+    KMessageBox::error(0,i18n("The Qt-Documentation-Path isn't set correctly."),i18n("No Database created!"));
     return;
   }
   
-  QDir dir(KApplication::localkdedir()+"/share/apps/");
+  QDir dir(locateLocal("data", ""));
   dir.mkdir("kdevelop");
  
   QString kde_doc_dir = conf->readEntry("doc_kde", KDELIBS_DOCDIR);
@@ -317,7 +334,7 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
     dirs = dirs + " " +  qt_doc_dir;
   }
   // added for documentation search in the kdevelop html directory
-  dirs= dirs + " "+ KApplication::kde_htmldir()+"/default/kdevelop";
+  dirs= dirs + " "+ locate("html", "default/kdevelop");
 
   uint count = dir_listbox->count();
   uint i;
@@ -337,13 +354,18 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   proc->clearArguments();
   if (useGlimpse->isChecked())
   {
-    *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop";
+    *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ locateLocal("data","");
     proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
     accept();
   }
   if (useHtDig->isChecked())
   {
-    *proc <<  "find " + dirs + " -name '*.html' | awk 'OFS=\"\"; {print \"file://localhost\", $0}' | htdig -v -s -c " + KApplication::kde_datadir() + "/kdevelop/tools/htdig.conf" + " - ; htmerge -v -s -c " + KApplication::kde_datadir() + "/kdevelop/tools/htdig.conf";
+    *proc <<  "find " +
+                dirs +
+                " -name '*.html' | awk 'OFS=\"\"; {print \"file://localhost\", $0}' | htdig -v -s -c " +
+                locate("appdata", "tools/htdig.conf") +
+                " - ; htmerge -v -s -c " +
+                locate("appdata", "tools/htdig.conf");
     proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
     accept();
   }
@@ -362,16 +384,8 @@ void CCreateDocDatabaseDlg::slotRemoveButtonClicked(){
   
 }
 void CCreateDocDatabaseDlg::slotDirButtonClicked(){
-  QString name=KFileBaseDialog::getDirectory(dir_edit->text(),this,i18n("Select Directory..."));
+  QString name=KFileDialog::getExistingDirectory(dir_edit->text(),0,i18n("Select Directory..."));
   if(!name.isEmpty()){
     dir_edit->setText(name);
   }
 }
-
-
-
-
-
-
-
-

@@ -1,23 +1,14 @@
+####### kdevelop will overwrite this part!!! (begin)##########
 
-INCLUDES= $(all_includes)
+INCLUDES = $(all_includes)
+
+libdbg_a_METASOURCES = AUTO
 
 noinst_LIBRARIES = libdbg.a
 
-libdbg_a_METASOURCES = USE_AUTOMOC
+libdbg_a_SOURCES = vartree.cpp stty.cpp memview.cpp gdbparser.cpp gdbcontroller.cpp gdbcommand.cpp framestack.cpp disassemble.cpp dbgcontroller.cpp dbgcommand.cpp brkptmanager.cpp breakpointdialog.cpp breakpoint.cpp 
 
-libdbg_a_SOURCES = memview.cpp breakpointdialog.cpp stty.cpp gdbparser.cpp breakpoint.cpp \
-                   brkptmanager.cpp dbgcommand.cpp dbgcontroller.cpp \
-                   framestack.cpp gdbcommand.cpp gdbcontroller.cpp vartree.cpp \
-                   disassemble.cpp
 
-noinst_HEADERS = memview.h breakpointdialog.h stty.h gdbparser.h breakpoint.h brkptmanager.h \
-                 dbgcommand.h dbgcontroller.h framestack.h gdbcommand.h \
-                 gdbcontroller.h vartree.h disassemble.h
+EXTRA_DIST = breakpoint.cpp breakpoint.h breakpointdialog.cpp breakpointdialog.h brkptmanager.cpp brkptmanager.h dbgcommand.cpp dbgcommand.h dbgcontroller.cpp dbgcontroller.h disassemble.cpp disassemble.h framestack.cpp framestack.h gdbcommand.cpp gdbcommand.h gdbcontroller.cpp gdbcontroller.h gdbparser.cpp gdbparser.h memview.cpp memview.h stty.cpp stty.h vartree.cpp vartree.h 
 
-toolbar_DATA = dbgbreak.xpm dbgnext.xpm dbgrun.xpm dbgstop.xpm  \
-               dbgrestart.xpm dbgstep.xpm dbgmemview.xpm dbgwatchvar.xpm \
-               dbgrunto.xpm dbgstepout.xpm dbgnextinst.xpm dbgstepinst.xpm 
-
-toolbardir = $(kde_datadir)/kdevelop/toolbar
-
-EXTRA_DIST = $(toolbar_DATA)
+####### kdevelop will overwrite this part!!! (end)############

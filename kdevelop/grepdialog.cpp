@@ -25,13 +25,14 @@
 #include <qlistbox.h>
 #include <qregexp.h>
 #include <qlabel.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
 #include <kbuttonbox.h>
 #include <kfiledialog.h>
 #include <kprocess.h>
 #include <kapp.h>
-#include <htmltoken.h>
 #include <klocale.h>
+#include <kstddirs.h>
+
 
 const char *template_desc[] = {
     "normal",
@@ -129,8 +130,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     dir_layout->addWidget(dir_edit, 10);
 
     QPushButton *dir_button = new QPushButton(this, "dirButton");
-    QPixmap pix;
-    pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+		QPixmap pix = BarIcon("open");
     dir_button->setPixmap(pix);
     dir_button->setFixedHeight(dir_edit->sizeHint().height());
     dir_button->setFixedWidth(30);
@@ -142,7 +142,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     dir_layout->addSpacing(10);
     dir_layout->addWidget(recursive_box);
 
-    KButtonBox *actionbox = new KButtonBox(this, KButtonBox::VERTICAL);
+    KButtonBox *actionbox = new KButtonBox(this, Qt::Vertical);
     layout->addWidget(actionbox, 0, 2);
     actionbox->addStretch();
     search_button = actionbox->addButton(i18n("&Search"));
@@ -180,7 +180,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 
     layout->activate();
 
-    KQuickHelp::add(pattern_edit,
+    QWhatsThis::add(pattern_edit,
 		    i18n("Enter the regular expression you want to search for here.\n"
 			 "Possible meta characters are:\n"
 			 "<bold>.</bold> - Matches any character\n"
@@ -202,15 +202,15 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 			 "Furthermore, backreferences to bracketed subexpressions are\n"
 			 "available via the notation \\\\<i>n</i>."
 			 ));
-    KQuickHelp::add(files_combo,
+    QWhatsThis::add(files_combo,
 		    i18n("Enter the file name pattern of the files to search here.\n"
 			 "You may give several patterns separated by commas"));
-    KQuickHelp::add(template_edit,
+    QWhatsThis::add(template_edit,
 		    i18n("You can choose a template for the pattern from the combo box\n"
 			 "and edit it here. The string %s in the template is replaced\n"
 			 "by the pattern input field, resulting in the regular expression\n"
 			 "to search for."));
-    KQuickHelp::add(resultbox,
+    QWhatsThis::add(resultbox,
 		    i18n("The results of the grep run are listed here. Select a\n"
 			 "filename/line number combination and press Enter or doubleclick\n"
 			 "on the item to show the respective line in the editor."));
@@ -219,8 +219,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
 	     SLOT(templateActivated(int)) );
     connect( dir_button, SIGNAL(clicked()),
 	     SLOT(dirButtonClicked()) );
-    connect( resultbox, SIGNAL(selected(const char *)),
-	     SLOT(itemSelected(const char *)) );
+    connect( resultbox, SIGNAL(selected(const QString&)),
+	     SLOT(itemSelected(const QString&)) );
     connect( search_button, SIGNAL(clicked()),
 	     SLOT(slotSearch()) );
     connect( cancel_button, SIGNAL(clicked()),
@@ -228,7 +228,7 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     connect( clear_button, SIGNAL(clicked()),
 	     SLOT(slotClear()) );
     connect( done_button, SIGNAL(clicked()),
-	     SLOT(accept()) );
+        SLOT(accept()) );
 }
 
 
@@ -241,7 +241,7 @@ GrepDialog::~GrepDialog()
 
 void GrepDialog::dirButtonClicked()
 {
-    dir_edit->setText(KDirDialog::getDirectory(dir_edit->text()));
+    dir_edit->setText(KFileDialog::getExistingDirectory(dir_edit->text()));
 }
 
 
@@ -252,62 +252,62 @@ void GrepDialog::templateActivated(int index)
 
 
 #include <iostream.h>
-void GrepDialog::itemSelected(const char *item)
+#include <kstddirs.h>
+void GrepDialog::itemSelected(const QString& item)
 {
-  int pos;
-  QString filename, linenumber;
-  
-  QString str = item;
-  if ( (pos = str.find(':')) != -1)
+    int pos;
+    QString filename, linenumber;
+
+    QString str = item;
+    if ( (pos = str.find(':')) != -1)
     {
-      filename = str.left(pos);
-      str = str.right(str.length()-1-pos);
-      if ( (pos = str.find(':')) != -1)
-	{
-	  linenumber = str.left(pos);
-	  emit itemSelected(filename,linenumber.toInt()-1);
-	  //		    cout << "Selected file " << filename << ", line " << linenumber << endl;
-	}
+        filename = str.left(pos);
+        str = str.right(str.length()-1-pos);
+        if ( (pos = str.find(':')) != -1)
+        {
+            linenumber = str.left(pos);
+            emit itemSelected(filename,linenumber.toInt()-1);
+            //	cout << "Selected file " << filename << ", line " << linenumber << endl;
+        }
     }
 }
 
 
 void GrepDialog::processOutput()
 {
-  int pos;
-  while ( (pos = buf.find('\n')) != -1)
+    int pos;
+    while ( (pos = buf.find('\n')) != -1)
     {
-      QString item = buf.left(pos);
-      if (!item.isEmpty())
-	resultbox->insertItem(item);
-      buf = buf.right(buf.length()-pos-1);
+        QString item = buf.left(pos);
+        if (!item.isEmpty())
+  	        resultbox->insertItem(item);
+        buf = buf.right(buf.length()-pos-1);
     }
-  
-  QString str;
-  str.setNum(resultbox->count());
-  str += i18n(" matches");
-  matches_label->setText(str);
+
+    QString str;
+    str.setNum(resultbox->count());
+    str += i18n(" matches");
+    matches_label->setText(str);
 }
 
 
 void GrepDialog::slotSearch()
 {
-  search_button->setEnabled(false);
-  cancel_button->setEnabled(true);
-  
-  StringTokenizer tokener;
-  QString files;
-  QString files_temp = files_combo->currentText();
-  if (files_temp.right(1) != ","){ 
-    files_temp = files_temp + ",";
-  }
-  tokener.tokenize(files_temp,",");
-  if(tokener.hasMoreTokens()){
-    files = files + " '" + QString(tokener.nextToken())+"'" ;
-  }
-  while(tokener.hasMoreTokens()){
-    files = files + " -o -name " + "'"+QString(tokener.nextToken())+ "'";
-  }
+    search_button->setEnabled(false);
+    cancel_button->setEnabled(true);
+
+    QString files;
+    QString files_temp = files_combo->currentText();
+    if (files_temp.right(1) != ",")
+        files_temp = files_temp + ",";
+
+    QStringList tokens = QStringList::split ( ",", files_temp, FALSE );
+    QStringList::Iterator it = tokens.begin();
+    if (it != tokens.end())
+        files = " '"+(*it++)+"'" ;
+
+    for ( ; it != tokens.end(); it++ )
+        files = files + " -o -name " + "'"+(*it)+ "'";
 
     status_label->setText(i18n("Searching..."));
 
@@ -332,17 +332,17 @@ void GrepDialog::slotSearch()
     *childproc << "/dev/null";
 
     connect( childproc, SIGNAL(processExited(KProcess *)),
-	     SLOT(childExited()) );
+         SLOT(childExited()) );
     connect( childproc, SIGNAL(receivedStdout(KProcess *, char *, int)),
-	     SLOT(receivedOutput(KProcess *, char *, int)) );
+         SLOT(receivedOutput(KProcess *, char *, int)) );
     childproc->start(KProcess::NotifyOnExit, KProcess::Stdout);
 }
 
 void GrepDialog::slotSearchFor(QString pattern){
-		slotClear();
-		pattern_edit->clear();
-		pattern_edit->setText(pattern);
-		slotSearch();
+    slotClear();
+    pattern_edit->clear();
+    pattern_edit->setText(pattern);
+    slotSearch();
 }
 
 void GrepDialog::finish()
@@ -353,7 +353,7 @@ void GrepDialog::finish()
     buf += '\n';
     processOutput();
     if (childproc)
-      delete childproc;
+        delete childproc;
     childproc = 0;
 }
 
@@ -372,18 +372,20 @@ void GrepDialog::childExited()
     
     finish();
 
-    status_label->setText( (status == 1)? i18n("No matches found")
-			   : (status == 2)? i18n("Syntax error in pattern")
-			   : i18n("Ready") );
+    status_label->setText( (status == 1)
+                              ? i18n("No matches found")
+                              : (status == 2)
+                                  ? i18n("Syntax error in pattern")
+                                  : i18n("Ready") );
     if (status != 0)
-	matches_label->setText("");
+	      matches_label->setText("");
     
 }
 
 
 void GrepDialog::receivedOutput(KProcess */*proc*/, char *buffer, int buflen)
 {
-    buf += QString(buffer, buflen+1);
+    buf += QCString(buffer, buflen+1);
     processOutput();
 }
 
@@ -399,13 +401,5 @@ void GrepDialog::slotClear()
 
 
 void  GrepDialog::setDirName(QString dir){
-  dir_edit->setText(dir);
+    dir_edit->setText(dir);
 }
-
-
-
-
-
-
-
-

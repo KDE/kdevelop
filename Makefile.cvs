@@ -1,27 +1,14 @@
-default: all
+all: 
+	@echo "This Makefile is only for the CVS repository"
+	@echo "This will be deleted before making the distribution"
+	@echo ""
+	@if test ! -d admin; then \
+	   echo "Please recheckout this module!" ;\
+	   echo "for cvs: use checkout once and after that update again" ;\
+	   echo "for cvsup: checkout kde-common from cvsup and" ;\
+	   echo "   link kde-common/admin to ./admin" ;\
+	   exit 1 ;\
+	fi
+	$(MAKE) -f admin/Makefile.common cvs
 
-dist:
-	@echo "This file is to make it easier for you to create all you need"
-	aclocal -I .
-	autoheader
-# use --include-deps, if you want to release the stuff. Don't use it for
-# yourself
-	automake --include-deps
-	perl am_edit
-	autoconf
-	touch stamp-h.in
-	LIST=`find ./po -name "*.po"`; \
-	for i in $$LIST; do \
-	 file2=`echo $$i | sed -e "s#\.po#\.gmo#"`; \
-	 msgfmt -o $$file2 $$i; \
-	done 
-	rm -f Makefile.dist
-
-all:
-	cat acinclude.m4.in libtool.m4.in kdevelop.m4 > acinclude.m4
-	aclocal 
-	autoheader
-	automake
-	perl am_edit
-	autoconf
-
+.SILENT:

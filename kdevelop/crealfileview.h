@@ -19,13 +19,13 @@
 #ifndef KPROJECTDIRTREELIST_H
 #define KPROJECTDIRTREELIST_H
 
-#include <kapp.h>
-#include <qwidget.h>
 #include "ctreeview.h"
-#include <kpopmenu.h>
+
 #include <qstrlist.h>
 
-//#include "cproject.h"
+class CProject;
+class KPopupMenu;
+class QListViewItem;
 class CProject;
 
 /**
@@ -117,10 +117,10 @@ private: // Popupmenus
 private: // Private attributes
   QStrList filelist;
   int file_col;
-	bool showNonPrjFiles;
+  bool showNonPrjFiles;
   QListViewItem* pRootItem;
   CProject* project;
-	QString projectDir;
+  QString projectDir;
 
 private: // Private methods
   /** Adds the files from a certain directory to the view. */

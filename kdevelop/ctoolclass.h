@@ -21,7 +21,8 @@
 #define CTOOLCLASS_H
 
 #include <stdlib.h>
-#include <htmltoken.h>
+
+#include <qstring.h>
 
 /**
  * some methods,that would be normaly global,but I hate global functions :-)
@@ -30,9 +31,10 @@
 class CToolClass {
 public:
   /** search the program in the $PATH*/
-  static bool searchProgram(QString name);
+  static bool searchProgram(QString name, bool allowWarningMsg=true);
   /** same as above but without warning message*/
-  static bool searchInstProgram(QString name);
+  static bool searchInstProgram(QString name) { return searchProgram( name, false); };
+
   /** return the absolute filename if found, otherwise ""*/
   static QString findProgram(QString name);
   /** returns the relative path, to get from source_path to destpath (both are absolute)

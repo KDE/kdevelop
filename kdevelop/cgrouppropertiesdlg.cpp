@@ -19,8 +19,12 @@
 
 
 #include "cgrouppropertiesdlg.h"
-#include <kapp.h>
+
 #include <klocale.h>
+
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qpushbutton.h>
 
 CGroupPropertiesDlg::CGroupPropertiesDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
   

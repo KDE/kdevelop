@@ -23,7 +23,10 @@
 #ifndef CADDCLASSATTRIBUTEDLG_H
 #define CADDCLASSATTRIBUTEDLG_H
 
+class CParsedAttribute;
+
 #include <qdialog.h>
+
 #include <qlineedit.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
@@ -31,8 +34,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qmultilinedit.h>
-#include <qlayout.h> 
-#include "./classparser/ParsedAttribute.h"
+#include <qlayout.h>
 
 /** Dialog to create a new attibute for a class.
  * @author Jonas Nordin
@@ -94,7 +96,7 @@ public: // Public widgets
 
   QPushButton okBtn;
   QPushButton cancelBtn;
-  QLabel btnFill;
+//  QLabel btnFill;
 
 protected:
   void enterEvent(QEvent* event);

@@ -101,7 +101,7 @@ protected slots:
   virtual void slotDbgProcessExited(KProcess* proc)                       = 0;
 
 signals:
-  void rawData              (const char* rawData);
+  void rawData              (const QString& rawData);
   void gotoSourcePosition   (const QString& filename, int lineno);
   void rawGDBBreakpointList (char* buf);
   void rawGDBBreakpointSet  (char* buf, int key);

@@ -18,6 +18,8 @@
 #ifndef _PROGRAMMINGBYCONTRACT_H_INCLUDED_
 #define _PROGRAMMINGBYCONTRACT_H_INCLUDED_
 
+#include <iostream.h>
+
 //#ifdef ASSERTIONS
 #define REQUIRE( TAG, REQ ) \
 if( !(REQ) ) \

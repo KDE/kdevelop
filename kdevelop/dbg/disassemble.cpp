@@ -17,8 +17,8 @@
 
 #include "disassemble.h"
 
-#include <kapp.h>
 #include <keditcl.h>
+#include <kglobalsettings.h>
 
 #include <qdict.h>
 #include <qheader.h>
@@ -29,15 +29,15 @@
 /***************************************************************************/
 /***************************************************************************/
 
-Disassemble::Disassemble(KApplication* a,QWidget* parent,char* name) :
-  KEdit(a, parent, name),
+Disassemble::Disassemble(QWidget* parent, const char* name) :
+  KEdit(parent, name),
   active_(false),
   lower_(0),
   upper_(0),
   address_(0)
 {
 //  setCaption("Disassemble");
-  setFont(a->fixedFont);
+  setFont(KGlobalSettings::fixedFont());
 }
 
 /***************************************************************************/

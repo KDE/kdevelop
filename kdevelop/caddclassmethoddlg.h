@@ -23,6 +23,8 @@
 #ifndef CADDCLASSMETHODDLG_H
 #define CADDCLASSMETHODDLG_H
 
+class CParsedMethod;
+
 #include <qdialog.h>
 #include <qlineedit.h>
 #include <qbuttongroup.h>
@@ -32,7 +34,6 @@
 #include <qlabel.h>
 #include <qmultilinedit.h>
 #include <qlayout.h> 
-#include "./classparser/ParsedMethod.h"
 
 /** Dialog to create a new method for a class. 
  * @author Jonas Nordin

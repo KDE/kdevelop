@@ -21,16 +21,15 @@
 #ifndef CCREATEDOCDATABASEDLG_H
 #define CCREATEDOCDATABASEDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <kprocess.h>
-#include <kconfig.h>
+
+class QCheckBox;
+class QRadioButton;
+class QPushButton;
+class QListBox;
+class QLineEdit;
+class KShellProcess;
+class KConfig;
 
 /**frontend for glimpseindex
   *@author Sandy Meier

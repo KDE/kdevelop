@@ -23,8 +23,8 @@
 #include <qpixmap.h>
 #include <qlistview.h>
 
-//class KTreeList;
-//class KTreeListItem;
+//class KListView;
+//class QListViewItem;
 class KDlgItem_Widget;
 class CKDevelop;
 

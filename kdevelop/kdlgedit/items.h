@@ -22,7 +22,7 @@
 #include <qframe.h>
 #include <kcursor.h>
 #include <kruler.h>
-#include <kpopmenu.h>
+#include <kpopupmenu.h>
 #include "itemsglobal.h"
 #include "kdlgeditwidget.h"
 #include "kdlgpropwidget.h"
@@ -329,14 +329,14 @@ class KDlgItem_KColorButton : public KDlgItem_Base
 #endif
 
 #ifdef INC_KCOMBO
-#include <kcombo.h>
+#include <kcombobox.h>
 class KDlgItem_KCombo : public KDlgItem_Base
 {
 //  Q_OBJECT
 
   #define classname KDlgItem_KCombo
-  #define widgettype KCombo
-  #define classdesc "KCombo"
+  #define widgettype KComboBox
+  #define classdesc "KComboBox"
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };
@@ -384,8 +384,8 @@ class KDlgItem_KLed: public KDlgItem_Base
 };
 #endif*/
 
-#ifdef INC_KLEDLAMP
-#include <kledlamp.h>
+/*#ifdef INC_KLEDLAMP
+#include <kled.h>
 class KDlgItem_KLedLamp : public KDlgItem_Base
 {
   Q_OBJECT
@@ -397,7 +397,7 @@ class KDlgItem_KLedLamp : public KDlgItem_Base
   #include "item_class.cpp.inc"
 };
 #endif
-
+*/
 #ifdef INC_KPROGRESS
 #include <kprogress.h>
 class KDlgItem_KProgress : public KDlgItem_Base
@@ -412,6 +412,7 @@ class KDlgItem_KProgress : public KDlgItem_Base
 };
 #endif
 
+/*
 #ifdef INC_KKEYBUTTON
 #include <kkeydialog.h>
 class KDlgItem_KKeyButton : public KDlgItem_Base
@@ -425,6 +426,7 @@ class KDlgItem_KKeyButton : public KDlgItem_Base
   #include "item_class.cpp.inc"
 };
 #endif
+*/
 
 #ifdef INC_KRESTRICTEDLINE
 #include <krestrictedline.h>
@@ -441,14 +443,14 @@ class KDlgItem_KRestrictedLine : public KDlgItem_Base
 #endif
 
 #ifdef INC_KTREELIST
-#include <ktreelist.h>
+#include <klistview.h>
 class KDlgItem_KTreeList : public KDlgItem_Base
 {
   Q_OBJECT
 
   #define classname KDlgItem_KTreeList
-  #define widgettype KTreeList
-  #define classdesc "KTreeList"
+  #define widgettype KListView
+  #define classdesc "KListView"
   #undef MyWidgetAdd
   #include "item_class.cpp.inc"
 };

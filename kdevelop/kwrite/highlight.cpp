@@ -1,21 +1,26 @@
 #include <string.h>
-#ifdef(_UNIXWARE7)
-#include <strings.h>
-#endif
+
 //#include <qcombo.h>
 #include <qgrpbox.h>
 #include <qtstream.h>
 #include <qregexp.h>
+#include <qlabel.h>
+#include <qstringlist.h>
 
 #include <kapp.h>
 #include <kfontdialog.h>
 #include <kcharsets.h>
 
-#include <X11/Xlib.h> //used in getXFontList()
 
 #include "highlight.h"
 #include "kwdoc.h"
-#include "kmimemagic.h"
+#include <kmimemagic.h>
+#include <kglobal.h>
+#include <qfile.h>
+#include <klocale.h>
+#include <kstddirs.h>
+
+//#include <X11/Xlib.h> //used in getXFontList()
 
 // ISO/IEC 9899:1990 (aka ANSI C)
 // "interrupt" isn´t an ANSI keyword, but an extension of some C compilers
@@ -893,7 +898,7 @@ const char *HlLatexParam::checkHgl(const char *s) {
 }
 
 //--------
-ItemStyle::ItemStyle() : selCol(white), bold(false), italic(false) {
+ItemStyle::ItemStyle() : selCol(Qt::white), bold(false), italic(false) {
 }
 
 ItemStyle::ItemStyle(const QColor &col, const QColor &selCol,
@@ -929,7 +934,7 @@ Highlight::~Highlight() {
 KConfig *Highlight::getKConfig() {
   KConfig *config;
 
-  config = kapp->getConfig();
+  config = KGlobal::config();
   config->setGroup((QString) iName + " Highlight");
   return config;
 }
@@ -1155,7 +1160,7 @@ void CHighlight::createItemData(ItemDataList &list) {
   list.append(new ItemData("String Char",dsChar));
   list.append(new ItemData("Comment",dsComment));
   list.append(new ItemData("Preprocessor",dsOthers));
-  list.append(new ItemData("Prep. Lib",dsOthers,darkYellow,yellow,false,false));
+  list.append(new ItemData("Prep. Lib",dsOthers,Qt::darkYellow,Qt::yellow,false,false));
   list.append(new ItemData("Symbol",dsNormal));
 }
 
@@ -1327,11 +1332,11 @@ HtmlHighlight::~HtmlHighlight() {
 void HtmlHighlight::createItemData(ItemDataList &list) {
 
   list.append(new ItemData("Normal Text",dsNormal));
-  list.append(new ItemData("Char",dsChar,darkGreen,green,false,false));
+  list.append(new ItemData("Char",dsChar,Qt::darkGreen,Qt::green,false,false));
   list.append(new ItemData("Comment",dsComment));
-  list.append(new ItemData("Tag Text",dsOthers,black,white,true,false));
-  list.append(new ItemData("Tag",dsKeyword,darkMagenta,magenta,true,false));
-  list.append(new ItemData("Tag Value",dsDecVal,darkCyan,cyan,false,false));
+  list.append(new ItemData("Tag Text",dsOthers,Qt::black,Qt::white,true,false));
+  list.append(new ItemData("Tag",dsKeyword,Qt::darkMagenta,Qt::magenta,true,false));
+  list.append(new ItemData("Tag Value",dsDecVal,Qt::darkCyan,Qt::cyan,false,false));
 }
 
 void HtmlHighlight::makeContextList() {
@@ -1541,7 +1546,7 @@ void PerlHighlight::createItemData(ItemDataList &list) {
   list.append(new ItemData("String",dsString));
   list.append(new ItemData("String Char",dsChar));
   list.append(new ItemData("Comment",dsComment));
-  list.append(new ItemData("Pod",dsOthers,darkYellow,yellow,false,true));
+  list.append(new ItemData("Pod",dsOthers,Qt::darkYellow,Qt::yellow,false,true));
 }
 
 /*
@@ -1874,7 +1879,7 @@ Highlight *HlManager::getHl(int n) {
 int HlManager::defaultHl() {
   KConfig *config;
 
-  config = kapp->getConfig();
+  config = KGlobal::config();
   config->setGroup("General Options");
   return nameFind(config->readEntry("Highlight"));
 }
@@ -1911,10 +1916,9 @@ int HlManager::wildcardFind(const char *fileName) {
 
 int HlManager::mimeFind(const char *contents, int len, const char *fname)
 {
-  // Magic file detection init (from kfm/kbind.cpp)    
-  QString mimefile = kapp->kde_mimedir().copy();    
-  mimefile += "/magic";    
-  KMimeMagic magic(mimefile);    
+  // Magic file detection init (from kfm/kbind.cpp)
+  QString mimefile = locate ("mime", "magic");
+  KMimeMagic magic(mimefile);
   magic.setFollowLinks(true);      
 /*
   // fill the detection buffer with the contents of the text
@@ -1935,7 +1939,9 @@ int HlManager::mimeFind(const char *contents, int len, const char *fname)
 */
   // detect the mime type
   KMimeMagicResult *result;
-  result = magic.findBufferFileType(contents, len, fname);
+  QByteArray contentsByteArray;
+  contentsByteArray.assign(contents, len);
+  result = magic.findBufferFileType(contentsByteArray, fname);
 
   Highlight *highlight;
   int p1, p2;
@@ -1951,7 +1957,7 @@ int HlManager::mimeFind(const char *contents, int len, const char *fname)
       if (p2 == -1) p2 = w.length();
       if (p1 < p2) {
         QRegExp regExp(w.mid(p1,p2 - p1),true,true);
-        if (regExp.match(result->getContent()) == 0) return hlList.at();
+        if (regExp.match(result->mimeType()) == 0) return hlList.at();
       }
       p1 = p2 + 1;
     }
@@ -1991,11 +1997,13 @@ void HlManager::makeAttribs(Highlight *highlight, Attribute *a, int n) {
     if (itemData->defFont) {
       font.setFamily(defaultFont.family);
       font.setPointSize(defaultFont.size);
-      KCharset(defaultFont.charset).setQFont(font);
+//      KCharsets(defaultFont.charset).setQFont(font);
+      KGlobal::charsets()->setQFont(font);
     } else {
       font.setFamily(itemData->family);
       font.setPointSize(itemData->size);
-      KCharset(itemData->charset).setQFont(font);
+//      KCharsets(itemData.charset).setQFont(font);
+      KGlobal::charsets()->setQFont(font);
     }
     a[z].setFont(font);
   }
@@ -2038,7 +2046,7 @@ void HlManager::getDefaults(ItemStyleList &list, ItemFont &font) {
   list.append(new ItemStyle(darkGray,gray,false,true));    //comment
   list.append(new ItemStyle(darkGreen,green,false,false)); //others
 
-  config = kapp->getConfig();
+  config = KGlobal::config();
   config->setGroup("Default Item Styles");
   for (z = 0; z < defaultStyles(); z++) {
     i = list.at(z);
@@ -2062,7 +2070,7 @@ void HlManager::setDefaults(ItemStyleList &list, ItemFont &font) {
   ItemStyle *i;
   char s[64];
 
-  config = kapp->getConfig();
+  config = KGlobal::config();
   config->setGroup("Default Item Styles");
   for (z = 0; z < defaultStyles(); z++) {
     i = list.at(z);
@@ -2109,84 +2117,89 @@ void HlManager::setHlDataList(HlDataList &list) {
 //-----
 
 //"ripped" from kfontdialog
-bool getKDEFontList(QStrList &fontList) {
-  QString s;
-
-  //TODO replace by QDir::homePath();
-  s = KApplication::localkdedir() + "/share/config/kdefonts";
-  QFile fontfile(s);
-//  if (!fontfile.exists()) return false;
-  if(!fontfile.open(IO_ReadOnly)) return false;
-//  if (!fontfile.isReadable()) return false;
-
-  QTextStream t(&fontfile);
-  while (!t.eof()) {
-    s = t.readLine();
-    s = s.stripWhiteSpace();
-    if (!s.isEmpty()) fontList.append(s);
-  }
-  fontfile.close();
-  return true;
-}
-
-void getXFontList(QStrList &fontList) {
-  Display *kde_display;
-  int numFonts;
-  char** fontNames;
-  char* fontName;
-  QString qfontname;
-  int i, dash, dash_two;
-
-  kde_display = XOpenDisplay( 0L );
-  fontNames = XListFonts(kde_display, "*", 32767, &numFonts);
-
-  for(i = 0; i < numFonts; i++) {
-    fontName = fontNames[i];
-    if (*fontName != '-') {
-      // The font name doesn't start with a dash -- an alias
-      // so we ignore it. It is debatable whether this is the right
-      // behaviour so I leave the following snippet of code around.
-      // Just uncomment it if you want those aliases to be inserted as well.
-
-      /*
-      qfontname = fontName;
-      if(fontlist.find(qfontname) == -1)
-          fontlist.inSort(qfontname);
-      */
-      continue;
-    }
-
-    qfontname = fontName;
-    dash = qfontname.find ('-', 1); // find next dash
-    if (dash == -1) continue; // No dash such next dash -- this shouldn't happen.
-                              // but what do I care -- lets skip it.
-
-    // the font name is between the second and third dash so:
-    // let's find the third dash:
-    dash_two = qfontname.find ('-', dash + 1);
-    if (dash == -1) continue; // No such next dash -- this shouldn't happen.
-                              // but what do I care -- lets skip it.
-
-    // fish the name of the font info string
-    qfontname = qfontname.mid(dash +1, dash_two - dash -1);
-    if (!qfontname.contains("open look", TRUE)) {
-      if (qfontname != "nil") {
-        if (fontList.find(qfontname) == -1) fontList.inSort(qfontname);
-      }
-    }
-  }
-
-  XFreeFontNames(fontNames);
-  XCloseDisplay(kde_display);
-}
-
-void getFontList(QStrList &fontList) {
-
-  //try to get KDE fonts
-  if (getKDEFontList(fontList)) return;
-  //not successful: get X fonts
-  getXFontList(fontList);
-}
+//bool getKDEFontList(QStrList &fontList) {
+//
+//  QString s;
+//
+//  //TODO replace by QDir::homePath();
+//  s = locate("config","kdefonts");
+//  if (s.isEmpty())
+//    return false;
+//
+//  QFile fontfile(s);
+////  if (!fontfile.exists()) return false;
+//  if(!fontfile.open(IO_ReadOnly))
+//    return false;
+////  if (!fontfile.isReadable()) return false;
+//
+//  QTextStream t(&fontfile);
+//  while (!t.eof()) {
+//    s = t.readLine();
+//    s = s.stripWhiteSpace();
+//    if (!s.isEmpty()) fontList.append(s);
+//  }
+//  fontfile.close();
+//  return true;
+//}
+//
+//void getXFontList(QStrList &fontList) {
+//  Display *kde_display;
+//  int numFonts;
+//  char** fontNames;
+//  char* fontName;
+//  QString qfontname;
+//  int i, dash, dash_two;
+//
+//  kde_display = XOpenDisplay( 0L );
+//  fontNames = XListFonts(kde_display, "*", 32767, &numFonts);
+//
+//  for(i = 0; i < numFonts; i++) {
+//    fontName = fontNames[i];
+//    if (*fontName != '-') {
+//      // The font name doesn't start with a dash -- an alias
+//      // so we ignore it. It is debatable whether this is the right
+//      // behaviour so I leave the following snippet of code around.
+//      // Just uncomment it if you want those aliases to be inserted as well.
+//
+//      /*
+//      qfontname = fontName;
+//      if(fontlist.find(qfontname) == -1)
+//          fontlist.inSort(qfontname);
+//      */
+//      continue;
+//    }
+//
+//    qfontname = fontName;
+//    dash = qfontname.find ('-', 1); // find next dash
+//    if (dash == -1) continue; // No dash such next dash -- this shouldn't happen.
+//                              // but what do I care -- lets skip it.
+//
+//    // the font name is between the second and third dash so:
+//    // let's find the third dash:
+//    dash_two = qfontname.find ('-', dash + 1);
+//    if (dash == -1) continue; // No such next dash -- this shouldn't happen.
+//                              // but what do I care -- lets skip it.
+//
+//    // fish the name of the font info string
+//    qfontname = qfontname.mid(dash +1, dash_two - dash -1);
+//    if (!qfontname.contains("open look", TRUE)) {
+//      if (qfontname != "nil") {
+//        if (fontList.find(qfontname) == -1) fontList.inSort(qfontname);
+//      }
+//    }
+//  }
+//
+//  XFreeFontNames(fontNames);
+//  XCloseDisplay(kde_display);
+//}
+//
+//void getFontList(QStrList &fontList) {
+//
+//  //try to get KDE fonts
+//  if (getKDEFontList(fontList)) return;
+//  //not successful: get X fonts
+//  getXFontList(fontList);
+//}
 
 
 StyleChanger::StyleChanger(QWidget *parent, int x, int y) : QObject(parent) {
@@ -2250,21 +2263,19 @@ void StyleChanger::changed() {
   }
 }
 
-FontChanger::FontChanger(QWidget *parent, int x, int y)
-  : QObject(parent) {
-
-  QStrList fontList(true);
+FontChanger::FontChanger(QWidget *parent, int x, int y) :
+  QObject(parent)
+{
   QRect r;
   QLabel *label;
-  int z;
-  char s[4];
 
-  getFontList(fontList);
+  QStringList fontList;
+  KFontChooser::getFontList(fontList, false);
 
   familyCombo = new QComboBox(true,parent);
   label = new QLabel(familyCombo,i18n("Family:"),parent);
-  connect(familyCombo,SIGNAL(activated(const char *)),SLOT(familyChanged(const char *)));
-  familyCombo->insertStrList(&fontList);
+  connect(familyCombo,SIGNAL(activated(const QString&)),SLOT(familyChanged(const QString&)));
+  familyCombo->insertStringList(fontList);
 
   r.setRect(x,y,160,25);
   label->setGeometry(r);
@@ -2274,11 +2285,8 @@ FontChanger::FontChanger(QWidget *parent, int x, int y)
   sizeCombo = new QComboBox(true,parent);
   label = new QLabel(sizeCombo,i18n("Size:"),parent);
   connect(sizeCombo,SIGNAL(activated(int)),SLOT(sizeChanged(int)));
-  z = 0;
-  while (fontSizes[z]) {
-    sprintf(s,"%d",fontSizes[z]);
-    sizeCombo->insertItem(s);
-    z++;
+  for( int i=0; fontSizes[i] != 0; i++ ){
+    sizeCombo->insertItem(QString().setNum(fontSizes[i]));
   }
 
   r.moveBy(0,25);
@@ -2288,7 +2296,7 @@ FontChanger::FontChanger(QWidget *parent, int x, int y)
 
   charsetCombo = new QComboBox(true,parent);
   label = new QLabel(charsetCombo,i18n("Charset:"),parent);
-  connect(charsetCombo,SIGNAL(activated(const char *)),SLOT(charsetChanged(const char *)));
+  connect(charsetCombo,SIGNAL(activated(const QString&)),SLOT(charsetChanged(const QString&)));
 
 //  KCharsets *charsets=KApplication::getKApplication()->getCharsets();
 //  QStrList lst = charsets->displayable(selFont.family());
@@ -2322,7 +2330,7 @@ found:
   displayCharsets();
 }
 
-void FontChanger::familyChanged(const char *family) {
+void FontChanger::familyChanged(const QString& family) {
 
   font->family = family;
   displayCharsets();
@@ -2333,7 +2341,7 @@ void FontChanger::sizeChanged(int n) {
   font->size = fontSizes[n];;
 }
 
-void FontChanger::charsetChanged(const char *charset) {
+void FontChanger::charsetChanged(const QString& charset) {
 
   font->charset = charset;
   //KCharset(chset).setQFont(font);
@@ -2341,20 +2349,21 @@ void FontChanger::charsetChanged(const char *charset) {
 
 void FontChanger::displayCharsets() {
   int z;
-  const char *charset;
+  QString charset;
   KCharsets *charsets;
 
-  charsets = kapp->getCharsets();
-  QStrList lst = charsets->displayable(font->family);
+  charsets = KGlobal::charsets();
+  QStringList lst = charsets->availableCharsetNames(font->family);
+//  QStrList lst = charsets->displayable(font->family);
   charsetCombo->clear();
   for(z = 0; z < (int) lst.count(); z++) {
-    charset = lst.at(z);
+    charset = *lst.at(z);
     charsetCombo->insertItem(charset);
-    if ((QString) font->charset == charset) charsetCombo->setCurrentItem(z);
+    if (/*(QString)*/ font->charset == charset) charsetCombo->setCurrentItem(z);
   }
   charset = "any";
   charsetCombo->insertItem(charset);
-  if ((QString) font->charset == charset) charsetCombo->setCurrentItem(z);
+  if (/*(QString)*/ font->charset == charset) charsetCombo->setCurrentItem(z);
 }
 
 //---------

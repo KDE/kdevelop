@@ -19,8 +19,9 @@
 
 #ifndef _DOCTREEVIEW_H_
 #define _DOCTREEVIEW_H_
-#define OLD
-#include "klistview.h"
+//#define OLD
+
+#include "kdevlistview.h"
 #include <stdio.h>
 #include <qtooltip.h>
 
@@ -38,7 +39,7 @@ class CProject;
  * @author Sandy Meier & Bernd Gehrmann (rewrite)
  */
 
-class DocTreeView : public KListView
+class DocTreeView : public KDevListView
 {
     Q_OBJECT 
 public: 
@@ -95,10 +96,10 @@ private: // Private classes
  * This typically represents one manual. When the user "opens"
  * the book, the according icon is changed.
  */
-class ListViewBookItem : public KListViewItem
+class ListViewBookItem : public KDevListViewItem
 {
 public:
-    ListViewBookItem( KListViewItem *parent,
+    ListViewBookItem( KDevListViewItem *parent,
                       const char *text, const char *filename );
     virtual void setOpen(bool o);
 };
@@ -115,17 +116,15 @@ public:
 class DocTreeKDevelopBook : public ListViewBookItem
 {
 public:
-    DocTreeKDevelopBook( KListViewItem *parent, const char *text,
+    DocTreeKDevelopBook( KDevListViewItem *parent, const char *text,
                          const char *filename, bool expandable=false )
         : ListViewBookItem(parent, text, locatehtml(filename))
         { setExpandable(expandable); }
     virtual void setOpen(bool o);
     static QString readIndexTitle(const char* book);
-    static QString locatehtml(const char *filename);
+    static QString locatehtml(const QString& filename);
 private:
     void readSgmlIndex(FILE *f);
 };
 
 #endif
-
-

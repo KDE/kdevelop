@@ -22,11 +22,12 @@
 #include <qdict.h>
 #include <qheader.h>
 
-#include <kpopmenu.h>
+#include <kpopupmenu.h>
 #include <kapp.h>
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <klocale.h>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -383,7 +384,7 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
         {
           char* EOL = strchr(str, '\n');
           if (EOL)
-            condition = QString(str+14, EOL-(str+13));
+            condition = QCString(str+14, EOL-(str+13));
         }
       }
 

@@ -24,6 +24,8 @@
 #include <qpainter.h>
 #include <qfont.h>
 #include <qcolor.h>
+#include <klocale.h>
+#include <qbrush.h>
 
 
 KDlgItemDatabase::KDlgItemDatabase()
@@ -165,7 +167,7 @@ void KDlgItemsPaintRects(QPainter *p, int w, int h)
   if (!p)
     return;
 
-  QBrush b(Dense4Pattern);
+  QBrush b(Qt::Dense4Pattern);
 
   p->drawWinFocusRect(0,0,w,h);
   p->drawWinFocusRect(1,1,w-2,h-2);

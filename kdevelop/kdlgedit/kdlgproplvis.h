@@ -156,7 +156,7 @@ class AdvLvi_Bool : public AdvLvi_Base
 //    QCheckBox *cbBool;
   public slots:
 //    void btnPressed();
-  void activated( const char* );
+  void activated( const QString& );
 };
 class AdvLvi_Orientation : public AdvLvi_Base
 {
@@ -173,7 +173,7 @@ class AdvLvi_Orientation : public AdvLvi_Base
     QComboBox *cbOrientation;
 
   public slots:
-    void activated( const char* );
+    void activated( const QString& );
 };
 
 class AdvLvi_Filename : public AdvLvi_ExtEdit
@@ -229,7 +229,7 @@ class AdvLvi_BgMode : public AdvLvi_Base
     QComboBox *cbBool;
 
   public slots:
-    void activated( const char* );
+    void activated( const QString& );
 };
 
 class AdvLvi_Cursor : public AdvLvi_Base
@@ -248,7 +248,7 @@ class AdvLvi_Cursor : public AdvLvi_Base
     QButton *btnMore;
 
   public slots:
-    void activated( const char* );
+    void activated( const QString& );
     void btnPressed();
 };
 
@@ -279,7 +279,7 @@ class AdvLvi_ComboList : public AdvLvi_Base
     QComboBox *cbOrientation;
 
   public slots:
-    void activated( const char* );
+    void activated( const QString& );
 };
 
 

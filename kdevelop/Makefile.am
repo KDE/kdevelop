@@ -1,4 +1,26 @@
+####### kdevelop will overwrite this part!!! (begin)##########
+bin_PROGRAMS = kdevelop
+kdevelop_SOURCES = kdevlistview.cpp main.cpp ktipofday.cpp kswallow.cpp kstartuplogo.cpp klangcombo.cpp grepdialog.cpp doctreeview.cpp dbgtoolbar.cpp dbgpsdlg.cpp cupdatekdedocdlg.cpp ctreeview.cpp ctreehandler.cpp ctoolsconfigdlg.cpp ctoolclass.cpp ctabctl.cpp crealfileview.cpp cproject.cpp cprjoptionsdlg.cpp coutputwidget.cpp cnewfiledlg.cpp cnewclassdlg.cpp cmakemanualdlgdata.cpp cmakemanualdlg.cpp clogfileview.cpp ckdevsetupdlg.cpp ckdevinstall.cpp ckdevelop_whatsthis.cpp ckdevelop_project.cpp ckdevelop_noslot.cpp ckdevelop_kdlginit.cpp ckdevelop_init.cpp ckdevelop_classview.cpp ckdevelop.cpp ckdevaccel.cpp ckappwizard.cpp cgrouppropertiesdlg.cpp cgeneratenewfile.cpp cfinddoctextdlg.cpp cfilepropdlg.cpp cexecuteargdlg.cpp cerrormessageparser.cpp ceditwidget.cpp cdoctreepropdlg.cpp cdocbrowser.cpp ccvaddfolderdlg.cpp ccreatedocdatabasedlg.cpp cclassview.cpp cclasstreehandler.cpp cclasstooltreeview.cpp cclasstooldlg.cpp cbugreportdlg.cpp caddnewtranslationdlg.cpp caddexistingfiledlg.cpp caddclassmethoddlg.cpp caddclassattributedlg.cpp 
+kdevelop_LDADD   = ./classparser/libclassparser.a ./classwizard/libclasswizard.a ./dbg/libdbg.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./print/libprint.a ./vc/libvc.a -lkhtml -lm -lkfile -lkdeui -lkdecore $(LIB_QT) $(LIBSOCKET)
 
+SUBDIRS = classparser classwizard dbg dlgs examples gfxview kdlgedit kwrite pics print tools vc 
+
+EXTRA_DIST = kdevelop.desktop kdevelop.xpm mini-kdevelop.xpm caddclassattributedlg.cpp caddclassattributedlg.h caddclassmethoddlg.cpp caddclassmethoddlg.h caddexistingfiledlg.cpp caddexistingfiledlg.h caddnewtranslationdlg.cpp caddnewtranslationdlg.h cbugreportdlg.cpp cbugreportdlg.h cclasstooldlg.cpp cclasstooldlg.h cclasstooltreeview.cpp cclasstooltreeview.h cclasstreehandler.cpp cclasstreehandler.h cclassview.cpp cclassview.h ccreatedocdatabasedlg.cpp ccreatedocdatabasedlg.h ccvaddfolderdlg.cpp ccvaddfolderdlg.h cdocbrowser.cpp cdocbrowser.h cdoctreepropdlg.cpp cdoctreepropdlg.h ceditwidget.cpp ceditwidget.h cerrormessageparser.cpp cerrormessageparser.h cexecuteargdlg.cpp cexecuteargdlg.h cfilepropdlg.cpp cfilepropdlg.h cfinddoctextdlg.cpp cfinddoctextdlg.h cgeneratenewfile.cpp cgeneratenewfile.h cgrouppropertiesdlg.cpp cgrouppropertiesdlg.h ckappwizard.cpp ckappwizard.h ckdevaccel.cpp ckdevaccel.h ckdevelop.cpp ckdevelop.h ckdevelop_classview.cpp ckdevelop_init.cpp ckdevelop_kdlginit.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp ckdevelop_whatsthis.cpp ckdevinstall.cpp ckdevinstall.h ckdevsetupdlg.cpp ckdevsetupdlg.h clogfileview.cpp clogfileview.h cmakemanualdlg.cpp cmakemanualdlg.h cmakemanualdlgdata.cpp cnewclassdlg.cpp cnewclassdlg.h cnewfiledlg.cpp cnewfiledlg.h coutputwidget.cpp coutputwidget.h cprjoptionsdlg.cpp cprjoptionsdlg.h cproject.cpp cproject.h crealfileview.cpp crealfileview.h ctabctl.cpp ctabctl.h ctoolclass.cpp ctoolclass.h ctoolsconfigdlg.cpp ctoolsconfigdlg.h ctreehandler.cpp ctreehandler.h ctreeview.cpp ctreeview.h cupdatekdedocdlg.cpp cupdatekdedocdlg.h dbgpsdlg.cpp dbgpsdlg.h dbgtoolbar.cpp dbgtoolbar.h debug.h development_package.xpm doctreeview.cpp doctreeview.h extractrc grepdialog.cpp grepdialog.h kdevelop-project.xpm kdevelop-setup.kdelnk kdevelop.kdelnk kdeveloprc klangcombo.cpp klangcombo.h kstartuplogo.cpp kstartuplogo.h kswallow.cpp kswallow.h ktipofday.cpp ktipofday.h main.cpp mini-development_package.xpm resource.h structdef.h x-kdevelop-project.kdelnk kdevlistview.cpp kdevlistview.h 
+
+install-data-local:
+	$(mkinstalldirs) $(kde_appsdir)/Applications/
+	$(INSTALL_DATA) kdevelop.desktop $(kde_appsdir)/Applications/kdevelop.desktop
+	$(mkinstalldirs) $(kde_icondir)/medium/locolor/apps/
+	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)/medium/locolor/apps/kdevelop.xpm
+	$(mkinstalldirs) $(kde_icondir)/small/locolor/apps/
+	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_icondir)/small/locolor/apps/kdevelop.xpm
+
+uninstall-local:
+	-rm -f $(kde_appsdir)/Applications/kdevelop.desktop
+	-rm -f $(kde_icondir)/medium/locolor/apps/kdevelop.xpm
+	-rm -f $(kde_icondir)/small/locolor/apps/kdevelop.xpm
+
+####### kdevelop will overwrite this part!!! (end)############
 # this 10 paths are KDE specific. Use them:
 # kde_htmldir       Where your docs should go to. (contains lang subdirs)
 # kde_appsdir       Where your application file (.kdelnk) should go to. 
@@ -12,103 +34,20 @@
 # kde_toolbardir    Where general toolbar icons should go to.
 # kde_wallpaperdir  Where general wallpapers should go to.
 
-# just set the variable
-APPSDIR = $(kde_appsdir)
 # set the include path for X, qt and KDE
 INCLUDES= $(all_includes)
-# claim, which subdirectories you want to install
-# if you don't have subdirectories, comment it
-SUBDIRS = tools templates toolbar pics kwrite kdlgedit classparser print vc dbg gfxview classwizard examples
-LFLAGS = -+
-####### This part is very kdevelop specific
-# you can add here more. This one gets installed 
-bin_PROGRAMS = kdevelop
-bin_SCRIPTS = extractrc
 
-# Which sources should be compiled for kdevelop.
-kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
-	ckdevelop_init.cpp ctabctl.cpp ckdevelop_noslot.cpp ckdevelop_project.cpp \
-	cclassview.cpp ceditwidget.cpp ckdevsetupdlg.cpp  ckdevelop_classview.cpp \
-	cprjoptionsdlg.cpp ckappwizard.cpp crealfileview.cpp \
-	clogfileview.cpp cdocbrowser.cpp cproject.cpp \
-	kswallow.cpp cgeneratenewfile.cpp \
-	doctreeview.cpp cnewclassdlg.cpp cfilepropdlg.cpp caddexistingfiledlg.cpp \
-	cgrouppropertiesdlg.cpp cupdatekdedocdlg.cpp ccreatedocdatabasedlg.cpp \
-	ctoolclass.cpp cdoctreepropdlg.cpp \
-	ckdevelop_whatsthis.cpp \
-	 cfinddoctextdlg.cpp kstartuplogo.cpp ktipofday.cpp \
-	ckdevinstall.cpp ckdevelop_kdlginit.cpp \
-	caddclassmethoddlg.cpp caddclassattributedlg.cpp \
-	cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp \
-	ctreeview.cpp cerrormessageparser.cpp cexecuteargdlg.cpp \
-	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp grepdialog.cpp \
-	ctoolsconfigdlg.cpp cbugreportdlg.cpp cclasstooltreeview.cpp \
-	cmakemanualdlg.cpp cmakemanualdlgdata.cpp ckdevaccel.cpp \
-    dbgtoolbar.cpp dbgpsdlg.cpp
+METASOURCES = AUTO
 
-kdevelop_METASOURCES = USE_AUTOMOC
-# the library search path.
-kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
-# the libraries to link against. Be aware of the order. First the libraries,
-# that depend on the following ones.
-kdevelop_LDADD   = ./vc/libvc.a ./dbg/libdbg.a ./print/libprint.a ./gfxview/libgfxview.a ./kdlgedit/libkdlgedit.a ./kwrite/libkwrite.a ./classparser/libclassparser.a ./classwizard/libclasswizard.a \
-$(LIB_KFILE) $(LIB_KIMGIO) $(LIBTIFF) $(LIBPNG) $(LIBJPEG) \
-$(LIB_KHTMLW) $(LIB_KDEUI) $(LEXLIB) $(LIBDL)
-# -kspell -ldb
+# the library search path. 
+kdevelop_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
-# this option you can leave out. Just, if you use "make dist", you need it
-noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
-	ctabctl.h ckdevsetupdlg.h cprjoptionsdlg.h crealfileview.h \
-	clogfileview.h structdef.h cdocbrowser.h cproject.h \
-	cclassview.h kswallow.h cgeneratenewfile.h \
-	doctreeview.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
-	cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
-	ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
-	debug.h \
-	cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
-	caddclassmethoddlg.h caddclassattributedlg.h \
-	cclasstooldlg.h cclasstreehandler.h ctreehandler.h \
-	ctreeview.h cerrormessageparser.h cexecuteargdlg.h \
-	ccvaddfolderdlg.h klangcombo.h caddnewtranslationdlg.h grepdialog.h \
-	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
-	cmakemanualdlg.h klistview.h ckdevaccel.h dbgtoolbar.h dbgpsdlg.h
+rcdir = $(kde_datadir)/kdevelop
+rc_DATA = kdevelopui.rc
 
-EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk mini-development_package.xpm development_package.xpm extractrc
+messages: rc.cpp
+	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
+	if test -n "$$LIST"; then \
+	 $(XGETTEXT) $$LIST -o $(podir)/kdevelop.pot; \
+	fi
 
-# if you "make distclean", this files get removed. If you want to remove
-# them while "make clean", use CLEANFILES
-DISTCLEANFILES = $(kdevelop_METASOURCES)
-
-# make messages.po. Move this one to ../po/ and "make merge" in po
-# the -x is for skipping messages already translated in kdelibs
-messages:
-	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc`  && mv messages.po ../po/kdevelop.pot 
-
-# just install datas here. Use install-exec-local for scripts and etc.
-# the binary itself is already installed from automake
-# use mkinstalldirs, not "install -d"
-# don't install a list of file. Just one file per install.
-# if you have more of them, create a subdirectory with an extra Makefile 
-install-data-local: 
-	$(mkinstalldirs) $(APPSDIR)/Development
-	$(INSTALL_DATA) kdevelop.kdelnk $(APPSDIR)/Development
-	$(INSTALL_DATA) kdevelop-setup.kdelnk $(APPSDIR)/Development
-	$(INSTALL_DATA) .directory $(APPSDIR)/Development
-	$(mkinstalldirs) $(kde_icondir)
-	$(INSTALL_DATA) kdevelop.xpm $(kde_icondir)
-	$(INSTALL_DATA) kdevelop-project.xpm $(kde_icondir)	
-	$(INSTALL_DATA) development_package.xpm $(kde_icondir)
-	$(mkinstalldirs) $(kde_minidir)
-	$(INSTALL_DATA) mini-kdevelop.xpm $(kde_minidir)/kdevelop.xpm
-	$(INSTALL_DATA) mini-development_package.xpm $(kde_minidir)/development_package.xpm
-	$(mkinstalldirs) $(kde_confdir)
-	$(INSTALL_DATA) kdeveloprc $(kde_confdir)/kdeveloprc
-	$(mkinstalldirs) $(kde_mimedir)/application	
-	$(INSTALL_DATA) x-kdevelop-project.kdelnk $(kde_mimedir)/application/
-	
-# remove ALL you have installed in install-data-local or install-exec-local
-uninstall-local:
-	-rm -f $(APPSDIR)/Development/kdevelop.kdelnk
-	-rm -f $(APPSDIR)/Development/kdevelop-setup.kdelnk
-	-rm -f $(kde_icondir)/kdevelop.xpm
-	-rm -f $(kde_minidir)/kdevelop.xpm

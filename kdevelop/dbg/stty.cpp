@@ -64,6 +64,8 @@
 #include <qintdict.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <klocale.h>
+#include <kstddirs.h>
 
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
@@ -86,7 +88,7 @@ static int chownpty(int fd, int grant)
     if (fd != PTY_FILENO && dup2(fd, PTY_FILENO) < 0)
       ::exit(1);
 
-    QString path = KApplication::kde_bindir() + "/" + BASE_CHOWN;
+    QString path = locate("exe", BASE_CHOWN);
     execle(path.data(), BASE_CHOWN, grant?"--grant":"--revoke", NULL, NULL);
     ::exit(1); // should not be reached
   }
@@ -327,7 +329,7 @@ bool STTY::findExternalTTY(const QString &termApp)
     ::execlp( prog,       prog,
 //              "-name",    "debugio",
 //              "-title",   "kdevelop: Program output",
-              "-caption", i18n("kdevelop: Debug application console"),
+              "-caption", i18n("kdevelop: Debug application console").latin1(),
               "-e",       "sh",
               "-c",       scriptStr,
               end);

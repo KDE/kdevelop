@@ -19,19 +19,14 @@
 #ifndef CBUGREPORTDLG_H
 #define CBUGREPORTDLG_H
 
-#include <qwidget.h>
-#include <qtabdialog.h>
-#include <qdialog.h>
-#include <qmultilinedit.h>
-#include <qlineedit.h>
-#include <qradiobutton.h>
-#include <qcombo.h>
-#include <kapp.h>
-#include <kquickhelp.h>
-#include <qstring.h>
-
-#include "cproject.h"
 #include "structdef.h"
+
+#include <qtabdialog.h>
+
+class QLineEdit;
+class QComboBox;
+class QRadioButton;
+class QMultiLineEdit;
 
 
 /** creates a dialog to fill in a bugreport and sends it to the KDevelop Team
@@ -40,8 +35,12 @@
 
 class CBugReportDlg : public QTabDialog  {
    Q_OBJECT
-public: 
-	CBugReportDlg(QWidget *parent, const char *name,TBugReportInfo buginfo, QString bug_email);
+
+public:
+	CBugReportDlg(QWidget *parent,
+	                const char *name,
+	                TBugReportInfo buginfo,
+	                const QString& bug_email);
 	~CBugReportDlg();
 	QString name;
 	QString email_address;

@@ -15,19 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qdatetime.h>
-#include <qdialog.h>
-#include <qmessagebox.h>
-#include <qstring.h>
-#include <kfiledialog.h>
-#include <kprocess.h>
-#include <kconfig.h>
-#include "../ckdevelop.h"
-#include "../cgeneratenewfile.h"
-#include "../cproject.h"
 #include "kdlgedit.h"
+
 #include "kdlgeditwidget.h"
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"
@@ -39,6 +28,24 @@
 #define INC_WIDGET
 #include "items.h"
 #include "kdlgloader.h"
+#include "../ckdevelop.h"
+#include "../cgeneratenewfile.h"
+#include "../cproject.h"
+#include "../ctabctl.h"
+
+#include <kfiledialog.h>
+#include <kprocess.h>
+#include <kconfig.h>
+#include <klocale.h>
+#include <kstddirs.h>
+#include <kmessagebox.h>
+
+#include <qdir.h>
+#include <qfileinfo.h>
+#include <qdatetime.h>
+#include <qdialog.h>
+#include <qmessagebox.h>
+#include <qstring.h>
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
@@ -149,7 +156,7 @@ bool KDlgEdit::slotFileClose(){
   if (dialog_file == "") return true;
   int result = 1;
   if(((CKDevelop*)parent())->kdlg_get_edit_widget()->isModified()){
-    result = KMsgBox::yesNoCancel(0,i18n("Question"),i18n("You have modified the current dialog\nDo you want to save it?"));
+    result = KMessageBox::warningYesNoCancel(0,i18n("You have modified the current dialog\nDo you want to save it?"), i18n("Question"));
   }
   if(result == 3) return false; // cancel
   if(result == 1) { // ok
@@ -174,7 +181,7 @@ void KDlgEdit::slotFileSave(){
   }
 }
 void KDlgEdit::slotFileSaveAs(){
-  QString  name = KFileDialog::getSaveFileName("","*.kdevdlg",0);
+  QString  name = KFileDialog::getSaveFileName("","*.kdevdlg");
   if (name.isNull()){
     return;
   }
@@ -295,7 +302,7 @@ void KDlgEdit::buildGenerate(bool force_get_classname_dialog){
       ((CKDevelop*)parent())->slotFileClose();
   }
 
-  cerr << "generate";
+//  cerr << "generate";
   QFile file(prj->getProjectDir() + info.data_file);
   QTextStream stream( &file );
   if ( file.open(IO_WriteOnly) ){
@@ -607,17 +614,17 @@ void KDlgEdit::generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString 
   generateIfWidget("KColorButton","kcolorbtn.h",generateKColorButton);
   generateIfWidget("QListView","qlistview.h",generateQListView);
 #if 0
-  generateIfWidget("KCombo","kcombo.h",generateKCombo);
+  generateIfWidget("KComboBox","kcombobox.h",generateKCombo);
 #endif
   generateIfWidget("KDatePicker","kdatepik.h",generateKDatePicker);
   generateIfWidget("KDateTable","kdatetbl.h",generateKDateTable);
   generateIfWidget("KKeyButton","kkeydialog.h",generateKKeyButton);
   generateIfWidget("KLed","kled.h",generateKLed);
-  generateIfWidget("KLedLamp","kledlamp.h",generateKLedLamp);
+  generateIfWidget("KLedLamp","kled.h",generateKLedLamp);
   generateIfWidget("KProgress","kprogress.h",generateKProgress);
   generateIfWidget("KRestrictedLine","krestrictedline.h",generateKRestrictedLine);
   generateIfWidget("KSeparator","kseparator.h",generateKSeparator);
-  generateIfWidget("KTreeList","ktreelist.h",generateKTreeList);
+  generateIfWidget("KListView","klistview.h",generateKTreeList);
 
 
 #undef generateIfWidget
@@ -1118,7 +1125,7 @@ void KDlgEdit::generateKCombo(KDlgItem_Widget *wid, QTextStream *stream,QString 
 {
     KDlgPropertyBase* props = wid->getProps();
 
-    props->dumpConstruct(stream, "KCombo", _parent);
+    props->dumpConstruct(stream, "KComboBox", _parent);
     generateCommon(wid,stream,_parent);
   
     props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
@@ -1222,7 +1229,7 @@ void KDlgEdit::generateKTreeList(KDlgItem_Widget *wid, QTextStream *stream,QStri
 {
     KDlgPropertyBase* props = wid->getProps();
 
-    props->dumpConstruct(stream, "KTreeList", _parent);
+    props->dumpConstruct(stream, "KListView", _parent);
     generateCommon(wid,stream,_parent);
 }
 
@@ -1295,9 +1302,9 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
     if (!props->getPropValue("Quickhelp").isEmpty()
 	&& ( ((CKDevelop*)parent())->getProject()->isKDEProject() || ((CKDevelop*)parent())->getProject()->isKDEProject()) )
 	{
-	    if(local_includes.contains("#include <kquickhelp.h>") == 0)
-		local_includes.append("#include <kquickhelp.h>");
-	    *stream << "  KQuickHelp::add("+ props->getPropValue("VarName") +
+	    if(local_includes.contains("#include <qwhatsthis.h>") == 0)
+		local_includes.append("#include <qwhatsthis.h>");
+	    *stream << "  QWhatsThis::add("+ props->getPropValue("VarName") +
 		",i18n(\"" +props->getPropValue("Quickhelp")+ "\"));\n";
 	}
     
@@ -1387,8 +1394,8 @@ class PreviewDlg : public QDialog
                                  "you can also get the library on the KDevelop website." ));
             return;
           }
-	
-        ldr->openDialog(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg");
+
+        ldr->openDialog(locate("appdata", "~~previewdlg~~.kdevdlg"));
         wid->move(0,0);
         setGeometry(wid->geometry());
      }
@@ -1413,24 +1420,25 @@ void KDlgEdit::slotViewPreview()
   if (!((CKDevelop*)parent())->kdlg_get_edit_widget())
     return;
 
-  QDir dir(KApplication::localkdedir()+"/share/apps/");
-  dir.mkdir("kdevelop");
-  
-  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg"))
-    {
-      QMessageBox::warning(((CKDevelop*)parent())->kdlg_get_edit_widget(),i18n("Dialog editor (WYSIWYG Preview)"),
-                           i18n("Error saving temporary dialog file."));
+  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(locate("appdata", "~~previewdlg~~.kdevdlg")))
+  {
+      QMessageBox::warning(((CKDevelop*)parent())->kdlg_get_edit_widget(),
+                            i18n("Dialog editor (WYSIWYG Preview)"),
+                            i18n("Error saving temporary dialog file."));
       return;
-    }
+  }
 
   PreviewDlg dlg;
   dlg.move(100,100);
   dlg.exec();
+
 }
 void KDlgEdit::slotDeleteDialog(QString file){
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected dialog?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
+  if (KMessageBox::questionYesNo(0,
+        i18n("Do you really want to delete the selected dialog?\n        There is no way to restore it!"),
+        i18n("Warning")) != KMessageBox::Yes)
     return;
-  }
+
   slotFileCloseForceSave();
   
   ((CKDevelop*)parent())->delFileFromProject(file); // relative filename

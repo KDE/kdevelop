@@ -15,28 +15,43 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include "./kdlgedit/kdlgedit.h"
-#include <iostream.h>
 
-#include <qprogressdialog.h>
-#include <qstring.h>
-
-#include <kmsgbox.h>
-#include <kcursor.h>
-
-#include "debug.h"
+#include <qdir.h>
 #include "ckdevelop.h"
+
 #include "cclassview.h"
-#include "kswallow.h"
-#include "ctoolclass.h"
 #include "cdocbrowser.h"
-#include "doctreeview.h"
+#include "ceditwidget.h"
 #include "clogfileview.h"
 #include "crealfileview.h"
+#include "ctabctl.h"
+#include "ctoolclass.h"
+#include "debug.h"
+#include "doctreeview.h"
+#include "kswallow.h"
+#include "./dbg/brkptmanager.h"
+#include "./kdlgedit/kdlgedit.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
 
-#include "./dbg/brkptmanager.h"
+#include <kcursor.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kmenubar.h>
+#include <kmessagebox.h>
+#include <kprogress.h>
+#include <kstatusbar.h>
+#include <kstddirs.h>
+#include <krun.h>
+
+#include <qmessagebox.h>
+#include <qprogressbar.h>
+#include <qprogressdialog.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 
 void CKDevelop::addRecentProject(const char* file)
 {
@@ -48,9 +63,8 @@ void CKDevelop::addRecentProject(const char* file)
       recent_projects.insert(0,file);
     }
     recent_projects_menu->clear();
-		uint i;
-    for ( i =0 ; i < recent_projects.count(); i++){
-      recent_projects_menu->insertItem(recent_projects.at(i));
+    for ( int i =0 ; i < recent_projects.count(); i++){
+      recent_projects_menu->insertItem(recent_projects.at(i), i);
     }
 	}
 }
@@ -289,35 +303,37 @@ void CKDevelop::setMainCaption(int tab_item)
       switch(tab_item)
       {
           case BROWSER:
-	     kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
-                  break;
+	          kdev_caption=browser_widget->currentTitle()+ " - KDevelop " + version ;
+            break;
+
           case TOOLS:
-	     kdev_caption=QString(i18n("Tools")) +" - KDevelop " + version ;
-                  break;
+	          kdev_caption=QString(i18n("Tools")) +" - KDevelop " + version ;
+            break;
+
           default:
-	      kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-	      kdev_caption+= version +
+	          kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
+	          kdev_caption+= version +
 //             	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"] ";
 // reinserted again... to show which file is in the editor (including the path - maybe it differs only in the path)
 // (W. Tasin)
              	" - ["+ edit_widget->getName()+"] ";
-	      if (edit_widget->isModified())
-                  {
-                     enableCommand(ID_FILE_SAVE);
-	        kdev_caption+= "*";
-                  }
-                  else
-                  {
-                    disableCommand(ID_FILE_SAVE);
-                  }
-                  break;
+	          if (edit_widget->isModified())
+            {
+              enableCommand(ID_FILE_SAVE);
+	            kdev_caption+= "*";
+            }
+            else
+            {
+              disableCommand(ID_FILE_SAVE);
+            }
+            break;
       }
       setCaption(kdev_caption);
     }
-    else
-    {
+//    else
+//    {
         // not using KDevelop but KDlgEdit
-    }
+//    }
 }
 
 
@@ -366,11 +382,10 @@ bool CKDevelop::fileSaveAs(){
   do
   {
     if (!isUntitled(oldName))
-      name = KFileDialog::getSaveFileName(oldName,0, this,oldName);
+      name = KFileDialog::getSaveFileName(oldName,QString::null, 0,oldName);
     else
-      name = KFileDialog::getSaveFileName((const char *)
-                                          ((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
-                                          0,this,oldName);
+      name = KFileDialog::getSaveFileName(((project) ?  QString(prj->getProjectDir()+oldName) : oldName),
+                                          QString::null,0,oldName);
 
     if (name.isNull()){
     // KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
@@ -381,15 +396,16 @@ bool CKDevelop::fileSaveAs(){
 
     // check if the extension is changed and the widget or program to view must change
     if (CProject::getType(name)!=CProject::getType(edit_widget->getName()))
-      message_result = KMsgBox::yesNoCancel(this,i18n("Save as new type of document?"),
-                                                                  i18n("Do you really want to save the file\n"
-                                                                  "as another type of document?"),
-                                                                  KMsgBox::QUESTION);
+      message_result = KMessageBox::warningYesNoCancel(this,
+                            i18n("Do you really want to save the file\nas another type of document?"),
+                            i18n("Save as new type of document?"));
+
     if(message_result==1 && QFile::exists(name))
     {
-      message_result=KMsgBox::yesNoCancel(this,i18n("File exists!"),
-                    QString(i18n("\nThe file\n\n"))+name+
-		i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"));
+      message_result=KMessageBox::warningYesNoCancel(this,
+                        i18n("\nThe file\n\n")+name+
+                            i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"),
+                        i18n("File exists!"));
     }
     
   } while (message_result == 2); // repeat it on 'no'
@@ -445,10 +461,10 @@ bool CKDevelop::fileSaveAs(){
           removeFileFromEditlist(oldName);
       }
     }
-	QStrList lToRefresh;
-	lToRefresh.append(oldName);
-	lToRefresh.append(name);
-	refreshTrees(&lToRefresh);
+	  QStrList lToRefresh;
+	  lToRefresh.append(oldName);
+	  lToRefresh.append(name);
+	  refreshTrees(&lToRefresh);
 //    slotViewRefresh();
   }
 
@@ -536,7 +552,7 @@ void CKDevelop::refreshClassViewByFileList(QStrList *iFileList)
 void CKDevelop::refreshTrees(QStrList * iFileList){
 //	time_t lStart = time(NULL);
 //	clock_t lStartClock = clock();
-  kapp->processEvents();
+  kapp->processEvents(100);
   doc_tree->refresh(prj);
   if (!project){
     return; // no project
@@ -548,13 +564,13 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
   statProg->show();
   if (iFileList)
   {
-        refreshClassViewByFileList(iFileList);
+    refreshClassViewByFileList(iFileList);
 	}
 	else
 	{
 //		time_t lStart = time(NULL);
 //		clock_t lStartClock = clock();
-    kapp->processEvents();
+    kapp->processEvents(100);
 		class_tree->refresh(prj);
 //		cout << "refresh classview took " << (time(NULL) - lStart) << "ms to complete" << endl;
 // 	 	cout << "refresh classview took " << (clock() - lStartClock) << "clocktick to complete" << endl;
@@ -562,26 +578,26 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
 	}
 
   statProg->reset();
-  statProg->hide();
+//  statProg->hide();
 
   // Update the classcombo.
-  kapp->processEvents();
+  kapp->processEvents(100);
   CVRefreshClassCombo();
 
   // Update LFV.
-  kapp->processEvents();
+  kapp->processEvents(100);
   log_file_tree->storeState(prj);
-  kapp->processEvents();
+  kapp->processEvents(100);
   log_file_tree->refresh(prj);
 
   // Update RFV.
-  kapp->processEvents();
+  kapp->processEvents(100);
   real_file_tree->refresh(prj);
 
-  kapp->processEvents();
+  kapp->processEvents(100);
   kdlg_dialogs_view->refresh(prj);
 
-  kdev_statusbar->repaint();
+  statusBar()->repaint();
   setCursor(KCursor::arrowCursor());	
   // update the file_open_menu
   file_open_list=prj->getHeaders();
@@ -618,7 +634,7 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 {
   if( project )
     {
-      kapp->processEvents();
+      kapp->processEvents(100);
       // If this is a sourcefile we parse it and update the classview.
       if( info->type == CPP_SOURCE || info->type == CPP_HEADER )
 			{
@@ -627,15 +643,15 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 			}
       
       // Update LFV.
-      kapp->processEvents();
+      kapp->processEvents(100);
       log_file_tree->storeState(prj);
       log_file_tree->refresh(prj);
       
       // Update RFV.
-      kapp->processEvents();
+      kapp->processEvents(100);
       real_file_tree->refresh(prj);
       // update dialogs tree
-      kapp->processEvents();
+      kapp->processEvents(100);
       kdlg_dialogs_view->refresh(prj);
       
     }
@@ -671,23 +687,23 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   lastfile = edit_widget->getName();
   lasttab = s_tab_view->getCurrentTab();
 
-  TEditInfo* info;
-  TEditInfo* actual_info;
-
+  QFileInfo fileInfo(filename);
   // check if the file exists
-  if(!QFile::exists(filename) && !isUntitled(filename)){
-    KMsgBox::message(this,i18n("Attention"), filename +i18n("\n\nFile does not exist!"));
+  if(!fileInfo.exists() && !isUntitled(filename)){
+    KMessageBox::error(this, filename +i18n("\n\nFile does not exist!"));
     return;
   }
 
-  if(filename.right(8) == ".kdevdlg"){
+  QString ext = fileInfo.extension();
+
+  if (ext == "kdevdlg"){
     switchToKDlgEdit();
     kdlgedit->slotOpenDialog(filename);
     return;
   }
 
   // Load QtDesigner if clicked/loaded an User Interface file (.ui)
-  if( filename.right(3) == ".ui") {
+  if ( ext == "ui") {
     if(!CToolClass::searchProgram("designer")){
       return;
     }
@@ -707,7 +723,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   // load kiconedit if clicked/loaded  an icon
-  if( filename.right(4) == ".xpm" || filename.right(4) == ".png" ){
+  if( ext == "xpm" || ext == "png" ){
     if(!CToolClass::searchProgram("kiconedit")){
       return;
     }
@@ -721,7 +737,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   // Load Qt linguist if the filename is a ts file
-  if( filename.right(3) == ".ts") {
+  if( ext == "ts") {
     if(!CToolClass::searchProgram("linguist")){
       return;
     }
@@ -735,7 +751,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   // Load Qt linguist if the filename is a ts file
-  if( filename.right(3) == ".po") {
+  if( ext == "po") {
     if(CToolClass::searchInstProgram("kbabel")){
    		KProcess linguist_process;
    		linguist_process << "kbabel" << filename;
@@ -747,7 +763,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   //load ktranslator if clicked/loaded an po file
-  if((filename).right(3) == ".po"){
+  if(ext == "po"){
     if(CToolClass::searchInstProgram("ktranslator")){
     showOutputView(false);
     s_tab_view->setCurrentTab(TOOLS);
@@ -760,8 +776,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   }
 
   //load kpaint for graphics files
-  if((filename).right(4) == ".gif" || (filename).right(4) == ".bmp" || (filename).right(4) == ".xbm"||
-	filename.right(4) == ".gif" || filename.right(4) == ".jpg"){
+  if(ext == "gif" || ext == "bmp" || ext == "xbm"|| ext == "jpg"){
     bool gimp=true;
     if(!CToolClass::searchInstProgram("gimp")){
       if(!CToolClass::searchInstProgram("kpaint"))
@@ -780,7 +795,7 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
     return;
   }
 
-  if((filename).right(3) == ".ps"){
+  if(ext == "ps"){
     if(!CToolClass::searchInstProgram("kghostview")){
 			return;
 		}
@@ -796,35 +811,41 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
     edit_widget = cpp_widget;
-//    s_tab_view->setCurrentTab(CPP);
-    
+
     if(build_menu->isItemEnabled(ID_BUILD_MAKE))			
       enableCommand(ID_BUILD_COMPILE_FILE);
   }
-  else{
+  else
+  {
     edit_widget = header_widget;
-//    s_tab_view->setCurrentTab(HEADER);
     disableCommand(ID_BUILD_COMPILE_FILE);
   }
-  
-  // search the current file which would be changed
-  
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    if (actual_info->filename == edit_widget->getName() ){
+
+  TEditInfo* info;
+  TEditInfo* actual_info;
+
+  // We need to look in the list of "open" files for the file that
+  // is currently held in the edit_widget. This file needs to
+  // be taken out of the editor_widget and stored, so that we can
+  // reuse the edit_widget for the new file.
+  for (actual_info=edit_infos.first(); actual_info != 0; actual_info=edit_infos.next())
+  {
+    if (actual_info->filename == edit_widget->getName())
       break;
-    }
-  }
-  
-  if(actual_info == 0){
-//    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
   }
 
+  // Make sure that we found the file in the editor_widget in our list
+  // If we haven't then this should be fatal.
+  if(actual_info == 0)
+    return;
 
   // handle file if it was modified on disk by another editor/cvs
   QFileInfo file_info(edit_widget->getName());
-
-  if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox){
-    if(QMessageBox::warning(this,i18n("File modified"),i18n("The file ") + edit_widget->getName() +i18n(" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?"),i18n("&Yes"),i18n("&No"))==0){
+  if((file_info.lastModified() != actual_info->last_modified )&& bShowModifiedBox)
+  {
+    if(KMessageBox::questionYesNo(this, i18n("The file ") + edit_widget->getName() +
+                                          i18n(" was modified outside this editor.\nOpen the file from disk and delete the current Buffer?"),
+                                        i18n("File modified"))==KMessageBox::Yes){
       bForceReload = true;
       actual_info->last_modified = file_info.lastModified();
     }
@@ -850,18 +871,19 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   // output_widget->append("auszuwechseldes file:" + actual_info->filename);
 
   // already in the list ?
-  for(info=edit_infos.first();info != 0;info=edit_infos.next()){
-    if (info->filename == filename ) { // if found in list
-      
-      //      cerr << "******already****\n" << info->text << "**************\n";
+  for(info=edit_infos.first();info != 0;info=edit_infos.next())
+  {
+     // if found in list
+    if (info->filename == filename )
+    {
       if (bForceReload)
       {
-	  QFileInfo fileinfo(filename);
-               edit_widget->clear();
-               edit_widget->loadFile(filename,1);
-               info->modified=false;
-               info->cursor_line=info->cursor_col=0;
-               info->text = edit_widget->text();
+        QFileInfo fileinfo(filename);
+        edit_widget->clear();
+        edit_widget->loadFile(filename,1);
+        info->modified=false;
+        info->cursor_line=info->cursor_col=0;
+        info->text = edit_widget->text();
       }
       else
       {
@@ -872,10 +894,9 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
       edit_widget->toggleModified(info->modified);
       edit_widget->setCursorPosition(info->cursor_line,info->cursor_col);
 
-      //      output_widget->append ("File: was was already there");
-      //      setMainCaption();  is handled by setCurrentTab()
       s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
       edit_widget->setFocus();
+
       // Need to get the breakpoints displayed in this file (if any)
 			if (brkptManager)
 	      brkptManager->refreshBP(filename);
@@ -904,9 +925,9 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
 //  edit_widget->setFocus();
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
-  //      setMainCaption();  is handled by setCurrentTab()
   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
   edit_widget->setFocus();
+
   // Need to get the breakpoints displayed in this file (if any)
 	if (brkptManager)
 	  brkptManager->refreshBP(filename);
@@ -928,53 +949,53 @@ void CKDevelop::switchToKDevelop(){
 
   //////// change the mainview ////////
   kdlg_tabctl->hide();
-  kdlg_top_panner->hide();
+  kdlgTopSplitter->hide();
   s_tab_view->show();
   t_tab_view->show();
 
-  top_panner->hide();
-  top_panner->deactivate();
-  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  top_panner->show();
+  topSplitter->hide();
+#warning FIXME QSplitter methods does not map to qt2 QSplitter
+//  topSplitter->deactivate();
+//  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
+  topSplitter->show();
   //////// change the bars ///////////
   kdlg_menubar->hide();
   kdev_menubar->show();
-  setMenu(kdev_menubar);
-
-  kdlg_statusbar->hide();
-  kdev_statusbar->show();
-  setStatusBar(kdev_statusbar);
+//  setMenu(kdev_menubar);
 
   toolBar(ID_KDLG_TOOLBAR)->hide();
   toolBar()->show();
   toolBar(ID_BROWSER_TOOLBAR)->show();
 
-  // this toolbar toogle is for placing the panner devider correctly
-  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
-  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
+  // this toolbar toogle is for placing the qsplitter devider correctly
+//  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
+//  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
 
 	setKeyAccel();  // initialize Keys
   ///////// reset bar status ////////////
-  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-    kdev_statusbar->show();
-  else
-    kdev_statusbar->hide();
+
+  initStatusBar();
+//  if(view_menu->isItemChecked(ID_VIEW_STATUSBAR))
+//    kdev_statusbar->show();
+//  else
+//    kdev_statusbar->hide();
 
   if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
-    enableToolBar(KToolBar::Show);
+    toolBar()->show();
   else
-    enableToolBar(KToolBar::Hide);
+    toolBar()->hide();
 
   if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
-    enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
+    toolBar(ID_BROWSER_TOOLBAR)->show();
   else
-    enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
+    toolBar(ID_BROWSER_TOOLBAR)->hide();
 
   ///////// reset the views status ///////////////
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
     showTreeView();
   else
     showTreeView(false);
+
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
     showOutputView();
   else
@@ -984,84 +1005,89 @@ void CKDevelop::switchToKDevelop(){
   repaint();
 
 }
-void CKDevelop::switchToKDlgEdit(){
-//   KConfig *config = kapp->getConfig();  
+void CKDevelop::switchToKDlgEdit()
+{
+	KShellProcess designer_process("/bin/sh");
+	const QString oldGroup = config->group();
+	config->setGroup("QT2");
+	QString qt2dir = QString ("QTDIR=")+ config->readEntry("qt2dir",getenv("QTDIR")) +" ";
+	config->setGroup(oldGroup);
+	designer_process << qt2dir << "designer";
+	if(!designer_process.start(KProcess::DontCare)) {
+  	debug("QtDesigner didn't start!");
+	}
+  return;
 
-  config->setGroup("KDlgEdit");
-  if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")
-    {
-      KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);
-      readmedlg->exec();
+	
+//   KConfig *config = KGlobal::config();
 
-      if (!readmedlg->isShowAgain())
-        config->writeEntry("KDlgEdit_ShowReadme","false");
-
-      delete readmedlg;
-    }
-
-
-  kdev_caption = caption();
-  setCaption(kdlg_caption);
-  bKDevelop=false;
-  setUpdatesEnabled(false);
-  //////// change the mainview ////////
-  s_tab_view->hide();
-  t_tab_view->hide();
-  kdlg_tabctl->show();
-  kdlg_top_panner->show();
-
-  top_panner->hide();
-  top_panner->deactivate();
-  top_panner->activate(kdlg_tabctl,kdlg_top_panner);// activate the top_panner
-  top_panner->show();
-
-  //////// change the bars ///////////
-  kdev_menubar->hide();
-  kdlg_menubar->show();
-  setMenu(kdlg_menubar);
-
-  kdev_statusbar->hide();
-  kdlg_statusbar->show();
-  setStatusBar(kdlg_statusbar);
-
-  toolBar()->hide();
-  toolBar(ID_BROWSER_TOOLBAR)->hide();
-  toolBar(ID_KDLG_TOOLBAR)->show();
-
-  ///////// reset bar status ////////////
-  if(kdlg_view_menu->isItemChecked(ID_VIEW_STATUSBAR))
-    kdlg_statusbar->show();
-  else
-    kdlg_statusbar->hide();
-
-  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR))
-    enableToolBar(KToolBar::Show, ID_KDLG_TOOLBAR);
-  else
-    enableToolBar(KToolBar::Hide, ID_KDLG_TOOLBAR);
-
-  setKeyAccel();  // initialize Keys
-
-  // this toolbar toogle is for placing the panner devider correctly
-  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
-  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
-
-  ///////// reset the views status ///////////////
-  if(kdlg_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-    showTreeView();
-  else
-    showTreeView(false);
-
-  if(kdlg_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
-    showOutputView();
-  else
-    showOutputView(false);
-  
-  if(!kdlg_tabctl->isTabEnabled("widgets_view")){
-    kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
-  }
-  kdlg_tabctl->setFocus();
-  setUpdatesEnabled(true);
-  repaint();
+//  config->setGroup("KDlgEdit");
+//  if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")
+//    {
+//      KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);
+//      readmedlg->exec();
+//
+//      if (!readmedlg->isShowAgain())
+//        config->writeEntry("KDlgEdit_ShowReadme","false");
+//
+//      delete readmedlg;
+//    }
+//
+//
+//  kdev_caption = caption();
+//  setCaption(kdlg_caption);
+//  bKDevelop=false;
+//  setUpdatesEnabled(false);
+//  //////// change the mainview ////////
+//  s_tab_view->hide();
+//  t_tab_view->hide();
+//  kdlg_tabctl->show();
+//  kdlgTopSplitter->show();
+//
+//  topSplitter->hide();
+////  topSplitter->deactivate();
+////  topSplitter->activate(kdlg_tabctl,kdlgTopSplitter);// activate the topSplitter
+//  topSplitter->show();
+//
+//  //////// change the bars ///////////
+//  kdev_menubar->hide();
+//  kdlg_menubar->show();
+////  setMenu(kdlg_menubar);
+//
+//  initStatusBar();
+//
+//  toolBar()->hide();
+//  toolBar(ID_BROWSER_TOOLBAR)->hide();
+//  toolBar(ID_KDLG_TOOLBAR)->show();
+//
+//  if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR))
+//    toolBar(ID_KDLG_TOOLBAR)->show();
+//  else
+//    toolBar(ID_KDLG_TOOLBAR)->hide();
+//
+//  setKeyAccel();  // initialize Keys
+//
+//  // this toolbar toogle is for placing the qsplitter devider correctly
+////  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
+////  enableToolBar(KToolBar::Toggle, ID_KDLG_TOOLBAR);
+//
+//  ///////// reset the views status ///////////////
+//  if(kdlg_view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+//    showTreeView();
+//  else
+//    showTreeView(false);
+//
+//  if(kdlg_view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
+//    showOutputView();
+//  else
+//    showOutputView(false);
+//
+//  if(!kdlg_tabctl->isTabEnabled("widgets_view")){
+//    kdlg_tabctl->setCurrentTab(1); // set Dialogs enabled if no dialog was choosen
+//  }
+//  kdlg_tabctl->setFocus();
+//  setUpdatesEnabled(true);
+//  repaint();
 }
 
 void CKDevelop::setToolMenuProcess(bool enable){
@@ -1170,7 +1196,7 @@ void CKDevelop::switchToWorkspace(int id){
     showOutputView(true);
   }
   else{showOutputView(false);}
-  
+
   if(ws.show_treeview){
     showTreeView(true);
   }
@@ -1218,7 +1244,8 @@ void CKDevelop::showOutputView(bool show){
     }
   }
 }
-void CKDevelop::readOptions(){
+void CKDevelop::readOptions()
+{
   config->setGroup("General Options");
 
 	/////////////////////////////////////////
@@ -1231,88 +1258,87 @@ void CKDevelop::readOptions(){
 
 	/////////////////////////////////////////
 	// BAR STATUS
-	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
-	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
-	KMenuBar::menuPosition kdlg_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDlgEdit MenuBar Position", KMenuBar::Top);
-	kdev_menubar->setMenuBarPos(kdlg_menu_bar_pos);
-
+#warning FIXME menubars
+//	KMenuBar::menuPosition kdev_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDevelop MenuBar Position", KMenuBar::Top);
+//	kdev_menubar->setMenuBarPos(kdev_menu_bar_pos);
+//	KMenuBar::menuPosition kdlg_menu_bar_pos=(KMenuBar::menuPosition)config->readNumEntry("KDlgEdit MenuBar Position", KMenuBar::Top);
+//	kdev_menubar->setMenuBarPos(kdlg_menu_bar_pos);
 
   KToolBar::BarPosition tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("ToolBar Position", KToolBar::Top);
   toolBar()->setBarPos(tool_bar_pos);
-	bool std_toolbar=	config->readBoolEntry("show_std_toolbar", true);
-	if(std_toolbar){
-	  view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
-    enableToolBar(KToolBar::Show,0);
+  bool std_toolbar=	config->readBoolEntry("show_std_toolbar", true);
+  if(std_toolbar){
+    view_menu->setItemChecked(ID_VIEW_TOOLBAR, true);
+    toolBar()->show();
   }
-  else{
-    enableToolBar(KToolBar::Hide,0);
-  }
-	// Browser Toolbar
+  else
+    toolBar()->hide();
+
+  // Browser Toolbar
   KToolBar::BarPosition browser_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("Browser ToolBar Position", KToolBar::Top);
   toolBar(ID_BROWSER_TOOLBAR)->setBarPos(browser_tool_bar_pos);
-	bool browser_toolbar=config->readBoolEntry("show_browser_toolbar",true);
-	if(browser_toolbar){
-	  view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
-    enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
+  bool browser_toolbar=config->readBoolEntry("show_browser_toolbar",true);
+  if(browser_toolbar){
+    view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR, true);
+    toolBar(ID_BROWSER_TOOLBAR)->show();
   }
-  else{
-    enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
-  }
+  else
+    toolBar(ID_BROWSER_TOOLBAR)->hide();
 	
-	// Dialogedit Toolbar	
+  // Dialogedit Toolbar	
   KToolBar::BarPosition kdlg_tool_bar_pos=(KToolBar::BarPosition)config->readNumEntry("KDlgEdit ToolBar Position", KToolBar::Top);
   toolBar(ID_KDLG_TOOLBAR)->setBarPos(kdlg_tool_bar_pos);
 	bool kdlg_toolbar=config->readBoolEntry("show_kdlg_toolbar", true);
-  if(kdlg_toolbar){
-		kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
-    enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
+  if(kdlg_toolbar)
+  {
+    kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
+    toolBar(ID_KDLG_TOOLBAR)->show();
   }
   else{
-    enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
+    toolBar(ID_KDLG_TOOLBAR)->hide();
   }
 	// Statusbar
 	bool statusbar=config->readBoolEntry("show_statusbar",true);
-	if(statusbar){
-	  view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
+	if (statusbar)
+	{
+    view_menu->setItemChecked(ID_VIEW_STATUSBAR, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
 	}
-	else{
-		enableStatusBar();
-	}
-	
+  initStatusBar();
+  	
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
-	view->setSeparatorPos(config->readNumEntry("view_panner_pos",80));
+//	mainSplitter->setSeparatorPos(config->readNumEntry("viewSplitter_pos",80));
 	bool outputview= config->readBoolEntry("show_output_view", true);
 	if(outputview){
 	  view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
 		toolBar()->setButton(ID_VIEW_OUTPUTVIEW, true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
-    output_view_pos=view->separatorPos();
+//    output_view_pos=mainSplitter->separatorPos();
 	}
 	else{
     output_view_pos=config->readNumEntry("output_view_pos", 80);
 	}
 	
-  top_panner->setSeparatorPos(config->readNumEntry("top_panner_pos", 263));
+//  topSplitter->setSeparatorPos(config->readNumEntry("topSplitter_pos", 263));
 	bool treeview=config->readBoolEntry("show_tree_view", true);
 	if(treeview){
 	  view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
 		toolBar()->setButton(ID_VIEW_TREEVIEW, true);
 		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
-    tree_view_pos=top_panner->separatorPos();
+//    tree_view_pos=topSplitter->separatorPos();
 	}
   else{
     tree_view_pos=config->readNumEntry("tree_view_pos", 263);
   }
 	
 
-  kdlg_top_panner->setSeparatorPos(config->readNumEntry("kdlg_top_panner_pos", 80));
+//  kdlgTopSplitter->setSeparatorPos(config->readNumEntry("kdlgTopSplitter_pos", 80));
 	if(config->readBoolEntry("show_properties_view",true)){
 	  kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
-    properties_view_pos=kdlg_top_panner->separatorPos();
+//    properties_view_pos=kdlgTopSplitter->separatorPos();
 	}	
   else{
     properties_view_pos=config->readNumEntry("properties_view_pos", 80);
@@ -1360,7 +1386,7 @@ void CKDevelop::readOptions(){
 	
 	uint i;
 	for ( i =0 ; i < recent_projects.count(); i++){
-    recent_projects_menu->insertItem(recent_projects.at(i));
+    recent_projects_menu->insertItem(recent_projects.at(i),i);
   }
 
 	doc_bookmarks_list.setAutoDelete(TRUE);
@@ -1369,7 +1395,7 @@ void CKDevelop::readOptions(){
 	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
 	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
 	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
-    doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
+    doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
   }
 	
   QString filename;
@@ -1377,42 +1403,41 @@ void CKDevelop::readOptions(){
   if(!filename.isEmpty()){
     slotURLSelected(browser_widget,filename,1,"test");
   }
-  else{
-    QString strpath = KApplication::kde_htmldir().copy() + "/";
-    QString file;
+  else
+  {
     // first try the locale setting
-    file = strpath + klocale->language() + '/' + "kdevelop/welcome/index.html";
+    QString file = locate("html", KGlobal::locale()->language() + "/kdevelop/welcome/index.html");
 
-    if( !QFileInfo( file ).exists() ){
-      // not found: use the default
-      file = strpath + "default/" + "kdevelop/welcome/index.html";
-    }
-    slotURLSelected(browser_widget, file,1,"test");
+    // not found: use the default
+    if( file.isEmpty() )
+      file = locate("html", "default/kdevelop/welcome/index.html");
+
+    if( !file.isEmpty() )
+      slotURLSelected(browser_widget, file,1,"test");
   }
 
   bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
-  if(switchKDevelop){
+  if(switchKDevelop)
     switchToKDevelop();
-  }
-  else{
+  else
     switchToKDlgEdit();
-  }
 }
 
 void CKDevelop::saveOptions(){
 	
   config->setGroup("General Options");
   config->writeEntry("Geometry", size() );
-  
-  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
-  config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
+
+#warning FIXME save options
+//  config->writeEntry("KDevelop MenuBar Position", (int)kdev_menubar->menuBarPos());
+//  config->writeEntry("KDlgEdit MenuBar Position", (int)kdlg_menubar->menuBarPos());
   config->writeEntry("ToolBar Position",  (int)toolBar()->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
   config->writeEntry("KDlgEdit ToolBar Position", (int)toolBar(ID_KDLG_TOOLBAR)->barPos());
-  
-  config->writeEntry("view_panner_pos",view->separatorPos());
-  config->writeEntry("top_panner_pos",top_panner->separatorPos());
-  config->writeEntry("kdlg_top_panner_pos",kdlg_top_panner->separatorPos());
+
+//  config->writeEntry("mainSplitterPos",mainSplitter->separatorPos());
+//  config->writeEntry("topSplitterPos",topSplitter->separatorPos());
+//  config->writeEntry("kdlgTopSplitterPos",kdlgTopSplitter->separatorPos());
 
   config->writeEntry("tree_view_pos",tree_view_pos);
   config->writeEntry("output_view_pos",output_view_pos);
@@ -1474,7 +1499,7 @@ bool CKDevelop::queryClose(){
   }
   else{
     TEditInfo* actual_info;
-    int message_result=1;
+    int message_result=KMessageBox::Yes;
     int save=true;
 
     config->writeEntry("project_file","");
@@ -1491,12 +1516,11 @@ bool CKDevelop::queryClose(){
 
     if (!save)
     {
-      message_result = KMsgBox::yesNo(this,i18n("Exit KDevelop"),
-                                         i18n("There is unsaved data.\n"
-					      "Do you really want to quit?"),
-                                         KMsgBox::QUESTION);
+      message_result = KMessageBox::questionYesNo(this,
+                            i18n("There is unsaved data.\nDo you really want to quit?"),
+                            i18n("Exit KDevelop"));
     }
-    return message_result==1;
+    return (message_result==KMessageBox::Yes);
   }
   return true;
 }
@@ -1508,7 +1532,8 @@ void CKDevelop::readProperties(KConfig* sess_config){
   QFile file(filename);
   if (file.exists()){
     if(!(readProjectFile(filename))){
-      KMsgBox::message(0,filename,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"));
+      KMessageBox::error(0,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"),
+                            filename);
       refreshTrees();
     }
     else{
@@ -1556,7 +1581,7 @@ void CKDevelop::saveProperties(KConfig* sess_config){
     TEditInfo* info;
     for(info=edit_infos.first();info != 0;info=edit_infos.next()){
       if(info->modified){
-	setUnsavedData ( true );
+#warning FIXME missing method	setUnsavedData ( true );
 	break;
       }
     }

@@ -17,23 +17,27 @@
 
 
 #include "kdlgwidgets.h"
-#include <kapp.h>
+//#include <kapp.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
 #include "../ckdevelop.h"
 #include "kdlgeditwidget.h"
 #include <qtooltip.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kstddirs.h>
 
 #define btnsize 34
 
 
-KDlgWidgets::KDlgWidgets(CKDevelop *parCKD, QWidget *parent, const char *name ) : QWidget(parent,name)
+KDlgWidgets::KDlgWidgets(CKDevelop *parCKD, QWidget *parent, const char *name ) :
+  QWidget(parent,name)
 {
   pCKDevel = parCKD;
   scrview = new myScrollView(this);
 
-  KQuickHelp::add(scrview->viewport(),
+  QWhatsThis::add(scrview->viewport(),
     i18n("<brown><b>\"Widgets\" tab<black></b>\n\n"
          "In this tab you will find all items\n"
          "you can add to the dialog. They are\n"
@@ -154,7 +158,7 @@ void KDlgWidgets::clicked_QListView()
 #if 0
 void KDlgWidgets::clicked_KCombo()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KCombo");
+  pCKDevel->kdlg_get_edit_widget()->addItem("KComboBox");
 }
 #endif
 void KDlgWidgets::clicked_KDatePicker()
@@ -197,7 +201,7 @@ void KDlgWidgets::clicked_KRestrictedLine()
 
 void KDlgWidgets::clicked_KTreeList()
 {
-  pCKDevel->kdlg_get_edit_widget()->addItem("KTreeList");
+  pCKDevel->kdlg_get_edit_widget()->addItem("KListView");
 }
 
 void KDlgWidgets::clicked_KSeparator()
@@ -235,11 +239,12 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   bool kdebtn = false;
 
   #define macroAddButton(fn, wd, mt, ht) \
-    addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd, kdebtn); \
+    addButton(QPixmap(BarIcon(fn)), wd, kdebtn); \
     connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt())); \
-    KQuickHelp::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht)); \
+    QWhatsThis::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht)); \
   QToolTip::add(buttons[btnsCount-1],QString(wd));
-  macroAddButton("kdlg_QWidget.xpm",        "QWidget",         clicked_QWidget        ,i18n(
+
+  macroAddButton("kdlg_QWidget",        "QWidget",         clicked_QWidget        ,i18n(
                  "This will insert a QWidget to the dialog.\n"
                  "Such an item may have several children items\n"
                  "or even more QWidgets as children. That means\n"
@@ -249,36 +254,36 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
                  "are widgets like the tab view which need several\n"
                  "widgets they can bring to the top."));
 
-  macroAddButton("kdlg_QLabel.xpm",         "QLabel",          clicked_QLabel         ,i18n("A QLabel can be used in order to display\nsome text or pixmap information in the dialog."));
-  macroAddButton("kdlg_QPushButton.xpm",    "QPushButton",     clicked_QPushButton    ,i18n("This is the normal button often used in\ndialogs (i.e. the \"Ok\"-Button)."));
-  macroAddButton("kdlg_QCheckBox.xpm",      "QCheckBox",       clicked_QCheckBox      ,i18n("Enables the user to (de-)select some settings."));
-  macroAddButton("kdlg_QRadioButton.xpm",   "QRadioButton",    clicked_QRadioButton   ,i18n("Lets the user choose between several options."));
-  macroAddButton("kdlg_QComboBox.xpm",      "QComboBox",       clicked_QComboBox      ,i18n("A combo box lets the user set a value by selecting\nit from a drop-down menu or by inserting the value,\nif the box is write enabled"));
-  macroAddButton("kdlg_QSpinBox.xpm",      "QSpinBox",       clicked_QSpinBox      ,i18n("Allows choosing numeric values by up-\nand down buttons or insertion if write enabled."));
-  macroAddButton("kdlg_QListBox.xpm",      "QListBox",       clicked_QListBox      ,i18n("Provides a single-column list of items that can be scrolled."));
-  macroAddButton("kdlg_QGroupBox.xpm",      "QGroupBox",       clicked_QGroupBox      ,i18n("Provides a groupbox frame with title to indicate that\nchild widgets within the box belong together."));
-  macroAddButton("kdlg_QButtonGroup.xpm",   "QButtonGroup",    clicked_QButtonGroup   ,i18n("Provides a buttongroup frame with title to indicate that\nchild widgets within the box belong together."));	// da
-  macroAddButton("kdlg_QLineEdit.xpm",      "QLineEdit",       clicked_QLineEdit      ,i18n("Inserts a text field giving the user the\npossibility to enter of change a text."));
-  macroAddButton("kdlg_QMultiLineEdit.xpm",      "QMultiLineEdit",       clicked_QMultiLineEdit      ,i18n("Offers a multi-line editor."));
-  macroAddButton("kdlg_QScrollBar.xpm",      "QScrollBar",       clicked_QScrollBar      ,i18n("Indicates the range of a value and sets the current value\nby a slider as well as up- and down buttons; often used\nfor widgets whose contents is larger than the acutally visible\nview area. By using the scrollbar, the visible area\ncan be changed to another part of the widgets' contents."));
-  macroAddButton("kdlg_QSlider.xpm",      "QSlider",       clicked_QSlider      ,i18n("Sets a value in a program-defined range by a slider."));
-  macroAddButton("kdlg_QProgressBar.xpm",      "QProgressBar",       clicked_QProgressBar      ,i18n("Displays the progress of an action that takes a longer time to be finished."));
-  macroAddButton("kdlg_QLCDNumer.xpm",      "QLCDNumber",      clicked_QLCDNumber     ,i18n("Displays a number in the style of LC-displays\noften used in clocks."));
-  macroAddButton("kdlg_QListView.xpm",     "QListView",      clicked_QListView     ,i18n("A list view lets your application display a multi-column list or tree."));
+  macroAddButton("kdlg_QLabel",         "QLabel",           clicked_QLabel,           i18n("A QLabel can be used in order to display\nsome text or pixmap information in the dialog."));
+  macroAddButton("kdlg_QPushButton",    "QPushButton",      clicked_QPushButton,      i18n("This is the normal button often used in\ndialogs (i.e. the \"Ok\"-Button)."));
+  macroAddButton("kdlg_QCheckBox",      "QCheckBox",        clicked_QCheckBox,        i18n("Enables the user to (de-)select some settings."));
+  macroAddButton("kdlg_QRadioButton",   "QRadioButton",     clicked_QRadioButton,     i18n("Lets the user choose between several options."));
+  macroAddButton("kdlg_QComboBox",      "QComboBox",        clicked_QComboBox,        i18n("A combo box lets the user set a value by selecting\nit from a drop-down menu or by inserting the value,\nif the box is write enabled"));
+  macroAddButton("kdlg_QSpinBox",       "QSpinBox",         clicked_QSpinBox,         i18n("Allows choosing numeric values by up-\nand down buttons or insertion if write enabled."));
+  macroAddButton("kdlg_QListBox",       "QListBox",         clicked_QListBox,         i18n("Provides a single-column list of items that can be scrolled."));
+  macroAddButton("kdlg_QGroupBox",      "QGroupBox",        clicked_QGroupBox,        i18n("Provides a groupbox frame with title to indicate that\nchild widgets within the box belong together."));
+  macroAddButton("kdlg_QButtonGroup",   "QButtonGroup",     clicked_QButtonGroup,     i18n("Provides a buttongroup frame with title to indicate that\nchild widgets within the box belong together."));	// da
+  macroAddButton("kdlg_QLineEdit",      "QLineEdit",        clicked_QLineEdit,        i18n("Inserts a text field giving the user the\npossibility to enter of change a text."));
+  macroAddButton("kdlg_QMultiLineEdit", "QMultiLineEdit",   clicked_QMultiLineEdit,   i18n("Offers a multi-line editor."));
+  macroAddButton("kdlg_QScrollBar",     "QScrollBar",       clicked_QScrollBar,       i18n("Indicates the range of a value and sets the current value\nby a slider as well as up- and down buttons; often used\nfor widgets whose contents is larger than the acutally visible\nview area. By using the scrollbar, the visible area\ncan be changed to another part of the widgets' contents."));
+  macroAddButton("kdlg_QSlider",        "QSlider",          clicked_QSlider,          i18n("Sets a value in a program-defined range by a slider."));
+  macroAddButton("kdlg_QProgressBar",   "QProgressBar",     clicked_QProgressBar,     i18n("Displays the progress of an action that takes a longer time to be finished."));
+  macroAddButton("kdlg_QLCDNumer",      "QLCDNumber",       clicked_QLCDNumber,       i18n("Displays a number in the style of LC-displays\noften used in clocks."));
+  macroAddButton("kdlg_QListView",      "QListView",        clicked_QListView,        i18n("A list view lets your application display a multi-column list or tree."));
   kdebtn = true;
-  macroAddButton("kdlg_KSeparator.xpm",       "KSeparator",    clicked_KSeparator     ,i18n("'KSeparator' is a small class to provide a identically look of horizontal or vertical lines in all KDE applications."));
+  macroAddButton("kdlg_KSeparator",     "KSeparator",       clicked_KSeparator,       i18n("'KSeparator' is a small class to provide a identically look of horizontal or vertical lines in all KDE applications."));
 #if 0
-  macroAddButton("kdlg_KCombo.xpm",     "KCombo",      clicked_KCombo     ,i18n("Just like QComboBox."));
+  macroAddButton("kdlg_KCombo",         "KComboBox",        clicked_KCombo,           i18n("Just like QComboBox."));
 #endif
-  macroAddButton("kdlg_KColorButton.xpm",     "KColorButton",  clicked_KColorButton   ,i18n("This is a button displaying the selected color."));
-  macroAddButton("kdlg_KKeyButton.xpm",       "KKeyButton",    clicked_KKeyButton     ,i18n("A push button that looks like a keyboard key."));
-  macroAddButton("kdlg_KRestrictedLine.xpm",  "KRestrictedLine",clicked_KRestrictedLine,i18n("Restricted Editline: Only selected Characters are valid input."));
-//  macroAddButton("kdlg_KLed.xpm",             "KLed",          clicked_KLed           ,i18n("A round led widget."));
-  macroAddButton("kdlg_KProgress.xpm",        "KProgress",     clicked_KProgress      ,i18n("A Progress indicator widget."));
-  macroAddButton("kdlg_KTreeList.xpm",        "KTreeList",     clicked_KTreeList      ,i18n("A collapsible treelist widget"));
-  macroAddButton("kdlg_KLedLamp.xpm",         "KLedLamp",      clicked_KLedLamp       ,i18n("A CDE-style LED lamp widget."));
-  macroAddButton("kdlg_KDatePicker.xpm",     "KDatePicker",      clicked_KDatePicker     ,i18n("Lets the user choose a date."));
-  macroAddButton("kdlg_KDateTable.xpm",     "KDateTable",      clicked_KDateTable     ,i18n("Views a calendar in a tableview."));
+  macroAddButton("kdlg_KColorButton",   "KColorButton",     clicked_KColorButton,     i18n("This is a button displaying the selected color."));
+  macroAddButton("kdlg_KKeyButton",     "KKeyButton",       clicked_KKeyButton,       i18n("A push button that looks like a keyboard key."));
+  macroAddButton("kdlg_KRestrictedLine","KRestrictedLine",  clicked_KRestrictedLine,  i18n("Restricted Editline: Only selected Characters are valid input."));
+//  macroAddButton("kdlg_KLed",             "KLed",          clicked_KLed,            i18n("A round led widget."));
+  macroAddButton("kdlg_KProgress",      "KProgress",        clicked_KProgress,        i18n("A Progress indicator widget."));
+  macroAddButton("kdlg_KTreeList",      "KListView",        clicked_KTreeList,        i18n("A collapsible treelist widget"));
+  macroAddButton("kdlg_KLedLamp",       "KLedLamp",         clicked_KLedLamp,         i18n("A CDE-style LED lamp widget."));
+  macroAddButton("kdlg_KDatePicker",    "KDatePicker",      clicked_KDatePicker,      i18n("Lets the user choose a date."));
+  macroAddButton("kdlg_KDateTable",     "KDateTable",       clicked_KDateTable,       i18n("Views a calendar in a tableview."));
 
 
   #undef macroAddButton

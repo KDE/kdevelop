@@ -16,17 +16,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
+//#include <iostream.h>
+#include "caddexistingfiledlg.h"
+
+#include "cproject.h"
+
+#include <kfiledialog.h>
+#include <kmessagebox.h>
+#include <kapp.h>
+#include <klocale.h>
+#include <kstddirs.h>
+
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qfiledialog.h>
-#include <kfiledialog.h>
-#include <kmsgbox.h>
-#include <kapp.h>
-#include <klocale.h>
-#include "caddexistingfiledlg.h"
-#include "cproject.h"
-
+#include <qwhatsthis.h>
+#include <qwidget.h>
+#include <qdialog.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qlabel.h>
+#include <qcheckbox.h>
+#include <qstringlist.h>
 
 CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProject* p_prj ) : QDialog(parent,name,true) {
 
@@ -66,8 +77,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   source_button->setBackgroundMode( QWidget::PaletteBackground );
   source_button->setFontPropagation( QWidget::NoChildren );
   source_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix(BarIcon("open"));
   source_button->setPixmap(pix);
   source_button->setAutoRepeat( FALSE );
   source_button->setAutoResize( FALSE );
@@ -109,16 +119,16 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   destination_button->setAutoRepeat( FALSE );
   destination_button->setAutoResize( FALSE );
   
+  QString sourceMsg = i18n("Select the source files to be added\nto the project here.");
+  QWhatsThis::add(source_edit, sourceMsg);
+  QWhatsThis::add(source_label, sourceMsg);
+  QWhatsThis::add(source_button, sourceMsg);
 
-  KQuickHelp::add(source_edit,
-  KQuickHelp::add(source_label,
-  KQuickHelp::add(source_button, i18n("Select the source files to be added\n"
-				"to the project here."))));
-
-  KQuickHelp::add(destination_edit,
-  KQuickHelp::add(destination_label,
-  KQuickHelp::add(destination_button, i18n("Select the directory where the new\n"
-					"source files will be copied to here."))));
+  QString destinationMsg = i18n("Select the directory where the new\n"
+                                "source files will be copied to here.");
+  QWhatsThis::add(destination_edit, destinationMsg);
+  QWhatsThis::add(destination_label, destinationMsg);
+  QWhatsThis::add(destination_button, destinationMsg);
 
   template_checkbox = new QCheckBox( this, "addTemplate_checkbox");
   template_checkbox->setGeometry(20, 130, 440, 30);
@@ -132,7 +142,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   template_checkbox->setAutoRepeat( FALSE );
   template_checkbox->setAutoResize( FALSE );
   template_checkbox->setChecked( TRUE );
-  KQuickHelp::add(template_checkbox, i18n("Check this if you want to insert your template to the added files."));
+  QWhatsThis::add(template_checkbox, i18n("Check this if you want to insert your template to the added files."));
 
 
   ok_button = new QPushButton( this, "ok_button" );
@@ -173,21 +183,19 @@ CAddExistingFileDlg::~CAddExistingFileDlg(){
 }
 void CAddExistingFileDlg::sourceButtonClicked(){
  
-  QStrList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,i18n("Source File(s)...")) );
-  files.setAutoDelete(true);
+  QStringList files( QFileDialog::getOpenFileNames(0,QDir::homeDirPath(),this,i18n("Source File(s)...")) );
+//  files.setAutoDelete(true);
 
   QString comp_str;
-  if(!files.isEmpty()){
-    for(QString str=files.first();str != 0;str = files.next()){
-      comp_str = comp_str + str + ",";
-    }
+  for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it ) {
+      comp_str = comp_str + (*it) + ",";
   }
   source_edit->setText(comp_str);
   files.clear();
 
 }
 void CAddExistingFileDlg::destinationButtonClicked(){
- QString name=KDirDialog::getDirectory(destination_edit->text(),this,i18n("Destination Directory"));
+ QString name=KFileDialog::getExistingDirectory(destination_edit->text(),0,i18n("Destination Directory"));
  if(!name.isEmpty()){
     destination_edit->setText(name);
   }
@@ -199,20 +207,18 @@ void CAddExistingFileDlg::OK(){
   QString dest_name = destination_edit->text();// + source_name
 
   // if (!file_info.exists()){
-//     KMsgBox::message(this,i18n("Error..."),i18n("You must choose an existing sourcefile!")
-// 		     ,KMsgBox::EXCLAMATION);
+//     KMessageBox::message(this,i18n("Error..."),i18n("You must choose an existing sourcefile!")
+// 		     ,KMessageBox::EXCLAMATION);
 //     return;
 //   }
   if(dest_name.contains(prj->getProjectDir()) == 0 ){
-    KMsgBox::message(this,i18n("Error..."),
-		     i18n("You must choose a destination, that is in your project-dir!")
-		     ,KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,
+		     i18n("You must choose a destination, that is in your project-dir!"));
     return;
   }
   if(!dir.exists()){
-    KMsgBox::message(this,i18n("Error..."),
-		     i18n("You must choose a valid dir as a destination!")
-		     ,KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,
+		     i18n("You must choose a valid dir as a destination!"));
     return;
   }
   

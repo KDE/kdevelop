@@ -17,16 +17,18 @@
 
 #include "dbgpsdlg.h"
 
-#include <kapp.h>
+//#include <kapp.h>
 #include <kbuttonbox.h>
-#include <kwizard.h>
+#include <kdialog.h>
+#include <kglobalsettings.h>
+#include <klocale.h>
 #include <kprocess.h>
-#include <kbutton.h>
 
 #include <qframe.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlistbox.h>
+#include <qtoolbutton.h>
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -51,16 +53,16 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
 
   QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 
-  heading_->setFont(kapp->fixedFont);
+  heading_->setFont(KGlobalSettings::fixedFont());
   heading_->setFrameStyle(QFrame::Panel|QFrame::Sunken);
   heading_->setMaximumHeight(heading_->sizeHint().height());
   heading_->setMinimumSize(heading_->sizeHint());
   topLayout->addWidget(heading_, 5);
 
   topLayout->addWidget(pids_, 5);
-  pids_->setFont(kapp->fixedFont);
+  pids_->setFont(KGlobalSettings::fixedFont());
 
-  KButtonBox *buttonbox = new KButtonBox(this, KButtonBox::HORIZONTAL, 5);
+  KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal, 5);
   QPushButton *ok       = buttonbox->addButton(i18n("Ok"));
   buttonbox->addStretch();
   QPushButton *cancel   = buttonbox->addButton(i18n("Cancel"));
@@ -86,7 +88,7 @@ Dbg_PS_Dialog::Dbg_PS_Dialog(QWidget *parent, const char *name) :
   psProc_->start(KProcess::NotifyOnExit, KProcess::Stdout);
 
   // Default display to 40 chars wide, default height is okay
-  resize( ((kapp->fixedFont).pointSize())*40, height());
+  resize( ((KGlobalSettings::fixedFont()).pointSize())*40, height());
   topLayout->activate();
 }
 
@@ -113,7 +115,7 @@ int Dbg_PS_Dialog::pidSelected()
 
 void Dbg_PS_Dialog::slotReceivedOutput(KProcess */*proc*/, char *buffer, int buflen)
 {
-  pidLines_ += QString(buffer, buflen+1);
+  pidLines_ += QCString(buffer, buflen+1);
 }
 
 /***************************************************************************/

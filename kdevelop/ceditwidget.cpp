@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "ceditwidget.h"
+
 #include <iostream.h>
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/highlight.h"
@@ -48,28 +49,28 @@ HlManager hlManager; //highlight manager
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
-  : KWrite(new KWriteDoc(&hlManager),parent,name) 
+CEditWidget::CEditWidget(QWidget* parent, const char* name) :
+  KWrite(new KWriteDoc(&hlManager), parent, name)
 {  
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
   //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
-  pop->insertItem(Icon("undo.xpm"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
-  pop->insertItem(Icon("redo.xpm"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
+  pop->insertItem(BarIcon("undo"),i18n("Undo"),this,SLOT(undo()),0,ID_EDIT_UNDO);
+  pop->insertItem(BarIcon("redo"),i18n("Redo"),this,SLOT(redo()),0,ID_EDIT_REDO);
   pop->insertSeparator();
-  pop->insertItem(Icon("cut.xpm"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
-  pop->insertItem(Icon("copy.xpm"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
-  pop->insertItem(Icon("paste.xpm"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
+  pop->insertItem(BarIcon("cut"),i18n("Cut"),this,SLOT(cut()),0,ID_EDIT_CUT);
+  pop->insertItem(BarIcon("copy"),i18n("Copy"),this,SLOT(copy()),0,ID_EDIT_COPY);
+  pop->insertItem(BarIcon("paste"),i18n("Paste"),this,SLOT(paste()),0,ID_EDIT_PASTE);
   pop->setItemEnabled(ID_EDIT_CUT,false);
   pop->setItemEnabled(ID_EDIT_COPY,false);
   pop->setItemEnabled(ID_EDIT_PASTE,false);
   pop->insertSeparator();
-  pop->insertItem(Icon("grep.xpm"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
-  pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
+  pop->insertItem(BarIcon("grep"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
+  pop->insertItem(BarIcon("lookup"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
 //  bookmarks.setAutoDelete(true);
   pop->insertSeparator();
-  pop->insertItem(Icon("dbgrunto.xpm"),i18n("Run to cursor"),this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
-  pop->insertItem(Icon("dbgwatchvar.xpm"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);
+  pop->insertItem(BarIcon("dbgrunto"),i18n("Run to cursor"),this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
+  pop->insertItem(BarIcon("dbgwatchvar"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -149,10 +150,10 @@ void CEditWidget::setFocus(){
  *   -
  *-----------------------------------------------------------------*/
 void CEditWidget::gotoPos(int pos,QString text_str){
-  
+
   //  cerr << endl << "POS: " << pos;
   // calculate the line
-  QString last_textpart = text_str.right(text_str.size()-pos); // the second part of the next,after the pos
+  QString last_textpart = text_str.right(text_str.length()-pos); // the second part of the next,after the pos
   int line = text_str.contains("\n") - last_textpart.contains("\n");
   //  cerr << endl << "LINE:" << line;
   setCursorPosition(line,0);
@@ -191,8 +192,8 @@ void CEditWidget::spellcheck2(KSpell *){
       }
     else
       {
-	KMsgBox::message(this,"KEdit: Error","Error starting KSpell.\n"\
-			 "Please make sure you have ISpell properly configured and in your PATH.", KMsgBox::STOP);
+	KMessageBox::message(this,"KEdit: Error","Error starting KSpell.\n"\
+			 "Please make sure you have ISpell properly configured and in your PATH.", KMessageBox::STOP);
       }
 }
 */
@@ -204,7 +205,7 @@ void CEditWidget::spellcheck2(KSpell *){
  * Parameters:
  *   startAt       Line to start deleting at.
  *   endAt         Line to end deleting at.
- *  
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
@@ -215,14 +216,14 @@ void CEditWidget::deleteInterval( uint startAt, uint endAt )
   int startPos=0;
   int endPos=0;
   QString txt;
-  
+
   // Fetch the text.
   txt = text();
 
   // Find start position.
   startPos = getLinePos( txt, startAt );
 
-  // We find the end of the line by increasing the linecounter and 
+  // We find the end of the line by increasing the linecounter and
   // subtracting by one to make pos point at the last \n character.
   endPos = getLinePos( txt, endAt + 1 );
   endPos--;
@@ -244,7 +245,7 @@ void CEditWidget::deleteInterval( uint startAt, uint endAt )
  * Parameters:
  *   toInsert      Text to insert.
  *   atLine        Line to start inserting the text.
- *  
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
@@ -252,16 +253,16 @@ void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
 {
   assert( toInsert != NULL );
 //  assert( atLine >= 0 );      uint is always >=0 ???
-  
+
   int pos=0;
   QString txt;
-  
+
   // Fetch the text.
   txt = text();
 
   // Find the position to insert at.
   pos = getLinePos( txt, atLine );
-  
+
   // Insert the new text.
   txt.insert( pos, toInsert );
 
@@ -278,14 +279,14 @@ void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
  *
  * Parameters:
  *   toAdd         Text to append.
- *  
+ *
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 void CEditWidget::append( const char *toAdd )
 {
   QString txt;
-  
+
   txt = text();
   txt.append( toAdd );
   setText( txt );
@@ -319,7 +320,7 @@ int CEditWidget::getLinePos( const char *buf, uint aLine )
     if( buf[ pos ] == '\n' )
       line++;
   }
-  
+
   // Pos currently points at the last \n, that's why we add 1.
   return pos + 1;
 }
@@ -330,12 +331,12 @@ void CEditWidget::enterEvent ( QEvent * /*e*/){
 
 void CEditWidget::mousePressEvent(QMouseEvent* event){
   if(event->button() == RightButton){
-    
+
     if(event->state() & ControlButton) {
       emit bufferMenu(this->mapToGlobal(event->pos()));
       return;
     }
-    
+
     int state;
     int pos;
     state = undoState();
@@ -353,7 +354,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     else{
       pop->setItemEnabled(ID_EDIT_REDO,false);
     }
-    
+
     QString str = markedText();
     if(!str.isEmpty()){
       pop->setItemEnabled(ID_EDIT_CUT,true);
@@ -371,7 +372,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
       pop->setItemEnabled(ID_EDIT_PASTE,false);
     else
       pop->setItemEnabled(ID_EDIT_PASTE,true);
-    
+
     if(str == ""){
       str = word(event->x()- (iconBorderWidth-2) ,event->y());
     }
@@ -393,9 +394,9 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     pop->setItemEnabled(ID_EDIT_RUN_TO_CURSOR, true);	                // TODO: only enable in debugger mode
     pop->setItemEnabled(ID_EDIT_STEP_OUT_OFF, true);	                // TODO: only enable in debugger mode
 
-    pop->changeItem(Icon("grep.xpm"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
-    pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
-    pop->changeItem(Icon("dbgwatchvar.xpm"),i18n("Watch: ") + str,ID_EDIT_ADD_WATCH_VARIABLE); // the lookup entry
+    pop->changeItem(BarIcon("grep"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
+    pop->changeItem(BarIcon("lookup"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
+    pop->changeItem(BarIcon("dbgwatchvar"),i18n("Watch: ") + str,ID_EDIT_ADD_WATCH_VARIABLE); // the lookup entry
 
     pop->popup(this->mapToGlobal(event->pos()));
   }

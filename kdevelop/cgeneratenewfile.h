@@ -18,10 +18,8 @@
 #ifndef CGENERATENEWFILE_H
 #define CGENERATENEWFILE_H
 
-#include <kapp.h>
 #include <qregexp.h>
 
-//#include "cproject.h"
 class CProject;
 
 // added by Alex Kern, Alexander.Kern@saarsoft.de

@@ -16,8 +16,11 @@
  ***************************************************************************/
 
 
-#include "../cproject.h"
 #include "kdlgdialogs.h"
+
+#include "../cproject.h"
+#include "../ctreehandler.h"
+#include <klocale.h>
 
 /*********************************************************************
  *                                                                   *

@@ -2,7 +2,7 @@
 
 #include "../ckdevelop.h"
 #include "kdlgproplv.h"
-
+#include <klocale.h>
 
 int CALLER_ITEMCLASS_NAME::MyWidget::recPosX(int px)
 {

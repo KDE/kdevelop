@@ -39,10 +39,10 @@ GDBParser::~GDBParser()
 
 // **************************************************************************
 
-void GDBParser::parseData(TrimmableItem* parent, char* buf,
+void GDBParser::parseData(TrimmableItem* parent, char * buf,
                             bool requested, bool params)
 {
-  static const char* unknown = "?";
+  static const char * unknown = "?";
 
   ASSERT(parent);
   if (!buf)
@@ -75,10 +75,8 @@ void GDBParser::parseData(TrimmableItem* parent, char* buf,
 
 // **************************************************************************
 
-void GDBParser::parseArray(TrimmableItem* parent, const QString& array)
+void GDBParser::parseArray(TrimmableItem* parent, char* buf)
 {
-  char* buf = array.data();
-
   QString elementRoot = parent->getName() + "[%d]";
   int idx = 0;
   while (*buf)
@@ -113,7 +111,7 @@ QString GDBParser::getName(char** buf)
   if (*start)
   {
     *buf = skipTokenValue(start);
-    return QString(start, *buf - start + 1);
+    return QCString(start, *buf - start + 1);
   }
   else
     *buf = start;
@@ -129,9 +127,9 @@ QString GDBParser::getValue(char** buf, bool requested)
   *buf = skipTokenValue(start);
 
   if (*start == '{')
-    return QString(start+1, *buf - start -1);
+    return QCString(start+1, *buf - start -1);
 
-  QString value(start, *buf - start + 1);
+  QCString value(start, *buf - start + 1);
 
   // QT2.x string handling
   // A very bad hack alert!
@@ -201,7 +199,7 @@ void GDBParser::setItem(TrimmableItem* parent, const QString& varName,
       int pos;
       if ((pos = value.find(':', 0)) != -1)
       {
-        QString rhs = value.mid(pos+2, value.length());
+        QCString rhs(value.mid(pos+2, value.length()));
         if (determineType(rhs.data()) != typeValue)
         {
           item->setCache(rhs);

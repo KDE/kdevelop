@@ -32,7 +32,7 @@ class KDlgItem_Base;
 class CKDevelop;
 class KRuler;
 class QTextStream;
-class KQuickHelpWindow;
+//class KQuickHelpWindow;
 
 /**
  * This is the edit widget you can see in the center of the kdevelop window.
@@ -63,7 +63,7 @@ class KDlgEditWidget : public QWidget  {
     /**
      * sets the pointer to the main widget.
     */
-    void setMainWidget(KDlgItem_Widget *mw) { main_widget = mw; }
+//    void setMainWidget(KDlgItem_Widget *mw) { main_widget = mw; }
 
     /**
      * returns a pointer to the selected widget or 0 if none is selected.
@@ -161,7 +161,7 @@ class KDlgEditWidget : public QWidget  {
     virtual void resizeEvent ( QResizeEvent * );
 
 
-    KQuickHelpWindow *qhw;
+//    KQuickHelpWindow *qhw;
     KDlgItemDatabase *dbase;
     KDlgItem_Widget *main_widget;
     KDlgItem_Base *selected_widget;

@@ -5,19 +5,16 @@
 // 
 data Information
 {
-   Filename="/home/rnolden/Projects/kdevelop/kdevelop/dlgs/makemandlg.kdevdlg"
+   Filename="/home/kde2/kdevelop1.4/kdevelop/dlgs/makemandlg.kdevdlg"
    KDevelopVersion="1.1"
    DlgEditVersion="0.1alpha"
-   LastChanged="Thu Oct 12 14:57:54 2000"
+   LastChanged="Sat Dec 2 15:43:03 2000"
 }
 
 data SessionManagement
 {
-   OpenedRoot_1="Appearance"
-   OpenedRoot_2="C++ Code"
-   OpenedRoot_3="General"
-   OpenedRoot_4="Geometry"
-   OpenedRootCount="4"
+   OpenedRoot_1="C++ Code"
+   OpenedRootCount="1"
 }
 
 item QWidget
@@ -27,7 +24,7 @@ item QWidget
    X="0"
    Y="0"
    Width="350"
-   Height="220"
+   Height="300"
    MinWidth="0"
    MinHeight="0"
 
@@ -35,8 +32,8 @@ item QWidget
    {
       Name="NoName"
       VarName="ok_button"
-      X="50"
-      Y="170"
+      X="30"
+      Y="130"
       Width="100"
       Height="30"
       MinWidth="0"
@@ -61,8 +58,8 @@ item QWidget
    {
       Name="NoName"
       VarName="file_edit"
-      X="10"
-      Y="110"
+      X="20"
+      Y="80"
       Width="280"
       Height="30"
       MinWidth="0"
@@ -73,10 +70,10 @@ item QWidget
    {
       Name="NoName"
       VarName="QLabel_1"
-      X="10"
-      Y="50"
-      Width="220"
-      Height="60"
+      X="20"
+      Y="40"
+      Width="327"
+      Height="15"
       MinWidth="0"
       MinHeight="0"
       Text="Manufdfdsfffffffffffffffffffffffffffffffdfdfdddfd\n"sfdssddfdsfile:""
@@ -100,8 +97,8 @@ item QWidget
    {
       Name="NoName"
       VarName="ksgml2html_radiobutton"
-      X="40"
-      Y="30"
+      X="30"
+      Y="240"
       Width="100"
       Height="30"
       MinWidth="0"

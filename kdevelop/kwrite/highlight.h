@@ -571,9 +571,9 @@ class FontChanger : public QObject {
     FontChanger(QWidget *parent, int x, int y);
     void setRef(ItemFont *);
   protected slots:
-    void familyChanged(const char *);
+    void familyChanged(const QString&);
     void sizeChanged(int);
-    void charsetChanged(const char *);
+    void charsetChanged(const QString&);
   protected:
     void displayCharsets();
     ItemFont *font;

@@ -16,24 +16,30 @@
  ***************************************************************************/
 
 
-#include <qpixmap.h>
-#include <qbitmap.h>
-#include <kapp.h>
-#include <kpopmenu.h>
 #include "kdlgitembase.h"
+
+//#include <kapp.h>
+#include "itemsglobal.h"
 #include "kdlgpropertybase.h"
 #include "kdlgeditwidget.h"
-#include "itemsglobal.h"
+
+#include <kiconloader.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
+#include <kstddirs.h>
+
+#include <qbitmap.h>
+#include <qpixmap.h>
 
 
-KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent
-, bool ismainwidget, const char* name )
- : QObject(parent,name),
+KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent,
+                              bool ismainwidget, const char* name ) :
+  QObject(parent,name),
+  isMainWidget (ismainwidget),
   childs (NULL),
   item (NULL),
   props (NULL),
-  editWidget (editwid),
-  isMainWidget (ismainwidget)
+  editWidget (editwid)
 {
   props = new KDlgPropertyBase();
   repaintItem();
@@ -57,25 +63,19 @@ void KDlgItem_Base::recreateItem()
 
 QString KDlgItem_Base::itemClass()
 {
-    return QString("[Base]");   
+  return QString("[Base]");
 }
 
 
 int KDlgItem_Base::getNrOfChilds()
 {
-    if (childs)
-	return childs->numItems();
-    else
-	return 0;
+  return (childs) ? childs->numItems() : 0;
 }
 
 
 bool KDlgItem_Base::addChild(KDlgItem_Base *itm)
 {
-    if (childs)
-	return childs->addItem(itm);
-    else
-	return false;
+  return (childs) ? childs->addItem(itm) : false;
 }
 
 
@@ -217,51 +217,36 @@ void KDlgItem_Base::repaintItem(QWidget *it)
 
   setStr2Prop("Font");
   if (strNotEmpty(str))
-    {
+  {
     itm->setFont(KDlgItemsGetFont(str));
 //    itm->setFont(KDlgItemsGetFont("\"helvetica\" \"20\" \"75\" \"TRUE\""));
-    }
+  }
   else
-    {
-      QWidget wid;
-      itm->setFont(wid.font());
-    }
+  {
+    QWidget wid;
+    itm->setFont(wid.font());
+  }
 
 }
 
 
 void KDlgItem_Base::execContextMenu(bool ismain)
 {
-    QString pixmapdir = KApplication::kde_toolbardir() + "/";
-    QString kdevpixmapdir = KApplication::kde_datadir() + QString("/kdevelop/toolbar/");
-    
-#define mkQPixTb(fn) QPixmap(pixmapdir + fn)
-#define mkQPixDd(fn) QPixmap(kdevpixmapdir + fn)
-
     KPopupMenu phelp;
     phelp.setTitle( itemClass() );
     if (!ismain)
-        {
-          phelp.insertItem( mkQPixTb("prev.xpm"), i18n("&Raise"),
-			    getEditWidget(), SLOT(slot_raiseSelected()) );
-          phelp.insertItem( mkQPixTb("next.xpm"), i18n("&Lower"),
-			    getEditWidget(), SLOT(slot_lowerSelected()) );
-          phelp.insertItem( mkQPixTb("top.xpm"), i18n("Raise to &top"),
-			    getEditWidget(), SLOT(slot_raiseTopSelected()) );
-          phelp.insertItem( mkQPixTb("bottom.xpm"), i18n("Lower to &bottom"),
-			    getEditWidget(), SLOT(slot_lowerBottomSelected()) );
-          phelp.insertSeparator();
-          phelp.insertItem( mkQPixDd("cut.xpm"), i18n("C&ut"),
-			    getEditWidget(), SLOT(slot_cutSelected()) );
-          phelp.insertItem( mkQPixTb("delete.xpm"), i18n("&Delete"),
-			    getEditWidget(), SLOT(slot_deleteSelected()) );
-          phelp.insertItem( mkQPixDd("copy.xpm"), i18n("&Copy"),
-			    getEditWidget(), SLOT(slot_copySelected()) );
-        }
-    phelp.insertItem( mkQPixDd("paste.xpm"), i18n("&Paste"),
-		      getEditWidget(), SLOT(slot_pasteSelected()) );
+    {
+      phelp.insertItem( BarIcon("prev"),    i18n("&Raise"),           getEditWidget(), SLOT(slot_raiseSelected()) );
+      phelp.insertItem( BarIcon("next"),    i18n("&Lower"),           getEditWidget(), SLOT(slot_lowerSelected()) );
+      phelp.insertItem( BarIcon("top"),     i18n("Raise to &top"),	  getEditWidget(), SLOT(slot_raiseTopSelected()) );
+      phelp.insertItem( BarIcon("bottom"),  i18n("Lower to &bottom"), getEditWidget(), SLOT(slot_lowerBottomSelected()) );
+      phelp.insertSeparator();
+      phelp.insertItem( BarIcon("cut"),     i18n("C&ut"),	            getEditWidget(), SLOT(slot_cutSelected()) );
+      phelp.insertItem( BarIcon("delete"),  i18n("&Delete"),	        getEditWidget(), SLOT(slot_deleteSelected()) );
+      phelp.insertItem( BarIcon("copy"),    i18n("&Copy"),    	      getEditWidget(), SLOT(slot_copySelected()) );
+    }
+    phelp.insertItem( BarIcon("paste"),   i18n("&Paste"),	          getEditWidget(), SLOT(slot_pasteSelected()) );
     phelp.insertSeparator();
-    phelp.insertItem( mkQPixTb("help.xpm"), i18n("&Help"),
-		      getEditWidget(), SLOT(slot_helpSelected()) );
+    phelp.insertItem( BarIcon("help"),    i18n("&Help"),		        getEditWidget(), SLOT(slot_helpSelected()) );
     phelp.exec(QCursor::pos());
 }

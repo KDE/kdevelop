@@ -16,11 +16,19 @@
  ***************************************************************************/
 
 
-#include <kapp.h>
-#include <kmsgbox.h>
-#include <klocale.h>
 #include "caddnewtranslationdlg.h"
+
 #include "cproject.h"
+
+//#include <kapp.h>
+#include <kmessagebox.h>
+#include <klangcombo.h>
+#include <klocale.h>
+
+
+#include <qpushbutton.h>
+#include <qlabel.h>
+
 
 /*********************************************************************
  *                                                                   *
@@ -219,7 +227,7 @@ CAddNewTranslationDlg::CAddNewTranslationDlg(QWidget *parent, const char *name, 
 	  lang_list.append("zh_TW.Big5");
 	}
 	if(lang_list.isEmpty()){
-	  KMsgBox::message(0,i18n("Information"),i18n("Your sourcecode is already translated to all supported languages."),KMsgBox::INFORMATION);
+	  KMessageBox::information(0,i18n("Your sourcecode is already translated to all supported languages."));
 	  ok_button->setEnabled(false);
 	}
 }

@@ -34,7 +34,7 @@ public:
   virtual QString dbgSetCommand() const                 = 0;
   virtual QString dbgRemoveCommand() const;
   virtual bool match(const Breakpoint* brkpt) const     = 0;
-  virtual const char* text () const;
+  virtual QString text () const;
   virtual void configureDisplay();
   virtual bool modifyDialog();
   virtual void reset();
@@ -92,7 +92,7 @@ protected:
   // for the listbox display which seems to get confused
   // if you just change the strings position
   // (eg QString.data()). It works like this but...
-  char display_[200];
+  QString display_;
 
 private:
   bool s_pending_             :1;

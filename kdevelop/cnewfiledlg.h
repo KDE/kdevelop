@@ -21,16 +21,17 @@
 #define CNEWFILEDLG_H
 
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlistbox.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qbuttongroup.h>
-#include <ktabctl.h>
+#include <qstring.h>
 
-//#include "cproject.h"
 class CProject;
+class KTabCtl;
+
+class QLineEdit;
+class QPushButton;
+class QLabel;
+class QCheckBox;
+class QListBox;
+class QButtonGroup;
 
 /** the new file dialog
   *@author Sandy Meier
@@ -58,7 +59,7 @@ public:
   void slotOKClicked();
   void slotLocButtonClicked();
   void slotAddToProject();
-  void slotEditTextChanged(const char* text);
+  void slotEditTextChanged(const QString& text);
   void slotListHighlighted(int);
   
 protected:

@@ -20,13 +20,14 @@
 
 #include <kapp.h>
 #include <kbuttonbox.h>
-#include <klined.h>
-#include <kintegerline.h>
-#include <kwizard.h>
+#include <klineedit.h>
+#include <knuminput.h>
+#include <kdialog.h>
 
 #include <qcheckbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <klocale.h>
 
 #include <algorithm>
 
@@ -60,7 +61,7 @@ BPDialog::BPDialog(Breakpoint* BP, QWidget *parent, const char *name) :
   label1->setMinimumSize(label1->sizeHint());
   grid->addWidget(label1, 0, 0);
 
-  conditional_ = new KLined(this);
+  conditional_ = new KLineEdit(this);
   conditional_->setText(BP->conditional());
   conditional_->setMinimumSize(conditional_->sizeHint());
   label1->setBuddy(conditional_);
@@ -75,7 +76,7 @@ BPDialog::BPDialog(Breakpoint* BP, QWidget *parent, const char *name) :
   label2->setMaximumWidth(max(label1->sizeHint().width(),
                               label2->sizeHint().width()));
 
-  ignoreCount_ = new KIntegerLine(this);
+  ignoreCount_ = new KIntNumInput(this);
   ignoreCount_->setValue(BP->ignoreCount());
   ignoreCount_->setMinimumSize(ignoreCount_->sizeHint());
   label2->setBuddy(ignoreCount_);

@@ -16,17 +16,23 @@
  ***************************************************************************/
 
 #include "dbgtoolbar.h"
+#include "./dbg/dbgcontroller.h"
+
 #include "ckdevelop.h"
 
-#include <kapp.h>
-#include <kpopmenu.h>
-#include <kwm.h>
+#include <kdockwindow.h>
+#include <klocale.h>
+#include <kpopupmenu.h>
+#include <kstddirs.h>
+#include <kwin.h>
+#include <kwinmodule.h>
 
-#include <qlayout.h>
-#include <qpushbutton.h>
+#include <qapp.h>
 #include <qframe.h>
-
-#include "./dbg/dbgcontroller.h"
+#include <qlayout.h>
+#include <qpainter.h>
+#include <qpushbutton.h>
+#include <qtooltip.h>
 
 // **************************************************************************
 // **************************************************************************
@@ -114,7 +120,7 @@ void DbgMoveHandle::mousePressEvent(QMouseEvent *e)
   offset_ = toolBar_->pos() - e->globalPos();
   setFrameStyle( QFrame::Panel|QFrame::Sunken);
   QApplication::setOverrideCursor(QCursor(sizeAllCursor));
-  setPalette(QPalette(kapp->selectColor));
+  setPalette(QPalette(colorGroup().background()));
   repaint();
 }
 
@@ -127,7 +133,7 @@ void DbgMoveHandle::mouseReleaseEvent(QMouseEvent *e)
   offset_ = QPoint(0,0);
   setFrameStyle( QFrame::Panel|QFrame::Raised);
   QApplication::restoreOverrideCursor();
-  setPalette(QPalette(kapp->backgroundColor));
+  setPalette(QPalette(colorGroup().background()));
   repaint();
 }
 
@@ -151,10 +157,7 @@ void DbgMoveHandle::mouseMoveEvent(QMouseEvent *e)
 class DbgButton : public QPushButton
 {
 public:
-  DbgButton(const char* text, const QPixmap& pixmap, DbgToolbar* parent) :
-    QPushButton(parent),
-    pixmap_(pixmap)
-    { setText(text); }
+  DbgButton(const QPixmap& pixmap, const QString& text, DbgToolbar* parent);
   virtual ~DbgButton()  {};
   void drawButtonLabel(QPainter *painter);
   QSize sizeHint() const;
@@ -162,6 +165,15 @@ public:
 private:
   QPixmap     pixmap_;
 };
+
+// **************************************************************************
+
+DbgButton::DbgButton(const QPixmap& pixmap, const QString& text, DbgToolbar* parent) :
+  QPushButton(parent),
+  pixmap_(pixmap)
+{
+  setText(text);
+}
 
 // **************************************************************************
 
@@ -195,8 +207,8 @@ QSize DbgButton::sizeHint() const
 // **************************************************************************
 // **************************************************************************
 
-DbgDocker::DbgDocker(DbgToolbar* toolBar, const QPixmap& pixmap) :
-  QLabel(0, "DbgDocker"),    // Cannot have a parent !!!
+DbgDocker::DbgDocker(QWidget* parent, DbgToolbar* toolBar, const QPixmap& pixmap) :
+  KSystemTray(parent, "DbgDocker"),
   toolBar_(toolBar)
 {
   setPixmap(pixmap);
@@ -213,16 +225,23 @@ void DbgDocker::mousePressEvent(QMouseEvent *e)
   switch (e->button())
   {
     case LeftButton:
+    {
       // Not really a click, but it'll hold for the time being !!!
       emit clicked();
       break;
+    }
 
     case RightButton:
+    {
       KPopupMenu* menu = new KPopupMenu( this );
       menu->setTitle("Debug toolbar");
       menu->insertItem(i18n("Activate"),                        toolBar_, SLOT(slotUndock()));
       menu->insertItem(i18n("Activate (KDevelop gets focus)"),  toolBar_, SLOT(slotActivateAndUndock()));
       menu->popup(e->globalPos());
+      break;
+    }
+
+    default:
       break;
   }
 }
@@ -236,60 +255,50 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   ckDevelop_(parent),
   dbgController_(dbgController),
   activeWindow_(0),
+  winModule_(0),
   bKDevFocus_(0),
   bPrevFocus_(0),
   appIsActive_(false),
   docked_(false),
-  docker_(0)
+  docker_(0),
+  dockWindow_(new KDockWindow(parent))
 {
+  setFrameStyle( QFrame::Box | QFrame::Raised );
+  setLineWidth(1);
+  setMidLineWidth(2);
+
+  winModule_  = new KWinModule(this);
+  docker_ = new DbgDocker(ckDevelop_, this, BarIcon("dbgnext"));
+  connect(docker_, SIGNAL(clicked()),  dbgController_,  SLOT(slotStepOver()));
+
   // Must have noFocus set so that we can see what window was active.
   // see slotDbgKdevFocus() for more comments
   // I do not want the user to be able to "close" this widget. If we have any
   // decoration then they can and that is bad.
   // This widget is closed when the debugger finishes i.e. they press "Stop"
-  KWM::setDecoration(winId(), KWM::noFocus|KWM::noDecoration|KWM::staysOnTop);
 
-  QBoxLayout* topLayout   = new QVBoxLayout( this );
+  // Do we need NoFocus???
+  KWin::setState( winId(), NET::StaysOnTop | NET::Modal);
+  KWin::setType( winId(), NET::Override );    // So it has no decoration
 
-  QBoxLayout* nextLayout  = new QHBoxLayout();
-  QBoxLayout* stepLayout  = new QHBoxLayout();
-  QBoxLayout* focusLayout = new QHBoxLayout();
+  QBoxLayout* topLayout     = new QVBoxLayout( this );
 
-  QPixmap pm;
+  QBoxLayout* nextLayout    = new QHBoxLayout();
+  QBoxLayout* stepLayout    = new QHBoxLayout();
+  QBoxLayout* focusLayout   = new QHBoxLayout();
 
-  DbgMoveHandle*  moveHandle  = new DbgMoveHandle(this);
+  DbgMoveHandle*  moveHandle= new DbgMoveHandle(this);
 
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgrun.xpm");
-  DbgButton*      bRun        = new DbgButton(i18n("Run"), pm, this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgbreak.xpm");
-  DbgButton*    bInterrupt  = new DbgButton(i18n("Interrupt"), pm, this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
-  DbgButton*    bNext       = new DbgButton(0, pm, this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnextinst.xpm");
-  DbgButton*    bNexti      = new DbgButton(0, pm, this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstep.xpm");
-  DbgButton*    bStep       = new DbgButton(0, pm, this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepinst.xpm");
-  DbgButton*    bStepi      = new DbgButton(0, pm, this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgstepout.xpm");
-  DbgButton*    bFinish     = new DbgButton(i18n("Step out"), pm, this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
-  DbgButton*    bView       = new DbgButton(i18n("Viewers"), pm, this);
-
-  pm.load(KApplication::kde_icondir() + "/mini/kdevelop.xpm");
-  bKDevFocus_ = new DbgButton(0, pm,  this);
-
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgmemview.xpm");
-  bPrevFocus_ = new DbgButton(0, pm,  this);
-
-//  bStep->setAccel(CTRL+'S');
+  QPushButton*  bRun        = new DbgButton(BarIcon("dbgrun"),      i18n("Run"),        this);
+  QPushButton*  bInterrupt  = new DbgButton(BarIcon("dbgbreak"),    i18n("Interrupt"),  this);
+  QPushButton*  bNext       = new DbgButton(BarIcon("dbgnext"),     QString::null,      this);
+  QPushButton*  bNexti      = new DbgButton(BarIcon("dbgnextinst"), QString::null,      this);
+  QPushButton*  bStep       = new DbgButton(BarIcon("dbgstep"),     QString::null,      this);
+  QPushButton*  bStepi      = new DbgButton(BarIcon("dbgstepinst"), QString::null,      this);
+  QPushButton*  bFinish     = new DbgButton(BarIcon("dbgstepout"),  i18n("Step out"),   this);
+  QPushButton*  bView       = new DbgButton(BarIcon("dbgmemview"),  i18n("Viewers"),    this);
+                bKDevFocus_ = new DbgButton(BarIcon("kdevelop"),    QString::null,      this);
+                bPrevFocus_ = new DbgButton(BarIcon("dbgmemview"),  QString::null,      this);
 
   connect(bRun,         SIGNAL(clicked()),  ckDevelop_,     SLOT(slotDebugRun()));
   connect(bInterrupt,   SIGNAL(clicked()),  dbgController,  SLOT(slotBreakInto()));
@@ -338,8 +347,15 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   // they should have the same height, so don't be too fussy
   int h = bFinish->sizeHint().height();
 
-  setMinimumSize(w, h*7);
-  setMaximumSize(w, h*7);
+  bNext->setMinimumHeight(h);
+  bNexti->setMinimumHeight(h);
+  bStep->setMinimumHeight(h);
+  bStepi->setMinimumHeight(h);
+  bKDevFocus_->setMinimumHeight(h);
+  bPrevFocus_->setMinimumHeight(h);
+
+  setMinimumSize(w+10, h*7);
+  setMaximumSize(w+10, h*7);
 
   setAppIndicator(appIsActive_);
   topLayout->activate();
@@ -362,17 +378,18 @@ void DbgToolbar::slotDbgKdevFocus()
   // the toolbar _cannot_ accept focus.
   // If anyone has a way of determining what window the app is _actually_ running on
   // then please fix and send a patch.
-  if (KWM::activeWindow() != ckDevelop_->winId())
-    activeWindow_ = KWM::activeWindow();
 
-  KWM::activate(ckDevelop_->winId());
+  if (winModule_->activeWindow() != ckDevelop_->winId())
+    activeWindow_ = winModule_->activeWindow();
+
+  KWin::setActiveWindow(activeWindow_);
 }
 
 // **************************************************************************
 
 void DbgToolbar::slotDbgPrevFocus()
 {
-  KWM::activate(activeWindow_);
+    KWin::setActiveWindow(activeWindow_);
 }
 
 // **************************************************************************
@@ -396,11 +413,11 @@ void DbgToolbar::setAppIndicator(bool appIndicator)
   if (appIndicator)
   {
     bPrevFocus_->setPalette(QPalette(colorGroup().mid()));
-    bKDevFocus_->setPalette(QPalette(kapp->backgroundColor));
+    bKDevFocus_->setPalette(QPalette(colorGroup().background()));
   }
   else
   {
-    bPrevFocus_->setPalette(QPalette(kapp->backgroundColor));
+    bPrevFocus_->setPalette(QPalette(colorGroup().background()));
     bKDevFocus_->setPalette(QPalette(colorGroup().mid()));
   }
 }
@@ -412,13 +429,9 @@ void DbgToolbar::slotDock()
   if (docked_)
     return;
 
-  ASSERT(!docker_);
-  hide();
-  QPixmap pm;
-  pm.load(KApplication::kde_datadir() + "/kdevelop/toolbar/dbgnext.xpm");
-  docker_ = new DbgDocker(this, pm);
-  connect(docker_, SIGNAL(clicked()),  dbgController_,  SLOT(slotStepOver()));
-  KWM::setDockWindow(docker_->winId());
+//  ASSERT(!docker_);
+//  hide();
+
   docker_->show();
   docked_ = true;
 }
@@ -430,7 +443,7 @@ void DbgToolbar::slotIconifyAndDock()
   if (docked_)
     return;
 
-  KWM::setIconify(ckDevelop_->winId(), true);
+//  KWin::iconifyWindow(ckDevelop_->winId(), true);
   slotDock();
 }
 
@@ -441,15 +454,7 @@ void DbgToolbar::slotUndock()
   if (!docked_)
     return;
 
-  ASSERT(docker_);
-  //TODO - this is bad - we want to remove the docker_ _in_ a call
-  // from the docker_. Yuk!!!
-  // Should create()/destroy() the window?, and always have the docked widget
-  // instantiated.?
-  docker_->close();
-  delete docker_;
-  docker_ = 0;
-  show();
+  docker_->hide();
   docked_ = false;
 }
 
@@ -460,7 +465,7 @@ void DbgToolbar::slotActivateAndUndock()
   if (!docked_)
     return;
 
-  KWM::activate(ckDevelop_->winId());
+  KWin::setActiveWindow(ckDevelop_->winId());
   slotUndock();
 }
 

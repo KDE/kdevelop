@@ -19,42 +19,34 @@
 #ifndef CEXECUTEARGDLG_H
 #define CEXECUTEARGDLG_H
 
-#include <qlineedit.h>
 #include <qdialog.h>
-#include <klocale.h>
-#include "cproject.h"
+
+class QLineEdit;
 
 /**gets the commandline arguments 
   *@author Ralf Nolden
   */
 
 class CExecuteArgDlg : public QDialog  {
-    Q_OBJECT
-	public: 
-    CExecuteArgDlg(QWidget *parent=0, const char *name=0,QString titel = "",QString args="");
-    ~CExecuteArgDlg();
+  Q_OBJECT
+
+public:
+  CExecuteArgDlg(QWidget *parent=0, const char *name=0,QString titel = "",QString args="");
+  ~CExecuteArgDlg();
     
-    QString getArguments(){return arguments;}
+  QString getArguments()  {return arguments;}
     
-    public slots:
-	void slotTextChanged(const char *t);
-    void slotSetArg();
-    void slotClose();
+public slots:
+  void slotTextChanged(const QString& t);
+  void slotSetArg();
+  void slotClose();
     
-protected:
-    CProject* prj;
+//protected:
+//    CProject* prj;
+
 private:
-    QString text;
-    QLineEdit *edit;
-    QString arguments;
+  QLineEdit *edit;
+  QString arguments;
 };
 
 #endif
-
-
-
-
-
-
-
-

@@ -19,34 +19,32 @@
 #ifndef CKDEVELOP_H
 #define CKDEVELOP_H
 
-//#ifdef HAVE_CONFIG_H
-//#include <config.h>
-//#endif
+#include "cproject.h"
+#include "ctreehandler.h"
+#include "structdef.h"      // needed for TEditInfo
+#include "resource.h"
 
-class CKDevelop;
-#include <iostream.h>
-
-#include <qlist.h>
-#include <qstring.h>
-#include <qstrlist.h>
-#include <qwhatsthis.h>
-#include <qtimer.h>
-#include <qprogressbar.h>
-
-#include <keditcl.h>
-#include <kapp.h>
-#include <ktmainwindow.h>
-#include <ktreelist.h>
-#include <kprocess.h>
-#include <htmlview.h>
-#include <htmltoken.h>
-#include <kfm.h>
+#include <kdialog.h>
 #include <kiconloader.h>
-#include <knewpanner.h>
-#include <kfiledialog.h>
-#include <kmsgbox.h>
-#include <kprogress.h>
+#include <kmainwindow.h>
+#include <kprocess.h>
 
+#include <qguardedptr.h>
+#include <qlist.h>
+#include <qstrlist.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
+class QSplitter;
+class QProgressBar;
+class QWhatsThis;
+class QTimer;
+
+class CProject;
+class CConfigA2psDlg;
+class CConfigEnscriptDlg;
 class CDocBrowser;
 class CClassView;
 class DocTreeView;
@@ -57,18 +55,8 @@ class CAddExistingFileDlg;
 class QListViewItem;
 class CErrorMessageParser;
 class GrepDialog;
-#include "ceditwidget.h"
-#include "coutputwidget.h"
-#include "ctabctl.h"
-#include "ckdevaccel.h"
-//#include "crealfileview.h"
-//#include "clogfileview.h"
-#include "ctreehandler.h"
-#include "cproject.h"
-#include "structdef.h"
-#include "resource.h"
-#include "./print/cprintdlg.h"
-
+class KHTMLView;
+class KHTMLPart;
 class CParsedMethod;
 class CParsedContainer;
 class CParsedClass;
@@ -78,6 +66,15 @@ class KDlgPropWidget;
 class KDlgWidgets;
 class KDlgDialogs;
 class KDlgItems;
+class KStatusBar;
+class CTabCtl;
+class CEditWidget;
+class COutputWidget;
+class CKDevAccel;
+//struct TFileInfo;
+class KProcess;
+class KWriteView;
+//class KProgress;
 
 // Debugger classes
 class VarViewer;
@@ -91,7 +88,7 @@ class DbgToolbar;
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
-class CKDevelop : public KTMainWindow {
+class CKDevelop : public KMainWindow {
   Q_OBJECT
 public:
   /**constructor*/
@@ -169,7 +166,7 @@ public:
   void initKDlg();
   void initKDlgMenuBar();
   void initKDlgToolBar();
-  void initKDlgStatusBar();
+//  void initKDlgStatusBar();
 //  void initKDlgKeyAccel();  not needed because of setKeyAccel(); connecting and disconnecting accelerators
 
   /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
@@ -188,7 +185,7 @@ public:
    *  @param refresh             If to refresh the trees.
    *  @return true if a new subdir was added.
    */
-  bool addFileToProject(QString complete_filename,ProjectFileType type,bool refreshTrees=true);
+  bool addFileToProject(QString complete_filename, ProjectFileType type, bool refreshTrees=true);
   void addRecentProject(const char* file);
   void switchToWorkspace(int id);
 
@@ -216,7 +213,7 @@ public:
   KDlgWidgets* kdlg_get_widgets_view()   { return kdlg_widgets_view; }
   KDlgDialogs* kdlg_get_dialogs_view()   { return kdlg_dialogs_view; }
   KDlgItems*   kdlg_get_items_view()     { return kdlg_items_view; }
-  KStatusBar*  kdlg_get_statusbar()      { return kdlg_statusbar; }
+  KStatusBar*  kdlg_get_statusbar()      { return m_statusBar; }
   CTabCtl* kdlg_get_tabctl()             { return  kdlg_tabctl;}
 
   /** Get the current project. */
@@ -428,7 +425,7 @@ public:
   /** Shows the debugger status on the status line */
   void slotDebugStatus(const QString& status, int statusFlag);
   /** Shows the debugger output */
-  void slotDebugReceivedStdout(const char* buffer);
+  void slotDebugReceivedStdout(const QString& buffer);
   /** Enter a pid and get the debugger to attach to it */
   void slotDebugAttach();
   /** Set the internal debugger arguments */
@@ -628,7 +625,7 @@ public:
   /** change copy & cut status */
   void slotCPPMarkStatus(KWriteView *, bool);
   void slotHEADERMarkStatus(KWriteView *, bool);
-  void slotBROWSERMarkStatus(KHTMLView *, bool);
+  void slotBROWSERMarkStatus(KHTMLPart *, bool);
   /** recognize change of Clipboard data */
   void slotClipboardChanged(KWriteView *, bool);
   /** change Statusbar status of Line and Column */
@@ -646,9 +643,9 @@ public:
   void slotClickedOnMessagesWidget();
   
 
-  void slotURLSelected(KHTMLView* widget,const char* url,int,const char*);
-  void slotDocumentDone( KHTMLView *_view );
-  void slotURLonURL(KHTMLView*,const char* url);
+  void slotURLSelected(KHTMLPart* widget,const QString& url,int,const char*);
+  void slotDocumentDone();
+  void slotURLonURL(const QString& url);
 
   void slotReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotReceivedStderr(KProcess* proc,char* buffer,int buflen);
@@ -860,14 +857,11 @@ private:
   KMenuBar* kdev_menubar;
   KMenuBar* kdlg_menubar;
 
-  KStatusBar* kdev_statusbar;
-  KStatusBar* kdlg_statusbar;
-
-  KNewPanner* view;
-  KNewPanner* top_panner;
-  /** Divides the top_panner for edit and properties widget 
+  QSplitter* mainSplitter;
+  QSplitter* topSplitter;
+  /** Divides the topSplitter for edit and properties widget
    * of the dialogeditor */
-  KNewPanner* kdlg_top_panner;  
+  QSplitter* kdlgTopSplitter;
   
   /** main class for the dialogeditor- 
    *  handles menu/toolbar etc. events specified for the dialogeditor. */
@@ -974,7 +968,7 @@ private:
   bool bDefaultCV;
   bool bKDevelop;
 //  KProgress* statProg;
-  QProgressBar* statProg;
+  QGuardedPtr<QProgressBar> statProg;
   //some vars for the searchengine
   QString search_output;
   QString doc_search_display_text, doc_search_text;
@@ -1027,6 +1021,30 @@ private:
   bool useGlimpse;
   bool useHtDig;
   bool lastShutdownOK;
+  bool m_statusBarIsKDevelop;
+  KStatusBar* m_statusBar;
+};
+
+class SaveAllDialog : public KDialog
+{
+  Q_OBJECT
+
+  public:
+    enum SaveAllResult{Yes=1, No=2, SaveAll=3, Cancel=4};
+
+    SaveAllDialog(const QString& filename, CProject* prj);
+    ~SaveAllDialog();
+
+    SaveAllResult result();
+
+  private slots:
+    void yes();
+    void no();
+    void saveAll();
+    void cancel();
+
+  private:
+    SaveAllResult m_result;
 };
 
 #endif

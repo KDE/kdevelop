@@ -24,6 +24,7 @@
 #include <kapp.h>
 #include "vc/versioncontrol.h"
 #include "debug.h"
+#include <kstddirs.h>
 
 #define PROJECT_VERSION_STR "KDevelop Project File Version 0.3 #DO NOT EDIT#"
 
@@ -151,7 +152,7 @@ void CProject::writeFileInfo(TFileInfo info){
   config.writeEntry("dist",info.dist);
   config.writeEntry("install",info.install);
   // save the $ because kconfig removes one
-  info.install_location.replace("[\\$]","$$");
+  info.install_location.replace(QRegExp("[\\$]"),"$$");
   config.writeEntry("install_location",info.install_location);
 }
 
@@ -161,7 +162,7 @@ void CProject::writeDialogFileInfo(TDialogFileInfo info){
   config.writeEntry("dist",info.dist);
   config.writeEntry("install",info.install);
   // save the $ because kconfig removes one
-  info.install_location.replace("[\\$]","$$");
+  info.install_location.replace(QRegExp("[\\$]"),"$$");
   config.writeEntry("install_location",info.install_location);
 
   config.writeEntry("baseclass",info.baseclass);
@@ -1288,7 +1289,7 @@ void CProject::createLibraryMakefileAm(const QString &makefile, const QString &t
 {
 
   QString abs_filename = getProjectDir() + makefile;
-  QString lib_template = KApplication::kde_datadir() + "/kdevelop/templates/MAM_"+type+"_template";
+  QString lib_template = locate("data", "kdevelop/templates/MAM_"+type+"_template");
   QFile fileDest(abs_filename);
   QFile file(lib_template);
   QStrList list;

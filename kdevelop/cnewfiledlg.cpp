@@ -15,16 +15,28 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+#define LAYOUT_BORDER (10)
 #include "cnewfiledlg.h"
+
 #include "cgeneratenewfile.h"
 #include "cproject.h"
-#include <kmsgbox.h>
 #include <iostream.h>
+
 #include <kfiledialog.h>
-#include <kquickhelp.h>
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kmessagebox.h>
+#include <ktabctl.h>
+
 #include <qlayout.h>
-#define LAYOUT_BORDER (10)
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qlistbox.h>
+#include <qlabel.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
+#include <qwhatsthis.h>
+
 
 CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool modal,WFlags f)
   : QDialog(parent,name,modal,f){
@@ -63,7 +75,9 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
-  KQuickHelp::add(list_cpp,KQuickHelp::add(list_manuals,KQuickHelp::add(list_linux,i18n("Choose the type of the new file here."))));
+  QWhatsThis::add(list_cpp, i18n("Choose the type of the new file here."));
+  QWhatsThis::add(list_manuals, i18n("Choose the type of the new file here."));
+  QWhatsThis::add(list_linux,i18n("Choose the type of the new file here."));
 
   tab->addTab(list_cpp,i18n("General"));
   tab->addTab(list_manuals,i18n("Manuals"));
@@ -96,8 +110,9 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	edit->setMaxLength( 32767 );
 	edit->setEchoMode( QLineEdit::Normal );
 	edit->setFrame( TRUE );
-        KQuickHelp::add(label_filename,KQuickHelp::add(edit,i18n("Enter a name for your new file here.")));
-  edit->setMinimumSize( edit->sizeHint() );
+    QWhatsThis::add(label_filename,i18n("Enter a name for your new file here."));
+    QWhatsThis::add(edit,i18n("Enter a name for your new file here."));
+    edit->setMinimumSize( edit->sizeHint() );
 	vlayout->addWidget( edit, 0 );
 	
 	check_use_template = new QCheckBox( this, "check_use_template" );
@@ -108,7 +123,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	check_use_template->setText(i18n("use Template") );
 	check_use_template->setAutoRepeat( FALSE );
 	check_use_template->setAutoResize( FALSE );
-	KQuickHelp::add(check_use_template,i18n("Check this if you want to use a template."));
+	QWhatsThis::add(check_use_template,i18n("Check this if you want to use a template."));
 	check_use_template->setMinimumSize( check_use_template->sizeHint() );
 	vlayout->addWidget( check_use_template, 0 );
 
@@ -142,7 +157,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	check_add_project->setText(i18n("add to Project") );
 	check_add_project->setAutoRepeat( FALSE );
 	check_add_project->setAutoResize( FALSE );
-	KQuickHelp::add(check_add_project,i18n("Check this if you want to add the new file to your project."));
+	QWhatsThis::add(check_add_project,i18n("Check this if you want to add the new file to your project."));
 	check_add_project->setMinimumSize( check_add_project->sizeHint() );
 	glayout->addWidget( check_add_project, 1, 0 );	
 	
@@ -164,7 +179,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	prj_loc_edit->setMaxLength( 32767 );
 	prj_loc_edit->setEchoMode( QLineEdit::Normal );
 	prj_loc_edit->setFrame( TRUE );
-	KQuickHelp::add(prj_loc_edit,i18n("Enter the directory where the new file will be located."));
+	QWhatsThis::add(prj_loc_edit,i18n("Enter the directory where the new file will be located."));
 	prj_loc_edit->setMinimumSize( prj_loc_edit->sizeHint() );
 	glayout->addWidget( prj_loc_edit, 3, 0 );
 
@@ -173,12 +188,11 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	loc_button->setBackgroundMode( QWidget::PaletteBackground );
 	loc_button->setFontPropagation( QWidget::NoChildren );
 	loc_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix = BarIcon("open");
 	loc_button->setPixmap(pix);
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );
-	KQuickHelp::add(loc_button,i18n("Here you can choose a directory where the new file will be located."));
+	QWhatsThis::add(loc_button,i18n("Here you can choose a directory where the new file will be located."));
 	loc_button->setMinimumSize( loc_button->sizeHint().height(), loc_button->sizeHint().height() );
 	glayout->addWidget( loc_button, 3, 1 );
 
@@ -225,7 +239,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
   connect(cancel,SIGNAL(clicked()),SLOT(reject()));
   connect(loc_button,SIGNAL(clicked()),SLOT(slotLocButtonClicked()));
   connect(check_add_project,SIGNAL(clicked()),SLOT(slotAddToProject()));
-  connect(edit,SIGNAL(textChanged (const char *)),SLOT(slotEditTextChanged(const char*)));
+  connect(edit,SIGNAL(textChanged (const QString&)),SLOT(slotEditTextChanged(const QString&)));
 
   connect(list_linux,SIGNAL(highlighted(int)),SLOT(slotListHighlighted(int)));
   connect(list_cpp,SIGNAL(highlighted(int)),SLOT(slotListHighlighted(int)));
@@ -253,53 +267,51 @@ void CNewFileDlg::slotOKClicked(){
   if ( (fileType() == "CPP") &&
        !(text.right(4) == ".cpp" || text.right(3) == ".cc" 
 	|| text.right(2) == ".C" || text.right(2) == ".c" || text.right(4) == ".cxx" || text.right(3) == ".ec" || text.right(5) == ".ecpp" )){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!")
-		     ,KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .cpp,.c,.cc,.C,.cxx,.ec or .ecpp!"));
     return;
   }
   if ( (fileType() == "HEADER") && !(text.right(2) == ".h" || (text.right(4) == ".hxx"))){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .h or .hxx!"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .h or .hxx!"));
     return;
   }
   if ( (fileType() == "LSM") && (text.right(4) != ".lsm")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .lsm !"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .lsm !"));
     return;
    }
   if ( (fileType() == "KDELNK") && (text.right(7) != ".kdelnk")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .kdelnk !"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .kdelnk !"));
     return;
   }
   if ( (fileType() == "EN_SGML") && (text.right(5) != ".sgml")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .sgml !"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .sgml !"));
     return;
   }
   if ( (fileType() == "EN_DOCBOOK") && (text.right(8) != ".docbook")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .docbook !"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .docbook !"));
     return;
   }
   if ( (fileType() == "DIALOG") && (text.right(8) != ".kdevdlg")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .kdevdlg !"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .kdevdlg !"));
     return;
   }
   if ( (fileType() == "QT2DIALOG") && (text.right(3) != ".ui")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .ui !"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .ui !"));
     return;
   }
   if ( (fileType() == "ICON") && (text.right(4) != ".xpm")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .xpm !"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .xpm !"));
     return;
   }
   if ( (fileType() == "LEXICAL") && !(text.right(4) == ".l++" || text.right(4) == ".lxx" || text.right(3) == ".ll" || text.right(2) == ".l")){
-    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .l, .ll, .lxx or .l++ !"), KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("The filename must end with .l, .ll, .lxx or .l++ !"));
     return;
   }
   if (text.isEmpty()){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a filename!"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("You must enter a filename!"));
     return;
   }
   if(addToProject() == true && (location().contains(prj->getProjectDir())) == 0 ){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must choose a location,that is in your project-dir!")
-		     ,KMsgBox::EXCLAMATION);
+    KMessageBox::error(this,i18n("You must choose a location,that is in your project-dir!"));
     return;
   }
   QString filename = fileName();
@@ -308,8 +320,9 @@ void CNewFileDlg::slotOKClicked(){
   complete_filename = location() + filename;
   
   if(QFile::exists(complete_filename)){
-    if(KMsgBox::yesNo(0,i18n("Files exists!"),
-		      i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?")) == 2){
+    if(KMessageBox::questionYesNo(0,
+		      i18n("You have added a file to the project that already exists.\nDo you want overwrite the old one?"),
+		      i18n("Files exists!")) == KMessageBox::No){
       return;
     }
   }
@@ -321,8 +334,6 @@ void CNewFileDlg::slotOKClicked(){
   QString filetype = fileType(); 
   CGenerateNewFile generator;
  
-   
-   
    // check if generate a empty file or generate one
   if (useTemplate() && (filetype != "TEXTFILE") && filetype != "ICON"){ // generate one,textfile always empty
     if (filetype == "HEADER"){
@@ -355,10 +366,10 @@ void CNewFileDlg::slotOKClicked(){
       // Make sure that we link against -lfl or -ll as controlled by
       // autoconf.
       if ((prj->getLDADD()).contains( "@LEXLIB@", FALSE ) == 0){
-	prj->setLDADD( prj->getLDADD() + " @LEXLIB@ ");
+        prj->setLDADD( prj->getLDADD() + " @LEXLIB@ ");
       }
-      KMsgBox::message(this,i18n("Information..."),i18n("Please make sure, that you have added\n\"AM_LEX_PROG\" to your configure.in!")
-			,KMsgBox::EXCLAMATION);
+      KMessageBox::information(this,
+            i18n("Please make sure, that you have added\n\"AM_LEX_PROG\" to your configure.in!"));
     }
   }
   else { // no template, -> empty file or icon
@@ -453,7 +464,7 @@ void CNewFileDlg::setAddToProject(){
   check_add_project->setChecked(true);
 }
 void CNewFileDlg::slotLocButtonClicked(){
-  QString str=  KDirDialog::getDirectory(prj_loc_edit->text(),this,"test");
+  QString str=  KFileDialog::getExistingDirectory(prj_loc_edit->text());
   if(!str.isEmpty()){
     prj_loc_edit->setText(str);
   }
@@ -468,7 +479,8 @@ QString CNewFileDlg::location(){
 void CNewFileDlg::slotAddToProject(){
 }
 
-void CNewFileDlg::slotEditTextChanged(const char* text){
+void CNewFileDlg::slotEditTextChanged(const QString& text)
+{
   QString filetype = fileType();
   QString extension = (prj && prj->getProjectType()=="normal_c" || prj->getProjectType()=="normal_gnome")? ".c" : ".cpp";
 

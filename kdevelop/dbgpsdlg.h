@@ -18,10 +18,11 @@
 #ifndef _DBGPSDLG_H_
 #define _DBGPSDLG_H_
 
-#include <kwizard.h>
+#include <kdialog.h>
 
 class QListBox;
 class KProcess;
+class QLabel;
 
 /***************************************************************************/
 

@@ -19,14 +19,11 @@
 #ifndef CADDNEWTRANSLATIONDLG_H
 #define CADDNEWTRANSLATIONDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
-#include <qpushbutton.h>
 #include <qstrlist.h>
-#include <klangcombo.h>
-#include <qlabel.h>
 
-//#include "cproject.h"
+class QPushButton;
+class KLanguageCombo;
 class CProject;
 
 /**

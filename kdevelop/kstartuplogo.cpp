@@ -18,11 +18,12 @@
 
 #include "kstartuplogo.h"
 #include <kapp.h>
+#include <kstddirs.h>
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 : QWidget(parent,name,WStyle_Customize | WStyle_NoBorder  ) { 	
   QPixmap pm;
-  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/startlogo.bmp");
+  pm.load(locate("appdata", "pics/startlogo.bmp"));
   setBackgroundPixmap(pm);
 
   setGeometry(QApplication::desktop()->width()/2-218, QApplication::desktop()->height()/2-158, 437,317);

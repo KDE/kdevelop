@@ -118,7 +118,7 @@ private slots:
   void slotAbortTimedEvent();
 
 signals:
-  void rawData              (const char* rawData);
+  void rawData              (const QString& rawData);
   void showStepInSource     (const QString& filename, int lineno, const QString& address);
   void rawGDBBreakpointList (char* buf);
   void rawGDBBreakpointSet  (char* buf, int key);

@@ -1,9 +1,6 @@
-data_DATA = bookmark.xpm breakpoint.xpm breakpoint_gr.xpm breakpoint_bl.xpm ddd.xpm
-datadir = $(kde_datadir)/kdevelop/pix
+####### kdevelop will overwrite this part!!! (begin)##########
 
-EXTRA_DIST = \
-		bookmark.xpm\
-		breakpoint.xpm\
-		breakpoint_gr.xpm\
-		ddd.xpm\
-		breakpoint_bl.xpm
+
+EXTRA_DIST = bookmark.xpm breakpoint.xpm breakpoint_bl.xpm breakpoint_gr.xpm ddd.xpm 
+
+####### kdevelop will overwrite this part!!! (end)############

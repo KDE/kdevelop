@@ -16,18 +16,27 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include <qregexp.h>
-#include <qfileinfo.h>
-#include <kprocess.h>
-#include <kmsgbox.h>
-#include <klocale.h>
-#include <assert.h>
-#include "debug.h"
-#include "resource.h"
+
 #include "clogfileview.h"
+
 #include "cgrouppropertiesdlg.h"
 #include "cproject.h"
+#include "ctreehandler.h"
+#include "debug.h"
+#include "resource.h"
 #include "vc/versioncontrol.h"
+
+#include <kapp.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kpopupmenu.h>
+#include <kprocess.h>
+
+#include <qfileinfo.h>
+#include <qlineedit.h>
+#include <qregexp.h>
+
+#include <assert.h>
 
 
 /*********************************************************************
@@ -356,7 +365,7 @@ void CLogFileView::slotFileRemove()
   QString filename=getFileName(currentItem());
   QString msg;
   msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
-  if (KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
+  if (KMessageBox::questionYesNo(0, msg, i18n("Warning")) == KMessageBox::No)
     return;
 
   emit selectedFileRemove(filename);
@@ -366,7 +375,8 @@ void CLogFileView::slotFileRemove()
 void CLogFileView::slotFileDelete()
 {
 
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
+  if(KMessageBox::questionYesNo(0,i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),
+                                  i18n("Warning")) == KMessageBox::No){
     return;
   }
   QString fullname = getFullFilename(currentItem());

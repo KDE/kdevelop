@@ -19,12 +19,15 @@
 #include <qfileinfo.h>
 
 #include <kfiledialog.h>
-#include <kmsgbox.h>
-#include <kquickhelp.h>
-#include <klocale.h>
+#include <kmessagebox.h>
+#include <qwhatsthis.h>
 
 #include "ctoolsconfigdlg.h"
 #include "ctoolclass.h"
+
+#include <iostream.h>
+#include <kstddirs.h>
+#include <klocale.h>
 
 CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(parent,name,this) {
 	setCaption(i18n("Tools-Menu Configuration"));	
@@ -42,7 +45,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	add_button->setText(i18n( "&Add" ));
 	add_button->setAutoRepeat( FALSE );
 	add_button->setAutoResize( FALSE );
-        KQuickHelp::add(add_button,i18n("Click here to add a tool specified below."));
+        QWhatsThis::add(add_button,i18n("Click here to add a tool specified below."));
 
 	delete_button = new QPushButton( this, "delete_button" );
 	delete_button->setGeometry( 270, 60, 100, 30 );
@@ -51,7 +54,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	delete_button->setAutoRepeat( FALSE );
 	delete_button->setAutoResize( FALSE );
 	delete_button->setEnabled( FALSE );
-	KQuickHelp::add(delete_button,i18n("Click here to delete an entry from the list."));
+	QWhatsThis::add(delete_button,i18n("Click here to delete an entry from the list."));
 
 	move_up_button = new QPushButton( this, "move_up_button" );
 	move_up_button->setGeometry( 270, 110, 100, 30 );
@@ -60,7 +63,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	move_up_button->setAutoRepeat( FALSE );
 	move_up_button->setAutoResize( FALSE );
 	move_up_button->setEnabled( FALSE );
-	KQuickHelp::add(move_up_button,i18n("Click here to move up the selected entry."));
+	QWhatsThis::add(move_up_button,i18n("Click here to move up the selected entry."));
 
 	move_down_button = new QPushButton( this, "move_down_button" );
 	move_down_button->setGeometry( 270, 150, 100, 30 );
@@ -69,7 +72,7 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	move_down_button->setAutoRepeat( FALSE );
 	move_down_button->setAutoResize( FALSE );
 	move_down_button->setEnabled( FALSE );
-	KQuickHelp::add(move_down_button,i18n("Click here to move down the selected entry."));
+	QWhatsThis::add(move_down_button,i18n("Click here to move down the selected entry."));
 
 	executable_label = new QLabel( this, "command_label" );
 	executable_label->setGeometry( 30, 240, 170, 30 );
@@ -86,14 +89,15 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	
 	executable_button = new QPushButton( this, "executable_button" );
 	executable_button->setGeometry( 410, 240, 30, 30 );
-	KQuickHelp::add(executable_button,i18n("Here you can browse through the disc to select an executable file."));
+	QWhatsThis::add(executable_button,i18n("Here you can browse through the disc to select an executable file."));
 	connect( executable_button, SIGNAL(clicked()), SLOT(slotToolsExeSelect()) );
-	QPixmap pix;
-	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix = BarIcon("open");
 	executable_button->setPixmap(pix);
 	executable_button->setAutoRepeat( FALSE );
 	executable_button->setAutoResize( FALSE );
-        KQuickHelp::add(executable_edit,KQuickHelp::add(executable_button,i18n("Enter the name of the executable file here.")));
+	QString executable_help = i18n("Enter the name of the executable file here.");
+    QWhatsThis::add(executable_edit,executable_help);
+    QWhatsThis::add(executable_button,executable_help);
 
 	menu_text_label = new QLabel( this, "Label_3" );
 	menu_text_label->setGeometry( 30, 280, 170, 30 );
@@ -107,7 +111,9 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	menu_text_edit->setMaxLength( 32767 );
 	menu_text_edit->setEchoMode( QLineEdit::Normal );
 	menu_text_edit->setFrame( TRUE );
-	KQuickHelp::add(menu_text_label,KQuickHelp::add(menu_text_edit,i18n("Enter a menu text for the executable here.")));
+	QString menu_help=i18n("Enter a menu text for the executable here.");
+	QWhatsThis::add(menu_text_label, menu_help);
+	QWhatsThis::add(menu_text_edit,menu_help);
 
 	arguments_label = new QLabel( this, "Label_4" );
 	arguments_label->setGeometry( 30, 320, 170, 30 );
@@ -121,7 +127,9 @@ CToolsConfigDlg::CToolsConfigDlg(QWidget *parent, const char *name ) : QDialog(p
 	arguments_edit->setMaxLength( 32767 );
 	arguments_edit->setEchoMode( QLineEdit::Normal );
 	arguments_edit->setFrame( TRUE );
-        KQuickHelp::add(arguments_label,KQuickHelp::add(arguments_edit,i18n("Enter arguments for the executable here.")));
+	QString arguments_help = i18n("Enter arguments for the executable here.");
+    QWhatsThis::add(arguments_label, arguments_help);
+    QWhatsThis::add(arguments_edit,arguments_help);
 
 	ok_button = new QPushButton( this, "ok_button" );
 	ok_button->setGeometry( 390, 20, 100, 30 );
@@ -162,19 +170,19 @@ void CToolsConfigDlg::slotToolAdd()
 	QString exe_file=QFileInfo(executable).fileName();
 		
 	if(executable.isEmpty()){
-		KMsgBox::message(this,i18n("Executable not set!"), i18n("You have to set an executable to add to the Tools-Menu first."));
+		KMessageBox::error(this, i18n("You have to set an executable to add to the Tools-Menu first."),i18n("Executable not set!"));
 		return;
 	}
 	if(!QFileInfo(CToolClass::findProgram(executable)).isExecutable()){
-	  KMsgBox::message(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
+	  KMessageBox::sorry(this,i18n("The selected file is not an executable. Please choose an executable filename."));
 	  return;
 	}
 	if(!CToolClass::searchInstProgram(exe_file) ){
-	  KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"																							"to execute the selected program as a tool."));
+	  KMessageBox::sorry(this,i18n("The selected executable is not in your Path. Please update your $PATH environment variable to execute the selected program as a tool."));
 	  return;
  	}
 	if(menutext.isEmpty()){
-	  KMsgBox::message(this,i18n("Menu text not set!"), i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."));
+	  KMessageBox::error(this, i18n("You have to insert a menuentry text to add the selected program to the Tools-Menu."),i18n("Menu text not set!"));
 	  return;
 	}
     	
@@ -208,7 +216,7 @@ void CToolsConfigDlg::slotToolMoveUp()
   if(current-1 ==0) move_up_button->setEnabled(false);
   move_down_button->setEnabled(true);
 }
-#include <iostream.h>
+
 void CToolsConfigDlg::slotToolMoveDown()
 {
   uint current = tools_listbox->currentItem();
@@ -231,11 +239,11 @@ void CToolsConfigDlg::slotToolsExeSelect()
   if (!exe_file_name.isEmpty()){
     QString exe_file=QFileInfo(exe_file_name).fileName();
     if(!QFileInfo(exe_file_name).isExecutable()){
-      KMsgBox::message(this,i18n("Warning"),i18n("The selected file is not an executable. Please choose an executable filename."));
+      KMessageBox::sorry(this,i18n("The selected file is not an executable. Please choose an executable filename."));
       return;
     }
     else if(!CToolClass::searchInstProgram(exe_file) ){
-      KMsgBox::message(this,i18n("Warning"),i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
+      KMessageBox::sorry(this,i18n("The selected executable is not in your Path. Please update your $PATH environment variable"
 						 "to execute the selected program as a tool."));
       return;
     }
@@ -269,7 +277,7 @@ void CToolsConfigDlg::slotShowToolProp(int index){
 
 void CToolsConfigDlg::readConfig(){
   
-  config = kapp->getConfig();
+  config = KGlobal::config();
   config->setGroup("ToolsMenuEntries");
   config->readListEntry("Tools_exe",tools_exe);
   config->readListEntry("Tools_entry",tools_entry);

@@ -24,7 +24,8 @@
 #include <qpushbutton.h>
 #include <qcheckbox.h>
 #include <kapp.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
+#include <klocale.h>
 
 
 KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool /*modal*/, WFlags /*f*/ )
@@ -74,7 +75,7 @@ KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool /*moda
   pbCancel->setGeometry( w-110, h-40, 100, 30 );
   connect(pbCancel, SIGNAL(clicked()), SLOT(reject()));
 
-  KQuickHelp::add(this,
+  QWhatsThis::add(this,
 	i18n("<brown><b>\"Set Grid\" dialog<black></b>\n\n"
 	     "Within this dialog you can set the desired\n"
 	     "grip size or disable the grid.\n\n"
@@ -82,33 +83,33 @@ KDlgGridDialog::KDlgGridDialog( QWidget * parent, const char * name, bool /*moda
 	     "and vertical grid size independently. That\n"
 	     "means you can set different values for each\n"
 	     "direction."));
-
-  KQuickHelp::add(lbHGrid,
-  KQuickHelp::add(sbHGrid,
-	i18n("<brown><b>(Horizontal) Grid Size<black></b>\n\n"
+	
+  QString HGridMsg = i18n("<brown><b>(Horizontal) Grid Size<black></b>\n\n"
 	     "Use this field to set the horizontal grid\n"
 	     "size in pixels or, if <i><u>Square Grid</u></i>is\n"
 	     "selected, to set both the horizontal and\n"
 	     "vertical grid size.\n\n"
-	     "A size of zero or one pixel disables the grid.")));
+	     "A size of zero or one pixel disables the grid.");
+  QWhatsThis::add(lbHGrid, HGridMsg);
+  QWhatsThis::add(sbHGrid, HGridMsg);
 
-  KQuickHelp::add(lbVGrid,
-  KQuickHelp::add(sbVGrid,
-	i18n("<brown><b>Vertical Grid Size<black></b>\n\n"
+  QString VGridMsg = i18n("<brown><b>Vertical Grid Size<black></b>\n\n"
 	     "Use this field to set the vertical grid\n"
 	     "size in pixels.\n\n"
-	     "A size of zero or one pixel disables the grid.")));
+	     "A size of zero or one pixel disables the grid.");
+  QWhatsThis::add(lbVGrid, VGridMsg);
+  QWhatsThis::add(sbVGrid, VGridMsg);
 
-  KQuickHelp::add(cbVHSame,
+  QWhatsThis::add(cbVHSame,
 	i18n("<brown><b>Square Grid<black></b>\n\n"
 	     "If enabled the horizontal and vertical\n"
 	     "size will be the same value.\n"));
 
-  KQuickHelp::add(pbOk,
+  QWhatsThis::add(pbOk,
 	i18n("<brown><b>Ok<black></b>\n\n"
 	     "Closes the dialog and uses the changed values."));
 
-  KQuickHelp::add(pbCancel,
+  QWhatsThis::add(pbCancel,
 	i18n("<brown><b>Cancel<black></b>\n\n"
 	     "Closes the dialog <i>without</i>using the changed values."));
 

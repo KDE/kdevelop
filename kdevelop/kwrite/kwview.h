@@ -4,14 +4,13 @@
 #include <qscrbar.h>
 #include <qiodev.h>
 #include <qpopmenu.h>
-
-#include <kfm.h>
 #include <kconfig.h>
 
 #include "kwdialog.h"
 
 class KWriteDoc;
 class Highlight;
+class KURL;
 
 //icon-paint
 const int iconBorderWidth		= 16;
@@ -396,17 +395,18 @@ class KWrite : public QWidget {
     void writeFile(QIODevice &);
     /** Loads the file given in name into the editor
     */
-    bool loadFile(const char *name, int flags = 0);
+    bool loadFile(const QString& name, int flags = 0);
     /** Saves the file as given in name
     */
-    bool writeFile(const char *name);
+    bool writeFile(const QString& name);
     /** Loads the file given in url into the editor.
         See the lfXXX constants in the .h file.
     */
-    void loadURL(const char *url, int flags = 0);
+    void loadURL(const KURL& url, int flags = 0);
     /** Saves the file as given in url
     */
-    void writeURL(const char *url, int flags = 0);
+    void writeURL(const KURL& url, int flags = 0);
+
   protected slots:
     void kfmFinished();
     void kfmError(int, const char *);
@@ -451,7 +451,7 @@ class KWrite : public QWidget {
     */
     void saveAs();
   protected:
-    KFM *kfm;
+    //KFM *kfm;
     QString kfmURL;
     QString kfmFile;
     action kfmAction;

@@ -535,13 +535,13 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
     str = aClass->attributeIterator.current()->type;
 
     // Remove all unwanted stuff.
-    str = str.replace( "[\\*&]", "" );
-    str = str.replace( "const", "" );
-    str = str.replace( "void", "" );
-    str = str.replace( "bool", "" );
-    str = str.replace( "uint", "" );
-    str = str.replace( "int", "" );
-    str = str.replace( "char", "" );
+    str = str.replace( QRegExp("[\\*&]"), "" );
+    str = str.replace( QRegExp("const"), "" );
+    str = str.replace( QRegExp("void"), "" );
+    str = str.replace( QRegExp("bool"), "" );
+    str = str.replace( QRegExp("uint"), "" );
+    str = str.replace( QRegExp("int"), "" );
+    str = str.replace( QRegExp("char"), "" );
     str = str.stripWhiteSpace();
 
     // If this isn't the class and the string contains data, we check for it.

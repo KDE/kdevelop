@@ -1,6 +1,6 @@
+####### kdevelop will overwrite this part!!! (begin)##########
 
-examples_DATA = kscribble-0.1.tar.gz kscribble-1.0.tar.gz
 
-examplesdir = $(kde_datadir)/kdevelop/examples
+EXTRA_DIST = kscribble-0.1.tar.gz kscribble-1.0.tar.gz 
 
-EXTRA_DIST = $(examples_DATA)
+####### kdevelop will overwrite this part!!! (end)############

@@ -16,6 +16,12 @@
  ***************************************************************************/
 
 #include "ctreeview.h"
+#include "ctreehandler.h"
+
+#include <kpopupmenu.h>
+
+#include <qheader.h>
+
 #include <assert.h>
 #include <iostream.h>
 
@@ -49,8 +55,8 @@ CTreeView::CTreeView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
 
   // Add callback for clicks in the listview.
   connect(this,
-          SIGNAL(rightButtonPressed( QListViewItem *, const QPoint &, int)),
-          SLOT(slotRightButtonPressed( QListViewItem *,const QPoint &,int)));
+          SIGNAL(mouseButtonClicked(int, QListViewItem *, const QPoint &, int)),
+          SLOT(slotMouseButtonClicked(int, QListViewItem *,const QPoint &,int)));
 
   // Initialize the treehandler.
   treeH = new CTreeHandler();
@@ -130,31 +136,31 @@ QListViewItem *CTreeView::findByName( const char */*aName*/ )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CTreeView::mousePressEvent(QMouseEvent * event)
-{
-  // Save the mousebutton.
-  mouseBtn = event->button();
-
-  //if( mouseBtn == LeftButton || mouseBtn == RightButton || mouseBtn == MidButton)
-  mousePos = event->pos();
-
-  // set the item selected if midButton clicked, QListView doesn't do this by default
-  QListViewItem* item;
-  item = itemAt(mousePos);
-  if (isSelected(item) && mouseBtn != RightButton){
-      emit selectionChanged ();
-      emit selectionChanged(item);
-  }
-
-  if(mouseBtn == MidButton){		
-      setSelected(item,true);
-  }
-  QListView::mousePressEvent( event );
-
-  // reset the saved mousebutton.
-  mouseBtn = NoButton;
-
-}
+//void CTreeView::contentsMousePressEvent(QMouseEvent * event)
+//{
+//  // Save the mousebutton.
+//  mouseBtn = event->button();
+//
+//  //if( mouseBtn == LeftButton || mouseBtn == RightButton || mouseBtn == MidButton)
+//  mousePos = event->pos();
+//
+//  // set the item selected if midButton clicked, QListView doesn't do this by default
+//  QListViewItem* item;
+//  item = itemAt(mousePos);
+//  if (isSelected(item) && mouseBtn != RightButton){
+//      emit selectionChanged ();
+//      emit selectionChanged(item);
+//  }
+//
+//  if(mouseBtn == MidButton){		
+//      setSelected(item,true);
+//  }
+//  QListView::mousePressEvent( event );
+//
+//  // reset the saved mousebutton.
+//  mouseBtn = NoButton;
+//
+//}
 
 /*********************************************************************
  *                                                                   *
@@ -171,24 +177,50 @@ void CTreeView::mousePressEvent(QMouseEvent * event)
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CTreeView::slotRightButtonPressed(QListViewItem *item,
-                                       const QPoint & /*p*/,int /*i*/)
+void CTreeView::slotMouseButtonClicked(int button, QListViewItem * item, const QPoint & pos, int /*c*/ )
 {
-  KPopupMenu *popup;
-
-  if( item )
+  if (item)
   {
-    // Set the sent item as active.
-    setSelected( item, true );
+    // These make other stuff work - absolutely crazy though :(
+    mouseBtn = button;
+    mousePos = pos;
 
-    // Fetch the popupmenu for the current item.
-    popup = getCurrentPopup();
+    switch (button)
+    {
+      case RightButton:
+      {
+        // Set the sent item as active.
+        setSelected( item, true );
 
-    // If the exists a popupmenu we show it.
-    if( popup )
-      popup->popup( this->mapToGlobal( mousePos ) );
+        // Fetch the popupmenu for the current item.
+        KPopupMenu* popup = getCurrentPopup();
+
+        // If the exists a popupmenu we show it.
+        if( popup )
+          popup->popup( this->mapToGlobal( mousePos ) );
+
+        break;
+      }
+
+      case LeftButton:
+      {
+        emit selectionChanged ();
+        emit selectionChanged(item);
+        break;
+      }
+
+      case MidButton:
+      {
+        setSelected(item,true);
+        break;
+      }
+
+      default:
+        break;
+    }
+    // Reset for unknown reasons :(
+    mouseBtn = NoButton;
   }
 }
 
-
-
+/*-----------------------------------------------------------------*/

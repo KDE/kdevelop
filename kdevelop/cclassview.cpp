@@ -16,26 +16,29 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include <time.h>
+
 #include "cclassview.h"
-#include <assert.h>
-#include <kmsgbox.h>
-#include <klocale.h>
-#include <qheader.h>
-#include <qprogressdialog.h> 
-#include <qmessagebox.h>
-#include <qstrlist.h>
 
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
 #include "cproject.h"
+
 #include "./gfxview/GfxClassTreeWindow.h"
-#include "resource.h"
+#include "./classparser/ClassParser.h"
 #include "./classwizard/cclasswizarddlg.h"
 
-// Initialize static members
-QString CClassView::CLASSROOTNAME = "Classes";
-QString CClassView::GLOBALROOTNAME = "Globals";
+#include "resource.h"
+
+#include <klocale.h>
+#include <kmessagebox.h>
+
+#include <qheader.h>
+#include <qmessagebox.h>
+#include <qprogressdialog.h>
+#include <qstrlist.h>
+
+#include <time.h>
+#include <assert.h>
 
 /*********************************************************************
  *                                                                   *
@@ -104,16 +107,21 @@ void CClassView::CCVToolTip::maybeTip( const QPoint &p )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
-  : CTreeView (parent, name)
+CClassView::CClassView(QWidget* parent, const char* name) :
+  CTreeView (parent, name),
+  cp(new CClassParser)
 {
+  CLASSROOTNAME = "Classes";
+  GLOBALROOTNAME = "Globals";
+
+
   project = NULL;		//by default initialize it to null;
 
   // Create the popupmenus.
   initPopups();
 
   // Set the store.
-  store = &cp.store;
+  store = &cp->store;
 
   // Create the tooltip;
   toolTip = new CCVToolTip( this );
@@ -137,6 +145,7 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
 CClassView::~CClassView()
 {
   delete toolTip;
+  delete cp;
 }
 
 /*------------------------------------------ CClassView::initPopups()
@@ -265,7 +274,7 @@ void CClassView::refresh( CProject *proj )
 
   // Reset the classparser and the view.
   ((CClassTreeHandler *)treeH)->clear();
-  cp.wipeout();
+  cp->wipeout();
 
   // Get all header and src filenames.
   header = proj->getHeaders();
@@ -291,7 +300,7 @@ void CClassView::refresh( CProject *proj )
   for( str = header.first(); str != NULL; str = header.next() )
   {
     debug( "  parsing:[%s]", str );
-    cp.parse( str );
+    cp->parse( str );
     emit setStatusbarProgress( ++currentCount );
   }
 	
@@ -299,7 +308,7 @@ void CClassView::refresh( CProject *proj )
   for( str = src.first(); str != NULL; str = src.next() )
   {
     debug( "  parsing:[%s]", str );
-    cp.parse( str );
+    cp->parse( str );
     emit setStatusbarProgress( ++currentCount );
   }
 
@@ -325,7 +334,7 @@ void CClassView::refresh( CProject *proj )
  *-----------------------------------------------------------------*/
 void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
 {
-//  cp.getDependentFiles( iHeaderList, iSourceList);
+//  cp->getDependentFiles( iHeaderList, iSourceList);
 
   // Initialize progressbar.
   int lTotalCount = 0;
@@ -340,23 +349,23 @@ void CClassView::refresh( QStrList &iHeaderList, QStrList &iSourceList)
 
   // Remove all references to the files in the lists
 //  for (lCurFile = iHeaderList.first(); lCurFile; lCurFile = iHeaderList.next())
-//    cp.removeWithReferences( lCurFile );
+//    cp->removeWithReferences( lCurFile );
   		
 //  for (lCurFile = iSourceList.first(); lCurFile; lCurFile = iSourceList.next())
-//    cp.removeWithReferences( lCurFile );
+//    cp->removeWithReferences( lCurFile );
 
   // Now parse the each file and add the data back.
   for (lCurFile = iHeaderList.first(); lCurFile; lCurFile = iHeaderList.next())
   {
     debug( "  parsing:[%s]", lCurFile );
-	  cp.parse( lCurFile );
+	  cp->parse( lCurFile );
     emit setStatusbarProgress( ++lCurCount );
   }
 
   for (lCurFile = iSourceList.first(); lCurFile; lCurFile = iSourceList.next())
   {
     debug( "  parsing:[%s]", lCurFile );
-    cp.parse( lCurFile );
+    cp->parse( lCurFile );
     emit setStatusbarProgress( ++lCurCount );
   }
 
@@ -455,7 +464,7 @@ void CClassView::addFile( const char *aName )
   debug( "Adding file %s", aName );
 
   // Parse the file.
-  cp.parse( aName );
+  cp->parse( aName );
 
   // Build the new classtree.
   refresh();
@@ -977,24 +986,24 @@ bool CClassView::validClassDecl( const char *className,
   if( retVal && className != NULL )
   {
     str.sprintf( "%s '%s' %s", 
-                 i18n("The class:"), 
+                 i18n("The class:").latin1(),
                  className == NULL ? "" : className, 
-                 i18n("couldn't be found."));
+                 i18n("couldn't be found.").latin1());
       
     retVal = store->hasClass( className );
 
     if( !retVal )
     {
       str.sprintf( "%s '%s' %s", 
-                   i18n("The struct:"), 
+                   i18n("The struct:").latin1(),
                    className == NULL ? "" : className, 
-                   i18n("couldn't be found."));
+                   i18n("couldn't be found.").latin1());
       retVal = store->hasStruct( className );
     }
   }
 
   if( !retVal )
-    QMessageBox::warning( this, i18n( "Not found" ), str );
+    KMessageBox::error( this, str, i18n( "Not found" ) );
 
   return retVal;
 }
@@ -1077,12 +1086,13 @@ void CClassView::slotClassNew()
 
 void CClassView::slotClassDelete()
 {
-  if( KMsgBox::yesNo( this, i18n("Delete class"),
+  if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this class?"),
-                      KMsgBox::QUESTION ) == 1 )
+                      i18n("Delete class")) == KMessageBox::Yes )
   {
-    KMsgBox::message( this, i18n("Not implemented"),
-                      i18n("This function isn't implemented yet.") );
+    KMessageBox::error( this,
+                      i18n("This function isn't implemented yet."),
+                      i18n("Not implemented") );
   }
                       
 }
@@ -1161,12 +1171,13 @@ void CClassView::slotAttributeNew()
 
 void CClassView::slotAttributeDelete()
 {
-  if( KMsgBox::yesNo( this, i18n("Delete attribute"), 
+  if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this attribute?"),
-                      KMsgBox::QUESTION ) == 1 )
+                      i18n("Delete attribute")) == KMessageBox::Yes )
   {
-    KMsgBox::message( this, i18n("Not implemented"),
-                      i18n("This function isn't implemented yet.") );
+    KMessageBox::error( this,
+                      i18n("This function isn't implemented yet."),
+                      i18n("Not implemented") );
   }
 }
 
@@ -1196,9 +1207,9 @@ void CClassView::slotFolderDelete()
 {
   QListViewItem *parent;
 
-  if( KMsgBox::yesNo( this, i18n("Delete folder"), 
+  if( KMessageBox::questionYesNo( this,
                       i18n("Are you sure you want to delete this folder?"),
-                      KMsgBox::QUESTION ) == 1 )
+                      i18n("Delete folder")) == KMessageBox::Yes )
   {
     parent = currentItem()->parent();
     parent->removeItem( currentItem() );

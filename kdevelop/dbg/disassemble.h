@@ -21,7 +21,6 @@
 #include <keditcl.h>
 
 class Breakpoint;
-class QMouseEvent;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -32,7 +31,7 @@ class Disassemble : public KEdit
   Q_OBJECT
 
 public:
-  Disassemble(KApplication* a, QWidget* parent, char* name=0);
+  Disassemble(QWidget* parent, const char* name=0);
   virtual ~Disassemble();
 
 private:

@@ -17,16 +17,26 @@
  ***************************************************************************/
 
 #include "ckdevsetupdlg.h"
+
 #include "ckdevelop.h"
 #include "resource.h"
 
+#include <kmessagebox.h>
+#include <kkeydialog.h>
+#include <klocale.h>
+#include <kstddirs.h>
+#include <kfiledialog.h>
+
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qbuttongroup.h>
 #include <qfileinfo.h>
+#include <qlineedit.h>
+#include <qwhatsthis.h>
 
-#include <kmsgbox.h>
-#include <klocale.h>
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 // SETUP DIALOG
 CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name )
@@ -36,7 +46,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   wantsTreeRefresh=false;
 
   setCaption( i18n("KDevelop Setup" ));
-  config=kapp->getConfig();
+  config=KGlobal::config();
   
   // ****************** the General Tab ********************
   w1 = new QWidget( this, "general" );
@@ -64,15 +74,16 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   makeSelectLineEdit->setGeometry( 270, 30, 130, 25 );
   makeSelectLineEdit->setText(make_cmd);
 
-  KQuickHelp::add(makeGroup,
-		  KQuickHelp::add(makeSelectLabel,
-		  KQuickHelp::add(makeSelectLineEdit,i18n("Make-Command\n\n"
+  QString makeSelectMsg = i18n("Make-Command\n\n"
 							  "Select your system's make-command.\n"
 							  "Usually, this is make, FreeBSD users\n"
 							  "may use gmake. Mind that you can also\n"
 							  "add option parameters to your make-binary\n"
-					  "as well."))));
-  
+					  "as well.");
+  QWhatsThis::add(makeGroup, makeSelectMsg);
+  QWhatsThis::add(makeSelectLabel, makeSelectMsg);
+  QWhatsThis::add(makeSelectLineEdit, makeSelectMsg);
+
   bool autoSave=config->readBoolEntry("Autosave",true);
   
   QButtonGroup* autosaveGroup;
@@ -118,17 +129,17 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   if(configTime==30*60*1000)
     autosaveTimeCombo->setCurrentItem(3);
 
-  KQuickHelp::add(autosaveTimeLabel,	
-		  KQuickHelp::add(autosaveTimeCombo,	
-				  KQuickHelp::add(autoSaveCheck,	
-						  KQuickHelp::add(autosaveGroup,i18n("Autosave\n\n"
-										     "If autosave is enabled, your currently\n"
-										     "changed files will be saved after the\n"
-										     "time-interval selected times out.\n\n"
-										     "Please select your timeout-value.\n"
-										     "Available are: 3 minutes, 5 minutes,\n"
-										     "15 minutes and 30 minutes.")))));
-  
+  QString autosaveMsg = i18n("Autosave\n\nIf autosave is enabled, your currently\n"
+                                "changed files will be saved after the\n"
+                                "time-interval selected times out.\n\n"
+                                "Please select your timeout-value.\n"
+                                "Available are: 3 minutes, 5 minutes,\n"
+                                "15 minutes and 30 minutes.");
+  QWhatsThis::add(autosaveTimeLabel,autosaveMsg);
+  QWhatsThis::add(autosaveTimeCombo, autosaveMsg);
+  QWhatsThis::add(autoSaveCheck, autosaveMsg);
+  QWhatsThis::add(autosaveGroup, autosaveMsg);
+
   QButtonGroup* autoswitchGroup;
   autoswitchGroup = new QButtonGroup( w1, "autoswitchGroup" );
   autoswitchGroup->setGeometry( 10, 190, 400, 60 );
@@ -154,7 +165,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   defaultClassViewCheck->setAutoResize( FALSE );
   bool defaultcv=config->readBoolEntry("DefaultClassView",true);
   defaultClassViewCheck->setChecked( defaultcv );
-  KQuickHelp::add(defaultClassViewCheck, i18n("use Class View as default\n\n"
+  QWhatsThis::add(defaultClassViewCheck, i18n("use Class View as default\n\n"
 					      "If this is enabled, KDevelop\n"
 					      "will automatically switch to\n"
 					      "the Class Viewer when switching.\n"
@@ -162,8 +173,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 					      "use Logical File Viewer for\n"
 					      "autoswitching."));
 
-  KQuickHelp::add(autoSwitchCheck,
-		  KQuickHelp::add(autoswitchGroup,i18n("Autoswitch\n\n"
+  QString autoswitchMsg = i18n("Autoswitch\n\n"
 						       "If autoswitch is enabled, KDevelop\n"
 						       "will open windows in the working\n"
 						       "view automatically according to\n"
@@ -171,7 +181,9 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 						       "Disableing autoswitch means you\n"
 						       "will have to switch to windows\n"
 						       "yourself, including turning on and\n"
-						       "off the outputwindow.")));	
+						       "off the outputwindow.");	
+  QWhatsThis::add(autoSwitchCheck, autoswitchMsg);
+  QWhatsThis::add(autoswitchGroup, autoswitchMsg);
 
 //  connect( autoSwitchCheck, SIGNAL(toggled(bool)),defaultClassViewCheck, SLOT(setEnabled(bool)));
   
@@ -184,7 +196,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   //	startupGroup->insert( lastProjectCheck );
   startupGroup->lower();
   
-  KQuickHelp::add(startupGroup, i18n("Startup\n\n"
+  QWhatsThis::add(startupGroup, i18n("Startup\n\n"
 	                  "The Startup group offers options for\n"
 				     "starting KDevelop"));
   
@@ -199,7 +211,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   logoCheck->setAutoResize( FALSE );
   logoCheck->setChecked( logo );
   
-  KQuickHelp::add(logoCheck, i18n("Startup Logo\n\n"
+  QWhatsThis::add(logoCheck, i18n("Startup Logo\n\n"
 	                  "If Startup Logo is enabled, KDevelop will show the\n"
 	                  "logo picture while it is starting."));
   
@@ -210,7 +222,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   lastProjectCheck->setAutoResize( FALSE );
   lastProjectCheck->setChecked( lastprj );
   
-  KQuickHelp::add(lastProjectCheck, i18n("Load last project\n\n"
+  QWhatsThis::add(lastProjectCheck, i18n("Load last project\n\n"
                     "If Load last project is enabled, KDevelop will load\n"
                     "the last project used."));
 
@@ -226,7 +238,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 	tipDayCheck->setAutoResize( FALSE );
 	tipDayCheck->setChecked( tip );
 
-	KQuickHelp::add(tipDayCheck, i18n("Tip of the Day\n\n"
+	QWhatsThis::add(tipDayCheck, i18n("Tip of the Day\n\n"
 	                  "If Tip of the Day is enabled, KDevelop will show the\n"
 	                  "Tip of the Day every time it starts."));
 	
@@ -239,11 +251,12 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   connect( defaultClassViewCheck,SIGNAL(toggled(bool)),parent,SLOT(slotOptionsDefaultCV(bool)));
 
   // ****************** the Keys Tab ***************************
-  
-  dict = new QDict<KKeyEntry>( accel->keyDict() );
+
+//  dict = new QDict<KKeyEntry>( accel->keyDict() );
   //  KKeyChooser* w2 = new KKeyChooser ( dict,this);
+  keyMap = accel->keyDict();
   w2 = new QWidget( this, "keys" );
-  w21 = new KKeyChooser ( dict,w2,true);
+  w21 = new KKeyChooser ( &keyMap, w2, true);
   w21->setGeometry(15,10,395,320);
   
   
@@ -251,7 +264,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   w = new QWidget( this, "documentaion" );
   config->setGroup("Doc_Location");
   
-  KQuickHelp::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
+  QWhatsThis::add(w, i18n("Enter the path to your QT and KDE-Libs\n"
 				"Documentation for the Documentation Browser.\n"
 				"QT usually comes with complete Documentation\n"
 				"whereas for KDE you can create the Documentation\n"
@@ -266,8 +279,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   QPushButton* qt_button;
   qt_button = new QPushButton( w, "qt_button" );
   qt_button->setGeometry( 370, 40, 30, 30 );
-  QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+  QPixmap pix = BarIcon("open");
   qt_button->setPixmap(pix);
   connect(qt_button,SIGNAL(clicked()),SLOT(slotQtClicked()));
   
@@ -276,16 +288,17 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   qt_label->setGeometry( 20, 40, 140, 30 );
   qt_label->setText( i18n("Qt-Library-Doc:") );
   
-  
-  KQuickHelp::add(qt_edit,
-  KQuickHelp::add(qt_button,
-  KQuickHelp::add(qt_label, i18n("Enter the path to your QT-Documentation\n"
+  QString qtdocMsg = i18n("Enter the path to your QT-Documentation\n"
 				 "here. To access the path easier please\n"
 				 "press the pushbutton on the right to change\n"
 				 "directories.\n\n"
 				 "Usually the QT-Documentation is\n"
-				 "located in <i><blue>$QTDIR/html</i>"))));	
-  
+				 "located in <i><blue>$QTDIR/html</i>");	
+
+  QWhatsThis::add(qt_edit, qtdocMsg);
+  QWhatsThis::add(qt_button, qtdocMsg);
+  QWhatsThis::add(qt_label, qtdocMsg);
+
   kde_edit = new QLineEdit( w, "kde_edit");
   kde_edit->setGeometry( 170, 90, 190, 30 );
   kde_doc_path=config->readEntry("doc_kde", KDELIBS_DOCDIR);
@@ -305,16 +318,17 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   kde_label->setGeometry( 20, 90, 140, 30 );
   kde_label->setText( i18n("KDE-Libraries-Doc:") );
   
-  KQuickHelp::add(kde_edit,
-  KQuickHelp::add(kde_button,
-  KQuickHelp::add(kde_label,i18n("Enter the path to your KDE-Documentation\n"
+  QString kdedocMsg = i18n("Enter the path to your KDE-Documentation\n"
 				 "here. To access the path easier please\n"
 				 "press the pushbutton on the right to change\n"
 				 "directories.\n\n"
 				 "If you have no kdelibs Documentation installed,\n"
 				 "you can create it by selecting the Update button\n"
-				 "below."))));
-  
+				 "below.");
+  QWhatsThis::add(kde_edit, kdedocMsg);
+  QWhatsThis::add(kde_button, kdedocMsg);
+  QWhatsThis::add(kde_label, kdedocMsg);
+
   QLabel* update_label;
   update_label = new QLabel( w, "update_label" );
   update_label->setGeometry( 20, 190, 260, 30 );
@@ -330,8 +344,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   update_button->setAutoRepeat( FALSE );
   update_button->setAutoResize( FALSE );
   
-  KQuickHelp::add(update_label,
-  KQuickHelp::add(update_button,i18n("Update KDE-Documentation\n\n"
+  QString updateMsg = i18n("Update KDE-Documentation\n\n"
 				     "This lets you create or update the\n"
 				     "HTML-documentation of the KDE-libs.\n"
 				     "Mind that you have kdoc installed to\n"
@@ -340,8 +353,10 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 				     "the documentation, as well as the \n"
 				     "Qt-Documentation path has to be set to\n"
 				     "cross-reference the KDE-Documentation\n"
-				     "with the Qt-classes.")));
-  
+				     "with the Qt-classes.");
+  QWhatsThis::add(update_label, updateMsg);
+  QWhatsThis::add(update_button, updateMsg);
+
   QLabel* create_label;
   create_label = new QLabel( w, "create_label" );
   create_label->setGeometry( 20, 230, 260, 30 );
@@ -357,15 +372,17 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   create_button->setAutoRepeat( FALSE );
   create_button->setAutoResize( FALSE );
   
-  KQuickHelp::add(create_label,
-		  KQuickHelp::add(create_button,i18n("Create Search Database\n\n"
+  QString createMsg = i18n("Create Search Database\n\n"
 						     "This will create a search database for glimpse\n"
 						     "which will be used to look up marked text in\n"
 						     "the documentation. We recommend updating the\n"
 						     "database each time you've changed the documentation\n"
 						     "e.g. after a kdelibs-update or installing a new\n"
-						     "Qt-library version.")));
-  
+						     "Qt-library version.");
+
+  QWhatsThis::add(create_label, createMsg);
+  QWhatsThis::add(create_button, createMsg);
+
 #ifdef WITH_KDOC2
   kdocCheck = new QCheckBox( w, "kdocCheck" );
   kdocCheck->setGeometry( 20, 270, 350, 30 );
@@ -379,7 +396,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
 
   kdocCheck->setChecked( bCreateKDoc );
 
-  KQuickHelp::add(kdocCheck, i18n("Create KDOC-reference of your project\n\n"
+  QWhatsThis::add(kdocCheck, i18n("Create KDOC-reference of your project\n\n"
                     "If this is enabled, on creating the API-Documentation KDoc creates also\n"
                     "a cross reference file of your project into the seleceted kdoc-reference\n"
                     "directory."));
@@ -433,7 +450,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgExternalCheck->setAutoResize( FALSE );
   dbgExternalCheck->setChecked(useExternalDbg);
 
-  KQuickHelp::add(dbgExternalCheck, i18n("Select internal or external debugger\n\n"
+  QWhatsThis::add(dbgExternalCheck, i18n("Select internal or external debugger\n\n"
 	                  "Choose whether to use an external debugger\n"
 	                  "or the internal debugger within kdevelop\n"
                     "The internal debugger is a frontend to gdb"));
@@ -455,11 +472,11 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgExternalSelectLineEdit->setGeometry( 270, 70, 130, 25 );
   dbgExternalSelectLineEdit->setText(dbg_cmd);
 
-  KQuickHelp::add(dbgSelectCmdLabel,
-    KQuickHelp::add(dbgExternalSelectLineEdit,
-        i18n("Identify the external debugger\n\n"
+  QString dbgSelectCmdMsg = i18n("Identify the external debugger\n\n"
 	                  "Enter the program name you wish to run\n"
-	                  "as your debugger")));
+	                  "as your debugger");
+  QWhatsThis::add(dbgSelectCmdLabel, dbgSelectCmdMsg);
+  QWhatsThis::add(dbgExternalSelectLineEdit, dbgSelectCmdMsg);
 
   dbgInternalGroup = new QButtonGroup( w3, "dbgInternalGroup" );
   dbgInternalGroup->setGeometry( 10, 130, 400, 180 );
@@ -474,7 +491,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgMembersCheck->setAutoRepeat( FALSE );
   dbgMembersCheck->setAutoResize( FALSE );
   dbgMembersCheck->setChecked(displayStaticMembers);
-  KQuickHelp::add(dbgMembersCheck, i18n("Display static members\n\n"
+  QWhatsThis::add(dbgMembersCheck, i18n("Display static members\n\n"
 	                  "Displaying static members makes gdb slower in\n"
                     "producing data within kde and qt.\n"
                     "It may change the \"signature\" of the data\n"
@@ -488,7 +505,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgAsmCheck->setAutoRepeat( FALSE );
   dbgAsmCheck->setAutoResize( FALSE );
   dbgAsmCheck->setChecked(displayMangledNames);
-  KQuickHelp::add(dbgAsmCheck, i18n("Display mangled names\n\n"
+  QWhatsThis::add(dbgAsmCheck, i18n("Display mangled names\n\n"
 	                  "When displaying the disassembled code you\n"
 	                  "can select to see the methods mangled names\n"
                     "However, non-mangled names are easier to read." ));
@@ -499,7 +516,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgLibCheck->setAutoRepeat( FALSE );
   dbgLibCheck->setAutoResize( FALSE );
   dbgLibCheck->setChecked(setBPsOnLibLoad);
-  KQuickHelp::add(dbgLibCheck, i18n("Set pending breakpoints on loading a library\n\n"
+  QWhatsThis::add(dbgLibCheck, i18n("Set pending breakpoints on loading a library\n\n"
 	                  "If GDB hasn't seen a library that will be loaded via\n"
 	                  "\"dlopen\" then it'll refuse to set a breakpoint in that code.\n"
                     "We can get gdb to stop on a library load and hence\n"
@@ -513,7 +530,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgFloatCheck->setAutoRepeat( FALSE );
   dbgFloatCheck->setAutoResize( FALSE );
   dbgFloatCheck->setChecked(dbgFloatingToolbar);
-  KQuickHelp::add(dbgFloatCheck, i18n("Enable floating toolbar\n\n"
+  QWhatsThis::add(dbgFloatCheck, i18n("Enable floating toolbar\n\n"
 	                  "Use the floating toolbar. This toolbar always stays\n"
                     "on top of all windows so that if the app covers KDevelop\n"
                     "you have control of the app though the small toolbar\n"
@@ -526,7 +543,7 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   dbgTerminalCheck->setAutoRepeat( FALSE );
   dbgTerminalCheck->setAutoResize( FALSE );
   dbgTerminalCheck->setChecked(dbgTerminal);
-  KQuickHelp::add(dbgTerminalCheck, i18n("Enable separate terminal for application i/o\n\n"
+  QWhatsThis::add(dbgTerminalCheck, i18n("Enable separate terminal for application i/o\n\n"
                     "This allows you to enter terminal input when your\n"
                     "application contains terminal input code (eg cin, fgets etc.) \n"
                     "If you use terminal input in your app, then tick this option.\n"
@@ -562,9 +579,10 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   qt2_button->setMinimumSize(0,0);
   qt2_button->setPixmap(pix);
 
-  KQuickHelp::add(qt2_edit,
-  KQuickHelp::add(qt2_button,
-  KQuickHelp::add(qt2,i18n("Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0"))));
+  QString qt2Msg = i18n("Set the root directory path leading to your Qt 2.x path, e.g. /usr/lib/qt-2.0");
+  QWhatsThis::add(qt2_edit, qt2Msg);
+  QWhatsThis::add(qt2_button, qt2Msg);
+  QWhatsThis::add(qt2, qt2Msg);
 
 
   QLabel* kde2= new QLabel(w4,"NoName");
@@ -584,14 +602,13 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   kde2_button->setMinimumSize(0,0);
 	kde2_button->setPixmap(pix);
 
-  KQuickHelp::add(kde2_edit,
-	KQuickHelp::add(kde2_button,
-	KQuickHelp::add(kde2,i18n("Set the root directory path leading to your KDE 2 includes/libraries, e.g. /opt/kde2"))));
+  QString kde2Msg = i18n("Set the root directory path leading to your KDE 2 includes/libraries, e.g. /opt/kde2");
+  QWhatsThis::add(kde2_edit, kde2Msg);
+  QWhatsThis::add(kde2_button, kde2Msg);
+  QWhatsThis::add(kde2, kde2Msg);
 
   connect(qt2_button,SIGNAL(clicked()),SLOT(slotQt2Clicked()));
   connect(kde2_button, SIGNAL(clicked()),SLOT(slotKDE2Clicked()));
-
-
 
   QGroupBox* ppath_box= new QGroupBox(w4,"NoName");
   ppath_box->setGeometry(10,210,400,100);
@@ -619,11 +636,10 @@ CKDevSetupDlg::CKDevSetupDlg(KAccel* accel_pa, QWidget *parent, const char *name
   connect(ppath_button, SIGNAL(clicked()),SLOT(slotPPathClicked()));
 // ---
 
-  KQuickHelp::add(ppath_edit,
-	KQuickHelp::add(ppath_button,
-	KQuickHelp::add(ppath,i18n("Set the start directory where to create/load projects here"))));
-
-
+  QString ppathMsg = i18n("Set the start directory where to create/load projects here");
+  QWhatsThis::add(ppath_edit, ppathMsg);
+  QWhatsThis::add(ppath_button, ppathMsg);
+  QWhatsThis::add(ppath, ppathMsg);
 
   // *********** tabs ****************
   addTab(w1, i18n("General"));
@@ -675,20 +691,21 @@ void CKDevSetupDlg::slotOkClicked(){
     text = text + "/";
   }
   QString qt_testfile=text+"classes.html"; // test if the path really is the qt-doc path
-  answer=1;
+  answer=KMessageBox::Yes;
   if(!QFileInfo(qt_testfile).exists())
   {
-    answer=KMsgBox::yesNo(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "Qt-library documentation. Do you really want to save\n"
-                                                              "this value?"));
+    answer=KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to the\n"
+                                                "Qt-library documentation. Do you really want to save\n"
+                                                "this value?"),
+                                            i18n("The selected path is not correct!"));
   }
 
-  if (answer==1)
+  if (answer==KMessageBox::Yes)
   {
      config->writeEntry("doc_qt",text);
      wantsTreeRefresh |= (qt_doc_path != text);
   }
-  answer=1;    // simulate again ok...
+  answer=KMessageBox::Yes;    // simulate again ok...
   text = kde_edit->text();
   if(text.right(1) != "/" ){
     text = text + "/";
@@ -696,12 +713,13 @@ void CKDevSetupDlg::slotOkClicked(){
   QString kde_testfile=text+"kdecore/index.html"; // test if the path really is the qt-doc path
   if(!QFileInfo(kde_testfile).exists())
   {
-    answer=KMsgBox::yesNo(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "KDE-library documentation. Do you really want to save\n"
-                                                              "this value?"));
+    answer=KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to the\n"
+                                                "KDE-library documentation. Do you really want to save\n"
+                                                "this value?"),
+                                            i18n("The selected path is not correct!"));
   }
 
-  if (answer==1)
+  if (answer==KMessageBox::Yes)
   {
      config->writeEntry("doc_kde",text);
      wantsTreeRefresh |= (kde_doc_path != text);
@@ -762,7 +780,7 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("ProjectDefaultDir", ppath_edit->text());	
 // ---
 
-  accel->setKeyDict( *dict);
+  accel->setKeyDict(keyMap);
   accel->writeSettings(config);
   config->sync();
   accept();
@@ -771,7 +789,7 @@ void CKDevSetupDlg::slotOkClicked(){
 void CKDevSetupDlg::slotQtClicked(){
   QString dir;
   config->setGroup("Doc_Location");
-  dir = KFileDialog::getDirectory(config->readEntry("doc_qt", QT_DOCDIR));
+  dir = KFileDialog::getExistingDirectory(config->readEntry("doc_qt", QT_DOCDIR));
   if (!dir.isEmpty()){
     qt_edit->setText(dir);
 
@@ -780,9 +798,10 @@ void CKDevSetupDlg::slotQtClicked(){
     }
     QString qt_testfile=dir+"classes.html"; // test if the path really is the qt-doc path
     if(!QFileInfo(qt_testfile).exists())
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "Qt-library documentation. Please choose the\n"
-                                                              "correct path."),KMsgBox::EXCLAMATION);
+      KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
+                                   "Qt-library documentation. Please choose the\n"
+                                   "correct path."),
+                                i18n("The selected path is not correct!"));
   }
 }
 
@@ -790,7 +809,7 @@ void CKDevSetupDlg::slotQtClicked(){
 void CKDevSetupDlg::slotKDEClicked(){
   QString dir;
   config->setGroup("Doc_Location");
-  dir = KFileDialog::getDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
+  dir = KFileDialog::getExistingDirectory(config->readEntry("doc_kde", KDELIBS_DOCDIR));
   if (!dir.isEmpty()){
     kde_edit->setText(dir);
 
@@ -800,10 +819,11 @@ void CKDevSetupDlg::slotKDEClicked(){
 
     QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the kde-doc path
     if(!QFileInfo(kde_testfile).exists())
-      KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "KDE-library documentation. Please choose the\n"
-                                                              "correct path or choose 'Update' to create a new\n"
-                                                              "documentation"),KMsgBox::EXCLAMATION);
+      KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
+                                   "KDE-library documentation. Please choose the\n"
+                                   "correct path or choose 'Update' to create a new\n"
+                                   "documentation"),
+                                i18n("The selected path is not correct!"));
   }
 }
 
@@ -838,31 +858,33 @@ void CKDevSetupDlg::slotSetDebug()
 void CKDevSetupDlg::slotQt2Clicked(){
   QString dir;
   config->setGroup("QT2");
-  dir = KFileDialog::getDirectory(config->readEntry("qt2dir"));
+  dir = KFileDialog::getExistingDirectory(config->readEntry("qt2dir"));
   if (!dir.isEmpty()){
     qt2_edit->setText(dir);
 
   }
   QString qt_testfile=dir+"include/qapp.h"; // test if the path really is the qt2 path
   if(!QFileInfo(qt_testfile).exists())
-  	KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "Qt-2.x root directory. Please choose the\n"
-                                                              "correct path."),KMsgBox::EXCLAMATION);
+  	KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
+                                 "Qt-2.x root directory. Please choose the\n"
+                                 "correct path."),
+                             i18n("The selected path is not correct!"));
 
 }
 void CKDevSetupDlg::slotKDE2Clicked(){
   QString dir;
   config->setGroup("QT2");
-  dir = KFileDialog::getDirectory(config->readEntry("kde2dir"));
+  dir = KFileDialog::getExistingDirectory(config->readEntry("kde2dir"));
   if (!dir.isEmpty()){
     kde2_edit->setText(dir);
 
   }
   QString kde_testfile=dir+"include/kmessagebox.h"; // test if the path really is the kde2 path
   if(!QFileInfo(kde_testfile).exists())
-  	KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("The chosen path does not lead to the\n"
-                                                              "KDE-2.x root directory. Please choose the\n"
-                                                              "correct path."),KMsgBox::EXCLAMATION);
+  	KMessageBox::error(this,i18n("The chosen path does not lead to the\n"
+                                 "KDE-2.x root directory. Please choose the\n"
+                                 "correct path."),
+                             i18n("The selected path is not correct!"));
 
 }
 
@@ -870,7 +892,7 @@ void CKDevSetupDlg::slotKDE2Clicked(){
 void CKDevSetupDlg::slotPPathClicked(){
   QString dir;
   config->setGroup("General Options");
-  dir = KFileDialog::getDirectory(config->readEntry("ProjectDefaultDir", QDir::homeDirPath()));
+  dir = KFileDialog::getExistingDirectory(config->readEntry("ProjectDefaultDir", QDir::homeDirPath()));
   if (!dir.isEmpty()){
     ppath_edit->setText(dir);
   }

@@ -18,10 +18,9 @@
 #ifndef _CTREEHANDLER_H_INCLUDED
 #define _CTREEHANDLER_H_INCLUDED
 
-#include <kapp.h>
-#include <qlistview.h>
-#include <qpixmap.h> 
-#include <qlist.h>
+class QListView;
+class QListViewItem;
+class QPixmap;
 
 /** All different types that the treehandler knows about.
  */

@@ -24,7 +24,7 @@
 
 #define CALLER_ITEMCLASS_NAME KDlgItem_KTreeList
 #define ITEMCLASS_NAME KDlgItem_KTreeList
-#define ITEMCLASS_TYPE KTreeList
+#define ITEMCLASS_TYPE KListView
 
 #include "item_all.cpp.inc"
 

@@ -29,6 +29,7 @@
 #include <kiconloader.h>
 #include <kapp.h>
 #include <klocale.h>
+#include <kstddirs.h>
 
 
 #include "klangcombo.h"
@@ -49,18 +50,19 @@ void KLanguageCombo::insertLanguage(const char *lang)
 {
   QPainter p;
 
-  QString output = QString(klocale->translate(language(lang))) + " ("+tag(lang)+")";
+  QString output = QString(KGlobal::locale()->translate(language(lang))) + " ("+tag(lang)+")";
 
   int w = fontMetrics().width(output) + 24;
   QPixmap pm(w, 16);
   
-  QPixmap flag(KApplication::kde_datadir() + "/kcmlocale/pics/" + (QString("flag_")+tag(lang)+".gif"));
+  QPixmap flag(locate("data", "kcmlocale/pics/" + (QString("flag_")+tag(lang)+".gif")));
   if(style() == MotifStyle){
     pm.fill(colorGroup().background());
   }
-  else{
-    pm.fill(kapp->windowColor);
-  }
+#warning FIXME windowcolor is ???
+//  else{
+//    pm.fill(kapp->windowColor);
+//  }
   p.begin(&pm);
   p.drawText(24,1,w-24,16,AlignLeft | AlignTop,output);
   if (!flag.isNull()){

@@ -17,12 +17,14 @@
 
 #include "cmakemanualdlg.h"
 #include "ctoolclass.h"
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <qfile.h>
 #include <kapp.h>
 #include <qpixmap.h>
+#include <kiconloader.h>
 #include <klocale.h>
+#include <kstddirs.h>
 
 CMakeManualDlg::CMakeManualDlg(QWidget *parent, const char *name,QString  manual_file) : QDialog(parent,name,true){
 	initDialog();
@@ -34,8 +36,7 @@ CMakeManualDlg::CMakeManualDlg(QWidget *parent, const char *name,QString  manual
 	program_group->insert(ksgml2html_radiobutton);
 	program_group->lower();
 
-	QPixmap pix;
-	pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix(BarIcon("open"));
 	file_button->setPixmap(pix);
 	file_edit->setText(manual_file);
 
@@ -69,35 +70,15 @@ void CMakeManualDlg::slotOkClicked(){
     }
     file = file_edit->text();
     if(!QFile::exists(file)){
-      KMsgBox::message(this,i18n("Error..."),
-		       i18n("You must choose an existing file!")
-		       ,KMsgBox::EXCLAMATION);
+      KMessageBox::error(this,i18n("You must choose an existing file!"));
       return;
     }
     accept();
 }
 void CMakeManualDlg::slotFileButtonClicked(){
-    QString str =  KFileDialog::getOpenFileName(0,"*.sgml",this,"test");
+    QString str =  KFileDialog::getOpenFileName(QString::null,"*.sgml");
     if(!str.isEmpty()){
 	file_edit->setText(str);
     }    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

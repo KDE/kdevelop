@@ -20,6 +20,7 @@
 #define INC_WIDGET
 #include "items.h"
 #include <qpainter.h>
+#include <klocale.h>
 
 class QWidget;
 

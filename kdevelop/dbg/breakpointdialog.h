@@ -19,9 +19,9 @@
 #ifndef BREAKPOINTDIALOG_H
 #define BREAKPOINTDIALOG_H
 
-#include <klined.h>
-#include <kintegerline.h>
-#include <kwizard.h>
+#include <klineedit.h>
+#include <knuminput.h>
+#include <kdialog.h>
 
 #include <qcheckbox.h>
 
@@ -44,8 +44,8 @@ public:
 
 private:
   QCheckBox*    enabled_;
-  KLined*       conditional_;
-  KIntegerLine* ignoreCount_;
+  KLineEdit*       conditional_;
+  KIntNumInput* ignoreCount_;
 };
 
 #endif

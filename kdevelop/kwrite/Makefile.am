@@ -1,13 +1,15 @@
+####### kdevelop will overwrite this part!!! (begin)##########
 
-# set the include path for X, qt and KDE
-INCLUDES= $(all_includes)
+INCLUDES = $(all_includes)
+
+libkwrite_a_METASOURCES = AUTO
 
 noinst_LIBRARIES = libkwrite.a
 
-libkwrite_a_METASOURCES = USE_AUTOMOC
+libkwrite_a_SOURCES = kwview.cpp kwdoc.cpp kwdialog.cpp highlight.cpp 
 
-libkwrite_a_SOURCES = highlight.cpp kmimemagic.cpp kwdialog.cpp kwdoc.cpp kwview.cpp
+SUBDIRS = pix 
 
-noinst_HEADERS = highlight.h kmimemagic.h kwdialog.h kwdoc.h kwview.h
+EXTRA_DIST = highlight.cpp highlight.h kwdialog.cpp kwdialog.h kwdoc.cpp kwdoc.h kwview.cpp kwview.h 
 
-SUBDIRS = pix
+####### kdevelop will overwrite this part!!! (end)############

@@ -22,8 +22,6 @@
   */
 
 #include <kapp.h>
-#include <kwm.h>
-#include <kwmmapp.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -96,7 +94,8 @@ void KSwallowWidget::swallowWindow(Window w)
   debug("\nKSwallowWidget::swallowWindow\n");
   window = w;
 
-  KWM::prepareForSwallowing(w);
+#warning FIXME Swallowing apps??
+//  KWM::prepareForSwallowing(w);
 
   XReparentWindow(qt_xdisplay(), w, winId(), 0, 0);
   XMapRaised(qt_xdisplay(), w);
@@ -166,8 +165,9 @@ void KSwallowWidget::sWExecute()
        
 
 
+#warning FIXME Swallowing apps??
     // Avoid flickering a la kwm! (ettrich)
-    KWM::doNotManage(swallowTitle);
+//    KWM::doNotManage(swallowTitle);
 
     // connect to KWM events to get notification if window appears
     connect(kapp, SIGNAL(windowAdd(Window)), this, SLOT(addWindow(Window)));
@@ -234,7 +234,8 @@ void KSwallowWidget::sWClose(bool save)
     if(save)
       sendClientMessage(window, ksw_save, 0);
     sendClientMessage(window, ksw_exit, 0);
-    KWM::close(window);
+#warning FIXME Swallowing apps??
+//    KWM::close(window);
   }
 }
 

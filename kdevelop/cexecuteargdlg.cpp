@@ -16,18 +16,21 @@
  ***************************************************************************/
 
 
+#include "cexecuteargdlg.h"
+
+#include <klocale.h>
+
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <kapp.h>
+#include <qlineedit.h>
 
-#include "cexecuteargdlg.h"
-
-CExecuteArgDlg::CExecuteArgDlg(QWidget *parent, const char *name, QString titel,QString arg ) : QDialog(parent,name,true) {
-    //  prj = p_prj;
-    arguments = arg;
+CExecuteArgDlg::CExecuteArgDlg(QWidget *parent, const char *name, QString title, QString arg ) :
+  QDialog(parent,name,true),
+  arguments(arg)
+{
     resize(0,0);
-    setCaption(titel);
+    setCaption(title);
     QVBoxLayout *vl = new QVBoxLayout(this,10);
     
     QHBoxLayout *hl = new QHBoxLayout( 15 );
@@ -42,8 +45,8 @@ CExecuteArgDlg::CExecuteArgDlg(QWidget *parent, const char *name, QString titel,
     edit->setFocus();
     
     edit->setText(arguments);
-    connect( edit, SIGNAL( textChanged( const char * ) ),
-	     SLOT( slotTextChanged( const char * ) ) );
+    connect( edit, SIGNAL( textChanged( const QString& ) ),
+	                SLOT( slotTextChanged( const QString& ) ) );
     
     hl->addWidget( label );
     hl->addWidget( edit );
@@ -87,13 +90,13 @@ void CExecuteArgDlg::slotSetArg(){
     accept();
 }
 
-void CExecuteArgDlg::slotTextChanged( const char *t )
+void CExecuteArgDlg::slotTextChanged( const QString& t )
 {
     arguments = t;
 }
 
 void CExecuteArgDlg::slotClose(){
-    edit->clear();
+  edit->clear();
 }
 
 

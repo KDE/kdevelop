@@ -36,6 +36,7 @@ static int BPKey_ = 0;
 /***************************************************************************/
 Breakpoint::Breakpoint(bool temporary, bool enabled) :
   QListBoxItem (),
+  display_(QString::null),
   s_pending_(true),
   s_actionAdd_(false),
   s_actionClear_(false),
@@ -55,7 +56,6 @@ Breakpoint::Breakpoint(bool temporary, bool enabled) :
   ignoreCount_(0),
   condition_("")
 {
-  *display_ = 0;
 }
 
 /***************************************************************************/
@@ -89,7 +89,7 @@ void Breakpoint::paint( QPainter *p )
 
 /***************************************************************************/
 
-const char* Breakpoint::text () const
+QString Breakpoint::text () const
 {
   return display_;
 }
@@ -99,39 +99,39 @@ const char* Breakpoint::text () const
 void Breakpoint::configureDisplay()
 {
   if (s_temporary_)
-    strcat(display_, "\ttemporary");
+    display_ += "\ttemporary";
 
   if (!s_enabled_)
-    strcat(display_, "\tdisabled");
+    display_ += "\tdisabled";
 
   if (!condition_.isEmpty())
   {
     QString t(QString().sprintf("\tif %s", condition_.data()));
-    strcat(display_, t.data());
+    display_ += t;
   }
 
   if (hits_)
   {
     QString t(QString().sprintf("\thits %d", hits_));
-    strcat(display_, t.data());
+    display_ += t;
   }
 
   if (ignoreCount_)
   {
     QString t(QString().sprintf("\tignore count %d", ignoreCount_));
-    strcat(display_, t.data());
+    display_ += t;
   }
 
   if (s_hardwareBP_)
   {
     QString t(display_);
-    sprintf(display_, "hw %s", t.data());
+    display_.sprintf("hw %s", t.data());
   }
 
   if (dbgId_>0)
   {
     QString t(display_);
-    sprintf(display_, "%d %s", dbgId_, t.data());
+    display_.sprintf("%d %s", dbgId_, t.data());
   }
 
   if (s_pending_)
@@ -145,10 +145,8 @@ void Breakpoint::configureDisplay()
       pending += "modify ";
 
     QString t(display_);
-    sprintf(display_, "%s>\t%s", pending.data(), t.data());
+    display_.sprintf("%s>\t%s", pending.data(), t.data());
   }
-
-  ASSERT(strlen(display_) < 199);   //  eeekkk!
 }
 
 /***************************************************************************/
@@ -319,7 +317,7 @@ bool FilePosBreakpoint::match(const Breakpoint* brkpt) const
 
 void FilePosBreakpoint::configureDisplay()
 {
-  ::sprintf(display_, "breakpoint at %s:%d", fileName_.data(), lineNo_);
+  display_.sprintf("breakpoint at %s:%d", fileName_.data(), lineNo_);
   Breakpoint::configureDisplay();
 }
 
@@ -353,7 +351,7 @@ QString Watchpoint::dbgSetCommand() const
 
 void Watchpoint::configureDisplay()
 {
-  sprintf(display_, "watchpoint on %s", varName_.data());
+  display_.sprintf("watchpoint on %s", varName_.data());
   Breakpoint::configureDisplay();
 }
 

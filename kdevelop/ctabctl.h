@@ -33,7 +33,7 @@ public:
    type = normal,output_widget
   */
   
-  CTabCtl(QWidget* parent=0,char* name=0,QString type="normal");
+  CTabCtl(QWidget* parent=0, const char* name=0, QString type="normal");
   /**destructor*/
   ~CTabCtl(){};
  
@@ -41,10 +41,6 @@ public:
   /** set the top tab*/
   void setCurrentTab(int id);
   int getCurrentTab();
-
-  
- 
-  
 };
 
 #endif

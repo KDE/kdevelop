@@ -19,9 +19,12 @@
 #ifndef KDLGDIALOGS_H
 #define KDLGDIALOGS_H
 
-#include <qwidget.h>
 #include "../ctreeview.h"
+#include <kpopupmenu.h>
+#include <qwidget.h>
+
 class CProject;
+class QListViewItem;
 
 /**
   *@author Sandy Meier <smeier@rz.uni-potsdam.de>
@@ -29,7 +32,8 @@ class CProject;
 
 class KDlgDialogs : public CTreeView  {
   Q_OBJECT
-public: 
+
+public:
   KDlgDialogs(QWidget *parent=0, const char *name=0);
   ~KDlgDialogs();
   void refresh(CProject* prj);
@@ -38,17 +42,19 @@ public:
   /** Get the current popupmenu. */
   virtual KPopupMenu *getCurrentPopup();
   
-  signals:
+signals:
   void kdlgdialogsSelected(QString dialog_file);
   void newDialog();
   // *.kdevdlg
   void deleteDialog(QString dialog_filename);
+
 public  slots:
-void slotSelectionChanged( QListViewItem* item);
+  void slotSelectionChanged( QListViewItem* item);
   void slotNewDialog();
   void slotDeleteDialog();
+
 protected:
-CProject*  project;
+  CProject*  project;
   // only new
   KPopupMenu dialog_pop;
   // new and delete

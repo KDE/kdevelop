@@ -14,6 +14,7 @@
 
 #include "kwdialog.h"
 #include "kwdoc.h"
+#include <klocale.h>
 
 SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   int flags, QWidget *parent, const char *name)

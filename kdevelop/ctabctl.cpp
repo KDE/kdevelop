@@ -16,9 +16,12 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
 #include "ctabctl.h"
 
-CTabCtl::CTabCtl( QWidget* parent,char* name, QString type) : KTabCtl(parent,name){
+CTabCtl::CTabCtl( QWidget* parent, const char* name, QString type) :
+  KTabCtl(parent,name)
+{
   setFocusPolicy(QWidget::NoFocus);
   tabs->setFocusPolicy(QWidget::NoFocus);
   if(type == "normal"){
@@ -28,27 +31,17 @@ CTabCtl::CTabCtl( QWidget* parent,char* name, QString type) : KTabCtl(parent,nam
     setShape(QTabBar::RoundedAbove);
     //    tabs->setFont(QFont("helvetica",10));
   }
-
 }
-void CTabCtl::setCurrentTab(int id){
 
+void CTabCtl::setCurrentTab(int id)
+{
   tabs->setCurrentTab(id);
   tabSelected(id);
   showTab(id);
 }
 
-int CTabCtl::getCurrentTab(){
+int CTabCtl::getCurrentTab()
+{
   int currentTab=tabs->currentTab();
   return currentTab;
 }
-
-
-
-
-
-
-
-
-
-
-

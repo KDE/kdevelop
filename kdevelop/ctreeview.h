@@ -19,13 +19,11 @@
 #define _CTREEVIEW_INCLUDED
 
 #include <qlistview.h>
-#include <qheader.h>
-#include <kpopmenu.h>
-#include <qpoint.h> 
-#include "ctreehandler.h"
 
-//#include "cproject.h"
 class CProject;
+class CTreeHandler;
+class KPopupMenu;
+class QListViewItem;
 
 /** */
 class CTreeView : public QListView
@@ -64,7 +62,7 @@ protected: // Protected attributes
 protected: // Protected methods
 
   /** Event to be executed on a mousepress. */
-  void mousePressEvent(QMouseEvent* event);
+//  void contentsMousePressEvent(QMouseEvent* event);
 
   /** Initialize popupmenus. */
     //  virtual void initPopups() = 0;
@@ -73,7 +71,8 @@ protected: // Protected methods
   virtual KPopupMenu *getCurrentPopup() = 0;
 
   protected slots: // Protected slots 
-    void slotRightButtonPressed(QListViewItem *,const QPoint &,int);
+    void slotMouseButtonClicked(int button, QListViewItem * item, const QPoint & pos, int c );
+//    void slotRightButtonPressed(QListViewItem *,const QPoint &,int);
 };
 
 #endif

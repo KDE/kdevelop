@@ -29,6 +29,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <kfiledialog.h>
+#include "../ctoolclass.h"
 
 /** the KDE-Printdialog
   *@author Stefan Heidrich
@@ -40,7 +41,7 @@ public:
   CPrintDlg(QWidget* parent=0,const char* file="",const char* name=0, bool html = false);
   ~CPrintDlg();
   void init();
-  bool lookProgram(QString name);
+  bool lookProgram(QString name) { CToolClass::searchProgram(name, false); }
   QString createFileString();
   void loadSettings();
   QString files,globalpara,prj_str;

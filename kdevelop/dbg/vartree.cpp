@@ -19,8 +19,8 @@
 #include "gdbparser.h"
 
 #include <kapp.h>     // here for i18n only! yuck!
-#include <kpopmenu.h>
-#include <klined.h>
+#include <kpopupmenu.h>
+#include <klineedit.h>
 
 #include <qheader.h>
 #include <qlabel.h>
@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+#include <klocale.h>
 
 #if defined(DBG_MONITOR)
   #define DBG_DISPLAY(X)          {emit rawData(QString(X));}
@@ -72,7 +73,7 @@ VarViewer::VarViewer( QWidget *parent, const char *name ) :
   // make the size small so that it can fit within the parent widget
   // size. The parents size is currently 4 tabs wide with <=3chars
   // in each tab. (ie quite small!) 
-  watchVarEntry_ = new KLined(this);
+  watchVarEntry_ = new KLineEdit(this);
   watchVarEntry_->setMinimumSize(0,0); //watchVarEntry_->sizeHint() );
   watchEntry->addWidget( watchVarEntry_ );
 
@@ -427,9 +428,9 @@ void TrimmableItem::updateValue(char* /* buf */)
 
 // **************************************************************************
 
-const char * TrimmableItem::key (int, bool) const
+QString TrimmableItem::key (int, bool) const
 {
-  return "";
+  return QString::null;
 }
 
 // **************************************************************************
@@ -488,7 +489,7 @@ QString VarItem::fullName() const
 
 // **************************************************************************
 
-void VarItem::setText ( int column, const char * data )
+void VarItem::setText ( int column, const QString& data )
 {
   if (!isActive() && isOpen() && dataType_ == typePointer)
     ((VarTree*)listView())->emitExpandItem(this);
@@ -551,8 +552,8 @@ void VarItem::setOpen(bool open)
   {
     if (cache_)
     {
-      QString value = cache_;
-      cache_ = QString();
+      QCString value = cache_;
+      cache_ = QCString();
       getParser()->parseData(this, value.data(), false, false);
       trim();
     }
@@ -630,8 +631,8 @@ FrameRoot::FrameRoot(VarTree* parent, int frameNo) :
   TrimmableItem (parent),
   needLocals_(true),
   frameNo_(frameNo),
-  params_(QString()),
-  locals_(QString())
+  params_(QCString()),
+  locals_(QCString())
 {
   setExpandable(true);
 }
@@ -698,8 +699,8 @@ void FrameRoot::setOpen(bool open)
   getParser()->parseData(this, params_.data(), false, true);
   getParser()->parseData(this, locals_.data(), false, false);
 
-  locals_ = QString();
-  params_ = QString();
+  locals_ = QCString();
+  params_ = QCString();
 }
 
 // **************************************************************************

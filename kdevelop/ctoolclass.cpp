@@ -19,63 +19,50 @@
 #include "ctoolclass.h"
 #include <iostream.h>
 #include <qfile.h>
-#include <kmsgbox.h>
+#include <kmessagebox.h>
 #include <kapp.h>
+#include <klocale.h>
 
-bool CToolClass::searchProgram(QString name){
-  StringTokenizer tokener;
+bool CToolClass::searchProgram(QString name, bool allowWarningMsg ){
+  QStringList paths;
   bool found=false;
-  QString file;
   QString complete_path = getenv("PATH");
-  
-  tokener.tokenize(complete_path,":");
-  
-  while(tokener.hasMoreTokens()){
-    file = QString(tokener.nextToken()) + "/" + name;
-    if(QFile::exists(file)){
+  paths = QStringList::split ( ":", complete_path, FALSE );
+
+  for ( QStringList::Iterator it = paths.begin(); it != paths.end(); ++it )
+  {
+    if (QFile::exists((*it) + "/" + name))
+    {
       found = true;
       break;
     }
   }
-  if(!found){
-    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs \"")+name+i18n("\" to work properly.\n\tPlease install it!"),KMsgBox::EXCLAMATION);
-  }
-  return found;
-}
 
-// this is for the installation process
-bool CToolClass::searchInstProgram(QString name){
-  StringTokenizer tokener;
-  bool found=false;
-  QString file;
-  QString complete_path = getenv("PATH");
-
-  tokener.tokenize(complete_path,":");
-
-  while(tokener.hasMoreTokens()){
-    file = QString(tokener.nextToken()) + "/" + name;
-    if(QFile::exists(file)){
-      found = true;
-      break;
-    }
+  if(!found && allowWarningMsg){
+    KMessageBox::sorry(0,
+                        i18n("KDevelop needs \"")+name+
+                            i18n("\" to work properly.\n\tPlease install it!"),
+                        i18n("Program not found!"));
   }
   return found;
 }
 
 QString CToolClass::findProgram(QString name){
-  StringTokenizer tokener;
-  QString file;
+  QStringList paths;
+  QString file="";
   QString complete_path = getenv("PATH");
+  paths = QStringList::split ( ":", complete_path, FALSE );
 
-  tokener.tokenize(complete_path,":");
-
-  while(tokener.hasMoreTokens()){
-    file = QString(tokener.nextToken()) + "/" + name;
-    if(QFile::exists(file)){
-      return file;
+  for ( QStringList::Iterator it = paths.begin(); it != paths.end(); ++it )
+  {
+    if (QFile::exists((*it) + "/" + name))
+    {
+      file = (*it) + "/" + name;
+      break;
     }
   }
-  return "";
+
+  return file;
 }
 
 QString CToolClass::getRelativePath(QString source_dir,QString dest_dir){

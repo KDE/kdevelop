@@ -23,7 +23,7 @@
 
 #define CALLER_ITEMCLASS_NAME KDlgItem_KCombo
 #define ITEMCLASS_NAME KDlgItem_KCombo
-#define ITEMCLASS_TYPE KCombo
+#define ITEMCLASS_TYPE KComboBox
 
 #include "item_all.cpp.inc"
 
@@ -68,9 +68,9 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoResize",   "",                  "General",        ALLOWED_BOOL);
-  props->addProp("Text",           "",             "General",        ALLOWED_STRING);
-  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
+  props->addProp("isAutoResize",    "", "General",  ALLOWED_BOOL);
+  props->addProp("Text",            "", "General",  ALLOWED_STRING);
+  props->addProp("Entries",         "", "General",  ALLOWED_MULTISTRING);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
@@ -83,7 +83,7 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   KDlgItem_Base::repaintItem(itm);
   itm->setAutoResize(Prop2Bool("isAutoResize") == 1 ? TRUE : FALSE);
 
-  itm->setText(Prop2Str("Text"));
+  itm->setEditText(Prop2Str("Text"));
 
   
 }

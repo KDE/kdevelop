@@ -114,12 +114,12 @@
 #define ID_PROJECT_OPTIONS          13120
 #define ID_PROJECT_MESSAGES	          14120
 //MB
-#ifndef WITH_KDOC2
+//#ifndef WITH_KDOC2
 #define ID_PROJECT_DOC_TOOL           14124
 #define ID_PROJECT_DOC_TOOL_KDOC      14125
 #define ID_PROJECT_DOC_TOOL_DOXYGEN   14126
 #define ID_PROJECT_DOC_TOOL_CONF_DOXYGEN   14127
-#endif
+//#endif
 //MB end
 #define ID_PROJECT_MAKE_PROJECT_API   14130
 #define ID_PROJECT_MAKE_USER_MANUAL   14140
@@ -337,9 +337,9 @@
 
 ///////////////////////////////////////////////////////////////////
 // Toolbar ID's
-#define ID_BROWSER_TOOLBAR 1
-#define ID_KDLG_TOOLBAR 2
-#define ID_DEBUG_TOOLBAR 3
+#define ID_BROWSER_TOOLBAR ("browser")
+#define ID_KDLG_TOOLBAR ("kdlg")
+#define ID_DEBUG_TOOLBAR ("debug")
 
 ///////////////////////////////////////////////////////////////////
 // ID's for the statusbar

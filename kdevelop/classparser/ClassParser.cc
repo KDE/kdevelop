@@ -1523,7 +1523,7 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
           }
           if( aMethod && methodType == QTSLOT)
           {
-          (void) printf("slot: %s\n", aMethod->name.data());
+//          (void) printf("slot: %s\n", aMethod->name.data());
 
 			CParsedMethod *	pm = aClass->getMethod(*aMethod);
 			if (pm != NULL) {

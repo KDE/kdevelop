@@ -117,7 +117,7 @@ QString FrameStack::getFrameParams(int frame)
 
           // The parameters are contained _within_ the brackets.
           if (paramEnd-paramStart > 2)
-            return QString (paramStart+1, paramEnd-paramStart-1);
+            return QCString (paramStart+1, paramEnd-paramStart-1);
         }
       }
     }
@@ -144,7 +144,7 @@ QString FrameStack::getFrameName(int frame)
           fnstart--;
         }
         QString frameName(QString().sprintf("#%d %s(...)", frame,
-                            QString(fnstart, paramStart-fnstart+1).data()));
+                            QCString(fnstart, paramStart-fnstart+1).data()));
         return frameName;
       }
     }

@@ -76,7 +76,7 @@ void CKDevAccel::connectItem(const char *action,
   if (!action)
     return;
 
-  KKeyEntry *pEntry = aKeyDict[ action ];
+  KKeyEntry *pEntry = &(keyDict()[action]);
 
 	if ( !pEntry ) {
 		QString str;
@@ -93,8 +93,9 @@ void CKDevAccel::connectItem(const char *action,
 
   if (pEntry->aCurrentKeyCode)
   {
-       pAccel->insertItem( pEntry->aCurrentKeyCode, pEntry->aAccelId );
-       pAccel->connectItem( pEntry->aAccelId, receiver, member );
+#warning FIXME What is this whole f*cking class trying to do :(
+//       insertItem( pEntry->aCurrentKeyCode, pEntry->aAccelId );
+//       connectItem( pEntry->aAccelId, receiver, member );
   }
 
   if ( !activate )
@@ -102,14 +103,15 @@ void CKDevAccel::connectItem(const char *action,
 }
 
 
-void CKDevAccel::connectItem(KAccel::StdAccel accel,
+void CKDevAccel::connectItem(KStdAccel::StdAccel accel,
                              const QObject* receiver, const char* member,
                              bool activate)
 {
-    if (stdAction(accel) && !aKeyDict[ stdAction(accel) ]){
-        insertStdItem(accel);
-    }
-    connectItem(stdAction(accel), receiver, member, activate);
+#warning FIXME What?
+//    if (stdAction(accel) && !aKeyDict[ stdAction(accel) ]){
+//        insertStdItem(accel);
+//    }
+//    connectItem(stdAction(accel), receiver, member, activate);
 }
 
 
@@ -127,21 +129,22 @@ void CKDevAccel::connectItem(const char *action,
   connectItem(action, receiver, member, activate);
 }
 
-void CKDevAccel::connectItem(KAccel::StdAccel accel,
+void CKDevAccel::connectItem(KStdAccel::StdAccel accel,
 	const QObject* receiver, const char *member, bool activate, uint uMenuId)
 {
   if (uMenuId!=0)
   {
    if ( m_Assoc.find(uMenuId) )
        m_Assoc.remove( uMenuId );
-   m_Assoc.insert( uMenuId, new SActionInfo(stdAction(accel), activate) );
+#warning FIXME Hmmm?
+//   m_Assoc.insert( uMenuId, new SActionInfo(stdAction(accel), activate) );
   }
 
   connectItem(accel, receiver, member, activate);
 }
 
 void CKDevAccel::disconnectItem(const char *action,
-	const QObject* receiver, const char *member)
+                  const QObject* receiver, const char *member)
 {
   int uMenuId=getMenuID(action);
   if (uMenuId!=0)
@@ -151,7 +154,7 @@ void CKDevAccel::disconnectItem(const char *action,
 }
 
 void CKDevAccel::reconnectItem(const char *action,
-	const QObject* receiver, const char *member)
+                  const QObject* receiver, const char *member)
 {
   uint uMenuId=getMenuID(action);
   bool activate=true;
@@ -162,20 +165,21 @@ void CKDevAccel::reconnectItem(const char *action,
   connectItem(action, receiver, member, activate);
 }
 
-void CKDevAccel::reconnectItem(KAccel::StdAccel accel,
-	const QObject* receiver, const char *member)
+void CKDevAccel::reconnectItem(KStdAccel::StdAccel accel,
+	                const QObject* receiver, const char *member)
 {
-  uint uMenuId=getMenuID(stdAction(accel));
-  bool activate=true;
-
-  if (uMenuId!=0)
-    activate=m_Assoc[uMenuId]->m_bEnabled;
-
-  connectItem(accel, receiver, member, activate);
+#warning FIXME Hmmmm?
+//  uint uMenuId=getMenuID(stdAction(accel));
+//  bool activate=true;
+//
+//  if (uMenuId!=0)
+//    activate=m_Assoc[uMenuId]->m_bEnabled;
+//
+//  connectItem(accel, receiver, member, activate);
 }
 
 bool CKDevAccel::reconnectItemByID(uint uMenuId,
-	const QObject* receiver, const char *member)
+                    const QObject* receiver, const char *member)
 {
   bool bFound=false;
   if ( m_Assoc.find(uMenuId) )
@@ -205,7 +209,6 @@ void CKDevAccel::readSettings(KConfig* config, bool setEnableStruct)
 
    }
 }
-
 
 /**
     like KAccel::setItemEnabled()

@@ -19,8 +19,8 @@
 #ifndef CERRORMESSAGEPARSER_H
 #define CERRORMESSAGEPARSER_H
 
-#include <qstring.h>
 #include <qlist.h>
+#include <qstring.h>
 
 /** */
 struct TErrorMessageInfo {

@@ -19,13 +19,14 @@
 #ifndef KDLGNEWDIALOGDLG_H
 #define KDLGNEWDIALOGDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
+
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qbuttongroup.h>
+
 class CProject;
 
 /**
@@ -38,11 +39,11 @@ public:
    KDlgNewDialogDlg(QWidget *parent=0, const char *name=0,CProject* prj=0);
   ~KDlgNewDialogDlg();
 
-	QString getClassname(){return classname_edit->text();}
-  QString getHeaderName(){return header_edit->text();}
-  QString getSourceName(){return cpp_edit->text();}
-  QString getDataName(){return data_edit->text();}
-  QString getLocation(){return loc_edit->text();}
+	QString getClassname()  {return classname_edit->text();}
+  QString getHeaderName() {return header_edit->text();}
+  QString getSourceName() {return cpp_edit->text();}
+  QString getDataName()   {return data_edit->text();}
+  QString getLocation()   {return loc_edit->text();}
   /** QDialog,QTabDialog,QFrame,QWidget*/
   QString getBaseClass();
   QString getBaseClassHeader();
@@ -70,7 +71,7 @@ protected:
   QLineEdit* custom_header_edit;
   QLineEdit* loc_edit;
   
-  bool  header_modified;
+  bool header_modified;
   bool source_modified;
   bool data_modified;
 
@@ -78,13 +79,13 @@ protected:
 
 protected slots:
 
-void slotOKClicked();
+  void slotOKClicked();
   void slotLocButtonClicked();
   void slotRadioButtonClicked(); 
-  void  slotClassEditChanged(const char* text);
-  void  slotHeaderEditChanged(const char* text);
-  void  slotSourceEditChanged(const char* text);
-  void  slotDataEditChanged(const char* text);
+  void slotClassEditChanged(const QString& text);
+  void slotHeaderEditChanged(const QString& text);
+  void slotSourceEditChanged(const QString& text);
+  void slotDataEditChanged(const QString& text);
   
 };
 

@@ -1,6 +1,10 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
+#include "kwview.h"
+#include "kwdoc.h"
+
+#include <kapp.h>
+#include <klocale.h>
+#include <kfiledialog.h>
+#include <kmessagebox.h>
 
 #include <qstring.h>
 #include <qregexp.h>
@@ -12,20 +16,16 @@
 #include <qpixmap.h>
 #include <qfileinf.h>
 #include <qfile.h>
+#include <qevent.h>
 #include <qdir.h>
 #include <qprinter.h>
 #include <qprintdialog.h>
 #include <qpaintdevicemetrics.h>
 #include <qclipbrd.h>
-#include <kapp.h>
 
-#include <kfiledialog.h>
-#include <kdir.h>
-
-#include <X11/Xlib.h> //used to have XSetTransientForHint()
-
-#include "kwview.h"
-#include "kwdoc.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
 
 #ifdef HAVE_PATHS_H
 #include <paths.h>
@@ -35,7 +35,12 @@
 #define _PATH_TMP "/tmp/"
 #endif
 
-int keys[] = {Key_1,Key_2,Key_3,Key_4,Key_5,Key_6,Key_7,Key_8,Key_9};
+#include <ctype.h>
+#include <time.h>
+
+#include <X11/Xlib.h> //used to have XSetTransientForHint()
+
+int keys[] = {Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6,Qt::Key_7,Qt::Key_8,Qt::Key_9};
 
 struct BufferInfo {
   void *user;
@@ -280,6 +285,8 @@ void KIconBorder::mousePressEvent(QMouseEvent* e)
       slotToggleBookmark();
       break;
     }
+    default:
+        break;
   }
 }
 
@@ -379,7 +386,7 @@ KWriteView::~KWriteView() {
 
 bool KWriteView::event( QEvent *e )
 {
-  if ( e->type() == Event_KeyPress ){
+  if ( e->type() == KeyPress ){
     QKeyEvent *k = (QKeyEvent *)e;
     if ( k->key() == Key_Tab ){
       keyPressEvent( k );
@@ -1244,7 +1251,7 @@ void KWriteView::mousePressEvent(QMouseEvent *e) {
 //  }
 
 	// Call CEditWidget::mousePressEvent to handle the RightButton case
-	QMouseEvent ee(Event_MouseButtonPress, mapToParent(e->pos()), e->button(), e->state());
+	QMouseEvent ee(QEvent::MouseButtonPress, mapToParent(e->pos()), e->button(), e->state());
   kWrite->mousePressEvent(&ee);
 }
 
@@ -1421,7 +1428,7 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
   wrapAt = 78;
   searchFlags = 0;
   replacePrompt = 0L;
-  kfm = 0L;
+//  kfm = 0L;
 //  popup = 0L;
 //  bookmarks.setAutoDelete(true);
 
@@ -1576,38 +1583,20 @@ void KWrite::writeFile(QIODevice &dev) {
 }
 
 
-bool KWrite::loadFile(const char *name, int flags) {
-
+bool KWrite::loadFile(const QString& name, int flags) {
   QFileInfo info(name);
   if (!info.exists()) {
-    if (flags & lfNewFile) return true;
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("The specified File does not exist"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    if (flags & lfNewFile)
+      return true;
+    KMessageBox::sorry(this, i18n("The specified File does not exist"));
     return false;
   }
   if (info.isDir()) {
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("You have specified a directory"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    KMessageBox::sorry(this, i18n("You have specified a directory"));
     return false;
   }
   if (!info.isReadable()) {
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("You do not have read permission to this file"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    KMessageBox::sorry(this, i18n("You do not have read permission to this file"));
     return false;
   }
 
@@ -1617,27 +1606,15 @@ bool KWrite::loadFile(const char *name, int flags) {
     f.close();
     return true;
   }
-  QMessageBox::warning(this,
-    i18n("Sorry"),
-    i18n("An Error occured while trying to open this Document"),
-    i18n("OK"),
-    "",
-    "",
-    0,0);
+  KMessageBox::sorry(this, i18n("An Error occured while trying to open this Document"));
   return false;
 }
 
-bool KWrite::writeFile(const char *name) {
+bool KWrite::writeFile(const QString& name) {
 
   QFileInfo info(name);
   if(info.exists() && !info.isWritable()) {
-    QMessageBox::warning(this,
-      i18n("Sorry"),
-      i18n("You do not have write permission to this file"),
-      i18n("OK"),
-      "",
-      "",
-      0,0);
+    KMessageBox::sorry(this, i18n("You do not have write permission to this file"));
     return false;
   }
 
@@ -1647,160 +1624,154 @@ bool KWrite::writeFile(const char *name) {
     f.close();
     return true;//kWriteDoc->setFileName(name);
   }
-  QMessageBox::warning(this,
-    i18n("Sorry"),
-    i18n("An Error occured while trying to open this Document"),
-    i18n("OK"),
-    "",
-    "",
-    0,0);
+  KMessageBox::sorry(this,  i18n("An Error occured while trying to open this Document"));
   return false;
 }
 
 
-void KWrite::loadURL(const char *url, int flags) {
-  KURL u(url);
-
-  if (u.isMalformed()) {
-    QString s;
-    if (url) {
-      s = "file:";
-      if (*url != '/') {
-        s += QDir::currentDirPath();
-        s += '/';
-      }
-      s += url;
-      u.parse(s);
-    }
-    if (u.isMalformed()) {
-      s.sprintf("%s\n%s",i18n("Malformed URL"),url);
-      QMessageBox::warning(this,
-        i18n("Sorry"),
-        s,
-        i18n("OK"),
-        "",
-        "",
-        0,0);
+void KWrite::loadURL(const KURL& url, int flags)
+{
+//  if (url.isMalformed()) {
+//    QString s;
+//    if (url) {
+//      s = "file:";
+//      if (url != KURL:("/")) {
+//        s += QDir::currentDirPath();
+//        s += '/';
+//      }
+//      s += url;
+//      u = s;
+//    }
+    if (url.isMalformed())
+    {
+      KMessageBox::sorry(this, i18n("Malformed URL\n")+url.prettyURL());
       return;
     }
-  }
-  if (u.isLocalFile()) {
-    // usual local file
+//  }
+
+  if (url.isLocalFile())
+  {
     emit statusMsg(i18n("Loading..."));
 
-    QString name(u.path());
-    KURL::decodeURL(name);
+    QString name(url.path());
     if (loadFile(name,flags)) {
-      name = u.url();
-      if (flags & lfInsert) {
-        name.prepend(": ");
-        name.prepend(i18n("Inserted"));
-      } else {
-        if (!(flags & lfNoAutoHl)) kWriteDoc->setFileName(name);
-          else kWriteDoc->updateLines();
-        name.prepend(": ");
-        name.prepend(i18n("Read"));
+      name = url.url();
+      if (flags & lfInsert)
+      {
+        name.prepend(i18n("Inserted: "));
+      }
+      else
+      {
+        if (!(flags & lfNoAutoHl))
+          kWriteDoc->setFileName(name);
+        else
+          kWriteDoc->updateLines();
+        name.prepend(i18n("Read: "));
       }
       emit statusMsg(name);
     }
-  } else {
-    // url
-    if (kfm != 0L) {
-      QMessageBox::information(this,
-        i18n("Sorry"),
-        i18n("KWrite is already waiting\nfor an internet job to finish\n"\
-             "Please wait until it has finished\nAlternatively stop the running one."),
-        i18n("OK"),
-        "",
-        "",
-        0,0);
-      return;
-    }
-    emit statusMsg(i18n("Waiting for KFM..."));
-
-    kfm = new KFM;
-    if (!kfm->isOK()) {
-      QMessageBox::warning(this,
-        i18n("Sorry"),
-        i18n("Could not start or find KFM"),
-        i18n("OK"),
-        "",
-        "",
-        0,0);
-      delete kfm;
-      kfm = 0L;
-      return;
-    }
-
-    kfmURL = u.url();
-    kfmFile.sprintf(_PATH_TMP"/kwrite%i",time(0L));
-    kfmAction = KWrite::GET;
-    kfmFlags = flags;
-
-    connect(kfm,SIGNAL(finished()),this,SLOT(kfmFinished()));
-    connect(kfm,SIGNAL(error(int, const char *)),this,SLOT(kfmError(int, const char *)));
-    kfm->copy(url,kfmFile);
   }
+#warning FIXME KFM stuff
+//  } else {
+//    // url
+//    if (kfm != 0L) {
+//      QMessageBox::information(this,
+//        i18n("Sorry"),
+//        i18n("KWrite is already waiting\nfor an internet job to finish\n"
+//             "Please wait until it has finished\nAlternatively stop the running one."),
+//        i18n("OK"),
+//        "",
+//        "",
+//        0,0);
+//      return;
+//    }
+//    emit statusMsg(i18n("Waiting for KFM..."));
+//
+//    kfm = new KFM;
+//    if (!kfm->isOK()) {
+//      QMessageBox::warning(this,
+//        i18n("Sorry"),
+//        i18n("Could not start or find KFM"),
+//        i18n("OK"),
+//        "",
+//        "",
+//        0,0);
+//      delete kfm;
+//      kfm = 0L;
+//      return;
+//    }
+
+//    kfmURL = u.url();
+//    kfmFile.sprintf(_PATH_TMP"/kwrite%i", time(0L));
+//    kfmAction = KWrite::GET;
+//    kfmFlags = flags;
+
+//    connect(kfm,SIGNAL(finished()),this,SLOT(kfmFinished()));
+//    connect(kfm,SIGNAL(error(int, const char *)),this,SLOT(kfmError(int, const char *)));
+//    kfm->copy(url,kfmFile);
+//  }
 }
 
 
-void KWrite::writeURL(const char *url, int flags) {
-  KURL u(url);
-
-  if (u.isLocalFile()) {
-    // usual local file
+void KWrite::writeURL(const KURL& url, int flags)
+{
+  if (url.isLocalFile())
+  {
     emit statusMsg(i18n("Saving..."));
 
-    QString name(u.path());
-    KURL::decodeURL(name);
-    if (writeFile(name)) {
-      if (!(flags & lfNoAutoHl)) kWriteDoc->setFileName(url);
-      name = url;
-      name.prepend(": ");
-      name.prepend(i18n("Wrote"));
+    QString name(url.path());
+    if (writeFile(name))
+    {
+      if (!(flags & lfNoAutoHl))
+        kWriteDoc->setFileName(url.url());
+      name.prepend(i18n("Wrote: "));
       emit statusMsg(name);
       setModified(false);
     }
-  } else {
-    // url
-    if (kfm != 0L) {
-      QMessageBox::information(this,
-        i18n("Sorry"),
-        i18n("KWrite is already waiting\nfor an internet job to finish\n"\
-             "Please wait until it has finished\nAlternatively stop the running one."),
-        i18n("OK"),
-        "",
-        "",
-        0,0);
-      return;
-    }
-    emit statusMsg(i18n("Waiting for KFM..."));
-
-    kfmURL = url;
-    kfmFile.sprintf(_PATH_TMP"/kwrite%i",time(0L));
-    kfmAction = KWrite::PUT;
-    kfmFlags = flags;
-    if (!writeFile(kfmFile)) return;
-
-    kfm = new KFM;
-
-    if (!kfm->isOK()) {
-      QMessageBox::warning(this,
-        i18n("Sorry"),
-        i18n("Could not start or find KFM"),
-        i18n("OK"),
-        "",
-        "",
-        0,0);
-      delete kfm;
-      kfm = 0L;
-      return;
-    }
-
-    connect(kfm,SIGNAL(finished()),this,SLOT(kfmFinished()));
-    connect(kfm,SIGNAL(error(int, const char *)),this,SLOT(kfmError(int, const char *)));
-    kfm->copy(kfmFile,url);
   }
+#warning FIXME KFM stuff
+//  else
+//  {
+//    // url
+//    if (kfm != 0L) {
+//      QMessageBox::information(this,
+//        i18n("Sorry"),
+//        i18n("KWrite is already waiting\nfor an internet job to finish\n"
+//             "Please wait until it has finished\nAlternatively stop the running one."),
+//        i18n("OK"),
+//        "",
+//        "",
+//        0,0);
+//      return;
+//    }
+//    emit statusMsg(i18n("Waiting for download..."));
+//
+//    kfmURL = url;
+//    kfmFile.sprintf(_PATH_TMP"/kwrite%i",time(0L));
+//    kfmAction = KWrite::PUT;
+//    kfmFlags = flags;
+//    if (!writeFile(kfmFile))
+//      return;
+
+//    kfm = new KFM;
+//
+//    if (!kfm->isOK()) {
+//      QMessageBox::warning(this,
+//        i18n("Sorry"),
+//        i18n("Could not start or find KFM"),
+//        i18n("OK"),
+//        "",
+//        "",
+//        0,0);
+//      delete kfm;
+//      kfm = 0L;
+//      return;
+//    }
+//
+//    connect(kfm,SIGNAL(finished()),this,SLOT(kfmFinished()));
+//    connect(kfm,SIGNAL(error(int, const char *)),this,SLOT(kfmError(int, const char *)));
+//    kfm->copy(kfmFile,url);
+//  }
 }
 
 void KWrite::kfmFinished() {
@@ -1840,8 +1811,8 @@ void KWrite::kfmFinished() {
     //clean up
     unlink(kfmFile);
   }
-  delete kfm;
-  kfm = 0L;
+//  delete kfm;
+//  kfm = 0L;
 
 }
 
@@ -1866,28 +1837,27 @@ bool KWrite::canDiscard() {
   int query;
 
   if (isModified()) {
-    query = QMessageBox::warning(this,
-      i18n("Warning"),
+    query = KMessageBox::questionYesNo(this,
       i18n("The current Document has been modified.\nWould you like to save it?"),
-      i18n("Yes"),
-      i18n("No"),
-      i18n("Cancel"),
-      0,2);
-    switch (query) {
-      case 0: //yes
+      i18n("Warning"));
+
+    switch (query)
+    {
+      case KMessageBox::Yes:
+      {
         save();
-        if (isModified()) {
-            query = QMessageBox::warning(this,
-            i18n("Sorry"),
+        if (isModified())
+        {
+          query = KMessageBox::questionYesNo(this,
             i18n("Could not save the document.\nOpen a new document anyways?"),
-            i18n("Yes"),
-            i18n("No"),
-            "",
-            0,1);
-          if (query == 1) return false; //no
+            i18n("Sorry"));
+          if (query == KMessageBox::No)
+            return false; //no
         }
         break;
-      case 2: //cancel
+      }
+
+      default:
         return false;
     }
   }
@@ -1901,25 +1871,25 @@ void KWrite::newDoc() {
 }
 
 void KWrite::open() {
-  QString url;    
+  KURL url;
 
   if (!canDiscard()) return;
-//  if (kWriteDoc->hasFileName()) s = QFileInfo(kWriteDoc->fileName()).dirPath();
-//    else s = QDir::currentDirPath();
 
-  url = KFileDialog::getOpenFileURL(kWriteDoc->fileName(),"*",this);
-  if (url.isEmpty()) return;
-//  kapp->processEvents();
+  url = KFileDialog::getOpenURL(kWriteDoc->fileName(),"*");
+  if (url.isEmpty())
+    return;
+
   loadURL(url);
 }
 
 void KWrite::insertFile() {
-  QString url;
+  KURL url;
 
-  url = KFileDialog::getOpenFileURL(kWriteDoc->fileName(),"*",this);
-  if (url.isEmpty()) return;
-//  kapp->processEvents();
-  loadURL(url,lfInsert);
+  url = KFileDialog::getOpenURL(kWriteDoc->fileName(),"*");
+  if (url.isEmpty())
+    return;
+
+  loadURL(url, lfInsert);
 }
 
 void KWrite::save() {
@@ -1931,30 +1901,29 @@ void KWrite::save() {
 }
 
 void KWrite::saveAs() {
-  QString url;
+  KURL url;
   int query;
 
   do {
     query = 0;
-    url = KFileDialog::getSaveFileURL(kWriteDoc->fileName(),"*",this);
-    if (url.isEmpty()) return;
+    url = KFileDialog::getSaveURL(kWriteDoc->fileName(),"*");
+    if (url.isEmpty())
+      return;
 
     KURL u(url);
     if (u.isLocalFile()) {
       QFileInfo info;
       QString name(u.path());
-      KURL::decodeURL(name);
+//      KURL::decodeURL(name);
       info.setFile(name);
-      if (info.exists()) {
-        query = QMessageBox::warning(this,
-          i18n("Warning"),
+      if (info.exists())
+      {
+        query = KMessageBox::questionYesNo(this,
           i18n("A Document with this Name already exists.\nDo you want to overwrite it?"),
-          i18n("Yes"),
-          i18n("No"),
-          "",0,1);
+          i18n("Warning"));
       }
     }
-  } while (query == 1);
+  } while (query == KMessageBox::Yes);
 
 //  kapp->processEvents();
   writeURL(url);
@@ -2189,8 +2158,8 @@ void KWrite::searchAgain(SConfig &s) {
         if (!(s.flags & sfBackward)) {
           // forward search
           str.sprintf("%s.\n%s?",
-            i18n("End of document reached"),
-            i18n("Continue from the beginning"));
+            i18n("End of document reached").data(),
+            i18n("Continue from the beginning").data());
           query = QMessageBox::information(this,
             i18n("Find"),
             str,
@@ -2200,8 +2169,8 @@ void KWrite::searchAgain(SConfig &s) {
         } else {
           // backward search
           str.sprintf("%s.\n%s?",
-            i18n("Beginning of document reached"),
-            i18n("Continue from the end"));
+            i18n("Beginning of document reached").data(),
+            i18n("Continue from the end").data());
           query = QMessageBox::information(this,
             i18n("Find"),
             str,
@@ -2367,7 +2336,8 @@ bool KWrite::askReplaceEnd() {
   if (s.flags & sfFinished) {
     // replace finished
     str.sprintf("%d %s.",
-      replaces,i18n("replace(s) made"));
+      replaces,
+      (i18n("replace(s) made")).data());
     QMessageBox::information(this,
       i18n("Replace"),
       str,
@@ -2381,9 +2351,10 @@ bool KWrite::askReplaceEnd() {
   if (!(s.flags & sfBackward)) {
     // forward search
     str.sprintf("%d %s.\n%s.\n%s?",
-      replaces,i18n("replace(s) made"),
-      i18n("End of document reached"),
-      i18n("Continue from the beginning"));
+      replaces,
+      i18n("replace(s) made").data(),
+      i18n("End of document reached").data(),
+      i18n("Continue from the beginning").data());
     query = QMessageBox::information(this,
       i18n("Replace"),
       str,
@@ -2393,9 +2364,10 @@ bool KWrite::askReplaceEnd() {
   } else {
     // backward search
     str.sprintf("%d %s.\n%s.\n%s?",
-      replaces,i18n("replace(s) made"),
-      i18n("Beginning of document reached"),
-      i18n("Continue from the end"));
+      replaces,
+      i18n("replace(s) made").data(),
+      i18n("Beginning of document reached").data(),
+      i18n("Continue from the end").data());
     query = QMessageBox::information(this,
       i18n("Replace"),
       str,
@@ -2589,7 +2561,7 @@ void KWrite::updateBMPopup() {
 			if(textline->isBookmarked())
 			{
 			  char buf[64];
-        sprintf(buf,"%s %d",i18n("Line"), line + 1);
+        sprintf(buf,"%s %d",i18n("Line").data(), line + 1);
 				int z = popup->count();
         popup->insertItem(buf,z);
         if (z < 9) popup->setAccel(ALT+keys[z],z);       	

@@ -9,6 +9,7 @@
 **********************************************************************/
 #include "cmakemanualdlg.h"
 #include <kapp.h>
+#include <klocale.h>
 
 void  CMakeManualDlg::initDialog(){
   this->resize(350,220);

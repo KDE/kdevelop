@@ -18,11 +18,11 @@
 #ifndef CKDEVACCEL_H
 #define CKDEVACCEL_H
 
-#include <qobject.h>
-#include <qstring.h>
 #include <qintdict.h>
 #include <qmenudata.h>
 #include <kaccel.h>
+
+class KConfig;
 
 // general structure to the new CKDevAccel class
 struct SActionInfo
@@ -71,7 +71,7 @@ public:
   void connectItem(const char *action,
                    const QObject *receiver, const char *member,
                    bool activate=true);
-  void connectItem(KAccel::StdAccel accel,
+  void connectItem(KStdAccel::StdAccel accel,
                    const QObject *receiver, const char *member,
                    bool activate=true);
   void disconnectItem(const char *action,
@@ -83,7 +83,7 @@ public:
     const QObject* receiver, const char *member,
     bool activate, uint uMenuId);
 
-  void connectItem(KAccel::StdAccel accel,
+  void connectItem(KStdAccel::StdAccel accel,
     const QObject* receiver, const char *member,
     bool activate, uint uMenuId);
 
@@ -93,7 +93,7 @@ public:
   void reconnectItem(const char *action,
     const QObject* receiver, const char *member);
 
-  void reconnectItem(KAccel::StdAccel accel,
+  void reconnectItem(KStdAccel::StdAccel accel,
     const QObject* receiver, const char *member);
 
   // like reconnect, only by resource ID

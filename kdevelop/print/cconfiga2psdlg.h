@@ -27,8 +27,8 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 #include <kprocess.h>
-#include <htmltoken.h>
 #include <kapp.h>
+#include "../ctoolclass.h"
 
 /** the KDevelop-A2psConfigdialog
   *@author Stefan Heidrich
@@ -40,7 +40,7 @@ public:
   CConfigA2psDlg(QWidget* parent=0,const char* name=0);
   ~CConfigA2psDlg();
   void init();
-  bool lookProgram(QString);
+  bool lookProgram(QString name) { CToolClass::searchProgram(name, false); }
   void loadSettings();
 
 public slots:

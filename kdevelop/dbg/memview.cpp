@@ -17,9 +17,10 @@
 
 #include "memview.h"
 
-#include <kapp.h>
 #include <kbuttonbox.h>
-#include <klined.h>
+#include <klineedit.h>
+#include <kglobalsettings.h>
+#include <klocale.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -48,8 +49,8 @@
 
 MemoryView::MemoryView(QWidget *parent, const char *name) :
   KDialog(parent, name, true),      // modal
-  start_(new KLined(this)),
-  end_(new KLined(this)),
+  start_(new KLineEdit(this)),
+  end_(new KLineEdit(this)),
   output_(new QMultiLineEdit(this))
 {
   setCaption(i18n("Memory/Misc viewer"));
@@ -91,9 +92,9 @@ MemoryView::MemoryView(QWidget *parent, const char *name) :
   label->setMinimumSize(label->sizeHint());
   topLayout->addWidget(label, 0);
   topLayout->addWidget(output_, 5);
-  output_->setFont(kapp->fixedFont);
+  output_->setFont(KGlobalSettings::fixedFont());
 
-  KButtonBox *buttonbox = new KButtonBox(this, KButtonBox::HORIZONTAL, 5);
+  KButtonBox *buttonbox = new KButtonBox(this, Horizontal, 5);
   QPushButton *memoryDump = buttonbox->addButton(i18n("Memory"));
   QPushButton *disassemble = buttonbox->addButton(i18n("Disassemble"));
   QPushButton *registers = buttonbox->addButton(i18n("Registers"));

@@ -1,14 +1,31 @@
-dist-hook:
-	perl am_edit
+####### kdevelop will overwrite this part!!! (begin)##########
 
-# This file you have to edit. Change the name here
-SUBDIRS =  kdevelop kdlgloader doc po debian
+SUBDIRS = kdevelop po doc 
 
+EXTRA_DIST = kdevelop.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO kdevelop.lsm kdevelop.m4 Makefile.cvs acconfig.h 
+
+####### kdevelop will overwrite this part!!! (end)############
 # not a GNU package. You can remove this line, if 
 # have all needed files, that a GNU package needs
-AUTOMAKE_OPTIONS = foreign 1.4
+AUTOMAKE_OPTIONS = foreign 
 
-EXTRA_DIST = BUGS FAQ kdevelop.kdevprj kdevelop.lsm README.htdig 
+$(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
+	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in ;
 
-#$(top_srcdir)/acinclude.m4: $(top_srcdir)/acinclude.m4.in $(top_srcdir)/libtool.m4.in $(top_srcdir)/kdevelop.m4
-#	cd $(top_srcdir) && cat acinclude.m4.in libtool.m4.in kdevelop.m4 > acinclude.m4   
+$(top_srcdir)/subdirs:
+	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common subdirs
+
+$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in $(top_srcdir)/kdevelop.m4
+	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in kdevelop.m4 > acinclude.m4
+
+MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
+
+package-messages:
+	$(MAKE) -f admin/Makefile.common package-messages
+	$(MAKE) -C po merge
+
+EXTRA_DIST = admin 
+
+dist-hook:
+	cd $(top_distdir) && perl admin/am_edit -padmin
+	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs

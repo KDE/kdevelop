@@ -19,22 +19,20 @@
 
 #ifndef __CNEWCLASSDLG_H_
 #define __CNEWCLASSDLG_H_
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qlistbox.h>
-#include <qtabdialog.h>
-#include <qmultilinedit.h>
-#include <kapp.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <kmsgbox.h>
-#include <kfiledialog.h>
-#include <qcheckbox.h>
-#include "cgeneratenewfile.h"
 
-//#include "cproject.h"
+#include <qdialog.h>
+#include <qstring.h>
+
+class KConfig;
+class QButtonGroup;
+class QLineEdit;
+class QMultiLineEdit;
+class QPushButton;
+class QRadioButton;
+class QLabel;
+class QCheckBox;
+
+
 class CProject;
 
 /** generates new class-skeletons (a header and a implementation file)
@@ -75,14 +73,15 @@ private:
   QString m_header_file;
   QString m_impl_file;
   CProject* prj_info;
- private slots:
- void        ok();
-  void  slotClassEditChanged(const char*);
-  void  slotHeaderEditChanged(const char*);
-  void  slotImplEditChanged(const char*);
+
+private slots:
+  void  ok();
+  void  slotClassEditChanged(const QString&);
+  void  slotHeaderEditChanged(const QString&);
+  void  slotImplEditChanged(const QString&);
 
 private: // Private methods
-  /** adds KQuickHelp to the dialog */
+  /** adds QWhatsThis to the dialog */
   void initQuickHelp();
   /** constructs the dialog. If dir is != 0, the class is generated in dir */
   void initDialog(const char* dir=0);

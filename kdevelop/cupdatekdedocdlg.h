@@ -30,7 +30,7 @@
 #include <qbuttongroup.h>
 #include <kprocess.h>
 #include <kconfig.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
 
 /** Generates the API-Documention from all KDE-Libs with kdoc
   *@author Sandy Meier

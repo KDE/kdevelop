@@ -19,11 +19,11 @@
 #ifndef CDOCTREEPROPDLG_H
 #define CDOCTREEPROPDLG_H
 
-#include <qwidget.h>
 #include <qdialog.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+
+class QLineEdit;
+class QLabel;
+class QPushButton;
 
 /**
   *@author Sandy Meier

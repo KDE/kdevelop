@@ -19,27 +19,19 @@
 #ifndef CDOCBROWSER_H
 #define CDOCBROWSER_H
 
+#include <khtml_part.h>
 
-#include <qwidget.h>
-#include <qstring.h>
+#include <qstringlist.h>
 #include <qtabdialog.h>
-#include <qcombobox.h>
-#include <qstrlist.h>
-#include <qpopupmenu.h>
-#include <qframe.h>
 
-#include <htmlview.h>
-#include <kiconloader.h>
-#include <kapp.h>
-#include <kconfig.h>
-#include "structdef.h"
+class QPopupMenu;
 
-
-/** 
+/**
   *the documentation browser, attention!: only a prototype
   *@author Sandy Meier
   */
-class CDocBrowser : public KHTMLView {
+class CDocBrowser : public KHTMLPart
+{
   Q_OBJECT 
 public: 
   /** construtor */
@@ -52,19 +44,23 @@ public:
   QString currentURL();
 	QString currentTitle();
 	QPopupMenu* popup(){ return doc_pop; };	
+	
+protected:	
+  virtual void  urlSelected ( const QString &url, int button = 0, int state = 0, const QString &_target = QString::null );
+
 public slots:
   void slotDocFontSize(int);
-  void slotDocStandardFont(const char *);
-  void slotDocFixedFont(const char *);
+  void slotDocStandardFont(const QString&);
+  void slotDocFixedFont(const QString&);
   void slotDocColorsChanged(const QColor&, const QColor&,
             		const QColor&, const QColor&, const bool, const bool);
-  void slotPopupMenu( KHTMLView *, const char *, const QPoint & );
+  void slotPopupMenu( const QString&, const QPoint & );
   void slotCopyText();
   void slotURLBack();
   void slotURLForward();
   void slotSearchText();
 	void slotGrepText();
-	void slotSetFileTitle(const char* title);
+	void slotSetFileTitle(const QString& title);
 	void slotViewInKFM();
 
 	void slotFindTextNext(QString);
@@ -95,7 +91,6 @@ private:
 	static QColor vLinkColor;
 	static bool   underlineLinks;
 	static bool   forceDefaults;
-
 };
 
 
@@ -121,25 +116,25 @@ public:
 public slots:
 	void	slotApplyPressed();
 	void	slotFontSize( int );
-	void	slotStandardFont( const char *n );
-	void	slotFixedFont( const char *n );
+	void	slotStandardFont( const QString& n );
+	void	slotFixedFont( const QString& n );
 
 signals:
 	void	fontSize( int );
-	void	standardFont( const char * );
-	void	fixedFont( const char * );
+	void	standardFont( const QString& );
+	void	fixedFont( const QString& );
 
 private:
 	void	readOptions();
-	void	getFontList( QStrList &list, const char *pattern );
-	void	addFont( QStrList &list, const char *xfont );
+	void	getFontList( QStringList &list, const char *pattern );
+	void	addFont( QStringList &list, const char *xfont );
 
 private:
 	int	fSize;
 	QString	stdName;
 	QString	fixedName;
-	QStrList standardFonts;
-	QStrList fixedFonts;
+	QStringList standardFonts;
+	QStringList fixedFonts;
 };
 
 //-----------------------------------------------------------------------------
@@ -173,7 +168,7 @@ private:
 	QColor linkColor;
 	QColor vLinkColor;
 	bool   underlineLinks;
-        bool   forceDefault;
+  bool   forceDefault;
 	bool   changed;
 };
 

@@ -20,44 +20,31 @@
 #ifndef CKAPPWIZARD_H
 #define CKAPPWIZARD_H
 
-#include <qdir.h>
-#include <kapp.h>
-#include <ktmainwindow.h>
+class QButtonGroup;
+class QCheckBox;
+class QComboBox;
+class QLabel;
+class QLineEdit;
+class QListView;
+class QListViewItem;
+class QMultiLineEdit;
+class QPushButton;
+class QPushButton;
+
+class KEdit;
+class KIconDialog;
+class KIconLoader;
+class KProcess;
+class KShellProcess;
+class KSeparator;
+
+class CProject;
+
 #include <kwizard.h>
-#include <kdatepik.h>
-#include <kbutton.h>
-#include <qfile.h>
-#include <qframe.h>
-#include <qheader.h>
-#include <qmessagebox.h>
-#include <qkeycode.h>
-#include <kiconloader.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qlistview.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qmultilinedit.h>
-#include <kseparator.h>
-#include <kfiledialog.h>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qpicture.h>
-#include <iostream.h>
-#include <kiconloaderdialog.h>
-#include <qstring.h>
-#include <keditcl.h>
-#include <qbutton.h>
 #include <qstrlist.h>
-#include <fstream.h>
-#include <kprocess.h>
-#include <qtooltip.h>
-#include <qrect.h>
-#include <qregexp.h>
-#include "cproject.h"
-#include <kquickhelp.h>
+
 
 /** the KDE-Application-Wizard
   *@author Stefan Heidrich
@@ -91,14 +78,13 @@ void slotDirDialogClicked();
   void slotCppDialogClicked();
   void slotNewHeaderButtonClicked();
   void slotNewCppButtonClicked();
-  void slotOkClicked();
-  void slotDefaultClicked(int);
+  void slotDefaultClicked();
   //  void slotAppClicked();
   //  void slotMiniClicked();
   //  void slotQtClicked();
   //  void slotCPPClicked();
-  void slotProjectnameEntry();
-  void slotDirectoryEntry();
+  void slotProjectnameEntry(const QString&);
+  void slotDirectoryEntry(const QString&);
   void slotIconButtonClicked();
   void slotMiniIconButtonClicked();
   void slotProgIconClicked();
@@ -110,15 +96,20 @@ void slotDirDialogClicked();
   void slotApplicationClicked();
   void slotLocationButtonClicked();
   void slotVSBoxChanged(int);
-  void slotVendorEntry();
+  void slotVendorEntry(const QString&);
+
+// Override the QDialog accept so the dialog won't close until
+// we want it too.
+//  void slotOkClicked();
+  void accept();
 
 private:
-	QString kdedir_env;
+  QString kdedir_env;
   QString m_author_email;
   QString  m_author_name;
   bool  gen_prj, modifyDirectory,modifyVendor;
   QObject* o;
-  QWidget *widget0,*widget1,*widget1c,*widget2,*widget3,*widget4,*widget1a,*widget1b;
+  QWidget *widget1a,*widget1b;
   QListView* applications;
   QLabel* apphelp;
   QPushButton* directoryload;
@@ -150,26 +141,20 @@ private:
   QCheckBox* cppheader;
   QMultiLineEdit* output;
   QMultiLineEdit* errOutput;
-  KWizardPage *page0,*page1,*page1a,*page2,*page3,*page4;
+  QWidget *page0,*page1,*page2,*page3,*page4,*page5;
   KSeparator *separator0,*separator1,*separator2;
-  KDirDialog* dirdialog;
-  KFileDialog *headerdialog,*cppdialog;
-  KIconLoaderDialog *iload,*mload;
+  KIconDialog *iload,*mload;
   QPixmap pm,iconpm,minipm,*icontemp,*minitemp;
   QPainter painter;
-  KApplication* help;
-  QString dir,nametext,directorytext,name1,name2,namelow,nameold;
+  QString m_dir,nametext,directorytext,name1,name2,namelow,nameold;
   QString entriesfname;
   KEdit *cppedit,*hedit;
-  QButton *okButton,*cancelButton,*defaultButton, *prevButton;
-  KIconLoader* loader;
+  QButton *m_finishButton, *m_cancelButton,*m_defaultButton, *m_prevButton;
   KShellProcess *q;
   //  KSimpleConfig* settings;
-  CProject *project;
+  CProject* project;
   QStrList sub_dir_list;
   QListViewItem *kdeentry;
-  //QListViewItem *corbaitem;
-  //QListViewItem *komitem;
   QListViewItem *kdenormaloglitem; // Added by Robert Wheat, 01-22-2000, OpenGL(tm) support
   QListViewItem *kdenormalitem;
   QListViewItem *kdeminiitem;
@@ -184,7 +169,6 @@ private:
   QListViewItem *cppitem;
   QListViewItem *customprojitem;
   QListViewItem *gnomenormalitem;
-  // QListViewItem *gtkminiitem;
   QListViewItem *qtnormalitem;
   QListViewItem *qt2normalitem;
   QListViewItem *qt2mdiitem;

@@ -18,16 +18,23 @@
 #ifndef _CCLASSVIEW_H
 #define _CCLASSVIEW_H
 
-#include <kapp.h>
-#include <qstring.h>
-#include <qlist.h>
-#include <qtooltip.h>
-
 #include "ctreeview.h"
-#include "./classparser/ClassParser.h"
+
 #include "cclasstreehandler.h"
 
+#include <kpopupmenu.h>
+#include <qtooltip.h>
+
+class CClassParser;
+class CClassStore;
 class CClassToolDlg;
+class CCVToolTip;
+class CParsedClass;
+class CProject;
+
+class QListViewItem;
+class QPoint;
+class QRect;
 class QStrList;
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
@@ -59,10 +66,10 @@ private: // Private classes
 public: // Public constants
 
   /** Name of the class-root. */
-  static QString CLASSROOTNAME;
+  QString CLASSROOTNAME;
 
   /** Name of the root for globals. */
-  static QString GLOBALROOTNAME;
+  QString GLOBALROOTNAME;
 
 public: // Public attributes
 
@@ -200,7 +207,7 @@ private: // Popupmenus
 private: // Private attributes
 
   /** The classparser. */	
-  CClassParser cp;
+  CClassParser* cp;
 
   /** The class item. */
   QListViewItem *classesItem;

@@ -21,13 +21,13 @@
 #ifndef CADDEXISTINGFILEDLG_H
 #define CADDEXISTINGFILEDLG_H
 
-#include <kquickhelp.h>
-#include <qwidget.h>
 #include <qdialog.h>
-#include <qpushbutton.h>
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
+
+class CProject;
+class QCheckBox;
+class QLabel;
+class QLineEdit;
+class QPushButton;
 
 //#include "cproject.h"
 class CProject;

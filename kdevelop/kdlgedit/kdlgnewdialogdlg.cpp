@@ -14,11 +14,15 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include <kfiledialog.h>
-#include "../cproject.h"
+
 #include "kdlgnewdialogdlg.h"
-#include <kmsgbox.h>
+#include "../cproject.h"
+
 #include <kapp.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kstddirs.h>
 
 KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* prj ) : QDialog(parent,name,true) {
   project = prj;
@@ -325,8 +329,7 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	loc_button->setBackgroundMode( QWidget::PaletteBackground );
 	loc_button->setFontPropagation( QWidget::NoChildren );
 	loc_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix = BarIcon("open");
 	loc_button->setPixmap(pix);
 	loc_button->setAutoRepeat( FALSE );
 	loc_button->setAutoResize( FALSE );
@@ -380,10 +383,10 @@ KDlgNewDialogDlg::KDlgNewDialogDlg(QWidget *parent, const char *name,CProject* p
 	data_modified = false;
 	
 	// connections
-	connect(classname_edit,SIGNAL(textChanged(const char*)),SLOT(slotClassEditChanged(const char*)));
-	connect(header_edit,SIGNAL(textChanged(const char*)),SLOT(slotHeaderEditChanged(const char*)));
-	connect(cpp_edit,SIGNAL(textChanged(const char*)),SLOT(slotSourceEditChanged(const char*)));
-	connect(data_edit,SIGNAL(textChanged(const char*)),SLOT(slotDataEditChanged(const char*)));
+	connect(classname_edit,SIGNAL(textChanged(const QString&)),SLOT(slotClassEditChanged(const QString&)));
+	connect(header_edit,SIGNAL(textChanged(const QString&)),SLOT(slotHeaderEditChanged(const QString&)));
+	connect(cpp_edit,SIGNAL(textChanged(const QString&)),SLOT(slotSourceEditChanged(const QString&)));
+	connect(data_edit,SIGNAL(textChanged(const QString&)),SLOT(slotDataEditChanged(const QString&)));
 	
 	connect(ok_button,SIGNAL(clicked()),SLOT(slotOKClicked()));
 	connect(cancel_button,SIGNAL(clicked()),SLOT(reject()));
@@ -400,32 +403,30 @@ KDlgNewDialogDlg::~KDlgNewDialogDlg(){
 
 void KDlgNewDialogDlg::slotOKClicked(){
   if(QString(classname_edit->text()) == "") {
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a classname!"),KMsgBox::EXCLAMATION);return;
+    KMessageBox::error(this,i18n("You must enter a classname!"));return;
   }
   if(QString(header_edit->text()) == "") {
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the header-file!"),KMsgBox::EXCLAMATION);return;
+    KMessageBox::error(this,i18n("You must enter a name for the header-file!"));return;
   }
   if(QString(cpp_edit->text()) == "") {
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the implementation-file!"),KMsgBox::EXCLAMATION);return;
+    KMessageBox::error(this,i18n("You must enter a name for the implementation-file!"));return;
   }
   if(QString(data_edit->text()) == "") {
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the data-file!"),KMsgBox::EXCLAMATION);return;
+    KMessageBox::error(this,i18n("You must enter a name for the data-file!"));return;
   }
   if(custom_radio_button->isChecked() &&  QString(custom_header_edit->text()) == ""){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the header-file\n for the custom class!"),KMsgBox::EXCLAMATION);return;
+    KMessageBox::error(this,i18n("You must enter a name for the header-file\n for the custom class!"));return;
   }
   if(custom_radio_button->isChecked() &&  QString(custom_class_edit->text()) == ""){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must enter a name for the custom class!"),KMsgBox::EXCLAMATION);return;
+    KMessageBox::error(this,i18n("You must enter a name for the custom class!"));return;
   }
   if(QString(loc_edit->text()).contains(project->getProjectDir()) == 0 ){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must choose a location,that is in your project-dir!")
-		     ,KMsgBox::EXCLAMATION);
-    return;
+    KMessageBox::error(this,i18n("You must choose a location,that is in your project-dir!"));return;
   }
   accept();
 }
 void KDlgNewDialogDlg::slotLocButtonClicked(){
-  QString str=  KDirDialog::getDirectory(loc_edit->text(),this,"test");
+  QString str=  KFileDialog::getExistingDirectory(loc_edit->text());
   if(!str.isEmpty()){
     loc_edit->setText(str);
   }
@@ -455,7 +456,7 @@ void KDlgNewDialogDlg::setCustomPropsEnabled(bool show){
     custom_prob_gbox->setEnabled(false);
   }
 }
-void  KDlgNewDialogDlg::slotClassEditChanged(const char* text){
+void  KDlgNewDialogDlg::slotClassEditChanged(const QString& text){
   QString str = text;
   if(!header_modified){
     header_edit->setText(str.lower() + ".h");
@@ -468,17 +469,17 @@ void  KDlgNewDialogDlg::slotClassEditChanged(const char* text){
   }
   
 }
-void KDlgNewDialogDlg::slotHeaderEditChanged(const char*){
+void KDlgNewDialogDlg::slotHeaderEditChanged(const QString&){
   if(header_edit->hasFocus()){
     header_modified = true;
   }
 }
-void KDlgNewDialogDlg::slotSourceEditChanged(const char*){
+void KDlgNewDialogDlg::slotSourceEditChanged(const QString&){
   if(cpp_edit->hasFocus()){
     source_modified = true;
   }
 }
-void KDlgNewDialogDlg::slotDataEditChanged(const char*){
+void KDlgNewDialogDlg::slotDataEditChanged(const QString&){
   if(data_edit->hasFocus()){
     data_modified = true;
   }

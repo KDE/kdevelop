@@ -16,54 +16,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream.h>
-
-#include <qclipbrd.h>
-#include <qevent.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qfont.h>
-#include <qregexp.h>
-#include <qtextstream.h>
-#include <qtoolbar.h>
-#include <qmessagebox.h>
-
-#include <kcursor.h>
-#include <kfiledialog.h>
-#include <kkeydialog.h>
-#include <kmsgbox.h>
-#include <ktabctl.h>
-#include <stdlib.h>
-
-#include "./kdlgedit/kdlgedit.h"
-#include "ctoolsconfigdlg.h"
-#include "ktipofday.h"
-
-// #include <kio_linedit_dlg.h>
-
 #include "ckdevelop.h"
-#include "ckdevsetupdlg.h"
-#include "cupdatekdedocdlg.h"
-#include "ccreatedocdatabasedlg.h"
-#include "crealfileview.h"
-#include "clogfileview.h"
 
-#include "cclassview.h"
-#include "ctoolclass.h"
-#include "cdocbrowser.h"
-#include "doctreeview.h"
-#include "cfinddoctextdlg.h"
-#include "cexecuteargdlg.h"
-#include "debug.h"
-#include "./kwrite/kwdoc.h"
-#include "kswallow.h"
-#include "cerrormessageparser.h"
-#include "grepdialog.h"
 #include "cbugreportdlg.h"
-#include "../config.h"
-#include "structdef.h"
-#include "vc/versioncontrol.h"
+#include "cclassview.h"
+#include "ccreatedocdatabasedlg.h"
+#include "cdocbrowser.h"
+#include "ceditwidget.h"
+#include "cerrormessageparser.h"
+#include "cexecuteargdlg.h"
+#include "cfinddoctextdlg.h"
+#include "ckdevaccel.h"
+#include "ckdevsetupdlg.h"
+#include "clogfileview.h"
+#include "coutputwidget.h"
+#include "crealfileview.h"
+#include "ctabctl.h"
+#include "ctoolclass.h"
+#include "ctoolsconfigdlg.h"
+#include "cupdatekdedocdlg.h"
 
+#include "dbgtoolbar.h"
+#include "dbgpsdlg.h"
+#include "debug.h"
+#include "doctreeview.h"
+#include "grepdialog.h"
+#include "kswallow.h"
+#include "structdef.h"
+
+#include "print/cprintdlg.h"
+#include "vc/versioncontrol.h"
 #include "./dbg/vartree.h"
 #include "./dbg/gdbcontroller.h"
 #include "./dbg/brkptmanager.h"
@@ -71,8 +53,44 @@
 #include "./dbg/framestack.h"
 #include "./dbg/memview.h"
 #include "./dbg/disassemble.h"
-#include "dbgtoolbar.h"
-#include "dbgpsdlg.h"
+#include "./kdlgedit/kdlgedit.h"
+#include "./kwrite/kwdoc.h"
+
+
+#include <kcombobox.h>
+#include <kcursor.h>
+#include <kfiledialog.h>
+#include <khtmlview.h>
+#include <kkeydialog.h>
+#include <klocale.h>
+#include <kmenubar.h>
+#include <kmessagebox.h>
+#include <krun.h>
+#include <kstddirs.h>
+#include <ktabctl.h>
+#include "ktipofday.h"
+
+#include <qclipbrd.h>
+#include <qdir.h>
+#include <qevent.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qfont.h>
+#include <qprogressbar.h>
+#include <qregexp.h>
+#include <qtextstream.h>
+#include <qtoolbar.h>
+#include <qmessagebox.h>
+
+#include <iostream.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#include <X11/Xlib.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // FILE-Menu slots
@@ -100,22 +118,22 @@ void CKDevelop::slotFileOpen(){
   //modif by Benoit Cerrina 15 Dec 99
   if(!lastOpenDir.isEmpty())
   {
-  	str = KFileDialog::getOpenFileName(lastOpenDir,"*",this);
+    str = KFileDialog::getOpenFileName(lastOpenDir,"*");
   }
   else if(project){
-    str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this);
+    str = KFileDialog::getOpenFileName(prj->getProjectDir(),"*");
   }
   else{
-    str = KFileDialog::getOpenFileName(0,"*",this);
+    str = KFileDialog::getOpenFileName(QString::null,"*");
   }  
   if (!str.isEmpty())
   {
-		int lSlashPos = str.findRev('/');
-		if (lSlashPos != -1)
-		{
-			lastOpenDir = str;
-			lastOpenDir.truncate(lSlashPos);
-		}
+    int lSlashPos = str.findRev('/');
+    if (lSlashPos != -1)
+    {
+      lastOpenDir = str;
+      lastOpenDir.truncate(lSlashPos);
+    }
   }
   //end modif
 
@@ -131,57 +149,58 @@ void CKDevelop::slotFileOpen( int id_ ){
   slotStatusMsg(i18n("Opening file..."));
 
   QString str=file_open_list.at(id_);
-	
+  
   switchToFile(str);
 
   slotStatusMsg(i18n("Ready."));
 
 }
 
-void CKDevelop::slotFileClose(){
-    slotStatusMsg(i18n("Closing file..."));
-    QString filename = edit_widget->getName();
-    int message_result;
+void CKDevelop::slotFileClose()
+{
+  slotStatusMsg(i18n("Closing file..."));
+  QString filename = edit_widget->getName();
+  int message_result;
 
-    if(edit_widget->isModified()){
-	
-	// no autosave if the user intends to save a file
-	if (bAutosave)
-	    saveTimer->stop();
-	
-	message_result = KMsgBox::yesNoCancel(this,i18n("Save?"),
-					      i18n("The document was modified,save?"),KMsgBox::QUESTION);
-	// restart autosaving
-	if (bAutosave)
-	    saveTimer->start(saveTimeout);
-	
-	if (message_result == 1){ // yes
-	
-	    if (isUntitled(filename))
-		{
-		    if (!fileSaveAs())
-			message_result=3;    // simulate here cancel because fileSaveAs failed....
-		}
-	    else
-		{
-		
-		    saveFileFromTheCurrentEditWidget();
-		    if (edit_widget->isModified())
-			message_result=3;		   // simulate cancel because doSave went wrong!
-		}
-	}
-	
-	if (message_result == 3) // cancel
-	    {
-		setInfoModified(filename, edit_widget->isModified());
-		slotStatusMsg(i18n("Ready."));
-		return;
-	    }
+  if(edit_widget->isModified())
+  {
+    // no autosave if the user intends to save a file
+    if (bAutosave)
+      saveTimer->stop();
+  
+    message_result = KMessageBox::warningYesNoCancel(this,
+                        i18n("The document was modified,save?"),
+                        i18n("Save?"));
+    // restart autosaving
+    if (bAutosave)
+      saveTimer->start(saveTimeout);
+  
+    if (message_result == 1)
+    { // yes
+      if (isUntitled(filename))
+      {
+        if (!fileSaveAs())
+          message_result=3;    // simulate here cancel because fileSaveAs failed....
+      }
+      else
+      {
+        saveFileFromTheCurrentEditWidget();
+        if (edit_widget->isModified())
+          message_result=3;       // simulate cancel because doSave went wrong!
+      }
     }
+  
+    if (message_result == 3) // cancel
+    {
+      setInfoModified(filename, edit_widget->isModified());
+      slotStatusMsg(i18n("Ready."));
+      return;
+    }
+  }
 
-    removeFileFromEditlist(filename);
-    setMainCaption();
-    slotStatusMsg(i18n("Ready."));
+  removeFileFromEditlist(filename);
+  setMainCaption();
+  slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotFileCloseAll()
@@ -203,17 +222,25 @@ void CKDevelop::slotFileCloseAll()
       if (prj)
         prjName = "\n" + prj->getProjectName() + "\n\n";
 
-      KMsgBox *files_close=new KMsgBox(this,i18n("Save changed files ?"),
-		    	   i18n("The project\n")+prjName
-					   +i18n("contains changed files. Save modified file\n\n")
-					   +actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
-					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
-
-      // show the messagea and store result in result:
-
-      files_close->show();
-
-      int result=files_close->result();
+#warning FIXME MessageBox needed with an extra button.
+//      KMessageBox *files_close=
+//        new KMessageBox(this,
+//                        i18n("The project\n")+prjName
+//                          +i18n("contains changed files. Save modified file\n\n")
+//                          +actual_info->filename+" ?\n\n",
+//                          i18n("Save changed files ?"),
+//                          i18n("Yes"), i18n("No"), /*i18n("Save all"), */i18n("Cancel"));
+//
+//      // show the messagea and store result in result:
+//
+//      files_close->show();
+//
+//      int result=files_close->result();
+      int result = KMessageBox::warningYesNoCancel(this,
+                          i18n("The project\n")+prjName
+                          +i18n("contains changed files. Save modified file\n\n")
+                          +actual_info->filename+" ?\n\n",
+                          i18n("Save changed files ?"));
 
       // create the save project messagebox
 
@@ -225,9 +252,9 @@ void CKDevelop::slotFileCloseAll()
         {
           switchToFile(actual_info->filename);
           handledNames.append(actual_info->filename);
-	        cont=fileSaveAs();
+          cont=fileSaveAs();
           next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-        }				
+        }        
         else // Save file and close it
         {
           switchToFile(actual_info->filename);
@@ -255,8 +282,8 @@ void CKDevelop::slotFileCloseAll()
       if(result==4) // Cancel
       {
         cont=false;
-	      break;
-      }	
+        break;
+      }  
     }  // end actual file close
 
     actual_info=next_info;
@@ -306,15 +333,23 @@ bool CKDevelop::saveFileFromTheCurrentEditWidget(){
   TEditInfo* actual_info;
   QFileInfo file_info(filename);
   
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      if (actual_info->filename == filename ){
-	  break;
-      }
+  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next())
+  {
+    if (actual_info->filename == filename ){
+      break;
+    }
   }
-  if(actual_info == 0) return false; //oops :-(
 
-  if(file_info.lastModified() != actual_info->last_modified){
-    if(QMessageBox::warning(this,i18n("File modified"),i18n("The file ") + filename + i18n(" was modified outside\n this editor.Save anyway?"),i18n("&Yes"),i18n("&No"))) return false;
+  if (actual_info == 0)
+    return false; //oops :-(
+
+  if(file_info.lastModified() != actual_info->last_modified)
+  {
+    if (KMessageBox::No == KMessageBox::questionYesNo(this,
+
+                    i18n("The file ") + filename + i18n(" was modified outside\n this editor.Save anyway?"),
+                    i18n("File modified")))
+      return false;
   }
   edit_widget->doSave();
   QFileInfo file_info2(filename);
@@ -333,18 +368,20 @@ void CKDevelop::slotFileSave(){
   if(isUntitled(filename)){
     slotFileSaveAs();
   }
-  else{
-      saveFileFromTheCurrentEditWidget(); // save the current file
-      setInfoModified(filename, edit_widget->isModified());
-      QStrList lSavedFile;
-      lSavedFile.append(filename);
+  else
+  {
+    saveFileFromTheCurrentEditWidget(); // save the current file
+    setInfoModified(filename, edit_widget->isModified());
+    QStrList lSavedFile;
+    lSavedFile.append(filename);
 #ifdef WITH_CPP_REPARSE
-      if (project)
+    if (project)
 #else
       if (project && edit_widget==header_widget)
 #endif
         refreshClassViewByFileList(&lSavedFile);
   }
+
   slotStatusMsg(i18n("Ready."));
   QString sHelpMsg=i18n("File ");
   sHelpMsg+=sShownFilename;
@@ -366,7 +403,8 @@ void CKDevelop::slotFileSaveAs(){
 }
 
 #include <iostream.h>
-void CKDevelop::slotFileSaveAll(){
+void CKDevelop::slotFileSaveAll()
+{
     QStrList handledNames;
     TEditInfo* actual_info, *cpp_info, *header_info;
     CEditWidget blind_widget;
@@ -376,128 +414,110 @@ void CKDevelop::slotFileSaveAll(){
     int visibleTab=s_tab_view->getCurrentTab();
 
     // ok,its a dirty implementation  :-)
-    if(!bAutosave || !saveTimer->isActive()){
-	slotStatusMsg(i18n("Saving all changed files..."));
-    }
-    else{
-	slotStatusMsg(i18n("Autosaving..."));
-    }
+    if(!bAutosave || !saveTimer->isActive())
+      slotStatusMsg(i18n("Saving all changed files..."));
+    else
+      slotStatusMsg(i18n("Autosaving..."));
 
-
-    view->setUpdatesEnabled(false);
+    mainSplitter->setUpdatesEnabled(false);
 
     setInfoModified(header_widget->getName(), header_widget->isModified());
     setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
     header_info=getInfoFromFilename(header_widget->getName());
     if (header_info)
-	header_info->text=header_widget->text();
+      header_info->text=header_widget->text();
     cpp_info=getInfoFromFilename(cpp_widget->getName());
     if (cpp_info)
-	cpp_info->text=cpp_widget->text();
+      cpp_info->text=cpp_widget->text();
 
     statProg->setTotalSteps(edit_infos.count());
     statProg->show();
-    statProg->setProgress(0);
-    int i=0;
 
     for(actual_info=edit_infos.first();actual_info != 0;)
     {
-	TEditInfo *next_info=edit_infos.next();
-	i++;
-	statProg->setProgress(i);
-//
-	cerr << "checking: " << actual_info->filename << "\n";
-	cerr << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
-//
-	if(!isUntitled(actual_info->filename) && actual_info->modified &&
-		handledNames.contains(actual_info->filename)<1)
+      int i=0;
+      TEditInfo *next_info=edit_infos.next();
+      statProg->setProgress(++i);
+
+//      cerr << "checking: " << actual_info->filename << "\n";
+//      cerr << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
+
+      if(!isUntitled(actual_info->filename) && actual_info->modified &&
+        handledNames.contains(actual_info->filename)<1)
+      {
+        int qYesNo=KMessageBox::Yes;
+        handledNames.append(actual_info->filename);
+        QFileInfo file_info(actual_info->filename);
+        if (file_info.lastModified() != actual_info->last_modified)
         {
-          int qYesNo=0;
-          handledNames.append(actual_info->filename);
+          qYesNo = KMessageBox::questionYesNo(this,
+                                QString().sprintf(i18n("The file %s was modified outside\nthis editor. Save anyway?"),actual_info->filename.data()),
+                                i18n("File modified"));
+        }
+
+        if (qYesNo==KMessageBox::Yes)
+        {
           QFileInfo file_info(actual_info->filename);
-          if (file_info.lastModified() != actual_info->last_modified)
-          {
-              qYesNo=QMessageBox::warning(this,i18n("File modified"),
-                    QString().sprintf(i18n("The file %s was modified outside\nthis editor. Save anyway?"),actual_info->filename.data()),i18n("&Yes"), i18n("&No"));
-          }
-
-          if (qYesNo==0) // Yes button has been pressed
-          {
-            QFileInfo file_info(actual_info->filename);
-            bool isModified;
-            blind_widget.setName(actual_info->filename);
-            blind_widget.setText(actual_info->text);
-            blind_widget.toggleModified(true);
-            blind_widget.doSave();
-            isModified=blind_widget.isModified();
+          bool isModified;
+          blind_widget.setName(actual_info->filename);
+          blind_widget.setText(actual_info->text);
+          blind_widget.toggleModified(true);
+          blind_widget.doSave();
+          isModified=blind_widget.isModified();
 //
-            cerr << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
+//      cerr << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
 //
 
-            if (actual_info==cpp_info)
-               cpp_widget->setModified(isModified);
-            if (actual_info==header_info)
-               header_widget->setModified(isModified);
+          if (actual_info==cpp_info)
+             cpp_widget->setModified(isModified);
+          if (actual_info==header_info)
+             header_widget->setModified(isModified);
 
-            actual_info->modified = isModified;
-            if (!isModified)
-            {
+          actual_info->modified = isModified;
+          if (!isModified)
+          {
 #ifdef WITH_CPP_REPARSE
-	       mod=true;
+              mod=true;
 #else
-	       mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(2)==".hxx");
+              mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx");
 #endif
               iFileList.append(actual_info->filename);
               actual_info->last_modified = file_info.lastModified();
-	
-            }
-          }
         }
-
-	actual_info=next_info;
+      }
     }
-    statProg->hide();
-    statProg->reset();
+    actual_info=next_info;
+  }
 
-    if (project && !iFileList.isEmpty() && mod)
-      refreshClassViewByFileList(&iFileList);
+//  statProg->hide();
+  statProg->reset();
 
-    setMainCaption(visibleTab);
-    if (visibleTab == CPP || visibleTab == HEADER)
-    {
-      edit_widget->setFocus();
-    }
-    if (visibleTab == BROWSER)
-    {
-      browser_widget->setFocus();
-    }
-    view->setUpdatesEnabled(true);
-    // switch back to visible tab
+  if (project && !iFileList.isEmpty() && mod)
+    refreshClassViewByFileList(&iFileList);
 
-    // s_tab_view->setCurrentTab(visibleTab);
-
-    slotStatusMsg(i18n("Ready."));
+  setMainCaption(visibleTab);
+  if (visibleTab == CPP || visibleTab == HEADER)
+  {
+    edit_widget->setFocus();
+  }
+  if (visibleTab == BROWSER)
+  {
+    browser_widget->view()->setFocus();
+  }
+  mainSplitter->setUpdatesEnabled(true);
+  slotStatusMsg(i18n("Ready."));
 }
 
 
 void CKDevelop::slotFilePrint(){
   QString file;
   slotFileSave();
-/*  if (s_tab_view->getCurrentTab() == BROWSER) {
-  	file = browser_widget->currentURL();
-  	CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus", TRUE);
- 	printerdlg->resize(600,480);
-	  printerdlg->exec();
-  	delete (printerdlg);
-  }
-  else { */
-	  file = edit_widget->getName();
-	  CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
-	  printerdlg->resize(600,480);
-	  printerdlg->exec();
-  	delete (printerdlg);
-//	}
+  file = edit_widget->getName();
+  CPrintDlg* printerdlg = new CPrintDlg(this, file, "suzus");
+  printerdlg->resize(600,480);
+  printerdlg->exec();
+  delete (printerdlg);
 }
 
 void CKDevelop::slotFileQuit(){
@@ -526,7 +546,7 @@ void CKDevelop::slotEditCopy(){
   if(s_tab_view->getCurrentTab()==2){
     browser_widget->slotCopyText();
   }
-	else
+  else
     edit_widget->copyText();
   slotStatusMsg(i18n("Ready."));
 }
@@ -556,12 +576,13 @@ void CKDevelop::slotEditSearch(){
 }
 void CKDevelop::slotEditRepeatSearch(){
   slotStatusMsg(i18n("Repeating last search..."));
-  if(s_tab_view->getCurrentTab()==BROWSER){
-    browser_widget->findTextNext(QRegExp(doc_search_text));
-  }
-  else{
-    edit_widget->searchAgain();
-  }
+#warning FIXME KHTML changes.
+//  if(s_tab_view->getCurrentTab()==BROWSER){
+//    browser_widget->findTextNext(QRegExp(doc_search_text));
+//  }
+//  else{
+//    edit_widget->searchAgain();
+//  }
   slotStatusMsg(i18n("Ready."));
 }
 void CKDevelop::slotEditSearchInFiles(){
@@ -590,12 +611,12 @@ void CKDevelop::slotEditSearchInFiles(QString search){
   search=realSearchText2regExp(search, true);
   grep_dlg->slotSearchFor(search);
   slotStatusMsg(i18n("Ready."));
-	}
+  }
 
 void CKDevelop::slotEditSearchText(){
   QString text;
   if(s_tab_view->getCurrentTab()==BROWSER){
-    browser_widget->getSelectedText(text);
+    text = browser_widget->selectedText();
   }
   else{
     text = edit_widget->markedText();
@@ -616,22 +637,22 @@ void CKDevelop::slotEditReplace(){
 }
 
 void CKDevelop::slotEditIndent(){
-	edit_widget->indent();
+  edit_widget->indent();
 }
 void CKDevelop::slotEditUnindent(){
-	edit_widget->unIndent();
+  edit_widget->unIndent();
 }
 
 void CKDevelop::slotEditComment(){
-	edit_widget->comment();
+  edit_widget->comment();
 }
 void CKDevelop::slotEditUncomment(){
-	edit_widget->unComment();
+  edit_widget->unComment();
 }
 
 /*
 void CKDevelop::slotEditSpellcheck(){
-	edit_widget->spellcheck();
+  edit_widget->spellcheck();
 }
 */
 
@@ -720,77 +741,82 @@ void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
-		toolBar()->setButton(ID_VIEW_TREEVIEW,false);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
-    tree_view_pos=top_panner->separatorPos();
-    top_panner->setSeparatorPos(0);
+    toolBar()->setButton(ID_VIEW_TREEVIEW,false);
+    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,false);
+#warning FIXME Splitter separator problems
+//    tree_view_pos=topSplitter->separatorPos();
+//    topSplitter->setSeparatorPos(0);
   }
   else{
-    top_panner->setSeparatorPos(tree_view_pos);
+#warning FIXME Splitter separator problems
+//    topSplitter->setSeparatorPos(tree_view_pos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
-		toolBar()->setButton(ID_VIEW_TREEVIEW,true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,true);
+    toolBar()->setButton(ID_VIEW_TREEVIEW,true);
+    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_TREEVIEW,true);
   }
-  QRect rMainGeom= top_panner->geometry();
-  top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-  top_panner->resize(rMainGeom.width(),rMainGeom.height());
+  QRect rMainGeom= topSplitter->geometry();
+  topSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
+  topSplitter->resize(rMainGeom.width(),rMainGeom.height());
 }
 
 void CKDevelop::slotViewTOutputView(){
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
+    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
+    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,false);
+#warning FIXME Splitter separator problems
+//    output_view_pos=view->separatorPos();
+//    view->setSeparatorPos(100);
   }
   else{
-    view->setSeparatorPos(output_view_pos);
+#warning FIXME Splitter separator problems
+//    view->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     kdlg_view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-		toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
-		toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,true);
+    toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);
+    toolBar(ID_KDLG_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW,true);
   }
-  QRect rMainGeom= view->geometry();
-  view->resize(rMainGeom.width()+1,rMainGeom.height());
-  view->resize(rMainGeom.width(),rMainGeom.height());
+  QRect rMainGeom= mainSplitter->geometry();
+  mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
+  mainSplitter->resize(rMainGeom.width(),rMainGeom.height());
 }
 
 
 void CKDevelop::slotViewTStdToolbar(){
  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR)){
    view_menu->setItemChecked(ID_VIEW_TOOLBAR,false);
-    enableToolBar(KToolBar::Hide);
+    toolBar()->hide();
   }
   else{
     view_menu->setItemChecked(ID_VIEW_TOOLBAR,true);
-    enableToolBar(KToolBar::Show);
+    toolBar()->show();
   }
 
 }
 void CKDevelop::slotViewTBrowserToolbar(){
   if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR)){
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,false);
-    enableToolBar(KToolBar::Hide,ID_BROWSER_TOOLBAR);
+    toolBar(ID_BROWSER_TOOLBAR)->hide();
   }
   else{
     view_menu->setItemChecked(ID_VIEW_BROWSER_TOOLBAR,true);
-    enableToolBar(KToolBar::Show,ID_BROWSER_TOOLBAR);
+    toolBar(ID_BROWSER_TOOLBAR)->show();
   }
 }
 
 void CKDevelop::slotViewTStatusbar(){
   if(view_menu->isItemChecked(ID_VIEW_STATUSBAR)){
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
-	  kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
+    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,false);
   }
   else{
     view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
-  	kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
+    kdlg_view_menu->setItemChecked(ID_VIEW_STATUSBAR,true);
   }
-  enableStatusBar();
+
+  initStatusBar();
 }
 
 void CKDevelop::slotViewRefresh(){
@@ -868,7 +894,7 @@ void CKDevelop::slotBuildCompileFile(){
 
 void CKDevelop::slotBuildRun()
 {
-  KConfig *config=kapp->getConfig();
+  KConfig *config=KGlobal::config();
   bool isDirty=isProjectDirty();
   int qYesNoCancel=0;
   int rebuildType;
@@ -896,7 +922,7 @@ void CKDevelop::slotBuildRun()
 
 void CKDevelop::slotBuildRunWithArgs()
 {
-  KConfig *config=kapp->getConfig();
+  KConfig *config=KGlobal::config();
   bool isDirty=isProjectDirty();
   int qYesNoCancel=0;
   int rebuildType;
@@ -927,17 +953,13 @@ void CKDevelop::slotStartRun(bool bWithArgs)
   bool bContinue=true;
    // rest from the buildRun
   appl_process.clearArguments();
-//  QDir::setCurrent(prj->getProjectDir());
+  QDir::setCurrent(prj->getProjectDir());
 
   QString underDir=prj->pathToBinPROGRAM();
   if (underDir.isEmpty())
     underDir = prj->getProjectDir() + prj->getSubDir();
   if (!underDir.isEmpty() && underDir.right(1)!="/")
     underDir+="/";
-
-  // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
-  // the current dir is resetted to the project dir at the end of this function after the kprocess call.
-  QDir::setCurrent(underDir);
 
   stdin_stdout_widget->clear();
   stderr_widget->clear();
@@ -969,7 +991,7 @@ void CKDevelop::slotStartRun(bool bWithArgs)
     {
        o_tab_view->setCurrentTab(STDINSTDOUT);
        QString term = "xterm";
-       QString exec_str = term + " -e sh -c '" + program + "'";
+       QString exec_str = term + " -e sh -c '" + underDir+program + "'";
 
        if(CToolClass::searchInstProgram("konsole"))
        {
@@ -977,22 +999,22 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        }
        if(CToolClass::searchInstProgram("ksh"))
        {
-         exec_str = term + " -e ksh -c '" + program +
+         exec_str = term + " -e ksh -c '" + underDir+program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        if(CToolClass::searchInstProgram("csh"))
        {
-         exec_str = term +" -e csh -c '" + program +
+         exec_str = term +" -e csh -c '" + underDir+program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("tcsh"))
        {
-          exec_str =  term +" -e tcsh -c '" + program +
+          exec_str =  term +" -e tcsh -c '" + underDir+program +
             ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
        }
        if(CToolClass::searchInstProgram("bash"))
        {
-          exec_str =  term +" -e bash -c '" + program +
+          exec_str =  term +" -e bash -c '" + underDir+program +
           ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
        }
        appl_process << exec_str;
@@ -1005,20 +1027,19 @@ void CKDevelop::slotStartRun(bool bWithArgs)
        QString kde2dir =  QString("KDEDIR=") + config->readEntry("kde2dir") + " ";
        config->setGroup(oldGroup);
 
-       appl_process << kde2dir <<  program;
-       cerr << endl << "EXEC:" << kde2dir << program;
+       appl_process << kde2dir << underDir + program;
+       cerr << endl << "EXEC:" << kde2dir << underDir + program;
        o_tab_view->setCurrentTab(STDERR);
     }
     else
     {
-      appl_process << program;
-      cerr << endl << "EXEC:" << program;
+      appl_process << underDir + program;
+      cerr << endl << "EXEC:" << underDir +program;
       o_tab_view->setCurrentTab(STDERR);
     }
 
     setToolMenuProcess(false);
     appl_process.start(KProcess::NotifyOnExit,KProcess::All);
-    QDir::setCurrent(prj->getProjectDir());
   }
 }
 
@@ -1261,7 +1282,7 @@ void CKDevelop::slotDebugMemoryView()
 
 void CKDevelop::slotDebugStatus(const QString& msg, int state)
 {
-  QString stateIndicator("P");		// default to "paused"
+  QString stateIndicator("P");    // default to "paused"
 
   if (state & s_appBusy)
   {
@@ -1287,7 +1308,6 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
 void CKDevelop::slotDebugAttach()
 {
   QDir::setCurrent(prj->getProjectDir());
-
   if (dbgInternal)
   {
     QString underDir=prj->pathToBinPROGRAM();
@@ -1314,13 +1334,9 @@ void CKDevelop::slotDebugAttach()
                             pid, dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        // set the underDir the current dir, otherwise the resource file for XML GUI construction isn´t loaded on KDE 2 apps.
-        // the current dir is resetted to the project dir at the end of this function after the kprocess call.
-        QDir::setCurrent(underDir);
-        dbgController->slotStart(binProgram, QString(),
-             (isAScript(binProgram)) ? libtool : QString());
+        dbgController->slotStart(underDir+binProgram, QString(),
+             (isAScript(underDir+binProgram)) ? libtool : QString());
         dbgController->slotAttachTo(pid);
-        QDir::setCurrent(prj->getProjectDir());
       }
     }
   }
@@ -1350,17 +1366,15 @@ void CKDevelop::slotDebugExamineCore()
 
     if (project)
     {
-      if (QString coreFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"core",this))
+      if (QString coreFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"core"))
       {
         slotStatusMsg(QString().sprintf(i18n("Examine core file %s in %s"),
                                 coreFile.data(), dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        QDir::setCurrent(underDir);
-        dbgController->slotStart(binProgram, QString(),
-             (isAScript(binProgram)) ? libtool : QString());
+        dbgController->slotStart(underDir+binProgram, QString(),
+             (isAScript(underDir+binProgram)) ? libtool : QString());
         dbgController->slotCoreFile(coreFile);
-        QDir::setCurrent(prj->getProjectDir());
       }
     }
   }
@@ -1378,7 +1392,7 @@ void CKDevelop::slotDebugNamedFile()
     slotStatusMsg(i18n("Enter executable to debug..."));
     if (project)
     {
-      if (QString debugFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"*",this))
+      if (QString debugFile = KFileDialog::getOpenFileName(prj->getProjectDir(),"*"))
       {
         slotStatusMsg(QString().sprintf(i18n("Running %s in %s"),
                           debugFile.data(), dbgExternalCmd.data()));
@@ -1403,7 +1417,7 @@ void CKDevelop::slotBuildDebugStart()
 
 void CKDevelop::slotBuildDebug(bool bWithArgs)
 {
-  KConfig *config=kapp->getConfig();
+  KConfig *config=KGlobal::config();
   bool isDirty=isProjectDirty();
   int qYesNoCancel=0;
   int rebuildType;
@@ -1465,7 +1479,7 @@ void CKDevelop::slotStartDebugRunWithArgs()
   if (argdlg.exec())
   {
     args = argdlg.getArguments();
-    prj->setDebugArgs(args);		
+    prj->setDebugArgs(args);    
     prj->writeProject();
 
     slotStatusMsg(i18n("Debug with arguments"));
@@ -1473,11 +1487,9 @@ void CKDevelop::slotStartDebugRunWithArgs()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    QDir::setCurrent(underDir);
-    dbgController->slotStart(binProgram, args,
-             (isAScript(binProgram)) ? libtool : QString());
+    dbgController->slotStart(underDir+binProgram, args,
+             (isAScript(underDir+binProgram)) ? libtool : QString());
     brkptManager->slotSetPendingBPs();
-    QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
   }
 }
@@ -1507,11 +1519,9 @@ void CKDevelop::slotStartDebug()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    QDir::setCurrent(underDir);
-    dbgController->slotStart(binProgram, QString(),
-             (isAScript(binProgram)) ? libtool : QString());
+    dbgController->slotStart(underDir+binProgram, QString(),
+             (isAScript(underDir+binProgram)) ? libtool : QString());
     brkptManager->slotSetPendingBPs();
-    QDir::setCurrent(prj->getProjectDir());
     slotDebugRun();
     return;
   }
@@ -1593,14 +1603,14 @@ void CKDevelop::setupInternalDebugger()
   ASSERT(!dbgController);
   if (dbgController)
     return;
-	
+  
   saveTimer->stop();  // stop the autosaving
   slotStatusMsg(QString().sprintf(i18n("Running %s in internal debugger"),
                   (prj->getBinPROGRAM()).data()));
 
   dbgController = new GDBController(var_viewer->varTree(), frameStack);
   dbgShuttingDown = false;
-	setDebugMenuProcess(true);  // MUST be after dbgController
+  setDebugMenuProcess(true);  // MUST be after dbgController
 
   o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);
   o_tab_view->setTabEnabled("DisassembleTab", dbgInternal && dbgController);
@@ -1628,8 +1638,8 @@ void CKDevelop::setupInternalDebugger()
             this,             SLOT(slotApplReceivedStderr(const char*)));
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  connect(  dbgController,    SIGNAL(rawData(const char*)),
-            this,             SLOT(slotDebugReceivedStdout(const char*)));
+  connect(  dbgController,    SIGNAL(rawData(const QString&)),
+            this,             SLOT(slotDebugReceivedStdout(const QString&)));
 #endif
 
   connect(  brkptManager,     SIGNAL(publishBPState(Breakpoint*)),
@@ -1911,7 +1921,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   // running make -f Makefile.dist/cvs
   shell_process.clearArguments();
   shell_process << make_cmd << "distclean && " << " cd " << prj->getProjectDir() << " && " << make_cmd
-		<< " -f "+makefile+" && ";
+    << " -f "+makefile+" && ";
   shell_process << flaglabel;
   if (!prj->getCXXFLAGS().isEmpty() || !prj->getAdditCXXFLAGS().isEmpty())
   {
@@ -2081,11 +2091,11 @@ void CKDevelop::slotBuildConfigure(){
   QString args=prj->getConfigureArgs();
   CExecuteArgDlg argdlg(this,i18n("Arguments"),i18n("Configure with Arguments"),args);
   if(argdlg.exec()){
-	  prj->setConfigureArgs(argdlg.getArguments());		
-	  prj->writeProject();
-	
+    prj->setConfigureArgs(argdlg.getArguments());    
+    prj->writeProject();
+  
   } else {
-	  return;
+    return;
   }
   slotDebugStop();
 
@@ -2167,7 +2177,7 @@ void CKDevelop::slotToolsTool(int tool){
   showOutputView(false);
 
   QString argument=tools_argument.at(tool);
- 		
+     
   // This allows us to replace the macro %H with the header file name, %S with the source file name
   // and %D with the project directory name.  Any others we should have?
   argument.replace( QRegExp("%H"), header_widget->getName() );
@@ -2251,15 +2261,15 @@ void CKDevelop::slotOptionsDocBrowser(){
    CDocBrowserOptionsDlg browserOptions;
 
    connect( browserOptions.fontOptions, SIGNAL(fontSize(int)),
-		 browser_widget, SLOT(slotDocFontSize( int )) );
-   connect( browserOptions.fontOptions, SIGNAL(standardFont( const char * )),
-		 browser_widget, SLOT(slotDocStandardFont( const char * )) );
-   connect( browserOptions.fontOptions, SIGNAL(fixedFont( const char * )),
-		 browser_widget, SLOT(slotDocFixedFont( const char * )) );
+     browser_widget, SLOT(slotDocFontSize( int )) );
+   connect( browserOptions.fontOptions, SIGNAL(standardFont( const QString& )),
+     browser_widget, SLOT(slotDocStandardFont( const QString& )) );
+   connect( browserOptions.fontOptions, SIGNAL(fixedFont( const QString& )),
+     browser_widget, SLOT(slotDocFixedFont( const QString& )) );
    connect( browserOptions.colorOptions, SIGNAL(colorsChanged(const QColor&, const QColor&,
-			const QColor&, const QColor&, const bool, const bool)),
-		 browser_widget, SLOT(slotDocColorsChanged(const QColor&, const QColor&,
-            		const QColor&, const QColor&, const bool, const bool)) );
+      const QColor&, const QColor&, const bool, const bool)),
+     browser_widget, SLOT(slotDocColorsChanged(const QColor&, const QColor&,
+                const QColor&, const QColor&, const bool, const bool)) );
 
    browserOptions.show();
    slotStatusMsg(i18n("Ready."));
@@ -2272,7 +2282,7 @@ void CKDevelop::slotOptionsToolsConfigDlg(){
 
   tools_menu->clear();
   kdlg_tools_menu->clear();
-	setToolmenuEntries();
+  setToolmenuEntries();
   slotStatusMsg(i18n("Ready."));
 }
 
@@ -2382,7 +2392,7 @@ void CKDevelop::slotOptionsUpdateKDEDocumentation(){
         config->sync();
         // doc_tree->refresh(prj);
         // doing this by next_job ... if the documentation generation has finished
-	next_job="doc_refresh";
+  next_job="doc_refresh";
     }
   }
 }
@@ -2390,7 +2400,9 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   bool foundGlimpse = CToolClass::searchInstProgram("glimpseindex");
   bool foundHtDig = CToolClass::searchInstProgram("htdig");
   if(!foundGlimpse && !foundHtDig){
-    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!"),KMsgBox::EXCLAMATION);
+    KMessageBox::error( 0,
+                        i18n("KDevelop needs either \"glimpseindex\" or \"htdig\" to work properly.\n\tPlease install one!"),
+                        i18n("Program not found!"));
     return;
   }
   CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config,foundGlimpse, foundHtDig);
@@ -2406,113 +2418,113 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
 // BOOKMARK-Menu slots
 ///////////////////////////////////////////////////////////////////////////////////////
 
-/*	
+/*  
 void CKDevelop::slotBookmarksSet(){
-	if(s_tab_view->getCurrentTab()==BROWSER)
-		slotBookmarksAdd();
-	else{
-		if(edit_widget==header_widget)
-			header_widget->setBookmark();
-		if(edit_widget==cpp_widget)
-			cpp_widget->setBookmark();
-	}
+  if(s_tab_view->getCurrentTab()==BROWSER)
+    slotBookmarksAdd();
+  else{
+    if(edit_widget==header_widget)
+      header_widget->setBookmark();
+    if(edit_widget==cpp_widget)
+      cpp_widget->setBookmark();
+  }
 }
 */
 
 void CKDevelop::slotBookmarksToggle()
 {
-	if(s_tab_view->getCurrentTab()==BROWSER)
-	{
-		doc_bookmarks->clear();
+  if(s_tab_view->getCurrentTab()==BROWSER)
+  {
+    doc_bookmarks->clear();
 
-		// Check if the current URL is bookmarked
-		int pos = doc_bookmarks_list.find(browser_widget->currentURL());
-		if(pos > -1)
-		{
-			// The current URL is bookmarked, let's remove the bookmark
-			doc_bookmarks_list.remove(pos);
-			doc_bookmarks_title_list.remove(pos);
-		}
-		else
-		{
-			// The current URL is not bookmark, let's bookmark it
-			doc_bookmarks_list.append(browser_widget->currentURL());
-			doc_bookmarks_title_list.append(browser_widget->currentTitle());
-		}
-		
-		// Recreate thepopup menu
-    for (uint i = 0 ; i < doc_bookmarks_list.count(); i++){
-      doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
+    // Check if the current URL is bookmarked
+    int pos = doc_bookmarks_list.find(browser_widget->currentURL());
+    if(pos > -1)
+    {
+      // The current URL is bookmarked, let's remove the bookmark
+      doc_bookmarks_list.remove(pos);
+      doc_bookmarks_title_list.remove(pos);
     }
-	}
-	else
-	{
-  	if(edit_widget==header_widget)
-  		header_widget->toggleBookmark();
-  	if(edit_widget==cpp_widget)
-  		cpp_widget->toggleBookmark();
-	}
+    else
+    {
+      // The current URL is not bookmark, let's bookmark it
+      doc_bookmarks_list.append(browser_widget->currentURL());
+      doc_bookmarks_title_list.append(browser_widget->currentTitle());
+    }
+    
+    // Recreate thepopup menu
+    for (uint i = 0 ; i < doc_bookmarks_list.count(); i++){
+      doc_bookmarks->insertItem(BarIcon("html"),doc_bookmarks_title_list.at(i));
+    }
+  }
+  else
+  {
+    if(edit_widget==header_widget)
+      header_widget->toggleBookmark();
+    if(edit_widget==cpp_widget)
+      cpp_widget->toggleBookmark();
+  }
 }
 
 void CKDevelop::slotBookmarksClear(){
-	if(s_tab_view->getCurrentTab()==BROWSER){
-		doc_bookmarks_list.clear();
-		doc_bookmarks_title_list.clear();
-		doc_bookmarks->clear();
-	}		
-	else{
-		if(edit_widget==header_widget)
-			header_widget->clearBookmarks();
-		if(edit_widget==cpp_widget)
-			cpp_widget->clearBookmarks();
-	}	
+  if(s_tab_view->getCurrentTab()==BROWSER){
+    doc_bookmarks_list.clear();
+    doc_bookmarks_title_list.clear();
+    doc_bookmarks->clear();
+  }    
+  else{
+    if(edit_widget==header_widget)
+      header_widget->clearBookmarks();
+    if(edit_widget==cpp_widget)
+      cpp_widget->clearBookmarks();
+  }  
 }
 
 void CKDevelop::openBrowserBookmark(char* file)
 {
   slotStatusMsg(i18n("Opening bookmark..."));
-  slotURLSelected(browser_widget, QString(file),1,"test");	
+  slotURLSelected(browser_widget, QString(file),1,"test");  
   slotStatusMsg(i18n("Ready."));
 }
 
 void CKDevelop::slotBookmarksBrowserSelected(int id_)
 {
-	char* file = doc_bookmarks_list.at(id_);
-	openBrowserBookmark(file);	
-}	
+  char* file = doc_bookmarks_list.at(id_);
+  openBrowserBookmark(file);  
+}  
 
 void CKDevelop::slotBookmarksNext()
 {
-	if(s_tab_view->getCurrentTab()==BROWSER)
-	{
-		if(doc_bookmarks_list.count() > 0)
-		{
+  if(s_tab_view->getCurrentTab()==BROWSER)
+  {
+    if(doc_bookmarks_list.count() > 0)
+    {
       char* file = doc_bookmarks_list.next();
-  		if(file == NULL) file = doc_bookmarks_list.first();
-			openBrowserBookmark(file);	
-		}
-	}
-	else
-	{
-		edit_widget->nextBookmark();
-	}
+      if(file == NULL) file = doc_bookmarks_list.first();
+      openBrowserBookmark(file);  
+    }
+  }
+  else
+  {
+    edit_widget->nextBookmark();
+  }
 }
 
 void CKDevelop::slotBookmarksPrevious()
 {
-	if(s_tab_view->getCurrentTab()==BROWSER)
-	{
-		if(doc_bookmarks_list.count() > 0)
-		{
+  if(s_tab_view->getCurrentTab()==BROWSER)
+  {
+    if(doc_bookmarks_list.count() > 0)
+    {
       char* file = doc_bookmarks_list.prev();
-  		if(file == NULL) file = doc_bookmarks_list.last();
-			openBrowserBookmark(file);	
-		}
-	}
-	else
-	{
-	  edit_widget->previousBookmark();
-	}
+      if(file == NULL) file = doc_bookmarks_list.last();
+      openBrowserBookmark(file);  
+    }
+  }
+  else
+  {
+    edit_widget->previousBookmark();
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -2546,8 +2558,8 @@ void CKDevelop::slotHelpForward(){
 }
 
 void CKDevelop::slotHelpHistoryBack( int id_){
-	slotStatusMsg(i18n("Opening history page..."));
-	
+  slotStatusMsg(i18n("Opening history page..."));
+  
   QString str = history_list.at(id_);
   if (str != 0){
     if(!bKDevelop)
@@ -2561,9 +2573,9 @@ void CKDevelop::slotHelpHistoryBack( int id_){
 }
 
 void CKDevelop::slotHelpHistoryForward( int id_){
-	slotStatusMsg(i18n("Opening history page..."));
+  slotStatusMsg(i18n("Opening history page..."));
 
-  int cur=history_list.at()+1;	
+  int cur=history_list.at()+1;  
   QString str = history_list.at(cur+id_);
   if (str != 0){
     if(!bKDevelop)
@@ -2576,13 +2588,13 @@ void CKDevelop::slotHelpHistoryForward( int id_){
 }
 
 void CKDevelop::slotHelpBrowserReload(){
-	slotStatusMsg(i18n("Reloading page..."));
+  slotStatusMsg(i18n("Reloading page..."));
   if(!bKDevelop)
     switchToKDevelop();
   s_tab_view->setCurrentTab(BROWSER);
-  browser_widget->setFocus();
-	browser_widget->showURL(browser_widget->currentURL(), true);
-	slotStatusMsg(i18n("Ready."));
+  browser_widget->view()->setFocus();
+  browser_widget->showURL(browser_widget->currentURL(), true);
+  slotStatusMsg(i18n("Ready."));
 }
 
 //*****************************************************************************
@@ -2594,20 +2606,20 @@ void CKDevelop::slotHelpBrowserReload(){
 //
 QString encodeURL(const QString &str)
 {
-    QString	temp;
-    static const char	*digits = "0123456789ABCDEF";
-    const char	*p;
+    QString  temp;
+    static const char  *digits = "0123456789ABCDEF";
+    const char  *p;
 
     for (p = str; p && *p; p++)
     {
-	if (isascii(*p) && (isdigit(*p) || isalpha(*p)))
-	    temp += *p;
-	else
-	{
-	    temp += '%';
-	    temp += digits[(*p >> 4) & 0x0f];
-	    temp += digits[*p & 0x0f];
-	}
+      if (isascii(*p) && (isdigit(*p) || isalpha(*p)))
+        temp += *p;
+      else
+      {
+        temp += '%';
+        temp += digits[(*p >> 4) & 0x0f];
+        temp += digits[*p & 0x0f];
+      }
     }
     return temp;
 }
@@ -2620,23 +2632,25 @@ void CKDevelop::slotHelpSearchText(QString text){
 
   if (!useGlimpse && !useHtDig)
   {
-    KMsgBox::message(0,i18n("Program not found!"),i18n("KDevelop needs either \"glimpse\" or \"htsearch\" to work properly.\n\tPlease install one!"),KMsgBox::EXCLAMATION);
+    KMessageBox::error(0,
+                        i18n("KDevelop needs either \"glimpse\" or \"htsearch\" to work properly.\n\tPlease install one!"),
+                        i18n("Program not found!"));
     return;
   }
 
   /// stripping error causing \n's
   if(!text.isEmpty())
   {
-   text.replace(QRegExp("^\n"), "");
-   pos=text.find("\n");
-   if (pos>-1)
-    text=text.left(pos);
+    text.replace(QRegExp("^\n"), "");
+    pos=text.find("\n");
+    if (pos>-1)
+      text=text.left(pos);
 
-   text.replace(QRegExp("'"), "'\\''"); // handle ' in a right way
+    text.replace(QRegExp("'"), "'\\''"); // handle ' in a right way
   }
 
   if(text.isEmpty()){
-    KMsgBox::message(this,i18n("Error..."),i18n("You must select a text for searching the documentation!"));
+    KMessageBox::error(this,i18n("You must select a text for searching the documentation!"));
     return;
   }
   //  cerr << ":" << text << ":" << endl;
@@ -2646,33 +2660,45 @@ void CKDevelop::slotHelpSearchText(QString text){
   doc_search_text = text.copy();
 
   slotStatusMsg(i18n("Searching selected text in documentation..."));
-  if(useGlimpse && !QFile::exists(KApplication::localkdedir()+"/share/apps" + "/kdevelop/.glimpse_index")){
+  if(useGlimpse && !QFile::exists(locate("appdata", ".glimpse_index")))
+  {
     if (!useHtDig) {
-      if(KMsgBox::yesNo(this,i18n("Error..."),i18n("KDevelop couldn't find the search database.\n Do you want to generate it now?")) == 1){
+      if(KMessageBox::questionYesNo(this,
+                    i18n("KDevelop couldn't find the search database.\n Do you want to generate it now?"),
+                    i18n("Error...")) == KMessageBox::Yes)
+      {
         slotOptionsCreateSearchDatabase();
       }
       return;
     }
     useGlimpse = false;
   }
-	enableCommand(ID_HELP_BROWSER_STOP);
+  enableCommand(ID_HELP_BROWSER_STOP);
   search_output = ""; // delete all from the last search
   search_process.clearArguments();
   if (useGlimpse)
   {
-    search_process << "glimpse  -H "+ KApplication::localkdedir()+"/share/apps" + "/kdevelop -U -c -y '"+ text +"'";
+    search_process << "glimpse  -H "+ locate("apps", "kdevelop") +" -U -c -y '"+ text +"'";
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
   if (useHtDig)
   {
-    search_process << "htsearch -c " + KApplication::kde_datadir() + "/kdevelop/tools/htdig.conf \"format=&matchesperpage=30&words=" + encodeURL(text) + "\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " + KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
+#warning FIXME well I think this needs checking :-)
+    search_process << "htsearch -c " +
+                        locate("appdata", "tools/htdig.conf") +
+                        "format=&matchesperpage=30&words=" +
+                        encodeURL(text) +
+                        "\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " +
+                        locateLocal("data", "search_result.html");
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
 }
-void CKDevelop::slotHelpSearchText(){
+
+void CKDevelop::slotHelpSearchText()
+{
   QString text;
   if(s_tab_view->getCurrentTab()==BROWSER){
-    browser_widget->getSelectedText(text);
+    text = browser_widget->selectedText();
   }
   else{
     text = edit_widget->markedText();
@@ -2684,21 +2710,22 @@ void CKDevelop::slotHelpSearchText(){
   slotHelpSearchText(text);
 }
 
-void CKDevelop::slotHelpSearch(){
+void CKDevelop::slotHelpSearch()
+{
   slotStatusMsg(i18n("Searching for Help on..."));
   CFindDocTextDlg* help_srch_dlg=new CFindDocTextDlg(this,"Search_for_Help_on");
   connect(help_srch_dlg,SIGNAL(signalFind(QString)),this,SLOT(slotHelpSearchText(QString)));
   help_srch_dlg->exec();
-	delete help_srch_dlg;
+  delete help_srch_dlg;
 }
 
 
 void CKDevelop::showDocHelp(const char *bookname)
 {
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
+  QString strpath = locate("html", ".");
   QString file;
   // first try the locale setting
-  file = strpath + klocale->language() + '/' + bookname +"/index.html";
+  file = strpath + KGlobal::locale()->language() + '/' + bookname +"/index.html";
   
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
@@ -2729,41 +2756,42 @@ void CKDevelop::slotHelpKDE2DevGuide(){
 
 void CKDevelop::slotHelpReference(){
 
-  QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + klocale->language() + '/' + "kdevelop/reference/C/cref.html";
-  if( !QFileInfo( file ).exists() ){
-  // not found: use the default
-  	file = strpath + "default/" + "kdevelop/reference/C/cref.html";
-  }
-  if( !QFileInfo( file ).exists() ){
-  file = strpath + klocale->language() + '/' + "kdevelop/cref.html";
-  }
-  if( !QFileInfo( file ).exists() ){
-    // not found: use the default
-    file = strpath + "default/" + "kdevelop/cref.html";
-  }
+  file = locate("html", KGlobal::locale()->language() + "/kdevelop/reference/C/cref.html");
+
+  if (file.isEmpty())
+    file = locate("html", "default/kdevelop/reference/C/cref.html");
+
+  if (file.isEmpty())
+    file = locate("html", KGlobal::locale()->language() + "/kdevelop/cref.html");
+
+  // not found: last chance
+  if (file.isEmpty())
+    file = locate("html",  "default/kdevelop/cref.html");
+
   slotURLSelected(browser_widget, file,1,"test");
 }
 
 void CKDevelop::slotHelpTipOfDay(){
-	KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
-	tipdlg->show();
+  KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
+  tipdlg->show();
 
-	delete tipdlg;	
+  delete tipdlg;  
 }
 
 void CKDevelop::slotHelpHomepage(){
-  if(vfork() > 0) {
-    // drop setuid, setgid
-    setgid(getgid());
-    setuid(getuid());
-    
-    execlp("kfmclient", "kfmclient", "exec", QString("http://www.kdevelop.org").data(), 0);
-    _exit(0);
-  }
+//  if(vfork() > 0) {
+//    // drop setuid, setgid
+//    setgid(getgid());
+//    setuid(getuid());
+//
+////    execlp("kfmclient", "kfmclient", "exec", QString("http://www.kdevelop.org").data(), 0);
+//    _exit(0);
+//  }
+    new KRun("http://www.kdevelop.org");
 }
+
 void CKDevelop::slotHelpBugReport(){
     
     config->setGroup("General Options");
@@ -2778,56 +2806,52 @@ void CKDevelop::slotHelpBugReport(){
 
     CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","submit@bugs.kde.org"));
     if( dlg.exec()){
-			config->writeEntry("author_name",dlg.name);
-			config->writeEntry("author_email",dlg.email_address);
-			config->writeEntry("os",dlg.os);
-			config->writeEntry("qt_version",dlg.qt_version);
-			config->writeEntry("kde_version",dlg.kde_version);
-			config->writeEntry("compiler",dlg.compiler);
-			config->writeEntry("sendmail_command",dlg.sendmail_command);
+      config->writeEntry("author_name",dlg.name);
+      config->writeEntry("author_email",dlg.email_address);
+      config->writeEntry("os",dlg.os);
+      config->writeEntry("qt_version",dlg.qt_version);
+      config->writeEntry("kde_version",dlg.kde_version);
+      config->writeEntry("compiler",dlg.compiler);
+      config->writeEntry("sendmail_command",dlg.sendmail_command);
     }
-    
-    
 }
 
 void CKDevelop::slotHelpAPI(){
   if(project){
     QString api_file=prj->getProjectDir() + prj->getProjectName().lower() +  "-api/index.html";
-   	//MB
+     //MB
 #ifndef WITH_KDOC2
-   	if (doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
-   	{
-   		QString api_dir =  prj->getProjectDir() + prj->getProjectName().lower() + "/";
-		  QString doxconf = api_dir +  "Doxyfile";
-  		if(!QFileInfo(doxconf).exists())
-    	{
-   		    KMsgBox::message(0, i18n("Error"),
-   		    						i18n("Doxygen configuration file not found\n"
-                           	"Generate a valid one:\n"		
-                           	"Project->API Doc Tool->Configure doxygen"),
-                      KMsgBox::EXCLAMATION);
-
-    		return;
-    	}
+     if (doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
+     {
+       QString api_dir =  prj->getProjectDir() + prj->getProjectName().lower() + "/";
+      QString doxconf = api_dir +  "Doxyfile";
+      if(!QFileInfo(doxconf).exists())
+      {
+           KMessageBox::error(0,
+                       i18n("Doxygen configuration file not found\n"
+                             "Generate a valid one:\n"    
+                             "Project->API Doc Tool->Configure doxygen"));
+        return;
+      }
       api_file=api_dir + "api/html/index.html";
    }
-#endif   		
+#endif       
     //MB end
     if(!QFileInfo(api_file).exists()){
-//    	int result=KMsgBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
-//    																																	"Would you like to generate it now ?"), KMsgBox::QUESTION);
-//    	if(result==1){
-//    		slotProjectAPI();
-//			}
-//			else{
-				return;  // replaced by right mouse button handling to generate the API in the DocTreeView
-//			}
-		}
-		else{
-	    slotStatusMsg(i18n("Switching to project API Documentation..."));
-	    slotURLSelected(browser_widget,api_file,1,"test");     
-			slotStatusMsg(i18n("Ready.")); 
-		}
+//      int result=KMessageBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
+//                                                                      "Would you like to generate it now ?"), KMessageBox::QUESTION);
+//      if(result==1){
+//        slotProjectAPI();
+//      }
+//      else{
+        return;  // replaced by right mouse button handling to generate the API in the DocTreeView
+//      }
+    }
+    else{
+      slotStatusMsg(i18n("Switching to project API Documentation..."));
+      slotURLSelected(browser_widget,api_file,1,"test");     
+      slotStatusMsg(i18n("Ready.")); 
+    }
   }
 }
 void CKDevelop::slotHelpManual(){
@@ -2841,15 +2865,15 @@ void CKDevelop::slotHelpManual(){
       // try docbook file projectdir/doc/HTML/index.html
       doc_file = prj->getProjectDir()+"/doc/en/HTML/index.html";
       if(!QFileInfo(doc_file).exists())
-				return;   // replaced by right mouse button handling to generate the help manual in DocTreeView
-		  else
-    	  slotURLSelected(browser_widget,doc_file,1,"test");
-		}
-		else{
-	    slotStatusMsg(i18n("Switching to project Manual..."));
-  	  slotURLSelected(browser_widget,doc_file,1,"test");
-    	slotStatusMsg(i18n("Ready."));
-  	}
+        return;   // replaced by right mouse button handling to generate the help manual in DocTreeView
+      else
+        slotURLSelected(browser_widget,doc_file,1,"test");
+    }
+    else{
+      slotStatusMsg(i18n("Switching to project Manual..."));
+      slotURLSelected(browser_widget,doc_file,1,"test");
+      slotStatusMsg(i18n("Ready."));
+    }
   }
 }
 
@@ -2858,19 +2882,19 @@ void CKDevelop::slotHelpAbout(){
   aboutmsg.setCaption(i18n("About KDevelop..."));
   aboutmsg.setButtonText(1, i18n("OK"));
   aboutmsg.setText(i18n("\t   KDevelop Version ")+version+i18n(" \n\n"
-  											"\t(c) 1998,1999,2000 The KDevelop Team \n\n"
+                        "\t(c) 1998,1999,2000 The KDevelop Team \n\n"
                         "Sandy Meier <smeier@kdevelop.de>\n"
                         "Stefan Heidrich <sheidric@rz.uni-potsdam.de>\n"
                         "Ralf Nolden <rnolden@kdevelop.de>\n"
                         "Jonas Nordin <jonas.nordin@cenacle.se>\n"
                         "Pascal Krahmer <pascal@beast.de>\n"
-			                  "Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
+                        "Bernd Gehrmann <bernd@physik.hu-berlin.de>\n"
                         "Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
-			                  "Jörgen Olsson<jorgen@cenacle.net>\n"
+                        "Jörgen Olsson<jorgen@cenacle.net>\n"
                         "Martin Piskernig <mpiskernig@kdevelop.de>\n"
-			                  "Walter Tasin <tasin@kdevelop.de>\n"
-			                  "John Birch <jbb@ihug.co.nz>\n"
-			                  "Stephan Kulow <coolo@kde.org>\n\n"
+                        "Walter Tasin <tasin@kdevelop.de>\n"
+                        "John Birch <jbb@ihug.co.nz>\n"
+                        "Stephan Kulow <coolo@kde.org>\n\n"
                         "See The KDevelop User Manual, Chapter Authors\n"
                         "for further information.\n\n"
                         "This program is free software; you can\n"
@@ -2881,7 +2905,7 @@ void CKDevelop::slotHelpAbout(){
                         "option) any later version.\n\n"));
 
   QPixmap pm;
-  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/about_logo.bmp");
+  pm.load(locate("data", "kdevelop/pics/about_logo.bmp"));
   aboutmsg.setIconPixmap(pm);
   aboutmsg.show();
 }
@@ -2889,26 +2913,28 @@ void CKDevelop::slotHelpAbout(){
 void CKDevelop::slotKDlgViewPropView(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_PROPVIEW)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,false);
-    properties_view_pos=kdlg_top_panner->separatorPos();
-    kdlg_top_panner->setSeparatorPos(100);
+#warning FIXME Splitter separator problems
+//    properties_view_pos=kdlgTopSplitter->separatorPos();
+//    kdlgTopSplitter->setSeparatorPos(100);
   }
   else{
-    kdlg_top_panner->setSeparatorPos(properties_view_pos);
+#warning FIXME Splitter separator problems
+//    kdlgTopSplitter->setSeparatorPos(properties_view_pos);
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_PROPVIEW,true);
   }
-  QRect rMainGeom= kdlg_top_panner->geometry();
-  kdlg_top_panner->resize(rMainGeom.width()+1,rMainGeom.height());
-  kdlg_top_panner->resize(rMainGeom.width(),rMainGeom.height());
+  QRect rMainGeom= kdlgTopSplitter->geometry();
+  kdlgTopSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
+  kdlgTopSplitter->resize(rMainGeom.width(),rMainGeom.height());
 
 }
 void CKDevelop::slotKDlgViewToolbar(){
   if(kdlg_view_menu->isItemChecked(ID_KDLG_VIEW_TOOLBAR)){
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,false);
-    enableToolBar(KToolBar::Hide,ID_KDLG_TOOLBAR);
+    toolBar(ID_KDLG_TOOLBAR)->hide();
   }
   else{
     kdlg_view_menu->setItemChecked(ID_KDLG_VIEW_TOOLBAR,true);
-    enableToolBar(KToolBar::Show,ID_KDLG_TOOLBAR);
+    toolBar(ID_KDLG_TOOLBAR)->show();
   }
 }
 
@@ -2934,7 +2960,7 @@ void CKDevelop::slotKDlgViewStatusbar(){
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewClass()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   CVGotoDeclaration( classname, "", THCLASS, THCLASS );
@@ -2952,8 +2978,8 @@ void CKDevelop::slotClassbrowserViewClass()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewDeclaration()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
@@ -2973,8 +2999,8 @@ void CKDevelop::slotClassbrowserViewDeclaration()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserViewDefinition()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
-  KCombo* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KComboBox* methodCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_METHOD_CHOICE);
   QString classname = classCombo->currentText();
   QString methodname = methodCombo->currentText();
 
@@ -2996,7 +3022,7 @@ void CKDevelop::slotClassbrowserViewDefinition()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserNewMethod()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
@@ -3015,7 +3041,7 @@ void CKDevelop::slotClassbrowserNewMethod()
  *-----------------------------------------------------------------*/
 void CKDevelop::slotClassbrowserNewAttribute()
 {
-  KCombo* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
+  KComboBox* classCombo = toolBar(ID_BROWSER_TOOLBAR)->getCombo(ID_CV_TOOLBAR_CLASS_CHOICE);
   QString classname = classCombo->currentText();
 
   if( !classname.isEmpty() )
@@ -3031,7 +3057,7 @@ void CKDevelop::slotStatusMsg(const char *text)
   ///////////////////////////////////////////////////////////////////
   // change status message permanently
 //  statusBar()->clear();
-    statProg->hide();
+//    statProg->hide();
     statusBar()->changeItem(text, ID_STATUS_MSG );
 }
 
@@ -3041,7 +3067,7 @@ void CKDevelop::slotStatusHelpMsg(const char *text)
   ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
-    QTimer::singleShot ( 2000, statProg, SLOT(hide()) );
+//    QTimer::singleShot ( 2000, statProg, SLOT(hide()) );
 
 }
 
@@ -3092,7 +3118,7 @@ void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
       disableCommand(ID_EDIT_CUT);
       disableCommand(ID_EDIT_COPY);
     }
-  }		
+  }    
 }
 
 void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
@@ -3107,11 +3133,11 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
       else{
         disableCommand(ID_EDIT_CUT);
         disableCommand(ID_EDIT_COPY);
-      }		
+      }    
   }
 }
 
-void CKDevelop::slotBROWSERMarkStatus(KHTMLView *, bool bMarked)
+void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
 {
   int item=s_tab_view->getCurrentTab();
   if (item==BROWSER)
@@ -3121,7 +3147,7 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLView *, bool bMarked)
       }
       else{
         disableCommand(ID_EDIT_COPY);
-      }		
+      }    
   }
 }
 
@@ -3139,8 +3165,8 @@ void CKDevelop::slotNewLineColumn()
 {
   QString linenumber;
   linenumber.sprintf(i18n("Line: %d Col: %d"), 
-     			edit_widget->currentLine() +1,
-			edit_widget->currentColumn() +1);
+           edit_widget->currentLine() +1,
+      edit_widget->currentColumn() +1);
   statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
 } 
 void CKDevelop::slotNewUndo(){
@@ -3164,13 +3190,13 @@ void CKDevelop::slotNewUndo(){
 }
 
 
-void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
-//	enableCommand(ID_HELP_BROWSER_STOP);
+void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*){
+//  enableCommand(ID_HELP_BROWSER_STOP);
   if(!bKDevelop)
     switchToKDevelop();
   //showOutputView(false);
   s_tab_view->setCurrentTab(BROWSER);
-  browser_widget->setFocus();
+  browser_widget->view()->setFocus();
   QString url_str = url;
 
   // add file: directive only if it is an absolute path
@@ -3199,17 +3225,17 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
     int cur =  history_list.at(); // get the current index
     if(cur == -1){
       history_list.append(url);
-			history_title_list.append(browser_widget->currentTitle());
+      history_title_list.append(browser_widget->currentTitle());
     }
     else{
       history_list.insert(cur+1,url);
       history_title_list.insert(cur+1, browser_widget->currentTitle());
     }
   }
-*/	
+*/  
 }
 
-void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
+void CKDevelop::slotURLonURL(const QString& url )
 {
         // in some cases KHTMLView return "file:/file:/...."
         //  this will be here workarounded... and also on
@@ -3231,7 +3257,8 @@ void CKDevelop::slotURLonURL(KHTMLView*, const char *url )
   }
 }
 
-void CKDevelop::slotDocumentDone( KHTMLView * /*_view*/ ){
+void CKDevelop::slotDocumentDone()
+{
   QString actualURL=browser_widget->currentURL();
   QString actualTitle=browser_widget->currentTitle();
   int cur =  history_list.at()+1; // get the current index
@@ -3239,10 +3266,11 @@ void CKDevelop::slotDocumentDone( KHTMLView * /*_view*/ ){
   int pos = actualURL.findRev('#');
   QString url_wo_ref=actualURL; // without ref
 
-  if(prev_was_search_result){
-    browser_widget->findTextBegin();
-    browser_widget->findTextNext(QRegExp(doc_search_text));
-  }
+#warning FIXME KHTML changes.
+//  if(prev_was_search_result){
+//    browser_widget->findTextBegin();
+//    browser_widget->findTextNext(QRegExp(doc_search_text));
+//  }
 
   if (s_tab_view->getCurrentTab()==BROWSER)
      setMainCaption(BROWSER);
@@ -3272,7 +3300,7 @@ void CKDevelop::slotDocumentDone( KHTMLView * /*_view*/ ){
      // the desired URL was already found in the list
 
      if (actualURL.contains("kdevelop/search_result.html") &&
-	history_title_list.at(found)!=actualTitle)
+  history_title_list.at(found)!=actualTitle)
      {
          // this means... a new search_result.html is selected and an old one
          // was found in list
@@ -3309,7 +3337,7 @@ void CKDevelop::slotDocumentDone( KHTMLView * /*_view*/ ){
    // reorganize the prev- and the next-historylist
    history_next->clear();
    history_prev->clear();
-		
+    
    int i;
    for ( i =0 ; i < cur; i++){
        history_prev->insertItem(history_title_list.at(i));
@@ -3321,18 +3349,18 @@ void CKDevelop::slotDocumentDone( KHTMLView * /*_view*/ ){
 
    // disable the back button if necessary
    if (cur == 0){ // no more backwards
- 	disableCommand(ID_HELP_BACK);
+   disableCommand(ID_HELP_BACK);
    }
    else {
- 	enableCommand(ID_HELP_BACK);
+   enableCommand(ID_HELP_BACK);
    }
 
    // disable the forward button if necessary
    if (cur >= ((int) history_list.count())-1){ // no more forwards
- 	disableCommand(ID_HELP_FORWARD);
+   disableCommand(ID_HELP_FORWARD);
    }
    else {
- 	enableCommand(ID_HELP_FORWARD);
+   enableCommand(ID_HELP_FORWARD);
    }
 
   }
@@ -3342,7 +3370,7 @@ void CKDevelop::slotDocumentDone( KHTMLView * /*_view*/ ){
 }
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
-  messages_widget->insertAtEnd(QString(buffer,buflen+1));
+  messages_widget->insertAtEnd(QCString(buffer,buflen+1));
   o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
 
@@ -3370,7 +3398,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
 //   }
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
-  messages_widget->insertAtEnd(QString(buffer,buflen+1));
+  messages_widget->insertAtEnd(QCString(buffer,buflen+1));
   o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){
@@ -3396,7 +3424,7 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
 //   }
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
-  stdin_stdout_widget->insertAtEnd(QString(buffer,buflen+1));
+  stdin_stdout_widget->insertAtEnd(QCString(buffer,buflen+1));
 //  if (*(buffer+buflen-1) == '\n')
 //    buflen--;
     
@@ -3411,7 +3439,7 @@ void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
 //  stdin_stdout_widget->insertAt(str,x,y);
 }
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
-  stderr_widget->insertAtEnd(QString(buffer,buflen+1));
+  stderr_widget->insertAtEnd(QCString(buffer,buflen+1));
 //  if (*(buffer+buflen-1) == '\n')
 //    buflen--;
     
@@ -3437,9 +3465,9 @@ void CKDevelop::slotApplReceivedStderr(const char* buffer)
 }
 
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-void CKDevelop::slotDebugReceivedStdout(const char* buffer)
+void CKDevelop::slotDebugReceivedStdout(const QString& buffer)
 {
-  dbg_widget->insertAtEnd(QString(buffer,strlen(buffer)+1));
+  dbg_widget->insertAtEnd(buffer);
 //  char* buf = (char*)buffer;
 //  int buflen = strlen(buf);
 //  if (*(buf+buflen-1) == '\n')
@@ -3450,16 +3478,16 @@ void CKDevelop::slotDebugReceivedStdout(const char* buffer)
 //  dbg_widget->setCursorPosition(dbg_widget->numLines()-1,0);
 }
 #else
-void CKDevelop::slotDebugReceivedStdout(const char* )
+void CKDevelop::slotDebugReceivedStdout(const QString& )
 { }
 #endif
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buflen){
-  QString str(buffer,buflen+1);
-  search_output = search_output + str;
+  QCString str(buffer,buflen+1);
+  search_output = search_output + QString(str);
 }
 void CKDevelop::slotSearchProcessExited(KProcess*){
-	disableCommand(ID_HELP_BROWSER_STOP);
+  disableCommand(ID_HELP_BROWSER_STOP);
   //  cerr << search_output;
   int pos=0;
   int nextpos=0;
@@ -3470,7 +3498,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   int i=0;
   int max=0;
 
-  QString filename = KApplication::localkdedir()+"/share/apps" + "/kdevelop/search_result.html";
+  QString filename = locateLocal("data", "search_result.html");
   if (useHtDig)
   {
     slotURLSelected(browser_widget, filename,1,"test");
@@ -3484,18 +3512,20 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   }
   if (list.isEmpty()){
 
-     KMsgBox::message(0,i18n("Not found!"),"\"" + doc_search_display_text + i18n("\" not found in documentation!"),KMsgBox::INFORMATION);
+     KMessageBox::information(0,"\"" + doc_search_display_text + i18n("\" not found in documentation!"),
+                                i18n("Not found!"));
     return;
   }
 
   // //lets sort it a little bit
-   for(;i<30;i++){
+  for(;i<30;i++)
+  {
     max =0;
     found_str = "";
     for(str = list.first();str != 0;str = list.next()){
       if (searchToolGetNumber(str) >= max){
-	found_str = str.copy();
-	max = searchToolGetNumber(str);
+        found_str = str.copy();
+        max = searchToolGetNumber(str);
       }
     }
     if(found_str != ""){
@@ -3505,42 +3535,45 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
 
   }
 
-   QFile file(filename);
-   QTextStream stream(&file);
-   file.open(IO_WriteOnly);
+  QFile file(filename);
+  QTextStream stream(&file);
+  file.open(IO_WriteOnly);
 
-   stream << "<HTML>";
-   stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
-   stream << "</TITLE></HEAD><H1>Search String: '" << doc_search_display_text << "'</H1><HR><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
-   stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
-   QString numstr;
-   for(str = sort_list.first();str != 0;str = sort_list.next() ){
-     stream << "<TR><TD><A HREF=\""+searchToolGetURL(str)+"\">"+
-			   searchToolGetTitle(str)+"</A><TD>"+
-			   numstr.setNum(searchToolGetNumber(str)) + "\n";
-   }
+  stream << "<HTML>";
+  stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
+  stream << "</TITLE></HEAD><H1>Search String: '" << doc_search_display_text << "'</H1><HR><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
+  stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
+  QString numstr;
+  for(str = sort_list.first();str != 0;str = sort_list.next() ){
+    stream << "<TR><TD><A HREF=\""+searchToolGetURL(str)+"\">"+
+              searchToolGetTitle(str)+"</A><TD>"+
+              numstr.setNum(searchToolGetNumber(str)) + "\n";
+  }
 
-   stream << "\n</TABLE></BODY></HTML>";
+  stream << "\n</TABLE></BODY></HTML>";
 
-   file.close();
-   slotURLSelected(browser_widget, filename,1,"test");
-
+  file.close();
+  slotURLSelected(browser_widget, filename,1,"test");
 }
+
 QString CKDevelop::searchToolGetTitle(QString str){
   int pos = str.find(' ');
   pos = str.find(' ',pos);
   int end_pos = str.find(':',pos);
   return str.mid(pos,end_pos-pos);
 }
+
 QString CKDevelop::searchToolGetURL(QString str){
   int pos = str.find(' ');
   return str.left(pos);
 }
+
 int CKDevelop::searchToolGetNumber(QString str){
   int pos =str.findRev(':');
   QString sub = str.right((str.length()-pos-2));
   return sub.toInt();
 }
+
 /*
 void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
   char a = key;
@@ -3612,7 +3645,7 @@ void CKDevelop::slotProcessExited(KProcess* proc){
           i18n("*** success ***\n"));
     if ( proc== &appl_process)
       result.sprintf(i18n("*** exit-code: %i ***\n"), 
-		     proc->exitStatus());
+         proc->exitStatus());
 
 
     if (next_job=="doc_refresh")
@@ -3644,10 +3677,10 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       }
       process.clearArguments();
       if(!prj->getMakeOptions().isEmpty()){
-      	process << make_cmd << prj->getMakeOptions();
+        process << make_cmd << prj->getMakeOptions();
       }
       else{
-      	process << make_cmd;
+        process << make_cmd;
       }
       setToolMenuProcess(false);
       process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
@@ -3697,27 +3730,27 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     if( next_job == "load_new_prj")
     {
 
-      if(project)		//now that we know that a new project will be built we can close the previous one 	{
+      if(project)    //now that we know that a new project will be built we can close the previous one   {
       {
         QString old_project = prj->getProjectFile();
-       	if(!slotProjectClose())				//the user may have pressed cancel in which case the state is undetermined
-    		{
-    			readProjectFile(old_project);
-    			slotViewRefresh();
-    		}
-     	  else
-    		{
-    		  QDir dir(QDir::current());
+         if(!slotProjectClose())        //the user may have pressed cancel in which case the state is undetermined
+        {
+          readProjectFile(old_project);
+          slotViewRefresh();
+        }
+         else
+        {
+          QDir dir(QDir::current());
           readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj");
-          slotViewRefresh();		// a new project started, this is legitimate
-    		}
-     	}
-   	  else
-  		{
-  		  QDir dir(QDir::current());
+          slotViewRefresh();    // a new project started, this is legitimate
+        }
+       }
+       else
+      {
+        QDir dir(QDir::current());
         readProjectFile(QDir::currentDirPath()+"/"+ dir.dirName()+".kdevprj");
-        slotViewRefresh();		// a new project started, this is legitimate
-  		}
+        slotViewRefresh();    // a new project started, this is legitimate
+      }
 
     }
     next_job = "";
@@ -3736,23 +3769,23 @@ void CKDevelop::slotProcessExited(KProcess* proc){
   }
   if (ready)
   { // start the error-message parser
-      QString str1 = messages_widget->text();
+    QString str1 = messages_widget->text();
       
-      if(error_parser->getMode() == CErrorMessageParser::MAKE){
-	  error_parser->parseInMakeMode(&str1);
-      }
-      if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
-//	  error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
-	  // docbook file
-	  error_parser->parseInSgml2HtmlMode(&str1, prj->getSGMLFile());
-      }
+    if(error_parser->getMode() == CErrorMessageParser::MAKE){
+      error_parser->parseInMakeMode(&str1);
+    }
+    if(error_parser->getMode() == CErrorMessageParser::SGML2HTML){
+//      error_parser->parseInSgml2HtmlMode(&str1, prj->getProjectDir() + prj->getSubDir() + "/docs/en/" + prj->getSGMLFile());
+    // docbook file
+      error_parser->parseInSgml2HtmlMode(&str1, prj->getSGMLFile());
+    }
       //enable/disable the menus/toolbars
-      if(error_parser->hasNext()){
-	  enableCommand(ID_VIEW_NEXT_ERROR);
-      }
-      else{
-	  disableCommand(ID_VIEW_NEXT_ERROR);
-      }
+    if(error_parser->hasNext()){
+      enableCommand(ID_VIEW_NEXT_ERROR);
+    }
+    else{
+      disableCommand(ID_VIEW_NEXT_ERROR);
+    }
   }
   if(beep && ready){
       XBell(kapp->getDisplay(),100); //beep :-)
@@ -3774,10 +3807,10 @@ void CKDevelop::slotSTabSelected(int item){
   if (item == HEADER || item == CPP)
   {
    // enableCommand(ID_FILE_SAVE);  is handled by setMainCaption()
-  enableCommand(ID_FILE_SAVE_AS);
-  enableCommand(ID_FILE_CLOSE);
+    enableCommand(ID_FILE_SAVE_AS);
+    enableCommand(ID_FILE_CLOSE);
 
-  enableCommand(ID_FILE_PRINT);
+    enableCommand(ID_FILE_PRINT);
 
 //  QString text=QApplication::clipboard()->text();
 //  if(text.isEmpty())
@@ -3785,27 +3818,26 @@ void CKDevelop::slotSTabSelected(int item){
 //  else
 //    enableCommand(ID_EDIT_PASTE);
 
-  enableCommand(ID_EDIT_INSERT_FILE);
-  enableCommand(ID_EDIT_SEARCH);
-  enableCommand(ID_EDIT_REPEAT_SEARCH);
-  enableCommand(ID_EDIT_REPLACE);
-  enableCommand(ID_EDIT_SPELLCHECK);
-  enableCommand(ID_EDIT_INDENT);
-  enableCommand(ID_EDIT_UNINDENT);
-  enableCommand(ID_EDIT_COMMENT);
-  enableCommand(ID_EDIT_UNCOMMENT);
-  enableCommand(ID_EDIT_SELECT_ALL);
-  enableCommand(ID_EDIT_DESELECT_ALL);
-  enableCommand(ID_EDIT_INVERT_SELECTION);
-
+    enableCommand(ID_EDIT_INSERT_FILE);
+    enableCommand(ID_EDIT_SEARCH);
+    enableCommand(ID_EDIT_REPEAT_SEARCH);
+    enableCommand(ID_EDIT_REPLACE);
+    enableCommand(ID_EDIT_SPELLCHECK);
+    enableCommand(ID_EDIT_INDENT);
+    enableCommand(ID_EDIT_UNINDENT);
+    enableCommand(ID_EDIT_COMMENT);
+    enableCommand(ID_EDIT_UNCOMMENT);
+    enableCommand(ID_EDIT_SELECT_ALL);
+    enableCommand(ID_EDIT_DESELECT_ALL);
+    enableCommand(ID_EDIT_INVERT_SELECTION);
   }
 
   if (item == HEADER){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
       if ( bDefaultCV)
-				t_tab_view->setCurrentTab(CV);
+        t_tab_view->setCurrentTab(CV);
       else
-				t_tab_view->setCurrentTab(LFV);
+        t_tab_view->setCurrentTab(LFV);
     }
     disableCommand(ID_BUILD_COMPILE_FILE);
     edit_widget = header_widget;
@@ -3816,11 +3848,11 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewLineColumn();
   }
   if (item == CPP){
-    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
+    if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){  
       if ( bDefaultCV)
-				t_tab_view->setCurrentTab(CV);
+        t_tab_view->setCurrentTab(CV);
       else
-				t_tab_view->setCurrentTab(LFV);
+        t_tab_view->setCurrentTab(LFV);
     }
     if(project && build_menu->isItemEnabled(ID_BUILD_MAKE)){
       enableCommand(ID_BUILD_COMPILE_FILE);
@@ -3856,7 +3888,7 @@ void CKDevelop::slotSTabSelected(int item){
     else{
       enableCommand(ID_EDIT_CUT);
       enableCommand(ID_EDIT_COPY);
-    }		
+    }    
   }
 
   if(item == BROWSER || item == TOOLS)
@@ -3890,9 +3922,9 @@ void CKDevelop::slotSTabSelected(int item){
   if(item == BROWSER){
     if(bAutoswitch)
       t_tab_view->setCurrentTab(DOC);
-    browser_widget->setFocus();
+    browser_widget->view()->setFocus();
 
-    if (browser_widget->isTextSelected())
+    if (browser_widget->hasSelection())
       enableCommand(ID_EDIT_COPY);
     else
       disableCommand(ID_EDIT_COPY);
@@ -3959,11 +3991,11 @@ void CKDevelop::slotUpdateDirFromVCS(QString dir){
     QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
 
     for ( ; it.current(); ++it ) {
-	actual_info = it.current();
-	QFileInfo file_info(actual_info->filename);
-	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-	}
+  actual_info = it.current();
+  QFileInfo file_info(actual_info->filename);
+  if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+      switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
+  }
     }
 }
 
@@ -3976,11 +4008,11 @@ void CKDevelop::slotCommitDirToVCS(QString dir){
     QListIterator<TEditInfo> it(edit_infos); // iterator for edit_infos list
 
     for ( ; it.current(); ++it ) {
-	actual_info = it.current();
-	QFileInfo file_info(actual_info->filename);
-	if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
-	    switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
-	}
+  actual_info = it.current();
+  QFileInfo file_info(actual_info->filename);
+  if(actual_info->last_modified != file_info.lastModified()){ // reload only changed files
+      switchToFile(actual_info->filename,true,false); //force reload, no modified on disc messagebox
+  }
     }
     
 }
@@ -3997,17 +4029,21 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
   
   if(!QFile::exists(url_file)){
     if( text == i18n("Qt-Library")){
-      if(KMsgBox::yesNo(0,i18n("File not found!"),"KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?",KMsgBox::INFORMATION) == 1) {
-				slotOptionsKDevelop();
+      if(KMessageBox::questionYesNo(0,
+                                    i18n("KDevelop couldn't find the Qt documentation.\n Do you want to set the correct path?"),
+                                    i18n("File not found!")) == KMessageBox::Yes) {
+        slotOptionsKDevelop();
       }
       return;
     }
-    if(text ==  i18n("KDE-Core-Library") || text == i18n("KDE-UI-Library") ||
-       text == i18n("KDE-KFile-Library") || text == i18n("KDE-KHTMLW-Library") ||
-       text == i18n("KDE-KFM-Library") || text == i18n("KDE-KDEutils-Library") ||
-       text == i18n("KDE-KAB-Library") || text == i18n("KDE-KSpell-Library")){
-      if(KMsgBox::yesNo(0,i18n("File not found!"),i18n("KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?"),KMsgBox::INFORMATION) == 1) {
-				slotOptionsUpdateKDEDocumentation();
+    if(text == i18n("KDE-Core-Library")     || text == i18n("KDE-UI-Library") ||
+       text == i18n("KDE-KFile-Library")    || text == i18n("KDE-KHTML-Library") ||
+       text == i18n("KDE-KFM-Library")      || text == i18n("KDE-KDEutils-Library") ||
+       text == i18n("KDE-KAB-Library")      || text == i18n("KDE-KSpell-Library")){
+      if(KMessageBox::questionYesNo(0,
+                            i18n("KDevelop couldn't find the KDE API-Documentation.\nDo you want to generate it now?"),
+                            i18n("File not found!")) == KMessageBox::Yes) {
+        slotOptionsUpdateKDEDocumentation();
       }
       return;
     }
@@ -4095,21 +4131,21 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_VIEW_REFRESH:
     slotViewRefresh();
     break;
-	case ID_VIEW_TREEVIEW:
-		slotViewTTreeView();
-		break;
-	case ID_VIEW_OUTPUTVIEW:
-		slotViewTOutputView();
-		break;
+  case ID_VIEW_TREEVIEW:
+    slotViewTTreeView();
+    break;
+  case ID_VIEW_OUTPUTVIEW:
+    slotViewTOutputView();
+    break;
   case ID_BUILD_COMPILE_FILE:
-  	slotBuildCompileFile();
-  	break;
+    slotBuildCompileFile();
+    break;
   case ID_BUILD_MAKE:
     slotBuildMake();
     break;
   case ID_BUILD_REBUILD_ALL:
-  	slotBuildRebuildAll();
-  	break;
+    slotBuildRebuildAll();
+    break;
   case ID_BUILD_RUN:
     slotBuildRun();
     break;
@@ -4128,17 +4164,18 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_HELP_FORWARD:
     slotHelpForward();
     break;
-	case ID_HELP_BROWSER_RELOAD:
-		slotHelpBrowserReload();
-		break;
-	case ID_HELP_BROWSER_STOP:
-		browser_widget->cancelAllRequests();
-	  shell_process.kill();
-		disableCommand(ID_HELP_BROWSER_STOP);
-		break;
-	case ID_HELP_CONTENTS:
-		slotHelpContents();
-		break;
+  case ID_HELP_BROWSER_RELOAD:
+    slotHelpBrowserReload();
+    break;
+  case ID_HELP_BROWSER_STOP:
+#warning FIXME KHTML changes.
+//    browser_widget->cancelAllRequests();
+    shell_process.kill();
+    disableCommand(ID_HELP_BROWSER_STOP);
+    break;
+  case ID_HELP_CONTENTS:
+    slotHelpContents();
+    break;
   case ID_HELP_SEARCH_TEXT:
     slotHelpSearchText();
     break;
@@ -4157,7 +4194,7 @@ void CKDevelop::slotToolbarClicked(int item){
     else{
       slotClassbrowserViewDefinition();
       cv_decl_or_impl=true;
-    }		
+    }    
     break;
 
   // Redirect to code that handles menu and toolbar selection
@@ -4179,208 +4216,209 @@ void CKDevelop::slotToolbarClicked(int item){
 }
 
 void CKDevelop::statusCallback(int id_){
-  switch(id_){
+  switch(id_)
+  {
     ON_STATUS_MSG(ID_FILE_NEW,                              i18n("Creates a new file"))
-    ON_STATUS_MSG(ID_FILE_OPEN,   							            i18n("Opens an existing file"))
-  ON_STATUS_MSG(ID_FILE_CLOSE,       						          i18n("Closes the actual file"))
+    ON_STATUS_MSG(ID_FILE_OPEN,                             i18n("Opens an existing file"))
+    ON_STATUS_MSG(ID_FILE_CLOSE,                            i18n("Closes the actual file"))
 
-  ON_STATUS_MSG(ID_FILE_SAVE,        						          i18n("Save the actual document"))
-  ON_STATUS_MSG(ID_FILE_SAVE_AS,     						          i18n("Save the document as..."))
-  ON_STATUS_MSG(ID_FILE_SAVE_ALL,    						          i18n("Save all changed files"))
+    ON_STATUS_MSG(ID_FILE_SAVE,                             i18n("Save the actual document"))
+    ON_STATUS_MSG(ID_FILE_SAVE_AS,                          i18n("Save the document as..."))
+    ON_STATUS_MSG(ID_FILE_SAVE_ALL,                         i18n("Save all changed files"))
 
-  ON_STATUS_MSG(ID_FILE_PRINT,       						          i18n("Prints the current document"))
+    ON_STATUS_MSG(ID_FILE_PRINT,                            i18n("Prints the current document"))
 
-//  ON_STATUS_MSG(ID_FILE_CLOSE_WINDOW,i18n("Closes the current window"))
+  //  ON_STATUS_MSG(ID_FILE_CLOSE_WINDOW,i18n("Closes the current window"))
 
-  ON_STATUS_MSG(ID_FILE_QUIT,        						          i18n("Exits the program"))
+    ON_STATUS_MSG(ID_FILE_QUIT,                             i18n("Exits the program"))
 
-	ON_STATUS_MSG(ID_EDIT_UNDO,															i18n("Reverts the last editing step"))
-	ON_STATUS_MSG(ID_EDIT_REDO,															i18n("Re-execute the last undone step"))
-	
-  ON_STATUS_MSG(ID_EDIT_CUT,                     			    i18n("Cuts the selected section and puts it to the clipboard"))
-  ON_STATUS_MSG(ID_EDIT_COPY,                    			    i18n("Copys the selected section to the clipboard"))
-  ON_STATUS_MSG(ID_EDIT_PASTE,                   			    i18n("Pastes the clipboard contents to actual position"))
+    ON_STATUS_MSG(ID_EDIT_UNDO,                             i18n("Reverts the last editing step"))
+    ON_STATUS_MSG(ID_EDIT_REDO,                             i18n("Re-execute the last undone step"))
 
-  ON_STATUS_MSG(ID_EDIT_INSERT_FILE,             			    i18n("Inserts a file at the current position"))
+    ON_STATUS_MSG(ID_EDIT_CUT,                              i18n("Cuts the selected section and puts it to the clipboard"))
+    ON_STATUS_MSG(ID_EDIT_COPY,                             i18n("Copys the selected section to the clipboard"))
+    ON_STATUS_MSG(ID_EDIT_PASTE,                            i18n("Pastes the clipboard contents to actual position"))
 
-  ON_STATUS_MSG(ID_EDIT_SEARCH,                  			    i18n("Searches the file for an expression"))
-  ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,           			    i18n("Repeats the last search"))
-  ON_STATUS_MSG(ID_EDIT_REPLACE,                 			    i18n("Searches and replace expression"))
-	ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,									i18n("Opens the search in files dialog to search for expressions over several files"))
-	
-	ON_STATUS_MSG(ID_EDIT_RUN_TO_CURSOR,                 		i18n("Run program to this cursor position"))
-	ON_STATUS_MSG(ID_EDIT_STEP_OUT_OFF,                     i18n("Run the program until this function/method ends"))
-	ON_STATUS_MSG(ID_EDIT_ADD_WATCH_VARIABLE,               i18n("Try to display this variable whenever the application execution is paused"))
+    ON_STATUS_MSG(ID_EDIT_INSERT_FILE,                      i18n("Inserts a file at the current position"))
 
-	
-	ON_STATUS_MSG(ID_EDIT_INDENT,														i18n("Moves the selection to the right"))
-	ON_STATUS_MSG(ID_EDIT_UNINDENT,													i18n("Moves the selection to the left"))
-	ON_STATUS_MSG(ID_EDIT_COMMENT,													i18n("Adds // to the beginning of each selected line"))
-	ON_STATUS_MSG(ID_EDIT_UNCOMMENT,												i18n("Removes // from the beginning of each selected line"))
-	
-  ON_STATUS_MSG(ID_EDIT_SELECT_ALL,              			    i18n("Selects the whole document contents"))
-	ON_STATUS_MSG(ID_EDIT_DESELECT_ALL,											i18n("Deselects the whole document contents"))
-	ON_STATUS_MSG(ID_EDIT_INVERT_SELECTION,									i18n("Inverts the current selection"))
+    ON_STATUS_MSG(ID_EDIT_SEARCH,                           i18n("Searches the file for an expression"))
+    ON_STATUS_MSG(ID_EDIT_REPEAT_SEARCH,                    i18n("Repeats the last search"))
+    ON_STATUS_MSG(ID_EDIT_REPLACE,                          i18n("Searches and replace expression"))
+    ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,                  i18n("Opens the search in files dialog to search for expressions over several files"))
 
-	
-  ON_STATUS_MSG(ID_VIEW_GOTO_LINE,               			    i18n("Goes to Line Number..."))
-	ON_STATUS_MSG(ID_VIEW_NEXT_ERROR,												i18n("Switches to the file and line the next error was reported"))
-	ON_STATUS_MSG(ID_VIEW_PREVIOUS_ERROR,										i18n("Switches to the file and line the previous error was reported"))
-	
-  ON_STATUS_MSG(ID_VIEW_TREEVIEW,              				    i18n("Enables/Disables the treeview"))
-  ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,            				    i18n("Enables/Disables the outputview"))
-
-  ON_STATUS_MSG(ID_VIEW_TOOLBAR,                  			  i18n("Enables/Disables the standard toolbar"))
-  ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,       				    i18n("Enables/Disables the browser toolbar"))
-  ON_STATUS_MSG(ID_VIEW_STATUSBAR,             				    i18n("Enables/Disables the statusbar"))
-
-  ON_STATUS_MSG(ID_VIEW_REFRESH,                			    i18n("Refreshes current view"))
-  ON_STATUS_MSG(ID_VIEW_IN_KFM,					   								i18n("Opens the current document in the KFM browser"))
-  ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,            			  i18n("Generates a new project with Application Wizard"))
-  ON_STATUS_MSG(ID_PROJECT_OPEN,			            	      i18n("Opens an existing project"))
-  ON_STATUS_MSG(ID_PROJECT_CLOSE,                 			  i18n("Closes the current project"))
-  ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,        			  i18n("Adds an existing file to the project"))
-	ON_STATUS_MSG(ID_PROJECT_ADD_NEW_TRANSLATION_FILE,			i18n("Adds a new language for internationalization to the project"))
-  ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,           			  i18n("Removes file from the project"))
-
-  ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,             			  i18n("Creates a new Class frame structure and files"))
-  ON_STATUS_MSG(ID_PROJECT_GENERATE,               			  i18n("Creates a project file for an existing automake project"))
-
-  ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,       			  i18n("Shows the current file properties"))
-  ON_STATUS_MSG(ID_PROJECT_OPTIONS,               			  i18n("Sets project and compiler options"))
-	ON_STATUS_MSG(ID_PROJECT_MESSAGES,											i18n("Invokes make to create the message file by extracting all i18n() macros"))
-//MB
-//  ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,        			i18n("Creates the Project's API with KDoc"))
-  #ifndef WITH_KDOC2
-  ON_STATUS_MSG(ID_PROJECT_DOC_TOOL,        			        i18n("Switches the documentation tool (kdoc/doxygen)"))
-  #endif
-  ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,        			i18n("Creates the Project's API"))
-//MB end
-  ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,        			i18n("Creates the Project's User Manual with the sgml-file"))
-	ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,							i18n("Creates distribution packages from the current project"))
-	ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
-
-  ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
-  ON_STATUS_MSG(ID_KDLG_BUILD_GENERATE,                   i18n("Generates the sourcefiles for the dialog"))
-  ON_STATUS_MSG(ID_BUILD_MAKE,                    			  i18n("Invokes make-command"))
-  ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,             			  i18n("Rebuilds the program"))
-  ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,       			  i18n("Invokes make clean and rebuild all"))
-  ON_STATUS_MSG(ID_BUILD_STOP,                    			  i18n("Stops make immediately"))
-  ON_STATUS_MSG(ID_BUILD_RUN,                     			  i18n("Invokes make-command and runs the program"))
-  ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,										i18n("Lets you set run-arguments to the binary and invokes the make-command"))
-  ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
-  ON_STATUS_MSG(ID_BUILD_MAKECLEAN,               			  i18n("Invokes make clean which deletes all object and metaobject files"))
-  ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
-  ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))
-
-  ON_STATUS_MSG(ID_DEBUG_START,                  			    i18n("Invokes the debugger on the current project executable"))
-  ON_STATUS_MSG(ID_DEBUG_START_OTHER,                     i18n("Various startups for the debugger"))
-  ON_STATUS_MSG(ID_DEBUG_SET_ARGS,                        i18n("Lets you debug your project app after specifying arguments for your app."))
-  ON_STATUS_MSG(ID_DEBUG_CORE,                            i18n("Examine a core file"))
-  ON_STATUS_MSG(ID_DEBUG_NAMED_FILE,                      i18n("Debug an app other than the current project executable"))
-  ON_STATUS_MSG(ID_DEBUG_ATTACH,                          i18n("Attach to running process"))
-  ON_STATUS_MSG(ID_DEBUG_RUN,                             i18n("Continues app execution"))
-  ON_STATUS_MSG(ID_DEBUG_RUN_CURSOR,                      i18n("Continues app execution until reaching the current cursor position"))
-  ON_STATUS_MSG(ID_DEBUG_STOP,                            i18n("Kills the app and exits the debugger"))
-  ON_STATUS_MSG(ID_DEBUG_STEP,                            i18n("Step into"))
-  ON_STATUS_MSG(ID_DEBUG_STEP_INST,                       i18n("Step instr"))
-  ON_STATUS_MSG(ID_DEBUG_NEXT,                            i18n("Step over"))
-  ON_STATUS_MSG(ID_DEBUG_NEXT_INST,                       i18n("Step over instr"))
-  ON_STATUS_MSG(ID_DEBUG_FINISH,                          i18n("Run to end of function"))
-  ON_STATUS_MSG(ID_DEBUG_MEMVIEW,                         i18n("Various views into the app"))
-  ON_STATUS_MSG(ID_DEBUG_BREAK_INTO,                      i18n("Interuppt the app"))
-
-  ON_STATUS_MSG(ID_TOOLS_KDLGEDIT,												i18n("Changes to the KDevelop dialogeditor"))
-  ON_STATUS_MSG(ID_KDLG_TOOLS_KDEVELOP,										i18n("Changes to KDevelop project editor"))
-
-  ON_STATUS_MSG(ID_OPTIONS_EDITOR,              			    i18n("Sets the Editor's behavoir"))
-  ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,       			    i18n("Sets the Editor's colors"))
-  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS,  i18n("Sets the highlighting default colors"))
-  ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING, 			    i18n("Sets the highlighting colors"))
-  ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,     	  				    i18n("Configures the Browser options"))
-	ON_STATUS_MSG(ID_OPTIONS_TOOLS_CONFIG_DLG,							i18n("Configures the Tools-Menu entries"))
-  ON_STATUS_MSG(ID_OPTIONS_PRINT,       			            i18n("Configures printing options"))
-  ON_STATUS_MSG(ID_OPTIONS_PRINT_ENSCRIPT,       	        i18n("Configures the printer to use enscript"))
-  ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,       			        i18n("Configures the printer to use a2ps"))
-  ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,              		    i18n("Configures KDevelop"))
-
-  ON_STATUS_MSG(ID_BOOKMARKS_SET,													i18n("Sets a bookmark to the current window file"))
-  ON_STATUS_MSG(ID_BOOKMARKS_TOGGLE,											i18n("Toggles a bookmark to the current window file"))
-  ON_STATUS_MSG(ID_BOOKMARKS_NEXT,												i18n("Goes to the next bookmark in the current window file"))
-  ON_STATUS_MSG(ID_BOOKMARKS_PREVIOUS,										i18n("Goes to the previous bookmark in the current window file"))
-  ON_STATUS_MSG(ID_BOOKMARKS_CLEAR,												i18n("Clears the bookmarks for the current window"))
-
-  ON_STATUS_MSG(ID_HELP_BACK,                      			  i18n("Switches to last browser page"))
-  ON_STATUS_MSG(ID_HELP_FORWARD,                   			  i18n("Switches to next browser page"))
-
-  ON_STATUS_MSG(ID_HELP_BROWSER_RELOAD,                   i18n("Reloads the current browser page"))
-  ON_STATUS_MSG(ID_HELP_BROWSER_STOP,                   	i18n("Cancels the document request"))
+    ON_STATUS_MSG(ID_EDIT_RUN_TO_CURSOR,                    i18n("Run program to this cursor position"))
+    ON_STATUS_MSG(ID_EDIT_STEP_OUT_OFF,                     i18n("Run the program until this function/method ends"))
+    ON_STATUS_MSG(ID_EDIT_ADD_WATCH_VARIABLE,               i18n("Try to display this variable whenever the application execution is paused"))
 
 
-  ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,              				i18n("Searches the selected text in the documentation"))
-  ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
+    ON_STATUS_MSG(ID_EDIT_INDENT,                           i18n("Moves the selection to the right"))
+    ON_STATUS_MSG(ID_EDIT_UNINDENT,                         i18n("Moves the selection to the left"))
+    ON_STATUS_MSG(ID_EDIT_COMMENT,                          i18n("Adds // to the beginning of each selected line"))
+    ON_STATUS_MSG(ID_EDIT_UNCOMMENT,                        i18n("Removes // from the beginning of each selected line"))
 
-  ON_STATUS_MSG(ID_HELP_CONTENTS,                  			  i18n("Switches to KDevelop's User Manual"))
-  ON_STATUS_MSG(ID_HELP_PROGRAMMING,                			i18n("Switches to the KDevelop Programming Handbook"))
-  ON_STATUS_MSG(ID_HELP_TUTORIAL,													i18n("Switches to the KDE Tutorials Handbook"))
-  ON_STATUS_MSG(ID_HELP_KDELIBREF,          			        i18n("Switches to the KDE Library Reference Guide Handbook"))
-  ON_STATUS_MSG(ID_HELP_KDE2_DEVGUIDE,           			    i18n("Switches to the KDE 2 Developer´s Guide Handbook"))
-  ON_STATUS_MSG(ID_HELP_REFERENCE,                			  i18n("Switches to the C/C++-Reference"))
-  
-  ON_STATUS_MSG(ID_HELP_TIP_OF_DAY,												i18n("Opens the Tip of the Day dialog with hints for using KDevelop"))
-  ON_STATUS_MSG(ID_HELP_HOMEPAGE,                 			  i18n("Enter the KDevelop Homepage"))
-  ON_STATUS_MSG(ID_HELP_BUG_REPORT,			                 	i18n("Sends a bug-report email to the KDevelop Team"))
-  
-  ON_STATUS_MSG(ID_HELP_PROJECT_API,		           			  i18n("Switches to the project's API-Documentation"))
-  ON_STATUS_MSG(ID_HELP_USER_MANUAL,               			  i18n("Switches to the project's User-Manual"))
+    ON_STATUS_MSG(ID_EDIT_SELECT_ALL,                       i18n("Selects the whole document contents"))
+    ON_STATUS_MSG(ID_EDIT_DESELECT_ALL,                     i18n("Deselects the whole document contents"))
+    ON_STATUS_MSG(ID_EDIT_INVERT_SELECTION,                 i18n("Inverts the current selection"))
 
 
-  ON_STATUS_MSG(ID_HELP_DLGNOTES,                 			  i18n("Some information about the dialog editor..."))
-  ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
+    ON_STATUS_MSG(ID_VIEW_GOTO_LINE,                        i18n("Goes to Line Number..."))
+    ON_STATUS_MSG(ID_VIEW_NEXT_ERROR,                       i18n("Switches to the file and line the next error was reported"))
+    ON_STATUS_MSG(ID_VIEW_PREVIOUS_ERROR,                   i18n("Switches to the file and line the previous error was reported"))
 
-  ON_STATUS_MSG(ID_CV_WIZARD,															i18n("Switches to declaration/implementation"))
-  ON_STATUS_MSG(ID_CV_VIEW_DECLARATION,										i18n("Switches to the method's declaration"))
-  ON_STATUS_MSG(ID_CV_VIEW_DEFINITION,										i18n("Switches to the method's definition"))
-  ON_STATUS_MSG(ID_CV_GRAPHICAL_VIEW,											i18n("Opens the graphical inheritance tree"))
-  ON_STATUS_MSG(ID_CV_CLASS_TOOL,													i18n("Opens the classtool dialog"))
-  ON_STATUS_MSG(ID_CV_CLASS_BASE_CLASSES,									i18n("Displays the inherited classes of the current class"))
-  ON_STATUS_MSG(ID_CV_CLASS_DERIVED_CLASSES,							i18n("Displays the classes who inherit the current class"))
-  ON_STATUS_MSG(ID_CV_FOLDER_NEW,													i18n("Creates a new folder"))
-  ON_STATUS_MSG(ID_CV_FOLDER_DELETE,											i18n("Deletes the current folder"))
-  ON_STATUS_MSG(ID_CV_CLASS_DELETE,												i18n("Deletes the current class"))
-  ON_STATUS_MSG(ID_CV_VIEW_CLASS_DECLARATION,							i18n("Goes to the class declaration"))
-  ON_STATUS_MSG(ID_CV_METHOD_NEW,													i18n("Opens the New Method dialog"))
-  ON_STATUS_MSG(ID_CV_METHOD_DELETE,											i18n("Deletes the current class method"))
-  ON_STATUS_MSG(ID_CV_ATTRIBUTE_NEW,											i18n("Creates a new attribute for the current class"))
-  ON_STATUS_MSG(ID_CV_ATTRIBUTE_DELETE,										i18n("Deletes the current class attribute"))
-  ON_STATUS_MSG(ID_CV_IMPLEMENT_VIRTUAL,									i18n("Creates a virtual method"))
-  ON_STATUS_MSG(ID_CV_ADD_SLOT_SIGNAL,										i18n("Adds a signal/slot mechanism"))
-  
-	ON_STATUS_MSG(ID_KDLG_FILE_CLOSE,												i18n("Closes the current dialog"))
-	ON_STATUS_MSG(ID_KDLG_FILE_SAVE,												i18n("Saves the current dialog"))
-	ON_STATUS_MSG(ID_KDLG_FILE_SAVE_AS,											i18n("Saves the current dialog under a new filename"))
-	
-	ON_STATUS_MSG(ID_KDLG_VIEW_PROPVIEW,										i18n("Enables/Disables the properties window"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_TOOLBAR,											i18n("Enables/Disables the standard toolbar"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,										i18n("Enables/Disables the statusbar"))
+    ON_STATUS_MSG(ID_VIEW_TREEVIEW,                         i18n("Enables/Disables the treeview"))
+    ON_STATUS_MSG(ID_VIEW_OUTPUTVIEW,                       i18n("Enables/Disables the outputview"))
 
-	ON_STATUS_MSG(ID_KDLG_VIEW_REFRESH,											i18n("Refreshes current view"))
-	ON_STATUS_MSG(ID_KDLG_VIEW_GRID,												i18n("Sets the grid size of the editing widget grid snap"))
+    ON_STATUS_MSG(ID_VIEW_TOOLBAR,                          i18n("Enables/Disables the standard toolbar"))
+    ON_STATUS_MSG(ID_VIEW_BROWSER_TOOLBAR,                  i18n("Enables/Disables the browser toolbar"))
+    ON_STATUS_MSG(ID_VIEW_STATUSBAR,                        i18n("Enables/Disables the statusbar"))
 
-	// LFV popups
-	ON_STATUS_MSG(ID_LFV_NEW_GROUP,													i18n("Lets you create a new logical file group"))
-	ON_STATUS_MSG(ID_LFV_REMOVE_GROUP,											i18n("Removes the selected logical file group"))
- 	ON_STATUS_MSG(ID_LFV_GROUP_PROP,												i18n("Shows the group's properties"))
-	ON_STATUS_MSG(ID_LFV_SHOW_PATH_ITEM,										i18n("Displays the absolute / relative path"))
-	ON_STATUS_MSG(ID_FILE_DELETE,														i18n("Deletes the selected file"))
+    ON_STATUS_MSG(ID_VIEW_REFRESH,                          i18n("Refreshes current view"))
+    ON_STATUS_MSG(ID_VIEW_IN_KFM,                           i18n("Opens the current document in the KFM browser"))
+    ON_STATUS_MSG(ID_PROJECT_KAPPWIZARD,                    i18n("Generates a new project with Application Wizard"))
+    ON_STATUS_MSG(ID_PROJECT_OPEN,                          i18n("Opens an existing project"))
+    ON_STATUS_MSG(ID_PROJECT_CLOSE,                         i18n("Closes the current project"))
+    ON_STATUS_MSG(ID_PROJECT_ADD_FILE_EXIST,                i18n("Adds an existing file to the project"))
+    ON_STATUS_MSG(ID_PROJECT_ADD_NEW_TRANSLATION_FILE,      i18n("Adds a new language for internationalization to the project"))
+    ON_STATUS_MSG(ID_PROJECT_REMOVE_FILE,                   i18n("Removes file from the project"))
 
-	// RFV popups
-	ON_STATUS_MSG(ID_RFV_SHOW_NONPRJFILES,									i18n("Show files that aren't registered as project files"))
-	ON_STATUS_MSG(ID_PROJECT_CVS_UPDATE,                    i18n("Updates file/directory from repository"))
-	ON_STATUS_MSG(ID_PROJECT_CVS_COMMIT,                    i18n("Commits file/directory to the repository"))
-	ON_STATUS_MSG(ID_PROJECT_CVS_ADD,                       i18n("Adds file/directory to the repository"))
-	ON_STATUS_MSG(ID_PROJECT_CVS_REMOVE,                     i18n("Deletes file from disk and removes it from the repository"))
-	
-	default: slotStatusMsg(i18n("Ready"));
-	}
+    ON_STATUS_MSG(ID_PROJECT_NEW_CLASS,                     i18n("Creates a new Class frame structure and files"))
+    ON_STATUS_MSG(ID_PROJECT_GENERATE,                      i18n("Creates a project file for an existing automake project"))
+
+    ON_STATUS_MSG(ID_PROJECT_FILE_PROPERTIES,               i18n("Shows the current file properties"))
+    ON_STATUS_MSG(ID_PROJECT_OPTIONS,                       i18n("Sets project and compiler options"))
+    ON_STATUS_MSG(ID_PROJECT_MESSAGES,                      i18n("Invokes make to create the message file by extracting all i18n() macros"))
+  //MB
+  //  ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,              i18n("Creates the Project's API with KDoc"))
+    #ifndef WITH_KDOC2
+    ON_STATUS_MSG(ID_PROJECT_DOC_TOOL,                      i18n("Switches the documentation tool (kdoc/doxygen)"))
+    #endif
+    ON_STATUS_MSG(ID_PROJECT_MAKE_PROJECT_API,              i18n("Creates the Project's API"))
+  //MB end
+    ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,              i18n("Creates the Project's User Manual with the sgml-file"))
+    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,             i18n("Creates distribution packages from the current project"))
+    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
+
+    ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
+    ON_STATUS_MSG(ID_KDLG_BUILD_GENERATE,                   i18n("Generates the sourcefiles for the dialog"))
+    ON_STATUS_MSG(ID_BUILD_MAKE,                            i18n("Invokes make-command"))
+    ON_STATUS_MSG(ID_BUILD_REBUILD_ALL,                     i18n("Rebuilds the program"))
+    ON_STATUS_MSG(ID_BUILD_CLEAN_REBUILD_ALL,               i18n("Invokes make clean and rebuild all"))
+    ON_STATUS_MSG(ID_BUILD_STOP,                            i18n("Stops make immediately"))
+    ON_STATUS_MSG(ID_BUILD_RUN,                             i18n("Invokes make-command and runs the program"))
+    ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,                   i18n("Lets you set run-arguments to the binary and invokes the make-command"))
+    ON_STATUS_MSG(ID_BUILD_DISTCLEAN,                       i18n("Invokes make distclean and deletes all compiled files"))
+    ON_STATUS_MSG(ID_BUILD_MAKECLEAN,                       i18n("Invokes make clean which deletes all object and metaobject files"))
+    ON_STATUS_MSG(ID_BUILD_AUTOCONF,                        i18n("Invokes automake and co."))
+    ON_STATUS_MSG(ID_BUILD_CONFIGURE,                       i18n("Invokes ./configure"))
+
+    ON_STATUS_MSG(ID_DEBUG_START,                           i18n("Invokes the debugger on the current project executable"))
+    ON_STATUS_MSG(ID_DEBUG_START_OTHER,                     i18n("Various startups for the debugger"))
+    ON_STATUS_MSG(ID_DEBUG_SET_ARGS,                        i18n("Lets you debug your project app after specifying arguments for your app."))
+    ON_STATUS_MSG(ID_DEBUG_CORE,                            i18n("Examine a core file"))
+    ON_STATUS_MSG(ID_DEBUG_NAMED_FILE,                      i18n("Debug an app other than the current project executable"))
+    ON_STATUS_MSG(ID_DEBUG_ATTACH,                          i18n("Attach to running process"))
+    ON_STATUS_MSG(ID_DEBUG_RUN,                             i18n("Continues app execution"))
+    ON_STATUS_MSG(ID_DEBUG_RUN_CURSOR,                      i18n("Continues app execution until reaching the current cursor position"))
+    ON_STATUS_MSG(ID_DEBUG_STOP,                            i18n("Kills the app and exits the debugger"))
+    ON_STATUS_MSG(ID_DEBUG_STEP,                            i18n("Step into"))
+    ON_STATUS_MSG(ID_DEBUG_STEP_INST,                       i18n("Step instr"))
+    ON_STATUS_MSG(ID_DEBUG_NEXT,                            i18n("Step over"))
+    ON_STATUS_MSG(ID_DEBUG_NEXT_INST,                       i18n("Step over instr"))
+    ON_STATUS_MSG(ID_DEBUG_FINISH,                          i18n("Run to end of function"))
+    ON_STATUS_MSG(ID_DEBUG_MEMVIEW,                         i18n("Various views into the app"))
+    ON_STATUS_MSG(ID_DEBUG_BREAK_INTO,                      i18n("Interuppt the app"))
+
+    ON_STATUS_MSG(ID_TOOLS_KDLGEDIT,                        i18n("Changes to the KDevelop dialogeditor"))
+    ON_STATUS_MSG(ID_KDLG_TOOLS_KDEVELOP,                   i18n("Changes to KDevelop project editor"))
+
+    ON_STATUS_MSG(ID_OPTIONS_EDITOR,                        i18n("Sets the Editor's behavoir"))
+    ON_STATUS_MSG(ID_OPTIONS_EDITOR_COLORS,                 i18n("Sets the Editor's colors"))
+    ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING_DEFAULTS,  i18n("Sets the highlighting default colors"))
+    ON_STATUS_MSG(ID_OPTIONS_SYNTAX_HIGHLIGHTING,           i18n("Sets the highlighting colors"))
+    ON_STATUS_MSG(ID_OPTIONS_DOCBROWSER,                    i18n("Configures the Browser options"))
+    ON_STATUS_MSG(ID_OPTIONS_TOOLS_CONFIG_DLG,              i18n("Configures the Tools-Menu entries"))
+    ON_STATUS_MSG(ID_OPTIONS_PRINT,                         i18n("Configures printing options"))
+    ON_STATUS_MSG(ID_OPTIONS_PRINT_ENSCRIPT,                i18n("Configures the printer to use enscript"))
+    ON_STATUS_MSG(ID_OPTIONS_PRINT_A2PS,                    i18n("Configures the printer to use a2ps"))
+    ON_STATUS_MSG(ID_OPTIONS_KDEVELOP,                      i18n("Configures KDevelop"))
+
+    ON_STATUS_MSG(ID_BOOKMARKS_SET,                         i18n("Sets a bookmark to the current window file"))
+    ON_STATUS_MSG(ID_BOOKMARKS_TOGGLE,                      i18n("Toggles a bookmark to the current window file"))
+    ON_STATUS_MSG(ID_BOOKMARKS_NEXT,                        i18n("Goes to the next bookmark in the current window file"))
+    ON_STATUS_MSG(ID_BOOKMARKS_PREVIOUS,                    i18n("Goes to the previous bookmark in the current window file"))
+    ON_STATUS_MSG(ID_BOOKMARKS_CLEAR,                       i18n("Clears the bookmarks for the current window"))
+
+    ON_STATUS_MSG(ID_HELP_BACK,                             i18n("Switches to last browser page"))
+    ON_STATUS_MSG(ID_HELP_FORWARD,                          i18n("Switches to next browser page"))
+
+    ON_STATUS_MSG(ID_HELP_BROWSER_RELOAD,                   i18n("Reloads the current browser page"))
+    ON_STATUS_MSG(ID_HELP_BROWSER_STOP,                     i18n("Cancels the document request"))
+
+
+    ON_STATUS_MSG(ID_HELP_SEARCH_TEXT,                      i18n("Searches the selected text in the documentation"))
+    ON_STATUS_MSG(ID_HELP_SEARCH,                           i18n("Lets you search individually for an expression"))
+
+    ON_STATUS_MSG(ID_HELP_CONTENTS,                         i18n("Switches to KDevelop's User Manual"))
+    ON_STATUS_MSG(ID_HELP_PROGRAMMING,                      i18n("Switches to the KDevelop Programming Handbook"))
+    ON_STATUS_MSG(ID_HELP_TUTORIAL,                         i18n("Switches to the KDE Tutorials Handbook"))
+    ON_STATUS_MSG(ID_HELP_KDELIBREF,                        i18n("Switches to the KDE Library Reference Guide Handbook"))
+    ON_STATUS_MSG(ID_HELP_KDE2_DEVGUIDE,                    i18n("Switches to the KDE 2 Developer´s Guide Handbook"))
+    ON_STATUS_MSG(ID_HELP_REFERENCE,                        i18n("Switches to the C/C++-Reference"))
+
+    ON_STATUS_MSG(ID_HELP_TIP_OF_DAY,                       i18n("Opens the Tip of the Day dialog with hints for using KDevelop"))
+    ON_STATUS_MSG(ID_HELP_HOMEPAGE,                         i18n("Enter the KDevelop Homepage"))
+    ON_STATUS_MSG(ID_HELP_BUG_REPORT,                       i18n("Sends a bug-report email to the KDevelop Team"))
+
+    ON_STATUS_MSG(ID_HELP_PROJECT_API,                      i18n("Switches to the project's API-Documentation"))
+    ON_STATUS_MSG(ID_HELP_USER_MANUAL,                      i18n("Switches to the project's User-Manual"))
+
+
+    ON_STATUS_MSG(ID_HELP_DLGNOTES,                         i18n("Some information about the dialog editor..."))
+    ON_STATUS_MSG(ID_HELP_ABOUT,                            i18n("Programmer's Hall of Fame..."))
+
+    ON_STATUS_MSG(ID_CV_WIZARD,                             i18n("Switches to declaration/implementation"))
+    ON_STATUS_MSG(ID_CV_VIEW_DECLARATION,                   i18n("Switches to the method's declaration"))
+    ON_STATUS_MSG(ID_CV_VIEW_DEFINITION,                    i18n("Switches to the method's definition"))
+    ON_STATUS_MSG(ID_CV_GRAPHICAL_VIEW,                     i18n("Opens the graphical inheritance tree"))
+    ON_STATUS_MSG(ID_CV_CLASS_TOOL,                         i18n("Opens the classtool dialog"))
+    ON_STATUS_MSG(ID_CV_CLASS_BASE_CLASSES,                 i18n("Displays the inherited classes of the current class"))
+    ON_STATUS_MSG(ID_CV_CLASS_DERIVED_CLASSES,              i18n("Displays the classes who inherit the current class"))
+    ON_STATUS_MSG(ID_CV_FOLDER_NEW,                         i18n("Creates a new folder"))
+    ON_STATUS_MSG(ID_CV_FOLDER_DELETE,                      i18n("Deletes the current folder"))
+    ON_STATUS_MSG(ID_CV_CLASS_DELETE,                       i18n("Deletes the current class"))
+    ON_STATUS_MSG(ID_CV_VIEW_CLASS_DECLARATION,             i18n("Goes to the class declaration"))
+    ON_STATUS_MSG(ID_CV_METHOD_NEW,                         i18n("Opens the New Method dialog"))
+    ON_STATUS_MSG(ID_CV_METHOD_DELETE,                      i18n("Deletes the current class method"))
+    ON_STATUS_MSG(ID_CV_ATTRIBUTE_NEW,                      i18n("Creates a new attribute for the current class"))
+    ON_STATUS_MSG(ID_CV_ATTRIBUTE_DELETE,                   i18n("Deletes the current class attribute"))
+    ON_STATUS_MSG(ID_CV_IMPLEMENT_VIRTUAL,                  i18n("Creates a virtual method"))
+    ON_STATUS_MSG(ID_CV_ADD_SLOT_SIGNAL,                    i18n("Adds a signal/slot mechanism"))
+
+    ON_STATUS_MSG(ID_KDLG_FILE_CLOSE,                       i18n("Closes the current dialog"))
+    ON_STATUS_MSG(ID_KDLG_FILE_SAVE,                        i18n("Saves the current dialog"))
+    ON_STATUS_MSG(ID_KDLG_FILE_SAVE_AS,                     i18n("Saves the current dialog under a new filename"))
+
+    ON_STATUS_MSG(ID_KDLG_VIEW_PROPVIEW,                    i18n("Enables/Disables the properties window"))
+    ON_STATUS_MSG(ID_KDLG_VIEW_TOOLBAR,                     i18n("Enables/Disables the standard toolbar"))
+    ON_STATUS_MSG(ID_KDLG_VIEW_STATUSBAR,                   i18n("Enables/Disables the statusbar"))
+
+    ON_STATUS_MSG(ID_KDLG_VIEW_REFRESH,                     i18n("Refreshes current view"))
+    ON_STATUS_MSG(ID_KDLG_VIEW_GRID,                        i18n("Sets the grid size of the editing widget grid snap"))
+
+    // LFV popups
+    ON_STATUS_MSG(ID_LFV_NEW_GROUP,                         i18n("Lets you create a new logical file group"))
+    ON_STATUS_MSG(ID_LFV_REMOVE_GROUP,                      i18n("Removes the selected logical file group"))
+     ON_STATUS_MSG(ID_LFV_GROUP_PROP,                       i18n("Shows the group's properties"))
+    ON_STATUS_MSG(ID_LFV_SHOW_PATH_ITEM,                    i18n("Displays the absolute / relative path"))
+    ON_STATUS_MSG(ID_FILE_DELETE,                           i18n("Deletes the selected file"))
+
+    // RFV popups
+    ON_STATUS_MSG(ID_RFV_SHOW_NONPRJFILES,                  i18n("Show files that aren't registered as project files"))
+    ON_STATUS_MSG(ID_PROJECT_CVS_UPDATE,                    i18n("Updates file/directory from repository"))
+    ON_STATUS_MSG(ID_PROJECT_CVS_COMMIT,                    i18n("Commits file/directory to the repository"))
+    ON_STATUS_MSG(ID_PROJECT_CVS_ADD,                       i18n("Adds file/directory to the repository"))
+    ON_STATUS_MSG(ID_PROJECT_CVS_REMOVE,                    i18n("Deletes file from disk and removes it from the repository"))
+
+    default: slotStatusMsg(i18n("Ready"));
+  }
 }

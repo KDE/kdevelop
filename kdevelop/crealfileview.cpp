@@ -16,23 +16,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <assert.h>
-#include <iostream.h>
-
-#include <qdir.h>
-#include <qstrlist.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-
-#include <kmsgbox.h>
-#include <klocale.h>
-#include <kprocess.h>
-
 #include "crealfileview.h"
+
 #include "ccvaddfolderdlg.h"
 #include "cproject.h"
 #include "vc/versioncontrol.h"
 #include "resource.h"
+#include "ctreehandler.h"
+
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kprocess.h>
+#include <kpopupmenu.h>
+
+#include <qdir.h>
+#include <qstringlist.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qheader.h>
+
+//#include <assert.h>
+//#include <iostream.h>
+
+//#include <kapp.h>
+//#include <qwidget.h>
+
 
 /*********************************************************************
  *                                                                   *
@@ -141,7 +149,7 @@ void CRealFileView::refresh(CProject* prj)
 void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* parent ) {
 
     QDir theDir( directory );
-    QStrList fl;
+    QStringList fl;
     QListViewItem* item;
     QString f;
     QString d=directory;
@@ -151,41 +159,47 @@ void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* pa
 
     // Add all files for this directory
     theDir.setFilter(QDir::Files);
-    fl=*(theDir.entryList());
+    fl=theDir.entryList();
     
-    for( fl.first(); fl.current(); fl.next() ) {
-      f=d;
-      f.append("/");
-      f.append(fl.current());
-      f.remove(0,1);
-      if( isInstalledFile(f) ) {
-	item = treeH->addItem( fl.current(), THINSTALLED_FILE, parent);
-	if (showNonPrjFiles) {
-	  item->setText(1,i18n("registered"));
-	  vc=project->getVersionControl();
-	  if (vc!=0) {
-	    reg=vc->registeredState(directory+'/'+fl.current());
-	    if (reg & VersionControl::canBeCommited) {
-	      item->setText(2,i18n("VCS"));
-	    } else {
-	      item->setText(2,i18n("local"));
-	    }
-	  }
-	}
-      } else {
-	if (showNonPrjFiles) {
-	  item = treeH->addItem( fl.current(), THC_FILE, parent,"");
-	  vc=project->getVersionControl();
-	  if (vc!=0) {
-	    reg=vc->registeredState(directory+'/'+fl.current());
-	    if (reg & VersionControl::canBeCommited) {
-	      item->setText(2,i18n("VCS"));
-	    } else {
-	      item->setText(2,i18n("local"));
-	    }
-	  }
-	}
-      }
+    for ( QStringList::Iterator it = fl.begin(); it != fl.end(); ++it )
+    {
+        f=d;
+        f.append("/");
+        f.append((*it).latin1());
+        f.remove(0,1);
+        if( isInstalledFile(f) )
+        {
+            item = treeH->addItem( (*it).latin1(), THINSTALLED_FILE, parent);
+            if (showNonPrjFiles)
+            {
+                item->setText(1,i18n("registered"));
+                vc=project->getVersionControl();
+                if (vc!=0)
+                {
+                    reg=vc->registeredState(directory+'/'+(*it).latin1());
+                    if (reg & VersionControl::canBeCommited)
+                        item->setText(2,i18n("VCS"));
+                    else
+                        item->setText(2,i18n("local"));
+                }
+            }
+        }
+        else
+        {
+            if (showNonPrjFiles)
+            {
+                item = treeH->addItem( (*it).latin1(), THC_FILE, parent,"");
+                vc=project->getVersionControl();
+                if (vc!=0)
+                {
+                    reg=vc->registeredState(directory+'/'+(*it).latin1());
+                    if (reg & VersionControl::canBeCommited)
+                        item->setText(2,i18n("VCS"));
+                    else
+                        item->setText(2,i18n("local"));
+                }
+            }
+        }
     }
 }
 
@@ -193,7 +207,7 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
 {
   QString currentPath;
   QListViewItem* lastFolder;
-  QStrList dirList;
+  QStringList dirList;
   QDir dir(directory);
 
   // Stop recursion if the directory doesn't exist.
@@ -203,21 +217,21 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
 
   dir.setSorting(QDir::Name);
   dir.setFilter(QDir::Dirs);
-  dirList = *(dir.entryList());
+  dirList = dir.entryList();
   
   // Remove '.' and  '..'
-  dirList.first();
-  dirList.remove();
-  dirList.remove();
+  QStringList::Iterator it = dirList.begin();
+  it = dirList.remove(it);
+  it = dirList.remove(it);
 
   // Recurse through all directories
-  while( dirList.current() ) 
+  while( it != dirList.end())
   {
-    lastFolder = treeH->addItem( dirList.current(), THFOLDER, parent );
+    lastFolder = treeH->addItem( (*it).latin1(), THFOLDER, parent );
     lastFolder->setOpen( false );
     
     // Recursive call to fetch subdirectories
-    currentPath = directory+"/"+dirList.current();
+    currentPath = directory+"/"+(*it).latin1();
     scanDir( currentPath, lastFolder );
     
     // Add the files in the recursed directory.
@@ -225,7 +239,7 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
     
     treeH->setLastItem( lastFolder );
     
-    dirList.next();
+    it++;
   } 
   
   // Add files in THIS directory as well.
@@ -416,7 +430,7 @@ void CRealFileView::slotAddFileToProject() {
   QString filename=getFullFilename(currentItem());
   QString msg;
   msg.sprintf(i18n("Do you want to add the file\n%s\nto the project ?"), filename.data());
-  if (KMsgBox::yesNo(0, i18n("Question"), msg, KMsgBox::QUESTION) == 2)
+  if (KMessageBox::questionYesNo(0, msg) == KMessageBox::No)
     return;
 
   emit addFileToProject(filename);
@@ -427,7 +441,7 @@ void CRealFileView::slotRemoveFileFromProject() {
   QString filename=getRelFilename(currentItem());
   QString msg;
   msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
-  if (KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
+  if (KMessageBox::questionYesNo(0, msg) == KMessageBox::No)
     return;
 
   emit removeFileFromProject(filename);
@@ -439,7 +453,7 @@ void CRealFileView::slotDeleteFilePhys() {
   QString fullfilename=getFullFilename(currentItem());
   QString msg;
   msg.sprintf(i18n("Do you really want to delete the file\n%s\nfrom the disk?\nThere is no way to restore it!"), filename.data());
-  if(KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
+  if(KMessageBox::questionYesNo(0, msg) == KMessageBox::No)
     return;
 
   QFile::remove(fullfilename);

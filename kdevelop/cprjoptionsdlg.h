@@ -32,12 +32,12 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <kmsgbox.h>
-#include <klined.h>
-#include <kspinbox.h>
+#include <kmessagebox.h>
+#include <klineedit.h>
+#include <qspinbox.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
 #include <qspinbox.h>
 
 /** the setup-dialog for a project 
@@ -144,7 +144,6 @@ private:
   QString old_cxxflags;
   bool need_configure_in_update;
   bool need_makefile_generation;
-  KFileDialog *filedialog;
 	KConfig *settings;
   // Binary path
   QLineEdit* binary_edit;

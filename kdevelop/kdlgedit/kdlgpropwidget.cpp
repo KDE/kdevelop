@@ -17,8 +17,23 @@
 
 
 #include "kdlgpropwidget.h"
+
 #include "kdlgproplvis.h"
+#include "../ckdevelop.h"
+#include "kdlgproplv.h"
+#include "kdlgitems.h"
+#include "items.h"
+#include "itemsglobal.h"
+#include "defines.h"
+
 #include <kcolorbtn.h>
+#include <kfontdialog.h>
+#include <kfiledialog.h>
+#include <kiconloader.h>
+#include <klocale.h>
+#include <krestrictedline.h>
+#include <krun.h>
+
 #include <qlistview.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
@@ -29,17 +44,9 @@
 #include <qmultilinedit.h>
 #include <qlabel.h>
 #include <qtoolbutton.h>
-#include <kfiledialog.h>
-#include <krestrictedline.h>
-#include <kspinbox.h>
-#include <stdio.h>
-#include "../ckdevelop.h"
-#include "kdlgproplv.h"
-#include "kdlgitems.h"
-#include "items.h"
-#include "itemsglobal.h"
-#include "defines.h"
+#include <qspinbox.h>
 
+#include <stdio.h>
 
 struct PropHelp
 {
@@ -167,7 +174,7 @@ AdvListView::AdvListView( CKDevelop* parCKD, QWidget * parent , const char * nam
   for (i=0; i<MAX_MAIN_ENTRYS; i++)
     openStats[i] = "";
 
-  KConfig *config = kapp->getConfig();
+  KConfig *config = KGlobal::config();
   config->setGroup("KDlgEdit");
   QString stats = config->readEntry("PropOpenStats");
 
@@ -202,7 +209,7 @@ AdvListView::~AdvListView()
 
   stats = stats.left(stats.length()-1);
 
-  KConfig *config = kapp->getConfig();
+  KConfig *config = KGlobal::config();
   config->setGroup("KDlgEdit");
   config->writeEntry("PropOpenStats",stats);
 
@@ -242,7 +249,8 @@ help();
       updateWidgets();
     }
 }
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
+#include <klocale.h>
 
 void AdvListView::linkclicked(QString str)
 {
@@ -267,18 +275,19 @@ void AdvListView::linkclicked(QString str)
   if (str.upper() == "MANUAL")
     pCKDevel->slotHelpManual();
   if (str.upper() == "KDEWEB")
-    {
+  {
       // lets give this URL to kfm, he knows better what
       // to do with it
-      if(vfork() > 0) {
+//      if(vfork() > 0) {
 	// drop setuid, setgid
-	setgid(getgid());
-	setuid(getuid());
+//	setgid(getgid());
+//	setuid(getuid());
 	
-	execlp("kfmclient", "kfmclient", "exec", QString("http://www.kde.org").data(), 0);
-	_exit(0);
-      }
-    }
+//	execlp("kfmclient", "kfmclient", "exec", QString("http://www.kde.org").data(), 0);
+//	_exit(0);
+//      }
+    new KRun("http://www.kde.org");
+  }
 }
 
 void AdvListView::help()
@@ -309,7 +318,9 @@ void AdvListView::help()
             }
 
         }
+#warning FIXME - KQuickHelpWindow???
 
+/*
       st = st + i18n("\n\n<i><->See also: <link kdev>KDevelop Manual</link>, <link qt>Qt API</link>, <link kdeui>KDE User Interfaces</link>, <link KDEWEB>KDE Website</link><+></i>");
 
       QString helptext = KDlgLimitLines(st);
@@ -317,6 +328,7 @@ void AdvListView::help()
       KQuickHelpWindow *qhw = new KQuickHelpWindow();
       connect(qhw, SIGNAL(hyperlink(QString)), SLOT(linkclicked(QString)));
       qhw->popup(QString("<b><brown>")+it->text(0)+QString("</b><black>\n\n") + helptext, QCursor::pos().x(),QCursor::pos().y());
+*/
     }
 }
 
@@ -746,10 +758,6 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
   int numGrp;
   AdvLvi_Base *adv = 0;
 
-  KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
-
-  QPixmap folder_pix = icon_loader->loadMiniIcon("folder.xpm");
-
   KDlgPropertyEntry *prop;
   int i,n;
   for (i = 0; i<=source->getProps()->getEntryCount(); i++)
@@ -771,7 +779,7 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
           if (grps[numGrp].length()!=0)
             {
               grpLvis[numGrp] = new AdvListViewItem(lv,grps[numGrp],"");
-              grpLvis[numGrp]->setPixmap(0,folder_pix);
+              grpLvis[numGrp]->setPixmap(0,BarIcon("folder"));
             }
           else
             continue;
@@ -901,7 +909,7 @@ AdvLvi_String::AdvLvi_String(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEnt
   setGeometry(0,0,0,0);
   leInput = new QLineEdit( this );
   leInput->setText(dpe->value);
-  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(textChanged ( const QString& )), SLOT(returnPressed()));
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 }
 
@@ -936,7 +944,7 @@ AdvLvi_Int::AdvLvi_Int(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dp
   leInput = new KRestrictedLine( this, 0, " 01234567890-" );
   leInput->setText(dpe->value.stripWhiteSpace());
 
-  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(textChanged ( const QString& )), SLOT(returnPressed()));
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 
   up = new QPushButton("",this);
@@ -1025,7 +1033,7 @@ AdvLvi_UInt::AdvLvi_UInt(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *
   leInput = new KRestrictedLine( this, 0, " 01234567890" );
   leInput->setText(dpe->value.stripWhiteSpace());
 
-  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(textChanged ( const QString& )), SLOT(returnPressed()));
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 
   up = new QPushButton("",this);
@@ -1118,9 +1126,9 @@ AdvLvi_ExtEdit::AdvLvi_ExtEdit(QWidget *parent, CKDevelop *parCKD, KDlgPropertyE
   btnMore = new QPushButton("...",this);
   leInput = new QLineEdit( this );
   leInput->setText(dpe->value);
-  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(textChanged ( const QString& )), SLOT(returnPressed()));
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
-//  connect( leInput, SIGNAL( textChanged ( const char * ) ), SLOT( updateParentLvi() ) );
+//  connect( leInput, SIGNAL( textChanged ( const QString& ) ), SLOT( updateParentLvi() ) );
 }
 
 QString AdvLvi_ExtEdit::getText()
@@ -1187,7 +1195,7 @@ AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *
 //  cbBool->setChecked(isValueTrue(dpe->value));
 //  cbBool->setBackgroundMode( PaletteLight );
 //  connect(cbBool, SIGNAL(clicked()), SLOT(btnPressed()));
-  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+  connect(cbBool, SIGNAL(activated(const QString&)), SLOT(activated(const QString&)));
 }
 
 void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
@@ -1211,7 +1219,7 @@ QString AdvLvi_Bool::getText()
 }
 
 //void AdvLvi_Bool::btnPressed()
-void AdvLvi_Bool::activated( const char* /*s*/ )
+void AdvLvi_Bool::activated( const QString& /*s*/ )
 {
   propEntry->value = getText();
 //  cbBool->setText(cbBool->isChecked() ? "true" : "false");
@@ -1233,7 +1241,7 @@ AdvLvi_Orientation::AdvLvi_Orientation(QWidget *parent, CKDevelop *parCKD, KDlgP
   else{
     cbOrientation->setCurrentItem(1);
   }
-  connect(cbOrientation, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+  connect(cbOrientation, SIGNAL(activated(const QString&)), SLOT(activated(const QString&)));
 }
 
 void AdvLvi_Orientation::resizeEvent ( QResizeEvent *e )
@@ -1252,7 +1260,7 @@ QString AdvLvi_Orientation::getText()
     return QString();
 }
 
-void AdvLvi_Orientation::activated( const char* /*s*/ )
+void AdvLvi_Orientation::activated( const QString& /*s*/ )
 {
   propEntry->value = getText();
   refreshItem();
@@ -1278,7 +1286,7 @@ AdvLvi_ColorEdit::AdvLvi_ColorEdit(QWidget *parent, CKDevelop *parCKD, KDlgPrope
       leInput->setText(QString(s));
     }
   connect(btn, SIGNAL(changed(const QColor&)), SLOT(changed(const QColor&)));
-  connect(leInput, SIGNAL(textChanged ( const char * )), SLOT(returnPressed()));
+  connect(leInput, SIGNAL(textChanged ( const QString& )), SLOT(returnPressed()));
   connect(leInput, SIGNAL(returnPressed()), SLOT(returnPressed()));
 }
 
@@ -1364,7 +1372,7 @@ AdvLvi_BgMode::AdvLvi_BgMode(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEnt
   cbBool->insertItem("PaletteText");
   cbBool->insertItem("PaletteBase");
   cbBool->setCurrentItem(0);
-  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+  connect(cbBool, SIGNAL(activated(const QString&)), SLOT(activated(const QString&)));
 }
 
 void AdvLvi_BgMode::resizeEvent ( QResizeEvent *e )
@@ -1388,7 +1396,7 @@ QString AdvLvi_BgMode::getText()
     return QString();
 }
 
-void AdvLvi_BgMode::activated( const char* /*s*/ )
+void AdvLvi_BgMode::activated( const QString& /*s*/ )
 {
   propEntry->value = getText();
   refreshItem();
@@ -1432,7 +1440,7 @@ AdvLvi_Cursor::AdvLvi_Cursor(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEnt
 
   btnMore = new QPushButton("...",this);
   connect( btnMore, SIGNAL( clicked() ), this, SLOT( btnPressed() ) );
-  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+  connect(cbBool, SIGNAL(activated(const QString&)), SLOT(activated(const QString&)));
 }
 
 void AdvLvi_Cursor::btnPressed()
@@ -1479,7 +1487,7 @@ QString AdvLvi_Cursor::getText()
 }
 
 
-void AdvLvi_Cursor::activated( const char* /*s*/ )
+void AdvLvi_Cursor::activated( const QString& /*s*/ )
 {
   propEntry->value = getText();
 }
@@ -1488,7 +1496,7 @@ void AdvLvi_Cursor::activated( const char* /*s*/ )
 AdvLvi_Varname::AdvLvi_Varname(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *dpe, const char *name /*=0*/)
   : AdvLvi_String(parent, parCKD, dpe, name)
 {
-  connect(leInput, SIGNAL(textChanged(const char *)), this, SLOT(VarnameChanged()) );
+  connect(leInput, SIGNAL(textChanged(const QString&)), this, SLOT(VarnameChanged()) );
 }
 
 void AdvLvi_Varname::VarnameChanged()
@@ -1516,7 +1524,7 @@ AdvLvi_ComboList::AdvLvi_ComboList(QWidget *parent, CKDevelop *parCKD, KDlgPrope
       s = getLineOutOfString(src,i);
     }
 
-  connect(cbOrientation, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
+  connect(cbOrientation, SIGNAL(activated(const QString&)), SLOT(activated(const QString&)));
 }
 
 void AdvLvi_ComboList::resizeEvent ( QResizeEvent *e )
@@ -1535,7 +1543,7 @@ QString AdvLvi_ComboList::getText()
     return QString();
 }
 
-void AdvLvi_ComboList::activated( const char* /*s*/ )
+void AdvLvi_ComboList::activated( const QString& /*s*/ )
 {
   propEntry->value = getText();
   refreshItem();

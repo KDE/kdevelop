@@ -49,7 +49,7 @@ private slots:
     void templateActivated(int index);
     void childExited();
     void receivedOutput(KProcess *proc, char *buffer, int buflen);
-    void itemSelected(const char *item);
+    void itemSelected(const QString&);
     void slotSearch();
     void slotCancel();
     void slotClear();

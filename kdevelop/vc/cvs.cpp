@@ -5,6 +5,7 @@
 #include "cvsdialog.h"
 #include "commitdialog.h"
 #include "cvs.h"
+#include <klocale.h>
 
 
 /* Split an absolute file name into the directory and

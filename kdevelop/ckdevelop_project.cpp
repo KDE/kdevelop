@@ -15,35 +15,57 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include <qprogressdialog.h>
-#include <kcursor.h>
 
 #include "ckdevelop.h"
-#include "ctoolclass.h"
-#include "ckappwizard.h"
-#include "debug.h"
-#include "cclassview.h"
-#include "crealfileview.h"
-#include "cprjoptionsdlg.h"
+
 #include "caddexistingfiledlg.h"
-#include "cfilepropdlg.h"
-#include "cnewfiledlg.h"
-#include "cnewclassdlg.h"
 #include "caddnewtranslationdlg.h"
+#include "cclassview.h"
+#include "ceditwidget.h"
 #include "cerrormessageparser.h"
+#include "cfilepropdlg.h"
+#include "cgeneratenewfile.h"
+#include "ckappwizard.h"
+#include "ckdevaccel.h"
+#include "clogfileview.h"
+#include "cmakemanualdlg.h"
+#include "cnewclassdlg.h"
+#include "cnewfiledlg.h"
+#include "coutputwidget.h"
+#include "cprjoptionsdlg.h"
+#include "crealfileview.h"
+#include "ctoolclass.h"
+#include "ctabctl.h"
+#include "debug.h"
 #include "./kdlgedit/kdlgeditwidget.h"
 #include "./kdlgedit/kdlgpropwidget.h"
 #include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgedit.h"
-#include "cmakemanualdlg.h"
-#include "cgeneratenewfile.h"
+
+#include <kcursor.h>
+#include <kbuttonbox.h>
+#include <kdialog.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kstddirs.h>
+#include <kmessagebox.h>
+
+#include <qprogressdialog.h>
+#include <qlayout.h>
+#include <qmessagebox.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 /*********************************************************************
  *                                                                   *
  *                              SLOTS                                *
  *                                                                   *
  ********************************************************************/ 
 
-bool CKDevelop::slotProjectClose(){
+bool CKDevelop::slotProjectClose()
+{
   // R.Nolden 03.02.99
   slotStatusMsg(i18n("Closing project..."));
   TEditInfo* actual_info;
@@ -55,83 +77,80 @@ bool CKDevelop::slotProjectClose(){
   setInfoModified(header_widget->getName(), header_widget->isModified());
   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
-  for(actual_info=edit_infos.first();cont && actual_info != 0;){
-//      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
-      TEditInfo *next_info=edit_infos.next();
-      if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
+  for(actual_info=edit_infos.first();cont && actual_info != 0;)
+	{
+//    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+    TEditInfo *next_info=edit_infos.next();
+    if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
+		{
+
+      SaveAllDialog dialog(actual_info->filename, prj);
+      dialog.exec();
+      SaveAllDialog::SaveAllResult result = dialog.result();
 	
-	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),
-					   i18n("The project\n\n")+prj->getProjectName()
-					   +i18n("\n\ncontains changed files. Save modified file\n\n")
-					   +actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
-					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
- 				// show the messagea and store result in result:
-	project_close->show();
-    	int result=project_close->result();
-	
-//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"Msgbox");
-	// create the save project messagebox
-	
-	// what to do
-	if(result==1){  // Yes- only save the actual file
+	    // what to do
+			if(result==SaveAllDialog::Yes)
+			{  // Yes- only save the actual file
 				// save file as if Untitled and close file
-	  if(isUntitled(actual_info->filename))
-            {
-//	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- untitled");
-	    switchToFile(actual_info->filename);
-            handledNames.append(actual_info->filename);
-	    cont=fileSaveAs();
-            next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-	  }
-				// Save file and close it
-	  else{
-//	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- save");
-	    switchToFile(actual_info->filename);
-            handledNames.append(actual_info->filename);
-	    slotFileSave();
-            actual_info->modified=edit_widget->isModified();
-            cont=!actual_info->modified; //something went wrong
-	  }
-	}
-	
-	if(result==2){   // No - no save but close
-//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close file");
+	  		if(isUntitled(actual_info->filename))
+        {
+	    		switchToFile(actual_info->filename);
           handledNames.append(actual_info->filename);
-	  actual_info->modified=false;
-          removeFileFromEditlist(actual_info->filename); // immediate remove
+	    		cont=fileSaveAs();
           next_info=edit_infos.first(); // start again... 'cause we deleted an entry
-	}
-	if(result==3){  // Save all
-//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
-	  slotFileSaveAll();
-	  break;
-	}
-	if(result==4){ // Cancel
-	  cont=false;
-//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
-	  break;
-	}
+	  		}
+				// Save file and close it
+	  		else
+				{
+	    		switchToFile(actual_info->filename);
+          handledNames.append(actual_info->filename);
+	    		slotFileSave();
+          actual_info->modified=edit_widget->isModified();
+          cont=!actual_info->modified; //something went wrong
+	  		}
+			}
 	
-      }  // end actual file close
+			if(result==SaveAllDialog::No)
+			{   // No - no save but close
+        handledNames.append(actual_info->filename);
+	  		actual_info->modified=false;
+        removeFileFromEditlist(actual_info->filename); // immediate remove
+        next_info=edit_infos.first(); // start again... 'cause we deleted an entry
+			}
+			
+			if(result==SaveAllDialog::SaveAll)
+			{  // Save all
+	  		slotFileSaveAll();
+	  		break;
+			}
+			
+			if(result==SaveAllDialog::Cancel)
+			{ // Cancel
+	  		cont=false;
+	  		break;
+      }
+    }  // end actual file close
      actual_info=next_info;
-    } // end for-loop
+  } // end for-loop
 
   // check if something went wrong with saving
   if (cont)
   {
     for(actual_info=edit_infos.first(); cont && actual_info != 0;
-	actual_info=edit_infos.next())
+				actual_info=edit_infos.next())
     {
         if (actual_info->modified)
            cont=false;
     } // end for-loop
   }
 
-  if(cont){
+  if (cont)
+	{
     // cancel wasn't pressed and all sources are saved - project closed
     // clear all widgets
 
-    if(!bKDevelop){
+    if(!bKDevelop)
+    {
       //      switchToKDevelop();
     }
     //    disableCommand(ID_TOOLS_KDLGEDIT);
@@ -245,8 +264,7 @@ void CKDevelop::slotAddExistingFiles(){
   QString token;
   QStrList files;
   QString str_files = add_dlg->source_edit->text(); 
-  StringTokenizer str_token;
-    
+
   connect(&add_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
   	  this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
 
@@ -256,11 +274,12 @@ void CKDevelop::slotAddExistingFiles(){
   connect(&add_process,SIGNAL(processExited(KProcess*)),
 	  this,SLOT(slotProcessExited(KProcess*) )) ;
 
-  str_token.tokenize(str_files,",");
-  while(str_token.hasMoreTokens()){
-    token = str_token.nextToken();
-    files.append(token);
-  }
+
+  QStringList fileList;
+  fileList = QStringList::split ( ",", str_files, FALSE );
+  for ( QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it )
+    files.append((*it));
+
   QString dest = add_dlg->destination_edit->text();
   if(dest.right(1) != "/"){ // I hope it works now -Sandy
     dest = dest + "/";
@@ -284,7 +303,7 @@ void CKDevelop::slotAddExistingFiles(){
     copy = false;
     progress.setProgress( i );
     if (!QFile::exists((const char*)file)) {
-        KMsgBox::message(this,i18n("Attention"),file +i18n("\n\nFile does not exist!"));
+        KMessageBox::error(this, file +i18n("\n\nFile does not exist!"));
         continue;
     }
     file_info.setFile(file);
@@ -308,14 +327,17 @@ void CKDevelop::slotAddExistingFiles(){
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
-         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,source_name);
+         temp_template = genfile.genHeaderFile(locate("data","temp_template"), prj,source_name);
          add_process << temp_template;
         }
-        else if (CProject::getType(file)==CPP_SOURCE)
-              {
-               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
-               add_process << temp_template;
-              }
+        else
+        {
+          if (CProject::getType(file)==CPP_SOURCE)
+          {
+             temp_template = genfile.genCPPFile(locate("data","temp_template"), prj, source_name);
+             add_process << temp_template;
+          }
+        }
       }
       add_process << file;
       add_process << ">";
@@ -333,10 +355,11 @@ void CKDevelop::slotAddExistingFiles(){
     }
     else
     if(QFile::exists(dest_name)){
-      int result=KMsgBox::yesNoCancel(this,i18n("File exists!"),
-                                      QString(i18n("\nThe file\n\n"))+
-				      source_name+
-				      i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"));
+      int result=KMessageBox::warningYesNoCancel(this,
+                                        i18n("\nThe file\n\n")+
+				                            source_name+
+				                            i18n("\n\nalready exists.\nDo you want overwrite the old one?\n"),
+				                        i18n("File exists!"));
       if(result==1)
         copy = true;
       if(result==2)
@@ -361,14 +384,17 @@ void CKDevelop::slotAddExistingFiles(){
       {
        if (CProject::getType(file)==CPP_HEADER)
         {
-         temp_template = genfile.genHeaderFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj,source_name);
+         temp_template = genfile.genHeaderFile(locate("data","temp_template"), prj,source_name);
          add_process << temp_template;
         }
-        else if (CProject::getType(file)==CPP_SOURCE)
-              {
-               temp_template = genfile.genCPPFile(KApplication::localkdedir()+"/share/apps/kdevelop/temp_template", prj, source_name);
-               add_process << temp_template;
-              }
+        else
+        {
+          if (CProject::getType(file)==CPP_SOURCE)
+          {
+            temp_template = genfile.genCPPFile(locate("data","temp_template"), prj, source_name);
+            add_process << temp_template;
+          }
+        }
       }
       add_process << file;
       add_process << ">";
@@ -437,7 +463,7 @@ void CKDevelop::slotProjectOptions(){
   if(prjdlg.exec()){
     if (prjdlg.needConfigureInUpdate()){
       prj->updateConfigureIn();
-      KMsgBox::message(0,i18n("Information"),i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+      KMessageBox::information(0,i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."));
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
       messages_widget->clear();
@@ -587,17 +613,16 @@ void CKDevelop::slotShowFileProperties(QString rel_name){
   dlg.show();
 }
 
-void CKDevelop::slotProjectOpen(){
+void CKDevelop::slotProjectOpen()
+{
 	QString old_project = "";
 
 	slotStatusMsg(i18n("Opening project..."));
 	QString str;
 // --- changed by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
-//	str = KFileDialog::getOpenFileName(0,"*.kdevprj",this);
   config->setGroup("General Options");
   QString defDir=config->readEntry("ProjectDefaultDir", QDir::homeDirPath());
-  str = KFileDialog::getOpenFileName( defDir,
-	                                    "*.kdevprj",this );
+  str = KFileDialog::getOpenFileName( defDir, "*.kdevprj");
 	slotProjectOpenCmdl(str);
 }
 
@@ -612,7 +637,7 @@ void CKDevelop::slotProjectOpenRecent(int id_)
   recent_projects_menu->clear();
   uint i;
   for ( i =0 ; i < recent_projects.count(); i++){
-    recent_projects_menu->insertItem(recent_projects.at(i));
+    recent_projects_menu->insertItem(recent_projects.at(i), i);
   }
   // ---
 }
@@ -644,7 +669,8 @@ void CKDevelop::slotProjectOpenCmdl(QString prjname)
     	if(!(readProjectFile(prjname)))		//the readProjectFile is now garanteed not to modify the state if it fails
 		{
 
-		    KMsgBox::message(0,prjname,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"));
+		    KMessageBox::error(0,i18n("This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!"),
+		                            prjname);
 //		    readProjectFile(old_project);		//not needed anymore
     	}
 		else
@@ -686,24 +712,24 @@ void CKDevelop::slotProjectNewAppl(){
     config->writeEntry("author_email",kappw.getAuthorEmail());
     config->sync();
 	
-	if(project)		//now that we know that a new project will be built we can close the previous one
-	{
+    if(project)		//now that we know that a new project will be built we can close the previous one
+    {
     	old_project = prj->getProjectFile();
     	if(!slotProjectClose())				//the user may have pressed cancel in which case the state is undetermined
-		{
-			readProjectFile(old_project);
-			slotViewRefresh();
-			return;
-		}
-  	}
+      {
+        readProjectFile(old_project);
+        slotViewRefresh();
+        return;
+      }
+    }
 
     readProjectFile(file);
     QString type=prj->getProjectType();
 
-  /* transferred to processesend.pl
-     to insert the created pot file also into the repository (if necessary)
-  */
-  /*
+    /* transferred to processesend.pl
+      to insert the created pot file also into the repository (if necessary)
+    */
+    /*
     if (type == "normal_kde" || type == "mini_kde" || type == "normalogl_kde" ||
         type =="normal_kde2" || type=="mini_kde2" || type == "mdi_kde2")
     {
@@ -727,7 +753,7 @@ void CKDevelop::slotProjectGenerate(){
   messages_widget->clear();
 
   QString dir;
-  dir = KFileDialog::getDirectory(QDir::currentDirPath());
+  dir = KFileDialog::getExistingDirectory(QDir::currentDirPath());
   if (dir.isEmpty())
   {
     slotStatusMsg(i18n("Ready."));
@@ -739,11 +765,10 @@ void CKDevelop::slotProjectGenerate(){
   }
   QString qt_testfile=dir+"Makefile.am"; // test if the path contains a Makefile.am
   if(!QFileInfo(qt_testfile).exists()){
-    KMsgBox::message(this,  i18n("The selected path is not correct!"),
-                            i18n("The chosen path does not lead to a\n"
+    KMessageBox::error(this,i18n("The chosen path does not lead to a\n"
                                  "directory containing a Makefile.am\n"
                                  "to create a Project file from"),
-                            KMsgBox::EXCLAMATION); 	
+                            i18n("The selected path is not correct!")); 	
     slotStatusMsg(i18n("Ready."));
     return;
   }
@@ -755,11 +780,10 @@ void CKDevelop::slotProjectGenerate(){
 
   if(QFileInfo(file).exists())
   {
-    if (KMsgBox::yesNo(this, i18n("File Exists!"),
-                             i18n("In the path you´ve given\n"
-                                  "already contains a KDevelop Project file!\n"
-                                  "Overwrite ?"),
-							      KMsgBox::QUESTION) != 1)
+    if (KMessageBox::questionYesNo(this, i18n("In the path you´ve given\n"
+                                                "already contains a KDevelop Project file!\n"
+                                                "Overwrite ?"),
+                                          i18n("File Exists!")) != KMessageBox::Yes)
     {
       slotStatusMsg(i18n("Ready."));
       return;
@@ -893,11 +917,11 @@ void CKDevelop::slotProjectAPI(){
 	  QString doxconf =  dir +  "Doxyfile";
  		if(!QFileInfo(doxconf).exists())
    	{
- 		    KMsgBox::message(0, i18n("Error"),
+ 		    KMessageBox::message(0, i18n("Error"),
  		    						i18n("Doxygen configuration file not found\n"
                          	"Generate a valid one:\n"		
                          	"Project->API Doc Tool->Configure doxygen"),
-                    KMsgBox::EXCLAMATION);
+                    KMessageBox::EXCLAMATION);
     		return;
    	}
     slotDebugStop();
@@ -1093,9 +1117,9 @@ void CKDevelop::slotConfigureDoxygen(){
 	// doxywizard ?
 	if(!CToolClass::searchInstProgram("doxywizard")) // no dialog
 	{
-   	KMsgBox::message(0,i18n("Program not found -- doxywizard "),
+   	KMessageBox::message(0,i18n("Program not found -- doxywizard "),
 			QString("doxwizard ") +i18n(" is not necessary, but you have to edit your Configuration for doxygen by hand.\nMaybe you should look for a newer Version at:\n\n\t http://www.stack.nl/~dimitri/doxygen/download.html\n\n"),
-							KMsgBox::EXCLAMATION);
+							KMessageBox::EXCLAMATION);
   	return; 	
 	}
 	process.clearArguments();
@@ -1175,11 +1199,11 @@ void CKDevelop::slotProjectManual(){
 
 void CKDevelop::slotProjectMakeDistSourceTgz(){
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
+#warning FIXME    mainSplitter->setSeparatorPos(output_view_pos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
+    QRect rMainGeom = mainSplitter->geometry();
+    mainSplitter->resize(rMainGeom.width()-1,rMainGeom.height());
+    mainSplitter->resize(rMainGeom.width()+1,rMainGeom.height());
   }
 
   slotDebugStop();
@@ -1345,12 +1369,14 @@ bool CKDevelop::readProjectFile(QString file){
       project=true;
   }
 */
-CProject * lNewProject = new CProject(file);
-  if(!(lNewProject->readProject())){
+  CProject * lNewProject = new CProject(file);
+  if(!(lNewProject->readProject()))
+  {
     return false;
   }
-  else {
-      project=true;
+  else
+  {
+    project=true;
 	  prj = lNewProject;
   }
 
@@ -1446,8 +1472,6 @@ CProject * lNewProject = new CProject(file);
 }
 
 
-
-
 void  CKDevelop::saveCurrentWorkspaceIntoProject(){
   TWorkspace current;
   TEditInfo* actual_info;
@@ -1474,7 +1498,7 @@ void CKDevelop::newSubDir(){
   if(prj->getProjectType() == "normal_empty"){
     return; // no makefile handling
   }
-  KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."),KMsgBox::INFORMATION);
+  KMessageBox::information(0,i18n("You have added a new subdir to the project.\nWe will regenerate all Makefiles now."));
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Running automake/autoconf and configure..."));
   messages_widget->clear();
@@ -1525,13 +1549,89 @@ void CKDevelop::newSubDir(){
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
+/***************************************************************************/
+
+SaveAllDialog::SaveAllDialog(const QString& filename, CProject* prj) :
+  KDialog(0, 0, true)
+{
+  setCaption(i18n("Save changed project files ?"));
+
+  QBoxLayout *topLayout = new QVBoxLayout(this, 5);
+
+  QHBoxLayout * lay = new QHBoxLayout(topLayout);
+  lay->setSpacing(KDialog::spacingHint()*2);
+  lay->setMargin(KDialog::marginHint()*2);
+  lay->addStretch(1);
+  QLabel *label1 = new QLabel(this);
+  label1->setPixmap(QMessageBox::standardIcon(QMessageBox::Warning, kapp->style().guiStyle()));
+  lay->add( label1 );
+  lay->add(  new QLabel(  i18n("The project\n\n")+prj->getProjectName()+
+				        					      i18n("\n\ncontains changed files. Save modified file\n\n")+
+				        					      filename+" ?\n\n",
+                          this) );
 
 
+  lay->addStretch(1);
 
+  KButtonBox *buttonbox = new KButtonBox(this, Qt::Horizontal, 5);
+  QPushButton *yes      = buttonbox->addButton(i18n("Yes"));
+  QPushButton *no       = buttonbox->addButton(i18n("No"));
+  QPushButton *saveAll  = buttonbox->addButton(i18n("Save all"));
+  QPushButton *cancel   = buttonbox->addButton(i18n("Cancel"));
+  buttonbox->layout();
+  topLayout->addWidget(buttonbox);
 
+  connect(yes,      SIGNAL(clicked()),  SLOT(yes()));
+  connect(no,       SIGNAL(clicked()),  SLOT(no()));
+  connect(saveAll,  SIGNAL(clicked()),  SLOT(saveAll()));
+  connect(cancel,   SIGNAL(clicked()),  SLOT(cancel()));
 
+  topLayout->activate();
+}
 
+/***************************************************************************/
 
+SaveAllDialog::~SaveAllDialog()
+{
+}
 
+/***************************************************************************/
 
+SaveAllDialog::SaveAllResult SaveAllDialog::result()
+{
+  return m_result;
+}
 
+/***************************************************************************/
+
+void SaveAllDialog::yes()
+{
+  m_result = Yes;
+  accept();
+}
+
+/***************************************************************************/
+
+void SaveAllDialog::no()
+{
+  m_result = No;
+  accept();
+}
+
+/***************************************************************************/
+
+void SaveAllDialog::saveAll()
+{
+  m_result = SaveAll;
+  accept();
+}
+
+/***************************************************************************/
+
+void SaveAllDialog::cancel()
+{
+  m_result = Cancel;
+  accept();
+}
+
+/***************************************************************************/

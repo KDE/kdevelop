@@ -18,10 +18,22 @@
 
 
 #include "cfilepropdlg.h"
+#include "clogfileview.h"
+#include "cproject.h"
+
 #include <iostream.h>
-#include <qfileinfo.h>
 #include <klocale.h>
 #include "debug.h"
+
+#include <qbuttongroup.h>
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qfileinfo.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qlistview.h>
+#include <qpushbutton.h>
+#include <qwhatsthis.h>
 
 /*********************************************************************
  *                                                                   *
@@ -241,15 +253,13 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   setMaximumSize( 32767, 32767 );
   
   
-  KQuickHelp::add(distribution_group, 
-		  KQuickHelp::add(incdist_check, i18n("This option sets if the actual file\n"
+  QString incdist_checkMsg = i18n("This option sets if the actual file\n"
 						      "will be included in the final distri-\n"
-						      "bution.")));
-  
-  KQuickHelp::add(installion_group,
-		  KQuickHelp::add(install_loc_label,
-				  KQuickHelp::add(install_loc_edit,
-						  KQuickHelp::add(install_check, i18n("This option sets if the actual file\n"
+						      "bution.");
+  QWhatsThis::add(distribution_group, incdist_checkMsg);
+  QWhatsThis::add(incdist_check, incdist_checkMsg);
+
+  QString install_checkMsg = i18n("This option sets if the actual file\n"
 										      "will be installed to the platform during\n"
 										      "the installation process of make install\n"
 										      "If the install button is checked, you have\n"
@@ -257,8 +267,11 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
 										      "Possible values are e.g.:\n"
 										      "$(kde_icondir)/filename\n"
 										      "$(kde_appsdir)/filename\n"
-										      "Other values can be found in the Makefile")))));
-  
+										      "Other values can be found in the Makefile");
+  QWhatsThis::add(installion_group, install_checkMsg);
+  QWhatsThis::add(install_loc_label, install_checkMsg);
+  QWhatsThis::add(install_loc_edit, install_checkMsg);
+  QWhatsThis::add(install_check, install_checkMsg);
   
   // fill the list
   QStrList filenames;
@@ -417,13 +430,17 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
   
 }
 void CFilePropDlg::slotInstallCheckToogled(bool on){
-    install_loc_edit->setEnabled(on);
-    if(on){
-	if(QString(install_loc_edit->text()).isEmpty()){
-	    install_loc_edit->setText(
-				      (name_e_label->text()) != 0 ?name_e_label->text():"");
-	}
+  install_loc_edit->setEnabled(on);
+  if(on)
+  {
+    if(QString(install_loc_edit->text()).isEmpty())
+    {
+      if ((name_e_label->text()).isEmpty())
+        install_loc_edit->setText(name_e_label->text());
+      else
+        install_loc_edit->setText(QString::null);
     }
+  }
 }
 void CFilePropDlg::slotOk(){
   if(saved_info !=0 ){ //ok,there is a old one,it !=0

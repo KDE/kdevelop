@@ -42,7 +42,7 @@ private:
   TrimmableItem* getItem(TrimmableItem* parent, DataType itemType,
                           const QString& varName, bool requested);
 
-  void parseArray(TrimmableItem* parent, const QString& value);
+  void parseArray(TrimmableItem* parent, char* buf);
 
   char*     skipTokenEnd(char* buf) const;
   char*     skipTokenValue(char* buf) const;

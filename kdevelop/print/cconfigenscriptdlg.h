@@ -36,8 +36,8 @@
 
 #include <kfontdialog.h>
 #include <kprocess.h>
-#include <htmltoken.h>
 #include <kapp.h>
+#include "../ctoolclass.h"
 
 class CConfigEnscriptDlg : public QTabDialog {
   Q_OBJECT
@@ -50,7 +50,7 @@ public:
   void initTab3(QWidget*parent);
   void initTab4(QWidget*parent);
   void selectedProgram();
-  bool lookProgram(QString);
+  bool lookProgram(QString name) { CToolClass::searchProgram(name, false); }
   void loadSettings();
   QString createParameters(int);
 

@@ -19,30 +19,32 @@
 #ifndef CKDEVINSTALL_H
 #define CKDEVINSTALL_H
 
-#include <qprogressdialog.h>
 #include <qdialog.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlined.h>
-#include <qpushbutton.h>
-#include <kapp.h>
-#include <kprocess.h>
+
+class KConfig;
+class KProcess;
+class QFrame;
+class QLabel;
+class QLineEdit;
+class QPushButton;
+class KShellProcess;
+
+
 /**Provides an installation module checking
   *installed programs needed by KDevelop. Uses CToolClass
   *for checking programs.
   *@author Ralf Nolden
   */
 
-class CKDevInstall : public QDialog  {
+class CKDevInstall : public QDialog
+{
    Q_OBJECT
-public: 
+
+public:
 	CKDevInstall(QWidget *parent=0, const char *name=0);
 	~CKDevInstall();
-public slots:
-
 
 protected slots:
-
     void slotQTpressed();
     void slotKDEpressed();
     void slotHelp();
@@ -51,6 +53,7 @@ protected slots:
     void slotReceivedStdout(KProcess*,char*,int);
     void slotReceivedStderr(KProcess*,char*,int);
     void slotProcessExited(KProcess*);
+
  protected:
 	  KConfig *config;
     QFrame* main_frame;
@@ -71,6 +74,7 @@ protected slots:
     QPushButton* cancel_button;
 
     KShellProcess* shell_process;
+
 private:
     bool qt_test;
     bool kde_test;

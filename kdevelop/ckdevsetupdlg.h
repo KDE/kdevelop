@@ -18,23 +18,24 @@
  ***************************************************************************/
 #ifndef __CKDEVSETUPDLG_H_
 #define __CKDEVSETUPDLG_H_
-#include <qlineedit.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
-#include <qlistbox.h>
+
+class QCheckBox;
+class QComboBox;
+class KAccel;
+class KConfig;
+class KKeyChooser;
+class QComboBox;
+class QLineEdit;
+class QButtonGroup;
+class QLabel;
+
 #include <qtabdialog.h>
-#include <qmultilinedit.h>
-#include <kapp.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <kmsgbox.h>
-#include <kfiledialog.h>
-#include <kquickhelp.h>
 #include <kaccel.h>
-#include <qdict.h>
-#include <kkeydialog.h>
-#include <kaccel.h>
+
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 
 
 /** the setup dialog for kdevelop
@@ -58,7 +59,7 @@ private:
   QString kde_doc_path, qt_doc_path;
   bool wantsTreeRefresh;
 
-  QDict<KKeyEntry>* dict;
+  KKeyEntryMap keyMap;
   KConfig* config;
   KAccel* accel;
 

@@ -17,14 +17,18 @@
 #ifndef DBGTOOLBAR_H
 #define DBGTOOLBAR_H
 
-class DbgController;
 class CKDevelop;
 class DbgButton;
+class DbgController;
 class DbgToolbar;
+class KWinModule;
+class KDockWindow;
 
-#include <kapp.h>       // Needed for "Window" (Xlib/qt inclusion order is tricky)
+#include <ksystemtray.h>
+#include <kwin.h>         // needed for WId :(
+
 #include <qframe.h>
-#include <qlabel.h>
+
 
 /**
   *@author John Birch
@@ -34,12 +38,12 @@ class DbgToolbar;
 // **************************************************************************
 // **************************************************************************
 
-class DbgDocker : public QLabel
+class DbgDocker : public KSystemTray
 {
   Q_OBJECT
 
 public:
-  DbgDocker(DbgToolbar* toolBar, const QPixmap& pixmap);
+  DbgDocker(QWidget* parent, DbgToolbar* toolBar, const QPixmap& pixmap);
   virtual ~DbgDocker()  {};
   virtual void mousePressEvent(QMouseEvent *e);
 
@@ -79,12 +83,14 @@ class DbgToolbar : public QFrame
   private:
     CKDevelop*      ckDevelop_;
     DbgController*  dbgController_;
-    Window          activeWindow_;
+    WId             activeWindow_;
+    KWinModule*     winModule_;
     DbgButton*      bKDevFocus_;
     DbgButton*      bPrevFocus_;
     bool            appIsActive_;
     bool            docked_;
     DbgDocker*      docker_;
+    KDockWindow*    dockWindow_;
 };
 
 #endif

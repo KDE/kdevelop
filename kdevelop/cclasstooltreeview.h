@@ -22,9 +22,11 @@
 #define _CCLASSTOOLTREEVIEW_H_INCLUDED
 
 #include "ctreeview.h"
+#include "ctreehandler.h"
 
-//#include "cproject.h"
-class  CProject; 
+#include <kpopupmenu.h>
+
+class  CProject;
 
 class CClassToolTreeView : public CTreeView
 {

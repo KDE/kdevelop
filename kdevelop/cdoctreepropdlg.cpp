@@ -17,10 +17,15 @@
 
 
 #include "cdoctreepropdlg.h"
+
 #include <kfiledialog.h>
-#include <kapp.h>
-#include <kquickhelp.h>
+#include <qwhatsthis.h>
 #include <klocale.h>
+#include <kstddirs.h>
+
+#include <qlineedit.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 
 CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(parent,name,true) {
   name_edit = new QLineEdit( this, "name_edit" );
@@ -60,7 +65,8 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   name_label->setText(i18n("Name:") );
   name_label->setAlignment( 289 );
   name_label->setMargin( -1 );
-  KQuickHelp::add(name_label,KQuickHelp::add(name_edit,i18n("Enter the name of the entry here.")));
+  QWhatsThis::add(name_label, i18n("Enter the name of the entry here."));
+  QWhatsThis::add(name_edit,i18n("Enter the name of the entry here."));
   
   file_label = new QLabel( this, "file_label" );
   file_label->setGeometry( 10, 70, 90, 30 );
@@ -73,7 +79,8 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_label->setText(i18n("File:") );
   file_label->setAlignment( 289 );
   file_label->setMargin( -1 );
-  KQuickHelp::add(file_label,KQuickHelp::add(file_edit,i18n("Enter the file of the entry here.")));
+  QWhatsThis::add(file_label, i18n("Enter the file of the entry here."));
+  QWhatsThis::add(file_edit,i18n("Enter the file of the entry here."));
   
   ok_button = new QPushButton( this, "ok_button" );
   ok_button->setGeometry( 100, 120, 100, 30 );
@@ -108,12 +115,11 @@ CDocTreePropDlg::CDocTreePropDlg(QWidget *parent, const char *name ) : QDialog(p
   file_button->setBackgroundMode( QWidget::PaletteBackground );
   file_button->setFontPropagation( QWidget::NoChildren );
   file_button->setPalettePropagation( QWidget::NoChildren );
-	QPixmap pix;
-  pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/open.xpm");
+	QPixmap pix = BarIcon("open");
   file_button->setPixmap(pix);
   file_button->setAutoRepeat( FALSE );
   file_button->setAutoResize( FALSE );
-  KQuickHelp::add(file_button,i18n("Here you can browse through the disc to select a file for the entry."));
+  QWhatsThis::add(file_button,i18n("Here you can browse through the disc to select a file for the entry."));
   
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
@@ -127,7 +133,7 @@ CDocTreePropDlg::~CDocTreePropDlg(){
 }
 
 void CDocTreePropDlg::slotFileButtonClicked(){
-  QString str=  KFileDialog::getOpenFileName(0,"*.html *.htm",this,"test");
+  QString str=  KFileDialog::getOpenFileName(QString::null,"*.html *.htm");
   if(!str.isEmpty()){
     file_edit->setText(str);
   }
