@@ -2,47 +2,35 @@
 # Made with the aid of debmake, by Christoph Lameter,
 # games on the sample debian/rules file for GNU hello by Ian Jackson.
 
-SHELL=/bin/sh
-
-BUILDDIR = ./build
+build: build-stamp
  
-build: $(BUILDDIR)/build-stamp
-
 -include debian/debiandirs
-
-debian/debiandirs: admin/debianrules
-	perl -w admin/debianrules echodirs > debian/debiandirs
-
-$(BUILDDIR)/build-stamp:
+ 
+debian/debiandirs: debian/debianrules
+	perl -w debian/debianrules echodirs > debian/debiandirs
+ 
+build-stamp:
 	dh_testdir
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi
-	test -d $(BUILDDIR) || mkdir $(BUILDDIR) ;\
-	cd $(BUILDDIR) ;\
-	CFLAGS="-g -O2 -pipe -Wall" \
-	CXXFLAGS="$$CFLAGS" \
-	$$PWD/../configure $(configkdevelop) 
+	./configure $(configkdevelop)
+	$(MAKE)
 
-	$(MAKE) -C $(BUILDDIR)
-
-	touch $(BUILDDIR)/build-stamp
+	touch build-stamp
 
 debian-clean:
 	dh_testdir
-	-rm -f $(BUILDDIR)/build-stamp
+	-rm -f build-stamp install-stamp
+	dh_clean
  
 clean: debian-clean
-	-rm -rf $(BUILDDIR)
-	-rm -f debian/debiandirs
+	-rm -f debian/debiandirs 
 	if test -d CVS; then \
-	  make -f admin/Makefile.common cvs-clean ;\
-	else \
-	  -rm -rf $(BUILDDIR) ;\
-	  -rm -rf debian/debiandirs ;\
-	  dh_clean ; \
+	make -f admin/Makefile.common cvs-clean ;\
 	fi
-
+	-make distclean
+	
 binary-indep:	build
 	dh_testroot
 	dh_testdir
@@ -50,27 +38,28 @@ binary-indep:	build
 binary-arch:	build
 	dh_testroot
 	dh_testdir
-	dh_clean
-	dh_installdirs
-	make -C $(BUILDDIR) DESTDIR=`pwd`/debian/tmp/ install
-	perl -w admin/debianrules
+	dh_clean -a
+	install -d debian/tmp/etc/kde2
+	$(MAKE) prefix=/usr DESTDIR=`pwd`/debian/tmp/ install
+	-rm -rf debian/tmp/home debian/tmp/blah \
+		debian/tmp/usr/share/applnk/Development/designer.desktop \
+		debian/tmp/usr/share/applnk/Development/linguist.desktop
+	cp kdevelop/kdeveloprc debian/tmp/etc/kde2/
+	perl -w debian/debianrules cleanup
 	dh_undocumented 
+	dh_installmenu
+	perl -w debian/debianrules docbase
 	dh_installdocs
 	dh_installchangelogs
 	dh_strip
 	dh_compress
 	dh_fixperms
-	chmod 755 debian/tmp/$(kde_datadir)/kdevelop/tools/processesend.pl
+	chmod 755 debian/tmp/usr/share/apps/kdevelop/tools/*
 	dh_perl
-	dh_suidregister
-	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
-	cd debian/tmp && find ./$(kde_confdir) -type f -print | sed -e 's#^./#/#' > DEBIAN/conffiles
-	chmod 644 debian/tmp/DEBIAN/conffiles
 	dh_md5sums
-	perl -w admin/debianrules update
 	dh_builddeb    
 
 # Below here is fairly generic really

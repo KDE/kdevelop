@@ -1,0 +1,6 @@
+?package(kdevelop):\
+        needs=x11\
+        section=Apps/Programming\
+        hints="KDE"\
+        title="KDevelop"\
+        command=kdevelop

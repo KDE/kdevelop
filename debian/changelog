@@ -1,46 +1,66 @@
-kdevelop-cvs (1:1.1-20000521-1.0) experimental; urgency=low
+kdevelop (1:1.5-20010220-1) unstable; urgency=low
  
-  * New upstream CVS version
-  * More build-depends work
-  * Creating ./build environment and adding in debian specific compile
-    time options for kdelibs doc dir and qt doc dir
+  * New cvs pull
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 21 May 2000 22:30:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 19 Feb 2001 02:06:00 -0700
 
-kdevelop-cvs (1:1.1-20000306-1.0) experimental; urgency=low
+kdevelop (1:1.4-final-1) unstable; urgency=low
  
-  * New upstream CVS version
-  * Setting package to -cvs for developer testing purposes
-  * Adding in build-depends
+  * New upstream release
  
- -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 06 Mar 2000 03:30:00 -0700
+ -- Ivan E. Moore II <rkrusty@debian.org>  Mon, 19 Feb 2001 02:06:00 -0700
 
-kdevelop (1:1.1-20000229-1.0) experimental; urgency=low
+kdevelop (1:1.4-20010218-1) unstable; urgency=low
+ 
+  * New upstream cvs pull
+  * New upload to Debian with permission of Raphael Bossek who did the ITP
+  * Updating for potato/woody/sid
+ 
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sun, 18 Feb 2001 02:06:00 -0700
 
-  * Fixing pathing for doc-base files
-  * Minor cleanups 
-  * Fixing location of license files to match new location
+kdevelop (1:1.4-20010127-1) unstable; urgency=low
 
- -- Ivan E. Moore II <rkrusty@debian.org>  Thu, 24 Feb 2000 18:00:03 -0700
+  * New upstream release
+  * Updating for potato/woody/sid
 
-kdevelop (1:1.0-19991201-1.0) unstable; urgency=low
+ -- Ivan E. Moore II <rkrusty@debian.org>  Sat, 27 Jan 2001 05:06:00 -0700
 
-  * Updating control file to specific section on a per package basis
-  * Changing package name to kdevelop-cvs to denote that this is not a stable
-    version.
-  * Reworking rules script to make use of newer debianrules scripting
-  * Redoing postinst and prerm scripts to conform more with debian policy
-  * Adding in postrm and preinst scripts to work cleanly with debian policy
-  * Changing dependency information to fit in with qt2/kde2 provided packages
-    as well as qt1/kde1 packages.
+kdevelop (1:1.1final-20000228-1) stable; urgency=low
 
- -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 01 Dec 1999 03:00:03 -0400
+  * New upstream release
+  * Recommend kdelibs-doc
+  * Don't include Makefiles
 
-kdevelop (1:1.0-19990924-1) unstable; urgency=low
+ -- Bernd Gehrmann <bernd@users.sourceforge.net>  Sun, 27 Feb 2000 12:00:00 +0100
 
-  * New upstream version
+kdevelop (1:1.1beta2-20000206-1) stable; urgency=low
 
- -- Ivan E. Moore II <rkrusty@debian.org>  Wed, 29 Sep 1999 14:00:03 -0400
+  * Back to old configure arguments
+  * Mentioned debugger in control file, 
+    made kdebase a dependency
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  7 Feb 2000 00:10:59 +0100
+
+kdevelop (1:1.1beta2-20000131-1) stable; urgency=low
+
+  * New upstream version: 1.1beta2
+  * Use --prefix in configure, set kde_confdir, kde_htmldir explicitly
+    because of new autoconf framework
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon, 31 Jan 2000 21:15:04 +0100
+
+kdevelop (1:1.0-19991206-1) stable; urgency=low
+
+  * New upstream version: 1.0
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Mon,  6 Dec 1999 20:21:54 +0100
+
+kdevelop (1:1.0beta4.1-19991030-1) unstable; urgency=low
+
+  * New upstream changes
+  * Disabled debug - is stripped anyway
+
+ -- Bernd Gehrmann <bernd@physik.hu-berlin.de>  Sat, 30 Oct 1999 09:02:41 +0200
 
 kdevelop (1:0.4-19990728-1) unstable; urgency=low
 
