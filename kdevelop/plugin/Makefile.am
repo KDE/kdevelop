@@ -1,2 +1,2 @@
-SUBDIRS = print projectmanagement gccoptions
+SUBDIRS = print projectmanagement
 
