@@ -17,6 +17,7 @@
 #include <qregexp.h>
 #include <qstylesheet.h>
 #include <qtimer.h>
+#include <qfileinfo.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knotifyclient.h>
@@ -503,6 +504,9 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         kdDebug(9004) << "Error in " << fn << " " << row << ": " << text << endl;
         if (dirstack.top())
             fn.prepend("/").prepend(*dirstack.top());
+        // consolidate /../
+        QFileInfo info(fn);
+        fn = info.absFilePath();
         kdDebug(9004) << "Path: " << fn << endl;
         items.append(new MakeItem(parags, fn, row, text));
         insertLine2(line, Error);
