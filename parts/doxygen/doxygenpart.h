@@ -101,6 +101,7 @@ private:
 
     //needed for documentFunction
     KAction* m_actionDocumentFunction;
+    KAction* m_actionPreview;
     KTextEditor::EditInterface* m_activeEditor;
     KTextEditor::ViewCursorInterface* m_cursor;
 };
