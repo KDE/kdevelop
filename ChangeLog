@@ -1,4 +1,9 @@
 2001-03-11  F@lk Brettschneider <falk@kdevelop.org>
+    * clearBookmarks() is a KWriteDoc method now, KWrite::clearBookmark() just calls its KWriteDoc
+    * KWriteDoc: setFileName(), setModified(), setText(), isModified() is public now (for direct access of the document (documents are the central place in an MDI architecture))
+    * architecture changed in a way that cpp_widget and header_widget is away now, use CKDevelop::m_docViewManager for those things now
+
+2001-03-11  F@lk Brettschneider <falk@kdevelop.org>
     * DocViewMan bugfixes
     * adapted these CKDevelop slots: slotOptionsEditor, slotOptionsEditorColors, slotOptionsSyntaxHighlightingDefaults, slotOptionsSyntaxHighlighting
 
