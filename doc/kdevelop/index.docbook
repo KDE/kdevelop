@@ -44,7 +44,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2004-03-03</date>
+  <date>2004-03-04</date>
   <releaseinfo>&kdevrelease;</releaseinfo>
 
   <authorgroup>
@@ -117,7 +117,7 @@ You will here find information on the following topics:
 </para>
 <itemizedlist>
   <listitem><para>
-  <link linkend="nutshell">In a nutshell</link>&mdash;a quick reference of the most used commands and actions.
+  <link linkend="nutshell">In a Nutshell&mdash;Tips and Tricks</link>&mdash;a quick reference of the most used commands and actions.
   </para></listitem>
   <listitem><para>
   <link linkend="unixdev">Development on UNIX</link>&mdash;a historical survey of UNIX program development, the main tools necessary and why you need an IDE.
@@ -189,7 +189,7 @@ You will here find information on the following topics:
 <!-- ====================================================================== -->
 
 <chapter id="nutshell">
-<title>In a Nutshell</title>
+<title>In a Nutshell&mdash;Tips and Tricks</title>
 
 <!-- Traditionally, most of this stuff will have been put into a FAQ section. It is more useful, however, to put it at the very start of a manual, as this is the place the (inexperienced) user first looks for.
 This chapter is meant to provide short hints and tips together with (mandatory) navigation links.
@@ -248,6 +248,16 @@ The information in this chapter is meant as a quick reference for a head start o
     <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project...</guimenuitem></menuchoice> will start the <link linkend="applicationwizard">&appwizard;</link>.
     </para>
     </formalpara>
+  </listitem>
+
+  <listitem>
+    <formalpara id="nutshell-new-custom-project">
+      <title>Create a Custom Project</title>
+      <para>
+      There is no direct way to create a custom project (&ie; a project which does use its own makefiles). Use <menuchoice><guimenu>Project</guimenu> <guimenuitem>Import Existing Project</guimenuitem></menuchoice> instead. Remember to set the appropriate <guilabel>Project Type</guilabel>, labeled by an additional <quote>(Custom Makefiles)</quote>, in the dialog.
+      </para>
+    </formalpara>
+    <para>If there is no existing project to import, create a new automake-based one first, then re-import it as custom project.</para>
   </listitem>
 
   <listitem>
