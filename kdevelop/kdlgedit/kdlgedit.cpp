@@ -1281,7 +1281,8 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
     props->dumpBoolPropCall(stream, "setEnabled", "IsEnabled", true);
 
     ////////////////////////////////C++ Code//////////////////////////
-    props->dumpBoolPropCall(stream, "setFocus", "hasFocus", false);
+    if(props->getPropValue("hasFocus") == "true") 
+        props->dumpPropCall(stream,"setFocus","");
     //    props->dumpBoolPropCall(stream, "setAcceptsDrops", "AcceptDrops", false);
 
     
