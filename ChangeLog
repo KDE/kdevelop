@@ -1,3 +1,8 @@
+2002-06-07  Roland Krause  <roland@ca.wai.com>
+    * Reapplied Kuba Ober's patch for indentation in first line of file. 
+      This is what happends when you apply patches instead using CVS!!!
+    * Applied Sebastian's patch for coutputwidget.cpp, click on error 
+      message now jumps to the correct line.
 2002-06-07  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Anders Lynge Esbensen <esban@egmont-kol.dk>: Fixes on docu indexing. Reviewed by Harry.
     * applied printer patch of Walter Tasin: Much improved printing. Reviewed by myself.
@@ -5,6 +10,8 @@
     * changing the default settings in Options-->Editor to more convinience for novices
 2002-06-06  August Hörandl  <august.hoerandl@gmx.at>
     * fix typo: kbasedoc.h in kdemdi.tar.gz
+2002-06-05  Kuba Ober <kuba@mareimbrium.org>
+    * fix indentation in first line of file
 2002-06-04  Roland Krause  <roland@ca.wai.com>
     * Applied a fix to the coutputwidget. This is mine and Harry's but not
       Kuba's solution. The coutputwidget will still use RichText so we can

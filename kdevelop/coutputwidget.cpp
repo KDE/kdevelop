@@ -124,8 +124,8 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     int currentPara;
     int index;
     getCursorPosition(&currentPara, &index);
-    int paraCount = paragraphs()-1;
-    bool displayAdditions = (paraCount == currentPara);
+    int paraCount = paragraphs();
+    bool displayAdditions = (paraCount-1 == currentPara);
 
     // escape rich edit tags like "&", "<", ">"
     line = QStyleSheet::escape( line );
@@ -154,7 +154,7 @@ void CMakeOutputWidget::insertAtEnd(const QString& text, MakeOutputErrorType def
     }
 
     if (displayAdditions)
-      setCursorPosition(paraCount+1, 0);
+      setCursorPosition(paraCount, 0);
 
     ensureCursorVisible();
 
@@ -291,7 +291,7 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
   {
     // add the error keyed on the line number in the make output widget
     ErrorDetails errorDetails(fileInErr, lineInErr, type);
-    m_errorMap.insert(numLines()-1, errorDetails);
+    m_errorMap.insert(numLines(), errorDetails);
   }
 }
 

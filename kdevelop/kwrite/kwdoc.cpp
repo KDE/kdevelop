@@ -1144,16 +1144,16 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
 #endif
 
 int KWriteDoc::seekIndentRef(QList<TextLine> & contents, int & tabs, int & spaces) {
-  int cells;
+  int cells = 0;
   TextLine * textLine = contents.current();
-  do {
+  while (textLine != 0) {
     tabs = textLine->indentTabs();
     spaces = textLine->indentSpaces();
     cells = tabs * tabChars + spaces;
     if (cells > 0 || (cells == 0 && textLine->firstChar() == 0)) // we've got our position so we're done
       break;
     textLine = contents.prev();
-  } while (textLine != 0);
+  };
   return cells;
 }
 
@@ -1307,20 +1307,22 @@ void KWriteDoc::commonTab(KWriteView * view, VConfig & c, bool add) {
   } else {
     // indent the new line
 
-    // find the column to indent to
-    TextLine* textLine = contents.at(c.cursor.y); // check the current line
-    // NB: accessing the list like that is expensive
-
     // find out baseline indentation level
+    TextLine* textLine;
     int cells = 0; // how many character cells were used (ie. accounting tab width)
 
-    textLine = contents.prev();
+    if (c.cursor.y > 0) {
+      textLine = contents.at(c.cursor.y - 1); // check the previous line
+      // NB: accessing the list like that is expensive
 
-    cells = seekIndentRef(contents);
+      cells = seekIndentRef(contents);
 
-    // adjust indentation levels for opening brace in this line
-    if (textLine->getChar(textLine->lastChar())=='{') { // opening brace
-      cells += indentLength;
+      textLine = contents.current();
+
+      // adjust indentation levels for opening brace in this line
+      if (textLine->getChar(textLine->lastChar())=='{') { // opening brace
+        cells += indentLength;
+      }
     }
 
     textLine = contents.at(c.cursor.y);
