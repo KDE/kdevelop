@@ -1,3 +1,7 @@
+2001-02-24 Falk Brettschneider <falk@kdevelop.org>
+	* synchronized KDevelop's QextMDI copy with QextMDI-2.0pre
+	  (somewhere before 2.0-beta1)
+
 2001-02-20 Omid Givi <omid@givi.nl>
 	* Added KDevComponentManager which is responsible for the
 	  creations of every component (through klibloader of
