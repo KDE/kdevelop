@@ -19,6 +19,7 @@
 #include <qdict.h>
 #include <qheader.h>
 #include <qfileinfo.h>
+#include <qregexp.h>
 
 #include <kpopupmenu.h>
 
@@ -448,9 +449,10 @@ void BreakpointWidget::slotParseGDBBrkptList(char *str)
                     ignore = atoi(str+13);
                 
                 if (strncmp(str, "\tstop only if ", 14) == 0) {
-                    char* EOL = strchr(str, '\n');
-                    if (EOL)
-                        condition = QCString(str+14, EOL-(str+13));
+                    QCString condLine(str);
+                    QRegExp regExp("\tstop only if ([^\n]*)");
+                    if( condLine.find( regExp ) >= 0 )
+                        condition = regExp.cap(1);
                 }
             }
             

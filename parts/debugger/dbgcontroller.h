@@ -113,6 +113,8 @@ signals:
     void rawGDBLibraries      (char *buf);
     void ttyStdout            (const char *output);
     void ttyStderr            (const char *output);
+    void gdbStdout            (const char *output);
+    void gdbStderr            (const char *output);
     
 protected:
     KProcess *dbgProcess_;

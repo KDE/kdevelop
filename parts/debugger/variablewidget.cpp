@@ -110,8 +110,8 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     QListView::setSelectionMode(QListView::Single);
     addColumn(i18n("Variable"));
     addColumn(i18n("Value"));
-    // This may be a matter of taste...
-    header()->hide();
+    // This may be a matter of taste... yes, I like it on
+//    header()->hide();
 
     connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              SLOT(slotContextMenu(KListView*, QListViewItem*)) );
@@ -586,7 +586,7 @@ void VarItem::checkForRequests()
         waitingForData();
         emit ((VariableTree*)listView())->expandUserItem(this,
                                                          // QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-                                                         QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
+                                                         QCString().sprintf("%s.local8Bit().data()",
                                                                             fullName().latin1()));
     }
     

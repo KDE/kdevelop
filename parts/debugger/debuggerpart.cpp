@@ -41,6 +41,7 @@
 #include "breakpointwidget.h"
 #include "framestackwidget.h"
 #include "disassemblewidget.h"
+#include "processwidget.h"
 #include "gdbcontroller.h"
 #include "breakpoint.h"
 #include "dbgpsdlg.h"
@@ -48,6 +49,7 @@
 #include "memviewdlg.h"
 #include "gdbparser.h"
 #include "debuggerconfigwidget.h"
+#include "processlinemaker.h"
 
 #include <iostream>
 
@@ -123,6 +125,9 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
     topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"));
+    
+    gdbOutputWidget = new ProcessWidget(0);
+    topLevel()->embedOutputView(gdbOutputWidget, i18n("GDB"));
     
     VariableTree *variableTree = variableWidget->varTree();
 
@@ -227,6 +232,13 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                          actionCollection(), "debug_attach");
     action->setStatusText( i18n("Attaches the debugger to a running process") );
     
+    action = new KAction(i18n("Toggle Breakpoint"), 0, 0,
+                         this, SLOT(toggleBreakpoint()),
+                         actionCollection(), "debug_toggle_breakpoint");
+    action = new KAction(i18n("Disable Breakpoint"), 0, 0,
+                         this, SLOT(slotDisableBreakpoint()),
+                         actionCollection(), "debug_disable_breakpoint");
+                         
     connect( topLevel()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );
     
@@ -251,6 +263,23 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( core(), SIGNAL(stopButtonClicked()),
              this, SLOT(slotStop()) );
 
+    connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
+             this, SLOT(slotActivePartChanged(KParts::Part*)) );
+             
+    procLineMaker = new ProcessLineMaker();
+    
+    connect( procLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
+             appFrontend(), SLOT(insertStdoutLine(const QString&)) );
+    connect( procLineMaker, SIGNAL(receivedStderrLine(const QString&)),
+             appFrontend(), SLOT(insertStderrLine(const QString&)) );
+    
+    gdbLineMaker = new ProcessLineMaker();
+    
+    connect( gdbLineMaker, SIGNAL(receivedStdoutLine(const QString&)),
+             gdbOutputWidget, SLOT(insertStdoutLine(const QString&)) );
+    connect( gdbLineMaker, SIGNAL(receivedStderrLine(const QString&)),
+             gdbOutputWidget, SLOT(insertStderrLine(const QString&)) );
+    
     setupController();
 }
 
@@ -265,15 +294,19 @@ DebuggerPart::~DebuggerPart()
         topLevel()->removeView(framestackWidget);
     if (disassembleWidget)
         topLevel()->removeView(disassembleWidget);
+    if(gdbOutputWidget)
+        topLevel()->removeView(gdbOutputWidget);
     
     delete variableWidget;
     delete breakpointWidget;
     delete framestackWidget;
     delete disassembleWidget;
+    delete gdbOutputWidget;
     delete controller;
     delete floatingToolBar;
     delete statusBarIndicator;
-
+    delete procLineMaker;
+    
     GDBParser::destroy();
 }
 
@@ -323,9 +356,7 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
       return;
 
     const EditorContext *econtext = static_cast<const EditorContext*>(context);
-    m_contextFileName = econtext->url().path();
     m_contextIdent = econtext->currentWord();
-    m_contextLine = econtext->line();
     
     popup->insertSeparator();
     if (econtext->url().isLocalFile())
@@ -337,7 +368,18 @@ void DebuggerPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 void DebuggerPart::toggleBreakpoint()
 {
-    breakpointWidget->slotToggleBreakpoint(m_contextFileName, m_contextLine);
+    KParts::ReadWritePart *rwpart
+        = dynamic_cast<KParts::ReadWritePart*>(partController()->activePart());
+    KTextEditor::ViewCursorInterface *cursorIface
+        = dynamic_cast<KTextEditor::ViewCursorInterface*>(partController()->activeWidget());
+    
+    if (!rwpart || !cursorIface)
+        return;
+    
+    uint line, col;
+    cursorIface->cursorPositionReal(&line, &col);
+
+    breakpointWidget->slotToggleBreakpoint(rwpart->url().path(), line);
 }
 
 
@@ -407,12 +449,14 @@ void DebuggerPart::setupController()
              this,             SLOT(slotShowStep(const QString&, int)));
 
     connect( controller,       SIGNAL(ttyStdout(const char*)),
-             this,             SLOT(slotApplReceivedStdout(const char*)));
+             procLineMaker,    SLOT(slotReceivedStdout(const char*)));
     connect( controller,       SIGNAL(ttyStderr(const char*)),
-             this,             SLOT(slotApplReceivedStderr(const char*)));
+             procLineMaker,    SLOT(slotReceivedStderr(const char*)));
              
-    connect( controller,       SIGNAL(rawData(const QString&)),
-             this,             SLOT(slotRawData(const QString&)) );
+    connect( controller,       SIGNAL(gdbStdout(const char*)),
+             gdbLineMaker,     SLOT(slotReceivedStdout(const char*)) );
+    connect( controller,       SIGNAL(gdbStderr(const char*)),
+             gdbLineMaker,     SLOT(slotReceivedStderr(const char*)) );
 }
 
 
@@ -462,6 +506,8 @@ void DebuggerPart::startDebugger()
         floatingToolBar = new DbgToolBar(this, topLevel()->main());
         floatingToolBar->show();
     }
+    
+    gdbOutputWidget->clear();
     
     controller->slotStart(shell, program);
     breakpointWidget->slotSetPendingBPs();
@@ -684,20 +730,18 @@ void DebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 }
 
 
-void DebuggerPart::slotApplReceivedStdout(const char *buf)
+void DebuggerPart::slotActivePartChanged( KParts::Part* part )
 {
-    appFrontend()->insertStdoutLine(QString::fromLatin1(buf));
-}
-
-
-void DebuggerPart::slotApplReceivedStderr(const char *buf)
-{
-    appFrontend()->insertStderrLine(QString::fromLatin1(buf));
-}
-
-void DebuggerPart::slotRawData( const QString& data )
-{
-    std::cout << data.local8Bit();
+  KAction* action = actionCollection()->action("debug_toggle_breakpoint");
+  if(!action)
+      return;
+  if(!part) {
+      action->setEnabled(false);
+      return;
+  }
+  KTextEditor::ViewCursorInterface *iface
+      = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
+  action->setEnabled( iface != 0 );
 }
 
 #include "debuggerpart.moc"

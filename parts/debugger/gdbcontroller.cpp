@@ -41,18 +41,7 @@
 #include <stdlib.h>
 using namespace std;
 
-#if defined(DBG_MONITOR)
-  #define GDB_MONITOR
-  #define DBG_DISPLAY(X)          {emit rawData((QString("\n")+QString(X)));}
-#else
-  #define DBG_DISPLAY(X)          {;}
-#endif
-
-#if defined(GDB_MONITOR)
-  #define GDB_DISPLAY(X)          {emit rawData(X);}
-#else
-  #define GDB_DISPLAY(X)          {;}
-#endif
+#define DBG_DISPLAY(X)          kdDebug(9012) << (X) << endl;
 
 // **************************************************************************
 //
@@ -297,7 +286,11 @@ void GDBController::executeCmd()
         setStateOff(s_appNotStarted|s_programExited|s_silent);
     }
     
-    GDB_DISPLAY(currentCmd_->cmdToSend());
+    QString prettyCmd = currentCmd_->cmdToSend();
+    prettyCmd.replace( QRegExp("set prompt \032.\n"), "" );
+    prettyCmd = "(gdb) " + prettyCmd;
+    emit gdbStdout( prettyCmd );
+    
     if (!stateIsOn(s_silent))
         emit dbgStatus ("", state_);
 }
@@ -562,7 +555,7 @@ void GDBController::parseLine(char* buf)
       // "continue" otherwise the program will just keep going
       // on a "step" type command, in this situation and that's
       // REALLY wrong.
-//        DBG_DISPLAY("Parsed (sh.lib) <" + QString(buf) + ">");
+      DBG_DISPLAY("Parsed (sh.lib) <" + QString(buf) + ">");
       if (currentCmd_ && (currentCmd_->rawDbgCommand() == "run" ||
                           currentCmd_->rawDbgCommand() == "continue"))
       {
@@ -601,7 +594,7 @@ void GDBController::parseLine(char* buf)
     // We don't change state, because this falls out when a run command starts
     // rather than when a run command stops.
     // We do let the user know what is happening though.
-    emit dbgStatus (QString(buf), state_);
+//    emit dbgStatus (QString(buf), state_);
     return;
   }
 
@@ -697,17 +690,12 @@ void GDBController::parseProgramLocation(char *buf)
     }
     
     //  "/opt/qt/src/widgets/qlistview.cpp:1558:42771:beg:0x401b22f2"
-    // This is soooo easy in perl...
-    QRegExp regExp1(":[0-9]+:[0-9]+:[a-z]+:0x[abcdef0-9]+$");
-    QRegExp regExp2(":0x[abcdef0-9]+$");
-    int linePos=0;
-    int addressPos=0;
-    if (((linePos     = regExp1.match(buf, 0)) >= 0) &&
-        ((addressPos  = regExp2.match(buf, 0)) >= 0)) {
+    QRegExp regExp1("(.*):([0-9]+):[0-9]+:[a-z]+:(0x[abcdef0-9]+)$");
+    if ( regExp1.match(buf, 0) >= 0 ) {
         actOnProgramPause(QString());
-        emit showStepInSource(QCString(buf, linePos+1),
-                              atoi(buf+linePos+1),
-                              QString(buf+addressPos+1));
+        emit showStepInSource( regExp1.cap(1),
+                               regExp1.cap(2).toInt(),
+                               regExp1.cap(3) );
         return;
     }
     
@@ -961,7 +949,7 @@ char *GDBController::parseOther(char *buf)
             // And there can be more that one in a row!!!!!
             // Isn't this bloody awful...
             if (strncmp(end, "(no debugging symbols found)...", 31) == 0) {
-                emit dbgStatus (QCString(end, 32), state_);
+//                emit dbgStatus (QCString(end, 32), state_);
                 return end+30;    // The last char parsed
             }
         }
@@ -1087,7 +1075,7 @@ void GDBController::slotStart(const QString& shell, const QString &application)
         return;
     }
     
-    GDB_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+shell+"] path:["+config_gdbPath_+"]\n");
+//    GDB_DISPLAY("\nStarting GDB - app:["+application+"] shell:["+shell+"] path:["+config_gdbPath_+"]\n");
     dbgProcess_ = new KProcess;
     
     connect( dbgProcess_, SIGNAL(receivedStdout(KProcess *, char *, int)),
@@ -1188,7 +1176,7 @@ void GDBController::slotStop()
         if (stateIsOn(s_attached)) { 
             queueCmd(new GDBCommand("detach", NOTRUNCMD, NOTINFOCMD, DETACH));
             timer->start(3000, TRUE);
-            DBG_DISPLAY("<attached wait>\n");
+            DBG_DISPLAY("<attached wait>");
             while (stateIsOn(s_waitTimer)) {
                 if (!stateIsOn(s_attached))
                     break;
@@ -1199,9 +1187,9 @@ void GDBController::slotStop()
         setStateOn(s_waitTimer|s_appBusy);
         const char *quit="quit\n";
         dbgProcess_->writeStdin(quit, strlen(quit));
-        GDB_DISPLAY(quit)
+        emit gdbStdout(quit);
         timer->start(3000, TRUE);
-        DBG_DISPLAY("<quit wait>\n");
+        DBG_DISPLAY("<quit wait>");
         while (stateIsOn(s_waitTimer)) {
             if (stateIsOn(s_programExited))
                 break;
@@ -1555,11 +1543,9 @@ void GDBController::slotSetLocalViewState(bool onOff)
 // Data from gdb gets processed here.
 void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
-#ifdef GDB_MONITOR
     QCString msg(buf, buflen+1);
-    msg.replace(QRegExp("\032."),"\n(gdb) ");
-    GDB_DISPLAY(msg);
-#endif
+    msg.replace( QRegExp("\032."), "" );
+    emit gdbStdout(msg);
     
     // Allocate some buffer space, if adding to this buffer will exceed it
     if (gdbOutputLen_+buflen+1 > gdbSizeofBuf_) {
@@ -1594,7 +1580,7 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
     // At the moment, just drop a message out and redirect
-    DBG_DISPLAY(QString("\nSTDERR: ")+QString::fromLatin1(buf, buflen+1));
+    DBG_DISPLAY(QString("STDERR: ")+QString::fromLatin1(buf, buflen+1));
     slotDbgStdout(proc, buf, buflen);
     
     //  QString bufData(buf, buflen+1);
@@ -1645,7 +1631,7 @@ void GDBController::slotDbgProcessExited(KProcess*)
     state_ = s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
     emit dbgStatus (i18n("Process exited"), state_);
     
-    GDB_DISPLAY(QString("\n(gdb) Process exited"));
+    emit gdbStdout(QString("(gdb) Process exited\n"));
 }
 
 // **************************************************************************
@@ -1654,7 +1640,7 @@ void GDBController::slotDbgProcessExited(KProcess*)
 void GDBController::slotAbortTimedEvent()
 {
     setStateOff(s_waitTimer);
-    DBG_DISPLAY(QString("Timer aborted\n"));
+    DBG_DISPLAY(QString("Timer aborted"));
 }
 
 // **************************************************************************

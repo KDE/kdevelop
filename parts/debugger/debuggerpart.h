@@ -25,10 +25,12 @@ class VariableWidget;
 class BreakpointWidget;
 class FramestackWidget;
 class DisassembleWidget;
+class ProcessWidget;
 class Breakpoint;
 class DbgController;
 class DbgToolBar;
 namespace KParts { class Part; };
+class ProcessLineMaker;
 
 class DebuggerPart : public KDevPlugin
 {
@@ -46,6 +48,7 @@ private slots:
     void projectOpened();
     void projectClosed();
     void projectConfigWidget(KDialogBase *dlg);
+    void slotActivePartChanged(KParts::Part*);
     
     void slotRun();
     void slotExamineCore();
@@ -64,9 +67,6 @@ private slots:
     void slotStatus(const QString &msg, int state);
     void slotShowStep(const QString &fileName, int lineNum);
     void slotGotoSource(const QString &fileName, int lineNum);
-    void slotApplReceivedStdout(const char *buf);
-    void slotApplReceivedStderr(const char *buf);
-    void slotRawData( const QString& );
 
 private:
     void startDebugger();
@@ -77,13 +77,14 @@ private:
     QGuardedPtr<BreakpointWidget> breakpointWidget;
     QGuardedPtr<FramestackWidget> framestackWidget;
     QGuardedPtr<DisassembleWidget> disassembleWidget;
+    QGuardedPtr<ProcessWidget> gdbOutputWidget;
     DbgController *controller;
     QLabel *statusBarIndicator;
     QGuardedPtr<DbgToolBar> floatingToolBar;
-
-    QString m_contextFileName;
+    ProcessLineMaker* procLineMaker;
+    ProcessLineMaker* gdbLineMaker;
+    
     QString m_contextIdent;
-    int m_contextLine;
 };
 
 #endif

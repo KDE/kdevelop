@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDebugger" version="5">
+<kpartgui name="KDevDebugger" version="6">
 <MenuBar>
  <Menu name="debug">
   <text>&amp;Debug</text>
@@ -12,6 +12,9 @@
   <Action name="debug_stepinto"/>
   <Action name="debug_stepintoinst"/>
   <Action name="debug_stepout"/>
+  <Separator/>
+  <Action name="debug_toggle_breakpoint"/>
+  <Action name="debug_disable_breakpoint"/>
   <Separator/>
   <Action name="debug_memview"/>
   <Action name="debug_core"/>
