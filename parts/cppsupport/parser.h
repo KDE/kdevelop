@@ -109,9 +109,7 @@ public /*rules*/ :
 
     // expression
     bool skipExpression( AST::Node& node );
-    bool skipConstantExpression( AST::Node& node );
     bool skipCommaExpression( AST::Node& node );
-    bool skipAssignmentExpression( AST::Node& node );
     bool skipExpressionStatement( StatementAST::Node& node );
 
     bool parseExpression( AST::Node& node );

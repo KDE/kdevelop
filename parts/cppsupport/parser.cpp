@@ -273,100 +273,6 @@ bool Parser::skip( int l, int r )
     return false;
 }
 
-bool Parser::skipConstantExpression( AST::Node& node )
-{
-    //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::skipConstantExpression()" << endl;
-
-    int start = lex->index();
-
-    while( !lex->lookAhead(0).isNull() ){
-	int tk = lex->lookAhead( 0 );
-
-	if( tk == '(' ){
-	    if( !skip('(', ')') ){
-		return false;
-	    }
-	    lex->nextToken();
-	} else if( tk == '[' ){
-	    if( !skip('[', ']') ){
-		return false;
-	    }
-	    lex->nextToken();
-	} else if( tk == '<' ){
-	    if( !skip('<', '>') ){
-		return false;
-	    }
-	    lex->nextToken();
-#ifdef ROB
-	} else if( tk == Token_identifier ){
-	    lex->nextToken();
-	    if( lex->lookAhead( 0 ) == Token_identifier )
-		break;
-#endif
-	} else if( tk == ',' || tk == ';' || tk == '>' ||
-		   tk == Token_assign || tk == ']' ||
-		   tk == ')' || tk == '}' || tk == ':' ){
-	    break;
-	} else {
-	    lex->nextToken();
-	}
-    }
-
-    if( start == lex->index() )
-        return false;
-
-    AST::Node ast = CreateNode<AST>();
-    UPDATE_POS( ast, start, lex->index() );
-    node = ast;
-
-    return true;
-}
-
-bool Parser::skipAssignmentExpression( AST::Node& node )
-{
-    //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::skipAssignmentExpression()" << endl;
-
-    int start = lex->index();
-
-    while( !lex->lookAhead(0).isNull() ){
-	int tk = lex->lookAhead( 0 );
-
-	if( tk == '(' ){
-	    if( !skip('(', ')') ){
-		return false;
-	    } else
-		lex->nextToken();
-	} else if( tk == '<' ){
-	    if( !skip('<', '>') ){
-		return false;
-	    } else
-		lex->nextToken();
-	} else if( tk == '[' ){
-	    if( !skip('[', ']') ){
-		return false;
-	    } else
-		lex->nextToken();
-#ifdef ROB
-	} else if( tk == Token_identifier ){
-	    lex->nextToken();
-	    if( lex->lookAhead(0) == Token_identifier )
-		break;
-#endif
-	} else if( tk == ',' || tk == ';' ||
-		   tk == '>' || tk == ']' || tk == ')' ||
-		   tk == Token_assign ){
-	    break;
-	} else
-	    lex->nextToken();
-    }
-
-    AST::Node ast = CreateNode<AST>();
-    UPDATE_POS( ast, start, lex->index() );
-    node = ast;
-
-    return true;
-}
-
 bool Parser::skipCommaExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::skipCommaExpression()" << endl;
@@ -1158,7 +1064,7 @@ bool Parser::parseTemplateArgument( AST::Node& node )
     }
 
     lex->setIndex( start );
-    if( !skipAssignmentExpression(node) ){
+    if( !parseLogicalOrExpression(node, true) ){
         return false;
     }
 
@@ -1224,7 +1130,7 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	if( lex->lookAhead(0) == ':' ){
 	    lex->nextToken();
 	    AST::Node expr;
-	    if( !skipConstantExpression(expr) ){
+	    if( !parseConstantExpression(expr) ){
 		reportError( i18n("Constant expression expected") );
 	    }
 	    goto update_node;
@@ -1795,7 +1701,7 @@ bool Parser::parseParameterDeclaration( ParameterDeclarationAST::Node& node )
     AST::Node expr;
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
-	if( !skipAssignmentExpression(expr) ){
+	if( !parseAssignmentExpression(expr) ){
 	    //reportError( i18n("Expression expected") );
 	}
     }
@@ -2277,7 +2183,7 @@ bool Parser::parseInitializerClause( AST::Node& node )
 	} else
 	    lex->nextToken();
     } else {
-	if( !skipAssignmentExpression(node) ){
+	if( !parseAssignmentExpression(node) ){
 	    //reportError( i18n("Expression expected") );
 	}
     }
@@ -2485,7 +2391,7 @@ bool Parser::parseCondition( AST::Node& /*node*/ )
 	    lex->nextToken();
 
 	    AST::Node expr;
-	    if( skipAssignmentExpression(expr) )
+	    if( skipExpression(expr) )
 		return true;
 	}
     }
@@ -2737,7 +2643,7 @@ bool Parser::parseLabeledStatement( StatementAST::Node& /*node*/ )
     {
 	lex->nextToken();
 	AST::Node expr;
-	if( !skipConstantExpression(expr) ){
+	if( !parseConstantExpression(expr) ){
 	    reportError( i18n("expression expected") );
 	}
 	ADVANCE( ':', ":" );
@@ -3639,10 +3545,12 @@ bool Parser::parseLogicalAndExpression( AST::Node& /*node*/, bool templArgs )
     return true;
 }
 
-bool Parser::parseLogicalOrExpression( AST::Node& /*node*/, bool templArgs )
+bool Parser::parseLogicalOrExpression( AST::Node& node, bool templArgs )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseLogicalOrExpression()" << endl;
 
+    int start = lex->index();
+    
     AST::Node expr;
     if( !parseLogicalAndExpression(expr, templArgs) )
         return false;
@@ -3654,6 +3562,9 @@ bool Parser::parseLogicalOrExpression( AST::Node& /*node*/, bool templArgs )
             return false;
     }
 
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     return true;
 }
 
@@ -3679,9 +3590,10 @@ bool Parser::parseConditionalExpression( AST::Node& /*node*/ )
     return true;
 }
 
-bool Parser::parseAssignmentExpression( AST::Node& /*node*/ )
+bool Parser::parseAssignmentExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseAssignmentExpression()" << endl;
+    int start = lex->index();
     AST::Node expr;
     if( lex->lookAhead(0) == Token_throw && !parseThrowExpression(expr) )
         return false;
@@ -3695,27 +3607,45 @@ bool Parser::parseAssignmentExpression( AST::Node& /*node*/ )
             return false;
     }
 
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     return true;
 }
 
 bool Parser::parseConstantExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseConstantExpression()" << endl;
-    return parseConditionalExpression( node );
+    int start = lex->index();
+    if( parseConditionalExpression(node) ){
+	AST::Node ast = CreateNode<AST>();
+	UPDATE_POS( ast, start, lex->index() );
+	node = ast;
+	return true;
+    }
+    return false;
 }
 
 bool Parser::parseExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseExpression()" << endl;
+    
+    int start = lex->index();
+    
     if( !parseCommaExpression(node) )
         return false;
 
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     return true;
 }
 
-bool Parser::parseCommaExpression( AST::Node& /*node*/ )
+bool Parser::parseCommaExpression( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseCommaExpression()" << endl;
+    int start = lex->index();
+    
     AST::Node expr;
     if( !parseAssignmentExpression(expr) )
         return false;
@@ -3727,6 +3657,9 @@ bool Parser::parseCommaExpression( AST::Node& /*node*/ )
             return false;
     }
 
+    AST::Node ast = CreateNode<AST>();
+    UPDATE_POS( ast, start, lex->index() );
+    node = ast;
     return true;
 }
 

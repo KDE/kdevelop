@@ -341,28 +341,6 @@ void Lexer::handleDirective( const QString& directive )
     m_inPreproc = false;
 }
 
-/*
-int Lexer::testDefined()
-{
-    int n = 0;
-    readWhiteSpaces( false );
-    if( currentChar() == '!' ){
-	nextChar();
-	n = 1;
-	readWhiteSpaces( false );
-    }
-
-    int startWord = currentPosition();
-    readIdentifier();
-    QString word = m_source.mid( startWord, currentPosition() - startWord );
-
-    if( word == "defined" ){
-	return n ? -1 : 1;
-    }
-
-    return 0;
-}
-*/
 int Lexer::testIfLevel()
 {
     int rtn = !m_skipping[ m_ifLevel++ ];
