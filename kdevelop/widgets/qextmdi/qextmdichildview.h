@@ -134,12 +134,6 @@ public:     // Methods
 //F.B.	virtual void setProperties(QextMdiChildViewProperty * p); //do nothing here....
 //F.B.	virtual void saveProperties();
 public slots:
-   /**
-    * Only for Qt1.44 downwards compatibility.
-    */
-/*#if QT_VERSION < 200
-   virtual void setFocus() { if(!hasFocus()) {QFocusEvent* fe = new QFocusEvent(Event_FocusIn); QApplication::postEvent(this, fe);} };
-#endif*/
 	/**
 	 * Attaches this window to the Mdi manager.<br>
 	 * It calls the QextMdiMainFrm attachWindow function , so if you have a pointer<br>

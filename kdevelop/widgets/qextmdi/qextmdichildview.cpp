@@ -27,10 +27,6 @@
 #include <qdatetime.h>
 #include <qobjectlist.h>
 
-#if QT_VERSION < 200
-   #include <qkeycode.h>
-#endif
-
 #include "qextmdichildview.h"
 #include "qextmdimainfrm.h"
 #include "qextmdichildfrm.h"
@@ -71,11 +67,7 @@ void QextMdiChildView::minimize(bool bAnimate)
 		if(!isMinimized()){
 			mdiParent()->setState(QextMdiChildFrm::Minimized,bAnimate);
 		}
-#if QT_VERSION >= 200
 	} else showMinimized();
-#else
-	} else hide();
-#endif
 }
 
 void QextMdiChildView::minimize(){ minimize(true); }
@@ -88,11 +80,7 @@ void QextMdiChildView::maximize(bool bAnimate)
 		if(!isMaximized()){
 			mdiParent()->setState(QextMdiChildFrm::Maximized,bAnimate);
 		}
-#if QT_VERSION >= 200
 	} else showMaximized();
-#else
-  } else resize(QApplication::desktop()->size());
-#endif
 }
 
 void QextMdiChildView::maximize(){ maximize(true); }
@@ -134,11 +122,7 @@ void QextMdiChildView::restore()
 {
 	if(mdiParent()){
 		if(isMinimized()||isMaximized())mdiParent()->setState(QextMdiChildFrm::Normal);	
-#if QT_VERSION >= 200
 	} else showNormal();
-#else
-	} else resize(QApplication::desktop()->size());
-#endif	
 }
 
 //=============== youAreAttached ============//
@@ -232,15 +216,9 @@ void QextMdiChildView::focusInEvent(QFocusEvent *)
 
 bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
 {
-#if QT_VERSION >= 200
    if( e->type() == QEvent::KeyPress) {
       QKeyEvent* ke = (QKeyEvent*) e;
       if( ke->key() == Qt::Key_Tab) {
-#else
-   if( e->type() == Event_KeyPress) {
-      QKeyEvent* ke = (QKeyEvent*) e;
-      if( ke->key() == Key_Tab) {
-#endif
          //qDebug("ChildView %i::eventFilter - TAB from %s (%s)", this, obj->name(), obj->className());
          QWidget* w = (QWidget*) obj;
          if( (w->focusPolicy() == QWidget::StrongFocus) || (w->focusPolicy() == QWidget::TabFocus)) {
@@ -256,7 +234,6 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
                 }
             }
          }
-#if QT_VERSION >= 200
          else {
             if( w->focusPolicy() == QWidget::WheelFocus) {
                //qDebug("  accept TAB as setFocus change");
@@ -272,7 +249,6 @@ bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
                }
             }
          }
-#endif   // QT_VERSION >= 200
       }
    }
    return false;                           // standard event processing
@@ -297,7 +273,6 @@ void QextMdiChildView::installEventFilterForAllChildren()
          m_lastFocusableChildWidget = widg; // last widget
          //qDebug("*** %s (%s)",widg->name(),widg->className());
       }
-#if QT_VERSION >= 200
       else {
          if( widg->focusPolicy() == QWidget::WheelFocus) {
             if( m_firstFocusableChildWidget == 0)
@@ -306,7 +281,6 @@ void QextMdiChildView::installEventFilterForAllChildren()
             //qDebug("*** %s (%s)",widg->name(),widg->className());
          }
       }
-#endif // QT_VERSION >= 200
    }
    //qDebug("### |%s|", m_lastFocusableChildWidget->name());
    if( m_lastFocusableChildWidget != 0) {
