@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Kate/Plugin
+X-KDE-Library=lib$APPNAMELC$plugin
+Name=My first Kate Plugin
+Comment=Your short description about the plugin goes here
+author=$AUTHOR$, $EMAIL$
