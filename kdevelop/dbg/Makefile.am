@@ -16,7 +16,7 @@ noinst_HEADERS = memview.h breakpointdialog.h stty.h gdbparser.h breakpoint.h br
 
 toolbar_DATA = dbgbreak.xpm dbgnext.xpm dbgrun.xpm dbgstop.xpm  \
                dbgrestart.xpm dbgstep.xpm dbgmemview.xpm dbgwatchvar.xpm \
-               dbgrunto.xpm dbgstepout.xpm
+               dbgrunto.xpm dbgstepout.xpm dbgnextinst.xpm dbgstepinst.xpm 
 
 toolbardir = $(kde_datadir)/kdevelop/toolbar
 
