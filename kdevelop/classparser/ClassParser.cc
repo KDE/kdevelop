@@ -1107,17 +1107,20 @@ void CClassParser::parseMethodImpl(bool isOperator,CParsedContainer *scope)
   }
 
   // Remove strange things until we find a '::'
-  while( lexemStack.top()->type != CLCL )
-    delete lexemStack.pop();
+  while( !lexemStack.isEmpty() && lexemStack.top()->type != CLCL )
+   delete lexemStack.pop();
 
-  // Delete '::'
-  aLexem = lexemStack.pop();
-  delete aLexem;
+  if (!lexemStack.isEmpty())
+  {
+   // Delete '::'
+   aLexem = lexemStack.pop();
+   delete aLexem;
 
-  // Get the classname
-  aLexem = lexemStack.pop();
-  className = aLexem->text;
-  delete aLexem;
+   // Get the classname
+   aLexem = lexemStack.pop();
+   className = aLexem->text;
+   delete aLexem;
+  }
 
   // Append all other classname'::' declarations.
   while( !lexemStack.isEmpty() && lexemStack.top()->type == CLCL )
