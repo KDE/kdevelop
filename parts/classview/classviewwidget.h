@@ -104,6 +104,8 @@ public:
     	: KListViewItem( parent, text ) {}
     ClassViewItem( QListViewItem* parent, const QString& text=QString::null )
     	: KListViewItem( parent, text ) {}
+    
+    virtual const CodeModelItem* model() const { return 0; }
 
     virtual bool isFolder() const { return false; }
     virtual bool isFile() const { return false; }
@@ -157,6 +159,8 @@ public:
     NamespaceDomBrowserItem( QListViewItem* parent, NamespaceDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
+    const CodeModelItem* model() const { return m_dom; }
+    
     virtual bool isNamespace() const { return true; }
 
     void setup();
@@ -185,6 +189,7 @@ public:
     ClassDomBrowserItem( QListViewItem* parent, ClassDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
+    const CodeModelItem* model() const { return m_dom; }
     virtual bool isClass() const { return true; }
 
     virtual bool hasDeclaration() const { return true; }
@@ -214,6 +219,7 @@ public:
     FunctionDomBrowserItem( QListViewItem* parent, FunctionDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
+    const CodeModelItem* model() const { return m_dom; }
     virtual bool isFunction() const { return true; }
 
     virtual bool hasDeclaration() const { return true; }
@@ -239,6 +245,7 @@ public:
     VariableDomBrowserItem( QListViewItem* parent, VariableDom dom )
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
+    const CodeModelItem* model() const { return m_dom; }
     virtual bool isVariable() const { return true; }
 
     virtual bool hasDeclaration() const { return true; }

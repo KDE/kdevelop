@@ -82,6 +82,7 @@ ClassViewWidget::ClassViewWidget( ClassViewPart * part )
 {
     addColumn( "" );
     header()->hide();
+    setSorting( 0 );
     setRootIsDecorated( true );
 
     m_projectItem = 0;
@@ -273,17 +274,22 @@ void ClassViewWidget::contentsContextMenuEvent( QContextMenuEvent * ev )
     m_actionOpenDeclaration->setEnabled( item && item->hasDeclaration() );
     m_actionOpenImplementation->setEnabled( item && item->hasImplementation() );
 
-    if( item && item->isClass() ){
-        m_actionAddMethod->plug( &menu );
-	m_actionAddAttribute->plug( &menu );
-	menu.insertSeparator();
-    }
-
-    int oldViewMode = viewMode();
     m_actionOpenDeclaration->plug( &menu );
     m_actionOpenImplementation->plug( &menu );
     menu.insertSeparator();
 
+    if( item && item->isClass() ){
+        m_actionAddMethod->plug( &menu );
+	m_actionAddAttribute->plug( &menu );
+    }
+
+    if( item && item->model() ){
+	CodeModelItemContext context( item->model() );
+	m_part->core()->fillContextMenu( &menu, &context );
+    }
+    menu.insertSeparator();
+
+    int oldViewMode = viewMode();
     m_actionViewMode->plug( &menu );
 
     menu.exec( ev->globalPos() );
@@ -697,9 +703,17 @@ void FunctionDomBrowserItem::openImplementation()
     if( lst.isEmpty() )
         return;
 
+    FunctionDefinitionDom fun = lst.front();
+    QString path = QFileInfo( m_dom->fileName() ).dirPath( true );
+
+    for( FunctionDefinitionList::Iterator it=lst.begin(); it!=lst.end(); ++it ){
+	if( path == QFileInfo((*it)->fileName()).dirPath(true) )
+	    fun = *it;
+    }
+
     int startLine, startColumn;
-    lst[ 0 ]->getStartPosition( &startLine, &startColumn );
-    listView()->m_part->partController()->editDocument( KURL(lst[0]->fileName()), startLine );
+    fun->getStartPosition( &startLine, &startColumn );
+    listView()->m_part->partController()->editDocument( KURL(fun->fileName()), startLine );
 }
 
 void VariableDomBrowserItem::setup( )
