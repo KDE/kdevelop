@@ -44,7 +44,8 @@ class CNewClassDlg : public QDialog
 {
     Q_OBJECT
 public:
-    CNewClassDlg( QWidget *parent=0, const char *name=0,CProject* prj=0 );
+  CNewClassDlg(CProject* prj,  QWidget *parent=0, const char *name=0);
+  CNewClassDlg(CProject* prj, const char* dir, QWidget *parent=0, const char *name=0);
   QString getHeaderFile();
   QString getImplFile();
 private:
@@ -79,6 +80,14 @@ private:
   void  slotClassEditChanged(const char*);
   void  slotHeaderEditChanged(const char*);
   void  slotImplEditChanged(const char*);
+
+private: // Private methods
+  /** adds KQuickHelp to the dialog */
+  void initQuickHelp();
+  /** constructs the dialog. If dir is != 0, the class is generated in dir */
+  void initDialog(const char* dir=0);
+  /** stores the subdir where the new class will be put */
+  QString subdirName;
 };
 
 #endif

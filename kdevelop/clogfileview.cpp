@@ -16,12 +16,10 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-
-
 #include <qregexp.h>
 #include <qfileinfo.h>
-#include <kmessagebox.h>
 #include <kprocess.h>
+#include <kmsgbox.h>
 #include <klocale.h>
 #include <assert.h>
 #include "debug.h"
@@ -38,7 +36,7 @@
  *                                                                   *
  ********************************************************************/
 
-CLogFileView::CLogFileView(QWidget*parent,const char* name,bool s_path)
+CLogFileView::CLogFileView(bool s_path, QWidget*parent,const char* name)
   : CTreeView(parent,name)
 {
   show_path = s_path;
@@ -356,8 +354,9 @@ void CLogFileView::slotNewGroup(){
 void CLogFileView::slotFileRemove()
 {
   QString filename=getFileName(currentItem());
-  QString msg = i18n("Do you really want to remove the file\n%1\nfrom project?\n\t\tIt will remain on disk.").arg(filename);
-  if (KMessageBox::warningYesNo(0, msg) == KMessageBox::No)
+  QString msg;
+  msg.sprintf(i18n("Do you really want to remove the file\n%s\nfrom project?\n\t\tIt will remain on disk."), filename.data());
+  if (KMsgBox::yesNo(0, i18n("Warning"), msg, KMsgBox::EXCLAMATION) == 2)
     return;
 
   emit selectedFileRemove(filename);
@@ -366,8 +365,8 @@ void CLogFileView::slotFileRemove()
 
 void CLogFileView::slotFileDelete()
 {
-  QString filename=getFileName(currentItem());
-  if (KMessageBox::warningYesNo(0, i18n("Do you really want to delete the file %1?\nThere is no way to restore it!").arg(filename)) == KMessageBox::No){
+
+  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
     return;
   }
   QString name = dict->find(currentItem());
@@ -447,8 +446,6 @@ void CLogFileView::split(QString str,QStrList& filters){
   //   }
   return ;
 }
-
-
 void CLogFileView::storeState(CProject* prj){
   assert( prj != NULL );
 
@@ -503,3 +500,9 @@ void CLogFileView::slotCommit()
 {
     emit commitFileToVCS(getFullFilename(currentItem()));
 }
+
+
+
+
+
+

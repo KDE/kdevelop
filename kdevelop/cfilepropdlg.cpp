@@ -17,14 +17,11 @@
  ***************************************************************************/
 
 
+#include "cfilepropdlg.h"
 #include <iostream.h>
 #include <qfileinfo.h>
-#include <qwhatsthis.h>
 #include <klocale.h>
 #include "debug.h"
-#include "cfilepropdlg.h"
-#include "cproject.h"
-#include "clogfileview.h"
 
 /*********************************************************************
  *                                                                   *
@@ -84,7 +81,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   file_group->setAlignment( 1 );
 
   
-  log_tree = new CLogFileView( this, "log_tree",true );
+  log_tree = new CLogFileView(true, this, "log_tree");
   log_tree->setGeometry( 20, 20, 300, 320 );
   if(preselecteditem != ""){
     log_tree->setPreSelectedItem(preselecteditem);
@@ -242,25 +239,24 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
   
-  QString text;
-  text = i18n("This option sets if the actual file\n"
-              "will be included in the final distribution\n");
-  QWhatsThis::add(distribution_group, text);
-  QWhatsThis::add(incdist_check, text);
   
-  text = i18n("This option sets if the actual file\n"
-              "will be installed to the platform during\n"
-              "the installation process of make install\n"
-              "If the install button is checked, you have\n"
-              "to set the installation path and filename\n"
-              "Possible values are e. g.:\n"
-              "$(kde_icondir)/filename\n"
-              "$(kde_appsdir)/filename\n"
-              "Other values can be found in the Makefile");
-  QWhatsThis::add(installion_group, text);
-  QWhatsThis::add(install_loc_label, text);
-  QWhatsThis::add(install_loc_edit, text);
-  QWhatsThis::add(install_check, text);
+  KQuickHelp::add(distribution_group, 
+		  KQuickHelp::add(incdist_check, i18n("This option sets if the actual file\n"
+						      "will be included in the final distri-\n"
+						      "bution.")));
+  
+  KQuickHelp::add(installion_group,
+		  KQuickHelp::add(install_loc_label,
+				  KQuickHelp::add(install_loc_edit,
+						  KQuickHelp::add(install_check, i18n("This option sets if the actual file\n"
+										      "will be installed to the platform during\n"
+										      "the installation process of make install\n"
+										      "If the install button is checked, you have\n"
+										      "to set the installation path and filename\n"
+										      "Possible values are e.g.:\n"
+										      "$(kde_icondir)/filename\n"
+										      "$(kde_appsdir)/filename\n"
+										      "Other values can be found in the Makefile")))));
   
   
   // fill the list
@@ -420,8 +416,8 @@ void CFilePropDlg::slotInstallCheckToogled(bool on){
     install_loc_edit->setEnabled(on);
     if(on){
 	if(QString(install_loc_edit->text()).isEmpty()){
-	    install_loc_edit->setText( (name_e_label->text() != 0)?
-                                       name_e_label->text() : QString("") );
+	    install_loc_edit->setText(
+				      (name_e_label->text()) != 0 ?name_e_label->text():"");
 	}
     }
 }

@@ -21,16 +21,16 @@
 #define CNEWFILEDLG_H
 
 #include <qdialog.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
+#include <qlistbox.h>
+#include <qlabel.h>
+#include <qcheckbox.h>
+#include <qbuttongroup.h>
+#include <ktabctl.h>
 
+//#include "cproject.h"
 class CProject;
-class QLineEdit;
-class QLabel;
-class QPushButton;
-class QCheckBox;
-class QListBox;
-class QButtonGroup;
-class KTabCtl;
-
 
 /** the new file dialog
   *@author Sandy Meier
@@ -39,7 +39,7 @@ class CNewFileDlg : public QDialog {
   Q_OBJECT
 public:
   /**constructor*/
-  CNewFileDlg(QWidget* parent =0,const char* name = 0,bool modal = false,WFlags f =0,CProject* prj=0); 
+  CNewFileDlg(CProject* prj,QWidget* parent =0,const char* name = 0,bool modal = false,WFlags f =0);
   /** return the filename*/
   QString fileName();
   /** return the filetype*/
@@ -51,6 +51,8 @@ public:
   bool useTemplate();
   bool addToProject();
   QString location();
+  /** sets the location for the dialog to start from */
+  void setLocation(QString location);
  protected slots:
   void slotTabSelected(int item);
   void slotOKClicked();

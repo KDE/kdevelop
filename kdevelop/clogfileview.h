@@ -39,7 +39,7 @@ class CLogFileView : public CTreeView {
 public: 
 
   /** construtor */
-  CLogFileView(QWidget*parent=0,const char* name=0,bool s_path=false);
+  CLogFileView(bool s_path=false,QWidget*parent=0,const char* name=0);
 
   /** destructor */
   ~CLogFileView();

@@ -18,7 +18,7 @@
  ***************************************************************************/
 #include "ctabctl.h"
 
-CTabCtl::CTabCtl(QWidget* parent,char* name,QString type) : KTabCtl(parent,name){
+CTabCtl::CTabCtl( QWidget* parent,char* name, QString type) : KTabCtl(parent,name){
   setFocusPolicy(QWidget::NoFocus);
   tabs->setFocusPolicy(QWidget::NoFocus);
   if(type == "normal"){
