@@ -1,3 +1,7 @@
+2001-10-29  F@lk Brettschneider <falk@kdevelop.org>
+    * syntax highlighting also for *.tlh and *.inl files
+      (C++ template header and source file type)
+
 2001-10-27  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of John Birch (jbb@kdevelop.org) for debugging of multithreaded applications
     * as well as his bugfix for displaying Qt3 strings when "show static members" is switched on
