@@ -18,17 +18,23 @@ QString URLUtil::filename(const QString & name) {
 
 QString URLUtil::directory(const QString & name) {
   int slashPos = name.findRev("/");
-  return slashPos<0 ? QString::null : name.left(slashPos);
+  return slashPos<0 ? QString("") : name.left(slashPos);
 }
 
-QString URLUtil::relativePath(const KURL & parent, const KURL & child, bool slashPrefix, bool slashSuffix) {
+QString URLUtil::relativePath(const KURL & parent, const KURL & child, uint slashPolicy) {
+  bool slashPrefix = slashPolicy & SLASH_PREFIX;
+  bool slashSuffix = slashPolicy & SLASH_SUFFIX;
   if (parent.cmp(child,true))
-    return (slashPrefix || slashSuffix) ? QString("/") : QString("");
+    return slashPrefix ? QString("/") : QString("");
 
   if (!parent.isParentOf(child)) return QString();
   int a=slashPrefix ? -1 : 1;
   int b=slashSuffix ? 1 : -1;
   return child.path(b).mid(parent.path(a).length());
+}
+
+QString URLUtil::relativePath(const QString & parent, const QString & child, uint slashPolicy) {
+  return relativePath(KURL(parent), KURL(child), slashPolicy);
 }
 
 QString URLUtil::upDir(const QString & path, bool slashSuffix) {
