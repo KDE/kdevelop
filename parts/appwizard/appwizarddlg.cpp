@@ -133,6 +133,8 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
             category.prepend("/"); // prepend /
         categories.append(category);
         info->category = category;
+		info->sourceArchive = templateConfig.readEntry("Archive");
+		
 		// Grab properties and file/dir list
 		QStringList groups = templateConfig.groupList();
 		groups.remove("General");
@@ -396,7 +398,7 @@ void AppWizardDialog::accept()
 		QTextStream temps(&f);
 		temps << templateText;
 		f.flush();
-		subMap.insert( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper(), KMacroExpander::expandMacros(templateText , subMap );
+		subMap.insert( QString( "%1_TEMPLATE" ).arg( (*it).suffix ).upper(), KMacroExpander::expandMacros(templateText , subMap)  );
 
 		installFile file;
 		file.source = tempFile->name();
