@@ -248,11 +248,9 @@ private:
     bool eof() const;
 
     // preprocessor (based on an article of Al Stevens on Dr.Dobb's journal)
-#if 0
-    int testDefined();
-#endif
     int testIfLevel();
     int macroDefined();
+    QString readArgument();
 
     int macroPrimary();
     int macroMultiplyDivide();
