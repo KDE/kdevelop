@@ -1,3 +1,6 @@
+1999-08-05 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* implemented the source generation for qlistview (kdlgedit)
+
 1999-08-05  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* fixed the problem with ksgml2html messagebox
 
@@ -10,6 +13,11 @@
 	* fixed so that the modifiers in the method dialogs gets shaded when 
 	  the user creates a signal or slot.
 
+1999-08-04 Sandy Meier   <smeier@rz.uni-potsdam.de>
+	* fixed problem with quoting string in qcombobox(kdlgedit) (Bug#1667,#1668,#1661)
+	* fixed problem on loading last file with kdevelop.kdelnk (Bug#1663)
+	* fixed problem with quoting string in qlistbox(kdlgedit) (Buf#1641)
+	
 1999-08-04  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* In kdlgedit's QComboBox code generation, put quotes 
 	  around inserted strings. 

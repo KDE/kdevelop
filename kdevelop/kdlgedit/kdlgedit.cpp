@@ -825,28 +825,37 @@ void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 
 void KDlgEdit::generateQComboBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
-    KDlgPropertyBase* props = wid->getProps();
-    
-    props->dumpConstruct(stream, "QComboBox", _parent);
-    generateCommon(wid,stream,_parent);
+  KDlgPropertyBase* props = wid->getProps();
+  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
   
-    props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
-
-    //entries
-    int i = 0;
-    QString src = props->getPropValue("Entries");
-    if (src != "")
-	{
-	    QString s = getLineOutOfString(src,i,"\\n");
-	    while (!s.isNull())
-		{
-		    props->dumpPropCall(stream, "insertItem", "\"" + s + "\"");
-		    i++;
-		    s = getLineOutOfString(src,i,"\\n");
-		}
+  props->dumpConstruct(stream, "QComboBox", _parent);
+  generateCommon(wid,stream,_parent);
+  
+  props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
+ 
+  //entries
+  int i = 0;
+  QString src = props->getPropValue("Entries");
+  if (src != "")
+    {
+      QString s = getLineOutOfString(src,i,"\\n");
+      while (!s.isNull()){
+	if (withi18n){
+	  s.prepend("i18n(\"");
+	  s.append("\")");
 	}
-    
-    *stream << "\n";
+	else{
+	  s.prepend("\"");
+	  s.append("\"");
+
+	}
+	props->dumpPropCall(stream, "insertItem", s);
+	i++;
+	s = getLineOutOfString(src,i,"\\n");
+      }
+    }
+  
+  *stream << "\n";
 }
 
 
@@ -869,12 +878,13 @@ void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString 
 
 void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
-    KDlgPropertyBase* props = wid->getProps();
-
-    props->dumpConstruct(stream, "QListBox", _parent);
-    generateCommon(wid,stream,_parent);
-    
-    props->dumpBoolPropCall(stream, "setAutoUpdate", "isAutoUpdate", true);
+  KDlgPropertyBase* props = wid->getProps();
+  bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+  
+  props->dumpConstruct(stream, "QListBox", _parent);
+  generateCommon(wid,stream,_parent);
+  
+  props->dumpBoolPropCall(stream, "setAutoUpdate", "isAutoUpdate", true);
     props->dumpBoolPropCall(stream, "setAutoScroll", "isAutoScroll", true);
     props->dumpBoolPropCall(stream, "setAutoScrollBar", "isAutoScrollBar", true);
     props->dumpBoolPropCall(stream, "setAutoBottomScrollBar", "isAutoBottomScrollBar", true);
@@ -891,6 +901,14 @@ void KDlgEdit::generateQListBox(KDlgItem_Widget *wid, QTextStream *stream,QStrin
 	    QString s = getLineOutOfString(src,i,"\\n");
 	    while (!s.isNull())
 		{
+		    if (withi18n){
+			s.prepend("i18n(\"");
+			s.append("\")");
+		    }
+		    else{
+			s.prepend("\"");
+			s.append("\"");
+		    }
 		    props->dumpPropCall(stream, "insertItem", s);
 		    i++;
 		    s = getLineOutOfString(src,i,"\\n");
@@ -947,9 +965,82 @@ void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
 void KDlgEdit::generateQListView(KDlgItem_Widget *wid, QTextStream *stream,QString _parent)
 {
     KDlgPropertyBase* props = wid->getProps();
-
+    
     props->dumpConstruct(stream, "QListView", _parent);
     generateCommon(wid,stream,_parent);
+    
+    
+    props->dumpIntPropCall(stream, "setTreeStepSize", "TreeStepSize");
+    props->dumpIntPropCall(stream, "setItemMargin", "ItemMargin");
+    
+    props->dumpBoolPropCall(stream, "setMultiSelection", "isMultiSelection", false);
+    props->dumpBoolPropCall(stream, "setAllColumnsShowFocus", "isAllColumnsShowFocus", false);
+    props->dumpBoolPropCall(stream, "setRootIsDecorated", "isRootDecorated", false);
+
+    bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
+     //Columns
+    int i = 0;
+    QString src = props->getPropValue("Columns");
+    if(src != "")
+	{
+	    QString s = getLineOutOfString(src,i,"\\n");
+	    while (!s.isNull())
+		{
+		    if (withi18n){
+			s.prepend("i18n(\"");
+			s.append("\")");
+		    }
+		    else{
+			s.prepend("\"");
+			s.append("\"");
+		    }
+		    props->dumpPropCall(stream, "addColumn", s);
+		    i++;
+		    s = getLineOutOfString(src,i,"\\n");
+		}
+	}
+
+    //Entries
+    i = 0;
+   src = props->getPropValue("Entries");
+    if(src != "")
+      {
+	QString s = getLineOutOfString(src,i,"\\n");
+	while (!s.isNull())
+	  {
+	    if (withi18n){
+	      s.prepend("i18n(\"");
+	      s.append("\")");
+	    }
+	    else{
+	      s.prepend("\"");
+	      s.append("\"");
+	    }
+	    *stream << "\tnew QListViewItem(" <<  props->getPropValue("VarName") << "," <<  s << ");\n";
+	    i++;
+	    s = getLineOutOfString(src,i,"\\n");
+	  }
+      }
+    
+
+    props->addProp("vScrollBarMode",     "Auto",          "Appearance",     ALLOWED_COMBOLIST, "Auto\nAlwaysOff\nAlwaysOn");
+    props->addProp("hScrollBarMode",     "Auto",          "Appearance",     ALLOWED_COMBOLIST, "Auto\nAlwaysOff\nAlwaysOn");
+
+    if( props->getPropValue("vScrollBarMode") == "AlwaysOn"){
+       props->dumpPropCall(stream, "setVScrollBarMode","QScrollView::AlwaysOn" );
+    }
+    if( props->getPropValue("vScrollBarMode") == "AlwaysOff"){
+      props->dumpPropCall(stream, "setVScrollBarMode","QScrollView::AlwaysOff" );
+    }
+
+    if( props->getPropValue("hScrollBarMode") == "AlwaysOn"){
+      props->dumpPropCall(stream, "setHScrollBarMode","QScrollView::AlwaysOn" );
+    }
+    if( props->getPropValue("hScrollBarMode") == "AlwaysOff"){
+      props->dumpPropCall(stream, "setHScrollBarMode","QScrollView::AlwaysOff" );
+    }
+    
+    *stream << "\n";
 }
 
 

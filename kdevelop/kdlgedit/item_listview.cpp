@@ -79,8 +79,6 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   props->addProp("isMultiSelection",   "",              "Appearance",     ALLOWED_BOOL);
   props->addProp("isAllColumnsShowFocus", "",           "Appearance",     ALLOWED_BOOL);
   props->addProp("isRootDecorated",    "",              "Appearance",     ALLOWED_BOOL);
-  props->addProp("ListViewFont",       "",              "Appearance",     ALLOWED_FONT);
-  props->addProp("ListViewPalette",    "",              "Appearance",     ALLOWED_COLOR);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

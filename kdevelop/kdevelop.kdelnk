@@ -2,7 +2,7 @@
 [KDE Desktop Entry]
 BinaryPattern=kdevelop;
 Type=Application
-Exec=kdevelop %i %m -caption %c
+Exec=kdevelop %u
 MimeType=application/x-kdevelop-project;
 Icon=kdevelop.xpm
 MiniIcon=kdevelop.xpm

@@ -295,7 +295,7 @@ public:
    */
   void slotProjectOpenRecent(int id_);
   /** opens a project committed by comandline or kfm */
-  void slotProjectOpenCmdl(const char*);
+  void slotProjectOpenCmdl(QString prjfile);
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
   /** add a new file to the project-same as file new */

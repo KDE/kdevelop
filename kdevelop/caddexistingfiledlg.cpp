@@ -131,7 +131,7 @@ CAddExistingFileDlg::CAddExistingFileDlg(QWidget *parent, const char *name,CProj
   template_checkbox->setAutoRepeat( FALSE );
   template_checkbox->setAutoResize( FALSE );
   template_checkbox->setChecked( TRUE );
-  KQuickHelp::add(template_checkbox, i18n("Check this if you want to use a template."));
+  KQuickHelp::add(template_checkbox, i18n("Check this if you want to insert your template to the added files."));
 
 
   ok_button = new QPushButton( this, "ok_button" );

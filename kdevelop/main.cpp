@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
     
     if (argc > 1){ 
       if (QString(argv[1]) != "--setup")
-				kdevelop->slotProjectOpenCmdl(argv[1]);
+	  kdevelop->slotProjectOpenCmdl(argv[1]);
     }
     if(bStartLogo){
       start_logo->close();

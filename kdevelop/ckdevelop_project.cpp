@@ -497,7 +497,7 @@ void CKDevelop::slotProjectOpenRecent(int id_)
   slotProjectOpenCmdl(recent_projects.at(id_));
 }
 
-void CKDevelop::slotProjectOpenCmdl(const char* prjname){
+void CKDevelop::slotProjectOpenCmdl(QString prjname){
 
   QString old_project = "";
 
@@ -507,7 +507,8 @@ void CKDevelop::slotProjectOpenCmdl(const char* prjname){
       return;
     }
   }
-
+  prjname.replace(QRegExp("file:"),"");
+  
   QFileInfo info(prjname);
 
   if (info.isFile()){
