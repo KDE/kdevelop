@@ -100,9 +100,9 @@ void EditorProxy::popupAboutToShow()
 	delete item->popup();
       else
           popup->removeItemAt(index);
-      kdDebug(9000) << "removed id " << id << " at index " << index << endl;
+//      kdDebug(9000) << "removed id " << id << " at index " << index << endl;
     } else {
-        kdDebug(9000) << "leaving id " << id << endl;
+//        kdDebug(9000) << "leaving id " << id << endl;
     }
   }
 
@@ -129,10 +129,14 @@ void EditorProxy::popupAboutToShow()
   EditInterface *editIface = dynamic_cast<EditInterface*>(ro_part);
 
   QString wordstr, linestr;
+  bool hasMultilineSelection = false;
   if( selectIface && selectIface->hasSelection() )
   {
-    wordstr = selectIface->selection();
-    // Why doesn't SelectionInterface have a way to get the bounds?
+    hasMultilineSelection = ( selectIface->selection().contains('\n') != 0 );
+    if ( !hasMultilineSelection ) 
+    {
+      wordstr = selectIface->selection();
+    }
   }
   if( cursorIface && editIface )
   {
@@ -140,7 +144,7 @@ void EditorProxy::popupAboutToShow()
     line = col = 0;
     cursorIface->cursorPositionReal(&line, &col);
     linestr = editIface->textLine(line);
-    if( wordstr.isEmpty() ) {
+    if( wordstr.isEmpty() && !hasMultilineSelection ) {
       int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
       int endPos = startPos;
       while (startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
