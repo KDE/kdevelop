@@ -674,7 +674,8 @@ bool CvsServicePartImpl::requestCvsService()
     if (KApplication::startServiceByDesktopName( "cvsservice",
         QStringList(), &error, &appId ))
     {
-        QString msg = i18n( "Cannot start DCOP CvsService. Please check your\n"
+        QString msg = i18n( "Unable to find the Cervisia KPart. \n"
+	"Cervisia Integration will not be available. Please check your\n"
             "Cervisia installation and re-try. Reason was:\n" ) + error;
         KMessageBox::error( processWidget(), msg, "DCOP Error" );
 
