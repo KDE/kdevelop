@@ -509,10 +509,24 @@ const QChar* Lexer::skip( const QChar* ptr, const QChar& l, const QChar& r )
 
 const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr )
 {
-    // skip for now
     //kdDebug(9007) << "handle directive " << directive << endl;
     
     if( directive == "include" ){
+	ptr = readWhiteSpaces( ptr, false );
+	if( ptr && *ptr == '"' || *ptr == '<' ){
+	    QChar ch = *ptr++;
+	    QChar ch2 = ch == QChar('"') ? QChar('"') : QChar('>');
+	 
+	    const QChar* startWord = ptr;
+	    while( ptr && *ptr != ch2 )
+		++ptr;
+	    if( ptr ){
+		QString word( startWord, int(ptr-startWord) );
+		m_driver->addDependence( m_driver->currentFileName(), 
+					 Dependence(word, ch == '"' ? Dep_Local : Dep_Global) );
+		++ptr;
+	    }
+	}
     } else if( directive == "define" ){
     } else if( directive == "undef" ){
     } else if( directive == "line" ){

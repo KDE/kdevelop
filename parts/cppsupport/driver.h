@@ -60,7 +60,7 @@ enum
     Dep_Local
 };
 
-typedef QPair<QString, int> Dependece;
+typedef QPair<QString, int> Dependence;
 
 class Macro
 {
@@ -127,14 +127,14 @@ public:
     virtual void reset();
     virtual void clear( const QString& fileName );
     
-    virtual void addDependence( const QString& fileName, const Dependece& dep );
+    virtual void addDependence( const QString& fileName, const Dependence& dep );
     virtual void addMacro( const QString& fileName, const Macro& macro );
     virtual void addProblem( const QString& fileName, const Problem& problem );
     
     virtual QString currentFileName() const { return m_currentFileName; }
     virtual TranslationUnitAST::Node parseFile( const QString& fileName, const QString& contents );
     
-    QValueList<Dependece> dependences( const QString& fileName ) const;
+    QValueList<Dependence> dependences( const QString& fileName ) const;
     QValueList<Macro> macros( const QString& fileName ) const;
     QValueList<Problem> problems( const QString& fileName ) const;
     
@@ -143,13 +143,13 @@ protected:
     virtual void setupParser( Parser* parser );
     
 private:
-    QValueList<Dependece>* findOrInsertDependeceList( const QString& fileName );
+    QValueList<Dependence>* findOrInsertDependenceList( const QString& fileName );
     QValueList<Macro>* findOrInsertMacroList( const QString& fileName );
     QValueList<Problem>* findOrInsertProblemList( const QString& fileName );
 
 private:
     QString m_currentFileName;
-    QAsciiDict< QValueList<Dependece> > m_dependences;
+    QAsciiDict< QValueList<Dependence> > m_dependences;
     QAsciiDict< QValueList<Macro> > m_macros;
     QAsciiDict< QValueList<Problem> > m_problems;
     

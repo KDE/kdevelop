@@ -39,9 +39,9 @@ void Driver::clear( const QString & fileName )
     m_problems.remove( fileName );
 }
 
-void Driver::addDependence( const QString & fileName, const Dependece & dep )
+void Driver::addDependence( const QString & fileName, const Dependence & dep )
 {
-    findOrInsertDependeceList( fileName )->append( dep );
+    findOrInsertDependenceList( fileName )->append( dep );
 }
 
 void Driver::addMacro( const QString & fileName, const Macro & macro )
@@ -54,11 +54,11 @@ void Driver::addProblem( const QString & fileName, const Problem & problem )
     findOrInsertProblemList( fileName )->append( problem );
 }
 
-QValueList < Dependece > * Driver::findOrInsertDependeceList( const QString & fileName )
+QValueList < Dependence > * Driver::findOrInsertDependenceList( const QString & fileName )
 {
-    QValueList < Dependece > * l = m_dependences.find( fileName );
+    QValueList < Dependence > * l = m_dependences.find( fileName );
     if( l == 0 ){
-	l = new QValueList < Dependece >();
+	l = new QValueList < Dependence >();
 	m_dependences.insert( fileName, l );
     }
     return l;
@@ -99,6 +99,9 @@ TranslationUnitAST :: Node Driver::parseFile( const QString & fileName, const QS
         
     TranslationUnitAST :: Node translationUnit;
     parser.parseTranslationUnit( translationUnit );
+    
+    m_currentFileName = QString::null;
+    
     return translationUnit;
 }
 
@@ -164,11 +167,11 @@ void Driver::setupParser( Parser * parser )
     Q_UNUSED( parser );
 }
 
-QValueList < Dependece > Driver::dependences( const QString & fileName ) const
+QValueList < Dependence > Driver::dependences( const QString & fileName ) const
 {
     if( m_dependences.find(fileName) )
 	return *m_dependences.find(fileName);
-    return QValueList<Dependece>();
+    return QValueList<Dependence>();
 }
 
 QValueList < Macro > Driver::macros( const QString & fileName ) const

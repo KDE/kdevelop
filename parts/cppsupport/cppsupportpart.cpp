@@ -1358,7 +1358,6 @@ void CppSupportPart::slotMakeMember()
 	        declarator = (DeclaratorAST*) currentNode;
 	    currentNode = currentNode->parent();
 	}
-
 	SimpleDeclarationAST* decl = currentNode ? (SimpleDeclarationAST*) currentNode : 0;
 	if( decl && decl->initDeclaratorList() && !declarator ){
 	    InitDeclaratorAST* i = decl->initDeclaratorList()->initDeclaratorList().at( 0 );
