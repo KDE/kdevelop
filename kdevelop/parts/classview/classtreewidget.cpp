@@ -16,13 +16,20 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kpopupmenu.h>
+#include "kdevlanguagesupport.h"
 #include "classstore.h"
+#include "classtooldlg.h"
 #include "classtreewidget.h"
 
 
-ClassTreeWidget::ClassTreeWidget(ClassView *view)
-    : ClassTreeBase(view, 0, "class tree widget")
-{}
+ClassTreeWidget::ClassTreeWidget(ClassView *part)
+    : ClassTreeBase(part, 0, "class tree widget")
+{
+    connect( part, SIGNAL(setLanguageSupport(KDevLanguageSupport*)),
+             this, SLOT(setLanguageSupport(KDevLanguageSupport*)) );
+    connect( part, SIGNAL(setClassStore(ClassStore*)),
+             this, SLOT(setClassStore(ClassStore*)) );
+}
 
 
 ClassTreeWidget::~ClassTreeWidget()
@@ -51,18 +58,17 @@ KPopupMenu *ClassTreeWidget::createPopup()
 }
 
 
-void ClassTreeWidget::slotClassBaseClasses()
+void ClassTreeWidget::setLanguageSupport(KDevLanguageSupport *ls)
 {
+    ClassTreeBase::setLanguageSupport(ls);
+    connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
 }
 
 
-void ClassTreeWidget::slotClassDerivedClasses()
+void ClassTreeWidget::setClassStore(ClassStore *store)
 {
-}
-
-
-void ClassTreeWidget::slotClassTool()
-{
+    ClassTreeBase::setClassStore(store);
+    refresh();
 }
 
 
@@ -71,7 +77,7 @@ void ClassTreeWidget::slotTreeModeChanged()
     KConfig *config = KGlobal::config();
     config->setGroup("General");
     config->writeEntry("ListByNamespace", !config->readBoolEntry("ListByNamespace"));
-    refresh(true);
+    buildTree(true);
 }
 
 
@@ -80,11 +86,17 @@ void ClassTreeWidget::slotScopeModeChanged()
     KConfig *config = KGlobal::config();
     config->setGroup("General");
     config->writeEntry("FullIdentifierScopes", !config->readBoolEntry("FullIdentifierScopes"));
-    refresh(false);
+    buildTree(false);
 }
 
 
-void ClassTreeWidget::refresh(bool fromScratch)
+void ClassTreeWidget::refresh()
+{
+    buildTree(false);
+}
+
+
+void ClassTreeWidget::buildTree(bool fromScratch)
 {
     if (!m_store)
         return;

@@ -1,3 +1,10 @@
+2000-08-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Added a class tool derived from the old one but subclassing 
+	  ClassTreeBase. Apart from the 'inherited' advantages, it
+	  now takes into account class parser updates while the dialog
+	  is open (which is likely to lead to crashes with the old one). 
+	  It also updates the button states.
+
 2000-08-11  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Completely new class tree:
 	  - Constructs items only on demand

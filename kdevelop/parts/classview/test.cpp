@@ -7,6 +7,10 @@ public:
   static int i;
 };
 
+class GlobalFooB : GlobalFoo { };
+class GlobalFooC : GlobalFoo, GlobalFooB { };
+class GlobalFooD : GlobalFoo, GlobalFooB, GlobalFooC { };
+
 GlobalFoo::i = 0;
 
 int main()

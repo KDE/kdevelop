@@ -11,36 +11,31 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _CLASSTREEWIDGET_H_
-#define _CLASSTREEWIDGET_H_
+#ifndef _CLASSTOOLWIDGET_H_
+#define _CLASSTOOLWIDGET_H_
 
 #include "classtreebase.h"
 
 
-class ClassTreeWidget : public ClassTreeBase
+class ClassToolWidget : public ClassTreeBase
 {
     Q_OBJECT
     
 public:
-    ClassTreeWidget(ClassView *part);
-    ~ClassTreeWidget();
+    ClassToolWidget(ClassView *part, QWidget *parent=0);
+    ~ClassToolWidget();
 
-public slots:
-    void setClassStore(ClassStore *aStore);
-    void setLanguageSupport(KDevLanguageSupport *ls);
+    void insertClassAndClasses(ParsedClass *parsedClass, QList<ParsedClass> *classList);
+    void insertClassAndClasses(ParsedClass *parsedClass, QList<ParsedParent> *parentList);
+    void insertAllClassMethods(ParsedClass *parsedClass, PIExport filter);
+    void insertAllClassAttributes(ParsedClass *parsedClass, PIExport filter);
 
 protected:
     virtual KPopupMenu *createPopup();
-
-private slots:
-    void refresh();
-    void slotTreeModeChanged();
-    void slotScopeModeChanged();
-
+  
 private:
-    void buildTree(bool fromScratch);
-    void buildTreeByCategory(bool fromScratch);
-    void buildTreeByNamespace(bool fromScratch);
+    void addClassAndAttributes(ParsedClass *parsedClass, PIExport filter, ClassTreeItem **lastItem);
+    void addClassAndMethods(ParsedClass *parsedClass, PIExport filter, ClassTreeItem **lastItem);
 };
 
 #endif

@@ -19,6 +19,7 @@
 
 
 class ClassTreeWidget;
+class ClassToolDialog;
 class ClassStore;
 class ClassListAction;
 class MethodListAction;
@@ -39,6 +40,13 @@ public:
                     PublicMethod, ProtectedMethod, PrivateMethod,
                     PublicSlot, ProtectedSlot, PrivateSlot,
                     Signal, GlobalFunction, GlobalVariable };
+
+    void registerClassTool(ClassToolDialog *dlg);
+    void unregisterClassTool(ClassToolDialog *dlg);
+    
+signals:
+    void setLanguageSupport(KDevLanguageSupport *ls);
+    void setClassStore(ClassStore *store);
     
 protected:
     virtual void setupGUI();
@@ -61,7 +69,8 @@ private slots:
     void dumpTree();
     
 private:
-    QGuardedPtr<ClassTreeWidget> m_widget;
+    QGuardedPtr<QWidget> m_classtree;
+    QList<QWidget> m_classtools;
     friend class ClassTreeBase;
 
     void setupPopup();
@@ -74,7 +83,7 @@ private:
     DelayedPopupAction *popup_action;
     ClassStore *m_store;
     KDevLanguageSupport *m_langsupport;
-    bool m_cv_decl_or_impl;
+    bool m_decl_or_impl;
 };
 
 #endif

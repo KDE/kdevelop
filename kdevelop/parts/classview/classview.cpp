@@ -21,6 +21,7 @@
 #include "classview.h"
 #include "classactions.h"
 #include "classtreewidget.h"
+#include "classtooldlg.h"
 #include "main.h"
 #include "cproject.h"
 #include "classstore.h"
@@ -33,15 +34,20 @@ ClassView::ClassView(QObject *parent, const char *name)
     setInstance(ClassFactory::instance());
     setXMLFile("kdevclassview.rc");
     
-    m_cv_decl_or_impl = false;
+    m_decl_or_impl = false;
     m_langsupport = 0;
     m_store = 0;
+
+    // In contrast to other widgets, we can have any number of class tool
+    // dialogs. That's why we don't use QGuardedPtr here, but instead let
+    // the dialogs register() and unregister() themselves.
+    m_classtools.setAutoDelete(true);
 }
 
 
 ClassView::~ClassView()
 {
-    delete m_widget;
+    delete m_classtree;
 }
 
 
@@ -49,16 +55,16 @@ void ClassView::setupGUI()
 {
     kdDebug(9003) << "Building ClassTreeWidget" << endl;
 
-    m_widget = new ClassTreeWidget(this);
+    m_classtree = new ClassTreeWidget(this);
     //    w->setIcon()
-    m_widget->setCaption(i18n("Class view"));
-    QWhatsThis::add(m_widget, i18n("Class View\n\n"
-                                   "The class viewer shows all classes, methods and variables "
-                                   "of the source files and allows switching to declarations "
-                                   "and implementations. The right button popup menu allows more specialized "
-                                   "functionality."));
+    m_classtree->setCaption(i18n("Class view"));
+    QWhatsThis::add(m_classtree, i18n("Class View\n\n"
+                                      "The class viewer shows all classes, methods and variables "
+                                      "of the source files and allows switching to declarations "
+                                      "and implementations. The right button popup menu allows more specialized "
+                                      "functionality."));
 
-    embedWidget(m_widget, SelectView, i18n("CV"), i18n("class tree view"));
+    embedWidget(m_classtree, SelectView, i18n("CV"), i18n("class tree view"));
 
     classes_action = new ClassListAction(i18n("Classes"), 0, this, SLOT(selectedClass()),
                                          actionCollection(), "class_combo");
@@ -99,18 +105,17 @@ void ClassView::setupPopup()
 void ClassView::languageSupportOpened(KDevLanguageSupport *ls)
 {
     m_langsupport = ls;
-    m_widget->setLangSupport(ls);
+    connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
+    emit setLanguageSupport(ls);
 
     setupPopup();
-
-    connect(ls, SIGNAL(updateSourceInfo()), this, SLOT(refresh()));
 }
 
 
 void ClassView::languageSupportClosed()
 {
     m_langsupport = 0;
-    m_widget->setLangSupport(0);
+    emit setLanguageSupport(0);
     
     setupPopup();
 }
@@ -120,8 +125,7 @@ void ClassView::classStoreOpened(ClassStore *store)
 {
     kdDebug(9003) << "ClassView::classStoreOpened()" << endl;
     m_store = store;
-    m_widget->setClassStore(store);
-    m_widget->refresh(true);
+    emit setClassStore(store);
     classes_action->setClassStore(store);
     classes_action->refresh();
     methods_action->setClassStore(store);
@@ -133,8 +137,7 @@ void ClassView::classStoreClosed()
 {
     kdDebug(9003) << "ClassView::classStoreClosed()" << endl;
     m_store = 0;
-    m_widget->setClassStore(0);
-    m_widget->refresh(true);
+    emit setClassStore(0);
     classes_action->setClassStore(0);
     classes_action->refresh();
     methods_action->setClassStore(0);
@@ -146,7 +149,19 @@ void ClassView::refresh()
 {
     classes_action->refresh();
     methods_action->refresh(classes_action->currentText());
-    m_widget->refresh(false);
+}
+
+
+void ClassView::registerClassTool(ClassToolDialog *dlg)
+{
+    m_classtools.append(dlg);
+    emit embedWidget(dlg, SelectView, i18n("CT"), i18n("class tool"));
+}
+
+
+void ClassView::unregisterClassTool(ClassToolDialog *dlg)
+{
+    m_classtools.removeRef(dlg);
 }
 
 
@@ -176,7 +191,7 @@ void ClassView::selectedMethod()
 
     kdDebug(9003) << "Method selected: "
                   << className << "::" << methodName << endl;
-    m_cv_decl_or_impl = true;
+    m_decl_or_impl = true;
     gotoImplementation(className, methodName, PublicMethod);
 }
 
@@ -190,12 +205,12 @@ void ClassView::switchedDeclImpl()
     QString methodName = methods_action->currentText();
 
     kdDebug(9003) << "ClassView::switchedDeclImpl" << endl;
-    if (m_cv_decl_or_impl) {
-        m_cv_decl_or_impl = false;
+    if (m_decl_or_impl) {
+        m_decl_or_impl = false;
         gotoDeclaration(className, methodName,
                         methodName.isEmpty()? Class : PublicMethod);
     } else {
-        m_cv_decl_or_impl = true;
+        m_decl_or_impl = true;
         if (methodName.isEmpty())
             gotoDeclaration(className, QString::null, Class);
         else

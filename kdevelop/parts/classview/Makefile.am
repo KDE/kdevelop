@@ -6,10 +6,11 @@ lib_LTLIBRARIES = libkdevclassview.la
 libkdevclassview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
 libkdevclassview_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
-libkdevclassview_la_SOURCES = main.cpp classview.cpp \
-			      classtreebase.cpp classtreewidget.cpp classactions.cpp
+libkdevclassview_la_SOURCES = main.cpp classview.cpp classactions.cpp classtreebase.cpp \
+			      classtreewidget.cpp classtoolwidget.cpp classtooldlg.cpp
 
-noinst_HEADERS = main.h classview.h classtreebase.h classtreewidget.h classactions.h
+noinst_HEADERS = main.h classview.h classactions.h classtreebase.h \
+		 classtreewidget.h classtoolwidget.h classtooldlg.h
 
 METASOURCES = AUTO
 

@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _CLASSTREEWIDGET_H_
-#define _CLASSTREEWIDGET_H_
+#ifndef _CLASSTREEBASE_H_
+#define _CLASSTREEBASE_H_
 
 #include <klistview.h>
 #include "parseditem.h"
@@ -35,11 +35,13 @@ public:
     ClassTreeBase( ClassView *part, QWidget *parent=0, const char *name=0 );
     ~ClassTreeBase();
 
-    void setClassStore(ClassStore *store);
-    void setLangSupport(KDevLanguageSupport *langsupport);
+public slots:
+    virtual void setClassStore(ClassStore *store);
+    virtual void setLanguageSupport(KDevLanguageSupport *ls);
 
 protected:
     ClassStore *m_store;
+    ClassView *m_part;
     ClassTreeItem *contextItem;
     virtual KPopupMenu *createPopup() = 0;
     
@@ -50,9 +52,11 @@ private slots:
     void slotGotoImplementation();
     void slotAddMethod();
     void slotAddAttribute();
+    void slotClassBaseClasses();
+    void slotClassDerivedClasses();
+    void slotClassTool();
     
 private:
-    ClassView *m_part;
     KDevLanguageSupport *m_langsupport;
     friend class ClassTreeItem;
 };

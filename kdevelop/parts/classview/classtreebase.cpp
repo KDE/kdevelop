@@ -23,6 +23,7 @@
 #include "classstore.h"
 #include "kdevlanguagesupport.h"
 #include "classview.h"
+#include "classtooldlg.h"
 #include "classtreebase.h"
 
 
@@ -378,7 +379,7 @@ void ClassToolTip::maybeTip(const QPoint &p)
 }
 
 
-ClassTreeBase::ClassTreeBase(ClassView *view, QWidget *parent, const char *name)
+ClassTreeBase::ClassTreeBase(ClassView *part, QWidget *parent, const char *name)
     : KListView(parent, name)
 {
     setRootIsDecorated(true);
@@ -395,7 +396,7 @@ ClassTreeBase::ClassTreeBase(ClassView *view, QWidget *parent, const char *name)
     connect( this, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)),
              this, SLOT(slotRightButtonPressed(QListViewItem*, const QPoint&)) );
 
-    m_part = view;
+    m_part = part;
     m_store = 0;
     m_langsupport = 0;
 }
@@ -474,13 +475,42 @@ void ClassTreeBase::slotAddAttribute()
 }
 
 
+void ClassTreeBase::slotClassBaseClasses()
+{
+    ClassToolDialog *dlg = new ClassToolDialog(m_part);
+    dlg->setClassStore(m_store);
+    dlg->setLanguageSupport(m_langsupport);
+    dlg->setClassName(contextItem->scopedText());
+    dlg->viewParents();
+}
+
+
+void ClassTreeBase::slotClassDerivedClasses()
+{
+    ClassToolDialog *dlg = new ClassToolDialog(m_part);
+    dlg->setClassStore(m_store);
+    dlg->setLanguageSupport(m_langsupport);
+    dlg->setClassName(contextItem->scopedText());
+    dlg->viewChildren();
+}
+
+
+void ClassTreeBase::slotClassTool()
+{
+    ClassToolDialog *dlg = new ClassToolDialog(m_part);
+    dlg->setClassStore(m_store);
+    dlg->setClassName(contextItem->scopedText());
+    dlg->setLanguageSupport(m_langsupport);
+}
+
+
 void ClassTreeBase::setClassStore(ClassStore *store)
 {
     m_store = store;
 }
 
 
-void ClassTreeBase::setLangSupport(KDevLanguageSupport *langsupport)
+void ClassTreeBase::setLanguageSupport(KDevLanguageSupport *ls)
 {
-    m_langsupport = langsupport;
+    m_langsupport = ls;
 }
