@@ -34,9 +34,11 @@ class BackgroundParser;
 class QLabel;
 class QProgressBar;
 class QStringList;
+class KListView;
+class QListViewItem;
 
 namespace KParts { class Part; }
-namespace KTextEditor { class EditInterface; };
+namespace KTextEditor { class EditInterface; class SelectionInterface; };
 
 
 class CppSupportPart : public KDevLanguageSupport
@@ -113,6 +115,7 @@ private slots:
     void slotChangedPreParsingPath( );
     void slotEnableCodeCompletion( bool setEnabled );
     void slotEnableCodeHinting( bool setEnabled, bool setOutputView );
+    void slotNodeSelected( QListViewItem* item );
 
     /**
      * loads, parses and creates both classstores needed
@@ -174,8 +177,11 @@ private:
     QGuardedPtr< ProblemReporter > m_problemReporter;
     BackgroundParser* m_backgroundParser;
     
+    KTextEditor::SelectionInterface* m_activeSelection;
     KTextEditor::EditInterface* m_activeEditor;
     QString m_activeFileName;
+    
+    KListView* m_astView;
 };
 
 #endif

@@ -1937,12 +1937,12 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 	
 	AST::Node name = CreateNode<AST>();
 	UPDATE_POS( name, start, lex->index() );
+	name->setText( toString(start, lex->index(), "") );
 	
 	ClassOrNamespaceNameAST::Node classOrNamespaceName( new ClassOrNamespaceNameAST() );
 	classOrNamespaceName->setName( name );
 	int startId = lex->index();
 		
-	
 	if( lex->lookAhead(1) == '<' ){
 	    lex->nextToken(); // skip template name
 	    lex->nextToken(); // skip <
@@ -1952,6 +1952,7 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 		lex->setIndex( index );
 		return false;
 	    }
+	    UPDATE_POS( args, startId, lex->index() );
 	    classOrNamespaceName->setTemplateArgumentList( args );
 	    
 	    if( lex->lookAhead(0) != '>' ){

@@ -64,6 +64,8 @@ enum NodeType
     NodeType_Custom = 2000
 };
 
+QString nodeTypeToString( NodeType type );
+
 class AST
 {
 public:
@@ -222,10 +224,16 @@ class TypeSpecifierAST: public AST
 public:
     typedef std::auto_ptr<TypeSpecifierAST> Node;
     enum { Type = NodeType_TypeSpecifier };
+    
+    virtual NameAST* name() { return m_name.get(); }
+    virtual void setName( NameAST::Node& name ) { m_name = name; }
 
 public:
     TypeSpecifierAST();
     virtual ~TypeSpecifierAST();
+    
+private:
+    NameAST::Node m_name;
     
 private:
     TypeSpecifierAST( const TypeSpecifierAST& source );
@@ -278,16 +286,12 @@ public:
     
     AST* classKey();
     void setClassKey( AST::Node& classKey );
-    
-    NameAST* name();
-    void setName( NameAST::Node& name );
-    
+        
     void addDeclaration( DeclarationAST::Node& declaration );
     QPtrList<DeclarationAST> declarations() { return m_declarations; }
     
 private:
     AST::Node m_classKey;
-    NameAST::Node m_name;
     QPtrList<DeclarationAST> m_declarations;
     
 private:
@@ -329,15 +333,11 @@ public:
 public:
     EnumSpecifierAST();
     virtual ~EnumSpecifierAST();
-    
-    AST* name();
-    void setName( AST::Node& name );
-    
+        
     void addEnumerator( EnumeratorAST::Node& enumerator );
     QPtrList<EnumeratorAST> enumerators() { return m_enumerators; }
 
 private:
-    AST::Node m_name;
     QPtrList<EnumeratorAST> m_enumerators;
         
 private:
@@ -358,12 +358,8 @@ public:
     AST* kind();
     void setKind( AST::Node& kind );
     
-    NameAST* name();
-    void setName( NameAST::Node& name );
-        
 private:
     AST::Node m_kind;
-    NameAST::Node m_name;
     
 private:
     ElaboratedTypeSpecifierAST( const ElaboratedTypeSpecifierAST& source );

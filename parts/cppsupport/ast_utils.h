@@ -13,7 +13,11 @@
 #define __ast_utils_h
 
 class AST;
+class QListViewItem;
+
+namespace KTextEditor{ class EditInterface; }
 
 AST* findNodeAt( AST* unit, int line, int column );
+void buildView( AST* ast, KTextEditor::EditInterface*, QListViewItem* parent );
 
 #endif // __ast_utils_h

@@ -11,6 +11,73 @@
 
 #include "ast.h"
 #include <kdebug.h>
+
+QString nodeTypeToString( NodeType type )
+{
+    switch( type )
+    {
+    case NodeType_Generic:
+	return "Generic";
+    case NodeType_TemplateArgumentList:
+	return "TemplateArgumentList";
+    case NodeType_ClassOrNamespaceName:
+	return "ClassOrNamespaceName";
+    case NodeType_NestedNameSpecifier:
+	return "NestedNameSpecifier";
+    case NodeType_Name:
+	return "Name";
+    case NodeType_Declaration:
+	return "Declaration";
+    case NodeType_TypeSpecifier:
+	return "TypeSpecifier";
+    case NodeType_BaseSpecifier:
+	return "BaseSpecifier";
+    case NodeType_BaseClause:
+	return "BaseClause";
+    case NodeType_ClassSpecifier:
+	return "ClassSpecifier";
+    case NodeType_Enumerator:
+	return "Enumerator";
+    case NodeType_EnumSpecifier:
+	return "EnumSpecifier";
+    case NodeType_ElaboratedTypeSpecifier:
+	return "ElaboratedTypeSpecifier";
+    case NodeType_LinkageBody:
+	return "LinkageBody";
+    case NodeType_LinkageSpecification:
+	return "LinkageSpecification";
+    case NodeType_Namespace:
+	return "Namespace";
+    case NodeType_NamespaceAlias:
+	return "NamespaceAlias";
+    case NodeType_Using:
+	return "Using";
+    case NodeType_UsingDirective:
+	return "UsingDirective";
+    case NodeType_InitDeclaratorList:
+	return "InitDeclaratorList";
+    case NodeType_Typedef:
+	return "Typedef";
+    case NodeType_Declarator:
+	return "Declarator";
+    case NodeType_InitDeclarator:
+	return "InitDeclarator";
+    case NodeType_TemplateDeclaration:
+	return "TemplateDeclaration";
+    case NodeType_SimpleDeclaration:
+	return "SimpleDeclaration";
+    case NodeType_Statement:
+	return "Statement";
+    case NodeType_TranslationUnit:
+	return "TranslationUnit";
+    case NodeType_Custom:	
+	return "Custom";
+    }
+    
+    return QString::null;
+}
+
+
 // ------------------------------------------------------------------------
 AST::AST()
     : m_nodeType( NodeType_Generic ), m_parent( 0 ),
@@ -491,17 +558,6 @@ void ClassSpecifierAST::setClassKey( AST::Node& classKey )
     if( m_classKey.get() ) m_classKey->setParent( this );
 }
 
-NameAST* ClassSpecifierAST::name()
-{
-    return m_name.get();
-}
-
-void ClassSpecifierAST::setName( NameAST::Node& name )
-{
-    m_name = name;
-    if( m_name.get() ) m_name->setParent( this );
-}
-
 void ClassSpecifierAST::addDeclaration( DeclarationAST::Node& declaration )
 {
     if( !declaration.get() )
@@ -519,17 +575,6 @@ EnumSpecifierAST::EnumSpecifierAST()
 
 EnumSpecifierAST::~EnumSpecifierAST()
 {
-}
-
-AST* EnumSpecifierAST::name()
-{
-    return m_name.get();
-}
-
-void EnumSpecifierAST::setName( AST::Node& name )
-{
-    m_name = name;
-    if( m_name.get() ) m_name->setParent( this );
 }
 
 void EnumSpecifierAST::addEnumerator( EnumeratorAST::Node& enumerator )
@@ -560,17 +605,6 @@ void ElaboratedTypeSpecifierAST::setKind( AST::Node& kind )
 {
     m_kind = kind;
     if( m_kind.get() ) m_kind->setParent( this );
-}
-
-NameAST* ElaboratedTypeSpecifierAST::name()
-{
-    return m_name.get();
-}
-
-void ElaboratedTypeSpecifierAST::setName( NameAST::Node& name )
-{
-    m_name = name;
-    if( m_name.get() ) m_name->setParent( this );
 }
 
 // ------------------------------------------------------------------------

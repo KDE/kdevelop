@@ -19,6 +19,7 @@
 #include "ast.h"
 #include "ast_utils.h"
 
+#include <qheader.h>
 #include <qmessagebox.h>
 #include <qdir.h>
 #include <qdom.h>
@@ -49,6 +50,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/view.h>
+#include <ktexteditor/selectioninterface.h>
 
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,90)
 #  include <ktexteditor/texthintinterface.h>
@@ -91,12 +93,12 @@ typedef KGenericFactory<CppSupportPart> CppSupportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsupport" ) );
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
-    : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeEditor( 0 )
+    : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeSelection( 0 ), m_activeEditor( 0 )
 {
     setInstance(CppSupportFactory::instance());
 
     setXMLFile("kdevcppsupport.rc");
-
+ 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( partController(), SIGNAL(savedFile(const QString&)),
@@ -108,6 +110,12 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_problemReporter = new ProblemReporter( this );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
+    
+    m_astView = new KListView();
+    m_astView->addColumn( "" );
+    m_astView->header()->hide();
+    mainWindow()->embedSelectViewRight( m_astView, i18n("AST Debug"), i18n("Show the AST for the current translation unit") );
+    connect( m_astView, SIGNAL(executed(QListViewItem*)), this, SLOT(slotNodeSelected(QListViewItem*)) );
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
              m_problemReporter, SLOT(configWidget(KDialogBase*)) );
@@ -187,6 +195,7 @@ CppSupportPart::~CppSupportPart()
     
     mainWindow( )->removeView( m_pCHWidget );
     mainWindow( )->removeView( m_problemReporter );
+    mainWindow()->removeView( m_astView );
     
     delete m_backgroundParser;
     delete m_pParser;
@@ -200,6 +209,7 @@ CppSupportPart::~CppSupportPart()
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
     if( ev->type() == Event_FoundProblems && m_problemReporter ){
+	m_backgroundParser->lock();
 	FoundProblemsEvent* event = (FoundProblemsEvent*) ev;
 	QString fileName = event->fileName();
 	
@@ -211,6 +221,19 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	    const Problem& p = *it++;
 	    m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
 	}
+	
+	if( fileName == m_activeFileName ){
+	    AST* ast = m_backgroundParser->translationUnit( fileName );
+	    if( ast ){
+		m_astView->clear();
+		QListViewItem* root = new KListViewItem( m_astView, QFileInfo(fileName).fileName() );
+		root->setExpandable( true );
+		root->setOpen( true );
+		buildView( ast, m_activeEditor, root );
+	    }
+	}
+	
+	m_backgroundParser->unlock();
     } else if( ev->type() == Event_FileParsed ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
@@ -354,6 +377,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
 
     KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
     m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>( part );
+    m_activeSelection = dynamic_cast<KTextEditor::SelectionInterface*>( part );
     
     m_activeFileName = QString::null;
     
@@ -379,7 +403,7 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
     KTextEditor::TextHintInterface* textHintIface = dynamic_cast<KTextEditor::TextHintInterface*>( view );
     if( !textHintIface )
 	return;
-    
+        
     connect( view, SIGNAL(needTextHint(int,int,QString&)), 
 	     this, SLOT(slotNeedTextHint(int,int,QString&)) );
     
@@ -1231,6 +1255,15 @@ void CppSupportPart::slotNeedTextHint( int line, int column, QString& textHint )
 	textHint = m_activeEditor->textLine( startLine );
     }
     m_backgroundParser->unlock();
+}
+
+void CppSupportPart::slotNodeSelected( QListViewItem* item )
+{
+    if( !item || !m_activeSelection )
+	return;    
+    
+    m_activeSelection->setSelection( item->text(1).toInt(), item->text(2).toInt(),
+				     item->text(3).toInt(), item->text(4).toInt() );
 }
 
 #include "cppsupportpart.moc"

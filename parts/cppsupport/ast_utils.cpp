@@ -11,7 +11,10 @@
 
 #include "ast_utils.h"
 #include "ast.h"
+#include <qlistview.h>
+#include <klocale.h>
 #include <kdebug.h>
+#include <ktexteditor/editinterface.h>
 
 AST* findNodeAt( AST* node, int line, int column )
 {
@@ -45,3 +48,32 @@ AST* findNodeAt( AST* node, int line, int column )
 
     return 0;
 }
+
+void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* parent )
+{
+    if( !ast || !editIface || !parent )
+	return;
+    
+    int startLine, startColumn;
+    int endLine, endColumn;
+    ast->getStartPosition( &startLine, &startColumn );
+    ast->getEndPosition( &endLine, &endColumn );
+    
+    QListViewItem* item = new QListViewItem( parent, editIface->textLine(startLine),
+					     QString::number(startLine), QString::number(startColumn),
+					     QString::number(endLine), QString::number(endColumn) );
+    
+    QPtrList<AST> children = ast->children();
+    if( children.count() ){
+	item->setExpandable( true );
+	item->setOpen( true );
+    } else
+	return;
+    
+    QPtrListIterator<AST> it( children );
+    while( it.current() ){
+	buildView( it.current(), editIface, item );
+	++it;
+    }
+}
+
