@@ -186,7 +186,6 @@ void AbbrevPart::slotExpandText()
         return;
 	
     QString word = currentWord();
-    kdDebug(9028) << "Expanding text " << word << endl;
     if (word.isEmpty())
         return;
 
@@ -409,7 +408,10 @@ void AbbrevPart::slotActivePartChanged( KParts::Part* part )
 
 void AbbrevPart::slotTextChanged()
 {
-    if( !m_inCompletion && currentWord().length() >= 3 )
+    unsigned int line, col;
+    viewCursorIface->cursorPositionReal( &line, &col );
+    QChar ch = editIface->textLine( line )[ col ];
+    if( !ch.isLetterOrNumber() && !m_inCompletion && currentWord().length() >= 3 )
 	slotExpandText();
 }
 
