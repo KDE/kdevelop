@@ -925,9 +925,9 @@ bool QextMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
         }
         else {
 #ifdef NO_KDE
-          qDebug( "### KAction( \"view_next_window\") __not__ found.\n" );
+          qDebug( "### KAction( \"view_last_window\") __not__ found.\n" );
 #else
-          kdDebug(9000) << "KAction( \"view_next_window\") not found." << endl;
+          kdDebug(9000) << "KAction( \"view_last_window\") not found." << endl;
 #endif          
         }
       }    

@@ -15,6 +15,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 
+#include <kdebug.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
@@ -148,12 +149,53 @@ void DoxygenPart::adjustDoxyfile()
 
 void DoxygenPart::slotDoxygen()
 {
+    bool searchDatabase = false;
+    QString htmlDirectory;
+
     adjustDoxyfile();
+
+    QString fileName = project()->projectDirectory() + "/Doxyfile";
+
+    Config::instance()->init();
+
+    QFile f(fileName);
+    if (f.open(IO_ReadOnly))
+    {
+      QTextStream is(&f);
+
+      Config::instance()->parse(is.read().latin1(), QFile::encodeName(fileName));
+      Config::instance()->convertStrToVal();
+
+      f.close();
+    }
+
+    // search engine
+    ConfigBool *search = dynamic_cast<ConfigBool*>(Config::instance()->get("SEARCHENGINE"));
+    if (search)
+    {
+      searchDatabase = Config_getBool("SEARCHENGINE");
+
+      if (searchDatabase)
+      {
+        // get input files
+	htmlDirectory = Config_getString("OUTPUT_DIRECTORY");
+	if ( htmlDirectory.length() > 0 )
+          htmlDirectory += "/";
+        htmlDirectory += Config_getString("HTML_OUTPUT");
+      }
+    }
 
     QString dir = project()->projectDirectory();
     QString cmdline = "cd ";
     cmdline += dir;
     cmdline += " && doxygen Doxyfile";
+    if (searchDatabase)
+    {
+      cmdline += " && doxytag -s search.idx ";
+      cmdline += htmlDirectory;
+    }
+
+    kdDebug(9026) << "Doxygen command line: " << cmdline << endl;
 
     makeFrontend()->queueCommand(dir, cmdline);
 }

@@ -1,3 +1,6 @@
+2003-03-15 F@lk Brettschneider <falkbr@kdevelop.org>
+	* applied patch of Jens Zurheide (jens.zurheide@gmx.de) that fixes some bugs
+
 2003-03-13 Alexander Dymo <cloudtemple@mksat.net>
 	* DevHelp documentation support for KDevelop.
 	  All documentation collections for GNU/GNOME developers from 

@@ -1,6 +1,5 @@
 #include <config.h>
 
-
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -56,6 +55,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Jonas Nordin", I18N_NOOP("C++ source parser"), "jonas.nordin@syncom.se");
   aboutData.addCredit("Trolltech AS", I18N_NOOP("Designer code"), "info@trolltech.com");
   aboutData.addCredit("Stephane ANCELOT", I18N_NOOP("Patches"), "sancelot@free.fr");
+  aboutData.addCredit("Jens Zurheide", I18N_NOOP("Patches"), "jens.zurheide@gmx.de");
   
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );

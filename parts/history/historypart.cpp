@@ -89,7 +89,7 @@ void HistoryPart::backAboutToShow()
 
   int savePos = m_history.at();
   for (int i=0; i<10 && m_history.prev(); ++i)
-    popup->insertItem(m_history.current()->m_url.url());
+    popup->insertItem(m_history.current()->m_url.prettyURL());
   
   m_history.at(savePos);
 }
@@ -102,7 +102,7 @@ void HistoryPart::forwardAboutToShow()
 
   int savePos = m_history.at();
   for (int i=0; i<10 && m_history.next(); ++i)
-    popup->insertItem(m_history.current()->m_url.url());
+    popup->insertItem(m_history.current()->m_url.prettyURL());
 
   m_history.at(savePos);
 }
@@ -143,7 +143,7 @@ void HistoryPart::updateActions()
   m_backAction->setEnabled(m_history.current() != m_history.getFirst());
   m_forwardAction->setEnabled(m_history.current() != m_history.getLast());
 
-  kdDebug(9013) << "history-length=" << m_history.count() << endl;
+  kdDebug(9031) << "history-length=" << m_history.count() << endl;
 }
 
 
@@ -182,7 +182,9 @@ void HistoryPart::addRecentEntry(KParts::Part *part)
   m_recentList->clear();
   it.toFirst();
   for ( ; it.current(); ++it)
-    m_recentList->insertItem(it.current()->url()); 
+  {
+    m_recentList->insertItem(it.current()->prettyURL());
+  }
 }
 
 
