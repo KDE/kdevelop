@@ -75,6 +75,8 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
                           this, SLOT(slotPerldocFAQ()),
                           actionCollection(), "help_perldocfaq" );
     action->setStatusText( i18n("Show the FAQ entry for a keyword") );
+
+    core()->insertNewAction( action );
 }
 
 
@@ -108,6 +110,7 @@ void PerlSupportPart::maybeParse(const QString fileName)
     QString path = fi.filePath();
     QString extension = fi.extension();
     if (extension == "pl" || extension == "pm") {
+        kdDebug(9016) << "maybe " << fileName << endl;
         classStore()->removeWithReferences(fileName);
         parse(fileName);
     }
@@ -177,7 +180,8 @@ void PerlSupportPart::savedFile(const QString &fileName)
 
 KDevLanguageSupport::Features PerlSupportPart::features()
 {
-    return Functions;
+    return KDevLanguageSupport::Features(Classes | Functions | Variables );
+//    return Functions;
 }
 
 
@@ -188,34 +192,246 @@ QStringList PerlSupportPart::fileFilters()
     return l;
 }
 
+void PerlSupportPart::parse(const QString& fileName){
+  QFile f(fileName);
+  if (!f.open(IO_ReadOnly))
+      return;
+  QTextStream stream(&f);
+  QStringList list;
+  QString rawline;
+  while (!stream.eof()) {
+   rawline = stream.readLine();
+   list.append(rawline.stripWhiteSpace().local8Bit());
+ }
+ f.close();
+ kdDebug(9016) << "parsing " << fileName << endl;
+ this->parseLines(&list,fileName);
+}
 
-void PerlSupportPart::parse(const QString &fileName)
+void PerlSupportPart::parseLines(QStringList* lines,const QString& fileName)
 {
-    QFile f(fileName);
-    if (!f.open(IO_ReadOnly))
-        return;
-    QTextStream stream(&f);
+  KRegExp  packagere("^[ \t]*package[ \t]+([+A-Za-z0-9_:]*).*\\;");
+  KRegExp     basere("^[ \t]*use[ \t]+base[ \t]*\\(\'*\"*([A-Za-z0-9_:]*)");
+  KRegExp      isare("^[ \t]*@ISA[ \t=qw\\(\'\"]*([A-Za-z0-9_: ]*)");
+  KRegExp   globalre("^[ \t]*our[ \t]+\\(*([ \t,$%@*+A-Za-z0-9_]*)\\)*.*");
+  KRegExp      subre("^[ \t]*sub[ \t]+([A-Za-z0-9_]*).*$");
+  KRegExp    blessre("bless[ \t]*[\\( ]*([,$%@*+A-Za-z0-9_]*).*;");
+  KRegExp     namere("^[ \t]*([$%@*])([A-Za-z0-9_]*).*$");
+  KRegExp  privatere("^_([A-Za-z0-9_]*)");
+  KRegExp  startpod("^=[a-z0-9]+ [a-z0-9]*");
+  KRegExp  cutpod("^=cut");
 
-    KRegExp subre("^[ \t]*sub[ \t]+([A-Za-z_]+).*$");
+  ParsedClass  *lastClass = 0;
+  ParsedMethod *lastsub = 0;
 
-    QCString line;
-    int lineNo = 0;
-    while (!stream.atEnd()) {
-        line = stream.readLine().stripWhiteSpace().local8Bit();
-        if (subre.match(line)) {
-            ParsedMethod *sub = new ParsedMethod;
-            sub->setName(subre.group(1));
-            sub->setDefinedInFile(fileName);
-            sub->setDefinedOnLine(lineNo);
+  QString line;
+  QString package;
+  QString parent;
+  QString subname;
+  QString var;
+  
+  int lineNo = -1;
+  int packagelineNo =0;
+  bool inClass = false;
+  bool inpod = false;
+  bool endpod = false;
+  
+  for ( QStringList::Iterator it = lines->begin(); it != lines->end(); ++it ) {
+    ++lineNo;
+    line = (*it).local8Bit();
 
-            ParsedMethod *old = classStore()->globalScope()->getMethod(sub);
-            if (!old)
-                classStore()->globalScope()->addMethod(sub);
-        }
-        ++lineNo;
+    //empty line ?
+    if (line.isNull()) {
+       continue;
     }
 
-    f.close();
+    //some POD checking , quick and dirty but it seams to work
+    if(inpod && endpod) {
+         inpod=false;
+         endpod=false;
+//         kdDebug(9016) << "END pod : [" << lineNo << "," << inpod << "] " << line << endl;
+    }
+
+    //are we in pod documentation ?
+    if (startpod.match(line)) {
+         inpod=true;
+//         kdDebug(9016) << "pod : [" << lineNo << "," << inpod << "," << endpod << "]" << line << endl;
+         continue;
+    }
+    //are we in pod documentation ?
+    if (inpod) {
+         endpod= cutpod.match(line);
+//         kdDebug(9016) << "skipping : [" << line << "]" << endl;
+         continue;
+    }
+
+      if (subre.match(line) && package) {
+          subname=subre.group(1);
+          if (subname.isEmpty()) {
+             kdDebug(9016) << "WARNING : subre empty" << endl;
+             continue;
+          }
+//          kdDebug(9016) << "subre match [" << subname << "]" << endl;
+          lastsub = new ParsedMethod;
+          if (lastClass) { lastsub->setName(subname); }
+          else           { lastsub->setName(package + "::" + subname); }   
+          if (privatere.match(subname)) { lastsub->setAccess(PIE_PRIVATE); }
+          else                          { lastsub->setAccess(PIE_PUBLIC); }
+          if (inClass) {
+             ParsedMethod *old = lastClass->getMethod(lastsub);
+             if (!old) {
+//                kdDebug(9016) << "class method add" << endl;
+                lastClass->addMethod(lastsub);
+             } else {
+                kdDebug(9016) << "WARNING: class method[" << lastsub->name() <<"] already exist" << endl;
+                delete lastsub;
+                lastsub=old;
+             }
+          } else {
+             ParsedMethod *old = classStore()->globalScope()->getMethod(lastsub);
+             if (!old) {
+//                kdDebug(9016) << "global sub add" << endl;
+                classStore()->globalScope()->addMethod(lastsub);
+             } else {
+                kdDebug(9016) << "WARNING: global sub[" << lastsub->name() <<"] already exit" << endl;
+                delete lastsub;
+                lastsub=old;
+             }
+          }
+          lastsub->setDefinedInFile(fileName);
+          lastsub->setDefinedOnLine(lineNo);
+          continue;
+      } //sub
+      
+      if (globalre.match(line) && package) {
+//        kdDebug(9016) << "globare match" << endl;
+        //splitup mulible ours
+        QStringList vars=QStringList::split(",",globalre.group(1));
+        for ( QStringList::Iterator it = vars.begin(); it != vars.end(); ++it ) {
+            if (namere.match(*it)) {
+              var=package + "::" + namere.group(2);
+              if (var.isEmpty()) {
+                kdDebug(9016) << "WARNING: global var empty" << endl;
+                continue;
+	            }
+              if (!classStore()->globalScope()->getAttributeByName(var)) {
+                ParsedAttribute *attr = new ParsedAttribute;
+                attr->setName(var);
+                attr->setDefinedInFile(fileName);
+                attr->setDefinedOnLine(lineNo);
+//                kdDebug(9016) << "global var [" << var << "] added" << var << endl;
+                classStore()->globalScope()->addAttribute(attr);
+              }
+            }
+          } //for
+        continue;
+      } //globalre
+      
+      if (blessre.match(line) && package) {
+//         kdDebug(9016) << "blessre match" << endl;
+         inClass=true;
+         //create class if not already there because of base match
+         if (!classStore()->hasClass(package) && (!lastClass)) {
+           lastClass = new ParsedClass;
+           lastClass->setName(package);
+           lastClass->setDefinedInFile(fileName);
+           lastClass->setDeclaredInFile(fileName);
+           lastClass->setDefinedOnLine(lineNo);
+           lastClass->setDeclaredOnLine(packagelineNo);
+           
+//           kdDebug(9016) << "adding new BLESSED class" << endl;
+           classStore()->globalScope()->addClass(lastClass);
+           classStore()->addClass(lastClass);
+         } else {
+           kdDebug(9016) << "WARNING: Class ["<< package << "] already exist" << endl;
+           lastClass = classStore()->getClassByName(package);
+         }
+         //mark last sub as constructor
+       if (lastsub && lastClass) {
+//              kdDebug(9016) << "adding new Constructor " << lastsub->name()<< endl;
+              lastsub->setIsConstructor(true);
+              lastsub->setName(subname);
+              lastClass->addMethod(lastsub); 
+         }
+       continue;
+      } //bless
+      
+      if (basere.match(line) && package) {
+         parent = basere.group(1);
+	       if (parent.isEmpty()) {
+             kdDebug(9016) << "WARNING : empty basere match"  << basere.group(1) << endl;
+	       continue;
+	       }
+//         kdDebug(9016) << "basere match ["  << basere.group(1) << "]" << endl;
+         inClass=true;
+         //create class if not already there 
+         if (!classStore()->hasClass(package)) {
+          //create class
+          lastClass = new ParsedClass;
+          lastClass->setName(package);
+          lastClass->setDefinedInFile(fileName);
+          lastClass->setDeclaredInFile(fileName);
+          lastClass->setDefinedOnLine(lineNo);
+          lastClass->setDeclaredOnLine(packagelineNo);
+//          kdDebug(9016) << "adding new BASE class" << endl;
+          classStore()->globalScope()->addClass(lastClass);
+          classStore()->addClass(lastClass);
+         } else {
+           kdDebug(9016) << "WARNING : Class ["<< package << "] already exist" << endl;
+           lastClass = classStore()->getClassByName(package);
+         } 
+         //add parent if found
+         if (lastClass) {
+           ParsedParent *parentClass = new ParsedParent;
+           parentClass->setName(parent);
+           parentClass->setAccess(PIE_PUBLIC);
+           lastClass->addParent(parentClass);
+         }
+         continue;
+      } //base
+      
+      if (isare.match(line) && package) {
+         parent = isare.group(1);
+         if (parent.isEmpty()) {
+             kdDebug(9016) << "empty isa re match"  << basere.group(1) << endl;
+             continue;
+         }
+//       kdDebug(9016) << "ISAre match ["  << basere.group(1) << "]" << endl;
+         inClass=true;
+          //create class if not already there
+         if (!classStore()->hasClass(package)) {
+          //create class
+          lastClass = new ParsedClass;
+          lastClass->setName(package);
+          lastClass->setDefinedInFile(fileName);
+          lastClass->setDefinedOnLine(lineNo);
+         } else {
+           kdDebug(9016) << "WARNING : Class ["<< package << "] already exist" << endl;
+           lastClass = classStore()->getClassByName(package);
+         }
+         //add parent if found
+         if (lastClass) {
+           ParsedParent *parentClass = new ParsedParent;
+           parentClass->setName(parent);
+           parentClass->setAccess(PIE_PUBLIC);
+           lastClass->addParent(parentClass);
+//           kdDebug(9016) << "adding new ISA class" << endl;
+           classStore()->globalScope()->addClass(lastClass);
+           classStore()->addClass(lastClass);
+         }
+         continue;
+      } //isa
+      
+      if (packagere.match(line)) {
+         package=packagere.group(1);
+         inClass=false;
+         lastClass=0;
+         lastsub=0;
+         packagelineNo=lineNo;
+//         kdDebug(9016) << "packagere match [" << package << "]" << endl;
+         continue;
+      }//package
+  } // for lines loop
 }
 
 
@@ -238,7 +454,7 @@ void PerlSupportPart::startApplication(const QString &program)
 
 void PerlSupportPart::slotExecute()
 {
-    QString program = project()->mainProgram();
+    QString program = project()->projectDirectory() + "/" + project()->mainProgram();
     QString cmd = interpreter() + " " + program;
     startApplication(cmd);
 }

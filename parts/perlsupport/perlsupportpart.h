@@ -49,6 +49,8 @@ private:
     void startApplication(const QString &program);
     void maybeParse(const QString fileName);
     void parse(const QString &fileName);
+    void parseLines(QStringList* lines,const QString& fileName);
+
 };
 
 #endif
