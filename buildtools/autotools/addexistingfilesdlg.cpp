@@ -67,18 +67,15 @@ AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProj
 
 	if ( titem && spitem && titem->type() == ProjectItem::Target && spitem->type() == ProjectItem::Subproject )
 	{
-		destStaticLabel->setText ( i18n ( "Target:" ) );
 
 		if ( titem->name.isEmpty() )
 		{
 			QString target = i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix );
 			targetLabel->setText ( target );
-			destLabel->setText ( target );
 		}
 		else
 		{
 			targetLabel->setText ( titem->name );
-			destLabel->setText ( titem->name );
 		}
 		directoryLabel->setText ( spitem->path );
 	}
@@ -86,7 +83,7 @@ AddExistingFilesDialog::AddExistingFilesDialog ( AutoProjectPart* part, AutoProj
 	sourceSelector = new FileSelectorWidget ( m_part, mode, sourceGroupBox, "source file selector" );
 	sourceGroupBoxLayout->addWidget ( sourceSelector );
 
-	importView = new KImportIconView ( i18n ( "Drag one or more files from above and drop it here!" ), destGroupBox, "destination icon view" );
+	importView = new KImportIconView ( i18n ( "Drag one or more files from the left view and drop it here!" ), destGroupBox, "destination icon view" );
 	destGroupBoxLayout->addWidget ( importView );
 	//destGroupBoxLayout->setStretchFactor(dir, 2);
 

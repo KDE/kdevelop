@@ -256,8 +256,6 @@ void AutoSubprojectView::slotAddExistingSubproject()
 	dlg.setCaption ( i18n ( "Add Existing Subproject to '%1'" ).arg ( spitem->subdir ) );
     dlg.targetLabel->setText("");
     dlg.directoryLabel->setText(spitem->path);
-    dlg.destStaticLabel->setText("");
-    dlg.destLabel->setText("");
 
 	if ( dlg.exec() )
 		emit selectionChanged ( spitem );

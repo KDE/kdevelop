@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AddExistingDlgBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>497</width>
-            <height>566</height>
+            <width>743</width>
+            <height>716</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,13 +23,75 @@
     <property name="caption">
         <string>ImportExistingDlgBase</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QGroupBox">
+        <widget class="QLayoutWidget" row="3" column="0">
+            <property name="name">
+                <cstring>layout10</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>buttonSpacer</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>317</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>okButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancelButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="KProgress" row="2" column="0">
+            <property name="name">
+                <cstring>progressBar</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="0" column="0">
             <property name="name">
                 <cstring>infoGroupBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="maximumSize">
                 <size>
@@ -142,24 +204,101 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QSplitter">
+        <widget class="QSplitter" row="1" column="0">
             <property name="name">
-                <cstring>Splitter2</cstring>
+                <cstring>splitter2</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Horizontal</enum>
             </property>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>Layout11</cstring>
+                    <cstring>layout12</cstring>
                 </property>
-                <hbox>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
-                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout10</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>arrowSpacer1</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>84</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>addAllButton</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>A&amp;dd All</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+D</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Import by creating symbolic links (recommended)</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>addSelectedButton</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add Selected</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+A</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Import by copying (not recommended)</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>arrowSpacer2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>84</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </hbox>
+                    </widget>
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>sourceGroupBox</cstring>
@@ -188,183 +327,37 @@
                             </property>
                         </vbox>
                     </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>Layout10</cstring>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>arrowSpacer1</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QPushButton">
-                                <property name="name">
-                                    <cstring>addAllButton</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>A&amp;dd All</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Import by creating symbolic links (recommended)</string>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton">
-                                <property name="name">
-                                    <cstring>addSelectedButton</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Add Selected</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Import by copying (not recommended)</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>arrowSpacer2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>20</width>
-                                        <height>20</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                        </vbox>
-                    </widget>
-                </hbox>
+                </vbox>
             </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>Layout13</cstring>
+                    <cstring>layout13</cstring>
                 </property>
-                <hbox>
+                <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <property name="margin">
-                        <number>0</number>
-                    </property>
                     <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>Layout9</cstring>
+                            <cstring>layout11</cstring>
                         </property>
-                        <vbox>
+                        <hbox>
                             <property name="name">
                                 <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
-                            </property>
-                            <widget class="QLayoutWidget">
-                                <property name="name">
-                                    <cstring>Layout8</cstring>
-                                </property>
-                                <hbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                    <property name="margin">
-                                        <number>0</number>
-                                    </property>
-                                    <widget class="QLabel">
-                                        <property name="name">
-                                            <cstring>destStaticLabel</cstring>
-                                        </property>
-                                        <property name="font">
-                                            <font>
-                                            </font>
-                                        </property>
-                                        <property name="text">
-                                            <string>[INFO]</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="KSqueezedTextLabel">
-                                        <property name="name">
-                                            <cstring>destLabel</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>[DESTINATION]</string>
-                                        </property>
-                                    </widget>
-                                </hbox>
-                            </widget>
-                            <widget class="QGroupBox">
-                                <property name="name">
-                                    <cstring>destGroupBox</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>140</width>
-                                        <height>100</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>32767</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                                <property name="title">
-                                    <string>Add &amp;Following</string>
-                                </property>
-                                <vbox>
-                                    <property name="name">
-                                        <cstring>unnamed</cstring>
-                                    </property>
-                                </vbox>
-                            </widget>
-                        </vbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>Layout10</cstring>
-                        </property>
-                        <vbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>0</number>
                             </property>
                             <spacer>
                                 <property name="name">
                                     <cstring>arrowSpacer1_2</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
                                 </property>
                                 <property name="sizeHint">
                                     <size>
-                                        <width>20</width>
+                                        <width>21</width>
                                         <height>20</height>
                                     </size>
                                 </property>
@@ -375,6 +368,9 @@
                                 </property>
                                 <property name="text">
                                     <string>R&amp;emove All</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+E</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Removes all added files.</string>
@@ -387,6 +383,9 @@
                                 <property name="text">
                                     <string>&amp;Remove Selected</string>
                                 </property>
+                                <property name="accel">
+                                    <string>Alt+R</string>
+                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Removes the selected files.</string>
                                 </property>
@@ -396,7 +395,7 @@
                                     <cstring>arrowSpacer2_2</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -408,67 +407,40 @@
                                     </size>
                                 </property>
                             </spacer>
+                        </hbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>destGroupBox</cstring>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>140</width>
+                                <height>100</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>32767</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="title">
+                            <string>Add &amp;Following</string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
                         </vbox>
                     </widget>
-                </hbox>
+                </vbox>
             </widget>
         </widget>
-        <widget class="KProgress">
-            <property name="name">
-                <cstring>progressBar</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout10</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>buttonSpacer</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>317</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>okButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>cancelButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
+    </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>cancelButton</sender>
@@ -493,8 +465,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>ksqueezedtextlabel.h</includehint>
-    <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>kprogress.h</includehint>
+    <includehint>ksqueezedtextlabel.h</includehint>
 </includehints>
 </UI>
