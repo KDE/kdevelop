@@ -26,6 +26,7 @@
 
 #include <qpainter.h>
 #include <qapplication.h>
+#include <qcursor.h>
 
 #include "qextmdidefines.h"
 #include "qextmdichildfrmcaption.h"

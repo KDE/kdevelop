@@ -61,7 +61,7 @@
 
 using namespace KParts;
 
-#ifdef _OS_WIN32_
+#if defined(_OS_WIN32_) || defined(Q_OS_WIN32)
 QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::Win95Look;
 #else
 #ifdef NO_KDE2

@@ -32,6 +32,7 @@
 
 #include <qtooltip.h>
 #include <qlabel.h>
+#include <qwidget.h>
 
 #include <qnamespace.h>
 
@@ -140,7 +141,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
    m_pFrm = parent;
    m_pButtonList = new QList<QextMdiTaskBarButton>;
    m_pButtonList->setAutoDelete(TRUE);
-   setFontPropagation(QWidget::SameFont);
+//QT30   setFontPropagation(QWidget::SameFont);
    setMinimumWidth(1);
    setFocusPolicy(NoFocus);
    parent->moveToolBar( this, dock);
@@ -274,7 +275,7 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 
    // if there's enough space, use actual width
    int buttonCount = m_pButtonList->count();
-   int buttonAreaWidth = taskBarWidth - style().toolBarHandleExtend() - style().defaultFrameWidth() - 5;
+   int buttonAreaWidth = taskBarWidth - style().toolBarHandleExtent() - style().defaultFrameWidth() - 5;
    if( ((allButtonsWidthHint) <= buttonAreaWidth) || (width() < parentWidget()->width())) {
       for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
          b->setText( b->actualText());
