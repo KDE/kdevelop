@@ -48,6 +48,7 @@ public:
 		void savePartialProjectSession(QDomElement* );
 		void setBaseURL(const KURL& url ) { base = url; }
 		KURL baseURL() { return base; }
+		virtual bool isValidDirectory( const QString &dirPath ) const;
 
 signals:
 //		void finishedFetching( QString destinationDir );

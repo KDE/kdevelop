@@ -91,7 +91,6 @@ subversionPart::subversionPart(QObject *parent, const char *name, const QStringL
 	m_impl->processWidget()->setCaption(i18n( "Subversion Output" ));
 	mainWindow()->embedOutputView( (QWidget*)m_impl->processWidget(), i18n( "Subversion" ), i18n( "Subversion messages" ) );
     QWhatsThis::add((QWidget*)m_impl->processWidget(), i18n("<b>Subversion</b><p>Subversion operations window."));
-	setVersionControl( this );
 }
 
 subversionPart::~subversionPart() {
@@ -374,6 +373,11 @@ void subversionPart::restorePartialProjectSession(const QDomElement* dom) {
 	m_propget_recurse = svn.attribute("recursepropget","1").toInt();
 	m_proplist_recurse = svn.attribute("recurseproplist","1").toInt();
 	base = svn.attribute( "base", "" );
+}
+
+bool subversionPart::isValidDirectory( const QString & dirPath ) const
+{
+    return false;
 }
 
 #include "subversion_part.moc"
