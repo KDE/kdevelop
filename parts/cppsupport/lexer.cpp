@@ -415,19 +415,11 @@ void Lexer::processDefine( Macro& m )
     }
 
     QString body;
-    while( !currentChar().isNull() ){
+    while( !currentChar().isNull() && currentChar() != '\n' ){
 
-	if( currentChar() == '\n' ){
-	    break;
-	} else if( currentChar().isSpace() ){
+        if( currentChar().isSpace() ){
 	    readWhiteSpaces( false );
 	    body += " ";
-	} else if( currentChar() == '\\' ){
-	    nextChar();
-	    readWhiteSpaces( false );
-	    if( currentChar() == '\n' ){
-		nextChar();
-	    }
 	} else {
 
 	    Token tk;
