@@ -38,6 +38,8 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
            this, SLOT(processExited( KProcess* )) );
   connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
            this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
+  connect( core(), SIGNAL(projectOpened()),
+           this, SLOT(projectOpened()) );
   
   m_widget = new ValgrindWidget( this );
   
@@ -54,6 +56,11 @@ ValgrindPart::~ValgrindPart()
 {
   delete m_widget;
   delete proc;
+}
+
+void ValgrindPart::projectOpened()
+{
+  _lastExec.truncate( 0 );
 }
 
 void ValgrindPart::loadOutput()

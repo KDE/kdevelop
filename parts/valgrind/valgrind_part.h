@@ -34,6 +34,7 @@ private slots:
   void receivedStderr( KProcess*, char*, int );
   void processExited( KProcess* );
   void loadOutput();
+  void projectOpened();
   
 private:
   void getActiveFiles();
