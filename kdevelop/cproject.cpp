@@ -976,8 +976,9 @@ void CProject::updateMakefileAm(const QString& makefile)
             if( type == "kpart_plugin")
             {
               stream << "\nLDADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -avoid-version -module -no-undefined\n\n";
+              stream << "lib" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
+              stream << "lib" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+              stream << "lib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = $(all_libraries) -avoid-version -module -no-undefined\n\n";
             }
             else if( (type == "kio_slave"))
             {
