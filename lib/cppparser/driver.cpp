@@ -242,19 +242,18 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
 
     lex.setSource( sourceProvider()->contents(fileName) );
 
-    TranslationUnitAST :: Node translationUnit;
     if( !onlyPreProcess ){
 	Parser parser( this, &lex );
 	setupParser( &parser );
 
+        TranslationUnitAST :: Node translationUnit;
 	parser.parseTranslationUnit( translationUnit );
+        m_parsedUnits.insert( fileName, translationUnit.release() );
+        fileParsed( fileName );
     }
-
-    m_parsedUnits.insert( fileName, translationUnit.release() );
+    
     m_currentFileName = QString::null;
     lexer = 0;
-
-    fileParsed( fileName );
 }
 
 void Driver::setupLexer( Lexer * lexer )
