@@ -132,8 +132,10 @@ void CKDevelop::slotFileClose(){
       }
     }
 
-    if (message_result == 3){ // cancel
-       slotStatusMsg(i18n("Ready."));
+    if (message_result == 3) // cancel
+    {
+      setInfoModified(filename, edit_widget->isModified());
+      slotStatusMsg(i18n("Ready."));
       return;
     }
   }
@@ -162,6 +164,7 @@ void CKDevelop::slotFileSave(){
   }
   else{
     edit_widget->doSave();
+    setInfoModified(filename, edit_widget->isModified());
     // only refresh if header file changed
     if(CProject::getType(filename)==CPP_HEADER){
     slotViewRefresh();
@@ -192,6 +195,7 @@ void CKDevelop::slotFileSaveAs(){
 }
 
 void CKDevelop::slotFileSaveAll(){
+  QStrList handledNames;
   // ok,its a dirty implementation  :-)
   if(!bAutosave || !saveTimer->isActive()){
     slotStatusMsg(i18n("Saving all changed files..."));
@@ -208,54 +212,43 @@ void CKDevelop::slotFileSaveAll(){
   // first the 2 current edits
   view->setUpdatesEnabled(false);
 
-  if(header_widget->isModified()){
-    if(header_widget->getName() == i18n("Untitled.h")){
-      switchToFile(i18n("Untitled.h"));
-      slotFileSaveAs();
-    }
-    else{
-      header_widget->doSave();
-    }
-    mod=true;
-  }
-  if(cpp_widget->isModified()){
-    if(cpp_widget->getName() == i18n("Untitled.cpp")){
-      switchToFile(i18n("Untitled.cpp"));
-      slotFileSaveAs();
-    }
-    else if(cpp_widget->getName() == i18n("Untitled.c")){
-      switchToFile(i18n("Untitled.c"));
-      slotFileSaveAs();
-    }
-    else{
-      cpp_widget->doSave();
-    }
-    //    mod=true;
-  }
+  setInfoModified(header_widget->getName(), header_widget->isModified());
+  setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
   statProg->setTotalSteps(edit_infos.count());
   statProg->show();
 	statProg->setProgress(0);
 	int i=0;
-  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+  for(actual_info=edit_infos.first();actual_info != 0;){
     //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+    TEditInfo *next_info=edit_infos.next();
+	// get now the next info... fileSaveAs can delete the actual_info
     i++;
     statProg->setProgress(i);
-    if(actual_info->modified){
+    if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
       if(isUntitled(actual_info->filename)){
       	switchToFile(actual_info->filename);
-      	slotFileSaveAs();
-     // 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
-//      	mod = true;  this is now handled by slotFileSaveAs()
+        handledNames.append(actual_info->filename);
+        if (fileSaveAs())
+        {
+          // maybe saved with another name... so we have to start again
+          next_info=edit_infos.first();
+          i=0;
+        }
+     //  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
+     //  mod = true;  this is now handled by slotFileSaveAs()
       }
       else{
       	switchToFile(actual_info->filename);
+        handledNames.append(actual_info->filename);
       	edit_widget->doSave();
+        actual_info->modified=edit_widget->isModified();
      // 	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
       	if(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx")
       	  mod = true;
       }
     }
+    actual_info=next_info;
   }
   statProg->hide();
   statProg->reset();
