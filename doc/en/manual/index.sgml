@@ -59,9 +59,8 @@ anywhere within the IDE.
 <sect>Changes
 <p>
 Version 1.1 of KDevelop comes along with the most needed facilities for C/C++ development. During the development phase of KDevelop,
-the project made great improvements since the 0.1 release followed by the 0.2, 0.3 and 0.4 releases; each of them were tested and bugs
-fixed. We believe that the current version is to be expected as the final release for the KDE 1.x series, giving developers the
-environment they want to use.
+the project made great improvements since the 1.0 final release. We believe that the current version is to be 
+expected as the final release for the KDE 1.x series, giving developers the environment they want to use.
 
 Improvements were made in the following sections:
 
@@ -69,7 +68,9 @@ Improvements were made in the following sections:
 <item>fast classparser and -browser with graphical class-tree view and dialog-based adding of members and classes,
 <item>CVS support for most needed functions such as adding, removing, updating and committing files and directories,
 <item>updated and extended documentation, now covering five handbooks shipping with KDevelop,
-<item>bugfixed classparser, dialogeditor and errorfinder.
+<item>bugfixed dialogeditor and errorfinder,
+<item>updated documentation tree which lets you access the class documentation up to any method of classes 
+directly
 </itemize>
 
 Any comments about the IDE, its documentation or feature requests are welcome.
@@ -206,9 +207,9 @@ If your system's <idx/make-command/ is <tt/gmake/, type <tt/gmake/ instead of <t
 <sect>Starting KDevelop
 <p>
 If you use <idx/KDE/ as your window manager, KDevelop can be started by choosing
-"K"&rarr"Applications"&rarr"KDevelop"&rarr"KDevelop 0.4". As KDevelop supports <idx/KDE/-Mime-types, you can also start by selecting a
-KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the <idx/KDE/ File Manager which will start KDevelop
-and load the project.
+"K"&rarr"Development"&rarr"KDevelop 1.1". As KDevelop supports <idx/KDE/-Mime-types, you can 
+also start by selecting a KDevelop project file ("*.kdevprj", displayed with the KDevelop project icon) in the 
+<idx/KDE/ File Manager which will start KDevelop and load the project.
 Under other window managers, open a console and type:
 <tscreen><verb>
 &percnt kdevelop
@@ -228,13 +229,13 @@ any time either by entering
 &percnt kdevelop  --<idx/setup/
 </verb></tscreen>
 
-or, when using KDE, by choosing "K"&rarr"Applications"&rarr"KDevelop"&rarr"Setup".
+or, when using KDE, by choosing "K"&rarr"Development"&rarr"KDevelop Setup".
 
 <sect>The Installation Program<label id="The Installation Program">
 <p>
-KDevelop includes an automatic installation program module which is invoked whenever Kdevelop is started and the configuration file
-kdeveloprc does not exist. We suggest you follow the installation steps by choosing "Proceed" to automatically check your system and to
-set up your KDevelop environment.
+KDevelop includes an automatic installation program module which is invoked whenever KDevelop is started and 
+the configuration file kdeveloprc does not exist. We suggest you follow the installation steps by choosing 
+"Proceed" to automatically check your system and to set up your KDevelop environment.
 
 
 The Installation dialog's buttons execute the following actions:
