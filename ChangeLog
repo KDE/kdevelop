@@ -6,6 +6,7 @@
 	  - add some global file templates to be stored in $datadir/kdevfilecreate/file-templates
 	* lib/util/filetemplate
 	  - look in global directory for templates if not found in project directory
+	
 2003-01-09  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
 	* revived lib/structure:
 	  - has a working Trie class now (tested with g++-3.2)
@@ -19,6 +20,7 @@
 	  - added interface for new file creation
 	* lib/util:
 	  - added urlutil, general URL manipulation utilities
+	
 2003-01-07  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * Append to libpath in subproject configuration dialog
 
