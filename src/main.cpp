@@ -58,6 +58,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Jens Zurheide", I18N_NOOP("Patches"), "jens.zurheide@gmx.de");
   aboutData.addCredit("Julian Rockey", I18N_NOOP("Filecreate part and other bits and patches"), "linux@jrockey.com");
   aboutData.addCredit("Amilcar do Carmo Lucas", I18N_NOOP("Patches"), "amilcar@ida.ing.tu-bs.de");
+  aboutData.addCredit("Ajay Guleria", I18N_NOOP("ClearCase support"), "ajay_guleria@yahoo.com");
 
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
