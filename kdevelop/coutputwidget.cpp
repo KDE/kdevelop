@@ -264,9 +264,10 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
     kdDebug() << "behind:" << msgBehind << endl << dbg << endl;
 */
 
-    // these are the strings that gmake 3.79.1 outputs on entering a directory
+    // these are the strings that gmake 3.79.1 (or later versions of it) outputs on entering a directory
     if ( msg == "Entering directory" || 			// English - default
          msg == "Wechsel in das Verzeichnis Verzeichnis" ||    // German - yes, there is a spelling error in make :)
+         msg == "Wechsel in das Verzeichnis" ||    // German - gmake without that spelling error
          msg == "Cambiando a directorio" || // Spanish
          msg == fr_e || // French
          msg == ja_e || // Japanese
@@ -295,6 +296,7 @@ void CMakeOutputWidget::processLine(const QString& line, MakeOutputErrorType typ
 
     if ( msg == "Leaving directory" || // en
          msg == "Verlassen des Verzeichnisses Verzeichnis" || // de
+         msg == "Verlassen des Verzeichnisses" ||    // de - gmake without that spelling error
          msg == "Saliendo directorio" || // es
          msg == fr_l || // fr
          msg == ja_l || //ja
