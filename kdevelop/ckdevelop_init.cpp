@@ -69,6 +69,7 @@
 #endif
 
 #include <iostream.h>
+#include <krun.h>
 
 CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   process("/bin/sh"),
@@ -85,6 +86,7 @@ CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   dbg_widget(0),
   dbgInternal(false)
 {
+
   doctool = DT_KDOC;
 
   version = VERSION;

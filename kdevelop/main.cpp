@@ -30,6 +30,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+
 static const char *description =
         I18N_NOOP("The KDevelop C/C++ Integrated Development Environment");
 
@@ -97,7 +98,6 @@ int main(int argc, char* argv[])
       install->show();
       delete install;
     }
-
     CKDevelop* kdevelop = new CKDevelop();
     kdevelop->completeStartup(args->count() == 0);
 

@@ -1,0 +1,13 @@
+[Desktop Entry]
+BinaryPattern=designer;
+Comment=Qt Interface Designer
+Comment[C]=Qt Interface Designer
+Exec=designer -client %i %m %U
+Icon=designer
+InitialPreference=3
+MapNotify=true
+MimeType=application/x-designer
+Name=Qt Desinger
+Name[C]=Qt Designer
+Terminal=false
+Type=Application

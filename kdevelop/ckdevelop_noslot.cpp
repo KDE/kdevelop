@@ -40,6 +40,10 @@
 #include <kstddirs.h>
 #include <krun.h>
 
+#include <kurl.h>
+#include <kopenwith.h>
+#include <kmimetype.h>
+
 #include <qmessagebox.h>
 #include <qprogressbar.h>
 #include <qprogressdialog.h>
@@ -625,6 +629,7 @@ void CKDevelop::refreshTrees(QStrList * iFileList){
  *-----------------------------------------------------------------*/
 void CKDevelop::refreshTrees(TFileInfo *info)
 {
+
   if( project )
   {
     kapp->processEvents(100);
@@ -665,6 +670,8 @@ void CKDevelop::refreshTrees(TFileInfo *info)
 void CKDevelop::switchToFile( QString filename, int line, int col,
                               bool bForceReload, bool bShowModifiedBox)
 {
+
+
   if (!isUntitled(filename)) {
     // We consider only symbolic links in directories here,
     // not links in files or hardlinks. The _real_ solution
@@ -687,122 +694,66 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     return;
   }
 
+
   QString ext = fileInfo.extension(false);
 
   // Load QtDesigner if clicked/loaded an User Interface file (.ui)
-  if ( ext == "ui") {
-    if(!CToolClass::searchProgram("designer")){
-      return;
-    }
+//  if ( ext == "ui") {
+//    if(!CToolClass::searchProgram("designer")){
+//      return;
+//    }
 
 //		KProcess designer_process;	
 //		designer_process << "designer" << "-client" << filename;
-		KShellProcess designer_process("/bin/sh");
-		const QString oldGroup = config->group();
-		config->setGroup("QT2");
-		QString qt2dir = QString ("QTDIR=")+ config->readEntry("qt2dir",getenv("QTDIR")) +" ";
-		config->setGroup(oldGroup);
-		designer_process << qt2dir << "designer" << "-client" << filename;
-		if(!designer_process.start(KProcess::DontCare)) {
-    	debug("QtDesigner didn't start!");
-		}
+//		KShellProcess designer_process("/bin/sh");
+//		const QString oldGroup = config->group();
+//		config->setGroup("QT2");
+//		QString qt2dir = QString ("QTDIR=")+ config->readEntry("qt2dir",getenv("QTDIR")) +" ";
+//		config->setGroup(oldGroup);
+//		designer_process << qt2dir << "designer" << "-client" << filename;
+//		if(!designer_process.start(KProcess::DontCare)) {
+//    	debug("QtDesigner didn't start!");
+//		}
+//    return;
+//  }
+//
+//  // Load Qt linguist if the filename is a ts file
+//  if( ext == "ts") {
+//    if(!CToolClass::searchProgram("linguist")){
+//      return;
+//    }
+//
+//		KProcess linguist_process;
+//		linguist_process << "linguist" << filename;
+//		if(!linguist_process.start(KProcess::DontCare)) {
+//    	debug("Qt Linguist didn't start!");
+//		}
+//    return;
+//  }
+//
+//  // Load Qt linguist if the filename is a ts file
+//  if( ext == "po") {
+//    if(CToolClass::searchInstProgram("kbabel")){
+//   		KProcess linguist_process;
+//   		linguist_process << "kbabel" << filename;
+//   		if(!linguist_process.start(KProcess::DontCare)) {
+//       	debug("KBabel didn't start!");
+//   		}
+//      return;
+//   	}
+//  }
+
+  KURL url;
+  url.setFileName(filename);
+  QString type =  KMimeType::findByURL(url, 0, true)->name();
+  if (!(type.startsWith("text/")
+    || type.startsWith("application/x-perl") || type.startsWith("application/x-python")
+    || type.startsWith("application/x-shellscript") || type.startsWith("application/x-desktop") ) )  // open with krun
+  {
+    new KRun( url );
     return;
   }
 
-  // load kiconedit if clicked/loaded  an icon
-  if( ext == "xpm" || ext == "png" ){
-    if(!CToolClass::searchProgram("kiconedit")){
-      return;
-    }
-    KShellProcess process("/bin/sh");
-    process << "kiconedit " << filename;
-    process.start(KProcess::DontCare);
-    return;
-  }
-
-  // load kiconedit if clicked/loaded  an icon
-  if( ext == "gz" || ext == "tgz" || ext == "bz" ){
-    if(!CToolClass::searchProgram("ark")){
-      return;
-    }
-    KShellProcess process("/bin/sh");
-    process << "ark " << filename;
-    process.start(KProcess::DontCare);
-    return;
-  }
-
-  // Load Qt linguist if the filename is a ts file
-  if( ext == "ts") {
-    if(!CToolClass::searchProgram("linguist")){
-      return;
-    }
-
-		KProcess linguist_process;
-		linguist_process << "linguist" << filename;
-		if(!linguist_process.start(KProcess::DontCare)) {
-    	debug("Qt Linguist didn't start!");
-		}
-    return;
-  }
-
-  // Load Qt linguist if the filename is a ts file
-  if( ext == "po") {
-    if(CToolClass::searchInstProgram("kbabel")){
-   		KProcess linguist_process;
-   		linguist_process << "kbabel" << filename;
-   		if(!linguist_process.start(KProcess::DontCare)) {
-       	debug("KBabel didn't start!");
-   		}
-      return;
-   	}
-  }
-
-  //load ktranslator if clicked/loaded an po file
-  if(ext == "po"){
-    if(CToolClass::searchInstProgram("ktranslator")){
-      KShellProcess process("/bin/sh");
-      process << "ktranslator " << filename;
-      process.start(KProcess::DontCare);
-      return;
-    }
-  }
-
-  //load kpaint for graphics files
-  if(ext == "gif" || ext == "bmp" || ext == "xbm"|| ext == "jpg"){
-    bool gimp=true;
-    if(!CToolClass::searchInstProgram("gimp")){
-      if(!CToolClass::searchInstProgram("kpaint"))
-        return;
-      }
-      QString tool;
-      if(gimp)
-        tool="gimp";
-      else
-        tool="kpaint";
-      KShellProcess process("/bin/sh");
-      process << tool << " " << filename;
-      process.start(KProcess::DontCare);
-      return;
-  }
-
-  if(ext == "ps"){
-    if(!CToolClass::searchInstProgram("kghostview")){
-			return;
-		}
-    KShellProcess process("/bin/sh");
-    process << "kghostview " << filename;
-    process.start(KProcess::DontCare);
-    return;
-  }
-  if(ext == "glade"){
-    if(!CToolClass::searchInstProgram("glade")){
-      return;
-    }
-    KShellProcess process("/bin/sh");
-    process << "glade " << filename;
-    process.start(KProcess::DontCare);
-    return;
-  }
 
   // set the correct edit_widget
   if (CProject::getType(filename) == CPP_SOURCE){
@@ -968,7 +919,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //  switchToFile( filename, false, lineNo, 0);
 //  edit_widget->setCursorPosition( lineNo, 0 );
 //}
-
 
 void CKDevelop::startDesigner()
 {

@@ -29,9 +29,9 @@
 #include <kmainwindow.h>
 #include <khelpmenu.h>
 #include <kcompletion.h>
-
 #include <kdockwidget.h>
 
+#include <kopenwith.h>
 #include <kprocess.h>
 
 #include <qguardedptr.h>
@@ -787,6 +787,7 @@ protected:
   void readProperties(KConfig* );
 	
 private:
+  KFileOpenWithHandler fowh;
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
   QPopupMenu* recent_projects_menu;
