@@ -68,7 +68,7 @@ sub replaceOldFile {
   $counter = 0;
   $wordlength = length($word);
   $newfile = "newfile.txt";
-  open (INPUT,$oldfile) || die "kann Datei nicht öffnen: $oldfile";
+  open (INPUT,$oldfile) || die "can not open file: $oldfile";
   open (OUTPUT,">$newfile");
   while ( defined ($line = <INPUT> )) {
     while ($where != -1) {
@@ -294,7 +294,7 @@ sub processCppTemplate {
     replaceOldFile("|DATE|",     $date,              "cpp");
     replaceOldFile("|YEAR|",     $year,              "cpp");
     
-    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
+    open (INPUT,"$file") || die "can not open file: $!";
     open (OUTPUT,">>cpp");
     while ( defined ($line = <INPUT> )) {
 	print OUTPUT $line;
@@ -319,15 +319,15 @@ sub processHeaderTemplate {
     replaceOldFile("|DATE|",     $date,              "header");
     replaceOldFile("|YEAR|",     $year,              "header");
     
-    open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
-    open (OUTPUT,">>cpp");
+    open (INPUT,"$file") || die "can not open file: $!";
+    open (OUTPUT,">>header");
     while ( defined ($line = <INPUT> )) {
 	print OUTPUT $line;
     }
     close (INPUT);
     close (OUTPUT);
-    rename ("cpp" , $file);
-    unlink ("cpp");
+    rename ("header" , $file);
+    unlink ("header");
 
 }
 
