@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <kwin.h>
 #include <kwinmodule.h>
+#include <kprocess.h>
 
 #include "document.h"
 #include "view.h"
@@ -121,13 +122,13 @@ void Document::invokeNC( const QString& command, bool appendFilename )
 {
   QString cmd = command;
   if ( appendFilename )
-    cmd += " \"" + m_file + "\"";
+    cmd += " " + KProcess::quote(m_file);
 
   if ( !m_isReady ) {
     // if NEdit server is not ready yet we store the commands for later
     m_commands += cmd;
   } else {
-    cmd = "nc -noask -svrname " + serverName() + " " + cmd;
+    cmd = "nc -noask -svrname " + KProcess::quote(serverName()) + " " + cmd;
     system( cmd );
   }
 }
