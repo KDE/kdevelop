@@ -51,7 +51,8 @@
 CParsedClass::CParsedClass()
   : methodIterator( methods ),
     attributeIterator( attributes ),
-    slotIterator( slotList )
+    slotIterator( slotList ),
+    signalIterator( signalList )
 {
   parents.setAutoDelete( true );
   attributes.setAutoDelete( true );
@@ -224,6 +225,10 @@ void CParsedClass::addSignal( CParsedMethod *aMethod )
 
   aMethod->setDeclaredInClass( name );
   signalList.append( aMethod );
+
+  QString str;
+  aMethod->toString( str );
+  signalsByNameAndArg.insert( str, aMethod );
 }
 
 /*------------------------------------------- CParsedClass::addSlot()
@@ -327,6 +332,23 @@ CParsedMethod *CParsedClass::getMethodByName( const char *aName )
 CParsedMethod *CParsedClass::getMethodByNameAndArg( const char *aName )
 {
   return methodsByNameAndArg.find( aName );
+}
+
+/*----------------------------- CParsedClass::getSignalByNameAndArg()
+ * getSignalByNameAndArg()
+ *   Get a signal by using its' name and args using the same format
+ *   as in CParsedMethod::toString().
+ *
+ * Parameters:
+ *   aName              Name and args of the signal to fetch.
+ *
+ * Returns:
+ *   CParsedMethod *    The method.
+ *   NULL               If not found.
+ *-----------------------------------------------------------------*/
+CParsedMethod *CParsedClass::getSignalByNameAndArg( const char *aName )
+{
+  return signalsByNameAndArg.find( aName );
 }
 
 /*----------------------------- CParsedClass::getSlotByNameAndArg()
@@ -483,6 +505,43 @@ QList<CParsedAttribute> *CParsedClass::getSortedAttributeList()
        str = srted.next() )
   {
     retVal->append( getAttributeByName( str ) );
+  }
+
+  return retVal;
+}
+
+/*------------------------------- CParsedClass::getSortedSignalList()
+ * getSortedSignalList()
+ *   Get all signals in sorted order. 
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedMethod> *  The sorted list.
+ *-----------------------------------------------------------------*/
+QList<CParsedMethod> *CParsedClass::getSortedSignalList()
+{
+  QList<CParsedMethod> *retVal = new QList<CParsedMethod>();
+  char *str;
+  QStrList srted;
+  QString m;
+  
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( signalIterator.toFirst();
+       signalIterator.current();
+       ++signalIterator )
+  {
+    signalIterator.current()->toString( m );
+    srted.inSort( m );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getSignalByNameAndArg( str ) );
   }
 
   return retVal;

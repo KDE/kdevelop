@@ -74,6 +74,13 @@ private: // Private attributes
   /** All slots ordered by name and argument. */
   QDict<CParsedMethod> slotsByNameAndArg;
 
+  /** List of all signals. */
+  QList<CParsedMethod> signalList;
+
+  /** All signals ordered by name and argument. */
+  QDict<CParsedMethod> signalsByNameAndArg;
+
+
 public: // Public attributes
 
   /** Name of the parsed class. */
@@ -103,11 +110,11 @@ public: // Public attributes
   /** Iterator for the attributes. */
   QDictIterator<CParsedAttribute> attributeIterator;
 
-  /** List of signals */
-  QList<CParsedMethod> signalList;
-
-  /** List of slots */
+  /** List of slots. */
   QListIterator<CParsedMethod> slotIterator;
+
+  /** List of signals. */
+  QListIterator<CParsedMethod> signalIterator;
 
   /** List of signal<->slot mappings. */
   QList<CParsedSignalSlot> signalMaps;
@@ -158,15 +165,16 @@ public: // Metods to set attribute values
 
 public: // Public queries
 
-  QList<CParsedMethod> *getMethods() { return &methods; }
-
   /** Get a method by using its' name. */
   CParsedMethod *getMethodByName( const char *aName );
 
   /** Get a method by using its' name and arguments. */
   CParsedMethod *getMethodByNameAndArg( const char *aName );
 
-  /** Get a method by using its' name and arguments. */
+  /** Get a signal by using its' name and arguments. */
+  CParsedMethod *getSignalByNameAndArg( const char *aName );
+
+  /** Get a slot by using its' name and arguments. */
   CParsedMethod *getSlotByNameAndArg( const char *aName );
 
   /** Get a method by comparing with another method. */
@@ -180,6 +188,9 @@ public: // Public queries
 
   /** Get all attributes in sorted order. */
   QList<CParsedAttribute> *getSortedAttributeList();
+
+  /** Get all signals in sorted order. */
+  QList<CParsedMethod> *getSortedSignalList();
 
   /** Get all slots in sorted order. */
   QList<CParsedMethod> *getSortedSlotList();
