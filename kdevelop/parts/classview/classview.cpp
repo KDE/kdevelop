@@ -264,9 +264,9 @@ void ClassView::selectedAddMethod()
     pm->asCppCode(cppCode);
 
     sourceFileSelected(pc->definedInFile);
-    kdDebug(9003) << "####################" << "Adding at line " << atLine << " " 
-                  << cppCode << endl
-                  << "####################";
+    kdDebug(9003) << "####################" << "Adding at line " << atLine
+                  << " " << cppCode
+                  << "####################" << endl;
     
     delete pm;
 }
@@ -315,9 +315,9 @@ void ClassView::selectedAddAttribute()
         atLine++;
 
     gotoDeclaration(className, className, THCLASS);
-    kdDebug(9003) << "####################" << "Adding at line " << atLine << " " 
-                  << headerCode << endl
-                  << "####################";
+    kdDebug(9003) << "####################" << "Adding at line " << atLine
+                  << " " << headerCode
+                  << "####################" << endl;
 
     delete pa;
 }
