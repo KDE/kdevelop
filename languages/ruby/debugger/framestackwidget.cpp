@@ -113,6 +113,7 @@ void FramestackWidget::parseRDBThreadList(char *str)
 	
 	QRegExp thread_re("(\\+)?\\s*(\\d+)\\s*(#<[^>]+>\\s*[^:]+:\\d+)");
 	int pos = thread_re.search(str);
+	viewedThread_ = 0;
 	
     while (pos != -1) {
 		ThreadStackItem* thread;
@@ -157,7 +158,10 @@ void FramestackWidget::parseRDBBacktraceList(char *str)
 		pos = frame_re.search(str, pos);
     }
 	
-	viewedThread_->setOpen(true);
+	if (viewedThread_ != 0) {
+		viewedThread_->setOpen(true);
+	}
+	
 	return;
 }
 
