@@ -1,5 +1,6 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>CvsForm</class>
+<author>Yann Hodique</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>CvsForm</cstring>
@@ -14,6 +15,10 @@
     </property>
     <property name="caption">
         <string>Form3</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>This form allows you to create a CVS repository
+for your new project</string>
     </property>
     <grid>
         <property name="name">
@@ -37,6 +42,13 @@
             <property name="name">
                 <cstring>root_edit</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter your Cvs Root location</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Cvs Root location goes here
+e.g. &lt;tt&gt;/home/cvsroot&lt;/tt&gt; or &lt;tt&gt;:pserver:me@localhost:/home/cvs&lt;/tt&gt;</string>
+            </property>
         </widget>
         <widget class="QLabel" row="5" column="0">
             <property name="name">
@@ -53,10 +65,20 @@
             <property name="text">
                 <string>start</string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Tag that will be associated with initial state</string>
+            </property>
         </widget>
         <widget class="QLineEdit" row="2" column="1">
             <property name="name">
                 <cstring>repository_edit</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter the name of the repository</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Cvs Repository name goes here
+Most of the thime you'll just reuse the project name</string>
             </property>
         </widget>
         <widget class="QLineEdit" row="3" column="1">
@@ -66,6 +88,9 @@
             <property name="text">
                 <string>vendor</string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter the vendor name</string>
+            </property>
         </widget>
         <widget class="QLineEdit" row="4" column="1">
             <property name="name">
@@ -73,6 +98,9 @@
             </property>
             <property name="text">
                 <string>new project</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Repository creation message</string>
             </property>
         </widget>
         <widget class="QLabel" row="4" column="0">
@@ -105,6 +133,9 @@
             </property>
             <property name="text">
                 <string>Init Root</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Check if you defined a new Cvs Root</string>
             </property>
         </widget>
     </grid>
