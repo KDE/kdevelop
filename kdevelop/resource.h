@@ -331,7 +331,7 @@
 #define IDK_PROJECT_FILE_PROPERTIES		SHIFT+Key_F7
 
 #define IDK_BUILD_MAKE								Key_F8
-#define IDK_BUILD_COMPILE_FILE	      CTRL+Key_F8
+#define IDK_BUILD_COMPILE_FILE	      SHIFT+Key_F8
 #define IDK_BUILD_MAKE_WITH						ALT+Key_F8
 
 #define IDK_BUILD_RUN									Key_F9
