@@ -1001,15 +1001,27 @@ void CClassView::buildInitalClassTree()
     // Try to determine if this is a subdirectory.
     str = aPC->definedInFile;
     str = str.remove( 0, projDir.length() );
-    str = str.remove( 0, str.find( '/', 1 ) );
-    str = str.remove( str.findRev( '/' ), 10000 );
-
+    int p = str.find( '/', 1 );
+    if (p == -1) {
+      // a source file directly in the project dir
+      str = "";
+    }
+    else {
+      QString subDir(project->getSubDir());
+      QString strPart = str.left(p+1);
+      if ((strPart == subDir) || (strPart == "src/") || (strPart == "include/")) {
+         // files in such subdirs have to appear directly under Classes
+         str = str.remove( 0, p);
+      }
+      str = str.remove( str.findRev( '/' ),10000 ); // just the subdir will remain
+    }
     if( str.isEmpty() )
       rootList.append( aPC );
-    else
-    {
+    else {
       // Remove heading /
-      str = str.remove( 0, 1 );
+      if (!str.isEmpty() && (str[0] == '/')) {
+        str = str.remove( 0, 1 );
+      }
       iterlist = dict.find( str );
 
       if( iterlist == NULL )
