@@ -59,6 +59,7 @@ CParsedClass::CParsedClass()
   signalList.setAutoDelete( true );
   slotList.setAutoDelete( true );
   signalMaps.setAutoDelete( true );
+  classes.setAutoDelete( false );
 }
 
 /*------------------------------------- CParsedClass::~CParsedClass()
