@@ -25,6 +25,7 @@
 #include <kfiledialog.h>
 #include <kprocess.h>
 #include <kconfig.h>
+#include <unistd.h>
 #include "../ckdevelop.h"
 #include "../cgeneratenewfile.h"
 #include "../cproject.h"
@@ -55,57 +56,7 @@ KDlgEdit::~KDlgEdit()
 
 
 void KDlgEdit::slotFileNew(){
-  // CProject* prj = ((CKDevelop*)parent())->getProject(); 
-//   TDialogFileInfo info;
-//   QString temp_dialog_file = dialog_file;
-//   if(prj != 0){
-//     if(slotFileClose()){
-//       KDlgNewDialogDlg dlg(((QWidget*) parent()),"I",prj);
-//       if( dlg.exec()){
-// 	// get the location
-// 	QString location = dlg.getLocation();
-// 	if(location.right(1) != "/"){
-// 	  location = location + "/";
-// 	}
-// 	info.rel_name = prj->getSubDir() + dlg.getClassname().lower() + ".kdevdlg";
-// 	info.dist = true;
-// 	info.install = false;
-// 	info.classname = dlg.getClassname();
-// 	info.baseclass = dlg.getBaseClass();
-// 	info.header_file = getRelativeName(location + dlg.getHeaderName());
-// 	info.source_file = getRelativeName(location + dlg.getSourceName());
-// 	info.data_file = getRelativeName(location + dlg.getDataName());
-// 	info.is_toplevel_dialog = true;
-	
-// 	QString l_dialog_file = prj->getProjectDir() + info.rel_name;
-	
-// 	if(prj->addDialogFileToProject(info.rel_name,info)){
-// 	  ((CKDevelop*)parent())->newSubDir();
-// 	}
-// 	((CKDevelop*)parent())->kdlg_get_edit_widget()->newDialog();			
-// 	((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(l_dialog_file);
-	
-// 	// registrate the source files
-// 	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getHeaderName());
-// 	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getSourceName());
-// 	((CKDevelop*)parent())->slotAddFileToProject(location + dlg.getDataName());
-	
-// 	// generate the new files;
-// 	// header
-// 	generateInitialHeaderFile(info,dlg.getBaseClassHeader());
-// 	generateInitialSourceFile(info);
-// 	slotOpenDialog(l_dialog_file);
-// 	slotBuildGenerate();
-// 	((CKDevelop*)parent())->refreshTrees();
-//       }
-//       else{
-// 	if(temp_dialog_file != ""){
-// 	  cerr << ":::" << temp_dialog_file << "::::";
-// 	  slotOpenDialog(temp_dialog_file);
-// 	}
-//       }
-//     } // end if(slotFileClose()
-//   }
+ 
 }
 
 
@@ -1336,9 +1287,9 @@ class PreviewDlg : public QDialog
                                  "you can also get the library on the KDevelop website." ));
             return;
           }
-
-#warning Why not save this in /tmp?
-        ldr->openDialog(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg");
+	QString pid_str;
+	pid_str.setNum(getpid());
+        ldr->openDialog("/tmp/"+pid_str+"previewdlg.kdevdlg");
         wid->move(0,0);
         setGeometry(wid->geometry());
      }
@@ -1359,18 +1310,17 @@ void KDlgEdit::slotViewPreview()
   if (!((CKDevelop*)parent())->kdlg_get_edit_widget())
     return;
 
-  QDir dir(KApplication::localkdedir()+"/share/apps/");
-  dir.mkdir("kdevelop");
 
-#warning Why not save this in /tmp?
-#if 0
-  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile(KApplication::localkdedir()+"/share/apps/kdevelop/"+"~~previewdlg~~.kdevdlg"))
+
+
+  QString pid_str;
+  pid_str.setNum(getpid());
+  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("/tmp/"+ pid_str+ "previewdlg.kdevdlg"))
     {
       QMessageBox::warning(((CKDevelop*)parent())->kdlg_get_edit_widget(),i18n("Dialog editor (WYSIWYG Preview)"),
                            i18n("Error saving temporary dialog file."));
       return;
     }
-#endif
 
   PreviewDlg dlg;
   dlg.move(100,100);

@@ -17,6 +17,7 @@
 
 
 #include <kapp.h>
+#include <kstddirs.h>
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qtooltip.h>
@@ -230,7 +231,7 @@ KDlgWidgets::myScrollView::myScrollView( QWidget * parent, const char * name, WF
   bool kdebtn = false;
 
   #define macroAddButton(fn, wd, mt, ht) \
-    addButton(QPixmap(KApplication::kde_datadir() + QString("/kdevelop/pics/mini/") + fn), wd, kdebtn); \
+    addButton(QPixmap(locate("data",QString("/kdevelop/pics/mini/") + fn)), wd, kdebtn); \
     connect(buttons[btnsCount-1], SIGNAL(clicked()), parent, SLOT(mt())); \
     QWhatsThis::add(buttons[btnsCount-1], QString("<brown><b>") + QString(wd) + QString("<black></b>\n\n") + QString(ht)); \
   QToolTip::add(buttons[btnsCount-1],QString(wd));
