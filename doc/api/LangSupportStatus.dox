@@ -94,7 +94,7 @@
       <td bgcolor="red">N</td>
       <td bgcolor="yellow">CodeModel</td>
       <td bgcolor="cyan">CodeModel</td>
-      <td bgcolor="yellow">CodeModel</td>
+      <td bgcolor="green">CodeModel</td>
       <td bgcolor="green">CodeModel</td>
       <td bgcolor="green">CodeModel</td>
       <td bgcolor="red">N</td>
@@ -132,7 +132,7 @@
     </tr>
     <tr>
       <td>\ref sectionProblemReporter</td>
-      <td bgcolor="cyan">Y</td>
+      <td bgcolor="green">Y</td>
       <td bgcolor="red">N</td>
       <td bgcolor="green">Y</td>
       <td bgcolor="red">N</td>
@@ -201,7 +201,7 @@
       <td bgcolor="red">N</td>
       <td bgcolor="green">N/A</td>
       <td bgcolor="red">N</td>
-      <td bgcolor="cyan">Y</td>
+      <td bgcolor="green">Y</td>
       <td bgcolor="red">N</td>
       <td bgcolor="yellow">Y</td>
       <td bgcolor="red">N</td>
