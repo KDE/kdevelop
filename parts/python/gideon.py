@@ -1,10 +1,10 @@
 import gideonc
 
 class core:
-    def gotoSourceFile(filename):
+    def gotoSourceFile(self, filename):
         gideonc.goto_source_file(filename)
         
-    def gotoDocumentationFile(filename):
+    def gotoDocumentationFile(self, filename):
         gideonc.goto_documentation_file(filename)
 
     projectOpened = "core_project_opened"

@@ -1,6 +1,6 @@
 def foo_action():
     print "foo-action called"
-    gideon.core.gotoSourceFile("/home/bernd/.bashrc")
+    gideon.core().gotoSourceFile("/home/bernd/.bashrc")
 
 def bar():
     print "bar called"
