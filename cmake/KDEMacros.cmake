@@ -18,7 +18,7 @@ ENDMACRO(ADD_FILE_DEPENDANCY)
 MACRO(KDE_ADD_DCOP_SKELS _sources)
    FOREACH (_current_FILE ${ARGN})
       GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
-      
+
 	  SET(_skel ${CMAKE_CURRENT_BINARY_DIR}/${_basename}_skel.cpp)
       SET(_kidl ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.kidl)
 
@@ -26,16 +26,16 @@ MACRO(KDE_ADD_DCOP_SKELS _sources)
          COMMAND ${DCOPIDL}
          ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} > ${_kidl}
          DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE}
-      )                
-      
+      )
+
 	  ADD_CUSTOM_COMMAND(OUTPUT ${_skel}
          COMMAND ${DCOPIDL2CPP}
-         ARGS --c++-suffix cpp --no-signals --no-stub ${_kidl} 
+         ARGS --c++-suffix cpp --no-signals --no-stub ${_kidl}
          DEPENDS ${_kidl}
-      )                
+      )
 
       SET(${_sources} ${${_sources}} ${_skel})
-   
+
    ENDFOREACH (_current_FILE)
 
 ENDMACRO(KDE_ADD_DCOP_SKELS)
@@ -52,10 +52,10 @@ MACRO(KDE_ADD_MOC_FILES _sources)
          COMMAND moc
          ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} -o ${_moc}
          DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE}
-      )                
+      )
 
       SET(${_sources} ${${_sources}} ${_moc})
-   
+
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_ADD_MOC_FILES)
 
@@ -71,10 +71,10 @@ MACRO(KDE_CREATE_AUTOMOC_FILES )
          COMMAND moc
          ARGS ${_header} -o ${_moc}
          DEPENDS ${_header}
-      )                
+      )
 
       ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc})
-  
+
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_CREATE_AUTOMOC_FILES)
 
@@ -82,32 +82,42 @@ ENDMACRO(KDE_CREATE_AUTOMOC_FILES)
 #usage: KDE_ADD_UI_FILES(foo_SRCS ${ui_files})
 MACRO(KDE_ADD_UI_FILES _sources )
    FOREACH (_current_FILE ${ARGN})
-      
+
 	  GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
       SET(_header ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.h)
       SET(_src ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.cpp)
 	  SET(_moc ${CMAKE_CURRENT_BINARY_DIR}/${_basename}.moc.cpp)
-	  
+
       ADD_CUSTOM_COMMAND(OUTPUT ${_header}
          COMMAND uic
-         ARGS  -o ${_header} ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE}
+         ARGS  -nounload -o ${_header} ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE}
          DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE}
-      )                
-      
+      )
+
+#	  ADD_CUSTOM_COMMAND(OUTPUT ${_src}
+#         COMMAND uic
+#         ARGS -nounload -tr tr2i18n -o ${_src} -impl ${_header} ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE}
+#         DEPENDS ${_header}
+#      )
+
 	  ADD_CUSTOM_COMMAND(OUTPUT ${_src}
-         COMMAND uic
-         ARGS -o ${_src} -impl ${_header} ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} 
+         COMMAND ${CMAKE_COMMAND}
+         ARGS
+         -DKDE_UIC_FILE:STRING=${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE}
+         -DKDE_UIC_CPP_FILE:STRING=${_src}
+         -DKDE_UIC_H_FILE:STRING=${_header}
+         -P ${CMAKE_SOURCE_DIR}/cmake/kdeuic.cmake
          DEPENDS ${_header}
-      )                
-      
+      )
+
       ADD_CUSTOM_COMMAND(OUTPUT ${_moc}
          COMMAND moc
          ARGS ${_header} -o ${_moc}
          DEPENDS ${_header}
-      )                
+      )
 
       SET(${_sources} ${${_sources}} ${_src} ${_moc} )
-      
+
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_ADD_UI_FILES)
 
@@ -115,14 +125,14 @@ MACRO(KDE_AUTOMOC)
    SET(_matching_FILES )
    FOREACH (_current_FILE ${ARGN})
       IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
-      
+
          FILE(READ ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} _contents)
-         
+
          STRING(REGEX MATCHALL "#include +[^ ]+\\.moc[\">]" _match "${_contents}")
          IF(_match)
             FOREACH (_current_MOC_INC ${_match})
                STRING(REGEX MATCH "[^ <\"]+\\.moc" _current_MOC "${_current_MOC_INC}")
-            
+
                GET_FILENAME_COMPONENT(_basename ${_current_MOC} NAME_WE)
                SET(_header ${CMAKE_CURRENT_SOURCE_DIR}/${_basename}.h)
                SET(_moc    ${CMAKE_CURRENT_BINARY_DIR}/${_current_MOC})
@@ -131,20 +141,20 @@ MACRO(KDE_AUTOMOC)
                   COMMAND moc
                   ARGS ${_header} -o ${_moc}
                   DEPENDS ${_header}
-               )                
+               )
 
                ADD_FILE_DEPENDANCY(${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE} ${_moc})
-  
+
             ENDFOREACH (_current_MOC_INC)
          ENDIF(_match)
-         
+
 #         GET_FILENAME_COMPONENT(_basename ${_current_FILE} NAME_WE)
 #         SET(_moc ${_basename}.moc)
 #         STRING(REGEX MATCH "#include.+${_moc}" _match "${_contents}")
 #         IF(_match)
-#            KDE_CREATE_AUTOMOC_FILES(${_current_FILE})      
+#            KDE_CREATE_AUTOMOC_FILES(${_current_FILE})
 #         ENDIF(_match)
-      
+
       ENDIF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_current_FILE})
    ENDFOREACH (_current_FILE)
 ENDMACRO(KDE_AUTOMOC)

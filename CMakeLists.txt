@@ -1,14 +1,20 @@
 PROJECT(kdevelop)
 
-INCLUDE(${PROJECT_SOURCE_DIR}/cmake/KDE.cmake)
-INCLUDE(${PROJECT_SOURCE_DIR}/cmake/KDEMacros.cmake)
+INCLUDE(${CMAKE_SOURCE_DIR}/cmake/KDE.cmake)
+INCLUDE(${CMAKE_SOURCE_DIR}/cmake/KDEMacros.cmake)
 
 SET(CMAKE_SKIP_RULE_DEPENDENCY 1)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 
+SET(CONFIG_QT_DOCDIR "\"/usr/lib/qt/doc/html/\"")
+SET(CONFIG_KDELIBS_DOXYDIR "\"/tmp/\"")
+
+CONFIGURE_FILE(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_SOURCE_DIR}/config.h)
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/lib/interfaces ${CMAKE_CURRENT_SOURCE_DIR}/lib/util)
 
 SUBDIRS( bdb lib parts)
+
 # languages buildtools editors vcs src pics doc mimetypes embedded kdevdesigner )
 
 
