@@ -22,8 +22,8 @@
 #include <qlineedit.h>
 #include <qlayout.h>
 
-PLineEdit::PLineEdit(const QString &propertyName, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name)
+PLineEdit::PLineEdit(MultiProperty *property, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QLineEdit(this);
@@ -43,12 +43,12 @@ void PLineEdit::setValue(const QVariant &value, bool emitChange)
     m_edit->setText(value.toString());
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
     if (emitChange)
-        emit propertyChanged(propertyName(), value);
+        emit propertyChanged(m_property, value);
 }
 
 void PLineEdit::updateProperty(const QString& val)
 {
-    emit propertyChanged(propertyName(), QVariant(val));
+    emit propertyChanged(m_property, QVariant(val));
 }
 
 #ifndef PURE_QT

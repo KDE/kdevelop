@@ -30,7 +30,7 @@ class QCheckBox;
 class PCheckBox: public PropertyWidget{
     Q_OBJECT
 public:
-    PCheckBox(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PCheckBox(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,33 +17,42 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PSPINBOX_H
-#define PSPINBOX_H
+#include "psizeedit.h"
 
-#include "propertywidget.h"
+#include <qlineedit.h>
+#include <qlayout.h>
+#include <qpainter.h>
 
-class QSpinBox;
+PSizeEdit::PSizeEdit(MultiProperty *property, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name)
+{
+    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new QLineEdit(this);
+    l->addWidget(m_edit);
 
-/**
-@short %Property editor with integer num input box.
-*/
-class PSpinBox: public PropertyWidget{
-    Q_OBJECT
-public:
-    PSpinBox(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
-    PSpinBox(MultiProperty *property, int minValue, int maxValue, int step = 1, QWidget *parent = 0, const char *name = 0);
+    m_edit->setReadOnly(true);
+}
 
-    /**@return the value currently entered in the editor widget.*/
-    virtual QVariant value() const;
-    /**Sets the value shown in the editor widget. Set emitChange to false
-    if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+QVariant PSizeEdit::value() const
+{
+    return m_value;
+}
 
-private slots:
-    void updateProperty(int val);
-    
-private:
-    QSpinBox *m_edit;
-};
+void PSizeEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
+{
+    p->setPen(Qt::NoPen);
+    p->setBrush(cg.background());
+    p->drawRect(r);
+    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
+}
 
-#endif
+void PSizeEdit::setValue(const QVariant& value, bool emitChange)
+{
+    m_value = value;
+    m_edit->setText(QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
+
+    if (emitChange)
+        emit propertyChanged(m_property, value);
+}
+
+#include "psizeedit.moc"

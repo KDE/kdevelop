@@ -33,7 +33,7 @@ class PStringListEdit: public PropertyWidget
 {
     Q_OBJECT
 public:
-    PStringListEdit(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PStringListEdit(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

@@ -30,7 +30,7 @@ class QLineEdit;
 class PLineEdit: public PropertyWidget{
     Q_OBJECT
 public:
-    PLineEdit(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PLineEdit(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

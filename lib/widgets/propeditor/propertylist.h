@@ -20,9 +20,14 @@
 #ifndef PROPERTYLIST_H
 #define PROPERTYLIST_H
 
-#include "property.h"
-#include "propertyaccessor.h"
-#include "propertyoperator.h"
+#include <qobject.h>
+#include <qmap.h>
+#include <qptrlist.h>
+#include <qvaluelist.h>
+#include <qpair.h>
+
+class Property;
+class MultiProperty;
 
 /** @file propertylist.h
 @short Contains @ref PropertyList class.
@@ -40,49 +45,24 @@ this list in order to:
 - display properties in the property editor widget (see @ref PropertyEditor).
 .
 
-PropertyList owns properties and deletes them itself.
+PropertyList owns properties and deletes them itself if propertyOwner = true
+in PropertyList's constructor.
+
 PropertyList is also capable of grouping properties.
 You can have unsorted list of groups of properties or a plain
 alphabetically sorted list of properties or both at the same time.
 */
-class PropertyList: public PropertyOperator
+class PropertyList: public QObject
 {
     Q_OBJECT
 public:
     PropertyList();
     virtual ~PropertyList();
 
-    /**Operator to cast @ref PropertyList to @ref PropertyAccessor.*/
-    virtual operator PropertyAccessor*();
     /**Accesses a property by it's name.
-    @return @ref Property with given name.
+    @return @ref MultiProperty with given name.
     */
-    virtual Property const *operator[](const QString &name);
-
-    /**Intersects with other @ref PropertyAccessor and returns a new accessor object.*/
-    virtual PropertyAccessor *intersect(const PropertyAccessor *list);
-
-    /**@return the name of the property.*/
-    virtual QString name(const QString &propertyName) const;
-    /**Sets the name of the property.*/
-    virtual void setName(const QString &propertyName, const QString &name);
-    /**@return the type of the property.*/
-    virtual int type(const QString &propertyName) const;
-    /**Sets the type of the property.*/
-    virtual void setType(const QString &propertyName, const int type);
-    /**@return the value of the property.*/
-    virtual QVariant value(const QString &propertyName) const;
-    /**Sets the value of the property.*/
-    virtual void setValue(const QString &propertyName, const QVariant &value);
-    /**@return the description of the property.*/
-    virtual QString description(const QString &propertyName) const;
-    /**Sets the description of the property.*/
-    virtual void setDescription(const QString &propertyName, const QString &description);
-    /**Sets the string-to-value correspondence list of the property.
-    This is used to create comboboxes-like property editors.*/
-    virtual void setValueList(const QString &propertyName, const QMap<QString, QVariant> &valueList);
-    /**The string-to-value correspondence list of the property.*/
-    virtual QMap<QString, QVariant> valueList(const QString &propertyName) const;
+    virtual MultiProperty *operator[](const QString &name);
 
     /**Adds the property to the list to the "common" group.*/
     virtual void addProperty(Property *property);
@@ -93,15 +73,54 @@ public:
     /**Removes property with the given name from the list.
     Emits @ref aboutToDeleteProperty before removing.*/
     virtual void removeProperty(const QString &name);
+    
+    /**@return the list of grouped properties.*/
+    virtual const QValueList<QPair<QString, QValueList<QString> > >& propertiesOfGroup() const;
+    /**@return the map: property - group name.*/
+    virtual const QMap<MultiProperty*, QString>& groupOfProperty() const;
+    
+    virtual void clear();
+    virtual bool contains(const QString &name);
 
+signals:
+    /**Emitted when the value of the property is changed.*/
+    void propertyValueChanged(Property* property);
+    /**Emitted when property is about to be deleted.*/
+    void aboutToDeleteProperty(Property* property);
+    
+protected:
+    PropertyList(bool propertyOwner);
+
+    /**Adds property to a group.*/
+    void addToGroup(const QString &group, MultiProperty *property);
+    /**Removes property from a group.*/
+    void removeFromGroup(MultiProperty *property);
+        
 private:
-    PropertyList(const PropertyList &list);
-    PropertyList operator=(const PropertyList &list);
-
     //sorted list of properties in form name: property
-    QMap<QString, Property*> m_list;
+    QMap<QString, MultiProperty*> m_list;
+    
+    //groups of properties:
+    // list of group name: (list of property names)
+    QValueList<QPair<QString, QValueList<QString> > > m_propertiesOfGroup;
+    // map of property: group
+    QMap<MultiProperty*, QString> m_groupOfProperty;
 
-friend class PropertyAccessor;
+    //indicates that this list will delete properties after removeProperty()
+    //and also in destructor
+    bool m_propertyOwner;
+    
+friend class MultiProperty;
+friend class PropertyBuffer;
+};
+
+class PropertyBuffer: public PropertyList{
+public:
+    PropertyBuffer(PropertyList *list);
+    PropertyBuffer();
+
+    /**Intersects with other @ref PropertyList.*/
+    virtual void intersect(const PropertyList *list);
 };
 
 #endif

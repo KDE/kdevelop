@@ -21,19 +21,19 @@
 
 #include <qpainter.h>
 
-PropertyWidget::PropertyWidget(const QString &propertyName, QWidget *parent, const char *name)
-    :QWidget(parent, name), m_propertyName(propertyName)
+PropertyWidget::PropertyWidget(MultiProperty *property, QWidget *parent, const char *name)
+    :QWidget(parent, name), m_property(property)
 {
 }
 
 QString PropertyWidget::propertyName() const
 {
-    return m_propertyName;
+    return m_property->name();
 }
 
-void PropertyWidget::setPropertyName(const QString &propertyName)
+void PropertyWidget::setProperty(MultiProperty *property)
 {
-    m_propertyName = propertyName;
+    m_property = property;
 }
 
 void PropertyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)

@@ -29,8 +29,8 @@
 #include <keditlistbox.h>
 #include <kstdguiitem.h>
 
-PStringListEdit::PStringListEdit(const QString &propertyName, QWidget *parent, const char *name)
-     :PropertyWidget(propertyName, parent, name)
+PStringListEdit::PStringListEdit(MultiProperty *property, QWidget *parent, const char *name)
+     :PropertyWidget(property, parent, name)
 {
     l = new QHBoxLayout(this);
 
@@ -53,7 +53,7 @@ void PStringListEdit::setValue(const QVariant &value, bool emitChange)
     m_list = value.toStringList();
     edit->setText(value.toStringList().join(", "));
     if (emitChange)
-        emit propertyChanged(propertyName(), value);
+        emit propertyChanged(m_property, value);
 }
 
 void PStringListEdit::showEditor()
@@ -85,7 +85,7 @@ void PStringListEdit::showEditor()
     }
     delete dia;
 
-    emit propertyChanged(propertyName(), m_list);
+    emit propertyChanged(m_property, m_list);
 }
 
 void PStringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)

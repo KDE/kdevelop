@@ -24,8 +24,8 @@
 #include <qlayout.h>
 #include <knuminput.h>
 
-PDoubleNumInput::PDoubleNumInput(const QString &propertyName, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name)
+PDoubleNumInput::PDoubleNumInput(MultiProperty *property, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name)
 {    
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KDoubleNumInput(-999999.0, 999999.0, 0.0, 0.01, 2, this);
@@ -49,12 +49,12 @@ void PDoubleNumInput::setValue(const QVariant &value, bool emitChange)
     m_edit->setValue(value.toDouble());
     connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(updateProperty(double)));
     if (emitChange)
-        emit propertyChanged(propertyName(), value);
+        emit propertyChanged(m_property, value);
 }
 
 void PDoubleNumInput::updateProperty(double val)
 {
-    emit propertyChanged(propertyName(), QVariant(val));
+    emit propertyChanged(m_property, QVariant(val));
 }
 
 #ifndef PURE_QT

@@ -30,7 +30,7 @@ class KColorCombo;
 class PColorCombo: public PropertyWidget{
     Q_OBJECT
 public:
-    PColorCombo(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PColorCombo(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

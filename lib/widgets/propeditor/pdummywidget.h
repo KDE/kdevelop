@@ -32,7 +32,7 @@ class PDummyWidget: public PropertyWidget
 {
     Q_OBJECT
 public:
-    PDummyWidget(const QString& propertyName, QWidget *parent = 0, const char *name = 0);
+    PDummyWidget(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

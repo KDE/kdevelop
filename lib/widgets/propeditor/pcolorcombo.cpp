@@ -24,8 +24,8 @@
 
 #include <kcolorcombo.h>
 
-PColorCombo::PColorCombo(const QString &propertyName, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name)
+PColorCombo::PColorCombo(MultiProperty *property, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KColorCombo(this);
@@ -45,15 +45,15 @@ void PColorCombo::setValue(const QVariant &value, bool emitChange)
     m_edit->setColor(value.toColor());
     connect(m_edit, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
     if (emitChange)
-        emit propertyChanged(propertyName(), value);
+        emit propertyChanged(m_property, value);
 }
 
 void PColorCombo::updateProperty(int /*val*/)
 {
-    emit propertyChanged(propertyName(), value());
+    emit propertyChanged(m_property, value());
 }
 
-void PColorCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
+void PColorCombo::drawViewer(QPainter *p, const QColorGroup &/*cg*/, const QRect &r, const QVariant &value)
 {
     p->setBrush(value.toColor());
     p->setPen(Qt::NoPen);

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,33 +17,39 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PSPINBOX_H
-#define PSPINBOX_H
+#include "purledit.h"
 
-#include "propertywidget.h"
+#include <kurlrequester.h>
+#include <qlayout.h>
 
-class QSpinBox;
+PUrlEdit::PUrlEdit(KFile::Mode mode, MultiProperty* property, QWidget* parent, const char* name)
+    :PropertyWidget(property, parent, name)
+{
+    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new KURLRequester(this);
+    l->addWidget(m_edit);
+    m_edit->setMode(mode);
 
-/**
-@short %Property editor with integer num input box.
-*/
-class PSpinBox: public PropertyWidget{
-    Q_OBJECT
-public:
-    PSpinBox(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
-    PSpinBox(MultiProperty *property, int minValue, int maxValue, int step = 1, QWidget *parent = 0, const char *name = 0);
+    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+}
 
-    /**@return the value currently entered in the editor widget.*/
-    virtual QVariant value() const;
-    /**Sets the value shown in the editor widget. Set emitChange to false
-    if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+QVariant PUrlEdit::value() const
+{
+     return QVariant(m_edit->url());
+}
 
-private slots:
-    void updateProperty(int val);
-    
-private:
-    QSpinBox *m_edit;
-};
+void PUrlEdit::setValue(const QVariant& value, bool emitChange)
+{
+    disconnect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+    m_edit->setURL(value.toString());
+    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
+    if (emitChange)
+        emit propertyChanged(m_property, value);
+}
 
-#endif
+void PUrlEdit::updateProperty(const QString &val)
+{
+    emit propertyChanged(m_property, QVariant(val));
+}
+
+#include "purledit.moc"

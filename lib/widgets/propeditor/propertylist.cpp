@@ -19,131 +19,48 @@
  ***************************************************************************/
 #include "propertylist.h"
 
+#include "property.h"
+#include "multiproperty.h"
+
 PropertyList::PropertyList()
-    :PropertyOperator()
+    :QObject(0, 0), m_propertyOwner(true)
 {
 }
 
-//we can't copy QObjects, damn :( ... workaround:
-PropertyList::PropertyList(const PropertyList &list)
-    :PropertyOperator(),
-    m_list(list.m_list)
+PropertyList::PropertyList(bool propertyOwner)
+    :QObject(0, 0), m_propertyOwner(propertyOwner)
 {
-    m_propertiesOfGroup = list.m_propertiesOfGroup;
-    m_groupOfProperty = list.m_groupOfProperty;
-}
-
-//this won't work, but anyway...
-PropertyList PropertyList::operator=(const PropertyList &list)
-{
-    if (this != &list)
-    {
-        m_propertiesOfGroup = list.m_propertiesOfGroup;
-        m_groupOfProperty = list.m_groupOfProperty;
-        m_list = list.m_list;
-    }
-    return *this;
 }
 
 PropertyList::~PropertyList()
 {
-    for (QMap<QString, Property*>::iterator it = m_list.begin(); it != m_list.end(); ++it)
-        removeProperty(it.key());
+    clear();
 }
 
-PropertyList::operator PropertyAccessor*()
+MultiProperty *PropertyList::operator[](const QString &name)
 {
-    PropertyAccessor *ac = new PropertyAccessor;
-    for (QMap<QString, Property*>::const_iterator it = m_list.begin(); it != m_list.end(); ++it)
-    {
-        QPtrList<Property> list;
-        list.append(it.data());
-        ac->m_list.insert(it.key(), list);
-        ac->addToGroup(m_groupOfProperty[it.data()], it.data());
-    }
-
-    connect(this, SIGNAL(aboutToDeleteProperty(Property*)), ac, SLOT(aboutToDeleteProperty(Property*)));
-    
-    return ac;
-}
-
-Property const *PropertyList::operator[](const QString &name)
-{
-    return m_list[name];
-}
-
-PropertyAccessor *PropertyList::intersect(const PropertyAccessor *list)
-{
-    return PropertyAccessor::intersect(list, *this);
-}
-
-QString PropertyList::name(const QString &propertyName) const
-{
-    if (m_list.contains(propertyName))
-        return m_list[propertyName]->name();
-    return QString::null;
-}
-
-void PropertyList::setName(const QString &propertyName, const QString &name)
-{
-    m_list[propertyName]->setName(name);
-}
-
-int PropertyList::type(const QString &propertyName) const
-{
-    if (m_list.contains(propertyName))
-        return m_list[propertyName]->type();
-    return QVariant::Invalid;
-}
-
-void PropertyList::setType(const QString &propertyName, const int type)
-{
-    m_list[propertyName]->setType(type);
-}
-
-QVariant PropertyList::value(const QString &propertyName) const
-{
-    if (m_list.contains(propertyName))
-        return m_list[propertyName]->value();
-    return QVariant();
-}
-
-void PropertyList::setValue(const QString &propertyName, const QVariant &value)
-{
-    m_list[propertyName]->setValue(value);
-    emit propertyValueChanged(m_list[propertyName]);
-}
-
-QString PropertyList::description(const QString &propertyName) const
-{
-    if (m_list.contains(propertyName))
-        return m_list[propertyName]->description();
-    return QString::null;
-}
-
-void PropertyList::setDescription(const QString &propertyName, const QString &description)
-{
-    m_list[propertyName]->setDescription(description);
-}
-
-QMap<QString, QVariant> PropertyList::valueList(const QString &propertyName) const
-{
-    if (m_list.contains(propertyName))
-        return m_list[propertyName]->valueList;
-    return QMap<QString, QVariant>();
-}
-
-void PropertyList::setValueList(const QString &propertyName, const QMap<QString, QVariant> &valueList)
-{
-    m_list[propertyName]->setValueList(valueList);
+    if (m_list.contains(name))
+        return m_list[name];
+    else 
+        return new MultiProperty(this);
 }
 
 void PropertyList::addProperty(Property *property)
 {
     if (property == 0)
         return;
-    addToGroup("", property);
-    m_list[property->name()] = property;
+    MultiProperty *mp = 0;
+    if ( m_list.contains(property->name()) )
+    {
+        mp = m_list[property->name()];
+        *mp << property;
+    }
+    else
+    {
+        mp = new MultiProperty(this, property);
+        m_list[property->name()] = mp;
+        addToGroup("", mp);
+    }
 }
 
 void PropertyList::addProperty(const QString &group, Property *property)
@@ -151,27 +68,194 @@ void PropertyList::addProperty(const QString &group, Property *property)
     if (property == 0)
         return;
 
-    addToGroup(group, property);
-    m_list[property->name()] = property;
+    MultiProperty *mp = 0;
+    if (m_list.contains(property->name()))
+    {
+        mp = m_list[property->name()];
+        *mp << property;
+    }
+    else
+    {
+        mp = new MultiProperty(this, property);
+        m_list[property->name()] = mp;
+        addToGroup(group, mp);
+    }
 }
 
 void PropertyList::removeProperty(Property *property)
 {
     if (property == 0)
         return;
-    
-    emit aboutToDeleteProperty(property);
 
-    removeFromGroup(property);
+    if (m_propertyOwner)
+        emit aboutToDeleteProperty(property);
+
+    MultiProperty *mp = m_list[property->name()];
+    QString group = m_groupOfProperty[mp];
+    removeFromGroup(mp);
     QString pname = property->name();
-    delete property;
-    m_list.remove(pname);
+    *mp >> property;
+    if (m_propertyOwner)
+        delete property;
+    if (mp->list.count() == 0)
+    {
+//        qWarning("rp:            removing mp for %s itself", pname.ascii());
+        m_list.remove(pname);
+        delete mp;
+    }
+    else
+        addToGroup(group, mp);
 }
 
 void PropertyList::removeProperty(const QString &name)
 {
     if (m_list.contains(name))
-        removeProperty(m_list[name]);
+    {
+        QString group = m_groupOfProperty[m_list[name]];
+        removeFromGroup(m_list[name]);
+        Property *property;
+        for (property = m_list[name]->list.first(); property; property = m_list[name]->list.next())
+        {
+            if (m_propertyOwner)
+                emit aboutToDeleteProperty(property);
+
+            *(m_list[property->name()]) >> property;
+            if (m_propertyOwner)
+                delete property;
+        }
+        if (m_list[name]->list.count() == 0)
+        {
+//            qWarning("rp2:            removing mp for %s itself", name.ascii());
+            delete m_list[name];
+            m_list.remove(name);
+        }
+        else
+        {
+            addToGroup(group, m_list[name]);
+        }
+    }
+}
+
+const QValueList<QPair<QString, QValueList<QString> > >& PropertyList::propertiesOfGroup() const
+{
+    return m_propertiesOfGroup;
+}
+
+const QMap<MultiProperty*, QString>& PropertyList::groupOfProperty() const
+{
+    return m_groupOfProperty;
+}
+
+void PropertyList::addToGroup(const QString &group, MultiProperty *property)
+{
+    if (!property)
+        return;
+
+    //do not add same property to the group twice
+    if (m_groupOfProperty.contains(property) && (m_groupOfProperty[property] == group))
+        return;
+    
+    QPair<QString, QValueList<QString> > *groupPair = 0;
+    for(QValueList<QPair<QString, QValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
+        it != m_propertiesOfGroup.end(); ++it)
+    {
+        if ((*it).first == group)
+        {
+            groupPair = &(*it);
+            break;
+        }
+    }
+    if (groupPair == 0)
+    {
+        groupPair = new QPair<QString, QValueList<QString> >();
+        groupPair->first = group;
+        groupPair->second.append(property->name());
+        m_propertiesOfGroup.append(*groupPair);
+        m_groupOfProperty[property] = group;
+        return;
+    }
+    //check if group already contains property with the same name
+    if (!groupPair->second.contains(property->name()))
+        groupPair->second.append(property->name());
+
+    m_groupOfProperty[property] = group;
+}
+
+void PropertyList::removeFromGroup(MultiProperty *property)
+{
+    QString group = m_groupOfProperty[property];
+//    qWarning("removeFromGroup group=%s", group.ascii());
+
+    for(QValueList<QPair<QString, QValueList<QString> > >::iterator it = m_propertiesOfGroup.begin();
+        it != m_propertiesOfGroup.end(); ++it)
+    {
+//        qWarning("removeFromGroup checking %s", (*it).first.ascii());
+        if ((*it).first == group)
+        {
+//            qWarning("removeFromGroup removing %s", property->name().ascii());
+            (*it).second.remove(property->name());
+            break;
+        }
+    }
+
+    m_groupOfProperty.remove(property);
+}
+
+PropertyBuffer::PropertyBuffer( )
+    :PropertyList(false)
+{
+}
+
+void PropertyBuffer::intersect(const PropertyList *list)
+{
+    for (QMap<QString, MultiProperty*>::iterator it = m_list.begin(); it != m_list.end(); ++it)
+    {
+//        qWarning("intersect:: for mp = %s", it.data()->name().ascii());
+        if (list->m_list.contains(it.key()))
+        {
+/*            qWarning("intersect::     list contains %s", it.key().ascii());
+            if ( (*(it.data()) == *(list->m_list[it.key()])))
+                qWarning("intersect::     equal properties");
+            else
+                qWarning("intersect::     not equal properties");*/
+            if ( ((*it.data()) == *(list->m_list[it.key()]))
+            && (list->m_groupOfProperty[list->m_list[it.key()]] == m_groupOfProperty[it.data()]) )
+            {
+//                qWarning("intersect::     equal properties, adding");
+                *(it.data()) << list->m_list[it.key()];
+                continue;
+            }
+        }
+//        qWarning("intersect::     removing %s from intersection", it.key().ascii());
+        removeProperty(it.key());
+    }
+}
+
+PropertyBuffer::PropertyBuffer(PropertyList *list)
+    :PropertyList(false)
+{
+    //deep copy of m_list
+    for (QMap<QString, MultiProperty*>::const_iterator it = list->m_list.begin();
+            it != list->m_list.end(); ++it)
+    {
+        MultiProperty *mp = new MultiProperty(*it.data());
+        mp->m_propertyList = this;
+        addToGroup(list->m_groupOfProperty[it.data()], mp);
+        m_list[it.key()] = mp;
+    }
+}
+
+void PropertyList::clear( )
+{
+    for (QMap<QString, MultiProperty*>::iterator it = m_list.begin(); it != m_list.end(); ++it)
+        removeProperty(it.key());
+}
+
+bool PropertyList::contains( const QString & name )
+{
+    if (m_list.contains(name))
+        return true;
+    return false;
 }
 
 #ifndef PURE_QT

@@ -33,8 +33,8 @@
 
 #include "psymbolcombo.h"
 
-PSymbolCombo::PSymbolCombo(const QString &propertyName, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name)
+PSymbolCombo::PSymbolCombo(MultiProperty *property, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name)
 {
     l = new QHBoxLayout(this);
 
@@ -72,7 +72,7 @@ void PSymbolCombo::setValue(const QVariant &value, bool emitChange)
         m_edit->setText(QChar(value.toInt()));
         connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
         if (emitChange)
-            emit propertyChanged(propertyName(), value);
+            emit propertyChanged(m_property, value);
     }
 }
 
@@ -110,7 +110,7 @@ void PSymbolCombo::selectChar()
 
 void PSymbolCombo::updateProperty(const QString& val)
 {
-    emit propertyChanged(propertyName(), QVariant(QString("%1").arg(val.at(0).unicode())));
+    emit propertyChanged(m_property, QVariant(QString("%1").arg(val.at(0).unicode())));
 }
 
 void PSymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,33 +17,27 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PSPINBOX_H
-#define PSPINBOX_H
+#ifndef PPOINTEDIT_H
+#define PPOINTEDIT_H
 
 #include "propertywidget.h"
 
-class QSpinBox;
+class QLineEdit;
 
-/**
-@short %Property editor with integer num input box.
-*/
-class PSpinBox: public PropertyWidget{
-    Q_OBJECT
+class PPointEdit : public PropertyWidget
+{
+Q_OBJECT
 public:
-    PSpinBox(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
-    PSpinBox(MultiProperty *property, int minValue, int maxValue, int step = 1, QWidget *parent = 0, const char *name = 0);
+    PPointEdit(MultiProperty* property, QWidget* parent=0, const char* name=0);
 
-    /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;
-    /**Sets the value shown in the editor widget. Set emitChange to false
-    if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value);
+    virtual void setValue(const QVariant& value, bool emitChange);
 
-private slots:
-    void updateProperty(int val);
-    
 private:
-    QSpinBox *m_edit;
+    QLineEdit *m_edit;
+    QVariant m_value;
+
 };
 
 #endif

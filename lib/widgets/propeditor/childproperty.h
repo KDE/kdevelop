@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,33 +17,54 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PSPINBOX_H
-#define PSPINBOX_H
+#ifndef CHILDPROPERTY_H
+#define CHILDPROPERTY_H
 
-#include "propertywidget.h"
+#include "property.h"
 
-class QSpinBox;
+class MultiProperty;
 
 /**
-@short %Property editor with integer num input box.
+@short Child property
+
+Used by @ref PropertyMachineFactory to create child properties.
 */
-class PSpinBox: public PropertyWidget{
-    Q_OBJECT
+class ChildProperty: public Property{
 public:
-    PSpinBox(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
-    PSpinBox(MultiProperty *property, int minValue, int maxValue, int step = 1, QWidget *parent = 0, const char *name = 0);
+    enum ChildPropertyType {
+        Size_Height,
+        Size_Width,
+        Point_X,
+        Point_Y,
+        Rect_X,
+        Rect_Y,
+        Rect_Width,
+        Rect_Height,
+        SizePolicy_HorData,
+        SizePolicy_VerData,
+        SizePolicy_HorStretch,
+        SizePolicy_VerStretch
+    };
+    
+    /**Constructs empty property.*/
+    ChildProperty() {}
+    /**Constructs property.*/
+    ChildProperty(MultiProperty *parent, int type, ChildPropertyType childType, const QString &name,
+        const QString &description, const QVariant &value = QVariant(),
+        bool save = true, bool readOnly = false);
+    /**Constructs property with @ref ValueFromList type.*/
+    ChildProperty(MultiProperty *parent, const QString &name, ChildPropertyType childType,
+        const QMap<QString, QVariant> &v_valueList, const QString &description,
+        const QVariant &value = QVariant(), bool save = true, bool readOnly = false);
 
-    /**@return the value currently entered in the editor widget.*/
+    /**@return the value of the property.*/
     virtual QVariant value() const;
-    /**Sets the value shown in the editor widget. Set emitChange to false
-    if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true);
-
-private slots:
-    void updateProperty(int val);
+    /**Sets the value of the property.*/
+    virtual void setValue(const QVariant &value);
     
 private:
-    QSpinBox *m_edit;
+    MultiProperty *m_parent;
+    ChildPropertyType m_childType;
 };
 
 #endif

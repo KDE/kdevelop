@@ -21,11 +21,12 @@
 #define PROPERTYMACHINEFACTORY_H
 
 #include <qmap.h>
-#include <qptrlist.h>
 
 #include "propertywidget.h"
 
 class Property;
+class MultiProperty;
+class ChildProperty;
 class QWidget;
 
 /** @file propertymachinefactory.h
@@ -47,11 +48,11 @@ property viewers and editors for font family, size, etc.
 struct Machine{
     Machine()
     {
-        details.setAutoDelete(true);
+//        details.setAutoDelete(true);
     }
     Machine(PropertyWidget *widget)
     {
-        details.setAutoDelete(true);
+//        details.setAutoDelete(true);
         propertyEditor = widget;
     }
     ~Machine()
@@ -61,8 +62,8 @@ struct Machine{
     
     /**Property viewer and editor widget.*/
     PropertyWidget *propertyEditor;
-    /**A list of detailed machines.*/
-    QPtrList<Machine> details;
+    /**A list of detailed properties.*/
+//    QPtrList<ChildProperty> details;
 };
 
 /**A pointer to factory function which creates and returns machine for a property.*/
@@ -81,7 +82,8 @@ public:
     /**Creates and returns the editor for given property type.
     Warning: editor and viewer widgets won't have parent widget. %Property editor
     cares about reparenting and deletion of returned widgets in machines.*/
-    Machine *machineForProperty(const QString propertyName, int type, const QMap<QString, QVariant> &valueList);
+    Machine *machineForProperty(MultiProperty *property);
+    bool hasDetailedEditors(int type);
 
     /**@return a pointer to a property machine factory instance.*/
     static PropertyMachineFactory *getInstance();

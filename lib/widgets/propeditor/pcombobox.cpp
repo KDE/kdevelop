@@ -22,14 +22,14 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 
-PComboBox::PComboBox(const QString &propertyName, const QMap<QString, QVariant> &list, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name), m_valueList(list)
+PComboBox::PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name), m_valueList(list)
 {
     init(false);
 }
 
-PComboBox::PComboBox(const QString &propertyName, const QMap<QString, QVariant> &list, bool rw, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name), m_valueList(list)
+PComboBox::PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, bool rw, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name), m_valueList(list)
 {
     init(rw);
 }
@@ -73,13 +73,13 @@ void PComboBox::setValue(const QVariant &value, bool emitChange)
         m_edit->setCurrentText(findDescription(value));
         connect(m_edit, SIGNAL(activated(int)), this, SLOT(updateProperty(int)));
         if (emitChange)
-            emit propertyChanged(propertyName(), value);
+            emit propertyChanged(m_property, value);
     }
 }
 
 void PComboBox::updateProperty(int /*val*/)
 {
-    emit propertyChanged(propertyName(), value());
+    emit propertyChanged(m_property, value());
 }
 
 QString PComboBox::findDescription(const QVariant &value)

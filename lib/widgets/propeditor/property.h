@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
- *   cloudtemple@mskat.net                                                 *
+ *   Copyright (C) 2002-2004 by Alexander Dymo  <cloudtemple@mskat.net>    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -31,29 +30,11 @@ class QString;
 @short Contains @ref Property class and @ref PropertyType enum.
 */
 
-/** @short PropertyType.
-
-    Integers that represent the type of the property. */
-enum PropertyType {
-    //standard supported QVariant types
-    String = QVariant::String          /**<string*/,
-    Integer = QVariant::Int            /**<integer*/,
-    Double = QVariant::Double          /**<double*/,
-    Boolean = QVariant::Bool           /**<boolean*/,
-    StringList = QVariant::StringList  /**<string list*/,
-    Color = QVariant::Color            /**<color*/,
-    List = QVariant::List              /**<QValueList<QVariant>*/,
-    Map = QVariant::Map                /**<QMap<QString, QVariant>*/,
-
-    //predefined custom types
-    ValueFromList = 2000               /**<string value from a list*/,
-    Symbol = 2001                      /**<unicode symbol code*/,
-    FontName = 2002                    /**<font name, e.g. "times new roman"*/,
-
-    UserDefined = 3000                 /**<plugin defined properties should start here*/
-};
-
 /**
+@short Property.
+
+It includes support for QStringList properties, an i18n'ed label and stores an old value to allow undo.
+
 Contains name, type and value.
 
 Type can be one of predefined types (including standard @ref QVariant types) by @ref PropertyType 
@@ -63,20 +44,60 @@ Value is a @ref QVariant.
 
 Property can optionally have a list of possible values.
 In that case use @ref ValueFromList type and valueList member.
+Use @ref description for i18n'ed label and @ref oldValue() to get old value of property
+and implement undo.
 
-Property also can have a description which will be shown in @ref PropertyEditor
-as a hint.
-@short Property.
+Examples:
+creating property:
+\code 
+Property *property = new Property(String, name, description, value)
+\endcode
+using convenience constructor to create property of ValueFromList type:
+\code
+Property *property = new Property(name, possibleValuesList, description, value);
+\endcode
 */
 class Property {
 public:
+    /** PropertyType.
+        Integers that represent the type of the property. */
+    enum PropertyType {
+        //standard supported QVariant types
+        String = QVariant::String          /**<string*/,
+        Integer = QVariant::Int            /**<integer*/,
+        Double = QVariant::Double          /**<double*/,
+        Boolean = QVariant::Bool           /**<boolean*/,
+        Date = QVariant::Date              /**<date*/,
+        DateTime = QVariant::DateTime      /**<date and time*/,
+        StringList = QVariant::StringList  /**<string list*/,
+        Color = QVariant::Color            /**<color*/,
+        List = QVariant::List              /**<QValueList<QVariant>*/,
+        Map = QVariant::Map                /**<QMap<QString, QVariant>*/,
+        Size = QVariant::Size              /**<size (width, height)*/,
+        Pixmap = QVariant::Pixmap          /**<pixmap*/,
+        Cursor = QVariant::Cursor          /**<cursor*/,
+        Point = QVariant::Point            /**<point (x,y)*/,
+        Rect = QVariant::Rect              /**<rectangle (x,y, width, height)*/,
+        SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
+
+        //predefined custom types
+        ValueFromList = 2000               /**<string value from a list*/,
+        Symbol = 2001                      /**<unicode symbol code*/,
+        FontName = 2002                    /**<font name, e.g. "times new roman"*/,
+        FileURL = 2003                     /**<url of a file*/,
+        DirectoryURL = 2004                /**<url of a directory*/,
+
+        UserDefined = 3000                 /**<plugin defined properties should start here*/
+    };
+
+    /**Constructs empty property.*/
     Property() {}
     /**Constructs property.*/
-    Property(int type, const QString &name, const QString &description = "",
+    Property(int type, const QString &name, const QString &description,
         const QVariant &value = QVariant(), bool save = true, bool readOnly = false);
     /**Constructs property with @ref ValueFromList type.*/
     Property(const QString &name, const QMap<QString, QVariant> &v_valueList,
-        const QString &description = "", const QVariant &value = QVariant(), bool save = true, bool readOnly = false);
+        const QString &description, const QVariant &value = QVariant(), bool save = true, bool readOnly = false);
     virtual ~Property();
 
     virtual bool operator<(const Property &prop) const;
@@ -106,12 +127,16 @@ public:
     /**Tells if the property can be saved to a stream, xml, etc.
     There is a possibility to use "GUI" properties that aren't
     stored but used only in a GUI.*/
-    virtual bool allowSaving();
-    /**Tells is the property is read only.*/
-    virtual bool isReadOnly();
+    virtual bool allowSaving() const;
+    /**Tells if the property is read only.*/
+    virtual bool readOnly() const;
+    /**Tells if the property is visible.*/
+    virtual bool visible() const;
+    /**Set the visibility.*/
+    virtual void setVisible(const bool visible);
 private:
-    Property(Property &property) {};
-    void operator=(Property &property) {};
+//    Property(Property &property) {};
+//    void operator=(Property &property) {};
 
     int m_type;
     QString m_name;
@@ -119,6 +144,7 @@ private:
     QVariant m_value;
     bool m_save;
     bool m_readOnly;
+    bool m_visible;
 };
 
 #endif

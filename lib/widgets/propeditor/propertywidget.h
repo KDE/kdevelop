@@ -27,6 +27,8 @@
 @short Contains @ref PropertyWidget class.
 */
 
+#include "multiproperty.h"
+
 /**
 @short An abstract base class of property viewer and editor vidget.
 
@@ -46,7 +48,7 @@ class PropertyWidget: public QWidget{
     Q_OBJECT
 public:
     /**Constructs widget for property with name "propertyName".*/
-    PropertyWidget(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PropertyWidget(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
     virtual ~PropertyWidget() {}
 
     /**@return the value currently entered in the editor widget.*/
@@ -56,6 +58,8 @@ public:
     virtual void setValue(const QVariant &value, bool emitChange=true) = 0;
     /**@return the name of edited property.*/
     virtual QString propertyName() const;
+    /**Sets the name of edited property.*/
+    virtual void setProperty(MultiProperty *property);
     
     /**Function to draw a property viewer when the editor isn't shown.*/
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
@@ -65,12 +69,10 @@ signals:
     to emit it only from @ref setValue() method.
     @ref PropertyEditor widget will connect this to the appropriate slot which
     will make updates to the @ref PropertyAccessor that hold propeties.*/
-    void propertyChanged(const QString &name, const QVariant &value);
+    void propertyChanged(MultiProperty *property, const QVariant &value);
 
-private:
-    QString m_propertyName;
-
-    virtual void setPropertyName(const QString &propertyName);
+protected:
+    MultiProperty *m_property;
 };
 
 #endif

@@ -1,6 +1,8 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
- *   cloudtemple@mskat.net                                                 *
+ *   Copyright (C) 2002-2004 by Alexander Dymo  <cloudtemple@mskat.net>    *
+ *   Copyright (C) 2002 by Lucijan Busch <lucijan@gmx.at>                  *
+ *   Copyright (C) 2003 by Cedric Pasteur <cedric.pasteur@free.fr>         *
+ *   Copyright (C) 2004 by Jaroslaw Staniek <js@iidea.pl>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -23,14 +25,16 @@
 
 Property::Property(int type, const QString &name, const QString &description,
     const QVariant &value, bool save, bool readOnly):
-    m_type(type), m_name(name), m_description(description), m_value(value), m_save(save), m_readOnly(readOnly)
+    m_type(type), m_name(name), m_description(description), m_value(value), m_save(save),
+    m_readOnly(readOnly), m_visible(true)
 {
 }
 
 Property::Property(const QString &name, const QMap<QString, QVariant> &v_valueList,
     const QString &description, const QVariant &value, bool save, bool readOnly):
     valueList(v_valueList), m_type(ValueFromList), m_name(name),
-    m_description(description), m_value(value), m_save(save), m_readOnly(readOnly)
+    m_description(description), m_value(value), m_save(save), m_readOnly(readOnly),
+    m_visible(true)
 {
 }
 
@@ -38,7 +42,7 @@ Property::~Property()
 {
 }
 
-bool Property::allowSaving()
+bool Property::allowSaving() const
 {
    return m_save;
 }
@@ -96,7 +100,18 @@ void Property::setValueList(const QMap<QString, QVariant> &v_valueList)
     valueList = v_valueList;
 }
 
-bool Property::isReadOnly( )
+bool Property::readOnly() const
 {
     return m_readOnly;
 }
+
+bool Property::visible() const
+{
+    return m_visible;
+}
+
+void Property::setVisible( const bool visible )
+{
+    m_visible = visible;
+}
+

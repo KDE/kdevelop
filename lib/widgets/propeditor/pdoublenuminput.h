@@ -31,7 +31,7 @@ class PDoubleNumInput: public PropertyWidget
 {
 Q_OBJECT
 public:
-    PDoubleNumInput(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PDoubleNumInput(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

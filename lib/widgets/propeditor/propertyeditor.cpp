@@ -29,28 +29,41 @@
 #include <qtable.h>
 #include <qlayout.h>
 #include <qpainter.h>
+#include <qptrlist.h>
+#include <qvaluelist.h>
 
 #include "property.h"
-#include "propertyaccessor.h"
+#include "multiproperty.h"
 #include "propertymachinefactory.h"
 
 class PropertyItem: public QListViewItem{
 public:
-    PropertyItem(PropertyEditor *parent, const QString &name, int type)
-        :QListViewItem(parent, name), m_editor(parent), m_type(type)
+    PropertyItem(PropertyEditor *parent, MultiProperty *property)
+        :QListViewItem(parent, property->description()), m_editor(parent), m_property(property)
     {
     }
     
-    PropertyItem(PropertyEditor *editor, QListViewItem *parent, const QString &name, int type)
-        :QListViewItem(parent, name), m_editor(editor), m_type(type)
+    PropertyItem(PropertyEditor *editor, QListViewItem *parent, MultiProperty *property)
+        :QListViewItem(parent, property->description()), m_editor(editor),
+        m_property(property)
     {
     }
     
-    int type() const
+/*    int type() const
     {
-        return m_type;
+        return m_property->type();
     }
-        
+    
+    QString name() const
+    {
+        return m_property->name();
+    }
+        */
+    MultiProperty *property() const
+    {
+        return m_property;
+    }
+    
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align)
     {
         if (column == 1)
@@ -58,11 +71,11 @@ public:
             QRect r(0, 0, m_editor->header()->sectionSize(1), height()-1);
             //FIXME: this is ugly, but how else can we deal with ValueFromList properties?
             QVariant valueToDraw;
-            if (type() == ValueFromList)
-                valueToDraw = m_editor->m_accessor->findValueDescription(text(0));
+            if (m_property->type() == Property::ValueFromList)
+                valueToDraw = m_property->findValueDescription();
             else
-                valueToDraw = m_editor->m_accessor->value(text(0));
-            m_editor->machine(text(0))->propertyEditor->drawViewer(p, cg, r, valueToDraw);
+                valueToDraw = m_property->value();
+            m_editor->machine(m_property)->propertyEditor->drawViewer(p, cg, r, valueToDraw);
             return;
         }
         QListViewItem::paintCell(p, cg, column, width, align);
@@ -70,7 +83,7 @@ public:
 
 private:
     PropertyEditor *m_editor;
-    int m_type;
+    MultiProperty *m_property;
 };
 
 
@@ -136,6 +149,7 @@ PropertyEditor::PropertyEditor(QWidget *parent, const char *name, WFlags f)
     m_doubleClickForEdit = true;
     m_lastClickedItem = 0;    
     m_currentEditWidget = 0;
+    m_list = 0;
 }
 
 PropertyEditor::~PropertyEditor()
@@ -143,22 +157,24 @@ PropertyEditor::~PropertyEditor()
     clearMachineCache();
 }
 
-void PropertyEditor::populateProperties(PropertyAccessor *accessor)
+void PropertyEditor::populateProperties(PropertyList *list)
 {
-    if (accessor == 0)
+    if (list == 0)
         return;
-    m_accessor = accessor;
-    connect(m_accessor, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
-    const QValueList<QPair<QString, QValueList<QString> > >& groups = m_accessor->propertiesOfGroup();
+    m_list = list;
+    connect(m_list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
+    const QValueList<QPair<QString, QValueList<QString> > >& groups = m_list->propertiesOfGroup();
     for (QValueList<QPair<QString, QValueList<QString> > >::const_iterator it = groups.begin();
         it != groups.end(); ++it)
     {
+//        qWarning("PropertyEditor::populateProperties:    adding group %s", (*it).first.ascii());
         PropertyGroupItem *group = 0;
-        if (!(*it).first.isEmpty())
+        if ( (!(*it).first.isEmpty()) && ((*it).second.count() > 0) )
             group = new PropertyGroupItem(this, (*it).first);
         const QValueList<QString> &properties = (*it).second;
         for (QValueList<QString>::const_iterator it2 = properties.begin(); it2 != properties.end(); ++it2)
         {
+//            qWarning("PropertyEditor::populateProperties:    adding property %s", (*it2).ascii());
             if (group)
                 addProperty(group, *it2);
             else
@@ -169,31 +185,84 @@ void PropertyEditor::populateProperties(PropertyAccessor *accessor)
 
 void PropertyEditor::addProperty(PropertyGroupItem *group, const QString &name)
 {
-    new PropertyItem(this, group, name, m_accessor->type(name));    
+    if ((*m_list)[name] == 0)
+        return;
+//        qWarning("%s = name : object null ", name.ascii());
+    PropertyItem *pitem = new PropertyItem(this, group, (*m_list)[name]);
+    addChildProperties(pitem);
 }
 
 void PropertyEditor::addProperty(const QString &name)
 {
-    new PropertyItem(this, name, m_accessor->type(name));
+    if ((*m_list)[name] == 0)
+        return;
+//        qWarning("%s = name : object null ", name.ascii());
+    PropertyItem *pitem = new PropertyItem(this, (*m_list)[name]);
+    addChildProperties(pitem);
+}
+
+void PropertyEditor::addChildProperties(PropertyItem *parent)
+{
+    MultiProperty *prop = parent->property();
+    //force machine creation to get detailed properties appended to current multiproperty
+    if ( !m_registeredForType.contains(prop->type())
+        && (PropertyMachineFactory::getInstance()->hasDetailedEditors(prop->type())) )
+    {
+        //FIXME: find better solution
+        machine(prop);
+    }
+        
+    qWarning("seeking children: count: %d", prop->details.count());
+
+    parent->setOpen(true);
+    for (QValueList<ChildProperty>::iterator it = prop->details.begin(); it != prop->details.end(); ++it)
+    {
+        qWarning("found child %s", (*it).name().ascii());
+        new PropertyItem(this, parent, new MultiProperty(&m_detailedList, &(*it)));
+    }
 }
 
 void PropertyEditor::clearProperties()
 {
-    disconnect(m_accessor, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
-    delete m_accessor;
-    m_accessor = 0;
+    m_detailedList.clear();
+    if (!m_list)
+        return;
+    if (m_currentEditWidget)
+        m_currentEditWidget->hide();
+    
+    clear();
+    disconnect(m_list, SIGNAL(propertyValueChanged(Property*)), this, SLOT(propertyValueChanged(Property*)));
+    delete m_list;
+    m_list = 0;
 }
 
 void PropertyEditor::propertyValueChanged(Property *property)
 {
     if (m_currentEditWidget->propertyName() == property->name())
         m_currentEditWidget->setValue(property->value(), false);
+    else
+    {
+        //repaint all items
+        QListViewItemIterator it(this);
+        while (it.current())
+        {
+            repaintItem(it.current());
+            ++it;
+        }        
+    }
 }
 
-void PropertyEditor::propertyChanged(const QString &name, const QVariant &value)
+void PropertyEditor::propertyChanged(MultiProperty *property, const QVariant &value)
 {
-    kdDebug() << "editor: assign " << name.latin1() << " to " << value.toString().latin1() << endl;
-    m_accessor->setValue(name, value, false);
+    if (!property)
+        return;
+    
+    kdDebug() << "editor: assign " << property->name().latin1() << " to " << value.toString().latin1() << endl;
+    property->setValue(value, false);
+/*    if (m_list->contains(name))
+    {
+        (*m_list)[name]->setValue(value, false);
+//    else if (m_detailedList->contains(*/
 }
 
 void PropertyEditor::hideEditor()
@@ -245,8 +314,18 @@ void PropertyEditor::placeEditor(PropertyItem *item)
 
 PropertyWidget* PropertyEditor::prepareEditor(PropertyItem *item)
 {
-    PropertyWidget *editorWidget = machine(item->text(0))->propertyEditor;    
-    editorWidget->setValue(m_accessor->value(item->text(0)), false);
+    PropertyWidget *editorWidget = 0;
+/*    if (item->depth() >= 2)
+    {
+        editorWidget = machine(item->name())->propertyEditor;    
+        editorWidget->setValue(m_accessor->value(item->name()), false);
+    }
+    else
+    {*/
+    editorWidget = machine(item->property())->propertyEditor;
+    editorWidget->setProperty(item->property());
+    editorWidget->setValue(item->property()->value(), false);
+    //}
     return editorWidget;
 }
 
@@ -276,16 +355,18 @@ void PropertyEditor::slotClicked(QListViewItem *item)
     m_lastClickedItem = item;
 }
 
-Machine *PropertyEditor::machine(const QString &name)
+Machine *PropertyEditor::machine(MultiProperty *property)
 {
-    int type = m_accessor->type(name);
-    QMap<QString, QVariant> values = m_accessor->valueList(name);
+    int type = property->type();
+    QString name = property->name();
+    QMap<QString, QVariant> values = property->valueList();
     if (m_registeredForType[type] == 0)
     {
-        m_registeredForType[type] = PropertyMachineFactory::getInstance()->machineForProperty(name, type, values);
-        connect(m_registeredForType[type]->propertyEditor, SIGNAL(propertyChanged(const QString&, const QVariant&)),
-            this, SLOT(propertyChanged(const QString&, const QVariant&)));
+        m_registeredForType[type] = PropertyMachineFactory::getInstance()->machineForProperty(property);
+        connect(m_registeredForType[type]->propertyEditor, SIGNAL(propertyChanged(MultiProperty*, const QVariant&)),
+            this, SLOT(propertyChanged(MultiProperty*, const QVariant&)));
         m_registeredForType[type]->propertyEditor->reparent(viewport(), 0, viewport()->childrenRect().topLeft());
+        m_registeredForType[type]->propertyEditor->hide();
     }
     return m_registeredForType[type];
 }

@@ -35,9 +35,9 @@ class PComboBox: public PropertyWidget{
     Q_OBJECT
 public:
     /**This constructor is used for read-only selection combo. It provides a value from valueList*/
-    PComboBox(const QString &propertyName, const QMap<QString, QVariant> &list, QWidget *parent = 0, const char *name = 0);
+    PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, QWidget *parent = 0, const char *name = 0);
     /**This constructor is used for read-write selection combo. It provides a value from valueList*/
-    PComboBox(const QString &propertyName, const QMap<QString, QVariant> &list, bool rw, QWidget *parent = 0, const char *name = 0);
+    PComboBox(MultiProperty *property, const QMap<QString, QVariant> &list, bool rw, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

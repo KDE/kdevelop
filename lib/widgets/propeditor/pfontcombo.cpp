@@ -31,8 +31,8 @@
 #include <qfontdatabase.h>
 #endif
 
-PFontCombo::PFontCombo(const QString &propertyName, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name)
+PFontCombo::PFontCombo(MultiProperty *property, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new KFontCombo(this);
@@ -66,12 +66,12 @@ void PFontCombo::setValue(const QVariant &value, bool emitChange)
 #endif
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(updateProperty(const QString&)));
     if (emitChange)
-        emit propertyChanged(propertyName(), value);
+        emit propertyChanged(m_property, value);
 }
 
 void PFontCombo::updateProperty(const QString &val)
 {
-    emit propertyChanged(propertyName(), QVariant(val));
+    emit propertyChanged(m_property, QVariant(val));
 }
 
 #ifndef PURE_QT

@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,52 +17,46 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "pspinbox.h"
+#include "pdatetimeedit.h"
 
-#include <limits.h>
-
-#include <qspinbox.h>
+#include <qdatetimeedit.h>
+#include <qpainter.h>
 #include <qlayout.h>
 
-PSpinBox::PSpinBox(MultiProperty *property, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+PDateTimeEdit::PDateTimeEdit(MultiProperty* property, QWidget* parent, const char* name): PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QSpinBox(INT_MIN, INT_MAX, 1, this);
+    m_edit = new QDateTimeEdit(this);
     l->addWidget(m_edit);
     
-    connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
+    connect(m_edit, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(updateProperty(const QDateTime&)));
 }
 
-PSpinBox::PSpinBox(MultiProperty *property, int minValue, int maxValue, int step, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+QVariant PDateTimeEdit::value() const
 {
-    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QSpinBox(minValue, maxValue, step, this);
-    l->addWidget(m_edit);
-    
-    connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
+     return QVariant(m_edit->dateTime());
 }
 
-QVariant PSpinBox::value() const
+void PDateTimeEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
 {
-    return QVariant(m_edit->cleanText().toInt());
+    p->setPen(Qt::NoPen);
+    p->setBrush(cg.background());
+    p->drawRect(r);
+    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, value.toDateTime().toString(Qt::LocalDate));
 }
 
-void PSpinBox::setValue(const QVariant &value, bool emitChange)
+void PDateTimeEdit::setValue(const QVariant& value, bool emitChange)
 {
-    disconnect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
-    m_edit->setValue(value.toInt());
-    connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(updateProperty(int)));
+    disconnect(m_edit, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(updateProperty(const QDateTime&)));
+    m_edit->setDateTime(value.toDateTime());
+    connect(m_edit, SIGNAL(valueChanged(const QDateTime&)), this, SLOT(updateProperty(const QDateTime&)));
     if (emitChange)
         emit propertyChanged(m_property, value);
 }
 
-void PSpinBox::updateProperty(int val)
+void PDateTimeEdit::updateProperty(const QDateTime &val)
 {
     emit propertyChanged(m_property, QVariant(val));
 }
 
-#ifndef PURE_QT
-#include "pspinbox.moc"
-#endif
+#include "pdatetimeedit.moc"

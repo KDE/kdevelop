@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2002-2004 by Alexander Dymo                             *
+ *   Copyright (C) 2004 by Alexander Dymo                                  *
  *   cloudtemple@mskat.net                                                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,33 +17,47 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#ifndef PSPINBOX_H
-#define PSPINBOX_H
+#include "pdateedit.h"
 
-#include "propertywidget.h"
+#include <qdatetimeedit.h>
+#include <qpainter.h>
+#include <qlayout.h>
 
-class QSpinBox;
-
-/**
-@short %Property editor with integer num input box.
-*/
-class PSpinBox: public PropertyWidget{
-    Q_OBJECT
-public:
-    PSpinBox(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
-    PSpinBox(MultiProperty *property, int minValue, int maxValue, int step = 1, QWidget *parent = 0, const char *name = 0);
-
-    /**@return the value currently entered in the editor widget.*/
-    virtual QVariant value() const;
-    /**Sets the value shown in the editor widget. Set emitChange to false
-    if you don't want to emit propertyChanged signal.*/
-    virtual void setValue(const QVariant &value, bool emitChange=true);
-
-private slots:
-    void updateProperty(int val);
+PDateEdit::PDateEdit(MultiProperty* property, QWidget* parent, const char* name)
+    :PropertyWidget(property, parent, name)
+{
+    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new QDateEdit(this);
+    l->addWidget(m_edit);
     
-private:
-    QSpinBox *m_edit;
-};
+    connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(updateProperty(const QDate&)));
+}
 
-#endif
+QVariant PDateEdit::value() const
+{
+     return QVariant(m_edit->date());
+}
+
+void PDateEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
+{
+    p->setPen(Qt::NoPen);
+    p->setBrush(cg.background());
+    p->drawRect(r);
+    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, value.toDate().toString(Qt::LocalDate));
+}
+
+void PDateEdit::setValue(const QVariant& value, bool emitChange)
+{
+    disconnect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(updateProperty(const QDate&)));
+    m_edit->setDate(value.toDate());
+    connect(m_edit, SIGNAL(valueChanged(const QDate&)), this, SLOT(updateProperty(const QDate&)));
+    if (emitChange)
+        emit propertyChanged(m_property, value);
+}
+
+void PDateEdit::updateProperty(const QDate &val)
+{
+    emit propertyChanged(m_property, QVariant(val));
+}
+
+#include "pdateedit.moc"

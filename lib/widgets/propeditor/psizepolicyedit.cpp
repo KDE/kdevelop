@@ -17,34 +17,54 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include "pdummywidget.h"
+#include "psizepolicyedit.h"
 
+#include <qlineedit.h>
+#include <qlayout.h>
 #include <qpainter.h>
+#include <qsizepolicy.h>
 
-PDummyWidget::PDummyWidget(MultiProperty *property, QWidget *parent, const char *name)
-    :PropertyWidget(property, parent, name)
+PSizePolicyEdit::PSizePolicyEdit(MultiProperty* property, const QMap<QString, QVariant> &spValues, QWidget* parent, const char* name)
+    :PropertyWidget(property, parent, name), m_spValues(spValues)
 {
+    QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
+    m_edit = new QLineEdit(this);
+    l->addWidget(m_edit);
+
+    m_edit->setReadOnly(true);
 }
 
-QVariant PDummyWidget::value() const
+QVariant PSizePolicyEdit::value() const
 {
     return m_value;
 }
 
-void PDummyWidget::setValue(const QVariant &value, bool emitChange)
+void PSizePolicyEdit::drawViewer(QPainter* p, const QColorGroup& cg, const QRect& r, const QVariant& value)
+{
+    p->setPen(Qt::NoPen);
+    p->setBrush(cg.background());
+    p->drawRect(r);
+    p->drawText(r, Qt::AlignAuto & Qt::SingleLine, QString("%1/%2/%3/%4").arg(findValueDescription(value.toSizePolicy().horData())).arg(findValueDescription(value.toSizePolicy().verData())).arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
+}
+
+void PSizePolicyEdit::setValue(const QVariant& value, bool emitChange)
 {
     m_value = value;
+    m_edit->setText(QString("%1/%2/%3/%4").arg(findValueDescription(value.toSizePolicy().horData())).arg(findValueDescription(value.toSizePolicy().verData())).arg(value.toSizePolicy().horStretch()).arg(value.toSizePolicy().verStretch()));
+
     if (emitChange)
         emit propertyChanged(m_property, value);
 }
 
-void PDummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &/*value*/)
+QString PSizePolicyEdit::findValueDescription(QVariant val) const
 {
-    p->setBrush(cg.background());
-    p->setPen(Qt::NoPen);
-    p->drawRect(r);
+//    qWarning("PSizePolicyEdit::findValueDescription : %d", val.toInt());
+    for (QMap<QString, QVariant>::const_iterator it = m_spValues.begin(); it != m_spValues.end(); ++ it)
+    {
+        if (it.data() == val)
+            return it.key();
+    }
+    return "";
 }
 
-#ifndef PURE_QT
-#include "pdummywidget.moc"
-#endif
+#include "psizepolicyedit.moc"

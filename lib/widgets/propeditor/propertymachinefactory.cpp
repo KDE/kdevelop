@@ -19,7 +19,17 @@
  ***************************************************************************/
 #include "propertymachinefactory.h"
 
+#ifndef PURE_QT
+#include <klocale.h>
+#else
+#include "compat_tools.h"
+#endif
+
+#include <qmap.h>
+
 #include "property.h"
+#include "childproperty.h"
+#include "multiproperty.h"
 #include "plineedit.h"
 #include "pspinbox.h"
 #include "pdoublenuminput.h"
@@ -30,6 +40,13 @@
 #include "pcombobox.h"
 #include "psymbolcombo.h"
 #include "pfontcombo.h"
+#include "psizeedit.h"
+#include "pdateedit.h"
+#include "pdatetimeedit.h"
+#include "purledit.h"
+#include "ppointedit.h"
+#include "prectedit.h"
+#include "psizepolicyedit.h"
 
 PropertyMachineFactory *PropertyMachineFactory::m_factory = 0;
 
@@ -41,37 +58,91 @@ PropertyMachineFactory::~PropertyMachineFactory()
 {
 }
 
-Machine *PropertyMachineFactory::machineForProperty(const QString propertyName, int type, const QMap<QString, QVariant> &valueList)
+Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
 {
+    int type = property->type();
+    QString propertyName = property->name();
+    QMap<QString, QVariant> valueList = property->valueList();
+    
     if (m_registeredForType.contains(type))
         return (*m_registeredForType[type])();
 
     switch (type)
     {
-        case String:
-            return new Machine(new PLineEdit(propertyName));
-        case Integer:
-            return new Machine(new PSpinBox(propertyName));
-        case Double:
-            return new Machine(new PDoubleNumInput(propertyName));
-        case Boolean:
-            return new Machine(new PCheckBox(propertyName));
-        case StringList:
-            return new Machine(new PStringListEdit(propertyName));
-        case Color:
-            return new Machine(new PColorCombo(propertyName));
+        case Property::String:
+            return new Machine(new PLineEdit(property));
+        case Property::Integer:
+            return new Machine(new PSpinBox(property));
+        case Property::Double:
+            return new Machine(new PDoubleNumInput(property));
+        case Property::Boolean:
+            return new Machine(new PCheckBox(property));
+        case Property::Date:
+            return new Machine(new PDateEdit(property));
+        case Property::DateTime:
+            return new Machine(new PDateTimeEdit(property));
+        case Property::StringList:
+            return new Machine(new PStringListEdit(property));
+        case Property::Color:
+            return new Machine(new PColorCombo(property));
 
-        case ValueFromList:
-            return new Machine(new PComboBox(propertyName, valueList));
-        case Symbol:
-            return new Machine(new PSymbolCombo(propertyName));
-        case FontName:
-            return new Machine(new PFontCombo(propertyName));
-    
-        case List:
-        case Map:
+        case Property::ValueFromList:
+            return new Machine(new PComboBox(property, valueList));
+        case Property::Symbol:
+            return new Machine(new PSymbolCombo(property));
+        case Property::FontName:
+            return new Machine(new PFontCombo(property));
+        case Property::FileURL:
+            return new Machine(new PUrlEdit(KFile::File, property));
+        case Property::DirectoryURL:
+            return new Machine(new PUrlEdit(KFile::Directory, property));
+
+        case Property::Size:
+        {
+            Machine *mach = new Machine(new PSizeEdit(property));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Size_Width, i18n("Width"), i18n("Width")));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Size_Height, i18n("Height"), i18n("Height")));
+            return mach;
+        }
+        case Property::Point:
+        {
+            Machine *mach = new Machine(new PPointEdit(property));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Point_X, i18n("x"), i18n("x")));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Point_Y, i18n("y"), i18n("y")));
+            return mach;
+        }
+        case Property::Rect:
+        {
+            Machine *mach = new Machine(new PRectEdit(property));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Rect_X, i18n("x"), i18n("x")));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Rect_Y, i18n("y"), i18n("y")));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Rect_Width, i18n("Width"), i18n("Width")));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::Rect_Height, i18n("Height"), i18n("Height")));
+            return mach;
+        }
+        case Property::SizePolicy:
+        {
+            QMap<QString, QVariant> spValues;
+            spValues[i18n("Fixed")] = QSizePolicy::Fixed;
+            spValues[i18n("Minimum")] = QSizePolicy::Minimum;
+            spValues[i18n("Maximum")] = QSizePolicy::Maximum;
+            spValues[i18n("Preferred")] = QSizePolicy::Preferred;
+            spValues[i18n("Expanding")] = QSizePolicy::Expanding;
+            spValues[i18n("Minumum Expanding")] = QSizePolicy::MinimumExpanding;
+            spValues[i18n("Ignored")] = QSizePolicy::Ignored;
+        
+            Machine *mach = new Machine(new PSizePolicyEdit(property, spValues));
+            property->details.append(ChildProperty(property, i18n("hSizeType"), ChildProperty::SizePolicy_HorData, spValues, i18n("Horizontal Size Type")));
+            property->details.append(ChildProperty(property, i18n("vSizeType"), ChildProperty::SizePolicy_VerData, spValues, i18n("Vertical Size Type")));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::SizePolicy_HorStretch, i18n("hStretch"), i18n("Horizontal Stretch")));
+            property->details.append(ChildProperty(property, Property::Integer, ChildProperty::SizePolicy_VerStretch, i18n("vStretch"), i18n("Vertical Stretch")));
+            return mach;
+        }
+
+        case Property::List:
+        case Property::Map:
         default:
-            return new Machine(new PDummyWidget(propertyName));
+            return new Machine(new PDummyWidget(property));
     }
 }
 
@@ -80,4 +151,12 @@ PropertyMachineFactory *PropertyMachineFactory::getInstance()
     if (m_factory == 0)
         m_factory = new PropertyMachineFactory();
     return m_factory;
+}
+
+bool PropertyMachineFactory::hasDetailedEditors( int type )
+{
+    if ( (type==Property::Size) || (type==Property::Point) ||
+        (type==Property::Rect) || (type==Property::SizePolicy) )
+        return true;
+    return 0;
 }

@@ -34,7 +34,7 @@ class KFontCombo;
 class PFontCombo: public PropertyWidget{
     Q_OBJECT
 public:
-    PFontCombo(const QString &propertyName, QWidget *parent = 0, const char *name = 0);
+    PFontCombo(MultiProperty *property, QWidget *parent = 0, const char *name = 0);
 
     /**@return the value currently entered in the editor widget.*/
     virtual QVariant value() const;

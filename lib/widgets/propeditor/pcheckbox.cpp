@@ -29,8 +29,8 @@
 #include "compat_tools.h"
 #endif
 
-PCheckBox::PCheckBox(const QString &propertyName, QWidget *parent, const char *name)
-    :PropertyWidget(propertyName, parent, name)
+PCheckBox::PCheckBox(MultiProperty *property, QWidget *parent, const char *name)
+    :PropertyWidget(property, parent, name)
 {
     QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
     m_edit = new QCheckBox(this);
@@ -50,12 +50,12 @@ void PCheckBox::setValue(const QVariant &value, bool emitChange)
     m_edit->setChecked(value.toBool());
     connect(m_edit, SIGNAL(toggled(bool)), this, SLOT(updateProperty(bool)));
     if (emitChange)
-        emit propertyChanged(propertyName(), value);
+        emit propertyChanged(m_property, value);
 }
 
 void PCheckBox::updateProperty(bool val)
 {
-    emit propertyChanged(propertyName(), QVariant(val));
+    emit propertyChanged(m_property, QVariant(val));
 }
 
 void PCheckBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)

@@ -22,11 +22,13 @@
 
 #include <qlistview.h>
 
-class PropertyAccessor;
+#include "propertylist.h"
+
 class PropertyItem;
 class PropertyGroupItem;
 class PropertyWidget;
 class Property;
+class MultiProperty;
 struct Machine;
 
 /** @file propertyeditor.h
@@ -49,14 +51,14 @@ public:
     PropertyEditor(QWidget *parent = 0, const char *name = 0, WFlags f = 0);
     ~PropertyEditor();
     
-    /**@return @ref Machine for given property name.
+    /**@return @ref Machine for given property.
     Uses cache to store created machines. 
     Cache will be cleared only with @ref clearMachineCache.*/
-    Machine *machine(const QString &name);
+    Machine *machine(MultiProperty *property);
     
 public slots:
     /**Shows properties from accessor.*/
-    void populateProperties(PropertyAccessor *accessor);
+    void populateProperties(PropertyList *list);
     /**Clears property list, disconnects accessor from the editor and deletes it.*/
     void clearProperties();
     /**Deletes cached machines.*/
@@ -66,7 +68,7 @@ protected slots:
     /**Updates property widget in the editor.*/
     void propertyValueChanged(Property* property);
     /**Updates accessor when new value is selected in the editor.*/
-    void propertyChanged(const QString &name, const QVariant &value);
+    void propertyChanged(MultiProperty *property, const QVariant &value);
 
     /**Shows property editor.*/
     void slotClicked(QListViewItem* item);
@@ -82,9 +84,11 @@ protected:
     void addGroup(const QString &name);
     void addProperty(PropertyGroupItem *group, const QString &name);
     void addProperty(const QString &name);
+    void addChildProperties(PropertyItem *parent);
     
 private:
-    PropertyAccessor *m_accessor;
+    PropertyList *m_list;
+    PropertyList m_detailedList;
 
     //machines cache for property types, machines will be deleted
     QMap<int, Machine* > m_registeredForType;
