@@ -1,42 +1,19 @@
-/********************************************************************
-* Name    : Definition of a parsed structure.                       *
-* ------------------------------------------------------------------*
-* File    : ParsedStruct.h                                          *
-* Author  : Jonas Nordin(jonas.nordin@cenacle.se)                   *
-* Date    : Tue Mar 30 11:09:36 CEST 1999                           *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Purpose :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Usage   :                                                         *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Macros:                                                           *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Types:                                                            *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Functions:                                                        *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-* Modifications:                                                    *
-*                                                                   *
-*                                                                   *
-*                                                                   *
-* ------------------------------------------------------------------*
-*********************************************************************/
+/***************************************************************************
+                          ParsedStruct.h  -  description
+                             -------------------
+    begin                : Tue Mar 30 1999
+    copyright            : (C) 1999 by Jonas Nordin
+    email                : jonas.nordin@cenacle.se
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   * 
+ *                                                                         *
+ ***************************************************************************/
 
 #ifndef _PARSEDSTRUCT_H_INCLUDED
 #define _PARSEDSTRUCT_H_INCLUDED
@@ -48,8 +25,10 @@
 #include "ParsedClassItem.h"
 #include "ParsedContainer.h"
 
-/** The parsed representation of a structure */
-class CParsedStruct : public CParsedItem, public CParsedContainer, public CParsedClassItem
+/** The parsed representation of a structure.
+ * @author Jonas Nordin
+ */
+class CParsedStruct : public CParsedContainer, public CParsedClassItem
 {
 public: // Constructor & Destructor
 
@@ -58,16 +37,21 @@ public: // Constructor & Destructor
 
 public: // Implementation of virtual methods
 
-  /** Return a string made for persistant storage. */
+  /** Return a string made for persistant storage. 
+   * @param str String to store the result in.
+   * @return Pointer to str.
+   */
   virtual const char *asPersistantString( QString &str ) { return NULL;}
 
-  /** Initialize the object from a persistant string. */
+  /** Initialize the object from a persistant string. 
+   * @param str String to initialize from.
+   * @param startPos Position(0-based) at which to start.
+   */
   virtual int fromPersistantString( const char *str, int startPos ) {return 0;}
 
   /** Output this object to stdout. */
   virtual void out();
 
 };
-
 
 #endif
