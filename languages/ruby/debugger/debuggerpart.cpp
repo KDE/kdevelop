@@ -520,7 +520,7 @@ void RubyDebuggerPart::slotStopDebugger()
 
     rdbBreakpointWidget->reset();
     framestackWidget->clear();
-    variableWidget->clear();
+    variableWidget->varTree()->clear();
 
 //     variableWidget->setEnabled(false);
     framestackWidget->setEnabled(false);

@@ -65,9 +65,6 @@ class VariableWidget : public QWidget
 
 public:
     VariableWidget( QWidget *parent=0, const char *name=0 );
-	
-	// Clear everything but the Watch and Global frames
-    void clear();
 
     VariableTree *varTree() const
     { return varTree_; }
@@ -101,6 +98,9 @@ friend class TrimmableItem;
 public:
 	VariableTree( VariableWidget *parent, const char *name=0 );
     virtual ~VariableTree();
+	
+	// Clear everything but the Watch and Global frames
+    void clear();
 
     int activeFlag() const                { return activeFlag_; }
     void setActiveFlag()                  { activeFlag_++; }

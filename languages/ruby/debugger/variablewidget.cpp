@@ -79,27 +79,6 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 
 }
 
-// **************************************************************************
-
-void VariableWidget::clear()
-{
-	QListViewItemIterator it(varTree_);
-	while (it.current() != 0) {
-		QListViewItem * item = it.current();
-		
-        if (	item->rtti() != RTTI_WATCH_ROOT 
-				&& item->rtti() != RTTI_WATCH_VAR_ITEM
-				&& item->rtti() != RTTI_GLOBAL_ROOT ) 
-		{
-			
-			delete item;
-		}
-		++it;
-    }
-	
-	return;
-}
-
 
 // **************************************************************************
 
@@ -174,6 +153,27 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
 
 VariableTree::~VariableTree()
 {
+}
+
+// **************************************************************************
+
+void VariableTree::clear()
+{
+	QListViewItemIterator it(this);
+	while (it.current() != 0) {
+		QListViewItem * item = it.current();
+		
+        if (	item->rtti() != RTTI_WATCH_ROOT 
+				&& item->rtti() != RTTI_WATCH_VAR_ITEM
+				&& item->rtti() != RTTI_GLOBAL_ROOT ) 
+		{
+			
+			delete item;
+		}
+		++it;
+    }
+	
+	return;
 }
 
 // **************************************************************************
