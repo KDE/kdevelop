@@ -39,6 +39,7 @@ class KMdiDockContainer: public QWidget, public KMdiDockContainerBase
   public:
     KMdiDockContainer(QWidget *parent, QWidget *win, int position, int flags);
     virtual ~KMdiDockContainer();
+
     KDockWidget *parentDockWidget();
 
     virtual void insertWidget (KDockWidget *w, QPixmap, const QString &, int &);

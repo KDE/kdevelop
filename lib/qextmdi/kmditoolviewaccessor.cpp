@@ -23,9 +23,7 @@
 # include <kdebug.h>
 #endif
 
-#if 0
-# include "kmdiguiclient.h"
-#endif
+#include "kmdiguiclient.h"
 #include "kmdimainfrm.h"
 #include <kmdidockwidget.h>
 
@@ -129,10 +127,8 @@ void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString&
 	}
 	tmp->setWidget(widgetToWrap);
 	mdiMainFrm->m_pToolViews->insert(widgetToWrap,this);
-#if 0	
 	if (mdiMainFrm->m_mdiGUIClient)
 		mdiMainFrm->m_mdiGUIClient->addToolView(this);
-#endif		
 	d->widget->installEventFilter(this);
 }
 

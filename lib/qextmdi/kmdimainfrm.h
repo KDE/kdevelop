@@ -264,9 +264,7 @@ protected:
 
 private:
    KMdiMainFrmPrivate*     d;
-#if 0   
-   KMDIPrivate::KMDIGUIClient*	   m_mdiGUIClient;
-#endif   
+   KMDIPrivate::KMDIGUIClient*     m_mdiGUIClient;
    bool m_managedDockPositionMode;
 
 // methods
@@ -701,6 +699,9 @@ signals:
    void collapseOverlapContainers();
 
    void mdiModeHasBeenChangedTo(KMdi::MdiMode);
+
+   void viewActivated(KMdiChildView*);
+   void viewDeactivated(KMdiChildView*);
 
 public slots:
    void prevToolViewInDock();

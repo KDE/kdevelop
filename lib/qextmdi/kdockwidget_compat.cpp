@@ -2855,7 +2855,10 @@ void KDockManager::readConfig( KConfig* c, QString group )
       obj->setToolTipString(c->readEntry( oname + ":tabToolTip" ));
     }
 
-    if (obj && obj->d->isContainer)  dynamic_cast<KDockContainer*>(obj->widget)->load(c,group);
+    if (obj && obj->d->isContainer) {
+		dynamic_cast<KDockContainer*>(obj->widget)->load(c,group);
+		removeFromAutoCreateList(obj);
+    }
     if ( obj && obj->header){
       obj->header->loadConfig( c );
     }
@@ -3624,7 +3627,7 @@ void KDockSplitter::resizeEvent(QResizeEvent *ev)
   if (initialised){
     int factor = (mHighResolution)? 10000:100;
     // real resize event, recalculate xpos
-    if (ev && mKeepSize  && isVisible()) {
+    if (ev && mKeepSize && isVisible()) {
 //	kdDebug()<<"mKeepSize : "<< ((m_orientation == Horizontal) ? "Horizontal":"Vertical") <<endl;
 
       if (ev->oldSize().width() != ev->size().width())
@@ -3640,9 +3643,9 @@ void KDockSplitter::resizeEvent(QResizeEvent *ev)
           else
           {
 //	kdDebug()<<"!mKeepSize : "<< ((m_orientation == Horizontal) ? "Horizontal":"Vertical") <<endl;
-	if (/*ev &&*/ isVisible()){
+	if (/*ev &&*/ isVisible()) {
 		if (m_orientation == Horizontal) {
-			/*if (ev->oldSize().height() != ev->size().height())*/
+		/*	if (ev->oldSize().height() != ev->size().height())*/
 			{
 			  if (fixedHeight0!=-1)
 				xpos=fixedHeight0*factor/height();
@@ -3653,7 +3656,7 @@ void KDockSplitter::resizeEvent(QResizeEvent *ev)
 		}
 		else
 		{
-	        	/*if (ev->oldSize().width() != ev->size().width())*/
+/*	        	if (ev->oldSize().width() != ev->size().width()) */
 			{
 			  if (fixedWidth0!=-1)
 				xpos=fixedWidth0*factor/width();

@@ -726,7 +726,7 @@ void MainWindow::loadMDISettings()
   bool maxChildFrmMode = config->readBoolEntry("maximized childframes", true);
   setEnableMaximizedChildFrmMode(maxChildFrmMode);
   
-  readDockConfig();
+  readDockConfig(0L, "dockSession_version1");
 }
 
 void MainWindow::guiRestoringFinished()
@@ -736,7 +736,7 @@ void MainWindow::guiRestoringFinished()
 
 void MainWindow::prepareToCloseViews()
 {
-  writeDockConfig();
+  writeDockConfig(0L, "dockSession_version1");
 }
 
 void MainWindow::saveSettings()
@@ -982,7 +982,7 @@ void MainWindow::fillToolViewsMenu(
      }
      KDockWidget *pDockWidget = manager()->findWidgetParentDock(it.current());  // Get the DockWidget which covers the view
      Q_ASSERT(pDockWidget);
-     QString Name = pDockWidget->name();                            // Get the name of the view
+     QString Name = pDockWidget->tabPageLabel();                    // Get the name of the view
      ViewMenuActionPrivateData ActionData;
      ActionData.pDockWidget = pDockWidget;                          // Save the pointer to the DockWidget
      ActionData.pChildView = it.current();                          // Save the pointer to the view
