@@ -5,9 +5,11 @@
 *) This is really unstable/experimental for now !
 Don't use it with important projects, you may lose files.
 
-You need a recent version of Subversion (apparently >= 0.14.2) to
+You need a recent version of Subversion (apparently >= 0.17) to
 compile this kpart.
-I develop it against recent Subversion snapshots.
+I develop it against recent Subversion snapshots. (debian subversion)
+please don't complain if it does not compile againt version x.xx.x, Subversion's API is changing
+permanently, I'm trying to keep the current part up to date with recent snapshots
 
 *) Problems you can encounter :
 ->remote repositeries work (http:///) but not local ones (file:///) :
