@@ -582,7 +582,7 @@ QString SnippetWidget::showSingleVarDialog(QString var, QMap<QString, QString> *
 
   labTop = new QLabel( &dlg, "label" );
   layoutTop->addWidget(labTop, 0, 0);
-  labTop->setText((QString(i18n("Enter the replacement values for ")) + var + ":"));
+  labTop->setText(i18n("Enter the replacement values for ") + var + ":");
   layout->addMultiCellLayout( layoutTop, 0, 0, 0, 1 );
 
 
