@@ -1,3 +1,7 @@
+2002-04-09 Roberto Raggi <raggi@cli.di.unipi.it>
+	* fixed crash in KDevDocTree
+	* removed qextmdi from kdevelop directory
+	
 2002-04-09  Simon Hausmann <hausmann@kde.org>
 
 	* cleanups in the servicetype definitions. Added proper inheritance

@@ -175,7 +175,7 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   show();
 
   stateChanged("disable_file_save");
-  stateChanged("edit_src",StateReverse);
+  stateChanged("edit_src" /*,StateReverse*/);
   stateChanged("project_load");
   stateChanged("project_open",StateReverse);
   stateChanged("build_project",StateReverse);

@@ -33,7 +33,7 @@
 #include <kmainwindow.h>
 #include <khelpmenu.h>
 #include <kcompletion.h>
-#include "widgets/qextmdi/include/qextmdimainfrm.h"
+#include "qextmdimainfrm.h"
 
 #include <kopenwith.h>
 #include <kprocess.h>
