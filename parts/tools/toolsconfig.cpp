@@ -46,13 +46,13 @@ void ToolsConfig::showEvent(QShowEvent *e)
 
       vbox = new QVBoxLayout(hbox);
 
-      _toList = new QPushButton(">>", this);
+      _toList = new QPushButton(QApplication::reverseLayout() ? "<<" : ">>", this);
       _toList->show();
       vbox->addWidget(_toList);
 
       connect(_toList, SIGNAL(clicked()), this, SLOT(toList()));
 
-      _toTree = new QPushButton("<<", this);
+      _toTree = new QPushButton(QApplication::reverseLayout() ? ">>" : "<<", this);
       _toTree->show();
       vbox->addWidget(_toTree);
 
