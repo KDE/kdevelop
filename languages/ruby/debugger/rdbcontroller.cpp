@@ -1312,6 +1312,7 @@ void RDBController::slotDbgProcessExited(KProcess*)
     state_ = s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
     emit dbgStatus (i18n("Process exited"), state_);
     emit rdbStdout("(rdb:1) Process exited\n");
+	frameStack_->clear();	
 	
 	if (socketNotifier_ != 0) {
 		delete socketNotifier_;
