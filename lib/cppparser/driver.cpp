@@ -397,11 +397,8 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "_cdecl" );
     lexer->addSkipWord( "CALLBACK" );
 
-    Macro m;
-    m.setName( "__volatile__" );
-    m.setBody( "volatile" );
-
-    addMacro( m );
+    addMacro( Macro("__volatile__", "volatile") );
+    addMacro( Macro("__complex__", "") );
 }
 
 void Driver::setupParser( Parser * parser )

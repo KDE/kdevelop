@@ -28,7 +28,7 @@
 #include <qmap.h>
 #include <qvaluelist.h>
 
-#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), (len) == 0 ? QCString("") : m_source.mid((start), (len)).utf8() )
+#define CREATE_TOKEN(type, start, len) Token( (type), (start), (len), (len) == 0 ? QString::null : m_source.mid((start), (len)) )
 #define ADD_TOKEN(tk) \
 { \
     m_tokens.insert( m_size++, new Token(tk) ); \

@@ -149,7 +149,7 @@ class Token
 {
 public:
     Token();
-    Token( int type, int position, int length, const QCString& text );
+    Token( int type, int position, int length, const QString& text );
     Token( const Token& source );
 
     Token& operator = ( const Token& source );
@@ -172,8 +172,8 @@ public:
     int position() const;
     void setPosition( int position );
 
-    const QCString& text() const;
-    void setText( const QCString& text );
+    QString text() const;
+    void setText( const QString& text );
 
 private:
     int m_type;
@@ -183,7 +183,7 @@ private:
     int m_startColumn;
     int m_endLine;
     int m_endColumn;
-    QCString m_text;
+    QString m_text;
 
     friend class Lexer;
     friend class Parser;
@@ -321,7 +321,7 @@ inline Token::Token()
 {
 }
 
-inline Token::Token( int type, int position, int length, const QCString& text )
+inline Token::Token( int type, int position, int length, const QString& text )
     : m_type( type ),
       m_position( position ),
       m_length( length ),
@@ -368,7 +368,7 @@ inline bool Token::operator == ( const Token& token ) const
     m_startColumn == token.m_startColumn &&
         m_endLine == token.m_endLine &&
       m_endColumn == token.m_endColumn &&
-      qstrcmp(m_text, token.m_text) == 0;
+           m_text == token.m_text;
 }
 
 inline bool Token::isNull() const
@@ -391,12 +391,12 @@ inline int Token::position() const
     return m_position;
 }
 
-inline const QCString& Token::text() const
+inline QString Token::text() const
 {
     return m_text;
 }
 
-inline void Token::setText( const QCString & text )
+inline void Token::setText( const QString & text )
 {
     m_text = text;
 }
@@ -616,7 +616,7 @@ inline int Lexer::findOperator3() const
 	QChar ch = currentChar(), ch1=peekChar(), ch2=peekChar(2);
 
 	if( ch == '<' && ch1 == '<' && ch2 == '=' ) return Token_assign;
-	else if( ch == '>' && ch1 == '<' && ch2 == '=' ) return Token_assign;
+	else if( ch == '>' && ch1 == '>' && ch2 == '=' ) return Token_assign;
 	else if( ch == '-' && ch1 == '>' && ch2 == '*' ) return Token_ptrmem;
 	else if( ch == '.' && ch1 == '.' && ch2 == '.' ) return Token_ellipsis;
     }
