@@ -31,12 +31,16 @@ KonsoleViewWidget::KonsoleViewWidget(KonsoleViewPart *part)
 {
     connect(part->partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
     vbox = new QVBoxLayout(this);
-
-    activate();
 }
 
 KonsoleViewWidget::~KonsoleViewWidget()
 {
+}
+
+void KonsoleViewWidget::show()
+{
+  activate();
+  QWidget::show();
 }
 
 void KonsoleViewWidget::activate()
