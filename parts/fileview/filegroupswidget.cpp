@@ -259,7 +259,10 @@ void FileGroupsWidget::addFile(const QString &fileName)
         FileViewFolderItem *fvgitem = static_cast<FileViewFolderItem*>(item);
         if (fvgitem->matches(fileName))
         {
-            (void) new FileGroupsFileItem(fvgitem, fileName);
+            QString f = fileName;
+            if (fileName.contains(m_part->project()->projectDirectory()))
+                f = fileName.mid(m_part->project()->projectDirectory().length()+1);
+            (void) new FileGroupsFileItem(fvgitem, f);
             fvgitem->sortChildItems(0, true);
             break;
         }
