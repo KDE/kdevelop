@@ -79,7 +79,7 @@
                         <cstring>mainprogram_label_3</cstring>
                     </property>
                     <property name="text">
-                        <string>Main program (relative to project directory):</string>
+                        <string>Main program (relative to build directory):</string>
                     </property>
                 </widget>
             </grid>
