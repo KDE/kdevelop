@@ -144,38 +144,12 @@ public:
      */
     virtual void openProject(const QString& projectFileName)=0;
     /**
-     * "Goes" to a file. This is a generic method that is used
-     * e.g. by file trees. For non-text files (i.e. files which
-     * have a mime-type that doesn't start with "text/") it runs
-     * the respective application. Text files are loaded into an
-     * editor via # gotoSourceFile().
-     */
-    virtual void gotoFile(const KURL &url) = 0;
-    /**
-     * Loads a file into the HTML viewer.
-     */
-    virtual void gotoDocumentationFile(const KURL& url,
-                                       Embedding embed=Replace) = 0;
-    /**
-     * Loads a file into the editor and jump to a line number.
-     */
-    virtual void gotoSourceFile(const KURL& url, int lineNum=0,
-                                Embedding embed=Replace) = 0;
-    /**
      * Goes to a given location in a source file and marks the line.
      * If fileName is null, the mark is cleared.
      * This is used by the debugger to mark the location where the
      * the debugger has stopped.
      */
     virtual void gotoExecutionPoint(const QString &fileName, int lineNum=0) = 0;
-    /**
-     * Saves all modified buffers.
-     */
-    virtual void saveAllFiles() = 0;
-    /**
-     * Reverts all modified buffers to their version on disk.
-     */
-    virtual void revertAllFiles() = 0;
     /**
      * Sets a breakpoint in the editor document belong to fileName.
      * If id==-1, the breakpoint is deleted.
@@ -205,14 +179,6 @@ signals:
      * The project is about to be closed.
      */
     void projectClosed();
-    /**
-     * Emitted when a file has been saved.
-     */
-    void savedFile(const QString &fileName);
-    /**
-     * Emitted when a file has been loaded.
-     */
-    void loadedFile(const QString &fileName);
     /**
      * The user has toggled a breakpoint.
      */

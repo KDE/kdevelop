@@ -22,6 +22,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevpartcontroller.h"
 #include "classstore.h"
 
 #include "pythonsupportpart.h"
@@ -39,7 +40,7 @@ PythonSupportPart::PythonSupportPart(KDevApi *api, QObject *parent, const char *
     
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(savedFile(const QString&)),
+    connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
 
     KAction *action;
@@ -218,7 +219,7 @@ void PythonSupportPart::slotPydoc()
     if (ok && !key.isEmpty()) {
         QString url = "pydoc:";
         url += key;
-        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+        partController()->showDocument(KURL(url));
     }
 }
 

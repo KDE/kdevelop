@@ -29,6 +29,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 #include "classstore.h"
 #include <kdevpartcontroller.h>
 
@@ -60,7 +61,7 @@ PHPSupportPart::PHPSupportPart(KDevApi *api, QObject *parent, const char *name)
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-  connect( core(), SIGNAL(savedFile(const QString&)),
+  connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
   connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 	   this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -138,7 +139,7 @@ void PHPSupportPart::slotTextChanged(){
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
   cerr << endl << "kdevelop (phpsupport): slotWebResult()" << filename.latin1() << line;
-  core()->gotoSourceFile(filename,line);
+  partController()->editDocument(filename,line);
 }
 void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
   QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));

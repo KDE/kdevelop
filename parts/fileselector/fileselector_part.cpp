@@ -15,6 +15,8 @@
 #include <kdevcore.h>
 #include <kdevproject.h>
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
+
 #include <ktip.h>
 
 #include "fileselector_factory.h"
@@ -44,7 +46,7 @@ void FileSelectorPart::fileSelected(const KFileItem *file)
 {
   KURL u(file->url());
 
-  core()->gotoSourceFile( u );
+  partController()->editDocument( u );
   topLevel()->lowerView(m_filetree);
 }
 

@@ -29,6 +29,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 
 #include "../../config.h"
 #include "misc.h"
@@ -587,7 +588,7 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
     if (ident.isEmpty())
         return;
     
-    m_part->core()->gotoDocumentationFile(ident);
+    m_part->partController()->showDocument(KURL(ident));
     m_part->topLevel()->lowerView(this);
 }
 

@@ -1,11 +1,13 @@
 Short-Term:
 
-mhk: refactor kdevapi, implement accessor methods
 mhk: move function areas of kdevcore into separate classes
+mhk: allow parts to add entries to the editor popup menu
+
 
 Mid-Term:
 
 mhk: improve documentation browsing
+mhk: make all functions using filenames use KURLs instead
 
 
 Long-Term:

@@ -26,6 +26,7 @@
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
 #include "kdevappfrontend.h"
+#include "kdevpartcontroller.h"
 #include "domutil.h"
 #include "variablewidget.h"
 #include "breakpointwidget.h"
@@ -564,7 +565,7 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 
 void DebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
-    core()->gotoSourceFile(fileName, lineNum);
+    partController()->editDocument(fileName, lineNum);
 }
 
 

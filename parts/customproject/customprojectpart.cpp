@@ -23,6 +23,7 @@
 #include "kdevtoplevel.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
+#include "kdevpartcontroller.h"
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
 #include "customprojectfactory.h"
@@ -120,13 +121,13 @@ void CustomProjectPart::slotItemExecuted(QListViewItem *item)
 {
     CustomProjectItem *spitem = static_cast<CustomProjectItem*>(item);
     if (spitem->type() == CustomProjectItem::File)
-        core()->gotoFile(KURL(spitem->path()));
+        partController()->editDocument(KURL(spitem->path()));
 }
 
 
 void CustomProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
-    core()->saveAllFiles();
+    partController()->saveAllFiles();
 
     QFileInfo fi(dir + "/Makefile");
     if (!fi.exists()) {

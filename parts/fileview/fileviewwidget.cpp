@@ -23,6 +23,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 
 #include "fileviewpart.h"
 #include "fileviewconfigwidget.h"
@@ -131,7 +132,7 @@ void FileViewWidget::slotItemExecuted(QListViewItem *item)
         return;
 
     FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(item);
-    m_part->core()->gotoFile(QString("file://") + fvfitem->fileName());
+    m_part->partController()->editDocument(QString("file://") + fvfitem->fileName());
     m_part->topLevel()->lowerView(this);
 }
 

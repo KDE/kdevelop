@@ -1,3 +1,7 @@
+2002-04-06  Matthias Hölzer-Klüpfel <mhk@kde.org>
+	* moved all part handling functions from KDevCore to
+	  KDevPartController
+
 2002-04-05  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* commited some patches by Bernd for fixing layout issues
 	* commited a patch by Bernd for reenabling the floating 

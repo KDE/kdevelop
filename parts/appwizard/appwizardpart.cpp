@@ -22,6 +22,7 @@
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
 #include <kdevmakefrontend.h>
+#include <kdevpartcontroller.h>
 
 
 AppWizardPart::AppWizardPart(KDevApi *api, QObject *parent, const char *name)
@@ -82,7 +83,7 @@ void AppWizardPart::slotCommandFinished(QString command){
     if(m_showFileAfterGeneration != ""){
       KURL u;
       u.setPath(m_showFileAfterGeneration);
-      core()->gotoSourceFile(u);
+      partController()->editDocument(u);
     }
     disconnect(makeFrontend(),0,this,0);
   }

@@ -23,6 +23,7 @@
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
+#include <kdevpartcontroller.h>
 
 #include "docsearchdlg.h"
 #include "docindexdlg.h"
@@ -169,7 +170,7 @@ void DocTreeViewPart::slotSearchDocumentation()
     DocSearchDialog dlg(m_widget, "doc search dialog");
     if (dlg.exec()) {
         QString indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
-        core()->gotoDocumentationFile(KURL("file://" + indexdir + "/results.html"));
+        partController()->showDocument(KURL("file://" + indexdir + "/results.html"));
     }
 }
 
@@ -180,7 +181,7 @@ void DocTreeViewPart::slotManpage()
     QString manpage = KLineEditDlg::getText(i18n("Show manpage on:"), "", &ok, 0);
     if (ok && !manpage.isEmpty()) {
         QString url = QString::fromLatin1("man:/%1(3)").arg(manpage);
-        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+        partController()->showDocument(KURL(url));
     }
 }
 
@@ -194,7 +195,7 @@ void DocTreeViewPart::slotRaiseWidget()
 void DocTreeViewPart::slotGotoManpage()
 {
     QString url = QString::fromLatin1("man:/%1(3)").arg(popupstr);
-    core()->gotoDocumentationFile(KURL(url), KDevCore::SplitHorizontal);
+    partController()->showDocument(KURL(url));
 }
 
 
@@ -207,7 +208,7 @@ void DocTreeViewPart::slotSearchDocumentationTerm()
     dlg.setSearchTerm(popupstr);
     if (dlg.performSearch()) {
         QString indexdir = kapp->dirs()->saveLocation("data", "gideon/helpindex");
-        core()->gotoDocumentationFile(KURL("file://" + indexdir + "/results.html"), KDevCore::SplitHorizontal);
+        partController()->showDocument(KURL("file://" + indexdir + "/results.html"));
     }
 }
 

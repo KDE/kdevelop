@@ -31,6 +31,7 @@
 
 #include "kdevpart.h"
 #include "kdevcore.h"
+#include "kdevpartcontroller.h"
 #include "kdevproject.h"
 #include "ctagsdlg.h"
 #include <qpushbutton.h>
@@ -499,7 +500,7 @@ void CTagsDialog::slotExecuted(QListBoxItem *item)
         return;
     }
     
-    m_part->core()->gotoSourceFile(fileName, lineNum-1, KDevCore::Replace);
+    m_part->partController()->editDocument(fileName, lineNum-1);
 }
 
 

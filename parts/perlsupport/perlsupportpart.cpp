@@ -22,6 +22,7 @@
 
 #include "kdevcore.h"
 #include "kdevproject.h"
+#include "kdevpartcontroller.h"
 #include "classstore.h"
 
 #include "perlsupportpart.h"
@@ -39,7 +40,7 @@ PerlSupportPart::PerlSupportPart(KDevApi *api, QObject *parent, const char *name
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(savedFile(const QString&)),
+    connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
 
     KAction *action;
@@ -180,7 +181,7 @@ void PerlSupportPart::slotPerldocFunction()
     if (ok && !key.isEmpty()) {
         QString url = "perldoc:functions/";
         url += key;
-        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+        partController()->showDocument(KURL(url));
     }
 }
 
@@ -192,7 +193,7 @@ void PerlSupportPart::slotPerldocFAQ()
     if (ok && !key.isEmpty()) {
         QString url = "perldoc:faq/";
         url += key;
-        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+        partController()->showDocument(KURL(url));
     }
 }
 

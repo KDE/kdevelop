@@ -29,6 +29,7 @@
 #include <kstandarddirs.h>
 
 #include "kdevcore.h"
+#include "kdevpartcontroller.h"
 #include "domutil.h"
 
 #include "misc.h"
@@ -360,7 +361,7 @@ void DocIndexDialog::accept()
         return;
     }
     
-    m_part->core()->gotoDocumentationFile(KURL(url));
+    m_part->partController()->showDocument(KURL(url));
 
     if (m_part->project())
         storeConfig();

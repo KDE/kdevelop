@@ -18,18 +18,6 @@ KDevCoreIface::~KDevCoreIface()
 {}
 
 
-void KDevCoreIface::gotoDocumentationFile(const QString &url, int embed)
-{
-    m_core->gotoDocumentationFile(KURL(url), KDevCore::Embedding(embed));
-}
-
-
-void KDevCoreIface::gotoSourceFile(const QString &fileName, int lineNum, int embed)
-{
-    m_core->gotoSourceFile(KURL(fileName), lineNum, KDevCore::Embedding(embed));
-}
-
-
 void KDevCoreIface::forwardProjectOpened()
 {
     kdDebug(9000) << "dcop emitting project opened" << endl;

@@ -24,6 +24,7 @@
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 #include "classstore.h"
 
 #include "classviewfactory.h"
@@ -493,13 +494,13 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
         QString toFile;
         int toLine = -1;
         static_cast<ClassTreeItem*>(item)->getImplementation(&toFile, &toLine);
-        m_part->core()->gotoSourceFile(toFile, toLine);
+	m_part->partController()->editDocument(toFile, toLine);
 	m_part->topLevel()->lowerView(this);
     } else if (button == MidButton) {
         QString toFile;
         int toLine = -1;
         static_cast<ClassTreeItem*>(item)->getDeclaration(&toFile, &toLine);
-        m_part->core()->gotoSourceFile(toFile, toLine);
+        m_part->partController()->editDocument(toFile, toLine);
 	m_part->topLevel()->lowerView(this);
     }
 }
@@ -521,7 +522,7 @@ void ClassTreeBase::slotGotoDeclaration()
     int toLine = -1;
     
     contextItem->getDeclaration(&toFile, &toLine);
-    m_part->core()->gotoSourceFile(toFile, toLine);
+    m_part->partController()->editDocument(toFile, toLine);
 }
 
 
@@ -531,7 +532,7 @@ void ClassTreeBase::slotGotoImplementation()
     int toLine = -1;
     
     contextItem->getImplementation(&toFile, &toLine);
-    m_part->core()->gotoSourceFile(toFile, toLine);
+    m_part->partController()->editDocument(toFile, toLine);
 }
 
 

@@ -20,6 +20,19 @@ public:
   virtual void saveAllFiles() = 0; 
   virtual void revertAllFiles() = 0;
 
+
+signals:
+
+  /**
+   * Emitted when a document has been saved.
+   */
+  void savedFile(const QString &fileName);
+
+  /**
+   * Emitted when a document has been loaded.
+   */
+  void loadedFile(const QString &fileName);
+
 };
 
 

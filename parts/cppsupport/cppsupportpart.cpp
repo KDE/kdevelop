@@ -70,7 +70,7 @@ CppSupportPart::CppSupportPart(bool cpp, KDevApi *api, QObject *parent, const ch
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(savedFile(const QString&)),
+    connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
@@ -593,7 +593,7 @@ void CppSupportPart::slotSwitchHeader()
     for (it = candidates.begin(); it != candidates.end(); ++it) {
         kdDebug(9007) << "Trying " << (*it) << endl;
         if (QFileInfo(*it).exists()) {
-            core()->gotoSourceFile(*it);
+            partController()->editDocument(*it);
             return;
         }
     }
@@ -604,7 +604,7 @@ void CppSupportPart::slotGotoIncludeFile()
 {
     QString fileName = findHeader(project()->allSourceFiles(), popupstr);
     if (!fileName.isEmpty())
-        core()->gotoSourceFile(fileName, 0);
+        partController()->editDocument(fileName, 0);
 
 }
 
@@ -683,7 +683,7 @@ void CppSupportPart::addMethod(const QString &className)
     } else
         atLine++;
 
-    core()->gotoSourceFile(pc->declaredInFile(), atLine);
+    partController()->editDocument(pc->declaredInFile(), atLine);
     kdDebug() << "Adding to .h: " << atLine << " " << headerCode << endl;
 
     if (m_pEditIface)
@@ -691,7 +691,7 @@ void CppSupportPart::addMethod(const QString &className)
 
     QString cppCode = asCppCode(pm);
 
-    core()->gotoSourceFile(pc->definedInFile(), atLine);
+    partController()->editDocument(pc->definedInFile(), atLine);
     kdDebug() << "Adding to .cpp: " << atLine << " " << cppCode << endl;
 
     if (m_pEditIface)
@@ -740,7 +740,7 @@ void CppSupportPart::addAttribute(const QString &className)
     } else
         atLine++;
 
-    core()->gotoSourceFile(pc->declaredInFile(), atLine);
+    partController()->editDocument(pc->declaredInFile(), atLine);
     kdDebug() << "Adding at line " << atLine << " " << headerCode << endl;
     if (m_pEditIface)
       m_pEditIface->insertLine(atLine, headerCode);

@@ -22,6 +22,7 @@
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 #include "compileroptionswidget.h"
 #include "makeoptionswidget.h"
 #include "runoptionswidget.h"
@@ -172,7 +173,7 @@ QStringList AutoProjectPart::allSourceFiles()
 
 void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
-    core()->saveAllFiles();
+    partController()->saveAllFiles();
 
     QFileInfo fi1(dir + "/Makefile");
     if (!fi1.exists()) {

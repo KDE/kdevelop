@@ -22,6 +22,7 @@
 #include "kdevtoplevel.h"
 #include "kdevmakefrontend.h"
 #include "kdevappfrontend.h"
+#include "kdevpartcontroller.h"
 #include "trollprojectfactory.h"
 #include "trollprojectwidget.h"
 #include "trollprojectpart.h"
@@ -114,7 +115,7 @@ QStringList TrollProjectPart::allSourceFiles()
 
 void TrollProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
-    core()->saveAllFiles();
+    partController()->saveAllFiles();
 
     QFileInfo fi(dir + "/Makefile");
     if (!fi.exists()) {

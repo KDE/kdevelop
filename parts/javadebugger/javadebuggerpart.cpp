@@ -23,6 +23,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 #include "variablewidget.h"
 #include "breakpointwidget.h"
 #include "framestackwidget.h"
@@ -470,7 +471,7 @@ void JavaDebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 
 void JavaDebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
-    core()->gotoSourceFile(fileName, lineNum);
+    partController()->editDocument(fileName, lineNum);
 }
 
 #include "javadebuggerpart.moc"

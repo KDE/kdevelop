@@ -18,6 +18,7 @@
 #include "domutil.h"
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 #include "scriptprojectfactory.h"
 #include "scriptprojectwidget.h"
 #include "scriptprojectpart.h"
@@ -83,7 +84,7 @@ void ScriptProjectPart::slotItemExecuted(QListViewItem *item)
 {
     ScriptProjectItem *spitem = static_cast<ScriptProjectItem*>(item);
     if (spitem->type() == ScriptProjectItem::File)
-        core()->gotoFile(KURL(spitem->path()));
+        partController()->editDocument(KURL(spitem->path()));
 }
 
 #include "scriptprojectpart.moc"

@@ -20,6 +20,8 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
+
 #include "grepdlg.h"
 #include "grepviewpart.h"
 #include "grepviewwidget.h"
@@ -188,7 +190,7 @@ void GrepViewWidget::lineHighlighted(int line)
     if (i->isCustomItem())
         {
             GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-            m_part->core()->gotoSourceFile(gi->filename(), gi->linenumber());
+            m_part->partController()->editDocument(gi->filename(), gi->linenumber());
         }
 }
 

@@ -28,6 +28,7 @@
 #include <kurl.h>
 
 #include "kdevcore.h"
+#include "kdevpartcontroller.h"
 #include "domutil.h"
 #include "trollprojectpart.h"
 #include "trollprojectwidget.h"
@@ -252,7 +253,7 @@ void TrollProjectWidget::slotItemExecuted(QListViewItem *item)
     } else if (pvitem->type() == ProjectItem::File) {
         QString dirName = activeSubproject->path;
         FileItem *fitem = static_cast<FileItem*>(pvitem);
-        m_part->core()->gotoFile(KURL(dirName + "/" + QString(fitem->name)));
+        m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
     }
 }
 

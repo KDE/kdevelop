@@ -21,6 +21,7 @@
 #include "kdevcore.h"
 #include "kdevlanguagesupport.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
 #include "classstore.h"
 
 #include "classviewpart.h"
@@ -393,7 +394,7 @@ void ClassViewPart::gotoDeclaration(const QString &className,
     
     if (toLine != -1) {
         kdDebug(9003) << "Classview switching to file " << toFile << "@ line " << toLine << endl;
-        core()->gotoSourceFile(toFile, toLine);
+	partController()->editDocument(toFile, toLine);
     }
 }
 
@@ -432,7 +433,7 @@ void ClassViewPart::gotoImplementation(const QString &className,
     }
     
     if (pm)
-        core()->gotoSourceFile(pm->definedInFile(), pm->definedOnLine());
+	partController()->editDocument(pm->definedInFile(), pm->definedOnLine());
 }
 
 #include "classviewpart.moc"

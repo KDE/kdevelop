@@ -29,6 +29,7 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevmakefrontend.h"
+#include "kdevpartcontroller.h"
 #include "classstore.h"
 #include "parsedmethod.h"
 #include "domutil.h"
@@ -50,7 +51,7 @@ FortranSupportPart::FortranSupportPart(KDevApi *api, QObject *parent, const char
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( core(), SIGNAL(savedFile(const QString&)),
+    connect( partController(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
 
     KAction *action;
@@ -75,7 +76,7 @@ void FortranSupportPart::slotFtnchek()
         return;
     }
 
-    core()->saveAllFiles();
+    partController()->saveAllFiles();
 
     QDomDocument &dom = *projectDom();
     

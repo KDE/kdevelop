@@ -20,6 +20,8 @@
 
 #include "kdevcore.h"
 #include "kdevtoplevel.h"
+#include "kdevpartcontroller.h"
+
 #include "makeviewpart.h"
 #include "makewidget.h"
 
@@ -135,7 +137,7 @@ void MakeWidget::nextError()
             setSelection(parag, 0, parag+1, 0, 0);
             setCursorPosition(parag, 0);
             ensureCursorVisible();
-            m_part->core()->gotoSourceFile((*it)->fileName, (*it)->lineNum);
+            m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
             return;
         }
     
@@ -160,7 +162,7 @@ void MakeWidget::prevError()
             setSelection(parag, 0, parag+1, 0, 0);
             setCursorPosition(parag, 0);
             ensureCursorVisible();
-            m_part->core()->gotoSourceFile((*it)->fileName, (*it)->lineNum);
+            m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
             return;
         }
             
@@ -193,7 +195,7 @@ void MakeWidget::searchItem(int parag)
     QListIterator<MakeItem> it(items);
     for (; it.current(); ++it) {
         if ((*it)->parag == parag)
-            m_part->core()->gotoSourceFile((*it)->fileName, (*it)->lineNum);
+            m_part->partController()->editDocument((*it)->fileName, (*it)->lineNum);
         if ((*it)->parag >= parag)
             return;
     }
