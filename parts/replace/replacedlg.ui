@@ -216,7 +216,7 @@
                         </font>
                     </property>
                     <property name="text">
-                        <string>Expression is invalid!!</string>
+                        <string>Expression is invalid.</string>
                     </property>
                 </widget>
                 <spacer>

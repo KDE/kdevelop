@@ -86,7 +86,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>&lt;i&gt;Warning&lt;/i&gt;: Password will be saved with weak encryption!</string>
+                <string>&lt;i&gt;Warning:&lt;/i&gt; password will be saved with weak encryption.</string>
             </property>
         </widget>
         <widget class="QLayoutWidget">
