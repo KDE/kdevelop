@@ -20,7 +20,7 @@ cxxflags=-O0 -g3 -Wall
 ldadd=-lkhtml -lm -lkfile -lkdeui -lkdecore $(LIB_QT)
 ldflags=
 [General]
-AMChanged=true
+AMChanged=false
 author=kdevelop-team
 configure_args=--with-qt-dir=/opt/qt-2.2 --prefix=/home/kde2/kde
 email=
@@ -1495,7 +1495,7 @@ install=false
 install_location=
 type=HEADER
 [kdevelop/kpp/Makefile.am]
-files=kdevelop/kpp/README,kdevelop/kpp/buildrpm.sh,kdevelop/kpp/cproject.cpp,kdevelop/kpp/cproject.h,kdevelop/kpp/cspec.cpp,kdevelop/kpp/cspec.h,kdevelop/kpp/kpp.cpp,kdevelop/kpp/kpp.h,kdevelop/kpp/prefView.ui,kdevelop/kpp/projectView.ui,kdevelop/kpp/template.spec
+files=kdevelop/kpp/README,kdevelop/kpp/buildrpm.sh,kdevelop/kpp/cspec.cpp,kdevelop/kpp/cspec.h,kdevelop/kpp/kpp.cpp,kdevelop/kpp/kpp.h,kdevelop/kpp/prefView.ui,kdevelop/kpp/projectView.ui,kdevelop/kpp/template.spec,kdevelop/kpp/cdevproject.cpp,kdevelop/kpp/cdevproject.h
 sub_dirs=
 type=static_library
 [kdevelop/kpp/README]
@@ -1508,12 +1508,12 @@ dist=true
 install=false
 install_location=
 type=DATA
-[kdevelop/kpp/cproject.cpp]
+[kdevelop/kpp/cdevproject.cpp]
 dist=true
 install=false
 install_location=
 type=SOURCE
-[kdevelop/kpp/cproject.h]
+[kdevelop/kpp/cdevproject.h]
 dist=true
 install=false
 install_location=
@@ -1775,7 +1775,7 @@ files=kdevelop/pics/mini/CTchildren.png,kdevelop/pics/mini/CTclients.png,kdevelo
 sub_dirs=
 type=normal
 [kdevelop/pics/misc/Makefile.am]
-files=kdevelop/pics/misc/about_logo.png,kdevelop/pics/misc/customApp.png,kdevelop/pics/misc/gnomeApp.png,kdevelop/pics/misc/kAppWizard.png,kdevelop/pics/misc/kdemdi.png,kdevelop/pics/misc/miniApp.png,kdevelop/pics/misc/normalApp.png,kdevelop/pics/misc/qextmdi.png,kdevelop/pics/misc/qtApp.png,kdevelop/pics/misc/qtmdi.png,kdevelop/pics/misc/startlogo.png,kdevelop/pics/misc/terminalApp.png,kdevelop/pics/misc/tipday.png
+files=kdevelop/pics/misc/about_logo.png,kdevelop/pics/misc/customApp.png,kdevelop/pics/misc/gnomeApp.png,kdevelop/pics/misc/kAppWizard.png,kdevelop/pics/misc/kdemdi.png,kdevelop/pics/misc/miniApp.png,kdevelop/pics/misc/normalApp.png,kdevelop/pics/misc/qextmdi.png,kdevelop/pics/misc/qtApp.png,kdevelop/pics/misc/qtmdi.png,kdevelop/pics/misc/startlogo.png,kdevelop/pics/misc/terminalApp.png,kdevelop/pics/misc/tipday.png,kdevelop/pics/misc/kicker.png
 sub_dirs=
 type=normal
 [kdevelop/pics/misc/about_logo.png]
@@ -1799,6 +1799,11 @@ install=false
 install_location=
 type=DATA
 [kdevelop/pics/misc/kdemdi.png]
+dist=true
+install=false
+install_location=
+type=DATA
+[kdevelop/pics/misc/kicker.png]
 dist=true
 install=false
 install_location=
