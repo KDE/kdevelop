@@ -120,10 +120,6 @@ void CvsPart::slotCommit() {
     if (d.exec() == QDialog::Rejected)
         return;
 
-    QString message = d.logMessage();
-    if (!message.isEmpty())
-        message = " -m " + KShellProcess::quote(message);
-
     QDomDocument &dom = *this->projectDom();
 
     QString command("cd ");
@@ -134,8 +130,7 @@ void CvsPart::slotCommit() {
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " commit ";
     command += DomUtil::readEntry(dom,"/kdevcvs/commitoptions",default_commit);
-    command += " ";
-    command += message; // Already quoted, see above
+    command += " -m " + KShellProcess::quote( d.logMessage() );
     command += " ";
     command += KShellProcess::quote(name);
 

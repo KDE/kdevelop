@@ -18,10 +18,15 @@
 
 class CommitDialog : public QDialog
 {
+	Q_OBJECT
 public:
     CommitDialog();
     QString logMessage()
         { return edit->text(); }
+
+protected slots:
+	// Override: must check for message not being void.
+	virtual void accept();
 
 private:
     QMultiLineEdit *edit;

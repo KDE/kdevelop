@@ -17,7 +17,7 @@
 #include <kapplication.h>
 #include <kbuttonbox.h>
 #include <klocale.h>
-
+#include <kmessagebox.h>
 
 CommitDialog::CommitDialog()
     : QDialog(0, "", true)
@@ -48,6 +48,25 @@ CommitDialog::CommitDialog()
     layout->activate();
     adjustSize();
 }
+
+void CommitDialog::accept()
+{
+	if (!logMessage().isEmpty()) {
+		QDialog::accept();
+	}
+	else {
+        int s = KMessageBox::warningContinueCancel( this,
+			i18n("You are committing your changes without any comment. This is not a good practice. Continue anyway?"),
+			i18n("Cvs commit warning"),
+			KStdGuiItem::cont(),
+			i18n("askWhenCommittingEmptyLogs") );
+        if ( s == KMessageBox::Continue ) {
+			QDialog::accept();
+		}
+    }
+}
+
+#include "commitdlg.moc"
 
 // Local Variables:
 // c-basic-offset: 4
