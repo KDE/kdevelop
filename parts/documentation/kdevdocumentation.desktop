@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Exec=blubb
-Comment=Documentation
+Comment=The Documentation plugin offers browsing and searching in local and online documentation with support for multiple documentation systems.
 Comment[br]=Teuliadur
 Comment[ca]=Documentació
 Comment[cy]=Dogfenniaeth
