@@ -376,16 +376,25 @@ signals:
    * See @ref QextMdiChildView::focusInEvent
    */
    void focusInEventOccurs( QextMdiChildView*);
-   /** 
+   /**
    * Is sent when this MDI child has received the focus (after actually changing the focus).
    * See @ref QextMdiChildView::focusInEvent
    */
    void gotFocus( QextMdiChildView*);
+   /**
+   * Is sent when this MDI child was set to the activate view of all MDI views (after actually changing the focus).
+   * See @ref QextMdiChildView::activate
+   */
+   void activated( QextMdiChildView*);
    /** Is sent when this MDI child view has lost the focus (after actually changing the focus).
     *  See @ref QextMdiChildView::focusOutEvent
     */
    void lostFocus( QextMdiChildView*);
-   /** 
+   /** Is sent when this MDI child view was deactivated (after actually changing the focus).
+    *  See @ref QextMdiChildView::focusOutEvent
+    */
+   void deactivated( QextMdiChildView*);
+   /**
    * Internally used to send information to the mainframe that this MDI child view wants to be closed.
    * See @ref QextMdiChildView::closeEvent and @ref QextMdiMainFrm::closeWindow
    */

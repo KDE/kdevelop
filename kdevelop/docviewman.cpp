@@ -60,7 +60,7 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   m_docBookmarksList.setAutoDelete(TRUE);
   m_docBookmarksTitleList.setAutoDelete(TRUE);
     
-  connect( this, SIGNAL(sig_viewGotFocus(QWidget*)), 
+  connect( this, SIGNAL(sig_viewActivated(QWidget*)), 
 					 m_pParent, SLOT(slotViewSelected(QWidget*)) );
 
 	connect( this, SIGNAL(sig_newStatus(const QString&)), 
@@ -485,8 +485,8 @@ void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
   for (; itViews.current() != 0; ++itViews) {
     CEditWidget* pView = (CEditWidget*) itViews.current()->parentWidget();
     if (!pView) continue;
-    disconnect(pView, SIGNAL(gotFocus(QextMdiChildView*)),
-               this, SLOT(slot_gotFocus(QextMdiChildView*)));
+    disconnect(pView, SIGNAL(activated(QextMdiChildView*)),
+               this, SLOT(slot_viewActivated(QextMdiChildView*)));
     // remove the view from MDI and delete the view
     QextMdiChildView* pMDICover = (QextMdiChildView*) pView->parentWidget();
     m_pParent->removeWindowFromMdi( pMDICover);
@@ -617,11 +617,11 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& i
   int length = shortName.length();
   shortName = shortName.right(length - (shortName.findRev('/') +1));
   pMDICover->setTabCaption( shortName);
-  connect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
-          this, SLOT(slot_gotFocus(QextMdiChildView*)));
+  connect(pMDICover, SIGNAL(activated(QextMdiChildView*)),
+          this, SLOT(slot_viewActivated(QextMdiChildView*)));
 
-  // fake a gotFocus to update the currentEditView/currentBrowserView pointers _before_ adding to MDI control
-  slot_gotFocus( pMDICover);
+  // fake a viewActivated to update the currentEditView/currentBrowserView pointers _before_ adding to MDI control
+  slot_viewActivated( pMDICover);
 
   // take it under MDI mainframe control (note: this triggers also a setFocus())
   int flags;
@@ -774,8 +774,8 @@ void DocViewMan::closeEditView(CEditWidget* pView)
   pMDICover->hide();
   
   // disconnect the focus signals
-  disconnect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)),
-    this, SLOT(slot_gotFocus(QextMdiChildView*)));
+  disconnect(pMDICover, SIGNAL(activated(QextMdiChildView*)),
+    this, SLOT(slot_viewActivated(QextMdiChildView*)));
 
   // remove the view from MDI and delete the view
   m_pParent->removeWindowFromMdi( pMDICover);
@@ -785,7 +785,7 @@ void DocViewMan::closeEditView(CEditWidget* pView)
     closeKWriteDoc(pDoc);
   }
   /* if there are no more views, the pointer have to be "reset" here,
-   * because slot_gotFocus() can not be called any longer
+   * because slot_viewActivated() can not be called any longer
    */
   if (m_MDICoverList.count() == 0) {
     m_pCurEditView = 0L;
@@ -804,7 +804,7 @@ void DocViewMan::closeBrowserView(KHTMLView* pView)
   pMDICover->hide();
   
   // disconnect the focus signals
-  disconnect(pMDICover, SIGNAL(gotFocus(QextMdiChildView*)), this, SLOT(slot_gotFocus(QextMdiChildView*)));
+  disconnect(pMDICover, SIGNAL(activated(QextMdiChildView*)), this, SLOT(slot_viewActivated(QextMdiChildView*)));
   
   // get a KHTMLView out of the parent to avoid a delete, 
   // it will be deleted later in the CDocBrowser destructor
@@ -829,9 +829,9 @@ CEditWidget* DocViewMan::getFirstEditView(KWriteDoc* pDoc) const
 //-----------------------------------------------------------------------------
 // Connected to the focus in event occures signal of CEditWidget.
 // Moves the focused view to the end of the list of focused views or
-// adds it. Emits the sig_viewGotFocus signal
+// adds it. Emits the sig_viewActivated signal
 //-----------------------------------------------------------------------------
-void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
+void DocViewMan::slot_viewActivated(QextMdiChildView* pMDICover)
 {
   // set current view, distinguish between edit widget and browser widget
   QObjectList* pL = (QObjectList*) pMDICover->children();
@@ -900,7 +900,7 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
 
   // emit the got focus signal 
   // (connected to CKDevelop but could also be caught by other ones)
-  emit sig_viewGotFocus(pView);
+  emit sig_viewActivated(pView);
 }
 
 //-----------------------------------------------------------------------------

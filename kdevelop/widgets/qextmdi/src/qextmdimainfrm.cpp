@@ -438,10 +438,14 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
    if(pWnd->parent() != NULL ) {
       QextMdiChildFrm *lpC=pWnd->mdiParent();
       if (lpC) {
-        if (!bShow)
-           lpC->hide();
-        lpC->unsetClient( m_undockPositioningOffset);
-        m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
+         QPixmap pixm(*(lpC->icon()));
+         QString capt(lpC->caption());
+         if (!bShow)
+            lpC->hide();
+         lpC->unsetClient( m_undockPositioningOffset);
+         m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
+         pWnd->setIcon(pixm);
+         pWnd->setCaption(capt);
       }
    }
    else {
@@ -1350,16 +1354,16 @@ void QextMdiMainFrm::fillWindowMenu()
    if (!m_bClearingOfWindowMenuBlocked) {
       m_pWindowMenu->clear();
    }
-   m_pWindowMenu->insertItem(tr("&Close"), this, SLOT(closeActiveView()));
-   m_pWindowMenu->insertItem(tr("Close &All"), this, SLOT(closeAllViews()));
+   int closeId = m_pWindowMenu->insertItem(tr("&Close"), this, SLOT(closeActiveView()));
+   int closeAllId = m_pWindowMenu->insertItem(tr("Close &All"), this, SLOT(closeAllViews()));
    if (bNoViewOpened) {
-      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(0), FALSE);
-      m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(1), FALSE);
+      m_pWindowMenu->setItemEnabled(closeId, FALSE);
+      m_pWindowMenu->setItemEnabled(closeAllId, FALSE);
    }
    if (!bTabPageMode) {
-      m_pWindowMenu->insertItem(tr("&Iconify All"), this, SLOT(iconifyAllViews()));
+      int iconifyId = m_pWindowMenu->insertItem(tr("&Iconify All"), this, SLOT(iconifyAllViews()));
       if (bNoViewOpened) {
-         m_pWindowMenu->setItemEnabled(m_pWindowMenu->idAt(2), FALSE);
+         m_pWindowMenu->setItemEnabled(iconifyId, FALSE);
       }
    }
    m_pWindowMenu->insertSeparator();
@@ -1383,19 +1387,23 @@ void QextMdiMainFrm::fillWindowMenu()
       }
    m_pWindowMenu->insertSeparator();
    if (!bTabPageMode) {
-      m_pWindowMenu->insertItem(tr("&Placing..."), m_pPlacingMenu);
+      int placMenuId = m_pWindowMenu->insertItem(tr("&Placing..."), m_pPlacingMenu);
          m_pPlacingMenu->clear();
          m_pPlacingMenu->insertItem(tr("Ca&scade windows"), m_pMdi,SLOT(cascadeWindows()));
          m_pPlacingMenu->insertItem(tr("Cascade &maximized"), m_pMdi,SLOT(cascadeMaximized()));
          m_pPlacingMenu->insertItem(tr("Expand &vertical"), m_pMdi,SLOT(expandVertical()));
          m_pPlacingMenu->insertItem(tr("Expand &horizontal"), m_pMdi,SLOT(expandHorizontal()));
-         m_pPlacingMenu->insertItem(tr("A&nodine's tile"), m_pMdi,SLOT(tileAnodine()));
-         m_pPlacingMenu->insertItem(tr("&Pragma's tile"), m_pMdi,SLOT(tilePragma()));
+         m_pPlacingMenu->insertItem(tr("Tile &non-overlapped"), m_pMdi,SLOT(tileAnodine()));
+         m_pPlacingMenu->insertItem(tr("Tile overla&pped"), m_pMdi,SLOT(tilePragma()));
          m_pPlacingMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
       m_pWindowMenu->insertSeparator();
-      m_pWindowMenu->insertItem(tr("&Dock/Undock..."), m_pDockMenu);
+      int dockUndockId = m_pWindowMenu->insertItem(tr("&Dock/Undock..."), m_pDockMenu);
          m_pDockMenu->clear();
       m_pWindowMenu->insertSeparator();
+      if (bNoViewOpened) {
+         m_pWindowMenu->setItemEnabled(placMenuId, FALSE);
+         m_pWindowMenu->setItemEnabled(dockUndockId, FALSE);
+      }
    }
    int entryCount = m_pWindowMenu->count();
 

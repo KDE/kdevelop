@@ -101,7 +101,7 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
    // destroy the old one
    QObject::disconnect(lpC);
    lpC->blockSignals(TRUE);
-   m_pZ->setAutoDelete(false);
+   m_pZ->setAutoDelete(FALSE);
    m_pZ->removeRef(lpC);
 
    // focus the next new childframe
@@ -116,7 +116,7 @@ void QextMdiChildArea::destroyChild(QextMdiChildFrm *lpC,bool bFocusTopChild)
       }
    }
    delete lpC;
-   m_pZ->setAutoDelete(true);
+   m_pZ->setAutoDelete(TRUE);
 
    if (bFocusTopChild)
       focusTopChild();
@@ -131,7 +131,7 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
    // destroy the old one
    QObject::disconnect(lpC);
    lpC->unsetClient();
-   m_pZ->setAutoDelete(false);
+   m_pZ->setAutoDelete(FALSE);
    m_pZ->removeRef(lpC);
 
    // focus the next new childframe
@@ -146,7 +146,7 @@ void QextMdiChildArea::destroyChildButNotItsView(QextMdiChildFrm *lpC,bool bFocu
       }
    }
    delete lpC;
-   m_pZ->setAutoDelete(true);
+   m_pZ->setAutoDelete(TRUE);
 
    if (bFocusTopChild)
       focusTopChild();
@@ -407,52 +407,60 @@ void QextMdiChildArea::tileAllInternal(int maxWnds)
    static int colrecall[9]={ 0,0,0,3,3,3,6,6,6 }; //adjust self
    static int rowrecall[9]={ 0,0,0,0,4,4,4,4,4 }; //adjust self
 
-   QextMdiChildFrm *lpTop=topChild();
-   int numVisible=getVisibleChildCount();
-   if(numVisible<1)return;
-   int numToHandle=((numVisible > maxWnds) ? maxWnds : numVisible);
-   int xQuantum=width()/colstable[numToHandle-1];
-   if(xQuantum < ((lpTop->minimumSize().width() > m_defaultChildFrmSize.width()) ? lpTop->minimumSize().width() : m_defaultChildFrmSize.width())){
-      if(colrecall[numToHandle-1]==0)qDebug("Tile : Not enough space");
-      else tileAllInternal(colrecall[numToHandle-1]);
-      return;
+   QextMdiChildFrm *lpTop = topChild();
+   int numVisible = getVisibleChildCount();
+   if (numVisible<1) return;
+   int numToHandle = ((numVisible > maxWnds) ? maxWnds : numVisible);
+   int xQuantum = width()/colstable[numToHandle-1];
+   if (xQuantum < ((lpTop->minimumSize().width() > m_defaultChildFrmSize.width()) ? lpTop->minimumSize().width() : m_defaultChildFrmSize.width())) {
+      if (colrecall[numToHandle-1] != 0) {
+         tileAllInternal(colrecall[numToHandle-1]);
+         return;
+      }
    }
    int yQuantum=height()/rowstable[numToHandle-1];
-   if(yQuantum < ((lpTop->minimumSize().height() > m_defaultChildFrmSize.height()) ? lpTop->minimumSize().height() : m_defaultChildFrmSize.height())){
-      if(rowrecall[numToHandle-1]==0)qDebug("Tile : Not enough space");
-      else tileAllInternal(rowrecall[numToHandle-1]);
-      return;
+   if (yQuantum < ((lpTop->minimumSize().height() > m_defaultChildFrmSize.height()) ? lpTop->minimumSize().height() : m_defaultChildFrmSize.height())) {
+      if (rowrecall[numToHandle-1] != 0) {
+         tileAllInternal(rowrecall[numToHandle-1]);
+         return;
+      }
    }
    int curX=0;
    int curY=0;
    int curRow=1;
    int curCol=1;
    int curWin=1;
-   for(QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()){
-      if(lpC->m_state!=QextMdiChildFrm::Minimized){
+   for (QextMdiChildFrm *lpC=m_pZ->first();lpC;lpC=m_pZ->next()) {
+      if (lpC->m_state!=QextMdiChildFrm::Minimized) {
          //restore the window
-         if(lpC->m_state==QextMdiChildFrm::Maximized)lpC->restorePressed();
-         if((curWin%numToHandle)==0)lpC->setGeometry(curX,curY,xQuantum * lastwindw[numToHandle-1],yQuantum);
-         else lpC->setGeometry(curX,curY,xQuantum,yQuantum);
+         if (lpC->m_state==QextMdiChildFrm::Maximized)
+            lpC->restorePressed();
+         if ((curWin%numToHandle)==0)
+            lpC->setGeometry(curX,curY,xQuantum * lastwindw[numToHandle-1],yQuantum);
+         else 
+            lpC->setGeometry(curX,curY,xQuantum,yQuantum);
          //example : 12 windows : 3 cols 3 rows
-         if(curCol<colstable[numToHandle-1]){ //curCol<3
+         if (curCol<colstable[numToHandle-1]) { //curCol<3
             curX+=xQuantum; //add a column in the same row
             curCol++;       //increase current column
-         } else {
-            curX=0;         //new row
-            curCol=1;       //column 1
-            if(curRow<rowstable[numToHandle-1]){ //curRow<3
-               curY+=yQuantum; //add a row
+         } 
+         else {
+            curX = 0;         //new row
+            curCol = 1;       //column 1
+            if (curRow < rowstable[numToHandle-1]) { //curRow<3
+               curY += yQuantum; //add a row
                curRow++;       //
-            } else {
-               curY=0;         //restart from beginning
-               curRow=1;       //
+            } 
+            else {
+               curY = 0;         //restart from beginning
+               curRow = 1;       //
             }
          }
          curWin++;
       }
    }
-   if(lpTop)lpTop->setFocus();
+   if (lpTop)
+      lpTop->setFocus();
 }
 //============ tileAnodine ============//
 void QextMdiChildArea::tileAnodine()
@@ -542,13 +550,16 @@ void QextMdiChildArea::undockWindow(QWidget* pWidget)   // added by F.B.
 {
    QextMdiChildView* pWnd = (QextMdiChildView*) pWidget;   // bad solution??? F.B.
 
-   if(!pWnd->parent())return;
-   QextMdiChildFrm *lpC=pWnd->mdiParent();
+   if (!pWnd->parent()) return;
+   QextMdiChildFrm *lpC = pWnd->mdiParent();
+   QPixmap pixm(*(lpC->icon()));
+   QString capt(lpC->caption());
    lpC->unsetClient();
    pWnd->youAreDetached();
-   //m_pTaskBar->windowAttached(pWnd,FALSE);
    destroyChild(lpC,TRUE); //Do not focus the new top child , we loose focus...
+   pWnd->setIcon(pixm);
    pWnd->setFocus();
+   pWnd->setCaption(capt);
 }
 
 //============ layoutMinimizedChildren ============//

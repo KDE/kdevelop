@@ -343,6 +343,8 @@ void QextMdiChildView::focusInEvent(QFocusEvent *e)
    m_bFocusInEventIsPending = TRUE;
    activate();
    m_bFocusInEventIsPending = FALSE;
+
+   emit gotFocus(this);
 }
 
 //============= activate ===============//
@@ -364,7 +366,7 @@ void QextMdiChildView::activate()
       return;   // nothing to do, we are the active childview, already
    }
    else {
-     emit gotFocus(this);
+     emit activated(this);
    }
 
    if( m_focusedChildWidget != 0L) {

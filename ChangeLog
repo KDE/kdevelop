@@ -1,9 +1,22 @@
+2001-06-20  F@lk Brettschneider <falk@kdevelop.org>
+   * synchronized with QextMDI CVS version of Dr. Baldeweg AG Dresden
+     - signal gotFocus(..) is renamed to activated(..) now!
+     - doubleclick on icon button closes view
+     - caption and icon for undocked views,
+     - some nice little helper functionality in the classes
+     - 'Tile Pragma' repaired
+     - revised 'Windows' menu
+   * DocViewMan adapted to that new QextMDI API
+
 2001-06-18  rokrau@yahoo.com
    * bugfix: KDevelop's treeviews now respect the user setting for 
      single/double clicks. For this I had to change part of ctreeview
      and also connect TreeView slots to KListView signals executed() and
      contextMenu(). This may have introduced some other problems, please
-     test and report. 
+     test and report.
+
+2001-06-18  F@lk Brettschneider <falk@kdevelop.org>
+   * further work on kdevelop/setup (indexing, changed text, related bugfixes)
 
 2001-06-17  F@lk Brettschneider <falk@kdevelop.org>
    * start kdevelop after its initial setup has finished

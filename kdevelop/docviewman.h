@@ -236,9 +236,9 @@ public:
   void initKeyAccel( CKDevAccel* accel, QWidget* pTopLevelWidget);
 
 public slots:
-  /** Is called whenever the MDI view gets focus. 
+  /** Is called whenever the MDI view has been activated. 
    * The update of pointers for the "current..."-methods is made here */
-  void slot_gotFocus(QextMdiChildView* pMDICover);
+  void slot_viewActivated(QextMdiChildView* pMDICover);
   /** Helper method for initKeyAccel(CKDevAccel* accel, QWidget* pTopLevelWidget), acts as slot entry with
    *  the right interface for signals from the QextMDI mainframe class. */
   void initKeyAccel( QWidget* pTopLevelWidget);
@@ -291,7 +291,7 @@ public slots:
 
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
-  void sig_viewGotFocus(QWidget* pView);
+  void sig_viewActivated(QWidget* pView);
   /** Is emitted when a view handled by the doc view manager looses focus. */
   void sig_viewLostFocus(QWidget* pView);
 

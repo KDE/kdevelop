@@ -35,6 +35,7 @@
 #include <qtoolbutton.h>
 #include <qlabel.h>
 #include <qdict.h>
+#include <qdatetime.h>
 
 #include "qextmdichildfrmcaption.h" //cross ref
 
@@ -179,6 +180,7 @@ protected:
    QPopupMenu*             m_pSystemMenu;
    QSize                   m_oldClientMinSize;
    QSize                   m_oldClientMaxSize;
+   QTime                   m_timeMeasure;
 
 // methods
 public:
@@ -232,6 +234,18 @@ public:
    * Cool to have it inline...
    */
    inline MdiWindowState state(){ return m_state; };
+   /**
+   * Returns the inner client area
+   */
+   inline QRect mdiAreaContentsRect() const {
+      QFrame* p=dynamic_cast<QFrame*>(parentWidget());
+      if(p) {
+         return p->contentsRect();
+      } else {
+         QRect empty;
+         return empty;
+      }
+   }
    /**
    * Returns the geometry that will be restored by calling restore().
    */
@@ -366,6 +380,5 @@ protected:
    */
    int getResizeCorner(int ax,int ay);
 };
-
 
 #endif //_QEXTMDICHILDFRM_H_
