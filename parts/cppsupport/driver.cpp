@@ -153,6 +153,7 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__GC_CONST" );
     lexer->addSkipWord( "__HASH_ALLOC_INIT", SkipWordAndArguments );
     lexer->addSkipWord( "__STL_DEFAULT_ALLOCATOR",  SkipWordAndArguments, "T" );
+    lexer->addSkipWord( "__STL_MUTEX_INITIALIZER" );
     
 	// antlr
     lexer->addSkipWord( "ANTLR_BEGIN_NAMESPACE", SkipWordAndArguments );
@@ -187,7 +188,11 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__unsigned__" );
     lexer->addSkipWord( "asmlinkage" );
     lexer->addSkipWord( "____cacheline_aligned" );
-    
+    lexer->addSkipWord( "__glibcpp_class_requires", SkipWordAndArguments );
+    lexer->addSkipWord( "__glibcpp_class2_requires", SkipWordAndArguments );
+    lexer->addSkipWord( "__glibcpp_class4_requires", SkipWordAndArguments );
+    lexer->addSkipWord( "__glibcpp_function_requires", SkipWordAndArguments );
+
     lexer->addSkipWord( "__BEGIN_NAMESPACE_STD" );
     lexer->addSkipWord( "__END_NAMESPACE_STD" );
     lexer->addSkipWord( "__BEGIN_NAMESPACE_C99" );
