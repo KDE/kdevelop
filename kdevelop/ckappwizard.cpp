@@ -1292,7 +1292,7 @@ void CKAppWizard::slotDirectoryEntry() {
 void CKAppWizard::slotIconButtonClicked() {
   QStringList iconlist;
   KIconLoaderDialog iload;
-  iload.selectIcon(name1,"*");
+  iload.selectIcon(name1,KIcon::Desktop);
   if (!name1.isNull() )
     iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1));
 }
@@ -1301,9 +1301,9 @@ void CKAppWizard::slotIconButtonClicked() {
 void CKAppWizard::slotMiniIconButtonClicked() {
   QStringList miniiconlist;
   KIconLoaderDialog  mload;
-  mload.selectIcon(name2,"*");
+  mload.selectIcon(name2,KIcon::Small);
   if (!name2.isNull() )
-#warning FIXME mini icons?
+//#warning FIXME mini icons?
     miniload->setPixmap(KGlobal::iconLoader()->loadIcon(name2));
 }
 
