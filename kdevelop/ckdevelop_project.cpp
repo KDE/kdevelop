@@ -940,6 +940,9 @@ bool CKDevelop::readProjectFile(QString file){
   if(!(prj->readProject())){
     return false;
   }
+  else {
+      project=true;
+  }
 
   // str = prj.getProjectDir() + prj.getSubDir() + prj.getProjectName().lower() + ".cpp";
   //   if(QFile::exists(str)){
@@ -1030,7 +1033,6 @@ bool CKDevelop::readProjectFile(QString file){
   }
 
   addRecentProject(file);
-  project=true;
   return true;
 }
 

@@ -101,9 +101,13 @@ void KDlgPropertyBase::dumpStringPropCall(QTextStream *stream, QString methname,
     QString contents = getPropValue(name);
     if (withi18n)
 	{
-	    contents.prepend("i18n(");
-	    contents.append(")");
+	    contents.prepend("i18n(\"");
+	    contents.append("\")");
 	}
+    else{
+	contents.prepend("\"");
+	contents.append("\"");
+    }
     dumpPropCall(stream, methname, contents);
 }
 
@@ -127,6 +131,7 @@ void KDlgPropertyBase::dumpBoolPropCall(QTextStream *stream, QString methname,
 	return;
     if (!iffalse && !propValueAsBool(name))
 	return;
+    if (name = "") return;
     
     dumpPropCall(stream, methname, getPropValue(name));
 }
@@ -153,7 +158,7 @@ void KDlgPropertyBase::dumpColorPropCall(QTextStream *stream, QString methname,
 void KDlgPropertyBase::dumpPixmapPropCall(QTextStream *stream, QString methname,
 					  QString name)
 {
-    QString contents = "QPixmap(";
+    QString contents = "QPixmap(\"";
     contents += getPropValue(name);
     contents += "\")";
     dumpPropCall(stream, methname, contents);

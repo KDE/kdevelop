@@ -914,7 +914,6 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
     props->dumpBoolPropCall(stream, "setDefault", "isDefault", false);
     props->dumpBoolPropCall(stream, "setAutoDefault", "isAutoDefault", false);
     props->dumpBoolPropCall(stream, "setToggleButton", "isToggleButton", false);
-    props->dumpBoolPropCall(stream, "setOn", "isOn", false);
     props->dumpBoolPropCall(stream, "setIsMenuButton", "isMenuButton", false);
     props->dumpBoolPropCall(stream, "setAutoResize", "isAutoResize", false);
     props->dumpBoolPropCall(stream, "setAutoRepeat", "isAutoRepeat", false);
@@ -939,7 +938,7 @@ void KDlgEdit::generateQGroupBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
     generateCommon(wid,stream,_parent);
     
     bool withi18n = ((CKDevelop*)parent())->getProject()->isKDEProject();
-    props->dumpStringPropCall(stream, "setText", "Text", withi18n);
+    props->dumpStringPropCall(stream, "setTitle", "Title", withi18n);
     
     *stream << "\n";
 }
@@ -1113,14 +1112,14 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 			    props->getPropValue("Width") + "," +
 			    props->getPropValue("Height"));
     
-    if (props->getPropValue("MinWidth") != "0" || props->getPropValue("MinHeight") != "0")
+    if (props->getPropValue("MinWidth") != "" || props->getPropValue("MinHeight") != "")
 	{
 	    QString contents =
 		props->getPropValue("MinWidth") + "," + props->getPropValue("MinHeight");
 	    props->dumpPropCall(stream, "setMinimumSize", contents);
 	}
 
-    if (props->getPropValue("MaxWidth") != "0" || props->getPropValue("MaxHeight") != "0")
+    if (props->getPropValue("MaxWidth") != "" || props->getPropValue("MaxHeight") != "")
 	{
 	    QString contents =
 		props->getPropValue("MaxWidth") + "," + props->getPropValue("MaxHeight");
