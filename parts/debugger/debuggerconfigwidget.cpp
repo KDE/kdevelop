@@ -13,6 +13,8 @@
 
 #include "debuggerconfigwidget.h"
 
+#include <kurlrequester.h>
+
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include <qfileinfo.h>
@@ -30,8 +32,10 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
     QFontMetrics fm(programArgs_edit->fontMetrics());
     programArgs_edit->setMinimumWidth(fm.width('X')*30);
 
+    gdbPath_edit->setMode(KFile::Directory);
+
     programArgs_edit->setText(  DomUtil::readEntry(dom, "/kdevdebugger/general/programargs"));
-    gdbPath_edit->setText(      DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
+    gdbPath_edit->setURL(      DomUtil::readEntry(dom, "/kdevdebugger/general/gdbpath"));
 
     QString shell =             DomUtil::readEntry(dom, "/kdevdebugger/general/dbgshell","no_value");
     if( shell == QString("no_value") )
@@ -50,7 +54,7 @@ DebuggerConfigWidget::DebuggerConfigWidget(DebuggerPart* part, QWidget *parent, 
             }
         }
     }
-    debuggingShell_edit->setText( shell );
+    debuggingShell_edit->setURL( shell );
 
     // Use setFile instead?
     configGdbScript_edit->setText( DomUtil::readEntry(dom, "/kdevdebugger/general/configGdbScript"));
@@ -75,8 +79,8 @@ DebuggerConfigWidget::~DebuggerConfigWidget()
 void DebuggerConfigWidget::accept()
 {
     DomUtil::writeEntry(dom, "/kdevdebugger/general/programargs", programArgs_edit->text());
-    DomUtil::writeEntry(dom, "/kdevdebugger/general/gdbpath", gdbPath_edit->text());
-    DomUtil::writeEntry(dom, "/kdevdebugger/general/dbgshell", debuggingShell_edit->text());
+    DomUtil::writeEntry(dom, "/kdevdebugger/general/gdbpath", gdbPath_edit->url());
+    DomUtil::writeEntry(dom, "/kdevdebugger/general/dbgshell", debuggingShell_edit->url());
 
     DomUtil::writeEntry(dom, "/kdevdebugger/general/configGdbScript", configGdbScript_edit->text());
     DomUtil::writeEntry(dom, "/kdevdebugger/general/runShellScript", runShellScript_edit ->text());

@@ -20,7 +20,6 @@
 
 class QDomElement;
 class QToolButton;
-class QTable;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -30,6 +29,7 @@ namespace GDBDebugger
 {
 class Breakpoint;
 class BreakpointTableRow;
+class GDBTable;
 
 class GDBBreakpointWidget : public QHBox
 {
@@ -66,6 +66,7 @@ private slots:
     void slotRemoveAllBreakpoints();
     void slotEditBreakpoint(const QString &fileName, int lineNum);
     void slotEditBreakpoint();
+    void slotAddBreakpoint();
     void slotAddBlankBreakpoint(int idx);
     void slotRowSelected(int row, int col, int button, const QPoint & mousePos);
     void slotEditRow(int row, int col, const QPoint & mousePos);
@@ -87,7 +88,7 @@ private:
     void removeBreakpoint(BreakpointTableRow* btr);
 
 private:
-    QTable*         m_table;
+    GDBTable*       m_table;
 
     QToolButton*    m_add;
     QToolButton*    m_delete;

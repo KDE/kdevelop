@@ -83,7 +83,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     variableWidget->setIcon(SmallIcon("math_brace"));
     variableWidget->setCaption(i18n("Variable Tree"));
     QWhatsThis::add
-        (variableWidget, i18n("Variable tree\n\n"
+        (variableWidget, i18n("<b>Variable tree</b><p>"
                               "The variable tree allows you to see "
                               "the variable values as you step "
                               "through your program using the internal "
@@ -100,7 +100,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbBreakpointWidget = new GDBBreakpointWidget();
     gdbBreakpointWidget->setCaption(i18n("Breakpoint List"));
     QWhatsThis::add
-        (gdbBreakpointWidget, i18n("Breakpoint list\n\n"
+        (gdbBreakpointWidget, i18n("<b>Breakpoint list</b><p>"
                                 "Displays a list of breakpoints with "
                                 "their current status. Clicking on a "
                                 "breakpoint item allows you to change "
@@ -113,7 +113,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     framestackWidget->setEnabled(false);
     framestackWidget->setCaption(i18n("Frame Stack"));
     QWhatsThis::add
-        (framestackWidget, i18n("Frame stack\n\n"
+        (framestackWidget, i18n("<b>Frame stack</b><p>"
                                 "Often referred to as the \"call stack\", "
                                 "this is a list showing what function is "
                                 "currently active and who called each "
@@ -129,7 +129,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     disassembleWidget->setEnabled(false);
     disassembleWidget->setCaption(i18n("Machine Code Display"));
     QWhatsThis::add
-        (disassembleWidget, i18n("Machine code display\n\n"
+        (disassembleWidget, i18n("<b>Machine code display</b><p>"
                                  "A machine code view into your running "
                                  "executable with the current instruction "
                                  "highlighted. You can step instruction by "
@@ -144,6 +144,10 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbOutputWidget = new GDBOutputWidget;
     gdbOutputWidget->setEnabled(false);
     gdbOutputWidget->setIcon( SmallIcon("inline_image") );
+    QWhatsThis::add
+        (gdbOutputWidget, i18n("<b>GDB output</b><p>"
+                                 "Shows all gdb commands being executed. "
+                                 "You can also issue any other gdb command while debugging."));
     mainWindow()->embedOutputView(gdbOutputWidget, i18n("GDB"),
                                   i18n("GDB output"));
     mainWindow()->setViewAvailable(gdbOutputWidget, false);
@@ -168,8 +172,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("&Start"), "1rightarrow", 0,
                          this, SLOT(slotRun()),
                          actionCollection(), "debug_run");
-    action->setStatusText( i18n("Runs the program in the debugger") );
-    action->setWhatsThis( i18n("Start in debugger\n\n"
+    action->setToolTip( i18n("Start in debugger") );
+    action->setWhatsThis( i18n("<b>Start in debugger</b><p>"
                                "Starts the debugger with the project's main "
                                "executable. You may set some breakpoints "
                                "before this, or you can interrupt the program "
@@ -179,24 +183,27 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Sto&p"), "stop", 0,
                          this, SLOT(slotStop()),
                          actionCollection(), "debug_stop");
-    action->setStatusText( i18n("Kills the executable and exits the debugger") );
+    action->setToolTip( i18n("Stop debugger") );
+    action->setWhatsThis(i18n("<b>Stop debugger</b><p>Kills the executable and exits the debugger."));
 
     action = new KAction(i18n("Interrupt"), "player_pause", 0,
                          this, SLOT(slotPause()),
                          actionCollection(), "debug_pause");
-    action->setStatusText( i18n("Interrupts the application") );
+    action->setToolTip( i18n("Interrupt application") );
+    action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current GDB command."));
 
     action = new KAction(i18n("Run to &Cursor"), "dbgrunto", 0,
                          this, SLOT(slotRunToCursor()),
                          actionCollection(), "debug_runtocursor");
-    action->setStatusText( i18n("Continues execution until the cursor position is reached") );
+    action->setToolTip( i18n("Run to cursor") );
+    action->setWhatsThis(i18n("<b>Run to cursor</b><p>Continues execution until the cursor position is reached."));
 
 
     action = new KAction(i18n("Step &Over"), "dbgnext", 0,
                          this, SLOT(slotStepOver()),
                          actionCollection(), "debug_stepover");
-    action->setStatusText( i18n("Steps over the next line") );
-    action->setWhatsThis( i18n("Step over\n\n"
+    action->setToolTip( i18n("Step over the next line") );
+    action->setWhatsThis( i18n("<b>Step over</b><p>"
                                "Executes one line of source in the current source file. "
                                "If the source line is a call to a function the whole "
                                "function is executed and the app will stop at the line "
@@ -206,14 +213,15 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Step over Ins&truction"), "dbgnextinst", 0,
                          this, SLOT(slotStepOverInstruction()),
                          actionCollection(), "debug_stepoverinst");
-    action->setStatusText( i18n("Steps over the next assembly instruction") );
+    action->setToolTip( i18n("Step over instruction") );
+    action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction."));
 
 
     action = new KAction(i18n("Step &Into"), "dbgstep", 0,
                          this, SLOT(slotStepInto()),
                          actionCollection(), "debug_stepinto");
-    action->setStatusText( i18n("Steps into the next statement") );
-    action->setWhatsThis( i18n("Step into\n\n"
+    action->setToolTip( i18n("Step into the next statement") );
+    action->setWhatsThis( i18n("<b>Step into</b><p>"
                                "Executes exactly one line of source. If the source line "
                                "is a call to a function then execution will stop after "
                                "the function has been entered.") );
@@ -222,14 +230,15 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Step into I&nstruction"), "dbgstepinst", 0,
                          this, SLOT(slotStepIntoInstruction()),
                          actionCollection(), "debug_stepintoinst");
-    action->setStatusText( i18n("Steps into the next assembly instruction") );
+    action->setToolTip( i18n("Step into instruction") );
+    action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction."));
 
 
     action = new KAction(i18n("Step O&ut"), "dbgstepout", 0,
                          this, SLOT(slotStepOut()),
                          actionCollection(), "debug_stepout");
-    action->setStatusText( i18n("Steps out of the current function") );
-    action->setWhatsThis( i18n("Step out of\n\n"
+    action->setToolTip( i18n("Steps out of the current function") );
+    action->setWhatsThis( i18n("<b>Step out</b><p>"
                                "Executes the application until the currently executing "
                                "function is completed. The debugger will then display "
                                "the line after the original call to that function. If "
@@ -240,14 +249,19 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Viewers"), "dbgmemview", 0,
                          this, SLOT(slotMemoryView()),
                          actionCollection(), "debug_memview");
-    action->setStatusText( i18n("Various views into the application") );
+    action->setToolTip( i18n("Debugger viewers") );
+    action->setWhatsThis(i18n("<b>Debugger viewers</b><p>Various information about application being executed. There are 4 views available:<br>"
+        "<b>Memory</b><br>"
+        "<b>Disassemble</b><br>"
+        "<b>Registers</b><br>"
+        "<b>Libraries</b>"));
 
 
     action = new KAction(i18n("Examine Core File"), "core", 0,
                          this, SLOT(slotExamineCore()),
                          actionCollection(), "debug_core");
-    action->setStatusText( i18n("Loads a core file into the debugger") );
-    action->setWhatsThis( i18n("Examine core file\n\n"
+    action->setToolTip( i18n("Examine core file") );
+    action->setWhatsThis( i18n("<b>Examine core file</b><p>"
                                "This loads a core file, which is typically created "
                                "after the application has crashed, e.g. with a "
                                "segmentation fault. The core file contains an "
@@ -258,12 +272,14 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     action = new KAction(i18n("Attach to Process"), "connect_creating", 0,
                          this, SLOT(slotAttachProcess()),
                          actionCollection(), "debug_attach");
-    action->setStatusText( i18n("Attaches the debugger to a running process") );
-
+    action->setToolTip( i18n("Attach to process") );
+    action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process."));
 
     action = new KAction(i18n("Toggle Breakpoint"), 0, 0,
                          this, SLOT(toggleBreakpoint()),
                          actionCollection(), "debug_toggle_breakpoint");
+    action->setToolTip(i18n("Toggle breakpoint"));
+    action->setWhatsThis(i18n("<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in editor."));
 
     connect( mainWindow()->main()->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
              this, SLOT(guiClientAdded(KXMLGUIClient*)) );

@@ -32,6 +32,7 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qtooltip.h>
+#include <qwhatsthis.h>
 
 // **************************************************************************
 // **************************************************************************
@@ -310,7 +311,7 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
   connect(bKDevFocus_, SIGNAL(clicked()), this,   SLOT(slotKdevFocus()));
   connect(bPrevFocus_, SIGNAL(clicked()), this,   SLOT(slotPrevFocus()));
 
-    QToolTip::add( bRun,        i18n("Continue with application execution. May start the application.") );
+    QToolTip::add( bRun,        i18n("Continue with application execution, may start the application") );
     QToolTip::add( bInterrupt,  i18n("Interrupt the application execution") );
     QToolTip::add( bNext,       i18n("Execute one line of code, but run through functions") );
     QToolTip::add( bNexti,      i18n("Execute one assembler instruction, but run through functions") );
@@ -319,7 +320,18 @@ DbgToolBar::DbgToolBar(DebuggerPart* part,
     QToolTip::add( bFinish,     i18n("Execute to end of current stack frame") );
     QToolTip::add( bView,       i18n("Memory, dissemble, registers, library viewers") );
     QToolTip::add( bKDevFocus_, i18n("Set focus on KDevelop") );
-    QToolTip::add( bPrevFocus_, i18n("Set focus on window that had focus when \"kdev\" was pressed") );
+    QToolTip::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus") );
+
+    QWhatsThis::add( bRun,        i18n("Continue with application execution. May start the application.") );
+    QWhatsThis::add( bInterrupt,  i18n("Interrupt the application execution.") );
+    QWhatsThis::add( bNext,       i18n("Execute one line of code, but run through functions.") );
+    QWhatsThis::add( bNexti,      i18n("Execute one assembler instruction, but run through functions.") );
+    QWhatsThis::add( bStep,       i18n("Execute one line of code, stepping into functions if appropriate.") );
+    QWhatsThis::add( bStepi,      i18n("Execute one assembler instruction, stepping into functions if appropriate.") );
+    QWhatsThis::add( bFinish,     i18n("Execute to end of current stack frame.") );
+    QWhatsThis::add( bView,       i18n("Memory, dissemble, registers, library viewers.") );
+    QWhatsThis::add( bKDevFocus_, i18n("Set focus on KDevelop.") );
+    QWhatsThis::add( bPrevFocus_, i18n("Set focus on window that had focus when KDevelop got focus.") );
 
     topLayout->addWidget(moveHandle);
     topLayout->addWidget(bRun);

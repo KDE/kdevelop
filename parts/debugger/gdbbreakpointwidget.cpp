@@ -14,6 +14,7 @@
  ***************************************************************************/
 
 #include "gdbbreakpointwidget.h"
+#include "gdbtable.h"
 
 #include "breakpoint.h"
 #include "domutil.h"
@@ -30,6 +31,7 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qvbox.h>
+#include <qlayout.h>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -171,28 +173,36 @@ void BreakpointTableRow::setRow()
 GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     QHBox(parent, name)
 {
-    QVBox* toolbar = new QVBox( this );
+    QFrame* toolbar = new QFrame( this );
+    QVBoxLayout *l = new QVBoxLayout(toolbar, 0, 0);
 
     toolbar->setFrameStyle( QFrame::ToolBarPanel | QFrame::Plain );
     toolbar->setLineWidth( 0 );
 
     m_add       = new QToolButton( toolbar, "add breakpoint" );
     m_add->setPixmap ( SmallIcon ( "breakpoint_add" ) );
-    QToolTip::add ( m_add, i18n ( "Add empty breakpoint" ) );
+    QToolTip::add ( m_add, i18n ( "Add empty breakpoint" ) + I18N_NOOP(" <Alt+A>"));
 
     m_delete    = new QToolButton( toolbar, "delete breakpoint" );
     m_delete->setPixmap ( SmallIcon ( "breakpoint_delete" ) );
-    QToolTip::add ( m_delete, i18n ( "Delete selected breakpoint" ) );
+    QToolTip::add ( m_delete, i18n ( "Delete selected breakpoint" ) + I18N_NOOP(" <Delete>") );
 
     m_edit      = new QToolButton( toolbar, "edit breakpoint" );
     m_edit->setPixmap ( SmallIcon ( "breakpoint_edit" ) );
-    QToolTip::add ( m_edit, i18n ( "Edit selected breakpoint" ) );
+    QToolTip::add ( m_edit, i18n ( "Edit selected breakpoint" ) + I18N_NOOP(" <Return>")  );
 
     m_removeAll      = new QToolButton( toolbar, "Delete all breakppoints" );
     m_removeAll->setPixmap ( SmallIcon ( "breakpoint_delete_all" ) );
     QToolTip::add ( m_removeAll, i18n ( "Remove all breakpoints" ) );
 
-    QPopupMenu* addMenu = new QPopupMenu( this );
+    l->addWidget(m_add);
+    l->addWidget(m_edit);
+    l->addWidget(m_delete);
+    l->addWidget(m_removeAll);
+    QSpacerItem* spacer = new QSpacerItem( 5, 5, QSizePolicy::Minimum, QSizePolicy::Expanding );
+    l->addItem(spacer);
+
+    QPopupMenu *addMenu = new QPopupMenu( this );
     addMenu->insertItem( i18n( "File:line" ),   BP_TYPE_FilePos );
     addMenu->insertItem( i18n( "Watchpoint" ),  BP_TYPE_Watchpoint );
     addMenu->insertItem( i18n( "Address" ),     BP_TYPE_Address );
@@ -200,7 +210,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
     m_add->setPopup( addMenu );
     m_add->setPopupDelay(1);
 
-    m_table = new QTable(0, numCols, this, name);
+    m_table = new GDBTable(0, numCols, this, name);
     m_table->setSelectionMode(QTable::SingleRow);
     m_table->setShowGrid (false);
     m_table->setLeftMargin(0);
@@ -224,7 +234,7 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
 
     m_table->show();
 
-    connect( addMenu,       SIGNAL(activated(int)),
+    connect( addMenu,     SIGNAL(activated(int)),
              this,          SLOT(slotAddBlankBreakpoint(int)) );
     connect( m_delete,      SIGNAL(clicked()),
              this,          SLOT(slotRemoveBreakpoint()) );
@@ -239,6 +249,15 @@ GDBBreakpointWidget::GDBBreakpointWidget(QWidget *parent, const char *name) :
              this,          SLOT(slotRowSelected(int, int, int, const QPoint &)));
     connect( m_table,       SIGNAL(valueChanged(int, int)),
              this,          SLOT(slotNewValue(int, int)));
+
+    connect( m_table,       SIGNAL(returnPressed()),
+             this,          SLOT(slotEditBreakpoint()));
+//    connect( m_table,       SIGNAL(f2Pressed()),
+//             this,          SLOT(slotEditBreakpoint()));
+    connect( m_table,       SIGNAL(deletePressed()),
+             this,          SLOT(slotRemoveBreakpoint()));
+    connect( m_table,       SIGNAL(insertPressed()),
+             this,          SLOT(slotAddBreakpoint()));
 }
 
 /***************************************************************************/
@@ -865,6 +884,17 @@ void GDBBreakpointWidget::restorePartialProjectSession(const QDomElement* el)
 
 /***************************************************************************/
 
+void GDBBreakpointWidget::slotAddBreakpoint( )
+{
+    if (m_add->popup())
+    {
+        m_add->popup()->popup(mapToGlobal(this->geometry().topLeft()));
+    }
 }
+
+/***************************************************************************/
+
+}
+
 
 #include "gdbbreakpointwidget.moc"

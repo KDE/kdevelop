@@ -63,27 +63,30 @@ MemoryViewDialog::MemoryViewDialog(QWidget *parent, const char *name)
     QGridLayout *grid = new QGridLayout(2, 2, 5);
     topLayout->addLayout(grid);
 
-    QLabel *label = new QLabel(start_, i18n("Start:"), this);
+    QLabel *label = new QLabel(start_, i18n("&Start:"), this);
+    label->setBuddy(start_);
     grid->addWidget(label, 0, 0);
     grid->setRowStretch(0, 0);
     grid->addWidget(start_, 1, 0);
     grid->setRowStretch(1, 0);
 
-    label = new QLabel(end_, i18n("Amount/End address (memory/disassemble):"), this);
+    label = new QLabel(end_, i18n("Amount/&End address (memory/disassemble):"), this);
+    label->setBuddy(end_);
     grid->addWidget(label, 0, 1);
     grid->addWidget(end_, 1, 1);
 
-    label = new QLabel(i18n("MemoryView:"), this);
+    label = new QLabel(i18n("Memory&View:"), this);
+    label->setBuddy(output_);
     topLayout->addWidget(label, 0);
     topLayout->addWidget(output_, 5);
     output_->setFont(KGlobalSettings::fixedFont());
 
     KButtonBox *buttonbox = new KButtonBox(this, Horizontal, 5);
-    QPushButton *memoryDump = buttonbox->addButton(i18n("Memory"));
-    QPushButton *disassemble = buttonbox->addButton(i18n("Disassemble"));
-    QPushButton *registers = buttonbox->addButton(i18n("Registers"));
-    QPushButton *libraries = buttonbox->addButton(i18n("Libraries"));
-    QPushButton *cancel = buttonbox->addButton(i18n("Cancel"));
+    QPushButton *memoryDump = buttonbox->addButton(i18n("&Memory"));
+    QPushButton *disassemble = buttonbox->addButton(i18n("&Disassemble"));
+    QPushButton *registers = buttonbox->addButton(i18n("&Registers"));
+    QPushButton *libraries = buttonbox->addButton(i18n("&Libraries"));
+    QPushButton *cancel = buttonbox->addButton(i18n("&Cancel"));
     memoryDump->setDefault(true);
     buttonbox->layout();
     topLayout->addWidget(buttonbox);

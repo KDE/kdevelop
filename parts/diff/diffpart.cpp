@@ -11,6 +11,7 @@
 
 #include <sys/stat.h>
 
+#include <qwhatsthis.h>
 #include <qpopupmenu.h>
 
 #include <klocale.h>
@@ -47,11 +48,16 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   diffWidget->setIcon( SmallIcon("editcopy") );
   QString nm( i18n( "Difference Viewer" ) );
   diffWidget->setCaption( nm );
+  QWhatsThis::add(diffWidget, i18n("<b>Difference Viewer</b><p>Shows output of the diff format. "
+    "Can utilize every installed component that is able to show diff output. "
+    "For example if you have Kompare installed, Difference Viewer can use it's graphical diff view."));
   mainWindow()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
 
-  new KAction( i18n("Difference Viewer..."), 0,
+  KAction *action = new KAction( i18n("Difference Viewer..."), 0,
 	       this, SLOT(slotExecDiff()),
 	       actionCollection(), "tools_diff" );
+  action->setToolTip(i18n("Difference viewer"));
+  action->setWhatsThis(i18n("<b>Difference viewer</b><p>Shows the contents of a patch file."));
 
   connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
            this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
@@ -103,8 +109,10 @@ void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
   if ( !rw_part || !rw_part->isModified() )
     return;
 
-  popup->insertItem( i18n( "Difference to Saved File" ),
+  int id = popup->insertItem( i18n( "Difference to Saved File" ),
                      this, SLOT(localDiff()) );
+  popup->setWhatsThis(id, i18n("<b>Difference to saved file</b><p>Shows the difference between "
+    "the file contents in editor and file contents saved on a disk."));
 }
 
 DiffPart::~DiffPart()

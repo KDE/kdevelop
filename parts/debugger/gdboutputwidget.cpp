@@ -51,7 +51,8 @@ GDBOutputWidget::GDBOutputWidget( QWidget *parent, const char *name) :
     QBoxLayout *userGDBCmdEntry = new QHBoxLayout();
     m_userGDBCmdEditor = new KHistoryCombo (this, "gdb-user-cmd-editor");
 
-    QLabel *label = new QLabel(i18n("GDB cmd:"), this);
+    QLabel *label = new QLabel(i18n("&GDB cmd:"), this);
+    label->setBuddy(m_userGDBCmdEditor);
     userGDBCmdEntry->addWidget(label);
 
     userGDBCmdEntry->addWidget(m_userGDBCmdEditor);

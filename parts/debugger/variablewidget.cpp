@@ -46,15 +46,16 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     : QWidget(parent, name)
 {
     varTree_ = new VariableTree(this);
-    QLabel *label = new QLabel(i18n("Expression to watch:"), this);
+    QLabel *label = new QLabel(i18n("E&xpression to watch:"), this);
 
     QHBox *watchEntry = new QHBox( this );
 
     watchVarEditor_ = new KHistoryCombo( watchEntry, "var-to-watch editor");
+    label->setBuddy(watchVarEditor_);
 
 //    watchVarEntry_ = new KLineEdit(this);
 
-    QPushButton *addButton = new QPushButton(i18n("Add"), watchEntry );
+    QPushButton *addButton = new QPushButton(i18n("&Add"), watchEntry );
 
     QBoxLayout * vbox = new QVBoxLayout();
 
