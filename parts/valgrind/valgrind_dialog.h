@@ -13,7 +13,7 @@ class DialogWidget;
  **/
 class ValgrindDialog : public KDialogBase
 {
-
+    Q_OBJECT
 public:
   ValgrindDialog( QWidget* parent = 0 );
   ~ValgrindDialog();
@@ -36,6 +36,9 @@ public:
       
 private:
   DialogWidget *w;
+  private slots:
+      void valgrindTextChanged();
+
 };
 
 #endif

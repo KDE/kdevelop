@@ -11,6 +11,8 @@
 #include "dialog_widget.h"
 #include "valgrind_dialog.h"
 
+#include "valgrind_dialog.moc"
+
 
 ValgrindDialog::ValgrindDialog( QWidget* parent )
   : KDialogBase( parent, "valgrind dialog", true, i18n("Valgrind Memory Check"), Ok|Cancel )
@@ -19,11 +21,19 @@ ValgrindDialog::ValgrindDialog( QWidget* parent )
   w->valExecutableEdit->setURL( "valgrind" );
   w->executableEdit->setFocus();
   setMainWidget( w );
+  connect( w->executableEdit->lineEdit(),  SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
+  connect( w->valExecutableEdit->lineEdit(), SIGNAL( textChanged( const QString &)), this, SLOT( valgrindTextChanged()));
+  enableButtonOK( false );
 }
 
 
 ValgrindDialog::~ValgrindDialog()
 {
+}
+
+void ValgrindDialog::valgrindTextChanged()
+{
+    enableButtonOK( !w->valExecutableEdit->lineEdit()->text().isEmpty() &&  !w->executableEdit->lineEdit()->text().isEmpty() );
 }
 
 QString ValgrindDialog::executableName() const
@@ -80,7 +90,7 @@ QString ValgrindDialog::valParams() const
     params += " " + reachableParam;
   if ( w->childrenBox->isChecked() )
     params += " " + childrenParam;
-  
+
   return params;
 }
 
