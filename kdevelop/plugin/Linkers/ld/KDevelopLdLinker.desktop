@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Service
+Comment=GNU Linker (ld)
+Name=KDevLinkerLd
+ServiceTypes=KDevelop/KDevCompiler
+X-KDE-Library=libKDevLinkerLd
