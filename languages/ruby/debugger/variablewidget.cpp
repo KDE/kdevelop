@@ -637,7 +637,7 @@ void VarItem::updateValue(char *buf)
 
 QString VarItem::typeFromValue(const QString& value)
 {
-	QRegExp ref_re("^#<([^:]+):");
+	QRegExp ref_re("^#<(([^:]|::)+):");
 	
 	if (ref_re.search(value) != -1) {
 		return ref_re.cap(1);
