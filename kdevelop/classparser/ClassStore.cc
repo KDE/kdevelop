@@ -257,6 +257,92 @@ void CClassStore::out()
  *                                                                   *
  ********************************************************************/
 
+/*-------------------------------------------- CClassStore::asForest()
+ * asForest()
+ *   Return the store as a forest(collection of trees).
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CClassTreeNode> List of trees.
+ *-----------------------------------------------------------------*/
+QList<CClassTreeNode> *CClassStore::asForest()
+{
+  CParsedClass *aClass;
+  CParsedClass *parentClass;
+  CParsedParent * aParent;
+  CClassTreeNode *aNode;
+  CClassTreeNode *newNode;
+  CClassTreeNode *parentNode;
+  QDict<CClassTreeNode> dict;
+  QList<CClassTreeNode> *retVal = new QList<CClassTreeNode>;
+
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    aClass = classIterator.current();
+
+    // If this class has no parent we just add it.
+    if( aClass->parents.count() == 0 )
+    {
+      // Check if this node has already been added as a template.
+      aNode = dict.find( aClass->name );
+      if( aNode == NULL)
+      {
+        aNode = new CClassTreeNode();
+        aNode->setClass( aClass );
+        aNode->setIsInSystem( true );
+        
+        dict.insert( aClass->name, newNode );
+      }
+      else // Already in the dict as a template
+      {
+        aNode->setClass( aClass );
+        aNode->setIsInSystem( true );
+      }
+      
+      // Add to the output list.
+      retVal->append( aNode );
+    }
+    else // Has parents
+    {
+      // Add this class to its' parents.
+      for( aParent = aClass->parents.first();
+           aParent != NULL;
+           aParent = aClass->parents.next() )
+      {
+        // Check if we have added the parent already.
+        parentNode = dict.find( aParent->name );
+
+        // Add a new node for the parent if not added already.
+        if( parentNode == NULL )
+        {
+          parentNode = new CClassTreeNode();
+
+          // Check for the class in the store.
+          parentClass = getClassByName( aParent->name );
+          if( parentClass != NULL )
+          {
+            parentNode->setClass( parentClass );
+            parentNode->setIsInSystem( true );
+          }
+        }
+
+        // Create the new node for the child.
+        newNode = new CClassTreeNode();
+        newNode->setClass( aClass );
+        newNode->setIsInSystem( true );
+
+        // Add it to the parent node.
+        parentNode->addChild( newNode );
+      }
+    }
+  }
+
+  return retVal;
+}
+
 /*-------------------------------------------- CClassStore::hasClass()
  * hasClass()
  *   Tells if a class exist in the store.

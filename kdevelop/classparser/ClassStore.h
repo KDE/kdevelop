@@ -43,7 +43,8 @@
 #include "ParsedClass.h"
 #include "PersistantClassStore.h"
 #include "ParsedStruct.h"
-/** */
+#include "ClassTreeNode.h"
+
 class CClassStore
 {
 public: // Constructor & Destructor
@@ -89,6 +90,9 @@ public: // Public attributes
   QDictIterator<CParsedStruct> gsIterator;
 
 public: // Public queries
+
+  /** Return the store as a forest(collection of trees). */
+  QList<CClassTreeNode> *asForest();
 
   /** Tells if a class exists in the store. */
   bool hasClass( const char *aName );
