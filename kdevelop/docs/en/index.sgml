@@ -35,7 +35,7 @@ part of the development process. KDevelop manages:
 autoconf,
 <item> KAppWizard, which generates complete, ready-to-go sample applications,
 <item> Classgenerator, for creating new classes and integrating them into the current project,
-<item> Rile management for sources, headers, documentation etc. to be included in the project,
+<item> File management for sources, headers, documentation etc. to be included in the project,
 <item> The creation of User-Handbooks written with SGML and the automatic generation of HTML-output with the KDE look and feel,
 <item> Automatic HTML-based API-documentation for your project's classes with cross-references to the used libraries,
 <item> Internationalization support for your application, allowing translators to easily add their target language to a project,
@@ -66,9 +66,9 @@ utilities; reviewed and extended documentation as well as a new project generato
 <sect1>About this Handbook
 <p>
 This user manual gives the user a complete overview of the KDevelop IDE and describes the basic development process in brief. For more
-information about specific programming issues, we suggest reading the KDevelop Programming Handbook included with KDevelop, which
-covers themes such as understanding generated application frameworks and how to create full-featured <idx/KDE/ applications using
-example projects.
+information about specific programming issues, we suggest reading the <htmlurl url="programming.html" name="KDevelop Programming
+Handbook"> included with KDevelop, which covers themes such as understanding generated application frameworks and how to create
+full-featured <idx/KDE/ applications using example projects.
 
 The design of this handbook is therefore separated into the following parts:
 <itemize>
@@ -312,10 +312,7 @@ after pressing OK. Mind that you can set up additional options like auto saving 
 <bf>Cancel:</bf>  Will show a warning message that the installation process is going to be canceled.  This warning message allows you
 to return to the installation ("Back") or to start KDevelop with the default values ("Continue"). Mind that in this case you will have
 to set all options yourself with the configuration dialogs provided in the options-menu.
-<figure>
-<eps FILE="firststart.eps">
-<img SRC="firststart.gif">
-</figure>
+
 
 <sect>Programs<label id="Programs">
 <p>
@@ -490,11 +487,11 @@ Info contents" section in KDEHelp.
 <p>
 In this chapter you will get a general overview how you can use KDevelop and the internal Dialog Editor to create own applications.
 Thereby, all tools are described by their use during the development process. If you are a beginner in C++/GUI design and
-programming, you should read <em/"The KDevelop Programming Handbook"/, which describes some basics for program design and shows a
-more detailed use of KDevelop by sample projects which you can follow step-by-step to get used with the way applications are
-created using KDevelop. Also you should have read chapter <ref id="Programs" name="Programs"> to gain a general understanding
-why Unix applications should make use of provided development tools; this will make things easier when you hit references to what
-Makefiles are etc.
+programming, you should read <htmlurl url="programming.html" name="The KDevelop Programming Handbook">, which describes some basics for
+program design and shows a more detailed use of KDevelop by sample projects which you can follow step-by-step to get used with the way
+applications are created using KDevelop. Also you should have read chapter <ref id="Programs" name="Programs"> to gain a general
+understanding why Unix applications should make use of provided development tools; this will make things easier when you hit references
+to what Makefiles are etc.
 
 <sect1>What are KDevelop Project Applications ?
 <p>
@@ -688,7 +685,7 @@ the Dialog Editor and the project management will take care of the rest. You can
 Execute, this will build your application including your new sources. But don't expect that dialogs are already usable- this is a
 matter of implementation that is the usual way a developer works. Don't worry- this isn't too difficult, too. For more information
 about creating dialogs, see <ref id="The Dialog Editor" name="The Dialog Editor">, examples and guidelines can also be found in
-<em/The KDevelop Programming Handbook/.
+<htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
 
 <sect3>Binding New Elements
 <p>
@@ -800,7 +797,8 @@ execution stops, so you can control critical implementations and by this detect 
 the real cause is another task; it depends on the programmer to locate this. The <bf/gdb/ is a debugger that is provided with the
 GNU compiler and programs like <em/ddd/ or <em/KDbg/ are frontends that allow an easier use. KDevelop therefore uses KDbg and lets
 you invoke the debugging process by the commands "Debug" in the Build-menu or by the "Debug" symbol in the toolbar. For more
-information about debugging applications, see <ref id="Projects" name="Projects"> and <em/The KDevelop Programming Handbook/.
+information about debugging applications, see <ref id="Projects" name="Projects"> and <htmlurl url="programming-12.html" name="The
+KDevelop Programming Handbook">.
 
 <sect1>Additional Information
 <p>
@@ -808,8 +806,8 @@ The topics addressed within this chapter are described im more detail within the
 in other documentations:
 
 <itemize>
-<item><em/The KDevelop Programming Handbook/, covering a complete introduction into GUI application design and programming with
-the Qt and <idx/KDE/ libraries,
+<item><htmlurl url="programming.html" name="The KDevelop Programming Handbook">, covering a complete introduction into GUI application
+design and programming with the Qt and <idx/KDE/ libraries,
 <item>this handbook, sections <ref id="Overview" name="Overview"> to <ref id="Projects" name="Projects">, describing all availiable
 functions within KDevelop, <item>this handbook, section <ref id="The Dialog Editor" name="The Dialog Editor">, adressing the use of the
 dialogeditor to create your own widgets, <item>The <em/Online-Reference Documentation/ to the Qt library, which covers examples of
@@ -1109,8 +1107,8 @@ highlight the found entry for the expression the search was invoked for. With th
 will be displayed if more than one hit was reported for the search on one page.<p>
 <item><bf/Search for Help on.../Opens the Search for Help on... dialog that lets you search for a specific expression you want help on.<p>
 <item><bf/User Manual		F1/ Opens the User's Manual to KDevelop index page so you have access to this manual.<p>
-<item><bf/Programming Handbook / Opens the KDevelop Programming Handbook index page to access the programming manuals <p>
-<item><bf/Tip of the Day/ Opens the Tip of the Day dialog to inform you about KDevelop's features.<p>
+<item><bf/Programming Handbook / Opens the <htmlurl url="programming.html" name="KDevelop Programming Handbook"> index page to access
+the programming manuals <p> <item><bf/Tip of the Day/ Opens the Tip of the Day dialog to inform you about KDevelop's features.<p>
 <item><bf/KDevelop Homepage/ Opens the KDevelop Homepage in the browser window if Internet access is provided.<p>
 <item><bf/Bug Report.../ Opens the KDevelop Bug Report dialog, where you can send a bug-report directly to the KDevelop Team by email.
 See <ref id="Bug Reporting" name="Bug Reporting"><p>
@@ -1449,13 +1447,13 @@ the provided search functions see <ref id="Using the Search Index" name="Using t
 <p>
 The KDevelop IDE comes with two sets of online-documentation, which can be accessed either via the Help-menu or by the Doc-tree in
 the Tree-View in the KDevelop folder. The first book provided is this online-handbook containing all information you need towards
-installation, configuration, available functionality and introduction to application development. The second book is <em/The
-KDevelop Programming Handbook/ in it's first edition. The programming handbook covers most questions related to the creation and
-extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich facilities that applications
-created with the Qt- and/or <idx/KDE-libraries/ have to offer as well as given a guideline for ensuring <idx/KDE/-compliance, which
-covers the same instructions given on the internet site of <htmlurl url="http://developer.kde.org" name="http://developer.kde.org">
-However, the programming handbook cannot replace any additonal documentation available in printed or electronic form about the C++
-programming language as well as about the usage of the Qt-library in certain terms.
+installation, configuration, available functionality and introduction to application development. The second book is <htmlurl
+url="programming.html" name="The KDevelop Programming Handbook"> in it's first edition. The programming handbook covers most questions
+related to the creation and extension of projects that work with KDevelop. By tutorials the user gets an introduction to the rich
+facilities that applications created with the Qt- and/or <idx/KDE-libraries/ have to offer as well as given a guideline for ensuring
+<idx/KDE/-compliance, which covers the same instructions given on the internet site of <htmlurl url="http://developer.kde.org"
+name="http://developer.kde.org"> However, the programming handbook cannot replace any additonal documentation available in printed or
+electronic form about the C++ programming language as well as about the usage of the Qt-library in certain terms.
 
 The C/C++-Reference used with KDevelop is currently only available on the KDevelop homepage at <htmlurl
 url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">.
@@ -2295,8 +2293,8 @@ all done by KDevelop automatically.
 
 For more information about internationalization support, see <htmlurl url="http://www.kde.org" name="http://www.kde.org">; a lot
 of people are doing translations for you to support their language. You will find a list of email-adresses of the translators you
-could write to and who will help you with this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <em/The KDevelop
-Programming Handbook/ where questions about internationalization are covered again.
+could write to and who will help you with this. Also read <ref id="The Dialog Editor" name="The Dialog Editor"> and <htmlurl
+url="programming-11.html" name="The KDevelop Programming Handbook"> where questions about internationalization are covered again.
 
 <sect2>Extending the Project Documentation<label id="Extending the Project Documentation">
 <p>
@@ -2324,8 +2322,8 @@ see that <tt/Install/ is checked and the Installdir+filename already contains th
 CTRL+C to copy the installation path to the clipboard. Then select the file you want to specify for installation. Enable
 <tt/Install/, this will enable the installdir-entry field, already containing the filename. Place the cursor in front of the
 filename and enter CTRL+V to insert the clipboard contents (which was the installation path copied before). This is the fastest
-way to specify the installation path. For more options about specifying installation destinations, see <em/The KDevelop
-Programming Handbook/.
+way to specify the installation path. For more options about specifying installation destinations, see <htmlurl
+url="programming-14.html" name="The KDevelop Programming Handbook">.
 
 <sect2>Project Hacking<label id="Project Hacking">
 <p>
@@ -2779,7 +2777,7 @@ While changing widget size, the statusbar shows the current values for width and
 After creating your project skelleton, you are provided a ready-to-run application, according to your preferences. As KDevelop provides
 the project types KDE and Qt application, the dialogeditor recognizes this and offers widget construction by the widgets that are
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
-information about widget design, see <em/The KDevelop Programming Handbook/.
+information about widget design, see <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
 
 To create a new dialog, select "New" from the "File"-menu or select "New" from the context menu in the "Dialogs" tab. The "New Dialog"
 menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
@@ -2830,8 +2828,8 @@ directory is the current project subdirectory containing the sources already pre
 After pressing "OK", your default values are generated and an empty Widget constructor is opened. Then you are ready to go for creating
 your own widget. Mind that the dialogeditor currently only supports static widgets without geometry management. If you're about to use
 geometry management for your widgets, you should make yourself accustomed with the classes that Qt provides for this, create a new
-class with the classgenerator and write your widget by hand. For more information, see <em/The KDevelop Programming Handbook/.
-
+class with the classgenerator and write your widget by hand. For more information, see <htmlurl url="programming.html" name="The
+KDevelop Programming Handbook">.
 
 <sect1>Adding Widgets<label id="Adding Widgets">
 <p>
@@ -2893,7 +2891,7 @@ are then listed in the next tree-level.
 
 On selecting an item, it gets marked in the edior view, as well as the properties are shown in the properties window.
 Using the items view is sometimes important if your widgets behavoir depends on the parent-child relationship. For more information
-see <em/The KDevelop Programming Handbook/.
+see <htmlurl url="programming-6.html" name="The KDevelop Programming Handbook">.
 
 <sect1>The Widget Editor<label id="The Widget Editor">
 <p>
@@ -2916,8 +2914,8 @@ and all possible values. Note that most values are implemented in QWidget and ar
 that the final code does not contain any method calls that are unchanged by the user and therefore use the default values as given in
 the widget's constructors.
 
-A complete list of the supported properties that can be set in the properties window for each widget item, see <em/The KDevelop
-Programming Handbook/.
+A complete list of the supported properties that can be set in the properties window for each widget item, see <htmlurl
+url="programming-6.html" name="The KDevelop Programming Handbook">.
 
 
 <sect1>Generating Files
@@ -2930,7 +2928,8 @@ project again within the dialogeditor. The output window pops up below the Widge
 Now that your project contains a new widget, your work as a programmer is to implement functionality to the used slots and eventually
 add other methods you may need.
 
-For more information about implementation of the widgets functions, see <em/The KDevelop Programming Handbook/.
+For more information about implementation of the widgets functions, see <htmlurl url="programming-6.html" name="The KDevelop
+Programming Handbook">.
 
 <sect>General Configuration<label id="General Configuration">
 <p>
@@ -3268,6 +3267,8 @@ Jacek Wojdel 			<htmlurl url="mailto:wojdel@kbs.twi.tudelft.nl" name="<wojdel@kb
 
 <bf>Additions, patches and bugfixes:</bf>
 
+Walter Tasin						<htmlurl url="mailto:tasin@e-technik.fh-muenchen.de" name="<tasin@e-technik.fh-muenchen.de>">
+
 Jost Schenk    					<htmlurl url="mailto:Jost@Schenk.de" name = "<Jost@Schenk.de>">
 
 David Barth    					<htmlurl url="mailto:dbarth@videotron.ca" name = "<dbarth@videotron.ca>">
@@ -3342,6 +3343,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
 </article>
+
+
 
 
 

@@ -87,6 +87,7 @@ the application programmer. This chapter therefore sorts the classes provided to
 	<item>Files
 	<item>Data objects
 	<item>Graphics
+	<item>Processes
 	</itemize>
 </itemize>
 
@@ -305,6 +306,14 @@ documentation for mor information.
 Qt supports a set of graphics formats that can be used for drawings or image programs. The graphics device for painting is
 <tt/QPainter/.
 
+<sect2>Processes
+<p>
+As applications can have different types of application communication with other programs available on the system such as standard Unix
+actions, developers can make use of the class <tt/KProcess/ to call another application. As the application is running independent from
+the one that invoked it, you can only receive the current status of the application ivoked by <tt/isRunning()/. Also, the invocation
+can be done with various intitialization values. Finally, the process can inform the application wether it has been terminated or
+ended. See <tt/KProcess/ for details.
+
 <sect>Copyright<label id="Copyright">
 <p>
 <tscreen><verb>
@@ -327,6 +336,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 </verb></tscreen>
 
 </article>
+
+
 
 
 

@@ -45,6 +45,7 @@ the application programmer. This chapter therefore sorts the classes provided to
 <LI>Files</LI>
 <LI>Data objects</LI>
 <LI>Graphics</LI>
+<LI>Processes</LI>
 </UL>
 </LI>
 </UL>
@@ -246,6 +247,14 @@ documentation for mor information.
 
 <P>Qt supports a set of graphics formats that can be used for drawings or image programs. The graphics device for painting is
 <CODE>QPainter</CODE>.
+<P>
+<H4>Processes</H4>
+
+<P>As applications can have different types of application communication with other programs available on the system such as standard Unix
+actions, developers can make use of the class <CODE>KProcess</CODE> to call another application. As the application is running independent from
+the one that invoked it, you can only receive the current status of the application ivoked by <CODE>isRunning()</CODE>. Also, the invocation
+can be done with various intitialization values. Finally, the process can inform the application wether it has been terminated or
+ended. See <CODE>KProcess</CODE> for details.
 <P>
 <P ALIGN="RIGHT">
 

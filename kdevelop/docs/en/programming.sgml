@@ -30,8 +30,8 @@ should make yourself familiar with that first. Information about C++ is availabl
 your local bookstore or by tutorials found on the internet. Knowledge about the design of Graphical User Interfaces is not required, as
 this handbook tries to cover the application design for KDE programs, which also includes an introduction into the Qt toolkit as well
 as the KDE libraries and the design of User Interfaces. Also, you should have made yourself comfortable with KDevelop by reading
-<em/The User Manual to KDevelop/, which conains a descriptive review of the functionality provided by the IDE.
-
+<htmlurl url="index.html" name="The User Manual to KDevelop">, which conains a descriptive review of the functionality provided by the
+IDE.
 <sect1>About this Handbook
 <p>
 This handbook has been written to give developers an introduction into KDE application development by using the KDevelop
@@ -71,7 +71,7 @@ Additional information about Qt/KDE programming is available by various sources:
 <itemize>
 <item><em/Programming with Qt/ by Matthias Kalle Dalheimer, published by O'Reilly (see <htmlurl url="http://www.oreilly.com"
 name="http://www.oreilly.com">, covering almost all aspects of the Qt GUI toolkit and contains examples as well.
-<item><em/The User Manual to KDevelop/, provided with the KDevelop IDE,
+<item><htmlurl url="index.html" name="The User Manual to KDevelop">, provided with the KDevelop IDE,
 <item><em/Online-Reference/ to the Qt-library, provided with your copy of the Qt toolkit in HTML and available as Postscript on
 <htmlurl url="http://www.troll.no" name="http://www.troll.no">
 <item>On the internet, see
@@ -447,10 +447,12 @@ application's code only provides a widget as a window.
 <item>Normal Qt Application: works like the normal KDE application by it's code with the difference that the project is based on the Qt
 library only and doesn't contain KDE support. This is intended for projects that have to be portable to Windows platforms or that don't
 want to require KDE libraries by the end-user.
-<item>C++ Application: Is based on the C++ compiler only and runs in a console, therefore doesn't require X-Window.
-<item>Custom project: creates an empty project without any sourcecode. This is intended for already existing projects to port to
-KDevelop or for projects where you want to start from scratch. Mind that you have to take care for makefiles and configure scripts all
-by yourself.
+<item>C Application: Is based on the C compiler only and runs in a console.
+<item>C++ Application: Is based on the C++ compiler only and runs in a console like the C application, therefore doesn't require
+X-Window.
+<item>Custom project: creates an empty project without any sourcecode. This is intended for already existing projects to port
+to KDevelop or for projects where you want to start from scratch. Mind that you have to take care for makefiles and configure scripts
+all by yourself.
 </itemize>
 
 In this chapter we'll see how the KAppWizard can be invoked and what has to be done to generate a KDE application project. This will
@@ -1334,7 +1336,7 @@ where we will find some useful things first. For creating new applications, the 
 <item><tt/KTabListBox/: offers a multi-column listbox where the user can change the rows with drag'n drop.
 <item><tt/KTreeList/: inherited from <tt/QTableView/, offering a collapsable tree. This could be used instead of <tt/QListView/.
 <item><tt/KEdit/: the base classes for the <em/KEdit/ application offered with KDE. This could be used instead of <tt/QMultiLineEdit/.
-<item><tt/KPanner/ and <tt/KNewPanner/: manage two child widgets like <tt/QSplitter/.
+<item><tt/KNewPanner/: manage two child widgets like <tt/QSplitter/.
 </enum>
 
 The <tt/khtmlw/ library on the other hand offers a complete HTML-interpreting widget that is ready to use. It is scrollable already,
