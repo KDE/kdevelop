@@ -1,3 +1,9 @@
+2001-07-11  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: show/hide mechanism of MDI-view taskbar fixed
+      (I had also to fix kdelibs/kdeui/ktoolbar.cpp, Please update!)
+    * for the haters of delayed startlogos:
+      mouse click on startlogo hides it when mainwindow is already visible
+
 2001-07-10  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: setFocus problem with inner widgets of a QextMdiChildView's focus loop fixed
       --> blinking cursor appears again when switching to files!
