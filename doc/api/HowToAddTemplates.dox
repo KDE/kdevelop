@@ -8,6 +8,15 @@ This is necessary for rapid application development (RAD) and makes it even
 for (unexperienced) 3rd party developer possible to create standard conforming
 applications like kedit as well as plugins for example for kdevelop or noatun.\n\n
 \ref templates_1\n
+    - \ref templates_1_1
+    - \ref templates_1_2
+        - \ref templates_1_2a
+        - \ref templates_1_2b
+        - \ref templates_1_2c
+        - \ref templates_1_2d
+        - \ref templates_1_2e
+        .
+    .
 \ref templates_2\n
 \ref templates_3
 <hr>
@@ -16,7 +25,7 @@ applications like kedit as well as plugins for example for kdevelop or noatun.\n
 
 You can find this template in <code>$KDEDIR/share/apps/kdevappwizard/template-khello</code>.
 
-\subsection templates_1_1 Step 1: Basic Skeleton
+\subsection templates_1_1 I.1. Step 1: Basic Skeleton
 
 Create a directory <code>template-khello</code> with the files
 <code><pre>
@@ -35,7 +44,7 @@ Create a directory <code>template-khello</code> with the files
 </pre></code>
 \note The directory name must begin with <code>"template-"</code>.
 
-\subsection templates_1_2 Step 2: The Files in Detail
+\subsection templates_1_2 I.2. Step 2: The Files in Detail
 
 Have a look into the files! There are some variables which the applicatin
 wizard will replace:
@@ -48,13 +57,14 @@ wizard will replace:
     - $LICENSE$ ..... by the license
     .
 </pre></code>
-\subsubsection templates_1_2a The Soure Code template-khello/app.cpp, template-khello/app.h and template-khello/main.cpp
+\subsubsection templates_1_2a I.2.1. The Source Files
 
-This files contain the source code that should not be too special so that the
-user can implement his own ideas.\n
+The files <code>template-khello/app.cpp, template-khello/app.h</code> and
+<code>template-khello/main.cpp</code> contain the source code that should not
+be too special so that the user can implement his own ideas.\n
 (There may be variables included - see \ref templates_1_2 "Step 2: The Files in Detail").
 
-\subsubsection templates_1_2b The File template-khello/khello
+\subsubsection templates_1_2b I.2.2. The File template-khello/khello
 
 It may look like this:
 \include khello/khello
@@ -70,21 +80,21 @@ The application wizard looks into this file to get
 the right half of the directory! If the directory is <code>template-foobar</code>
 the file must be <code>template-foobar/foobar</code>.
 
-\subsubsection templates_1_2c Some Additional Files
+\subsubsection templates_1_2c I.2.3. Some Additional Files
 
 The file
-    - <code>template-khello/appui.rc</code> contains information about the toolbar and the menu
-    - <code>template-khello/preview.png</code> will be shown in the aplication wizard
+    - <code>template-khello/appui.rc</code> contains information about the toolbar and the menu.
+    - <code>template-khello/preview.png</code> will be shown in the aplication wizard.
     - <code>template-khello/app.desktop</code> describes the application.
     - <code>template-khello/subdirs</code> contains a list of the subdirectories (usually <code>doc, po, src</code>) and can be found in the project root directory. It is necessary for the autotools.
     .
 
-\subsubsection templates_1_2d The File template-khello/src-Makefile.am
+\subsubsection templates_1_2d I.2.4. The File template-khello/src-Makefile.am
 
 This file will be copied to the <code>$PROJECTDIR/src/</code>.
 \include khello/src-Makefile.am
 
-\subsubsection templates_1_2e The File template-khello/script
+\subsubsection templates_1_2e I.2.5. The File template-khello/script
 
 The following script is used to install the template and replaces all
 variables by the corresponding value. The result is a hopefully working
