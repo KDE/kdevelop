@@ -729,7 +729,7 @@ int CClassParser::checkClassDecl()
     PUSH_LEXEM();
     getNextLexem();
 
-    exit = ( ( isOperator && lexem == '(' ) || 
+    exit = ( ( isOperator && lexem == '(' && lexemStack.top()->type != CPOPERATOR ) || 
              ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' )) ); 
   }
 
@@ -871,6 +871,7 @@ void CClassParser::parseClassMethodVariable( CParsedClass *aClass )
       break;
     case CP_IS_OPERATOR:
     case CP_IS_METHOD:
+    case CP_IS_METHOD_IMPL:
       aMethod = new CParsedMethod();
       fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
       if( !aMethod->name.isEmpty() )
