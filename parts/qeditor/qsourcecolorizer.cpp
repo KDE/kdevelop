@@ -30,6 +30,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kglobalsettings.h>
 
 using namespace std;
 
@@ -39,7 +40,7 @@ QSourceColorizer::QSourceColorizer( QEditor* editor )
 {
     m_items.setAutoDelete( TRUE );
 
-    QFont defaultFont = kapp->font();
+    QFont defaultFont = KGlobalSettings::fixedFont();
     KConfig* config = QEditorPartFactory::instance()->config();
     config->setGroup( "General" );  // or colorizer ?!?!?
 

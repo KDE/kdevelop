@@ -126,10 +126,12 @@ struct QEditorKey{
 QEditor::QEditor( QWidget* parent, const char* name )
     : KTextEdit( parent, name )
 {
+#if 0
     setWordWrap( NoWrap );
     setHScrollBarMode( QScrollView::AlwaysOn );
     setVScrollBarMode( QScrollView::AlwaysOn );
     document()->setUseFormatCollection( FALSE );
+#endif
 
     parenMatcher = new ParenMatcher();
 
