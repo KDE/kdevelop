@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevkonsoleview.la
 libkdevkonsoleview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevkonsoleview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevkonsoleview_la_SOURCES = konsoleviewfactory.cpp \
-			     konsoleviewpart.cpp \
+libkdevkonsoleview_la_SOURCES = konsoleviewpart.cpp \
 			     konsoleviewwidget.cpp
 
 METASOURCES = AUTO

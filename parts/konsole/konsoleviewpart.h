@@ -3,19 +3,19 @@
 
 
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
 class KonsoleViewWidget;
 
 
-class KonsoleViewPart : public KDevPart
+class KonsoleViewPart : public KDevPlugin
 {
   Q_OBJECT
 
 public:
    
-  KonsoleViewPart(KDevApi *api, QObject *parent=0, const char *name=0);
+  KonsoleViewPart(QObject *parent, const char *name, const QStringList &);
   ~KonsoleViewPart();
 
   

@@ -9,12 +9,14 @@
 #include "kdevtoplevel.h"
 
 #include "konsoleviewwidget.h"
-#include "konsoleviewfactory.h"
 #include "konsoleviewpart.h"
 
+#include <kgenericfactory.h>
 
-KonsoleViewPart::KonsoleViewPart(KDevApi *api, QObject *parent, const char *name)
-  : KDevPart(api, parent, name)
+K_EXPORT_COMPONENT_FACTORY( libkdevkonsoleview, KGenericFactory<KonsoleViewPart>( "kdevkonsoleview" ) );
+
+KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStringList &)
+  : KDevPlugin(parent, name)
 {
   m_widget = new KonsoleViewWidget(this);
   
