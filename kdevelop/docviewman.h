@@ -88,7 +88,7 @@ public:
   void reloadModifiedFiles();
 
   /** */
-  int checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck = true);
+  int checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck = true, CEditWidget* pCurEditView = 0L);
 
   /** */
   bool doFileClose();

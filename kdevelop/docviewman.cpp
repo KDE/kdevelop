@@ -799,7 +799,7 @@ bool DocViewMan::closeView(QWidget* pWnd)
     if (pChild->isWidgetType()) {
       pView = (QWidget*) pChild;
       if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView)) {
-        if (checkAndSaveFileOfCurrentEditView(true) != KMessageBox::Cancel) {
+        if (checkAndSaveFileOfCurrentEditView(true, pEditView) != KMessageBox::Cancel) {
           closeEditView(pEditView);
           return true;
         }
@@ -847,10 +847,10 @@ void DocViewMan::closeEditView(CEditWidget* pView)
   /* if there are no more views, the pointer have to be "reset" here,
    * because slot_viewActivated() can not be called any longer
    */
-  if (m_MDICoverList.count() == 0) {
+//  if (m_MDICoverList.count() == 0) {
     m_pCurEditView = 0L;
     m_pCurBrowserView = 0L;
-  }
+//  }
 }
 
 //-----------------------------------------------------------------------------
@@ -1206,11 +1206,19 @@ void DocViewMan::doCloseAllDocs()
   }
 }
 
-int DocViewMan::checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck)
+int DocViewMan::checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck, CEditWidget* pCurEditView)
 {
   // Get the current file name
-  QString filename = currentEditView()->getName();
-  KWriteDoc* pCurEditDoc = currentEditDoc();
+  KWriteDoc* pCurEditDoc = 0L;
+  QString filename;
+  if (!pCurEditView) {
+    pCurEditView = currentEditView();
+    pCurEditDoc = currentEditDoc();
+  }
+  else {
+    pCurEditDoc = pCurEditView->doc();
+  }
+  filename = pCurEditView->getName();
 
   if (pCurEditDoc == 0)
     return KMessageBox::Cancel; //oops :-(
@@ -1255,7 +1263,7 @@ int DocViewMan::checkAndSaveFileOfCurrentEditView(bool bDoModifiedInsideCheck)
   }
 
   // Really save it
-  currentEditView()->doSave();
+  pCurEditView->doSave();
   QFileInfo file_info2(filename);
   pCurEditDoc->setLastFileModifDate(file_info2.lastModified());
 

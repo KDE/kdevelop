@@ -1,3 +1,13 @@
+2001-08-05  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: last fix concerning a grave GUI bug, was application crash in Toplevel mode
+              (clicked Compile when no view of two was activated)
+
+2001-08-04  jbb <jbb@kdevelop.org>
+    * Bring admin dir upto kde-2.2_release
+    * workaround: bug#30097 frank assured me that KDEHOME was not set, but .kde2 was
+      being used. This change just prefers .kde2 over .kde iff KDEHOME is not set.
+      It shouldn't hurt and I gave kdevelop-devel a day to complain ...
+
 2001-07-31  Harald Fernengel  <harry@bnro.de>
     * cut/paste for non-source files
     * made it compile with gcc-3.0, too

@@ -403,7 +403,7 @@ void QextMdiChildView::activate()
 	    if(!m_bFocusInEventIsPending) {
          setFocus();
       }
-      qDebug("QextMdiChildView::activate() called!");
+      //qDebug("QextMdiChildView::activate() called!");
       emit activated(this);
    }
 
