@@ -498,7 +498,7 @@ void Core::saveFileInteractionFinished(const QString &fileName)
 
 void Core::slotOpenFile()
 {
-#if 0
+#if 1
     QString fileName = KFileDialog::getOpenFileName();
     gotoSourceFile(KURL(fileName), 0);
 #else

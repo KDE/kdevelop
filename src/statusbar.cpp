@@ -72,7 +72,8 @@ bool StatusBar::event(QEvent *e)
         }
     } else if (e->type() == QEvent::ChildRemoved) {
         QChildEvent *ce = static_cast<QChildEvent*>(e);
-        if (ce->child()->isWidgetType()) {
+        //        if (ce->child()->isWidgetType()) {
+        if (ce->child() == widget) {
             widget = 0;
             return true;
         }
