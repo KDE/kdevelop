@@ -45,7 +45,7 @@ struct ApplicationInfo
     QListViewItem *item; // item pointer to the listview
 
     ApplicationInfo()
-	: item( 0 )
+    : item( 0 )
     {}
 };
 
@@ -57,7 +57,7 @@ struct AppWizardFileTemplate
     QMultiLineEdit *edit;
 
     AppWizardFileTemplate()
-	: edit( 0 )
+    : edit( 0 )
     {}
 };
 
@@ -86,13 +86,14 @@ protected:
 private:
     ApplicationInfo *templateForItem(QListViewItem *item);
     void insertCategoryIntoTreeView(const QString &completeCategoryPath);
-	void loadVcs();
+    void loadVcs();
 
     QPtrList<ApplicationInfo> m_appsInfo;
     QValueList<AppWizardFileTemplate> m_fileTemplates;
-    QDict<QListViewItem> m_categoryMap; //store the category name and the pointer in the treeview
-	// A list of currently available version control systems
-	QDict<KDevVersionControl> m_availVcs;
+    // Store the category name and the pointer in the treeview
+    QDict<QListViewItem> m_categoryMap;
+    // A list of currently available version control systems
+    QDict<KDevVersionControl> m_availVcs;
 
     AppWizardPart *m_part;
     QWidget *m_lastPage;

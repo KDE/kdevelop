@@ -167,7 +167,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
     m_sdi_fileprops_page->setClassFileProps(*props_temp);
     */
-	loadVcs();
+    loadVcs();
 
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
 
@@ -199,30 +199,26 @@ void AppWizardDialog::loadVcs()
     m_vcsForm->combo->insertItem( i18n("no version control system", "None"), i );
     m_vcsForm->stack->addWidget( 0, i++ );
 
-	// We query for all vcs plugins for KDevelop
-	QStringList availableVcs = m_part->registeredVersionControls();
+    // We query for all vcs plugins for KDevelop
+    QStringList availableVcs = m_part->registeredVersionControls();
 
-	kdDebug( 9000 ) << "  ** Starting examining services ..." << endl;
+    for(QStringList::const_iterator it( availableVcs.begin() ); it != availableVcs.end(); ++it)
+    {
+        KDevVersionControl *vcs = m_part->versionControlByName( (*it) );
+        QString vcsName = vcs->uid();
 
-	for(QStringList::const_iterator it( availableVcs.begin() ); it != availableVcs.end(); ++it)
-	{
-		KDevVersionControl *vcs = m_part->versionControlByName( (*it) );
-		QString vcsName = vcs->uid();
-		kdDebug( 9000 ) << "  =====> Found VCS: " << vcsName << endl;
+        QWidget *newProjectWidget = vcs->newProjectWidget( m_vcsForm->stack );
+        if (newProjectWidget) {
+            m_vcsForm->combo->insertItem( vcsName, i );
+            m_vcsForm->stack->addWidget( newProjectWidget, i++ );
+        }
+        else
+        {
+            kdDebug( 9000 ) << "  ** Warning: VCS has not widget. Skipping. " << endl;
+        }
+    }
 
-		QWidget *newProjectWidget = vcs->newProjectWidget( m_vcsForm->stack );
-		if (newProjectWidget) {
-			m_vcsForm->combo->insertItem( vcsName, i );
-			m_vcsForm->stack->addWidget( newProjectWidget, i++ );
-		}
-		else
-		{
-			kdDebug( 9000 ) << "  ** Warning: VCS has not widget. Skipping. " << endl;
-		}
-	}
-
-	kdDebug( 9000 ) << "  ** Done examining services ..." << endl;
-	addPage( m_vcsForm, i18n("Version Control System") );
+    addPage( m_vcsForm, i18n("Version Control System") );
 }
 
 
