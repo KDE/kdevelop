@@ -58,7 +58,7 @@ checkWhich ()
 {
   WHICH=""
   for i in "type -p" "which" "type" ; do
-    T=`$i sh`
+    T=`$i sh 2> /dev/null`
     test -x "$T" && WHICH="$i" && break
   done
 }

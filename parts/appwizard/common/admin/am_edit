@@ -18,7 +18,7 @@
 #    KDE_ICON = AUTO
 #
 # For documentation :
-#    ...
+#    http://developer.kde.org/documentation/other/developer-faq.html
 #
 # and more new tags TBD!
 #
@@ -1133,11 +1133,13 @@ sub tag_UIFILES ()
                     $dep_lines .= "\techo '#include <klocale.h>' > $source.$cxxsuffix\n";
                     my ($mangled_source) = $source;
                     $mangled_source =~ s/[^A-Za-z0-9]/_/g;  # get rid of garbage
-                    $dep_lines .= "\t\$(UIC) -tr \${UIC_TR} -i $source.h $sourcedir$source.ui | sed -e \"s,\${UIC_TR}( \\\"\\\" ),QString::null,g\" | sed -e \"s,\${UIC_TR}( \\\"\\\"\\, \\\"\\\" ),QString::null,g\" | sed -e \"s,image\\([0-9][0-9]*\\)_data,img\\1_" . $mangled_source . ",g\" >> $source.$cxxsuffix || rm -f $source.$cxxsuffix\n";
+                    $dep_lines .= "\t\$(UIC) -tr \${UIC_TR} -i $source.h $sourcedir$source.ui > $source.$cxxsuffix.temp ; ret=\$\$?; \\\n";
+                    $dep_lines .= "\tsed -e \"s,\${UIC_TR}( \\\"\\\" ),QString::null,g\" $source.$cxxsuffix.temp | sed -e \"s,\${UIC_TR}( \\\"\\\"\\, \\\"\\\" ),QString::null,g\" | sed -e \"s,image\\([0-9][0-9]*\\)_data,img\\1_" . $mangled_source . ",g\" >> $source.$cxxsuffix ;\\\n";
+		    $dep_lines .= "\trm -f $source.$cxxsuffix.temp ;\\\n";
                 } else {
-                    $dep_lines .= "\t\$(UIC) -i $source.h $sourcedir$source.ui > $source.$cxxsuffix || rm -f $source.$cxxsuffix\n";
+                    $dep_lines .= "\t\$(UIC) -i $source.h $sourcedir$source.ui > $source.$cxxsuffix; ret=\$\$?; \\\n";
                 }
-                $dep_lines .= "\techo '#include \"$source.moc\"' >> $source.$cxxsuffix\n\n";
+		$dep_lines .= "\tif test \"\$\$ret\" = 0; then echo '#include \"$source.moc\"' >> $source.$cxxsuffix; else rm -f $source.$cxxsuffix ; exit \$\$ret ; fi\n\n";
                 $dep_lines .= "$source.h: $sourcedir$source.ui\n";
                 $dep_lines .= "\t\$(UIC) -o $source.h $sourcedir$source.ui\n\n";
                 $dep_lines .= "$source.moc: $source.h\n";
@@ -1262,12 +1264,13 @@ sub tag_ICON()
                'hi48' => 'hicolor/48x48',
                'hi64' => 'hicolor/64x64',
                'hisc' => 'hicolor/scalable',
- 	       'cr16' => 'crystal/16x16',
-               'cr22' => 'crystal/22x22',
-               'cr32' => 'crystal/32x32',
-               'cr48' => 'crystal/48x48',
-               'cr64' => 'crystal/64x64',
-               'crsc' => 'crystal/scalable'
+ 	       'cr16' => 'crystalsvg/16x16',
+               'cr22' => 'crystalsvg/22x22',
+               'cr32' => 'crystalsvg/32x32',
+               'cr48' => 'crystalsvg/48x48',
+               'cr64' => 'crystalsvg/64x64',
+               'cr128' => 'crystalsvg/128x128',
+               'crsc' => 'crystalsvg/scalable'
               );
             
             $newfile =~ s@.*-($appname\.(png|xpm|mng|svgz|svg?))@$1@;
