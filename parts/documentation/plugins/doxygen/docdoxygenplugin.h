@@ -50,8 +50,9 @@ public:
     virtual void autoSetupPlugin();
     
 protected:
-    void createBookTOC(DocumentationItem* item);
-    void createBookIndex(const QString &tagfile, IndexBox* index, DocumentationCatalogItem* item);
+    void createBookTOC(DocumentationItem* item, const QString &tagUrl = QString::null, 
+        const QString &baseHtmlUrl = QString::null);
+    void createBookIndex(const QString &tagfile, IndexBox* index, DocumentationCatalogItem* item, const QString &baseHtmlUrl = QString::null);
     
     void createIndexFromTag(QDomDocument &dom, IndexBox* index, DocumentationCatalogItem* item,
         QDomElement &parentEl, const QString &prefix);

@@ -38,6 +38,26 @@
 
 #include "../../../../config.h"
 
+class DoxyDocumentationCatalogItem: public DocumentationCatalogItem
+{
+public:
+    DoxyDocumentationCatalogItem(const QString &origUrl, DocumentationPlugin* plugin,
+        KListView *parent, const QString &name)
+        :DocumentationCatalogItem(plugin, parent, name), m_origUrl(origUrl)
+    {
+    }
+    DoxyDocumentationCatalogItem(const QString &origUrl, DocumentationPlugin* plugin,
+        DocumentationItem *parent, const QString &name)
+        :DocumentationCatalogItem(plugin, parent, name), m_origUrl(origUrl)
+    {
+    }
+    QString origUrl() const { return m_origUrl; }
+    
+private:
+    QString m_origUrl;
+};
+
+
 static const KAboutData data("docdoxygenplugin", I18N_NOOP("Doxygen documentation plugin"), "1.0");
 typedef KDevGenericFactory<DocDoxygenPlugin> DocDoxygenPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libdocdoxygenplugin, DocDoxygenPluginFactory(&data) )
@@ -55,7 +75,7 @@ DocDoxygenPlugin::~DocDoxygenPlugin()
 
 QPair<KFile::Mode, QString> DocDoxygenPlugin::catalogLocatorProps()
 {
-    return QPair<KFile::Mode, QString>(KFile::File, "index.html");
+    return QPair<KFile::Mode, QString>(KFile::File, "index.html *.tag");
 }
 
 QString DocDoxygenPlugin::catalogTitle(const QString& url)
@@ -64,16 +84,39 @@ QString DocDoxygenPlugin::catalogTitle(const QString& url)
     if (!fi.exists())
         return QString::null;
     
-    QFile f(url);
-    if (!f.open(IO_ReadOnly))
-        return QString::null;
-    
-    QTextStream ts(&f);
-    QString contents = ts.read();
-    QRegExp re(".*<title>(.*)</title>.*");
-    re.setCaseSensitive(false);
-    re.search(contents);
-    return re.cap(1);   
+    if (fi.extension(false) == "html")
+    {
+        QFile f(url);
+        if (!f.open(IO_ReadOnly))
+            return QString::null;
+        
+        QTextStream ts(&f);
+        QString contents = ts.read();
+        QRegExp re(".*<title>(.*)</title>.*");
+        re.setCaseSensitive(false);
+        re.search(contents);
+        return re.cap(1);   
+    }
+    else if (fi.extension(false) == "tag")
+    {
+        QFile *f = 0;
+        QFile f1(fi.dirPath(true) + "/html/index.html");
+        if (f1.open(IO_ReadOnly))
+            f = &f1;
+        QFile f2(fi.dirPath(true) + "/index.html");
+        if (f2.open(IO_ReadOnly))
+            f = &f2;
+        if (f != 0)
+        {
+            QTextStream ts(f);
+            QString contents = ts.read();
+            QRegExp re(".*<title>(.*)</title>.*");
+            re.setCaseSensitive(false);
+            re.search(contents);
+            return re.cap(1);   
+        }
+    }
+    return QString::null;
 }
 
 QString DocDoxygenPlugin::pluginName() const
@@ -104,11 +147,31 @@ QStringList DocDoxygenPlugin::fullTextSearchLocations()
 
 void DocDoxygenPlugin::setCatalogURL(DocumentationCatalogItem* item)
 {
+    if (item->url().url().endsWith("tag"))
+    {
+        QFileInfo fi(item->url().directory(false) + "html/index.html");
+        if (fi.exists())
+        {
+            item->setURL(KURL::fromPathOrURL(fi.absFilePath()));
+            return;
+        }
+        QFileInfo fi2(item->url().directory(false) + "index.html");
+        if (fi2.exists())
+        {
+            item->setURL(KURL::fromPathOrURL(fi2.absFilePath()));
+            return;
+        }
+        item->setURL(KURL());
+    }
 }
 
 bool DocDoxygenPlugin::needRefreshIndex(DocumentationCatalogItem* item)
 {
-    QFileInfo fi(item->url().path());
+    DoxyDocumentationCatalogItem *doxyItem = dynamic_cast<DoxyDocumentationCatalogItem*>(item);
+    if (!doxyItem)
+        return false;
+    
+    QFileInfo fi(doxyItem->origUrl());
     config->setGroup("Index");
     if (fi.lastModified() > config->readDateTimeEntry(item->text(0), new QDateTime()))
     {
@@ -146,6 +209,26 @@ void DocDoxygenPlugin::createIndex(IndexBox* index, DocumentationCatalogItem* it
     QFileInfo fi(item->url().path());
     if (!fi.exists())
         return;
+
+    DoxyDocumentationCatalogItem *doxyItem = dynamic_cast<DoxyDocumentationCatalogItem*>(item);
+    if (!doxyItem)
+        return;
+    
+    //doxygen documentation mode (if catalog points to a .tag)
+    if (doxyItem->origUrl().endsWith("tag"))
+    {
+        QString htmlUrl;
+        QFileInfo fi2(item->url().directory(false) + "index.html");
+        if (fi2.exists())
+            htmlUrl = fi2.dirPath(true) + "/";
+        QFileInfo fi(item->url().directory(false) + "html/index.html");
+        if (fi.exists())
+            htmlUrl = fi.dirPath(true) + "/";
+        
+        createBookIndex(doxyItem->origUrl(), index, item, htmlUrl);
+    }
+    
+    //KDE doxygen documentation mode (if catalog points to a index.html)
     QDir d(fi.dirPath(true));
     QStringList fileList = d.entryList("*", QDir::Dirs);
     
@@ -167,9 +250,28 @@ void DocDoxygenPlugin::createTOC(DocumentationCatalogItem* item)
     QFileInfo fi(item->url().path());
     if (!fi.exists())
         return;
+    
+    DoxyDocumentationCatalogItem *doxyItem = dynamic_cast<DoxyDocumentationCatalogItem*>(item);
+    if (!doxyItem)
+        return;
+    
+    //doxygen documentation mode (if catalog points to a .tag)
+    if (doxyItem->origUrl().endsWith("tag"))
+    {
+        QString htmlUrl;
+        QFileInfo fi2(item->url().directory(false) + "index.html");
+        if (fi2.exists())
+            htmlUrl = fi2.dirPath(true) + "/";
+        QFileInfo fi(item->url().directory(false) + "html/index.html");
+        if (fi.exists())
+            htmlUrl = fi.dirPath(true) + "/";
+        if (!htmlUrl.isEmpty())
+            createBookTOC(item, doxyItem->origUrl(), htmlUrl);
+    }
+    
+    //KDE doxygen documentation mode (if catalog points to a index.html)
     QDir d(fi.dirPath(true));
     QStringList fileList = d.entryList("*", QDir::Dirs);
-    
     QStringList::ConstIterator it;
     for (it = fileList.begin(); it != fileList.end(); ++it)
     {
@@ -188,14 +290,26 @@ void DocDoxygenPlugin::createTOC(DocumentationCatalogItem* item)
 
 DocumentationCatalogItem *DocDoxygenPlugin::createCatalog(KListView *contents, const QString &title, const QString &url)
 {
-    DocumentationCatalogItem *item = new DocumentationCatalogItem(this, contents, title);
+    kdDebug() << "DocDoxygenPlugin::createCatalog: url=" << url << endl;
+    DocumentationCatalogItem *item = new DoxyDocumentationCatalogItem(url, this, contents, title);
     item->setURL(url);
     return item;
 }
 
-void DocDoxygenPlugin::createBookTOC(DocumentationItem *item)
+void DocDoxygenPlugin::createBookTOC(DocumentationItem *item, const QString &tagUrl, const QString &baseHtmlUrl)
 {
-    QString tagName = item->url().upURL().directory(false) + item->text(0) + ".tag";
+    QString tagName;
+    if (tagUrl.isEmpty())
+        tagName = item->url().upURL().directory(false) + item->text(0) + ".tag";
+    else
+        tagName = tagUrl;
+    
+    QString baseUrl;
+    if (baseHtmlUrl.isEmpty())
+        baseUrl = item->url().directory(false);
+    else
+        baseUrl = baseHtmlUrl;
+            
     //@todo list html files in the directory if tag was not found
     if (!QFile::exists(tagName))
         return;
@@ -225,22 +339,21 @@ void DocDoxygenPlugin::createBookTOC(DocumentationItem *item)
             QString classname = childEl.namedItem("name").firstChild().toText().data();
             QString filename = childEl.namedItem("filename").firstChild().toText().data();
 
-            if (QFile::exists(item->url().directory(false) + filename))
+            if (QFile::exists(baseUrl + filename))
             {
                 DocumentationItem *docItem = new DocumentationItem(DocumentationItem::Document,
                     item, classname);
-                docItem->setURL(KURL(item->url().directory(false) + filename));
+                docItem->setURL(KURL(baseUrl + filename));
             }
         }
         childEl = childEl.nextSibling().toElement();
-    }    
+    }
 }
 
-void DocDoxygenPlugin::createBookIndex(const QString &tagfile, IndexBox* index, DocumentationCatalogItem* item)
+void DocDoxygenPlugin::createBookIndex(const QString &tagfile, IndexBox* index, DocumentationCatalogItem* item, const QString &baseHtmlUrl)
 {
     QString tagName = tagfile;
     kdDebug() << tagfile << endl;
-    //@todo list html files in the directory if tag was not found
     if (!QFile::exists(tagName))
         return;
     
@@ -260,7 +373,8 @@ void DocDoxygenPlugin::createBookIndex(const QString &tagfile, IndexBox* index, 
     f.close();
 
     QDomElement docEl = dom.documentElement();
-    createIndexFromTag(dom, index, item, docEl, KURL(tagfile).directory(false));
+    QString prefix = baseHtmlUrl.isEmpty() ? KURL(tagfile).directory(false) + "html/" : baseHtmlUrl;
+    createIndexFromTag(dom, index, item, docEl, prefix);
 }
 
 void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
@@ -281,9 +395,9 @@ void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
 
             IndexItemProto *indexItem = new IndexItemProto(this, item, index, classname, 
             i18n("%1 Class Reference").arg(classname));
-            indexItem->addURL(KURL(prefix + "html/" + filename));
+            indexItem->addURL(KURL(prefix + filename));
             
-            createIndexFromTag(dom, index, item, childEl, prefix + "html/" + filename);
+            createIndexFromTag(dom, index, item, childEl, prefix + filename);
         }
         else if ((childEl.tagName() == "member") && 
             ((childEl.attribute("kind") == "function")
