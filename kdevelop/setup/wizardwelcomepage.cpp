@@ -39,7 +39,7 @@ WizardWelcomePage::WizardWelcomePage(QWidget* parent, const char* name, const QS
                       i18n("1.) let you adjust some settings for the editor and user interface.") + "\n" +
                       i18n("2.) check your system for helper programs needed by KDevelop.") + "\n" +
                       i18n("3.) set up your documentation, automatically.") + "\n\n" +
-                      i18n("'Next` will invoke the automatic detection and the documentation generator.") + "\n" +
+                      i18n("'Next' will invoke the automatic detection and the documentation generator.") + "\n" +
                       i18n("'Help' will give more information about the installation.") + "\n" +
                       i18n("'Cancel' will stop the installation and KDevelop will be started without setting the initial values needed for proper functionality."), m_vbox );
    label->setAlignment(WordBreak);

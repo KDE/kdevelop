@@ -671,7 +671,7 @@ void CPrjCompOpts::connectGUI(){
 //        "that behave differently in traditional "
 //        "and ANSI C."));
 //  QWhatsThis::add(w_undef, i18n("Warn if an undefined identifier is "
-//                                "evaluated in an `#if' directive"));
+//                                "evaluated in an '#if' directive"));
 //  QWhatsThis::add(w_write_strings,
 //  i18n("Give string constants the type <i>const char[LENGTH]</i> "
 //        "so that copying the address of one into a non-<i>const "

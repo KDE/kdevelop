@@ -484,7 +484,7 @@ void CNewClassDlg::slotImplEditChanged(const QString&){
 void CNewClassDlg::initQuickHelp(){
   QString classnameMsg = i18n("Insert your new classname here.\n"
 	                                    "Please try to keep some standards\n"
-	                                    "like using an upper `K` as the first\n"
+	                                    "like using an uppercase 'K' as the first\n"
 	                                    "letter for your new class, if it is\n"
                                         "a class for a KDE-project.");
   QWhatsThis::add(classname_group, classnameMsg);
@@ -492,7 +492,7 @@ void CNewClassDlg::initQuickHelp(){
 	
   QWhatsThis::add(baseclass_edit, i18n("Insert the baseclass from which your new class\n"
                                     "will be derived from. If you have checked\n"
-                                    "`generate a QWidget-Childclass`, the new class will\n"
+                                    "\"Generate a QWidget-Childclass\", the new class will\n"
                                     "be derived from QWidget. If no baseclass is named, the\n"
                                     "new class will not have a parent class."));
 
@@ -519,9 +519,9 @@ void CNewClassDlg::initQuickHelp(){
   QWhatsThis::add(doc_edit, docMsg);
 
   QString qwidgetMsg = i18n("This offers additional options to your new class.\n"
-                                    "If you check `use header/cpp-templates`, your name and\n"
+                                    "If you check \"Use header/cpp-templatesi\", your name and\n"
                                     "email adress will be added into the new generated files\n"
-                                    "If you check `generate a QWidget-Childclass`, the new class\n"
+                                    "If you check \"Generate a QWidget-Childclass\", the new class\n"
                                     "will use QWidget as the baseclass. This is also useful for\n"
                                     "using baseclasses derived from QWidget, e.g. QDialog.");
   QWhatsThis::add(add_group, qwidgetMsg);
