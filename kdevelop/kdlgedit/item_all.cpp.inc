@@ -6,11 +6,37 @@
 void CALLER_ITEMCLASS_NAME::MyWidget::mousePressEvent ( QMouseEvent *e )
 {
   selectMe();
-  isMBPressed = true;
-  startPnt = e->globalPos();
-  lastPnt = e->globalPos();
-  origRect = geometry();
-  pressedEdge = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height());
+
+  if (e->button() == LeftButton)
+    {
+      isMBPressed = true;
+      startPnt = e->globalPos();
+      lastPnt = e->globalPos();
+      origRect = geometry();
+      pressedEdge = KDlgItemsGetClickedRect(e->pos().x(), e->pos().y(), width(), height());
+    }
+
+  if (e->button() == RightButton)
+    {
+      KPopupMenu phelp;
+      phelp.setTitle( parentObject->itemClass() );
+      if (!isMainwidget)
+        {
+          phelp.insertItem( i18n("&Raise"), parentObject->getEditWidget(), SLOT(slot_raiseSelected()) );
+          phelp.insertItem( i18n("&Lower"), parentObject->getEditWidget(), SLOT(slot_lowerSelected()) );
+          phelp.insertItem( i18n("Raise to &top"),    parentObject->getEditWidget(), SLOT(slot_raiseTopSelected()) );
+          phelp.insertItem( i18n("Lower to &bottom"), parentObject->getEditWidget(), SLOT(slot_lowerBottomSelected()) );
+          phelp.insertSeparator();
+          phelp.insertItem( i18n("&Cut"),   parentObject->getEditWidget(), SLOT(slot_cutSelected()) );
+          phelp.insertItem( i18n("&Delete"),parentObject->getEditWidget(), SLOT(slot_deleteSelected()) );
+          phelp.insertItem( i18n("C&opy"),  parentObject->getEditWidget(), SLOT(slot_copySelected()) );
+        }
+      phelp.insertItem( i18n("&Paste"), parentObject->getEditWidget(), SLOT(slot_pasteSelected()) );
+      phelp.insertSeparator();
+      phelp.insertItem( i18n("&Help"),  parentObject->getEditWidget(), SLOT(slot_helpSelected()) );
+      phelp.exec(QCursor::pos());
+    }
+
 }
 
 void CALLER_ITEMCLASS_NAME::MyWidget::mouseReleaseEvent ( QMouseEvent * )

@@ -43,12 +43,18 @@ void KDlgItem_LineEdit::MyWidget::paintEvent ( QPaintEvent *e )
 KDlgItem_LineEdit::KDlgItem_LineEdit( KDlgEditWidget* editwid, QWidget *parent , const char* name )
   : KDlgItem_Base(editwid, parent,false,name)
 {
+  addMyPropEntrys();
   parentWidgetItem = 0;
   item = new MyWidget(this, parent);
   item->show();
   item->setMouseTracking(true);
   repaintItem();
-  addMyPropEntrys();
+}
+
+void KDlgItem_LineEdit::recreateItem()
+{
+  item->recreate((QWidget*)parent(), 0, item->pos(), true);
+  item->setMouseTracking(true);
 }
 
 void KDlgItem_LineEdit::addMyPropEntrys()

@@ -52,6 +52,12 @@ KDlgItem_PushButton::KDlgItem_PushButton( KDlgEditWidget* editwid, QWidget *pare
   repaintItem();
 }
 
+void KDlgItem_PushButton::recreateItem()
+{
+  item->recreate((QWidget*)parent(), 0, item->pos(), true);
+  item->setMouseTracking(true);
+}
+
 void KDlgItem_PushButton::addMyPropEntrys()
 {
 

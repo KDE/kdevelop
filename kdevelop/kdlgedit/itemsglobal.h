@@ -26,6 +26,8 @@
 
 class KDlgItem_Base;
 
+QString KDlgLimitLines(QString src, unsigned maxlen = 40);
+
 /**
  * Paints the border and the rectangles of a selected item.
 */
@@ -107,6 +109,9 @@ class KDlgItemDatabase
      * returns the next item (run getFirst() first!)
     */
     KDlgItem_Base *getNext();
+
+    int raiseItem(KDlgItem_Base*);
+    int lowerItem(KDlgItem_Base*);
 
   protected:
     KDlgItem_Base *items[MAX_WIDGETS_PER_DIALOG];

@@ -235,36 +235,7 @@ void AdvListView::help()
 
       st = st + i18n("\n\n<i><->See also: <link kdev>KDevelop Manual</link>, <link qt>Qt API</link>, <link kdeui>KDE User Interfaces</link>, <link KDEWEB>KDE Website</link><+></i>");
 
-      QString helptext = "";
-      QString lastword = "";
-      int linelen = 0;
-      int i;
-      int istag = 0;
-      for (i=0; i<=(signed)st.length(); i++)
-        {
-          QString ch = st.mid(i,1);
-          if (istag==0)
-            linelen++;
-          lastword = lastword+ch;
-          if (ch == "<")
-            istag++;
-          if (ch == ">")
-            istag--;
-          if (ch == " ")
-            {
-              helptext = helptext + lastword;
-              lastword = "";
-            }
-          if ((linelen>40) && ((lastword.length()<40) && (ch != " ")))
-            {
-              linelen = 0;
-              helptext = helptext+"\n";
-            }
-          if (ch == "\n")
-            linelen = 0;
-        }
-
-      helptext = helptext + lastword;
+      QString helptext = KDlgLimitLines(st);
 
       KQuickHelpWindow *qhw = new KQuickHelpWindow();
       connect(qhw, SIGNAL(hyperlink(QString)), SLOT(linkclicked(QString)));

@@ -54,6 +54,7 @@
     MyWidget *item;
   public:
     classname( KDlgEditWidget* editwid = 0, QWidget *parent = 0, const char* name = 0 );
+    virtual void recreateItem();
     virtual ~classname() {}
     virtual QString itemClass() { return QString(classdesc); }
     virtual MyWidget* getItem() { return item; }

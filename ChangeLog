@@ -1,3 +1,9 @@
+1999-04-11 Pascal Krahmer <pascal@beast.de>
+        * added popupmenu in the edit view (rightclick on an item or on the mainwidget)
+        * added raise/lower/raise to top/lower to bottom methods (available in GUI through the popup)
+        * added delete method (also only in the popup for now)
+        * added quickhelp for the popupmenu (different behaviour for main-/other widgets) (run: popupmenu/help)
+
 1999-04-10  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* implemented remove,delete and add file for the RFV
 	* completed the support for "po" files, 

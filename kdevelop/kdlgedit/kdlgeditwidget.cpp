@@ -29,10 +29,12 @@
 #include "kdlgproplv.h"
 #include "kdlgitems.h"
 #include "kdlgpropwidget.h"
+#include <kquickhelp.h>
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
    : QWidget(parent,name)
 {
+  qhw = new KQuickHelpWindow();
   dlgfilelinecnt = 0;
   pCKDevel = parCKD;
 
@@ -74,6 +76,144 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
 KDlgEditWidget::~KDlgEditWidget()
 {
+}
+
+
+int KDlgEditWidget::raiseSelected(bool updateMe)
+{
+  if (!selectedWidget())
+    return -3;
+
+  if (selectedWidget()==mainWidget())
+    return -4;
+
+  int res = 0;
+
+  if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+    {
+      if (!((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb())
+        return -4;
+      res = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb()->raiseItem(selectedWidget());
+    }
+  else
+    {
+      res = mainWidget()->getChildDb()->raiseItem(selectedWidget());
+    }
+
+  if ((res == 0) && (updateMe))
+    mainWidget()->recreateItem();
+
+  return res;
+}
+
+int KDlgEditWidget::lowerSelected(bool updateMe)
+{
+  if (!selectedWidget())
+    return -3;
+
+  if (selectedWidget()==mainWidget())
+    return -4;
+
+  int res = 0;
+
+  if (((KDlgItem_Widget*)selectedWidget())->parentWidgetItem)
+    {
+      if (!((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb())
+        return -4;
+      res = ((KDlgItem_Widget*)selectedWidget())->parentWidgetItem->getChildDb()->lowerItem(selectedWidget());
+    }
+  else
+    {
+      res = mainWidget()->getChildDb()->lowerItem(selectedWidget());
+    }
+
+  if ((res == 0) && (updateMe))
+    mainWidget()->recreateItem();
+
+  return res;
+}
+
+void KDlgEditWidget::slot_raiseTopSelected()
+{
+  while (raiseSelected(false) == 0);
+
+  mainWidget()->recreateItem();
+}
+
+void KDlgEditWidget::slot_lowerBottomSelected()
+{
+  while (lowerSelected(false) == 0);
+
+  mainWidget()->recreateItem();
+}
+
+void KDlgEditWidget::slot_cutSelected()
+{
+  slot_copySelected();
+  slot_deleteSelected();
+}
+
+void KDlgEditWidget::slot_deleteSelected()
+{
+  if (!selectedWidget())
+    return;
+
+  KDlgItem_Widget *dummy = (KDlgItem_Widget*)selected_widget;
+  deselectWidget();
+
+  if (dummy->parentWidgetItem)
+    {
+      if (!dummy->parentWidgetItem->getChildDb())
+        return;
+      dummy->parentWidgetItem->getChildDb()->removeItem(dummy);
+    }
+  else
+    {
+      mainWidget()->getChildDb()->removeItem(dummy);
+    }
+
+  dummy->deleteMyself();
+  delete dummy->getItem();
+  delete dummy;
+  selected_widget = 0;
+  selectWidget(mainWidget());
+
+  if ((pCKDevel) && ((CKDevelop*)pCKDevel)->kdlg_get_items_view())
+    ((CKDevelop*)pCKDevel)->kdlg_get_items_view()->addWidgetChilds(main_widget);
+}
+
+void KDlgEditWidget::slot_copySelected()
+{
+  qhw->popup("Sorry, feature not yet implemented.\n\n<i>Pascal Krahmer</i>", QCursor::pos().x(),QCursor::pos().y());
+}
+
+void KDlgEditWidget::slot_pasteSelected()
+{
+  qhw->popup("Sorry, feature not yet implemented.\n\n<i>Pascal Krahmer</i>", QCursor::pos().x(),QCursor::pos().y());
+}
+
+void KDlgEditWidget::slot_helpSelected()
+{
+  QString helptext = i18n("<b><u><brown>QuickHelp<black></u></b>\n\n");
+
+  if (selectedWidget() != mainWidget())
+    {
+      helptext = helptext + QString(i18n("<b><i>Raise</i></b>\n\nBrings the item one step towards the topmost one in the hierarchy.\n\n"));
+      helptext = helptext + QString(i18n("<b><i>Lower</i></b>\n\nOn the contrary to <i>raise</i> this function brings the item one step backwards in the hierarchy, to the bottommost item.\n\n"));
+      helptext = helptext + QString(i18n("<b><i>Raise to top</i></b>\n\nSets the item to be the topmost one.\n\n"));
+      helptext = helptext + QString(i18n("<b><i>Raise to bottom</i></b>\n\nMakes the item to become the bottommost.\n\n"));
+      helptext = helptext + QString(i18n("<b><i>Copy</i></b>\n\nSelects the item to be copied. That means, if you choose paste later, this item will be inserted.\n\n"));
+      helptext = helptext + QString(i18n("<b><i>Delete</i></b>\n\nRemoves the selected item from the dialog.\n\n"));
+      helptext = helptext + QString(i18n("<b><i>Cut</i></b>\n\nCopies the item and removes it from the dialog. But unlike toe delete function you will be able to insert a copy of the item using the <i>paste</i> function.\n\n"));
+    }
+  else
+    helptext = helptext + QString(i18n("<b>Note :</b> Since the selected item is the main widget only few of the normally available functions are enabled. Open another items' help to get information about the other functions.\n\n"));
+
+  helptext = helptext + QString(i18n("<b><i>Paste</i></b>\n\nInserts an item you have copied before using the <i>Copy</i>function at the current position of the mouse pointer.\n\n"));
+
+  helptext = KDlgLimitLines(helptext,60);
+
+  qhw->popup(helptext, QCursor::pos().x(),QCursor::pos().y());
 }
 
 

@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 
+#include <kapp.h>
 #include "items.h"
 #include <qwidget.h>
 #include <qpixmap.h>
@@ -34,6 +35,10 @@ KDlgItem_Base::KDlgItem_Base( KDlgEditWidget* editwid , QWidget *parent , bool i
 
   props = new KDlgPropertyBase();
   repaintItem();
+}
+
+void KDlgItem_Base::recreateItem()
+{
 }
 
 void KDlgItem_Base::deleteMyself()

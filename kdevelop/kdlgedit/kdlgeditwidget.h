@@ -32,6 +32,7 @@ class KDlgItem_Base;
 class CKDevelop;
 class KRuler;
 class QTextStream;
+class KQuickHelpWindow;
 
 /**
  * This is the edit widget you can see in the center of the kdevelop window.
@@ -101,6 +102,20 @@ class KDlgEditWidget : public QWidget  {
      * opens a dialog from the file <i>fname</i>
     */
     bool openFromFile( QString fname );
+
+    int raiseSelected(bool updateMe = true);
+    int lowerSelected(bool updateMe = true);
+  public slots:
+    int slot_raiseSelected() { return raiseSelected(); }
+    int slot_lowerSelected() { return lowerSelected(); }
+    void slot_raiseTopSelected();
+    void slot_lowerBottomSelected();
+    void slot_cutSelected();
+    void slot_deleteSelected();
+    void slot_copySelected();
+    void slot_pasteSelected();
+    void slot_helpSelected();
+
   protected:
     int dlgfilelinecnt;
 
@@ -114,6 +129,7 @@ class KDlgEditWidget : public QWidget  {
 
     virtual void resizeEvent ( QResizeEvent * );
 
+    KQuickHelpWindow *qhw;
     KDlgItemDatabase *dbase;
     KDlgItem_Widget *main_widget;
     KDlgItem_Base *selected_widget;

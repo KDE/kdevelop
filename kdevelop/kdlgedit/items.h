@@ -27,6 +27,7 @@
 #include <kruler.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
+#include <kpopmenu.h>
 
 class KDlgEditWidget;
 
@@ -47,7 +48,9 @@ class KDlgItem_Base : public QObject
      * @param name Just passed to the items' widgets' constructor
     */
     KDlgItem_Base( KDlgEditWidget* editwid = 0, QWidget *parent = 0, bool ismainwidget = false, const char* name = 0 );
-    virtual ~KDlgItem_Base() {}
+    virtual ~KDlgItem_Base() { }
+
+    virtual void recreateItem();
 
     /**
      * Returns the type of the items class. Has to be overloaded in order to return the right type.

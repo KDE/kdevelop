@@ -71,12 +71,25 @@ KDlgItem_Widget::KDlgItem_Widget( KDlgEditWidget *editwid, QWidget *parent , boo
 {
   parentWidgetItem = 0;
   childs = new KDlgItemDatabase();
-  item = new MyWidget(this, parent, ismainwidget);
+  item = new MyWidget(this, parent, isMainWidget);
   item->show();
   item->setMouseTracking(true);
   repaintItem();
 }
 
+void KDlgItem_Widget::recreateItem()
+{
+  KDlgItem_Base *it = childs->getFirst();
+  while (it)
+  {
+    ((KDlgItem_Widget*)it)->recreateItem();
+    it = childs->getNext();
+  }
+
+  item->recreate((QWidget*)parent(), 0, item->pos(), true);
+  item->setMouseTracking(true);
+  return;
+}
 
 KDlgItem_Widget::KDlgItem_Widget( KDlgEditWidget *editwid, QWidget *parent , const char* name )
    : KDlgItem_Base(editwid, parent,false,name)

@@ -89,6 +89,57 @@ void KDlgItemDatabase::removeItem(KDlgItem_Base *item, bool deleteIt)
       }
 }
 
+int KDlgItemDatabase::raiseItem(KDlgItem_Base *item)
+{
+  if (!item)
+    return -1;
+
+  KDlgItem_Base *it = getFirst();
+  while (it)
+    {
+      if (it == item)
+        {
+          int me = recentGetNr;
+          KDlgItem_Base *nx = getNext();
+          if (!nx)
+            return 1;
+
+          items[recentGetNr] = item;
+          items[me] = nx;
+          return 0;
+        }
+      it = getNext();
+    }
+
+  return -2;
+}
+
+int KDlgItemDatabase::lowerItem(KDlgItem_Base *item)
+{
+  if (!item)
+    return -1;
+
+  int last = -1;
+  KDlgItem_Base *it = getFirst();
+  while (it)
+    {
+      if (it == item)
+        {
+          if ((last == -1) || (!items[last]))
+            return 1;
+
+          items[recentGetNr] = items[last];
+          items[last] = item;
+          return 0;
+        }
+      last = recentGetNr;
+      it = getNext();
+    }
+
+  return -2;
+}
+
+
 KDlgItem_Base *KDlgItemDatabase::getNext()
 {
   if (recentGetNr>=MAX_WIDGETS_PER_DIALOG)
@@ -383,4 +434,40 @@ int KDlgItemsIsValueTrue(QString val)
     return 1;
 
   return -1;
+}
+
+QString KDlgLimitLines(QString src, unsigned maxlen)
+{
+  QString helptext = "";
+  QString lastword = "";
+  int linelen = 0;
+  int i;
+  int istag = 0;
+  for (i=0; i<=(signed)src.length(); i++)
+    {
+      QString ch = src.mid(i,1);
+      if (istag==0)
+        linelen++;
+      lastword = lastword+ch;
+      if (ch == "<")
+        istag++;
+      if (ch == ">")
+        istag--;
+      if (ch == " ")
+        {
+          helptext = helptext + lastword;
+          lastword = "";
+        }
+      if ((linelen>maxlen) && (((unsigned)lastword.length()<maxlen) && (ch != " ")))
+        {
+          linelen = 0;
+          helptext = helptext+"\n";
+        }
+      if (ch == "\n")
+        linelen = 0;
+    }
+
+  helptext = helptext + lastword;
+
+  return helptext;
 }
