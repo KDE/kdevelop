@@ -163,7 +163,7 @@ void ProjectManager::loadDefaultProject()
 {
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
   if( args->isSet("project") ) {
-    KURL projectUrl = args->getOption( "project" );
+    KURL projectUrl( args->getOption("project") );
     loadProject( projectUrl );
   } else if( args->count() > 0 ) {
     KConfig *config = kapp->config();

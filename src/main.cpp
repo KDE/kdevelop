@@ -19,7 +19,7 @@
 static KCmdLineOptions options[] =
 {
     { "profile <profile>",	I18N_NOOP("Profile to load"), 0 },
-    { "project <url>",          I18N_NOOP("Project to load"), 0 },
+    { "project <url>",   	I18N_NOOP("Project to load"), 0 },
     { "+file(s)",		I18N_NOOP("Files to load"), 0 },
     { 0,0,0 }
 };
@@ -75,12 +75,12 @@ int main(int argc, char *argv[])
   KApplication app;
 
   SplashScreen *splash = new SplashScreen;
-  
+
   app.processEvents();
 
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
 		   splash, SLOT(showMessage(const QString &)));
-  
+
   PluginController::getInstance()->loadInitialPlugins();
 
   splash->showMessage( i18n( "Loading Settings" ) );
@@ -92,9 +92,9 @@ int main(int argc, char *argv[])
   Core::getInstance()->doEmitCoreInitialized();
 
   splash->showMessage( i18n( "Loading Project" ) );
-  ProjectManager::getInstance()->loadDefaultProject();
-
   delete splash;
+  
+  ProjectManager::getInstance()->loadDefaultProject();
 
   kapp->dcopClient()->registerAs("gideon");
 
