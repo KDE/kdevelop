@@ -28,6 +28,7 @@
 #include <qregexp.h>
 #include <qtextstream.h>
 #include <qtoolbar.h>
+#include <qmessagebox.h>
 
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -1391,17 +1392,41 @@ void CKDevelop::slotHelpBugReport(){
   
 }
 void CKDevelop::slotHelpAbout(){
-  KMsgBox::message(this,i18n("About KDevelop..."),i18n("\t   KDevelop Version "+version+" \n\n\t(c) 1998,1999 KDevelop Team \n
-Sandy Meier <smeier@rz.uni-potsdam.de>
-Stefan Heidrich <sheidric@rz.uni-potsdam.de>
-Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
-Jonas Nordin <jonas.nordin@cenacle.se>
-Pascal Krahmer <pascal@beast.de>
-Stefan Bartel <bartel@rz.uni-potsdam.de>
-Martin Piskernig <martin.piskernig@stuwo.at>
 
-Read the AUTHORS file for further informations!"));
+  QMessageBox aboutmsg(this, "About KDevelop");
+  aboutmsg.setCaption(i18n("About KDevelop..."));
+  aboutmsg.setButtonText(1, i18n("OK"));
+  aboutmsg.setText(i18n("\t   KDevelop Version "+version+" \n\n"
+  											"\t(c) 1998,1999 The KDevelop Team \n\n"
+                        "Sandy Meier <smeier@rz.uni-potsdam.de>\n"
+                        "Stefan Heidrich <sheidric@rz.uni-potsdam.de>\n"
+                        "Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>\n"
+                        "Jonas Nordin <jonas.nordin@cenacle.se>\n"
+                        "Pascal Krahmer <pascal@beast.de>\n"
+                        "Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
+                        "Martin Piskernig <martin.piskernig@stuwo.at>\n\n"
+                        "See The KDevelop User Manual, Chapter Authors\n"
+                        "for further information.\n\n"
+                        "This program is free software; you can\n"
+                        "redistribute it and/or modify it under\n"
+                        "the terms of the GNU General Public License\n"
+                        "as published by the Free Software Foundation;\n"
+                        "either version 2 of the License, or (at your\n"
+                        "option) any later version.\n\n"
+												"This program is distributed in the hope that\n"
+												"it will be useful, but WITHOUT ANY WARRANTY; \n"
+												"without even the implied warranty of\n"
+												"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
+												"See the GNU General Public License for more details.\n\n"
+												"You should have received a copy of the GNU\n"
+												"General Public License along with this program;\n"
+												"if not, write to the Free Software Foundation, Inc.,\n"
+												"675 Mass Ave, Cambridge, MA 02139, USA."));
 
+  QPixmap pm;
+  pm.load(KApplication::kde_datadir() + "/kdevelop/pics/about_logo.bmp");
+  aboutmsg.setIconPixmap(pm);
+  aboutmsg.show();
 }
 
 void CKDevelop::slotKDlgViewPropView(){
@@ -2348,6 +2373,7 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
 
 
 

@@ -2,11 +2,12 @@
 
 SUBDIRS = mini 
 
-EXTRA_DIST = customApp.bmp kAppWizard.bmp miniApp.bmp normalApp.bmp qtApp.bmp startlogo.bmp terminalApp.bmp tipday.bmp dlg_firstrun.bmp 
+EXTRA_DIST = customApp.bmp kAppWizard.bmp miniApp.bmp normalApp.bmp qtApp.bmp startlogo.bmp terminalApp.bmp tipday.bmp dlg_firstrun.bmp about_logo.bmp 
 
 ####### kdevelop will overwrite this part!!! (end)############
-pics_DATA = kAppWizard.bmp miniApp.bmp normalApp.bmp terminalApp.bmp startlogo.bmp  tipday.bmp qtApp.bmp customApp.bmp dlg_firstrun.bmp
-
+pics_DATA = kAppWizard.bmp miniApp.bmp normalApp.bmp terminalApp.bmp startlogo.bmp  tipday.bmp qtApp.bmp customApp.bmp \
+						dlg_firstrun.bmp about_logo.bmp
+							
 picsdir = $(kde_datadir)/kdevelop/pics/
 
 EXTRA_DIST = $(pics_DATA)

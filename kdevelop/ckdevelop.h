@@ -126,7 +126,7 @@ public:
    *  @param refresh             If to refresh the trees.
    */
   bool addFileToProject(QString complete_filename,ProjectFileType type,bool refreshTrees=true);
-
+	void addRecentProject(const char* file);
   void switchToWorkspace(int id);
 
   /** Switch the view to a certain file.
@@ -252,6 +252,10 @@ public:
   void slotProjectNewAppl();
   /** opens a projectfile and close the old one*/
   void slotProjectOpen();
+	/** opens a project file from the recent project menu in the project menu by getting the project entry and
+		* calling slotProjectOpenCmdl()
+		*/
+	void slotProjectOpenRecent(int id_);
   /** opens a project committed by comandline or kfm */
   void slotProjectOpenCmdl(const char*);
   /** close the current project,return false if  canceled*/
@@ -536,6 +540,7 @@ protected:
 private:
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
+  QPopupMenu* recent_projects_menu;
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
   QPopupMenu* bookmarks_menu;
@@ -605,6 +610,7 @@ private:
   KConfig* config;
   int act_outbuffer_len;
 
+  QStrList recent_projects;
   // for the browser
   QStrList history_list;
   QStrList history_title_list;

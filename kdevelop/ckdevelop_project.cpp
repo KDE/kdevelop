@@ -500,6 +500,11 @@ void CKDevelop::slotProjectOpen(){
   
 }
 
+void CKDevelop::slotProjectOpenRecent(int id_)
+{
+  slotProjectOpenCmdl(recent_projects.at(id_));
+}
+
 void CKDevelop::slotProjectOpenCmdl(const char* prjname){
 
   QString old_project = "";
@@ -956,6 +961,7 @@ bool CKDevelop::readProjectFile(QString file){
   enableCommand(ID_BUILD_AUTOCONF);
   enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
 	
+  addRecentProject(file);
   project=true;
   return true;
 }
@@ -998,6 +1004,10 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
+
 
 
 

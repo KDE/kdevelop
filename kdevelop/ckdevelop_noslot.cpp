@@ -17,17 +17,38 @@
  ***************************************************************************/
 #include "./kdlgedit/kdlgedit.h"
 #include <iostream.h>
-#include <kmsgbox.h>
+
 #include <qprogressdialog.h>
-#include "ckdevelop.h"
+
+#include <kmsgbox.h>
+#include <kcursor.h>
+
 #include "debug.h"
+#include "ckdevelop.h"
 #include "cclassview.h"
 #include "kswallow.h"
 #include "ctoolclass.h"
-#include "./kdlgedit/kdlgdialogs.h"
 #include "cdocbrowser.h"
+#include "./kdlgedit/kdlgdialogs.h"
 #include "./kdlgedit/kdlgreadmedlg.h"
 
+void CKDevelop::addRecentProject(const char* file)
+{
+  if(recent_projects.find(file) == -1){
+    if( recent_projects.count() < 5)
+    	if(recent_projects.containsRef(file)>0)
+      recent_projects.insert(0,file);
+    else{
+      recent_projects.remove(4);
+      recent_projects.insert(0,file);
+    }
+    recent_projects_menu->clear();
+		uint i;
+    for ( i =0 ; i < recent_projects.count(); i++){
+      recent_projects_menu->insertItem(recent_projects.at(i));
+    }
+	}
+}
 
 void CKDevelop::removeFileFromEditlist(const char *filename){
   TEditInfo* actual_info;
@@ -111,6 +132,7 @@ void CKDevelop::refreshTrees(){
 
   // Update the classview.
   slotStatusMsg(i18n("Scanning project files..."));
+	setCursor(KCursor::waitCursor());
   statProg->show();
   class_tree->refresh(prj);
   statProg->reset();
@@ -129,7 +151,7 @@ void CKDevelop::refreshTrees(){
   kdlg_dialogs_view->refresh(prj);
 
   kdev_statusbar->repaint();
-	
+	setCursor(KCursor::arrowCursor());	
   // update the file_open_menu
   file_open_list=prj->getHeaders();
   QStrList sources=prj->getSources();
@@ -754,13 +776,19 @@ void CKDevelop::readOptions(){
   //  make_with_cmd=config->readEntry("MakeWith","");
 
   config->setGroup("Files");
+	recent_projects.setAutoDelete(TRUE);
+	config->readListEntry("Recent Projects",recent_projects);
+	
+	uint i;
+	for ( i =0 ; i < recent_projects.count(); i++){
+    recent_projects_menu->insertItem(recent_projects.at(i));
+  }
+
 	doc_bookmarks_list.setAutoDelete(TRUE);
 	doc_bookmarks_title_list.setAutoDelete(TRUE);
 	
 	config->readListEntry("doc_bookmarks",doc_bookmarks_list);
 	config->readListEntry("doc_bookmarks_title",doc_bookmarks_title_list);
-		
-	uint i;
 	for ( i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(Icon("mini/html.xpm"),doc_bookmarks_title_list.at(i));
   }
@@ -827,6 +855,7 @@ void CKDevelop::saveOptions(){
   config->writeEntry("browser_file",history_list.current());
 	config->writeEntry("doc_bookmarks", doc_bookmarks_list);
 	config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
+	config->writeEntry("Recent Projects", recent_projects);
 
 	config->sync();
 }
@@ -924,6 +953,15 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
+
+
+
+
+
+
+
+
+
 
 
 

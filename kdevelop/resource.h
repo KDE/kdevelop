@@ -89,7 +89,8 @@
 // Project-menu entries 
 
 #define ID_PROJECT_KAPPWIZARD       13210
-#define ID_PROJECT_OPEN			        13230
+#define ID_PROJECT_OPEN			        13220
+#define ID_PROJECT_OPEN_RECENT			13230
 #define ID_PROJECT_CLOSE            13240
 #define ID_PROJECT_NEW_CLASS        13250
 #define ID_PROJECT_ADD_FILE_EXIST   13280
@@ -289,10 +290,8 @@
 #define IDK_EDIT_COPY	       					CTRL+Key_C
 #define IDK_EDIT_PASTE								CTRL+Key_V
 
-#define IDK_EDIT_SEARCH								CTRL+Key_F
 #define IDK_EDIT_REPEAT_SEARCH				Key_F3
-#define IDK_EDIT_REPLACE							CTRL+Key_R
-#define IDK_EDIT_SEARCH_IN_FILES						CTRL+ALT+Key_F
+#define IDK_EDIT_SEARCH_IN_FILES			CTRL+ALT+Key_F
 
 #define IDK_EDIT_INDENT								CTRL+Key_I
 #define IDK_EDIT_UNINDENT							CTRL+Key_U
@@ -300,12 +299,11 @@
 ///////////////////////////////////////////////////////////////////
 // View-menu entries
 #define IDK_VIEW_GOTO_LINE	    			CTRL+Key_L
-#define IDK_VIEW_NEXT_ERROR                             Key_F4
-#define IDK_VIEW_PREVIOUS_ERROR                             SHIFT+Key_F4
+#define IDK_VIEW_NEXT_ERROR           Key_F4
+#define IDK_VIEW_PREVIOUS_ERROR       SHIFT+Key_F4
 #define IDK_VIEW_TREEVIEW	    				CTRL+Key_T
 #define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_G
-#define IDK_VIEW_STATUSBAR          	CTRL+Key_B			
-#define IDK_VIEW_PREVIEW				CTRL+Key_Space
+#define IDK_VIEW_PREVIEW							CTRL+Key_Space
 
 ///////////////////////////////////////////////////////////////////
 // Project-menu entries 
@@ -334,11 +332,7 @@
 #define IDK_HELP_SEARCH_TEXT					Key_F2				
 #define IDK_HELP_CONTENTS							Key_F1
 
-#define IDK_SHOW_HEADER        				CTRL+Key_1
-#define IDK_SHOW_C	       						CTRL+Key_2
-#define IDK_SHOW_HELP	       					CTRL+Key_3
-#define IDK_SHOW_TOOLS	       				CTRL+Key_4
-#define IDK_TOGGLE_LAST        				CTRL+Key_Tab
+#define IDK_TOGGLE_LAST        				CTRL+Key_B
 
 
 ///////////////////////////////////////////////////////////////////
@@ -360,6 +354,8 @@
 ///////////////////////////////////////////////////////////////////
 // Create cases for entries and connect them to change statusBar entry
 #define ON_STATUS_MSG(id, message)     case id:  slotStatusHelpMsg(message);break;
+
+
 
 
 
