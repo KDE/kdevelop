@@ -154,7 +154,7 @@ void TargetOptionsDialog::storeConfig()
         }
     }
 
-    if (target->primary == "LIBRARIES" || target->primary == "LTLIBARIES") {
+    if (target->primary == "LIBRARIES" || target->primary == "LTLIBRARIES") {
         QString old_libadd = target->libadd;
         if (new_addstr != old_libadd) {
             target->libadd = new_addstr;
