@@ -90,11 +90,16 @@ public:
 	// #### proper mkspec (althoigh this will be no fun :-)
 
 	addIncludePath( qtdir + "/mkspecs/" + qmakespec );
-
 	if ( qmakespec == "linux-g++" ) {
 	    addIncludePath( "/include" );
 	    addIncludePath( "/usr/include" );
 	    addIncludePath( "/ust/local/include" );
+#if KDE_VERSION <= 305
+	    return; // FIXME!!! Roberto, please review! ;-)
+	    // If the QProcess from below is executed,
+	    // it somehow breaks the gcc call in parts/outputviews/makewidget.cpp. :-(
+	    // It then has the effect that KProcess will never exit, at least on KDE-3.0
+#endif // KDE_VERSION
 	    QProcess proc;
 	    proc.addArgument( "gcc" );
 	    proc.addArgument( "-print-file-name=include" );
