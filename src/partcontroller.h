@@ -78,16 +78,10 @@ private slots:
   void slotCloseAllWindows();
   void slotCloseOtherWindows();
 
-  void slotPopupAboutToShow();
-  void slotPopupAboutToHide();
-  void slotDeletePopup();
-
   void slotUploadFinished();
 
 
 private:
-
-  void setLineNumber(int lineNum);
 
   void setupActions();
 
@@ -107,20 +101,12 @@ private:
 
   void editText(const KURL &url, int num);
 
-  QTabWidget *m_tabWidget;
-
   static PartController *s_instance;
-
-  KParts::PartManager *m_partManager;
 
   QPtrList<PartListEntry> m_partList;
 
   KAction *m_closeWindowAction, *m_saveAllFilesAction, *m_revertAllFilesAction;
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
-
-  QArray<int> m_popupIds;
-
-  QPopupMenu *m_popup;
 
 };
 

@@ -17,15 +17,10 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 
-#include <ktexteditor/viewcursorinterface.h>
-#include <ktexteditor/popupmenuinterface.h>
-#include <ktexteditor/editinterface.h>
-#include <ktexteditor/markinterface.h>
-
 
 #include "toplevel.h"
 #include "core.h"
-
+#include "editorproxy.h"
 
 #include "partcontroller.h"
 
@@ -135,7 +130,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
   if (existingPart)
   {
     activatePart(existingPart);
-    setLineNumber(lineNum);
+    EditorProxy::getInstance()->setLineNumber(existingPart, lineNum);
     return;
   }
 
@@ -159,7 +154,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
     KParts::ReadWritePart *part = static_cast<KParts::ReadWritePart*>(factory->createPart(TopLevel::getInstance()->main(), "KParts/ReadWritePart"));
     part->openURL(url);
     integratePart(part, url);
-    setLineNumber(lineNum);
+    EditorProxy::getInstance()->setLineNumber(part, lineNum);
   }
   else
   {
@@ -175,7 +170,7 @@ void PartController::showDocument(const KURL &url, int lineNum)
   if (existingPart)
   {
     activatePart(existingPart);
-    setLineNumber(lineNum);
+    EditorProxy::getInstance()->setLineNumber(existingPart, lineNum);
     return;
   }
 
@@ -188,26 +183,13 @@ void PartController::showDocument(const KURL &url, int lineNum)
     KParts::ReadOnlyPart *part = static_cast<KParts::ReadOnlyPart*>(factory->createPart(TopLevel::getInstance()->main(), "KParts/ReadOnlyPart"));
     part->openURL(url);
     integratePart(part, url);
-    setLineNumber(lineNum);
+    EditorProxy::getInstance()->setLineNumber(part, lineNum);
   }
   else
   {
     // try to start a new handling process
     new KRun(url);
   }
-}
-
-
-void PartController::setLineNumber(int lineNum)
-{
-  KParts::Part *part = activePart();
-
-  if (!part->inherits("KTextEditor::Document") || !part->widget())
-    return;
-
-  KTextEditor::ViewCursorInterface *iface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget());
-  if (iface)
-    iface->setCursorPosition(lineNum, 0);
 }
 
 
@@ -247,17 +229,12 @@ void PartController::integratePart(KParts::Part *part, const KURL &url)
 
   addPart(part);
 
-  if (part->inherits("KTextEditor::Document") && part->widget())
-  {
-    KTextEditor::PopupMenuInterface *iface = dynamic_cast<KTextEditor::PopupMenuInterface*>(part->widget());
-    if (iface)
-      iface->installPopup(contextPopupMenu());
+  EditorProxy::getInstance()->installPopup(part, contextPopupMenu());
 
-    // HACK: this is a workaround. The kate-part does not emit "completed" when
-    // it save a file yet.
-    // FIXME: remove this line once kate-part emits the right signal
-    connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotUploadFinished()));
-  }
+  // HACK: this is a workaround. The kate-part does not emit "completed" when
+  // it save a file yet.
+  // FIXME: remove this line once kate-part emits the right signal
+  connect(part, SIGNAL(fileNameChanged()), this, SLOT(slotUploadFinished()));
 
   // tell the parts we loaded a document
   KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(part);
@@ -283,11 +260,7 @@ QPopupMenu *PartController::contextPopupMenu()
   static QPopupMenu *popup = 0;
 
   if (!popup)
-  {
     popup = (QPopupMenu*)(TopLevel::getInstance()->main())->factory()->container("rb_popup", TopLevel::getInstance()->main());
-    connect(popup, SIGNAL(aboutToShow()), this, SLOT(slotPopupAboutToShow()));
-    connect(popup, SIGNAL(aboutToHide()), this, SLOT(slotPopupAboutToHide()));
-  }
 
   return popup;
 }
@@ -511,81 +484,6 @@ bool PartController::closeDocuments(const QStringList &documents)
 }
 
 
-void PartController::slotPopupAboutToShow()
-{
-  QPopupMenu *popup = (QPopupMenu*)sender();
-  if (!popup)
-    return;
-
-  // ugly hack: mark the "original" items 
-  m_popupIds.resize(popup->count());
-  for (uint index=0; index < popup->count(); ++index)
-    m_popupIds[index] = popup->idAt(index);
-  
-  // first fill the menu in the file context
-
-  if (!activePart())
-    return;
-
-  KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(activePart());
-  if (ro_part)
-  {
-    FileContext context(ro_part->url().path());
-    Core::getInstance()->fillContextMenu(popup, &context);
-  }
-  
-  // second, fill the menu in the editor context
-
-  if (!activePart()->widget())
-    return;
-
-  KTextEditor::ViewCursorInterface *cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(activePart()->widget());
-  KTextEditor::EditInterface *editIface = dynamic_cast<KTextEditor::EditInterface*>(activePart());
-
-  if (!cursorIface || !editIface || !ro_part)
-  {
-    Core::getInstance()->fillContextMenu(popup, 0);
-  }
-  else
-  {
-    uint line, col;
-    cursorIface->cursorPosition(&line, &col);
-    EditorContext context(ro_part->url(), line, editIface->textLine(line), col);
-    Core::getInstance()->fillContextMenu(popup, &context);
-  }
-}
-
-
-void PartController::slotPopupAboutToHide()
-{
-  m_popup = (QPopupMenu*)sender();
-
-  QTimer::singleShot(0, this, SLOT(slotDeletePopup()));
-}
-
-
-void PartController::slotDeletePopup()
-{
-  if (!m_popup)
-    return;
-
-  // ugly hack: remove all but the "original" items
-  for (int index=m_popup->count()-1; index >= 0; --index)
-  {
-    int id = m_popup->idAt(index);
-    if (m_popupIds.contains(id) == 0)
-    {
-      QMenuItem *item = m_popup->findItem(id);
-      if (item->popup())
-	delete item->popup();
-      m_popup->removeItemAt(index);
-    }
-  }
-
-  m_popup = 0;
-}
-
-
 bool PartController::readyToClose()
 {
   QPtrListIterator<PartListEntry> it(m_partList);
@@ -616,21 +514,7 @@ bool PartController::readyToClose()
 
 void PartController::clearExecutionPoint()
 {
-  // remove the execution point mark from all other documents
-  QPtrListIterator<PartListEntry> it(m_partList);
-  for ( ; it.current(); ++it)
-  {
-    KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(it.current()->part());
-    if (!iface)
-      continue;
-
-    for (KTextEditor::Mark *mark = iface->marks().first(); mark != 0; mark = iface->marks().next())
-      if (mark->type == KTextEditor::MarkInterface::markType05)
-      {
-	kdDebug(9000) << "removing mark in line " << mark->line << " from: " << ((KParts::ReadOnlyPart*)it.current()->part())->url().url() << endl;
-	iface->removeMark(mark->line, mark->type);
-      }
-  }
+  EditorProxy::getInstance()->clearExecutionPoint();
 }
 
 
@@ -643,16 +527,8 @@ void PartController::gotoExecutionPoint(const KURL &url, int lineNum)
   KParts::Part *part = partForURL(url);
   if (!part)
     return;
- 
-  clearExecutionPoint();
 
-  // set the mark to the right file
-  KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(part);
-  if (iface)
-  {
-    kdDebug(9000) << "set execution point to " << lineNum << endl;
-    iface->setMark(lineNum, KTextEditor::MarkInterface::markType05);
-  }
+  EditorProxy::getInstance()->setExecutionPoint(part, lineNum);
 }
 
 
