@@ -34,7 +34,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( "kdev%{APPNA
 		this, SLOT(projectConfigWidget(KDialogBase*)) );
 	connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
 	connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-	connect( partController(), SIGNAL(savedFile(const QString&)), this, SLOT(savedFile(const QString&)) );
+	connect( partController(), SIGNAL(savedFile(const KURL&)), this, SLOT(savedFile(const KURL&)) );
 	connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
 		this, SLOT(slotActivePartChanged(KParts::Part *)));
 }
@@ -85,14 +85,14 @@ void %{APPNAME}Part::projectClosed()
 {
 
 }
-void %{APPNAME}Part::savedFile(const QString &fileName)
+void %{APPNAME}Part::savedFile(const KURL &fileName)
 {
 
 
-	if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 )))
+	if (project()->allFiles().contains(fileName.path().mid ( project()->projectDirectory().length() + 1 )))
 	{
-		kdDebug(9014) << "parse file " << fileName << endl;
-		emit addedSourceInfo( fileName );
+		kdDebug(9014) << "parse file " << fileName.path() << endl;
+		emit addedSourceInfo( fileName.path() );
 	}
 }
 void %{APPNAME}Part::addedFilesToProject(const QStringList &fileList)
