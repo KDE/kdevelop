@@ -56,7 +56,6 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     QLabel *label = new QLabel(i18n("E&xpression to watch:"), this);
 
     QHBox *watchEntry = new QHBox( this );
-
     watchVarEditor_ = new KHistoryCombo( watchEntry, "var-to-watch editor");
     label->setBuddy(watchVarEditor_);
 
@@ -65,8 +64,6 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
     addButton->setFixedWidth(addButton->width());
 
     QBoxLayout * vbox = new QVBoxLayout();
-
-
     vbox->addWidget( label );
     vbox->addWidget( watchEntry );
 
@@ -76,7 +73,6 @@ VariableWidget::VariableWidget(QWidget *parent, const char *name)
 
     connect( addButton, SIGNAL(clicked()), SLOT(slotAddWatchExpression()) );
     connect( watchVarEditor_, SIGNAL(returnPressed()), SLOT(slotAddWatchExpression()) );
-
 }
 
 
@@ -93,10 +89,8 @@ void VariableWidget::setEnabled(bool bEnabled)
 
 void VariableWidget::slotAddWatchExpression()
 {
-//    QString watchVar(watchVarEntry_->text());
     QString watchVar(watchVarEditor_->currentText());
-    if (!watchVar.isEmpty())
-    {
+    if (!watchVar.isEmpty()) {
         slotAddWatchExpression(watchVar);
     }
 }
@@ -105,8 +99,7 @@ void VariableWidget::slotAddWatchExpression()
 
 void VariableWidget::slotAddWatchExpression(const QString &ident)
 {
-    if (!ident.isEmpty())
-    {
+    if (!ident.isEmpty()) {
         watchVarEditor_->addToHistory(ident);
         varTree_->slotAddWatchExpression(ident);
         watchVarEditor_->clearEdit();
@@ -136,7 +129,7 @@ VariableTree::VariableTree(VariableWidget *parent, const char *name)
     setRootIsDecorated(true);
     setAllColumnsShowFocus(true);
     setColumnWidthMode(0, Manual);
-    setSorting(VarNameCol);
+    setSorting(VAR_NAME_COLUMN);
     QListView::setSelectionMode(QListView::Single);
 
     addColumn(i18n("Variable"), 100 );
@@ -183,7 +176,7 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
     if (item->parent() != 0) {
         KPopupMenu popup(this);
-        popup.insertTitle(item->text(VarNameCol));
+        popup.insertTitle(item->text(VAR_NAME_COLUMN));
         int idRemoveWatch = -2;
         if (item->rtti() == RTTI_WATCH_VAR_ITEM) {
             idRemoveWatch = popup.insertItem( i18n("Remove Watch Expression") );
@@ -197,9 +190,9 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
             delete item;
         } else if (res == idCopyToClipboard) {
             QClipboard *qb = KApplication::clipboard();
-            QString text = "{ \"" + item->text( VarNameCol ) + "\", " +
-                            "\"" + item->text( ValueCol ) + "\", " +
-                            "\"" + item->text( VarTypeCol ) + "\" }";
+            QString text = "{ \"" + item->text( VAR_NAME_COLUMN ) + "\", " +
+                            "\"" + item->text( VALUE_COLUMN ) + "\", " +
+                            "\"" + item->text( VAR_TYPE_COLUMN ) + "\" }";
 
 #if KDE_VERSION > 305
             qb->setText( text, QClipboard::Clipboard );
@@ -214,39 +207,16 @@ void VariableTree::slotContextMenu(KListView *, QListViewItem *item)
 
 void VariableTree::slotAddWatchExpression(const QString &watchVar)
 {
-    new WatchVarItem(watchRoot(), watchVar, typeUnknown);
+    new WatchVarItem(watchRoot(), watchVar, UNKNOWN_TYPE);
 	emit addWatchExpression(watchVar, true);
 }
 
 
-
 // **************************************************************************
 
-void VariableTree::setLocalViewState(bool localsOn, int frameNo, int threadNo)
+void VariableTree::setFetchGlobals(bool fetch)
 {
-    // When they want to _close_ a frame then we need to check the state of
-    // all other frames to determine whether we still need the locals.
-    if (!localsOn) {
-        QListViewItem *sibling = firstChild();
-        while (sibling != 0) {
-			if (sibling->rtti() == RTTI_VAR_FRAME_ROOT && ((VarFrameRoot*) sibling)->isOpen()) {
-                localsOn = true;
-                break;
-            }
-
-            sibling = sibling->nextSibling();
-        }
-    }
-
-    emit localViewState(localsOn);
-    emit selectFrame(frameNo, threadNo);
-}
-
-// **************************************************************************
-
-void VariableTree::setGlobalViewState(bool globalsOn)
-{
-	emit globalViewState(globalsOn);
+	emit fetchGlobals(fetch);
 }
 
 // **************************************************************************
@@ -296,7 +266,7 @@ void VariableTree::resetWatchVars()
 {
 	for (QListViewItem *child = watchRoot()->firstChild(); child != 0; child = child->nextSibling()) {
 		((WatchVarItem*) child)->setDisplayId(-1);
-        emit addWatchExpression(child->text(VarNameCol), false);
+        emit addWatchExpression(child->text(VAR_NAME_COLUMN), false);
 	}
 }
 
@@ -306,7 +276,7 @@ void VariableTree::resetWatchVars()
 
 void VariableTree::trim()
 {
-    QListViewItem *child = firstChild();
+	QListViewItem *child = firstChild();
 
     while (child != 0) {
         QListViewItem *nextChild = child->nextSibling();
@@ -328,7 +298,7 @@ void VariableTree::trim()
 
 void VariableTree::trimExcessFrames()
 {
-    viewport()->setUpdatesEnabled(false);
+	viewport()->setUpdatesEnabled(false);
     QListViewItem *child = firstChild();
 
     while (child != 0) {
@@ -351,12 +321,12 @@ void VariableTree::trimExcessFrames()
 
 void VariableTree::maybeTip(const QPoint &p)
 {
-    VarItem * item = dynamic_cast<VarItem*>( itemAt( p ) );
-    if ( item )
-    {
-        QRect r = itemRect( item );
-        if ( r.isValid() )
-            tip( r, item->tipText() );
+    VarItem * item = dynamic_cast<VarItem*>( itemAt(p) );
+    if (item != 0) {
+        QRect r = itemRect(item);
+        if (r.isValid()) {
+            tip(r, item->tipText());
+		}
     }
 }
 
@@ -367,7 +337,8 @@ void VariableTree::maybeTip(const QPoint &p)
 
 LazyFetchItem::LazyFetchItem(VariableTree *parent)
     : KListViewItem(parent),
-      activationId_(0)
+      activationId_(0),
+	  waitingForData_(false)
 {
     setActivationId();
 }
@@ -393,11 +364,12 @@ LazyFetchItem::~LazyFetchItem()
 void LazyFetchItem::paintCell(QPainter *p, const QColorGroup &cg,
                               int column, int width, int align)
 {
-    if (p == 0)
+    if (p == 0) {
         return;
+	}
+	
     // make toplevel item (watch and frame items) names bold
-    if (column == VarNameCol && parent() == 0)
-    {
+    if (column == VAR_NAME_COLUMN && parent() == 0) {
         QFont f = p->font();
         f.setBold(true);
         p->setFont(f);
@@ -413,7 +385,7 @@ VarItem *LazyFetchItem::findItemWithName(const QString &name) const
 
     // Check the siblings on this branch
     while (child != 0) {
-		if (child->text(VarNameCol) == name) {
+		if (child->text(VAR_NAME_COLUMN) == name) {
 			return (VarItem*) child;
 		}
 
@@ -430,17 +402,16 @@ void LazyFetchItem::trim()
     QListViewItem *child = firstChild();
 
     while (child != 0) {
-        QListViewItem *nextChild = child->nextSibling();
         LazyFetchItem *item = (LazyFetchItem*) child;
+        child = child->nextSibling();
 		// Never trim a branch if we are waiting on data to arrive.
 		if (!waitingForData_) {
 			if (item->isActive()) {
-				item->trim();
+ 				item->trim();
 			} else {
 				delete item;
 			}
         }
-        child = nextChild;
     }
 }
 
@@ -455,18 +426,26 @@ VarItem::VarItem(LazyFetchItem *parent, const QString &varName, DataType dataTyp
       dataType_(dataType),
       highlight_(false)
 {
-    setText(VarNameCol, varName);
-
-    kdDebug(9012) << " ### VarItem::VarItem *CONSTR* " << varName << endl;
+    setText(VAR_NAME_COLUMN, varName);
 	
-	// Get the type of the variable, unless it's a Watch expression
-	if (parent->rtti() != RTTI_WATCH_ROOT) {
-		// This gets the type of an item by sending a 'p <itemname>.class'
-		// expression to the debugger. It isn't used at present because
-		// the type column is derived from the value column in
-		// VarItem::updateType()
-//    	emit ((VariableTree*)listView())->varItemConstructed(this);
+	// Order the VarItems so that globals are first, then
+	// class variables, instance variables and finally local
+	// variables
+	QRegExp arrayelement_re("\\[(\\d+)\\]");
+	key_ = varName;
+	if (arrayelement_re.search(varName) != -1) {
+		key_.sprintf("%.6d", arrayelement_re.cap(1).toInt());
+	} else if (key_.startsWith("$")) {
+		key_.prepend("1001");
+	} else if (key_.startsWith("@@")) {
+		key_.prepend("1002");
+	} else if (key_.startsWith("@")) {
+		key_.prepend("1003");
+	} else {
+		key_.prepend("1004");
 	}
+
+    kdDebug(9012) << " ### VarItem::VarItem *CONSTR* " << varName << endl;	
 }
 
 // **************************************************************************
@@ -475,25 +454,9 @@ VarItem::~VarItem()
 {
 }
 
-// Order the VarItems so that globals are first, then
-// class variables, instance variables and finally local
-// variables
 QString VarItem::key(int /*column*/, bool /*ascending*/) const 
 {
-	QString key_ = text(VarNameCol);
-	QRegExp arrayelement_re("\\[(\\d+)\\]");
-	
-	if (arrayelement_re.search(key_) != -1) {
-		return key_.sprintf("%.6d", arrayelement_re.cap(1).toInt());
-	} else if (key_.startsWith("$")) {
-		return key_.prepend("1001");
-	} else if (key_.startsWith("@@")) {
-		return key_.prepend("1002");
-	} else if (key_.startsWith("@")) {
-		return key_.prepend("1003");
-	} else {
-		return key_.prepend("1004");
-	}
+	return key_;
 }
 
 // **************************************************************************
@@ -505,7 +468,7 @@ QString VarItem::key(int /*column*/, bool /*ascending*/) const
 // and leave a plain '@foobar' as it is.
 QString VarItem::fullName() const
 {
-	QString itemName = text(VarNameCol);
+	QString itemName = text(VAR_NAME_COLUMN);
     QString vPath("");
     const VarItem *item = this;
 
@@ -515,7 +478,7 @@ QString VarItem::fullName() const
 
     // This stops at the root item (FrameRoot or GlobalRoot)
 	while (item->rtti() == RTTI_VAR_ITEM) {
-		QString itemName = item->text(VarNameCol);
+		QString itemName = item->text(VAR_NAME_COLUMN);
 		
 		if (vPath.startsWith("[")) {
 			// If it's a Hash or an Array, then just insert the value. As
@@ -540,15 +503,14 @@ QString VarItem::fullName() const
 
 void VarItem::setText(int column, const QString &data)
 {
-    setActivationId();
+	setActivationId();
 	
-    if (column == ValueCol) {
-		QListViewItem::setText(VarTypeCol, typeFromValue(data));
-		highlight_ = (!text(ValueCol).isEmpty() && text(ValueCol) != data);
+    if (column == VALUE_COLUMN) {
+		QListViewItem::setText(VAR_TYPE_COLUMN, typeFromValue(data));
+		highlight_ = (!text(VALUE_COLUMN).isEmpty() && text(VALUE_COLUMN) != data);
     }
 
     QListViewItem::setText(column, data);
-	
     repaint();
 }
 
@@ -557,9 +519,7 @@ void VarItem::setText(int column, const QString &data)
 void VarItem::updateValue(char *buf)
 {
     LazyFetchItem::stopWaitingForData();
-
-    RDBParser::getRDBParser()->parseData(this, buf);
-    setActivationId();
+    RDBParser::parseExpandedVariable(this, buf);
 }
 
 // **************************************************************************
@@ -600,7 +560,6 @@ QString VarItem::typeFromValue(const QString& value)
 void VarItem::setCache(const QCString &value)
 {
 	cache_ = value;
-    setExpandable(true);
     checkForRequests();
     if (isOpen())
         setOpen(true);
@@ -611,10 +570,9 @@ void VarItem::setCache(const QCString &value)
 
 void VarItem::setOpen(bool open)
 {
-    if (open && cache_ != 0) {
-		QCString value = cache_;
+    if (open && cache_ != "") {
+		RDBParser::parseExpandedVariable(this, cache_.data());
 		cache_ = "";
-		RDBParser::getRDBParser()->parseData(this, value.data());
 		trim();
     }
 
@@ -632,15 +590,12 @@ QCString VarItem::cache()
 
 void VarItem::checkForRequests()
 {
-	// This shouldn't be needed to keep it from blowing up, but sometimes is.
-    // On the other hand, if it's empty, there is no reason to go on...
-    if ( cache_.isEmpty() ) return;
-
-    if (dataType_ == typeReference || dataType_ == typeArray || dataType_ == typeHash) {
+    if (dataType_ == REFERENCE_TYPE || dataType_ == ARRAY_TYPE || dataType_ == HASH_TYPE) {
         startWaitingForData();
         emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
     }
 
+	return;
 }
 
 // **************************************************************************
@@ -663,15 +618,19 @@ void VarItem::setDataType(DataType dataType)
 void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
                         int column, int width, int align)
 {
-    if ( !p )
+    if (p == 0) {
         return;
+	}
 
-    if (column == ValueCol && highlight_) {
+    if (column == VALUE_COLUMN && highlight_) {
         QColorGroup hl_cg( cg.foreground(), cg.background(), cg.light(),
                            cg.dark(), cg.mid(), red, cg.base());
         QListViewItem::paintCell( p, hl_cg, column, width, align );
-    } else
+    } else {
         QListViewItem::paintCell( p, cg, column, width, align );
+	}
+	
+	return;
 }
 
 // **************************************************************************
@@ -679,12 +638,13 @@ void VarItem::paintCell(QPainter *p, const QColorGroup &cg,
 QString VarItem::tipText() const
 {
     const unsigned int maxTooltipSize = 70;
-    QString tip = text( ValueCol );
+    QString tip = text(VALUE_COLUMN);
 
-    if (tip.length() < maxTooltipSize )
+    if (tip.length() < maxTooltipSize) {
 	    return tip;
-    else
+    } else {
 	    return tip.mid( 0, maxTooltipSize - 1 ) + " [...]";
+	}
 }
 
 // **************************************************************************
@@ -711,7 +671,6 @@ VarFrameRoot::~VarFrameRoot()
 
 void VarFrameRoot::addLocals(char *variables)
 {
-    setActivationId();
     cache_.append(variables);
 }
 
@@ -719,13 +678,14 @@ void VarFrameRoot::addLocals(char *variables)
 
 void VarFrameRoot::setLocals()
 {
-    setActivationId();
     setExpandable(!cache_.isEmpty());
+    RDBParser::parseVariables(this, cache_.data());
+	cache_ = "";
     needLocals_ = false;
+	stopWaitingForData();
+	trim();
 	
-    if (isOpen()) {
-        setOpen(true);
-	}
+	return;
 }
 
 // **************************************************************************
@@ -734,27 +694,24 @@ void VarFrameRoot::setLocals()
 // state.
 void VarFrameRoot::setOpen(bool open)
 {
-	bool localStateChange = (isOpen() != open);
+	bool localsViewChanged = (isOpen() != open);
     QListViewItem::setOpen(open);
 
-    if (localStateChange)
-        ((VariableTree*)listView())->setLocalViewState(open, frameNo_, threadNo_);
+    if (localsViewChanged) {
+		((VariableTree*)listView())->selectFrame(frameNo_, threadNo_);
+	}
 
-    if (!open)
-        return;
-
-    RDBParser::getRDBParser()->parseData(this, cache_.data());
-    cache_ = "";
+	return;
 }
 
 void VarFrameRoot::setFrameName(const QString &frameName)
 { 
-	if (text(VarNameCol) != frameName) {
-		cache_ = "";
-	}
+	cache_ = "";
+	setActivationId();
+	setText(VAR_NAME_COLUMN, frameName); 
+	setText(VALUE_COLUMN, "");
 	
-	setText(VarNameCol, frameName); 
-	setText(ValueCol, ""); 
+	return; 
 }
 
 // **************************************************************************
@@ -762,29 +719,6 @@ void VarFrameRoot::setFrameName(const QString &frameName)
 // **************************************************************************
 // **************************************************************************
 
-void GlobalRoot::setGlobals(char * globals)
-{
-    setActivationId();
-    RDBParser::getRDBParser()->parseData(this, globals);
-	
-	return;
-}
-
-// **************************************************************************
-
-void GlobalRoot::setOpen(bool open)
-{
-	bool globalStateChange = (isOpen() != open);
-	QListViewItem::setOpen(open);
-	
-	if (globalStateChange) {
-    	((VariableTree*)listView())->setGlobalViewState(open);
-	}
-	
-	return;
-}
-
-// **************************************************************************
 
 GlobalRoot::GlobalRoot(VariableTree *parent)
     : LazyFetchItem(parent)
@@ -798,6 +732,30 @@ GlobalRoot::GlobalRoot(VariableTree *parent)
 
 GlobalRoot::~GlobalRoot()
 {
+}
+
+// **************************************************************************
+
+void GlobalRoot::setGlobals(char * globals)
+{
+    setActivationId();
+    RDBParser::parseVariables(this, globals);
+	
+	return;
+}
+
+// **************************************************************************
+
+void GlobalRoot::setOpen(bool open)
+{
+	bool globalsViewChanged = (isOpen() != open);
+	QListViewItem::setOpen(open);
+	
+	if (globalsViewChanged) {
+    	((VariableTree*)listView())->setFetchGlobals(isOpen());
+	}
+	
+	return;
 }
 
 // **************************************************************************
@@ -839,7 +797,7 @@ int WatchVarItem::displayId()
 WatchRoot::WatchRoot(VariableTree *parent)
     : LazyFetchItem(parent)
 {
-    setText(VarNameCol, i18n("Watch"));
+    setText(VAR_NAME_COLUMN, i18n("Watch"));
     setOpen(true);
 }
 
@@ -858,16 +816,16 @@ void WatchRoot::setWatchExpression(char * buf, char * expression)
 	QString expr(expression);
 	QRegExp display_re("^(\\d+):\\s([^\n]+)\n");
 	
-    for (QListViewItem *child = firstChild(); child; child = child->nextSibling()) {
+    for (QListViewItem *child = firstChild(); child != 0; child = child->nextSibling()) {
         WatchVarItem *varItem = (WatchVarItem*) child;
-		if (	varItem->text(VarNameCol) == expr 
+		if (	varItem->text(VAR_NAME_COLUMN) == expr 
 				&& varItem->displayId() == -1
 				&& display_re.search(buf) >= 0 ) 
 		{
 			varItem->setDisplayId(display_re.cap(1).toInt());
 			// Skip over the 'thing = ' part of expr to get the value
-			varItem->setText(	ValueCol, 
-								display_re.cap(2).mid(varItem->text(VarNameCol).length() + strlen(" = ")) );
+			varItem->setText(	VALUE_COLUMN, 
+								display_re.cap(2).mid(varItem->text(VAR_NAME_COLUMN).length() + strlen(" = ")) );
 			return;
 		}
 	}
@@ -877,13 +835,13 @@ void WatchRoot::setWatchExpression(char * buf, char * expression)
 // expr is the thing = value part of "1: a = 1", id is the display number
 void WatchRoot::updateWatchExpression(int id, const QString& expr)
 {
-    for (QListViewItem *child = firstChild(); child; child = child->nextSibling()) {
+    for (QListViewItem *child = firstChild(); child != 0; child = child->nextSibling()) {
         WatchVarItem *varItem = (WatchVarItem*) child;
 		if (varItem->displayId() == id) {
-			Q_ASSERT( expr.startsWith(varItem->text(VarNameCol)) );
+			Q_ASSERT( expr.startsWith(varItem->text(VAR_NAME_COLUMN)) );
 			// Skip over the 'thing = ' part of expr to get the value
-			varItem->setText(	ValueCol, 
-								expr.mid(varItem->text(VarNameCol).length() + strlen(" = ")) );
+			varItem->setText(	VALUE_COLUMN, 
+								expr.mid(varItem->text(VAR_NAME_COLUMN).length() + strlen(" = ")) );
 			return;
 		}
 	}

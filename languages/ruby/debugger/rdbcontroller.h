@@ -75,9 +75,7 @@ private:
     void parseGlobals         (char *buf);
     void parseLocals          (char type, char *buf);
     void parseRequestedData   (char *buf);
-    void parseWhatis          (char *buf);
     void parseFrameSelected   (char *buf);
-    //  void parseFileStart       (char *buf);
 
     void parse                (char *buf);
 
@@ -119,13 +117,9 @@ public slots:
     void slotExpandItem(VarItem *parent, const QCString &userRequest);
     void slotRubyInspect(const QString &inspectText);
     void slotSelectFrame(int frameNo, int threadNo, bool needFrames);
-    void slotSetLocalViewState(bool onOff);
-    void slotSetGlobalViewState(bool onOff);
+    void slotFetchGlobals(bool fetch);
     void slotAddWatchExpression(const QString& expr, bool execute);
 	void slotRemoveWatchExpression(int displayId);
-
-    // type determination requires a var object, so we do it here
-    void slotVarItemConstructed(VarItem *item);
 
     void slotUserRDBCmd(const QString&);
 
@@ -168,7 +162,6 @@ private:
     QPtrList<DbgCommand> cmdList_;
     DbgCommand*       currentCmd_;
 	QString           currentPrompt_;
-	int               currentThread_;        // From the ruby debugger prompt '(rdb:nnn) '
 
     STTY*             tty_;
 	

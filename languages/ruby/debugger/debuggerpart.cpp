@@ -146,12 +146,6 @@ RubyDebuggerPart::RubyDebuggerPart( QObject *parent, const char *name, const QSt
                                   i18n("RDB output"));
     mainWindow()->setViewAvailable(rdbOutputWidget, false);
 
-    VariableTree *variableTree = variableWidget->varTree();
-
-    // variableTree -> framestackWidget
-    connect( variableTree,     SIGNAL(selectFrame(int, int)),
-             framestackWidget, SLOT(slotSelectFrame(int, int)));
-
     // rdbBreakpointWidget -> this
     connect( rdbBreakpointWidget, SIGNAL(refreshBPState(const Breakpoint&)),
              this,             SLOT(slotRefreshBPState(const Breakpoint&)));
@@ -290,8 +284,6 @@ RubyDebuggerPart::~RubyDebuggerPart()
     delete floatingToolBar;
     delete statusBarIndicator;
     delete procLineMaker;
-
-    RDBParser::destroy();
 }
 
 
@@ -367,24 +359,20 @@ void RubyDebuggerPart::setupController()
     // this -> controller
     connect( this,                  SIGNAL(rubyInspect(const QString&)),
              controller,            SLOT(slotRubyInspect(const QString&)));
+
+    // variableTree -> framestackWidget
+    connect( variableTree,          SIGNAL(selectFrame(int, int)),
+             framestackWidget,      SLOT(slotSelectFrame(int, int)));
 	
     // variableTree -> controller
     connect( variableTree,          SIGNAL(expandItem(VarItem*, const QCString&)),
              controller,            SLOT(slotExpandItem(VarItem*, const QCString&)));
-    connect( variableTree,          SIGNAL(localViewState(bool)),
-             controller,            SLOT(slotSetLocalViewState(bool)));
-    connect( variableTree,          SIGNAL(globalViewState(bool)),
-             controller,            SLOT(slotSetGlobalViewState(bool)));
-    connect( variableTree,          SIGNAL(varItemConstructed(VarItem*)),
-             controller,            SLOT(slotVarItemConstructed(VarItem*)));
+    connect( variableTree,          SIGNAL(fetchGlobals(bool)),
+             controller,            SLOT(slotFetchGlobals(bool)));
     connect( variableTree,          SIGNAL(addWatchExpression(const QString&, bool)),
              controller,            SLOT(slotAddWatchExpression(const QString&, bool)));  
     connect( variableTree,          SIGNAL(removeWatchExpression(int)),
              controller,            SLOT(slotRemoveWatchExpression(int)));  
-
-    // variableTree -> rdbBreakpointWidget
-//    connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
-//             rdbBreakpointWidget,   SLOT(slotToggleWatchpoint(const QString &)));
     
     // framestackWidget -> controller
     connect( framestackWidget,      SIGNAL(selectFrame(int,int,bool)),

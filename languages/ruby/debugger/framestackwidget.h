@@ -25,6 +25,8 @@
 #include <qlistview.h>
 #include <qstringlist.h>
 
+#include "rdbcontroller.h"
+
 namespace RDBDebugger
 {
 
@@ -34,16 +36,17 @@ class FramestackWidget;
 class ThreadStackItem : public QListViewItem
 {
 public:
-    ThreadStackItem(FramestackWidget *parent, const QString &threadDesc);
+    ThreadStackItem(FramestackWidget *parent, int threadNo, const QString &threadDesc);
     virtual ~ThreadStackItem();
 
-    void setOpen(bool open);
+	virtual int rtti() const { return RTTI_THREAD_STACK_ITEM; }
+    
+	void setOpen(bool open);
 
-    int threadNo()
-    { return threadNo_; }
+    int threadNo() { return threadNo_; }
 
 private:
-  int threadNo_;
+	int threadNo_;
 };
 
 /***************************************************************************/
@@ -53,19 +56,21 @@ private:
 class FrameStackItem : public QListViewItem
 {
 public:
-    FrameStackItem(FramestackWidget *parent, const QString &frameDesc);
-    FrameStackItem(ThreadStackItem *parent, const QString &frameDesc);
+    FrameStackItem(ThreadStackItem * parent, int frameNo, const QString & frameDesc, const QString & frameName);
     virtual ~FrameStackItem();
 
-    void setOpen(bool open);
+	virtual int rtti() const { return RTTI_FRAME_STACK_ITEM; }
+    
+	void setOpen(bool open);
 
-    int frameNo()
-    { return frameNo_; }
-    int threadNo()
-    { return threadNo_; }
+    int frameNo() { return frameNo_; }
+    int threadNo() { return threadNo_; }
+	QString frameName() { return frameName_; }
+	
 private:
     int frameNo_;
     int threadNo_;
+	QString frameName_;
 };
 
 /***************************************************************************/
@@ -91,8 +96,6 @@ public:
     ThreadStackItem *findThread(int threadNo);
     FrameStackItem *findFrame(int frameNo, int threadNo);
 
-    QString getFrameName(int frameNo, int threadNo);
-
     int viewedThread()
     { return viewedThread_ ? viewedThread_->threadNo() : -1; }
 
@@ -103,13 +106,7 @@ public slots:
 signals:
     void selectFrame(int frameNo, int threadNo, bool needFrames);
 
-#if QT_VERSION < 300
 private:
-  QListViewItem* findItemWhichBeginsWith(const QString& text) const;
-#endif
-
-private:
-
     ThreadStackItem *viewedThread_;
 };
 

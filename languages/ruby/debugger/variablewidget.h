@@ -44,20 +44,19 @@ class VariableTree;
 class DbgController;
 class Breakpoint;
 
-enum { VarNameCol = 0, ValueCol = 1, VarTypeCol = 2};
-enum DataType { typeUnknown, typeValue, typeReference,
-                typeArray, typeHash, typeWhitespace,
-                typeName };
-				
-enum RttiValues { 
-	RTTI_WATCH_ROOT			= 1001, 
-	RTTI_GLOBAL_ROOT		= 1002, 
-	RTTI_VAR_FRAME_ROOT		= 1003, 
-	RTTI_LAZY_FETCH_ITEM 	= 1004,
-	RTTI_VAR_ITEM			= 1005,
-	RTTI_WATCH_VAR_ITEM		= 1006
-}; 
-		   
+enum { 
+	VAR_NAME_COLUMN = 0, 
+	VALUE_COLUMN = 1, 
+	VAR_TYPE_COLUMN = 2
+};
+
+enum DataType { 
+	UNKNOWN_TYPE, 
+	VALUE_TYPE, 
+	REFERENCE_TYPE,
+	ARRAY_TYPE, 
+	HASH_TYPE
+};		   
 
 class VariableWidget : public QWidget
 {
@@ -116,25 +115,21 @@ public:
     // Remove items that are not active
     void trim();
     void trimExcessFrames();
-    void setLocalViewState(bool localsOn, int frameNo, int threadNo);
-    void setGlobalViewState(bool globalsOn);
+    void setFetchGlobals(bool fetch);
 
 	// (from QToolTip) Display a tooltip when the cursor is over an item
 	virtual void maybeTip(const QPoint &);
 
 signals:
     void toggleWatchpoint(const QString &varName);
-    void selectFrame(int frameNo, int threadNo);
+    void selectFrame(int frame, int thread);
     void expandItem(VarItem *item, const QCString &request);
-    void localViewState(bool localsOn);
-    void globalViewState(bool globalsOn);
+    void fetchGlobals(bool fetch);
     void addWatchExpression(const QString& expr, bool execute);
     void removeWatchExpression(int displayId);
-    void varItemConstructed(VarItem *item);
 
 public slots:
     void slotAddWatchExpression(const QString& watchVar);
-
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
@@ -169,14 +164,14 @@ public:
     virtual VarItem *findItemWithName(const QString& name) const;
     
 	int  currentActivationId() const        { return ((VariableTree*) listView())->activationId(); }
-	void setActivationId()                  { activationId_ = currentActivationId(); }
+	virtual void setActivationId()          { activationId_ = currentActivationId(); }
     bool isActive() const                   { return activationId_ == currentActivationId(); }
     
-	void startWaitingForData ()             { waitingForData_ = true; }
-    virtual void stopWaitingForData()       { waitingForData_ = false; }
+	void startWaitingForData()              { waitingForData_ = true; }
+    void stopWaitingForData()               { waitingForData_ = false; }
+    bool isWaitingForData() const           {  return waitingForData_; }
 
 protected:
-
     void paintCell( QPainter *p, const QColorGroup &cg,
                     int column, int width, int align );
 
@@ -223,6 +218,7 @@ private:
                     int column, int width, int align );
 
 private:
+	QString   key_;
     QCString  cache_;
     DataType  dataType_;
     bool      highlight_;
@@ -256,7 +252,7 @@ private:
 class VarFrameRoot : public LazyFetchItem
 {
 public:
-    VarFrameRoot(VariableTree *parent, int frameNo, int threadNo);
+    VarFrameRoot(VariableTree *parent, int frame, int thread);
     virtual ~VarFrameRoot();
 	
 	virtual int rtti() const { return RTTI_VAR_FRAME_ROOT; }
@@ -271,7 +267,14 @@ public:
 
     void setFrameName(const QString &frameName);
 
-    bool needLocals() const                     { return needLocals_; }
+	virtual void setActivationId() { 
+		LazyFetchItem::setActivationId(); 
+		needLocals_ = true;
+	} 
+	
+    bool needLocals() const { 
+		return isOpen() && !isWaitingForData() && needLocals_; 
+	}
 	
 	int frameNo() { return frameNo_; }
 	int threadNo() { return threadNo_; }
@@ -290,7 +293,7 @@ private:
 class WatchRoot : public LazyFetchItem
 {
 public:
-    WatchRoot(VariableTree *parent);
+    WatchRoot(VariableTree * parent);
     virtual ~WatchRoot();
 	
 	virtual int rtti() const { return RTTI_WATCH_ROOT; }
@@ -310,7 +313,7 @@ public:
 class GlobalRoot : public LazyFetchItem
 {
 public:
-    GlobalRoot(VariableTree *parent);
+    GlobalRoot(VariableTree * parent);
     virtual ~GlobalRoot();
 	
 	virtual int rtti() const { return RTTI_GLOBAL_ROOT; }
@@ -320,7 +323,7 @@ public:
 	}
 	
     void setOpen(bool open);
-    void setGlobals(char *globals);
+    void setGlobals(char * globals);
 };
 
 /***************************************************************************/

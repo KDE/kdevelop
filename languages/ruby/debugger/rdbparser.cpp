@@ -31,49 +31,15 @@
 namespace RDBDebugger
 {
 
-// **************************************************************************
-// **************************************************************************
-// **************************************************************************
-
-RDBParser *RDBParser::RDBParser_ = 0;
-
-RDBParser *RDBParser::getRDBParser()
-{
-  if (!RDBParser_)
-    RDBParser_ = new RDBParser();
-
-  return RDBParser_;
-}
 
 // **************************************************************************
 
-void RDBParser::destroy()
-{
-    delete RDBParser_;
-    RDBParser_ = 0;
-}
-
-// **************************************************************************
-
-RDBParser::RDBParser()
-{
-}
-
-// **************************************************************************
-
-RDBParser::~RDBParser()
-{
-}
-
-// **************************************************************************
-
-void RDBParser::parseData(LazyFetchItem *parent, char *buf)
+void RDBParser::parseVariables(LazyFetchItem *parent, char *buf)
 {
     static const char *unknown = "?";
 	
 	QString		varName;
 	QCString	value;
-	DataType	dataType;
 	int			pos;
 
     Q_ASSERT(parent);
@@ -85,7 +51,7 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
         buf = (char*)unknown;
 	}
 		
-	QRegExp var_re("\\s*([^\\n\\s]+) => ([^\\n]+)\\n");
+	QRegExp var_re("\\s*([^\\n\\s]+) => ([^\\n]+)");
 	QRegExp ref_re("(#<[^:]+:0x[\\da-f]+)\\s*([^=]*)>?");
 	
 	// Look for 'dataitem => value' pairs. For example:
@@ -102,7 +68,7 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 				value = var_re.cap(2).latin1();
 			}
 			
-	        DataType dataType = determineType(value.data());
+	        DataType dataType = determineType((char *) var_re.cap(2).latin1());
 			setItem(parent, varName, dataType, value);
 			
 			pos  += var_re.matchedLength();
@@ -111,6 +77,14 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 
 		return;
 	}
+}
+
+void RDBParser::parseExpandedVariable(LazyFetchItem *parent, char *buf)
+{
+	DataType	dataType;
+	int			pos;
+	QString		varName;
+	QCString	value;
 	
 	// Look for a reference type which has been printed via a 'pp' command, to
 	// expand its sub items. For example:
@@ -124,14 +98,14 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 	
 	pos = ppref_re.search(buf);
 	if (pos != -1) {
-		if (ppref_re.cap(3) != "" && ppvalue_re.search(ppref_re.cap(2)) != -1) {
+		if (ppref_re.cap(3) != "" && ppvalue_re.search(ppref_re.cap(0)) != -1) {
 			// The line ends with a '>', but we have this case now..
 			// If there is only one instance variable, pp puts everything
 			// on a single line:
 			//     #<MyClass:0x30094b90 @foobar="hello">
-			// So strip out '@foobar="hello"' from the name, and use it as
-			// the first name=value pair
-			parent->setText(ValueCol, ppref_re.cap(1) + ">");
+			// So search for '@foobar="hello"', to use as the
+			// first name=value pair
+			parent->setText(VALUE_COLUMN, ppref_re.cap(1) + ">");
 			pos = 0;
 		} else {
 			// Either a single line like:
@@ -139,13 +113,8 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 			// Or on multiple lines with name=value pairs:
 			//     #<MyClass:0x30093540
  			//		@foobar="hello",
-			parent->setText(ValueCol, QString("%1%2>").arg(ppref_re.cap(1)).arg(ppref_re.cap(2)));
+			parent->setText(VALUE_COLUMN, QString("%1%2>").arg(ppref_re.cap(1)).arg(ppref_re.cap(2)));
 			pos = ppvalue_re.search(buf, pos);
-			
-			// If there are no name=value pairs, then make the item non-expandable
-			if (pos == -1) {
-				parent->setExpandable(false);
-			}
 		}
 				
 		while (pos != -1) {
@@ -172,7 +141,7 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 	
 	pos = array_re.search(buf);
 	if (pos != -1) {
-		parent->setText(ValueCol, array_re.cap(1));
+		parent->setText(VALUE_COLUMN, array_re.cap(1));
 		pos  += array_re.matchedLength();
 		pos = pparray_re.search(buf, pos);
 		
@@ -185,6 +154,8 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 			pos += pparray_re.matchedLength();
 			pos = pparray_re.search(buf, pos);
 		}
+		
+		return;
 	}
 	
 	// Look for a hash type which has been printed via a 'pp' command, to
@@ -198,7 +169,7 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 	
 	pos = hash_re.search(buf);
 	if (pos != -1) {
-		parent->setText(ValueCol, hash_re.cap(1));
+		parent->setText(VALUE_COLUMN, hash_re.cap(1));
 		pos  += hash_re.matchedLength();
 		pos = pphash_re.search(buf, pos);
 		
@@ -211,7 +182,11 @@ void RDBParser::parseData(LazyFetchItem *parent, char *buf)
 			pos += pphash_re.matchedLength();
 			pos = pphash_re.search(buf, pos);
 		}
+		
+		return;
 	}
+	
+	return;
 }
 
 
@@ -229,22 +204,21 @@ void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
 	}
 
     switch (dataType) {
-    case typeHash:
-    case typeArray:
+    case HASH_TYPE:
+    case ARRAY_TYPE:
 		// Don't set the name in the value column yet, as it gets
 		// set when the pp command returns with the array or hash
 		// expansion
-        item->setText(ValueCol, "");
-        item->setCache(value);
+        item->setCache("");
         break;
 
-    case typeReference:
-        item->setText(ValueCol, "");
-        item->setCache(value);
+    case REFERENCE_TYPE:
+        item->setCache("");
         break;
 
-    case typeValue:
-        item->setText(ValueCol, value);
+    case VALUE_TYPE:
+        item->setText(VALUE_COLUMN, value);
+		item->setExpandable(false);
         break;
 
     default:
@@ -254,19 +228,22 @@ void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
 
 // **************************************************************************
 
-DataType RDBParser::determineType(char *buf) const
+DataType RDBParser::determineType(char *buf)
 {
-	if (qstrncmp(buf, "#<", strlen("#<")) == 0) {
-		return typeReference;
+	if (qstrncmp(buf, "#<", strlen("#<")) == 0 && strstr(buf, "=") != 0) {
+		// An object instance reference is only expandable and a 'REFERENCE_TYPE'
+		// if it contains an '=' (ie it has at least one '@instance_variable=value').
+		// Otherwise, treat it as a 'VALUE_TYPE'.
+		return REFERENCE_TYPE;
 	} else if (qstrncmp(buf, "[", strlen("[")) == 0) {
-		return typeArray;
+		return ARRAY_TYPE;
 	} else if (qstrncmp(buf, "{", strlen("{")) == 0) {
-		return typeHash;
+		return HASH_TYPE;
 	} else if (qstrncmp(buf, "nil", strlen("nil")) == 0) {
-//		return typeUnknown;
-		return typeValue;
+//		return UNKNOWN_TYPE;
+		return VALUE_TYPE;
 	} else {
-		return typeValue;
+		return VALUE_TYPE;
 	}
 }
 

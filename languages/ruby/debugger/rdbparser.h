@@ -27,24 +27,14 @@
 namespace RDBDebugger
 {
 
-class RDBParser
+namespace RDBParser
 {
-public:
-    void parseData(LazyFetchItem *parent, char *buf);
-    DataType determineType(char *buf) const;
-
-    static RDBParser *getRDBParser();
-    static void destroy();
-
-private:
+    void parseVariables(LazyFetchItem *parent, char *buf);
+    void parseExpandedVariable(LazyFetchItem *parent, char *buf);
+    DataType determineType(char *buf);
     void setItem(	LazyFetchItem *parent, const QString &varName, 
 					DataType dataType, const QCString &value );
-
-protected:
-    RDBParser();
-    ~RDBParser();
-    static RDBParser *RDBParser_;
-};
+}
 
 }
 

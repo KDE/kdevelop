@@ -105,7 +105,6 @@ RDBController::RDBController(VariableTree *varTree, FramestackWidget *frameStack
 		socketNotifier_(0),
         currentCmd_(0),
 		currentPrompt_("(rdb:1) "),
-		currentThread_(1),
         tty_(0),
         state_(s_dbgNotStarted|s_appNotStarted|s_silent),
         programHasExited_(false),
@@ -158,29 +157,6 @@ RDBController::~RDBController()
 
 void RDBController::configure()
 {    
-   
-/*
-    if ((old_breakOnLoadingLibrary_  != config_breakOnLoadingLibrary_  )           &&
-            dbgProcess_)
-    {
-        bool restart = false;
-        if (stateIsOn(s_appBusy))
-        {
-            setStateOn(s_silent);
-            pauseApp();
-            restart = true;
-        }
-
- 
- 
-        
-        if (!config_rubyInterpreter.isEmpty())
-          queueCmd(new RDBCommand("source " + config_rubyInterpreter, NOTRUNCMD, NOTINFOCMD, 0));
-
-        if (restart)
-            queueCmd(new RDBCommand("cont", RUNCMD, NOTINFOCMD));
-    }
-*/
 }
 
 // **************************************************************************
@@ -202,8 +178,6 @@ void RDBController::queueCmd(DbgCommand *cmd, bool executeNext)
         cmdList_.insert(0, cmd);
     else
         cmdList_.append (cmd);
-
-//    executeCmd();
 }
 
 // **************************************************************************
@@ -218,19 +192,16 @@ void RDBController::executeCmd()
     if (stateIsOn(s_dbgNotStarted|s_waitForWrite|s_appBusy|s_shuttingDown) || !dbgProcess_)
         return;
 
-    if (!currentCmd_)
-    {
+    if (currentCmd_ == 0) {
         if (cmdList_.isEmpty())
             return;
 
         currentCmd_ = cmdList_.take(0);
     }
 
-    if (!currentCmd_->moreToSend())
-    {
+    if (!currentCmd_->moreToSend()) {
         delete currentCmd_;
-        if (cmdList_.isEmpty())
-        {
+        if (cmdList_.isEmpty()) {
             currentCmd_ = 0;
             return;
         }
@@ -248,8 +219,7 @@ void RDBController::executeCmd()
 		ptr += bytesWritten;
 	}
 	
-    if (currentCmd_->isARunCmd())
-    {
+    if (currentCmd_->isARunCmd()) {
         setStateOn(s_appBusy);
         kdDebug(9012) << "App is busy" << endl;
         setStateOff(s_appNotStarted|s_programExited|s_silent);
@@ -329,27 +299,17 @@ void RDBController::actOnProgramPause(const QString &msg)
 
         // We're always at frame one when the program stops
         // and we must reset the active flag
-        viewedThread_ = currentThread_;
         currentFrame_ = 1;
         varTree_->nextActivationId();
         backtraceDueToProgramStop_ = true;
         
-        // These two need to be actioned immediately. The order _is_ important
-//        if (stateIsOn(s_viewThreads))
 		queueCmd(new RDBCommand("where", NOTRUNCMD, INFOCMD), true);
         queueCmd(new RDBCommand("thread list", NOTRUNCMD, INFOCMD), true);
 		
 		if (stateIsOn(s_viewGlobals)) {
 			queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
 		}
-        
-		if (stateIsOn(s_viewLocals)) {
-//            queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
-            queueCmd(new RDBCommand("var instance self", NOTRUNCMD, INFOCMD));
-            queueCmd(new RDBCommand("var class self.class", NOTRUNCMD, INFOCMD));
-            queueCmd(new RDBCommand("var local", NOTRUNCMD, INFOCMD));
-        }
-
+		
 		varTree_->watchRoot()->setActivationId();
 		        
 		emit acceptPendingBPs();
@@ -364,7 +324,7 @@ void RDBController::actOnProgramPause(const QString &msg)
 // all other commands are disabled.
 void RDBController::programNoApp(const QString &msg, bool msgBox)
 {
-    state_ = (s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown)));
+    state_ = (s_appNotStarted|s_programExited|(state_&(s_shuttingDown)));
     destroyCmds();
 
     // We're always at frame one when the program stops
@@ -440,8 +400,11 @@ void RDBController::parseBacktraceList(char *buf)
     {
         varTree_->trimExcessFrames();
         VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
-        if (frame)
-            frame->setFrameName(frameStack_->getFrameName(currentFrame_, viewedThread_));
+    	if (frame == 0) {
+        	frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
+    	}
+		
+		frame->setFrameName(frameStack_->findFrame(currentFrame_, viewedThread_)->frameName());
         backtraceDueToProgramStop_ = false;
     }
 }
@@ -503,24 +466,6 @@ void RDBController::parseRequestedData(char *buf)
     }
 }
 
-// **************************************************************************
-
-// Not used at present. The VarItem::updateType() method derives the type name
-// from the value without doing a whatis command or the ruby equivalent.
-void RDBController::parseWhatis(char * /*buf*/)
-{
-	if (RDBItemCommand *rdbItemCommand = dynamic_cast<RDBItemCommand*> (currentCmd_))
-    {
-        // Fish out the item from the command and let it deal with the data
-        VarItem *item = rdbItemCommand->getItem();
-		(void) item;
-        varTree_->viewport()->setUpdatesEnabled(false);
-//        item->updateType(buf);
-        varTree_->viewport()->setUpdatesEnabled(true);
-        varTree_->repaint();
-    }
-}
-
 
 // **************************************************************************
 
@@ -528,8 +473,7 @@ void RDBController::parseWhatis(char * /*buf*/)
 // where we are in the program source.
 void RDBController::parseFrameSelected(char *buf)
 {
-    if (!stateIsOn(s_silent))
-    {
+    if (!stateIsOn(s_silent)) {
         emit showStepInSource("", -1, "");
         emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
     }
@@ -569,7 +513,7 @@ void RDBController::parseUpdateDisplay(char *buf)
 
 // **************************************************************************
 
-// This is called on program stop to process the global.
+// This is called on program stop to process the globals.
 void RDBController::parseGlobals(char *buf)
 {
     varTree_->viewport()->setUpdatesEnabled(false);
@@ -593,7 +537,7 @@ void RDBController::parseLocals(char type, char *buf)
     {
         frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
         frame->setFrameName(
-                frameStack_->getFrameName(currentFrame_, viewedThread_));
+                frameStack_->findFrame(currentFrame_, viewedThread_)->frameName());
     }
 
     Q_ASSERT(frame);
@@ -607,16 +551,6 @@ void RDBController::parseLocals(char type, char *buf)
     } else {
         frame->addLocals(buf);
         frame->setLocals();
-        // Trim the whole tree when we're on the top most
-        // frame so that they always see only "frame 1" on a program stop.
-        // User selects frame 2, will show both frame 1 and frame 2.
-        // Reselecting a frame 1 regenerates the data and therefore trims
-        // the whole tree _but_ all the items in every frame will be active
-        // so nothing will be deleted.
-        if (currentFrame_ == 1 || viewedThread_ == -1)
-            varTree_->trim();
-        else
-            frame->trim();
 	}
 
     varTree_->viewport()->setUpdatesEnabled(true);
@@ -629,8 +563,6 @@ void RDBController::parseLocals(char type, char *buf)
 
 void RDBController::parse(char *buf)
 {
-	QRegExp whatis_re("^p\\s.*\\.class$");
-		
 	if (currentCmd_ == 0) {
 		return;
 	}
@@ -651,8 +583,6 @@ void RDBController::parse(char *buf)
 		;
 	} else if (qstrncmp(currentCmd_->rawDbgCommand(), "method instance ", strlen("method instance ")) == 0) { 
 	} else if (qstrncmp(currentCmd_->rawDbgCommand(), "method ", strlen("method ")) == 0) {
-	} else if (whatis_re.search(currentCmd_->rawDbgCommand()) >= 0) {
-		parseWhatis(buf);
 	} else if (qstrncmp(currentCmd_->rawDbgCommand(), "pp ", strlen("pp ")) == 0) {
 		parseRequestedData(buf);
 	} else if (currentCmd_->rawDbgCommand() == "thread list") {
@@ -1047,13 +977,11 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
 	}
 
     // Get rdb to switch the frame stack on a thread change.
-    if (threadNo != -1)
-    {
+    if (threadNo != -1) {
         // We don't switch threads if we on this thread. The -1 check is
         // because the first time after a stop we're actually on this thread
         // but the thread number had been reset to -1.
-        if (viewedThread_ != -1)
-        {
+        if (viewedThread_ != -1) {
             if (viewedThread_ != threadNo) {
 				// Note that 'thread switch nnn' is a run command
                 queueCmd(new RDBCommand(QCString().sprintf("thread switch %d",
@@ -1083,49 +1011,32 @@ void RDBController::slotSelectFrame(int frameNo, int threadNo, bool needFrames)
     // Find or add the frame details. hold onto whether it existed because
     // we're about to create one if it didn't.
     VarFrameRoot *frame = varTree_->findFrame(frameNo, viewedThread_);
-    if (!frame)
-    {
+    if (frame == 0) {
         frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
-        frame->setFrameName(frameStack_->getFrameName(currentFrame_, viewedThread_));
-    }
-
-    Q_ASSERT(frame);
-    if (stateIsOn(s_viewLocals))
-    {
-        // Have we already got these details?
-        if (frame->needLocals())
-        {
-            // Add the frame params to the variable list
-            // and ask for the locals
-//            queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
-            queueCmd(new RDBCommand("var instance self", NOTRUNCMD, INFOCMD));
-            queueCmd(new RDBCommand("var class self.class", NOTRUNCMD, INFOCMD));
-            queueCmd(new RDBCommand("var local", NOTRUNCMD, INFOCMD));
-        }
     }
 	
+	frame->setFrameName(frameStack_->findFrame(currentFrame_, viewedThread_)->frameName());
+	
+	// Have we already got these details?
+	if (frame->needLocals()) {
+		// Ask for the locals
+//      queueCmd(new RDBCommand("var const self.class", NOTRUNCMD, INFOCMD));
+		queueCmd(new RDBCommand("var instance self", NOTRUNCMD, INFOCMD));
+		queueCmd(new RDBCommand("var class self.class", NOTRUNCMD, INFOCMD));
+		queueCmd(new RDBCommand("var local", NOTRUNCMD, INFOCMD));
+		frame->startWaitingForData();
+    }
+	
+	// The user must have initiated this action by clicking on something in
+	// the GUI, so there won't be any current commands
 	if (! backtraceDueToProgramStop_) {
+		Q_ASSERT(currentCmd_ == 0);
 		executeCmd();
 	}
 	
 	return;
 }
 
-// **************************************************************************
-
-// Not used at present. The type of an item is 'guessed' from its value
-// in the VarItem::updateType() method instead.
-void RDBController::slotVarItemConstructed(VarItem *item)
-{
-    if (stateIsOn(s_appBusy|s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    // name and value come from "var local", for the type we
-    // send a "whatis <varName>" here.
-    QString strName = item->fullName();
-    queueCmd(new RDBItemCommand(item, QCString("p ") + strName.latin1() + ".class",
-                                false));
-}
 
 
 // **************************************************************************
@@ -1151,7 +1062,7 @@ void RDBController::slotExpandItem(VarItem *item, const QCString &userRequest)
 
 // **************************************************************************
 
-// This method evaluates text selected with the 'Ruby Inspect' context menu
+// This method evaluates text selected with the 'Inspect:' context menu
 void RDBController::slotRubyInspect(const QString &inspectText)
 {
     queueCmd(new RDBCommand(	QCString().sprintf("p %s", inspectText.latin1()), 
@@ -1188,25 +1099,10 @@ void RDBController::slotRemoveWatchExpression(int displayId)
 
 // **************************************************************************
 
-// The user will only get locals if one of the branches to the local tree
-// is open. This speeds up stepping through code a great deal.
-void RDBController::slotSetLocalViewState(bool onOff)
-{
-    if (onOff) {
-        setStateOn(s_viewLocals);
-    } else {
-        setStateOff(s_viewLocals);
-	}
-
-    kdDebug(9012) << (onOff ? "<Locals ON>": "<Locals OFF>") << endl;
-}
-
-// **************************************************************************
-
 // The user will only get globals if the Global frame is open
-void RDBController::slotSetGlobalViewState(bool onOff)
+void RDBController::slotFetchGlobals(bool fetch)
 {
-    if (onOff) {
+    if (fetch) {
         setStateOn(s_viewGlobals);
 		queueCmd(new RDBCommand("var global", NOTRUNCMD, INFOCMD));
 		executeCmd();
@@ -1214,7 +1110,7 @@ void RDBController::slotSetGlobalViewState(bool onOff)
         setStateOff(s_viewGlobals);
 	}
 
-    kdDebug(9012) << (onOff ? "<Globals ON>": "<Globals OFF>") << endl;
+    kdDebug(9012) << (fetch ? "<Globals ON>": "<Globals OFF>") << endl;
 }
 
 // **************************************************************************
@@ -1315,8 +1211,6 @@ void RDBController::slotReadFromSocket(int socket)
 		return;
 	}
 	
-	currentThread_ = prompt_re.cap(2).toInt();
-	
 	// Save the prompt, and remove it from the buffer
 	currentPrompt_ = prompt_re.cap(1).latin1();
 	rdbOutputLen_ -= prompt_re.matchedLength();
@@ -1337,7 +1231,7 @@ void RDBController::slotReadFromSocket(int socket)
 void RDBController::slotDbgProcessExited(KProcess*)
 {
     destroyCmds();
-    state_ = s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown));
+    state_ = s_appNotStarted|s_programExited|(state_&(s_shuttingDown));
     emit dbgStatus (i18n("Process exited"), state_);
     emit rdbStdout("(rdb:1) Process exited\n");
 	frameStack_->clear();

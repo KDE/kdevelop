@@ -51,7 +51,7 @@ enum DBGStateFlags
   s_waitForWrite      = 8,
   s_programExited     = 16,
   s_silent            = 32,
-  s_viewLocals        = 64,
+//  s_viewLocals        = 64,
   s_viewBT            = 128,
   s_viewBP            = 256,
   s_attached          = 512,
@@ -60,6 +60,20 @@ enum DBGStateFlags
   s_shuttingDown      = 4096,
   s_viewThreads       = 8192
 };
+
+				
+enum RttiValues { 
+	RTTI_WATCH_ROOT			= 1001, 
+	RTTI_GLOBAL_ROOT		= 1002, 
+	RTTI_VAR_FRAME_ROOT		= 1003, 
+	RTTI_LAZY_FETCH_ITEM 	= 1004,
+	RTTI_VAR_ITEM			= 1005,
+	RTTI_WATCH_VAR_ITEM		= 1006,
+	RTTI_THREAD_STACK_ITEM	= 1007,
+	RTTI_FRAME_STACK_ITEM	= 1008
+}; 
+
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
@@ -96,7 +110,6 @@ public slots:
 						   const QString& debuggee_path,
                            const QString& application,
                            const QString& run_arguments)                    = 0;
-    //virtual void slotStart(const QString& shell, const QString &application)= 0;
 
     virtual void slotStopDebugger()                                         = 0;
 
@@ -113,10 +126,7 @@ public slots:
     virtual void slotExpandItem(VarItem *parent,
                                     const QCString &userRequest)            = 0;
     virtual void slotSelectFrame(int frame, int thread, bool needFrames)    = 0;
-    virtual void slotSetLocalViewState(bool onOff)                          = 0;
-
-    // for optional additional commands and initialization
-    virtual void slotVarItemConstructed(VarItem */*item*/) {}
+    virtual void slotFetchGlobals(bool fetch)                               = 0;
 
 protected slots:
     virtual void slotDbgStdout(KProcess *proc, char *buf, int buflen)       = 0;
