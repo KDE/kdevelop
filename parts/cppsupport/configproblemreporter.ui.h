@@ -13,9 +13,9 @@ void ConfigureProblemReporter::init()
 {
     KConfig* config = kapp->config();
     config->setGroup( "General Options" );
-    bgParserCheckbox->setChecked( config->readBoolEntry("EnableJavaBgParser") );
+    bgParserCheckbox->setChecked( config->readBoolEntry("EnableCppBgParser") );
     delaySlider->setEnabled( bgParserCheckbox->isChecked() );
-    delaySlider->setValue( config->readNumEntry("JavaBgParserDelay") );
+    delaySlider->setValue( config->readNumEntry("CppBgParserDelay") );
 }
 
 void ConfigureProblemReporter::destroy()
@@ -26,9 +26,9 @@ void ConfigureProblemReporter::accept()
 {
     KConfig* config = kapp->config();
     config->setGroup( "General Options" );
-    config->writeEntry( "EnableJavaBgParser", bgParserCheckbox->isChecked() );
+    config->writeEntry( "EnableCppBgParser", bgParserCheckbox->isChecked() );
     if( bgParserCheckbox->isChecked() )
-	config->writeEntry( "JavaBgParserDelay", delaySlider->value() );
+	config->writeEntry( "CppBgParserDelay", delaySlider->value() );
     config->sync();
 }
 

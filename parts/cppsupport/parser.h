@@ -14,7 +14,7 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include "ast.h"
+#include <qdom.h>
 
 class ProblemReporter;
 
@@ -46,27 +46,17 @@ public:
 
 public /*rules*/ :
 
-    TranslationUnitAST* parseTranslationUnit();
-
-    DeclarationAST* parseDefinition();
-    DeclarationAST* parseLinkageSpecification();
-    DeclarationAST* parseNamespace();
-    DeclarationAST* parseUsing();
-    DeclarationAST* parseUsingDirective();
-    DeclarationAST* parseTypedef();
-    DeclarationAST* parseAsmDefinition();
-    DeclarationAST* parseTemplateDeclaration();
-    DeclarationAST* parseDeclaration();
-    DeclarationAST* parseIntegralDeclaration();
-    DeclarationAST* parseConstDeclaration();
-    DeclarationAST* parseOtherDeclaration();
-
-    LinkageBodyAST* parseLinkageBody();
-
-    DeclaratorListAST* parseInitDeclaratorList();
-    DeclaratorAST* parseDeclarator();
-    DeclaratorAST* parseInitDeclarator();
-
+    bool parseTranslationUnit();
+    bool parseDefinition();
+    bool parseLinkageSpecification();
+    bool parseLinkageBody();
+    bool parseNamespace();
+    bool parseUsing();
+    bool parseUsingDirective();
+    bool parseTypedef();
+    bool parseAsmDefinition();
+    bool parseTemplateDeclaration();
+    bool parseDeclaration();
     bool parseNestedNameSpecifier();
     bool parseQualifiedName();
     bool parseUnqualiedName();
@@ -79,14 +69,20 @@ public /*rules*/ :
     bool parsePtrOperator();
     bool parseTemplateArgument();
     bool parseTypeSpecifier();
+    bool parseDeclarator();
     bool parseTemplateParameterList();
     bool parseTemplateParameter();
     bool parseDeclHead();
+    bool parseIntegralDeclaration();
     bool parseIntegralDeclHead();
+    bool parseOtherDeclaration();
+    bool parseConstDeclaration();
     bool parseConstructorDeclaration();
     bool parseStorageClassSpecifier();
     bool parseFunctionSpecifier();
     bool parseConstantExpression();
+    bool parseInitDeclaratorList();
+    bool parseInitDeclarator();
     bool parseFunctionBody();
     bool parseParameterDeclarationClause();
     bool parseCtorInitializer();
@@ -128,6 +124,8 @@ private:
     ProblemReporter* m_problemReporter;
     Driver* driver;
     Lexer* lex;
+    QDomDocument* dom;
+    QDomElement translationUnit;
     QString m_fileName;
     int m_errors;
     int m_maxErrors;

@@ -20,6 +20,8 @@
 #include "cppsupportpart.h"
 #include "kdevpartcontroller.h"
 #include "kdevtoplevel.h"
+#include "configproblemreporter.h"
+#include "backgroundparser.h"
 
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
@@ -34,10 +36,16 @@
 
 #include <qtimer.h>
 #include <qregexp.h>
+#include <qvbox.h>
+#include <kdialogbase.h>
 
 
 ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const char* name )
-    : QListView( parent, name ), m_cppSupport( part ), m_editor( 0 ), m_document( 0 )
+    : QListView( parent, name ),
+      m_cppSupport( part ),
+      m_editor( 0 ),
+      m_document( 0 ),
+      m_bgParser( 0 )
 {
     addColumn( i18n("Level") );
     addColumn( i18n("Problem") );
@@ -63,7 +71,12 @@ ProblemReporter::ProblemReporter( CppSupportPart* part, QWidget* parent, const c
 
 ProblemReporter::~ProblemReporter()
 {
+    if( m_bgParser ) {
+        m_bgParser->wait();
+    }
 
+    delete( m_bgParser );
+    m_bgParser = 0;
 }
 
 void ProblemReporter::slotActivePartChanged( KParts::Part* part )
@@ -89,8 +102,20 @@ void ProblemReporter::slotTextChanged()
 
 void ProblemReporter::reparse()
 {
+    kdDebug(9007) << "ProblemReporter::reparse()" << endl;
+
     if( !m_editor )
         return;
+
+    if( m_bgParser ) {
+        if( m_bgParser->running() ) {
+            m_timer->changeInterval( m_delay );
+            return;
+        }
+
+        delete( m_bgParser );
+        m_bgParser = 0;
+    }
 
     QListViewItem* current = firstChild();
     while( current ){
@@ -101,7 +126,9 @@ void ProblemReporter::reparse()
             delete( i );
     }
 
-    m_cppSupport->parseContents( m_editor->text(), m_filename );
+    m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
+    m_bgParser->start();
+
     m_timer->stop();
 }
 
@@ -156,6 +183,14 @@ void ProblemReporter::configure()
     config->setGroup( "General Options" );
     m_active = config->readBoolEntry( "EnableCppBgParser", TRUE );
     m_delay = config->readNumEntry( "CppBgParserDelay", 1000 );
+}
+
+void ProblemReporter::configWidget( KDialogBase* dlg )
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("C++ Parsing"));
+    ConfigureProblemReporter* w = new ConfigureProblemReporter( vbox );
+    connect(dlg, SIGNAL(okClicked()), w, SLOT(accept()));
+    connect(dlg, SIGNAL(okClicked()), this, SLOT(configure()));
 }
 
 #include "problemreporter.moc"

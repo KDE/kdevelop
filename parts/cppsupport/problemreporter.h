@@ -23,6 +23,8 @@
 
 class CppSupportPart;
 class QTimer;
+class KDialogBase;
+class BackgroundParser;
 
 namespace KParts{
     class Part;
@@ -51,6 +53,7 @@ public:
 public slots:
     void reparse();
     void configure();
+    void configWidget( KDialogBase* );
 
 private slots:
     void slotActivePartChanged( KParts::Part* );
@@ -65,6 +68,7 @@ private:
     QString m_filename;
     int m_active;
     int m_delay;
+    BackgroundParser* m_bgParser;
 };
 
 #endif

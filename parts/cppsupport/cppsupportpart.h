@@ -71,9 +71,6 @@ public:
      */
     static QString ppFileExt( ){ return "-pp.pcs"; };
 
-
-    void parseContents( const QString& contents, const QString& fileName );
-
 protected:
     virtual KDevLanguageSupport::Features features();
     virtual QStringList fileFilters();

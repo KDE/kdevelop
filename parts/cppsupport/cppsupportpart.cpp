@@ -13,9 +13,6 @@
 
 #include "cppsupportpart.h"
 #include "problemreporter.h"
-#include "lexer.h"
-#include "parser.h"
-#include "driver.h"
 
 #include <qdir.h>
 #include <qdom.h>
@@ -95,6 +92,9 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     m_problemReporter = new ProblemReporter( this );
     topLevel( )->embedOutputView( m_problemReporter, i18n("Problems") );
+
+    connect( core(), SIGNAL(configWidget(KDialogBase*)),
+             m_problemReporter, SLOT(configWidget(KDialogBase*)) );
 
 
     KAction *action;
@@ -1041,41 +1041,5 @@ CppSupportPart::parseDirectory( const QString &startDir, bool withSubDir,
     label->setText( "" );
 }
 
-void CppSupportPart::parseContents( const QString& contents,
-                                    const QString& fileName )
-{
-    CppSupport::Driver driver;
-    CppSupport::Lexer lexer;
-
-    // stl
-    lexer.addSkipWord( "__STL_BEGIN_NAMESPACE" );
-    lexer.addSkipWord( "__STL_END_NAMESPACE" );
-    lexer.addSkipWord( "__STL_NULL_TMPL_ARGS" );
-    lexer.addSkipWord( "__GC_CONST" );
-    lexer.addSkipWord( "__STL_TEMPLATE_NULL" );
-
-    // qt
-    lexer.addSkipWord( "Q_TEMPLATE_EXTERN" );
-    lexer.addSkipWord( "Q_EXPORT" );
-    lexer.addSkipWord( "QM_EXPORT_NETWORK" );
-    lexer.addSkipWord( "QMAC_PASCAL" );
-    lexer.addSkipWord( "QT_STATIC_CONST" );
-    lexer.addSkipWord( "Q_OVERRIDE", CppSupport::SkipWordAndArguments );
-    lexer.addSkipWord( "Q_ENUMS", CppSupport::SkipWordAndArguments );
-    lexer.addSkipWord( "Q_PROPERTY", CppSupport::SkipWordAndArguments );
-    lexer.addSkipWord( "Q_INLINE_TEMPLATES" );
-    lexer.addSkipWord( "Q_TYPENAME" );
-
-    // kde
-    lexer.addSkipWord( "K_EXPORT_COMPONENT_FACTORY", CppSupport::SkipWordAndArguments );
-
-    lexer.setSource( contents );
-
-    CppSupport::Parser parser( m_problemReporter, &driver, &lexer );
-    parser.setFileName( fileName );
-    AST* ast = parser.parseTranslationUnit();
-    delete( ast );
-    ast = 0;
-}
 
 #include "cppsupportpart.moc"

@@ -30,7 +30,7 @@ using namespace std;
     Token token = lex->lookAhead( 0 ); \
     if( token != tk ){ \
         reportError( Errors::SyntaxError ); \
-        return 0; \
+        return false; \
     } \
     lex->nextToken(); \
 }
@@ -40,7 +40,7 @@ using namespace std;
     Token token = lex->lookAhead( 0 ); \
     if( token != tk ){ \
         reportError( Errors::SyntaxError ); \
-        return 0; \
+        return false; \
     } \
 }
 
@@ -51,12 +51,20 @@ Parser::Parser( ProblemReporter* pr, Driver* drv, Lexer* lexer )
 {
     m_fileName = "<stdin>";
 
-    m_maxErrors = 5;
+    dom = new QDomDocument( "Cpp" );
+    translationUnit = dom->createElement( "TranslationUnit" );
+    dom->appendChild( translationUnit );
+
+    m_maxErrors = 15;
     resetErrors();
 }
 
 Parser::~Parser()
 {
+    if( dom ){
+        delete( dom );
+        dom = 0;
+    }
 }
 
 void Parser::setFileName( const QString& fileName )
@@ -201,16 +209,11 @@ bool Parser::parseName()
     return true;
 }
 
-TranslationUnitAST* Parser::parseTranslationUnit()
+bool Parser::parseTranslationUnit()
 {
-    TranslationUnitAST* ast = new TranslationUnitAST();
-
     //kdDebug(9007) << "Parser::parseTranslationUnit()" << endl;
     while( !lex->lookAhead(0).isNull() ){
-        DeclarationAST* decl = parseDefinition();
-        if( decl ){
-            ast->addDeclaration( decl );
-        } else {
+        if( !parseDefinition() ){
             // error recovery
             syntaxError();
             int tk = lex->lookAhead( 0 );
@@ -221,106 +224,78 @@ TranslationUnitAST* Parser::parseTranslationUnit()
         }
     }
 
-    return ast;
+    return m_errors == 0;
 }
 
-DeclarationAST* Parser::parseDefinition()
+bool Parser::parseDefinition()
 {
     //kdDebug(9007) << "Parser::parseDefinition()" << endl;
-
-    DeclarationAST* ast = 0;
-
     switch( lex->lookAhead(0) ){
 
     case ';':
-        ast = new NullDeclarationAST();
-        ast->setStart( lex->index() );
         lex->nextToken();
-        ast->setEnd( lex->index() );
-        break;
+        return true;
 
     case Token_extern:
-        ast = parseLinkageSpecification();
-        break;
+        return parseLinkageSpecification();
 
     case Token_namespace:
-        ast = parseNamespace();
-        break;
+        return parseNamespace();
 
     case Token_using:
-        ast = parseUsing();
-        break;
+        return parseUsing();
 
     case Token_typedef:
-        ast = parseTypedef();
-        break;
+        return parseTypedef();
 
     case Token_asm:
-        ast = parseAsmDefinition();
-        break;
+        return parseAsmDefinition();
 
     case Token_template:
     case Token_export:
-        ast = parseTemplateDeclaration();
-        break;
+        return parseTemplateDeclaration();
 
     default:
-        ast = parseDeclaration();
+        return parseDeclaration();
 
     } // end switch
-
-    return ast;
 }
 
 
-DeclarationAST* Parser::parseLinkageSpecification()
+bool Parser::parseLinkageSpecification()
 {
     //kdDebug(9007) << "Parser::parseLinkageSpecification()" << endl;
 
-    DeclarationAST* ast = 0;
-    int start = lex->index();
-
     if( lex->lookAhead(0) != Token_extern ){
-        return 0;
+        return false;
     }
     lex->nextToken();
+
 
     if( lex->lookAhead(0) == Token_string_literal ){
         lex->nextToken(); // skip string literal
     }
 
     if( lex->lookAhead(0) == '{' ){
-        ast = parseLinkageBody();
+        if( parseLinkageBody() ){
+        }
     } else {
-        ast = parseDefinition();
-        if( !ast ){
+        if( !parseDefinition() ){
             reportError( i18n("Declaration syntax error") );
-            return 0;
+            return true;
         }
     }
 
-    if( ast ){
-        ast->setStart( start );
-    }
-
-    return ast;
+    return true;
 }
 
-LinkageBodyAST* Parser::parseLinkageBody()
+bool Parser::parseLinkageBody()
 {
     //kdDebug(9007) << "Parser::parseLinkageBody()" << endl;
-
-    LinkageBodyAST* ast = 0;
-    int start, end;
-
-    start = lex->index();
-
     if( lex->lookAhead(0) != '{' ){
-        return 0;
+        return false;
     }
     lex->nextToken();
-
-    ast = new LinkageBodyAST();
 
     while( !lex->lookAhead(0).isNull() ){
         int tk = lex->lookAhead( 0 );
@@ -328,16 +303,13 @@ LinkageBodyAST* Parser::parseLinkageBody()
         if( tk == '}' )
             break;
 
-        DeclarationAST* decl = parseDefinition();
-        if( decl ){
-            ast->addDeclaration( decl );
-        } else {
+        if( !parseDefinition() ){
             // error recovery
-            // TODO: skip until next declaration
             syntaxError();
             if( skipUntil(';') ){
                 lex->nextToken(); // skip ;
             }
+        } else {
         }
     }
 
@@ -347,34 +319,21 @@ LinkageBodyAST* Parser::parseLinkageBody()
     }
     lex->nextToken();
 
-    end = lex->index();
-
-    ast->setStart( start );
-    ast->setEnd( end );
-
-    return ast;
+    return true;
 }
 
-DeclarationAST* Parser::parseNamespace()
+bool Parser::parseNamespace()
 {
     //kdDebug(9007) << "Parser::parseNamespace()" << endl;
-
-    DeclarationAST* ast = 0;
-    int start, end;
-    int nameStart, nameEnd;
-
-    start = lex->index();
-
     if( lex->lookAhead(0) != Token_namespace ){
-        return ast;
+        return false;
     }
     lex->nextToken();
 
-    nameStart = lex->index();
+
     if( lex->lookAhead(0) == Token_identifier ){
         lex->nextToken();
     }
-    nameEnd = lex->index();
 
     if( lex->lookAhead(0) != '{' ){
         reportError( i18n("{ expected") );
@@ -384,88 +343,41 @@ DeclarationAST* Parser::parseNamespace()
     if( parseLinkageBody() ){
     }
 
-    end = lex->index();
-
-    ast = new NamespaceDeclarationAST();
-    ast->setStart( start );
-    ast->setEnd( end );
-    ast->setNameStart( nameStart );
-    ast->setNameEnd( nameEnd );
-
-    return ast;
+    return true;
 }
 
-DeclarationAST* Parser::parseUsing()
+bool Parser::parseUsing()
 {
     //kdDebug(9007) << "Parser::parseUsing()" << endl;
 
-    DeclarationAST* ast = 0;
-    int start, end;
-    int nameStart, nameEnd;
-
-    start = lex->index();
-
     if( lex->lookAhead(0) != Token_using ){
-        return 0;
+        return false;
     }
     lex->nextToken();
 
     if( lex->lookAhead(0) == Token_namespace ){
-        ast = parseUsingDirective();
-        if( ast )
-            ast->setStart( start );
+        return parseUsingDirective();
+    }
 
-        return ast;
+
+    if( parseName() ){
+
+        if( lex->lookAhead(0) != ';' ){
+            reportError( i18n("; expected") );
+            skipUntil( ';' );
+        }
+        lex->nextToken(); // skip ;
+        return true;
     }
 
     if( lex->lookAhead(0) == Token_typename ){
         lex->nextToken();
     }
 
-    nameStart = lex->index();
-    if( !parseName() ){
-        reportError( i18n("namespace name expected") );
-    }
-    nameEnd = lex->index();
-    lex->nextToken();
-
-    if( lex->lookAhead(0) != ';' ){
-        reportError( i18n("; expected") );
-    }
-    lex->nextToken(); // skip ;
-
-    end = lex->index();
-
-    ast = new UsingDeclarationAST();
-    ast->setStart( start );
-    ast->setEnd( end );
-    ast->setNameStart( nameStart );
-    ast->setNameEnd( nameEnd );
-
-    return ast;
-}
-
-DeclarationAST* Parser::parseUsingDirective()
-{
-    //kdDebug(9007) << "Parser::parseUsingDirective()" << endl;
-
-    UsingDeclarationAST* ast = 0;
-    int start, end;
-    int nameStart, nameEnd;
-
-    start = lex->index();
-
-    if( lex->lookAhead(0) != Token_namespace ){
-        return 0;
-    }
-    lex->nextToken();
-
-
-    nameStart = lex->index();
     if( !parseName() ){
         reportError( i18n("Namespace name expected") );
+        return false;
     }
-    nameEnd = lex->index();
 
     if( lex->lookAhead(0) != ';' ){
         reportError( i18n("; expected") );
@@ -473,15 +385,31 @@ DeclarationAST* Parser::parseUsingDirective()
     }
     lex->nextToken();
 
-    end = lex->index();
+    return true;
+}
 
-    ast = new UsingDeclarationAST();
-    ast->setStart( start );
-    ast->setEnd( end );
-    ast->setNameStart( nameStart );
-    ast->setNameEnd( nameEnd );
+bool Parser::parseUsingDirective()
+{
+    //kdDebug(9007) << "Parser::parseUsingDirective()" << endl;
 
-    return ast;
+    if( lex->lookAhead(0) != Token_namespace ){
+        return false;
+    }
+    lex->nextToken();
+
+
+    if( !parseName() ){
+        reportError( i18n("Namespace name expected") );
+    } else {
+    }
+
+    if( lex->lookAhead(0) != ';' ){
+        reportError( i18n("} expected") );
+        skipUntil( ';' );
+    }
+    lex->nextToken();
+
+    return true;
 }
 
 
@@ -536,17 +464,12 @@ bool Parser::parseTemplateArgumentList()
     return true;
 }
 
-DeclarationAST* Parser::parseTypedef()
+bool Parser::parseTypedef()
 {
     //kdDebug(9007) << "Parser::parseTypedef()" << endl;
 
-    TypedefDeclarationAST* ast = 0;
-    int start, end;
-    int nameStart=0, nameEnd=0;
-
-    start = lex->index();
     if( lex->lookAhead(0) != Token_typedef ){
-        return 0;
+        return false;
     }
     lex->nextToken();
 
@@ -555,11 +478,7 @@ DeclarationAST* Parser::parseTypedef()
         reportError( i18n("Need a type specifier to declare") );
     }
 
-    DeclaratorAST* declarator = parseDeclarator();
-    if( declarator ){
-        nameStart = declarator->nameStart();
-        nameEnd = declarator->nameEnd();
-    } else {
+    if( !parseDeclarator() ){
         reportError( i18n("Need an identifier to declare") );
     }
 
@@ -569,26 +488,13 @@ DeclarationAST* Parser::parseTypedef()
     }
     lex->nextToken();
 
-    end = lex->index();
 
-    ast = new TypedefDeclarationAST();
-    ast->setStart( start );
-    ast->setEnd( end );
-    ast->setNameStart( nameStart );
-    ast->setNameEnd( nameEnd );
-    ast->setDeclarator( declarator );
-
-    return ast;
+    return true;
 }
 
-DeclarationAST* Parser::parseAsmDefinition()
+bool Parser::parseAsmDefinition()
 {
     //kdDebug(9007) << "Parser::parseAsmDefinition()" << endl;
-
-    DeclarationAST* ast = 0;
-    int start=0, end=0;
-
-    start = lex->index();
 
     ADVANCE( Token_asm, "asm" );
     ADVANCE( '(', '(' );
@@ -599,26 +505,14 @@ DeclarationAST* Parser::parseAsmDefinition()
     ADVANCE( ')', ')' );
     ADVANCE( ';', ';' );
 
-    end = lex->index();
-
-    ast = new AsmDeclaratationAST();
-    ast->setStart( start );
-    ast->setEnd( end );
-
-    return ast;
+    return true;
 }
 
-DeclarationAST* Parser::parseTemplateDeclaration()
+bool Parser::parseTemplateDeclaration()
 {
     //kdDebug(9007) << "Parser::parseTemplateDeclaration()" << endl;
 
-    TemplateDeclarationAST* ast = 0;
-    int start, end;
-    int argStart, argEnd;
     bool _export = false;
-
-    start = lex->index();
-
     if( lex->lookAhead(0) == Token_export ){
         _export = true;
         lex->nextToken();
@@ -628,14 +522,14 @@ DeclarationAST* Parser::parseTemplateDeclaration()
         if( _export ){
             ADVANCE( Token_template, "template" );
         } else
-            return 0;
+            return false;
     }
 
     ADVANCE( Token_template, "template" );
 
-    argStart = lex->index();
     if( lex->lookAhead(0) == '<' ){
         lex->nextToken();
+
 
         if( parseTemplateParameterList() ){
         }
@@ -646,40 +540,23 @@ DeclarationAST* Parser::parseTemplateDeclaration()
         }
         lex->nextToken();
     }
-    argEnd = lex->index();
 
-    DeclarationAST* decl = parseDefinition();
-    if( !decl ){
+    if( !parseDefinition( ) ){
         reportError( i18n("expected a declaration") );
+    } else {
     }
-    end = lex->index();
 
-    ast = new TemplateDeclarationAST();
-    ast->setStart( start );
-    ast->setEnd( end );
-    ast->setDeclaration( decl );
-
-    return ast;
+    return true;
 }
 
-DeclarationAST* Parser::parseDeclaration()
+bool Parser::parseDeclaration()
 {
     //kdDebug(9007) << "Parser::parseDeclaration()" << endl;
 
-    DeclarationAST* ast = 0;
-    ast = parseIntegralDeclaration();
-    if( ast != 0 )
-        return ast;
-
-    ast = parseConstDeclaration();
-    if( ast != 0 )
-        return ast;
-
-    ast = parseOtherDeclaration();
-    if( ast != 0 )
-        return ast;
-
-    return 0;
+    return
+        parseIntegralDeclaration() ||
+        parseConstDeclaration() ||
+        parseOtherDeclaration();
 }
 
 bool Parser::parseDeclHead()
@@ -696,14 +573,14 @@ bool Parser::parseDeclHead()
     return true;
 }
 
-DeclarationAST* Parser::parseIntegralDeclaration()
+bool Parser::parseIntegralDeclaration()
 {
     //kdDebug(9007) << "Parser::parseIntegralDeclaration()" << endl;
     int index = lex->index();
 
     if( !parseIntegralDeclHead() ){
         lex->setIndex( index );
-        return 0;
+        return false;
     }
 
     int tk = lex->lookAhead( 0 );
@@ -713,29 +590,26 @@ DeclarationAST* Parser::parseIntegralDeclaration()
         lex->nextToken();
         if( !parseConstantExpression() ){
             lex->setIndex( index );
-            return 0;
+            return false;
         }
         ADVANCE( ';', ';' );
     } else {
-        DeclaratorListAST* declarators = parseInitDeclaratorList();
-        if( !declarators ){
+        if( !parseInitDeclaratorList() ){
             lex->setIndex( index );
-            return 0;
+            return false;
         }
-        delete( declarators );
 
         if( lex->lookAhead(0) == ';' ){
             lex->nextToken();
         } else {
             if( !parseFunctionBody() ){
                 lex->setIndex( index );
-                return 0;
+                return false;
             }
         }
     }
 
-    DeclarationAST* ast = 0;
-    return ast;
+    return true;
 }
 
 bool Parser::parseIntegralDeclHead()
@@ -756,55 +630,39 @@ bool Parser::parseIntegralDeclHead()
     return true;
 }
 
-DeclarationAST* Parser::parseOtherDeclaration()
+bool Parser::parseOtherDeclaration()
 {
     //kdDebug(9007) << "Parser::parseOtherDeclaration()" << endl;
 
-    int start, end;
-
-    start = lex->index();
-
     if( lex->lookAhead(0) == Token_friend ){
         lex->nextToken();
-        DeclarationAST* decl = parseDefinition();
-        if( decl ){
+        if( !parseDefinition() ){
             reportError( i18n("expected a declaration") );
-            return 0;
+            return false;
         }
-        end = lex->index();
-
-        FriendDeclarationAST* ast = new FriendDeclarationAST();
-        ast->setStart( start );
-        ast->setEnd( end );
-        ast->setDeclaration( decl );
-        return ast;
-
     } else {
 
         if( !parseDeclHead() ){
-            return 0;
+            return false;
         }
 
-        int nameStart = lex->index();
         if( !parseName() ){
-            return 0;
+            return false;
         }
-        int nameEnd = lex->index();
 
         if( isConstructorDecl() ){
             if( !parseConstructorDeclaration() ){
-                return 0;
+                return false;
             }
         } else {
+
             QStringList cv;
             if( parseCvQualify(cv) ){
             }
 
-            DeclaratorListAST* declarators = parseInitDeclaratorList();
-            if( !declarators ){
-                return 0;
+            if( !parseInitDeclaratorList() ){
+                return false;
             }
-            delete( declarators );
         }
 
         if( lex->lookAhead(0) == ';' ){
@@ -812,43 +670,33 @@ DeclarationAST* Parser::parseOtherDeclaration()
             lex->nextToken();
         } else {
             if( !parseFunctionBody() ){
-                return 0;
+                return false;
             }
         }
-
-        end = lex->index();
     }
 
-    return 0;
+    return true;
 }
 
-DeclarationAST* Parser::parseConstDeclaration()
+bool Parser::parseConstDeclaration()
 {
     //kdDebug(9007) << "Parser::parseConstDeclaration()" << endl;
-    int start, end;
-
-    start = lex->index();
 
     if( lex->lookAhead(0) != Token_const ){
-        return 0;
+        return false;
     }
     lex->nextToken();
 
     int index = lex->index();
 
-    DeclaratorListAST* declarators = parseInitDeclaratorList();
-    if( !declarators ){
+    if( !parseInitDeclaratorList() ){
         lex->setIndex( index );
-        return 0;
+        return false;
     }
-    delete( declarators );
 
     ADVANCE( ';', ';' );
 
-    end = lex->index();
-
-    DeclarationAST* ast = 0;
-    return ast;
+    return true;
 }
 
 bool Parser::isConstructorDecl()
@@ -1076,51 +924,47 @@ bool Parser::parseTypeSpecifier()
     return true;
 }
 
-DeclaratorAST* Parser::parseDeclarator()
+bool Parser::parseDeclarator()
 {
     //kdDebug(9007) << "Parser::parseDeclarator()" << endl;
 
-    DeclaratorAST* ast = 0;
-    DeclaratorAST* sub = 0;
-    int start, end;
-    int nameStart=0, nameEnd=0;
-
-    start = lex->index();
     while( parsePtrOperator() ){
     }
 
     if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
 
-        sub = parseDeclarator();
-        if( !sub ){
-            return 0;
+        if( !parseDeclarator() ){
+//             reportError( "expected a nested declarator",
+//                          lex->lookAhead(0) );
+            return false;
         }
         if( lex->lookAhead(0) != ')'){
-            return 0;
+            return false;
         }
         lex->nextToken();
     } else {
-        nameStart = lex->index();
         if( !parseDeclaratorId() ){
-            return 0;
+            return false;
         }
-        nameEnd = lex->index();
 
         if( lex->lookAhead(0) == ':' ){
             lex->nextToken();
             if( !parseConstantExpression() ){
                 reportError( i18n("Constant expression expected") );
-                return 0;
+                return true;
+            } else {
             }
-            return 0;
+            return true;
         }
+
     }
 
     while( lex->lookAhead(0) == '[' ){
         lex->nextToken();
         if( !parseCommaExpression() ){
             reportError( i18n("Expression expected") );
+        } else {
         }
 
         if( lex->lookAhead(0) != ']' ){
@@ -1135,7 +979,7 @@ DeclaratorAST* Parser::parseDeclarator()
         lex->nextToken();
 
         if( !parseParameterDeclarationClause() ){
-            return 0;
+            return false;
         }
         if( lex->lookAhead(0) != ')' ){
             reportError( i18n(") expected") );
@@ -1150,16 +994,8 @@ DeclaratorAST* Parser::parseDeclarator()
         if( parseExceptionSpecification() ){
         }
     }
-    end = lex->index();
 
-    ast = new DeclaratorAST();
-    ast->setStart( start );
-    ast->setEnd( end );
-    ast->setNameStart( nameStart );
-    ast->setNameEnd( nameEnd );
-    ast->setSubDeclarator( sub );
-
-    return ast;
+    return true;
 }
 
 bool Parser::parseEnumSpecifier()
@@ -1382,8 +1218,7 @@ bool Parser::parseAbstractDeclarator()
     if( lex->lookAhead(0) == '(' ){
         lex->nextToken();
 
-        DeclaratorAST* declarator = parseDeclarator();;
-        if( declarator ){
+        if( !parseDeclarator() ){
 //             reportError( "expected a nested declarator",
 //                          lex->lookAhead(0) );
             return false;
@@ -1393,7 +1228,6 @@ bool Parser::parseAbstractDeclarator()
             skipUntil( ')' );
         }
         lex->nextToken();
-        delete( declarator ); // TODO: remove
     }
 
     while( lex->lookAhead(0) == '[' ){
@@ -1463,31 +1297,24 @@ bool Parser::parseConstantExpression()
 }
 
 
-DeclaratorListAST* Parser::parseInitDeclaratorList()
+bool Parser::parseInitDeclaratorList()
 {
     //kdDebug(9007) << "Parser::parseInitDeclaratorList()" << endl;
 
-    DeclaratorAST* declarator = parseInitDeclarator();
-    if( !declarator ){
-        return 0;
+    if( !parseInitDeclarator() ){
+        return false;
     }
-
-    DeclaratorListAST* ast = new DeclaratorListAST();
-    ast->addDeclarator( declarator );
 
     while( lex->lookAhead(0) == ',' ){
         lex->nextToken();
 
-        declarator = parseInitDeclarator();
-        if( declarator ){
-            ast->addDeclarator( declarator );
+        if( parseInitDeclarator() ){
         } else {
             parseError();
             break;
         }
     }
-
-    return ast;
+    return true;
 }
 
 bool Parser::parseFunctionBody()
@@ -1553,9 +1380,7 @@ bool Parser::parseParameterDeclaration()
     }
 
     int index = lex->index();
-    DeclaratorAST* declarator = parseDeclarator();
-    if( declarator ){
-        delete( declarator ); // TODO: remove
+    if( parseDeclarator() ){
     } else {
         lex->setIndex( index );
         // optional abstract declarator
@@ -1823,19 +1648,18 @@ bool Parser::parseEnumerator()
     return true;
 }
 
-DeclaratorAST* Parser::parseInitDeclarator()
+bool Parser::parseInitDeclarator()
 {
     //kdDebug(9007) << "Parser::parseInitDeclarator()" << endl;
 
-    DeclaratorAST* declarator = parseDeclarator();
-    if( declarator ){
-        return 0;
+    if( !parseDeclarator() ){
+        return false;
     }
 
     if( parseInitializer() ){
     }
 
-    return declarator;
+    return true;
 }
 
 bool Parser::parseAssignmentExpression()
@@ -2183,4 +2007,9 @@ bool Parser::parseUnqualiedName()
     }
 
     return true;
+}
+
+void Parser::dump()
+{
+    kdDebug(9007) << dom->toString() << endl;
 }
