@@ -137,7 +137,7 @@ void DocTreeViewPart::projectConfigWidget(KDialogBase *dlg) {
 
 void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
-    kdDebug(9002) << "context in doctree" << endl;
+/*    kdDebug(9002) << "context in doctree" << endl;
     if (context->hasType( Context::EditorContext )) {
         const EditorContext *econtext = static_cast<const EditorContext*>(context);
         QString ident = econtext->currentWord();
@@ -172,7 +172,7 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
                                "a full text index must be created first, which can be done in the "
                                "configuration dialog of the documentation tree."));
         }
-    }
+    }*/
 }
 
 void DocTreeViewPart::slotSearchDocumentation()
