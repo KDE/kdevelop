@@ -46,16 +46,15 @@ public:
     /**
     * Return a pointer to the associated configuration widget for this vcs.
     */
-    virtual QWidget* newProjectWidget(QWidget */*parent*/);
+    virtual QWidget* newProjectWidget( QWidget */*parent*/ );
     /**
     * Creates a new project in the passed path @p dir.
     */
-    virtual void createNewProject(const QString&/* dir*/);
+    virtual void createNewProject( const QString&/* dir*/ );
     /**
     * Fetch a module from remote repository, so it can be used for importing
-    * @param  parent the parent widget
     */
-    virtual void fetchFromRepository( QWidget *parent );
+    virtual void fetchFromRepository();
     /**
     * Returns the unique identifier for this plugin (so it can be used for retrieving
     * it from collections).

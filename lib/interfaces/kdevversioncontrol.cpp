@@ -44,7 +44,7 @@ QString KDevVersionControl::uid() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QWidget* KDevVersionControl::newProjectWidget(QWidget */*parent*/)
+QWidget* KDevVersionControl::newProjectWidget( QWidget */*parent*/ )
 {
     KMessageBox::sorry( mainWindow()->main(), i18n( "Not implemented." ) );
 
@@ -53,7 +53,7 @@ QWidget* KDevVersionControl::newProjectWidget(QWidget */*parent*/)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void KDevVersionControl::createNewProject(const QString&/* dir*/)
+void KDevVersionControl::createNewProject( const QString&/* dir*/ )
 {
     KMessageBox::sorry( mainWindow()->main(), i18n( "Not implemented." ) );
 
@@ -62,7 +62,7 @@ void KDevVersionControl::createNewProject(const QString&/* dir*/)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void KDevVersionControl::fetchFromRepository( QWidget *parent )
+void KDevVersionControl::fetchFromRepository()
 {
     KMessageBox::sorry( mainWindow()->main(), i18n( "Not implemented." ) );
 
