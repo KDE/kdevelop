@@ -149,6 +149,8 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     search_button->setDefault(true);
     cancel_button = actionbox->addButton(i18n("Cancel"));
     cancel_button->setEnabled(false);
+    QPushButton *clear_button = actionbox->addButton(i18n("Clear"));
+    QPushButton *done_button = actionbox->addButton(i18n("Done"));
     actionbox->addStretch();
     actionbox->layout();
 
@@ -175,13 +177,6 @@ GrepDialog::GrepDialog(QString dirname, QWidget *parent, const char *name)
     status_frame->adjustSize();
     status_frame->setMinimumSize(status_frame->size());
     layout->addMultiCellWidget(status_frame, 3, 3, 0, 2);
-
-    KButtonBox *buttonbox = new KButtonBox(this);
-    layout->addMultiCellWidget(buttonbox, 5, 5, 0, 2);
-    QPushButton *clear_button = buttonbox->addButton(i18n("Clear"));
-    buttonbox->addStretch();
-    QPushButton *done_button = buttonbox->addButton(i18n("Done"));
-    buttonbox->layout();
 
     layout->activate();
 
