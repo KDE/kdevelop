@@ -1,5 +1,13 @@
+1999-09-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Fixed 'unknown' accelerators which listen for weird
+	  things like umlauts.
+	* Applied HP-UX portabiliby fix for kdlgloader.h
+	  by Andrew Morton <morton@nortelnetworks.com>
+
 1999-09-27 Sandy Meier <smeier@rz.uni-potsdam.de>
-	* commited patch by Andrew Morton <morton@nortelnetworks.com> -> fixed some problems in kdlgloader.h
+	* commited patch by Andrew Morton <morton@nortelnetworks.com> 
+	  -> fixed some problems in kdlgloader.h
+	
 1999-09-24 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
         * improvements on new key-accelerator system
 	* solving segfault on redefinition of short-cuts
