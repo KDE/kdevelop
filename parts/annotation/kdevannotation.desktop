@@ -1,0 +1,34 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Name=KDevannotation
+Name[sv]=KDevelop annotation
+Name[ta]=கெடெவ்annotation
+Name[xx]=xxKDevannotationxx
+GenericName=annotation Plugin
+GenericName[br]=Lugent annotation
+GenericName[fr]=Module de annotation
+GenericName[pt_BR]=Plugin do annotation
+GenericName[ru]=Модуль annotation
+GenericName[sv]=annotation insticksprogram
+Comment=annotation Description
+Comment[br]=Deskrivadur annotation
+Comment[fr]=Description de annotation
+Comment[pt_BR]=Descrição do annotation
+Comment[ru]=Описание annotation
+Comment[sv]=annotation beskrivning
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+
+X-KDevelop-Plugin-Version=1
+X-KDevelop-Plugin-Homepage=
+X-KDevelop-Plugin-BugsEmailAddress=mchoui@e-c.qc.ca
+X-KDevelop-Plugin-Copyright=(C) by Mathieu Chouinard
+
+X-KDevelop-Args=
+
+X-KDevelop-Scope=Global
+X-KDE-Library=libkdevannotation
+X-KDevelop-Version=3
+X-KDevelop-Properties=
