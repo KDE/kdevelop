@@ -470,7 +470,7 @@ void PartController::slotCurrentChanged(QWidget *w)
 
 void PartController::slotOpenFile()
 {
-  QStringList fileNames = KFileDialog::getOpenFileNames(QString::null, "*.*", TopLevel::getInstance()->main(), i18n("Open File"));
+  QStringList fileNames = KFileDialog::getOpenFileNames(QString::null, QString::null, TopLevel::getInstance()->main(), QString::null);
 
   for ( QStringList::Iterator it = fileNames.begin(); it != fileNames.end(); ++it ) {
     editDocument(KURL(*it));
