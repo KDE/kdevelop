@@ -329,7 +329,9 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
             QString name = childEl.attribute("name");
             QString url = base + childEl.attribute("url");
             DocTreeItem *item = new DocTreeItem(this, Book, name);
-            item->setFileName(url);
+
+                item->setFileName(url);
+            
             if (lastChildItem)
                 item->moveItem(lastChildItem);
             lastChildItem = item;
@@ -347,6 +349,21 @@ DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fil
                     if (lastGrandchildItem)
                         item2->moveItem(lastGrandchildItem);
                     lastGrandchildItem = item2;
+		    // and nobody said there couldn't be another level ;-)
+		    QListViewItem *last2GrandchildItem = 0;
+		    QDomElement grand2childEl = grandchildEl.firstChild().toElement();
+		    while (!grand2childEl.isNull()) {
+			if (grand2childEl.tagName() == "tocsect3") {
+			    QString name3 = grand2childEl.attribute("name");
+			    QString url3 = base + grand2childEl.attribute("url");
+			    DocTreeItem *item3 = new DocTreeItem(item2, Doc, name3);
+			    item3->setFileName(url3);
+			    if (last2GrandchildItem)
+				item3->moveItem(last2GrandchildItem);
+			    last2GrandchildItem = item3;
+			}
+			grand2childEl = grand2childEl.nextSibling().toElement();
+		    }
                 }
                 grandchildEl = grandchildEl.nextSibling().toElement();
             }
