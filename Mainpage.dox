@@ -19,29 +19,28 @@ the <a href="http://www.kdevelop.org">KDevelop website</a>.
 
 \section status Current Staus
 
-  - Programming Languages Support Status \ref LangSupportStatus
-  - You can find the \ref Features
-  - You can find the \ref Requirements
+Here you can see the current \ref requirements and the \ref features.
+There is also a \ref LangSupportStatus page.
 
 
 \section expand How to expand KDevelop
 
-  - You can find more info on \ref KDev3Arch
-  - How to add support for a language in KDevelop \ref howToAddNewLanguage
-  - How to extend KDevelop via plugins \ref howToExtend
+First of all read the \ref KDev3Arch then you can find more information on how to expand KDevelop on:
+  - \ref howToAddNewLanguage
+  - \ref howToExtend
 
 
 \section PlannedTasks Planned tasks
 
-First we need to do the \ref HighPriTasks then fix the \ref Bugs and finally fix the dispersed \ref Todo
+First we need to do the \ref HighPriTasks then fix the \ref bug and finally fix the dispersed \ref todo
 all over the code.
 
 
 \section misc Misc
 
-  - You can find the \ref Authors
-  - You can find the \ref Maintainers
-  - You can find the \ref F.A.Q.
-  - You can find the \ref Deprecated List
+  - \ref authors
+  - \ref maintainers
+  - \ref FAQ
+  - \ref deprecated
 
 */

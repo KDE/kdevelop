@@ -23,7 +23,7 @@ DISTRIBUTE_GROUP_DOC   = NO
 TAB_SIZE               = 4
 ALIASES                = "feature=\xrefitem features \"Feature(s)\" \"Features\"" \
                          "maintainer=\xrefitem maintainers \"Maintainer(s)\" \"Maintainers\"" \
-                         "requirement=\xrefitem requirement \"Requirement(s)\" \"Requirements\"" \
+                         "requirement=\xrefitem requirements \"Requirement(s)\" \"Requirements\"" \
                          "faq=\xrefitem FAQ \"F.A.Q.\" \"F.A.Q.\"" \
                          "authors=\xrefitem authors \"Author(s)\" \"Authors\""
 OPTIMIZE_OUTPUT_FOR_C  = NO
@@ -68,6 +68,7 @@ WARN_LOGFILE           =
 INPUT                  = src \
                          lib \
                          parts \
+                         Mainpage.dox \
                          plugins
 FILE_PATTERNS          = *.h \
                          *.hh \
@@ -129,7 +130,7 @@ EXCLUDE                = parts/appwizard/adahello/ \
                          parts/appwizard/kdevlang \
                          parts/cppsupport/subclassing_template
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS       = 
+EXCLUDE_PATTERNS       = *.moc*
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO

@@ -9,14 +9,14 @@ reconfigure (sub)projects. Unsupported qmake features will be left unchanged
 (hopefully) no major testing has been run yet.
 
 \authors Bernd Gehrmann <bernd AT kdevelop.org>
-\authors Thomas Hasart <thasart AT gmx.de>                                                        *
+\authors Thomas Hasart <thasart AT gmx.de>
 
 \maintainer Jakob Simon-Gaarde <jsgaarde AT tdcspace.dk>
 
 \feature Loads and maintains .pro files (qmake project files).
-\feature supports subprojects and qmake scopes.
+\feature Supports subprojects and qmake scopes.
 \feature Qmake projects can be configured on project, subproject and file level.
-\feature It will regenerate a projects .pro files dynamically as you add,
+\feature Regenerates a projects .pro files dynamically as you add,
 remove or reconfigure (sub)projects.
 \feature Unsupported qmake features will be left unchanged (hopefully)
  no major testing has been run yet.
