@@ -253,12 +253,12 @@ svn_error_t *SvnPart::promptUser(char **result, const char *prompt, svn_boolean_
 		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
 				QLineEdit::Normal, QString::null, &ok, NULL );
 		if (!ok)
-			return svn_error_create (0, 0, NULL, "Authentification aborted"); 
+			return svn_error_create (0, NULL, "Authentification aborted"); 
 	} else {
 		text = QInputDialog::getText( i18n("Subversion authentication"), i18n(prompt_native),
 				QLineEdit::Password, QString::null, &ok, NULL );
 		if (!ok)
-			return svn_error_create (0, 0, NULL, "Authentification aborted"); 
+			return svn_error_create (0, NULL, "Authentification aborted"); 
 	}
 		
 	err = svn_utf_cstring_to_utf8 ((const char **)result, text, NULL, pool);
@@ -457,6 +457,7 @@ void SvnPart::slotUpdate() {
 void SvnPart::slotDiff() {
 	svn_client_auth_baton_t *auth_baton=createAuthBaton();
 	svn_boolean_t recurse=recursive;
+	svn_boolean_t no_diff_deleted=false;
 	svn_opt_revision_t revision_start,revision_end;
 	revision_start.kind = svn_opt_revision_base;
 	revision_end.kind = svn_opt_revision_working;
@@ -474,7 +475,7 @@ void SvnPart::slotDiff() {
 	
 	kdDebug() << "SVN diff " << popupfile.utf8() << endl;
 	svn_error_t *err = svn_client_diff (options, auth_baton, popupfile.utf8(), &revision_start,
-			popupfile.utf8(), &revision_end, recurse, outfile, errfile, pool);
+			popupfile.utf8(), &revision_end, recurse, no_diff_deleted, outfile, errfile, pool);
 	if (err)
 		Error(err);
 	else {//idem : remove ?

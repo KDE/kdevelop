@@ -1,3 +1,7 @@
+2003-02-04 Mickael Marchand <marchand@kde.org>
+	* parts/svn:
+	  - update to subversion 0.17, minor API changes
+
 2003-02-04 Roberto Raggi <roberto@kdevelop.org>
 	* added text hints support to qeditor
 
