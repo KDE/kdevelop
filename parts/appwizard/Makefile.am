@@ -13,9 +13,9 @@ libkdevappwizard_la_SOURCES = appwizardfactory.cpp appwizardpart.cpp appwizarddl
 
 METASOURCES = AUTO
 
-servicedir = $(kde_servicesdir) 
+servicedir = $(kde_servicesdir)
 service_DATA = kdevappwizard.desktop
 
-rcdir = $(kde_datadir)/kdevappwizard 
+rcdir = $(kde_datadir)/kdevappwizard
 rc_DATA = kdevappwizard.rc
 noinst_HEADERS =  autoform.h dataform.h
