@@ -45,10 +45,12 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
 
 PartExplorerPlugin::~PartExplorerPlugin()
 {
+/*
     if (m_widget)
     {
         mainWindow()->removeView( m_widget );
     }
+*/	
     //delete m_widget;
 }
 
