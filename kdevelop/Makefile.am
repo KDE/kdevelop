@@ -37,7 +37,8 @@ kdevelop_SOURCES = ckdevelop.cpp main.cpp cnewfiledlg.cpp coutputwidget.cpp \
 		   cnewprojectdlg.cpp cfinddoctextdlg.cpp kstartuplogo.cpp ktipofday.cpp \
 		   ckdevinstall.cpp ckdevelop_kdlginit.cpp \
 		   caddclassmethoddlg.cpp caddclassattributedlg.cpp \
-		   cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp
+		   cclasstooldlg.cpp cclasstreehandler.cpp ctreehandler.cpp \
+		   ctreeview.cpp
 
 kdevelop_METASOURCES = USE_AUTOMOC
 # the library search path. 
@@ -57,7 +58,8 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		debug.h \
 		cnewprojectdlg.h cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
 		caddclassmethoddlg.h caddclassattributedlg.h \
-		cclasstooldlg.h cclasstreehandler.h ctreehandler.h
+		cclasstooldlg.h cclasstreehandler.h ctreehandler.h \
+		ctreeview.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm
 
