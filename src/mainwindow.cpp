@@ -719,6 +719,12 @@ void MainWindow::guiRestoringFinished()
 
 void MainWindow::prepareToCloseViews()
 {
+  // closed views are undocked (toplevel) and invisible;
+  // need to dock them back to get a proper docksession saving
+  while (m_unavailableViews.first()) {
+    setViewAvailable(m_unavailableViews.first(), true); // this also removes from the list
+  }
+  
   writeDockConfig();
 }
 
