@@ -107,6 +107,7 @@ void ProjectManager::createActions( KActionCollection* ac )
                           this, SLOT(loadProject(const KURL &)),
                           ac, "project_open_recent");
   m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
+  m_openRecentProjectAction->loadEntries(kapp->config(), "RecentProjects");
 
   m_closeProjectAction =
     new KAction(i18n("C&lose Project"), "fileclose",0,
@@ -162,8 +163,6 @@ void ProjectManager::slotProjectOptions()
 
 void ProjectManager::loadSettings()
 {
-  KConfig *config = kapp->config();
-  m_openRecentProjectAction->loadEntries(config, "RecentProjects");
 }
 
 void ProjectManager::saveSettings()
@@ -251,7 +250,8 @@ bool ProjectManager::loadProject(const KURL &url)
     }
   }
 
-  m_openRecentProjectAction->addURL(KURL(projectFile()));
+  m_openRecentProjectAction->addURL(projectFile());
+
   m_closeProjectAction->setEnabled(true);
   m_projectOptionsAction->setEnabled(true);
 
