@@ -424,4 +424,9 @@ void CUpdateKDEDocDlg::slotProcessExited(KProcess*)
   emit newDocIsCreatedNow(kde_doc_path);
 }
 
+void CUpdateKDEDocDlg::setQtDocDir(const QString& qtDocDir)
+{
+  qt_doc_path = qtDocDir;
+}
+ 
 #include "cupdatekdedocdlg.moc"

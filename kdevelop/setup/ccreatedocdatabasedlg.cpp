@@ -343,4 +343,9 @@ void CCreateDocDatabaseDlg::slotProcessExited(KProcess*)
     emit indexingFinished("htdig");
 }
 
+void CCreateDocDatabaseDlg::setQtDocDir(const QString& qtDocDir)
+{
+  m_qtDocDir = qtDocDir;
+}
+
 #include "ccreatedocdatabasedlg.moc"
