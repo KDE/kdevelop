@@ -10,7 +10,10 @@
  ***************************************************************************/
 
 #include <qlineedit.h>
+#include <qtextedit.h>
 #include <qpushbutton.h>
+#include <qtooltip.h>
+#include <qlayout.h>
 
 #include <klistview.h>
 #include <klocale.h>
@@ -35,6 +38,40 @@ public:
         setText( 1, propertyType );
         setText( 2, propertyValue );
     }
+
+    QString tipText() const
+    {
+        QString tip = "Name: %1 | Type: %2 | Value: %3";
+        return tip.arg( text(0) ).arg( text(1) ).arg( text(2) );
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// class ResultsList
+///////////////////////////////////////////////////////////////////////////////
+
+class ResultsList : virtual public KListView, virtual public QToolTip
+{
+public:
+    ResultsList( QWidget *parent )
+        : KListView( parent, "resultslist" ), QToolTip( viewport() ) {}
+    virtual ~ResultsList() {}
+
+    virtual void maybeTip(const QPoint &p)
+    {
+        PropertyItem *item = dynamic_cast<PropertyItem*>( itemAt( p ) );
+        if ( item )
+        {
+            QRect r = itemRect( item );
+            if ( r.isValid() )
+                tip( r, item->tipText() );
+        }
+    }
+
+    void clear()
+    {
+        KListView::clear();
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,35 +79,60 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 
 PartExplorerForm::PartExplorerForm( QWidget *parent )
-    : KDialogBase( parent, "partexplorerform", true, i18n("PartExplorer, a services lister"),
-        User1 | Close, User1, true )
+    : PartExplorerFormBase( parent, "partexplorerform", 0 )
 {
-    m_base = new PartExplorerFormBase( this, "partexplorerformbase" );
-    this->setMainWidget( m_base );
+    resultsList = new ResultsList( this );
+    resultsList->addColumn( tr2i18n( "Property" ) );
+    resultsList->addColumn( tr2i18n( "Type" ) );
+    resultsList->addColumn( tr2i18n( "Value" ) );
+    resultsList->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)3,
+        (QSizePolicy::SizeType)3, 0, 0,
+        resultsList->sizePolicy().hasHeightForWidth() ) );
+    PartExplorerFormBaseLayout->addWidget( resultsList );
 
-    setButtonText( User1, i18n("&Start query") );
 
-    connect( this, SIGNAL(user1Clicked()), this, SLOT(slotSearchRequested()) );
-    connect( m_base->lineEditType, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
-    connect( m_base->lineEditCostraints, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+    connect( typeEdit, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+    connect( costraintsText, SIGNAL(returnPressed()), this, SLOT(slotSearchRequested()) );
+
+    connect( searchButton, SIGNAL(clicked()), this, SLOT(slotSearchRequested()) );
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 PartExplorerForm::~PartExplorerForm()
 {
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+QString PartExplorerForm::serviceType() const
+{
+    QString st = this->typeEdit->text();
+
+    return st.isEmpty()? QString::null : st;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString PartExplorerForm::costraints() const
+{
+    QString c = this->costraintsText->text();
+    return c.isEmpty()? QString::null : c;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 void PartExplorerForm::slotSearchRequested()
 {
-    QString serviceType = m_base->lineEditType->text(),
-        costraints = m_base->lineEditCostraints->text();
+    QString serviceType = this->serviceType(),
+        costraints = this->costraints();
 
-    kdDebug(9000) << ">> slot PartExplorerForm::slotSearchRequested(): " << endl
-        << "  ** serviceType = " << serviceType << ", costraints = " << costraints
-        << endl;
+    kdDebug(9000) << "===> PartExplorerForm::slotSearchRequested(): " <<
+        " serviceType = " << serviceType << ", costraints = " << costraints << endl;
 
-    if (serviceType.isNull() || serviceType.isEmpty())
+    if (serviceType.isNull() && serviceType.isNull())
     {
-        slotDisplayError( "You must fill at least the type field!!" );
+        slotDisplayError( i18n("You must fill at least a field!!") );
         return;
     }
 
@@ -79,27 +141,30 @@ void PartExplorerForm::slotSearchRequested()
     fillWidget( foundServices );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 void PartExplorerForm::slotDisplayError( QString errorMessage )
 {
-    if (errorMessage.isNull() || errorMessage.isEmpty())
+    if (errorMessage.isEmpty())
     {
-        errorMessage = "Unknown error!";
+        errorMessage = i18n("Unknown error!");
     }
     KMessageBox::error( this, errorMessage );
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
 void PartExplorerForm::fillWidget( const KTrader::OfferList &services )
 {
-    m_base->listViewResults->clear();
+    this->resultsList->clear();
 
     if ( services.isEmpty())
     {
-        kdDebug( 9000 ) << "OfferList is empty!" << endl;
-        slotDisplayError( "No service found matching the criteria!" );
+        slotDisplayError( i18n("No service found matching the criteria!") );
         return;
     }
 
-    m_base->listViewResults->setRootIsDecorated( true );
+    this->resultsList->setRootIsDecorated( true );
 
     KListViewItem *rootItem = 0;
 
@@ -107,9 +172,7 @@ void PartExplorerForm::fillWidget( const KTrader::OfferList &services )
     for ( ; it != services.end(); ++it )
     {
         KService::Ptr service = (*it);
-        kdDebug( 9000 ) << "  ** Found service: " << service->name() << endl;
-
-        KListViewItem *serviceItem = new KListViewItem( m_base->listViewResults, rootItem, service->name() );
+        KListViewItem *serviceItem = new KListViewItem( this->resultsList, rootItem, service->name() );
 
         QStringList propertyNames = service->propertyNames();
         for ( QStringList::const_iterator it = propertyNames.begin(); it != propertyNames.end(); ++it )
@@ -124,9 +187,10 @@ void PartExplorerForm::fillWidget( const KTrader::OfferList &services )
             else {
                 propertyValue = property.toString();
             }
-            kdDebug( 9000 ) << "  **** Found property: " << propertyName << endl;
-            kdDebug( 9000 ) << "  ****           Type: " << propertyType << endl;
-            kdDebug( 9000 ) << "  ****          Value: " << propertyValue << endl;
+
+            QString dProperty = " *** Found property < %1, %2, %3 >";
+            dProperty = dProperty.arg( propertyName ).arg( propertyType ).arg( propertyValue );
+            kdDebug( 9000 ) << dProperty << endl;
 
             new PropertyItem( serviceItem, propertyName, propertyType, propertyValue );
         }

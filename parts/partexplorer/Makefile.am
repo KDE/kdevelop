@@ -14,4 +14,4 @@ servicedir = $(kde_servicesdir)
 service_DATA = kdevpartexplorer.desktop
 
 rcdir = $(kde_datadir)/kdevpartexplorer
-rc_DATA = kdevpartexplorer.rc
+

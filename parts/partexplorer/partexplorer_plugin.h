@@ -12,6 +12,8 @@
 #ifndef _PARTEXPLORERPLUGIN_H_
 #define _PARTEXPLORERPLUGIN_H_
 
+#include <qguardedptr.h>
+
 #include "kdevplugin.h"
 
 class QWidget;
@@ -41,24 +43,11 @@ public:
     */
     virtual ~PartExplorerPlugin();
 
-signals:
-    /**
-    * This signal is connected to the m_widget, so the form will be the only encharged
-    * for displaying error messages.
-    */
-    void displayError( QString );
-
-public slots:
-    /**
-    * Show PartEplorer form.
-    */
-    void slotShowWidget();
-
 private:
     /**
     * The dialog for user interaction, so the plugin is usable too ;)
     */
-    PartExplorerForm *m_widget;
+    QGuardedPtr<PartExplorerForm> m_widget;
 };
 
 #endif // _PARTEXPLORERPLUGIN_H_

@@ -12,7 +12,6 @@
 #include "partexplorer_plugin.h"
 
 #include <kinstance.h>
-#include <kaction.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -30,38 +29,19 @@ PartExplorerPlugin::PartExplorerPlugin(  QObject *parent, const char *name, cons
 {
     // we need an instance
     setInstance( PartExplorerPluginFactory::instance() );
-    // set our XML-UI resource file
-    setXMLFile( "kdevpartexplorer.rc" );
-
-    KAction *action;
-    // This plugin offer only one action, a menu entry for showing the PartExplorerForm ...
-    action = new KAction( i18n("Part Explorer"), 0, this, SLOT(slotShowWidget()),
-        actionCollection(), "show_partexplorerform" );
 
     // this should be your custom internal widget
-    m_widget = new PartExplorerForm( mainWindow()->main()->centralWidget() );
-    m_widget->hide();
-
-    // When the user press "Search" button then this part performs the query.
-    connect(
-        m_widget, SIGNAL(searchQuery(QString,QString)),
-        this, SLOT(slotSearchServices(QString,QString))
-    );
-    // Let the widget to display any error message we may encounter.
-    connect(
-        this, SIGNAL(displayError(QString)),
-        m_widget, SLOT(slotDisplayError(QString))
-    );
+    m_widget = new PartExplorerForm();
+    mainWindow()->embedSelectView( m_widget, i18n("PartExplorer"), i18n("Query system services"));
 }
 
 PartExplorerPlugin::~PartExplorerPlugin()
 {
-//    delete m_widget;
-}
-
-void PartExplorerPlugin::slotShowWidget()
-{
-    m_widget->show();
+    if (m_widget)
+    {
+        mainWindow()->removeView( m_widget );
+    }
+    delete m_widget;
 }
 
 #include "partexplorer_plugin.moc"

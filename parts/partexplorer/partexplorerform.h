@@ -13,31 +13,31 @@
 #define PARTEXPLORERFORM_H
 
 #include <ktrader.h>
-#include <kdialogbase.h>
 
-class PartExplorerFormBase;
+#include "partexplorerformbase.h"
 
-/*
-class KTrader;
-class KTrader::OfferList;
-*/
+class ResultsList;
+
 /**
 * Adds new signals and slots so we can do more information hiding and make
 * the PartExplorerPart more abstract.
 *
 * @author Mario Scalas
 */
-class PartExplorerForm : public KDialogBase
+class PartExplorerForm : public PartExplorerFormBase
 {
     Q_OBJECT
 public:
-    PartExplorerForm( QWidget *parent );
+    PartExplorerForm( QWidget *parent = 0 );
     virtual ~PartExplorerForm();
 
     /**
     * Fills the widget with data gathered for system's query.
     */
     void fillWidget( const KTrader::OfferList &services );
+
+    QString serviceType() const;
+    QString costraints() const;
 
 public slots:
     void slotDisplayError( QString );
@@ -46,7 +46,7 @@ protected slots:
     void slotSearchRequested();
 
 private:
-    PartExplorerFormBase *m_base;
+    ResultsList *resultsList;
 };
 
 #endif
