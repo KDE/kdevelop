@@ -19,7 +19,7 @@ static const KCmdLineOptions options[]=
 
 int main( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, newExampleAboutData() );
+    KCmdLineArgs::init( argc, argv, new$APPNAME$AboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication app;
 

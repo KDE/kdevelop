@@ -5,7 +5,7 @@ templatedir = ${appwizarddatadir}/templates
 
 kopart_DATA = kopart.kdevelop kopart_aboutdata.h kopart_part.cpp kopart_view.h src-Makefile.am \
 	kopart.png kopart_factory.cpp kopart_part.h main.cpp subdirs kopart.desktop kopart.rc \
-	kopart_factory.h kopart_view.cpp x-kopart.desktop
+	kopart_factory.h kopart_view.cpp x-kopart.desktop configure.in.in
 
 template_DATA = kopart
 
