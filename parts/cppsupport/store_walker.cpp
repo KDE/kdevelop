@@ -561,15 +561,10 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
 
 	bool isConstructor = typeSpec == 0 && id == m_currentClass->name();
 	method->setIsConstructor( isConstructor );
-
-#if 0
-	if( m_currentClass && isConstructor )
-	    method->setType( m_currentClass->name() + "*" );
-	else if( m_currentClass && isDestructor )
-	    method->setType( "void" );
-	else
-#endif
-	    method->setType( typeOfDeclaration(typeSpec, d) );
+	
+	QString text = typeOfDeclaration( typeSpec, d );
+	if( !text.isEmpty() )
+	    method->setType( text );
     } else {
 	QString text = typeOfDeclaration( typeSpec, d );
 	if( !text.isEmpty() )
@@ -616,7 +611,9 @@ void StoreWalker::parseFunctionArguments( DeclaratorAST* declarator, ParsedMetho
 		    arg->setName( text );
 	    }
 
-	    arg->setType( typeOfDeclaration(param->typeSpec(), param->declarator()) );
+	    QString tp = typeOfDeclaration( param->typeSpec(), param->declarator() );
+	    if( !tp.isEmpty() )
+		arg->setType( tp );
 	    method->addArgument( arg );
 	}
     }
