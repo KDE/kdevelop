@@ -208,6 +208,8 @@ public: // Methods to store project options
   
   void setBinPROGRAM(const char *name)        { writeGroupEntry( "Config for BinMakefileAm", "bin_program", name ); }
 
+  void setPathToBinPROGRAM(const char *name)  { writeGroupEntry( "Config for BinMakefileAm", "path_to_bin_program", name ); }
+
   void setDirWhereMakeWillBeCalled(const char *name)        { writeGroupEntry( "General", "dir_where_make_will_be_called", name ); }
 
 
@@ -275,6 +277,8 @@ public: // Methods to fetch project options
   QString getConfigureArgs()  { return readGroupEntry( "General", "configure_args" ); }
 
   QString getBinPROGRAM()     { return readGroupEntry( "Config for BinMakefileAm", "bin_program" ); }
+
+  QString pathToBinPROGRAM()  { return readGroupEntry( "Config for BinMakefileAm", "path_to_bin_program" ); }
 
   QString getDirWhereMakeWillBeCalled(QString defaultStr);
 
