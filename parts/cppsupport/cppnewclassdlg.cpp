@@ -83,6 +83,7 @@ CppNewClassDialog::CppNewClassDialog(KDevPlugin *part, QWidget *parent, const ch
     comp = basename_edit->completionObject();
     setCompletion(m_part->classStore());
     setCompletion(m_part->ccClassStore());
+    classname_edit->setFocus();
 }
 
 
