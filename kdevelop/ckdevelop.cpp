@@ -199,9 +199,13 @@ void CKDevelop::slotFileCloseAll()
     TEditInfo *next_info=edit_infos.next();
     if(actual_info->modified && handledNames.contains(actual_info->filename)<1)
     {
+      QString prjName("");
+      if (prj)
+        prjName = "\n" + prj->getProjectName() + "\n\n";
+
       KMsgBox *files_close=new KMsgBox(this,i18n("Save changed files ?"),
-		    	   i18n("The project\n\n")+prj->getProjectName()
-					   +i18n("\n\ncontains changed files. Save modified file\n\n")
+		    	   i18n("The project\n")+prjName
+					   +i18n("contains changed files. Save modified file\n\n")
 					   +actual_info->filename+" ?\n\n",KMsgBox::QUESTION,
 					   i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
 
