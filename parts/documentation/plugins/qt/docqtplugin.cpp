@@ -140,8 +140,9 @@ void DocQtPlugin::init(KListView* contents)
     for (QMap<QString, QString>::const_iterator it = entryMap.begin();
         it != entryMap.end(); ++it)
     {
-        new QtDocumentationCatalogItem(config->readPathEntry(it.key()), this,
-            contents, it.key());
+        if (catalogEnabled(it.key()))
+            new QtDocumentationCatalogItem(config->readPathEntry(it.key()), this,
+                contents, it.key());
     }
 }
 
@@ -163,13 +164,14 @@ void DocQtPlugin::reinit(KListView *contents, KListBox *index, QStringList restr
     for (QMap<QString, QString>::const_iterator it = entryMap.begin();
         it != entryMap.end(); ++it)
     {
-        if (restrictions.contains(it.key()))
+        if (restrictions.contains(it.key()) || (!catalogEnabled(it.key())))
         {
             if (namedCatalogs.contains(it.key()))
                 delete namedCatalogs[it.key()];
         }
         else
         {
+            kdDebug() << "updating 1" << endl;
             if (!namedCatalogs.contains(it.key()))    //create catalog if it does not exist
             {
                 QtDocumentationCatalogItem *item = new QtDocumentationCatalogItem(
@@ -177,10 +179,22 @@ void DocQtPlugin::reinit(KListView *contents, KListBox *index, QStringList restr
                 loadIndex(index, item);
             }
             else if (!indexEnabled(namedCatalogs[it.key()]))    //clear index if it is disabled in configuration
+            {
+                kdDebug() << "    updating: clearCatalogIndex" << endl;
                 clearCatalogIndex(namedCatalogs[it.key()]);
+            }
             else if ( (indexEnabled(namedCatalogs[it.key()]))    //index is requested in configuration but does not yet exist
                 && (!indexes.contains(namedCatalogs[it.key()])) )
+            {
+                 kdDebug() << "    index requested " << endl;
                  createIndex(index, namedCatalogs[it.key()]);
+            }
+            else if (indexEnabled(namedCatalogs[it.key()]))
+                kdDebug() << "    1" << endl;
+            else if (!indexes.contains(namedCatalogs[it.key()]))
+                kdDebug() << "    2" << endl;
+            else
+                kdDebug() << "    3" << endl;                
         }
     }
 }
@@ -356,6 +370,8 @@ void DocQtPlugin::loadCatalogConfiguration(KListView *configurationView)
     {
         ConfigurationItem *item = new ConfigurationItem(configurationView, it.key(), it.data(),
             hasCapability(Index), hasCapability(FullTextSearch));
+        config->setGroup("TOC Settings");
+        item->setContents(config->readBoolEntry(item->title(), true));
         config->setGroup("Index Settings");
         item->setIndex(config->readBoolEntry(item->title(), false));
         config->setGroup("Search Settings");
@@ -381,6 +397,11 @@ void DocQtPlugin::saveCatalogConfiguration(KListView *configurationView)
         if (confItem->isChanged())
             config->deleteEntry(confItem->origTitle());
         config->writePathEntry(confItem->title(), confItem->url());
+        
+        config->setGroup("TOC Settings");
+        if (confItem->isChanged())
+            config->deleteEntry(confItem->origTitle());
+        config->writeEntry(confItem->title(), confItem->contents());
         
         config->setGroup("Index Settings");
         if (confItem->isChanged())
@@ -424,14 +445,36 @@ QString DocQtPlugin::catalogTitle(const QString &url)
 
 bool DocQtPlugin::indexEnabled(DocumentationCatalogItem *item) const
 {
+    QString group = config->group();
     config->setGroup("Index Settings");
-    return config->readBoolEntry(item->text(0), false);
+    bool b = config->readBoolEntry(item->text(0), false);
+    config->setGroup(group);
+    return b;
 }
 
 void DocQtPlugin::setIndexEnabled(DocumentationCatalogItem *item, bool e)
 {
+    QString group = config->group();
     config->setGroup("Index Settings");
     config->writeEntry(item->text(0), e);
+    config->setGroup(group);
+}
+
+bool DocQtPlugin::catalogEnabled(const QString &name) const
+{
+    QString group = config->group();
+    config->setGroup("TOC Settings");
+    bool b = config->readBoolEntry(name, true);
+    config->setGroup(group);
+    return b;
+}
+
+void DocQtPlugin::setCatalogEnabled(const QString &name, bool e)
+{
+    QString group = config->group();
+    config->setGroup("TOC Settings");
+    config->writeEntry(name, e);
+    config->setGroup(group);
 }
 
 #include "docqtplugin.moc"

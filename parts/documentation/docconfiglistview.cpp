@@ -27,6 +27,7 @@ DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
      :KListView(parent, name)
 {
     setSorting(-1);
+    addColumn(i18n("TOC"));
     addColumn(i18n("Index"));
     addColumn(i18n("Search"));
     addColumn(i18n("Title"));    
@@ -35,6 +36,7 @@ DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
     setColumnWidthMode(1, QListView::Maximum);
     setColumnWidthMode(2, QListView::Maximum);
     setColumnWidthMode(3, QListView::Maximum);
+    setColumnWidthMode(4, QListView::Maximum);
     setAllColumnsShowFocus(true);
 
     connect(this, SIGNAL(clicked(QListViewItem*, const QPoint&, int)),
@@ -52,9 +54,15 @@ void DocConfigListView::clickedItem(QListViewItem *item, const QPoint &pnt, int 
     ConfigurationItem *cfg = dynamic_cast<ConfigurationItem*>(item);
     if (!cfg)
         return;
-    if ((c == 0) && (cfg->indexPossible()))
+    if (c == 0)
+    {
+        cfg->setContents(!cfg->contents());
+        if (!cfg->contents())
+            cfg->setIndex(false);
+    }
+    if ((c == 1) && (cfg->indexPossible()))
         cfg->setIndex(!cfg->index());
-    else if ((c == 1)  && (cfg->fullTextSearchPossible()))
+    else if ((c == 2)  && (cfg->fullTextSearchPossible()))
         cfg->setFullTextSearch(!cfg->fullTextSearch());
     repaintItem(item);
 }

@@ -95,9 +95,9 @@ public:
         bool indexPossible, bool fullTextSearchPossible);
 
     virtual QString title() const { return m_title; }
-    virtual void setTitle(const QString title) { setText(2, m_title = title); }
+    virtual void setTitle(const QString title) { setText(3, m_title = title); }
     virtual QString url() const { return m_url; }
-    virtual void setURL(const QString url) { setText(3, m_url = url); }
+    virtual void setURL(const QString url) { setText(4, m_url = url); }
 
     virtual bool isChanged() const { return m_title == m_origTitle; }
     virtual QString origTitle() const {return m_origTitle; }
@@ -105,6 +105,8 @@ public:
     virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
     virtual int width(const QFontMetrics &fm, const QListView *lv, int c) const;
 
+    bool contents() const { return m_contents; }
+    void setContents(bool contents) { m_contents = contents; }
     bool index() const { return m_index; }
     void setIndex(bool index) { m_index = index; }
     bool fullTextSearch() const { return m_fullTextSearch; }
@@ -117,7 +119,8 @@ private:
     QString m_title;
     QString m_url;
     QString m_origTitle;
-    
+
+    bool m_contents;
     bool m_index;
     bool m_fullTextSearch;
     
@@ -188,6 +191,13 @@ public:
     */
     virtual void autoSetup() = 0;
 
+    /**Indicates if a catalog with specified name is enabled. Documentation plugin
+    should check this and do not load catalogs disabled in configuration.
+    All catalogs are enabled by default.*/
+    virtual bool catalogEnabled(const QString &name) const = 0;
+    /**Enables or disables documentation catalog.*/
+    virtual void setCatalogEnabled(const QString &name, bool e) = 0;
+    
     /**Indicates if an index of given catalog should be rebuilt. This method
     is used by index caching algorythm to make a descision to rebuild index
     or to load it from cache.*/
@@ -196,7 +206,7 @@ public:
     has Index capability, indices for it's catalogs can be enabled/disabled
     in configuration dialog.*/
     virtual bool indexEnabled(DocumentationCatalogItem *item) const = 0;
-    /**Enables index for documentation catalog.*/
+    /**Enables or disables index for documentation catalog.*/
     virtual void setIndexEnabled(DocumentationCatalogItem *item, bool e) = 0;
     /**Builds index for given catalog. This method should fill index with
     IndexItem objects.

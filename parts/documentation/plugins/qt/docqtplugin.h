@@ -37,7 +37,10 @@ public:
     virtual void reinit(KListView *contents, KListBox *index, QStringList restrictions);
     virtual void createTOC(DocumentationCatalogItem *item);
     virtual void setCatalogURL(DocumentationCatalogItem *item);    
-    
+
+    virtual bool catalogEnabled(const QString &name) const;
+    virtual void setCatalogEnabled(const QString &name, bool e);
+        
     virtual bool needRefreshIndex(DocumentationCatalogItem *item);
     virtual void createIndex(KListBox *index, DocumentationCatalogItem *item);
     virtual bool indexEnabled(DocumentationCatalogItem *item) const;

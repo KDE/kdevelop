@@ -145,17 +145,17 @@ IndexItem::IndexItem(DocumentationPlugin *plugin, DocumentationCatalogItem *cata
 ConfigurationItem::ConfigurationItem(QListView *parent, const QString &title, const QString &url,
     bool indexPossible, bool fullTextSearchPossible)
     :QCheckListItem(parent, "", QCheckListItem::CheckBox), m_title(title), m_url(url),
-    m_origTitle(title), m_index(false), m_fullTextSearch(false),
+    m_origTitle(title), m_contents(true), m_index(false), m_fullTextSearch(false),
     m_indexPossible(indexPossible), m_fullTextSearchPossible(fullTextSearchPossible)
 {
-    setText(2, m_title);
-    setText(3, m_url);
+    setText(3, m_title);
+    setText(4, m_url);
 }
 
 void ConfigurationItem::paintCell(QPainter *p, const QColorGroup &cg, int column,
     int width, int align)
 {
-    if ( (column == 0) || (column == 1) )
+    if ( (column == 0) || (column == 1) || (column == 2) )
     {
         if ( !p )
             return;
@@ -173,11 +173,11 @@ void ConfigurationItem::paintCell(QPainter *p, const QColorGroup &cg, int column
         int marg = lv->itemMargin();
         int styleflags = QStyle::Style_Default;
                 
-        if (((column == 0) && m_index) || ((column == 1) && m_fullTextSearch))
+        if (((column == 0) && m_contents) || ((column == 1) && m_index) || ((column == 2) && m_fullTextSearch))
             styleflags |= QStyle::Style_On;
         else
             styleflags |= QStyle::Style_Off;
-        if (((column == 0) && m_indexPossible) || ((column == 1) && m_fullTextSearchPossible))
+        if ((column == 0) || ((column == 1) && m_indexPossible) || ((column == 2) && m_fullTextSearchPossible))
             styleflags |= QStyle::Style_Enabled;
 
         int x = 0;
@@ -199,7 +199,7 @@ void ConfigurationItem::paintCell(QPainter *p, const QColorGroup &cg, int column
 
 int ConfigurationItem::width(const QFontMetrics &fm, const QListView *lv, int c) const
 {
-    if ((c == 0) || (c == 1))
+    if ((c == 0) || (c == 1) || (c == 2))
         return lv->style().pixelMetric(QStyle::PM_CheckListButtonSize, lv) + 4;
     return QListViewItem::width(fm, lv, c);
 }
@@ -282,7 +282,7 @@ void DocumentationPlugin::cacheIndex(DocumentationCatalogItem *item)
     
     QTextStream str(&cacheFile);
     str.setEncoding(QTextStream::UnicodeUTF8);
-        
+
     QValueList<IndexItem*> catalogIndexes = indexes[item];
     for (QValueList<IndexItem*>::const_iterator it = catalogIndexes.constBegin();
         it != catalogIndexes.constEnd(); ++it)
@@ -323,7 +323,7 @@ void DocumentationPlugin::addCatalog(DocumentationCatalogItem *item)
 {
     catalogs.append(item);
     namedCatalogs[item->text(0)] = item;
-    indexes[item] = QValueList<IndexItem*>();
+//    indexes[item] = QValueList<IndexItem*>();
 }
 
 void DocumentationPlugin::addCatalogConfiguration(KListView *configurationView,
