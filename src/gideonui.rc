@@ -27,12 +27,15 @@
   </Menu>
   <Menu name="project">
     <text>&amp;Project</text>
+    <DefineGroup name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
-    <Action name="project_close"/>
-    <DefineGroup name="project"/>
-    <Action name="project_options"/>
+    <DefineGroup name="project_import"/>
+    <Separator/>
     <Merge/>
+    <Action name="project_options"/>
+    <Separator/>
+    <Action name="project_close"/>
   </Menu>
   <Menu name="build">
     <text>&amp;Build</text>
