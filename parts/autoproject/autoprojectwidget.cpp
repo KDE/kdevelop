@@ -689,7 +689,7 @@ void AutoProjectWidget::slotAddNewFile()
                       this, "add file dialog");
 
     if (dlg.exec())
-        slotOverviewSelectionChanged(m_shownSubproject); // update list view
+        slotDetailsSelectionChanged(m_shownSubproject); // update list view
 }
 
 
@@ -749,8 +749,9 @@ void AutoProjectWidget::slotRemoveFile()
     RemoveFileDialog dlg(this, m_shownSubproject, titem, fitem->text(0),
                          this, "remove file dialog");
 
-    if (dlg.exec())
-        slotOverviewSelectionChanged(m_shownSubproject);
+    if (dlg.exec()) {
+        slotDetailsSelectionChanged(m_shownSubproject);
+        }
 }
 
 
@@ -845,7 +846,7 @@ void AutoProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item,
 TargetItem *AutoProjectWidget::selectedTarget()
 {
     ProjectItem *pvitem = static_cast<ProjectItem*>(details->selectedItem());
-    if (!pvitem && pvitem->type() != ProjectItem::Target)
+    if (!pvitem || (pvitem->type() != ProjectItem::Target))
         return 0;
 
     return static_cast<TargetItem*>(pvitem);
@@ -855,7 +856,7 @@ TargetItem *AutoProjectWidget::selectedTarget()
 FileItem *AutoProjectWidget::selectedFile()
 {
     ProjectItem *pvitem = static_cast<ProjectItem*>(details->selectedItem());
-    if (!pvitem && pvitem->type() != ProjectItem::File)
+    if (!pvitem || (pvitem->type() != ProjectItem::File))
         return 0;
 
     return static_cast<FileItem*>(pvitem);
