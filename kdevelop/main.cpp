@@ -197,7 +197,11 @@ int main(int argc, char* argv[])
 
   if (args->count()) {
     // need full path name to find project and session files (rokrau 6/11/01)
-    QFileInfo arg0(args->arg(0));
+    QString sa0 = args->arg(0);
+    // konqueror passes a URL as argument (harryF 7/24/01)
+    if ( sa0.left(5) == "file:" )
+	sa0 = sa0.remove(0, 5);
+    QFileInfo arg0(sa0);
     CProject* pProj = kdevelop->projectOpenCmdl_Part1(arg0.absFilePath());
     if (pProj != 0L) {
       kdevelop->projectOpenCmdl_Part2(pProj);
