@@ -1,7 +1,7 @@
 /* XPM */
 static char *undo_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"24 24 5 1",
+"24 22 5 1",
 "  c Gray0",
 ". c #ae6e66e76a0a",
 "X c #c6c67d7d8181",
@@ -25,8 +25,6 @@ static char *undo_xpm[] = {
 "OOOOOOOOOOOOOOO  OOOOOOO",
 "OOOOOOOOOOOOOOO OOOOOOOO",
 "OOOOOOOOOOOOOO OOOOOOOOO",
-"OOOOOOOOOOOOOOOOOOOOOOOO",
-"OOOOOOOOOOOOOOOOOOOOOOOO",
 "OOOOOOOOOOOOOOOOOOOOOOOO",
 "OOOOOOOOOOOOOOOOOOOOOOOO",
 "OOOOOOOOOOOOOOOOOOOOOOOO",
