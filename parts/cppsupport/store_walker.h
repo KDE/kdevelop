@@ -23,6 +23,8 @@ public:
     StoreWalker( const QString& fileName, CodeModel* store );
     virtual ~StoreWalker();
 
+    FileDom file() { return m_file; }
+
     // translation-unit
     virtual void parseTranslationUnit( TranslationUnitAST* );
 

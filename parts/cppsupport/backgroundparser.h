@@ -68,7 +68,7 @@ public:
 
 protected:
     Unit* findUnit( const QString& fileName );
-    Unit* parseFile( const QString& fileName, bool readFromDisk );
+    Unit* parseFile( const QString& fileName, bool readFromDisk, bool lock=false );
 
 private:
     class KDevDriver* m_driver;

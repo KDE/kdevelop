@@ -109,7 +109,7 @@ private slots:
     void slotProjectCompiled();
     void setupCatalog();
     void codeCompletionConfigStored();
-
+    void recomputeCodeModel();
     void slotNewClass();
     void slotSwitchHeader();
     void slotGotoIncludeFile();
@@ -117,6 +117,7 @@ private slots:
     void slotMakeMember();
     void slotExtractInterface();
     void gotoLine( int line );
+    void emitFileParsed();
 
     void slotNeedTextHint( int, int, QString& );
 

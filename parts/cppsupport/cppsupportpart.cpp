@@ -143,6 +143,7 @@ public:
 	}
 
 	walker.parseTranslationUnit( ast.get() );
+	cppSupport()->codeModel()->addFile( walker.file() );
 	remove( fileName );
     }
 };
@@ -267,7 +268,7 @@ CppSupportPart::~CppSupportPart()
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
-    //kdDebug(9007) << "CppSupportPart::customEvent()" << endl;
+    kdDebug(9007) << "CppSupportPart::customEvent()" << endl;
 
     if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
@@ -287,22 +288,9 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	        m_problemReporter->reportProblem( fileName, p );
 	    }
 
-	    m_backgroundParser->lock();
-	    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
-
-		if( true /*!hasErrors*/ ){
-		    StoreWalker walker( fileName, codeModel() );
-
-		    if( codeModel()->hasFile(fileName) ){
-			FileDom file = codeModel()->fileByName( fileName );
-			removeWithReferences( fileName );
-		    }
-		    walker.parseTranslationUnit( ast );
-		    emit addedSourceInfo( fileName );
-		}
-	    }
-	    m_backgroundParser->unlock();
+	    QTimer::singleShot( 0, this, SLOT(recomputeCodeModel()) );
 	}
+
 	emit fileParsed( fileName );
     }
 }
@@ -1379,6 +1367,32 @@ void CppSupportPart::slotExtractInterface( )
 void CppSupportPart::gotoLine( int line )
 {
     m_activeViewCursor->setCursorPositionReal( line, 0 );
+}
+
+void CppSupportPart::recomputeCodeModel( )
+{
+	if( codeModel()->hasFile(m_activeFileName) ){
+		FileDom file = codeModel()->fileByName( m_activeFileName );
+		removeWithReferences( m_activeFileName );
+	}
+
+	m_backgroundParser->lock();
+	if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(m_activeFileName) ){
+
+		if( true /*!hasErrors*/ ){
+			StoreWalker walker( m_activeFileName, codeModel() );
+			walker.parseTranslationUnit( ast );
+			codeModel()->addFile( walker.file() );
+		    	emit addedSourceInfo( m_activeFileName );
+		}
+	}
+	m_backgroundParser->unlock();
+	QTimer::singleShot( 0, this, SLOT(emitFileParsed()) );
+}
+
+void CppSupportPart::emitFileParsed( )
+{
+	emit fileParsed( m_activeFileName );
 }
 
 #include "cppsupportpart.moc"

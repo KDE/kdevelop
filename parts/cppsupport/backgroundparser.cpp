@@ -250,7 +250,7 @@ void BackgroundParser::removeFile( const QString& fileName )
         m_isEmpty.wakeAll();
 }
 
-Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk )
+Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk, bool lock )
 {
     static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( readFromDisk );
 
@@ -267,6 +267,9 @@ Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk )
 
     static_cast<KDevSourceProvider*>( m_driver->sourceProvider() )->setReadFromDisk( false );
 
+    if( lock )
+        m_mutex.lock();
+
     if( m_unitDict.find(fileName) != m_unitDict.end() ){
 	Unit* u = m_unitDict[ fileName ];
 	m_unitDict.remove( fileName );
@@ -275,6 +278,9 @@ Unit* BackgroundParser::parseFile( const QString& fileName, bool readFromDisk )
     }
 
     m_unitDict.insert( fileName, unit );
+
+    if( lock )
+        m_mutex.unlock();
 
     KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName, unit->problems) );
 
@@ -294,9 +300,6 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
 
 TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
 {
-    if( m_currentFile == fileName ){
-         kdDebug(9007) << "============================> SHIT!!!!!!!!!!!" << endl;
-    }
     Unit* u = 0;
     if( (u = findUnit(fileName)) == 0 ){
 	m_fileList->remove( fileName );
@@ -337,28 +340,23 @@ void BackgroundParser::run()
 
     while( !m_close ){
 
-        m_mutex.lock();
 	while( m_fileList->isEmpty() ){
-            m_canParse.wait( &m_mutex );
+            m_canParse.wait();
 
-            if( m_close ){
+            if( m_close )
                 break;
-            }
         }
 
-        if( m_close ){
-            m_mutex.unlock();
+        if( m_close )
             break;
-        }
 
 	QPair<QString, bool> entry = m_fileList->front();
         QString fileName = entry.first;
 	bool readFromDisk = entry.second;
 	m_currentFile = fileName;
 
-	(void) parseFile( fileName, readFromDisk );
+	(void) parseFile( fileName, readFromDisk, true );
 	m_fileList->pop_front();
-        m_mutex.unlock();
 
 	m_currentFile = QString::null;
     }

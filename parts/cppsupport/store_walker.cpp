@@ -47,8 +47,6 @@ void StoreWalker::parseTranslationUnit( TranslationUnitAST* ast )
     m_imports << QStringList();
     TreeParser::parseTranslationUnit( ast );
     m_imports.pop_back();
-
-    m_store->addFile( m_file );
 }
 
 void StoreWalker::parseDeclaration( DeclarationAST* ast )
