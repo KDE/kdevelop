@@ -17,5 +17,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevgrepview.desktop
 
-rcdir = $(kde_datadir)/gideon
+rcdir = $(kde_datadir)/kdevgrepview
 rc_DATA = kdevgrepview.rc

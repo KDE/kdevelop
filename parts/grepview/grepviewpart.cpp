@@ -28,9 +28,7 @@
 GrepViewPart::GrepViewPart(KDevApi *api, QObject *parent, const char *name)
     : KDevPart(api, parent, name)
 {
-#ifndef GIDEON
-    setInstance(GrepFactory::instance());
-#endif
+    setInstance(GrepViewFactory::instance());
     
     setXMLFile("kdevgrepview.rc");
 
