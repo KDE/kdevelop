@@ -30,6 +30,8 @@
 #include <qlayout.h>
 #include <qfont.h>
 
+class CEditWidget;
+
 class ArgHintArrow : public QButton
 {
     Q_OBJECT
@@ -53,7 +55,7 @@ class KDevArgHint : public QFrame
 
 public:
     /** construtor */
-    KDevArgHint ( QWidget* parent );
+    KDevArgHint ( QWidget* parent, CEditWidget* edit );
     /** destructor */
     virtual ~KDevArgHint();
 
@@ -102,6 +104,9 @@ protected:
 signals:
     void argHintHided();
     void activated( int );
+
+private:
+    CEditWidget* m_edit;
 };
 
 #endif

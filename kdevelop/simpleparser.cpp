@@ -1,3 +1,23 @@
+/* $Id$
+ *
+ *  Copyright (C) 2002 Roberto Raggi (raggi@cli.di.unipi.it)
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; see the file COPYING.LIB.  If not, write to
+ *  the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ *  Boston, MA 02111-1307, USA.
+ *
+ */
 
 #include "simpleparser.h"
 
@@ -7,6 +27,7 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <kregexp.h>
+#include <kdebug.h>
 
 static QString remove( QString text, const QChar& l, const QChar& r )
 {
@@ -80,9 +101,9 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
     QStringList lines = QStringList::split( ";", contents );
 
-    KRegExp decl_rx( "^\\s*(([\\w_]|::)+)\\s+([\\w_]+)\\b[^{]*$" );
+    QRegExp decl_rx( "^\\s*(([\\w_<>]|::)+)\\s+([\\w_]+)\\b[^{]*$" );
     QRegExp method_rx( "^\\s*((?:[\\w_]|::)+).*{$" );
-    QRegExp ide_rx( "\\b(([\\w_]|::)+)\\s*\\(" );
+    // QRegExp ide_rx( "\\b(([\\w_<>]|::)+)\\s*\\(" );
 
     int lev = 0;
     QStringList::Iterator it = lines.begin();
@@ -101,10 +122,10 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
         if( line.startsWith("(") ){
             // pass
-        } else if( decl_rx.match(simplifyLine) ){
+        } else if( decl_rx.exactMatch(simplifyLine) ){
             // parse a declaration
-            QString type = QString::fromLatin1( decl_rx.group( 1 ) );
-            QString rest = simplifyLine.mid( decl_rx.groupStart(2) + 1 )
+            QString type = QString::fromLatin1( decl_rx.cap( 1 ) );
+            QString rest = simplifyLine.mid( decl_rx.pos(2) + 1 )
                            .replace( ws, "" );
 
             QStringList vlist = QStringList::split( ",", rest);
@@ -136,4 +157,15 @@ QValueList<SimpleVariable> SimpleParser::parseFile( const QString& filename ){
     }
     qDebug( "-----------------------------------------------------------" );
     return vars;
+}
+
+
+SimpleVariable SimpleParser::findVariable( const QValueList<SimpleVariable>& vars,
+                                           const QString& varname )
+{
+    for( QValueList<SimpleVariable>::ConstIterator it=vars.begin(); it!=vars.end(); ++it ){
+        if( (*it).name == varname )
+            return (*it);
+    }
+    return SimpleVariable();
 }

@@ -21,6 +21,7 @@
 
 #include "kwview.h"
 
+class CClassStore;
 class CppCodeCompletion;
 
 /** An abstraction layer for the editwidget.
@@ -37,7 +38,7 @@ public: // Constructor and destructor
    * @param doc           The pointer to the KWrite document for the KWrite constructor.
    * @param contentsType  One of the DocViewMan::ContentsType. Specifies what kind of edit widget this is (header or source file)
    */
-  CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc);
+  CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, CClassStore* pStore );
   /** Destroys the object.
    */
   ~CEditWidget();
@@ -167,8 +168,9 @@ public: // Queries
 public slots:
 // void spellcheck();
 // void spellcheck2(KSpell*);
- void slotGrepText();
+    void slotGrepText();
     void expandText();
+    void completeText();
 
 public: // Method to manipulate the buffer
 
@@ -209,10 +211,6 @@ protected: // Protected methods
    */
   int getLinePos( const char *buf, uint aLine );
 
-  /** */
-  QString getFunctionBody( int );
-
-
 protected slots:
   void slotLookUp();
   void slotManpage();
@@ -246,6 +244,7 @@ private:
 // KSpellConfig *ksc;
 // int spell_offset;
     CppCodeCompletion* m_pCodeCompletion;
+    CClassStore* m_pStore;
 };
 
 #endif

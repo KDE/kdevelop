@@ -1,10 +1,10 @@
 /***************************************************************************
                     ckdevelop.cpp - the main class in CKDevelop
-                             -------------------                                         
+                             -------------------
 
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : 20 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -12,7 +12,7 @@
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   * 
+ *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
 
@@ -106,7 +106,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 void CKDevelop::slotFileNew(){
-  
+
   slotStatusMsg(i18n("Creating new file..."));
   newFile(false);
   slotStatusMsg(i18n("Ready."));
@@ -191,7 +191,7 @@ void CKDevelop::slotFileSave()
   QString filename = m_docViewManager->currentEditView()->getName();
   QString sShownFilename = QFileInfo(filename).fileName();
   slotStatusMsg(i18n("Saving file %1").arg(sShownFilename));
-  
+
   if (isUntitled(filename)) {
     slotFileSaveAs();
   } else {
@@ -207,7 +207,7 @@ void CKDevelop::slotFileSave()
 
 void CKDevelop::slotFileSaveAs(){
     slotStatusMsg(i18n("Save file as..."));
-    
+
     fileSaveAs();
 
     setMainCaption();
@@ -255,7 +255,7 @@ void CKDevelop::slotFilePrint()
 {
   if (!m_docViewManager->currentEditView())
     return;
-    
+
   slotStatusMsg(i18n("Printing..."));
   slotFileSave();
 
@@ -961,7 +961,7 @@ void CKDevelop::slotBuildCompileFile(){
    	flags += "CC=" + config->readEntry("CC","gcc")+ " ";
    	flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
   	flags += "CPPFLAGS=\"" + cppflags + "\" ";
-    flags += "CFLAGS=\"" + cflags + "\" ";			
+    flags += "CFLAGS=\"" + cflags + "\" ";
    	if(prj->getProjectType()=="normal_c"){
    		flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
    	}
@@ -1626,7 +1626,7 @@ void CKDevelop::slotStartDebugRunWithArgs()
   if (argdlg.exec())
   {
     args = argdlg.getArguments();
-    prj->setDebugArgs(args);    
+    prj->setDebugArgs(args);
     prj->writeProject();
 
     stdin_stdout_widget->clear();
@@ -1745,7 +1745,7 @@ void CKDevelop::setupInternalDebugger()
   ASSERT(!dbgController);
   if (dbgController)
     return;
-  
+
   saveTimer->stop();  // stop the autosaving
 //  slotStatusMsg(i18n("Running %1 (from %2) in internal debugger").arg(prj->getBinPROGRAM()).arg(prj->getRunFromDir()));
 
@@ -1884,7 +1884,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
    	flags += "CC=" + config->readEntry("CC","gcc")+ " ";
    	flags += "CXX=" + config->readEntry("CXX","g++")+ " ";
   	flags += "CPPFLAGS=\"" + cppflags + "\" ";
-    flags += "CFLAGS=\"" + cflags + "\" ";			
+    flags += "CFLAGS=\"" + cflags + "\" ";
    	if(prj->getProjectType()=="normal_c"){
    		flags += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
    	}
@@ -1953,16 +1953,16 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
   setToolMenuProcess(false);
   slotFileSaveAll();
   messages_widget->start();
-  
+
   debug("set make args !\n");
-  
+
   // set the make arguments
   process.clearArguments();
   process << flags;
   process << make_cmd << prj->getMakeOptions() << " -f" << makefile;
   process << target;
 	debug("run: %s %s %s -f %s %s", flags.data(), make_cmd.data(), prj->getMakeOptions().data(), makefile.data(), target.data());
-  
+
   // why is this beeping business necessary? shouldn't there be a switch?
   // beep = true;
 
@@ -2020,7 +2020,7 @@ void CKDevelop::slotBuildCleanRebuildAll()
 
 void CKDevelop::RunConfigure(const QString& conf, bool ask){
 	QString args, shellcommand;
-	
+
 	if(conf==i18n("(Default)")){ // blddir=srcdir
 		args=prj->getConfigureArgs();
 	}
@@ -2062,7 +2062,7 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
 		QDir::setCurrent(vpath);
  	}
 	QString cppflags, cflags, cxxflags, addcxxflags, ldflags, group;
-	// get all other strings	
+	// get all other strings
   if(conf==i18n("(Default)")){
 		cxxflags=prj->getCXXFLAGS().simplifyWhiteSpace();
 		addcxxflags=prj->getAdditCXXFLAGS().simplifyWhiteSpace();
@@ -2088,7 +2088,7 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
  	shellcommand += "CC=\"" + config->readEntry("CC","gcc") + "\" ";
  	shellcommand += "CXX=\"" + config->readEntry("CXX","g++") + "\" ";
 	shellcommand += "CPPFLAGS=\"" + cppflags + "\" ";
-  shellcommand += "CFLAGS=\"" + cflags + "\" ";			
+  shellcommand += "CFLAGS=\"" + cflags + "\" ";
  	if(prj->getProjectType()=="normal_c"){
  		 shellcommand += "CFLAGS=\"" + cflags + " " + cxxflags + " " + addcxxflags + "\" " ;
  	}
@@ -2098,7 +2098,7 @@ void CKDevelop::RunConfigure(const QString& conf, bool ask){
   shellcommand += "LDFLAGS=\"" + ldflags+ "\" " ;
 	// the configure script is always in the project directory, no matter where we are
   shellcommand += prj->getProjectDir() + "/configure " + args;
-  
+
 	shell_process.clearArguments();
 	shell_process << shellcommand;
 	debug("run: %s\n", shellcommand.data());
@@ -2143,11 +2143,11 @@ void CKDevelop::slotToolsTool(int tool)
   }
 //  if(!bKDevelop)
 //    switchToKDevelop();
-    
+
 //  showOutputView(false);
 
   QString argument = toolApp.getArgs();
-     
+
   // This allows us to replace the macro %H with the header file name, %S with the source file name,
   // %T with the currently selected text, %W with the currently selected word
   // and %D with the project directory name.  Any others we should have?
@@ -2443,7 +2443,7 @@ void CKDevelop::slotOptionsCreateSearchDatabase(){
   KButtonBox bb( &parentDlg);
   bb.addStretch();
   QPushButton* ok_button  = bb.addButton( i18n("OK") );
-  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );	
+  QPushButton* cancel_button  = bb.addButton( i18n("Cancel") );
   ok_button->setDefault(true);
   connect(cancel_button, SIGNAL(clicked()), &parentDlg, SLOT(reject()));
   connect(ok_button, SIGNAL(clicked()), &embeddedDlg, SLOT(slotOkClicked()));
@@ -2758,7 +2758,7 @@ void CKDevelop::slotHelpAPI(){
       {
            KMessageBox::error(0,
                        i18n("Doxygen configuration file not found\n"
-                             "Generate a valid one:\n"    
+                             "Generate a valid one:\n"
                              "Project->API Doc Tool->Configure doxygen"));
         return;
       }
@@ -2766,7 +2766,7 @@ void CKDevelop::slotHelpAPI(){
    }
     //MB end
     if(!QFileInfo(api_file).exists()){
-//      int result=KMessageBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
+//      int result=KMessageBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n"
 //                                                                      "Would you like to generate it now ?"), KMessageBox::QUESTION);
 //      if(result==1){
 //        slotProjectAPI();
@@ -2778,7 +2778,7 @@ void CKDevelop::slotHelpAPI(){
     else{
       slotStatusMsg(i18n("Switching to project API Documentation..."));
       slotURLSelected(api_file);
-      slotStatusMsg(i18n("Ready.")); 
+      slotStatusMsg(i18n("Ready."));
     }
   }
 }
@@ -2787,7 +2787,7 @@ void CKDevelop::slotHelpManual(){
 
     QString name = prj->getSGMLFile().copy();
     QFileInfo finfo(name);
- 
+
     QString doc_file = finfo.dirPath() + "/" + finfo.baseName()+ ".html";
     if(!QFileInfo(doc_file).exists()){
       // try docbook file projectdir/doc/HTML/index.html
@@ -2908,7 +2908,7 @@ void CKDevelop::slotClassbrowserNewMethod()
 
 /*------------------------- CKDevelop::slotClassbrowserNewAttribute()
  * slotClassbrowserNewAttribute()
- *   Event when the user wants to create a new attribute from the 
+ *   Event when the user wants to create a new attribute from the
  *   browser toolbar/menu.
  *
  * Parameters:
@@ -3059,7 +3059,7 @@ void CKDevelop::slotCPPMarkStatus(KWriteView *,bool bMarked)
       disableCommand(ID_EDIT_CUT);
       disableCommand(ID_EDIT_COPY);
     }
-  }    
+  }
 }
 
 void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
@@ -3073,7 +3073,7 @@ void CKDevelop::slotHEADERMarkStatus(KWriteView *, bool bMarked)
       else{
         disableCommand(ID_EDIT_CUT);
         disableCommand(ID_EDIT_COPY);
-      }    
+      }
   }
 }
 
@@ -3099,7 +3099,7 @@ void CKDevelop::slotBROWSERMarkStatus(KHTMLPart *, bool bMarked)
       }
       else{
         disableCommand(ID_EDIT_COPY);
-      }    
+      }
   }
 }
 
@@ -3118,7 +3118,7 @@ void CKDevelop::slotNewLineColumn()
   QString linenumber;
   linenumber = i18n("Line: %1 Col: %2").arg(m_docViewManager->currentEditView ()->currentLine() +1).arg(m_docViewManager->currentEditView()->currentColumn() +1);
   statusBar()->changeItem(linenumber.data(), ID_STATUS_LN_CLM);
-} 
+}
 void CKDevelop::slotNewUndo()
 {
   if (!m_docViewManager->currentEditView()) return;
@@ -3138,7 +3138,7 @@ void CKDevelop::slotNewUndo()
   else{
     disableCommand(ID_EDIT_REDO);
   }
-  
+
 }
 
 
@@ -3153,7 +3153,7 @@ void CKDevelop::slotURLSelected(const QString& url)
   if (url_str.left(1)=="/")
      url_str=QString("file:") + url;
 
-  // Call the DocViewManager 
+  // Call the DocViewManager
   m_docViewManager->doSelectURL(url_str);
 
   QString str = history_list.current();
@@ -3319,7 +3319,7 @@ void CKDevelop::slotApplReceivedStdout(const char* buffer)
 {
   slotApplReceivedStdout(0, (char*)buffer, strlen(buffer));
 }
- 
+
 void CKDevelop::slotApplReceivedStderr(const char* buffer)
 {
     slotApplReceivedStderr(0, (char*)buffer, strlen(buffer));
@@ -3582,7 +3582,7 @@ void CKDevelop::slotProcessExited(KProcess* proc)
       next_job = "";
       ready = false;
     }
-      
+
     else if (next_job == "refresh")
     { // rest from the add projectfile
       refreshTrees();
@@ -3667,7 +3667,7 @@ void CKDevelop::slotProcessExited(KProcess* proc)
       XBell(kapp->getDisplay(),100); //beep :-)
       beep = false;
   }
-  
+
 }
 
 void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
@@ -3760,7 +3760,7 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
     else{
       enableCommand(ID_EDIT_CUT);
       enableCommand(ID_EDIT_COPY);
-    }    
+    }
   }
   else if (m_docViewManager->curDocIsBrowser())
   {
@@ -3854,7 +3854,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
     return;
   }
   QString text = doc_tree->selectedText();
-  
+
   if(!QFile::exists(url_file)){
     if( text == i18n("Qt-Library")){
       if(KMessageBox::questionYesNo(0,
@@ -3877,7 +3877,7 @@ void CKDevelop::slotDocTreeSelected(QString url_file){
     }
   }
   slotURLSelected(url_file);
-  
+
 }
 
 void CKDevelop::slotTCurrentTab(int item){
@@ -3993,7 +3993,7 @@ void CKDevelop::slotToolbarClicked(int item){
     else{
       slotClassbrowserViewDefinition();
       cv_decl_or_impl=true;
-    }    
+    }
     break;
 
   // Redirect to code that handles menu and toolbar selection

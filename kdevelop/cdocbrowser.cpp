@@ -89,9 +89,9 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) :
           this, SLOT( slotPopupMenu( const QString&, const QPoint & ) ) );
   connect(this, SIGNAL( setWindowCaption ( const QString&) ), this, SLOT( slotSetFileTitle( const QString&) ) );
 
-  KConfig *config = KGlobal::config();
-  KHTMLSettings* htmlsettings = settings();
-  htmlsettings->init(config); // no reset, just additionally
+//FB  KConfig *config = KGlobal::config();
+//FB  KHTMLSettings* htmlsettings = settings();
+//FB  htmlsettings->init(config); // no reset, just additionally
 
   kdDebug() << "End CDocBrowser creation !" << endl;
 }

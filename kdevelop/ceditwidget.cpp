@@ -88,8 +88,8 @@ static QValueList<CompletionEntry> getAllWords( const QString& text,
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
-  KWrite(doc, parent, name)
+CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, CClassStore* pStore) :
+    KWrite(doc, parent, name), m_pStore( pStore )
 {
   setFocusProxy (kWriteView);
   pop = new QPopupMenu();
@@ -119,7 +119,9 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc) :
   pop->insertItem(SmallIconSet("dbgrunto"),i18n("Run to cursor"),this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
   pop->insertItem(SmallIconSet("dbgwatchvar"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);
 
-  m_pCodeCompletion = new CppCodeCompletion( this );
+  m_pCodeCompletion = new CppCodeCompletion( this, m_pStore );
+
+  // connect( kWriteDoc, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -473,42 +475,6 @@ void CEditWidget::slotAddWatchVariable(){
     emit addWatchVariable(searchtext);
 }
 
-QString CEditWidget::getFunctionBody( int iLine )
-{
-    KRegExp regMethod ("[ \t]*[A-Za-z_][A-Za-z_0-9]*::[~A-Za-z_][A-Za-z_0-9]*[ \t]*.*\\)[ \t]*[:{]");
-    QString currentClassName;
-
-    int iMethodBegin = 0;
-    QString text;
-    QString strLine;
-    for( int i=iLine; i>0; --i ){
-        QString s = textLine( i );
-        s = s.replace( QRegExp("const"), "" );
-        text.prepend( s ).simplifyWhiteSpace();
-        if( regMethod.match(text) ){
-            iMethodBegin = i;
-            currentClassName = strLine;
-            currentClassName.remove( currentClassName.find( "::" ), 999 );
-            currentClassName.remove( 0, currentClassName.findRev( " ", -1 ) + 1);
-            kdDebug( 9007 ) << "method's classname is '" << currentClassName << "'" << endl;
-            break;
-        }
-    }
-
-
-    if( iMethodBegin == 0 ){
-        kdDebug( 9007 ) << "no method declaration found" << endl;
-        return QString::null;
-    }
-
-    QString strCopy;
-    for( int i = iMethodBegin; i < iLine; i++ ){
-        strCopy += textLine( i ) + "\n";
-    }
-
-    return strCopy;
-}
-
 void CEditWidget::expandText()
 {
     kdDebug() << "CEditWidget::expandText()" << endl;
@@ -529,6 +495,11 @@ void CEditWidget::expandText()
             m_pCodeCompletion->showCompletionBox( entries, prefix.length() );
         }
     }
+}
+
+void CEditWidget::completeText()
+{
+    m_pCodeCompletion->completeText();
 }
 
 #include "ceditwidget.moc"

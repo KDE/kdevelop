@@ -40,12 +40,13 @@
 #include "./dbg/brkptmanager.h"
 #include "./dbg/vartree.h"
 #include "./ctags/ctagsdialog_impl.h"
+#include "./classparser/ClassStore.h"
 #include "ckdevaccel.h"
 
 //==============================================================================
 // class implementation
 //------------------------------------------------------------------------------
-DocViewMan::DocViewMan( CKDevelop* parent)
+DocViewMan::DocViewMan( CKDevelop* parent, CClassStore* pStore )
 : QObject( parent)
   ,m_pParent(parent)
   ,m_pDocBookmarksMenu(0L)
@@ -54,6 +55,7 @@ DocViewMan::DocViewMan( CKDevelop* parent)
   ,m_pCurBrowserDoc(0L)
   ,m_pCurBrowserView(0L)
   ,m_curIsBrowser(false)
+  ,m_pStore(pStore)
 {
   m_MDICoverList.setAutoDelete(true);
 
@@ -197,7 +199,7 @@ void DocViewMan::doOptionsEditor()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore );
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -220,7 +222,7 @@ void DocViewMan::doOptionsEditorColors()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore);
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -244,7 +246,7 @@ void DocViewMan::doOptionsSyntaxHighlightingDefaults()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore);
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -267,7 +269,7 @@ void DocViewMan::doOptionsSyntaxHighlighting()
       pConfig->setGroup("KWrite Options");
       dummyDoc.readConfig(pConfig);
     }
-    CEditWidget dummyView(0L, "dummyview", &dummyDoc);
+    CEditWidget dummyView(0L, "dummyview", &dummyDoc, m_pStore);
     if (pConfig) {
       pConfig->setGroup("KWrite Options");
       dummyView.readConfig(pConfig);
@@ -709,7 +711,7 @@ void DocViewMan::addQExtMDIFrame(QWidget* pNewView, bool bShow, const QPixmap& i
 CEditWidget* DocViewMan::createEditView(KWriteDoc* pDoc, bool bShow)
 {
   // create the view and add to MDI
-  CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc);
+  CEditWidget* pEW = new CEditWidget(0L, "autocreatedview", pDoc, m_pStore );
   if(!pEW) return 0L;
   pEW->setCaption(pDoc->fileName());
 
@@ -2203,8 +2205,18 @@ void DocViewMan::slotEditExpandText()
 void DocViewMan::slotEditCompleteText()
 {
     kdDebug() << "DocViewMan::slotEditCompleteText()" << endl;
-//    if (currentEditView())
-//        currentEditView()->completeText();
+    if (currentEditView())
+        currentEditView()->completeText();
+}
+
+void DocViewMan::setStore( CClassStore* pStore )
+{
+    m_pStore = pStore;
+}
+
+CClassStore* DocViewMan::store() const
+{
+    return m_pStore;
 }
 
 #include "docviewman.moc"

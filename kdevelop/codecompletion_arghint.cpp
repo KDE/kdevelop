@@ -23,6 +23,7 @@
 #include <kdebug.h>
 
 #include "codecompletion_arghint.h"
+#include "ceditwidget.h"
 
 static const char* left_xpm[] = {
 "16 16 3 1",
@@ -87,7 +88,8 @@ void ArgHintArrow::drawButton ( QPainter *p )
 }
 
 
-KDevArgHint::KDevArgHint ( QWidget *parent ) : QFrame ( parent, 0,  WType_Popup )
+KDevArgHint::KDevArgHint ( QWidget *parent, CEditWidget* edit )
+    : QFrame ( parent, 0,  WType_Popup ), m_edit( edit )
 {
 	setFrameStyle ( QFrame::Box | QFrame::Plain );
 	setLineWidth ( 1 );
@@ -206,7 +208,6 @@ void KDevArgHint::reset()
 
 void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
 {
-#if 0
 	if ( m_nCurLine == 0 )
 		m_nCurLine = nLine;
 
@@ -217,14 +218,16 @@ void KDevArgHint::cursorPositionChanged ( int nLine, int nCol )
 		return;
 	}
 
-	if ( pEditIface->hasSelectedText() )
+#if 0
+	if ( m_edit->doc()->hasMarkedText() )
 	{
 		hide();
 		emit argHintHided();
 		return;
 	}
+#endif
 
-	QString strCurLine = pEditIface->line ( nLine );
+	QString strCurLine = m_edit->textLine( nLine );
 	strCurLine.replace(QRegExp("\t"),"        "); // hack which asume that TAB is 8 char big #fixme
 	//strCurLine = strCurLine.left ( nCol );
 	QString strLineToCursor = strCurLine.left ( nCol );
@@ -267,7 +270,6 @@ void KDevArgHint::setFunctionText ( int nFunc, const QString& strText )
 		m_pFuncLabel->clear();
 
 	updateState();
-#endif
 }
 
 void KDevArgHint::setArgMarkInfos ( const QString& strWrapping, const QString& strDelimiter )

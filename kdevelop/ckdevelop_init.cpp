@@ -1,10 +1,10 @@
 /***************************************************************************
       init.cpp - the init specific part of CKDevelop (constructor,init() ...)
-                             -------------------                                         
+                             -------------------
 
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
-    email                : smeier@rz.uni-potsdam.de                                     
+    begin                : 20 Jul 1998
+    copyright            : (C) 1998 by Sandy Meier
+    email                : smeier@rz.uni-potsdam.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -52,6 +52,7 @@
 #include <kstatusbar.h>
 #include <kstdaccel.h>
 #include <kaboutdata.h>
+#include <klineedit.h>
 
 #include <qprogressbar.h>
 
@@ -197,6 +198,7 @@ void CKDevelop::initView()
 
   class_tree = new CClassView(0L,"cv");
   class_tree->setFocusPolicy(QWidget::ClickFocus);
+  m_docViewManager->setStore( class_tree->store );
 
   log_file_tree = new CLogFileView(config->readBoolEntry("lfv_show_path",false),0L,"lfv");
   log_file_tree->setFocusPolicy(QWidget::ClickFocus);
@@ -242,7 +244,7 @@ void CKDevelop::initView()
   ////////////////////////
   // Outputwindow
   ////////////////////////
-	
+
   messages_widget = new CMakeOutputWidget(0L,"messages");
   messages_widget->setFocusPolicy(QWidget::NoFocus);
 //  messages_widget->setReadOnly(TRUE);
@@ -314,26 +316,26 @@ void CKDevelop::initMenuBar(){
 // Edit-menu entries
 
   edit_menu = new QPopupMenu;
-  edit_menu->insertItem(SmallIconSet("undo"), i18n("U&ndo"), 
+  edit_menu->insertItem(SmallIconSet("undo"), i18n("U&ndo"),
 												m_docViewManager, SLOT(slotEditUndo()),
 												0 ,ID_EDIT_UNDO);
-  edit_menu->insertItem(SmallIconSet("redo"), i18n("R&edo"), 
+  edit_menu->insertItem(SmallIconSet("redo"), i18n("R&edo"),
 												m_docViewManager, SLOT(slotEditRedo()),
 												0 ,ID_EDIT_REDO);
   edit_menu->insertSeparator();
-  edit_menu->insertItem(SmallIconSet("editcut"),i18n("C&ut"), 
+  edit_menu->insertItem(SmallIconSet("editcut"),i18n("C&ut"),
 												m_docViewManager, SLOT(slotEditCut()),
 												0 ,ID_EDIT_CUT);
-  edit_menu->insertItem(SmallIconSet("editcopy"),i18n("&Copy"), 
+  edit_menu->insertItem(SmallIconSet("editcopy"),i18n("&Copy"),
 												m_docViewManager, SLOT(slotEditCopy()),
 												0 ,ID_EDIT_COPY);
-  edit_menu->insertItem(SmallIconSet("editpaste"),i18n("&Paste"), 
+  edit_menu->insertItem(SmallIconSet("editpaste"),i18n("&Paste"),
 												m_docViewManager, SLOT(slotEditPaste()),
 												0 , ID_EDIT_PASTE);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(SmallIconSet("increaseindent"),i18n("In&dent"), 
+	edit_menu->insertItem(SmallIconSet("increaseindent"),i18n("In&dent"),
 												this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-	edit_menu->insertItem(SmallIconSet("decreaseindent"),i18n("Uninden&t"), 
+	edit_menu->insertItem(SmallIconSet("decreaseindent"),i18n("Uninden&t"),
 												this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
   edit_menu->insertSeparator();
 	edit_menu->insertItem(i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
@@ -345,10 +347,10 @@ void CKDevelop::initMenuBar(){
 												0,ID_EDIT_INSERT_FILE);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(SmallIconSet("find"),i18n("&Search..."), 
+  edit_menu->insertItem(SmallIconSet("find"),i18n("&Search..."),
 												m_docViewManager, SLOT(slotEditSearch()),
 												0,ID_EDIT_SEARCH);
-  edit_menu->insertItem(SmallIconSet("next"),i18n("Repeat Searc&h"), 
+  edit_menu->insertItem(SmallIconSet("next"),i18n("Repeat Searc&h"),
 												m_docViewManager, SLOT(slotEditRepeatSearch(int)),
 												0,ID_EDIT_REPEAT_SEARCH);
 
@@ -365,13 +367,13 @@ void CKDevelop::initMenuBar(){
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
   edit_menu->insertSeparator();
-  edit_menu->insertItem(i18n("Select &All"), 
+  edit_menu->insertItem(i18n("Select &All"),
 												m_docViewManager, SLOT(slotEditSelectAll()),
 												0,ID_EDIT_SELECT_ALL);
-  edit_menu->insertItem(i18n("Deselect All"), 
+  edit_menu->insertItem(i18n("Deselect All"),
 												m_docViewManager, SLOT(slotEditDeselectAll()),
 												0,ID_EDIT_DESELECT_ALL);
-  edit_menu->insertItem(i18n("Invert Selection"), 
+  edit_menu->insertItem(i18n("Invert Selection"),
 												m_docViewManager, SLOT(slotEditInvertSelection()),
 												0,ID_EDIT_INVERT_SELECTION);
 
@@ -432,7 +434,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertSeparator();
   view_menu->insertItem(SmallIconSet("reload"),i18n("&Refresh"),this,
 			   SLOT(slotViewRefresh()),0,ID_VIEW_REFRESH);
-			
+
   menuBar()->insertItem(i18n("&View"), view_menu);
 
 
@@ -460,10 +462,10 @@ void CKDevelop::initMenuBar(){
 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
   //			   SLOT(slotProjectRemoveFile()),0,ID_PROJECT_REMOVE_FILE);
- 		
+
   project_menu->insertItem(SmallIconSet("file_properties"),i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
-			
+
   project_menu->insertSeparator();
 
   project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
@@ -626,7 +628,7 @@ void CKDevelop::initMenuBar(){
   m_docViewManager->installBMPopup(code_bookmarks);
   //   QPopupMenu* cpp_bookmarks = new QPopupMenu();
   //  cpp_widget->installBMPopup(cpp_bookmarks);
-	
+
   bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("Code &Window"),code_bookmarks,31000);
   // bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("C/C++ &Window"),cpp_bookmarks,31010);
 
@@ -634,7 +636,7 @@ void CKDevelop::initMenuBar(){
 
   bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("&Browser Window"), doc_bookmarks,31010);
 */
-	
+
   menuBar()->insertItem(i18n("Book&marks"),bookmarks_menu);
 
   ///////////////////////////////////////////////////////////////////
@@ -666,17 +668,17 @@ void CKDevelop::initMenuBar(){
   help->insertItem(SmallIconSet("contents"),tutorial,this,SLOT(slotHelpTutorial()),0 ,ID_HELP_TUTORIAL);
   help->insertItem(SmallIconSet("contents"),kdelibref,this,SLOT(slotHelpKDELibRef()),0 ,ID_HELP_KDELIBREF);
   help->insertItem(SmallIconSet("contents"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
-  help->insertSeparator();	
+  help->insertSeparator();
   help->insertItem(SmallIconSet("contents"),i18n("Project &API-Doc"),this,
                         SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);
 
   help->insertItem(SmallIconSet("contents"),i18n("Project &User-Manual"),this,
                         SLOT(slotHelpManual()),0,ID_HELP_USER_MANUAL);
-  help->insertSeparator();	
+  help->insertSeparator();
 	help->insertItem(SmallIconSet("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
   help->insertItem(SmallIconSet("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
   help->insertItem( i18n( "&Report Bug..." ),help_menu, SLOT(reportBug()),0,ID_HELP_BUG_REPORT);
-  help->insertSeparator();	
+  help->insertSeparator();
   QString appName = (aboutData)? aboutData->programName() : QString::fromLocal8Bit(kapp->name());
   help->insertItem( kapp->miniIcon(), i18n( "&About %1" ).arg(appName), help_menu, SLOT( aboutApplication() ));
   help->insertItem( SmallIcon("go"), i18n( "About &KDE" ),help_menu, SLOT( aboutKDE() ) );
@@ -769,7 +771,7 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton("editcut",ID_EDIT_CUT,true,i18n("Cut"));
   toolBar()->insertButton("editcopy",ID_EDIT_COPY, true,i18n("Copy"));
   toolBar()->insertButton("editpaste",ID_EDIT_PASTE, true,i18n("Paste"));
-	
+
 //  toolBar()->insertSeparator();
 
   toolBar()->insertButton("compfile",ID_BUILD_COMPILE_FILE, false,i18n("Compile file"));
@@ -889,7 +891,7 @@ void CKDevelop::initToolBar(){
   history_prev = new QPopupMenu();
   connect(history_prev, SIGNAL(activated(int)), SLOT(slotHelpHistoryBack(int)));
   toolBar(ID_BROWSER_TOOLBAR)->setDelayedPopup(ID_HELP_BACK, history_prev);
-	
+
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("forward",ID_HELP_FORWARD, false,i18n("Forward"));
   history_next = new QPopupMenu();
   connect(history_next, SIGNAL(activated(int)), SLOT(slotHelpHistoryForward(int)));
@@ -897,14 +899,14 @@ void CKDevelop::initToolBar(){
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("stop",ID_HELP_BROWSER_STOP, false,i18n("Stop"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("reload_page",ID_HELP_BROWSER_RELOAD, true,i18n("Reload"));
 	toolBar(ID_BROWSER_TOOLBAR)->insertButton("contents", ID_HELP_CONTENTS, true, i18n("User Manual"));
-	
+
 //  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("help", ID_HELP_SEARCH_TEXT,
 					    true,i18n("Search Text in Documenation"));
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("filefind",ID_HELP_SEARCH,
               true,i18n("Search for Help on..."));
-	
+
 //  toolBar(ID_BROWSER_TOOLBAR)->insertSeparator();
 
   toolBar(ID_BROWSER_TOOLBAR)->insertButton("contexthelp",ID_HELP_WHATS_THIS,
@@ -1250,7 +1252,7 @@ void CKDevelop::setToolmenuEntries(){
   for( it = toolList.begin(); it != toolList.end(); ++it ) {
     tools_menu->insertItem((*it).getLabel(),count++);
   }
-	
+
 //	connect(tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 }
 

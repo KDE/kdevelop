@@ -1,3 +1,8 @@
+2002-02-15  F@lk Brettschneider <falk@kdevelop.org>
+    * applied new patch of Roberto Raggi <raggi@cli.di.unipi.it>
+      for code completion, Ctrl+Space asks the class store (hmm...doesn't have an effect on my machine but...anyway)
+    * commented out stuff in CDocBrowser constructor, since it's under construction atm
+
 2002-02-14  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: documentation browser settings dialog works again
       (but KHTML uses changed settings only after restart of KHTMLPart, needs improvement in kdelibs/khtml!)
@@ -20,7 +25,7 @@
       for making basic code completion available on KDE 2 as well
       
 2002-02-10  F@lk Brettschneider <falk@kdevelop.org>
-    * applied patch of Roberto Raggi <raggi@cli.di.unipi.it> 
+    * applied patch of Roberto Raggi <raggi@cli.di.unipi.it>
       for codecompletion and text expansion
     
 2002-02-09  jbb <jbb@kdevelop.org>
