@@ -84,7 +84,7 @@ DbgMoveHandle::DbgMoveHandle(QWidget * parent,
 //  limit_(KWM::getWindowRegion(KWM::desktop(winId())))
 {
   setFrameStyle( QFrame::Panel|QFrame::Raised);
-  setFixedHeight( 9 );
+  setFixedHeight( 12 );
 }
 
 // **************************************************************************
@@ -193,7 +193,8 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   ckDevelop_(parent),
   activeWindow_(0),
   bKDevFocus_(0),
-  bPrevFocus_(0)
+  bPrevFocus_(0),
+  appIsActive_(false)
 {
   // Must have noFocus set so that we can see what window was active.
   // see slotDbgKdevFocus() for more comments
@@ -285,6 +286,7 @@ DbgToolbar::DbgToolbar(DbgController* dbgController, CKDevelop* parent) :
   setMinimumSize(w+16, h*8);
   setMaximumSize(w+16, h*8);
 
+  setAppIndicator(appIsActive_);
   topLayout->activate();
 }
 
@@ -331,7 +333,19 @@ void DbgToolbar::slotDbgPrevFocus()
 // kdev button is highlighted.
 void DbgToolbar::slotDbgStatus(const QString&,int state)
 {
-  if (state & (s_appBusy|s_waitForWrite))
+  bool appIndicator = state & s_appBusy;
+  if (appIndicator != appIsActive_)
+  {
+    setAppIndicator(appIndicator);
+    appIsActive_ = appIndicator;
+  }
+}
+
+// **************************************************************************
+
+void DbgToolbar::setAppIndicator(bool appIndicator)
+{
+  if (appIndicator)
   {
     bPrevFocus_->setPalette(QPalette(colorGroup().mid()));
     bKDevFocus_->setPalette(QPalette(kapp->backgroundColor));

@@ -40,7 +40,7 @@ enum DBGStateFlags
   s_appBusy           = 4,
   s_waitForWrite      = 8,
   s_programExited     = 16,
-  s_silentBreakInto   = 32,
+  s_silent            = 32,
   s_viewLocals        = 64,
   s_viewBT            = 128,
   s_viewBP            = 256,

@@ -36,6 +36,9 @@ class DbgToolbar : public QFrame
     DbgToolbar(DbgController* dbgController, CKDevelop* ckDevelop);
     virtual ~DbgToolbar();
 
+  private:
+    void setAppIndicator(bool appIndicator);
+
   public slots:
     void slotDbgStatus(const QString&,int);
 
@@ -49,6 +52,7 @@ class DbgToolbar : public QFrame
     Window      activeWindow_;
     DbgButton*  bKDevFocus_;
     DbgButton*  bPrevFocus_;
+    bool        appIsActive_;
 };
 
 #endif
