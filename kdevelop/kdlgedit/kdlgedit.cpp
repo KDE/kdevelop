@@ -1031,7 +1031,7 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
   }
   //isToogledOn
   if(props->getPropValue("isToggledOn") == "true"){
-    *stream << varname_p + "setToggleOn(true);\n";
+    *stream << varname_p + "setOn(true);\n";
   }
   //IsMenuButton
   if(props->getPropValue("isMenuButton") == "true"){
@@ -1314,8 +1314,12 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
     *stream << varname_p + "setEnabled(false);\n";
   }
   ////////////////////////////////C++ Code//////////////////////////
+  //hasFocus
+  if(props->getPropValue("hasFocus") == "true"){
+    *stream << varname_p + "setFocus();\n";
+  }
   
-  
+
   ////////////////////////////////Appearance/////////////////////////
   //BgPixmap
   if(props->getPropValue("BgPixmap") != ""){
