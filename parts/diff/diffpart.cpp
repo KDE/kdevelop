@@ -51,6 +51,7 @@ DiffPart::~DiffPart()
 
 void DiffPart::openURL( const KURL& url )
 {
+  diffWidget->slotClear();
   diffWidget->openURL( url );
   topLevel()->raiseView( diffWidget );
 /*
@@ -64,6 +65,7 @@ void DiffPart::openURL( const KURL& url )
 
 void DiffPart::showDiff( const QString& diff )
 {
+  diffWidget->slotClear();
   diffWidget->setDiff( diff );
   topLevel()->raiseView( diffWidget );
 /*
