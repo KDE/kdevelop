@@ -4,7 +4,7 @@ INCLUDES = -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/interfaces -I$(top_src
 
 kde_module_LTLIBRARIES = libkdevclassview.la
 libkdevclassview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevclassview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la
+libkdevclassview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML)
 
 libkdevclassview_la_SOURCES = classviewpart.cpp classviewwidget.cpp digraphview.cpp viewcombos.cpp hierarchydlg.cpp
 

@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/util -I$(top_srcdi
 kde_module_LTLIBRARIES = libkdevdoctreeview.la kio_kdeapi.la
 
 libkdevdoctreeview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkdevdoctreeview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la
+libkdevdoctreeview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la $(LIB_KHTML)
 
 libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp doctreeviewpart.cpp doctreeviewwidget.cpp doctreeglobalconfigwidgetbase.ui doctreeglobalconfigwidget.cpp adddocitemdlg.cpp docindexdlg.cpp docsearchdlg.cpp misc.cpp librarydocdlgbase.ui doctreeprojectconfigwidgetbase.ui doctreeprojectconfigwidget.cpp librarydocdlg.cpp choosedlg.cpp docindexwatcher.cpp doctreeitem.cpp
 
