@@ -1,4 +1,4 @@
-KDevelop 1.1
+KDevelop 1.2
 
 -------------------------------------
 
@@ -32,14 +32,12 @@ db (berkley database)
 
 optional:
 -----------------------
+gdb 4.18 (do not use 4.17, I've been told it has some problems)
 KDE-SDK
 sgmltools 1
-Glimpse >= 4.1
-htDig 3.1.x
+Glimpse >= 4.1 or htDig 3.1.x
 KIconEdit
 KDbg
-gdb 4.18 (do not use 4.17, I've been told it has some problems)
-a2ps 4.11
 enscript
 Gv, Ghostview, KGhostview
 cvs >= 1.10
