@@ -109,9 +109,9 @@ void ClassViewWidget::buildTree(bool fromScratch)
 
 void ClassViewWidget::buildTreeByCategory(bool fromScratch)
 {
-    //    TreeState oldTreeState;
-    //    if (!fromScratch)
-    //        oldTreeState = treeState();
+    TreeState oldTreeState;
+    if (!fromScratch)
+        oldTreeState = treeState();
     
     clear();
     
@@ -196,16 +196,16 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
             lastItem->setOpen(true);
     }
 
-    //    if (!fromScratch)
-    //        setTreeState(oldTreeState);
+    if (!fromScratch)
+        setTreeState(oldTreeState);
 }
 
 
 void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
 {
-    //    TreeState oldTreeState;
-    //    if (!fromScratch)
-    //        oldTreeState = treeState();
+    TreeState oldTreeState;
+    if (!fromScratch)
+        oldTreeState = treeState();
 
     clear();
 
@@ -221,8 +221,8 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
     }
     delete scopeList;
 
-    //    if (!fromScratch)
-    //        setTreeState(oldTreeState);
+    if (!fromScratch)
+        setTreeState(oldTreeState);
 }
 
 

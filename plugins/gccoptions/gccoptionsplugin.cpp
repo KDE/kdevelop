@@ -482,7 +482,7 @@ GccOptionsDialog::GccOptionsDialog(GccOptionsPlugin::Type type, QWidget *parent,
     vbox = addVBoxPage(i18n("Optimization"));
     optimization = new OptimizationTab(type, vbox, "optimization tab");
 
-    if (type = GccOptionsPlugin::G77) {
+    if (type == GccOptionsPlugin::G77) {
         vbox = addVBoxPage(i18n("Fortran specifics"));
         g77 = new G77Tab(vbox, "g77 tab");
     } else

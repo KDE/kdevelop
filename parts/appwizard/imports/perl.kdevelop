@@ -2,7 +2,7 @@
 <kdevelop>
  <general>
   <projectmanagement>KDevScriptProject</projectmanagement>
-  <primarylanguage>Python</primarylanguage>
+  <primarylanguage>Perl</primarylanguage>
   <ignoreparts>
    <part>KDevDebugger</part>
    <part>KDevJavaDebugger</part>
@@ -11,7 +11,7 @@
  </general>
  <kdevscriptproject>
   <general>
-   <mainprogram>$APPNAMELC.py</mainprogram>
+   <mainprogram>$APPNAMELC.pl</mainprogram>
   </general>
  </kdevscriptproject>
 </kdevelop>

@@ -6,6 +6,7 @@
   <ignoreparts>
    <part>KDevDebugger</part>
    <part>KDevJavaDebugger</part>
+   <part>KDevFileView</part>
   </ignoreparts>
  </general>
  <kdevscriptproject>

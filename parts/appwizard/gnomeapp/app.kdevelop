@@ -4,6 +4,9 @@
   <projectmanagement>KDevAutoProject</projectmanagement>
   <primarylanguage>C</primarylanguage>
  </general>
+  <ignoreparts>
+   <part>KDevJavaDebugger</part>
+  </ignoreparts>
  <kdevautoproject>
   <general>
    <mainprogram>src/$APPNAMELC</mainprogram>

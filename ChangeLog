@@ -1,3 +1,9 @@
+2001-06-10  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Don't show Fortran options for gcc
+	* Enabled class view fixes from 06-05 :-)
+	* More import project types
+
 2001-06-09 Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
     * Started to move the kwrite code from lib to the part.

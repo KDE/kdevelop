@@ -2,9 +2,10 @@
 <kdevelop>
  <general>
   <projectmanagement>KDevAutoProject</projectmanagement>
-  <primarylanguage>C</primarylanguage>
+  <primarylanguage>C++</primarylanguage>
   <ignoreparts>
    <part>KDevJavaDebugger</part>
+   <part>KDevFileView</part>
   </ignoreparts>
  </general>
  <kdevautoproject>

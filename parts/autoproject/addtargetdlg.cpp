@@ -158,13 +158,16 @@ void AddTargetDialog::primaryChanged()
         list.append("include");
         list.append("oldinclude");
         list.append("pkginclude");
+        list.append("noinst");
         break;
     case 5: // Data
         list.append("bin");
         list.append("sbin");
+        list.append("noinst");
         break;
     case 6: // Java
         list.append("java");
+        list.append("noinst");
         break;
     }
 
