@@ -27,8 +27,8 @@
 class GDBParser
 {
 public:
-	GDBParser();
-	~GDBParser();
+  GDBParser();
+  ~GDBParser();
 
   void parseData(TrimmableItem* parent, char* buf,
                       bool requested, bool params);

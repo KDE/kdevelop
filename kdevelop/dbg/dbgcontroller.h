@@ -44,6 +44,10 @@ enum DBGStateFlags
   s_viewLocals        = 64,
   s_viewBT            = 128,
   s_viewBP            = 256,
+  s_attached          = 512,
+  s_core              = 1024,
+  s_waitTimer         = 2048,
+  s_shuttingDown      = 4096,
 };
 /***************************************************************************/
 /***************************************************************************/
@@ -54,8 +58,8 @@ class DbgController : public QObject
 
 public:
 
-	DbgController();
-	virtual ~DbgController();
+  DbgController();
+  virtual ~DbgController();
   virtual void reConfig()                                                 = 0;
 
 protected:
@@ -65,12 +69,12 @@ protected:
 public slots:
   virtual void slotStart(const QString& application, const QString& args) = 0;
   virtual void slotCoreFile(const QString& coreFile)                      = 0;
-  virtual void slotAttachTo(const QString& AttachTo)                      = 0;
+  virtual void slotAttachTo(int pid)                                      = 0;
 
-	virtual void slotRun() 																						      = 0;
+  virtual void slotRun()                                                   = 0;
   virtual void slotRunUntil(const QString& filename, int lineNo)          = 0;
-	virtual void slotStepInto()                                             = 0;
-	virtual void slotStepOver()                                             = 0;
+  virtual void slotStepInto()                                             = 0;
+  virtual void slotStepOver()                                             = 0;
   virtual void slotStepOutOff()                                           = 0;
 
   virtual void slotBreakInto()                                            = 0;
@@ -86,7 +90,7 @@ public slots:
   virtual void slotExpandItem(VarItem* parent)                            = 0;
   virtual void slotExpandUserItem(VarItem* parent,
                                     const QString& userRequest)           = 0;
-	
+  
 protected slots:
   virtual void slotDbgStdout(KProcess* proc, char* buf, int buflen)       = 0;
   virtual void slotDbgStderr(KProcess* proc, char* buf, int buflen) {} ;
@@ -95,7 +99,7 @@ protected slots:
 
 signals:
   void rawData              (const char* rawData);
-	void gotoSourcePosition   (const QString& filename, int lineno);
+  void gotoSourcePosition   (const QString& filename, int lineno);
   void rawGDBBreakpointList (char* buf);
   void rawGDBBreakpointSet  (char* buf, int key);
   void rawGDBDisassemble    (char* buf);
@@ -104,7 +108,7 @@ signals:
   void rawGDBLibraries      (char* buf);
   void ttyStdout            (const char* output);
   void ttyStderr            (const char* output);
-  	
+    
 protected:
   KProcess *dbgProcess_;
 };

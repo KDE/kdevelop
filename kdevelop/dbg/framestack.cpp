@@ -33,6 +33,7 @@ FrameStack::FrameStack(QWidget * parent, const char * name, WFlags f) :
   currentList_(0)
 {
   connect( this,  SIGNAL(highlighted(int)), SLOT(slotHighlighted(int)));
+  connect( this,  SIGNAL(selected(int)), SLOT(slotHighlighted(int)));
   setCaption( "Frame stack" );
   show();
 }
@@ -48,11 +49,22 @@ FrameStack::~FrameStack()
 
 void FrameStack::slotHighlighted(int frame)
 {
-  if (frame != currentFrame_)
-  {
-    currentFrame_ = frame;
-    emit selectFrame(frame);
-  }
+  // always set this as the current frame and emit a signal
+  // because this will display the source file if it's not visible
+  // due to the user having opened a different file.
+  currentFrame_ = frame;
+  emit selectFrame(frame);
+}
+
+/***************************************************************************/
+
+// someone (the vartree :-)) wants us to select this frame.
+void FrameStack::slotSelectFrame(int frame)
+{
+  if (isSelected(frame))
+    slotHighlighted(frame);   // force this when we're already selected
+  else
+    setCurrentItem(frame);
 }
 
 /***************************************************************************/
@@ -141,7 +153,6 @@ QString FrameStack::getFrameName(int frame)
   return QString("No stack");
 }
 
-/***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/

@@ -1,5 +1,5 @@
 /***************************************************************************
-                          disassemble.h  -  description                              
+                          memview.h  -  description                              
                              -------------------                                         
     begin                : Tue Oct 5 1999                                           
     copyright            : (C) 1999 by John Birch                         
@@ -20,15 +20,15 @@
   *@author John Birch
   */
 
-#ifndef DISASSEMBLE_H
-#define DISASSEMBLE_H
+#ifndef MEMVIEW_H
+#define MEMVIEW_H
 
-#include <qdialog.h>
+#include <kwizard.h>
 
 class KLined;
 class QMultiLineEdit;
 
-class MemoryView : public QDialog
+class MemoryView : public KDialog
 {
   Q_OBJECT
 
@@ -41,7 +41,7 @@ signals:
   void memoryDump(const QString& start, const QString& end);
   void registers();
   void libraries();
-	
+
 public slots:
   void slotRawGDBMemoryView(char* buf);
 

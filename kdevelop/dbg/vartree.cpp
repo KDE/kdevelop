@@ -139,7 +139,7 @@ void VarTree::slotRightButtonClicked( QListViewItem* selectedItem,
                                       const QPoint &,
                                       int)
 {
-  setSelected (selectedItem, true);		// Need to select this item.
+  setSelected (selectedItem, true);    // Need to select this item.
   if (selectedItem->parent())
   {
     QListViewItem* item = findRoot(selectedItem);
@@ -158,15 +158,15 @@ void VarTree::slotRightButtonClicked( QListViewItem* selectedItem,
 
 void VarTree::slotToggleWatchpoint()
 {
-	if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
-  	emit toggleWatchpoint(item->fullName());
+  if (VarItem* item = dynamic_cast<VarItem*>(currentItem()))
+    emit toggleWatchpoint(item->fullName());
 }
 
 // **************************************************************************
 
 void VarTree::slotRemoveWatchVariable()
 {
-	delete currentItem();
+  delete currentItem();
 }
 
 // **************************************************************************
@@ -199,7 +199,8 @@ void VarTree::emitSetLocalViewState(bool localsOn, int frameNo)
     }
   }
 
-  emit setLocalViewState(localsOn, frameNo);
+  emit setLocalViewState(localsOn);
+  emit selectFrame(frameNo);
 }
 
 // **************************************************************************
@@ -476,7 +477,7 @@ QString VarItem::fullName() const
   if (itemName[0] == '<')
     return varPath();
 
-	return varPath() + itemName.replace(QRegExp("^static "), "");
+  return varPath() + itemName.replace(QRegExp("^static "), "");
 }
 
 // **************************************************************************
@@ -581,10 +582,10 @@ DataType VarItem::getDataType() const
 
 // Overridden to highlight the changed items
 void VarItem::paintCell( QPainter * p, const QColorGroup & cg,
-			                          int column, int width, int align )
+                                int column, int width, int align )
 {
   if ( !p )
-	  return;
+    return;
 
   if (column == ValueCol && highlight_)
   {
@@ -695,7 +696,7 @@ WatchRoot::~WatchRoot()
 }
 
 // **************************************************************************
-	
+
 void WatchRoot::requestWatchVars()
 {
   for (QListViewItem* child = firstChild(); child; child = child->nextSibling())
@@ -706,3 +707,4 @@ void WatchRoot::requestWatchVars()
 // **************************************************************************
 // **************************************************************************
 // **************************************************************************
+

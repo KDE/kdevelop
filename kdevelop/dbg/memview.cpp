@@ -1,5 +1,5 @@
 /***************************************************************************
-                          disassemble.cpp  -  description
+                          memview.cpp  -  description
                              -------------------
     begin                : Tue Oct 5 1999
     copyright            : (C) 1999 by John Birch
@@ -47,16 +47,17 @@
 // **************************************************************************
 
 MemoryView::MemoryView(QWidget *parent, const char *name) :
-  QDialog(parent, name, true),      // modal
+  KDialog(parent, name, true),      // modal
   start_(new KLined(this)),
   end_(new KLined(this)),
   output_(new QMultiLineEdit(this))
 {
+  setCaption(i18n("Memory/Misc viewer"));
   // Make the top-level layout; a vertical box to contain all widgets
   // and sub-layouts.
-  QBoxLayout *topLayout = new QVBoxLayout(this);
+  QBoxLayout *topLayout = new QVBoxLayout(this, 5);
 
-  QGridLayout *grid = new QGridLayout(2, 2, 10);
+  QGridLayout *grid = new QGridLayout(2, 2, 5);
   topLayout->addLayout(grid);
 
   QLabel *label;
@@ -89,9 +90,10 @@ MemoryView::MemoryView(QWidget *parent, const char *name) :
   label->setMaximumHeight(label->sizeHint().height());
   label->setMinimumSize(label->sizeHint());
   topLayout->addWidget(label, 0);
-  topLayout->addWidget(output_, 10);
+  topLayout->addWidget(output_, 5);
+  output_->setFont(kapp->fixedFont);
 
-  KButtonBox *buttonbox = new KButtonBox(this);
+  KButtonBox *buttonbox = new KButtonBox(this, KButtonBox::HORIZONTAL, 5);
   QPushButton *memoryDump = buttonbox->addButton(i18n("Memory"));
   QPushButton *disassemble = buttonbox->addButton(i18n("Disassemble"));
   QPushButton *registers = buttonbox->addButton(i18n("Registers"));

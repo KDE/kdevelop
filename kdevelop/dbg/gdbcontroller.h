@@ -81,12 +81,12 @@ private:
 public slots:
   void slotStart(const QString& application, const QString& args);
   void slotCoreFile(const QString& coreFile);
-  void slotAttachTo(const QString& attachTo);
-	
-	void slotRun();																						
+  void slotAttachTo(int pid);
+  
+  void slotRun();                                            
   void slotRunUntil(const QString& filename, int lineNo);
-	void slotStepInto();
-	void slotStepOver();
+  void slotStepInto();
+  void slotStepOver();
   void slotStepOutOff();
 
   void slotBreakInto();
@@ -102,7 +102,7 @@ public slots:
 
   void slotExpandItem(VarItem* parent);
   void slotExpandUserItem(VarItem* parent, const QString& userRequest);
-  void slotSetLocalViewState(bool onOff, int frameNo);
+  void slotSetLocalViewState(bool onOff);
 
 protected slots:
   void slotDbgStdout(KProcess* proc, char* buf, int buflen);
@@ -112,9 +112,12 @@ protected slots:
   void slotStepInSource(const QString& filename, int lineNo);
   void slotDbgStatus(const QString& status, int state);
 
+private slots:
+  void slotAbortTimedEvent();
+
 signals:
   void rawData              (const char* rawData);
-	void showStepInSource     (const QString& filename, int lineno);
+  void showStepInSource     (const QString& filename, int lineno, const QString& address);
   void rawGDBBreakpointList (char* buf);
   void rawGDBBreakpointSet  (char* buf, int key);
   void rawGDBDisassemble    (char* buf);
@@ -124,8 +127,8 @@ signals:
   void ttyStdout            (const char* output);
   void ttyStderr            (const char* output);
   void dbgStatus            (const QString& status, int statusFlag);
-	void acceptPendingBPs			();
-	void unableToSetBPNow     (int BPNo);
+  void acceptPendingBPs      ();
+  void unableToSetBPNow     (int BPNo);
 
 private:
   FrameStack*       frameStack_;
@@ -133,9 +136,9 @@ private:
   int               currentFrame_;
 
   int               state_;
-	int               gdbSizeofBuf_;          // size of the output buffer
+  int               gdbSizeofBuf_;          // size of the output buffer
   int               gdbOutputLen_;          // amount of data in the output buffer
-	char*             gdbOutput_;             // buffer for the output from kprocess
+  char*             gdbOutput_;             // buffer for the output from kprocess
 
   QList<DbgCommand> cmdList_;
   DbgCommand*       currentCmd_;

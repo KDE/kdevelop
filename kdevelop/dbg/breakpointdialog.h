@@ -35,12 +35,12 @@ class BPDialog : public KDialog  {
    Q_OBJECT
 
 public:
-	BPDialog(Breakpoint* breakpoint, QWidget *parent=0, const char *name=0);
-	~BPDialog();
-	
-	QString getConditional()      { return conditional_->text(); }
-	int getIgnoreCount()          { return ignoreCount_->value(); }
-	bool isEnabled()              { return enabled_->isChecked(); }
+  BPDialog(Breakpoint* breakpoint, QWidget *parent=0, const char *name=0);
+  ~BPDialog();
+  
+  QString getConditional()      { return conditional_->text(); }
+  int getIgnoreCount()          { return ignoreCount_->value(); }
+  bool isEnabled()              { return enabled_->isChecked(); }
 
 private:
   QCheckBox*    enabled_;

@@ -55,6 +55,8 @@ public:
   bool isHardwareBP() const                     { return s_hardwareBP_; }
   void setIgnoreCount(int ignoreCount)          { ignoreCount_ = ignoreCount; }
   int ignoreCount() const                       { return ignoreCount_; }
+  void setAddress(const QString& address)       { address_ = address; }
+  QString address() const                       { return address_; }
   void setConditional(const QString& condition) { condition_ = condition; }
   QString conditional() const                   { return condition_; }
 
@@ -113,6 +115,7 @@ private:
   int active_;                        // counter incremented on receipt of all BP's
 
   int ignoreCount_;
+  QString address_;
   QString condition_;
 };
 
@@ -123,7 +126,7 @@ class FilePosBreakpoint : public Breakpoint
 {
 public:
   FilePosBreakpoint(const QString& fileName, int lineNo,
-                  bool temporary=false, bool enabled=true);
+                      bool temporary=false, bool enabled=true);
   virtual ~FilePosBreakpoint();
   virtual QString dbgSetCommand() const;
   virtual bool match(const Breakpoint* brkpt) const;
@@ -131,7 +134,7 @@ public:
 
   QString filename() const          { return fileName_; }
   int lineNo() const                { return lineNo_; }
-  bool hasSourcePosition() const      { return true; }
+  bool hasSourcePosition() const    { return true; }
 
 private:
 	QString fileName_;

@@ -68,8 +68,8 @@ public:
 
   QListViewItem* lastChild() const;
 
-  int activeFlag() const         		  { return activeFlag_; }
-  void setActiveFlag()            		{ activeFlag_++; }
+  int activeFlag() const                { return activeFlag_; }
+  void setActiveFlag()                  { activeFlag_++; }
 
   QListViewItem* findRoot(QListViewItem* item) const;
   FrameRoot* findFrame(int frameNo) const;
@@ -85,22 +85,23 @@ public:
   void emitSetLocalViewState(bool localsOn,int frameNo);
 
 public slots:
-	void slotAddWatchVariable(const QString& watchVar);
+  void slotAddWatchVariable(const QString& watchVar);
 
 private slots:
   void slotRightButtonClicked(  QListViewItem* selectedItem, const QPoint &, int);
-	void slotToggleWatchpoint();
-	void slotRemoveWatchVariable();
+  void slotToggleWatchpoint();
+  void slotRemoveWatchVariable();
 
 signals:
   void toggleWatchVariable(const QString& varName);
   void toggleWatchpoint(const QString& varName);
   void expandItem(VarItem* item);
   void expandUserItem(VarItem* item, const QString& userRequest);
-  void setLocalViewState(bool localsOn, int frameNo);
+  void setLocalViewState(bool localsOn);
+  void selectFrame(int frameNo);
 
 private:
-  int         activeFlag_;
+  int activeFlag_;
 };
 
 /***************************************************************************/
@@ -114,7 +115,7 @@ public:
   TrimmableItem(VarTree* parent);
   TrimmableItem(TrimmableItem* parent);
 
-	virtual ~TrimmableItem();
+  virtual ~TrimmableItem();
 
   virtual void trim();
   virtual QString getName() const         { return QString(text(VarNameCol)); }
@@ -146,10 +147,10 @@ public:
 
   VarItem( TrimmableItem* parent, const QString& varName, DataType dataType);
 
-	virtual ~VarItem();
+  virtual ~VarItem();
 
-	QString varPath() const;
-	QString fullName() const;
+  QString varPath() const;
+  QString fullName() const;
   DataType getDataType() const;
 
   void updateValue(char* data);
@@ -163,7 +164,7 @@ public:
 private:
   void checkForRequests();
   void paintCell( QPainter * p, const QColorGroup & cg,
-			                    int column, int width, int align );
+                          int column, int width, int align );
 
 private:
   QString   cache_;
@@ -179,7 +180,7 @@ class FrameRoot : public TrimmableItem
 {
 public:
   FrameRoot(VarTree* parent, int frameNo);
-	virtual ~FrameRoot();
+  virtual ~FrameRoot();
 
   void setLocals(char* locals);
   void setParams(const QString& params);
@@ -206,9 +207,9 @@ class WatchRoot : public TrimmableItem
 {
 public:
   WatchRoot(VarTree* parent);
-	virtual ~WatchRoot();
-	
-	void requestWatchVars();
+  virtual ~WatchRoot();
+  
+  void requestWatchVars();
 };
 
 /***************************************************************************/

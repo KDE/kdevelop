@@ -254,7 +254,7 @@ void BreakpointManager::slotSetPendingBPs()
   for (int index=0; index<(int)count(); index++)
   {
     Breakpoint* BP = (Breakpoint*)(item(index));
-		if (BP->isPending() && !BP->isDbgProcessing())
+    if (BP->isPending() && !BP->isDbgProcessing())
       emit publishBPState(BP);
   }
 }
@@ -309,7 +309,7 @@ void BreakpointManager::slotEditBreakpoint(const QString& fileName, int lineNo)
 
 void BreakpointManager::slotToggleWatchpoint(const QString& varName)
 {
-	Watchpoint* watchpoint = new Watchpoint(varName, false, true);
+  Watchpoint* watchpoint = new Watchpoint(varName, false, true);
   int found = findIndex(watchpoint);
   if (found >= 0)
   {
@@ -374,32 +374,32 @@ void BreakpointManager::slotParseGDBBrkptList(char* str)
 
         // We're only interested in these fields here.
         if (strncmp(str, "\tbreakpoint already hit ", 24) == 0)
-		      hits = atoi(str+24);
-		
+          hits = atoi(str+24);
+    
         if (strncmp(str, "\tignore next ", 13) == 0)
-		      ignore = atoi(str+13);
+          ignore = atoi(str+13);
 
         if (strncmp(str, "\tstop only if ", 14) == 0)
         {
           char* EOL = strchr(str, '\n');
           if (EOL)
-		        condition = QString(str+14, EOL-(str+13));
-		    }
+            condition = QString(str+14, EOL-(str+13));
+        }
       }
 
       if (Breakpoint* BP = findId(id))
-			{
+      {
         BP->setActive(activeFlag_, id);
         BP->setHits(hits);
-		    BP->setIgnoreCount(ignore);
-		    BP->setConditional(condition);
+        BP->setIgnoreCount(ignore);
+        BP->setConditional(condition);
         emit publishBPState(BP);
 
         BP->configureDisplay();
       }
     }
   }
-  		
+      
   // Remove any inactive breakpoints.
   for (int index=count()-1; index>=0; index--)
   {
@@ -431,18 +431,18 @@ void BreakpointManager::slotParseGDBBreakpointSet(char* str, int BPKey)
 
   if ((strncmp(str, "Breakpoint ", 11) == 0))
     startNo = str+11;
-	else
-	{
-  	if ((strncmp(str, "Hardware watchpoint ", 20) == 0))
-  	{
-  	  hardware = true;
-    	startNo = str+20;
+  else
+  {
+    if ((strncmp(str, "Hardware watchpoint ", 20) == 0))
+    {
+      hardware = true;
+      startNo = str+20;
     }
     else
-  	  if ((strncmp(str, "Watchpoint ", 11) == 0))
-    	  startNo = str+11;
+      if ((strncmp(str, "Watchpoint ", 11) == 0))
+        startNo = str+11;
   }
-	
+  
   if (startNo)
   {
     int id = atoi(startNo);

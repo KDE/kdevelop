@@ -39,6 +39,7 @@ public:
 	
 public slots:
   void slotHighlighted(int index);
+  void slotSelectFrame(int frame);
 
 signals:
   void selectFrame(int selectFrame);

@@ -155,10 +155,10 @@ void Breakpoint::configureDisplay()
 
 QString Breakpoint::dbgRemoveCommand() const
 {
-	if (dbgId_>0)
-		return QString().sprintf("delete %d", dbgId_);
+  if (dbgId_>0)
+    return QString().sprintf("delete %d", dbgId_);
 
-	return QString();
+  return QString();
 }
 
 /***************************************************************************/

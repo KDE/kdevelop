@@ -37,8 +37,8 @@ BPDialog::BPDialog(Breakpoint* BP, QWidget *parent, const char *name) :
   conditional_(0),
   ignoreCount_(0)
 {
-	ASSERT(BP);
-	
+  ASSERT(BP);
+  
   QBoxLayout *topLayout = new QVBoxLayout(this, 10);
   QString title;
   if (BP->hasSourcePosition())
