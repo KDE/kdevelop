@@ -231,7 +231,7 @@ void KTabZoomFrame::mouseMoveEvent(QMouseEvent *ev)
 
   case KTabZoomPosition::Right:
     extend = d->m_slideStart.x() - ev->globalPos().x() + d->m_initialSize;
-    kdDebug() << "New extend: " << extend << endl;
+    kdDebug(9000) << "New extent: " << extend << endl;
     if (extend < 250)
       extend = 250;
     setGeometry(d->m_initialPos - extend, y(), extend, height());

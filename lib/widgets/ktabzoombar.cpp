@@ -95,7 +95,7 @@ int KTabZoomBar::addTab(QTab *tab)
 
 void KTabZoomBar::removeTab(int index)
 {
-  kdDebug() << "KTabZoomBar::removeTab" << index << endl;
+  kdDebug(9000) << "KTabZoomBar::removeTab" << index << endl;
 
   KTabZoomButton *button = d->m_buttons[index];
   if (!button)

@@ -141,7 +141,7 @@ void PartController::editDocument(const KURL &url, int lineNum)
 
 void PartController::showDocument(const KURL &url, const QString &context)
 {
-kdDebug() << "SHOW: " << url.url() << " context=" << context << endl;
+kdDebug(9000) << "SHOW: " << url.url() << " context=" << context << endl;
 
   DocumentationPart *part = 0;
 

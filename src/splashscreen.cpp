@@ -51,7 +51,7 @@ SplashScreen::~SplashScreen()
 
 void SplashScreen::showMessage(const QString &message)
 {
-  kdDebug() << "SPLASH: message=" << message << endl;
+  kdDebug(9000) << "SPLASH: message=" << message << endl;
 
   m_message->setText(message);
   kapp->processEvents();

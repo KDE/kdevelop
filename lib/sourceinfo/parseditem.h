@@ -108,6 +108,8 @@ public:
      */
     inline void setName(const QString &aName)
     {
+        name_ = aName;
+#if 0
 	if( !aName || aName == "" ){
 	    std::cerr << "EE: ParsedItem::setName - not a valid name" << std::endl;
 	    name_ = "setName standard name";
@@ -122,6 +124,7 @@ public:
 		name_ = aName;
 	    }
 	}
+#endif
     }
     QString name() const
         { return name_; }
