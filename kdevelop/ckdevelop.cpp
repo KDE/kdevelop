@@ -687,10 +687,10 @@ void CKDevelop::slotViewTTreeView()
     dockWdgList.append( (KDockWidget*)real_file_tree->parentWidget()->parentWidget());
   if (doc_tree)
     dockWdgList.append( (KDockWidget*)doc_tree->parentWidget()->parentWidget());
-//  if (weAreDebuggingAtTheMoment)
+  if (dbgController != 0L) {  // when debugging, only
     if (var_viewer)
       dockWdgList.append( (KDockWidget*)var_viewer->parentWidget()->parentWidget());
-//  }
+  }
 
   toggleGroupOfToolViewCovers(ID_VIEW_TREEVIEW, &dockWdgList);
 }
@@ -710,7 +710,7 @@ void CKDevelop::slotViewTOutputView()
     dockWdgList.append( (KDockWidget*)konsole_widget->parentWidget()->parentWidget());
   if (brkptManager)
     dockWdgList.append( (KDockWidget*)brkptManager->parentWidget()->parentWidget());
-//  if (weAreDebuggingAtTheMoment) {
+  if (dbgController != 0L) {  // when debugging, only
     if (frameStack)
       dockWdgList.append( (KDockWidget*)frameStack->parentWidget()->parentWidget());
     if (disassemble)
@@ -719,7 +719,7 @@ void CKDevelop::slotViewTOutputView()
     if (dbg_widget)
       dockWdgList.append( (KDockWidget*)dbg_widget->parentWidget()->parentWidget());
 #endif
-//  }
+  }
 
   toggleGroupOfToolViewCovers(ID_VIEW_OUTPUTVIEW, &dockWdgList);
 }
@@ -3998,42 +3998,61 @@ void CKDevelop::fillToggleTreeViewsMenu()
   KDockWidget* pDock;
   toggletreeviews_popup->clear();
 
-  toggletreeviews_popup->insertItem(i18n("Classes-View"), this, SLOT(slotViewTClassesView()));
+  toggletreeviews_popup->insertItem(i18n("All &Tree Tool-Views"),this, SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
+  toggletreeviews_popup->insertSeparator();
+
+  toggletreeviews_popup->insertItem(i18n("&Classes"), this, SLOT(slotViewTClassesView()));
   pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bClassesChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(2), bClassesChecked);
 
-  toggletreeviews_popup->insertItem(i18n("Groups-View"), this, SLOT(slotViewTGroupsView()));
+  toggletreeviews_popup->insertItem(i18n("&Groups"), this, SLOT(slotViewTGroupsView()));
   pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(1), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bGroupsChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(3), bGroupsChecked);
 
-  toggletreeviews_popup->insertItem(i18n("Files-View"), this, SLOT(slotViewTFilesView()));
+  toggletreeviews_popup->insertItem(i18n("&Files"), this, SLOT(slotViewTFilesView()));
   pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(2), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bFilesChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(4), bFilesChecked);
 
-  toggletreeviews_popup->insertItem(i18n("Books-View"), this, SLOT(slotViewTBooksView()));
+  toggletreeviews_popup->insertItem(i18n("&Books"), this, SLOT(slotViewTBooksView()));
   pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(3), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bBooksChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(5), bBooksChecked);
 
-  toggletreeviews_popup->insertItem(i18n("Watch-View"), this, SLOT(slotViewTWatchView()));
+  toggletreeviews_popup->insertItem(i18n("&Watch"), this, SLOT(slotViewTWatchView()));
   pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(4), bVisible || (pTabWidget && pTabWidget->isVisible()));
-//  toggletreeviews_popup->setItemEnabled(toggletreeviews_popup->idAt(4), isDebugging());
+  bool bWatchChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(6), bWatchChecked);
+  toggletreeviews_popup->setItemEnabled(toggletreeviews_popup->idAt(6), (dbgController != 0L));
+
+  if (dbgController != 0L) {  // if not debugging, don't consider the watch view
+    if (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked && bWatchChecked) {
+      toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
+    }
+  }
+  else {
+    if (bClassesChecked && bGroupsChecked && bFilesChecked && bBooksChecked) {
+      toggletreeviews_popup->setItemChecked(toggletreeviews_popup->idAt(0), true);   //only if all are on
+    }
+  }
 }
 
 void CKDevelop::slotViewTClassesView()
 {
   KDockWidget* pDock = (KDockWidget*)class_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(0)))
+  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(2)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4042,7 +4061,7 @@ void CKDevelop::slotViewTClassesView()
 void CKDevelop::slotViewTGroupsView()
 {
   KDockWidget* pDock = (KDockWidget*)log_file_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(1)))
+  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(3)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4051,7 +4070,7 @@ void CKDevelop::slotViewTGroupsView()
 void CKDevelop::slotViewTFilesView()
 {
   KDockWidget* pDock = (KDockWidget*)real_file_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(2)))
+  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(4)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4060,7 +4079,7 @@ void CKDevelop::slotViewTFilesView()
 void CKDevelop::slotViewTBooksView()
 {
   KDockWidget* pDock = (KDockWidget*)doc_tree->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(3)))
+  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(5)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4069,7 +4088,7 @@ void CKDevelop::slotViewTBooksView()
 void CKDevelop::slotViewTWatchView()
 {
   KDockWidget* pDock = (KDockWidget*)var_viewer->parentWidget()->parentWidget();
-  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(4)))
+  if (toggletreeviews_popup->isItemChecked(toggletreeviews_popup->idAt(6)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4082,64 +4101,87 @@ void CKDevelop::fillToggleOutputViewsMenu()
   KDockWidget* pDock;
   toggleoutputviews_popup->clear();
 
-  toggleoutputviews_popup->insertItem(i18n("Messages-View"), this, SLOT(slotViewOMessagesView()));
+  toggleoutputviews_popup->insertItem(i18n("All &Output Tool-Views"),this,SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
+  toggleoutputviews_popup->insertSeparator();
+
+  toggleoutputviews_popup->insertItem(i18n("&Messages"), this, SLOT(slotViewOMessagesView()));
   pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bMessagesChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(2), bMessagesChecked);
 
-  toggleoutputviews_popup->insertItem(i18n("StdOut-View"), this, SLOT(slotViewOStdOutView()));
+  toggleoutputviews_popup->insertItem(i18n("&StdOut"), this, SLOT(slotViewOStdOutView()));
   pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(1), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bStdOutChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(3), bStdOutChecked);
 
-  toggleoutputviews_popup->insertItem(i18n("StdErr-View"), this, SLOT(slotViewOStdErrView()));
+  toggleoutputviews_popup->insertItem(i18n("S&tdErr"), this, SLOT(slotViewOStdErrView()));
   pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(2), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bStdErrChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(4), bStdErrChecked);
 
-  toggleoutputviews_popup->insertItem(i18n("Konsole-View"), this, SLOT(slotViewOKonsoleView()));
+  toggleoutputviews_popup->insertItem(i18n("&Konsole"), this, SLOT(slotViewOKonsoleView()));
   pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(3), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bKonsoleChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(5), bKonsoleChecked);
 
-  toggleoutputviews_popup->insertItem(i18n("Breakpoint-View"), this, SLOT(slotViewOBreakpointView()));
+  toggleoutputviews_popup->insertItem(i18n("&Breakpoints"), this, SLOT(slotViewOBreakpointView()));
   pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(4), bVisible || (pTabWidget && pTabWidget->isVisible()));
+  bool bBreakpointsChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(6), bBreakpointsChecked);
 
-  toggleoutputviews_popup->insertItem(i18n("Disassemble-View"), this, SLOT(slotViewODisassembleView()));
+  toggleoutputviews_popup->insertItem(i18n("&Disassemble"), this, SLOT(slotViewODisassembleView()));
   pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(5), bVisible || (pTabWidget && pTabWidget->isVisible()));
-//  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(5), isDebugging());
+  bool bDisassembleChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(7), bDisassembleChecked);
+  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(7), (dbgController != 0L));
 
-  toggleoutputviews_popup->insertItem(i18n("Frame-Stack-View"), this, SLOT(slotViewOFrameStackView()));
+  toggleoutputviews_popup->insertItem(i18n("&Call Stack"), this, SLOT(slotViewOFrameStackView()));
   pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(6), bVisible || (pTabWidget && pTabWidget->isVisible()));
-//  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(6), isDebugging());
+  bool bCallStackChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(8), bCallStackChecked);
+  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(8), (dbgController != 0L));
 
+  bool bDebuggerChecked = true;  // to support the if-statement below
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-  toggleoutputviews_popup->insertItem(i18n("Debugger-View"), this, SLOT(slotViewODebuggerView()));
+  toggleoutputviews_popup->insertItem(i18n("D&ebugger"), this, SLOT(slotViewODebuggerView()));
   pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
   bVisible = pDock->isVisible();
   pTabWidget = pDock->parentDockTabGroup();
-  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(7), bVisible || (pTabWidget && pTabWidget->isVisible()));
-//  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(7), isDebugging());
+  bool bDebuggerChecked = bVisible || (pTabWidget && pTabWidget->isVisible());
+  toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(9), bDebuggerChecked);
+  toggleoutputviews_popup->setItemEnabled(toggleoutputviews_popup->idAt(9), (dbgController != 0L));
 #endif
+
+  if (dbgController != 0L) {  // if not debugging, don't consider the disassemble, callstack and debugger views
+    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked && bDisassembleChecked && bCallStackChecked && bDebuggerChecked) {
+      toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
+    }
+  }
+  else {
+    if (bMessagesChecked && bStdOutChecked && bStdErrChecked && bKonsoleChecked && bBreakpointsChecked) {
+      toggleoutputviews_popup->setItemChecked(toggleoutputviews_popup->idAt(0), true);   //only if all are on
+    }
+  }
 }
 
 void CKDevelop::slotViewOMessagesView()
 {
   KDockWidget* pDock = (KDockWidget*)messages_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(0)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(2)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4148,7 +4190,7 @@ void CKDevelop::slotViewOMessagesView()
 void CKDevelop::slotViewOStdOutView()
 {
   KDockWidget* pDock = (KDockWidget*)stdin_stdout_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(1)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(3)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4157,7 +4199,7 @@ void CKDevelop::slotViewOStdOutView()
 void CKDevelop::slotViewOStdErrView()
 {
   KDockWidget* pDock = (KDockWidget*)stderr_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(2)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(4)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4166,7 +4208,7 @@ void CKDevelop::slotViewOStdErrView()
 void CKDevelop::slotViewOKonsoleView()
 {
   KDockWidget* pDock = (KDockWidget*)konsole_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(3)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(5)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4175,7 +4217,7 @@ void CKDevelop::slotViewOKonsoleView()
 void CKDevelop::slotViewOBreakpointView()
 {
   KDockWidget* pDock = (KDockWidget*)brkptManager->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(4)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(6)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4184,7 +4226,7 @@ void CKDevelop::slotViewOBreakpointView()
 void CKDevelop::slotViewODisassembleView()
 {
   KDockWidget* pDock = (KDockWidget*)disassemble->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(5)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(7)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4193,7 +4235,7 @@ void CKDevelop::slotViewODisassembleView()
 void CKDevelop::slotViewOFrameStackView()
 {
   KDockWidget* pDock = (KDockWidget*)frameStack->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(6)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(8)))
     pDock->undock();
   else
     pDock->dockBack();
@@ -4202,7 +4244,7 @@ void CKDevelop::slotViewOFrameStackView()
 void CKDevelop::slotViewODebuggerView()
 {
   KDockWidget* pDock = (KDockWidget*)dbg_widget->parentWidget()->parentWidget();
-  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(7)))
+  if (toggleoutputviews_popup->isItemChecked(toggleoutputviews_popup->idAt(9)))
     pDock->undock();
   else
     pDock->dockBack();

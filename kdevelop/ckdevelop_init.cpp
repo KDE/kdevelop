@@ -678,11 +678,7 @@ void CKDevelop::initMenuBar(){
   view_menu->insertSeparator();
   view_menu->insertItem(SmallIconSet("newwidget"),i18n("&Dialog Editor"),this,SLOT(startDesigner()),0,ID_TOOLS_DESIGNER);
   view_menu->insertSeparator();
-  view_menu->insertItem(i18n("All &Tree-View"),this,
-			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
   view_menu->insertItem(i18n("Tree Tool V&iews"), toggletreeviews_popup);
-  view_menu->insertItem(i18n("All &Output-View"),this,
-			SLOT(slotViewTOutputView()),0,ID_VIEW_OUTPUTVIEW);
   view_menu->insertItem(i18n("O&utput Tool Views"), toggleoutputviews_popup);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("Toolb&ar"),this,
@@ -1520,8 +1516,8 @@ void CKDevelop::initDebugger()
     disassemble   = new Disassemble(0L, "DisassembleTab");
     brkptManager->setCaption(i18n("breakpoint"));
     addToolWindow(brkptManager, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger breakpoints"), i18n("breakpoint"));
-    frameStack->setCaption(i18n("frame stack"));
-    addToolWindow(frameStack, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger function call stack"), i18n("frame stack"));
+    frameStack->setCaption(i18n("call stack"));
+    addToolWindow(frameStack, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger function call stack"), i18n("call stack"));
     disassemble->setCaption(i18n("disassemble"));
     addToolWindow(disassemble, KDockWidget::DockBottom, messages_widget, 70, i18n("debugger disassemble view"), i18n("disassemble"));
 

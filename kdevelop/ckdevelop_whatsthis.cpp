@@ -269,7 +269,7 @@ void CKDevelop::initWhatsThis(){
         "to the source in the editor window."));
                                                                                             
   if (frameStack)
-    whats_this->add((QWidget*)frameStack, i18n("Frame stack display\n\n"
+    whats_this->add((QWidget*)frameStack, i18n("Call stack display\n\n"
         "Often referred to as the \"call stack\", "
         "this is a list showing what function "
         "is currently active and who called "
