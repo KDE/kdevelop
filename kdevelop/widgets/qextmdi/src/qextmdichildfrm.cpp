@@ -67,6 +67,11 @@
 #include "kde2_maxbutton.xpm"
 #include "kde2_restorebutton.xpm"
 #include "kde2_undockbutton.xpm"
+#include "kde2laptop_closebutton.xpm"
+#include "kde2laptop_minbutton.xpm"
+#include "kde2laptop_maxbutton.xpm"
+#include "kde2laptop_restorebutton.xpm"
+#include "kde2laptop_undockbutton.xpm"
 
 QextMdiWin32IconButton::QextMdiWin32IconButton( QWidget* parent, const char* name)
   : QLabel( parent, name)
@@ -814,6 +819,14 @@ void QextMdiChildFrm::resizeEvent(QResizeEvent *)
       m_pMinimize->setGeometry( captionWidth-captionHeight*3, 0, captionHeight,captionHeight);
       m_pUndock->setGeometry  ( captionWidth-captionHeight*4, 0, captionHeight,captionHeight);
    }
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+      m_pUnixIcon->hide();
+      m_pWinIcon->setGeometry(1,1,captionHeight-2,captionHeight-2);
+      m_pClose->setGeometry((captionWidth-captionHeight)+1,1,captionHeight-2,captionHeight-2);
+      m_pMaximize->setGeometry((captionWidth-(captionHeight*2))+2,1,captionHeight-2,captionHeight-2);
+      m_pMinimize->setGeometry((captionWidth-(captionHeight*3))+3,1,captionHeight-2,captionHeight-2);
+      m_pUndock->setGeometry((captionWidth-(captionHeight*4))+4,1,captionHeight-2,captionHeight-2);
+   }
    else {
       m_pWinIcon->hide();
       m_pUnixIcon->hide();
@@ -979,12 +992,19 @@ void QextMdiChildFrm::redecorateButtons()
       m_pCloseButtonPixmap = new QPixmap( kde_closebutton);
       m_pUndockButtonPixmap = new QPixmap( kde_undockbutton);
    }
-   else {
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
       m_pMinButtonPixmap = new QPixmap( kde2_minbutton);
       m_pMaxButtonPixmap = new QPixmap( kde2_maxbutton);
       m_pRestoreButtonPixmap = new QPixmap( kde2_restorebutton);
       m_pCloseButtonPixmap = new QPixmap( kde2_closebutton);
       m_pUndockButtonPixmap = new QPixmap( kde2_undockbutton);
+   }
+   else {   // kde2laptop look
+      m_pMinButtonPixmap = new QPixmap( kde2laptop_minbutton);
+      m_pMaxButtonPixmap = new QPixmap( kde2laptop_maxbutton);
+      m_pRestoreButtonPixmap = new QPixmap( kde2laptop_restorebutton);
+      m_pCloseButtonPixmap = new QPixmap( kde2laptop_closebutton);
+      m_pUndockButtonPixmap = new QPixmap( kde2laptop_undockbutton);
    }
 
 #if QT_VERSION > 209

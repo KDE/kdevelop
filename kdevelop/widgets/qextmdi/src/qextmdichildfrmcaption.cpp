@@ -149,7 +149,10 @@ int QextMdiChildFrmCaption::heightHint()
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look) {
       if(hght<20)hght=20;
    }
-   else {
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look) {
+      if(hght<16)hght=16;
+   }
+   else {   // kde2laptop look
       if(hght<14)hght=14;
    }
    return hght;
@@ -174,7 +177,9 @@ void QextMdiChildFrmCaption::paintEvent(QPaintEvent *)
       r.setLeft(r.left()+19);
    else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE1Look)
       r.setLeft(r.left()+22);
-   else
+   else if (QextMdiMainFrm::frameDecorOfAttachedViews() == QextMdi::KDE2Look)
+      r.setLeft(r.left()+17);
+   else  // kde2laptop look
       r.setLeft(r.left()+30);
 
    int captionWidthForText = width() - 5*heightHint();   // = width - width_for_buttons
