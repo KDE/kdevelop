@@ -2,7 +2,7 @@
 #include <qpopupmenu.h>
 #include <qtimer.h>
 
-
+#include <kdeversion.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -10,7 +10,9 @@
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/popupmenuinterface.h>
 #include <ktexteditor/editinterface.h>
+#if (KDE_VERSION > 304)
 #include <ktexteditor/markinterfaceextension.h>
+#endif
 
 
 #include "partcontroller.h"
@@ -211,6 +213,7 @@ void EditorProxy::setBreakpoint(KParts::Part *part, int lineNum, bool enabled, b
 
 void EditorProxy::activePartChanged(KParts::Part *part)
 {
+#if (KDE_VERSION > 304)
   MarkInterfaceExtension *iface = dynamic_cast<MarkInterfaceExtension*>(part);
   if (iface)
   {
@@ -220,6 +223,7 @@ void EditorProxy::activePartChanged(KParts::Part *part)
 
     iface->setMarksUserChangable(MarkInterface::markType01|MarkInterface::markType02|MarkInterface::markType03|MarkInterface::markType04);
   }
+#endif
 }
 
 
