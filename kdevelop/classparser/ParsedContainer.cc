@@ -104,8 +104,7 @@ void CParsedContainer::addAttribute( CParsedAttribute *anAttribute )
   if( !path().isEmpty() )
     anAttribute->setDeclaredInScope( path() );
 
-  attributes.insert( ( useFullPath ? anAttribute->path() : anAttribute->name ), 
-                     anAttribute );
+  attributes.insert( anAttribute->name,  anAttribute );
 }
 
 /*------------------------------------------ CParsedContainer::addMethod()
