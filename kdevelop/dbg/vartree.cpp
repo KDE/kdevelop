@@ -638,13 +638,17 @@ void VarItem::checkForRequests()
   if (strncmp(cache_, "d = 0x", 6) == 0)      // Eeeek - too small
   {
     waitingForData();
-    if (GDBParser::getGDBParser()->isQT2Version())
+//    if (GDBParser::getGDBParser()->isQT2Version())
+//      ((VarTree*)listView())->emitExpandUserItem(this,
+//           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+//           fullName().latin1()));
+//    else
+//      ((VarTree*)listView())->emitExpandUserItem(this,
+//           QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
+//           fullName().latin1()));
+
       ((VarTree*)listView())->emitExpandUserItem(this,
-           QCString().sprintf("(($len=($data=%s.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-           fullName().latin1()));
-    else
-      ((VarTree*)listView())->emitExpandUserItem(this,
-           QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
+           QCString().sprintf("(($len=($data=%s.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
   }
 
@@ -660,13 +664,16 @@ void VarItem::checkForRequests()
   if (strncmp(cache_, "dPath = {d = 0x", 15) == 0)
   {
     waitingForData();
-    if (GDBParser::getGDBParser()->isQT2Version())
+//    if (GDBParser::getGDBParser()->isQT2Version())
+//      ((VarTree*)listView())->emitExpandUserItem(this,
+//           QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
+//           fullName().latin1()));
+//      else
+//      ((VarTree*)listView())->emitExpandUserItem(this,
+//           QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
+//           fullName().latin1()));
       ((VarTree*)listView())->emitExpandUserItem(this,
-           QCString().sprintf("(($len=($data=%s.dPath.d).len)?$data.unicode.rw@($len>100?200:$len*2):\"\")",
-           fullName().latin1()));
-      else
-      ((VarTree*)listView())->emitExpandUserItem(this,
-           QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode.ucs)@($len>100?200:$len*2):\"\")",
+           QCString().sprintf("(($len=($data=%s.dPath.d).len)?*((char*)&$data.unicode[0])@($len>100?200:$len*2):\"\")",
            fullName().latin1()));
   }
 }
