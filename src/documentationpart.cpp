@@ -88,41 +88,34 @@ DocumentationPart::DocumentationPart()
 
 void DocumentationPart::popup( const QString & url, const QPoint & p )
 {
-  KPopupMenu *m_popup = new KPopupMenu( i18n( "Documentation Viewer" ), this->widget() );
-
-  // Install the global back and forward actions, if they are available
-  KActionCollection *actions = TopLevel::getInstance()->main()->actionCollection();
-  KAction *backAction = actions->action("browser_back");
-  KAction *forwardAction = actions->action("browser_forward");
-  if(backAction && forwardAction)
-  {
-    backAction->plug(m_popup);
-    forwardAction->plug(m_popup);
-    m_popup->insertSeparator();
-  }
+  KPopupMenu popup( i18n( "Documentation Viewer" ), this->widget() );
+  
+  m_backAction->plug( &popup );
+  m_forwardAction->plug( &popup );
+  popup.insertSeparator();
   
   KAction * incFontAction = this->action("incFontSizes");
   KAction * decFontAction = this->action("decFontSizes");
   if ( incFontAction && decFontAction )
   {
-    incFontAction->plug( m_popup );
-    decFontAction->plug( m_popup );
-    m_popup->insertSeparator();
+    incFontAction->plug( &popup );
+    decFontAction->plug( &popup );
+    popup.insertSeparator();
   }
   
-  duplicateAction->plug(m_popup);
+  duplicateAction->plug(&popup);
   int idNewWindow = -2;
   if (!url.isEmpty())
   {
-    idNewWindow = m_popup->insertItem(SmallIcon("window_new"),i18n("Open in New Window"));
-    m_popup->setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
+    idNewWindow = popup.insertItem(SmallIcon("window_new"),i18n("Open in New Window"));
+    popup.setWhatsThis(idNewWindow, i18n("<b>Open in new window</b><p>Opens current link in a new window."));
   }
-  m_popup->insertSeparator();
-  reloadAction->plug(m_popup);
-  stopAction->plug(m_popup);
-  m_popup->insertSeparator();
-  printAction->plug(m_popup);
-  m_popup->insertSeparator();
+  popup.insertSeparator();
+  reloadAction->plug(&popup);
+  stopAction->plug(&popup);
+  popup.insertSeparator();
+  printAction->plug(&popup);
+  popup.insertSeparator();
 
 /*  if (!url.isEmpty())
   {
@@ -140,9 +133,9 @@ void DocumentationPart::popup( const QString & url, const QPoint & p )
 
   KAction *ac = action("setEncoding");
   if (ac)
-    ac->plug(m_popup);
+    ac->plug(&popup);
 
-  int r = m_popup->exec(p);
+  int r = popup.exec(p);
 
   if (r == idNewWindow)
   {
