@@ -31,7 +31,7 @@ ClassListAction::ClassListAction(KDevPlugin *part, const QString &text,
                                  KActionCollection *parent, const char *name)
     : KWidgetAction( m_combo = new QComboBox(), text, cut, 0, 0, parent, name), m_part(part)
 {
-#if (QT_VERSION >= 310)
+#if (QT_VERSION >= 0x030100)
     m_combo->setEditable( true );
     m_combo->setAutoCompletion( true );
 #endif
@@ -93,7 +93,7 @@ MethodListAction::MethodListAction(KDevPlugin *part, const QString &text, const 
                                    KActionCollection *parent, const char *name)
     : KWidgetAction( m_combo = new QComboBox(), text, accel, 0, 0, parent, name), m_part(part)
 {    
-#if (QT_VERSION >= 310)
+#if (QT_VERSION >= 0x030100)
     m_combo->setEditable( true );
     m_combo->setAutoCompletion( true );
 #endif
