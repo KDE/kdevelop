@@ -61,7 +61,7 @@ const VCSFileInfoMap *SVNFileInfoProvider::status( const QString &dirPath ) {
 		QString rPath = projectDirectory( );
 		rPath += QDir::separator() + dirPath;
 		kdDebug() << "DIR : " << rPath << " " << KURL( QFileInfo( rPath ).absFilePath() ) << endl;
-		s << cmd << QFileInfo( rPath ).absFilePath();
+		s << cmd << KURL( QFileInfo( rPath ).absFilePath() );
 		KIO::SimpleJob *job2 = KIO::special(servURL, parms, false);
 		job2->setWindow( m_part->mainWindow()->main() );
 
