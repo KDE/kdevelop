@@ -619,7 +619,13 @@ void CKDevelop::slotProjectAddNewTranslationFile(){
 void CKDevelop::slotAddFileToProject(QString abs_filename){
   ProjectFileType type = CProject::getType( abs_filename );
 
-  addFileToProject(abs_filename, type, true);
+  addFileToProject(abs_filename, type, false);
+
+  // Parse the file if it's a sourcefile.
+  if( type == CPP_SOURCE || type == CPP_HEADER )
+    class_tree->addFile( abs_filename );
+
+  log_file_tree->refresh( prj );
 }
 
 void CKDevelop::slotProjectMessages(){

@@ -33,6 +33,17 @@
  ********************************************************************/
 
 
+/*------------------------------------- CRealFileView::CRealFileView()
+ * CRealFileView()
+ *   Constructor.
+ *
+ * Parameters:
+ *   parent         Parent widget.
+ *   name           The name of this widget.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 CRealFileView::CRealFileView(QWidget*parent,const char* name)
   : CTreeView(parent,name)
 {
@@ -183,6 +194,15 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   addFilesFromDir( directory, parent );
 }
 
+/*----------------------------------- CRealFileView::getCurrentPopup()
+ * getCurrentPopup()
+ *   Get the current popupmenu.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 KPopupMenu *CRealFileView::getCurrentPopup()
 {
   KPopupMenu *popup;
@@ -242,8 +262,8 @@ bool CRealFileView::isInstalledFile(QString filename)
 void CRealFileView::slotSelectionChanged(QListViewItem* selection) 
 {
   if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER ||
-  	mouseBtn == MidButton && treeH->itemType() != THFOLDER)
-      emit fileSelected(getFullFilename(selection));
+      mouseBtn == MidButton && treeH->itemType() != THFOLDER)
+    emit fileSelected(getFullFilename(selection));
 }
 
 void CRealFileView::slotAddFileToProject() {
@@ -254,7 +274,8 @@ void CRealFileView::slotAddFileToProject() {
                     KMsgBox::QUESTION) == 2){
     return;
   }
- 
+
+  currentItem()->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
   emit addFileToProject(filename);
 }
 
@@ -273,8 +294,8 @@ void CRealFileView::slotDeleteFilePhys() {
   if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to delete the selected file?\n        There is no way to restore it!"),KMsgBox::EXCLAMATION) == 2){
     return;
   }
-	filename = getFullFilename(currentItem());
-	QFile::remove(filename);
+  filename = getFullFilename(currentItem());
+  QFile::remove(filename);
 
   if (isInstalledFile(filename)) {
     emit removeFileFromProject(filename);
@@ -285,6 +306,3 @@ void CRealFileView::slotDeleteFilePhys() {
 void CRealFileView::slotShowFileProperties() {
   emit showFileProperties(getRelFilename(currentItem()));
 }
-
-
-
