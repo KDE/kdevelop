@@ -1,3 +1,7 @@
+2001-07-26  F@lk Brettschneider <falk@kdevelop.org>
+    * KDE version check fixed. Now KDevelop-2.0 runs even on FreeBSD
+      with the little help of KrazyKiwi. Thanks!
+
 2001-07-25  rokrau@yahoo.com
     * bugfix: F12 now works without a project loaded. I've implemented this
       somewhat reluctantly, it should work but KDevelop should be used with 

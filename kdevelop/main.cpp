@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
   aboutData.addCredit ("Michel Stol (aka Wimpie)",I18N_NOOP("Startlogo KDevelop 1.4, 2.0"), "f1r3f0x@hotmail.com");
 
   aboutData.addCredit ("Martin Piskernig",I18N_NOOP("Patches/Bugfixes, Translation coordination"), "martin.piskernig@stuwo.at");
-	
+
 	KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options );
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -140,8 +140,8 @@ int main(int argc, char* argv[])
 
   // KDE version check
   KStandardDirs stddirs;
-  QString libPath = stddirs.findResourceDir("lib", "libkdeui.so.3.0.0");
-  QFileInfo libFI( libPath + "/libkdeui.so.3.0.0");
+  QString libPath = stddirs.findResourceDir("lib", "libkdeui.so.3");
+  QFileInfo libFI( libPath + "/libkdeui.so.3");
   QDateTime requiredDate(QDate(2001,5,24), QTime(22,30));
   if ( libFI.lastModified() < requiredDate) {
     KMessageBox::sorry(0L,
