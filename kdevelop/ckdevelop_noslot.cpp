@@ -1299,7 +1299,8 @@ void CKDevelop::readOptions()
     mainSplitter->setSizes(mainSplitterPos);
 	}
 	else{
-	  o_tab_view->hide();
+//	  o_tab_view->hide();
+	    outputdock->hide();
 	}
   // SETTING TOP PANNER
   // set a default value for the splitter in pos
@@ -1319,7 +1320,8 @@ void CKDevelop::readOptions()
     topSplitter->setSizes(topSplitterPos);
 	}
 	else{
-	  t_tab_view->hide();
+//	  t_tab_view->hide();
+	  treedock->hide();
 	}
 
 

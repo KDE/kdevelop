@@ -742,10 +742,12 @@ void CKDevelop::slotViewTTreeView(){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
     toolBar()->setButton(ID_VIEW_TREEVIEW,false);
     topSplitterPos=topSplitter->sizes();
-    t_tab_view->hide();
+//    t_tab_view->hide();
+    treedock->hide();
   }
   else{
-    t_tab_view->show();
+    treedock->show();
+//    t_tab_view->show();
     topSplitter->setSizes(topSplitterPos);
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,true);
     toolBar()->setButton(ID_VIEW_TREEVIEW,true);
@@ -761,10 +763,12 @@ void CKDevelop::slotViewTOutputView(){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,false);
     mainSplitterPos=mainSplitter->sizes();
-    o_tab_view->hide();
+//    o_tab_view->hide();
+    outputdock->hide();
   }
   else{
-    o_tab_view->show();
+    outputdock->show();
+//    o_tab_view->show();
     mainSplitter->setSizes(mainSplitterPos);
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
     toolBar()->setButton(ID_VIEW_OUTPUTVIEW,true);

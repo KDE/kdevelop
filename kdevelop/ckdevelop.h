@@ -27,6 +27,9 @@
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <kmainwindow.h>
+
+#include <kdockwidget.h>
+
 #include <kprocess.h>
 
 #include <qguardedptr.h>
@@ -81,7 +84,7 @@ class KStatusBarLabel;
 /** the mainclass in kdevelop
   *@author Sandy Meier
   */
-class CKDevelop : public KMainWindow {
+class CKDevelop : public KDockMainWindow /*KMainWindow*/{
   Q_OBJECT
 public:
   /**constructor*/
@@ -876,6 +879,8 @@ private:
   CTabCtl* t_tab_view;
   /** The tabbar for the output_widgets. */
   CTabCtl* o_tab_view;
+  KDockWidget* treedock;
+  KDockWidget* outputdock;
 
   CEditWidget* edit_widget; // a pointer to the actual editwidget
   CEditWidget* header_widget; // the editwidget for the headers/resources

@@ -638,11 +638,9 @@ KPopupMenu *CClassView::getCurrentPopup()
 {
   KPopupMenu *popup = NULL;
   QString text= currentItem()->text(0);
-
-  if(text.length() > 20 ){
-    text = text.left(20) + "...";
-  }
-  cerr << text << endl;
+  int start= text.find('(', 1);
+  if(start!=-1)
+    text.remove(start+1,text.length()-(start+1) );
 
   switch( treeH->itemType() )
   {
@@ -1353,5 +1351,9 @@ void CClassView::slotClassWizard()
 /**  */
 void CClassView::slotGrepText(){
   QString text= currentItem()->text(0);
+  int start= text.find('(', 1);
+  if(start!=-1)
+    text.remove(start+1,text.length()-(start+1) );
+
   emit signalGrepText(text);
 }

@@ -67,9 +67,9 @@
 #endif
 
 #include <iostream.h>
+// KMainWindow(0),
 
-CKDevelop::CKDevelop() :
-  KMainWindow(0),
+CKDevelop::CKDevelop(): KDockMainWindow(0L,"CKDevelop"),
   process("/bin/sh"),
   appl_process("/bin/sh"),
   shell_process("/bin/sh"),
@@ -176,7 +176,11 @@ void CKDevelop::initView()
   //  s_tab_current = 0;
   topSplitter = new QSplitter(QSplitter::Horizontal, mainSplitter, "topSplitter"); //,QSplitter::Absolute);
 
-  t_tab_view = new CTabCtl(topSplitter);
+  treedock=createDockWidget( "Tree-View", SmallIcon("tree_win"), 0, i18n("Tree-View"));
+  t_tab_view = new CTabCtl(treedock);
+  treedock->setWidget(t_tab_view);
+
+//  t_tab_view = new CTabCtl(topSplitter);
   t_tab_view->setFocusPolicy(QWidget::ClickFocus);
 //  t_tab_view->setMinimumSize(600,400);
 
@@ -225,7 +229,14 @@ void CKDevelop::initView()
   ////////////////////////
 
   // the tabbar + tabwidgets for edit and browser
-  s_tab_view = new CTabCtl(topSplitter);
+
+  KDockWidget* main = createDockWidget( "Editor",SmallIcon("kdevelop") , this );
+  setMainDockWidget( main );
+
+  s_tab_view = new CTabCtl(main);
+  main->setWidget( s_tab_view );
+
+//  s_tab_view = new CTabCtl(topSplitter);
   s_tab_view->setFocusPolicy(QWidget::ClickFocus);
 
   header_widget = new CEditWidget(s_tab_view,"header");
@@ -277,7 +288,11 @@ void CKDevelop::initView()
   // Outputwindow
   ////////////////////////
 	
-  o_tab_view = new CTabCtl(mainSplitter, "output_tabview","output_widget");
+  outputdock=createDockWidget( "Output-View", SmallIcon("output_win"), 0L, i18n("Output-View"));
+  o_tab_view = new CTabCtl(outputdock, "output_tabview","output_widget");
+  outputdock->setWidget(o_tab_view);
+
+//  o_tab_view = new CTabCtl(mainSplitter, "output_tabview","output_widget");
   mainSplitter->setResizeMode(topSplitter, QSplitter::Stretch);
 
   messages_widget = new COutputWidget(o_tab_view);
@@ -300,7 +315,8 @@ void CKDevelop::initView()
 /////////////////////////////////////////////////////////////
 
   // set the mainwidget
-  setCentralWidget(mainSplitter);
+//  setCentralWidget(mainSplitter);
+
   initKeyAccel();
   initMenuBar();
   initToolBar();
