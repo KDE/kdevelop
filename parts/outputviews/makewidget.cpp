@@ -124,6 +124,7 @@ MakeWidget::MakeWidget(MakeViewPart *part)
  ,m_part(part)
  ,m_vertScrolling(false)
  ,m_horizScrolling(false)
+ ,m_bCompiling(false)
  ,m_errorGccRx("([^: \t]+):([0-9]+):(.*)")
  ,m_errorGccFileGroup(1)
  ,m_errorGccRowGroup(2)
@@ -210,6 +211,15 @@ void MakeWidget::startNextJob()
 
     currentCommand = *it;
     commandList.remove(it);
+    
+    if (currentCommand.contains(" gmake") 
+	&& !currentCommand.contains("configure ") 
+	&& !currentCommand.contains(" Makefile.cvs")
+	&& !currentCommand.contains(" clean")
+	&& !currentCommand.contains(" package-messages")
+	&& !currentCommand.contains(" install")) 
+    { m_bCompiling = true; }
+    else { m_bCompiling = false; }
 
     it =  dirList.begin();
     QString dir = *it;
@@ -648,7 +658,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         items.append(new MakeItem(parags, fn, row, text));
 	type = Error;
     }
-    else  {
+    else if (m_bCompiling) {
 	if (m_compileFile1.search(line) != -1) {
 	    QString tool;
 	    if (!line.startsWith("g++")) { tool = "(libtool)"; }
@@ -681,10 +691,11 @@ void MakeWidget::insertLine1(const QString &line, Type type)
     
     // append it to this textedit widget
     bool bShortOutputExprMatched = !shortOutput.isEmpty();
-    if (m_compilerOutputLevel != eFull && bShortOutputExprMatched) {
+    bool bConfiguring = line.startsWith("checking "); // hack to consider an implicite configure call
+    if (bShortOutputExprMatched && m_compilerOutputLevel != eFull) {
 	insertLine2(shortOutput, StyledDiagnostic);
     }
-    else if (!(m_compilerOutputLevel == eVeryShort && type == Diagnostic)){
+    else if (bConfiguring || !(m_bCompiling && m_compilerOutputLevel == eVeryShort && type == Diagnostic)){
 	insertLine2(line, type);
     }
     
@@ -696,7 +707,8 @@ void MakeWidget::insertLine1(const QString &line, Type type)
 	type = StyledDiagnostic;
     }
     insertLine2(ln, type, &m_shortOutput);
-    if (type != Diagnostic) {
+    if (bConfiguring || !(m_bCompiling && type == Diagnostic)) 
+    {
 	insertLine2(ln, type, &m_veryShortOutput);
     }
 }
@@ -876,7 +888,7 @@ void MakeWidget::updateSettingsFromConfig()
     pConfig->setGroup("MakeOutputView");
     setFont(pConfig->readFontEntry("Messages Font"));
     m_bLineWrapping = pConfig->readBoolEntry("LineWrapping", true);
-    m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eShort);
+    m_compilerOutputLevel = (EOutputLevel) pConfig->readNumEntry("CompilerOutputLevel", (int) eVeryShort);
     m_bShowDirNavMsg = pConfig->readBoolEntry("ShowDirNavigMsg", false);
 }
 

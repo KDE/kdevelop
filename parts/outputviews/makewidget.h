@@ -95,6 +95,7 @@ private:
     MakeViewPart *m_part;
     
     bool m_vertScrolling, m_horizScrolling;
+    bool m_bCompiling;
     
     bool m_bLineWrapping;
     EOutputLevel m_compilerOutputLevel;
