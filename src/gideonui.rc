@@ -126,6 +126,8 @@
 
 <ToolBar name="browserToolBar" position="Top" newline="true">
   <text>Browser Toolbar</text>
+  <Action name="browser_back" />
+  <Action name="browser_forward" />
 </ToolBar>
 
 <Menu name="rb_popup">

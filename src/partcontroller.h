@@ -1,15 +1,11 @@
 #ifndef __PARTCONTROLLER_H__
 #define __PARTCONTROLLER_H__
 
+#include "kdevpartcontroller.h"
 
 #include <qwidget.h>
 #include <qarray.h>
-
-
-class QTabWidget;
-class QPopupMenu;
-
-
+#include <qptrlist.h>
 #include <kurl.h>
 
 namespace KParts
@@ -19,14 +15,13 @@ namespace KParts
   class PartManager;
 };
 
+class QTabWidget;
+class QPopupMenu;
 class KAction;
+class KToolBarPopupAction;
 class KRecentFilesAction;
-
-#include "kdevpartcontroller.h"
-
-
 class DocumentationPart;
-
+class HistoryEntry;
 
 class PartController : public KDevPartController
 {
@@ -59,6 +54,7 @@ public slots:
   void slotCurrentChanged(QWidget *w);
   void slotClosePartForWidget(const QWidget *widget);
   void slotCloseAllButPartForWidget(QWidget *widget);
+  void slotActivePartChanged( KParts::Part* part );
 
 protected:
 
@@ -77,10 +73,19 @@ private slots:
   void slotCloseAllWindows();
   void slotCloseOtherWindows();
 
+  void slotBack();
+  void slotForward();
+  void slotBackAboutToShow();
+  void slotBackPopupActivated( int id );
+  void slotForwardAboutToShow();
+  void slotForwardPopupActivated( int id );
+
   void slotUploadFinished();
 
   void updateMenuItems();
-
+  void saveState( KParts::Part* part );
+  void restoreState();
+  void addHistoryEntry( HistoryEntry* entry );
 
 private:
 
@@ -110,9 +115,13 @@ private:
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
   KRecentFilesAction *m_openRecentAction;
   QString m_presetEncoding;
-    
+
   DocumentationPart *findDocPart(const QString &context);
 
+  KToolBarPopupAction* m_backAction;
+  KToolBarPopupAction* m_forwardAction;
+  QPtrList< HistoryEntry > m_history;
+  bool m_restoring;
 };
 
 

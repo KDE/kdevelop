@@ -24,6 +24,7 @@
 #include <kaction.h>
 #include <kstatusbar.h>
 #include <khtml_part.h>
+#include <kpopupmenu.h>
 #include <kio/netaccess.h>
 
 #include "toplevel.h"
@@ -40,14 +41,22 @@
 
 PartController *PartController::s_instance = 0;
 
+struct HistoryEntry {
+    KURL url;
+    QString context;
+
+    HistoryEntry( const KURL& u, const QString& c ): url( u ), context( c ) {}
+};
 
 PartController::PartController(QWidget *parent)
   : KDevPartController(parent)
 {
   connect(this, SIGNAL(partRemoved(KParts::Part*)), this, SLOT(updateMenuItems()));
   connect(this, SIGNAL(partAdded(KParts::Part*)), this, SLOT(updateMenuItems()));
-  connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(updateMenuItems()));
+  connect(this, SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part*)));
 
+  m_history.setAutoDelete( true );
+  m_restoring = false;
   setupActions();
 }
 
@@ -105,6 +114,25 @@ void PartController::setupActions()
     this, SLOT(slotCloseOtherWindows()),
     ac, "file_closeother");
   m_closeOtherWindowsAction->setEnabled(false);
+
+  m_backAction = new KToolBarPopupAction(i18n("Back"), "back", 0,
+    this, SLOT(slotBack()),
+    ac, "browser_back");
+
+  connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()),
+         this, SLOT(slotBackAboutToShow()));
+  connect(m_backAction->popupMenu(), SIGNAL(activated(int)),
+         this, SLOT(slotBackPopupActivated(int)));
+
+
+  m_forwardAction = new KToolBarPopupAction(i18n("Forward"), "forward", 0,
+    this, SLOT(slotForward()),
+    ac, "browser_forward");
+
+  connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()),
+         this, SLOT(slotForwardAboutToShow()));
+  connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)),
+         this, SLOT(slotForwardPopupActivated(int)));
 }
 
 
@@ -249,6 +277,9 @@ void PartController::showDocument(const KURL &url, const QString &context)
   }
   else
     activatePart(part);
+
+  if( !m_restoring )
+     addHistoryEntry( new HistoryEntry(docUrl, context) );
 
   bool bSuccess = part->openURL(docUrl);
   if (!bSuccess) {
@@ -452,6 +483,9 @@ void PartController::updateMenuItems()
   m_closeWindowAction->setEnabled(hasReadOnlyParts);
   m_closeAllWindowsAction->setEnabled(hasReadOnlyParts);
   m_closeOtherWindowsAction->setEnabled(hasReadOnlyParts);
+
+  m_backAction->setEnabled(m_history.current() != m_history.getFirst());
+  m_forwardAction->setEnabled(m_history.current() != m_history.getLast());
 }
 
 
@@ -649,7 +683,7 @@ void PartController::slotClosePartForWidget( const QWidget* w)
 void PartController::slotCloseAllButPartForWidget(QWidget* w)
 {
   slotCurrentChanged(w);
-  slotCloseOtherWindows();  
+  slotCloseOtherWindows();
 }
 
 bool PartController::closePartForWidget( const QWidget* w )
@@ -674,6 +708,122 @@ bool PartController::readyToClose()
   }
 
   return true;
+}
+
+void PartController::slotActivePartChanged( KParts::Part* part )
+{
+    updateMenuItems();
+    if( !part || QString(part->name()) != "DocumentationPart" ){
+        m_backAction->setEnabled( false );
+	m_forwardAction->setEnabled( false );
+    }
+}
+
+void PartController::slotBack()
+{
+  saveState(activePart());
+
+  if(m_history.prev()==0L) m_history.first();
+
+  restoreState();
+}
+
+void PartController::slotForward()
+{
+  saveState(activePart());
+
+  if(m_history.next()==0L)  m_history.last();
+
+  restoreState();
+}
+
+void PartController::slotBackAboutToShow()
+{
+  KPopupMenu *popup = m_backAction->popupMenu();
+  popup->clear();
+
+  int savePos = m_history.at();
+  for (int i=0; i<10 && m_history.prev(); ++i)
+    popup->insertItem( m_history.current()->url.url() );
+
+  m_history.at(savePos);
+}
+
+void PartController::slotBackPopupActivated( int id )
+{
+  int by = m_backAction->popupMenu()->indexOf(id)+1;
+
+  saveState(activePart());
+  for (int i=0; i < by; ++i)
+    m_history.prev();
+  if(m_history.prev()==0L) m_history.first();
+
+  restoreState();
+
+  updateMenuItems();
+}
+
+void PartController::slotForwardAboutToShow()
+{
+  KPopupMenu *popup = m_forwardAction->popupMenu();
+  popup->clear();
+
+  int savePos = m_history.at();
+  for (int i=0; i<10 && m_history.next(); ++i)
+    popup->insertItem(m_history.current()->url.url());
+
+  m_history.at(savePos);
+}
+
+void PartController::slotForwardPopupActivated( int id )
+{
+  int by = m_forwardAction->popupMenu()->indexOf(id)+1;
+
+  saveState(activePart());
+  for (int i=0; i < by; ++i)
+    m_history.next();
+  if(m_history.current()==0L) m_history.last();
+
+  restoreState();
+
+  updateMenuItems();
+}
+
+void PartController::addHistoryEntry( HistoryEntry* entry )
+{
+  HistoryEntry *current = m_history.current();
+  while (m_history.getLast() != current)
+    m_history.removeLast();
+  m_history.append( entry );
+  m_history.last();
+
+  updateMenuItems();
+}
+
+void PartController::saveState( KParts::Part* part )
+{
+  DocumentationPart* d = dynamic_cast<DocumentationPart*>( part );
+  if( !d )
+     return;
+
+  HistoryEntry *entry = m_history.current();
+  if (!entry)
+    return;
+
+  entry->url = d->url();
+}
+
+
+void PartController::restoreState()
+{
+  HistoryEntry *entry = m_history.current();
+  if (!entry)
+    return;
+
+  m_restoring = true;
+  showDocument( entry->url, entry->context );
+  m_restoring = false;
+  updateMenuItems();
 }
 
 
