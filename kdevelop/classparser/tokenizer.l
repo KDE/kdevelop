@@ -27,14 +27,8 @@
   class MyLexer : public yyFlexLexer
   {
     public:
-    int yyinput() { return yyFlexLexer::yyinput(); };
+    char *gettext() {return yytext;};
   };
-
-  /* Continue parsing defines. */
-  int cont = 0;
-
-  /* Counter for the current line being parsed. */
-  int line_num = 1;
 
   /* Line where a comment starts. */
   int comment_start = -1;
@@ -51,7 +45,7 @@
   bool endComment(MyLexer *lex);
 %}
 
-WS           [ \t\r]+
+WS           [[:blank:]\r]+
 LETTER       [A-Za-z_~]
 DIGIT        [0-9]
 NUM          {DIGIT}+
@@ -66,9 +60,11 @@ CCHAR [^'\\\n]|{ESCAPE_SEQUENCE}
 SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 
 %option yylineno
+%option C++ yymore
+
 %%
     /*==============> Strip whitespace <==============*/
-<INITIAL,COMMENT,PREPARSER>{WS}         {}
+<INITIAL,PREPARSER>{WS}         {}
 
     /*==============> Special keyword <==============*/
 <INITIAL>"class"         {return CPCLASS;}
@@ -141,29 +137,25 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
     /*==============> Numbers <==============*/
 <INITIAL>{NUM}        {return NUM;}
 
-    /*==============> Inrease the line counter at CR <==============*/
-<INITIAL,COMMENT>"\n"         {line_num++;}
- 
-    /*==============> Skip preprocessor directives <==============*/   
+    /*==============> Skip preprocessor directives <==============*/
 <INITIAL>"#"[acdeimpsuw ]	{BEGIN (PREPARSER);}
-<PREPARSER>"\\\n"      {line_num++;}
-<PREPARSER>"\n"	       {line_num++; BEGIN (0);}
-<PREPARSER>"/*"        {beginComment((MyLexer *) this);
+<PREPARSER>[^\\]"\n"	{ BEGIN (0);}
+<PREPARSER>"/*"		{beginComment((MyLexer *) this);
                                   BEGIN (PPCOMMENT);}
 <PPCOMMENT>"*/"        { endComment((MyLexer *) this);
                        BEGIN (PREPARSER); }
 
     /*==============> Strip // comments <==============*/
-<INITIAL,COMMENT>"//"(.)*[\n<<EOF>>] {line_num++;}
+<INITIAL,PREPARSER>"//"(.)*[\n<<EOF>>] {}
 
     /*==============> Strip comments <==============*/
-<INITIAL,COMMENT,PREPARSER>"/*"  {beginComment((MyLexer *) this);
+<INITIAL>"/*"        {beginComment((MyLexer *) this);
                                   BEGIN (COMMENT);}
 
 <COMMENT>"*/"        { endComment((MyLexer *) this);
                        BEGIN (0); }
 
-<COMMENT>.           {inComment((MyLexer *) this);}
+<COMMENT,PPCOMMENT>.  {inComment((MyLexer *) this);}
 
     /*==============> All other characters are ignored <==============*/
 <INITIAL,PREPARSER>.  {}
@@ -179,14 +171,8 @@ bool beginComment(MyLexer *lex)
 
 void inComment(MyLexer *lex)
 {
-  int c=lex->yyinput();
-
-  if (c==EOF)
-  {
-    comment_end = lex->lineno();
-  }
-  else
-   comment+=c;
+  char *text=lex->gettext();
+  comment+=text;
 };
 
 bool endComment(MyLexer *lex)
