@@ -17,10 +17,13 @@ AST::AST()
       m_startLine( 0 ), m_startColumn( 0 ),
       m_endLine( 0 ), m_endColumn( 0 )
 {
+    m_children.setAutoDelete( false );
 }
 
 AST::~AST()
 {
+    if( m_parent )
+	m_parent->removeChild( this );
 }
 
 void AST::setStartPosition( int line, int col )
@@ -53,6 +56,25 @@ void AST::getEndPosition( int* line, int* col ) const
         * col = m_endColumn;
 }
 
+void AST::setParent( AST* parent )
+{
+    if( m_parent )
+	m_parent->removeChild( this );
+    
+    m_parent = parent;    
+    if( m_parent )
+	m_parent->appendChild( this );
+}
+
+void AST::appendChild( AST* child )
+{
+    m_children.append( child );
+}
+
+void AST::removeChild( AST* child )
+{
+    m_children.remove( child );
+}
 
 // ------------------------------------------------------------------------
 NameAST::NameAST()

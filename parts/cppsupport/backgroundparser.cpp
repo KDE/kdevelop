@@ -65,6 +65,7 @@ void BackgroundParser::addFile( const QString& fileName)
     lock();
     m_unitDict.remove( fileName );
     m_unitDict.insert( fileName, unit );
+    KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );    
     KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
     unlock();
 }
@@ -240,6 +241,7 @@ void BackgroundParser::run()
 	    lock();
 	    m_unitDict.remove( fileName );
 	    m_unitDict.insert( fileName, unit );
+	    KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
 	    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
 	    unlock();
 	    	    

@@ -38,19 +38,28 @@ public:
     AST();
     virtual ~AST();
 
-    AST* parent() { return m_parent; }
-    void setParent( AST* parent ) { m_parent = parent; }
+    virtual AST* parent() { return m_parent; }
+    virtual void setParent( AST* parent );
 
-    void setStartPosition( int line, int col );
-    void getStartPosition( int* line, int* col ) const;
+    virtual void setStartPosition( int line, int col );
+    virtual void getStartPosition( int* line, int* col ) const;
 
-    void setEndPosition( int line, int col );
-    void getEndPosition( int* line, int* col ) const;
+    virtual void setEndPosition( int line, int col );
+    virtual void getEndPosition( int* line, int* col ) const;
+    
+    virtual QString text() const { return m_text; }
+    virtual void setText( const QString& text ) { m_text = text; }
+    
+    virtual QPtrList<AST> children() { return m_children; }
+    virtual void appendChild( AST* child );
+    virtual void removeChild( AST* child );
 
 private:
     AST* m_parent;
     int m_startLine, m_startColumn;
     int m_endLine, m_endColumn;
+    QString m_text;
+    QPtrList<AST> m_children;
 
 private:
     AST( const AST& source );
@@ -162,13 +171,6 @@ private:
     DeclarationAST( const DeclarationAST& source );
     void operator = ( const DeclarationAST& source );
 };
-
-// type-specifier
-//   simple-type-specifier
-//   class-specifier
-//   enum-specifier
-//   elaborated-type-specifier
-//   cv-qualifier
 
 class TypeSpecifierAST: public AST
 {

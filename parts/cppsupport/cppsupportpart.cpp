@@ -201,6 +201,9 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	    const Problem& p = *it++;
 	    m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
 	}
+    } else if( ev->type() == Event_FileParsed ){
+	FileParsedEvent* event = (FileParsedEvent*) ev;
+	// topLevel()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
     }
 }
 
