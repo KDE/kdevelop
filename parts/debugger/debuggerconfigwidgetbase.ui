@@ -257,7 +257,7 @@ This toolbar is in addition to the toolbar in KDevelop.</string>
             </rect>
         </property>
         <property name="title">
-            <string>Remote debugging</string>
+            <string>Remote Debugging</string>
         </property>
         <widget class="QLabel">
             <property name="name">

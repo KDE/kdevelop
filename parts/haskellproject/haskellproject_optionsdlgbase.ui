@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
+            <width>793</width>
             <height>480</height>
         </rect>
     </property>
@@ -30,7 +30,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>config_label</cstring>
@@ -169,7 +168,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>Haskell &amp;Compiler/Interpreter:</string>
+                <string>Haskell &amp;compiler/interpreter:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>compiler_box</cstring>
@@ -448,6 +447,9 @@
     <tabstop>addconfig_button</tabstop>
     <tabstop>removeconfig_button</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
+</includes>
 <slots>
     <slot access="protected">compiler_box_activated(const QString&amp;)</slot>
     <slot access="protected">addconfig_button_clicked()</slot>
@@ -459,13 +461,9 @@
     <slot access="protected">setDirty()</slot>
     <slot access="protected">setDefaultOptions()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
-    <includehint>qwidget.h</includehint>
     <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>

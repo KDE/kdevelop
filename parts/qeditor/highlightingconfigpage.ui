@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>504</width>
-            <height>277</height>
+            <width>553</width>
+            <height>309</height>
         </rect>
     </property>
     <property name="caption">
@@ -136,7 +136,7 @@
                         <cstring>adjustAllButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Adjust all...</string>
+                        <string>Adjust All...</string>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="3" column="0" rowspan="1" colspan="2">

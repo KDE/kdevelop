@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Found tags in the following files</string>
+        <string>Found Tags in Following Files</string>
     </property>
     <grid>
         <property name="name">

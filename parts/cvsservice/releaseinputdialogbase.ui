@@ -8,12 +8,12 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>542</width>
-            <height>234</height>
+            <width>626</width>
+            <height>290</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Update/revert to another release/branch/date</string>
+        <string>Update/Revert to Another Release/Branch/Date</string>
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
@@ -49,7 +49,7 @@
                         <cstring>headRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>most recent from HEAD</string>
+                        <string>Most recent from HEAD</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -68,7 +68,7 @@
                                 <cstring>revisionRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>an arbitrary revision/tag/branch</string>
+                                <string>An arbitrary revision/tag/branch</string>
                             </property>
                             <property name="checked">
                                 <bool>false</bool>
@@ -103,7 +103,7 @@
                                 <cstring>dateRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>an arbitrary date</string>
+                                <string>An arbitrary date</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit">
@@ -126,7 +126,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>Additional options</string>
+                <string>Additional Options</string>
             </property>
             <widget class="QCheckBox">
                 <property name="name">
@@ -141,7 +141,7 @@
                     </rect>
                 </property>
                 <property name="text">
-                    <string>Enforce even if the file has been locally modified (Revert)</string>
+                    <string>Enforce even if the file has been locally modified (revert)</string>
                 </property>
             </widget>
         </widget>

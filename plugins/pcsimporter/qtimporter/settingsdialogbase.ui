@@ -62,7 +62,7 @@
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>Configuration</string>
+                        <string>Configuration:</string>
                     </property>
                 </widget>
                 <widget class="KComboBox">

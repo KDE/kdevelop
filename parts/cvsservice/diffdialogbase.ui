@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>519</width>
-            <height>217</height>
+            <height>272</height>
         </rect>
     </property>
     <property name="caption">
@@ -27,7 +27,7 @@
                 <cstring>buttonGroup1</cstring>
             </property>
             <property name="title">
-                <string>Build difference between</string>
+                <string>Build Difference Between</string>
             </property>
             <vbox>
                 <property name="name">
@@ -38,7 +38,7 @@
                         <cstring>diffLocalHeadRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>local copy and HEAD</string>
+                        <string>Local copy and HEAD</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -57,7 +57,7 @@
                                 <cstring>diffLocalOtherRadio</cstring>
                             </property>
                             <property name="text">
-                                <string>local copy and an arbitrary revision</string>
+                                <string>Local copy and an arbitrary revision:</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit">
@@ -75,7 +75,7 @@
                         <cstring>diffArbitraryRevRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>two arbitrary revisions/tags</string>
+                        <string>Two arbitrary revisions/tags</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
