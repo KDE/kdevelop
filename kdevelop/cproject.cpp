@@ -207,7 +207,11 @@ void CProject::setModifyMakefiles(bool enable){
     config->writeEntry("modifyMakefiles",enable);
     config->sync();
 }
-
+void CProject::setShowNonProjectFiles(bool enable){
+    config->setGroup("General");
+    config->writeEntry("showNonProjectFiles",enable);
+    config->sync();
+}
 void CProject::setAdditCXXFLAGS(const QString& flags){
   config->setDollarExpansion(false);
   writeGroupEntry( "Config for BinMakefileAm", "addcxxflags", flags );
@@ -299,6 +303,12 @@ QString CProject::getLDADD(){
 bool CProject::getModifyMakefiles(){
     config->setGroup("General");
     return config->readBoolEntry("modifyMakefiles",true);
+}
+/** whether to show non-project files in the file-view */
+bool CProject::getShowNonProjectFiles()
+{
+    config->setGroup("General");
+    return config->readBoolEntry("showNonProjectFiles",true);
 }
 /** returns the preprocessor flags */
 QString CProject::getCPPFLAGS(){

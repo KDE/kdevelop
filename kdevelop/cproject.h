@@ -256,6 +256,8 @@ public: // Methods to store project options
   /** if yes the makefiles in the project are modified from KDevelop*/
   void setModifyMakefiles(bool enable=true);
 
+  /** whether to show non-project files in the file-view */
+  void setShowNonProjectFiles(bool enable=true);
 
   /** Store options for make( f.e. "-k" for "make -k"*/
   void setMakeOptions(const QString& options)    { writeGroupEntry( "General", "make_options", options ); }
@@ -332,6 +334,8 @@ public: // Methods to fetch project options
   QString getSGMLFile()       { return readGroupEntry( "General", "sgml_file" ); }
 
   bool getModifyMakefiles();
+  /** whether to show non-project files in the file-view */
+  bool getShowNonProjectFiles();
 
   /** Fetch the options for make( i.e "-k" for "make -k". */
   QString getMakeOptions()    { QString flag=readGroupEntry( "General", "make_options" );

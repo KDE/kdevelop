@@ -111,6 +111,7 @@ void CRealFileView::refresh(CProject* prj)
 	return;
 
   project=prj;
+  showNonPrjFiles = project->getShowNonProjectFiles();
 
 	if (showNonPrjFiles) {
 		setColumnWidthMode(0,Maximum);
@@ -538,8 +539,11 @@ void CRealFileView::slotCommit()
 }
  
 void CRealFileView::slotShowNonPrjFiles() {
-	showNonPrjFiles=!showNonPrjFiles;
-	refresh(project);
+    if ( !project )
+      return;
+    showNonPrjFiles=!showNonPrjFiles;
+    project->setShowNonProjectFiles( showNonPrjFiles );
+    refresh(project);
 }
 
 /**  */
