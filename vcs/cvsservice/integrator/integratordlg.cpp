@@ -34,6 +34,7 @@
 #include <kprocess.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <cvsservice_stub.h>
 
@@ -116,8 +117,41 @@ void IntegratorDlg::accept()
     
     if (!createModule->isChecked())
         return;
-    
-    QCString appId;
+
+    KProcess *proc = new KProcess();
+    proc->setWorkingDirectory(m_projectLocation);
+    *proc << "cvs";
+    *proc << "-d" << repository->currentText() << "import"
+        << "-m" << QString("\"%1\"").arg(comment->text()) << module->text()
+        << vendorTag->text() << releaseTag->text();
+    proc->start(KProcess::Block);
+    if (!proc->normalExit())
+        KMessageBox::error(this, i18n("cvs import did not exit normally. Please check if cvs is instaled and works correcly."), i18n("Init CVS Repository"));
+    else if (proc->exitStatus() != 0)
+        KMessageBox::error(this, i18n("cvs import exited with status %1. Please check if the cvs location is correct.").arg(proc->exitStatus()), i18n("Init CVS Repository"));    
+    else
+    {
+        kdDebug() << "Project is in: " << m_projectLocation << endl;
+        
+        KURL url = KURL::fromPathOrURL(m_projectLocation);
+        QString up = url.upURL().path();
+        kdDebug() << "Up is: " << up << endl;
+        
+        //delete sources in project dir
+        KProcess *rmproc = new KProcess();
+        *rmproc << "rm";
+        *rmproc << "-f" << "-r" << m_projectLocation;
+        rmproc->start(KProcess::Block);
+        
+        //checkout sources from cvs
+        KProcess *coproc = new KProcess();
+        coproc->setWorkingDirectory(up);
+        *coproc << "cvs";
+        *coproc << "-d" << repository->currentText() << "checkout" << module->text();
+        coproc->start(KProcess::Block);
+    }
+
+/*    QCString appId;
     QString error;
 
     if (KApplication::startServiceByDesktopName("cvsservice",
@@ -130,10 +164,11 @@ void IntegratorDlg::accept()
     }
     else
     {
+        kdDebug() << "!!!!! IMPORT" << endl;
         CvsService_stub *cvsService = new CvsService_stub(appId, "CvsService");
         cvsService->import(m_projectLocation, repository->currentText(), module->text(),
             "", comment->text(), vendorTag->text(), releaseTag->text(), false);
-    }
+    }*/
 }
 
 void IntegratorDlg::createModule_clicked()
