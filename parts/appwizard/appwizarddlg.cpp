@@ -172,7 +172,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 
     //    licenseChanged();
 
-    nextButton()->setEnabled(false);
+    setNextEnabled(generalPage, false);
 //    nextButton()->setEnabled(!appname_edit->text().isEmpty());
 
 //    QRegExp appname_regexp ("[a-zA-Z][a-zA-Z0-9_]*"); //Non-Unicode version
@@ -494,11 +494,13 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
             addPage(edit, i18n("Template for .%1 Files").arg(fileTemplate.suffix));
             m_fileTemplates.append(fileTemplate);
         }
-        licenseChanged(); // update template editors
-	textChanged(); // update Next button state
+        // licenseChanged(); // update template editors
+        textChanged(); // calls licenseChanged() && update Next button state
     } else {
+        m_pCurrentAppInfo=0;
         icon_label->clear();
         desc_textview->clear();
+        nextButton()->setEnabled(false);
     }
 }
 
@@ -527,13 +529,18 @@ void AppWizardDialog::projectLocationChanged()
   // This version insures WYSIWYG and checks pathvalidity
   finalLoc_label->setText(dest_edit->text() + (dest_edit->text().right(1)=="/" ? "":"/") + appname_edit->text().lower());
   QDir qd(dest_edit->text());
-  if (!qd.exists())
+  if (!qd.exists() || appname_edit->displayText().isEmpty())
   {
     finalLoc_label->setText(finalLoc_label->text() + i18n("invalid location", " (invalid)"));
     m_pathIsValid=false;
+    nextButton()->setEnabled(false);
   }
   else
+  {
     m_pathIsValid=true;
+    if (m_pCurrentAppInfo)
+        nextButton()->setEnabled(true);
+  }
 
 }
 
