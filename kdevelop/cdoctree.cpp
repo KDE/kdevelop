@@ -60,6 +60,7 @@ void CDocTree::mousePressEvent(QMouseEvent* event){
 }
 void CDocTree::refresh(CProject* prj){ 
   project = prj;
+  setUpdatesEnabled( false );
   clear();
  
   KPath path;
@@ -141,6 +142,9 @@ void CDocTree::refresh(CProject* prj){
   }
   
   setExpandLevel(2);
+  setUpdatesEnabled( TRUE );
+  repaint();
+
 }
 void CDocTree::slotSingleSelected(int index){
   if(right_button){
@@ -211,6 +215,7 @@ void CDocTree::slotDocumentationProp(){
     config_kdevelop->sync();
   }
 }
+
 
 
 

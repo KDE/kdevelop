@@ -1,3 +1,7 @@
+1999-03-08  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+  * fixed the refresh of trees with setUpdatesEnabled(false,true) and repaint to avoid flickering
+    did that for slotFileSaveAll as well
+
 1999-03-07  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed the Installation bug with the qt-path
   * added additional proof for the qt-path into the update dialog

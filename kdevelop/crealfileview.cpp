@@ -28,7 +28,7 @@ CRealFileView::~CRealFileView(){
 }
 
 void CRealFileView::refresh(QString projectdir) {
-
+  setUpdatesEnabled( false );
   clear();
   QDir dir(projectdir);
   if (!dir.exists()) {
@@ -39,6 +39,9 @@ void CRealFileView::refresh(QString projectdir) {
   path.push(&projectdir);
   insertItem(projectdir,&icon);
   scanDir(projectdir,path);
+  setUpdatesEnabled( TRUE );
+  repaint();
+
 }
 
 

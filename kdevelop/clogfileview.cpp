@@ -60,6 +60,7 @@ CLogFileView::~CLogFileView(){
 }
 
 void CLogFileView::refresh(CProject* prj){ 
+  setUpdatesEnabled( false );
   clear();
   if (!prj->valid){
     return; // no correct project
@@ -118,6 +119,9 @@ void CLogFileView::refresh(CProject* prj){
   }
   
   setExpandLevel(2);
+  setUpdatesEnabled( TRUE );
+  repaint();
+
 }
 
 
@@ -286,6 +290,7 @@ void CLogFileView::split(QString str,QStrList& filters){
   //   }
   return ;
 }
+
 
 
 

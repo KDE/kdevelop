@@ -152,6 +152,8 @@ void CClassView::refresh(CProject* prj){
   QPixmap private_meth_pix(pix_dir + "CVprivate_meth.xpm");
   QPixmap kwm_pix = icon_loader->loadMiniIcon("kwm.xpm");
   
+  setUpdatesEnabled( false );
+
   clear();
   QString* p_str = new QString;
   *p_str = prj_info->getProjectName();
@@ -207,6 +209,9 @@ void CClassView::refresh(CProject* prj){
      path.pop();
    }
   setExpandLevel(1);
+  setUpdatesEnabled( TRUE );
+  repaint();
+
  //  if(saved_item_path != 0){
 //     QString* item_name = saved_item_path->pop();
 //     int parent_index = itemIndex(itemAt(saved_item_path));
@@ -581,4 +586,5 @@ QString CClassView::CVGetVariable(QString str){
   }
   return str.mid(begin+1,end-begin+1);
 }
+
 
