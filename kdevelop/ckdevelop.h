@@ -73,6 +73,7 @@ class CKDevAccel;
 class KProcess;
 class KWriteView;
 class KStartupLogo;
+class CKonsoleWidget;
 
 // Debugger classes
 class VarViewer;
@@ -897,6 +898,9 @@ private:
   /** stderr output. */
   COutputWidget* stderr_widget;
 
+  /** A konsole */
+  CKonsoleWidget *konsole_widget;
+  
   int tree_view_pos;
   int output_view_pos;
   int properties_view_pos;

@@ -29,6 +29,7 @@
 #include "debug.h"
 #include "doctreeview.h"
 #include "./dbg/brkptmanager.h"
+#include "ckonsolewidget.h"
 
 #include <kcursor.h>
 #include <kfiledialog.h>
@@ -682,6 +683,9 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //    kdDebug() << "Path: " << dirpart << endl;
 //    kdDebug() << "File: " << filepart << endl;
     filename = dirpart + "/" + filepart;
+
+    // tell the konsole about our new path
+    konsole_widget->setDirectory(dirpart);
   }
 
   lastfile = edit_widget->getName();

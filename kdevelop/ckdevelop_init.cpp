@@ -31,6 +31,7 @@
 #include "doctreeview.h"
 #include "grepdialog.h"
 #include "kstartuplogo.h"
+#include "ckonsolewidget.h"
 
 #include "./dbg/dbgcontroller.h"
 #include "./dbg/vartree.h"
@@ -300,9 +301,12 @@ void CKDevelop::initView()
   stderr_widget->setReadOnly(TRUE);
   stderr_widget->setFocusPolicy(QWidget::ClickFocus);
 
+  konsole_widget = new CKonsoleWidget(o_tab_view);
+  
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
   o_tab_view->addTab(stderr_widget,i18n("stderr"));
+  o_tab_view->addTab(konsole_widget, i18n("Konsole"));
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
