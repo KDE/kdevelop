@@ -51,6 +51,8 @@ protected:
 private slots:
 	void itemClicked( QListViewItem * );
 	void popupMenu( QListViewItem * , const QPoint & , int );
+	void collapseAll();
+	void expandAll();
 	void doEmitRemoveBookMark();
 
 private:

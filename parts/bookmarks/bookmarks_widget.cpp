@@ -121,7 +121,7 @@ public:
 		}
 		else
 		{
-			return _url.path();
+			return _url.prettyURL();
 		}
 	}
 
@@ -275,6 +275,12 @@ void BookmarksWidget::popupMenu( QListViewItem * item, const QPoint & p, int )
 			popup.insertTitle( _selectedItem->url().fileName() + i18n( ", All" ) );
 			popup.insertItem( i18n("Remove These Bookmarks"), this, SLOT( doEmitRemoveBookMark() ) );
 		}
+		
+		popup.insertSeparator();
+		
+		popup.insertItem( i18n( "Collapse All" ), this, SLOT(collapseAll()) );
+		popup.insertItem( i18n( "Expand All" ), this, SLOT(expandAll()) );
+		
 		popup.exec(p);
 	}
 
@@ -300,6 +306,26 @@ BookmarksConfig * BookmarksWidget::config( )
 QStringList BookmarksWidget::getContext( KURL const & url, unsigned int line )
 {
 	return _part->getContext( url, line, config()->context() );
+}
+
+void BookmarksWidget::collapseAll( )
+{
+	QListViewItem * it = firstChild();
+	while( it )
+	{
+		it->setOpen( false );
+		it = it->nextSibling();
+	}
+}
+
+void BookmarksWidget::expandAll( )
+{
+	QListViewItem * it = firstChild();
+	while( it )
+	{
+		it->setOpen( true );
+		it = it->nextSibling();
+	}
 }
 
 
