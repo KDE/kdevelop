@@ -1,4 +1,4 @@
-/* $Id$
+/*
  */
 #ifndef ADASUPPORT_H
 #define ADASUPPORT_H

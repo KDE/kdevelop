@@ -19,7 +19,6 @@
    Boston, MA 02111-1307, USA.
 */
 
-// $Id$
 
 #include "qeditor_factory.h"
 #include "qeditor_part.h"

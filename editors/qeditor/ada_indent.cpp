@@ -1,4 +1,4 @@
-/* $Id$
+/*
  * Copyright (C) 2003 Oliver Kellogg
  * okellogg@users.sourceforge.net
  *

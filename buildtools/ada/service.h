@@ -1,5 +1,4 @@
-/* $Id$
- * Copyright (C) 2001-2002 by Bernd Gehrmann
+/* Copyright (C) 2001-2002 by Bernd Gehrmann
  * bernd@kdevelop.org
  * Copyright (C) 2003 Oliver Kellogg
  * okellogg@users.sourceforge.net

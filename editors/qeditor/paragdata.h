@@ -1,7 +1,6 @@
 // (C) 2001-2002 Trolltech AS
 
-/* $Id$
- *
+/*
  *  This file is part of Klint
  *  Copyright (C) 2001 Roberto Raggi (roberto@kdevelop.org)
  *

@@ -1,4 +1,4 @@
-/* $Id$
+/*
  */
 #ifndef ADA_UTILS_H
 #define ADA_UTILS_H

@@ -1,5 +1,4 @@
-/* $Id$
- *
+/*
  *  This file is part of Klint
  *  Copyright (C) 2002 Roberto Raggi (roberto@kdevelop.org)
  *

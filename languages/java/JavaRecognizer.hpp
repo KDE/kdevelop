@@ -135,7 +135,6 @@
  *
  * Version tracking now done with following ID:
  *
- * $Id$
  *
  * This grammar is in the PUBLIC DOMAIN
  */

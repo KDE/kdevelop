@@ -1,4 +1,4 @@
-/* $Id$
+/*
  */
 #include <stdlib.h>
 #include <unistd.h>

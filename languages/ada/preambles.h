@@ -1,5 +1,4 @@
-/* $Id$
- *
+/*
  * Two macros are defined here: ANTLR_PARSER_PREAMBLE and ANTLR_LEXER_PREAMBLE.
  * They encapsulate the application specific extensions for the classes
  * AdaParser and AdaLexer which are defined in ada.g.

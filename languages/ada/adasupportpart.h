@@ -1,4 +1,3 @@
-// $Id$
 //
 #ifndef __ADASUPPORTPART_H__
 #define __ADASUPPORTPART_H__

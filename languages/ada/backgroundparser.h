@@ -1,4 +1,4 @@
-/* $Id$
+/*
  * Copyright (C) 2002 by Roberto Raggi
  * roberto@kdevelop.org
  * Copyright (C) 2003 Oliver Kellogg

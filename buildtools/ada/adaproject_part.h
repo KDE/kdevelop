@@ -1,5 +1,4 @@
-/* $Id$
- * Copyright (C) 2003 Oliver Kellogg
+/* Copyright (C) 2003 Oliver Kellogg
  * okellogg@users.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify
