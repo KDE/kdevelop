@@ -1,7 +1,7 @@
 <!DOCTYPE kdeveloptoc>
 <kdeveloptoc>
-<title>LIBSTDC++ (umn.edu)</title>
-<base href="http://epoxy.mrs.umn.edu/doc/libstdc++3-doc/libstdc++/html"/>
+<title>LIBSTDC++ (gcc.gnu.org)</title>
+<base href="http://gcc.gnu.org/onlinedocs/libstdc++"/>
 <tocsect1 name="Documentation" url="documentation.html"/>
 <tocsect1 name="Intro" url="17_intro/howto.html"/>
 <tocsect1 name="Library Support" url="18_support/howto.html"/>
