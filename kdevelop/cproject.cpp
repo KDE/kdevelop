@@ -876,7 +876,7 @@ void CProject::updateMakefileAm(const QString& makefile)
           if( (type == "kio_slave") )
             stream << "kde_module_LTLIBRARIES = kio_" << libRootName << ".la\n\n";
           else if( (type == "kc_module") )
-            stream << "kde_module_LTLIBRARIES = kcm_" << libRootName << ".la\n\n";
+            stream << "kde_module_LTLIBRARIES = libkcm_" << libRootName << ".la\n\n";
           else
             stream << "lib_LTLIBRARIES = lib" << libRootName << ".la\n\n";
 

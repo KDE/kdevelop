@@ -75,12 +75,12 @@ if ($processes{APPLICATION} =~/customproj/){
 }
 else{
   unpackFiles ("template.tar");
-  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|kcmodule|sharedlib/) {
+  if ($processes{APPLICATION} =~ /kde2mini|kde2normal|kde2mdi|qt2normal|qt2mdi|qextmdi|kickerapp|^kpart$|kioslave|kcmodule|ktheme|sharedlib/) {
     unpackFiles ("admin.tar");
   }
 
-  if ($processes{APPLICATION} =~ /kde2mini|kickerapp|^kpart$|kioslave|kcmodule/) {
-    changeMiniApp();
+  if ($processes{APPLICATION} =~/kde2mini|kickerapp|^kpart$|kioslave|kcmodule|ktheme/) {
+	changeMiniApp();
   }
   elsif ($processes{APPLICATION} =~ /kde2normal|kde2mdi/)
   {
@@ -588,6 +588,10 @@ sub changeMiniApp {
     replaceValuesInFile(\%changings, "configure.in.in");
     replaceValuesInFile(\%changings, "doc/en/Makefile.am");
   }
+  if ($processes{APPLICATION} =~ /ktheme/)
+  {
+    replaceValuesInFile(\%changings, "configure.in.in");
+  }
 
   #Replacements and name changing in underDirectory
   chdir ($underDirectory);
@@ -598,7 +602,7 @@ sub changeMiniApp {
     rename ("skel.desktop", $nameLittle.".desktop");
     replaceValuesInFile(\%changings, "$nameLittle.desktop");
   }
-  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule/)
+  if ($processes{APPLICATION} =~ /kpart|kioslave|kcmodule|ktheme/)
   {
     if ($processes{APPLICATION} =~ /kpart/)
         {
@@ -610,7 +614,11 @@ sub changeMiniApp {
                 rename("skel.protocol", $nameLittle.".protocol");
                 replaceValuesInFile(\%changings, "$nameLittle.protocol");
         }
-
+    if ($processes{APPLICATION} =~ /ktheme/)
+        {
+		  			rename("skel.themerc", $nameLittle.".themerc");
+    				replaceValuesInFile(\%changings, "$nameLittle.themerc");
+		}
     rename ("skel.cpp",  $nameLittle.".cpp");
     rename ("skel.h",   $nameLittle.".h");
     replaceValuesInFile(\%changings, "$nameLittle.cpp");

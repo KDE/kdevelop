@@ -173,7 +173,8 @@ private:
   QListViewItem *kpartitem;
   QListViewItem *sharedlibitem;
   QListViewItem *kioslaveitem;
-	QListViewItem *kcmoduleitem;
+  QListViewItem *kthemeitem;
+  QListViewItem *kcmoduleitem;
   QLineEdit* messageline;
   QLabel* logMessage;
   QLineEdit* vendorline;
