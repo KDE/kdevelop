@@ -98,14 +98,23 @@ void DoxygenPart::adjustDoxyfile()
   {
     patterns->init();
     patterns->addValue("*.cpp");
+    patterns->addValue("*.cxx");
     patterns->addValue("*.cc");
     patterns->addValue("*.C");
     patterns->addValue("*.c++");
-    patterns->addValue("*.cxx");
+    patterns->addValue("*.c");
+    patterns->addValue("*.inl");
+    patterns->addValue("*.tlh");
+    patterns->addValue("*.diff");
+    patterns->addValue("*.patch");
+    patterns->addValue("*.moc");
+    patterns->addValue("*.xpm");
     patterns->addValue("*.h");
-    patterns->addValue("*.H");
-    patterns->addValue("*.hxx");
     patterns->addValue("*.hpp");
+    patterns->addValue("*.hh");
+    patterns->addValue("*.hxx");
+    patterns->addValue("*.h++");
+    patterns->addValue("*.H");
     patterns->addValue("*.java");
   }
 

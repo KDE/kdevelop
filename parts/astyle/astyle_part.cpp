@@ -93,9 +93,15 @@ void AStylePart::activePartChanged(KParts::Part *part)
       int pos = extension.findRev('.');
       if (pos >= 0)
         extension = extension.mid(pos);
-      if (extension == ".h" || extension == ".c" || extension == ".java"
-	  || extension == ".cpp" || extension == ".cc" || extension == ".C"
-	  || extension == ".cxx" || extension == ".c++" || extension == ".hxx")
+      if (extension == ".h"   || extension == ".c" || extension == ".java"
+       || extension == ".cpp" || extension == ".hpp"
+       || extension == ".C"   || extension == ".H"
+       || extension == ".cxx" || extension == ".hxx" 
+       || extension == ".inl" || extension == ".tlh" 
+       || extension == ".moc" || extension == ".xpm" 
+       || extension == ".diff"|| extension == ".patch"
+       || extension == ".hh"  || extension == ".cc"
+       || extension == ".c++" || extension == ".h++")
 	enabled = true;
     }
   }
