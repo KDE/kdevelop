@@ -29,6 +29,9 @@
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
 #include <kprocess.h>
+#include <klineedit.h>
+#include <kurlrequester.h>
+#include <kfiledialog.h>
 
 #include "librarydocdlgbase.h"
 #include "adddocitemdlg.h"
@@ -36,6 +39,23 @@
 #include "doctreeviewfactory.h"
 #include "doctreeviewwidget.h"
 
+class LibraryDocDlg : public LibraryDocDlgBase
+{
+public:
+    LibraryDocDlg(QString name = QString::null,
+                  QString doc = QString::null,
+                  QString source = QString::null) 
+   : LibraryDocDlgBase(0, "library doc", true) {
+      libName->setText(name);
+      docURL->setURL(doc);
+      sourceURL->setURL(source);
+      docURL->fileDialog()->setMode(KFile::Directory);
+      sourceURL->fileDialog()->setMode(KFile::Directory);
+    }
+    QString getLibName() { return libName->text(); }
+    QString getDocPath() { return docURL->url(); }
+    QString getSourcePath() { return sourceURL->url(); }
+};
 
 class DocTreeConfigListItem : public QCheckListItem
 {
@@ -52,7 +72,6 @@ private:
     QString idnt;
     int no;
 };
-
 
 
 DocTreeConfigWidget::DocTreeConfigWidget(DocTreeViewWidget *widget,
@@ -108,8 +127,9 @@ QWidget *DocTreeConfigWidget::createLibrariesTab()
     libraries_view->setMinimumWidth(fm.width('X')*35);
     libraries_view->setAllColumnsShowFocus(true);
     libraries_view->setResizeMode(QListView::AllColumns);
-    libraries_view->setColumnWidth(0, 60);
-    libraries_view->setColumnWidth(1, 100);
+    libraries_view->setColumnWidth(0, 64);
+    libraries_view->setColumnWidth(1, 64);
+    libraries_view->setColumnWidth(2, 64);
     libraries_view->addColumn(i18n("Library"));
     libraries_view->addColumn(i18n("Doc Path"));
     libraries_view->addColumn(i18n("Source Path"));
@@ -138,29 +158,6 @@ void DocTreeConfigWidget::updateLibrary()
     kdDebug() << "update libraries"<< endl;
 }
 
-#include <klineedit.h>
-#include <kurlrequester.h>
-#include <kfiledialog.h>
-
-
-class LibraryDocDlg : public LibraryDocDlgBase
-{
-public:
-    LibraryDocDlg(QString name = QString::null,
-                  QString doc = QString::null,
-                  QString source = QString::null) 
-   : LibraryDocDlgBase(0, "library doc", true) {
-      libName->setText(name);
-      docURL->setURL(doc);
-      sourceURL->setURL(source);
-      docURL->fileDialog()->setMode(KFile::Directory);
-      sourceURL->fileDialog()->setMode(KFile::Directory);
-    }
-    QString getLibName() { return libName->text(); }
-    QString getDocPath() { return docURL->url(); }
-    QString getSourcePath() { return sourceURL->url(); }
-};
-
 void DocTreeConfigWidget::editLibrary()
 {
     QListViewItem* item = libraries_view->currentItem();
@@ -184,6 +181,10 @@ void DocTreeConfigWidget::addLibrary()
 
 void DocTreeConfigWidget::removeLibrary()
 {
+    QListViewItem* item = libraries_view->currentItem();
+    if (item) {
+        libraries_view->removeItem(item);
+    }
 }
 
 
