@@ -28,6 +28,7 @@
 #include <qdir.h>
 #include <qinputdialog.h>
 #include <qfiledialog.h>
+#include <qtooltip.h>
 #include <kdebug.h>
 #include <klistview.h>
 #include <kmessagebox.h>
@@ -152,16 +153,19 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     buildButton->setPixmap ( SmallIcon ( "make_kdevelop.png",22 ) );
     buildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildButton->sizePolicy().hasHeightForWidth() ) );
     buildButton->setEnabled ( true );
+    QToolTip::add( buildButton, i18n( "Build" ) );
     // rebuild
     rebuildButton = new QToolButton ( projectTools, "Rebuild button" );
     rebuildButton->setPixmap ( SmallIcon ( "rebuild.png",22 ) );
     rebuildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildButton->sizePolicy().hasHeightForWidth() ) );
     rebuildButton->setEnabled ( true );
+    QToolTip::add( rebuildButton, i18n( "Rebuild" ) );
     // run
     runButton = new QToolButton ( projectTools, "Run button" );
     runButton->setPixmap ( SmallIcon ( "exec.png",22 ) );
     runButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, runButton->sizePolicy().hasHeightForWidth() ) );
     runButton->setEnabled ( true );
+    QToolTip::add( runButton, i18n( "Run" ) );
     // spacer
     QWidget *spacer = new QWidget(projectTools);
     projectTools->setStretchFactor(spacer, 1);
@@ -171,6 +175,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     projectconfButton->setText("Configure");
     projectconfButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, projectconfButton->sizePolicy().hasHeightForWidth() ) );
     projectconfButton->setEnabled ( true );
+    QToolTip::add( projectconfButton, i18n( "Configure the project" ) );
 
     // Project button connections
     connect ( buildButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
@@ -215,18 +220,21 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     addfilesButton->setPixmap ( SmallIcon ( "fileimport.png",22 ) );
     addfilesButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, addfilesButton->sizePolicy().hasHeightForWidth() ) );
     addfilesButton->setEnabled ( true );
+    QToolTip::add( addfilesButton, i18n( "Add existing files" ) );
 
     // Add new file button
     newfileButton = new QToolButton ( fileTools, "Add new file" );
     newfileButton->setPixmap ( SmallIcon ( "filenew.png",22 ) );
     newfileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, newfileButton->sizePolicy().hasHeightForWidth() ) );
     newfileButton->setEnabled ( true );
+    QToolTip::add( newfileButton, i18n( "Add new files" ) );
 
     // remove file button
-    removefileButton = new QToolButton ( fileTools, "remove file" );
+    removefileButton = new QToolButton ( fileTools, "Remove file" );
     removefileButton->setPixmap ( SmallIcon ( "stop.png",22 ) );
     removefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, removefileButton->sizePolicy().hasHeightForWidth() ) );
     removefileButton->setEnabled ( true );
+    QToolTip::add( removefileButton, i18n( "Remove file" ) );
 
     // spacer
     spacer = new QWidget(fileTools);
@@ -237,6 +245,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
     configurefileButton->setPixmap ( SmallIcon ( "configure_file.png",22 ) );
     configurefileButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, configurefileButton->sizePolicy().hasHeightForWidth() ) );
     configurefileButton->setEnabled ( true );
+    QToolTip::add( configurefileButton, i18n( "Configure file" ) );
 
     // detail tree
     details = new KListView(detailContainer, "details widget");
@@ -612,7 +621,7 @@ SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QStr
   // Stop if baseItem not an ansister
   if (baseScopeParts.count() > subScopeParts.count())
     return NULL;
-  int i;
+  uint i;
   for (i=0; i<baseScopeParts.count(); i++)
   {
     // Stop if baseItem in wrong treepart
@@ -924,7 +933,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
           SubprojectItem *scope;
           propdlg->exec();
-          for (int i=0; i<dirtyScopes.count();i++)
+          for (uint i=0; i<dirtyScopes.count();i++)
           {
             scope = getScope(m_shownSubproject,dirtyScopes[i]);
             kdDebug(9024) << "Looking for scope: " << dirtyScopes[i] << " (starting in " <<  m_shownSubproject->scopeString << ")" << endl;
