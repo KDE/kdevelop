@@ -207,7 +207,7 @@ void MakeWidget::slotReceivedOutput(KProcess *, char *buffer, int buflen)
         stderrbuf = "";
     }
     
-    stdoutbuf += QString::fromLatin1(buffer, buflen);
+    stdoutbuf += QString::fromLocal8Bit(buffer, buflen);
     int pos;
     while ( (pos = stdoutbuf.find('\n')) != -1) {
         QString line = stdoutbuf.left(pos);
@@ -225,7 +225,7 @@ void MakeWidget::slotReceivedError(KProcess *, char *buffer, int buflen)
         stdoutbuf = "";
     }
     
-    stderrbuf += QString::fromLatin1(buffer, buflen);
+    stderrbuf += QString::fromLocal8Bit(buffer, buflen);
     int pos;
     while ( (pos = stderrbuf.find('\n')) != -1) {
         QString line = stderrbuf.left(pos);
