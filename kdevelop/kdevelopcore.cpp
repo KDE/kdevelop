@@ -13,13 +13,12 @@
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kdialogbase.h>
-#include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <qdom.h>
 #include <qobjectlist.h>
-
+#include <kmessagebox.h>
 #include "classstore.h"
-#include "projectoptionsdlg.h"
+#include "ProjectOptionsDlg.h"
 #include "kdevelop.h"
 #include "kdevcomponent.h"
 #include "kdevversioncontrol.h"
@@ -415,9 +414,14 @@ void KDevelopCore::slotProjectClose()
 
 void KDevelopCore::slotProjectOptions()
 {
-    ProjectOptionsDialog *pDlg = new ProjectOptionsDialog(m_pKDevelopGUI, "project options dialog");
-    pDlg->exec();
-    delete pDlg;
+  ProjectOptionsDlg *pDlg;
+	if (m_api->projectSpace){
+  	pDlg = new ProjectOptionsDlg(m_pKDevelopGUI, "project options dialog", m_api->projectSpace);
+  	pDlg->exec();
+  	delete pDlg;
+  }else{
+     KMessageBox::sorry(m_pKDevelopGUI, i18n("No project space opened!"));
+  }
 }
 
 
