@@ -21,6 +21,7 @@
 #include <qdialog.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
+#include <qtoolbutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -33,7 +34,7 @@
 
 typedef enum _CTOperations
 {
-  CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTNONE
+  CTPARENT, CTCHILD, CTCLIENT, CTSUPP, CTATTR, CTMETH, CTVIRT, CTSLOTS, CTSIGNALS, CTNONE
 }CTDOperations;
 
 /** This dialog gives the user the possibility to view classhierarchies,
@@ -83,6 +84,9 @@ public: // Public methods to set attribute values
 
   /** View virtual methods in this class and parents. */
   void viewVirtuals();
+
+  void viewSlots();
+  void viewSignals();
   QString classToString();
 
 public: // Public widgets
@@ -106,7 +110,8 @@ protected: // Private widgets
 
   QLabel filler;
   QPushButton attributesBtn;
-  QPushButton methodsBtn;
+  //QPushButton methodsBtn;
+  QToolButton methodsBtn;
   //  QPushButton virtualsBtn;
   QComboBox exportCombo;
   virtual void resizeEvent ( QResizeEvent* );
@@ -118,6 +123,8 @@ protected slots:
   void slotSuppliers();
   void slotAttributes();
   void slotMethods();
+  void slotSlots();
+  void slotSignals();
   void slotVirtuals();
   void slotExportComboChoice(int idx);
   void slotClassComboChoice(int idx);
@@ -179,7 +186,11 @@ private: // Private methods
   void addClasses( QList<CParsedClass> *list );
   void addClassAndAttributes( CParsedClass *aClass );
   void addClassAndMethods( CParsedClass *aClass );
+  void addClassAndSlots( CParsedClass *aClass );
+  void addClassAndSignals( CParsedClass *aClass );
   void addAllClassMethods();
+  void addAllClassSlots();
+  void addAllClassSignals();
   void addAllClassAttributes();
   
   /** Change the caption depending on the current operation. */

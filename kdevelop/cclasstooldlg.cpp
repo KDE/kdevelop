@@ -32,6 +32,8 @@
 #include <qmessagebox.h>
 #include <qregexp.h>
 #include <qtooltip.h>
+#include <qpopupmenu.h>
+
 
 /*********************************************************************
  *                                                                   *
@@ -113,6 +115,8 @@ void CClassToolDlg::setWidgetValues()
   classCombo.setMinimumWidth( 260 );
   classCombo.setFixedHeight( 30 );
   classCombo.setSizeLimit( 10 );
+  classCombo.setEditable( true );
+  classCombo.setAutoCompletion( true );
   
   parentsBtn.setFixedSize( 30, 30 );
   childrenBtn.setFixedSize( 30, 30 );
@@ -193,6 +197,12 @@ void CClassToolDlg::readIcons()
 
   //  pm = BarIcon("CTvirtuals");
   //  virtualsBtn.setPixmap( pm );
+  QPopupMenu* menu= new QPopupMenu ( this, "meths menu");
+  menu -> insertItem ( BarIcon("CVpublic_meth"), "Methods", this, SLOT(slotMethods()), 0, 0, 0);
+  menu -> insertItem ( BarIcon("CVpublic_slot"), "Slots", this, SLOT(slotSlots()), 0, 1, 1);
+  menu -> insertItem ( BarIcon("CVpublic_signal"), "Signals", this, SLOT(slotSignals()), 0, 2, 2);
+  methodsBtn.setPopup( menu );
+  methodsBtn.setPopupDelay(200);
 }
 
 /*---------------------------------- CClassToolDlg::setTooltips()
@@ -398,6 +408,32 @@ void CClassToolDlg::addClassAndMethods( CParsedClass *aClass )
   classTree.setOpen( root, true );
 }
 
+void CClassToolDlg::addClassAndSlots( CParsedClass *aClass )
+{
+  REQUIRE( "Valid class", currentClass != NULL );
+
+  QListViewItem *root;
+
+  // Insert root item(the current class);
+  root = classTree.treeH->addRoot( aClass->name, THCLASS );
+
+  ((CClassTreeHandler *)classTree.treeH)->addSlotsFromClass( aClass, root);
+  classTree.setOpen( root, true );
+}
+
+void CClassToolDlg::addClassAndSignals( CParsedClass *aClass )
+{
+  REQUIRE( "Valid class", currentClass != NULL );
+
+  QListViewItem *root;
+
+  // Insert root item(the current class);
+  root = classTree.treeH->addRoot( aClass->name, THCLASS );
+
+  ((CClassTreeHandler *)classTree.treeH)->addSignalsFromClass( aClass, root);
+  classTree.setOpen( root, true );
+}
+
 void CClassToolDlg::addAllClassMethods()
 {
   REQUIRE( "Valid class", currentClass != NULL );
@@ -420,6 +456,54 @@ void CClassToolDlg::addAllClassMethods()
 
   // Add the current class
   addClassAndMethods( currentClass );
+}
+
+void CClassToolDlg::addAllClassSlots()
+{
+  REQUIRE( "Valid class", currentClass != NULL );
+
+  CParsedParent *aParent;
+  CParsedClass *aClass;
+
+  // Clear all previous items in the tree.
+  classTree.treeH->clear();
+
+  // First treat all parents.
+  for( aParent = currentClass->parents.first();
+       aParent != NULL;
+       aParent = currentClass->parents.next() )
+  {
+    aClass = store->getClassByName( aParent->name );
+    if( aClass != NULL )
+      addClassAndSlots( aClass );
+  }
+
+  // Add the current class
+  addClassAndSlots( currentClass );
+}
+
+void CClassToolDlg::addAllClassSignals()
+{
+  REQUIRE( "Valid class", currentClass != NULL );
+
+  CParsedParent *aParent;
+  CParsedClass *aClass;
+
+  // Clear all previous items in the tree.
+  classTree.treeH->clear();
+
+  // First treat all parents.
+  for( aParent = currentClass->parents.first();
+       aParent != NULL;
+       aParent = currentClass->parents.next() )
+  {
+    aClass = store->getClassByName( aParent->name );
+    if( aClass != NULL )
+      addClassAndSlots( aClass );
+  }
+
+  // Add the current class
+  addClassAndSignals( currentClass );
 }
 
 void CClassToolDlg::addAllClassAttributes()
@@ -575,6 +659,26 @@ void CClassToolDlg::viewMethods()
   changeCaption();  
   addAllClassMethods();
 }
+/** View methods in this class and parents. */
+void CClassToolDlg::viewSlots()
+{
+  REQUIRE( "Valid current class", currentClass != NULL );
+
+  currentOperation = CTMETH;
+
+  changeCaption();
+  addAllClassSlots();
+}
+/** View methods in this class and parents. */
+void CClassToolDlg::viewSignals()
+{
+  REQUIRE( "Valid current class", currentClass != NULL );
+
+  currentOperation = CTMETH;
+
+  changeCaption();
+  addAllClassSignals();
+}
 
 /** View attributes in this class and parents. */
 void CClassToolDlg::viewAttributes()
@@ -633,6 +737,14 @@ void CClassToolDlg::slotAttributes()
 void CClassToolDlg::slotMethods()
 {
   viewMethods();
+}
+void CClassToolDlg::slotSlots()
+{
+  viewSlots();
+}
+void CClassToolDlg::slotSignals()
+{
+  viewSignals();
 }
 
 void CClassToolDlg::slotVirtuals()
@@ -709,6 +821,12 @@ void CClassToolDlg::slotClassComboChoice(int /*idx*/)
     case CTVIRT:
       viewVirtuals();
       break;
+    case CTSLOTS:
+        viewSlots();
+        break;
+    case CTSIGNALS:
+        viewSignals();
+        break;
     default:
       break;
   }

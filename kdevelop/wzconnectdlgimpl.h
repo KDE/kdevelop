@@ -184,6 +184,8 @@ signals: // Signals
 public: // Public attributes
   /**  */
   CClassView* class_tree;
+  /**  */
+  static QString CppCodeExtra;
 protected: // Protected attributes
   /**  */
   QString strSlotMethod;

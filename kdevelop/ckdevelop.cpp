@@ -1037,7 +1037,9 @@ void CKDevelop::slotDebugStop()
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
 //  dbg_widget->clear();
 #endif
-  m_docViewManager->currentEditView()->clearStepLine();
+  if (m_docViewManager->currentEditView())
+    m_docViewManager->currentEditView()->clearStepLine();
+
   brkptManager->refreshBP(m_docViewManager->currentEditView()->getName());
 
   o_tab_view->setTabEnabled("FStackTab", dbgInternal && dbgController);

@@ -1,4 +1,11 @@
-2001-03-21  jbb <jbb@kdevelop.org>
+2001-03-11  bretzel <serge.lussier@videotron.ca>
+    * Added: Instanciate new static attributes in cpp file.
+    * Added: New feature: Read-Write property for new attribute and
+             Automaticly implement properties methods in cpp file.
+    * Fixed: Disabled unused undo button in Classproperties dialog 
+             - No code yet for it...
+
+ 2001-03-21  jbb <jbb@kdevelop.org>
     * Fixed: Crash when right click on empty space in watch window.
 
 2001-03-20  F@lk Brettschneider <falk@kdevelop.org>

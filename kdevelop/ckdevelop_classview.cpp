@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include "wzconnectdlgimpl.h"
 
 /*********************************************************************
  *                                                                   *
@@ -328,7 +329,15 @@ void CKDevelop::slotCVAddMethod( const char *aClassName,
   if( !toAdd.isEmpty() )
   {
     switchToFile( aClass->definedInFile );
-	 aMethod->asCppCode( toAdd );	
+    QString extra = CClassPropertiesDlgImpl::CppCodeExtra;
+	 aMethod->asCppCode( toAdd );
+	 kdDebug() << "addmethod: toadd=" << toAdd .data() << endl;
+	 if( !extra.isEmpty() )
+	 {
+	    int ix;
+	    if ( ( ix = toAdd.find('{')) != -1 )
+	        toAdd.insert(ix+1, extra);
+	 }
 	 //int pos = toAdd.find( aMethod -> name );
     //kdDebug() << aMethod -> name.data() << " 's pos=" << pos << endl;
 	 //if(pos > -1 ) toAdd.insert(pos, QString(QString(aClassName)+"::"));
@@ -500,6 +509,46 @@ void CKDevelop::slotCVAddAttribute( const char *aClassName, CParsedAttribute* aA
   m_docViewManager->currentEditView()->insertAtLine( toAdd, atLine );
   m_docViewManager->currentEditView()->setCursorPosition( atLine, 0 );
   slotFileSave();
+  if( !aAttr -> isStatic )
+  {
+    delete aAttr;
+    return;
+  }
+  /* We have a static attribute member... Thus I added the code below
+     to instanciate the attribute into the cpp file.
+     - First I have to find a place to add the code.
+     - I choose to find the position at the first method...
+  */
+  CParsedMethod *aMethod;
+  QList <CParsedMethod>  *lMethod = aClass -> getSortedMethodList();
+  aMethod = lMethod -> first();
+  QString File="";
+  int n, Line = 32767;
+  do
+  {
+    kdDebug() << "in file " << aMethod -> definedInFile.data() << endl;
+    if( ( aMethod -> definedInFile.find(".h")) == -1)
+    {
+      File = aMethod -> definedInFile;
+      if ( ((n=aMethod -> definedOnLine) < Line) && ( n > 0) )
+      Line = n;
+    }
+    aMethod = lMethod -> next();
+  }while ( aMethod);
+  if( Line != 32767 )
+  {
+    kdDebug() << "found a place " << File.data() << " at line# " << Line << endl;
+    if( !File.isEmpty() && (Line != 32767) )
+    {
+        if(Line <= 2) Line = 2;
+        Line -= 1;
+        switchToFile( File, Line );
+        toAdd = aAttr -> type + " " + aClass -> name + "::" + aAttr -> name + ";\n";
+        m_docViewManager->currentEditView()->insertAtLine( toAdd, Line );
+        m_docViewManager->currentEditView()->setCursorPosition( Line, 0 );
+    }
+  }
+
   // Delete the genererated attribute
   delete aAttr;
 }
