@@ -597,14 +597,31 @@ void PartController::slotPopupAboutToShow()
 
 void PartController::slotPopupAboutToHide()
 {
-  QPopupMenu *popup = (QPopupMenu*)sender();
-  if (!popup)
+  m_popup = (QPopupMenu*)sender();
+
+  QTimer::singleShot(0, this, SLOT(slotDeletePopup()));
+}
+
+
+void PartController::slotDeletePopup()
+{
+  if (!m_popup)
     return;
 
   // ugly hack: remove all but the "original" items
-  for (int index=popup->count()-1; index >= 0; --index)
-    if (m_popupIds.contains(popup->idAt(index)) == 0)
-      popup->removeItemAt(index);
+  for (int index=m_popup->count()-1; index >= 0; --index)
+  {
+    int id = m_popup->idAt(index);
+    if (m_popupIds.contains(id) == 0)
+    {
+      QMenuItem *item = m_popup->findItem(id);
+      if (item->popup())
+	delete item->popup();
+      m_popup->removeItemAt(index);
+    }
+  }
+
+  m_popup = 0;
 }
 
 

@@ -81,6 +81,7 @@ private slots:
 
   void slotPopupAboutToShow();
   void slotPopupAboutToHide();
+  void slotDeletePopup();
 
   void slotUploadFinished();
 
@@ -120,6 +121,8 @@ private:
   KAction *m_closeAllWindowsAction, *m_closeOtherWindowsAction;
 
   QArray<int> m_popupIds;
+
+  QPopupMenu *m_popup;
 
 };
 
