@@ -42,7 +42,7 @@ class ImplementationWidget : public CreateImplemenationWidgetBase
 Q_OBJECT
 public:
     ImplementationWidget(KDevLanguageSupport *part, QWidget* parent = 0, const char* name = 0, bool modal = false);
-    ~ImplementationWidget();
+    virtual ~ImplementationWidget();
     /*$PUBLIC_FUNCTIONS$*/
 
     /**@returns The %DOM of selected (or created) class.*/    

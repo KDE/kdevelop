@@ -41,7 +41,7 @@ Q_OBJECT
 public:
     QtDesignerIntegration(KDevLanguageSupport *part, ImplementationWidget *impl,
         bool classHasDefinitions, const char* name = 0);
-    ~QtDesignerIntegration();
+    virtual ~QtDesignerIntegration();
 
 public slots:
     virtual void addFunction(const QString& formName, KInterfaceDesigner::Function function);
