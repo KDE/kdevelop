@@ -43,6 +43,7 @@
       <type ext="ui" />
       <type ext="cpp" />
       <type ext="h" />
+      <type ext="ts" />
     </useglobaltypes>
   </kdevfilecreate>
 </kdevelop>

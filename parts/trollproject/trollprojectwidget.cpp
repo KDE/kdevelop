@@ -2060,6 +2060,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                 case GroupItem::Forms:
                     fcext = "ui-widget";
                     break;
+                case GroupItem::Translations:
+                    fcext = "ts";
+                    break;
                 default:
                     fcext = QString::null;
                 }

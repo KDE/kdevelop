@@ -129,6 +129,9 @@
       <type ext="hs" name="Haskell source" create="template" icon="source_hs">
         <descr>A new empty Haskell source file.</descr>
       </type>
+      <type ext="ts" name="Qt Linguist translation" create="template" icon="template_source">
+        <descr>A new empty Qt Linguist translation source file.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>
