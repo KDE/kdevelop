@@ -1,6 +1,6 @@
 EXTRA_DIST = tip.database
 
-SUBDIRS = manual welcome
+SUBDIRS = manual welcome cref
 		
 install-data-local:
 	$(mkinstalldirs) $(kde_htmldir)/de/kdevelop/
