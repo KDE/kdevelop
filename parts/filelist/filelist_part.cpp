@@ -42,7 +42,7 @@ FileListPart::FileListPart(QObject *parent, const char *name, const QStringList&
     QWhatsThis::add
         (m_widget, i18n("WHAT DOES THIS PART DO?"));
 
-    mainWindow()->embedSelectView( m_widget, i18n("FileList"), i18n("Open files") );
+    mainWindow()->embedSelectView( m_widget, i18n("File List"), i18n("Open files") );
 }
 
 
