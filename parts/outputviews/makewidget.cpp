@@ -308,9 +308,12 @@ bool MakeWidget::isRunning()
 void MakeWidget::copy()
 {
 	int parafrom=0, indexfrom=0, parato=0, indexto=0;
-	getSelection(&parafrom, &indexfrom, &parato, &indexto);
-	if(parafrom < 0 || indexfrom < 0 || parato < 0 || indexto < 0)
-	QTextEdit::copy();
+    getSelection(&parafrom, &indexfrom, &parato, &indexto);
+    if( parafrom < 0 || indexfrom < 0 || parato < 0 || indexto < 0
+    || ((parafrom == parato) && (indexfrom == indexto)) )
+    {
+        return;
+    }
 
 	QString selection;
 	for(int i = parafrom; i<=parato; i++)
