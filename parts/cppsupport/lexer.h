@@ -50,6 +50,8 @@ enum Type {
     Token_decr,
     Token_arrow,
 
+    Token_concat,
+
     Token_K_DCOP,
     Token_k_dcop,
     Token_k_dcop_signals,
@@ -629,6 +631,7 @@ inline int Lexer::findOperator2() const
 	else if( ch == '+' && ch1 == '+' ) return Token_incr;
 	else if( ch == '-' && ch1 == '-' ) return Token_decr;
 	else if( ch == '-' && ch1 == '>' ) return Token_arrow;
+	else if( ch == '#' && ch1 == '#' ) return Token_concat;
     }
 
     return -1;

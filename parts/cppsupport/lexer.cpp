@@ -49,6 +49,11 @@ void Lexer::setSource( const QString& source )
     m_inPreproc = false;
 
     tokenize();
+#if 0
+    for( int i=0; i<m_size; ++i ){
+      qDebug( "%s", toString(m_tokens[ i ]).latin1() );
+    }
+#endif
 }
 
 void Lexer::reset()
@@ -161,6 +166,8 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 	    int svColumn = currentColumn();
 
 	    Macro m = m_driver->macros()[ ide ];
+	    m_driver->removeMacro( m.name() );
+
 	    if( m.hasArguments() ){
                 int endIde = currentPosition();
 
@@ -205,7 +212,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 
             // tokenize the macro body
 	    bool d = m_preprocessorEnabled;
-	    disablePreprocessor();
+	    //disablePreprocessor();
 
             m_endPtr = currentPosition() + m.body().length();
             while( !currentChar().isNull() ){
@@ -216,7 +223,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
                 bool stringify = false;
                 QString textToInsert = QString::null;
 
-		if( currentChar() == '#' && peekChar() == '#' ){
+		if( !m_startLine && currentChar() == '#' && peekChar() == '#' ){
                 	// TODO: check m_size
         		Token lastTok = m_tokens[ --m_size ];
 
@@ -225,7 +232,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		        readWhiteSpaces();
         		textToInsert = toString( lastTok );
                         mergeToken = true;
-		} else if( currentChar() == '#' ){
+		} else if( !m_startLine && currentChar() == '#' ){
         		nextChar();
   			stringify = true;
                 }
@@ -264,6 +271,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
 		    addToken( tok );
 		}
             }
+	    m_driver->addMacro( m );	    
             m_preprocessorEnabled = d;
 	    m_currentLine = argsEndAtLine;
 	    m_currentColumn = argsEndAtColumn;
@@ -391,11 +399,16 @@ void Lexer::skip( int l, int r )
 
 QString Lexer::readArgument()
 {
-    QString arg;
+    QMemArray<Token> tokens = m_tokens;
+    int size = m_size;
+
+    m_tokens = QMemArray<Token>( 100 );
+    m_size = 0;
+
     int count = 0;
 
     readWhiteSpaces();
-    while( currentChar() ){
+    while( !currentChar().isNull() ){
 
 	readWhiteSpaces();
 	QChar ch = currentChar();
@@ -412,10 +425,20 @@ QString Lexer::readArgument()
 	    --count;
 	}
 
-	if( tk != -1 ){
-	    arg += toString( tk ) + " ";
-	}
+	if( tk != -1 )
+	  addToken( tk );
     }
+
+    QString arg;
+    for( int i=0; i<m_size; ++i ){
+      arg += toString( m_tokens[ i ] ) + " ";
+    }
+
+    //qDebug( "arg = %s", arg.latin1() );
+    
+    m_tokens = tokens;
+    m_size = size;
+
     return arg.stripWhiteSpace();
 }
 
@@ -458,10 +481,8 @@ void Lexer::handleDirective( const QString& directive )
 
     // skip line
     while( !currentChar().isNull() && currentChar() != '\n' ){
-
         Token tk;
         nextToken( tk, true );
-
     }
 
     m_skipWordsEnabled = skip;
@@ -533,9 +554,6 @@ void Lexer::processDefine( Macro& m )
 
 	    Token tk;
 	    nextToken( tk, true );
-
-	    if( tk == '\n' )
-		break;
 
 	    if( tk.type() != -1 ){
                 QString s = toString( tk );
