@@ -1,3 +1,6 @@
+2004-05-10 Andras Mantia <amantia@kde.org>
+    * Add possibility to define environment variables for the configure stage.
+
 2004-05-08 Alexander Dymo <cloudtemple@mksat.net>
     * Devhelp and KDevelopTOC documentation plugins are implemented. Indexes that exist
       in devhelp and kdeveloptoc files are now taken into account.
