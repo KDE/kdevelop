@@ -17,6 +17,7 @@ kdevwidgetsinclude_HEADERS = klistviewaction.h qcomboview.h flagboxes.h \
 SUBDIRS = propeditor
 
 libkdevwidgets_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la
+libkdevwidgets_la_LDFLAGS = -no-undefined $(all_libraries)
 rcdir = $(kde_datadir)/kdevelop
 
 rc_DATA =  kdevhtml_partui.rc

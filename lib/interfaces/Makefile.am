@@ -11,6 +11,9 @@ libkdevinterfaces_la_SOURCES = kdevcore.cpp kdevproject.cpp \
 		KDevPartControllerIface.cpp katedocumentmanagerinterface.cpp katedocumentmanagerinterface.skel \
 	kdevprojectiface.cpp kdevprojectiface.skel kdevdesignerintegrationiface.cpp \
 	kdevdesignerintegrationiface.skel
+libkdevinterfaces_la_LDFLAGS = -no-undefined $(all_libraries) $(LIB_KDEUI) $(LIB_KHTML) $(LIB_KPARTS) -lktexteditor -lkscript \
+	$(top_builddir)/lib/interfaces/external/libkinterfacedesigner.la \
+	$(top_builddir)/lib/util/libkdevutil.la
 
 kdevelopincludedir = $(includedir)/kdevelop/interfaces
 kdevelopinclude_HEADERS = kdevlanguagesupport.h kdevmainwindow.h \
