@@ -1101,8 +1101,7 @@ void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
     c.cursor.y++;
     c.cursor.x = 0;
     if (pos > 0) {
-      // TODO: need a working record here now
-      //recordReplace(c.cursor,0,textLine->getText(),pos);
+      recordReplace(c.cursor,0,textLine->getText(),pos);
       c.cursor.x = pos;
     }
   }
