@@ -358,13 +358,13 @@ sub changeNormalApp {
     chdir ($overDirectory);
     replaceOldFile("SUBDIRS = skel", "SUBDIRS = $nameLittle.po", 
 		   "Makefile.am");
-    replaceOldFile("skel",    $nameLittle,         "configure.in");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
     replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
     replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
 		   "configure.in");
     
     chdir ($underDirectory);
-    replaceOldFile("skel",   $nameLittle,          "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",   $nameLittle,          "Makefile.am");
     replaceOldFile("|NAMELITTLE|",  $nameLittle,          "skel.cpp");
     replaceOldFile("|NAMELITTLE|",  $nameLittle,          "skel.h");
     replaceOldFile("|NAMELITTLE|",  $nameLittle,          "main.cpp");
@@ -394,7 +394,7 @@ sub changeNormalApp {
     replaceOldFile("|NAMELITTLE|",  $nameLittle,          $nameLittle."view.h");
 
     chdir ($underDirectory."/docs/en");
-    replaceOldFile("skel",   $nameLittle,          "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",   $nameLittle,          "Makefile.am");
 
     condCopyGNUFiles();
     condCopyLsmFile();
@@ -439,30 +439,30 @@ sub changeMiniApp {
     chdir ($overDirectory);
     replaceOldFile("SUBDIRS = skel", "SUBDIRS = $nameLittle.po", 
 		   "Makefile.am");
-    replaceOldFile("skel",    $nameLittle,         "configure.in");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
     replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
     replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
 		   "configure.in");
 
  
     chdir ($underDirectory);
-    replaceOldFile("skel",    $nameLittle,         "Makefile.am");
-    replaceOldFile("skel",    $nameLittle,         "skel.cpp");
-    replaceOldFile("skel",    $nameLittle,         "main.cpp");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.cpp");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "main.cpp");
 
-    replaceOldFile("Skel",    $name,               "skel.cpp");
-    replaceOldFile("Skel",    $name,               "skel.h");
-    replaceOldFile("Skel",    $name,               "main.cpp");
+    replaceOldFile("|NAME|",    $name,               "skel.cpp");
+    replaceOldFile("|NAME|",    $name,               "skel.h");
+    replaceOldFile("|NAME|",    $name,               "main.cpp");
 
     replaceOldFile("|AUTHOR|",  $processes{AUTHOR},  "skel.cpp");
-    replaceOldFile("SKEL",    $nameBig,            "skel.h");
+    replaceOldFile("|NAMEBIG|",    $nameBig,            "skel.h");
    
     #renamed skel with the projectname
     rename ("skel.cpp", $nameLittle.".cpp");
     rename ("skel.h",   $nameLittle.".h");
 
     chdir ($underDirectory."/docs/en");
-    replaceOldFile("skel",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
 
     condCopyGNUFiles();
     condCopyLsmFile();
@@ -500,19 +500,19 @@ sub changeTerminalApp {
     
     #replaced skel with the projectname in different files
     chdir ($overDirectory);
-    replaceOldFile("skel",    $nameLittle,         "Makefile.am");
-    replaceOldFile("skel",    $nameLittle,         "configure.in");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
     replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
     
     chdir ($underDirectory);
-    replaceOldFile("skel",    $nameLittle,         "Makefile.am");
-    replaceOldFile("skel",    $nameLittle,         "main.cpp");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "main.cpp");
     
     #replaced Skel with the projectname in different files
-    replaceOldFile("Skel",    $name,               "main.cpp");
+    replaceOldFile("|NAME|",    $name,               "main.cpp");
     
     chdir ($underDirectory . "/docs/en");
-    replaceOldFile("skel",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
     
     condCopyGNUFiles();
     condCopyLsmFile();
@@ -554,12 +554,12 @@ sub changeQtApp {
     
     #replaced skel with the projectname in different files
     chdir ($overDirectory);
-    replaceOldFile("skel",    $nameLittle,         "Makefile.am");
-    replaceOldFile("skel",    $nameLittle,         "configure.in");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "configure.in");
     replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
 
     chdir ($underDirectory);
-    replaceOldFile("skel",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
     replaceOldFile("|NAMELITTLE|",    $nameLittle,         "main.cpp");
     replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.cpp");
     replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.h");
