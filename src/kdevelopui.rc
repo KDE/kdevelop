@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="23" name="kdevelop" >
+<kpartgui version="24" name="kdevelop" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -155,10 +155,6 @@
 
 <ToolBar name="extraToolBar" position="Top" noMerge="1" hidden="true">
   <text>Extra Toolbar</text>
-</ToolBar>
-
-<ToolBar name="locationToolBar" position="Top" noMerge="1" hidden="true">
-  <text>Location Toolbar</text>
 </ToolBar>
 
 <Menu name="rb_popup">
