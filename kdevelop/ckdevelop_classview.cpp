@@ -409,10 +409,7 @@ void CKDevelop::CVGotoDefinition( const char *className,
                                   THType type )
 {
   CParsedClass *aClass = NULL;
-  CParsedAttribute *aAttr = NULL;
-  CParsedStruct *aStruct = NULL;
-  QString toFile;
-  int toLine = -1;
+  CParsedMethod *aMethod = NULL;
 
   // Fetch a class if one is passed.
   if( className != NULL && strlen( className ) > 0 )
@@ -426,9 +423,65 @@ void CKDevelop::CVGotoDefinition( const char *className,
   // Get the type of declaration at the index.
   switch( type )
   {
+    case THPUBLIC_SLOT:
+    case THPROTECTED_SLOT:
+    case THPRIVATE_SLOT:
+      if( aClass )
+        aMethod = aClass->getSlotByNameAndArg( declName );      
+      break;
+    case THPUBLIC_METHOD:
+    case THPROTECTED_METHOD:
+    case THPRIVATE_METHOD:
+      if( aClass )
+      {
+        aMethod = aClass->getMethodByNameAndArg( declName );
+        CVMethodSelected( declName );
+      }
+      break;
+    case THGLOBAL_FUNCTION:
+      aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
+      break;
+    default:
+      debug( "Clicked on unknown type." );
+  }
+
+  if( aMethod )
+    switchToFile( aMethod->definedInFile, aMethod->definedOnLine );
+}
+
+/*-------------------------------------- CKDevelop::CVGotoDeclaration()
+ * CVGotoDeclaration()
+ *   Goto the declaration of the item with the index in the tree.
+ *
+ * Parameters:
+ *   index          Index in the tree.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::CVGotoDeclaration( const char *className, 
+                                   const char *declName, 
+                                   THType type )
+{
+  CParsedClass *aClass = NULL;
+  CParsedAttribute *aAttr = NULL;
+  CParsedStruct *aStruct = NULL;
+  QString toFile;
+  int toLine = -1;
+
+  if( className != NULL && strlen( className ) > 0 )
+  {
+    aClass = class_tree->store->getClassByName( className );
+
+    if( aClass != NULL )
+      CVClassSelected( className );
+  }
+
+  switch( type )
+  {
     case THCLASS:
-      toFile = aClass->definedInFile;
-      toLine = aClass->definedOnLine;
+      toFile = aClass->declaredInFile;
+      toLine = aClass->declaredOnLine;
       break;
     case THSTRUCT:
       if( aClass != NULL )
@@ -436,8 +489,8 @@ void CKDevelop::CVGotoDefinition( const char *className,
       else
         aStruct = class_tree->store->globalContainer.getStructByName( declName );
 
-      toFile = aStruct->definedInFile;
-      toLine = aStruct->definedOnLine;
+      toFile = aStruct->declaredInFile;
+      toLine = aStruct->declaredOnLine;
       break;
     case THPUBLIC_ATTR:
     case THPROTECTED_ATTR:
@@ -474,14 +527,14 @@ void CKDevelop::CVGotoDefinition( const char *className,
       aAttr = class_tree->store->globalContainer.getAttributeByName( declName );
       break;
     default:
-      debug( "Clicked on unknown type." );
+      break;
   }
-
+  
   // Fetch the line and file from the attribute if the value is set.
   if( aAttr != NULL )
   {
-    toFile = aAttr->definedInFile;
-    toLine = aAttr->definedOnLine;
+    toFile = aAttr->declaredInFile;
+    toLine = aAttr->declaredOnLine;
   }
 
   if( toLine != -1 )
@@ -489,57 +542,6 @@ void CKDevelop::CVGotoDefinition( const char *className,
     debug( "  Switching to file %s @ line %d", toFile.data(), toLine );
     switchToFile( toFile, toLine );
   }
-}
-
-/*-------------------------------------- CKDevelop::CVGotoDeclaration()
- * CVGotoDeclaration()
- *   Goto the declaration of the item with the index in the tree.
- *
- * Parameters:
- *   index          Index in the tree.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CKDevelop::CVGotoDeclaration( const char *className, 
-                                   const char *declName, 
-                                   THType type )
-{
-  CParsedClass *aClass = NULL;
-  CParsedMethod *aMethod = NULL;
-
-  if( className != NULL && strlen( className ) > 0 )
-  {
-    aClass = class_tree->store->getClassByName( className );
-    CVClassSelected( className );
-  }
-
-  switch( type )
-  {
-    case THPUBLIC_SLOT:
-    case THPROTECTED_SLOT:
-    case THPRIVATE_SLOT:
-      if( aClass )
-        aMethod = aClass->getSlotByNameAndArg( declName );      
-      break;
-    case THPUBLIC_METHOD:
-    case THPROTECTED_METHOD:
-    case THPRIVATE_METHOD:
-      if( aClass )
-      {
-        aMethod = aClass->getMethodByNameAndArg( declName );
-        CVMethodSelected( declName );
-      }
-      break;
-    case THGLOBAL_FUNCTION:
-      aMethod = class_tree->store->globalContainer.getMethodByNameAndArg( declName );
-      break;
-    default:
-      break;
-  }
-  
-  if( aMethod )
-    switchToFile( aMethod->declaredInFile, aMethod->declaredOnLine );
 }
 
 /*----------------------------------- CKDevelop::refreshClassCombo()
