@@ -1,3 +1,13 @@
+1999-10-30 The KDevelop Team
+	* KDevelop 1.0Beta4.1 released
+
+1999-10-30 Sandy Meier  <smeier@rz.uni-potsdam.de>
+	*  uncommented setCurrentTab(MESSAGES) in ckdevelop.cpp
+	*  add "-lkfm" to linkerflags in ckappwizard.cpp
+	*  remove $shell declaration in processend.pl, this produced a warning
+	*  fixed a small bug in sourcecode generation
+	*  some small changes in the bugreport dialog
+
 1999-10-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Fixed wrong assert() in CEditWidget::deleteInternal()
 	  - from Richard Dale's Objective C patch

@@ -1622,7 +1622,7 @@ void CKDevelop::slotHelpBugReport(){
     info.kde_version = config->readEntry("kde_version","");
     info.qt_version = config->readEntry("qt_version","");
     info.compiler = config->readEntry("compiler","");
-    info.sendmail_command = config->readEntry("sendmail_command","");
+    info.sendmail_command = config->readEntry("sendmail_command","/usr/sbin/sendmail");
 
     CBugReportDlg dlg(this,"bug",info,config->readEntry("kdevelop_bug_report_email","submit@bugs.kde.org"));
     if( dlg.exec()){
@@ -2116,7 +2116,7 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   messages_widget->insertAtEnd(QString(buffer,buflen+1));
-//  o_tab_view->setCurrentTab(MESSAGES);
+  o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
 
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){
@@ -2144,7 +2144,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   messages_widget->insertAtEnd(QString(buffer,buflen+1));
-//  o_tab_view->setCurrentTab(MESSAGES);
+  o_tab_view->setCurrentTab(MESSAGES);
   // QString str1 = messages_widget->text();
 //   if(error_parser->getMode() == CErrorMessageParser::MAKE){
 //     error_parser->parseInMakeMode(&str1,prj->getProjectDir() + prj->getSubDir());

@@ -3,7 +3,6 @@ require ("flush.pl");
 use File::Copy;
 
 $homedirectory = $ENV{HOME};
-$shell = $ENV{SHELL};
 printflush (STDOUT,"Starting with installation\n");
 
 #open file "entries" for reading the parameters from kAppWizard and put it in a hash
