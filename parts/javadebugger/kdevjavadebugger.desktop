@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Java Debugger frontend
+Name=KDevJavaDebugger
+Icon=
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevjavadebugger
