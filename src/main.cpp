@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
   aboutData.addCredit("Matt Newell", "Fileselector component", "newellm@proaxis.com");
   aboutData.addCredit("Jonas Nordin", "C++ source parser", "jonas.nordin@syncom.se");
   aboutData.addCredit("Trolltech AS", "Designer code", "info@trolltech.com");
-  aboutData.addCredit("Stephane ANCELOT", "Patches", "<sancelot@free.fr>");
+  aboutData.addCredit("Stephane ANCELOT", "Patches", "sancelot@free.fr");
   
   KCmdLineArgs::init(argc, argv, &aboutData);
   KCmdLineArgs::addCmdLineOptions( options );
