@@ -15,6 +15,7 @@
 #include "autoprojectwidget.h"
 
 #include <qcheckbox.h>
+#include <qdom.h>
 #include <qfile.h>
 #include <qheader.h>
 #include <qpainter.h>
@@ -50,7 +51,8 @@
 #include "addapplicationdlg.h"
 #include "addfiledlg.h"
 #include "addicondlg.h"
-#include "importexistingdlg.h"
+#include "addexistingfilesdlg.h"
+#include "addexistingdirectoriesdlg.h"
 #include "removefiledlg.h"
 #include "removetargetdlg.h"
 #include "choosetargetdialog.h"
@@ -779,42 +781,36 @@ void AutoProjectWidget::slotAddSubproject()
 
 void AutoProjectWidget::slotAddExistingSubproject()
 {
-	QDomDocument &dom = *m_part->projectDom();
+	SubprojectItem* spitem = selectedSubproject();
+	if ( !spitem )
+		return;
+		
+	AddExistingDirectoriesDialog dlg ( m_part, this, spitem, this, "add existing subprojects" );
+	
+	dlg.setCaption ( i18n ( "Add Existing Subproject to '%1'" ).arg ( spitem->subdir ) );
+	
+	if ( dlg.exec() )
+		slotOverviewSelectionChanged ( spitem );
+}
 
-	if ( DomUtil::readBoolEntry( dom, "/kdevautoproject/general/useactivetarget" ) )
-	{
-	/*	FileItem * fitem = createFileItem( name );
-		m_activeTarget->sources.append( fitem );
-		m_activeTarget->insertItem( fitem );
-	 
-		// TODO: Merge with code in addfiledlg.cpp
-		QString canontargetname = AutoProjectTool::canonicalize( m_activeTarget->name );
-		QString varname = canontargetname + "_SOURCES";
-		m_activeSubproject->variables[ varname ] += ( " " + name );
-	 
-		QMap<QString, QString> replaceMap;
-		replaceMap.insert( varname, m_activeSubproject->variables[ varname ] );
-	 
-		AutoProjectTool::modifyMakefileam( m_activeSubproject->path + "/Makefile.am", replaceMap );
-	 
-		emitAddedFile( m_activeSubproject->path + "/" + name );*/
-	}
+
+void AutoProjectWidget::slotAddExistingFile()
+{
+	TargetItem * titem = selectedTarget();
+	if ( !titem )
+		return;
+
+	AddExistingFilesDialog dlg( m_part, this, m_shownSubproject, titem,
+	                          this, "add existing files" );
+	QString caption;
+	if ( selectedTarget()->name.isEmpty() )
+		caption = i18n ( "%1 in %2" ).arg ( selectedTarget()->primary ).arg ( selectedTarget()->prefix );
 	else
-	{
-	QStringList fileList;
+		caption = selectedTarget()->name;
 
-	fileList.append ( "newfiledlg.cpp" );
-	fileList.append ( "newfiledlg.h" );
+	dlg.setCaption( i18n( "Add Existing Files to '%1'" ).arg ( caption ) );
 
-		ChooseTargetDialog chooseTargetDlg ( this, fileList, this, "choose target dialog" );
-
-		//chooseTargetDlg = new ChooseTargetDialog ( this, this, "choose target dialog" );
-
-		if ( chooseTargetDlg.exec() && chooseTargetDlg.neverAskAgainCheckBox->isChecked() )
-		{
-			DomUtil::writeBoolEntry( dom, "/kdevautoproject/general/useactivetarget", true );
-		}
-	}
+	dlg.exec();
 }
 
 
@@ -888,24 +884,16 @@ void AutoProjectWidget::slotAddNewFile()
 	AddFileDialog dlg( m_part, this, m_shownSubproject, titem,
 	                   this, "add file dialog" );
 
-	dlg.setCaption ( i18n ( "Add New File to '%1'" ).arg ( selectedTarget()->name ) );
+	QString caption;
+	if ( selectedTarget()->name.isEmpty() )
+		caption = i18n ( "%1 in %2" ).arg ( selectedTarget()->primary ).arg ( selectedTarget()->prefix );
+	else
+		caption = selectedTarget()->name;
+	
+	dlg.setCaption ( i18n ( "Add New File to '%1'" ).arg ( caption ) );
 
 	if ( dlg.exec() )
 		slotDetailsSelectionChanged( m_shownSubproject ); // update list view
-}
-
-
-void AutoProjectWidget::slotAddExistingFile()
-{
-	TargetItem * titem = selectedTarget();
-	if ( !titem )
-		return ;
-
-	ImportExistingDialog dlg( m_part, this, m_shownSubproject, titem,
-	                          this, "add existing files" );
-	dlg.setCaption( i18n( "Add Existing Files to '%1'" ).arg ( selectedTarget()->name ) );
-
-	dlg.exec();
 }
 
 
@@ -971,7 +959,13 @@ void AutoProjectWidget::slotRemoveDetail()
 		RemoveFileDialog dlg( this, m_shownSubproject, titem, fitem->text( 0 ),
 		                      this, "remove file dialog" );
 
-		dlg.setCaption ( i18n ( "Remove File from '%1'" ).arg ( titem->name ) );
+		QString caption;
+		if ( titem->name.isEmpty() )
+			caption = i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix );
+		else
+			caption = titem->name;
+
+		dlg.setCaption ( i18n ( "Remove File from '%1'" ).arg ( caption ) );
 
 		if ( dlg.exec() )
 		{
@@ -1238,6 +1232,30 @@ void AutoProjectWidget::emitRemovedFile( const QString &name )
 	emit m_part->removedFilesFromProject( fileList );
 }
 
+void AutoProjectWidget::restoreSession ( const QDomElement* el )
+{
+
+}
+
+void AutoProjectWidget::saveSession ( QDomElement* el )
+{
+	kdDebug ( 9020 ) << "************** Saving session data of AutoProjectWidget: " << endl;
+	
+	if ( m_activeTarget && m_activeSubproject )
+	{
+		QDomDocument domDoc = el->ownerDocument();
+		
+		QString activeTargetPath = m_activeSubproject->path.mid ( m_part->project()->projectDirectory().length() + 1 );
+		activeTargetPath = activeTargetPath + "/" + m_activeTarget->name;
+		
+		QDomElement generalEl = domDoc.createElement("general");
+		
+		kdDebug ( 9020 ) << "************** Saving session data of AutoProjectWidget: " << activeTargetPath << endl;
+		
+		generalEl.setAttribute("activetarget", activeTargetPath);
+		el->appendChild(generalEl);
+	}
+}
 void AutoProjectWidget::parsePrimary( SubprojectItem *item,
                                       const QString &lhs, const QString &rhs )
 {

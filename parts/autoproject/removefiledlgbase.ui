@@ -161,7 +161,7 @@
                 </size>
             </property>
             <property name="title">
-                <string>Target Information</string>
+                <string>&amp;File Information</string>
             </property>
             <vbox>
                 <property name="name">

@@ -64,8 +64,12 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *sp
 	}
 
 	removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b>?" ).arg ( filename ) );
+	
 	directoryLabel->setText ( spitem->path );
-	targetLabel->setText ( item->name );
+	if ( item->name.isEmpty() )
+		targetLabel->setText ( i18n ( "%1 in %2" ).arg ( item->primary ).arg ( item->prefix ) );
+	else
+		targetLabel->setText ( item->name );
 
 	connect ( removeButton, SIGNAL ( clicked() ), this, SLOT ( accept() ) );
 	connect ( cancelButton, SIGNAL ( clicked() ), this, SLOT ( reject() ) );

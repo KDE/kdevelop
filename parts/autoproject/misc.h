@@ -16,9 +16,10 @@
 #include <qmap.h>
 #include <qwidget.h>
 
+#include "kfiledndiconview.h"
 
 /**
- * Very small helper class. It has just one static method which
+ * Very small helper class. It has just static methods.
  */
 class AutoProjectTool
 {
@@ -40,6 +41,26 @@ public:
     static void parseMakefileam(const QString &filename, QMap<QString,QString> *variables);
     static void modifyMakefileam(const QString &filename, QMap<QString,QString> variables);
 	static void removeFromMakefileam(const QString &filename, QMap<QString,QString> variables);
+};
+
+
+// Used by AddExisting*Dialog
+class KImportIconView : public KFileDnDIconView
+{
+	Q_OBJECT
+	
+public:
+	KImportIconView ( const QString& strIntro, QWidget* parent = 0, const char* name = 0 );
+	virtual ~KImportIconView() {}
+	
+	void somethingDropped ( bool dropped );
+
+protected:
+	void drawContents ( QPainter *p, int cx, int cy, int cw, int ch );
+
+private:
+	QString m_strIntro;
+	bool m_bDropped;
 };
 
 #endif

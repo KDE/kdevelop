@@ -162,7 +162,7 @@
                         <cstring>textLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Note:&lt;/b&gt; You will not be able to undo this operation! And please check your Makefile.ams afterwards!</string>
+                        <string>&lt;b&gt;Note:&lt;/b&gt; You will not be able to undo this operation! And please check your Makefile.am afterwards!</string>
                     </property>
                 </widget>
             </vbox>

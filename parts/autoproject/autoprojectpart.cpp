@@ -2,6 +2,9 @@
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
+*   Copyright (C) 2002 by Victor Röder                                    *
+*   victor_roeder@gmx.de                                                  *
+*                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
@@ -11,6 +14,7 @@
 
 #include "autoprojectpart.h"
 
+#include <qdom.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qstringlist.h>
@@ -277,7 +281,10 @@ void AutoProjectPart::addFiles ( const QStringList& fileList )
 		{
 			if ( !messageBoxShown )
 			{
-				KMessageBox::information(m_widget, i18n("It seems that you don't have an Active Target specified!\nAutomake Manager supports this feature to 'activate' the target your currently working on.\nJust right-click a target and choose 'Make Target Active'."));
+				KMessageBox::information(m_widget, i18n("It seems that you don't have an Active Target specified!\n"
+														"Automake Manager supports this feature to 'activate' the target your currently working on.\n"
+														"Just right-click a target and choose 'Make Target Active'."),
+														i18n ( "No Active Target found" ) );
 				messageBoxShown = true;
 			}
 		}
@@ -342,13 +349,26 @@ QString AutoProjectPart::buildDirectory()
 
     QString builddir = DomUtil::readEntry(dom, prefix + "builddir");
     if (builddir.isEmpty())
-        return projectDirectory();
+        return topsourceDirectory();
     else if (builddir.startsWith("/"))
         return builddir;
     else
         return projectDirectory() + "/" + builddir;
 }
 
+QString AutoProjectPart::topsourceDirectory()
+{
+    QDomDocument &dom = *projectDom();
+    QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
+
+    QString topsourcedir = DomUtil::readEntry(dom, prefix + "topsourcedir");
+    if (topsourcedir.isEmpty())
+        return projectDirectory();
+    else if (topsourcedir.startsWith("/"))
+        return topsourcedir;
+    else
+        return projectDirectory() + "/" + topsourcedir;
+}
 
 void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
@@ -438,7 +458,7 @@ void AutoProjectPart::slotConfigure()
     QDomDocument &dom = *projectDom();
     QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
   
-    QString cmdline = projectDirectory();
+    QString cmdline = topsourceDirectory();
     cmdline += "/configure";
     QString cc = DomUtil::readEntry(dom, prefix + "ccompilerbinary");
     if (!cc.isEmpty())
@@ -481,11 +501,11 @@ void AutoProjectPart::slotMakefilecvs()
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
     
-    if (QFile::exists(projectDirectory() + "/Makefile.cvs"))
+    if (QFile::exists(topsourceDirectory() + "/Makefile.cvs"))
         cmdline += " -f Makefile.cvs";
-    else if (QFile::exists(projectDirectory() + "/Makefile.dist"))
+    else if (QFile::exists(topsourceDirectory() + "/Makefile.dist"))
         cmdline += " -f Makefile.dist";
-    else if (QFile::exists(projectDirectory() + "/autogen.sh"))
+    else if (QFile::exists(topsourceDirectory() + "/autogen.sh"))
         cmdline = "./autogen.sh";
     else {
         KMessageBox::sorry(m_widget, i18n("There is neither a Makefile.cvs file nor an "
@@ -496,7 +516,7 @@ void AutoProjectPart::slotMakefilecvs()
     cmdline.prepend(makeEnvironment());
 
     QString dircmd = "cd ";
-    dircmd += projectDirectory();
+    dircmd += topsourceDirectory();
     dircmd += " && ";
 
     makeFrontend()->queueCommand(projectDirectory(), dircmd + cmdline);
@@ -570,6 +590,30 @@ void AutoProjectPart::slotBuildConfigAboutToShow()
     QStringList l = allBuildConfigs();
     buildConfigAction->setItems(l);
     buildConfigAction->setCurrentItem(l.findIndex(currentBuildConfig()));
+}
+
+void AutoProjectPart::restorePartialProjectSession ( const QDomElement* el )
+{
+	m_widget->restoreSession ( el );
+}
+
+void AutoProjectPart::savePartialProjectSession ( QDomElement* el )
+{
+	QDomDocument domDoc = el->ownerDocument();
+	
+	KMessageBox::information ( 0, "Hallo, Welt!" );
+	
+	kdDebug ( 9000 ) << "*********************************************** 1) AutoProjectPart::savePartialProjectSession()" << endl;
+	
+	if ( domDoc.isNull() )
+	{
+		kdDebug ( 9000 ) << "*********************************************** 2) AutoProjectPart::savePartialProjectSession()" << endl;
+		return;
+	}
+	
+	kdDebug ( 9000 ) << "*********************************************** 3) AutoProjectPart::savePartialProjectSession()" << endl;
+	
+	m_widget->saveSession ( el );
 }
 
 #include "autoprojectpart.moc"

@@ -33,8 +33,8 @@ class TargetItem;
 class FileItem;
 class KPopupMenu;
 class KAction;
+class QDomElement;
 class QToolButton;
-class ChooseTargetDialog;
 class QStringList;
 
 /**
@@ -241,6 +241,16 @@ public:
 	 * to which e.g. all files are added to.
 	 */
 	TargetItem* activeTarget();
+	
+	/**
+	 * Restores the last settings of the AutoProjectWidget
+	 */
+	void restoreSession ( const QDomElement* el );
+	
+	/**
+	 * Saves the latest changes of the AutoProjectWidget to the session file.
+	 */
+	void saveSession ( QDomElement* el );
 
 	void emitAddedFile ( const QString& name );
 	void emitAddedFiles(const QStringList &fileList);
@@ -316,8 +326,6 @@ private:
 	KListView *overview;
 	KListView *details;
 	
-	//ChooseTargetDialog* chooseTargetDlg;
-
 	bool m_kdeMode;
 	AutoProjectPart *m_part;
 	SubprojectItem *m_activeSubproject;

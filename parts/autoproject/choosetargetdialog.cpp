@@ -78,9 +78,7 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList 
 		m_choosenTarget = widget->activeTarget();
 		//kdDebug ( 9000 ) << "1) Choosen target is " << m_choosenTarget->name << endl;
 		m_choosenSubproject = widget->activeSubproject();
-		//choosenSubprojectLabel->setText (  );
 		choosenTargetLabel->setText ( ( widget->activeSubproject()->path + "/<b>" + m_widget->activeTarget()->name + "</b>" ).mid ( m_widget->projectDirectory().length() + 1 ) );
-		//choosenTargetGroupBox->setEnabled ( false );
 		subprojectComboBox->setEnabled ( false );
 		targetComboBox->setEnabled ( false );
 
@@ -89,17 +87,11 @@ ChooseTargetDialog::ChooseTargetDialog ( AutoProjectWidget* widget, QStringList 
 	}
 	else
 	{
-		choosenTargetLabel->setText ( i18n ( "No Active Target specified! Specify one first or select another." ) );
-		//choosenSubprojectLabel->setText ( "" );
 		activeTargetRadioButton->setChecked ( false );
 		chooseTargetRadioButton->setChecked ( true );
 		activeTargetRadioButton->setEnabled ( false );
 		neverAskAgainCheckBox->setEnabled ( false );
-
-		//subprojectComboBox->setCurrentItem ( 0 );
-
-		//kdDebug ( 9000 ) << "current text: " << subprojectComboBox->text(0) << endl;
-
+		
 		slotSubprojectChanged ( subprojectComboBox->text(0) );
 	}
 
@@ -276,7 +268,9 @@ void ChooseTargetDialog::accept ()
 		{
 			if ( fitem->name == fileName )
 			{
-				KMessageBox::error ( this, i18n ( "The file %1 already exists in the chosen target!\nThe file will be created but will not be added to the target.\nRename the file and select 'Add Existing Files' from the Automake Manager." ).arg ( fitem->name ) );
+				KMessageBox::error ( this, i18n ( "The file %1 already exists in the choosen target!\nThe file will be created but will not be added to the target.\n"
+																"Rename the file and select 'Add Existing Files' from the Automake Manager." ).arg ( fitem->name ),
+																i18n ( "Error while adding files" ) );
 				found = true;
 			}
 		}

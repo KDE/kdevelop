@@ -1,6 +1,9 @@
 /***************************************************************************
  *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
+*                                                                         *
+*   Copyright (C) 2002 by Victor Röder                                    *
+*   victor_roeder@gmx.de                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -18,6 +21,7 @@
 
 #include "kdevproject.h"
 
+class QDomElement;
 class QStringList;
 class KDialogBase;
 class AutoProjectWidget;
@@ -44,6 +48,12 @@ public:
 	virtual void addFiles ( const QStringList& fileList );
     virtual void removeFile(const QString &fileName);
 	virtual void removeFiles ( const QStringList& fileList );
+	
+	/**
+	 * Implementation of the KDevPlugin interface.
+	 */
+	virtual void restorePartialProjectSession ( const QDomElement* el );
+	virtual void savePartialProjectSession ( QDomElement* el );
 
     /**
      * automake specific methods.
@@ -51,6 +61,7 @@ public:
     QStringList allBuildConfigs();
     QString currentBuildConfig();
     QString buildDirectory();
+    QString topsourceDirectory();
     void startMakeCommand(const QString &dir, const QString &target);
 
 protected:

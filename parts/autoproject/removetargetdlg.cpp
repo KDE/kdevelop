@@ -44,11 +44,12 @@ RemoveTargetDialog::RemoveTargetDialog(  AutoProjectWidget *widget, SubprojectIt
 {
     removeLabel->setText ( i18n ( "Do you really want to remove <b>%1</b><br>with <b>all files</b> that are attached to it<br>and <b>all dependencies</b>?" ).arg ( titem->name ) );
     directoryLabel->setText ( spitem->path );
-    if ( titem->name && !titem->name.isEmpty() )
-		targetLabel->setText ( titem->name );
+    
+	if ( titem->name.isEmpty() )
+		targetLabel->setText ( i18n ( "%1 in %2" ).arg ( titem->primary ).arg ( titem->prefix ) );
 	else
-		targetLabel->setText ( "" );
-
+		targetLabel->setText ( titem->name );
+    
 	connect ( removeButton, SIGNAL ( clicked() ), this, SLOT ( accept() ) );
     connect ( cancelButton, SIGNAL ( clicked() ), this, SLOT ( reject() ) );
 
@@ -86,7 +87,8 @@ void RemoveTargetDialog::init()
 			if ( m_titem->name == titem->name )
 				continue;
 
-			if ( titem->primary == "LTLIBRARIES" || titem->primary == "PROGRAMS" )
+			if ( titem->primary == "LTLIBRARIES" || titem->primary == "PROGRAMS" 
+				|| titem->primary == "LIBRARIES"  || titem->primary == "JAVA" )
 			{
 				QString canonname = AutoProjectTool::canonicalize ( titem->name );
 
@@ -174,8 +176,25 @@ void RemoveTargetDialog::accept ()
 	else if ( m_titem->primary == "KDEDOCS" )
 		removeMap.insert ( "KDE_DOCS", "" );
 	else
-		removeMap.insert ( varname, "" );
-
+	{
+		// if we have bin_PROGRAMS = [target to be deleted] [other target]
+		// delete only the [target to be deleted], not the whole line!
+		QStringList targets = QStringList::split(QRegExp("[ \t\n]"), m_spitem->variables[varname]);
+		
+		if ( targets.count() > 1 )
+		{
+			targets.remove ( m_titem->name );
+			m_spitem->variables[varname] = targets.join ( " " );
+			replaceMap.insert ( varname, m_spitem->variables[varname] );
+			AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
+			replaceMap.clear();
+		}
+		else
+		{
+			removeMap.insert ( varname, m_titem->name );
+		}
+	}
+		
 	// if we have no such line containing blabla_SOURCES, blabla_LDFLAGS, etc.
 	// they are ignored
 	removeMap.insert ( canonname + "_SOURCES", "" );
@@ -225,8 +244,23 @@ void RemoveTargetDialog::accept ()
 	for ( FileItem* fitem = m_titem->sources.first(); fitem; fitem = m_titem->sources.next() )
 	{
 		if (removeCheckBox->isChecked())
+		{
+			// before removing the files, check if they are mentioned in "noinst_HEADERS = blabla1.h blabla2.h"
+			QStringList noInstHeaders = QStringList::split ( QRegExp ( "[ \t\n]" ), m_spitem->variables["noinst_HEADERS"] );
+			
+			if ( noInstHeaders.contains ( fitem->name ) )
+			{
+				noInstHeaders.remove ( fitem->name );
+				
+				m_spitem->variables["noinst_HEADERS"] = noInstHeaders.join ( " " );
+				replaceMap.insert ( "noinst_HEADERS",  m_spitem->variables["noinst_HEADERS"] );
+				AutoProjectTool::modifyMakefileam ( m_spitem->path + "/Makefile.am", replaceMap );
+				replaceMap.clear();
+			}
+			
 			QFile::remove(m_spitem->path + "/" + fitem->name);
-
+		}
+		
 		fileList.append ( m_spitem->path.mid ( m_widget->projectDirectory().length() + 1 ) + "/" + fitem->name );
 
 		qApp->processEvents();
