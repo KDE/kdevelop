@@ -51,7 +51,7 @@ class QEditorView:
 {
     Q_OBJECT
 public:
-    QEditorView( QEditorPart*, QWidget*, const char* =0 );
+    QEditorView( QEditorPart*, QWidget* =0, const char* =0 );
     virtual ~QEditorView();
 
     KTextEditor::Document* document() const;
@@ -95,6 +95,9 @@ protected:
                     QTextParagraph* lastParag, int lastIndex );
     bool process( const QString& );
     void doRepaint();
+    
+private:
+    void setupActions();
 
 private:
     QTextParagraph* m_currentParag;

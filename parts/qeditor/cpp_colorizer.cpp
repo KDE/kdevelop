@@ -58,7 +58,7 @@ CppColorizer::CppColorizer( QEditor* editor )
 {
     // default context
     HLItemCollection* context0 = new HLItemCollection( 0 );
-    context0->appendChild( new RegExpHLItem( "^\\s*#", PreProcessor, 4 ) );
+    context0->appendChild( new RegExpHLItem( "^\\s*#.", PreProcessor, 4 ) );
     context0->appendChild( new RegExpHLItem( "\\s+", Normal, 0 ) );
     context0->appendChild( new StringHLItem( "'", String, 1 ) );
     context0->appendChild( new StringHLItem( "\"", String, 2 ) );
@@ -96,5 +96,34 @@ CppColorizer::CppColorizer( QEditor* editor )
 
 CppColorizer::~CppColorizer()
 {
+}
+
+int CppColorizer::computeLevel( QTextParagraph* parag, int startLevel )
+{
+    int level = startLevel;
+
+    ParagData* data = (ParagData*) parag->extraData();
+    if( !data ){
+        return startLevel;
+    }
+
+    data->setBlockStart( false );
+
+    QValueList<Symbol> symbols = data->symbolList();
+    QValueList<Symbol>::Iterator it = symbols.begin();
+    while( it != symbols.end() ){
+        Symbol sym = *it++;
+        if( sym.ch() == '{' ){
+            ++level;
+        } else if( sym.ch() == '}' ){
+            --level;
+        }
+    }
+
+    if( level > startLevel ){
+        data->setBlockStart( true );
+    }
+
+    return level;
 }
 

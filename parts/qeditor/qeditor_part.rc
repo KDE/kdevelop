@@ -19,11 +19,6 @@
     <Action name="go_goto_line" />
   </Menu>
 
-  <Menu name="view" noMerge="1"><text>&amp;View</text>
-  </Menu>
-
-  <Action name="bookmarks" />
-
   <Menu name="tools" noMerge="1"><text>&amp;Tools</text>
     <Action name="tools_start_macro" />
     <Action name="tools_stop_macro" />

@@ -42,9 +42,6 @@
 
 #include <kdebug.h>
 
-#define kdDebug() kdDebug(9032)
-
-
 static QColor getColor( const QString &type )
 {
     // #### should be configurable
@@ -178,7 +175,7 @@ QEditorCodeCompletion::QEditorCodeCompletion( QEditorView* view )
 void QEditorCodeCompletion::showCompletionBox(
     QValueList<KTextEditor::CompletionEntry> complList, int offset, bool casesensitive )
 {
-    kdDebug() << "showCompletionBox " << endl;
+    kdDebug(9032) << "showCompletionBox " << endl;
 
     m_caseSensitive = casesensitive;
     m_complList = complList;
@@ -224,7 +221,7 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
             m_view->insertText(add);
             // HACK: move cursor. This needs to be handled in a clean way
             // by the doc/view.
-            m_view->setCursorPositionReal( m_lineCursor, m_view->cursorColumnReal() + add.length() );
+            //m_view->setCursorPositionReal( m_lineCursor, m_view->cursorColumnReal() + add.length() );
 
             complete( item->m_entry );
             m_view->setFocus();
@@ -241,8 +238,8 @@ bool QEditorCodeCompletion::eventFilter( QObject *o, QEvent *e )
         QApplication::sendEvent( m_view->editor(), e );
         if( m_colCursor + m_offset > m_view->cursorColumnReal() ) {
             // the cursor is too far left
-            kdDebug() << "Aborting Codecompletion after sendEvent" << endl;
-            kdDebug() << m_view->cursorColumnReal() << endl;
+            kdDebug(9032) << "Aborting Codecompletion after sendEvent" << endl;
+            kdDebug(9032) << m_view->cursorColumnReal() << endl;
             abortCompletion();
             m_view->setFocus();
             return true;
@@ -281,12 +278,12 @@ void QEditorCodeCompletion::updateBox( bool newCoordinate )
     int len = m_view->cursorColumnReal() - m_colCursor;
     QString currentComplText = currentLine.mid(m_colCursor,len);
 
-    kdDebug() << "Column: " << m_colCursor << endl;
-    kdDebug() << "Line: " << currentLine << endl;
-    kdDebug() << "CurrentColumn: " << m_view->cursorColumnReal() << endl;
-    kdDebug() << "Len: " << len << endl;
-    kdDebug() << "Text: " << currentComplText << endl;
-    kdDebug() << "Count: " << m_complList.count() << endl;
+    kdDebug(9032) << "Column: " << m_colCursor << endl;
+    kdDebug(9032) << "Line: " << currentLine << endl;
+    kdDebug(9032) << "CurrentColumn: " << m_view->cursorColumnReal() << endl;
+    kdDebug(9032) << "Len: " << len << endl;
+    kdDebug(9032) << "Text: " << currentComplText << endl;
+    kdDebug(9032) << "Count: " << m_complList.count() << endl;
 
     QValueList<KTextEditor::CompletionEntry>::Iterator it;
     if( m_caseSensitive ) {
@@ -353,7 +350,7 @@ void QEditorCodeCompletion::showArgHint ( QStringList functionList,
     int nNum = 0;
     for( QStringList::Iterator it = functionList.begin(); it != functionList.end(); it++ )
     {
-        kdDebug() << "Insert function text: " << *it << endl;
+        kdDebug(9032) << "Insert function text: " << *it << endl;
 
         m_pArgHint->addFunction ( nNum, ( *it ) );
 

@@ -46,6 +46,7 @@
 #include <qpopupmenu.h>
 #include <private/qrichtext_p.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 using namespace std;
 
@@ -204,7 +205,7 @@ MarkerWidget::~MarkerWidget()
 
 void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
 {
-    buffer.fill( backgroundColor() );
+    buffer.fill();
 
     QTextParagraph *p = m_editor->document()->firstParagraph();
     QPainter painter( &buffer );
@@ -243,6 +244,7 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
                                     ( p->rect().height() - execPixmap->height() ) / 2 -
                                     yOffset, *execPixmap );
                 break;
+		
             default:
                 break;
             }
@@ -257,8 +259,8 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
 
 void MarkerWidget::resizeEvent( QResizeEvent *e )
 {
-	buffer.resize( e->size() );
-	QWidget::resizeEvent( e );
+    buffer.resize( e->size() );
+    QWidget::resizeEvent( e );
 }
 
 void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )

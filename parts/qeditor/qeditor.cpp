@@ -47,6 +47,7 @@
 #include "qsourcecolorizer.h"
 #include "cpp_colorizer.h"
 #include "java_colorizer.h"
+#include "jsp_colorizer.h"
 #include "python_colorizer.h"
 #include "xml_colorizer.h"
 #include "qmake_colorizer.h"
@@ -389,12 +390,17 @@ void QEditor::setLanguage( const QString& l )
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CppColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        //setBackgroundParser( new CppParser(this) );
+        setBackgroundParser( 0 /*new CppParser(this)*/ );
     } else if( m_language == "java" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new JavaColorizer(this) );
 	document()->setIndent( new CIndent(this) );
-        //setBackgroundParser( new CppParser(this) );
+        setBackgroundParser( 0 /*new CppParser(this)*/ );
+    } else if( m_language == "jsp" ){
+        setElectricKeys( QString::null );
+	document()->setPreProcessor( new JspColorizer(this) );
+	document()->setIndent( new SimpleIndent(this) );	
+        setBackgroundParser( 0 );
     } else if( m_language == "csharp" ){
         setElectricKeys( "{}" );
 	document()->setPreProcessor( new CSharpColorizer(this) );

@@ -47,6 +47,7 @@
 
 #include "qeditor_part.moc"
 
+
 struct HLMode{
     QString name;
     QString section;
@@ -100,34 +101,24 @@ using namespace std;
 QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
                           QObject *parent, const char *name,
                           const QStringList & /*args*/ )
-    : KTextEditor::Document( parent, name ), m_currentView( 0 )
+    : KTextEditor::Document( parent, "QEditorPart" ), m_currentView( 0 )
 {
-    QEditorPartFactory::registerDocument( this );
-
     kdDebug(9032) << "QEditorPart::QEditorPart()" << endl;
     // we need an instance
     setInstance( QEditorPartFactory::instance() );
+    
+    QEditorPartFactory::registerDocument( this );
 
     m_views.setAutoDelete( FALSE );
     m_cursors.setAutoDelete( TRUE );
 
     m_currentView = new QEditorView( this, parentWidget, widgetName );
-    setWidget( m_currentView );
     m_views.append( m_currentView );
     insertChildClient( m_currentView );
+    m_currentView->show();
+    setWidget( m_currentView );
 
     setupHighlighting();
-
-    // connections
-    connect( m_currentView->editor(), SIGNAL(textChanged()),
-             this, SIGNAL(textChanged()) );
-    connect( m_currentView->editor(), SIGNAL(selectionChanged()),
-             this, SIGNAL(selectionChanged()) );
-
-    setupActions();
-
-    // set our XML-UI resource file
-    setXMLFile("qeditor_part.rc");
 
     // we are read-write by default
     setReadWrite(true);
@@ -144,55 +135,14 @@ QEditorPart::~QEditorPart()
     QEditorPartFactory::deregisterDocument( this );
 }
 
-void QEditorPart::setupActions()
-{
-    // create our actions
-    KStdAction::open( this, SLOT(fileOpen()), actionCollection() );
-    KStdAction::saveAs( this, SLOT(fileSaveAs()), actionCollection() );
-    KStdAction::save( this, SLOT(save()), actionCollection() );
-
-    KStdAction::undo( this, SLOT(undo()), actionCollection() );
-    KStdAction::redo( this, SLOT(redo()), actionCollection() );
-
-    KStdAction::cut( m_currentView, SLOT(cut()), actionCollection() );
-    KStdAction::copy( m_currentView, SLOT(copy()), actionCollection() );
-    KStdAction::paste( m_currentView, SLOT(paste()), actionCollection() );
-    KStdAction::selectAll( m_currentView, SLOT(selectAll()), actionCollection() );
-
-    KStdAction::gotoLine( m_currentView, SLOT(gotoLine()), actionCollection() );
-    KStdAction::find( m_currentView, SLOT(doFind()), actionCollection() );
-    KStdAction::replace( m_currentView, SLOT(doReplace()), actionCollection() );
-
-    new KAction( i18n("&Indent"), CTRL + Key_I,
-		 m_currentView, SLOT(indent()),
-                 actionCollection(), "edit_indent" );
-
-    new KAction( i18n("Start Macro"), CTRL + Key_ParenLeft,
-		 m_currentView->editor(), SLOT(startMacro()),
-                 actionCollection(), "tools_start_macro" );
-
-    new KAction( i18n("Stop Macro"), CTRL + Key_ParenRight,
-		 m_currentView->editor(), SLOT(stopMacro()),
-                 actionCollection(), "tools_stop_macro" );
-
-    new KAction( i18n("Execute Macro"), CTRL + Key_E,
-		 m_currentView->editor(), SLOT(executeMacro()),
-                 actionCollection(), "tools_execute_macro" );
-
-    new KAction( i18n("&Configure Editor..."), 0,
-		 this, SLOT(configDialog()),
-                 actionCollection(), "settings_configure_editor" );
-}
-
 void QEditorPart::setReadWrite(bool rw)
 {
     // notify your internal widget of the read-write state
     m_currentView->editor()->setReadOnly(!rw);
-    if (rw)
+    if (rw){
         connect(m_currentView->editor(), SIGNAL(textChanged()),
                 this, SLOT(setModified()));
-    else
-    {
+    } else {
         disconnect(m_currentView->editor(), SIGNAL(textChanged()),
                    this, SLOT(setModified()));
     }
@@ -202,8 +152,13 @@ void QEditorPart::setReadWrite(bool rw)
 
 void QEditorPart::setModified(bool modified)
 {
+    m_currentView->editor()->setModified( modified );    
+
+    // in any event, we want our parent to do it's thing
+    ReadWritePart::setModified(modified);
+
     // get a handle on our Save action and make sure it is valid
-    KAction *save = actionCollection()->action(KStdAction::stdName(KStdAction::Save));
+    KAction *save = m_currentView->actionCollection()->action(KStdAction::stdName(KStdAction::Save));
     if (!save)
         return;
 
@@ -213,25 +168,7 @@ void QEditorPart::setModified(bool modified)
         save->setEnabled(true);
     else
         save->setEnabled(false);
-
-    m_currentView->editor()->setModified( modified );
-
-    // in any event, we want our parent to do it's thing
-    ReadWritePart::setModified(modified);
 }
-
-#if 0
-KAboutData *QEditorPart::createAboutData()
-{
-    // the non-i18n name here must be the same as the directory in
-    // which the part's rc file is installed ('partrcdir' in the
-    // Makefile)
-    KAboutData *aboutData = new KAboutData("qeditorpart", I18N_NOOP("Qt Designer Based Text Editor"), "0.1");
-    aboutData->addAuthor("Roberto Raggi", 0, "raggi@cli.di.unipi.it");
-    aboutData->addAuthor("Trolltech AS", 0, "info@trolltech.com");
-    return aboutData;
-}
-#endif
 
 void QEditorPart::readConfig()
 {
@@ -529,11 +466,6 @@ bool QEditorPart::selectAll()
     return TRUE;
 }
 
-bool QEditorPart::isModified() const
-{
-    return m_currentView->editor()->isModified();
-}
-
 void QEditorPart::setupHighlighting()
 {
     m_currentMode = 0;
@@ -593,6 +525,12 @@ void QEditorPart::setupHighlighting()
     mode->section = "Programming";
     mode->extensions = QStringList() << "*.pro" << "*Makefile" << "*Makefile.am" << "*Makefile.in";
     m_modes.append( mode );
+    
+    mode = new HLMode;
+    mode->name = "jsp";
+    mode->section = "Programming";
+    mode->extensions = QStringList() << "*.jsp";
+    m_modes.append( mode );    
 }
 
 unsigned int QEditorPart::hlMode()

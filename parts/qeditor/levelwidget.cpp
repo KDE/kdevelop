@@ -114,7 +114,7 @@ LevelWidget::~LevelWidget()
 
 void LevelWidget::paintEvent( QPaintEvent* /*e*/ )
 {
-    buffer.fill( backgroundColor() );
+    buffer.fill( /*backgroundColor()*/ );
 
     QTextParagraph *p = m_editor->document()->firstParagraph();
     QPainter painter( &buffer );

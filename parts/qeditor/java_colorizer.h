@@ -31,6 +31,7 @@ public:
     JavaColorizer( QEditor* );
     virtual ~JavaColorizer();
 
+    int computeLevel( QTextParagraph* parag, int startLevel );
 };
 
 #endif

@@ -80,7 +80,7 @@ void BackgroundParser::continueParsing()
     if( m_lastParsed )
 	m_timer->start( m_interval, TRUE );
     else {
-        kdDebug(9032) << "parsed!!!" << endl;
+        // kdDebug(9032) << "parsed!!!" << endl;
         emit parsed();
     }
 }

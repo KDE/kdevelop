@@ -89,15 +89,9 @@ public:
      * Reimplemented to disable and enable Save action
      */
     virtual void setModified(bool modified);
-    virtual bool isModified() const;
 
     QSourceColorizer* colorizer() const;
     QEditorIndenter* indenter() const;
-
-#if 0
-    static KAboutData *createAboutData();
-#endif
-
 
     // general options
     bool wordWrap() const;
@@ -125,9 +119,6 @@ public slots:
 signals:
     void fileNameChanged();
     void configWidget( KDialogBase* );
-
-private:
-    void setupActions();
 
 // -- MarkInterface ------------------------------------------------------------------------
 public:

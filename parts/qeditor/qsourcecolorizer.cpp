@@ -32,6 +32,8 @@
 #include <kdebug.h>
 #include <kconfig.h>
 
+using namespace std;
+
 
 QSourceColorizer::QSourceColorizer( QEditor* editor )
     : QTextPreProcessor(), m_editor( editor )
@@ -151,14 +153,37 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
         parag->setEndState( state );
     }
 
+    int oldLevel = extra->level();
+    int level = computeLevel( parag, startLevel );
+    if( level != oldLevel ){
+        extra->setLevel( level > 0 ? level : 0 );
+    }
+    
     parag->setFirstPreProcess( FALSE );
 
+    QTextParagraph *p = parag->next();
+    if ( ((oldLevel != level) ||
+	  (!!oldState || !!parag->endState()) && oldState != parag->endState()) &&
+	 invalidate && p && !p->firstPreProcess() && p->endState() != -1 ) {
+		
+	kdDebug(9032) << "invalidate!!!" << endl;
+	while ( p ) {
+	    if ( p->endState() == -1 )
+		return;
+	    p->setEndState( -1 );
+	    p = p->next();
+	}
+    }
+
+#if 0
     if ( invalidate && parag->next() &&
-         state != oldState &&
+         (state != oldState || level != oldLevel) &&
 	 !parag->next()->firstPreProcess() &&
          parag->next()->endState() != -1 ) {
+      kdDebug(9032) << "invalidate!!" << endl;
 	parag->next()->setEndState( -1 );
     }
+#endif
 }
 
 void QSourceColorizer::insertHLItem( int id, HLItemCollection* item )
@@ -170,20 +195,6 @@ void QSourceColorizer::setSymbols( const QString& l, const QString& r )
 {
     m_left = l;
     m_right = r;
-}
-
-QChar QSourceColorizer::matchFor( const QChar& ch ) const
-{
-    int idx = m_left.find( ch );
-    if( idx != -1 ){
-        return m_right[ idx ];
-    } else {
-        idx = m_right.find( ch );
-        if( idx != -1 ){
-            return m_left[ idx ];
-        }
-    }
-    return QChar::null;
 }
 
 QTextFormat* QSourceColorizer::formatFromId( const QString& id )
@@ -210,3 +221,4 @@ QStringList QSourceColorizer::styleList() const
 
     return lst;
 }
+

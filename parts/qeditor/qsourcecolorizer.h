@@ -259,7 +259,6 @@ public:
     void insertHLItem( int, HLItemCollection* );
 
     void setSymbols( const QString&, const QString& );
-    QChar matchFor( const QChar& ) const;
     QString leftSymbols() const { return m_left; }
     QString rightSymbols() const { return m_right; }
 
@@ -269,6 +268,7 @@ public:
     QStringList styleList() const;
     virtual void updateStyles( QMap<QString, QPair<QFont, QColor> >& values );
     virtual void process( QTextDocument*, QTextParagraph*, int, bool=FALSE );
+    virtual int computeLevel( QTextParagraph*, int ) { return 0; }
 
 protected:
     QEditor* m_editor;

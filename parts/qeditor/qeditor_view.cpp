@@ -28,6 +28,7 @@
 
 #include "qeditor_view.h"
 #include "qeditor_part.h"
+#include "qeditor_factory.h"
 #include "qeditor.h"
 #include "paragdata.h"
 #include "qeditorcodecompletion.h"
@@ -44,6 +45,8 @@
 #include <private/qrichtext_p.h>
 
 #include <kdebug.h>
+#include <kaction.h>
+#include <klocale.h>
 #include <kapplication.h>
 
 
@@ -51,6 +54,8 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     : KTextEditor::View( document, parent, name ),
       m_document( document )
 {
+    setInstance( QEditorPartFactory::instance() );
+
     QEditorPartFactory::registerView( this );
     m_findDialog = new KoFindDialog( this, "FindDialog_0", long(KoFindDialog::FromCursor) );
     m_replaceDialog = new KoReplaceDialog( this, "ReplaceDialog_0",
@@ -85,7 +90,13 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     setFocusProxy( m_editor );
     connect( m_editor, SIGNAL(cursorPositionChanged(int, int)),
 	     this, SIGNAL(cursorPositionChanged()) );
-
+    
+    // connections
+    connect( m_editor, SIGNAL(textChanged()),
+             doc(), SIGNAL(textChanged()) );
+    connect( m_editor, SIGNAL(selectionChanged()),
+             doc(), SIGNAL(selectionChanged()) );
+    
     m_pCodeCompletion = new QEditorCodeCompletion( this );
     connect(m_pCodeCompletion,SIGNAL(completionAborted()),
 	    this,SIGNAL(completionAborted()));
@@ -98,6 +109,11 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     connect(m_pCodeCompletion,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)),
 	    this,SIGNAL(filterInsertString(KTextEditor::CompletionEntry*,QString *)) );
 
+    // set our XML-UI resource file
+    setXMLFile( "qeditor_part.rc" );
+
+    setupActions();
+    
     configChanged();
 }
 
@@ -527,4 +543,46 @@ void QEditorView::selectAll( )
 {
     m_editor->selectAll();
 }
+
+void QEditorView::setupActions()
+{
+    // create our actions
+    KStdAction::open( doc(), SLOT(fileOpen()), actionCollection() );
+    KStdAction::saveAs( doc(), SLOT(fileSaveAs()), actionCollection() );
+    KStdAction::save( doc(), SLOT(save()), actionCollection() );
+
+    KStdAction::undo( doc(), SLOT(undo()), actionCollection() );
+    KStdAction::redo( doc(), SLOT(redo()), actionCollection() );
+
+    KStdAction::cut( this, SLOT(cut()), actionCollection() );
+    KStdAction::copy( this, SLOT(copy()), actionCollection() );
+    KStdAction::paste( this, SLOT(paste()), actionCollection() );
+    KStdAction::selectAll( this, SLOT(selectAll()), actionCollection() );
+
+    KStdAction::gotoLine( this, SLOT(gotoLine()), actionCollection() );
+    KStdAction::find( this, SLOT(doFind()), actionCollection() );
+    KStdAction::replace( this, SLOT(doReplace()), actionCollection() );
+
+    new KAction( i18n("&Indent"), "indent", CTRL + Key_I,
+		 editor(), SLOT(indent()),
+                 actionCollection(), "edit_indent" );
+
+    new KAction( i18n("Start Macro"), "start macro", CTRL + Key_ParenLeft,
+		 editor(), SLOT(startMacro()),
+                 actionCollection(), "tools_start_macro" );
+
+    new KAction( i18n("Stop Macro"), "stop macro", CTRL + Key_ParenRight,
+		 editor(), SLOT(stopMacro()),
+                 actionCollection(), "tools_stop_macro" );
+
+    new KAction( i18n("Execute Macro"), "execute macro", CTRL + Key_E,
+		 editor(), SLOT(executeMacro()),
+                 actionCollection(), "tools_execute_macro" );
+
+    new KAction( i18n("&Configure Editor..."), "configure editor", 0,
+		 doc(), SLOT(configDialog()),
+                 actionCollection(), "settings_configure_editor" );
+}
+
+
 #include "qeditor_view.moc"
