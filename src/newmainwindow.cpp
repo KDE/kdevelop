@@ -583,12 +583,13 @@ void NewMainWindow::slotPartURLChanged( KParts::ReadOnlyPart * ro_part )
 {
 	kdDebug() << k_funcinfo << endl;
 	
-	if ( !ro_part || !ro_part->widget() || !ro_part->widget()->parentWidget() ) return;
-	
-	KMdiChildView * childView = dynamic_cast<KMdiChildView*>( ro_part->widget()->parentWidget() );
-	if ( childView )
+	if ( QWidget * widget = EditorProxy::getInstance()->topWidgetForPart( ro_part ) )
 	{
-		childView->setMDICaption( ro_part->url().fileName() );
+		KMdiChildView * childView = dynamic_cast<KMdiChildView*>( widget->parentWidget() );
+		if ( childView )
+		{
+			childView->setMDICaption( ro_part->url().fileName() );
+		}
 	}
 }
 
