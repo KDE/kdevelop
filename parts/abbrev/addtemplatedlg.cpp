@@ -19,21 +19,27 @@
  *
  */
 #include "addtemplatedlg.h"
-
 #include <qcombobox.h>
 #include <qlineedit.h>
-
+#include <qpushbutton.h>
 
 AddTemplateDialog::AddTemplateDialog( QStringList suffixesList, QWidget *parent, const char *name )
     : AddTemplateDialogBase( parent, name )
 {
     setFocusProxy( editTemplate );
     comboSuffixes->insertStringList(suffixesList);
+    connect( editTemplate,  SIGNAL(textChanged ( const QString & )), this, SLOT( textChanged()));
+    connect( editDescription,  SIGNAL(textChanged ( const QString & )), this, SLOT( textChanged()));
+    buttonOk->setEnabled(false);
 }
-
 
 AddTemplateDialog::~AddTemplateDialog()
 {
+}
+
+void AddTemplateDialog::textChanged()
+{
+    buttonOk->setEnabled( !editTemplate->text().isEmpty() && !editDescription->text().isEmpty() );
 }
 
 QString AddTemplateDialog::templ() const

@@ -35,6 +35,8 @@ public:
     QString templ() const;
     QString description() const;
     QString suffixes() const;
+private slots:
+    void textChanged();
 };
 
 #endif
