@@ -313,7 +313,7 @@ void AppWizardDialog::accept()
 
     QString appname = appname_edit->text();
     for (uint i=0; i < appname.length(); ++i)
-        if (!appname[i].isLetterOrNumber()) {
+        if (!appname[i].isLetterOrNumber() && appname[i] != '_') {
             KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers, "
                                           "as it will be used as the top level directory name."));
             showPage(generalPage);

@@ -76,7 +76,7 @@ void ImportDialog::accept()
     }
 
     for (uint i=0; i < projectName.length(); ++i)
-        if (!projectName[i].isLetterOrNumber()) {
+        if (!projectName[i].isLetterOrNumber() && projectName[i] != '_') {
             KMessageBox::sorry(this, i18n("Your application name should only contain letters and numbers."));
             return;
         }
