@@ -39,5 +39,5 @@ GenericName[tg]=Интегратсия наудани муҳити тайёрк�
 GenericName[xx]=xxIntegrated Development Environmentxx
 GenericName[zh_CN]=集成开发环境
 X-DCOP-ServiceType=Multi
-Categories=Qt;KDE;Development;IDE;
+Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

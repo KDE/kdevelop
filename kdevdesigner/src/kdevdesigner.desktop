@@ -43,4 +43,4 @@ Comment[tg]=Муҳит барои сохтани Qt/KDE ба шакли граф
 Comment[xx]=xxGUI Designer for Qt/KDExx
 Comment[zh_CN]=Qt/KDE 的 GUI 设计师
 Terminal=false
-Categories=Qt;KDE;Development;GUIDesigner;
+Categories=Qt;KDE;Development;GUIDesigner;X-KDE-KDevelopIDE;

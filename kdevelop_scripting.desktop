@@ -19,5 +19,5 @@ GenericName[pt_BR]=Ambiente de Desenvolvimento Integrado para a Programação em
 GenericName[ru]=Интегрированная среда разработки на интерпретируемых языках
 GenericName[sv]=Integrerad utvecklingsmiljö för utveckling med skriptspråk
 X-DCOP-ServiceType=Multi
-Categories=Qt;KDE;Development;IDE;
+Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 

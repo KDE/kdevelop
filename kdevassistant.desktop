@@ -52,5 +52,5 @@ GenericName[tg]=Аз назар бо ҳуҷҷатнок гузарондан
 GenericName[xx]=xxDocumentation Viewerxx
 GenericName[zh_CN]=文档查看器
 X-DCOP-ServiceType=Multi
-Categories=Qt;KDE;Development;Documentation;
+Categories=Qt;KDE;Development;Documentation;X-KDE-KDevelopIDE;
 

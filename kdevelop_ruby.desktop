@@ -21,5 +21,5 @@ GenericName[pt_BR]=Ambiente de Desenvolvimento Integrado para a Programação em
 GenericName[ru]=Интегрированная среда разработки на Ruby
 GenericName[sv]=Integrerad utvecklingsmiljö för Ruby-utveckling
 X-DCOP-ServiceType=Multi
-Categories=Qt;KDE;Development;IDE;
+Categories=Qt;KDE;Development;IDE;X-KDE-KDevelopIDE;
 
