@@ -1,3 +1,8 @@
+1999-03-23 Jonas Nordin <jonas.nordin@cenacle.se>
+	* added new classtool dialog inspired from ISE Eiffel.
+	* fixed the ClassParser. Seems to handle the Qt includes now.
+	* added a documentation field to the attribute and method dialogs.
+	
 1999-03-23  Pascal Krahmer <pascal@beast.de>
         * added tab "items" for kdlgedit
         * some stuff in kdevelop/kdlgedit/*
