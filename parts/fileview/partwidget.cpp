@@ -135,5 +135,9 @@ void PartWidget::slotBtnFilterClick()
     }
 }
 
+void PartWidget::focusInEvent( QFocusEvent * )
+{
+    m_filetree->setFocus();
+}
 
 #include "partwidget.moc"

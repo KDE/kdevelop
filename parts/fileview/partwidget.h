@@ -30,6 +30,9 @@ public:
 
     void showProjectFiles();
 
+protected:
+    virtual void focusInEvent( QFocusEvent * );
+
 private slots:
     void slotFilterChange( const QString & nf );
     void slotBtnFilterClick();
