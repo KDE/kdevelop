@@ -1888,6 +1888,7 @@ QString KWriteDoc::getWord(PointStruc &cursor) {
   int start, end, len, z;
 
   textLine = contents.at(cursor.y);
+	if (!textLine) return QString();
   len = textLine->length();
   start = end = cursor.x;
   while (start > 0 && highlight->isInWord(textLine->getChar(start - 1)))
