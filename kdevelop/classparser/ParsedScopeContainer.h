@@ -59,7 +59,7 @@ public: // Public queries
    *
    * @param aName Name of the scope to check for.
    */
-  inline bool hasScope( const char *aName );
+  bool hasScope( const char *aName );
 
   /**
    * Fetch a scope by using it's name.
