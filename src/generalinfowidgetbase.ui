@@ -166,7 +166,7 @@
                 <cstring>project_directory_edit</cstring>
             </property>
         </widget>
-        <widget class="QLabel" row="1" column="2" rowspan="1" colspan="3">
+        <widget class="KSqueezedTextLabel" row="1" column="2" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>project_directory_diagnostic_label</cstring>
             </property>
@@ -188,6 +188,7 @@
 </images>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
+    <include location="global" impldecl="in declaration">ksqueezedtextlabel.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
