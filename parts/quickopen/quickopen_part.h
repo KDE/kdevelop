@@ -38,12 +38,14 @@ private slots:
     void slotProjectClosed();
     void slotQuickFileOpen();
     void slotQuickOpenClass();
-	void slotQuickOpenFunction();
+    void slotQuickOpenFunction();
 
 private:
+    QString getWordInEditor();
+    
     KAction* m_actionQuickOpen;
     KAction* m_actionQuickOpenClass;
-	KAction* m_actionFunctionOpen;
+    KAction* m_actionFunctionOpen;
 };
 
 

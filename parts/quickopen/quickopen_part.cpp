@@ -26,10 +26,17 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <klineedit.h>
 #include <kdevgenericfactory.h>
 #include <kdevplugininfo.h>
 
 #include <kmainwindow.h>
+
+#include <kparts/part.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/popupmenuinterface.h>
+#include <ktexteditor/editinterface.h>
+#include <ktexteditor/selectioninterface.h>
 
 #include <kdevmainwindow.h>
 #include <kdevcore.h>
@@ -39,6 +46,8 @@
 typedef KDevGenericFactory<QuickOpenPart> QuickOpenFactory;
 static const KDevPluginInfo data("kdevquickopen");
 K_EXPORT_COMPONENT_FACTORY( libkdevquickopen, QuickOpenFactory( data ) )
+
+using namespace KTextEditor;
 
 QuickOpenPart::QuickOpenPart(QObject *parent, const char *name, const QStringList& )
     : KDevPlugin(&data, parent, name ? name : "QuickOpenPart" )
@@ -86,14 +95,55 @@ void QuickOpenPart::slotQuickFileOpen( )
 
 void QuickOpenPart::slotQuickOpenClass( )
 {
-    QuickOpenClassDialog dlg( this, mainWindow()->main() );
+    QuickOpenClassDialog dlg( this, mainWindow()->main() );    
+    dlg.nameEdit->setText(getWordInEditor());
     dlg.exec();
 }
 
 void QuickOpenPart::slotQuickOpenFunction()
 {
     QuickOpenFunctionDialog dlg( this, mainWindow()->main() );
+    dlg.nameEdit->setText(getWordInEditor());
     dlg.exec();
+}
+
+QString QuickOpenPart::getWordInEditor()
+{
+    KParts::ReadOnlyPart *
+        ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
+    if (!ro_part)
+        return "";
+    SelectionInterface *selectIface = dynamic_cast<SelectionInterface*>(ro_part);
+    ViewCursorInterface *cursorIface = dynamic_cast<ViewCursorInterface*>(ro_part->widget());
+    EditInterface *editIface = dynamic_cast<EditInterface*>(ro_part);
+    QString wordstr;
+    bool hasMultilineSelection = false;
+    if (selectIface && selectIface->hasSelection())
+    {
+        hasMultilineSelection = ( selectIface->selection().contains('\n') != 0 );
+        if (!hasMultilineSelection)
+            wordstr = selectIface->selection();
+    }
+    if (cursorIface && editIface)
+    {
+        uint line, col;
+        line = col = 0;
+        cursorIface->cursorPositionReal(&line, &col);
+        QString linestr = editIface->textLine(line);
+        if (wordstr.isEmpty() && !hasMultilineSelection)
+        {
+            int startPos = QMAX(QMIN((int)col, (int)linestr.length()-1), 0);
+            int endPos = startPos;
+            while (startPos >= 0 && 
+                    ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' ) )
+                startPos--;
+            while (endPos < (int)linestr.length() && 
+                    ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' ) )
+                endPos++;
+            wordstr = (startPos==endPos)? QString() : linestr.mid(startPos+1, endPos-startPos-1);
+        }
+    }
+    return wordstr;
 }
 
 #include "quickopen_part.moc"
