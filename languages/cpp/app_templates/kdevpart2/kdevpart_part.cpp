@@ -15,7 +15,7 @@ typedef KGenericFactory<%{APPNAME}Part> %{APPNAME}Factory;
 K_EXPORT_COMPONENT_FACTORY( libkdev%{APPNAMELC}, %{APPNAME}Factory( "kdev%{APPNAMELC}" ) );
 
 %{APPNAME}Part::%{APPNAME}Part(QObject *parent, const char *name, const QStringList& )
-  : KDevPlugin("KDevPart", "kdevpart", parent, name ? name : "%{APPNAME}Part" )
+  : KDevPlugin("%{APPNAME}", "%{APPNAMELC}", parent, name ? name : "%{APPNAME}Part" )
 {
   setInstance(%{APPNAME}Factory::instance());
   setXMLFile("kdevpart_%{APPNAMELC}.rc");
