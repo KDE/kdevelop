@@ -84,10 +84,10 @@ int MyFileTreeViewItem::compare( QListViewItem *i, int col, bool ascending ) con
     if (rhs)
     {
         if (rhs->isDir() && !isDir())
-            return 1;
+            return (ascending) ? 1 : -1;
         else
             if (!rhs->isDir() && isDir())
-                return -1;
+                return (ascending) ? -1 : 1;
     }
 
     return QListViewItem::compare( i, col, ascending );
