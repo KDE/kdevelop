@@ -37,9 +37,6 @@
             <property name="text">
                 <string>C&amp;apture output</string>
             </property>
-            <property name="accel">
-                <string>Alt+A</string>
-            </property>
             <property name="whatsThis" stdset="0">
                 <string>If this is checked, the output of the application will be shown in the application output view, otherwise all output will be ignored.</string>
             </property>

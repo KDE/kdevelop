@@ -12,9 +12,6 @@
             <height>212</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>IntegratorDlgBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -59,9 +56,6 @@
                     <property name="text">
                         <string>&amp;Init Local Repository...</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+I</string>
-                    </property>
                     <property name="autoDefault">
                         <bool>false</bool>
                     </property>
@@ -94,9 +88,6 @@
                     </property>
                     <property name="text">
                         <string>Login to &amp;Repository...</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
                     </property>
                     <property name="autoDefault">
                         <bool>false</bool>

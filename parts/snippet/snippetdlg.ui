@@ -51,9 +51,6 @@
                     <property name="text">
                         <string>&amp;Add</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                 </widget>
                 <widget class="KPushButton">
                     <property name="name">

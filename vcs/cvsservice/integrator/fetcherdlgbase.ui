@@ -96,9 +96,6 @@
             <property name="text">
                 <string>Fetch &amp;List</string>
             </property>
-            <property name="accel">
-                <string>Alt+L</string>
-            </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
             <property name="name">

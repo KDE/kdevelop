@@ -63,9 +63,6 @@
             <property name="text">
                 <string>&amp;Cancel</string>
             </property>
-            <property name="accel">
-                <string>Alt+C</string>
-            </property>
         </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
@@ -100,9 +97,6 @@
                                 <property name="text">
                                     <string>&amp;Application</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create an application</string>
                                 </property>
@@ -114,9 +108,6 @@
                                 <property name="text">
                                     <string>&amp;Library</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+L</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Create a library</string>
                                 </property>
@@ -127,9 +118,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Subdirectories</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+S</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>This project holds subdirectories</string>
@@ -310,9 +298,6 @@
                                 <property name="text">
                                     <string>St&amp;atic library</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -348,9 +333,6 @@
                                 <property name="text">
                                     <string>S&amp;hared library</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+H</string>
-                                </property>
                             </widget>
                         </grid>
                     </widget>
@@ -372,9 +354,6 @@
                                 <property name="text">
                                     <string>&amp;Qt</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+Q</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the Qt header files/library</string>
                                 </property>
@@ -385,9 +364,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Open&amp;GL</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+G</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the OpenGL (or Mesa) headers/libraries</string>
@@ -400,9 +376,6 @@
                                 <property name="text">
                                     <string>Ord&amp;ered</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Support required for X11 application or library</string>
                                 </property>
@@ -413,9 +386,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;STL</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+S</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="1">
@@ -439,9 +409,6 @@
                                 <property name="text">
                                     <string>&amp;Thread</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+T</string>
-                                </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires support for multi-threaded application or library.</string>
                                 </property>
@@ -453,9 +420,6 @@
                                 <property name="text">
                                     <string>RTT&amp;I</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+I</string>
-                                </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="1">
                                 <property name="name">
@@ -463,9 +427,6 @@
                                 </property>
                                 <property name="text">
                                     <string>E&amp;xceptions </string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+X</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="0" column="2">
@@ -540,9 +501,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Debug</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+D</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Set project to be built in debug mode</string>
@@ -1029,9 +987,6 @@
                                         <property name="text">
                                             <string>&amp;Add...</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+A</string>
-                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -1232,9 +1187,6 @@
                                 <property name="text">
                                     <string>&amp;Add...</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1242,9 +1194,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Remove</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+R</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -1254,9 +1203,6 @@
                                 <property name="text">
                                     <string>&amp;Edit</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
-                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1265,9 +1211,6 @@
                                 <property name="text">
                                     <string>Move U&amp;p</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+P</string>
-                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1275,9 +1218,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Move Dow&amp;n</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                             <spacer>
@@ -1612,9 +1552,6 @@
                                         <property name="text">
                                             <string>Move &amp;Up</string>
                                         </property>
-                                        <property name="accel">
-                                            <string>Alt+U</string>
-                                        </property>
                                     </widget>
                                     <widget class="KPushButton">
                                         <property name="name">
@@ -1717,9 +1654,6 @@
                                 <property name="text">
                                     <string>&amp;Add...</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
-                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1727,9 +1661,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Remove</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+R</string>
                                 </property>
                             </widget>
                             <widget class="KPushButton">
@@ -1739,9 +1670,6 @@
                                 <property name="text">
                                     <string>&amp;Edit</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
-                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1750,9 +1678,6 @@
                                 <property name="text">
                                     <string>Move U&amp;p</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+P</string>
-                                </property>
                             </widget>
                             <widget class="KPushButton">
                                 <property name="name">
@@ -1760,9 +1685,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Move Dow&amp;n</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                             <spacer>

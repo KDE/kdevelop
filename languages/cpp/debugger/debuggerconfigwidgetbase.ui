@@ -133,9 +133,6 @@ Note that its name has to be gdb, so you might have to create a symlink named gd
             <property name="text">
                 <string>Display static &amp;members</string>
             </property>
-            <property name="accel">
-                <string>Alt+M</string>
-            </property>
             <property name="whatsThis" stdset="0">
                 <string>Displaying static members makes GDB slower in
 producing data within KDE and Qt.

@@ -15,9 +15,6 @@
             <height>218</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>ManageCustomBuildCommandsBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
