@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.1.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY kdevelop "<application>KDevelop</application>">
+  <!ENTITY kdevelop "<application>KDevelop 3</application>">
   <!ENTITY grep "<command>grep</command>">
   <!ENTITY egrep "<command>egrep</command>">
   <!ENTITY ctags "<command>ctags</command>">
@@ -16,6 +16,9 @@
   <!ENTITY perl "<application>Perl</application>">
   <!ENTITY php "<application>PHP</application>">
   <!ENTITY apache "<application>Apache</application>">
+  <!ENTITY Microsoft "<application>Microsoft</application>">
+  <!ENTITY Windows "<application>Windows</application>">
+  <!ENTITY Mac "<application>Mac</application>">
   <!ENTITY kappname "&kdevelop;">
   <!ENTITY % addindex "INCLUDE">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
@@ -24,156 +27,231 @@
 <book lang="&language;">
 
 <bookinfo>
-<title>&kdevelop; Documentation</title>
+  <title>&kdevelop; Documentation</title>
 
-<date>2002-11-25</date>
-<releaseinfo>3.0</releaseinfo>
+  <date>2002-11-25</date>
+  <releaseinfo>3.0</releaseinfo>
 
-<authorgroup>
-<author>
-<firstname>Bernd</firstname>
-<surname>Gehrmann</surname>
-<affiliation><address><email>bernd@kdevelop.org</email></address></affiliation>
-</author>
-<author>
-<firstname>Caleb</firstname>
-<surname>Tennis</surname>
-<affiliation><address><email>caleb@aei-tech.com</email></address></affiliation>
-</author>
-</authorgroup>
+  <authorgroup>
+    <author>
+      <firstname>Bernd</firstname>
+      <surname>Gehrmann</surname>
+      <affiliation>
+        <address><email>bernd@kdevelop.org</email></address>
+	  </affiliation>
+    </author>
 
-<copyright>
-<year>2002</year>
-<holder>Bernd Gehrmann</holder>
-</copyright>
-<copyright>
-<year>2002</year>
-<holder>Caleb Tennis</holder>
-</copyright>
+    <author>
+	  <firstname>Caleb</firstname>
+      <surname>Tennis</surname>
+      <affiliation>
+        <address><email>caleb@aei-tech.com</email></address>
+      </affiliation>
+    </author>
 
-<legalnotice>&FDLNotice;</legalnotice>
+    <author>
+      <firstname>Bernd</firstname>
+      <surname>Pol</surname>
+      <affiliation>
+        <address><email>bernd.pol@online.de</email></address>
+      </affiliation>
+    </author>
+  </authorgroup>
 
-<abstract>
-<para>This documentation describes the &kdevelop; Integrated
-Development Environment (Gideon)</para>
-</abstract>
+  <copyright>
+    <year>2002</year>
+    <holder>Bernd Gehrmann</holder>
+  </copyright>
+  <copyright>
+    <year>2002</year>
+    <holder>Caleb Tennis</holder>
+  </copyright>
 
-<keywordset>
-<keyword>KDE</keyword>
-<keyword>KDevelop</keyword>
-<keyword>IDE</keyword>
-<keyword>development</keyword>
-<keyword>programming</keyword>
-</keywordset>
+  <legalnotice>&FDLNotice;</legalnotice>
+
+  <abstract>
+    <para>This documentation describes the &kdevelop; Integrated Development
+    Environment</para>
+  </abstract>
+
+  <keywordset>
+    <keyword>KDE</keyword>
+    <keyword>KDevelop</keyword>
+    <keyword>IDE</keyword>
+    <keyword>development</keyword>
+    <keyword>programming</keyword>
+  </keywordset>
 
 </bookinfo>
 
-<chapter id="overview">
+<!-- ====================================================================== -->
+
+<chapter id="unixdev">
 <title>Overview: Development on UNIX</title>
 
-<para>
-From the beginning, UNIX has maintained two very different development
-paradigms. One is the world of system programming languages, where the source 
-code is compiled to machine code by a <emphasis>compiler</emphasis>. The 
-programming language C is an example for this. UNIX was the first operating 
-system kernel to be written in a high level language instead of assembler
-which was common before that time. The other paradigm is the world of
-scripting languages which began with the shell which was at the same time the 
-user's interface to the operating system and a very high level programming 
-language. Elementary building blocks in a shell script are small utility
-programs like <command>grep</command>, <command>sed</command>
-and <command>find</command> which do some tightly defined job and 
-which are connected to each other via pipes.
-</para>
+<sect1 id="history">
+<title>Some Historical Remarks</title>
 
 <para>
-As time has gone by, both worlds have evolved. While C is still used mainly as
-a system programming language, C++ as a variant of C enriched by 
-object-oriented and genericity extensions has found its place for the 
-development of complex applications in the 1990's. FORTRAN77 and Ada still
-have their stronghold in numerical applications. 
+From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
 </para>
+<para>
+The other paradigm is the world of <emphasis>scripting languages</emphasis>. This world evolved with the invention of the UNIX shell which was the user's interface to the operating system - and at the same time a very high level programming language. A shell script is built from a set of small utility programs like e.g. <command>grep</command>, <command>sed</command>, or <command>find</command>. Each such utility is designed for some tightly defined job. The trick is that any such utility can be connected to another one via a simple transport mechanism, called a <emphasis>pipe</emphasis>, which directs the output of the foregoing utility into the input of the next processed one. This makes up for a very powerful and highly flexible programming tool.
+</para>
+<para>
+As time has gone by, both worlds have evolved. While C is still used mainly as a system programming language, C++ as a variant of C enriched by object-oriented and genericity extensions has found its place for the development of complex applications in the 1990's. There are numerous other programming languages, even older ones keep their place - FORTRAN77 and Ada e.g. still have their stronghold in numerical applications.
+</para>
+</sect1> <!-- history -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="unixdev-scripting-languages">
+<title>Contemporary Scripting Languages</title>
+<para>
+In the scripting area, there has been a shift away from the shell, which suffers from portability concerns, to languages which unify all commonly needed functionality in their standard libraries, while still being able to interface to the outside through pipes when necessary.
+</para>
+<para>
+All these scripting languages have in common that they are widely portable between UNIX variants, &Microsoft; &Windows;, &Mac; OS or even VMS. Also, they all have implementations that are freely distributable.
+</para>
+
+<sect2 id="unixdev-SL-Perl">
+<title>Perl</title>
+<para>
+&perl; has become popular as a text processing and system administration language. In the beginning of the World Wide Web, CGI scripts written in &perl; were a widely used method to create dynamic web pages from databases. Today, this method has been replaced mostly by the <command>mod_perl</command> plugin for the &apache; web server. Among &perl;'s strengths are its built-in support for advanced regular expression matching and its rich archive of freely distributed modules, see: <ulink url="http://cpan.org">CPAN</ulink>.
+</para>
+</sect2>
+
+<sect2 id="unixdev-SL-Python">
+<title>Python</title>
+<para>
+&python; shines by the elegance of its class system and the ease and flexibility with which external libraries can be wrapped, in a way that they appear like standard &python; classes and functions. In contrast to &perl;, &python; has a clear and concise embedding API, which makes it the language of choice for making C and C++ programs scriptable.
+</para>
+</sect2>
+
+<sect2 id="unixdev-SL-PHP">
+<title>PHP</title>
+<para>
+&php; was invented as a language directly embeddable into HTML pages and consequently has its main uses in delivering dynamic content in the web.
+</para>
+</sect2>
+</sect1> <!-- ovwScriptL -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="unixdev-dcop">
+<title>The DCOP Interface</title>
 
 <para>
-In the scripting area, there has been a shift away from the shell, which suffers
-from portability concerns, to languages which unify all commonly needed
-functionality in their standard libraries, while still being able to interface
-to the outside through pipes when necessary. &perl; has become popular as a
-text processing and system administration language. In the beginning of the 
-World Wide Web, CGI scripts written in &perl; were a widely used method to
-create dynamic web pages from databases. Today, this method has been mostly
-replaced mostly by the <command>mod_perl</command> plugin for the
-&apache; web server. Among &perl;'s strengths are its built-in support for 
-advanced regular expression expression matching and its rich archive of
-freely distributed modules <ulink url="http://cpan.org">CPAN</ulink>.
+Another evolution on UNIX-like scripting is the <emphasis>DCOP</emphasis> protocol. DCOP stands for <emphasis>Desktop COmmunikation Protocol</emphasis> and is implemented as a simple IPC/RPC mechanism built to operate over sockets. In effect this provides facilities similar to the traditional UNIX pipe mechanism.
 </para>
-
+<para>Traditional shell scripting is based on fairly small tool programs which were designed to work on a strictly textual basis. DCOP allows elaborate graphical programs to communicate with each other in a quite similar way. This enables e.g. a KDE programm to send messages to another KDE program, or receive data from it for its own purposes.
+</para>
 <para>
-&python; shines by the elegance of its class system and the ease and
-flexibility with which external libraries can be wrapped, in a way that they
-appear like standard &python; classes and functions. In contrast to &perl;,
-&python; has a clear and concise embedding API, which makes it the language
-of choice for making C and C++ programs scriptable. &php; was invented as a
-language directly embeddable into HTML pages and consequently has its main
-uses in delivering dynamic content in the web.
+There are drawbacks, however. To use DCOP a program must be designed to contain a special DCOP interface. And the DCOP communication process runs somewhat slowly. Yet it returns much of the power and flexibility of UNIX scripting to high-level programs which are based on a graphical user interface.
 </para>
-
 <para>
-All these scripting languages have in common that they are widely portable
-between UNIX variants, &Microsoft; &Windows;, &Mac; OS or even VMS. Also,
-they all have implementations that are freely distributable.
+For more information, see <citetitle>The DCOP Desktop COmmunication Protocol library</citetitle> API reference of the KDE dcop library.
 </para>
+</sect1> <!--  unixdev-dcop -->
 
-<para>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-</para>
-
-
-<simplesect id="overview-buildsystems">
+<sect1 id="unixdev-buildsystems">
 <title>Build systems</title>
 
 <para>
-With a compiled language, the basic tools you need are the compiler (which 
-turns source code into object files) and the linker (which binds several
-object files and libraries together into one executable). When you have a
-large project consisting of possibly hundreds of source code files, the
-process of compiling may become quite laborsome. You do not want to recompile
-all files each time you have changed only some of them. Instead, you only want
-to compile those files which are affected by the changes. In general, it is
-not obvious which these are. When you change a function prototype in a 
-header file, you need to compile all files which include this header file.
+Except in very simple cases your programming project will consist of a lot of building blocks of source code each put into a separate file for easier maintenance. To make this running you have to effectively translate all this stuff into a few machine language units in a suiting format which allows the operating system to load and execute the program.
 </para>
-
 <para>
-A tool which takes care of recompilations is <command>make</command>.
-It takes as input a so-called <filename>Makefile</filename>, which declares
-some <emphasis>targets</emphasis>, the commands which are to be executed
-to "make" the target, and a set of <emphasis>dependencies</emphasis>. We
-cannot go into the details here. However, we recommend that you make yourself
-accustomed to the syntax of <command>make</command>. Even if you
-normally do not use it directly, an understanding of the fundamentals of
-the build system can be useful. See the <ulink url="info://make/Top">
-<citetitle>GNU Make Manual</citetitle></ulink>.
+To accomplish this, the basic tools you need are
+<itemizedlist>
+  <listitem><para>
+  a <emphasis>text editor</emphasis> to write the source code files,
+  </para></listitem>
+  <listitem><para>
+  a translating program, usually a <emphasis>compiler</emphasis> to turn the source code into object files,
+  </para></listitem>
+  <listitem><para>
+  a <emphasis>librarian</emphasis> which collects object files into libraries to reuse them easily without the need to recompile,
+  </para></listitem>
+  <listitem><para>
+  a <emphasis>linker</emphasis> which binds several object files and libraries together into one executable,
+  </para></listitem>
+  <listitem><para>
+  a <emphasis>make system</emphasis> which provides some means to manage all this stuff and - not to forget
+  </para></listitem>
+  <listitem><para>
+  a <emphasis>debugger</emphasis> to (hopefully) find all errors in the program and possibly some other diagnosis tools to get everything running smootly.
+  </para></listitem>
+</itemizedlist>
 </para>
+<para>
+When you have a large project consisting of possibly hundreds of source code files, the process of compiling may become quite laborsome. You do not want to recompile all files each time you have changed only some of them. Instead, you only want to compile those files which are affected by the changes. In general, it is not obvious which these are. When you e.g. change a function prototype in a header file, you need to compile every file which includes this header file.
+</para>
+<sect2 id="unixdev-buildsystems-make">
+<title>The Make Process</title>
+<para>
+A tool which takes care of recompilations is <command>make</command>. It keeps track of all work using a set of <emphasis>rules</emphasis> which describe what to do in case some piece of information (usually a source or object code file) was changed. All rules belonging to a certain project are stored in a so-called <filename>Makefile</filename> which is processed by <command>make</command> any time you want to update your work.
+</para>
+<para>
+Each rule consists of several building blocks, namely
+<itemizedlist>
+  <listitem><para>
+  a <emphasis>target</emphasis>, i.e. the file to be built
+  </para></listitem>
+  <listitem><para>
+  a set of <emphasis>dependencies</emphasis>, basically the names of those files the target depends on (e.g. the name of a source file, where then the target will be the name of the object file to be built) and
+  </para></listitem>
+  <listitem><para>
+  the <emphasis>commands</emphasis> which are to be executed to "make" the target (i.e. to compile it or to link other object files together to build an executable progam file).
+  </para></listitem>
+</itemizedlist>
+</para>
+<para>
+Basically the <command>make</command> command will read the rules one after another, check each file in the dependency list of a given target and make this target anew if any one of these files has changed, using the commands listed in that rule.
+</para>
+<para>
+There are several additional possibilities to control such a make process, and a <filename>Makefile</filename> can thus grow very complex. We cannot go into the details here. However, we recommend that you make yourself accustomed to the syntax of <command>make</command>. Even if you do not normally use it directly, an understanding of the fundamentals of the build system can be useful. See the <ulink url="info://make/Top"> <citetitle>GNU Make Manual</citetitle></ulink> for more information.
+</para>
+</sect2></sect1> <!-- unixdev-buildsystems -->
 
-</simplesect>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-
-<simplesect id="overview-guidevelopment">
+<sect1 id="unixdev-guidevelopment">
 <title>GUI Development</title>
 
 <para>
-Application developers become even more encumbered by having to not only create
-program libraries and logic, but also provide a easy to use custom built user
-interface that is both intuitive and functional.  Most programmers receive little
-to no training in GUI development, and as a result user interfaces are 
-<ulink url="http://www.rha.com/ui_hall_of_shame.htm">poorly designed</ulink>.
+Application developers become even more encumbered by having to not only create program libraries and logic, but also provide a easy to use custom built user interface that is both intuitive and functional.  Most programmers receive little to no training in GUI development, and as a result user interfaces are <ulink url="http://www.rha.com/ui_hall_of_shame.htm">poorly designed</ulink>.
 </para>
+<para>
+During the years some common design principles have evolved. It is strongly advised to adhere to them. This way your user interfaces will retain a common look and feel that the users of your application will gratefully appreciate.
+</para>
+<para>
+For KDE GUI development there is a style guide available. It is found in the <ulink url="http://developer.kde.org/documentation/standards/kde/style/basics/index.html">KDE User Interface Guidelines</ulink> on the KDE Developer's Corner page.
+</para>
+</sect1> <!-- unixdev-guidevelopment -->
 
-</simplesect>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-</chapter>
+<sect1 id="unixdev-ide">
+<title>Integrating Concepts and Tools: The IDE</title>
 
+<para>
+There are separate tools available for almost any step in the programming process - planning, editing, managing files and compilation processes, debugging, documentation and the like. But once the projects grow the programming process will most likely become quite cumbersome.
+</para>
+<para>
+Much repetitive work has to be done when designing, compiling, and debugging a program. A lot of work can be saved through the use of templates and scripts. And another lot by simple keeping the tools easily available and able to communicate with each other under a common GUI. E.g. it really does come in handy if a debugger were able to open the source file in question in an editor and place the cursor directly at the position of the bug just found.
+</para>
+<para>
+To more easily accomplish such a scheme, <emphasis>Integrated Development Environments</emphasis> (IDE) were devised. Such an IDE integrates all templates, tools, and scripts which are needed in the development process into one single environment.
+</para>
+<para>
+For the KDE platform &kdevelop; is such an IDE. It provides a wide range of tools which ease program development and maintenance, even for different programming languages and across platforms.
+</para>
+</sect1> <!-- unixdev-ide -->
+</chapter> <!-- unixdev -->
+
+<!-- ====================================================================== -->
 
 <chapter id="kdevelopoverview">
 <title>&kdevelop; Overview</title>
@@ -194,6 +272,7 @@ for details on how to obtain the &kdevelop; source code.
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="requirements">
 <title>&kdevelop; Requirements</title>
@@ -221,132 +300,136 @@ are available on most platforms as distribution packages and thereby can be inst
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 <sect1 id="compileandinstall">
 <title>&kdevelop; Compilation and Installation</title>
 <para>
 In order to compile and install &kdevelop; on your system, type the following in the base directory
 of the &kdevelop; distribution:
 </para>
-
+<!-- kbuildsycoca -->
 </sect1>
 
 </chapter>
 
+<!-- ====================================================================== -->
 
 <chapter id="userinterface">
 <title>Overview: &kdevelop;'s Features</title>
 
-<sect1 id="uimodes">
-<title>User Interface Modes</title>
+<sect1 id="uimodes-overview">
+<title>Availabe User Interface Modes</title>
 
 <para>
-&kdevelop; 3.0 offers developers four separate interface modes: <link linkend="mdi-desc">Multiple Document</link>,
-<link linkend="tabbed-desc">Tabbed Document</link>, <link linkend="toplevel-desc">Toplevel Window</link>
-, and <link linkend="ideal-desc">IDEAl</link>.
+&kdevelop; offers developers four separate user interface modes (click on the mode name to view an example):
+<itemizedlist>
+  <listitem>
+  <para><link linkend="mdi-desc">Child Frame Windows</link></para>
+  <itemizedlist>
+    <listitem><para>All tool views are initially docked to the mainframe.</para></listitem>
+    <listitem><para>Editor and browser views will live like toplevel windows within a view area of the mainframe.</para></listitem>
+  </itemizedlist>
+  </listitem>
+
+  <listitem>
+  <para><link linkend="tabbed-desc">Tabbed Pages</link></para>
+  <itemizedlist>
+    <listitem><para>
+	All tool views are initially docked to the mainframe.
+	</para></listitem>
+    <listitem><para>
+	Editor and browser views will be stacked in a tab window.
+	</para></listitem>
+  </itemizedlist>
+  </listitem>
+
+  <listitem>
+  <para><link linkend="toplevel-desc">Toplevel Windows</link></para>
+  <itemizedlist>
+    <listitem><para>
+	All editor, browser, and tool views will be toplevel windows directly on the desktop.
+	</para></listitem>
+    <listitem><para>
+	The main widget only contains the menu, toolbars, and statusbar.
+	</para></listitem>
+  </itemizedlist>
+  </listitem>
+
+  <listitem><para><link linkend="ideal-desc">IDEAl</link></para>
+  <para>
+  This is a novel user interface approach optimizing both work space and intuitive handling of the tools.
+  </para>
+  <itemizedlist>
+    <listitem><para>
+	All tool views are docked in a tabbar fashion around the mainframe area. They are grouped left, bottom, and right according to the services provided.
+	</para></listitem>
+    <listitem><para>
+	Editor and browser views will be stacked in a big sized tab window inmidst the mainframe area.
+	</para></listitem>
+  </itemizedlist>
+  </listitem>
+</itemizedlist>
 </para>
 
-<sect2 id="mdi-desc">
-<title>Multiple Document Interface (MDI)</title>
-
+<sect2 id="maximize-workspace">
+<title>How to maximize your work space area</title>
 <para>
+To maximize space, there is a full-screen window mode available which expands the mainframe area to the screen borders. Additional space can be reclaimed by hiding the menubar. And you can of course hide any toolbar as usual in <application>KDE</application> applications.
 </para>
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-mdi-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
-
-</sect2>
-
-
-<sect2 id="tabbed-desc">
-<title>Tabbed Document Mode</title>
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-tabbed-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
-
-<para>
-</para>
-
-</sect2>
-
-<sect2 id="toplevel-desc">
-<title>Toplevel Window Mode</title>
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-toplevel-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
-
-<para>
-</para>
-
-</sect2>
-
-<sect2 id="ideal-desc">
-<title>IDEAl Window Mode</title>
-
-<screenshot>
-<mediaobject>
-<imageobject>
-<imagedata fileref="gideon-ideal-mode.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Screenshot</phrase></textobject>
-</mediaobject></screenshot>
-
+<!-- ### Expand this: menus, short commands, toolbar icons -->
 </sect2>
 
 </sect1>
 
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 <sect1 id="parts">
 <title>Plugin Parts</title>
-<para>KDevelop 3.0 offers extensible modules, or parts, to be loaded at runtime and on demand.  This
-allows developers to only turn on features that they need or want for their development.
+
+<para>
+&kdevelop; offers extensible modules, or parts, to be loaded at runtime and on demand.  This allows developers to only turn on features that they need or want for their development.
 </para>
 
 <para>
-Some of the parts are considered global - that is, they effect the entire operation of &kdevelop;.
-For example, the uimode part allows a developer to select which user interface they wish to use.
+Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
 </para>
 
 <para>
-Other parts are project specfic, and are only utilized when a project of that type is loaded.  The
-Automake Manager, for example, only needs to be active when an Automake based project is currently
-loaded.  Otherwise, this part will not be active.
+Other parts are <link linkend="table-project-parts">project specfic</link>, and are only utilized when a project of that type is loaded.  The Automake Manager, for example, only needs to be active when an Automake based project is currently loaded.  Otherwise, this part will not be active.
 </para>
 
 <para>
-Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus,
-extra menu items, extra tool buttons, etc.
+Active parts can have many effects on &kdevelop;.  Depending on their function, they may add extra menus, extra menu items, extra tool buttons, etc.
 </para>
 
-<para>
-Globally, a project will rely on some form of project management system.  &kdevelop; offers four
-<link linkend="makesystems">project management systems</link>:
-</para>
-
-<table>
+<table id="table-project-parts">
 <title>Project Management Parts in &kdevelop;</title>
+
 <tgroup cols="2"><tbody>
-<row><entry>antproject</entry><entry>ANT Project Manager</entry></row>
-<row><entry>autoproject</entry><entry>Automake Project Manager</entry></row>
-<row><entry>customproject</entry><entry>Custom Project Manager</entry></row>
-<row><entry>trollproject</entry><entry>QMake based Project Manager</entry></row>
+<row>
+  <entry>antproject</entry>
+  <entry>ANT Project Manager (Java applications)</entry>
+</row>
+<row>
+  <entry>autoproject</entry>
+  <entry>Automake Project Manager</entry>
+</row>
+<row>
+  <entry>customproject</entry>
+  <entry>Custom Project Manager</entry>
+</row>
+<row>
+  <entry>trollproject</entry>
+  <entry>QMake based Project Manager</entry>
+</row>
 </tbody></tgroup>
 </table>
 
-<table>
+<table id="table-global-parts">
 <title>Global Parts in &kdevelop;</title>
+
 <tgroup cols="2"><tbody>
 <row><entry>Part Name</entry><entry>Description</entry></row>
 <row><entry>appwizard</entry><entry>New Project Wizard</entry></row>
@@ -412,38 +495,108 @@ Globally, a project will rely on some form of project management system.  &kdeve
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 <sect1 id="makesystems">
 <title>Project Management Systems</title>
 
-<sect2>
-<title>Automake Project</title>
+<para>
+Globally, a project will rely on some form of project management system.  &kdevelop; offers four <emphasis>project management systems</emphasis> the programmer can select from when creating a new project.
+
+<itemizedlist>
+  <listitem><para>
+  <link linkend="automake-project">Automake projects</link> use the GNU standard development tools.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="qmake-project">QMake projects</link> use the trolltech QMake project manager.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="ant-project">ANT projects</link> use the Apache ANT project manager for Jave development.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="custom-project">Custom projects</link> require you to maintain your own <filename>Makefiles</filename>.
+  </para></listitem>
+</itemizedlist>
+</para>
+
+<sect2 id="makesystems-distribution">
+<title>How to Distribute Your Application</title>
 
 <para>
-Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers 
-to use the GNU standard development tools. In opposition to the self-creation of Makefiles, 
-which have to be written anyway because of the project's complexity, those provide not only a better 
-way of Makefile generation but also a good and safe way to provide a fast adaption towards different 
-systems by autoconf-generated configure scripts. 
+The distribution of your applications does not require the end-user to have anything different installed other than
+<itemizedlist>
+  <listitem><para>an appropriate compiler,</para></listitem>
+  <listitem><para>a linker, and</para></listitem>
+  <listitem><para>the appropriate development libraries,</para></listitem>
+</itemizedlist>
 </para>
 <para>
-The distribution of your applications does not require the end-user to have anything different installed
-other than a C++ compiler and the appropriate development libraries, which is most often the case; but
-you can as well distribute binary packages of your application.  In either way, the end-user of your product
-does not have to have &kdevelop; installed.  For giving away your sources, we advise to include the 
-project file of &kdevelop; as well, as this makes it very easy for other developerss to work with your
-sources if they use KDevelop as well.  For projects where several developers, maybe working on different
-places, are involved, this should be the case anyway to ensure consistency of the Makefiles so you don't
-run into trouble.  Especially on multi language applications, translators won't actually work with the
-source code, except in cases that require correction for enabling translation support.
+which at least for C++ applications is most often the case. But you can as well distribute <emphasis>binary packages</emphasis> of your application.
+<!-- ### more detail on binary construction needed somewhere -->
+In either way, the end-user of your product does not need &kdevelop; installed.
+</para>
+<para>
+For giving away your sources, we advise to include the <emphasis>project file</emphasis> of &kdevelop; as well. This makes it very easy for other developers - if they use &kdevelop; - to work with your sources.
+</para>
+<para>
+For projects where s<emphasis>everal developers</emphasis>, maybe working on different places, are involved, this should be the case anyway. So you can ensure consistency of the <filename>Makefiles</filename> to not run into trouble.
+</para>
+<para>
+Especially on multi language applications, <emphasis>translators</emphasis> won't actually work with the source code, except in cases that require correction for enabling translation support.
 </para>
 
 </sect2>
 
-<sect2>
-<title>QMake Project</title>
+<sect2 id="automake-project">
+<title>Automake Project</title>
+
 <para>
-For developers who enjoy the flexibility and feel of Qt's qmake system, &kdevelop; offers the ability to
-handle qmake based projects (.pro files) within the GUI.
+Projects created with &kdevelop;'s Automake Project Manager make it very easy for developers to use the GNU standard development tools. They provide
+<itemizedlist>
+  <listitem><para>
+  a better way of <filename>Makefile</filename> generation and
+  </para></listitem>
+  <listitem><para>
+  a good and safe way for fast adaption towards different systems by autoconf-generated <filename>configure</filename> scripts.
+  </para></listitem>
+</itemizedlist>
+</para>
+</sect2>
+
+<sect2 id="qmake-project">
+<title>QMake Project</title>
+
+<para>
+For developers who enjoy the flexibility and feel of Qt's qmake system, &kdevelop; offers the ability to handle qmake based projects (.pro files) within the GUI.
+</para>
+<para>
+For more information on the QMake project manager see the <citetitle>qmake User Guide</citetitle> which should be included in your distribution or have a look at the <ulink url="http://doc.trolltech.com/">TROLLTECH Documentation</ulink> home page where you may find the QMake documentation of your <citetitle>Qt C++ GUI Application Development Toolkit</citetitle> version.
+</para>
+</sect2>
+
+<sect2 id="ant-project">
+<title>ANT project</title>
+
+<para>
+Java developers may want to use the Apache ANT project manager for their projects. To set up a new Ant project in &kdevelop; select <menuchoice><guimenu>Project</guimenu>
+<guimenuitem>New Project...</guimenuitem>
+<guimenuitem>Java</guimenuitem>
+<guimenuitem>Ant Project</guimenuitem>
+<guimenuitem>Application</guimenuitem></menuchoice>.
+</para>
+<para>
+For more information see <ulink url="http://ant.apache.org/">The Apache Ant Project</ulink> home page.
+</para>
+</sect2>
+
+<sect2 id="custom-project">
+<title>Custom Project</title>
+
+<para>
+If you prefer to maintain your own <filename>Makefiles</filename> for your project you may use the custom project option of &kdevelop;. This may be feasible in unusually structured projects or if you want to retain full control over the <command>make</command> process.
+</para>
+<para>
+Yet, if you do not <emphasis>really need</emphasis> the extra flexibility and control of the custom project manager you should consider Autoproject or one of the other project managers, because they considerably ease the program building and distribution processes.
 </para>
 </sect2>
 
@@ -451,6 +604,7 @@ handle qmake based projects (.pro files) within the GUI.
 
 </chapter>
 
+<!-- ====================================================================== -->
 
 <chapter id="appwizard">
 <title>Getting Started: The Application Wizard</title>
@@ -459,8 +613,46 @@ handle qmake based projects (.pro files) within the GUI.
 <title>New projects</title>
 
 <para>
-To create a new project in &kdevelop; 3.0, select <guimenuitem>New Project</guimenuitem> from the 
-<guimenu>Project</guimenu> menu.  You should see the New Project Wizard, as seen below:
+Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. (...)
+<!-- ### Expand: which procedures -->
+</para>
+<para>
+&kdevelop; provides an easy way to initiate a new programming project - the <emphasis>Application Wizard</emphasis>. You will find the Application Wizard at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
+</para>
+<para>
+Only a short series of steps is necessary to start a new programming project, using the Application Wizard:
+</para>
+<orderedlist>
+  <listitem><para>
+  Select the programming language you want to use and the type of the application you want to build from a set of predefined templates.
+  </para></listitem>
+  <listitem><para>
+  Supply some general information as application name, directory where the application shall be built, etc.
+  </para></listitem>
+  <listitem><para>
+  Decide whether you want to use a version control system, like e.g. CVS, and supply the necessary data if needed.
+  </para></listitem>
+  <listitem><para>
+  Set up some templates for initial header and source files (if applicable).
+  </para></listitem>
+  <listitem><para>
+  Finally tell Application Wizard to set up all initial directory structure, starting header/source file templates, and managment tools, like e.g. an initial make skeleton, etc.
+  </para></listitem>
+</orderedlist>
+<para>
+Voil&agrave; - that's all. Application Wizard will have provided you with a primary functional set of programming files, where you can readily start working.
+</para>
+<para>
+Let's look at all this in more detail now ...
+</para>
+
+<!-- ### Explain steps in detail -->
+
+<sect2 id="newprojects-start">
+<title>Initial Steps</title>
+
+<para>
+To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.  You should see the New Project Wizard, as seen below:
 </para>
 
 <figure id="screenshot-newprojectwizard" float="1">
@@ -471,11 +663,39 @@ To create a new project in &kdevelop; 3.0, select <guimenuitem>New Project</guim
 </figure>
 
 <para>
-Fill out the appropriate information, and select <guibutton>Next</guibutton>
+Fill in the appropriate information, and select <guibutton>Next</guibutton>
 </para>
+
+<sect3 id="newprojects-start-type">
+<title>Select Programming Language and Application Type</title>
+<para></para>
+</sect3>
+
+<sect3 id="newprojects-start-general">
+<title>Provide General Information</title>
+<para></para>
+</sect3>
+
+</sect2>
+
+<sect2 id="newprojects-start-cvs">
+<title>Supply Version System Information</title>
+<para></para>
+</sect2>
+
+<sect2 id="newprojects-start-templates">
+<title>Supply Header/Source Templates</title>
+<para></para>
+</sect2>
+
+<sect2 id="newprojects-start-build">
+<title>Build the Initial Project Files</title>
+<para></para>
+</sect2>
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="importing">
 <title>Importing existing projects</title>
@@ -496,6 +716,7 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="convertingold">
 <title>Converting old &kdevelop; project files</title>
@@ -509,7 +730,7 @@ This utility can be used to convert older &kdevelop; project files to 3.0 files.
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="editing">
 <title>Editing</title>
@@ -699,13 +920,14 @@ Redo
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="searchinggrepping">
 <title>Searching and grepping</title>
 <indexterm zone="searchinggrepping"><primary>searching</primary></indexterm>
 <indexterm zone="searchinggrepping"><primary>finding</primary></indexterm>
 
-<simplesect id="searching">
+<sect2 id="searching">
 <title>Searching for text</title>
 
 <para>
@@ -713,10 +935,10 @@ Redo
 <keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>- Replace
 </para>
 
-</simplesect>
+</sect2>
  
 
-<simplesect id="isearch">
+<sect2 id="isearch">
 <title>ISearch</title>
 <indexterm zone="isearch"><primary>isearch</primary></indexterm>
 <indexterm zone="isearch"><primary>incremental search</primary></indexterm>
@@ -724,18 +946,18 @@ Redo
 
 <para>
 The conventional search with <menuchoice><guimenu>Edit</guimenu>
-<guimenuitem>Find</guimenuitem></menuchoice> requires you to specify the full 
-search term before starting. Most of the time, it is much faster to search 
+<guimenuitem>Find</guimenuitem></menuchoice> requires you to specify the full
+search term before starting. Most of the time, it is much faster to search
 incrementally. If you click into the edit field labeled 
 <guilabel>ISearch</guilabel> in the toolbar, the search is performed as you 
 type. You will find that often the desired term is already found after typing
 in 3 or 4 letters.
 </para>
 
-</simplesect>
+</sect2>
 
 
-<simplesect id="grep">
+<sect2 id="grep">
 <title>Grep</title>
 <indexterm zone="grep"><primary>search</primary><secondary>in files</secondary></indexterm>
 
@@ -752,7 +974,7 @@ large) number of files is available through the
 In the dialog, you can specify which files are searched. There is a number of 
 wildcard patterns available in a combo box. In this way, you can easily
 restrict the find mechanism to header files. Furthermore, you specify a 
-directory where the search is started. If you check the 
+directory where the search is started. If you check the
 <guibutton>Recursive</guibutton> box, the search iterates through all 
 directories in the hierarchy below this one.
 </para>
@@ -855,10 +1077,11 @@ your editor, you may get some mismatches in the line number, or some found
 items will be invalid. You can avoid this by saving all files beforehand.
 </para>
 
-</simplesect>
+</sect2>
 
 </sect1>
-  
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="newfiles">
 <title>Creating new files and classes</title>
@@ -870,7 +1093,7 @@ items will be invalid. You can avoid this by saving all files beforehand.
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="filebrowsers">
 <title>The file browsers</title>
@@ -951,7 +1174,7 @@ be put below more specific ones. For example, an asterisk for the
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="classbrowser">
 <title>The class browser</title>
@@ -1015,6 +1238,7 @@ with an empty implementation.
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="classtools">
 <title>Class tools</title>
@@ -1026,6 +1250,7 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="classhierarchy">
 <title>Class hierarchy</title>
@@ -1037,9 +1262,48 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 
 </chapter>
 
+<!-- ====================================================================== -->
 
+<chapter id="documentation">
+<title>Documentation</title>
 
-<chapter id="docbrowser">
+<para>
+Documention unfortunately belongs to the most-overlooked programming issues. Yet, once properly set up and maintained internal and external documentation provides most valuable help.
+</para>
+<para>
+Documentation has multiple facets. There is
+<itemizedlist>
+  <listitem><para>
+  <emphasis>project internal documentation</emphasis>, mainly consisting of
+  <itemizedlist>
+    <listitem><para>
+	<emphasis>comments</emphasis> in header/source files
+	</para></listitem>
+    <listitem><para>
+	<emphasis>internal API documentation</emphasis> of your project generated from the program file by special tools, e.g. <application>Doxygen</application>
+	</para></listitem>
+  </itemizedlist>
+  </para></listitem>
+  <listitem><para>
+  <emphasis>project external documentation</emphasis>, comprising among others
+  <itemizedlist>
+	<listitem><para>
+	<emphasis>external API documentation</emphasis> of e.g. common system libraries (<application>KDE</application>, <application>Qt</application>, etc.)
+	</para></listitem>
+	<listitem><para>
+	any other documentation (programming language manuals, general system information, HowTo articles and the like)
+	</para></listitem>
+  </itemizedlist>
+  </para></listitem>
+</itemizedlist>
+</para>
+<para>
+All this documentation should be easily maintainable and ready at hand whenever you need it. &kdevelop; has provisions for just this.
+</para>
+
+<!-- ### doc browser, notes on internal documentation, how to profit from Doxygen -->
+
+<sect1 id="docbrowser">
 <title>The documentation browser</title>
 
 
@@ -1049,10 +1313,10 @@ view and choosing <guimenuitem>Class tool...</guimenuitem>.
 <imageobject><imagedata fileref="doctreeview.png"/></imageobject>
 </mediaobject>
 </figure>
-
+</sect1>
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="projectmanagement">
 <title>Building and Project management</title>
@@ -1064,7 +1328,7 @@ PHP work very differently.
 </para>
 
 <para>
-In <xref linkend="overview-buildsystems"/> we have given a rough overview of
+In <xref linkend="unixdev-buildsystems"/> we have given a rough overview of
 the build systems commonly in use on UNIX systems. We now give a detailed
 introduction into the project management modules supported by &kdevelop;
 The most important one is the <command>autoproject</command> plugin which
@@ -1075,7 +1339,7 @@ templates use this project management.
 
 <para>
 In addition, &kdevelop; contains the <command>customproject</command> plugin,
-which can be used for projects for which you maintain your own 
+which can be used for projects for which you maintain your own
 <filename>Makefiles</filename>, but also for projects that use the tool
 <command>ant</command> which is very common in the Java world, or projects
 using <command>qmake</command>.
@@ -1093,7 +1357,7 @@ using <command>qmake</command>.
 </para>
 
 
-<simplesect id="autoconf">
+<sect2 id="autoconf">
 <title>Autoconf</title>
 <indexterm zone="autoconf"><primary><filename>configure</filename> script</primary></indexterm>
 <indexterm zone="autoconf"><primary><filename>config.status</filename> script</primary></indexterm>
@@ -1143,19 +1407,19 @@ CXX = g++
 #define SIZEOF_INT 4
 </programlisting>
 
-</simplesect>
+</sect2>
 
 
-<simplesect id="automake">
+<sect2 id="automake">
 <title>Automake</title>
 
 <para>
 </para>
 
-</simplesect>
+</sect2>
 
 
-<simplesect id="automakemanager">
+<sect2 id="automakemanager">
 <title>KDevelop's automake manager</title>
 
 <figure id="screenshot-automakemanager" float="1">
@@ -1165,10 +1429,10 @@ CXX = g++
 </mediaobject>
 </figure>
 
-</simplesect>
+</sect2>
 
 
-<simplesect id="automakelibrary">
+<sect2 id="automakelibrary">
 <title>Building and installing libraries</title>
 
 <para>
@@ -1188,11 +1452,11 @@ CXX = g++
 </itemizedlist>
 </para>
 
-</simplesect>
+</sect2>
 
 </sect1>
 
-
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="customproject">
 <title>Custom Makefiles and build scripts</title>
@@ -1204,6 +1468,8 @@ CXX = g++
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 <sect1 id="compileroptions">
 <title>Compiler options</title>
 
@@ -1211,6 +1477,8 @@ CXX = g++
 </para>
 
 </sect1>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="makeoptions">
 <title>Make options</title>
@@ -1222,7 +1490,7 @@ CXX = g++
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="advancedautoproject">
 <title>Advanced autoproject usage</title>
@@ -1238,6 +1506,7 @@ CXX = g++
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="crosscompiling">
 <title>Cross-compiling</title>
@@ -1289,6 +1558,7 @@ For many combinations, you can use a short form, for instance
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id="qtembedded">
 <title>Qt/Embedded</title>
@@ -1356,7 +1626,7 @@ the autoproject project management, you have to add
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="debugger">
 <title>The debugger</title>
@@ -1476,6 +1746,7 @@ via the context menu.
 
 </sect1>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 <sect1 id ="debuggeroptions">
 <title>Options</title>
@@ -1530,7 +1801,8 @@ breakpoints.
 </sect1>
 
 </chapter> 
-  
+
+<!-- ====================================================================== -->
 
 <chapter id="python">
 <title>Python</title>
@@ -1540,7 +1812,7 @@ breakpoints.
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="php">
 <title>PHP</title>
@@ -1549,7 +1821,7 @@ breakpoints.
 </para>
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="cvs">
 <title>Using CVS</title>
@@ -1663,7 +1935,7 @@ SourceForge documentation.
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="externalprogs">
 <title>Leveraging external programs</title>
@@ -1691,7 +1963,7 @@ Other tools will be discussed in the chapter <xref linkend="plugintools"/>.
 
 </chapter>
 
-
+<!-- ====================================================================== -->
 
 <chapter id="plugintools">
 <title>Plugin Tools</title>
@@ -1897,9 +2169,147 @@ the content of the matched subgroups will be shown in a list box.
 
 </chapter>
 
+<!-- ====================================================================== -->
 
+<appendix id="app-uimodes-examples">
+<title>&kdevelop; User Interface Mode Examples</title>
 
-<appendix id="bibliography">
+<sect1 id="mdi-desc">
+<title>Child Frame Windows Mode</title>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-mdi-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+</sect1>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="tabbed-desc">
+<title>Tabbed Pages Mode</title>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-tabbed-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+</sect1>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="toplevel-desc">
+<title>Toplevel Windows Mode</title>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-toplevel-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+</sect1>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="ideal-desc">
+<title>IDEAl Mode</title>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="gideon-ideal-mode.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Screenshot</phrase></textobject>
+</mediaobject></screenshot>
+
+<para>
+Click <link linkend="uimodes-overview">here</link> to return to the modes overview.
+</para>
+
+</sect1>
+
+</appendix>
+
+<!-- ====================================================================== -->
+
+<appendix id="app-misc-info">
+<title>Further information</title>
+<sect1 id="gettinginformation">
+<title>Getting information</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="app-reporting-bugs">
+<title>Reporting bugs</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="app-licensing">
+<title>Licensing</title>
+&underFDL;
+&underGPL;
+</sect1>
+</appendix>
+
+<!-- ====================================================================== -->
+
+<appendix id="app-changelog">
+<title>Changes</title>
+<sect1 id="changes">
+<title>Changes to this document</title>
+<para>
+<itemizedlist>
+<listitem><para>
+2003-01-03 - Started this Changelog
+</para></listitem>
+</itemizedlist>
+</para>
+</sect1>
+</appendix>
+
+<!-- ====================================================================== -->
+
+<!--  Note (bp, 2003-09-04): <bibliography> should remain the last appendix section because of a (meinproc???) bug which sends the Next selection in circles back to it. -->
+
+<appendix id="app-bibliography">
 <title>Bibliography</title>
 
 <bibliography>
@@ -2048,46 +2458,13 @@ the content of the matched subgroups will be shown in a list box.
 </bibliography>
 
 <para>
+<!-- (dummy paragraph to get DTD right) -->
 </para>
 
 </appendix>
 
+<!-- ====================================================================== -->
 
+<index id="app-index"/>
 
-<appendix id="misc">
-<title>Further information</title>
-<sect1 id="gettinginformation">
-<title>Getting information</title>
-<para>
-</para>
-</sect1>
-
-<sect1 id="reportingbugs">
-<title>Reporting bugs</title>
-<para>
-</para>
-</sect1>
-
-<sect1 id="licensing">
-<title>Licensing</title>
-&underFDL;
-&underGPL;
-</sect1>
-</appendix>
-
-<appendix id="changelog">
-<title>Changes</title>
-<sect1 id="changes">
-<title>Changes to this document</title>
-<para>
-<itemizedlist>
-<listitem><para>
-2003-01-03 - Started this Changelog
-</para></listitem>
-</itemizedlist>
-</para>
-</sect1>
-</appendix>
-
-<index id="indexchapter"/>
 </book>
