@@ -79,6 +79,11 @@ class KDlgWidgets;
 class KDlgDialogs;
 class KDlgItems;
 
+class VarViewer;
+class DbgController;
+class FrameStack;
+class BreakpointManager;
+class Breakpoint;
 
 /** the mainclass in kdevelop
   *@author Sandy Meier
@@ -182,6 +187,7 @@ public:
     * @param enable if true than enable,otherwise disable
     */
   void setToolMenuProcess(bool enable);
+  void setDebugMenuProcess(bool enable);
 
   KDlgEditWidget* kdlg_get_edit_widget() { return kdlg_edit_widget; }
   KDlgPropWidget* kdlg_get_prop_widget() { return kdlg_prop_widget; }
@@ -339,12 +345,32 @@ public:
   void slotBuildStop();
   void slotBuildRun();
   void slotBuildRunWithArgs();
-  void slotBuildDebug();
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
-  
-  
+
+  /** Starts up the debugger, and gets it running. This may
+      instantiate a debugger if it doesn't exist */
+  void slotDebugRun();
+  /** Stops and kills the debugger */
+  void slotDebugStop();
+  /** display the given breakpoint*/
+  void slotDebugRefreshBPState(const Breakpoint* BP);
+  /** BP state has changed do something (maybe) */
+  void slotDebugBPState(Breakpoint* BP);
+   /** Dialog showing various views of the debugged program
+      memory, libraries, disassembled code */
+  void slotDebugMemoryView();
+  /** follows the source position in the editor of the debugger*/
+  void slotDebugShowStepInSource(const QString& filename,int linenumber);
+  /** follows the source position in the editor of the debugger*/
+  void slotDebugGoToSourcePosition(const QString& filename,int linenumber);
+  /** Shows the debugger status on the status line */
+  void slotDebugStatus(const QString& status, int statusFlag);
+  /** Shows the debugger output */
+  void slotDebugReceivedStdout(const char* buffer);
+
+
   ////////////////////////
   // TOOLS-Menu entries
   ///////////////////////
@@ -545,6 +571,8 @@ public:
 
   void slotApplReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotApplReceivedStderr(KProcess* proc,char* buffer,int buflen);
+  void slotApplReceivedStdout(const char* buffer);
+  void slotApplReceivedStderr(const char* buffer);
 
   void switchToKDevelop();
   void switchToKDlgEdit();
@@ -813,7 +841,9 @@ private:
   CRealFileView* real_file_tree;
   /** The documentation tree. */
   DocTreeView* doc_tree;
-  
+  /** The debugger's tree of local variable's */
+  VarViewer* var_viewer;
+ 
   /** Output from the compiler ... */
   COutputWidget* messages_widget;
   /** stdin and stdout output. */
@@ -865,10 +895,14 @@ private:
   int lasttab;
   QString lastfile;
 
+  // debugger additions
+  DbgController*      dbgController;
+  FrameStack*         frameStack;
+  BreakpointManager*  brkptManager;
+
+  /** debugger dialog */
+  COutputWidget* dbg_widget;
 };
 
 #endif
-
-
-
 

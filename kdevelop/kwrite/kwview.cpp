@@ -36,6 +36,8 @@
 
 int keys[] = {Key_1,Key_2,Key_3,Key_4,Key_5,Key_6,Key_7,Key_8,Key_9};
 
+const int GUTTER_SIZE=20;
+
 struct BufferInfo {
   void *user;
   int w;
@@ -96,6 +98,7 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
   kWriteDoc = doc;
 
   QWidget::setCursor(ibeamCursor);
+  setMouseTracking(true);   //dbg
   setBackgroundMode(NoBackground);
   setFocusPolicy(StrongFocus);
   move(2,2);
@@ -130,6 +133,18 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
 KWriteView::~KWriteView() {
   kWriteDoc->removeView(this);
   releaseBuffer(this);
+}
+
+bool KWriteView::event( QEvent *e )
+{
+  if ( e->type() == Event_KeyPress ){
+    QKeyEvent *k = (QKeyEvent *)e;
+    if ( k->key() == Key_Tab ){
+      keyPressEvent( k );
+      return true;
+    }
+  }
+  return QWidget::event( e );
 }
 
 void KWriteView::cursorLeft(VConfig &c) {
@@ -275,7 +290,11 @@ void KWriteView::changeXPos(int p) {
 
   dx = xPos - p;
   xPos = p;
-  if (QABS(dx) < width()) scroll(dx,0); else QWidget::update();
+  if (QABS(dx) < width()-GUTTER_SIZE)
+    scrollW(dx,0);
+  else
+    repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height());
+    //QWidget::update();
 }
 
 void KWriteView::changeYPos(int p) {
@@ -285,7 +304,11 @@ void KWriteView::changeYPos(int p) {
   yPos = p;
   startLine = yPos / kWriteDoc->fontHeight;
   endLine = (yPos + height() -1) / kWriteDoc->fontHeight;
-  if (QABS(dy) < height()) scroll(0,dy); else QWidget::update();
+  if (QABS(dy) < height())
+    scroll(0,dy);
+  else
+    repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height());
+    //QWidget::update();
 }
 
 
@@ -381,7 +404,9 @@ void KWriteView::insLine(int line) {
   }
 }
 
-void KWriteView::delLine(int line) {
+void KWriteView::delLine(int line)
+{
+  emit kWrite->deleteLine( line );
 
   if (line <= cursor.y && cursor.y > 0) {
     cursor.y--;
@@ -457,7 +482,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     w = kWrite->width() - 4;
     h = kWrite->height() - 4;
 
-    xMax = kWriteDoc->textWidth() - w;
+    xMax = kWriteDoc->textWidth() - w + GUTTER_SIZE;
     b = (xPos > 0 || xMax > 0);
     if (b) h -= 16;
     yMax = kWriteDoc->textHeight() - h;
@@ -480,7 +505,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
       cYPosMax = yPos + ((h - fontHeight)*2)/3;
     } else {*/
       cXPosMin = xPos + 4;
-      cXPosMax = xPos + w - 8;
+      cXPosMax = xPos + w - 8 - GUTTER_SIZE;
       cYPosMin = yPos;
       cYPosMax = yPos + (h - fontHeight);
 //    }
@@ -560,14 +585,13 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     }
 
     if (b) {
-      QWidget::update();
+      repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height(), false);
+
     } else {
       if (updateState > 0) paintTextLines(oldXPos,oldYPos);
 
       if (dx || dy) {
-        scroll(dx,dy);
-//        kapp->syncX();
-//        scroll2(dx - dx/2,dy - dy/2);
+        scrollW(dx,dy);
       } else if (cursorOn) paintCursor();
     }
   }
@@ -647,7 +671,11 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
   for (z = 0; z < updateState; z++) {
     line = updateLines[z];
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
-    bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h);
+//    bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h); //dbg
+    bitBlt(this,GUTTER_SIZE,line*h - yPos,drawBuffer,0,0,width(),h);
+    drawGutter(paint, line, h);
+    bitBlt(this,0,line*h - yPos,drawBuffer,0,0,GUTTER_SIZE,h);
+
   }
   paint.end();
 }
@@ -657,7 +685,8 @@ void KWriteView::paintCursor() {
 
   h = kWriteDoc->fontHeight;
   y = h*cursor.y - yPos;
-  x = cXPos - (xPos-2);
+  x = cXPos - (xPos-2) + GUTTER_SIZE;
+  if ( (x-2) < GUTTER_SIZE ) return;
 
   QPainter paint;
   if (cursorOn) {
@@ -668,12 +697,17 @@ void KWriteView::paintCursor() {
     paint.drawLine(x,y,x,h);
     paint.drawLine(x-2,y,x+2,y);
     paint.drawLine(x-2,h,x+2,h);
+    paint.end();
   } else {
-    paint.begin(drawBuffer);
-    kWriteDoc->paintTextLine(paint,cursor.y,cXPos - 2,cXPos + 3);
-    bitBlt(this,x - 2,y,drawBuffer,0,0,5,h);
+    if ( !drawBuffer->isNull() ){
+  //debug("===============================maximus BUG begin");
+      paint.begin(drawBuffer);
+  //debug("===============================maximus BUG end");
+      kWriteDoc->paintTextLine(paint,cursor.y,cXPos - 2, cXPos + 3);
+      bitBlt(this,x - 2,y,drawBuffer,0,0,5,h);
+      paint.end();
+    }
   }
-  paint.end();
 }
 
 void KWriteView::placeCursor(int x, int y, int flags) {
@@ -690,6 +724,12 @@ void KWriteView::focusInEvent(QFocusEvent *) {
 //  printf("got focus %d\n",cursorTimer);
 
   QString text=QApplication::clipboard()->text();
+  //dbg - start
+  kWrite->newCurPos();
+  kWrite->newStatus();
+  kWrite->newCaption();
+  kWrite->newUndo();
+  // dbg - end
   if (!cursorTimer) {
     cursorTimer = startTimer(500);
     cursorOn = true;
@@ -878,28 +918,41 @@ X      : cut
 
 void KWriteView::mousePressEvent(QMouseEvent *e) {
 
-  if (e->button() == LeftButton) {
+  if (e->x() <= GUTTER_SIZE)
+  {
+    placeCursor( 0, e->y(), 0 );
+    kWriteDoc->updateViews();
+    emit kWrite->gutterClick(QString(kWriteDoc->fileName()), cursor.y+1,
+                                e->button() == RightButton);
+    return;
+  }
+
+//dbg
+//  if (e->button() == LeftButton) {
+  QMouseEvent *ee = new QMouseEvent(Event_MouseButtonPress, QPoint(e->x()-GUTTER_SIZE, e->y()), QPoint(e->globalX(), e->globalY()), e->button(), e->state());
+
+  if (ee->button() == LeftButton) {
     int flags;
 
     flags = 0;
-    if (e->state() & ShiftButton) {
+    if (ee->state() & ShiftButton) {
       flags |= cfMark;
-      if (e->state() & ControlButton) flags |= cfMark | cfKeepSelection;
+      if (ee->state() & ControlButton) flags |= cfMark | cfKeepSelection;
     }
-    placeCursor(e->x(),e->y(),flags);
+    placeCursor(ee->x(),ee->y(),flags);
     scrollX = 0;
     scrollY = 0;
     if (!scrollTimer) scrollTimer = startTimer(50);
     kWriteDoc->updateViews();
   }
   if (e->button() == MidButton) {
-    placeCursor(e->x(),e->y(),0);
+    placeCursor(ee->x(),ee->y(),0);
     kWrite->paste();
   }
-  if (kWrite->popup && e->button() == RightButton) {
-    kWrite->popup->popup(mapToGlobal(e->pos()));
+  if (kWrite->popup && ee->button() == RightButton) {
+    kWrite->popup->popup(mapToGlobal(ee->pos()));
   }
-  kWrite->mousePressEvent(e);
+  kWrite->mousePressEvent(ee);
 }
 
 void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {
@@ -923,12 +976,20 @@ void KWriteView::mouseReleaseEvent(QMouseEvent *e) {
 
 void KWriteView::mouseMoveEvent(QMouseEvent *e) {
 
-  if (e->state() & LeftButton) {
+  if (e->x() <= GUTTER_SIZE) {
+    QWidget::setCursor(arrowCursor);
+    return;
+  }
+
+  QWidget::setCursor(ibeamCursor);
+  QMouseEvent *ee = new QMouseEvent(Event_MouseMove, QPoint(e->x()-GUTTER_SIZE, e->y()), QPoint(e->globalX(), e->globalY()), e->button(), e->state());
+
+  if (ee->state() & LeftButton) {
     int flags;
     int d;
 
-    mouseX = e->x();
-    mouseY = e->y();
+    mouseX = ee->x();
+    mouseY = ee->y();
     scrollX = 0;
     scrollY = 0;
     d = kWriteDoc->fontHeight;
@@ -950,7 +1011,7 @@ void KWriteView::mouseMoveEvent(QMouseEvent *e) {
     }
 
     flags = cfMark;
-    if (e->state() & ControlButton) flags |= cfKeepSelection;
+    if (ee->state() & ControlButton) flags |= cfKeepSelection;
     placeCursor(mouseX,mouseY,flags);
     kWriteDoc->updateViews(/*ufNoScroll*/);
   }
@@ -968,7 +1029,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   QPainter paint;
   paint.begin(drawBuffer);
 
-  xStart = xPos-2 + updateR.x();
+  xStart = xPos-2 + updateR.x() - GUTTER_SIZE;
   xEnd = xStart + updateR.width();
 
   h = kWriteDoc->fontHeight;
@@ -980,7 +1041,8 @@ void KWriteView::paintEvent(QPaintEvent *e) {
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
 //    if (cursorOn && line == cursor.y) paintCursor(paint,cXPos - xStart,h);
     bitBlt(this,updateR.x(),y,drawBuffer,0,0,updateR.width(),h);
-
+    drawGutter(paint, line, h);
+    bitBlt(this,0,y,drawBuffer,0,0,GUTTER_SIZE,h);
     line++;
     y += h;
   }
@@ -992,6 +1054,7 @@ void KWriteView::resizeEvent(QResizeEvent *) {
 //  printf("KWriteView::resize\n");
   resizeBuffer(this,width(),kWriteDoc->fontHeight);
   QWidget::update();
+  repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height(), false);
 }
 
 void KWriteView::timerEvent(QTimerEvent *e) {
@@ -1014,6 +1077,7 @@ KWBookmark::KWBookmark() {
 
 KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
   : QWidget(parent, name) {
+  stepLine = -1;  // dbg
   kWriteDoc = doc;
   kWriteView = new KWriteView(this,doc);
 
@@ -1996,11 +2060,16 @@ void KWrite::installBMPopup(QPopupMenu *p/*KWBookPopup *p*/) {
 void KWrite::setBookmark(int n) {
   KWBookmark *b;
 
-  while ((int) bookmarks.count() <= n) bookmarks.append(new KWBookmark());
+  while ((int) bookmarks.count() <= n)
+    bookmarks.append(new KWBookmark());
   b = bookmarks.at(n);
   b->xPos = kWriteView->xPos;
   b->yPos = kWriteView->yPos;
   b->cursor = kWriteView->cursor;
+
+  int line = b->cursor.y;
+  kWriteDoc->tagLines( line, line );
+  kWriteDoc->updateViews();
 }
 
 void KWrite::setBookmark() {
@@ -2049,7 +2118,17 @@ void KWrite::gotoBookmark(int n) {
 }
 
 void KWrite::clearBookmarks() {
+  for (int z = 0; z < (int) bookmarks.count(); z++)
+  {
+    KWBookmark *b = bookmarks.at(z);
+    if (b->cursor.y >= 0)
+    {
+      int line = b->cursor.y;
+      kWriteDoc->tagLines( line, line );
+    }
+  }
   bookmarks.clear();
+  kWriteDoc->updateViews();
 }
 
 void KWrite::updateBMPopup() {
@@ -2388,3 +2467,138 @@ void KWrite::resizeEvent(QResizeEvent *) {
 
 
 
+void KWriteView::scrollW(int dx, int dy)
+{
+  int x1, y1, x2, y2, w=width(), h=height();
+  if ( dx > 0 )
+  {
+    x1 = 0 + GUTTER_SIZE;
+    x2 = dx + GUTTER_SIZE;
+    w -= dx + GUTTER_SIZE;
+  }
+  else
+  {
+    x1 = -dx + GUTTER_SIZE;
+    x2 = 0 + GUTTER_SIZE;
+    w += dx - GUTTER_SIZE;
+  }
+  if ( dy > 0 )
+  {
+    y1 = 0;
+    y2 = dy;
+    h -= dy;
+  }
+  else
+  {
+    y1 = -dy;
+    y2 = 0;
+    h += dy;
+  }
+
+  if ( dx == 0 && dy == 0 )
+    return;
+
+  Display *dpy = x11Display();
+  GC gc = qt_xget_readonly_gc();
+  XSetGraphicsExposures( dpy, gc, TRUE );
+  XCopyArea( dpy, winId(), winId(), gc, x1, y1, w, h, x2, y2);
+  if ( dy )
+    XCopyArea( dpy, winId(), winId(), gc, 0, y1, GUTTER_SIZE-1, h, 0, y2);
+  XSetGraphicsExposures( dpy, gc, FALSE );
+
+  if ( dx )
+  {
+    x1 = (x2 == GUTTER_SIZE) ? w : GUTTER_SIZE;
+    repaint( x1, 0, width()-w, height(), TRUE );
+  }
+
+  if ( dy )
+  {
+    y1 = (y2 == 0) ? h : 0;
+    repaint( GUTTER_SIZE, y1, width()-GUTTER_SIZE, height()-h, TRUE );
+  }
+}
+
+void KWriteView::drawGutter(QPainter &paint, int line, int h)
+{
+  #include "pix/bookmark.xpm"
+  #include "pix/breakpoint.xpm"
+  #include "pix/breakpoint_gr.xpm"
+  #include "pix/breakpoint_bl.xpm"
+  #include "pix/ddd.xpm"
+
+  paint.fillRect(0, 0, GUTTER_SIZE-2, h, kapp->backgroundColor);
+  paint.setPen(white);
+  paint.drawLine(GUTTER_SIZE-2, 0, GUTTER_SIZE-2, h);
+  paint.setPen(QColor(kapp->backgroundColor).dark());
+  paint.drawLine(GUTTER_SIZE-1, 0, GUTTER_SIZE-1, h);
+
+  if (line < (int) kWriteDoc->contents.count())
+  {
+    // Look for a bookmark on this line
+    for (int z = 0; z < (int) kWrite->bookmarks.count(); z++)
+    {
+      KWBookmark* b = kWrite->bookmarks.at(z);
+      if (b->cursor.y == line)
+	      paint.drawPixmap( GUTTER_SIZE-14, h-17 , QPixmap(bookmark_xpm) );
+    }
+
+    // A breakpoint is on this line - draw it
+  	if ( kWriteDoc->textLine(line)->getBPId() != 0 )
+  	{
+			QPixmap bpPix;
+      if (!kWriteDoc->textLine(line)->isBPEnabled())
+        bpPix = QPixmap(breakpoint_gr_xpm);
+      else
+			  if (kWriteDoc->textLine(line)->isBPPending())
+				  bpPix = QPixmap(breakpoint_bl_xpm);
+        else
+  				bpPix = QPixmap(breakpoint_xpm);
+
+	    paint.drawPixmap( GUTTER_SIZE-14, h-17 , bpPix );
+    }
+
+    // This line is the position in source the debugger has stopped at.
+    if (kWrite->stepLine == line )
+      paint.drawPixmap( 0, h-13 , QPixmap(ddd_xpm) );
+  }
+}
+
+void KWrite::setBreakpoint( int line, int id, bool enabled, bool pending )
+{
+  TextLine *tx = kWriteDoc->textLine( line );
+  if ( tx == 0L )
+    return;
+  tx->setBPId( id, enabled, pending );
+  kWriteDoc->tagLines( line, line );
+  kWriteDoc->updateViews();
+}
+
+void KWrite::delBreakpoint( int line )
+{
+  TextLine *tx = kWriteDoc->textLine( line );
+  if ( tx == 0L )
+    return;
+  tx->delBPId();
+  kWriteDoc->tagLines( line, line );
+  kWriteDoc->updateViews();
+}
+
+void KWrite::setStepLine( int line )
+{
+  PointStruc cursor;
+  cursor.x = 0;
+  cursor.y = line;
+  stepLine = line;
+  kWriteView->updateCursor(cursor);
+  kWriteDoc->unmarkFound();
+  kWriteDoc->tagLines( line, line );
+  kWriteDoc->updateViews();
+}
+
+void KWrite::clearStepLine()
+{
+  kWriteDoc->tagLines( stepLine, stepLine );
+  stepLine = -1;
+  kWriteDoc->updateViews();
+}

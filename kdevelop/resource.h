@@ -58,6 +58,10 @@
 #define ID_EDIT_REPLACE             11090
 #define ID_EDIT_SEARCH_IN_FILES     11130
 
+#define ID_EDIT_RUN_TO_CURSOR	      11136
+#define ID_EDIT_STEP_OUT_OFF	      11137
+#define ID_EDIT_ADD_WATCH_VARIABLE  11138
+
 #define ID_EDIT_SPELLCHECK					11140
 
 #define ID_EDIT_INDENT             	11091
@@ -131,6 +135,14 @@
 #define ID_BUILD_CONFIGURE          14100
 #define ID_BUILD_DISTCLEAN          14110
 
+// The debugger entries
+#define ID_DEBUG_RUN                14320
+#define ID_DEBUG_STOP               14330
+#define ID_DEBUG_STEP               14340
+#define ID_DEBUG_NEXT               14350
+#define ID_DEBUG_RESTART            14360
+#define ID_DEBUG_BRKPT              14370
+#define ID_DEBUG_BREAK_INTO         14380
 
 ///////////////////////////////////////////////////////////////////
 // Classviewer popup entries 
@@ -301,6 +313,7 @@
 #define ID_STATUS_EMPTY             1004
 #define ID_STATUS_EMPTY_2           1005
 #define ID_STATUS_PROGRESS          1006
+#define ID_STATUS_DBG               1100
 
 ///////////////////////////////////////////////////////////////////
 // ID's for the statusbar

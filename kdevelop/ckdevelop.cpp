@@ -60,7 +60,12 @@
 #include "structdef.h"
 #include "vc/versioncontrol.h"
 
-
+#include "./dbg/vartree.h"
+#include "./dbg/gdbcontroller.h"
+#include "./dbg/brkptmanager.h"
+#include "./dbg/breakpoint.h"
+#include "./dbg/framestack.h"
+#include "./dbg/memview.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // FILE-Menu slots
@@ -758,6 +763,181 @@ void CKDevelop::slotBuildRunWithArgs(){
 	next_job = "run_with_args";
     }
 }
+
+void CKDevelop::slotDebugRun()
+{
+  if(!prj->getBinPROGRAM())
+    slotBuildMake();
+
+  if (!dbgController)
+  {
+    dbgController = new GDBController(var_viewer->varTree(), frameStack);
+
+    connect(  dbgController,    SIGNAL(rawGDBBreakpointList (char*)),
+              brkptManager,     SLOT(slotParseGDBBrkptList(char*)));
+    connect(  dbgController,    SIGNAL(rawGDBBreakpointSet(char*, int)),
+              brkptManager,     SLOT(slotParseGDBBreakpointSet(char*, int)));
+    connect(  dbgController,    SIGNAL(acceptPendingBPs()),
+              brkptManager,     SLOT(slotSetPendingBPs()));
+    connect(  dbgController,    SIGNAL(unableToSetBPNow(int)),
+              brkptManager,     SLOT(slotUnableToSetBPNow(int)));
+
+    connect(  dbgController,    SIGNAL(dbgStatus(const QString&,int)),
+              this,             SLOT(slotDebugStatus(const QString&,int)));
+    connect(  dbgController,    SIGNAL(showStepInSource(const QString&,int)),
+              this,             SLOT(slotDebugShowStepInSource(const QString&,int)));
+    connect(  dbgController,    SIGNAL(ttyStdout(const char*)),
+              this,             SLOT(slotApplReceivedStdout(const char*)));
+    connect(  dbgController,    SIGNAL(ttyStderr(const char*)),
+              this,             SLOT(slotApplReceivedStderr(const char*)));
+
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+    connect(  dbgController,    SIGNAL(rawData(const char*)),
+              this,             SLOT(slotDebugReceivedStdout(const char*)));
+#endif
+
+    connect(  brkptManager,     SIGNAL(publishBPState(Breakpoint*)),
+              dbgController,    SLOT(slotBPState(Breakpoint*)));
+
+    connect(  frameStack,       SIGNAL(selectFrame(int)),
+              dbgController,    SLOT(slotSelectFrame(int)));
+
+    connect(  var_viewer->varTree(),  SIGNAL(expandItem(VarItem*)),
+              dbgController,          SLOT(slotExpandItem(VarItem*)));
+    connect(  var_viewer->varTree(),  SIGNAL(expandUserItem(VarItem*, const QString&)),
+              dbgController,          SLOT(slotExpandUserItem(VarItem*, const QString&)));
+    connect(  var_viewer->varTree(),  SIGNAL(setLocalViewState(bool,int)),
+              dbgController,          SLOT(slotSetLocalViewState(bool,int)));
+
+    connect(  header_widget,    SIGNAL(runToCursor(const QString&, int)),
+              dbgController,    SLOT(slotRunUntil(const QString&, int)));
+
+    connect(  cpp_widget,       SIGNAL(runToCursor(const QString&, int)),
+              dbgController,    SLOT(slotRunUntil(const QString&, int)));
+
+    connect(  header_widget,    SIGNAL(stepOutOff()),
+              dbgController,    SLOT(slotStepOutOff()));
+
+    connect(  cpp_widget,       SIGNAL(stepOutOff()),
+              dbgController,    SLOT(slotStepOutOff()));
+
+    setDebugMenuProcess(true);
+
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    dbgController->slotStart(prj->getBinPROGRAM(), prj->getExecuteArgs());
+  }
+
+  // If there's BP's waiting to be set then do this now
+  brkptManager->slotSetPendingBPs();
+	
+  // and start the debugger going
+  dbgController->slotRun();
+}
+
+void CKDevelop::slotDebugStop()
+{
+  setDebugMenuProcess(false);
+  delete dbgController;
+  dbgController = 0;
+  brkptManager->reset();
+  frameStack->clear();
+  var_viewer->clear();
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  dbg_widget->clear();
+#endif
+  edit_widget->clearStepLine();
+  brkptManager->refreshBP(edit_widget->getName());
+}
+
+void CKDevelop::slotDebugShowStepInSource(const QString& filename,int linenumber)
+{
+  if (filename.isEmpty())
+  {
+    edit_widget->clearStepLine();
+  }
+  else
+  {
+    // The editor starts at line 0 but GDB starts at line 1. Fix that now!
+    switchToFile(filename);
+    edit_widget->clearStepLine();
+    edit_widget->setStepLine(linenumber-1);
+  }
+}
+
+void CKDevelop::slotDebugGoToSourcePosition(const QString& filename,int linenumber)
+{
+  switchToFile(filename,linenumber);
+}
+
+void CKDevelop::slotDebugRefreshBPState(const Breakpoint* BP)
+{
+  if (BP->hasSourcePosition() && (edit_widget->getName() == BP->filename()))
+  {
+    if (BP->isActionDie())
+    {
+      edit_widget->delBreakpoint(BP->lineNo()-1);
+      return;
+    }
+
+    // The editor starts at line 0 but GDB starts at line 1. Fix that now!
+    edit_widget->setBreakpoint(BP->lineNo()-1, -1/*BP->id()*/, BP->isEnabled(), BP->isPending() );
+  }
+}
+
+// All we need to do is make sure the display is uptodate.
+void CKDevelop::slotDebugBPState(Breakpoint* BP)
+{
+  slotDebugRefreshBPState(BP);
+}
+
+
+void CKDevelop::slotDebugMemoryView()
+{
+  MemoryView* memoryView = new MemoryView(this, "Memory view");
+  connect(  memoryView,     SIGNAL(disassemble(const QString&, const QString&)),
+            dbgController,  SLOT(slotDisassemble(const QString&, const QString&)));
+  connect(  memoryView,     SIGNAL(memoryDump(const QString&, const QString&)),
+            dbgController,  SLOT(slotMemoryDump(const QString&, const QString&)));
+  connect(  memoryView,     SIGNAL(registers()),
+            dbgController,  SLOT(slotRegisters()));
+  connect(  memoryView,     SIGNAL(libraries()),
+            dbgController,  SLOT(slotLibraries()));
+
+  connect(  dbgController,  SIGNAL(rawGDBMemoryDump(char*)),
+            memoryView,     SLOT(slotRawGDBMemoryView(char*)));
+  connect(  dbgController,  SIGNAL(rawGDBDisassemble(char*)),
+            memoryView,     SLOT(slotRawGDBMemoryView(char*)));
+  connect(  dbgController,  SIGNAL(rawGDBRegisters(char*)),
+            memoryView,     SLOT(slotRawGDBMemoryView(char*)));
+  connect(  dbgController,  SIGNAL(rawGDBLibraries(char*)),
+            memoryView,     SLOT(slotRawGDBMemoryView(char*)));
+
+  memoryView->exec();
+  delete memoryView;
+}
+
+void CKDevelop::slotDebugStatus(const QString& msg, int state)
+{
+  if (state)
+  {
+    if (state & (s_dbgNotStarted|s_appNotStarted))
+      statusBar()->changeItem(" ", ID_STATUS_DBG);
+    if (state & (s_appBusy|s_waitForWrite))
+      statusBar()->changeItem("A", ID_STATUS_DBG);
+    if (state & s_programExited)
+    {
+      statusBar()->changeItem("E", ID_STATUS_DBG);
+      edit_widget->clearStepLine();
+    }
+  }
+  else
+    statusBar()->changeItem("P", ID_STATUS_DBG);
+
+  if (!msg.isEmpty())
+    slotStatusMsg(msg);
+}
+
+/*
 void CKDevelop::slotBuildDebug(){
 
   if(!CToolClass::searchProgram("kdbg")){
@@ -786,6 +966,7 @@ void CKDevelop::slotBuildDebug(){
   swallow_widget->init();
   
 }
+*/
 
 void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram(make_cmd)){
@@ -2201,6 +2382,29 @@ void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
 //  stderr_widget->insertAt(str,x,y);
 }
 
+void CKDevelop::slotApplReceivedStdout(const char* buffer)
+{
+  slotApplReceivedStdout(0, (char*)buffer, strlen(buffer));
+}
+ 
+void CKDevelop::slotApplReceivedStderr(const char* buffer)
+{
+    slotApplReceivedStderr(0, (char*)buffer, strlen(buffer));
+}
+
+void CKDevelop::slotDebugReceivedStdout(const char* buffer)
+{
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  char* buf = (char*)buffer;
+  int buflen = strlen(buf);
+  if (*(buf+buflen-1) == '\n')
+    buflen--;
+
+  QString str(buf,buflen+1);
+  dbg_widget->insertLine(str);
+  dbg_widget->setCursorPosition(dbg_widget->numLines()-1,0);
+#endif
+}
 
 void CKDevelop::slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen){
   QString str(buffer,buflen+1);
@@ -2801,9 +3005,26 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_BUILD_REBUILD_ALL:
   	slotBuildRebuildAll();
   	break;
-  case ID_BUILD_DEBUG:
-    slotBuildDebug();
+//****************************  	
+  case ID_DEBUG_RUN:
+    slotDebugRun();
     break;
+  case ID_DEBUG_STEP:
+    dbgController->slotStepInto();
+    break;
+  case ID_DEBUG_NEXT:
+    dbgController->slotStepOver();
+    break;
+  case ID_DEBUG_STOP:
+    slotDebugStop();
+    break;
+  case ID_DEBUG_BREAK_INTO:
+    dbgController->slotBreakInto();
+    break;
+  case ID_DEBUG_BRKPT:    // change this name
+    slotDebugMemoryView();
+    break;
+//****************************  	
   case ID_BUILD_RUN:
     slotBuildRun();
     break;
@@ -2886,6 +3107,11 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_EDIT_REPLACE,                 			    i18n("Searchs and replace expression"))
 	ON_STATUS_MSG(ID_EDIT_SEARCH_IN_FILES,									i18n("Opens the search in files dialog to search for expressions over several files"))
 	
+	ON_STATUS_MSG(ID_EDIT_RUN_TO_CURSOR,                 		i18n("Run program to this cursor position"))
+	ON_STATUS_MSG(ID_EDIT_STEP_OUT_OFF,                     i18n("Run the program until this function/method ends"))
+	ON_STATUS_MSG(ID_EDIT_ADD_WATCH_VARIABLE,               i18n("Try to display this variable whenever the application execution is paused"))
+
+	
 	ON_STATUS_MSG(ID_EDIT_INDENT,														i18n("Moves the selection to the right"))
 	ON_STATUS_MSG(ID_EDIT_UNINDENT,													i18n("Moves the selection to the left"))
 	
@@ -2933,7 +3159,7 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_BUILD_RUN,                     			  i18n("Invokes make-command and runs the program"))
   ON_STATUS_MSG(ID_BUILD_RUN_WITH_ARGS,										i18n("Lets you set run-arguments to the binary and invokes the make-command"))
 
-  ON_STATUS_MSG(ID_BUILD_DEBUG,                   			  i18n("Invokes make and KDbg debugging the binary"))
+//  ON_STATUS_MSG(ID_DEBUG_RUN,                   			    i18n("Invokes make and KDbg debugging the binary"))
   ON_STATUS_MSG(ID_BUILD_DISTCLEAN,               			  i18n("Invokes make distclean and deletes all compiled files"))
   ON_STATUS_MSG(ID_BUILD_AUTOCONF,                			  i18n("Invokes automake and co."))
   ON_STATUS_MSG(ID_BUILD_CONFIGURE,               			  i18n("Invokes ./configure"))

@@ -41,6 +41,10 @@
 #include "cerrormessageparser.h"
 #include "grepdialog.h"
 
+#include "./dbg/vartree.h"
+#include "./dbg/framestack.h"
+#include "./dbg/brkptmanager.h"
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -57,7 +61,9 @@ CKDevelop::CKDevelop(bool witharg)
   beep=false; // no beep
   cv_decl_or_impl=true;
   file_open_list.setAutoDelete(TRUE);
-  
+
+  dbgController = 0;
+
   config = kapp->getConfig();
   kdev_caption=kapp->getCaption();
 
@@ -105,16 +111,29 @@ void CKDevelop::initView(){
 
 
   stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
-  stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
+//  stdin_stdout_widget->setFocusPolicy(QWidget::NoFocus);
   
   stderr_widget = new COutputWidget(kapp,o_tab_view);
   stderr_widget->setReadOnly(TRUE);
   stderr_widget->setFocusPolicy(QWidget::NoFocus);
 
+  frameStack = new FrameStack(o_tab_view);
+  frameStack->setFocusPolicy(QWidget::NoFocus);
+
+  brkptManager = new BreakpointManager(o_tab_view);
+  brkptManager->setFocusPolicy(QWidget::NoFocus);
+
   o_tab_view->addTab(messages_widget,i18n("messages"));
   o_tab_view->addTab(stdin_stdout_widget,i18n("stdout"));
   o_tab_view->addTab(stderr_widget,i18n("stderr"));
-  
+  o_tab_view->addTab(frameStack,i18n("frame stack"));
+  o_tab_view->addTab(brkptManager,i18n("breakpoint"));
+
+#if defined(GDB_MONITOR) || defined(DBG_MONITOR)
+  dbg_widget = new COutputWidget(kapp,o_tab_view);
+  o_tab_view->addTab(dbg_widget,i18n("debugger"));
+#endif
+
   ////////////////////////
   // Top Panner
   ////////////////////////
@@ -140,11 +159,14 @@ void CKDevelop::initView(){
   doc_tree = new DocTreeView(t_tab_view,"DOC");
   doc_tree->setFocusPolicy(QWidget::NoFocus);
 
+  var_viewer = new VarViewer(t_tab_view,"VAR");
+  var_viewer->setFocusPolicy(QWidget::NoFocus);
+
   t_tab_view->addTab(class_tree,i18n("CV"));
   t_tab_view->addTab(log_file_tree,i18n("LFV"));
   t_tab_view->addTab(real_file_tree,i18n("RFV"));
   t_tab_view->addTab(doc_tree,i18n("DOC"));
-
+  t_tab_view->addTab(var_viewer,i18n("VAR"));
 
   ////////////////////////
   // Right main window
@@ -393,7 +415,9 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( "Run_with_args", this, SLOT(slotBuildRunWithArgs() ), true, ID_BUILD_RUN_WITH_ARGS );
   
   accel->insertItem( i18n("Debug"), "BuildDebug", (unsigned int) 0);
-  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_BUILD_DEBUG );
+//  accel->connectItem("BuildDebug", this, SLOT(slotBuildDebug()), true, ID_BUILD_DEBUG );
+  accel->connectItem("BuildDebug", this, SLOT(slotDebugRun()), true,
+  ID_BUILD_DEBUG );
   
   accel->insertItem( i18n("DistClean"), "BuildDistClean", (unsigned int) 0);
   accel->connectItem("BuildDistClean",this, SLOT(slotBuildDistClean()), true, ID_BUILD_DISTCLEAN );
@@ -606,7 +630,7 @@ void CKDevelop::initMenuBar(){
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
   build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
-  build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
+  build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotDebugRun()),0,ID_DEBUG_RUN);
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
@@ -800,10 +824,20 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("make.xpm"),ID_BUILD_MAKE, false,i18n("Make"));
   toolBar()->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
-  toolBar()->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
   toolBar()->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
-  toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("stop_proc.xpm"),ID_BUILD_STOP, false,i18n("Stop"));
+
+  QFrame *separatorLineDbg= new QFrame(toolBar());
+  separatorLineDbg->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+  toolBar()->insertWidget(0,20,separatorLineDbg);
+
+  toolBar()->insertButton(Icon("dbgmemview.xpm"),ID_DEBUG_BRKPT, false,i18n("Memory view dialog"));
+  toolBar()->insertButton(Icon("dbgrun.xpm"),ID_DEBUG_RUN, false,i18n("Run/continue"));
+  toolBar()->insertButton(Icon("dbgstep.xpm"),ID_DEBUG_STEP, false,i18n("Step into"));
+  toolBar()->insertButton(Icon("dbgnext.xpm"),ID_DEBUG_NEXT, false,i18n("Step over"));
+  toolBar()->insertButton(Icon("dbgrestart.xpm"),ID_DEBUG_RESTART, false,i18n("Restart program"));
+  toolBar()->insertButton(Icon("dbgstop.xpm"),ID_DEBUG_STOP, false,i18n("Stop debugging"));
+  toolBar()->insertButton(Icon("dbgbreak.xpm"),ID_DEBUG_BREAK_INTO, false,i18n("Break into running program"));
 
   QFrame *separatorLine2= new QFrame(toolBar());
   separatorLine2->setFrameStyle(QFrame::VLine|QFrame::Sunken);
@@ -919,6 +953,11 @@ void CKDevelop::initStatusBar(){
   kdev_statusbar->changeItem("", ID_STATUS_EMPTY_2);
 
   kdev_statusbar->insertWidget(statProg,150, ID_STATUS_PROGRESS);
+
+  kdev_statusbar->insertItem("xx", ID_STATUS_DBG);
+  kdev_statusbar->changeItem("", ID_STATUS_DBG);
+  kdev_statusbar->setAlignment(ID_STATUS_DBG, AlignCenter);
+
   kdev_statusbar->insertItem("", ID_STATUS_MSG);
   kdev_statusbar->setInsertOrder(KStatusBar::RightToLeft);
   kdev_statusbar->setAlignment(ID_STATUS_INS_OVR, AlignCenter);
@@ -1072,6 +1111,35 @@ void CKDevelop::initConnections(){
   connect(&appl_process,SIGNAL(receivedStderr(KProcess*,char*,int)),
 	  this,SLOT(slotApplReceivedStderr(KProcess*,char*,int)) );
 
+	// Connect the breakpoint manager to monitor the bp setting - even
+	// when the debugging isn't running
+  // ... Must connect up both editors!!!!!
+  connect(  header_widget,  SIGNAL(gutterClick(const QString&,int,bool)),
+            brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int,bool)));
+  connect(  cpp_widget,     SIGNAL(gutterClick(const QString&,int,bool)),
+            brkptManager,   SLOT(slotToggleStdBreakpoint(const QString&,int,bool)));
+
+  connect(  var_viewer->varTree(),  SIGNAL(toggleWatchpoint(const QString&)),
+            brkptManager,           SLOT(slotToggleWatchpoint(const QString&)));
+
+  // Use this one as it just goes to the file/line pos
+  connect(  brkptManager,   SIGNAL(gotoSourcePosition(const QString&,int)),
+            this,           SLOT(slotDebugGoToSourcePosition(const QString&,int)));
+
+  // used when the BP _only_ needs to be displayed (i.e file (re)loaded into editor)
+  connect(  brkptManager,   SIGNAL(refreshBPState(const Breakpoint*)),
+            this,           SLOT(slotDebugRefreshBPState(const Breakpoint*)));
+
+  // used when the BP gets displayed or the state has changed so the display may
+  // need changing.
+  connect(  brkptManager,   SIGNAL(publishBPState(Breakpoint*)),
+            this,           SLOT(slotDebugBPState(Breakpoint*)));
+
+  // connect adding watch variable from the rmb in the editors
+  connect(  header_widget,          SIGNAL(addWatchVariable(const QString&)),
+            var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
+  connect(  cpp_widget,             SIGNAL(addWatchVariable(const QString&)),
+            var_viewer->varTree(),  SLOT(slotAddWatchVariable(const QString&)));
 }
 
 void CKDevelop::initProject(bool witharg){

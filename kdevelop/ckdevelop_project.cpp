@@ -148,6 +148,8 @@ bool CKDevelop::slotProjectClose(){
     stderr_widget->clear();
     kdlg_dialogs_view->clear();
 
+    slotDebugStop();
+
     kdlgedit->slotFileSave();
     
     kdlg_edit_widget->hide();

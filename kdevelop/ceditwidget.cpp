@@ -67,8 +67,11 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
   pop->insertItem(Icon("grep.xpm"),"",this,SLOT(slotGrepText()),0,ID_EDIT_SEARCH_IN_FILES);
   pop->insertItem(Icon("lookup.xpm"),"",this,SLOT(slotLookUp()),0,ID_HELP_SEARCH_TEXT);
   bookmarks.setAutoDelete(true);
-
-
+  pop->insertSeparator();
+  pop->insertItem(Icon("dbgrunto.xpm"),"Run to cursor",this,SLOT(slotRunToCursor()),0,ID_EDIT_RUN_TO_CURSOR);
+  pop->insertItem(Icon("dbgstepout.xpm"),"Step out off",this,SLOT(slotStepOutOff()),0,ID_EDIT_STEP_OUT_OFF);
+  pop->insertSeparator();
+  pop->insertItem(Icon("dbgwatchvar.xpm"),"",this,SLOT(slotAddWatchVariable()),0,ID_EDIT_ADD_WATCH_VARIABLE);
 }
 
 /*-------------------------------------- CEditWidget::~CEditWidget()
@@ -386,8 +389,13 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     pop->setItemEnabled(ID_HELP_SEARCH_TEXT, !str.isEmpty());
     pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES, !str.isEmpty());
 
+    pop->setItemEnabled(ID_EDIT_ADD_WATCH_VARIABLE, !str.isEmpty());  // TODO: only enable in debugger mode
+    pop->setItemEnabled(ID_EDIT_RUN_TO_CURSOR, true);	                // TODO: only enable in debugger mode
+    pop->setItemEnabled(ID_EDIT_STEP_OUT_OFF, true);	                // TODO: only enable in debugger mode
+
     pop->changeItem(Icon("grep.xpm"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
     pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
+    pop->changeItem(Icon("dbgwatchvar.xpm"),i18n("Watch: ") + str,ID_EDIT_ADD_WATCH_VARIABLE); // the lookup entry
 
     pop->popup(this->mapToGlobal(event->pos()));
   }
@@ -404,5 +412,22 @@ void CEditWidget::slotLookUp(){
 }
 void CEditWidget::slotGrepText(){
     emit grepText(searchtext);
+}
+
+// Support for debugging the current project
+#include <qfileinfo.h>
+
+void CEditWidget::slotRunToCursor(){
+    QFileInfo fi( getName() );
+    emit runToCursor(fi.fileName(), currentLine()+1);
+}
+
+void CEditWidget::slotStepOutOff(){
+    emit stepOutOff();
+}
+
+void CEditWidget::slotAddWatchVariable(){
+  if (!searchtext.isEmpty())
+    emit addWatchVariable(searchtext);
 }
 
