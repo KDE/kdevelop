@@ -823,24 +823,125 @@ void CKDevelop::slotBuildCompileFile(){
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
-void CKDevelop::slotBuildRun(){
-  slotBuildMake();
-  slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
-  beep=false;
-  next_job = "run";
+void CKDevelop::slotBuildRun()
+{
+  bool isDirty=isProjectDirty();
+  int qYesNoCancel=QMessageBox::Yes;
+
+  if (isDirty)
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
+                    i18n("Should the project be rebuild before starting the application?"),
+                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+
+  if (qYesNoCancel!=QMessageBox::Cancel)
+  {
+    beep=false;
+    prj->writeProject();
+    if (isDirty && qYesNoCancel==QMessageBox::Yes)
+    {
+      next_job = "run";
+      slotBuildMake();
+    }
+    else
+      slotStartRun();
+  }
 }
 
-void CKDevelop::slotBuildRunWithArgs(){
+void CKDevelop::slotBuildRunWithArgs()
+{
+  bool isDirty=isProjectDirty();
+  int qYesNoCancel=QMessageBox::Yes;
+
+  if (isDirty)
+    qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
+                    i18n("Should the project be rebuild before starting the application?"),
+                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+
+  if (qYesNoCancel!=QMessageBox::Cancel)
+  {
     QString args=prj->getExecuteArgs();
     CExecuteArgDlg argdlg(this,"Arguments",i18n("Execute with Arguments"),args);
-    if(argdlg.exec()){
+    if(argdlg.exec())
+    {
 	prj->setExecuteArgs(argdlg.getArguments());		
-	prj->writeProject();
-	slotBuildMake();
-	slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
 	beep=false;
-	next_job = "run_with_args";
+	prj->writeProject();
+        if (isDirty && qYesNoCancel==QMessageBox::Yes)
+        {
+          next_job = "run_with_args";
+          slotBuildMake();
+        }
+        else
+          slotStartRun();
     }
+  }
+}
+
+void CKDevelop::slotStartRun(bool bWithArgs)
+{
+  slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
+   // rest from the buildRun
+  appl_process.clearArguments();
+  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+
+  stdin_stdout_widget->clear();
+  stderr_widget->clear();
+
+  QString args = prj->getExecuteArgs();
+  QString program = prj->getBinPROGRAM().lower();
+
+
+  if(bWithArgs)
+  {
+    if(!args.isEmpty())
+    {
+     program = prj->getBinPROGRAM().lower()+" "+args;
+    }
+  }
+
+  // Warning: not every user has the current directory in his path !
+  if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c")
+  {
+  	o_tab_view->setCurrentTab(STDINSTDOUT);
+  	QString term = "xterm";
+  	QString exec_str = term + " -e sh -c './" +  program + "'";
+  	
+  	if(CToolClass::searchInstProgram("konsole"))
+        {
+          term = "konsole";
+  	}
+  	if(CToolClass::searchInstProgram("ksh"))
+        {
+          exec_str = term + " -e ksh -c './" + program +
+            ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
+  	}
+  	if(CToolClass::searchInstProgram("csh"))
+        {
+          exec_str = term +" -e csh -c './" + program +
+            ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
+  	}
+  	if(CToolClass::searchInstProgram("tcsh"))
+        {
+          exec_str =  term +" -e tcsh -c './" + program +
+            ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
+  	}
+  	if(CToolClass::searchInstProgram("bash"))
+        {
+          exec_str =  term +" -e bash -c './" + program +
+          ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
+  	}
+        appl_process << exec_str;
+        cerr << endl << "EXEC:" << exec_str;
+  }
+  else
+  {
+    appl_process << "./" + program;
+    cerr << endl << "EXEC:" << "./" +program;
+    o_tab_view->setCurrentTab(STDERR);
+  }
+
+  setToolMenuProcess(false);
+  appl_process.start(KProcess::NotifyOnExit,KProcess::All);
 }
 
 void CKDevelop::slotDebugActivator(int id)
@@ -1195,6 +1296,8 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
     if(!bKDevelop)
       switchToKDevelop();
 
+    beep=false;
+    prj->writeProject();
     if (isDirty && qYesNoCancel==QMessageBox::Yes)
     {
       if (bWithArgs)
@@ -3159,7 +3262,8 @@ void CKDevelop::slotProcessExited(KProcess* proc){
       next_job="";
     }
 
-    if (next_job == make_cmd){ // rest from the rebuild all
+    if (next_job == make_cmd)
+    { // rest from the rebuild all
       QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
       process.clearArguments();
       if(!prj->getMakeOptions().isEmpty()){
@@ -3176,88 +3280,45 @@ void CKDevelop::slotProcessExited(KProcess* proc){
 
     if (next_job == "debug"  && process.exitStatus() == 0)
     {
-      next_job = "";
       slotStartDebug();
+      next_job = "";
+      ready = false;
     }
 
     if (next_job == "debug_with_args"  && process.exitStatus() == 0)
     {
-      next_job = "";
       slotStartDebugRunWithArgs();
+      next_job = "";
+      ready = false;
     }
 
-    if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0){
-      // rest from the buildRun
-      appl_process.clearArguments();
-      QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-      stdin_stdout_widget->clear();
-      stderr_widget->clear();
-      QString args = prj->getExecuteArgs();
-      QString program = prj->getBinPROGRAM().lower();
+    if ((next_job == "run"  || next_job == "run_with_args") && process.exitStatus() == 0)
+    {
+      slotStartRun(next_job=="run_with_args");
+      next_job = "";
+      ready = false;
+    }
       
-      
-      if(next_job == "run_with_args"){
-	if(!args.isEmpty()){
-	  program = prj->getBinPROGRAM().lower() + " "+args;
-	}
-      }
-
-  // Warning: not every user has the current directory in his path !
-  if(prj->getProjectType() == "normal_cpp" || prj->getProjectType() == "normal_c"){
-  	o_tab_view->setCurrentTab(STDINSTDOUT);
-  	QString term = "xterm";
-  	QString exec_str = term + " -e sh -c './" +  program + "'";
-  	
-  	if(CToolClass::searchInstProgram("konsole")){
-  	  term = "konsole";
-  	}
-  	if(CToolClass::searchInstProgram("ksh")){
-  	  exec_str = term + " -e ksh -c './" + program +
-  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-  	}
-  	if(CToolClass::searchInstProgram("csh")){
-  	  exec_str = term +" -e csh -c './" + program +
-  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-  	}
-  	if(CToolClass::searchInstProgram("tcsh")){
-  	  exec_str =  term +" -e tcsh -c './" + program +
-  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";$<'";
-  	}
-  	if(CToolClass::searchInstProgram("bash")){
-  	  exec_str =  term +" -e bash -c './" + program +
-  	    ";echo \"\n" + QString(i18n("Press Enter to continue!")) + "\";read'";
-  	}
-  	appl_process << exec_str;
-  	cerr << endl << "EXEC:" << exec_str;
-	}
-  else{
-		appl_process << "./" + program;
-		cerr << endl << "EXEC:" << "./" +program;
-		o_tab_view->setCurrentTab(STDERR);
-  }
-  setToolMenuProcess(false);
-  appl_process.start(KProcess::NotifyOnExit,KProcess::All);
-  next_job = "";
-  ready = false;
-  }
-      
-    if (next_job == "refresh"){ // rest from the add projectfile
+    if (next_job == "refresh")
+    { // rest from the add projectfile
       refreshTrees();
     }
     next_job = "";
   }
-  else {
+  else
+  {
     result= i18n("*** process exited with error(s) ***\n");
     next_job = "";
-    
   }
+
   if (!result.isEmpty())
   {
      int x,y;
      messages_widget->cursorPosition(&x,&y);
      messages_widget->insertAt(result, x, y);
   }
-  if (ready){ // start the error-message parser
+  if (ready)
+  { // start the error-message parser
       QString str1 = messages_widget->text();
       
       if(error_parser->getMode() == CErrorMessageParser::MAKE){

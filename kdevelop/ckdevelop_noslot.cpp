@@ -112,6 +112,7 @@ bool CKDevelop::isProjectDirty()
     if (*filename!='\0' && CProject::getType(filename)!=DATA)
     {
       TEditInfo *actual_info=getInfoFromFilename(prjDir+filename);
+      QFileInfo src_info(prjDir + filename);
 
       if (actual_info)
       {
@@ -119,14 +120,13 @@ bool CKDevelop::isProjectDirty()
         if (actual_info->modified || bin_info.lastModified()<actual_info->last_modified)
           isClean=false;
       }
-      else
-      {
-        // here only the check if the file would be younger than the target file
-        //  i. e. the project binary
-        QFileInfo src_info(prjDir + filename);
-        if (bin_info.lastModified()<src_info.lastModified())
-          isClean=false;
-      }
+      /* here only the check if the file would be younger than the target file
+         i. e. the project binary
+         this should be checked always... even if the file is already loaded
+         so we can check if the source was modified outside the buffer
+      */
+      if (isClean && bin_info.lastModified()<src_info.lastModified())
+        isClean=false;
     }
   }
 

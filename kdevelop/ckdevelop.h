@@ -363,6 +363,7 @@ public:
   void slotBuildStop();
   void slotBuildRun();
   void slotBuildRunWithArgs();
+  void slotStartRun(bool bWithArgs=false);
   void slotBuildDebug(bool bWithArgs=false);
   void slotBuildDistClean();
   void slotBuildAutoconf();
