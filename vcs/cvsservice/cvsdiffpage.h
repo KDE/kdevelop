@@ -14,6 +14,7 @@
 
 #include "cvsservicedcopIface.h"
 #include <qwidget.h>
+#include "bufferedstringreader.h"
 
 class CvsJob_stub;
 class CvsService_stub;
@@ -44,6 +45,8 @@ public:
 private:
     //QTextEdit *m_diffText;
     DiffWidget *m_diffText;
+    BufferedStringReader m_outputBuffer;
+    QString m_diffString;
 
     CvsService_stub *m_cvsService;
     CvsJob_stub *m_cvsDiffJob;
