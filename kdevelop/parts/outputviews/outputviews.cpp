@@ -20,7 +20,8 @@
 #include "makewidget.h"
 #include "appoutputwidget.h"
 #include "outputviews.h"
-
+#include "KDevComponentManager.h"
+#include "kdeveditormanager.h"
 
 MakeView::MakeView(QObject *parent, const char *name)
     : KDevMakeFrontend(parent, name)
@@ -39,6 +40,17 @@ MakeView::~MakeView()
     delete m_dcop;
 }
 
+ProjectSpace* MakeView::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
+
+KDevMakeFrontend* MakeView::makeFrontend(){
+	return static_cast<KDevMakeFrontend*>(componentManager()->component("KDevMakeFrontend"));
+}
+
+KDevEditorManager* MakeView::editorManager(){
+	return static_cast<KDevEditorManager*>(componentManager()->component("KDevEditorManager"));
+}
 
 void MakeView::setupGUI()
 {
@@ -110,7 +122,7 @@ void AppOutputView::executeAppCommand(const QString &command)
 }
 
 
-void AppOutputView::stopButtonClicked()
+void AppOutputView::slotStopButtonClicked()
 {
     m_widget->stopButtonClicked();
 }

@@ -20,21 +20,25 @@
 #include "kdevactions.h"
 #include "projectspace.h"
 #include "kdevmakefrontend.h"
-
+#include "KDevComponentManager.h"
 
 CvsInterface::CvsInterface(QObject *parent, const char *name)
-    : KDevVersionControl(parent, name)
-{
+    : KDevVersionControl(parent, name){
     setInstance(CvsFactory::instance());
 }
 
+CvsInterface::~CvsInterface(){
+}
 
-CvsInterface::~CvsInterface()
-{}
+ProjectSpace* CvsInterface::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
 
+KDevMakeFrontend* CvsInterface::makeFrontend(){
+	return static_cast<KDevMakeFrontend*>(componentManager()->component("KDevMakeFrontend"));
+}
 
-QList<KAction> CvsInterface::kdevNodeActions(KDevNode *node)
-{
+QList<KAction> CvsInterface::kdevNodeActions(KDevNode *node){
     QList<KAction> list;
     
     if (node->inherits("KDevFileNode")) {

@@ -82,7 +82,7 @@ EditorManager::~EditorManager()
 
 /****************************************************************************/
 
-void EditorManager::configWidgetRequested(KDialogBase *dlg)
+void EditorManager::slotConfigWidgetRequested(KDialogBase *dlg)
 {
   QVBox *vbox = dlg->addVBoxPage(i18n("Editor"));
   (void) new EditorConfigWidget(vbox, "editor config widget");

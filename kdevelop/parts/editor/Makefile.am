@@ -1,5 +1,9 @@
 # Here resides the editor part.
-INCLUDES = -I$(top_srcdir)/kdevelop/lib/general $(all_includes)
+INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
+					 -I$(top_srcdir)/kdevelop/lib/ComponentManager \
+					 -I$(top_srcdir)/kdevelop/lib/ComponentManager/Components \
+					 -I$(top_srcdir)/kdevelop/lib/Interfaces \
+						$(all_includes)
 lib_LTLIBRARIES = libkdeveditorpart.la
 
 libkdeveditorpart_la_LDFLAGS =  \

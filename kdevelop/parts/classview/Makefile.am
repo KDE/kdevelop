@@ -1,11 +1,16 @@
 # Here resides the class view part.
 
-INCLUDES = -I$(top_srcdir)/kdevelop/lib/general -I$(top_srcdir)/kdevelop/lib/sourceinfo \
-					 -I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler $(all_includes)
+INCLUDES = 	-I$(top_srcdir)/kdevelop/lib/general \
+						-I$(top_srcdir)/kdevelop/lib/ComponentManager \
+						-I$(top_srcdir)/kdevelop/lib/ComponentManager/Components \
+						-I$(top_srcdir)/kdevelop/parts/SourceInfo \
+						-I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
+							$(all_includes)
 
 lib_LTLIBRARIES = libkdevclassview.la
 libkdevclassview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
-libkdevclassview_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
+libkdevclassview_la_LIBADD =	$(top_builddir)/kdevelop/lib/libkdevelop.la \
+															$(top_builddir)/kdevelop/parts/SourceInfo/libkdevsourceinfo.la
 
 libkdevclassview_la_SOURCES = main.cpp classview.cpp classactions.cpp classtreebase.cpp \
 			      classtreewidget.cpp classtoolwidget.cpp classtooldlg.cpp

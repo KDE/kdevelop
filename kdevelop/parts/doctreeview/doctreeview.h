@@ -17,6 +17,8 @@
 
 
 class DocTreeWidget;
+class ProjectSpace;
+class KDevEditorManager;
 
 class DocTreeView : public KDevComponent
 {
@@ -26,16 +28,21 @@ public:
     DocTreeView( QObject *parent=0, const char *name=0 );
     ~DocTreeView();
 
+   	ProjectSpace* projectSpace();
+   	KDevEditorManager* editorManager();
+   	
     // This is currently called by DocTreeViewConfigWidget if the
     // changes are accepted. Maybe this could be done through
     // the component system (but maybe not ;-)
     void configurationChanged() {};
 
+public slots:	
+	void slotProjectSpaceOpened();
+	void slotConfigWidgetRequested(KDialogBase*);
+
 protected:
     virtual void setupGUI();
-    virtual void configWidgetRequested(KDialogBase *dlg);
-    virtual void projectSpaceOpened();
-    
+
 private:
     QGuardedPtr<DocTreeWidget> m_widget;
     friend class DocTreeWidget;

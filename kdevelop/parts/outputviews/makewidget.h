@@ -17,7 +17,7 @@
 
 
 class MakeView;
-
+class KDevEditorManager;
 
 class MakeWidget : public ProcessView
 {

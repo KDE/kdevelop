@@ -27,7 +27,7 @@
 #include "classstore.h"
 #include "kdevlanguagesupport.h"
 #include "kdeveditormanager.h"
-
+#include "KDevComponentManager.h"
 
 ClassView::ClassView(QObject *parent, const char *name)
     : KDevComponent(parent, name)
@@ -47,6 +47,18 @@ ClassView::ClassView(QObject *parent, const char *name)
 ClassView::~ClassView()
 {
     delete m_classtree;
+}
+
+ClassStore* ClassView::classStore(){
+	return static_cast<ClassStore*>(componentManager()->component("KDevClassStore"));
+}
+
+KDevLanguageSupport* ClassView::languageSupport(){
+	return static_cast<KDevLanguageSupport*>(componentManager()->component("KDevLanguageSupport"));
+}
+
+KDevEditorManager* ClassView::editorManager(){
+	return static_cast<KDevEditorManager*>(componentManager()->component("KDevEditorManager"));
 }
 
 
@@ -102,7 +114,7 @@ void ClassView::setupPopup()
 }
 
 
-void ClassView::projectSpaceOpened()
+void ClassView::slotProjectSpaceOpened()
 {
     kdDebug(9003) << "ClassView::projetSpaceOpened()" << endl;
 
@@ -113,7 +125,6 @@ void ClassView::projectSpaceOpened()
 
     setupPopup();
 }
-
 
 void ClassView::updatedSourceInfo()
 {

@@ -50,8 +50,6 @@ public:
   /** Destructor for the fileclass of the application */
   ~EditorManager();
 
-  void configWidgetRequested(KDialogBase *dlg);
-
 //  void slotEventHandler(KDevEvent* event);
 
   /** initializes the document generally */
@@ -103,6 +101,8 @@ public slots:
   void slotEditFind();
   void slotEditFindNext();
   void slotEditReplace();
+
+	void slotConfigWidgetRequested(KDialogBase*);
 
 protected:
 	void setupGUI();

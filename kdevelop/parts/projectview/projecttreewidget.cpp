@@ -39,9 +39,8 @@ ProjectTreeWidget::ProjectTreeWidget(ProjectView *pPart)
   connect(this,SIGNAL(clicked(QListViewItem*)),this,SLOT(slotClicked(QListViewItem*)));
 }
 
-ProjectTreeWidget::~ProjectTreeWidget()
-{}
-
+ProjectTreeWidget::~ProjectTreeWidget(){
+}
 
 void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoint& p,int){
   kdDebug(9009) << "ProjectTreeWidget::slotRightButtonPressed" << endl;

@@ -17,7 +17,6 @@
 #include <qguardedptr.h>
 #include "kdevcomponent.h"
 
-
 class ClassTreeWidget;
 class ClassToolDialog;
 class HierarchyDialog;
@@ -26,7 +25,9 @@ class ClassListAction;
 class MethodListAction;
 class DelayedPopupAction;
 class ParsedClass;
-
+class KDevLanguageSupport;
+class KDevEditorManager;
+class ClassStore;
 
 class ClassView : public KDevComponent
 {
@@ -46,13 +47,19 @@ public:
     void registerHierarchyDialog(HierarchyDialog *dlg);
     void unregisterClassToolDialog(ClassToolDialog *dlg);
     void unregisterHierarchyDialog(HierarchyDialog *dlg);
-    
+		
+		ClassStore* classStore();
+		KDevLanguageSupport* languageSupport();
+		KDevEditorManager* editorManager();
+
 signals:
     void setLanguageSupport(KDevLanguageSupport *ls);
     
+public slots:	
+	void slotProjectSpaceOpened();
+
 protected:
     virtual void setupGUI();
-    virtual void projectSpaceOpened();
 
 private slots:
     void updatedSourceInfo();

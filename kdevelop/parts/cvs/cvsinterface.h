@@ -14,6 +14,8 @@
 
 #include "kdevversioncontrol.h"
 
+class ProjectSpace;
+class KDevMakeFrontend;
 
 class CvsInterface : public KDevVersionControl
 {
@@ -22,6 +24,8 @@ class CvsInterface : public KDevVersionControl
 public:
     CvsInterface( QObject *parent=0, const char *name=0 );
     ~CvsInterface();
+		ProjectSpace* projectSpace();
+		KDevMakeFrontend* makeFrontend();
 
 protected:
     virtual QList<KAction> kdevNodeActions(KDevNode *node);

@@ -16,6 +16,8 @@
 #include "kdevnodes.h"
 
 class ProjectTreeWidget;
+class ProjectSpace;
+class KDevEditorManager;
 
 class ProjectView : public KDevComponent
 {
@@ -24,6 +26,8 @@ class ProjectView : public KDevComponent
 public:
     ProjectView( QObject *parent=0, const char *name=0 );
     ~ProjectView();
+    ProjectSpace* projectSpace();
+ 		KDevEditorManager* editorManager();
 
     enum ItemType { Scope, Class, Struct,
                     PublicAttr, ProtectedAttr, PrivateAttr,
@@ -33,10 +37,12 @@ public:
 
     QList<KAction>* assembleKDevNodeActions(KDevNode* pNode);
 
+public slots:	
+	void slotProjectSpaceOpened();
+	void slotProjectSpaceClosed();
+
 protected:
     virtual void setupGUI();
-    virtual void projectSpaceOpened();
-    virtual void projectSpaceClosed();
 
 private slots:
     void addedFileToProject(KDevFileNode* pNode);

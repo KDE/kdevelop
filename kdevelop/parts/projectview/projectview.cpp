@@ -19,6 +19,8 @@
 #include "projectview.h"
 #include "projecttreewidget.h"
 #include "projectspace.h"
+#include "KDevComponentManager.h"
+#include "kdeveditormanager.h"
 
 ProjectView::ProjectView(QObject *parent, const char *name)
     : KDevComponent(parent, name){
@@ -31,6 +33,13 @@ ProjectView::~ProjectView(){
     delete m_pProjectTree;
 }
 
+KDevEditorManager* ProjectView::editorManager(){
+	return static_cast<KDevEditorManager*>(componentManager()->component("KDevEditorManager"));
+}
+
+ProjectSpace* ProjectView::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
 
 void ProjectView::setupGUI(){
     kdDebug(9009) << "Building ProjectTreeWidget" << endl;
@@ -44,7 +53,7 @@ void ProjectView::setupGUI(){
 
 }
 
-void ProjectView::projectSpaceOpened()
+void ProjectView::slotProjectSpaceOpened()
 {
     kdDebug(9009) << "projectSpaceOpened" << endl;
     ProjectSpace *ps = projectSpace();
@@ -60,7 +69,7 @@ void ProjectView::projectSpaceOpened()
              this, SLOT(addedProject(KDevNode*)) );
 }
 
-void ProjectView::projectSpaceClosed()
+void ProjectView::slotProjectSpaceClosed()
 {
     m_pProjectTree->writeProjectSpaceGlobalConfig();
     m_pProjectTree->clear();

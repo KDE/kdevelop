@@ -22,6 +22,8 @@
 #include "grepwidget.h"
 #include "grepconfigwidget.h"
 #include "main.h"
+#include "KDevComponentManager.h"
+#include "kdeveditormanager.h"
 
 
 GrepView::GrepView(QObject *parent, const char *name)
@@ -39,6 +41,13 @@ GrepView::~GrepView()
     delete m_widget;
 }
 
+ProjectSpace* GrepView::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
+
+KDevEditorManager* GrepView::editorManager(){
+	return static_cast<KDevEditorManager*>(componentManager()->component("KDevEditorManager"));
+}
 
 void GrepView::setupGUI()
 {
@@ -70,21 +79,21 @@ void GrepView::setupGUI()
 }
 
 
-void GrepView::configWidgetRequested(KDialogBase *dlg)
+void GrepView::slotConfigWidgetRequested(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
     (void) new GrepConfigWidget(vbox, "grep config widget");
 }
 
 
-void GrepView::stopButtonClicked()
+void GrepView::slotStopButtonClicked()
 {
     kdDebug(9001) << "GrepView::stopButtonClicked()" << endl;
     m_widget->killJob();
 }
 
 
-void GrepView::projectSpaceOpened()
+void GrepView::slotProjectSpaceOpened()
 {
     kdDebug(9001) << "GrepView::projectSpaceOpened()" << endl;
     m_widget->setProjectSpace(projectSpace());
@@ -100,7 +109,7 @@ void GrepView::projectSpaceOpened()
 }
 
 
-void GrepView::projectSpaceClosed()
+void GrepView::slotProjectSpaceClosed()
 {
 #if 0
     kdDebug(9001) << "GrepView::writeProjectSpaceUserConfig" << endl;

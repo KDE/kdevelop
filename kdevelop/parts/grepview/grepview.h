@@ -17,6 +17,8 @@
 
 
 class GrepWidget;
+class ProjectSpace;
+class KDevEditorManager;
 
 class GrepView : public KDevComponent
 {
@@ -25,13 +27,17 @@ class GrepView : public KDevComponent
 public:
     GrepView( QObject *parent=0, const char *name=0 );
     ~GrepView();
+   	ProjectSpace* projectSpace();
+   	KDevEditorManager* editorManager();
+
+public slots:	
+	void slotProjectSpaceOpened();
+	void slotProjectSpaceClosed();
+	void slotStopButtonClicked();
+	void slotConfigWidgetRequested(KDialogBase*);
 
 protected:
     virtual void setupGUI();
-    virtual void configWidgetRequested(KDialogBase *dlg);
-    virtual void stopButtonClicked();
-    virtual void projectSpaceOpened();
-    virtual void projectSpaceClosed();
 
 private:
     QGuardedPtr<GrepWidget> m_widget;

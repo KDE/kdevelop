@@ -23,6 +23,8 @@ class ClassStore;
 class CClassParser;
 class KDevFileNode;
 class ProjectSpace;
+class KDevEditorManager;
+class ClassStore;
 
 class CppSupport : public KDevLanguageSupport
 {
@@ -31,10 +33,15 @@ class CppSupport : public KDevLanguageSupport
 public:
     CppSupport( QObject *parent=0, const char *name=0 );
     ~CppSupport();
+		
+		ClassStore* classStore();
+		ProjectSpace* projectSpace();
+		KDevEditorManager* editorManager();
+
+public slots:	
+	void slotProjectSpaceOpened();
 
 protected:
-    virtual void projectSpaceOpened();
-
     virtual bool hasFeature(Features feature);
     virtual void newClassRequested();
     virtual void addMethodRequested(const QString &className);

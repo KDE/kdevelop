@@ -20,14 +20,19 @@
 
 class MakeWidget;
 class ProjectSpace;
+class KDevMakeFrontend;
+class KDevEditorManager;
 
 class MakeView : public KDevMakeFrontend
 {
     Q_OBJECT
 
 public:
-    MakeView( QObject *parent=0, const char *name=0 );
-    ~MakeView();
+  MakeView( QObject *parent=0, const char *name=0 );
+  ~MakeView();
+  KDevMakeFrontend* makeFrontend();
+  ProjectSpace* projectSpace();
+ 	KDevEditorManager* editorManager();
 
 protected:
     virtual void setupGUI();
@@ -50,11 +55,13 @@ public:
     AppOutputView( QObject *parent=0, const char *name=0 );
     ~AppOutputView();
 
+public slots:	
+	void slotStopButtonClicked();
+
 protected:
     virtual void setupGUI();
     virtual void executeAppCommand(const QString &command);
-    virtual void stopButtonClicked();
-    
+
 private:
     QGuardedPtr<AppOutputWidget> m_widget;
     friend class AppOutputWidget;

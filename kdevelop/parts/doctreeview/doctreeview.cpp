@@ -20,6 +20,9 @@
 #include "doctreewidget.h"
 #include "doctreeconfigwidget.h"
 #include "main.h"
+#include "KDevComponentManager.h"
+#include "kdeveditormanager.h"
+#include "projectspace.h"
 
 
 DocTreeView::DocTreeView(QObject *parent, const char *name)
@@ -36,6 +39,13 @@ DocTreeView::~DocTreeView()
     delete m_widget;
 }
 
+ProjectSpace* DocTreeView::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
+
+KDevEditorManager* DocTreeView::editorManager(){
+	return static_cast<KDevEditorManager*>(componentManager()->component("KDevEditorManager"));
+}
 
 void DocTreeView::setupGUI()
 {
@@ -53,7 +63,7 @@ void DocTreeView::setupGUI()
 }
 
 
-void DocTreeView::configWidgetRequested(KDialogBase *dlg)
+void DocTreeView::slotConfigWidgetRequested(KDialogBase *dlg)
 {
     QVBox *vbox = dlg->addVBoxPage(i18n("Documentation tree"));
     DocTreeConfigWidget *w = new DocTreeConfigWidget(this, vbox, "documentation tree config widget");
@@ -61,7 +71,7 @@ void DocTreeView::configWidgetRequested(KDialogBase *dlg)
 }
 
 
-void DocTreeView::projectSpaceOpened()
+void DocTreeView::slotProjectSpaceOpened()
 {
     m_widget->projectSpaceOpened(projectSpace());
 }

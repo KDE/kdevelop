@@ -4,7 +4,8 @@
 #include "brkptmanager.h"
 
 #include "kdevcomponent.h"
-
+#include "KDevComponentManager.h"
+#include "projectspace.h"
 #include "kaction.h"
 #include "kdebug.h"
 #include "klocale.h"
@@ -20,6 +21,10 @@ DbgManager::DbgManager(QObject *parent, const char *name ) :
 DbgManager::~DbgManager()
 {
     delete m_BPManager;
+}
+
+ProjectSpace* DbgManager::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
 }
 
 void DbgManager::setupGUI()

@@ -26,12 +26,18 @@
  *@author Sandy Meier
  */
 
+class ProjectSpace;
+class KDevMakeFrontend;
+
 class KDEProjectSpace : public AutomakeProjectSpace  {
 Q_OBJECT
   public: 
  KDEProjectSpace(QObject* parent=0,const char* name=0);
  ~KDEProjectSpace();
- 
+
+ KDevMakeFrontend* makeFrontend();
+ ProjectSpace* projectSpace();
+
  virtual void updateAdminFiles();
  virtual void setupGUI();
  virtual bool writeGlobalConfig(QDomDocument& doc,QDomElement& psElement);
@@ -43,20 +49,20 @@ Q_OBJECT
  QList<FileGroup> defaultFileGroups();
  QStringList allDirectories();
  
- protected slots:
+protected slots:
   void slotProjectAddNewTranslationFile();
- virtual void updateMakefilesAm();
- virtual void slotBuildMake();
- virtual void slotBuildRebuildAll();
- virtual void slotBuildCleanRebuildAll();
- virtual void slotBuildExecute();
- virtual void slotBuildExecuteWithArgs();
- virtual void slotBuildDistClean();
- virtual void slotBuildAutoconf();
- virtual void slotBuildConfigure();
+  virtual void updateMakefilesAm();
+  virtual void slotBuildMake();
+  virtual void slotBuildRebuildAll();
+  virtual void slotBuildCleanRebuildAll();
+  virtual void slotBuildExecute();
+  virtual void slotBuildExecuteWithArgs();
+  virtual void slotBuildDistClean();
+  virtual void slotBuildAutoconf();
+  virtual void slotBuildConfigure();
  
  
- protected:
- KAboutData* m_pAboutData;
+protected:
+  KAboutData* m_pAboutData;
 };
 #endif

@@ -6,6 +6,7 @@
 #include <qguardedptr.h>
 
 class BreakpointManager;
+class ProjectSpace;
 
 class DbgManager : public KDevComponent
 {
@@ -14,6 +15,8 @@ class DbgManager : public KDevComponent
 public:
   DbgManager( QObject *parent=0, const char *name=0 );
   virtual ~DbgManager();
+	
+	ProjectSpace* projectSpace();
 
 protected:
   virtual void setupGUI();

@@ -27,6 +27,7 @@
 #include "projectspace.h"
 #include "kdeveditormanager.h"
 #include "main.h"
+#include "KDevComponentManager.h"
 
 
 CppSupport::CppSupport(QObject *parent, const char *name)
@@ -43,8 +44,19 @@ CppSupport::~CppSupport()
     delete m_parser;
 }
 
+ClassStore* CppSupport::classStore(){
+	return static_cast<ClassStore*>(componentManager()->component("KDevClassStore"));
+}
 
-void CppSupport::projectSpaceOpened()
+ProjectSpace* CppSupport::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
+
+KDevEditorManager* CppSupport::editorManager(){
+	return static_cast<KDevEditorManager*>(componentManager()->component("KDevEditorManager"));
+}
+
+void CppSupport::slotProjectSpaceOpened()
 {
     kdDebug(9007) << "CppSupport::projectSpaceOpened()" << endl;
 

@@ -42,6 +42,8 @@
 #include <qlineedit.h>
 #include <iostream.h>
 #include "KDevCompiler.h"
+#include "kdevmakefrontend.h"
+#include "KDevComponentManager.h"
 
 KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 		: AutomakeProjectSpace(parent,name)
@@ -65,6 +67,14 @@ KDEProjectSpace::KDEProjectSpace(QObject* parent,const char* name)
 }
 
 KDEProjectSpace::~KDEProjectSpace(){
+}
+
+ProjectSpace* KDEProjectSpace::projectSpace(){
+	return static_cast<ProjectSpace*>(componentManager()->component("ProjectSpace"));
+}
+
+KDevMakeFrontend* KDEProjectSpace::makeFrontend(){
+	return static_cast<KDevMakeFrontend*>(componentManager()->component("KDevMakeFrontend"));
 }
 
 void KDEProjectSpace::setupGUI(){
