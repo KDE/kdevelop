@@ -125,7 +125,13 @@ into development progress of the KDevelop team. Also we offer various third part
 If you're experiencing problems with compiling or using KDevelop, please read the <ref id="Questions and Answers" name="Questions and
 Answers"> section of this handbook or the FAQ-file included with the KDevelop package. If your problem is not addressed, please
 subscribe to the KDevelop mailing list at <htmlurl url="mailto:kdevelop-request@barney.cs.uni-potsdam.de" name =
-"kdevelop-request@barney.cs.uni-potsdam.de"> by sending a mail with an empty header and "subscribe youremailaddress" as contents. Requests and problem report should only target the usage of the KDevelop IDE and not towards any questions that regard any <idx/implementation/ problem you may have while coding your own application. Anyway, all mails send to the mailing list should be written in English, so that all participants can take part on discussions and are able to provide better help. The mailing list is also intended for those users willing to contribute and who found solutions for any problems they experienced, so we can fix <idx/errors/ and include that knowledge to give beginners an even more qualified first-hand help.
+"kdevelop-request@barney.cs.uni-potsdam.de"> by sending a mail with an empty header and "subscribe youremailaddress" as contents. Requests and
+problem report should only target the usage of the KDevelop IDE and not towards any questions that regard any <idx/implementation/ problem you
+may have while coding your own application. Anyway, all mails send to the mailing list should be written in English, so that all participants can
+take part on discussions and are able to provide better help. The mailing list is also intended for those users willing to contribute and who found
+solutions for any problems they experienced, so we can fix <idx/errors/ and include that knowledge to give beginners an even more qualified
+first-hand help.
+
 An good way to report problems is to send the <idx/output/ you get by starting kdevelop from the console or to copy and paste the
 contents of KDevelop's internal <idx/Messages-window/.
 
@@ -193,7 +199,7 @@ In order to compile and install KDevelop on your system, type the following in t
 
 In order to compile the KDevelop CVS snapshot, type the following :
 <tscreen><verb>
-	&percnt make -f <idx/Makefile.cvs/
+	&percnt make -f Makefile.cvs
 	&percnt ./configure
 	&percnt make
 
@@ -226,7 +232,7 @@ first start, allowing a quick configuration of the most needed options. If your 
 any time either by entering
 
 <tscreen><verb> 	
-&percnt kdevelop  --<idx/setup/
+&percnt kdevelop  --setup
 </verb></tscreen>
 
 or, when using KDE, by choosing "K"&rarr"Development"&rarr"KDevelop Setup".
@@ -259,9 +265,9 @@ allow correct <idx/printing/. If it isn't installed, you can do this at any time
 
 <item> Checking for <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/.  We encourage you to install those programs as they are good
 helpers for creating complete <idx/KDE/-applications. Note that <idx/KDbg/ is used directly for <idx/debugging/ your current project within
-KDevelop; <idx/KIconEdit/ is used to display and edit <idx/pixmaps/ selected in the file-viewer trees. The programs <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/
-are then configured to be available in the "<idx/Tools/" menu of the KDevelop menu bar if they are found. Other tools can be added to the
-<idx/Tools/-menu by selecting "<idx/Tools/..." in the Options menu later.
+KDevelop; <idx/KIconEdit/ is used to display and edit <idx/pixmaps/ selected in the file-viewer trees. The programs <idx/KDbg/, <idx/KIconEdit/ and
+<idx/KTranslator/ are then configured to be available in the "<idx/Tools/" menu of the KDevelop menu bar if they are found. Other tools
+can be added to the <idx/Tools/-menu by selecting "<idx/Tools/..." in the Options menu later.
 
 <item> Summary of detected programs: the installer lists those programs it found and those it didn't. Additional hints are given, if a
 needed program is recommended.
@@ -1039,8 +1045,8 @@ Configure again.<p>
 <p><nidx/"Tools"-menu/
 The <idx/Tools/-menu contains by default the entries for the following programs if installed: <idx/KDbg/, <idx/KIconEdit/ and <idx/KTranslator/. These are
 checked by the KDevelop installation program and inserted in the given order into the menu. Invoking a tool will open the
-"<idx/Tools/"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
-see <ref id="Configuring the "<idx/Tools/" Menu" name="Configuring the "<idx/Tools/" Menu">.
+"Tools"-window and start the selected program inside this window. The <idx/Tools/ menu can be edited by the <idx/Tools/-entry in the Options-menu;
+see <ref id="Configuring the Tools Menu" name="Configuring the Tools Menu">.
 
 <sect1>Changing KDevelop's settings
 <p><nidx/"Options"-menu/
@@ -3216,7 +3222,7 @@ use the cvs features.
 This chapter describes how you can set your individual preferences about how KDevelop works. All settings addressed below can be
 found by the according entry in the Options-menu.
 
-<sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the "<idx/Tools/" Menu">
+<sect>Configuring the Tools Menu<label id="Configuring the Tools Menu">
 <p><nidx/configuring the Tools-menu/<nidx/"Options"-menu/
 
 As KDevelop supports the use of third-party programs within it's user interface, you are able to <idx/configure/ any program that suits
@@ -3647,7 +3653,7 @@ better world where users have the freedom of choice.
 <p>
 <tscreen><verb>
 
-KDevelop Copyright 1998,1999 The KDevelop Team.
+KDevelop Copyright 1998, 1999, 2000 The KDevelop Team.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
