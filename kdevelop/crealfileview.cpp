@@ -237,14 +237,22 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
   it = dirList.remove(it);
   it = dirList.remove(it);
   it = dirList.end();
-  it--;
 
   // Add files in THIS directory as well.
   addFilesFromDir( directory, parent );
 
+  if (it == dirList.begin()) {
+    return; // there aint subdirs
+  }
+
+  bool bLastLoopStep = false;
   // Recurse through all directories
-  while( it != dirList.begin())
-  {
+  do {
+    it--;
+    if (it == dirList.begin()) {
+      bLastLoopStep = true;
+    }
+
     lastFolder = treeH->addItem( (*it).latin1(), THFOLDER, parent );
     lastFolder->setOpen( false );
     
@@ -256,9 +264,8 @@ void CRealFileView::scanDir(const QString& directory, QListViewItem* parent)
     //    addFilesFromDir( currentPath, lastFolder );
     
     treeH->setLastItem( lastFolder );
-    
-    it--;
-  } 
+  }
+  while (!bLastLoopStep);
 }
 
 /*----------------------------------- CRealFileView::getCurrentPopup()
