@@ -127,7 +127,7 @@ STTY::STTY(bool ext, const QString &termAppName)
         fout = findTTY();
         if (fout >= 0) {
             ttySlave = QString(tty_slave);
-            out = new QSocketNotifier(fout, QSocketNotifier::Read);
+            out = new QSocketNotifier(fout, QSocketNotifier::Read, this);
             connect( out, SIGNAL(activated(int)), this, SLOT(OutReceived(int)) );
         }
     }
