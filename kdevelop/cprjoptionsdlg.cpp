@@ -698,7 +698,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
  
   QLabel* addit_ldflags_label;
   addit_ldflags_label=new QLabel(w4,"addit_ldflags_label");
-  addit_ldflags_label->setGeometry(20,70,90,20);
+  addit_ldflags_label->setGeometry(20,70,90,30);
   addit_ldflags_label->setText(i18n("additional flags:"));
 
   addit_ldflags=new QLineEdit(w4,"addit_ldflags");
@@ -849,7 +849,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
  
   QLabel* addit_ldadd_label;
   addit_ldadd_label=new QLabel(w4,"addit_ldadd_label");
-  addit_ldadd_label->setGeometry(20,230,110,20);
+  addit_ldadd_label->setGeometry(20,230,110,30);
   addit_ldadd_label->setText(i18n("additional libraries:"));
 
   addit_ldadd=new QLineEdit(w4,"addit_ldadd");
@@ -862,6 +862,309 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   KQuickHelp::add(addit_ldadd, i18n("Add additional libraries here.")));
 
   addTab(w4,i18n("Linker Options"));
+
+  // ****************** the Make_Widget ********************
+  QWidget *w5 = new QWidget( this, "make" );
+  KQuickHelp::add(w5, i18n("This dialog is for setting\nyour make options."));
+
+  m_set_modify_line = new QLineEdit( w5, "m_set_modify_line" );
+  m_set_modify_line->setGeometry( 130, 200, 320, 30 );
+  m_set_modify_line->setMinimumSize( 0, 0 );
+  m_set_modify_line->setMaximumSize( 32767, 32767 );
+  m_set_modify_line->setFocusPolicy( QWidget::StrongFocus );
+  m_set_modify_line->setBackgroundMode( QWidget::PaletteBase );
+  m_set_modify_line->setFontPropagation( QWidget::NoChildren );
+  m_set_modify_line->setPalettePropagation( QWidget::NoChildren );
+  m_set_modify_line->setText(i18n(""));
+  m_set_modify_line->setMaxLength( 32767 );
+  m_set_modify_line->setEchoMode( QLineEdit::Normal );
+  m_set_modify_line->setFrame( TRUE );
+
+  m_job_number = new QSpinBox( w5, "m_job_number" );
+  m_job_number->setGeometry( 130, 120, 60, 30 );
+  m_job_number->setMinimumSize( 0, 0 );
+  m_job_number->setMaximumSize( 32767, 32767 );
+  m_job_number->setFocusPolicy( QWidget::StrongFocus );
+  m_job_number->setBackgroundMode( QWidget::PaletteBackground );
+  m_job_number->setFontPropagation( QWidget::NoChildren );
+  m_job_number->setPalettePropagation( QWidget::NoChildren );
+  m_job_number->setFrameStyle( 50 );
+  m_job_number->setLineWidth( 2 );
+  m_job_number->setRange( 1, 99 );
+  m_job_number->setSteps( 1, 0 );
+  m_job_number->setPrefix( "" );
+  m_job_number->setSuffix( "" );
+  m_job_number->setSpecialValueText( "" );
+  m_job_number->setWrapping( FALSE );
+  
+  m_other_makefile_line = new QLineEdit( w5, "m_other_makefile_line" );
+  m_other_makefile_line->setGeometry( 130, 160, 320, 30 );
+  m_other_makefile_line->setMinimumSize( 0, 0 );
+  m_other_makefile_line->setMaximumSize( 32767, 32767 );
+  m_other_makefile_line->setFocusPolicy( QWidget::StrongFocus );
+  m_other_makefile_line->setBackgroundMode( QWidget::PaletteBase );
+  m_other_makefile_line->setFontPropagation( QWidget::NoChildren );
+  m_other_makefile_line->setPalettePropagation( QWidget::NoChildren );
+  m_other_makefile_line->setText(i18n(""));
+  m_other_makefile_line->setMaxLength( 32767 );
+  m_other_makefile_line->setEchoMode( QLineEdit::Normal );
+  m_other_makefile_line->setFrame( TRUE );
+  
+  m_set_modify_dir = new QPushButton( w5, "m_set_modify_dir" );
+  m_set_modify_dir->setGeometry( 460, 200, 30, 30 );
+  m_set_modify_dir->setMinimumSize( 0, 0 );
+  m_set_modify_dir->setMaximumSize( 32767, 32767 );
+  m_set_modify_dir->setFocusPolicy( QWidget::TabFocus );
+  m_set_modify_dir->setBackgroundMode( QWidget::PaletteBackground );
+  m_set_modify_dir->setFontPropagation( QWidget::NoChildren );
+  m_set_modify_dir->setPalettePropagation( QWidget::NoChildren );
+  m_set_modify_dir->setText(i18n("..."));
+  m_set_modify_dir->setAutoRepeat( FALSE );
+  m_set_modify_dir->setAutoResize( FALSE );
+  
+  m_makefile_dir = new QPushButton( w5, "m_makefile_dir" );
+  m_makefile_dir->setGeometry( 460, 160, 30, 30 );
+  m_makefile_dir->setMinimumSize( 0, 0 );
+  m_makefile_dir->setMaximumSize( 32767, 32767 );
+  m_makefile_dir->setFocusPolicy( QWidget::TabFocus );
+  m_makefile_dir->setBackgroundMode( QWidget::PaletteBackground );
+  m_makefile_dir->setFontPropagation( QWidget::NoChildren );
+  m_makefile_dir->setPalettePropagation( QWidget::NoChildren );
+  m_makefile_dir->setText(i18n("..."));
+  m_makefile_dir->setAutoRepeat( FALSE );
+  m_makefile_dir->setAutoResize( FALSE );
+  
+  m_print_debug_info = new QCheckBox( w5, "m_print_debug_info" );
+  m_print_debug_info->setGeometry( 20, 20, 150, 30 );
+  m_print_debug_info->setMinimumSize( 0, 0 );
+  m_print_debug_info->setMaximumSize( 32767, 32767 );
+  m_print_debug_info->setFocusPolicy( QWidget::TabFocus );
+  m_print_debug_info->setBackgroundMode( QWidget::PaletteBackground );
+  m_print_debug_info->setFontPropagation( QWidget::NoChildren );
+  m_print_debug_info->setPalettePropagation( QWidget::NoChildren );
+  m_print_debug_info->setText(i18n("Print debug information"));
+  m_print_debug_info->setAutoRepeat( FALSE );
+  m_print_debug_info->setAutoResize( FALSE );
+  
+  m_optional_line = new QLineEdit( w5, "m_optional_line" );
+  m_optional_line->setGeometry( 130, 240, 360, 30 );
+  m_optional_line->setMinimumSize( 0, 0 );
+  m_optional_line->setMaximumSize( 32767, 32767 );
+  m_optional_line->setFocusPolicy( QWidget::StrongFocus );
+  m_optional_line->setBackgroundMode( QWidget::PaletteBase );
+  m_optional_line->setFontPropagation( QWidget::NoChildren );
+  m_optional_line->setPalettePropagation( QWidget::NoChildren );
+  m_optional_line->setText(i18n(""));
+  m_optional_line->setMaxLength( 32767 );
+  m_optional_line->setEchoMode( QLineEdit::Normal );
+  m_optional_line->setFrame( TRUE );
+  
+  m_print_data_base = new QCheckBox( w5, "m_print_data_base" );
+  m_print_data_base->setGeometry( 340, 20, 150, 30 );
+  m_print_data_base->setMinimumSize( 0, 0 );
+  m_print_data_base->setMaximumSize( 32767, 32767 );
+  m_print_data_base->setFocusPolicy( QWidget::TabFocus );
+  m_print_data_base->setBackgroundMode( QWidget::PaletteBackground );
+  m_print_data_base->setFontPropagation( QWidget::NoChildren );
+  m_print_data_base->setPalettePropagation( QWidget::NoChildren );
+  m_print_data_base->setText(i18n("Print the data base"));
+  m_print_data_base->setAutoRepeat( FALSE );
+  m_print_data_base->setAutoResize( FALSE );
+  
+  m_no_rules = new QCheckBox( w5, "m_no_rules" );
+  m_no_rules->setGeometry( 180, 50, 150, 30 );
+  m_no_rules->setMinimumSize( 0, 0 );
+  m_no_rules->setMaximumSize( 32767, 32767 );
+  m_no_rules->setFocusPolicy( QWidget::TabFocus );
+  m_no_rules->setBackgroundMode( QWidget::PaletteBackground );
+  m_no_rules->setFontPropagation( QWidget::NoChildren );
+  m_no_rules->setPalettePropagation( QWidget::NoChildren );
+  m_no_rules->setText(i18n("No built-in rules"));
+  m_no_rules->setAutoRepeat( FALSE );
+  m_no_rules->setAutoResize( FALSE );
+  
+  m_env_variables = new QCheckBox( w5, "m_env_variables" );
+  m_env_variables->setGeometry( 20, 50, 150, 30 );
+  m_env_variables->setMinimumSize( 0, 0 );
+  m_env_variables->setMaximumSize( 32767, 32767 );
+  m_env_variables->setFocusPolicy( QWidget::TabFocus );
+  m_env_variables->setBackgroundMode( QWidget::PaletteBackground );
+  m_env_variables->setFontPropagation( QWidget::NoChildren );
+  m_env_variables->setPalettePropagation( QWidget::NoChildren );
+  m_env_variables->setText(i18n("Environment variables"));
+  m_env_variables->setAutoRepeat( FALSE );
+  m_env_variables->setAutoResize( FALSE );
+  
+  m_cont_after_error = new QCheckBox( w5, "m_cont_after_error" );
+  m_cont_after_error->setGeometry( 180, 20, 150, 30 );
+  m_cont_after_error->setMinimumSize( 0, 0 );
+  m_cont_after_error->setMaximumSize( 32767, 32767 );
+  m_cont_after_error->setFocusPolicy( QWidget::TabFocus );
+  m_cont_after_error->setBackgroundMode( QWidget::PaletteBackground );
+  m_cont_after_error->setFontPropagation( QWidget::NoChildren );
+  m_cont_after_error->setPalettePropagation( QWidget::NoChildren );
+  m_cont_after_error->setText(i18n("Continue after errors"));
+  m_cont_after_error->setAutoRepeat( FALSE );
+  m_cont_after_error->setAutoResize( FALSE );
+  
+  m_touch_files = new QCheckBox( w5, "m_touch_files" );
+  m_touch_files->setGeometry( 340, 50, 150, 30 );
+  m_touch_files->setMinimumSize( 0, 0 );
+  m_touch_files->setMaximumSize( 32767, 32767 );
+  m_touch_files->setFocusPolicy( QWidget::TabFocus );
+  m_touch_files->setBackgroundMode( QWidget::PaletteBackground );
+  m_touch_files->setFontPropagation( QWidget::NoChildren );
+  m_touch_files->setPalettePropagation( QWidget::NoChildren );
+  m_touch_files->setText(i18n("Touch files"));
+  m_touch_files->setAutoRepeat( FALSE );
+  m_touch_files->setAutoResize( FALSE );
+  
+  m_print_work_dir = new QCheckBox( w5, "m_print_work_dir" );
+  m_print_work_dir->setGeometry( 340, 80, 150, 30 );
+  m_print_work_dir->setMinimumSize( 0, 0 );
+  m_print_work_dir->setMaximumSize( 32767, 32767 );
+  m_print_work_dir->setFocusPolicy( QWidget::TabFocus );
+  m_print_work_dir->setBackgroundMode( QWidget::PaletteBackground );
+  m_print_work_dir->setFontPropagation( QWidget::NoChildren );
+  m_print_work_dir->setPalettePropagation( QWidget::NoChildren );
+  m_print_work_dir->setText(i18n("Print working directory"));
+  m_print_work_dir->setAutoRepeat( FALSE );
+  m_print_work_dir->setAutoResize( FALSE );
+  
+  m_silent_operation = new QCheckBox( w5, "m_silent_operation" );
+  m_silent_operation->setGeometry( 180, 80, 150, 30 );
+  m_silent_operation->setMinimumSize( 0, 0 );
+  m_silent_operation->setMaximumSize( 32767, 32767 );
+  m_silent_operation->setFocusPolicy( QWidget::TabFocus );
+  m_silent_operation->setBackgroundMode( QWidget::PaletteBackground );
+  m_silent_operation->setFontPropagation( QWidget::NoChildren );
+  m_silent_operation->setPalettePropagation( QWidget::NoChildren );
+  m_silent_operation->setText(i18n("Silent operation"));
+  m_silent_operation->setAutoRepeat( FALSE );
+  m_silent_operation->setAutoResize( FALSE );
+  
+  m_ignor_errors = new QCheckBox( w5, "m_ignor_errors" );
+  m_ignor_errors->setGeometry( 20, 80, 150, 30 );
+  m_ignor_errors->setMinimumSize( 0, 0 );
+  m_ignor_errors->setMaximumSize( 32767, 32767 );
+  m_ignor_errors->setFocusPolicy( QWidget::TabFocus );
+  m_ignor_errors->setBackgroundMode( QWidget::PaletteBackground );
+  m_ignor_errors->setFontPropagation( QWidget::NoChildren );
+  m_ignor_errors->setPalettePropagation( QWidget::NoChildren );
+  m_ignor_errors->setText(i18n("Ignore all errors"));
+  m_ignor_errors->setAutoRepeat( FALSE );
+  m_ignor_errors->setAutoResize( FALSE );
+  
+  m_job_number_label = new QLabel( w5, "m_job_number_label" );
+  m_job_number_label->setGeometry( 20, 120, 100, 30 );
+  m_job_number_label->setMinimumSize( 0, 0 );
+  m_job_number_label->setMaximumSize( 32767, 32767 );
+  m_job_number_label->setFocusPolicy( QWidget::NoFocus );
+  m_job_number_label->setBackgroundMode( QWidget::PaletteBackground );
+  m_job_number_label->setFontPropagation( QWidget::NoChildren );
+  m_job_number_label->setPalettePropagation( QWidget::NoChildren );
+  m_job_number_label->setText(i18n("job number"));
+  m_job_number_label->setAlignment( 289 );
+  m_job_number_label->setMargin( -1 );
+  
+  m_optional_label = new QLabel( w5, "m_optional_label" );
+  m_optional_label->setGeometry( 20, 240, 100, 30 );
+  m_optional_label->setMinimumSize( 0, 0 );
+  m_optional_label->setMaximumSize( 32767, 32767 );
+  m_optional_label->setFocusPolicy( QWidget::NoFocus );
+  m_optional_label->setBackgroundMode( QWidget::PaletteBackground );
+  m_optional_label->setFontPropagation( QWidget::NoChildren );
+  m_optional_label->setPalettePropagation( QWidget::NoChildren );
+  m_optional_label->setText(i18n("optional options"));
+  m_optional_label->setAlignment( 289 );
+  m_optional_label->setMargin( -1 );
+  
+  m_set_modify_label = new QLabel( w5, "m_set_modify_label" );
+  m_set_modify_label->setGeometry( 20, 200, 100, 30 );
+  m_set_modify_label->setMinimumSize( 0, 0 );
+  m_set_modify_label->setMaximumSize( 32767, 32767 );
+  m_set_modify_label->setFocusPolicy( QWidget::NoFocus );
+  m_set_modify_label->setBackgroundMode( QWidget::PaletteBackground );
+  m_set_modify_label->setFontPropagation( QWidget::NoChildren );
+  m_set_modify_label->setPalettePropagation( QWidget::NoChildren );
+  m_set_modify_label->setText(i18n("set modified"));
+  m_set_modify_label->setAlignment( 289 );
+  m_set_modify_label->setMargin( -1 );
+  
+  m_other_makefile_label = new QLabel( w5, "m_other_makefile_label" );
+  m_other_makefile_label->setGeometry( 20, 160, 100, 30 );
+  m_other_makefile_label->setMinimumSize( 0, 0 );
+  m_other_makefile_label->setMaximumSize( 32767, 32767 );
+  m_other_makefile_label->setFocusPolicy( QWidget::NoFocus );
+  m_other_makefile_label->setBackgroundMode( QWidget::PaletteBackground );
+  m_other_makefile_label->setFontPropagation( QWidget::NoChildren );
+  m_other_makefile_label->setPalettePropagation( QWidget::NoChildren );
+  m_other_makefile_label->setText(i18n("other makefile"));
+  m_other_makefile_label->setAlignment( 289 );
+  m_other_makefile_label->setMargin( -1 );
+
+  addTab(w5,i18n("Make Options"));
+
+  KQuickHelp::add(m_set_modify_dir, i18n("If you click on this button, you get a\n"
+				 "filedialog, with that you can choose a file."));
+
+  KQuickHelp::add(m_makefile_dir, i18n("If you click on this button, you get a\n"
+				 "filedialog, with that you can choose a file."));
+
+  KQuickHelp::add(m_print_debug_info, i18n("Print  debugging  information  in  addition to normal\n"
+					   "processing.  The  debugging  information  says  which\n"
+					   "files  are being considered for remaking, which file-\n"
+					   "times are being compared and with what results, which\n"
+					   "files  actually  need  to  be  remade, which implicit\n"
+					   "rules are considered and which  are  applied---every­\n"
+					   "thing  interesting about how make decides what to do."));
+
+  KQuickHelp::add(m_optional_label, i18n("Here you can add exta options for you make."));
+
+  KQuickHelp::add(m_print_data_base, i18n("Print  the data base (rules and variable values) that\n"
+					  "results from reading the makefiles; then  execute  as\n"
+					  "usual  or  as  otherwise specified.  This also prints\n"
+					  "the version information."));
+
+  KQuickHelp::add(m_no_rules, i18n("Eliminate  use  of the built-in implicit rules.  Also\n"
+				   "clear out the default list  of  suffixes  for  suffix\n"
+				   "rules."));
+
+  KQuickHelp::add(m_env_variables, i18n("Give variables taken from the environment  precedence\n"
+					"over variables from makefiles."));
+
+  KQuickHelp::add(m_cont_after_error, i18n("Continue  as  much as possible after an error. While\n"
+					   "the target that failed, and those that depend on it,\n"
+					   "cannot  be  remade, the  other dependencies of these\n"
+					   "targets can be processed all the same."));
+
+  KQuickHelp::add(m_touch_files, i18n("Touch  files  (mark  them  up  to date without really\n"
+				      "changing them) instead  of  running  their  commands.\n"
+				      "This  is used to pretend that the commands were done,\n"
+				      "in order to fool future invocations of make."));
+
+  KQuickHelp::add(m_print_work_dir, i18n("Print  a  message  containing  the  working directory\n"
+					 "before and after other processing.  This may be  use­\n"
+					 "ful  for  tracking down errors from complicated nests\n"
+					 "of recursive make commands."));
+
+  KQuickHelp::add(m_silent_operation, i18n("Silent  operation;  do not print the commands as they\n"
+					   "are executed."));
+
+  KQuickHelp::add(m_ignor_errors, i18n("Ignore  all  errors  in  commands  executed to\n"
+				       "remake files."));
+
+  KQuickHelp::add(m_job_number_label, i18n("Specifies the number of jobs (commands) to run\n"
+					   "simultaneously. If you have a single CPU-System\n"
+					   "it is not a good idea to choose more then 2."));
+
+  KQuickHelp::add(m_set_modify_label, i18n("Pretend that the target file has just been  modified.\n"
+					   "It  is  almost the same as running a touch command on\n"
+					   "the given file before running make, except  that  the\n"
+					   "modification  time is changed only in the imagination\n"
+					   "of make."));
+
+  KQuickHelp::add(m_other_makefile_label, i18n("Use the choosen file as a makefile."));
 
   // **************set the button*********************
   setOkButton(i18n("OK"));

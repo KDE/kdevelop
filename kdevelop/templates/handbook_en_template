@@ -1,11 +1,11 @@
 
 <!doctype linuxdoc system>
 <article>
-<title>The PROJECT_NAME Handbook
-<author>AUTHOR <tt>EMAIL</tt>
-<date>Version VERSION , DATE
+<title>The |PRJNAME| Handbook
+<author>|AUTHOR| <tt>|EMAIL|</tt>
+<date>Version |VERSION| , |DATE|
 <abstract>
-This Handbook describes PROJECT_NAME Version VERSION
+This Handbook describes |PRJNAME| Version |VERSION|
 </abstract>
 
 <toc>
@@ -17,7 +17,7 @@ This Handbook describes PROJECT_NAME Version VERSION
 
 <sect>Installation
 <p>
-<sect1>How to obtain PROJECT_NAME 
+<sect1>How to obtain |PRJNAME| 
 <p>
 
 <sect1>Requirements
@@ -26,8 +26,8 @@ This Handbook describes PROJECT_NAME Version VERSION
 <sect1>Compilation and installation
 <p>
 
-In order to compile and install PROJECT_NAME on your system, type the following in
-the base directory of the PROJECT_NAME distribution:
+In order to compile and install |PRJNAME| on your system, type the following in
+the base directory of the |PRJNAME| distribution:
 
 <tscreen><verb>
 % ./configure
@@ -36,10 +36,10 @@ the base directory of the PROJECT_NAME distribution:
 </verb></tscreen>
 
 <p>
-Since PROJECT_NAME uses <verb>autoconf</verb> you should have not trouble
+Since |PRJNAME| uses <verb>autoconf</verb> you should have not trouble
 compiling it.
 Should you run into problems please report them to the the author at 
-<htmlurl url="mailto:EMAIL" name = "AUTHOR">
+<htmlurl url="mailto:|EMAIL|" name = "|AUTHOR|">
 
 
 <p>
@@ -53,7 +53,7 @@ Should you run into problems please report them to the the author at
 
 <sect>Copyright<p>
 
-PROJECT_NAME Copyright 1998 AUTHOR , EMAIL
+|PRJNAME| Copyright |YEAR| |AUTHOR| , |EMAIL|
 
 
 This program is free software; you can redistribute it and/or modify

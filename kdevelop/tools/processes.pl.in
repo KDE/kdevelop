@@ -140,10 +140,10 @@ sub condCopyGNUFiles {
     	copy ("TODO_template",      "$overDirectory/TODO"     );
         chdir($overDirectory);
         # replaced AUTHOR and EMAIL
-        $word = "AUTHOR";
+        $word = "|AUTHOR|";
         $replace = $processes{AUTHOR};
         replaceOldFile($word, $replace, "AUTHORS");
-        $word = "EMAIL";
+        $word = "|EMAIL|";
         $replace = $processes{EMAIL};
         replaceOldFile($word, $replace, "AUTHORS");
 
@@ -160,10 +160,10 @@ sub condCopyLsmFile {
 	chdir ($templatedir);
 	copy ("lsm_template", "$overDirectory/$nameLittle.lsm");
 	chdir ($overDirectory);
-	replaceOldFile("PROJECT_NAME", $name,               "$nameLittle.lsm");
-	replaceOldFile("AUTHOR",       $processes{AUTHOR},  "$nameLittle.lsm");
-	replaceOldFile("EMAIL",        $processes{EMAIL},   "$nameLittle.lsm");
-	replaceOldFile("VERSION",      $processes{VERSION}, "$nameLittle.lsm");
+	replaceOldFile("|PRJNAME|", $name,               "$nameLittle.lsm");
+	replaceOldFile("|AUTHOR|",       $processes{AUTHOR},  "$nameLittle.lsm");
+	replaceOldFile("|EMAIL|",        $processes{EMAIL},   "$nameLittle.lsm");
+	replaceOldFile("|VERSION|",      $processes{VERSION}, "$nameLittle.lsm");
 
     }
 }
@@ -178,14 +178,14 @@ sub condCopyUserDocFiles {
 	chdir ($templatedir);
 	copy ("handbook_en_template", "$underDirectory/docs/en/index.sgml");
 	chdir ("$underDirectory/docs/en");
-	$word = "PROJECT_NAME";
+	$word = "|PRJNAME|";
 	$replace = $name;
-	replaceOldFile("PROJECT_NAME", $name,               "index.sgml");
-	replaceOldFile("AUTHOR",       $processes{AUTHOR},  "index.sgml");
-	replaceOldFile("EMAIL",        $processes{EMAIL},   "index.sgml");
-	replaceOldFile("VERSION",      $processes{VERSION}, "index.sgml");
-	replaceOldFile("DATE",         $date,               "index.sgml");
-	replaceOldFile("YEAR",         $year,               "index.sgml");
+	replaceOldFile("|PRJNAME|", $name,               "index.sgml");
+	replaceOldFile("|AUTHOR|",       $processes{AUTHOR},  "index.sgml");
+	replaceOldFile("|EMAIL|",        $processes{EMAIL},   "index.sgml");
+	replaceOldFile("|VERSION|",      $processes{VERSION}, "index.sgml");
+	replaceOldFile("|DATE|",         $date,               "index.sgml");
+	replaceOldFile("|YEAR|",         $year,               "index.sgml");
     }
   
     #if USER-Docs was not chosen in kAppWizard
@@ -210,7 +210,7 @@ sub condCopyKdelnkFile {
 	chdir ($templatedir);
 	copy ("kdelnk_template", "$underDirectory/$nameLittle.kdelnk");
 	chdir ($underDirectory);
-	replaceOldFile("PROJECT_NAME", $nameLittle, "$nameLittle.kdelnk");
+	replaceOldFile("|PRJNAME|", $nameLittle, "$nameLittle.kdelnk");
 
     }
 }
@@ -288,11 +288,11 @@ sub processCppTemplate {
   
     copy ("$local_datadir/kdevelop/cpp", $underDirectory);
     chdir ($underDirectory);
-    replaceOldFile("FILENAME", $file,              "cpp");
-    replaceOldFile("AUTHOR",   $processes{AUTHOR}, "cpp");
-    replaceOldFile("EMAIL",    $processes{EMAIL},  "cpp");
-    replaceOldFile("DATE",     $date,              "cpp");
-    replaceOldFile("YEAR",     $year,              "cpp");
+    replaceOldFile("|FILENAME|", $file,              "cpp");
+    replaceOldFile("|AUTHOR|",   $processes{AUTHOR}, "cpp");
+    replaceOldFile("|EMAIL|",    $processes{EMAIL},  "cpp");
+    replaceOldFile("|DATE|",     $date,              "cpp");
+    replaceOldFile("|YEAR|",     $year,              "cpp");
     
     open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
     open (OUTPUT,">>cpp");
@@ -313,11 +313,11 @@ sub processHeaderTemplate {
   
     copy ("$local_datadir/kdevelop/header", $underDirectory);
     chdir ($underDirectory);
-    replaceOldFile("FILENAME", $file,              "header");
-    replaceOldFile("AUTHOR",   $processes{AUTHOR}, "header");
-    replaceOldFile("EMAIL",    $processes{EMAIL},  "header");
-    replaceOldFile("DATE",     $date,              "header");
-    replaceOldFile("YEAR",     $year,              "header");
+    replaceOldFile("|FILENAME|", $file,              "header");
+    replaceOldFile("|AUTHOR|",   $processes{AUTHOR}, "header");
+    replaceOldFile("|EMAIL|",    $processes{EMAIL},  "header");
+    replaceOldFile("|DATE|",     $date,              "header");
+    replaceOldFile("|YEAR|",     $year,              "header");
     
     open (INPUT,"$file") || die "kann Datei nicht öffnen: $!";
     open (OUTPUT,">>cpp");
@@ -359,39 +359,39 @@ sub changeNormalApp {
     replaceOldFile("SUBDIRS = skel", "SUBDIRS = $nameLittle.po", 
 		   "Makefile.am");
     replaceOldFile("skel",    $nameLittle,         "configure.in");
-    replaceOldFile("VERSION", $processes{VERSION}, "configure.in");
+    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
     replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
 		   "configure.in");
     
     chdir ($underDirectory);
     replaceOldFile("skel",   $nameLittle,          "Makefile.am");
-    replaceOldFile("kbase",  $nameLittle,          "skel.cpp");
-    replaceOldFile("kbase",  $nameLittle,          "skel.h");
-    replaceOldFile("kbase",  $nameLittle,          "main.cpp");
+    replaceOldFile("|NAMELITTLE|",  $nameLittle,          "skel.cpp");
+    replaceOldFile("|NAMELITTLE|",  $nameLittle,          "skel.h");
+    replaceOldFile("|NAMELITTLE|",  $nameLittle,          "main.cpp");
 
-    replaceOldFile("KBase",  $name,                "skel.cpp");
-    replaceOldFile("KBase",  $name,                "skel.h");
-    replaceOldFile("KBase",  $name,                "main.cpp");
+    replaceOldFile("|NAME|",  $name,                "skel.cpp");
+    replaceOldFile("|NAME|",  $name,                "skel.h");
+    replaceOldFile("|NAME|",  $name,                "main.cpp");
   
-    replaceOldFile("AUTHOR", $processes{AUTHOR},   "skel.cpp");
-    replaceOldFile("KBASE",  $nameBig,             "skel.h");
+    replaceOldFile("|AUTHOR|", $processes{AUTHOR},   "skel.cpp");
+    replaceOldFile("|NAMEBIG|",  $nameBig,             "skel.h");
   
     #renamed skel with the projectname
     rename ("skel.cpp", $nameLittle.".cpp");
     rename ("skel.h",   $nameLittle.".h");
     
     chdir ($underDirectory);
-    replaceOldFile("KBase",  $name,                $nameLittle."doc.cpp");
-    replaceOldFile("KBase",  $name,                $nameLittle."doc.h");
-    replaceOldFile("KBase",  $name,                $nameLittle."view.cpp");
-    replaceOldFile("KBase",  $name,                $nameLittle."view.h");
-    replaceOldFile("KBase",  $name,                "resource.h");
+    replaceOldFile("|NAME|",  $name,                $nameLittle."doc.cpp");
+    replaceOldFile("|NAME|",  $name,                $nameLittle."doc.h");
+    replaceOldFile("|NAME|",  $name,                $nameLittle."view.cpp");
+    replaceOldFile("|NAME|",  $name,                $nameLittle."view.h");
+    replaceOldFile("|NAME|",  $name,                "resource.h");
 
-    replaceOldFile("KBASE",  $nameBig,             $nameLittle."doc.h");
-    replaceOldFile("KBASE",  $nameBig,             $nameLittle."view.h");
-    replaceOldFile("kbase",  $nameLittle,          $nameLittle."doc.cpp");
-    replaceOldFile("kbase",  $nameLittle,          $nameLittle."view.cpp");
-    replaceOldFile("kbase",  $nameLittle,          $nameLittle."view.h");
+    replaceOldFile("|NAMEBIG|",  $nameBig,             $nameLittle."doc.h");
+    replaceOldFile("|NAMEBIG|",  $nameBig,             $nameLittle."view.h");
+    replaceOldFile("|NAMELITTLE|",  $nameLittle,          $nameLittle."doc.cpp");
+    replaceOldFile("|NAMELITTLE|",  $nameLittle,          $nameLittle."view.cpp");
+    replaceOldFile("|NAMELITTLE|",  $nameLittle,          $nameLittle."view.h");
 
     chdir ($underDirectory."/docs/en");
     replaceOldFile("skel",   $nameLittle,          "Makefile.am");
@@ -440,7 +440,7 @@ sub changeMiniApp {
     replaceOldFile("SUBDIRS = skel", "SUBDIRS = $nameLittle.po", 
 		   "Makefile.am");
     replaceOldFile("skel",    $nameLittle,         "configure.in");
-    replaceOldFile("VERSION", $processes{VERSION}, "configure.in");
+    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
     replaceOldFile("$nameLittle/Makefile", "$nameLittle/Makefile po/Makefile",
 		   "configure.in");
 
@@ -454,7 +454,7 @@ sub changeMiniApp {
     replaceOldFile("Skel",    $name,               "skel.h");
     replaceOldFile("Skel",    $name,               "main.cpp");
 
-    replaceOldFile("AUTHOR",  $processes{AUTHOR},  "skel.cpp");
+    replaceOldFile("|AUTHOR|",  $processes{AUTHOR},  "skel.cpp");
     replaceOldFile("SKEL",    $nameBig,            "skel.h");
    
     #renamed skel with the projectname
@@ -502,7 +502,7 @@ sub changeTerminalApp {
     chdir ($overDirectory);
     replaceOldFile("skel",    $nameLittle,         "Makefile.am");
     replaceOldFile("skel",    $nameLittle,         "configure.in");
-    replaceOldFile("VERSION", $processes{VERSION}, "configure.in");
+    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
     
     chdir ($underDirectory);
     replaceOldFile("skel",    $nameLittle,         "Makefile.am");
@@ -556,41 +556,41 @@ sub changeQtApp {
     chdir ($overDirectory);
     replaceOldFile("skel",    $nameLittle,         "Makefile.am");
     replaceOldFile("skel",    $nameLittle,         "configure.in");
-    replaceOldFile("VERSION", $processes{VERSION}, "configure.in");
+    replaceOldFile("|VERSION|", $processes{VERSION}, "configure.in");
 
     chdir ($underDirectory);
     replaceOldFile("skel",    $nameLittle,         "Makefile.am");
-    replaceOldFile("bank",    $nameLittle,         "main.cpp");
-    replaceOldFile("bank",    $nameLittle,         "skel.cpp");
-    replaceOldFile("bank",    $nameLittle,         "skel.h");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "main.cpp");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.cpp");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "skel.h");
 
-    replaceOldFile("Bank",    $name."App",         "skel.cpp");
-    replaceOldFile("Bank",    $name."App",         "skel.h");
+    replaceOldFile("|NAME|",    $name."App",         "skel.cpp");
+    replaceOldFile("|NAME|",    $name."App",         "skel.h");
     replaceOldFile($name."AppDoc",  $name."Doc",   "skel.cpp");
     replaceOldFile($name."AppDoc",  $name."Doc",   "skel.h");
     replaceOldFile($name."AppView", $name."View",  "skel.cpp");
     replaceOldFile($name."AppView", $name."View",  "skel.h");
-    replaceOldFile("AUTHOR",  $processes{AUTHOR},  "skel.cpp");
-    replaceOldFile("BANK",    $nameBig,            "skel.h");
+    replaceOldFile("|AUTHOR|",  $processes{AUTHOR},  "skel.cpp");
+    replaceOldFile("|NAMEBIG|",    $nameBig,            "skel.h");
 
     #renamed bank with the projectname
     rename ("skel.cpp", $nameLittle.".cpp");
     rename ("skel.h",   $nameLittle.".h");
 
     chdir ($underDirectory);
-    replaceOldFile("Bank",    $name,               "${nameLittle}doc.cpp");
-    replaceOldFile("Bank",    $name,               "${nameLittle}doc.h");
-    replaceOldFile("Bank",    $name,               "${nameLittle}view.h");
-    replaceOldFile("Bank",    $name,               "${nameLittle}view.cpp");
-    replaceOldFile("Bank",    $name,               "resource.h");
-    replaceOldFile("BANK",    $nameBig,            "${nameLittle}doc.h");
-    replaceOldFile("BANK",    $nameBig,            "${nameLittle}view.h");
-    replaceOldFile("bank",    $nameLittle,         "${nameLittle}doc.cpp");
-    replaceOldFile("bank",    $nameLittle,         "${nameLittle}view.cpp");
-    replaceOldFile("bank",    $nameLittle,         "${nameLittle}view.h");
+    replaceOldFile("|NAME|",    $name,               "${nameLittle}doc.cpp");
+    replaceOldFile("|NAME|",    $name,               "${nameLittle}doc.h");
+    replaceOldFile("|NAME|",    $name,               "${nameLittle}view.h");
+    replaceOldFile("|NAME|",    $name,               "${nameLittle}view.cpp");
+    replaceOldFile("|NAME|",    $name,               "resource.h");
+    replaceOldFile("|NAMEBIG|",    $nameBig,            "${nameLittle}doc.h");
+    replaceOldFile("|NAMEBIG|",    $nameBig,            "${nameLittle}view.h");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "${nameLittle}doc.cpp");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "${nameLittle}view.cpp");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "${nameLittle}view.h");
 
     chdir ($underDirectory."/docs/en");
-    replaceOldFile("bank",    $nameLittle,         "Makefile.am");
+    replaceOldFile("|NAMELITTLE|",    $nameLittle,         "Makefile.am");
     
     condCopyGNUFiles();
     condCopyLsmFile();

@@ -1,3 +1,8 @@
+1999-05-24  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* added the make-option-tab to the project-options-dialog
+	* the make-option-tab have no functionality yet
+	* integrated the patch from Walter Tasin into kdevelop (Thanx Walter)
+
 1999-05-24  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* implemented "move_down" and "move_up" in the tools-config dlg
 

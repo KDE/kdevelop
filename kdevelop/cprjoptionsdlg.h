@@ -38,6 +38,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <kquickhelp.h>
+#include <qspinbox.h>
 
 /** the setup-dialog for a project 
   *@author Sandy Meier, Stefan Bartel
@@ -111,6 +112,26 @@ protected:
   QCheckBox* l_kspell;
   QCheckBox* l_kab;
   QLineEdit* addit_ldadd;
+  // TAB Make options
+  QLineEdit* m_set_modify_line;
+  QSpinBox* m_job_number;
+  QLineEdit* m_other_makefile_line;
+  QPushButton* m_set_modify_dir;
+  QPushButton* m_makefile_dir;
+  QCheckBox* m_print_debug_info;
+  QLineEdit* m_optional_line;
+  QCheckBox* m_print_data_base;
+  QCheckBox* m_no_rules;
+  QCheckBox* m_env_variables;
+  QCheckBox* m_cont_after_error;
+  QCheckBox* m_touch_files;
+  QCheckBox* m_print_work_dir;
+  QCheckBox* m_silent_operation;
+  QCheckBox* m_ignor_errors;
+  QLabel* m_job_number_label;
+  QLabel* m_optional_label;
+  QLabel* m_set_modify_label;
+  QLabel* m_other_makefile_label;
 
 private:
   QString old_version;

@@ -31,12 +31,15 @@ QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj){
   if(!QFile::exists(cpp_header)){
     cpp_header = KApplication::kde_datadir() + "/kdevelop/templates/cpp_template";
   }
+/*
+     not needed anymore - handled by CProject::setInfosInString()
   QString email = prj->getEmail();
   QString author = prj->getAuthor();
   QString version = prj->getVersion();
   QString date = QDate::currentDate().toString();
   QString year;
   year.setNum(QDate::currentDate().year());
+*/
   QStrList list;
   QString str;
   
@@ -51,13 +54,17 @@ QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj){
   file.setName(abs_name);
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str !=0;str = list.next()){
-      str.replace(QRegExp("FILENAME"),name);
+/*
+     not needed anymore - handled by CProject::setInfosInString()
       str.replace(QRegExp("EMAIL"),email);
       str.replace(QRegExp("AUTHOR"),author);
       str.replace(QRegExp("VERSION"),version);
       str.replace(QRegExp("DATE"),date);
       str.replace(QRegExp("YEAR"),year);
       stream << str << "\n";
+*/
+      str.replace(QRegExp("\\|FILENAME\\|"),name);
+      stream << prj->setInfosInString(str) << '\n';
     }
   }
   file.close();  
@@ -71,12 +78,15 @@ QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj){
   if(!QFile::exists(template_header)){
     template_header = KApplication::kde_datadir() + "/kdevelop/templates/header_template";
   }
+/*
+     not needed anymore - handled by CProject::setInfosInString()
   QString email = prj->getEmail();
   QString author = prj->getAuthor();
   QString version = prj->getVersion();
   QString date = QDate::currentDate().toString();
   QString year;
   year.setNum(QDate::currentDate().year());
+*/
   QStrList list;
   QString str;
   
@@ -91,13 +101,17 @@ QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj){
   file.setName(abs_name);
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str !=0;str = list.next()){
-      str.replace(QRegExp("FILENAME"),name);
+/*
+     not needed anymore - handled by CProject::setInfosInString()
       str.replace(QRegExp("EMAIL"),email);
       str.replace(QRegExp("AUTHOR"),author);
       str.replace(QRegExp("VERSION"),version);
       str.replace(QRegExp("DATE"),date);
       str.replace(QRegExp("YEAR"),year);
       stream << str << "\n";
+*/
+      str.replace(QRegExp("\\|FILENAME\\|"),name);
+      stream << prj->setInfosInString(str) << '\n';
     }
   }
   file.close();  
@@ -107,14 +121,17 @@ QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   
   QString template_handbook = KApplication::kde_datadir() + 
     "/kdevelop/templates/handbook_en_template";
+/*
+     not needed anymore - handled by CProject::setInfosInString()
   QString project_name = prj->getProjectName();
   QString email = prj->getEmail();
   QString author = prj->getAuthor();
   QString version = prj->getVersion();
+  QString date = QDate::currentDate().toString();
+*/
   QStrList list;
   QString str;
-  QString date = QDate::currentDate().toString();
-  
+
   QFile file(template_handbook);
   QTextStream stream(&file);
   if(file.open(IO_ReadOnly)){ // read the handbook_template
@@ -126,12 +143,16 @@ QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   file.setName(abs_name);
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str !=0;str = list.next()){
+/*
+     not needed anymore - handled by CProject::setInfosInString()
       str.replace(QRegExp("PROJECT_NAME"),project_name);
       str.replace(QRegExp("EMAIL"),email);
       str.replace(QRegExp("AUTHOR"),author);
       str.replace(QRegExp("VERSION"),version);
       str.replace(QRegExp("DATE"),date);
       stream << str << "\n";
+*/
+      stream << prj->setInfosInString(str) << '\n';
     }
   }
   file.close();  
@@ -155,7 +176,7 @@ QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){
   file.setName(abs_name);
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str !=0;str = list.next()){
-      str.replace(QRegExp("PROJECT_NAME"),project_name);
+      str.replace(QRegExp("\\|PRJNAME\\|"),project_name);
       stream << str << "\n";
     }
   }
@@ -165,10 +186,14 @@ QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){
 }
 QString  CGenerateNewFile::genLSMFile(QString abs_name,CProject* prj){
   QString template_lsm = KApplication::kde_datadir() + "/kdevelop/templates/lsm_template";
+/*
+     not needed anymore - handled by CProject::setInfosInString()
   QString project_name = prj->getProjectName();
   QString email = prj->getEmail();
   QString author = prj->getAuthor();
   QString version = prj->getVersion();
+*/
+
   QStrList list;
   QString str;
   
@@ -183,11 +208,15 @@ QString  CGenerateNewFile::genLSMFile(QString abs_name,CProject* prj){
   file.setName(abs_name);
   if(file.open(IO_WriteOnly)){
     for(str = list.first();str !=0;str = list.next()){
+/*
+     not needed anymore - handled by CProject::setInfosInString()
       str.replace(QRegExp("PROJECT_NAME"),project_name);
       str.replace(QRegExp("EMAIL"),email);
       str.replace(QRegExp("AUTHOR"),author);
       str.replace(QRegExp("VERSION"),version);
       stream << str << "\n";
+*/
+      stream << prj->setInfosInString(str) << '\n';
     }
   }
   file.close();  

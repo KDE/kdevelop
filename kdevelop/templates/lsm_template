@@ -1,11 +1,11 @@
 Begin3
-Title:          PROJECT_NAME 
-Version:        VERSION
+Title:          |PRJNAME| 
+Version:        |VERSION|
 Entered-date:   
 Description:    
 Keywords:       KDE, X11, Qt 
-Author:         AUTHOR <EMAIL> 
-Maintained-by:  AUTHOR <EMAIL> 
+Author:         |AUTHOR| <|EMAIL|> 
+Maintained-by:  |AUTHOR| <|EMAIL|> 
 Primary-site:   	        
 Home-page:      http:// 
 Original-site:  

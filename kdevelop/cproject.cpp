@@ -1038,6 +1038,56 @@ void CProject::getAllStaticLibraries(QStrList& libs){
   }
 }
 
+/*-------------------------------------- CProject::setInfosInString()
+ * setInfosInString()
+ *    changes the string to the real values of the project         *
+ * Parameters:
+ *    strtemplate   template string to change
+ *    basics        if true change only basic informations
+ *                  (optimizing parameter)
+ *
+ * Returns:
+ *   reference to the stringlist
+ *-----------------------------------------------------------------*/
+QString& CProject::setInfosInString(QString& strtemplate, bool basics)
+{
+   QString date=QDate::currentDate().toString();
+   QString year;
+   year.setNum(QDate::currentDate().year());
+   QString projectName=getProjectName();
+
+   strtemplate.replace(QRegExp("\\|PRJNAME\\|"), projectName);
+   strtemplate.replace(QRegExp("\\|NAME\\|"), projectName);
+   strtemplate.replace(QRegExp("\\|NAMELITTLE\\|"), projectName.lower());
+   strtemplate.replace(QRegExp("\\|NAMEBIG\\|"), projectName.upper());
+
+   strtemplate.replace(QRegExp("\\|PRJDIR\\|"), getProjectDir());
+   strtemplate.replace(QRegExp("\\|PRJFILE\\|"), getProjectFile());
+   strtemplate.replace(QRegExp("\\|SUBDIR\\|"), getSubDir());
+   strtemplate.replace(QRegExp("\\|AUTHOR\\|"), getAuthor());
+   strtemplate.replace(QRegExp("\\|EMAIL\\|"), getEmail());
+   strtemplate.replace(QRegExp("\\|VERSION\\|"), getVersion());
+   strtemplate.replace(QRegExp("\\|BINPROGRAM\\|"), getBinPROGRAM());
+   strtemplate.replace(QRegExp("\\|DATE\\|"), date);
+   strtemplate.replace(QRegExp("\\|YEAR\\|"), year);
+
+   if (!basics)
+   {
+     strtemplate.replace(QRegExp("\\|KDEVPRJVER\\|"), getKDevPrjVersion());
+     strtemplate.replace(QRegExp("\\|PRJTYPE\\|"), getProjectType());
+     strtemplate.replace(QRegExp("\\|CLASSVIEWTREE\\|"), getClassViewTree());
+     strtemplate.replace(QRegExp("\\|SGMLFILE\\|"), getSGMLFile());
+     strtemplate.replace(QRegExp("\\|EXEARGS\\|"), getExecuteArgs());
+     strtemplate.replace(QRegExp("\\|MAKEOPTIONS\\|"), getMakeOptions());
+     strtemplate.replace(QRegExp("\\|LDFLAGS\\|"), getLDFLAGS());
+     strtemplate.replace(QRegExp("\\|LDADD\\|"), getLDADD());
+     strtemplate.replace(QRegExp("\\|CXXFLAGS\\|"), getCXXFLAGS());
+     strtemplate.replace(QRegExp("\\|ADDITCXX\\|"), getAdditCXXFLAGS());
+   }
+
+   return strtemplate;
+}
+
 /*********************************************************************
  *                                                                   *
  *                          PRIVATE METHODS                          *

@@ -347,6 +347,12 @@ public: // Public methods
   void setCurrentWorkspaceNumber(int id);
   int getCurrentWorkspaceNumber();
 
+/** method to fill up a string template with actual project info
+  *@author Walter Tasin
+  */
+  QString& setInfosInString(QString& strtemplate, bool basics=true);
+
+
 protected:
 
   /** Write an entry to the project file. 
