@@ -20,7 +20,6 @@
  *
  */
 
-
 #include "qsourcecolorizer.h"
 #include "qeditor_part.h"
 #include "paragdata.h"
@@ -105,13 +104,15 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
 {
     int state = 0;
     int startLevel = 0;
+    int startState = 0;
     
     if( parag->prev() ){
 	if( parag->prev()->endState() == -1 )
 	    process( doc, parag->prev(), 0, FALSE );
-	state = parag->prev()->endState();
+	startState = parag->prev()->endState();
 	startLevel = ((ParagData*) parag->prev()->extraData())->level();
     }
+    state = startState;
     
     ParagData* extra = (ParagData*) parag->extraData();
     if( extra ){
@@ -168,28 +169,24 @@ void QSourceColorizer::process( QTextDocument* doc, QTextParagraph* parag, int,
     parag->setFirstPreProcess( FALSE );
     
     QTextParagraph *p = parag->next();
-    if ( ((oldLevel != level) ||
-	  (!!oldState || !!parag->endState()) && oldState != parag->endState()) &&
-	 invalidate && p && !p->firstPreProcess() && p->endState() != -1 ) {
-	
-	kdDebug(9032) << "invalidate!!!" << endl;
+    
+    if( (oldLevel != level 
+	 || (oldState == -1 && parag->prev() && parag->endState() != parag->prev()->endState())
+	 || (oldState != -1 && oldState != state))
+	&& invalidate && p && !p->firstPreProcess() && p->endState() != -1 )
+    {		
+	//kdDebug(9032) << "invalidate!!! line = " << parag->paragId() << endl;
+	int count = 0;
 	while ( p ) {
 	    if ( p->endState() == -1 )
 		return;
+	    
+	    ++count;
 	    p->setEndState( -1 );
 	    p = p->next();
 	}
+	//kdDebug(9032) << "invalidated " << count+1 << " lines" << endl;
     }
-    
-#if 0
-    if ( invalidate && parag->next() &&
-	 (state != oldState || level != oldLevel) &&
-	 !parag->next()->firstPreProcess() &&
-	 parag->next()->endState() != -1 ) {
-	kdDebug(9032) << "invalidate!!" << endl;
-	parag->next()->setEndState( -1 );
-    }
-#endif
 }
 
 void QSourceColorizer::insertHLItem( int id, HLItemCollection* item )

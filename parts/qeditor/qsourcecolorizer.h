@@ -138,7 +138,7 @@ public:
     
     int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
 	//kdDebug(9032) << "StartsWithHLItem::checkHLItem" << endl;    
-	if( (length - pos) >= m_text.length() && QString(buffer+pos, m_text.length()) == m_text )
+	if( (length - pos) >= (int)m_text.length() && QString(buffer+pos, m_text.length()) == m_text )
 	    return length;
 	
 	return pos;
@@ -155,7 +155,7 @@ public:
     
     int checkHL( const QChar* buffer, int pos, int length, int*, int* ){
         //kdDebug(9032) << "StringHLItem::checkHLItem" << endl;    
-	if( (length - pos) >= m_text.length() && QString(buffer+pos, m_text.length()) == m_text )
+	if( (length - pos) >= (int)m_text.length() && QString(buffer+pos, m_text.length()) == m_text )
 	   return pos + m_text.length();
 	   
 	return pos;

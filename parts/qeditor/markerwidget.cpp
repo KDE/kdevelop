@@ -88,7 +88,7 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
     while ( p ) {
         if ( !p->isVisible() ) {
             p = p->next();
-            continue;
+            continue;    
         }
         if ( p->rect().y() + p->rect().height() - yOffset < 0 ) {
             p = p->next();
@@ -96,7 +96,6 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
         }
         if ( p->rect().y() - yOffset > height() )
             break;
-
 
         ParagData* paragData = (ParagData*) p->extraData();
         unsigned int mark = paragData ? paragData->mark() : 0;
@@ -119,6 +118,7 @@ void MarkerWidget::paintEvent( QPaintEvent* /*e*/ )
     painter.end();
     bitBlt( this, 0, 0, &m_buffer );
 }
+
 
 void MarkerWidget::resizeEvent( QResizeEvent *e )
 {
