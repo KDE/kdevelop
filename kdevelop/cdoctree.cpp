@@ -18,13 +18,14 @@
 #include <iostream.h>
 
 #include <qfileinfo.h>
+#include <qheader.h>
 
 #include <kmsgbox.h>
 
 #include "cdoctreepropdlg.h"
 #include "cdoctree.h"
 
-CDocTree::CDocTree(QWidget*parent,const char* name,KConfig* config) : KTreeList(parent,name){
+CDocTree::CDocTree(QWidget*parent,const char* name,KConfig* config) : QListView(parent,name){
   config_kdevelop = config;
   icon_loader = KApplication::getKApplication()->getIconLoader();
   left_button = true;
@@ -39,7 +40,11 @@ CDocTree::CDocTree(QWidget*parent,const char* name,KConfig* config) : KTreeList(
   doc_pop->insertItem(i18n("Remove Entry"),this,SLOT(slotRemoveDocumentation()));
   doc_pop->insertSeparator();
   doc_pop->insertItem(i18n("Properties..."),this,SLOT(slotDocumentationProp()));
-  connect(this,SIGNAL(singleSelected(int)),SLOT(slotSingleSelected(int)));
+  connect(this,SIGNAL(rightButtonPressed( QListViewItem *, const QPoint &, int )),SLOT(slotRightButtonPressed( QListViewItem *,const QPoint &,int)));
+  
+  setRootIsDecorated(true);
+  addColumn("JK");
+  header()->hide();
 
 }
 
@@ -56,104 +61,117 @@ void CDocTree::mousePressEvent(QMouseEvent* event){
   }
   mouse_pos.setX(event->pos().x());
   mouse_pos.setY(event->pos().y());
-  KTreeList::mousePressEvent(event); 
+  QListView::mousePressEvent(event); 
 }
 void CDocTree::refresh(CProject* prj){ 
   project = prj;
-  setUpdatesEnabled( false );
+  //  setUpdatesEnabled( false );
   clear();
+  setSorting(-1,false); // no sorting
  
-  KPath path;
-  QString str;
-  QString file;
-  QString str_path;
-  QString str_sub_path;
 
   QPixmap folder_pix = icon_loader->loadMiniIcon("folder.xpm");
   QPixmap book_pix = icon_loader->loadMiniIcon("mini-book1.xpm");
-  str = i18n("Documentation");
-  path.push(&str);   
-  insertItem(i18n("Documentation"),&folder_pix);
-  
-  
-  
-  addChildItem(i18n("KDevelop"),&folder_pix,&path);
-  addChildItem(i18n("Qt/KDE Libraries"),&folder_pix,&path);
-  addChildItem(i18n("Others"),&folder_pix,&path);
-  addChildItem(i18n("Current Project"),&folder_pix,&path);
-  
 
-  //  add KDevelop
-  str_path = i18n("KDevelop");
-  path.push(&str_path);
-  addChildItem(i18n("Manual"),&book_pix,&path);
-  addChildItem(i18n("Tutorial"),&book_pix,&path);
-  addChildItem(i18n("C/C++ Reference"),&book_pix,&path);
+  QListViewItem* top_item= new QListViewItem(this,i18n("Documentation"));
+  top_item->setPixmap(0,folder_pix);
   
+  // current Project
+  QListViewItem* project_item = new QListViewItem(top_item,i18n("Current Project"));
+  project_item->setPixmap(0,folder_pix);
+  
+  QListViewItem* item =0;
 
-  //check for khtml or khtmlw installed in documentation. If no documentation present, use khtml
-  config_kdevelop->setGroup("Doc_Location");
-  QString kde_path=config_kdevelop->readEntry("doc_kde");
-  // check for library documentations
-  QString chk_khtmlw_file=kde_path+"khtmlw/index.html";
-  QString chk_kdeutils_file=kde_path+"kdeutils/index.html";
+  // add the Project-Doc
+  if(project){
+    if(prj->valid){
+      item = new QListViewItem(project_item,i18n("User-Manual"));
+      item->setPixmap(0,book_pix);
+      item = new QListViewItem(project_item,i18n("API-Documentation"));
+      item->setPixmap(0,book_pix);
+    }
+  }
 
-  //  add the Libraries
-  str_path = i18n("Qt/KDE Libraries");
-  path.pop();
-  path.push(&str_path);
-  addChildItem(i18n("Qt-Library"),&book_pix,&path);
-  addChildItem(i18n("KDE-Core-Library"),&book_pix,&path);
-  addChildItem(i18n("KDE-UI-Library"),&book_pix,&path);
-  addChildItem(i18n("KDE-KFile-Library"),&book_pix,&path);
-  if(QFileInfo(chk_khtmlw_file).exists())
-    addChildItem(i18n("KDE-KHTMLW-Library"),&book_pix,&path);    //insert khtmlw if exists
-  else
-    addChildItem(i18n("KDE-KHTML-Library"),&book_pix,&path);     // else insert khtml per default
-  addChildItem(i18n("KDE-KFM-Library"),&book_pix,&path);
-  if(QFileInfo(chk_kdeutils_file).exists())
-    addChildItem(i18n("KDE-KDEutils-Library"),&book_pix,&path);  // also insert the kdeutils library if exists
-  addChildItem(i18n("KDE-KAB-Library"),&book_pix,&path);
-  addChildItem(i18n("KDE-KSpell-Library"),&book_pix,&path);
-
-  // add the others
-  str_path = i18n("Others");
-  path.pop();
-  path.push(&str_path);
+  // Others
+  QListViewItem* others_item = new QListViewItem(top_item,i18n("Others"));
+  others_item->setPixmap(0,folder_pix);
 
   config_kdevelop->setGroup("Other_Doc_Location");
   QStrList others_list;
   QString others_str;
   config_kdevelop->readListEntry("others_list",others_list);
   for(others_str=others_list.first();others_str !=0;others_str=others_list.next()){
-    addChildItem(others_str,&book_pix,&path);
+    item = new QListViewItem(others_item,others_str);
+    item->setPixmap(0,book_pix);
   }
+  //Qt/KDE Libraries
+  QListViewItem* lib_item = new QListViewItem(top_item,i18n("Qt/KDE Libraries"));
+  lib_item->setPixmap(0,folder_pix);
   
-  
-  // add the Project-Doc
-  str_path = i18n("Current Project");
-  path.pop();
-  path.push(&str_path);
-  if(project){
-    if(prj->valid){
-      addChildItem(i18n("API-Documentation"),&book_pix,&path);
-      addChildItem(i18n("User-Manual"),&book_pix,&path);
-    }
+  //check for khtml or khtmlw installed in documentation. If no documentation present, use khtml
+  config_kdevelop->setGroup("Doc_Location");
+  QString kde_path=config_kdevelop->readEntry("doc_kde");
+  // check for library documentations
+  QString chk_khtmlw_file=kde_path+"khtmlw/index.html";
+  QString chk_kdeutils_file=kde_path+"kdeutils/index.html";
+ 
+  item = new QListViewItem(lib_item,i18n("KDE-KSpell-Library"));
+  item->setPixmap(0,book_pix);
+  item = new QListViewItem(lib_item,i18n("KDE-KAB-Library"));
+  item->setPixmap(0,book_pix);
+  if(QFileInfo(chk_kdeutils_file).exists()){
+    item = new QListViewItem(lib_item,i18n("KDE-KDEutils-Library"));
+    item->setPixmap(0,book_pix);// also insert the kdeutils library if exists
   }
-  
-  setExpandLevel(2);
-  setUpdatesEnabled( TRUE );
+  item = new QListViewItem(lib_item,i18n("KDE-KFM-Library"));
+  item->setPixmap(0,book_pix);
+  if(QFileInfo(chk_khtmlw_file).exists()){
+    item = new QListViewItem(lib_item,i18n("KDE-KHTMLW-Library"));
+    item->setPixmap(0,book_pix);
+  }
+  else{
+    item = new QListViewItem(lib_item,i18n("KDE-KHTML-Library"));
+    item->setPixmap(0,book_pix); // else insert khtml per defaull
+  }
+  item = new QListViewItem(lib_item,i18n("KDE-KFile-Library"));
+  item->setPixmap(0,book_pix);
+  item = new QListViewItem(lib_item,i18n("KDE-UI-Library"));
+  item->setPixmap(0,book_pix);
+  item = new QListViewItem(lib_item,i18n("KDE-Core-Library"));
+  item->setPixmap(0,book_pix);
+  item = new QListViewItem(lib_item,i18n("Qt-Library"));
+  item->setPixmap(0,book_pix);
+ 
+
+  // kdevelop
+  QListViewItem* kdevelop_item = new QListViewItem(top_item,i18n("KDevelop"));
+  kdevelop_item->setPixmap(0,folder_pix);
+  item = new QListViewItem(kdevelop_item,i18n("C/C++ Reference"));
+  item->setPixmap(0,book_pix);
+  item = new QListViewItem(kdevelop_item,i18n("Tutorial"));
+  item->setPixmap(0,book_pix);
+  item = new QListViewItem(kdevelop_item,i18n("Manual"));
+  item->setPixmap(0,book_pix);
+
+  setOpen ( top_item,true );
+  setOpen ( lib_item,true );
+  setOpen ( kdevelop_item,true );
+  setOpen ( others_item,true );
+  setOpen ( project_item,true );
+
   repaint();
 
 }
-void CDocTree::slotSingleSelected(int index){
-  if(right_button){
-    //cerr << itemAt(index)->getText();
-    if(QString(itemAt(index)->getText()) == i18n("Others") ){
+void CDocTree::slotRightButtonPressed( QListViewItem *item,const QPoint &,int){
+  
+  if(item != 0){
+    QString text= item->text(0);
+    setCurrentItem(item);
+    if(text == i18n("Others") ){
       others_pop->popup(this->mapToGlobal(mouse_pos));
      
     }
-    else if(QString(itemAt(index)->getParent()->getText()) == i18n("Others")){
+    else if(QString(item->parent()->text(0)) == i18n("Others")){
       doc_pop->popup(this->mapToGlobal(mouse_pos));
     }
   }
@@ -171,11 +189,11 @@ void CDocTree::slotAddDocumentation(){
     config_kdevelop->readListEntry("others_list",others_list);
 
     // find the correct place
-    if(QString(getCurrentItem()->getText()) == i18n("Others") ){ 
+    if(QString(currentItem()->text(0)) == i18n("Others") ){ 
       others_list.insert(0,dlg.name_edit->text());
     }
     else{
-      pos = others_list.find(QString(getCurrentItem()->getText()));
+      pos = others_list.find(QString(currentItem()->text(0)));
       others_list.insert(pos+1,dlg.name_edit->text());
     }
     //write the list
@@ -188,9 +206,9 @@ void CDocTree::slotAddDocumentation(){
 }
 
 void CDocTree::slotRemoveDocumentation(){
-  QString name = QString(getCurrentItem()->getText());
+  QString name = currentItem()->text(0);
   QStrList others_list;
-
+  
   config_kdevelop->setGroup("Other_Doc_Location");
   config_kdevelop->readListEntry("others_list",others_list);
   others_list.remove(name);
@@ -199,16 +217,16 @@ void CDocTree::slotRemoveDocumentation(){
   refresh(project);
 }
 void CDocTree::slotDocumentationProp(){
-  QString name = QString(getCurrentItem()->getText());
+  QString name = currentItem()->text(0);
   config_kdevelop->setGroup("Other_Doc_Location");
   QString filename = config_kdevelop->readEntry(name);
-
+  
   CDocTreePropDlg dlg;
   dlg.setCaption(i18n("Properties..."));
   dlg.name_edit->setText(name);
   dlg.name_edit->setEnabled(false);
   dlg.file_edit->setText(filename);
-
+  
   if(dlg.exec()){
     config_kdevelop->setGroup("Other_Doc_Location");
     config_kdevelop->writeEntry(name,dlg.file_edit->text());

@@ -839,20 +839,26 @@ void CKDevelop::slotToolsKTranslator(){
 void CKDevelop::slotOptionsEditor(){
   slotStatusMsg(i18n("Setting up the Editor..."));
   cpp_widget->optDlg();
+  config->setGroup("KWrite Options");
+  cpp_widget->writeConfig(config);
+  cpp_widget->doc()->writeConfig(config);
   header_widget->copySettings(cpp_widget);
   config->setGroup("KWrite Options");
-  edit_widget->writeConfig(config);
-  edit_widget->doc()->writeConfig(config);
+  header_widget->readConfig(config);
+  header_widget->doc()->readConfig(config);
   slotStatusMsg(IDS_DEFAULT);
 
 }
 void CKDevelop::slotOptionsEditorColors(){
   slotStatusMsg(i18n("Setting up the Editor's colors..."));
   cpp_widget->colDlg();
+  config->setGroup("KWrite Options");
+  cpp_widget->writeConfig(config);
+  cpp_widget->doc()->writeConfig(config);
   header_widget->copySettings(cpp_widget);
   config->setGroup("KWrite Options");
-  edit_widget->writeConfig(config);
-  edit_widget->doc()->writeConfig(config);
+  header_widget->readConfig(config);
+  header_widget->doc()->readConfig(config);
   slotStatusMsg(IDS_DEFAULT);
 
 }
@@ -861,19 +867,25 @@ void CKDevelop::slotOptionsEditorColors(){
 void CKDevelop::slotOptionsSyntaxHighlightingDefaults(){
   slotStatusMsg(i18n("Setting up syntax highlighting default colors..."));
   cpp_widget->hlDef();
+  config->setGroup("KWrite Options");
+  cpp_widget->writeConfig(config);
+  cpp_widget->doc()->writeConfig(config);
   header_widget->copySettings(cpp_widget);
   config->setGroup("KWrite Options");
-  edit_widget->writeConfig(config);
-  edit_widget->doc()->writeConfig(config);
+  header_widget->readConfig(config);
+  header_widget->doc()->readConfig(config);
   slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotOptionsSyntaxHighlighting(){
   slotStatusMsg(i18n("Setting up syntax highlighting colors..."));
   cpp_widget->hlDlg();
+  config->setGroup("KWrite Options");
+  cpp_widget->writeConfig(config);
+  cpp_widget->doc()->writeConfig(config);
   header_widget->copySettings(cpp_widget);
   config->setGroup("KWrite Options");
-  edit_widget->writeConfig(config);
-  edit_widget->doc()->writeConfig(config);
+  header_widget->readConfig(config);
+  header_widget->doc()->readConfig(config);
   slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotOptionsDocBrowser(){
@@ -1640,17 +1652,13 @@ void CKDevelop::slotRealFileTreeSelected(int index){
 
 }
 
-void CKDevelop::slotDocTreeSelected(int index){
-  QString string = doc_tree->itemAt(index)->getText() ;
-  if( string == "Documentation"){
+void CKDevelop::slotDocTreeSelected(){
+  QString text = doc_tree->currentItem()->text(0);
+  if( text == i18n("Documentation")){
     slotHelpContents();
     return;
   }
-  if (doc_tree->itemAt(index)->hasChild() == true) return; // no action
-  KPath* path;
-  QString* str;
-  path = doc_tree->itemPath(index);
-  str = path->pop();
+  if (doc_tree->currentItem()->childCount() > 0) return; // no action
 
   KLocale *kloc = KApplication::getKApplication()->getLocale();
 
@@ -1658,7 +1666,7 @@ void CKDevelop::slotDocTreeSelected(int index){
   QString file;
 
   config->setGroup("Doc_Location");
-  if(*str == i18n("Tutorial") ){
+  if(text == i18n("Tutorial") ){
     // first try the locale setting
     file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
     if( !QFileInfo( file ).exists() ){
@@ -1669,7 +1677,7 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
     return;
   }
-  if(*str == i18n("Manual") ){
+  if(text == i18n("Manual") ){
     // first try the locale setting
     file = strpath + kloc->language() + '/' + "kdevelop/index.html";
 
@@ -1680,7 +1688,7 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
     return;
   }
-  if(*str == i18n("C/C++ Reference") ){
+  if(text == i18n("C/C++ Reference") ){
     // first try the locale setting
     file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
 
@@ -1688,10 +1696,10 @@ void CKDevelop::slotDocTreeSelected(int index){
       // not found: use the default
       file = strpath + "default/" + "kdevelop/reference/C/cref.html";
     }
-	  if( !QFileInfo( file ).exists() ){
-  		// show the translated error page
-  		file = strpath + kloc->language() + '/' + "kdevelop/cref.html";
-  	}
+    if( !QFileInfo( file ).exists() ){
+      // show the translated error page
+      file = strpath + kloc->language() + '/' + "kdevelop/cref.html";
+    }
     if( !QFileInfo( file ).exists() ){
       // not found: use the default error page
       file = strpath + "default/" + "kdevelop/cref.html";
@@ -1699,59 +1707,59 @@ void CKDevelop::slotDocTreeSelected(int index){
     slotURLSelected(browser_widget,"file:" + file,1,"test");
     return;
   }
-  if(*str == i18n("Qt-Library") ){
+  if(text == i18n("Qt-Library") ){
     slotURLSelected(browser_widget,"file:" +config->readEntry("doc_qt") + "index.html",1,"test");
     return;
   }
-  if(*str == i18n("KDE-Core-Library") ){
+  if(text == i18n("KDE-Core-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdecore/index.html",1,"test");
     return;
   }
-  if(*str == i18n("KDE-UI-Library") ){
+  if(text == i18n("KDE-UI-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdeui/index.html",1,"test");
     return;
   }
-  if(*str == i18n("KDE-KFile-Library") ){
+  if(text == i18n("KDE-KFile-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfile/index.html",1,"test");
     return;
   }
-  if(*str == i18n("KDE-KHTMLW-Library") ){
+  if(text == i18n("KDE-KHTMLW-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtmlw/index.html",1,"test");
      return;
   }
-  if(*str == i18n("KDE-KHTML-Library") ){
+  if(text == i18n("KDE-KHTML-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "khtml/index.html",1,"test");
      return;
   }
-  if(*str == i18n("KDE-KFM-Library") ){
+  if(text == i18n("KDE-KFM-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kfmlib/index.html",1,"test");
      return;
   }
-  if(*str == i18n("KDE-KDEutils-Library") ){
+  if(text == i18n("KDE-KDEutils-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kdeutils/index.html",1,"test");
      return;
   }
-  if(*str == i18n("KDE-KAB-Library") ){
+  if(text == i18n("KDE-KAB-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kab/index.html",1,"test");
      return;
   }
-  if(*str == i18n("KDE-KSpell-Library") ){
+  if(text == i18n("KDE-KSpell-Library") ){
     slotURLSelected(browser_widget,"file:" + config->readEntry("doc_kde") + "kspell/index.html",1,"test");
      return;
   }
-  if(*str == i18n("API-Documentation") ){
+  if(text == i18n("API-Documentation") ){
     slotHelpAPI();
      return;
   }
-  if(*str == i18n("User-Manual") ){
+  if(text == i18n("User-Manual") ){
     slotHelpManual();
      return;
   }
-  //
+  
   config->setGroup("Other_Doc_Location");
-  QFileInfo file_info(config->readEntry(*str));
+  QFileInfo file_info(config->readEntry(text));
   if(file_info.isFile()){
-    slotURLSelected(browser_widget,"file:" + config->readEntry(*str),1,"test");
+    slotURLSelected(browser_widget,"file:" + config->readEntry(text),1,"test");
   }
 
 }

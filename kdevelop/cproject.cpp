@@ -293,7 +293,15 @@ void CProject::getFilters(QString group,QStrList& filters){
   config->setGroup("LFV Groups");
   config->readListEntry(group,filters);
 }
+
 bool CProject::addFileToProject(QString rel_name,TFileInfo info){
+  
+  QStrList all_files;
+  getAllFiles(all_files);
+
+  if(all_files.contains(rel_name) > 0){ // file is already in Project?
+    return false; // no new subdir;
+  }
   
   QStrList list_files;
   QString makefile_name;

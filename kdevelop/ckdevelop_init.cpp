@@ -146,7 +146,6 @@ void CKDevelop::init(){
 
   doc_tree = new CDocTree(t_tab_view,"DOC",config);
   doc_tree->setFocusPolicy(QWidget::NoFocus);
-  doc_tree->setIndentSpacing(15);
 
   t_tab_view->addTab(class_tree,"CV");
   t_tab_view->addTab(log_file_tree,"LFV");
@@ -168,7 +167,7 @@ void CKDevelop::init(){
 
   connect(real_file_tree, SIGNAL(singleSelected(int)), SLOT(slotRealFileTreeSelected(int)));
 
-  connect(doc_tree, SIGNAL(singleSelected(int)), SLOT(slotDocTreeSelected(int)));
+  connect(doc_tree, SIGNAL(selectionChanged()), SLOT(slotDocTreeSelected()));
 
 
   // the tabbar + tabwidgets for edit and browser

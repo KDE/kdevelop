@@ -24,13 +24,14 @@
 #include <kapp.h>
 #include "cproject.h"
 #include <kpopmenu.h>
+#include <qlistview.h>
 
 
 /** the documentation tree (manual,tutorial,KDE-libs...)
   *@author Sandy Meier
   */
 
-class CDocTree : public KTreeList {
+class CDocTree : public QListView {
   Q_OBJECT 
 public: 
   /** construtor */
@@ -56,10 +57,6 @@ protected:
  void slotAddDocumentation();
   void slotRemoveDocumentation();
   void slotDocumentationProp();
-  void  slotSingleSelected(int index);
-
-
-  
-
+  void slotRightButtonPressed( QListViewItem *,const QPoint &,int);
 };
 #endif

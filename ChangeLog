@@ -1,3 +1,10 @@
+1999-03-24  Sandy Meier  <smeier@rz.uni-potsdam.de>
+
+	* fixed a update bug in all slotOptionsEditor...() methods, 
+	the header widget didn't get updated
+	* fixed CKDevelop::addFileToProject():  proof if file already is included in the project file
+	* ported the CDocTree (inherited KTreeList ) to a QListView
+
 1999-03-24 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed the classtooldialog. All options should work now.
 	* fixed minor glitch in the classparser. Didn't handle defaultvalues
@@ -81,7 +88,7 @@
 	* fixed a bug in the Application Wizard,produced segfault by closing kdevelop
 
 1999-03-10  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
-	* fixed many bugs like overwriting existing files, memorylinks, no settingdefault in printdialog...
+	* fixed many bugs, like overwriting existing files, memorylinks, no settingdefault in printdialog...
 
 1999-03-10  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * fixed the addExisting files-asked every time, even when a file did not exist

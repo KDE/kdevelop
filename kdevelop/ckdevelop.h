@@ -90,12 +90,13 @@ public:
   void initWhatsThis();
   void initProject();
   void refreshTrees();
-	void setKeyAccel();
 
-	void initKDlg();
-	void initKDlgMenuBar();
-	void initKDlgToolBar();
-	void initKDlgStatusBar();
+  void setKeyAccel();
+  
+  void initKDlg();
+  void initKDlgMenuBar();
+  void initKDlgToolBar();
+  void initKDlgStatusBar();
   void initKDlgKeyAccel();
   /** sets the Main window caption on startup if in KDlgedit mode, used by main() */
   void setKDlgCaption();
@@ -125,12 +126,12 @@ public:
 
  public slots:
 
-////////////////////////
-// FILE-Menu entries
-///////////////////////
-
-  /** generate a new file*/
-  void slotFileNew();
+ ////////////////////////
+ // FILE-Menu entries
+ ///////////////////////
+ 
+ /** generate a new file*/
+ void slotFileNew();
   /**open a file*/
   void slotFileOpen();
   /** close the cuurent file*/
@@ -146,15 +147,15 @@ public:
   void slotFilePrint();
   /** quit kdevelop*/
   void slotFileQuit();
-
-////////////////////////
-// EDIT-Menu entries
+  
+  ////////////////////////
+  // EDIT-Menu entries
 ///////////////////////
-	/** Undo last editing step */
+  /** Undo last editing step */
   void slotEditUndo();
   /** Redo last editing step */
   void slotEditRedo();
-	/** cuts a selection to the clipboard */
+  /** cuts a selection to the clipboard */
   void slotEditCut();
   /** copies a selection to the clipboard */
   void slotEditCopy();
@@ -162,11 +163,11 @@ public:
   void slotEditPaste();
   /** inserts a file at the cursor position */
   void slotEditInsertFile();
-	/** opens the search dialog for the editing widget */
+  /** opens the search dialog for the editing widget */
   void slotEditSearch();
   /** repeat last search */
   void slotEditRepeatSearch();
-	/** opens the search and replace dialog */
+  /** opens the search and replace dialog */
   void slotEditReplace();
   void slotEditIndent();
   void slotEditUnindent();
@@ -176,11 +177,11 @@ public:
   void slotEditInvertSelection();
   /** remove all text selections */
   void slotEditDeselectAll();
-
-////////////////////////
-// VIEW-Menu entries
-///////////////////////
-	/** opens the goto line dialog */
+  
+  ////////////////////////
+  // VIEW-Menu entries
+  ///////////////////////
+  /** opens the goto line dialog */
   void slotViewGotoLine();
   /** dis-/enables the treeview */
   void slotViewTTreeView();
@@ -196,11 +197,11 @@ public:
   void slotViewTStatusbar();
   /** refresh all trees and other widgets*/
   void slotViewRefresh();
-
-////////////////////////
-// PROJECT-Menu entries
-///////////////////////
- /** generates a new project with KAppWizard*/
+  
+  ////////////////////////
+  // PROJECT-Menu entries
+  ///////////////////////
+  /** generates a new project with KAppWizard*/
   void slotProjectNewAppl();
   /** generates a new project file */
   void slotProjectNew();
@@ -210,7 +211,7 @@ public:
   void slotProjectOpenCmdl(const char*);
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
-	/** add a new file to the project-same as file new */
+  /** add a new file to the project-same as file new */
   void slotProjectAddNewFile();
   /** opens the add existing files dialog */
   void slotProjectAddExistingFiles();
@@ -222,18 +223,18 @@ public:
   void slotProjectNewClass();
   /** opens the properties dialog for the project files */
   void slotProjectFileProperties();
-	/** opens the project options dialog */
+  /** opens the project options dialog */
   void slotProjectOptions();
-	/** selects the project workspace */
+  /** selects the project workspace */
   void slotProjectWorkspaces(int);
-
-////////////////////////
-// BUILD-Menu entries
-///////////////////////
+  
+  ////////////////////////
+  // BUILD-Menu entries
+  ///////////////////////
   /** compile the actual sourcefile using setted options */
   void slotBuildCompileFile();
   void slotBuildMake();
-//   void slotBuildMakeWith();
+  //   void slotBuildMakeWith();
   void slotBuildRebuildAll();
   void slotBuildCleanRebuildAll();
   void slotBuildStop();
@@ -242,20 +243,20 @@ public:
   void slotBuildDistClean();
   void slotBuildAutoconf();
   void slotBuildConfigure();
-	void slotBuildMessages();
+  void slotBuildMessages();
   void slotBuildAPI();
   void slotBuildManual();
-
-////////////////////////
-// TOOLS-Menu entries
-///////////////////////
+  
+  ////////////////////////
+  // TOOLS-Menu entries
+  ///////////////////////
   void slotToolsKDbg();
   void slotToolsKIconEdit();
   void slotToolsKTranslator();
-
-////////////////////////
-// OPTIONS-Menu entries
-///////////////////////
+  
+  ////////////////////////
+  // OPTIONS-Menu entries
+  ///////////////////////
   void slotOptionsEditor();
   void slotOptionsEditorColors();
   void slotOptionsSyntaxHighlightingDefaults();
@@ -277,13 +278,13 @@ public:
   void slotOptionsDefaultCV(bool);
   /** shows the Update dialog and sends output to the messages widget */
   void slotOptionsUpdateKDEDocumentation();
-	/** shows the create search database dialog called by the setup button */
+  /** shows the create search database dialog called by the setup button */
   void  slotOptionsCreateSearchDatabase();
-
-////////////////////////
-// HELP-Menu entries
-///////////////////////
-	/** goes one page back in the documentation browser */
+  
+  ////////////////////////
+  // HELP-Menu entries
+  ///////////////////////
+  /** goes one page back in the documentation browser */
   void slotHelpBack();
   /** goes one page forward in the documentatio browser */
   void slotHelpForward();
@@ -291,7 +292,7 @@ public:
   void slotHelpSearchText();
   /** search marked text with a text string */
   void slotHelpSearchText(QString text);
-	/** shows the Search for Help on.. dialog to insert a search expression */
+  /** shows the Search for Help on.. dialog to insert a search expression */
   void slotHelpSearch();
   /** shows the C/C++-referenc */
   void slotHelpReference();
@@ -309,28 +310,28 @@ public:
   void slotHelpAPI();
   /** shows the manual of the current project */
   void slotHelpManual();
-	/** shows the KDevelop manual */
+  /** shows the KDevelop manual */
   void slotHelpContents();
   void slotHelpHomepage();
   /** shows the aboutbox of KDevelop */
   void slotHelpAbout();
 
-
-////////////////////////
-// KDlgEdit-View-Menu entries -- managed by kdevelop
-///////////////////////
+  
+  ////////////////////////
+  // KDlgEdit-View-Menu entries -- managed by kdevelop
+  ///////////////////////
   void slotKDlgViewPropView();
   void slotKDlgViewToolbar();
   void slotKDlgViewStatusbar();
-
-////////////////////////
-// All slots which are used if the user clicks or selects something in the view
-///////////////////////
-	/** swich construction for the toolbar icons, selecting the right slots */
+  
+  ////////////////////////
+  // All slots which are used if the user clicks or selects something in the view
+  ///////////////////////
+  /** swich construction for the toolbar icons, selecting the right slots */
   void slotToolbarClicked(int);
   /** click on the main window tabs: header, source,documentation or tools*/
   void slotSTabSelected(int item);
-	/** set the window tab automatically without click */
+  /** set the window tab automatically without click */
   void slotSCurrentTab(int item);
   /** click on the treeview tabs: cv,lfv,wfv,doc*/
   void slotTTabSelected(int item);
@@ -338,14 +339,14 @@ public:
   void slotTCurrentTab(int item);
 	
   ///////////// -- the methods for the treeview selection
-	/** click action on classviewer */
+  /** click action on classviewer CV */
   void slotClassTreeSelected(int);
   /** click action on LFV */
   void slotLogFileTreeSelected(int index);
-	/** click action on RFV */
+  /** click action on RFV */
   void slotRealFileTreeSelected(int index);
-	/** click action on DOC */
-  void slotDocTreeSelected(int index);
+  /** click action on DOC */
+  void slotDocTreeSelected();
   /** selection of classes in the browser toolbar */
   void slotClassChoiceCombo(int index);
   /** selection of methods in the browser toolbar */
@@ -389,8 +390,6 @@ public:
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
   void slotProcessExited(KProcess* proc);
   void slotSearchProcessExited(KProcess*);
-
-
   
   // return the position of the classdeclaration begin
   void CVGotoDefinition(int index);
@@ -429,7 +428,7 @@ private:
   QWhatsThis* whats_this;
 
   // the menus for the dialogeditor- specific. other menus inserted as the standard above
-	QPopupMenu* kdlg_file_menu;
+  QPopupMenu* kdlg_file_menu;
   QPopupMenu* kdlg_edit_menu;
   QPopupMenu* kdlg_view_menu;
   QPopupMenu* kdlg_project_menu;
@@ -446,13 +445,13 @@ private:
 
   KNewPanner* view;
   KNewPanner* top_panner;
-	KNewPanner* kdlg_top_panner;  // devides the top_panner for edit and properties widget of the dialogeditor
-
-	KDlgEdit* kdlgedit;          // main class for the dialogeditor- handles menu/toolbar etc. events specified for the dialogeditor
-	
+  KNewPanner* kdlg_top_panner;  // devides the top_panner for edit and properties widget of the dialogeditor
+  
+  KDlgEdit* kdlgedit;          // main class for the dialogeditor- handles menu/toolbar etc. events specified for the dialogeditor
+  
   bool beep; // set this to true, if you want a beep after a process,slotProcessExited()
   
-
+  
   KIconLoader icon_loader;
   KProcess process; // for tools,compiler,make,kodc
   KProcess appl_process; //only for selfmade appl
@@ -517,7 +516,7 @@ private:
   bool bDefaultCV;
   bool bKDevelop;
   KProgress* statProg;
-//  QProgressBar* statProg;
+  //  QProgressBar* statProg;
   //some vars for the searchengine
   QString search_output;
   QString doc_search_text;
