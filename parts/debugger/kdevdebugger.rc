@@ -23,7 +23,7 @@
   <Action name="debug_memview"/>
  </Menu>
 </MenuBar>
-<ToolBar name="debugToolBar">
+<ToolBar name="browserToolBar">
   <Action name="debug_run"/>
   <Action name="debug_cont"/>
   <Action name="debug_stepover"/>
@@ -31,6 +31,7 @@
   <Action name="debug_stepout"/>
   <Separator/>
   <Action name="debug_memview"/>
+  </WeakSeparator/>
 </ToolBar>
 </kpartgui>
 

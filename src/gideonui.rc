@@ -59,6 +59,20 @@
   </Menu>
 </MenuBar>
 
+<ToolBar name="mainToolBar" position="Top" iconText="IconOnly" noMerge="1" fullWidth="false" newline="true" >
+  <Action name="project_open" />
+  <Separator/>
+  <Merge/>
+  <Action name="help_whats_this"/>
+</ToolBar>
+
+<ToolBar name="buildToolBar" position="Top" iconText="IconOnly" >
+  <Merge/>
+  <Action name="stop_processes"/>
+</ToolBar>
+
+<ToolBar name="browserToolBar" position="Top" newline="true">
+</ToolBar>
 
 <Menu name="rb_popup">
   <Merge/>
@@ -67,15 +81,4 @@
   <Action name="file_closeother"/>
 </Menu>
 
-
-<ToolBar position="Top" iconText="IconOnly" noMerge="1" name="mainToolBar" fullWidth="false" >
-  <Action name="project_open" />
-  <Separator/>
-  <Merge/>
-  <Action name="help_whats_this"/>
-</ToolBar>
-<ToolBar name="buildToolBar">
-  <Merge/>
-  <Action name="stop_processes"/>
-</ToolBar>
 </kpartgui>

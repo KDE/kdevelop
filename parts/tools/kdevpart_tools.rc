@@ -7,7 +7,7 @@
 	<Merge/>
   </Menu>
 </MenuBar>
-<ToolBar position="Top" iconText="IconOnly" noMerge="1" name="toolsToolBar" fullWidth="false" >
+<ToolBar position="Top" iconText="IconOnly" noMerge="1" name="toolsToolBar" fullWidth="false" hidden="true" >
   <ActionList name="tools_list"/>
 </ToolBar>
 </kpartplugin>

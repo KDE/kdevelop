@@ -4,6 +4,7 @@
   <Action name="class_combo" />
   <Action name="method_combo" />
   <Action name="class_wizard" />
+  <Separator/>
 </ToolBar>
 </kpartgui>
 
