@@ -2761,8 +2761,10 @@ bool FormWindow::event( QEvent *e )
 {
     if (e->type() == QEvent::ShowMaximized)
     {
+#if QT_VERSION >= 0x030300
         if ( isMaximized() )
             setWindowState( windowState() & ~WindowMaximized | WindowActive);
+#endif
         return true;
     }
     return QWidget::event(e);
