@@ -20,6 +20,8 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
+
 
 #include "kdevcore.h"
 #include "kdevmakefrontend.h"
@@ -53,6 +55,10 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
 
 	KPopupMenu *sub = new KPopupMenu(popup);
         QString name = fi.fileName();
+        sub->insertItem( i18n("Edit: %1").arg(name),
+                           this, SLOT(slotEdit()) );
+        sub->insertItem( i18n("Revert: %1").arg(name),
+                           this, SLOT(slotRevert()) );
         sub->insertItem( i18n("Submit: %1").arg(name),
                            this, SLOT(slotCommit()) );
         sub->insertItem( i18n("Sync: %1").arg(name),
@@ -66,37 +72,61 @@ void PerforcePart::contextMenu(QPopupMenu *popup, const Context *context)
     }
 }
 
-
-void PerforcePart::slotCommit()
+void PerforcePart::execCommand( const QString& cmd ) 
 {
-    KMessageBox::error( 0, "not implemented yet" );
-/*  TODO: need a solution here...
-    QString dir, name;
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
-        dir = fi.absFilePath();
-        name = ".";
-    } else {
-        dir = fi.dirPath();
-        name = fi.fileName();
-    }
-    
-    CommitDialog d;
-    if (d.exec() == QDialog::Rejected)
+        KMessageBox::error( 0, i18n("Cannot handle directories, please select single files") );
         return;
-
-    QString message = d.logMessage();
-    if (!message.isEmpty())
-     message = KShellProcess::quote(message);
+    }
+    QString dir = fi.dirPath();
+    QString name = fi.fileName();
 
     QString command("cd ");
     command += dir;
-    command += " && p4 submit -i ";
+    command += " && p4 " + cmd + " ";
     command += name;
-    command += "<\'" + message + "\'"
 
     makeFrontend()->queueCommand(dir, command);
-*/
+}
+
+void PerforcePart::slotEdit()
+{
+    execCommand( "edit" );
+}
+
+void PerforcePart::slotRevert()
+{
+    if ( KMessageBox::questionYesNo( 0, 
+            i18n("Do you really want to revert "
+                 "the file %1 and lose all your changes?").arg(popupfile) ) == KMessageBox::Yes ) {
+        execCommand( "revert" );
+    }
+}
+
+void PerforcePart::slotCommit()
+{
+    QFileInfo fi(popupfile);
+    if (fi.isDir()) {
+        KMessageBox::error( 0, i18n("Submitting of subdirectories is not supported") );
+        return;
+    }
+    
+    CommitDialog d;
+    QStringList lst;
+    lst << popupfile;
+    d.setFiles( lst );
+    if (d.exec() == QDialog::Rejected)
+        return;
+
+    QString message = d.changeList();
+    if (!message.isEmpty())
+     message = KShellProcess::quote(message);
+
+    QString command("echo " + message);
+    command += " | p4 submit -i";
+
+    makeFrontend()->queueCommand("", command);
 }
 
 
@@ -106,7 +136,7 @@ void PerforcePart::slotUpdate()
     QFileInfo fi(popupfile);
     if (fi.isDir()) {
         dir = fi.absFilePath();
-        name = ".";
+        name = "..."; // three dots means "recoursive"
     } else {
         dir = fi.dirPath();
         name = fi.fileName();
@@ -123,31 +153,13 @@ void PerforcePart::slotUpdate()
 
 void PerforcePart::slotAdd()
 {
-    QFileInfo fi(popupfile);
-    QString dir = fi.dirPath();
-    QString name = fi.fileName();
-    
-    QString command("cd ");
-    command += dir;
-    command += " && p4 add ";
-    command += name;
-
-    makeFrontend()->queueCommand(dir, command);
+    execCommand( "add" );
 }
 
 
 void PerforcePart::slotRemove()
 {
-    QFileInfo fi(popupfile);
-    QString dir = fi.dirPath();
-    QString name = fi.fileName();
-
-    QString command("cd ");
-    command += dir;
-    command += " && p4 delete ";
-    command += name;
-
-    makeFrontend()->queueCommand(dir, command);
+    execCommand( "delete" );
 }
 
 #include "perforcepart.moc"

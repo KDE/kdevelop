@@ -33,8 +33,12 @@ private slots:
     void slotUpdate();
     void slotAdd();
     void slotRemove();
+    void slotEdit();
+    void slotRevert();
 
 private:
+    /** calls p4 with the command cmd and appends the filename */
+    void execCommand( const QString& cmd );
     QString popupfile;
 };
 
