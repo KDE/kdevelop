@@ -85,7 +85,7 @@ public: // Implementation of virtual methods
   virtual const char *asPersistantString( QString &str );
 
   /** Initialize the object from a persistant string. */
-  virtual int fromPersistantString( const char *str, int startPos ) {return 0;}
+  virtual int fromPersistantString( const char *, int) {return 0;}
 
 public: // Public queries
 

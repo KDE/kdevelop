@@ -51,7 +51,7 @@ public: // Public methods
   void asPersistantString( QString &dataStr );
 
   /** Initialize the object from a persistant string. */
-  int fromPersistantString( const char *str, int startPos ) { return startPos; }
+  int fromPersistantString( const char *, int startPos ) { return startPos; }
 
   /** Output the class as text on stdout */
   void out();
