@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Doxygen
+Name=KDevDoxygen
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevdoxygen
+X-KDevelop-Scope=Project

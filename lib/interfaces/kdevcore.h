@@ -78,6 +78,25 @@ private:
 
 
 /**
+ * A context for the popup menu in file views. Here,
+ * fileName() returns the absolute name of the selected
+ * file or directory.
+ */
+class FileContext : public Context
+{
+public:
+    FileContext(const QString &fileName)
+        : Context("file"), m_fileName(fileName) {}
+    ~FileContext() {}
+
+    QString fileName() const
+    { return m_fileName; }
+
+private:
+    QString m_fileName;
+};
+
+/**
  * A context for the popup menu in class views. In this case,
  * className() returns the name of the class, including its
  * scope (i.e. namespace).

@@ -81,7 +81,7 @@ BINARY_TOC             = NO
 TOC_EXPAND             = NO
 DISABLE_INDEX          = NO
 ENUM_VALUES_PER_LINE   = 4
-GENERATE_TREEVIEW      = YES
+GENERATE_TREEVIEW      = NO
 TREEVIEW_WIDTH         = 250
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
@@ -124,7 +124,7 @@ EXPAND_AS_DEFINED      =
 # Configuration::addtions related to external references   
 #---------------------------------------------------------------------------
 TAGFILES               = 
-GENERATE_TAGFILE       = 
+GENERATE_TAGFILE       = doc/api/tags
 ALLEXTERNALS           = NO
 PERL_PATH              = /usr/bin/perl
 #---------------------------------------------------------------------------

@@ -1,0 +1,247 @@
+/***************************************************************************
+ *   Copyright (C) 2000 by Dimitri van Heesch                              *
+ *   dimitri@stack.nl                                                      *
+ *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   bernd@kdevelop.org                                                    *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+***************************************************************************/
+
+#include <qscrollview.h>
+#include <qvbox.h>
+#include <qwhatsthis.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+
+#include "config.h"
+#include "inputbool.h"
+#include "inputstring.h"
+#include "inputstrlist.h"
+#include "inputint.h"
+#include "doxygenconfigwidget.h"
+
+
+DoxygenConfigWidget::DoxygenConfigWidget(const QString &fileName, QWidget *parent, const char *name)
+    : QTabWidget(parent, name)
+{
+    m_dependencies = new QDict< QList<IInput> >(257);
+    m_dependencies->setAutoDelete(true);
+    m_inputWidgets = new QDict< IInput >;
+    m_switches = new QDict< QObject >;
+   
+    QListIterator<ConfigOption> options = Config::instance()->iterator();
+    QScrollView *page = 0;
+    QVBox *pagebox = 0;
+    ConfigOption *option = 0;
+    for (options.toFirst(); (option=options.current()); ++options) {
+        switch(option->kind())
+            {
+            case ConfigOption::O_Info:
+                page = new QScrollView(this, option->name());
+                page->viewport()->setBackgroundMode(PaletteBackground);
+                pagebox = new QVBox(0);
+                page->addChild(pagebox);
+                addTab(page, option->name());
+                QWhatsThis::add(page, option->docs().simplifyWhiteSpace() );
+                break;
+            case ConfigOption::O_String:
+                {
+                    InputString::StringMode sm = InputString::StringFree;
+                    switch(((ConfigString *)option)->widgetType()) {
+                    case ConfigString::String: sm=InputString::StringFree; break;
+                    case ConfigString::File:   sm=InputString::StringFile; break;
+                    case ConfigString::Dir:    sm=InputString::StringDir;  break;
+                    }
+                    InputString *inputString = new InputString
+                        ( option->name(),                        // name
+                          pagebox,                               // widget
+                          *((ConfigString *)option)->valueRef(), // variable 
+                          sm                                     // type
+                          );
+                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace() );
+                    connect(inputString,SIGNAL(changed()),SIGNAL(changed()));
+                    m_inputWidgets->insert(option->name(),inputString);
+                    addDependency(m_switches,option->dependsOn(),option->name());
+                }
+                break;
+            case ConfigOption::O_Enum:
+                {
+                    InputString *inputString = new InputString
+                        ( option->name(),                        // name
+                          pagebox,                               // widget
+                          *((ConfigEnum *)option)->valueRef(),   // variable 
+                          InputString::StringFixed               // type
+                          );
+                    QStrListIterator sli=((ConfigEnum *)option)->iterator();
+                    for (sli.toFirst();sli.current();++sli)
+                        inputString->addValue(sli.current());
+                    QWhatsThis::add(inputString, option->docs().simplifyWhiteSpace() );
+                    connect(inputString,SIGNAL(changed()),SIGNAL(changed()));
+                    m_inputWidgets->insert(option->name(),inputString);
+                    addDependency(m_switches,option->dependsOn(),option->name());
+                }
+                break;
+            case ConfigOption::O_List:
+                {
+                    InputStrList::ListMode lm = InputStrList::ListString;
+                    switch(((ConfigList *)option)->widgetType())
+                        {
+                        case ConfigList::String:     lm=InputStrList::ListString;  break;
+                        case ConfigList::File:       lm=InputStrList::ListFile;    break;
+                        case ConfigList::Dir:        lm=InputStrList::ListDir;     break;
+                        case ConfigList::FileAndDir: lm=InputStrList::ListFileDir; break;
+                        }
+                    InputStrList *inputStrList = new InputStrList
+                        ( option->name(),                         // name
+                          pagebox,                                // widget
+                          *((ConfigList *)option)->valueRef(),    // variable
+                          lm                                      // type
+                          );
+                    QWhatsThis::add(inputStrList, option->docs().simplifyWhiteSpace() );
+                    connect(inputStrList,SIGNAL(changed()),SIGNAL(changed()));
+                    m_inputWidgets->insert(option->name(),inputStrList);
+                    addDependency(m_switches,option->dependsOn(),option->name());
+                }
+                break;
+            case ConfigOption::O_Bool:
+                {
+                    InputBool *inputBool = new InputBool
+                        ( option->name(),                         // name
+                          pagebox,                                // widget
+                          *((ConfigBool *)option)->valueRef()     // variable
+                          );
+                    QWhatsThis::add(inputBool, option->docs().simplifyWhiteSpace() );
+                    connect(inputBool,SIGNAL(changed()),SIGNAL(changed()));
+                    m_inputWidgets->insert(option->name(),inputBool);
+                    addDependency(m_switches,option->dependsOn(),option->name());
+                }
+                break;
+            case ConfigOption::O_Int:
+                {
+                    InputInt *inputInt = new InputInt
+                        ( option->name(),                         // name
+                          pagebox,                                // widget
+                          *((ConfigInt *)option)->valueRef(),     // variable
+                          ((ConfigInt *)option)->minVal(),        // min value
+                          ((ConfigInt *)option)->maxVal()         // max value
+                          );
+                    QWhatsThis::add(inputInt, option->docs().simplifyWhiteSpace() );
+                    connect(inputInt,SIGNAL(changed()),SIGNAL(changed()));
+                    m_inputWidgets->insert(option->name(),inputInt);
+                    addDependency(m_switches,option->dependsOn(),option->name());
+                }
+                break;
+            } 
+    }
+    
+    QDictIterator<QObject> di(*m_switches);
+    QObject *obj = 0;
+    for (di.toFirst();(obj=di.current());++di) {
+        connect(obj,SIGNAL(toggle(const char *,bool)),SLOT(toggle(const char *,bool)));
+        // UGLY HACK: assumes each item depends on a boolean without checking!
+        emit toggle(di.currentKey(),((InputBool *)obj)->getState());
+    }
+    
+    m_fileName = fileName;
+    loadFile();
+}
+
+
+DoxygenConfigWidget::~DoxygenConfigWidget()
+{
+    delete m_dependencies;
+    delete m_inputWidgets;
+    delete m_switches;
+}
+
+
+void DoxygenConfigWidget::addDependency(QDict<QObject> *switches,
+                                        const QCString &dep,const QCString &name)
+{
+    if (!dep.isEmpty())
+        {
+            IInput *parent = m_inputWidgets->find(dep);
+            IInput *child = m_inputWidgets->find(name);
+            if (switches->find(dep) == 0)
+                switches->insert(dep,parent->qobject());
+            QList<IInput> *list = m_dependencies->find(dep);
+            if (list == 0) {
+                list = new QList<IInput>;
+                m_dependencies->insert(dep,list);
+            }
+            list->append(child);
+        }
+}
+
+void DoxygenConfigWidget::toggle(const char *name,bool state)
+{
+    QList<IInput> *inputs = m_dependencies->find(name);
+    IInput *input = inputs->first();
+    while (input) {
+        input->setEnabled(state);
+        input = inputs->next();
+    }
+}
+
+void DoxygenConfigWidget::init()
+{
+    QDictIterator<IInput> di(*m_inputWidgets);
+    IInput *input = 0;
+    for (di.toFirst();(input=di.current());++di)
+        input->init();
+    QDictIterator<QObject> dio(*m_switches);
+    QObject *obj = 0;
+    for (dio.toFirst();(obj=dio.current());++dio) {
+        connect(obj,SIGNAL(toggle(const char *,bool)),SLOT(toggle(const char *,bool)));
+        // UGLY HACK: assumes each item depends on a boolean without checking!
+        emit toggle(dio.currentKey(),((InputBool *)obj)->getState());
+    }
+}
+
+
+void DoxygenConfigWidget::loadFile()
+{
+    Config::instance()->init();
+
+    QFile f(m_fileName);
+    if (!f.open(IO_ReadOnly)) {
+        KMessageBox::information(0, i18n("Doxyfile does not exist. Starting with default values."));
+    } else {
+        int fsize = f.size();
+        QCString contents(fsize+1);
+        f.readBlock(contents.data(),fsize);
+        contents[fsize]='\0';
+        
+        Config::instance()->parse(contents, m_fileName);
+        Config::instance()->convertStrToVal();
+
+        f.close();
+    }
+
+    init();
+}
+
+
+void DoxygenConfigWidget::saveFile()
+{
+    QFile f(m_fileName);
+    if (!f.open(IO_WriteOnly)) {
+        KMessageBox::information(0, i18n("Cannot write Doxyfile."));
+    } else {
+        Config::instance()->writeTemplate(&f, true, true);
+
+        f.close();
+    }
+}
+
+
+void DoxygenConfigWidget::accept()
+{
+    saveFile();
+}
+
+#include "doxygenconfigwidget.moc"

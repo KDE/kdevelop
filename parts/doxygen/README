@@ -1,0 +1,3 @@
+Note: In order to update to a newer doxygen version, copy over the files
+config.* from the addon/doxywizard directory in the doxygen sources. 
+Everything else we can customize for our look & feel.

@@ -1,4 +1,12 @@
-2001-07-13  Richard Dale <duke@tipitina.demon.co.uk
+2001-07-15  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Elementary cvs support (add, remove, update, commit)
+	* doxygen plugin
+	* Added FileContext for context menus in the FileView.
+	  This should be used for the project management widgets
+	  later.
+
+2001-07-13  Richard Dale <duke@tipitina.demon.co.uk>
 
 	* Fixed bug causing 'precondition violated' messages in the C++
           class parser

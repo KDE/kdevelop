@@ -136,16 +136,24 @@ void FileViewWidget::slotContextMenu(KListView *, QListViewItem *item, const QPo
 {
     if (!item)
         return;
-    KPopupMenu pop(i18n("File View"));
+    KPopupMenu popup(i18n("File View"));
     // TODO: Add, remove groups
-    int customizeId = pop.insertItem(i18n("Customize..."));
-    int res = pop.exec(p);
+    int customizeId = popup.insertItem(i18n("Customize..."));
+    popup.insertSeparator();
+    if (item->parent()) {
+        // Not for group items
+        FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(item);
+        FileContext context(fvfitem->fileName());
+        m_part->core()->fillContextMenu(&popup, &context);
+    }
+    
+    int res = popup.exec(p);
     if (res == customizeId) {
-        KDialogBase dlg(KDialogBase::TreeList, i18n("Customize documentation tree"),
+        KDialogBase dlg(KDialogBase::TreeList, i18n("Customize file tree"),
                         KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
                         "customization dialog");
         QVBox *vbox = dlg.addVBoxPage(i18n("File View"));
-        FileViewConfigWidget *w = new FileViewConfigWidget(m_part, vbox, "doctreeview config widget");
+        FileViewConfigWidget *w = new FileViewConfigWidget(m_part, vbox, "fileview config widget");
         connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()));
         dlg.exec();
     }

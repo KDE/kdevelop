@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=CVS Integration
+Name=KDevCvs
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevcvs
+X-KDevelop-Scope=Project

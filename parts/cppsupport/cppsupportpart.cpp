@@ -130,6 +130,7 @@ static QString findHeader(const QStringList &list, const QString &header)
     return QString::null;
 }
 
+
 void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 {
     if (context->hasType("editor")) {
