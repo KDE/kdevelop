@@ -56,13 +56,13 @@ private slots:
 private:
     /** sets komparePart to 0 if kompare part is not installed */
     void loadKomparePart( QWidget* parent );
+    void setKompareVisible( bool visible );
 
 private:
     QTextEdit* te;
     KIO::Job* job;
     KParts::ReadOnlyPart* komparePart;
     KTempFile* tempFile;
-
 };
 
 #endif

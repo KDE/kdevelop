@@ -50,6 +50,21 @@ DiffWidget::~DiffWidget()
 {
 }
 
+void DiffWidget::setKompareVisible( bool visible )
+{
+  if ( !komparePart || !komparePart->widget() ) {
+    te->show();
+    return;
+  }
+  if ( visible ) {
+    te->hide();
+    komparePart->widget()->show();
+  } else {
+    te->show();
+    komparePart->widget()->hide();
+  }
+}
+
 void DiffWidget::loadKomparePart( QWidget* parent )
 {
   if ( komparePart )
@@ -108,14 +123,26 @@ void DiffWidget::slotFinished()
 void DiffWidget::setDiff( const QString& diff )
 {
   if ( komparePart ) {
-    delete tempFile;
-    // workaround until kompare can view patches directly from a QString
-    tempFile = new KTempFile();
-    tempFile->setAutoDelete( true );
-    *(tempFile->textStream()) << diff;
-    tempFile->close();
-    openURL( tempFile->name() );
-    return;
+    bool ok = false;
+    if ( komparePart->openStream( "text/plain", KURL() ) ) {
+      komparePart->writeStream( diff.local8Bit() );
+      ok = komparePart->closeStream();
+    } else {
+      // workaround for old kompare versions < KDE 3.2
+      delete tempFile;
+      tempFile = new KTempFile();
+      tempFile->setAutoDelete( true );
+      *(tempFile->textStream()) << diff;
+      tempFile->close();
+      ok = komparePart->openURL( tempFile->name() );
+    }
+    if ( ok ) {
+      setKompareVisible( true );
+      return;
+    } else {
+      setKompareVisible( false );
+      te->setText( i18n("*** Error viewing diff with the diff KPart, falling back to plainText ***") );
+    }
   }
 
   slotAppend( diff );
@@ -125,7 +152,12 @@ void DiffWidget::setDiff( const QString& diff )
 void DiffWidget::openURL( const KURL& url )
 {
   if ( komparePart ) {
-    komparePart->openURL( url );
+    if ( komparePart->openURL( url ) ) {
+      setKompareVisible( true );
+    } else {
+      setKompareVisible( false );
+      te->setText( i18n("<b>Error viewing diff with the diff KPart</b>") );
+    }
     return;
   }
 
@@ -136,7 +168,7 @@ void DiffWidget::openURL( const KURL& url )
   if ( !job )
     return;
 
-  connect( job, SIGNAL(data( KIO::Job *, const QByteArray &)),
+  connect( job, SIGNAL(data( KIO::Job *, const QByteArray & )),
            this, SLOT(slotAppend( KIO::Job*, const QByteArray& )) );
   connect( job, SIGNAL(result( KIO::Job * )),
            this, SLOT(slotFinished()) );  
