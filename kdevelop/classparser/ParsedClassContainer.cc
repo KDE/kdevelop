@@ -36,10 +36,10 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedClassContainer::CParsedClassContainer()
-  : classIterator( classes )
+CParsedClassContainer::CParsedClassContainer(bool autodel)
+  : CParsedContainer(autodel), classIterator( classes )
 {
-  classes.setAutoDelete( true );
+  classes.setAutoDelete( autodel );
 }
 
 /*------------------- CParsedClassContainer::~CParsedClassContainer()

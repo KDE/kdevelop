@@ -34,14 +34,14 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CParsedContainer::CParsedContainer()
+CParsedContainer::CParsedContainer(bool autodel)
   : useFullPath( false ),
     methodIterator( methods ),
     attributeIterator( attributes ),
     structIterator( structs )
 {
-  attributes.setAutoDelete( true );
-  methods.setAutoDelete( true );
+  attributes.setAutoDelete( autodel );
+  methods.setAutoDelete( autodel );
 }
 
 /*----------------------------- CParsedContainer::~CParsedContainer()

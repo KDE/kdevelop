@@ -36,7 +36,7 @@
  *   -
  *-----------------------------------------------------------------*/
 CParsedScopeContainer::CParsedScopeContainer()
-  : scopeIterator( scopes )
+  : CParsedClassContainer(false), scopeIterator( scopes )
 {
   setItemType( PIT_SCOPE );
   scopes.setAutoDelete( true );
