@@ -502,7 +502,8 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
   classIntf.replace(QRegExp("\\$AUTHOR\\$"), author);
   classIntf.replace(QRegExp("\\$DOC\\$"), doc);
   classIntf.replace(QRegExp("\\$CLASSNAME\\$"), className);
-  classIntf.replace(QRegExp("\\$BASECLASS\\$"), dlg.baseclasses_view->firstChild()->text(0));
+  if (dlg.baseclasses_view->childCount() > 0) 
+    classIntf.replace(QRegExp("\\$BASECLASS\\$"), dlg.baseclasses_view->firstChild()->text(0));
   classIntf.replace(QRegExp("\\$INHERITANCE\\$"), inheritance);
   classIntf.replace(QRegExp("\\$QOBJECT\\$"), qobject);
   classIntf.replace(QRegExp("\\$ARGS\\$"), args);
