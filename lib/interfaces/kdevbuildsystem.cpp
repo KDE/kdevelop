@@ -163,7 +163,7 @@ KDevBuildSystem::~ KDevBuildSystem( )
 }
 
 KDevBuildSystem::KDevBuildSystem( QObject *parent, const char * name )
-    :QObject(parent, name), m_project(parent)
+    :QObject(parent, name)
 {
 }
 
