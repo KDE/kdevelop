@@ -40,6 +40,7 @@
 #include <kpopupmenu.h>
 #include <kstandarddirs.h>
 #include <ksimpleconfig.h>
+#include <kprocess.h>
 
 #include "kdevcore.h"
 #include "domutil.h"
@@ -178,8 +179,10 @@ void DocTreeKDELibsBook::readContents()
             success = true;
         }
     } else {
-        if ( (f = popen(QString("gzip -c -d ")
-                        + idx_filename + " 2>/dev/null", "r")) != 0) {
+        QString cmd = "gzip -c -d ";
+        cmd += KProcess::quote(idx_filename);
+        cmd += " 2>/dev/null";
+        if ( (f = popen(QFile::encodeName(cmd), "r")) != 0) {
             readKdoc2Index(f);
             pclose(f);
             success = true;
