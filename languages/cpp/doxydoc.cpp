@@ -33,6 +33,7 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 	bool foundfile = false;
 	//produce doxygen conform filenames
 	QString filename = "/class" + scope.replace(QRegExp("_"), "__").replace( QRegExp("::"), "_1_1" ) + ".xml";
+
 	//search for file in all directories
 	for (std::list<QDir>::const_iterator ci = m_dirs.begin(); !foundfile && ci != m_dirs.end(); ++ci){
 		if (QFile::exists( ci->path() + filename)){
@@ -60,53 +61,48 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 	formatType( type );
 
 	for ( uint i = 0; i < m_list.count(); ++i ) {
-		if ( m_list.item( i ).childNodes().item( 3 ).toElement().text() == name ) {
-			QDomNodeList nodes = m_list.item( i ).childNodes();
-			QString nodetype = nodes.item( 0 ).toElement().text();
-			formatType( nodetype );
-			if ( !nodetype.isNull() )
-				formatType( nodetype );
-			else
-				nodetype = "";
-			if ( nodetype == type ) {
-				QString nodearguments = "";
-				QString arguments = tmparguments;
-				if (!arguments)
-					arguments = "";
 
-				formatType( arguments );
-
-				uint j = 4;
-				for (; j < nodes.count() && nodes.item( j ).nodeName() == "param"; ++j ) {
-					nodearguments += nodes.item( j ).childNodes().item( 0 ).toElement().text() + ",";
-				}
-
+		QDomElement elem = m_list.item(i).toElement();
+		if ((elem.elementsByTagName("name").item(0).toElement().text() == name) && elem.elementsByTagName("type").item(0).toElement().text() == tmptype){
+				QDomNodeList paramnodes = elem.elementsByTagName("param");
+				QString nodearguments = "", arguments = tmparguments;
+				for (unsigned int j = 0; j < paramnodes.count(); ++j )
+					nodearguments += paramnodes.item( j ).childNodes().item( 0 ).toElement().text() + ",";
 				if ( nodearguments != "") {
 					nodearguments = nodearguments.left( nodearguments.length() - 1 );
 					formatType( nodearguments );
 				}
-
+				formatType(arguments);
 				if ( arguments == nodearguments ) {
-					if (nodes.item(j).nodeName() == "exceptions")
-						++j;
-				QString brief = nodes.item( j++ ).toElement().text();
-				QString detailstr = "";
-				QString paramstr = "";
-				QDomNode detail = nodes.item( j );
-				QDomNode descnode;
-				for (uint index = 0; index < detail.childNodes().count(); ++index){
-					descnode = detail.childNodes().item(index);
-					if (descnode.hasChildNodes() && descnode.childNodes().item(0).nodeName() == "parameterlist"){
+				QString brief = "";
+				QDomNode briefnode = elem.elementsByTagName("briefdescription").item(0);
+				if (briefnode.hasChildNodes())
+					brief = briefnode.firstChild().toElement().text();
+
+				QString detailstr = "", paramstr = "";
+				QDomNode detail = elem.elementsByTagName("detaileddescription").item(0);
+				if (detail.hasChildNodes())
+					detail = detail.firstChild();
+
+				QDomNode descnode = detail.firstChild();
+				while (!descnode.isNull()){
+					if (descnode.nodeName() == "parameterlist"){
 						int tmpcount = descnode.childNodes().count();
 						for (int k = 0; k < tmpcount; ++k){
 							//add parametername
-							paramstr += "<li><i>" + descnode.childNodes().item(0).childNodes().item(k++).toElement().text() + "</i>\t";
+							paramstr += "<li><i>" + descnode.childNodes().item(k++).toElement().text() + "</i>\t";
 							//add parameterdescription
-							paramstr += descnode.childNodes().item(0).childNodes().item(k).toElement().text() + "</li>";
+							paramstr += descnode.childNodes().item(k).toElement().text() + "</li>";
 						}
+					} else
+					if (descnode.nodeName() == "simplesect"){
 					} else {
-						detailstr += descnode.toElement().text();
+						if (descnode.isText())
+							detailstr += descnode.toText().data();
+						else
+							detailstr += descnode.toElement().text();
 					}
+					descnode = descnode.nextSibling();
 				}
 
 
@@ -122,9 +118,9 @@ QString DoxyDoc::functionDescription( const QString& tmpscope, const QString& na
 					return QString::null;
 				else
 					return description;
-				}
 			}
 		}
+
 	}
 
 	return QString::null;
