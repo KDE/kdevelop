@@ -621,7 +621,7 @@ void CvsPart::commit( const KURL::List& urlList )
         cvsJob.call( "setRSH", options->rsh() );
     }
     m_widget->startJob();
-    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(jobExited(bool,int)) );
+    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     // 2. if requested to do so, add an entry to the Changelog too
     if (dlg.mustAddToChangeLog())
@@ -660,7 +660,7 @@ void CvsPart::update( const KURL::List& urlList )
     }
 
     m_widget->startJob();
-    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(jobExited(bool,int)) );
+    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     doneOperation();
 }
@@ -686,7 +686,7 @@ void CvsPart::add( const KURL::List& urlList )
     }
 
     m_widget->startJob();
-    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(jobExited(bool,int)) );
+    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     doneOperation();
 }
@@ -710,7 +710,7 @@ void CvsPart::remove( const KURL::List& urlList )
     }
 
     m_widget->startJob();
-    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(jobExited(bool,int)) );
+    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     doneOperation();
 }
@@ -734,7 +734,7 @@ void CvsPart::revert( const KURL::List& urlList )
     }
 
     m_widget->startJob();
-    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(jobExited(bool,int)) );
+    connect( m_widget, SIGNAL(jobFinished(bool,int)), this, SLOT(slotJobFinished(bool,int)) );
 
     doneOperation();
 }
