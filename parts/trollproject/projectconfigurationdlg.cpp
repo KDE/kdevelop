@@ -130,6 +130,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     myProjectItem->configuration.m_requirements += QD_THREAD;
   if (checkX11->isChecked())
     myProjectItem->configuration.m_requirements += QD_X11;
+  if (checkOrdered->isChecked())
+    myProjectItem->configuration.m_requirements += QD_ORDERED;
 
   // Warnings
   myProjectItem->configuration.m_warnings = QWARN_OFF;
@@ -358,6 +360,8 @@ void ProjectConfigurationDlg::UpdateControls()
     checkThread->setChecked(true);
   if (myProjectItem->configuration.m_requirements & QD_X11)
     checkX11->setChecked(true);
+  if (myProjectItem->configuration.m_requirements & QD_ORDERED)
+    checkOrdered->setChecked(true);
   if (myProjectItem->configuration.m_requirements & QD_EXCEPTIONS)
     exceptionCheck->setChecked(true);
   if (myProjectItem->configuration.m_requirements & QD_STL)

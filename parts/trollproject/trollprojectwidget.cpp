@@ -1191,6 +1191,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     configList.append("stl");
   if (item->configuration.m_requirements & QD_RTTI)
     configList.append("rtti");
+  if (item->configuration.m_requirements & QD_ORDERED)
+    configList.append("ordered");
   if (item->configuration.m_inheritconfig == true)
     Buffer->setValues("CONFIG",configList,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
   else
@@ -2511,6 +2513,8 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         item->configuration.m_requirements += QD_STL;
       if (lst.find("rtti")!=lst.end())
         item->configuration.m_requirements += QD_RTTI;
+      if (lst.find("ordered")!=lst.end())
+        item->configuration.m_requirements += QD_ORDERED;
     }
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
     if (lst.count())

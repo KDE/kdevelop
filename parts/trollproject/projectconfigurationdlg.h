@@ -20,7 +20,7 @@ enum QMakeBuildMode    {QBM_DEBUG,QBM_RELEASE};
 enum QMakeWarnings     {QWARN_ON,QWARN_OFF};
 enum QMakeDepends      {QD_QT=1,QD_OPENGL=2,QD_THREAD=4,QD_X11=8,QD_STATIC=16,
                         QD_SHARED=32,QD_PLUGIN=64,QD_EXCEPTIONS=128,QD_STL=256,
-                        QD_RTTI=512};
+                        QD_RTTI=512, QD_ORDERED=1024};
 enum QMakeTemplate     {QTMP_APPLICATION,QTMP_LIBRARY,QTMP_SUBDIRS};
 
 #include "projectconfigurationdlgbase.h"

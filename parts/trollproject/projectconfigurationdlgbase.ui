@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>612</width>
-            <height>634</height>
+            <width>570</width>
+            <height>487</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -335,17 +335,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QCheckBox" row="1" column="1">
-                                <property name="name">
-                                    <cstring>checkX11</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;X11</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Support required for X11 application or library</string>
-                                </property>
-                            </widget>
                             <widget class="QCheckBox" row="0" column="1">
                                 <property name="name">
                                     <cstring>checkThread</cstring>
@@ -366,14 +355,6 @@
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the OpenGL (or Mesa) headers/libraries</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="2" column="0">
-                                <property name="name">
-                                    <cstring>exceptionCheck</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>exceptions </string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="3" column="0">
@@ -401,6 +382,36 @@
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Requires the Qt header files/library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>checkX11</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;X11</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="0">
+                                <property name="name">
+                                    <cstring>checkOrdered</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Ordered</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Support required for X11 application or library</string>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="2" column="1">
+                                <property name="name">
+                                    <cstring>exceptionCheck</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>exceptions </string>
                                 </property>
                             </widget>
                         </grid>
