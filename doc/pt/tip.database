@@ -1,0 +1,29 @@
+...que o KDevelop presta Ajuda Rápida através de um clique do botão direito do rato nos itens?
+...que pode seleccionar o tempo de gravação automática no diálogo de configuração?
+Se deseja especificar opções adicionais para a linha de comando do seu programa de make, pode definí-las no diálogo de configuração.
+Se utiliza funções ou outras livrarias diferentes daquelas com que a aplicação se encontra presentemente ligada, pode especificá-las no diálogo de opções do projecto.
+Se deseja modificar o número da versão da sua aplicação, pode fazê-lo no diálogo de opções do projecto, actualizando automaticamente o seu projecto.
+Se deseja criar um projecto, escolha "Projecto"->"Assistente de Aplicação" da barra de menus.
+Se não tem a documentação da livraria KDE, crie-a seleccionando "Actualizar" da pasta Documentação no diálogo de Configuração do KDevelop.
+Se alterou as classes da sua aplicação, deverá actualizar a sua documentação API seleccionando "Fazer Doc-API" do menu Contruir.
+Pode poupar tempo se seleccionar "Compilar Ficheiro" do menu Construir ou na barra de ferramentas para apenas compilar o seu ficheiro corrente de implementação.
+Se procura informação sobre classes ou membros de classes, seleccione "Procurar Ajuda sobre..." do menu de Ajuda.
+Se deseja obter informação sobre algo na janela do KDevelop, seleccione o botão "O que é isto?" na barra de ferramentas e carregue sobre o item que desconhece.
+Dica: Pode procurar a documentação por uma palavra-chave marcando a palavra e seleccionando "procurar" no menu que surge com o botão direito do rato.
+A equipa do KDevelop deseja-lhe um dia agradável !
+Se descobriu um bug (erro) no KDevelop, por favor informe-nos. Os endereços de contacto encontram-se no manual do KDevelop.
+Se deseja adicionar a sua própria documentação à árvore de documentação, carregue com o botão direito do rato sobre a entrada "Outros" na árvore. Depois escolha o caminho e nome de entrada.
+...pode criar uma nova classe com "Nova Classe" do menu Projecto?
+que pode imprimir os seus ficheiros quer com a2ps, quer com enscript, de dentro do KDevelop?
+Para abrir um projecto, seleccione "Abrir" do menu Projecto.
+Se compilar o seu projecto e obtiver um erro, pode carregar na mensagem de erro para ir para o ficheiro e linha onde o erro ocorreu.
+...que pode utilizar atalhos de teclado para ligar e desligar as janelas de árvore e output?
+...que pode fazer a depuração do seu programa dentro do KDevelop seleccionando "Depuração" no menu Construir ou seleccionando o icon Depuração?
+...que pode alternar entre classes seleccionando a lista de classes na barra de ferramentas?
+...que pode editar xpm's com o kiconedit seleccionando-os nas árvores de vista de ficheiros?
+...que pode definir os avisos de compilação no diálogo de opções do projecto?
+...que pode até procurar por texto marcado mesmo de dentro do browser de documentação pelo menu do botão direito do rato?
+...que pode copiar texto do browser de documentação para a área de transferência com um clique do botão direito do rato e inserí-lo no seu código fonte?
+...que deve manter a documentação das suas livrarias actualizada após instalar novas livrarias?
+...que pode configurar o realçe de sintaxe do editor?
+...que pode desfazer e refazer as suas acções e definir o número de passos no diálogo do editor?

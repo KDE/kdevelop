@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>Manual do Utilizador do KDevelop: O Navegador de Classes</TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="KDE, KDevelop">
+<META NAME="description" CONTENT="Manual do Utilizador do KDevelop">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.png" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
+
+ 
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Página seguinte</A>
+ <A HREF="index-9.html">Página anterior</A>
+ <A HREF="index.html#toc10">Índice geral</A>
+</P>
+<H3><A NAME="The Class Browser"></A> <A NAME="s10">10. O Navegador de Classes</A></H3>
+
+<P>
+<H3><A NAME="ss10.1">10.1 O Visualizador de Classes</A>
+</H3>
+
+<P>O Visualizador de Classes do KDevelop é uma das ferramentas mais importantes e úteis que o ambiente de desenvolvimento disponibiliza ao programador para gerir o código do
+seu projecto. Quando um projecto é aberto, um analisador de sintaxe de classes lê todo o código do projecto procurando funções, classes etc., apresentando depois os resultados na
+árvore de vista VC. Este capítulo mostra-lhe como utilizar o Visualizador de Classes e a funcionalidade disponibilizada e como isso pode melhorar o seu trabalho.
+<P>As Classes e os seus métodos também são acessíveis através das caixas de selecção da barra de ferramentas do navegador. Aí, a caixa esquerda selecciona a classe; a direita
+permite-lhe escolher os métodos da classe seleccionada. Quando selecciona um método, o navegador de classes mostra automaticamente o ficheiro
+de implementação e coloca o cursor no método. Finalmente, o botão de assistente de classes à direita da caixa de selecção irá mostrar-lhe,
+quando premido, a declaração do método. O menu de escolha, disponibilizado pela seta para baixo no botão, permite funcionalidades
+adicionais também disponíveis no navegador de classes, tais como:
+<P>
+<UL>
+<LI>Ver Declaração: navega para a declaração do método</LI>
+<LI>Ver Definição: navega para a definição do método</LI>
+<LI>Nova Classe: abre o diálogo de Nova Classe para construir uma classe nova</LI>
+<LI>Adicionar Método: adiciona um método à classe seleccionada</LI>
+<LI>Adicionar Atributo: adiciona um atributo à classe seleccionada</LI>
+</UL>
+<P>
+<H4>Objectos Disponíveis</H4>
+
+<P>Por objectos disponíveis, descrevemos um termo que significa que o código C++ pode ser visto como uma colecção de objectos- classes, seus membros,
+funções globais e afins. A árvore de classes apresenta estes objectos logicamente e ordena-os por caracter, pelo que são fáceis de localizar
+na árvore bem como pelo seu icon correspondente. Assim a árvore de classes contém uma pasta "Classes" e uma "Globais". Por isso a pasta "Classes"
+geralmente contém as classes do projecto; se o seu projecto contém subdirectórios para gerir os ficheiros de código, estes também são
+apresentados pelo seu nme de directório original e contêm todas as classes que estão guardades nos ficheiros localizados no subdirectório.
+<P>Mais ainda, quando expandindo uma classe, a árvore de classes apresenta o conteudo da classe separando os métodos e atributos. Como estes podem ter
+atributos dos tipos público, privado e protegido, estes são também apresentados por icons modificados. Pode ver que uma classe apresentada no
+Navegador de Classes contém todos os objectos que estão presentes na declaração da classe.
+<P>Agora, classes são algo muito comum quando a programar em C++ e irão conter a maior parte do código. Mas as aplicações também contêm objectos
+que têm a apresentação de "Globais" para o programa. Estes seriam estruturas, funções etc. Especialmente a função <CODE>main()</CODE> aparece em
+todas as aplicações e necessita de a modificar de uma ou outra forma por vezes. Para aceder a estes objectos, o Visualizador de Classes disponibiliza a
+pasta "Globais", contendo subpastas para os seguintes tipos de objectos:
+<UL>
+<LI>Estruturas</LI>
+<LI>Funções</LI>
+<LI>Variáveis</LI>
+</UL>
+<P>Como os icons que apresentam estes itens são semelhantes aos utilizados no visualizador de classes, o seu significado é fácil de adivinhar e recordar pelo
+programador.
+<P>Finalmente, pode ser afirmado que o visualizador de classes apresenta o seu projecto graficamente através dos seus objectos relativamente à sua aparência para
+o código. Na secção seguinte irá aprender como utilizar o visualizador de classes e as suas ferramentas em conjunto com o seu código.
+<P>
+<H4>Navegar as Declarações e Implementações dos Objectos</H4>
+
+<P>A maior capacidade do Visualizador de Classes é disponibilizar uma boa forma de aceder rápidamente ao seu código independentemente da sua localização
+dentro dos ficheiros. Assim, selecções através de um clique do rato irão resultar nas seguintes acções:
+<P>
+<UL>
+<LI><B>Num nome de classe:</B>  Vai para a declaração da classe</LI>
+<LI><B>Num método da classe:</B> Vai para a implementação do método</LI>
+<LI><B>Num atributo da classe:</B> Vai para a declaração do atributo na declaração da classe</LI>
+<LI><B>Numa estrutura:</B> Vai para a declaração da estrutura</LI>
+<LI><B>Numa função global:</B> Vai para a implementação da função</LI>
+</UL>
+<P>Agora, Isto permite-lhe o acesso mais necessário ao código dos objectos. Aparentemente, pode ser necessário modificar o cabeçalho de um método, resultando
+na necessidade de alterar a sua declaração na classe bem como a implementação. O visualizador de classes suporta isto disponibilizando
+menus de contexto acessíveis pelo botão direito do rato sobre os itens. Num método ou função, isto significa que pode seleccionar para onde quer ir:
+<P>
+<UL>
+<LI><B>Ir para a definição:</B> Vai para a implementação- este é o defeito para um clique do botão esquerdo como descrito acima</LI>
+<LI><B>Ir para a declaração:</B> Vai para a declaração do método ou função.</LI>
+</UL>
+<P>Através deste comportamento, o Navegador de Classes oferece-lhe acesso a todo o lado que necessita ir para programar a sua aplicação em C++.
+<P>As seguintes secções dão-lhe uma descrição de outras ferramentas que o Navegador de Classes disponibiliza- irá acha-las muito úteis quando
+trabalhar com grandes projectos pois elas potenciam o trabalho orientado por objectos em programas C++.
+<P>
+<H3><A NAME="ss10.2">10.2 As Ferramentas de Classes</A>
+</H3>
+
+<P>As ferramentas de classes são diálogos que tornam ainda mais fácil ao programador obter mais informação sobre as classes do seu projecto. Como o
+visualizador de classes apresenta todos os objectos segundo a sua ocorrência no código, por vezes você pode querer mais informação sobre classes sem ter de
+olhar para o código. Assim, os diálogos das ferramentas de classes estão idealizadas para apresentar atributos específicos de classes.
+<P>O diálogo das ferramentas de classes é invocado pelo menu de contexto sobre uma classe no visualizador de classes. Seleccione "Ferramentas de Classes", e o diálogo surgirá.
+Para obter informação sobre uma classe, escolha a classe na lista de selecção no topo. Depois os botões na barra de ferramentas disponibilizam funções que lhe dão
+árvores específicas para a sua classe. Estas são:
+<P>
+<DL>
+<DT><B> Pais:</B><DD><P>Os pais da classe seleccionada, o que significa a classe donde herdou. Isto é útil para heranças múltiplas bem como para ver porque uma
+classe se comporta de uma ou de outra forma, por ex. para diálogos a sua classe Pai poderia ser <EM>QWidget</EM> ou <EM>QDialog</EM>.
+<DT><B>Filhos:</B><DD><P>Apresenta as classes filhas que herdam da classe actual.
+<DT><B>Clientes:</B><DD><P>Classes que fazem uso da classe seleccionada através de um atributo na sua declaração de classe.
+<DT><B>Fornecedores:</B><DD><P>Os fornecedores que dão atributos para a classe seleccionada.
+<DT><B>Atributos:</B><DD><P>Os atributos da classe pelo seu nome.
+<DT><B>Métodos:</B><DD><P>Os Métodos da classe seleccionada.
+<DT><B>Métodos Virtuais:</B><DD><P>Os métodos virtuais que uma classe disponibiliza.
+</DL>
+
+Ainda mais, a selecção de um atributo publico, protegido, privado ou todos mostra Atributos, Métodos e Métodos Virtuais pelo seu
+valor de atributo.
+<P>
+<H3><A NAME="ss10.3">10.3 Gerir Classes</A>
+</H3>
+
+<P>O Navegador de Classes também permite adicionar métodos e atributos directamente através de diálogos. Isto significa que você não tem de escrever a
+declaração de classe e o cabeçalho de implementação. Depois de adicionar o método, apenas tem de definir os parâmetros formais para o
+cabeçalho de implementação e, se o método requer um atributo, para a declaração.
+<P><B>&raquo; Como adicionar um método a uma classe</B>
+<P>
+<OL>
+<LI>seleccione a classe a que  deseja adicionar o método</LI>
+<LI>prima o botão direito do rato; surge o menu de contexto</LI>
+<LI>seleccione "Adicionar função membro".</LI>
+<LI>o diálogo "Adicionar função membro" surge.</LI>
+<LI>inserir o tipo, declaração e documentação para o método</LI>
+<LI>especificar o acesso e modificadores do método</LI>
+<LI>premir OK para sair do diálogo</LI>
+</OL>
+<P>Para adicionar uma variável, esta é a mesma forma, apenas tendo de seleccionar "Adicionar variável membro" no menu de contexto.
+<P>A diferença entre as acções destes diálogos são que adicionar uma variável apenas irá adicionar uma variável à declaração da classe,
+e a adição de um método irá adicionar a declaração do método e o cabeçalho de implementação do mesmo ao código. Como o visualizador de classes
+se actualiza automaticamente por si só, você tem acesso ao novo método implementado, para que só tenha de escrever o código para
+o verdadeiro objectivo do método.
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-11.html">Página seguinte</A>
+ <A HREF="index-9.html">Página anterior</A>
+ <A HREF="index.html#toc10">Índice geral</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>
