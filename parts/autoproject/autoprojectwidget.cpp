@@ -57,7 +57,7 @@ static QCString cleanwhitespace(QCString str)
 {
     QCString res;
     
-    QStringList l = QStringList::split(QRegExp("[ \\t]"), QString(str));
+    QStringList l = QStringList::split(QRegExp("[ \t]"), QString(str));
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
         res += *it;
@@ -365,6 +365,12 @@ FileItem *AutoProjectWidget::createFileItem(const QString &name)
 }
 
 
+void AutoProjectWidget::emitAddedFile(const QString &name)
+{
+    emit m_part->addedFileToProject(name);
+}
+
+
 void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCString rhs)
 {
     // Parse line foo_bar = bla bla
@@ -394,7 +400,7 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
     // could also be checked... not trivial because the list of
     // possible prefixes can be extended dynamically (see below)
     if (primary == "PROGRAMS" || primary == "LIBRARIES" || primary == "LTLIBRARIES") {
-        QStringList l = QStringList::split(QRegExp("[ \\t\n]"), QString(rhs));
+        QStringList l = QStringList::split(QRegExp("[ \t\n]"), QString(rhs));
         QStringList::Iterator it1;
         for (it1 = l.begin(); it1 != l.end(); ++it1) {
             TargetItem *titem = createTargetItem((*it1).latin1(), prefix, primary);
@@ -407,7 +413,7 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
             titem->dependencies = cleanwhitespace(item->variables[canonname + "_DEPENDENCIES"]);
 
             QCString sources = item->variables[canonname + "_SOURCES"];
-            QStringList l2 = QStringList::split(QRegExp("[ \\t\\n]"), sources);
+            QStringList l2 = QStringList::split(QRegExp("[ \t\n]"), sources);
             QStringList::Iterator it2;
             for (it2 = l2.begin(); it2 != l2.end(); ++it2) {
                 FileItem *fitem = createFileItem(*it2);
@@ -427,14 +433,14 @@ void AutoProjectWidget::parsePrimary(SubprojectItem *item, QCString lhs, QCStrin
         TargetItem *titem = createTargetItem(QCString(""), prefix, primary);
         item->targets.append(titem);
         
-        QStringList l = QStringList::split(QRegExp("[ \\t]"), QString(rhs));
+        QStringList l = QStringList::split(QRegExp("[ \t]"), QString(rhs));
         QStringList::Iterator it3;
         for (it3 = l.begin(); it3 != l.end(); ++it3) {
             FileItem *fitem = createFileItem(*it3);
             titem->sources.append(fitem);
         }
     } else if (primary == "JAVA") {
-        QStringList l = QStringList::split(QRegExp("[ \\t\n]"), QString(rhs));
+        QStringList l = QStringList::split(QRegExp("[ \t\n]"), QString(rhs));
         QStringList::Iterator it1;
         TargetItem *titem = createTargetItem(QCString(""), prefix, primary);
         item->targets.append(titem);
@@ -480,7 +486,7 @@ void AutoProjectWidget::parseSubdirs(SubprojectItem *item, QCString /*lhs*/, QCS
     rhs.replace(QRegExp("\\$\\(AUTODIRS\\)"), "");
     rhs.replace(QRegExp("\\$\\(COMPILE_FIRST\\)"), "");
     rhs.replace(QRegExp("\\$\\(COMPILE_LAST\\)"), "");
-    QStringList l = QStringList::split(QRegExp("[ \\t]"), QString(rhs));
+    QStringList l = QStringList::split(QRegExp("[ \t]"), QString(rhs));
     QStringList::Iterator it;
     for (it = l.begin(); it != l.end(); ++it) {
         if (*it == ".")

@@ -28,6 +28,7 @@ public:
     ~FileViewPart();
 
 public slots:
+    void projectChanged();
     void refresh();
     
 private slots:

@@ -45,7 +45,6 @@ DocIndexDialog::DocIndexDialog(DocTreeViewPart *part, QWidget *parent, const cha
     term_combo->setMinimumWidth(fm.width('X')*40);
 
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
-    dirs->addResourceType("docindices", KStandardDirs::kde_default("data") + "kdevdoctreeview/docindices/");
     QStringList books = dirs->findAllResources("docindices", QString::null, false, true);
 
     QStringList::Iterator bit;
@@ -137,6 +136,8 @@ void DocIndexDialog::readIndexFromFile(const QString &fileName)
     QDomElement fileEl = docEl.namedItem("fileindex").toElement();
     index->title = titleEl.firstChild().toText().data();
     index->base = baseEl.attribute("href");
+    if (!index->base.isEmpty())
+        index->base += "/";
     readEntryList(conceptEl, &index->conceptNames, &index->conceptUrls);
     readEntryList(identEl, &index->identNames, &index->identUrls);
     readEntryList(fileEl, &index->fileNames, &index->fileUrls);
@@ -174,19 +175,19 @@ void DocIndexDialog::accept()
             if (concept_box->isChecked())
                 if ( (pos = (*iit)->conceptNames.findIndex(term)) != -1) {
                     kdDebug(9002) << "found in concept index of " << (*iit)->title << endl;
-                    url = (*iit)->base + "/" + (*iit)->conceptUrls[pos];
+                    url = (*iit)->base + (*iit)->conceptUrls[pos];
                     break;
                 }
             if (ident_box->isChecked())
                 if ( (pos = (*iit)->identNames.findIndex(term)) != -1) {
                     kdDebug(9002) << "found in ident index of " << (*iit)->title << endl;
-                    url = (*iit)->base + "/" + (*iit)->identUrls[pos];
+                    url = (*iit)->base + (*iit)->identUrls[pos];
                     break;
                 }
             if (file_box->isChecked())
                 if ( (pos = (*iit)->fileNames.findIndex(term)) != -1) {
                     kdDebug(9002) << "found in file index of " << (*iit)->title << endl;
-                    url = (*iit)->base + "/" + (*iit)->fileUrls[pos];
+                    url = (*iit)->base + (*iit)->fileUrls[pos];
                     break;
                 }
         }

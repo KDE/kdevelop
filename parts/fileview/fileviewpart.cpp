@@ -17,6 +17,7 @@
 #include <klocale.h>
 
 #include "kdevcore.h"
+#include "kdevproject.h"
 
 #include "fileviewfactory.h"
 #include "fileviewwidget.h"
@@ -38,8 +39,8 @@ FileViewPart::FileViewPart(KDevApi *api, QObject *parent, const char *name)
 
     core()->embedWidget(m_filetree, KDevCore::SelectView, i18n("Files"));
 
-    connect( core(), SIGNAL(projectOpened()), this, SLOT(refresh()) );
-    connect( core(), SIGNAL(projectClosed()), this, SLOT(refresh()) );
+    connect( core(), SIGNAL(projectOpened()), this, SLOT(projectChanged()) );
+    connect( core(), SIGNAL(projectClosed()), this, SLOT(projectChanged()) );
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 }
@@ -48,6 +49,18 @@ FileViewPart::FileViewPart(KDevApi *api, QObject *parent, const char *name)
 FileViewPart::~FileViewPart()
 {
     delete m_filetree;
+}
+
+
+void FileViewPart::projectChanged()
+{
+    if (project()) {
+        connect( project(), SIGNAL(addedFileToProject(const QString &)),
+                 m_filetree, SLOT(addFile(const QString &)) );
+        connect( project(), SIGNAL(removedFileFromProject(const QString &)),
+                 m_filetree, SLOT(removeFile(const QString &)) );
+    }
+    m_filetree->refresh();
 }
 
 

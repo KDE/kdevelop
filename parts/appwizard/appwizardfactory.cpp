@@ -12,6 +12,7 @@
 
 #include <kdebug.h>
 #include <kinstance.h>
+#include <kstddirs.h>
 
 #include "appwizardfactory.h"
 #include "appwizardpart.h"
@@ -51,8 +52,11 @@ KDevPart *AppWizardFactory::createPartObject(KDevApi *api, QObject *parent,
 KInstance *AppWizardFactory::s_instance = 0;
 KInstance *AppWizardFactory::instance()
 {
-    if (!s_instance)
+    if (!s_instance) {
         s_instance = new KInstance("kdevappwizard");
+        KStandardDirs *dirs = s_instance->dirs();
+        dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
+    }
 
     return s_instance;
 }

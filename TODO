@@ -20,8 +20,6 @@
   appear separately. In the current setup, one can easily get lost
   when opening a class list.
 
-* Templates for cli programs
-
 * Complete STL index. Preferably convert STL documentation to docbook :-)
 
 * Implement reverse I-search

@@ -135,8 +135,10 @@ void AddFileDialog::accept()
     QMap<QCString,QCString> replaceMap;
     replaceMap.insert(varname, subProject->variables[varname]);
     
-    AutoProjectTool::modifyMakefileam(subProject->subdir + "/Makefile.am", replaceMap);
+    AutoProjectTool::modifyMakefileam(subProject->path + "/Makefile.am", replaceMap);
 
+    m_widget->emitAddedFile(name);
+    
     QDialog::accept();
 }
 

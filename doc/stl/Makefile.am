@@ -1,13 +1,13 @@
 htmldir = $(kde_htmldir)/en/kdevdoctreeview/stl
-indexdir = ${kde_datadir}/kdevdoctreeview/docindices
+indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = stl.index
 
-stl.index: stl.index.in
+stl.index: $(srcdir)/stl.index.in
 	echo "<!DOCTYPE gideonindex>" > stl.index ; \
 	echo "<gideonindex>" >> stl.index ; \
 	echo "<title>STL</title>" >> stl.index ; \
 	echo "<base href=\"$(htmldir)\"/>" >> stl.index ; \
-	cat stl.index.in >> stl.index ; \
+	cat $(srcdir)/stl.index.in >> stl.index ; \
 	echo "</gideonindex>" >> stl.index
 
 install-data-local:

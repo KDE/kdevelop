@@ -64,12 +64,11 @@ static void guessAuthorAndEmail(QString *author, QString *email)
 
 
 AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const char *name)
-    : AppWizardDialogBase(parent, name)
+    : AppWizardDialogBase(parent, name), m_pCurrentAppInfo(0)
 {
   templates_listview->header()->hide();
 
   KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
-  dirs->addResourceType("apptemplates", KStandardDirs::kde_default("data") + "kdevappwizard/templates/");
   m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
   
   kdDebug(9010) << "Templates: " << endl;
@@ -192,7 +191,8 @@ AppWizardDialog::~AppWizardDialog()
 
 void AppWizardDialog::textChanged()
 {
-    bool invalid = appname_edit->text().isEmpty()
+    bool invalid = !m_pCurrentAppInfo
+        || appname_edit->text().isEmpty()
         || dest_edit->text().isEmpty()
         || author_edit->text().isEmpty()
         || version_edit->text().isEmpty();

@@ -28,6 +28,8 @@ public:
 
 public slots:
     void refresh();
+    void addFile(const QString &fileName);
+    void removeFile(const QString &fileName);
     
 private slots:
     void slotItemExecuted(QListViewItem *item);

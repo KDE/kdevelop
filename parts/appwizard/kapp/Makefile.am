@@ -5,7 +5,7 @@ templatedir = ${appwizarddatadir}/templates
 
 kapp_DATA = app.cpp app.h pref.cpp pref.h appview.cpp appview.h \
             appiface.h app_client.cpp main.cpp appui.rc src-Makefile.am \
-	    kapp.png app.kdevelop
+	    kapp.png app.kdevelop subdirs
 template_DATA = kapp
 
 BUILT_SOURCES = script.local

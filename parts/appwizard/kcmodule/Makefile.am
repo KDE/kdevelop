@@ -4,7 +4,7 @@ kcmoduledir = ${appwizarddatadir}/template-kcmodule
 templatedir = ${appwizarddatadir}/templates
 
 kcmodule_DATA = module.cpp module.h module.desktop src-Makefile.am \
-                kcmodule.png
+                kcmodule.png subdirs
 template_DATA = kcmodule
 
 BUILT_SOURCES = script.local

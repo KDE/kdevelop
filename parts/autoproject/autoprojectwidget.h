@@ -141,6 +141,8 @@ public:
                                  const QCString &prefix, const QCString &primary);
     FileItem *createFileItem(const QString &name);
 
+    void emitAddedFile(const QString &name);
+    
 private slots:
     void slotItemExecuted(QListViewItem *item);
     void slotContextMenu(KListView *, QListViewItem *item, const QPoint &p);

@@ -11,6 +11,7 @@
 
 #include <kdebug.h>
 #include <kinstance.h>
+#include <kstddirs.h>
 #include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
 
@@ -49,8 +50,12 @@ KDevPart *DocTreeViewFactory::createPartObject(KDevApi *api, QObject *parent,
 KInstance *DocTreeViewFactory::s_instance = 0;
 KInstance *DocTreeViewFactory::instance()
 {
-    if (!s_instance)
+    if (!s_instance) {
         s_instance = new KInstance("kdevdoctreeview");
+        KStandardDirs *dirs = s_instance->dirs();
+        dirs->addResourceType("docindices", KStandardDirs::kde_default("data") + "kdevdoctreeview/indices/");
+        dirs->addResourceType("doctocs", KStandardDirs::kde_default("data") + "kdevdoctreeview/tocs/");
+    }
 
     return s_instance;
 }

@@ -4,7 +4,7 @@ kioslavedir = ${appwizarddatadir}/template-kioslave
 templatedir = ${appwizarddatadir}/templates
 
 kioslave_DATA = slave.cpp slave.h slave.protocol src-Makefile.am \
-                kioslave.png
+                kioslave.png subdirs
 template_DATA = kioslave
 
 BUILT_SOURCES = script.local

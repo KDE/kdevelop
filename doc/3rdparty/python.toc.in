@@ -1,0 +1,40 @@
+<tocsect1 name="Tutorial" url="tut/tut.html">
+  <tocsect2 name="Whetting your Appetite" url="tut/node3.html"/>
+  <tocsect2 name="Using the Python Interpreter" url="tut/node4.html"/>
+  <tocsect2 name="An Informal Introduction to Python" url="tut/node5.html"/>
+  <tocsect2 name="More Control Flow Tools" url="tut/node6.html"/>
+  <tocsect2 name="Data Structures" url="tut/node7.html"/>
+  <tocsect2 name="Modules" url="tut/node8.html"/>
+  <tocsect2 name="Input and Output" url="tut/node9.html"/>
+  <tocsect2 name="Errors and Exceptions" url="tut/node10.html"/>
+  <tocsect2 name="Classes" url="tut/node11.html"/>
+  <tocsect2 name="What now?" url="tut/node12.html"/>
+</tocsect1>
+<tocsect1 name="Reference" url="ref/ref.html">
+  <tocsect2 name="Introduction" url="ref/introduction.html"/>
+  <tocsect2 name="Lexical analysis" url="ref/lexical.html"/>
+  <tocsect2 name="Data model" url="ref/datamodel.html"/>
+  <tocsect2 name="Execution model" url="ref/execmodel.html"/>
+  <tocsect2 name="Expressions" url="ref/expressions.html"/>
+  <tocsect2 name="Simple statements" url="ref/simple.html"/>
+  <tocsect2 name="Compound statements" url="ref/compound.html"/>
+</tocsect1>
+<tocsect1 name="Library Reference" url="lib/lib.html">
+  <tocsect2 name="Introducction" url="lib/intro.html"/>
+  <tocsect2 name="Built-in Types, Exceptions and Functions" url="lib/builtin.html"/>
+  <tocsect2 name="Python Runtime Services" url="lib/python.html"/>
+  <tocsect2 name="String Services" url="lib/strings.html"/>
+  <tocsect2 name="Miscellaneous Services" url="lib/misc.html"/>
+  <tocsect2 name="Generic Operating System Services" url="lib/allos.html"/>
+  <tocsect2 name="Optional Operating System Services" url="lib/someos.html"/>
+  <tocsect2 name="Unix Specific Services" url="lib/unix.html"/>
+  <tocsect2 name="The Python Debugger" url="lib/module-pdb.html"/>
+  <tocsect2 name="The Python Profiler" url="lib/profile.html"/>
+  <tocsect2 name="Internet Protocols and Support" url="lib/internet.html"/>
+  <tocsect2 name="Internet Data Handling" url="lib/netdata.html"/>
+  <tocsect2 name="Structured Markup Processing Tools" url="lib/markup.html"/>
+  <tocsect2 name="Multimedia Services" url="lib/multimedia.html"/>
+  <tocsect2 name="Cryptographic Services" url="lib/crypto.html"/>
+  <tocsect2 name="Restricted Execution" url="lib/restricted.html"/>
+  <tocsect2 name="Python Language Services" url="lib/language.html"/>
+</tocsect1>

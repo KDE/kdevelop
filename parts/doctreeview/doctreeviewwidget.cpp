@@ -27,11 +27,12 @@
 #include "kdevcore.h"
 #include "kdevproject.h"
 
-#include "doctreeviewwidget.h"
+#include "../../config.h"
+#include "misc.h"
+#include "doctreeviewfactory.h"
 #include "doctreeviewpart.h"
 #include "doctreeconfigwidget.h"
-#include "misc.h"
-#include "../../config.h"
+#include "doctreeviewwidget.h"
 
 
 
@@ -284,6 +285,83 @@ void DocTreeKDELibsFolder::refresh()
 }
     
 
+/***************************************/
+/* Folder from the 'tocs' resource dir */
+/***************************************/
+
+class DocTreeTocFolder : public DocTreeItem
+{
+public:
+    DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fileName);
+    ~DocTreeTocFolder();
+};
+
+
+DocTreeTocFolder::DocTreeTocFolder(DocTreeViewWidget *parent, const QString &fileName)
+    : DocTreeItem(parent, Folder, fileName)
+{
+    QFile f(fileName);
+    if (!f.open(IO_ReadOnly)) {
+        kdDebug(9002) << "Could not read doc toc: " << fileName << endl;
+        return;
+    }
+
+    QDomDocument doc;
+    if (!doc.setContent(&f) || doc.doctype().name() != "gideontoc") {
+        kdDebug() << "Not a valid gideontoc file: " << fileName << endl;
+        return;
+    }
+    
+    f.close();
+    
+    QDomElement docEl = doc.documentElement();
+    QDomElement titleEl = docEl.namedItem("title").toElement();
+    QDomElement baseEl = docEl.namedItem("base").toElement();
+    setText(0, titleEl.firstChild().toText().data());
+    QString base = baseEl.attribute("href");
+    if (!base.isEmpty())
+        base += "/";
+
+    QListViewItem *lastChildItem = 0;
+    QDomElement childEl = docEl.firstChild().toElement();
+    while (!childEl.isNull()) {
+        if (childEl.tagName() == "tocsect1") {
+            QString name = childEl.attribute("name");
+            QString url = base + childEl.attribute("url");
+            DocTreeItem *item = new DocTreeItem(this, Book, name);
+            item->setFileName(url);
+            if (lastChildItem)
+                item->moveItem(lastChildItem);
+            lastChildItem = item;
+            
+            // Ok, this means we have two levels in the table of contents hardcoded
+            // Eventually, this limitation should go, but at the moment it is simple to implement :-)
+            QListViewItem *lastGrandchildItem = 0;
+            QDomElement grandchildEl = childEl.firstChild().toElement();
+            while (!grandchildEl.isNull()) {
+                if (grandchildEl.tagName() == "tocsect2") {
+                    QString name2 = grandchildEl.attribute("name");
+                    QString url2 = base + grandchildEl.attribute("url");
+                    DocTreeItem *item2 = new DocTreeItem(item, Doc, name2);
+                    item2->setFileName(url2);
+                    if (lastGrandchildItem)
+                        item2->moveItem(lastGrandchildItem);
+                    lastGrandchildItem = item2;
+                }
+                grandchildEl = grandchildEl.nextSibling().toElement();
+            }
+        }
+
+        childEl = childEl.nextSibling().toElement();
+    }
+
+}
+
+
+DocTreeTocFolder::~DocTreeTocFolder()
+{}
+
+
 /*************************************/
 /* Folder "Documentation Base"       */
 /*************************************/
@@ -476,6 +554,13 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 #ifdef WITH_DOCBASE
     folder_docbase   = new DocTreeDocbaseFolder(this);
 #endif
+
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+    QStringList tocs = dirs->findAllResources("doctocs", QString::null, false, true);
+    QStringList::Iterator tit;
+    for (tit = tocs.begin(); tit != tocs.end(); ++tit)
+        new DocTreeTocFolder(this, *tit);
+
     folder_kdelibs   = new DocTreeKDELibsFolder(this);
     folder_kdelibs->refresh();
     folder_general   = new DocTreeGeneralFolder(this);

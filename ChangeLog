@@ -1,3 +1,13 @@
+2001-05-27  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added TOCs for perl, python and PHP to the
+	  documentation tree
+	* Added python documentation index
+	* Made file view aware of files added to and
+	  removed from the project
+	* Added 'subdirs' files to KDE app templates
+	* Several bug fixes in project management
+
 2001-05-25  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Added FORTRAN 77 parser

@@ -23,6 +23,7 @@ install( "${src}/template-common/kde-app.lsm",         "${dest}/src/${APPNAMELC}
 install( "${src}/template-common/lo16-app-app.png",    "${dest}/src/lo16-${APPNAMELC}-app.png");
 install( "${src}/template-common/lo32-app-app.png",    "${dest}/src/lo32-${APPNAMELC}-app.png");
 install( "${src}/template-common/kde-po-Makefile.am",  "${dest}/po/Makefile.am" );
+install( "${src}/template-kapp/subdirs",               "${dest}/subdirs" );
 
 print "Installing application sources\n";
 install( "${src}/template-kapp/src-Makefile.am",       "${dest}/src/Makefile.am" );

@@ -38,7 +38,6 @@ void FixedFormParser::process(const QCString &line, const QString &fileName, int
         if (line[i] != ' ')
             simplified += line[i];
 
-    kdDebug(9019) << "Matching " << line << endl;
     QCString name;
     if (functionre.match(simplified))
         name = functionre.group(3);
@@ -70,7 +69,6 @@ void FixedFormParser::parse(const QString &fileName)
     while (!stream.atEnd()) {
         ++lineNum;
         QCString str = stream.readLine().latin1();
-        kdDebug(9019) << "Got line " << str << " at " << lineNum << endl;
         if (!str.isEmpty() && QCString("*Cc#!").find(str[0]) != -1)
             continue;
         // Continuation line

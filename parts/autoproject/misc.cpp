@@ -117,7 +117,7 @@ void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QC
     }
     QTextStream outs(&fout);
     
-    KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \\t]*:?=[ \\t]*(.*)$");
+    KRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
     
     while (!ins.atEnd()) {
         QString line;
@@ -126,9 +126,10 @@ void AutoProjectTool::modifyMakefileam(const QString &filename, QMap<QCString,QC
             QCString lhs = re.group(1);
             QCString rhs = re.group(2);
             QMap<QCString,QCString>::Iterator it;
-            for (it = variables.begin(); it != variables.end(); ++it)
+            for (it = variables.begin(); it != variables.end(); ++it) {
                 if (lhs == it.key())
                     break;
+            }
             if (it != variables.end()) {
                 // Skip continuation lines
                 while (!s.isEmpty() && s[s.length()-1] == '\\' && !ins.atEnd())

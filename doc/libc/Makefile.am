@@ -1,13 +1,13 @@
 htmldir = $(kde_htmldir)/en/kdevdoctreeview/libc
-indexdir = ${kde_datadir}/kdevdoctreeview/docindices
+indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = libc.index
 
-libc.index:
+libc.index: $(srcdir)/libc.index.in
 	echo "<!DOCTYPE gideonindex>" > libc.index ; \
 	echo "<gideonindex>" >> libc.index
 	echo "<title>libc</title>" >> libc.index ; \
 	echo "<base href=\"$(htmldir)\"/>" >> libc.index ; \
-	cat libc.index.in >> libc.index ; \
+	cat $(srcdir)/libc.index.in >> libc.index ; \
 	echo "</gideonindex>" >> libc.index ; \
 	echo "" >> libc.index
 

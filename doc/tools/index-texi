@@ -34,6 +34,8 @@ for $file (@ARGV) {
                         }
                 }
         }
+
+        close(FILE);
 }
 
 if ($lastindex) {

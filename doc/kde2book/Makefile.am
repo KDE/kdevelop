@@ -1,14 +1,14 @@
 htmldir = $(kde_htmldir)/en/kdevdoctreeview/kde2book
-indexdir = ${kde_datadir}/kdevdoctreeview/docindices
+indexdir = ${kde_datadir}/kdevdoctreeview/indices
 index_DATA = kde2book.index
 
-kde2book.index:
+kde2book.index: $(srcdir)/kde2book.index.in
 	echo "<!DOCTYPE gideonindex>" > kde2book.index ; \
 	echo "<gideonindex>" >> kde2book.index ; \
 	echo "<title>KDE2 Development Book</title>" >> kde2book.index ; \
 	echo "<base href=\"$(htmldir)\"/>" >> kde2book.index ; \
 	echo "<conceptindex>" >> kde2book.index ; \
-	sort < kde2book.index.in | uniq >> kde2book.index ; \
+	sort < $(srcdir)/kde2book.index.in | uniq >> kde2book.index ; \
 	echo "</conceptindex>" >> kde2book.index ; \
 	echo "</gideonindex>" >> kde2book.index ; \
 	echo "" >> kde2book.index

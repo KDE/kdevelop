@@ -1,1 +1,1 @@
-EXTRA_DIST = index-texi index.xsl
+EXTRA_DIST = index-texi index-python index.xsl

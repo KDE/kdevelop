@@ -13,6 +13,7 @@
 #include <qheader.h>
 #include <qtimer.h>
 #include <qvbox.h>
+#include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -185,6 +186,50 @@ void FileViewWidget::refresh()
             }
             item = item->nextSibling();
         }
+    }
+
+    QListViewItem *item = firstChild();
+    while (item) {
+        item->sortChildItems(0, true);
+        item = item->nextSibling();
+    }
+}
+
+
+void FileViewWidget::addFile(const QString &fileName)
+{
+    kdDebug(9017) << "FileView add " << fileName << endl;
+    
+    QListViewItem *item = firstChild();
+    while (item) {
+        FileViewGroupItem *fvgitem = static_cast<FileViewGroupItem*>(item);
+        if (fvgitem->matches(fileName)) {
+            (void) new FileViewFileItem(fvgitem, fileName);
+            fvgitem->sortChildItems(0, true);
+            break;
+        }
+        item = item->nextSibling();
+    }
+}
+
+
+void FileViewWidget::removeFile(const QString &fileName)
+{
+    kdDebug(9017) << "FileView remove " << fileName << endl;
+    
+    QListViewItem *item = firstChild();
+    while (item) {
+        FileViewGroupItem *fvgitem = static_cast<FileViewGroupItem*>(item);
+        QListViewItem *childItem = fvgitem->firstChild();
+        while (childItem) {
+            FileViewFileItem *fvfitem = static_cast<FileViewFileItem*>(childItem);
+            if (fvfitem->fileName() == fileName) {
+                delete fvfitem;
+                //                fvgitem->sortChildItems(0, true);
+                break;
+            }
+        }
+        item = item->nextSibling();
     }
 }
 
