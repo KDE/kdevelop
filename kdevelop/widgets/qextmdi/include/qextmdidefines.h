@@ -1,3 +1,5 @@
+#ifndef _MDIDEFINES_H_
+#define _MDIDEFINES_H_
 //----------------------------------------------------------------------------
 //    filename             : qextmdidefines.h
 //----------------------------------------------------------------------------
@@ -24,14 +26,81 @@
 //
 //----------------------------------------------------------------------------
 
-#ifndef _MDIDEFINES_H_
-#define _MDIDEFINES_H_
-
 #define QEXTMDI_MDI_CHILDFRM_SEPARATOR 2
 #define QEXTMDI_MDI_CHILDFRM_BORDER 3
 #define QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER 6
 #define QEXTMDI_MDI_CHILDFRM_MIN_WIDTH 130
 
+//----------------------------------------------------------------------------
+namespace QextMdi
+{
+   /** extent Qt events
+      @see QCustomEvent, QEvent::User 
+      <PRE>
+      bool
+      B_MyWidget::event( QEvent* e) {
+         if( e->type() == QEvent::Type(QEvent::User + int(QextMdi::EV_Move))) {
+            ...
+         }
+         ...
+      }
+      </PRE>
+   */
+   enum EventType {
+      EV_Move=1,
+      EV_DragBegin,
+      EV_DragEnd,
+      EV_ResizeBegin,
+      EV_ResizeEnd
+   };
+
+   /**
+   * During @ref QextMdiMainFrm::addWindow the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system
+   */
+   enum AddWindowFlags {
+      /**
+      * standard is: show normal, attached, visible, document view (not toolview)
+      */
+      StandardAdd = 0,
+      /**
+      * add a maximized view
+      */
+      Maximize    = 1,
+      /**
+      * add a minimized view
+      */
+      Minimize    = 2,
+      /**
+      * add a view that is not visible for the moment but under MDI control
+      */
+      Hide        = 4,
+      /**
+      * add a view that appears toplevel
+      */
+      Detach      = 8,
+      /**
+      * add the view as tool view. That means it is stay-on-top and toplevel
+      */
+      ToolWindow  = 16
+   };
+
+   enum FrameDecor {
+      Win95Look = 0,
+      KDE1Look  = 1,
+      KDE2Look  = 2,
+      KDE2LaptopLook = 3
+   };
+
+   enum MdiMode {
+      ToplevelMode   = 0,
+      ChildframeMode = 1,
+      TabPageMode    = 2
+   };
+
+}; //namespace
+
+
+//----------------------------------------------------------------------------
 #ifndef _DLL_IMP_EXP_MSG_
 #   define _DLL_IMP_EXP_MSG_
 #endif

@@ -176,6 +176,7 @@ QextMdiTaskBarButton * QextMdiTaskBar::addWinButton(QextMdiChildView *win_ptr)
    m_pStretchSpace->show();
 
    b->show();
+   show();
    return b;
 }
 

@@ -332,7 +332,7 @@ QPixmap * QextMdiChildView::myIconPtr()
 void QextMdiChildView::focusInEvent(QFocusEvent *e)
 {
    // every widget get a FocusInEvent when a popup menu is opened!?! -> maybe bug of QT
-   if (e->reason() == QFocusEvent::Popup) {
+   if (e && ((e->reason())==QFocusEvent::Popup)) {
       return;
    }
    // XXX TODO: call QWidget::focusInEvent() ???

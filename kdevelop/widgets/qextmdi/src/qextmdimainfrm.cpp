@@ -62,12 +62,12 @@
 using namespace KParts;
 
 #ifdef _OS_WIN32_
-QextMdi::QextMdiFrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::Win95Look;
+QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::Win95Look;
 #else
 #ifdef NO_KDE2
-QextMdi::QextMdiFrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE1Look;
+QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE1Look;
 #else
-QextMdi::QextMdiFrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
+QextMdi::FrameDecor QextMdiMainFrm::m_frameDecoration = QextMdi::KDE2Look;
 #endif
 #endif
 

@@ -47,7 +47,6 @@ QextMdiChildFrmCaption::QextMdiChildFrmCaption(QextMdiChildFrm *parent)
 {
    m_szCaption    = tr("Unnamed");
    m_bActive      = FALSE;
-   m_bCanMove     = FALSE;
    m_pParent      = parent;
    setBackgroundMode(NoBackground);
    setFocusPolicy(NoFocus);
@@ -65,9 +64,15 @@ void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
    if ( e->button() == LeftButton) {
       setMouseTracking(FALSE);
-      if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
+      if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look) {
          QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
-      m_bCanMove = TRUE;
+      }
+      m_pParent->m_bDragging = TRUE;
+      //notify child view
+      QextMdiChildFrmDragBeginEvent ue(e);
+      if( m_pParent->m_pClient != 0L) {
+         QApplication::sendEvent( m_pParent->m_pClient, &ue);
+      }
       m_offset = mapToParent( e->pos());
    }
    else if ( e->button() == RightButton) {
@@ -83,14 +88,21 @@ void QextMdiChildFrmCaption::mouseReleaseEvent(QMouseEvent *e)
       if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
          QApplication::restoreOverrideCursor();
       releaseMouse();
-      m_bCanMove = FALSE;
+      if(m_pParent->m_bDragging) {
+         m_pParent->m_bDragging = FALSE;
+         //notify child view
+         QextMdiChildFrmDragEndEvent ue(e);
+         if( m_pParent->m_pClient != 0L) {
+            QApplication::sendEvent( m_pParent->m_pClient, &ue);
+         }
+      }
    }
 }
 
 //============== mouseMoveEvent =============//
 void QextMdiChildFrmCaption::mouseMoveEvent(QMouseEvent *e)
 {
-   if ( !m_bCanMove )
+   if ( !m_pParent->m_bDragging )
       return;
    QPoint relMousePosInChildArea = m_pParent->m_pManager->mapFromGlobal( e->globalPos() );
 
@@ -239,7 +251,7 @@ void QextMdiChildFrmCaption::slot_moveViaSystemMenu()
    grabMouse();
    if (QextMdiMainFrm::frameDecorOfAttachedViews() != QextMdi::Win95Look)
       QApplication::setOverrideCursor(Qt::sizeAllCursor,TRUE);
-   m_bCanMove = TRUE;
+   m_pParent->m_bDragging = TRUE;
    m_offset = mapFromGlobal( QCursor::pos());
 }
 

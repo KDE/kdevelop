@@ -88,16 +88,41 @@ void QextMdiWin32IconButton::mousePressEvent( QMouseEvent*)
 //============ QextMdiChildFrm ============//
 
 QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
- : QFrame(parent, "qextmdi_childfrm")
-  ,m_pClient(0)
-  ,m_resizeMode(FALSE)
-  ,m_pIconButtonPixmap(0L)
-  ,m_pMinButtonPixmap(0L)
-  ,m_pMaxButtonPixmap(0L)
-  ,m_pRestoreButtonPixmap(0L)
-  ,m_pCloseButtonPixmap(0L)
-  ,m_pUndockButtonPixmap(0L)
-  ,m_windowMenuID(0)
+ : QFrame(parent, "qextmdi_childfrm"),
+                           //positions same in h and cpp for fast order check
+                           m_pClient(0L),
+
+
+                           m_pManager(0L),
+                           m_pCaption(0L),
+                           m_pWinIcon(0L),
+                           m_pUnixIcon(0L),
+                           m_pMinimize(0L),
+                           m_pMaximize(0L),
+                           m_pClose(0L),
+                           m_pUndock(0L),
+                           m_state(Normal),
+                           m_restoredRect(),
+                           m_iResizeCorner(QEXTMDI_NORESIZE),
+                           m_iLastCursorCorner(QEXTMDI_NORESIZE),
+                           m_bResizing(FALSE),
+                           m_bDragging(FALSE),
+                           m_pIconButtonPixmap(0L),
+                           m_pMinButtonPixmap(0L),
+                           m_pMaxButtonPixmap(0L),
+                           m_pRestoreButtonPixmap(0L),
+                           m_pCloseButtonPixmap(0L),
+                           m_pUndockButtonPixmap(0L),
+
+
+
+                           m_windowMenuID(0),
+
+
+
+                           m_pSystemMenu(0L),
+                           m_oldClientMinSize(),
+                           m_oldClientMaxSize()
 {
    m_pCaption  = new QextMdiChildFrmCaption(this);
    m_pManager  = parent;
@@ -145,10 +170,6 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
    setFrameStyle(QFrame::WinPanel|QFrame::Raised);
    setFocusPolicy(NoFocus);
 
-   m_state=Normal;
-   
-   m_iResizeCorner=QEXTMDI_NORESIZE;
-   m_iLastCursorCorner=QEXTMDI_NORESIZE;
    setMouseTracking(TRUE);
 
    setMinimumSize( QSize( QEXTMDI_MDI_CHILDFRM_MIN_WIDTH, m_pCaption->heightHint()));
@@ -170,9 +191,9 @@ QextMdiChildFrm::~QextMdiChildFrm()
 //============ mousePressEvent =============//
 void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
 {
-   if( m_resizeMode) {
-      if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
-      m_resizeMode = FALSE;
+   if( m_bResizing) {
+      if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
+      m_bResizing = FALSE;
       releaseMouse();
    }
 
@@ -181,16 +202,29 @@ void QextMdiChildFrm::mousePressEvent(QMouseEvent *e)
 
    m_iResizeCorner=getResizeCorner(e->pos().x(),e->pos().y());
    if(m_iResizeCorner != QEXTMDI_NORESIZE) {
-      m_resizeMode = TRUE;
+      m_bResizing = TRUE;
+      //notify child view
+      QextMdiChildFrmResizeBeginEvent ue(e);
+      if( m_pClient != 0L) {
+         QApplication::sendEvent( m_pClient, &ue);
+      }
    }
 }
 
 //============ mouseReleaseEvent ==============//
 
-void QextMdiChildFrm::mouseReleaseEvent(QMouseEvent *)
+void QextMdiChildFrm::mouseReleaseEvent(QMouseEvent *e)
 {
-   if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
-   m_resizeMode = FALSE;
+   if(QApplication::overrideCursor()) { QApplication::restoreOverrideCursor(); }
+
+   if(m_bResizing) {
+      m_bResizing = FALSE;
+      //notify child view
+      QextMdiChildFrmResizeEndEvent ue(e);
+      if( m_pClient != 0L) {
+         QApplication::sendEvent( m_pClient, &ue);
+      }
+   }
 }
 
 //============= setResizeCursor ===============//
@@ -230,14 +264,14 @@ void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
    if(!m_pClient) return;
    if(m_pClient->minimumSize() == m_pClient->maximumSize()) return;
 
-   if(m_resizeMode) {
+   if(m_bResizing) {
       if( !(e->state() & RightButton) && !(e->state() & MidButton)) {
          // same as: if no button or left button pressed
          QPoint p = parentWidget()->mapFromGlobal( e->globalPos() );
          resizeWindow(m_iResizeCorner, p.x(), p.y());
       }
       else
-         m_resizeMode = FALSE;
+         m_bResizing = FALSE;
    }
    else {
       m_iResizeCorner = getResizeCorner(e->pos().x(), e->pos().y());
@@ -250,7 +284,7 @@ void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 void QextMdiChildFrm::moveEvent(QMoveEvent* me)
 {
    // give its child view the chance to notify a childframe move
-   QextMdiChildFrmMovedEvent cfme( me);
+   QextMdiChildFrmMoveEvent cfme( me);
    if( m_pClient != 0L) {
       QApplication::sendEvent( m_pClient, &cfme);
    }
@@ -260,7 +294,7 @@ void QextMdiChildFrm::moveEvent(QMoveEvent* me)
 
 void QextMdiChildFrm::leaveEvent(QEvent *)
 {
-   if(!m_resizeMode) {
+   if(!m_bResizing) {
       m_iResizeCorner=QEXTMDI_NORESIZE;
       m_iLastCursorCorner=QEXTMDI_NORESIZE;
       if(QApplication::overrideCursor())QApplication::restoreOverrideCursor();
@@ -979,7 +1013,7 @@ void QextMdiChildFrm::switchToMinimizeLayout()
 void QextMdiChildFrm::slot_resizeViaSystemMenu()
 {
    grabMouse();
-   m_resizeMode = TRUE;
+   m_bResizing = TRUE;
    m_iResizeCorner = QEXTMDI_RESIZE_BOTTOMLEFT;
    setResizeCursor( m_iResizeCorner);
 }

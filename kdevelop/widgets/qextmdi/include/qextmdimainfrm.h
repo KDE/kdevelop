@@ -53,53 +53,6 @@
 #include "qextmdilistiterator.h"
 #include "qextmdinulliterator.h"
 
-namespace QextMdi {
-
-/**
-* During @ref QextMdiMainFrm::addWindow the enum AddWindowFlags is used to determine how the view is initialy being added to the MDI system
-*/
-typedef enum {
-      /**
-      * standard is: show normal, attached, visible, document view (not toolview)
-      */
-      StandardAdd = 0,
-      /**
-      * add a maximized view
-      */
-      Maximize    = 1,
-      /**
-      * add a minimized view
-      */
-      Minimize    = 2,
-      /**
-      * add a view that is not visible for the moment but under MDI control
-      */
-      Hide        = 4,
-      /**
-      * add a view that appears toplevel
-      */
-      Detach      = 8,
-      /**
-      * add the view as tool view. That means it is stay-on-top and toplevel
-      */
-      ToolWindow  = 16
-   } AddWindowFlags;
-
-typedef enum {
-      Win95Look = 0,
-      KDE1Look  = 1,
-      KDE2Look  = 2,
-      KDE2LaptopLook = 3
-   } QextMdiFrameDecor;
-
-typedef enum {
-      ToplevelMode   = 0,
-      ChildframeMode = 1,
-      TabPageMode    = 2
-   } MdiMode;
-
-}; //namespace
-
 /**
  * @short Internal class
  *
@@ -158,7 +111,7 @@ protected:
    int                     m_oldMainFrmHeight;
    int                     m_oldMainFrmMinHeight;
    int                     m_oldMainFrmMaxHeight;
-   static QextMdi::QextMdiFrameDecor   m_frameDecoration;
+   static QextMdi::FrameDecor   m_frameDecoration;
    bool                    m_bSDIApplication;
    KDockWidget*            m_pDockbaseAreaOfDocumentViews;
    KDockWidget*            m_pDockbaseOfTabPage;

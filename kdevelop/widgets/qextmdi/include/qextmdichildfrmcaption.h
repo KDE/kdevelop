@@ -62,6 +62,7 @@ public:
    * Returns the caption bar height depending on the used font 
    */
    int heightHint();
+
 public slots:
    /** 
    * Grabs the mouse, a move cursor, sets a move indicator variable to TRUE and keeps the global mouse position in mind
@@ -110,10 +111,6 @@ protected: // Protected attributes
    * state variable indicating whether activated or not activated 
    */
    bool              m_bActive;
-   /** 
-   * state variable indicating if this is being moved at the moment 
-   */
-   bool              m_bCanMove;
    /** 
    * the position offset related to its parent widget (internally used for translating mouse move positions 
    */
