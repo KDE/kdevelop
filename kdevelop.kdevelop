@@ -22,9 +22,14 @@
   </general>
   <kdevfileview>
     <groups>
-      <group pattern="*.cpp;*.cxx;*.h" name="Sources" />
+      <group pattern="*.cpp;*.cxx" name="Sources" />
+      <group pattern="*.h;*.hpp" name="Headers" />
       <group pattern="*.ui" name="User Interface" />
+      <group pattern="*.desktop" name="desktop" />
+      <group pattern="*.rc" name="Resources" />
       <group pattern="*.png" name="Icons" />
+      <group pattern="*.kdevelop" name="Project templates" />
+      <group pattern="*.toc;*.index" name="Documentation" />
       <group pattern="*.po;*.ts" name="Translations" />
       <group pattern="*script" name="scripts" />
       <group pattern="*" name="Others" />
