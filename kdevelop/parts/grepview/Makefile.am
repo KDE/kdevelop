@@ -6,9 +6,10 @@ lib_LTLIBRARIES = libkdevgrepview.la
 libkdevgrepview_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
 libkdevgrepview_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la $(LIB_KDEUI)
 
-libkdevgrepview_la_SOURCES = main.cpp grepview.cpp grepwidget.cpp grepdlg.cpp
+libkdevgrepview_la_SOURCES = main.cpp grepview.cpp grepwidget.cpp grepdlg.cpp \
+			     grepconfigwidget.cpp
 
-noinst_HEADERS = main.h grepview.h grepwidget.h grepdlg.h
+noinst_HEADERS = main.h grepview.h grepwidget.h grepdlg.h grepconfigwidget.h
 
 METASOURCES = AUTO
 

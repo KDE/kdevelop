@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=KDevelop/VersionControl
+Name=KDevelop Version Control Interface

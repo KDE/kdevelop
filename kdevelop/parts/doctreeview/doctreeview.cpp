@@ -1,8 +1,12 @@
+#include <qvbox.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kdialogbase.h>
+
 #include "doctreeview.h"
 #include "doctreewidget.h"
+#include "doctreeconfigwidget.h"
 #include "main.h"
 
 
@@ -28,6 +32,13 @@ void DocTreeView::setupGUI()
     m_widget->setCaption(i18n("Documentation"));
     
     emit embedWidget(m_widget, SelectView, i18n("DOC"), i18n("documentation tree view"));
+}
+
+
+void DocTreeView::createConfigWidget(KDialogBase *dlg)
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("Documentation tree"));
+    (void) new DocTreeConfigWidget(this, vbox, "documentation tree config widget");
 }
 
 

@@ -1,6 +1,6 @@
 /***************************************************************************
-                             customizedlg.cpp
-                             ----------------------
+                             doctreeconfigwidget.h
+                             --------------------
     copyright            : (C) 1999 by Bernd Gehrmann
     email                : bernd@physik.hu-berlin.de
  ***************************************************************************/
@@ -15,17 +15,43 @@
  ***************************************************************************/
 
 
-#include <klocale.h>
-#include "componentmanager.h"
-#include "customizedlg.h"
+#ifndef _DOCTREECONFIGWIDGET_H_
+#define _DOCTREECONFIFWIDGET_H_
+
+#include <qhbox.h>
+#include <qtabwidget.h>
+
+class QListView;
+class DocTreeView;
 
 
-CustomizeDialog::CustomizeDialog(QWidget *parent, const char *name)
-    : KDialogBase(TreeList, i18n("Customize KDevelop"), Ok|Cancel,
-                  Ok, parent, "customize dialog")
+class DocTreeConfigWidget : public QTabWidget
 {
-}
+    Q_OBJECT
+	
+public: 
+    DocTreeConfigWidget( DocTreeView *doctree, QWidget *parent, const char *name=0 );
+    ~DocTreeConfigWidget();
 
+    enum Page { KDevelop, Libraries, Others };
+    void showPage(Page page);
 
-CustomizeDialog::~CustomizeDialog()
-{}
+private slots:
+    void accept();
+    void addClicked();
+    void editClicked();
+    void removeClicked();
+
+private:
+    DocTreeView *part;
+    QListView *kdevelopView;
+    QListView *librariesView;
+    QListView *othersView;
+    QHBox *kdevelopTab;
+    QHBox *librariesTab;
+    QHBox *othersTab;
+    void readConfig();
+    void storeConfig();
+};
+
+#endif

@@ -23,7 +23,8 @@
 
 class CProject;
 class CClassStore;
-class CustomizeDialog;
+class KDialogBase;
+
 
 /**
  * This is the base class for all components like doc tree view, LFV, RFV
@@ -53,7 +54,7 @@ public:
      * Creates a configuration page for use in the
      * KDevelop settings dialog.
      */
-    virtual void createConfigWidget(CustomizeDialog *parent);
+    virtual void createConfigWidget(KDialogBase *dlg);
     /**
      * The user has changed the path to kdelibs/qt.
      */

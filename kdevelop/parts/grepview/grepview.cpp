@@ -1,9 +1,13 @@
+#include <qvbox.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kiconloader.h>
+#include <kdialogbase.h>
+
 #include "grepview.h"
 #include "grepwidget.h"
+#include "grepconfigwidget.h"
 #include "main.h"
 
 
@@ -42,6 +46,13 @@ void GrepView::setupGUI()
                                "over several files. Matches will be "
                                "displayed, you can switch to a match "
                                "directly.") );
+}
+
+
+void GrepView::createConfigWidget(KDialogBase *dlg)
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("Grep"));
+    (void) new GrepConfigWidget(vbox, "grep config widget");
 }
 
 

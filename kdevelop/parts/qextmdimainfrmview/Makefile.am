@@ -15,5 +15,5 @@ METASOURCES = AUTO
 servicedir = $(kde_servicesdir)
 service_DATA = kdevmdimainfrmcomponent.desktop
 
-rcdir = $(kde_datadir)/qextmdimainfrmview
+rcdir = $(kde_datadir)/kdevqextmdimainfrmview
 rc_DATA = kdevmdimainfrmcomponent.rc

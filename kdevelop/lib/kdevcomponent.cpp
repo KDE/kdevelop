@@ -14,7 +14,7 @@ void KDevComponent::setupGUI()
 {
 }
 
-void KDevComponent::createConfigWidget(CustomizeDialog *parent)
+void KDevComponent::createConfigWidget(KDialogBase *dlg)
 {
 }
 

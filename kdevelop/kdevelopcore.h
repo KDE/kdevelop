@@ -16,6 +16,13 @@ public:
     KDevelopCore(KDevelop *gui);
     ~KDevelopCore();
 
+    void setupKDevelop();
+    
+private:
+    void initActions();
+    void loadComponents();
+    void initComponents();
+
 private slots:
     void gotoSourceFile(const QString &filename, int lineno);
     void gotoDocumentationFile(const QString &filename);
@@ -23,9 +30,7 @@ private slots:
     void gotoProjectManual();
 
 private:
-    void loadComponents(KDevelop *gui);
-    void initComponents(KDevelop *gui);
-
+    KDevelop *m_kdevelopgui;
     QList<KDevComponent> m_components;
 };
 

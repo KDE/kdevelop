@@ -1,5 +1,5 @@
 /***************************************************************************
-                             doctreeviewconfdlg.cpp
+                             doctreeconfigwidget.cpp
                              ----------------------
     copyright            : (C) 1999 by Bernd Gehrmann
     email                : bernd@physik.hu-berlin.de
@@ -17,25 +17,25 @@
 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <qlistview.h>
 #include <qheader.h>
 #include <qvbox.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <ksimpleconfig.h>
 #include <kdialog.h>
+#include <klistview.h>
 
-#include "klistview.h"
 #include "cdoctreepropdlg.h"
 #include "doctreeview.h"
-#include "doctreeviewconfigwidget.h"
+#include "doctreeconfigwidget.h"
 
 
-class DocTreeViewConfigListItem : public QCheckListItem
+class DocTreeConfigListItem : public QCheckListItem
 {
 public:
-    DocTreeViewConfigListItem(QListView *parent, const QString &text,
+    DocTreeConfigListItem(QListView *parent, const QString &text,
                               const QString &id, int number)
         : QCheckListItem(parent, text, CheckBox)
         { setOn(true); idnt = id; no = number; }
@@ -50,10 +50,10 @@ private:
 
 
 
-DocTreeViewConfigWidget::DocTreeViewConfigWidget(DocTreeView *doctree, QWidget *parent, const char *name)
+DocTreeConfigWidget::DocTreeConfigWidget(DocTreeView *docpart, QWidget *parent, const char *name)
     : QTabWidget(parent, name)
 {
-    tree = doctree;
+    part = docpart;
     
     // KDevelop tab
     kdevelopTab = new QHBox(this);
@@ -104,18 +104,18 @@ DocTreeViewConfigWidget::DocTreeViewConfigWidget(DocTreeView *doctree, QWidget *
 }
 
 
-DocTreeViewConfigWidget::~DocTreeViewConfigWidget()
+DocTreeConfigWidget::~DocTreeConfigWidget()
 {}
 
 
-void DocTreeViewConfigWidget::showPage(DocTreeViewConfigWidget::Page page)
+void DocTreeConfigWidget::showPage(DocTreeConfigWidget::Page page)
 {
     QTabWidget::showPage((page==KDevelop)? kdevelopTab :
                          (page==Libraries)? librariesTab : othersTab);
 }
 
 
-void DocTreeViewConfigWidget::readConfig()
+void DocTreeConfigWidget::readConfig()
 {
     QString path = locate("appdata", "tools/documentation");
     KSimpleConfig docconfig(path);
@@ -129,8 +129,8 @@ void DocTreeViewConfigWidget::readConfig()
 	{
             docconfig.setGroup("KDevelop-" + (*it));
             QString name = docconfig.readEntry("Name"); 
-            (void) new DocTreeViewConfigListItem(kdevelopView, name, (*it), kdevelopPos);
-	    qDebug( "Insert %s", name.ascii() );
+            (void) new DocTreeConfigListItem(kdevelopView, name, (*it), kdevelopPos);
+	    kdDebug(9002) << "Inserting " << name << endl;
             ++kdevelopPos;
 	}
     // Read in possible items for the Libraries tree
@@ -143,8 +143,8 @@ void DocTreeViewConfigWidget::readConfig()
 	{
             docconfig.setGroup("Libraries-" + (*it));
             QString name = docconfig.readEntry("Name"); 
-            (void) new DocTreeViewConfigListItem(librariesView, name, (*it), librariesPos);
-	    qDebug( "Insert %s", name.ascii() );
+            (void) new DocTreeConfigListItem(librariesView, name, (*it), librariesPos);
+	    kdDebug(9002) << "Inserting " << name << endl;
             ++librariesPos;
 	}
 
@@ -159,8 +159,8 @@ void DocTreeViewConfigWidget::readConfig()
             QListViewItem *item = kdevelopView->firstChild();
             for (; item; item = item->nextSibling())
                 {
-                    DocTreeViewConfigListItem *citem = static_cast<DocTreeViewConfigListItem*>(item);
-                    qDebug( "Checking %s with %s", citem->ident().ascii(), (*it).ascii() );
+                    DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+                    kdDebug(9002) << "Checking " << citem->ident() << " with " << (*it) << endl;
                     if (citem->ident() == (*it))
                         citem->setOn(false);
                 }
@@ -174,8 +174,8 @@ void DocTreeViewConfigWidget::readConfig()
             QListViewItem *item = librariesView->firstChild();
             for (; item; item = item->nextSibling())
                 {
-                    DocTreeViewConfigListItem *citem = static_cast<DocTreeViewConfigListItem*>(item);
-                    qDebug( "Checking %s with %s", citem->ident().ascii(), (*it).ascii() );
+                    DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
+                    kdDebug(9002) << "Checking " << citem->ident() << " with " << (*it) << endl;
                     if (citem->ident() == (*it))
                         citem->setOn(false);
                 }
@@ -193,7 +193,7 @@ void DocTreeViewConfigWidget::readConfig()
 }
 
 
-void DocTreeViewConfigWidget::storeConfig()
+void DocTreeConfigWidget::storeConfig()
 {
     KConfig *config = KGlobal::config();
     config->setGroup("DocTree");
@@ -203,7 +203,7 @@ void DocTreeViewConfigWidget::storeConfig()
         QListViewItem *item = kdevelopView->firstChild();
         for (; item; item = item->nextSibling())
             {
-                DocTreeViewConfigListItem *citem = static_cast<DocTreeViewConfigListItem*>(item);
+                DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
                 if (!citem->isOn())
                     kdevelopNotShown.append(citem->ident());
             }
@@ -215,7 +215,7 @@ void DocTreeViewConfigWidget::storeConfig()
         QListViewItem *item = librariesView->firstChild();
         for (; item; item = item->nextSibling())
             {
-                DocTreeViewConfigListItem *citem = static_cast<DocTreeViewConfigListItem*>(item);
+                DocTreeConfigListItem *citem = static_cast<DocTreeConfigListItem*>(item);
                 if (!citem->isOn())
                     librariesNotShown.append(citem->ident());
             }
@@ -236,7 +236,7 @@ void DocTreeViewConfigWidget::storeConfig()
 }
 
 
-void DocTreeViewConfigWidget::addClicked()
+void DocTreeConfigWidget::addClicked()
 {
     CDocTreePropDlg dlg;
     dlg.setCaption(i18n("Add documentation entry"));
@@ -247,7 +247,7 @@ void DocTreeViewConfigWidget::addClicked()
 }
 
 
-void DocTreeViewConfigWidget::editClicked()
+void DocTreeConfigWidget::editClicked()
 {
     CDocTreePropDlg dlg;
     dlg.setCaption(i18n("Edit documentation entry"));
@@ -260,14 +260,14 @@ void DocTreeViewConfigWidget::editClicked()
 }
 
 
-void DocTreeViewConfigWidget::removeClicked()
+void DocTreeConfigWidget::removeClicked()
 {
     delete othersView->currentItem();
 }
 
 
-void DocTreeViewConfigWidget::accept()
+void DocTreeConfigWidget::accept()
 {
     storeConfig();
-    tree->configurationChanged();
+    part->configurationChanged();
 }

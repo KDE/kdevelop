@@ -26,7 +26,7 @@ class MakeWidget : public ProcessView
 {
     Q_OBJECT
 public:
-    MakeWidget(MakeView *view);
+    MakeWidget(MakeView *part);
     ~MakeWidget();
 
     void startJob();
@@ -44,7 +44,7 @@ private:
     virtual void insertStderrLine(const QString &line);
     
 private:
-    MakeView *m_view;
+    MakeView *m_part;
     QStack<QString> dirstack;
 };
 

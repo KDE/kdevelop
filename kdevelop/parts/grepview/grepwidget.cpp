@@ -83,7 +83,7 @@ void GrepListBoxItem::paint(QPainter *p)
 }
 
 
-GrepWidget::GrepWidget(GrepView *view)
+GrepWidget::GrepWidget(GrepView *part)
     : ProcessView(0, "grep widget")
 {
     grepdlg = new GrepDialog(this, "grep widget");
@@ -92,7 +92,7 @@ GrepWidget::GrepWidget(GrepView *view)
     connect( this, SIGNAL(highlighted(int)),
              this, SLOT(lineHighlighted(int)) );
 
-    m_view = view;
+    m_part = part;
 }
 
 
@@ -166,7 +166,7 @@ void GrepWidget::lineHighlighted(int line)
     if (i->isCustomItem())
         {
             GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-            emit m_view->gotoSourceFile(gi->filename(), gi->linenumber());
+            emit m_part->gotoSourceFile(gi->filename(), gi->linenumber());
         }
 }
 

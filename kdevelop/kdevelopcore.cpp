@@ -1,6 +1,9 @@
 #include <kdebug.h>
 #include <ktrader.h>
 #include <klibloader.h>
+#include <klocale.h>
+#include <kdialogbase.h>
+
 #include "ClassParser.h"
 #include "kdevelop.h"
 #include "kdevelopcore.h"
@@ -9,8 +12,10 @@
 KDevelopCore::KDevelopCore(KDevelop *gui)
     : QObject(gui, "kdevelop core")
 {
-    loadComponents(gui);
-    initComponents(gui);
+    m_kdevelopgui = gui;
+
+    loadComponents();
+    initComponents();
 
     // Hack to test the class viewer
     CClassParser *classparser = new CClassParser;
@@ -30,7 +35,7 @@ KDevelopCore::~KDevelopCore()
 {}
 
 
-void KDevelopCore::loadComponents(KDevelop *gui)
+void KDevelopCore::loadComponents()
 {
     KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component");
     if (offers.isEmpty())
@@ -47,7 +52,7 @@ void KDevelopCore::loadComponents(KDevelop *gui)
         if (prop.isValid())
             args = QStringList::split(" ", prop.toString());
         
-        QObject *obj = factory->create(gui, (*it)->name().latin1(),
+        QObject *obj = factory->create(m_kdevelopgui, (*it)->name().latin1(),
                                        "KDevComponent", args);
         
         if (!obj->inherits("KDevComponent")) {
@@ -55,13 +60,13 @@ void KDevelopCore::loadComponents(KDevelop *gui)
             return;
         }
         KDevComponent *comp = (KDevComponent*) obj;
-        gui->guiFactory()->addClient(comp);
+        m_kdevelopgui->guiFactory()->addClient(comp);
         m_components.append(comp);
     }
 }
 
 
-void KDevelopCore::initComponents(KDevelop *gui)
+void KDevelopCore::initComponents()
 {
     // Connect all signals
     QListIterator<KDevComponent> it(m_components);
@@ -75,7 +80,7 @@ void KDevelopCore::initComponents(KDevelop *gui)
         connect( *it, SIGNAL(gotoProjectManual()),
                  this, SLOT(gotoProjectManual()) );
         connect( *it, SIGNAL(embedWidget(QWidget*, KDevComponent::Role, const QString&, const QString&)),
-                 gui, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
+                 m_kdevelopgui, SLOT(embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&)) );
     }
 
     // Call the setup routines
@@ -86,6 +91,22 @@ void KDevelopCore::initComponents(KDevelop *gui)
 }
 
         
+void KDevelopCore::setupKDevelop()
+{
+    KDialogBase *dlg = new KDialogBase(KDialogBase::TreeList, i18n("Customize KDevelop"),
+                                       KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, m_kdevelopgui,
+                                       "customize dialog");
+    
+    QListIterator<KDevComponent> it(m_components);
+    for (; it.current(); ++it) {
+        (*it)->createConfigWidget(dlg);
+    }
+
+    dlg->exec();
+    delete dlg;
+}
+
+
 void KDevelopCore::gotoSourceFile(const QString &filename, int lineno)
 {
     kdDebug(9000) << "KDevelopCore::gotoSourceFile" << endl;
@@ -108,5 +129,6 @@ void KDevelopCore::gotoProjectManual()
 {
     kdDebug(9000) << "KDevelopCore::gotoProjectManual" << endl;
 }
+
 
 #include "kdevelopcore.moc"

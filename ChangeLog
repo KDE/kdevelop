@@ -1,3 +1,9 @@
+2000-07-04  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Readded configuration dialog framework
+	* Renamed some 'view' variables to 'part' for clarity
+        * Install qextmdimainfrm's xml file into the directory
+          given by its KInstance
+
 2000-07-02  Falk Brettschneider <gigafalk@yahoo.com>
   * readded QextMDI as shared library libkdevqextmdi.so
   * added initial version of a KPart qextmdimainfrmview that acts as MDI control based on QextMDI

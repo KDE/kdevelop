@@ -24,6 +24,9 @@
 #include "kdevcomponent.h"
 
 
+class KDevelopCore;
+
+
 class KDevelop : public KParts::DockMainWindow
 {
  Q_OBJECT
@@ -189,9 +192,12 @@ private:
   /** debug aid. Switch on using compile switch GDB_MONITOR or DBG_MONITOR */
   KDockWidget* m_dockbaseDbgWidgetView;			
 
+  KDevelopCore *m_kdevelopcore;
+    
 private slots:
    void slotFilePrint();
  void slotProjectNew();
+ void slotOptionsKDevelopSetup();
  void slotOptionsEditToolbars();
 };
 

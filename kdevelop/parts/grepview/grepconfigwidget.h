@@ -1,5 +1,5 @@
 /***************************************************************************
-                             grepviewconfigwidget.h
+                             grepconfigwidget.h
                              ----------------------
     copyright            : (C) 1999 by Bernd Gehrmann
     email                : bernd@physik.hu-berlin.de
@@ -15,18 +15,20 @@
  ***************************************************************************/
 
 
-#ifndef GREPVIEWCONFIGWIDGET_H
-#define GREPVIEWCONFIGWIDGET_H
+#ifndef _GREPCONFIGWIDGET_H_
+#define _GREPCONFIGWIDGET_H_
 
-#include "customizedlg.h"
 
-class GrepViewConfigWidget : public QWidget
+#include <qwidget.h>
+
+
+class GrepConfigWidget : public QWidget
 {
     Q_OBJECT
 	
 public: 
-    GrepViewConfigWidget( QWidget *parent, const char *name=0 );
-    ~GrepViewConfigWidget();
+    GrepConfigWidget( QWidget *parent, const char *name=0 );
+    ~GrepConfigWidget();
 };
 
 #endif

@@ -516,7 +516,7 @@ DocTreeWidget::DocTreeWidget(DocTreeView *view)
     connect( this, SIGNAL(returnPressed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
 
-    m_view = view;
+    m_part = view;
 }
 
 
@@ -534,11 +534,11 @@ void DocTreeWidget::slotItemExecuted(QListViewItem *item)
 
     QString ident = kitem->ident();
     if (ident == "internal:projectAPI")
-        emit m_view->gotoProjectApiDoc();
+        emit m_part->gotoProjectApiDoc();
     else if (ident == "internal:projectManual")
-        emit m_view->gotoProjectManual();
+        emit m_part->gotoProjectManual();
     else if (!ident.isEmpty())
-        emit m_view->gotoDocumentationFile(kitem->ident());
+        emit m_part->gotoDocumentationFile(kitem->ident());
 }
 
 

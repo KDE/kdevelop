@@ -2,8 +2,6 @@
 <kpartgui name="MdiMainFrmComponent" version="1">
 <MenuBar>
  <Menu name="view">
-   <Action name="view_next_error" />
-   <Action name="view_previous_error" />
  </Menu>
 </MenuBar>
 </kpartgui>

@@ -48,7 +48,7 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
 
   createGUI( 0L );
 
-  (void) new KDevelopCore(this);
+  m_kdevelopcore = new KDevelopCore(this);
 }
 
 
@@ -800,6 +800,13 @@ void KDevelop::slotProjectNew(){
   dlg->show();
   delete dlg;
 }
+
+
+void KDevelop::slotOptionsKDevelopSetup()
+{
+    m_kdevelopcore->setupKDevelop();
+}
+
 
 void KDevelop::slotOptionsEditToolbars(){
   KEditToolbar dlg(actionCollection());

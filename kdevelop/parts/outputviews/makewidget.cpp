@@ -60,7 +60,7 @@ MakeWidget::MakeWidget(MakeView *view)
     connect( this, SIGNAL(highlighted(int)),
              this, SLOT(lineHighlighted(int)) );
 
-    m_view = view;
+    m_part = view;
 }
 
 
@@ -133,7 +133,7 @@ void MakeWidget::lineHighlighted(int line)
     ProcessListBoxItem *i = static_cast<ProcessListBoxItem*>(item(line));
     if (i->isCustomItem()) {
         MakeListBoxItem *gi = static_cast<MakeListBoxItem*>(i);
-        emit m_view->gotoSourceFile(gi->filename(), gi->linenumber());
+        emit m_part->gotoSourceFile(gi->filename(), gi->linenumber());
     }
 }
 

@@ -35,11 +35,10 @@ class DocTreeWidget : public KListView
     Q_OBJECT
     
 public: 
-    DocTreeWidget(DocTreeView *view);
+    DocTreeWidget(DocTreeView *part);
     ~DocTreeWidget();
 
     void configurationChanged();
-    //    void createConfigWidget(CustomizeDialog *dlg);
     void docPathChanged();
     void projectClosed();
     void projectOpened(CProject *prj);
@@ -56,6 +55,6 @@ private:
     DocTreeOthersFolder *folder_others;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;
-    DocTreeView *m_view;
+    DocTreeView *m_part;
 };
 #endif

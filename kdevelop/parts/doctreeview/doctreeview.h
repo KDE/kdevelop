@@ -22,7 +22,7 @@ public:
 protected:
     virtual void setupGUI();
     virtual void docPathChanged();
-//    virtual void createConfigWidget(CustomizeDialog *parent);
+    virtual void createConfigWidget(KDialogBase *dlg);
     virtual void projectClosed();
     virtual void projectOpened(CProject *prj);
     

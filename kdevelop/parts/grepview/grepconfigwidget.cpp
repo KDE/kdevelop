@@ -1,5 +1,5 @@
 /***************************************************************************
-                             customizedlg.h
+                             grepconfigwidget.cpp
                              ----------------------
     copyright            : (C) 1999 by Bernd Gehrmann
     email                : bernd@physik.hu-berlin.de
@@ -15,20 +15,21 @@
  ***************************************************************************/
 
 
-#ifndef CUSTOMIZEDLG_H
-#define CUSTOMIZEDLG_H
-
-#include <qtabwidget.h>
-#include <kdialogbase.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include "grepconfigwidget.h"
 
 
-class CustomizeDialog : public KDialogBase
+GrepConfigWidget::GrepConfigWidget(QWidget *parent, const char *name)
+    : QWidget(parent, name)
 {
-public: 
-    CustomizeDialog( QWidget *parent, const char *name=0 );
-    ~CustomizeDialog();
-    QFrame *addPage(const QString &title)
-      { return KDialogBase::addPage(title); }
-};
+    QBoxLayout *layout = new QVBoxLayout(this);
+    layout->setAutoAdd(true);
+    new QLabel("Test", parent);
+    layout->addStretch();
+}
 
-#endif
+
+GrepConfigWidget::~GrepConfigWidget()
+{
+}

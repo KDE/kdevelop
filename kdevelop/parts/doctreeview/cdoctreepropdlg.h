@@ -1,8 +1,9 @@
 /***************************************************************************
-                             grepwidget.h
+                          cdoctreepropdlg.h  -  description                              
                              -------------------                                         
-    copyright            : (C) 1999 by Bernd Gehrmann
-    email                : bernd@physik.hu-berlin.de
+    begin                : Wed Feb 3 1999                                           
+    copyright            : (C) 1999 by Sandy Meier                         
+    email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
 /***************************************************************************
@@ -14,39 +15,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _GREPWIDGET_H_
-#define _GREPWIDGET_H_
 
-#include "processview.h"
+#ifndef CDOCTREEPROPDLG_H
+#define CDOCTREEPROPDLG_H
 
-class GrepDialog;
-class CProject;
-class GrepView;
+#include <qdialog.h>
+#include <qlineedit.h>
 
+/**
+  *@author Sandy Meier
+  */
 
-class GrepWidget : public ProcessView
-{
-    Q_OBJECT
+class CDocTreePropDlg : public QDialog  {
+   Q_OBJECT
+public: 
+   CDocTreePropDlg(QWidget *parent=0, const char *name=0);
+  ~CDocTreePropDlg();
+ protected slots:
+ void  slotFileButtonClicked();
 public:
-    GrepWidget(GrepView *part);
-    ~GrepWidget();
-
-public slots:
-    void showDialog();
-    void showDialogWithPattern(QString pattern);
-
-    void projectOpened(CProject *prj);
-
-private slots:
-    void searchActivated();
-    void lineHighlighted(int line);
-
-    
-private:
-    virtual void insertStdoutLine(const QString &line);
-
-    GrepDialog *grepdlg;
-    GrepView *m_part;
+  QLineEdit* name_edit;
+  QLineEdit* file_edit;
 };
 
 #endif
+
