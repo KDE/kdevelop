@@ -257,7 +257,7 @@ void RDBParser::parseExpandedVariable(VarItem *parent, char *buf)
 void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
                         DataType dataType, const QCString &value)
 {
-	VarItem *item = parent->findItemWithName(varName);
+	VarItem *item = parent->findItem(varName);
     if (item == 0) {
         item = new VarItem(parent, varName, dataType);
     } else {
@@ -268,18 +268,11 @@ void RDBParser::setItem(LazyFetchItem *parent, const QString &varName,
     switch (dataType) {
     case HASH_TYPE:
     case ARRAY_TYPE:
-        item->setText(VALUE_COLUMN, value);
-        item->setCache("");
-        break;
-
     case REFERENCE_TYPE:
-        item->setText(VALUE_COLUMN, value);
-        item->setCache("");
-        break;
-
     case STRUCT_TYPE:
         item->setText(VALUE_COLUMN, value);
-        item->setCache("");
+		item->setExpandable(true);
+        item->update();
         break;
 
     case VALUE_TYPE:

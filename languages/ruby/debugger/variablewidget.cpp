@@ -329,7 +329,7 @@ bool VariableTree::schedule()
 					QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 				}
 				
-				// Tell the controller to retrieve the variable values
+				// Tell the controller to fetch the variable values
 				emit selectFrame(frame->frameNo(), frame->threadNo());
 				return true;
 			}
@@ -482,7 +482,7 @@ void LazyFetchItem::paintCell(QPainter *p, const QColorGroup &cg,
 
 // **************************************************************************
 
-VarItem *LazyFetchItem::findItemWithName(const QString &name) const
+VarItem *LazyFetchItem::findItem(const QString &name) const
 {
 	QListViewItem *child = firstChild();
 
@@ -627,7 +627,7 @@ void VarItem::setText(int column, const QString &data)
 
 // **************************************************************************
 
-void VarItem::updateValue(char *buf)
+void VarItem::expandValue(char *buf)
 {
     LazyFetchItem::stopWaitingForData();
     RDBParser::parseExpandedVariable(this, buf);
@@ -668,47 +668,27 @@ QString VarItem::typeFromValue(const QString& value)
 
 // **************************************************************************
 
-void VarItem::setCache(const QCString &value)
-{
-	cache_ = value;
-    checkForRequests();
-    if (isOpen())
-        setOpen(true);
-    setActivationId();
-}
-
-// **************************************************************************
-
 void VarItem::setOpen(bool open)
 {
-    if (open && cache_ != "") {
-		RDBParser::parseExpandedVariable(this, cache_.data());
-		cache_ = "";
-		prune();
-    }
-
     QListViewItem::setOpen(open);
+	
+	Q_ASSERT(	dataType_ == REFERENCE_TYPE 
+				|| dataType_ == ARRAY_TYPE 
+				|| dataType_ == HASH_TYPE
+				|| dataType_ == STRUCT_TYPE );
+					
+	update();
+	return;
 }
 
 // **************************************************************************
 
-QCString VarItem::cache()
+void VarItem::update()
 {
-    return cache_;
-}
-
-// **************************************************************************
-
-void VarItem::checkForRequests()
-{
-    if (	dataType_ == REFERENCE_TYPE 
-			|| dataType_ == ARRAY_TYPE 
-			|| dataType_ == HASH_TYPE
-			|| dataType_ == STRUCT_TYPE ) 
-	{
-        startWaitingForData();
-        emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
-    }
+	if (isOpen()) {
+		startWaitingForData();
+		emit ((VariableTree*)listView())->expandItem(this, fullName().latin1());
+	}
 
 	return;
 }
@@ -820,14 +800,26 @@ void VarFrameRoot::setOpen(bool open)
 
 void VarFrameRoot::setFrameName(const QString &frameName)
 {
-	if (frameName != text(VAR_NAME_COLUMN)) {
-		prune();
-	}
-	
 	setText(VAR_NAME_COLUMN, frameName); 
 	setText(VALUE_COLUMN, "");
 	
 	return; 
+}
+
+void VarFrameRoot::setActivationId() 
+{ 
+	LazyFetchItem::setActivationId(); 
+	stopWaitingForData();
+	needsVariables_ = true;
+	cache_ = "";
+} 
+	
+bool VarFrameRoot::needsVariables() const 
+{ 
+	return (	text(VAR_NAME_COLUMN).contains("try_initialize") == 0 
+				&& isOpen() 
+				&& !isWaitingForData() 
+				&& needsVariables_ ); 
 }
 
 // **************************************************************************

@@ -176,7 +176,7 @@ public:
 	virtual int rtti() const { return RTTI_LAZY_FETCH_ITEM; }
 	
     virtual void prune();
-    virtual VarItem *findItemWithName(const QString& name) const;
+    virtual VarItem *findItem(const QString& name) const;
     
 	int  currentActivationId() const        { return ((VariableTree*) listView())->activationId(); }
 	virtual void setActivationId()          { activationId_ = currentActivationId(); }
@@ -184,7 +184,7 @@ public:
     
 	void startWaitingForData()              { waitingForData_ = true; }
     void stopWaitingForData()               { waitingForData_ = false; }
-    bool isWaitingForData() const           {  return waitingForData_; }
+    bool isWaitingForData() const           { return waitingForData_; }
 
 protected:
     void paintCell( QPainter *p, const QColorGroup &cg,
@@ -214,21 +214,22 @@ public:
     DataType dataType() const;
 	void setDataType(DataType dataType);
 
-    void updateValue(char *data);
-
     QString typeFromValue(const QString& value);
-
-    void setCache(const QCString& value);
-    QCString cache();
 
     void setOpen(bool open);
     void setText (int column, const QString& text);
 
     // Returns the text to be displayed as tooltip (the value)
     QString tipText() const;
+	
+	// If the item is open, fetch details via a pp command
+    void update();
+	
+	// The details from the pp command have arrived, parse them
+	// and update the UI
+    void expandValue(char *data);
 
 private:
-    void checkForRequests();
     void paintCell( QPainter *p, const QColorGroup &cg,
                     int column, int width, int align );
 
@@ -282,17 +283,8 @@ public:
 
     void setFrameName(const QString &frameName);
 
-	virtual void setActivationId() { 
-		LazyFetchItem::setActivationId(); 
-		needsVariables_ = true;
-	} 
-	
-    bool needsVariables() const { 
-		return	text(VAR_NAME_COLUMN).contains("try_initialize") == 0 
-				&& isOpen() 
-				&& !isWaitingForData() 
-				&& needsVariables_; 
-	}
+	virtual void setActivationId();
+    bool needsVariables() const;
 	
 	int frameNo() { return frameNo_; }
 	int threadNo() { return threadNo_; }

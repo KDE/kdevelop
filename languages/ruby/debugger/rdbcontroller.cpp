@@ -361,7 +361,7 @@ void RDBController::parseProgramLocation(char *buf)
     QRegExp display_re("^(\\d+):\\s(.*)$");
 	
     //  "/opt/qt/src/widgets/qlistview.rb:1558:puts 'hello world'"
-    QRegExp sourcepos_re("^([^:]+):(\\d+):(.*)$");
+    QRegExp sourcepos_re("^([^:]+):(\\d+):");
 		
 	line = input.readLine();
 	while (! line.isNull()) {
@@ -481,8 +481,7 @@ void RDBController::parseRequestedData(char *buf)
         // Fish out the item from the command and let it deal with the data
         VarItem *item = rdbItemCommand->getItem();
         varTree_->viewport()->setUpdatesEnabled(false);
-        item->updateValue(buf);
-        item->prune();
+        item->expandValue(buf);
         varTree_->viewport()->setUpdatesEnabled(true);
         varTree_->repaint();
     }
@@ -840,7 +839,9 @@ void RDBController::slotRun()
 	}
 
     queueCmd(new RDBCommand("cont", RUNCMD, NOTINFOCMD));
-    executeCmd();
+	if (currentCmd_ == 0) {
+    	executeCmd();
+	}
 }
 
 // **************************************************************************
@@ -859,7 +860,9 @@ void RDBController::slotRunUntil(const QString &fileName, int lineNum)
                                 RUNCMD, NOTINFOCMD));
     queueCmd(new RDBCommand("cont", RUNCMD, NOTINFOCMD));
 								
-    executeCmd();
+	if (currentCmd_ == 0) {
+    	executeCmd();
+	}
 }
 
 // **************************************************************************
@@ -870,7 +873,9 @@ void RDBController::slotStepInto()
         return;
 
     queueCmd(new RDBCommand("step", RUNCMD, NOTINFOCMD));
-    executeCmd();
+	if (currentCmd_ == 0) {
+    	executeCmd();
+	}
 }
 
 
@@ -882,7 +887,9 @@ void RDBController::slotStepOver()
         return;
 
     queueCmd(new RDBCommand("next", RUNCMD, NOTINFOCMD));
-    executeCmd();
+	if (currentCmd_ == 0) {
+    	executeCmd();
+	}
 }
 
 
@@ -894,7 +901,9 @@ void RDBController::slotStepOutOff()
         return;
 
     queueCmd(new RDBCommand("finish", RUNCMD, NOTINFOCMD));
-    executeCmd();
+	if (currentCmd_ == 0) {
+    	executeCmd();
+	}
 }
 
 // **************************************************************************
