@@ -1,3 +1,9 @@
+2000-03-05  Ralf Funken <rfunken@kdevelop.de>
+
+	* Added documentation for build options and general settings in German and English manuals
+        * Fixed tabstop problems in the en and de tutorials (KScribble sources)
+        * Updated german welcome page
+
 2000-03-04  Ralf Funken <rfunken@kdevelop.de>
 
 	* Updated german manual
