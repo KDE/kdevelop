@@ -1,3 +1,9 @@
+2000-05-21 Falk Brettschneider <gigafalk@yahoo.com>
+        * debugger views are only visible when one is debugging
+	  (now there are 2 dock configurations, 1 for edit mode and 1 for debug mode)
+	  -->please remove the "Dock Settings" section in your kdeveloprc file!!!
+	* debugger views can be shown/hidden using a submenu View->DebuggerViews
+
 2000-05-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* 4th iteration of the DocTreeView, to get ride of KListView
 	* Walter's cvs fixes from the 1.x branch
