@@ -116,9 +116,6 @@ int main(int argc, char* argv[])
     }
     kdevelop->show();
     
-    a.config()->setGroup("General Options");
-		kdevelop->slotTCurrentTab(a.config()->readNumEntry("LastActiveTree",-1/*(default=-1)==DOC*/));
-
     if (!args->isSet("setup"))
 	  kdevelop->slotProjectOpenCmdl(argv[1]);
     
