@@ -230,6 +230,7 @@ void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
 {
    if(m_resizeMode) {
       if( !(e->state() & RightButton) && !(e->state() & MidButton))
+         // same as: if no button or left button pressed
          resizeWindow(m_iResizeCorner, e->pos().x(), e->pos().y());
       else
          m_resizeMode = FALSE;
@@ -238,6 +239,15 @@ void QextMdiChildFrm::mouseMoveEvent(QMouseEvent *e)
       m_iResizeCorner = getResizeCorner(e->pos().x(), e->pos().y());
       setResizeCursor( m_iResizeCorner);
    }
+}
+
+//============= mouseMoveEvent ===============//
+
+void QextMdiChildFrm::moveEvent(QMoveEvent* me)
+{
+   // give its child view the chance to notify a childframe move
+   QextMdiChildFrmMovedEvent cfme( me);
+   QApplication::sendEvent( this, &cfme);
 }
 
 //=============== leaveEvent ===============//
@@ -823,28 +833,32 @@ QPopupMenu* QextMdiChildFrm::systemMenu()
    m_pSystemMenu->clear();
 
 #ifdef _OS_WIN32_
-   m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
+   m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
    m_pSystemMenu->insertItem(tr("&Move"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
    m_pSystemMenu->insertItem(tr("R&esize"),this, SLOT(slot_resizeViaSystemMenu()));
    m_pSystemMenu->insertItem(tr("M&inimize"),this, SLOT(minimizePressed()));
    m_pSystemMenu->insertItem(tr("M&aximize"),this, SLOT(maximizePressed()));
    if( state() == Normal)
       m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(0),FALSE);
-   else {// state=maximized
+   else if( state() == Maximized) {
       m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(1),FALSE);
       m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(2),FALSE);
       m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(4),FALSE);
    }
-#else
-   if( state() == Maximized)
-      m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(maximizePressed()));
-   if( state() == Normal)
-      m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
-   m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
-   if( state() == Normal) {
-      m_pSystemMenu->insertItem(tr("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
-      m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(slot_resizeViaSystemMenu()));
+   else if( state() == Minimized) {
+      m_pSystemMenu->setItemEnabled(m_pSystemMenu->idAt(3),FALSE);
    }
+#else
+   if( state() != Normal)
+      m_pSystemMenu->insertItem(tr("&Restore"),this,SLOT(restorePressed()));
+   if( state() != Maximized)
+      m_pSystemMenu->insertItem(tr("&Maximize"),this, SLOT(maximizePressed()));
+   if( state() != Minimized)
+      m_pSystemMenu->insertItem(tr("&Iconify"),this, SLOT(minimizePressed()));
+   if( state() != Maximized)
+      m_pSystemMenu->insertItem(tr("M&ove"),m_pCaption, SLOT(slot_moveViaSystemMenu()));
+   if( state() == Normal)
+      m_pSystemMenu->insertItem(tr("&Resize"),this, SLOT(slot_resizeViaSystemMenu()));
 #endif
 
    m_pSystemMenu->insertItem(tr("&Undock"),this, SLOT(undockPressed()));
