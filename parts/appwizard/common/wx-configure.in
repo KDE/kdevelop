@@ -18,6 +18,7 @@ AC_ARG_WITH(wx-config,
         WXCONFIG=$withval
     fi
 ])
+
 AC_MSG_CHECKING([wxWindows version])
 if wxversion=`$WXCONFIG --version`; then
     AC_MSG_RESULT([$wxversion])
@@ -25,22 +26,15 @@ else
     AC_MSG_RESULT([not found])
     AC_MSG_ERROR([wxWindows is required. Try --with-wx-config.])
 fi
-case $wxversion in
-	[2.3.3])
-		;;
-	[2.4.0])
-		;;
-	[2.4.1])
-		;;
-	*)
-		AC_MSG_ERROR([wxWindows 2.3.3 or 2.4.0 required])
-		AC_MSG_ERROR([Try --with-wx-config.])
-      ;;
-esac
 
-WX_CPPFLAGS="`$WXCONFIG --cppflags`"
-WX_CXXFLAGS="`$WXCONFIG --cxxflags | sed -e 's/-fno-exceptions//'`"
-WX_LIBS="`$WXCONFIG --libs`"
+vers=`echo $wxversion | $AWK 'BEGIN { FS = "."; } { printf "% d", ($1 * 1000 + $2) * 1000 + $3;}'`
+if test -n "$vers" && test "$vers" -ge 2003003; then
+	WX_CPPFLAGS="`$WXCONFIG --cppflags`"
+	WX_CXXFLAGS="`$WXCONFIG --cxxflags | sed -e 's/-fno-exceptions//'`"
+	WX_LIBS="`$WXCONFIG --libs`"
+else
+	AC_MSG_ERROR([wxWindows 2.3.3 or newer is required])
+fi
 
 CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
 CXXFLAGS="$CXXFLAGS $WX_CPPFLAGS"
