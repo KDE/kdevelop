@@ -1314,31 +1314,16 @@ void CKDevelop::initDebugger()
   // Enable or disable the tabs, if they exist...
   if (var_viewer)
   {
-    // Figure out whether the tabs should be enabled or not.
-    if (dbgInternal)
-      dockManager->findWidgetParentDock(brkptManager->parentWidget())->makeDockVisible();
-    else
-      dockManager->findWidgetParentDock(brkptManager->parentWidget())->undock();
-    if (dbgInternal && dbgController) {
-      dockManager->findWidgetParentDock(frameStack->parentWidget())->makeDockVisible();
-      dockManager->findWidgetParentDock(disassemble->parentWidget())->makeDockVisible();
-      dockManager->findWidgetParentDock(var_viewer->parentWidget())->makeDockVisible();
-    }
-    else {
-      dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();
-      dockManager->findWidgetParentDock(disassemble->parentWidget())->undock();
-      dockManager->findWidgetParentDock(var_viewer->parentWidget())->undock();
-    }
-
+    dockManager->findWidgetParentDock(brkptManager->parentWidget())->undock();
+    dockManager->findWidgetParentDock(frameStack->parentWidget())->undock();
+    dockManager->findWidgetParentDock(disassemble->parentWidget())->undock();
+    dockManager->findWidgetParentDock(var_viewer->parentWidget())->undock();
     brkptManager->setEnabled(dbgInternal);
     frameStack->setEnabled(dbgInternal && dbgController);
     disassemble->setEnabled(dbgInternal && dbgController);
     var_viewer->setEnabled(dbgInternal && dbgController);
 #if defined(GDB_MONITOR) || defined(DBG_MONITOR)
-    if (dbgInternal)
-      dockManager->findWidgetParentDock(dbg_widget->parentWidget())->makeDockVisible();
-    else
-      dockManager->findWidgetParentDock(dbg_widget->parentWidget())->undock();
+    dockManager->findWidgetParentDock(dbg_widget->parentWidget())->undock();
     dbg_widget->setEnabled(dbgInternal);
 #endif
   }
