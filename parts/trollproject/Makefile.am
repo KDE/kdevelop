@@ -8,8 +8,10 @@ libkdevtrollproject_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
 libkdevtrollproject_la_SOURCES = caret.cpp\
                                  filebuffer.cpp\
+				 projectconfigurationdlg.ui \
                                  trollprojectpart.cpp \
 				 trollprojectwidget.cpp
+
 
 METASOURCES = AUTO
 

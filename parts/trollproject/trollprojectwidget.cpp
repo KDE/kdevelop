@@ -41,6 +41,7 @@
 #include "kdevtoplevel.h"
 #include "domutil.h"
 #include "trollprojectpart.h"
+#include "projectconfigurationdlg.h"
 
 /**
  * Class ProjectViewItem
@@ -346,6 +347,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     int idBuild = popup.insertItem(SmallIcon("launch"),i18n("Build"));
     int idQmake = popup.insertItem(SmallIcon("launch"),i18n("Run qmake"));
     int idViewProjectFile = popup.insertItem(SmallIcon("document"),i18n("View "+QString(spitem->subdir)+".pro file"));
+    int idTestDlg = popup.insertItem(SmallIcon("folder"),i18n("testDlg"));
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
@@ -392,6 +394,11 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
       QString dirName = spitem->path;
       m_part->partController()->showDocument(KURL(dirName + "/" + QString(spitem->subdir)+".pro"));
       m_part->topLevel()->lowerView(this);
+    }
+    else if (r == idTestDlg)
+    {
+      ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg();
+      dlg->show();
     }
 
 
