@@ -36,7 +36,6 @@
 #include "cnewfiledlg.h"
 #include "cnewclassdlg.h"
 #include "caddnewtranslationdlg.h"
-#include "cerrormessageparser.h"
 #include "./kdlgedit/kdlgedit.h"
 #include "cmakemanualdlg.h"
 #include "cgeneratenewfile.h"

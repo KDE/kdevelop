@@ -47,7 +47,6 @@
 #include "ctoolclass.h"	
 #include "kswallow.h"
 #include "ctabctl.h"
-#include "cerrormessageparser.h"
 #include "grepview.h"
 #include "makeview.h"
 #include "outputview.h"

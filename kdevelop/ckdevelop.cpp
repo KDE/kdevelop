@@ -63,7 +63,6 @@
 #include "./kwrite/kwdoc.h"
 #include "./kwrite/kwdialog.h"
 #include "kswallow.h"
-#include "cerrormessageparser.h"
 #include "cbugreportdlg.h"
 #include "../config.h"
 #include "structdef.h"

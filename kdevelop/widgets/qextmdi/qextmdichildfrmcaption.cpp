@@ -66,7 +66,7 @@ QextMdiChildFrmCaption::~QextMdiChildFrmCaption()
 
 void QextMdiChildFrmCaption::mousePressEvent(QMouseEvent *e)
 {
-   m_relativeMousePos = e->pos() - pos() + QPoint(QEXTMDI_MDI_CHILDFRM_BORDER,QEXTMDI_MDI_CHILDFRM_BORDER);
+    m_relativeMousePos = e->pos() - pos() ;//+ QPoint(QEXTMDI_MDI_CHILDFRM_BORDER,QEXTMDI_MDI_CHILDFRM_BORDER);
 	//F.B. QApplication::setOverrideCursor(Qt::sizeAllCursor,true);
 	m_bCanMove=true;
 }
