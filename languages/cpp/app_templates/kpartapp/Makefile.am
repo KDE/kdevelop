@@ -7,7 +7,7 @@ template_DATA = ${templateName}.kdevtemplate
 templatedir = ${appwizarddatadir}/templates
 
 appwizarddatadir = ${kde_datadir}/kdevappwizard
-${template_DATA}.tar.gz:
+${templateName}.tar.gz:
 	$(TAR) -cf ${templateName}.tar -C $(srcdir) ${dataFiles}
 	$(GZIP) -9 ${templateName}.tar
 
