@@ -1,3 +1,6 @@
+2002-01-21  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+    * fix: make undo work gracefully with autoindentation of '{'
+
 2002-01-20  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix (for Roland): Minimized KDevelop doesn't restore back during compiling,
       was the same reason that the messages output view was activated again and again with every new line inserted in it

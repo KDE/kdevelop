@@ -1097,12 +1097,14 @@ void KWriteDoc::newLine(KWriteView *view, VConfig &c) {
     } while (textLine);
 
     // insert the newline and indent the cursor
-    recordAction(KWAction::newLine,c.cursor);
+    recordAction(KWAction::newLine,c.cursor); // insert and record newline
     c.cursor.y++;
     c.cursor.x = 0;
     if (pos > 0) {
-      // TODO: need a working record here now
-      //recordReplace(c.cursor,0,textLine->getText(),pos);
+      char* buf = new char[pos];
+      memset(buf, ' ', pos);
+      PointStruc linebeg(0, c.cursor.y);
+      recordInsert(linebeg, &buf[0], pos);
       c.cursor.x = pos;
     }
   }
