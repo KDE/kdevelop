@@ -82,17 +82,16 @@ int main(int argc, char *argv[])
   splash->showMessage( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
-  splash->showMessage( i18n( "Loading Project" ) );
-  ProjectManager::getInstance()->loadDefaultProject();
-
   splash->showMessage( i18n( "Starting GUI" ) );
   TopLevel::getInstance()->main()->show();
 
-  splash->showMessage( i18n( "Ready" ) );
   Core::getInstance()->doEmitCoreInitialized();
+  
+  splash->showMessage( i18n( "Loading Project" ) );
+  ProjectManager::getInstance()->loadDefaultProject();
 
   delete splash;
-
+   
   kapp->dcopClient()->registerAs("gideon");
 
   return app.exec();

@@ -210,7 +210,7 @@ bool ProjectManager::loadProject(const KURL &url)
     unloadLanguageSupport();
     delete m_info; m_info = 0;
     return false;
-  }
+}
 
   loadLocalParts();
 
@@ -493,6 +493,7 @@ void ProjectManager::loadLocalParts()
   for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
   {
     QString name = (*it)->name();
+    kdDebug(9000) << "-----------------------------> load part " << name << endl;
 
     // Unload it if it is marked as ignored and loaded
     if (m_info->m_ignoreParts.contains(name)) {
@@ -518,6 +519,7 @@ void ProjectManager::loadLocalParts()
       PluginController::getInstance()->integratePart( part );
       m_info->m_localParts.insert( name, part );
     }
+    kapp->processEvents();
   }
 }
 

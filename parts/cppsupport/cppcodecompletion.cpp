@@ -1315,7 +1315,7 @@ void CppCodeCompletion::setupCodeInformationRepository( )
         m_repository->addCatalog( QString::number(id++), catalog );
     }
     
-    (void) m_repository->getEntriesInScope( QStringList(), true );
+    (void) m_repository->getEntriesInScope( QStringList(), false );
 }
 
 QString CppCodeCompletion::typeName( const QString& str )
