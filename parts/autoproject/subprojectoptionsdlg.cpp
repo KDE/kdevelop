@@ -241,7 +241,7 @@ void SubprojectOptionsDialog::insideMoveUpClicked()
 
 void SubprojectOptionsDialog::insideMoveDownClicked()
 {
-   if (insideinc_listview->currentItem()->nextSibling() == 0) {
+   if (insideinc_listview->currentItem() == 0 || insideinc_listview->currentItem()->nextSibling() == 0) {
         KNotifyClient::beep();
         return;
    }
@@ -266,7 +266,7 @@ void SubprojectOptionsDialog::outsideMoveUpClicked()
 
 void SubprojectOptionsDialog::outsideMoveDownClicked()
 {
-   if (outsideinc_listview->currentItem()->nextSibling() == 0) {
+   if (outsideinc_listview->currentItem() == 0 || outsideinc_listview->currentItem()->nextSibling() == 0) {
         KNotifyClient::beep();
         return;
    }
