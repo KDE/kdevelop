@@ -2,6 +2,7 @@
 	* Fix keyboard accelerator keys for File menu..no conflicts
 	* Fix broken signal/slot connections in code
 	* Add RMB context menu to ideal mode tabs to allow file closing
+	* Add ability to configure output window fonts
 
 2002-12-29 Harald Fernengel <harry@kdevelop.org>
 	* Added valgrind part, requires installed valgrind
