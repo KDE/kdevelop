@@ -1,3 +1,7 @@
+2001-05-20 Sandy Meier   <smeier@kdevelop.org>
+	* added initial PHP support including a simple php parser
+	* added "hello world" PHP template to AppWizard
+
 2001-05-20  Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 
     * Added a new editor interface for debugging 
