@@ -1250,7 +1250,15 @@ void KDlgEdit::generateCommon(KDlgItem_Widget *wid, QTextStream *stream,QString 
 		",\"" +props->getPropValue("ToolTip")+ "\");\n";
 	}
 
-    props->dumpBoolPropCall(stream, "hide", "IsHidden", false);
+	if(props->getPropValue("IsHidden") != "") {
+		if(props->getPropValue("IsHidden") == "true") {
+			props->dumpPropCall(stream,"hide","");
+		}
+		else {
+			props->dumpPropCall(stream,"show","");
+		}
+	}
+//    props->dumpBoolPropCall(stream, "hide", "IsHidden", false);
     props->dumpBoolPropCall(stream, "setEnabled", "IsEnabled", true);
 
     ////////////////////////////////C++ Code//////////////////////////

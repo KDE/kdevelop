@@ -1088,7 +1088,6 @@ void CHighlight::makeContextList() {
 
   //normal context
   contextList[0] = c = new HlContext(0,0);
-    c->items.append(new HlCSymbol(13,0));
     c->items.append(keyword = new HlKeyword(1,0));
     c->items.append(dataType = new HlKeyword(2,0));
     c->items.append(new HlCFloat(6,0));
@@ -1100,6 +1099,7 @@ void CHighlight::makeContextList() {
     c->items.append(new Hl2CharDetect(10,2,"//"));
     c->items.append(new Hl2CharDetect(10,3,"/*"));
     c->items.append(new HlCPrep(11,4));
+		c->items.append(new HlCSymbol(13,0));
   //string context
   contextList[1] = c = new HlContext(8,0);
     c->items.append(new HlLineContinue(8,6));
