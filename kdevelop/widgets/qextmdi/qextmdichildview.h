@@ -170,7 +170,9 @@ public slots:
 	virtual void youAreAttached(QextMdiChildFrm *lpC);
 	virtual void youAreDetached();
    /** called if someone click on the "Window" menu item for this child frame window */
-   void slot_clickedInWindowMenu();
+   virtual void slot_clickedInWindowMenu();
+   /** called if someone click on the "Dock/Undock..." menu item for this child frame window */
+   virtual void slot_clickedInDockMenu();
 
 protected:	// Protected methods
 	/**
@@ -197,6 +199,8 @@ signals:
    void mdiParentNoLongerMaximized(QextMdiChildFrm*);
    /** is automatically emitted when slot_clickedInWindowMenu is called */
    void clickedInWindowMenu(int);
+   /** is automatically emitted when slot_clickedInDockMenu is called */
+   void clickedInDockMenu(int);
 };
 
 inline bool QextMdiChildView::isAttached(){ return (parent() != 0); }
