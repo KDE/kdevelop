@@ -1,3 +1,6 @@
+2002-02-12  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: coloured output also for the KDE 3 version
+
 2002-02-11  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch of Daniel Koebbing <daniel.koebbing@westfleisch.de>
       for making basic code completion available on KDE 2 as well
