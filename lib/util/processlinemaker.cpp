@@ -88,3 +88,9 @@ void ProcessLineMaker::slotReceivedStderr( const char* buffer )
 {
     slotReceivedStderr( QString::fromLocal8Bit( buffer ) );
 }
+
+void ProcessLineMaker::clearBuffers( )
+{
+	stderrbuf = "";
+	stdoutbuf = "";
+}

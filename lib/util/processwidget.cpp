@@ -87,6 +87,9 @@ ProcessWidget::~ProcessWidget()
 
 void ProcessWidget::startJob(const QString &dir, const QString &command)
 {
+    procLineMaker->clearBuffers();
+    procLineMaker->blockSignals( false );
+
     clear();
     insertItem(new ProcessListBoxItem(command, ProcessListBoxItem::Diagnostic));
     childproc->clearArguments();
@@ -102,7 +105,9 @@ void ProcessWidget::startJob(const QString &dir, const QString &command)
 
 void ProcessWidget::killJob( int signo )
 {
-    childproc->kill( signo );
+    procLineMaker->blockSignals( true );
+    
+	childproc->kill( signo );
 }
 
 
