@@ -19,7 +19,7 @@ install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
 	for file in *.html ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done ; \
 	$(mkinstalldirs) $(DESTDIR)$(htmldir)/graphics ; \
-	for file in graphics/*.gif ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done ;
+	for file in graphics/*.gif ; do $(INSTALL_DATA) $$file $(DESTDIR)$(htmldir)/$$file ; done
 
 dist-hook:
 	mkdir -p $(distdir) ; \
