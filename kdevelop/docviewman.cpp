@@ -1185,9 +1185,10 @@ void DocViewMan::doFileCloseAll()
 
   QListIterator<QObject> itDoc(m_documentList);
   itDoc.toFirst();
-  while(cont && itDoc.current())
+  QObject* itDocObject;
+  while ( (itDocObject = itDoc.current()) )
   {
-    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDoc.current());
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (itDocObject);
     if (pDoc
         && pDoc->isModified()
         && handledNames.contains(pDoc->fileName())<1)
@@ -1245,7 +1246,7 @@ void DocViewMan::doFileCloseAll()
 
     // If the doc has been deleted then the iterator will be moved to the next
     // doc already - so we only have to move on if a doc wasn't deleted.
-    if (pDoc == itDoc.current())
+    if (itDocObject == itDoc.current())
       ++itDoc;
   } // end while-loop
 }
