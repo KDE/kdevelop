@@ -845,8 +845,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     Buffer->setValues("QMAKE_LIBDIR",item->configuration.m_librarypath,FileBuffer::VSM_RESET,VALUES_PER_ROW);
 
   // Write to .pro file
-  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
-
+//  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
+  Buffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());
 }
 
 SubprojectItem* TrollProjectWidget::getScope(SubprojectItem *baseItem,const QString &scopeString)
@@ -907,7 +907,8 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
       subBuffer->setValues("FORMS",spitem->forms,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
       subBuffer->setValues("FORMS",spitem->forms_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
   }
-  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
+//  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro",getHeader());
+  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->pro_file,getHeader());  
 }
 
 QString TrollProjectWidget::getHeader()
@@ -1529,7 +1530,12 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 void TrollProjectWidget::parse(SubprojectItem *item)
 {
     QFileInfo fi(item->path);
-    QString proname = item->path + "/" + fi.baseName() + ".pro";
+//    QString proname = item->path + "/" + fi.baseName() + ".pro";
+    QDir dir(item->path);
+    QStringList l = dir.entryList("*.pro");
+    
+    item->pro_file = l.count()?l[0]:(fi.baseName() + ".pro");
+    QString proname = item->path + "/" + item->pro_file;
     
     kdDebug(9024) << "Parsing " << proname << endl;
 

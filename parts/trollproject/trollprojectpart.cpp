@@ -260,7 +260,12 @@ void TrollProjectPart::startQMakeCommand(const QString &dir)
     QFileInfo fi(dir);
 
     QString cmdline = QString::fromLatin1( isTMakeProject() ? "tmake " : "qmake " );
-    cmdline += fi.baseName() + ".pro";
+//    cmdline += fi.baseName() + ".pro";
+    QDir d(dir);
+    QStringList l = d.entryList("*.pro");
+    
+    cmdline += l.count()?l[0]:(fi.baseName() + ".pro");
+    
     cmdline += QString::fromLatin1( " -o Makefile" );
 
     QString dircmd = "cd ";

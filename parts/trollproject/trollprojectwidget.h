@@ -95,6 +95,7 @@ public:
     QString subdir;
     QString relpath;
     QString path;
+    QString pro_file;
     QPtrList<GroupItem> groups;
     QPtrList<SubprojectItem> scopes;
 
