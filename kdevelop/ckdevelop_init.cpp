@@ -76,6 +76,16 @@ CKDevelop::CKDevelop(bool witharg)
   config = kapp->getConfig();
   kdev_caption=kapp->getCaption();
 
+  // ********* DEBUG stuff splattered everywhere (jbb) :-)
+  debugPopup = new QPopupMenu();
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug this project's executable"),this,SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
+  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set debug arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
+//  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set remote target"),this,SLOT(slotDebugSetRemote()),0,ID_DEBUG_SET_REMOTE);
+
+
   initView();
   initConnections();
   initKDlg();    // create the KDialogEditor
@@ -636,7 +646,9 @@ void CKDevelop::initMenuBar(){
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Execute"),this,SLOT(slotBuildRun()),0,ID_BUILD_RUN);
   build_menu->insertItem(Icon("run.xpm"),i18n("Execute &with Arguments..."),this,SLOT(slotBuildRunWithArgs()),0,ID_BUILD_RUN_WITH_ARGS);
-  build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
+//  build_menu->insertItem(Icon("debugger.xpm"),i18n("&Debug..."),this,SLOT(slotBuildDebug()),0,ID_BUILD_DEBUG);
+  build_menu->insertItem(Icon("debugger.xpm"), i18n("&Debug..."), debugPopup, ID_BUILD_DEBUG);
+
   build_menu->insertSeparator();
   build_menu->insertItem(i18n("DistC&lean"),this,SLOT(slotBuildDistClean()),0,ID_BUILD_DISTCLEAN);
   build_menu->insertItem(i18n("&Autoconf and automake"),this,SLOT(slotBuildAutoconf()),0,ID_BUILD_AUTOCONF);
@@ -833,14 +845,7 @@ void CKDevelop::initToolBar(){
   toolBar()->insertButton(Icon("rebuild.xpm"),ID_BUILD_REBUILD_ALL, false,i18n("Rebuild"));
   toolBar()->insertSeparator();
   toolBar()->insertButton(Icon("debugger.xpm"),ID_BUILD_DEBUG, false, i18n("Debug"));
-  // ********* DEBUG stuff splattered everywhere (jbb) :-)
-  debugPopup = new QPopupMenu();
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Examine core file"),this,SLOT(slotDebugExamineCore()),0,ID_DEBUG_CORE);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug another executable"),this,SLOT(slotDebugNamedFile()),0,ID_DEBUG_NAMED_FILE);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Attach to process"),this,SLOT(slotDebugAttach()),0,ID_DEBUG_ATTACH);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Debug this project's executable"),this,SLOT(slotBuildDebug()),0,ID_DEBUG_NORMAL);
-  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set debug arguments"),this,SLOT(slotDebugSetArgs()),0,ID_DEBUG_SET_ARGS);
-//  debugPopup->insertItem(Icon("debugger.xpm"),i18n("Set remote target"),this,SLOT(slotDebugSetRemote()),0,ID_DEBUG_SET_REMOTE);
+  // ********* DEBUG stuff
   toolBar()->setDelayedPopup(ID_BUILD_DEBUG, debugPopup);
   // ********* DEBUG
   toolBar()->insertButton(Icon("run.xpm"),ID_BUILD_RUN, false,i18n("Run"));
