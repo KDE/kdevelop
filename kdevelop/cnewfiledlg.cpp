@@ -54,7 +54,7 @@ CNewFileDlg::CNewFileDlg(QWidget* parent,const char* name,bool modal,WFlags f,CP
 
   list_linux = new QListBox( tab, "list_linux" );
   list_linux->insertItem(i18n("lsm File - Linux Software Map"));
-  list_linux->insertItem(i18n("kdelnk-File - for the KDE-Menu"));
+  list_linux->insertItem(i18n("desktop-File - for the KDE-Menu"));
   list_linux->insertItem(i18n("Icon (*.xpm)"));
   list_linux->setMultiSelection( FALSE );
   list_linux->setCurrentItem(0);
@@ -281,8 +281,8 @@ void CNewFileDlg::slotOKClicked(){
     KMessageBox::sorry(this, i18n("The filename must end with .lsm !"));
     return;
    }
-  if ( (fileType() == "KDELNK") && (text.right(7) != ".kdelnk")){
-    KMessageBox::sorry(this, i18n("The filename must end with .kdelnk !"));
+  if ( (fileType() == "DESKTOP") && (text.right(7) != ".desktop")){
+    KMessageBox::sorry(this, i18n("The filename must end with .desktop !"));
     return;
   }
   if ( (fileType() == "EN_SGML") && (text.right(5) != ".sgml")){
@@ -428,8 +428,8 @@ QString CNewFileDlg::fileType(){
   }
   if (current == 2){ // /linux/kde
     str = list_linux->text(list_linux->currentItem());
-    if (str == i18n("kdelnk-File - for the KDE-Menu")){
-      return "KDELNK";
+    if (str == i18n("desktop-File - for the KDE-Menu")){
+      return "DESKTOP";
     }
     if (str == i18n("lsm File - Linux Software Map")){
       return "LSM";
@@ -495,8 +495,8 @@ void CNewFileDlg::slotEditTextChanged(const char* text){
       if (filetype == "LEXICAL") {
 	edit->setText(text + QString(".l"));
       }
-      if (filetype == "KDELNK" ) {
-	edit->setText(text + QString(".kdelnk"));
+      if (filetype == "DESKTOP" ) {
+	edit->setText(text + QString(".desktop"));
       }
       if (filetype == "EN_SGML" ) {
 	edit->setText(text + QString(".sgml"));
@@ -510,8 +510,8 @@ void CNewFileDlg::slotEditTextChanged(const char* text){
       if (filetype == "ICON" ) {
       edit->setText(text + QString(".xpm"));
       }
-      if (filetype == "KDELNK" ) {
-	edit->setText(text + QString(".kdelnk"));
+      if (filetype == "DESKTOP" ) {
+	edit->setText(text + QString(".desktop"));
       }
       if (filetype == "DIALOG" ) {
 	edit->setText(text + QString(".kdevdlg"));
@@ -526,6 +526,7 @@ void CNewFileDlg::slotListHighlighted(int){
   edit->setFocus();
   autocompletion = true;
 }
+
 
 
 

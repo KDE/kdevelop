@@ -176,6 +176,8 @@ QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
 }
 QString  CGenerateNewFile::genDesktopFile(QString abs_name,CProject* prj){  
   QString template_desktop = locate("kdev_template", "desktop_template");
+cout << template_desktop << endl;
+
   QString project_name = prj->getProjectName().lower();
   QString str;
   QStrList list;
@@ -259,6 +261,7 @@ QString CGenerateNewFile::genNifFile(QString abs_name){
     process << abs_name;
     process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
 }
+
 
 
 
