@@ -26,6 +26,7 @@
 
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
+#include "./gfxview/GfxClassTreeWindow.h"
 
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";
@@ -99,8 +100,9 @@ void CClassView::initPopups()
   projectPopup.insertItem(i18n("Add Folder..."), this, SLOT( slotFolderNew()));
   projectPopup.insertSeparator();
   projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()));
-  id = projectPopup.insertItem(i18n("Graphical classview..."), this, SLOT(slotGraphicalView()));
-  projectPopup.setItemEnabled( id, false );
+  projectPopup.insertItem(i18n("Graphical classview.."), this, SLOT(slotGraphicalView()));
+
+
 
   // Class popup
   classPopup.setTitle( i18n("Class"));
@@ -665,6 +667,11 @@ void CClassView::slotProjectOptions()
 
 void CClassView::slotGraphicalView()
 {
+  QList<CClassTreeNode> *forest = store->asForest();
+  CGfxClassTreeWindow *cb = new CGfxClassTreeWindow(NULL);
+  cb->setCaption(i18n("Graphical classview"));
+  cb->InitializeTree(forest);
+  cb->show();
 }
 
 void CClassView::slotFileNew()
