@@ -362,9 +362,9 @@ void CKDevelop::initMenu(){
   build_menu = new QPopupMenu;
 
   build_menu->insertItem(Icon("run.xpm"),i18n("&Run"), this, 
-			 SLOT(slotBuildRun()),0,ID_BUILD_RUN);
+			 SLOT(slotBuildRun()),CTRL+Key_F9,ID_BUILD_RUN);
   build_menu->insertItem(Icon("make.xpm"),i18n("&Make"), this, 
-			 SLOT(slotBuildMake()),0,ID_BUILD_MAKE);
+			 SLOT(slotBuildMake()),Key_F9,ID_BUILD_MAKE);
   build_menu->insertItem(i18n("&Rebuild all"), this, 
 			 SLOT(slotBuildRebuildAll()),0,ID_BUILD_REBUILD_ALL);
   build_menu->insertItem(i18n("&Clean/Rebuild all"), this, 

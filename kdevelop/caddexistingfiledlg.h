@@ -28,7 +28,7 @@
 #include <qlabel.h>
 #include "cproject.h"
 
-/**
+/** Dlg for adding file(s) to a existing project
   *@author Sandy Meier
   */
 

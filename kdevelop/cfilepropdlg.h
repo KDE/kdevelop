@@ -33,9 +33,10 @@
 #include <qcheckbox.h>
 #include <kquickhelp.h>
 
-/**
-  *@author Sandy Meier
-  */
+/** 
+ * Dlg for changing the properties of a file in an existing project
+ *@author Sandy Meier
+ */
 
 class CFilePropDlg : public QDialog  {
    Q_OBJECT

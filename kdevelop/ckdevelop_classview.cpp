@@ -85,7 +85,7 @@ int CKDevelop::CVGotoClassDecl(QString classname){
     num_classes--;
     regexp = " [a-zA-Z]";
     act_pos = text.find(regexp,act_pos) +1; // find the begin of the classname/structname
-    regexp = "[ {]";
+    regexp = "[ {\n]";
     pos1 = text.find(regexp,act_pos); // find the end of the classname
     classname_test = text.mid(act_pos,(pos1-act_pos)); // get the classname
     if (classname_test == classname) num_classes =0; // found
@@ -99,6 +99,7 @@ int CKDevelop::CVGotoClassDecl(QString classname){
 
 void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
   QString compl_name = classname + "::" + meth_name;
+
   //cerr << "COMPLETE_NAME:" << compl_name;
   QString filename;
   QFile file;
@@ -106,6 +107,12 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
   QString stream;
   int pos;
   QString last_textpart;
+  QRegExp regexp = "[ (\t]";
+
+  pos = compl_name.find( regexp );
+  if ( pos > 0 )
+    compl_name.truncate( pos );
+  debug( compl_name );
   
   if (!prj.getSources().isEmpty()){
     for(filename = prj.getSources().first();filename != 0;filename = prj.getSources().next()){
@@ -129,14 +136,25 @@ void CKDevelop::CVGotoMethodeImpl(QString classname,QString meth_name){
   } // end if 
 }
 void CKDevelop::CVGotoClassVarDecl(QString classname,QString var_name){
-  int pos;
+  int pos, nextpos;
   QString text,last_textpart;
+  QRegExp regexp = "[a-zA-Z0-9_^ ^;^\t^\n^*]";
  
   pos = CVGotoClassDecl(classname);
+  nextpos = pos;
   text = edit_widget->text();
-  pos = text.find(var_name,pos);
+  class_tree->CVRemoveAllComments(&text);
+  
+  do
+  {
+  pos = text.find(var_name,nextpos);
+  debug("pos - 1: >" + text.mid(pos - 1, 1) + "<");
+  debug("pos + length: >" + text.mid(pos + var_name.length(), 1) + "<");
+  nextpos = pos + var_name.length();
+  } while ( regexp.match( text.mid(pos - 1, 1) )
+            || regexp.match( text.mid(pos + var_name.length(), 1) ) );
   edit_widget->gotoPos(pos,text);
-      
+
 }
 
 void CKDevelop::slotClassChoiceCombo(int index){

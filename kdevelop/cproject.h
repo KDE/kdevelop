@@ -52,7 +52,7 @@ struct TFileInfo {
 };
 
 /** this class includes the properties of a project and some methods to read
-  * and write the props
+  * and write these props
   *@author Sandy Meier
   */
 class CProject  {

@@ -54,8 +54,8 @@ void CClassView::CVReadAllFiles(){
 	file.open(IO_ReadOnly);
 	//      cerr << "LESE DATEI" << endl;
 // 	while(!in_stream.eof()){
-// 	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
-// 	}
+//  	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
+//  	}
 	// the above one was really slow
 	stream_info->stream.resize(file.size()+1);
 	file.readBlock((char*)stream_info->stream,file.size());
@@ -65,26 +65,26 @@ void CClassView::CVReadAllFiles(){
       }
     }
   }
-  // //read the sources
-  if (!prj_info->getSources().isEmpty()){
-    for(filename = prj_info->getSources().first();filename != 0;filename = prj_info->getSources().next()){
-      stream_info = new TStreamedFile;
-      file.setName(prj_info->getProjectDir() + prj_info->getSubDir() + filename);
-      stream_info->filename = filename;
-      if (file.exists()){
-	file.open(IO_ReadOnly);
-	//cerr << "LESE CPPDATEI" << endl;
-	 // while(!in_stream.eof()){
-// 	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
-// 	}
-	stream_info->stream.resize(file.size()+1);
-	file.readBlock(stream_info->stream,file.size());
-	file.close();
-	CVRemoveAllComments(&stream_info->stream);
-	streamed_files->append(stream_info); // add it to the classfiles
-      }
-    }
-  }
+  // // //read the sources
+//   if (!prj_info->getSources().isEmpty()){
+//     for(filename = prj_info->getSources().first();filename != 0;filename = prj_info->getSources().next()){
+//       stream_info = new TStreamedFile;
+//       file.setName(prj_info->getProjectDir() + prj_info->getSubDir() + filename);
+//       stream_info->filename = filename;
+//       if (file.exists()){
+// 	file.open(IO_ReadOnly);
+// 	//cerr << "LESE CPPDATEI" << endl;
+// 	 // while(!in_stream.eof()){
+// // 	  stream_info->stream = stream_info->stream + in_stream.readLine() + "\n";
+// // 	}
+// 	stream_info->stream.resize(file.size()+1);
+// 	file.readBlock(stream_info->stream,file.size());
+// 	file.close();
+// 	CVRemoveAllComments(&stream_info->stream);
+// 	streamed_files->append(stream_info); // add it to the classfiles
+//       }
+//     }
+//   }
 
 }
 
@@ -219,7 +219,7 @@ void CClassView::CVFindTheClasses(){
       pos1 = stream.find(regexp, act_pos);    // test for forward declarations
       if ( stream.mid(pos1, 1) == "{" )
       {
-        regexp = "[;{ \t]";
+        regexp = "[;{ \t\n]";
         pos1 = stream.find(regexp,act_pos); // find the end of the classname
         class_info->classname = stream.mid(act_pos,(pos1-act_pos)); // get the classname
         act_pos = stream.find('{',act_pos);
@@ -279,6 +279,10 @@ int CClassView::CVFindClassDecEnd(QString stream,int startpos){
   int act_pos = startpos;
   while (num !=0){
     act_pos++;
+    if(act_pos == (int)stream.size()){
+      cerr << endl << "FIXME: Error by parsing,coundn't find a class-end definition";
+      return act_pos;
+    }
     if (stream[act_pos] == '{') num++;
     if (stream[act_pos] == '}') num--;
   }
@@ -433,7 +437,7 @@ QString CClassView::CVGetMethod(QString str){
   begin = str.findRev('(',end);
   regexp = "[a-zA-Z]";
   begin = str.findRev(regexp,begin);
-  regexp = "[ \t:;]";
+  regexp = "[ \t:;*]";
   begin = str.findRev(regexp,begin);
   return str.mid(begin+1,end-begin);
 }

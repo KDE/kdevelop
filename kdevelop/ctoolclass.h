@@ -1,10 +1,11 @@
 /***************************************************************************
-                     main.cpp - the main-function
+                 ctoolclass.h - some methods,that would be normal global,but I
+		              hate global function :-)
                              -------------------                                         
 
     version              :                                   
-    begin                : 20 Jul 1998                                        
-    copyright            : (C) 1998 by Sandy Meier                         
+    begin                : 20 Jan 1999                        
+    copyright            : (C) 1999 by Sandy Meier                         
     email                : smeier@rz.uni-potsdam.de                                     
  ***************************************************************************/
 
@@ -16,24 +17,22 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
-#include "ckdevelop.h"
-#include <kwmmapp.h>
 
-int main(int argc, char* argv[]) {
+#ifndef CTOOLCLASS_H
+#define CTOOLCLASS_H
 
-  KWMModuleApplication a(argc,argv,"kdevelop");  
-  a.connectToKWM();
+#include <stdlib.h>
+#include <htmltoken.h>
+
+/**
+ * some methods,that would be normaly global,but I hate global function :-)
+ * @author Sandy Meier
+ */
+class CToolClass {
+public:
+  /** search the program in the $PATH*/
+static  bool  searchProgram(QString name);
   
-  if (a.isRestored()){
-    RESTORE(CKDevelop);
-  }
-  else {
-    CKDevelop* kdevelop = new CKDevelop;
-    a.setMainWidget(kdevelop);
-    a.setTopWidget(kdevelop);
-    kdevelop->show();
-  }  
- 
-  int rc = a.exec();
-  return rc;
-}
+};
+
+#endif

@@ -34,10 +34,22 @@
 #include <kdebug.h>
 #include "./kwrite/kwdoc.h"
 #include "ccreatedocdatabasedlg.h"
+#include "ctoolclass.h"
 
 
 
 void CKDevelop::slotFileNewAppl(){
+  
+  if(!CToolClass::searchProgram("perl")){
+    return;
+  }
+  if(!CToolClass::searchProgram("autoconf")){
+    return;
+  }
+  if(!CToolClass::searchProgram("automake")){
+    return;
+  }
+  
   slotStatusMsg(i18n("Creating a new frame application..."));
   CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
   kappw->exec();
@@ -51,8 +63,8 @@ void CKDevelop::slotFileNewAppl(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFileNewFile(){
-  slotStatusMsg(i18n("Creating new file..."));
   
+  slotStatusMsg(i18n("Creating new file..."));
   newFile(false);
   slotStatusMsg(IDS_DEFAULT);
 }
@@ -566,7 +578,9 @@ int CKDevelop::searchToolGetNumber(QString str){
   return sub.toInt();
 }
 void CKDevelop::slotCreateSearchDatabase(){
-
+  if(!CToolClass::searchProgram("glimpse")){
+    return;
+  }
   CCreateDocDatabaseDlg dlg(this,"DLG",&shell_process,config);
   if(dlg.exec()){
     slotStatusMsg(i18n("Creating Search Database..."));
@@ -584,6 +598,9 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
   
 }
 void CKDevelop::slotDocSText(QString text){
+  if(!CToolClass::searchProgram("glimpse")){
+    return;
+  }
   slotStatusMsg(i18n("Searching selected text in documentation..."));
   doc_search_text = text.copy(); // save the text
 
@@ -640,6 +657,9 @@ void CKDevelop::slotDocManual(){
   slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotDocUpdateKDEDocumentation(){
+  if(!CToolClass::searchProgram("kdoc")){
+    return;
+  }
   slotStatusMsg(i18n("Updating KDE-Libs documentation..."));
   config->setGroup("Doc_Location");
   CUpdateKDEDocDlg dlg(this,"test",&shell_process, config);
@@ -654,6 +674,9 @@ void CKDevelop::slotBuildRun(){
   next_job = "run";
 }
 void CKDevelop::slotBuildMake(){
+  if(!CToolClass::searchProgram("make")){
+    return;
+  }
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
@@ -666,6 +689,9 @@ void CKDevelop::slotBuildMake(){
 }
 
 void CKDevelop::slotBuildRebuildAll(){
+  if(!CToolClass::searchProgram("make")){
+    return;
+  }
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
@@ -679,6 +705,9 @@ void CKDevelop::slotBuildRebuildAll(){
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 void CKDevelop::slotBuildCleanRebuildAll(){
+  if(!CToolClass::searchProgram("make")){
+    return;
+  }
   setToolMenuProcess(false);
   slotFileSaveAll();
   output_widget->clear();
@@ -691,6 +720,9 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 void CKDevelop::slotBuildAutoconf(){
+  if(!CToolClass::searchProgram("autoconf")){
+    return;
+  }
   setToolMenuProcess(false);
   slotFileSave();
   output_widget->clear();
@@ -707,6 +739,9 @@ void CKDevelop::slotBuildStop(){
   slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotBuildAPI(){
+  if(!CToolClass::searchProgram("kdoc")){
+    return;
+  }
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
@@ -724,6 +759,9 @@ void CKDevelop::slotBuildAPI(){
 
 void CKDevelop::slotBuildManual(){
 
+  if(!CToolClass::searchProgram("sgml2html")){
+    return;
+  }
   setToolMenuProcess(false);
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
@@ -818,7 +856,7 @@ void CKDevelop::slotClickedOnOutputWidget(){
   }
 
 }
-void CKDevelop::slotProcessExited(KProcess*){
+void CKDevelop::slotProcessExited(KProcess* proc){
   setToolMenuProcess(true);
   slotStatusMsg(IDS_DEFAULT);
   if (process.normalExit()) {
@@ -844,7 +882,7 @@ void CKDevelop::slotProcessExited(KProcess*){
     }
   } 
   else {
-    cerr << "Make exited with error(s)..." << endl;
+    cerr << "process exited with error(s)..." << endl;
   }
 }
 

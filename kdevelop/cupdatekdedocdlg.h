@@ -31,7 +31,8 @@
 #include <kprocess.h>
 #include <kconfig.h>
 #include <kquickhelp.h>
-/**
+
+/** Generates the API-Documention from all KDE-Libs with kdoc
   *@author Sandy Meier
   */
 

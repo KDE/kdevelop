@@ -376,40 +376,40 @@ void CKAppWizard::slotNewCppButtonClicked() {
 // connection of this (defaultButton)
 void CKAppWizard::slotOkClicked() {
   cancelButton->setFixedWidth(75);
- cancelButton->setEnabled(false);
- defaultButton->setEnabled(false);
- setCancelButton(i18n("Exit"));
- errOutput->clear();
- output->clear();
- QDir kdevelop;
- kdevelop.mkdir(QDir::homeDirPath() + "/.kdevelop");
- cppedit->setName(QDir::homeDirPath() + "/.kdevelop/cpp");
- cppedit->toggleModified(true);
- cppedit->doSave();
- hedit->setName(QDir::homeDirPath() + "/.kdevelop/header");
- hedit->toggleModified(true);
- hedit->doSave();
- ofstream entries (QDir::homeDirPath() + "/.kdevelop/entries");
- entries << "APPLICATION\n";
- if (kna->isChecked()) 
-   entries << "standard\n";
- else 
-   entries << "mini\n";
- entries << "NAME\n";
- entries << nameline->text() << "\n";
- entries << "DIRECTORY\n";
- if(QString(directoryline->text()).right(1) == "/"){
-   entries << directoryline->text() << "\n";
- }
- else{
-   entries << directoryline->text() << "/" << "\n";
- }
-
-
- entries << "AUTHOR\n";
- entries << authorline->text() << "\n";
- entries << "EMAIL\n";
- entries << emailline->text() << "\n";
+  cancelButton->setEnabled(false);
+  defaultButton->setEnabled(false);
+  setCancelButton(i18n("Exit"));
+  errOutput->clear();
+  output->clear();
+  QDir kdevelop;
+  kdevelop.mkdir(QDir::homeDirPath() + "/.kdevelop");
+  cppedit->setName(QDir::homeDirPath() + "/.kdevelop/cpp");
+  cppedit->toggleModified(true);
+  cppedit->doSave();
+  hedit->setName(QDir::homeDirPath() + "/.kdevelop/header");
+  hedit->toggleModified(true);
+  hedit->doSave();
+  ofstream entries (QDir::homeDirPath() + "/.kdevelop/entries");
+  entries << "APPLICATION\n";
+  if (kna->isChecked()) 
+    entries << "standard\n";
+  else 
+    entries << "mini\n";
+  entries << "NAME\n";
+  entries << nameline->text() << "\n";
+  entries << "DIRECTORY\n";
+  if(QString(directoryline->text()).right(1) == "/"){
+    entries << directoryline->text() << "\n";
+  }
+  else{
+    entries << directoryline->text() << "/" << "\n";
+  }
+  
+  
+  entries << "AUTHOR\n";
+  entries << authorline->text() << "\n";
+  entries << "EMAIL\n";
+  entries << emailline->text() << "\n";
   entries << "API\n";
   if (apidoc->isChecked())
     entries << "yes\n";
@@ -461,7 +461,7 @@ void CKAppWizard::slotOkClicked() {
   QString path = kapp->kde_datadir()+"/kdevelop/tools/";
   *p << "perl" << path + "processes.pl";
   p->start(KProcess::NotifyOnExit, KProcess::AllOutput);
-   okButton->setEnabled(false);
+  okButton->setEnabled(false);
   gotoPage(5);
   int i;
   for (i=0;i<5;i++) {
@@ -545,8 +545,8 @@ void CKAppWizard::slotDefaultClicked() {
   dir = QDir::homeDirPath();
   nameline->setText(0);
   okButton->setEnabled(false);
-  miniload->setPixmap("/opt/kde/share/icons/mini/application_settings.xpm");
-  iconload->setPixmap("/opt/kde/share/icons/edit.xpm");
+  miniload->setPixmap(QPixmap(KApplication::kde_icondir() + "/mini/application_settings.xpm"));
+  iconload->setPixmap(QPixmap(KApplication::kde_icondir() + "/edit.xpm"));
   cppedit->loadFile(KApplication::kde_datadir() + "/kdevelop/templates/cpp_template",cppedit->OPEN_READWRITE);
   hedit->loadFile(KApplication::kde_datadir() + "/kdevelop/templates/header_template",hedit->OPEN_READWRITE);
   authorline->setText(0);
@@ -685,12 +685,12 @@ void CKAppWizard::slotProcessExited() {
   cerr << makeAmInfo.type;
   sub_dir_list.clear();
   if (userdoc->isChecked()) {
-  sub_dir_list.append("docs");
+    sub_dir_list.append("docs");
   }
   makeAmInfo.sub_dirs = sub_dir_list;
   project->writeMakefileAmInfo (makeAmInfo);
   project->addMakefileAmToProject (makeAmInfo.rel_name);
-
+  
   makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
   cerr << makeAmInfo.rel_name;
   makeAmInfo.type = "normal";
@@ -720,6 +720,7 @@ void CKAppWizard::slotProcessExited() {
   fileInfo.install = 0;
   fileInfo.install_location = "";
   project->writeFileInfo (fileInfo);
+
   project->addFileToProject ("COPYING");
   fileInfo.rel_name = "COPYING";
   fileInfo.type = "DATA";
@@ -734,6 +735,7 @@ void CKAppWizard::slotProcessExited() {
   fileInfo.install = 0;
   fileInfo.install_location = "";
   project->writeFileInfo (fileInfo);
+
   project->addFileToProject ("INSTALL");
   fileInfo.rel_name = "INSTALL";
   fileInfo.type = "DATA";
@@ -748,6 +750,7 @@ void CKAppWizard::slotProcessExited() {
   fileInfo.install = 0;
   fileInfo.install_location = "";
   project->writeFileInfo (fileInfo);
+
   project->addFileToProject ("TODO");
   fileInfo.rel_name = "TODO";
   fileInfo.type = "DATA";
@@ -848,71 +851,70 @@ void CKAppWizard::slotProcessExited() {
   }
 
   if (miniicon->isChecked()) {
-  project->addFileToProject (namelow + "/mini-" + namelow + ".xpm");
-  fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 1;
-  QString icon = "mini-" + namelow + ".xpm";
-  fileInfo.install_location = "$(kde_minidir)/" + icon;
-  project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/mini-" + namelow + ".xpm");
+    fileInfo.rel_name = namelow + "/mini-" + namelow + ".xpm";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 1;
+    QString icon = "mini-" + namelow + ".xpm";
+    fileInfo.install_location = "$(kde_minidir)/" + icon;
+    project->writeFileInfo (fileInfo);
   }
-
+  
   if (userdoc->isChecked()) {
-    /*  project->addFileToProject (namelow + "/" + namelow + "/docs/en/index-1.html");
-	fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-1.html";*/
-  project->addFileToProject (namelow + "/index-1.html");
-  fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-1.html";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 0;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "/docs/en/index-2.html");
-  fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-2.html";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 0;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "/docs/en/index-3.html");
-  fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-3.html";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 0;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "/docs/en/index-4.html");
-  fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-4.html";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 0;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "/docs/en/index-5.html");
-  fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-5.html";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 0;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "/docs/en/index-6.html");
-  fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-6.html";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 0;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
-  project->addFileToProject (namelow + "/" + namelow + "/docs/en/index.html");
-  fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index.html";
-  fileInfo.type = "DATA";
-  fileInfo.dist = "true";
-  fileInfo.install = 0;
-  fileInfo.install_location = "";
-  project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/docs/en/index-1.html");
+    fileInfo.rel_name = namelow + "/docs/en/index-1.html";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 0;
+    fileInfo.install_location = "";
+    project->writeFileInfo (fileInfo);
+
+    project->addFileToProject (namelow + "/docs/en/index-2.html");
+    fileInfo.rel_name = namelow + "/docs/en/index-2.html";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 0;
+    fileInfo.install_location = "";
+    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/docs/en/index-3.html");
+    fileInfo.rel_name = namelow + "/docs/en/index-3.html";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 0;
+    fileInfo.install_location = "";
+    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/docs/en/index-4.html");
+    fileInfo.rel_name = namelow + "/" + namelow + "/docs/en/index-4.html";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 0;
+    fileInfo.install_location = "";
+    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/docs/en/index-5.html");
+    fileInfo.rel_name = namelow + "/docs/en/index-5.html";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 0;
+    fileInfo.install_location = "";
+    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/docs/en/index-6.html");
+    fileInfo.rel_name = namelow + "/docs/en/index-6.html";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 0;
+    fileInfo.install_location = "";
+    project->writeFileInfo (fileInfo);
+    project->addFileToProject (namelow + "/docs/en/index.html");
+    fileInfo.rel_name = namelow + "/docs/en/index.html";
+    fileInfo.type = "DATA";
+    fileInfo.dist = "true";
+    fileInfo.install = 0;
+    fileInfo.install_location = "";
+    project->writeFileInfo (fileInfo);
   }
-
-
+  
+  
   QStrList group_filters;
   group_filters.append("*");
   project->addLFVGroup ("Others","");

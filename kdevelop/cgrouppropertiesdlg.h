@@ -27,7 +27,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 
-/**
+/** Dlg for change the group-properties in the LFV (logical file view)
   *@author Sandy Meier
   */
 

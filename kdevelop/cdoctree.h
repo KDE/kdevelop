@@ -26,7 +26,7 @@
 #include "cproject.h"
 
 
-/**
+/** the documentation tree (manual,tutorial,KDE-libs...)
   *@author Sandy Meier
   */
 

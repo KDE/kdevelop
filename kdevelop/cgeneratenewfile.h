@@ -24,7 +24,7 @@
 #include <qregexp.h>
 
 /**
-  *
+  * tool class for generating new files with templates
   *@author Sandy Meier
   */
 class CGenerateNewFile  {
