@@ -365,3 +365,5 @@ void DocumentationPlugin::loadIndex(KListBox *index, DocumentationCatalogItem *i
     createIndex(index, item);
     cacheIndex(item);
 }
+
+#include "kdevdocumentationplugin.moc"
