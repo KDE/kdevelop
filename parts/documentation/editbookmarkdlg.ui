@@ -12,9 +12,6 @@
             <height>121</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>EditBookmarkDlg</string>
-    </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
     </property>

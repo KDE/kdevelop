@@ -12,9 +12,6 @@
             <height>399</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>QuickOpenFunctionChooseFormBase</string>
-    </property>
     <widget class="KSqueezedTextLabel">
         <property name="name">
             <cstring>filepathlabel</cstring>

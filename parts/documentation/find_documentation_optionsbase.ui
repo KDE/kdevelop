@@ -73,9 +73,6 @@
                     <property name="text">
                         <string>Move &amp;Up</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+U</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
@@ -83,9 +80,6 @@
                     </property>
                     <property name="text">
                         <string>Move &amp;Down</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
                     </property>
                 </widget>
                 <spacer>

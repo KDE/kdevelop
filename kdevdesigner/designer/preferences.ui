@@ -89,9 +89,6 @@
                                 <property name="text">
                                     <string>Enable auto sa&amp;ve</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+V</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -193,9 +190,6 @@
                                 <property name="text">
                                     <string>Restore last &amp;workspace on startup</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+W</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -241,9 +235,6 @@
                                 <property name="text">
                                     <string>Disable data&amp;base auto-edit in preview</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+B</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -254,9 +245,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Show toolbutton lab&amp;els</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Text Labels</string>
@@ -296,9 +284,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Sn&amp;ap to grid</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+A</string>
                                 </property>
                                 <property name="checked">
                                     <bool>true</bool>

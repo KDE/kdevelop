@@ -271,9 +271,6 @@
                                 <property name="text">
                                     <string>&amp;Find in documentation</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+F</string>
-                                </property>
                             </widget>
                             <widget class="QCheckBox" row="1" column="0">
                                 <property name="name">
@@ -281,9 +278,6 @@
                                 </property>
                                 <property name="text">
                                     <string>&amp;Look in documentation index</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+L</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">
@@ -293,9 +287,6 @@
                                 <property name="text">
                                     <string>S&amp;earch in documentation</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+E</string>
-                                </property>
                             </widget>
                             <widget class="QCheckBox" row="4" column="0">
                                 <property name="name">
@@ -304,9 +295,6 @@
                                 <property name="text">
                                     <string>Goto &amp;infopage</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+I</string>
-                                </property>
                             </widget>
                             <widget class="QCheckBox" row="3" column="0">
                                 <property name="name">
@@ -314,9 +302,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Goto &amp;manpage</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+M</string>
                                 </property>
                             </widget>
                         </grid>
