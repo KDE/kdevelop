@@ -261,7 +261,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
     QRect clipRect(clipx, clipy, clipw, cliph);
     p->eraseRect(clipRect);
 
-    p->setFont(QFont("helvetica", 12));
+    p->setFont(KGlobalSettings::generalFont());
     QPtrListIterator<DigraphNode> it1(nodes);
     for (; it1.current(); ++it1) {
         QRect r((*it1)->x-(*it1)->w/2, (*it1)->y-(*it1)->h/2, (*it1)->w, (*it1)->h);
