@@ -16,7 +16,8 @@ public:
   virtual void embedSelectViewRight ( QWidget* view, const QString& title ) = 0;
 
   virtual void removeView(QWidget *view) = 0;
-
+  virtual void setViewVisible(QWidget *pView, bool bEnabled) = 0;
+  
   virtual void raiseView(QWidget *view) = 0;
   virtual void lowerView(QWidget *view) = 0;
   virtual void lowerAllViews() = 0;

@@ -249,6 +249,10 @@ void TopLevelSDI::removeView(QWidget *)
 {
 }
 
+void TopLevelSDI::setViewVisible(QWidget *pView, bool bEnabled)
+{
+  // TODO: implement me
+}
 
 void TopLevelSDI::raiseView(QWidget *view)
 {

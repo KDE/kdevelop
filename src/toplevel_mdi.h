@@ -35,7 +35,8 @@ public:
   void embedSelectViewRight ( QWidget* view, const QString& title );  //!< We do not have a right pane so this is just a wrapper to embedSelectView(
 
   void removeView(QWidget *view);
-
+  void setViewVisible(QWidget *pView, bool bEnabled);
+  
   void raiseView(QWidget *view);
   void lowerView(QWidget *view);
   void lowerAllViews();

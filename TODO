@@ -19,7 +19,6 @@ High priority tasks!
 
 * UI bugs:
   - GUI redraw blocked on Gideon startup for the time of project loading 
-  - debugger toolview are visible when the debugger isn't active
   - new editor views are added always maximized, even in non-maximized
     UI Childframe mode, view-taskbar missing
   - docking state of all toolviews not restored after Gideon restart

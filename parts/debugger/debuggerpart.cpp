@@ -89,7 +89,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                          "To change a variable value in your "
                                          "running app use a watch variable (eg a=5)."));
     topLevel()->embedSelectView(variableWidget, i18n("Watch"));
-    
+    topLevel()->setViewVisible(variableWidget, false);
+
     breakpointWidget = new BreakpointWidget();
     breakpointWidget->setCaption(i18n("Breakpoint List"));
     QWhatsThis::add(breakpointWidget, i18n("Breakpoint list\n\n"
@@ -100,6 +101,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "breakpoint. Double clicking will take you "
                                            "to the source in the editor window."));
     topLevel()->embedOutputView(breakpointWidget, i18n("Breakpoints"));
+    topLevel()->setViewVisible(breakpointWidget, false);
     
     framestackWidget = new FramestackWidget();
     framestackWidget->setEnabled(false);
@@ -113,6 +115,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                            "can see the values in any of the "
                                            "previous calling functions."));
     topLevel()->embedOutputView(framestackWidget, i18n("Frame Stack"));
+    topLevel()->setViewVisible(framestackWidget, false);
     
     disassembleWidget = new DisassembleWidget();
     disassembleWidget->setEnabled(false);
@@ -125,9 +128,11 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                             "buttons of \"step over\" instruction and "
                                             "\"step into\" instruction."));
     topLevel()->embedOutputView(disassembleWidget, i18n("Disassemble"));
+    topLevel()->setViewVisible(disassembleWidget, false);
     
     gdbOutputWidget = new ProcessWidget(0);
     topLevel()->embedOutputView(gdbOutputWidget, i18n("GDB"));
+    topLevel()->setViewVisible(gdbOutputWidget, false);
     
     VariableTree *variableTree = variableWidget->varTree();
 
@@ -499,6 +504,13 @@ void DebuggerPart::startDebugger()
                                "has been halted by the debugger (i.e. a breakpoint has "
                                "been activated or the interrupt was pressed).") );
     
+
+    topLevel()->setViewVisible(variableWidget, true);
+    topLevel()->setViewVisible(breakpointWidget, true);
+    topLevel()->setViewVisible(framestackWidget, true);
+    topLevel()->setViewVisible(disassembleWidget, true);
+    topLevel()->setViewVisible(gdbOutputWidget, true);
+    
     variableWidget->setEnabled(true);
     framestackWidget->setEnabled(true);
     disassembleWidget->setEnabled(true);
@@ -534,6 +546,12 @@ void DebuggerPart::stopDebugger()
     framestackWidget->setEnabled(false);
     disassembleWidget->setEnabled(false);
     
+    topLevel()->setViewVisible(variableWidget, false);
+    topLevel()->setViewVisible(breakpointWidget, false);
+    topLevel()->setViewVisible(framestackWidget, false);
+    topLevel()->setViewVisible(disassembleWidget, false);
+    topLevel()->setViewVisible(gdbOutputWidget, false);
+
     KActionCollection *ac = actionCollection();
     ac->action("debug_run")->setText( i18n("&Start") );
     ac->action("debug_run")->setIcon( "1rightarrow" );

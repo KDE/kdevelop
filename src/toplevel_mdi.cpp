@@ -480,6 +480,26 @@ void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
 }
 
 
+void TopLevelMDI::setViewVisible(QWidget *pView, bool bEnabled)
+{
+  QextMdiChildView* pWrappingView = dynamic_cast<QextMdiChildView*>(pView->parentWidget());
+  if (!pWrappingView) return;
+  
+  if (m_partViews.find(pWrappingView) != -1) {
+    // TODO
+  }
+  else {
+    KDockWidget* pWrappingDockWidget = dockManager->findWidgetParentDock(pWrappingView);
+    if (!pWrappingDockWidget) return;
+    if (bEnabled) {
+      pWrappingDockWidget->makeDockVisible();
+    }
+    else {
+      pWrappingDockWidget->undock();
+    }
+  }
+}
+
 void TopLevelMDI::removeView(QWidget *view)
 {
   if (!view)
