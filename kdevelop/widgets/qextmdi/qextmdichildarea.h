@@ -54,27 +54,46 @@ class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildArea : public QFrame
 
 // attributes
 public:
-   /** Z Order stack of @ref QextMdiChildFrm childframe windows (top=last) */
+   /** 
+   * Z Order stack of @ref QextMdiChildFrm childframe windows (top=last) 
+   */
    QList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
-   /** the default size of an newly created childframe */
+   /** 
+   * the default size of an newly created childframe 
+   */
    QSize                   m_defaultChildFrmSize;
 
 private:
-   /** The MDI childframe window caption font */
+   /** 
+   * The MDI childframe window caption font 
+   */
    QFont m_captionFont;
-   /** The foreground color of the active MDI childframe window caption */
+   /** 
+   * The foreground color of the active MDI childframe window caption 
+   */
    QColor m_captionActiveBackColor;
-   /** The background color of the active MDI childframe window captions */
+   /** 
+   * The background color of the active MDI childframe window captions 
+   */
    QColor m_captionActiveForeColor;
-   /** The foreground color of inactive MDI childframe window captions */
+   /** 
+   * The foreground color of inactive MDI childframe window captions 
+   */
    QColor m_captionInactiveBackColor;
-   /** The background color of inactive MDI childframe window captions */
+   /** 
+   * The background color of inactive MDI childframe window captions 
+   */
    QColor m_captionInactiveForeColor;
+   /**
+   * 
+   */
    int m_captionFontLineSpacing;
 
 // methods
 public:
-   /** Consruction. Note: This class needn't to know about @ref QextMdiMainFrm. */
+   /** 
+   * Consruction. Note: This class needn't to know about @ref QextMdiMainFrm. 
+   */
    QextMdiChildArea(QWidget *parent);
    /**
    * Destructor : THERE should be no child windows anymore...
@@ -112,28 +131,48 @@ public:
    * Returns the number of visible children
    */
    int getVisibleChildCount();
-   /** Calculates the cascade point for the given index. If index is -1
-       the cascade point is calculated for the window following the last window */
+   /** 
+   * Calculates the cascade point for the given index. If index is -1
+   * the cascade point is calculated for the window following the last window 
+   */
    QPoint getCascadePoint(int indexOfWindow = -1);
-   /** Sets the MDI childframe window caption font (no relayout) */
+   /** 
+   * Sets the MDI childframe window caption font (no relayout) 
+   */
    void setMdiCaptionFont(const QFont &fnt);
-   /** Sets the foreground color of the active MDI childframe window caption (no relayout) */
+   /** 
+   * Sets the foreground color of the active MDI childframe window caption (no relayout) 
+   */
    void setMdiCaptionActiveForeColor(const QColor &clr);
-   /** Sets the background color of the active MDI childframe window captions (no relayout) */
+   /** 
+   * Sets the background color of the active MDI childframe window captions (no relayout) 
+   */
    void setMdiCaptionActiveBackColor(const QColor &clr);
-   /** Sets the foreground color of inactive MDI childframe window captions (no relayout) */
+   /** 
+   * Sets the foreground color of inactive MDI childframe window captions (no relayout) 
+   */
    void setMdiCaptionInactiveForeColor(const QColor &clr);
-   /** Sets the background color of inactive MDI childframe window captions (no relayout) */
+   /** 
+   * Sets the background color of inactive MDI childframe window captions (no relayout) 
+   */
    void setMdiCaptionInactiveBackColor(const QColor &clr);
 
 public slots:
-   /** Cascades the windows resizing it to the minimum size. */
+   /** 
+   * Cascades the windows resizing it to the minimum size. 
+   */
    void cascadeWindows();
-   /** Casecades the windows resizing it to the maximum available size. */
+   /** 
+   * Casecades the windows resizing it to the maximum available size. 
+   */
    void cascadeMaximized();
-   /** Maximize all windows but only in vertical direction */
+   /** 
+   * Maximize all windows but only in vertical direction 
+   */
    void expandVertical();
-   /** Maximize all windows but only in horizontal direction */
+   /** 
+   * Maximize all windows but only in horizontal direction 
+   */
    void expandHorizontal();
    /**
    * Foces focus to the topmost child
@@ -141,45 +180,72 @@ public slots:
    * Btw : It should not happen.
    */
    void focusTopChild();
-   /** Tile Pragma */
+   /** 
+   * Tile Pragma 
+   */
    void tilePragma();
-   /** Tile Anodine */
+   /** 
+   * Tile Anodine 
+   */
    void tileAnodine();
-   /** Tile Vertically */
+   /** 
+   * Tile Vertically 
+   */
    void tileVertically();
-   /** Positioning of minimized child frames */
+   /** 
+   * Positioning of minimized child frames 
+   */
    void layoutMinimizedChildren();
    
 protected:
-   /** Internally used for the tile algorithm */
+   /** 
+   * Internally used for the tile algorithm 
+   */
    void tileAllInternal(int maxWnds);
-   /** Automatically focuses the attached MDI view which is on top of all other attached MDI view. */
+   /** 
+   * Automatically focuses the attached MDI view which is on top of all other attached MDI view. 
+   */
    virtual void focusInEvent(QFocusEvent *);
-   /** Automatically resizes a maximized MDI view and layouts the positions of minimized MDI views. */
+   /** 
+   * Automatically resizes a maximized MDI view and layouts the positions of minimized MDI views. 
+   */
    virtual void resizeEvent(QResizeEvent *);
-   /** Shows the 'Window' popup menu on right mouse button click */
+   /** 
+   * Shows the 'Window' popup menu on right mouse button click 
+   */
    void mousePressEvent(QMouseEvent *e);
-   /** Internally used. Actions that are necessary when an MDI view gets minimized */
+   /** 
+   * Internally used. Actions that are necessary when an MDI view gets minimized 
+   */
    void childMinimized(QextMdiChildFrm *lpC,bool bWasMaximized);
-   /** An equivalent to @ref QextMdiMainFrm::detachWindow */
+   /** 
+   * An equivalent to @ref QextMdiMainFrm::detachWindow 
+   */
    void undockWindow(QWidget *lpC);
 
 signals:
-   /** Signalizes that the child frames are no longer maximized */
+   /** 
+   * Signalizes that the child frames are no longer maximized 
+   */
    void noLongerMaximized(QextMdiChildFrm*);
-   /** Signalizes that the child frames are maximized now*/
+   /** 
+   * Signalizes that the child frames are maximized now
+   */
    void nowMaximized();
    /** Internally used.
-    * Signalizes from QextMdiChildArea to QextMdiMainFrm
-    * that the signal/slot connections of the system buttons in the menubar (only in Maximize mode)
-    * must be updated to another MDI view because the focused MDI view has changed */
+   * Signalizes from QextMdiChildArea to QextMdiMainFrm
+   * that the signal/slot connections of the system buttons in the menubar (only in Maximize mode)
+   * must be updated to another MDI view because the focused MDI view has changed 
+   */
    void sysButtonConnectionsMustChange(QextMdiChildFrm*, QextMdiChildFrm*);
    /** Internally used.
-     * Signalizes from QextMdiChildArea to QextMdiMainFrm
-     * that the 'Window' popup menu must be shown */
+   * Signalizes from QextMdiChildArea to QextMdiMainFrm
+   * that the 'Window' popup menu must be shown 
+   */
    void popupWindowMenu( QPoint);
    /** Signalizes that the last attached (docked) MDI view has been closed.
-     * Note: Detached MDI views can remain. */
+   * Note: Detached MDI views can remain. 
+   */
    void lastChildFrmClosed();
 };
 

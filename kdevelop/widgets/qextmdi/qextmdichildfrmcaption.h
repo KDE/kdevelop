@@ -34,56 +34,89 @@
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrm;
 
 /**
-  * @short Internal class.
-  *
-  * It's the caption bar of a child frame widget.
-  */
-
+* @short Internal class.
+*
+* It's the caption bar of a child frame widget.
+*/
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildFrmCaption : public QWidget
 {
    Q_OBJECT
 public:
-   /** Constructor */
+   /** 
+   * Constructor 
+   */
    QextMdiChildFrmCaption(QextMdiChildFrm *parent);
-   /** Destructor */
+   /** 
+   * Destructor 
+   */
    ~QextMdiChildFrmCaption();
-   /** Repaint the caption bar in active background colours */
+   /** 
+   * Repaint the caption bar in active background colours 
+   */
    void setActive(bool bActive);
-   /** Repaint with a new caption bar title */
+   /** 
+   * Repaint with a new caption bar title 
+   */
    void setCaption(const QString& text);
-   /** Returns the caption bar height depending on the used font */
+   /** 
+   * Returns the caption bar height depending on the used font 
+   */
    int heightHint();
 public slots:
-   /** Grabs the mouse, a move cursor, sets a move indicator variable to true and keeps the global mouse position in mind */
+   /** 
+   * Grabs the mouse, a move cursor, sets a move indicator variable to true and keeps the global mouse position in mind 
+   */
    void slot_moveViaSystemMenu();
 
 protected:
-   /** Draws the caption bar and its title using the settings */
+   /** 
+   * Draws the caption bar and its title using the settings 
+   */
    virtual void paintEvent(QPaintEvent *e);
-   /** The same as @ref QextMdiChildFrmCaption::slot_moveViaSystemMenu */
+   /** 
+   * The same as @ref QextMdiChildFrmCaption::slot_moveViaSystemMenu 
+   */
    virtual void mousePressEvent(QMouseEvent *);
-   /** Calls maximizePressed of the parent widget (@ref QextMdiChildFrm) */
+   /** 
+   * Calls maximizePressed of the parent widget (@ref QextMdiChildFrm) 
+   */
    virtual void mouseDoubleClickEvent(QMouseEvent *);
-   /** Restore the normal mouse cursor, set the state variable back to 'not moving' */
+   /** 
+   * Restore the normal mouse cursor, set the state variable back to 'not moving' 
+   */
    virtual void mouseReleaseEvent(QMouseEvent *);
-   /** Checks if out of move range of the @ref QextMdiChildArea and calls @ref QextMdiChildFrm::move */
+   /** 
+   * Checks if out of move range of the @ref QextMdiChildArea and calls @ref QextMdiChildFrm::move 
+   */
    virtual void mouseMoveEvent(QMouseEvent *e);
-   /** Computes a new abbreviated string from a given string depending on a given maximum width */
+   /** 
+   * Computes a new abbreviated string from a given string depending on a given maximum width 
+   */
    QString abbreviateText(QString origStr, int maxWidth);
 
 // attributes
 public:
-   /** the title string shown in the caption bar */
+   /** 
+   * the title string shown in the caption bar 
+   */
    QString           m_szCaption;
 
 protected: // Protected attributes
-   /** parent widget */
+   /** 
+   * parent widget 
+   */
    QextMdiChildFrm  *m_pParent;
-   /** state variable indicating whether activated or not activated */
+   /** 
+   * state variable indicating whether activated or not activated 
+   */
    bool              m_bActive;
-   /** state variable indicating if this is being moved at the moment */
+   /** 
+   * state variable indicating if this is being moved at the moment 
+   */
    bool              m_bCanMove;
-   /** the position offset related to its parent widget (internally used for translating mouse move positions */
+   /** 
+   * the position offset related to its parent widget (internally used for translating mouse move positions 
+   */
    QPoint            m_offset;
 };
 
