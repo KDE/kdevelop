@@ -91,7 +91,26 @@ void TargetOptionsDialog::readConfig()
         l1.remove(l1it);
     }
     ldflagsother_edit->setText(l1.join(" "));
-    dependencies_edit->setText(target->dependencies);
+    QString l_dependencies_str = target->dependencies;
+
+    // Remove the implicit dependencies (internal libraries) from the list of
+    // dependencies in order to be able to extract the explicit dependencies.
+    // The explicit dependencies will then be presented to the user (on the edit box )
+    // and the implicit dependencies will only be re-added in the storeConfig()
+    if (target->primary == "PROGRAMS") {
+        QString ldadd_str = target->ldadd;
+        QStringList l_dependencies_lst = QStringList::split(QRegExp("[ \t]"), l_dependencies_str);
+        QStringList ldadd_lst = QStringList::split(QRegExp("[ \t]"), ldadd_str);
+        QStringList::Iterator l_dep_it = ldadd_lst.begin();
+        while (l_dep_it != ldadd_lst.end() && l_dependencies_lst.isEmpty() == false) {
+            QString ldadd_item = *l_dep_it;
+            l_dependencies_lst.remove(ldadd_item);
+            l_dep_it++;
+        }
+        l_dependencies_str = l_dependencies_lst.join(" ");
+    }
+          
+    dependencies_edit->setText(l_dependencies_str);
 
     QString addstr = (target->primary == "PROGRAMS")? target->ldadd : target->libadd;
     QStringList l2 = QStringList::split(QRegExp("[ \t]"), addstr);
@@ -146,6 +165,9 @@ void TargetOptionsDialog::storeConfig()
             liblist.append("$(top_builddir)/" + clitem->text());
         clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
     }
+    // Form a string with the current selected internal Libraries
+    QString inside_ldadd = liblist.join(" ");
+
     clitem = static_cast<QCheckListItem*>(outsidelib_listview->firstChild());
     while (clitem) {
         liblist.append(clitem->text());
@@ -179,6 +201,12 @@ void TargetOptionsDialog::storeConfig()
     }
 
     QString new_dependencies = dependencies_edit->text();
+    if (target->primary == "PROGRAMS") {
+        // Add the currenty selected internal Libraries (implicit dependencies) to the dependency list
+        if (!new_dependencies.isEmpty())
+            new_dependencies.append(" "); 
+        new_dependencies.append(inside_ldadd);
+    }
     QString old_dependencies = target->dependencies;
     if (new_dependencies != old_dependencies) {
         target->dependencies = new_dependencies;
