@@ -1,9 +1,9 @@
 Begin3
 Title:          KDevelop
-Version:        1.1
-Entered-date:   28 Feb 2000
+Version:        1.2
+Entered-date:   4 May 2000
 Description:    an IDE for X/Qt/KDE
-Keywords:       IDE, KDE, X11, Qt, development, C++,GUI Builder
+Keywords:       IDE, KDE,GNOME, X11, Qt, development, C++,GUI Builder
 Author:         The KDevelop Team
 Maintained-by:  Sandy Meier <smeier@kdevelop.de>
 Primary-site:   

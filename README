@@ -5,7 +5,7 @@ KDevelop 1.2
 1. What is KDevelop ?
 
 KDevelop is an easy to use IDE (Intergrated Development Enviroment) for
-Unix/X11, targeting on C++ application development; specialized on the Qt and KDE libraries.
+Unix/X11, targeting on C/C++ application development; specialized on the Qt/KDE and GNOME libraries.
 
 2. KDevelop-Homepage
 
@@ -25,7 +25,7 @@ perl 5.004
 autoconf 2.12
 automake 1.4
 Qt 1.44 NOT Qt 2.0
-KDE 1.1.x 
+KDE 1.1.x (kdelibs) 
 flex
 db (berkley database)
 
