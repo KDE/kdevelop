@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kdevgenericfactory.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <qregexp.h>
 
@@ -323,7 +323,7 @@ void PythonSupportPart::slotStartInterpreter()
 void PythonSupportPart::slotExecuteString()
 {
     bool ok;
-    QString cmd = KLineEditDlg::getText(i18n("String to execute"), QString::null, &ok, 0);
+    QString cmd = KInputDialog::getText(i18n("String to execute"), i18n("String to execute:"), QString::null, &ok, 0);
     if (ok) {
         cmd.prepend("'");
         cmd.append("'");
@@ -335,7 +335,7 @@ void PythonSupportPart::slotExecuteString()
 void PythonSupportPart::slotPydoc()
 {
     bool ok;
-    QString key = KLineEditDlg::getText(i18n("Show Python documentation on keyword:"), "", &ok, 0);
+    QString key = KInputDialog::getText(i18n("Show Python Documentation"), i18n("Show Python documentation on keyword:"), "", &ok, 0);
     if (ok && !key.isEmpty()) {
         QString url = "pydoc:";
         url += key;

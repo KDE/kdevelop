@@ -20,7 +20,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdevgenericfactory.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <qregexp.h>
 #include <codemodel.h>
@@ -213,7 +213,7 @@ void PerlSupportPart::slotStartInterpreter()
 void PerlSupportPart::slotExecuteString()
 {
     bool ok;
-    QString cmd = KLineEditDlg::getText(i18n("String to execute"), QString::null, &ok, 0);
+    QString cmd = KInputDialog::getText(i18n("String to execute"), i18n("String to execute:"), QString::null, &ok, 0);
     if (ok) {
         cmd.prepend("'");
         cmd.append("'");
@@ -225,7 +225,7 @@ void PerlSupportPart::slotExecuteString()
 void PerlSupportPart::slotPerldocFunction()
 {
     bool ok;
-    QString key = KLineEditDlg::getText(i18n("Show Perl documentation for function:"), "", &ok, 0);
+    QString key = KInputDialog::getText(i18n("Show Perl Documentation"), i18n("Show Perl documentation for function:"), "", &ok, 0);
     if (ok && !key.isEmpty()) {
         QString url = "perldoc:functions/";
         url += key;
@@ -237,7 +237,7 @@ void PerlSupportPart::slotPerldocFunction()
 void PerlSupportPart::slotPerldocFAQ()
 {
     bool ok;
-    QString key = KLineEditDlg::getText(i18n("Show FAQ entry for keyword:"), "", &ok, 0);
+    QString key = KInputDialog::getText(i18n("Show FAQ Entry"), i18n("Show FAQ entry for keyword:"), "", &ok, 0);
     if (ok && !key.isEmpty()) {
         QString url = "perldoc:faq/";
         url += key;

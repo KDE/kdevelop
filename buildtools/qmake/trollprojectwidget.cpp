@@ -49,7 +49,7 @@
 #include <kparts/part.h>
 #include <kaction.h>
 #include <kprocess.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kdeversion.h>
 #include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
@@ -976,7 +976,7 @@ void TrollProjectWidget::slotCreateScope(SubqmakeprojectItem *spitem)
   else
     spitem = m_shownSubproject;
   bool ok = FALSE;
-  QString scopename = KLineEditDlg::getText(
+  QString scopename = KInputDialog::getText(
                       i18n( "Create Scope" ),
                       i18n( "Please enter a name for the new scope:" ),
                       QString::null, &ok, this );
@@ -1068,7 +1068,8 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
 
     SubqmakeprojectItem *spitem = static_cast<SubqmakeprojectItem*>(item);
 
-    KPopupMenu popup(i18n("Subproject %1").arg(item->text(0)), this);
+    KPopupMenu popup(this);
+    popup.insertTitle(i18n("Subproject %1").arg(item->text(0)));
 
     int idBuild = -2;
     int idQmake = -2;
@@ -1613,8 +1614,8 @@ void TrollProjectWidget::addFiles( QStringList &files, bool noPathTruncate)
         kdDebug() << "  orig: " << origFilePath << "  dest: " << QDir::cleanDirPath(newPath + "/" + origFileName) << endl;
         source.setPath(origFilePath);
         dest.setPath(QDir::cleanDirPath(newPath + "/" + origFileName));
-        if (KIO::NetAccess::copy(source, dest))
-            KIO::NetAccess::del(source);
+        if (KIO::NetAccess::copy(source, dest, (QWidget*)0))
+            KIO::NetAccess::del(source, (QWidget*)0);
         *it = QDir::cleanDirPath(newPath + "/" + origFileName);
         fileName = *it;
     }
@@ -1792,7 +1793,7 @@ void TrollProjectWidget::slotNewFile()
       {
           // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
-          QString filepattern = KLineEditDlg::getText(
+          QString filepattern = KInputDialog::getText(
                               i18n( "Insert New Filepattern" ),
                               i18n( "Please enter a filepattern relative the current "
                                     "subproject (example docs/*.html):" ),
@@ -1809,7 +1810,7 @@ void TrollProjectWidget::slotNewFile()
       {
 //          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
-          QString install_obj = KLineEditDlg::getText(
+          QString install_obj = KInputDialog::getText(
                               i18n( "Insert New Install Object" ),
                               i18n( "Please enter a name for the new object:" ),
                               QString::null, &ok, this );
@@ -1833,7 +1834,7 @@ void TrollProjectWidget::slotNewFile()
     } else {
         bool ok = FALSE;
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-        QString filename = KLineEditDlg::getText(
+        QString filename = KInputDialog::getText(
                             i18n( "Insert New File"),
                             i18n( "Please enter a name for the new file:" ),
                             QString::null, &ok, this );
@@ -2021,7 +2022,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         default: ;
         }
 
-        KPopupMenu popup(title, this);
+        KPopupMenu popup(this);
+	popup.insertTitle(title);
 
         int idInsExistingFile = -2;
 	int idInsNewFile = -2;
@@ -2089,7 +2091,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 	    else if (r == idInsNewFilepatternItem)
         {
           bool ok = FALSE;
-          QString filepattern = KLineEditDlg::getText(
+          QString filepattern = KInputDialog::getText(
                               i18n( "Add Pattern of Files to Install" ),
                               i18n( "Enter a pattern relative to the current "
                                     "subproject (example docs/*.html):" ),
@@ -2217,7 +2219,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
                     createFileSupport->createNewFile(fcext, cleanSubprojectPath);
             } else {
                 bool ok = FALSE;
-                QString filename = KLineEditDlg::getText(
+                QString filename = KInputDialog::getText(
                                     i18n( "Create New File"),
                                     i18n( "Enter a name for the new file:" ),
                                     QString::null, &ok, this );
@@ -2244,7 +2246,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         else if (r == idInsInstallObject)
         {
           bool ok = FALSE;
-          QString install_obj = KLineEditDlg::getText(
+          QString install_obj = KInputDialog::getText(
                               i18n( "Add Install Object" ),
                               i18n( "Enter a name for the new object:" ),
                               QString::null, &ok, this );
@@ -2423,7 +2425,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 	GroupItem *titem = static_cast<GroupItem*>(item->parent());
 
           bool ok = FALSE;
-          QString filepattern = KLineEditDlg::getText(
+          QString filepattern = KInputDialog::getText(
                               i18n( "Edit Pattern" ),
                               i18n( "Enter a pattern relative to the current "
                                     "subproject (example docs/*.html):" ),

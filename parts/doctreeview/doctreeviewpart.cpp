@@ -19,7 +19,7 @@
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstringhandler.h>
@@ -135,7 +135,7 @@ void DocTreeViewPart::projectConfigWidget(KDialogBase *dlg) {
 }
 */
 
-void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
+void DocTreeViewPart::contextMenu(QPopupMenu */*popup*/, const Context */*context*/)
 {
 /*    kdDebug(9002) << "context in doctree" << endl;
     if (context->hasType( Context::EditorContext )) {
@@ -188,7 +188,7 @@ void DocTreeViewPart::slotSearchDocumentation()
 void DocTreeViewPart::slotManpage()
 {
     bool ok;
-    QString manpage = KLineEditDlg::getText(i18n("Show manpage on:"), "", &ok, 0);
+    QString manpage = KInputDialog::getText(i18n("Show Manpage"), i18n("Show manpage on:"), "", &ok, 0);
     if (ok && !manpage.isEmpty()) {
         QString url = QString::fromLatin1("man:/%1").arg(manpage);
         partController()->showDocument(KURL(url));
