@@ -47,7 +47,7 @@ public:
     bool isEnabled() const { return m_bCodeCompletion; }
     void setEnabled( bool setEnable );
     
-    virtual QString evaluateExpression( QString, SimpleContext* ctx );
+    virtual QString evaluateExpression( const QString&, SimpleContext* ctx );
     
     virtual int expressionAt( const QString& text, int index );
     virtual QStringList splitExpression( const QString& text );
@@ -56,9 +56,8 @@ public:
     
     QValueList<KTextEditor::CompletionEntry> findAllEntries( const QString& type, bool includePrivate=true );
     
-    QStringList getGlobalSignatureList(const QString &functionName);
-    QStringList getSignatureListForClass( QString strClass, QString strMethod );
-    QStringList getParentSignatureListForClass( ParsedClass* pClass, QString strMethod );
+    QStringList getGlobalSignatureList( const QString& functionName );
+    QStringList getSignatureListForClass( const QString& className, const QString& functionName );
     
     QString typeOf( const QString& name, ParsedClassContainer* container = 0 );
     ParsedClassContainer* findContainer( const QString& name, ParsedScopeContainer* container = 0, 

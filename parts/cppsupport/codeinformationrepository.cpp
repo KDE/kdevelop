@@ -75,12 +75,25 @@ QValueList<Tag> CodeInformationRepository::getTagsInFile( const QString & fileNa
 QValueList<KTextEditor::CompletionEntry> CodeInformationRepository::getEntriesInScope( const QStringList & scope )
 {
     kdDebug(9020) << "CodeInformationRepository::getEntriesInScope()" << endl;
+    
     QValueList<KTextEditor::CompletionEntry> entryList;
-
+    QValueList<Tag> tags;
     QValueList<Catalog::QueryArgument> args;
+    
+    args.clear();
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Namespace )
+	<< Catalog::QueryArgument( "scope", scope );
+    tags += query( args );
+    
+    args.clear();
+    args << Catalog::QueryArgument( "kind", Tag::Kind_Class )
+	<< Catalog::QueryArgument( "scope", scope );
+    tags += query( args );
+    
+    args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_FunctionDeclaration )
-    	<< Catalog::QueryArgument( "scope", scope );
-    QValueList<Tag> tags = query( args );
+	<< Catalog::QueryArgument( "scope", scope );
+    tags += query( args );
 
     args.clear();
     args << Catalog::QueryArgument( "kind", Tag::Kind_Variable )

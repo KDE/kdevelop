@@ -516,8 +516,10 @@ CppCodeCompletion::splitExpression( const QString& text )
 }
 
 QString
-CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
+CppCodeCompletion::evaluateExpression( const QString& e, SimpleContext* ctx )
 {
+    QString expr = e;
+    
     bool global = false;
     if( expr.startsWith("::") ){
 	expr = expr.mid( 2 );
@@ -645,26 +647,11 @@ CppCodeCompletion::completeText( )
 		functionList = getGlobalSignatureList( word );
 	    }
 
-	    if( functionList.count() == 0 ){
-		functionList = m_repository->getSignatureList( scope, word );
-	    }
-
-	    if( functionList.count() == 0 ){
-		functionList = m_repository->getSignatureList( QStringList(), word );
-	    }
-
             if( functionList.count() ){
 		m_activeCompletion->showArgHint( functionList, "()", "," );
 	    }
 	} else {
 	    QValueList<KTextEditor::CompletionEntry> entryList = findAllEntries( type );
-
-            if( entryList.size() == 0 ){
-                // try with the catalog
-                kdDebug(9020) << "-------> looking for " << type << endl;
-
-                entryList = m_repository->getEntriesInScope( scope );
-            }
 
 	    if( entryList.size() )
 		m_activeCompletion->showCompletionBox( entryList, word.length(), false );
@@ -677,49 +664,46 @@ CppCodeCompletion::completeText( )
 
 QStringList CppCodeCompletion::getGlobalSignatureList(const QString &functionName)
 {
-    return m_pSupport->classStore()->globalScope()->getSortedMethodSignatureList(functionName);
+    QStringList list = m_pSupport->classStore()->globalScope()->getSortedMethodSignatureList( functionName );
+    list += m_repository->getSignatureList( QStringList(), functionName );
+    return list;
 }
 
-QStringList CppCodeCompletion::getSignatureListForClass( QString strClass, QString strMethod )
-{
-     ParsedClass* pClass = dynamic_cast<ParsedClass*>( findContainer(strClass) );
-     if ( !pClass )
-         return QStringList();
-
-     QStringList retVal = pClass->getSortedMethodSignatureList(strMethod);
-     retVal += pClass->getSortedSlotSignatureList(strMethod);
-     retVal += pClass->getSortedSignalSignatureList(strMethod);
-     retVal += getParentSignatureListForClass( pClass, strMethod );
-
-     return retVal;
-}
-
-
-QStringList CppCodeCompletion::getParentSignatureListForClass( ParsedClass* pClass, QString strMethod )
+QStringList CppCodeCompletion::getSignatureListForClass( const QString& className, const QString& functionName )
 {
     QStringList retVal;
-
-    QPtrList<ParsedParent> parentList = pClass->parents;
-    for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
-    {
-        pClass = dynamic_cast<ParsedClass*>( findContainer(pParentClass->name()) );
-
-        if ( pClass )
-        {
-            retVal = pClass->getSortedMethodSignatureList(strMethod);
-            retVal += pClass->getSortedSignalSignatureList(strMethod);
-            retVal += pClass->getSortedSlotSignatureList(strMethod);
-            retVal += getParentSignatureListForClass( pClass, strMethod );
-        }
-        /*else
-          {
-          // TODO: look in ClassStore for Namespace classes
-          } */
+    
+    ParsedClass* pClass = dynamic_cast<ParsedClass*>( findContainer(className) );
+    if ( !pClass ){
+	// check the pcs
+	retVal = m_repository->getSignatureList( QStringList::split("::", className), functionName );
+	
+	QValueList<Tag> parents = m_repository->getBaseClassList( className ); 
+	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
+	QValueList<Tag>::Iterator it = parents.begin();
+	while( it != parents.end() ){
+	    const Tag& tag = *it;
+	    ++it;
+	    
+	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
+	    retVal += getSignatureListForClass( tag.attribute("baseClass").toString(), functionName );
+	}
+    } else {
+	retVal = pClass->getSortedMethodSignatureList( functionName );
+	retVal += pClass->getSortedSlotSignatureList( functionName );
+	retVal += pClass->getSortedSignalSignatureList( functionName );
+	
+	QPtrList<ParsedParent> parentList = pClass->parents;
+	for ( ParsedParent* pParentClass = parentList.first(); pParentClass != 0; pParentClass = parentList.next() )
+	{
+	    // ParsedClass* baseClass = dynamic_cast<ParsedClass*>( findContainer(pParentClass->name()) );
+	    retVal += getSignatureListForClass( pParentClass->name(), functionName );
+	}
+	    
     }
-
+        
     return retVal;
 }
-
 
 void CppCodeCompletion::slotFileParsed( const QString& fileName )
 {
@@ -986,6 +970,19 @@ QValueList<KTextEditor::CompletionEntry> CppCodeCompletion::findAllEntries( cons
 		entryList << entry;
 	    }
 	}
+    } else {
+	QStringList scope = QStringList::split( "::", type );
+	entryList = m_repository->getEntriesInScope( scope );
+	QValueList<Tag> parents = m_repository->getBaseClassList( type ); // type or scope?
+	kdDebug(9020) << "------> found " << parents.size() << " base classes" << endl;
+	QValueList<Tag>::Iterator it = parents.begin();
+	while( it != parents.end() ){
+	    const Tag& tag = *it;
+	    ++it;
+	    
+	    kdDebug(9020) << "found base class " << tag.attribute( "baseClass" ).toString() << endl;
+	    entryList += findAllEntries( tag.attribute("baseClass").toString(), false );
+	}
     }
 
     entryList = unique( entryList );
@@ -1121,7 +1118,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 void CppCodeCompletion::setupCodeInformationRepository( )
 {
     // add all available pcs for now
-
+    
     int id = 1;
     CppSupportPart* part = m_pSupport;
     QPtrListIterator<Catalog> it( part->catalogList() );
@@ -1146,7 +1143,7 @@ QString CppCodeCompletion::typeName( const QString& str )
         
 	QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
-
+	
         QString type;
 	while( it.current() ){
 	    if( it.current()->name() ){
@@ -1154,7 +1151,7 @@ QString CppCodeCompletion::typeName( const QString& str )
 	    } 
 	    ++it;
 	}
-
+	
         if( name->unqualifiedName() && name->unqualifiedName()->name() ){
             type += name->unqualifiedName()->name()->text();
         }
