@@ -1,3 +1,6 @@
+2001-03-06  jbb <jbb@kdevelop.org>
+    * Fixed: Dirs containing "++" would cause kimport to fail.
+
 2001-02-26  jbb <jbb@kdevelop.org>
     * Fixed: Window placement at startup was wrong
              Screen width missed iconBorder width adjustment.
