@@ -309,9 +309,13 @@ Unit* BackgroundParser::findUnit( const QString& fileName )
     return it != m_unitDict.end() ? *it : 0;
 }
 
-TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName )
+TranslationUnitAST* BackgroundParser::translationUnit( const QString& fileName, bool create )
 {
-    Unit* u = findUnit( fileName );
+    Unit* u = 0;
+    if (create)
+        u = findOrCreateUnit( fileName, true );
+    else
+        u = findUnit( fileName );
     return u ? u->translationUnit : 0;
 }
 

@@ -58,7 +58,7 @@ public:
     void removeFile( const QString& fileName );
     void removeAllFiles();
 
-    TranslationUnitAST* translationUnit( const QString& fileName );
+    TranslationUnitAST* translationUnit( const QString& fileName, bool create = false );
     QValueList<Problem> problems( const QString& fileName );
 
     void close();

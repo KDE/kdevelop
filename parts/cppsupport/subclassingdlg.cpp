@@ -105,22 +105,22 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
 {
   m_formFile = formFile;
   m_creatingNewSubclass = false;
-  m_filename = filename;  
+  m_filename = filename;
   ClassStore classcontainer;
 
-  
+
   // sync
   while( m_cppSupport->backgroundParser()->filesInQueue() > 0 )
       m_cppSupport->backgroundParser()->isEmpty().wait();
-  
+
   m_cppSupport->backgroundParser()->lock();
-  TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h" );
+  TranslationUnitAST* translationUnit = m_cppSupport->backgroundParser()->translationUnit( filename + ".h", true );
   if( translationUnit ){
       StoreWalker w( filename + ".h", &classcontainer );
       w.parseTranslationUnit( translationUnit );
   }
   m_cppSupport->backgroundParser()->unlock();
-  
+
   QStringList pathsplit(QStringList::split('/',filename));
 
   QStringList classes(classcontainer.getSortedClassNameList());
@@ -131,13 +131,23 @@ m_newFileNames(dummy), m_cppSupport( cppSupport )
     m_edClassName->setText(cls->name());
     m_edFileName->setText(pathsplit[pathsplit.count()-1]);
     cls->out();
-    SlotList slotlist = cls->getSortedMethodList();
-    SlotList::iterator it;
-    for ( it = slotlist.begin(); it != slotlist.end(); ++it )
+
+    cls->slotIterator.toFirst();
+    ParsedMethod *method = 0;
+    while ( (method = cls->slotIterator.current()) != 0)
     {
-      ParsedMethod *method = *it;
       m_parsedMethods << method->name()+"(";
+      ++(cls->slotIterator);
     }
+
+    cls->methodIterator.toFirst();
+    method = 0;
+    while ( (method = cls->methodIterator.current()) != 0)
+    {
+      m_parsedMethods << method->name()+"(";
+      ++(cls->methodIterator);
+    }
+
   }
   readUiFile();
   m_btnOk->setEnabled(true);
@@ -236,7 +246,7 @@ void SubclassingDlg::readUiFile()
                            funcelem.attributeNode("returnType").value(),true);
     m_slotView->insertItem(newFunc);
     if (allreadyInSubclass(funcelem.text()))
-      newSlot->setAllreadyInSubclass();
+      newFunc->setAllreadyInSubclass();
     m_slots << newFunc;
   }
 }
