@@ -39,7 +39,7 @@ ClassListAction::ClassListAction(KDevPlugin *part, const QString &text,
     m_combo->setMinimumWidth( 200 );
     m_combo->setMaximumWidth( 400 );
     
-    connect( m_combo, SIGNAL(returnPressed()), receiver, slot );
+    //connect( m_combo, SIGNAL(returnPressed()), receiver, slot );
     connect( m_combo, SIGNAL(activated(const QString&)), receiver, slot );
     
     setShortcutConfigurable( false );
