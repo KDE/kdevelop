@@ -839,6 +839,9 @@ CppCodeCompletion::completeText( )
 	isInstance = false;
     }
 
+    kdDebug(9007) << "===========================> type is: " << type << endl;
+    kdDebug(9007) << "===========================> word is: " << word << endl;
+
     if( !showArguments ){
 	QValueList<KTextEditor::CompletionEntry> entryList;
 
@@ -867,6 +870,7 @@ CppCodeCompletion::completeText( )
 
 	if( type.isEmpty() && expr.isEmpty() ){
 	    computeSignatureList( signatureList, word, m_pSupport->codeModel()->globalNamespace()->functionList() );
+	    computeSignatureList( signatureList, word, QStringList() );
 
 	    if( !word.isEmpty() ){
 		QStringList fakeType;
@@ -1821,7 +1825,7 @@ void CppCodeCompletion::computeFileEntryList( )
 	entry.text = QFileInfo( *it ).fileName();
 	m_fileEntryList.push_back( entry );
     }
-    
+
     m_fileEntryList = unique( m_fileEntryList );
 }
 
