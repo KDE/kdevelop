@@ -99,6 +99,7 @@ void AddTranslationDialog::accept()
     f.open(IO_WriteOnly);
     f.close();
 
+    dir = m_part->buildDirectory() + "/po";
     m_part->startMakeCommand(dir, QString::fromLatin1("force-reedit"));
 
     QDialog::accept();
