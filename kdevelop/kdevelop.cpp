@@ -758,50 +758,48 @@ void KDevelop::initComponents()
 void KDevelop::loadComponents(const QString &type, KDockWidget::DockPosition pos, int ratio)
 {
     KDockWidget *prevWidget = m_dockbaseMDIMainFrm;
+
+    QString constraint = QString::fromLatin1( "[X-KDevelop-ComponentType] == '" ) + type + '\'';
     
-    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component");
-    KTrader::OfferList::Iterator it;
+    KTrader::OfferList offers = KTrader::self()->query("KDevelop/Component", constraint);
     if (offers.isEmpty())
         kdDebug(9000) << "No KDevelop components" << endl;
     
-    for (it = offers.begin(); it != offers.end(); ++it) {
-        QVariant prop = (*it)->property("X-KDevelop-ComponentType");
-        if (prop.isValid() && prop.toString() == type) {
-            kdDebug(9000) << "Found " << type << " " << (*it)->name().latin1() << endl;
-            KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
-            
-            QStringList args;
-            prop = (*it)->property("X-KDevelop-Args");
-            if (prop.isValid()) 
-                args = QStringList::split(" ", prop.toString());
-            
-            QObject *obj = factory->create(0, (*it)->name().latin1(),
-                                           "KDevComponent", args);
+    KTrader::OfferList::ConstIterator it = offers.begin();
 
-            if (!obj->inherits("KDevComponent")) {
-                kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
-                continue;
-            }
-            KDevComponent *comp = (KDevComponent*) obj;
-            guiFactory()->addClient(comp);
+    kdDebug(9000) << "Found " << type << " " << (*it)->name().latin1() << endl;
+    KLibFactory *factory = KLibLoader::self()->factory((*it)->library());
 
-            KDockWidget *nextWidget = createDockWidget((*it)->name(), (*it)->icon(),
-                                                       0, (*it)->comment(), (*it)->name());
-            nextWidget->setWidget(comp->widget());
-            nextWidget->manualDock(prevWidget, pos, ratio);
-            prevWidget = nextWidget;
-            pos = KDockWidget::DockCenter;
-            
-            //!!!! HACK !!!!
-            //!!!!------!!!!
-            //!!!! embedToolViewInGUI(..) should be called from the initialization !!!!
-            //!!!! code part of every certain component, not here !!!!
-            //            embedToolViewInGUI(comp->widget());
+    QStringList args;
+    QVariant prop = (*it)->property("X-KDevelop-Args");
+    if (prop.isValid())
+        args = QStringList::split(" ", prop.toString());
 
-            // Hack
-            comp->classStoreOpened(classstore);
-        }
+    QObject *obj = factory->create(0, (*it)->name().latin1(),
+                                   "KDevComponent", args);
+
+    if (!obj->inherits("KDevComponent")) {
+        kdDebug(9000) << "Component does not inherit KDevComponent" << endl;
+        return;
     }
+    KDevComponent *comp = (KDevComponent*) obj;
+    guiFactory()->addClient(comp);
+
+    KDockWidget *nextWidget = createDockWidget((*it)->name(), (*it)->icon(),
+                                               0, (*it)->comment(), (*it)->name());
+    nextWidget->setWidget(comp->widget());
+    nextWidget->manualDock(prevWidget, pos, ratio);
+    prevWidget = nextWidget;
+    pos = KDockWidget::DockCenter;
+
+    //!!!!HACK !!!!
+    //!!!!------!!!!
+    //!!!! embedToolViewInGUI(..) should be called from the initialization !!!!
+    //!!!! code part of every certain component, not here !!!!
+    //            embedToolViewInGUI(comp->widget());
+
+    // Hack
+    comp->classStoreOpened(classstore);
 }
 
 void KDevelop::slotFilePrint()
