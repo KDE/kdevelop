@@ -97,6 +97,9 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
     // shellprocess
     finished_glimpse=false;
 
+    qt_test=kde_test=true; // assuming worst case... everything must be checked
+    till_doc=false; // first we must run through all, maybe the second time only from qt-doc-search
+
     shell_process = new KShellProcess();
     connect(shell_process,SIGNAL(receivedStdout(KProcess*,char*,int)),
 	    this,SLOT(slotReceivedStdout(KProcess*,char*,int)) );
@@ -167,8 +170,6 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 
 	config->setGroup("Doc_Location");
 	QString qt_doc=config->readEntry("doc_qt", QT_DOCDIR);
-	if(qt_doc.isEmpty())
-	  qt_test=true;
 	qt_edit = new QLineEdit( this, "LineEdit_1" );
 	qt_edit->setGeometry( 270, 100, 160, 30 );
 	qt_edit->setText( qt_doc );
@@ -204,11 +205,8 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name ) : QDialog(parent,
 	kde_label->setText(i18n("KDE-Documentation Path:"));
 	kde_label->setAlignment( 289 );
 	kde_label->setMargin( -1 );
-
 	config->setGroup("Doc_Location");
-	QString kde_doc=config->readEntry("doc_kde","");
-	if(kde_doc.isEmpty())
-	  kde_test=true;
+	QString kde_doc=config->readEntry("doc_kde",KDELIBS_DOCDIR);
 	kde_edit = new QLineEdit( this, "LineEdit_2" );
 	kde_edit->setGeometry( 270, 140, 160, 30 );
 	kde_edit->setText( kde_doc );
@@ -285,13 +283,11 @@ void CKDevInstall::slotQTpressed()
     qt_edit->setText(dir);
     config->setGroup("Doc_Location");
 
-    QString qt_testfile=dir+"classes.html"; // test if the path really is the qt-doc path
+    QString qt_testfile=dir+"/classes.html"; // test if the path really is the qt-doc path
     if(QFileInfo(qt_testfile).exists()){
-      if(dir.right(1) != "/"){
-      	dir=dir+"/";
-      }
       config->writeEntry("doc_qt",dir);
       qt_test=false;
+      auto_button->setEnabled(true);
     }
     else{
       KMsgBox::message(this,i18n("The selected path is not correct!"),i18n("\nThe chosen path does not lead to the\n"
@@ -309,7 +305,7 @@ void CKDevInstall::slotKDEpressed()
     kde_edit->setText(dir);
     config->setGroup("Doc_Location");
 
-    QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the kde-doc path
+    QString kde_testfile=dir+"/kdecore/index.html"; // test if the path really is the kde-doc path
     if(QFileInfo(kde_testfile).exists()){
       config->writeEntry("doc_kde",dir);
       kde_test=false;
@@ -353,6 +349,11 @@ void CKDevInstall::slotAuto() // proceed >>
   bool ktranslator=false;
 	bool kpaint=false;
 	
+  auto_button->setEnabled(false);
+
+  if (!till_doc) // jump to the new entry point if qt-doc first wasn't found
+  {
+
   int highl_style=KMsgBox::yesNo(this,i18n("Syntax-Highlighting"),i18n("\nNow you can choose the Syntax-Highlighting style\n"
                                                                       "KDevelop will use. The options are to set\n"
                                                                       "the highlighting to Emacs stlye or to the default\n"
@@ -550,6 +551,8 @@ void CKDevInstall::slotAuto() // proceed >>
   }
   progress.setProgress( numProgs );
 
+  } // end of till_doc
+
   if(CToolClass::searchInstProgram("gmake")){
     gmake=true;
   }
@@ -701,7 +704,8 @@ void CKDevInstall::slotAuto() // proceed >>
   else
     print_str="a2ps / enscript"+not_found+ i18n(" -- printing can only use lpr\n");
 
-
+  if (!till_doc)
+  {
   KMsgBox::message(this, i18n("Program test results"),i18n("The following results have been determined for your system:\n\n ")
                   +make_str+gmake_str+autoconf_str+autoheader_str+automake_str+perl_str+sgml2html_str+kdoc_str+glimpse_str+glimpseindex_str
                   +print_str+kdbg_str+kiconedit_str+kpaint_str+ktranslator_str, KMsgBox::INFORMATION);
@@ -711,49 +715,43 @@ void CKDevInstall::slotAuto() // proceed >>
 	config->writeEntry("Tools_entry",tools_entry);
 	config->writeEntry("Tools_argument",tools_argument);
 	
-  if(qt_test){ // test, if qt_test is required- qt_test is set to "true" in the constructor.
-  						 // Leave out the test if the correct path has been set in the edit field (there, qt_test has been set to false)
-	
-	  // now check for the qt libs documentation
-  	QString qt_testfile="classes.html";
-  	QString qt="";
+  }  // end of till_doc
 
-	QDir* qt_dir=new QDir();
-  	if(qt_dir->cd("/usr/local/qt/html/"))
-	  if(qt_dir->exists("classes.html"))
-	    qt="/usr/local/qt/html/";
-	
-	if(qt_dir->cd("/usr/local/lib/qt/html/"))
-  	  if(qt_dir->exists("classes.html"))
-	    qt="/usr/local/lib/qt/html/";
-	
-	if(qt_dir->cd("/usr/lib/qt/html/"))
-  	  if(qt_dir->exists("classes.html"))
-	    qt="/usr/lib/qt/html/";
-	
-	if(qt_dir->cd("/usr/lib/qt/doc/html/"))
-	  if(qt_dir->exists("classes.html"))
-	    qt="/usr/lib/qt/doc/html/";
-	
-	if(qt_dir->cd("/usr/X11/lib/qt/html/"))
-  	  if(qt_dir->exists("classes.html"))
-	    qt="/usr/X11/lib/qt/html/";
-	
-	if(qt_dir->cd("/usr/X11/lib/qt/doc/html/"))
-  	  if(qt_dir->exists("classes.html"))
-	    qt="/usr/X11/lib/qt/doc/html/";
-	
-	if(qt_dir->cd("/usr/doc/qt-doc/html/"))
-  	  if(qt_dir->exists("classes.html"))
-	    qt="/usr/doc/qt-doc/html/";
-	
-	if(!qt.isEmpty())
-  	  qt_test=false;
-	else
-  	  qt_test=true;
-	
-	if(!qt_test){
-  	  config->setGroup("Doc_Location");
+  int i;
+  //  test also autoconfified documentation path
+  config->setGroup("Doc_Location");
+  QString qt=config->readEntry("doc_qt", QT_DOCDIR);
+  qt_test=true;
+
+  QString qt_testfile; // for tests if the path really is the qt-doc path
+  char *qt_dirs[]={"/usr/local/qt/html",
+		"/usr/local/lib/qt/html",
+		"/usr/lib/qt/html",
+		"/usr/lib/qt/doc/html",
+		"/usr/X11/lib/qt/html",
+		"/usr/X11/lib/qt/doc/html",
+		"/usr/doc/qt-doc/html",
+		0l };
+
+  // first check the autoconfified path
+  if(qt_test && !qt.isEmpty())
+  {
+    qt_testfile=qt+"/classes.html";
+
+    if(QFileInfo(qt_testfile).exists())
+      qt_test=false;
+  }
+
+  for (i=0; qt_dirs[i]!=0l && qt_test; i++)
+  {
+    qt = qt_dirs[i];
+    qt_testfile=qt+"/classes.html";
+
+    if(QFileInfo(qt_testfile).exists())
+      qt_test=false;
+  };
+
+  if(!qt_test){
 	  config->writeEntry("doc_qt",qt);
 	  KMsgBox::message(this, i18n("Qt Documentation found"),i18n("\nThe Qt-Documentation has been found at:\n\n")+qt
 								     +i18n("\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
@@ -766,52 +764,53 @@ void CKDevInstall::slotAuto() // proceed >>
 	  if(result==1){
 	    hint_label->setGeometry( 40, 150, 440, 120 );
 	    hint_label->setText(i18n("    Please choose your Qt-Documentation path by pushing the selection button above."));
+            till_doc=true; // till qt-doc search all is done
 	    return;
-	  }
   	}
+	else
+	{
+	     slotProcessExited(0);
+             return;
+       	}
   }
   
-  //ok it follows some stupid code, but it works:-) --Sandy 
-  kde_test=false;
+  //  test also autoconfified documentation path
   config->setGroup("Doc_Location");
-  QString dir = "/opt/kde/share/doc/HTML/en/kdelibs/"; // normal dists :-)
- 
-  QString kde_testfile=dir+"kdecore/index.html"; // test if the path really is the kde-doc path
+  QString dir=config->readEntry("doc_kde", KDELIBS_DOCDIR);
+  kde_test=true;
 
-  if(QFileInfo(kde_testfile).exists()){
+  QString kde_testfile; // for tests if the path really is the kde-doc path
+  char *kde_dirs[]={"/opt/kde/share/doc/HTML/en/kdelibs", // normal dist
+		"/usr/share/doc/kdelibs", // Redhat 6.0
+		"/usr/local/kde/share/doc/kdelibs",  // other locations
+		0l };
+
+  // first check the autoconfified path
+  if(kde_test && !dir.isEmpty())
+  {
+    kde_testfile=dir+"/kdecore/index.html";
+
+    if(QFileInfo(kde_testfile).exists())
+      kde_test=false;
+  }
+
+  for (i=0; kde_dirs[i]!=0l && kde_test; i++)
+  {
+    dir = kde_dirs[i];
+    kde_testfile=dir+"/kdecore/index.html";
+
+    if(QFileInfo(kde_testfile).exists())
+      kde_test=false;
+  };
+
+  if (!kde_test) {
     config->writeEntry("doc_kde",dir);
-    kde_test=true;
-  }
-
-  if(!kde_test){
-    dir = "/usr/share/doc/kdelibs/"; // Redhat 6.0
-    kde_testfile=dir+"kdecore/index.html"; 
-    
-    if(QFileInfo(kde_testfile).exists()){
-      config->writeEntry("doc_kde",dir);
-      kde_test=true;
-    }
-  }
-  if(!kde_test){
-    dir = "/usr/local/kde/share/doc/kdelibs/"; // another kde location
-    kde_testfile=dir+"kdecore/index.html"; 
-
-    if(QFileInfo(kde_testfile).exists()){
-      config->writeEntry("doc_kde",dir);
-      kde_test=true;
-    }
-  }
-  
-  if (kde_test) {
     KMsgBox::message(0, i18n("KDE-Library Documentation found"),i18n("\nThe KDE-Library-Documentation has been found at:\n\n"+dir
 								     +"\n\nThe correct path has been set.\n "),KMsgBox::INFORMATION);
      slotProcessExited(0);
      return; //ok, nothing more to do, we are leaving	
   }
   
-
-
-
 
   QDir* kde_dir=new QDir();
 
