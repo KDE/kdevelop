@@ -1,3 +1,7 @@
+2004-03-15 Jens Dagerbo <jens.dagerbo@swipnet.se>
+    * NewMainWindow is now enabled by default
+	* Added settings in "User Interface" for TabWidget visibility and IDEAl mode button layout
+	
 2004-03-12 Jens Dagerbo <jens.dagerbo@swipnet.se>
     * Added NewMainWindow - a new MainWindow implementation - enable in toplevel.cpp to try it out.
 	* Major cleanup of PartController::editDocument()
