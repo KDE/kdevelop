@@ -150,14 +150,16 @@ void Core::initActions()
                           actionCollection(), "file_revert_all");
     _revertAll->setEnabled(false);
 
-    action = new KAction( i18n("&Close window"), Key_F4,
+    _closeWindow = new KAction( i18n("&Close window"), Key_F4,
                           this, SLOT(slotCloseWindow()),
                           actionCollection(), "file_closewindow" );
-
-    action = new KAction( i18n("&Kill buffer"), 0,
+    _closeWindow->setEnabled(false);
+    
+    _killBuffer = new KAction( i18n("&Kill buffer"), 0,
                           this, SLOT(slotKillBuffer()),
                           actionCollection(), "file_killbuffer" );
-    
+    _killBuffer->setEnabled(false);
+
     action = new KAction( i18n("&Open project..."), "project_open", 0,
                           this, SLOT(slotProjectOpen()),
                           actionCollection(), "project_open" );
@@ -301,16 +303,21 @@ void Core::partCountChanged()
   // enable/disable actions according to the part status
   
   bool rw_parts = false;
-
+  bool ro_parts = false;
+  
   QListIterator<KParts::Part> it(*partManager()->parts());
   for ( ; it.current(); ++it)
   {
       if (it.current()->inherits("KParts::ReadWritePart"))
           rw_parts = true;
+      if (it.current()->inherits("KParts::ReadOnlyPart"))
+          ro_parts = true;
   }
 
   _saveAll->setEnabled(rw_parts);
-  _revertAll->setEnabled(rw_parts);               
+  _revertAll->setEnabled(rw_parts);
+  _closeWindow->setEnabled(ro_parts);
+  _killBuffer->setEnabled(ro_parts);
 }
 
 

@@ -123,7 +123,7 @@ private:
     KURL::List viewedURLs;
     QString projectFile;
 
-    KAction *_saveAll, *_revertAll;
+    KAction *_saveAll, *_revertAll, *_closeWindow, *_killBuffer;
 
 };
 
