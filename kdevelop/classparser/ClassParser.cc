@@ -174,14 +174,14 @@ void CClassParser::parseClassHeader()
 void CClassParser::parseType( QString *aStr )
 {
   bool isConst = false;
-  bool exit=false;
+  bool exit = false;
 
   if( lexem == CONST )
   {
+    isConst = true;
     getNextLexem();
   }
-
-  // Start off with saving the type.
+  
   *aStr = lexer->YYText();
   *aStr += " ";
 
@@ -296,35 +296,6 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
     scopedepth++;
 }
 
-/*--------------------------- CClassParser::isConstructorDestructor()
- * isConstructorDestructor()
- *   Is the string the name of a constructor or destructor?
- *
- * Parameters:
- *   str          String to check.
- *
- * Returns:
- *   bool         The result.
- *-----------------------------------------------------------------*/
-bool CClassParser::isConstructorDestructor( const char *str )
-{
-  assert( str != NULL && strlen( str ) > 0 );
-
-  bool retVal = false;
-
-  if( isDefiningClass )
-  {
-    if( str[0] == '~' && currentClass->name == (const char *)&str[1] )
-      retVal = true;
-    else
-      retVal = ( currentClass->name == str );
-  }
-  else
-    retVal = ( store.getClassByName( ( str[0] == '~' ? (const char *)str[1] : str ) ) != NULL );
-
-  return retVal;
-}
-
 /*------------------------------------- CClassParser::parseModifier()
  * parseModifier()
  *   Checks for virtal/static... declarations.
@@ -343,7 +314,7 @@ void CClassParser::parseModifiers( CParsedMethod *method )
       case STATIC:
         method->setIsStatic( true );
         break;
-      case VIRTUAL:
+      case CPVIRTUAL:
         method->setIsVirtual( true );
         break;
     }
@@ -453,10 +424,15 @@ void CClassParser::parseDeclaration()
   // Check modifiers( virtual/static ).
   parseModifiers( method );
 
-  // Check if this is a constructor or destructor.
-  if( !isConstructorDestructor( lexer->YYText() ) )
-    // Get the type declaration.
-    parseType( &type );
+  // Parse the type
+  parseType( &type );
+
+  // Function with no returntype.
+  if( lexem == '(' || ( !isDefiningClass && lexem == CLCL) )
+  {
+    declName = type;
+    type = "";
+  }
 
   // Set the line on which the function is defined/declared.
   declLine = lexer->lineno() - 1;
@@ -468,19 +444,25 @@ void CClassParser::parseDeclaration()
     getNextLexem();
 
     parseType( &type );
-    type.stripWhiteSpace();
     type = classPrefix + "::" + type;
   }
 
   // Save the variable/functionname.
-  declName = lexer->YYText();
-  
-  getNextLexem();
+  if( lexem == ID )
+  {
+    declName = lexer->YYText();
+    getNextLexem();
+  }
 
   switch( lexem )
   {
     case ';': // Variable 
       isAttr = true;
+      break;
+    case ':': // Bit declared variable
+      isAttr = true;
+      // Skip bit specification.
+      getNextLexem();
       break;
     case '[': // Array start
       isAttr = true;
@@ -649,6 +631,11 @@ void CClassParser::parseToplevel()
     // To parse toplevel definitions.
     switch( lexem )
     {
+      case CPSTRUCT:
+        // Skip until end of declaration.
+        while( lexem != ';' )
+          getNextLexem();
+        break;
       case CLASS:
         getNextLexem();
         if( lexem == ID )
@@ -708,7 +695,21 @@ void CClassParser::parseToplevel()
             isDefiningClass = false;
         }
         break;
-      case CONST: // Const indicates start of a declaration
+      case CPFRIEND:
+        if( isDefiningClass )
+        {
+          getNextLexem();
+          if( lexem == CLASS )
+          {
+            getNextLexem();
+            currentClass->addFriend( lexer->YYText() );
+          }
+          else if( declaredScope != -1 && scopedepth == 1 )
+            parseDeclaration();
+        }
+        break;
+      case CPVIRTUAL: // Virtual indicates start of a declaration.
+      case CONST: // Const indicates start of a declaration.
       case ID:
         // Only threat declarations within a class or at 
         // toplevel.
