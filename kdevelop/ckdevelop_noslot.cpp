@@ -694,7 +694,11 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload, bool bShowModi
 //   connect(new_editorview->editorsecondview->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   
   
-  mdi_main_frame->addWindow( new_editorview, true);
+  mdi_main_frame->addWindow( new_editorview,  // the view pointer
+                             true,            // show it
+			     true,            // attach it
+			     false,           // don't show it maximized
+			     0);              // initial geometry rectangle, 0 means minimumSize()
   if(maximize){
     new_editorview->maximize(true);
   }

@@ -200,7 +200,11 @@ void CKDevelop::initView(){
   // let's go
   browser_widget = browser_view->browser;
   browser_widget->setFocusPolicy(QWidget::StrongFocus);
-  mdi_main_frame->addWindow(browser_view,true);
+  mdi_main_frame->addWindow(browser_view, // the view pointer
+                            true,         // show it
+			    true,         // attach it
+			    false,        // don't show it maximized
+			    0);           // initial geometry rectangle, 0 means minimumSize()
 
   // maybe we should make this configurable :-)
   mdi_main_frame-> m_pMdi->setBackgroundPixmap(QPixmap(locate("wallpaper","Magneto_Bomb.jpg")));
