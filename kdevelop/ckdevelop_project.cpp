@@ -724,7 +724,6 @@ void CKDevelop::slotProjectGenerate(){
     return;
   }
   slotStatusMsg(i18n("Generating project file..."));
-  QString old_project="";
   QString dir;
 
   dir = KFileDialog::getDirectory(QDir::currentDirPath());
@@ -742,6 +741,7 @@ void CKDevelop::slotProjectGenerate(){
       return;
     }
   }
+  QDir::setCurrent(dir);
   QDir directory(dir);
   QString relDir=directory.dirName();
   QString file =relDir+".kdevprj";
@@ -751,8 +751,6 @@ void CKDevelop::slotProjectGenerate(){
                                                               "already contains a KDevelop Project file!\n"
                                                                             "Overwrite ?"),KMsgBox::EXCLAMATION); 	
   if(result){
-
-
     showOutputView(true);
     setToolMenuProcess(false);
     messages_widget->clear();
@@ -760,26 +758,11 @@ void CKDevelop::slotProjectGenerate(){
 
     shell_process.clearArguments();
     shell_process << QString("cd '")+dir +"' && ";
-    shell_process <<  "kimport > "+file;
+    shell_process <<  "kimport | tee  "+file;
     shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
     beep = true;
+    next_job="load_new_prj";
   }
-
-//  if(project)		//now that we know that a new project will be built we can close the previous one 	{
-//  {
-//    old_project = prj->getProjectFile();
-//   	if(!slotProjectClose())				//the user may have pressed cancel in which case the state is undetermined
-//		{
-//			readProjectFile(old_project);
-//			slotViewRefresh();
-//		}
-// 	  else
-//		{
-//      readProjectFile(file);
-//      slotViewRefresh();		// a new project started, this is legitimate
-//		}
-// 	
-// 	}
   slotStatusMsg(i18n("Ready."));
 }
 
