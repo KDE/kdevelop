@@ -950,7 +950,8 @@ void Core::slotOpenFile()
 {
 #if 1
     QString fileName = KFileDialog::getOpenFileName();
-    openFileInteractionFinished(fileName);
+    if (!fileName.isEmpty())
+        openFileInteractionFinished(fileName);
 #else
     // currently broken
     FileNameEdit *w = new FileNameEdit(i18n("Open file:"), win->statusBar());
