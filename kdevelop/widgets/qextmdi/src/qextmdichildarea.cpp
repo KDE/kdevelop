@@ -182,7 +182,7 @@ void QextMdiChildArea::setTopChild(QextMdiChildFrm *lpC,bool bSetFocus)
          // first maximize the new view
          lpC->setState(QextMdiChildFrm::Maximized, bDontAnimate);
          lpC->m_pClient->resize(size());
-         qApp->processOneEvent();
+         qApp->sendPostedEvents();
          // then restore the old maximized view in background
          pMaximizedChild->setState(QextMdiChildFrm::Normal, bDontAnimate);
          qApp->processOneEvent();
