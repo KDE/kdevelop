@@ -1,3 +1,9 @@
+kdevelop (1:2.0b1-2) unstable; urgency=low
+
+  * Renamed debian doc-base entries to standard ones.
+
+ -- Christian Couder <chcouder@club-internet.fr>  Mon, 23 Jul 2001 22:58:54 +0100
+
 kdevelop (1:2.0b1-1) unstable; urgency=low
 
   * New release
