@@ -218,12 +218,11 @@ RPM's, so daß Sie keine Probleme haben sollten, die benötigte zusätzliche Softwa
 Um die <idx/KDE/ Bibliotheks-Dokumentation zu erstellen, benötigen Sie das kdelibs Paket im Quellcode, wie es vom KDE Projekt
 bereitgestellt wird oder in den Quellpaketen ihrer Distribution enthalten ist und <bf/KDoc/ (enthalten im <idx/KDE-SDK/).
 
-Zusätzlich bieten wir eine C/C++ Referenz auf unserer Homepage auf <htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"> an, die
-nach ihrer Installation im Dokumentationsbrowser verfügbar ist. Laden Sie das Paket herunter und kopieren Sie es als <tt/root/ in Ihr
-<idx/KDE/ Verzeichnis und entpacken Sie es mit <tt/tar zxvf c_c++_reference.tar.gz/. Bei Nichtinstallation zeigt die Auswahl der
-Referenz im Dokumentationsbaum eine Fehlerseite an mit der URL der KDevelop Homepage, auf der Sie das Paket erhalten können, und
-beschreibt den Installationsvorgang.
+Zusätzlich bieten wir eine C/C++ Referenz auf unserer Homepage auf <htmlurl url="http://www.kdevelop.org"
+name="http://www.kdevelop.org"> an, die nach ihrer Installation im Dokumentationsbrowser verfügbar ist. Laden Sie das Paket herunter
+und kopieren Sie es als <tt/root/ in Ihr <idx/KDE/ Verzeichnis und entpacken Sie es mit <tt/tar zxvf c_c++_reference.tar.gz/. Bei
+Nichtinstallation zeigt die Auswahl der Referenz im Dokumentationsbaum eine Fehlerseite an mit der URL der KDevelop Homepage, auf der
+Sie das Paket erhalten können, und beschreibt den Installationsvorgang.
 
 <sect>Compilierung und Installation
 <p>
@@ -926,8 +925,8 @@ Beschreibungen für alle Klassen und Widgets inklusive Beispielcode zu Ihrer Verw
   <item><htmlurl url="http://www.kde.org" name="http://www.kde.org"> für Informationen zum KDE Projekt und Entwicklungshinweisen,
   <item><htmlurl url="http://developer.kde.org" name="http://developer.kde.org"> für zusätzliche Referenzen zur KDE
 Applikationsentwicklung.
-	<item>Auf der KDevelop Homepage <htmlurl url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html"
-name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">   </itemize>
+	<item>Auf der KDevelop Homepage <htmlurl url="http://www.kdevelop.org" name="http://www.kdevelop.org">
+  </itemize>
 </itemize>
 
 <chapt>Übersicht<label id="Übersicht">
@@ -1598,12 +1597,11 @@ url="http://developer.kde.org" name="http://developer.kde.org"> finden. Jedoch k
 Dokumentation ersetzen, die Sie entweder gedruckt oder in elektronischer Form zur C++ Programmiersprache erhalten können, wie auch die
 Verwendung der Qt-Bibliothek.
 
-Die C/C++-Referenz, die KDevelop zur Zeit verwendet ist nur auf der KDevelop Homepage unter <htmlurl
-url="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html" name="http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html">
-erhältlich; bei Distributionen wird diese evtl. mitgeliefert. Sie können diese einfach installieren, indem Sie das Quellpaket beziehen
-und in das Haupt-KDE Verzeichnis kopieren ($KDEDIR). Dort entpacken Sie das Paket als Administrator (root) mit <tt/tar zxvf
-c_c++_reference.tar.gz/, die Referenz wird dann in das Dokumentations-Verzeichnis kopiert. Zur Deinstallation der Referenz löschen Sie
-den Ordner "reference" unter ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
+Die C/C++-Referenz, die KDevelop zur Zeit verwendet ist nur auf der KDevelop Homepage unter <htmlurl url="http://www.kdevelop.org"
+name="http://www.kdevelop.org"> erhältlich; bei Distributionen wird diese evtl. mitgeliefert. Sie können diese einfach installieren,
+indem Sie das Quellpaket beziehen und in das Haupt-KDE Verzeichnis kopieren ($KDEDIR). Dort entpacken Sie das Paket als Administrator
+(root) mit <tt/tar zxvf c_c++_reference.tar.gz/, die Referenz wird dann in das Dokumentations-Verzeichnis kopiert. Zur Deinstallation
+der Referenz löschen Sie den Ordner "reference" unter ($KDEDIR)/share/doc/HTML/default/kdevelop/reference.
 
 Der Qt/KDE-Bibliotheks-Dokumentationsordner erlaubt Ihnen den direkten Zugriff auf die HTML-Online-Dokumentation Ihrer Kopie der
 Qt-Bibliothek. Der Pfad zur Bibliotheksdokumentation wird für gewöhnlich durch das KDevelop Installationsprogramm ermittelt, Sie können
