@@ -30,7 +30,7 @@
 class GrepListBoxItem : public ProcessListBoxItem
 {
 public:
-    GrepListBoxItem(const QString &s1, const QString &s2, const QString &s3);
+    GrepListBoxItem(const QString &s1, const QString &s2, const QString &s3, bool showFilename);
     QString filename()
         { return str1; }
     int linenumber()
@@ -40,17 +40,20 @@ public:
 private:
     virtual void paint(QPainter *p);
     QString str1, str2, str3;
+    bool show;
 };
 
 
 GrepListBoxItem::GrepListBoxItem(const QString &s1,
                                  const QString &s2,
-                                 const QString &s3)
+                                 const QString &s3,
+                                 bool showFilename)
     : ProcessListBoxItem(s1+s2+s3, Normal)
 {
-    str1 = s1;
-    str2 = s2;
+    str1 = s1; // filename 
+    str2 = s2; 
     str3 = s3;
+    show = showFilename;
 }
 
 
@@ -63,24 +66,28 @@ bool GrepListBoxItem::isCustomItem()
 void GrepListBoxItem::paint(QPainter *p)
 {
     QFontMetrics fm = p->fontMetrics();
+    QString stx = str2.right(str2.length()-1);
     int y = fm.ascent()+fm.leading()/2;
     int x = 3; 
-
-    p->setPen(Qt::darkGreen);
-    p->drawText(x, y, str1);
-    x += fm.width(str1);
-    
+	if (show)
+	{
+		p->setPen(Qt::darkGreen);
+		p->drawText(x, y, str1);
+		x += fm.width(str1);
+    }
+    else {
     p->setPen(Qt::black);
     QFont font1(p->font());
     QFont font2(font1); 
     font2.setBold(true);
     p->setFont(font2);
-    p->drawText(x, y, str2);
+    p->drawText(x, y, stx);
     p->setFont(font1);
-    x += fm.width(str2);
+    x += fm.width(stx);
     
     p->setPen(Qt::blue);
     p->drawText(x, y, str3);
+	}
 }
 
 
@@ -210,7 +217,7 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
 {
     int pos;
     QString filename, linenumber, rest;
-
+    
     QString str = line;
     if ( (pos = str.find(':')) != -1)
         {
@@ -220,7 +227,17 @@ void GrepViewWidget::insertStdoutLine(const QString &line)
                 {
                     linenumber = str.left(pos);
                     str.remove(0, pos);
-                    insertItem(new GrepListBoxItem(filename, linenumber, str));
+                    // filename will be displayed only once
+                    // selecting filename will display line 1 of file, 
+                    // otherwise, line of requested search
+                    if (findItem(filename,BeginsWith|ExactMatch) == 0)
+							{
+							 insertItem(new GrepListBoxItem(filename, "1", str, true));
+							 insertItem(new GrepListBoxItem(filename, linenumber, str, false));
+
+							}
+						else insertItem(new GrepListBoxItem(filename, linenumber, str, false)); 
+
                 }
         }
 }
