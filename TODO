@@ -33,6 +33,10 @@ High priority tasks!
   - Trying Java projects results in mysterious error messages
   - Project name should be able to contain spaces
 
+* code completion:
+  - remove the annoying conflict from automatic word completion(abbrevpart)
+    and language specific code completion(like the one in cppsupport)
+
 2. KDevelop 2 compatibility
 ---------------------------
 
