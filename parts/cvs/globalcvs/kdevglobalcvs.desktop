@@ -1,9 +1,0 @@
-[Desktop Entry]
-Encoding=UTF-8
-Type=Service
-Exec=blubb
-Comment=CVS Integration (global)
-Name=KDevGlobalCvs
-ServiceTypes=KDevelop/Plugin
-X-KDE-Library=libkdevglobalcvs
-X-KDevelop-Scope=Global

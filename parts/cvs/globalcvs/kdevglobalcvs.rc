@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevGlobalCvs" version="1">
-<MenuBar>
-  <Menu name="project" >
-    <Action name="cvs_import"/>
-  </Menu>
-</MenuBar>
-</kpartgui>
-
