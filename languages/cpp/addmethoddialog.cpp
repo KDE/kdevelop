@@ -48,6 +48,11 @@ AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ClassDom klass,
 {
     QString fileName = m_klass->fileName();
 
+    access->insertStringList( QStringList() << "Public" << "Protected" << "Private" << "Signals" <<
+		"Public Slots" << "Protected Slots" << "Private Slots" );
+    
+    storage->insertStringList( QStringList() << "Normal" << "Static" << "Virtual" << "Pure Virtual" << "Friend" );
+    
     // setup sourceFile combo
     QMap<QString, bool> m;
 #if 0 /// FIXME: ROBE

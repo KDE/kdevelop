@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AddMethodDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>613</width>
-            <height>566</height>
+            <height>568</height>
         </rect>
     </property>
     <property name="caption">
@@ -196,31 +196,6 @@
                             <cstring>unnamed</cstring>
                         </property>
                         <widget class="QComboBox" row="1" column="1">
-                            <item>
-                                <property name="text">
-                                    <string>Normal</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Static</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Virtual</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Pure Virtual</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Friend</string>
-                                </property>
-                            </item>
                             <property name="name">
                                 <cstring>storage</cstring>
                             </property>
@@ -256,41 +231,6 @@
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
-                            <item>
-                                <property name="text">
-                                    <string>Public</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Protected</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Private</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Signals</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Public Slots</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Protected Slots</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Private Slots</string>
-                                </property>
-                            </item>
                             <property name="name">
                                 <cstring>access</cstring>
                             </property>

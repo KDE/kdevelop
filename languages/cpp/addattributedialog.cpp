@@ -44,6 +44,10 @@ AddAttributeDialog::AddAttributeDialog(CppSupportPart* cppSupport, ClassDom klas
 				 QWidget* parent, const char* name, bool modal, WFlags fl)
     : AddAttributeDialogBase(parent,name, modal,fl), m_cppSupport( cppSupport ), m_klass( klass ), m_count( 0 )
 {
+    access->insertStringList( QStringList() << "Public" << "Protected" << "Private" );
+    
+    storage->insertStringList( QStringList() << "Normal" << "Static" );
+	
     returnType->setAutoCompletion( true );
     returnType->insertStringList( QStringList()
 	    << "void"

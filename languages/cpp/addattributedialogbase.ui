@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AddAttributeDialogBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>619</width>
-            <height>411</height>
+            <height>413</height>
         </rect>
     </property>
     <property name="caption">
@@ -185,16 +185,6 @@
                             <cstring>unnamed</cstring>
                         </property>
                         <widget class="QComboBox" row="1" column="1">
-                            <item>
-                                <property name="text">
-                                    <string>Normal</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Static</string>
-                                </property>
-                            </item>
                             <property name="name">
                                 <cstring>storage</cstring>
                             </property>
@@ -222,21 +212,6 @@
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
-                            <item>
-                                <property name="text">
-                                    <string>Public</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Protected</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Private</string>
-                                </property>
-                            </item>
                             <property name="name">
                                 <cstring>access</cstring>
                             </property>
