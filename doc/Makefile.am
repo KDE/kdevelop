@@ -1,2 +1,2 @@
-SUBDIRS = kdevelop tools kde2book libc stl 3rdparty
+SUBDIRS = kdevelop kdearch kde2book tools libc stl 3rdparty
 
