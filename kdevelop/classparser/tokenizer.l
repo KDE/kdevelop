@@ -65,6 +65,9 @@ SCHAR        [^"\\\n]|{ESCAPE_SEQUENCE}
 "struct"        {return CPSTRUCT;}
 "ON_CMD"        {return SIGNALSLOT_MAP;}
 "ON_STATUS_MSG" {return SIGNALTEXT_MAP;}
+"BEGIN_STATUS_MSG" {return CPBEGINSTATUSMSG;}
+"END_STATUS_MSG" {return CPENDSTATUSMSG;}
+
 
 
     /*==============> Ignore Q_EXPORT:s <==============*/

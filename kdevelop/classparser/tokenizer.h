@@ -60,6 +60,8 @@
 #define CPTYPEDEF      275
 #define CPFRIEND       276
 #define CPSTRUCT       277
+#define CPBEGINSTATUSMSG 278
+#define CPENDSTATUSMSG 279
 typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;
