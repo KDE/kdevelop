@@ -732,12 +732,15 @@ void CKDevelop::slotProjectGenerate(){
   }
   QString qt_testfile=dir+"Makefile.am"; // test if the path contains a Makefile.am
   if(!QFileInfo(qt_testfile).exists()){
-    KMessageBox::error(this,i18n("The chosen path does not lead to a\n"
+    if (KMessageBox::questionYesNo(this,i18n("The chosen path does not lead to a\n"
                                  "directory containing a Makefile.am\n"
-                                 "to create a Project file from"),
-                            i18n("The selected path is not correct!")); 	
-    slotStatusMsg(i18n("Ready."));
-    return;
+                                 "to create a Project file from.\n"
+                                 "Are you sure this is the correct path?\n"),
+                            i18n("The selected path may not correct!")) != KMessageBox::Yes)
+    {
+      slotStatusMsg(i18n("Ready."));
+      return;
+    }
   }
 
   QDir::setCurrent(dir);
@@ -762,8 +765,15 @@ void CKDevelop::slotProjectGenerate(){
   error_parser->toogleOff();
 
   shell_process.clearArguments();
-  shell_process << QString("cd '")+dir +"' && ";
-  shell_process <<  "kimport -o=" + file + " -b="+relDir;
+  shell_process << "echo"
+                << "'"+dir+"'"
+                << "&&";
+  shell_process << "cd"
+                << "'"+dir+"'"
+                << "&&";
+  shell_process <<  "kimport"
+                << "-o="+file
+                << "-b="+relDir;
   shell_process.start(KProcess::NotifyOnExit, KProcess::AllOutput);
   beep = true;
   next_job="load_new_prj";

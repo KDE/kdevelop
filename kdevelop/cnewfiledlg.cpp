@@ -56,6 +56,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
   list_linux = new QListBox( tab, "list_linux" );
   list_linux->insertItem(i18n("lsm File - Linux Software Map"));
   list_linux->insertItem(i18n("kdelnk-File - for the KDE-Menu"));
+  list_linux->insertItem(i18n("desktop-File - for the KDE-Menu"));
   list_linux->insertItem(i18n("Icon (*.xpm)"));
   list_linux->setMultiSelection( FALSE );
   list_linux->setCurrentItem(0);
@@ -282,6 +283,10 @@ void CNewFileDlg::slotOKClicked(){
     KMessageBox::error(this,i18n("The filename must end with .kdelnk !"));
     return;
   }
+  if ( (fileType() == "DESKTOP") && (text.right(8) != ".desktop")){
+    KMessageBox::error(this,i18n("The filename must end with .desktop !"));
+    return;
+  }
   if ( (fileType() == "EN_SGML") && (text.right(5) != ".sgml")){
     KMessageBox::error(this,i18n("The filename must end with .sgml !"));
     return;
@@ -350,6 +355,10 @@ void CNewFileDlg::slotOKClicked(){
     }
     if (filetype == "KDELNK"){
       generator.genKDELnkFile(complete_filename,prj);
+      type = "DATA";
+    }
+    if (filetype == "DESKTOP"){
+      generator.genDEsktopFile(complete_filename,prj);
       type = "DATA";
     }
     if (filetype == "EN_SGML"){
@@ -441,6 +450,9 @@ QString CNewFileDlg::fileType(){
     if (str == i18n("kdelnk-File - for the KDE-Menu")){
       return "KDELNK";
     }
+    if (str == i18n("desktop-File - for the KDE-Menu")){
+      return "DESKTOP";
+    }
     if (str == i18n("lsm File - Linux Software Map")){
       return "LSM";
     }
@@ -507,6 +519,10 @@ void CNewFileDlg::slotEditTextChanged(const QString& text)
 	if (filetype == "KDELNK" ) 
 	  {
 	    edit->setText(text + QString(".kdelnk"));
+	  }
+	if (filetype == "DESKTOP" ) 
+	  {
+	    edit->setText(text + QString(".desktop"));
 	  }
 	if (filetype == "EN_SGML" ) 
 	  {

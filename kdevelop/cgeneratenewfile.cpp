@@ -308,6 +308,33 @@ QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){
   return file.name();
   
 }
+
+QString  CGenerateNewFile::genDEsktopFile(QString abs_name,CProject* prj){
+  QString template_kdelnk = locate("appdata", "templates/desktop_template");
+  QString project_name = prj->getProjectName().lower();
+  QString str;
+  QStrList list;
+  
+  QFile file(template_kdelnk);
+  QTextStream stream(&file);
+  if(file.open(IO_ReadOnly)){ // read the kdelnk_template
+    while(!stream.eof()){
+      list.append(stream.readLine());
+    }
+  }
+  file.close();
+
+  file.setName(abs_name);
+  if(file.open(IO_WriteOnly)){
+    for(str = list.first();str !=0;str = list.next()){
+      str.replace(QRegExp("\\|PRJNAME\\|"),project_name);
+      stream << str << "\n";
+    }
+  }
+  file.close();  
+  return file.name();
+}
+
 QString  CGenerateNewFile::genLSMFile(QString abs_name,CProject* prj){
   QString template_lsm = locate("appdata", "templates/lsm_template");
 /*

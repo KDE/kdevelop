@@ -21,13 +21,13 @@ use File::Find;
 use File::Basename;
 use Sys::Hostname;
 
-sub processDir();
+sub processDir($);
 sub addSource($);
 sub addHeader($);
 sub addData($);
 sub addGeneral();
 
-$version            = "v0.1";
+$version            = "v0.2";
 $debug              = 0;
 $thisProg           = "$0";     # This programs name
 $topdir             = "";
@@ -89,17 +89,21 @@ while (defined ($ARGV[0]))
     }
 }
 
-
-
 die ("Must enter an output filename\n")    if (!$outfile);
+
 $topdir       = cwd();
-$printTopdir  = basename($topdir);
 $binfile      = basename($topdir)    if (!$binfile);
+
+find (\&buildDirList, ('.'));
 
 open (FILEOUT, "> $outfile") or die ("Could not open $outfile: $!\n");
 print FILEOUT "# KDE Config File\n";
 
-processDir();
+foreach $file (@dirs)
+{
+  processDir($file);
+}
+
 addGeneral();
 
 close FILEOUT;
@@ -108,37 +112,42 @@ close FILEOUT;
 
 #-----------------------------------------------------------------------------
 
-sub processDir()
+sub buildDirList
 {
+  # add restrictions here for which dirs to process
+  return if (!-d);
+  return if ($File::Find::name =~ /CVS$|.deps$|.libs$/);
+
+  push (@dirs, $File::Find::name);
+}
+
+#-----------------------------------------------------------------------------
+
+sub processDir($)
+{
+    my ($reldir)=@_;
     my @subdirs=();
     my @files=();
     my $file="";
     my $type="normal";
     my $subdirs="";
 
-    opendir (DIR, ".") or die ("Can't open dir: $!");
-
-    $reldir = cwd();
-    $reldir =~ s/$topdir\/?//;
+    $reldir =~ s/^\.\///;
     $reldir = "$reldir/"    if ($reldir);
-
     $type="po" if ($reldir =~ /^po\/$/);
+    print "$reldir\n";
 
-    print "$printTopdir/$reldir\n";
+    opendir (DIR, $reldir) or die ("Can't open dir <$reldir>: $!");
 
     push @all_Makefiles, $reldir;
 
     while ( defined ($file = readdir DIR))
     {
-        next if ($file =~ /Makefile|^\.|\.lo$|^CVS$|\.closure$|\.o$|\.a$|\.la$|\.P$|\.moc$|\.moc\.(.*)$|meta_unload.cpp$/);
+        # restrict which files are added to the project file.
+        # Note: this restricts the subdir line as well.
+        next if ($file =~ /^CVS$|Makefile|^\.|\.lo$|\.closure$|\.o$|\.a$|\.la$|\.P$|\.moc$|\.moc\.(.*)$|meta_unload.cpp$/);
 
-        if (-d $file)
-        {
-            # If you need to restrict the subdirs then add the
-            # check in here (note the example code commented out)
-            push @subdirs, $file; #            if (-f "$file/Makefile.am");
-            next;
-        }
+        push @subdirs, $file, next  if (-d $file);
 
         if ($file =~ /^$binfile$/)
         {
@@ -174,15 +183,15 @@ sub processDir()
     print FILEOUT "sub_dirs=$subdirs\n";
 
     @root_subdirs = @subdirs    if (!$reldir);
-    if (@subdirs)
-    {
-        foreach $subdir (@subdirs)
-        {
-            chdir($subdir) or die ("Failed to change dir:$!\n");
-            processDir();
-            chdir("..");
-        }
-    }
+#    if (@subdirs)
+#    {
+#        foreach $subdir (@subdirs)
+#        {
+#            chdir($subdir) or die ("Failed to change dir to $subdir:$!\n");
+#            processDir();
+#            chdir("..");
+#        }
+#    }
     return 0;
 }
 
