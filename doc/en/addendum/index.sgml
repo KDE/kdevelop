@@ -43,21 +43,28 @@ Ralf Nolden
 
 David Sweet &lt;dsweet@chaos.umd.edu&gt;
 
-July 1, 1999
+August 14, 1999
 
 <em>
-To help develop KDE or a KDE application you need to know how to (i) find KDE information and code, (ii) use CVS, and (iii)
+To help develop KDE or a KDE application you need to know
+how to
+(i) find KDE information and code, (ii) use CVS, and (iii)
 compile. This document aims to help to you do these things without
-losing too much hair. This mini-HOWTO is geared toward new developers, occasional
-developers, and anyone those considering contributing the
-the most excellent free software project that is KDE.  It addresses questions that I and others have been asking on
-the <bf/kde-devel/ mailing list recently along with some more general
-information. You can find a current version of this document at
-<htmlurl url="http://www.chaos.umd.edu/~dsweet/KDE/DevelMiniHOWTO.txt"
-name="http://www.chaos.umd.edu/~dsweet/KDE/DevelMiniHOWTO.txt">. To contribute, comment, or correct, please email me
-dsweet@chaos.umd.edu </em>
+losing too much hair.
+This HOWTO is geared toward new developers, occasional
+developers, and anyone considering contributing the the most excellent
+free software project that is KDE.  It addresses questions that I and
+others have been asking on the <bf/kde-devel/ mailing list recently
+along with some more general information.
+You can find a current version of this document at the
+<htmlurl url="http://www-chaos.umd.edu/~dsweet/KDE/DeveloperHOWTO"
+name="KDE Developer's HOWTO homepage">.
+To contribute, comment, or correct, please email me at
+<htmlurl url="mailto:dsweet@chaos.umd.edu" name="dsweet@chaos.umd.edu">
+</em>
 
 <sect>Information and Source Code
+
 
 <sect1>General Information
 <p>
@@ -67,19 +74,21 @@ to the project.  You can write new code, improve old code, write
 documentation, translate to other languages, create artwork, sounds, &
 music, report bugs, and suggest new features.  If you would like to
 develop code, read on.  If you would like to contribute in another
-way, please visit the KDE web site (www.kde.org) for more information.
+way, please visit the KDE web site (<htmlurl url="http://www.kde.org"
+> name="http://www.kde.org">) for more information.
 
-KDE uses the Qt toolkit which is developed by Troll Tech
-(www.troll.no). The main components of the desktop are a file manager
-(kfm), window manager (kwm), and panel (kpanel).  There are many more
-utilities and applications which are included in the base distribution
-and available elsewhere.
+KDE uses the Qt toolkit which is developed by Troll Tech (<htmlurl
+url="http://www.troll.no" name="http://www.troll.no">). The main
+components of the desktop are a file manager (kfm), window manager
+(kwm), and panel (kpanel).  There are many more utilities and
+applications which are included in the base distribution and available
+elsewhere.
 
 The primary programming language used for development is C++, although
 bindings are available for Python (pyKDE).  The KDE code consists of libraries
 containing classes for, for example: (libkdecore) an application base
 (KApplication), accessing configuration files (KConfig), launching
-external process (KProcess); (libkdeui) widgets (KEdit, KFontDialog,
+external processs (KProcess); (libkdeui) widgets (KEdit, KFontDialog,
 KToolBar, etc.); and other utility classes like KFileDialog (a file
 dialog) and KSpell (a spellchecker).  Various desktop, configuration,
 and system administration utilities are also included in the
@@ -87,14 +96,21 @@ distribution.  These are some of the things KDE developers work on.  A
 more recent creation is KOffice, a productivity suite which includes a
 word processor, spreadsheet, and presentation tool.
 
-The currently released version of KDE is 1.1.1.  KDE 1.2 will
+The currently released version of KDE is 1.1.1.  KDE 1.1.2 (that's
+right, 1.1.2 is the name, not 1.2, according to release schedule
+announcments made to <bf/kde-devel/ by Matthias Hoelzer-Kluepfel) will
 introduce theme support (which allows users to dramatically change the
-appearance of their desktops), a development tool for KDE developers,
-and include bugfixes.  One should expect KDE 1.2 to be released in
-mid-July.  KDE 2.0, which is, perhaps, the main focus of
-development right now, will include rewrites or major updates of kfm,
-khtmlw (an HTML widget), kpanel, kmail & maybe kwm, unicode support,
-and much more.
+appearance of their desktops), an integrated development environment,
+KDevelop, and other development tools for KDE developers, and include
+bugfixes.  The KDE 1.1.2 release schedule current reads:
+<itemize>
+<item>Source .tgz's:  August 30
+<item>Binary .rpm's:  September 6
+</itemize>
+
+KDE 2.0, which is, perhaps, the main focus of development right now, will
+include rewrites or major updates of kfm, khtmlw (an HTML widget),
+kpanel, kmail, and maybe kwm, unicode support, and much more.
 
 KDE 2.0 requires mico, a free CORBA implementation.  CORBA is used to
 make the new kfm (dubbed Konquerer) easily extensible and to create a
@@ -102,59 +118,66 @@ document-centric user interface for KOffice.  The user can, for
 example, embed a chart created and edited with KSpread into a document
 which has text created and edited by KWord.  Here's a bit from Simon
 Hausmann about KOM/OpenParts
-
+<verb>
  OpenParts is based on KOM. It provides an easy way to graphically
   embed other application's "widgets" , provides a clever way to manage
   shared GUI elements, together with a CORBA/KOM interface/implementation of
   these, and it implements the basic support for the document view model,
   extensively used by KOffice.
+</verb>
 See kdenonbeta/corbadoc/komop.html in CVS for more.
 
 <sect1>URLs
 <p>
-The main KDE web site is at:  http://www.kde.org
-See the "Developer information" section in the navigation side bar.
-Bug reports can be found at:  http://bugs.kde.org
-Troll Tech (makers of the Qt toolkit) main site:  http://www.troll.no
-
-KDE Source Code and binaries:  ftp://ftp.kde.org  (or mirrors)
-Qt  Source Code and binaries:  ftp://ftp.troll.no
-
-CORBA Info: http://www.omg.org/
-A good CORBA paper: http://www.cs.wustl.edu/~schmidt/vinoski.ps.gz
-MICO: http://diamant-atm.vsb.cs.uni-frankfurt.de/~mico/   (Read the documentation,  it's good!  And get version 2.2.7!)
-OpenParts/KOM: http://www.chaos.umd.edu/~dsweet/KDE/KTrans/KOM
-
+<list>
+<item>The main KDE web site is at:  <htmlurl url="http://www.kde.org"
+ name="http://www.kde.org">.
+<item>The developer's library is at:   <htmlurl url="http://developer.kde.org"
+ name="http://developer.kde.org">.
+<item> Bug reports can be found at (and sent to):  <htmlurl url="http://bugs.kde.org" name="http://bugs.kde.org">.
+<item> Troll Tech (makers of the Qt toolkit) main site:   <htmlurl url="http://www.troll.no" name="http://www.troll.no">.
+<item> KDE Source Code and binaries:   <htmlurl url="ftp://ftp.kde.org"
+ name="ftp://ftp.kde.org">  (or mirrors)
+<item> Qt Source Code and binaries:  <htmlurl url="ftp://ftp.troll.no" name="ftp://ftp.troll.no">
+<item> CORBA Info: <htmlurl url="http://www.omg.org/" name="http://www.omg.org/">
+<item> A good CORBA paper (IMHO): <htmlurl url="http://www.cs.wustl.edu/~schmidt/vinoski.ps.gz" name="http://www.cs.wustl.edu/~schmidt/vinoski.ps.gz">
+<item> MICO:  <htmlurl url="http://diamant-atm.vsb.cs.uni-frankfurt.de/~mico/" name="http://diamant-atm.vsb.cs.uni-frankfurt.de/~mico/"> (Read the documentation,  it's good!  And get version 2.2.7!)
+<item> OpenParts/KOM and other KDE 2.0 information: <htmlurl url="http://developer.kde.org/documentation/library/kde-2.0.html" name="http://developer.kde.org/documentation/library/kde-2.0.html">
+</list>
 
 <sect1>Mailing lists
 <p>
-The list kde-devel is for KDE developers in general.  The koffice
-mailing list is for developers interested in koffice, and kfm-devel is
+The list <bf/kde-devel/ is for KDE developers in general.  The <bf/kde-koffice/
+mailing list is for developers interested in koffice, and <bf/kfm-devel/ is
 for kfm (the file manager) developers.
 
-Send a message to either kde-devel-request or koffice-request with the
-messag "subscribe myid@myserver" (where myid@myserver stands for your
-email address).  Go to the KDE mail page a click on "Mailing Lists"
-for more information about other KDE mailing lists and the mailing
-list archive.
+Send a message to either <bf/kde-devel-request/ or
+<bf/koffice-request/ with the message "subscribe myid@myserver" (where
+myid@myserver stands for your email address).  Go to the KDE mail page
+a click on "Mailing Lists" for more information about other KDE
+mailing lists and the mailing list archive.
 
-Troll Tech provides a list for users of the Qt 2.0 snapshots
+Toll Tech provides a list for users of the Qt 2.0 snapshots
 (discussed below).  You may subscribe to this by sending an email to
-snapshot-users-request@troll.no with the _message_ "subscribe".
+snapshot-users-request@troll.no with the <em/message/ "subscribe".
 
 
 As a KDE developer you may want or need a kde email address, like
-joedeveloper@kde.org.  To obtain one, send an email to Martin Konold at
-konold@kde.org.
+joedeveloper@kde.org.  To obtain one, send an email with a polite request to Martin Konold at konold@kde.org.
 
-To gain access to the KDE CVS respository (discussed below), send an
-email with an encrypted password to Stephan Kulow &lt;coolo@kde.org&gt;.
+To gain access to the KDE CVS respository (discussed below), you firsly need
+to have a good reason for wanting access.  For example, you may be maintaining
+a CVS module.  If you think you have a good reason, send a polite email request
+to Stephan Kulow &lt;coolo@kde.org&gt;.
 
-To get your encrpyted password, type:
+You'll also need to send him an encrypted password to get the account
+set up.  To create your encrpyted password, type:
+<tscreen><verb>
 	perl -e print\ crypt\('passwd','sa'\)\.\"\\n\"
-where passwd is your choice of password and sa is two random
-characters from the set (a-zA-Z0-9./). The output is the encrypted
-passwd.
+</verb></tscreen>
+where <tt/passwd/ is your choice of password and <tt/sa/ is two random
+characters from the set (a-zA-Z0-9./). The output is your encrypted
+password.
 
 
 <sect>KDE CVS
@@ -191,17 +214,21 @@ and HEAD.  They both are derived from the same code (i.e., if you
 identical source code) but used for different purposes.  Here are some
 branches and descriptions for your reference:
 <itemize>
-<item>	KDE_1_1_1_RELEASE - code that was considered stable, released, and distributed as KDE 1.1.1
-<item>	KDE_1_1_BRANCH - derived from KDE_1_1_1_RELEASE; being developed
-for KDE 1.2 (it's not 1.1.2 anymore!); will include KThememge, KDevelop, and bugfixes; based on Qt 1.44.
-<item>	HEAD - code which will become KDE 2.0.  It is based on Qt 2.0, requires mico, has a new kwm, kpanel, etc.  LOTS of changes.
+<item> KDE_1_1_1_RELEASE - code that was considered stable, released,
+and distributed as KDE 1.1.1
+<item> KDE_1_1_BRANCH - derived from
+KDE_1_1_1_RELEASE; being developed for KDE 1.1.2; will include
+KThemeMgr, KDevelop, and bugfixes; based on Qt 1.42.
+<item> HEAD - code which will become KDE 2.0.  It is based on Qt 2.0, requires mico, has a new kwm, kpanel, etc.  LOTS of changes.
 </itemize>
 
 <sect1> Using <tt/cvs/
 <p>
-The cvs utility is probably on your system.  To learn to use it I
-would recommend reading the man page!  But, I've
-included explanations of some common functions below.
+The cvs utility is probably on your system.  If not, you should visit
+<htmlurl url="http://www.cyclic.com/cyclic-pages/howget.html"
+name="http://www.cyclic.com/cyclic-pages/howget.html"> To learn to use
+it I would recommend reading the man page!  But, I've included
+explanations of some common functions below.
 
 Let's assume for this section that your username is <tt/joedeveloper/.
 As written below you should enter all of these commands from some base
@@ -210,14 +237,22 @@ directory.  (KDE/CVS is not a bad choice!)
 Set the environment variable <tt/CVSROOT/ to
 <tt>:pserver:joedeveloper@cvs.kde.org:/home/kde.</tt>
 
-<bf/Checking out a module/, ex. kdelibs from HEAD
+<bf/Listing CVS modules/
+  You can't do this directly unfortunately.  You can, however, view the contents of the file /home/kde/modules with
+<tscreen><verb>
+        cvs -z6 co -c
+</verb></tscreen>
+
+The <tt/-z6/ option tells the server to compress the code at "level 6"
+before sending it to you.  This may speed things up for you.  (In this
+case, since the module listing is small, it may not matter.)
+
+<bf/Checking out a module/, e.g. kdelibs from HEAD
 <tscreen><verb>
 	cvs -z6 checkout -r HEAD kdelibs
 	cvs -z6 checkout kdelibs
 </verb></tscreen>
 
-The <tt/-z6/ option tells the server to compress the code at "level 6"
-before sending it to you.  This may speed things up for you.
 The -r options tells cvs which branch you want to checkout from.  The
 default is the HEAD branch.
 
@@ -337,7 +372,7 @@ compiled code from the HEAD branch -- as well as Qt 2.0!
 
 <sect1> Compiling Qt 2.0
 <p>
- Let's get Qt 2.0.  (Get the official release version.  It's
+ Let's get Qt 2.0.  (Get the official releascan also be found at e version.  It's
   available now).  Put the sources in KDE/kde-HEAD. To compile the
   code, <tt/cd/ to KDE/kde-HEAD and
 
@@ -346,11 +381,17 @@ compiled code from the HEAD branch -- as well as Qt 2.0!
 	tar -xvf qt-2.00.tar
 	ln -s qt-2.00 qt
 	cd qt
-	setenv QTDIR $PWD     (if you use csh/tcsh, change this for bash)
+	setenv QTDIR $PWD     (if you use csh/tcsh)
+	    OR
+        export QTDIR=`pwd`    (if you use bash)
+	cd configs
+	mv linux-g++-shared linux-g++-shared.orig
+	sed s/-fno-rtti// linux-g++-shared.orig > linux-g++-shared
+(Note, this step may not be needed with the release version of Qt 2.0, but it shouldn't hurt.)
+	make linux-g++-shared
 	make
 </verb></tscreen>
-(<em/Note/: The Qt compilation process has been simplified.  It is now in
-the KDE style.)
+
 You should compare the files configs/linux-g++-shared and
 configs/linux-g++-shared.orig if you don't know what the sed is doing.
 Then look up the -fno-rtti option of <tt/egcs/ if you'd like to learn more.
@@ -361,17 +402,21 @@ Then look up the -fno-rtti option of <tt/egcs/ if you'd like to learn more.
 Now, for the KDE code.  <tt/cd/ to KDE/CVS-HEAD/kdesupport.  Type
 <tscreen><verb>
 	make -f Makefile.cvs
-	./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
---with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib 	make
+	./configure --prefix=/home/joedeveloper/KDE/kde-HEAD
+    --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
+    --with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib
+	make
 If all goes well, then
 	make install
 If not, try to fix things, then type
 	make install
 Repeat this process for the other modules.  You should alter the
 ./configure line to read
-	./configure --prefix=/home/joedeveloper/KDE/kde-HEAD --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
---with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib --enable-new-stuff --enable-tutorials when you compile the code in the kdelibs
-module. </verb></tscreen>
+	./configure --prefix=/home/joedeveloper/KDE/kde-HEAD
+  --with-qt-dir=/home/joedeveloper/KDE/kde-HEAD/qt
+  --with-qt-libs=/home/joedeveloper/KDE/kde-HEAD/qt/lib --enable-new-stuff
+  --enable-tutorials when you compile the code in the kdelibs module.
+</verb></tscreen>
 
 <sect1> Compiling tips
 <p>
@@ -400,7 +445,7 @@ The best way to do this is by writing SGML and processing it with
 You should also document your widgets and other classes.  You can
 include comments in your header ( <tt>.h</tt>) files which describe
 each <tt/public/ or <tt/protected/ method.  It you do this as you
-write the methods it will make the documentation process seem easier.
+write the methods it will make the documentation proceSss seem easier.
 (It may also help you be certain about what function(s) that method is to
 perform.)  The script <tt/kdoc/ will turn your header files into
 beautiful class documentation.  You can see examples of <tt/kdoc/
@@ -419,9 +464,7 @@ The great thing about writing your documents in SGML (<bf/S/tandard
 <bf/G/eneralized <bf/M/arkup <bf/L/anguage) is that you can turn them
 into nice text, HTML, LaTeX or Postscript files.
 
-Right now, <tt/ksgml2html/ doesn't work (for me anyway!), so you
-can process your files with <tt/sgml2html/.  Of course, in either case you'll
-need SGML-Tools which is available from
+You'll need SGML Tools which are available from
 
 <itemize>
 <item> SGML-Tools:  <htmlurl url="http://www.sgmltools.org/" name="http://www.sgmltools.org/">
@@ -435,6 +478,13 @@ If you know HTML, then it's cake.
 
 If you create an application, put the documenation in a subdirectory
 of your source code directory called <tt/doc/.
+
+To process the .sgml file, ex. mydocs.sgml, into KDE-style HTML type
+<tscreen><verb>
+     ksgml2html mydocs.sgml en
+</verb></tscreen>
+where <tt/en/ stands for English.  You should use the code for your
+language.
 
 <sect1> KDOC:  The KDE Class Documentation Tool for C++
 
@@ -492,7 +542,7 @@ its libraries are.)  Type <tt>kdoc -h</tt> for more information.
 
 <sect1> Packaging
 <p>
-'Packaging' means putting your (in this case source) code into some
+'Packing' means putting your (in this case source) code into some
 format that is
 <itemize>
 <item> easy for others to configure and install, and
@@ -553,7 +603,7 @@ AC_OUTPUT(Makefile \
 </verb></tscreen>
 The <tt/po/ directory contains translations of strings that you
 used in your code (this is about i18n(), which is not covered in this
-miniHOWTO).  We'll get to that it a minute.
+HOWTO).  We'll get to that it a minute.
 
 Now we want to set up the Makefile for the kmyapp subdirectory.  Edit
 <tt>kmyapp/Makefile.am</tt> according to the instructions given in the
@@ -648,7 +698,7 @@ Entered-date:   3/1/99
 Description:    GUI and more for RLab
 Keywords:       kde rlab math plot plotting
 Author:         David Sweet &lt;dsweet@chaos.umd.edu&gt;
-Maintained-by:  David Sweet &lt;dsweet@chaos.umd.edu&gt;
+Maintained-by:  David Sweet &lt'dsweet@chaos.umd.edu&gt;
 Home-page:      http://www.glue.umd.edu/~dsweet/KDE/KLab
 Primary-site:   ftp://ftp.kde.org/pub/kde/unstable/apps/scientific
 Alternate-site: http://www.glue.umd.edu/~dsweet/KDE/KLab/
@@ -674,7 +724,7 @@ contact the author.
 
  If you are developing outside of CVS, you can submit your code
 (widgets, applications, etc.) via FTP to
-<htmlurl url="ftp://upload.kde.org/Incoming" name="ftp://upload.kde.org/Incoming">
+<htmlurl url="ftp://upload.kde.org/pub/kde/Incoming" name="ftp://upload.kde.org/pub/kde/Incoming">
 
 When you do this be sure to include an <tt/.lsm/ (Linux Software Map) file.
 This way your code can be automatically placed in the appropriate spot
@@ -691,7 +741,31 @@ expand to a single directory with all of your stuff in it.
 <p>
 I'd like to thank the following people for their suggestions (in no
 particular order): Roberto Alsina, Waldo Bastian, Harri Porten, Samuel
-Wuethrich, Daniel Naber, Martin Konold, and Pietro Iglio.
+Wuethrich, Richard Moore, Daniel Naber, Ralf Nolden, Martin Konold,
+and Pietro Iglio, Stephan Kulow, Junji Takagi.
+
+<sect>About this document
+
+<sect1> Finding
+<p>
+The current version of this document is available at <htmlurl url="http://www.chaos.umd.edu/~dsweet/KDE/MiniHOWTO" name="http://www.chaos.umd.edu/~dsweet/KDE/MiniHOWTO">.
+
+A Japanese language version is available at <htmlurl url="http://www.asahi-net.or.jp/~hc3j-tkg/kde-jp/DevelMiniHOWTO-jp.txt" name="http://www.asahi-net.or.jp/~hc3j-tkg/kde-jp/DevelMiniHOWTO-jp.txt"> thanks to Junji Takagi.
+
+This document is included in the KDE Developer's Web Site (<htmlurl url="http://developer.kde.org" name="http://developer.kde.org">) and is part of the
+KDevelop (<htmlurl url="http://www.kdevelop.org" name="http://www.kdevelop.org">) programming manual.
+
+<sect1> Changes
+<p>
+<sect2> Changes from version &lt;July 1, 1999&gt; to version &lt;August 14, 1999&gt; (only minor ones):
+<p>
+ <itemize>
+ <item> Added "About this document" section
+ <item> Added more acknowledgements
+ <item> Multiple formatting changes (thanks Ralf!)
+ <item> Fixed instructions for getting CVS access
+ </itemize>
+
 
 
 <chapt>Using KDE I/O Slaves
