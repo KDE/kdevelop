@@ -1022,6 +1022,13 @@ void ClassViewWidget::maybeTip( QPoint const & p )
 			tooltip = access + strstatic + vitem->dom()->type() + " " + vitem->dom()->name();
 		}	
 	}
+	else if ( item->isTypeAlias() )
+	{
+		if( TypeAliasDomBrowserItem * titem = dynamic_cast<TypeAliasDomBrowserItem*>( item ) )
+		{
+			tooltip = QString( "[Type] " ) + titem->dom()->type() + " " + titem->dom()->name();
+		}
+	}
 	
 	kdDebug(0) << tooltip << endl;
 	

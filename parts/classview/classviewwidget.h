@@ -120,6 +120,7 @@ public:
     virtual bool isClass() const { return false; }
     virtual bool isFunction() const { return false; }
     virtual bool isVariable() const { return false; }
+    virtual bool isTypeAlias() const { return false; }
 
     virtual bool hasDeclaration() const { return false; }
     virtual bool hasImplementation() const { return false; }
@@ -235,6 +236,7 @@ public:
     	: ClassViewItem( parent, dom->name() ), m_dom( dom ) {}
 
     const CodeModelItem* model() const { return m_dom; }
+	virtual bool isTypeAlias() const { return true; }
 
     virtual bool hasDeclaration() const { return true; }
     virtual void openDeclaration();
