@@ -1223,6 +1223,13 @@ void CKDevelop::slotDebugStatus(const QString& msg, int state)
 
 void CKDevelop::slotDebugAttach()
 {
+  QString underDir=prj->getProjectDir() + prj->getSubDir();
+  if (underDir.right(1)!='/')
+    underDir+='/';
+
+  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
+		prj->getBinPROGRAM();
+
   if (dbgInternal)
   {
     if (dbgController)
@@ -1239,8 +1246,8 @@ void CKDevelop::slotDebugAttach()
                             pid, dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-        dbgController->slotStart(prj->getBinPROGRAM(), QString());
+        QDir::setCurrent(underDir);
+        dbgController->slotStart(binProgram, QString());
         dbgController->slotAttachTo(pid);
       }
     }
@@ -1252,6 +1259,12 @@ void CKDevelop::slotDebugAttach()
 
 void CKDevelop::slotDebugExamineCore()
 {
+  QString underDir=prj->getProjectDir() + prj->getSubDir();
+  if (underDir.right(1)!='/')
+    underDir+='/';
+  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
+		prj->getBinPROGRAM();
+
   if (dbgInternal)
   {
     if (dbgController)
@@ -1267,8 +1280,8 @@ void CKDevelop::slotDebugExamineCore()
                                 coreFile.data(), dbgExternalCmd.data()));
 
         setupInternalDebugger();
-        QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-        dbgController->slotStart(prj->getBinPROGRAM(), QString());
+        QDir::setCurrent(underDir);
+        dbgController->slotStart(binProgram, QString());
         dbgController->slotCoreFile(coreFile);
       }
     }
@@ -1350,6 +1363,12 @@ void CKDevelop::slotDebugRunWithArgs()
 
 void CKDevelop::slotStartDebugRunWithArgs()
 {
+  QString underDir=prj->getProjectDir() + prj->getSubDir();
+  if (underDir.right(1)!='/')
+    underDir+='/';
+  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
+		prj->getBinPROGRAM();
+
   QString args=prj->getDebugArgs();
   if (args.isEmpty())
     QString args=prj->getExecuteArgs();
@@ -1366,8 +1385,8 @@ void CKDevelop::slotStartDebugRunWithArgs()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    dbgController->slotStart(prj->getBinPROGRAM(), args);
+    QDir::setCurrent(underDir);
+    dbgController->slotStart(binProgram, args);
     brkptManager->slotSetPendingBPs();
     slotDebugRun();
   }
@@ -1375,6 +1394,12 @@ void CKDevelop::slotStartDebugRunWithArgs()
 
 void CKDevelop::slotStartDebug()
 {
+  QString underDir=prj->getProjectDir() + prj->getSubDir();
+  if (underDir.right(1)!='/')
+    underDir+='/';
+  QString binProgram=QString((isAScript(underDir+prj->getBinPROGRAM())) ? ".libs/" : "") +
+		prj->getBinPROGRAM();
+
   // if we can run the application, so we can clear the Makefile.am-changed-flag
   prj->clearMakefileAmChanged();
 
@@ -1387,8 +1412,8 @@ void CKDevelop::slotStartDebug()
     stderr_widget->clear();
 
     setupInternalDebugger();
-    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-    dbgController->slotStart(prj->getBinPROGRAM(), QString());
+    QDir::setCurrent(underDir);
+    dbgController->slotStart(binProgram, QString());
     brkptManager->slotSetPendingBPs();
     slotDebugRun();
     return;
@@ -1406,8 +1431,8 @@ void CKDevelop::slotStartDebug()
 
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
-  swallow_widget->setExeString(dbgExternalCmd+ " " + prj->getBinPROGRAM());
+  QDir::setCurrent(underDir);
+  swallow_widget->setExeString(dbgExternalCmd+ " " + binProgram);
   swallow_widget->sWExecute();
   swallow_widget->init();
 }

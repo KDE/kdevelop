@@ -138,6 +138,12 @@ public:
    *  if there is one file modified or younger than the binary
    */
   bool isProjectDirty();
+
+  /** checks the named file
+   *  if it is a shell script
+   */
+  bool isAScript(const QString &);
+
   /*
      parses only the files listed in the stringlist
   */
