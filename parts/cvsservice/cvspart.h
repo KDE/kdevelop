@@ -64,6 +64,10 @@ public:
     * Fetch a module from remote repository, so it can be used for importing
     */
     virtual void fetchFromRepository();
+    /**
+    * Check if the directory is a valid CVS directory.
+    */
+    virtual bool isValidDirectory( const QDir &dir ) const;
 
 private slots:
     /** Add menu items binded to cvs operations' slots to @p popup, using

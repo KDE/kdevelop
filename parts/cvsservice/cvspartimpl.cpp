@@ -8,7 +8,10 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 #include <qfile.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -20,6 +23,7 @@
 #include <urlutil.h>
 
 #include "cvsprocesswidget.h"
+#include "cvsdir.h"
 #include "cvsentry.h"
 #include "cvspart.h"
 #include "cvspartimpl.h"
@@ -120,35 +124,14 @@ bool CvsPartImpl::isRegisteredInRepository( const QString &projectDirectory, con
         return true;
     }
 
-    QString dirName = url.directory();
-    QString entriesFilePath = dirName + "/CVS/Entries";
-
-    kdDebug(9000) << "===> pathUrl.path()      = " << url.path() << endl;
-    kdDebug(9000) << "===> dirName             = " << dirName << endl;
-    kdDebug(9000) << "===> entriesFilePath = " << entriesFilePath << endl;
-
-    bool found = false;
-    QFile f( entriesFilePath );
-    if (f.open( IO_ReadOnly ))
+    CVSDir cvsdir( url.directory() );
+    if (!cvsdir.isValid())
     {
-        QTextStream t( &f );
-        CvsEntry cvsEntry;
-        while (cvsEntry.read( t ) && !found)
-        {
-            if (cvsEntry.fileName == url.fileName())
-            {
-                kdDebug(9000) << "===> Ok, file is registered into repository." << endl;
-                found = true;
-            }
-        }
+        kdDebug(9000) << "===> Error: " << url.directory() << " is not a valid CVS directory " << endl;
+        return false;
     }
-    else
-    {
-        kdDebug(9000) << "===> Error: could not open CVS/Entries!! " << endl;
-    }
-    f.close();
-
-    return found;
+    CVSEntry entry = cvsdir.fileState( url.fileName() );
+    return entry.isValid();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -284,6 +267,15 @@ void CvsPartImpl::removeFromIgnoreList( const QString &projectDirectory, const K
     {
         removeFromIgnoreList( projectDirectory, urls[i] );
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool CvsPartImpl::isValidDirectory( const QDir &dir ) const
+{
+    CVSDir cvsdir( dir );
+
+    return cvsdir.isValid();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

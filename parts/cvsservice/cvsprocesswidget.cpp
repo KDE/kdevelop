@@ -161,16 +161,14 @@ void CvsProcessWidget::cancelJob()
 {
     kdDebug() << "CvsProcessWidget::cancelJob() here!" << endl;
 
-    if (!m_job)
+    if (!m_job || !m_job->isRunning())
         return;
     m_job->cancel();
     delete m_job; m_job = 0;
 
     showInfo( i18n("*** Job canceled by user request ***") );
 
-    m_part->mainWindow()->statusBar()->message( i18n("CVS Job canceled") );
-    m_part->mainWindow()->raiseView( this );
-    m_part->core()->running( m_part, true );
+    m_part->core()->running( m_part, false );
 }
 
 ///////////////////////////////////////////////////////////////////////////////

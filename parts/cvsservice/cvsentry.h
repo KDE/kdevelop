@@ -9,36 +9,40 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 
-#include <qstring.h>
+#ifndef CVSENTRY_H
+#define CVSENTRY_H
 
-class QTextStream;
+#include <qstringlist.h>
 
-struct CvsEntry
+class CVSEntry
 {
-    enum  EntryState { invalidEntry, fileEntry, directoryEntry };
-
-    CvsEntry();
-    CvsEntry( const QString &aLine );
-
-    bool read( QTextStream & );
-    void write( QTextStream & );
-
-    void clean();
-
-    void parse( const QString &aLine );
-    QString pack() const;
-
-    EntryState state() const;
-
-    QString type; // "D" or ""
-    QString fileName;
-    QString revision;
-    QString timeStamp;
-    QString options;
-    QString tagDate;
+public:
+    enum  EntryType { invalidEntry, fileEntry, directoryEntry };
 
     static const QString invalidMarker;
     static const QString directoryMarker;
     static const QString fileMarker;
     static const QString entrySeparator;
+
+    static void parse( const QString &aLine, CVSEntry &entry );
+
+    CVSEntry();
+    CVSEntry( const QString &aLine );
+
+    void clean();
+
+    bool isValid() const { return type() != invalidEntry; }
+
+    EntryType type() const;
+    QString fileName() const;
+    QString revision() const;
+    QString timeStamp() const;
+    QString options() const;
+    QString tag() const;
+
+private:
+    EntryType m_type;
+    QStringList m_fields;
 };
+
+#endif

@@ -16,93 +16,111 @@
 
 #include "cvsentry.h"
 
-const QString CvsEntry::invalidMarker = "<Invalid entry>";
-const QString CvsEntry::directoryMarker = "D";
-const QString CvsEntry::fileMarker = "";
-const QString CvsEntry::entrySeparator = "/";
+///////////////////////////////////////////////////////////////////////////////
+// Static
+///////////////////////////////////////////////////////////////////////////////
 
-CvsEntry::CvsEntry()
+const QString CVSEntry::invalidMarker = "<Invalid entry>";
+const QString CVSEntry::directoryMarker = "D";
+const QString CVSEntry::fileMarker = "";
+const QString CVSEntry::entrySeparator = "/";
+
+///////////////////////////////////////////////////////////////////////////////
+// class CVSEntry
+///////////////////////////////////////////////////////////////////////////////
+
+CVSEntry::CVSEntry()
 {
     clean();
 }
 
-CvsEntry::CvsEntry( const QString &aLine )
+///////////////////////////////////////////////////////////////////////////////
+
+CVSEntry::CVSEntry( const QString &aLine )
 {
-    parse( aLine );
+    parse( aLine, *this );
 }
 
-void CvsEntry::clean()
+///////////////////////////////////////////////////////////////////////////////
+
+void CVSEntry::clean()
 {
-    type = invalidMarker;
-    fileName = revision = timeStamp = options = tagDate = QString::null;
+    m_type = invalidEntry;
 }
 
-CvsEntry::EntryState CvsEntry::state() const
+///////////////////////////////////////////////////////////////////////////////
+
+CVSEntry::EntryType CVSEntry::type() const
 {
-    if (type == invalidMarker)
-        return invalidEntry;
-    else if (type == directoryMarker)
-        return directoryEntry;
-    else
-        return fileEntry;
+    return m_type;
 }
 
-bool CvsEntry::read( QTextStream &t )
-{
-    if (t.eof())
-        return false;
+///////////////////////////////////////////////////////////////////////////////
 
-    parse( t.readLine() );
-    return true;
-}
-
-void CvsEntry::write( QTextStream &t )
+void CVSEntry::parse( const QString &aLine, CVSEntry &entry )
 {
-    if (state() != invalidEntry)
-    {
-        t << pack();
-    }
-}
+    entry.clean();
 
-void CvsEntry::parse( const QString &aLine )
-{
-    clean();
+    entry.m_fields = QStringList::split( "/", aLine );
 
     if (aLine.startsWith( entrySeparator )) // Is a file?
     {
-        type = fileMarker; // Is a file
-
-        int start = 1;
-        int length = aLine.find( entrySeparator, start ) - start;
-        fileName = aLine.mid( start, length );
-
-        start = start + length + 1;
-        length = aLine.find( entrySeparator, start ) - start;
-        revision = aLine.mid( start, length );
-
-        start = start + length + 1;
-        length = aLine.find( entrySeparator, start ) - start;
-        timeStamp = aLine.mid( start, length );
-
-        start = start + length + 1;
-        length = aLine.find( entrySeparator, start ) - start;
-        options = aLine.mid( start, length );
-
-        start = start + length + 1;
-        length = aLine.find( entrySeparator, start ) - start;
-        tagDate = aLine.mid( start, length );
+        entry.m_type = fileEntry; // Is a file
     }
     else // Must be a directory then
     {
-        type = directoryMarker; // Is a file
-
-        int start = 2;
-        int length = aLine.find( entrySeparator, start ) - start;
-        fileName = aLine.mid( start, length ); // Ok, it is a directory name really ;)
+        entry.m_type = directoryEntry; // Is a directory
+        entry.m_fields.pop_front(); // Remove first
     }
 }
 
-QString CvsEntry::pack() const
+///////////////////////////////////////////////////////////////////////////////
+
+QString CVSEntry::fileName() const
 {
-    return QString::null;
+    if (type() != invalidEntry && m_fields.count() >= 1)
+        return m_fields[0];
+    else
+        return QString::null;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CVSEntry::revision() const
+{
+    if (type() != invalidEntry && m_fields.count() >= 2)
+        return m_fields[1];
+    else
+        return QString::null;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CVSEntry::timeStamp() const
+{
+    if (type() != invalidEntry && m_fields.count() >= 3)
+        return m_fields[2];
+    else
+        return QString::null;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CVSEntry::options() const
+{
+    if (type() != invalidEntry && m_fields.count() >= 4)
+        return m_fields[3];
+    else
+        return QString::null;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString CVSEntry::tag() const
+{
+    if (type() != invalidEntry && m_fields.count() >= 5)
+        return m_fields[4];
+    else
+        return QString::null;
+}
+

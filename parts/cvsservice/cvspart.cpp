@@ -315,6 +315,13 @@ bool CvsPart::urlFocusedDocument( KURL &url )
 
 ///////////////////////////////////////////////////////////////////////////////
 
+bool CvsPart::isValidDirectory( const QDir &dir ) const
+{
+    return m_impl->isValidDirectory( dir );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 void CvsPart::slotActionLogin()
 {
     m_impl->login();

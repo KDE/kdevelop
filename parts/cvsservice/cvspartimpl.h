@@ -25,6 +25,7 @@ class CvsProcessWidget;
 class KDevMainWindow;
 class KDevCore;
 class KDevDiffFrontend;
+class QDir;
 
 // Available Cvs operations
 enum CvsOperation
@@ -146,6 +147,11 @@ public:
         const QString &cvsRsh, const QString &location,
         const QString &message, const QString &module, const QString &vendor,
         const QString &release, bool mustInitRoot ) = 0;
+
+    /**
+    * Check if the directory is valid as CVS directory (has the /CVS/ dir inside)
+    */
+    virtual bool isValidDirectory( const QDir &dir ) const;
 
 // Helpers
 public:

@@ -88,12 +88,13 @@ QStringList CVSDir::registeredEntryList() const
 
     QByteArray bytes = cacheFile( entriesFileName() );
     QTextStream t( bytes, IO_ReadOnly );
-
+    CVSEntry entry;
     while (!t.eof())
     {
         QString line = t.readLine();
-
-        l.append( line );
+        CVSEntry::parse( line, entry );
+        if (entry.isValid())
+            l.append( entry.fileName() );
     }
     return l;
 }
