@@ -45,11 +45,12 @@ RemoveFileDialog::RemoveFileDialog(AutoProjectWidget *widget, SubprojectItem *sp
         if (fileListContains((*it)->sources, filename))
             targets.append((*it)->name);
 
-    if (targets.count() > 1)
+    removefromtargets_box = 0;
+    if (targets.count() > 1) {
+        QString joinedtargets = "     " + targets.join("\n     ");
         removefromtargets_box = new QCheckBox(i18n("The file %1 is still used by the following targets:\n%2\n"
-                                                   "Remove it from all of them?").arg(filename).arg(targets.join("\n")), this);
-    else
-        removefromtargets_box = 0;
+                                                   "Remove it from all of them?").arg(filename).arg(joinedtargets), this);
+    }
 
     removefromdisk_box = new QCheckBox(i18n("Remove from disk"), this);
         
@@ -94,11 +95,14 @@ void RemoveFileDialog::accept()
                 FileItem *fitem = static_cast<FileItem*>((*it)->firstChild());
                 while (fitem) {
                     FileItem *nextitem = static_cast<FileItem*>(fitem->nextSibling());
-                    if (fitem->text(0) == fileName)
-                        delete fitem;
+                    if (fitem->text(0) == fileName) {
+                        QListView *lv = fitem->listView();
+                        lv->setSelected(fitem, false);
+                        (*it)->sources.remove(fitem);
+                    }
                     fitem = nextitem;
                 }
-                QCString canontargetname = AutoProjectTool::canonicalize(target->name);
+                QCString canontargetname = AutoProjectTool::canonicalize((*it)->name);
                 QCString varname = canontargetname + "_SOURCES";
                 QStringList sources = QStringList::split(QRegExp("[ \t\n]"), subProject->variables[varname]);
                 sources.remove(fileName);
@@ -111,9 +115,9 @@ void RemoveFileDialog::accept()
     FileItem *fitem = static_cast<FileItem*>(target->firstChild());
     while (fitem) {
         if (fitem->text(0) == fileName) {
-            // Bleh. This leads to a crash later because in a QListView slot items must
-            // not be removed
-            delete fitem;
+            QListView *lv = fitem->listView();
+            lv->setSelected(fitem, false);
+            target->sources.remove(fitem);
             break;
         }
         fitem = static_cast<FileItem*>(fitem->nextSibling());
