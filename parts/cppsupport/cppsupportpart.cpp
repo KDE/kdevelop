@@ -149,7 +149,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     KAction *action;
 
-    action = new KAction(i18n("Switch Header/Implementation"), Key_F12,
+    action = new KAction(i18n("Switch Header/Implementation"), SHIFT+Key_F12,
                          this, SLOT(slotSwitchHeader()),
                          actionCollection(), "edit_switchheader");
     action->setStatusText( i18n("Switch between header and implementation files") );
