@@ -248,6 +248,7 @@ void CClassView::initPopups()
 void CClassView::refresh( CProject *proj )
 {
 //  QProgressDialog progressDlg(NULL, "progressDlg", true );
+  QStrList src1;
   QStrList src;
   QStrList header;
   char *str;
@@ -265,8 +266,18 @@ void CClassView::refresh( CProject *proj )
 
   // Get all header and src filenames.
   header = proj->getHeaders();
-  src = proj->getSources();
+  src1 = proj->getSources();
+  
+  
+  // a really cool hack.:-) 
+  //we revert the order of the src's to get the data files (dlgs) first parsed. It's important for the addMethod dlg...
+  // -Sandy
+  QString filestr;
+  for(filestr = src1.last();filestr!=0;filestr = src1.prev()){
+      src.append(filestr);
+  }
 
+  
   // Initialize progressbar.
   totalCount = header.count() + src.count();
   emit resetStatusbarProgress();

@@ -5,6 +5,8 @@
 	* commited patch (bugfix) by Alexis Mikhalov, (coutputwidget.cpp (insertAtEnd))
 	* fixed problem with CFLAGS und CXXFLAGS in mixed C/C++ projects
 	* removed -fsyntax-only from the project options, because of problems with configure
+	* fixed problem in "add method" (classview), sometimes KDevelop added methods to the dialog datafile
+	
 	
 2000-01-25 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* fixing "Add existing file to project" problem
