@@ -500,3 +500,4 @@ void BugEdit::resizeEvent (QResizeEvent * QEvent)
     // Pass the event down to our subclass.
     QWidget::resizeEvent (QEvent);
 }
+#include "bugedit.moc"

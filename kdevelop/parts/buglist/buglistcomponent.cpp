@@ -178,3 +178,4 @@ void BugListComponent::slotWidgetClosed ()
         m_pBugList = NULL;
     }
 }
+#include "buglistcomponent.moc"

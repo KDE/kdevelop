@@ -647,3 +647,4 @@ void BugList::slotOwnership ()
     }
 
 }
+#include "buglist.moc"
