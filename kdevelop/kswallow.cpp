@@ -23,7 +23,6 @@
 
 #include <kapp.h>
 #include <kwm.h>
-#include <kwmmapp.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
