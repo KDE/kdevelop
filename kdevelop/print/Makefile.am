@@ -19,3 +19,4 @@ EXTRA_DIST = cconfiga2psdlg.cpp cconfigenscriptdlg.cpp cconfigenscriptdlg.h cdat
 
 ####### kdevelop will overwrite this part!!! (end)############
 KDE_OPTIONS = nofinal
+INCLUDES = $(all_includes) -I$(top_builddir)/kdevelop/kpp
