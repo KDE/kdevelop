@@ -193,7 +193,12 @@ void BugListComponent::slotProjectChanged()
     // Parse the project space for the details we need on the new
     // subproject that we changed to.
 
-    slotProjectSpaceOpened ();
+/* FIXME: Not in every change in project is the projectspace changed.
+ *        note that sigProjectChanged is generated also by others e.g. appwizard, though sigProjectSpaceOpened
+ *        only by the core.
+*/
+
+//    slotProjectSpaceOpened ();
 }
 
 
