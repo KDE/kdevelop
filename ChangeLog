@@ -1,3 +1,8 @@
+2003-06-23 Amilcar Lucas <a.lucas@tu-bs.de>
+   * Replaced all TODO occurencies with @todo so that they show up in the
+     Doxygen generated documentation under "Related Pages > Todo List"
+   * Make Doxygen generate XML files for the codecompletion tooltips
+   
 2003-06-18 Mario Scalas <mario.scalas@libero.it>
 	* (CvsPart) New features added:
 	  - It is now possible to add to/remove files from .cvsignore file

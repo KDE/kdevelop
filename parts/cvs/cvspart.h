@@ -35,7 +35,7 @@ enum CvsOperation { opAdd, opCommit, opUpdate, opRevert, opRemove, opLog, opDiff
 /**
 * Implementation for the CvsPart command line tool wrapper: it let to do all common
 * used cvs operations (add, commit, remove, ...).
-* TODO: Additional slots for more complex stuff as status, revert, patch creation, ...
+* @todo: Additional slots for more complex stuff as status, revert, patch creation, ...
 */
 class CvsPart : public KDevVersionControl
 {

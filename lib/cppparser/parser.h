@@ -42,8 +42,8 @@ public:
 
 private:
     virtual bool reportError( const Error& err );
-    /*TODO: remove*/ virtual bool reportError( const QString& msg );
-    /*TODO: remove*/ virtual void syntaxError();
+    /** @todo: remove*/ virtual bool reportError( const QString& msg );
+    /** @todo: remove*/ virtual void syntaxError();
 
 public /*rules*/ :
 

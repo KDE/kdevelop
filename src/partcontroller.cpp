@@ -385,7 +385,7 @@ KParts::Factory *PartController::findPartFactory(const QString &mimeType, const 
 void PartController::integratePart(KParts::Part *part, const KURL &url, bool isTextEditor )
 {
   if (!part->widget()) {
-    // TODO error handling
+    /// @todo error handling
       kdDebug(9000) << "no widget for this part!!" << endl;
       return; // to avoid later crash
   }
@@ -950,7 +950,7 @@ void PartController::restoreState()
 void PartController::showPart( KParts::Part* part, const QString& name, const QString& shortDescription )
 {
   if (!part->widget()) {
-    // TODO error handling
+    /// @todo error handling
     return; // to avoid later crash
   }
 

@@ -182,7 +182,7 @@ public:
     QStringList includePaths() const { return m_includePaths; }
     virtual void addIncludePath( const QString &path );
 
-    // TODO: remove
+    /// @todo: remove
     const QMap<QString, TranslationUnitAST*> &parsedUnits() const { return m_parsedUnits; }
 
     virtual void setResolveDependencesEnabled( bool enabled );

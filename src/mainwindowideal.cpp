@@ -295,7 +295,7 @@ void MainWindowIDEAl::removeView(QWidget *view)
 }
 
 void MainWindowIDEAl::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
-    // TODO: implement me
+    /// @todo: implement me
 }
 
 void MainWindowIDEAl::raiseView(QWidget *view) {
@@ -662,7 +662,7 @@ void MainWindowIDEAl::fileDirty(const QString& fileName)
         KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
         if (!ro_part || !ro_part->url().isLocalFile())
             continue;
-        if ( ro_part->url().path() == fileName ) { // ###TODO URL comparison sucks...
+        if ( ro_part->url().path() == fileName ) { /// @todo URL comparison sucks...
              if ( PartController::getInstance()->isDirty( ro_part ) ) {
                     m_tabWidget->setTabIconSet( ro_part->widget(), SmallIconSet( "revert" ) );
                     m_tabWidget->setTabToolTip( ro_part->widget(), i18n("Externally modified - %1").arg( ro_part->url().url() ) );

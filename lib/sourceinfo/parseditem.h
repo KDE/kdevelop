@@ -130,8 +130,8 @@ public:
     QString name() const
         { return name_; }
     /**
-     * Sets the acess (public/protected/private)
-     * @param aExport The new access
+     * Sets the access (public/protected/private)
+     * @param aAccess The new access
      */
     inline void setAccess(PIAccess aAccess)
         { _access = aAccess; }

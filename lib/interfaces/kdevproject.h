@@ -57,7 +57,7 @@ public:
 	/**
 	* Returns a list of all files in the project.
 	* The files are relative to the project directory.
-	* TODO: This is currently a bit broken because the
+	* @todo: This is currently a bit broken because the
 	* autoproject part doesn't return header files here.
 	*/
 	virtual QStringList allFiles() = 0;

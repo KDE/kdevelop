@@ -46,7 +46,7 @@ StatusBar::StatusBar(QWidget *parent, const char *name)
 	connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
 		this, SLOT(activePartChanged(KParts::Part*)));
 
-	// TODO remove parts from the map on PartRemoved() ?
+	/// @todo remove parts from the map on PartRemoved() ?
 }
 
 

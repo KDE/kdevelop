@@ -632,7 +632,7 @@ void Lexer::processDefine( Macro& m )
 void Lexer::processElse()
 {
     if( m_ifLevel == 0 )
-        // TODO: report error
+        /// @todo: report error
 	return;
 
     if( m_ifLevel > 0 && m_skipping[m_ifLevel-1] )
@@ -644,11 +644,11 @@ void Lexer::processElse()
 void Lexer::processElif()
 {
     if( m_ifLevel == 0 )
-	// TODO: report error
+	/// @todo: report error
 	return;
 
     if( !m_trueTest[m_ifLevel] ){
-        // ###: TODO: implement the correct semantic for elif!!
+        /// @todo: implement the correct semantic for elif!!
         bool inSkip = m_ifLevel > 0 && m_skipping[ m_ifLevel-1 ];
         m_trueTest[ m_ifLevel ] = macroExpression() != 0;
 	m_skipping[ m_ifLevel ] = inSkip ? inSkip : !m_trueTest[ m_ifLevel ];
@@ -660,7 +660,7 @@ void Lexer::processElif()
 void Lexer::processEndif()
 {
     if( m_ifLevel == 0 )
-	// TODO: report error
+	/// @todo: report error
 	return;
 
     m_skipping[ m_ifLevel ] = 0;
@@ -747,7 +747,7 @@ int Lexer::macroPrimary()
 	nextChar();
 	result = macroExpression();
 	if( currentChar() != ')' ){
-	    // TODO: report error
+	    /// @todo: report error
 	    return 0;
 	}
 	nextChar();
@@ -776,7 +776,7 @@ int Lexer::macroPrimary()
 		if( toString(tk) == "defined" ){
 		    return macroPrimary();
 		}
-		// TODO: implement
+		/// @todo: implement
 		return m_driver->hasMacro( toString(tk) );
 	    case Token_number_literal:
 		return toString(tk).toInt();

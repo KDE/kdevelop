@@ -657,7 +657,7 @@ CppCodeCompletion::completeText( )
 
                 Driver d;
                 Lexer lexer( &d );
-                // TODO: setup the lexer(i.e. adds macro, special words, ...
+                /// @todo: setup the lexer(i.e. adds macro, special words, ...
 
                 lexer.setSource( textToReparse );
                 Parser parser( &d, &lexer );
@@ -672,12 +672,12 @@ CppCodeCompletion::completeText( )
 	            recoveredDecl->getEndPosition( &endLine, &endColumn );
                     kdDebug(9007) << "endLine = " << endLine << ", endColumn " << endColumn << endl;
 
-                    // TODO: check end position
+                    /// @todo: check end position
 
                     if( isFunDef ) {
                         FunctionDefinitionAST* def = static_cast<FunctionDefinitionAST*>( recoveredDecl.get() );
 
-                        // TODO: remove code duplication
+                        /// @todo: remove code duplication
 
                         QString contents = textToReparse;
                         int start_expr = expressionAt( contents, contents.length() - 1 );
@@ -820,7 +820,7 @@ CppCodeCompletion::completeText( )
 
     if( !type.isEmpty() ){
         kdDebug(9007) << "type = " << type << endl;
-	QStringList scope = QStringList::split( "::", type ); // TODO: check :: or . ??!?
+	QStringList scope = QStringList::split( "::", type ); /// @todo: check :: or . ??!?
 	bool isInstance = !expr.endsWith( "::" );
 
 	if( showArguments ){

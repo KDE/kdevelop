@@ -54,7 +54,7 @@ static QValueList<ParsedMethod*> getVirtualMethodListForClassAndAncestors( JavaS
         if ( pClass )
             retVal += getVirtualMethodListForClassAndAncestors( part, pClass );
         else {
-            // TODO: look in ClassStore for Namespace classes
+            /// @todo: look in ClassStore for Namespace classes
         }
     }
 

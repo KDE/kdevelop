@@ -206,7 +206,7 @@ public:
 
     /**
      * Removes all items in the store with references to the file. 
-     * @param aFile The file to check references to.
+     * @param fileName The file to check references to.
      */
     void removeWithReferences(const QString &fileName);
     

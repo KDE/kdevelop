@@ -169,7 +169,7 @@ void LogForm::slotLinkClicked( const QString & link )
         contents->append( "invalid link clicked" );
         return;
     }
-    // TODO: use the diff frontend
+    /// @todo: use the diff frontend
     process->setArguments( QStringList() << "cvs" << "diff" << "-r" + v1 << "-r" + v2 << pathName );
     process->start();
     setCaption( tr("diff %1").arg(pathName) );

@@ -394,7 +394,7 @@ bool Parser::parseName( NameAST::Node& node )
 	    lex->nextToken();
 	    ast->addClassOrNamespaceName( n );
 	    if( lex->lookAhead(0) == Token_template )
-	        lex->nextToken(); // skip optional template     #### TODO CHECK
+	        lex->nextToken(); /// skip optional template     #### @todo CHECK
 	} else {
 	    ast->setUnqualifedName( n );
 	    break;
@@ -1590,7 +1590,7 @@ bool Parser::parseTypeId( AST::Node& node )
 {
     //kdDebug(9007)<< "--- tok = " << lex->toString(lex->lookAhead(0)) << " -- "  << "Parser::parseTypeId()" << endl;
 
-    // ### TODO: implement the AST for typeId
+    /// @todo: implement the AST for typeId
     int start = lex->index();
     AST::Node ast = CreateNode<AST>();
 
@@ -1671,7 +1671,7 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
 good:
     ast->setParameterDeclarationList( params );
 
-    // TODO: add ellipsis
+    /// @todo: add ellipsis
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 

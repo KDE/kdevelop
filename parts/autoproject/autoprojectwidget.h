@@ -95,7 +95,7 @@ public:
 	* Adds a file to the active target.
         * If the file does not contain a "/" character, it is added
         * to the active target.
-        * If it does contain "/" character(s), ... TODO.. add to appropriate target
+        * If it does contain "/" character(s), ... @todo.. add to appropriate target
 	*/
 	void addFiles(const QStringList &list);
 	/**

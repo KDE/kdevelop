@@ -220,7 +220,7 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<KMdiChildView> *pViews):
       dockBaseIsVisible     = winState.dockBaseIsVisible;
       if (winState.dockBaseIsHidden ||
          (winState.dockBaseMayBeDockBack && !winState.dockBaseIsVisible))
-         dockBaseIsHidden = true;  //TODO: not just parentIsHidden = winState.parentIsHidden?
+         dockBaseIsHidden = true;  /// @todo: not just parentIsHidden = winState.parentIsHidden?
 
     }
     if (winState.viewMenuChecked) noViews++;
@@ -473,9 +473,9 @@ void MainWindow::addToolViewWindow(EView eView, KMdiChildView *child, const QStr
     if(eView == OutputView)   addToolWindow(child, KDockWidget::DockBottom, first, 70, toolTip, name);
     else {
       QString tabName = name;
-      //TODO_implement_me: if (!tabHeaderShouldContainText) {
+      /// @todo implement_me: if (!tabHeaderShouldContainText) {
         tabName = "";
-      //TODO_implement_me: }
+      /// @todo implement_me: }
       addToolWindow(child, KDockWidget::DockLeft, first, 25, toolTip, tabName);
     }
   }
@@ -484,9 +484,9 @@ void MainWindow::addToolViewWindow(EView eView, KMdiChildView *child, const QStr
     if(eView == OutputView)   addToolWindow(child, KDockWidget::DockCenter, first, 25, toolTip, name);
     else {
       QString tabName = name;
-      //TODO_implement_me: if (!tabHeaderShouldContainText) {
+      /// @todo implement_me: if (!tabHeaderShouldContainText) {
         tabName = "";
-      //TODO_implement_me: }
+      /// @todo implement_me: }
       addToolWindow(child, KDockWidget::DockCenter, first, 25, toolTip, tabName);
     }
   }
@@ -525,7 +525,7 @@ void MainWindow::setViewAvailable(QWidget *pView, bool bEnabled)
   if (!pWrappingView) return;
 
   if (m_partViews.find(pWrappingView) != -1) {
-    // TODO
+    /// @todo
   }
   else {
     KDockWidget* pWrappingDockWidget = dockManager->findWidgetParentDock(pWrappingView);
@@ -1301,7 +1301,10 @@ void MainWindow::callCommand(const QString& command)
  */
 void MainWindow::storeOutputViewTab()
 {
-/*  TODO: implement this properly
+/** @todo: implement this properly
+       look at MainWindow::slotReactToProjectOpened() to hide a view
+       MainWindow::toggleSingleToolWin() to show it and also to check the visibility
+
   if (m_bottomBar->isRaised()) {
     // If m_bottomBar->isRaised then store the current view
     previous_output_view = m_bottomBar->current();
@@ -1318,7 +1321,10 @@ void MainWindow::storeOutputViewTab()
  */
 void MainWindow::restoreOutputViewTab()
 {
-/* TODO: implement this properly
+/** @todo: implement this properly
+       look at MainWindow::slotReactToProjectOpened() to hide a view
+       MainWindow::toggleSingleToolWin() to show it and also to check the visibility
+
   if ( previous_output_view == NULL) {
     // If no previous exists then hide current
     if (m_bottomBar->current())

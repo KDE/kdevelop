@@ -188,7 +188,7 @@ void AddAttributeDialog::accept()
 	QListViewItem* item = attributes->firstChild();
 	stream << "\n";
 	while( item ){
-	    // TODO: check item
+	    /// @todo: check item
 	    stream << "    " << item->text(0).lower() << ": ";
 	    if( item->text(1) == "Static" )
 		stream << "static ";

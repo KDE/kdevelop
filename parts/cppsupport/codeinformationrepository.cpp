@@ -14,7 +14,7 @@
 
 #include <kdebug.h>
 
-// TODO: move in utils.cpp
+/// @todo: move in utils.cpp
 static QValueList<KTextEditor::CompletionEntry>
 my_unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
 {

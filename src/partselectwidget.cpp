@@ -120,7 +120,7 @@ void PartSelectWidget::readGlobalConfig()
 
     for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
     {
-//TODO remove this clumsiness once the Name/GenericName/Comment approach is in all our .desktop files
+        /// @todo remove this clumsiness once the Name/GenericName/Comment approach is in all our .desktop files
         QString Comment = (*it)->comment();
         QString GenericName = (*it)->genericName();
         if ( GenericName.isEmpty() )
@@ -130,7 +130,7 @@ void PartSelectWidget::readGlobalConfig()
         PluginItem *item = new PluginItem( _pluginList, (*it)->name(), GenericName, Comment );
 // ---------
 
-//TODO enable this instead
+/// @todo enable this instead
 //        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), (*it)->comment() );
         item->setOn(config.readBoolEntry((*it)->name(), true));
     }
@@ -159,7 +159,7 @@ void PartSelectWidget::readProjectConfig()
     KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it)
     {
-//TODO remove this clumsiness once the Name/GenericName/Comment approach is in all our .desktop files
+/// @todo remove this clumsiness once the Name/GenericName/Comment approach is in all our .desktop files
         QString Comment = (*it)->comment();
         QString GenericName = (*it)->genericName();
         if ( GenericName.isEmpty() )
@@ -169,7 +169,7 @@ void PartSelectWidget::readProjectConfig()
         PluginItem *item = new PluginItem( _pluginList, (*it)->name(), GenericName, Comment );
 // --------------
 
-//TODO enable this instead
+/// @todo enable this instead
 //        PluginItem *item = new PluginItem( _pluginList, (*it)->name(), (*it)->genericName(), (*it)->comment() );
         item->setOn(!ignoreparts.contains((*it)->name()));
     }
