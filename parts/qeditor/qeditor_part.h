@@ -42,6 +42,7 @@ class KAboutData;
 class HLMode;
 class KConfig;
 class QSourceColorizer;
+class KDialogBase;
 
 /**
  * This is a "Part".  It that does all the real work in a KPart
@@ -100,6 +101,7 @@ public slots:
 
 signals:
     void fileNameChanged();
+    void configWidget( KDialogBase* );
 
 private:
     void setupActions();

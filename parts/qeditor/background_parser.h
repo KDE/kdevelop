@@ -52,7 +52,7 @@ private slots:
 
 protected:
     void setParsed( QTextParag*, bool );
-    QTextParag* isParsed( QTextParag* ) const;
+    bool isParsed( QTextParag* ) const;
 
     virtual void invalidate( QTextParag*, QTextParag* );
     virtual void ensureParsed( QTextParag* );

@@ -14,23 +14,23 @@
 
 using namespace std;
 
-void SettingsDialog::init()
+void HighlightingConfigPage::init()
 {
     m_editor = 0;
 }
 
-void SettingsDialog::destroy()
+void HighlightingConfigPage::destroy()
 {
 }
 
-void SettingsDialog::setEditor( QEditorPart* editor )
+void HighlightingConfigPage::setEditor( QEditorPart* editor )
 {
     m_editor = editor;
 
     if( !m_editor )
 	return;
 
-    // fill element list
+    // setup colorizer
     listElements->clear();
     QSourceColorizer* colorizer = m_editor->colorizer();
     QStringList styleList = colorizer->styleList();
@@ -43,16 +43,15 @@ void SettingsDialog::setEditor( QEditorPart* editor )
     listElements->insertStringList( styleList );
 }
 
-void SettingsDialog::accept()
+void HighlightingConfigPage::accept()
 {
     QSourceColorizer* colorizer = m_editor->colorizer();
     colorizer->updateStyles( m_map );
-    QDialog::accept();
 }
 
-void SettingsDialog::slotUpdatePreview()
+void HighlightingConfigPage::slotUpdatePreview()
 {
-    kdDebug() << "SettingsDialog::slotUpdatePreview()" << endl;
+    kdDebug() << "HighlightingConfigPage::slotUpdatePreview()" << endl;
     QFont font( comboFontFamily->currentFont(), spinFontSize->value() );
     font.setBold( checkBold->isChecked() );
     font.setItalic( checkItalic->isChecked() );
@@ -70,7 +69,7 @@ void SettingsDialog::slotUpdatePreview()
 }
 
 
-void SettingsDialog::slotSelectionChanged()
+void HighlightingConfigPage::slotSelectionChanged()
 {
     QString id = listElements->currentText();
     QFont font = m_map[ id ].first;

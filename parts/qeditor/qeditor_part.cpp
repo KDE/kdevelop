@@ -23,7 +23,7 @@
 #include "qeditor_view.h"
 #include "qeditor.h"
 #include "paragdata.h"
-#include "settingsdialog.h"
+#include "highlightingconfigpage.h"
 #include "qsourcecolorizer.h"
 
 #include <kinstance.h>
@@ -32,10 +32,13 @@
 #include <kfiledialog.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <kdialogbase.h>
 
+#include <qvbox.h>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qregexp.h>
+#include <qlayout.h>
 #include <private/qrichtext_p.h>
 
 #include "qeditor_part.moc"
@@ -758,8 +761,27 @@ void QEditorPart::clearMarks ()
 
 void QEditorPart::configDialog()
 {
+#if 0
     SettingsDialog dlg;
     dlg.setEditor( this );
+
+    emit configWidget( &dlg );
+
+    if( dlg.exec() ){
+        m_editor->editor()->configChanged();
+    }
+#endif
+    KDialogBase dlg(KDialogBase::Tabbed, i18n("QEditor Options"),
+                    KDialogBase::Ok|KDialogBase::Cancel,
+                    KDialogBase::Ok, 0,
+                    "qeditor options dialog");
+
+    HighlightingConfigPage* hlPage = new HighlightingConfigPage( dlg.addVBoxPage(i18n("Highlighting")) );
+    hlPage->setEditor( this );
+    connect( &dlg, SIGNAL(okClicked()), hlPage, SLOT(accept()) );
+
+    emit configWidget( &dlg );
+
     if( dlg.exec() ){
         m_editor->editor()->configChanged();
     }

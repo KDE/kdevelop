@@ -144,7 +144,7 @@ void BackgroundParser::setParsed( QTextParag* p, bool parsed )
         data->setParsed( parsed );
 }
 
-QTextParag* BackgroundParser::isParsed( QTextParag* p ) const
+bool BackgroundParser::isParsed( QTextParag* p ) const
 {
     ParagData* data = (ParagData*) p->extraData();
     if( data )

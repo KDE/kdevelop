@@ -17,7 +17,7 @@ messages: rc.cpp
 kde_module_LTLIBRARIES = libqeditorpart.la
 
 # the Part's source, library search path, and link libraries
-libqeditorpart_la_SOURCES = cpp_colorizer.cpp	 qeditor_view.cpp 	java_colorizer.cpp	 qeditorcodecompletion_arghint.cpp 	parenmatcher.cpp	 qmake_colorizer.cpp 	python_colorizer.cpp	 qsourcecolorizer.cpp 	qeditor.cpp		 simple_indent.cpp 	qeditor_meta_unload.cpp  xml_colorizer.cpp 	qeditor_part.cpp	 qeditorcodecompletion.cpp 	paragdata.cpp linenumberwidget.h linenumberwidget.cpp markerwidget.cpp gotolinedialog.ui settingsdialog.ui koFind.cpp koReplace.cpp levelwidget.cpp cindent.cpp yyindent.cpp cs_colorizer.cpp background_parser.cpp cpp_parser.cpp
+libqeditorpart_la_SOURCES = cpp_colorizer.cpp	 qeditor_view.cpp 	java_colorizer.cpp	 qeditorcodecompletion_arghint.cpp 	parenmatcher.cpp	 qmake_colorizer.cpp 	python_colorizer.cpp	 qsourcecolorizer.cpp 	qeditor.cpp		 simple_indent.cpp 	qeditor_meta_unload.cpp  xml_colorizer.cpp 	qeditor_part.cpp	 qeditorcodecompletion.cpp 	paragdata.cpp linenumberwidget.h linenumberwidget.cpp markerwidget.cpp gotolinedialog.ui settingsdialog.ui koFind.cpp koReplace.cpp levelwidget.cpp cindent.cpp yyindent.cpp cs_colorizer.cpp background_parser.cpp cpp_parser.cpp highlightingconfigpage.ui
 
 libqeditorpart_la_LDFLAGS = -module $(KDE_PLUGIN) $(all_libraries)
 libqeditorpart_la_LIBADD  = $(LIB_KPARTS) $(LIB_KFILE) -lktexteditor
