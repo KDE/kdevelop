@@ -53,7 +53,6 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
 FileSelectorPart::~FileSelectorPart()
 {
     if (m_filetree){
-	m_filetree->writeConfig( instance()->config(), "fileselector" );
 	mainWindow()->removeView( m_filetree );
     }
 

@@ -226,7 +226,9 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
 }
 
 KDevFileSelector::~KDevFileSelector()
-{}
+{
+	writeConfig( m_part->instance()->config(), "fileselector" );
+}
 //END Constroctor/Destrctor
 
 //BEGIN Public Methods
@@ -684,7 +686,7 @@ KFSConfigPage::KFSConfigPage( QWidget *parent, const char *name, KDevFileSelecto
 
 void KFSConfigPage::apply()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = fileSelector->m_part->instance()->config();
     config->setGroup( "fileselector" );
     // toolbar
     QStringList l;
@@ -739,10 +741,10 @@ void KFSConfigPage::reload()
 
 void KFSConfigPage::init()
 {
-    KConfig *config = kapp->config();
+    KConfig *config = fileSelector->m_part->instance()->config();
     config->setGroup( "fileselector" );
     // toolbar
-    QStringList l = config->readListEntry( "fstoolbar", ',' );
+    QStringList l = config->readListEntry( "toolbar actions", ',' );
     if ( l.isEmpty() ) // default toolbar
         l << "up" << "back" << "forward" << "home" <<
         "short view" << "detailed view" <<
