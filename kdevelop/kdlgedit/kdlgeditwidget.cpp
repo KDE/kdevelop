@@ -25,6 +25,7 @@
 #include <qdatetime.h>
 #include <kruler.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "kdlgproplv.h"
 #include "kdlgitems.h"
@@ -223,8 +224,10 @@ void KDlgEditWidget::slot_copySelected()
   if (!selected_widget)
     return;
 
-#warning Using non-unique names for temporaries is evil!
-  QFile f("/tmp/kdevdlgedt_copyitem.tmp");
+  QString pid_str;
+  pid_str.setNum(getpid());
+  
+  QFile f("/tmp/"+pid_str+"kdevdlgedt_copyitem.tmp");
   if ( f.open(IO_WriteOnly) )
     {
       QTextStream t( &f );
@@ -264,7 +267,10 @@ void KDlgEditWidget::slot_pasteSelected()
       }
 
   dlgfilelinecnt = 0;
-  QFile f("/tmp/kdevdlgedt_copyitem.tmp");
+
+  QString pid_str;
+  pid_str.setNum(getpid());
+  QFile f("/tmp/"+pid_str+"kdevdlgedt_copyitem.tmp");
   if ( f.open(IO_ReadOnly) )
     {
       QTextStream t( &f );

@@ -1,6 +1,11 @@
+1999-09-08  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added cvs version (HEAD) of KWrite, thanks to Jochen Wilhelmy for the port some days ago
+	* cleaned up class CEditWidget
+	* removed debug.h
+
 1999-09-08 Jonas Nordin <jonas.nordin@syncom.se>
 	* fixed problems with classes using templates like class<i>.
-	* added various new metods needed in the future. ;-)
+	* added various new methods needed in the future. ;-)
 
 1999-09-07 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* new standard kdelib-doc path defined

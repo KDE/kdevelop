@@ -25,7 +25,6 @@
 #include "ckdevelop.h"
 #include "ctoolclass.h"
 #include "ckappwizard.h"
-#include "debug.h"
 #include "cclassview.h"
 #include "crealfileview.h"
 #include "clogfileview.h"
@@ -64,7 +63,6 @@ bool CKDevelop::slotProjectClose(){
   setInfoModified(cpp_widget->getName(), cpp_widget->isModified());
 
   for(actual_info=edit_infos.first();cont && actual_info != 0;){
-//      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
       TEditInfo *next_info=edit_infos.next();
       if(actual_info->modified && handledNames.contains(actual_info->filename)<1){
 
@@ -82,7 +80,6 @@ bool CKDevelop::slotProjectClose(){
         int result = 0; // until problem above is resolved
 #endif
 	
-//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"Msgbox");
 	// create the save project messagebox
 	
 	// what to do
@@ -90,7 +87,7 @@ bool CKDevelop::slotProjectClose(){
 				// save file as if Untitled and close file
 	  if(isUntitled(actual_info->filename))
             {
-//	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- untitled");
+
 	    switchToFile(actual_info->filename);
             handledNames.append(actual_info->filename);
 	    cont=fileSaveAs();
@@ -108,20 +105,17 @@ bool CKDevelop::slotProjectClose(){
 	}
 	
 	if(result==2){   // No - no save but close
-//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close file");
           handledNames.append(actual_info->filename);
 	  actual_info->modified=false;
           removeFileFromEditlist(actual_info->filename); // immediate remove
           next_info=edit_infos.first(); // start again... 'cause we deleted an entry
 	}
 	if(result==3){  // Save all
-//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
 	  slotFileSaveAll();
 	  break;
 	}
 	if(result==4){ // Cancel
 	  cont=false;
-//	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
 	  break;
 	}
 	

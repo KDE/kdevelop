@@ -35,7 +35,6 @@
 #include "cproject.h"
 #include "cprjoptionsdlg.h"
 #include "vc/versioncontrol.h"
-#include "debug.h"
 
 
 class FlagBox : public QCheckBox
@@ -563,8 +562,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
 			"libraries to add to your project."));
   ldflags = " " + ldflags + " ";
   ldadd = " " + ldadd + " ";
-//  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldflags.data());
-//  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
+
   QGroupBox* ldflags_group;
   ldflags_group=new QGroupBox(w4,"ldflags_group");
   ldflags_group->setGeometry(10,10,490,100);

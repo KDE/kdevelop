@@ -26,7 +26,6 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 
-#include "debug.h"
 #include "ckdevelop.h"
 #include "cclassview.h"
 #include "kswallow.h"
@@ -62,10 +61,9 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
   for(actual_info=edit_infos.first();actual_info != 0;){
     TEditInfo* next_info=edit_infos.next();
     if (actual_info->filename == filename){ // found
-//      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
+
       menu_buffers->removeItem(actual_info->id);
       if(edit_infos.removeRef(actual_info)){
-//	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
       }
     }
     actual_info=next_info;
@@ -649,14 +647,13 @@ void CKDevelop::switchToFile(QString filename, bool bForceReload,bool bShowModif
   info->last_modified = fileinfo.lastModified();
 
   // update the widget
-//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"switchToFile: %s",filename.data());
+
   edit_widget->clear();
   edit_widget->loadFile(filename,1);
   edit_widget->setName(filename);
-//  edit_widget->setFocus();
   info->text = edit_widget->text();
   edit_infos.append(info); // add to the list
-  //      setMainCaption();  is handled by setCurrentTab()
+ 
   s_tab_view->setCurrentTab((edit_widget==header_widget) ? HEADER : CPP);
   edit_widget->setFocus();
 }

@@ -49,7 +49,6 @@
 
 #include "cproject.h"
 #include "ckappwizard.h"
-#include "debug.h"
 #include "ctoolclass.h"
 
 
@@ -1836,9 +1835,7 @@ void CKAppWizard::slotProcessExited() {
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
- // KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
   if (kdenormalitem->isSelected() || kdeminiitem->isSelected()) {
     sub_dir_list.append("po");
@@ -1847,9 +1844,7 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "prog_main";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   if (userdoc->isChecked()) {
     //    sub_dir_list.append("docs");
@@ -1858,27 +1853,21 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
   makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
   makeAmInfo.rel_name =  namelow + "/docs/en/Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
   
   if (!(cppitem->isSelected() || citem->isSelected() || qtnormalitem->isSelected()) && CToolClass::searchProgram("xgettext")) {
     makeAmInfo.rel_name = "po/Makefile.am";
-//    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
     makeAmInfo.type = "po";
-//    KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
     sub_dir_list.clear();
     makeAmInfo.sub_dirs = sub_dir_list;
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);

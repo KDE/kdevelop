@@ -302,7 +302,8 @@ void GrepDialog::slotSearch()
     cancel_button->setEnabled(true);
 
     QString files;
-    QStringList filelist = QStringList::split(",", files_combo->currentText());
+#warning FIXME: QStringList does not have method split or?
+   /* QStringList filelist = QStringList::split(",", files_combo->currentText());
     if (!filelist.isEmpty())
         {
             QStringList::Iterator it(filelist.begin());
@@ -311,6 +312,7 @@ void GrepDialog::slotSearch()
             for (; it != filelist.end(); ++it)
                 files += " -o -name '" + (*it) + "'";
         }
+*/
 
     status_label->setText(i18n("Searching..."));
 

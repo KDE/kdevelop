@@ -22,7 +22,6 @@
 #include <qregexp.h>
 #include <kprocess.h>
 #include "vc/versioncontrol.h"
-#include "debug.h"
 
 #define PROJECT_VERSION_STR "KDevelop Project File Version 0.3 #DO NOT EDIT#"
 
@@ -365,7 +364,7 @@ void CProject::getAllFiles(QStrList& list){
 
 bool CProject::isDirInProject(QString rel_name){
 
-//  KDEBUG(KDEBUG_INFO,CPROJECT,"isDirInProject() Don't use this function,it's not implemented!");
+  cerr << "isDirInProject() Don't use this function,it's not implemented!";
   return true;
   int pos = rel_name.findRev('/');
   QString dir_name;
@@ -512,7 +511,6 @@ bool CProject::addFileToProject(QString rel_name,TFileInfo info)
     slash2_pos = makefile_name.findRev('/',slash_pos-1);
     if(slash2_pos != -1){
       subdir = makefile_name.mid(slash2_pos+1,slash_pos-slash2_pos-1);
-//      KDEBUG1(KDEBUG_INFO,DIALOG,"SUBDIR %s",subdir.data());
       makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
       config.setGroup(makefile_name);
       sub_dirs.clear();

@@ -59,7 +59,6 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	doctreeview.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
 	cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
 	ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
-	debug.h \
 	cfinddoctextdlg.h kstartuplogo.h ktipofday.h ckdevinstall.h \
 	caddclassmethoddlg.h caddclassattributedlg.h \
 	cclasstooldlg.h cclasstreehandler.h ctreehandler.h \

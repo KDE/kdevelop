@@ -54,7 +54,7 @@
 extern KGuiCmdManager cmdMngr;
 
 CKDevelop::CKDevelop(bool witharg)
-    : shell_process("/bin/sh");
+    : shell_process("/bin/sh")
 {
   version = VERSION;
   project=false;// no project
@@ -178,7 +178,7 @@ void CKDevelop::initView(){
   cpp_widget->readConfig(config);
   cpp_widget->doc()->readConfig(config);
 
-//  edit_widget->setFocusPolicy(QWidget::StrongFocus);
+
 
 
   // init the 2 first kedits
@@ -197,7 +197,6 @@ void CKDevelop::initView(){
 
   swallow_widget = new KSwallowWidget(s_tab_view);
   swallow_widget->setFocusPolicy(QWidget::StrongFocus);
-//  swallow_widget->setFocusPolicy(QWidget::NoFocus);
 
   
 
@@ -207,8 +206,6 @@ void CKDevelop::initView(){
   s_tab_view->addTab(swallow_widget,i18n("Tool&s"));
 
 
-  //  top_panner->activate(t_tab_view,s_tab_view);// activate the top_panner
-  //  view->activate(top_panner,o_tab_view); 
 
   // set the mainwidget
   setView(view);
@@ -258,50 +255,18 @@ void CKDevelop::initKeyAccel(){
   accel->connectItem( KAccel::Quit, this, SLOT(slotFileQuit()) );
 
   //edit menu  
-/*  accel->connectItem( KAccel::Undo , this, SLOT(slotEditUndo()) );
-  
-  accel->insertItem( i18n("Redo"), "Redo",IDK_EDIT_REDO );
-  accel->connectItem( "Redo" , this, SLOT(slotEditRedo()) );
 
-  accel->connectItem( KAccel::Cut , this, SLOT(slotEditCut()) );
-  accel->connectItem( KAccel::Copy , this, SLOT(slotEditCopy()) );
-  accel->connectItem( KAccel::Paste , this, SLOT(slotEditPaste()) );
-
-  accel->insertItem( i18n("Indent"), "Indent",IDK_EDIT_INDENT );
-  accel->connectItem( "Indent", this, SLOT(slotEditIndent() ) );
-  
-  accel->insertItem( i18n("Unindent"), "Unindent",IDK_EDIT_UNINDENT );
-  accel->connectItem( "Unindent", this, SLOT(slotEditUnindent() ) );
-*/
   accel->insertItem( i18n("Insert File"), "InsertFile", "");
   accel->connectItem( "InsertFile", this, SLOT(slotEditInsertFile()) );
-/*
-  accel->connectItem( KAccel::Find, this, SLOT(slotEditSearch() ) );
 
-  accel->insertItem( i18n("Repeat Search"), "RepeatSearch",IDK_EDIT_REPEAT_SEARCH );
-  accel->connectItem( "RepeatSearch", this, SLOT(slotEditRepeatSearch() ) );
-
-  accel->connectItem( KAccel::Replace, this, SLOT(slotEditReplace() ) );
-*/
   accel->insertItem( i18n("Search in Files"), "Grep", IDK_EDIT_SEARCH_IN_FILES );
   accel->connectItem( "Grep", this, SLOT(slotEditSearchInFiles() ) );
 
   accel->insertItem( i18n("Search selection in Files"), "GrepSearch", IDK_EDIT_GREP_IN_FILES );
   accel->connectItem( "GrepSearch", this, SLOT(slotEditSearchText() ) );
-/*
-  accel->insertItem( i18n("Select All"), "SelectAll", IDK_EDIT_SELECT_ALL);
-  accel->connectItem("SelectAll", this, SLOT(slotEditSelectAll() ) );
-  
-  accel->insertItem(i18n("Deselect All"), "DeselectAll", "");
-  accel->connectItem("DeselectAll", this, SLOT(slotEditDeselectAll()));
-  
-  accel->insertItem(i18n("Invert Selection"), "Invert Selection", "");
-  accel->connectItem("Invert Selection", this, SLOT(slotEditInvertSelection()));
-*/
+
   //view menu
-/*  accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
-  accel->connectItem( "GotoLine", this, SLOT( slotViewGotoLine()) );
-*/
+
   accel->insertItem( i18n("Next Error"), "NextError",IDK_VIEW_NEXT_ERROR);
   accel->connectItem( "NextError", this, SLOT( slotViewNextError()) );
   
@@ -494,10 +459,10 @@ void CKDevelop::initMenuBar(){
   pixmap = loader->loadIcon("undo");
   edit_menu = new KGuiCmdPopup(kdev_dispatcher);//QPopupMenu;
   edit_menu->addCommand(ctEditCommands, cmUndo,pixmap, ID_EDIT_UNDO);
-//  edit_menu->insertItem(Icon("undo.xpm"), i18n("U&ndo"), this, SLOT(slotEditUndo()),0 ,ID_EDIT_;
+
   pixmap = loader->loadIcon("redo");
   edit_menu->addCommand(ctEditCommands, cmRedo, pixmap, ID_EDIT_REDO);
-//  edit_menu->insertItem(Icon("redo.xpm"), i18n("R&edo"), this, SLOT(slotEditRedo()),0 ,ID_EDIT_REDO);
+
 
   edit_menu->insertSeparator();
   pixmap = loader->loadIcon("cut");
@@ -506,17 +471,14 @@ void CKDevelop::initMenuBar(){
   edit_menu->addCommand(ctEditCommands, cmCopy, pixmap, this, SLOT(slotEditCopy()), ID_EDIT_COPY);
   pixmap = loader->loadIcon("paste");
   edit_menu->addCommand(ctEditCommands, cmPaste, pixmap, ID_EDIT_PASTE);
-//  edit_menu->insertItem(Icon("cut.xpm"),i18n("C&ut"), this, SLOT(slotEditCut()),0 ,ID_EDIT_CUT);
-//  edit_menu->insertItem(Icon("copy.xpm"),i18n("&Copy"), this, SLOT(slotEditCopy()),0 ,ID_EDIT_COPY);
-//  edit_menu->insertItem(Icon("paste.xpm"),i18n("&Paste"), this, SLOT(slotEditPaste()),0 , ID_EDIT_PASTE);
+
 
   edit_menu->insertSeparator();
   pixmap = loader->loadIcon("indent");
   edit_menu->addCommand(ctEditCommands, cmIndent, pixmap, ID_EDIT_INDENT);
   pixmap = loader->loadIcon("unindent");
   edit_menu->addCommand(ctEditCommands, cmUnindent, pixmap, ID_EDIT_UNINDENT);
-//  edit_menu->insertItem(Icon("indent.xpm"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
-//  edit_menu->insertItem(Icon("unindent.xpm"),i18n("&Unindent"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
+
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."), this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
@@ -525,11 +487,9 @@ void CKDevelop::initMenuBar(){
   pixmap = loader->loadIcon("search");
   edit_menu->addCommand(ctFindCommands, cmFind, pixmap, this, SLOT(slotEditSearch()), ID_EDIT_SEARCH);
   edit_menu->addCommand(ctFindCommands, cmFindAgain, this, SLOT(slotEditRepeatSearch()), ID_EDIT_REPEAT_SEARCH);
-//  edit_menu->insertItem(Icon("search.xpm"),i18n("&Search..."), this, SLOT(slotEditSearch()),0,ID_EDIT_SEARCH);
-//  edit_menu->insertItem(i18n("&Repeat Search"), this, SLOT(slotEditRepeatSearch()),0,ID_EDIT_REPEAT_SEARCH);
+
   
   edit_menu->addCommand(ctFindCommands, cmReplace, this, SLOT(slotEditReplace()), ID_EDIT_REPLACE);
-//  edit_menu->insertItem(i18n("&Replace..."), this, SLOT(slotEditReplace()),0,ID_EDIT_REPLACE);
   edit_menu->insertItem(BarIcon("grep"),i18n("&Search in Files..."), this, SLOT(slotEditSearchInFiles()),0,ID_EDIT_SEARCH_IN_FILES);
 //  edit_menu->insertItem(i18n("Spell&check..."),this, SLOT(slotEditSpellcheck()),0,ID_EDIT_SPELLCHECK);
 
@@ -538,9 +498,7 @@ void CKDevelop::initMenuBar(){
   edit_menu->addCommand(ctEditCommands, cmDeselectAll, ID_EDIT_DESELECT_ALL);
   edit_menu->addCommand(ctEditCommands, cmInvertSelection, ID_EDIT_INVERT_SELECTION);
 
-//  edit_menu->insertItem(i18n("Select &All"), this, SLOT(slotEditSelectAll()),0,ID_EDIT_SELECT_ALL);
-//  edit_menu->insertItem(i18n("Deselect All"), this, SLOT(slotEditDeselectAll()),0,ID_EDIT_DESELECT_ALL);
-//  edit_menu->insertItem(i18n("Invert Selection"), this, SLOT(slotEditInvertSelection()),0,ID_EDIT_INVERT_SELECTION);
+
   
   kdev_menubar->insertItem(i18n("&Edit"), edit_menu);
 
@@ -1206,9 +1164,7 @@ if(bKDevelop){
     accel->changeMenuAccel(edit_menu, ID_EDIT_REPEAT_SEARCH,"RepeatSearch" );
     accel->changeMenuAccel(edit_menu, ID_EDIT_REPLACE,KAccel::Replace );*/
     accel->changeMenuAccel(edit_menu, ID_EDIT_SEARCH_IN_FILES,"Grep" );
-/*    accel->changeMenuAccel(edit_menu, ID_EDIT_INDENT,"Indent" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
-    accel->changeMenuAccel(edit_menu, ID_EDIT_SELECT_ALL, "SelectAll");*/
+
 		
 //    accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
     accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );

@@ -55,7 +55,6 @@
 #include "doctreeview.h"
 #include "cfinddoctextdlg.h"
 #include "cexecuteargdlg.h"
-#include "debug.h"
 #include "./kwrite/kwdoc.h"
 #include "kswallow.h"
 #include "cerrormessageparser.h"
@@ -373,7 +372,7 @@ void CKDevelop::slotFileSaveAll(){
     statProg->setProgress(0);
     int i=0;
     for(actual_info=edit_infos.first();actual_info != 0;){
-	//KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+
 	TEditInfo *next_info=edit_infos.next();
 	// get now the next info... fileSaveAs can delete the actual_info
 	i++;
@@ -388,8 +387,8 @@ void CKDevelop::slotFileSaveAll(){
 			next_info=edit_infos.first();
 			i=0;
 		    }
-		//  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
-		//  mod = true;  this is now handled by slotFileSaveAs()
+	    
+	       
 	    }
 	    else{
 		switchToFile(actual_info->filename,false,false);
@@ -570,13 +569,6 @@ void CKDevelop::slotEditReplace(){
 }
 
 
-void CKDevelop::slotEditIndent(){
-	edit_widget->indent();
-}
-void CKDevelop::slotEditUnindent(){
-	edit_widget->unIndent();
-}
-
 void CKDevelop::slotEditSpellcheck(){
 	edit_widget->spellcheck();
 }
@@ -589,9 +581,7 @@ void CKDevelop::slotEditSelectAll(){
 }
 
 
-void CKDevelop::slotEditInvertSelection(){
-    edit_widget->invertSelection();
-}
+
 
 
 void CKDevelop::slotEditDeselectAll(){
@@ -920,11 +910,12 @@ void CKDevelop::slotBuildRebuildAll(){
   //  QString shell = getenv("SHELL");
   QString flaglabel;
   //  if(shell == "/bin/bash"){
-      flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
-      //  }
-      //  else{
-      //      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
-  }
+  flaglabel=(prj->getProjectType()=="normal_c") ? "CFLAGS=\"" : "CXXFLAGS=\"";
+  //  }
+  //  else{
+  //      flaglabel=(prj->getProjectType()=="normal_c") ? "env CFLAGS=\"" : "env CXXFLAGS=\"";
+  //  }
+  
   
 
   error_parser->reset();
@@ -1376,7 +1367,6 @@ void CKDevelop::slotHelpBack(){
     browser_widget->showURL(str);
   }
 
-  //KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
   slotStatusMsg(i18n("Ready."));
 }
 

@@ -21,7 +21,6 @@
 #include <qfileinfo.h>
 #include <qwhatsthis.h>
 #include <klocale.h>
-#include "debug.h"
 #include "cfilepropdlg.h"
 #include "cproject.h"
 #include "clogfileview.h"
@@ -337,7 +336,6 @@ void CFilePropDlg::slotSelectionChanged(QListViewItem* item){
     saved_info->dist = incdist_check->isChecked();
     saved_info->install = install_check->isChecked();
     saved_info->install_location = install_loc_edit->text();
-//    KDEBUG(KDEBUG_INFO,DIALOG,"fileinfo  saved");
   }
   // prepare the new 
   // find the tfileinfo
