@@ -2,6 +2,9 @@
 	* Added a "diff frontend" to allow other plugins use the diff part.
 	* Implemented it for CVS, so you can now view the differences to the
           repository.
+	* Applied patch by "Caleb Tennis" <caleb@aei-tech.com>:
+	  ask whether a file should be removed from the recent project
+	  list if it doesn't exist anymore
 
 2002-07-29 Harald Fernengel <harry@kdevelop.org>
 	* Added a part to show diffs either in the widget from Kompare (->KDESDK)
