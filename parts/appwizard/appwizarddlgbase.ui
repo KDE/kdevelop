@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>563</width>
-            <height>551</height>
+            <height>585</height>
         </rect>
     </property>
     <property name="caption">
@@ -61,177 +61,6 @@
                 <property name="resizeMode">
                     <enum>LastColumn</enum>
                 </property>
-            </widget>
-            <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
-                <property name="name">
-                    <cstring>GroupBox1</cstring>
-                </property>
-                <property name="title">
-                    <string>Properties</string>
-                </property>
-                <grid>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>11</number>
-                    </property>
-                    <property name="spacing">
-                        <number>6</number>
-                    </property>
-                    <widget class="QLabel" row="1" column="0">
-                        <property name="name">
-                            <cstring>location_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Location:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>dest_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="2" column="0">
-                        <property name="name">
-                            <cstring>author_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Author:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>author_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>dest_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="4">
-                        <property name="name">
-                            <cstring>appname_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="3" column="0">
-                        <property name="name">
-                            <cstring>version_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Version:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>version_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="0" column="0">
-                        <property name="name">
-                            <cstring>appname_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>Application &amp;name:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>appname_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QToolButton" row="1" column="5">
-                        <property name="name">
-                            <cstring>dest_button</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>3</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>30</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>30</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>....</string>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="3" column="1">
-                        <property name="name">
-                            <cstring>version_edit</cstring>
-                        </property>
-                        <property name="text">
-                            <string>0.1</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="3" column="2">
-                        <property name="name">
-                            <cstring>license_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>L&amp;icense:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>license_combo</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QComboBox" row="3" column="3" rowspan="1" colspan="2">
-                        <item>
-                            <property name="text">
-                                <string>GPL</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>BSD</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>QPL</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>LGPL</string>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Custom</string>
-                            </property>
-                        </item>
-                        <property name="name">
-                            <cstring>license_combo</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="2" column="1">
-                        <property name="name">
-                            <cstring>author_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLabel" row="2" column="2" rowspan="1" colspan="2">
-                        <property name="name">
-                            <cstring>email_label</cstring>
-                        </property>
-                        <property name="text">
-                            <string>&amp;Email:</string>
-                        </property>
-                        <property name="buddy" stdset="0">
-                            <cstring>email_edit</cstring>
-                        </property>
-                    </widget>
-                    <widget class="QLineEdit" row="2" column="4">
-                        <property name="name">
-                            <cstring>email_edit</cstring>
-                        </property>
-                    </widget>
-                </grid>
             </widget>
             <widget class="QLabel" row="0" column="1">
                 <property name="name">
@@ -312,6 +141,193 @@
                     <bool>true</bool>
                 </property>
             </widget>
+            <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+                <property name="name">
+                    <cstring>GroupBox1</cstring>
+                </property>
+                <property name="title">
+                    <string>Properties</string>
+                </property>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>11</number>
+                    </property>
+                    <property name="spacing">
+                        <number>6</number>
+                    </property>
+                    <widget class="QLabel" row="1" column="0">
+                        <property name="name">
+                            <cstring>location_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Location:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>dest_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>author_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Author:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>author_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>dest_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+                        <property name="name">
+                            <cstring>appname_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="3" column="0">
+                        <property name="name">
+                            <cstring>version_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Version:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>version_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>appname_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Application &amp;name:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>appname_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QToolButton" row="1" column="4">
+                        <property name="name">
+                            <cstring>dest_button</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>3</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>30</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>30</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>....</string>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="3" column="1">
+                        <property name="name">
+                            <cstring>version_edit</cstring>
+                        </property>
+                        <property name="text">
+                            <string>0.1</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="3" column="2">
+                        <property name="name">
+                            <cstring>license_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>L&amp;icense:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>license_combo</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QComboBox" row="3" column="3">
+                        <item>
+                            <property name="text">
+                                <string>GPL</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>BSD</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>QPL</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>LGPL</string>
+                            </property>
+                        </item>
+                        <item>
+                            <property name="text">
+                                <string>Custom</string>
+                            </property>
+                        </item>
+                        <property name="name">
+                            <cstring>license_combo</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="1">
+                        <property name="name">
+                            <cstring>author_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="2">
+                        <property name="name">
+                            <cstring>email_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Email:</string>
+                        </property>
+                        <property name="buddy" stdset="0">
+                            <cstring>email_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLineEdit" row="2" column="3">
+                        <property name="name">
+                            <cstring>email_edit</cstring>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="4" column="1" rowspan="1" colspan="4">
+                        <property name="name">
+                            <cstring>finalLoc_label</cstring>
+                        </property>
+                        <property name="text">
+                            <string>TextLabel4</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="4" column="0">
+                        <property name="name">
+                            <cstring>TextLabel3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Final location:</string>
+                        </property>
+                    </widget>
+                </grid>
+            </widget>
         </grid>
     </widget>
 </widget>
@@ -330,18 +346,6 @@
     </connection>
     <connection>
         <sender>version_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>textChanged()</slot>
-    </connection>
-    <connection>
-        <sender>appname_edit</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>AppWizardDlgBase</receiver>
-        <slot>projectNameChanged()</slot>
-    </connection>
-    <connection>
-        <sender>appname_edit</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>AppWizardDlgBase</receiver>
         <slot>textChanged()</slot>
@@ -375,6 +379,18 @@
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>AppWizardDlgBase</receiver>
         <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>appname_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>textChanged()</slot>
+    </connection>
+    <connection>
+        <sender>appname_edit</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>AppWizardDlgBase</receiver>
+        <slot>projectLocationChanged()</slot>
     </connection>
 </connections>
 <tabstops>

@@ -19,6 +19,7 @@
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
+#include <qmessagebox.h>
 
 #include "importdlg.h"
 #include "appwizarddlg.h"

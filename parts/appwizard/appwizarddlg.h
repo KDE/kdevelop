@@ -25,6 +25,7 @@ class QVBox;
 #include <qdict.h>
 #include <qlistview.h>
 #include <qlineedit.h>
+#include <qlabel.h>
 
 #include "kdevglobalversioncontrol.h"
 #include "appwizarddlgbase.h"
@@ -61,7 +62,7 @@ public:
     AppWizardDialog( AppWizardPart *part, QWidget *parent=0, const char *name=0 );
     ~AppWizardDialog();
     QString getProjectName() { return appname_edit->text(); }
-    QString getProjectLocation() { return dest_edit->text(); }
+    QString getProjectLocation() { return finalLoc_label->text(); }
     QString getCommandLine() { return m_cmdline; }
     QString getShowFileAfterGeneration();
 
@@ -89,6 +90,7 @@ private:
     ApplicationInfo* m_pCurrentAppInfo;
     bool m_projectLocationWasChanged;
     VcsForm *m_vcs;
+    bool m_pathIsValid;
 };
 
 #endif

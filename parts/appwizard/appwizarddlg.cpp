@@ -22,7 +22,6 @@
 #include <qfileinfo.h>
 #include <qgrid.h>
 #include <qheader.h>
-#include <qlabel.h>
 #include <qlistview.h>
 #include <qmap.h>
 #include <qmultilineedit.h>
@@ -59,14 +58,15 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     helpButton()->hide();
     templates_listview->header()->hide();
 
+    m_pathIsValid=false;
     m_part = part;
     m_projectLocationWasChanged=false;
     m_appsInfo.setAutoDelete(true);
     m_tempFiles.setAutoDelete(true);
-    
+
     KStandardDirs *dirs = AppWizardFactory::instance()->dirs();
     QStringList m_templateNames = dirs->findAllResources("apptemplates", QString::null, false, true);
-    
+
     kdDebug(9010) << "Templates: " << endl;
     QStringList categories;
 
@@ -113,7 +113,7 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
                           << ait.current()->category << endl;
         ait.current()->item = item;
     }
-    
+
     QString author, email;
     AppWizardUtil::guessAuthorAndEmail(&author, &email);
     author_edit->setText(author);
@@ -161,14 +161,14 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
     //    addPage(m_sdi_fileprops_page,"Class/File Properties");
 
     //    licenseChanged();
-    
+
     m_vcs = new VcsForm();
-    
+
     int i=0;
     m_vcs->combo->insertItem("None",i);
     //m_vcs->stack->addWidget(new QLabel(QString("plop"),m_vcs->stack),i++);
     m_vcs->stack->addWidget(0,i++);
-        
+
     KDevGlobalVersionControl::GlobalVcsMap map = KDevGlobalVersionControl::vcsMap();
     for (KDevGlobalVersionControl::GlobalVcsMap::Iterator it = map.begin(); it != map.end(); ++it) {
 	if ( !(*it) )
@@ -176,9 +176,9 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
         m_vcs->combo->insertItem(it.key(),i);
         m_vcs->stack->addWidget((*it)->newProjectWidget(m_vcs->stack),i++);
     }
-    m_vcs->stack->raiseWidget(0);   
+    m_vcs->stack->raiseWidget(0);
     addPage(m_vcs,"Version Control System");
-        
+
     nextButton()->setEnabled(!appname_edit->text().isEmpty());
 }
 
@@ -193,11 +193,12 @@ void AppWizardDialog::textChanged()
 
     bool invalid = !m_pCurrentAppInfo
         || appname_edit->text().isEmpty()
-        || dest_edit->text().isEmpty()
+        || !m_pathIsValid
         || author_edit->text().isEmpty()
         || version_edit->text().isEmpty();
     setFinishEnabled(m_lastPage, !invalid);
-    nextButton()->setEnabled(!appname_edit->text().isEmpty());
+    nextButton()->setEnabled(!appname_edit->text().isEmpty()&&!invalid);
+
 }
 
 
@@ -279,7 +280,7 @@ void AppWizardDialog::licenseChanged()
             text.replace(QRegExp("\n ##"), "\n##");
             text.replace(QRegExp("\n #"), "\n# ");
         }
-            
+
         edit->setText(text);
     }
 }
@@ -287,7 +288,7 @@ void AppWizardDialog::licenseChanged()
 
 void AppWizardDialog::accept()
 {
-    QFileInfo fi(dest_edit->text());
+    QFileInfo fi(finalLoc_label->text());
     if (fi.exists()) {
         KMessageBox::sorry(this, i18n("The directory you have chosen as the location for "
                                       "the project already exists."));
@@ -301,7 +302,7 @@ void AppWizardDialog::accept()
         KShellProcess p("/bin/sh");
         p.clearArguments();
         p << "mkdirhier";
-        p << "\"" << dest_edit->text() << "\"";
+        p << "\"" << finalLoc_label->text() << "\"";
         p.start(KProcess::Block,KProcess::AllOutput);
     }
 
@@ -370,7 +371,7 @@ void AppWizardDialog::accept()
     m_cmdline += " --appname=";
     m_cmdline +=  KShellProcess::quote(appname_edit->text());
     m_cmdline += " --dest=";
-    m_cmdline +=  KShellProcess::quote(dest_edit->text());
+    m_cmdline +=  KShellProcess::quote(finalLoc_label->text());
     m_cmdline += " --source=";
     m_cmdline +=  KShellProcess::quote(source);
     m_cmdline += " --license=";
@@ -385,10 +386,10 @@ void AppWizardDialog::accept()
     if (m_vcs->stack->id(m_vcs->stack->visibleWidget())) {
         KDevGlobalVersionControl* pVC = KDevGlobalVersionControl::vcsMap()[m_vcs->combo->currentText()];
         if (pVC) {
-            pVC->createNewProject(dest_edit->text());
+            pVC->createNewProject(finalLoc_label->text());
         }
     }
-    
+
     QWizard::accept();
 }
 
@@ -403,7 +404,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
         m_fileTemplates.remove(m_fileTemplates.begin());
     }
     m_lastPage = 0;
-    
+
     ApplicationInfo *info = templateForItem(item);
     if (info) {
         m_pCurrentAppInfo = info;
@@ -420,7 +421,7 @@ void AppWizardDialog::templatesTreeViewClicked(QListViewItem *item)
         desc_textview->setText(info->comment);
         dest_edit->setText(info->defaultDestDir);
         m_projectLocationWasChanged = false;
-        projectNameChanged(); // set the dest new
+        //projectNameChanged(); // set the dest new
 
         // Create new file template pages
         QStringList l = QStringList::split(",", info->fileTemplates);
@@ -462,16 +463,23 @@ void AppWizardDialog::destButtonClicked()
 void AppWizardDialog::projectNameChanged()
 {
     // Location was already edited by hand => don't change
-    if (!m_projectLocationWasChanged && m_pCurrentAppInfo)
-        dest_edit->setText(m_pCurrentAppInfo->defaultDestDir
-                           + "/" + appname_edit->text().lower());
 }
 
 
 void AppWizardDialog::projectLocationChanged()
 {
-    if (dest_edit->hasFocus())
-        m_projectLocationWasChanged = true;
+  // Jakob Simon-Gaarde: Got tired of the anoying bug with the appname/location confussion.
+  // This version insures WYSIWYG and checks pathvalidity
+  finalLoc_label->setText(dest_edit->text() + (dest_edit->text().right(1)=="/" ? "":"/") + appname_edit->text().lower());
+  QDir qd(dest_edit->text());
+  if (!qd.exists())
+  {
+    finalLoc_label->setText(finalLoc_label->text() + " (invalid)");
+    m_pathIsValid=false;
+  }
+  else
+    m_pathIsValid=true;
+
 }
 
 
@@ -517,7 +525,7 @@ ApplicationInfo *AppWizardDialog::templateForItem(QListViewItem *item)
 QString AppWizardDialog::getShowFileAfterGeneration()
 {
     if (m_pCurrentAppInfo && !m_pCurrentAppInfo->showFileAfterGeneration.isEmpty())
-        return dest_edit->text() + "/" + m_pCurrentAppInfo->showFileAfterGeneration;
+        return finalLoc_label->text() + "/" + m_pCurrentAppInfo->showFileAfterGeneration;
 
     return QString();
 }
