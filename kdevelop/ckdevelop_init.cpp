@@ -155,6 +155,8 @@ void CKDevelop::init(){
   connect(class_tree, SIGNAL(selectedProjectOptions()), SLOT(slotProjectOptions()));
   connect(class_tree, SIGNAL(selectedViewDeclaration()), SLOT(slotCVViewDeclaration()));
   connect(class_tree, SIGNAL(selectedViewDefinition()), SLOT(slotCVViewDefinition()));
+  connect(class_tree, SIGNAL(signalAddMethod( CParsedMethod *)), SLOT(slotCVAddMethod( CParsedMethod * )));
+  connect(class_tree, SIGNAL(signalAddAttribute( CParsedAttribute *)), SLOT(slotCVAddAttribute( CParsedAttribute * )));
 
   connect(log_file_tree, SIGNAL(logFileTreeSelected(QString)), SLOT(slotLogFileTreeSelected(QString)));
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
