@@ -74,8 +74,7 @@ AddApplicationDialog::~AddApplicationDialog()
 void AddApplicationDialog::iconClicked()
 {
     KIconLoader *loader = AutoProjectFactory::instance()->iconLoader();
-    KIconDialog dlg(loader, this);
-    QString name = dlg.selectIcon(KIcon::Desktop);
+    QString name = KIconDialog::getIcon(KIcon::Desktop);
     if (!name.isNull()) {
         iconName = name;
         icon_button->setPixmap(loader->loadIcon(name, KIcon::Desktop));
