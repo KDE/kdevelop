@@ -48,8 +48,17 @@ void CKDevelop::slotFileNewAppl(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
-
-
+  if(project){
+  	int message_result=KMsgBox::yesNo(this,i18n("Close Project ?"),i18n("Currently,Project\n\n ")+prj.getProjectName()+
+									i18n("\n\nis open. Close it ?\n\n"),KMsgBox::QUESTION);
+    if(message_result ==1){  
+			slotProjectClose();
+    }
+		else{
+			return;
+		}
+	}
+	 
   slotStatusMsg(i18n("Creating a new frame application..."));
   CKAppWizard* kappw  = new CKAppWizard (this,"zutuz");
   kappw->exec();
@@ -82,19 +91,32 @@ void CKDevelop::slotFileOpenFile(){
   
 }
 void CKDevelop::slotFileOpenPrj(){
-  slotStatusMsg(i18n("Opening project..."));
-
-  QString str;
-  str = KFileDialog::getOpenFileName(prj.getProjectDir(),"*.kdevprj",this);
-  slotStatusMsg(IDS_DEFAULT); 
-  if (str.isEmpty()) return; //cancel
-  QFileInfo info(str);
-  
-  if (info.isFile()){
-    if(!(readProjectFile(str))){
-      KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+  if(project){
+  	int message_result=KMsgBox::yesNo(this,i18n("Close Project ?"),i18n("Currently,Project\n\n ")+prj.getProjectName()+
+									i18n("\n\nis open. Close it ?\n\n"),KMsgBox::QUESTION);
+    if(message_result ==1){ // Yes !! 
+			// close current project first
+			slotProjectClose();
     }
+		else{ // Cancel
+			return;
+		}   
   }
+  // then open other project
+	slotStatusMsg(i18n("Opening project..."));
+	QString str;
+	str = KFileDialog::getOpenFileName(prj.getProjectDir(),"*.kdevprj",this);
+	if (str.isEmpty()) return; //cancel
+	QFileInfo info(str);
+  
+	if (info.isFile()){
+		if(!(readProjectFile(str))){
+		  KMsgBox::message(0,str,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
+		}
+
+		slotStatusMsg(IDS_DEFAULT);
+	}	
+
 
 }
 
@@ -148,16 +170,16 @@ void CKDevelop::slotFileSaveAll(){
     cerr << "check:" << actual_info->filename << endl;
     if(actual_info->modified){
       if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
-	switchToFile(actual_info->filename);
-	slotFileSaveAs();
-	cerr << actual_info->filename << "UNTITLED";
-	mod = true;
+				switchToFile(actual_info->filename);
+				slotFileSaveAs();
+				cerr << actual_info->filename << "UNTITLED";
+				mod = true;
       }
       else{
-	switchToFile(actual_info->filename);
-	edit_widget->doSave();
-	cerr << actual_info->filename;
-	mod = true;
+				switchToFile(actual_info->filename);
+				edit_widget->doSave();
+				cerr << actual_info->filename;
+				mod = true;
       }
     }
   }
@@ -225,10 +247,10 @@ void CKDevelop::slotFileClose(){
   //search the actual edit_info and remove it
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
     if (actual_info->filename == edit_widget->getName()){ // found
-             cerr << "remove edit_info begin\n";
-             menu_buffers->removeItem(actual_info->id);
+       cerr << "remove edit_info begin\n";
+       menu_buffers->removeItem(actual_info->id);
 	     if(edit_infos.removeRef(actual_info)){
-	cerr << "remove edit_info end\n";
+			 	cerr << "remove edit_info end\n";
        }
     }
   }
@@ -245,7 +267,6 @@ void CKDevelop::slotFileClose(){
      }
    }
    // if not found a successor create an new file
-   
    actual_info = new TEditInfo;
    actual_info->modified=false;
    if (getTabLocation(edit_widget->getName()) == 0) {// header
@@ -321,6 +342,9 @@ void CKDevelop::closeEvent(QCloseEvent* e){
 
 void CKDevelop::slotFileQuit(){
   slotStatusMsg(i18n("Exiting..."));
+  if(project=true){   // if project loaded - close it first to save changes
+			slotProjectClose();
+  }
   close(); 
 }
 void CKDevelop::slotEditUndo(){
@@ -1561,6 +1585,42 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

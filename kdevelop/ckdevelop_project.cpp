@@ -17,17 +17,15 @@
  *                                                                         *
  ***************************************************************************/
 #include "ckdevelop.h"
-#include <iostream.h>
-#include "cprjoptionsdlg.h"
-#include "cnewclassdlg.h"
-#include "cfilepropdlg.h"
-#include "caddexistingfiledlg.h"
-#include <htmltoken.h>
 
 
 void CKDevelop::slotProjectNew(){
-  if(project=true)
-  slotProjectClose();
+	// Currently a project open ?
+  if(project){
+  	int message_result=KMsgBox::yesNo(this,i18n("Close Project ?"),i18n("Currently,Project\n\n")+prj.getProjectName()+
+									i18n("\n\nis open. Close it ?\n\n"),KMsgBox::QUESTION);
+    if(message_result ==1){    // Yes !
+			slotProjectClose();      // close current project
 
 /* TODO:
   add a dialog to create empty project file, just set
@@ -36,13 +34,218 @@ void CKDevelop::slotProjectNew(){
   - then call slotProjectAddExistingFiles to add all files needed by the new app.
   Makefile.am - don't know yet how to create it for the project Type. Maybe Prototypes ?
   Ralf */
+			
+		}
+		else{   // Cancel
+      return;
+		}
+	}  
 
 }
 
+
 void CKDevelop::slotProjectClose(){
+  // R.Nolden 03.02.99
+  slotStatusMsg(i18n("Closing project..."));
+  TEditInfo* actual_info;
+  bool mod=true;
+  bool headerCancel=false;
+  bool cppCancel=false;
+  
 
- /* TODO: close the actual project and remove files from windows menu*/
+  // check if header widget contains modified file
+	if(header_widget->isModified()){
+	  cerr << "header_widget modified file" << endl;
+	  KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
+				+i18n("\n\ncontains changed files. Save modified file\n")+header_widget->getName()+" ?",KMsgBox::QUESTION,
+				i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+ 			// show the messagea and store result in result:
+    project_close->show();
+    int result=project_close->result();
+		edit_widget=header_widget;
 
+			// then show the messagebox
+    cerr << "header msgbox result"<<endl;
+		// yes- save headerwidget
+		if(result== 1){			 	
+		  if(edit_widget->getName() == "Untitled.h"){
+		    slotFileSaveAs();    
+        slotFileClose();
+		  }
+			else{
+			  slotFileSave();
+        slotFileClose();
+  			}
+      edit_widget->toggleModified(false);      
+	  	mod=true;
+		}  
+    if(result==2){   // No - no save but close
+			cerr << "No- close header widget file" << endl;
+			edit_widget->toggleModified(false);
+			slotFileClose();
+      mod=true;
+		}
+		if(result==3){  // Save all
+			cerr << "Save all" <<endl;
+			slotFileSaveAll();
+      mod=true;
+		}
+		if(result==4){ // Cancel
+			cerr << "Cancel project close" <<endl;
+      mod=false;
+      headerCancel=true;
+		}
+	} // end header widge close
+  
+  if(cpp_widget->isModified()){
+	  KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
+				+i18n("\n\ncontains changed files. Save modified file\n")+cpp_widget->getName()+" ?",KMsgBox::QUESTION,
+				i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+ 			// show the messagea and store result in result:
+		project_close->show();
+    int result=project_close->result();
+
+		cerr <<"cpp_widget modified file"<<endl;
+		cerr << "cpp msgbox result"<<endl;
+		// yes- save cpp widget
+		edit_widget=cpp_widget;
+		if(result== 1){			 	
+		  if(edit_widget->getName() == "Untitled.cpp"){
+		    slotFileSaveAs();    
+        slotFileClose();
+		  }
+			else{
+			  slotFileSave();
+        slotFileClose();
+  		}
+      edit_widget->toggleModified(false);      
+	  	mod=true;
+		}  
+    if(result==2){   // No - no save but close
+			cerr << "No- close header widget file" << endl;
+			edit_widget->toggleModified(false);
+			slotFileClose();
+      mod=true;
+		}
+		if(result==3){  // Save all
+			cerr << "Save all" <<endl;
+			slotFileSaveAll();
+      mod=true;
+		}
+		if(result==4){ // Cancel
+			cerr << "Cancel project close" <<endl;
+      cppCancel=true;
+      mod=false;
+		}
+
+	}  // end cppwidget close
+
+  if(!headerCancel && !cppCancel){
+  // for -loop for actual infos
+  for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
+    cerr << "check file:" << actual_info->filename << endl;
+    if(actual_info->modified){
+
+		  KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj.getProjectName()
+					+i18n("\n\ncontains changed files. Save modified file\n")+actual_info->filename+" ?",KMsgBox::QUESTION,
+					i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+ 				// show the messagea and store result in result:
+			project_close->show();
+    	int result=project_close->result();
+
+      cerr << "Msgbox" << endl;
+			// create the save project messagebox
+
+      // what to do
+	    if(result==1){  // Yes- only save the actual file
+				// save file as if Untitled and close file
+ 		  	if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
+					cerr << "yes- untitled" << endl;
+					switchToFile(actual_info->filename);
+					slotFileSaveAs();
+          slotFileClose();
+        }
+				// Save file and close it
+				else{
+					cerr << "yes- save" << endl;
+	 				switchToFile(actual_info->filename);
+					slotFileSave();
+         	slotFileClose();
+//					if(edit_infos.removeRef(actual_info));
+				}
+				mod = true;
+			} 
+
+			if(result==2){   // No - no save but close
+				cerr << "No- close file" << endl;
+        actual_info->modified=false;
+				slotFileClose();
+        mod=true;
+			}
+			if(result==3){  // Save all
+				cerr << "Save all" <<endl;
+				slotFileSaveAll();
+				mod=true;
+ 				break;
+			}
+			if(result==4){ // Cancel
+        mod=false;
+				cerr << "Cancel project close" <<endl;
+				break;
+			}
+
+    }  // end actual file close
+	} // end for-loop
+	} // end the if cppCancel && headerCancel
+ 
+  if(mod){
+    header_widget->clear();
+    cpp_widget->clear();
+    class_tree->clear();
+	  log_file_tree->clear();
+	  real_file_tree->clear();
+    menu_buffers->clear();
+
+	  toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_CLASS_CHOICE);
+  	toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_METHOD_CHOICE);
+
+
+
+  	header_widget->setName("Untitled.h");
+  	cpp_widget->setName("Untitled.cpp");
+  	TEditInfo* edit1 = new TEditInfo;
+  	TEditInfo* edit2 = new TEditInfo;
+  	edit1->filename = header_widget->getName();
+  	edit2->filename = cpp_widget->getName();
+
+ 		edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
+  	edit1->modified=false;
+  	edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
+  	edit2->modified=false;
+  	edit_infos.append(edit1);
+  	edit_infos.append(edit2);
+	}
+  project=false;
+  switchToFile(header_widget->getName());
+
+  disableCommand(ID_FILE_NEW_FILE);
+  // doc menu
+  disableCommand(ID_DOC_PROJECT_API_DOC);
+  disableCommand(ID_DOC_USER_MANUAL);
+  // build menu
+  setToolMenuProcess(false);  
+  // prj menu
+  disableCommand(ID_PROJECT_CLOSE);
+  disableCommand(ID_PROJECT_ADD_FILE);
+  disableCommand(ID_PROJECT_ADD_FILE_NEW);
+  disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+  disableCommand(ID_PROJECT_REMOVE_FILE);
+  disableCommand(ID_PROJECT_NEW_CLASS);
+  disableCommand(ID_PROJECT_FILE_PROPERTIES);
+  disableCommand(ID_PROJECT_OPTIONS);
+
+  disableCommand(ID_BUILD_AUTOCONF);
+  slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotProjectCompileFile(){
 /* TODO: add a process reading the filename and compiler options->gcc -options -filename ...*/
@@ -244,6 +447,60 @@ void CKDevelop::slotProjectFileProperties(){
   CFilePropDlg dlg(this,"DLG",&prj);
   dlg.show();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

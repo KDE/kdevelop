@@ -20,7 +20,7 @@
 #include <iostream.h>
 #include <kmsgbox.h>
 #include "./kwrite/kwdoc.h"
-
+			
 CKDevelop::CKDevelop(){
   QString filename;
   version = VERSION;
@@ -44,6 +44,7 @@ CKDevelop::CKDevelop(){
   
   // if first start, the onlinehelp is shown, so outputview is false
   // else show output view according to value in config file  -Ralf
+
   config->setGroup("General Options");
   bool showOutput=config->readBoolEntry("show_output_view",false);
   if( showOutput=true)
@@ -122,9 +123,12 @@ void CKDevelop::init(){
 
   view = new KNewPanner(this,"view",KNewPanner::Horizontal,KNewPanner::Percent,
   			config->readNumEntry("view_panner_pos",80));
+
+
   o_tab_view = new CTabCtl(view,"output_tabview","output_widget");
   
   messages_widget = new COutputWidget(kapp,o_tab_view);
+  messages_widget->setFocusPolicy(QWidget::ClickFocus);
 
 //  output_widget->setFillColumnMode(80,true);
 //  output_widget->setWordWrap(true);
@@ -134,10 +138,13 @@ void CKDevelop::init(){
   connect(messages_widget,SIGNAL(clicked()),this,SLOT(slotClickedOnMessagesWidget()));
 
   stdin_stdout_widget = new COutputWidget(kapp,o_tab_view);
+  stdin_stdout_widget->setFocusPolicy(QWidget::StrongFocus);
 
   connect(stdin_stdout_widget,SIGNAL(keyPressed(int)),this,SLOT(slotKeyPressedOnStdinStdoutWidget(int)));
   stderr_widget = new COutputWidget(kapp,o_tab_view);
   stderr_widget->setReadOnly(TRUE);
+  stderr_widget->setFocusPolicy(QWidget::ClickFocus);
+
   o_tab_view->addTab(messages_widget,"messages");
   o_tab_view->addTab(stdin_stdout_widget,"stdin/stdout");
   o_tab_view->addTab(stderr_widget,"stderr");
@@ -219,24 +226,20 @@ void CKDevelop::init(){
   cpp_widget->readConfig(config);
   cpp_widget->doc()->readConfig(config);
 
-  edit_widget->setFocusPolicy(QWidget::NoFocus);
+  edit_widget->setFocusPolicy(QWidget::StrongFocus);
 
   connect(cpp_widget, SIGNAL(newCurPos()), this, SLOT(slotNewLineColumn()));
   connect(cpp_widget, SIGNAL(newStatus()),this, SLOT(slotNewStatus()));
   connect(cpp_widget, SIGNAL(newUndo()),this, SLOT(slotNewUndo()));
-
 
   // init the 2 first kedits
   TEditInfo* edit1 = new TEditInfo;
   TEditInfo* edit2 = new TEditInfo;
   edit1->filename = header_widget->getName();
   edit2->filename = cpp_widget->getName();
-  
-
 
   browser_widget = new CDocBrowser(s_tab_view,"browser");
-//  browser_widget->setFocusPolicy(QWidget::StrongFocus);
-  browser_widget->setFocusPolicy(QWidget::NoFocus);
+  browser_widget->setFocusPolicy(QWidget::StrongFocus);
 
   prev_was_search_result= false;
   //init
@@ -268,8 +271,8 @@ void CKDevelop::init(){
   initMenu();
   initToolbar();
   initStatusBar();
-  
-  
+
+
   // initialize output_view_pos
   if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     output_view_pos=view->separatorPos();
@@ -289,13 +292,14 @@ void CKDevelop::init(){
     tree_view_pos=config->readNumEntry("tree_view_pos", 213);
   }
 
-  // the rest of the init for the kedits
-  edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
+   // the rest of the init for the kedits
+ 	edit1->id = menu_buffers->insertItem(edit1->filename,-2,0);
   edit1->modified=false;
   edit2->id = menu_buffers->insertItem(edit2->filename,-2,0);
   edit2->modified=false;
   edit_infos.append(edit1);
   edit_infos.append(edit2);
+
 }
 void CKDevelop::initMenu(){
   // build a menubar
@@ -671,23 +675,31 @@ void CKDevelop::initProject(){
       KMsgBox::message(0,filename,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
       refreshTrees();
     }
-    // read the two last files
-    config->setGroup("Files");
-    filename = config->readEntry("header_file");
-    if (QFile::exists(filename)){
-     switchToFile(filename);
-    }
-    config->setGroup("Files");
-    filename = config->readEntry("cpp_file");
-    if (QFile::exists(filename)){
-      switchToFile(filename);
-    }
+	  config->setGroup("Files");
+  	QString filename = config->readEntry("project_file","");
+  	QFile file(filename);
+  	filename = config->readEntry("header_file",i18n("Untitled.h"));
+  	if (QFile::exists(filename)){
+    	switchToFile(filename);
+ 		}
+
+  	filename = config->readEntry("cpp_file", i18n("Untitled.cpp"));
+  	if (QFile::exists(filename)){
+    	switchToFile(filename);
+		}
 
   }
   else{
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
+
+
+
+
+
 
 
 

@@ -25,33 +25,41 @@
 #endif
 
 class CKDevelop;
+#include <iostream.h>
+
+#include <qlist.h>
+#include <qstring.h>
+#include <qstrlist.h>
+
 #include <keditcl.h>
 #include <kapp.h>
 #include <ktmainwindow.h>
 #include <ktreelist.h>
-
-#include <qstring.h>
 #include <kprocess.h>
 #include <htmlview.h>
+#include <htmltoken.h>
 #include <kfm.h>
 #include <kiconloader.h>
-#include <qlist.h>
-#include <qstrlist.h>
 #include <knewpanner.h>
 #include <kfiledialog.h>
+#include <kmsgbox.h>
 
+#include "caddexistingfiledlg.h"
 #include "cdocbrowser.h"
-#include "structdef.h"
 #include "ceditwidget.h"
+#include "cfilepropdlg.h"
+#include "cnewclassdlg.h"
 #include "cnewfiledlg.h"
 #include "coutputwidget.h"
 #include "ctabctl.h"
 #include "crealfileview.h"
 #include "clogfileview.h"
 #include "cproject.h"
+#include "cprjoptionsdlg.h"
 #include "cclassview.h"
 #include "kswallow.h"
 #include "cdoctree.h"
+#include "structdef.h"
 #include "resource.h"
 
 
@@ -341,6 +349,9 @@ private:
 };
 
 #endif
+
+
+
 
 
 

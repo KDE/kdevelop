@@ -59,7 +59,6 @@ void CKDevelop::switchToFile(QString filename){
     return;
   }
   
-
   // set the correct edit_widget
   if (getTabLocation(filename) == HEADER){
     edit_widget = header_widget;
@@ -168,6 +167,8 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_MAKE_USER_MANUAL);
   }
 }
+
+
 
 
 

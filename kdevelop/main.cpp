@@ -2,6 +2,7 @@
                      main.cpp - the main-function
                              -------------------                                         
 
+
     version              :                                   
     begin                : 20 Jul 1998                                        
     copyright            : (C) 1998 by Sandy Meier                         
@@ -39,3 +40,4 @@ int main(int argc, char* argv[]) {
     int rc = a.exec();
     return rc;
 }
+

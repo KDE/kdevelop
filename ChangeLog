@@ -1,3 +1,7 @@
+1999-02-03    <Ralf.Nolden@post.rwth-aachen.de>
+        * added project close dialog connected to new project and Kappwizard
+        * fixed focus in Doc-Browser and outputview
+
 1999-02-02    <smeier@rz.uni-potsdam.de>
 
 	* fixed the TAB-bug
