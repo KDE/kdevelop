@@ -18,7 +18,8 @@ dist:
 	rm -f Makefile.dist
 
 all:
-	aclocal -I .
+	cat acinclude.m4.in libtool.m4.in kdevelop.m4 > acinclude.m4
+	aclocal 
 	autoheader
 	automake
 	perl am_edit
