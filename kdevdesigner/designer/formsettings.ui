@@ -78,7 +78,7 @@
                         <cstring>radioPixmapInline</cstring>
                     </property>
                     <property name="text">
-                        <string>Save In&amp;line</string>
+                        <string>Save in&amp;line</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>

@@ -90,7 +90,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="text">
-                                <string>Repository :</string>
+                                <string>Repository:</string>
                             </property>
                         </widget>
                         <widget class="KURLRequester">
