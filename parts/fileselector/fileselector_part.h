@@ -6,7 +6,7 @@
 #include <qguardedptr.h>
 #include <kdialogbase.h>
 #include <kdevpart.h>
-#include <kfileviewitem.h>
+#include <kfileitem.h>
 
 
 class FileSelectorWidget;
