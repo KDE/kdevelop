@@ -765,7 +765,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 API is the short form of <quote>Application Program Interface</quote>. Actually such an API cotains a series of descriptions (&ie; calling conventions) by which an application program can access the operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
 </para>
 <para>
-There is a version of the most current API available at the <ulink url="http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html">KDevelop-Home website</ulink>. It will be automatically updated every 24 hours so you can keep up.
+There is a version of the most current API available at the <ulink url="http://www.kdevelop.org/HEAD/doc/api/html/index.html">KDevelop-Home website</ulink>. It will be automatically updated every 24 hours so you can keep up.
 </para>
 <para>
 Alas, this version is best used read-only over the internet. If you do not always have internet access you may as well build your own API documentation from the &kdevelop; sources. To do so, you must tell the automake system where to find the KDELIBS API in your system. This is accomplished by the special option <option>--with-kdelibsdoxy-dir</option> in the <command>configure</command> command when you prepare to compile the &kdevelop; sources:
