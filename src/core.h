@@ -12,7 +12,14 @@
 #ifndef _CORE_H_
 #define _CORE_H_
 
+#include <qglobal.h>
+#if (QT_VERSION >= 300)
 #include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 
 #include "toplevel.h"
 #include "kdevcore.h"

@@ -1,7 +1,14 @@
 #ifndef __NEDIT_PART_H__
 #define __NEDIT_PART_H__
 
+#include <qglobal.h>
+#if (QT_VERSION >= 300)
 #include <qptrlist.h>
+#else
+#include <qlist.h>
+#define QPtrList QList
+#define QPtrListIterator QListIterator
+#endif
 
 #include <kparts/part.h>
 
