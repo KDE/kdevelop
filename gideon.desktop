@@ -8,3 +8,4 @@ DocPath=kdevelop/index.html
 Terminal=0
 Name=KDevelop 3.0
 Comment=An Integrated Development Environment for C++/Qt/KDE
+X-DCOP-ServiceType=Multi
