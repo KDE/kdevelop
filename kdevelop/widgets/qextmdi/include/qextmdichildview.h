@@ -26,7 +26,6 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-
 #ifndef _QEXTMDICHILDVIEW_H_
 #define _QEXTMDICHILDVIEW_H_
 

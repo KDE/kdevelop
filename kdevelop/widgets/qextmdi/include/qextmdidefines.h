@@ -1,5 +1,3 @@
-#ifndef _MDIDEFINES_H_
-#define _MDIDEFINES_H_
 //----------------------------------------------------------------------------
 //    filename             : qextmdidefines.h
 //----------------------------------------------------------------------------
@@ -25,6 +23,8 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
+#ifndef _MDIDEFINES_H_
+#define _MDIDEFINES_H_
 
 #define QEXTMDI_MDI_CHILDFRM_SEPARATOR 2
 #define QEXTMDI_MDI_CHILDFRM_BORDER 3

@@ -23,7 +23,6 @@
 //    License, or (at your option) any later version.
 //
 //----------------------------------------------------------------------------
-
 #ifndef _QEXTMDICAPTION_H_
 #define _QEXTMDICAPTION_H_
 

@@ -1,5 +1,3 @@
-#ifndef _QEXTMDICHILDFRM_H_
-#define _QEXTMDICHILDFRM_H_
 //----------------------------------------------------------------------------
 //    filename             : qextmdichildfrm.h
 //----------------------------------------------------------------------------
@@ -26,6 +24,8 @@
 //    License, or (at your option) any later version.
 //
 //------------------------------------------------------------------------------
+#ifndef _QEXTMDICHILDFRM_H_
+#define _QEXTMDICHILDFRM_H_
 
 #include <qlist.h>
 #include <qpixmap.h>
@@ -36,7 +36,7 @@
 #include <qdict.h>
 #include <qdatetime.h>
 
-#include "qextmdichildfrmcaption.h" //cross ref
+#include "qextmdichildfrmcaption.h"
 
 class QextMdiChildArea;
 class QextMdiChildView;
