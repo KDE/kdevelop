@@ -1,3 +1,9 @@
+2003-05-11 Roberto Raggi <roberto@kdevelop.org>
+    * autoproject: don't write empty variables in Makefile.am
+    * autoproject: implemented the remove subproject feature
+    * autoproject: improved add subprojects
+    * autoproject: create a (default) noinst_HEADERS target
+
 2003-05-05 Alexander Dymo <cloudtemple@mksat.net>
     * parts/trollproject
       MOC_DIR, UI_DIR, OBJECTS_DIR variables support in configuration dialog is back again.
@@ -149,8 +155,8 @@
   * Implemented intelegent bottom view autohide.
 
 2003-03-26  Roland Krause  <roland@ca.wai.com>
-	* Renamed main.f77 to main.f and adopted the various files. 
-	  The simple hello world fortran application now works. 
+	* Renamed main.f77 to main.f and adopted the various files.
+	  The simple hello world fortran application now works.
 
 2003-03-26 Roberto Raggi <roberto@kdevelop.org>
 	* added showPart() to KDevPlugin
@@ -159,7 +165,7 @@
 2003-03-25 Roberto Raggi <roberto@kdevelop.org>
 	* improved the plugin framework
 	* added DCOP interfaces for FilterPart and CppSupportPart
-	
+
 2003-03-21 Roberto Raggi <roberto@kdevelop.org>
 	*  better support for namespace and inner classes
 
