@@ -1324,6 +1324,7 @@ void CKDevelop::readOptions()
 	  treedock->hide();
 	}
 
+  readDockConfig();
 
   	
 	/////////////////////////////////////////
@@ -1381,6 +1382,7 @@ void CKDevelop::readOptions()
 }
 
 void CKDevelop::saveOptions(){
+  writeDockConfig();
 	
   config->setGroup("General Options");
   config->writeEntry("Geometry", size() );
