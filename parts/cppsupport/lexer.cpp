@@ -174,10 +174,10 @@ void Lexer::nextToken( Token& tk )
 		}
 	    } else if( /*qt_rx.exactMatch(ide) ||*/
 		ide.endsWith("EXPORT") ||
-		ide.startsWith("Q_EXPORT") ||
+		(ide.startsWith("Q_EXPORT") && ide != "Q_EXPORT_INTERFACE") ||
 		ide.startsWith("QM_EXPORT") ||
 		ide.startsWith("QM_TEMPLATE")){
-		
+
 		readWhiteSpaces();
 		if( currentChar() == '(' )
 		    skip( '(', ')' );
