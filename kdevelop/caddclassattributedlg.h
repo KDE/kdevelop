@@ -94,9 +94,10 @@ public: // Public widgets
 
   QPushButton okBtn;
   QPushButton cancelBtn;
-    //  QLabel btnFill;
+  QLabel btnFill;
 
 protected:
+  void enterEvent(QEvent* event);
  protected slots:
   void OK();
  

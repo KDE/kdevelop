@@ -230,3 +230,7 @@ void CAddClassAttributeDlg::OK()
     accept();
 }
 
+void CAddClassAttributeDlg::enterEvent(QEvent* event){
+    QDialog::enterEvent(event);
+    typeEdit.setFocus();
+}
