@@ -26,6 +26,8 @@
 #include <kmessagebox.h>
 #include <kparts/part.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/viewcursorinterface.h>
+#include <ktexteditor/editinterface.h>
 #include <partcontroller.h>
 
 #include "kdevproject.h"
@@ -33,6 +35,8 @@
 #include "kdevcore.h"
 #include "doxygenconfigwidget.h"
 #include "domutil.h"
+#include "codemodel.h"
+#include "codemodel_utils.h"
 
 #include "config.h"
 
@@ -42,7 +46,7 @@ static const KAboutData data("kdevdoxygen", I18N_NOOP("Doxygen"), "1.0");
 K_EXPORT_COMPONENT_FACTORY( libkdevdoxygen, DoxygenFactory( &data ) )
 
 DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
-    : KDevPlugin("Doxgen", "doxygen", parent, name ? name : "DoxygenPart")
+    : KDevPlugin("Doxgen", "doxygen", parent, name ? name : "DoxygenPart"), m_activeEditor(0), m_cursor(0)
 {
     setInstance(DoxygenFactory::instance());
     setXMLFile("kdevdoxygen.rc");
@@ -63,13 +67,17 @@ DoxygenPart::DoxygenPart(QObject *parent, const char *name, const QStringList &)
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
+    
+    m_actionDocumentFunction = new KAction(i18n("Document Current Function"), 0, CTRL+SHIFT+Key_S, this, SLOT(slotDocumentFunction()), actionCollection(), "edit_document_function");
+    m_actionDocumentFunction->setToolTip( i18n("Create a documentation template above a function"));
+    m_actionDocumentFunction->setWhatsThis(i18n("<b>Document Current Function</b><p>Creates a documentation template according to a functions signature above a function definition/declaration."));
                   
     m_tmpDir.setAutoDelete(true);
     connect(&m_process, SIGNAL(processExited(KProcess*)), this, SLOT(slotPreviewProcessExited()));
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotActivePartChanged(KParts::Part* )));
-    m_action = new KAction(i18n("Preview Doxygen Output"), 0, CTRL+ALT+Key_P, this, SLOT(slotRunPreview()), actionCollection(), "show_preview_doxygen_output");
-    m_action->setToolTip( i18n("Show a preview of the doxygen output of this file") );
-    m_action->setWhatsThis( i18n("<b>Preview Doxygen output</b><p>Runs Doxygen over the current file and shows the created index.html.") );
+    m_actionPreview = new KAction(i18n("Preview Doxygen Output"), 0, CTRL+ALT+Key_P, this, SLOT(slotRunPreview()), actionCollection(), "show_preview_doxygen_output");
+    m_actionPreview->setToolTip( i18n("Show a preview of the doxygen output of this file") );
+    m_actionPreview->setWhatsThis( i18n("<b>Preview Doxygen output</b><p>Runs Doxygen over the current file and shows the created index.html.") );
 
     //read Doxygen configuration, if none exists yet, create it with some defaults    
     adjustDoxyfile();
@@ -450,8 +458,78 @@ void DoxygenPart::slotActivePartChanged( KParts::Part * part )
 	else
 		m_file = QString::null;
 	// <-
+    m_activeEditor = dynamic_cast<KTextEditor::EditInterface*>(part);
+    m_cursor = part ? dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()) : 0;
 }
 
+void DoxygenPart::slotDocumentFunction(){
+    if (m_activeEditor != 0 && m_cursor != 0){
+        if ( codeModel()->hasFile( m_file ) ) {
+            unsigned int cursorLine, cursorCol;
+            m_cursor->cursorPosition(&cursorLine, &cursorCol);
+            
+            FunctionDom function = 0;
+            FunctionDefinitionDom functionDef = 0;
+            
+            FileDom file = codeModel()->fileByName( m_file );
+            
+            FunctionList functionList = CodeModelUtils::allFunctions(file);
+            FunctionList::ConstIterator theend = functionList.end();
+            for( FunctionList::ConstIterator ci = functionList.begin(); ci!= theend; ++ci ){    
+                int sline, scol;
+                int eline, ecol;
+                (*ci)->getStartPosition(&sline, &scol);
+                (*ci)->getEndPosition(&eline, &ecol);
+                if(cursorLine >= sline && cursorLine <= eline && cursorCol >= scol && cursorCol <= ecol)
+                    function = *ci;
+            }
+            if (function == 0){
+                FunctionDefinitionList functionDefList = CodeModelUtils::allFunctionDefinitionsDetailed(file).functionList;
+                FunctionDefinitionList::ConstIterator theend = functionDefList.end();
+                for( FunctionDefinitionList::ConstIterator ci = functionDefList.begin(); ci!= theend; ++ci ){    
+                    int sline, scol;
+                    int eline, ecol;
+                    (*ci)->getStartPosition(&sline, &scol);
+                    (*ci)->getEndPosition(&eline, &ecol);
+                    if(cursorLine >= sline && cursorLine <= eline && cursorCol >= scol && cursorCol <= ecol)
+                        functionDef = *ci;
+                }
+            }
+           
+            int line, col;
+            if (function != 0)
+                function->getStartPosition(&line, &col);
+            else if (functionDef != 0)
+                functionDef->getStartPosition(&line, &col);
+            else
+                return;
+            QString funcLine = m_activeEditor->textLine(line);
+            unsigned int pos = 0;
+            unsigned int length = funcLine.length();
+            while (pos < length && funcLine.at(pos).isSpace())
+                ++pos;
+            //store chars used for indenting the line and put it in front of every created doc line
+            QString indentChars = funcLine.left(pos);
+            QString text = indentChars + "/**\n" + indentChars + " * \n";
+            ArgumentList args;
+            QString resultType;
+            if (function != 0) {
+                args = function->argumentList();
+                resultType = function->resultType();
+            } else {
+                args = functionDef->argumentList();
+                resultType = functionDef->resultType();
+            }
+            for( ArgumentList::ConstIterator ci = args.begin(); ci != args.end(); ++ci)
+                text += indentChars + " * @param " + (*ci)->name() +" \n";
+            if (resultType != "void")
+                text += indentChars + " * @return \n";
+            text += indentChars + " */\n";
+            m_activeEditor->insertText(line, 0, text);
+            m_cursor->setCursorPosition( line + 1, indentChars.length() + 3);
+        }
+    }
+}
 
 
 #include "doxygenpart.moc"

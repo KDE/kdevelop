@@ -29,6 +29,10 @@ class KAction;
 namespace KParts{
     class Part;
 }
+namespace KTextEditor{
+    class ViewCursorInterface;
+    class EditInterface;
+}
 
 class DoxygenPart : public KDevPlugin
 {
@@ -61,12 +65,16 @@ private slots:
 	*/
 	void slotRunPreview();
 	/**
-	*	gets called when the currently active part changed. 
-		When the new part is a KTextEditor::Document the filepath gets internally stored and gets processed if slotRunPreview() is called.
-		@see KTextEditor::Document
+	 *	gets called when the currently active part changed. 
+	 *	When the new part is a KTextEditor::Document the filepath gets internally stored and gets processed if slotRunPreview() is called.
+	 *	@see KTextEditor::Document
 	*/
 	void slotActivePartChanged(KParts::Part*);
-	
+
+    /**
+     * inserts a documentation template above a functiondeclaration/-definition.
+     */
+    void slotDocumentFunction();
 
 
 private:
@@ -81,7 +89,12 @@ private:
     KProcess m_process;
     QString m_file;
 	KTempDir m_tmpDir;
-    KAction* m_action;
+    KAction* m_actionPreview;
+    
+    //needed for documentFunction
+    KAction* m_actionDocumentFunction;
+    KTextEditor::EditInterface* m_activeEditor;
+    KTextEditor::ViewCursorInterface* m_cursor;
 };
 
 #endif
