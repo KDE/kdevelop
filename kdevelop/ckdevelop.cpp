@@ -906,6 +906,15 @@ void CKDevelop::slotDebugStepOutOff()
   dbgController->slotStepOutOff();
 }
 
+void CKDevelop::slotDebugToggleBreakpoint()
+{
+  if (!brkptManager)
+    return;
+
+  edit_widget->slotToggleBreakpoint();
+}
+
+
 void CKDevelop::slotDebugRun()
 {
   if (!dbgController)

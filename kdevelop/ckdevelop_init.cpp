@@ -517,6 +517,9 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Debug interrupt"), "DebugInterrupt", (unsigned int) 0);
   accel->connectItem( "DebugInterrupt", this, SLOT(slotDebugInterrupt()), true, ID_DEBUG_BREAK_INTO);
 
+  accel->insertItem( i18n("Debug toggle breakpoint"), "DebugToggleBreakpoint", (unsigned int) 0);
+  accel->connectItem( "DebugToggleBreakpoint", this, SLOT(slotDebugToggleBreakpoint()), true, ID_DEBUG_TOGGLE_BP);
+
   accel->readSettings(0, false);
 }
 

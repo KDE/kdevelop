@@ -147,6 +147,7 @@
 #define ID_DEBUG_NEXT_INST          14351
 #define ID_DEBUG_FINISH             14360
 #define ID_DEBUG_MEMVIEW            14370
+#define ID_DEBUG_TOGGLE_BP          14375
 #define ID_DEBUG_BREAK_INTO         14380
 
 // The debugger startups

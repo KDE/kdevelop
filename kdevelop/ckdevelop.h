@@ -400,6 +400,7 @@ public:
   void slotDebugStepOverIns();
   void slotDebugBreakInto();
   void slotDebugStepOutOff();
+  void slotDebugToggleBreakpoint();
 
   ////////////////////////
   // TOOLS-Menu entries

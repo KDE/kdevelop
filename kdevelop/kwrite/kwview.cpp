@@ -107,7 +107,7 @@ KIconBorder::KIconBorder(KWrite *write, KWriteDoc *doc, KWriteView *view) :
 	selectMenu.insertItem(i18n("Toggle bookmark"), this, SLOT(slotToggleBookmark()));
 	selectMenu.insertItem(i18n("Clear all bookmarks"), kWrite, SLOT(clearBookmarks()));
 	selectMenu.insertSeparator();
-	selectMenu.insertItem(i18n("Toggle breakpoint"), this, SLOT(slotToggleBreakpoint()));
+	selectMenu.insertItem(i18n("Toggle breakpoint"), kWrite, SLOT(slotToggleBreakpoint()));
 	menuId_editBrkpoint = selectMenu.insertItem(i18n("Edit breakpoint"), this, SLOT(slotEditBreakpoint()));
 	selectMenu.insertItem(i18n("Clear all breakpoints"), kWrite, SIGNAL(clearAllBreakpoints()));
 	selectMenu.insertSeparator();
@@ -259,7 +259,7 @@ void KIconBorder::mousePressEvent(QMouseEvent* e)
     case LeftButton:
     {
       if (LMBIsBreakpoint)
-        slotToggleBreakpoint();
+        kWrite->slotToggleBreakpoint();
       else
         slotToggleBookmark();
       break;
@@ -287,11 +287,6 @@ void KIconBorder::slotLMBMenuToggle()
   LMBIsBreakpoint = !LMBIsBreakpoint;
 	selectMenu.setItemChecked(menuId_LMBBrkpoint, LMBIsBreakpoint);
 	selectMenu.setItemChecked(menuId_LMBBookmark, !LMBIsBreakpoint);
-}
-
-void KIconBorder::slotToggleBreakpoint()
-{
-  emit kWrite->toggleBreakpoint(QString(kWriteDoc->fileName()), cursorOnLine+1);
 }
 
 void KIconBorder::slotEditBreakpoint()
@@ -2960,4 +2955,9 @@ void KWrite::clearStepLine()
   kWriteDoc->tagLines( stepLine, stepLine );
   stepLine = -1;
   kWriteDoc->updateViews();
+}
+
+void KWrite::slotToggleBreakpoint()
+{
+  emit toggleBreakpoint(QString(kWriteDoc->fileName()), currentLine()+1);
 }
