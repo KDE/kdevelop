@@ -18,6 +18,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <qmessagebox.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
 
@@ -112,8 +113,8 @@ QString TrollProjectPart::projectName()
 QString TrollProjectPart::mainProgram()
 {
     QDomDocument &dom = *projectDom();
-
-    return DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
+    return "bin/qmakeapp";
+//    return DomUtil::readEntry(dom, "/kdevtrollproject/run/mainprogram");
 }
 
 
