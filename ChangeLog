@@ -1,3 +1,7 @@
+2000-03-04 Walter Tasin <tasin@kdevelop.de>
+	* updating INSTALL file
+	* making --enable-kdoc2 default option
+
 2000-03-03 Falk Brettschneider <gigafalk@yahoo.com>
 	* Windows menu contains also undocked MDI views now, change of the window-menu management 
 
