@@ -38,6 +38,7 @@ KTabZoomBar::KTabZoomBar(QWidget *parent, KTabZoomPosition::Position pos, const 
 
   d->m_tabPosition = pos;
   d->m_docked = false;
+  d->m_count = 0;
 
   d->m_layout = new KTabZoomBarLayout(this, pos);
 
