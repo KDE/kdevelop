@@ -21,6 +21,7 @@ TextLine::TextLine(int attribute, int context)
   : len(0), size(0), text(0L), attribs(0L), attr(attribute), ctx(context),
     bpID(0)
 {
+  visible=true;
 }
 
 TextLine::~TextLine() {
@@ -69,6 +70,9 @@ void TextLine::insert(int pos, const char *s, int l) {
   memcpy(&text[pos],s,l);
 }
 
+void TextLine::setVisible(bool status){
+	visible=status;
+}
 
 void TextLine::overwrite(int pos, const char *s, int l) {
 

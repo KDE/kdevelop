@@ -36,8 +36,6 @@
 
 int keys[] = {Key_1,Key_2,Key_3,Key_4,Key_5,Key_6,Key_7,Key_8,Key_9};
 
-const int GUTTER_SIZE=20;
-
 struct BufferInfo {
   void *user;
   int w;
@@ -92,6 +90,215 @@ void releaseBuffer(void *user) {
   resizeBuffer(0,0,0);
 }
 
+KIconBorder::KIconBorder(KWrite *write, KWriteDoc *doc, KWriteView *view) : QWidget(write) {
+	kWrite = write;
+	kWriteDoc = doc;
+	kWriteView = view;
+
+  int /*id_Abort,*/ id_Add, id_Clear, id_EditBp;
+
+	setBackgroundColor(colorGroup().background());
+	
+	setGeometry ( 2, 2, iconBorderWidth, 800/*this->height()*/);
+
+//	bookmarkIcon.load(KApplication::kde_icondir()+"/mini/bookmarkicon.xpm");
+
+//	id_Abort=selectMenu.insertItem(i18n("Abort"), this, SLOT(closePopup()));
+//	selectMenu.insertSeparator();
+	id_Add=selectMenu.insertItem(i18n("Toggle Bookmark"), this, SLOT(toggleBookmark()));
+	id_Clear=selectMenu.insertItem(i18n("Clear Bookmarks"), kWrite, SLOT(clearBookmarks()));
+	selectMenu.insertSeparator();
+	id_EditBp=selectMenu.insertItem(i18n("Edit Breakpoint"), this, SLOT(slotBreakpointRMBMenu()));
+	selectMenu.insertSeparator();
+	id_toggle=selectMenu.insertItem(i18n("Set Breakpoints"), this, SLOT(toggleMenu()));
+	selectMenu.setCheckable(true);
+	selectBroBm=true;
+	selectMenu.setItemChecked(id_toggle, true);
+//	selectMenu.insertItem("Get Range", this, SLOT(getRange()));
+//	selectMenu.insertItem("Hide function", this, SLOT(closePopup()));
+//	selectMenu.insertItem("Show function", this, SLOT(closePopup()));
+}
+
+KIconBorder::~KIconBorder() {
+}
+
+/**  */
+void KIconBorder::toggleMenu(){
+  selectBroBm = selectMenu.isItemChecked(id_toggle);
+	selectBroBm = !selectBroBm;
+  selectMenu.setItemChecked(id_toggle,selectBroBm);
+}
+
+/** toggles a bookmark */
+void KIconBorder::toggleBookmark(){
+
+	int line = ( mouseY + kWriteView->getYPos() ) / kWriteDoc->getFontHeight();
+	//	kWriteView->cursor.y = ( mouseY + kWriteView->getYPos() ) / kWriteDoc->getFontHeight();
+  //	kWriteView->changeYPos(mouseY);
+
+	if(kWrite->bookmarked(line))
+  {
+    kWrite->removeBookmark(line);
+  }
+	else
+	{
+		// Save the cursor position
+		int oldLine = kWriteView->cursor.y;
+
+		// Add a bookmark at the clicked line
+		kWriteView->cursor.y = line;
+  	kWrite->addBookmark();
+
+		// Reset the cursor position
+		kWriteView->cursor.y = oldLine;
+
+		// Repaint the bookmarked line
+    kWriteDoc->tagLines( line, line );
+	  kWriteDoc->updateViews();
+	}
+}
+
+/** Paints an icon to y */
+void KIconBorder::ShowIcon(QPixmap& icon, int y){
+  QPainter paint;
+
+  paint.begin(this);
+	paint.drawPixmap(2,y,icon);
+  paint.end();
+
+}
+
+int KIconBorder::getFontHeight()
+{
+	return kWriteDoc->getFontHeight();
+}
+
+void KIconBorder::clearLine(/*QPainter &paint,*/ int line)
+{
+	QPainter paint;
+
+	paint.begin(this);
+
+	int y = line * getFontHeight() - kWriteView->getYPos();
+
+  paint.fillRect(0, y, iconBorderWidth-2, getFontHeight(), colorGroup().background());
+
+  paint.setPen(white);
+  paint.drawLine(iconBorderWidth-2, y, iconBorderWidth-2, y + getFontHeight());
+  paint.setPen(QColor(colorGroup().background()).dark());
+  paint.drawLine(iconBorderWidth-1, y, iconBorderWidth-1, y + getFontHeight());
+
+	paint.end();
+}
+
+void KIconBorder::paintBookmark(int line)
+{
+  #include "pix/bookmark.xpm"
+
+  if (kWrite->bookmarked(line))
+	{
+		QPixmap bookmarkPixmap(bookmark_xpm);
+    ShowIcon(bookmarkPixmap, line * getFontHeight() - kWriteView->getYPos());
+	}
+}
+
+void KIconBorder::paintBreakpoint(int line)
+{
+  #include "pix/breakpoint.xpm"
+  #include "pix/breakpoint_gr.xpm"
+  #include "pix/breakpoint_bl.xpm"
+  #include "pix/ddd.xpm"
+
+  // A breakpoint is on this line - draw it
+	if ( kWriteDoc->textLine(line)->getBPId() != 0 )
+	{
+		QPixmap bpPix;
+    if (!kWriteDoc->textLine(line)->isBPEnabled())
+      bpPix = QPixmap(breakpoint_gr_xpm);
+    else
+		  if (kWriteDoc->textLine(line)->isBPPending())
+			  bpPix = QPixmap(breakpoint_bl_xpm);
+      else
+				bpPix = QPixmap(breakpoint_xpm);
+
+		ShowIcon(bpPix, line * getFontHeight() - kWriteView->getYPos());
+  }
+
+  // This line is the position in source the debugger has stopped at.
+  if (kWrite->getStepLine() == line )
+	{
+		QPixmap dddPixmap(ddd_xpm);
+		ShowIcon(dddPixmap, line * getFontHeight() - kWriteView->getYPos());
+	}
+}
+
+void KIconBorder::paintLine(int line)
+{
+  if (line < kWriteDoc->getTextLineCount())
+  {
+		clearLine(line);
+
+		paintBookmark(line);
+
+		paintBreakpoint(line);
+  }
+}
+
+void KIconBorder::paintEvent(QPaintEvent* e)
+{
+	int lineStart, lineEnd, h, yPos;
+
+	QRect updateR = e->rect();
+
+	h = kWriteDoc->getFontHeight();
+	yPos = kWriteView->getYPos();
+	lineStart = (yPos + updateR.y()) / h;
+	lineEnd = (yPos + updateR.y() + updateR.height()) / h;
+
+	for(int line = lineStart; line <= lineEnd; line++)
+	{
+		paintLine(line);
+	}
+}
+
+/**  */
+void KIconBorder::slotBreakpointRMBMenu(){
+  kWriteView->placeCursor( 0, mouseY, 0 );
+  kWriteDoc->updateViews();
+  emit kWrite->gutterClick(QString(kWriteDoc->fileName()), kWriteView->cursor.y+1,true);
+}
+
+/** Checks MouseEvents and executes the popup */
+void KIconBorder::mousePressEvent(QMouseEvent* e){
+//	selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width()/2,e->y()-20)));
+	mouseY=e->y();
+
+  if (e->button()==LeftButton) {
+    if (selectBroBm) {
+            //toggle Breakpoint
+      kWriteView->placeCursor( 0, e->y(), 0 );
+      kWriteDoc->updateViews();
+      emit kWrite->gutterClick(QString(kWriteDoc->fileName()), kWriteView->cursor.y+1,false);
+  		//e->button() == RightButton);
+    } else {
+      toggleBookmark(); //or toggle after renewing bookmark handling
+    }
+  } else if (e->button()==RightButton) {
+    selectMenu.exec(mapToGlobal(QPoint(e->x()-selectMenu.width()/2,e->y()-20)));
+  } else if (e->button()==MidButton) {
+    toggleBookmark();
+  }
+}
+
+/** Closes Popup */
+void KIconBorder::closePopup(){
+	selectMenu.hide();
+}
+
+/** gets the Range of the function the cursor is in */
+void KIconBorder::getRange(){
+	kWriteView->getRange(kWriteView->cursor.y);
+}
 
 KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
   kWrite = write;
@@ -101,7 +308,9 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
   setMouseTracking(true);   //dbg
   setBackgroundMode(NoBackground);
   setFocusPolicy(StrongFocus);
-  move(2,2);
+  move(iconBorderWidth+2,2);
+
+  leftBorder = new KIconBorder(kWrite, kWriteDoc, this);
 
   xScroll = new QScrollBar(QScrollBar::Horizontal,write);
   yScroll = new QScrollBar(QScrollBar::Vertical,write);
@@ -290,11 +499,10 @@ void KWriteView::changeXPos(int p) {
 
   dx = xPos - p;
   xPos = p;
-  if (QABS(dx) < width()-GUTTER_SIZE)
-    scrollW(dx,0);
+  if (QABS(dx) < width())
+    scroll(dx,0);
   else
-    repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height());
-    //QWidget::update();
+    QWidget::update();
 }
 
 void KWriteView::changeYPos(int p) {
@@ -305,12 +513,15 @@ void KWriteView::changeYPos(int p) {
   startLine = yPos / kWriteDoc->fontHeight;
   endLine = (yPos + height() -1) / kWriteDoc->fontHeight;
   if (QABS(dy) < height())
+	{
+		leftBorder->scroll(0,dy);
     scroll(0,dy);
+	}
   else
-    repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height());
-    //QWidget::update();
+	{
+    QWidget::update();
+	}
 }
-
 
 void KWriteView::getVConfig(VConfig &c) {
 
@@ -319,12 +530,21 @@ void KWriteView::getVConfig(VConfig &c) {
   c.wrapAt = kWrite->wrapAt;
 }
 
-
-
 void KWriteView::update(VConfig &c) {
-
+	
   if (cursor.x == c.cursor.x && cursor.y == c.cursor.y) return;
   exposeCursor = true;
+
+	if(cursor.y != c.cursor.y)
+	{
+		int h = kWriteDoc->fontHeight;
+
+		// Check if the cursor goes out of what is currently seen
+		if(h * cursor.y < yPos)
+			leftBorder->scroll(0, yPos - h * cursor.y);
+		else if(h * (cursor.y + 1) > yPos + height())
+			leftBorder->scroll(0, yPos + height() - h * (cursor.y + 1));
+	}
 
   kWriteDoc->unmarkFound();
   
@@ -482,7 +702,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     w = kWrite->width() - 4;
     h = kWrite->height() - 4;
 
-    xMax = kWriteDoc->textWidth() - w + GUTTER_SIZE;
+    xMax = kWriteDoc->textWidth() - w;
     b = (xPos > 0 || xMax > 0);
     if (b) h -= 16;
     yMax = kWriteDoc->textHeight() - h;
@@ -505,7 +725,7 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
       cYPosMax = yPos + ((h - fontHeight)*2)/3;
     } else {*/
       cXPosMin = xPos + 4;
-      cXPosMax = xPos + w - 8 - GUTTER_SIZE;
+      cXPosMax = xPos + w - 8 - iconBorderWidth;
       cYPosMin = yPos;
       cYPosMax = yPos + (h - fontHeight);
 //    }
@@ -585,13 +805,13 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     }
 
     if (b) {
-      repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height(), false);
+      repaint(0, 0, width(), height(), false);
 
     } else {
       if (updateState > 0) paintTextLines(oldXPos,oldYPos);
 
       if (dx || dy) {
-        scrollW(dx,dy);
+        scroll(dx,dy);
       } else if (cursorOn) paintCursor();
     }
   }
@@ -671,11 +891,9 @@ void KWriteView::paintTextLines(int xPos, int yPos) {
   for (z = 0; z < updateState; z++) {
     line = updateLines[z];
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
-//    bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h); //dbg
-    bitBlt(this,GUTTER_SIZE,line*h - yPos,drawBuffer,0,0,width(),h);
-    drawGutter(paint, line, h);
-    bitBlt(this,0,line*h - yPos,drawBuffer,0,0,GUTTER_SIZE,h);
+    bitBlt(this,0,line*h - yPos,drawBuffer,0,0,width(),h);
 
+		leftBorder->paintLine(line);
   }
   paint.end();
 }
@@ -685,8 +903,7 @@ void KWriteView::paintCursor() {
 
   h = kWriteDoc->fontHeight;
   y = h*cursor.y - yPos;
-  x = cXPos - (xPos-2) + GUTTER_SIZE;
-  if ( (x-2) < GUTTER_SIZE ) return;
+  x = cXPos - (xPos-2);
 
   QPainter paint;
   if (cursorOn) {
@@ -918,41 +1135,28 @@ X      : cut
 
 void KWriteView::mousePressEvent(QMouseEvent *e) {
 
-  if (e->x() <= GUTTER_SIZE)
-  {
-    placeCursor( 0, e->y(), 0 );
-    kWriteDoc->updateViews();
-    emit kWrite->gutterClick(QString(kWriteDoc->fileName()), cursor.y+1,
-                                e->button() == RightButton);
-    return;
-  }
-
-//dbg
-//  if (e->button() == LeftButton) {
-  QMouseEvent *ee = new QMouseEvent(Event_MouseButtonPress, QPoint(e->x()-GUTTER_SIZE, e->y()), QPoint(e->globalX(), e->globalY()), e->button(), e->state());
-
-  if (ee->button() == LeftButton) {
+  if (e->button() == LeftButton) {
     int flags;
 
     flags = 0;
-    if (ee->state() & ShiftButton) {
+    if (e->state() & ShiftButton) {
       flags |= cfMark;
-      if (ee->state() & ControlButton) flags |= cfMark | cfKeepSelection;
+      if (e->state() & ControlButton) flags |= cfMark | cfKeepSelection;
     }
-    placeCursor(ee->x(),ee->y(),flags);
+    placeCursor(e->x(),e->y(),flags);
     scrollX = 0;
     scrollY = 0;
     if (!scrollTimer) scrollTimer = startTimer(50);
     kWriteDoc->updateViews();
   }
   if (e->button() == MidButton) {
-    placeCursor(ee->x(),ee->y(),0);
+    placeCursor(e->x(),e->y(),0);
     kWrite->paste();
   }
-  if (kWrite->popup && ee->button() == RightButton) {
-    kWrite->popup->popup(mapToGlobal(ee->pos()));
+  if (kWrite->popup && e->button() == RightButton) {
+    kWrite->popup->popup(mapToGlobal(e->pos()));
   }
-  kWrite->mousePressEvent(ee);
+  kWrite->mousePressEvent(e);
 }
 
 void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {
@@ -976,20 +1180,12 @@ void KWriteView::mouseReleaseEvent(QMouseEvent *e) {
 
 void KWriteView::mouseMoveEvent(QMouseEvent *e) {
 
-  if (e->x() <= GUTTER_SIZE) {
-    QWidget::setCursor(arrowCursor);
-    return;
-  }
-
-  QWidget::setCursor(ibeamCursor);
-  QMouseEvent *ee = new QMouseEvent(Event_MouseMove, QPoint(e->x()-GUTTER_SIZE, e->y()), QPoint(e->globalX(), e->globalY()), e->button(), e->state());
-
-  if (ee->state() & LeftButton) {
+  if (e->state() & LeftButton) {
     int flags;
     int d;
 
-    mouseX = ee->x();
-    mouseY = ee->y();
+    mouseX = e->x();
+    mouseY = e->y();
     scrollX = 0;
     scrollY = 0;
     d = kWriteDoc->fontHeight;
@@ -1011,7 +1207,7 @@ void KWriteView::mouseMoveEvent(QMouseEvent *e) {
     }
 
     flags = cfMark;
-    if (ee->state() & ControlButton) flags |= cfKeepSelection;
+    if (e->state() & ControlButton) flags |= cfKeepSelection;
     placeCursor(mouseX,mouseY,flags);
     kWriteDoc->updateViews(/*ufNoScroll*/);
   }
@@ -1021,6 +1217,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   int xStart, xEnd;
   int h;
   int line, y, yEnd;
+//  bool isVisible;
 
   QRect updateR = e->rect();
 //  printf("update rect  = ( %i, %i, %i, %i )\n",
@@ -1029,7 +1226,7 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   QPainter paint;
   paint.begin(drawBuffer);
 
-  xStart = xPos-2 + updateR.x() - GUTTER_SIZE;
+  xStart = xPos-2 + updateR.x();
   xEnd = xStart + updateR.width();
 
   h = kWriteDoc->fontHeight;
@@ -1041,8 +1238,9 @@ void KWriteView::paintEvent(QPaintEvent *e) {
     kWriteDoc->paintTextLine(paint,line,xStart,xEnd);
 //    if (cursorOn && line == cursor.y) paintCursor(paint,cXPos - xStart,h);
     bitBlt(this,updateR.x(),y,drawBuffer,0,0,updateR.width(),h);
-    drawGutter(paint, line, h);
-    bitBlt(this,0,y,drawBuffer,0,0,GUTTER_SIZE,h);
+
+		leftBorder->paintLine(line);
+
     line++;
     y += h;
   }
@@ -1054,7 +1252,6 @@ void KWriteView::resizeEvent(QResizeEvent *) {
 //  printf("KWriteView::resize\n");
   resizeBuffer(this,width(),kWriteDoc->fontHeight);
   QWidget::update();
-  repaint(GUTTER_SIZE, 0, width()-GUTTER_SIZE, height(), false);
 }
 
 void KWriteView::timerEvent(QTimerEvent *e) {
@@ -1070,6 +1267,50 @@ void KWriteView::timerEvent(QTimerEvent *e) {
     kWriteDoc->updateViews(/*ufNoScroll*/);
   }
 }
+
+/** returns the range of a hidden function */
+int KWriteView::getRange(int midline){
+	int counter=0;
+	int n;
+	QString textline;
+	int line=midline;
+
+//	midline=cursor.y;
+debug("Midline: %i",midline);
+
+	textline=kWriteDoc->contents.at(midline)->getString();
+
+debug(textline);
+
+	counter=textline.contains("{")-textline.contains("}");
+
+debug("First Counter: %i",counter);
+	
+	while (counter<1) {
+		line--;
+		if (line==0) break;
+		textline=kWriteDoc->contents.at(line)->getString();
+		counter+=textline.contains("{")-textline.contains("}");
+		debug("Line in first while: %i",line);
+	}
+
+	debug("Counter: %i at %i",counter,line);
+	line++;
+
+	while	(counter != 0) {
+		textline=kWriteDoc->contents.at(line)->getString();
+		counter+=textline.contains("{")-textline.contains("}");
+		line++;
+	}
+	debug("Range is: %i to %i",midline, line );
+
+	for (n=midline;n<=line;n++) {
+		kWriteDoc->contents.at(n)->setVisible(false);
+	}
+
+	return line;	
+}
+
 
 KWBookmark::KWBookmark() {
   cursor.y = -1;
@@ -2041,6 +2282,10 @@ void KWrite::replaceSlot() {
 /*void KWrite::format() {
   dlg = new FormatDialog()
   if (dlg->exec() == QDialog::Accepted) {
+	VConfig c;
+
+	kWriteView->getVConfig(c);
+	kWriteView->update(c);
 
   }
   delete dlg;
@@ -2102,6 +2347,72 @@ void KWrite::addBookmark() {
     if (bookmarks.at(z)->cursor.y == -1) break;
   }
   setBookmark(z);
+}
+
+void KWrite::removeBookmark(int line)
+{
+	KWBookmark *b;
+ 	for (b = bookmarks.first(); b != 0L; b = bookmarks.next())
+  {
+    if (b->cursor.y == line)
+		{
+      bookmarks.remove();
+      kWriteDoc->tagLines( line, line );
+		  kWriteDoc->updateViews();
+		}
+  }
+}
+
+void KWrite::nextBookmark()
+{
+ 	if(bookmarks.count() > 0)
+	{
+    int startLine = kWriteView->cursor.y;
+		int lineCount = kWriteDoc->lastLine();
+		int line = startLine;
+		int normalizedLine;
+		do
+		{
+			line++;
+			normalizedLine = line % lineCount;
+		}
+		while(normalizedLine != startLine && !bookmarked(normalizedLine));
+		
+		kWriteView->cursor.y = normalizedLine;
+		kWriteView->changeYPos(kWriteView->cursor.y);
+	}
+}
+
+bool KWrite::bookmarked(int line)
+{
+  // Look for a bookmark on this line
+	KWBookmark *b;
+ 	for (b = bookmarks.first(); b != 0L; b = bookmarks.next())
+  {
+    if (b->cursor.y == line)
+      return true;
+  }
+	return false;
+}
+
+void KWrite::previousBookmark()
+{
+ 	if(bookmarks.count() > 0)
+	{
+    int startLine = kWriteView->cursor.y;
+		int lineCount = kWriteDoc->lastLine();
+		int line = startLine;
+		int normalizedLine;
+		do
+		{
+			line--;
+			normalizedLine = abs(line % lineCount);
+		}
+		while(normalizedLine != startLine && !bookmarked(normalizedLine));
+		
+		kWriteView->cursor.y = normalizedLine;
+		kWriteView->changeYPos(kWriteView->cursor.y);
+	}
 }
 
 void KWrite::gotoBookmark(int n) {
@@ -2463,105 +2774,6 @@ void KWrite::resizeEvent(QResizeEvent *) {
 
   kWriteView->tagAll();//updateState = 3;
   kWriteView->updateView(0/*ufNoScroll*/);
-}
-
-
-
-void KWriteView::scrollW(int dx, int dy)
-{
-  int x1, y1, x2, y2, w=width(), h=height();
-  if ( dx > 0 )
-  {
-    x1 = 0 + GUTTER_SIZE;
-    x2 = dx + GUTTER_SIZE;
-    w -= dx + GUTTER_SIZE;
-  }
-  else
-  {
-    x1 = -dx + GUTTER_SIZE;
-    x2 = 0 + GUTTER_SIZE;
-    w += dx - GUTTER_SIZE;
-  }
-  if ( dy > 0 )
-  {
-    y1 = 0;
-    y2 = dy;
-    h -= dy;
-  }
-  else
-  {
-    y1 = -dy;
-    y2 = 0;
-    h += dy;
-  }
-
-  if ( dx == 0 && dy == 0 )
-    return;
-
-  Display *dpy = x11Display();
-  GC gc = qt_xget_readonly_gc();
-  XSetGraphicsExposures( dpy, gc, TRUE );
-  XCopyArea( dpy, winId(), winId(), gc, x1, y1, w, h, x2, y2);
-  if ( dy )
-    XCopyArea( dpy, winId(), winId(), gc, 0, y1, GUTTER_SIZE-1, h, 0, y2);
-  XSetGraphicsExposures( dpy, gc, FALSE );
-
-  if ( dx )
-  {
-    x1 = (x2 == GUTTER_SIZE) ? w : GUTTER_SIZE;
-    repaint( x1, 0, width()-w, height(), TRUE );
-  }
-
-  if ( dy )
-  {
-    y1 = (y2 == 0) ? h : 0;
-    repaint( GUTTER_SIZE, y1, width()-GUTTER_SIZE, height()-h, TRUE );
-  }
-}
-
-void KWriteView::drawGutter(QPainter &paint, int line, int h)
-{
-  #include "pix/bookmark.xpm"
-  #include "pix/breakpoint.xpm"
-  #include "pix/breakpoint_gr.xpm"
-  #include "pix/breakpoint_bl.xpm"
-  #include "pix/ddd.xpm"
-
-  paint.fillRect(0, 0, GUTTER_SIZE-2, h, kapp->backgroundColor);
-  paint.setPen(white);
-  paint.drawLine(GUTTER_SIZE-2, 0, GUTTER_SIZE-2, h);
-  paint.setPen(QColor(kapp->backgroundColor).dark());
-  paint.drawLine(GUTTER_SIZE-1, 0, GUTTER_SIZE-1, h);
-
-  if (line < (int) kWriteDoc->contents.count())
-  {
-    // Look for a bookmark on this line
-    for (int z = 0; z < (int) kWrite->bookmarks.count(); z++)
-    {
-      KWBookmark* b = kWrite->bookmarks.at(z);
-      if (b->cursor.y == line)
-	      paint.drawPixmap( GUTTER_SIZE-14, h-17 , QPixmap(bookmark_xpm) );
-    }
-
-    // A breakpoint is on this line - draw it
-  	if ( kWriteDoc->textLine(line)->getBPId() != 0 )
-  	{
-			QPixmap bpPix;
-      if (!kWriteDoc->textLine(line)->isBPEnabled())
-        bpPix = QPixmap(breakpoint_gr_xpm);
-      else
-			  if (kWriteDoc->textLine(line)->isBPPending())
-				  bpPix = QPixmap(breakpoint_bl_xpm);
-        else
-  				bpPix = QPixmap(breakpoint_xpm);
-
-	    paint.drawPixmap( GUTTER_SIZE-14, h-17 , bpPix );
-    }
-
-    // This line is the position in source the debugger has stopped at.
-    if (kWrite->stepLine == line )
-      paint.drawPixmap( 0, h-13 , QPixmap(ddd_xpm) );
-  }
 }
 
 void KWrite::setBreakpoint( int line, int id, bool enabled, bool pending )
