@@ -151,7 +151,9 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
     m_pCCStore = pCCStore;
 
     m_pTmpFile     = 0;
+#ifdef DANIEL_CC
     m_pParser      = 0;
+#endif
     m_pCursorIface = 0;
     m_pEditIface   = 0;
     m_pCompletionIface = 0;
@@ -165,7 +167,9 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part, ClassStore* pStore, 
 
 CppCodeCompletion::~CppCodeCompletion( )
 {
+#ifdef DANIEL_CC
     delete m_pParser;
+#endif
     delete m_pTmpFile;
 }
 
@@ -292,9 +296,9 @@ CppCodeCompletion::typingTypeOf( int nLine, int nCol )
 
 
 void
-//CppCodeCompletion::slotTextChanged( KTextEditor::Document *pDoc, int nLine, int nCol )
 CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& /*text*/ )
 {
+#ifdef DANIEL_CC
     QString strCurLine = m_pEditIface->textLine( nLine );
 
     // should be done once and destroyed by destructor, shouldn't it ?
@@ -420,6 +424,7 @@ CppCodeCompletion::slotTextChanged( int nLine, int nCol, const QString& /*text*/
         // remove the parsed variables from CppCCParser!
         m_pParser->variableList.clear( );
     }
+#endif
 }
 
 /**** TODO: replace this method with a parsing mechanism - very buggy! ****/

@@ -30,7 +30,10 @@
 
 #include "kdevcore.h"
 
+#ifdef DANIEL_CC
 #include "cppccparser.h"
+#endif
+
 #include "cppsupportpart.h"
 #include "simpleparser.h"
 
@@ -99,7 +102,9 @@ private:
     KDevCore* m_pCore;
     ClassStore* m_pStore;
     ClassStore* m_pCCStore;
+#ifdef DANIEL_CC
     CppCCParser* m_pParser;
+#endif
     KTextEditor::ViewCursorInterface* m_pCursorIface;
     KTextEditor::EditInterface* m_pEditIface;
     KTextEditor::CodeCompletionInterface* m_pCompletionIface;

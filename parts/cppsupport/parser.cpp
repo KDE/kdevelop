@@ -49,11 +49,17 @@ using namespace std;
 class Symbol{
 public:
 	Symbol( const QString& name, int kind )
-		: m_name( name ), m_kind(kind), m_sourceStart( 0 ), m_sourceEnd( 0 )
+            :     m_name( name ),
+                  m_kind(kind),
+                  m_sourceStart( 0 ),
+                  m_sourceEnd( 0 )
 		{}
 
 	~Symbol()
 		{}
+
+	QString type() const { return m_type; }
+	void setType( const QString& type ) { m_type = type; }
 
 	QString name() const { return m_name; }
 	int kind() const { return m_kind; }
@@ -65,6 +71,7 @@ public:
 	void setSourceEnd( int end ) { m_sourceEnd = end; }
 
 private:
+        QString m_type;
 	QString m_name;
 	int m_kind;
 	int m_sourceStart;
@@ -121,8 +128,6 @@ public:
 		else
 			return 0;
 	}
-
-
 
 	void addSymbolTable( SymbolTable* s ){
 		m_children.append( s );
