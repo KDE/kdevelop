@@ -71,6 +71,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"protected"     {return PROTECTED;}
 <INITIAL>"private"       {return PRIVATE;}
 <INITIAL>"const"         {return CONST;}
+<INITIAL>"volatile"      {return VOLATILE;}
 <INITIAL>"static"        {return STATIC;}
 <INITIAL>"virtual"       {return CPVIRTUAL;}
 <INITIAL>"signals"       {return QTSIGNAL;}
@@ -83,6 +84,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 <INITIAL>"operator"      {return CPOPERATOR;}
 <INITIAL>"template"      {return CPTEMPLATE;}
 <INITIAL>"throw"         {return CPTHROW;}
+<INITIAL>"namespace"     {return NAMESPACE;}
 
     /*==============> Ignored stuff <==============*/
 <INITIAL>"Q_EXPORT"       {}
