@@ -208,6 +208,25 @@ void QEditor::keyPressEvent( QKeyEvent* e )
                e->ascii() == ':' || e->ascii() == '#' ){
 	insert( e->text(), FALSE );
 	e->accept();
+    } else if (e->state() == Qt::ControlButton) {
+        switch (e->key()) {
+        case Qt::Key_Backspace:
+            if (!hasSelectedText()) {
+                removeSelection();
+                moveCursor( MoveWordBackward, true );
+            }
+            removeSelectedText();
+            break;
+        case Qt::Key_Delete:
+            if (!hasSelectedText()) {
+                removeSelection();
+                moveCursor( MoveWordForward, true );
+            }
+            removeSelectedText();
+            break;
+        default:
+        	KTextEdit::keyPressEvent( e );
+        }
     } else if( e->key() == Key_Backspace ){
 	if( backspaceIndentEnabled() ){
 	    backspaceIndent( e );
@@ -215,7 +234,7 @@ void QEditor::keyPressEvent( QKeyEvent* e )
 	    KTextEdit::keyPressEvent( e );
 	}
     } else {
-	KTextEdit::keyPressEvent( e );
+    KTextEdit::keyPressEvent( e );
     }
 }
 

@@ -1,3 +1,6 @@
+2002-12-18 F@lk Brettschneider <falk@kdevelop.org>
+	* QEditor: can now delete words via Ctrl+Backspace and Ctrl+Del
+    
 2002-12-18  Victor Röder  <victor_roeder@gmx.de>
 	* Added "Choose Target Dialog"
 	* Added SLOTS for removing/adding many files
