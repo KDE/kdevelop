@@ -5,6 +5,10 @@
 #include <kurl.h>
 #include <kparts/partmanager.h>
 
+namespace KParts
+{
+  class ReadOnlyPart;
+}
 
 class KDevPartController : public KParts::PartManager
 {
@@ -22,7 +26,8 @@ public:
 
   virtual void saveAllFiles() = 0;
   virtual void revertAllFiles() = 0;
-
+  /** true if the file has been modified outside KDevelop */
+  virtual bool isDirty(KParts::ReadOnlyPart*) = 0;
 
 signals:
 
@@ -35,6 +40,11 @@ signals:
    * Emitted when a document has been loaded.
    */
   void loadedFile(const QString &fileName);
+
+  /**
+   * Emitted when a file has been modified outside of KDevelop
+   */
+  void fileDirty(const QString &fileName);
 
 };
 
