@@ -65,7 +65,9 @@ FileViewFolderItem::FileViewFolderItem(QListView *parent, const QString &name, c
 
 bool FileViewFolderItem::matches(const QString &fileName)
 {
-    QString fName = QFileInfo(fileName).fileName();
+    // Test with the file path, so that "*ClientServer/*.h" patterns work
+    QString fName = QFileInfo(fileName).filePath();
+
     QStringList::ConstIterator it;
     for (it = patterns.begin(); it != patterns.end(); ++it) {
         // The regexp objects could be created already
@@ -169,6 +171,17 @@ void FileGroupsWidget::slotContextMenu(KListView *, QListViewItem *item, const Q
         FileGroupsFileItem *fvfitem = static_cast<FileGroupsFileItem*>(item);
         QString pathName = m_part->project()->projectDirectory() + QDir::separator() + fvfitem->fileName();
         FileContext context( pathName, false);
+        m_part->core()->fillContextMenu(&popup, &context);
+    }
+    else{
+        QStringList file_list;
+        QListViewItem* i = item->firstChild();
+        while(i){
+            FileGroupsFileItem *fvgitem = static_cast<FileGroupsFileItem*>(i);
+            file_list << fvgitem->fileName();
+            i = i->nextSibling();
+        }
+        FileContext context(file_list);
         m_part->core()->fillContextMenu(&popup, &context);
     }
     m_actionToggleShowNonProjectFiles->plug( &popup );
