@@ -908,7 +908,12 @@ void KWriteView::placeCursor(int x, int y, int flags) {
   update(c);
 }
 
-void KWriteView::focusInEvent(QFocusEvent *) {
+void KWriteView::focusInEvent(QFocusEvent *e) {
+   // every widget get a focusInEvent when a popup menu is opened!?! -> maybe bug of QT
+   if (e && ((e->reason())==QFocusEvent::Popup)) {
+      return;
+   }
+
 //  printf("got focus %d\n",cursorTimer);
 
   QString text=kapp->clipboard()->text();
