@@ -1,3 +1,7 @@
+2001-12-13  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+    * reposition cursor when indenting an existing line
+    * realign cursor to indentation position when it's before first character
+
 2001-12-11  F@lk Brettschneider <falk@kdevelop.org>
     * made widget/qextmdi compilable with QT_NO_COMPAT for Qt3
 

@@ -1151,26 +1151,30 @@ void KWriteDoc::tab(KWriteView *view, VConfig &c) {
 
     if (indentPos > 0) {
 
-      // if cursor before the indentation target then align cursor
-      if (c.cursor.x < indentPos)
-        c.cursor.x = indentPos;
-
       // if the line does not start on indent pos align it there
       textLine = contents.at(c.cursor.y);
       int curPos = textLine->firstChar();
-      // TODO: need to record what we do here
       if (curPos < indentPos) {
+        // indent
         int len = indentPos-curPos;
         char* buf = new char[len];
         memset(buf, ' ', len);
         PointStruc linebeg(0, c.cursor.y);
         recordInsert(linebeg, &buf[0], len);
+        c.cursor.x += len;
         delete[] buf;
       }
       else if (curPos > indentPos) {
+        // unindent
         PointStruc beg(indentPos, c.cursor.y);
         recordDelete(beg, curPos-indentPos);
+        c.cursor.x -= curPos-indentPos;
       }
+
+      if (c.cursor.x < curPos)
+      // if cursor before the first char then align cursor
+      // with the start of indentation
+        setCursor = true;
     }
 
     if (setCursor) {
