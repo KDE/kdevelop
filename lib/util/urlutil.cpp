@@ -25,19 +25,11 @@
 
 #include "urlutil.h"
 
-#ifndef KDE_IS_VERSION
-KURL KURL_fromPathOrURL(const QString& text )
-{
-  if ( text.isEmpty() )
-    return KURL();
-    KURL url;
-    if ( text[0] == '/' )
-      url.setPath( text );
-    else
-      url = text;
-  return url;
-}
+#include <kdeversion.h>
+#if (KDE_VERSION_MINOR==0) && (KDE_VERSION_MAJOR==3)
+#include <kdevkurl.h>
 #endif
+
 ///////////////////////////////////////////////////////////////////////////////
 // Namespace URLUtil
 ///////////////////////////////////////////////////////////////////////////////
@@ -132,10 +124,10 @@ QString URLUtil::extractPathNameRelative(const KURL &baseDirUrl, const KURL &url
 
 QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &url )
 {
-#if defined(KDE_IS_VERSION)
+#if (KDE_VERSION_MINOR!=0) || (KDE_VERSION_MAJOR!=3)
   KURL baseDirUrl = KURL::fromPathOrURL( basePath );
 #else
-  KURL baseDirUrl = KURL_fromPathOrURL( basePath );
+  KURL baseDirUrl = KdevKURL::fromPathOrURL( basePath );
 #endif
   return extractPathNameRelative( baseDirUrl, url );
 }
@@ -144,12 +136,12 @@ QString URLUtil::extractPathNameRelative(const QString &basePath, const KURL &ur
 
 QString URLUtil::extractPathNameRelative(const QString &basePath, const QString &absFilePath )
 {
-#if defined(KDE_IS_VERSION)
+#if (KDE_VERSION_MINOR!=0) || (KDE_VERSION_MAJOR!=3)
   KURL baseDirUrl = KURL::fromPathOrURL( basePath ),
        fileUrl = KURL::fromPathOrURL( absFilePath );
 #else
-  KURL baseDirUrl = KURL_fromPathOrURL( basePath ),
-       fileUrl = KURL_fromPathOrURL( absFilePath );
+  KURL baseDirUrl = KdevKURL::fromPathOrURL( basePath ),
+       fileUrl = KdevKURL::fromPathOrURL( absFilePath );
 #endif
   return extractPathNameRelative( baseDirUrl, fileUrl );
 }

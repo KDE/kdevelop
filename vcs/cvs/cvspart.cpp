@@ -57,22 +57,18 @@
 #include "cvsoptionswidget.h"
 #include "checkoutdialog.h"
 
+#include <kdeversion.h>
+#if (KDE_VERSION_MINOR==0) && (KDE_VERSION_MAJOR==3)
+#include <kdevkurl.h>
+#endif
+
 
 KURL KURL_fromPathOrURL( const QString& text )
 {
-#if KDE_VERSION > 305
+#if (KDE_VERSION_MINOR!=0) || (KDE_VERSION_MAJOR!=3)
     return KURL::fromPathOrURL(text);
 #else
-    if ( text.isEmpty() )
-        return KURL();
-
-    KURL url;
-    if ( text[0] == '/' )
-        url.setPath( text );
-    else
-        url = text;
-
-    return url;
+    return KdevKURL::fromPathOrURL(text);
 #endif
 }
 

@@ -32,6 +32,12 @@
 
 #include "cervisia_plugin.h"
 
+#include <kdeversion.h>
+#if (KDE_VERSION_MINOR==0) && (KDE_VERSION_MAJOR==3)
+#include <kdevkurl.h>
+#define KURL KdevKURL
+#endif
+
 typedef KGenericFactory<CervisiaPlugin> CervisiaPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevcervisia, CervisiaPluginFactory( "kdevcervisia" ) );
 
