@@ -277,5 +277,3 @@ private: // Private methods
 };
 
 #endif
-
-

@@ -70,7 +70,8 @@ void PerlSupportPart::maybeParse(const QString fileName)
 {
     QFileInfo fi(fileName);
     QString path = fi.filePath();
-    if (fi.extension() == "pl") {
+    QString extension = fi.extension();
+    if (extension == "pl" || extension == "pm") {
         classStore()->removeWithReferences(fileName);
         parse(fileName);
     }
