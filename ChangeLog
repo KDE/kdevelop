@@ -1,3 +1,6 @@
+1999-09-18 Stefan Heidrich <sheidric@rz.uni-potsdam.de>
+	* fixed bug, now you can have spaces in directory
+
 1999-09-17 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* fixed i18n("") problem in kdlgedit, I got this bugreport by someone, 
 	but I lost his email.:-( Sorry.

@@ -1183,27 +1183,27 @@ void CKAppWizard::okPermited() {
  	p.clearArguments();
   if (kdeminiitem->isSelected()) { 
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/mini.tar.gz";
-    p << "cp " + copysrc + (QString) " " + copydes;
+    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
     p.start(KProcess::Block,KProcess::AllOutput);
   }  
   else if (kdenormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/normal.tar.gz";
-    p << "cp " + copysrc + (QString) " " + copydes;
+    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
     p.start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (qtnormalitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/qt.tar.gz";
-    p << "cp " + copysrc + (QString) " " + copydes;
+    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
     p.start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (cppitem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/cpp.tar.gz";
-    p << "cp " + copysrc + (QString) " " + copydes;
+    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
     p.start(KProcess::Block,KProcess::AllOutput);
   } 
   else if (citem->isSelected()) {
     copysrc = KApplication::kde_datadir() + "/kdevelop/templates/c.tar.gz";
-    p << "cp " + copysrc + (QString) " " + copydes;
+    p << "cp " + (QString) "'" + copysrc + (QString) "' '" + copydes + (QString) "'";
     p.start(KProcess::Block,KProcess::AllOutput);
   }
 
