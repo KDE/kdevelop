@@ -17,6 +17,7 @@
 
 class DocTreeItem;
 class DocTreeKDELibsFolder;
+class DocTreeDoxygenFolder;
 class DocTreeBookmarksFolder;
 class DocTreeProjectFolder;
 class DocTreeDocbaseFolder;
@@ -49,6 +50,7 @@ private:
     QListViewItem *contextItem;
     DocTreeItem *folder_kdevelop;
     DocTreeKDELibsFolder *folder_kdelibs;
+    DocTreeDoxygenFolder *folder_doxygen;
     DocTreeBookmarksFolder *folder_bookmarks;
     DocTreeDocbaseFolder *folder_docbase;
     DocTreeProjectFolder *folder_project;

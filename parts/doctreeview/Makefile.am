@@ -11,8 +11,8 @@ libkdevdoctreeview_la_SOURCES = doctreeviewfactory.cpp \
 				doctreeviewpart.cpp \
 				doctreeviewwidget.cpp \
 			        doctreeconfigwidget.cpp \
-				doctreeglobalconfigwidgetbase.ui \
 				doctreeglobalconfigwidget.cpp \
+				doctreeglobalconfigwidgetbase.ui \
 				adddocitemdlg.cpp \
 				docindexdlg.cpp \
 				docsearchdlg.cpp \

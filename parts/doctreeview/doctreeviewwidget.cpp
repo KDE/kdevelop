@@ -100,7 +100,7 @@ void DocTreeItem::clear()
 
 
 /*************************************/
-/* Folder "Qt/KDE libraries"         */
+/* Folder "Qt/KDE libraries (kdoc)"  */
 /*************************************/
 
 
@@ -147,7 +147,6 @@ QString DocTreeKDELibsBook::fileName()
 
 void DocTreeKDELibsBook::setOpen(bool o)
 {
-    //    kdDebug(9002) << (o? "Open kdelibs book" : "Close kdelibs book") << endl;
     if (o && DocTreeItem::fileName().isNull())
         readContents();
     DocTreeItem::setOpen(o);
@@ -231,7 +230,7 @@ class DocTreeKDELibsFolder : public DocTreeItem
 {
 public:
     DocTreeKDELibsFolder(DocTreeViewWidget *parent, const QString &context)
-        : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries"), context)
+        : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries (kdoc)"), context)
         { setExpandable(true); }
     void refresh();
 };
@@ -273,6 +272,114 @@ void DocTreeKDELibsFolder::refresh()
 //        if (!hiddenNames.contains(*it2)) {
 //            (void) new DocTreeKDELibsBook(this, *it1, *it2, context());
 //        }
+}
+    
+
+/***************************************/
+/* Folder "Qt/KDE libraries (Doxygen)" */
+/***************************************/
+
+
+class DocTreeDoxygenBook : public DocTreeItem
+{
+public:
+    DocTreeDoxygenBook( DocTreeItem *parent, const QString &name,
+                        const QString &tagFileName, const QString &context);
+    ~DocTreeDoxygenBook();
+
+    virtual void setOpen(bool o);
+    
+private:
+    void readTagFile();
+    QString dirname;
+};
+
+
+DocTreeDoxygenBook::DocTreeDoxygenBook(DocTreeItem *parent, const QString &name,
+                                       const QString &dirName, const QString &context)
+    : DocTreeItem(parent, Book, name, context),
+      dirname(dirName)
+{
+    QString fileName = dirName + "/html/index.html";
+    setFileName(fileName);
+    setExpandable(true);
+}
+
+
+DocTreeDoxygenBook::~DocTreeDoxygenBook()
+{}
+
+
+void DocTreeDoxygenBook::setOpen(bool o)
+{
+    if (o && childCount() == 0)
+        readTagFile();
+    DocTreeItem::setOpen(o);
+}
+
+
+void DocTreeDoxygenBook::readTagFile()
+{
+    QString fileName = dirname + "/" + text(0) + ".tag";
+    QFile f(fileName);
+    if (!f.open(IO_ReadOnly)) {
+        kdDebug(9002) << "Could not open tag file" << endl;
+        return;
+    }
+    
+    QDomDocument dom;
+    if (!dom.setContent(&f) || dom.documentElement().nodeName() != "tagfile") {
+        kdDebug(9002) << "No valid tag file" << endl;
+        return;
+    }
+    f.close();
+
+    QDomElement docEl = dom.documentElement();
+
+    QDomElement childEl = docEl.firstChild().toElement();
+    while (!childEl.isNull()) {
+        if (childEl.tagName() == "compound" && childEl.attribute("kind") == "class") {
+            QString classname = childEl.namedItem("name").firstChild().toText().data();
+            QString filename = childEl.namedItem("filename").firstChild().toText().data();
+            
+            DocTreeItem *item = new DocTreeItem(this, Doc, classname, context());
+            item->setFileName(dirname + "/html/" + filename);
+        }
+        childEl = childEl.nextSibling().toElement();
+    }
+
+    sortChildItems(0, true);
+}
+
+
+class DocTreeDoxygenFolder : public DocTreeItem
+{
+public:
+    DocTreeDoxygenFolder(DocTreeViewWidget *parent, const QString &context)
+        : DocTreeItem(parent, Folder, i18n("Qt/KDE Libraries (Doxygen)"), context)
+        { setExpandable(true); }
+    void refresh();
+};
+
+
+void DocTreeDoxygenFolder::refresh()
+{
+    DocTreeItem::clear();
+
+    KConfig *config = DocTreeViewFactory::instance()->config();
+    QString docdir = config->readEntry("kdelibsdocdir", KDELIBS_DOXYDIR);
+    QDir d(docdir);
+    QStringList fileList = d.entryList("*", QDir::Dirs);
+
+    QStringList::ConstIterator it;
+    for (it = fileList.begin(); it != fileList.end(); ++it) {
+        QString dirName = (*it);
+        if (dirName == "." || dirName == ".." || dirName == "common")
+            continue;
+        new DocTreeDoxygenBook(this, *it, d.filePath(*it), context());
+    }
+
+    sortChildItems(0, true);
 }
     
 
@@ -441,7 +548,6 @@ void DocTreeDocbaseFolder::readDocbaseFile(FILE *f)
 
 void DocTreeDocbaseFolder::setOpen(bool o)
 {
-    //    kdDebug(9002) << (o? "Open docbase folder" : "Close docbase folder") << endl;
     if (o && childCount() == 0) {
         QDir d("/usr/share/doc-base");
         QStringList fileList = d.entryList("*", QDir::Files);
@@ -580,6 +686,9 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     for (tit = tocs.begin(); tit != tocs.end(); ++tit)
         folder_toc.append(new DocTreeTocFolder(this, *tit, QString("ctx_%1").arg(*tit)));
 
+    folder_doxygen   = new DocTreeDoxygenFolder(this, "ctx_doxygen");
+    folder_doxygen->refresh();
+
     folder_kdelibs   = new DocTreeKDELibsFolder(this, "ctx_kdelibs");
     folder_kdelibs->refresh();
 
@@ -680,6 +789,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
     QListIterator<DocTreeTocFolder> it1(folder_toc);
     for (; it1.current(); ++it1)
         takeItem(it1.current());
+    takeItem(folder_doxygen);
     takeItem(folder_kdelibs);
     takeItem(folder_kdevelop);
 
@@ -708,6 +818,7 @@ void DocTreeViewWidget::projectChanged(KDevProject *project)
         if (!ignoretocs.contains(it2.current()->tocName()))
             insertItem(it2.current());
     }
+    insertItem(folder_doxygen);
     if (!ignoretocs.contains("kde"))
         insertItem(folder_kdelibs);
 
