@@ -138,6 +138,23 @@ void CKDevelop::slotCVViewDefinition( const char *parentPath,
   CVMethodSelected( itemName );
 }
 
+/*---------------------------- CClassView::slotViewClassDeclaration()
+ * viewClassDefinition()
+ *   Views a declaration of a specified class.
+ *
+ * Parameters:
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CKDevelop::slotSwitchToFile(const QString & toFile, int toLine)
+{
+  if (!toFile.isEmpty() && toLine!=-1)
+  {
+    switchToFile( toFile, toLine );
+  }
+}
+
 /*-------------------------------------- CKDevelop::slotCVAddMethod()
  * slotCVAddMethod()
  *   Event when the user adds a method to a class. Brings up a dialog
