@@ -268,9 +268,13 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
          m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockFullSite);
          pCover->manualDock( m_pDockbaseOfTabPage, KDockWidget::DockCenter);
          pCover->setEnableDocking(KDockWidget::DockNone);
-         if (m_pDockbaseOfTabPage == m_pDockbaseAreaOfDocumentViews)
+         if (m_pDockbaseOfTabPage == m_pDockbaseAreaOfDocumentViews) {
             m_pDockbaseAreaOfDocumentViews->undock();
-         m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockCorner);
+            m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockNone);
+         }
+         else {
+           m_pDockbaseOfTabPage->setDockSite(KDockWidget::DockCorner);
+         }
          m_pDockbaseOfTabPage = pCover;
       }
       if (!(flags & QextMdi::Hide)) {
@@ -982,6 +986,8 @@ void QextMdiMainFrm::switchToChildframeMode()
       // set this dock to main view
       setView(m_pDockbaseAreaOfDocumentViews);
       setMainDockWidget(m_pDockbaseAreaOfDocumentViews);
+      m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
+      m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
       m_pDockbaseOfTabPage = m_pDockbaseAreaOfDocumentViews;
    }
    if (m_mdiMode == QextMdi::TabPageMode) {
