@@ -12,6 +12,7 @@
 
 #include <kdevcore.h>
 #include <kdevapi.h>
+#include <kdevpartcontroller.h>
 
 
 #include <ktexteditor/editinterface.h>
@@ -36,8 +37,7 @@ AStylePart::AStylePart(KDevApi *api, QObject *parent, const char *name)
 
   connect(core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(configWidget(KDialogBase*)));
 
-  m_controller = api->getPartController();
-  connect(api->getPartController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
+  connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 }
 
 
@@ -48,7 +48,7 @@ AStylePart::~AStylePart()
 
 void AStylePart::beautifySource()
 {
-  KParts::Part *part = m_controller->getActivePart();
+  KParts::Part *part = partController()->getActivePart();
   if (!part)
     return;
   

@@ -10,7 +10,6 @@ class KDialogBase;
 #include <kaction.h>
 
 #include <kdevpart.h>
-#include <kdevpartcontroller.h>
 
 
 #include "keditor/editor.h"
@@ -39,9 +38,6 @@ private:
 
   KAction *_action;
 
-  // TODO: remove, use a new accesor function to API instead!
-  KDevPartController *m_controller;
-  
 };
 
 
