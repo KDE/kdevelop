@@ -71,31 +71,23 @@
                 <cstring>TextLabel1</cstring>
             </property>
             <property name="text">
-                <string>Exclude in</string>
+                <string>Exclude in:</string>
             </property>
         </widget>
         <widget class="QListView" row="1" column="0" rowspan="1" colspan="3">
             <column>
                 <property name="text">
-                    <string>Column 1</string>
+                    <string>Project Scopes</string>
                 </property>
                 <property name="clickable">
-                    <bool>true</bool>
+                    <bool>false</bool>
                 </property>
                 <property name="resizeable">
-                    <bool>true</bool>
+                    <bool>false</bool>
                 </property>
             </column>
-        <item>
-            <property name="text">
-                <string>New Item</string>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-        </item>
             <property name="name">
-                <cstring>ListView1</cstring>
+                <cstring>ScopeTree</cstring>
             </property>
         </widget>
     </grid>
@@ -115,7 +107,7 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>ListView1</tabstop>
+    <tabstop>ScopeTree</tabstop>
     <tabstop>PushButton1</tabstop>
     <tabstop>PushButton2</tabstop>
 </tabstops>

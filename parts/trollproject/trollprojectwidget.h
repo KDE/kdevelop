@@ -19,10 +19,13 @@
 #include <qmap.h>
 #include <qstrlist.h>
 #include <qvbox.h>
+#include <qtoolbutton.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <qbutton.h>
 #include "filebuffer.h"
 #include "projectconfigurationdlg.h"
+#include "filepropertydlg.h"
 
 class TrollProjectPart;
 class KListView;
@@ -85,7 +88,6 @@ public:
     QStringList sources;
     QStringList headers;
     QStringList forms;
-    QStringList interfaces;
 
     ProjectConfiguration configuration;
 
@@ -101,7 +103,7 @@ private:
 class GroupItem : public ProjectItem
 {
 public:
-    enum GroupType {Sources, Headers, Interfaces, Forms };
+    enum GroupType {Sources, Headers, Forms };
 
     GroupItem(QListView *lv, GroupType type, const QString &text,const QString &scopeString);
 
@@ -167,6 +169,10 @@ private slots:
     void slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p);
     void slotDetailsExecuted(QListViewItem *item);
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
+    void slotBuildProject();
+    void slotRebuildProject();
+    void slotConfigureProject();
+    void slotRunProject();
 
 private:
     void cleanDetailView(SubprojectItem *item);
@@ -175,8 +181,14 @@ private:
     void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
     void parse(SubprojectItem *item);
 
+    QVBox     *overviewContainer;
     KListView *overview;
     KListView *details;
+    QHBox     *projectTools;
+    QToolButton *buildButton;
+    QToolButton *rebuildButton;
+    QToolButton *runButton;
+    QToolButton *projectconfButton;
     SubprojectItem *m_shownSubproject;
     TrollProjectPart *m_part;
 };

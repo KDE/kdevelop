@@ -42,6 +42,7 @@
 #include "domutil.h"
 #include "trollprojectpart.h"
 
+
 /**
  * Class ProjectViewItem
  */
@@ -131,12 +132,51 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
 {
     QSplitter *splitter = new QSplitter(Vertical, this);
 
-    overview = new KListView(splitter, "project overview widget");
+    overviewContainer = new QVBox(splitter,"Projects");
+    overviewContainer->setMargin ( 2 );
+    overviewContainer->setSpacing ( 2 );
+    projectTools = new QHBox(overviewContainer,"Project buttons");
+    projectTools->setMargin ( 2 );
+    projectTools->setSpacing ( 2 );
+    // build
+    buildButton = new QToolButton ( projectTools, "Build button" );
+    buildButton->setPixmap ( SmallIcon ( "make_kdevelop.png",22 ) );
+    buildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, buildButton->sizePolicy().hasHeightForWidth() ) );
+    buildButton->setEnabled ( true );
+    // rebuild
+    rebuildButton = new QToolButton ( projectTools, "Rebuild button" );
+    rebuildButton->setPixmap ( SmallIcon ( "rebuild.png",22 ) );
+    rebuildButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, rebuildButton->sizePolicy().hasHeightForWidth() ) );
+    rebuildButton->setEnabled ( true );
+    // run
+    runButton = new QToolButton ( projectTools, "Run button" );
+    runButton->setPixmap ( SmallIcon ( "run.png",22 ) );
+    runButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType ) 0, ( QSizePolicy::SizeType) 0, 0, 0, runButton->sizePolicy().hasHeightForWidth() ) );
+    runButton->setEnabled ( true );
+    // spacer
+    QWidget *spacer = new QWidget(projectTools);
+    projectTools->setStretchFactor(spacer, 1);
+    // Project configuration
+    projectconfButton = new QToolButton ( projectTools, "Project configuration button" );
+    projectconfButton->setPixmap ( SmallIcon ( "configure.png",22 ) );
+    projectconfButton->setText("Configure");
+    projectconfButton->setEnabled ( true );
+    // connect toolbar buttons
+    connect ( buildButton, SIGNAL ( clicked () ), this, SLOT ( slotBuildProject () ) );
+    connect ( rebuildButton, SIGNAL ( clicked () ), this, SLOT ( slotRebuildProject () ) );
+    connect ( runButton, SIGNAL ( clicked () ), this, SLOT ( slotRunProject () ) );
+    connect ( projectconfButton, SIGNAL ( clicked () ), this, SLOT ( slotConfigureProject () ) );
+
+    // Project tree
+    overview = new KListView(overviewContainer, "project overview widget");
     overview->setResizeMode(QListView::LastColumn);
     overview->setSorting(-1);
     overview->header()->hide();
     overview->addColumn(QString::null);
-    details = new KListView(splitter, "project details widget");
+
+
+
+    details = new KListView(splitter, "details widget");
     details->setRootIsDecorated(true);
     details->setResizeMode(QListView::LastColumn);
     details->setSorting(-1);
@@ -252,6 +292,20 @@ void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
     cleanDetailView(m_shownSubproject);
     m_shownSubproject = static_cast<SubprojectItem*>(item);
     buildProjectDetailTree(m_shownSubproject,details);
+    if (m_shownSubproject->isScope)
+    {
+      buildButton->setEnabled(false);
+      rebuildButton->setEnabled(false);
+      runButton->setEnabled(false);
+      projectconfButton->setEnabled(false);
+    }
+    else
+    {
+      buildButton->setEnabled(true);
+      rebuildButton->setEnabled(true);
+      runButton->setEnabled(true);
+      projectconfButton->setEnabled(true);
+    }
 }
 
 void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
@@ -337,6 +391,55 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 }
 
 
+void TrollProjectWidget::slotConfigureProject()
+{
+  ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(&(m_shownSubproject->configuration));
+  dlg->exec();
+  updateProjectConfiguration(m_shownSubproject);
+}
+
+void TrollProjectWidget::slotRunProject()
+{
+  // no subproject selected
+  if (!m_shownSubproject)
+    return;
+  // can't build from scope
+  if (m_shownSubproject->isScope)
+    return;
+  // Only run application projects
+  if (m_shownSubproject->configuration.m_template!=QTMP_APPLICATION)
+    return;
+  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+  m_part->execute(projectDirectory()+relpath+"/"+m_shownSubproject->subdir);
+
+}
+
+void TrollProjectWidget::slotBuildProject()
+{
+  // no subproject selected
+  if (!m_shownSubproject)
+    return;
+  // can't build from scope
+  if (m_shownSubproject->isScope)
+    return;
+  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+  m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+  m_part->topLevel()->lowerView(this);
+}
+
+void TrollProjectWidget::slotRebuildProject()
+{
+  // no subproject selected
+  if (!m_shownSubproject)
+    return;
+  // can't build from scope
+  if (m_shownSubproject->isScope)
+    return;
+  QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+  m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+  m_part->topLevel()->lowerView(this);
+}
+
 void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *item, const QPoint &p)
 {
     if (!item)
@@ -350,8 +453,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     int idAddSubproject = popup.insertItem(SmallIcon("folder_new"),i18n("Add Subproject..."));
     int idBuild = popup.insertItem(SmallIcon("launch"),i18n("Build"));
     int idQmake = popup.insertItem(SmallIcon("launch"),i18n("Run qmake"));
-    int idViewProjectFile = popup.insertItem(SmallIcon("document"),i18n("View "+QString(spitem->subdir)+".pro file"));
-    int idTestDlg = popup.insertItem(SmallIcon("Folder"),i18n("Subproject settings"));
+    int idProjectConfiguration = popup.insertItem(SmallIcon("configure.png"),i18n("Subproject settings"));
     int r = popup.exec(p);
 
     QString relpath = spitem->path.mid(projectDirectory().length());
@@ -393,13 +495,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
         m_part->startQMakeCommand(projectDirectory() + relpath);
         m_part->topLevel()->lowerView(this);
     }
-    else if (r == idViewProjectFile)
-    {
-      QString dirName = spitem->path;
-      m_part->partController()->showDocument(KURL(dirName + "/" + QString(spitem->subdir)+".pro"));
-      m_part->topLevel()->lowerView(this);
-    }
-    else if (r == idTestDlg)
+    else if (r == idProjectConfiguration)
     {
       ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(&(spitem->configuration));
       dlg->exec();
@@ -447,8 +543,6 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->setValues("HEADERS",spitem->headers,4);
   subBuffer->removeValues("FORMS");
   subBuffer->setValues("FORMS",spitem->forms,4);
-  subBuffer->removeValues("INTERFACES");
-  subBuffer->setValues("INTERFACES",spitem->interfaces,4);
   m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
 
@@ -458,9 +552,6 @@ void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,QString &fi
   titem->files.append(fitem);
   switch (titem->groupType)
   {
-    case GroupItem::Interfaces:
-      titem->owner->interfaces.append(filename);
-      break;
     case GroupItem::Sources:
       titem->owner->sources.append(filename);
       break;
@@ -485,10 +576,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         GroupItem *titem = static_cast<GroupItem*>(pvitem);
         QString title,ext;
         switch (titem->groupType) {
-        case GroupItem::Interfaces:
-            title = i18n("Interfaces");
-            ext = "*.*";
-            break;
         case GroupItem::Sources:
             title = i18n("Sources");
             ext = "*.cpp *.c";
@@ -507,6 +594,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(title, this);
         int idInsExistingFile = popup.insertItem(SmallIconSet("fileopen"),i18n("Insert existing files..."));
         int idInsNewFile = popup.insertItem(SmallIconSet("filenew"),i18n("Insert new file..."));
+        int idFileProperties = popup.insertItem(SmallIconSet("filenew"),i18n("Properties..."));
         int r = popup.exec(p);
         QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
         if (r == idInsExistingFile)
@@ -566,6 +654,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
         int idRemoveFile = popup.insertItem(i18n("Remove File..."));
+        int idFileProperties = popup.insertItem(i18n("Properties..."));
 
         FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
@@ -573,6 +662,12 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         int r = popup.exec(p);
         if (r == idRemoveFile)
             removeFile(m_shownSubproject, fitem);
+        // Fileproperties
+        else if (r == idFileProperties)
+        {
+          FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,fitem);
+          propdlg->exec();
+        }
 
     }
 }
@@ -585,9 +680,6 @@ void TrollProjectWidget::removeFile(SubprojectItem *spitem, FileItem *fitem)
     emitRemovedFile(spitem->path + "/" + fitem->text(0));
     switch (gitem->groupType)
     {
-      case GroupItem::Interfaces:
-        spitem->interfaces.remove(fitem->text(0));
-        break;
       case GroupItem::Sources:
         spitem->sources.remove(fitem->text(0));
         break;
@@ -652,24 +744,12 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
 
     QStringList minusListDummy;
     FileBuffer *subBuffer = buffer->getSubBuffer(scopeString);
-    subBuffer->getValues("INTERFACES",item->interfaces,minusListDummy);
     subBuffer->getValues("FORMS",item->forms,minusListDummy);
     subBuffer->getValues("SOURCES",item->sources,minusListDummy);
     subBuffer->getValues("HEADERS",item->headers,minusListDummy);
 
     // Create list view items
-    GroupItem *titem = createGroupItem(GroupItem::Interfaces, "INTERFACES",scopeString);
-    item->groups.append(titem);
-    titem->owner = item;
-    if (!item->interfaces.isEmpty()) {
-        QStringList l = item->interfaces;
-        QStringList::Iterator it;
-        for (it = l.begin(); it != l.end(); ++it) {
-            FileItem *fitem = createFileItem(*it);
-            titem->files.append(fitem);
-        }
-    }
-    titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
+    GroupItem *titem = createGroupItem(GroupItem::Forms, "FORMS",scopeString);
     item->groups.append(titem);
     titem->owner = item;
     if (!item->forms.isEmpty()) {

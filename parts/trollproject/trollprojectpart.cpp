@@ -49,7 +49,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                                    "in the upper half shows the subprojects, each one having a "
                                    ".pro file. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
-    
+
     topLevel()->embedSelectView(m_widget, i18n("Project"));
 
     KAction *action;
@@ -171,7 +171,7 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 
     cmdline += " ";
     cmdline += target;
-    
+
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
@@ -183,10 +183,10 @@ void TrollProjectPart::startMakeCommand(const QString &dir, const QString &targe
 void TrollProjectPart::startQMakeCommand(const QString &dir)
 {
     QFileInfo fi(dir);
-    
+
     QString cmdline = "qmake ";
     cmdline += fi.baseName() + ".pro";
-    
+
     QString dircmd = "cd ";
     dircmd += dir;
     dircmd += " && ";
@@ -209,12 +209,13 @@ void TrollProjectPart::slotClean()
 
 void TrollProjectPart::slotExecute()
 {
-    QString program = m_widget->projectDirectory() + "/" + project()->mainProgram();
-    
+    // temporary hack
+    QString program = m_widget->projectDirectory() + "/" + m_projectName;
+
     QDomElement docEl = projectDom()->documentElement();
     QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
     QDomElement envvarsEl = trollprojectEl.namedItem("envvars").toElement();
-    
+
     QString environstr;
     QDomElement childEl = envvarsEl.firstChild().toElement();
     while (!childEl.isNull()) {
@@ -231,5 +232,12 @@ void TrollProjectPart::slotExecute()
     bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
     appFrontend()->startAppCommand(program, inTerminal);
 }
+
+void TrollProjectPart::execute(const QString &command)
+{
+    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
+    appFrontend()->startAppCommand(command, inTerminal);
+}
+
 
 #include "trollprojectpart.moc"

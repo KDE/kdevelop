@@ -46,11 +46,12 @@ private slots:
     void slotBuild();
     void slotClean();
     void slotExecute();
-    
+
 private:
     void startMakeCommand(const QString &dir, const QString &target);
     void startQMakeCommand(const QString &dir);
-    
+    void execute(const QString &command);
+
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_projectName;
     friend class TrollProjectWidget;
