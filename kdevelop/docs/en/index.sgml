@@ -132,6 +132,7 @@ as distribution packages and thereby can be installed easily.
 <item>perl 5.004, available at <htmlurl url="http://www.perl.com" name="http://www.perl.com">
 <item>autoconf 2.12, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
 <item>automake 1.2, available at <htmlurl url="http://www.gnu.org" name="http://www.gnu.org">
+<item>flex 2.5.4, 
 <item>Qt 1.42, avaliable at <htmlurl url="http://www.troll.no" name="http://www.troll.no">
 <item><idx/KDE/ 1.1.x, available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">
 </itemize>
@@ -144,7 +145,8 @@ as distribution packages and thereby can be installed easily.
 <item>sgmltools 1.0, available at <htmlurl url="http://www.sgmltools.org" name="http://www.sgmltools.org">
 <item><idx/KDE-SDK/ (<bf/KDE S/oftware <bf/D/evelopment <bf/K/it)with KDoc, KSgml2Html, KTranslator (available at <htmlurl
 url="http://developer.kde.org" name="http://developer.kde.org">)
-<item>KDbg, KIconEdit (available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
+<item>KDbg, available at <htmlurl url="http://members.telecom.at/~johsixt/kdbg.html" name="http://members.telecom.at/~johsixt/kdbg.html">
+<item>KIconEdit (available at <htmlurl url="http://www.kde.org" name="http://www.kde.org">)
 </itemize>
 
 KDevelop was tested with SuSE Linux 5.2 on an AMD K6 200, 64MB RAM and FreeBSD 3.0-Release as well as SuSE Linux 6.0 on an Intel
@@ -2581,15 +2583,16 @@ The KDevelop Classviewer is one of the most useful and important tools that the 
 sources. When a project is loaded, a classparser reads all project sources for functions, classes etc., then displays the results in
 the CV treeview. This chapter shows you how to use the Classviewer and the provided functionality and how it can improve your work.
 
-Classes and their methods are also accessible through the browser toolbar combos. There, the left combo selects the class; the right
+Classes and their methods can also be accessed by the browser toolbar. There, the left combo selects the class; the right
 lets you choose the methods of the selected class. When you select a method, the classbrowser will automatically bring you to the
 implementation file and sets the cursor to the method. Finally, the class-assistant button on the right of the method combo will bring
-you to the declaration of the method on a click. The delayed popup menu, displayed by the down-arrow on the button, allows additional
-functionality also available in the classbrowser, such as:
+you to the declaration of the method on a click; on another click to the definition. The delayed popup menu, displayed by the 
+down-arrow on the button, offers additional functionality that is also available in the classbrowser context menus, such as:
 
 <itemize>
-<item>View Declaration: browses to the declaration of the method
-<item>View Definition: browses to the definition of the method
+<item>Goto Declaration: browses to the declaration of the method
+<item>Goto Definition: browses to the definition of the method
+<item>Goto Class Declaration: browses to the class declaration
 <item>New Class: opens the New Class dialog to construct a new class
 <item>Add Method: adds a method to the selected class
 <item>Add Attribute: adds an attribute to the selected class

@@ -151,12 +151,11 @@ void KTipofDay::slotOK()
 
 void KTipofDay::slotNext()
 {
-  KLocale *kloc = KApplication::getKApplication()->getLocale();
 
   QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
 
-  file = strpath + kloc->language() + '/' + "kdevelop/tipdatabase";
+  file = strpath + klocale->language() + '/' + "kdevelop/tipdatabase";
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
     file = strpath + "default/" + "kdevelop/tipdatabase";

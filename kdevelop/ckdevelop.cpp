@@ -1271,18 +1271,17 @@ void CKDevelop::slotHelpSearch(){
 }
 
 void CKDevelop::slotHelpReference(){
-  KLocale *kloc = KApplication::getKApplication()->getLocale();
 
   QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + kloc->language() + '/' + "kdevelop/reference/C/cref.html";
+  file = strpath + klocale->language() + '/' + "kdevelop/reference/C/cref.html";
   if( !QFileInfo( file ).exists() ){
   // not found: use the default
   	file = strpath + "default/" + "kdevelop/reference/C/cref.html";
   }
   if( !QFileInfo( file ).exists() ){
-  file = strpath + kloc->language() + '/' + "kdevelop/cref.html";
+  file = strpath + klocale->language() + '/' + "kdevelop/cref.html";
   }
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
@@ -1319,30 +1318,55 @@ void CKDevelop::slotHelpKDEHTMLLib(){
 
 void CKDevelop::slotHelpAPI(){
   if(project){
-    slotStatusMsg(i18n("Switching to project API Documentation..."));
-    slotURLSelected(browser_widget,prj->getProjectDir() + prj->getSubDir() +  "api/index.html",1,"test");
-    slotStatusMsg(i18n("Ready."));
+    QString api_file=prj->getProjectDir() + prj->getSubDir() +  "api/index.html";
+    if(!QFileInfo(api_file).exists()){
+    	int result=KMsgBox::yesNo( this, i18n("No Project API documentation !"), i18n("The Project API documentation is not present.\n" 
+    																																	"Would you like to generate it now ?"), KMsgBox::QUESTION);
+    	if(result==1){
+    		slotProjectAPI();
+			}
+			else{
+				return;
+			}
+		}
+		else{
+	    slotStatusMsg(i18n("Switching to project API Documentation..."));
+	    slotURLSelected(browser_widget,api_file,1,"test");     
+			slotStatusMsg(i18n("Ready.")); 
+		}
   }
 }
 void CKDevelop::slotHelpManual(){
   if(project){
-    slotStatusMsg(i18n("Switching to project Manual..."));
     unsigned int index = prj->getSGMLFile().length()-4;
     QString name = prj->getSGMLFile().copy();
     name.remove(index,4);
-    slotURLSelected(browser_widget,prj->getProjectDir() + prj->getSubDir() + "docs/en/" + name + "html",1,"test");
-    slotStatusMsg(i18n("Ready."));
+    QString doc_file=prj->getProjectDir() + prj->getSubDir() + "docs/en/" + name + "html";
+    if(!QFileInfo(doc_file).exists()){
+    	int result=KMsgBox::yesNo( this, i18n("No Project manual found !"),
+    				i18n("The Project manual documentation is not present.\n" 
+    							"Would you like to generate the handbook  now ?"), KMsgBox::QUESTION);
+    	if(result==1){
+    		slotProjectManual();
+			}
+			else{
+				return;
+			}
+		}
+		else{
+	    slotStatusMsg(i18n("Switching to project Manual..."));
+  	  slotURLSelected(browser_widget,doc_file,1,"test");
+    	slotStatusMsg(i18n("Ready."));
+  	}
   }
 }
 
 void CKDevelop::slotHelpContents(){
-  
-  KLocale *kloc = KApplication::getKApplication()->getLocale();
-  
+    
   QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + kloc->language() + '/' + "kdevelop/index.html";
+  file = strpath + klocale->language() + '/' + "kdevelop/index.html";
   
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
@@ -1352,12 +1376,11 @@ void CKDevelop::slotHelpContents(){
 }
 
 void CKDevelop::slotHelpTutorial(){
-  KLocale *kloc = KApplication::getKApplication()->getLocale();
 
   QString strpath = KApplication::kde_htmldir().copy() + "/";
   QString file;
   // first try the locale setting
-  file = strpath + kloc->language() + '/' + "kdevelop/tutorial.html";
+  file = strpath + klocale->language() + '/' + "kdevelop/tutorial.html";
 
   if( !QFileInfo( file ).exists() ){
     // not found: use the default
@@ -1369,7 +1392,8 @@ void CKDevelop::slotHelpTutorial(){
 void CKDevelop::slotHelpTipOfDay(){
 	KTipofDay* tipdlg=new KTipofDay(this, "tip of the day");
 	tipdlg->show();
-	
+
+	delete tipdlg;	
 }
 
 
@@ -2525,6 +2549,10 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
+
 
 
 
