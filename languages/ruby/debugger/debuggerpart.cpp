@@ -37,7 +37,7 @@
 #include <dcopclient.h>
 #include <qtimer.h>
 #include <kstringhandler.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
