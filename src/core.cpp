@@ -586,8 +586,6 @@ KEditor::Document *Core::createDocument(const KURL &url)
 
 void Core::gotoSourceFile(const KURL& url, int lineNum, Embedding embed)
 {
-    // TODO: Implement the embedding
-
     if (url.isEmpty())
       return;
 
@@ -663,30 +661,11 @@ void Core::saveAllFiles()
         if (it.current()->inherits("KParts::ReadWritePart"))
         {
             KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
-            rw_part->save();
-        }
-        
-#if 0
 
-    // TODO: Move the modified check to the part or part framework
-    
-    QListIterator<TextEditorDocument> it(editedDocs);
-    for (; it.current(); ++it) {
-        TextEditorDocument *doc = it.current();
-        if (doc->isModified() && doc->modifiedOnDisk()) {
-            int res = KMessageBox::warningYesNoCancel
-                (win, i18n("The file %1 was modified on the disk.\n"
-                           "Save anyway?").arg(doc->url().url()));
-            if (res == KMessageBox::Cancel)
-                return;
-            if (res == KMessageBox::Yes) {
-                doc->save();
-                win->statusBar()->message(i18n("Saved %1").arg(doc->fileName()));
-                emit savedFile(doc->fileName());
-            }
+            rw_part->save();
+
+            message(i18n("Saved %1").arg(rw_part->url().url()));
         }
-    }
-#endif
 }
 
 
@@ -773,26 +752,21 @@ void Core::slotOpenFile()
 
 void Core::slotCloseWindow()
 {
-    if (!activePart)
+    if (!activePart || !activePart->inherits("KParts::ReadWritePart"))
         return;
+        
+    KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(activePart);
 
-    delete activePart;
-    
-#if 0
-
-    // TODO: Move to the editor part
-    
-    if (activePart->inherits("EditorPart")) {
-        EditorPart *part = static_cast<EditorPart*>(activePart);
-        TextEditorDocument *doc = part->editorDocument();
-        if (doc->isModified() && !KMessageBox::warningYesNo
-            (win, i18n("The file %1 is modified.\n"
-                       "Close this window anyway?").arg(doc->url().url())))
+    if (rw_part->isModified())
+    {
+        int res = KMessageBox::warningYesNo(win, 
+                     i18n("The file %1 is modified.\n"
+                          "Close this window anyway?").arg(rw_part->url().url()));
+        if (res == KMessageBox::No)
             return;
     }
-    
-    delete activePart->widget();
-#endif
+            
+    delete activePart;
 }
 
 
@@ -893,24 +867,26 @@ void Core::slotKillBuffer()
 
 void Core::slotQuit()
 {
-#if 0
+    QListIterator<KParts::Part> it(*partManager()->parts());
+    for ( ; it.current(); ++it)
+        {
+            if (!it.current()->inherits("KParts::ReadWritePart"))
+                continue;
 
-    // TODO: Implement modified check
-        
-    QListIterator<TextEditorDocument> it(editedDocs);
-    for (; it.current(); ++it) {
-        TextEditorDocument *doc = it.current();
-        if (doc->isModified()) {
-            int res = KMessageBox::warningYesNoCancel
-                (win, i18n("The file %1 is modified.\n"
-                           "Save this file now?").arg(doc->url().url()));
-            if (res == KMessageBox::Cancel)
-                return;
-            if (res == KMessageBox::Yes)
-                doc->save();
+            KParts::ReadWritePart *rw_part = static_cast<KParts::ReadWritePart*>(it.current());
+
+            if (rw_part->isModified())
+                {
+                    int res = KMessageBox::warningYesNoCancel(win, 
+                                i18n("The file %1 is modified.\n" 
+                                     "Save this file now?").arg(rw_part->url().url()));
+                    if (res == KMessageBox::Yes)
+                        rw_part->save();
+                    if (res == KMessageBox::Cancel)
+                        return;
+                }
         }
-    }
-#endif
+
     disconnect( manager, SIGNAL(activePartChanged(KParts::Part*)),
                 this, SLOT(activePartChanged(KParts::Part*)) );
 
