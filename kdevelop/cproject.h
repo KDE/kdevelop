@@ -283,6 +283,8 @@ public: // Methods to fetch project options
 
   QString getDirWhereMakeWillBeCalled(QString defaultStr);
 
+  QString getExecutableDir();
+
   QString getExecutable();
 
   QString getLibtoolDir();

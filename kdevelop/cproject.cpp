@@ -16,16 +16,21 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdir.h>
 #include "cproject.h"
-#include <iostream.h>
-#include <qregexp.h>
+
+#include "vc/versioncontrol.h"
+#include "ctoolclass.h"
+
 #include <kprocess.h>
 #include <kconfigbase.h>
 #include <kapp.h>
-#include "vc/versioncontrol.h"
 #include "debug.h"
 #include <kstddirs.h>
+
+#include <qdir.h>
+#include <qregexp.h>
+
+#include <iostream.h>
 
 #define PROJECT_VERSION_STR "KDevelop Project File Version 0.3 #DO NOT EDIT#"
 
@@ -272,7 +277,10 @@ TMakefileAmInfo CProject::getMakefileAmInfo(QString rel_name){
 
 QString CProject::getDirWhereMakeWillBeCalled(QString defaultStr)
 {
-  return readGroupEntry( "General", "dir_where_make_will_be_called", defaultStr);
+  QString dir = readGroupEntry( "General", "dir_where_make_will_be_called");
+  if (dir.isEmpty())
+    return defaultStr;
+  return dir;
 }
 
 
@@ -1450,11 +1458,22 @@ bool CProject::isCustomProject(){
 
 // **************************************************************************
 
-QString CProject::getExecutable()
+QString CProject::getExecutableDir()
 {
+  // If we arnt a custom project then we are already in the correct
+  // directory - HACK alert!!!
+  if (!isCustomProject())
+    return "./";
+
   QString underDir=pathToBinPROGRAM();
+
+  // Setup the default path - make it relative to project dir
   if (underDir.isEmpty())
-    underDir = getProjectDir() + getSubDir();
+  {
+    underDir = getProjectDir();
+    if (underDir[0] == '/')
+      underDir = CToolClass::getRelativePath(getProjectDir(), underDir);
+  }
 
   if (underDir.isEmpty())
     underDir = "./";
@@ -1462,7 +1481,14 @@ QString CProject::getExecutable()
   if (underDir.right(1) != "/")
     underDir+="/";
 
-  QString exe = underDir+getBinPROGRAM();
+  return underDir;
+}
+
+// **************************************************************************
+
+QString CProject::getExecutable()
+{
+  QString exe = getExecutableDir()+getBinPROGRAM();
   return exe;
 }
 
@@ -1503,6 +1529,9 @@ QString CProject::getRunFromDir()
     if (!isCustomProject())
       underDir += getSubDir();
   }
+
+  if (underDir[0] != '/')
+    underDir = getProjectDir() + underDir;
   return underDir;
 }
 

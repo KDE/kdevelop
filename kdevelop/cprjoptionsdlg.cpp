@@ -1409,17 +1409,18 @@ void CPrjOptionsDlg::addBinPage()
   binary_edit= new QLineEdit(binary_box,"binary_edit");
   grid1->addWidget(binary_edit,1,0);
 
-  QString underDir=prj_info->pathToBinPROGRAM();
-  if (underDir.isEmpty())
-  {
-    underDir = prj_info->getProjectDir() + prj_info->getSubDir();
-    if (underDir[0] == '/')
-      underDir = CToolClass::getRelativePath(prj_info->getProjectDir(), underDir);
-  }
+//  QString underDir=prj_info->pathToBinPROGRAM();
+//  if (underDir.isEmpty())
+//  {
+//    underDir = prj_info->getProjectDir() + prj_info->getSubDir();
+//    if (underDir[0] == '/')
+//      underDir = CToolClass::getRelativePath(prj_info->getProjectDir(), underDir);
+//
+//  }
+//  if (underDir.right(1)!="/")
+//    underDir+="/";
 
-  if (underDir.right(1)!="/")
-    underDir+="/";
-
+  QString underDir=prj_info->getExecutableDir();
   binary_edit->setText(underDir+prj_info->getBinPROGRAM());
 
   QPushButton* binary_button= new QPushButton(binary_box,"binary_button");
@@ -1818,59 +1819,73 @@ void CPrjOptionsDlg::ok(){
 
   /******** sort out the make directory *********/
 
-  QString makeDir = m_makestartpoint_line->text();
-  if (!makeDir.isEmpty())
+  if (prj_info->isCustomProject())
   {
-    if (makeDir == prj_info->getProjectDir())
-      makeDir = "";
-    else
+    QString makeDir = m_makestartpoint_line->text();
+    if (!makeDir.isEmpty())
     {
-      // Make sure that the user is aware of the consequences of setting an
-      // absolute directory path here.
-      if (makeDir[0] == '/')
+      if (makeDir == prj_info->getProjectDir())
+        makeDir = "./";
+      else
       {
-        if (KMessageBox::warningYesNo(this,
-                    i18n("The path\n\n") + makeDir +
-                      i18n("\n\nwhich you set as directory where make should\n"
-                            "run is not a relative path.\nThis can cause problems,\n"
-                            "if you move the project. What path do you want to save\n"
-                            "to your project file?"),
-                    i18n("Path decision"),
-                    i18n("&Relative path"),
-                    i18n("&Absolute path")) == KMessageBox::Yes)
+        // Make sure that the user is aware of the consequences of setting an
+        // absolute directory path here.
+        if (makeDir[0] == '/')
         {
-          makeDir = CToolClass::getRelativePath(prj_info->getProjectDir(), makeDir);
+          if (KMessageBox::warningYesNo(this,
+                      i18n("The path\n\n") + makeDir +
+                        i18n("\n\nwhich you set as directory where make should\n"
+                              "run is not a relative path.\nThis can cause problems,\n"
+                              "if you move the project. What path do you want to save\n"
+                              "to your project file?"),
+                      i18n("Path decision"),
+                      i18n("&Relative path"),
+                      i18n("&Absolute path")) == KMessageBox::Yes)
+          {
+            makeDir = CToolClass::getRelativePath(prj_info->getProjectDir(), makeDir);
+          }
         }
       }
     }
-  }
 
-  prj_info->setDirWhereMakeWillBeCalled(makeDir);
+    prj_info->setDirWhereMakeWillBeCalled(makeDir);
+  }
 
   /******** binary options *********/
-  QString binaryPath = binary_edit->text();
-  if (!binaryPath.isEmpty()) {
-    if (binaryPath[0] == '/') {
-      if(KMessageBox::warningYesNo(this,
-                i18n("The path\n\n") + binaryPath +
-                i18n("\n\nto your binary which should be run on 'Execute'\n"
-                      "is not a relative path. This can cause problems,\n"
-                      "if you move the project. What path do you want to\n"
-                      "save to your project file?"),
-                i18n("Path decision"),
-                i18n("&Relative path"),
-                i18n("&Absolute path")) == KMessageBox::Yes)
-        binaryPath = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryPath);
+  if (prj_info->isCustomProject())
+  {
+    QString binaryPath = binary_edit->text();
+    if (!binaryPath.isEmpty())
+    {
+      if (binaryPath[0] == '/')
+      {
+        if(KMessageBox::warningYesNo(this,
+                  i18n("The path\n\n") + binaryPath +
+                  i18n("\n\nto your binary which should be run on 'Execute'\n"
+                        "is not a relative path. This can cause problems,\n"
+                        "if you move the project. What path do you want to\n"
+                        "save to your project file?"),
+                  i18n("Path decision"),
+                  i18n("&Relative path"),
+                  i18n("&Absolute path")) == KMessageBox::Yes)
+        {
+          binaryPath = CToolClass::getRelativePath(prj_info->getProjectDir(), binaryPath);
+        }
+      }
     }
+
+    // split the path into dir and program
+    QFileInfo fileInfo( binaryPath );
+
+    prj_info->setBinPROGRAM( fileInfo.fileName() );
+    prj_info->setPathToBinPROGRAM( fileInfo.dirPath() );
   }
-  // split the path into dir and program
-  QFileInfo fileInfo( binaryPath );
 
-  prj_info->setBinPROGRAM( fileInfo.fileName() );
-  prj_info->setPathToBinPROGRAM( fileInfo.dirPath() );
-
-  QString libtoolDir = libtool_edit->text();
-  prj_info->setLibtoolDir(libtoolDir);
+  if (prj_info->isCustomProject())
+  {
+    QString libtoolDir = libtool_edit->text();
+    prj_info->setLibtoolDir(libtoolDir);
+  }
 
   /***************************************/
 
