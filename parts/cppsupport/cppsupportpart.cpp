@@ -1360,13 +1360,13 @@ void CppSupportPart::slotMakeMember()
 	}
 
 	SimpleDeclarationAST* decl = currentNode ? (SimpleDeclarationAST*) currentNode : 0;
-	if( decl && !declarator ){
+	if( decl && decl->initDeclaratorList() && !declarator ){
 	    InitDeclaratorAST* i = decl->initDeclaratorList()->initDeclaratorList().at( 0 );
 	    if( i )
 	       declarator = i->declarator();
 	}
 
-	if( currentNode && declarator && declarator->parameterDeclarationClause() ){
+	if( decl && declarator && declarator->parameterDeclarationClause() ){
 	    QString text;
 
 	    text += typeSpecToString( decl->typeSpec() );
