@@ -806,9 +806,7 @@ void CKDevelop::initToolBar(){
 
   toolBar()->insertButton("newwidget",ID_TOOLS_DESIGNER, true,i18n("Switch to QT's designer (dialog editor)"));
   toolBar()->insertButton("tree_win",ID_VIEW_TREEVIEW, true,i18n("Tree-View"));
-  toolBar()->setDelayedPopup(ID_VIEW_TREEVIEW,toggletreeviews_popup);
   toolBar()->insertButton("output_win",ID_VIEW_OUTPUTVIEW, true,i18n("Output-View"));
-  toolBar()->setDelayedPopup(ID_VIEW_OUTPUTVIEW,toggleoutputviews_popup);
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
