@@ -63,6 +63,14 @@ void EditorProxy::installPopup(KParts::Part *part, QPopupMenu *popup, bool reval
     {
       iface->installPopup(popup);
 
+      // @fixme this needs cleaning up
+      // The popupmenu is no longer destroyed after being used, so this code now creates a 
+      // new connection to aboutToShow() for every merged editorpart. This meant we were setting
+      // up the contextmenu multiple times for every invocation. No wonder it was slow.. ;)
+      // As a simple too-close-to-release-to-do-properly fix, let's simply add a disconnect().
+      // teatime
+      disconnect(popup, SIGNAL(aboutToShow()), this, 0);
+
       connect(popup, SIGNAL(aboutToShow()), this, SLOT(popupAboutToShow()));
     }
   }
