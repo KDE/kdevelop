@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
+#include <qcursor.h>
 #include <klocale.h>
 
 #if defined(DBG_MONITOR)
