@@ -10,7 +10,7 @@
   <!ENTITY doxygen "<application>doxygen</application>">
   <!ENTITY doxywizard "<application>doxywizard</application>">
   <!ENTITY CVS "<application>CVS</application>">
-  <!ENTITY cvs "<application>cvs</application>">
+  <!ENTITY cvs "<acronym>CVS</acronym>">
   <!ENTITY ssh "<application>ssh</application>">
   <!ENTITY python "<application>Python</application>">
   <!ENTITY perl "<application>Perl</application>">
@@ -107,6 +107,9 @@ You will here find information on the following topics:
   </para></listitem>
   <listitem><para>
   <link linkend="kdevelopoverview">Overview: &kdevelop;'s features</link> - is some kind of a warm-up, giving a short overview of what is built-in into &kdevelop; and makes you acquainted with the look and feel of this <acronym>IDE</acronym>.
+  </para></listitem>
+  <listitem><para>
+  <link linkend="app-menues">Menues and toolbars overview</link> - (in the appendix) provides you with a short overview over the menue and toolbar selections available.
   </para></listitem>
   <listitem><para>
   <link linkend="initialsetup">Configuring &kdevelop;</link> - shows how you can taylor the <acronym>IDE</acronym> to suit your needs.
@@ -273,7 +276,7 @@ Each rule consists of several building blocks, namely
   a set of <emphasis>dependencies</emphasis>, basically the names of those files the target depends on (e.g. the name of a source file, where then the target will be the name of the object file to be built) and
   </para></listitem>
   <listitem><para>
-  the <emphasis>commands</emphasis> which are to be executed to "make" the target (i.e. to compile it or to link other object files together to build an executable progam file).
+  the <emphasis>commands</emphasis> which are to be executed to <quote>make</quote> the target (i.e. to compile it or to link other object files together to build an executable progam file).
   </para></listitem>
 </itemizedlist>
 </para>
@@ -383,9 +386,10 @@ To obtain an initial version of &kdevelop; you must download it (this is a so-ca
 <para>
 Now you may compile your &kdevelop; version as shown in the <link linkend="compileandinstall">&kdevelop; Compilation and Installation</link> chapter.
 </para>
-<para>
-<emphasis>Note:</emphasis> Once you successfully checked out your &kdevelop; version, you may keep up with the changes using the update procedure shown in the next section. <emphasis>Please do not checkout every time you want to keep your &kdevelop; up to date!</emphasis>
-</para>
+
+<note><para>
+Once you successfully checked out your &kdevelop; version, you may keep up with the changes using the update procedure shown in the next section. <emphasis>Please do not checkout every time you want to keep your &kdevelop; up to date!</emphasis>
+</para></note>
 </sect3>
 
 <sect3 id="howto-cvs-up">
@@ -413,9 +417,10 @@ Note the <command>up</command> (= <emphasis>update</emphasis>) command instead o
   </member>
 </simplelist>
 
-<para>
-<emphasis>Note:</emphasis> Keep an eye on the messages &CVS; produces during the update sequence. The exact steps in the compilation sequence depend on this.
-</para>
+<note><para>
+Keep an eye on the messages &CVS; produces during the update sequence. The exact steps in the compilation sequence depend on this.
+</para></note>
+
 <para>
 Now you can compile a new &kdevelop; version as shown in the <link linkend="compileandinstall-make-cvs">Special &CVS; compilation considerations</link> chapter.
 </para>
@@ -463,24 +468,34 @@ In order to successfully compile and use &kdevelop;, you need the following prog
   <application>valgrind</application> from <ulink url="http://developer.kde.org/~sewardj/">http://developer.kde.org/~sewardj/</ulink> helps you to find memory management problems in your applications.
   </para></listitem>
   <listitem><para>
+  <application>CVS</application> from <ulink url="http://www.cvshome.org">http://www.cvshome.org</ulink> if you want to use the &CVS; versioning system.
+  </para></listitem>
+  <listitem><para>
   Any other compiler and/or tool in case you want to develop for another language/platform than <acronym>C++</acronym>/&kde; or use some special facility.
   </para></listitem>
 </itemizedlist>
 
-<para>
-<emphasis>Note 1:</emphasis> You can circumvent the need for &autoconf; >= 2.52 and &automake; >= 1.6.1. Just remove the <filename class="directory">admin</filename> directory in your &kdevelop; installation directory and type
-</para>
-<para>
-<prompt>(your-kdevelop-directory)&gt; </prompt>
-<userinput>ln -s $KDEDIR/share/apps/kdelibs/admin admin</userinput>
-</para>
-<para>
-at the console. This causes &kdevelop; to use the standard settings in the &kde; <filename class="directory">admin</filename> directory instead.
-</para>
-
-<para>
-<emphasis>Note 2:</emphasis> Be careful <emphasis>not to mix &qt; versions</emphasis>. Always link &kdevelop; to the same &qt; version your &kde; library was compiled. Otherwise you will most likely experience <emphasis>very strange</emphasis> behaviours.
-</para>
+<note>
+<orderedlist>
+  <listitem>
+    <para>
+    You can circumvent the need for &autoconf; >= 2.52 and &automake; >= 1.6.1. Just remove the <filename class="directory">admin</filename> directory in your &kdevelop; installation directory and type
+    </para>
+    <para>
+      <prompt>(your-kdevelop-directory)&gt; </prompt>
+      <userinput>ln -s $KDEDIR/share/apps/kdelibs/admin admin</userinput>
+    </para>
+    <para>
+    at the console. This causes &kdevelop; to use the standard settings in the &kde; <filename class="directory">admin</filename> directory instead.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+    Be careful <emphasis>not to mix &qt; versions</emphasis>. Always link &kdevelop; to the same &qt; version your &kde; library was compiled. Otherwise you will most likely experience <emphasis>very strange</emphasis> behaviours.
+    </para>
+  </listitem>
+</orderedlist>
+</note>
 
 </sect1> <!-- requirements -->
 
@@ -495,9 +510,10 @@ at the console. This causes &kdevelop; to use the standard settings in the &kde;
 <para>
 Before entering the compile sequence you must make sure all libraries and tools are available to the make system. To accomplish this some environment variables need to be properly set. The actual steps to be performed depend on the console shell you use.
 </para>
-<para>
-<emphasis>Note:</emphasis> To avoid typing in all the statements that set the necessary environment variables every time you want to compile, you should put them in your <filename>.bashrc</filename> or <filename>.cshrc</filename> file. That way the environment variables will be properly set every time you start the shell.
-</para>
+
+<note><para>
+To avoid typing in all the statements that set the necessary environment variables every time you want to compile, you should put them in your <filename>.bashrc</filename> or <filename>.cshrc</filename> file. That way the environment variables will be properly set every time you start the shell.
+</para></note>
 
 <sect3 id="compileandinstall-preliminaries-bash">
 <title>bash shell</title>
@@ -534,9 +550,9 @@ setenv PATH $QTDIR/bin:$KDEDIR/bin:$PATH
 <sect2 id="compileandinstall-make">
 <title>Compile &kdevelop;</title>
 
-<para>
-<emphasis>Note:</emphasis> In the following discussion we assume that you have put your &kdevelop; sources in the <filename class="directory">~/kde3src/kdevelop</filename> directory.
-</para>
+<note><para>
+In the following discussion we assume that you have put your &kdevelop; sources in the <filename class="directory">~/kde3src/kdevelop</filename> directory.
+</para></note>
 
 <sect3 id="compileandinstall-make-cvs">
 <title>Special &CVS; compilation considerations</title>
@@ -584,9 +600,10 @@ before you proceed with <emphasis>all</emphasis> of the following steps.
 <para>
 Once the basic make system is set up this way you must decide on the type of the &kdevelop; system you want to use. This is done in the following configure step which buids the actual <filename>Makefile</filename> the <command>make</command> command will use.
 </para>
-<para>
-<emphasis>Note:</emphasis> You may drop the <option>--prefix</option> option in the following <command>configure</command> command lines if you want &kdevelop; be installed in the default &kde; directory. See the <link linkend="compileandinstall-options">Some notes on <command>configure</command> options</link> chapter for this.
-</para>
+
+<note><para>
+You may drop the <option>--prefix</option> option in the following <command>configure</command> command lines if you want &kdevelop; be installed in the default &kde; directory. See the <link linkend="compileandinstall-options">Some notes on <command>configure</command> options</link> chapter for this.
+</para></note>
 
 <formalpara>
 <title>A debug-compiled version</title>
@@ -658,8 +675,10 @@ If you want compile and install &kdevelop; on a <acronym>FreeBSD</acronym> syste
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>export CXXFLAGS="-L/usr/X11R6/lib -I/usr/local/include/db41 -I/usr/local/include -L/usr/local/lib -I/usr/X11R6/include"</userinput>
 </para>
-<para><emphasis>Note:</emphasis> You need the <emphasis>berkeley db 4.1</emphasis> installed, if you have another version, you have to adjust the path.
-</para>
+
+<note><para>
+You need the <emphasis>berkeley db 4.1</emphasis> installed, if you have another version, you have to adjust the path.
+</para></note>
 
 <sect3>
 <title>Check the berkeley db version</title>
@@ -695,9 +714,11 @@ to
 <para>
 in the <filename>configure</filename> file because otherwise configure can't find the db libraries.
 </para>
-<para>
-<emphasis>Note:</emphasis> As <command>make -f Makefile.cvs</command> rebuilds the <filename>configure</filename> file you have to always change this entry as well.
-</para>
+
+<note><para>
+As <command>make -f Makefile.cvs</command> rebuilds the <filename>configure</filename> file you have to always change this entry as well.
+</para></note>
+
 <para>
 The <acronym>FreeBSD</acronym> guys renamed <filename>libdb.so</filename> to <filename>libdbxx.so</filename>. So replace
 </para>
@@ -757,7 +778,7 @@ In a tcsh shell you must set the environment variables using:
     <userinput>setenv KDEDIRS /usr/local/kde:/opt/kde3</userinput>
 </para>
 <para>
-The <command>kbuildsycoca</command> command ("build system control cache") looks around for libraries and caches their location and version, so that &kdevelop; can find them. The caveat is that it takes noticeable time - and it has to be run any time you call up the shell to start &kdevelop; from a non-default directory. You may want to put the above commands into a shell script to reduce the typing effort.
+The <command>kbuildsycoca</command> command (<quote>build system control cache</quote>) looks around for libraries and caches their location and version, so that &kdevelop; can find them. The caveat is that it takes noticeable time - and it has to be run any time you call up the shell to start &kdevelop; from a non-default directory. You may want to put the above commands into a shell script to reduce the typing effort.
 </para>
 <para>
 (You could as well put the lines in your <filename>.bashrc</filename> or <filename>.cshrc</filename> file, but this is not advisable as <command>kbuildsycoca</command> will then be run any time you call up the shell.)
@@ -890,12 +911,18 @@ To switch the user interface mode select <menuchoice> <guimenu>Settings</guimenu
 <para>
 Select the radio button of the user interface mode you want to switch to, then press <guibutton>OK</guibutton>
 </para>
-<para>
-<emphasis>Note 1:</emphasis> If you switch to or from the (non-windowed) IDEAl mode, you'll have to restart &kdevelop;.
-</para>
-<para>
-<emphasis>Note 2:</emphasis> Currently there are two IDEAl modes provided - a "window" IDEAl mode and a "standard" IDEAl mode (bottom row of the radio buttons). The window mode fits with the other mdi modes, but is still experimental. You don't need to restart &kdevelop; if you select this one from one of the other three mdi modes. Yet it is recommended to use the standard IDEAl mode in everyday work for now.
-</para>
+
+<note>
+<orderedlist>
+  <listitem><para>
+  If you switch to or from the (non-windowed) IDEAl mode, you'll have to restart &kdevelop;.
+  </para></listitem>
+  <listitem><para>
+  Currently there are two IDEAl modes provided - a <quote>windowed</quote> IDEAl mode and a <quote>standard</quote> IDEAl mode (bottom row of the radio buttons). The window mode fits with the other mdi modes, but is still experimental. You don't need to restart &kdevelop; if you select this one from one of the other three mdi modes. Yet it is recommended to use the standard IDEAl mode in everyday work for now.
+  </para></listitem>
+</orderedlist>
+</note>
+
 </sect2>
 
 <sect2 id="maximize-workspace">
@@ -921,6 +948,16 @@ To <emphasis>hide</emphasis> the menu bar select <menuchoice> <guimenu>Settings<
 </sect2>
 
 </sect1> <!-- uimodes-overview -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="ui-elements">
+<title>Elements of the user interface</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect1>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1061,7 +1098,7 @@ Especially on multi language applications, <emphasis>translators</emphasis> won'
 <title>Getting started: the application wizard</title>
 
 <para>
-In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and/or tools specially needed to get the application up and running.
+In &kdevelop; software development work is organized in <emphasis>projects</emphasis>. Such a project keeps everything together which belongs to a complete programming task: source files, additional data files, any actually needed management facilities as the make system as well as access to all components and any additional tools needed to get the application up and running.
 </para>
 <para>
 Organizing all development work in projects allows you to easily switch between the global tasks at hand. This is quite handy if you e.g. work on several applications at the same time as is often the case. Tell &kdevelop; to open the project you want to work at and you may proceed in the environment just where you left.
@@ -1087,10 +1124,10 @@ Only a short series of steps is necessary to start a new programming project, us
   <link linkend="newprojects-start-general">Supply some general information</link> as application name, directory where the application shall be built, etc.
   </para></listitem>
   <listitem><para>
-  Decide whether you want to use a version control system, like e.g. CVS, and supply the necessary data if needed.
+  Decide whether you want to use a <link linkend="newprojects-start-cvs">version control system</link>, like e.g. CVS, and supply the necessary data if needed.
   </para></listitem>
   <listitem><para>
-  Set up some templates for initial header and source files (if applicable).
+  Set up some templates for <link linkend="newprojects-start-templates">initial header and source files</link> (if applicable).
   </para></listitem>
   <listitem><para>
   Finally tell application wizard to set up all initial directory structure, starting header/source file templates, and managment tools, like e.g. an initial make skeleton, etc.
@@ -1115,10 +1152,9 @@ To create a new project in &kdevelop;, select <guimenuitem>New Project</guimenui
     <imageobject>
       <imagedata fileref="createnewproject.png" format="PNG"/>
     </imageobject>
-<!-- ### caption is disturbing in this context
 	<caption><para>
-	The Create New Project application wizard dialog
-	</para></caption> -->
+	Initial dialog to set up a new project
+	</para></caption>
   </mediaobject>
 </screenshot>
 
@@ -1149,7 +1185,7 @@ The left hand side of the upper part in this dialog is where you do the selectio
 To be precise, these folders do not contain real programming tools actually. They do lead to pre-defined <emphasis>templates</emphasis> you can use as a starting point for development in that language. To get an idea of what is provided, just open the folders one after the other. There will be a series of subfolders on some, one or more simple entries only on others. The subfolders you see organize the available templates according to some tasks, the simple entries name the templates you may select.
 </para>
 <para>
-We cannot go into detail here on which tasks each template provides, but it's easy to find out. Whenever you select a template entry some information is displayed in the fields to the right. In the lower field you will find a <emphasis>short description</emphasis> on what the template is supposed to do. In the field above that a picture will be shown, if available, about the the outcome of the application this template produces if you compile and run it unmodified. Usually this is a <emphasis>screenshot</emphasis> of the main window the application will display.
+We cannot go into detail here on which tasks each template provides, but it's easy to find out. Whenever you select a template entry some information is displayed in the fields to the right. In the lower field you will find a <emphasis>short description</emphasis> on what the template is supposed to do. In the field above that a picture will be shown, if available, about the outcome of the application this template produces if you compile and run it unmodified. Usually this is a <emphasis>screenshot</emphasis> of the main window the application will display.
 </para>
 <para>
 Select the template which best fits your application's goals as a starting point. Then enter the general properties information in the lower field as shown in the next chapter.
@@ -1189,19 +1225,7 @@ The other prominent cause of this restriction you can see at the bottom line of 
 As you type the application name you will notice that the application wizard repeats your input at the end of the <guilabel>Final location</guilabel> line, using lower case only characters.
 </para>
 <para>
-Thus you must select the name of your new application with care.  If you end up with an already used directory the application manager will complain, albeit only at the very end of the setup process:
-</para>
-
-<screenshot id="screenshot-wrongprojectloc">
-  <mediaobject>
-    <imageobject>
-      <imagedata fileref="wrong-project-location.png" format="PNG"/>
-    </imageobject>
-  </mediaobject>
-</screenshot>
-
-<para>
-Once you pressed <guibutton>OK</guibutton> on this the application manager will send you back to this first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, requiring you to correct the application directory.
+Thus you must select the name of your new application with care.  If you end up with an already used directory the application manager will not allow you to continue to the next step, keeping the <guibutton>Next &gt;</guibutton> button deactivated (greyed). Yet, it will <emphasis>warn</emphasis> you in this case by appending <quote>(dir/file already exist)</quote> to the <guilabel>Final location</guilabel> line.
 </para>
 
 <formalpara>
@@ -1217,14 +1241,12 @@ This is done in the second row input field of the <guilabel>Properties</guilabel
 Application manager will copy an <emphasis>initial value</emphasis> to the <guilabel>Location</guilabel> field on start-up. This is taken from what you have chosen in the <guilabel>Default projects directory</guilabel> field during the <link linkend="initialsetup-general">general configuration steps</link>.
 </para>
 <para>
-Alter the <guilabel>Location</guilabel> field contents so that the application deveopment directory shown in the <guilabel>Final location</guilabel> line will be unique.
+Alter the <guilabel>Location</guilabel> field contents so that the application development directory shown in the <guilabel>Final location</guilabel> line will be unique.
 </para>
-<para>
-<emphasis>Note:</emphasis> Take care that the path you enter in the <guilabel>Location</guilabel> field already exists. Otherwise the application manger will not allow you to continue to the next step, keeping the <guibutton>Next &gt;</guibutton> button deactivated (greyed).
-</para>
-<para>
-The application manager will warn you about non-existing paths by appending <emphasis>(invalid)</emphasis> to the <guilabel>Final location</guilabel> line. Thus, if the <guibutton>Next &gt;</guibutton> button will remain greyed whatever you do - check here whether your application development path is valid.
-</para>
+
+<note><para>
+Take care that the path you enter in the <guilabel>Location</guilabel> field already exists. Otherwise you will not be able to continue to the next step. The application manager will <emphasis>warn</emphasis> you about non-existing paths by appending <quote>(invalid)</quote> to the <guilabel>Final location</guilabel> line.
+</para></note>
 
 <formalpara>
 <title>Personal information</title>
@@ -1232,26 +1254,41 @@ The application manager will warn you about non-existing paths by appending <emp
 The fields following this are not so critical. Just supply your name (i.e. the name of the person who is responsible for the application) in the <guilabel>Author</guilabel> field, and a valid e-mail address in the <guilabel>Email</guilabel> field, so that users can give you feedback on the application.
 </para>
 </formalpara>
-<para>
-<emphasis>Note 1:</emphasis> The application manager will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
-</para>
-<para>
-<emphasis>Note 2:</emphasis> Of all fields, the <guilabel>Email</guilabel> is <emphasis>optional</emphasis>, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
-</para>
+
+<note>
+<orderedlist>
+  <listitem><para>
+  The application manager fills these fields with some default values, taken from the Email presets in the KDE control center. If these defaults in the <guilabel>Create New Project</guilabel> <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields do not suit, you may want to have a look at your mail configuration in the KDE control center.
+  </para></listitem>
+  <listitem><para>
+  The application manager will integrate this information into the starting program templates if applicable. In KDE C++ programs for instance you will find it near the beginning of the <filename>main.cpp</filename> source file.
+  </para></listitem>
+  <listitem><para>
+  Of all fields, the <guilabel>Email</guilabel> is <emphasis>optional</emphasis>, reflecting the fact that not every developer may have access to the internet. You may keep this field empty if you wish and proceed nevertheless.
+  </para></listitem>
+</orderedlist>
+</note>
 
 <formalpara>
 <title>Version and license info</title>
 <para>
-Finally enter a starting version number for your new application in the <guilabel>Version</guilabel> field, and select the license under which you want your application be put from the <guilabel>License</guilabel> control.
+Finally enter a starting version number for your new application in the <guilabel>Version</guilabel> field, and select the license under which you want your application be put from the <guilabel>License</guilabel> tab.
 </para>
 </formalpara>
-<!-- ### Supply a link to licence stuff explanation -->
-<para>
-<emphasis>Note:</emphasis> Both version and license information will as well be integrated into the starting templates in a suiting format the application type you selected does provide.
-</para>
 
 <para>
-Once you have correctly entered all this information stuff, press the <guibutton>Next &gt;</guibutton> button to proceed as will be shown in the following chapters.
+If you select an application type for which the application manager provides common source template texts (e.g. C/C++), you may view the licence notification text on the third page of this <guilabel>Create New Project</guilabel> dialog (see the <link linkend="newprojects-start-templates">Supply header/source templates</link> chapter below).
+</para>
+<para>
+If you selected <quote>Custom</quote> from the <guilabel>License</guilabel> tab you must provide a license text on your own.
+</para>
+
+<note><para>
+Both version and license information will as well be integrated into the starting templates in a suiting format the application type you selected does provide.
+</para></note>
+
+<para>
+Once you have correctly entered all this information stuff, press the <guibutton>Next &gt;</guibutton> button to proceed as shown in the following chapters.
 </para>
 </sect3>
 
@@ -1259,12 +1296,206 @@ Once you have correctly entered all this information stuff, press the <guibutton
 
 <sect2 id="newprojects-start-cvs">
 <title>Supply version system information</title>
-<para></para>
+
+<para>
+In a second step the application manager will lead you to the <guilabel>Version Control System</guilabel> page where you can decide which version control system you want to use.
+</para>
+
+<note><para>
+This discussion concentrates on the needs for project creation only. For more information on CVS see the <link linkend="cvs">Using CVS</link> chapter below.
+</para></note>
+
+<formalpara>
+<title>No version control system wanted</title>
+<para>
+Initially there is <quote>None</quote> selected in the <guilabel>Version control system</guilabel> tab, and the page will be empty otherwise. If you don't want to use a version control system, just click the <guibutton>Next ></guibutton> button and go on.
+</para>
+</formalpara>
+
+<formalpara>
+<title>Using CVS</title>
+<para>
+Otherwise you must reselect the version control system you want to use from the <guilabel>Version control system</guilabel> tab. Currently only <quote>&cvs;</quote> is availabe. If you select this, the application manager will redisplay the page, now showing a series of fields you must fill in.
+</para>
+</formalpara>
+
+<screenshot id="screenshot-newproject-cvs">
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="create-new-project-cvs.png" format="PNG"/>
+    </imageobject>
+	<caption><para>
+	Set new project up for CVS
+	</para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+A version control system such as &CVS; (which means <quote>Concurrent Versions System</quote>) stores copies of selected project files in some sort of a database. If you use &CVS; you can amongst others upload (<quote>commit</quote>) those files or load them back into your project directory (<quote>checkout</quote>, or <quote>update</quote>). The special thing about this is that the files in the versioning database are stored in a structured way which allows you to always revert to an earlier development state if you need so. And &CVS; allows multiple designers to fairly easily collaborate on a big project (such as &kdevelop;) without disturbing each others work.
+</para>
+
+<formalpara>
+<title>CVS root</title>
+<para>
+&cvs; needs to <emphasis>manage</emphasis> the versioning database it keeps from your project files. To accomplish this it keeps some special database information in an own directory, called the <emphasis>&cvs; root</emphasis>. The first step on setting up &cvs; for your new project thus is to tell &kdevelop; where this root is located.
+</para>
+</formalpara>
+
+<para>
+<emphasis>Local &cvs; root.</emphasis> There are two basic possibilities. Either you want to use a <emphasis>local</emphasis> CVS database or you use a database which is held on a <emphasis>remote server</emphasis>. If you develop for your own, you may want use the &cvs; database as some sort of a backup system on your own computer. Usually this is set up in your home directory root and given the name <filename>cvsroot</filename>. This may look as follows:
+</para>
+<para><userinput><filename class="directory">/home/devel/cvsroot</filename></userinput> (where <filename>devel</filename> simply denotes the <quote>developing</quote> user, just for example)
+</para>
+<para>
+Enter the name of the &cvs; root directory your system has been set up for in the <guilabel>CVS root</guilabel> field. In principle you can select any name, even use multiple &cvs; databases, but it is advisable that you stick to the &cvs; root once set up.
+</para>
+<para>
+<emphasis>Initialize a new &cvs; root.</emphasis> If there does not exist a &cvs; root yet, &kdevelop; can command the &CVS; system to create one for you in the given directory. Just check the <guilabel>Init root</guilabel> checkbox below the <guilabel>CVS root</guilabel> field.
+</para>
+<note><para>
+As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initialize a new &cvs; root. It does nothing by itself to this directory. Fortunately &cvs; is clever enough to check whether the &cvs; root directory already exists. Hence it does no harm if you should have inadvertently checked <guilabel>Init root</guilabel> on an already existing &cvs; root directory.
+</para></note>
+
+<para>
+<emphasis>Remote &cvs; root.</emphasis> There are occasions where the &cvs; database is to be kept on a remote server, especially when several developers work at the same project. Then you must enter the &cvs; root <acronym>URL</acronym> of this server in the <guilabel>CVS root</guilabel> field. For example, if you want access to the &kde; &cvs; server:
+</para>
+<para>
+<userinput><filename class="directory">:pserver:mylogin@cvs.kde.org:/home/kde</filename></userinput> (where <filename>mylogin</filename> denotes the login name set up in your &kde; &cvs; account)
+</para>
+
+<formalpara>
+<title>Remote &cvs; server types</title>
+<para>
+Basically there are two widely used remote &cvs; server types, the <emphasis>pserver</emphasis> which uses a password-secured non-encrypted protocol, and the <emphasis>ext</emphasis> server which uses an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted data transfer. They are distinguished by the <acronym>URL</acronym> prefix they use:
+</para>
+</formalpara>
+<para>
+<filename>:pserver:</filename>
+</para>
+<para>
+for the <quote>password protected server</quote> non-encrypted type, and
+</para>
+<para>
+<filename>:ext:</filename>
+</para>
+<para>
+for an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted server type. For example
+</para>
+<para>
+<userinput><filename class="directory">:ext:mylogin@cvs.cervisia.sourceforge.net:/cvsroot/cervisia</filename></userinput>
+</para>
+<para>
+accesses the &cvs; root of the widely used <application>Cervisia</application> &cvs; management tool on the SourceForge server.
+</para>
+<para>
+If you want to use an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted server for &cvs; access you must tell &kdevelop; the encryption protocol to be used. Just enter <userinput>rsh</userinput> or <userinput>ssh</userinput> in the <guilabel>CVS_RSH</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page.
+</para>
+
+<note><para>
+There is a caveat if you use an encrypted server for &cvs; from within &kdevelop;. See the <link linkend="cvs">Using CVS</link> chapter for details.
+</para></note>
+
+<formalpara>
+<title>The &cvs; repository</title>
+<para>
+So far you have told &kdevelop; where the &cvs; root resides which manages the versioning database and how to access it. Now you need to tell &kdevelop; under which name you want &CVS; save your project files in that database. Such a place your project files will be held in &cvs; is called a <emphasis>repository</emphasis>.
+</para>
+</formalpara>
+<para>
+In principle you can use any name for the &cvs; repository of your project files as long as it adheres to the specifications of naming a file. Yet, most developers simply use the name of the application itself. &CVS; will build a directory with this name in the &cvs; root, hence it is more easily found if you keep the application name for it.
+</para>
+<para>
+Just enter the repository name you want to use in the <guilabel>CVS repository</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page. In our example this is: <userinput>YourNewApplication</userinput>
+</para>
+
+<formalpara>
+<title>The remaining fields</title>
+<para>
+There is not much work left to do. Application manager has already set up the remaining fields for you. In detail:
+</para>
+</formalpara>
+<para>
+The <guilabel>Vendor</guilabel> field is used for compatibility reasons only. You can stick to the <quote>vendor</quote> default the application manager puts in here.
+</para>
+<para>
+The <guilabel>Message</guilabel> field allows you to comment the initial &cvs; contents. Use any text you like or just stick to the <quote>new project</quote> default the application manager did put in.
+</para>
+<para>
+The <guilabel>Release tag</guilabel> holds the name wich tags the initial state of your project. Such a <emphasis>tag</emphasis> names a certain point within the &CVS; repository by which you can later access this state of your development. (See more in  the <link linkend="cvs">Using CVS</link> chapter.)
+</para>
+<para>
+The application manager has put a default <quote>start</quote> tag in here which is a worthy proposal. Just stick to it.
+</para>
+
+<note>
+<para>
+When any information of all these is wrong &kdevelop; usually will not know about until project construction time. It is the &CVS; system which will figure out those errors when it tries to build the repository. Hence you must keep an eye to the <guilabel>Messages</guilabel> window of &kdevelop; when the project is created in the final setup step. If anything was in error with &CVS; you will in most cases see an error message like this:
+</para>
+
+<screen><computeroutput><literal>
+* cd '/home/devel/test' &amp;&amp; cvs -d '/home/devel/mycvsroot' \
+  import -m 'new project' '' 'vendor' 'start' &amp;&amp;\
+  sh /opt/kde3/share/apps/kdevcvs/buildcvs.sh . '' \
+  '/home/devel/mycvsroot'
+* cvs [import aborted]: /home/devel/mycvsroot/CVSROOT: No such file or
+  directory
+* *** Exited with status: 1 ***
+</literal></computeroutput></screen>
+
+<para>
+If this happens you will have to either manually set up &cvs; (&kdevelop; should have successfully initialized your project files at this time) or delete the project directory and start over again with <guimenuitem>New Project</guimenuitem> from the <guimenu>Project</guimenu> menu.
+</para>
+</note>
+
+<para>
+Afer you have entered all &CVS; related information, press the <guibutton>Next &gt;</guibutton> to go on.
+</para>
+
+<note><para>
+If you want to correct an error on the previous <guilabel>Create New Project</guilabel> page, just press the <guibutton>&lt; Back</guibutton> button. The application manager will remember your settings on the current page, so you can easily proceed when you come back.
+</para></note>
+
 </sect2>
 
 <sect2 id="newprojects-start-templates">
 <title>Supply header/source templates</title>
-<para></para>
+
+<para>
+The next step brings you to a series of pages where you can set up common information you want to include in your source and header files, if the task at hand allows.
+</para>
+<para>
+Both header and source templates are provided for C and C++ applications, each on its own page. There may be source templates only for others. And in some cases you will find this page empty. Application wizard will fill in some common header comment which for a c++ application might look like:
+</para>
+
+<screen><computeroutput><literal>
+/***************************************************************************
+ *   Copyright (C) 2003 by Your Name                                       *
+ *   you@you.com                                                           *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+</literal></computeroutput></screen>
+
+<para>
+Other templates will provide similar information in a format according to the definitions of the programming language you want to use.
+</para>
+<para>
+As you might have noticed, the applications manager did readily fill in some information you provided on the first <guilabel>General</guilabel> page of the <guilabel>Create New Project</guilabel> dialog, namely the contnents of the <guilabel>Author</guilabel> and <guilabel>Email</guilabel> fields. Also proper license information will have been inserted according to your selection in the <guilabel>License</guilabel> tab.
+</para>
+<para>
+You can edit this template text according to your needs. Some hints on what you may inlude are given in the next chapter.
+</para>
+
+<sect3 id="newprojects-start-templates-edit">
+<title>How to edit the templates</title>
+
+<para>
+</para>
+</sect3>
+
 </sect2>
 
 <sect2 id="newprojects-start-build">
@@ -1299,8 +1530,7 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 <title>Converting old KDevelop project files</title>
 
 <para>
-&kdevelop; allows you to open old KDevelop 2.x project files and convert them to &kdevelop; files.
-To do so go to <guimenuitem>Open Project...</guimenuitem> and select <guilabel>KDevelop 2 project files</guilabel> in the <guilabel>Filter:</guilabel>. Then select project file you want to open. The project gets converted to &kdevelop; and saved as a <guilabel>&kdevelop; project file</guilabel>.
+&kdevelop; allows you to open old KDevelop 2.x project files and convert them to &kdevelop; files. To do so go to <guimenuitem>Open Project...</guimenuitem> and select <guilabel>KDevelop 2 project files</guilabel> in the <guilabel>Filter:</guilabel>. Then select project file you want to open. The project gets converted to &kdevelop; and saved as a <guilabel>&kdevelop; project file</guilabel>.
 </para>
 
 </sect1> <!-- convertingold -->
@@ -1496,6 +1726,16 @@ Redo
 </informaltable>
 
 </sect1> <!-- keyboardmapping -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="editing-reporter">
+<title>The problem reporter</title>
+
+<para>
+(... to be written ...)
+</para>
+</sect1> <!-- editing-reporter -->
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -1784,7 +2024,7 @@ methods and attributes of the respective class is shown.
 
 <para>
 The class view works in two different modes. By default, all symbols are 
-grouped into "Classes", "Structs", "Functions", "Variables" and "Namespaces". 
+grouped into <quote>Classes</quote>, <quote>Structs</quote>, <quote>Functions</quote>, <quote>Variables</quote> and <quote>Namespaces</quote>.
 In the context menu of the view, you can choose 
 <guimenuitem>List by Namespaces</guimenuitem>. In this mode, the namespace
 hierarchy is shown and the symbols grouped into the respective namespace where
@@ -2261,7 +2501,7 @@ associate file names and line numbers with addresses in the executable.
 </itemizedlist>
 
 <para>
-The debugger frontend offers several views "into" the process:
+The debugger frontend offers several views <quote>into</quote> the process:
 </para>
 
 <itemizedlist>
@@ -2336,7 +2576,7 @@ via the context menu.
 <indexterm zone="debugger"><primary>mangling</primary><secondary>name</secondary></indexterm>
 
 <para>
-In C++, function names in the executable are "mangled", i.e. the function
+In C++, function names in the executable are <quote>mangled</quote>, i.e. the function
 names include information about the argument types. This is necessary in 
 order to support overloading of functions. The mangling algorithm is not 
 standardized and differs even between different versions of the 
@@ -2448,7 +2688,7 @@ important for your daily work can be used directly.
 <para>
 Basic knowledge of &CVS; usage is assumed. In particular, you should know 
 how to checkout a given project from the repository. We recommend the
-book "Open Source Development With CVS" by Karl Fogel which is freely
+book <citetitle pubwork="book">Open Source Development With CVS</citetitle> by Karl Fogel which is freely
 distributed (except for the non-technical chapters). See
 <ulink url="http://cvsbook.red-bean.com/cvsbook.html"/>.
 </para>
@@ -2509,7 +2749,7 @@ Otherwise, when another user has committed his own changes before,
 All these commands are invoked as subprocesses by &kdevelop; without any
 further command line options or environment variables. This may be a
 problem when the connection with the &CVS; server goes through a
-&ssh; connection and requires that you enter your password each time 
+&ssh; connection and requires that you enter your password each time
 you commit or update. This is for instance necessary when your project is
 hosted on <filename>sourceforge.net</filename>. Workarounds for this
 problem are described on the CVS/SSH FAQ which you can find in the
@@ -2525,7 +2765,7 @@ SourceForge documentation.
 <indexterm zone="externalprogs"><primary>programs</primary><secondary>external</secondary></indexterm>
 
 <para>
-Although &kdevelop; is a so-called "Integrated" development environment, it
+Although &kdevelop; is a so-called <quote>Integrated</quote> development environment, it
 will never contain all features that you may want to use, and the 
 capabilities of its editor will never suffice to perform often-used text
 processing tasks. As a genuine UNIX program, &kdevelop; contains several 
@@ -2574,7 +2814,7 @@ into memory.
 This plugin expands abbreviations into frequently used code snippets. It is
 activated by pressing <keycombo><keycap>Ctrl</keycap>
 <keycap>Space</keycap></keycombo>. For example, when you enter 
-<literal>"ife"</literal> into a C++ in the editor and press 
+<literal>"ife"</literal> into a C++ in the editor and press
 <keycombo><keycap>Ctrl</keycap><keycap>Space</keycap></keycombo>, you obtain
 an <literal>if-else</literal> code template and save some key strokes. The set
 of supported abbreviations depends on the programming language of the edited 
@@ -2624,7 +2864,7 @@ command is then inserted into the editor.
 
 <para>
 This one helps you to use the &doxygen; API documentation tool 
-(<ulink url="http://www.doxygen.org"/>). You can select 
+(<ulink url="http://www.doxygen.org"/>). You can select
 <menuchoice><guimenu>Project</guimenu>
 <guimenuitem>Run Doxygen</guimenuitem></menuchoice> to generate API 
 documentation for your current project, based on the configuration given by 
@@ -2665,8 +2905,8 @@ all symbols of your source files.
 You can search in the symbol database in two ways: when the 
 <guilabel>Regular expression match</guilabel> box is checked, the text you 
 enter will be interpreted as a regular expression (POSIX flavor) and matched 
-with the existing symbols. For example, the text <literal>".*Widget"</literal>
-will search for all symbols ending with <literal>"Widget"</literal>. If the 
+with the existing symbols. For example, the text <literal>.*Widget</literal>
+will search for all symbols ending with <literal>Widget</literal>. If the
 box is not checked, the search will be verbatim.
 </para>
 
@@ -2732,7 +2972,7 @@ program &egrep;.
 When you enter an expression, you get immediate feedback about any syntax
 errors in it. By entering a text under <guilabel>Test string</guilabel>,
 you can see whether the expression matches this string. In particular, if
-your regular expression includes groups, such as <literal>"([a-z])"</literal>,
+your regular expression includes groups, such as <literal>([a-z])</literal>,
 the content of the matched subgroups will be shown in a list box.
 </para>
 </listitem>
@@ -2865,6 +3105,17 @@ Active parts can have many effects on &kdevelop;.  Depending on their function, 
 
 <!-- ====================================================================== -->
 
+<appendix id="app-menues">
+<title>Menues and toolbars overview</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</appendix> <!-- app-menues -->
+
+<!-- ====================================================================== -->
+
 <appendix id="app-uimodes-examples">
 <title>&kdevelop; user interface mode examples</title>
 
@@ -2966,7 +3217,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 
 </sect1> <!-- ideal-desc -->
 
-</appendix>
+</appendix> <!-- app-uimodes-examples -->
 
 <!-- ====================================================================== -->
 
@@ -2989,7 +3240,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 &underFDL;
 &underGPL;
 </sect1> <!-- app-licensing -->
-</appendix>
+</appendix> <!-- app-misc-info -->
 
 <!-- ====================================================================== -->
 
@@ -3005,7 +3256,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 </itemizedlist>
 </para>
 </sect1> <!-- changes -->
-</appendix>
+</appendix> <!-- app-changelog -->
 
 <!-- ====================================================================== -->
 
@@ -3163,7 +3414,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <!-- (dummy paragraph to get DTD right) -->
 </para>
 
-</appendix>
+</appendix> <!-- app-bibliography -->
 
 <!-- ====================================================================== -->
 
