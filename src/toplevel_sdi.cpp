@@ -528,7 +528,7 @@ void TopLevelSDI::slotTextChanged() {
     if ( t.right( 1 ) != "*" )
         t += "*";
 
-    m_tabWidget->setTabLabel( w, t );
+    m_tabWidget->changeTab( w, t );
 }
 
 void TopLevelSDI::slotUpdateModifiedFlags() {
@@ -542,10 +542,10 @@ void TopLevelSDI::slotUpdateModifiedFlags() {
             QString t = m_tabWidget->tabLabel( rw_part->widget() );
             bool titleMod = (t.right( 1 ) == "*");
             if ( rw_part->isModified() && !titleMod ) {
-                m_tabWidget->setTabLabel( rw_part->widget(), t + "*" );
+                m_tabWidget->changeTab( rw_part->widget(), t + "*" );
             } else if ( !rw_part->isModified() && titleMod ) {
                 t.truncate( t.length() - 1 );
-                m_tabWidget->setTabLabel( rw_part->widget(), t );
+                m_tabWidget->changeTab( rw_part->widget(), t );
             }
         }
     }
