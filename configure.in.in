@@ -39,6 +39,10 @@ kdevelop/parts/cppsupport/Makefile \
 kdevelop/parts/javasupport/Makefile \
 kdevelop/parts/kdeprojectspace/Makefile \
 kdevelop/parts/kdeprojectspace/res/Makefile \
+kdevelop/parts/kdejavaprojectspace/Makefile \
+kdevelop/parts/kdejavaprojectspace/res/Makefile \
+kdevelop/parts/kdeobjcprojectspace/Makefile \
+kdevelop/parts/kdeobjcprojectspace/res/Makefile \
 kdevelop/parts/projectview/Makefile \
 kdevelop/parts/buglist/Makefile \
 kdevelop/parts/SourceInfo/Makefile \
