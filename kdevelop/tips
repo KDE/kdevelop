@@ -1,6 +1,6 @@
 <tip category="KDevelop|General">
 <html>
-<p>...that can select your autosaving time in the setup dialog?
+<p>...that you can select your autosaving time in the setup dialog?
 </html>
 </tip>
 <tip category="KDevelop|General">
@@ -52,8 +52,8 @@ select "Search for Help on..." from the Help-menu.
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>If you want to have info about something in the KDevelop window, select
-the "What's this?" button in the toolbar and click on the item you don't know about.
+<p>If you want information about something in the KDevelop window, click the
+"What's This?" button in the toolbar and click on the item you want information for.
 </html>
 </tip>
 <tip category="KDevelop|General">
@@ -80,7 +80,7 @@ select "look up" in the right button popup menu.
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>...that you can create a new class with "new class" from the Project menu?
+<p>...that you can create a new class with "New Class" from the Project menu?
 </html>
 </tip>
 <tip category="KDevelop|General">
@@ -116,7 +116,7 @@ error message to switch to the file and line the error occured.
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>...that you can edit xpm's with kiconedit by selecting them in the file viewer's trees?
+<p>...that you can edit .xpm files with KIconEdit by selecting them in the file viewer's trees?
 </html>
 </tip>
 <tip category="KDevelop|General">
@@ -126,8 +126,8 @@ error message to switch to the file and line the error occured.
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>...that you can even search for marked text even from within the
-documentation browser with a right button menu?
+<p>...that you can search for marked text, even from within the
+documentation browser using a right button menu?
 </html>
 </tip>
 <tip category="KDevelop|General">
@@ -158,16 +158,16 @@ with a right button menu and insert it into your sources?
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>...that you can move the cursor by words with Ctrl and left or right arrow?
+<p>...that you can move the cursor from word to word with CTRL and left or right arrow?
 </html>
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>...that you can bookmarks helpbrowser pages in the "Bookmarks" menu?
+<p>...that you can bookmark helpbrowser pages in the "Bookmarks" menu?
 </html>
 </tip>
 <tip category="KDevelop|General">
 <html>
-<p>...that you can start grep search from inside editor and browser with context menu?
+<p>...that you can start grep search from within the editor and the browser using the context menu?
 </html>
 </tip>
