@@ -28,6 +28,7 @@
 #include <kurlrequester.h>
 #include <klineedit.h>
 #include <kio/job.h>
+#include <kdebug.h>
 
 using namespace KIO;
 
@@ -50,14 +51,18 @@ subversionWidget *subversionCore::processWidget() const {
 
 void subversionCore::update( const KURL::List& list ) {
 	KURL servURL = m_part->baseURL();
+	if ( servURL.isEmpty() ) servURL="svn+http://blah/";
+	if ( ! servURL.protocol().startsWith( "svn" ) ) {
+		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+	}
+	kdDebug() << "servURL : " << servURL << endl;
 	for ( QValueListConstIterator<KURL> it = list.begin(); it != list.end() ; ++it ) {
+		kdDebug() << "updating : " << *it << endl;
 		QByteArray parms;
 		QDataStream s( parms, IO_WriteOnly );
 		int cmd = 2;
 		int rev = -1;
-		s << cmd << servURL << *it << rev << QString( "HEAD" );
-		if ( ! servURL.protocol().startsWith( "svn" ) ) 
-				servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
+		s << cmd << *it << rev << QString( "HEAD" );
 		SimpleJob * job = KIO::special(servURL, parms, true);
 		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 	}

@@ -221,10 +221,15 @@ bool subversionPart::urlFocusedDocument( KURL &url ) {
 }
 
 void subversionPart::slotActionUpdate() {
+	kdDebug() << "subversion: slotActionUpdate()" << endl;
 	KURL doc;
 	if (urlFocusedDocument( doc )) {
 		m_impl->update( doc );
 	}
+}
+
+void subversionPart::slotUpdate() {
+	m_impl->update (m_urls);
 }
 
 void subversionPart::slotProjectOpened() {
