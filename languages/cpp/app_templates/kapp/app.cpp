@@ -203,7 +203,7 @@ void %{APPNAME}::fileSaveAs()
 {
     // this slot is called whenever the File->Save As menu is selected,
     KURL file_url = KFileDialog::getSaveURL();
-    if (!file_url.isEmpty() && !file_url.isMalformed())
+    if (!file_url.isEmpty() && file_url.isValid())
     {
         // save your info, here
     }
@@ -254,7 +254,7 @@ void %{APPNAME}::optionsShowStatusbar()
 
 void %{APPNAME}::optionsConfigureKeys()
 {
-    KKeyDialog::configureKeys(actionCollection(), "%{APPNAMELC}ui.rc");
+    KKeyDialog::configure(actionCollection());
 }
 
 void %{APPNAME}::optionsConfigureToolbars()

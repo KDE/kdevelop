@@ -47,7 +47,7 @@ void Plugin%{APPNAME}::slotAction()
 
     // This is a standard check to make sure we are dealing with a
     // valid URL
-    if ( url.isMalformed() )
+    if ( !url.isValid() )
     {
         QString title( i18n( "Malformed URL" ) );
         QString text( i18n( "The URL you entered is not valid, please "

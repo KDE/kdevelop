@@ -108,7 +108,7 @@ void %{APPNAME}::optionsShowStatusbar()
 
 void %{APPNAME}::optionsConfigureKeys()
 {
-    KKeyDialog::configureKeys(actionCollection(), "%{APPNAMELC}ui.rc");
+    KKeyDialog::configure(actionCollection());
 }
 
 void %{APPNAME}::optionsConfigureToolbars()
