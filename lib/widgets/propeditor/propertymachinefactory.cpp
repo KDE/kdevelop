@@ -43,16 +43,19 @@
 #include "psizeedit.h"
 #include "pdateedit.h"
 #include "pdatetimeedit.h"
-#include "purledit.h"
 #include "ppointedit.h"
 #include "prectedit.h"
 #include "psizepolicyedit.h"
 #include "pcolorbutton.h"
 #include "pyesnobutton.h"
-#include "pfontbutton.h"
 #include "ppixmapedit.h"
 #include "pcursoredit.h"
 #include "plinestyleedit.h"
+
+#ifndef PURE_QT
+#include "pfontbutton.h"
+#include "purledit.h"
+#endif
 
 namespace PropertyLib{
 
@@ -93,8 +96,14 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             return new Machine(new PStringListEdit(property));
         case Property::Color:
             return new Machine(new PColorButton(property));
+#ifndef PURE_QT
         case Property::Font:
             return new Machine(new PFontButton(property));
+        case Property::FileURL:
+            return new Machine(new PUrlEdit(KFile::File, property));
+        case Property::DirectoryURL:
+            return new Machine(new PUrlEdit(KFile::Directory, property));
+#endif
         case Property::Pixmap:
             return new Machine(new PPixmapEdit(property));
 
@@ -104,10 +113,6 @@ Machine *PropertyMachineFactory::machineForProperty(MultiProperty *property)
             return new Machine(new PSymbolCombo(property));
         case Property::FontName:
             return new Machine(new PFontCombo(property));
-        case Property::FileURL:
-            return new Machine(new PUrlEdit(KFile::File, property));
-        case Property::DirectoryURL:
-            return new Machine(new PUrlEdit(KFile::Directory, property));
         case Property::LineStyle:
             return new Machine(new PLineStyleEdit(property));
 
