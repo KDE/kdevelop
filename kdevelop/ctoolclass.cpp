@@ -27,27 +27,17 @@
 
 bool CToolClass::searchProgram(const QString& name, bool allowWarningMsg )
 {
-//  QStringList paths;
-//  bool found=false;
-//  QString complete_path = getenv("PATH");
-//  paths = QStringList::split ( ":", complete_path, FALSE );
-//
-//  for ( QStringList::Iterator it = paths.begin(); it != paths.end(); ++it )
-//  {
-//    if (QFile::exists((*it) + "/" + name))
-//    {
-//      found = true;
-//      break;
-//    }
-//  }
-
-  if (findProgram(name).isEmpty() && allowWarningMsg)
+  if (findProgram(name).isEmpty())
   {
-    KMessageBox::sorry(0,
+    if (allowWarningMsg)
+    {
+      KMessageBox::sorry(0,
                         i18n("KDevelop needs \"%1\" to work properly.\n\tPlease install it!").arg(name),
                         i18n("Program not found!"));
+    }
     return false;
   }
+
   return true;
 }
 
