@@ -21,7 +21,7 @@
 #include <qstringlist.h>
 #include <kdebug.h>
 
-QString nodeTypeToString( NodeType type )
+QString nodeTypeToString( int type )
 {
     switch( type )
     {

@@ -43,6 +43,16 @@ using namespace std;
   lex->nextToken(); \
 }
 
+#define ADVANCE_NR(tk, descr) \
+{ \
+  const Token& token = lex->lookAhead( 0 ); \
+  if( token != tk ){ \
+      reportError( i18n("'%1' expected found '%2'").arg(descr).arg(lex->toString(token)) ); \
+  } \
+  else \
+      lex->nextToken(); \
+}
+
 #define CHECK(tk, descr) \
 { \
   const Token& token = lex->lookAhead( 0 ); \
@@ -2526,20 +2536,20 @@ bool Parser::parseDoStatement( StatementAST::Node& node )
     StatementAST::Node body;
     if( !parseStatement(body) ){
 	reportError( i18n("statement expected") );
-	return false;
+	//return false;
     }
 
-    ADVANCE( Token_while, "while" );
-    ADVANCE( '(' , "(" );
+    ADVANCE_NR( Token_while, "while" );
+    ADVANCE_NR( '(' , "(" );
 
     AST::Node expr;
     if( !skipCommaExpression(expr) ){
 	reportError( i18n("expression expected") );
-	return false;
+	//return false;
     }
 
-    ADVANCE( ')', ")" );
-    ADVANCE( ';', ";" );
+    ADVANCE_NR( ')', ")" );
+    ADVANCE_NR( ';', ";" );
 
     DoStatementAST::Node ast = CreateNode<DoStatementAST>();
     ast->setStatement( body );
