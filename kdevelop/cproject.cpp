@@ -856,13 +856,13 @@ void CProject::updateMakefileAm(const QString& makefile)
             stream << "\nINCLUDES = $(all_includes)\n\n";
 
           if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
-            stream << "lib" << canonicalDirName(dir.dirName()) << "_a_METASOURCES = AUTO\n\n";
+            stream << "lib" << canonicalizeDirName(dir.dirName()) << "_a_METASOURCES = AUTO\n\n";
           else
             if (QFileInfo(getProjectDir() + "automoc").exists())
-              stream << "lib" << canonicalDirName(dir.dirName()) << "_a_METASOURCES = USE_AUTOMOC\n\n";
+              stream << "lib" << canonicalizeDirName(dir.dirName()) << "_a_METASOURCES = USE_AUTOMOC\n\n";
 
           stream << "noinst_LIBRARIES = lib" << dir.dirName() << ".a\n\n";
-          stream << "lib" << canonicalDirName(dir.dirName()) << "_a_SOURCES = " << sources << "\n";
+          stream << "lib" << canonicalizeDirName(dir.dirName()) << "_a_SOURCES = " << sources << "\n";
           if(isQt2Project())
             // am_edit used only for qt apps requires this switch in Makefile.am´s to use tr instead of i18n and other specific stuff
             stream << "KDE_OPTIONS = qtonly\n";
@@ -899,52 +899,52 @@ void CProject::updateMakefileAm(const QString& makefile)
             if( type == "kpart_plugin")
             {
               stream << "\nLDADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << libRootName << "_la_LIBADD = " << getLDADD() << "\n\n";
-              stream << "\nlib" << libRootName << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
+              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+              stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -avoid-version -module -no-undefined\n\n";
             }
           }
 
           config->setGroup(makefile);
           QString sharedlibLDFLAGS = config->readEntry("sharedlib_LDFLAGS");
           if (!sharedlibLDFLAGS.isEmpty())
-            stream << "\nlib" << libRootName << "_la_LDFLAGS = " << sharedlibLDFLAGS << "\n\n";
+            stream << "\nlib" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = " << sharedlibLDFLAGS << "\n\n";
 
           if (QFileInfo(getProjectDir() + "am_edit").exists() ||QFileInfo(getProjectDir() + "admin/am_edit").exists())
           {
             if( (type == "kio_slave") )
-              stream << "kio_" << libRootName << "_la_METASOURCES=AUTO\n\n";
+              stream << "kio_" << canonicalizeDirName(libRootName) << "_la_METASOURCES=AUTO\n\n";
             else if( (type == "kc_module") )
-              stream << "libkcm_" << libRootName << "_la_METASOURCES=AUTO\n\n";
+              stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_METASOURCES=AUTO\n\n";
             else
-              stream << "lib" << libRootName << "_la_METASOURCES = AUTO\n\n";
+              stream << "lib" << canonicalizeDirName(libRootName) << "_la_METASOURCES = AUTO\n\n";
           }
           else
           {
             if (QFileInfo(getProjectDir() + "automoc").exists())
             {
               if( (type == "kio_slave") )
-                stream << "kio_" << libRootName <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
+                stream << "kio_" << canonicalizeDirName(libRootName) <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
               else if( (type == "kc_module") )
-                stream << "libkcm_" << libRootName <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
+                stream << "libkcm_" << canonicalizeDirName(libRootName) <<  "_la_METASOURCES = USE_AUTOMOC\n\n";
               else
-                stream << "lib" << libRootName << "_la_METASOURCES = USE_AUTOMOC\n\n";
+                stream << "lib" << canonicalizeDirName(libRootName) << "_la_METASOURCES = USE_AUTOMOC\n\n";
             }
           }
 
           if( (type == "kio_slave") )
           {
-            stream << "kio_" << libRootName << "_la_SOURCES = " << sources << "\n";
-            stream << "kio_" << libRootName << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
-            stream << "kio_" << libRootName << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
+            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LIBADD = -lkio " << getLDADD() << "\n\n";
+            stream << "kio_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else if( (type == "kc_module") )
           {
-            stream << "libkcm_" << libRootName << "_la_SOURCES = " << sources << "\n";
-            stream << "libkcm_" << libRootName << "_la_LIBADD = " << getLDADD() << "\n\n";
-            stream << "libkcm_" << libRootName << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
+            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
+            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LIBADD = " << getLDADD() << "\n\n";
+            stream << "libkcm_" << canonicalizeDirName(libRootName) << "_la_LDFLAGS = -module $(KDE_PLUGIN)  " << getLDFLAGS() << "\n\n";
           }
           else
-            stream << "lib" << libRootName << "_la_SOURCES = " << sources << "\n";
+            stream << "lib" << canonicalizeDirName(libRootName) << "_la_SOURCES = " << sources << "\n";
 
           if(isQt2Project())
             // am_edit used only for qt apps requires this switch in Makefile.am´s to use tr instead of i18n and other specific stuff
@@ -1912,7 +1912,7 @@ CProject* currentProject()
   return gkdevelop?gkdevelop->getProject():0L;
 }
 
-QString CProject::canonicalDirName(QString dir_name)
+QString CProject::canonicalizeDirName(const QString& dir_name)
 {
   QString canonical_dir_name = dir_name;
 
