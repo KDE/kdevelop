@@ -508,7 +508,19 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
  *-----------------------------------------------------------------*/
 QList<CParsedClass> *CClassStore::getSortedClassList()
 {
-  return globalContainer.getSortedClassList();
+  QList<CParsedClass> *list = globalContainer.getSortedClassList();
+  CParsedClass *aClass;
+
+  // Remove all non-global classes.
+  for( aClass = list->first();
+       aClass != NULL;
+       aClass = list->next() )
+  {
+    if( !aClass->declaredInScope.isEmpty() )
+      list->remove();
+  }
+
+  return list;
 }
 
 /*---------------------------- CClassStore::getSortedClassNameList()
