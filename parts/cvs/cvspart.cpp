@@ -9,8 +9,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qfileinfo.h>
-#include <qpopupmenu.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -19,11 +17,14 @@
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
+#include <kurl.h>
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
 #include <kgenericfactory.h>
 
+#include <qfileinfo.h>
+#include <qpopupmenu.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
@@ -185,6 +186,8 @@ bool CvsPart::Private::findPaths()
 	if (!owner->project())
 	{
 		kdDebug(9000) << "CvsPart::findPaths(): No project???" << endl;
+		KMessageBox::sorry( 0, i18n("Open a project first.\n"
+			"Operation will be aborted.") );
 		return false;
 	}
 	// From menu-bar invoked actions we use the currently focused document, otherwise we used the one
@@ -192,6 +195,8 @@ bool CvsPart::Private::findPaths()
 	if (invokedFromMenu && !retrieveUrlFocusedDocument())
 	{
 		kdDebug(9000) << "CvsPart::findPaths(): Unable to retrieve the Url for the active parte (is there any?)." << endl;
+		KMessageBox::sorry( 0, i18n("Unable to find current document's path. Is any opened?\n"
+			"Operation will be aborted.") );
 		return false;
 	}
 
@@ -223,12 +228,14 @@ bool CvsPart::Private::prepareOperation()
 {
 	if (!findPaths())
 	{
-		kdDebug(9000) << "  ** slotCommit(): aborting since findPath() == false." << endl;
+		kdDebug(9000) << "  ** prepareOperation(): aborting since findPath() == false." << endl;
 		return false;
 	}
 	if (!isRegisteredInRepository())
 	{
-		kdDebug(9000) << "  ** slotDiff(): aborting since file is not is repository." << endl;
+		kdDebug(9000) << "  ** prepareOperation(): aborting since file is not is repository." << endl;
+		KMessageBox::sorry( 0, i18n("The file doesn't seem to belong to repository.\n"
+			"Operation will be aborted.") );
 		return false;
 	}
 	return true;
@@ -259,7 +266,6 @@ bool CvsPart::Private::isRegisteredInRepository()
 	kdDebug(9000) << "===> pathUrl.path()      = " << pathUrl.path() << endl;
 	kdDebug(9000) << "===> dirName             = " << dirName << endl;
 	kdDebug(9000) << "===> entriesFilePath = " << entriesFilePath << endl;
-	//kdDebug(9000) << "===> whatToSearch    = " << whatToSearch << endl;
 
 	bool found = false;
 	QFile f( entriesFilePath );
@@ -506,7 +512,7 @@ void CvsPart::slotAdd()
 	// present" condition and have faith in cvs command to report error).
 	if (!d->findPaths())
 	{
-		kdDebug(9000) << "  ** slotCommit(): aborting since findPath() == false." << endl;
+		kdDebug(9000) << "  ** slotAdd(): aborting since findPath() == false." << endl;
 		return;
 	}
 

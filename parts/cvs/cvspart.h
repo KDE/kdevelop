@@ -12,9 +12,6 @@
 #ifndef _CVSPART_H_
 #define _CVSPART_H_
 
-#include <qguardedptr.h>
-#include <kurl.h>
-
 #include "kdevversioncontrol.h"
 
 class Context;
