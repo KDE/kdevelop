@@ -79,3 +79,10 @@ void CvsWidget::lineHighlighted(int line) {
 void CvsWidget::insertStdoutLine(const QString & line) {
     insertItem(new CvsListBoxItem(line));
 }
+
+void CvsWidget::childFinished(bool normal, int status)
+{
+    m_part->core()->running( m_part, false );
+
+    ProcessWidget::childFinished( normal, status );
+}

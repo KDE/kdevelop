@@ -24,6 +24,7 @@ private slots:
 
 private:
     virtual void insertStdoutLine(const QString & line);
+    virtual void childFinished(bool normal, int status);
 
     CvsPart * m_part;
     QString dir;
