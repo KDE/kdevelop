@@ -21,7 +21,9 @@ DETAILS_AT_TOP         = NO
 INHERIT_DOCS           = YES
 DISTRIBUTE_GROUP_DOC   = NO
 TAB_SIZE               = 4
-ALIASES                = 
+ALIASES                = "feature=\xrefitem features \"Feature(s)\" \"Features\"" \
+                         "maintainer=\xrefitem maintainers \"Maintainer(s)\" \"Maintainers\"" \
+                         "requirement=\xrefitem requirement \"Requirement(s)\" \"Requirements\""
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 SUBGROUPING            = YES
