@@ -42,7 +42,7 @@ public:
             combo->insertItem((*it)->comment());
             (*names) << (*it)->name();
             (*execs) << (*it)->exec();
-            kdDebug() << "insertStringList item " << (*it)->name() << "," << (*it)->exec() << endl;
+            kdDebug(9020) << "insertStringList item " << (*it)->name() << "," << (*it)->exec() << endl;
         }
     }
     static QString currentText(QComboBox *combo, const QStringList &names)
@@ -141,33 +141,33 @@ void ConfigureOptionsWidget::readSettings(const QString &config)
     QString f77compiler = DomUtil::readEntry(dom, prefix + "f77compiler");
 
     if (ccompiler.isEmpty()) {
-        kdDebug() << "No c compiler set" << endl;
+        kdDebug(9020) << "No c compiler set" << endl;
         QValueList<KService::Ptr>::ConstIterator it;
         for (it = coffers.begin(); it != coffers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
-                kdDebug() << "Found default " << (*it)->name() << endl;
+                kdDebug(9020) << "Found default " << (*it)->name() << endl;
                 ccompiler = (*it)->name();
                 break;
             }
         }
     }
     if (cxxcompiler.isEmpty()) {
-        kdDebug() << "No cxx compiler set" << endl;
+        kdDebug(9020) << "No cxx compiler set" << endl;
         QValueList<KService::Ptr>::ConstIterator it;
         for (it = cxxoffers.begin(); it != cxxoffers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
-                kdDebug() << "Found default " << (*it)->name() << endl;
+                kdDebug(9020) << "Found default " << (*it)->name() << endl;
                 cxxcompiler = (*it)->name();
                 break;
             }
         }
     }
     if (f77compiler.isEmpty()) {
-        kdDebug() << "No c compiler set" << endl;
+        kdDebug(9020) << "No c compiler set" << endl;
         QValueList<KService::Ptr>::ConstIterator it;
         for (it = f77offers.begin(); it != f77offers.end(); ++it) {
             if ((*it)->property("X-KDevelop-Default").toBool()) {
-                kdDebug() << "Found default " << (*it)->name() << endl;
+                kdDebug(9020) << "Found default " << (*it)->name() << endl;
                 f77compiler = (*it)->name();
                 break;
             }
