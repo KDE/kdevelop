@@ -1185,11 +1185,20 @@ void CKDevelop::slotProjectLoadTags()
 {
   kdDebug() << "in slotProjectLoadTags()\n";
   slotStatusMsg(i18n("Loading tags file..."));
-
+  // must have a project for this
   CProject* pPrj = getProject();
   if (!pPrj) {
     bCTags=false;
     return;
+  }
+  // check whether to reload a CTagsDataBase
+  if (bCTags && pPrj->ctagsDataBase().is_initialized()) {
+      slotProjectMakeTags();
+      // change status if reload failes for some reason
+      if (!pPrj->ctagsDataBase().reload())
+          bCTags=false;
+      kdDebug() << "reloading tags file completed\n";
+      return;
   }
   QString filename = pPrj->getProjectDir() + "/tags";
   if (!QFileInfo(filename).exists()) {
@@ -1210,10 +1219,15 @@ void CKDevelop::slotProjectLoadTags()
       return;
     }
   }
-  pPrj->ctagsDataBase().load(filename);
-  bCTags = true;
+  if (pPrj->ctagsDataBase().load(filename)) {
+      bCTags = true;
+      kdDebug() << "loading tags file completed\n";
+  }
+  else {
+      bCTags = false;
+      kdDebug() << "loading tags file failed\n";
+  }
   slotStatusMsg(i18n("Ready."));
-  kdDebug() << "loading tags file completed\n";
 }
 
 void CKDevelop::slotProjectMakeTags()

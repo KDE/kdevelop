@@ -148,11 +148,11 @@ public:
   /** destructor */
   ~CTagsDataBase();
   /** load a tags file and create the search database */
-  void load(const QString& file);
+  bool load(const QString& file);
   /** unload, remove search database but keep file list */
   void unload();
   /** reload, unload and reload current search database */
-  void reload();
+  bool reload();
   /** clear, unload database and remove file list */
   void clear();
   /** the number of CTag entries found for a tag */
@@ -161,6 +161,9 @@ public:
   const CTagList* ctaglist(const QString& tag) const ;
   /** return whether CTagsDataBase is initialized */
   bool is_initialized() const {return m_init;}
+protected:
+  /** internal function that loads the tags file */
+  bool loadTags(const QString& file);
 private:
   /** true if search database is initialized */
   bool m_init;

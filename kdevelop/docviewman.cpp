@@ -791,6 +791,7 @@ bool DocViewMan::closeView(QWidget* pWnd)
 	if (!pWnd) return;
 
   // get the embedded view
+  if (!pWnd) return true; // I ran into this case also, yuck!
   QObjectList* pL = (QObjectList*) (pWnd->children());
   if (!pL) return true; // I ran into this case once, no idea why this happened (rokrau 06/02/01)
   QWidget* pView = 0L;

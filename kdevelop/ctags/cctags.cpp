@@ -194,8 +194,24 @@ CTagsDataBase::CTagsDataBase()
 CTagsDataBase::~CTagsDataBase()
 {
 }
+
 /** load a tags file and create the search database */
-void CTagsDataBase::load(const QString& file)
+bool CTagsDataBase::load(const QString& file)
+{
+  bool success=loadTags(file);
+  if (success) {
+      m_filelist.append(file);
+  }
+  return success;
+}
+
+/**
+ *  Load a tags file and create the search database.
+ *  This is an internal (protected) method. The load()
+ *  method is publically visible and takes care
+ *  of appending the filename to a list for reloading.
+ **/
+bool CTagsDataBase::loadTags(const QString& file)
 {
   QFile tagsfile(file);
   if (tagsfile.open(IO_ReadOnly)) {
@@ -227,7 +243,7 @@ void CTagsDataBase::load(const QString& file)
           pTagList = new CTagList(*ptag);
           if (!pTagList) {
             // error out of memory while attempting to create tags database
-            return;
+            return false;
           }
           m_taglistdict.insert(*ptag,pTagList);
         }
@@ -240,11 +256,11 @@ void CTagsDataBase::load(const QString& file)
   else {
     // "Unable to open tags file: %1"
     kdDebug() << "cant open tags file: " << file << "\n";
-    return;
+    return false;
   }
   tagsfile.close();
-  m_filelist.append(file);
   m_init = true;
+  return true;
 }
 
 
@@ -269,14 +285,17 @@ void CTagsDataBase::clear()
 
 
 /** reload, unload current and load regenerated search database */
-void CTagsDataBase::reload()
+bool CTagsDataBase::reload()
 {
   if (m_init) unload();
+  bool success=true;
   QStringList::Iterator it;
   for (it=m_filelist.begin();it!=m_filelist.end();++it)
   {
-    load(*it);
+    // note: calls the internal function to prevent endless loop
+    success = success & loadTags(*it);
   }
+  return success;
 }
 
 

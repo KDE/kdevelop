@@ -29,20 +29,31 @@
  **/
 class CTagsCommandLine {
 public:
-  CTagsCommandLine() {
+  CTagsCommandLine() {                    // long form of arguments
+    m_onlyProjectFiles=false;
     m_command = "ctags";
-    m_append = "--append=no";
-    m_sort = "--sort=no";
-    m_totals = "--totals=yes";
-    m_excmd_pattern = "--excmd=number"; //pattern
-    m_file_scope = "--file-scope=yes";
-    m_file_tags = "--file-tags=yes";
-    m_c_types = "--c-types=+px";
+    m_append = "";                        //--append=no      [default]
+    m_sort = "-u";                        //--sort=no
+    m_totals = "--totals";                //--totals=yes
+    m_excmd_pattern = "-n";               //--excmd=number
+    m_file_scope = "";                    //--file-scope=yes [default]
+    m_c_types = "--c++-types=+px";
     m_fortran_types = "--fortran-types=-l+L";
-    m_exclude = "--exclude=\"*.inc *.bck glimpse*\"";
     m_fields = "--fields=+i";
+    m_extra = " --extra=+f";
+    m_recurse = "-R";                     // --recurse=on
+    m_exclude.append("--exclude=[Mm]ake*");
+    m_exclude.append("--exclude=config*");
+    m_exclude.append("--exclude=*.inc");
+    m_exclude.append("--exclude=*.bck");
+    m_exclude.append("--exclude=glimpse*");
+    m_exclude.append("--exclude=.glimpse*");
+    m_exclude.append("--exclude=CVS");
   }
   ~CTagsCommandLine() {}
+  /** access to onlyProjectFiles */
+  bool onlyProjectFiles() {return m_onlyProjectFiles;} const
+  void onlyProjectFiles(const bool onlyProjectFiles) {m_onlyProjectFiles=onlyProjectFiles;}
   /** access to command */
   QString command() {return m_command;} const
   void command(const QString& command) {m_command=command;}
@@ -61,33 +72,38 @@ public:
   /** access to file_scope option */
   QString file_scope() {return m_file_scope;} const
   void file_scope(const QString& file_scope) {m_file_scope=file_scope;}
-  /** access to file_tags option */
-  QString file_tags() {return m_file_tags;} const
-  void file_tags(const QString& file_tags) {m_file_tags=file_tags;}
   /** access to c_types option */
   QString c_types() {return m_c_types;} const
   void c_types(const QString& c_types) {m_c_types=c_types;}
   /** access to fortran_types option */
   QString fortran_types() {return m_fortran_types;} const
   void fortran_types(const QString& fortran_types) {m_fortran_types=fortran_types;}
-  /** access to exclude option */
-  QString exclude() {return m_exclude;} const
-  void exclude(const QString& exclude) {m_exclude=exclude;}
   /** access to fields option */
   QString fields() {return m_fields;} const
   void fields(const QString& fields) {m_fields=fields;}
+  /** access to extra option */
+  QString extra() {return m_extra;} const
+  void extra(const QString& extra) {m_extra=extra;}
+  /** access to recuse option */
+  QString recurse() {return m_recurse;} const
+  void recurse(const QString& recurse) {m_recurse=recurse;}
+  /** access to exclude list */
+  QStringList exclude() {return m_exclude;} const
+  void exclude(const QStringList& exclude) {m_exclude=exclude;}
 private:
+  bool m_onlyProjectFiles;
   QString m_command;
   QString m_append;
   QString m_sort;
   QString m_totals;
   QString m_excmd_pattern;
   QString m_file_scope;
-  QString m_file_tags;
   QString m_c_types;
   QString m_fortran_types;
-  QString m_exclude;
   QString m_fields;
+  QString m_extra;
+  QString m_recurse;
+  QStringList m_exclude;
 };
 
 

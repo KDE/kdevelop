@@ -1026,19 +1026,24 @@ void CKDevelop::resizeEvent( QResizeEvent *pRSE)
 void CKDevelop::create_tags()
 {
   kdDebug() << "creating tags file\n";
-  // collect all files belonging to the project
   QString files;
-  QStrListIterator isrc(getProject()->getSources());
-  while (isrc)
-  {
-      files = files + *isrc + " ";
-      ++isrc;
+  if (m_CTagsCmdLine.onlyProjectFiles()) {
+      // collect all files belonging to the project
+      QStrListIterator isrc(getProject()->getSources());
+      while (isrc)
+      {
+          files = files + *isrc + " ";
+          ++isrc;
+      }
+      QStrListIterator ihdr(getProject()->getHeaders());
+      while (ihdr)
+      {
+          files = files + *ihdr + " ";
+          ++ihdr;
+      }
   }
-  QStrListIterator ihdr(getProject()->getHeaders());
-  while (ihdr)
-  {
-      files = files + *ihdr + " ";
-      ++ihdr;
+  else {
+      files = getProject()->getProjectDir();
   }
   // set the name of the output file
   QString tagfile = getProject()->getProjectDir() + "/tags";
@@ -1050,13 +1055,18 @@ void CKDevelop::create_tags()
   shell_process << m_CTagsCmdLine.totals();
   shell_process << m_CTagsCmdLine.excmd_pattern();
   shell_process << m_CTagsCmdLine.file_scope();
-  shell_process << m_CTagsCmdLine.file_tags();
   shell_process << m_CTagsCmdLine.c_types();
   shell_process << m_CTagsCmdLine.fortran_types();
-  shell_process << m_CTagsCmdLine.exclude();
   shell_process << m_CTagsCmdLine.fields();
+  shell_process << m_CTagsCmdLine.extra();
+  for ( QStringList::Iterator it  = m_CTagsCmdLine.exclude().begin();
+                              it != m_CTagsCmdLine.exclude().end();
+                            ++it ) {
+      shell_process << (*it);
+  }
   shell_process << "-f" ;
   shell_process << tagfile ;
+  shell_process << m_CTagsCmdLine.recurse();
   shell_process << files ;
   // run it
   shell_process.start(KProcess::Block/*NotifyOnExit*/,KProcess::AllOutput);

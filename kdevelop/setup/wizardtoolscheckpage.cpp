@@ -59,6 +59,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   bool kpaint       = CToolClass::searchInstProgram("kpaint");
   bool designer     = CToolClass::searchInstProgram("designer");
   bool linguist     = CToolClass::searchInstProgram("linguist");
+  bool ctags        = CToolClass::searchInstProgram("ctags");
 
   m_pInstallState->make	 = CToolClass::searchInstProgram("make");
   m_pInstallState->gmake = CToolClass::searchInstProgram("gmake");
@@ -167,6 +168,14 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   else
     linguist_str=i18n("Qt Linguist")+not_found+"\n";
 
+  QString ctags_str;
+  if(ctags){
+    ctags_str="ctags"+found+"\n";
+  }
+  else
+    ctags_str=i18n("ctags")+not_found
+             +i18n(" -- browse functionality will not be provided")+"\n";
+
   QString ktranslator_str;
   if(ktranslator){
     ktranslator_str="KTranslator"+found+"\n";
@@ -261,6 +270,7 @@ void WizardToolsCheckPage::searchForAllTools(QListBox* lb)
   lb->insertItem(ktranslator_str);
   lb->insertItem(kbabel_str);
   lb->insertItem(linguist_str);
+  lb->insertItem(ctags_str);
   lb->insertItem(designer_str);
 
   CToolClass::writeToolConfig(toolList);
