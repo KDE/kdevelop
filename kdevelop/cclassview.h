@@ -22,19 +22,15 @@
 #include <kapp.h>
 #include <qstring.h>
 #include <qlist.h>
-#include <qpoint.h> 
-#include <qpixmap.h> 
-#include <qlistview.h>
-#include <kpopmenu.h>
+#include "ctreeview.h"
 #include "./classparser/ClassParser.h"
-#include "cproject.h"
 #include "cclasstreehandler.h"
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
   */
 
-class CClassView : public QListView
+class CClassView : public CTreeView
 {
   Q_OBJECT
 
@@ -53,16 +49,8 @@ public: // Public constants
 
 public: // Public attributes
 
-  /** Tells which(if any) of the buttons where pressed. */
-  int mouseBtn;
-
   /** The classtore */
   CClassStore *store;
-
-public: // Public queries
-
-  /** Return the type of the selected item. */
-  int indexType();
 
 public: // Public refreshmethods
   
@@ -77,7 +65,6 @@ public: // Public refreshmethods
 
 protected: // Protected signals and slots
   protected slots:
-    void slotRightButtonPressed(QListViewItem *,const QPoint &,int);
     void slotProjectOptions();
     void slotFileNew();
     void slotClassNew();
@@ -102,7 +89,13 @@ protected: // Protected signals and slots
     void signalAddMethod( CParsedMethod * );
     void signalAddAttribute( CParsedAttribute * );
 
-private: // Private constants
+protected: // Implementations of virtual methods.
+
+  /** Initialize popupmenus. */
+  void initPopups();
+
+  /** Get the current popupmenu. */
+  KPopupMenu *getCurrentPopup();
 
 private: // Popupmenus
 
@@ -120,25 +113,13 @@ private: // Popupmenus
 
 private: // Private attributes
 
-  /** The position at the last mousepress-event. */
-  QPoint mousePos;
-
   /** The classparser. */	
   CClassParser cp;
 
-  /** The utilityclass to draw the tree. */
-  CClassTreeHandler treeH;
-
 private: // Private methods
-
-  /** Event to be executed on a mousepress. */
-  void mousePressEvent(QMouseEvent* event);
 
   /** Fetches the currently selected class from the store. */
   CParsedClass *getCurrentClass();
-
-  /** Initialize popupmenus. */
-  void initPopups();
   
 };
 

@@ -21,104 +21,175 @@
 #include "qdir.h"
 #include "qstrlist.h"
 #include "crealfileview.h"
-#include "qheader.h"
 #include <kmsgbox.h>
 #include <kprocess.h>
 #include <qfileinfo.h>
 #include <iostream.h>
+#include <assert.h>
 
-CRealFileView::CRealFileView(QWidget*parent,const char* name):QListView(parent,name){
+/*********************************************************************
+ *                                                                   *
+ *                     CREATION RELATED METHODS                      *
+ *                                                                   *
+ ********************************************************************/
 
-  loader = kapp->getIconLoader();
-  folder_pix = loader->loadMiniIcon("folder.xpm");
-  file_pix = loader->loadMiniIcon("c_src.xpm");
-  inst_file_pix.load(KApplication::kde_datadir()+"/kdevelop/pics/mini/inst_file.xpm");
+CRealFileView::CRealFileView(QWidget*parent,const char* name)
+  : CTreeView(parent,name)
+{
+  // Create the popupmenus.
+  initPopups();
 
-  file_col=addColumn("file");
-  header()->hide();
-  setRootIsDecorated(true);
-  setSorting(-1);
-
-  installed_file_menu = new KPopupMenu();
-  installed_file_menu->setTitle(i18n("installed:"));
-  installed_file_menu->insertItem(i18n("Remove from Project..."),this,SLOT(slotRemoveFileFromProject()));
-  installed_file_menu->insertItem(i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
-  installed_file_menu->insertSeparator();
-  installed_file_menu->insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
-
-  other_file_menu = new KPopupMenu();
-  other_file_menu->setTitle(i18n("other:"));
-  other_file_menu->insertItem(i18n("Add to Project..."),this,SLOT(slotAddFileToProject()));
-  other_file_menu->insertItem(i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
-  //other_file_menu->insertSeparator();
-  //other_file_menu->insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
-
-  connect(this, SIGNAL(selectionChanged(QListViewItem*)), SLOT(slotSelectionChanged(QListViewItem*)));
-  connect(this, SIGNAL(rightButtonPressed(QListViewItem*,const QPoint &,int)), SLOT(slotRightButtonPressed( QListViewItem *,const QPoint &,int)));
+  file_col = 0;
+  
+  connect(this, 
+          SIGNAL(selectionChanged(QListViewItem*)), 
+          SLOT(slotSelectionChanged(QListViewItem*)));
 }
 
 CRealFileView::~CRealFileView(){
 }
 
-void CRealFileView::refresh(CProject* prj) {
+/*---------------------------------------- CRealFileView::initPopups()
+ * initPopups()
+ *   Initialze all popupmenus.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CRealFileView::initPopups()
+{
+  installed_file_menu.setTitle(i18n("Installed"));
+  installed_file_menu.insertItem(i18n("Remove from Project..."),this,SLOT(slotRemoveFileFromProject()));
+  installed_file_menu.insertItem(i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
+  installed_file_menu.insertSeparator();
+  installed_file_menu.insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
+
+  other_file_menu.setTitle(i18n("Other"));
+  other_file_menu.insertItem(i18n("Add to Project..."),this,SLOT(slotAddFileToProject()));
+  other_file_menu.insertItem(i18n("Delete physically..."),this,SLOT(slotDeleteFilePhys()));
+  //other_file_menu->insertSeparator();
+  //other_file_menu->insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                          PUBLIC METHODS                           *
+ *                                                                   *
+ ********************************************************************/
+
+/*------------------------------------------ CRealFileView::refresh()
+ * refresh()
+ *   Add all files in the project directory.
+ *
+ * Parameters:
+ *   proj          The project specification.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CRealFileView::refresh(CProject* prj) 
+{
+  assert( prj );
 
   project=prj;
+
   QString projectdir=project->getProjectDir();
   if(projectdir.right(1)=="/") {
     projectdir.truncate(projectdir.length()-1);
   }
+
   QDir dir(projectdir);
   if (!dir.exists()) {
     return;
   }
+
+  // Remove all entries.
+  treeH->clear();
+
+  // Save all files registered in the project in the filelist variable.
   project->getAllFiles(filelist);
-  clear();
-  pRootItem = new QListViewItem(this,projectdir);
-  pRootItem->setPixmap(file_col,folder_pix);
+
+  // Add the root item.
+  pRootItem = treeH->addRoot( projectdir, THFOLDER );
   pRootItem->setOpen(true);
-  scanDir(projectdir,pRootItem);
-  repaint();
+
+  scanDir(projectdir, pRootItem);
 }
 
-
-void CRealFileView::scanDir(const QString& directory,QListViewItem* parent) {
-  
+void CRealFileView::scanDir(const QString& directory, QListViewItem* parent) 
+{
+  QString currentPath;
+  QListViewItem* lastFolder;
+  QListViewItem* item;
+  QStrList fileList;
+  QStrList dirList;
   QDir dir(directory);
+
+  // Stop recursion if the directory doesn't exist.
   if (!dir.exists()) {
     return;
   }
+
   dir.setSorting(QDir::Name);
   dir.setFilter(QDir::Dirs);
-  QStrList dirList = *(dir.entryList());
+  dirList = *(dir.entryList());
+
+  // Remove '.' and  '..'
   dirList.first();
   dirList.remove();
   dirList.remove();
-  QString current_str;
-  QListViewItem* pItem;
-  QListViewItem* pItem2=parent;
-  while( (dirList.current()) ) {
-    pItem=new QListViewItem(parent,pItem2,dirList.current());
-    pItem->setPixmap(file_col,folder_pix);
-    pItem->setOpen(true);
-    current_str = directory+"//"+dirList.current();
-    scanDir(current_str,pItem);
+
+  // Recurse through all directories
+  while( dirList.current() ) 
+  {
+    lastFolder = treeH->addItem( dirList.current(), THFOLDER, parent );
+    lastFolder->setOpen( true );
+
+    // Recursive call to fetch subdirectories
+    currentPath = directory+"//"+dirList.current();
+    scanDir( currentPath, lastFolder );
+
+    // Add all files for this directory
+    QDir theDir( currentPath );
+    theDir.setFilter(QDir::Files);
+    fileList=*(theDir.entryList());
+    for( fileList.first();
+         fileList.current();
+         fileList.next() )
+    {
+      item = treeH->addItem( fileList.current(), THC_FILE, lastFolder );
+
+      // If this is an installed file, we change the icon.
+      if( isInstalledFile( getRelFilename( item ) ) )
+        item->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
+    }
+
+    treeH->setLastItem( lastFolder );
+
     dirList.next();
-    pItem2=pItem;
+  }
+}
+
+KPopupMenu *CRealFileView::getCurrentPopup()
+{
+  KPopupMenu *popup;
+
+  switch( treeH->itemType() )
+  {
+    case THINSTALLED_FILE:
+      popup = &installed_file_menu;
+      break;
+    case THC_FILE:
+      popup = &other_file_menu;
+      break;
+    default:
+      popup = NULL;
+      break;
   }
 
-  dir.setFilter(QDir::Files);
-  QStrList fileList=*(dir.entryList());
-  fileList.first();
-  while( (fileList.current()) ) {
-    pItem=new QListViewItem(parent,pItem2,fileList.current());
-    if (IsInstalledFile(getRelFilename(pItem))) {
-      pItem->setPixmap(file_col,inst_file_pix);
-    } else {
-      pItem->setPixmap(file_col,file_pix);
-    }
-    fileList.next();
-    pItem2=pItem;
-  }
+  return popup;
 }
 
 QString CRealFileView::getRelFilename(QListViewItem* pItem) {
@@ -146,67 +217,29 @@ QString CRealFileView::getFullFilename(QListViewItem* pItem) {
   return filename;
 }
 
-bool CRealFileView::IsInstalledFile(QString filename) {
-
-  if (filelist.contains(filename)) {
-    return true;
-  } else {
-    return false;
-  }
+bool CRealFileView::isInstalledFile(QString filename) 
+{
+  return ( filelist.contains(filename) > 0 );
 }
 
-bool CRealFileView::IsDirectory(QString filename) {
+/*********************************************************************
+ *                                                                   *
+ *                              SLOTS                                *
+ *                                                                   *
+ ********************************************************************/
 
-  QFileInfo fi(filename);
-  return fi.isDir();
-}
-
-void CRealFileView::slotSelectionChanged(QListViewItem* selection) {
-
-  QString filename=getFullFilename(selection);
-  if (IsDirectory(filename)) {
-    return;
-  }
-  if(leftButton()){ // right button: return
+void CRealFileView::slotSelectionChanged(QListViewItem* selection) 
+{
+  if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER )
       emit fileSelected(getFullFilename(selection));
-  }
-}
-
-bool CRealFileView::leftButton(){
-  return left_button;
-}
-bool CRealFileView::rightButton(){
-  return right_button;
-}
-
-void CRealFileView::slotRightButtonPressed( QListViewItem *pItem,const QPoint & mouse_pos,int col){
-    
-    if(pItem != 0) {
-	QString filename=getRelFilename(pItem);
-	setCurrentItem(pItem);
-	setSelected(pItem,true);
-	if (IsDirectory(getFullFilename(pItem))) {	    
-	} 
-	else {
-	    if (IsInstalledFile(filename)) {
-		filename=" "+filename;
-		filename=i18n("registered:");
-		installed_file_menu->setTitle(filename);
-		installed_file_menu->popup(mouse_pos);
-	    } else {
-		filename=" "+filename;
-		filename=i18n("other:");
-		other_file_menu->setTitle(filename);
-		other_file_menu->popup(mouse_pos);
-	    }
-	}
-    }
 }
 
 void CRealFileView::slotAddFileToProject() {
 
   QString filename=getRelFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you want to add the file:\n"+filename+"\n to the project ?"),KMsgBox::EXCLAMATION) == 2){
+  if(KMsgBox::yesNo(0,i18n("Question"),
+                    i18n("Do you want to add the file:\n"+filename+"\n to the project ?"),
+                    KMsgBox::QUESTION) == 2){
     return;
   }
   emit addFileToProject(filename);
@@ -216,7 +249,9 @@ void CRealFileView::slotAddFileToProject() {
 void CRealFileView::slotRemoveFileFromProject() {
 
   QString filename=getRelFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you want to remove the file:\n"+filename+"\n from the project ?\nIt will remain on disk."),KMsgBox::EXCLAMATION) == 2){
+  if(KMsgBox::yesNo(0,i18n("Question"),
+                    i18n("Do you want to remove the file:\n"+filename+"\n from the project ?\nIt will remain on disk."),
+                    KMsgBox::QUESTION) == 2){
     return;
   }
   emit removeFileFromProject(filename);
@@ -226,10 +261,12 @@ void CRealFileView::slotRemoveFileFromProject() {
 void CRealFileView::slotDeleteFilePhys() {
 
   QString filename=getRelFilename(currentItem());
-  if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you want to remove the file:\n"+filename+"\n from your filesystem ?"),KMsgBox::EXCLAMATION) == 2){
+  if(KMsgBox::yesNo(0,i18n("Question"),
+                    i18n("Do you want to remove the file:\n"+filename+"\n from your filesystem ?"),
+                    KMsgBox::QUESTION) == 2){
     return;
   }
-  if (IsInstalledFile(filename)) {
+  if (isInstalledFile(filename)) {
     emit removeFileFromProject(filename);
   }
   filename = getFullFilename(currentItem());
@@ -244,18 +281,4 @@ void CRealFileView::slotDeleteFilePhys() {
 
 void CRealFileView::slotShowFileProperties() {
   emit showFileProperties(getRelFilename(currentItem()));
-}
-
-void CRealFileView::mousePressEvent(QMouseEvent* event){
-    if(event->button() == RightButton){    
-	left_button = false;
-	right_button = true;
-    }
-    if(event->button() == LeftButton){
-	left_button = true;
-	right_button = false;
-    }
-    mouse_pos.setX(event->pos().x());
-    mouse_pos.setY(event->pos().y());
-    QListView::mousePressEvent(event); 
 }

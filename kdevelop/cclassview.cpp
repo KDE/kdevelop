@@ -19,7 +19,6 @@
 
 #include "cclassview.h"
 #include <assert.h>
-#include <kiconloader.h>
 #include <kmsgbox.h>
 #include <qheader.h>
 
@@ -49,27 +48,16 @@ QString CClassView::GLOBALROOTNAME = "Globals";
  *   -
  *-----------------------------------------------------------------*/
 CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
-  : QListView (parent, name)
+  : CTreeView (parent, name)
 {
+  // Create the popupmenus.
   initPopups();
-
-  // Initialize the object.
-  setRootIsDecorated( true );
-  addColumn( "classes" );
-  header()->hide();
-  setSorting(-1,false);
-
-  // Add callback for clicks in the listview.
-  connect(this,
-          SIGNAL(rightButtonPressed( QListViewItem *, const QPoint &, int)),
-          SLOT(slotRightButtonPressed( QListViewItem *,const QPoint &,int)));
 
   // Set the store.
   store = &cp.store;
 
-  // Initialize the treehandler.
-  treeH.setTree( this );
-  treeH.setStore( store );
+  setTreeHandler( new CClassTreeHandler() );
+  ((CClassTreeHandler *)treeH)->setStore( store );
 }
 
 /*------------------------------------------ CClassView::~CClassView()
@@ -83,6 +71,58 @@ CClassView::CClassView(QWidget* parent /* = 0 */,const char* name /* = 0 */)
  *-----------------------------------------------------------------*/
 CClassView::~CClassView()
 {
+}
+
+/*------------------------------------------ CClassView::initPopups()
+ * initPopups()
+ *   Initialze all popupmenus.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassView::initPopups()
+{
+  int id;
+  // Project popup
+  projectPopup.setTitle(i18n ("Project"));
+  projectPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()));
+  projectPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()));
+  id = projectPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
+  projectPopup.setItemEnabled(id, false );
+  projectPopup.insertSeparator();
+  projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()));
+
+  // Class popup
+  classPopup.setTitle( i18n("Class"));
+  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
+  classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
+  classPopup.insertSeparator();
+  classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()));
+  classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()));
+  classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()));
+  classPopup.insertSeparator();
+  id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
+  classPopup.setItemEnabled(id, false );
+  id = classPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
+  classPopup.setItemEnabled(id, false );
+
+  // Method popup
+  methodPopup.setTitle( i18n( "Method" ) );
+  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
+  methodPopup.insertSeparator();
+  id = methodPopup.insertItem( i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
+  methodPopup.setItemEnabled( id, false );
+
+  // Attribute popup
+  attributePopup.setTitle( i18n( "Attribute" ) );
+  attributePopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
+  attributePopup.insertSeparator();
+  id = attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
+  attributePopup.setItemEnabled( id, false );
 }
 
 /*********************************************************************
@@ -113,7 +153,7 @@ void CClassView::refresh( CProject *proj )
   debug( "CClassView::refresh( proj )" );
 
   // Reset the classparser and the view.
-  treeH.clear();
+  ((CClassTreeHandler *)treeH)->clear();
   cp.wipeout();
 
   projDir = proj->getProjectDir();
@@ -160,7 +200,7 @@ void CClassView::refresh()
 
   // Insert root item
   str = i18n( CLASSROOTNAME );
-  classes = treeH.addRoot( str, THFOLDER );
+  classes = treeH->addRoot( str, THFOLDER );
 
   list = store->getSortedClasslist();
 
@@ -169,18 +209,18 @@ void CClassView::refresh()
        aPC != NULL;
        aPC = list->next() )
   {
-    ci = treeH.addClass( aPC, classes );
+    ci = ((CClassTreeHandler *)treeH)->addClass( aPC, classes );
 
-    treeH.updateClass( aPC, ci );
-    treeH.setLastItem( ci );
+    ((CClassTreeHandler *)treeH)->updateClass( aPC, ci );
+    treeH->setLastItem( ci );
   }
 
   // Add the globals folder.
   str = i18n( GLOBALROOTNAME );
-  globals = treeH.addRoot( str, THFOLDER );
+  globals = treeH->addRoot( str, THFOLDER );
 
   // Add all global functions and variables
-  treeH.addGlobalFunctions( store->getGlobalFunctions(), globals );
+  ((CClassTreeHandler *)treeH)->addGlobalFunctions( store->getGlobalFunctions(), globals );
   //  addAttributes( store->gvIterator, globals );
 
   // Open the classes and globals folder.
@@ -204,140 +244,15 @@ void CClassView::refreshClassByName( const char *aName )
 
 /*********************************************************************
  *                                                                   *
- *                          PUBLIC QUERIES                           *
- *                                                                   *
- ********************************************************************/
-
-/*------------------------------------------ CClassView::indexType()
- * indexType()
- *   Return the type of the currently selected item.
- *
- * Parameters:
- *   aPC             Class that holds the data.
- *   path            Current path in the view.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-int CClassView::indexType()
-{
-  QListViewItem *item;
-  QListViewItem *parent;
-  CParsedClass *aClass;
-  int retVal = -1;
-
-  item = currentItem();
-
-  // Should add cases for global functions and variables.
-  if( strcmp( item->text(0), i18n( CLASSROOTNAME ) ) == 0 ) // Root
-    retVal = THFOLDER;
-  else if( cp.store.getClassByName( item->text(0) ) )
-    retVal = THCLASS;
-  else // Check for methods and attributes.
-  {
-    parent = item->parent();
-    aClass = cp.store.getClassByName( parent->text(0) );
-    if( aClass && aClass->getMethodByNameAndArg( item->text(0) ) )
-      retVal = METHOD;
-    else if( aClass && aClass->getAttributeByName( item->text(0) ) )
-      retVal = ATTRIBUTE;
-  }
-
-  // Check for globals if nothing else has worked.
-  if( retVal == -1 )
-    if( store->getGlobalFunctionByNameAndArg( item->text(0) ) != NULL )
-      retVal = THGLOBAL_FUNCTION;
-    else if( store->getGlobalVarByName( item->text(0) ) != NULL )
-      retVal = THGLOBAL_VARIABLE;
-
-  return retVal;
-}
-
-/*********************************************************************
- *                                                                   *
  *                          PRIVATE METHODS                          *
  *                                                                   *
  ********************************************************************/
 
-/*------------------------------------------ CClassView::initPopups()
- * initPopups()
- *   Initialze all popupmenus.
- *
- * Parameters:
- *   -
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void  CClassView::initPopups()
-{
-  int id;
-  // Project popup
-  projectPopup.setTitle(i18n ("Project"));
-  projectPopup.insertItem(i18n("New file..."), this, SLOT(slotFileNew()));
-  projectPopup.insertItem(i18n("New class..."), this, SLOT(slotClassNew()));
-  id = projectPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
-  projectPopup.setItemEnabled(id, false );
-  projectPopup.insertSeparator();
-  projectPopup.insertItem(i18n("Options..."), this, SLOT(slotProjectOptions()));
-
-  // Class popup
-  classPopup.setTitle( i18n("Class"));
-  classPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
-  classPopup.insertItem( i18n("Add member function..."), this, SLOT(slotMethodNew()));
-  classPopup.insertItem( i18n("Add member variable..."), this, SLOT(slotAttributeNew()));
-  classPopup.insertSeparator();
-  classPopup.insertItem( i18n("Parent classes..."), this, SLOT(slotClassBaseClasses()));
-  classPopup.insertItem( i18n("Child classes..."), this, SLOT(slotClassDerivedClasses()));
-  classPopup.insertItem( i18n("Classtool..."), this, SLOT(slotClassTool()));
-  classPopup.insertSeparator();
-  id = classPopup.insertItem( i18n("Delete class"), this, SLOT(slotClassDelete()));
-  classPopup.setItemEnabled(id, false );
-  id = classPopup.insertItem(i18n("New Folder..."), this, SLOT( slotFolderNew()));
-  classPopup.setItemEnabled(id, false );
-
-  // Method popup
-  methodPopup.setTitle( i18n( "Method" ) );
-  methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
-  methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
-  methodPopup.insertSeparator();
-  id = methodPopup.insertItem( i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
-  methodPopup.setItemEnabled( id, false );
-
-  // Attribute popup
-  attributePopup.setTitle( i18n( "Attribute" ) );
-  attributePopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
-  attributePopup.insertSeparator();
-  id = attributePopup.insertItem( i18n( "Delete attribute" ), this, SLOT(slotAttributeDelete()));
-  attributePopup.setItemEnabled( id, false );
-}
-
 /*********************************************************************
  *                                                                   *
- *                              EVENTS                               *
+ *                        PROTECTED QUERIES                          *
  *                                                                   *
  ********************************************************************/
-
-/*------------------------------------- CClassView::mousePressEvent()
- * mousePressEvent()
- *   Handles mousepressevents(duh!). If the left or right mouse 
- *   button is pressed the coordinate and the mousebutton is saved.
- *
- * Parameters:
- *   event           The event.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CClassView::mousePressEvent(QMouseEvent * event)
-{
-  // Save the mousebutton.
-  mouseBtn = event->button();
-
-  if( mouseBtn == LeftButton || mouseBtn == RightButton )
-    mousePos = event->pos();
-
-  QListView::mousePressEvent( event );
-}
 
 /*------------------------------------- CClassView::getCurrentClass()
  * getCurrentClass()
@@ -353,53 +268,53 @@ CParsedClass *CClassView::getCurrentClass()
   return store->getClassByName( currentItem()->text(0) );
 }
 
-/*********************************************************************
- *                                                                   *
- *                              SLOTS                                *
- *                                                                   *
- ********************************************************************/
 
-/*--------------------------------- CClassView::slotRightButtonPressed()
- * slotRightButtonPressed()
- *   Event when a user selects someting in the tree.
+/*--------------------------------- CClassView::getCurrentPopup()
+ * getCurrentPopup()
+ *   Get the current popupmenu.
  *
  * Parameters:
  *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CClassView::slotRightButtonPressed(QListViewItem *item,const QPoint &p,int i)
+KPopupMenu *CClassView::getCurrentPopup()
 {
-  KPopupMenu *popup;
+  KPopupMenu *popup = NULL;
 
-  if( item )
+  switch( treeH->itemType() )
   {
-    setSelected( item, true );
-
-    // If the right button is pressed we show a popupmenu.
-    switch( indexType() )
-    {
-      case THFOLDER:
+    case THFOLDER:
+      if( strcmp( currentItem()->text(0), i18n( CLASSROOTNAME ) ) == 0 )
         popup = &projectPopup;
-        break;
-      case THCLASS:
-        popup = &classPopup;
-        break;
-      case METHOD:
-        popup = &methodPopup;
-        break;
-      case ATTRIBUTE:
-        popup = &attributePopup;
-        break;
-      default:
-        popup = NULL;
-        break;
-    }
+      break;
+    case THCLASS:
+      popup = &classPopup;
+      break;
+    case THPUBLIC_METHOD:
+    case THPROTECTED_METHOD:
+    case THPRIVATE_METHOD:
+    case THGLOBAL_FUNCTION:
+      popup = &methodPopup;
+      break;
+    case THPUBLIC_ATTR:
+    case THPROTECTED_ATTR:
+    case THPRIVATE_ATTR:
+    case THGLOBAL_VARIABLE:
+      popup = &attributePopup;
+      break;
+    default:
+      break;
   }
 
-  if( popup )
-    popup->popup( this->mapToGlobal( mousePos ) );
+  return popup;
 }
+
+/*********************************************************************
+ *                                                                   *
+ *                              SLOTS                                *
+ *                                                                   *
+ ********************************************************************/
 
 void CClassView::slotProjectOptions()
 {

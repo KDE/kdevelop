@@ -24,187 +24,188 @@
 #include <kprocess.h>
 #include "cgrouppropertiesdlg.h"
 #include "debug.h"
-#include <qheader.h>
+#include <assert.h>
 
-CLogFileView::CLogFileView(QWidget*parent,const char* name) : QListView(parent,name){
+/*********************************************************************
+ *                                                                   *
+ *                     CREATION RELATED METHODS                      *
+ *                                                                   *
+ ********************************************************************/
+
+CLogFileView::CLogFileView(QWidget*parent,const char* name)
+  : CTreeView(parent,name)
+{
+  // Create the popupmenus.
+  initPopups();
  
-  icon_loader = KApplication::getKApplication()->getIconLoader();
-  left_button = true;
-  right_button = false;
-  file_pop = new KPopupMenu();
-  file_pop->setTitle("File:");
-  file_pop->insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
-  file_pop->insertItem(i18n("Remove File"),this,SLOT(slotFileRemove()));
-  file_pop->insertItem(i18n("Delete File..."),this,SLOT(slotFileDelete()));
-  file_pop->insertSeparator();
-  file_pop->insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
-  group_pop = new KPopupMenu();
-  
-  group_pop->setTitle("LFV-Group:");
-  group_pop->insertItem(i18n("New LFV-Group..."),this,SLOT(slotNewGroup()));
-  group_pop->insertSeparator();
-  group_pop->insertItem(i18n("Remove Group"),this,SLOT(slotGroupRemove()));
-  group_pop->insertSeparator();
-  group_pop->insertItem(i18n("Properties..."),this,SLOT(slotGroupProp()));
-
-  project_pop = new KPopupMenu();
-  
-  project_pop->setTitle("Project:");
-  project_pop->insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
-  project_pop->insertItem(i18n("New Class..."),this,SLOT(slotNewClass()));
-  project_pop->insertItem(i18n("New LFV-Group..."),this,SLOT(slotNewGroup()));
-  
-  connect(this,SIGNAL(rightButtonPressed( QListViewItem *, const QPoint &, int )),SLOT(slotRightButtonPressed( QListViewItem *,const QPoint &,int)));
-  connect(this,SIGNAL(selectionChanged(QListViewItem*)),SLOT(slotSelectionChanged( QListViewItem *)));
-  setRootIsDecorated(true);
-  addColumn("JK");
-  header()->hide();
-  
+  connect(this,
+          SIGNAL(selectionChanged(QListViewItem*)),
+          SLOT(slotSelectionChanged(QListViewItem *)));  
 }
 
 CLogFileView::~CLogFileView(){
 }
 
-void CLogFileView::refresh(CProject* prj){ 
-  clear();
-  if (!prj->valid){
-    return; // no correct project
-  }
-  setSorting(-1,false);
+/*---------------------------------------- CLogFileView::initPopups()
+ * initPopups()
+ *   Initialze all popupmenus.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CLogFileView::initPopups()
+{
+  file_pop.setTitle("File");
+  file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
+  file_pop.insertItem(i18n("Remove File"),this,SLOT(slotFileRemove()));
+  file_pop.insertItem(i18n("Delete File..."),this,SLOT(slotFileDelete()));
+  file_pop.insertSeparator();
+  file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
+  
+  group_pop.setTitle("Group");
+  group_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()));
+  group_pop.insertSeparator();
+  group_pop.insertItem(i18n("Remove Group"),this,SLOT(slotGroupRemove()));
+  group_pop.insertSeparator();
+  group_pop.insertItem(i18n("Properties..."),this,SLOT(slotGroupProp()));
 
-  project = prj;
-  QString filter_str;
-  QString filename;
+  project_pop.setTitle("Project");
+  project_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
+  project_pop.insertItem(i18n("New Class..."),this,SLOT(slotNewClass()));
+  project_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()));
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                          PUBLIC METHODS                           *
+ *                                                                   *
+ ********************************************************************/
+
+/*-------------------------------------------- CLogFileView::refresh()
+ * refresh()
+ *   Add all files in the project.
+ *
+ * Parameters:
+ *   proj          The project specification.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CLogFileView::refresh(CProject* prj)
+{
+  assert( prj != NULL );
+
+  QListViewItem *lastGrp;
+  QListViewItem *top_item;
   QStrList files;
   QStrList groups;
   QStrList filters;
   QStrList temp_files;
   QRegExp filter_exp("",true,true);// set Wildcard
-  QPixmap folder_pix = icon_loader->loadMiniIcon("folder.xpm");
-  QPixmap source_pix = icon_loader->loadMiniIcon("c_src.xpm");
-  QPixmap project_pix = icon_loader->loadMiniIcon("kwm.xpm");
-  QString temp_str;
-  QString* project_str = new QString;
-  QString* group_str = new QString;
-  
-  *project_str = prj->getProjectName();
+  char *group_str;
+  char *filter_str;
+  char *temp_str;
+  QString filename;
 
-  prj->getAllFiles(files);
-  prj->getLFVGroups(groups);
-  //  for(filename=files.first();filename!=0;filename = files.next())  { 
-  //cerr << filename << ":" << endl;
-  //}
-  
-  QListViewItem* top_item= new QListViewItem(this,prj->getProjectName());
-  top_item->setPixmap(0,folder_pix);
+  // Remove all entries.
+  treeH->clear();
 
-  QListViewItem* group_item;
-  QListViewItem* prev_group_item=0;
-  QListViewItem* item;
-  QListViewItem* prev_item=0;
-
-  for(*group_str=groups.first();(*group_str)!=0;*group_str=groups.next()){ 
-      // every group
-      if(prev_group_item ==0){
-	  group_item = new QListViewItem(top_item,*group_str);
-	  group_item->setPixmap(0,folder_pix);
-	  prev_group_item = group_item;
-	  prev_item=0;
-      }
-      else{
-	  group_item = new QListViewItem(top_item,prev_group_item,*group_str);
-	  group_item->setPixmap(0,folder_pix);
-	  prev_group_item = group_item;
-	  prev_item=0;
-      }
-  
-      prj->getFilters(*group_str,filters);
-      for(filter_str=filters.first();filter_str!=0;filter_str=filters.next()){
-	  // every filter
-	  filter_exp=filter_str;
-	  //      cerr << "FILTER:"  << filter_str;
-	  for(filename=files.first();filename!=0;filename = files.next())  { 
-	      // check every file
-	      if(filename.find(filter_exp) != -1){ // if found
-		  if(prev_item==0){
-		      item = new QListViewItem(group_item,filename);
-		      item->setPixmap(0,source_pix);
-		      prev_item = item;
-		  }
-		  else{
-		      item = new QListViewItem(group_item,prev_item,filename);
-		      item->setPixmap(0,source_pix);
-		      prev_item = item;
-		  }
-		  temp_files.append(filename);
-		  //	  cerr << "FILENAME:"  << filename << endl;
-	      }
-	  }
-	  // remove the saved files from the filelist
-	  for(temp_str = temp_files.first();temp_str!=0;temp_str=temp_files.next()){
-	      files.remove(temp_str);
-	  }
-	  temp_files.clear();
-      }
-      setOpen ( group_item,true );
+  // Not a valid project.
+  if (!prj->valid)
+  {
+    return;
   }
-  setOpen(top_item,true);
+
+  project = prj;
+  
+  // Add the root item.
+  top_item = treeH->addRoot( prj->getProjectName(), THPROJECT );
+
+  prj->getLFVGroups(groups);
+  prj->getAllFiles(files);
+  for(group_str = groups.first();
+      group_str != NULL;
+      group_str = groups.next())
+  { 
+    // Add the group item.
+    lastGrp = treeH->addItem( group_str, THFOLDER, top_item );
+
+    // Add files belonging to the group.
+    prj->getFilters( group_str, filters );
+    for( filter_str = filters.first();
+         filter_str != 0;
+         filter_str=filters.next())
+    {
+      filter_exp = filter_str;
+
+      // Check every file
+      for( filename = files.first();
+           !filename.isEmpty();
+           filename = files.next())
+      { 
+        // If found
+        if( filename.find( filter_exp ) != -1)
+        {
+          treeH->addItem( filename, THC_FILE, lastGrp );
+          temp_files.append(filename);
+        }
+      }
+
+      // Remove the saved files from the filelist
+      for(temp_str = temp_files.first();
+          temp_str != NULL;
+          temp_str = temp_files.next())
+      {
+        files.remove(temp_str);
+      }
+
+      temp_files.clear();
+    }
+
+    treeH->setLastItem( lastGrp );
+    setOpen( lastGrp, true );
+  }
+
+  setOpen(top_item, true);
 }
-void CLogFileView::slotSelectionChanged( QListViewItem* item){
-    if(!(isFile(item))) return; // it is not file
-    if(!leftButton()) return; // right button: return
+
+/** Get the current popupmenu. */
+KPopupMenu *CLogFileView::getCurrentPopup()
+{
+  KPopupMenu *popup = NULL;
+
+  switch( treeH->itemType() )
+  {
+    case THPROJECT:
+      popup = &project_pop;
+      break;
+    case THFOLDER:
+      popup = &group_pop;
+      break;
+    case THC_FILE:
+      popup = &file_pop;
+      break;
+    default:
+      break;
+  }
+
+  return popup;
+}
+
+/*********************************************************************
+ *                                                                   *
+ *                              SLOTS                                *
+ *                                                                   *
+ ********************************************************************/
+
+void CLogFileView::slotSelectionChanged( QListViewItem* item)
+{
+  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE )
     emit logFileTreeSelected(project->getProjectDir() + item->text(0));
 }
 
-void CLogFileView::mousePressEvent(QMouseEvent* event){
-    if(event->button() == RightButton){    
-	left_button = false;
-	right_button = true;
-    }
-    if(event->button() == LeftButton){
-	left_button = true;
-	right_button = false;
-    }
-    mouse_pos.setX(event->pos().x());
-    mouse_pos.setY(event->pos().y());
-    QListView::mousePressEvent(event); 
-}
-
-bool CLogFileView::isGroup(QListViewItem* current){
-    if(current == 0) return false;
-    QListViewItem* parent = current->parent();
-    if(parent == 0) return false;
-    QListViewItem* pparent = parent->parent();
-    if(pparent == 0) return true;  
-    return false;
-}
-bool CLogFileView::isFile(QListViewItem* current){
-    if(current == 0) return false;
-    QListViewItem* parent = current->parent();
-    if(parent == 0) return false;
-    QListViewItem* pparent = parent->parent();
-    if(pparent == 0) return false;
-    return true;
-}
-bool CLogFileView::leftButton(){
-  return left_button;
-}
-bool CLogFileView::rightButton(){
-  return right_button;
-}
-void CLogFileView::slotRightButtonPressed( QListViewItem * item ,const QPoint &,int){
-    if(isFile(item)){
-	file_pop->popup(this->mapToGlobal(mouse_pos));
-    }
-    else if(isGroup(item)){
-	group_pop->popup(this->mapToGlobal(mouse_pos));
-    } 
-    else{
-	project_pop->popup(this->mapToGlobal(mouse_pos));
-    }
-    setCurrentItem(item);
-    setSelected(item,true);
-}
 void CLogFileView::slotNewClass(){
   emit selectedNewClass();
 }
@@ -315,15 +316,3 @@ void CLogFileView::split(QString str,QStrList& filters){
   //   }
   return ;
 }
-
-
-
-
-
-
-
-
-
-
-
-

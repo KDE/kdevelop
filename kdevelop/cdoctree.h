@@ -23,43 +23,48 @@
 #include <kapp.h>
 #include "cproject.h"
 #include <kpopmenu.h>
-#include <qlistview.h>
+#include "ctreeview.h"
 
 
 /** the documentation tree (manual,tutorial,KDE-libs...)
   *@author Sandy Meier
   */
 
-class CDocTree : public QListView {
+class CDocTree : public CTreeView 
+{
   Q_OBJECT 
 public: 
   /** construtor */
   CDocTree(QWidget*parent=0,const char* name=0, KConfig* config=0); 
   /** destructor */
   ~CDocTree();
+
   /** starts the refresh */
   void refresh(CProject* prj);
-  
-protected:
-  void  mousePressEvent(QMouseEvent* event);
-  
-  KIconLoader* icon_loader;
-  KPopupMenu*  others_pop;
-  KPopupMenu* doc_pop;
-  bool left_button;
-  bool right_button;
-  QPoint mouse_pos; // the position at the last mousepress-event
-  KConfig* config_kdevelop;
-  CProject* project;
+
+protected: // Implementations of virtual methods.
+
+  /** Initialize popupmenus. */
+  void initPopups();
+
+  /** Get the current popupmenu. */
+  KPopupMenu *getCurrentPopup();
 
  protected slots:
- void slotAddDocumentation();
+  void slotAddDocumentation();
   void slotRemoveDocumentation();
   void slotDocumentationProp();
-  void slotRightButtonPressed( QListViewItem *,const QPoint &,int);
   void slotSelectionChanged(QListViewItem* item);
 
  signals:
-void  fileSelected(QString url_file);
+  void fileSelected(QString url_file);
+
+private: // Popupmenus
+  KPopupMenu others_pop;
+  KPopupMenu doc_pop;
+
+private: // Private attributes
+  KConfig* config_kdevelop;
+  CProject* project;
 };
 #endif
