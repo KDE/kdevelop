@@ -237,6 +237,28 @@ void QextMdiMainFrm::setMinimumSize( int minw, int minh)
    DockMainWindow::setMinimumSize( minw, minh);
 }
 
+//================ wrapper ===============//
+
+QextMdiChildView* QextMdiMainFrm::createWrapper(QWidget *view, const QString& name, const QString& shortName)
+{
+  Q_ASSERT( view ); // if this assert fails, then some part didn't return a widget. Fix the part ;)
+
+  QextMdiChildView* pMDICover = new QextMdiChildView(name);
+  QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
+  view->reparent(pMDICover, QPoint(0,0));
+  pLayout->addWidget(view);
+  pMDICover->setName(name);
+  pMDICover->setTabCaption(shortName);
+  pMDICover->setCaption(name);
+
+  const QPixmap* wndIcon = view->icon();
+  if (wndIcon) {
+      pMDICover->setIcon(*wndIcon);
+  }
+
+  return pMDICover;
+}
+
 //================ addWindow ===============//
 
 void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)

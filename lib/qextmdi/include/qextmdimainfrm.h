@@ -404,6 +404,10 @@ public:
    void findRootDockWidgets(QPtrList<KDockWidget>* pRootDockWidgetList, QValueList<QRect>* pPositionList);
 
 public slots:
+   /** addWindow demands a QextMdiChildView. This method wraps every QWidget in such an object and
+       this way you can every widget put under MDI control.
+    */
+   QextMdiChildView* createWrapper(QWidget *view, const QString& name, const QString& shortName);
    /**
     * One of the most important methods at all!
     * Adds a QextMdiChildView to the MDI system. The main frame takes it under control.
