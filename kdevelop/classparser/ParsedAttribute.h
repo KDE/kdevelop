@@ -85,17 +85,16 @@ public: // Public attributes
 public: // Public methods to set attribute values
 
   /** Set the name. */
-  void setName( QString &aName );
   void setName( const char *aName );
 
   /** Set the type. */
-  void setType( QString &aType );
+  void setType( const char *aType );
 
   /** Set the class this attribute belongs to. */
-  void setDeclaredInClass( QString &aName );
+  void setDeclaredInClass( const char *aName );
 
   /** Set the file this attribute belongs to. */
-  void setDeclaredInFile( QString &aName );
+  void setDeclaredInFile( const char *aName );
 
   /** Set the line. */
   void setDefinedOnLine( int aLine );
@@ -113,7 +112,7 @@ public: // Public methods to set attribute values
   void setExport( int aType );
 
   /** Set the comment. */
-  void setComment( QString &aComment );
+  void setComment( const char *aComment );
 
 public: // Public attributes
 

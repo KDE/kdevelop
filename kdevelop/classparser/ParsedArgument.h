@@ -57,11 +57,10 @@ public: // Public attributes
 
 public: // Public methods to set attribute values
   /** Set the argument name */
-  void setName( QString &aName );
   void setName( const char *aName );
 
   /** Set the type */
-  void setType( QString &aType );
+  void setType( const char *aType );
 
 public: // Public attributes
   

@@ -91,23 +91,6 @@ CParsedClass::~CParsedClass()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedClass::setName( QString &aName )
-{
-  assert( aName != NULL && !aName.isEmpty() );
-
-  name = aName;
-}
-
-/*------------------------------------------- CParsedClass::setName()
- * setName()
- *   Set the name of the class.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
 void CParsedClass::setName( const char *aName )
 {
   assert( aName != NULL && strlen( aName ) > 0 );
@@ -141,9 +124,9 @@ void CParsedClass::setDefinedOnLine( int aLine )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedClass::setHFilename( QString &aName )
+void CParsedClass::setHFilename( const char *aName )
 {
-  assert( aName != NULL && !aName.isEmpty() );
+  assert( aName != NULL && strlen( aName ) > 0 );
 
   hFilename = aName;
 }
@@ -158,9 +141,9 @@ void CParsedClass::setHFilename( QString &aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedClass::setImplFilename( QString &aName )
+void CParsedClass::setImplFilename( const char *aName )
 {
-  assert( aName != NULL && !aName.isEmpty() );
+  assert( aName != NULL && strlen( aName ) > 0 );
 
   implFilename = aName;
 }

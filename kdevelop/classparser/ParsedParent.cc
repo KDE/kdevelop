@@ -80,23 +80,6 @@ CParsedParent::~CParsedParent()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedParent::setName( QString &aName )
-{
-  assert( aName != NULL && !aName.isEmpty() );
-
-  name = aName;
-}
-
-/*------------------------------------------- CParsedClass::setName()
- * setName()
- *   Set the name of the parent.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
 void CParsedParent::setName( const char *aName )
 {
   assert( aName != NULL && strlen( aName ) > 0 );

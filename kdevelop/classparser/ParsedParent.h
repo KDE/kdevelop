@@ -58,8 +58,8 @@ public: // Public attributes
   QString name;
 
 public: // Public methods to set attribute values
+
   /** Set parent the parent name */
-  void setName( QString &aName );
   void setName( const char *aName );
 
   /** Set the export status */

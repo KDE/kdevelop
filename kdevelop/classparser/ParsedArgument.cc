@@ -80,23 +80,6 @@ CParsedArgument::~CParsedArgument()
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedArgument::setName( QString &aName )
-{
-  assert( aName != NULL && !aName.isEmpty() );
-
-  name = aName;
-}
-
-/*--------------------------------------- CParsedArgument::setName()
- * setName()
- *   Set the name of the argument.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
 void CParsedArgument::setName( const char *aName )
 {
   assert( aName != NULL && strlen( aName ) > 0 );
@@ -114,9 +97,9 @@ void CParsedArgument::setName( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedArgument::setType( QString &aType )
+void CParsedArgument::setType( const char *aType )
 {
-  assert( aType != NULL && !aType.isEmpty() );
+  assert( aType != NULL && strlen( aType ) > 0 );
 
   type = aType;
 }

@@ -76,23 +76,6 @@ CParsedAttribute::~CParsedAttribute()
 
 /*--------------------------------------- CParsedAttribute::setName()
  * setName()
- *   Set the name of the class.
- *
- * Parameters:
- *   aName            The new name.
- *
- * Returns:
- *   -
- *-----------------------------------------------------------------*/
-void CParsedAttribute::setName( QString &aName )
-{
-  assert( aName != NULL && !aName.isEmpty() );
-
-  name = aName;
-}
-
-/*--------------------------------------- CParsedAttribute::setName()
- * setName()
  *   Set the name of the attribute.
  *
  * Parameters:
@@ -118,7 +101,7 @@ void CParsedAttribute::setName( const char *aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedAttribute::setDeclaredInClass( QString &aName )
+void CParsedAttribute::setDeclaredInClass( const char *aName )
 {
   assert( aName != NULL && strlen( aName ) > 0 );
 
@@ -136,7 +119,7 @@ void CParsedAttribute::setDeclaredInClass( QString &aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedAttribute::setDeclaredInFile( QString &aName )
+void CParsedAttribute::setDeclaredInFile( const char *aName )
 {
   assert( aName != NULL && strlen( aName ) > 0 );
 
@@ -153,7 +136,7 @@ void CParsedAttribute::setDeclaredInFile( QString &aName )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedAttribute::setType( QString &aType )
+void CParsedAttribute::setType( const char *aType )
 {
   assert( aType != NULL );
 
@@ -249,9 +232,9 @@ void CParsedAttribute::setExport( int aExport )
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-void CParsedAttribute::setComment( QString &aComment )
+void CParsedAttribute::setComment( const char *aComment )
 {
-  assert( aComment != NULL && !aComment.isEmpty() );
+  assert( aComment != NULL );
 
   comment = aComment;
 }

@@ -102,17 +102,16 @@ public: // Public attributes
 public: // Metods to set attribute values
 
   /** Set the classname. */
-  void setName( QString &aName );
   void setName( const char *aName );
 
   /** Set the line. */
   void setDefinedOnLine( int aLine );
 
   /** Set the .h filename. */
-  void setHFilename( QString &aName );
+  void setHFilename( const char *aName );
   
   /** Set the .cc/.cpp filename. */
-  void setImplFilename( QString &aName );
+  void setImplFilename( const char *aName );
 
   /** Add a parent. */
   void addParent( CParsedParent *aParent );
