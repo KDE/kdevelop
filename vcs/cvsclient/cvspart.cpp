@@ -330,6 +330,12 @@ void CvsPart::createNewProject( const QString& dirName )
 
 void CvsPart::contextMenu( QPopupMenu *popup, const Context *context )
 {
+
+// If the current project doesn't support CVS, we don't
+// want to confuse the user with a CVS popup menu.
+if(!isValidDirectory(project()->projectDirectory()))
+  return;
+
     if (context->hasType( Context::FileContext ))
     {
         kdDebug(9000) << "CvsPart::contextMenu()" << endl;
@@ -1085,10 +1091,11 @@ void CvsPart::slotProjectClosed()
 
 bool CvsPart::isValidDirectory( const QString &dirPath ) const
 {
-    QDir cvsdir( dirPath );
-    QString entriesFileName = dirPath + QDir::separator() + "Entries";
-    QString rootFileName = dirPath + QDir::separator()  + "Entries";
-    QString repoFileName = dirPath + QDir::separator()  + "Repository";
+    QString cvs = "/CVS/";
+    QDir cvsdir( dirPath + cvs );
+    QString entriesFileName = dirPath + cvs + "Entries";
+    QString rootFileName = dirPath + cvs + "Root";
+    QString repoFileName = dirPath + cvs + "Repository";
 
     return cvsdir.exists() &&
         QFile::exists( entriesFileName ) &&
