@@ -244,9 +244,6 @@ void DoxygenConfigWidget::loadFile()
 
 void DoxygenConfigWidget::saveFile()
 {
-    if (!m_hasChanged)
-        return;
-    
     QFile f(m_fileName);
     if (!f.open(IO_WriteOnly)) {
         KMessageBox::information(0, i18n("Cannot write Doxyfile."));
@@ -260,7 +257,8 @@ void DoxygenConfigWidget::saveFile()
 
 void DoxygenConfigWidget::accept()
 {
-    saveFile();
+    if (m_hasChanged)
+        saveFile();
 }
 
 #include "doxygenconfigwidget.moc"
