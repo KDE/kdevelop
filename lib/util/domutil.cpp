@@ -189,3 +189,94 @@ void DomUtil::writePairListEntry(QDomDocument &doc, const QString &path, const Q
         el.appendChild(subEl);
     }
 }
+
+DomPath DomUtil::resolvPathStringExt(const QString pathstring)
+{
+    // parse path
+    unsigned int i;
+    QStringList pathParts = QStringList::split('/',pathstring);
+    DomPath dompath;
+    for (i=0; i<pathParts.count(); i++)
+    {
+      QStringList pathElemParts = QStringList::split('|',pathParts[i],TRUE);
+      DomPathElement dompathelem;
+      dompathelem.tagName = pathElemParts[0].simplifyWhiteSpace();
+      if (pathElemParts.count()>1)
+      {
+        // handle attributes
+        QStringList attrParts = QStringList::split(';',pathElemParts[1]);
+        for (unsigned int j=0; j<attrParts.count(); j++)
+        {
+          QStringList attribSet = QStringList::split('=',attrParts[j]);
+          if (attribSet.count()<2)
+            continue;
+          DomAttribute domattribute;
+          domattribute.name = attribSet[0].simplifyWhiteSpace();
+          domattribute.value = attribSet[1].simplifyWhiteSpace();
+          dompathelem.attribute.append(domattribute);
+        }
+      }
+      if (pathElemParts.count()>2)
+	dompathelem.matchNumber = pathElemParts[2].toInt();
+      else
+	dompathelem.matchNumber = 0; // or else the first
+      dompath.append(dompathelem);
+    }
+    return dompath;
+}
+
+
+#define rightchild !wrongchild
+
+QDomElement DomUtil::elementByPathExt(QDomDocument &doc, const QString &pathstring)
+{
+  DomPath dompath = resolvPathStringExt(pathstring);
+  QDomElement elem = doc.documentElement();
+  QDomNodeList children;
+  QDomElement nextElem = elem;
+  for (unsigned int j=0; j<dompath.count(); j++)
+  {
+    children = nextElem.childNodes();
+    DomPathElement dompathelement= dompath[j];
+    bool wrongchild = false;
+    int matchCount = 0;
+    for (unsigned int i=0; i<children.count(); i++)
+    {
+      wrongchild = false;
+      QDomElement child = children.item(i).toElement();
+      QString tag = child.tagName();
+      tag = dompathelement.tagName;
+      if (child.tagName() == dompathelement.tagName)
+      {
+        for (unsigned int k=0; k<dompathelement.attribute.count(); k++)
+        {
+          DomAttribute domattribute = dompathelement.attribute[k];
+          QDomAttr domattr = child.attributeNode(domattribute.name);
+          if (domattr.isNull() ||
+	      domattr.value() != domattribute.value)
+          {
+            wrongchild = true;
+            break;
+          }
+        }      
+      }
+      else
+        wrongchild=true;
+      if (rightchild)
+      {	
+        if (dompathelement.matchNumber == matchCount++)
+        {
+          nextElem = child;
+          break;
+        }
+      }
+    }
+    if (wrongchild)
+    {
+      QDomElement nullDummy;
+      nullDummy.clear();
+      return nullDummy;
+    }
+  }
+  return nextElem;
+}

@@ -18,6 +18,21 @@
 #include <qvaluelist.h>
 
 
+struct DomAttribute
+{
+  QString name;
+  QString value;
+};
+
+struct DomPathElement
+{
+  QString tagName;
+  QValueList<DomAttribute> attribute;
+  int matchNumber;  // for use when more than one element matches the path
+};
+
+typedef QValueList<DomPathElement> DomPath;
+
 /**
  * Utility class for conveniently accessing data in a DOM tree.
  */
@@ -118,6 +133,45 @@ public:
     static void writePairListEntry(QDomDocument &doc, const QString &path, const QString &tag,
                                    const QString &firstAttr, const QString &secondAttr,
                                    const PairList &value);
+
+    /**
+     * Resolves an extended path
+     * Extended path format:
+     * pathpart: tag[|attr1=value[;attr2=value;..][|matchNumber]]
+     * where matchNumber is zero-based
+     * path: pathpart[/pathpart/..]
+     */
+    static DomPath resolvPathStringExt(const QString pathstring);
+    
+    /**
+     * Retrieve an element specified with extended path
+     * examples: 
+     * 1: "widget|class=QDialog/property|name=geometry"
+     *    or "widget|class=QDialog/property||1"
+     * 2: "widget/property|name=caption/string"
+     *    or "widget/property||2/string"
+     * 
+     *
+     * <widget class="QDialog">
+     *    <property name="name">
+     *        <cstring>KdevFormName</cstring>
+     *    </property>
+     *    <property name="geometry">       <-- 1. reaches this node
+     *        <rect>
+     *            <x>0</x>
+     *            <y>0</y>
+     *            <width>600</width>
+     *            <height>480</height>
+     *        </rect>
+     *    </property>
+     *    <property name="caption">
+     *        <string>KdevFormCaption</string>     <-- 2. reaches this node
+     *    </property>
+     * </widget>
+     */    
+    static QDomElement elementByPathExt(QDomDocument &doc, const QString &pathstring);
+
+    
 private:
     static QString readEntryAux(const QDomDocument &doc, const QString &path);
 };
