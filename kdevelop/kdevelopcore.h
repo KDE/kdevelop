@@ -18,16 +18,24 @@ public:
     KDevelopCore(KDevelop *gui);
     ~KDevelopCore();
 
-    void setupKDevelop();
-    
+    void loadInitialComponents();
+
 private:
     void initActions();
     void initComponent(KDevComponent *component);
-    void loadInitialComponents();
     void loadVersionControl(const QString &name);
     void unloadVersionControl();
 
 private slots:
+    // Handling of actions
+    void slotFilePrint();
+    void slotOptionsKDevelopSetup();
+
+    // Handling of component requests
+    void addFileToRepository(const QString &filename);
+    void removeFileFromRepository(const QString &filename);
+    void commitFileToRepository(const QString &filename);
+    void updateFileFromRepository(const QString &filename);
     void executeCommand(const QString &command);
     void gotoSourceFile(const QString &filename, int lineno);
     void gotoDocumentationFile(const QString &filename);

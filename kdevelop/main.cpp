@@ -91,11 +91,7 @@ int main(int argc, char* argv[])
 //      delete install;
 //    }
   KDevelop *kdevelop = new KDevelop("kdevelop gui");
-//    CKDevelop* kdevelop = new CKDevelop();
-//    if(bInstall){
-//      kdevelop->refreshTrees();  // this is because of the new documentation
-//    }
-    kdevelop->show();
+  kdevelop->show();
 
 //
 //    if (!args->isSet("setup"))

@@ -1,3 +1,8 @@
+2000-07-07  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Added version-control related signals to KDevComponent
+	* KDevelopCore can now define actions itself
+	* Minor fixes
+
 2000-07-06  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Zeroth version of a version control interface
 	* Some cleanups in KDevComponent interface and KDevelop

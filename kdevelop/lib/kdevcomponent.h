@@ -91,6 +91,11 @@ public:
 
 signals:
     void embedWidget(QWidget *, KDevComponent::Role, const QString&, const QString&);
+    void addFileToRepository(const QString&);
+    void removeFileFromRepository(const QString&);
+    void commitFileToRepository(const QString&);
+    void updateFileFromRepository(const QString&);
+    
     void executeCommand(const QString &);
     void gotoSourceFile(const QString &, int);
     void gotoDocumentationFile(const QString &);

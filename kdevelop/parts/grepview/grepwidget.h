@@ -27,21 +27,21 @@ class GrepView;
 class GrepWidget : public ProcessView
 {
     Q_OBJECT
+    
 public:
     GrepWidget(GrepView *part);
     ~GrepWidget();
+
+    void projectOpened(CProject *prj);
 
 public slots:
     void showDialog();
     void showDialogWithPattern(QString pattern);
 
-    void projectOpened(CProject *prj);
-
 private slots:
     void searchActivated();
     void lineHighlighted(int line);
 
-    
 private:
     virtual void insertStdoutLine(const QString &line);
 

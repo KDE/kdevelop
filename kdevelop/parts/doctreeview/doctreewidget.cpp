@@ -589,19 +589,6 @@ void DocTreeWidget::docPathChanged()
 }
 
 
-#if 0
-void DocTreeWidget::createConfigWidget(CustomizeDialog *parent)
-{
-    QFrame *frame = parent->addPage(i18n("Documentation Tree"));
-    QBoxLayout *vbox = new QVBoxLayout(frame);
-    DocTreeWidgetConfigWidget *w =
-        new DocTreeWidgetConfigWidget(this, frame, "doctreeview config widget");
-    vbox->addWidget(w);
-    connect(parent, SIGNAL(okClicked()), w, SLOT(accept()));
-}
-#endif
-
-
 void DocTreeWidget::projectOpened(CProject *prj)
 {
     folder_project->setProject(prj);

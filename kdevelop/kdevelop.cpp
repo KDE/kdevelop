@@ -42,13 +42,12 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
 {
   initActions();
   initHelp();
-  //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
   setXMLFile( "kdevelopui.rc" );
 
-  createGUI( 0L );
-
-  m_kdevelopcore = new KDevelopCore(this);
+  KDevelopCore *core = new KDevelopCore(this);
+  createGUI(0);
+  core->loadInitialComponents();
 }
 
 
@@ -72,7 +71,6 @@ void KDevelop::initActions(){
   m_paFileSaveAs = KStdAction::saveAs( this, SLOT( slotFileSaveAs() ), actionCollection(), "file_save_as" );
   m_paFileSaveAll = new KAction( i18n("Save A&ll"), "save_all", 0, this, SLOT( slotFileSaveAll() ), actionCollection(), "file_save_all");
   // Separator
-  m_paFilePrint = KStdAction::print( this, SLOT( slotFilePrint() ), actionCollection(),  "file_print");
   m_paFileQuit = KStdAction::quit( this, SLOT( slotFileQuit() ), actionCollection(),  "file_quit");
 
   /////////////////////////////////////
@@ -258,10 +256,6 @@ void KDevelop::initActions(){
   // Configure Printer submenu
   m_paOptionsConfigureEnscript = new KAction( i18n("&Enscript..."), 0, this, SLOT( slotOptionsConfigureEnscript() ),
 					      actionCollection(), "options_configure_printer_enscript");
-  // Separator
-  m_paOptionsKDevelopSetup = new KAction( i18n("&KDevelop Setup..."), 0, this, SLOT( slotOptionsKDevelopSetup() ),
-					  actionCollection(), "options_kdevelop_setup");
-
   m_paOptionsEditToolbars = KStdAction::configureToolbars(this, SLOT(slotOptionsEditToolbars()), actionCollection(),"options_configure_toolbars");
 
   /////////////////////////////////////
@@ -372,19 +366,11 @@ void KDevelop::initHelp(){
                                   "file saving by enabling autosave in the KDevelop "
                                   "Setup together with the desired saving intervall.") );
 
-  m_paFilePrint->setShortText( i18n("Prints the current document") );
-  m_paFilePrint->setWhatsThis( i18n("Print\n\n"
-                                  "Opens the printing dialog. There, you can "
-                                  "configure which printing program you wish "
-                                  "to use, either a2ps or ensrcipt, and print "
-                                  "your project files.") );
-
   m_paFileQuit->setShortText( i18n("Exits KDevelop") );
   m_paFileQuit->setWhatsThis( i18n("Quit\n\n"
                                   "Closes your current KDevelop session. You will be asked "
                                   "to save the contents of currently opened and changed files "
                                   "before KDevelop exits.") );
-
 
   m_paEditUndo->setShortText( i18n("Reverts the last editing step") );
   m_paEditUndo->setWhatsThis( i18n("Undo\n\n"
@@ -652,9 +638,6 @@ void KDevelop::initHelp(){
   m_paOptionsConfigureEnscript->setShortText( i18n("Configures the printer to use enscript") );
 //,  m_paOptionsConfigureEnscript->setWhatsThis(  );
 
-  m_paOptionsKDevelopSetup->setShortText( i18n("Configures KDevelop") );
-//  m_paOptionsKDevelopSetup->setWhatsThis(  );
-
   // Bookmark Actions
   m_paBookmarksToggle->setShortText( i18n("Toggle a bookmark at the current cursor position") );
 //  m_paBookmarksToggle->setWhatsThis(  );
@@ -776,35 +759,10 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
     }
 }
 
-void KDevelop::slotFilePrint()
-{
-    KLibFactory *factory = KLibLoader::self()->factory("libkdevprintplugin");
-    if (!factory)
-        return;
-
-    QStringList args;
-    args << "/vmlinuz"; // temporary ;-)
-    QObject *obj = factory->create(this, "print dialog", "KDevPrintDialog", args);
-    if (!obj->inherits("QDialog")) {
-        kdDebug(9000) << "Print plugin doesn't provide a dialog" << endl;
-        return;
-    }
-
-    QDialog *dlg = (QDialog *)obj;
-    dlg->exec();
-    delete dlg;
-}
-
 void KDevelop::slotProjectNew(){
   NewProjectDlg* dlg = new NewProjectDlg();
   dlg->show();
   delete dlg;
-}
-
-
-void KDevelop::slotOptionsKDevelopSetup()
-{
-    m_kdevelopcore->setupKDevelop();
 }
 
 

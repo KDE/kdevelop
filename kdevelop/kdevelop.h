@@ -60,7 +60,6 @@ private:
   KAction* m_paFileSave;
   KAction* m_paFileSaveAs;
   KAction* m_paFileSaveAll;
-  KAction* m_paFilePrint;
   KAction* m_paFileQuit;
   // Edit Actions
   KAction* m_paEditUndo;
@@ -132,7 +131,6 @@ private:
   KAction* m_paOptionsSyntaxHighlighting;
   KAction* m_paOptionsDocumentationBrowser;
   KAction* m_paOptionsConfigureEnscript;
-  KAction* m_paOptionsKDevelopSetup;
   KAction* m_paOptionsEditToolbars;
   // Bookmark Actions
   KAction* m_paBookmarksToggle;
@@ -192,12 +190,8 @@ private:
   /** debug aid. Switch on using compile switch GDB_MONITOR or DBG_MONITOR */
   KDockWidget* m_dockbaseDbgWidgetView;			
 
-  KDevelopCore *m_kdevelopcore;
-    
 private slots:
-   void slotFilePrint();
  void slotProjectNew();
- void slotOptionsKDevelopSetup();
  void slotOptionsEditToolbars();
 };
 

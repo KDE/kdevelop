@@ -42,7 +42,7 @@ public:
     void docPathChanged();
     void projectClosed();
     void projectOpened(CProject *prj);
-
+    
 private slots:
     void slotConfigure();
     void slotItemExecuted(QListViewItem *item);
