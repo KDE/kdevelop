@@ -107,7 +107,7 @@ static QString remove_keywords( QString text ){
 
     QString s;
     int index = 0;
-    while( index < text.length() ){
+    while( index < (int)text.length() ){
         int len = 0;
         int pos = ide_rx.match( text, index, &len );
         if( pos == -1 ){
@@ -527,7 +527,7 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
                     subexpr = subexpr.stripWhiteSpace();
                     if( subexpr[0] != '(' ){
                         int start_expr = expressionAt( subexpr, subexpr.length()-1 );
-                        if( start_expr != subexpr.length()-1 ){
+                        if( start_expr != (int)subexpr.length()-1 ){
                             subexpr = subexpr.mid( start_expr );
                             kdDebug() << "subexpr = " << subexpr << endl;
                         }
