@@ -27,8 +27,6 @@
 #include "caddclassattributedlg.h"
 #include "cclasstooldlg.h"
 #include "ccvaddfolderdlg.h"
-//#include "ccvadminfolderdlg.h"
-
 
 // Initialize static members
 QString CClassView::CLASSROOTNAME = "Classes";

@@ -25,7 +25,6 @@
 #include "ctreeview.h"
 #include "./classparser/ClassParser.h"
 #include "cclasstreehandler.h"
-#include "cstrtree.h"
 
 /** Tree-like classview for kdevelop utilizing the classparser lib.
   * @author Jonas Nordin
