@@ -74,10 +74,10 @@ class GroupItem : public ProjectItem
 public:
     enum GroupType { Sources, Headers, Interfaces };
     
-    GroupItem(QListView *lv, GroupType groupType, const QString &text);
+    GroupItem(QListView *lv, GroupType type, const QString &text);
 
     QList<FileItem> files;
-    GroupType groupTyp;
+    GroupType groupType;
 };
 
 
@@ -138,7 +138,7 @@ private:
 
     KListView *overview;
     KListView *details;
-    SubprojectItem *activeSubproject;
+    SubprojectItem *m_shownSubproject;
     TrollProjectPart *m_part;
 };
 

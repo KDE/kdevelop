@@ -191,11 +191,7 @@ void TrollProjectPart::slotBuild()
 
 void TrollProjectPart::slotQMake()
 {
-    QString cmdline = DomUtil::readEntry(*projectDom(), "/kdevtrollproject/make/makebin");
-    if (cmdline.isEmpty())
-        cmdline = MAKE_COMMAND;
-    cmdline += "qmake ";
-    cmdline += " ";
+    QString cmdline = "qmake ";
     
     QString dircmd = "cd ";
     dircmd += projectDirectory();

@@ -454,6 +454,9 @@ void ClassTreeBase::slotReturnPressed( QListViewItem *item )
         return;
 
     ClassTreeItem *ctitem = static_cast<ClassTreeItem*>(item);
+    if (ctitem->isOrganizer())
+        return;
+    
     QString toFile;
     int toLine = -1;
     ctitem->getImplementation(&toFile, &toLine);
@@ -466,7 +469,7 @@ void ClassTreeBase::slotItemPressed(int button, QListViewItem *item)
     // We assume here that ALL (!) items in the list view
     // are ClassTreeItem's
     ClassTreeItem *ctitem = static_cast<ClassTreeItem*>(item);
-    if (!ctitem)
+    if (!ctitem || ctitem->isOrganizer())
         return;
 
     if (button == LeftButton) {

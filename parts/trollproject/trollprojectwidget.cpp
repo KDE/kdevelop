@@ -31,6 +31,7 @@
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
+#include "kdevtoplevel.h"
 #include "domutil.h"
 #include "trollprojectpart.h"
 
@@ -78,9 +79,10 @@ void SubprojectItem::init()
  * Class GroupItem
  */
 
-GroupItem::GroupItem(QListView *lv, GroupType /*groupType*/, const QString &text)
+GroupItem::GroupItem(QListView *lv, GroupType type, const QString &text)
     : ProjectItem(Group, lv, text)
 {
+    groupType = type;
     files.setAutoDelete(true);
     setPixmap(0, SmallIcon("tar"));
 }
@@ -124,7 +126,7 @@ TrollProjectWidget::TrollProjectWidget(TrollProjectPart *part)
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 
     m_part = part;
-    activeSubproject = 0;
+    m_shownSubproject = 0;
 }
 
 
@@ -182,7 +184,7 @@ QStringList TrollProjectWidget::allFiles()
         QString path = spitem->path;
         QListIterator<GroupItem> tit(spitem->groups);
         for (; tit.current(); ++tit) {
-            GroupItem::GroupType type = (*tit)->groupTyp;
+            GroupItem::GroupType type = (*tit)->groupType;
             if (type == GroupItem::Sources || type == GroupItem::Headers) {
                 QListIterator<FileItem> fit(tit.current()->files);
                 for (; fit.current(); ++fit)
@@ -206,10 +208,10 @@ QString TrollProjectWidget::projectDirectory()
 
 QString TrollProjectWidget::subprojectDirectory()
 {
-    if (!activeSubproject)
+    if (!m_shownSubproject)
         return QString::null;
 
-    return activeSubproject->path;
+    return m_shownSubproject->path;
 }
 
 
@@ -223,9 +225,9 @@ void TrollProjectWidget::slotItemExecuted(QListViewItem *item)
     ProjectItem *pvitem = static_cast<ProjectItem*>(item);
 
     if (pvitem->type() == ProjectItem::Subproject) {
-        if (activeSubproject) {
+        if (m_shownSubproject) {
             // Remove all GroupItems and all of their children from the view
-            QListIterator<GroupItem> it1(activeSubproject->groups);
+            QListIterator<GroupItem> it1(m_shownSubproject->groups);
             for (; it1.current(); ++it1) {
                 // After AddTargetDialog, it can happen that an
                 // item is not yet in the list view, so better check...
@@ -236,10 +238,10 @@ void TrollProjectWidget::slotItemExecuted(QListViewItem *item)
             }
         }
             
-        activeSubproject = static_cast<SubprojectItem*>(item);
+        m_shownSubproject = static_cast<SubprojectItem*>(item);
 
         // Insert all GroupItems and all of their children into the view
-        QListIterator<GroupItem> it2(activeSubproject->groups);
+        QListIterator<GroupItem> it2(m_shownSubproject->groups);
         for (; it2.current(); ++it2) {
             details->insertItem(*it2);
             QListIterator<FileItem> it3((*it2)->files);
@@ -248,9 +250,10 @@ void TrollProjectWidget::slotItemExecuted(QListViewItem *item)
             (*it2)->setOpen(true);
         }
     } else if (pvitem->type() == ProjectItem::File) {
-        QString dirName = activeSubproject->path;
+        QString dirName = m_shownSubproject->path;
         FileItem *fitem = static_cast<FileItem*>(pvitem);
         m_part->partController()->editDocument(KURL(dirName + "/" + QString(fitem->name)));
+        m_part->topLevel()->lowerView(this);
     }
 }
 
@@ -278,25 +281,48 @@ void TrollProjectWidget::slotContextMenu(KListView *, QListViewItem *item, const
         else if (r == idBuild) {
             QString relpath = spitem->path.mid(projectDirectory().length());
             m_part->startMakeCommand(projectDirectory() + relpath, QString::fromLatin1(""));
+            m_part->topLevel()->lowerView(this);
         }
     } else if (pvitem->type() == ProjectItem::Group) {
-        //GroupItem *titem = static_cast<GroupItem*>(pvitem);
-        KPopupMenu pop;
-        int idAddFile = pop.insertItem(i18n("Add File..."));
-        int r = pop.exec(p);
+        
+        GroupItem *titem = static_cast<GroupItem*>(pvitem);
+        QString title;
+        switch (titem->groupType) {
+        case GroupItem::Interfaces:
+            title = i18n("Interfaces");
+            break;
+        case GroupItem::Sources:
+            title = i18n("Sources");
+            break;
+        case GroupItem::Headers:
+            title = i18n("Headers");
+            break;
+        default: ;
+        }
+            
+        KPopupMenu popup(title, this);
+        int idAddFile = popup.insertItem(i18n("Add File..."));
+        int r = popup.exec(p);
         if (r == idAddFile) {
             ;
-                //   slotItemExecuted(activeSubproject); // update list view
+                //   slotItemExecuted(m_shownSubproject); // update list view
         }
+        
     } else if (pvitem->type() == ProjectItem::File) {
-        //FileItem *fitem = static_cast<FileItem*>(pvitem);
-        //GroupItem *titem = static_cast<GroupItem*>(fitem->parent());
-        KPopupMenu pop;
-        int idRemoveFile = pop.insertItem(i18n("Remove File..."));
-        int r = pop.exec(p);
+        
+        FileItem *fitem = static_cast<FileItem*>(pvitem);
+
+        KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
+        int idRemoveFile = popup.insertItem(i18n("Remove File..."));
+
+        FileContext context(m_shownSubproject->path + "/" + fitem->name);
+        m_part->core()->fillContextMenu(&popup, &context);
+        
+        int r = popup.exec(p);
         if (r == idRemoveFile) {
             ;
         }
+        
     }
 }
 
@@ -351,6 +377,11 @@ static QString parse_part( const QString &part )
 	if ( inName ) {
 	    if ( c == '\n' )
 		break;
+	    if ( c == '\\' ) {
+		inName = FALSE;
+		res += ' ';
+		continue;
+	    }
 	    res += c;
 	}
     }

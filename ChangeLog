@@ -7,6 +7,12 @@
 	  are included in AutoProjectPart::allFiles()
 	* Allow adding and removing files from
 	  custom project
+	* Bug fix in trollproject by
+	  Ludovic LANGE <ludovic.lange@free.fr>
+	  to handle continuation lines in .pro files
+	* Some polishing in trollproject
+	* Do nothing if an organizer item in the
+	  class view is clicked on
 
 2002-04-29  Bernd Gehrmann  <bernd@mail.berlios.de>
 
@@ -431,7 +437,7 @@
           multiple inheritance works now
 
 2001-08-10   Harald Fernengel <harry@bnro.de>
-        * Polished the Grep Dialog. It now remebers the last searches and 
+        * Polished the Grep Dialog. It now remembers the last searches and 
           search directories, search button is now default-button
         * find now works on non-unix platforms, too
 

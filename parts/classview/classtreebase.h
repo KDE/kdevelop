@@ -78,6 +78,8 @@ public:
         {}
 
     KPopupMenu *createPopup();
+    bool isOrganizer()
+    { return !m_item; }
     virtual QString scopedText() const;
     void getDeclaration(QString *toFile, int *toLine);
     void getImplementation(QString *toFile, int *toLine);
