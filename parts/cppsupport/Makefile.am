@@ -28,4 +28,3 @@ r___LDFLAGS = $(all_libraries)
 r___SOURCES = main.cpp
 r___DEPENDENCIES = libkdevcppsupport.la
 r___LDADD = libkdevcppsupport.la $(top_builddir)/lib/catalog/libkdevcatalog.la $(top_builddir)/lib/cppparser/libkdevcppparser.la
-noinst_HEADERS = setupqtpage.h createpcsdialog.h
