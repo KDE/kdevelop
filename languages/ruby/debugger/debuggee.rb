@@ -249,8 +249,13 @@ class Context
 
   def const_list(ary, obj)
     ary.sort!
+	total_length = 0
     for c in ary
-      stdout.printf "  %s => %s\n", c, debug_inspect(obj.module_eval(c))
+	  str = debug_inspect(obj.module_eval(c))
+      if c.to_s != str && c.to_s !~ /SCRIPT_LINES__|ENV|TRUE|FALSE|NIL|MatchingData/ &&
+        c.to_s !~ /IPsocket|IPserver|UDPsocket|UDPserver|TCPserver|TCPsocket|UNIXserver|UNIXsocket/
+      	stdout.printf "  %s => %s\n", c, debug_inspect(obj.module_eval(c))
+	  end
     end
   end
 
