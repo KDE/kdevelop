@@ -330,11 +330,13 @@ AutoProjectWidget::~AutoProjectWidget()
 
 void AutoProjectWidget::openProject(const QString &dirName)
 {
-    SubprojectItem *item = new SubprojectItem(overview, "/");
-    item->subdir = "/";
+    SubprojectItem *item = new SubprojectItem(overview, "/" );
+    item->setPixmap ( 0, SmallIcon ( "kdevelop" ) );
+	item->subdir = "/";
     item->path = dirName;
     parse(item);
     item->setOpen(true);
+	item->setText ( 0, m_part->projectDirectory() + m_part->projectName() );
     overview->setSelected(item, true);
 }
 
@@ -444,12 +446,16 @@ QString AutoProjectWidget::subprojectDirectory()
 void AutoProjectWidget::setActiveTarget(const QString &targetPath)
 {
     int prefixlen = projectDirectory().length()+1;
+	
+	int spcount = 0; // Counting the subprojects above our active subproject
+							// to get the total height (there's a totalHeight() but it doesn't work :-(
 
     m_activeSubproject = 0;
     m_activeTarget = 0;
     
     QListViewItemIterator it(overview);
     for (; it.current(); ++it) {
+		spcount++;
         SubprojectItem *spitem = static_cast<SubprojectItem*>(it.current());
         QString path = spitem->path;
         QListIterator<TargetItem> tit(spitem->targets);
@@ -461,10 +467,13 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
             QString currentTargetPath = (path + "/" + (*tit)->name).mid(prefixlen);
             bool hasTarget = (targetPath == currentTargetPath);
             (*tit)->setBold(hasTarget);
+			spitem->setBold(hasTarget);
             if (hasTarget) {
                 m_activeSubproject = spitem;
                 m_activeTarget = (*tit);
                 overview->setSelected(m_activeSubproject, true);
+				overview->viewport()->update();
+				overview->setContentsPos ( 0, ( ( spcount - 10 ) * spitem->height() ) ); // scroll to the active subproject - a little bit ugly but I didn't get it work
             } else {
                 details->viewport()->update();
             }
