@@ -159,14 +159,13 @@ VariableTree::~VariableTree()
 
 void VariableTree::clear()
 {
-	QListViewItemIterator it(this);
-	while (it.current() != 0) {
-		QListViewItem * item = it.current();
-        if (item->rtti() != RTTI_WATCH_ROOT && item->rtti() != RTTI_WATCH_VAR_ITEM) {
-			delete item;
+    QListViewItem *sibling = firstChild();
+    while (sibling != 0) {
+		QListViewItem * current = sibling;
+        sibling = sibling->nextSibling();
+		if (current->rtti() != RTTI_WATCH_ROOT) {
+			delete current;
 		}
-		
-		++it;
     }
 	
 	globalRoot_ = 0;
