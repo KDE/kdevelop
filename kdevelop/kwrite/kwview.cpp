@@ -2543,7 +2543,7 @@ void KWrite::keyPressEvent(QKeyEvent *e) {
 
   if (e->state() & AltButton) {
     for (z = 0; z < 9; z++) {
-      if (kw_bookmark_keys[z] == e->key()) gotoBookmark(z);
+      if (kw_bookmark_keys[z] == e->key()) gotoBookmark(z+1);
     }
   }
 }
