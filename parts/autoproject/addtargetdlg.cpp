@@ -168,6 +168,9 @@ void AddTargetDialog::accept()
 	if( primary == "LTLIBRARIES" && !name.endsWith(".la") )
 	    name.append( QString::fromLatin1(".la") );
 
+	if ( primary == "LIBRARIES" && !name.endsWith(".a") )
+	    name.append ( QString::fromLatin1(".a") );
+
 	QPtrListIterator<TargetItem> it(m_subproject->targets);
 	for (; it.current(); ++it)
 		if (name == (*it)->name) {
