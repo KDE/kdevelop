@@ -44,7 +44,7 @@ class GuardedItem
 public:
     GuardedItem() {}
     GuardedItem( const GuardedItem& ) {}
-    GuardedItem& operator= ( const GuardedItem& other ) { return *this; }
+    GuardedItem& operator= ( const GuardedItem& /* other */ ) { return *this; }
     virtual ~GuardedItem();
 
     virtual void registerNotifyClient( NotifyClient* nc );
