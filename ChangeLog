@@ -1,9 +1,13 @@
+2002-03-01  F@lk Brettschneider <falk@kdevelop.org>
+    * applied a patch of Jens Zurheide <jens.zurheide@gmx.de> fixing a crash 
+      when opening the config dialog for the documentation browser
+
 2002-02-28  Harald Fernengel <harry@kdevelop.org>
     * bugfix: Project-View now saves whether non-project files should be shown or not into project-file
 
 2002-02-28  Roberto Raggi <raggi@cli.di.unipi.it>
     * bugfix: completion for method's arguments
-	
+
 2002-02-28  F@lk Brettschneider <falk@kdevelop.org>
     * applied patch for documentation browser configuration dialog sent by Jens Zurheide <jens.zurheide@gmx.de>
     * bugfix: a crash in setMainCaption because of dangling pointer DocViewMan::m_pCurrentEditView
