@@ -1,3 +1,7 @@
+2000-05-02 Walter Tasin  <tasin@kdevelop.de>
+	* segfault fix, if kdlgloader.so is not present and starting
+	  preview dialog
+
 2000-05-02  Ralf Funken <RFunken@kdevelop.de>
 	* Telephone hotfix by R. Nolden :
           Panner not repainted correctly using 800x600, fixed
