@@ -157,7 +157,10 @@ THType CTreeHandler::itemType( QListViewItem *item )
 {
   int idx;
   const QPixmap *p;
-  
+
+  // hope that's correct, it prevents a code dump though (rokrau 6/29/01)
+  if (!item)
+    return THFOLDER;
   p = item->pixmap( 0 );
   if (!p)
     return THCLASS;
