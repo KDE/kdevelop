@@ -1239,7 +1239,7 @@ bool PartController::reactToDirty( KURL const & url, bool )// isModified )
 {
 
 	enum DirtyAction { doNothing, alertUser, autoReload };	
-	DirtyAction action = alertUser;
+	DirtyAction action = autoReload;
 		
 	if ( action == doNothing ) return false;
 	
