@@ -60,7 +60,6 @@ public slots:
   void slotURLBack();
   void slotURLForward();
  signals:
-  void signalCopyText();
   void signalURLBack();
   void signalURLForward();
 

@@ -1,3 +1,4 @@
+
 1999-02-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* added an icon-generation to the newfile dlg 
 	* commit a new version of kwrite into kdevelop's sourcetree
@@ -10,6 +11,8 @@
     and added buttons for that in the Documentation tab of the setup dialog
   * added autoswitch functionality
   * made autosave timing selectable in the setup for 3,5,15 and 30 minutes
+  * changed implementation of slotEditCopy() and moved the browser part into
+    CDocBrowser
   * changed back printer icon and menu entries -sorry, Stefan...
 
 1999-02-23  Stefan Heidrich <sheidric@rz.uni-potsdam.de>

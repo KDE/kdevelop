@@ -632,7 +632,7 @@ void CKDevelop::initToolbar(){
   toolBar()->insertButton(pix,ID_FILE_SAVE_ALL,true,i18n("Save All"));
 */
   pix.load(KApplication::kde_datadir() + "/kdevelop/toolbar/print.xpm");
-  toolBar()->insertButton(pix,ID_OPTIONS_PRINT,true,i18n("Print"));
+  toolBar()->insertButton(pix,ID_FILE_PRINT,true,i18n("Print"));
 
   QFrame *separatorLine= new QFrame(toolBar());
   separatorLine->setFrameStyle(QFrame::VLine|QFrame::Sunken);
@@ -785,7 +785,6 @@ void CKDevelop::initConnections(){
   connect(header_widget,SIGNAL(lookUp(QString)),this,SLOT(slotDocSText(QString)));
 
   // connect Docbrowser rb menu
-  connect(browser_widget,SIGNAL(signalCopyText()),this,SLOT(slotEditCopy()));
   connect(browser_widget,SIGNAL(signalURLBack()),this,SLOT(slotDocBack()));
   connect(browser_widget,SIGNAL(signalURLForward()),this,SLOT(slotDocForward()));
 	
@@ -817,5 +816,7 @@ void CKDevelop::initProject(){
     refreshTrees(); // this refresh only the documentation tab,tree
   }
 }
+
+
 
 

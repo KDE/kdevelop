@@ -207,12 +207,10 @@ void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint 
 }
 
 void CDocBrowser::slotCopyText(){
-/*	  QString text;
-	  getSelectedText( text );
-	  QClipboard *cb = kapp->clipboard();
-	  cb->setText( text );
-*/
-  emit signalCopyText();
+  QString text;
+  getSelectedText( text );
+  QClipboard *cb = kapp->clipboard();
+  cb->setText( text );
 }
 
 void CDocBrowser::slotURLBack(){
@@ -560,6 +558,7 @@ CDocBrowserOptionsDlg::CDocBrowserOptionsDlg( QWidget *parent, const char *name 
 	connect( this, SIGNAL( applyButtonPressed() ),
 		colorOptions, SLOT( slotApplyPressed() ) );
 }
+
 
 
 

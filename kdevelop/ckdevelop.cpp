@@ -334,11 +334,7 @@ void CKDevelop::slotEditCut(){
 void CKDevelop::slotEditCopy(){
   slotStatusMsg(i18n("Copying..."));
   if(s_tab_view->getCurrentTab()==2){
-	  QString text;
-
-	  browser_widget->getSelectedText( text );
-	  QClipboard *cb = kapp->clipboard();
-	  cb->setText( text );
+    browser_widget->slotCopyText();
   }
 	else
     edit_widget->copyText();
@@ -1564,9 +1560,9 @@ void CKDevelop::slotToolbarClicked(int item){
   case ID_FILE_SAVE_ALL:
     slotFileSaveAll();
     break;
-/*  case ID_FILE_PRINT:
+  case ID_FILE_PRINT:
     slotFilePrint();
-    break;*/
+    break;
   case ID_EDIT_UNDO:
     slotEditUndo();
     break;
@@ -1710,6 +1706,7 @@ BEGIN_STATUS_MSG(CKDevelop)
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			i18n("Programmer's Hall of Fame..."))
 
 END_STATUS_MSG()
+
 
 
 

@@ -365,6 +365,8 @@ class HlContext {
     int ctx;
 };
 
+const int nContexts = 32;
+
 class GenHighlight : public Highlight {
   public:
     GenHighlight(const char *name);
@@ -374,7 +376,7 @@ class GenHighlight : public Highlight {
     virtual void makeContextList() = 0;
     virtual void init();
     virtual void done();
-    const int nContexts = 32;
+//    const int nContexts = 32;
     HlContext *contextList[nContexts];
 };
 
@@ -589,3 +591,4 @@ class HighlightDialog : public QDialog {
 };
 
 #endif //_HIGHLIGHT_H_
+
