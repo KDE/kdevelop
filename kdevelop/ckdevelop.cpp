@@ -3758,8 +3758,10 @@ void CKDevelop::slotViewSelected(QWidget* /*pView*/ /*, int docType */)
   if (!(m_docViewManager->curDocIsBrowser()))
   {
     int state = 0;
-    if (m_docViewManager->currentEditView())
+    if (m_docViewManager->currentEditView()) {
       state = m_docViewManager->currentEditView()->undoState();
+      m_docViewManager->currentEditView()->setFocus();
+    }
     //undo
     if(state & 1)
       enableCommand(ID_EDIT_UNDO);
