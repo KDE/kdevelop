@@ -62,4 +62,16 @@ bool AppOutputViewPart::isRunning()
     return m_widget->isRunning();
 }
 
+
+void AppOutputViewPart::insertStdoutLine(const QString &line)
+{
+    m_widget->insertStdoutLine(line);
+}
+
+
+void AppOutputViewPart::insertStderrLine(const QString &line)
+{
+    m_widget->insertStderrLine(line);
+}
+
 #include "appoutputviewpart.moc"

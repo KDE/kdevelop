@@ -31,6 +31,8 @@ public:
 protected:
     virtual void startAppCommand(const QString &command);
     virtual bool isRunning();
+    virtual void insertStdoutLine(const QString &line);
+    virtual void insertStderrLine(const QString &line);
 
 private:
     QGuardedPtr<AppOutputWidget> m_widget;

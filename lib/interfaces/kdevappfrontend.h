@@ -27,6 +27,15 @@ public:
      * Returns whether the application is currently running.
      */
     virtual bool isRunning() = 0;
+    /**
+     * Inserts a string into the view.
+     */
+    virtual void insertStdoutLine(const QString &line) = 0;
+    /**
+     * Inserts a string into the view marked as stderr output
+     * (colored in the current implementation).
+     */
+    virtual void insertStderrLine(const QString &line) = 0;
 };
 
 #endif
