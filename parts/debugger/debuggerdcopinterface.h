@@ -20,7 +20,6 @@ class DebuggerDCOPInterface : public DCOPObject
 {
     K_DCOP
 public:
-    DebuggerDCOPInterface() : DCOPObject("DebuggerInterface") {};
 
 k_dcop:
     virtual ASYNC slotDebugExternalProcess() = 0;

@@ -66,6 +66,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     KDevPlugin( "CppDebugger", "debugger", parent, name ? name : "DebuggerPart" ),
     controller(0)
 {
+    setObjId("DebuggerInterface");
     setInstance(DebuggerFactory::instance());
 
     setXMLFile("kdevdebugger.rc");
