@@ -14,25 +14,78 @@
 #define __ast_h
 
 #include <memory>
+#include <qptrlist.h>
 
 class AST
 {
 public:
     typedef std::auto_ptr<AST> Ptr;
     
-    AST()
-	: start( 0 ), end( 0 ) 
-    {}
+public:
+    AST();
+    virtual ~AST();
     
-    virtual ~AST() 
-    {}
+    void setStart( int start ) { m_start = start; }
+    int start() const { return m_start; }
     
-    int start;
-    int end;
-
+    void setEnd( int end ) { m_end = end; }
+    int end() const { return m_end; }
+    
+private:
+    int m_start;
+    int m_end;
+    
 private:
     AST( const AST& source );
     void operator = ( const AST& source );
+};
+
+class NameAST: public AST
+{
+public:
+    typedef std::auto_ptr<NameAST> Ptr;
+    
+public:
+    NameAST();
+    virtual ~NameAST();
+        
+    bool isGlobal() const;
+    void setGlobal( bool b );
+    
+    void setNestedName( AST::Ptr& nestedName );
+    AST* nestedName();
+    
+    void setUnqualifedName( AST::Ptr& unqualifiedName );
+    AST* unqualifiedName();
+    
+private:
+    bool m_global;
+    AST::Ptr m_nestedName;
+    AST::Ptr m_unqualifiedName;
+    
+private:
+    NameAST( const NameAST& source );
+    void operator = ( const NameAST& source );
+};
+
+class TranslationUnitAST: public AST
+{
+public:
+    typedef std::auto_ptr<TranslationUnitAST> Ptr;
+    
+public:
+    TranslationUnitAST();
+    virtual ~TranslationUnitAST();
+    
+    void addDeclaration( AST::Ptr& ast );
+    QPtrList<AST> declarations() { return m_declarations; }
+    
+private:
+    QPtrList<AST> m_declarations;
+   
+private:
+    TranslationUnitAST( const TranslationUnitAST& source );
+    void operator = ( const TranslationUnitAST& source );
 };
 
 #endif 

@@ -266,37 +266,51 @@ bool Parser::skip( int l, int r )
     return false;
 }
 
-bool Parser::parseName( AST::Ptr& node )
+bool Parser::parseName( NameAST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseName()" << endl;
 
 #warning "ignore namespace for now!!"    
 
+    int start = lex->index();
+
     AST::Ptr nestedName, unqualifedName;
-            
+    bool isGlobal = false;
+                
     if( lex->lookAhead(0) == Token_scope ){
+        isGlobal = true;
 	lex->nextToken();
     }
     
     parseNestedNameSpecifier( nestedName );
     if( parseUnqualifiedName(unqualifedName) ){
         //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "----------> name parsed!!" << endl;
+	
+	node = NameAST::Ptr( new NameAST() );
+	node->setGlobal( isGlobal );
+	node->setNestedName( nestedName );
+	node->setUnqualifedName( unqualifedName );
+	node->setStart( start );
+	node->setEnd( lex->index() );
+	
 	return true;
     }
     
     return false;
 }
 
-bool Parser::parseTranslationUnit( AST::Ptr& /*node*/ )
+bool Parser::parseTranslationUnit( TranslationUnitAST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseTranslationUnit()" << endl;
             
+    node = TranslationUnitAST::Ptr( new TranslationUnitAST() );
     while( !lex->lookAhead(0).isNull() ){
         AST::Ptr def;
         if( !parseDefinition(def) ){
 	    // error recovery
 	    skipUntilDeclaration();
 	}
+	node->addDeclaration( def );
     }
     
     return m_errors == 0;
@@ -340,13 +354,7 @@ bool Parser::parseDefinition( AST::Ptr& node )
 	    if( parseEnumSpecifier(spec) || parseClassSpecifier(spec) ){
 	        parseInitDeclaratorList(declarators);
 	        ADVANCE( ';', ";" );
-		
-		node = AST::Ptr( new AST() );
-		node->start = start;
-		node->end = lex->lookAhead( 0 );
-		// node->spec = spec;
-		// node->declarators = declarators;
-		
+				
 	        return true;
 	    }
 	
@@ -431,7 +439,7 @@ bool Parser::parseNamespace( AST::Ptr& /*node*/ )
 	// namespace alias
 	lex->nextToken();
 	
-	AST::Ptr name;
+	NameAST::Ptr name;
 	if( parseName(name) ){	    
 	    ADVANCE( ';', ";" );	    
 	    return true;
@@ -467,7 +475,7 @@ bool Parser::parseUsing( AST::Ptr& /*node*/ )
     if( lex->lookAhead(0) == Token_typename )
 	lex->nextToken();
     
-    AST::Ptr name;
+    NameAST::Ptr name;
     if( !parseName(name) )
 	return false;
         
@@ -485,7 +493,7 @@ bool Parser::parseUsingDirective( AST::Ptr& /*node*/ )
     }
     lex->nextToken();
     
-    AST::Ptr name;
+    NameAST::Ptr name;
     if( !parseName(name) ){
 	reportError( i18n("Namespace name expected") );
 	return false;
@@ -729,7 +737,7 @@ bool Parser::parseSimpleTypeSpecifier( AST::Ptr& /*node*/ )
     }
 
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "!! token = " << lex->lookAhead(0).toString() << endl;
-    AST::Ptr name;
+    NameAST::Ptr name;
     return parseName( name );
 }
 
@@ -796,7 +804,8 @@ bool Parser::parseDeclarator( AST::Ptr& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclarator()" << endl;
 
-    AST::Ptr ptrOp, decl, declId;
+    AST::Ptr ptrOp, decl;
+    NameAST::Ptr declId;
     
     while( parsePtrOperator(ptrOp) ){
         // TODO: add ptr operator do current declarator
@@ -1406,7 +1415,7 @@ bool Parser::parseElaboratedTypeSpecifier( AST::Ptr& /*node*/ )
     {
 	lex->nextToken();
 	
-	AST::Ptr name;
+	NameAST::Ptr name;
 	if( parseName(name) ){
 	    return true;
 	}
@@ -1416,7 +1425,7 @@ bool Parser::parseElaboratedTypeSpecifier( AST::Ptr& /*node*/ )
     return false;
 }
 
-bool Parser::parseDeclaratorId( AST::Ptr& node )
+bool Parser::parseDeclaratorId( NameAST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseDeclaratorId()" << endl;
     return parseName( node );
@@ -1592,7 +1601,7 @@ bool Parser::parseMemInitializer( AST::Ptr& /*node*/ )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializer()" << endl;
     
-    AST::Ptr initId;
+    NameAST::Ptr initId;
     if( !parseMemInitializerId(initId) ){
 	reportError( i18n("Identifier expected") );
 	return false;
@@ -1663,7 +1672,7 @@ bool Parser::parseBaseSpecifier( AST::Ptr& /*node*/ )
 	}
     }
         
-    AST::Ptr name;
+    NameAST::Ptr name;
     if( !parseName(name) ){
 	reportError( i18n("Identifier expected") );
     }
@@ -1692,7 +1701,7 @@ bool Parser::parseInitializerClause( AST::Ptr& /*node*/ )
     return true;
 }
 
-bool Parser::parseMemInitializerId( AST::Ptr& node )
+bool Parser::parseMemInitializerId( NameAST::Ptr& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseMemInitializerId()" << endl;
     
@@ -2226,7 +2235,7 @@ bool Parser::parseNamespaceAliasDefinition( AST::Ptr& /*node*/ )
     ADVANCE( Token_identifier,  "identifier" );
     ADVANCE( '=', "=" );
     
-    AST::Ptr name;
+    NameAST::Ptr name;
     if( !parseName(name) ){
 	reportError( i18n("Namespace name expected") );
     }
@@ -2276,7 +2285,7 @@ bool Parser::parseDeclaration( AST::Ptr& /*node*/ )
         
     int index = lex->index();
 
-    AST::Ptr name;
+    NameAST::Ptr name;
     if( parseName(name) && lex->lookAhead(0) == '(' ){
 	// no type specifier, maybe a constructor or a cast operator??
 	

@@ -47,7 +47,7 @@ public:
 
 public /*rules*/ :
 
-    bool parseTranslationUnit( AST::Ptr& node );
+    bool parseTranslationUnit( TranslationUnitAST::Ptr& node );
 
     bool parseDefinition( AST::Ptr& node );
     bool parseBlockDeclaration( AST::Ptr& node );
@@ -65,7 +65,7 @@ public /*rules*/ :
     bool parseNestedNameSpecifier( AST::Ptr& node );
     bool parseUnqualifiedName( AST::Ptr& node );
     bool parseStringLiteral( AST::Ptr& node );
-    bool parseName( AST::Ptr& node );
+    bool parseName( NameAST::Ptr& node );
     bool parseOperatorFunctionId( AST::Ptr& node );
     bool parseTemplateArgumentList( AST::Ptr& node );
     bool parseOperator( AST::Ptr& node );
@@ -88,7 +88,7 @@ public /*rules*/ :
     bool parseEnumSpecifier( AST::Ptr& node );
     bool parseClassSpecifier( AST::Ptr& node );
     bool parseElaboratedTypeSpecifier( AST::Ptr& node );
-    bool parseDeclaratorId( AST::Ptr& node );
+    bool parseDeclaratorId( NameAST::Ptr& node );
     bool parseExceptionSpecification( AST::Ptr& node );
     bool parseEnumeratorList( AST::Ptr& node );
     bool parseEnumerator( AST::Ptr& node );
@@ -107,7 +107,7 @@ public /*rules*/ :
     bool parseBaseSpecifierList( AST::Ptr& node );
     bool parseBaseSpecifier( AST::Ptr& node );
     bool parseInitializerClause( AST::Ptr& node );
-    bool parseMemInitializerId( AST::Ptr& node );
+    bool parseMemInitializerId( NameAST::Ptr& node );
     bool parseFunctionBody( AST::Ptr& node );
 
     // expression

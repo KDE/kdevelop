@@ -84,8 +84,12 @@ void BackgroundParser::run()
     Parser parser( m_reporter, &driver,  &lexer );
     parser.setFileName( m_fileName );
 
-    AST::Ptr translationUnit;
+    TranslationUnitAST::Ptr translationUnit;
     parser.parseTranslationUnit( translationUnit );
+    
+    // a simple test
+    QPtrList<AST> decls = translationUnit->declarations();
+    kdDebug(9007) << "--> found " << decls.count() << " toplevel declarations" << endl;
 
     kdDebug(9007) << "FINISHED!!" << endl;
 }
