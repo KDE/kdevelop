@@ -13,9 +13,7 @@
 #define __K_TABZOOMFRAME_H__
 
 #include <qframe.h>
-
-#include "ktabzoomposition.h"
-
+#include <kmultitabbar.h>
 
 class KTabZoomFramePrivate;
 
@@ -25,7 +23,7 @@ class KTabZoomFrame : public QWidget
 
 public:
 
-  KTabZoomFrame(QWidget *parent=0, KTabZoomPosition::Position pos=KTabZoomPosition::Left, const char *name=0);
+  KTabZoomFrame(QWidget *parent=0, KMultiTabBar::KMultiTabBarPosition pos=KMultiTabBar::Left, const char *name=0);
   ~KTabZoomFrame();
 
   int addTab(QWidget *widget, const QString &title);
@@ -45,7 +43,7 @@ signals:
   void dockToggled(bool docked);
   void sizeChanged();
 
-  
+
 protected:
 
   void mousePressEvent(QMouseEvent *ev);

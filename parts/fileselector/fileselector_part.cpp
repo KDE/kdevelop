@@ -33,18 +33,19 @@ FileSelectorPart::FileSelectorPart(QObject *parent, const char *name, const QStr
     : KDevPlugin("FileSelector", "fileselector", parent, name ? name : "FileSelectorPart")
 {
     setInstance(FileSelectorFactory::instance());
-    
+
     m_filetree = new KDevFileSelector( mainWindow(), partController() );
-    
+
     connect( m_filetree->dirOperator(), SIGNAL(fileSelected(const KFileItem*)),
 	     this, SLOT(fileSelected(const KFileItem*)));
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );
-    
+
     connect( core(), SIGNAL(configWidget(KDialogBase*)), this, SLOT(slotConfigWidget(KDialogBase*)) );
-    
+
     m_filetree->setCaption( i18n("File Selector") );
-    mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("file selector") );    
-    
+    m_filetree->setIcon( SmallIcon("view_detailed") );
+    mainWindow()->embedSelectView( m_filetree, i18n("File Selector"), i18n("file selector") );
+
     m_filetree->readConfig( instance()->config(), "fileselector" );
 }
 
@@ -54,14 +55,14 @@ FileSelectorPart::~FileSelectorPart()
 	m_filetree->writeConfig( instance()->config(), "fileselector" );
 	mainWindow()->removeView( m_filetree );
     }
-    
+
     delete (KDevFileSelector*) m_filetree;
 }
 
 void FileSelectorPart::fileSelected( const KFileItem * file )
 {
     KURL u(file->url());
-    
+
     partController()->editDocument( u );
     mainWindow()->lowerView(m_filetree);
 }

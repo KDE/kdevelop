@@ -23,6 +23,7 @@
 #include <kmainwindow.h>
 // Because of KShellProcess::quote()
 #include <kprocess.h>
+#include <kiconloader.h>
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
@@ -136,6 +137,8 @@ void CvsPart::init()
         this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)),
         this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
+
+    m_impl->processWidget()->setIcon( SmallIcon("db") );
 
     mainWindow()->embedOutputView( m_impl->processWidget(), i18n("CvsService"), i18n("cvs output") );
 }

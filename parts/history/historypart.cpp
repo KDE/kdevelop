@@ -6,6 +6,7 @@
 #include <kmainwindow.h>
 #include <kparts/part.h>
 #include <kpopupmenu.h>
+#include <kiconloader.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
@@ -16,10 +17,10 @@ class HistoryEntry
 {
 public:
   HistoryEntry(KParts::Part *part) : m_part(part) {};
-  
+
   KParts::Part *m_part;
   KURL m_url;
-  
+
 };
 
 
@@ -33,13 +34,14 @@ HistoryPart::HistoryPart(QObject *parent, const char *name, const QStringList &)
   setInstance(HistoryPartFactory::instance());
 
   setXMLFile("kdevhistory.rc");
-	
+
   connect(partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(partAdded(KParts::Part*)));
   connect(partController(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(partRemoved(KParts::Part*)));
   connect(partController(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(activePartChanged(KParts::Part*)));
 
   m_recentList = new QListBox;
   m_recentList->setCaption(i18n("Recent Files"));
+  m_recentList->setIcon( SmallIcon("history") );
   mainWindow()->embedSelectView(m_recentList, i18n("Recent"), i18n("recent files"));
   connect(m_recentList, SIGNAL(selected(const QString &)),
 	  this, SLOT(recentFileSelected(const QString &)));
@@ -90,7 +92,7 @@ void HistoryPart::backAboutToShow()
   int savePos = m_history.at();
   for (int i=0; i<10 && m_history.prev(); ++i)
     popup->insertItem(m_history.current()->m_url.prettyURL());
-  
+
   m_history.at(savePos);
 }
 
@@ -116,9 +118,9 @@ void HistoryPart::backPopupActivated(int id)
   for (int i=0; i < by; ++i)
     m_history.prev();
   if(m_history.prev()==0L) m_history.first();
-  
+
   restoreState();
-  
+
   updateActions();
 }
 
@@ -126,12 +128,12 @@ void HistoryPart::backPopupActivated(int id)
 void HistoryPart::forwardPopupActivated(int id)
 {
   int by = m_forwardAction->popupMenu()->indexOf(id)+1;
- 
+
   saveState(partController()->activePart());
   for (int i=0; i < by; ++i)
     m_history.next();
   if(m_history.current()==0L) m_history.last();
-  
+
   restoreState();
 
   updateActions();
@@ -191,7 +193,7 @@ void HistoryPart::addRecentEntry(KParts::Part *part)
 void HistoryPart::recentFileSelected(const QString &url)
 {
   KURL theURL(url);
- 
+
   mainWindow()->lowerView(m_recentList);
 
   KParts::Part *part = 0;
@@ -206,7 +208,7 @@ void HistoryPart::recentFileSelected(const QString &url)
       break;
     }
   }
-  
+
   if (part)
   {
     partController()->setActivePart(part);
@@ -266,7 +268,7 @@ void HistoryPart::restoreState()
 void HistoryPart::backActivated()
 {
   saveState(partController()->activePart());
-  
+
   if(m_history.prev()==0L) m_history.first();
 
   restoreState();

@@ -106,6 +106,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                 "breakpoint item allows you to change "
                                 "the breakpoint and will take you "
                                 "to the source in the editor window."));
+    gdbBreakpointWidget->setIcon( SmallIcon("stop") );
     mainWindow()->embedOutputView(gdbBreakpointWidget, i18n("Breakpoints"), i18n("debugger breakpoints"));
 
     framestackWidget = new FramestackWidget();
@@ -120,6 +121,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                 "program. By clicking on an item you "
                                 "can see the values in any of the "
                                 "previous calling functions."));
+    framestackWidget->setIcon( SmallIcon("table") );
     mainWindow()->embedOutputView(framestackWidget, i18n("Frame Stack"), i18n("debugger function call stack"));
     mainWindow()->setViewAvailable(framestackWidget, false);
 
@@ -134,12 +136,14 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
                                  "instruction using the debuggers toolbar "
                                  "buttons of \"step over\" instruction and "
                                  "\"step into\" instruction."));
+    disassembleWidget->setIcon( SmallIcon("gear") );
     mainWindow()->embedOutputView(disassembleWidget, i18n("Disassemble"),
                                   i18n("debugger disassemble view"));
     mainWindow()->setViewAvailable(disassembleWidget, false);
 
     gdbOutputWidget = new GDBOutputWidget;
     gdbOutputWidget->setEnabled(false);
+    gdbOutputWidget->setIcon( SmallIcon("inline_image") );
     mainWindow()->embedOutputView(gdbOutputWidget, i18n("GDB"),
                                   i18n("GDB output"));
     mainWindow()->setViewAvailable(gdbOutputWidget, false);

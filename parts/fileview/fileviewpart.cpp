@@ -48,7 +48,7 @@ FileViewPart::FileViewPart(QObject *parent, const char *name, const QStringList 
     //    setXMLFile("kdevfileview.rc");
 
     m_widget = new PartWidget( this );
-
+    m_widget->setIcon( SmallIcon("folder") );
     mainWindow()->embedSelectView( m_widget, i18n("File Tree"), i18n("view on the project directory") );
 
     // File tree

@@ -35,6 +35,7 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
         "you navigate in the source directories")
     );
 
+    m_widget->setIcon( SmallIcon("konsole") );
     mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("embedded console window"));
 }
 

@@ -52,7 +52,7 @@ ClassViewPart::ClassViewPart(QObject *parent, const char *name, const QStringLis
     setupActions();
 
     m_widget = new ClassViewWidget(this);
-
+    m_widget->setIcon( SmallIcon("view_tree") );
     mainWindow()->embedSelectView( m_widget, i18n("Classes"), i18n("Class browser") );
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(slotProjectOpened()) );

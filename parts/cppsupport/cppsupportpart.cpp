@@ -67,6 +67,7 @@
 #include <kconfig.h>
 #include <kdeversion.h>
 #include <kstandarddirs.h>
+#include <kiconloader.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -178,6 +179,7 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
              this, SLOT(partRemoved(KParts::Part*)));
 
     m_problemReporter = new ProblemReporter( this );
+    m_problemReporter->setIcon( SmallIcon("info") );
     mainWindow( )->embedOutputView( m_problemReporter, i18n("Problems"), i18n("problem reporter"));
 
     connect( core(), SIGNAL(configWidget(KDialogBase*)),

@@ -16,6 +16,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kiconloader.h>
 
 #include "kdevproject.h"
 #include "kdevcore.h"
@@ -35,6 +36,7 @@ MakeViewPart::MakeViewPart(QObject *parent, const char *name, const QStringList 
     m_dcop = new KDevMakeFrontendIface(this);
 
     m_widget = new MakeWidget(this);
+    m_widget->setIcon( SmallIcon("exec") );
     m_widget->setCaption(i18n("Messages Output"));
     QWhatsThis::add(m_widget, i18n("Messages output\n\n"
                                    "The messages window shows the output of the compiler and "

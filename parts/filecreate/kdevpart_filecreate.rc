@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="filecreate" library="libfilecreateplugin" version="2">
+<kpartplugin name="KDevFileCreate" library="libfilecreateplugin" version="3">
 <MenuBar>
  <Menu name="file">
     <Action name="file_new" group="new_merge" />

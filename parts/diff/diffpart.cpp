@@ -24,6 +24,7 @@
 #include <ktexteditor/editinterface.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include "kdevcore.h"
 #include "kdevmainwindow.h"
@@ -43,6 +44,7 @@ DiffPart::DiffPart(QObject *parent, const char *name, const QStringList &)
   setXMLFile("kdevdiff.rc");
 
   diffWidget = new DiffWidget();
+  diffWidget->setIcon( SmallIcon("editcopy") );
   QString nm( i18n( "Difference Viewer" ) );
   diffWidget->setCaption( nm );
   mainWindow()->embedOutputView( diffWidget, nm, i18n("output of the diff command") );
@@ -101,7 +103,7 @@ void DiffPart::contextMenu( QPopupMenu* popup, const Context* context )
   if ( !rw_part || !rw_part->isModified() )
     return;
 
-  popup->insertItem( i18n( "Difference to Saved File" ), 
+  popup->insertItem( i18n( "Difference to Saved File" ),
                      this, SLOT(localDiff()) );
 }
 
@@ -205,7 +207,7 @@ void DiffPart::showDiff( const QString& diff )
 
   diffDlg->setDiff( diff );
   diffDlg->exec();
-  delete diffDlg; 
+  delete diffDlg;
 */
 }
 

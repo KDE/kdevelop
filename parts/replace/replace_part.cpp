@@ -16,6 +16,7 @@
 #include <klocale.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
+#include <kiconloader.h>
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
@@ -33,6 +34,7 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
     setXMLFile("kdevpart_replace.rc");
 
     m_widget = new ReplaceWidget(this);
+    m_widget->setIcon( SmallIcon("filefind") );
 
     QWhatsThis::add
         (m_widget, i18n("Replace\n\n"

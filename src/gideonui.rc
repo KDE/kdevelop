@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="9" name="gideon" >
+<kpartgui version="11" name="gideon" >
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <DefineGroup name="new_merge"/>
@@ -123,31 +123,30 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" position="Top" noMerge="1" fullWidth="false" >
+<ToolBar name="mainToolBar" position="Top" noMerge="1" fullWidth="true" newline="true" >
   <text>Main Toolbar</text>
   <Action name="project_open" />
   <DefineGroup name="project_operations"/>
   <DefineGroup name="file_operations"/>
   <DefineGroup name="edit_operations"/>
   <DefineGroup name="find_operations"/>
-  <Separator/>
   <Action name="tree_view"/>
   <Action name="output_view"/>
   <DefineGroup name="view_operations"/>
+  <Action name="stop_processes"/>
+  <DefineGroup name="build_operations"/>
+  <DefineGroup name="debug_operations"/>
   <Merge/>
   <Action name="help_whats_this"/>
 </ToolBar>
 
-<ToolBar name="buildToolBar" position="Top" iconText="IconOnly" >
-  <text>Build Toolbar</text>
-  <Merge/>
-  <Action name="stop_processes"/>
-</ToolBar>
-
-<ToolBar name="docBrowserToolBar" position="Top" iconText="IconOnly" newline="true">
-  <text>Documentation Browser Toolbar</text>
+<ToolBar name="browserToolBar" position="Top" noMerge="1" fullWidth="false">
+  <text>Browser Toolbar</text>
+  <DefineGroup name="class_operations" />
+  <DefineGroup name="browser_operations" />
   <Action name="browser_back" />
   <Action name="browser_forward" />
+  <Merge/>
 </ToolBar>
 
 <Menu name="rb_popup">

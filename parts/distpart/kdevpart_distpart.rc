@@ -5,7 +5,7 @@
   <Action name="make_dist" group="tools_project_operations"/>
  </Menu>
 </MenuBar>
-<ToolBar name="toolsToolBar"><text>Tools Toolbar</text>
+<ToolBar name="extraToolBar"><text>Tools Toolbar</text>
   <Action name="make_dist"/>
 </ToolBar>
 </kpartplugin>

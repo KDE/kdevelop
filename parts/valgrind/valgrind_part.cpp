@@ -40,14 +40,15 @@ ValgrindPart::ValgrindPart( QObject *parent, const char *name, const QStringList
            this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
   connect( core(), SIGNAL(projectOpened()),
            this, SLOT(projectOpened()) );
-  
+
   m_widget = new ValgrindWidget( this );
-  
+  m_widget->setIcon( SmallIcon("fork") );
+
   QWhatsThis::add( m_widget, i18n( "Valgrind memory leak check" ) );
 
   new KAction( i18n("&Valgrind Memory Leak Check"), 0, this,
 	       SLOT(slotExecValgrind()), actionCollection(), "tools_valgrind" );
-  
+
   mainWindow()->embedOutputView( m_widget, "Valgrind", i18n("Valgrind memory leak check") );
 }
 
@@ -74,7 +75,7 @@ void ValgrindPart::loadOutput()
     KMessageBox::sorry( 0, i18n("Could not open valgrind output: %1").arg(fName) );
     return;
   }
-  
+
   clear();
   getActiveFiles();
 
@@ -170,12 +171,12 @@ void ValgrindPart::runValgrind( const QString& exec, const QString& params, cons
     return;
     /// @todo - ask for forced kill
   }
- 
+
   clear();
- 
+
   getActiveFiles();
-  
-  proc->clearArguments();  
+
+  proc->clearArguments();
   *proc << valExec << valParams << exec << params;
   proc->start( KProcess::NotifyOnExit, KProcess::AllOutput );
   mainWindow()->raiseView( m_widget );
@@ -264,7 +265,7 @@ void ValgrindPart::restorePartialProjectSession( const QDomElement* el )
 void ValgrindPart::savePartialProjectSession( QDomElement* el )
 {
   QDomDocument domDoc = el->ownerDocument();
-  if ( domDoc.isNull() ) 
+  if ( domDoc.isNull() )
     return;
 
   QDomElement execElem = domDoc.createElement( "executable" );

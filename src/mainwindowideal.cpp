@@ -216,13 +216,13 @@ void MainWindowIDEAl::createStatusBar() {
 
 
 void MainWindowIDEAl::createFramework() {
-    m_leftBar = new KTabZoomWidget(this, KTabZoomPosition::Left);
+    m_leftBar = new KTabZoomWidget(this, KMultiTabBar::Left);
     setCentralWidget(m_leftBar);
 
-    m_bottomBar = new KTabZoomWidget(m_leftBar, KTabZoomPosition::Bottom);
+    m_bottomBar = new KTabZoomWidget(m_leftBar, KMultiTabBar::Bottom);
     m_leftBar->addContent(m_bottomBar);
 
-    m_rightBar = new KTabZoomWidget ( m_bottomBar, KTabZoomPosition::Right );
+    m_rightBar = new KTabZoomWidget ( m_bottomBar, KMultiTabBar::Right );
     m_bottomBar->addContent ( m_rightBar );
 
     m_tabWidget = new KTabWidget(m_rightBar);
@@ -246,9 +246,9 @@ void MainWindowIDEAl::createFramework() {
     connect( m_rightBar, SIGNAL(tabsChanged()), this, SLOT(slotRightTabsChanged()) );
     connect( m_bottomBar, SIGNAL(tabsChanged()), this, SLOT(slotBottomTabsChanged()) );
 
-    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), 
+    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)),
             this, SLOT(slotPartAdded(KParts::Part*)));
-    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), 
+    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)),
             this, SLOT(slotStatusChange(KParts::Part*)));
     connect(PartController::getInstance(), SIGNAL(fileDirty(const QString&)),
             this, SLOT(fileDirty(const QString&)));
@@ -275,15 +275,15 @@ void MainWindowIDEAl::embedPartView(QWidget *view, const QString &name, const QS
 
 
 void MainWindowIDEAl::embedSelectView(QWidget *view, const QString &name, const QString &toolTip) {
-    m_leftBar->addTab(view, name, toolTip);
+    m_leftBar->addTab( view->icon() ? *view->icon() : SmallIcon("kdevelop"), view, name, toolTip);
 }
 
-void MainWindowIDEAl::embedSelectViewRight ( QWidget* view, const QString& title, const QString &toolTip) {
-    m_rightBar->addTab (view, title, toolTip);
+void MainWindowIDEAl::embedSelectViewRight ( QWidget* view, const QString& name, const QString &toolTip) {
+    m_rightBar->addTab( view->icon() ? *view->icon() : SmallIcon("kdevelop"), view, name, toolTip);
 }
 
 void MainWindowIDEAl::embedOutputView(QWidget *view, const QString &name, const QString &toolTip) {
-    m_bottomBar->addTab(view, name, toolTip);
+    m_bottomBar->addTab( view->icon() ? *view->icon() : SmallIcon("kdevelop"), view, name, toolTip);
 }
 
 void MainWindowIDEAl::removeView(QWidget *view)

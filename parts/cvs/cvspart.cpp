@@ -22,6 +22,7 @@
 #include <kaction.h>
 #include <kurl.h>
 #include <kdeversion.h>
+#include <kiconloader.h>
 
 #include <kparts/part.h>
 #include <kdevpartcontroller.h>
@@ -159,7 +160,7 @@ void CvsPart::init()
     connect( core(), SIGNAL(stopButtonClicked(KDevPlugin*)), this, SLOT(slotStopButtonClicked(KDevPlugin*)) );
 
     m_widget = new CvsWidget( this );
-
+    m_widget->setIcon( SmallIcon("db") );
     mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("cvs output") ); // i18n("CVS") ?!?? ;)
 }
 

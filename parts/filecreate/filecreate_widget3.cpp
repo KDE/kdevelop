@@ -17,7 +17,7 @@
 #include <kurl.h>
 #include <kdebug.h>
 #include <klocale.h>
-
+#include <kiconloader.h>
 #include <kdevcore.h>
 
 #include "filecreate_widget3.h"
@@ -30,9 +30,9 @@
 namespace FileCreate {
 
   ListWidget::ListWidget(FileCreatePart *part)
-    : KListView(0, "filecreate widget"), TypeChooser(part)
+    : KListView(0, "KDevFileCreate"), TypeChooser(part)
   {
-
+    setIcon( SmallIcon("filenew2") );
     setResizeMode( LastColumn );
     setAllColumnsShowFocus(true);
     setRootIsDecorated(true);

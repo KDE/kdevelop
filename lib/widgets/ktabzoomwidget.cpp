@@ -17,15 +17,13 @@
 #include <qwidgetstack.h>
 #include <qguardedptr.h>
 
+#include <kmultitabbar.h>
 #include <kdebug.h>
 #include <kconfig.h>
-
+#include <kiconloader.h>
 
 #include "ktabzoomframe.h"
-
-
 #include "ktabzoomwidget.h"
-
 
 class KTZWidgetInfo
 {
@@ -34,7 +32,6 @@ public:
 
   QWidget *m_widget;
   int     m_index, m_barIndex;
-
 };
 
 
@@ -42,9 +39,9 @@ class KTabZoomWidgetPrivate
 {
 public:
 
-  KTabZoomPosition::Position m_tabPosition;
+  KMultiTabBar::KMultiTabBarPosition m_tabPosition;
   QWidget                    *m_content;
-  KTabZoomBar                *m_tabBar;
+  KMultiTabBar               *m_tabBar;
   QBoxLayout                 *m_layout;
   KTabZoomFrame              *m_popup;
   QPtrList<KTZWidgetInfo>    m_info;
@@ -54,7 +51,7 @@ public:
 };
 
 
-KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, const char *name)
+KTabZoomWidget::KTabZoomWidget(QWidget *parent, KMultiTabBar::KMultiTabBarPosition pos, const char *name)
   : QWidget(parent, name)
 {
   d = new KTabZoomWidgetPrivate;
@@ -66,18 +63,18 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
   d->m_strut = 0;
   d->m_lastActiveWidget = 0;
 
-  d->m_tabBar = new KTabZoomBar(this, pos);
-  connect(d->m_tabBar, SIGNAL(selected(int)), this, SLOT(selected(int)));
-  connect(d->m_tabBar, SIGNAL(unselected()), this, SLOT(unselected()));
+  d->m_tabBar = new KMultiTabBar( (pos == KMultiTabBar::Left) || (pos == KMultiTabBar::Right) ? KMultiTabBar::Vertical: KMultiTabBar::Horizontal, this );
+  //d->m_tabBar->setStyle( KMultiTabBar::KDEV3 );
+  d->m_tabBar->setPosition( pos );
 
-  if (pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
+  if (pos == KMultiTabBar::Left || pos == KMultiTabBar::Right)
     d->m_layout = new QHBoxLayout(this);
   else
     d->m_layout = new QVBoxLayout(this);
 
   d->m_popup = new KTabZoomFrame(parent, pos);
-  
-  if(pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
+
+  if(pos == KMultiTabBar::Left || pos == KMultiTabBar::Right)
     d->m_popup->setMinimumWidth(110);
   else
     d->m_popup->setMinimumHeight(125);
@@ -88,7 +85,7 @@ KTabZoomWidget::KTabZoomWidget(QWidget *parent, KTabZoomPosition::Position pos, 
 
   d->m_popup->hide();
 
-  if (pos == KTabZoomPosition::Left || pos == KTabZoomPosition::Right)
+  if (pos == KMultiTabBar::Left || pos == KMultiTabBar::Right)
     d->m_popup->resize(250, height());
   else
     d->m_popup->resize(width(), 125);
@@ -100,13 +97,26 @@ KTabZoomWidget::~KTabZoomWidget()
   delete d;
 }
 
+void KTabZoomWidget::setStyle( KMultiTabBar::KMultiTabBarStyle style )
+{
+    d->m_tabBar->setStyle( style );
+}
 
-void KTabZoomWidget::addTab(QWidget *widget, const QString &title, const QString& toolTip)
+
+void KTabZoomWidget::addTab( const QPixmap& pixmap, QWidget *widget, const QString &title, const QString& toolTip)
 {
   KTZWidgetInfo *info = new KTZWidgetInfo( widget );
 
-  info->m_barIndex = d->m_tabBar->addTab( QTab(title), toolTip );
+  static int id = 0;
+
+  ++id;
+
+  d->m_tabBar->appendTab( pixmap, id, title );
+  info->m_barIndex = id;
   info->m_index = d->m_popup->addTab(widget, title);
+
+  connect(d->m_tabBar->tab(id), SIGNAL(clicked(int)), this, SLOT(selected(int)));
+  //connect(d->m_tabBar->tab(id), SIGNAL(unselected()), this, SLOT(unselected()));
 
   connect(widget, SIGNAL(destroyed()), this, SLOT(widgetDeleted()));
 
@@ -114,18 +124,18 @@ void KTabZoomWidget::addTab(QWidget *widget, const QString &title, const QString
 
   switch (d->m_tabPosition)
   {
-  case KTabZoomPosition::Bottom:
-  case KTabZoomPosition::Top:
+  case KMultiTabBar::Bottom:
+  case KMultiTabBar::Top:
     if(widget->minimumSizeHint().height() + 12 > d->m_popup->minimumHeight())
       d->m_popup->setMinimumHeight(widget->minimumSizeHint().height() + 12);
     break;
-  case KTabZoomPosition::Left:
-  case KTabZoomPosition::Right:
+  case KMultiTabBar::Left:
+  case KMultiTabBar::Right:
     if(widget->minimumSizeHint().width() + 12 > d->m_popup->minimumWidth())
       d->m_popup->setMinimumWidth(widget->minimumSizeHint().width() + 12);
     break;
-  }  
-   
+  }
+
   emit tabsChanged();
 }
 
@@ -172,15 +182,15 @@ void KTabZoomWidget::addContent(QWidget *content)
 
   switch (d->m_tabPosition)
   {
-  case KTabZoomPosition::Left:
-  case KTabZoomPosition::Top:
+  case KMultiTabBar::Left:
+  case KMultiTabBar::Top:
     d->m_layout->addWidget(d->m_tabBar);
     d->m_layout->addWidget(d->m_strut);
     d->m_layout->addWidget(d->m_content,1);
     break;
 
-  case KTabZoomPosition::Right:
-  case KTabZoomPosition::Bottom:
+  case KMultiTabBar::Right:
+  case KMultiTabBar::Bottom:
     d->m_layout->addWidget(d->m_content,1);
     d->m_layout->addWidget(d->m_strut);
     d->m_layout->addWidget(d->m_tabBar);
@@ -195,6 +205,11 @@ void KTabZoomWidget::addContent(QWidget *content)
 
 void KTabZoomWidget::selected(int index)
 {
+  if( !d->m_tabBar->isTabRaised(index) ){
+     unselected();
+     return;
+  }
+
   calculateGeometry();
 
   if (d->m_docked)
@@ -270,10 +285,21 @@ return d->m_lastActiveWidget;
 void KTabZoomWidget::unselected()
 {
   d->m_popup->hide();
-  d->m_tabBar->unsetButtons();
+  unsetButtons();
   d->m_strut->hide();
 }
 
+void KTabZoomWidget::unsetButtons()
+{
+    if( !d->m_tabBar->tabs() )
+        return;
+
+    QPtrListIterator<KMultiTabBarTab> it( *d->m_tabBar->tabs() );
+    while( it.current() ){
+        it.current()->setState( false );
+        ++it;
+    }
+}
 
 void KTabZoomWidget::raiseWidget(QWidget *widget)
 {
@@ -282,7 +308,7 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
   for (KTZWidgetInfo *i=d->m_info.first(); i != 0; i = d->m_info.next())
     if (i->m_widget == widget || !widget)
     {
-      d->m_tabBar->setActiveIndex(i->m_barIndex);
+      /// @todo d->m_tabBar->setActiveIndex(i->m_barIndex);
       d->m_lastActiveWidget = i->m_widget;
       return;
     }
@@ -291,7 +317,7 @@ void KTabZoomWidget::raiseWidget(QWidget *widget)
 
 void KTabZoomWidget::lowerAllWidgets()
 {
-  d->m_tabBar->unsetButtons();
+  unsetButtons();
 }
 
 
@@ -304,7 +330,7 @@ void KTabZoomWidget::lowerWidget(QWidget *w)
     if (i->m_widget == w)
     {
       d->m_popup->hide();
-      d->m_tabBar->unsetButtons();
+      unsetButtons();
       return;
     }
 }
@@ -314,19 +340,19 @@ void KTabZoomWidget::calculateGeometry()
 {
   switch (d->m_tabPosition)
   {
-  case KTabZoomPosition::Left:
+  case KMultiTabBar::Left:
     d->m_popup->setGeometry(d->m_tabBar->width(), y(), d->m_popup->width(), height());
     break;
 
-  case KTabZoomPosition::Right:
+  case KMultiTabBar::Right:
     d->m_popup->setGeometry(d->m_tabBar->x() - d->m_popup->width(), y(), d->m_popup->width(), height());
     break;
 
-  case KTabZoomPosition::Top:
+  case KMultiTabBar::Top:
     d->m_popup->setGeometry(x(), d->m_tabBar->height(), width(), d->m_popup->height());
     break;
 
-  case KTabZoomPosition::Bottom:
+  case KMultiTabBar::Bottom:
     d->m_popup->setGeometry(x(), d->m_tabBar->y() - d->m_popup->height(), width(), d->m_popup->height());
     break;
   }
@@ -345,7 +371,7 @@ void KTabZoomWidget::setDockMode(bool docked)
 {
   d->m_docked = docked;
 
-  d->m_tabBar->setDockMode(docked);
+  /// @todo d->m_tabBar->setDockMode(docked);
   d->m_popup->setDockMode(docked);
 
   if (!docked)
@@ -363,21 +389,22 @@ void KTabZoomWidget::setDockMode(bool docked)
 void KTabZoomWidget::saveSettings(KConfig *config)
 {
   config->writeEntry("Docked", d->m_docked);
-  if (d->m_tabPosition == KTabZoomPosition::Left || d->m_tabPosition == KTabZoomPosition::Right)
+  if (d->m_tabPosition == KMultiTabBar::Left || d->m_tabPosition == KMultiTabBar::Right)
     config->writeEntry("Strut", d->m_popup->width());
   else
     config->writeEntry("Strut", d->m_popup->height());
 
-	config->writeEntry("TabIndex", indexOf(current()));
+  config->writeEntry("TabIndex", indexOf(current()));
 }
 
 
 void KTabZoomWidget::loadSettings(KConfig *config)
 {
+   kdDebug() << "============================================> load settings" << endl;
   int s = config->readNumEntry("Strut", -1);
   if (s > 0)
   {
-    if (d->m_tabPosition == KTabZoomPosition::Left || d->m_tabPosition == KTabZoomPosition::Right)
+    if (d->m_tabPosition == KMultiTabBar::Left || d->m_tabPosition == KMultiTabBar::Right)
       d->m_popup->resize(s, d->m_popup->height());
     else
       d->m_popup->resize(d->m_popup->width(), s);
@@ -389,12 +416,15 @@ void KTabZoomWidget::loadSettings(KConfig *config)
   {
     KTZWidgetInfo *i=d->m_info.first();
     if (i) {
-      d->m_tabBar->setActiveIndex(config->readNumEntry("TabIndex", 0));
+      /// @todo d->m_tabBar->setActiveIndex(config->readNumEntry("TabIndex", 0));
     } else {
       // np parts there to show so we just hide ourselves
       setDockMode( false );
     }
   }
+
+  if( !d->m_popup->isVisible() && d->m_strut->isVisible() )
+      d->m_popup->show();
 }
 
 
@@ -403,7 +433,7 @@ void KTabZoomWidget::adjustStrut()
   if (!d->m_docked)
     return;
 
-  if (d->m_tabPosition == KTabZoomPosition::Left || d->m_tabPosition == KTabZoomPosition::Right)
+  if (d->m_tabPosition == KMultiTabBar::Left || d->m_tabPosition == KMultiTabBar::Right)
     d->m_strut->setFixedWidth(d->m_popup->width());
   else
     d->m_strut->setFixedHeight(d->m_popup->height());
