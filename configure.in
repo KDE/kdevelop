@@ -106,6 +106,7 @@ doc/ru/programming/Makefile \
 doc/ru/tutorial/Makefile \
 doc/ru/welcome/Makefile \
 doc/sv/Makefile \
+doc/es/Makefile \
 doc/zh_CN.GB2312/Makefile \
 doc/zh_CN.GB2312/welcome/Makefile \
 doc/zh_CN.GB2312/tutorial/Makefile \
