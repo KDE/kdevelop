@@ -9,6 +9,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qmessagebox.h>
 #include "filepropertydlg.h"
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -51,12 +52,46 @@ FilePropertyDlg::FilePropertyDlg(SubprojectItem *spitem,int grtype, FileItem *fi
 : FilePropertyBase(parent,name,modal,fl),
 m_dirtyScopes(dirtyScopes)
 {
+  if (grtype == GroupItem::InstallObject)
+  {
+    GroupItem* gitem = dynamic_cast<GroupItem*>(fitem->parent());
+    if (gitem)
+      m_installObjectName = gitem->install_objectname;    
+  }
   m_gtype = grtype;
   m_subProjectItem = spitem;
   m_fileItem = fitem;
   ScopeTree->setRootIsDecorated(true);
   createScopeTree(m_subProjectItem);
 }
+
+GroupItem* FilePropertyDlg::getInstallRoot(SubprojectItem* item)
+{
+  QPtrListIterator<GroupItem> it(item->groups);
+  for (;it.current();++it)
+  {
+    if ((*it)->groupType == GroupItem::InstallRoot)
+      return *it;
+  }
+  return 0;
+}
+
+GroupItem* FilePropertyDlg::getInstallObject(SubprojectItem* item, const QString& objectname)
+{
+  GroupItem* instroot = getInstallRoot(item);
+  if (!instroot)
+    return 0;
+  QPtrListIterator<GroupItem> it(instroot->installs);
+  for (;it.current();++it)
+  {
+    if ((*it)->groupType == GroupItem::InstallObject &&
+        (*it)->install_objectname == objectname )
+      return *it;
+  }
+  return 0;
+  
+}
+
 
 QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
 {
@@ -68,30 +103,10 @@ QStringList* FilePropertyDlg::getExcludeList(SubprojectItem *spitem)
       return &(spitem->forms_exclude);
     if (m_gtype == GroupItem::InstallObject)
     {
-    /*
-      GroupItem *gitem = 0;
-
-      QPtrListIterator<GroupItem> it(m_shownSubproject->groups);
-      for (; it.current(); ++it)
-      {
-        if ((*it)->groupType == GroupItem::InstallRoot)
-        {
-          gitem = *it;
-          break;
-        }
-      }      
-      QPtrListIterator<GroupItem> it2(gitem->installs);
-      for (; it2.current(); ++it2)
-      {
-        if ((*it2)->install_objectname == )
-        {
-          if ();
-        }
-      }      
-      */
-      GroupItem* gitem = (GroupItem*) m_fileItem->parent();
-      return &(gitem->str_files_exclude);
-      
+      GroupItem* gitem = getInstallObject(spitem,m_installObjectName);
+      if (gitem)
+        return &(gitem->str_files_exclude);
+      return &m_dummy;            
     }
     return NULL;
 }
@@ -142,9 +157,15 @@ QStringList FilePropertyDlg::getExcludedScopes(ScopeItem *sitem)
     if (sitem->isDirty())
     {
       if (sitem->isOn())
-        sitem->excludeFromScope(m_fileItem->name,true);
+      {
+        if (m_gtype != GroupItem::InstallObject)
+          sitem->excludeFromScope(m_fileItem->name,true);
+      }
       else
-        sitem->excludeFromScope(m_fileItem->name,false);
+      {
+        if (m_gtype != GroupItem::InstallObject)
+          sitem->excludeFromScope(m_fileItem->name,false);
+      }
       scopes.append(sitem->getScopeString());
       kdDebug(9024) << "dirty scope - " << sitem->getScopeString() << endl;
     }

@@ -1017,7 +1017,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     }
     if (r == idAddScope)
     {
-      slotAddSubdir(spitem);
+      slotCreateScope(spitem);
     }
     else if (r == idBuild)
     {
@@ -1270,11 +1270,13 @@ void TrollProjectWidget::updateInstallObjects(SubprojectItem* item, FileBuffer* 
   for (;it.current();++it)
   {
     GroupItem* iobj = *it;
-    if (!iobj->str_files.isEmpty())
+    subBuffer->removeValues(iobj->install_objectname+".path");
+    subBuffer->removeValues(iobj->install_objectname+".files");
+
+    if (!iobj->str_files.isEmpty() ||
+        !iobj->str_files_exclude.isEmpty())
     {
       instobjects.append(iobj->install_objectname);
-      subBuffer->removeValues(iobj->install_objectname+".path");
-      subBuffer->removeValues(iobj->install_objectname+".files");
       subBuffer->setValues(iobj->install_objectname+".path",iobj->install_path,FileBuffer::VSM_RESET,VALUES_PER_ROW);
       subBuffer->setValues(iobj->install_objectname+".files",iobj->str_files,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
       subBuffer->setValues(iobj->install_objectname+".files",iobj->str_files_exclude,FileBuffer::VSM_EXCLUDE,VALUES_PER_ROW);
@@ -1517,13 +1519,14 @@ void TrollProjectWidget::slotNewFile()
     GroupItem *gitem = static_cast<GroupItem*>(details->currentItem());
     if (gitem)
     {
-      if (gitem->groupType == GroupItem::InstallRoot)
+      if (gitem->groupType == GroupItem::InstallObject)
       {
           // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
           QString filepattern = KLineEditDlg::getText(
-                              i18n( "Insert new install object" ),
-                              i18n( "Please enter a name for the new object:" ),
+                              i18n( "Insert new filepattern" ),
+                              i18n( "Please enter a filepattern relative the current "
+                                    "subproject (example docs/*.html):" ),
                               QString::null, &ok, this );
           if ( ok && !filepattern.isEmpty() )
           {
@@ -1533,6 +1536,25 @@ void TrollProjectWidget::slotNewFile()
           }
           return;        
       }
+      if (gitem->groupType == GroupItem::InstallRoot)
+      {
+//          QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
+          bool ok = FALSE;
+          QString install_obj = KLineEditDlg::getText(
+                              i18n( "Insert new install object" ),
+                              i18n( "Please enter a name for the new object:" ),
+                              QString::null, &ok, this );
+          if ( ok && !install_obj.isEmpty() )
+          {
+            GroupItem* institem = createGroupItem(GroupItem::InstallObject, install_obj ,gitem->scopeString);
+            institem->owner = m_shownSubproject;
+            institem->install_objectname = install_obj;
+            gitem->installs.append(institem);
+            slotOverviewSelectionChanged(m_shownSubproject);
+          }
+          return;        
+      }
+
     }
     KDevCreateFile * createFileSupport = m_part->createFileSupport();
     if (createFileSupport)
@@ -1593,9 +1615,32 @@ void TrollProjectWidget::slotConfigureFile()
   FilePropertyDlg *propdlg = new FilePropertyDlg(m_shownSubproject,gitem->groupType,fitem,dirtyScopes);
   SubprojectItem *scope;
   propdlg->exec();
+  
   for (uint i=0; i<dirtyScopes.count();i++)
   {
     scope = getScope(m_shownSubproject,dirtyScopes[i]);
+    if (gitem->groupType == GroupItem::InstallObject)
+    {
+      GroupItem* instroot = getInstallRoot(scope);
+      GroupItem* instobj = getInstallObject(scope,gitem->install_objectname);
+      if (!instobj)
+      {
+        GroupItem* institem = createGroupItem(GroupItem::InstallObject, gitem->install_objectname ,scope->scopeString);
+        institem->owner = scope;
+        institem->install_objectname = gitem->install_objectname;
+        instroot->installs.append(institem);
+        instobj = institem;
+      }
+      // Using the boolean nature of this operation I can append or remove the file from the excludelist
+      if (instobj->str_files_exclude.join(":").find(fitem->name) >= 0)
+      {
+        instobj->str_files_exclude.remove(fitem->name);
+      }
+      else
+      {
+        instobj->str_files_exclude.append(fitem->name);
+      }
+    }
     if (scope)
       updateProjectFile(scope);
   }
@@ -1726,8 +1771,9 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           // QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
           bool ok = FALSE;
           QString filepattern = KLineEditDlg::getText(
-                              i18n( "Insert new install object" ),
-                              i18n( "Please enter a name for the new object:" ),
+                              i18n( "Insert new filepattern" ),
+                              i18n( "Please enter a filepattern relative the current "
+                                    "subproject (example docs/*.html):" ), 
                               QString::null, &ok, this );
           if ( ok && !filepattern.isEmpty() )
           {
@@ -1860,6 +1906,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         // Fileproperties
         else if (r == idFileProperties)
         {
+        /*
           GroupItem *gitem = static_cast<GroupItem*>(fitem->parent());
           if (!gitem)
             return;
@@ -1873,6 +1920,8 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
             if (scope)
                updateProjectFile(scope);
           }
+        */
+          slotConfigureFile();
         }
         else if(r == idViewUIH) {
           m_part->partController()->editDocument(KURL(m_shownSubproject->path + "/" +

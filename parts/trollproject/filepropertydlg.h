@@ -47,11 +47,15 @@ class FilePropertyDlg : public FilePropertyBase
 
   private:
   void            createScopeTree(SubprojectItem *spitem,ScopeItem *sitem=0);
+  GroupItem*      getInstallRoot(SubprojectItem *spitem);
+  GroupItem*      getInstallObject(SubprojectItem *spitem,const QString& objectname);
   QStringList*    getExcludeList(SubprojectItem *spitem);
   QStringList     getExcludedScopes(ScopeItem *sitem=0);
   FileItem        *m_fileItem;
   SubprojectItem  *m_subProjectItem;
   QStringList     &m_dirtyScopes;
+  QStringList     m_dummy;
+  QString         m_installObjectName;
   int             m_gtype;
 
   public slots:
