@@ -10,15 +10,18 @@
  ***************************************************************************/
 
 #include <klocale.h>
+#include <kgenericfactory.h>
+#include <kaction.h>
 
 #include "kdevcore.h"
 #include "regexptestdlg.h"
-#include "regexptestfactory.h"
 #include "regexptestpart.h"
 
+typedef KGenericFactory<RegexpTestPart> RegexpTestFactory;
+K_EXPORT_COMPONENT_FACTORY( libkdevregexptest, RegexpTestFactory( "kdevregexptest" ) );
 
-RegexpTestPart::RegexpTestPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+RegexpTestPart::RegexpTestPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name)
 {
     setInstance(RegexpTestFactory::instance());
     setXMLFile("kdevregexptest.rc");

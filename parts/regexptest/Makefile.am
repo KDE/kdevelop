@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevregexptest.la
 libkdevregexptest_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevregexptest_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevregexptest_la_SOURCES = regexptestfactory.cpp \
-			       regexptestpart.cpp \
+libkdevregexptest_la_SOURCES = regexptestpart.cpp \
 			       regexptestdlg.cpp \
 			       regexptestdlgbase.ui
 

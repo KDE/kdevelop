@@ -4,7 +4,7 @@ Type=Service
 Exec=blubb
 Comment=Regular Expression tester
 Name=KDevRegexpTest
-ServiceTypes=KDevelop/Part
+ServiceTypes=KDevelop/Plugin
 X-KDE-Library=libkdevregexptest
 X-KDevelop-Scope=Global
 

@@ -14,17 +14,17 @@
 
 #include <qguardedptr.h>
 #include <kdialogbase.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 class RegexpTestDialog;
 
 
-class RegexpTestPart : public KDevPart
+class RegexpTestPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    RegexpTestPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    RegexpTestPart( QObject *parent, const char *name, const QStringList & );
     ~RegexpTestPart();
 
 private slots:
