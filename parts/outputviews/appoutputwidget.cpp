@@ -12,6 +12,8 @@
 #include "appoutputwidget.h"
 
 #include <qregexp.h>
+#include <qfileinfo.h>
+#include <qdir.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -46,11 +48,19 @@ void AppOutputWidget::childFinished(bool normal, int status)
 
 void AppOutputWidget::slotRowSelected(QListBoxItem* row)
 {
-	QRegExp assertMatch("ASSERT: \\\"([^\\\"]+)\\\" in ([^\\( ]+) \\(([\\d]+)\\)");
-	if (row && assertMatch.exactMatch(row->text())) {
-		m_part->partController()->editDocument(assertMatch.cap(2), assertMatch.cap(3).toInt() - 1);
-		m_part->mainWindow()->statusBar()->message(i18n("Assertion failed: %1").arg(assertMatch.cap(1)), 10000);
-		m_part->mainWindow()->lowerView(this);
+	static QRegExp assertMatch("ASSERT: \\\"([^\\\"]+)\\\" in ([^\\( ]+) \\(([\\d]+)\\)");
+	static QRegExp lineInfoMatch("\\[([^:]+):([\\d]+)\\]");
+	if (row) {
+		if (assertMatch.exactMatch(row->text())) {
+			m_part->partController()->editDocument(assertMatch.cap(2), assertMatch.cap(3).toInt() - 1);
+			m_part->mainWindow()->statusBar()->message(i18n("Assertion failed: %1").arg(assertMatch.cap(1)), 10000);
+			m_part->mainWindow()->lowerView(this);
+
+		} else if (lineInfoMatch.search(row->text()) != -1) {
+			m_part->partController()->editDocument(lineInfoMatch.cap(1), lineInfoMatch.cap(2).toInt() - 1);
+			m_part->mainWindow()->statusBar()->message(row->text(), 10000);
+			m_part->mainWindow()->lowerView(this);
+		}
 	}
 }
 
