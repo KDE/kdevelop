@@ -88,7 +88,6 @@ public:
     ThreadStackItem *findThread(int threadNo);
     FrameStackItem *findFrame(int frameNo, int threadNo);
 
-//    QCString getFrameParams(int frameNo, int threadNo);
     QString getFrameName(int frameNo, int threadNo);
 
     int viewedThread()
@@ -109,10 +108,6 @@ private:
 private:
 
     ThreadStackItem *viewedThread_;
-//    ThreadStackItem *stoppedAtThread_;
-//    int             currentFrame_;
-//    QString         firstLineOfLastBacktrace_;
-//    QStringList     threadList_;
 };
 
 }

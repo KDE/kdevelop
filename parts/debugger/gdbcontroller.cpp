@@ -759,7 +759,7 @@ void GDBController::parseProgramLocation(char *buf)
 void GDBController::parseBacktraceList(char *buf)
 {
     frameStack_->parseGDBBacktraceList(buf);
-
+/*
     varTree_->viewport()->setUpdatesEnabled(false);
     varTree_->setCurrentThread(viewedThread_);
 
@@ -776,14 +776,12 @@ void GDBController::parseBacktraceList(char *buf)
     QString frameName = frameStack_->getFrameName(currentFrame_, viewedThread_);
     varFrame->setFrameName(frameName);
 
-    // Add the frame params to the variable list
-// varFrame->setParams(frameStack_->getFrameParams(currentFrame_, viewedThread_));
-
     if (currentFrame_ == 0 && viewedThread_ != -1)
         varTree_->trimExcessFrames();
 
     varTree_->viewport()->setUpdatesEnabled(true);
     varTree_->repaint();
+*/
 }
 
 // **************************************************************************
@@ -792,6 +790,7 @@ void GDBController::parseThreadList(char *buf)
 {
     frameStack_->parseGDBThreadList(buf);
     viewedThread_ = frameStack_->viewedThread();
+    varTree_->setCurrentThread(viewedThread_);
 }
 
 // **************************************************************************
@@ -803,8 +802,8 @@ void GDBController::parseBreakpointSet(char *buf)
     if (GDBSetBreakpointCommand *BPCmd = dynamic_cast<GDBSetBreakpointCommand*>(currentCmd_))
     {
         // ... except in this case :-) A -1 key tells us that this is
-        // a special internal breakpoint, and we shouldn't do anything with it.
-        // Currently there are _no_ internal breakpoints.
+        // a special internal breakpoint, and we shouldn't do anything
+        // with it. Currently there are _no_ internal breakpoints.
         if (BPCmd->getKey() != -1)
             emit rawGDBBreakpointSet(buf, BPCmd->getKey());
     }
@@ -877,8 +876,6 @@ void GDBController::parseFrameSelected(char *buf)
 
     if (!stateIsOn(s_silent))
     {
-        //    if (char *end = strchr(buf, '\n'))    // 21/11/2000 this has already been removed
-        //      *end = 0;      // clobber the new line
         emit showStepInSource("", -1, "");
         emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
     }
@@ -1708,7 +1705,7 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
         case typePointer:
             queueCmd(new GDBPointerCommand(varItem));
             break;
-        
+
         default:
             queueCmd(new GDBItemCommand(varItem, QCString("print ") + varItem->fullName().latin1()));
             break;
@@ -1742,7 +1739,7 @@ void GDBController::slotExpandItem(TrimmableItem *genericItem)
             }
             item = item->nextSibling();
         }
-    }    
+    }
 */
 }
 

@@ -217,7 +217,7 @@ void VariableTree::slotDoubleClicked(QListViewItem *item, const QPoint &pos, int
         kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
         TrimmableItem *titem = dynamic_cast<TrimmableItem*>(item);
         if (titem)
-        {                                                                  
+        {
             kdDebug(9012) << " ### VariableTree::slotDoubleClicked 2" << endl;
             titem->handleDoubleClicked(pos, c);
         }
@@ -326,7 +326,7 @@ void VariableTree::trimExcessFrames()
     while (child) {
         QListViewItem *nextChild = child->nextSibling();
         if (VarFrameRoot *frame = dynamic_cast<VarFrameRoot*> (child)) {
-            if (frame->matchDetails(0, currentThread_))
+            if (!frame->matchDetails(0, currentThread_))
                 delete frame;
         }
         child = nextChild;
@@ -624,7 +624,7 @@ void VarItem::updateType(char *buf)
 
     originalValueType_ = str.latin1();
 
-    setText(VarTypeCol, str);    
+    setText(VarTypeCol, str);
 }
 
 // **************************************************************************

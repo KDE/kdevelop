@@ -180,13 +180,6 @@ void GDBParser::setItem(TrimmableItem *parent, const QString &varName,
             return;
 
         item = new VarItem(parent, varName, dataType);
-    } else {
-        // Don't update a "this" item because it'll alwasy stay red because the local
-        // this looks different than the param this.
-        // TODO - this is not good code. We should check to see if the address is the
-        // same between params and locals before ignoring the param.
-        //    if (params && varName == "this")
-        //      return;
     }
 
     switch (dataType) {
@@ -263,10 +256,10 @@ DataType GDBParser::determineType(char *buf) const
                 return typeArray;
             case '}':
                 if (*(buf+1) == ',' || *(buf+1) == '\n' || !*(buf+1))
-                    return typeArray;                     // Hmm a single element array??
+                    return typeArray;       // Hmm a single element array??
                 if (strncmp(buf+1, " 0x", 3) == 0)
-                    return typePointer;                   // What about references?
-                return typeUnknown;                     // very odd?
+                    return typePointer;     // What about references?
+                return typeUnknown;         // very odd?
             case '(':
                 buf = skipDelim(buf, '(', ')');
                 break;
@@ -333,9 +326,10 @@ char *GDBParser::skipString(char *buf) const
     if (buf && *buf == '\"') {
         buf = skipQuotes(buf, *buf);
         while (*buf) {
-            if ((strncmp(buf, ", \"", 3) == 0) || (strncmp(buf, ", '", 3) == 0))
+            if ((strncmp(buf, ", \"", 3) == 0) ||
+                (strncmp(buf, ", '", 3) == 0))
                 buf = skipQuotes(buf+2, *(buf+2));
-            else if (strncmp(buf, " <", 2) == 0)         // take care of <repeats
+            else if (strncmp(buf, " <", 2) == 0)  // take care of <repeats
                 buf = skipDelim(buf+1, '<', '>');
             else
                 break;
