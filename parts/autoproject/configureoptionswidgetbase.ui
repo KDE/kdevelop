@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>765</width>
-            <height>554</height>
+            <width>546</width>
+            <height>380</height>
         </rect>
     </property>
     <property name="caption">
@@ -23,8 +23,106 @@
             <number>0</number>
         </property>
         <property name="spacing">
-            <number>0</number>
+            <number>6</number>
         </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>config_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>Configuration:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>config_combo</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer17_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Fixed</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>addconfig_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>removeconfig_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Remove</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name" stdset="0">
+                        <cstring>Spacer18_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
         <widget class="QTabWidget">
             <property name="name">
                 <cstring>fortran_tab</cstring>
@@ -666,6 +764,30 @@
         <receiver>configure_options_widget</receiver>
         <slot>cxxserviceChanged()</slot>
     </connection>
+    <connection>
+        <sender>addconfig_button</sender>
+        <signal>clicked()</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>configAdded()</slot>
+    </connection>
+    <connection>
+        <sender>removeconfig_button</sender>
+        <signal>clicked()</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>configRemoved()</slot>
+    </connection>
+    <connection>
+        <sender>config_combo</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>configChanged(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>config_combo</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>configure_options_widget</receiver>
+        <slot>configComboTextChanged(const QString&amp;)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>cservice_combo</tabstop>
@@ -683,10 +805,14 @@
 </tabstops>
 <slots>
     <slot access="protected">cflagsClicked()</slot>
+    <slot access="protected">configAdded()</slot>
+    <slot access="protected">configChanged(const QString&amp;)</slot>
+    <slot access="protected">configComboTextChanged(const QString&amp;)</slot>
+    <slot access="protected">configRemoved()</slot>
     <slot access="protected">cserviceChanged()</slot>
     <slot access="protected">cxxflagsClicked()</slot>
-    <slot access="protected">f77flagsClicked()</slot>
     <slot access="protected">cxxserviceChanged()</slot>
+    <slot access="protected">f77flagsClicked()</slot>
     <slot access="protected">f77serviceChanged()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>

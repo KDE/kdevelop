@@ -3,6 +3,7 @@
 <MenuBar>
   <Menu name="project" >
     <Action name="project_addtranslation" />
+    <Action name="project_configuration" />
   </Menu>
   <Menu name="build" >
     <Action name="build_build" />

@@ -69,25 +69,58 @@ ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *p
 {
     m_part = part;
 
-    QDomDocument dom = *m_part->projectDom();
-
-    configargs_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/configure/configargs"));
-    builddir_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/configure/builddir"));
-
-    KTrader::OfferList coffers =
-        KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C'");
-    KTrader::OfferList cxxoffers =
-        KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C++'");
-    KTrader::OfferList f77offers =
-        KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Fortran'");
+    coffers   = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C'");
+    cxxoffers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'C++'");
+    f77offers = KTrader::self()->query("KDevelop/CompilerOptions", "[X-KDevelop-Language] == 'Fortran'");
 
     ServiceComboBox::insertStringList(cservice_combo, coffers, &cservice_names, &cservice_execs);
     ServiceComboBox::insertStringList(cxxservice_combo, cxxoffers, &cxxservice_names, &cxxservice_execs);
     ServiceComboBox::insertStringList(f77service_combo, f77offers, &f77service_names, &f77service_execs);
 
-    QString ccompiler = DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompiler");
-    QString cxxcompiler = DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxcompiler");
-    QString f77compiler = DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77compiler");
+    if (coffers.isEmpty())
+        cflags_button->setEnabled(false);
+    if (cxxoffers.isEmpty())
+        cxxflags_button->setEnabled(false);
+    if (f77offers.isEmpty())
+        f77flags_button->setEnabled(false);
+
+    currentConfig = QString::null;
+    configChanged("default");
+
+    QDomDocument dom = *m_part->projectDom();
+    QDomNode node = dom.documentElement().namedItem("kdevautoproject").namedItem("configurations");
+    QDomElement childEl = node.firstChild().toElement();
+    while (!childEl.isNull()) {
+        allConfigs.append(childEl.tagName());
+        kdDebug(9020) << "Found config " << childEl.tagName() << endl;
+        childEl = childEl.nextSibling().toElement();
+    }
+
+    if (!allConfigs.contains("default"))
+        allConfigs.append("default");
+    config_combo->insertStringList(allConfigs);
+}
+
+
+ConfigureOptionsWidget::~ConfigureOptionsWidget()
+{}
+
+
+void ConfigureOptionsWidget::readSettings(const QString &config)
+{
+    QDomDocument dom = *m_part->projectDom();
+    QString prefix = "/kdevautoproject/configurations/" + config + "/";
+    kdDebug(9020) << "Reading config from " << prefix << endl;
+    
+    configargs_edit->setText(DomUtil::readEntry(dom, prefix + "configargs"));
+    QString builddir = DomUtil::readEntry(dom, prefix + "builddir");
+    if (builddir.isEmpty() && config != "default")
+        builddir = config;
+    builddir_edit->setText(builddir);
+
+    QString ccompiler = DomUtil::readEntry(dom, prefix + "ccompiler");
+    QString cxxcompiler = DomUtil::readEntry(dom, prefix + "cxxcompiler");
+    QString f77compiler = DomUtil::readEntry(dom, prefix + "f77compiler");
 
     if (ccompiler.isEmpty()) {
         kdDebug() << "No c compiler set" << endl;
@@ -127,55 +160,98 @@ ConfigureOptionsWidget::ConfigureOptionsWidget(AutoProjectPart *part, QWidget *p
     ServiceComboBox::setCurrentText(cxxservice_combo, cxxcompiler, cxxservice_names);
     ServiceComboBox::setCurrentText(f77service_combo, f77compiler, f77service_names);
 
-    if (coffers.isEmpty())
-        cflags_button->setEnabled(false);
-    if (cxxoffers.isEmpty())
-        cxxflags_button->setEnabled(false);
-    if (f77offers.isEmpty())
-        f77flags_button->setEnabled(false);
-
-    cbinary_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompilerbinary"));
-    cxxbinary_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxcompilerbinary"));
-    f77binary_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77compilerbinary"));
+    cbinary_edit->setText(DomUtil::readEntry(dom, prefix + "ccompilerbinary"));
+    cxxbinary_edit->setText(DomUtil::readEntry(dom, prefix + "cxxcompilerbinary"));
+    f77binary_edit->setText(DomUtil::readEntry(dom, prefix + "f77compilerbinary"));
     
-    cflags_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/cflags"));
-    cxxflags_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxflags"));
-    f77flags_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77flags"));
+    cflags_edit->setText(DomUtil::readEntry(dom, prefix + "cflags"));
+    cxxflags_edit->setText(DomUtil::readEntry(dom, prefix + "cxxflags"));
+    f77flags_edit->setText(DomUtil::readEntry(dom, prefix + "f77flags"));
 }
 
 
-ConfigureOptionsWidget::~ConfigureOptionsWidget()
-{}
-
-
-void ConfigureOptionsWidget::accept()
+void ConfigureOptionsWidget::saveSettings(const QString &config)
 {
     QDomDocument dom = *m_part->projectDom();
+    QString prefix = "/kdevautoproject/configurations/" + config + "/";
+    kdDebug(9020) << "Saving config under " << prefix << endl;
 
-    DomUtil::writeEntry(dom, "/kdevautoproject/configure/configargs", configargs_edit->text());
-    DomUtil::writeEntry(dom, "/kdevautoproject/configure/builddir", builddir_edit->text());
+    DomUtil::writeEntry(dom, prefix + "configargs", configargs_edit->text());
+    DomUtil::writeEntry(dom, prefix + "builddir", builddir_edit->text());
 
     QFileInfo fi(builddir_edit->text());
     QDir dir(fi.dir());
     dir.mkdir(fi.fileName());
 
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/ccompiler",
+    DomUtil::writeEntry(dom, prefix + "ccompiler",
                         ServiceComboBox::currentText(cservice_combo, cservice_names));
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cxxcompiler",
+    DomUtil::writeEntry(dom, prefix + "cxxcompiler",
                         ServiceComboBox::currentText(cxxservice_combo, cxxservice_names));
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/f77compiler",
+    DomUtil::writeEntry(dom, prefix + "f77compiler",
                         ServiceComboBox::currentText(f77service_combo, f77service_names));
 
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/ccompilerbinary", cbinary_edit->text());
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cxxcompilerbinary", cxxbinary_edit->text());
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/f77compilerbinary", f77binary_edit->text());
+    DomUtil::writeEntry(dom, prefix + "ccompilerbinary", cbinary_edit->text());
+    DomUtil::writeEntry(dom, prefix + "cxxcompilerbinary", cxxbinary_edit->text());
+    DomUtil::writeEntry(dom, prefix + "f77compilerbinary", f77binary_edit->text());
 
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cflags", cflags_edit->text());
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/cxxflags", cxxflags_edit->text());
-    DomUtil::writeEntry(dom, "/kdevautoproject/compiler/f77flags", f77flags_edit->text());
+    DomUtil::writeEntry(dom, prefix + "cflags", cflags_edit->text());
+    DomUtil::writeEntry(dom, prefix + "cxxflags", cxxflags_edit->text());
+    DomUtil::writeEntry(dom, prefix + "f77flags", f77flags_edit->text());
 
     if (KMessageBox::questionYesNo(this, i18n("Rerun configure now?")) == KMessageBox::Yes)
         QTimer::singleShot(0, m_part, SLOT(slotConfigure()));
+}
+
+
+void ConfigureOptionsWidget::configComboTextChanged(const QString &config)
+{
+    bool canAdd = !allConfigs.contains(config) && !config.contains("/") && !config.isEmpty();
+    bool canRemove = allConfigs.contains(config) && config != "default";
+    addconfig_button->setEnabled(canAdd);
+    removeconfig_button->setEnabled(canRemove);
+}
+
+
+void ConfigureOptionsWidget::configChanged(const QString &config)
+{
+    if (config == currentConfig || !allConfigs.contains(config))
+        return;
+    
+    if (!currentConfig.isNull())
+        saveSettings(currentConfig);
+
+    currentConfig = config;
+    readSettings(config);
+
+    config_combo->setEditText(config);
+    //    configComboTextChanged(config);
+}
+
+
+void ConfigureOptionsWidget::configAdded()
+{
+    QString config = config_combo->currentText();
+    
+    allConfigs.append(config);
+
+    config_combo->clear();
+    config_combo->insertStringList(allConfigs);
+    configChanged(config);
+}
+
+
+void ConfigureOptionsWidget::configRemoved()
+{
+    QString config = config_combo->currentText();
+
+    QDomDocument dom = *m_part->projectDom();
+    QDomNode node = dom.documentElement().namedItem("kdevautoproject").namedItem("configurations");
+    node.removeChild(node.namedItem(config));
+    allConfigs.remove(config);
+
+    config_combo->clear();
+    config_combo->insertStringList(allConfigs);
+    configChanged("default");
 }
 
 
@@ -275,6 +351,12 @@ KDevCompilerOptions *ConfigureOptionsWidget::createCompilerOptions(const QString
     KDevCompilerOptions *dlg = (KDevCompilerOptions*) obj;
     
     return dlg;
+}
+
+
+void ConfigureOptionsWidget::accept()
+{
+    saveSettings(currentConfig);
 }
 
 #include "configureoptionswidget.moc"

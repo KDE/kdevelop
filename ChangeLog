@@ -3,6 +3,7 @@
 	* Display header files in automake manager
 	* Add Icon dialog
 	* Allow to build index.cache.bz2 by context menu
+	* Multiple build configurations
 
 2002-04-28  Sandy Meier  <smeier@kdevelop.org>
 	

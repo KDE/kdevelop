@@ -12,6 +12,7 @@
 #include "autoprojectpart.h"
 
 #include <qfileinfo.h>
+#include <qpopupmenu.h>
 #include <qwhatsthis.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -101,6 +102,9 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
     if (!kde)
         action->setEnabled(false);
 
+    buildConfigAction = new KSelectAction( i18n("Build configuration"), 0,
+                                           actionCollection(), "project_configuration" );
+
     QDomDocument &dom = *projectDom();
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/run/disable_default")) {
         //ok we handle the execute in this kpart
@@ -108,6 +112,11 @@ AutoProjectPart::AutoProjectPart(QObject *parent, const char *name, const QStrin
                               this, SLOT(slotExecute()),
                               actionCollection(), "build_execute" );
     }
+    
+    connect( buildConfigAction->popupMenu(), SIGNAL(activated(const QString&)),
+             this, SLOT(slotBuildConfigChanged(const QString&)) );
+    connect( buildConfigAction->popupMenu(), SIGNAL(aboutToShow()),
+             this, SLOT(slotBuildConfigAboutToShow()) );
 
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
@@ -225,13 +234,52 @@ void AutoProjectPart::removeFile(const QString &fileName)
 }
 
 
+QStringList AutoProjectPart::allBuildConfigs()
+{
+    QDomDocument &dom = *projectDom();
+
+    QStringList allConfigs;
+    QDomNode node = dom.documentElement().namedItem("kdevautoproject").namedItem("configurations");
+    QDomElement childEl = node.firstChild().toElement();
+    while (!childEl.isNull()) {
+        allConfigs.append(childEl.tagName());
+        kdDebug(9020) << "Found config " << childEl.tagName() << endl;
+        childEl = childEl.nextSibling().toElement();
+    }
+
+    return allConfigs;
+}
+
+
+QString AutoProjectPart::currentBuildConfig()
+{
+    QDomDocument &dom = *projectDom();
+
+    QString config = DomUtil::readEntry(dom, "/kdevautoproject/general/useconfiguration");
+    if (config.isEmpty() || !allBuildConfigs().contains(config))
+        config = "default";
+
+    return config;
+}
+
+
+QString AutoProjectPart::buildDirectory()
+{
+    QDomDocument &dom = *projectDom();
+    QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
+
+    QString builddir = DomUtil::readEntry(dom, prefix + "builddir");
+    return builddir.isEmpty()? projectDirectory() : builddir;
+}
+
+
 void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target)
 {
     partController()->saveAllFiles();
 
     QFileInfo fi1(dir + "/Makefile");
     if (!fi1.exists()) {
-        QFileInfo fi2(m_widget->buildDirectory() + "/configure");
+        QFileInfo fi2(buildDirectory() + "/configure");
         if (!fi2.exists()) {
             int r = KMessageBox::questionYesNo(m_widget, i18n("There is no Makefile in this directory\n"
                                                               "and no configure script for this project.\n"
@@ -275,46 +323,49 @@ void AutoProjectPart::startMakeCommand(const QString &dir, const QString &target
 
 void AutoProjectPart::slotBuild()
 {
-    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1(""));
+    startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 
 
 void AutoProjectPart::slotConfigure()
 {
     QDomDocument &dom = *projectDom();
-    
+    QString prefix = "/kdevautoproject/configurations/" + currentBuildConfig() + "/";
+  
     QString cmdline = projectDirectory();
     cmdline += "/configure";
-    QString cc = DomUtil::readEntry(dom, "/kdevautoproject/compiler/ccompilerbinary");
+    QString cc = DomUtil::readEntry(dom, prefix + "ccompilerbinary");
     if (!cc.isEmpty())
         cmdline.prepend(QString("CC=%1 ").arg(cc));
-    QString cflags = DomUtil::readEntry(dom, "/kdevautoproject/compiler/cflags");
+    QString cflags = DomUtil::readEntry(dom, prefix + "cflags");
     if (!cflags.isEmpty())
         cmdline.prepend(QString("CFLAGS=%1 ").arg(cflags));
-    QString cxx = DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxcompilerbinary");
+    QString cxx = DomUtil::readEntry(dom, prefix + "cxxcompilerbinary");
     if (!cxx.isEmpty())
         cmdline.prepend(QString("CXX=%1 ").arg(cxx));
-    QString cxxflags = DomUtil::readEntry(dom, "/kdevautoproject/compiler/cxxflags");
+    QString cxxflags = DomUtil::readEntry(dom, prefix + "cxxflags");
     if (!cxxflags.isEmpty())
         cmdline.prepend(QString("CXXFLAGS=%1 ").arg(cxxflags));
-    QString f77 = DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77compilerbinary");
+    QString f77 = DomUtil::readEntry(dom, prefix + "f77compilerbinary");
     if (!f77.isEmpty())
         cmdline.prepend(QString("F77=%1 ").arg(f77));
-    QString fflags = DomUtil::readEntry(dom, "/kdevautoproject/compiler/f77flags");
+    QString fflags = DomUtil::readEntry(dom, prefix + "f77flags");
     if (!fflags.isEmpty())
         cmdline.prepend(QString("FFLAGS=%1 ").arg(fflags));
 
-    QString configargs = DomUtil::readEntry(dom, "/kdevautoproject/configure/configargs");
+    QString configargs = DomUtil::readEntry(dom, prefix + "configargs");
     if (!configargs.isEmpty()) {
 	cmdline += " ";
         cmdline += configargs;
     }
 
+    QString builddir = buildDirectory();
+    
     QString dircmd = "cd ";
-    dircmd += m_widget->buildDirectory();
+    dircmd += builddir;
     dircmd += " && ";
 
-    makeFrontend()->queueCommand(m_widget->buildDirectory(), dircmd + cmdline);
+    makeFrontend()->queueCommand(builddir, dircmd + cmdline);
 }
 
 
@@ -346,31 +397,31 @@ void AutoProjectPart::slotMakefilecvs()
 
 void AutoProjectPart::slotInstall()
 {
-    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("install"));
+    startMakeCommand(buildDirectory(), QString::fromLatin1("install"));
 }
 
 
 void AutoProjectPart::slotClean()
 {
-    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("clean"));
+    startMakeCommand(buildDirectory(), QString::fromLatin1("clean"));
 }
 
 
 void AutoProjectPart::slotDistClean()
 {
-    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("distclean"));
+    startMakeCommand(buildDirectory(), QString::fromLatin1("distclean"));
 }
 
 
 void AutoProjectPart::slotMakeMessages()
 {
-    startMakeCommand(m_widget->buildDirectory(), QString::fromLatin1("package-messages"));
+    startMakeCommand(buildDirectory(), QString::fromLatin1("package-messages"));
 }
 
 
 void AutoProjectPart::slotExecute()
 {
-    QString program = m_widget->buildDirectory() + "/" + project()->mainProgram();
+    QString program = buildDirectory() + "/" + mainProgram();
     
     if (DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal")) {
         QString terminal = "konsole -e /bin/sh -c '";
@@ -402,6 +453,21 @@ void AutoProjectPart::slotAddTranslation()
 {
     AddTranslationDialog dlg(this, m_widget);
     dlg.exec();
+}
+
+
+void AutoProjectPart::slotBuildConfigChanged(const QString &config)
+{
+    QDomDocument &dom = *projectDom();
+    DomUtil::writeEntry(dom, "/kdevautoproject/general/useconfiguration", config);
+}
+
+
+void AutoProjectPart::slotBuildConfigAboutToShow()
+{
+    QStringList l =  allBuildConfigs();
+    buildConfigAction->setItems(l);
+    buildConfigAction->setCurrentItem(l.findIndex(currentBuildConfig()));
 }
 
 #include "autoprojectpart.moc"

@@ -441,15 +441,6 @@ QString AutoProjectWidget::subprojectDirectory()
 }
 
 
-QString AutoProjectWidget::buildDirectory()
-{
-    QDomDocument &dom = *m_part->projectDom();
-
-    QString dir = DomUtil::readEntry(dom, "/kdevautoproject/configure/builddir");
-    return dir.isEmpty()? projectDirectory() : dir;
-}
-
-
 void AutoProjectWidget::setActiveTarget(const QString &targetPath)
 {
     int prefixlen = projectDirectory().length()+1;
@@ -656,7 +647,7 @@ void AutoProjectWidget::slotBuildSubproject()
 {
     QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
 
-    m_part->startMakeCommand(buildDirectory() + relpath, QString::fromLatin1(""));
+    m_part->startMakeCommand(m_part->buildDirectory() + relpath, QString::fromLatin1(""));
 
     m_part->topLevel()->lowerView(this);
 }
@@ -727,7 +718,7 @@ void AutoProjectWidget::slotBuildTarget()
         name = "index.cache.bz2";
 
     QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-    m_part->startMakeCommand(buildDirectory() + relpath, titem->name);
+    m_part->startMakeCommand(m_part->buildDirectory() + relpath, titem->name);
     
     m_part->topLevel()->lowerView(this);
 }

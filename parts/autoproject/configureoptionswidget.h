@@ -12,8 +12,11 @@
 #ifndef _CONFIGUREOPTIONSWIDGET_H_
 #define _CONFIGUREOPTIONSWIDGET_H_
 
-#include "domutil.h"
 #include "configureoptionswidgetbase.h"
+
+#include <ktrader.h>
+#include "domutil.h"
+
 
 class KDevCompilerOptions;
 class AutoProjectPart;
@@ -31,6 +34,10 @@ public slots:
     void accept();
 
 private:
+    virtual void configChanged(const QString &config);
+    virtual void configComboTextChanged(const QString &config);
+    virtual void configAdded();
+    virtual void configRemoved();
     virtual void cflagsClicked();
     virtual void cxxflagsClicked();
     virtual void f77flagsClicked();
@@ -38,10 +45,16 @@ private:
     virtual void cxxserviceChanged();
     virtual void f77serviceChanged();
 
+    void readSettings(const QString &config);
+    void saveSettings(const QString &config);
+    
     KDevCompilerOptions *createCompilerOptions(const QString &lang);
+    KTrader::OfferList coffers, cxxoffers, f77offers;
     QStringList cservice_names, cservice_execs;
     QStringList cxxservice_names, cxxservice_execs;
     QStringList f77service_names, f77service_execs;
+    QStringList allConfigs;
+    QString currentConfig;
     
     AutoProjectPart *m_part;
 };

@@ -20,6 +20,7 @@
 
 class KDialogBase;
 class AutoProjectWidget;
+class KSelectAction;
 
 
 class AutoProjectPart : public KDevProject
@@ -53,13 +54,21 @@ private slots:
     void slotMakeMessages();
     void slotConfigure();
     void slotExecute();
+    void slotBuildConfigChanged(const QString &config);
+    void slotBuildConfigAboutToShow();
     //void slotImportExisting();
     
 private:
+    QStringList allBuildConfigs();
+    QString currentBuildConfig();
+    QString buildDirectory();
+    
     void startMakeCommand(const QString &dir, const QString &target);
     
     QGuardedPtr<AutoProjectWidget> m_widget;
     QString m_projectName;
+    KSelectAction *buildConfigAction;
+    
     friend class AutoProjectWidget;
     friend class CompilerOptionsWidget;
     friend class AddTranslationDialog;
