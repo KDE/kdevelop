@@ -219,7 +219,6 @@ void CPrjOptionsDlg::addCompilerOptionsPage()
   optimize=new QCheckBox(target_group,"optimize");
   grid2->addWidget( optimize,1,0);
   optimize->setText(i18n("optimize"));
-  int t = cxxflags.find("-O0");
   optimize->setChecked(cxxflags.find("-O0") == -1);
 
   optimize_level=new QSpinBox(target_group,"optimize_level");
