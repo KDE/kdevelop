@@ -1,5 +1,3 @@
-SUBDIRS = keditor 
-
 INCLUDES = $(all_includes)
 
 noinst_LTLIBRARIES = libkdevinterfaces.la

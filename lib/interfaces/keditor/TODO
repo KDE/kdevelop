@@ -1,6 +1,0 @@
-This has to be done until the new interface is a usable
-as the old one:
-
-o Implement a generic interface for RMB menus
-o Implement an additional multiple-view interface
-o Implement interface for code completion
