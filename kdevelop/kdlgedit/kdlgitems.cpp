@@ -92,9 +92,9 @@ void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd)
 
   KDlgItem_Widget *w = (KDlgItem_Widget*)wd->getChildDb()->getFirst();
 //  do {
-//    if ((w) && (w->getProps()))
-//      if (w->getProps());// w->getProps()->getProp("Name");
-//      printf("****** %s\n",(const char*)w->getProps()->getProp("Name"));
+    if ((w) && (w->getProps()))
+      if (w->getProps()) w->getProps()->getProp(1);
+//      printf("****** %s\n",(const char*)w->getProps()->getProp(1));
 //    w = (KDlgItem_Widget*)wd->getChildDb()->getNext();
 //  } while (w);
 }

@@ -22,6 +22,10 @@
 #include <qmessagebox.h>
 #include <kapp.h>
 #include <qpushbutton.h>
+#include <kruler.h>
+
+int RULER_WIDTH = 20;
+int RULER_HEIGHT = 20;
 
 KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *name )
    : QWidget(parent,name)
@@ -36,7 +40,7 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   setBackgroundMode(PaletteLight);
 
-  main_widget = new KDlgItem_Widget( this );
+  main_widget = new KDlgItem_Widget( this, true );
 
   main_widget->getProps()->setProp_Value("X","0");
   main_widget->getProps()->setProp_Value("Y","0");
@@ -47,11 +51,32 @@ KDlgEditWidget::KDlgEditWidget(CKDevelop* parCKD,QWidget *parent, const char *na
 
   if ((parCKD) && ((CKDevelop*)parCKD)->kdlg_get_items_view())
     ((CKDevelop*)parCKD)->kdlg_get_items_view()->addWidgetChilds(main_widget);
+
+  rulh = new KRuler(KRuler::horizontal, this);
+  rulh->setRulerStyle(KRuler::pixel);
+  rulh->setRange(0,400);
+  rulh->setOffset(0);
+  rulh->setPixelPerMark(5);
+
+  rulv = new KRuler(KRuler::vertical, this);
+  rulv->setRulerStyle(KRuler::pixel);
+  rulv->setRange(0,300);
+  rulv->setOffset(0);
+  rulv->setPixelPerMark(5);
 }
 
 KDlgEditWidget::~KDlgEditWidget()
 {
 }
+
+void KDlgEditWidget::resizeEvent ( QResizeEvent *e )
+{
+  QWidget::resizeEvent(e);
+
+  rulh->setGeometry(RULER_WIDTH,0,  width()-RULER_WIDTH, 20);
+  rulv->setGeometry(0,RULER_HEIGHT, 20, height()-RULER_HEIGHT);
+}
+
 
 void KDlgEditWidget::choiseAndAddItem()
 {
@@ -61,16 +86,16 @@ void KDlgEditWidget::choiseAndAddItem()
 bool KDlgEditWidget::addItem(int type)
 {
 
-  KDlgItem_Widget *wid2 = new KDlgItem_Widget( this );
+  KDlgItem_Widget *wid2 = new KDlgItem_Widget( main_widget->getItem(), false );
 
-  wid2->getProps()->setProp_Value("X","200");
-  wid2->getProps()->setProp_Value("Y","100");
-  wid2->getProps()->setProp_Value("Width","200");
-  wid2->getProps()->setProp_Value("Height","200");
+  wid2->getProps()->setProp_Value("X","150");
+  wid2->getProps()->setProp_Value("Y","50");
+  wid2->getProps()->setProp_Value("Width","150");
+  wid2->getProps()->setProp_Value("Height","100");
   wid2->addChild( new KDlgItem_PushButton ( wid2->getItem() ) );
   wid2->repaintItem();
 
-//  wid->addChild( wid2 );
+  main_widget->addChild( wid2 );
 
   return true;
 }
@@ -258,11 +283,12 @@ void KDlgPropertyBase::fillWithStandardEntrys()
 
 
 
-KDlgItem_Base::KDlgItem_Base( QWidget *parent , const char* name )
+KDlgItem_Base::KDlgItem_Base( QWidget *parent , bool ismainwidget, const char* name )
   : QObject(parent,name)
 {
+  isMainWidget = ismainwidget;
   item = new QWidget(parent);
-//  item->setGeometry(10,10,100,50);
+  item->setMouseTracking(true);
   item->setBackgroundMode(QWidget::PaletteDark);
 
   props = new KDlgPropertyBase();
@@ -276,17 +302,44 @@ void KDlgItem_Base::repaintItem(QWidget *it)
   if ((!itm) || (!props))
     return;
 
-  itm->setGeometry(props->getIntFromProp("X",itm->x()),
-                   props->getIntFromProp("Y",itm->y()),
+  itm->setGeometry(isMainWidget ? RULER_WIDTH : props->getIntFromProp("X",itm->x()),
+                   isMainWidget ? RULER_HEIGHT : props->getIntFromProp("Y",itm->y()),
                    props->getIntFromProp("Width",itm->width()),
                    props->getIntFromProp("Height",itm->height()));
 }
 
-KDlgItem_Widget::KDlgItem_Widget( QWidget *parent , const char* name )
-   : KDlgItem_Base(parent,name)
+KDlgItem_Widget::MyWidget::MyWidget(QWidget* parent , bool isMainWidget, const char* name )
+  : QFrame(parent,name)
+{
+  if (isMainWidget)
+    setFrameStyle( QFrame::WinPanel | QFrame::Raised );
+  else
+    {
+      setFrameStyle( QFrame::Panel | QFrame::Plain );
+      setLineWidth(1);
+    }
+  show();
+}
+
+void KDlgItem_Widget::MyWidget::paintEvent ( QPaintEvent *e )
+{
+  QFrame::paintEvent(e);
+
+  QPainter p(this);
+  p.setClipRect(e->rect());
+
+  for (int x = 0; x < width(); x+=10)
+   for (int y = 0; y < height(); y+=10)
+     p.drawPoint(x,y);
+
+}
+
+
+KDlgItem_Widget::KDlgItem_Widget( QWidget *parent , bool ismainwidget = false, const char* name )
+   : KDlgItem_Base(parent,ismainwidget,name)
 {
   childs = new KDlgItemDatabase();
-  item = new QWidget(parent);
+  item = new MyWidget(parent, ismainwidget);
   item->show();
   props = new KDlgPropertyBase();
   repaintItem();
@@ -300,11 +353,14 @@ void KDlgItem_Widget::repaintItem(QWidget *it)
     return;
 
   KDlgItem_Base::repaintItem(itm);
+
 }
 
 
+
+
 KDlgItem_PushButton::KDlgItem_PushButton( QWidget *parent , const char* name )
-  : KDlgItem_Base(0,name)
+  : KDlgItem_Base(0,false,name)
 {
   item = new QPushButton("Button",parent);
 //  item->setGeometry(10,10,100,50);

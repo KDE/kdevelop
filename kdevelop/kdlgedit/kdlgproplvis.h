@@ -181,7 +181,7 @@ class KDlgItem_Base : public QObject
 {
   Q_OBJECT
   public:
-    KDlgItem_Base( QWidget *parent = 0, const char* name = 0 );
+    KDlgItem_Base( QWidget *parent = 0, bool ismainwidget = false, const char* name = 0 );
     virtual ~KDlgItem_Base() {}
 
     virtual QString itemClass() { return QString("[Base]"); }
@@ -194,13 +194,14 @@ class KDlgItem_Base : public QObject
   protected:
     QWidget *item;
     KDlgPropertyBase *props;
+    bool isMainWidget;
 };
 
 class KDlgItem_Widget : public KDlgItem_Base
 {
   Q_OBJECT
   public:
-    KDlgItem_Widget( QWidget *parent = 0, const char* name = 0 );
+    KDlgItem_Widget( QWidget *parent = 0, bool ismainwidget = false, const char* name = 0 );
     virtual ~KDlgItem_Widget() {}
 
     virtual QString itemClass() { return QString("QWidget"); }
@@ -213,7 +214,16 @@ class KDlgItem_Widget : public KDlgItem_Base
     bool addChild(KDlgItem_Base *item) { return childs->addItem(item); }
 
   protected:
-    QWidget *item;
+    class MyWidget : public QFrame
+    {
+      public:
+        MyWidget(QWidget* parent = 0, bool isMainWidget = false, const char* name = 0);
+
+      protected:
+        virtual void paintEvent ( QPaintEvent * );
+    };
+
+    MyWidget *item;
     KDlgItemDatabase *childs;
     int nrOfChilds;
 };
