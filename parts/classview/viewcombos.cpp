@@ -162,7 +162,7 @@ void refreshFunctions(ClassViewPart *part, KComboView *view, const ClassDom & do
     FunctionList functions = dom->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
-        FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it, true), *it);
         view->addItem(item);
         item->setOpen(true);
         processFunction(part, view, item);
@@ -177,7 +177,7 @@ void refreshFunctions(ClassViewPart *part, KComboView *view, const NamespaceDom 
     FunctionList functions = dom->functionList();
     for (FunctionList::const_iterator it = functions.begin(); it != functions.end(); ++it)
     {
-        FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it), *it);
+        FunctionItem *item = new FunctionItem(part, view->listView(), part->languageSupport()->formatModelItem(*it, true), *it);
         view->addItem(item);
         item->setOpen(true);
         processFunction(part, view, item);
@@ -189,7 +189,7 @@ void processNamespace( ClassViewPart *part, KComboView *view, NamespaceItem * it
     NamespaceList namespaces = item->dom()->namespaceList();
     for (NamespaceList::const_iterator it = namespaces.begin(); it != namespaces.end(); ++it)
     {
-        NamespaceItem *newitem = new NamespaceItem(part, item, part->languageSupport()->formatModelItem(*it), *it);
+        NamespaceItem *newitem = new NamespaceItem(part, item, part->languageSupport()->formatModelItem(*it, true), *it);
         view->addItem(newitem);
         newitem->setOpen(true);
         processNamespace(part, view, newitem);
