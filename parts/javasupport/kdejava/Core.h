@@ -16,47 +16,61 @@ extern "C" {
 #undef org_kde_koala_Core_MidButton
 #define org_kde_koala_Core_MidButton 4L
 #undef org_kde_koala_Core_MouseButtonMask
-#define org_kde_koala_Core_MouseButtonMask 7L
+#define org_kde_koala_Core_MouseButtonMask 255L
 #undef org_kde_koala_Core_ShiftButton
-#define org_kde_koala_Core_ShiftButton 8L
+#define org_kde_koala_Core_ShiftButton 256L
 #undef org_kde_koala_Core_ControlButton
-#define org_kde_koala_Core_ControlButton 16L
+#define org_kde_koala_Core_ControlButton 512L
 #undef org_kde_koala_Core_AltButton
-#define org_kde_koala_Core_AltButton 32L
+#define org_kde_koala_Core_AltButton 1024L
+#undef org_kde_koala_Core_MetaButton
+#define org_kde_koala_Core_MetaButton 2048L
 #undef org_kde_koala_Core_KeyButtonMask
-#define org_kde_koala_Core_KeyButtonMask 56L
+#define org_kde_koala_Core_KeyButtonMask 4095L
 #undef org_kde_koala_Core_Keypad
 #define org_kde_koala_Core_Keypad 16384L
 #undef org_kde_koala_Core_Horizontal
 #define org_kde_koala_Core_Horizontal 0L
 #undef org_kde_koala_Core_Vertical
-#define org_kde_koala_Core_Vertical 1L
+#define org_kde_koala_Core_Vertical 0L
+#undef org_kde_koala_Core_AlignAuto
+#define org_kde_koala_Core_AlignAuto 0L
 #undef org_kde_koala_Core_AlignLeft
 #define org_kde_koala_Core_AlignLeft 1L
 #undef org_kde_koala_Core_AlignRight
 #define org_kde_koala_Core_AlignRight 2L
 #undef org_kde_koala_Core_AlignHCenter
 #define org_kde_koala_Core_AlignHCenter 4L
+#undef org_kde_koala_Core_AlignJustify
+#define org_kde_koala_Core_AlignJustify 8L
+#undef org_kde_koala_Core_AlignHorizontal_Mask
+#define org_kde_koala_Core_AlignHorizontal_Mask 15L
 #undef org_kde_koala_Core_AlignTop
-#define org_kde_koala_Core_AlignTop 8L
+#define org_kde_koala_Core_AlignTop 16L
 #undef org_kde_koala_Core_AlignBottom
-#define org_kde_koala_Core_AlignBottom 16L
+#define org_kde_koala_Core_AlignBottom 32L
 #undef org_kde_koala_Core_AlignVCenter
-#define org_kde_koala_Core_AlignVCenter 32L
+#define org_kde_koala_Core_AlignVCenter 64L
+#undef org_kde_koala_Core_AlignVertical_Mask
+#define org_kde_koala_Core_AlignVertical_Mask 112L
 #undef org_kde_koala_Core_AlignCenter
-#define org_kde_koala_Core_AlignCenter 36L
+#define org_kde_koala_Core_AlignCenter 68L
 #undef org_kde_koala_Core_SingleLine
-#define org_kde_koala_Core_SingleLine 64L
+#define org_kde_koala_Core_SingleLine 128L
 #undef org_kde_koala_Core_DontClip
-#define org_kde_koala_Core_DontClip 128L
+#define org_kde_koala_Core_DontClip 256L
 #undef org_kde_koala_Core_ExpandTabs
-#define org_kde_koala_Core_ExpandTabs 256L
+#define org_kde_koala_Core_ExpandTabs 512L
 #undef org_kde_koala_Core_ShowPrefix
-#define org_kde_koala_Core_ShowPrefix 512L
+#define org_kde_koala_Core_ShowPrefix 1024L
 #undef org_kde_koala_Core_WordBreak
-#define org_kde_koala_Core_WordBreak 1024L
+#define org_kde_koala_Core_WordBreak 2048L
+#undef org_kde_koala_Core_BreakAnywhere
+#define org_kde_koala_Core_BreakAnywhere 4096L
 #undef org_kde_koala_Core_DontPrint
-#define org_kde_koala_Core_DontPrint 4096L
+#define org_kde_koala_Core_DontPrint 8192L
+#undef org_kde_koala_Core_NoAccel
+#define org_kde_koala_Core_NoAccel 16384L
 #undef org_kde_koala_Core_WState_Created
 #define org_kde_koala_Core_WState_Created 1L
 #undef org_kde_koala_Core_WState_Disabled
@@ -87,8 +101,8 @@ extern "C" {
 #define org_kde_koala_Core_WState_Polished 8192L
 #undef org_kde_koala_Core_WState_DND
 #define org_kde_koala_Core_WState_DND 16384L
-#undef org_kde_koala_Core_WState_Modal
-#define org_kde_koala_Core_WState_Modal 32768L
+#undef org_kde_koala_Core_WState_Reserved0
+#define org_kde_koala_Core_WState_Reserved0 32768L
 #undef org_kde_koala_Core_WState_Reserved1
 #define org_kde_koala_Core_WState_Reserved1 65536L
 #undef org_kde_koala_Core_WState_Reserved2
@@ -97,16 +111,18 @@ extern "C" {
 #define org_kde_koala_Core_WState_Reserved3 262144L
 #undef org_kde_koala_Core_WState_Maximized
 #define org_kde_koala_Core_WState_Maximized 524288L
-#undef org_kde_koala_Core_WState_TranslateBackground
-#define org_kde_koala_Core_WState_TranslateBackground 1048576L
+#undef org_kde_koala_Core_WState_Minimized
+#define org_kde_koala_Core_WState_Minimized 1048576L
 #undef org_kde_koala_Core_WState_ForceDisabled
 #define org_kde_koala_Core_WState_ForceDisabled 2097152L
 #undef org_kde_koala_Core_WState_Exposed
 #define org_kde_koala_Core_WState_Exposed 4194304L
+#undef org_kde_koala_Core_WState_HasMouse
+#define org_kde_koala_Core_WState_HasMouse 8388608L
 #undef org_kde_koala_Core_WType_TopLevel
 #define org_kde_koala_Core_WType_TopLevel 1L
-#undef org_kde_koala_Core_WType_Modal
-#define org_kde_koala_Core_WType_Modal 2L
+#undef org_kde_koala_Core_WType_Dialog
+#define org_kde_koala_Core_WType_Dialog 2L
 #undef org_kde_koala_Core_WType_Popup
 #define org_kde_koala_Core_WType_Popup 4L
 #undef org_kde_koala_Core_WType_Desktop
@@ -120,7 +136,7 @@ extern "C" {
 #undef org_kde_koala_Core_WStyle_DialogBorder
 #define org_kde_koala_Core_WStyle_DialogBorder 64L
 #undef org_kde_koala_Core_WStyle_NoBorder
-#define org_kde_koala_Core_WStyle_NoBorder 0L
+#define org_kde_koala_Core_WStyle_NoBorder 8192L
 #undef org_kde_koala_Core_WStyle_Title
 #define org_kde_koala_Core_WStyle_Title 128L
 #undef org_kde_koala_Core_WStyle_SysMenu
@@ -135,12 +151,10 @@ extern "C" {
 #define org_kde_koala_Core_WStyle_Tool 2048L
 #undef org_kde_koala_Core_WStyle_StaysOnTop
 #define org_kde_koala_Core_WStyle_StaysOnTop 4096L
-#undef org_kde_koala_Core_WStyle_Dialog
-#define org_kde_koala_Core_WStyle_Dialog 8192L
 #undef org_kde_koala_Core_WStyle_ContextHelp
 #define org_kde_koala_Core_WStyle_ContextHelp 16384L
-#undef org_kde_koala_Core_WStyle_NoBorderEx
-#define org_kde_koala_Core_WStyle_NoBorderEx 32768L
+#undef org_kde_koala_Core_WStyle_Reserved
+#define org_kde_koala_Core_WStyle_Reserved 32768L
 #undef org_kde_koala_Core_WStyle_Mask
 #define org_kde_koala_Core_WStyle_Mask 65520L
 #undef org_kde_koala_Core_WDestructiveClose
@@ -155,14 +169,30 @@ extern "C" {
 #define org_kde_koala_Core_WResizeNoErase 1048576L
 #undef org_kde_koala_Core_WMouseNoMask
 #define org_kde_koala_Core_WMouseNoMask 2097152L
-#undef org_kde_koala_Core_WNorthWestGravity
-#define org_kde_koala_Core_WNorthWestGravity 4194304L
+#undef org_kde_koala_Core_WStaticContents
+#define org_kde_koala_Core_WStaticContents 4194304L
 #undef org_kde_koala_Core_WRepaintNoErase
 #define org_kde_koala_Core_WRepaintNoErase 8388608L
 #undef org_kde_koala_Core_WX11BypassWM
 #define org_kde_koala_Core_WX11BypassWM 16777216L
+#undef org_kde_koala_Core_WWinOwnDC
+#define org_kde_koala_Core_WWinOwnDC 0L
 #undef org_kde_koala_Core_WGroupLeader
 #define org_kde_koala_Core_WGroupLeader 33554432L
+#undef org_kde_koala_Core_WShowModal
+#define org_kde_koala_Core_WShowModal 67108864L
+#undef org_kde_koala_Core_WNoMousePropagation
+#define org_kde_koala_Core_WNoMousePropagation 134217728L
+#undef org_kde_koala_Core_WSubWindow
+#define org_kde_koala_Core_WSubWindow 268435456L
+#undef org_kde_koala_Core_WNorthWestGravity
+#define org_kde_koala_Core_WNorthWestGravity 4194304L
+#undef org_kde_koala_Core_WType_Modal
+#define org_kde_koala_Core_WType_Modal 67108866L
+#undef org_kde_koala_Core_WStyle_Dialog
+#define org_kde_koala_Core_WStyle_Dialog 2L
+#undef org_kde_koala_Core_WStyle_NoBorderEx
+#define org_kde_koala_Core_WStyle_NoBorderEx 8192L
 #undef org_kde_koala_Core_ColorMode_Mask
 #define org_kde_koala_Core_ColorMode_Mask 3L
 #undef org_kde_koala_Core_AutoColor
@@ -213,16 +243,16 @@ extern "C" {
 #define org_kde_koala_Core_HiEnglishUnit 4L
 #undef org_kde_koala_Core_TwipsUnit
 #define org_kde_koala_Core_TwipsUnit 5L
+#undef org_kde_koala_Core_WindowsStyle
+#define org_kde_koala_Core_WindowsStyle 0L
+#undef org_kde_koala_Core_MotifStyle
+#define org_kde_koala_Core_MotifStyle 1L
 #undef org_kde_koala_Core_MacStyle
 #define org_kde_koala_Core_MacStyle 0L
-#undef org_kde_koala_Core_WindowsStyle
-#define org_kde_koala_Core_WindowsStyle 1L
 #undef org_kde_koala_Core_Win3Style
 #define org_kde_koala_Core_Win3Style 2L
 #undef org_kde_koala_Core_PMStyle
 #define org_kde_koala_Core_PMStyle 3L
-#undef org_kde_koala_Core_MotifStyle
-#define org_kde_koala_Core_MotifStyle 4L
 #undef org_kde_koala_Core_SHIFT
 #define org_kde_koala_Core_SHIFT 2097152L
 #undef org_kde_koala_Core_CTRL
@@ -377,6 +407,10 @@ extern "C" {
 #define org_kde_koala_Core_Key_Hyper_R 4183L
 #undef org_kde_koala_Core_Key_Help
 #define org_kde_koala_Core_Key_Help 4184L
+#undef org_kde_koala_Core_Key_Direction_L
+#define org_kde_koala_Core_Key_Direction_L 4185L
+#undef org_kde_koala_Core_Key_Direction_R
+#define org_kde_koala_Core_Key_Direction_R 4192L
 #undef org_kde_koala_Core_Key_Space
 #define org_kde_koala_Core_Key_Space 32L
 #undef org_kde_koala_Core_Key_Any
@@ -825,12 +859,16 @@ extern "C" {
 #define org_kde_koala_Core_WV_95 2L
 #undef org_kde_koala_Core_WV_98
 #define org_kde_koala_Core_WV_98 3L
+#undef org_kde_koala_Core_WV_Me
+#define org_kde_koala_Core_WV_Me 4L
 #undef org_kde_koala_Core_WV_DOS_based
 #define org_kde_koala_Core_WV_DOS_based 15L
 #undef org_kde_koala_Core_WV_NT
 #define org_kde_koala_Core_WV_NT 16L
 #undef org_kde_koala_Core_WV_2000
 #define org_kde_koala_Core_WV_2000 32L
+#undef org_kde_koala_Core_WV_XP
+#define org_kde_koala_Core_WV_XP 48L
 #undef org_kde_koala_Core_WV_NT_based
 #define org_kde_koala_Core_WV_NT_based 240L
 #undef org_kde_koala_Core_UI_General
@@ -845,18 +883,138 @@ extern "C" {
 #define org_kde_koala_Core_UI_AnimateTooltip 4L
 #undef org_kde_koala_Core_UI_FadeTooltip
 #define org_kde_koala_Core_UI_FadeTooltip 5L
+#undef org_kde_koala_Core_ArrowCursor
+#define org_kde_koala_Core_ArrowCursor 0L
+#undef org_kde_koala_Core_UpArrowCursor
+#define org_kde_koala_Core_UpArrowCursor 1L
+#undef org_kde_koala_Core_CrossCursor
+#define org_kde_koala_Core_CrossCursor 2L
+#undef org_kde_koala_Core_WaitCursor
+#define org_kde_koala_Core_WaitCursor 3L
+#undef org_kde_koala_Core_IbeamCursor
+#define org_kde_koala_Core_IbeamCursor 4L
+#undef org_kde_koala_Core_SizeVerCursor
+#define org_kde_koala_Core_SizeVerCursor 5L
+#undef org_kde_koala_Core_SizeHorCursor
+#define org_kde_koala_Core_SizeHorCursor 6L
+#undef org_kde_koala_Core_SizeBDiagCursor
+#define org_kde_koala_Core_SizeBDiagCursor 7L
+#undef org_kde_koala_Core_SizeFDiagCursor
+#define org_kde_koala_Core_SizeFDiagCursor 8L
+#undef org_kde_koala_Core_SizeAllCursor
+#define org_kde_koala_Core_SizeAllCursor 9L
+#undef org_kde_koala_Core_BlankCursor
+#define org_kde_koala_Core_BlankCursor 10L
+#undef org_kde_koala_Core_SplitVCursor
+#define org_kde_koala_Core_SplitVCursor 11L
+#undef org_kde_koala_Core_SplitHCursor
+#define org_kde_koala_Core_SplitHCursor 12L
+#undef org_kde_koala_Core_PointingHandCursor
+#define org_kde_koala_Core_PointingHandCursor 13L
+#undef org_kde_koala_Core_ForbiddenCursor
+#define org_kde_koala_Core_ForbiddenCursor 14L
+#undef org_kde_koala_Core_WhatsThisCursor
+#define org_kde_koala_Core_WhatsThisCursor 15L
+#undef org_kde_koala_Core_LastCursor
+#define org_kde_koala_Core_LastCursor 15L
+#undef org_kde_koala_Core_BitmapCursor
+#define org_kde_koala_Core_BitmapCursor 24L
 #undef org_kde_koala_Core_PlainText
 #define org_kde_koala_Core_PlainText 0L
 #undef org_kde_koala_Core_RichText
 #define org_kde_koala_Core_RichText 1L
 #undef org_kde_koala_Core_AutoText
 #define org_kde_koala_Core_AutoText 2L
+#undef org_kde_koala_Core_DockUnmanaged
+#define org_kde_koala_Core_DockUnmanaged 0L
+#undef org_kde_koala_Core_DockTornOff
+#define org_kde_koala_Core_DockTornOff 1L
+#undef org_kde_koala_Core_DockTop
+#define org_kde_koala_Core_DockTop 2L
+#undef org_kde_koala_Core_DockBottom
+#define org_kde_koala_Core_DockBottom 3L
+#undef org_kde_koala_Core_DockRight
+#define org_kde_koala_Core_DockRight 4L
+#undef org_kde_koala_Core_DockLeft
+#define org_kde_koala_Core_DockLeft 5L
+#undef org_kde_koala_Core_DockMinimized
+#define org_kde_koala_Core_DockMinimized 6L
+#undef org_kde_koala_Core_Unmanaged
+#define org_kde_koala_Core_Unmanaged 0L
+#undef org_kde_koala_Core_TornOff
+#define org_kde_koala_Core_TornOff 1L
+#undef org_kde_koala_Core_Top
+#define org_kde_koala_Core_Top 2L
+#undef org_kde_koala_Core_Bottom
+#define org_kde_koala_Core_Bottom 3L
+#undef org_kde_koala_Core_Right
+#define org_kde_koala_Core_Right 4L
+#undef org_kde_koala_Core_Left
+#define org_kde_koala_Core_Left 5L
+#undef org_kde_koala_Core_Minimized
+#define org_kde_koala_Core_Minimized 6L
+#undef org_kde_koala_Core_TextDate
+#define org_kde_koala_Core_TextDate 0L
+#undef org_kde_koala_Core_ISODate
+#define org_kde_koala_Core_ISODate 1L
+#undef org_kde_koala_Core_LocalDate
+#define org_kde_koala_Core_LocalDate 2L
+#undef org_kde_koala_Core_FixedColor
+#define org_kde_koala_Core_FixedColor 0L
+#undef org_kde_koala_Core_FixedPixmap
+#define org_kde_koala_Core_FixedPixmap 1L
+#undef org_kde_koala_Core_NoBackground
+#define org_kde_koala_Core_NoBackground 2L
+#undef org_kde_koala_Core_PaletteForeground
+#define org_kde_koala_Core_PaletteForeground 3L
+#undef org_kde_koala_Core_PaletteButton
+#define org_kde_koala_Core_PaletteButton 4L
+#undef org_kde_koala_Core_PaletteLight
+#define org_kde_koala_Core_PaletteLight 5L
+#undef org_kde_koala_Core_PaletteMidlight
+#define org_kde_koala_Core_PaletteMidlight 6L
+#undef org_kde_koala_Core_PaletteDark
+#define org_kde_koala_Core_PaletteDark 7L
+#undef org_kde_koala_Core_PaletteMid
+#define org_kde_koala_Core_PaletteMid 8L
+#undef org_kde_koala_Core_PaletteText
+#define org_kde_koala_Core_PaletteText 9L
+#undef org_kde_koala_Core_PaletteBrightText
+#define org_kde_koala_Core_PaletteBrightText 10L
+#undef org_kde_koala_Core_PaletteBase
+#define org_kde_koala_Core_PaletteBase 11L
+#undef org_kde_koala_Core_PaletteBackground
+#define org_kde_koala_Core_PaletteBackground 12L
+#undef org_kde_koala_Core_PaletteShadow
+#define org_kde_koala_Core_PaletteShadow 13L
+#undef org_kde_koala_Core_PaletteHighlight
+#define org_kde_koala_Core_PaletteHighlight 14L
+#undef org_kde_koala_Core_PaletteHighlightedText
+#define org_kde_koala_Core_PaletteHighlightedText 15L
+#undef org_kde_koala_Core_PaletteButtonText
+#define org_kde_koala_Core_PaletteButtonText 16L
+#undef org_kde_koala_Core_PaletteLink
+#define org_kde_koala_Core_PaletteLink 17L
+#undef org_kde_koala_Core_PaletteLinkVisited
+#define org_kde_koala_Core_PaletteLinkVisited 18L
+#undef org_kde_koala_Core_X11ParentRelative
+#define org_kde_koala_Core_X11ParentRelative 19L
+#undef org_kde_koala_Core_CaseSensitive
+#define org_kde_koala_Core_CaseSensitive 1L
+#undef org_kde_koala_Core_BeginsWith
+#define org_kde_koala_Core_BeginsWith 2L
+#undef org_kde_koala_Core_EndsWith
+#define org_kde_koala_Core_EndsWith 4L
+#undef org_kde_koala_Core_Contains
+#define org_kde_koala_Core_Contains 8L
+#undef org_kde_koala_Core_ExactMatch
+#define org_kde_koala_Core_ExactMatch 16L
 /*
  * Class:     org_kde_koala_Core
  * Method:    editor
- * Signature: ()I
+ * Signature: ()Lorg/kde/koala/Editor;
  */
-JNIEXPORT jint JNICALL Java_org_kde_koala_Core_editor
+JNIEXPORT jobject JNICALL Java_org_kde_koala_Core_editor
   (JNIEnv *, jobject);
 
 /*
@@ -957,6 +1115,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_Core_newCore
 
 /*
  * Class:     org_kde_koala_Core
+ * Method:    openProject
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_Core_openProject
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_kde_koala_Core
  * Method:    partManager
  * Signature: ()Lorg/kde/koala/PartManager;
  */
@@ -1002,6 +1168,22 @@ JNIEXPORT void JNICALL Java_org_kde_koala_Core_saveAllFiles
  */
 JNIEXPORT void JNICALL Java_org_kde_koala_Core_setBreakpoint
   (JNIEnv *, jobject, jstring, jint, jint, jboolean, jboolean);
+
+/*
+ * Class:     org_kde_koala_Core
+ * Method:    setJavaSlotFactory
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_Core_setJavaSlotFactory
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     org_kde_koala_Core
+ * Method:    statusBar
+ * Signature: ()Lorg/kde/qt/QStatusBar;
+ */
+JNIEXPORT jobject JNICALL Java_org_kde_koala_Core_statusBar
+  (JNIEnv *, jobject);
 
 #ifdef __cplusplus
 }

@@ -33,58 +33,34 @@ JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_finalize
 
 /*
  * Class:     org_kde_koala_PersistantClassStore
- * Method:    getClassByName
- * Signature: (Ljava/lang/String;)Lorg/kde/koala/ParsedClass;
- */
-JNIEXPORT jobject JNICALL Java_org_kde_koala_PersistantClassStore_getClassByName
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_kde_koala_PersistantClassStore
- * Method:    hasClass
- * Signature: (Ljava/lang/String;)Z
- */
-JNIEXPORT jboolean JNICALL Java_org_kde_koala_PersistantClassStore_hasClass
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_kde_koala_PersistantClassStore
  * Method:    newPersistantClassStore
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_newPersistantClassStore__
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_newPersistantClassStore
   (JNIEnv *, jobject);
-
-/*
- * Class:     org_kde_koala_PersistantClassStore
- * Method:    newPersistantClassStore
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_newPersistantClassStore__Ljava_lang_String_2
-  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     org_kde_koala_PersistantClassStore
  * Method:    open
- * Signature: ()Z
+ * Signature: (Ljava/lang/String;I)Z
  */
 JNIEXPORT jboolean JNICALL Java_org_kde_koala_PersistantClassStore_open
+  (JNIEnv *, jobject, jstring, jint);
+
+/*
+ * Class:     org_kde_koala_PersistantClassStore
+ * Method:    restoreAll
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_restoreAll
   (JNIEnv *, jobject);
 
 /*
  * Class:     org_kde_koala_PersistantClassStore
- * Method:    removeClass
+ * Method:    setFileName
  * Signature: (Ljava/lang/String;)V
  */
-JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_removeClass
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     org_kde_koala_PersistantClassStore
- * Method:    setFilename
- * Signature: (Ljava/lang/String;)V
- */
-JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_setFilename
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_setFileName
   (JNIEnv *, jobject, jstring);
 
 /*
@@ -97,10 +73,50 @@ JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_setPath
 
 /*
  * Class:     org_kde_koala_PersistantClassStore
+ * Method:    storeAll
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_storeAll
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_PersistantClassStore
+ * Method:    storeAttribute
+ * Signature: (Lorg/kde/koala/ParsedAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_storeAttribute
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_PersistantClassStore
  * Method:    storeClass
  * Signature: (Lorg/kde/koala/ParsedClass;)V
  */
 JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_storeClass
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_PersistantClassStore
+ * Method:    storeMethod
+ * Signature: (Lorg/kde/koala/ParsedMethod;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_storeMethod
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_PersistantClassStore
+ * Method:    storeScope
+ * Signature: (Lorg/kde/koala/ParsedScopeContainer;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_storeScope
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_PersistantClassStore
+ * Method:    storeStruct
+ * Signature: (Lorg/kde/koala/ParsedStruct;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_PersistantClassStore_storeStruct
   (JNIEnv *, jobject, jobject);
 
 #ifdef __cplusplus

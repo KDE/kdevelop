@@ -17,6 +17,7 @@
 
 import java.net.*;
 import java.lang.reflect.*;
+import org.kde.koala.Core;
 
 /** Loads the JNI function libraries, and provides a means of adding to the
 	directories searched for classes at runtime.
@@ -59,14 +60,12 @@ class kdevjavapluginapi  {
 	}
 
 	static {
-		System.loadLibrary("qtjava");
 		try {
 			Class c = Class.forName("org.kde.qt.qtjava");
 		} catch (Exception e) {
 			System.out.println("Can't load qtjava class");
 		}
 
-		System.loadLibrary("kdejava");
 		try {
 			Class c = Class.forName("org.kde.koala.kdejava");
 		} catch (Exception e) {
@@ -74,5 +73,6 @@ class kdevjavapluginapi  {
 		}
 
 		System.loadLibrary("kdevjavapluginapi");
+		Core.setJavaSlotFactory();
 	}
 }

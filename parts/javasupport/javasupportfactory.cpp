@@ -161,11 +161,12 @@ JavaSupportFactory::JavaSupportFactory(QObject *parent, const char *name)
 	}
 
 	kdDebug(9013) << "Created JVM, classpath: " << classPath << endl;
-
+	
 	urlLoaderClass = env->FindClass("kdevjavapluginapi");
 
 	if (urlLoaderClass == 0) {
 		kdDebug(9013) << "kdevjavapluginapi class not found" << endl;
+		env->ExceptionDescribe();
 		return;
 	}
 
@@ -173,6 +174,7 @@ JavaSupportFactory::JavaSupportFactory(QObject *parent, const char *name)
 
 	if (partClass == 0) {
 		kdDebug(9013) << "JavaSupportPart class not found" << endl;
+		env->ExceptionDescribe();
 		return;
 	}
 
@@ -180,6 +182,7 @@ JavaSupportFactory::JavaSupportFactory(QObject *parent, const char *name)
 
 	if (factoryClass == 0) {
 		kdDebug(9013) << "JavaSupportFactory class not found" << endl;
+		env->ExceptionDescribe();
 		return;
 	}
 
@@ -187,62 +190,63 @@ JavaSupportFactory::JavaSupportFactory(QObject *parent, const char *name)
 
 	if (parserClass == 0) {
 		kdDebug(9013) << "JavaClassParser class not found" << endl;
+		env->ExceptionDescribe();
 		return;
 	}
 
 	nm.name = (char *) "newJavaSupportFactory";
 	nm.signature = (char *) "(Lorg/kde/qt/QObject;Ljava/lang/String;)V";
-	nm.fnPtr = Java_JavaSupportFactory_newJavaSupportFactory__Lorg_kde_qt_QObject_2Ljava_lang_String_2;
+	nm.fnPtr = (void*) Java_JavaSupportFactory_newJavaSupportFactory__Lorg_kde_qt_QObject_2Ljava_lang_String_2;
 	env->RegisterNatives(factoryClass, &nm, 1);
 
 	nm.name = (char *) "newJavaSupportFactory";
 	nm.signature = (char *) "()V";
-	nm.fnPtr = Java_JavaSupportFactory_newJavaSupportFactory__;
+	nm.fnPtr = (void*) Java_JavaSupportFactory_newJavaSupportFactory__;
 	env->RegisterNatives(factoryClass, &nm, 1);
 
 	nm.name = (char *) "finalize";
 	nm.signature = (char *) "()V";
-	nm.fnPtr = Java_JavaSupportFactory_finalize;
+	nm.fnPtr = (void*) Java_JavaSupportFactory_finalize;
 	env->RegisterNatives(factoryClass, &nm, 1);
 
 	nm.name = (char *) "createPartObject";
 	nm.signature = (char *) "(Lorg/kde/koala/KDevApi;Lorg/kde/qt/QObject;[Ljava/lang/String;)Lorg/kde/koala/KDevPart;";
-	nm.fnPtr = Java_JavaSupportFactory_createPartObject;
+	nm.fnPtr = (void*) Java_JavaSupportFactory_createPartObject;
 	env->RegisterNatives(factoryClass, &nm, 1);
 
 	nm.name = (char *) "instance";
 	nm.signature = (char *) "()Lorg/kde/koala/KInstanceInterface;";
-	nm.fnPtr = Java_JavaSupportFactory_instance;
+	nm.fnPtr = (void*) Java_JavaSupportFactory_instance;
 	env->RegisterNatives(factoryClass, &nm, 1);
 
 	nm.name = (char *) "finalize";
 	nm.signature = (char *) "()V";
-	nm.fnPtr = Java_JavaClassParser_finalize;
+	nm.fnPtr = (void*) Java_JavaClassParser_finalize;
 	env->RegisterNatives(parserClass, &nm, 1);
 
 	nm.name = (char *) "newJavaClassParser";
 	nm.signature = (char *) "(Lorg/kde/koala/ClassStore;)V";
-	nm.fnPtr = Java_JavaClassParser_newJavaClassParser__Lorg_kde_koala_ClassStore_2;
+	nm.fnPtr = (void*) Java_JavaClassParser_newJavaClassParser__Lorg_kde_koala_ClassStore_2;
 	env->RegisterNatives(parserClass, &nm, 1);
 
 	nm.name = (char *) "out";
 	nm.signature = (char *) "()V";
-	nm.fnPtr = Java_JavaClassParser_out;
+	nm.fnPtr = (void*) Java_JavaClassParser_out;
 	env->RegisterNatives(parserClass, &nm, 1);
 
 	nm.name = (char *) "parse";
 	nm.signature = (char *) "(Ljava/lang/String;)Z";
-	nm.fnPtr = Java_JavaClassParser_parse;
+	nm.fnPtr = (void*) Java_JavaClassParser_parse;
 	env->RegisterNatives(parserClass, &nm, 1);
 
 	nm.name = (char *) "removeWithReferences";
 	nm.signature = (char *) "(Ljava/lang/String;)V";
-	nm.fnPtr = Java_JavaClassParser_removeWithReferences;
+	nm.fnPtr = (void*) Java_JavaClassParser_removeWithReferences;
 	env->RegisterNatives(parserClass, &nm, 1);
 
 	nm.name = (char *) "wipeout";
 	nm.signature = (char *) "()V";
-	nm.fnPtr = Java_JavaClassParser_wipeout;
+	nm.fnPtr = (void*) Java_JavaClassParser_wipeout;
 	env->RegisterNatives(parserClass, &nm, 1);
 }
 
@@ -276,8 +280,9 @@ KDevPart *JavaSupportFactory::createPartObject(KDevApi *api, QObject *parent,
 	jclass		partClass;
 	jobject		result;
 	jmethodID	cid;
-
+	
 	env = QtSupport::GetEnv();
+	
 	if (env == 0) {
 		kdDebug(9013) << "Can't find Java env" << endl;
 		return 0;
@@ -291,6 +296,7 @@ KDevPart *JavaSupportFactory::createPartObject(KDevApi *api, QObject *parent,
 	}
 
 	cid = env->GetMethodID(partClass, "<init>", "(Lorg/kde/koala/KDevApi;Lorg/kde/qt/QObject;Ljava/lang/String;)V");
+	
 	if (cid == 0) {
 		kdDebug(9013) << "Can't find method id for JavaSupportPart constructor" << endl;
 		return 0;
@@ -301,6 +307,12 @@ KDevPart *JavaSupportFactory::createPartObject(KDevApi *api, QObject *parent,
 								QtSupport::objectForQtKey(env, api, "org.kde.koala.KDevApi"),
 								QtSupport::objectForQtKey(env, parent, "org.kde.qt.QObject"),
 								env->NewStringUTF("java support part") );
+	
+	if (result == 0) {
+		kdDebug(9013) << "Can't create JavaSupportPart instance" << endl;
+		env->ExceptionDescribe();
+		return 0;
+	}
 
 	return (KDevPart *) QtSupport::getQt(env, result);
 }

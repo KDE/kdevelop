@@ -77,6 +77,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ParsedClass_finalize
 
 /*
  * Class:     org_kde_koala_ParsedClass
+ * Method:    friends
+ * Signature: ()Ljava/util/ArrayList;
+ */
+JNIEXPORT jobject JNICALL Java_org_kde_koala_ParsedClass_friends
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ParsedClass
  * Method:    getMethod
  * Signature: (Lorg/kde/koala/ParsedMethod;)Lorg/kde/koala/ParsedMethod;
  */

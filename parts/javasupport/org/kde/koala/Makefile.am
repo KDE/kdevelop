@@ -24,7 +24,17 @@ java_JAVA = ClassStore.java \
 			       ParsedParent.java \
 			       ParsedScopeContainer.java \
 			       ParsedStruct.java \
-			       PersistantClassStore.java
+			       PersistantClassStore.java \
+			       CursorDocumentIface.java \
+				   Document.java \
+				   DocumentEventHandling.java \
+				   DocumentSignals.java \
+				   DocumentInterface.java \
+				   DocumentInterfaceEventHandling.java \
+				   DocumentInterfaceSignals.java \
+				   EditDocumentIface.java \
+				   Editor.java \
+				   EditorInterface.java
 
 javadir = $(kde_datadir)/kdevjavasupport/org/kde/koala
 

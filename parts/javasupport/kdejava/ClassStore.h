@@ -49,6 +49,22 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_addScope
 
 /*
  * Class:     org_kde_koala_ClassStore
+ * Method:    close
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_close
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    exists
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ClassStore_exists
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
  * Method:    finalize
  * Signature: ()V
  */
@@ -113,6 +129,14 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_newClassStore
 
 /*
  * Class:     org_kde_koala_ClassStore
+ * Method:    open
+ * Signature: (Ljava/lang/String;I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_kde_koala_ClassStore_open
+  (JNIEnv *, jobject, jstring, jint);
+
+/*
+ * Class:     org_kde_koala_ClassStore
  * Method:    out
  * Signature: ()V
  */
@@ -137,11 +161,75 @@ JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_removeWithReferences
 
 /*
  * Class:     org_kde_koala_ClassStore
+ * Method:    restoreAll
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_restoreAll
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    setFileName
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_setFileName
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    setPath
+ * Signature: (Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_setPath
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     org_kde_koala_ClassStore
  * Method:    storeAll
  * Signature: ()V
  */
 JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_storeAll
   (JNIEnv *, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    storeAttribute
+ * Signature: (Lorg/kde/koala/ParsedAttribute;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_storeAttribute
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    storeClass
+ * Signature: (Lorg/kde/koala/ParsedClass;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_storeClass
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    storeMethod
+ * Signature: (Lorg/kde/koala/ParsedMethod;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_storeMethod
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    storeScope
+ * Signature: (Lorg/kde/koala/ParsedScopeContainer;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_storeScope
+  (JNIEnv *, jobject, jobject);
+
+/*
+ * Class:     org_kde_koala_ClassStore
+ * Method:    storeStruct
+ * Signature: (Lorg/kde/koala/ParsedStruct;)V
+ */
+JNIEXPORT void JNICALL Java_org_kde_koala_ClassStore_storeStruct
+  (JNIEnv *, jobject, jobject);
 
 /*
  * Class:     org_kde_koala_ClassStore

@@ -29,7 +29,14 @@ libkdevjavapluginapi_la_SOURCES = ClassStore.cpp \
 			       ParsedParent.cpp \
 			       ParsedScopeContainer.cpp \
 			       ParsedStruct.cpp \
-			       PersistantClassStore.cpp
+			       PersistantClassStore.cpp \
+			       CursorDocumentIface.cpp \
+			       DocumentInterface.cpp \
+			       EditDocumentIface.cpp \
+			       Document.cpp \
+			       Editor.cpp \
+			       EditorInterface.cpp \
+			       KDevJavaSlot.cpp
 
 
 
@@ -59,6 +66,13 @@ EXTRA_DIST = ClassStore.h \
 			       ParsedScopeContainer.h \
 			       ParsedStruct.h \
 			       PersistantClassStore.h
+			       CursorDocumentIface.h \
+			       DocumentInterface.h \
+			       EditDocumentIface.h \
+			       Document.h \
+			       Editor.h \
+			       EditorInterface.h \
+			       KDevJavaSlot.h
 
 
 SOMAJOR = 1
@@ -74,7 +88,7 @@ kdevjavapluginapidir = $(includedir)/kdevjavapluginapi
 noinst_HEADERS =
 
 libkdevjavapluginapi_la_LDFLAGS = $(all_libraries)  $(KDE_PLUGIN) -no-undefined -version-info $(SOMAJOR):$(SOMINOR):$(SOSUBMINOR) 
-libkdevjavapluginapi_la_LIBADD = $(top_builddir)/lib/libkdevelop.la -lqtjava -lkdejava 
+libkdevjavapluginapi_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/interfaces/keditor/libkeditorinterface.la -lqtjava -lkdejava 
 
 # add here the libraries which have to be include
 # for building the shared lib
