@@ -73,6 +73,7 @@ PluginController::PluginController()
 void PluginController::loadInitialPlugins()
 {
   loadDefaultParts();
+  loadCorePlugins();
   loadGlobalPlugins();
 }
 
@@ -112,6 +113,32 @@ void PluginController::loadDefaultParts()
   }
 }
 
+// a Core plugin is implicitly global, so it makes
+// sense to put them in the global plugin container
+void PluginController::loadCorePlugins()
+{
+  KTrader::OfferList coreOffers = pluginServices( "Core" );
+  for (KTrader::OfferList::ConstIterator it = coreOffers.begin(); it != coreOffers.end(); ++it)
+  {
+    QString name = (*it)->name();
+
+    // Check if it is already loaded
+    if( m_globalParts[ name ] != 0 )
+      continue;
+
+    assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
+
+//    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
+    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->genericName()));
+
+    KDevPlugin *plugin = loadPlugin( *it );
+    if ( plugin )
+    {
+        m_globalParts.insert( name, plugin );
+        integratePart( plugin );
+    }
+  }
+}
 
 void PluginController::loadGlobalPlugins()
 {
@@ -120,9 +147,9 @@ void PluginController::loadGlobalPlugins()
   for (KTrader::OfferList::ConstIterator it = globalOffers.begin(); it != globalOffers.end(); ++it)
   {
     config->setGroup("Plugins");
-    
+
     QString name = (*it)->name();
-    
+
     // Unload it if it is marked as ignored and loaded
     if (!config->readBoolEntry( name, true)) {
       KDevPlugin* part = m_globalParts[name];
@@ -137,10 +164,11 @@ void PluginController::loadGlobalPlugins()
     // Check if it is already loaded
     if( m_globalParts[ name ] != 0 )
       continue;
-      
+
     assert( !( *it )->hasServiceType( "KDevelop/Part" ) );
-    
-    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
+
+//    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->comment()));
+    emit loadingPlugin(i18n("Loading plugin: %1").arg((*it)->genericName()));
 
     KDevPlugin *plugin = loadPlugin( *it );
     if ( plugin ) {

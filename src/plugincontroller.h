@@ -42,6 +42,7 @@ protected:
 private slots:
   void slotConfigWidget( KDialogBase* );
   void loadGlobalPlugins();
+  void loadCorePlugins();
   void unloadGlobalPlugins();
   
 private:

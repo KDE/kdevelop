@@ -35,7 +35,10 @@ public slots:
 
 signals:
    void accepted();
-   
+
+private slots:
+    void itemSelected( QListViewItem * );
+
 private:
     enum Scope { Global, Project };
 
@@ -46,9 +49,11 @@ private:
     void saveProjectConfig();
     
     QDomDocument m_projectDom;
-    Scope scope;
-    QListView *lv;
-    QStringList names;
+    Scope _scope;
+
+    QListView * _pluginList;
+    QLabel * _pluginDescription;
+
 };
 
 #endif

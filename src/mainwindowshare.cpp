@@ -302,6 +302,7 @@ void MainWindowShare::slotSettings()
     gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
     gsw->projects_url->setURL(config->readEntry("DefaultProjectsDir", QDir::homeDirPath()+"/"));
     Core::getInstance()->doEmitConfigWidget(&dlg);
+    dlg.resize( 800, 600);
     dlg.exec();
 
     config->setGroup("General Options");
