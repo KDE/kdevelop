@@ -295,9 +295,6 @@ void GrepDialog::processOutput()
 }
 
 
-// grep -e 'pattern' $(find 'directory' -name 'filepattern')
-
-
 void GrepDialog::slotSearch()
 {
   search_button->setEnabled(false);
@@ -322,19 +319,17 @@ void GrepDialog::slotSearch()
     QString pattern = template_edit->text();
     pattern.replace(QRegExp("%s"), pattern_edit->text());
     pattern.replace(QRegExp("'"), "'\\''");
-    QString filepattern;
-    if (recursive_box->isChecked())
-	{
-	    filepattern = QString("$(find '") + dir_edit->text() +
-		"' -name"  + files + ")";
-	}
-    else
-	{
-	    filepattern = QString("$(find '") + dir_edit->text() +
-		"' -maxdepth 1 -name "+ files + ")";
-	}
 
-    childproc = new KShellProcess();
+    QString filepattern = "`find '";
+    filepattern += dir_edit->text();
+    filepattern += "'";
+    if (!recursive_box->isChecked())
+        filepattern += " -maxdepth 1";
+    filepattern += " -name ";
+    filepattern += files;
+    filepattern += "`";
+
+    childproc = new KShellProcess("/bin/sh");
     *childproc << "grep";
     *childproc << "-n";
     *childproc << (QString("-e '") + pattern + "'");

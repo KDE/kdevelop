@@ -1,3 +1,9 @@
+1999-09-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Use /bin/sh in GrepDialog and use backticks
+	  instead of $()
+	* Use /bin/sh for CKDevelop::shell_process. The
+	  trick with shell=="/bin/bash" was not portable.
+
 1999-09-06 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
 	* new standard kdelib-doc path defined
 	  now KDevelop searches first /opt/kde/share/doc/HTML/en/kdelibs
