@@ -1544,8 +1544,8 @@ void MetaDataBase::setupInterfaceManagers( const QString &plugDir )
     if ( !languageInterfaceManager ) {
 	languageInterfaceManager =
 	    new QPluginManager<LanguageInterface>( IID_Language,
-//						   QApplication::libraryPaths(),
-						   kapp->dirs()->resourceDirs("qtplugins"),
+						   QApplication::libraryPaths(),
+//						   kapp->dirs()->resourceDirs("qtplugins"),
 						   plugDir );
 
 	langList = languageInterfaceManager->featureList();

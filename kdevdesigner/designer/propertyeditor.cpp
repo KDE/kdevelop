@@ -44,6 +44,7 @@
 #include "database.h"
 #include "menubareditor.h"
 
+#include <kdebug.h>
 #include <kiconloader.h>
 #include "kdevdesigner_part.h"
 
@@ -3933,14 +3934,27 @@ QString clean_arguments( const QString &s )
 
 void EventList::setup()
 {
+    kdDebug() << "==========================" << endl;
+    kdDebug() << "==========================" << endl;
+    kdDebug() << "==========================" << endl;
+    kdDebug() << "========  SETUP  =========" << endl;
+    kdDebug() << "==========================" << endl;
+    kdDebug() << "==========================" << endl;
+    kdDebug() << "==========================" << endl;
+    
     clear();
 
     if ( !formWindow )
 	return;
+    kdDebug() << "query for language: " << formWindow->project()->language() << endl;
     LanguageInterface *iface = MetaDataBase::languageInterface( formWindow->project()->language() );
     QStrList sigs;
     if ( iface )
+    {
+        kdDebug() << "Interface is present" << endl;
 	sigs = iface->signalNames( editor->widget() );
+    }
+    kdDebug() << "Signals: " << QStringList::fromStrList(sigs) << endl;
     QStrListIterator it( sigs );
     while ( it.current() ) {
 	HierarchyItem *eventItem = new HierarchyItem( HierarchyItem::Event, this, (HierarchyItem*)0,
@@ -3992,7 +4006,8 @@ void EventList::objectClicked( QListViewItem *i )
 {
     if ( !i || !i->parent() )
 	return;
-    formWindow->mainWindow()->editFunction( i->text( 0 ) );
+    formWindow->mainWindow()->part()->emitEditFunction(formWindow->fileName(), i->text( 0 ));
+//    formWindow->mainWindow()->editFunction( i->text( 0 ) );
 }
 
 void EventList::showRMBMenu( QListViewItem *i, const QPoint &pos )
@@ -4073,11 +4088,20 @@ void EventList::renamed( QListViewItem *i )
 		sig = iface->createArguments( sig.simplifyWhiteSpace() );
 	    funcname += "(" + sig + ")";
 	}
-	MetaDataBase::addFunction( formWindow, funcname.latin1(), "virtual", "public",
+
+         //normally add a function in kdevdesigner
+        AddFunctionCommand *cmd2 = new AddFunctionCommand( tr( "Add function" ),
+                                                formWindow, funcname.latin1(), "virtual",
+                                                "public",
+                                                "slot", formWindow->project()->language(),
+                                                "void" );
+ 
+/*	MetaDataBase::addFunction( formWindow, funcname.latin1(), "virtual", "public",
 				   "slot", formWindow->project()->language(), "void" );
 	editor->formWindow()->mainWindow()->
-	    editFunction( i->text( 0 ).left( i->text( 0 ).find( "(" ) ), TRUE );
+	    editFunction( i->text( 0 ).left( i->text( 0 ).find( "(" ) ), TRUE );*/
 	cmd->execute();
+        cmd2->execute(); 
 	editor->formWindow()->mainWindow()->objectHierarchy()->updateFormDefinitionView();
 	editor->formWindow()->formFile()->setModified( TRUE );
     }

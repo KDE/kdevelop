@@ -3120,7 +3120,7 @@ void MainWindow::setupPluginManagers()
     templateWizardPluginManager =
 	new QPluginManager<TemplateWizardInterface>( IID_TemplateWizard, QApplication::libraryPaths(), pluginDirectory() );
 
-    MetaDataBase::setupInterfaceManagers( "/kdevdesigner" );
+    MetaDataBase::setupInterfaceManagers( "/designer" );
     preferencePluginManager =
 	new QPluginManager<PreferenceInterface>( IID_Preference, QApplication::libraryPaths(), pluginDirectory() );
     projectSettingsPluginManager =
