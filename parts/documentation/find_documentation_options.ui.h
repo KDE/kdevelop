@@ -32,11 +32,6 @@
 
 KConfig* config = NULL;
 
-struct FinderOptions
-{
-    std::vector<std::pair< bool, SourceType > > sources;
-};
-
 void FindDocumentationOptions::init()
 {    
  
