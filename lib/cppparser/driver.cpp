@@ -57,7 +57,7 @@ private:
 
 
 Driver::Driver()
-    : depresolv( FALSE ), lexer( 0 )
+    : depresolv( FALSE ), m_generatePreprocessedOutput( FALSE ), lexer( 0 )
 {
     m_sourceProvider = new DefaultSourceProvider();
 }
@@ -121,7 +121,8 @@ TranslationUnitAST::Node Driver::takeTranslationUnit( const QString& fileName )
 {
     QMap<QString, TranslationUnitAST*>::Iterator it = m_parsedUnits.find( fileName );
     TranslationUnitAST::Node unit( *it );
-    m_parsedUnits.remove( it );
+    //m_parsedUnits.remove( it );
+    m_parsedUnits[ fileName] = 0;
     return unit;
 }
 
@@ -136,12 +137,13 @@ void Driver::addDependence( const QString & fileName, const Dependence & dep )
     QFileInfo fileInfo( dep.first );
     QString fn = fileInfo.absFilePath();
 
-    findOrInsertDependenceList( fileName ).insert( fn, dep );
-
-    if ( !depresolv )
+    if ( !depresolv ){
+        findOrInsertDependenceList( fileName ).insert( fn, dep );
 	return;
+    }
 
     QString file = findIncludeFile( dep );
+    findOrInsertDependenceList( fileName ).insert( fn, dep );
 
     if ( m_parsedUnits.find(file) != m_parsedUnits.end() )
 	return;
@@ -216,7 +218,8 @@ QValueList < Problem > Driver::problems( const QString & fileName ) const
 
 void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force )
 {
-    QString absFilePath = QFileInfo( fileName ).absFilePath();
+    QFileInfo fileInfo( fileName );
+    QString absFilePath = fileInfo.absFilePath();
 
     QMap<QString, TranslationUnitAST*>::Iterator it = m_parsedUnits.find( absFilePath );
 
@@ -238,6 +241,30 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
 
     lex.setSource( sourceProvider()->contents(fileName) );
 
+    if( m_generatePreprocessedOutput ){
+        QDir::home().mkdir( "/tmp/i" );
+        QFile f( QString::fromLatin1("/tmp/i/") + fileInfo.baseName() + ".i" );
+        f.open( IO_WriteOnly );
+        QTextStream out( &f );
+
+        QMap<QString, Dependence> deps = dependences( fileName );
+        QMap<QString, Dependence>::Iterator dit = deps.begin();
+        while( dit != deps.end() ){
+            out << "// #include <" << dit.key() << ">\n";
+            ++dit;
+        }
+
+        QStringList sync = QStringList() << ";" << ":" << "{" << "}";
+        while( const Token& tok = lex.lookAhead(0) ){
+            QString str = lex.toString( tok );
+            out << str << (sync.contains(str) ? "\n" : " ");
+
+            lex.nextToken();
+        }
+        f.close();
+        lex.setIndex( 0 );
+    }
+
     TranslationUnitAST :: Node translationUnit;
     if( !onlyPreProcess ){
 	Parser parser( this, &lex );
@@ -249,6 +276,8 @@ void Driver::parseFile( const QString& fileName, bool onlyPreProcess, bool force
     m_parsedUnits.insert( fileName, translationUnit.release() );
     m_currentFileName = QString::null;
     lexer = 0;
+
+    fileParsed( fileName );
 }
 
 void Driver::setupLexer( Lexer * lexer )
@@ -366,6 +395,12 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "__cdecl" );
     lexer->addSkipWord( "_cdecl" );
     lexer->addSkipWord( "CALLBACK" );
+
+    Macro m;
+    m.setName( "__volatile__" );
+    m.setBody( "volatile" );
+
+    addMacro( m );
 }
 
 void Driver::setupParser( Parser * parser )
@@ -416,3 +451,12 @@ void Driver::setupPreProcessor()
 {
 }
 
+void Driver::setGeneratePreprocessedOutput( bool b )
+{
+    m_generatePreprocessedOutput = b;
+}
+
+void Driver::fileParsed( const QString & fileName )
+{
+    Q_UNUSED( fileName );
+}

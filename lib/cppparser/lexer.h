@@ -142,6 +142,8 @@ enum SkipType {
     SkipWordAndArguments
 };
 
+class LexerData;
+
 class Token
 {
 public:
@@ -278,6 +280,7 @@ private:
     void processUndef();
 
 private:
+    LexerData* d;
     Driver* m_driver;
     QMemArray< Token > m_tokens;
     int m_size;

@@ -805,7 +805,7 @@ bool Parser::parseTypedef( DeclarationAST::Node& node )
 	//reportError( i18n("Need an identifier to declare") );
 	//return false;
     }
-    
+
     ADVANCE( ';', ";" );
 
     TypedefAST::Node ast = CreateNode<TypedefAST>();
@@ -1167,7 +1167,7 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	lex->setIndex( start );
 	return false;
     }
-    
+
     int index = lex->index();
     if( lex->lookAhead(0) == '(' ){
 	lex->nextToken();
@@ -1629,7 +1629,7 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
     int start = lex->index();
 
     ParameterDeclarationClauseAST::Node ast = CreateNode<ParameterDeclarationClauseAST>();
-    
+
     ParameterDeclarationListAST::Node params;
     if( !parseParameterDeclarationList(params) ){
 
@@ -1647,7 +1647,7 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
 
     if( lex->lookAhead(0) == Token_ellipsis ){
 	AST_FROM_TOKEN( ellipsis, lex->index() );
-	ast->setEllipsis( ellipsis );	
+	ast->setEllipsis( ellipsis );
 	lex->nextToken();
     }
 
@@ -1722,9 +1722,9 @@ bool Parser::parseParameterDeclaration( ParameterDeclarationAST::Node& node )
     AST::Node expr;
     if( lex->lookAhead(0) == '=' ){
 	lex->nextToken();
-	if( !parseAssignmentExpression(expr) ){
+	if( !parseLogicalOrExpression(expr,true) ){
 	    //reportError( i18n("Expression expected") );
-	}
+        }
     }
 
     ParameterDeclarationAST::Node ast = CreateNode<ParameterDeclarationAST>();
@@ -3022,7 +3022,7 @@ bool Parser::parseFunctionBody( StatementListAST::Node& node )
 
     if( lex->lookAhead(0) != '}' ){
 	reportError( i18n("} expected") );
-    } else 
+    } else
 	lex->nextToken();
 
     UPDATE_POS( ast, start, lex->index() );
