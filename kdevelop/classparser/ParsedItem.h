@@ -104,7 +104,22 @@ public: // Virtual methods to be defined by children.
   virtual const char *asPersistantString( QString &str ) = 0;
 
   /** Initialize the object from a persistant string. */
-  virtual void fromPersistantString( const char *str ) = 0;
+  virtual int fromPersistantString( const char *str, int startPos ) = 0;
+
+protected: // Protected methods
+
+  /** Returns the next substring(ending with \n) starting at position start. */
+  int getSubString( char *buf, const char *toRead, int start )
+  {
+    int endPos=0;
+
+    buf[0]='\0';
+    while( toRead[start+endPos] != '\n' )
+      endPos++;
+    strncpy( buf, &toRead[start], endPos );
+
+    return start+endPos+1;
+  }
 };
 
 #endif 
