@@ -61,7 +61,9 @@ public:
 	SimpleVariable()
 	{}
 	SimpleVariable( const SimpleVariable& source )
-			: name( source.name ), type( source.type )
+			: name( source.name ), 
+			type( source.type ), 
+			ptrList( source.ptrList )
 	{}
 	~SimpleVariable()
 	{}
@@ -70,11 +72,13 @@ public:
 	{
 		name = source.name;
 		type = source.type;
+		ptrList = source.ptrList;
 		return *this;
 	}
 
 	QString name;
 	QStringList type;
+	QStringList ptrList;
 };
 
 class SimpleContext
@@ -108,19 +112,17 @@ public:
 		m_prev = 0;
 	}
 
-	const QValueList<SimpleVariable>& vars() const
+	QValueList<SimpleVariable>& vars()
 	{
 		return m_vars;
 	}
 
-	void add
-		( const SimpleVariable& v )
+	void add( const SimpleVariable& v )
 	{
 		m_vars.append( v );
 	}
-
-	void add
-		( const QValueList<SimpleVariable>& vars )
+	
+	void add( const QValueList<SimpleVariable>& vars )
 	{
 		m_vars += vars;
 	}
@@ -696,8 +698,38 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
 	return l;
 }
 
+void CppCodeCompletion::evaluateAccessOp( QString expr, SimpleContext* ctx )
+{
+	//Remove the vars that don't correspond to the member access operator
+	//that we are using.  
+	
+	//TODO: Take into account the de-reference operator...
+	
+	bool dotOp = expr.endsWith( "." );
+	bool arrowOp = expr.endsWith( "->" );
+	
+	while ( ctx )
+	{
+		QValueList<SimpleVariable> &vars = ctx->vars();
+		QValueList<SimpleVariable>::Iterator it = vars.begin();
+		for ( ; it != vars.end(); ++it )
+		{
+			SimpleVariable & var = *it;
+			if ( ( var.ptrList.count() && !arrowOp ) ||
+			     ( !var.ptrList.count() && !dotOp ) )
+			{
+				var.type = "";
+			}
+		}
+		
+		ctx = ctx->prev();
+	}
+}
+
 QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* ctx )
 {
+	evaluateAccessOp( expr, ctx );
+
 	d->classNameList = typeNameList( m_pSupport->codeModel() );
 
 	bool global = false;
@@ -706,7 +738,7 @@ QStringList CppCodeCompletion::evaluateExpression( QString expr, SimpleContext* 
 		expr = expr.mid( 2 );
 		global = true;
 	}
-
+	
 	QStringList exprList = splitExpression( expr );
 	QStringList type = evaluateExpressionInternal( exprList, QStringList(), ctx );
 	
@@ -1021,8 +1053,7 @@ void CppCodeCompletion::completeText( )
 						this_type = typeName( scope );
 						var.type = this_type;
 						var.name = "this";
-						ctx->add
-						( var );
+						ctx->add( var );
 					}
 
 					type = evaluateExpression( expr, ctx );
@@ -1156,8 +1187,7 @@ void CppCodeCompletion::completeText( )
 					SimpleVariable var;
 					var.type = scope;
 					var.name = "this";
-					ctx->add
-					( var );
+					ctx->add( var );
 					//kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 				}
 
@@ -1375,6 +1405,16 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 					++it;
 
 					SimpleVariable var;
+					
+					QStringList ptrList;
+					QPtrList<AST> ptrOpList = param->declarator()->ptrOpList();
+					QPtrList<AST>::iterator it = ptrOpList.begin();
+					for ( ; it != ptrOpList.end(); ++it )
+					{
+						ptrList.append( ( *it )->text() );
+					}
+					
+					var.ptrList = ptrList;
 					var.type = typeName( param->typeSpec() ->text() );
 					var.name = declaratorToString( param->declarator(), QString::null, true );
 
@@ -1514,6 +1554,16 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 		if ( d->declaratorId() )
 		{
 			SimpleVariable var;
+			
+			QStringList ptrList;
+			QPtrList<AST> ptrOpList = d->ptrOpList();
+			QPtrList<AST>::iterator it = ptrOpList.begin();
+			for ( ; it != ptrOpList.end(); ++it )
+			{
+				ptrList.append( ( *it )->text() );
+			}
+			
+			var.ptrList = ptrList;
 			var.type = type;
 			var.name = toSimpleName( d->declaratorId() );
 			ctx->add( var );
@@ -1532,9 +1582,20 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
 	
 	QStringList type = typeName( ast->typeSpec() ->text() );
 	SimpleVariable var;
+	
+	QStringList ptrList;
+	QPtrList<AST> ptrOpList = ast->declarator()->ptrOpList();
+	QPtrList<AST>::iterator it = ptrOpList.begin();
+	for ( ; it != ptrOpList.end(); ++it )
+	{
+		ptrList.append( ( *it )->text() );
+	}
+	
+	var.ptrList = ptrList;
 	var.type = type;
 	var.name = toSimpleName( ast->declarator() ->declaratorId() );
 	ctx->add( var );
+	//kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 }
 
 bool CppCodeCompletion::inContextScope( AST* ast, int line, int col, bool checkStart, bool checkEnd )
