@@ -131,6 +131,15 @@ public:
 		addMacro( Macro( lst[1], lst[2] ) );
 	    }
 	    addMacro( Macro( "__cplusplus", "1" ) );
+	    
+	    QString incl = getenv( "INCLUDE" );
+	    QStringList includePaths = QStringList::split( ':', incl );
+	    QStringList::Iterator it = includePaths.begin();
+	    while( it != includePaths.end() ){
+		addIncludePath( (*it).stripWhiteSpace() );
+		++it;
+	    }
+	    
 	} else if ( qmakespec == "win32-borland" ) {
 	    QString incl = getenv( "INCLUDE" );
 	    QStringList includePaths = QStringList::split( ';', incl );
