@@ -25,7 +25,7 @@
 int main(int argc, char* argv[]) {
   
   KStartupLogo* start_logo=0L;
-  KWMModuleApplication a(argc,argv,"kdevelop");
+  KApplication a(argc,argv,"kdevelop");
   a.getConfig()->setGroup("General Options");
   bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);
   bool bInstall=a.getConfig()->readBoolEntry("Install",true);
@@ -37,8 +37,7 @@ int main(int argc, char* argv[]) {
     start_logo= new KStartupLogo;
     start_logo->show();
   }
-  a.connectToKWM();
-  
+
   if (a.isRestored()){
     RESTORE(CKDevelop);
   }
@@ -52,8 +51,6 @@ int main(int argc, char* argv[]) {
     if(bInstall){
       kdevelop->refreshTrees();  // this is because of the new documentation
     }
-    a.setMainWidget(kdevelop);
-    a.setTopWidget(kdevelop);
     kdevelop->show();
     
     a.getConfig()->setGroup("General Options");
@@ -64,7 +61,7 @@ int main(int argc, char* argv[]) {
       kdevelop->setKDlgCaption();
     
     if (argc > 1){ 
-      if (QString(argv[1]) != "--setup-wizard")
+      if (QString(argv[1]) != "--setup")
 				kdevelop->slotProjectOpenCmdl(argv[1]);
     }
     
@@ -81,6 +78,7 @@ int main(int argc, char* argv[]) {
   int rc = a.exec();
   return rc;
 }
+
 
 
 

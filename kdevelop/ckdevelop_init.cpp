@@ -1008,6 +1008,8 @@ void CKDevelop::initProject(){
   config->setGroup("General Options");
   bool bLastProject= config->readBoolEntry("LastProject",true);
   QString filename;
+	if(kapp->argc() > 1)
+		bLastProject = false;
 	if(bLastProject){
 	  config->setGroup("Files");
   	filename = config->readEntry("project_file","");
@@ -1177,6 +1179,10 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
+
 
 
 

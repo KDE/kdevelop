@@ -1,3 +1,8 @@
+1999-05-30  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* fixed project loading for commandline
+	* changed KDevelop to use KApplication
+	* fixed manual creation to use ksgml only if prj->isKDEProject()
+
 1999-05-30  Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 	* change the interface of make-options
 	* implemented the internal of make-options
@@ -1052,3 +1057,4 @@
 
 
 >>>>>>> 1.190
+

@@ -516,9 +516,9 @@ void CKDevelop::slotProjectOpenCmdl(const char* prjname){
 
     KMsgBox::message(0,prjname,"This is a Project-File from KDevelop 0.1\nSorry,but it's incompatible with KDevelop >= 0.2.\nPlease use only new generated projects!");
     readProjectFile(old_project);
-    slotViewRefresh();
     }
 
+    slotViewRefresh();
     slotStatusMsg(i18n("Ready."));
   }	
 }
@@ -724,7 +724,8 @@ void CKDevelop::slotProjectManual(){
     ksgml=false;
     KMsgBox::message(this,i18n("Warning..."),i18n("The program ksgml2html wasn't found, therefore your documentation\nwon't have the usual KDE logo and look.\n\nThe manual will be build using sgml2html."));
   }
-  
+	if(!prj->isKDEProject())
+		ksgml=false;
   showOutputView(true);
   error_parser->toogleOn(CErrorMessageParser::SGML2HTML);
   setToolMenuProcess(false);
@@ -978,6 +979,9 @@ void CKDevelop::newSubDir(){
   shell_process << make_cmd << " -f Makefile.dist  && ./configure";
   shell_process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
+
+
+
 
 
 
