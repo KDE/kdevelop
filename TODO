@@ -29,7 +29,6 @@ High priority tasks!
     should then start from that point.
   - Messages in status bar would look nicer if they appeared with the same
     border as other items.
-  - Debug menu items not properly enabled/disabled.
   - Browser tool bar should truncate long menu entries so it doesn't take so
     much space.
       
