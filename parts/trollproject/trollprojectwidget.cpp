@@ -479,6 +479,9 @@ void TrollProjectWidget::slotDetailsExecuted(QListViewItem *item)
 
 void TrollProjectWidget::slotConfigureProject()
 {
+//  ProjectOptionsDlg *d = new ProjectOptionsDlg(m_part,this);
+//  d->exec();
+
   ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(&(m_shownSubproject->configuration));
   dlg->exec();
   updateProjectConfiguration(m_shownSubproject);
@@ -871,7 +874,6 @@ void TrollProjectWidget::slotConfigureFile()
     if (scope)
       updateProjectFile(scope);
   }
-
 }
 
 void TrollProjectWidget::slotDetailsSelectionChanged(QListViewItem *item)

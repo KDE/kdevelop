@@ -29,6 +29,7 @@
 #include "kdevappfrontend.h"
 #include "kdevpartcontroller.h"
 #include "trollprojectwidget.h"
+#include "projectrunoptionsdlg.h"
 #include "config.h"
 
 
@@ -51,7 +52,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                                    ".pro file. The 'details' view in the lower half shows the "
                                    "targets for the active subproject selected in the overview."));
 
-    topLevel()->embedSelectViewRight(m_widget, i18n("qmake Manager"));
+    topLevel()->embedSelectViewRight(m_widget, i18n("QMake Manager"));
 
     KAction *action;
 
@@ -80,8 +81,12 @@ TrollProjectPart::~TrollProjectPart()
 }
 
 
-void TrollProjectPart::projectConfigWidget(KDialogBase */*dlg*/)
+void TrollProjectPart::projectConfigWidget(KDialogBase *dlg)
 {
+    QVBox *vbox;
+    vbox = dlg->addVBoxPage(i18n("Run Options"));
+    ProjectRunOptionsDlg *optdlg = new ProjectRunOptionsDlg(this,vbox);
+    connect( dlg, SIGNAL(okClicked()), optdlg, SLOT(accept()) );
 }
 
 

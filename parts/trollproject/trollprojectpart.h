@@ -56,6 +56,7 @@ private:
     QGuardedPtr<TrollProjectWidget> m_widget;
     QString m_projectName;
     friend class TrollProjectWidget;
+    friend class ProjectRunOptionsDlg;
 };
 
 #endif
