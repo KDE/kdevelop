@@ -630,9 +630,9 @@ bool ProjectManager::loadKDevelop2Project( const KURL & url )
 
     QFileInfo fileInfo( url.path() );
 
-    KProcess proc;
+    KShellProcess proc( "/bin/sh" );
     proc.setWorkingDirectory( fileInfo.dirPath(true) );
-    proc << cmd << KShellProcess::quote( url.path() );
+    proc << "perl" << cmd << KShellProcess::quote( url.path() );
     proc.start( KProcess::Block );
 
     QString projectFile = fileInfo.dirPath( true ) + "/" + fileInfo.baseName() + ".kdevelop";
