@@ -4,13 +4,13 @@ KDevelop will be an easy to use IDE (Intergrated Development Enviroment) for
 Unix/X11.At the moment there are only alpha-versions.
 
 KDevelop-Homepage:
-http://www.cs.uni-potsdam.de/~smeier/kdevelop/
+http://www.kdevelop.org
 
 Requirements:
 In order to successfully compile und use KDevelop, you need following
 programs and libraries: 	
 
-	g++ 2.8/egcs 1.1 (or compatible) (it should work with gcc 2.7.2)
+	g++ 2.8/egcs 1.1 (or compatible)
 	GNU make
 	perl 5.004
 	autoconf 2.12
@@ -32,20 +32,5 @@ see INSTALL in the same directory
 
 Have fun!
 							 The KDevelop-Team
-
-FAQ:
-
-How can I convert a KDevelop 0.2 project to a 0.3 one?
-
-1. please change the AC_OUTPUT in the configure.in to a oneline version
-
-for example: 
-old version AC_OUTPUT(Makefile \
-		kdevelop/kwrite/Makefile \
-		kdevelop/templates/Makefile
-)
-new version: AC_OUTPUT(Makefile kdevelop/kwrite/Makefile kdevelop/templates/Makefile)
-
-2. That's all. :-)
 
 

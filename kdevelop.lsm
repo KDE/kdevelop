@@ -7,7 +7,7 @@ Keywords:       IDE, KDE, X11, Qt, development, C++
 Author:         The KDevelop Team
 Maintained-by:  Sandy Meier <smeier@rz.uni-potsdam.de>
 Primary-site:   
-Home-page:      http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html
+Home-page:      http://www.kdevelop.org
 Original-site:  
 Platform:       Linux,FreeBSD needs Qt 1.42 and KDE 1.1
 Copying-policy: GNU Public License

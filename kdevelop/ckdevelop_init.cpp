@@ -802,9 +802,10 @@ void CKDevelop::initToolBar(){
   toolBar()->setToggle(ID_VIEW_TREEVIEW);
   toolBar()->setToggle(ID_VIEW_OUTPUTVIEW);
 
-  QFrame *separatorLine3= new QFrame(toolBar());
-  separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
-  toolBar()->insertWidget(0,20,separatorLine3);
+ QFrame *separatorLine3= new QFrame(toolBar());
+ separatorLine3->setFrameStyle(QFrame::VLine|QFrame::Sunken);
+toolBar()->insertWidget(0,20,separatorLine3);
+
 
   whats_this = new QWhatsThis;  
   QToolButton *btnwhat = whats_this->whatsThisButton(toolBar());

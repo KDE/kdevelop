@@ -275,7 +275,7 @@ QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
   char ch;
   int i;
   bool bFound;
-  char *szChangingChars= (bForGrep) ? "^{}[]\\^$" : "$^*[]|()\\;,#<>-.~{}" ;
+  char *szChangingChars= (bForGrep) ? "[]\\^$" : "$^*[]|()\\;,#<>-.~{}" ;
 
   while ((ch=*szOldText++)!='\0')
   {
@@ -705,7 +705,13 @@ void CKDevelop::switchToKDlgEdit(){
 
 void CKDevelop::setToolMenuProcess(bool enable){
 
-  if (enable){
+  if (enable)
+    disableCommand(ID_BUILD_STOP);
+  else
+    enableCommand(ID_BUILD_STOP);
+
+  if (enable && project){
+
     if(s_tab_view->getCurrentTab() == CPP){
       enableCommand(ID_BUILD_COMPILE_FILE);
     }
@@ -724,16 +730,14 @@ void CKDevelop::setToolMenuProcess(bool enable){
     else{
       enableCommand(ID_PROJECT_MESSAGES);
     }
-    disableCommand(ID_BUILD_STOP);
     enableCommand(ID_PROJECT_MAKE_PROJECT_API);
     enableCommand(ID_PROJECT_MAKE_USER_MANUAL);
 		enableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-    if(bAutosave)
-      saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
 
   }
-  else {
-    
+
+  if (!enable)
+  {
     // set the popupmenus enable or disable
     disableCommand(ID_BUILD_COMPILE_FILE);
     disableCommand(ID_BUILD_RUN_WITH_ARGS);
@@ -746,11 +750,16 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_AUTOCONF);
     disableCommand(ID_BUILD_CONFIGURE);
     disableCommand(ID_PROJECT_MESSAGES);
-    enableCommand(ID_BUILD_STOP);
     disableCommand(ID_PROJECT_MAKE_PROJECT_API);
     disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
-    if(bAutosave)
+  }
+
+  if(bAutosave)
+  {
+    if(enable)
+      saveTimer->start(saveTimeout); // restart autosaving if enabled after a process finished
+    else
       saveTimer->stop();  // stop the autosaving if make or something is running
   }
 }

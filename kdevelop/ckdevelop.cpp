@@ -1420,7 +1420,7 @@ void CKDevelop::slotHelpHomepage(){
     setgid(getgid());
     setuid(getuid());
     
-    execlp("kfmclient", "kfmclient", "exec", QString("http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html").data(), 0);
+    execlp("kfmclient", "kfmclient", "exec", QString("http://www.kdevelop.org").data(), 0);
     _exit(0);
   }
 }
