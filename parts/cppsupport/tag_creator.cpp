@@ -19,7 +19,7 @@
 #include <qfileinfo.h>
 #include <qregexp.h>
 
-DoxyDoc* TagCreator::m_documentation = new DoxyDoc("");
+DoxyDoc* TagCreator::m_documentation = new DoxyDoc( QStringList() );
 
 TagCreator::TagCreator( const QString& fileName, Catalog* c )
     : m_catalog( c ), m_fileName( fileName ), m_anon( 0 )
@@ -256,7 +256,7 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     parseFunctionArguments( tag, d );
 
-	QString arguments = tag.attribute("a").toStringList().join(",");
+    QString arguments = tag.attribute("a").toStringList().join(",");
     tag.setAttribute("description", m_documentation->functionDescription(scopeStr.replace(QRegExp("."),":"), id, typeOfDeclaration(typeSpec, d), arguments));
 
     tagBuilder.setAccess( TagUtils::stringToAccess(m_currentAccess) );

@@ -18,10 +18,50 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-class MyDriver: public Driver
+class RppDriver: public Driver
 {
 public:
-    MyDriver() { setup(); }
+    RppDriver( Catalog* c )
+        : catalog( c ), m_generateTags( true )
+    {
+        setup();
+    }
+
+    virtual ~RppDriver()
+    {
+        TagCreator::destroyDocumentation();
+    }
+
+    void setGenerateTags( bool b )
+    {
+        m_generateTags = b;
+    }
+
+    void addDocDirectory( const QString& dir )
+    {
+        m_docDirectoryList.append( dir );
+        TagCreator::setDocumentationDirectories( m_docDirectoryList );
+    }
+
+    void fileParsed( const QString& fileName )
+    {
+        std::cout << (m_generateTags ? "generate tags for " : "checking ") << fileName << std::endl;
+
+        QValueList<Problem> l = problems( fileName );
+        QValueList<Problem>::Iterator it = l.begin();
+        while( it != l.end() ){
+            const Problem& p = *it;
+            ++it;
+            std::cout << fileName << ":" << p.line() << ":" << p.column() << ": " << p.text() << std::endl;
+        }
+
+        TranslationUnitAST::Node ast = takeTranslationUnit( fileName );
+
+        if( m_generateTags ){
+            TagCreator w( fileName, catalog );
+            w.parseTranslationUnit( ast.get() );
+        }
+    }
 
     void setupLexer( Lexer* lex )
     {
@@ -57,7 +97,7 @@ public:
 	    proc.addArgument( "gcc" );
 	    proc.addArgument( "-print-file-name=include" );
 	    if ( !proc.start() ) {
-		qWarning( "Couldn't start gcc" );
+		std::cerr << "*error* Couldn't start gcc" << std::endl;
 		return;
 	    }
 	    while ( proc.isRunning() )
@@ -75,7 +115,7 @@ public:
 	    proc.addArgument( "-ansi" );
 	    proc.addArgument( "-" );
 	    if ( !proc.start() ) {
-		qWarning( "Couldn't start gcc" );
+		std::cerr << "*error* Couldn't start gcc" << std::endl;
 		return;
 	    }
 	    while ( !proc.isRunning() )
@@ -105,6 +145,10 @@ public:
 	}
     }
 
+private:
+    Catalog* catalog;
+    bool m_generateTags;
+    QStringList m_docDirectoryList;
 };
 
 void parseDirectory( Driver& driver, QDir& dir, bool rec, bool parseAllFiles )
@@ -121,7 +165,6 @@ void parseDirectory( Driver& driver, QDir& dir, bool rec, bool parseAllFiles )
 	    QString fn = dir.path() + "/" + (*it);
 	    ++it;
 
-	    std::cout << "parsing file " << fn << std::endl;
 	    driver.parseFile( fn );
 	}
     }
@@ -145,8 +188,6 @@ void parseDirectory( Driver& driver, QDir& dir, bool rec, bool parseAllFiles )
 
 int main( int argc, char* argv[] )
 {
-    MyDriver driver;
-    driver.setResolveDependencesEnabled( true );
     KStandardDirs stddir;
 
     if( argc < 3 ){
@@ -156,7 +197,6 @@ int main( int argc, char* argv[] )
 
     bool rec = false;
     bool parseAllFiles = false;
-    bool generateTags = true;
 
     QString datadir = stddir.localkdedir() + "/" + KStandardDirs::kde_default( "data" );
 
@@ -171,7 +211,18 @@ int main( int argc, char* argv[] )
         std::cerr << "*error* " << "database " << dbFileName << " already exists!" << std::endl << std::endl;
         return -1;
     }
-	QStringList docdirlist;
+
+
+    Catalog catalog;
+    catalog.open( dbFileName );
+    catalog.addIndex( "kind" );
+    catalog.addIndex( "name" );
+    catalog.addIndex( "scope" );
+    catalog.addIndex( "fileName" );
+
+    RppDriver driver( &catalog );
+    driver.setResolveDependencesEnabled( true );
+
     for( int i=2; i<argc; ++i ){
         QString s( argv[i] );
         if( s == "-r" || s == "--recursive" ){
@@ -184,50 +235,21 @@ int main( int argc, char* argv[] )
 	   driver.setResolveDependencesEnabled( false );
 	   continue;
        } else if( s == "-c" || s == "--check-only" ){
-           generateTags = false;
+           driver.setGenerateTags( false );
 	   continue;
-       }  else if ( s.left(2) == "-d"){
-		docdirlist << s.right(s.length()-2);
-		continue;
-	}
+       }  else if ( s.startsWith("-d") ){
+           driver.addDocDirectory( s.mid(2) );
+           continue;
+       }
 
-        QDir dir( s );
-        if( !dir.exists() ){
-            std::cerr<< "*error* " << "the directory " << dir.path() << " doesn't exists!" << std::endl << std::endl;
-            continue;
-        }
-        parseDirectory( driver, dir, rec, parseAllFiles );
+       QDir dir( s );
+       if( !dir.exists() ){
+           std::cerr<< "*error* " << "the directory " << dir.path() << " doesn't exists!" << std::endl << std::endl;
+           continue;
+       }
+
+       parseDirectory( driver, dir, rec, parseAllFiles );
     }
-
-    if( !generateTags )
-        return 0;
-
-    Catalog catalog;
-    catalog.open( dbFileName );
-    catalog.addIndex( "kind" );
-    catalog.addIndex( "name" );
-    catalog.addIndex( "scope" );
-    catalog.addIndex( "fileName" );
-
-    std::cout << "generating the pcs database" << std::endl;
-
-    QMap<QString, TranslationUnitAST*> units = driver.parsedUnits();
-    QMap<QString, TranslationUnitAST*>::Iterator unitIt = units.begin();
-	TagCreator::setDocumentationDirectories(docdirlist);
-    while( unitIt != units.end() ){
-        TagCreator w( unitIt.key(), &catalog );
-        w.parseTranslationUnit( unitIt.data() );
-
-        TranslationUnitAST::Node node = driver.takeTranslationUnit( unitIt.key() );
-        node.reset();
-
-	std::cout << ".";
-	std::flush( std::cout );
-
-        ++unitIt;
-    }
-    std::cout << std::endl;
-	TagCreator::destroyDocumentation();
 
     return 0;
 }
