@@ -41,8 +41,9 @@ Patches:
   Yann Hodique <Yann.Hodique@lifl.fr>
   Heinz Hornung <Hornung-Heinz@t-online.de>
 
-SplashScreen:
+SplashScreens:
   Marion Klein <MarionKlein@wanadoo.fr>
+  Ram� Lamana Villar <ramon@alumnos.upm.es>
 
 KDevTabBar, bug fixes, Gideon Release:
   Caleb Tennis <caleb@aei-tech.com>
@@ -63,6 +64,9 @@ DistPart, Bash Shell Support:
 API Documentation, Run Options, code reorganization. Fixes for project templates, autotools and doxygen. 
   Amilcar Lucas <a.lucas@tu-bs.de>
 
+Replace plugin, Bookmarks plugin, FileList plugin, CTags2 plugin, Overall improvements and patches
+  Jens Dagerbo  <jens.dagerbo@swipnet.se>
+  
 Other software included in the source package:
 
 * KDE 2.0 Development Book
