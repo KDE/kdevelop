@@ -59,3 +59,6 @@ KDevScripting=false
 [UI]
 MDIStyle=1
 MDIMode=4
+
+[Kate View Defaults]
+Icon Bar=true
