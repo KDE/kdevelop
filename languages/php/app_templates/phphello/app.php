@@ -1,5 +1,7 @@
 <?php
 
+%{TEMPLATE_FOR_php}
+
 printHeader();
 echo "<h1>Hello World!</h1>\n";
 printFooter();
@@ -10,9 +12,9 @@ function printHeader(){
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 	<meta name="description" content="" />
-	<meta name="author" content="$AUTHOR$" />
+	<meta name="author" content="%{AUTHOR}" />
 	<meta name="keywords" content="" />
-	<title>$APPNAME$</title>
+	<title>%{APPNAME}</title>
 </head>
 <body>
 
