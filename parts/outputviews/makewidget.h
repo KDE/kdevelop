@@ -25,23 +25,25 @@ class KProcess;
 class ProcessLineMaker;
 
 
-class MakeWidget : public QTextEdit
-{
+class MakeWidget : public QTextEdit {
     Q_OBJECT
-    
+
 public:
     MakeWidget(MakeViewPart *part);
     ~MakeWidget();
 
     void queueJob(const QString &dir, const QString &command);
     bool isRunning();
-    
+
 public slots:
     void startNextJob();
     void killJob();
     void nextError();
     void prevError();
-    
+
+protected:
+    void paletteChange(const QPalette& oldPalette);
+
 private slots:
     void insertStdoutLine(const QString& line);
     void insertStderrLine(const QString& line);
@@ -51,13 +53,14 @@ private:
     virtual void contentsMousePressEvent(QMouseEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
     void searchItem(int parag);
-    
+
     enum Type { Normal, Error, Diagnostic };
     void insertLine1(const QString &line, Type type);
     void insertLine2(const QString &line, Type type);
     bool matchEnterDir( const QString& line, QString& dir );
     bool matchLeaveDir( const QString& line, QString& dir );
     QString getOutputColor( Type type );
+    void updateColors();
 
     QStringList commandList;
     QStringList dirList;
@@ -68,6 +71,7 @@ private:
     QList<MakeItem> items;
     int parags;
     bool moved;
+    QString normalColor, errorColor, diagnosticColor;
 
     MakeViewPart *m_part;
 };
