@@ -159,6 +159,7 @@ void TopLevelSDI::raiseView(QWidget *view)
 {
   m_leftBar->raiseWidget(view);
   m_bottomBar->raiseWidget(view);
+  m_tabWidget->showPage(view);
 }
 
 

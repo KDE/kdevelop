@@ -307,6 +307,9 @@ void PartController::closePart(KParts::Part *part)
     }
   }
 
+  if (part->widget())
+    TopLevel::getInstance()->removeView(part->widget());
+  
   delete part;
 }
 

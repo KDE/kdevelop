@@ -106,9 +106,7 @@ void TopLevelMDI::createActions()
   action->setStatusText(i18n("Lets you customize KDevelop") );
 
   if (!isFakingSDIApplication()) 
-  {
     menuBar()->insertItem(i18n("&Window"), windowMenu());
-  }
 }
 
 
@@ -146,8 +144,6 @@ void TopLevelMDI::embedPartView(QWidget *view, const QString &name)
   unsigned int mdiFlags = QextMdi::StandardAdd | QextMdi::Maximize;
   
   addWindow(child, QPoint(0,0), mdiFlags);
-
-  connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
 }
 
 
@@ -161,8 +157,6 @@ void TopLevelMDI::embedSelectView(QWidget *view, const QString &name)
     addToolWindow(child, KDockWidget::DockLeft, this, 25, name, name);
   else
     addToolWindow(child, KDockWidget::DockCenter, first, 25, name, name);
-
-  connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
 
   m_selectViews.append(child);
 }
@@ -179,31 +173,29 @@ void TopLevelMDI::embedOutputView(QWidget *view, const QString &name)
   else
     addToolWindow(child, KDockWidget::DockCenter, first, 70, name, name);
 
-  connect(view, SIGNAL(destroyed()), this, SLOT(slotWidgetDeleted()));
-
   m_outputViews.append(child);
-}
-
-
-void TopLevelMDI::slotWidgetDeleted()
-{
-  QWidget *w = (QWidget*)sender();
-
-  removeView(w);
 }
 
 
 void TopLevelMDI::removeView(QWidget *view)
 {
   QextMdiChildView *wrapper = m_widgetMap[view];
+
   if (wrapper)
   {
-    closeWindow(wrapper);
+    removeWindowFromMdi(wrapper);
 
     m_selectViews.remove(wrapper);
     m_outputViews.remove(wrapper);
 
     m_widgetMap.remove(view);
+
+    // Note: this reparenting is necessary. Otherwise, the view gets
+    // deleted twice: once when the wrapper is deleted, and the second
+    // time when the part is deleted.
+    view->reparent(this, QPoint(0,0), false);
+
+    delete wrapper;
   }
 }
 

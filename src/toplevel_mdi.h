@@ -57,8 +57,6 @@ private slots:
   void slotProjectOptions();
   void slotSettings();
 
-  void slotWidgetDeleted();
-
 
 private:
 
