@@ -304,6 +304,7 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
     int start = lex->index();
     
     m_problems.clear();
+    
     TranslationUnitAST::Node tun = CreateNode<TranslationUnitAST>();
     node = tun;
     while( !lex->lookAhead(0).isNull() ){
@@ -494,7 +495,7 @@ bool Parser::parseNamespace( DeclarationAST::Node& node )
 
     NamespaceAST::Node ast = CreateNode<NamespaceAST>();
     ast->setNamespaceName( namespaceName );
-    
+        
     LinkageBodyAST::Node linkageBody;
     parseLinkageBody( linkageBody );
     
@@ -1502,7 +1503,7 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 	reportError( i18n("} missing") );
     } else
 	lex->nextToken();
-	
+    	
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
     
@@ -1924,6 +1925,91 @@ bool Parser::skipCommaExpression()
     return true;
 }
 
+// nested-name-specifier
+//   class-or-namespace-name "::" nested-name-specifier-opt
+//   class-or-namespace-name "::" "template"-opt unqualified-id
+bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
+{
+    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNestedNameSpecifier()" << endl;
+
+    int start = lex->index();
+    bool ok = false;
+    
+    NestedNameSpecifierAST::Node nns = CreateNode<NestedNameSpecifierAST>();
+    
+    int startId = start;
+    while( lex->lookAhead(0) == Token_identifier ){
+	
+	startId = lex->index();
+	
+	ClassOrNamespaceNameAST::Node classOrNamespaceName = CreateNode<ClassOrNamespaceNameAST>();
+	
+	if( lex->lookAhead(1) == '<' ){
+	    lex->nextToken(); // skip template name
+	    lex->nextToken(); // skip <
+	    
+	    TemplateArgumentListAST::Node args;
+	    if( !parseTemplateArgumentList(args) ){
+		lex->setIndex( startId );
+		return false;
+	    }
+	    	    
+	    if( lex->lookAhead(0) != '>' ){
+		lex->setIndex( startId );
+		return false;
+	    }
+	    
+	    lex->nextToken(); // skip >
+	    
+	    args->setText( toString(startId, lex->index()) );
+	    UPDATE_POS( args, startId, lex->index() );
+	    
+	    classOrNamespaceName->setTemplateArgumentList( args );
+	    
+	    if ( lex->lookAhead(0) == Token_scope ) {
+	        
+	    	UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
+		
+		lex->nextToken();
+		ok = true;
+		
+		nns->addClassOrNamespaceName( classOrNamespaceName );
+		
+	    } else {
+		lex->setIndex( startId );
+		break;
+	    }
+	    
+	} else if( lex->lookAhead(1) == Token_scope ){
+	    lex->nextToken(); // skip name
+	    
+	    classOrNamespaceName->setText( toString(startId, lex->index()) );
+	    UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
+	    nns->addClassOrNamespaceName( classOrNamespaceName );
+	    
+	    lex->nextToken(); // skip ::
+	    if( lex->lookAhead(0) == Token_template && lex->lookAhead(1) == Token_identifier ){
+		lex->nextToken(); // skip optional template keyword
+	    }
+	    ok = true;
+	    
+	} else
+	    break;	    
+    }
+    
+    if ( !ok ) {
+	lex->setIndex( startId );
+	return false;
+    }
+    
+    node = nns;
+    UPDATE_POS( node, start, lex->index() );
+    node->setText( toString(start,lex->index()) );
+    
+    return true;
+}
+
+#if 0
 bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::parseNestedNameSpecifier()" << endl;
@@ -2011,6 +2097,9 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
     
     return true;
 }
+#endif
+
+
 
 bool Parser::parsePtrToMember( AST::Node& /*node*/ )
 {

@@ -1163,6 +1163,18 @@ a class for the KDE libraries.</string>
         <receiver>cpp_new_class_dialog</receiver>
         <slot>qobject_box_stateChanged(int)</slot>
     </connection>
+    <connection>
+        <sender>access_view</sender>
+        <signal>mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>access_view_mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</slot>
+    </connection>
+    <connection>
+        <sender>methods_view</sender>
+        <signal>mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</signal>
+        <receiver>cpp_new_class_dialog</receiver>
+        <slot>methods_view_mouseButtonPressed(int,QListViewItem*,const QPoint&amp;,int)</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>classname_edit</tabstop>

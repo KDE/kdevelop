@@ -14,10 +14,12 @@
 
 class AST;
 class QListViewItem;
+class QStringList;
 
 namespace KTextEditor{ class EditInterface; }
 
 AST* findNodeAt( AST* unit, int line, int column );
 void buildView( AST* ast, KTextEditor::EditInterface*, QListViewItem* parent );
+void scopeOfNode( AST* ast, QStringList& );
 
 #endif // __ast_utils_h

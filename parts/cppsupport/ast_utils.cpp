@@ -11,9 +11,14 @@
 
 #include "ast_utils.h"
 #include "ast.h"
+
 #include <qlistview.h>
+#include <qstringlist.h>
+
 #include <klocale.h>
 #include <kdebug.h>
+#include <kapplication.h>
+
 #include <ktexteditor/editinterface.h>
 
 AST* findNodeAt( AST* node, int line, int column )
@@ -51,7 +56,7 @@ AST* findNodeAt( AST* node, int line, int column )
 
 void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* parent )
 {
-    if( !ast || !editIface || !parent )
+    if( !ast || !editIface || !parent || ast->nodeType() == NodeType_Generic )
 	return;
     
     int startLine, startColumn;
@@ -83,3 +88,36 @@ void buildView( AST* ast, KTextEditor::EditInterface* editIface, QListViewItem* 
 	++it;
     }
 }
+
+void scopeOfNode( AST* ast, QStringList& scope )
+{
+    if( !ast )
+	return;
+    
+    if( ast->parent() )
+	scopeOfNode( ast->parent(), scope );
+    
+    QString s;
+    switch( ast->nodeType() )
+    {
+    case NodeType_ClassSpecifier:
+	s = ((ClassSpecifierAST*)ast)->name()->text();
+	s = s.isEmpty() ? QString::fromLatin1("<unnamed>") : s;
+	kdDebug(9007) << "scope = " << s << endl;
+	scope.push_back( s );
+	break;
+	
+    case NodeType_Namespace:
+	s = ((NamespaceAST*)ast)->namespaceName();
+	s = s.isEmpty() ? QString::fromLatin1("<unnamed>") : s;
+	kdDebug(9007) << "scope = " << s << endl;
+	scope.push_back( s );
+	break;
+	
+    default:
+	break;
+    }    
+}
+
+
+

@@ -79,6 +79,9 @@ public:
     virtual int nodeType() const { return m_nodeType; }
     virtual void setNodeType( int nodeType ) { m_nodeType = nodeType; }
 
+    virtual QString text() const { return m_text; }
+    virtual void setText( const QString& text ) { m_text = text; }
+    
     virtual AST* parent() { return m_parent; }
     virtual void setParent( AST* parent );
 
@@ -87,9 +90,6 @@ public:
 
     virtual void setEndPosition( int line, int col );
     virtual void getEndPosition( int* line, int* col ) const;
-
-    virtual QString text() const { return m_text; }
-    virtual void setText( const QString& text ) { m_text = text; }
 
     virtual QPtrList<AST> children() { return m_children; }
     virtual void appendChild( AST* child );
@@ -278,7 +278,7 @@ class ClassSpecifierAST: public TypeSpecifierAST
 {
 public:
     typedef std::auto_ptr<ClassSpecifierAST> Node;
-    enum { Type = NodeType_ClassOrNamespaceName };
+    enum { Type = NodeType_ClassSpecifier };
 
 public:
     ClassSpecifierAST();
