@@ -15,6 +15,7 @@
 #include <qdir.h>
 #include <qtimer.h>
 #include <qregexp.h>
+#include <qstylesheet.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <knotifyclient.h>
@@ -485,7 +486,8 @@ void MakeWidget::insertLine2(const QString &line, Type type)
 
     int paraFrom, indexFrom, paraTo, indexTo;
     getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
-    append(QString("<code><font color=\"%1\">%2</font></code><br>").arg(color).arg(line));
+    QString eLine = QStyleSheet::escape( line );
+    append(QString("<code><font color=\"%1\">%2</font></code><br>").arg(color).arg(eLine));
     setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
     
     if (move) {
