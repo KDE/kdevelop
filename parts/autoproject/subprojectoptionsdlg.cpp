@@ -177,7 +177,7 @@ void SubprojectOptionsDialog::storeConfig()
     }
 
     QString old_metasources = subProject->variables["METASOURCES"];
-    QString new_metasources = metasources_checkbox->isChecked() ? "AUTO" : QString::null;
+    QString new_metasources = metasources_checkbox->isChecked() ? QString::fromLatin1("AUTO") : QString::null;
     if (new_metasources != old_metasources) {
         subProject->variables["METASOURCES"] = new_metasources;
         replaceMap.insert("METASOURCES", new_metasources);
