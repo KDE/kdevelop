@@ -500,22 +500,7 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	if((source_header_candidate = sourceOrHeaderCandidate()) != QString::null)
 	{
 	
-	 QString tmp;
-	 if(is_source)
-	  tmp = i18n("Switch To Header");
-	 else if(is_header)
-	  tmp = i18n("Switch To Implementation");
-	
-	 if(!tmp.isEmpty())
-	 {
-          id = popup->insertItem( tmp,
-                this, SLOT( slotSwitchHeader() ) );
-          popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
-                                      "If you are currently looking at a header file, this "
-                                      "brings you to the corresponding implementation file. "
-                                      "If you are looking at an implementation file (.cpp etc.), "
-                                      "this brings you to the corresponding header file.") );
-	 }	 
+	 
 	}
 
        kdDebug(9007) << "======> code model has the file: " << m_activeFileName << " = " << codeModel()->hasFile( m_activeFileName ) << endl;
@@ -526,8 +511,16 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                candidate = source_header_candidate;
            else
                candidate = m_activeFileName;
+	       
+		size_t curLine = 0, curCol = 0;
+		if (m_activeViewCursor != 0)
+			m_activeViewCursor->cursorPosition(&curLine, &curCol);
+		
+		FunctionDom currentFunction = 0;
+		bool hasDeclAndDef = false;//indicate wether a matfching declaration/definition has been found
+		bool fileExists = !candidate.isEmpty() && codeModel()->hasFile(candidate);
 //           kdDebug() << "CppSupportPart::contextMenu 2: candidate: " << candidate << endl;
-           if (!candidate.isEmpty() && codeModel()->hasFile(candidate) )
+           if (fileExists )
            {
                 QPopupMenu* m2 = new QPopupMenu( popup );
                 id = popup->insertItem( i18n("Go to Declaration"), m2 );
@@ -546,9 +539,14 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 		    text += formatModelItem( *it, true );
 		    text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
 		    int id = m2->insertItem( text, this, SLOT(gotoDeclarationLine(int)) );
-		    int line, column;
+		    int line, column, endLine, endColumn;
 		    (*it)->getStartPosition( &line, &column );
+			(*it)->getStartPosition( &line, &column );
+			(*it)->getEndPosition(&endLine, &endColumn);
 		    m2->setItemParameter( id, line );
+		    if (m_activeViewCursor)
+			if (curLine >= line && curLine <= endLine)//@todo currently column isn't checked, should be sufficient this way
+				currentFunction = *it;
                 }
 		if(m2->count() == 0)
 		  popup->removeItem(id);
@@ -563,6 +561,10 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
                candidate1 = m_activeFileName;
 //           kdDebug() << "CppSupportPart::go to definition in " << candidate1 << endl;
 
+		FunctionDefinitionDom currentFunctionDefintion = 0;
+		QString curFuncDefText;
+		CodeModelUtils::PredDefinitionMatchesDeclaration comparator(currentFunction);
+		
            if( codeModel()->hasFile(candidate1) ){
                QPopupMenu* m = new QPopupMenu( popup );
                id = popup->insertItem( i18n("Go to Definition"), m );
@@ -579,13 +581,66 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	           text += formatModelItem( *it, true );
 	           text = text.replace( QString::fromLatin1("&"), QString::fromLatin1("&&") );
                    int id = m->insertItem( text, this, SLOT(gotoLine(int)) );
-	           int line, column;
+	           int line, column, endLine, endColumn;
 	           (*it)->getStartPosition( &line, &column );
+		   (*it)->getEndPosition(&endLine, &endColumn);
 	           m->setItemParameter( id, line );
+			if (currentFunction == 0)
+			{
+				if (curLine >= line && curLine <=endLine)//cursor is currently above function defintion, find matching declaration later
+				{//@todo currently column isn't checked, should be sufficient this way
+					currentFunctionDefintion = *it;
+					curFuncDefText= text;
+				}
+			} else
+			{
+				if ( comparator(*it) ) //functiondefintion found for declaration the cursor is currently above
+				{
+					int tmpId = popup->insertItem(i18n("Go to definition of ") + text, this, SLOT(gotoLine(int))); 
+					int linel, coll;
+					(*it)->getStartPosition(&linel, &coll);
+					popup->setItemParameter(tmpId, linel);
+					hasDeclAndDef = true;
+				}
+			}
+		   
                }
        	       if(m->count() == 0)
 		popup->removeItem(id);
            }
+		if (fileExists && currentFunction == 0 && currentFunctionDefintion != 0)//cursor is above a functiondefintion, find matching  declaration
+		{
+			FileDom file2 = codeModel()->fileByName( candidate );
+			FunctionList functionList2 = CodeModelUtils::allFunctions(file2);
+			for( FunctionList::ConstIterator it=functionList2.begin(); it!=functionList2.end(); ++it )
+				if (CodeModelUtils::compareDeclarationToDefinition(*it, currentFunctionDefintion))
+				{
+					int tmpId = popup->insertItem(i18n("Go to declaration of ") + curFuncDefText, this, SLOT(gotoDeclarationLine(int))); 
+					int linel, coll;
+					(*it)->getStartPosition(&linel, &coll);
+					popup->setItemParameter(tmpId, linel);
+					hasDeclAndDef = true;
+				}
+		}
+		if (!hasDeclAndDef)
+		{
+			QString tmp;
+	 		if(is_source)
+	  			tmp = i18n("Switch To Header");
+	 		else if(is_header)
+	  			tmp = i18n("Switch To Implementation");
+	  
+	 		if(!tmp.isEmpty())
+	 		{
+          			id = popup->insertItem( tmp,
+                		this, SLOT( slotSwitchHeader() ) );
+          			popup->setWhatsThis( id, i18n("<b>Switch Header/Implementation</b><p>"
+                                      "If you are currently looking at a header file, this "
+                                      "brings you to the corresponding implementation file. "
+                                      "If you are looking at an implementation file (.cpp etc.), "
+                                      "this brings you to the corresponding header file.") );
+	 		}
+		}
        }
 
 	const EditorContext *econtext = static_cast<const EditorContext*>(context);
