@@ -9,7 +9,8 @@ LFLAGS = -+
 
 # until am_edit can handle uic
 newprojectdlgbase.h : newprojectdlg.ui
-	uic -o newprojectdlgbase.h newprojectdlg.ui
+	uic -o newprojectdlgbase.h newprojectdlg.ui;\
+	$(MOC) newprojectdlgbase.h -o newprojectdlgbase.moc
 
 newprojectdlgbase.cpp : newprojectdlg.ui
 	uic -i newprojectdlgbase.h -o newprojectdlgbase.cpp newprojectdlg.ui

@@ -25,15 +25,15 @@ noinst_HEADERS = appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 				 plugin.h pmc.h project.h projectspace.h qobjectplugin.h \
 				registeredfile.h  pluginloader.h appwizardbase.h filepropspagebase.h \
 		filepropspage.h
-noinst_PROGRAMS = testprj
+#noinst_PROGRAMS = testprj
 
-testprj_SOURCES = testprj.cpp
+#testprj_SOURCES = testprj.cpp
 
 # the library search path. 
-testprj_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
+#testprj_LDFLAGS = $(all_libraries) $(KDE_RPATH) 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
+#testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/libkdevprojectmanagement.la \
 		$(top_builddir)/kdevelop/lib/general/libkdevgeneral.la \
 		$(LIB_KFILE) $(LIB_KPARTS)
