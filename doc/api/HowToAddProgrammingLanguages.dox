@@ -8,26 +8,21 @@
 
   - Implement interface KDevLanguageSupport
   - Language parser for class browser
-  - UI subclassing
-    - (if the language has Qt bindings)
-	.
-  - Problem reporter
-    - (parses source on the fly and reports syntax errors)
-	.
-  - Syntax highlighter
-    - (add to QEditor if not available elsewhere)
-	.
-  - \ref applicationTemplates
-  - \ref sourceFileTemplates
-  - Source code abbreviations
-    - (ife expands to an if else statement, etc)
-	.
-  - \ref sourceFormater (prettyprint functionality)
-  - \ref debuggerSupport
+  - \ref sectionQtUiSubclassing - (if the language has Qt bindings)
+  - \ref sectionCodeCompletion
+  - \ref sectionProblemReporter - (parses source on the fly and reports syntax errors)
+  - Syntax highlighter - (add to QEditor if not available elsewhere)
+  - \ref sectionApplicationTemplates
+  - \ref sectionSourceFileTemplates
+  - \ref sectionAbbreviationTemplates - (ife expands to an if else statement, etc)
+  - \ref sectionSourceCodeFormater (prettyprint functionality)
+  - \ref sectionDebugger
     - (gdb/jdb/??? integration)
-  - \ref compilerPlugins
+  - \ref sectionCompilerPlugins
   - Build tool (make/ant/etc)
   .
+
+Take a look at \ref LangSupportStatus to see the current status of the laguages currently supported by KDevelop.
 
 \section Expl Explanations, hints, tips, and all around Good Things To Know, regarding that list
 
@@ -41,10 +36,12 @@ Implementing methods:
 
 Should be enough for a language support to start working.
 
-\section KDevLang KDevLang project template
 KDevelop ships with KDevLang project template. It is a simple language support prototype that can be used when developing language support plugins with KDevelop.
 To use it, start a New Project and select: <code>C++->KDevelop->KDevelop Language Support Plugin</code> in the application wizard.
-The template is located in <code>parts/appwizard/kdevlang</code>, you can change it there if you need.
+The template is located in <code>languages/cpp/app_templates/kdevlang</code>, you can change it there if you need.
+
+
+
 
 
 \section LSupp Language Support
@@ -70,6 +67,8 @@ Language support can offer additional features:
     .
   .
 
+\subsection sectionQtUiSubclassing Qt UI subclassing
+
 If there is a Qt bindings for your language and there is a possibility
 to use QtDesigner ui files, you could implement ui subclassing feature:
   - <code>virtual QStringList subclassWidget(const QString& formName);</code>
@@ -79,7 +78,7 @@ to use QtDesigner ui files, you could implement ui subclassing feature:
 
 See <code>cppsupport</code> and <code>javasupport</code> for examples.
 
-\section ClStore Class Store
+\subsection ClStore Class Store
 
 If you write (or have) a language parser, your language support can have
 "class store" (a database containing the information about scopes, classes
@@ -88,11 +87,14 @@ etc.). Class store libraries can be found at <code>lib/catalog</code> (Catalog) 
 
 KDevelop provides class browsers that extract information from a <B>class store</B> and display it in a tree view and toolbar selectors of scopes, classes and methods.
 
+\subsubsection sectionMemoryClassStore Memory Class Store
+CodeModel is the memory class store. It is very efficient and thus it is recommended for using as a project class store. CodeModel libraries are located in <code>lib/interfaces/codemodel.h</code>. The class browser for a CodeModel based stores is <code>parts/classview</code>.
+
+\subsubsection sectionPersistantClassStore Persistant Class Store
 Catalog is the persistant class store for KDevelop. Persistant class store can be used as an information storage for code completion but it also can be used as a class store for the project. Take a look at
 <code>parts/cppsupport</code> for an example of using catalog. Catalog is stored on disk in the database file (Berkeley db) If you use catalog with the project, your class browser will be <code>parts/classbrowser</code>.
 
-CodeModel is the memory class store. It is very efficient and thus it is recommended for using as a project class store. CodeModel libraries are located in <code>lib/interfaces/codemodel.h</code>. The class browser for a CodeModel based stores is <code>parts/classview</code>.
-
+\subsection sectionCodeCompletion Code completion
 Class store enables you to write a code completion for the language. At the
 moment (2003-06-25), code completion is available only to cppsupport so take a
 look at it for an example.
@@ -101,21 +103,25 @@ In general, class stores can be filled with information without specialized
 and complex language parsers (take a look at <code>parts/pythonsupport</code> that have a very simple python parser) but your language support will surely benefit
 from having such. There is a hand-written c/c++ parser (<code>lib/cppparser</code>) in KDevelop that might be used for ObjC or related C-based languages. Other (not so complex as c++) languages can be parsed by ANTLR based parsers (library is in lib/antlr). Consult www.antlr.org for a ANTLR documentation and look at <code>parts/javasupport</code>, <code>parts/adasupport</code> and <code>parts/pascalsupport</code> for an example of using such parsers. The latest version of ANTLR (2.7.2) has support for Java, C, Pascal, Ada, C++, CIM, HTML, IDL, Verilog, VRML, OCL, ASN.1, and SQL. You can write an ANTLR parser for your own language, of course.
 
-\section PrReport Problem Reporter
+\subsection sectionProblemReporter Problem Reporter
 
 If you have a language parser, you can implement <B>problem reporter</B>
 functionality for your language. The problem reporter catches errors
 reported by a parser and displays it in a problem reporter view.
 <code>parts/javasupport</code>, <code>parts/adasupport</code>, <code>parts/pascalsupport</code> and <code>parts/cppsupport</code> have problem reporters.
 
-\section Templ Templates
+\subsection Templ Templates
 
-\subsection applicationTemplates Application Wizard Templates
+\subsubsection sectionApplicationTemplates Application Wizard Templates
 
 <B>Application wizard</B> templates should be also written. Appwizard templates are simple to create - consult \ref howToAddApplicationTemplates (HowToAddApplicationTemplates.dox file)
 and look at <code>languages/ruby/app_templates/rubyhello</code>, <code>languages/pascal/app_templates/pascalhello</code>, or <code>languages/ada/app_templates/adahello</code>.
 
-\subsection sourceFileTemplates Source File Templates
+\subsubsection sectionApplicationImportTemplates Application wizard import templates
+
+To be written.
+
+\subsubsection sectionSourceFileTemplates Source File Templates
 
 Another thing to do is to create <B>file create templates</B>. They are prototypes for a source files of your language. These prototypes are placed in
 <code>parts/filecreate/file-templates</code> dir or <code>languages/YOURLANGUAGE/file_templates</code> and have names equal to the extensions of language source files.
@@ -123,32 +129,36 @@ The description of the prototypes is placed in <code>parts/filecreate/template-i
 
 Consult FileCreatePart (parts/filecreate/README.dox file) and \ref howToAddFileTemplates for further information.
 
-\subsection CdAbbr Code Abbreviation Templates
+\subsubsection sectionAbbreviationTemplates Code Abbreviation Templates
 
 KDevelop has a support for <B>code abbreviations</B> so you can add some predefined abbreviations to your language support. Take <code>parts/cppsupport/cpptemplates</code> as an example.
 
 
-\section sourceFormater Source Code Formater
+\subsection sectionSourceCodeFormater Source Code Formater
 
 Implement a KDevSourceFormater class interface.
 To obtain source formatter functionality (that is already available to
 c-based languages) you can extend astyle library (<code>lib/astyle</code>) that is used by KDevelop to format sources.
 Take a look at AStylePart for an example how to do it.
 
-\section documentationTopics Documentation topics
+\subsection sectionDocumentationTopics Documentation topics
 
 Add them to doc/extras for an example see doc/extras/python.toc and doc/extras/python.index
 
-\section debuggerSupport Debugger Support
+\subsection sectionDebugger Debugger
 
 The last thing to have a complete language support in KDevelop is to
 write a <B>Debugger support</B>. KDevelop already provides GDB support
 (<code>parts/debugger</code>) and JDB (java debugger) support (<code>parts/javadebugger</code>). Take a look at them to get inspiration.
 
-\section compilerPlugins Compiler plugins
+\subsection sectionCompilerPlugins Compiler plugins
 
 There is an ability to create compiler plugin for KDevelop. Compiler plugin provides the compiler configuration dialog which implements command line compiler options.
 Compiler plugins must implement KDevCompilerOptions interface.
+
+
+
+
 
 \section Editor Language Editor
 
@@ -157,6 +167,10 @@ interface. In case none of the editors does support advanced editing of sources
 written in your language (like code folding, syntax highlighting, line
 indentation) you can improve QEditor included in KDevelop (<code>parts/qeditor</code>).
 By creating QEditorIndenter and QSourceColorizer descendants you can provide the support for an automatic indentation and syntax highlighting that will be available for sure in KDevelop.
+
+
+
+
 
 \section PrManag Build Tools
 
@@ -192,6 +206,9 @@ Also available:
 
 Choose your build tool and if the existing build tools doesn't fit
 in, extend generic build tool via build system plugin.
+
+
+
 
 \section MiscInf Other Info
 
