@@ -16,9 +16,10 @@
 #include <qmessagebox.h>
 #include <kfiledialog.h>
 #include <klineedit.h>
-#include <qpushbutton.h>
+#include <kpushbutton.h>
 #include <domutil.h>
 #include <qdom.h>
+#include <kstdguiitem.h>
 
 #define WIDGET_CAPTION_NAME "widget/property|name=caption/string"
 #define WIDGET_CLASS_NAME   "class"
@@ -29,6 +30,9 @@ NewWidgetDlg::NewWidgetDlg(QStringList &newFileNames,QWidget* parent, const char
 m_newFileNames(newFileNames)
 //=================================================
 {
+// Remove in kde 3.4 support
+	okayButton->setGuiItem(KStdGuiItem::ok());
+	cancelButton->setGuiItem(KStdGuiItem::cancel());
 }
 
 
