@@ -24,34 +24,16 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "stty.h"
-#include "kapp.h"
-
-#include <qsocketnotifier.h>
-#include <qstring.h>
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <termios.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include <sys/types.h>
 #include <sys/ioctl.h>
-#ifdef TIME_WITH_SYS_TIME
+#include <sys/stat.h>
+#include <sys/wait.h>
 #include <sys/time.h>
-#endif
 #include <sys/resource.h>
-#include <grp.h>
-
-#if defined (_HPUX_SOURCE)
-#define _TERMIOS_INCLUDED
-#include <bsdtty.h>
-#endif
 
 #ifdef HAVE_SYS_STROPTS_H
 #include <sys/stropts.h>
@@ -59,13 +41,29 @@
 #endif
 
 #include <assert.h>
-#include <time.h>
+#include <fcntl.h>
+#include <grp.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
+#include <termios.h>
+#include <time.h>
+#include <unistd.h>
+
+#if defined (_HPUX_SOURCE)
+#define _TERMIOS_INCLUDED
+#include <bsdtty.h>
+#endif
+
 #include <qintdict.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
+#include <qsocketnotifier.h>
+#include <qstring.h>
+
 #include <klocale.h>
 #include <kstddirs.h>
+#include <kapp.h>
+
+#include "stty.h"
 
 #define PTY_FILENO 3
 #define BASE_CHOWN "konsole_grantpty"
