@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevjavadebugger.la
 libkdevjavadebugger_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevjavadebugger_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevjavadebugger_la_SOURCES = javadebuggerfactory.cpp \
-			     javadebuggerpart.cpp \
+libkdevjavadebugger_la_SOURCES = javadebuggerpart.cpp \
 			     dbgcontroller.cpp \
 			     jdbcontroller.cpp \
 			     dbgcommand.cpp \

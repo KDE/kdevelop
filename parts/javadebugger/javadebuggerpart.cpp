@@ -19,6 +19,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kstatusbar.h>
+#include <kgenericfactory.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -32,12 +33,12 @@
 #include "breakpoint.h"
 #include "dbgpsdlg.h"
 #include "memviewdlg.h"
-#include "javadebuggerfactory.h"
 #include "javadebuggerpart.h"
 
+K_EXPORT_COMPONENT_FACTORY( libkdevjavadebugger, JavaDebuggerFactory( "kdevjavadebugger" ) );
 
-JavaDebuggerPart::JavaDebuggerPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name),
+JavaDebuggerPart::JavaDebuggerPart(QObject *parent, const char *name, const QStringList &)
+    : KDevPlugin(parent, name),
       controller(0)
 {
     setInstance(JavaDebuggerFactory::instance());

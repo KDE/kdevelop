@@ -15,7 +15,9 @@
 #define _DEBUGGERPART_H_
 
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
+
+#include <kgenericfactory.h>
 
 class VariableWidget;
 class BreakpointWidget;
@@ -25,12 +27,12 @@ class Breakpoint;
 class DbgController;
 class DbgToolBar;
 
-class JavaDebuggerPart : public KDevPart
+class JavaDebuggerPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    JavaDebuggerPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    JavaDebuggerPart( QObject *parent, const char *name, const QStringList & );
     ~JavaDebuggerPart();
 
 private slots:
@@ -60,5 +62,7 @@ private:
     DbgController *controller;
     //    QGuardedPtr<DbgToolBar> floatingToolBar;
 };
+
+typedef KGenericFactory<JavaDebuggerPart> JavaDebuggerFactory;
 
 #endif

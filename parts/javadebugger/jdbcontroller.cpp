@@ -17,7 +17,7 @@
 
 #include "jdbcontroller.h"
 
-#include "javadebuggerfactory.h"
+#include "javadebuggerpart.h"
 #include "breakpoint.h"
 #include "framestackwidget.h"
 #include "variablewidget.h"
