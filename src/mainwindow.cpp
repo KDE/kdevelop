@@ -204,6 +204,8 @@ ToolDockBaseState::ToolDockBaseState(const QPtrList<QWidget> *pViews):
   noViews              (0)
 {
 
+ return;
+#warning this crashes in ideal mode, looks like there are dangling pointers on opening another project
   QPtrListIterator<QWidget> it(*pViews);
   for( ; it.current(); ++it)                                        // Iterate through all views
   {
@@ -600,8 +602,9 @@ void MainWindow::removeView(QWidget *view)
   }
   
   if( pDock ) {
-    pDock->undock();
-    delete (KDockWidget*) pDock;
+	deleteToolWindow(view);
+/*    pDock->undock();
+    delete (KDockWidget*) pDock;*/
   }
   else {
     kdDebug(9000) << "pDock already destroyed!!" << endl;
