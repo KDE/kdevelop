@@ -18,7 +18,7 @@
 #include "cppnewclassdlgbase.h"
 
 class KDevPlugin;
-
+class KDevProject;
 
 class CppNewClassDialog : public CppNewClassDialogBase
 {
@@ -36,10 +36,49 @@ protected:
     virtual void nameHandlerChanged(const QString &text);
 
 private:
+
     bool headerModified;
     bool implementationModified;
     QString m_parse;
     KDevPlugin *m_part;
+
+    // configuration variables
+    QString interface_url;
+    QString implementation_url;
+    QString interface_suffix;
+    QString implementation_suffix;
+    bool lowercase_filenames;
+
+    friend class ClassGenerator;
+
+    // The class that translates UI input to a class
+    class ClassGenerator {
+
+    public:
+      ClassGenerator(CppNewClassDialog& _dlg) : dlg(_dlg) {}
+      void generate();
+
+    private:
+      bool validateInput();
+      void common_text();
+      void gen_implementation();
+      void gen_interface();
+
+      QString className;
+      QString header;
+      QString implementation;
+
+      KDevProject *project;
+      QString subDir, headerPath, implementationPath;
+      QString doc;
+      QString namespaceStr, baseName;
+      bool childClass;
+      bool objc;
+      QString namespaceBeg, namespaceEnd;
+      QString args;
+
+      CppNewClassDialog& dlg;
+    };
 };
 
 #endif

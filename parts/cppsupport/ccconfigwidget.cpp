@@ -128,7 +128,7 @@ void CCConfigWidget::initFTTab( )
     bool files = DomUtil::readBoolEntry(dom, "/cppsupportpart/filetemplates/choosefiles");
     slotEnableChooseFiles(files);
     // read in template groups
-    QStringList interface_files = KGlobal::dirs()->findAllResources( "appdata", "templates/*.h", false, true);
+    QStringList interface_files = KGlobal::dirs()->findAllResources( "data", "kdevcppsupport/templates/*.h", false, true);
     kdDebug() << "** Interface file templates:";
     QStringList::iterator i;
     for (i=interface_files.begin();i!=interface_files.end();i++) {
@@ -149,6 +149,8 @@ void CCConfigWidget::initFTTab( )
     interface_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/interfacesuffix", ".h"));
     implementation_suffix->setText(DomUtil::readEntry(dom, "/cppsupportpart/filetemplates/implementationsuffix", ".cpp"));
     lowercase_filenames->setChecked(DomUtil::readBoolEntry(dom, "/cppsupportpart/filetemplates/lowercasefilenames", true));
+    interface_url->fileDialog()->setURL(KURL(*m_pPart->project()->projectDirectory()));
+    implementation_url->fileDialog()->setURL(KURL(*m_pPart->project()->projectDirectory()));
 }
     
 CCConfigWidget::~CCConfigWidget( )

@@ -1,21 +1,12 @@
 //
 //
-// C++ Interface |FILENAME|
+// C++ Interface: $MODULE
 //
 // Description: 
 //
 //
-// Author: |AUTHOR|, (C) |YEAR|
+// Author: $AUTHOR <$EMAIL>, (C) $YEAR
 //
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-
-#ifndef |FILENAME|_Interface
-#define |FILENAME|_Interface
-
-#include "General.hxx"
-
-
-
-#endif

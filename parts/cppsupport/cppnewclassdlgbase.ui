@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>484</width>
-            <height>454</height>
+            <width>655</width>
+            <height>591</height>
         </rect>
     </property>
     <property name="caption">
@@ -25,163 +25,6 @@
         <property name="spacing">
             <number>6</number>
         </property>
-        <spacer row="2" column="1">
-            <property name="name">
-                <cstring>Spacer11</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Minimum</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>20</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QGroupBox" row="3" column="0">
-            <property name="name">
-                <cstring>filenames_group</cstring>
-            </property>
-            <property name="title">
-                <string>File Names</string>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>header_label</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>21</y>
-                        <width>193</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&amp;Header:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>header_edit</cstring>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>header_edit</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>42</y>
-                        <width>193</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>Insert your header file name here.
-It is automatically inserted while
-you select the classname, but you can
-still edit it afterwards.</string>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>implementation_edit</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>91</y>
-                        <width>193</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="whatsThis" stdset="0">
-                    <string>Insert your implementation filename here.
-It is automatically inserted while
-you select the classname, but you can
-still edit it afterwards.</string>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>implementation_label</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>70</y>
-                        <width>193</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>&amp;Implementation:</string>
-                </property>
-                <property name="buddy" stdset="0">
-                    <cstring>implementation_edit</cstring>
-                </property>
-            </widget>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>120</y>
-                        <width>100</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Name Handling:</string>
-                </property>
-            </widget>
-            <widget class="QComboBox">
-                <item>
-                    <property name="text">
-                        <string>none</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>lower</string>
-                    </property>
-                </item>
-                <item>
-                    <property name="text">
-                        <string>upper</string>
-                    </property>
-                </item>
-                <property name="name">
-                    <cstring>name_handler_combo</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>110</x>
-                        <y>120</y>
-                        <width>91</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QLineEdit" row="1" column="2">
-            <property name="name">
-                <cstring>basename_edit</cstring>
-            </property>
-            <property name="whatsThis" stdset="0">
-                <string>Insert the base class which your new class
-will be derived from. If you have checked
-'Generate QWidget child class' the new class will
-be derived from QWidget. If no base class is named, the
-new class will not have a parent class.</string>
-            </property>
-        </widget>
         <widget class="QLineEdit" row="1" column="0">
             <property name="name">
                 <cstring>classname_edit</cstring>
@@ -192,28 +35,6 @@ Please try to keep some standards
 like using an upper 'K' as the first
 letter for your new class, if it is
 a class for the KDE libraries.</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="0" column="0">
-            <property name="name">
-                <cstring>classname_label</cstring>
-            </property>
-            <property name="text">
-                <string>Class &amp;name:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>classname_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="0" column="2">
-            <property name="name">
-                <cstring>basename_label</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Base class:</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>basename_edit</cstring>
             </property>
         </widget>
         <spacer row="4" column="1">
@@ -357,77 +178,6 @@ doxygen or similar tools.</string>
                 </spacer>
             </vbox>
         </widget>
-        <widget class="QButtonGroup" row="3" column="2">
-            <property name="name">
-                <cstring>inheritance_group</cstring>
-            </property>
-            <property name="title">
-                <string>Inheritance</string>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>11</number>
-                </property>
-                <property name="spacing">
-                    <number>6</number>
-                </property>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>public_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>public</string>
-                    </property>
-                    <property name="checked">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>protected_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>protected</string>
-                    </property>
-                </widget>
-                <widget class="QRadioButton">
-                    <property name="name">
-                        <cstring>private_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>private</string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>Spacer9</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Vertical</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Minimum</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>virtual_box</cstring>
-                    </property>
-                    <property name="text">
-                        <string>virtual</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
         <widget class="QLayoutWidget" row="7" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>Layout3</cstring>
@@ -451,12 +201,6 @@ doxygen or similar tools.</string>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>20</width>
-                            <height>20</height>
-                        </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
@@ -490,6 +234,191 @@ doxygen or similar tools.</string>
             <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>classname_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Class name:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>classname_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="2">
+            <property name="name">
+                <cstring>namespace_label</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Namespace:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>classname_edit</cstring>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="1" column="2">
+            <property name="name">
+                <cstring>namespace_edit</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Insert your new classname here.
+Please try to keep some standards
+like using an upper 'K' as the first
+letter for your new class, if it is
+a class for the KDE libraries.</string>
+            </property>
+        </widget>
+        <widget class="QButtonGroup" row="3" column="2">
+            <property name="name">
+                <cstring>inheritance_group</cstring>
+            </property>
+            <property name="title">
+                <string>Inheritance</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>basename_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Base class:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>basename_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>public_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>public</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="2" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>protected_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>protected</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="3" column="0" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>private_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>private</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>basename_edit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Insert the base class which your new class
+will be derived from. If you have checked
+'Generate QWidget child class' the new class will
+be derived from QWidget. If no base class is named, the
+new class will not have a parent class.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="2">
+                    <property name="name">
+                        <cstring>virtual_box</cstring>
+                    </property>
+                    <property name="text">
+                        <string>virtual</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer row="2" column="1">
+            <property name="name">
+                <cstring>Spacer11</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Minimum</enum>
+            </property>
+        </spacer>
+        <widget class="QGroupBox" row="3" column="0">
+            <property name="name">
+                <cstring>filenames_group</cstring>
+            </property>
+            <property name="title">
+                <string>File Names</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>11</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>header_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Header:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>header_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>header_edit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Insert your header file name here.
+It is automatically inserted while
+you select the classname, but you can
+still edit it afterwards.</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>implementation_label</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Implementation:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>implementation_edit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit">
+                    <property name="name">
+                        <cstring>implementation_edit</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Insert your implementation filename here.
+It is automatically inserted while
+you select the classname, but you can
+still edit it afterwards.</string>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
     </grid>
 </widget>
