@@ -1,3 +1,7 @@
+2004-10-29  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Added the 'qmakeapp' project template translated to QtRuby
+
 2004-10-28  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Fixed Ruby KDE app and DCOP service templates so they work again.

@@ -1,1 +1,1 @@
-SUBDIRS = rubyhello qtruby dcopservice kapp
+SUBDIRS = rubyhello qtruby qtrubyapp dcopservice kapp

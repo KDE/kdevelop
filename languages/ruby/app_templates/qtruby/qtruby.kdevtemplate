@@ -1,8 +1,8 @@
 # KDE Config File
 [General]
-Name=QtRuby application
-Category=Ruby
-Comment=This generates a simple QtRuby application
+Name=QtRuby Hello World
+Category=Ruby/Qt
+Comment=This generates a simple QtRuby Hello World application
 FileTemplates=rb,ShellStyle
 ShowFilesAfterGeneration=%{dest}/%{APPNAMELC}.rb
 Archive=qtruby.tar.gz
