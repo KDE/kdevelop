@@ -187,8 +187,12 @@ protected:
    * A list of taskbar buttons.
    * Note: Each button stands for one MDI view (toolviews doesn't have got a taskbar button). 
    */
+#if QT_VERSION < 300
    QList<QextMdiTaskBarButton>*  m_pButtonList;
-   /** 
+#else
+   QPtrList<QextMdiTaskBarButton>*  m_pButtonList;
+#endif
+   /**
    * The belonging MDI mainframe (parent widget of this) 
    */
    QextMdiMainFrm*               m_pFrm;

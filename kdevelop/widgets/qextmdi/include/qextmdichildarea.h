@@ -28,6 +28,11 @@
 #define _QEXTMDICHILDAREA_H_
 
 #include <qframe.h>
+#if QT_VERSION < 300
+# include <qlist.h>
+#else
+# include <qptrlist.h>
+#endif
 
 #include "qextmdichildfrm.h"
 #include "qextmdichildview.h"
@@ -57,8 +62,12 @@ public:
    /** 
    * Z Order stack of @ref QextMdiChildFrm childframe windows (top=last) 
    */
+#if QT_VERSION < 300
    QList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
-   /** 
+#else
+   QPtrList<QextMdiChildFrm> *m_pZ; //Auto delete enabled
+#endif
+   /**
    * the default size of an newly created childframe 
    */
    QSize                   m_defaultChildFrmSize;

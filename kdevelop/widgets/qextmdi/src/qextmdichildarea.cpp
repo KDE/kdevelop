@@ -47,7 +47,11 @@ QextMdiChildArea::QextMdiChildArea(QWidget *parent)
    m_captionActiveForeColor = QColor(255,255,255);
    m_captionInactiveBackColor = QColor(160,160,164);
    m_captionInactiveForeColor = QColor(255,255,255);
+#if QT_VERSION < 300
    m_pZ = new QList<QextMdiChildFrm>;
+#else
+   m_pZ = new QPtrList<QextMdiChildFrm>;
+#endif
    m_pZ->setAutoDelete(TRUE);
    setFocusPolicy(ClickFocus);
    m_defaultChildFrmSize = QSize(400,300);
@@ -312,7 +316,11 @@ void QextMdiChildArea::focusTopChild()
 void QextMdiChildArea::cascadeWindows()
 {
    int idx=0;
+#if QT_VERSION < 300
    QList<QextMdiChildFrm> list(*m_pZ);
+#else
+   QPtrList<QextMdiChildFrm> list(*m_pZ);
+#endif
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
       QextMdiChildFrm *lpC=list.first();
@@ -331,7 +339,11 @@ void QextMdiChildArea::cascadeWindows()
 void QextMdiChildArea::cascadeMaximized()
 {
    int idx=0;
+#if QT_VERSION < 300
    QList<QextMdiChildFrm> list(*m_pZ);
+#else
+   QPtrList<QextMdiChildFrm> list(*m_pZ);
+#endif
 
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
@@ -354,7 +366,11 @@ void QextMdiChildArea::cascadeMaximized()
 void QextMdiChildArea::expandVertical()
 {
    int idx=0;
+#if QT_VERSION < 300
    QList<QextMdiChildFrm> list(*m_pZ);
+#else
+   QPtrList<QextMdiChildFrm> list(*m_pZ);
+#endif
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
       QextMdiChildFrm *lpC=list.first();
@@ -371,7 +387,11 @@ void QextMdiChildArea::expandVertical()
 void QextMdiChildArea::expandHorizontal()
 {
    int idx=0;
+#if QT_VERSION < 300
    QList<QextMdiChildFrm> list(*m_pZ);
+#else
+   QPtrList<QextMdiChildFrm> list(*m_pZ);
+#endif
    list.setAutoDelete(FALSE);
    while(!list.isEmpty()){
       QextMdiChildFrm *lpC=list.first();
