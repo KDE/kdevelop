@@ -59,22 +59,22 @@ public:
 
     int kind() const
     {
-        return attribute( "kind" ).toInt();
+        return m_kind;
     }
 
     void setKind( int kind )
     {
-        setAttribute( "kind", kind );
+        m_kind = kind;
     }
 
     QString fileName() const
     {
-        return attribute( "fileName" ).toString();
+        return m_fileName;
     }
 
     void setFileName( const QString& fileName )
     {
-        setAttribute( "fileName", fileName );
+        m_fileName = fileName;
     }
 
     QString path( const QString& sep = QString::fromLatin1("::") ) const
@@ -87,68 +87,116 @@ public:
 
     QString name() const
     {
-        return attribute( "name" ).toString();
+        return m_name;
     }
 
     void setName( const QString& name )
     {
-        setAttribute( "name", name );
+        m_name = name;
     }
 
     QStringList scope() const
     {
-        return attribute( "scope" ).toStringList();
+        return m_scope;
     }
 
     void setScope( const QStringList& scope )
     {
-        setAttribute( "scope", scope );
+        m_scope = scope;
     }
 
     void getStartPosition( int* line, int* column ) const
     {
-	if( line ) *line = attribute( "startLine" ).toInt();
-	if( column ) *column = attribute( "startColumn" ).toInt();
+	if( line ) *line = m_startLine;
+	if( column ) *column = m_startColumn;
     }
 
     void setStartPosition( int line, int column )
     {
-	setAttribute( "startLine", line );
-	setAttribute( "startColumn", column );
+	m_startLine = line;
+	m_startColumn = column;
     }
 
     void getEndPosition( int* line, int* column ) const
     {
-	if( line ) *line = attribute( "endLine" ).toInt();
-	if( column ) *column = attribute( "endColumn" ).toInt();
+	if( line ) *line = m_endLine;
+	if( column ) *column = m_endColumn;
     }
 
     void setEndPosition( int line, int column )
     {
-	setAttribute( "endLine", line );
-	setAttribute( "endColumn", column );
+	m_endLine = line;
+	m_endColumn = column;
     }
 
-    bool hasAttribute( const QString& name ) const
+    bool hasAttribute( const QCString& name ) const
     {
+	if( name == "kind" ||
+	    name == "name" ||
+	    name == "scope" ||
+	    name == "fileName" ||
+	    name == "startLine" ||
+	    name == "startColumn" ||
+	    name == "endLine" ||
+	    name == "endColumn" )
+	    return true;
         return m_attributes.contains( name );
     }
 
-    QVariant attribute( const QString& name ) const
+    QVariant attribute( const QCString& name ) const
     {
+	if( name == "kind" )
+	    return m_kind;
+	else if( name == "name" )
+	    return m_name;
+	else if( name == "scope" )
+	    return m_scope;
+	else if( name == "fileName" )
+	    return m_fileName;
+	else if( name == "startLine" )
+	    return m_startLine;
+	else if( name == "startColumn" )
+	    return m_startColumn;
+	else if( name == "endLine" )
+	    return m_endLine;
+	else if( name == "endColumn" )	
+	    return m_endColumn;
         return m_attributes[ name ];
     }
 
-    void setAttribute( const QString& name, const QVariant& value )
+    void setAttribute( const QCString& name, const QVariant& value )
     {
-        m_attributes[ name ] = value;
+	if( name == "kind" )
+	    m_kind = value.toInt();
+	else if( name == "name" )
+	    m_name = value.toString();
+	else if( name == "scope" )
+	    m_scope = value.toStringList();
+	else if( name == "fileName" )
+	    m_fileName = value.toString();
+	else if( name == "startLine" )
+	    m_startLine = value.toInt();
+	else if( name == "startColumn" )
+	    m_startColumn = value.toInt();
+	else if( name == "endLine" )
+	    m_endLine = value.toInt();
+	else if( name == "endColumn" )	
+	    m_endColumn = value.toInt();
+	else
+	    m_attributes[ name ] = value;
     }
 
     void load( QDataStream& stream );
     void store( QDataStream& stream ) const;
 
 private:
-    QMap<QString, QVariant> m_attributes;
+    int m_kind;
+    QString m_name;
+    QStringList m_scope;
+    QString m_fileName;
+    int m_startLine, m_startColumn;
+    int m_endLine, m_endColumn;
+    QMap<QCString, QVariant> m_attributes;
 };
 
 #endif

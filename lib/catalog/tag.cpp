@@ -21,11 +21,20 @@
 #include <qdatastream.h>
 
 Tag::Tag()
+    : m_kind( 0 ),
+      m_startLine( 0 ), m_startColumn( 0 ),
+      m_endLine( 0 ), m_endColumn( 0 )
 {
 }
 
 Tag::Tag( const Tag& source )
-    : m_attributes( source.m_attributes )
+    : m_kind( source.m_kind ),
+    m_name( source.m_name ),
+    m_scope( source.m_scope ),
+    m_fileName( source.m_fileName ),
+    m_startLine( source.m_startLine ), m_startColumn( source.m_startColumn ),
+    m_endLine( source.m_endLine ), m_endColumn( source.m_endColumn ),   
+    m_attributes( source.m_attributes )
 {
 }
 
@@ -35,16 +44,42 @@ Tag::~Tag()
 
 Tag& Tag::operator = ( const Tag& source )
 {
+    m_kind = source.m_kind;
+    m_name = source.m_name;
+    m_scope = source.m_scope;
+    m_fileName = source.m_fileName;
+    m_startLine = source.m_startLine;
+    m_startColumn = source.m_startColumn;
+    m_endLine = source.m_endLine;
+    m_endColumn = source.m_endColumn;
     m_attributes = source.m_attributes;
     return( *this );
 }
 
 void Tag::load( QDataStream& stream )
 {
-    stream >> m_attributes;
+    stream 
+	>> m_kind
+	>> m_name
+	>> m_scope
+	>> m_fileName
+	>> m_startLine
+	>> m_startColumn
+	>> m_endLine
+	>> m_endColumn
+	>> m_attributes;
 }
 
 void Tag::store( QDataStream& stream ) const
 {
-    stream << m_attributes;
+    stream 
+	<< m_kind
+	<< m_name
+	<< m_scope
+	<< m_fileName
+	<< m_startLine
+	<< m_startColumn
+	<< m_endLine
+	<< m_endColumn
+	<< m_attributes;
 }

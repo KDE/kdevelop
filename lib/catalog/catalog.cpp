@@ -33,21 +33,21 @@ struct Catalog::Private
     QString dbName;
 
     DB* dbp;
-    QMap<QString, DB*> indexes;
+    QMap<QCString, DB*> indexList;
 
     Private()
 	: dbp( 0 )
     {
     }
 
-    bool hasIndex( const QString& name ) const
+    bool hasIndex( const QCString& name ) const
     {
-        return indexes.contains( name );
+        return indexList.contains( name );
     }
 
-    DB* index( const QString& name )
+    DB* index( const QCString& name )
     {
-        return indexes[ name ];
+        return indexList[ name ];
     }
 
     QValueList<Tag> getAllItems( DB* dbp )
@@ -84,7 +84,7 @@ struct Catalog::Private
     }
 
 
-    bool addItem( DB* dbp, const QString& id, const Tag& tag )
+    bool addItem( DB* dbp, const QCString& id, const Tag& tag )
     {
 	Q_ASSERT( dbp != 0 );
 
@@ -115,7 +115,7 @@ struct Catalog::Private
 	return ret == 0;
     }
 
-    bool addItem( DB* dbp, const QVariant& id, const QString& v )
+    bool addItem( DB* dbp, const QVariant& id, const QCString& v )
     {
 	Q_ASSERT( dbp != 0 );
 
@@ -146,7 +146,7 @@ struct Catalog::Private
 	return ret == 0;
     }
 
-    bool removeItem( DB* dbp, const QString& id )
+    bool removeItem( DB* dbp, const QCString& id )
     {
 	Q_ASSERT( dbp != 0 );
 
@@ -186,13 +186,13 @@ Catalog::~Catalog()
 }
 
 /*!
-    \fn Catalog::indexes() const
+    \fn Catalog::indexList() const
  */
-QStringList Catalog::indexes() const
+QValueList<QCString> Catalog::indexList() const
 {
-    QStringList l;
-    QMap<QString, DB*>::Iterator it = d->indexes.begin();
-    while( it != d->indexes.end() ){
+    QValueList<QCString> l;
+    QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+    while( it != d->indexList.end() ){
         l << it.key();
         ++it;
     }
@@ -203,20 +203,20 @@ QStringList Catalog::indexes() const
 /*!
     \fn Catalog::hasIndex( const QString& name ) const
  */
-bool Catalog::hasIndex( const QString& name ) const
+bool Catalog::hasIndex( const QCString& name ) const
 {
-    return d->indexes.contains( name );
+    return d->indexList.contains( name );
 }
 
 /*!
     \fn Catalog::addIndex( const QString& name )
  */
-void Catalog::addIndex( const QString& name )
+void Catalog::addIndex( const QCString& name )
 {
     Q_ASSERT( d->dbp != 0 );
 
-    QMap<QString, DB*>::Iterator it = d->indexes.find( name );
-    if( it == d->indexes.end() ){
+    QMap<QCString, DB*>::Iterator it = d->indexList.find( name );
+    if( it == d->indexList.end() ){
         DB* dbp = 0;
 
         int ret;
@@ -233,7 +233,7 @@ void Catalog::addIndex( const QString& name )
         }
 
 	QFileInfo fileInfo( d->dbName );
-	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + name + ".idx";
+	QString indexName = fileInfo.dirPath(true) + "/" + fileInfo.baseName() + "." + QString(name) + ".idx";
 
         if ((ret = dbp->open(
 	    dbp, indexName, 0, DB_BTREE, DB_CREATE, 0664)) != 0) {
@@ -242,19 +242,19 @@ void Catalog::addIndex( const QString& name )
 	    return;
         }
 
-        d->indexes[ name ] = dbp;
+        d->indexList[ name ] = dbp;
     }
 }
 
 /*!
     \fn Catalog::removeIndex( const QString& name )
  */
-void Catalog::removeIndex( const QString& name )
+void Catalog::removeIndex( const QCString& name )
 {
-    QMap<QString, DB*>::Iterator it = d->indexes.find( name );
-    if( it != d->indexes.end() ){
+    QMap<QCString, DB*>::Iterator it = d->indexList.find( name );
+    if( it != d->indexList.end() ){
 	DB* dbp = *it;
-        d->indexes.remove( it );
+        d->indexList.remove( it );
 	dbp->close( dbp, 0 );
     }
 }
@@ -266,14 +266,14 @@ void Catalog::close()
 {
     d->dbName = QString::null;
 
-    QMap<QString, DB*>::Iterator it = d->indexes.begin();
-    while( it != d->indexes.end() ){
+    QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+    while( it != d->indexList.end() ){
         if( it.data() ){
 	    it.data()->close( it.data(), 0 );
         }
         ++it;
     }
-    d->indexes.clear();
+    d->indexList.clear();
 
     if( d->dbp != 0 ){
 	d->dbp->close( d->dbp, 0 );
@@ -330,16 +330,16 @@ bool Catalog::isValid() const
 /*!
     \fn Catalog::addItem( const QString& id, Tag tag )
  */
-QString Catalog::addItem( const Tag& tag )
+QCString Catalog::addItem( const Tag& tag )
 {
     // TODO: generate a unique ID
     static int n = 0;
-    QString id;
-    id.sprintf( "%08d_", n++ );
+    QCString id;
+    id.sprintf( "%05d_", n++ );
 
     if( d->addItem(d->dbp, id, tag) ){
-	QMap<QString, DB*>::Iterator it = d->indexes.begin();
-	while( it != d->indexes.end() ){
+	QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+	while( it != d->indexList.end() ){
 	    if( tag.hasAttribute(it.key()) )
 	        d->addItem( it.data(), tag.attribute(it.key()), id );
 
@@ -348,13 +348,13 @@ QString Catalog::addItem( const Tag& tag )
 	return id;
     }
 
-    return QString::null;
+    return "";
 }
 
 /*!
     \fn Catalog::removeItem( const QString& id )
  */
-bool Catalog::removeItem( const QString& id )
+bool Catalog::removeItem( const QCString& id )
 {
    if( d->removeItem(d->dbp, id) ){
        // TODO: remove item from the index dbs
@@ -367,7 +367,7 @@ bool Catalog::removeItem( const QString& id )
 /*!
     \fn Catalog::getItemById( const QString& id )
  */
-Tag Catalog::getItemById( const QString& id )
+Tag Catalog::getItemById( const QCString& id )
 {
     Q_ASSERT( d->dbp != 0 );
 
@@ -415,8 +415,8 @@ void Catalog::sync()
     Q_ASSERT( d->dbp != 0 );
     d->dbp->sync( d->dbp, 0 );
 
-    QMap<QString, DB*>::Iterator it = d->indexes.begin();
-    while( it != d->indexes.end() ){
+    QMap<QCString, DB*>::Iterator it = d->indexList.begin();
+    while( it != d->indexList.end() ){
  	it.data()->sync( it.data(), 0 );
         ++it;
     }
@@ -433,10 +433,10 @@ QValueList<Tag> Catalog::query( const QValueList<QueryArgument>& args )
 
     DBC** cursors = new DBC* [ args.size() + 1 ];
 
-    QValueList< QPair<QString,QVariant> >::ConstIterator it = args.begin();
+    QValueList< QPair<QCString,QVariant> >::ConstIterator it = args.begin();
     int current = 0;
     while( it != args.end() ){
-        QString indexName = (*it).first;
+        QCString indexName = (*it).first;
 	QVariant value = (*it).second;
 
         if( d->hasIndex(indexName) ){

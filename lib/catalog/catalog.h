@@ -28,7 +28,7 @@
 class Catalog
 {
 public:
-    typedef QPair<QString, QVariant> QueryArgument;
+    typedef QPair<QCString, QVariant> QueryArgument;
 
 public:
     Catalog();
@@ -41,15 +41,15 @@ public:
     virtual void close();
     virtual void sync();
 
-    QStringList indexes() const;
-    bool hasIndex( const QString& name ) const;
-    void addIndex( const QString& name );
-    void removeIndex( const QString& name );
+    QValueList<QCString> indexList() const;
+    bool hasIndex( const QCString& name ) const;
+    void addIndex( const QCString& name );
+    void removeIndex( const QCString& name );
 
-    QString addItem( const Tag& tag );
-    bool removeItem( const QString& id );
+    QCString addItem( const Tag& tag );
+    bool removeItem( const QCString& id );
 
-    Tag getItemById( const QString& id );
+    Tag getItemById( const QCString& id );
     QValueList<Tag> getAllItems();
     QValueList<Tag> query( const QValueList<QueryArgument>& args );
 
