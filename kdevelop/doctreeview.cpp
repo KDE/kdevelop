@@ -70,7 +70,7 @@ ListViewDocItem::ListViewDocItem(KDevListViewItem *parent,
 
 void ListViewDocItem::setOpen(bool o)
 {
-    setPixmap(0, o? SmallIcon("document2") : SmallIcon("document"));
+    setPixmap(0, o? SmallIcon("document") : SmallIcon("document2"));
     KDevListViewItem::setOpen(o);
 }
 
