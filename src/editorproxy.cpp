@@ -128,6 +128,21 @@ void EditorProxy::popupAboutToShow()
                           linestr, wordstr);
     Core::getInstance()->fillContextMenu(popup, &context);
   }
+  
+  // Remove redundant separators (any that are first, last, or doubled)
+  bool lastWasSeparator = true;
+  for( uint i = 0; i < popup->count(); ) {
+    int id = popup->idAt( i );
+    if( lastWasSeparator && popup->findItem( id )->isSeparator() ) {
+      popup->removeItem( id );
+      // Since we removed an item, don't increment i
+    } else {
+      lastWasSeparator = false;
+      i++;
+    }
+  }
+  if( lastWasSeparator && popup->count() > 0 )
+    popup->removeItem( popup->idAt( popup->count() - 1 ) );
 }
 
 #include "editorproxy.moc"
