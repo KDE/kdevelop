@@ -785,11 +785,10 @@ void DocViewMan::closeView(QWidget* pView)
 {
   debug("DocViewMan::closeView !\n");
 
-  CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView);
-  if(pEditView) closeEditView(pEditView);
-
-  KHTMLView* pHTMLView = dynamic_cast<KHTMLView*> (pView);
-  if(pHTMLView) closeBrowserView(pHTMLView);
+  if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView))
+    closeEditView(pEditView);
+  else if (KHTMLView* pHTMLView = dynamic_cast<KHTMLView*> (pView))
+    if(pHTMLView) closeBrowserView(pHTMLView);
 }
 
 //-----------------------------------------------------------------------------
