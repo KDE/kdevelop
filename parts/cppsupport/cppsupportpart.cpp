@@ -974,6 +974,8 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     
     m_timestamp[ fileName ] = t;
 
+    partController()->blockSignals( true );
+    
     m_backgroundParser->addFile( fileName );
     while( m_backgroundParser->filesInQueue() > 0 )
        m_backgroundParser->isEmpty().wait();
@@ -986,6 +988,8 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     }
     m_backgroundParser->unlock();
     m_backgroundParser->removeFile( fileName );
+    
+    partController()->blockSignals( false );
 }
 
 // better idea needed for not always calling with QProgressBar & QLabel
