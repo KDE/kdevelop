@@ -100,7 +100,7 @@ private: // Private attributes
   QString currentFile;
   
   /** The scope in which the attributes and metods being defined. */
-  int declaredScope;
+  PIExport declaredScope;
 
   /** Stack of lexems currently parsed. */
   QStack<CParsedLexem> lexemStack;

@@ -739,7 +739,7 @@ int CClassParser::checkClassDecl()
   bool isImpl = false;
   bool isOperator = false;
   bool isMultiDecl = false;
-  int retVal;
+  int retVal = CP_IS_OTHER;
   bool exit = false;
 
   while( !exit )
@@ -761,7 +761,8 @@ int CClassParser::checkClassDecl()
     getNextLexem();
 
     exit = ( ( isOperator && lexem == '(' && lexemStack.top()->type != CPOPERATOR ) || 
-             ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' )) ); 
+             ( !isOperator && ( lexem == '(' || lexem == ';' || lexem == '=' ) ) ||
+             ( lexem == 0 ) ); 
   }
 
   // If we find a '(' it's a function of some sort.
@@ -772,7 +773,7 @@ int CClassParser::checkClassDecl()
     else
       retVal = ( isImpl ? CP_IS_METHOD_IMPL : CP_IS_METHOD );
   }
-  else // Attribute
+  else if( lexem != 0 ) // Attribute
   {
     if( isMultiDecl )
       retVal = ( isImpl ? CP_IS_MULTI_ATTR_IMPL : CP_IS_MULTI_ATTRIBUTE );
@@ -941,7 +942,7 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
   CParsedMethod *aMethod;
   bool exit = false;
 
-  declaredScope = CPGLOBAL;
+  declaredScope = PIE_GLOBAL;
 
   while( !exit )
   {
@@ -950,9 +951,14 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
     switch( lexem )
     {
       case PUBLIC:
+        declaredScope = PIE_PUBLIC;
+        methodType = 0;
+        break;
       case PROTECTED:
+        declaredScope = PIE_PROTECTED;
+        methodType = 0;
       case PRIVATE:
-        declaredScope = lexem;
+        declaredScope = PIE_PRIVATE;
         methodType = 0;
         break;
       case QTSIGNAL:
@@ -992,16 +998,12 @@ void CClassParser::parseClassDeclarations( CParsedClass *aClass )
       case CPSTRUCT:
         aStruct = parseStruct();
         if( aStruct )
-        {
-          store.addGlobalStruct( aStruct );
-          break;
-        }
-        else if( aStruct == NULL && lexemStack.isEmpty() )
-          break;
+          aClass->addStruct( aStruct );
+        break;
       case CONST:
       case ID:
         // Ignore everything that hasn't got any scope declarator.
-        if( declaredScope != CPGLOBAL )
+        if( declaredScope != PIE_GLOBAL )
         {
           // If the type is signal or slot we KNOW it's a method.
           if( methodType != 0 )
@@ -1091,9 +1093,10 @@ void CClassParser::parseGlobalMethodVariable()
       else
         delete anAttr;
       break;
+    case CP_IS_OPERATOR:
     case CP_IS_METHOD:
       aMethod = new CParsedMethod();
-      fillInParsedMethod( aMethod );
+      fillInParsedMethod( aMethod, declType == CP_IS_OPERATOR );
       if( !aMethod->name.isEmpty() )
         store.addGlobalFunction( aMethod );
       else
@@ -1101,6 +1104,7 @@ void CClassParser::parseGlobalMethodVariable()
       break;
     case CP_IS_MULTI_ATTR_IMPL:
       debug( "Found multi attr implementation." );
+      emptyStack();
       break;
     case CP_IS_MULTI_ATTRIBUTE:
       fillInMultipleVariable( list );
@@ -1112,9 +1116,6 @@ void CClassParser::parseGlobalMethodVariable()
       {
         store.addGlobalVar( anAttr );
       }
-      break;
-    case CP_IS_OPERATOR:
-      debug( "Found operator declaration." );
       break;
   }
 }
@@ -1190,12 +1191,9 @@ void CClassParser::parseToplevel()
       case CPSTRUCT:
         aStruct = parseStruct();
         if( aStruct )
-        {
           store.addGlobalStruct( aStruct );
-          break;
-        }
-        else if( aStruct == NULL && lexemStack.isEmpty() )
-          break;
+
+        break;
       case CONST:
       case ID:
         parseGlobalMethodVariable();
@@ -1218,7 +1216,7 @@ void CClassParser::parseToplevel()
 void CClassParser::reset()
 {
   lexem = -1;
-  declaredScope = CPGLOBAL;
+  declaredScope = PIE_GLOBAL;
   isStatic=false;
 }
 
