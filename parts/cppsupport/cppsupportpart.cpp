@@ -252,7 +252,7 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	m_backgroundParser->unlock();
     } else if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
-	QString fileName = event->fileName();
+	QString fileName( event->fileName().unicode(), event->fileName().length() );
 	emit fileParsed( fileName );
 	// mainWindow()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
     }
@@ -1415,7 +1415,7 @@ QStringList CppSupportPart::subclassWidget(QString formName)
     dlg->exec();
     return newFileNames;
 }
-		    
+
 QStringList CppSupportPart::updateWidget(QString formName, QString fileName)
 {
     QStringList dummy;
@@ -1423,6 +1423,6 @@ QStringList CppSupportPart::updateWidget(QString formName, QString fileName)
     dlg->exec();
     return dummy;
 }
-					
+
 
 #include "cppsupportpart.moc"

@@ -74,7 +74,6 @@ void RTClassBrowser::parseNamespace( NamespaceAST* ast )
 
 void RTClassBrowser::parseNamespaceAlias( NamespaceAliasAST* ast )
 {
-    
     TreeParser::parseNamespaceAlias( ast );
 }
 

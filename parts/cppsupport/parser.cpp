@@ -143,10 +143,8 @@ bool Parser::skipUntilDeclaration()
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilDeclaration()" << endl;
 
-    //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "-->token = " << lex->lookAhead(0).toString() << endl;
-
-    lex->nextToken();
     while( !lex->lookAhead(0).isNull() ){
+
 	switch( lex->lookAhead(0) ){
 	case ';':
 	case '~':
@@ -194,8 +192,6 @@ bool Parser::skipUntilStatement()
 {
     //kdDebug(9007) << "--- tok = " << lex->lookAhead(0).toString() << " -- "  << "Parser::skipUntilStatement() -- token = " << lex->lookAhead(0).toString() << endl;
 
-    lex->nextToken();
-
     while( !lex->lookAhead(0).isNull() ){
 	switch( lex->lookAhead(0) ){
 		case ';':
@@ -237,12 +233,12 @@ bool Parser::skipUntilStatement()
 		case Token_template:
 		case Token_using:
 		    return true;
-	    
+
 	    default:
   	        lex->nextToken();
 	}
     }
-    
+
     return false;
 }
 
@@ -312,8 +308,11 @@ bool Parser::parseTranslationUnit( TranslationUnitAST::Node& node )
     node = tun;
     while( !lex->lookAhead(0).isNull() ){
         DeclarationAST::Node def;
+	int startDecl = lex->index();
         if( !parseDefinition(def) ){
 	    // error recovery
+	    if( startDecl == lex->index() )
+	        lex->nextToken(); // skip at least one token
 	    skipUntilDeclaration();
 	}
 	node->addDeclaration( def );
@@ -456,10 +455,13 @@ bool Parser::parseLinkageBody( LinkageBodyAST::Node& node )
 	    break;
 
 	DeclarationAST::Node def;
+	int startDecl = lex->index();
 	if( parseDefinition(def) ){
 	    node->addDeclaration( def );
 	} else {
 	    // error recovery
+	    if( startDecl == lex->index() )
+	        lex->nextToken(); // skip at least one token
 	    skipUntilDeclaration();
 	}
     }
@@ -1714,7 +1716,10 @@ bool Parser::parseClassSpecifier( TypeSpecifierAST::Node& node )
 	    break;
 
 	DeclarationAST::Node memSpec;
+	int startDecl = lex->index();
 	if( !parseMemberSpecification(memSpec) ){
+	    if( startDecl == lex->index() )
+	        lex->nextToken(); // skip at least one token
 	    skipUntilDeclaration();
 	} else
 	    ast->addDeclaration( memSpec );
@@ -2655,7 +2660,10 @@ bool Parser::parseCompoundStatement( StatementAST::Node& node )
 	    break;
 
 	StatementAST::Node stmt;
+	int startStmt = lex->index();
 	if( !parseStatement(stmt) ){
+	    if( startStmt == lex->index() )
+	        lex->nextToken();
 	    skipUntilStatement();
 	} else {
 	    ast->addStatement( stmt );
@@ -3082,7 +3090,10 @@ bool Parser::parseFunctionBody( StatementListAST::Node& node )
 	    break;
 
 	StatementAST::Node stmt;
+	int startStmt = lex->index();
 	if( !parseStatement(stmt) ){
+	    if( startStmt == lex->index() )
+	        lex->nextToken();
 	    skipUntilStatement();
 	} else
 	    ast->addStatement( stmt );
