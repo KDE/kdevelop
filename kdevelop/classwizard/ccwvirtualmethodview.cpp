@@ -7,6 +7,17 @@
  *                                                                   *
  ********************************************************************/
 
+/*--------------------- CCWVirtualMethodView::CCWVirtualMethodView()
+ * CCWVirtualMethodView()
+ *   Constructor.
+ *
+ * Parameters:
+ *   parent         Parent widget.
+ *   name           The name of this widget.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 CCWVirtualMethodView::CCWVirtualMethodView( QWidget *parent, const char *name )
   : QWidget( parent, name ),
     topLayout( this, 5 ),
@@ -32,6 +43,15 @@ CCWVirtualMethodView::CCWVirtualMethodView( QWidget *parent, const char *name )
   setTooltips();
 }
 
+/*--------------------- CCWVirtualMethodView::~CCWVirtualMethodView()
+ * ~CCWVirtualMethodView()
+ *   Destructor.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 CCWVirtualMethodView::~CCWVirtualMethodView()
 {
 }
@@ -42,13 +62,17 @@ CCWVirtualMethodView::~CCWVirtualMethodView()
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------ CClassTreeHandler::setWidgetValues()
+ * setWidgetValues()
+ *   Set all initial values of all widgets in the view.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CCWVirtualMethodView::setWidgetValues()
 {
-
-  /////////////////////////////
-  // Virtual File view
-  ////////////////////////////
-
   // Top layout
   topLayout.addLayout( &classComboLayout );
   topLayout.addLayout( &listViewLayout );
@@ -103,10 +127,28 @@ void CCWVirtualMethodView::setWidgetValues()
   buttonLayout.addWidget( &filler );
 }
 
+/*---------------------------------- CClassTreeHandler::setTooltips()
+ * setTooltips()
+ *   Set tooltip strings.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CCWVirtualMethodView::setTooltips()
 {
 }
 
+/*--------------------------------- CClassTreeHandler::setCallbacks()
+ * setCallbacks()
+ *   Set all signal<->slot mappings.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CCWVirtualMethodView::setCallbacks()
 {
   connect( &classCombo, SIGNAL(activated(int)), SLOT(slotClassComboChoice(int)));
@@ -119,6 +161,16 @@ void CCWVirtualMethodView::setCallbacks()
  *                                                                   *
  ********************************************************************/
 
+/*------------------------------------- CClassTreeHandler::setStore()
+ * setStore()
+ *   Set the classtore.
+ *
+ * Parameters:
+ *   aStore         The store.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CCWVirtualMethodView::setStore( CClassStore *aStore )
 {
   assert( aStore != NULL );
@@ -166,8 +218,15 @@ void CCWVirtualMethodView::slotClassComboChoice(int idx)
        aMethod != NULL;
        aMethod = availList.next() )
   {
-    availLb.inSort( aMethod->asString( str ) );
-    availDict.insert( aMethod->asString( str ), aMethod );
+    // Create the string like <classname>::<methodname>
+    aMethod->asString( str );
+    str = aMethod->declaredInClass + "::" + str;
+
+    // Add to the view.
+    availLb.inSort( str );
+
+    // Add to the internal dictionary.
+    availDict.insert( str, aMethod );
   }
 }
 
