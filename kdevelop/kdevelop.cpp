@@ -748,7 +748,7 @@ void KDevelop::embedWidget(QWidget *w, KDevComponent::Role role, const QString &
                                                w->icon()? *w->icon() : QPixmap(),
                                                0L,
                                                w->caption(),
-                                               "");//shortCaption);
+                                               shortCaption);
     nextWidget->setWidget(w);
     nextWidget->setToolTipString(shortExplanation);
     if (role == KDevComponent::SelectView) {

@@ -1,63 +1,9 @@
-AC_INIT(acinclude.m4)
-
-dnl This is so we can use kde-common
-AC_CONFIG_AUX_DIR(admin)
-
-AC_CANONICAL_SYSTEM
-AC_ARG_PROGRAM
-
-dnl inits some variables needed by automake's Makefiles.
-dnl add here the package name and it's version number. It will
-dnl be defined in config.h and in the Makefiles
-AM_INIT_AUTOMAKE(kdevelop,0.1)
-
-KDE_SET_PREFIX
-
-dnl generate the config header
-AM_CONFIG_HEADER(config.h) dnl at the distribution this done
-
-dnl Checks for programs.
-AC_CHECK_COMPILERS
-AC_ENABLE_SHARED(yes)
-AC_ENABLE_STATIC(no)
-KDE_PROG_LIBTOOL    
-
-dnl Check for a lexer.
-AM_PROG_LEX
-
-dnl don't build libraries. This mainly disables the configure switches
-dnl --enable-shared and --enable-static, since they don't make that much
-dnl sense then :)
-dnl AM_DISABLE_LIBRARIES
-
-AM_ENABLE_SHARED
-
-dnl adds --disable-nls to not install the .gmo files out of po. If you
-dnl don't have i18n support, you may want to remove this, but leaving it
-dnl here doesn't hurt
-AM_KDE_WITH_NLS
-AC_PATH_KDE   
-
-AC_CHECK_BOOL
-
-KDE_USE_QT(2)
-
-dnl Image readers/writers
-
-AC_FIND_JPEG
-AC_FIND_TIFF
-KDE_CHECK_KIMGIO 
-
-dnl in this space add everything you want to check for
-dnl examples are specific headers, libraries, etc.
-dnl everything to compile and run a KDE program is already checked
 
 KDEV_PATH_QTDOC
 KDEV_PATH_KDELIBSDOC
 KDEV_PATH_KDOCINDEX
 KDEV_CHECK_DOCBASE
 KDEV_CHECK_KDOC2
-dnl KDE_CHECK_FINAL
 
 dnl add here all your Makefiles. This are created by configure
 AC_OUTPUT(

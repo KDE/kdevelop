@@ -22,7 +22,7 @@ MdiMainFrmComponent::~MdiMainFrmComponent()
 
 void MdiMainFrmComponent::setupGUI()
 {
-    kdDebug(9002) << "Building QextMDI-MainFrame" << endl;
+    kdDebug(9005) << "Building QextMDI-MainFrame" << endl;
 
     m_widget = new MdiFrame(0L);
     emit embedWidget(m_widget, DocumentView, i18n("QextMdi-MainFrm"), i18n("source file views area"));
