@@ -83,6 +83,23 @@ void CTreeHandler::setTree( QListView *aTree )
   tree = aTree;
 }
 
+/*--------------------------------------- CTreeHandler::setLastItem()
+ * setLastItem()
+ *   Set the last added item(==item to add next item below).
+ *
+ * Parameters:
+ *   aItem          The item to add.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CTreeHandler::setLastItem( QListViewItem *aItem )
+{ 
+  assert( aItem != NULL );
+
+  lastItem = aItem;
+}
+
 /*********************************************************************
  *                                                                   *
  *                          PUBLIC QUERIES                           *
@@ -116,11 +133,25 @@ QPixmap *CTreeHandler::getIcon( THType anIcon )
  *-----------------------------------------------------------------*/
 THType CTreeHandler::itemType()
 {
+  return itemType( tree->currentItem() );
+}
+
+/*-------------------------------------------- CTreeHandler::itemType()
+ * itemType()
+ *   Return the type of the item.
+ *
+ * Parameters:
+ *   -
+ *
+ * Returns:
+ *   THType    The selected items' type.
+ *-----------------------------------------------------------------*/
+THType CTreeHandler::itemType( QListViewItem *item )
+{
   int idx;
   const QPixmap *p;
   
-  p = tree->currentItem()->pixmap( 0 );
-  
+  p = item->pixmap( 0 );
   for( idx=0; 
        idx < THEND_POS && p->serialNumber() != icons[ idx ]->serialNumber();
        idx++ )
@@ -182,7 +213,7 @@ QListViewItem *CTreeHandler::addRoot( const char *aName,
 
   // Save this as the last entry.
   lastRootItem = item;
-  lastItem = item;
+  setLastItem( item );
 
   return item;
 }
@@ -210,11 +241,8 @@ QListViewItem *CTreeHandler::addItem( const char *aName,
   item->setText( 0, aName );
   item->setPixmap( 0, *(getIcon( iconType )) );
 
-  if( getIcon( iconType )->serialNumber() != item->pixmap(0)->serialNumber() )
-    debug( "INTE lika serienummer" );
-
   // Save this as the last entry.
-  lastItem = item;
+  setLastItem( item );
 
   return item;
 }

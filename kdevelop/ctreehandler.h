@@ -47,7 +47,7 @@ public: // Public methods to set attribute values.
   void setTree( QListView *aTree );
 
   /** Set the last added item. */
-  void setLastItem( QListViewItem *aItem ) { lastItem = aItem; }
+  void setLastItem( QListViewItem *aItem );
 
 public: // Public methods
 
@@ -69,6 +69,8 @@ public: // Public queries
   /** Return the type of the current icon. */
   THType itemType();
 
+  /** Return the type of the item. */
+  THType itemType( QListViewItem *item );
 
 private: // Private attributes
 
