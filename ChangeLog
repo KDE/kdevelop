@@ -1,6 +1,11 @@
 1999-05-29  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed all i18n() that were missing
 	
+1999-05-28 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed implementation of viewing declarations/definitions of items
+	  in the classview. Middle button now jumps to the definition.
+	* Added possibility to view definitions/declarations in the classtool.
+
 1999-05-28  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* added bookmarks menu for the browser window
 	* added delayed popups for browser history on toolbar back and forward buttons
