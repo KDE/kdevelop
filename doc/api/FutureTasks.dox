@@ -108,5 +108,9 @@ Another tasks:
     .
   - Integrate kontact's TODO-List and knotes plugin. (We need something like a
     server/client system that all the knotes/toto-clients are always synced.)
+  - Make the help buttons (that we already have) open the KDevelop Handbook on
+    the correct page (or the index if the subject is not covered yet).
+  - Replace editors/qeditor/koReplace.* and editors/qeditor/koFind.* with
+    kdelibs/kutils/kreplace.* and kdelibs/kutils/kfind.*
 
 */
