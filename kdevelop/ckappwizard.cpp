@@ -1294,7 +1294,7 @@ void CKAppWizard::slotIconButtonClicked() {
   KIconLoaderDialog iload;
   iload.selectIcon(name1,KIcon::Desktop);
   if (!name1.isNull() )
-    iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1));
+    iconload->setPixmap(KGlobal::iconLoader()->loadIcon(name1, KIcon::Desktop));
 }
 
 // connection of miniload
@@ -1304,7 +1304,7 @@ void CKAppWizard::slotMiniIconButtonClicked() {
   mload.selectIcon(name2,KIcon::Small);
   if (!name2.isNull() )
 //#warning FIXME mini icons?
-    miniload->setPixmap(KGlobal::iconLoader()->loadIcon(name2));
+    miniload->setPixmap(KGlobal::iconLoader()->loadIcon(name2, KIcon::Small));
 }
 
 // activate and deactivate the iconbutton

@@ -281,10 +281,10 @@ void CTreeHandler::readIcons()
 
   il = KGlobal::iconLoader();
 
-  icons[ THFOLDER ] = new QPixmap( il->loadIcon( "mini/folder.png" ) );
-  icons[ THFOLDER_OPEN ] = new QPixmap( il->loadIcon( "mini/folder_open.png" ) );
+  icons[ THFOLDER ] = new QPixmap( il->loadIcon( "mini/folder.png", KIcon::Small ) );
+  icons[ THFOLDER_OPEN ] = new QPixmap( il->loadIcon( "mini/folder_open.png", KIcon::Small ) );
   icons[ THCLASS ] = new QPixmap(locate("appdata", "pics/mini/CVclass.png"));
-  icons[ THPROJECT ] = new QPixmap( il->loadIcon( "mini/kwm.png" ) );
+  icons[ THPROJECT ] = new QPixmap( il->loadIcon( "mini/kwm.png", KIcon::Small ) );
   icons[ THBOOK ] = new QPixmap( BarIcon( "mini-book1" ) );
   icons[ THBOOK_OPEN ] = new QPixmap( BarIcon( "mini-book2" ) );
   icons[ THDOC ] = new QPixmap( BarIcon( "mini-doc" ) );
@@ -301,7 +301,7 @@ void CTreeHandler::readIcons()
   icons[ THPROTECTED_METHOD ] = new QPixmap(locate("appdata", "pics/mini/CVprotected_meth.png"));
   icons[ THPRIVATE_METHOD ] = new QPixmap(locate("appdata", "pics/mini/CVprivate_meth.png"));
   icons[ THGLOBAL_FUNCTION ] = new QPixmap( locate("appdata", "pics/mini/CVglobal_meth.png"));
-  icons[ THC_FILE ] = new QPixmap( il->loadIcon( "mini/c_src.png" ) );
+  icons[ THC_FILE ] = new QPixmap( il->loadIcon( "mini/c_src.png", KIcon::Small ) );
   icons[ THINSTALLED_FILE ] = new QPixmap( locate("appdata", "pics/mini/inst_file.png"));
   icons[ THDELETE ] = new QPixmap( BarIcon( "delete" ) );
 

@@ -473,28 +473,28 @@ void CKDevelop::initMenuBar(){
 
 ///////////////////////////////////////////////////////////////////
 // Edit-menu entries
-  pixmap = loader->loadIcon("undo");
+  pixmap = loader->loadIcon("undo", KIcon::Small);
   edit_menu = new KGuiCmdPopup(kdev_dispatcher);//QPopupMenu;
   edit_menu->addCommand(ctEditCommands, cmUndo,pixmap, ID_EDIT_UNDO);
 
-  pixmap = loader->loadIcon("redo");
+  pixmap = loader->loadIcon("redo", KIcon::Small);
   edit_menu->addCommand(ctEditCommands, cmRedo, pixmap, ID_EDIT_REDO);
 
   edit_menu->insertItem(i18n("Undo/Redo &History..."),this,SLOT(slotEditUndoHistory()),0,ID_EDIT_UNDO_HISTORY);
 
   edit_menu->insertSeparator();
-  pixmap = loader->loadIcon("cut");
+  pixmap = loader->loadIcon("cut", KIcon::Small);
   edit_menu->addCommand(ctEditCommands, cmCut, pixmap, this,SLOT(slotEditCut()),ID_EDIT_CUT);
-  pixmap = loader->loadIcon("copy");
+  pixmap = loader->loadIcon("copy", KIcon::Small);
   edit_menu->addCommand(ctEditCommands, cmCopy, pixmap, this, SLOT(slotEditCopy()), ID_EDIT_COPY);
-  pixmap = loader->loadIcon("paste");
+  pixmap = loader->loadIcon("paste", KIcon::Small);
   edit_menu->addCommand(ctEditCommands, cmPaste, pixmap, this,SLOT(slotEditPaste()),ID_EDIT_PASTE);
 
 
   edit_menu->insertSeparator();
-  pixmap = loader->loadIcon("indent");
+  pixmap = loader->loadIcon("indent", KIcon::Small);
   edit_menu->addCommand(ctEditCommands, cmIndent, pixmap, ID_EDIT_INDENT);
-  pixmap = loader->loadIcon("unindent");
+  pixmap = loader->loadIcon("unindent", KIcon::Small);
   edit_menu->addCommand(ctEditCommands, cmUnindent, pixmap, ID_EDIT_UNINDENT);
 
 
@@ -502,7 +502,7 @@ void CKDevelop::initMenuBar(){
   edit_menu->insertItem(i18n("&Insert File..."), this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);
 
   edit_menu->insertSeparator();
-  pixmap = loader->loadIcon("search");
+  pixmap = loader->loadIcon("search", KIcon::Small);
   edit_menu->addCommand(ctFindCommands, cmFind, pixmap, this, SLOT(slotEditSearch()), ID_EDIT_SEARCH);
   edit_menu->addCommand(ctFindCommands, cmFindAgain, this, SLOT(slotEditRepeatSearch()), ID_EDIT_REPEAT_SEARCH);
 
@@ -576,7 +576,7 @@ void CKDevelop::initMenuBar(){
 			   SLOT(slotProjectNewClass()),0,ID_PROJECT_NEW_CLASS);
   project_menu->insertItem(i18n("&Add existing File(s)..."),this,SLOT(slotProjectAddExistingFiles()),0,ID_PROJECT_ADD_FILE_EXIST);
   
-  project_menu->insertItem(loader->loadIcon("locale", KIconLoader::Small),i18n("Add new &Translation File..."), this,
+  project_menu->insertItem(loader->loadIcon("locale", KIcon::Small),i18n("Add new &Translation File..."), this,
 			   SLOT(slotProjectAddNewTranslationFile()),0,ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
 
   //  project_menu->insertItem(i18n("&Remove File from Project"), this,
