@@ -68,6 +68,11 @@ CKDevelop::CKDevelop(bool witharg)
       dbg_widget(0),
       dbgInternal(false)
 {
+  //MB
+  #ifndef WITH_KDOC2
+      doctool = DT_KDOC;
+  #endif
+  //MB end
   version = VERSION;
   project=false;// no project
   beep=false; // no beep
@@ -688,6 +693,16 @@ void CKDevelop::initMenuBar(){
   project_menu->insertSeparator();
   
   project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
+  //MB
+  #ifndef WITH_KDOC2
+  doctool_menu = new QPopupMenu();
+  doctool_menu->insertItem(i18n("kdoc"), this, SLOT(slotSwitchDocTool()),0,ID_PROJECT_DOC_TOOL_KDOC);
+  doctool_menu->insertItem(i18n("doxygen"), this, SLOT(slotSwitchDocTool()),0,ID_PROJECT_DOC_TOOL_DOXYGEN);
+  doctool_menu->insertSeparator();
+  doctool_menu->insertItem(i18n("Configure doxygen"), this, SLOT(slotConfigureDoxygen()),0,ID_PROJECT_DOC_TOOL_CONF_DOXYGEN);
+  project_menu->insertItem(i18n("API Doc Tool..."), doctool_menu, ID_PROJECT_DOC_TOOL );
+  #endif
+  //MB end
   project_menu->insertItem(i18n("Make AP&I-Doc"), this,
 			 SLOT(slotProjectAPI()),0,ID_PROJECT_MAKE_PROJECT_API);
   project_menu->insertItem(Icon("mini/mini-book1.xpm"), i18n("Make &User-Manual..."), this,
@@ -1563,3 +1578,36 @@ void CKDevelop::initDebugger()
   if (dbgController)
     dbgController->reConfig();
 }
+//MB
+#ifndef WITH_KDOC2
+void CKDevelop::slotSwitchDocTool(){
+  // kdoc used, can we switch to doxygen ?
+  if(doctool_menu->isItemChecked(ID_PROJECT_DOC_TOOL_KDOC))
+  {
+  	if(!CToolClass::searchInstProgram("doxygen"))
+    {
+   	  KMsgBox::message(0,i18n("Program not found -- doxygen"),
+			  i18n(" This option requires Doxygen to work. Look for it at:\n\n http://www.stack.nl/~dimitri/doxygen/download.html\n"),
+							KMsgBox::EXCLAMATION);
+  	  // no doxygen found
+  	  return;
+    }
+    // yes, we have it
+    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,false);
+    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,true);
+  	doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,true);
+  	doctool = DT_DOX;
+   	return;
+  }
+	// kdoc
+  doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,true);
+  doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,false);
+	doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,false);
+  doctool = DT_KDOC;
+}
+#else
+void CKDevelop::slotSwitchDocTool()
+{
+}
+#endif
+//MB end

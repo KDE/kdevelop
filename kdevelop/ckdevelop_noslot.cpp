@@ -1089,6 +1089,11 @@ void CKDevelop::setToolMenuProcess(bool enable){
     else{
       enableCommand(ID_PROJECT_MESSAGES);
     }
+  //MB
+  #ifndef WITH_KDOC2
+    enableCommand(ID_PROJECT_DOC_TOOL);
+  #endif
+  //MB end
     enableCommand(ID_PROJECT_MAKE_PROJECT_API);
 
 //    // we don´t support docbook -> html, yet!
@@ -1118,6 +1123,11 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_BUILD_AUTOCONF);
     disableCommand(ID_BUILD_CONFIGURE);
     disableCommand(ID_PROJECT_MESSAGES);
+  //MB
+  #ifndef WITH_KDOC2
+    disableCommand(ID_PROJECT_DOC_TOOL);
+  #endif
+  //MB end
     disableCommand(ID_PROJECT_MAKE_PROJECT_API);
     disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
@@ -1323,6 +1333,24 @@ void CKDevelop::readOptions(){
   config->setGroup("Files");
 	recent_projects.setAutoDelete(TRUE);
 	config->readListEntry("Recent Projects",recent_projects);
+  //MB
+  #ifndef WITH_KDOC2
+	doctool = config->readNumEntry("doc_tool_type");
+  // must be done here - cause the call comes AFTER the initialization of Project menue :(
+  if (doctool == DT_KDOC || doctool == 0)
+  {
+    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,true);
+    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,false);
+	  doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,false);
+  }
+  if (doctool == DT_DOX)
+  {
+    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_KDOC,false);
+    doctool_menu->setItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN,true);
+	  doctool_menu->setItemEnabled(ID_PROJECT_DOC_TOOL_CONF_DOXYGEN,true);
+  }
+	#endif
+	//MB end
 	
 	uint i;
 	for ( i =0 ; i < recent_projects.count(); i++){
@@ -1410,7 +1438,12 @@ void CKDevelop::saveOptions(){
   config->writeEntry("doc_bookmarks", doc_bookmarks_list);
   config->writeEntry("doc_bookmarks_title", doc_bookmarks_title_list);
   config->writeEntry("Recent Projects", recent_projects);
-  
+  //MB serializes menuoptions
+  #ifndef WITH_KDOC2
+  config->writeEntry("doc_tool_type",doctool);
+  #endif
+  //MB end
+
   config->sync();
 }
 

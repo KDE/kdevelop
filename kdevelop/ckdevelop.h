@@ -335,6 +335,13 @@ public:
    */
   void slotProjectOpenRecent(int id_);
   /** opens a project committed by comandline or kfm */
+  //MB  cannot guard with #ifdefs here - moc skips this :(
+   /** switchs between kdoc1 and doxygen as API documentation tool
+   */
+  void slotSwitchDocTool();
+  /** Configures Doxygen */
+  void slotConfigureDoxygen();
+  //MB end
   void slotProjectOpenCmdl(QString prjfile);
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
@@ -802,6 +809,13 @@ private:
   //the menus for kdevelop main
   QPopupMenu* file_menu;				
   QPopupMenu* recent_projects_menu;
+  //MB
+  #ifndef WITH_KDOC2
+  QPopupMenu* doctool_menu;
+  enum DOCTOOL {DT_KDOC, DT_DOX};
+  int doctool;
+  #endif
+  //MB end
   QPopupMenu* edit_menu;
   QPopupMenu* view_menu;
   QPopupMenu* bookmarks_menu;

@@ -885,6 +885,38 @@ void CKDevelop::slotProjectMessages(){
 }
 
 void CKDevelop::slotProjectAPI(){
+  //MB
+#ifndef WITH_KDOC2
+  if (project_menu->isItemChecked(ID_PROJECT_DOC_TOOL_DOXYGEN))
+  {
+	  QString dir = prj->getProjectDir() + prj->getProjectName().lower() + "/";
+	  QString doxconf =  dir +  "Doxyfile";
+ 		if(!QFileInfo(doxconf).exists())
+   	{
+ 		    KMsgBox::message(0, i18n("Error"),
+ 		    						i18n("Doxygen configuration file not found\n"
+                         	"Generate a valid one:\n"		
+                         	"Project->API Doc Tool->Configure doxygen"),
+                    KMsgBox::EXCLAMATION);
+    		return;
+   	}
+    slotDebugStop();
+    showOutputView(true);
+    setToolMenuProcess(false);
+    error_parser->toogleOff();
+    slotFileSaveAll();
+    slotStatusMsg(i18n("Creating project API-Documentation..."));
+    messages_widget->clear();
+    shell_process.clearArguments();
+    shell_process << QString("cd '")+ dir + "' && ";
+    shell_process << "doxygen ";
+    next_job="fv_refresh";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+	  beep=true;
+ 	  return;
+  }
+#endif
+  //MB end
   if(!CToolClass::searchProgram("kdoc")){
     return;
   }
@@ -997,6 +1029,88 @@ void CKDevelop::slotProjectAPI(){
   beep=true;
 
 }
+
+//MB
+#ifndef WITH_KDOC2
+
+#include <vector>
+
+void CKDevelop::slotConfigureDoxygen(){
+	// check for Doxyfile
+	KShellProcess process;
+  QString dir = prj->getProjectDir() + prj->getProjectName().lower() + "/";
+  QString file= dir + "Doxyfile";
+  if(!QFileInfo(file).exists())
+  {
+  	// create default
+		process.clearArguments();
+    process << QString("cd '")+ dir + "' && ";
+    process << "doxygen -s -g Doxyfile";
+    process.start(KShellProcess::Block,KShellProcess::AllOutput);
+ 	
+    // fill file with default projectname directories, etc.
+ 	  QFile f( file );
+    if ( !f.open( IO_ReadOnly ) )
+        return;
+    QTextStream t(&f);
+    std::vector<QString> vec;
+    while ( !t.eof() )
+    {
+      QString s = t.readLine();
+    	vec.push_back(s);
+    	if (s.find("#") == 0)
+    		continue;
+    	if (s.find("OUTPUT_DIRECTORY") == 0)
+    		vec.back() = QString("OUTPUT_DIRECTORY\t=")+dir+"api/";
+    	if (s.find("TAB_SIZE") == 0)
+    		vec.back() = "TAB_SIZE\t=4";
+    	if (s.find("WARN_IF_UNDOCUMENTED") == 0)
+    		vec.back() = "WARN_IF_UNDOCUMENTED\t=NO";
+    	if (s.find("INPUT") == 0)
+    		vec.back() = QString("INPUT\t=") + dir;
+    	if (s.find("FILE_PATTERNS") == 0)
+    		vec.back().append("*.h \\ \n *.hh \\ \n *.H \\ \n " );
+    	if (s.find("RECURSIVE") == 0)
+    		vec.back() = "RECURSIVE\t=YES";
+     	if (s.find("ALPHABETICAL_INDEX") == 0)
+    		vec.back() = "ALPHABETICAL_INDEX\t=YES";
+    	if (s.find("GENERATE_LATEX") == 0)
+    		vec.back() = "GENERATE_LATEX\t=NO";
+    	if (s.find("GENERATE_RTF") == 0)
+    		vec.back() = "GENERATE_RTF\t=NO";
+    	if (s.find("GENERATE_MAN") == 0)
+    		vec.back() = "GENERATE_MAN\t=NO";
+    }
+    f.close();
+    t.unsetDevice();
+    f.open(IO_WriteOnly);
+    t.setDevice(&f);
+    for (unsigned i=0; i<vec.size(); ++i)
+    	t << vec[i] << "\n";
+    f.close();
+    t.unsetDevice();
+ 	}		 	
+	// doxywizard ?
+	if(!CToolClass::searchInstProgram("doxywizard")) // no dialog
+	{
+   	KMsgBox::message(0,i18n("Program not found -- doxywizard "),
+			QString("doxwizard ") +i18n(" is not necessary, but you have to edit your Configuration for doxygen by hand.\nMaybe you should look for a newer Version at:\n\n\t http://www.stack.nl/~dimitri/doxygen/download.html\n\n"),
+							KMsgBox::EXCLAMATION);
+  	return; 	
+	}
+	process.clearArguments();
+  QString s =  QString("cd '") + dir + "' && ";
+  s += "doxywizard Doxyfile";
+  cerr << s << endl;
+ 	process << s;
+  process.start(KShellProcess::DontCare,KShellProcess::AllOutput);
+}
+#else
+void CKDevelop::slotConfigureDoxygen()
+{
+}
+#endif
+//MB end
 
 void CKDevelop::slotProjectManual(){
 
