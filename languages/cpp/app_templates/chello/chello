@@ -8,24 +8,79 @@ Comment=Generates a simple Hello world program in C
 Comment[fr]=Génère un simple programme de test du type « Hello world » dans le language C.
 FileTemplates=h,CStyle,c,CStyle
 ShowFilesAfterGeneration=src/APPNAMELC.c
+Archive=chello.tgz
 
 [LIBS]
 Type= Value
 ValueType=QString
-Widget= OPT_LIBS
+Value= OPT_LIBS
 Comment= Optional libraries to link to.
 Default= -lm
 
 [INCLUDES]
 Type= Value
 ValueType=QString
-Widget= OPT_INCS
+Value= OPT_INCS
 Comment= Optional include path.
 Default= -I/usr/include
 
 [CFLAGS]
 Type= Value
 ValueType=QString
-Widget= CFLAGS
+Value= CFLAGS
 Comment= Optional CFLAGS to define in the makefile.
 Default= -O2
+
+[LICENSE]
+Type=install
+Source=%{src}/template-common/%{LICENSEFILE}
+Dest=%{dest}/%{LICENSEFILE}
+
+[ADMIN]
+Type=install archive
+Source=%{src}/template-common/admin.tar.gz"
+Dest=%{dest}
+Process=false
+
+[GNU]
+Type=install archive
+Source=%{src}/template-common/gnu.tar.gz
+Dest=%{dest}
+
+[PROJECT]
+Type=install
+Source=%{src}/template-chello/app.kdevelop
+Dest=%{dest}/%{APPNAMELC}.kdevelop
+
+[SRC]
+Type= mkdir
+Dir=%{dest}/src
+
+[MAKEFILE.AM]
+Type=install
+Source=%{src}/template-chello/c-Makefile.am
+Dest=%{dest}/Makefile.am
+
+[MAKEFILE.CVS]
+Type=install
+Source=%{src}/template-chello/c-Makefile.cvs
+Dest=%{dest}/Makefile.cvs
+
+[CONFIGURE.IN]
+Type=install
+Source=%{src}/template-chello/configure.in
+Dest=%{dest}/configure.in
+
+[SRC.MAKEFILE.AM]
+Type=install
+Source=%{src}/template-chello/src-Makefile.am
+Dest=%{dest}/src/Makefile.am
+
+[APP.C]
+Type=install
+Source=%{src}/template-chello/main.c
+Dest=%{dest}/src/%{APPNAMELC}.c
+
+[MGS]
+Type=Message
+Comment=A simple C project was created in %{dest}.
