@@ -1282,19 +1282,7 @@ void CKDevelop::slotLogFileTreeSelected(int index){
   path = log_file_tree->itemPath(index);
   str = path->pop();
 
-  // load kiconedit if clicked on a icon
-  if((*str).right(4) == ".xpm"){
-    if(!CToolClass::searchProgram("kiconedit")){
-      return;
-    }
-    showOutputView(false);
-    s_tab_view->setCurrentTab(TOOLS);
-    swallow_widget->sWClose(false);
-    swallow_widget->setExeString("kiconedit " + prj->getProjectDir() + *str);
-    swallow_widget->sWExecute();
-    swallow_widget->init();
-    return;
-  }
+  
 
   switchToFile(prj->getProjectDir() + *str);
   //  cerr << "SELECTED2\n";
@@ -1407,10 +1395,7 @@ void CKDevelop::slotDocTreeSelected(int index){
   if(file_info.isFile()){
     slotURLSelected(browser_widget,"file:" + config->readEntry(*str),1,"test");
   }
-  else{
-     KMsgBox::message(0,i18n("Not found!"),"file: \"" + config->readEntry(*str) + i18n("\" not found!"),KMsgBox::INFORMATION);
-       return;
-  }
+  
 }
 void CKDevelop::slotToolsKIconEdit(){
 
@@ -1484,7 +1469,7 @@ Stefan Heidrich <sheidric@rz.uni-potsdam.de>
 Stefan Bartel <bartel@rz.uni-potsdam.de>
 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
                              
-KDevelop contains sourcecode from KWrite 0.97 
+KDevelop contains sourcecode from KWrite 0.98 
 (c) by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 "));
 

@@ -1,3 +1,7 @@
+1999-02-23  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* added an icon-generation to the newfile dlg 
+	* commit a new version of kwrite into kdevelop's sourcetree
+
 1999-02-23 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
   * changed Documentation Path dialog to KDevelop Setup
   * removed menuentries for autosave, make and added them to
@@ -16,7 +20,6 @@
     with dialog for creating an empty project
 
 1999-02-21  Sandy Meier  <smeier@rz.uni-potsdam.de>
-
 	* fixed the $ bug in CProject
 	* added "file not found!" msgbox to the doc-browser
 	* added better integration of KIconedit, accessable via LFV
@@ -26,7 +29,8 @@
 	* added the printconfigure entry in the options menu
 
 1999-02-20  Sandy Meier  <smeier@rz.uni-potsdam.de>
-	* remove the sh-scripts "autoconfsuite","cleanrebuildall","rebuildmakefiles" and
+	* remove the sh-scripts "autoconfsuite","cleanrebuildall",
+	"rebuildmakefiles" and
 	replaced it with a C++ solution
 	* fixed a bug in cpp.tar.gz (doubled SOURCE in Makefile.am)
 	
@@ -59,7 +63,7 @@
     until then change Autosave Timeout (in ms) in your kdeveloprc
   * modified slotFileSaveAll() for performance, refresh trees only called on headers
 
-1999-02-17  Stefan heidrich  <sheidric@rz.uni-potsdam.de>
+1999-02-17  Stefan Heidrich  <sheidric@rz.uni-potsdam.de>
 	* in the applicationwizard the real installationpath is printed
 	* the applications are generated in debug-mode
 

@@ -22,6 +22,8 @@
 #include "ckdevelop.h"
 #include "debug.h"
 #include "cclassview.h"
+#include "kswallow.h"
+#include "ctoolclass.h"
 
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
@@ -57,6 +59,21 @@ void CKDevelop::switchToFile(QString filename){
     KMsgBox::message(this,i18n("Attention"),filename +"\n\nFile does not exist!");
     return;
   }
+  // load kiconedit if clicked/loaded  an icon
+  if((filename).right(4) == ".xpm"){
+    if(!CToolClass::searchProgram("kiconedit")){
+      return;
+    }
+    showOutputView(false);
+    s_tab_view->setCurrentTab(TOOLS);
+    swallow_widget->sWClose(false);
+    swallow_widget->setExeString("kiconedit " + filename);
+    swallow_widget->sWExecute();
+    swallow_widget->init();
+    return;
+  }
+
+
   
   // set the correct edit_widget
   if (getTabLocation(filename) == HEADER){

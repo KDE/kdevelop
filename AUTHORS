@@ -1,22 +1,27 @@
-Main-Developers (KDevelop 0.2):
+***Main-Developers (KDevelop 0.3)***
 
 -Sandy Meier <smeier@rz.uni-potsdam.de>
 -Stefan Heidrich <sheidric@rz.uni-potsdam.de>
--Stefan Bartel <bartel@rz.uni-potsdam.de>
 -Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+-Stefan Bartel <bartel@rz.uni-potsdam.de>
 
-small patches and bugfixes:
+***Translations coordination***
+
+-Martin Piskernig <martin.piskernig@stuwo.at>
+
+***Translations***
+
+-Ilmar Habibulin <ilmar@ints.ru>              - russian 
+-Steen Rabol <rabol@get2net.dk>               - danish
+-Martin Piskernig <martin.piskernig@stuwo.at> - german
+
+***small patches and bugfixes***
 
 -Jost Schenk <Jost@Schenk.de>
 -David Barth <dbarth@videotron.ca>
 
-Translations:
 
-Ilmar Habibulin <ilmar@ints.ru>              - russian 
-Steen Rabol <rabol@get2net.dk>               - danish
-Martin Piskernig <martin.piskernig@stuwo.at> - german
-
-KDevelop contains sourcecode from KWrite 0.97 
+KDevelop contains sourcecode from KWrite 0.98 
 (c) by Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 
 

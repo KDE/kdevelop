@@ -4,15 +4,15 @@
 #include <stdio.h>
 
 #include <qlabel.h>
-#include <qbuttongroup.h>
-#include <qpushbutton.h>
-
+#include <qbttngrp.h>
+#include <qpushbt.h>
+#include <qobjcoll.h>
 #include <kapp.h>
 
 #include "kwdialog.h"
 #include "kwdoc.h"
 
-SearchDialog::SearchDialog(const char *searchFor, const char *replaceWith,
+SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   int flags, QWidget *parent, const char *name)
   : QDialog(parent,name,true) {
 
@@ -24,9 +24,12 @@ SearchDialog::SearchDialog(const char *searchFor, const char *replaceWith,
 
 //  setFocusPolicy(QWidget::StrongFocus);
 
-  search = new QLineEdit(this);
-  search->setText(searchFor);
-  search->selectAll();
+  search = new QComboBox(true, this);
+  search->insertStrList(searchFor);
+  //workaround for missing QComboBox::selectAll()
+  ((QLineEdit *) (search->children()->getFirst()))->selectAll();
+//  search->dumpObjectTree();
+//  search->selectAll();
   label = new QLabel(search,i18n("&Text To Find:"),this);
 
   r.setRect(10,0,300,25);
@@ -35,8 +38,8 @@ SearchDialog::SearchDialog(const char *searchFor, const char *replaceWith,
   search->setGeometry(r);
 
   if (flags & sfReplace) {
-    replace = new QLineEdit(this);
-    replace->setText(replaceWith);
+    replace = new QComboBox(true, this);
+    replace->insertStrList(replaceWith);
     label = new QLabel(replace,i18n("&Replace With:"),this);
 
     r.moveBy(0,25);
@@ -102,11 +105,11 @@ SearchDialog::SearchDialog(const char *searchFor, const char *replaceWith,
 }
 
 const char *SearchDialog::getSearchFor() {
-  return search->text();
+  return search->currentText();
 }
 
 const char *SearchDialog::getReplaceWith() {
-  return replace->text();
+  return replace->currentText();
 }
 
 int SearchDialog::getFlags() {
@@ -128,7 +131,7 @@ int SearchDialog::getFlags() {
 void SearchDialog::okSlot() {
   const char *text;
 
-  text = search->text();
+  text = search->currentText();
   if (text && *text) accept();//emit search();
 }
 
@@ -452,4 +455,3 @@ void ColorDialog::getColors(QColor *colors) {
   colors[2] = found->color();
   colors[3] = selFound->color();
 }
-

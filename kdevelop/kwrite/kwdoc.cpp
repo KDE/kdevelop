@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <qobject.h>
-#include <qapplication.h>
-#include <qclipboard.h>
+#include <qapp.h>
+#include <qclipbrd.h>
 #include <qfont.h>
 #include <qpainter.h>
 
@@ -70,7 +70,6 @@ void TextLine::insert(int pos, const char *s, int l) {
 
 void TextLine::overwrite(int pos, const char *s, int l) {
 
-//  if (n == -1) n = strlen(s);
   if (pos + l > len) {
     resize(pos + l);
     if (pos > len) memset(&text[len],' ',pos - len);
@@ -389,8 +388,8 @@ void KWActionGroup::insertAction(KWAction *a) {
 }
 
 
-KWriteDoc::KWriteDoc(HlManager *hlManager)
-  : QObject(0L), hlManager(hlManager) {
+KWriteDoc::KWriteDoc(HlManager *hlManager, const char *path)
+  : QObject(0L), hlManager(hlManager), fName(path) {
 
   contents.setAutoDelete(true);
 
@@ -412,6 +411,7 @@ KWriteDoc::KWriteDoc(HlManager *hlManager)
 
   pseudoModal = 0L;
   clear();
+  clearFileName();
 
   setHighlight(0); //calls updateFontData()
   connect(hlManager,SIGNAL(changed()),SLOT(hlChanged()));
@@ -469,7 +469,6 @@ void KWriteDoc::writeConfig(KConfig *config) {
 
   config->writeEntry("TabWidth",tabChars);
   config->writeEntry("UndoSteps",undoSteps);
-  config->writeEntry("Highlight",highlight->name());
   for (z = 0; z < 5; z++) {
     sprintf(s,"Color%d",z);
     config->writeEntry(s,colors[z]);
@@ -487,6 +486,7 @@ void KWriteDoc::writeSessionConfig(KConfig *config) {
 
   writeConfig(config);
   config->writeEntry("URL",fName);
+  config->writeEntry("Highlight",highlight->name());
 }
 
 void KWriteDoc::registerView(KWriteView *view) {
@@ -576,12 +576,16 @@ void KWriteDoc::insertFile(KWriteView *view, VConfig &c, QIODevice &dev) {
       if ((unsigned char) *s >= 32 || *s == '\t') {
         b[pos] = *s;
         pos++;
-      } else if (*s == '\n') {
+      } else if (*s == '\n' || *s == '\r') {
         recordAction(KWAction::newLine,c.cursor);
         recordReplace(c.cursor,0,b,pos);
         c.cursor.y++;
         c.cursor.x = 0;
         pos = 0;
+        if (len > 1 && *s == '\r' && s[1] == '\n') {
+          s++;
+          len--;
+        }
       }
       if (pos >= 256) {
         recordReplace(c.cursor,0,b,pos);
@@ -614,11 +618,17 @@ void KWriteDoc::loadFile(QIODevice &dev) {
     while (len > 0) {
       if ((unsigned char) *s >= 32 || *s == '\t') {
         textLine->append(*s);
-      } else if (*s == '\n') {
+      } else if (*s == '\n' || *s == '\r') {
         textLine = new TextLine();
         contents.append(textLine);
-      } else if (*s == '\r') {
-        printf("dos text\n");
+        if (*s == '\r') {
+          eolMode = eolMacintosh;
+          if (len > 1 && s[1] == '\n') {
+            eolMode = eolDos;
+            s++;
+            len--;
+          }
+        }
       }
       s++;
       len--;
@@ -636,7 +646,8 @@ void KWriteDoc::writeFile(QIODevice &dev) {
     dev.writeBlock(textLine->getText(),textLine->length());
     textLine = contents.next();
     if (!textLine) break;
-    dev.putch('\n');
+    if(eolMode != eolUnix) dev.putch('\r');
+    if(eolMode != eolMacintosh) dev.putch('\n');
   } while (true);
 }
 
@@ -658,16 +669,42 @@ void KWriteDoc::insertChar(KWriteView *view, VConfig &c, char ch) {
       if (ch == '[') buf[l++] = ']';
       if (ch == '{') buf[l++] = '}';
     }
+    /*
+    if (ch == 'ä') {
+      strcpy(buf,"&auml;");
+      l = z = 6;
+    }
+    if (ch == 'ö') {
+      strcpy(buf,"&ouml;");
+      l = z = 6;
+    }
+    if (ch == 'ü') {
+      strcpy(buf,"&uuml;");
+      l = z = 6;
+    }
+    if (ch == 'Ä') {
+      strcpy(buf,"&Auml;");
+      l = z = 6;
+    }
+    if (ch == 'Ö') {
+      strcpy(buf,"&Ouml;");
+      l = z = 6;
+    }
+    if (ch == 'Ü') {
+      strcpy(buf,"&Uuml;");
+      l = z = 6;
+    }*/
   }
+  //l = length of string in buf[], z = cursor increment
 
-  //do nothing if spaces will be removed
   if (buf[0] == ' ' && c.flags & cfRemoveSpaces && c.cursor.x >= textLine->length()) {
+    //do nothing if spaces will be removed and cursor behind end of line
     c.cursor.x += z;
     view->updateCursor(c.cursor);
     return;
   }
-  recordStart(c.cursor);
 
+  recordStart(c.cursor);
   recordReplace(c.cursor,(c.flags & cfOvr) ? l : 0,buf,l);
   c.cursor.x += z;
 
@@ -964,18 +1001,16 @@ void KWriteDoc::updateLines(int startLine, int endLine, int flags) {
   if (line > 0) ctxNum = contents.at(line - 1)->getContext();
   do {
     textLine = contents.at(line);
+    if (line <= endLine) {
+      if (flags & cfRemoveSpaces) textLine->removeSpaces();
+      updateMaxLength(textLine);
+    }
     endCtx = textLine->getContext();
-    highlight->doHighlight(ctxNum,textLine);
-    ctxNum = textLine->getContext();
+    ctxNum = highlight->doHighlight(ctxNum,textLine);
+    textLine->setContext(ctxNum);
     line++;
   } while (line <= lastLine && (line <= endLine || endCtx != ctxNum));
   tagLines(startLine,line - 1);
-
-  for (line = startLine; line <= endLine; line++) {
-    textLine = contents.at(line);
-    updateMaxLength(textLine);
-    if (flags & cfRemoveSpaces) textLine->removeSpaces();
-  }
 }
 
 
@@ -1135,7 +1170,7 @@ void KWriteDoc::toggleRect(int x1, int y1, int x2, int y2) {
 void KWriteDoc::selectTo(PointStruc &start, PointStruc &end, int flags) {
 
   if (start.x != select.x || start.y != select.y) {
-    /* new selection */
+    //new selection
     if (!(flags & cfKeepSelection)) deselectAll();
     anchor = start;
   }
@@ -1238,6 +1273,8 @@ void KWriteDoc::clear() {
     view->tagAll();
   }
 
+  eolMode = eolUnix;
+
   contents.clear();
 
   contents.append(longestLine = new TextLine());
@@ -1247,8 +1284,6 @@ void KWriteDoc::clear() {
 
   selectStart = 0xffffff;
   selectEnd = 0;
-//  selectStart = 0;
-//  selectEnd = -1;
 
   foundLine = -1;
 
@@ -1303,7 +1338,7 @@ void KWriteDoc::selectAll() {
 
   unmarkFound();
   selectStart = 0;
-  selectEnd = contents.count() -1;
+  selectEnd = lastLine();
 
   tagLines(selectStart,selectEnd);
 
@@ -1329,10 +1364,9 @@ void KWriteDoc::deselectAll() {
     textLine = contents.at(z);
     textLine->selectEol(false,0);
   }
-  selectEnd = -1;
+  selectStart = 0xffffff;
+  selectEnd = 0;
 }
-
-
 
 void KWriteDoc::invertSelection() {
   int z;
@@ -1342,7 +1376,7 @@ void KWriteDoc::invertSelection() {
 
   unmarkFound();
   selectStart = 0;
-  selectEnd = contents.count() -1;
+  selectEnd = lastLine();
 
   tagLines(selectStart,selectEnd);
 
@@ -1352,8 +1386,30 @@ void KWriteDoc::invertSelection() {
   }
   textLine = contents.at(z);
   textLine->toggleSelect(0,textLine->length());
+  optimizeSelection();
 }
 
+void KWriteDoc::selectWord(PointStruc &cursor, int flags) {
+  TextLine *textLine;
+  int start, end, len;
+
+
+  textLine = contents.at(cursor.y);
+  len = textLine->length();
+  start = end = cursor.x;
+  while (start > 0 && highlight->isInWord(textLine->getChar(start - 1))) start--;
+  while (end < len && highlight->isInWord(textLine->getChar(end))) end++;
+  if (end <= start) return;
+  if (!(flags & cfKeepSelection)) deselectAll();
+  textLine->select(true, start, end);
+
+  anchor.x = start;
+  select.x = end;
+  anchor.y = select.y = cursor.y;
+  tagLines(cursor.y, cursor.y);
+  if (cursor.y < selectStart) selectStart = cursor.y;
+  if (cursor.y > selectEnd) selectEnd = cursor.y;
+}
 
 QString KWriteDoc::text() {
   TextLine *textLine;
@@ -1379,7 +1435,7 @@ QString KWriteDoc::text() {
   return s;
 }
 
-QString KWriteDoc::currentWord(PointStruc &cursor) {
+QString KWriteDoc::getWord(PointStruc &cursor) {
   TextLine *textLine;
   int start, end, len, z;
 
@@ -1601,7 +1657,7 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line,
   TextLine *textLine;
   int z, x;
   char ch;
-  Attribute *a = 0;
+  Attribute *a = 0L;
   int attr, nextAttr;
   int xs;
   int xc, zc;
@@ -1674,6 +1730,52 @@ void KWriteDoc::paintTextLine(QPainter &paint, int line,
 //printf("\n");
 }
 
+void KWriteDoc::printTextLine(QPainter &paint, int line, int xEnd, int y) {
+  TextLine *textLine;
+  int z, x;
+  Attribute *a = 0L;
+  int attr, nextAttr;
+  char ch;
+  char buf[256];
+  int bufp;
+
+  if (line >= (int) contents.count()) return;
+  textLine = contents.at(line);
+
+  z = 0;
+  x = 0;
+  y += fontAscent -1;
+  attr = -1;
+  bufp = 0;
+  while (x < xEnd && z < textLine->length()) {
+    ch = textLine->getChar(z);
+    if (ch == '\t') {
+      if (bufp > 0) {
+        paint.drawText(x, y, buf, bufp);
+        x += a->fm.width(buf,bufp);
+        bufp = 0;
+      }
+      x += tabWidth - (x % tabWidth);
+    } else {
+      nextAttr = textLine->getAttr(z);
+      if (nextAttr != attr || bufp >= 256) {
+        if (bufp > 0) {
+          paint.drawText(x, y, buf, bufp);
+          x += a->fm.width(buf,bufp);
+          bufp = 0;
+        }
+        attr = nextAttr;
+        a = &attribs[attr];
+        paint.setFont(a->font);
+      }
+      buf[bufp] = ch;
+      bufp++;
+    }
+    z++;
+  }
+  if (bufp > 0) paint.drawText(x, y, buf, bufp);
+}
+
 void KWriteDoc::setModified(bool m) {
   KWriteView *view;
 
@@ -1693,28 +1795,57 @@ bool KWriteDoc::isLastView(int numViews) {
   return ((int) views.count() == numViews);
 }
 
-void KWriteDoc::setFileName(const char *s) {
-  int z;
-
-  fName = s;
-  for (z = 0; z < (int) views.count(); z++) {
-    emit views.at(z)->kWrite->newCaption();
-  }
-
-  //highlight detection
-  if (fName.isEmpty()) return;
-  int pos = fName.findRev('/') + 1;
-  setHighlight(hlManager->highlightFind(this));
-  updateViews();
-}
 
 bool KWriteDoc::hasFileName() {
-  return !fName.isEmpty();
+  return fName.findRev('/') +1 < (int) fName.length();
 }
 
 const char *KWriteDoc::fileName() {
   return fName;
 }
+
+void KWriteDoc::setFileName(const char *s) {
+  int pos, hl;
+  KWriteView *view;
+
+  fName = s;
+  for (view = views.first(); view != 0L; view = views.next()) {
+    emit view->kWrite->newCaption();
+  }
+
+  //highlight detection
+  pos = fName.findRev('/') +1;
+  if (pos >= (int) fName.length()) return; //no filename
+  hl = hlManager->wildcardFind(&s[pos]);
+  if (hl == -1) {
+    // fill the detection buffer with the contents of the text
+    const int HOWMANY = 1024;
+    char buf[HOWMANY];
+    int bufpos = 0, len;
+    TextLine *textLine;
+
+    for (textLine = contents.first(); textLine != 0L; textLine = contents.next()) {
+      len = textLine->length();
+      if (bufpos + len > HOWMANY) len = HOWMANY - bufpos;
+      memcpy(&buf[bufpos], textLine->getText(), len);
+      bufpos += len;
+      if (bufpos >= HOWMANY) break;
+    }
+    hl = hlManager->mimeFind(buf, bufpos, &s[pos]);
+  }
+  setHighlight(hl);
+  updateViews();
+}
+
+void KWriteDoc::clearFileName() {
+  KWriteView *view;
+
+  fName.truncate(fName.findRev('/') +1);
+  for (view = views.first(); view != 0L; view = views.next()) {
+    emit view->kWrite->newCaption();
+  }
+}
+
 
 void downcase(char *s, int len) {
   while (len > 0) {
@@ -1919,7 +2050,6 @@ void KWriteDoc::delLine(int line) {
 void KWriteDoc::optimizeSelection() {
   TextLine *textLine;
   
-//  if (selectEnd >= (int) contents.count()) selectEnd = (int) contents.count() -1;
   while (selectStart <= selectEnd) {
     textLine = contents.at(selectStart);
     if (textLine->isSelected() || textLine->numSelected() > 0) break;
@@ -1930,7 +2060,6 @@ void KWriteDoc::optimizeSelection() {
     if (textLine->isSelected() || textLine->numSelected() > 0) break;
     selectEnd--;
   }
-//  printf("selectStart %d, selectEnd %d\n",selectStart,selectEnd);
   if (selectStart > selectEnd) {
     selectStart = 0xffffff;
     selectEnd = 0;
@@ -2220,6 +2349,7 @@ void KWriteDoc::setPseudoModal(QWidget *w) {
 void KWriteDoc::indent(KWriteView *view, VConfig &c) {
   TextLine *textLine;
 
+  c.flags |= cfPersistent;
   recordStart(c.cursor);
   c.cursor.x = 0;
   if (selectEnd < selectStart) {
@@ -2244,6 +2374,7 @@ void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
   int l;
   bool started;
 
+  c.flags |= cfPersistent;
   memset(s,' ',16);
   cursor = c.cursor;
   c.cursor.x = 0;

@@ -1,9 +1,9 @@
 #ifndef _KWVIEV_H_
 #define _KWVIEV_H_
 
-#include <qscrollbar.h>
-#include <qiodevice.h>
-#include <qpopupmenu.h>
+#include <qscrbar.h>
+#include <qiodev.h>
+#include <qpopmenu.h>
 
 #include <kfm.h>
 #include <kconfig.h>
@@ -57,6 +57,11 @@ const int ufPos             = 4;
 const int lfInsert          = 1;
 const int lfNewFile         = 2;
 const int lfNoAutoHl        = 4;
+
+//end of line settings
+const int eolUnix           = 0;
+const int eolMacintosh      = 1;
+const int eolDos            = 2;
 
 void resizeBuffer(void *user, int w, int h);
 
@@ -124,6 +129,7 @@ class KWriteView : public QWidget {
     virtual void focusOutEvent(QFocusEvent *);
     virtual void keyPressEvent(QKeyEvent *e);
     virtual void mousePressEvent(QMouseEvent *);
+    virtual void mouseDoubleClickEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
@@ -275,6 +281,7 @@ class KWrite : public QWidget {
      /** Gets the marked text as string
      */
      QString markedText();
+
 //url aware file functions
   public:
     enum action{GET, PUT}; //tells us what kind of job kwrite is waiting for
@@ -302,6 +309,9 @@ class KWrite : public QWidget {
     void kfmFinished();
     void kfmError(int, const char *);
   public:
+    /** Returns true if the document has a filename (not counting the path).
+    */
+    bool hasFileName();
     /** Returns the URL of the currnet file
     */
     const char *fileName();
@@ -409,8 +419,9 @@ class KWrite : public QWidget {
   protected slots:
     void replaceSlot();
   protected:
-    QString searchFor;
-    QString replaceWith;
+    QStrList searchForList;
+//    QString replaceWith;
+    QStrList replaceWithList;
     int searchFlags;
     int replaces;
     SConfig s;
@@ -477,9 +488,21 @@ class KWrite : public QWidget {
     /** Presents the highlight setup dialog to the user
     */
     void hlDlg();
+    /** Gets the highlight number
+    */
+    int getHl();
     /** Sets the highlight number n
     */
     void setHl(int n);
+    /** Get the end of line mode (Unix, Macintosh or Dos)
+    */
+    int getEol();
+    /** Set the end of line mode (Unix, Macintosh or Dos)
+    */
+    void setEol(int);
+
+//print
+    void print();
 
 //internal
   protected:

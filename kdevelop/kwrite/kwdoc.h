@@ -5,7 +5,7 @@
 #include <qlist.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <qfontmetrics.h>
+#include <qfontmet.h>
 
 #include "kwview.h"
 #include "highlight.h"
@@ -122,7 +122,7 @@ class KWriteDoc : QObject {
     friend HlManager;
     
   public:
-    KWriteDoc(HlManager *);
+    KWriteDoc(HlManager *, const char *path = 0L);
     ~KWriteDoc();
 
     int lastLine() const;
@@ -134,6 +134,9 @@ class KWriteDoc : QObject {
     void writeConfig(KConfig *);
     void readSessionConfig(KConfig *);
     void writeSessionConfig(KConfig *);
+//  void inheritFileName(KWriteDoc *doc) {
+//    fName = QString(doc->fName, doc->fName.findRev('/') +1);
+//  }
   protected:
     void registerView(KWriteView *);
     void removeView(KWriteView *);
@@ -184,9 +187,10 @@ class KWriteDoc : QObject {
     void selectAll();
     void deselectAll();
     void invertSelection();
+    void selectWord(PointStruc &cursor, int flags);
 
     QString text();
-    QString currentWord(PointStruc &cursor);
+    QString getWord(PointStruc &cursor);
     void setText(const char *);
     bool hasMarkedText() {return (selectEnd >= selectStart);}
     QString markedText(int flags);
@@ -194,14 +198,16 @@ class KWriteDoc : QObject {
 
     QColor &cursorCol(int x, int y);
     void paintTextLine(QPainter &, int line, int xStart, int xEnd);
+    void printTextLine(QPainter &, int line, int xEnd, int y);
 
     void setModified(bool);
 //    bool isModified();
     bool isLastView(int numViews);
 
-    void setFileName(const char *);
     bool hasFileName();
     const char *fileName();
+    void setFileName(const char *);
+    void clearFileName();
 
     bool doSearch(SConfig &s, const char *searchFor);
     void unmarkFound();
@@ -241,6 +247,8 @@ class KWriteDoc : QObject {
     HlManager *hlManager;
     Highlight *highlight;
     Attribute attribs[nAttribs];
+
+    int eolMode;
 
     int tabChars;
     int tabWidth;

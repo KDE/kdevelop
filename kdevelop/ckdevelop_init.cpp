@@ -549,10 +549,13 @@ void CKDevelop::initMenu(){
 
   options_menu->insertItem(i18n("Documentation &Browser..."),this,
 			   SLOT(slotOptionsDocBrowser()),0,ID_OPTIONS_DOCBROWSER);
-  options_menu->insertSeparator();
+
+  
+  
+  
   options_menu->insertItem(i18n("Configure &Keys..."),this,
 			   SLOT(slotOptionsKeys()),0,ID_OPTIONS_KEYS);
-  options_menu->insertSeparator();
+
 
   options_menu->insertItem(i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);

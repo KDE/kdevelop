@@ -41,12 +41,6 @@ button_group = new QButtonGroup( this, "button_group" );
 	button_group->setTitle( i18n("Project Options" ));
 	button_group->setAlignment( 1 );
 
-  
-
-
-
-	
-
 	check_use_template = new QCheckBox( this, "check_use_template" );
 	check_use_template->setGeometry( 270, 120, 180, 30 );
 	check_use_template->setMinimumSize( 10, 10 );
@@ -170,8 +164,8 @@ ok = new QPushButton( this, "ok" );
   
   
   
-  // the tabview
-  tab = new KTabCtl(this);
+	// the tabview
+	tab = new KTabCtl(this);
   tab->setGeometry( 20, 20, 230, 160);
   tab->setBorder(false);
   
@@ -179,6 +173,7 @@ ok = new QPushButton( this, "ok" );
   list_linux = new QListBox( tab, "list_linux" );
   list_linux->insertItem(i18n("lsm File - Linux Software Map"));
   list_linux->insertItem(i18n("kdelnk-File - for the KDE-Menu"));
+  list_linux->insertItem(i18n("Icon (*.xpm)"));
   list_linux->setMultiSelection( FALSE );
   list_linux->setCurrentItem(0);
   
@@ -202,7 +197,6 @@ ok = new QPushButton( this, "ok" );
   setMinimumSize( 0, 0 );
   setMaximumSize( 32767, 32767 );
   
-
   
   edit->setFocus();
   
@@ -245,6 +239,10 @@ void CNewFileDlg::slotOKClicked(){
     KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .sgml !"),KMsgBox::EXCLAMATION);
     return;
   }
+  if ( (fileType() == "ICON") && (text.right(4) != ".xpm")){
+    KMsgBox::message(this,i18n("Error..."),i18n("The filename must end with .xpm !"),KMsgBox::EXCLAMATION);
+    return;
+  }
   if (text.isEmpty()){
     KMsgBox::message(this,i18n("Error..."),i18n("You must enter a filename!"),KMsgBox::EXCLAMATION);
     return;
@@ -269,7 +267,7 @@ void CNewFileDlg::slotOKClicked(){
    complete_filename = location() + filename;
    
    // check if generate a empty file or generate one
-   if (useTemplate() && (filetype != "TEXTFILE")){ // generate one,textfile always empty
+   if (useTemplate() && (filetype != "TEXTFILE") && filetype != "ICON"){ // generate one,textfile always empty
     
      if (filetype == "HEADER"){
       generator.genHeaderFile(complete_filename,prj);
@@ -292,16 +290,20 @@ void CNewFileDlg::slotOKClicked(){
        type = "DATA";
      }
    }
-   else { // no template, -> empty file
-     QFile file(complete_filename);
-     file.open(IO_ReadWrite);
-     file.close();
+   else { // no template, -> empty file or icon
+     if(filetype == "ICON"){
+       generator.genIcon(complete_filename);
+     }
+     else{
+       QFile file(complete_filename);
+       file.open(IO_ReadWrite);
+       file.close();
+     }
    }
    accept();
 }
 
 QString CNewFileDlg::fileName(){
-  
   return edit->text();
 }
 QString CNewFileDlg::fileType(){ 
@@ -331,11 +333,12 @@ QString CNewFileDlg::fileType(){
     if (str == i18n("kdelnk-File - for the KDE-Menu")){
       return "KDELNK";
     }
-    str = list_linux->text(list_linux->currentItem());
     if (str == i18n("lsm File - Linux Software Map")){
       return "LSM";
     }
-    
+    if (str == i18n("Icon (*.xpm)")){
+      return "ICON";
+    }
   }
   return "TEST";
 }
