@@ -50,13 +50,12 @@ int main(int argc, char *argv[])
  
   app.processEvents();
 
-  TopLevel::getInstance()->loadSettings();
-  
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)),
 		   splash, SLOT(showMessage(const QString &)));
 
   PluginController::getInstance()->loadInitialPlugins();
 
+  TopLevel::getInstance()->loadSettings();
   TopLevel::getInstance()->main()->show();
 
   Core::getInstance()->doEmitCoreInitialized();
