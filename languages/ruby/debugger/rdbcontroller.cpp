@@ -1124,7 +1124,7 @@ void RDBController::slotFetchGlobals(bool fetch)
 void RDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 {
     QCString msg(buf, buflen+1);
-    emit rdbStdout(msg);
+    emit ttyStdout(msg);
 }
 
 // **************************************************************************
@@ -1133,7 +1133,7 @@ void RDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
 void RDBController::slotDbgStderr(KProcess *, char *buf, int buflen)
 {
     QCString msg(buf, buflen+1);
-    emit rdbStderr(msg);
+    emit ttyStderr(msg);
 }
 
 // **************************************************************************
