@@ -588,7 +588,8 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
     } else if( directive == "pragma" ){
     } else if( directive == "if" ){
 	ptr = readWhiteSpaces( ptr, false );
-	if( isValid(ptr) && *ptr == '0' )
+
+	if( m_directiveStack.isEmpty() || (isValid(ptr) && *ptr == '0') )
 	    m_directiveStack.push( PreProc_skip );
 	else
 	    m_directiveStack.push( PreProc_in_group );

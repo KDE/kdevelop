@@ -682,8 +682,8 @@ bool Parser::parseTypedef( DeclarationAST::Node& node )
 
     InitDeclaratorListAST::Node declarators;
     if( !parseInitDeclaratorList(declarators) ){
-	reportError( i18n("Need an identifier to declare") );
-	return false;
+	//reportError( i18n("Need an identifier to declare") );
+	//return false;
     }
 
     ADVANCE( ';', ";" );
