@@ -1272,7 +1272,7 @@ void KMdiMainFrm::switchToToplevelMode()
    if ((oldMdiMode == KMdi::TabPageMode) || (oldMdiMode==KMdi::IDEAlMode)) {
       if (!m_pDockbaseAreaOfDocumentViews) {
          m_pDockbaseAreaOfDocumentViews = createDockWidget( "mdiAreaCover", QPixmap(), 0L, "mdi_area_cover");
-   m_pDockbaseAreaOfDocumentViews ->setDockWindowTransient(this,true);
+         m_pDockbaseAreaOfDocumentViews->setDockWindowTransient(this,true);
          m_pDockbaseAreaOfDocumentViews->setEnableDocking(KDockWidget::DockNone);
          m_pDockbaseAreaOfDocumentViews->setDockSite(KDockWidget::DockCorner);
          m_pDockbaseAreaOfDocumentViews->setWidget(m_pMdi);
@@ -1834,9 +1834,22 @@ void KMdiMainFrm::finishIDEAlMode(bool full)
          pView->resize(sz);
          pView->setMinimumSize(mins.width(),mins.height());
          pView->setMaximumSize(maxs.width(),maxs.height());
-         ((KDockWidget*)pParent)->undock(); // this destroys the dockwiget cover, too
-         pParent->close();
-         delete pParent;
+         KDockWidget* pDockW = 0L;
+         // find the oldest ancestor of the current dockwidget that can be undocked
+         do {
+            if (pParent->inherits("KDockWidget") || pParent->inherits("KDockWidget_Compat::KDockWidget")) {
+                pDockW = (KDockWidget*) pParent;
+                pDockW->undock(); // this destroys the dockwiget cover, too
+                if (pParent != m_pDockbaseAreaOfDocumentViews) {
+                    pParent->close();
+                    delete pParent;
+                }
+            }
+            else {
+                pParent = pParent->parentWidget();
+            }
+         }
+         while (pParent && !pDockW);
          if (centralWidget() == pParent) {
             setCentralWidget(0L); // avoid dangling pointer
          }

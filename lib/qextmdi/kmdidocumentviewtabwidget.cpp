@@ -1,7 +1,5 @@
-#include "kmdidocumentviewtabwidget.h"
-#include "kmdidocumentviewtabwidget.moc"
 #include <qtabbar.h>
-
+#include "kmdidocumentviewtabwidget.h"
 
 KMdiDocumentViewTabWidget::KMdiDocumentViewTabWidget(QWidget* parent, const char* name):QTabWidget(parent,name) {
 //	QTabBar *bar=tabBar();
@@ -48,4 +46,6 @@ void KMdiDocumentViewTabWidget::removePage ( QWidget * w ) {
 	if (count()<2) tabBar()->hide();
 }
 
-
+#ifndef NO_INCLUDE_MOCFILES
+#include "kmdidocumentviewtabwidget.moc"
+#endif

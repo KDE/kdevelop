@@ -42,11 +42,21 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widget
 		d->widget=d->widgetContainer->getWidget();
 	} else {
 		d->widget=widgetToWrap;
+        QString finalTabCaption;
+        if (tabCaption == 0) {
+            finalTabCaption = widgetToWrap->caption();
+            if (finalTabCaption.isEmpty() && !widgetToWrap->icon()) {
+                finalTabCaption = widgetToWrap->name();
+            }
+        }
+        else {
+            finalTabCaption = tabCaption;
+        }
 		d->widgetContainer= parent->createDockWidget( widgetToWrap->name(),
                                               (widgetToWrap->icon()?(*(widgetToWrap->icon())):QPixmap()),
                                               0L,  // parent
                                               widgetToWrap->caption(),
-                                              tabCaption==0 ? widgetToWrap->caption() : tabCaption);
+                                              finalTabCaption);
 		d->widgetContainer->setWidget(widgetToWrap);
 		if (tabToolTip!=0) {
 			d->widgetContainer->setToolTipString(tabToolTip);
@@ -77,26 +87,45 @@ QWidget *KMdiToolViewAccessor::wrappedWidget() {
 }
 
 
-void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap) {
+void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString& tabToolTip, const QString& tabCaption)
+{
 	Q_ASSERT(!(d->widget));
 	Q_ASSERT(!widgetToWrap->inherits("KDockWidget"));
 	disconnect(d->widgetContainer,SIGNAL(widgetSet(QWidget*)),this,SLOT(setWidgetToWrap(QWidget*)));
 	delete d->widget;
-        d->widget=widgetToWrap;
+    d->widget=widgetToWrap;
 	KDockWidget *tmp=d->widgetContainer;
-	if (!tmp) {
-		tmp=mdiMainFrm->createDockWidget( widgetToWrap->name(),
-			widgetToWrap->icon()?(*(widgetToWrap->icon())):QPixmap(),
-			0L,  // parent
-                        widgetToWrap->caption(),
-                        widgetToWrap->caption() );
 
+    QString finalTabCaption;
+    if (tabCaption == 0) {
+        finalTabCaption = widgetToWrap->caption();
+        if (finalTabCaption.isEmpty() && !widgetToWrap->icon()) {
+            finalTabCaption = widgetToWrap->name();
+        }
+    }
+    else {
+        finalTabCaption = tabCaption;
+    }
+
+	if (!tmp) {
+		tmp = mdiMainFrm->createDockWidget( widgetToWrap->name(),
+			                        widgetToWrap->icon()?(*(widgetToWrap->icon())):QPixmap(),
+			                        0L,  // parent
+                                    widgetToWrap->caption(),
+                                    finalTabCaption );
 		d->widgetContainer= tmp;
-	} else {
+		if (tabToolTip!=0) {
+			d->widgetContainer->setToolTipString(tabToolTip);
+		}
+	} 
+    else {
 		tmp->setCaption(widgetToWrap->caption());
-		tmp->setTabPageLabel(widgetToWrap->caption());
+		tmp->setTabPageLabel(finalTabCaption);
 		tmp->setPixmap(widgetToWrap->icon()?(*(widgetToWrap->icon())):QPixmap());
 		tmp->setName(widgetToWrap->name());
+		if (tabToolTip!=0) {
+			d->widgetContainer->setToolTipString(tabToolTip);
+		}
 	}
 	tmp->setWidget(widgetToWrap);
 	mdiMainFrm->m_pToolViews->insert(widgetToWrap,this);
@@ -115,56 +144,59 @@ bool KMdiToolViewAccessor::eventFilter(QObject *o, QEvent *e) {
 	return false;
 }
 
-void KMdiToolViewAccessor::show(KDockWidget::DockPosition pos, QWidget* pTargetWnd ,int percent) {
-  Q_ASSERT(d->widgetContainer);
-  if (!d->widgetContainer) return;
-  if (pos == KDockWidget::DockNone) {
-     d->widgetContainer->setEnableDocking(KDockWidget::DockNone);
-     d->widgetContainer->reparent(mdiMainFrm, Qt::WType_TopLevel | Qt::WType_Dialog, QPoint(0,0), true); //pToolView->isVisible());
-   }
-   else {   // add (and dock) the toolview as DockWidget view
+void KMdiToolViewAccessor::show(KDockWidget::DockPosition pos, QWidget* pTargetWnd ,int percent)
+{
+    Q_ASSERT(d->widgetContainer);
+    if (!d->widgetContainer) return;
+    if (pos == KDockWidget::DockNone) {
+        d->widgetContainer->setEnableDocking(KDockWidget::DockNone);
+        d->widgetContainer->reparent(mdiMainFrm, Qt::WType_TopLevel | Qt::WType_Dialog, QPoint(0,0), true); //pToolView->isVisible());
+    }
+    else {   // add (and dock) the toolview as DockWidget view
+        
+        KDockWidget* pCover = d->widgetContainer;
+        
+        KDockWidget* pTargetDock = 0L;
+        if (pTargetWnd->inherits("KDockWidget") || pTargetWnd->inherits("KDockWidget_Compat::KDockWidget")) {
+            pTargetDock = (KDockWidget*) pTargetWnd;
+        }
 
-      KDockWidget *pCover=d->widgetContainer;
-
-      KDockWidget* pTargetDock = 0L;
         // Should we dock to ourself?
-      bool DockToOurself = false;
-      if(mdiMainFrm->m_pDockbaseAreaOfDocumentViews)
-      {
-        if (pTargetWnd == mdiMainFrm->m_pDockbaseAreaOfDocumentViews->getWidget()) {
-		DockToOurself = true;
+        bool DockToOurself = false;
+        if (mdiMainFrm->m_pDockbaseAreaOfDocumentViews) {
+            if (pTargetWnd == mdiMainFrm->m_pDockbaseAreaOfDocumentViews->getWidget()) {
+                DockToOurself = true;
                 pTargetDock = mdiMainFrm->m_pDockbaseAreaOfDocumentViews;
-	} else if (pTargetWnd == mdiMainFrm->m_pDockbaseAreaOfDocumentViews) {
-		DockToOurself = true;
+            } 
+            else if (pTargetWnd == mdiMainFrm->m_pDockbaseAreaOfDocumentViews) {
+                DockToOurself = true;
                 pTargetDock = mdiMainFrm->m_pDockbaseAreaOfDocumentViews;
-	}
-      }
-      // this is not inheriting QWidget*, its plain impossible that this condition is true
-      //if (pTargetWnd == this) DockToOurself = true;
-      if (!DockToOurself) if(pTargetWnd != 0L) {
-         pTargetDock = mdiMainFrm->dockManager->findWidgetParentDock( pTargetWnd);
-         if (!pTargetDock) {
-            if (pTargetWnd->parentWidget()) {
-               pTargetDock = mdiMainFrm->dockManager->findWidgetParentDock( pTargetWnd->parentWidget());
             }
-         }
-      }
-      if (pTargetDock) {
-	      if (mdiMainFrm->m_managedDockPositionMode && (mdiMainFrm->m_pMdi || mdiMainFrm->m_documentTabWidget)) {
-			KDockWidget *dw1=pTargetDock->findNearestDockWidget(pos);
-                        if (dw1)
-                        pCover->manualDock(dw1,KDockWidget::DockCenter,percent);
-                        else
-                        pCover->manualDock ( pTargetDock, pos, 20 );
-
-	      }
-      else
-      	pCover->manualDock( pTargetDock, pos, percent);
+        }
+        // this is not inheriting QWidget*, its plain impossible that this condition is true
+        //if (pTargetWnd == this) DockToOurself = true;
+        if (!DockToOurself) if(pTargetWnd != 0L) {
+            pTargetDock = mdiMainFrm->dockManager->findWidgetParentDock( pTargetWnd);
+            if (!pTargetDock) {
+                if (pTargetWnd->parentWidget()) {
+                    pTargetDock = mdiMainFrm->dockManager->findWidgetParentDock( pTargetWnd->parentWidget());
+                }
+            }
+        }
+        if (!pTargetDock || pTargetWnd == mdiMainFrm->getMainDockWidget()) {
+            if (mdiMainFrm->m_managedDockPositionMode && (mdiMainFrm->m_pMdi || mdiMainFrm->m_documentTabWidget)) {
+                KDockWidget *dw1=pTargetDock->findNearestDockWidget(pos);
+                if (dw1)
+                    pCover->manualDock(dw1,KDockWidget::DockCenter,percent);
+                else
+                    pCover->manualDock ( pTargetDock, pos, 20 );
+                return;
+            }
+        }
+        pCover->manualDock( pTargetDock, pos, percent);
 //check      pCover->show();
-      }
-   }
-
-}
+    }
+ }
 
 void KMdiToolViewAccessor::hide() {
 	Q_ASSERT(d->widgetContainer);
