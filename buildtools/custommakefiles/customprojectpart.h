@@ -87,6 +87,7 @@ private:
 
     QString m_projectDirectory;
     QString m_projectName;
+    QString m_filelistDir;
     QStringList m_sourceFiles;
     QPopupMenu *m_targetMenu;
     QPopupMenu *m_targetObjectFilesMenu;
