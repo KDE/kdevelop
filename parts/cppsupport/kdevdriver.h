@@ -19,8 +19,8 @@ public:
     KDevDriver( CppSupportPart* cppSupport );
     CppSupportPart* cppSupport();
     void setupProject();
-    // setup the preprocessor
-    // code provided by Reginald Stadlbauer <reggie@trolltech.com>
+    //! setup the preprocessor
+    //! code provided by Reginald Stadlbauer <reggie@trolltech.com>
     void setup();
 
     virtual void addMacro( const Macro& m )

@@ -1,0 +1,15 @@
+/** \class AdaProjectPart
+Ada Project
+
+\authors <a href="mailto:okellogg AT users.sourceforge.net">Oliver Kellogg</a>
+
+
+\feature Feature 1
+\feature Feature 2
+
+\bug Bug1
+\bug Bug2
+
+\requirement Ada compiler
+
+*/

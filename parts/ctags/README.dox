@@ -1,0 +1,15 @@
+/** \class CTagsPart
+CTags (http://ctags.sourceforge.net)is a source navigation tool with support for many languages.
+
+\feature Provides a context menu for finding type declarations/definitions.
+\feature Provides query dialog in the Tools menu.
+\feature When more than one declaration/definition is found, presets a dialog so that the user can select which one to goto.
+
+\authors <a href="mailto:bernd AT kdevelop.org">Bernd Gehrmann</a>
+
+\bug Can not detect CTags version that well.
+
+\requirement <a href="http://ctags.sourceforge.net">CTags</a> >= 5.0
+
+
+*/

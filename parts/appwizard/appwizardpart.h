@@ -33,7 +33,7 @@ private slots:
     void slotCommandFinished(const QString &command);
 
 private:
-    // opens the file where the "main" function is in
+    //! opens the file where the "main" function is in
     void openMainFile();
     AppWizardDialog *m_dialog;
     QString m_creationCommand;

@@ -1,0 +1,12 @@
+/** \class CloserPart
+Part for closing selected windows
+
+This is a very simple plugin, the only purpose of which is to display
+a dialog showing the currenly open files and offering to close them.
+
+\authors Jens Dagerbo <jens.dagerbo@swipnet.se> aka teatime
+
+\todo Decide if it is supposed to be a part of KDevelop at all, and if so,
+if it is sane to offer it as a plugin or just put it in the main code.
+
+*/

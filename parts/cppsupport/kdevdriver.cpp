@@ -45,8 +45,8 @@ void KDevDriver::setupLexer( Lexer* lexer )
 	lexer->setReportWarnings( true );
 }
 
-// setup the preprocessor
-// code provided by Reginald Stadlbauer <reggie@trolltech.com>
+//! setup the preprocessor
+//! code provided by Reginald Stadlbauer <reggie@trolltech.com>
 void KDevDriver::setup()
 {
 	QString kdedir = getenv( "KDEDIR" );

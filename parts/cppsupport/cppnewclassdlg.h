@@ -197,7 +197,7 @@ private:
 
     friend class ClassGenerator;
 
-    // The class that translates UI input to a class
+    //! The class that translates UI input to a class
     class ClassGenerator {
 
     public:
@@ -256,7 +256,7 @@ private:
     };
 
 
-    // workaround to make gcc 2.95.x happy
+    //! workaround to make gcc 2.95.x happy
     friend class CppNewClassDialog::ClassGenerator;
 };
 
