@@ -63,8 +63,8 @@ if ($processes{API} eq "yes")
        }
        else
        {
-         printflush (STDOUT,">kdoc -d $underDirectory/api/ $name *.h\n");
-	 system ("kdoc -d $underDirectory/api/ $name *.h");
+         printflush (STDOUT,">kdoc -d $underDirectory/$nameLittle-api/ $name *.h\n");
+	 system ("kdoc -d $underDirectory/$nameLittle-api/ $name *.h");
        }
       }
       else

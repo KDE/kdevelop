@@ -970,8 +970,8 @@ void CKDevelop::initMenuBar(){
  *-----------------------------------------------------------------*/
 void CKDevelop::initToolBar(){
 
-//  toolBar()->insertButton(BarIcon("filenew"),ID_FILE_NEW, false,i18n("New"));
-
+  toolBar()->insertButton("filenew",ID_FILE_NEW, false,i18n("New"));
+  toolBar()->insertSeparator();
   toolBar()->insertButton("project_open",ID_PROJECT_OPEN, true,i18n("Open Project"));
   toolBar()->insertSeparator();
   toolBar()->insertButton("fileopen",ID_FILE_OPEN, true,i18n("Open File"));

@@ -20,10 +20,10 @@
 #define CADDNEWTRANSLATIONDLG_H
 
 #include <qdialog.h>
-#include <qstrlist.h>
+#include <qstringlist.h>
 
 class QPushButton;
-class KLanguageCombo;
+class QComboBox;
 class CProject;
 
 /**
@@ -39,8 +39,8 @@ public:
 protected:
   QPushButton* ok_button;
   QPushButton* cancel_button;
-  KLanguageCombo* lang_combo;
-  QStrList lang_list;
+  QComboBox* lang_combo;
+  QStringList lang_list;
   QString langfile;
   CProject* prj;
 

@@ -71,8 +71,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
   list_cpp->insertItem(i18n("C/C++ Header (*.h,*.hxx)"));
   list_cpp->insertItem(i18n("C/C++ File (*.cpp,*.c,*.cc,*.C ...)"));
   list_cpp->insertItem(i18n("Empty Textfile"));
-  list_cpp->insertItem(i18n("Qt/KDE Dialog (*.kdevdlg)"));
-  list_cpp->insertItem(i18n("Qt2 User Interface (*.ui)"));
+  list_cpp->insertItem(i18n("Qt Designer File (*.ui)"));
   list_cpp->insertItem(i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)"));
   list_cpp->setMultiSelection( FALSE );
   list_cpp->setCurrentItem(0);
@@ -212,7 +211,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	ok->setBackgroundMode( QWidget::PaletteBackground );
 	ok->setFontPropagation( QWidget::NoChildren );
 	ok->setPalettePropagation( QWidget::NoChildren );
-	ok->setText(i18n("OK"));
+	ok->setText(i18n("&OK"));
 	ok->setAutoRepeat( FALSE );
 	ok->setAutoResize( FALSE );
 	ok->setDefault( TRUE );
@@ -222,7 +221,7 @@ CNewFileDlg::CNewFileDlg(CProject* p_prj, QWidget* parent,const char* name,bool 
 	cancel->setBackgroundMode( QWidget::PaletteBackground );
 	cancel->setFontPropagation( QWidget::NoChildren );
 	cancel->setPalettePropagation( QWidget::NoChildren );
-	cancel->setText(i18n("Cancel") );
+	cancel->setText(i18n("&Cancel") );
 	cancel->setAutoRepeat( FALSE );
 	cancel->setAutoResize( FALSE );
 
@@ -293,10 +292,6 @@ void CNewFileDlg::slotOKClicked(){
   }
   if ( (fileType() == "EN_DOCBOOK") && (text.right(8) != ".docbook")){
     KMessageBox::error(this,i18n("The filename must end with .docbook !"));
-    return;
-  }
-  if ( (fileType() == "DIALOG") && (text.right(8) != ".kdevdlg")){
-    KMessageBox::error(this,i18n("The filename must end with .kdevdlg !"));
     return;
   }
   if ( (fileType() == "QT2DIALOG") && (text.right(3) != ".ui")){
@@ -393,12 +388,6 @@ void CNewFileDlg::slotOKClicked(){
       file.close();
     }
   }
-  if( filetype == "DIALOG"){
-    QFile file(complete_filename);
-    file.remove();
-    file.open(IO_ReadWrite);
-    file.close();
-  }
   if( filetype == "QT2DIALOG"){
     QFile file(complete_filename);
     file.remove();
@@ -424,10 +413,7 @@ QString CNewFileDlg::fileType(){
     if (str == i18n("Empty Textfile")){
       return "TEXTFILE";
     }
-    if(str == i18n("Qt/KDE Dialog (*.kdevdlg)")){
-      return "DIALOG";
-    }
-    if(str == i18n("Qt2 User Interface (*.ui)")){
+    if(str == i18n("Qt Designer File (*.ui)")){
       return "QT2DIALOG";
     }
     if(str == i18n("Lexical File (*.l, *.ll, *.lxx, *.l++)")){
