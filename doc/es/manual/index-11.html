@@ -1,10 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<TITLE>El Manual de Usuario de KDevelop: El editor de diálogos</TITLE>
+<TITLE>El manual de usuario de KDevelop: El editor de diálogos</TITLE>
 <META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
 <META NAME="keywords" CONTENT="">
-<META NAME="description" CONTENT="">
+<META NAME="description" CONTENT="Manual de usuario de KDevelop">
 </HEAD>
 <BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
 <FONT FACE="Helvetica">
@@ -61,7 +61,7 @@ widgets. These are:
 <P>
 <H4>Menubar</H4>
 
-<P><B>"File"-menu:</B> replaces "New" with "New Dialog". "Open" allows to open a dialog definition file.
+<P><B>"File"-menu:</B> . "Open" allows to open a dialog definition file.
 <P><B>"View"-menu:</B> replaces "Tree-View" with "Widgets-View", en/disabling the Widgets-View tabulators; adds "Properties-View" to
 en/disable the Properties-View and "Grid Size" to let you specify the grid size in pixels for horizontal and vertical values.
 <P><B>"Build"-menu:</B> replaces "Compile File" with "Generate Sources". This lets you actually generate the sources for your
@@ -85,9 +85,11 @@ the project types KDE and Qt application, the dialog editor recognizes this and 
 provided by the used libraries. To save time, you already should have a design in mind that will do the intended actions. For
 information about widget design, see 
 <A HREF="programming/index-6.html">The KDevelop Programming Handbook</A>.
-<P>To create a new dialog, select "New" from the "File"-menu or select "New" from the context menu in the "Dialogs" tab. The "New
-Dialog" menu appears where you have to give KDevelop the dialog-specific information about the baseclass and the source file names and
-destination.
+<P>To create a new dialog, select "New" from the "File"-menu or select "New" from the context menu in the "Dialogs" tab. The New File Dialog 
+appears where you can select the item Qt/KDE Dialog(*.kdevdlg). Enter the file name for your dialog to save the layout to.
+Then press OK and a new dialog will appear. When finished with the new dialog, select "Generate Complete Sources" from the Build-Menu. The
+dialog to generate the widget´s source file will appear. There you have to give KDevelop the dialog-specific information about the baseclass, 
+the source file names and destination.
 <P>
 <H4>Dialog Class</H4>
 
