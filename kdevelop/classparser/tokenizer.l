@@ -67,6 +67,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 "struct"        {return CPSTRUCT;}
 "union"         {return CPUNION;}
 "operator"      {return CPOPERATOR;}
+"template"      {return CPTEMPLATE;}
 
     /*==============> Ignored stuff <==============*/
 "Q_EXPORT"       {}
@@ -115,7 +116,7 @@ SCHAR [^"\\\n]|{ESCAPE_SEQUENCE}
 {ID}         {return ID;}
 
     /*==============> Numbers <==============*/
-{NUM}        {return STRING;}
+{NUM}        {return NUM;}
 
     /*==============> Inrease the line counter at CR <==============*/
 "\n"         {line_num++;}

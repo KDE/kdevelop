@@ -59,6 +59,8 @@
 #define CPFRIEND       276
 #define CPSTRUCT       277
 #define CPOPERATOR     278
+#define CPTEMPLATE     279
+#define NUM            280
 typedef const char * YYSTYPE;
 
 extern YYSTYPE yylval;
