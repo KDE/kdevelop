@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=KDevelop Part (Standalone build)
+Category=C++/KDevelop/
+Comment=This generates a KPart for KDevelop, to be built outside of the KDevelop source tree.
+FileTemplates=h,CStyle,cpp,CStyle

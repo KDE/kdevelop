@@ -8,7 +8,7 @@
 
 
 #include <qguardedptr.h>
-#include <kdevplugin.h>
+#include <kdevelop/kdevplugin.h>
 
 
 class $APPNAME$Widget;
