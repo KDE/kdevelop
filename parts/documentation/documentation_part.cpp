@@ -169,4 +169,9 @@ void DocumentationPart::setupActions()
         new DocBookmarkOwner(this), menu->popupMenu(), actionCollection(), true);*/
 }
 
+void DocumentationPart::emitBookmarkLocation(const QString &title, const KURL &url)
+{
+    emit bookmarkLocation(title, url);
+}
+
 #include "documentation_part.moc"

@@ -1398,7 +1398,7 @@ void DocTreeViewWidget::slotItemExecuted(QListViewItem *item)
     }
 
     kdDebug(9002) << "Showing: " << ident << endl;
-    m_part->partController()->showDocument(KURL(ident), dtitem->context());
+    m_part->partController()->showDocument(KURL(ident));
     m_part->mainWindow()->lowerView(this);
 }
 
@@ -1809,7 +1809,7 @@ void DocTreeViewWidget::slotIndexItemExecuted(QListViewItem *item)
     }
     else if(resultList->count() == 1)
     {
-        m_part->partController()->showDocument(KURL::fromPathOrURL( resultList->first()->fileName() ), ident);
+        m_part->partController()->showDocument(KURL::fromPathOrURL( resultList->first()->fileName() ));
         m_part->mainWindow()->lowerView(this);
     }
     else

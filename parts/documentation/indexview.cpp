@@ -34,6 +34,7 @@
 #include <kdevpartcontroller.h>
 #include <kdevdocumentationplugin.h>
 
+#include "docutils.h"
 #include "documentation_part.h"
 #include "documentation_widget.h"
 
@@ -52,6 +53,8 @@ IndexView::IndexView(DocumentationWidget *parent, const char *name)
     l->addWidget(m_index);
        
     connect(m_index, SIGNAL(doubleClicked(QListBoxItem* )), this, SLOT(searchInIndex(QListBoxItem* )));
+    connect(m_index, SIGNAL(mouseButtonPressed(int, QListBoxItem*, const QPoint& )),
+        this, SLOT(itemMouseButtonPressed(int, QListBoxItem*, const QPoint& )));
     connect(m_edit, SIGNAL(returnPressed()), this, SLOT(searchInIndex()));
     connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(showIndex(const QString&)));
     
@@ -76,7 +79,7 @@ void IndexView::searchInIndex(QListBoxItem *item)
         return;
     //FIXME: adymo: get rid of "context"
     //@todo: adymo: show dialog to select url from a list
-    m_widget->part()->partController()->showDocument(indexItem->urls().first(), "1");
+    m_widget->part()->partController()->showDocument(indexItem->urls().first());
 }
 
 void IndexView::showIndex(const QString &term)
@@ -145,6 +148,17 @@ bool IndexView::eventFilter(QObject *watched, QEvent *e)
     }
 
     return QWidget::eventFilter(watched, e);    
+}
+
+void IndexView::itemMouseButtonPressed(int button, QListBoxItem *item, const QPoint &pos)
+{
+    if ((button != Qt::RightButton) || (!item))
+        return;
+    IndexItem *docItem = dynamic_cast<IndexItem*>(item);
+    if (!docItem)
+        return;
+    
+    DocUtils::docItemPopup(m_widget->part(), docItem, pos, false, true);
 }
 
 #include "indexview.moc"

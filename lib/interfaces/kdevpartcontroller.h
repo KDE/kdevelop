@@ -66,9 +66,9 @@ public:
   /**
    * Show a HTML document in the documentation viewer
    * @param url the URL of the document to view
-   * @param context a string used to identify a specific documentation viewer
+   * @param newWin if true, the new window will be created instead of using current
    */
-  virtual void showDocument(const KURL &url, const QString &context = QString::null) = 0;
+  virtual void showDocument(const KURL &url, bool newWin = false) = 0;
   
   /**
    * Embed a part into the main area of the mainwindow

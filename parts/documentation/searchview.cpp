@@ -47,6 +47,7 @@
 #include <kdevdocumentationplugin.h>
 
 #include "documentation_part.h"
+#include "docutils.h"
 
 SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *name)
     :QWidget(parent, name), m_part(part)
@@ -105,6 +106,8 @@ SearchView::SearchView(DocumentationPart *part, QWidget *parent, const char *nam
     connect(m_edit, SIGNAL(returnPressed()), this, SLOT(search()));
     connect(m_goSearchButton, SIGNAL(clicked()), this, SLOT(search()));
     connect(m_view, SIGNAL(executed(QListViewItem*)), this, SLOT(executed(QListViewItem*)));
+    connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemMouseButtonPressed(int, QListViewItem*, const QPoint&, int )));
 }
 
 SearchView::~SearchView()
@@ -231,7 +234,7 @@ void SearchView::search()
 
     //show results
     analyseSearchResults();
-    m_part->partController()->showDocument(KURL("file://" + indexdir + "/results.html"), "2");
+    m_part->partController()->showDocument(KURL("file://" + indexdir + "/results.html"));
 }
 
 void SearchView::htsearchStdout(KProcess *, char *buffer, int len)
@@ -282,7 +285,18 @@ void SearchView::executed(QListViewItem *item)
     if (!d)
         return;
     
-    m_part->partController()->showDocument(d->url(), "2");
+    m_part->partController()->showDocument(d->url());
+}
+
+void SearchView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c)
+{
+    if ((button != Qt::RightButton) || (!item))
+        return;
+    DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
+    if (!docItem)
+        return;
+    
+    DocUtils::docItemPopup(m_part, docItem, pos, true, false, 1);
 }
 
 #include "searchview.moc"

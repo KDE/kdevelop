@@ -23,6 +23,13 @@
 #include <kurlcompletion.h>
 #include <klineedit.h>
 #include <kcombobox.h>
+#include <kpopupmenu.h>
+#include <klocale.h>
+
+#include <kdevpartcontroller.h>
+
+#include "kdevdocumentationplugin.h"
+#include "documentation_part.h"
 
 QString DocUtils::noEnvURL(const QString &url)
 {
@@ -37,4 +44,43 @@ QString DocUtils::envURL(KURLRequester *req)
         return req->comboBox()->currentText();
     else
         return req->url();
+}
+
+void DocUtils::docItemPopup(DocumentationPart *part, DocumentationItem *docItem,
+    const QPoint &pos, bool showBookmark, bool showSearch, int titleCol)
+{
+    docItemPopup(part, docItem->text(titleCol), docItem->url(), pos, showBookmark, showSearch);
+}
+
+void DocUtils::docItemPopup(DocumentationPart *part, IndexItem *docItem, const QPoint &pos,
+    bool showBookmark, bool showSearch)
+{
+    docItemPopup(part, docItem->text(), docItem->urls().first(), pos, showBookmark, showSearch);
+}
+
+void DocUtils::docItemPopup(DocumentationPart *part, const QString &title, const KURL &url,
+    const QPoint &pos, bool showBookmark, bool showSearch)
+{
+    KPopupMenu menu;
+    menu.setTitle(i18n("Documentation"));
+    menu.insertItem(i18n("Open in Current Tab"), 1);
+    menu.insertItem(i18n("Open in New Tab"), 2);
+    if (showBookmark)
+    {
+        menu.insertSeparator();   
+        menu.insertItem(i18n("Bookmark This Location"), 3);
+    }
+    if (showSearch)
+    {
+        menu.insertSeparator();
+        menu.insertItem(QString("%1: %2").arg(i18n("Search")).arg(title), 4);
+    }
+    
+    switch (menu.exec(pos))
+    {
+        case 1: part->partController()->showDocument(url); break;
+        case 2: part->partController()->showDocument(url, true); break;
+        case 3: part->emitBookmarkLocation(title, url); break;
+        case 4: break;
+    }
 }

@@ -187,7 +187,7 @@ void ProjectSession::recreateViews(KURL& url, QDomElement docEl)
       PartController::getInstance()->editDocument(url, line);
     }
     else {
-      PartController::getInstance()->showDocument(url, context);
+      PartController::getInstance()->showDocument(url);
     }
     QDomElement viewPropertiesEl = viewEl.namedItem("AdditionalSettings").toElement();
     if (!viewPropertiesEl.isNull()) {

@@ -213,7 +213,7 @@ void DocTreeViewPart::slotContextFulltextSearch()
     dlg.setSearchTerm(m_popupstr);
     if (dlg.performSearch()) {
         QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
-        partController()->showDocument(KURL("file://" + indexdir + "/results.html"), m_popupstr );
+        partController()->showDocument(KURL("file://" + indexdir + "/results.html") );
     }
 }
 

@@ -407,11 +407,11 @@ void PartController::editDocument(const KURL &inputUrl, int lineNum, int col)
 }
 
 
-void PartController::showDocument(const KURL &url, const QString &context)
+void PartController::showDocument(const KURL &url, bool newWin)
 {
   QString fixedPath = DocumentationPart::resolveEnvVarsInURL(url.url()); // possibly could env vars
   KURL docUrl(fixedPath);
-  kdDebug(9000) << "SHOW: " << docUrl.url() << " context=" << context << endl;
+  kdDebug(9000) << "SHOW: " << docUrl.url() << endl;
 
   if ( docUrl.isLocalFile() && KMimeType::findByURL(docUrl)->name() != "text/html" ) {
     // a link in a html-file pointed to a local text file - display
@@ -419,9 +419,26 @@ void PartController::showDocument(const KURL &url, const QString &context)
     editDocument( docUrl );
     return;
   }
+  
+  
+  DocumentationPart *part = dynamic_cast<DocumentationPart*>(activePart());
+  if (!part || newWin)
+  {
+    part = new DocumentationPart;
+    integratePart(part,docUrl);
+    connect(part, SIGNAL(fileNameChanged(KParts::ReadOnlyPart* )),
+        this, SIGNAL(partURLChanged(KParts::ReadOnlyPart* )));
+  }
+  else
+  {
+    activatePart(part);
+  }
+  part->openURL(docUrl);
+  
 
-  DocumentationPart *part = 0;
-
+  //adymo: context has gone
+/*  DocumentationPart *part = 0;
+  
   if (!context.isEmpty())
     part = findDocPart(context);
 
@@ -437,7 +454,7 @@ void PartController::showDocument(const KURL &url, const QString &context)
   bool bSuccess = part->openURL(docUrl);
   if (!bSuccess) {
     // part->showError(...);
-  }
+  }*/
 }
 
 

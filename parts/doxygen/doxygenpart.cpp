@@ -335,7 +335,7 @@ void DoxygenPart::slotDoxClean()
 
 void DoxygenPart::slotPreviewProcessExited( )
 {
-	partController()->showDocument(KURL(m_tmpDir.name()+"html/index.html"), "doxyprev");
+	partController()->showDocument(KURL(m_tmpDir.name()+"html/index.html"));
 }
 
 void DoxygenPart::slotRunPreview( )

@@ -251,14 +251,6 @@
                     </widget>
                 </grid>
             </widget>
-            <widget class="QWidget">
-                <property name="name">
-                    <cstring>tab</cstring>
-                </property>
-                <attribute name="title">
-                    <string>&amp;Bookmarks</string>
-                </attribute>
-            </widget>
         </widget>
     </grid>
 </widget>

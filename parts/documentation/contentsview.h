@@ -33,6 +33,7 @@ public:
 
 protected slots:
     void itemExecuted(QListViewItem *item, const QPoint &p, int col);
+    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
     
 private:
     DocumentationWidget *m_widget;

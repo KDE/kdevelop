@@ -78,7 +78,7 @@ void ChooseDlg::slotItemExecuted(QListViewItem *item)
 {
     if(item == 0) return;
 
-    m_part->partController()->showDocument(KURL( item->text(1) ), item->text(0));
+    m_part->partController()->showDocument(KURL( item->text(1) ));
     m_part->mainWindow()->lowerView(this);
     
     close();

@@ -44,9 +44,9 @@ void KDevPartControllerIface::editDocument(const QString &url, int lineNum)
 }
 
 
-void KDevPartControllerIface::showDocument(const QString &url, const QString &context)
+void KDevPartControllerIface::showDocument(const QString &url, bool newWin)
 {
-  m_controller->showDocument(KURL(url), context);
+  m_controller->showDocument(KURL(url), newWin);
 }
 
 

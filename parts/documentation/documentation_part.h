@@ -29,6 +29,7 @@ class KConfig;
 class KDialogBase;
 class ConfigWidgetProxy;
 class DocumentationPlugin;
+class KURL;
 
 /*
  Please read the README.dox file for more info about this part
@@ -42,10 +43,12 @@ public:
     ~DocumentationPart();
     
     void emitIndexSelected(KListBox *indexBox);
+    void emitBookmarkLocation(const QString &title, const KURL &url);
     bool configure();
 
 signals:
     void indexSelected(KListBox *indexBox);
+    void bookmarkLocation(const QString &title, const KURL &url);
     
 protected:
     void loadDocumentationPlugins();

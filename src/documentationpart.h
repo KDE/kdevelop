@@ -6,6 +6,7 @@
 
 class KAction;
 class DocumentationHistoryEntry;
+class KParts::ReadOnlyPart;
 
 class DocumentationPart : public KHTMLPart
 {
@@ -21,7 +22,7 @@ public:
   static QString resolveEnvVarsInURL(const QString& url);
 
 signals:
-  void fileNameChanged();
+  void fileNameChanged(KParts::ReadOnlyPart *part);
 
 private slots:
 

@@ -26,6 +26,7 @@
 
 #include "documentation_widget.h"
 #include "documentation_part.h"
+#include "docutils.h"
 
 ContentsView::ContentsView(DocumentationWidget *parent, const char *name)
      :KListView(parent, name), m_widget(parent)
@@ -38,6 +39,8 @@ ContentsView::ContentsView(DocumentationWidget *parent, const char *name)
     
     connect(this, SIGNAL(executed(QListViewItem*, const QPoint&, int )),
         this, SLOT(itemExecuted(QListViewItem*, const QPoint&, int )));
+    connect(this, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemMouseButtonPressed(int, QListViewItem*, const QPoint&, int )));
 }
 
 ContentsView::~ContentsView()
@@ -49,8 +52,18 @@ void ContentsView::itemExecuted(QListViewItem *item, const QPoint &p, int col)
     DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
     if (!docItem)
         return;
-    //FIXME: adymo: get rid of "context"
-    m_widget->part()->partController()->showDocument(docItem->url(), "1");
+    m_widget->part()->partController()->showDocument(docItem->url());
+}
+
+void ContentsView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c)
+{
+    if ((button != Qt::RightButton) || (!item))
+        return;
+    DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
+    if (!docItem)
+        return;
+    
+    DocUtils::docItemPopup(m_widget->part(), docItem, pos, true, true);
 }
 
 #include "contentsview.moc"

@@ -47,7 +47,7 @@ public:
   
   void setEncoding(const QString &encoding);
   void editDocument(const KURL &inputUrl, int lineNum=-1, int col=-1);
-  void showDocument(const KURL &url, const QString &context = QString::null);
+  void showDocument(const KURL &url, bool newWin = false);
   void showPart( KParts::Part* part, const QString& name, const QString& shortDescription );
 
   KParts::ReadOnlyPart *partForURL(const KURL &url);

@@ -36,6 +36,7 @@
 #include "documentation_part.h"
 #include "documentation_widget.h"
 #include "editbookmarkdlg.h"
+#include "docutils.h"
 
 DocBookmarkManager::DocBookmarkManager(DocumentationPart */*part*/)
     :KBookmarkManager(locateLocal("data",
@@ -128,6 +129,11 @@ BookmarkView::BookmarkView(DocumentationWidget *parent, const char *name)
     connect(m_addButton, SIGNAL(clicked()), this, SLOT(addBookmark()));
     connect(m_editButton, SIGNAL(clicked()), this, SLOT(editBookmark()));
     connect(m_removeButton, SIGNAL(clicked()), this, SLOT(removeBookmark()));
+    
+    connect(m_widget->part(), SIGNAL(bookmarkLocation(const QString&, const KURL& )),
+        this, SLOT(addBookmark(const QString&, const KURL& )));
+    connect(m_view, SIGNAL(mouseButtonPressed(int, QListViewItem*, const QPoint&, int )),
+        this, SLOT(itemMouseButtonPressed(int, QListViewItem*, const QPoint&, int )));
 }
 
 BookmarkView::~BookmarkView()
@@ -201,21 +207,34 @@ void BookmarkView::addBookmark()
     dlg.locationEdit->setURL(m_bmOwner->currentURL());
     dlg.nameEdit->setFocus();
     if (dlg.exec())
-    {
-        KBookmark bm = m_bmManager->root().addBookmark(m_bmManager, dlg.nameEdit->text(),
-            KURL(dlg.locationEdit->url()));
-        m_bmManager->save();
-        
-        DocBookmarkItem *item = 0;
-        if (m_view->lastItem())
-            item = dynamic_cast<DocBookmarkItem*>(m_view->lastItem());
-        if (item == 0)
-            item = new DocBookmarkItem(DocumentationItem::Document, m_view, bm.fullText());
-        else
-            item = new DocBookmarkItem(DocumentationItem::Document, m_view, item, bm.fullText());
-        item->setURL(bm.url());
-        item->setBookmark(bm);
-    }
+        addBookmark(dlg.nameEdit->text(), KURL(dlg.locationEdit->url()));
+}
+
+void BookmarkView::addBookmark(const QString &title, const KURL &url)
+{
+    KBookmark bm = m_bmManager->root().addBookmark(m_bmManager, title, url);
+    m_bmManager->save();
+    
+    DocBookmarkItem *item = 0;
+    if (m_view->lastItem())
+        item = dynamic_cast<DocBookmarkItem*>(m_view->lastItem());
+    if (item == 0)
+        item = new DocBookmarkItem(DocumentationItem::Document, m_view, bm.fullText());
+    else
+        item = new DocBookmarkItem(DocumentationItem::Document, m_view, item, bm.fullText());
+    item->setURL(bm.url());
+    item->setBookmark(bm);
+}
+
+void BookmarkView::itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c)
+{
+    if ((button != Qt::RightButton) || (!item))
+        return;
+    DocumentationItem *docItem = dynamic_cast<DocumentationItem*>(item);
+    if (!docItem)
+        return;
+    
+    DocUtils::docItemPopup(m_widget->part(), docItem, pos, false, true);
 }
 
 #include "bookmarkview.moc"

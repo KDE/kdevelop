@@ -45,6 +45,8 @@ protected slots:
     void htsearchStdout(KProcess *, char *buffer, int len);
     void htsearchExited(KProcess *);
     void executed(QListViewItem *item);
+    
+    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
 
 protected:
     void runHtdig(const QString &arg);

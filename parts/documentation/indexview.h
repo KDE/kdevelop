@@ -41,6 +41,8 @@ protected slots:
     void searchInIndex();
     void searchInIndex(QListBoxItem *item);
     void showIndex(const QString &term);
+
+    void itemMouseButtonPressed(int button, QListBoxItem *item, const QPoint &pos);
     
 private:
     DocumentationWidget *m_widget;

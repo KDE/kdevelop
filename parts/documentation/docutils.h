@@ -23,6 +23,12 @@
 #include <qstring.h>
 
 class KURLRequester;
+class KPopupMenu;
+class DocumentationItem;
+class DocumentationPart;
+class QPoint;
+class IndexItem;
+class KURL;
 
 namespace DocUtils{
 
@@ -32,6 +38,12 @@ QString envURL(KURLRequester *req);
 /**Resolves environment variables in url.*/
 QString noEnvURL(const QString &url);
 
+void docItemPopup(DocumentationPart *part, DocumentationItem *docItem, const QPoint &pos,
+    bool showBookmark = false, bool showSearch = false, int titleCol = 0);
+void docItemPopup(DocumentationPart *part, IndexItem *docItem, const QPoint &pos,
+    bool showBookmark = false, bool showSearch = false);
+void docItemPopup(DocumentationPart *part, const QString &title, const KURL &url,
+    const QPoint &pos, bool showBookmark = false, bool showSearch = false);
 }
 
 #endif

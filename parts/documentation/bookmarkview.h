@@ -53,6 +53,9 @@ class BookmarkView : public QWidget
 public:
     BookmarkView(DocumentationWidget *parent = 0, const char *name = 0);
     ~BookmarkView();
+    
+public slots:
+    void addBookmark(const QString &title, const KURL &url);
 
 protected:
     void showBookmarks();
@@ -62,6 +65,7 @@ protected slots:
     void addBookmark();
     void editBookmark();
     void removeBookmark();
+    void itemMouseButtonPressed(int button, QListViewItem *item, const QPoint &pos, int c);
 
 private:
     DocumentationWidget *m_widget;

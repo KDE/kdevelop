@@ -315,7 +315,7 @@ bool DocumentationPart::openURL(const KURL &url)
   bool retval = KHTMLPart::openURL(newUrl);
   if ( retval )
   {
-    emit fileNameChanged();
+    emit fileNameChanged(this);
 	if ( !m_restoring ) 
 	{
 		addHistoryEntry();
@@ -360,7 +360,7 @@ void DocumentationPart::slotCancelled( const QString & /*errMsg*/ )
 
 void DocumentationPart::slotDuplicate( )
 {
-    PartController::getInstance()->showDocument(url(), m_context + "dup");
+    PartController::getInstance()->showDocument(url(), true);
 }
 
 void DocumentationPart::slotPrint( )
