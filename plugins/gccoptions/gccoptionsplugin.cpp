@@ -201,7 +201,7 @@ OptimizationTab::OptimizationTab(GccOptionsPlugin::Type type, QWidget *parent, c
 
     if (type == GccOptionsPlugin::GPP) {
     new FlagListItem(optBox,
-                     "-fno-default-inline", i18n("<qt>Do not make members functions inline merely because they "
+                     "-fno-default-inline", i18n("<qt>Do not make member functions inline merely because they "
                                                  "are defined inside the class scope.</qt>"),
                      "-fdefault-inline");
     }
@@ -323,7 +323,7 @@ Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagCheckBox(this, controller,
                      "-pedantic-errors", i18n("Like -pedantic, but errors are produced instead of warnings."));
     new FlagCheckBox(this, controller,
-                     "-Wall",            i18n("All below warnings combined:"));
+                     "-Wall",            i18n("All warnings below, combined:"));
 
     wallBox = new FlagListBox(this);
 
@@ -354,7 +354,7 @@ Warnings1Tab::Warnings1Tab(GccOptionsPlugin::Type type, QWidget *parent, const c
     new FlagListItem(wallBox,
                      "-Wunused",             i18n("<qt>Warn when a variable is declared but not used.</qt>"));
     new FlagListItem(wallBox,
-                     "-Wuninitialized",      i18n("<qt>Warn when a variable is used without being initialized before.</qt>"));
+                     "-Wuninitialized",      i18n("<qt>Warn when a variable is used without being initialized first.</qt>"));
     new FlagListItem(wallBox,
                      "-Wunknown-pragmas",    i18n("<qt>Warn when an unknown #pragma statement is encountered.</qt>"));
     if (type == GccOptionsPlugin::GPP) { 
