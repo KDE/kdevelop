@@ -117,7 +117,7 @@ int DelayedPopupAction::plug(QWidget *widget, int index)
         connect( bar, SIGNAL(destroyed()), this, SLOT(slotDestroyed()) );
         
         int id = KAction::getToolButtonID();
-        bar->insertButton(iconName(), id, SIGNAL( clicked() ), this,
+        bar->insertButton(icon(), id, SIGNAL( clicked() ), this,
                           SLOT(slotActivated()), isEnabled(), plainText(),
                           index);
         addContainer(bar, id);
