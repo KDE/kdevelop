@@ -27,8 +27,8 @@ class TranslationUnitAST;
 class Unit
 {
 public:
-    Unit(): translationUnit( 0 ) { kdDebug(9007) << "++ Unit()" << endl; }
-    ~Unit() { kdDebug(9007) << "-- Unit()" << endl; delete translationUnit; translationUnit = 0; }
+    Unit(): translationUnit( 0 ) {}
+    ~Unit() { delete translationUnit; translationUnit = 0; }
 
     QString fileName;
     QValueList<Problem> problems;

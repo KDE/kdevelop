@@ -37,7 +37,6 @@ static struct {
     { "emit", Token_emit },
     // Qt keywords -- end
 
-    { "__asm__", Token_asm },
     { "__int64", Token_int }, 
     { "and", Token_and },
     { "and_eq", Token_and_eq },
@@ -277,15 +276,15 @@ void Lexer::tokenize()
 	    }
 	    ptr = end;
 	} else if( m_startLine && *ptr == '#' ){
-	    
+
 	    NEXT_CHAR( ptr ); // skip #
 	    ptr = readWhiteSpaces( ptr, false );	    // skip white spaces
-	    
+
 	    const QChar* eptr = readIdentifier( ptr ); // read the directive
-	    QString directive( ptr, eptr - ptr );	    
-	    
+	    QString directive( ptr, eptr - ptr );
+
 	    ptr = handleDirective( directive, eptr );
-	    //m_tokens[ m_size++ ] = Token( Token_preproc, ptr, 1 );	    
+	    //m_tokens[ m_size++ ] = Token( Token_preproc, ptr, 1 );
 	} else if( preproc_state == PreProc_skip ){
 	    // skip line and continue
 	    while( isValid(ptr) && !ptr->isNull() && *ptr != '\n' )
@@ -575,6 +574,7 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 		++ptr;
 	    }
 	    m.setBody( body );
+	    m_driver->addMacro( m_driver->currentFileName(), m );
 	}
     } else if( directive == "undef" ){
 	ptr = readWhiteSpaces( ptr, false );
@@ -630,12 +630,13 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	(void) m_directiveStack.pop();
     }
 
-    while( isValid(ptr) ){
+    if( isValid(ptr) ){
 	// skip line
 	const QChar* base = ptr;
 	while( isValid(ptr) && *ptr != '\n' )
 	    NEXT_CHAR( ptr );
 
+#if 0
 	QString line( base, ptr - base );
 	line = line.stripWhiteSpace();
 	if( !line.endsWith("\\") )
@@ -644,6 +645,7 @@ const QChar* Lexer::handleDirective( const QString& directive, const QChar* ptr 
 	if( isValid(ptr) ){
 	    NEXT_CHAR( ptr ); // skip \n
 	}
+#endif
     }
     return ptr;
 }

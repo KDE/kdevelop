@@ -1589,14 +1589,15 @@ bool Parser::parseParameterDeclarationClause( ParameterDeclarationClauseAST::Nod
 	return false;
     }
 
-    if( lex->lookAhead(0) == ',' && lex->lookAhead(1) == Token_ellipsis ){
-	lex->nextToken();
+    if( lex->lookAhead(0) == Token_ellipsis ){
 	lex->nextToken();
     }
 
 good:
     ParameterDeclarationClauseAST::Node ast = CreateNode<ParameterDeclarationClauseAST>();
     ast->setParameterDeclarationList( params );
+
+    // TODO: add ellipsis
     UPDATE_POS( ast, start, lex->index() );
     node = ast;
 
@@ -1620,6 +1621,9 @@ bool Parser::parseParameterDeclarationList( ParameterDeclarationListAST::Node& n
 
     while( lex->lookAhead(0) == ',' ){
 	lex->nextToken();
+
+	if( lex->lookAhead(0) == Token_ellipsis )
+	    break;
 
 	if( !parseParameterDeclaration(param) ){
 	    lex->setIndex( start );
@@ -2231,16 +2235,21 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
     bool ok = false;
 
     NestedNameSpecifierAST::Node nns = CreateNode<NestedNameSpecifierAST>();
-    
+
     int startId = start;
     while( lex->lookAhead(0) == Token_identifier ){
-	
+
 	startId = lex->index();
-	
+
 	ClassOrNamespaceNameAST::Node classOrNamespaceName = CreateNode<ClassOrNamespaceNameAST>();
-	
+
 	if( lex->lookAhead(1) == '<' ){
 	    lex->nextToken(); // skip template name
+
+	    AST::Node name = CreateNode<AST>();
+	    UPDATE_POS( name, startId, lex->index() );
+	    classOrNamespaceName->setName( name );
+
 	    lex->nextToken(); // skip <
 
 	    TemplateArgumentListAST::Node args;
@@ -2248,55 +2257,59 @@ bool Parser::parseNestedNameSpecifier( NestedNameSpecifierAST::Node& node )
 		lex->setIndex( startId );
 		return false;
 	    }
-	    	    
+
 	    if( lex->lookAhead(0) != '>' ){
 		lex->setIndex( startId );
 		return false;
 	    }
-	    
+
 	    lex->nextToken(); // skip >
-	    
+
 	    args->setText( toString(startId, lex->index()) );
 	    UPDATE_POS( args, startId, lex->index() );
-	    
+
 	    classOrNamespaceName->setTemplateArgumentList( args );
-	    
+
 	    if ( lex->lookAhead(0) == Token_scope ) {
-	        
-	    	UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
-		
+
+		UPDATE_POS( classOrNamespaceName, startId, lex->index() );
+
 		lex->nextToken();
 		ok = true;
-		
+
 		nns->addClassOrNamespaceName( classOrNamespaceName );
-		
+
 	    } else {
 		lex->setIndex( startId );
 		break;
 	    }
-	    
+
 	} else if( lex->lookAhead(1) == Token_scope ){
 	    lex->nextToken(); // skip name
-	    
+
+	    AST::Node name = CreateNode<AST>();
+	    UPDATE_POS( name, startId, lex->index() );
+	    classOrNamespaceName->setName( name );
+
 	    classOrNamespaceName->setText( toString(startId, lex->index()) );
-	    UPDATE_POS( classOrNamespaceName, startId, lex->index() );	
+	    UPDATE_POS( classOrNamespaceName, startId, lex->index() );
 	    nns->addClassOrNamespaceName( classOrNamespaceName );
-	    
+
 	    lex->nextToken(); // skip ::
 	    if( lex->lookAhead(0) == Token_template && lex->lookAhead(1) == Token_identifier ){
 		lex->nextToken(); // skip optional template keyword
 	    }
 	    ok = true;
-	    
+
 	} else
-	    break;	    
+	    break;
     }
-    
+
     if ( !ok ) {
 	lex->setIndex( startId );
 	return false;
     }
-    
+
     node = nns;
     UPDATE_POS( node, start, lex->index() );
     node->setText( toString(start,lex->index()-1) );

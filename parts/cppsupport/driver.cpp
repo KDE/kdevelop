@@ -96,7 +96,7 @@ TranslationUnitAST :: Node Driver::parseFile( const QString & fileName, const QS
     lexer.setSource( source );
     Parser parser( this, &lexer );
     setupParser( &parser );
-        
+
     TranslationUnitAST :: Node translationUnit;
     parser.parseTranslationUnit( translationUnit );
     
@@ -129,10 +129,39 @@ void Driver::setupLexer( Lexer * lexer )
     lexer->addSkipWord( "ANTLR_USING_NAMESPACE", SkipWordAndArguments );
     lexer->addSkipWord( "ANTLR_END_NAMESPACE" );
     lexer->addSkipWord( "ANTLR_C_USING", SkipWordAndArguments );
-    
+
     // gnu
     lexer->addSkipWord( "__extension__" );
     lexer->addSkipWord( "__attribute__", SkipWordAndArguments );
+    lexer->addSkipWord( "__BEGIN_DECLS" );
+    lexer->addSkipWord( "__END_DECLS" );
+    lexer->addSkipWord( "__THROW" );
+    lexer->addSkipWord( "__const" );
+    lexer->addSkipWord( "__const__" );
+    lexer->addSkipWord( "__restrict" );
+    lexer->addSkipWord( "__restrict__" );
+    lexer->addSkipWord( "__inline" );
+    lexer->addSkipWord( "__inline__" );
+    lexer->addSkipWord( "__attribute_pure__" );
+    lexer->addSkipWord( "__attribute_malloc__" );
+    lexer->addSkipWord( "__attribute_format_strfmon__" );
+    lexer->addSkipWord( "__asm__", SkipWordAndArguments );
+    lexer->addSkipWord( "__devinit" );
+    lexer->addSkipWord( "__devinit__" );
+    lexer->addSkipWord( "__init" );
+    lexer->addSkipWord( "__init__" );
+    lexer->addSkipWord( "__signed" );
+    lexer->addSkipWord( "__signed__" );
+    lexer->addSkipWord( "__unsigned" );
+    lexer->addSkipWord( "__unsigned__" );
+    lexer->addSkipWord( "asmlinkage" );
+    lexer->addSkipWord( "____cacheline_aligned" );
+    
+    lexer->addSkipWord( "__BEGIN_NAMESPACE_STD" );
+    lexer->addSkipWord( "__END_NAMESPACE_STD" );
+    lexer->addSkipWord( "__BEGIN_NAMESPACE_C99" );
+    lexer->addSkipWord( "__END_NAMESPACE_C99" );
+    lexer->addSkipWord( "__USING_NAMESPACE_STD", SkipWordAndArguments );
 
     // kde
     lexer->addSkipWord( "K_SYCOCATYPE", SkipWordAndArguments );

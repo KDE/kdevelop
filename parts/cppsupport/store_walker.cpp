@@ -197,7 +197,9 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
 	while( it.current() ){
-	    scope << it.current()->text();
+	    if( it.current()->name() ){
+	       scope << it.current()->name()->text();
+	    }
 	    ++it;
 	}
     }
@@ -421,7 +423,8 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	QPtrList<ClassOrNamespaceNameAST> l = nestedName->classOrNamespaceNameList();
 	QPtrListIterator<ClassOrNamespaceNameAST> it( l );
 	while( it.current() ){
-	    scope << it.current()->text();
+	    if( it.current()->name() )
+	       scope << it.current()->name()->text();
 	    ++it;
 	}
     }
