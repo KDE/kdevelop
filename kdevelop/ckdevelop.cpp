@@ -555,15 +555,15 @@ void CKDevelop::slotBuildCompileFile(){
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
-  slotStatusMsg(i18n("Compiling ")+edit_widget->getName());
+  slotStatusMsg(i18n("Compiling ")+cpp_widget->getName());
   messages_widget->clear();
   process.clearArguments();
-  QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
-  // get the filename of the implementation file to compile and change extension for make
   QFileInfo fileinfo(cpp_widget->getName());
+  QDir::setCurrent(fileinfo.dirPath());
+  // get the filename of the implementation file to compile and change extension for make
   KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
-  //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
-  process << make_cmd <<fileinfo.baseName()+".o";
+//  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
+  process << make_cmd << fileinfo.baseName()+".o";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 }
 
@@ -1067,9 +1067,9 @@ void CKDevelop::slotBoomarksBrowserSelected(int id_){
 	slotStatusMsg(i18n("Opening bookmark..."));
 	QString file= doc_bookmarks_list.at(id_);
 	slotURLSelected( browser_widget, file,1,"test");	
-
   slotStatusMsg(i18n("Ready."));
 }	
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // HELP-Menu slots

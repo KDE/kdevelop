@@ -62,13 +62,13 @@ void CRealFileView::initPopups()
 {
   installed_file_menu.setTitle(i18n("File (Registered)"));
   installed_file_menu.insertItem(i18n("Remove File from Project..."),this,SLOT(slotRemoveFileFromProject()));
-  installed_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),this,SLOT(slotDeleteFilePhys()));
+  installed_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disc..."),this,SLOT(slotDeleteFilePhys()));
   installed_file_menu.insertSeparator();
   installed_file_menu.insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
 
   other_file_menu.setTitle(i18n("File"));
   other_file_menu.insertItem(i18n("Add File to Project..."),this,SLOT(slotAddFileToProject()));
-  other_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disk..."),this,SLOT(slotDeleteFilePhys()));
+  other_file_menu.insertItem( *(treeH->getIcon( THDELETE )), i18n("Remove File from Disc..."),this,SLOT(slotDeleteFilePhys()));
   //other_file_menu->insertSeparator();
   //other_file_menu->insertItem(i18n("Properties..."),this,SLOT(slotShowFileProperties()));
 }
@@ -241,7 +241,8 @@ bool CRealFileView::isInstalledFile(QString filename)
 
 void CRealFileView::slotSelectionChanged(QListViewItem* selection) 
 {
-  if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER )
+  if( mouseBtn == LeftButton && treeH->itemType() != THFOLDER ||
+  	mouseBtn == MidButton && treeH->itemType() != THFOLDER)
       emit fileSelected(getFullFilename(selection));
 }
 
@@ -284,3 +285,6 @@ void CRealFileView::slotDeleteFilePhys() {
 void CRealFileView::slotShowFileProperties() {
   emit showFileProperties(getRelFilename(currentItem()));
 }
+
+
+

@@ -134,9 +134,15 @@ void CTreeView::mousePressEvent(QMouseEvent * event)
   // Save the mousebutton.
   mouseBtn = event->button();
 
-  if( mouseBtn == LeftButton || mouseBtn == RightButton )
-    mousePos = event->pos();
+  //if( mouseBtn == LeftButton || mouseBtn == RightButton || mouseBtn == MidButton)
+  mousePos = event->pos();
 
+  // set the item selected if midButton clicked, QListView doesn't do this by default
+  QListViewItem* item;
+  if(mouseBtn == MidButton){
+		item = itemAt(mousePos);
+		setSelected(item,true);
+  }
   QListView::mousePressEvent( event );
 }
 
@@ -173,3 +179,6 @@ void CTreeView::slotRightButtonPressed(QListViewItem *item,
       popup->popup( this->mapToGlobal( mousePos ) );
   }
 }
+
+
+

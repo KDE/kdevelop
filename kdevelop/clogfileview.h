@@ -37,7 +37,7 @@ class CLogFileView : public CTreeView {
 public: 
 
   /** construtor */
-  CLogFileView(QWidget*parent=0,const char* name=0); 
+  CLogFileView(QWidget*parent=0,const char* name=0,bool s_path=false);
 
   /** destructor */
   ~CLogFileView();
@@ -58,11 +58,13 @@ public:
   void setAllGroupsOpened(){allgroups_opened=true;}
   /** returns the relative filename*/
   QString getFileName(QListViewItem* item);
+  bool showPath(){return show_path;}
 
 protected: // Implementations of virtual methods.
 
   /** Initialize popupmenus. */
   void initPopups();
+
 
   /** Get the current popupmenu. */
   KPopupMenu *getCurrentPopup();
@@ -79,6 +81,8 @@ protected:
     void slotFileDelete();
     void slotGroupProp();
     void slotGroupRemove();
+    /**  */
+	  void slotShowPath();
     
  signals:
     void selectedNewClass();
@@ -95,6 +99,7 @@ protected:
   bool popupmenu_disable;
   bool firstitemselect;
   bool allgroups_opened;
+  bool show_path;
 
   CProject* project;
   QString preselectitem;
@@ -103,3 +108,8 @@ protected:
   
 };
 #endif
+
+
+
+
+

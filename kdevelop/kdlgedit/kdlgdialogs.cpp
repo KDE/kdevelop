@@ -95,7 +95,8 @@ KPopupMenu* KDlgDialogs::getCurrentPopup(){
 void KDlgDialogs::slotSelectionChanged( QListViewItem* item)
 {
   
-  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE ){
+  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE ||
+  	mouseBtn == MidButton && treeH->itemType() == THC_FILE){
       current_dialog = (project->getProjectDir() + project->getSubDir() 
 			+ QString(item->text(0)).lower() + ".kdevdlg" );
       emit kdlgdialogsSelected(current_dialog);

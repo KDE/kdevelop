@@ -120,7 +120,7 @@ void CClassView::initPopups()
   methodPopup.setTitle( i18n( "Method" ) );
   methodPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()));
   methodPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition() ));
-  methodPopup.insertSeparator();
+	methodPopup.insertSeparator();
   id = methodPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete method" ), this, SLOT(slotMethodDelete()));
   methodPopup.setItemEnabled( id, false );
 
@@ -133,8 +133,8 @@ void CClassView::initPopups()
 
   // Slot popup
   slotPopup.setTitle( i18n( "Slot" ) );
-  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDefinition()));
-  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT( slotViewDeclaration()));
+  slotPopup.insertItem( i18n("Go to definition" ), this, SLOT( slotViewDeclaration()));
+  slotPopup.insertItem( i18n("Go to declaration" ), this, SLOT(slotViewDefinition()));
   slotPopup.insertSeparator();
   id = slotPopup.insertItem( *(treeH->getIcon( THDELETE )), i18n( "Delete slot" ), this, SLOT(slotMethodDelete()));
   slotPopup.setItemEnabled( id, false );

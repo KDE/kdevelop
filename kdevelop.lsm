@@ -1,10 +1,10 @@
 Begin3
 Title:          KDevelop
-Version:        0.3
-Entered-date:   8. March 1999 
+Version:        0.4
+Entered-date:   14. June 1999
 Description:    an IDE for X/Qt/KDE
 Keywords:       IDE, KDE, X11, Qt, development, C++
-Author:         Sandy Meier, Stefan Heidrich,Ralf Nolden,Stefan Bartel
+Author:         The KDevelop Team
 Maintained-by:  Sandy Meier <smeier@rz.uni-potsdam.de>
 Primary-site:   
 Home-page:      http://www.cs.uni-potsdam.de/~smeier/kdevelop/index.html

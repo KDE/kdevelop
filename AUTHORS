@@ -29,6 +29,8 @@
 -Jochen Wilhelmy <digisnap@cs.tu-berlin.de>
 -Matthias Hoelzer-Kluepfel <mhk@caldera.de>
 -Matt Koss <koss@napri.sk>
+-Bernd Gehrmann <bernd@physik.hu-berlin.de>
+-Walter Tasin <tasin@e-technik.fh-muenchen.de>
 
 KDevelop contains sourcecode from the following programs/classes:
 
@@ -37,4 +39,7 @@ KDE Help	:(c) 1996 by Martin R. Jones <mjones@kde.org>
 GrapeFruit	:(c) 1999 by Bernd Gehrmann <bernd@physik.hu-berlin.de>
 KSwallow	:(c) by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
 kcmlocale	:(c) 1998 by Matthias Hoelzer <hoelzer@physik.uni-wuerzburg.de>
+
+
+
 

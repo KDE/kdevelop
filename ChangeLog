@@ -1,3 +1,8 @@
+1999-05-29  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* fixed "build->compile file" problem in subdirs
+	* viewmode of LFV is now configurable,
+	just click on the root item with the right mouse-button
+		
 1999-05-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* New autoconf/automake framework using DESTDIR for
 	the staging area prefix. Concerns acinclude.m4, ltconfig,
@@ -18,7 +23,7 @@
 	* added delayed popups for browser history on toolbar back and forward buttons
 	* added title support for HTML file titles on KDevelop caption, bookmarks and history popups
 	* added delayed popup for project headers and sources on the Open File toolbar button
-	
+
 1999-05-27  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* implemented new mode for LFV, 
 	it's now possible to view the file without the path

@@ -371,7 +371,11 @@ void CNewFileDlg::slotLocButtonClicked(){
   }
 }
 QString CNewFileDlg::location(){
-  return prj_loc_edit->text();
+	QString str = prj_loc_edit->text();
+	if (str.right(1) != "/"){
+	 	str = str + "/";
+	}
+  return str;
 }
 void CNewFileDlg::slotAddToProject(){
   if(check_add_project->isChecked()){

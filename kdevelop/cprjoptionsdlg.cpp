@@ -875,7 +875,7 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   m_set_modify_line->setBackgroundMode( QWidget::PaletteBase );
   m_set_modify_line->setFontPropagation( QWidget::NoChildren );
   m_set_modify_line->setPalettePropagation( QWidget::NoChildren );
-  m_set_modify_line->setText(i18n(""));
+  m_set_modify_line->setText("");
   m_set_modify_line->setMaxLength( 32767 );
   m_set_modify_line->setEchoMode( QLineEdit::Normal );
   m_set_modify_line->setFrame( TRUE );
@@ -1378,3 +1378,4 @@ void CPrjOptionsDlg::ok(){
 bool CPrjOptionsDlg::needConfigureInUpdate(){
   return  need_configure_in_update;
 }
+

@@ -547,6 +547,8 @@ void CKDevelop::closeEvent(QCloseEvent* e){
 
   config->writeEntry("show_kdevelop",bKDevelop);
 
+  config->writeEntry("lfv_show_path",log_file_tree->showPath());
+
   config->writeEntry("Autosave",bAutosave);
   config->writeEntry("Autosave Timeout",saveTimeout);
 
@@ -590,7 +592,6 @@ bool  CKDevelop::isFileInBuffer(QString abs_filename){
   }
   return false;
 }
-
 
 
 

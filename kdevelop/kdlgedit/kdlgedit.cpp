@@ -545,13 +545,14 @@ void KDlgEdit::generateQLineEdit(KDlgItem_Widget *wid, QTextStream *stream,QStri
 
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   //setText
-  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
-    *stream << varname_p + "setText(i18n(\""+ props->getPropValue("Text") +"\"));\n";
+  if(props->getPropValue("Text") != ""){
+	  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+  	  *stream << varname_p + "setText(i18n(\""+ props->getPropValue("Text") +"\"));\n";
+ 	 }
+ 	 else{
+ 	   *stream << varname_p + "setText(\""+ props->getPropValue("Text") +"\");\n";
+ 	 }
   }
-  else{
-    *stream << varname_p + "setText(\""+ props->getPropValue("Text") +"\");\n";
-  }
-
   //setMaxLenght
   if(props->getPropValue("MaxLength") != ""){
     *stream << varname_p + "setMaxLength("+ props->getPropValue("MaxLength") +");\n";
@@ -579,12 +580,14 @@ void KDlgEdit::generateQMultiLineEdit(KDlgItem_Widget *wid, QTextStream *stream,
 
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   // setText
-  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
-    *stream << varname_p + "setText(i18n(\""+ props->getPropValue("Text") +"\"));\n";
-  }
-  else{
-    *stream << varname_p + "setText(\""+ props->getPropValue("Text") +"\");\n";
-  }
+  if(props->getPropValue("Text") != ""){
+	  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+  	  *stream << varname_p + "setText(i18n(\""+ props->getPropValue("Text") +"\"));\n";
+ 	 }
+ 	 else{
+ 	   *stream << varname_p + "setText(\""+ props->getPropValue("Text") +"\");\n";
+ 	 }
+ 	}
 
   //isTextSelected
   if(props->getPropValue("isTextSelected") != "FALSE"){
@@ -702,12 +705,14 @@ void KDlgEdit::generateQRadioButton(KDlgItem_Widget *wid, QTextStream *stream,QS
 
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   //setText
-  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
-    *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
-  }
-  else{
-    *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
-  }
+  if(props->getPropValue("Text") != ""){
+	  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+  	  *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
+ 	 }
+ 	 else{
+ 	   *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
+ 	 }
+ 	}
   //  setChecked
   if(props->getPropValue("isChecked") == "TRUE"){
     *stream << varname_p + "setChecked(true);\n";
@@ -740,12 +745,14 @@ void KDlgEdit::generateQCheckBox(KDlgItem_Widget *wid, QTextStream *stream,QStri
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   
   //setText
-  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
-    *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
-  }
-  else{
-    *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
-  }
+  if(props->getPropValue("Text") != ""){
+	  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+  	  *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
+	  }
+  	else{
+    	*stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
+	  }
+	}
  
   //  setChecked
   if(props->getPropValue("isChecked") == "TRUE"){
@@ -792,13 +799,14 @@ void KDlgEdit::generateQLabel(KDlgItem_Widget *wid, QTextStream *stream,QString 
 
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   //setText
-  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
-    *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
+  if(props->getPropValue("Text") != ""){
+	  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+  	  *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
+ 	 }
+ 	 else{
+  	  *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
+ 	 }
   }
-  else{
-    *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
-  }
-  
   //isAutoResize
   if(props->getPropValue("isAutoResize") == "TRUE"){
     *stream << varname_p + "setAutoResize(true);\n";
@@ -859,13 +867,14 @@ void KDlgEdit::generateQPushButton(KDlgItem_Widget *wid, QTextStream *stream,QSt
 
   QString varname_p = "\t"+props->getPropValue("VarName") + "->";
   //setText
-  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
-    *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
+  if(props->getPropValue("Text") != ""){
+	  if(((CKDevelop*)parent())->getProject()->isKDEProject()){
+  	  *stream << varname_p + "setText(i18n(\""+props->getPropValue("Text") +"\"));\n";
+	  }
+ 	 else{
+ 	   *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
+ 	 }
   }
-  else{
-    *stream << varname_p + "setText(\""+props->getPropValue("Text") +"\");\n";
-  }
-  
   //isDefault
   if(props->getPropValue("isDefault") == "TRUE"){
     *stream << varname_p + "setDefault(true);\n";

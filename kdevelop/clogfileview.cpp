@@ -26,7 +26,7 @@
 #include <assert.h>
 #include <qfileinfo.h>
 
-
+#define ID_SHOW_PATH_ITEM  1000
 
 /*********************************************************************
  *                                                                   *
@@ -34,9 +34,10 @@
  *                                                                   *
  ********************************************************************/
 
-CLogFileView::CLogFileView(QWidget*parent,const char* name)
+CLogFileView::CLogFileView(QWidget*parent,const char* name,bool s_path)
   : CTreeView(parent,name)
 {
+	show_path = s_path;
   // Create the popupmenus.
   initPopups();
  
@@ -68,7 +69,7 @@ void CLogFileView::initPopups()
   file_pop.setTitle(i18n("File"));
   file_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
   file_pop.insertItem(i18n("Remove File from Project..."),this,SLOT(slotFileRemove()));
-  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Remove File from Disk..."),this,SLOT(slotFileDelete()));
+  file_pop.insertItem(*(treeH->getIcon( THDELETE )),i18n("Remove File from Disc..."),this,SLOT(slotFileDelete()));
   file_pop.insertSeparator();
   file_pop.insertItem(i18n("Properties..."),this,SLOT(slotFileProp()));
   
@@ -79,10 +80,16 @@ void CLogFileView::initPopups()
   group_pop.insertSeparator();
   group_pop.insertItem(i18n("Properties..."),this,SLOT(slotGroupProp()));
 
-  project_pop.setTitle(i18n("Project"));
+
+  project_pop.setTitle(i18n("Project/LFV"));
   project_pop.insertItem(i18n("New File..."),this,SLOT(slotNewFile()));
   project_pop.insertItem(i18n("New Class..."),this,SLOT(slotNewClass()));
   project_pop.insertItem(i18n("New Group..."),this,SLOT(slotNewGroup()));
+  project_pop.insertSeparator();
+  project_pop.insertItem(i18n("Show relative path"),this,SLOT(slotShowPath()),0,ID_SHOW_PATH_ITEM);
+  project_pop.setCheckable(true);
+  if(show_path) project_pop.setItemChecked(ID_SHOW_PATH_ITEM,true);
+
 }
 
 /*********************************************************************
@@ -165,9 +172,14 @@ void CLogFileView::refresh(CProject* prj)
         // If found
         if( filename.find( filter_exp ) != -1)
         {
-          current_item = treeH->addItem( QFileInfo("/"+filename).fileName(), THC_FILE, lastGrp );
-	  p_filename = new QString;
-	  dict->insert(current_item,*p_filename = filename);
+          if(show_path) {
+             current_item = treeH->addItem(filename, THC_FILE, lastGrp );
+					}
+					else{  // fill the dict, because the path is not stored into the tree
+						current_item = treeH->addItem( QFileInfo("/"+filename).fileName(), THC_FILE, lastGrp );
+				 		p_filename = new QString;
+						dict->insert(current_item,*p_filename = filename);
+					}
 	  //	  cerr << ":" << current_item << ":" << filename << endl;
 	  if(firstitemselect == true && item_already_selected == false){
 	    setSelected(current_item,true);
@@ -253,12 +265,14 @@ KPopupMenu *CLogFileView::getCurrentPopup()
 
 void CLogFileView::slotSelectionChanged( QListViewItem* item)
 {
-  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE ){
-    //    emit logFileTreeSelected(project->getProjectDir() + item->text(0));
-    // cerr << item << endl;
-//     cerr << QString(dict->find(item));
-//     cerr << dict->count();
-    emit logFileTreeSelected(project->getProjectDir() + dict->find(item));
+  if( mouseBtn == LeftButton && treeH->itemType() == THC_FILE ||
+	  	mouseBtn == MidButton && treeH->itemType() == THC_FILE){
+  	if(show_path){
+	    emit logFileTreeSelected(project->getProjectDir() + item->text(0));
+	  }
+    else{
+	    emit logFileTreeSelected(project->getProjectDir() + dict->find(item));
+	  }
   }
 }
 
@@ -269,8 +283,12 @@ void CLogFileView::slotNewFile(){
   emit selectedNewFile();
 }
 void CLogFileView::slotFileProp(){
-  //  emit showFileProperties(currentItem()->text(0));
-  emit showFileProperties(dict->find(currentItem()));
+  if(show_path) {
+	  emit showFileProperties(currentItem()->text(0));
+  }
+  else{
+	  emit showFileProperties(dict->find(currentItem()));
+	}
 }
 void CLogFileView::slotGroupProp(){
   QStrList filters;
@@ -315,7 +333,13 @@ void CLogFileView::slotFileRemove(){
   if(KMsgBox::yesNo(0,i18n("Warning"),i18n("Do you really want to remove the file from project?\n\t\tIt will remain on disk."),KMsgBox::EXCLAMATION) == 2){
     return;
   }
-  emit selectedFileRemove(dict->find(currentItem()));
+  if(show_path) {
+	  emit selectedFileRemove(currentItem()->text(0));
+  }
+  else{
+	  emit selectedFileRemove(dict->find(currentItem()));
+	}
+
 }
 void CLogFileView::slotFileDelete(){
 
@@ -330,12 +354,20 @@ void CLogFileView::slotFileDelete(){
   //  cerr << "\n\n" << command << "\n\n";
   *proc << command;
   proc->start();
-  
-  emit selectedFileRemove(dict->find(currentItem()));
+
+  if(show_path) {
+	  emit selectedFileRemove(currentItem()->text(0));
+  }
+  else{
+	  emit selectedFileRemove(dict->find(currentItem()));
+	}
   
 }
 QString CLogFileView::getFileName(QListViewItem* item){
-  return  dict->find(item);
+	if(show_path){
+		return item->text(0);
+	}
+ 	return  dict->find(item);
 }
 void CLogFileView::slotGroupRemove(){
   QString name = currentItem()->text(0);
@@ -399,4 +431,20 @@ void CLogFileView::storeState(CProject* prj){
   }
   prj->setLFVOpenGroups(opengroups);
 }
+
+
+
+/**  */
+void CLogFileView::slotShowPath(){
+	if(project_pop.isItemChecked(ID_SHOW_PATH_ITEM)){
+		project_pop.setItemChecked(ID_SHOW_PATH_ITEM,false);
+		show_path = false;
+	}
+	else{
+		project_pop.setItemChecked(ID_SHOW_PATH_ITEM,true);
+		show_path = true;
+	}
+	refresh(project);	
+}
+
 

@@ -80,7 +80,7 @@ CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj,QStri
   file_group->setAlignment( 1 );
 
   
-  log_tree = new CLogFileView( this, "log_tree" );
+  log_tree = new CLogFileView( this, "log_tree",true );
   log_tree->setGeometry( 20, 20, 300, 320 );
   if(preselecteditem != ""){
     log_tree->setPreSelectedItem(preselecteditem);
@@ -409,3 +409,4 @@ void CFilePropDlg::slotOk(){
   prj->updateMakefilesAm();
   accept(); 
 }
+

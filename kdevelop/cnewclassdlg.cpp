@@ -180,10 +180,6 @@ CNewClassDlg::CNewClassDlg( QWidget *parent, const char *name,CProject* prj )
   //connect( this, SIGNAL(applyButtonPressed()), SLOT(ok()) );
 }
 
-
-
-  
-
 void CNewClassDlg::ok(){
   QString text = classname_edit->text(); 
   if (text.isEmpty() ){
@@ -211,6 +207,7 @@ void CNewClassDlg::ok(){
  
   QString classname = classname_edit->text();
   QString headername = header_edit->text();
+  QString headerfile = header_edit->text();
   QString implname = impl_edit->text();
   QString basename = baseclass_edit->text();
   if(basename.isEmpty() && qwidget_check->isChecked()){
@@ -255,8 +252,9 @@ void CNewClassDlg::ok(){
     for(str = list.first();str != 0;str = list.next()){
       stream << str << "\n";
     }
-    stream << "\n#ifndef " + classname.upper() + "_H\n";
-    stream << "#define "+ classname.upper() + "_H\n\n";
+    headerfile.replace(QRegExp("\\."),"_");
+    stream << "\n#ifndef " + headerfile.upper() + "\n";
+    stream << "#define "+ headerfile.upper() + "\n\n";
     if (qwidget_check->isChecked() && basename != "QWidget"){
       stream << "#include <qwidget.h>\n";
     }

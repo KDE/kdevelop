@@ -73,7 +73,7 @@ void  CErrorMessageParser::parseInSgml2HtmlMode(QString sgmloutput,QString sgmlf
     }
   }
   out();
-  cerr << endl << endl << ":::::::::";
+//  cerr << endl << endl << ":::::::::";
 }
 void CErrorMessageParser::parseInMakeMode(QString makeoutput,QString startdir){
   if(!isOn()) return;
@@ -257,3 +257,4 @@ bool CErrorMessageParser::isOn(){
 CErrorMessageParser::TEPMode CErrorMessageParser::getMode(){
   return m_mode;
 }
+
