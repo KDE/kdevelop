@@ -442,6 +442,10 @@ bool ProjectManager::loadProjectPart()
 {
   KService::Ptr projectService = KService::serviceByDesktopName(m_info->m_projectPlugin);
   if (!projectService) {
+    // this is for backwards compatibility with pre-alpha6 projects
+    projectService = KService::serviceByDesktopName(m_info->m_projectPlugin.lower());
+  }
+  if (!projectService) {
     KMessageBox::sorry(TopLevel::getInstance()->main(),
         i18n("No project management plugin %1 found.")
             .arg(m_info->m_projectPlugin));
