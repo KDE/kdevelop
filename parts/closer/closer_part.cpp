@@ -52,60 +52,10 @@ CloserPart::~CloserPart()
 
 void CloserPart::openDialog()
 {
-    CloserDialogImpl d( openFiles() );
+    CloserDialogImpl d( partController()->openURLs() );
     if ( d.exec() == QDialog::Accepted )
     {
-        closeFiles( d.getCheckedFiles() );
+        partController()->closeFiles( d.getCheckedFiles() );
     }
-}
-
-// @todo use partcontroller method
-KURL::List CloserPart::openFiles()
-{
-    KURL::List openfiles;
-    if( const QPtrList<KParts::Part> * partlist = partController()->parts() )
-    {
-        QPtrListIterator<KParts::Part> it( *partlist );
-        while ( KParts::Part* part = it.current() )
-        {
-            if ( KParts::ReadOnlyPart * ro_part = dynamic_cast<KParts::ReadOnlyPart*>( part ) )
-            {
-                openfiles.append( ro_part->url() );
-            }
-            ++it;
-        }
-    }
-    return openfiles;
-}
-
-// @todo use partcontroller method
-void CloserPart::closeFiles( KURL::List const & fileList )
-{
-    KURL::List::ConstIterator it = fileList.begin();
-    while ( it != fileList.end() )
-    {
-        if ( KParts::ReadOnlyPart * ro_part = partForURL( *it ) )
-        {
-//            partController()->closePartForWidget( ro_part->widget() );
-            partController()->closePart( ro_part );
-        }
-        ++it;
-    }
-}
-
-// @todo use partcontroller method
-KParts::ReadOnlyPart * CloserPart::partForURL( KURL const & url )
-{
-    QPtrListIterator<KParts::Part> it( *partController()->parts() );
-    while( it.current() )
-    {
-        KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(it.current());
-        if (ro_part && url == ro_part->url())
-        {
-            return ro_part;
-        }
-        ++it;
-    }
-    return 0;
 }
 #include "closer_part.moc"

@@ -29,10 +29,6 @@ public:
 public slots:
     void openDialog();
 
-private:
-    KURL::List openFiles();
-    void closeFiles( KURL::List const & fileList );
-    KParts::ReadOnlyPart * partForURL( KURL const & url );
 };
 
 
