@@ -362,6 +362,8 @@ public:
   /** shows the configuration dialog for a2ps printing */
   void slotOptionsConfigureA2ps();
   /** show a configure-dialog for kdevelop*/
+  void slotOptionsCustomize();
+  /** show a configure-dialog for kdevelop*/
   void slotOptionsKDevelop();
   /** sets the make command after it is changed in the Setup dialog */
   void slotOptionsMake();

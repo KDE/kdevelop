@@ -1,6 +1,10 @@
 #include "component.h"
 
 
+void Component::createConfigWidget(CustomizeDialog *parent)
+{
+}
+
 void Component::docPathChanged()
 {
 }

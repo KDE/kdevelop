@@ -1,3 +1,6 @@
+1999-11-17  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Framework for a modularized customization dialog
+
 1999-11-12  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Rewritten and completed the cool new documentation 
 	  tree configurator and restructured DocTreeView
@@ -14,7 +17,7 @@
 	* all editoroptions dlgs should work now
 
 1999-11-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-	* Removed iostream diagnostics with qDebug
+	* Replaced iostream diagnostics with qDebug
 	* Some more methods changed from refreshTrees()
 	  to component system
 

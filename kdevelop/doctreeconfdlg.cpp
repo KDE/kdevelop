@@ -29,22 +29,11 @@
 
 #include "klistview.h"
 #include "cdoctreepropdlg.h"
+#include "doctreeviewconfigwidget.h"
 #include "doctreeconfdlg.h"
 
 
-class DocTreeConfigCheckListItem : public QCheckListItem
-{
-public:
-    DocTreeConfigCheckListItem(QListView *parent, const QString &text, const QString &id)
-        : QCheckListItem(parent, text, CheckBox)
-        { setOn(true); idnt = id; }
-    QString ident()
-        { return idnt; }
-private:
-    QString idnt;
-};
-
-
+// This should become a thin wrapper around DocTreeViewConfigWidget
 
 DocTreeConfigDialog::DocTreeConfigDialog(Page page, QWidget *parent, const char *name)
     : QTabDialog(parent, name, true)
@@ -105,9 +94,9 @@ DocTreeConfigDialog::DocTreeConfigDialog(Page page, QWidget *parent, const char 
 DocTreeConfigDialog::~DocTreeConfigDialog()
 {}
 
-
 void DocTreeConfigDialog::readConfig()
 {
+#if 0
     QString path = locate("appdata", "tools/documentation");
     KSimpleConfig docconfig(path);
     // Read in possible items for the KDevelop tree
@@ -119,7 +108,7 @@ void DocTreeConfigDialog::readConfig()
 	{
             docconfig.setGroup("KDevelop-" + (*it));
             QString name = docconfig.readEntry("Name"); if (name.isEmpty()) name = (*it);
-            (void) new DocTreeConfigCheckListItem(kdevelopView, name, (*it));
+            //            (void) new DocTreeConfigCheckListItem(kdevelopView, name, (*it));
 	    qDebug( "Insert %s", name.ascii() );
 	}
     // Read in possible items for the Libraries tree
@@ -131,7 +120,7 @@ void DocTreeConfigDialog::readConfig()
 	{
             docconfig.setGroup("Libraries-" + (*it));
             QString name = docconfig.readEntry("Name"); if (name.isEmpty()) name = (*it);
-            (void) new DocTreeConfigCheckListItem(librariesView, name, (*it));
+            //            (void) new DocTreeConfigCheckListItem(librariesView, name, (*it));
 	    qDebug( "Insert %s", name.ascii() );
 	}
 
@@ -177,11 +166,13 @@ void DocTreeConfigDialog::readConfig()
     QStringList::Iterator it2 = othersShownURL.begin();
     for (; it1 != othersShownTitle.end() && it2 != othersShownURL.end(); ++it1, ++it2)
         new QListViewItem(othersView, *it1, *it2);
+#endif
 }
 
 
 void DocTreeConfigDialog::storeConfig()
 {
+#if 0
     KConfig *config = KGlobal::config();
     config->setGroup("DocTree");
     // Save KDevelop section
@@ -220,6 +211,7 @@ void DocTreeConfigDialog::storeConfig()
     }
     config->writeEntry("OthersShownTitle", othersShownTitle);
     config->writeEntry("OthersShownURL", othersShownURL);
+#endif
 }
 
 

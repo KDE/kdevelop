@@ -70,6 +70,7 @@
 #include "print/cconfigenscriptdlg.h"
 #include "print/cconfiga2psdlg.h"
 #include "plugins/pluginmanagerdlg.h"
+#include "customizedlg.h"
 #include "editorview.h"
 #include "widgets/qextmdi/qextmdichildview.h"
 #include "mdiframe.h"
@@ -1239,6 +1240,13 @@ void CKDevelop::slotOptionsConfigureA2ps(){
   a2psconf->resize(600,430);
   a2psconf->exec();
   delete (a2psconf);
+}
+
+void CKDevelop::slotOptionsCustomize(){
+  slotStatusMsg(i18n("Setting up KDevelop..."));
+  CustomizeDialog *dlg = new CustomizeDialog(this, "customize kdevelop dialog");
+  dlg->exec();
+  delete dlg;
 }
 
 void CKDevelop::slotOptionsKDevelop(){

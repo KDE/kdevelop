@@ -674,6 +674,9 @@ void CKDevelop::initMenuBar(){
 	options_menu->insertItem(i18n("Tools..."),this,SLOT(slotOptionsToolsConfigDlg()),0,ID_OPTIONS_TOOLS_CONFIG_DLG);
 //  options_menu->insertItem(i18n("&Spellchecker..."),this,SLOT(slotOptionsSpellchecker()),0,ID_OPTIONS_SPELLCHECKER);
   options_menu->insertSeparator();
+  // Temporary hack
+  options_menu->insertItem(i18n("Customize..."),this,
+			   SLOT(slotOptionsCustomize()),0,ID_OPTIONS_CUSTOMIZE);
   options_menu->insertItem(i18n("&KDevelop Setup..."),this,
 			   SLOT(slotOptionsKDevelop()),0,ID_OPTIONS_KDEVELOP);
 

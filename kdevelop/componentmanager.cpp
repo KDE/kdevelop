@@ -40,6 +40,14 @@ void ComponentManager::registerComponent(Component *component)
 }
 
 
+void ComponentManager::createConfigWidgets(CustomizeDialog *parent)
+{
+    QListIterator<Component> it(components);
+    for ( ; it.current(); ++it)
+        (*it)->createConfigWidget(parent);
+}
+
+
 void ComponentManager::notifyDocPathChanged()
 {
     QListIterator<Component> it(components);

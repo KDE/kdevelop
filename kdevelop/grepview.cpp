@@ -1,8 +1,8 @@
 /***************************************************************************
                              grepview.cpp
                              -------------------                                         
-
-    copyright            : (C) 1999 The KDevelop Team
+    copyright            : (C) 1999 by Bernd Gehrmann
+    email                : bernd@physik.hu-berlin.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,12 +15,16 @@
  ***************************************************************************/
 
 #include <qregexp.h>
-
+#include <kdialogbase.h>
+#include <klocale.h>
 #include "cproject.h"
 #include "ctoolclass.h"
-#include "grepview.h"
-#include "grepdlg.h"
+#include "customizedlg.h"
 #include "misc.h"
+#include "grepviewconfigwidget.h"
+#include "grepdlg.h"
+#include "grepview.h"
+
 
 class GrepListBoxItem : public ProcessListBoxItem
 {
@@ -180,9 +184,15 @@ void GrepView::insertStdoutLine(const QString &line)
                     linenumber = str.left(pos);
                     str.remove(0, pos);
                     insertItem(new GrepListBoxItem(filename, linenumber, str));
-                    //emit itemSelected(filename,linenumber.toInt()-1);
                 }
         }
+}
+
+
+void GrepView::createConfigWidget(CustomizeDialog *parent)
+{
+    QFrame *frame = parent->addPage(i18n("Grep View"));
+    (void) new GrepViewConfigWidget(frame, "grepview config widget");
 }
 
 

@@ -29,6 +29,8 @@
 
 #include "cproject.h"
 #include "ctoolclass.h"
+#include "customizedlg.h"
+#include "doctreeviewconfigwidget.h"
 #include "doctreeconfdlg.h"
 #include "doctreeview.h"
 
@@ -556,9 +558,26 @@ DocTreeView::~DocTreeView()
 {}
 
 
+void DocTreeView::configurationChanged()
+{
+    folder_kdevelop->refresh();
+    folder_kdelibs->refresh();
+    folder_others->refresh();
+}
+
+
 void DocTreeView::docPathChanged()
 {
     folder_kdelibs->refresh();
+}
+
+
+void DocTreeView::createConfigWidget(CustomizeDialog *parent)
+{
+    QFrame *frame = parent->addPage(i18n("Documentation Tree"));
+    DocTreeViewConfigWidget *w =
+        new DocTreeViewConfigWidget(this, frame, "doctreeview config widget");
+    connect(parent, SIGNAL(okClicked()), w, SLOT(accept()));
 }
 
 

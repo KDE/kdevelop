@@ -184,7 +184,7 @@
 #define ID_OPTIONS_PRINT         16070
 #define ID_OPTIONS_PRINT_A2PS          16071
 #define ID_OPTIONS_PRINT_ENSCRIPT      16072
-
+#define ID_OPTIONS_CUSTOMIZE           16073 //temporary hack
 #define ID_OPTIONS_KDEVELOP            16080
 
 ///////////////////////////////////////////////////////////////////

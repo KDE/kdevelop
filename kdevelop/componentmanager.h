@@ -22,6 +22,7 @@
 #include <qstring.h>
 
 class CProject;
+class CustomizeDialog;
 class Component;
 
 
@@ -37,6 +38,7 @@ public:
     static ComponentManager *self();
     void registerComponent(Component *component);
     
+    void createConfigWidgets(CustomizeDialog *parent);
     void notifyDocPathChanged();
     void notifyCompilationAborted();
     void notifyProjectOpened(CProject *prj);

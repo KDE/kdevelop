@@ -1,7 +1,8 @@
 /***************************************************************************
                              grepview.h
                              -------------------                                         
-    copyright            : (C) 1999 by The KDevelop Team
+    copyright            : (C) 1999 by Bernd Gehrmann
+    email                : bernd@physik.hu-berlin.de
  ***************************************************************************/
 
 /***************************************************************************
@@ -33,6 +34,7 @@ public:
     void showDialogWithPattern(QString pattern);
 
     // Component notifications:
+    virtual void createConfigWidget(CustomizeDialog *parent);
     virtual void projectOpened(CProject *prj);
 
 signals:

@@ -21,6 +21,7 @@
 #include <qstring.h>
 
 class CProject;
+class CustomizeDialog;
 
 /**
  * This is the base class for all components like doc tree view, LFV, RFV
@@ -34,6 +35,11 @@ class CProject;
 class Component
 {
 public:
+    /**
+     * Creates a configuration page for use in the
+     * KDevelop settings dialog.
+     */
+    virtual void createConfigWidget(CustomizeDialog *parent);
     /**
      * The user has changed the path to kdelibs/qt.
      */
