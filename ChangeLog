@@ -1,3 +1,7 @@
+2005-01-20 Jens Dagerbo <jens.dagerbo@swipnet.se>
+ * Further cleanup of plugin handling in PluginController/ProjectManager.
+ * Removed the last traces of in-project language switching. 
+ 
 2005-01-09 Jens Dagerbo <jens.dagerbo@swipnet.se>
  * Finished the new CTags frontend.
 
