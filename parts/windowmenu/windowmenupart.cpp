@@ -36,6 +36,10 @@ WindowMenuPart::~WindowMenuPart()
 
 void WindowMenuPart::updateBufferMenu()
 {
+  if ( !topLevelValid() )
+    // do nothing otherwise it may crash while plugging the ActionLists
+    return;
+
   QPtrList<KAction> bufferActions;
 
   unplugActionList("window_list");
