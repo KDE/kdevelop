@@ -8,6 +8,10 @@ gnome.tar.gz:
 	$(TAR) -cf gnome.tar -C $(srcdir)/gnome macros
 	gzip gnome.tar
 
+gnome2.tar.gz:
+	$(TAR) -cf gnome2.tar -C $(srcdir)/gnome2 macros
+	gzip gnome2.tar
+
 gnu.tar.gz:
 	$(TAR) -cf gnu.tar -C $(srcdir)/gnu AUTHORS  COPYING \
 		ChangeLog  INSTALL  NEWS  README  TODO
@@ -25,7 +29,7 @@ incadmin.tar.gz:
 
 appwizarddatadir = ${kde_datadir}/kdevappwizard
 commondatadir = ${appwizarddatadir}/template-common
-commondata_DATA = admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz wxwidgets.tar.gz \
+commondata_DATA = admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz gnome2.tar.gz wxwidgets.tar.gz \
 	kde-app.lsm kde-Makefile.am kde-Makefile.cvs kde-configure.in.in \
 	kde-index.docbook kde-po-Makefile.am kde-doc-Makefile.am kde-doc-en-Makefile.am \
 	hi16-app-app.png hi32-app-app.png kde-app.desktop kde-part.desktop \
@@ -34,5 +38,5 @@ commondata_DATA = admin.tar.gz gnu.tar.gz incadmin.tar.gz gnome.tar.gz wxwidgets
 	wx-configure.in wx-Makefile.am wx-Makefile.cvs \
 	COPYING COPYING.LIB LICENSE.QPL LICENSE.BSD Artistic \
 	admin.kdevtemplate gnu.kdevtemplate dockbook.kdevtemplate\
-	incadmin.kdevtemplate
+	incadmin.kdevtemplate gnome2.kdevtemplate
 
