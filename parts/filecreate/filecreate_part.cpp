@@ -207,7 +207,7 @@ void FileCreatePart::slotAboutToShowNewPopupMenu()
 							KIcon::DefaultState, NULL, true);
 						subMenu->insertItem(iconPix, subtype->name(), this,
 							SLOT(slotNewFilePopup(int)), 0, ++id );
-						subMenu->setItemParameter( id, (int)filetype );
+						subMenu->setItemParameter( id, (int)subtype );
 					}
 				}
 				if( subMenu )
