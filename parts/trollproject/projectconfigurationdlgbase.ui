@@ -728,14 +728,28 @@
     <tabstop>TabBuild</tabstop>
     <tabstop>radioApplication</tabstop>
     <tabstop>radioLibrary</tabstop>
+    <tabstop>checkStatic</tabstop>
     <tabstop>radioSubdirs</tabstop>
+    <tabstop>m_targetPath</tabstop>
+    <tabstop>Browse</tabstop>
+    <tabstop>m_targetOutputFile</tabstop>
+    <tabstop>m_targetLibraryVersion</tabstop>
     <tabstop>radioDebugMode</tabstop>
     <tabstop>radioReleaseMode</tabstop>
     <tabstop>checkWarning</tabstop>
     <tabstop>checkQt</tabstop>
-    <tabstop>checkOpenGL</tabstop>
     <tabstop>checkThread</tabstop>
+    <tabstop>checkOpenGL</tabstop>
     <tabstop>checkX11</tabstop>
+    <tabstop>m_defines</tabstop>
+    <tabstop>m_debugFlags</tabstop>
+    <tabstop>m_releaseFlags</tabstop>
+    <tabstop>m_debugFlagsLink</tabstop>
+    <tabstop>m_releaseFlagsLink</tabstop>
+    <tabstop>m_includePath</tabstop>
+    <tabstop>m_libraryPath</tabstop>
+    <tabstop>buttonCancel</tabstop>
+    <tabstop>buttonOk</tabstop>
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
 </tabstops>

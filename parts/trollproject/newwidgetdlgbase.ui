@@ -222,6 +222,15 @@
         <slot>subclassingPressed()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>templateList</tabstop>
+    <tabstop>subclassingCb</tabstop>
+    <tabstop>ui_classnameEd</tabstop>
+    <tabstop>captionEd</tabstop>
+    <tabstop>subclassnameEd</tabstop>
+    <tabstop>PushButton3</tabstop>
+    <tabstop>PushButton2</tabstop>
+</tabstops>
 <slots>
     <slot>subclassingPressed()</slot>
     <slot>templateSelChanged()</slot>
