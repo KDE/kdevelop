@@ -669,8 +669,8 @@ void CKDevelop::slotBuildCompileFile(){
  */
 void CKDevelop::slotBuildRun(){
     //    editor_view->setFocus();
-    switchToFile("/home/smeier/.bashrc");
-    return;
+//    switchToFile("/home/smeier/.bashrc");
+//    return;
   slotBuildMake();
   slotStatusMsg(i18n("Running ")+prj->getBinPROGRAM());
   beep=false;
