@@ -12,7 +12,7 @@ void GeneralConfigPage::init()
 {
     part = 0;
     
-    checkWordWrap->hide();
+    //checkWordWrap->hide();
     checkParenthesesMatching->hide();
 	   
 }

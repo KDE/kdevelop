@@ -128,6 +128,8 @@ QEditorPart::QEditorPart( QWidget *parentWidget, const char *widgetName,
     setModified(false);
 
     readConfig();
+    
+    setWordWrap( wordWrap() );
 }
 
 QEditorPart::~QEditorPart()
@@ -788,6 +790,18 @@ void QEditorPart::setWordWrap( bool enabled )
     KConfig* config = QEditorPartFactory::instance()->config();
     config->setGroup( "General" );
     config->writeEntry( "WordWrap", enabled );
+    config->sync();
+    
+    QEditor* ed = m_currentView->editor();
+    if( enabled){
+	ed->setWordWrap( QEditor::WidgetWidth );
+	ed->setHScrollBarMode( QScrollView::AlwaysOff );
+	ed->setVScrollBarMode( QScrollView::AlwaysOn );
+    } else {
+	ed->setWordWrap( QEditor::NoWrap );
+	ed->setHScrollBarMode( QScrollView::AlwaysOn );
+	ed->setVScrollBarMode( QScrollView::AlwaysOn );
+    }
 }
 
 bool QEditorPart::parenthesesMatching() const
