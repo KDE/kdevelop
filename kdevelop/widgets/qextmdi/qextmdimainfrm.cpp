@@ -242,6 +242,7 @@ void QextMdiMainFrm::attachWindow(QextMdiChildView *pWnd, bool bShow)
       lpC->move(topLeftMdiChildArea);
    }
    lpC->setClient(pWnd);
+   lpC->setFocus();
 //   if (pWnd->minimumHeight() == pWnd->maximumHeight())
 //      lpC->setFixedHeight (lpC->height());
    pWnd->youAreAttached(lpC);
@@ -322,8 +323,10 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
    QObject::disconnect( pWnd, SIGNAL(tabCaptionChanged(const QString&)), but, SLOT(setNewText(const QString&)) );
    m_pTaskBar->removeWinButton(pWnd);
    
-   if(pWnd->isAttached())
+   if(pWnd->isAttached()) {
+      pWnd->mdiParent()->hide();
       m_pMdi->destroyChildButNotItsView(pWnd->mdiParent());
+   }
 
    if(pWnd->isToolView())
       pWnd->m_bToolView = false;
