@@ -8,7 +8,7 @@
  <Menu name="edit">
   <Action name="edit_make_member"/>
  </Menu>
- 
+
  <Menu name="view">
   <Action name="edit_switchheader"/>
  </Menu>
@@ -16,7 +16,8 @@
  <Menu name="project">
   <Action name="project_newclass"/>
  </Menu>
- 
+</MenuBar>
+
 <ToolBar name="browserToolBar" position="Top" iconText="IconOnly" >
   <text>Browser Toolbar</text>
   <Action name="project_newclass"/>
