@@ -297,3 +297,4 @@ void FileRepository::slotPartRemoved( KParts::Part* part )
     }
 }
 
+#include "filerepository.moc"

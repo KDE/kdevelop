@@ -54,3 +54,4 @@ void GlobalCvs::createNewProject(const QString& dir) {
                       + form->repository_edit->text() + " " + form->vendor_edit->text() + " " + form->release_edit->text();
     makeFrontend()->queueCommand(dir,command);
 }
+#include "globalcvs.moc"
