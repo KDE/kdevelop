@@ -5,6 +5,7 @@ Icon=kbear
 ServiceTypes=KBear/Plugin
 X-KDE-Library=libkbear$APPNAMELC$
 Name=KBear$APPNAME$
+Name[hi]=के-बीयर$APPNAME$
 Name[sv]=KBear $APPNAME$
 Name[ta]=கெபியர்$APPNAME$
 Name[xx]=xxKBear$APPNAME$xx
