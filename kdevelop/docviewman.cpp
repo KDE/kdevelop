@@ -257,14 +257,6 @@ QObject* DocViewMan::docPointer(int docId) const
 }
 
 //------------------------------------------------------------------------------
-// get number of documents
-//------------------------------------------------------------------------------
-int DocViewMan::countDocs() const
-{
-  return m_docsAndViews.count();
-}
-
-//------------------------------------------------------------------------------
 // get the ids of all documents of this type or a combination of types
 //------------------------------------------------------------------------------
 QList<int> DocViewMan::docs( int type) const
@@ -452,7 +444,7 @@ void DocViewMan::closeView(QWidget* pView)
     //   remove list entry
     m_docsAndViews.remove(pDocViews);
     //   did we close the last doc?
-    if (countDocs() == 0) {
+    if (docCount() == 0) {
       emit sig_lastDocClosed();
     }
   }

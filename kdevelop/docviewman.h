@@ -72,8 +72,6 @@ public:
     * The returned object is of type QObject since we deal with several document types. */
   QObject* docPointer(int docId) const;
 
-  /** Get number of documents */
-  int countDocs() const;
   /** get the ids of all documents of this type or a combination of types */
   QList<int> docs( int type = DocViewMan::Undefined) const;
   /** Get the id of a document displayed by a given view */
