@@ -38,6 +38,8 @@ private:
     void buildTree(bool fromScratch);
     void buildTreeByCategory(bool fromScratch);
     void buildTreeByNamespace(bool fromScratch);
+
+    static void sortFolder(QListViewItem* item);
 };
 
 #endif

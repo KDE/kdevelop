@@ -118,7 +118,7 @@ void ClassViewWidget::buildTree(bool fromScratch)
 
 static QString determineFolder(QString fileName, QString projectDir)
 {
-    kdDebug() << "determineFolder "  << fileName << ", " << projectDir << endl;
+    //kdDebug() << "determineFolder "  << fileName << ", " << projectDir << endl;
     projectDir += "/";
     // filename must be a path all right, consider assert'ing this
     if (!fileName.startsWith(projectDir))
@@ -149,7 +149,7 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
 
     if (features & KDevLanguageSupport::Classes) {
         // Add classes
-        lastItem = new ClassTreeOrganizerItem(this, lastItem, i18n("Classes"));
+        ClassTreeItem *classes = new ClassTreeOrganizerItem(this, lastItem, i18n("Classes"));
         ilastItem = 0;
         QValueList<ParsedClass*> classList = store->getSortedClassList();
         QValueList<ParsedClass*>::ConstIterator it;
@@ -165,31 +165,52 @@ void ClassViewWidget::buildTreeByCategory(bool fromScratch)
         }
 
         // Create folders
-        dirNames.sort();
         QMap<QString, ClassTreeItem*> folders;
         
+        // Insert folders in a hierarchy
         QStringList::ConstIterator sit;
         for (sit = dirNames.begin(); sit != dirNames.end(); ++sit) {
-            ilastItem = new ClassTreeOrganizerItem(lastItem, ilastItem, *sit);
-            folders.insert(*sit, ilastItem);
+            QStringList l = QStringList::split('/', *sit);
+            QStringList::ConstIterator i;
+            QString path;
+            for (i = l.begin(); i != l.end(); ++i) {
+                const QString & dir = *i;
+                ClassTreeItem *parent;
+                QMap<QString, ClassTreeItem*>::iterator folder = folders.find(path);
+                if (folder!=folders.end())
+                    parent = *folder;
+                else
+                    parent = classes;
+                if (!path.isEmpty())
+                  path += '/';
+                path += dir;
+                if (folders.find(path)==folders.end()) {
+                    ilastItem = new ClassTreeOrganizerItem(parent, 0, dir);
+                    folders.insert(path, ilastItem);
+                }
+            }
         }
-
+        // Sort folders
+        sortFolder(classes);
+        
         // Put classes into folders (if appropriate) or directly into the organizer item
         for (it = classList.begin(); it != classList.end(); ++it) {
             QString fileName = (*it)->definedInFile();
             QString dirName = determineFolder(fileName, projectDir);
+            kdDebug() << "inserting " << fileName << " into " << dirName << endl;
             QMap<QString, ClassTreeItem*>::ConstIterator fit = folders.find(dirName);
             if (fit == folders.end())
-                ilastItem = new ClassTreeClassItem(lastItem, ilastItem, *it);
+                ilastItem = new ClassTreeClassItem(classes, ilastItem, *it);
             else {
+                kdDebug() << "found folder" << endl;
                 QListViewItem *iilastItem = (*fit)->firstChild();
                 while (iilastItem)
                     iilastItem = iilastItem->nextSibling();
-                (void) new ClassTreeClassItem(*fit, static_cast<ClassTreeItem*>(iilastItem), *it);
+                new ClassTreeClassItem(*fit, static_cast<ClassTreeItem*>(iilastItem), *it);
             }
         }
         if (fromScratch)
-            lastItem->setOpen(true);
+            classes->setOpen(true);
     }
     
     if (features & KDevLanguageSupport::Structs) {
@@ -272,5 +293,16 @@ void ClassViewWidget::buildTreeByNamespace(bool fromScratch)
     if (!fromScratch)
         setTreeState(oldTreeState);
 }
+    
+void ClassViewWidget::sortFolder(QListViewItem* item)
+{
+    if (item!=0) {
+        item->sort();
+        QListViewItem *child = item->firstChild();
+        for (; child!=0; child = child->nextSibling())
+            sortFolder(child);
+    }
+}
 
+    
 #include "classviewwidget.moc"

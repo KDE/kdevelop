@@ -386,7 +386,7 @@ ClassTreeBase::ClassTreeBase(ClassViewPart *part, QWidget *parent, const char *n
     setFocusPolicy(ClickFocus);
     setRootIsDecorated(true);
     setResizeMode(QListView::LastColumn);
-    setSorting(-1);
+    setSorting(0, TRUE);
     header()->hide();
     addColumn(QString::null);
 
@@ -498,7 +498,6 @@ void ClassTreeBase::slotContextMenuRequested(QListViewItem *item, const QPoint &
     popup->exec(p);
     delete popup;
 }
-
 
 void ClassTreeBase::slotGotoDeclaration()
 {
