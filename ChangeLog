@@ -1,3 +1,8 @@
+1999-07-08 Jonas Nordin <jonas.nordin@cenacle.se>
+	* fixed parsing of method implementations that has templates.
+	  foo<T>::bar(...)
+	* fixed parsing of function pointer argument to functions.
+
 1999-07-08  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Again reduced libkdlgedit.a by 130k. Sigh.
 
