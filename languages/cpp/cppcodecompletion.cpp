@@ -307,7 +307,7 @@ void CppCodeCompletion::slotTimeout()
 	return;
 
     QString textLine = m_activeEditor->textLine( nLine );
-    QChar ch = textLine[ nCol ];;
+    QChar ch = textLine[ nCol ];
     if( ch.isLetterOrNumber() || ch == '_' )
 	return;
 
@@ -331,12 +331,13 @@ void CppCodeCompletion::integratePart( KParts::Part* part )
     if( !part || !part->widget() )
         return;
 
-    if( KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part ) )
+    KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>( part );
+    if( doc )
     {
-        kdDebug(9007) << "=================> integrate document: " << doc << endl;
+        kdDebug(9007) << k_funcinfo << "integrate document: " << doc << endl;
 
 	if( m_pSupport && m_pSupport->codeCompletionConfig()->automaticCodeCompletion() ){
-		kdDebug( 9007 ) << "enabling code completion" << endl;
+		kdDebug( 9007 ) << k_funcinfo << "enabling code completion" << endl;
 		connect(part, SIGNAL(textChanged()), this, SLOT(slotTextChanged()) );
 		connect(part->widget(), SIGNAL( completionDone( KTextEditor::CompletionEntry ) ), this,
 			SLOT( slotCompletionBoxHided( KTextEditor::CompletionEntry ) ) );
@@ -354,10 +355,10 @@ void CppCodeCompletion::slotPartAdded(KParts::Part *part)
 
 void CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 {
-    kdDebug( 9007 ) << "CppCodeCompletion::slotActivePartChanged()" << endl;
-
     if( !part )
       return;
+
+    kdDebug( 9007 ) << k_funcinfo << endl;
 
     m_activeFileName = QString::null;
 
@@ -386,7 +387,7 @@ void CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
         return;
     }
 
-    kdDebug(9007) << "CppCodeCompletion::slotActivePartChanged() -- end" << endl;
+    kdDebug(9007) << k_funcinfo << "-- end" << endl;
 }
 
 void CppCodeCompletion::slotTextChanged()
@@ -406,12 +407,20 @@ void CppCodeCompletion::slotTextChanged()
     m_ccLine = 0;
     m_ccColumn = 0;
 
-    if( (m_pSupport->codeCompletionConfig()->automaticCodeCompletion() && (ch == "." || ch2 == "->" || ch2 == "::")) ||
+    if( (m_pSupport->codeCompletionConfig()->automaticCodeCompletion() &&
+	(ch == "." || ch2 == "->" || ch2 == "::")) ||
 	(m_pSupport->codeCompletionConfig()->automaticArgumentsHint() && ch == "(") ||
-	(m_pSupport->codeCompletionConfig()->automaticHeaderCompletion() && (ch == "\"" || ch == "<") && m_includeRx.search(strCurLine) != -1 ) ){
+	(m_pSupport->codeCompletionConfig()->automaticHeaderCompletion() && (ch == "\"" || ch == "<") &&
+	 m_includeRx.search(strCurLine) != -1 ) )
+    {
 	m_ccLine = nLine;
 	m_ccColumn = nCol;
-	m_ccTimer->start( ch == "(" ? m_pSupport->codeCompletionConfig()->argumentsHintDelay() : m_pSupport->codeCompletionConfig()->codeCompletionDelay(), true );
+	int time;
+	if ( ch == "(" )
+	    time = m_pSupport->codeCompletionConfig()->argumentsHintDelay();
+	else
+	    time = m_pSupport->codeCompletionConfig()->codeCompletionDelay();
+	m_ccTimer->start( time, true );
     }
 }
 
@@ -419,7 +428,7 @@ enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN };
 
 int CppCodeCompletion::expressionAt( const QString& text, int index )
 {
-    kdDebug(9007) << "CppCodeCompletion::expressionAt()" << endl;
+    kdDebug(9007) << k_funcinfo << endl;
 
     int last = T_UNKNOWN;
     int start = index;
@@ -491,9 +500,9 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
  if( current.length() ) { l << current; /*kdDebug(9007) << "add word " << current << endl;*/ current = ""; }
 
     QStringList l;
-    int index = 0;
+    uint index = 0;
     QString current;
-    while( index < (int)text.length() ){
+    while( index < text.length() ){
         QChar ch = text[ index ];
         QString ch2 = text.mid( index, 2 );
 
@@ -502,7 +511,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
             ++index;
         } else if( ch == '(' ){
             int count = 0;
-            while( index < (int)text.length() ){
+            while( index < text.length() ){
                 QChar ch = text[ index ];
                 if( ch == '(' ){
                     ++count;
@@ -516,7 +525,7 @@ QStringList CppCodeCompletion::splitExpression( const QString& text )
             }
         } else if( ch == '[' ){
             int count = 0;
-            while( index < (int)text.length() ){
+            while( index < text.length() ){
                 QChar ch = text[ index ];
                 if( ch == '[' ){
                     ++count;
@@ -652,8 +661,7 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
     return QStringList();
 }
 
-void
-CppCodeCompletion::completeText( )
+void CppCodeCompletion::completeText( )
 {
     kdDebug(9007) << "CppCodeCompletion::completeText()" << endl;
 
