@@ -34,7 +34,6 @@ public:
   void              appendBufferText(const QStringList &buffer) {m_buffer+=buffer;}
   void              removeComments();
   Caret             findInBuffer(const QString &subString,const Caret& startPos,bool nvlToMax=false);
-  Caret             findWrittenVariableInBuffer(const QString &subString,const Caret& startPos);
   void              saveBuffer(const QString &filename,const QString &qmakeHeader="");
   void              dumpBuffer();
   QString           pop(int row);
