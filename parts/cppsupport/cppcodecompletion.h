@@ -15,7 +15,7 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  *                                                                         *
- ***************************************************************************/ 
+ ***************************************************************************/
 
 #ifndef __CPPCODECOMPLETION_H__
 #define __CPPCODECOMPLETION_H__
@@ -46,23 +46,25 @@ public:
     CppCodeCompletion( CppSupportPart* part );
     virtual ~CppCodeCompletion();
 
+    CodeInformationRepository* repository() { return m_repository; }
+
     bool isEnabled() const { return m_bCodeCompletion; }
     void setEnabled( bool setEnable );
-    
+
     virtual QString evaluateExpression( const QString&, SimpleContext* ctx );
-    
+
     virtual int expressionAt( const QString& text, int index );
     virtual QStringList splitExpression( const QString& text );
-    
+
     QValueList<KTextEditor::CompletionEntry> findAllEntries( const QString& type, bool includePrivate, bool isInstance );
-    
+
     QStringList getGlobalSignatureList( const QString& functionName );
     QStringList getSignatureListForClass( const QString& className, const QString& functionName, bool isInstance );
-    
+
     QString typeOf( const QString& name, ParsedClassContainer* container = 0 );
-    ParsedClassContainer* findContainer( const QString& name, ParsedScopeContainer* container = 0, 
+    ParsedClassContainer* findContainer( const QString& name, ParsedScopeContainer* container = 0,
 					 const QStringList& imports = QStringList() );
-        
+
 public slots:
     void completeText();
 
@@ -91,7 +93,7 @@ private:
     void computeContext( SimpleContext*& ctx, SwitchStatementAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, DeclarationStatementAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, ConditionAST* ast, int line, int col );
-    
+
     QString getText( int startLine, int startColumn, int endLine, int endColumn );
 
 private:
@@ -107,8 +109,8 @@ private:
     bool m_bCompletionBoxShow;
     bool m_bCodeCompletion;
 
-    private: unsigned int m_ccLine;
-    private: unsigned int m_ccColumn;
+    unsigned int m_ccLine;
+    unsigned int m_ccColumn;
 
     CodeInformationRepository* m_repository;
     CppCodeCompletionData* d;

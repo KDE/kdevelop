@@ -222,39 +222,31 @@ CppSupportPart::~CppSupportPart()
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
 {
-    if( ev->type() == int(Event_FoundProblems) && m_problemReporter ){
-	m_backgroundParser->lock();
-	FoundProblemsEvent* event = (FoundProblemsEvent*) ev;
-	QString fileName = event->fileName();
+    if( ev->type() == int(Event_FileParsed) ){
 
-	m_problemReporter->removeAllErrors( fileName );
+        if( m_problemReporter ){
+	    FileParsedEvent* event = (FileParsedEvent*) ev;
+	    QString fileName = event->fileName();
 
-	QValueList<Problem> problems = event->problems();
-	QValueList<Problem>::ConstIterator it = problems.begin();
-	while( it != problems.end() ){
-	    const Problem& p = *it++;
-	    m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
-	}
+	    m_problemReporter->removeAllErrors( fileName );
+
+	    QValueList<Problem> problems = event->problems();
+	    QValueList<Problem>::ConstIterator it = problems.begin();
+	    while( it != problems.end() ){
+	        const Problem& p = *it++;
+	        m_problemReporter->reportError( p.text(), fileName, p.line(), p.column() );
+	    }
 
 #ifdef ENABLE_FILE_STRUCTURE
-	if( fileName == m_activeFileName ){
-	    TranslationUnitAST* ast = m_backgroundParser->translationUnit( fileName );
-	    if( ast ){
-	        RTClassBrowser b( fileName, m_structureView );
-		b.parseTranslationUnit( ast );
+	    if( fileName == m_activeFileName ){
+	        TranslationUnitAST* ast = m_backgroundParser->translationUnit( fileName );
+	        if( ast ){
+	            RTClassBrowser b( fileName, m_structureView );
+		    b.parseTranslationUnit( ast );
+	        }
 	    }
-	}
 #endif
-
-	m_backgroundParser->unlock();
-    } else if( ev->type() == int(Event_FileParsed) ){
-
-	if( m_valid ){
-	    FileParsedEvent* event = (FileParsedEvent*) ev;
-	    QString fileName( event->fileName().unicode(), event->fileName().length() );
-	    emit fileParsed( fileName );
-	    // mainWindow()->statusBar()->message( i18n("%1 Parsed").arg(event->fileName()), 1000 );
-	}
+        }
 
 	m_eventConsumed.wakeAll();
     }
@@ -452,7 +444,7 @@ void CppSupportPart::addedFilesToProject(const QStringList &fileList)
 
 	// changed - daniel
 	QString path = fileInfo.absFilePath();
-	maybeParse( path, classStore( ) );
+	maybeParse( path );
 
 	//partController()->editDocument ( KURL ( path ) );
     }
@@ -492,7 +484,7 @@ void CppSupportPart::changedFilesInProject( const QStringList & fileList )
     {
         QFileInfo fileInfo( d, *it );
         kdDebug(9007) << "changedFilesInProject() " << fileInfo.absFilePath() << endl;
-        maybeParse( fileInfo.absFilePath(), classStore() );
+        maybeParse( fileInfo.absFilePath() );
     }
     emit updatedSourceInfo();
 }
@@ -503,7 +495,7 @@ void CppSupportPart::savedFile(const QString &fileName)
 
     if (m_projectFileList.contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
 	// changed - daniel
-	maybeParse( fileName, classStore( ) );
+	maybeParse( fileName );
 	emit updatedSourceInfo();
     }
 }
@@ -713,9 +705,9 @@ CppSupportPart::parseProject( )
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
             QString absFilePath = fileInfo.absFilePath();
-            kdDebug(9000) << "parse file" << absFilePath << endl;
+            kdDebug(9007) << "parse file" << absFilePath << endl;
 
-            maybeParse( absFilePath, classStore() );
+            maybeParse( absFilePath );
 
 	    if( (n%5) == 0 )
 	        kapp->processEvents();
@@ -743,7 +735,7 @@ CppSupportPart::parseProject( )
 }
 
 void
-CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
+CppSupportPart::maybeParse( const QString& fileName )
 {
     if( !fileExtensions( ).contains( QFileInfo( fileName ).extension( ) ) )
         return;
@@ -752,7 +744,7 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     QDateTime t = fileInfo.lastModified();
 
     if( !fileInfo.exists() ){
-	store->removeWithReferences( fileName );
+	classStore()->removeWithReferences( fileName );
 	return;
     }
 
@@ -763,7 +755,7 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
 
     m_timestamp[ fileName ] = t;
 
-    partController()->blockSignals( true );
+    //partController()->blockSignals( true );
 
     m_backgroundParser->addFile( fileName );
     while( m_backgroundParser->filesInQueue() > 0 )
@@ -772,7 +764,7 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     m_backgroundParser->lock();
     TranslationUnitAST* translationUnit = m_backgroundParser->translationUnit( fileName );
     if( translationUnit ){
-	StoreWalker walker( fileName, store );
+	StoreWalker walker( fileName, classStore() );
 	walker.parseTranslationUnit( translationUnit );
     }
     m_backgroundParser->unlock();
@@ -780,51 +772,7 @@ CppSupportPart::maybeParse( const QString fileName, ClassStore *store )
     if( !findDocument(fileName) )
         m_backgroundParser->removeFile( fileName );
 
-    partController()->blockSignals( false );
-}
-
-// better idea needed for not always calling with QProgressBar & QLabel
-void
-CppSupportPart::parseDirectory( const QString &startDir, bool withSubDir,
-                                      QProgressBar *bar, QLabel *label   )
-{
-    QFileInfo* fi = 0;
-    QDir       dirObject;
-
-    dirObject.cd( startDir );
-
-    if( withSubDir == true ){
-        dirObject.setFilter( QDir::Dirs );
-        const QFileInfoList* list = dirObject.entryInfoList( );
-        QFileInfoListIterator it( *list );
-
-        // if we find a directory we call recursively parseDirectory( )
-        while( ( fi = it.current( ) ) ){
-            // skipping "." - named files and directories
-            if( fi->fileName( ).at( 0 ) != '.' )
-                parseDirectory( fi->dirPath( true ) + "/" + fi->fileName( ), withSubDir, bar, label );
-            ++it;
-        }
-    }
-
-    dirObject.cd( startDir );
-    dirObject.setFilter( QDir::Files );
-    const QFileInfoList* list = dirObject.entryInfoList( );
-    QFileInfoListIterator it( *list );
-
-    bar->setTotalSteps( it.count( ) );
-    int n = 0;
-
-    while( ( fi = it.current( ) ) ){
-	kapp->processEvents( );
-        bar->setProgress( n++ );
-        label->setText( i18n( "Currently parsing: '%1'" )
-	                .arg( fi->filePath( ) ) );
-        maybeParse( fi->filePath( ), classStore ( ) );
-        ++it;
-    }
-
-    label->setText( "" );
+    //partController()->blockSignals( false );
 }
 
 void CppSupportPart::implementVirtualMethods( const QString& className )
@@ -1088,6 +1036,11 @@ KMimeType::List CppSupportPart::mimeTypes( )
 	list << mime;
 
     return list;
+}
+
+void CppSupportPart::emitFileParsed( const QString & fileName )
+{
+    emit fileParsed( fileName );
 }
 
 #include "cppsupportpart.moc"

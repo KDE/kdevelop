@@ -25,15 +25,14 @@
 
 enum
 {
-    Event_FoundProblems = QEvent::User + 1000,
-    Event_FileParsed
+    Event_FileParsed = QEvent::User + 1000
 };
 
-class FoundProblemsEvent: public QCustomEvent
+class FileParsedEvent: public QCustomEvent
 {
 public:
-    FoundProblemsEvent( const QString& fileName, const QValueList<Problem>& problems )
-    : QCustomEvent(Event_FoundProblems)
+    FileParsedEvent( const QString& fileName, const QValueList<Problem>& problems )
+    : QCustomEvent(Event_FileParsed)
     {
         // the members are deep copies
         m_fileName = QString(fileName.ascii());
@@ -51,25 +50,6 @@ public:
 private:
     QString m_fileName;
     QValueList<Problem> m_problems;
-
-private:
-    FoundProblemsEvent( const FoundProblemsEvent& source );
-    void operator = ( const FoundProblemsEvent& source );
-};
-
-class FileParsedEvent: public QCustomEvent
-{
-public:
-    FileParsedEvent( const QString& fileName )
-    : QCustomEvent( Event_FileParsed )
-    {
-        m_fileName = QString(fileName.ascii());
-    }
-
-    QString fileName() const { return m_fileName; }
-
-private:
-    QString m_fileName;
 
 private:
     FileParsedEvent( const FileParsedEvent& source );

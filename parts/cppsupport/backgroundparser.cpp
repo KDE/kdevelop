@@ -12,7 +12,8 @@
 #include "backgroundparser.h"
 #include "cppsupportpart.h"
 #include "cppsupport_events.h"
-
+#include "codeinformationrepository.h"
+#include "cppcodecompletion.h"
 #include "driver.h"
 #include "ast_utils.h"
 
@@ -337,6 +338,8 @@ bool BackgroundParser::filesInQueue()
 
 void BackgroundParser::run()
 {
+    (void) m_cppSupport->codeCompletion()->repository()->getEntriesInScope( QStringList(), false );
+
     while( true ){
 
 	if( m_close )
@@ -360,8 +363,7 @@ void BackgroundParser::run()
 
 	    m_unitDict.insert( fileName, unit );
 
-            KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
-	    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
+            KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName, unit->problems) );
 
 	    if( m_consumed )
 	        m_consumed->wait();
@@ -369,6 +371,7 @@ void BackgroundParser::run()
 	    if( m_fileList.isEmpty() )
 	        m_isEmpty.wakeAll();
 	}
+        m_cppSupport->emitFileParsed( fileName );
     }
 
     kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;

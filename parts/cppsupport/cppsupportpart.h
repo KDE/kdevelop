@@ -58,6 +58,7 @@ public:
 
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
+    CppCodeCompletion* codeCompletion() { return m_pCompletion; }
 
     const QPtrList<Catalog>& catalogList() { return m_catalogList; }
 
@@ -71,6 +72,8 @@ public:
     KTextEditor::Document* findDocument( const KURL& url );
 
     static KConfig *config();
+
+    void emitFileParsed( const QString& fileName );
 
 signals:
     void fileParsed( const QString& fileName );
@@ -95,7 +98,7 @@ private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
     void addedFilesToProject(const QStringList &fileList);
     void removedFilesFromProject(const QStringList &fileList);
-    void changedFilesInProject( const QStringList & fileList );    
+    void changedFilesInProject( const QStringList & fileList );
     void slotProjectCompiled();
     void setupCatalog();
 
@@ -118,24 +121,14 @@ private slots:
     /**
      * only parses the current project
      */
-    bool parseProject( );    
+    bool parseProject( );
 
 private:
 
     /**
      * checks if a file has to be parsed
      */
-    void maybeParse( const QString fileName, ClassStore *store );
-
-    /**
-     * parses a directory incl. subdirectories if wanted
-     * param directory start directory
-     * param withSubDirectoreis true or false
-     * param bar progressbar
-     * param label for debug output on screen
-     */
-    void parseDirectory( const QString &directory, bool withSubDirectories,
-                         QProgressBar *bar, QLabel *label );
+    void maybeParse( const QString& fileName );
 
     QStringList modifiedFileList();
 
