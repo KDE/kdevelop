@@ -2,8 +2,22 @@
 require ("flush.pl");
 use File::Copy;
 
-$homedirectory = $ENV{KDEHOME};
-$homedirectory = "$ENV{HOME}/.kde"    if (!$homedirectory);
+my $homedirectory = $ENV{KDEHOME};
+if (!$homedirectory || ! -d $homedirectory)
+{
+  $homedirectory = "$ENV{HOME}/.kde2";
+  if (!$homedirectory || ! -d $homedirectory)
+  {
+    $homedirectory = "$ENV{HOME}/.kde";
+  }
+}
+
+if (!$homedirectory || ! -d $homedirectory)
+{
+  printflush (STDERR, "Fatal: Home directory does not exist: $homedirectory\n");
+  return;
+}
+
 
 my $entriesfilename= shift || "entries";
 printflush (STDOUT,"Starting with configuration\n");

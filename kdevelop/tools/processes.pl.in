@@ -11,7 +11,21 @@ my $entriesfilename= shift || "entries";
 my %changings;
 
 my $homedirectory = $ENV{KDEHOME};
-$homedirectory = "$ENV{HOME}/.kde"    if (!$homedirectory);
+if (!$homedirectory || ! -d $homedirectory)
+{
+  $homedirectory = "$ENV{HOME}/.kde2";
+  if (!$homedirectory || ! -d $homedirectory)
+  {
+    $homedirectory = "$ENV{HOME}/.kde";
+  }
+}
+
+if (!$homedirectory || ! -d $homedirectory)
+{
+  printflush (STDERR, "Fatal: Home directory does not exist: $homedirectory\n");
+  return;
+}
+
 
 my $local_icondir     = $homedirectory  . "/share/icons/";
 my $local_datadir     = $homedirectory  . "/share/apps/";
