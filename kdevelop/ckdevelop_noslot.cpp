@@ -695,14 +695,6 @@ void CKDevelop::readOptions(){
 	/////////////////////////////////////////
 	// Outputwindow, TreeView, KDevelop/KDlgEdit
   bool outputview= config->readBoolEntry("show_output_view", true);
-  int output_view_pos=config->readNumEntry("OutputViewHeight", size.height()*20/100);
-  int edit_view_pos=config->readNumEntry("EditViewHeight", size.height()-output_view_pos);
-
-  // set initial heights of trees, mdi and output views
-//FALK  dockbase_t_tab_view->resize(dockbase_t_tab_view->width(),edit_view_pos);
-  mdi_main_frame->resize(mdi_main_frame->width(),edit_view_pos);
-//FALK  dockbase_o_tab_view->resize(dockbase_o_tab_view->width(),output_view_pos);
-
   if(outputview){
     view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW, true);
     toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_OUTPUTVIEW, true);
@@ -711,13 +703,6 @@ void CKDevelop::readOptions(){
 //FALK    dockbase_o_tab_view->hide();
 
   bool treeview=config->readBoolEntry("show_tree_view", true);
-  int tree_view_pos=config->readNumEntry("ClassViewWidth", size.width()*20/100);
-  edit_view_pos=config->readNumEntry("EditViewWidth", size.width()-tree_view_pos);
-
-  // set initial widths of trees and  mdi views
-//FALK  dockbase_t_tab_view->resize(tree_view_pos,dockbase_t_tab_view->height());
-  mdi_main_frame->resize(edit_view_pos,mdi_main_frame->height());
-
   if(treeview){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW, true);
     toolBar(ID_MAIN_TOOLBAR)->setButton(ID_VIEW_TREEVIEW, true);
@@ -781,16 +766,8 @@ void CKDevelop::saveOptions(){
   config->setGroup("General Options");
   config->writeEntry("Geometry", size() );
   
-
   config->writeEntry("ToolBar Position",  (int)toolBar(ID_MAIN_TOOLBAR)->barPos());
   config->writeEntry("Browser ToolBar Position", (int)toolBar(ID_BROWSER_TOOLBAR)->barPos());
-
-
-  config->writeEntry("EditViewHeight",mdi_main_frame->height());
-//FALK  config->writeEntry("OutputViewHeight",dockbase_o_tab_view->height());
-
-//FALK  config->writeEntry("ClassViewWidth",dockbase_t_tab_view->width());
-  config->writeEntry("EditViewWidth",mdi_main_frame->width());
 
   config->writeEntry("show_tree_view",view_menu->isItemChecked(ID_VIEW_TREEVIEW));
   config->writeEntry("show_output_view",view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW));
@@ -800,19 +777,6 @@ void CKDevelop::saveOptions(){
 
   config->writeEntry("show_statusbar",view_menu->isItemChecked(ID_VIEW_STATUSBAR));
   config->writeEntry("show_mdiviewtaskbar",view_menu->isItemChecked(ID_VIEW_MDIVIEWTASKBAR));
-
-//FALK	if( dockbase_t_tab_view->getWidget()->isA("KDockTabGroup")){
-//FALK		// get tab control
-//FALK		KDockTabGroup* pTabGroup = (KDockTabGroup*) dockbase_t_tab_view->getWidget();
-//FALK		// get current tab page
-//FALK		QWidget* tmpWidget = pTabGroup->visiblePage();
-//FALK		if( !tmpWidget->inherits("KDockWidget"))
-//FALK			qDebug("critical: (in CKDevelop::slotMDIGetFocus) tab control page is not a KDockWidget!");
-//FALK		KDockWidget* currentTab = (KDockWidget*) pTabGroup->visiblePage();
-//FALK		config->writeEntry("LastActiveTree", pTabGroup->id(currentTab));	//was: value=t_tab_view->getCurrentTab()
-//FALK	}
-//FALK	else
-//FALK		qDebug("warning: (in CKDevelop::saveOptions) the parent of dockbase_t_tab_view should be a KDockTabGroup, but isn´t!");
 
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
