@@ -1111,7 +1111,7 @@ void CPrjOptionsDlg::addMakePage()
 //  m_print_work_dir->setAutoResize( FALSE );
 
 
-  QGridLayout *grid2 = new QGridLayout(makeOptions,1,4,15,7, "grid-k");
+  QGridLayout *grid2 = new QGridLayout(0,1,4,15,7, "grid-k");
   grid1->addMultiCellLayout(grid2,3,3,0,2);
 
   m_job_number_label = new QLabel( makeOptions, "m_job_number_label" );
@@ -1160,7 +1160,7 @@ void CPrjOptionsDlg::addMakePage()
   m_rebuild_combo->insertItem(i18n("always rebuild"));
 
 
-  grid2 = new QGridLayout(makeOptions,3,3,15,7,"grid-l");
+  grid2 = new QGridLayout(0,3,3,15,7,"grid-l");
   grid1->addMultiCellLayout(grid2,4,6,0,2);
 
   m_set_modify_label = new QLabel( makeOptions, "m_set_modify_label" );
