@@ -48,12 +48,12 @@
 DocViewMan::DocViewMan( CKDevelop* parent)
 : QObject( parent)
   ,m_pParent(parent)
+  ,m_pDocBookmarksMenu(0L)
   ,m_pCurEditDoc(0L)
   ,m_pCurEditView(0L)
   ,m_pCurBrowserDoc(0L)
   ,m_pCurBrowserView(0L)
   ,m_curIsBrowser(true)
-  ,m_pDocBookmarksMenu(0L)
 {
   debug("create docviewman !\n");
 
@@ -929,6 +929,8 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
       pView = (QWidget*) pChild;
     }
   }
+  if (pView->hasFocus())
+    return; // nothing to do if we've got the focus, already
 
   if (pView->inherits("CEditWidget")) {
     m_pCurEditView = (CEditWidget*) pView;
