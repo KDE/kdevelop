@@ -1346,6 +1346,8 @@ void KWriteView::resizeEvent(QResizeEvent *) {
 //  printf("KWriteView::resize\n");
   resizeBuffer(this,width(),kWriteDoc->fontHeight);
   QWidget::update();
+
+  leftBorder->resize(leftBorder->width(),height());
 }
 
 void KWriteView::timerEvent(QTimerEvent *e) {
