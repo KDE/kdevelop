@@ -1,16 +1,27 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=NEdit support
+Comment[da]=NEdit støtte
+Comment[de]=NEdit-Unterst�tzung
+Comment[es]=Soporte para NEdit
 Comment[hu]=NEdit-támogatás
+Comment[pt]=Suporte ao NEdit
 Comment[pt_BR]=Suporte ao NEdit
+Comment[sr]=Подршка за nedit
 Comment[sv]=Nedit-stöd
 Comment[xx]=xxNEdit supportxx
 Name=NEdit
 Name[sv]=Nedit
 Name[xx]=xxNEditxx
 GenericName=NEdit support
+GenericName[da]=NEdit støtte
+GenericName[de]=NEdit-Unterst�tzung
+GenericName[es]=Soporte para NEdit
 GenericName[hu]=NEdit-támogatás
+GenericName[it]=Supporto per NEdit
+GenericName[pt]=Suporte ao NEdit
 GenericName[pt_BR]=Suporte ao NEdit
+GenericName[sr]=Подршка за nedit
 GenericName[sv]=Nedit-stöd
 GenericName[xx]=xxNEdit supportxx
 X-KDE-Library=libkneditpart

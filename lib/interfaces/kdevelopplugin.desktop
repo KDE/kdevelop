@@ -3,8 +3,14 @@ Encoding=UTF-8
 Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 Name=KDevelop Plugin
+Name[da]=KDevelop plugin
+Name[de]=KDevelop-Plugin
+Name[es]=Extensión de KDevelop
 Name[hu]=KDevelop-bővítőmodul
+Name[it]=Plugin di KDevelop
+Name[pt]='Plugin' do KDevelop
 Name[pt_BR]=Plugin do KDevelop
+Name[sr]=KDevelop-ов прикључак
 Name[sv]=KDevelop insticksmodul
 Name[xx]=xxKDevelop Pluginxx
 

@@ -4,6 +4,14 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/PCSImporter
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop PCS Importer
+Name[da]=KDevelop PCS importør
+Name[de]=KDevelop-PCS-Importierer
+Name[es]=Importación PCS de KDevelop
+Name[hu]=KDevelop PCS-importáló
+Name[pt]=Importador de PCS do KDevelop
+Name[pt_BR]=Importador PCS para o KDevelop
+Name[sr]=KDevelop-ов PCS увозник
+Name[sv]=KDevelop PCS-import
 
 [PropertyDef::X-KDevelop-PCSImporter]
 Type=QString

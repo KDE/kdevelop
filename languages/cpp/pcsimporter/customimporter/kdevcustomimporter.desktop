@@ -1,7 +1,16 @@
 [Desktop Entry]
 Type=Service
 Name=KDevCustomImporter
+Name[de]=KDevCustomImportierer
+Name[sv]=KDevelop egen import
 Comment=KDevelop Custom Directory PCS Importer
+Comment[da]=KDevelop selvindrette mappe-PCS-importr
+Comment[de]=KDevelop benutzerdefinierter PCS-Verzeichnisimportierer
+Comment[es]=Importador de PCS de directorio personalizado de KDevelop
+Comment[hu]=KDevelop egyéni könyvtár PCS-importáló
+Comment[pt_BR]=Importador de Diretório PCS Personalizado para o KDevelop
+Comment[sr]=KDevelop-ов PCS увозник прилагођеног директоријума
+Comment[sv]=KDevelop PCS-import för egen katalog
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevcustomimporter

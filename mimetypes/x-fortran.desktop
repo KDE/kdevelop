@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Fortran Source File
+Comment[de]=Fortran-Quellcodedatei
 Hidden=false
 Icon=source_f
 MimeType=text/x-fortran

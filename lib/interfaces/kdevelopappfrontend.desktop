@@ -4,8 +4,14 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/AppFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=App frontend interface
+Name[da]=App forende-grænseflade
+Name[de]=Benutzerschnittstelle f�r Anwendung
+Name[es]=Interfaz del entorno de aplicaciones
 Name[hu]=Alkalmazáskezelési felület
+Name[it]=Applicazione per le interfacce
+Name[pt]=Interface da aplicação
 Name[pt_BR]=Interface frontend para aplicativos
+Name[sr]=Интерфејс сучеља апликације
 Name[sv]=Programgränssnitt
 Name[xx]=xxApp frontend interfacexx
 

@@ -1,7 +1,16 @@
 [Desktop Entry]
 Type=Service
 Name=KDevQtImporter
+Name[de]=KDevQtImportierer
+Name[sv]=KDevelop QT-import
 Comment=KDevelop Qt PCS Importer
+Comment[da]=KDevelop Qt PCS importør
+Comment[de]=KDevelop Qt-PCS-Importierer
+Comment[es]=Importador de PCS de Qt de KDevelop
+Comment[hu]=KDevelop Qt PCS-importáló
+Comment[pt_BR]=Importador PCS Qt para o KDevelop
+Comment[sr]=KDevelop-ов Qt PCS увозник
+Comment[sv]=KDevelop QT PCS-import
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevqtimporter

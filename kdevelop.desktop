@@ -10,6 +10,7 @@ Terminal=0
 Name=KDevelop 3.0
 Name[xx]=xxKDevelop 3.0xx
 Comment=IDE for C++/Qt/KDE
+Comment[de]=IDE f�r C++/Qt/KDE
 Comment[es]=IDE para C++/Qt/KDE
 Comment[hu]=C++/Qt/KDE fejlesztőkörnyezet
 Comment[it]=IDE per C++/Qt/KDE

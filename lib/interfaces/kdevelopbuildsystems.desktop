@@ -4,6 +4,15 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/BuildSystems
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Build System Interface
+Name[da]=KDevelop byggesystem grænseflade
+Name[de]=KDevelop-Systemerstellung-Schnittstelle
+Name[es]=Interfaz del sistema de construcción de KDevelop
+Name[hu]=KDevelop fordításkezelő felület
+Name[it]=Interfaccia di compilazione di KDevelop
+Name[pt]=Interface do KDevelop para o Sistema de Compilação
+Name[pt_BR]=Interface de Sistema de Construção do KDevelop
+Name[sr]=KDevelop-ова изградња системског интерфејса
+Name[sv]=KDevelop byggsystemgränssnitt
 
 [PropertyDef::X-KDevelop-BuildSystem]
 Type=QString

@@ -4,8 +4,13 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/DiffFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Diff Frontend Interface
+Name[da]=Diff-forende grænseflade
+Name[de]=Diff-Benutzerschnittstelle
+Name[es]=Interfaz del entorno de diff
 Name[hu]=Diff-kezelési felület
+Name[it]=Interfaccia a Diff
 Name[pt_BR]=Interface de Frontend do Diff
+Name[sr]=Интерфејс diff сучеља
 Name[sv]=Gränssnitt för jämförelse
 Name[xx]=xxDiff Frontend Interfacexx
 

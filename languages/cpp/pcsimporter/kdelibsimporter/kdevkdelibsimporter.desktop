@@ -1,7 +1,16 @@
 [Desktop Entry]
 Type=Service
 Name=KDevKDELibsImporter
+Name[de]=KDevKDELibsImportierer
+Name[sv]=KDevelop KDE-biblioteksimport
 Comment=KDevelop KDELibs PCS Importer
+Comment[da]=KDevelop KDELibs PCS importør
+Comment[de]=KDevelop KDELibs-PCS-Importierer
+Comment[es]=Importador de PCS de KDELibs de KDevelop
+Comment[hu]=KDevelop KDELibs PCS-importáló
+Comment[pt_BR]=Importador PCS do KDELibs para o KDevelop
+Comment[sr]=KDevelop-ов KDELibs PCS увозник
+Comment[sv]=KDevelop KDE-bibliotek PCS-import
 Icon=gear
 ServiceTypes=KDevelop/PCSImporter
 X-KDE-Library=libkdevkdelibsimporter

@@ -4,8 +4,14 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/CompilerOptions
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Compiler Options Dialog Interface
+Name[da]=KDevelop kompilerindstillinger dialoggrænseflade
+Name[de]=KDevelop-Compileroptionen-Dialogschnittstelle
+Name[es]=Interfaz del diálogo de opciones del compilador de KDevelop
 Name[hu]=A KDevelop fordítási opcióinak párbeszédablaka
+Name[it]=Interfaccia KDevelop per le opzioni di compilazione
+Name[pt]=Interface da Janela de Opções do Compilador do KDevelop
 Name[pt_BR]=Interface de Diálogo de Opções do Compilador do KDevelop
+Name[sr]=KDevelop-ов интерфејс прозора „опције компајлера“
 Name[sv]=KDevelop dialoggränssnitt för kompilatoralternativ
 Name[xx]=xxKDevelop Compiler Options Dialog Interfacexx
 

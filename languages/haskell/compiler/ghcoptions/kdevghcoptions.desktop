@@ -1,10 +1,20 @@
-# KDE Config File  
+# KDE Config File
 [Desktop Entry]
 Encoding=UTF-8
 Type=Service
 Exec=ghc --make
 Comment=Glasgow Haskell Compiler
+Comment[da]=Glasgow Haskell compiler
+Comment[de]=Glasgow Haskell-Compiler
+Comment[es]=Compilador Glasgow Haskell
+Comment[hu]=Glasgow Haskell fordítóprogram
+Comment[pt]=Compilador Glasgow Haskell
+Comment[pt_BR]=Compilador Glasgow Haskell
+Comment[sr]=Glasgow Haskell компајлер
+Comment[sv]=Glasgow Haskell-kompilator
 Name=GhcOptions
+Name[de]=GhcOptionen
+Name[sv]=Alternativ för ghc
 ServiceTypes=KDevelop/CompilerOptions
 X-KDE-Library=libkdevghcoptions
 X-KDevelop-Language=Haskell

@@ -9,6 +9,7 @@ Comment[pt_BR]=Arquivo de Projeto do KDevelop
 Comment[sr]=KDevelop-ов фајл пројекта
 Comment[sv]=KDevelop projektfil
 Comment[xx]=xxKDevelop Project Filexx
+Comment[de]=KDevelop-Projektdatei
 DefaultApp=kdevelop
 Icon=kdevelop_project
 Type=MimeType

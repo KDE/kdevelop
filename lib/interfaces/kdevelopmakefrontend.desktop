@@ -4,8 +4,14 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/MakeFrontend
 X-KDE-Derived=KDevelop/Plugin
 Name=Make Frontend Interface
+Name[da]=Make forende grænseflade
+Name[de]=Make-Benutzerschnittstelle
+Name[es]=Interfaz del entorno de make
 Name[hu]=Make kezelőfelület
+Name[it]=Interfaccia per Make
+Name[pt]=Interface para o Make
 Name[pt_BR]=Interface de Frontend do Make
+Name[sr]=Интерфејс за прављење сучеља
 Name[sv]=Byggränssnitt
 Name[xx]=xxMake Frontend Interfacexx
 
