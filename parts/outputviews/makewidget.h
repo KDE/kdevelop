@@ -64,7 +64,7 @@ private:
 
     enum Type { Normal, Error, Diagnostic, StyledDiagnostic };
     void insertLine1(const QString &line, Type type);
-    void insertLine2(const QString &line, Type type);
+    void insertLine2(const QString &line, Type type, QStringList* pStringList = 0L);
     bool matchEnterDir( const QString& line, QString& dir );
     bool matchLeaveDir( const QString& line, QString& dir );
     QString getOutputColor( Type type );
@@ -111,6 +111,9 @@ private:
     QRegExp m_linkFile;
     QRegExp m_installFile;
     int m_fileNameGroup;
+    
+    QStringList m_shortOutput;
+    QStringList m_fullOutput;
 };
 
 #endif

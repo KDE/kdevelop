@@ -215,12 +215,17 @@ void MakeWidget::startNextJob()
     QString dir = *it;
     dirList.remove(it);
 
-    clear();
+    clear(); // clear the widget
     items.clear();
     parags = 0;
     moved = false;
+    
+    m_shortOutput.clear(); // clear the shadow string lists
+    m_fullOutput.clear();
 
     insertLine2(currentCommand, Diagnostic);
+    insertLine2(currentCommand, Diagnostic, &m_shortOutput);
+    insertLine2(currentCommand, Diagnostic, &m_fullOutput);
     childproc->clearArguments();
     *childproc << currentCommand;
     childproc->start(KProcess::NotifyOnExit, KProcess::AllOutput);
@@ -401,6 +406,8 @@ void MakeWidget::slotProcessExited(KProcess *)
     }
 
     insertLine2(s, t);
+    insertLine2(s, t, &m_shortOutput);
+    insertLine2(s, t, &m_fullOutput);
 
     m_part->mainWindow()->statusBar()->message(QString("%1: %2").arg(currentCommand).arg(s), 3000);
     m_part->core()->running(m_part, false);
@@ -561,6 +568,8 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         kdDebug(9004) << "Entering dir: " << (*dir).ascii() << endl;
 	if (m_bShowDirNavMsg) {
 	    insertLine2(line, Diagnostic);
+	    insertLine2(line, Diagnostic, &m_shortOutput);
+	    insertLine2(line, Diagnostic, &m_fullOutput);
 	}
         return;
     }
@@ -579,6 +588,8 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         delete dir;
 	if (m_bShowDirNavMsg) {
 	    insertLine2(line, Diagnostic);
+	    insertLine2(line, Diagnostic, &m_shortOutput);
+	    insertLine2(line, Diagnostic, &m_fullOutput);
 	}
         return;
     }
@@ -619,6 +630,7 @@ void MakeWidget::insertLine1(const QString &line, Type type)
             hasmatch = false;
     }
 
+    QString shortOutput;
     if (hasmatch)
     {
         kdDebug(9004) << "Error in " << fn << " " << row << ": " << text << endl;
@@ -631,41 +643,48 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         items.append(new MakeItem(parags, fn, row, text));
 	type = Error;
     }
-    else if (m_bShortCompilerOutput) {
+    else  {
 	if (m_compileFile1.search(line) != -1) {
 	    QString tool;
 	    if (!line.startsWith("g++")) { tool = "(libtool)"; }
-	    insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile1.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+	    shortOutput = i18n("compiling <b>%1</b> %2").arg(m_compileFile1.cap(m_fileNameGroup)).arg(tool);
 	}
 	else if (m_compileFile3.search(line) != -1) {
 	    int i = line.findRev(" ");
 	    QString filename = line.right(line.length()-i);
 	    QString tool;
 	    if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	    insertLine2(i18n("compiling <b>%1</b> %2").arg(filename).arg(tool), StyledDiagnostic);
+	    shortOutput = i18n("compiling <b>%1</b> %2").arg(filename).arg(tool);
 	}
 	else if (m_compileFile2.search(line) != -1) {
 	    QString tool;
 	    if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	    insertLine2(i18n("compiling <b>%1</b> %2").arg(m_compileFile2.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+	    shortOutput = i18n("compiling <b>%1</b> %2").arg(m_compileFile2.cap(m_fileNameGroup)).arg(tool);
 	}
 	else if (m_mocFile.search(line) != -1) {
-	    insertLine2(i18n("generating <b>%1</b> (moc)").arg(m_mocFile.cap(m_fileNameGroup)), StyledDiagnostic);
+	    shortOutput = i18n("generating <b>%1</b> (moc)").arg(m_mocFile.cap(m_fileNameGroup));
 	}
 	else if (m_linkFile.search(line) != -1) {
 	    QString tool;
 	    if (!line.startsWith("g++")) { tool = " (libtool)"; }
-	    insertLine2(i18n("linking <b>%1</b> %2").arg(m_linkFile.cap(m_fileNameGroup)).arg(tool), StyledDiagnostic);
+	    shortOutput = i18n("linking <b>%1</b> %2").arg(m_linkFile.cap(m_fileNameGroup)).arg(tool);
 	}
 	else if (m_installFile.search(line) != -1) {
-	    insertLine2(i18n("installing <b>%1</b>").arg(m_installFile.cap(m_fileNameGroup)), StyledDiagnostic);
+	    shortOutput = i18n("installing <b>%1</b>").arg(m_installFile.cap(m_fileNameGroup));
 	}
-	else {
-	    insertLine2(line, type);
-	}
-	return;
     }
-    insertLine2(line, type);
+    
+    // append it to this textedit widget
+    bool bShortOutputExprMatched = !shortOutput.isEmpty();
+    if (m_bShortCompilerOutput && bShortOutputExprMatched) {
+	insertLine2(shortOutput, StyledDiagnostic);
+    }
+    else {
+	insertLine2(line, type);
+    }
+    // also store the short and long version in stringlists to allow switching on the fly
+    insertLine2(line, type, &m_fullOutput);
+    insertLine2(bShortOutputExprMatched ? shortOutput : line, bShortOutputExprMatched ? StyledDiagnostic : type, &m_shortOutput);
 }
 
 void MakeWidget::paletteChange(const QPalette& /*oldPalette*/)
@@ -701,18 +720,8 @@ QString MakeWidget::getOutputColor( Type type )
 
 
 
-void MakeWidget::insertLine2(const QString &line, Type type)
+void MakeWidget::insertLine2(const QString &line, Type type, QStringList* pStringList)
 {
-    ++parags;
-
-    int para, index;
-    getCursorPosition( &para, &index );
-
-    bool atEnd = para == paragraphs() - 1 && index == paragraphLength( para );
-
-    int paraFrom, indexFrom, paraTo, indexTo;
-    getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
-
     QString icon;
     if (type == Error)
         icon = "<img src=\"error\"></img><nobr> </nobr>";
@@ -729,7 +738,25 @@ void MakeWidget::insertLine2(const QString &line, Type type)
 #else
     static const QString br;
 #endif
+    
+    if (pStringList) {
+	// just store it in a stringlist, if the user wants to switch between short and full output on the fly
+	pStringList->append(QString("<code>%1<font color=\"%2\">%3</font></code>%4").arg(icon).arg(color).arg(type == StyledDiagnostic ? line : eLine).arg(br));
+	return;
+    }
+    
+    ++parags;
+
+    int para, index;
+    getCursorPosition( &para, &index );
+
+    bool atEnd = para == paragraphs() - 1 && index == paragraphLength( para );
+
+    int paraFrom, indexFrom, paraTo, indexTo;
+    getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
+
     append(QString("<code>%1<font color=\"%2\">%3</font></code>%4").arg(icon).arg(color).arg(type == StyledDiagnostic ? line : eLine).arg(br));
+
     setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
 
     if (atEnd && !m_vertScrolling && !m_horizScrolling)
@@ -784,6 +811,19 @@ void MakeWidget::toggleCompilerOutput()
     pConfig->setGroup("MakeOutputView");
     pConfig->writeEntry("ShortCompilerOutput", m_bShortCompilerOutput);
     pConfig->sync();
+    clear();
+    if (m_bShortCompilerOutput) {
+	QStringList::Iterator it = m_shortOutput.begin();
+	while (it != m_shortOutput.end()) {
+	    append(*it); it++;
+	}
+    }
+    else {
+	QStringList::Iterator it = m_fullOutput.begin();
+	while (it != m_fullOutput.end()) {
+	    append(*it); it++;
+	}
+    }
 }
 
 void MakeWidget::toggleShowDirNavigMessages()
