@@ -32,6 +32,23 @@
 #include "ktabbar.h"
 #include "ktabwidget.h"
 
+#if QT_VERSION < 0x030100
+void QRect_moveLeft (QRect* pcQRect, int pos) {
+  int x1,x2,y1,y2;
+  pcQRect->coords(&x1, &y1, &x2, &y2);
+  x2 += (pos - x1);
+  x1 = pos;
+  pcQRect->setCoords(x1, y1, x2, y2);
+}
+void QRect_moveTop (QRect* pcQRect, int pos) {
+  int x1,x2,y1,y2;
+  pcQRect->coords(&x1, &y1, &x2, &y2);
+  y2 += (pos - y1);
+  y1 = pos;
+  pcQRect->setCoords(x1, y1, x2, y2);
+}
+#endif
+
 KTabBar::KTabBar( QWidget *parent, const char *name )
     : QTabBar( parent, name ), mReorderStartTab( -1 ), mReorderPreviousTab( -1 ),
       mHoverCloseButtonTab( 0 ), mDragSwitchTab( 0 ), mHoverCloseButton( 0 ),
@@ -190,8 +207,13 @@ void KTabBar::mouseMoveEvent( QMouseEvent *e )
                 xoff = 7;
                 yoff = 0;
             }
+#if QT_VERSION >= 0x030100
             rect.moveLeft( t->rect().left() + 2 + xoff );
             rect.moveTop( t->rect().center().y()-pixmap.height()/2 + yoff );
+#else
+            QRect_moveLeft ( &rect, t->rect().left() + 2 + xoff );
+            QRect_moveTop ( &rect, t->rect().center().y()-pixmap.height()/2 + yoff );
+#endif
             if ( rect.contains( e->pos() ) ) {
                 if ( mHoverCloseButton ) {
                     if ( mHoverCloseButtonTab == t )
