@@ -41,13 +41,634 @@
 
 </bookinfo>
 
+<chapter id="structure">
+<title>Library structure</title>
+
+<simplesect id="structure-byname">
+<title>Libraries by name</title>
+
+<variablelist>
+
+<varlistentry>
+<term><ulink url="kdeapi:kdecore/index.html">kdecore</ulink></term>
+<listitem><para>
+The kdecore library is the basic application framework for every KDE based
+program. It provides access to the configuration system, command line
+handling, icon loading and manipulation, some special kinds inter-process
+communication, file handling and various other utilities.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><ulink url="kdeapi:kdeui/index.html">kdeui</ulink></term>
+<listitem><para>
+The <literal>kdeui</literal> library provides many widgets and standard
+dialogs which Qt doesn't have or which have more features than their Qt
+counterparts. It also includes several widgets which are subclassed
+from Qt ones and are better integrated with the KDE desktop by
+respecting user preferences.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><ulink url="kdeapi:kio/index.html">kio</ulink></term>
+<listitem><para>
+The <literal>kio</literal> library contains facilities for asynchronous,
+network transparent I/O and access to mimetype handling. It also provides the
+KDE file dialog and its helper classes.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><ulink url="kdeapi:kjs/index.html">kjs</ulink></term>
+<listitem><para>
+The <literal>kjs</literal> library provides an implementation of JavaScript.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><ulink url="kdeapi:khtml/index.html">khtml</ulink></term>
+<listitem><para>
+The <literal>khtml</literal> library contains the KHTML part, a HTML browsing
+widget, DOM API and parser, including interfaces to Java and JavaScript.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</simplesect>
+
+
+<simplesect id="structure-grouped">
+<title>Grouped classes</title>
+
+<para>
+Core application skeleton - classes needed by almost every application.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara>
+<title><ulink url="kdeapi:kdecore/KApplication">KApplication</ulink></title>
+<para>
+Initializes and controls a KDE application.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara>
+<title><ulink url="kdeapi:kdecore/KUniqueApplication">KUniqueApplication</ulink></title>
+<para>
+Makes sure only one instance of an application can run simultaneously.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KAboutData">KAboutData</ulink></title>
+<para>
+Holds information for the about box.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KCmdLineArgs">KCmdLineArgs</ulink></title>
+<para>
+Command line argument processing.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Configuration settings - access to KDE's hierarchical configuration
+database, global settings and application resources.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KConfig">KConfig</ulink></title>
+<para>
+Provides access to KDE's configuration database.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KSimpleConfig">KSimpleConfig</ulink></title>
+<para>
+Access to simple, non-hierarchical configuration files.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KDesktopFile">KDesktopFile</ulink></title>
+<para>
+Access to <literal>.desktop</literal> files.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KGlobalSettings">KGlobalSettings</ulink></title>
+<para>
+Convenient access to not application-specific settings.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+File and URL handling - decoding of URLs, temporary files etc.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KURL">KURL</ulink></title>
+<para>
+Represents and parses URLs.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KTempFile">KTempFile</ulink></title>
+<para>
+Creates unique files for temporary data.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KSaveFile">KSaveFile</ulink></title>
+<para>
+Allows to save files atomically.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Interprocess communication - DCOP helper classes and subprocess invokation.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KProcess">KProcess</ulink></title>
+<para>
+Invokes and controls child processes.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KShellProcess">KShellProcess</ulink></title>
+<para>
+Invokes child processes via a shell.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdesu/PtyProcess">PtyProcess</ulink></title>
+<para>
+Communication with a child processes through a pseudo terminal.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KIPC">KIPC</ulink></title>
+<para>
+Simple IPC mechanism using X11 ClientMessages.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:dcop/DCOPClient">DCOPClient</ulink></title>
+<para>
+DCOP messaging.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KDCOPPropertyProxy">KDCOPPropertyProxy</ulink></title>
+<para>
+A proxy class publishing Qt properties through DCOP.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KDCOPActionProxy">KDCOPActionProxy</ulink></title>
+<para>
+A proxy class publishing a DCOP interface for actions.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Utility classes - memory management, regular expressions, string manipulation,
+random numbers
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KRegExp">KRegExp</ulink></title>
+<para>
+POSIX regular expression maching.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KStringHandler">KStringHandler</ulink></title>
+<para>
+An extravagant interface for string manipulation.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KZoneAllocator">KZoneAllocator</ulink></title>
+<para>
+Efficient memory allocator for large groups of small objects.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KRandomSequence">KRandomSequence</ulink></title>
+<para>
+Pseudo random number generator.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Keyboard accelerators - classes helping to establish consistent key bindings
+throughout the desktop.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KAccel">KAccel</ulink></title>
+<para>
+Collection of keyboard shortcuts.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KStdAccel">KStdAccel</ulink></title>
+<para>
+Easy access to the common keyboard shortcut keys.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KGlobalAccel"></ulink></title>
+<para>
+Collection of system-wide keyboard shortcuts.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Image processing - icon loading and manipulating.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KIconLoader">KIconLoader</ulink></title>
+<para>
+Loads icons in a theme-conforming way.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KIconTheme">KIconTheme</ulink></title>
+<para>
+Helper classes for KIconLoader.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KPixmap">KPixmap</ulink></title>
+<para>
+A pixmap class with extended dithering capabilities.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KPixmapEffect">KPixmapEffect</ulink></title>
+<para>
+Pixmap effects like gradients and patterns.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KPixmapIO">KPixmapIO</ulink></title>
+<para>
+Fast <classname>QImage</classname> to <classname>QPixmap</classname> conversion.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Drag and Drop - drag objects for colors and URLs.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KURLDrag">KURLDrag</ulink></title>
+<para>
+A drag object for URLs.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KColorDrag">KColorDrag</ulink></title>
+<para>
+A drag object for colors.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KMultipleDrag">KMultipleDrag</ulink></title>
+<para>
+Allows to construct drag objects from several others.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Auto-Completion
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KCompletion">KCompletion</ulink></title>
+<para>
+Generic auto-completion of strings.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kio/KURLCompletion">KURLCompletion</ulink></title>
+<para>
+Auto-completion of URLs.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kio/KShellCompletion">KShellCompletion</ulink></title>
+<para>
+Auto-completion of executables.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Widgets - widget classes for list views, rules, color selction etc.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KListView</ulink></title>
+<para>
+A variant of <classname>QListView</classname> that honors KDE's system-wide settings.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KListBox</ulink></title>
+<para>
+A variant of <classname>QListBox</classname> that honors KDE's system-wide settings.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KIconView</ulink></title>
+<para>
+A variant of <classname>QIconView</classname> that honors KDE's system-wide settings.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KListView">KLineEdit</ulink></title>
+<para>
+A variant of <classname>QLineEdit</classname> with completion support.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KComboBox">KComboBox</ulink></title>
+<para>
+A variant of <classname>QComboBox</classname> with completion support.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KFontCombo">KFontCombo</ulink></title>
+<para>
+A combo box for selecting fonts.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KColorCombo">KColorCombo</ulink></title>
+<para>
+A combo box for selecting colors.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KColorButton">KColorButton</ulink></title>
+<para>
+A button for selecting colors.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KURLCombo">KURLCombo</ulink></title>
+<para>
+A combo box for selecting file names and URLs.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kfile/KURLRequester">KURLRequester</ulink></title>
+<para>
+A line edit for selecting file names and URLs.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KRuler">KRuler</ulink></title>
+<para>
+A ruler widget.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink
+url="kdeapi:kdeui/KAnimWidget">KAnimWidget</ulink></title>
+<para>
+animations.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KNumInput">KNumInput</ulink></title>
+<para>
+A widget for inputting numbers.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KPasswordEdit">KPasswordEdit</ulink></title>
+<para>
+A widget for inputting passwords.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Dialogs - full-featured dialogs for file, color and font selection.
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kfile/KFileDialog">KFileDialog</ulink></title>
+<para>
+A file selection dialog.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KColorDialog">KColorDialog</ulink></title>
+<para>
+A color selection dialog.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KFontDialog">KFontDialog</ulink></title>
+<para>
+A font selection dialog.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kfile/KIconDialog">KIconDialog</ulink></title>
+<para>
+An icon selection dialog.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KKeyDialog">KKeyDialog</ulink></title>
+<para>
+A dialog for editing keyboard bindings.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KEditToolBar">KEditToolBar</ulink></title>
+<para>
+A dialog for editing toolbars.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KTipDialog">KTipDialog</ulink></title>
+<para>
+A Tip-of-the-day dialog.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KAboutDialog">KAboutDialog</ulink></title>
+<para>
+An about dialog.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KLineEditDlg">KLineEditDlg</ulink></title>
+<para>
+A simple dialog for entering text.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kfile/KURLRequesterDlg">KURLRequesterDlg</ulink></title>
+<para>
+A simple dialog for entering URLs.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KMessageBox">KMessageBox</ulink></title>
+<para>
+A dialog for signaling errors and warnings.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KPasswordDialog">KPasswordDialog</ulink></title>
+<para>
+A dialog for inputting passwords.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Actions and XML GUI
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KAction">KAction</ulink></title>
+<para>
+Abstraction for an action that can be plugged into menu bars and tool bars.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KActionCollection">KActionCollection</ulink></title>
+<para>
+A set of actions.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdeui/KXMLGUIClient">KXMLGUIClient</ulink></title>
+<para>
+A GUI fragment consisting of an action collection and a DOM tree representing their location in the GUI.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kparts/KPartManager">KPartManager</ulink></title>
+<para>
+Manages the activation of XMLGUI clients.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+<para>
+Plugins and Components
+</para>
+
+<itemizedlist>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KLibrary">KLibrary</ulink></title>
+<para>
+Represents a dynamically loaded library.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KLibrary">KLibLoader</ulink></title>
+<para>
+Shared library loading.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kdecore/KLibFactory">KLibFactory</ulink></title>
+<para>
+Object factory in plugins.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kio/KServiceType">KServiceType</ulink></title>
+<para>
+Represents a service type.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kio/KService">KService</ulink></title>
+<para>
+Represents a service.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kio/KMimeType">KMimeType</ulink></title>
+<para>
+Represents a MIME type.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kio/KServiceTypeProfile">KServiceTypeProfile</ulink></title>
+<para>
+User preferences for MIME type mappings.
+</para>
+</formalpara></listitem>
+
+<listitem><formalpara><title><ulink url="kdeapi:kio/KServiceTypeProfile">KTrader</ulink></title>
+<para>
+Querying for services.
+</para>
+</formalpara></listitem>
+
+</itemizedlist>
+
+</simplesect>
+
+</chapter>
+
+
+
 <chapter id="graphics">
 <title>Graphics</title>
 
 <sect1 id="graphics-qpainter">
 <title>Low-level graphics with QPainter</title>
 
-<simplesect id="rendering">
+<simplesect id="qpainter-rendering">
 <title>Rendering with QPainter</title>
 
 <para>
@@ -59,16 +680,16 @@ text and pixmaps.
 
 <para>
 The central graphics class for 2D painting with Qt is 
-<ulink url="http://doc.trolltech.com/qpainter.html">QPainter</ulink>. It can
+<ulink url="kdeapi:qt/QPainter">QPainter</ulink>. It can
 draw on a
-<ulink url="http://doc.trolltech.com/qpaintdevice.html">QPaintDevice</ulink>.
+<ulink url="kdeapi:qt/QPaintDevice">QPaintDevice</ulink>.
 There are three possible paint devices implemented: One is 
-<ulink url="http://doc.trolltech.com/qwidget.html">QWidget</ulink>
+<ulink url="kdeapi:qt/QWidget">QWidget</ulink>
 which represents a widget on the screen. The second is 
-<ulink url="http://doc.trolltech.com/qprinter.html">QPrinter</ulink> which
+<ulink url="kdeapi:qt/QPrinter">QPrinter</ulink> which
 represents a printer and produces Postscript output. The third it
 the class
-<ulink url="http://doc.trolltech.com/qpicture.html">QPicture</ulink> which
+<ulink url="kdeapi:qt/QPicture">QPicture</ulink> which
 records paint commands and can save them on disk and play them back
 later. A possible storage format for paint commands is the W3C standard
 SVG.
@@ -95,18 +716,18 @@ void FooWidget::paintEvent()
 When drawing on a printer, you have to make sure to use QPrinter::newPage()
 to finish with a page and begin a new one - something that naturally is not
 relevant for painting widgets. Also, when printing, you may want to use the
-<ulink url="http://doc.trolltech.com/qpaintdevicemetrics.html">device metrics</ulink>
+<ulink url="kdeapi:qt/QPaintDeviceMetrics">device metrics</ulink>
 in order to compute coordinates.
 </para>
 
 </simplesect>
 
 
-<simplesect id="transformations">
+<simplesect id="qpainter-transformations">
 <title>Transformations</title>
 
 <para>
-By default, when using the QPainter, it draws in the natural coordinate
+By default, when using QPainter, it draws in the natural coordinate
 system of the device used. This means, if you draw a line along the horizontal
 axis with a length of 10 units, it will be painted as a horizontal line
 on the screen with a length of 10 pixels. However, QPainter can apply arbitrary
@@ -121,13 +742,14 @@ y' according to
 
 <para>
 The 3x3 matrix in this equation can be set with QPainter::setWorldMatrix() and
-is of type <ulink url="http://doc.trolltech.com/qwmatrix.html">QWMatrix</ulink>.
+is of type <ulink url="kdeapi:qt/QWMatrix">QWMatrix</ulink>.
 Normally, this is the identity matrix, i.e. m11 and m22 are one, and the
 other parameters are zero. There are basically three different groups of
 transformations:
 </para>
 
 <itemizedlist>
+
 <listitem><formalpara>
 <title>Translations</title>
 <para>
@@ -155,7 +777,7 @@ to the matrix
 </formalpara>
 
 <mediaobject>
-    <imageobject><imagedata fileref="affine-scale.png"/></imageobject>
+<imageobject><imagedata fileref="affine-scale.png"/></imageobject>
 </mediaobject>
 
 <para>
@@ -190,7 +812,7 @@ in degrees, not as mathematical angle! The corresponding matrix is
 </formalpara>
 
 <mediaobject>
-    <imageobject><imagedata fileref="affine-rotate.png"/></imageobject>
+<imageobject><imagedata fileref="affine-rotate.png"/></imageobject>
 </mediaobject>
 
 <para>
@@ -244,19 +866,19 @@ multiplied.
 </simplesect>
 
 
-<simplesect id="strokeattributes">
+<simplesect id="qpainter-strokeattributes">
 <title>Setting stroking attributes</title>
 
 <para>
 The rendering of lines, curves and outlines of polygons can be modified by 
 setting a special pen with QPainter::setPen(). The argument of this function is a 
-<ulink url="http://doc.trolltech.com/qpen.html">QPen</ulink> object. The properties
+<ulink url="kdeapi:qt/QPen">QPen</ulink> object. The properties
 stored in it are a style, a color, a join style and a cap style.
 </para>
 
 <para>
 The pen style is member of the enum
-<ulink url="http://doc.trolltech.com/qt.html#PenStyle-enum">Qt::PenStyle</ulink>. 
+<ulink url="kdeapi:qt/Qt#PenStyle-enum">Qt::PenStyle</ulink>. 
 and can take one of the following values:
 </para>
 
@@ -266,7 +888,7 @@ and can take one of the following values:
 
 <para>
 The join style is a member of the enum
-<ulink url="http://doc.trolltech.com/qt.html#PenJoinStyle-enum">Qt::PenJoinStyle</ulink>. 
+<ulink url="kdeapi:qt/Qt#PenJoinStyle-enum">Qt::PenJoinStyle</ulink>. 
 It specifies how the junction between multiple lines which are attached to each 
 other is drawn. It takes one of the following values:
 </para>
@@ -296,8 +918,7 @@ other is drawn. It takes one of the following values:
 
 <para>
 The cap style is a member of the enum 
-<ulink url="http://doc.trolltech.com/qt.html#PenCapStyle-enum">Qt::PenCapStyle</ulink>
-and specifies how the end points of lines are drawn. It takes one of the values 
+<ulink url="kdeapi:qt/Qt#PenCapStyle-enum">Qt::PenCapStyle</ulink>and specifies how the end points of lines are drawn. It takes one of the values 
 from the following table:
 </para>
 
@@ -327,13 +948,13 @@ from the following table:
 </simplesect>
 
 
-<simplesect id="fillattributes">
+<simplesect id="qpainter-fillattributes">
 <title>Setting fill attributes</title>
 
 <para>
 The fill style of polygons, circles or rectangles can be modified by setting
 a special brush with QPainter::setBrush(). This function takes a
-<ulink url="http://doc.trolltech.com/qbrush.html">QBrush</ulink> object as argument. 
+<ulink url="kdeapi:qt/QBrush">QBrush</ulink> object as argument. 
 Brushes can be constructed in four different ways:
 </para>
 
@@ -357,7 +978,7 @@ brush with the custom pattern you give as second parameter.</para>
 
 <para>
 A default brush style is from the enum
-<ulink url="http://doc.trolltech.com/qt.html#BrushStyle-enum">Qt::BrushStyle</ulink>.
+<ulink url="kdeapi:qt/Qt#BrushStyle-enum">Qt::BrushStyle</ulink>.
 Here is a picture of all predefined patterns:
 </para>
 
@@ -373,13 +994,13 @@ QPainter::setBrushOrigin().
 </simplesect>
 
 
-<simplesect id="color">
+<simplesect id="qpainter-color">
 <title>Color</title>
 
 <para>
 Colors play a role both when stroking curves and when filling shapes. In Qt, 
 colors are represented by the class 
-<ulink url="http://doc.trolltech.com/qcolor.html">QColor</ulink>. Qt does not support 
+<ulink url="kdeapi:qt/QColor">QColor</ulink>. Qt does not support 
 advanced graphics features like ICC color profiles and color correction. Colors 
 are usually constructed by specifying their red, green and blue components, as 
 the RGB model is the way pixels are composed of on a monitor. 
@@ -396,7 +1017,7 @@ slider.
 </simplesect>
 
 
-<simplesect id="paintsettings">
+<simplesect id="qpainter-paintsettings">
 <title>Other settings</title>
 
 <para>
@@ -408,7 +1029,7 @@ transparency, i.e. a way to blend the painted foreground with the background.
 However, there is a simple way to combine background and foreground with
 boolean operators. The method QPainter::setRasterOp() sets the used operator,
 which comes from the enum 
-<ulink url="http://doc.trolltech.com/qt.html#RasterOp-enum">RasterOp</ulink>.
+<ulink url="kdeapi:qt/Qt#RasterOp-enum">RasterOp</ulink>.
 </para>
 
 <para>
@@ -422,7 +1043,7 @@ the rubberband selections in image manipulation programs known as
 </simplesect>
 
 
-<simplesect id="graphicsprimitives">
+<simplesect id="qpainter-primitives">
 <title>Drawing graphics primitives</title>
 
 <para>
@@ -430,7 +1051,7 @@ In the following we list the elementary graphics elements supported by
 QPainter. Most of them exist in several overloaded versions which take a 
 different number of arguments. For example, methods that deal with rectangles
 usually either take a 
-<ulink url="http://doc.trolltech.com/qrect.html">QRect</ulink> as argument or a set
+<ulink url="kdeapi:qt/QRect">QRect</ulink> as argument or a set
 of four integers.
 </para>
 
@@ -460,7 +1081,7 @@ drawEllipse(), drawArc(), drawPie and drawChord().</para>
 </simplesect>
 
 
-<simplesect id="pixmaps">
+<simplesect id="qpainter-pixmaps">
 <title>Drawing pixmaps and images</title>
 
 <para>
@@ -468,7 +1089,7 @@ Qt provides two very different classes to represent images.
 </para>
 
 <para>
-<ulink url="http://doc.trolltech.com/qpixmap.html">QPixmap</ulink> directly corresponds
+<ulink url="kdeapi:qt/QPixmap">QPixmap</ulink> directly corresponds
 to the pixmap objects in X11. Pixmaps are server-side objects and may - on a
 modern graphics card - even be stored directly in the card's memory. This makes
 it <emphasis>very</emphasis> efficient to transfer pixmaps to the screen. Pixmaps also act as
@@ -477,13 +1098,13 @@ QPaintDevice, so you can draw on it with a QPainter. Elementary drawing
 operations are usually accelerated by modern graphics. Therefore, a common usage
 pattern is to use pixmaps for double buffering. This means, instead of painting
 directly on a widget, you paint on a temporary pixmap object and use the
-<ulink url="http://doc.trolltech.com/qpaintdevice.html#bitBlt-1">bitBlt</ulink>
+<ulink url="kdeapi:qt/QPaintDevice#bitBlt-1">bitBlt</ulink>
 function to transfer the pixmap to the widget. For complex repaints, this helps
 to avoid flicker.
 </para>
 
 <para>
-In contrast, <ulink url="http://doc.trolltech.com/qimage.html">QImage</ulink> objects 
+In contrast, <ulink url="kdeapi:qt/QImage">QImage</ulink> objects 
 live on the client side. Their emphasis in on providing direct access to the
 pixels of the image. This makes them of use for image manipulation, and things
 like loading and saving to disk (QPixmap's load() method takes QImage as 
@@ -497,7 +1118,7 @@ require dithering.
 </simplesect>
 
 
-<simplesect id="drawingtext">
+<simplesect id="qpainter-drawingtext">
 <title>Drawing text</title>
 
 <para>
@@ -505,9 +1126,9 @@ Text can be drawn with one of the overloaded variants of the method
 QPainter::drawText(). These draw a QString either at a given point or in a given
 rectangle, using the font set by QPainter::setFont(). There is also a parameter
 which takes an ORed combination of some flags from the enums
-<ulink url="http://doc.trolltech.com/qt.html#AlignmentFlags-enum">Qt::AlignmentFlags</ulink>
+<ulink url="kdeapi:qt/Qt#AlignmentFlags-enum">Qt::AlignmentFlags</ulink>
 and
-<ulink url="http://doc.trolltech.com/qt.html#TextFlags-enum">Qt::TextFlags</ulink>
+<ulink url="kdeapi:qt/Qt#TextFlags-enum">Qt::TextFlags</ulink>
 </para>
 
 <para>
@@ -517,11 +1138,11 @@ languages written from right to left.
 
 <para>
 A more advanced way to display marked up text is the 
-<ulink url="http://doc.trolltech.com/qsimplerichtext.html">QSimpleRichText</ulink> 
+<ulink url="kdeapi:qt/QSimpleRichText">QSimpleRichText</ulink> 
 class. Objects of this class can be constructed with a piece of text using
 a subset of the HTML tags, which is quite rich and provides even tables.
 The text style can be customized by using a 
-<ulink url="http://doc.trolltech.com/qstylesheet.html">QStyleSheet</ulink> (the
+<ulink url="kdeapi/qt/QStyleSheet">QStyleSheet</ulink> (the
 documentation of the tags can also be found here). Once the rich text object has
 been constructed, it can be rendered on a widget or another paint device with
 the QSimpleRichText::draw() method.
@@ -552,13 +1173,13 @@ source code.
 
 <para>
 As an alternative, Qt contains the class 
-<ulink url="http://doc.trolltech.com/qcanvas.html">QCanvas</ulink> in which
+<ulink url="kdeapi:qt/QCanvas">QCanvas</ulink> in which
 you put graphical objects like polygons, text, pixmaps. You may also provide
 additional items by subclassing 
-<ulink url="http://doc.trolltech.com/qcanvasitem.html">QCanvasItem</ulink> or
+<ulink url="kdeapi:qt/QCanvasItem">QCanvasItem</ulink> or
 one of its more specialized subclasses. A canvas can be shown on the screen by
 one or more widgets of the class
-<ulink url="http://doc.trolltech.com/qcanvas.html">QCanvasView</ulink> which
+<ulink url="kdeapi:qt/QCanvas">QCanvasView</ulink> which
 you have to subclass in order to handle user interactions. Qt takes care of
 all repaints of objects in the view, whether they are caused by the widget
 being exposed, new objects being created or modified or other things. By using
@@ -611,7 +1232,7 @@ with the toolkit of the environment
 </para>
 
 <para>
-Qt offers the widget <ulink url="http://doc.trolltech.com/qglwidget.html">QGLWidget</ulink>
+Qt offers the widget <ulink url="kdeapi:qt/QGLWidget">QGLWidget</ulink>
 which encapsulates a window with an associated GL context. Basically, you use it
 by subclassing it and reimplementing some methods.
 </para>
@@ -705,21 +1326,29 @@ An introduction to Inventor can be found
 <chapter id="userinterface">
 <title>User interface</title>
 
-<sect1 id="xmlgui">
+<sect1 id="userinterface-actionpattern">
+<title>The action pattern</title>
+
+<para></para>
+
+</sect1>
+
+
+<sect1 id="userinterface-xmlgui">
 <title>Defining menus and toolbars in XML</title>
 
-<simplesect>
+<simplesect id="xmlgui-intro">
 <title>Introduction</title>
 
 <para>
-While the <ulink url="actionpattern.html">action pattern</ulink> allows to encapsulate 
-actions triggered by the user in an object which can be "plugged" somewhere in
-the menu bars or toolbars, it does not by itself solve the problem of 
-constructing the menus themselves. In particular, you have build all popup menus
-in C++ code and explicitly insert the actions in a certain order, under 
-consideration of the style guide for standard actions. This makes it pretty
-difficult to allow the user to customize the menus or change shortcuts to
-fit his needs, without changing the source code.
+While the <link linkend="userinterface-actionpattern">action pattern</link>
+allows to encapsulate  actions triggered by the user in an object which can be
+"plugged" somewhere in the menu bars or toolbars, it does not by itself solve
+the problem of  constructing the menus themselves. In particular, you have to
+build all popup menus in C++ code and explicitly insert the actions in a
+certain order, under consideration of the style guide for standard actions.
+This makes it pretty difficult to allow the user to customize the menus or
+change shortcuts to fit his needs, without changing the source code.
 </para>
 
 <para>
@@ -727,32 +1356,37 @@ This problem is solved by a set of classes called <literal>XMLGUI</literal>.
 Basically, this separates actions (coded in C++) from their appearance in menu
 bars and tool bars (coded in XML). Without modifying any source code, menus
 can be simply customized by adjusting an XML file. Furthermore, it helps
-to make sure that standard actions (such as <literal>File->Open</literal> or
-<literal>Help->About</literal>) appear in the locations suggested by the style
-guide. XMLGUI is especially important for modular programs, where the items
-appearing in the menu bar may come from many different plugins or parts.
+to make sure that standard actions (such as
+<menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>
+or <menuchoice><guimenu>Help</guimenu><guimenuitem>About</guimenuitem></menuchoice>)
+appear in the locations suggested by the style guide. XMLGUI is especially
+important for modular programs, where the items appearing in the menu bar may
+come from many different plugins or parts.
 </para>
 
 <para>
 KDE's class for toplevel windows, 
-<ulink url="../library/3.0-api/classref/kdeui/KMainWindow.html">KMainWindow</ulink>,
+<ulink url="kdeapi:kdeui/KMainWindow.html">KMainWindow</ulink>,
 inherits 
-<ulink url="../library/3.0-api/classref/kdeui/KXMLGUIClient.html">KXMLGUIClient</ulink>
+<ulink url="kdeapi:kdeui/KXMLGUIClient.html">KXMLGUIClient</ulink>
 and therefore supports XMLGUI out of the box. All actions created within it must
-have the client's actionCollection() as parent. A call to createGUI() will then 
-build the whole set of menu and tool bars defined the applications XML file 
-(conventionally with the suffix ui.rc). 
+have the client's <literal>actionCollection()</literal> as parent. A call to
+<literal>createGUI()</literal> will then build the whole set of menu and tool
+bars defined the applications XML file  (conventionally with the suffix
+<literal>ui.rc</literal>). 
 </para>
 
 </simplesect>
 
 
-<simplesect>
+<simplesect id="xmlgui-kviewexample">
 <title>An example: Menu in KView</title>
 
 <para>
-In the following, we take KDE's image view KView as example. It has a ui.rc 
-file kviewui.rc, which is installed with the Makefile.am snippet
+In the following, we take KDE's image view <application>KView</application> as
+example. It has a <literal>ui.rc</literal> file named
+<filename>kviewui.rc</filename> which is installed with the 
+<filename>Makefile.am</filename> snippet
 </para>
 
 <programlisting>
@@ -761,8 +1395,8 @@ rc_DATA = kviewui.rc
 </programlisting>
 
 <para>
-Here is an excerpt from the kviewui.rc file. For simplicity, we show 
-only the definition of the View menu.
+Here is an excerpt from the <filename>kviewui.rc</filename> file. For
+simplicity, we show only the definition of the <guimenu>View</guimenu> menu.
 </para>
 
 <programlisting>
@@ -807,8 +1441,8 @@ The corresponding part of the setup in C++ is:
 </programlisting>
 
 <para>
-The View menu resulting from this GUI definition looks like in this
-screenshot:
+The <guimenu>View</guimenu> menu resulting from this GUI definition looks like
+in this screenshot:
 </para>
 
 <mediaobject>
@@ -817,22 +1451,23 @@ screenshot:
 
 <para>
 The XML file begins with a document type declaration. The DTD for kpartgui can
-be found in the kdelibs sources in <filename>kdeui/kpartgui.dtd</filename>. The outermost
-element of the file contains the instance name of the application as attribute.
-It can also contain a version number in the form "version=2". This is useful
-when you release new versions of an application with a changed menu structure,
-e.g. with more features. If you bump up the version number of the ui.rc file, 
-KDE makes sure that any customized version of the file is discarded and the new 
-file is used instead.
+be found in the kdelibs sources in <filename>kdeui/kpartgui.dtd</filename>. The
+outermost element of the file contains the instance name of the application as
+attribute. It can also contain a version number in the form "version=2". This
+is useful when you release new versions of an application with a changed menu
+structure, e.g. with more features. If you bump up the version number of the
+<literal>ui.rc</literal> file, KDE makes sure that any customized version of
+the file is discarded and the new  file is used instead.
 </para>
 
 <para>
-The next line, &lt;MenuBar&gt; contains a declaration of a menu bar. You can
-also insert any number of &lt;ToolBar&gt; declarations in order to create some
-tool bars. The menu contains a submenu with the name "view". This name is
-already predefined, and thus you see a translated version of the word "View"
-in the screenshot. If you declare your own submenus, you have to add the title
-explicitly. For example, KView has a submenu with the title "Image" which is
+The next line, <literal>&lt;MenuBar&gt;</literal>, contains a declaration of a
+menu bar. You can also insert any number of <literal>&lt;ToolBar&gt;</literal>
+declarations in order to create some tool bars. The menu contains a submenu
+with the name "view". This name is already predefined, and thus you see a
+translated version of the word "View" in the screenshot. If you declare your
+own submenus, you have to add the title explicitly. For example,
+<application>KView</application> has a submenu with the title "Image" which is
 declared as follows:
 </para>
 
@@ -844,24 +1479,27 @@ declared as follows:
 </programlisting>
 
 <para>
-In KDE's automake framework, such titles are automatically extracted and put 
-into the application's <ulink url="kde-i18n-howto.html"><literal>.po</literal></ulink> file, so 
-it is considered by translators. Note that you have to write the accelerator 
-marker "&amp;" in the form XML compliant form "&amp;amp;".
+In KDE's automake framework, such titles are automatically extracted and put
+into the application's <ulink url="kde-i18n-howto.html"><literal>.po</literal></ulink>
+file , so it is considered by translators. Note that you have to write the
+accelerator marker "&amp;" in the form XML compliant form "&amp;amp;".
 </para>
 
 <para>
-Let us come back to the example. KView's View menu contains a couple of custom
-actions: zoom50, zoom100, zoom200, zoomMaxpect and fullscreen, declared with a
-&lt;Action&gt; element. The separator in the screenshots corresponds with the
-&lt;Separator&gt; element. 
+Let us come back to the example. <application>KView</application>'s
+<guimenu>View</guimenu> menu contains a couple of custom actions:
+<literal>zoom50</literal>, <literal>zoom100</literal>,
+<literal>zoom200</literal>, <literal>zoomMaxpect</literal> and
+<literal>fullscreen</literal>, declared with a
+<literal>&lt;Action&gt;</literal> element. The separator in the
+screenshots corresponds to the <literal>&lt;Separator&gt;</literal> element. 
 </para>
 
 <para>
 You will note that some menu items do not not have a corresponding element in 
 the XML file. These are <emphasis>standard actions</emphasis>. Standard
 actions are created by the class 
-<ulink url="../library/3.0-api/classref/kdeui/KStdAction.html">KStdAction</ulink>.
+<ulink url="kdeapi:kdeui/KStdAction.html">KStdAction</ulink>.
 When you create such actions in your application (such as in the C++ example
 above), they will automatically be inserted in a prescribed position, and
 possibly with an icon and a shortcut key. You can look up these locations in
@@ -871,13 +1509,13 @@ the file <filename>kdeui/ui_standards.rc</filename> in the kdelibs sources.
 </simplesect>
 
 
-<simplesect>
+<simplesect id="xmlgui-konqexample">
 <title>An example: Toolbars in Konqueror</title>
 
 <para>
-For the discussion of toolbars, we switch to Konqueror's GUI
-definition. This excerpt defines the location bar, which contains the input
-field for URLs.
+For the discussion of toolbars, we switch to
+<application>Konqueror</application>'s GUI definition. This excerpt defines
+the location bar, which contains the input field for URLs.
 </para>
 
 <programlisting>
@@ -910,10 +1548,12 @@ with the previous toolbar.
 </para></listitem>
 
 <listitem><para>
-<literal>noEdit</literal>: Normally toolbars can be customized by the user, e.g. in
-<literal>Settings->Configure Toolbars</literal> in Konqueror. Setting this option to
-"true" marks this toolbar as not editable. This is important for toolbars
-which are filled with items at runtime, e.g. Konqueror's bookmark toolbar.
+<literal>noEdit</literal>: Normally toolbars can be customized by the user,
+e.g. in <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+Toolbars</guimenuitem></menuchoice> in
+<application>Konqueror</application>. Setting this option to "true" marks this
+toolbar as not editable. This is important for toolbars which are filled with
+items at runtime, e.g. <application>Konqueror</application>'s bookmark toolbar.
 </para></listitem>
 
 <listitem><para>
@@ -944,20 +1584,21 @@ such as graphics programs, it may be interesting to replace this with
 </simplesect>
 
 
-<simplesect>
+<simplesect id="xmlgui-dynamical">
 <title>Dynamical menus</title>
 
 <para>
 Obviously, an XML can only contain a static description of a user interface.
-Often, there are menus which change at runtime. For example, Konqueror's
-<literal>Location</literal> menu contains a set of items
-<literal>Open with Foo</literal> with the applications able to load a file
-with a given MIME type. Each time the document shown changes, the list of menu
-items is updated. XMLGUI is prepared to handle such cases with the notion of
-<emphasis>action lists</emphasis>. An action list is declared as one item in
-the XML file, but consists of several actions which are plugged into the menu
-at runtime. The above example is implemented with the following declaration in
-Konqueror's XML file:
+Often, there are menus which change at runtime. For example,
+<application>Konqueror</application>'s <guimenu>Location</guimenu> menu
+contains a set of items <guimenuitem>Open with Foo</guimenuitem> with the
+applications able to load a file with a given MIME type. Each time the
+document shown changes, the list of menu items is updated. XMLGUI is prepared
+to handle such cases with the notion of <emphasis>action lists</emphasis>.
+An action list is declared as one item in the XML file, but consists of
+several actions which are plugged into the menu at runtime. The above example
+is implemented with the following declaration in
+<application>Konqueror</application>'s XML file:
 </para>
 
 <programlisting>
@@ -970,8 +1611,9 @@ Konqueror's XML file:
 </programlisting>
 
 <para>
-The function KXMLGUIClient::plugActionList() is then used to add actions to be
-displayed, whereas the function KXMLGuiClient::unplugActionList() removes all
+The function <function>KXMLGUIClient::plugActionList()</function> is then used
+to add actions to be displayed, whereas the function
+<function>KXMLGuiClient::unplugActionList()</function> removes all
 plugged actions. The routine responsible for updating looks as follows:
 </para>
 
@@ -999,17 +1641,18 @@ example.
 </simplesect>
 
 
-<simplesect>
+<simplesect id="xmlgui-contextmenus">
 <title>Context menus</title>
 
 <para>
 The examples above only contained cases where a main window's menubar and 
 toolbars were created. In the cases, the processes of constructing these
-containers is completely hidden from you behind the createGUI() call
-(except if you have custom containers). However, there are cases, where
-you want to construct other containers and populate them with GUI definitions
-from the XML file. One such example are context menus. In order to get a
-pointer to a context menu, you have to ask the client's factory for it:
+containers is completely hidden from you behind the
+<function>createGUI()</function> call (except if you have custom containers).
+However, there are cases, where you want to construct other containers and
+populate them with GUI definitions from the XML file. One such example are
+context menus. In order to get a pointer to a context menu, you have to
+ask the client's factory for it:
 </para>
 
 <programlisting>
@@ -1022,9 +1665,9 @@ void MainWindow::popupRequested()
 </programlisting>
 
 <para>
-The method KXMLGUIFactory::container() used above looks whether it finds a
-container in the XML file with the given name. Thus, a possible definition
-could look as follows:
+The method <function>KXMLGUIFactory::container()</function> used above looks
+whether it finds a container in the XML file with the given name. Thus, a
+possible definition could look as follows:
 </para>
 
 <programlisting>
@@ -1066,24 +1709,25 @@ a button.
 <listitem><para>
 "What's this?" help is usually a longer and richer explanation of a widget
 or a menu item. It is also more clunky to use: In dialogs, it can be invoked
-in two ways: either by pressing Shift-F1 or by clicking on the question mark
-in the title bar (where the support of the latter depends on the window manager).
-The mouse pointer then turns into an arrow with a question mark, and the help
-window appears when a user interfact element has been clicked. "What's this?"
-help for menu items is usually activated by a button in the toolbar which contains
-an arrow and a question mark. 
+in two ways: either by pressing
+<keycombo><keycap>Shift</keycap><keycap>F1</keycap></keycombo> or by clicking
+on the question mark in the title bar (where the support of the latter depends
+on the window manager). The mouse pointer then turns into an arrow with a
+question mark, and the help window appears when a user interfact element has
+been clicked. "What's this?" help for menu items is usually activated by a
+button in the toolbar which contains an arrow and a question mark. 
 </para></listitem>
 
 <listitem><para>
-The problem with this approach is that the user can't see whether a widget provides 
-help or not. When the user activates the question mark button and doesn't get any 
-help window when clicking on a user interface element, he will get frustrated very
-quickly.
+The problem with this approach is that the user can't see whether a widget
+provides help or not. When the user activates the question mark button and
+doesn't get any  help window when clicking on a user interface element, he
+will get frustrated very quickly.
 </para>
 
 <para>
 The advantage of "What's this?" help windows as provided by Qt and KDE is that
-they can contain <ulink url="http://doc.trolltech.com/qstylesheet.html">rich text</ulink>, 
+they can contain <ulink url="kdeapi:qt/QStyleSheet">rich text</ulink>, 
 i.e. the may contain different fonts, bold and italic text and even images and tables.
 </para>
 
@@ -1099,13 +1743,15 @@ An example of "What's this?" help:
 
 <listitem><para>
 Finally, every program should have a manual. A manual is normally viewed in
-khelpcenter by activating the help menu. That means, a complete additional 
-application pops up and diverts the user from his work. Consequently, consulting
-the manual should only be necessary if other facilities like tooltips and what's
-this help are not sufficient. Of course, a manual has the advantage that it does
-not explain single, isolated aspects of the user interface. Instead, it can
-explain aspects of the application in a greater context. Manuals for KDE
-are written using the <ulink url="http://i18n.kde.org">DocBook</ulink> markup language.
+<application>KHelpCenter</application> by activating the
+<guimenu>Help</guimenu> menu. That means, a complete additional application
+pops up and diverts the user from his work. Consequently, consulting the
+manual should only be necessary if other facilities like tooltips and what's
+this help are not sufficient. Of course, a manual has the advantage that it
+does not explain single, isolated aspects of the user interface. Instead, it
+can explain aspects of the application in a greater context. Manuals for KDE
+are written using the <ulink url="http://i18n.kde.org">DocBook</ulink> markup
+language.
 </para></listitem>
 
 </itemizedlist>
@@ -1113,7 +1759,7 @@ are written using the <ulink url="http://i18n.kde.org">DocBook</ulink> markup la
 <para>
 From the programmer's point of view, Qt provides an easy to use API for online
 help. To assign a tooltip to widget, use the 
-<ulink url="http://doc.trolltech.com/qtooltip.html">QToolTip</ulink> class.
+<ulink url="kdeapi:qt/QToolTip">QToolTip</ulink> class.
 </para>
 
 <programlisting>
@@ -1123,7 +1769,7 @@ QToolTip::add(w, i18n("This widget does something."))
 <para>
 If the menu bars and tool bars are created using the <ulink url="actionpattern.html">
 action pattern</ulink>, the string used as tooltip is derived from the first argument
-of the <ulink url="../library/3.0-api/classref/kdeui/KAction.html">KAction</ulink> constructor:
+of the <ulink url="kdeapi:kdeui/KAction.html">KAction</ulink> constructor:
 </para>
 
 <programlisting>
@@ -1162,8 +1808,8 @@ action->setWhatsThis(i18n("Deletes the marked file"))
 </programlisting>
 
 <para>
-The invocation of khelpcenter is encapsulated in the 
-<ulink url="../library/3.0-api/classref/kdecore/KApplication">KApplication</ulink>
+The invocation of <application>KHelpCenter</application> is encapsulated in the
+<ulink url="kdeapi:kdecore/KApplication">KApplication</ulink>
 class. In order to show the manual of your application, just use 
 </para>
 
@@ -1172,10 +1818,10 @@ kapp->invokeHelp()
 </programlisting>
 
 <para>
-This displays the first page with the table of contents. When
-you want to display only a certain section of the manual, you
-can give an additional argument to invokeHelp() determining
-the anchor which the browser jumps to.
+This displays the first page with the table of contents. When you want to
+display only a certain section of the manual, you can give an additional
+argument to <function>invokeHelp()</function> determining the anchor which
+the browser jumps to.
 </para>
 
 </sect1>
@@ -1187,10 +1833,10 @@ the anchor which the browser jumps to.
 <chapter id="components">
 <title>Components and services</title>
 
-<sect1 id="services">
+<sect1 id="components-services">
 <title>KDE services</title>
 
-<simplesect>
+<simplesect id="services-whatarekdeservices">
 <title>What are KDE services?</title>
 
 <para>
@@ -1219,19 +1865,22 @@ Some examples:
 <itemizedlist>
 
 <listitem><para>
-The HTML rendering engine used in Konqueror is an embedabble component that
-implements the service types KParts/ReadOnlyPart and Browser/View.
+The HTML rendering engine used in <application>Konqueror</application> is an
+embedabble component that implements the service types
+<literal>KParts/ReadOnlyPart</literal> and <literal>Browser/View</literal>.
 </para></listitem>
 <listitem><para>
-In KDevelop HEAD, most functionality is packaged in plugins with the
-service type KDevelop/Part. At startup, all services with this type are loaded,
-such that you can extend the IDE in a very flexible way.
+In <application>KDevelop</application> HEAD, most functionality is packaged in
+plugins with the service type <literal>KDevelop/Part</literal>. At startup,
+all services with this type are loaded, such that you can extend the IDE in a
+very flexible way.
 </para></listitem>
 <listitem><para>
-In the icon view, Konqueror displays - if enabled - thumbnail pictures of
-images, HTML pages, PDF and text files. This ability can be extended. If you
-want it to display preview pictures of your own data files with some MIME type,
-you can implement a service with service type <classname>ThumbCreator</classname>.
+In the icon view, <application>Konqueror</application> displays - if enabled -
+thumbnail pictures of images, HTML pages, PDF and text files. This ability can
+be extended. If you want it to display preview pictures of your own data files
+with some MIME type, you can implement a service with service type
+<classname>ThumbCreator</classname>.
 </para></listitem>
 
 </itemizedlist>
@@ -1253,13 +1902,14 @@ a complex query language.
 </simplesect>
 
 
-<simplesect>
+<simplesect id="services-definingservicetypes">
 <title>Defining service types</title>
 
 <para>
 New service types are added by installing a description of them into the
 directory <filename>KDEDIR/share/servicetypes</filename>. In an automake
-framework, this can be done with this Makefile.am snippet:
+framework, this can be done with this <filename>Makefile.am</filename>
+snippet:
 </para>
 
 <programlisting>
@@ -1268,7 +1918,8 @@ EXTRA_DIST = $(kde_servicetypesdir_DATA)
 </programlisting>
 
 <para>
-The definition kdeveloppart.desktop of a KDevelop part looks as follows:
+The definition <filename>kdeveloppart.desktop</filename> of a
+<application>KDevelop</application> part looks as follows:
 </para>
 
 <programlisting>
@@ -1293,13 +1944,13 @@ that a service has some properties. Each property definition corresponds
 to a group <literal>[PropertyDef::name]</literal> in the configuration file. In
 this group, the <literal>Type</literal> entry declares the type of the property.
 Possible types are everything that can be stored in a 
-<ulink url="http://doc.trolltech.com/qvariant.html">QVariant</ulink>.
+<ulink url="kdeapi:qt/QVariant">QVariant</ulink>.
 </para>
 
 </simplesect>
 
 
-<simplesect>
+<simplesect id="services-defininglibraryservices">
 <title>Defining shared library services</title>
 
 <para>
@@ -1313,8 +1964,10 @@ EXTRA_DIST = $(kde_servicesdir_DATA)
 </programlisting>
 
 <para>
-The content of the following example file kdevdoxygen.desktop defines
-the KDevDoxygen plugin with the service type KDevelop/Part:
+The content of the following example file
+<filename>kdevdoxygen.desktop</filename> defines the
+<literal>KDevDoxygen</literal> plugin with the service type
+<literal>KDevelop/Part</literal>:
 </para>
 
 <programlisting>
@@ -1349,32 +2002,32 @@ extern "C" {
 <para>
 The type of the factory class <classname>DoxygenFactory</classname> depends on
 the specific service type the service implements. In our example of a KDevelop
-plugin, the factory must be a KDevFactory (which inherits KLibFactory). More
-common examples are
-<ulink url="../library/3.0-api/classref/kparts/KParts__Factory.html">KParts::Factory</ulink>
+plugin, the factory must be a <classname>KDevFactory</classname> (which
+inherits <classname>KLibFactory</classname>). More common examples are
+<ulink url="kdeapi:kparts/KParts::Factory">KParts::Factory</ulink>
 which is supposed to produce 
-<ulink url="../library/3.0-api/classref/kparts/KParts__ReadOnlyPart.html">KParts::ReadOnlyPart</ulink>
+<ulink url="kdeapi:kparts/KParts::ReadOnlyPart">KParts::ReadOnlyPart</ulink>
 objects or in most cases the generic
-<ulink url="../library/3.0-api/classref/kdecore/KLibFactory.html">KLibFactory</ulink>.
+<ulink url="kdeapi:kdecore/KLibFactory">KLibFactory</ulink>.
 </para>
 
 </simplesect>
 
 
-<simplesect>
+<simplesect id="services-usinglibraryservices">
 <title>Using shared library services</title>
 
 <para>
 In order to use a shared library service in an application, you need to obtain a
-<ulink url="../library/3.0-api/classref/kio/KService.html">KService</ulink> object
+<ulink url="kdeapi:kio/KService.html">KService</ulink> object
 representing it. This is discussed in the 
 <ulink url="mime.html">section about MIME types</ulink> (and in a section about the
 trader to be written :-)
 </para>
 
 <para>
-With the KService object at hand, you can very simply load the library and
-get a pointer to its factory object:
+With the <classname>KService</classname> object at hand, you can very simply
+load the library and get a pointer to its factory object:
 </para>
 
 <programlisting>
@@ -1393,7 +2046,7 @@ if (!factory) {
 <para>
 From this point, the further proceeding depends again on the service type. For
 generic plugins, you create objects with the method
-<ulink url="../library/3.0-api/classref/kdecore/KLibFactory.html#ref3">KLibFactory::create()</ulink>.
+<ulink url="kdeapi:kdecore/KLibFactory.html#ref3">KLibFactory::create()</ulink>.
 For KParts, you must cast the factory pointer to the more specific KParts::Factory and use
 its create() method:
 </para>
@@ -1412,7 +2065,7 @@ if (factory->inherits("KParts::Factory")) {
 </simplesect>
 
 
-<simplesect>
+<simplesect id="services-definingdcopservices">
 <title>Defining DCOP services</title>
 
 <para>
@@ -1438,13 +2091,13 @@ name. As additional properties, it contains two lines:
 <literal>X-DCOP-ServiceType</literal> specifies the way the service is
 started. The value <literal>Unique</literal> says that the service must not be
 started more than once. This means, if you try to start this service (e.g. via 
-<ulink url="../library/3.0-api/classref/kdecore/KApplication.html#startServiceByName">
+<ulink url="kdeapi:kdecore/KApplication.html#startServiceByName">
 KApplication::startServiceByName()</ulink>, KDE looks whether it is already 
 registered with DCOP and uses the running service. If it is not registered yet, 
 KDE will start it up and wait until is registered. Thus, you can immediately 
 send DCOP calls to the service. In such a case, the service should be implemented
 as a 
-<ulink url="../library/3.0-api/classref/kdecore/KUniqueApplication.html">KUniqueApplication</ulink>.
+<ulink url="kdeapi:kdecore/KUniqueApplication.html">KUniqueApplication</ulink>.
 </para>
 
 <para>
@@ -1477,7 +2130,7 @@ X-KDE-StartupNotify=false
 </simplesect>
 
 
-<simplesect>
+<simplesect id="services-usingdcopservices">
 <title>Using DCOP services</title>
 
 <para>
@@ -1512,17 +2165,19 @@ instead, because it is much simpler and less error prone.
 
 <para>
 In the example given here, the service was started "by name", i.e. the
-first argument to KApplication::startServiceByName() is the name is
-appearing in the Name line of the desktop file. An alternative is to
-use KApplication::startServiceByDesktopName(), which takes the file name
-of its desktop file as argument, i.e. in this case "kio_uiserver.desktop".
+first argument to <function>KApplication::startServiceByName()</function> is
+the name is appearing in the <literal>Name</literal> line of the desktop
+file. An alternative is to use
+<function>KApplication::startServiceByDesktopName()</function>, which takes
+the file name of its desktop file as argument, i.e. in this case
+<literal>"kio_uiserver.desktop"</literal>.
 </para>
 
 <para>
 All these calls take a list of URLs as a second argument, which is given
 to the service on the command line. The third argument is a pointer to a
-QString. If starting the service fails, this argument is set to a translated
-error message.
+<classname>QString</classname>. If starting the service fails, this argument
+is set to a translated error message.
 </para>
 
 </simplesect>
@@ -1530,10 +2185,10 @@ error message.
 </sect1>
 
 
-<sect1 id="mime">
+<sect1 id="components-mime">
 <title>MIME types</title>
 
-<simplesect>
+<simplesect id="mime-whataremimetypes">
 <title>What are MIME types?</title>
 
 <para>
@@ -1549,14 +2204,14 @@ KDE, this concept is used at a variety of places:
 <itemizedlist>
 
 <listitem><para>
-In Konqueror's icon view, files are represented by icons. Each MIME type
-has a certain associated icon shown here.
+In <application>Konqueror</application>'s icon view, files are represented by
+icons. Each MIME type has a certain associated icon shown here.
 </para></listitem>
 
 <listitem><para>
-When you click onto a file icon or a file name in Konqueror, either the
-file is shown in an embedded view, or an application associated with the 
-file type is opened.  
+When you click onto a file icon or a file name in
+<application>Konqueror</application>, either the file is shown in an embedded
+view, or an application associated with the file type is opened.  
 </para></listitem>
 
 <listitem><para>
@@ -1600,13 +2255,14 @@ it is efficiently and conveniently available through the KDE libraries.
 </simplesect>
 
 
-<simplesect>
+<simplesect id="mime-definingmimetypes">
 <title>Defining MIME types</title>
 
 <para>
-Let us define a type "application/x-foo" for our new foobar program. To this 
-end, you have to write a file <filename>foo.desktop</filename> and install it
-into <filename>KDEDIR/share/mimelnk/application</filename>. (This is the usual
+Let us define a type <literal>"application/x-foo"</literal> for our new
+<application>foobar</application> program. To this end, you have to write a
+file <filename>foo.desktop</filename> and install it into
+<filename>KDEDIR/share/mimelnk/application</filename>. (This is the usual
 location, which may differ between distributions). This can be done by adding
 this to the <filename>Makefile.am</filename>:
 </para>
@@ -1633,15 +2289,15 @@ Comment[de]=Foo Datei
 </programlisting>
 
 <para>
-The "Comment" is entry is supposed to be translated. Since the
+The <literal>"Comment"</literal> entry is supposed to be translated. Since the
 <filename>.desktop</filename> file  specifies an icon, you should also install
 an icon <filename>fooicon.png</filename>, which represents the file e.g. in
-Konqueror.
+<application>Konqueror</application>.
 </para>
 
 <para>
 In the KDE libraries, such a type definition is mapped to an instance of the 
-class <ulink url="../library/3.0-api/classref/kio/KMimeType.html">KMimeType</ulink>.
+class <ulink url="kdeapi:kio/KMimeType.html">KMimeType</ulink>.
 Use this like in the following example:
 </para>
 
@@ -1659,19 +2315,22 @@ for (it = patterns.begin(); it != patterns.end(); ++it)
 </simplesect>
 
 
-<simplesect>
-<title>Finding out the MIME type of data</title>
+<simplesect id="mime-determiningmimetypes">
+<title>Determining the MIME type of data</title>
 
 <para>
-The fast method for finding out the type of a file is KMimeType::findByURL().
-This looks for the url string and in most cases determines the type from the
-extension. For certain protocols (e.g. http, man, info), this mechanism is 
-not used. For example, CGI scripts on web servers written in Perl often have
-the extension <literal>.pl</literal>, which would indicate a "text/x-perl" type. 
-However, we file delivered by the server is the output of this script, which 
-is normally HTML. For such a case, KMimeType::findByURL() returns the MIME type
-"application/octet-stream" (available through KMimeType::defaultMimeType()), 
-which indicates a failure to find out the type.
+The fast method for determining the type of a file is
+<function>KMimeType::findByURL()</function>. This looks for the URL string and
+in most cases determines the type from the extension. For certain protocols
+(e.g. http, man, info), this mechanism is not used. For example, CGI scripts
+on web servers written in Perl often have the extension
+<literal>.pl</literal>, which would indicate a
+<literal>"text/x-perl"</literal> type. However, we file delivered by the
+server is the output of this script, which is normally HTML. For such a case,
+<function>KMimeType::findByURL()</function> returns the MIME type
+<literal>"application/octet-stream"</literal> (available through
+<function>KMimeType::defaultMimeType()</function>), which indicates a failure
+to find out the type.
 </para>
 
 <programlisting>
@@ -1691,7 +2350,7 @@ forget about them.)
 You may want to find out a MIME from the contents of file instead of
 the file name. This is more reliable, but also slower, as it requires
 reading a part of the file. This is done with the 
-<ulink url="../library/3.0-api/classref/kio/KMimeMagic.html">KMimeMagic</ulink> 
+<ulink url="kdeapi:kio/KMimeMagic.html">KMimeMagic</ulink> 
 class, which has different error handling:
 </para>
 
@@ -1705,8 +2364,8 @@ else
 
 <para>
 As a variant of this function, you can also determine the type of a memory
-chunk. This is e.g. used in KWrite in order to find out the highlighting
-mode:
+chunk. This is e.g. used in <application>Kate</application> in order to find
+out the highlighting mode:
 </para>
 
 <programlisting>
@@ -1736,8 +2395,8 @@ else
 <para>
 This starts a KIO job to download a part of the file and check this.
 Note that this function is perhaps quite slow and blocks the program. Normally
-you will only want to use this if KMimeType::findByURL() has returned
-"application/octet-stream".
+you will only want to use this if <function>KMimeType::findByURL()</function>
+has returned <literal>"application/octet-stream"</literal>.
 </para>
 
 <para>
@@ -1766,16 +2425,16 @@ void FooClass::mimeResult(KIO::Job *job)
 </simplesect>
 
 
-<simplesect>
+<simplesect id="mime-mappingmimetypes">
 <title>Mapping a MIME type to an application or service</title>
 
 <para>
-When an application is installed, it installs a .desktop file which contains
-a list of MIME types this application can load. Similarly, components like
-KParts make this information available by their service .desktop files.
-So in general, there are several programs and components which can process
-a given MIME type. You can obtain such a list from the class 
-<classname>KServiceTypeProfile</classname>:
+When an application is installed, it installs a <literal>.desktop</literal>
+file which contains a list of MIME types this application can load. Similarly,
+components like KParts make this information available by their service
+<literal>.desktop</literal> files. So in general, there are several programs
+and components which can process a given MIME type. You can obtain such a list
+from the class <classname>KServiceTypeProfile</classname>:
 </para>
 
 <programlisting>
@@ -1788,20 +2447,22 @@ for (it = offers.begin(); it != offers.end(); ++it) {
 </programlisting>
 
 <para>
-The return value of this function is a list of service offers. A 
-KServiceOffer packages a KService::Ptr together with a preference number.
-The list returned by KServiceTypeProfile::offers() is ordered by the 
-user's preference. The user can change this by calling 
-"keditfiletype text/html" or choosing "Edit File Type" on Konqueror's 
-context menu on a HTML file.
+The return value of this function is a list of service offers. A
+<classname>KServiceOffer</classname> object packages a KService::Ptr together
+with a preference number. The list returned by
+<function>KServiceTypeProfile::offers()</function> is ordered by the user's
+preference. The user can change this by calling <command>"keditfiletype
+text/html"</command> or choosing <guimenuitem>Edit File Type</guimenuitem> on
+<application>Konqueror</application>'s context menu on a HTML file.
 </para>
 
 <para>
-In the above example, an offer list of the applications supporting text/html
-was requested. This will - among others - contain HTML editors like Quanta Plus.
-You can also replace the second argument "Application" by "KParts::ReadOnlyPart". 
-In that case, you get a list of embedabble components for presenting HTML content,
-for example KHTML. 
+In the above example, an offer list of the applications supporting
+<literal>text/html</literal> was requested. This will - among others - contain
+HTML editors like <application>Quanta Plus</application>. You can also replace
+the second argument <literal>"Application"</literal> by
+<literal>"KParts::ReadOnlyPart"</literal>. In that case, you get a list of
+embedabble components for presenting HTML content, for example KHTML. 
 </para>
 
 <para>
@@ -1820,12 +2481,12 @@ else
 
 <para>
 For even more complex queries, there is a full-blown CORBA-like
-<ulink url="../library/3.0-api/classref/kio/KTrader.html">trader</ulink>.
+<ulink url="kdeapi:kio/KTrader.html">trader</ulink>.
 </para>
 
 <para>
-In order to run an application service with some urls, use 
-<ulink url="../library/3.0-api/classref/kio/KRun.html">KRun</ulink>:
+In order to run an application service with some URLs, use 
+<ulink url="kdeapi:kio/KRun.html">KRun</ulink>:
 </para>
 
 <programlisting>
@@ -1838,7 +2499,7 @@ KRun::run(offer.service(), urlList);
 </simplesect>
 
 
-<simplesect>
+<simplesect id="mime-misc">
 <title>Miscellaneous</title>
 
 <para>
@@ -1874,7 +2535,7 @@ new KRun(url);
 <sect1 id="nettransparency">
 <title>Network transparency</title>
 
-<simplesect>
+<simplesect id="nettransparency-intro">
 <title>Introduction</title>
 
 <para>
@@ -1927,7 +2588,7 @@ http://www-com.physik.hu-berlin.de/~bernd/article.tgz#tar:/paper.tex
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-usingkio">
 <title>Using KIO</title>
 
 <para>
@@ -2088,7 +2749,7 @@ Deletes a file or directory.
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-direntries">
 <title>Directory entries</title>
 
 <para>
@@ -2178,18 +2839,19 @@ MIME type if it does not have reliable information.
 </itemizedlist>
 
 <para>
-Although the way of storing information about files in a UDSEntry is flexible
-and practical from the ioslave point of view, it is a mess to use for the
-application programmer. For example, in order to find out the MIME type of
-the file, you have to iterate over all atoms and test whether m_uds is
-UDS_MIME_TYPE. Fortunately, there is an API which is a lot easier to use:
-the class KFileItem.
+Although the way of storing information about files in a
+<classname>UDSEntry</classname> is flexible and practical from the ioslave
+point of view, it is a mess to use for the application programmer. For
+example, in order to find out the MIME type of the file, you have to iterate
+over all atoms and test whether <literal>m_uds</literal> is
+<literal>UDS_MIME_TYPE</literal>. Fortunately, there is an API which is a lot
+easier to use: the class <classname>KFileItem</classname>.
 </para>
 
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-syncuse">
 <title>Synchronous usage</title>
 
 <para>
@@ -2215,13 +2877,15 @@ processes repaint events.
 </para>
 
 <para>
-A particularly interesting combination of functions is download() in combination
-with removeTempFile(). The former downloads a file from given URL and stores it
-in a temporary file with a unique name. The name is stored in the second argument.
-<emphasis>If</emphasis> the URL is local, the file is not downloaded, and instead the second
-argument is set to the local file name. The function removeTempFile() deletes the
-file given by its argument if the file is the result of a former download. 
-If that is not the case, it does nothing. Thus, a very easy to use way of loading
+A particularly interesting combination of functions is
+<function>download()</function> in combination with
+<function>removeTempFile()</function>. The former downloads a file from given
+URL and stores it in a temporary file with a unique name. The name is stored
+in the second argument. <emphasis>If</emphasis> the URL is local, the file is
+not downloaded, and instead the second argument is set to the local file
+name. The function <function>removeTempFile()</function> deletes the file
+given by its argument if the file is the result of a former download. If that
+is not the case, it does nothing. Thus, a very easy to use way of loading
 files regardless of their location is the following code snippet:
 </para>
 
@@ -2238,7 +2902,7 @@ if (KIO::NetAccess::download(url, tempFile) {
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-metadata">
 <title>Meta data</title>
 
 <para>
@@ -2265,9 +2929,10 @@ void FooClass::reloadPage()
 
 <para>
 The same technique is used in the other direction, i.e. for communication from
-the slave to the application. The method Job::queryMetaData() asks for the
-value of the certain key delivered by the slave. For the HTTP slave, one such
-example is the key "modified", which contains a (stringified representation of)
+the slave to the application. The method
+<function>Job::queryMetaData()</function> asks for the value of the certain
+key delivered by the slave. For the HTTP slave, one such example is the key
+<literal>"modified"</literal>, which contains a (stringified representation of)
 the date when the web page was last modified. An example how you can use this
 is the following:
 </para>
@@ -2296,7 +2961,7 @@ void FooClass::transferResult(KIO::Job *job)
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-scheduling">
 <title>Scheduling</title>
 
 <para>
@@ -2325,15 +2990,16 @@ still running, a new process must be started and used. In the API usage in the
 examples above, there are no limitation for creating new slave processes: if you
 start a consecutive series of downloads for 20 different files, then KIO will 
 start 20 slave processes. This scheme of assigning slaves to jobs is called 
-<emphasis>direct</emphasis>. It  not always the most appropriate scheme, as it may need much
-memory and put a high load on both the client and server machines.
+<emphasis>direct</emphasis>. It  not always the most appropriate scheme, as it
+may need much memory and put a high load on both the client and server machines.
 </para>
 
 <para>
-So there is a different way. You can <emphasis>schedule</emphasis> jobs. If you do this, only
-a limited number (currently 3) of slave processes for a protocol will be 
-created. If you create more jobs than that, they are put in a queue and 
-are processed when a slave process becomes idle. This is done as follows:
+So there is a different way. You can <emphasis>schedule</emphasis> jobs. If
+you do this, only a limited number (currently 3) of slave processes for a
+protocol will be created. If you create more jobs than that, they are put in a
+queue and are processed when a slave process becomes idle. This is done as
+follows:
 </para>
 
 <programlisting>
@@ -2343,13 +3009,13 @@ KIO::Scheduler::scheduleJob(job);
 </programlisting>
 
 <para>
-A third possibility is <emphasis>connection oriented</emphasis>. For example, for the IMAP 
-slave, it does not make any sense to start multiple processes for the same
-server. Only one IMAP connection at a time should be enforced. In this case,
-the application must explicitly deal with the notion of a slave. It has to
-allocate a slave for a certain connection and then assign all jobs which 
-should go through the same connection to the same slave. This can again be
-easily achieved by using the KIO::Scheduler:
+A third possibility is <emphasis>connection oriented</emphasis>. For example,
+for the IMAP slave, it does not make any sense to start multiple processes for
+the same server. Only one IMAP connection at a time should be enforced. In
+this case, the application must explicitly deal with the notion of a slave. It
+has to eallocate a slave for a certain connection and then assign all jobs
+which should go through the same connection to the same slave. This can again
+be easily achieved by using the KIO::Scheduler:
 </para>
 
 <programlisting>
@@ -2375,7 +3041,7 @@ to be finished.
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-definingslaves">
 <title>Defining an ioslave</title>
 
 <para>
@@ -2410,13 +3076,14 @@ Icon=ftp
 </programlisting>
 
 <para>
-The "protocol" entry defines for which protocol this slave is responsible. 
-"exec" is (in contrast what you would expect naively) the name of the library 
-that implements the slave. When the slave is supposed to start, the "kdeinit" 
-executable is started which in turn loads this library into its address space.
-So in practice, you can think of the running slave as a separate process 
-although it is implemented as library. The advantage of this mechanism is that 
-it saves a lot of memory and  reduces the time needed by the runtime linker.
+The <literal>"protocol"</literal> entry defines for which protocol this slave
+is responsible. <literal>"exec"</literal> is (in contrast what you would
+expect naively) the name of the library that implements the slave. When the
+slave is supposed to start, the <command>"kdeinit"</command> executable is
+started which in turn loads this library into its address space. So in
+practice, you can think of the running slave as a separate process although it
+is implemented as library. The advantage of this mechanism is that it saves a
+lot of memory and  reduces the time needed by the runtime linker.
 </para>
 
 <para>
@@ -2424,25 +3091,27 @@ The "input" and "output" lines are not used currently.
 </para>
 
 <para>
-The remaining lines in the <literal>.protocol</literal> file define which abilities the 
-slave has. In general, the features a slave must implement are much simpler than 
-the features the KIO API provides for the application. The reason for this is 
-that complex jobs are scheduled to a couple of subjobs. For example, in order to
-list a directory recursively, one job will be started for the toplevel 
-directory. Then for each subdirectory reported back, new subjobs are started. A 
-scheduler in KIO makes sure that not too many jobs are active at the same time.
-Similarly, in order to copy a file within a protocol that does not support 
-copying directly (like the ftp: protocol), KIO can read the source file and then 
-write the data to the destination file. For this to work, the <literal>.protocol</literal>
-must advertize the actions its slave supports.
+The remaining lines in the <literal>.protocol</literal> file define which
+abilities the slave has. In general, the features a slave must implement are
+much simpler than the features the KIO API provides for the application. The
+reason for this is that complex jobs are scheduled to a couple of subjobs. For
+example, in order to list a directory recursively, one job will be started for
+the toplevel directory. Then for each subdirectory reported back, new subjobs
+are started. A scheduler in KIO makes sure that not too many jobs are active
+at the same time. Similarly, in order to copy a file within a protocol that
+does not support copying directly (like the <literal>ftp:</literal> protocol),
+KIO can read the source file and then write the data to the destination
+file. For this to work, the <literal>.protocol</literal> must advertize the
+actions its slave supports.
 </para>
 
 <para>
 Since slaves are loaded as shared libraries, but constitute standalone programs,
 their code framework looks a bit different from normal shared library plugins.
-The function which is called to start the slave is called kdemain(). This 
-function does some initializations and then goes into an event loop and waits
-for requests by the application using it. This looks as follows:
+The function which is called to start the slave is called
+<function>kdemain()</function>. This function does some initializations and
+then goes into an event loop and waits for requests by the application using
+it. This looks as follows:
 </para>
 
 <programlisting>
@@ -2469,14 +3138,15 @@ int kdemain(int argc, char **argv)
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-implementingslaves">
 <title>Implementing an ioslave</title>
 
 <para>
-Slaves are implemented as subclasses of KIO::SlaveBase (FtpSlave in the above 
-example). Thus, the actions listed in the <literal>.protocol</literal> correspond to 
-certain virtual functions in KIO::SlaveBase the slave implementation must 
-reimplement. Here is a list of possible actions and the corresponding virtual 
+Slaves are implemented as subclasses of <classname>KIO::SlaveBase</classname>
+(FtpSlave in the above example). Thus, the actions listed in the
+<literal>.protocol</literal> correspond to certain virtual functions in
+<classname>KIO::SlaveBase</classname> the slave implementation must
+reimplement. Here is a list of possible actions and the corresponding virtual
 functions:
 </para>
 
@@ -2531,25 +3201,26 @@ or not (i.e. the default implementation returns an error).
 All these implementation should end with one of two calls: If the operation
 was successful, they should call <literal>finished()</literal>. If an error has occured,
 <literal>error()</literal> should be called with an error code as first argument and a
-string in the second. Possible error codes are listed as enum KIO::Error. The
-second argument is usually the URL in question. It is used e.g. in 
-KIO::Job::showErrorDialog() in order to parametrize the human-readable error
-message.
+string in the second. Possible error codes are listed as enum
+<type>KIO::Error</type>. The second argument is usually the URL in
+question. It is used e.g. in <function>KIO::Job::showErrorDialog()</function>
+in order to parametrize the human-readable error message.
 </para>
 
 <para>
 For slaves that correspond to network protocols, it might be interesting to 
-reimplement the method SlaveBase::setHost(). This is called to tell the slave
-process about the host and port, and the user name and password to log in.
-In general, meta data set by the application can be queried by SlaveBase::metaData().
-You can check for the existence of meta data of a certain key with
-SlaveBase::hasMetaData().
+reimplement the method <function>SlaveBase::setHost()</function>. This is
+called to tell the slave process about the host and port, and the user name
+and password to log in. In general, meta data set by the application can be
+queried by <function>SlaveBase::metaData()</function>. You can check for the
+existence of meta data of a certain key with
+<function>SlaveBase::hasMetaData()</function>.
 </para>
 
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-communication">
 <title>Communicating back to the application</title>
 
 <para>
@@ -2560,41 +3231,47 @@ to the application using the slave process:
 <itemizedlist>
 
 <listitem><para>
-get() sends blocks of data. This is done with data(), which takes a 
-QByteArray as argument. Of course, you do not need to send all data 
-at once. If you send a large file, call data() with smaller data 
-blocks, so the application can process them. Call finished() when
+<function>get()</function> sends blocks of data. This is done with
+<function>data()</function>, which takes a <classname>QByteArray</classname>
+as argument. Of course, you do not need to send all data at once. If you send
+a large file, call <function>data()</function> with smaller data blocks, so
+the application can process them. Call <function>finished()</function> when
 the transfer is finished.
 </para></listitem>
     
 <listitem><para>
-listDir() reports information about the entries of a directory. For
-this purpose, call listEntries() with a KIO::UDSEntryList as argument.
-Analogously to data(), you can call this several times. When
-you are finished, call listEntry() with the second argument set to
-true. You may also call totalSize() to report the total number of
-directory entries, if known.
+<function>listDir()</function> reports information about the entries of a
+directory. For this purpose, call <function>listEntries()</function> with a
+<classname>KIO::UDSEntryList</classname> as argument. Analogously to
+<function>data()</function>, you can call this several times. When you are
+finished, call <function>listEntry()</function> with the second argument set
+to true. You may also call <function>totalSize()</function> to report the
+total number of directory entries, if known.
 </para></listitem>
 
 <listitem><para>
-stat() reports information about a file like size, MIME type, etc.
-Such information is packaged in a KIO::UDSEntry, which will be discussed
-below. Use statEntry() to send such an item to the application.
+<function>stat()</function> reports information about a file like size, MIME
+type, etc. Such information is packaged in a
+<classname>KIO::UDSEntry</classname>, which will be discussed below. Use
+<function>statEntry()</function> to send such an item to the application.
 </para></listitem>
 
 <listitem><para>
-mimetype() calls mimeType() with a string argument.
+<function>mimetype()</function> calls <function>mimeType()</function> with a
+string argument.
 </para></listitem>
 
 <listitem><para>
-get() and copy() may want to provide progress information. This is
-done with the methods totalSize(), processedSize(), speed(). The
-total size and processed size are reported as bytes, the speed as
- bytes per second.
+<function>get()</function> and <function>copy()</function> may want to provide
+progress information. This is done with the methods
+<function>totalSize()</function>, <function>processedSize()</function>,
+<function>speed()</function>. The total size and processed size are reported
+as bytes, the speed as bytes per second.
 </para></listitem>
 
 <listitem><para>
-You can send arbitrary key/value pairs of meta data with setMetaData().
+You can send arbitrary key/value pairs of meta data with
+<function>setMetaData()</function>.
 </para></listitem>
 
 </itemizedlist>
@@ -2602,7 +3279,7 @@ You can send arbitrary key/value pairs of meta data with setMetaData().
 </simplesect>
 
 
-<simplesect>
+<simplesect id="nettransparency-interacting">
 <title>Interacting with the user</title>
 
 <para>
@@ -2614,25 +3291,29 @@ to be overwritten.
 <itemizedlist>
 
 <listitem><para>
-infoMessage() - This is for informational feedback, such as the message
-"Retrieving data from &lt;host&gt;" from the http slave, which is often displayed
- in the status bar of the program. On the application side, this method 
-corresponds to the signal KIO::Job::infoMessage().
+<function>infoMessage()</function> - This is for informational feedback, such
+as the message "Retrieving data from &lt;host&gt;" from the http slave, which
+is often displayed in the status bar of the program. On the application side,
+this method corresponds to the signal
+<function>KIO::Job::infoMessage()</function>.
 </para></listitem>
 
 <listitem><para>
-warning() - Displays a warning in a message box with 
-KMessageBox::information(). If a message box is still open from a former
-call of warning() from the same slave process, nothing happens.
+<function>warning()</function> - Displays a warning in a message box with
+<function>KMessageBox::information()</function>. If a message box is still
+open from a former call of warning() from the same slave process, nothing
+happens.
 </para></listitem>
 
 <listitem><para>
-messageBox() - This is richer than the previous method. It allows to open
- a message box with text and caption and some buttons. See the enum
-SlaveBase::MessageBoxType for reference.
+<function>messageBox()</function> - This is richer than the previous
+method. It allows to open a message box with text and caption and some
+buttons. See the enum <type>SlaveBase::MessageBoxType</type> for reference.
 </para></listitem>
 
-<listitem><para>openPassDlg() - Opens a dialog for the input of user name and password.
+<listitem><para>
+<function>openPassDlg()</function> - Opens a dialog for the input of user name
+and password.
 </para></listitem>
 
 </itemizedlist>
