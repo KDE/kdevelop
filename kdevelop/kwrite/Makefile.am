@@ -5,7 +5,7 @@ lib_LTLIBRARIES = libkdevelopkwrite.la
 INCLUDES = $(all_includes)
 
 
-LDFLAGS =  
+LDFLAGS = 
 
 
 libkdevelopkwrite_la_LDFLAGS = -version-info 2:0
