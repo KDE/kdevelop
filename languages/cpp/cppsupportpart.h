@@ -146,6 +146,7 @@ private slots:
     void gotoDeclarationLine( int line );
     void emitFileParsed();
     void slotParseFiles();
+    void slotCreateSubclass();
 
     void slotNeedTextHint( int, int, QString& );
 

@@ -673,6 +673,17 @@ void CppSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
 	    m_activeFunction = (FunctionModel*) mcontext->item();
 	}
     }
+    else if (context->hasType(Context::FileContext)){
+        const FileContext *fc = static_cast<const FileContext*>(context);
+        //this is a .ui file and only selection contains only one such file
+        kdDebug() << "file context with " << fc->fileName() << endl;
+        if (fc->fileName().endsWith(".ui"))
+        {
+            m_contextFileName = fc->fileName();
+            int id = popup->insertItem(i18n("Create or Select Implementation..."), this, SLOT(slotCreateSubclass()));
+            popup->setWhatsThis(id, i18n("<b>Create or select implementation</b><p>Creates or selects a subclass of selected form for use with integrated KDevDesigner."));
+        }
+    }
 }
 
 
@@ -1864,6 +1875,16 @@ KDevDesignerIntegration * CppSupportPart::designer( KInterfaceDesigner::Designer
     }
     kdDebug() << "3" << endl;
     return des;
+}
+
+void CppSupportPart::slotCreateSubclass()
+{
+    QFileInfo fi(m_contextFileName);
+    if (fi.extension(false) != "ui")
+        return;
+    QtDesignerIntegration *des = dynamic_cast<QtDesignerIntegration*>(designer(KInterfaceDesigner::QtDesigner));
+    if (des)
+        des->selectImplementation(m_contextFileName);
 }
 
 #include "cppsupportpart.moc"
