@@ -73,7 +73,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 	ctoolsconfigdlg.h cbugreportdlg.h cclasstooltreeview.h \
 	cmakemanualdlg.h klistview.h ckdevaccel.h dbgtoolbar.h dbgpsdlg.h
 
-EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk mini-development_package.xpm development_package.xpm
+EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc x-kdevelop-project.kdelnk kdevelop-project.xpm .directory kdevelop-setup.kdelnk mini-development_package.xpm development_package.xpm extractrc
 
 # if you "make distclean", this files get removed. If you want to remove
 # them while "make clean", use CLEANFILES

@@ -1,3 +1,6 @@
+2000-11-27  KDevelop Team <team@kdevelop.org>
+	* KDevelop1.3Beta1 released
+
 2000-11-02  Ralf Nolden <nolden@kde.org>
   * changed creation of api-reference to a folder <projectdir>/<projectname>-api as that otherwise confuses kdoc on
     existing projects that the project importer was used on.
