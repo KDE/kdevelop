@@ -1,3 +1,10 @@
+2003-03-21 jbb <jbb@kdevelop.org>
+    * src/debugger.*
+    - Finally, after many years, the "sliding" breakpoint problem
+      has been solved thanks to the initial efforts of
+      Andras Mantia (Mantia Andras <amantia@freemail.hu>)
+      See bug 48732.
+
 2003-03-20 Roberto Raggi <roberto@kdevelop.org>
 	* improved code completion
 
