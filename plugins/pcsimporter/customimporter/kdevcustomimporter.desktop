@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=KDevCustomImporter
+Comment=KDevelop Custom Directory PCS Importer
+Icon=gear
+ServiceTypes=KDevelop/PCSImporter
+X-KDE-Library=libkdevcustomimporter
+X-KDevelop-PCSImporter=
