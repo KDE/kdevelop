@@ -283,11 +283,7 @@ void DigraphView::drawContents(QPainter* p, int clipx, int clipy, int clipw, int
                 for (int j=0; j<4; ++j)
                     a.setPoint(j, b.point(i+j));
                 if (a.boundingRect().intersects(clipRect))
-#if QT_VERSION < 300
-                    p->drawQuadBezier((*it2)->points, i);
-#else
                     p->drawCubicBezier((*it2)->points, i);
-#endif
             }
         QPoint p1 = (*it2)->points[n-2];
         QPoint p2 = (*it2)->points[n-1];

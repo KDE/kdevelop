@@ -10,9 +10,8 @@ libkdevelop_la_LDFLAGS = $(all_libraries) -no-undefined -version-info 1:0
 libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 			$(top_builddir)/lib/sourceinfo/libkdevsourceinfo.la \
 			$(top_builddir)/lib/util/libkdevutil.la \
-			$(LIBQT3STUFF) \
 			-lkspell $(LIB_KPARTS) $(LIB_KFILE)
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces sourceinfo util structure $(QT3STUFFSUBDIR)
+SUBDIRS = interfaces sourceinfo util structure

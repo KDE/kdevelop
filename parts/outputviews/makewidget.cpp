@@ -121,11 +121,7 @@ void MakeWidget::nextError()
 {
     int parag, index;
     if (moved)
-#if QT_VERSION < 300
-        getCursorPosition(parag, index);
-#else
 	getCursorPosition(&parag, &index);
-#endif
     else
         parag = 0;
 
@@ -150,11 +146,7 @@ void MakeWidget::prevError()
 {
     int parag, index;
     if (moved)
-#if QT_VERSION < 300
-        getCursorPosition(parag, index);
-#else
         getCursorPosition(&parag, &index);
-#endif
     else
         parag = 0;
 
@@ -179,11 +171,7 @@ void MakeWidget::contentsMousePressEvent(QMouseEvent *e)
 {
     QTextEdit::contentsMousePressEvent(e);
     int parag, index;
-#if QT_VERSION < 300
-        getCursorPosition(parag, index);
-#else
-        getCursorPosition(&parag, &index);
-#endif
+    getCursorPosition(&parag, &index);
     searchItem(parag);
 }
 
@@ -192,11 +180,7 @@ void MakeWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Key_Return || e->key() == Key_Enter) {
         int parag, index;
-#if QT_VERSION < 300
-        getCursorPosition(parag, index);
-#else
         getCursorPosition(&parag, &index);
-#endif
         searchItem(parag);
     } else
         QTextEdit::keyPressEvent(e);
@@ -359,20 +343,12 @@ void MakeWidget::insertLine2(const QString &line, Type type)
     bool move = textCursor()->parag() == document()->lastParag() && textCursor()->atParagEnd();
 
     int paraFrom, indexFrom, paraTo, indexTo;
-#if QT_VERSION < 300
-        getSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
-#else
-        getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
-#endif
+    getSelection(&paraFrom, &indexFrom, &paraTo, &indexTo, 0);
     append(QString("<code><font color=\"%1\">%2</font></code><br>").arg(color).arg(line));
     setSelection(paraFrom, indexFrom, paraTo, indexTo, 0);
     
     if (move) {
-#if QT_VERSION < 300
-        moveCursor(MoveEnd, false, true);
-#else
         moveCursor(MoveEnd, false);
-#endif
     }
 
 }

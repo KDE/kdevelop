@@ -3,13 +3,7 @@
 
 
 #include <qwidget.h>
-#if (QT_VERSION >= 300)
 #include <qptrlist.h>
-#else
-#include <qlist.h>
-#define QPtrList QList
-#define QPtrListIterator QListIterator
-#endif
 #include <qpixmap.h>
 
 

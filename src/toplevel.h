@@ -13,13 +13,7 @@
 #define _TOPLEVEL_H_
 
 #include <qglobal.h>
-#if (QT_VERSION >= 300)
 #include <qptrlist.h>
-#else
-#include <qlist.h>
-#define QPtrList QList
-#define QPtrListIterator QListIterator
-#endif
 #include <kparts/mainwindow.h>
 #include "statusbar.h"
 #include "kdevcore.h"

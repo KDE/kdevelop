@@ -74,11 +74,7 @@ QWidget *Splitter::firstChild()
 
 int Splitter::handleWidth() const
 {
-#if QT_VERSION < 300
-    return (orientation() == Horizontal)? style().splitterWidth() : 0;
-#else
     return (orientation() == Horizontal)? style().pixelMetric(QStyle::PM_SplitterWidth, this) : 0;
-#endif
 }
 
 
@@ -187,11 +183,7 @@ void Splitter::doLayout()
             sizes[i] = QMAX(sizes[i], childlist.at(i)->minimumSizeHint().width());
             childlist.at(i)->setGeometry(offset, 0, sizes[i], height());
             offset += childlist.at(i)->width();
-#if QT_VERSION < 300
-            handlelist.at(i)->setGeometry(offset, 0, style().splitterWidth(), height());
-#else
             handlelist.at(i)->setGeometry(offset, 0, style().pixelMetric(QStyle::PM_SplitterWidth, this), height());
-#endif
             handlelist.at(i)->show();
             offset += handlelist.at(i)->width();
         }
@@ -367,11 +359,7 @@ void SplitterHandle::mousePressEvent(QMouseEvent *e)
 void SplitterHandle::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-#if QT_VERSION < 300
-    style().drawSplitter(&p, 0, 0, width(), height(), colorGroup(), Horizontal);
-#else
     style().drawPrimitive(QStyle::PE_Splitter, &p, QRect(0, 0, width(), height()), colorGroup(), QStyle::Style_Horizontal);
-#endif
 }
 
 #include "splitter.moc"

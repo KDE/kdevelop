@@ -1,5 +1,5 @@
 #include <kdebug.h>
-
+#include <ktexteditor/editinterface.h>
 
 #include "kwrite/kwview.h"
 #include "kwrite/kwdoc.h"
