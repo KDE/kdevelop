@@ -1,3 +1,12 @@
+2001-11-02  Walter Tasin <tasin@kdevelop.org>
+    * solving the autoconf problem
+      now c/c++ templates are tested with new autoconf 2.52 version
+    * c and c++ templates are using the admin directory
+      (but take care a c terminal application has its own
+       adapted version of some acinclude.m4 macros) 
+    * most project types should work with automake 1.5
+      (only gnome still doesn't work)
+
 2001-11-02  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: disable the disassemble when it's hidden
     * bugfix ;-): ALT+0 till ALT+9 switches the views in tab page mode
