@@ -1,3 +1,9 @@
+2003-11-09 F@lk Brettschneider <falkbr@kdevelop.org>
+    * as planned and decided month ago, now we
+      remove KDevelop's own special implementation of IDEAl UI mode.
+      This has been replaced by KDE's IDEAl UI mode, globally implemented in kdelibs/kmdi.
+      Now we increase maintainance, KDE-comformity and can switch all KDevelop UI modes on the fly.
+
 2003-10-29 Alexander Dymo <cloudtemple@mksat.net>
     * Imported updated pascal parser, it isn't restricted now to pascal-78.
       Most object pascal/delphi extensions are supported.
