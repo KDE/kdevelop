@@ -89,9 +89,7 @@ CKDevelop::CKDevelop() :
       doctool = DT_KDOC;
   #endif
   //MB end
-  bKDevelop = true;
-  m_statusBarIsKDevelop = false;
-  m_statusBar = 0;
+//  bKDevelop = true;
 
   version = VERSION;
   project=false;// no project
@@ -701,6 +699,7 @@ void CKDevelop::initMenuBar(){
  		
   project_menu->insertItem(BarIcon("file_properties"),i18n("&File Properties..."), this, SLOT(slotProjectFileProperties())
 			   ,0,ID_PROJECT_FILE_PROPERTIES);
+			
   project_menu->insertSeparator();
 
   project_menu->insertItem(i18n("Make &messages and merge"), this, SLOT(slotProjectMessages()),0, ID_PROJECT_MESSAGES);
@@ -1236,8 +1235,8 @@ void CKDevelop::initConnections(){
 
   connect(browser_widget, SIGNAL(onURL(const QString&)),this,SLOT(slotURLonURL(const QString&)));
   connect(browser_widget, SIGNAL(signalSearchText()),this,SLOT(slotHelpSearchText()));
-  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
-  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
+//  connect(browser_widget, SIGNAL(goRight()), this, SLOT(slotHelpForward()));
+//  connect(browser_widget, SIGNAL(goLeft()), this, SLOT(slotHelpBack()));
   connect(browser_widget, SIGNAL(enableStop(int)), this, SLOT(enableCommand(int)));	
   connect(browser_widget->popup(), SIGNAL(highlighted(int)), this, SLOT(statusCallback(int)));
   connect(browser_widget, SIGNAL(signalGrepText(QString)), this, SLOT(slotEditSearchInFiles(QString)));

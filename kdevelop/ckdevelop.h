@@ -625,7 +625,7 @@ public:
   void slotApplReceivedStdout(const char* buffer);
   void slotApplReceivedStderr(const char* buffer);
 
-  void switchToKDevelop();
+//  void switchToKDevelop();
   void startDesigner();
 
   void slotSearchReceivedStdout(KProcess* proc,char* buffer,int buflen);
@@ -903,7 +903,7 @@ private:
 
   bool bAutoswitch;
   bool bDefaultCV;
-  bool bKDevelop;
+//  bool bKDevelop;
 //  KProgress* statProg;
   QGuardedPtr<QProgressBar> statProg;
   //some vars for the searchengine
@@ -958,7 +958,6 @@ private:
   bool useGlimpse;
   bool useHtDig;
   bool lastShutdownOK;
-  bool m_statusBarIsKDevelop;
   KStatusBar* m_statusBar;
   KStartupLogo* start_logo;
 

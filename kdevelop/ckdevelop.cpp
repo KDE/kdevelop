@@ -680,9 +680,9 @@ void CKDevelop::slotViewNextError(){
   if(info.filename != ""){
     messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
-    if(!bKDevelop){
-      switchToKDevelop();
-    }
+//    if(!bKDevelop){
+//      switchToKDevelop();
+//    }
     slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
   }
   else{
@@ -710,9 +710,9 @@ void CKDevelop::slotViewPreviousError(){
   if(info.filename != ""){
     messages_widget->setCursorPosition(info.makeoutputline-1,0);
     switchToFile(info.filename,info.errorline-1);
-    if(!bKDevelop){
-      switchToKDevelop();
-    }
+//    if(!bKDevelop){
+//      switchToKDevelop();
+//    }
     slotStatusMsg(messages_widget->textLine(info.makeoutputline-1));
   }
   else{
@@ -1446,8 +1446,8 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
 
   if (qYesNoCancel!=2)
   {
-    if(!bKDevelop)
-      switchToKDevelop();
+//    if(!bKDevelop)
+//      switchToKDevelop();
 
     beep=false;
     prj->writeProject();
@@ -2162,8 +2162,8 @@ void CKDevelop::slotToolsTool(int tool){
   if(!CToolClass::searchProgram(tools_exe.at(tool)) ){
     return;
   }
-  if(!bKDevelop)
-    switchToKDevelop();
+//  if(!bKDevelop)
+//    switchToKDevelop();
     
 //  showOutputView(false);
 
@@ -2523,8 +2523,8 @@ void CKDevelop::slotHelpBack(){
   slotStatusMsg(i18n("Switching to last page..."));
   QString str = history_list.prev();
   if (str != 0){
-    if(!bKDevelop)
-      switchToKDevelop();
+//    if(!bKDevelop)
+//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2537,8 +2537,8 @@ void CKDevelop::slotHelpForward(){
   slotStatusMsg(i18n("Switching to next page..."));
   QString str = history_list.next();
   if (str != 0){
-    if(!bKDevelop)
-      switchToKDevelop();
+//    if(!bKDevelop)
+//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2551,8 +2551,8 @@ void CKDevelop::slotHelpHistoryBack( int id_){
   
   QString str = history_list.at(id_);
   if (str != 0){
-    if(!bKDevelop)
-      switchToKDevelop();
+//    if(!bKDevelop)
+//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2567,8 +2567,8 @@ void CKDevelop::slotHelpHistoryForward( int id_){
   int cur=history_list.at()+1;
   QString str = history_list.at(cur+id_);
   if (str != 0){
-    if(!bKDevelop)
-      switchToKDevelop();
+//    if(!bKDevelop)
+//      switchToKDevelop();
     s_tab_view->setCurrentTab(BROWSER);
     browser_widget->showURL(str);
   }
@@ -2578,8 +2578,8 @@ void CKDevelop::slotHelpHistoryForward( int id_){
 
 void CKDevelop::slotHelpBrowserReload(){
   slotStatusMsg(i18n("Reloading page..."));
-  if(!bKDevelop)
-    switchToKDevelop();
+//  if(!bKDevelop)
+//    switchToKDevelop();
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->view()->setFocus();
   browser_widget->showURL(browser_widget->currentURL(), true);
@@ -2649,7 +2649,7 @@ void CKDevelop::slotHelpSearchText(QString text){
   doc_search_text = text.copy();
 
   slotStatusMsg(i18n("Searching selected text in documentation..."));
-  if(useGlimpse && !QFile::exists(locate("appdata", ".glimpse_index")))
+  if(useGlimpse && !QFile::exists(locateLocal("appdata", ".glimpse_index")))
   {
     if (!useHtDig) {
       if(KMessageBox::questionYesNo(this,
@@ -2667,7 +2667,10 @@ void CKDevelop::slotHelpSearchText(QString text){
   search_process.clearArguments();
   if (useGlimpse)
   {
-    search_process << "glimpse  -H "+ locate("apps", "kdevelop") +" -U -c -y '"+ text +"'";
+    search_process << "glimpse";
+    search_process << "-H" << locateLocal("appdata", "");
+    search_process << "-U" << "-c" << "-y" << "'" + text +"'";
+
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
   if (useHtDig)
@@ -2678,7 +2681,7 @@ void CKDevelop::slotHelpSearchText(QString text){
                         "format=&matchesperpage=30&words=" +
                         encodeURL(text) +
                         "\" | sed -e '/file:\\/\\/localhost/s//file:\\/\\//g' > " +
-                        locateLocal("data", "search_result.html");
+                        locateLocal("appdata", "search_result.html");
     search_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
 }
@@ -3145,8 +3148,8 @@ void CKDevelop::slotNewUndo(){
 
 void CKDevelop::slotURLSelected(KHTMLPart* ,const QString& url,int,const char*){
 //  enableCommand(ID_HELP_BROWSER_STOP);
-  if(!bKDevelop)
-    switchToKDevelop();
+//  if(!bKDevelop)
+//    switchToKDevelop();
   //showOutputView(false);
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->view()->setFocus();
@@ -3432,80 +3435,92 @@ void CKDevelop::slotSearchReceivedStdout(KProcess* /*proc*/,char* buffer,int buf
   QCString str(buffer,buflen+1);
   search_output = search_output + QString(str);
 }
-void CKDevelop::slotSearchProcessExited(KProcess*){
+void CKDevelop::slotSearchProcessExited(KProcess*)
+{
   disableCommand(ID_HELP_BROWSER_STOP);
-  //  cerr << search_output;
-  int pos=0;
-  int nextpos=0;
-  QStrList list;
-  QStrList sort_list;
-  QString str;
-  QString found_str;
-  int i=0;
-  int max=0;
 
-  QString filename = locateLocal("data", "search_result.html");
-  if (useHtDig)
+  // Figure out the filename of the file we will create if we are using glimpse,
+  // or the file that should have the results created by HtDig.
+  QString filename = locateLocal("appdata", "search_result.html");
+
+  // Since we prefer glimspe when we started the search we have to
+  // prefer glimpse here as well!!
+  if (useGlimpse)
   {
-    slotURLSelected(browser_widget, filename,1,"test");
-    return;
-  }
+    QStrList list;
+    QString str;
+    int nextpos;
+    int pos=0;
+    while((nextpos = search_output.find('\n', pos)) != -1)
+    {
+      str = search_output.mid(pos,nextpos-pos);
+      list.append(str);
+      pos = nextpos+1;
+    }
 
-  while((nextpos = search_output.find('\n',pos)) != -1){
-    str = search_output.mid(pos,nextpos-pos);
-    list.append(str);
-    pos = nextpos+1;
-  }
-  if (list.isEmpty()){
+    if (list.isEmpty()){
 
-     KMessageBox::information(0,"\"" + doc_search_display_text + i18n("\" not found in documentation!"),
-                                i18n("Not found!"));
-    return;
-  }
+       KMessageBox::information(0,"\"" + doc_search_display_text + i18n("\" not found in documentation!"),
+                                  i18n("Not found!"));
+      return;
+    }
 
-  // //lets sort it a little bit
-  for(;i<30;i++)
-  {
-    max =0;
-    found_str = "";
-    for(str = list.first();str != 0;str = list.next()){
-      if (searchToolGetNumber(str) >= max){
-        found_str = str.copy();
-        max = searchToolGetNumber(str);
+    int max;
+    QStrList sort_list;
+    QString found_str;
+
+    // sort on the numeric count at the end of each line.
+    // The higher the hit count, the earlier it appears in the list.
+    for(int i=0;i<30;i++)
+    {
+      max =0;
+      found_str = "";
+      for(str = list.first();str != 0;str = list.next()){
+        if (searchToolGetNumber(str) >= max){
+          found_str = str.copy();
+          max = searchToolGetNumber(str);
+        }
+      }
+      if (found_str != ""){
+        sort_list.append(found_str);
+        list.remove(found_str);
       }
     }
-    if(found_str != ""){
-      sort_list.append(found_str);
-      list.remove(found_str);
+
+    QFile file(filename);
+    QTextStream stream(&file);
+    file.open(IO_WriteOnly);
+
+    stream << "<HTML>";
+    stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
+    stream << "</TITLE></HEAD><H1>Search String: '" << doc_search_display_text << "'</H1><HR><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
+    stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
+    QString numstr;
+    for(str = sort_list.first(); str != 0; str = sort_list.next() ){
+      stream << "<TR><TD><A HREF=\""+searchToolGetURL(str)+"\">"+
+                searchToolGetTitle(str)+"</A><TD>"+
+                numstr.setNum(searchToolGetNumber(str)) + "\n";
     }
 
+    stream << "\n</TABLE></BODY></HTML>";
+
+    file.close();
+    slotURLSelected(browser_widget, filename, 1,"test");
+    return;
   }
-
-  QFile file(filename);
-  QTextStream stream(&file);
-  file.open(IO_WriteOnly);
-
-  stream << "<HTML>";
-  stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
-  stream << "</TITLE></HEAD><H1>Search String: '" << doc_search_display_text << "'</H1><HR><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
-  stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
-  QString numstr;
-  for(str = sort_list.first();str != 0;str = sort_list.next() ){
-    stream << "<TR><TD><A HREF=\""+searchToolGetURL(str)+"\">"+
-              searchToolGetTitle(str)+"</A><TD>"+
-              numstr.setNum(searchToolGetNumber(str)) + "\n";
+  else
+  {
+    ASSERT (useHtDig);
+    filename = locateLocal("appdata", "search_result.html");
+    if (QFile::exists(filename))
+      slotURLSelected(browser_widget, filename, 1,"test");
   }
-
-  stream << "\n</TABLE></BODY></HTML>";
-
-  file.close();
-  slotURLSelected(browser_widget, filename,1,"test");
 }
 
 QString CKDevelop::searchToolGetTitle(QString str){
   int pos = str.find(' ');
   pos = str.find(' ',pos);
-  int end_pos = str.find(':',pos);
+  int end_pos = str.findRev(':');
   return str.mid(pos,end_pos-pos);
 }
 
@@ -3533,8 +3548,8 @@ void CKDevelop::slotClickedOnMessagesWidget(){
   messages_widget->cursorPosition(&x,&y);
   info = error_parser->getInfo(x+1);
   if(info.filename != ""){
-    if(!bKDevelop)
-      switchToKDevelop();
+//    if(!bKDevelop)
+//      switchToKDevelop();
     messages_widget->setCursorPosition(info.makeoutputline,0);
     switchToFile(info.filename,info.errorline-1);
   }

@@ -354,7 +354,8 @@ void CCreateDocDatabaseDlg::slotOkClicked(){
   proc->clearArguments();
   if (useGlimpse->isChecked())
   {
-    *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " + size_str +" -F -X -H "+ locateLocal("data","");
+    *proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " +
+                    size_str +" -F -X -H "+ locateLocal("appdata","");
     proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
     accept();
   }

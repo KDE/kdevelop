@@ -700,7 +700,7 @@ bool CBugReportDlg::generateEmail() {
   text+=misc_mledit->text();
   QDir dir(locateLocal("data",""));
   dir.mkdir("kdevelop");
-  QFile file(locateLocal("data", "kdevelop") + "bugreport."+strBugID);
+  QFile file(locateLocal("appdata", "bugreport."+strBugID));
   if (!file.open(IO_WriteOnly)) {
     return false;
   }
@@ -714,7 +714,7 @@ bool CBugReportDlg::generateEmail() {
 bool CBugReportDlg::sendEmail() {
 
 	QString command("cat ");
-	command.append(locateLocal("data", "kdevelop")+ "bugreport."+strBugID);
+	command.append(locateLocal("appdata", "bugreport."+strBugID));
   command+=" | ";
   command+=sendmail_edit->text();
   command+=" -t";

@@ -47,11 +47,12 @@ int main(int argc, char* argv[]) {
     }
 
     CKDevelop* kdevelop = new CKDevelop();
-    kdevelop->completeStartup( argc > 1 );
 
 		// We don't want this happening - It shouldn't - but (indirectly) KHTMLPart connects :(
 		if (a.dcopClient() && a.dcopClient()->isAttached())
 			a.dcopClient()->suspend();
+
+    kdevelop->completeStartup( argc > 1 );
 
     if(bInstall){
       kdevelop->refreshTrees();  // this is because of the new documentation

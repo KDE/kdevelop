@@ -294,8 +294,8 @@ bool CKDevelop::setInfoModified(const QString &sFilename, bool bModified)
  *-----------------------------------------------------------------*/
 void CKDevelop::setMainCaption(int tab_item)
 {
-    if (bKDevelop)
-    {
+//    if (bKDevelop)
+//    {
       switch(tab_item)
       {
           case BROWSER:
@@ -321,7 +321,7 @@ void CKDevelop::setMainCaption(int tab_item)
             break;
       }
       setCaption(kdev_caption);
-    }
+//    }
 }
 
 
@@ -916,61 +916,61 @@ void CKDevelop::switchToFile(QString filename, int lineNo){
   edit_widget->setCursorPosition( lineNo, 0 );
 }
 
-#warning FIXME this is now redundent??
-void CKDevelop::switchToKDevelop(){
-
-  setCaption(kdev_caption);
-
-  bKDevelop=true;
-  setUpdatesEnabled(false);
-
-  //////// change the mainview ////////
-  s_tab_view->show();
-  t_tab_view->show();
-
-  topSplitter->hide();
-#warning FIXME QSplitter methods does not map to qt2 QSplitter
-//  topSplitter->deactivate();
-//  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
-  topSplitter->show();
-  //////// change the bars ///////////
-  kdev_menubar->show();
-//  setMenu(kdev_menubar);
-
-  toolBar(ID_BROWSER_TOOLBAR)->show();
-
-  // this toolbar toogle is for placing the qsplitter devider correctly
-//  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
-//  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
-
-	setKeyAccel();  // initialize Keys
-  ///////// reset bar status ////////////
-
-  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
-    toolBar()->show();
-  else
-    toolBar()->hide();
-
-  if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
-    toolBar(ID_BROWSER_TOOLBAR)->show();
-  else
-    toolBar(ID_BROWSER_TOOLBAR)->hide();
-
-  ///////// reset the views status ///////////////
-  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
-    showTreeView();
-  else
-    showTreeView(false);
-
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
-    showOutputView();
-  else
-    showOutputView(false);
-
-  setUpdatesEnabled(true);
-  repaint();
-
-}
+//#warning FIXME this is now redundent??
+//void CKDevelop::switchToKDevelop(){
+//
+//  setCaption(kdev_caption);
+//
+//  bKDevelop=true;
+//  setUpdatesEnabled(false);
+//
+//  //////// change the mainview ////////
+//  s_tab_view->show();
+//  t_tab_view->show();
+//
+//  topSplitter->hide();
+//#warning FIXME QSplitter methods does not map to qt2 QSplitter
+////  topSplitter->deactivate();
+////  topSplitter->activate(t_tab_view,s_tab_view);// activate the topSplitter
+//  topSplitter->show();
+//  //////// change the bars ///////////
+//  kdev_menubar->show();
+////  setMenu(kdev_menubar);
+//
+//  toolBar(ID_BROWSER_TOOLBAR)->show();
+//
+//  // this toolbar toogle is for placing the qsplitter devider correctly
+////  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
+////  enableToolBar(KToolBar::Toggle, ID_BROWSER_TOOLBAR);
+//
+//	setKeyAccel();  // initialize Keys
+//  ///////// reset bar status ////////////
+//
+//  if(view_menu->isItemChecked(ID_VIEW_TOOLBAR))
+//    toolBar()->show();
+//  else
+//    toolBar()->hide();
+//
+//  if(view_menu->isItemChecked(ID_VIEW_BROWSER_TOOLBAR))
+//    toolBar(ID_BROWSER_TOOLBAR)->show();
+//  else
+//    toolBar(ID_BROWSER_TOOLBAR)->hide();
+//
+//  ///////// reset the views status ///////////////
+//  if(view_menu->isItemChecked(ID_VIEW_TREEVIEW))
+//    showTreeView();
+//  else
+//    showTreeView(false);
+//
+//  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW))
+//    showOutputView();
+//  else
+//    showOutputView(false);
+//
+//  setUpdatesEnabled(true);
+//  repaint();
+//
+//}
 
 void CKDevelop::startDesigner()
 {
@@ -1060,6 +1060,13 @@ void CKDevelop::setToolMenuProcess(bool enable){
     disableCommand(ID_PROJECT_MAKE_PROJECT_API);
     disableCommand(ID_PROJECT_MAKE_USER_MANUAL);
     disableCommand(ID_PROJECT_MAKE_DISTRIBUTION);
+
+    disableCommand(ID_PROJECT_CLOSE);
+    disableCommand(ID_PROJECT_NEW_CLASS);
+    disableCommand(ID_PROJECT_ADD_FILE_EXIST);
+    disableCommand(ID_PROJECT_ADD_NEW_TRANSLATION_FILE);
+    disableCommand(ID_PROJECT_FILE_PROPERTIES);
+    disableCommand(ID_PROJECT_OPTIONS);
   }
 
   if(bAutosave)
@@ -1278,11 +1285,11 @@ void CKDevelop::readOptions()
       slotURLSelected(browser_widget, file,1,"test");
   }
 
-  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
-  if(switchKDevelop)
-    switchToKDevelop();
-  else
-    startDesigner();
+//  bool switchKDevelop=config->readBoolEntry("show_kdevelop",true);  // if true, kdevelop, else kdialogedit
+//  if(switchKDevelop)
+//    switchToKDevelop();
+//  else
+//    startDesigner();
 }
 
 void CKDevelop::saveOptions(){
@@ -1312,7 +1319,7 @@ void CKDevelop::saveOptions(){
   config->writeEntry("LastActiveTab", s_tab_view->getCurrentTab());
   config->writeEntry("LastActiveTree", t_tab_view->getCurrentTab());
 
-  config->writeEntry("show_kdevelop",bKDevelop);
+//  config->writeEntry("show_kdevelop",bKDevelop);
 
   config->writeEntry("lfv_show_path",log_file_tree->showPath());
 
