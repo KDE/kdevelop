@@ -24,53 +24,57 @@ class KStatusBar;
  * @short Main window class
  * @author $AUTHOR$ <$EMAIL$>
  * @version 0.1
+ * Note: You can user _every_ widget for implementing your userinterface.
  */
 class $APPNAME$UI : public QWidget, public UserInterface
 {
 Q_OBJECT
 public:
-	$APPNAME$UI();
-	virtual ~$APPNAME$UI();
-	void load(const QString& url);
+    $APPNAME$UI();
+    virtual ~$APPNAME$UI();
+    void load(const QString& url);
 
 protected:
-	virtual void dragEnterEvent(QDragEnterEvent *event);
-	virtual void dropEvent(QDropEvent *event);
-	virtual void closeEvent(QCloseEvent*);
-	virtual void showEvent(QShowEvent*e);
-	virtual void mouseReleaseEvent(QMouseEvent *);
-	virtual bool eventFilter(QObject*, QEvent*);
-	virtual void wheelEvent(QWheelEvent *e);
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
+    virtual void closeEvent(QCloseEvent*);
+    virtual void showEvent(QShowEvent*e);
+    /** RMB -> context menu  */
+    virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual bool eventFilter(QObject*, QEvent*);
+    /** volume control  */
+    virtual void wheelEvent(QWheelEvent *e);
 
 protected:
-	QSlider *seeker() const { return mSeeker; }
-	KStatusBar *statusBar() const { return mStatusBar; }
+    QSlider *seeker() const { return mSeeker; }
+    KStatusBar *statusBar() const { return mStatusBar; }
 
 public slots:
-	void slotPlaying();
-	void slotStopped();
-	void slotPaused();
+    void slotPlaying();
+    void slotStopped();
+    void slotPaused();
 
-	void playlistShown();
-	void playlistHidden();
+    /** "show/hide playlist" button  */
+    void playlistShown();
+    void playlistHidden();
 
-	void slotTimeout();
-	void sliderMoved(int seconds);
-	void changeLoopType(int t);
-	void skipToWrapper(int second);
+    void slotTimeout();
+    void sliderMoved(int seconds);
+    void changeLoopType(int t);
+    void skipToWrapper(int second);
 
 signals:
-	void skipTo( int ); // emitted by skipToWrapper()
+    void skipTo( int ); // emitted by skipToWrapper()
 
 private slots:
-	void changeStatusbar(const QString& text, const QString &text2=0);
-	void changeCaption(const QString& text);
-	void popup();
+    void changeStatusbar(const QString& text, const QString &text2=0);
+    void changeCaption(const QString& text);
+    void popup();
 
 private:
-	QPushButton *mBack, *mStop, *mPlay, *mForward, *mPlaylist, *mPopup, *mLoop;
-	QSlider *mSeeker, *mVolume;
-	KStatusBar *mStatusBar;
+    QPushButton *mBack, *mStop, *mPlay, *mForward, *mPlaylist, *mPopup, *mLoop;
+    QSlider *mSeeker, *mVolume;
+    KStatusBar *mStatusBar;
 };
 
 #endif // $APPNAMEUC$_IMPL_H
