@@ -148,7 +148,6 @@ private:
     int               currentFrame_;
     int               viewedThread_;
 
-    int               state_;
     int               gdbSizeofBuf_;          // size of the output buffer
     int               gdbOutputLen_;          // amount of data in the output buffer
     char*             gdbOutput_;             // buffer for the output from kprocess
@@ -157,8 +156,12 @@ private:
     DbgCommand*       currentCmd_;
 
     STTY*             tty_;
-    bool              programHasExited_;
     QString           badCore_;
+
+    // Some state variables
+    int               state_;
+    bool              programHasExited_;
+    bool              backtraceDueToProgramStop_;
 
     // Configuration values
     QDomDocument &dom;

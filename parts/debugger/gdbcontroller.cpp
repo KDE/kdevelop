@@ -127,14 +127,15 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
         varTree_(varTree),
         currentFrame_(0),
         viewedThread_(-1),
-        state_(s_dbgNotStarted|s_appNotStarted|s_silent),
         gdbSizeofBuf_(2048),
         gdbOutputLen_(0),
         gdbOutput_(new char[2048]),
         currentCmd_(0),
         tty_(0),
-        programHasExited_(false),
         badCore_(QString()),
+        state_(s_dbgNotStarted|s_appNotStarted|s_silent),
+        programHasExited_(false),
+        backtraceDueToProgramStop_(false),
         dom(projectDom),
         config_breakOnLoadingLibrary_(true),
         config_forceBPSet_(true),
@@ -383,6 +384,7 @@ void GDBController::actOnProgramPause(const QString &msg)
         viewedThread_ = -1;
         currentFrame_ = 0;
         varTree_->setActiveFlag();
+        backtraceDueToProgramStop_ = true;
 
         // These two need to be actioned immediately. The order _is_ important
         if (stateIsOn(s_viewThreads))
@@ -765,7 +767,15 @@ void GDBController::parseProgramLocation(char *buf)
 void GDBController::parseBacktraceList(char *buf)
 {
     frameStack_->parseGDBBacktraceList(buf);
-    varTree_->trimExcessFrames();
+    if (backtraceDueToProgramStop_)
+    {
+        varTree_->trimExcessFrames();
+        VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
+        if (frame)
+            frame->setFrameName(
+                frameStack_->getFrameName(currentFrame_, viewedThread_));
+        backtraceDueToProgramStop_ = false;
+    }
 }
 
 // **************************************************************************
@@ -809,7 +819,6 @@ void GDBController::parseRequestedData(char *buf)
         varTree_->repaint();
     }
 }
-
 
 // **************************************************************************
 
@@ -877,16 +886,14 @@ void GDBController::parseLocals(char type, char *buf)
 
     // The locals are always attached to the currentFrame
     VarFrameRoot *frame = varTree_->findFrame(currentFrame_, viewedThread_);
-    if (!(frame))
+    if (!frame)
     {
-        // Make a Frame root when we didn't have one.
         frame = new VarFrameRoot(varTree_, currentFrame_, viewedThread_);
         frame->setFrameName(
                 frameStack_->getFrameName(currentFrame_, viewedThread_));
     }
 
     Q_ASSERT(frame);
-
 
     if (type == (char) ARGS)
     {
