@@ -73,10 +73,12 @@ public: // Public queries
   /** Return the type of the item. */
   THType itemType( QListViewItem *item );
 
-private: // Private attributes
+protected: // Protected attributes
 
   /** The tree to draw in. */
   QListView *tree;
+
+private: // Private attributes
 
   /** The last item added to the tree. */
   QListViewItem *lastItem;
@@ -94,7 +96,6 @@ private: // Private methods
 
   /** Initalize the icon array and read the icons from disk. */
   void readIcons();
-
 };
 
 #endif
