@@ -1976,7 +1976,9 @@ void KWriteDoc::setFileName( const QString& s ) {
   //highlight detection
   pos = fName.findRev('/') +1;
   if (pos >= (int) fName.length()) return; //no filename
-  hl = hlManager->wildcardFind(s.right(pos));
+  hl = hlManager->wildcardFind((pos) ? s.right(pos) : QString("")); // this is a WORKAROUND
+                                                                    //  QT-2.00 QRegExp doesn´t permit a null-string
+
   if (hl == -1) {
     // fill the detection buffer with the contents of the text
     const int HOWMANY = 1024;
