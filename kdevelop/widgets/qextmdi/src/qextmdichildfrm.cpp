@@ -573,6 +573,10 @@ QPixmap* QextMdiChildFrm::icon()
 void QextMdiChildFrm::setClient(QextMdiChildView *w)
 {
    m_pClient=w;
+
+   if (w->icon())
+      setIcon( *(w->icon()));
+
    //resize to match the client
    int clientYPos=m_pCaption->heightHint()+QEXTMDI_MDI_CHILDFRM_SEPARATOR+QEXTMDI_MDI_CHILDFRM_BORDER;
   if(w->size().isEmpty() || (w->size() == QSize(1,1)))
@@ -602,7 +606,7 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
       pFocPolDict->insert( widg->name(), pFocPol);
    }
    delete list;                        // delete the list, not the objects
-   
+
    //Reparent if needed
    if(w->parent()!=this){
       //reparent to this widget , no flags , point , show it
@@ -614,18 +618,18 @@ void QextMdiChildFrm::setClient(QextMdiChildView *w)
 
       // min/max sizes, flags, DND get lost. :-(
       w->reparent(this,0,pnt2,w->isVisible());
-      
+
       w->setMinimumSize(mincs.width(),mincs.height());
       w->setMaximumSize(maxcs.width(),maxcs.height());
       setMinimumWidth(QEXTMDI_MDI_CHILDFRM_MIN_WIDTH);
    } else w->move(QEXTMDI_MDI_CHILDFRM_BORDER,clientYPos);
-   
+
    linkChildren( pFocPolDict);
-   
+
    QObject::connect( m_pClient, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(raiseAndActivate()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNowMaximized()), m_pManager, SIGNAL(nowMaximized()) );
    QObject::connect( m_pClient, SIGNAL(mdiParentNoLongerMaximized(QextMdiChildFrm*)), m_pManager, SIGNAL(noLongerMaximized(QextMdiChildFrm*)) );
-   
+
    if( m_pClient->minimumSize().width() > m_pManager->m_defaultChildFrmSize.width()) {
       setMinimumWidth(m_pClient->minimumSize().width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
    }
@@ -863,6 +867,25 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
       if( newChildFrmSize != size())
          resize( newChildFrmSize );
    }
+   else if (e->type() == QEvent::ChildInserted) {
+      // if we got a new child we install ourself as event filter for the new 
+      // child and its children (as we did when we got our client). 
+      // XXX see linkChildren() and focus policy stuff
+      QObject* pNewChild = ((QChildEvent*)e)->child();
+      if ( (pNewChild != 0L) && (pNewChild->inherits("QWidget")) ) {
+         QWidget* pNewWidget = (QWidget*)pNewChild;
+         QObjectList *list = pNewWidget->queryList( "QWidget" );
+         list->insert(0, pNewChild);         // add the new child to the list too, just to save code
+         QObjectListIt it( *list );          // iterate over all new child widgets
+         QObject * obj;
+         while ( (obj=it.current()) != 0 ) { // for each found object...
+            QWidget* widg = (QWidget*)obj;
+            ++it;
+            widg->installEventFilter(this);
+         }
+         delete list;                        // delete the list, not the objects
+      }
+   }
    return FALSE;                           // standard event processing
 }
 
@@ -1023,8 +1046,14 @@ void QextMdiChildFrm::redecorateButtons()
    }
 #endif
 
-   m_pWinIcon->setPixmap( *m_pIconButtonPixmap);
-   m_pUnixIcon->setPixmap( *m_pIconButtonPixmap);
+   if (m_pClient && m_pClient->icon()) {
+      m_pWinIcon->setPixmap( *(m_pClient)->icon());
+      m_pUnixIcon->setPixmap( *(m_pClient)->icon());
+   }
+   else {
+      m_pWinIcon->setPixmap( *m_pIconButtonPixmap);
+      m_pUnixIcon->setPixmap( *m_pIconButtonPixmap);
+   }
    m_pClose->setPixmap( *m_pCloseButtonPixmap);
    m_pMinimize->setPixmap( *m_pMinButtonPixmap);
    m_pMaximize->setPixmap( *m_pMaxButtonPixmap);
