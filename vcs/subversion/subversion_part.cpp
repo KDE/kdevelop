@@ -28,7 +28,7 @@
 #include "kdevmainwindow.h"
 #include "subversion_core.h"
 #include "subversion_part.h"
-#include "subversion_options_widget.h"
+#include "subversionoptionswidgetimpl.h"
 #include "subversionprojectwidget.h"
 #include "urlutil.h"
 #include <qvbox.h>
@@ -39,6 +39,7 @@
 #include <domutil.h>
 #include <kurlrequester.h>
 #include <qradiobutton.h>
+#include <kdebug.h>
 
 typedef KGenericFactory<subversionPart> subversionFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevsubversion, subversionFactory( "kdevsubversion" ) );
@@ -119,7 +120,7 @@ QWidget* subversionPart::newProjectWidget( QWidget* parent ) {
 
 void subversionPart::projectConfigWidget( KDialogBase *dlg ) {
 	QVBox *vbox = dlg->addVBoxPage( i18n("Subversion") );
-	subversionOptionsWidget *w = new subversionOptionsWidget( (QWidget *)vbox, "svn config widget" );
+	subversionOptionsWidgetImpl *w = new subversionOptionsWidgetImpl( (QWidget *)vbox, this, "svn config widget" );
 	connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
 
@@ -227,6 +228,7 @@ void subversionPart::slotProjectClosed() {
 }
 
 void subversionPart::savePartialProjectSession(QDomElement* dom) {
+	kdDebug() << "subversion : savePartialProjectSession" << endl;
 	QDomDocument doc = dom->ownerDocument();
 	QDomElement svn = doc.createElement( "subversion" );
 	svn.setAttribute("recursecheckout", m_checkout_recurse);
@@ -250,6 +252,7 @@ void subversionPart::savePartialProjectSession(QDomElement* dom) {
 }
 
 void subversionPart::restorePartialProjectSession(const QDomElement* dom) {
+	kdDebug() << "subversion : restorePartialProjectSession" << endl;
 	QDomElement svn = dom->namedItem("subversion").toElement();
 
 	m_checkout_recurse = svn.attribute( "recursecheckout", "1" ).toInt();

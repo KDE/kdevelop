@@ -17,21 +17,27 @@
 	 Boston, MA 02111-1307, USA.
 	 */
 
-#ifndef __SUBVERSION_OPTIONS_WIDGET_H__
-#define __SUBVERSION_OPTIONS_WIDGET_H__
+#ifndef __SUBVERSION_OPTIONS_WIDGET_IMPL_H__
+#define __SUBVERSION_OPTIONS_WIDGET_IMPL_H__
 
 #include <qwidget.h>
+#include "subversionoptionswidget.h"
+class subversionPart;
 
-class subversionOptionsWidget : public QWidget
+class subversionOptionsWidgetImpl : public subversionOptionsWidget
 {
   Q_OBJECT
     
 public:
 		  
-  subversionOptionsWidget(QWidget *parent, const char* name);
-  ~subversionOptionsWidget();
+  subversionOptionsWidgetImpl(QWidget *parent, subversionPart *part, const char* name);
+  ~subversionOptionsWidgetImpl();
 
 private:
+	subversionPart *m_part;
+
+public slots:
+		void accept();
 
 };
 

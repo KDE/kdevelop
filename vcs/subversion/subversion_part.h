@@ -31,68 +31,67 @@ class subversionProjectWidget;
 
 class subversionPart : public KDevVersionControl
 {
-  Q_OBJECT
+	Q_OBJECT
 
 public:
-   
-  subversionPart(QObject *parent, const char *name, const QStringList &);
-  ~subversionPart();
+		subversionPart(QObject *parent, const char *name, const QStringList &);
+		~subversionPart();
 
-	void setupActions();
-	QWidget* newProjectWidget( QWidget* parent );
-	void createNewProject( const QString& dirname );
-	void fetchFromRepository();
-	KDevVCSFileInfoProvider * fileInfoProvider() const;
-	bool isValidDirectory( const QString& dirPath);
-	void projectConfigWidget( KDialogBase *dlg );
-	bool urlFocusedDocument( KURL &url );
-	void restorePartialProjectSession(const QDomElement* );
-	void savePartialProjectSession(QDomElement* );
-	void setBaseURL(const KURL& url ) { base = url; }
-	KURL baseURL() { return base; }
+		void setupActions();
+		QWidget* newProjectWidget( QWidget* parent );
+		void createNewProject( const QString& dirname );
+		void fetchFromRepository();
+		KDevVCSFileInfoProvider * fileInfoProvider() const;
+		bool isValidDirectory( const QString& dirPath);
+		bool urlFocusedDocument( KURL &url );
+		void restorePartialProjectSession(const QDomElement* );
+		void savePartialProjectSession(QDomElement* );
+		void setBaseURL(const KURL& url ) { base = url; }
+		KURL baseURL() { return base; }
 
 signals:
-	void finishedFetching( QString destinationDir );
+		void finishedFetching( QString destinationDir );
 
 private slots:
-	void contextMenu( QPopupMenu *popup, const Context *context );
-	void slotActionUpdate();
-	void slotProjectClosed();
-	void slotProjectOpened();
-  
+		void contextMenu( QPopupMenu *popup, const Context *context );
+		void slotActionUpdate();
+		void slotProjectClosed();
+		void slotProjectOpened();
+		void projectConfigWidget( KDialogBase *dlg );
+
 private:
-    
-  QGuardedPtr<subversionCore> m_impl;
-	KURL::List m_urls;
+		QGuardedPtr<subversionCore> m_impl;
+		KURL::List m_urls;
 
-	KAction *actionCommit,
-	*actionDiff,
-	*actionAdd,
-	*actionRemove,
-	*actionUpdate,
-	*actionAddToIgnoreList,
-	*actionRemoveFromIgnoreList;
+		KAction *actionCommit,
+		*actionDiff,
+		*actionAdd,
+		*actionRemove,
+		*actionUpdate,
+		*actionAddToIgnoreList,
+		*actionRemoveFromIgnoreList;
 
-	subversionProjectWidget *m_projWidget;
-	KURL base;
+		subversionProjectWidget *m_projWidget;
+		KURL base;
 
-	//options
-	bool m_checkout_recurse;
-	bool m_update_recurse;
-	bool m_switch_recurse;
-	bool m_add_recurse;
-	bool m_remove_force;
-	bool m_commit_recurse;
-	bool m_diff_recurse;
-	bool m_merge_recurse;
-	bool m_merge_overwrite;
-	bool m_relocate_recurse;
-	bool m_revert_recurse;
-	bool m_resolve_recurse;
-	bool m_move_force;
-	bool m_propset_recurse;
-	bool m_propget_recurse;
-	bool m_proplist_recurse;
+public:
+		//options
+		bool m_checkout_recurse;
+		bool m_update_recurse;
+		bool m_switch_recurse;
+		bool m_add_recurse;
+		bool m_remove_force;
+		bool m_commit_recurse;
+		bool m_diff_recurse;
+		bool m_merge_recurse;
+		bool m_merge_overwrite;
+		bool m_relocate_recurse;
+		bool m_revert_recurse;
+		bool m_resolve_recurse;
+		bool m_move_force;
+		bool m_propset_recurse;
+		bool m_propget_recurse;
+		bool m_proplist_recurse;
 };
 
 
