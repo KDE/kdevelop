@@ -6,7 +6,7 @@
 	* Replaced and made changes to Project so that every project
 	  can hold its own KDevCompilers. (Individual project options
 	  and stuff per Project)
-	* Defined the compilers that a project uses as an attribute
+	* Defined the compilers which a project uses as an attribute
 	  for the Project service.
 	* Changed ProjectOptions to deal with the above.
 
