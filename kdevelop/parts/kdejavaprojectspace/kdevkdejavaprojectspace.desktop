@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=KDE Java ProjectSpace (handles KDE Java Projects,po files...)
+Name=KDE Java
+Icon=find
+ServiceTypes=KDevelop/ProjectSpace
+X-KDE-Library=libkdevkdejavaprojectspace
+X-KDevelop-Language=Java

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Java support
+Name=JavaSupport
+ServiceTypes=KDevelop/LanguageSupport
+X-KDE-Library=libkdevjavasupport
+X-KDevelop-Language=Java
