@@ -126,7 +126,7 @@ void CParsedStruct::addMember( CParsedAttribute *aMember )
  *-----------------------------------------------------------------*/
 void CParsedStruct::out()
 {
-  cout << "   " << name;
+  cout << "   " << name << "\n";
   for( memberIterator.toFirst();
        memberIterator.current();
        ++memberIterator )
