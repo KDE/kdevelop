@@ -66,6 +66,8 @@
 #include "kdevversioncontrol.h"
 #include "kdevmakefrontend.h"
 #include "kdevpartcontroller.h"
+#include "kdevappfrontend.h"
+#include "kdevplugininfo.h"
 #include "kdevlicense.h"
 #include "kdevcore.h"
 #include "appwizardfactory.h"
@@ -218,6 +220,11 @@ AppWizardDialog::AppWizardDialog(AppWizardPart *part, QWidget *parent, const cha
 				dir.option = templateConfig.readEntry("Option", "" );
 				dir.perms = templateConfig.readNumEntry("Perms", 0777 );
 				info->dirList.append(dir);
+			}
+			else if( type == "finishcmd" )
+			{
+                                info->finishCmd=templateConfig.readPathEntry("Command");
+                                info->finishCmdDir=templateConfig.readPathEntry("Directory");
 			}
 			else if( type == "ui")
 			{
@@ -626,6 +633,9 @@ void AppWizardDialog::accept()
 	{
 		m_pCurrentAppInfo->subMap.remove( *cleanIt );
 	}
+
+        if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+           appFrontend->startAppCommand(KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmdDir, m_pCurrentAppInfo->subMap), KMacroExpander::expandMacros(m_pCurrentAppInfo->finishCmd, m_pCurrentAppInfo->subMap), false);
 
 	openAfterGeneration();
 

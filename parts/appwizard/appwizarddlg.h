@@ -83,6 +83,8 @@ struct ApplicationInfo
     QValueList<installDir> dirList;
     QString customUI;
     QString message;
+    QString finishCmd;
+    QString finishCmdDir;
     QString sourceArchive;
 
     //! item pointer to the listview
