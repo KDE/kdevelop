@@ -158,6 +158,7 @@ void DoxygenPart::adjustDoxyfile()
 void DoxygenPart::slotDoxygen()
 {
     bool searchDatabase = false;
+    QString outputDirectory;
     QString htmlDirectory;
 
     adjustDoxyfile();
@@ -186,10 +187,13 @@ void DoxygenPart::slotDoxygen()
       if (searchDatabase)
       {
         // get input files
-        htmlDirectory = Config_getString("OUTPUT_DIRECTORY");
-        if ( htmlDirectory.length() > 0 )
-          htmlDirectory += "/";
-        htmlDirectory += Config_getString("HTML_OUTPUT");
+        outputDirectory = Config_getString("OUTPUT_DIRECTORY");
+        if ( outputDirectory.isEmpty() == false )
+          outputDirectory += "/";
+        htmlDirectory   = Config_getString("HTML_OUTPUT");
+        if ( htmlDirectory.isEmpty() == true )
+          htmlDirectory = "html";
+        htmlDirectory.prepend(outputDirectory);
       }
     }
 
