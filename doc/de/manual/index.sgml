@@ -3087,6 +3087,75 @@ add other methods you may need.
 For more information about implementation of the widgets functions, see <htmlurl url="programming-6.html" name="The KDevelop
 Programming Handbook">.
 
+
+<chapt>CVS Integration
+<p>
+KDevelop also takes care of managing your project via CVS repositories. The goal behind CVS (concurrent version control) is to enable
+groups of developers to work on the same source-tree independently and to merge changes into the repository. Usually, the repository is
+located at a server. The initial repository contains the base set of files that the project includes; directories and files are then
+added or removed to the CVS by the developers.
+
+Locally, the developer works on his copy of the CVS tree. He writes his changes into his files and tests, if his project still works,
+at least to a certain extend where incomplete sources don't prevent other developers from still working on the CVS repository if they
+receive the changes.
+
+<sect>Enabling CVS Support
+<p>
+As CVS support is most often only needed by professionals or companies as well as by KDE developers maintaining their project over the
+KDE CVS server, using the CVS commands of KDevelop is optional. To enable the CVS commands, open the Project-Options dialog and change
+the option for Version Control to "CVS".
+
+<sect>Using CVS Commands
+<p>
+Then the following commands are available in the LFV and RFV by context menus:
+
+Over a file not included in the repository:
+<itemize>
+<item><bf/Add to Repository/: adds the file to the repository. The file is set up to be added and will be introduced to the repository
+on the next <tt/commit/ command that includes the directory where the added file is located locally.
+</itemize>
+
+Over a file included in the repository:
+<itemize>
+<item><bf/Update/: update the selected file with the CVS version
+<item><bf/Commit/: commit the selected file to the CVS repository
+<item><bf/Remove from Repository/: remove the file from the repository
+</itemize>
+
+Over a folder:
+<itemize>
+<item><bf/Add/: adds the folder to the repository
+<item><bf/Remove/: removes the folder from the repository
+<item><bf/Update/: update the folder recursively to be in sync with the repository
+<item><bf/Commit/: commit any changes recursively to the repository
+</itemize>
+
+The CVS commands all require a working network connection to the CVS server. When invoking a command, you will be shown a dialog with
+the command sent to the CVS server and the retrieved output. Thereby you can control what actually happens and if the command was
+successful or not.
+
+As the CVS commands of KDevelop only work with the <tt/cvs/ system command and its commandline options, you should have no trouble to
+use the cvs features.
+
+
+<chapt>General Configuration<label id="General Configuration">
+<p>
+
+This chapter describes how you can set your individual preferences about how KDevelop works. All settings addressed below can be
+found by the according entry in the Options-menu.
+
+<sect>Configuring the "<idx/Tools/" Menu<label id="Configuring the &dquot;<idx/Tools/&dquot; Menu">
+<p><nidx/configuring the Tools-menu/<nidx/"Options"-menu/
+
+As KDevelop supports the use of third-party programs within it's user interface, you are able to <idx/configure/ any program that suits
+your needs towards application development. This can be done by adding programs to the already pre-defined ones in the
+<idx/"Tools"-menu/. To change the tools-menu, select "<idx/Tools/" from the "Options" menu. This dialog allows to specify the entry
+name, program and additional command line options you want to pass to the execution. To remove a program from the menu, select the
+entry name and choose "Delete". To add a program, specify the menuentry, where a & is used as a menu-accelerator; you may compare the
+already configured entries with the entry list. Select the binary and pass your commandline options. Then hit "Add" and the entry
+is added to the list. After leaving the <idx/configuration dialog/, the tools-menu updates itself, so the new configuration is already
+usable without restarting KDevelop.
+
 <chapt>General Configuration<label id="General Configuration">
 <p>
 This chapter describes how you can set your individual preferences about how KDevelop works. All settings adressed below can be
