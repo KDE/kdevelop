@@ -1526,6 +1526,9 @@ void PartController::addHistoryEntry()
 	{
 		m_backHistory.push_front( thisEntry );
 		m_backAction->setEnabled( true );
+		
+		m_forwardHistory.clear();
+		m_forwardAction->setEnabled( false );
 	}
 }
 
