@@ -1,3 +1,8 @@
+2002-11-05 Yann Hodique <Yann.Hodique@lifl.fr>
+    * new interface for global vcs actions
+    * new page for appwizard : vcs system choice
+    * global cvs part
+
 2002-11-05 F@lk Brettschneider <falk@kdevelop.org>
     * adaption to KDevelop-2 behaviour: only show c++-debugger views when debugging
     * and applied new patch of Heinz Hornung <Hornung-Heinz@t-online.de>
