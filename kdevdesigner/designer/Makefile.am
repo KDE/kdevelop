@@ -13,3 +13,4 @@ noinst_HEADERS = kdevdesigner_part.h designeraction.h myiconloader.h
 AM_CXXFLAGS = -DDESIGNER
 picsdirdir = $(kde_datadir)/kdevdesignerpart/pics
 
+KDE_OPTIONS=nofinal
