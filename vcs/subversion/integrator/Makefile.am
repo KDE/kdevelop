@@ -8,7 +8,7 @@ NETACCESS_LIB = $(top_builddir)/vcs/compat/netaccess/libnetaccess.la
 endif
 
 kde_module_LTLIBRARIES = libsubversionintegrator.la
-libsubversionintegrator_la_LDFLAGS = $(all_libraries)
+libsubversionintegrator_la_LDFLAGS = -avoid-version -no-undefined $(all_libraries)
 libsubversionintegrator_la_LIBADD =\
 	$(top_builddir)/lib/interfaces/extras/libkdevextras.la\
 	$(top_builddir)/lib/libkdevelop.la $(NETACCESS_LIB)

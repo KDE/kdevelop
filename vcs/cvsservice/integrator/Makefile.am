@@ -3,7 +3,7 @@ INCLUDES = -I$(top_srcdir)/lib/interfaces \
 	$(all_includes)
 METASOURCES = AUTO
 kde_module_LTLIBRARIES = libcvsserviceintegrator.la
-libcvsserviceintegrator_la_LDFLAGS = $(all_libraries)
+libcvsserviceintegrator_la_LDFLAGS = -avoid-version -no-undefined $(all_libraries)
 libcvsserviceintegrator_la_LIBADD = \
 	$(top_builddir)/lib/interfaces/extras/libkdevextras.la $(top_builddir)/lib/libkdevelop.la -lcvsservice
 noinst_HEADERS = cvsserviceintegrator.h integratordlg.h
