@@ -92,10 +92,10 @@ public:
   void reloadModifiedFiles();
 
   /** */
-  bool saveFileFromTheCurrentEditWidget();
+  int saveFileFromTheCurrentEditWidget();
 
   /** */
-  void doFileSave(bool project);
+  int doFileSave();
   /** */
   void doFileCloseAll();
 
@@ -222,6 +222,9 @@ public slots:
   /** Helper method for initKeyAccel(CKDevAccel* accel, QWidget* pTopLevelWidget), acts as slot entry with
    *  the right interface for signals from the QextMDI mainframe class. */
   void initKeyAccel( QWidget* pTopLevelWidget);
+  /**
+   * Called when a file is removed via RMB in the LFV or RFV. */
+  void slotRemoveFileFromEditlist(const QString &absFilename);
 
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */

@@ -1339,13 +1339,6 @@ bool CKDevelop::addFileToProject(QString complete_filename,
   return new_subdir;
 }
 
-// Falk, can this be removed?
-void CKDevelop::slotRemoveFileFromEditlist(const QString &absFilename)
-{
-  // m_docViewManager->removeFileFromEditlist(absFilename);
-  setMainCaption();
-}
-
 void CKDevelop::delFileFromProject(QString rel_filename){
 
   prj->removeFileFromProject(rel_filename);

@@ -102,7 +102,7 @@ void DocViewMan::doSwitchToFile(QString filename, int line, int col, bool bForce
   QString editWidgetName;
   if (pCurEditWidget) {
     debug("getting edit widget name !");
-    editWidgetName = pCurEditWidget->getName(); //FB
+    editWidgetName = pCurEditWidget->getName();
     debug("editWidgetName : '%s' !", editWidgetName.data());
   }
   else {
@@ -534,6 +534,15 @@ KWriteDoc* DocViewMan::findKWriteDoc()
 }
 
 //-----------------------------------------------------------------------------
+void DocViewMan::slotRemoveFileFromEditlist(const QString &absFilename)
+{
+  KWriteDoc* pDoc = findKWriteDoc( absFilename);
+  closeKWriteDoc( pDoc);
+  m_pParent->setMainCaption();
+}
+
+
+//-----------------------------------------------------------------------------
 // close an edit document, causes all views to be closed
 //-----------------------------------------------------------------------------
 void DocViewMan::closeKWriteDoc(KWriteDoc* pDoc)
@@ -802,14 +811,34 @@ KHTMLView* DocViewMan::createBrowserView(CDocBrowser* pDoc, bool bShow)
 //-----------------------------------------------------------------------------
 // close a view
 //-----------------------------------------------------------------------------
-void DocViewMan::closeView(QWidget* pView)
+void DocViewMan::closeView(QWidget* pWnd)
 {
   debug("DocViewMan::closeView !\n");
 
-  if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView))
-    closeEditView(pEditView);
-  else if (KHTMLView* pHTMLView = dynamic_cast<KHTMLView*> (pView))
-    if(pHTMLView) closeBrowserView(pHTMLView);
+  // get the embedded view
+  QObjectList* pL = (QObjectList*) (pWnd->children());
+  QWidget* pView = 0L;
+  QObject* pChild;
+  // the first object we'll find is the layout,
+  // the second test will be successful for the one and only embedded widget
+  for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {
+    if (pChild->inherits("QWidget")) {
+      pView = (QWidget*) pChild;
+    }
+  }
+
+  if (CEditWidget* pEditView = dynamic_cast<CEditWidget*> (pView)) {
+    if (!pEditView)
+      return;
+
+    if (doFileSave() != KMessageBox::Cancel)
+      closeEditView(pEditView);
+  }
+  else if (KHTMLView* pHTMLView = dynamic_cast<KHTMLView*> (pView)) {
+    if(pHTMLView) {
+      closeBrowserView(pHTMLView);
+    }
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -898,7 +927,50 @@ void DocViewMan::slot_gotFocus(QextMdiChildView* pMDICover)
     m_pCurEditView = (CEditWidget*) pView;
     m_pCurEditDoc = m_pCurEditView->doc();
     m_curIsBrowser = false;
-  } else {
+
+    // check if the file has been modified outside
+    // --------
+    // Get the current file name
+    QString filename = m_pCurEditView->getName();
+    if (m_pCurEditDoc == 0)
+      return; //oops :-(
+    // check if it modified inside KDevelop
+    bool bModifiedInside = false;
+    if (m_pCurEditDoc->isModified()) {
+      bModifiedInside = true;
+    }
+    // check if it is modified outside KDevelop
+    bool bModifiedOutside = false;
+    QFileInfo file_info(filename);
+    if ((file_info.lastModified() != m_pCurEditDoc->getLastFileModifDate())) {
+      bModifiedOutside = true;
+    }
+    if (bModifiedInside && bModifiedOutside) {
+      if (KMessageBox::warningYesNo(m_pParent
+               ,i18n("This file %1 was modified inside but also outside this editor.\n"
+                     "Do you want to keep your changes or reload it from disk?")
+               .arg(filename), i18n("File modified")
+               ,i18n("&Keep"), i18n("&Reload")) == KMessageBox::No) {
+        loadKWriteDoc(m_pCurEditDoc, filename, 1);
+      }
+      else {
+        m_pCurEditDoc->setLastFileModifDate(file_info.lastModified());
+      }
+    }
+    else if (bModifiedOutside) {
+      if (KMessageBox::questionYesNo(m_pParent
+               ,i18n("This file %1 was modified outside this editor.\n"
+                    "Do you want reload it from disk?")
+               .arg(filename), i18n("File modified")
+               ,i18n("&Yes"), i18n("&No")) == KMessageBox::Yes) {
+        loadKWriteDoc(m_pCurEditDoc, filename, 1);
+      }
+      else {
+        m_pCurEditDoc->setLastFileModifDate(file_info.lastModified());
+      }
+    }
+  }
+  else {
     m_pCurBrowserView = (KHTMLView*) pView;
     m_pCurBrowserDoc = (CDocBrowser*) m_pCurBrowserView->part();
     m_curIsBrowser = true;
@@ -1039,23 +1111,26 @@ bool DocViewMan::noDocModified()
 }
 
 
-void DocViewMan::doFileSave(bool project)
+int DocViewMan::doFileSave()
 {
   debug("DocViewMan::doFileSave !\n");
 
   QString filename = docName(m_pCurEditDoc);
 
   // save the current file
-  saveFileFromTheCurrentEditWidget();
+  int ret = saveFileFromTheCurrentEditWidget();
+  if (ret == KMessageBox::Cancel) return ret;
+
   // setInfoModified(filename, currentEditView()->isModified());
   QStrList lSavedFile;
   lSavedFile.append(filename);
 #ifdef WITH_CPP_REPARSE
-  if (project)
+  if (m_pParent->hasProject())
 #else
-    if (project && getKWriteDocType(m_pCurEditDoc) == CPP_HEADER)
+    if (m_pParent->hasProject() && getKWriteDocType(m_pCurEditDoc) == CPP_HEADER)
 #endif
       m_pParent->refreshClassViewByFileList(&lSavedFile);
+  return ret;
 }
 
 // closes all KWrite documents and their views 
@@ -1224,7 +1299,7 @@ void DocViewMan::doCloseAllDocs()
   }
 }
 
-bool DocViewMan::saveFileFromTheCurrentEditWidget()
+int DocViewMan::saveFileFromTheCurrentEditWidget()
 {
   debug("DocViewMan::saveFileFromTheCurrentEditWidget !\n");
 
@@ -1233,15 +1308,42 @@ bool DocViewMan::saveFileFromTheCurrentEditWidget()
   KWriteDoc* pCurEditDoc = currentEditDoc();
 
   if (pCurEditDoc == 0)
-    return false; //oops :-(
+    return KMessageBox::Cancel; //oops :-(
 
-  // Ask if we should save it
+  // check if it modified inside KDevelop
+  bool bModifiedInside = false;
+  if (pCurEditDoc->isModified()) {
+    bModifiedInside = true;
+  }
+  // check if it is modified outside KDevelop
+  bool bModifiedOutside = false;
   QFileInfo file_info(filename);
-  if(file_info.lastModified() != pCurEditDoc->getLastFileModifDate()) {
-    if (KMessageBox::No == KMessageBox::questionYesNo(m_pParent,
-                    i18n("The file %1 was modified outside\n this editor.Save anyway?").arg(filename),
-                    i18n("File modified")))
-      return false;
+  if ((file_info.lastModified() != pCurEditDoc->getLastFileModifDate())) {
+    bModifiedOutside = true;
+  }
+
+  int button;
+  if (bModifiedInside && bModifiedOutside) {
+    button = KMessageBox::warningYesNoCancel(m_pParent
+             ,i18n("This file %1 was modified inside but also outside this editor.\n"
+                   "Do you want to reject your changes or overwrite the changes that happened outside?")
+             .arg(filename), i18n("File modified")
+             ,i18n("&Overwrite"), i18n("&Reject"));
+  }
+  else if (bModifiedInside) {
+    button = KMessageBox::warningYesNoCancel(m_pParent
+             ,i18n("The file %1 was modified.\n"
+                  "Do you want to save your changes?")
+             .arg(filename), i18n("File modified")
+             ,i18n("&Yes"), i18n("&No"));
+  }
+
+  switch (button) {
+  case KMessageBox::No:
+  case KMessageBox::Cancel:
+    return button;
+  default:
+    break;
   }
 
   // Really save it
@@ -1249,7 +1351,7 @@ bool DocViewMan::saveFileFromTheCurrentEditWidget()
   QFileInfo file_info2(filename);
   pCurEditDoc->setLastFileModifDate(file_info2.lastModified());
 
-  return true;
+  return KMessageBox::Yes;
 }
 
 void DocViewMan::saveModifiedFiles()

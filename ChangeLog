@@ -1,3 +1,9 @@
+2001-05-11  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: if a file is changed outside the application,
+      it will now be noticed with focus change
+    * bugfix: removing a file from RFV or LFV should remove the views as well now
+    * bugfix: closing a view checks if the file is modified, appropriate dialogs appear
+
 2001-05-10  F@lk Brettschneider <falk@kdevelop.org>
     * made application accelerators work also for the Toplevel MDI mode
       which is needed for usuability.

@@ -233,7 +233,7 @@ void CKDevelop::slotFileSave()
   if (isUntitled(filename)) {
     slotFileSaveAs();
   } else {
-    m_docViewManager->doFileSave(project);
+    m_docViewManager->doFileSave();
   }
 
   slotStatusMsg(i18n("Ready."));
@@ -3991,22 +3991,7 @@ void CKDevelop::slotToolbarClicked(int item){
  */
 void CKDevelop::closeWindow(QextMdiChildView *pWnd, bool /*layoutTaskBar*/)
 {
-  // get the embedded view
-  QObjectList* pL = (QObjectList*) (pWnd->children());
-  if (!pL)
-  {
-    kdDebug() << "pl is zero implies QextMdiChildView *pWnd has no children?" << endl;
-    return;
-  }
-  QWidget* pView = 0L;
-  QObject* pChild;
-  for ( pChild = pL->first(); pChild && !pView; pChild = pL->next()) {  // the first is the layout, the second test should be successful
-    if (pChild->inherits("QWidget")) {
-      pView = (QWidget*) pChild;
-    }
-  }
-
-  m_docViewManager->closeView( pView);
+  m_docViewManager->closeView( pWnd);
 }
 
 QString CKDevelop::getProjectName()

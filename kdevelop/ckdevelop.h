@@ -637,8 +637,6 @@ public:
   /** add a file to the project */
   void slotAddFileToProject(QString abs_filename);
   void delFileFromProject(QString rel_filename);
-  /* a slot shell to removeFileFromEditlist */
-  void slotRemoveFileFromEditlist(const QString &absFilename);
 
   /////////some slots for VCS interaction
   

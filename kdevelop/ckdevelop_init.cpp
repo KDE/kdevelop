@@ -972,7 +972,7 @@ void CKDevelop::initConnections(){
   connect(log_file_tree, SIGNAL(selectedNewClass()), SLOT(slotProjectNewClass()));
   connect(log_file_tree, SIGNAL(selectedNewFile()), SLOT(slotProjectAddNewFile()));
   connect(log_file_tree, SIGNAL(selectedFileRemove(QString)), SLOT(delFileFromProject(QString)));
-  connect(log_file_tree, SIGNAL(removeFileFromEditlist(const QString &)), SLOT(slotRemoveFileFromEditlist(const QString &)));
+  connect(log_file_tree, SIGNAL(removeFileFromEditlist(const QString &)), m_docViewManager, SLOT(slotRemoveFileFromEditlist(const QString &)));
   connect(log_file_tree, SIGNAL(showFileProperties(const QString&)),SLOT(slotShowFileProperties(const QString&)));
   connect(log_file_tree, SIGNAL(menuItemHighlighted(int)), SLOT(statusCallback(int)));
   connect(log_file_tree, SIGNAL(commitFileToVCS(QString)), SLOT(slotCommitFileToVCS(QString)));
@@ -982,7 +982,7 @@ void CKDevelop::initConnections(){
   connect(real_file_tree, SIGNAL(showFileProperties(const QString&)),SLOT(slotShowFileProperties(const QString&)));
   connect(real_file_tree, SIGNAL(addFileToProject(QString)),SLOT(slotAddFileToProject(QString)));
   connect(real_file_tree, SIGNAL(removeFileFromProject(QString)),SLOT(delFileFromProject(QString)));
-  connect(real_file_tree, SIGNAL(removeFileFromEditlist(const QString &)), SLOT(slotRemoveFileFromEditlist(const QString &)));
+  connect(real_file_tree, SIGNAL(removeFileFromEditlist(const QString &)), m_docViewManager, SLOT(slotRemoveFileFromEditlist(const QString &)));
   connect(real_file_tree, SIGNAL(commitFileToVCS(QString)), SLOT(slotCommitFileToVCS(QString)));
   connect(real_file_tree, SIGNAL(updateFileFromVCS(QString)), SLOT(slotUpdateFileFromVCS(QString)));
   connect(real_file_tree, SIGNAL(commitDirToVCS(QString)), SLOT(slotCommitDirToVCS(QString)));
