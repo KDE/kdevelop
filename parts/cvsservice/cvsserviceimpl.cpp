@@ -217,19 +217,19 @@ void CvsServiceImpl::revert( const KURL::List& urlList )
         return;
 
     CvsOptions *options = CvsOptions::instance();
-	QString revertOptions = options->revertOptions();
+    QString revertOptions = options->revertOptions();
 
     ReleaseInputDialog dlg(
-		i18n("Release / tag to revert"),
-		mainWindow()->main()->centralWidget()
-	);
-	if (dlg.exec() == QDialog::Rejected)
-		return;
-	if (!dlg.releaseTag().isEmpty())
-	{
-		QString releaseOption = " -r " + dlg.releaseTag();
-		revertOptions += releaseOption;
-	}
+        i18n("Release / tag to revert"),
+        mainWindow()->main()->centralWidget()
+    );
+    if (dlg.exec() == QDialog::Rejected)
+        return;
+    if (!dlg.releaseTag().isEmpty())
+    {
+        QString releaseOption = " -r " + dlg.releaseTag();
+        revertOptions += releaseOption;
+    }
 
     DCOPRef cvsJob = m_cvsService->update( m_fileList, true, true, true, revertOptions );
 

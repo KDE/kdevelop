@@ -216,10 +216,10 @@ void CvsPart::createNewProject( const QString &dirName )
         return;
 
     // @fixme: actually there is no way to inform that a _new_ ("just created")
-	// project has been opened because projectOpened() is emitted after the project
-	// has been created :-/ So the only way to inform that slotProjectOpened() to not
-	// load default settings (overriding the CvsOptions instance is to set this flag
-	// here ...
+    // project has been opened because projectOpened() is emitted after the project
+    // has been created :-/ So the only way to inform that slotProjectOpened() to not
+    // load default settings (overriding the CvsOptions instance is to set this flag
+    // here ...
     g_projectWasJustCreated = true;
 
     m_impl->createNewProject( dirName,
@@ -365,7 +365,7 @@ void CvsPart::slotActionAdd()
 void CvsPart::slotActionAddBinary()
 {
     KURL currDocument;
-	if (urlFocusedDocument( currDocument ))
+    if (urlFocusedDocument( currDocument ))
     {
         m_impl->add( KURL::KURL(currDocument), true );
     }
