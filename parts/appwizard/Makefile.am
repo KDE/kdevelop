@@ -4,7 +4,9 @@
 SUBDIRS = . imports common kapp kpartapp kpartplugin kappjava javahello kcmodule kicker kioslave \
 	  kdevpart kdevpart2 pythonhello pyqt phphello chello cpphello gnomeapp kscreensaver \
 	  kofficepart chello_gba dcopservice konqnavpanel qmakesimple qmakeapp khello kateplugin qtopiaapp fortranhello \
-      kdedcop
+	  kdedcop \
+	  perlhello
+      
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
