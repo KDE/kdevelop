@@ -50,7 +50,13 @@ public:
 	    SlotCompletion,
 	    VirtualDeclCompletion
 	};
-
+	enum MemberAccessOp
+	{
+		NoOp,
+		DotOp,
+		ArrowOp
+	};
+	
 public:
 	CppCodeCompletion( CppSupportPart* part );
 	virtual ~CppCodeCompletion();
@@ -66,7 +72,7 @@ public:
 
 	int expressionAt( const QString& text, int index );
 	QStringList splitExpression( const QString& text );
-	QStringList typeOf( const QString& name, const QStringList& scope );
+	QStringList typeOf( const QString& name, const QStringList& scope, MemberAccessOp accessOp );
 	QStringList evaluateExpression( QString expr, SimpleContext* ctx );
 
 	static QStringList typeName( const QString& name );
@@ -97,11 +103,12 @@ private:
 	void computeRecoveryPoints();
 
 	QStringList evaluateExpressionInternal( QStringList& exprList, const QStringList& scope, SimpleContext* ctx = 0 );
+	bool correctAccessOp( QStringList ptrList, MemberAccessOp accessOp );
 
-	QStringList typeOf( const QValueList<Tag>& tags );
-	QStringList typeOf( const QString& name, ClassDom klass );
-	QStringList typeOf( const QString& name, NamespaceDom scope );
-	QStringList typeOf( const QString& name, const FunctionList& methods );
+	QStringList typeOf( const QValueList<Tag>& tags, MemberAccessOp accessOp );
+	QStringList typeOf( const QString& name, ClassDom klass, MemberAccessOp accessOp );
+	QStringList typeOf( const QString& name, NamespaceDom scope, MemberAccessOp accessOp );
+	QStringList typeOf( const QString& name, const FunctionList& methods, MemberAccessOp accessOp );
 
 	/// @todo remove isInstance
 	void computeCompletionEntryList( QValueList<KTextEditor::CompletionEntry>& entryList, SimpleContext* ctx, bool isInstance );
@@ -150,6 +157,7 @@ private:
 	bool m_bArgHintShow;
 	bool m_bCompletionBoxShow;
 	bool m_blockForKeyword;
+	bool m_demandCompletion;
 
 	unsigned int m_ccLine;
 	unsigned int m_ccColumn;

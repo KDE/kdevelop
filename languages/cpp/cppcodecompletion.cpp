@@ -309,6 +309,7 @@ CppCodeCompletion::CppCodeCompletion( CppSupportPart* part )
 	m_bArgHintShow = false;
 	m_bCompletionBoxShow = false;
 	m_blockForKeyword = false;
+	m_demandCompletion = false;
 	m_completionMode = NormalCompletion;
 
 	m_repository = new CodeInformationRepository( cppSupport->codeRepository() );
@@ -781,13 +782,19 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 	QString currentExpr = exprList.front().stripWhiteSpace();
 	exprList.pop_front();
 	
-	bool dotOp = currentExpr.endsWith( "." );
-	bool arrowOp = currentExpr.endsWith( "->" );
-	
-	if ( dotOp )
+	MemberAccessOp accessOp;
+	if ( currentExpr.endsWith( "." ) )
+	{	
+		accessOp = DotOp;
 		currentExpr.truncate( currentExpr.length() - 1 );
-	else if ( arrowOp )
+	}
+	else if ( currentExpr.endsWith( "->" ) )
+	{
+		accessOp = ArrowOp;
 		currentExpr.truncate( currentExpr.length() - 2 );
+	}
+	else
+		accessOp = NoOp;
 		
 	int leftParen = currentExpr.find( "(" );
 
@@ -806,7 +813,7 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 			{
 				QString name = type.back();
 				type.pop_back();
-				type = typeOf( name, type );
+				type = typeOf( name, type, accessOp );
 			}
 
 			if ( !type.isEmpty() )
@@ -820,19 +827,13 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 		SimpleVariable var = ctx->findVariable( currentExpr );
 		QStringList type = var.type;
 		
-		//Remove the vars that don't correspond to the member access operator
-		//that we are using.  
-		//TODO: Take into account the de-reference operator...
-		bool correctAccessOp = ( ( var.ptrList.count() && var.ptrList[0] == "*" && arrowOp ) ||
-		                         ( ( !var.ptrList.count() || var.ptrList[0] == "&" ) && dotOp ) );
-		
-		if ( !type.isEmpty() && correctAccessOp )
+		if ( !type.isEmpty() && correctAccessOp( var.ptrList, accessOp ) )
 			return evaluateExpressionInternal( exprList, type );
 
 		QStringList t_this = ctx->findVariable( "this" ).type;
 		if ( !t_this.isEmpty() )
 		{
-			QStringList type = typeOf( currentExpr, t_this );
+			QStringList type = typeOf( currentExpr, t_this, accessOp );
 			if ( !type.isEmpty() )
 				return evaluateExpressionInternal( exprList, type );
 
@@ -840,11 +841,25 @@ QStringList CppCodeCompletion::evaluateExpressionInternal( QStringList & exprLis
 		}
 	}
 
-	QStringList type = typeOf( currentExpr, scope );
+	QStringList type = typeOf( currentExpr, scope, accessOp );
 	if ( !type.isEmpty() )
 		return evaluateExpressionInternal( exprList, type );
 
 	return QStringList();
+}
+
+bool CppCodeCompletion::correctAccessOp( QStringList ptrList, MemberAccessOp accessOp )
+{
+	if ( m_demandCompletion || accessOp == NoOp )
+		return true;
+	
+	//Remove the vars that don't correspond to the member access operator
+	//that we are using.  
+	
+	///@todo: Take into account the de-reference operator...
+	bool arrowOp = accessOp == ArrowOp && ptrList.count() && ptrList[0] == "*";
+	bool dotOp =  accessOp == DotOp && ( !ptrList.count() || ptrList[0] == "&" );
+	return arrowOp || dotOp;
 }
 
 void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
@@ -853,7 +868,9 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 
 	if ( !m_pSupport || !m_activeCursor || !m_activeEditor || !m_activeCompletion )
 		return ;
-
+	
+	m_demandCompletion = invokedOnDemand;
+	
 	unsigned int line, column;
 	m_activeCursor->cursorPositionReal( &line, &column );
 
@@ -877,7 +894,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 	bool showArguments = false;
 	bool isInstance = true;
 	m_completionMode = NormalCompletion;
-
+		
 	if ( ch2 == "->" || ch == "." || ch == "(" )
 	{
 		int pos = ch2 == "->" ? nCol - 3 : nCol - 2;
@@ -1293,13 +1310,12 @@ void CppCodeCompletion::slotFileParsed( const QString& fileName )
 	if ( fileName != m_activeFileName || !m_pSupport || !m_activeEditor )
 		return ;
 
-	m_pSupport->backgroundParser() ->lock ()
-	;
+	m_pSupport->backgroundParser() ->lock ();
 	computeRecoveryPoints();
 	m_pSupport->backgroundParser() ->unlock();
 }
 
-QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& scope )
+QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& scope, MemberAccessOp accessOp )
 {
 	QStringList type;
 
@@ -1310,11 +1326,11 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 	ClassDom klass = findContainer( key );
 	if ( klass )
 	{
-		return typeOf( name, klass );
+		return typeOf( name, klass, accessOp );
 	}
 	else
 	{
-		type = typeOf( name, m_pSupport->codeModel() ->globalNamespace() );
+		type = typeOf( name, m_pSupport->codeModel() ->globalNamespace(), accessOp );
 		if ( !type.isEmpty() )
 			return type;
 	}
@@ -1329,7 +1345,7 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 	args << Catalog::QueryArgument( "name", name );
 	QValueList<Tag> tags( m_repository->query( args ) );
 	kdDebug( 9007 ) << "type of " << name << " in " << scope.join( "::" ) << " takes " << t.elapsed() << endl;
-	type = typeOf( tags );
+	type = typeOf( tags, accessOp );
 
 	if ( type.isEmpty() )
 	{
@@ -1346,7 +1362,7 @@ QStringList CppCodeCompletion::typeOf( const QString& name, const QStringList& s
 			CppBaseClass<Tag> info( tag );
 
 			QStringList newScope = typeName( info.baseClass() );
-			type = typeOf( name, newScope );
+			type = typeOf( name, newScope, accessOp );
 			if ( !type.isEmpty() )
 				break;
 		}
@@ -1823,16 +1839,24 @@ void CppCodeCompletion::computeRecoveryPoints( )
 	walker.parseTranslationUnit( unit );
 }
 
-QStringList CppCodeCompletion::typeOf( const QValueList< Tag > & tags )
+QStringList CppCodeCompletion::typeOf( const QValueList< Tag > & tags, MemberAccessOp accessOp )
 {
 	QValueList<Tag>::ConstIterator it = tags.begin();
 	while ( it != tags.end() )
 	{
 		const Tag & tag = *it;
 		++it;
-
+		
 		if ( tag.hasAttribute( "t" ) )
-			return typeName( tag.attribute( "t" ).toString() );
+		{
+			QString type = tag.attribute( "t" ).toString();
+			QRegExp ptrRx( "(\\*|\\&)" );
+			QString ptr = type.mid( type.find( ptrRx ) );
+			QStringList ptrList = QStringList::split( "", ptr );
+			if ( !correctAccessOp( ptrList, accessOp ) )
+				type = "";
+			return typeName( type );
+		}
 		else if ( tag.kind() == Tag::Kind_Class || tag.kind() == Tag::Kind_Namespace )
 		{
 			QStringList l = tag.scope();
@@ -1844,21 +1868,21 @@ QStringList CppCodeCompletion::typeOf( const QValueList< Tag > & tags )
 	return QStringList();
 }
 
-QStringList CppCodeCompletion::typeOf( const QString & name, ClassDom klass )
+QStringList CppCodeCompletion::typeOf( const QString & name, ClassDom klass, MemberAccessOp accessOp )
 {
 	QStringList type;
 
 	if ( klass->hasVariable( name ) )
 		return typeName( klass->variableByName( name ) ->type() );
 
-	type = typeOf( name, klass->functionList() );
+	type = typeOf( name, klass->functionList(), accessOp );
 	if ( !type.isEmpty() )
 		return type;
 
 	QStringList parents = klass->baseClassList();
 	for ( QStringList::Iterator it = parents.begin(); it != parents.end(); ++it )
 	{
-		type = typeOf( name, typeName( *it ) );
+		type = typeOf( name, typeName( *it ), accessOp );
 		if ( !type.isEmpty() )
 			return type;
 	}
@@ -1866,21 +1890,21 @@ QStringList CppCodeCompletion::typeOf( const QString & name, ClassDom klass )
 	return QStringList();
 }
 
-QStringList CppCodeCompletion::typeOf( const QString & name, NamespaceDom scope )
+QStringList CppCodeCompletion::typeOf( const QString & name, NamespaceDom scope, MemberAccessOp accessOp )
 {
 	if ( scope->hasVariable( name ) )
 		return typeName( scope->variableByName( name ) ->type() );
 
 	QStringList type;
 
-	type = typeOf( name, scope->functionList() );
+	type = typeOf( name, scope->functionList(), accessOp );
 	if ( !type.isEmpty() )
 		return type;
 
 	return QStringList();
 }
 
-QStringList CppCodeCompletion::typeOf( const QString & name, const FunctionList & methods )
+QStringList CppCodeCompletion::typeOf( const QString & name, const FunctionList & methods, MemberAccessOp accessOp )
 {
 	FunctionList::ConstIterator it = methods.begin();
 	while ( it != methods.end() )
@@ -1889,7 +1913,15 @@ QStringList CppCodeCompletion::typeOf( const QString & name, const FunctionList 
 		++it;
 
 		if ( meth->name() == name )
-			return typeName( meth->resultType() );
+		{	
+			QString type = meth->resultType();
+			QRegExp ptrRx( "(\\*|\\&)" );
+			QString ptr = type.mid( type.find( ptrRx ) );
+			QStringList ptrList = QStringList::split( "", ptr );
+			if ( !correctAccessOp( ptrList, accessOp ) )
+				type = "";
+			return typeName( type );
+		}
 	}
 
 	return QStringList();
