@@ -410,6 +410,8 @@ void MainWindow::createActions()
     slotToggleViewbar();
     m_toggleViewbar->setEnabled(false);
   }
+
+  new KAction( i18n("Raise &Editor"), ALT+Key_C, this, SLOT(raiseEditor()), actionCollection(), "raise_editor");
 }
 
 KMdiChildView* MainWindow::wrapper(QWidget *view, const QString& name)
@@ -1447,6 +1449,17 @@ void MainWindow::setCaption( const QString & caption )
 	else
 	{
 		KMdiMainFrm::setCaption( caption );
+	}
+}
+
+void MainWindow::raiseEditor( )
+{
+	kdDebug() << k_funcinfo << endl;
+	
+	KDevPartController * partcontroller = API::getInstance()->partController();
+	if ( partcontroller->activePart() && partcontroller->activePart()->widget() )
+	{
+		partcontroller->activePart()->widget()->setFocus();
 	}
 }
 

@@ -104,6 +104,7 @@ public slots:
   /** Reimplemented from KMdiMainFrm to save chosen mode */
   virtual void switchToIDEAlMode();
 
+  virtual void raiseEditor();
 
   /** Fills the show-hide menu for the output views */
   virtual void fillOutputToolViewsMenu();
