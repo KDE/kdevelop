@@ -79,7 +79,7 @@ private:
   bool stateIsOn(int state)       { return state_ & state; }
 
 public slots:
-  void slotStart(const QString& application, const QString& args);
+  void slotStart(const QString& application, const QString& args, const QString& sDbgShell=QString());
   void slotCoreFile(const QString& coreFile);
   void slotAttachTo(int pid);
   

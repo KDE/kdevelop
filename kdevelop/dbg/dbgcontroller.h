@@ -67,7 +67,8 @@ protected:
   virtual char* parse(char* str)                                          = 0;
 
 public slots:
-  virtual void slotStart(const QString& application, const QString& args) = 0;
+  virtual void slotStart(const QString& application, const QString& args,
+      const QString& sDbgShell=QString()) = 0;
   virtual void slotCoreFile(const QString& coreFile)                      = 0;
   virtual void slotAttachTo(int pid)                                      = 0;
 

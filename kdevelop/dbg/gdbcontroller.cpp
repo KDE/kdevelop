@@ -1139,7 +1139,7 @@ void GDBController::modifyBreakpoint(Breakpoint* BP)
 
 // **************************************************************************
 
-void GDBController::slotStart(const QString& application, const QString& args)
+void GDBController::slotStart(const QString& application, const QString& args, const QString &sDbgShell)
 {
   badCore_ = QString();
   QString appName("konsole");
@@ -1184,7 +1184,11 @@ void GDBController::slotStart(const QString& application, const QString& args)
             this,         SLOT(slotDbgProcessExited(KProcess*)));
 
   // fires up gdb under the process
-  *dbgProcess_<<config_gdbPath_+QString("gdb")<<"-fullname"<<"-nx"<<"-quiet";
+  if (!sDbgShell.isEmpty())
+   *dbgProcess_<<"/bin/sh"<<"-c"<<sDbgShell+" "+config_gdbPath_+
+      "gdb "+application+" -fullname -nx -quiet";
+  else
+   *dbgProcess_<<config_gdbPath_+QString("gdb")<<application<<"-fullname"<<"-nx"<<"-quiet";
 
   dbgProcess_->start( KProcess::NotifyOnExit,
                       KProcess::Communication(KProcess::All));
@@ -1228,9 +1232,12 @@ void GDBController::slotStart(const QString& application, const QString& args)
     queueCmd(new GDBCommand("set print asm-demangle off", NOTRUNCMD, NOTINFOCMD));
 
   // Load the file into gdb
-  QString fileCmd = "file " + application;
-  queueCmd(new GDBCommand(fileCmd, NOTRUNCMD, NOTINFOCMD));
-
+  /*if (sDbgShell.isEmpty())
+  {
+    QString fileCmd = "file " + application;
+    queueCmd(new GDBCommand(fileCmd, NOTRUNCMD, NOTINFOCMD));
+  }
+  */
   // Organise any breakpoints.
   emit acceptPendingBPs();
 
