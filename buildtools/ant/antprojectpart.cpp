@@ -553,13 +553,13 @@ void AntProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
   popup->insertSeparator();
   if (inProject)
   {
-    int id = popup->insertItem( i18n("Remove %1 from project").arg(popupstr),
+    int id = popup->insertItem( i18n("Remove %1 From Project").arg(popupstr),
                        this, SLOT(slotRemoveFromProject()) );
     popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the project."));
   }
   else
   {
-    int id = popup->insertItem( i18n("Add %1 to project").arg(popupstr),
+    int id = popup->insertItem( i18n("Add %1 to Project").arg(popupstr),
                        this, SLOT(slotAddToProject()) );
     popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file from the project."));
   }

@@ -165,7 +165,7 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
         m_contextDirName = fcontext->fileName();
         m_contextDirName = m_contextDirName.mid ( project()->projectDirectory().length() + 1 );
         popup->insertSeparator();
-        int id = popup->insertItem( i18n("Make active directory"),
+        int id = popup->insertItem( i18n("Make Active Directory"),
                            this, SLOT(slotChooseActiveDirectory()) );
         popup->setWhatsThis(id, i18n("<b>Make active directory</b><p>"
         "Chooses this directory as the destination for new files created using wizards "
@@ -182,14 +182,14 @@ void CustomProjectPart::contextMenu(QPopupMenu *popup, const Context *context)
     popup->insertSeparator();
     if (inProject)
     {
-        int id = popup->insertItem( i18n("Remove %1 from project").arg(popupstr),
+        int id = popup->insertItem( i18n("Remove %1 From Project").arg(popupstr),
                            this, SLOT(slotRemoveFromProject()) );
         popup->setWhatsThis(id, i18n("<b>Remove from project</b><p>Removes current file from the list of files in project. "
             "Note that the file should be manually excluded from corresponding makefile or build.xml."));
     }
     else
     {
-        int id = popup->insertItem( i18n("Add %1 to project").arg(popupstr),
+        int id = popup->insertItem( i18n("Add %1 to Project").arg(popupstr),
                            this, SLOT(slotAddToProject()) );
         popup->setWhatsThis(id, i18n("<b>Add to project</b><p>Adds current file to the list of files in project. "
             "Note that the file should be manually added to corresponding makefile or build.xml."));
