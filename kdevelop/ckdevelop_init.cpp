@@ -161,6 +161,10 @@ CKDevelop::CKDevelop(): QextMdiMainFrm(0L,"CKDevelop")
   initDebugger();
   initWhatsThis();
 
+  // read the previous dock szenario from kdeveloprc
+  // (this has to be after all creation of dockwidget-covered tool-views
+  readDockConfig(config);
+
   show();
 
   setDebugMenuProcess(false);
@@ -200,12 +204,6 @@ void CKDevelop::initView()
 //FB    outputdock->manualDock(maindock, KDockWidget::DockBottom, 80/*size relation in %*/);
 //FB    treedock->manualDock(maindock, KDockWidget::DockLeft, 30/*size relation in %*/);
 //  }
-  // do not allow to pull off the dockwidgets to desktop or to tab mode
-  // the probs which would be introduced are too hard to handle (in KDevelop-1.x ;-)
-//FB  outputdock->setEnableDocking( KDockWidget::DockCorner);
-//FB  treedock->setEnableDocking( KDockWidget::DockCorner);
-//FB  outputdock->setDockSite( KDockWidget::DockCorner);
-//FB  treedock->setDockSite( KDockWidget::DockCorner);
 
   ////////////////////////
   // Treeviews
@@ -258,19 +256,19 @@ void CKDevelop::initView()
   // Outputwindow
   ////////////////////////
 	
-  messages_widget = new CMakeOutputWidget(0L);
+  messages_widget = new CMakeOutputWidget(0L,"messages");
   messages_widget->setFocusPolicy(QWidget::ClickFocus);
 //  messages_widget->setReadOnly(TRUE);
 
-  stdin_stdout_widget = new COutputWidget(0L);
+  stdin_stdout_widget = new COutputWidget(0L,"stdin");
   stdin_stdout_widget->setReadOnly(TRUE);
   stdin_stdout_widget->setFocusPolicy(QWidget::ClickFocus);
 
-  stderr_widget = new COutputWidget(0L);
+  stderr_widget = new COutputWidget(0L,"stderr");
   stderr_widget->setReadOnly(TRUE);
   stderr_widget->setFocusPolicy(QWidget::ClickFocus);
 
-  konsole_widget = new CKonsoleWidget(0L);
+  konsole_widget = new CKonsoleWidget(0L,"konsole");
 
   messages_widget->setCaption(i18n("messages"));
   addToolWindow(messages_widget, KDockWidget::DockBottom, m_pMdi, 70, i18n("output of KDevelop"), i18n("messages"));

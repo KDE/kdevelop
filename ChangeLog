@@ -1,3 +1,7 @@
+2001-05-22  F@lk Brettschneider <falk@kdevelop.org>
+    * bugfix: backswitch from Toplevel mode to Childframe mode works properly now
+    * --> that's why: enabled readDockConfig() in CKDevelop constructor again
+
 2001-05-22  Harald Fernengel <harry@bnro.de>
     * Added 2 slots activateNextWin() and activatePrevWin() to QextMdiMainFrm.
     * Added 2 new keyboard accels: "Goto Next Window" and "Goto Previous Window"
