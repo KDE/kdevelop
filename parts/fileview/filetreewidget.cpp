@@ -24,6 +24,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpopupmenu.h>
+#include <kmimetype.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -82,11 +83,9 @@ FileTreeItem::FileTreeItem(FileTreeItem *parent, Type type, const QString &name)
 
 void FileTreeItem::init()
 {
-    if (typ == File)
-        setPixmap(0, SmallIcon("document"));
-    else {
+   setPixmap(0, KMimeType::pixmapForURL( KURL(path()), 0, KIcon::Small ) );
+   if (typ == Dir) {
         setExpandable(true);
-        setPixmap(0, SmallIcon("folder"));
         kdDebug(9017) << "Watch dir " << path() << endl;
         listView()->watchDir(path());
     }
