@@ -57,8 +57,8 @@ void KMdiFocusList::restore() {
 
 
 void KMdiFocusList::objectHasBeenDestroyed(QObject* o) {
-	QWidget *w=dynamic_cast<QWidget*>(o);
-	if (!w) return;
+    if (!o || !o->isWidgetType()) return;
+	QWidget *w=(QWidget*)o;
 	m_list.remove(w);
 }
 
