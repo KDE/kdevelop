@@ -143,10 +143,7 @@ void CKDevelop::slotFileClose(){
     }
     
     removeFileFromEditlist(filename);
-    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-    kdev_caption+= version +
-	" - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
-    setCaption(kdev_caption);
+    setMainCaption();
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -209,12 +206,8 @@ void CKDevelop::slotFileSaveAs(){
     slotStatusMsg(i18n("Save file as..."));
     
     fileSaveAs();
-    
-    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-    kdev_caption+= version +
-             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
-    setCaption(kdev_caption);
-    
+
+    setMainCaption();
     slotStatusMsg(i18n("Ready."));
 }
 
@@ -1693,6 +1686,8 @@ void CKDevelop::slotNewStatus()
   int config;
   config = edit_widget->config();
   statusBar()->changeItem(config & cfOvr ? "OVR" : "INS",ID_STATUS_INS_OVR);
+  // set new caption... maybe the file content is changed
+  setMainCaption();
 }
 
 void CKDevelop::slotNewLineColumn()
@@ -1791,7 +1786,7 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
   }
 
   if (s_tab_view->getCurrentTab()==BROWSER)
-    setCaption(actualTitle+" - KDevelop " + version);
+     setMainCaption(BROWSER);
 
   if (pos!=-1)
    url_wo_ref = actualURL.left(pos);
@@ -2249,10 +2244,7 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-    kdev_caption+= version +
-             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
-    setCaption(kdev_caption);
+    setMainCaption();
   }
   if (item == CPP){
     if(bAutoswitch && t_tab_view->getCurrentTab()==DOC){	
@@ -2269,20 +2261,18 @@ void CKDevelop::slotSTabSelected(int item){
     slotNewUndo();
     slotNewStatus();
     slotNewLineColumn();
-    kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-    kdev_caption+= version +
-             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
-    setCaption(kdev_caption);
+    setMainCaption();
   }
   if(item == BROWSER){
     if(bAutoswitch)
       t_tab_view->setCurrentTab(DOC);
     disableCommand(ID_BUILD_COMPILE_FILE);
     browser_widget->setFocus();
-    setCaption(browser_widget->currentTitle()+ " - KDevelop " + version );
+    setMainCaption(BROWSER);
   }
   if(item == TOOLS){
 		disableCommand(ID_BUILD_COMPILE_FILE);
+                setMainCaption(TOOLS);
 	}
   //  s_tab_current = item;
 

@@ -222,10 +222,7 @@ bool CKDevelop::slotProjectClose(){
 
   if (!cont)
   {
-   kdev_caption=(project) ? (const char *) (prj->getProjectName()+" - KDevelop ") : "KDevelop ";
-   kdev_caption+= version +
-             " - ["+ QFileInfo(edit_widget->getName()).fileName()+"]";
-   setCaption(kdev_caption);
+   setMainCaption();
   }
 
   return cont; // false if pressed cancel
