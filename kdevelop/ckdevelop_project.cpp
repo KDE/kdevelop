@@ -806,7 +806,7 @@ void CKDevelop::slotProjectAPI(){
 
   shell_process.clearArguments();
   shell_process << "kdoc";
-  shell_process << "-p -z -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+  shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
   if (!link.isEmpty())
       {
           shell_process << ("-L" + idx_path);
