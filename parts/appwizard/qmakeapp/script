@@ -3,6 +3,7 @@
 use gideon;
 
 initGideon();
+installFileTemplate();
 installLicense();
 
 print "Installing project file\n";
