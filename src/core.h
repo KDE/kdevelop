@@ -22,6 +22,7 @@ class KDevApi;
 class KDevFactory;
 class DocumentationPart;
 class KAction; 
+class KRecentFilesAction;
 
 
 #include "keditor/editor.h"
@@ -93,6 +94,8 @@ private slots:
     void slotDocumentLoaded(KEditor::Document *doc);
     void slotDocumentSaved(KEditor::Document *doc);
 
+    void recentProjectSelected(const KURL &url);
+    
 
 private:
     KActionCollection *actionCollection();
@@ -132,6 +135,7 @@ private:
     QString projectFile;
 
     KAction *_saveAll, *_revertAll, *_closeWindow, *_killBuffer;
+    KRecentFilesAction *_recentProjectAction;
 
 };
 

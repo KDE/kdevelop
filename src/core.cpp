@@ -105,6 +105,8 @@ Core::Core()
       projectFile = project;
       openProject();
     }
+
+    _recentProjectAction->loadEntries(config, "RecentProjects");
 }
 
 
@@ -166,6 +168,11 @@ void Core::initActions()
                           this, SLOT(slotProjectOpen()),
                           actionCollection(), "project_open" );
     action->setStatusText( i18n("Opens a project") );
+
+    _recentProjectAction = new KRecentFilesAction( i18n("Open &recent project..."), 0,
+                          this, SLOT(recentProjectSelected(const KURL &)),
+                          actionCollection(), "project_open_recent");
+    _recentProjectAction->setStatusText( i18n("Opens a recent project") );
 
     action = new KAction( i18n("C&lose project"), "fileclose",0,
                           this, SLOT(slotProjectClose()),
@@ -628,7 +635,8 @@ void Core::openProject()
     if (api->project)
         api->project->openProject(projectDir);
     emit projectOpened();
-    
+    _recentProjectAction->addURL(projectFile);
+
     win->setCaption(projectDir);
     actionCollection()->action("project_close")->setEnabled(true);
     actionCollection()->action("project_options")->setEnabled(true);
@@ -1109,6 +1117,9 @@ void Core::slotQuit()
     closeProject();
     removeGlobalParts();
 
+    // save the recent projects
+    _recentProjectAction->saveEntries(config, "RecentProjects");
+    
     win->closeReal();
 }
 
@@ -1289,6 +1300,13 @@ void Core::slotDocumentSaved(KEditor::Document *doc)
 QStatusBar *Core::statusBar() const
 {
   return win->statusBar();
+}
+
+
+void Core::recentProjectSelected(const KURL &url)
+{
+  projectFile = url.path();
+  openProject();
 }
 
 
