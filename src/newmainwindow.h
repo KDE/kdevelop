@@ -70,6 +70,10 @@ public:
   //whatever reason) and this value is needed in EditorProxy
   KMdi::TabWidgetVisibility getTabWidgetVisibility() { return tabWidgetVisibility(); }
   
+  /**Enable the main window to be shown. Main window is created with m_canBeShown
+  flag set to false. This sets the flag to true and show() method will be enabled.*/
+  void enableShow();
+    
 public slots:
 
   void createGUI(KParts::Part *part);
@@ -86,6 +90,8 @@ public slots:
   
   /** called by the part to set the caption */
   void setCaption( const QString &);
+  
+  virtual void show();
   
 signals:
   void currentChanged( QWidget* widget );
@@ -142,6 +148,8 @@ private:
   bool showTabIcons;
 
   KURL m_currentTabURL;
+
+  bool m_canBeShown;
 };
 
 

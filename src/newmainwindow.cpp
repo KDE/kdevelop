@@ -79,7 +79,7 @@ UI mode can now only be changed via a restart. This is intentional!
 ****************************/
 
 NewMainWindow::NewMainWindow(QWidget *parent, const char *name, KMdi::MdiMode mdimode)
- : KMdiMainFrm(parent, name, mdimode )
+ : KMdiMainFrm(parent, name, mdimode ), m_canBeShown(false)
 // ,m_pWindowMenu(0L)
 // ,m_bSwitching(false)
 {
@@ -838,6 +838,17 @@ void NewMainWindow::tabMoved( int from, int to )
     KMdiChildView *view = m_pDocumentViews->at(from);
     m_pDocumentViews->remove(from);
     m_pDocumentViews->insert(to, view);
+}
+
+void NewMainWindow::show( )
+{
+    if (m_canBeShown)
+        KMdiMainFrm::show();
+}
+
+void NewMainWindow::enableShow()
+{
+    m_canBeShown = true;
 }
 
 #include "newmainwindow.moc"

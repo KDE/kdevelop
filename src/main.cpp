@@ -17,6 +17,7 @@
 #include "partcontroller.h"
 #include "core.h"
 #include "projectmanager.h"
+#include "newmainwindow.h"
 
 static KCmdLineOptions options[] =
 {
@@ -90,9 +91,6 @@ int main(int argc, char *argv[])
   splash->message( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
 
-  splash->message( i18n( "Starting GUI" ) );
-  TopLevel::getInstance()->main()->show();
-
   QObject::connect(PluginController::getInstance(), SIGNAL(loadingPlugin(const QString &)), 
     splash, SLOT(message(const QString &)));
   splash->show();
@@ -100,6 +98,14 @@ int main(int argc, char *argv[])
   PluginController::getInstance()->loadInitialPlugins();
   
   Core::getInstance()->doEmitCoreInitialized();
+
+  splash->message( i18n( "Starting GUI" ) );
+//BEGIN a workaround on kmdi bug - we do not allow mainwindow to be shown until now
+  NewMainWindow *mw = dynamic_cast<NewMainWindow*>(TopLevel::getInstance()->main());
+  if (mw)
+      mw->enableShow();
+//END workaround
+  TopLevel::getInstance()->main()->show();
 
   delete splash;
 
