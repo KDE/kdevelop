@@ -33,12 +33,16 @@ void KDevCoreIface::gotoSourceFile(const QString &fileName, int lineNum, int emb
 
 DCOPRef KDevCoreIface::activeEditorView()
 {
+#ifndef NEW_EDITOR
     TextEditorView *view = m_core->activeEditorView();
     if (view) {
         kdDebug(9000) << "editor view: " << view->objId() << endl;
         return DCOPRef(DCOPClient::mainClient()->appId(), view->objId());
     } else
         return DCOPRef();
+#else
+    return DCOPRef();
+#endif
 }
 
 

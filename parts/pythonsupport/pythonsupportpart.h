@@ -36,7 +36,8 @@ private slots:
 
     // Internal
     void initialParse();
-
+    void slotPydoc();
+    
 private:
     void maybeParse(const QString fileName);
     void parse(const QString &fileName);

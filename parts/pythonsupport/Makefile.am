@@ -3,14 +3,24 @@
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/sourceinfo $(all_includes)
 
-kde_module_LTLIBRARIES = libkdevpythonsupport.la
+kde_module_LTLIBRARIES = libkdevpythonsupport.la kio_pydoc.la
+
 libkdevpythonsupport_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevpythonsupport_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
-
 libkdevpythonsupport_la_SOURCES = pythonsupportfactory.cpp \
 			          pythonsupportpart.cpp
 
+kio_pydoc_la_SOURCES = pydoc.cpp
+kio_pydoc_la_LIBADD = $(LIB_KIO)
+kio_pydoc_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+
 METASOURCES = AUTO
 
+slavedir = $(kde_datadir)/kio_pydoc
+slave_DATA = kde_pydoc.py kde_inspect.py
+
 servicedir = $(kde_servicesdir)
-service_DATA = kdevpythonsupport.desktop
+service_DATA = kdevpythonsupport.desktop pydoc.protocol
+
+rcdir = $(kde_datadir)/kdevpythonsupport
+rc_DATA = kdevpythonsupport.rc

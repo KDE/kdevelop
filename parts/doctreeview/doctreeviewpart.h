@@ -37,6 +37,7 @@ private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
     void slotDocumentationIndex();
     void slotSearchDocumentation();
+    void slotManpage();
     void slotRaiseWidget();
     void slotGotoManpage();
     void slotSearchDocumentationTerm();

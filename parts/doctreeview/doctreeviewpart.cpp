@@ -16,6 +16,7 @@
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kiconloader.h>
+#include <klineeditdlg.h>
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kstringhandler.h>
@@ -75,6 +76,11 @@ DocTreeViewPart::DocTreeViewPart(KDevApi *api, QObject *parent, const char *name
                                "create a full text index, which can be done in the "
                                "configuration dialog of the documentation tree.") );
 
+    action = new KAction( i18n("Man page..."), 0,
+                          this, SLOT(slotManpage()),
+                          actionCollection(), "help_manpage" );
+    action->setStatusText( i18n("Show a manpage") );
+    
 #if 0
     // No longer necessary since the dock widgets are gone :-)
     action = new KAction( i18n("&Documentation tree"), 0,
@@ -145,6 +151,15 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 } 
 
 
+void DocTreeViewPart::slotDocumentationIndex()
+{
+    if (!m_indexDialog)
+        m_indexDialog = new DocIndexDialog(this, m_widget, "doc index dialog");
+
+    m_indexDialog->show();
+}
+
+
 void DocTreeViewPart::slotSearchDocumentation()
 {
     DocSearchDialog dlg(m_widget, "doc search dialog");
@@ -155,12 +170,14 @@ void DocTreeViewPart::slotSearchDocumentation()
 }
 
 
-void DocTreeViewPart::slotDocumentationIndex()
+void DocTreeViewPart::slotManpage()
 {
-    if (!m_indexDialog)
-        m_indexDialog = new DocIndexDialog(this, m_widget, "doc index dialog");
-
-    m_indexDialog->show();
+    bool ok;
+    QString manpage = KLineEditDlg::getText(i18n("Show manpage on:"), "", &ok, 0);
+    if (ok && !manpage.isEmpty()) {
+        QString url = QString::fromLatin1("man:/%1(3)").arg(manpage);
+        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+    }
 }
 
 

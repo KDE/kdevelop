@@ -1,0 +1,8 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevPythonSupport" version="1">
+<MenuBar>
+ <Menu name="help">
+  <Action name="help_pydoc"/>
+ </Menu>
+</MenuBar>
+</kpartgui>

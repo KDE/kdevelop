@@ -1,3 +1,9 @@
+2001-05-29  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+
+	* Added a pydoc ioslave and a corresponding menu item to
+	  the python support part
+	* Added a man page item to the help menu
+
 2001-05-28  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* New scripting layer based on DCOP

@@ -892,6 +892,7 @@ void Core::running(KDevPart *part, bool runs)
 }
 
 
+#ifndef NEW_EDITOR
 TextEditorView *Core::activeEditorView()
 {
     if (activePart && activePart->inherits("EditorPart"))
@@ -899,6 +900,7 @@ TextEditorView *Core::activeEditorView()
     else
         return 0;
 }
+#endif
 
 
 void Core::message(KEditor::Document *, const QString &str)

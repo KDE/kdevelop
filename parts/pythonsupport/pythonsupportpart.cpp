@@ -16,6 +16,7 @@
 #include <qtimer.h>
 #include <kapp.h>
 #include <kdebug.h>
+#include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
 
@@ -33,12 +34,19 @@ PythonSupportPart::PythonSupportPart(KDevApi *api, QObject *parent, const char *
     : KDevLanguageSupport(api, parent, name)
 {
     setInstance(PythonSupportFactory::instance());
+
+    setXMLFile("kdevpythonsupport.rc");
     
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(savedFile(const QString&)),
              this, SLOT(savedFile(const QString&)) );
 
+    KAction *action;
+    action = new KAction( i18n("Python documentation..."), 0,
+                          this, SLOT(slotPydoc()),
+                          actionCollection(), "help_pydoc" );
+    action->setStatusText( i18n("Show a Python documentation page") );
 }
 
 
@@ -195,6 +203,17 @@ void PythonSupportPart::parse(const QString &fileName)
     }
     
     f.close();
+}
+
+void PythonSupportPart::slotPydoc()
+{
+    bool ok;
+    QString key = KLineEditDlg::getText(i18n("Show Python documentation on key:"), "", &ok, 0);
+    if (ok && !key.isEmpty()) {
+        QString url = "pydoc:";
+        url += key;
+        core()->gotoDocumentationFile(KURL(url), KDevCore::Replace);
+    }
 }
 
 #include "pythonsupportpart.moc"
