@@ -104,7 +104,7 @@ class CParsedContainer : public CParsedItem
 {
 public: // Constructor and destructor
 
-  CParsedContainer();
+  CParsedContainer(bool autodel=true);
   ~CParsedContainer();
 
 protected: // Private attributes
