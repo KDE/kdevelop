@@ -47,14 +47,14 @@ public:
     * @param file to parse
     * @param line until to parse
     */
-    bool parse( const QString& file = QString::null, int iCCLine_ = 9999999 );
+    bool parse( const QString& file = QString::null, const int iCCLine_ = 9999999 );
 
     /**
     * parse: the string we'll have to parse
     * @param string to parse
     * @param line until to parse
     */
-    bool parse( const QString* file = 0, int iCCLine_ = 9999999 );
+    bool parse( const QString* file = 0, const int iCCLine_ = 9999999 );
 
 public:
     // public variables
