@@ -7,6 +7,7 @@
 
 2002-05-20  Harald Fernengel  <harry@kdevelop.org>
 	* Outputviews: Uses bright font colors if widget background is dark
+	* Extended Tools Config: Show App-Tree to make it more comfortable
 
 2002-05-20  Roberto Raggi  <raggi@cli.di.unipi.it>
 	* Ported qeditor to ktexteditor interface
