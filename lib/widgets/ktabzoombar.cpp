@@ -136,15 +136,4 @@ void KTabZoomBar::unsetButtons()
 }
 
 
-QSize KTabZoomBar::sizeHint() const
-{
-  return d->m_layout->sizeHint();
-}
-
-
-int KTabZoomBar::heightForWidth(int width) const
-{
-  return d->m_layout->heightForWidth(width);
-}
-
 #include "ktabzoombar.moc"
