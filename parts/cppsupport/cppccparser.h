@@ -122,7 +122,7 @@ private:
     /**
      * wrapper method called from public parse
      */
-    void parseObject( istream& object );
+    void parseObject( std::istream& object );
 
     /**
      * top level parsing

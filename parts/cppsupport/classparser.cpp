@@ -35,6 +35,8 @@ extern int comment_end;
 /** Last parsed comment. */
 extern QString comment;
 
+using namespace std;
+
 #define PUSH_LEXEM() lexemStack.push( new CParsedLexem( lexem, getText() ))
 
 enum
