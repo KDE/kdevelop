@@ -18,9 +18,25 @@
 #include <ktexteditor/editinterface.h>
 #include <kgenericfactory.h>
 #include <kaction.h>
+#include <kguiitem.h>
+#include <kpopupmenu.h>
 
 #include "kdevcore.h"
 #include "kdevpartcontroller.h"
+
+// maximum steps to remember
+static const int MAX_HISTORY = 50;
+// textchanges after which the QValueLists are cleaned
+static const int MAX_CLEANUP = 200;
+// maximum number of items to display in Popup
+static const int MAX_ITEMS = 20;
+
+static int anchorID = 0;
+
+int Anchor::nextID()
+{
+  return anchorID++;
+}
 
 typedef KGenericFactory<SourceNavPart> SourceNavFactory;
 K_EXPORT_COMPONENT_FACTORY( libkdevsourcenav, SourceNavFactory( "kdevsourcenav" ) );
@@ -31,14 +47,20 @@ SourceNavPart::SourceNavPart(QObject *parent, const char *name, const QStringLis
   setInstance(SourceNavFactory::instance());
   setXMLFile("kdevpart_sourcenav.rc");
 
+  backPopupVisible = false;
+  forwardPopupVisible = false;
+
   connect( partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)) );
 
-  navForward = new KAction( i18n("&Navigate Forward"), "1rightarrow", 0,
-                            this, SLOT(slotNavForward()),
-                            actionCollection(), "navForward" );
-  navBack = new KAction( i18n("&Navigate Back"), "1leftarrow", 0,
-                            this, SLOT(slotNavBack()),
-                            actionCollection(), "navBack" );
+  navForward = new KToolBarPopupAction( KGuiItem( i18n("Navigate Forward"), "1rightarrow", i18n( "ToolTip" ), i18n( "Whats This" ) ),
+                                        0, this, SLOT(slotNavForward()), actionCollection(), "navForward" );
+  navBack = new KToolBarPopupAction( KGuiItem( i18n("Navigate Backwards"), "1leftarrow", i18n( "ToolTip" ), i18n( "Whats This" ) ),
+                                     0, this, SLOT(slotNavBack()), actionCollection(), "navBack" );
+
+  connect( navForward->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(fillForwardPopup()) );
+  connect( navForward->popupMenu(), SIGNAL(activated(int)), this, SLOT(forwardPopupClicked(int)) );
+  connect( navBack->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(fillBackPopup()) );
+  connect( navBack->popupMenu(), SIGNAL(activated(int)), this, SLOT(backPopupClicked(int)) );
 
   navForward->setEnabled( false );
   navBack->setEnabled( false );
@@ -49,6 +71,49 @@ SourceNavPart::~SourceNavPart()
 {
 }
 
+void SourceNavPart::backPopupClicked( int id )
+{
+  navigate( id, navList, forwardList );
+}
+
+void SourceNavPart::forwardPopupClicked( int id )
+{
+  navigate( id, forwardList, navList );
+}
+
+void SourceNavPart::fillPopup( const AnchorList& list, QPopupMenu* pop )
+{
+  if ( !pop )
+    return;
+
+  QString item;
+  int i = 0;
+  pop->clear();
+  AnchorList::ConstIterator it = list.begin();
+  while ( it != list.end() && i < MAX_ITEMS ) {
+    if ( (*it).url().isLocalFile() ) {
+      item = (*it).url().fileName();
+    } else {
+      item = (*it).url().prettyURL();
+    }
+    item +=  ":" + QString::number( (*it).line() );
+    pop->insertItem( item, (*it).id() );
+    ++i;
+    ++it;
+  }
+}
+
+void SourceNavPart::fillBackPopup()
+{
+  fillPopup( navList, navBack->popupMenu() );
+}
+
+void SourceNavPart::fillForwardPopup()
+{
+  fillPopup( forwardList, navForward->popupMenu() );
+}
+
+// called when a new document has been added
 void SourceNavPart::slotPartAdded( KParts::Part *part )
 {
   if ( !part )
@@ -57,8 +122,6 @@ void SourceNavPart::slotPartAdded( KParts::Part *part )
   KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(part);
   if ( !doc )
     return;
-
-  kdDebug() << "SOURCENAV: found KTextEditor::Document" << endl;
 
   KTextEditor::EditInterface *ed = dynamic_cast<KTextEditor::EditInterface*>(doc);
   if ( ed ) {
@@ -99,7 +162,7 @@ void SourceNavPart::gotoPos( const Anchor& ankh )
 bool SourceNavPart::isNearby( const Anchor& pos1, const Anchor& pos2 )
 {
   // 10 is just a magic number, might need a bit tweaking ;)
-  if ( pos1.url() == pos2.url() && QABS((int)pos1.line() - (int)pos2.line()) < 5 )
+  if ( pos1.isValid() && pos2.isValid() && pos1.url() == pos2.url() && QABS((int)pos1.line() - (int)pos2.line()) < 5 )
     return true;
   return false;
 }
@@ -113,8 +176,34 @@ void SourceNavPart::slotTextChanged()
     navList.push_front( cur );
   }
 
+  if ( cur.id() % MAX_CLEANUP == 0 ) {
+    cleanupList( navList );
+    cleanupList( forwardList );
+  }
+
   enableActions();
-//  kdDebug() << "SourceNavPart::slotTextChanged: " << cur.url().prettyURL() << ":" << cur.line() << endl;
+}
+
+void SourceNavPart::navigate( int id, AnchorList& list1, AnchorList& list2 )
+{
+  Anchor ankh;
+
+  AnchorList::Iterator it = list1.begin();
+  while ( it != list1.end() ) {
+    ankh = (*it);
+    list2.push_front( *it );
+    it = list1.remove( it );
+
+    if ( ankh.id() == id ) {
+      // found the right position
+      it = list1.end();
+    }
+  }
+
+  if ( ankh.isValid() ) {
+    gotoPos( ankh );
+  }
+  enableActions();
 }
 
 void SourceNavPart::navigate( AnchorList& list1, AnchorList& list2 )
@@ -158,6 +247,14 @@ void SourceNavPart::enableActions()
 {
   navForward->setEnabled( !forwardList.isEmpty() );
   navBack->setEnabled( !navList.isEmpty() );
+}
+
+void SourceNavPart::cleanupList( AnchorList& list )
+{
+  AnchorList::Iterator it = list.at( MAX_HISTORY );
+  while ( it != list.end() ) {
+    it = list.remove( it );
+  }
 }
 
 #include "sourcenav_part.moc"

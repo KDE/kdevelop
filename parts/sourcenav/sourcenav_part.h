@@ -23,23 +23,35 @@ namespace KParts {
 };
 
 class KAction;
+class KToolBarPopupAction;
+class QPopupMenu;
 
 class Anchor
 {
 public:
-  Anchor( KURL url = KURL(), uint line = 0, uint col = 0 )
+  Anchor()
+  {
+    _id = -1;
+    _line = _col = 0;
+  }
+  Anchor( KURL url, uint line = 0, uint col = 0 )
   { 
     _url = url;
     _line = line;
     _col = col;
+    _id = nextID();
   }
   KURL url() const { return _url; }
   uint line() const { return _line; }
   uint col() const { return _col; }
+  int  id() const { return _id; }
+  bool isValid() const { return _id != -1; }
 
 private:
   KURL _url;
   uint _line, _col;
+  int  _id;
+  static int nextID();
 };
 
 typedef QValueList<Anchor> AnchorList;
@@ -60,6 +72,10 @@ public slots:
 private slots:
   void slotPartAdded( KParts::Part *part );
   void slotTextChanged();
+  void fillBackPopup();
+  void fillForwardPopup();
+  void backPopupClicked( int id );
+  void forwardPopupClicked( int id );
 
 private:
   Anchor getCurrentPos();
@@ -67,10 +83,14 @@ private:
   bool   isNearby( const Anchor& pos1, const Anchor& pos2 );
   void   enableActions();
   void   navigate( AnchorList& list1, AnchorList& list2 );
+  void   navigate( int id, AnchorList& list1, AnchorList& list2 );
+  void   fillPopup( const AnchorList& list, QPopupMenu* pop );
+  void   cleanupList( AnchorList& list );
 
-  KAction *navForward, *navBack;
-  AnchorList navList;
-  AnchorList forwardList;
+  KToolBarPopupAction *navForward, *navBack;
+  AnchorList          navList;
+  AnchorList          forwardList;
+  bool                backPopupVisible, forwardPopupVisible;
 };
 
 
