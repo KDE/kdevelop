@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=Fortran Source File
+Hidden=false
+Icon=source_f
+MimeType=text/x-fortran
+Patterns=*.f;*.F;*.f77;*.f90;*.f95;*.for;*.ftn;*.fpp
+Type=MimeType
+
+[Property::X-KDE-text]
+Type=bool
+Value=true
