@@ -45,6 +45,7 @@ PartWidget::PartWidget( FileViewPart *part, QWidget *parent )
         infoProvider = part->versionControl()->fileInfoProvider();
 
     m_filetree = new FileTreeWidget( m_part, this, infoProvider );
+    setCaption(i18n("File Tree"));
     m_filetree->setCaption(i18n("File Tree"));
     m_filetree->setIcon(SmallIcon("folder"));
     QWhatsThis::add(m_filetree, i18n("<b>File tree</b><p>"

@@ -41,7 +41,8 @@ ReplacePart::ReplacePart(QObject *parent, const char *name, const QStringList& )
 
     m_widget = new ReplaceWidget(this);
     m_widget->setIcon( SmallIcon("filefind") );
-
+    m_widget->setCaption(i18n("Replace"));
+    
     QWhatsThis::add
         (m_widget, i18n("<b>Replace</b><p>"
                         "This window shows a preview of a string replace "

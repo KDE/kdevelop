@@ -33,6 +33,7 @@ namespace FileCreate {
     : KListView(0, "KDevFileCreate"), TypeChooser(part)
   {
     setIcon( SmallIcon("filenew2") );
+    setCaption(i18n("File Create"));
     setResizeMode( LastColumn );
     setAllColumnsShowFocus(true);
     setRootIsDecorated(true);

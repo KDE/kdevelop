@@ -126,7 +126,7 @@ CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & )
     actionAddToIgnoreList( 0 ), actionRemoveFromIgnoreList( 0 )
 {
     setInstance( CvsFactory::instance() );
-
+    
     setXMLFile( "kdevcvspart.rc" );
 
     init();
@@ -161,6 +161,7 @@ void CvsPart::init()
 
     m_widget = new CvsWidget( this );
     m_widget->setIcon( SmallIcon("db") );
+    m_widget->setCaption(i18n("CVS Output"));
     mainWindow()->embedOutputView( m_widget, i18n("CVS"), i18n("CVS output") ); // i18n("CVS") ?!?? ;)
     QWhatsThis::add(m_widget, i18n("<b>CVS</b><p>Concurrent Versions System operations window. Shows results of cvs command execution."));
 }

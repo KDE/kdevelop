@@ -146,6 +146,7 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     gdbOutputWidget = new GDBOutputWidget;
     gdbOutputWidget->setEnabled(false);
     gdbOutputWidget->setIcon( SmallIcon("inline_image") );
+    gdbOutputWidget->setCaption(i18n("GDB Output"));
     QWhatsThis::add
         (gdbOutputWidget, i18n("<b>GDB output</b><p>"
                                  "Shows all gdb commands being executed. "

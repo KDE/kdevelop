@@ -37,6 +37,8 @@ KonsoleViewPart::KonsoleViewPart(QObject *parent, const char *name, const QStrin
     );
 
     m_widget->setIcon( SmallIcon("konsole") );
+    m_widget->setCaption(i18n("Konsole"));
+    
     mainWindow()->embedOutputView(m_widget, i18n("Konsole"), i18n("Embedded console window"));
 }
 
