@@ -37,12 +37,11 @@ void OpenWithPart::fillContextMenu(QPopupMenu *popup, const Context *context)
     return;
 
   const FileContext *ctx = static_cast<const FileContext*>(context);
-  KURL url = ctx->urls().first();
-  if (URLUtil::isDirectory(url))
+  m_url = ctx->urls().first();
+  if (URLUtil::isDirectory(m_url))
       return;
 
   popup->insertSeparator();
-  m_url = KURL(url.fileName());
 
   KPopupMenu *sub = new KPopupMenu(popup);
 
