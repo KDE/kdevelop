@@ -701,7 +701,7 @@ void QComboView::popup()
     d->mouseWasInsidePopup = FALSE;
 //    int w = lb->variableWidth() ? lb->sizeHint().width() : width();
     int w = width();
-    int h = listHeight( lb, d->sizeLimit ) + 2;
+    int h = listHeight( lb, d->sizeLimit );
 #if KDE_VERSION > 305
     QRect screen = QApplication::desktop()->availableGeometry( const_cast<QComboView*>(this) );
 #else
