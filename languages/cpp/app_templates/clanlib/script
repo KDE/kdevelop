@@ -5,9 +5,7 @@ use kdevelop;
 initKDevelop();
 installFileTemplate();
 installLicense();
-installAdmin();
 installGNU();
-installDocbook();
 
 print "Installing project file\n";
 # install the kdevelop project file
