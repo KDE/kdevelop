@@ -77,9 +77,16 @@ int main(int argc, char *argv[])
 
   PluginController::getInstance()->loadInitialPlugins();
 
+  splash->showMessage( i18n( "Loading Settings" ) );
   TopLevel::getInstance()->loadSettings();
+
+  splash->showMessage( i18n( "Loading Project" ) );
   ProjectManager::getInstance()->loadDefaultProject();
+
+  splash->showMessage( i18n( "Starting GUI" ) );
   TopLevel::getInstance()->main()->show();
+
+  splash->showMessage( i18n( "Ready" ) );
   Core::getInstance()->doEmitCoreInitialized();
 
   delete splash;
