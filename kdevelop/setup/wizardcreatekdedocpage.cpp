@@ -67,9 +67,10 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
 //    kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
 
     m_pInstallState->kde = docDir;
-    CUpdateKDEDocDlg* dlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, "test");
-    vl->addWidget(dlg);
-    QObject::connect(dlg, SIGNAL(newDocPathIsSetNow(const QString&)), SLOT(slotSetKDEDocPath(const QString&)) );
+    CUpdateKDEDocDlg* pDlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, "test");
+    vl->addWidget(pDlg);
+    QObject::connect(pDlg, SIGNAL(newDocIsCreatedNow(const QString&)), SLOT(slotSetKDEDocPath(const QString&)) );
+    QObject::connect(pDlg, SIGNAL(newDocCreationStartedNow()), SLOT(slotDisableButton()) );
   }
 }
 
@@ -77,6 +78,11 @@ void WizardCreateKDEDocPage::slotSetKDEDocPath(const QString& newKDEDocPath)
 {
   m_pInstallState->kde = newKDEDocPath;
   setValid(true);	// enable the Next button again
+}
+
+void WizardCreateKDEDocPage::slotDisableButton()
+{
+  setValid(false);
 }
 
 #include "wizardcreatekdedocpage.moc"

@@ -28,6 +28,8 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 class QRadioButton;
+class QMultiLineEdit;
+class QVBoxLayout;
 
 #include <qwidget.h>
 
@@ -50,26 +52,43 @@ public:
   QLabel* doc_label;
   QPushButton* source_button;
   QPushButton* doc_button;
-  QPushButton* ok_button;
+  QPushButton* create_button;
   QPushButton* cancel_button;
   QRadioButton* del_recent_radio_button;
   QRadioButton* del_new_radio_button;
   QRadioButton* leave_new_radio_button;
 
 signals:
-	void newDocPathIsSetNow(const QString&);
+	void newDocIsCreatedNow(const QString&);
+  void newDocCreationStartedNow();
+
 public slots:
- void OK();
+  void OK();
   void slotLeaveNewRadioButtonClicked();
   void slotDelNewRadioButtonClicked();
   void slotDelRecentRadioButtonClicked();
   void slotDocButtonClicked();
   void slotSourceButtonClicked();
+
+protected slots:
+  void slotShowToolProcessOutputDlg();
+  void slotReceivedStdout(KProcess*,char*,int);
+  void slotReceivedStderr(KProcess*,char*,int);
+  void slotProcessExited(KProcess*);
+
+protected:
+  void createShellProcessOutputWidget();
+
 protected:
   KShellProcess* m_proc;
   QString kde_doc_path;
   QString qt_doc_path;
   bool bUpdated;
+
+  QDialog* m_pShellProcessOutput;
+  QMultiLineEdit* m_pShellProcessOutputLines;
+  QPushButton* m_pShellProcessOutputOKButton;
+  QPushButton* m_pShellProcessOutputCancelButton;
 };
 
 #endif

@@ -65,10 +65,9 @@ void CKDevInstall::slotReceivedStderr(KProcess*,char* buffer, int count)
 
 CKDevInstall::CKDevInstall(QWidget *parent, const char *name, KConfig* config)
 : QWizard(parent,name)
+  ,m_config(config)
   ,m_pInstallState(0L)
 {
-  m_config = config;
-
   //  test also autoconfified documentation path
   m_config->setGroup("Doc_Location");
   QString qtDocuPath = m_config->readEntry("doc_qt", QT_DOCDIR);
@@ -419,15 +418,7 @@ void CKDevInstall::slotFinished()
 
   m_config->sync();
 
-  KStandardDirs stddirs;
-  QString binPath = stddirs.findResourceDir("bin", "kdevelop");
-
-  KProcess kdevelopTheProgram;
-  kdevelopTheProgram.setExecutable(binPath + "/kdevelop&");
-  if (!kdevelopTheProgram.start()) {
-		qDebug("couldn't start kdevelop :-(");
-  }
-  qApp->quit();
+  kapp->startServiceByDesktopName("kdevelop");
 }
 
 void CKDevInstall::slotEnableCreateKDEDocPage(bool bEnabled)

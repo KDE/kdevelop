@@ -15,14 +15,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include "cupdatekdedocdlg.h"
-
-#include <kconfig.h>
-#include <kfiledialog.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kprocess.h>
-#include <kstddirs.h>
 
 #include <qbuttongroup.h>
 #include <qdir.h>
@@ -35,7 +27,19 @@
 #include <qwidget.h>
 #include <qlayout.h>
 #include <qgrid.h>
+#include <qlayout.h>
+#include <qmultilineedit.h>
+#include <qapplication.h>
+
+#include <kconfig.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kprocess.h>
+#include <kstddirs.h>
 #include <kbuttonbox.h>
+
+#include "cupdatekdedocdlg.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -43,10 +47,13 @@
 
 
 CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir, const QString& qtDocDir, QWidget *parent, bool bShowCancelButton, const char *name) : QWidget(parent,name)
+  ,m_proc(proc)
+  ,m_pShellProcessOutput(0L)
+  ,m_pShellProcessOutputLines(0L)
+  ,m_pShellProcessOutputOKButton(0L)
 {
   kde_doc_path = kdeDocDir;
   qt_doc_path = qtDocDir;
-  m_proc = proc;
 
   QVBoxLayout* vl1 = new QVBoxLayout(this, 15, 7);
 
@@ -138,18 +145,18 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
 
   KButtonBox *bb = new KButtonBox( this );
   bb->addStretch();
-  ok_button =bb->addButton( i18n("Create") );
-  ok_button->setDefault( true );
-	if (bShowCancelButton)
-	  cancel_button  = bb->addButton( i18n("Cancel") );	
-
+  create_button =bb->addButton( i18n("Create") );
+  create_button->setDefault( true );
+  if (bShowCancelButton)
+     cancel_button = bb->addButton( i18n("Cancel") );    
+  
   vl1->addWidget(bb);
 
   bUpdated=false;
 
   setFixedHeight(sizeHint().height());
 
-  connect(ok_button,SIGNAL(clicked()),SLOT(OK()));
+  connect(create_button,SIGNAL(clicked()),SLOT(OK()));
   connect(leave_new_radio_button,SIGNAL(clicked()),SLOT(slotLeaveNewRadioButtonClicked()));
   connect(del_new_radio_button,SIGNAL(clicked()),SLOT(slotDelNewRadioButtonClicked()));
   connect(del_recent_radio_button,SIGNAL(clicked()),SLOT(slotDelRecentRadioButtonClicked()));
@@ -157,6 +164,7 @@ CUpdateKDEDocDlg::CUpdateKDEDocDlg(KShellProcess* proc, const QString& kdeDocDir
   connect(doc_button,SIGNAL(clicked()),SLOT(slotDocButtonClicked()));
   connect(source_button,SIGNAL(clicked()),SLOT(slotSourceButtonClicked()));
 
+  createShellProcessOutputWidget();
 }
 
 
@@ -182,12 +190,11 @@ void CUpdateKDEDocDlg::OK(){
                    i18n("The selected path is not correct!"));
     return;
   }
-  
+
   QString new_doc_path = kde_doc_path;
   if(!del_recent_radio_button->isChecked())
   { // not recent doc path
     new_doc_path = doc_edit->text();
-    emit newDocPathIsSetNow(new_doc_path);
   }
 
   if(new_doc_path.right(1) != "/")
@@ -316,7 +323,7 @@ void CUpdateKDEDocDlg::OK(){
   bUpdated=true;
   kde_doc_path=new_doc_path; // all went ok... so set the new doc_path
 
-  emit newDocPathIsSetNow(kde_doc_path);
+  slotShowToolProcessOutputDlg();
 }
 
 
@@ -355,6 +362,68 @@ void CUpdateKDEDocDlg::slotSourceButtonClicked(){
       source_edit->setText(dir);
   }
 
+}
+
+void CUpdateKDEDocDlg::createShellProcessOutputWidget()
+{
+  m_pShellProcessOutput = new QDialog(this, "shell_process_output_dlg");
+  m_pShellProcessOutput->setCaption(i18n("Creating the KDE Documentation"));
+  QVBoxLayout* pVL = new QVBoxLayout(m_pShellProcessOutput, 15, 7);
+  QLabel* pLabel = new QLabel(i18n("Wait until the process has finished:"), m_pShellProcessOutput);
+  m_pShellProcessOutputLines = new QMultiLineEdit(m_pShellProcessOutput);
+  KButtonBox *bb = new KButtonBox( m_pShellProcessOutput );
+  bb->addStretch();
+  m_pShellProcessOutputOKButton =bb->addButton( i18n("&OK") );
+  m_pShellProcessOutputOKButton->setDefault( true );
+  bb->addStretch();
+
+  pVL->addWidget(pLabel);
+  pVL->addWidget(m_pShellProcessOutputLines);
+  pVL->addWidget(bb);
+
+  m_pShellProcessOutput->resize(300, 400);
+
+  QObject::connect(m_pShellProcessOutputOKButton, SIGNAL(clicked()), m_pShellProcessOutput, SLOT(accept()));
+  QObject::connect(m_proc,SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+  QObject::connect(m_proc,SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+  QObject::connect(m_proc,SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*) )) ;
+}
+
+void CUpdateKDEDocDlg::slotShowToolProcessOutputDlg()
+{
+  m_pShellProcessOutputOKButton->setEnabled(false);
+  m_pShellProcessOutputLines->clear();
+  QApplication::setOverrideCursor(WaitCursor);
+  emit newDocCreationStartedNow();
+  create_button->setEnabled(false);
+  m_pShellProcessOutput->exec();
+}
+
+void CUpdateKDEDocDlg::slotReceivedStdout(KProcess*,char* buffer,int count)
+{
+  QCString test(buffer, count);
+  m_pShellProcessOutputLines->insertLine(test);
+  m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
+  qDebug(test);
+}
+void CUpdateKDEDocDlg::slotReceivedStderr(KProcess*,char* buffer, int count)
+{
+  QCString test(buffer, count);
+  m_pShellProcessOutputLines->insertLine(test);
+  m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
+  qDebug(test);
+}
+
+void CUpdateKDEDocDlg::slotProcessExited(KProcess*)
+{
+  m_pShellProcessOutputLines->insertLine("");
+  m_pShellProcessOutputLines->insertLine("Finished!");
+  m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
+  m_pShellProcessOutputOKButton->setEnabled(true);
+  create_button->setEnabled(true);
+  QApplication::restoreOverrideCursor();
+
+  emit newDocIsCreatedNow(kde_doc_path);
 }
 
 #include "cupdatekdedocdlg.moc"

@@ -32,6 +32,7 @@ class QPushButton;
 class QListBox;
 class QVBox;
 class QDir;
+class QMultiLineEdit;
 class KConfig;
 class KProcess;
 class KShellProcess;

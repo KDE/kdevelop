@@ -27,6 +27,7 @@ public:
 	WizardCreateKDEDocPage(QWidget* parent, const char* name, const QString& infoText, const QString& installPictPathAndFilename, CKDevInstallState* pInstallState);
 protected slots:	
 	void slotSetKDEDocPath(const QString& newKDEDocPath);
+  void slotDisableButton();
 };
 
 #endif  // WIZARDCREATEKDEDOCPAGE_H

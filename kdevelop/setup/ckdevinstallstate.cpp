@@ -15,6 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qlayout.h>
+#include <qmultilineedit.h>
+
 #include <kprocess.h>
 
 #include "ckdevinstallstate.h"
