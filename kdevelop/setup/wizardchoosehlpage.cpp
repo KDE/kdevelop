@@ -33,8 +33,8 @@ WizardSyntaxHlPage::WizardSyntaxHlPage(QWidget* parent, const char* name, const 
 {
   m_vbox = new QVBox(this);
   QLabel* label = new QLabel(m_vbox);
-  label = new QLabel(i18n("Now you can choose the Syntax-Highlighting style which KDevelop will use.") + "\n" +
-										 i18n("Which one do you want to use?"), m_vbox );
+  label = new QLabel(i18n("These are the most common syntax highlighting styles.") + "\n" +
+										 i18n("You can modify these default styles later in the KDevelop options:"), m_vbox );
    										
   QButtonGroup* bg = new QButtonGroup(m_vbox);
 

@@ -61,11 +61,12 @@ WizardIndexDocuPage::WizardIndexDocuPage(QWidget* parent, const char* name, cons
                               "This will provide an extended help functionality and will give you the information you need."), wdg);
       label->setAlignment(WordBreak);
 
-      CCreateDocDatabaseDlg* dlg = new CCreateDocDatabaseDlg(wdg,"DLG", m_pInstallState->shell_process, m_pInstallState->kde, m_pInstallState->qt, m_pInstallState->glimpse | m_pInstallState->glimpseindex, m_pInstallState->htdig);
+      CCreateDocDatabaseDlg* pDlg = new CCreateDocDatabaseDlg(wdg,"DLG", m_pInstallState->shell_process, m_pInstallState->kde, m_pInstallState->qt, m_pInstallState->glimpse | m_pInstallState->glimpseindex, m_pInstallState->htdig);
       vl->addWidget(label);
-      vl->addWidget(dlg);
+      vl->addWidget(pDlg);
 
-      QObject::connect(dlg, SIGNAL(indexingFinished(const QString&)), SLOT(indexingFinished(const QString&)) );
+      QObject::connect(pDlg, SIGNAL(indexingFinished(const QString&)), SLOT(indexingFinished(const QString&)) );
+      QObject::connect(pDlg, SIGNAL(indexingStartedNow()), SLOT(slotDisableButton()) );
     }
   }
 }
@@ -74,6 +75,13 @@ void WizardIndexDocuPage::indexingFinished(const QString& searchEngine)
 {
   m_pInstallState->searchEngine = searchEngine;
   setValid(true);	// enable the Next button again
+  setBackButtonEnabled(true);
+}
+
+void WizardIndexDocuPage::slotDisableButton()
+{
+  setValid(false);
+  setBackButtonEnabled(false);
 }
 
 #include "wizardindexdocupage.moc"

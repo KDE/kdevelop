@@ -47,12 +47,11 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
     label = new QLabel(wdg);
   }
   else{
-    setValid(false);	// disable the next button, will be enabled again when the creation of the KDE docu has finished
-    label = new QLabel(i18n("Now KDevelop will create a new KDE-library documentation.\n\n"
-                            "For that, you need the kdelibs package as the source package. "
+    label = new QLabel(i18n("This is the opportunity to create a new KDE-library HTML-documentation shown in the documentation tree of KDevelop.\n\n"
+                            "For that, you need the source package of kdelibs. "
                             "In most cases it is included in your distribution. "
-                            "If you don't have the kdelibs as sources, we advise to obtain them from http://www.kde.org.\n\n"
-                            "Mind that the sources should match your installed kdelibs version."), wdg);
+                            "If not, we recomment to obtain them from http://www.kde.org. "
+                            "Consider the sources should match your installed kdelibs version.\n\n"), wdg);
     label->setAlignment(WordBreak);
     vl->addWidget(label);
     QString docDir = locateLocal("appdata", "KDE-Documentation");
@@ -67,7 +66,7 @@ WizardCreateKDEDocPage::WizardCreateKDEDocPage(QWidget* parent, const char* name
 //    kde_dir->mkdir(".kde/share/apps/kdevelop/KDE-Documentation",false);
 
     m_pInstallState->kde = docDir;
-    CUpdateKDEDocDlg* pDlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, "test");
+    CUpdateKDEDocDlg* pDlg = new CUpdateKDEDocDlg(m_pInstallState->shell_process, docDir, m_pInstallState->qt, wdg, false, "test");
     vl->addWidget(pDlg);
     QObject::connect(pDlg, SIGNAL(newDocIsCreatedNow(const QString&)), SLOT(slotSetKDEDocPath(const QString&)) );
     QObject::connect(pDlg, SIGNAL(newDocCreationStartedNow()), SLOT(slotDisableButton()) );
@@ -78,11 +77,13 @@ void WizardCreateKDEDocPage::slotSetKDEDocPath(const QString& newKDEDocPath)
 {
   m_pInstallState->kde = newKDEDocPath;
   setValid(true);	// enable the Next button again
+  setBackButtonEnabled(true);
 }
 
 void WizardCreateKDEDocPage::slotDisableButton()
 {
   setValid(false);
+  setBackButtonEnabled(false);
 }
 
 #include "wizardcreatekdedocpage.moc"

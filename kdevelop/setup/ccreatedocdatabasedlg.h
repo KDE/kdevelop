@@ -28,7 +28,9 @@ class QRadioButton;
 class QPushButton;
 class QListBox;
 class QLineEdit;
+class QMultiLineEdit;
 class KShellProcess;
+class KProcess;
 class KConfig;
 
 /**frontend for glimpseindex
@@ -46,20 +48,28 @@ public slots:
   void slotOkClicked();
 
 signals:
+  void indexingStartedNow();
 	void indexingFinished(const QString&);
 	
+protected:
+  void createShellProcessOutputWidget();
+
 protected slots:
   void slotAddButtonClicked();
   void slotRemoveButtonClicked();
   void slotDirButtonClicked();
-  
+  void slotShowToolProcessOutputDlg();
+  void slotReceivedStdout(KProcess*,char*,int);
+  void slotReceivedStderr(KProcess*,char*,int);
+  void slotProcessExited(KProcess*);
+
 protected:
   QCheckBox* kde_checkbox;
   QCheckBox* qt_checkbox;
   QRadioButton* tiny_radio_button;
   QRadioButton* small_radio_button;
   QRadioButton* medium_radio_button;
-  QPushButton* ok_button;
+  QPushButton* start_button;
   QPushButton* cancel_button;
   QPushButton* dir_button;
   QListBox* dir_listbox;
@@ -73,6 +83,11 @@ protected:
 	QString m_qtDocDir;
 	
   KShellProcess* m_proc;
+
+  QDialog* m_pShellProcessOutput;
+  QMultiLineEdit* m_pShellProcessOutputLines;
+  QPushButton* m_pShellProcessOutputOKButton;
+  QPushButton* m_pShellProcessOutputCancelButton;
 };
 
 #endif

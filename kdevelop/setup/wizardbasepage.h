@@ -36,15 +36,18 @@ public:
   virtual void setPageTitle( const QString& pageTitle ) { m_pageTitle = pageTitle; };
   virtual bool valid() const { return m_valid; }
   virtual void setValid( bool state );
+  virtual void setBackButtonEnabled( bool state);
   virtual void setHelpTextBackgroundColor( const QColor& bgcolor);
 
 signals:
   void validData(QWidget* page, bool valid);
+  void enableBackButton(QWidget* page, bool enable);
 
 protected:
   QString m_pageTitle;
   bool    m_valid;
-  QLabel * labelText;
+  bool    m_backButtonEnabled;
+  QLabel* m_labelText;
 	QVBox * m_vbox;
 	CKDevInstallState* m_pInstallState;
 };

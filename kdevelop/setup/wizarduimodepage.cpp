@@ -39,7 +39,8 @@ WizardUIModePage::WizardUIModePage(QWidget* parent, const char* name, const QStr
 
   KGlobal::instance()->iconLoader()->loadIcon( "window_list", KIcon::NoGroup, KIcon::SizeMedium );
 
-  label = new QLabel(i18n("What kind of user interface do you want?"),m_vbox);
+  label = new QLabel(i18n("These are possible user interface modes, all of them are types of MDI.") + "\n" +
+                     i18n("Use the question mark button to get more information about each style!:"),m_vbox);
 
   QButtonGroup* bg = new QButtonGroup(m_vbox);
   QObject::connect(bg, SIGNAL(clicked(int)), SLOT(slotModeChanged(int)) );
@@ -89,11 +90,17 @@ WizardUIModePage::WizardUIModePage(QWidget* parent, const char* name, const QStr
   bg->setMargin(8);
   bg->setFixedHeight(bg->sizeHint().height());
 
-  QString cfTxt = i18n("All tool views are initially docked to the mainframe.\nEditor and browser views will live within a view area of the mainframe.");
+  QString cfTxt = i18n("All tool views are initially docked to the mainframe.\n"
+                       "Editor and browser views will live like toplevel windows within a view area of the mainframe.\n"
+                       "A typical example of this MDI mode is MS Visual Studio 6.0.");
   QWhatsThis::add(childframe, cfTxt);
-  QString tlTxt = i18n("All editor, browser and tool views will be toplevel windows (directly on desktop).");
+  QString tlTxt = i18n("All editor, browser and tool views will be toplevel windows (directly on desktop).\n"
+                       "The main widget contains the menu, toolbars and statusbar, only.\n"
+                       "A typical example of this MDI mode is the image manipulation application Gimp");
   QWhatsThis::add(toplevel, tlTxt);
-  QString tpTxt = i18n("All tool views are initially docked to the mainframe.\nEditor and browser views will be stacked in a tab window.");
+  QString tpTxt = i18n("All tool views are initially docked to the mainframe.\n"
+                       "Editor and browser views will be stacked in a tab window.\n"
+                       "A typical example of this MDI mode is KDEStudio, our friend C++-IDE in the world of KDE.");
   QWhatsThis::add(tabpage, tpTxt);
 
   label = new QLabel("", m_vbox);

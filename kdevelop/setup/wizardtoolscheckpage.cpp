@@ -34,7 +34,7 @@ WizardToolsCheckPage::WizardToolsCheckPage(QWidget* parent, const char* name, co
 : WizardBasePage(parent, name, infoText, installPictPathAndFilename, pInstallState)
 {
   m_vbox = new QVBox(this);
-  new QLabel(i18n("The following results have been determined for your system:")+"\n", m_vbox);
+  new QLabel(i18n("These tools have been detected on your computer:")+"\n", m_vbox);
   QListBox* lb = new QListBox(m_vbox);
   searchForAllTools(lb);
 }

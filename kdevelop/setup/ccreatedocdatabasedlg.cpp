@@ -15,15 +15,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#include "ccreatedocdatabasedlg.h"
-
-#include <kmessagebox.h>
-#include <kfiledialog.h>
-//#include <kapp.h>
-#include <klocale.h>
-#include <kstddirs.h>
-#include <kprocess.h>
-//#include <kconfig.h>
 
 #include <qdir.h>
 #include <qwhatsthis.h>
@@ -37,7 +28,19 @@
 #include <qbuttongroup.h>
 #include <qlayout.h>
 #include <qgrid.h>
+#include <qmultilineedit.h>
+#include <qapplication.h>
+
+#include <kmessagebox.h>
+#include <kfiledialog.h>
+//#include <kapp.h>
+#include <klocale.h>
+#include <kstddirs.h>
+#include <kprocess.h>
 #include <kbuttonbox.h>
+//#include <kconfig.h>
+
+#include "ccreatedocdatabasedlg.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -46,11 +49,15 @@
 //#include <iostream.h>
 
 CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,KShellProcess* proc,const QString& kdeDocDir, const QString& qtDocDir, bool foundGlimpse,bool foundHtDig, bool bShowIndexingButton) : QWidget(parent,name)
+	,start_button(0L)
+  ,m_proc(proc)
+  ,m_pShellProcessOutput(0L)
+  ,m_pShellProcessOutputLines(0L)
+  ,m_pShellProcessOutputOKButton(0L)
 {
   m_kdeDocDir = kdeDocDir;
   m_qtDocDir = qtDocDir;
 
-  m_proc = proc;
   QGridLayout *grid2 = new QGridLayout(this,2,3,0,7);
 
   //-----search engine group-----
@@ -111,8 +118,8 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   kde_checkbox->setChecked( TRUE );
 
 	if (bShowIndexingButton) {
-	  ok_button  = new QPushButton(i18n("Start indexing"), wdg);
-  	ok_button->setDefault(true);
+	  start_button  = new QPushButton(i18n("Start indexing"), wdg);
+  	start_button->setDefault(true);
 	}
 
   grid1 = new QGridLayout(qtarch_ButtonGroup_3,2,1,15,7);
@@ -121,7 +128,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
   QVBoxLayout* vl = new QVBoxLayout(wdg,0,7);
   vl->addWidget(qtarch_ButtonGroup_3);
 	if (bShowIndexingButton)
-	  vl->addWidget(ok_button);
+	  vl->addWidget(start_button);
   grid2->addWidget(wdg, 0, 2);
 
   // ------- additional dirs group --------------
@@ -156,7 +163,7 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
 
  /*****************Connections******************/
  if (bShowIndexingButton)
-	 connect(ok_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
+	 connect(start_button,SIGNAL(clicked()),SLOT(slotOkClicked()));
  connect(add_button,SIGNAL(clicked()),SLOT(slotAddButtonClicked()));
  connect(remove_button,SIGNAL(clicked()),SLOT(slotRemoveButtonClicked()));
  connect(dir_button,SIGNAL(clicked()),SLOT(slotDirButtonClicked()));
@@ -174,8 +181,11 @@ CCreateDocDatabaseDlg::CCreateDocDatabaseDlg(QWidget *parent, const char *name,K
  QWhatsThis::add(tiny_radio_button,
      i18n("a tiny index (2-3% of the total size of all files)"));
 
+  createShellProcessOutputWidget();
 }
-CCreateDocDatabaseDlg::~CCreateDocDatabaseDlg(){
+
+CCreateDocDatabaseDlg::~CCreateDocDatabaseDlg()
+{
 }
 
 void CCreateDocDatabaseDlg::slotOkClicked()
@@ -223,8 +233,6 @@ void CCreateDocDatabaseDlg::slotOkClicked()
     *m_proc <<  "find "+ dirs +" -name '*.html' | glimpseindex " +
                     size_str +" -F -X -H "+ locateLocal("appdata","");
     m_proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-
-    emit indexingFinished("glimpse");
   }
   else if (useHtDig->isChecked())
   {
@@ -235,10 +243,13 @@ void CCreateDocDatabaseDlg::slotOkClicked()
                 " - ; htmerge -v -s -c " +
                 locate("appdata", "tools/htdig.conf");
     m_proc->start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
-    emit indexingFinished("htdig");
   }
+
+  slotShowToolProcessOutputDlg();
 }
-void CCreateDocDatabaseDlg::slotAddButtonClicked(){
+
+void CCreateDocDatabaseDlg::slotAddButtonClicked()
+{
   QString str = dir_edit->text();
 
   if(str != "" ){
@@ -247,14 +258,87 @@ void CCreateDocDatabaseDlg::slotAddButtonClicked(){
   }
   
 }
-void CCreateDocDatabaseDlg::slotRemoveButtonClicked(){
+
+void CCreateDocDatabaseDlg::slotRemoveButtonClicked()
+{
   dir_listbox->removeItem(dir_listbox->currentItem());
   
 }
-void CCreateDocDatabaseDlg::slotDirButtonClicked(){
+
+void CCreateDocDatabaseDlg::slotDirButtonClicked()
+{
   QString name=KFileDialog::getExistingDirectory(dir_edit->text(),0,i18n("Select Directory..."));
   if(!name.isEmpty()){
     dir_edit->setText(name);
   }
 }
+
+void CCreateDocDatabaseDlg::createShellProcessOutputWidget()
+{
+  m_pShellProcessOutput = new QDialog(this, "shell_process_output_dlg");
+  m_pShellProcessOutput->setCaption(i18n("Creating the KDE Documentation"));
+  QVBoxLayout* pVL = new QVBoxLayout(m_pShellProcessOutput, 15, 7);
+  QLabel* pLabel = new QLabel(i18n("Wait until the process has finished:"), m_pShellProcessOutput);
+  m_pShellProcessOutputLines = new QMultiLineEdit(m_pShellProcessOutput);
+  KButtonBox *bb = new KButtonBox( m_pShellProcessOutput );
+  bb->addStretch();
+  m_pShellProcessOutputOKButton =bb->addButton( i18n("&OK") );
+  m_pShellProcessOutputOKButton->setDefault( true );
+  bb->addStretch();
+
+  pVL->addWidget(pLabel);
+  pVL->addWidget(m_pShellProcessOutputLines);
+  pVL->addWidget(bb);
+
+  m_pShellProcessOutput->resize(500, 400);
+
+  QObject::connect(m_pShellProcessOutputOKButton, SIGNAL(clicked()), m_pShellProcessOutput, SLOT(accept()));
+  QObject::connect(m_proc,SIGNAL(receivedStdout(KProcess*,char*,int)), this, SLOT(slotReceivedStdout(KProcess*,char*,int)) );
+  QObject::connect(m_proc,SIGNAL(receivedStderr(KProcess*,char*,int)), this, SLOT(slotReceivedStderr(KProcess*,char*,int)) );
+  QObject::connect(m_proc,SIGNAL(processExited(KProcess*)), this, SLOT(slotProcessExited(KProcess*) )) ;
+}
+
+void CCreateDocDatabaseDlg::slotShowToolProcessOutputDlg()
+{
+  m_pShellProcessOutputOKButton->setEnabled(false);
+  m_pShellProcessOutputLines->clear();
+  QApplication::setOverrideCursor(WaitCursor);
+  emit indexingStartedNow();
+	if (start_button)
+	  start_button->setEnabled(false);
+  m_pShellProcessOutput->exec();
+}
+
+void CCreateDocDatabaseDlg::slotReceivedStdout(KProcess*,char* buffer,int count)
+{
+  QCString test(buffer, count);
+  m_pShellProcessOutputLines->insertLine(test);
+  m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
+  qDebug(test);
+}
+
+void CCreateDocDatabaseDlg::slotReceivedStderr(KProcess*,char* buffer, int count)
+{
+  QCString test(buffer, count);
+  m_pShellProcessOutputLines->insertLine(test);
+  m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
+  qDebug(test);
+}
+
+void CCreateDocDatabaseDlg::slotProcessExited(KProcess*)
+{
+  m_pShellProcessOutputLines->insertLine("");
+  m_pShellProcessOutputLines->insertLine("Finished!");
+  m_pShellProcessOutputLines->setCursorPosition(m_pShellProcessOutputLines->numLines(), 0);
+  m_pShellProcessOutputOKButton->setEnabled(true);
+	if (start_button)
+	  start_button->setEnabled(true);
+  QApplication::restoreOverrideCursor();
+
+  if (useGlimpse->isChecked())
+    emit indexingFinished("glimpse");
+  else
+    emit indexingFinished("htdig");
+}
+
 #include "ccreatedocdatabasedlg.moc"

@@ -183,10 +183,9 @@ void CUpdateKDEDocDlg::OK(){
   QString kde_testfile=kdelibs_path+"kdoc.rules";
   if(!QFileInfo(kde_testfile).exists())
   {
-    KMessageBox::error(this,i18n("The chosen path for the KDE-Libs does not\n"
-                   "lead to the KDE Libraries. Please choose the\n"
-                   "correct path.This is where you have unpacked\n"
-                   "e.g. a kdelibs snapshot a la /snapshot/kdelibs."),
+    KMessageBox::error(this,i18n("The chosen path for the KDE-Libs does not lead to the KDE Libraries.\n\n"
+                   "Please choose the correct path!\n\n"
+                   "This is where you have unpacked e.g. a kdelibs snapshot a la /snapshot/kdelibs."),
                    i18n("The selected path is not correct!"));
     return;
   }

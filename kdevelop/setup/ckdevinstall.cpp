@@ -84,17 +84,17 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name, KConfig* config)
   connect(m_pInstallState->shell_process,SIGNAL(processExited(KProcess*)),
           this,SLOT(slotProcessExited(KProcess*) )) ;
 
-  setCaption(i18n("KDevelop Installation"));
+  setCaption(i18n("KDevelop Setup"));
 
-  WizardWelcomePage* pWizWelcomePage            = new WizardWelcomePage(this,"welcome_page", i18n("Welcome"), "pics/test.png");
-  WizardSyntaxHlPage* pWizSyntaxHlPage          = new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Syntax highlighting style"), "pics/test.png", m_pInstallState);
-  WizardUIModePage* pWizUIModePage              = new WizardUIModePage(this,"uimode_page", i18n("User interface mode"), "pics/test.png", m_pInstallState);
-  WizardToolsCheckPage* pWizToolsCheckPage      = new WizardToolsCheckPage(this, "toolscheck_page", i18n("Program test results"), "pics/test.png", m_pInstallState);
-  WizardQtDocPage* pWizQtDocPage                = new WizardQtDocPage(this, "qtdoc_page", i18n("Qt documentation"), "pics/test.png", m_pInstallState);
-  WizardKDEDocPage* pWizKDEDocPage              = new WizardKDEDocPage(this, "kdedoc_page", i18n("KDE documentation"), "pics/test.png", m_pInstallState);
-  WizardCreateKDEDocPage* pWizCreateKDEDocPage  = new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Creating the KDE documentation"), "pics/test.png", m_pInstallState);
-  WizardIndexDocuPage* pWizIndexDocuPage        = new WizardIndexDocuPage(this, "indexdocu_page", i18n("Indexing the documentation"), "pics/test.png", m_pInstallState);
-  WizardLastPage* pWizLastPage                  = new WizardLastPage(this,"last_page", i18n("Installation finished"), "pics/test.png", m_pInstallState);
+  WizardWelcomePage* pWizWelcomePage            = new WizardWelcomePage(this,"welcome_page", i18n("Let's start!"), "pics/test.png");
+  WizardSyntaxHlPage* pWizSyntaxHlPage          = new WizardSyntaxHlPage(this, "syntaxhl_page", i18n("Choose the syntax highlighting style for the editor!"), "pics/test.png", m_pInstallState);
+  WizardUIModePage* pWizUIModePage              = new WizardUIModePage(this,"uimode_page", i18n("What is your favourite user interface mode?"), "pics/test.png", m_pInstallState);
+  WizardToolsCheckPage* pWizToolsCheckPage      = new WizardToolsCheckPage(this, "toolscheck_page", i18n("This is the result of a check for tools used by KDevelop:"), "pics/test.png", m_pInstallState);
+  WizardQtDocPage* pWizQtDocPage                = new WizardQtDocPage(this, "qtdoc_page", i18n("Automatic detection of the Qt documentation"), "pics/test.png", m_pInstallState);
+  WizardKDEDocPage* pWizKDEDocPage              = new WizardKDEDocPage(this, "kdedoc_page", i18n("Automatic detection of the KDE documentation"), "pics/test.png", m_pInstallState);
+  WizardCreateKDEDocPage* pWizCreateKDEDocPage  = new WizardCreateKDEDocPage(this, "createkdedoc_page", i18n("Choose Create to start the parser or skip the documentation by choosing Next!"), "pics/test.png", m_pInstallState);
+  WizardIndexDocuPage* pWizIndexDocuPage        = new WizardIndexDocuPage(this, "indexdocu_page", i18n("Enhance your documentation by creating an index database!"), "pics/test.png", m_pInstallState);
+  WizardLastPage* pWizLastPage                  = new WizardLastPage(this,"last_page", i18n("The setup has finished."), "pics/test.png", m_pInstallState);
 
   addPage(pWizWelcomePage, "Step 1 of 9");
   addPage(pWizSyntaxHlPage, "Step 2 of 9");
@@ -113,7 +113,9 @@ CKDevInstall::CKDevInstall(QWidget *parent, const char *name, KConfig* config)
   connect( cancelButton(), SIGNAL(clicked()), SLOT(slotCancel()) );
   connect( finishButton(), SIGNAL(clicked()), SLOT(slotFinished()) );
   connect( pWizCreateKDEDocPage, SIGNAL(validData(QWidget*,bool)), SLOT(setNextEnabled(QWidget*,bool)) );
+  connect( pWizCreateKDEDocPage, SIGNAL(enableBackButton(QWidget*,bool)), SLOT(setBackEnabled(QWidget*,bool)) );
   connect( pWizIndexDocuPage, SIGNAL(validData(QWidget*,bool)), SLOT(setNextEnabled(QWidget*,bool)) );
+  connect( pWizIndexDocuPage, SIGNAL(enableBackButton(QWidget*,bool)), SLOT(setBackEnabled(QWidget*,bool)) );
 
 	resize( 520, 420 );
 }

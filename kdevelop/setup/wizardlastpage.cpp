@@ -33,9 +33,9 @@ WizardLastPage::WizardLastPage(QWidget* parent, const char* name, const QString&
   m_vbox = new QVBox(this);
 
   QLabel * label = new QLabel("", m_vbox);
-  label = new QLabel(i18n("The installation process finished successfully.\n\n"
-                           "The KDevelop Team wishes that you will enjoy our program and we would be honoured for any feedback.\n\n"
-                           "The KDevelop Team"), m_vbox );
+  label = new QLabel(i18n("The setup process has finished successfully.\n\n"
+                          "We wish you will enjoy our program and we would be honoured for any feedback.\n\n"
+                          "The KDevelop Team"), m_vbox );
   label->setAlignment(WordBreak);
   label = new QLabel("", m_vbox);
 

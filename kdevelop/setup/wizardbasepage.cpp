@@ -31,47 +31,54 @@ WizardBasePage::WizardBasePage(QWidget* parent, const char* name, const QString&
 : QHBox(parent, name)
 	,m_pInstallState(pInstallState)
 {
-   QWidget* box = new QWidget(this);
-   QVBoxLayout* layout = new QVBoxLayout(box);
-   QLabel* labelText = new QLabel(infoText, box);
-   QLabel* labelPict = new QLabel(box);
-   labelText->setMinimumHeight(50);
+  QWidget* box = new QWidget(this);
+  QVBoxLayout* layout = new QVBoxLayout(box);
+  m_labelText = new QLabel(infoText, box);
+  QLabel* labelPict = new QLabel(box);
+  m_labelText->setMinimumHeight(50);
 
-   QPixmap pm;
+  QPixmap pm;
 
-   if (pm.load(locate("appdata", installPictPathAndFilename))) {
-      box->setFixedWidth(pm.width());
-      labelPict->setBackgroundPixmap(pm);
-      labelPict->setFixedSize(pm.size());
-      labelText->setBackgroundColor(QColor(206,102,57));
-      labelText->setFixedWidth(pm.width());
-   }
-   else {
-      labelPict->setBackgroundColor(QColor(206,102,57));
-      labelText->setBackgroundColor(QColor(206,102,57));
-      labelPict->setFixedWidth(120);
-      labelText->setFixedWidth(120);
-   }
+  if (pm.load(locate("appdata", installPictPathAndFilename))) {
+    box->setFixedWidth(pm.width());
+    labelPict->setBackgroundPixmap(pm);
+    labelPict->setFixedSize(pm.size());
+    m_labelText->setBackgroundColor(QColor(206,102,57));
+    m_labelText->setFixedWidth(pm.width());
+  }
+  else {
+    box->setFixedWidth(120);
+    labelPict->setBackgroundColor(QColor(206,102,57));
+    m_labelText->setBackgroundColor(QColor(206,102,57));
+    labelPict->setFixedWidth(120);
+    m_labelText->setFixedWidth(120);
+  }
 
-   setSpacing(8);
-   labelText->setAlignment(AlignCenter | WordBreak);
-   labelText->setIndent(8);
+  setSpacing(8);
+  m_labelText->setAlignment(AlignCenter | WordBreak);
+  m_labelText->setIndent(8);
 
-   if (layout != 0L) {
-      layout->add( labelPict);
-      layout->add( labelText);
-   }
+  if (layout != 0L) {
+    layout->add( labelPict);
+    layout->add( m_labelText);
+  }
 }
 
 void WizardBasePage::setValid( bool state )
 {
-   m_valid = state;
-   emit validData(this, state);
+  m_valid = state;
+  emit validData(this, state);
+}
+
+void WizardBasePage::setBackButtonEnabled( bool state)
+{
+  m_backButtonEnabled = state;
+  emit enableBackButton(this, state);
 }
 
 void WizardBasePage::setHelpTextBackgroundColor( const QColor& bgcolor)
 {
-   labelText->setBackgroundColor( bgcolor);
+   m_labelText->setBackgroundColor( bgcolor);
 }
 
 #include "wizardbasepage.moc"
