@@ -359,7 +359,9 @@ KMdiChildView* KMdiMainFrm::createWrapper(QWidget *view, const QString& name, co
 {
   Q_ASSERT( view ); // if this assert fails, then some part didn't return a widget. Fix the part ;)
 
-  KMdiChildView* pMDICover = new KMdiChildView(name);
+  KMdiChildView* pMDICover = new KMdiChildView(name, // caption
+					       0L, // parent
+					       name.latin1()); // object name, necessary later in the dockwidgets
   QBoxLayout* pLayout = new QHBoxLayout( pMDICover, 0, -1, "layout");
   view->reparent(pMDICover, QPoint(0,0));
   pLayout->addWidget(view);
