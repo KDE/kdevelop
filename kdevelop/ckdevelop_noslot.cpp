@@ -902,6 +902,34 @@ void CKDevelop::readOptions()
 	for ( uint i =0 ; i < doc_bookmarks_title_list.count(); i++){
     doc_bookmarks->insertItem(SmallIconSet("html"),doc_bookmarks_title_list.at(i));
   }
+
+   // restore MDI mode
+   config->setGroup("MDI");
+   int mdiModeNum = config->readNumEntry( "MDI mode", (int)QextMdi::ChildframeMode);
+   QextMdi::MdiMode mdiMode;
+   mdiMode = (QextMdi::MdiMode)mdiModeNum;
+   switch (mdiMode) {
+   case QextMdi::ToplevelMode:
+      {
+         int childFrmModeHt = config->readNumEntry( "Childframe mode height", 400);
+         resize( width(), childFrmModeHt);
+         switchToToplevelMode();
+      }
+      break;
+   case QextMdi::ChildframeMode:
+      break;
+   case QextMdi::TabPageMode:
+      {
+         int childFrmModeHt = config->readNumEntry( "Childframe mode height", 400);
+         resize( width(), childFrmModeHt);
+         switchToTabPageMode();
+      }
+      break;
+   default:
+      break;
+   }
+   bool bMaximizeMode = config->readBoolEntry( "Maximize mode", true);  // maximized is default
+   setEnableMaximizedChildFrmMode(bMaximizeMode);
 }
 
 void CKDevelop::saveOptions(){
