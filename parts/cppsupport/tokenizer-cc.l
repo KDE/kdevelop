@@ -24,11 +24,11 @@
   #include "FlexLexer.h"
 
   /** This class is a stupid trick to make it possible 
-   * to access the gettext method. */
+   * to access the getText method. */
   class MyLexer : public yyFlexLexer
   {
     public:
-    char *gettext() {return yytext;};
+    char *getText() {return yytext;};
   };
 
   /* Line where a comment starts. */
@@ -219,7 +219,7 @@ bool beginComment(MyLexer *lex)
 
 void inComment(MyLexer *lex)
 {
-  char *text=lex->gettext();
+  char *text=lex->getText();
   comment+=text;
 };
 
