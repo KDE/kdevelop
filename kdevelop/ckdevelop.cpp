@@ -3595,7 +3595,7 @@ void CKDevelop::slotSTabSelected(int item){
     disableCommand(ID_EDIT_PASTE);
     disableCommand(ID_EDIT_INSERT_FILE);
     // disableCommand(ID_EDIT_SEARCH);
-    disableCommand(ID_EDIT_REPEAT_SEARCH);
+    // disableCommand(ID_EDIT_REPEAT_SEARCH);
     disableCommand(ID_EDIT_REPLACE);
     disableCommand(ID_EDIT_SPELLCHECK);
     disableCommand(ID_EDIT_INDENT);
