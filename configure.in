@@ -99,4 +99,10 @@ doc/en/manual/Makefile \
 doc/en/programming/Makefile \
 doc/en/tutorial/Makefile \
 doc/en/welcome/Makefile \
-doc/zh_CN.GB2312/Makefile ) 
+doc/zh_CN.GB2312/Makefile \
+doc/ru/Makefile \
+doc/ru/cref/Makefile \
+doc/ru/welcome/Makefile \
+doc/ru/tutorial/Makefile \
+doc/ru/manual/Makefile
+) 
