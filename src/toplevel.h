@@ -7,6 +7,19 @@
 
 /*! \mainpage GIDEON ARCHITECTURE
 
+KDevelop is an easy to use IDE for developing C/C++ applications under X11. Currently it also supports:
+  -KDE applications
+  -QT applications
+  -Fortran
+  -Java
+  -Perl
+  -Phyton
+  -PHP
+  -Ruby
+  .
+
+For more info goto: http://www.kdevelop.org
+
 \section intro Introduction
 This page explains how the various peaces of gideon work together.
 
