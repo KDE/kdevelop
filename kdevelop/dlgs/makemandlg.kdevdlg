@@ -5,10 +5,10 @@
 // 
 data Information
 {
-   Filename="/home/rnolden/kde_11/kdevelop/kdevelop/dlgs/makemandlg.kdevdlg"
+   Filename="/home/rnolden/Projects/kdevelop/kdevelop/dlgs/makemandlg.kdevdlg"
    KDevelopVersion="0.4"
    DlgEditVersion="0.1alpha"
-   LastChanged="Wed Jan 19 13:05:10 2000"
+   LastChanged="Tue Feb 15 23:14:38 2000"
 }
 
 data SessionManagement
