@@ -658,8 +658,6 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
     disableCommand(ID_BUILD_COMPILE_FILE);
   }
 
-  TEditInfo* info;
-
   QString editWidgetName;
   if (pCurEditWidget) {
     debug("getting edit widget name !");
@@ -687,10 +685,11 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 	if(KMessageBox::questionYesNo(this, i18n("The file %1 was modified outside this editor.\n"
 						 "Open the file from disk and delete the current Buffer?")
 				      .arg(editWidgetName),
-				      i18n("File modified"))==KMessageBox::Yes){
-	  bForceReload = true;
-	  actual_info->last_modified = file_info.lastModified();
-	}
+				      i18n("File modified"))==KMessageBox::Yes)
+	  {
+	    bForceReload = true;
+	    actual_info->last_modified = file_info.lastModified();
+	  }
       }
     
     debug(" getting lastModified !\n");
@@ -725,7 +724,10 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 //FB---------ende-der-behandlung-der-alten-datei--------
 
   // See if we already have the file wanted in our list of saved files.
-  bool found = ( m_docViewManager->findInfo(filename) != 0 );
+  
+  TEditInfo* info = m_docViewManager->findInfo(filename);
+
+  bool found = (info != 0);
 
   debug("found : %d !\n", found);
 
@@ -790,7 +792,13 @@ void CKDevelop::switchToFile( QString filename, int line, int col,
 
     int docId = m_docViewManager->findDoc( filename);
     pCurEditWidget = (CEditWidget*) m_docViewManager->viewsOfDoc( docId).getFirst();
+
+    debug(" activate view !\n");
+
     activateView( (QextMdiChildView*) pCurEditWidget->parentWidget());
+
+    debug(" view activated !\n");
+
     // The file is in the list so use the saved text
     pCurEditWidget->setText(info->text);
     qDebug("doc (and at least 1 view) did exist, raise it");

@@ -205,7 +205,7 @@ private:
   QList<DocViewNode>            m_docsAndViews;
 
   /** list of info about edit document 
-   (should ne merged with the above list) */
+   (should be merged with the above list) */
   QList<TEditInfo> edit_infos;
 
   /** List of the focused views, the view at the end is the recently

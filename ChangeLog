@@ -1,4 +1,7 @@
 2001-03-18  Christian Couder <christian@kdevelop.org>
+    * Fix a bug (in switchToFile) in the change I previously commited.
+	
+2001-03-18  Christian Couder <christian@kdevelop.org>
     * Moved all the edit_info stuff from the CKDevelop class to the
 	DocViewMan class.
     * Code simplified in many places in ckdevelop files.
