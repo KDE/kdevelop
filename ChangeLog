@@ -1,3 +1,10 @@
+2000-04-24 Falk Brettschneider <gigafalk@yahoo.com>
+        * some adaptions to kdockwidgets done
+	* several new view widgets for debugger stuff added (debugging still not works here)
+
+2000-04-24 John Birch <jbb@ihug.co.nz>
+        * compilable port to kde2 but not working code
+
 2000-04-12 Falk Brettschneider <gigafalk@yahoo.com>
         * Some dockings are impossible again now. (only debugger views are supposed to be floatable on desktop)
         * The dock positions/state are saved from session to session.
