@@ -124,6 +124,7 @@ GDBController::GDBController(VariableTree *varTree, FramestackWidget *frameStack
       frameStack_(frameStack),
       varTree_(varTree),
       currentFrame_(0),
+      viewedThread_(-1),
       state_(s_dbgNotStarted|s_appNotStarted|s_silent),
       gdbSizeofBuf_(2048),
       gdbOutputLen_(0),
@@ -352,15 +353,18 @@ void GDBController::actOnProgramPause(const QString &msg)
         setStateOff(s_appBusy);
         if (stateIsOn(s_silent))
             return;
-        
+ 
         emit dbgStatus (msg, state_);
-        
+
         // We're always at frame zero when the program stops
         // and we must reset the active flag
+        viewedThread_ = -1;
         currentFrame_ = 0;
         varTree_->setActiveFlag();
-        
+
         // These two need to be actioned immediately. The order _is_ important
+        if (stateIsOn(s_viewThreads))
+            queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD), true);
         queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE), true);
         if (stateIsOn(s_viewLocals))
             queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
@@ -382,12 +386,13 @@ void GDBController::programNoApp(const QString &msg, bool msgBox)
     state_ = (s_appNotStarted|s_programExited|(state_&(s_viewLocals|s_shuttingDown)));
     destroyCmds();
     emit dbgStatus (msg, state_);
-    
+
     // We're always at frame zero when the program stops
     // and we must reset the active flag
+    viewedThread_ = -1;
     currentFrame_ = 0;
     varTree_->setActiveFlag();
-    
+
     // Now wipe the tree out
     varTree_->viewport()->setUpdatesEnabled(false);
     varTree_->trim();
@@ -493,6 +498,7 @@ void GDBController::parseLine(char* buf)
   if ( strncmp(buf, "[New Thread", 11)==0)
   {
     DBG_DISPLAY("Parsed (START_[New)<ignored><" + QString(buf) + ">");
+    setStateOn(s_viewThreads);
     return;
   }
 
@@ -690,7 +696,8 @@ void GDBController::parseProgramLocation(char *buf)
     }
     
     //  "/opt/qt/src/widgets/qlistview.cpp:1558:42771:beg:0x401b22f2"
-    QRegExp regExp1("(.*):([0-9]+):[0-9]+:[a-z]+:(0x[abcdef0-9]+)$");
+    QRegExp regExp1("(.*):(\\d+):\\d+:[a-z]+:(0x[abcdef0-9]+)$");
+    regExp1.setMinimal(true);
     if ( regExp1.match(buf, 0) >= 0 ) {
         actOnProgramPause(QString());
         emit showStepInSource( regExp1.cap(1),
@@ -698,13 +705,14 @@ void GDBController::parseProgramLocation(char *buf)
                                regExp1.cap(3) );
         return;
     }
-    
+
     if (stateIsOn(s_appBusy))
         actOnProgramPause(i18n("No source: %1").arg(QString(buf)));
     else
         emit dbgStatus (i18n("No source: %1").arg(QString(buf)), state_);
-    
+
     QRegExp regExp3("^0x[abcdef0-9]+ ");
+    regExp3.setMinimal(true);
     int start;
     if ((start = regExp3.match(buf, 0)) >= 0)
         emit showStepInSource(QString(), -1,
@@ -848,12 +856,12 @@ void GDBController::parseLocals(char *buf)
     frame->setLocals(buf);
     
     // This is tricky - trim the whole tree when we're on the top most
-    // frame so that they always see onlu "frame 0" on a program stop.
+    // frame so that they always see only "frame 0" on a program stop.
     // User selects frame 1, will show both frame 0 and frame 1.
     // Reselecting a frame 0 regenerates the data and therefore trims
     // the whole tree _but_ all the items in every frame will be active
     // so nothing will be deleted.
-    if (currentFrame_ == 0)
+    if (currentFrame_ == 0 && viewedThread_ == -1) // FIXME:
         varTree_->trim();
     else
         frame->trim();
@@ -890,8 +898,10 @@ char *GDBController::parseCmdBlock(char *buf)
             // match the start block with the end block if we can.
             char lookup[3] = {BLOCK_START, *(buf+1), 0};
             if ((end = strstr(buf+2, lookup))) {
-                if (*(end-1) == '\n')
-                    *(end-1) = 0;   // fix this by clobbering the new line
+                // fix this by clobbering the new line
+                // Hmm What did this fix? - it breaks thread handling
+//FIXME         if (*(end-1) == '\n')
+//FIXME            *(end-1) = 0;
                 *end = 0;         // Make a null terminated c-string
                 end++;            // The real end!
             }
@@ -926,7 +936,7 @@ char *GDBController::parseCmdBlock(char *buf)
             currentCmd_ = 0;
         }
     }
-    
+
     return end;
 }
 
@@ -1215,6 +1225,8 @@ void GDBController::slotCoreFile(const QString &coreFile)
 {
     setStateOff(s_silent);
     queueCmd(new GDBCommand(QCString("core ") + coreFile.latin1(), NOTRUNCMD, NOTINFOCMD, 0));
+    if (stateIsOn(s_viewThreads))
+        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
     if (stateIsOn(s_viewLocals))
         queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
@@ -1227,6 +1239,8 @@ void GDBController::slotAttachTo(int pid)
     setStateOff(s_appNotStarted|s_programExited|s_silent);
     setStateOn(s_attached);
     queueCmd(new GDBCommand(QCString().sprintf("attach %d", pid), NOTRUNCMD, NOTINFOCMD, 0));
+    if (stateIsOn(s_viewThreads))
+        queueCmd(new GDBCommand("info thread", NOTRUNCMD, INFOCMD, THREAD),true);
     queueCmd(new GDBCommand("backtrace", NOTRUNCMD, INFOCMD, BACKTRACE));
     if (stateIsOn(s_viewLocals))
         queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));

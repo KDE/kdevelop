@@ -17,7 +17,7 @@
 #define _FRAMESTACKWIDGET_H_
 
 #include <qlistview.h>
-//#include <qstrlist.h>
+#include <qstringlist.h>
 class FramestackWidget;
 
 
@@ -72,7 +72,7 @@ class FramestackWidget : public QListView
     Q_OBJECT
     
 public:
-    FramestackWidget( QWidget *parent=0, const char *name=0 );
+    FramestackWidget( QWidget *parent=0, const char *name=0, WFlags f=0 );
     virtual ~FramestackWidget();
     
     QListViewItem *lastChild() const;
@@ -81,6 +81,9 @@ public:
     void parseGDBThreadList(char *str);
     void parseGDBBacktraceList(char *str);
     
+    ThreadStackItem *findThread(int threadNo);
+    FrameStackItem *findFrame(int frameNo, int threadNo);
+
     QCString getFrameParams(int frameNo, int threadNo);
     QString getFrameName(int frameNo, int threadNo);
 
@@ -94,13 +97,18 @@ public slots:
 signals:
     void selectFrame(int frameNo, int threadNo, bool needFrames);
 
+#if QT_VERSION < 300
 private:
-    ThreadStackItem *findThread(int threadNo);
-    FrameStackItem *findFrame(int frameNo, int threadNo);
+  QListViewItem* findItemWhichBeginsWith(const QString& text) const;
+#endif
+
+private:
 
     ThreadStackItem *viewedThread_;
     ThreadStackItem *stoppedAtThread_;
     int             currentFrame_;
+    QString         firstLineOfLastBacktrace_;
+    QStringList     threadList_;
 };
 
 #endif

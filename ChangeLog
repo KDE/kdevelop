@@ -1,3 +1,13 @@
+2003-02-12 jbb <jbb@kdevelop.org> 
+    * parts/debugger
+    - Sync source with thread patch in kdevelop2.1.x. Some bits were missed
+            from a previous merge. This should fix some thread issues.
+    - Fixed: In some situations locals were not displayed.
+            Note: Parameters may still be missing depending on the fn sig.
+    - Fixed: Can't find source problem due to QRegExp too greedy.
+            Note: The "finish" command can still have some odd behaviour
+            due to an extra line output (which may be gdb version dependent).
+
 2003-02-11  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
         * lib/structure:
           - implemented take(), I wonder why I left it like that
