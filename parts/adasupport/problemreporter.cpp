@@ -182,9 +182,11 @@ void ProblemReporter::reparse()
 			++it;
 		}
 	}
-		
+
+/* Temporarily deactivated (crashes)
     m_bgParser = new BackgroundParser( this, m_editor->text(), m_filename );
     m_bgParser->start();
+ */
 }
 
 void ProblemReporter::slotSelected( QListViewItem* item )
@@ -202,7 +204,7 @@ void ProblemReporter::reportError( QString message,
 	if( m_markIface ){
 		m_markIface->addMark( line-1, KTextEditor::MarkInterface::markType10 );
 	}
-	
+
     new ProblemItem( this,
                        "error",
                        message.replace( QRegExp("\n"), "" ),
