@@ -1,7 +1,14 @@
+htmldir = $(kde_htmldir)/en/gideon/stl
 indexdir = ${kde_datadir}/gideon/docindices
 index_DATA = stl.index
 
-htmldir = $(kde_htmldir)/en/gideon/stl
+stl.index: stl.index.in
+	echo "<!DOCTYPE gideonindex>" > stl.index ; \
+	echo "<gideonindex>" >> stl.index ; \
+	echo "<title>STL</title>" >> stl.index ; \
+	echo "<base href=\"$(htmldir)\"/>" >> stl.index ; \
+	cat stl.index.in >> stl.index ; \
+	echo "</gideonindex>" >> stl.index
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(htmldir) ; \
@@ -10,13 +17,3 @@ install-data-local:
 dist-hook:
 	mkdir -p $(distdir) ; \
 	for file in $(srcdir)/*.html $(srcdir)/*.gif ; do cp -p $$file $(distdir) ; done
-
-stl.index: stl.index.in
-	@rm -f stl.index ; \
-	echo "<!DOCTYPE gideonindex>" > stl.index ; \
-	echo "<gideonindex>" >> stl.index ; \
-	echo "<title>STL</title>" >> stl.index ; \
-	echo "<base href=\"$(htmldir)\"/>" >> stl.index ; \
-	cat stl.index.in >> stl.index ; \
-	echo "</gideonindex>" >> stl.index
-
