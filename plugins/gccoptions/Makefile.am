@@ -1,15 +1,18 @@
 # Here resides the gcc option dialog plugin.
 
-INCLUDES = -I$(top_srcdir)/lib/interfaces $(all_includes)
+INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/widgets $(all_includes)
 
 kde_module_LTLIBRARIES = libkdevgccoptions.la
-libkdevgccoptions_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
-libkdevgccoptions_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
+libkdevgccoptions_la_LDFLAGS = -module $(all_libraries) $(KDE_PLUGIN)
+libkdevgccoptions_la_LIBADD = $(top_builddir)/lib/libkdevelop.la $(top_builddir)/lib/widgets/libwidgets.la
 
-libkdevgccoptions_la_SOURCES = gccoptionsplugin.cpp \
-			       flagboxes.cpp
+libkdevgccoptions_la_SOURCES = gccoptionsplugin.cpp
 
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevgccoptions.desktop kdevgppoptions.desktop kdevg77options.desktop
+AM_CFLAGS = 
+AM_CXXFLAGS = 
+AM_FFLAGS = 
+SUBDIRS = 

@@ -107,7 +107,7 @@ GeneralTab::GeneralTab(GccOptionsPlugin::Type type, QWidget *parent, const char 
 
     QVButtonGroup *output_group = new QVButtonGroup(i18n("Output"), this);
     new FlagCheckBox(output_group, controller,
-                     "-fsyntax-only", i18n("Only check the code for syntax errors. Don't produce object code"));
+                     "-fsyntax-only", i18n("Only check the code for syntax errors. Don't produce object code."));
     new FlagCheckBox(output_group, controller,
                      "-pg",           i18n("Generate extra code to write profile information for gprof."));
     new FlagCheckBox(output_group, controller,
@@ -137,7 +137,7 @@ GeneralTab::GeneralTab(GccOptionsPlugin::Type type, QWidget *parent, const char 
                      "-short-enums",        i18n("For an enum, choose the smallest possible integer type."));
     new FlagCheckBox(codegen_group, controller,
                      "-short-double",       i18n("Make 'double' the same as 'float'."));
-    
+
     QApplication::sendPostedEvents(this, QEvent::ChildInserted);
     layout->addStretch();
 }
@@ -241,7 +241,7 @@ void OptimizationTab::readFlags(QStringList *list)
 void OptimizationTab::writeFlags(QStringList *list)
 {
     optBox->writeFlags(list);
-    
+
     if (O0->isChecked())
         (*list) << "-O0";
     else if (O1->isChecked())
