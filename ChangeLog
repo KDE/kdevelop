@@ -1,3 +1,10 @@
+2003-03-05 Alexander Dymo <cloudtemple@mksat.net>
+    * Documentation browser is now able to handle all Qt documentation including
+      custom *.xml documentation. Configuration options are also available.
+    * GTK tocs renamed to GNOME 1.0 API Reference. Incorrect links fixed, Bonobo
+      chapter included. More to come.
+    * Started adding W3C TR tocs to the documentation browser.
+    
 2003-03-02 F@lk Brettschneider <falkbr@kdevelop.org>
 	* completed the new behaviour of the make-output view
 	  (can be configured via contextmenu or Gideon settings dialog)
@@ -9,7 +16,7 @@
 	* reenabled java support
 	* removed obsolete kdevelop java plugin template
 
-2003-02-27  Victor Röder  <victor_roeder@gmx.de>
+2003-02-27  Victor Rder  <victor_roeder@gmx.de>
 * Started to restructure the Autoproject part
 	-> Splitted AutoProjectWidget in
 	   * AutoSubprojectView
