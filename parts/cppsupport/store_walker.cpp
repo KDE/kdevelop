@@ -204,11 +204,10 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 	}
     }
 
-    ParsedClassContainer* cl = getClassByName( m_store, scope.join(".") );
-    if( cl == 0 )
-        cl = m_store->getScopeByName( scope.join(".") );
-    if( cl == 0 )
-        cl = m_currentContainer;
+    QString scopeStr = scope.join( "." );
+    ParsedClassContainer* cl = findContainer( m_store, scopeStr );
+    if( !cl )
+       cl = m_currentContainer;
 
     ParsedMethod* method = new ParsedMethod();
     method->setName( id );
@@ -323,14 +322,19 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     if ( kind == "class" ) {
         if (innerClass)
 	  m_currentContainer->addClass( klass );
-	else
+	else{
  	  m_store->addClass( klass );
+          currentScope()->addClass( klass );
+        }
     }
     else {
         if (innerClass)
           m_currentContainer->addStruct( klass );
-	else
+	else{
 	  m_store->addStruct( klass );
+          currentScope()->addStruct( klass );
+        }
+
     }
 
     if ( ast->baseClause() )
@@ -422,9 +426,8 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 	}
     }
 
-    ParsedClassContainer* cl = getClassByName( m_store, scope.join(".") );
-    if( cl == 0 )
-        cl = m_store->getScopeByName( scope.join(".") );
+    QString scopeStr = scope.join( "." );
+    ParsedClassContainer* cl = findContainer( m_store, scopeStr );
     if( cl == 0 )
         cl = m_currentContainer;
 
@@ -715,5 +718,46 @@ ParsedClass * StoreWalker::getClassByName( ClassStore * container, const QString
     if( !c )
 	c = container->getStructByName( name );
     return c;
+}
+
+ParsedClassContainer* StoreWalker::findContainer( ClassStore* store, const QString& name )
+{
+    kdDebug(9007) << "StoreWalker::findContainer() -- " << name << endl;
+
+    ParsedScopeContainer* container = store->globalScope();
+
+    QStringList path = QStringList::split( ".", name );
+    QStringList::Iterator it = path.begin();
+    while( it != path.end() ){
+        QString s = *it;
+        ++it;
+
+        ParsedScopeContainer* scope = container->getScopeByName( s );
+        if( !scope )
+            break;
+
+        path.remove( s );
+        container = scope;
+    }
+
+    if( path.size() == 0 )
+        return container;
+
+    QString className = path.join( "." );
+    kdDebug(9007) << "---------> class name is " << className << endl;
+    ParsedClass* klass = container->getClassByName( className );
+    if( !klass )
+        klass = container->getStructByName( className );
+
+    kdDebug(9007) << "----------> container is " << klass << endl;
+    return klass;
+}
+
+ParsedScopeContainer* StoreWalker::currentScope()
+{
+    ParsedScopeContainer* scope = dynamic_cast<ParsedScopeContainer*>( m_currentContainer );
+    if( !scope )
+        scope = m_store->globalScope();
+    return scope;
 }
 

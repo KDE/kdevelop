@@ -249,7 +249,6 @@ CppCodeCompletion::slotActivePartChanged(KParts::Part *part)
 void
 CppCodeCompletion::slotCursorPositionChanged( int nLine, int nCol )
 {
-    kdDebug(9007) << "Cursor position changed" << endl;
 #if 0
     if( !m_pSupport )
 	return;
@@ -313,8 +312,6 @@ CppCodeCompletion::slotTextChanged()
     QString strCurLine = m_pEditIface->textLine( nLine );
     QString ch = strCurLine.mid( nCol-1, 1 );
     QString ch2 = strCurLine.mid( nCol-2, 2 );
-
-    kdDebug(9007) << "ch = " << ch << " -- ch2 = " << ch2 << endl;
 
     if ( ch == "." || ch2 == "->" ){
     	m_ccTimer->start( 500, true );

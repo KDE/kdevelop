@@ -29,7 +29,7 @@ class StoreWalker: public TreeParser
 public:
     StoreWalker( const QString& fileName, ClassStore* store );
     virtual ~StoreWalker();
-    
+
     // translation-unit
     virtual void parseTranslationUnit( TranslationUnitAST* );
 
@@ -65,6 +65,8 @@ private:
     QString typeOfDeclaration( TypeSpecifierAST* typeSpec, DeclaratorAST* declarator );
     ParsedClass* getClassByName( ParsedClassContainer* container, const QString& name );
     ParsedClass* getClassByName( ClassStore* container, const QString& name );
+    ParsedClassContainer* findContainer( ClassStore* store, const QString& name );
+    ParsedScopeContainer* currentScope();
 
 private:
     QString m_fileName;
