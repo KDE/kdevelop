@@ -14,7 +14,7 @@ build-stamp:
 	if test ! -f configure; then \
 	  $(MAKE) -f admin/Makefile.common ;\
 	fi
-	./configure $(configkdevelop) --includedir=/usr/include/kde
+	./configure $(configkdevelop)
 	$(MAKE)
 
 	touch build-stamp
