@@ -433,6 +433,13 @@ void GDBController::parseLine(char* buf)
     if (!*buf)
         return;
 
+    if (strncmp(buf, "The program no longer exists", 28) == 0)
+    {
+        programNoApp(QString(buf), false);
+        programHasExited_ = true;   // FIXME: - a nasty switch
+        return;
+    }
+    
     if (strncmp(buf, "Prog", 4) == 0)
     {
         if ((strncmp(buf, "Program exited", 14) == 0))
@@ -447,6 +454,7 @@ void GDBController::parseLine(char* buf)
         {
             if (stateIsOn(s_core))
             {
+            	KMessageBox::information(0, QString(buf));
                 destroyCmds();
                 actOnProgramPause(QString(buf));
             }
@@ -462,24 +470,18 @@ void GDBController::parseLine(char* buf)
             // SIGINT is a "break into running program".
             // We do this when the user set/mod/clears a breakpoint but the
             // application is running.
-            // And the user does this to stop the program for their own
-            // nefarious purposes.
+            // And the user does this to stop the program also.
             if (strstr(buf+23, "SIGINT") && stateIsOn(s_silent))
                 return;
 
-            if (strstr(buf+23, "SIGSEGV") || strstr(buf+23, "SIGFPE"))
-            {
-                // Oh, shame, shame. The app has died a horrible death
-                // Lets remove the pending commands and get the current
-                // state organised for the user to figure out what went
-                // wrong.
-                // Note we're not quite dead yet...
-                DBG_DISPLAY("Parsed (SIG...) <" + QString(buf) + ">");
-                destroyCmds();
-                actOnProgramPause(QString(buf));
-                programHasExited_ = true;   // FIXME: - a nasty switch
-                return;
-            }
+            // Whenever we have a signal raised then tell the user, but don't
+            // end the program as we want to allow the user to look at why the
+            // program has a signal that's caused the prog to stop.
+            // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
+	    // that'll end the program.
+            KMessageBox::information(0, QString(buf));
+            actOnProgramPause(QString(buf));
+            return;
         }
 
         // All "Program" strings cause a refresh of the program state
@@ -520,6 +522,15 @@ void GDBController::parseLine(char* buf)
 
             DBG_DISPLAY("Ignore (START_cann)<" + QString(buf) + ">");
             //        actOnProgramPause(QString());
+            return;
+        }
+
+        // When the program Seg faults (SEGV, FPE etc) and is then continued
+        // we get this. The program is now dead.
+        if ( strncmp(buf, "Cannot find user-level thread for LWP", 37)==0)
+        {
+            programNoApp(QString(buf), false);
+            programHasExited_ = true;   // FIXME: - a nasty switch
             return;
         }
 
@@ -628,8 +639,8 @@ void GDBController::parseLine(char* buf)
         return;
     }
 
-    if (strncmp(buf, "No s", 4) == 0 ||      // "No symbols loaded"
-            strncmp(buf, "Sing", 4) == 0)        // Single stepping
+    if (strncmp(buf, "No symbols loaded", 17) == 0 ||
+            strncmp(buf, "Single", 6) == 0)        // Single stepping
     {
         // We don't change state, because this falls out when a run command
         // starts rather than when a run command stops.
@@ -656,7 +667,7 @@ void GDBController::parseLine(char* buf)
             KMessageBox::error( 0,
                                 i18n("gdb message:\n")+badCore_ + "\n" +
                                 QString(buf)+"\n\n"+
-                                i18n("Any symbols gdb resolves are suspect"),
+                                i18n("The symbols gdb resolves maybe suspect"),
                                 i18n("Mismatched Core File"));
 
         return;
