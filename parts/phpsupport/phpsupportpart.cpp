@@ -13,6 +13,7 @@
 
 #include <iostream>
 
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 #include <qprogressbar.h>
@@ -348,10 +349,11 @@ void PHPSupportPart::initialParse(){
     bar->show();
 
     for (QStringList::Iterator it = files.begin(); it != files.end() ;++it) {
-      kdDebug(9018) << "maybe parse " << project()->projectDirectory() + "/" + (*it) << endl;
+      QFileInfo fileInfo( project()->projectDirectory(), *it );
+      kdDebug(9018) << "maybe parse " << fileInfo.absFilePath() << endl;
       bar->setProgress(n);
       kapp->processEvents();
-      maybeParse(project()->projectDirectory() + "/" + *it);
+      maybeParse( fileInfo.absFilePath() );
       ++n;
     }
     mainWindow()->statusBar()->removeWidget(bar);
@@ -372,7 +374,8 @@ void PHPSupportPart::addedFilesToProject(const QStringList &fileList)
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		maybeParse(project()->projectDirectory() + "/" + ( *it ) );
+		QFileInfo fileInfo( project()->projectDirectory(), *it );
+		maybeParse( fileInfo.absFilePath() );
 	}
 
     emit updatedSourceInfo();
@@ -387,7 +390,8 @@ void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
 
 	for ( it = fileList.begin(); it != fileList.end(); ++it )
 	{
-		classStore()->removeWithReferences(project()->projectDirectory() + "/" + ( *it ) );
+		QFileInfo fileInfo( project()->projectDirectory(), *it );
+		classStore()->removeWithReferences( fileInfo.absFilePath() );
 	}
 
     emit updatedSourceInfo();

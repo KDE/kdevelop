@@ -62,6 +62,10 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	bracketClose = line.contains("}");
 	lastClass = new ParsedClass;
 	lastClass->setName(classre.group(1));
+
+	lastClass->setDeclaredInFile(fileName);
+	lastClass->setDeclaredOnLine(lineNo);
+
 	lastClass->setDefinedInFile(fileName);
 	lastClass->setDefinedOnLine(lineNo);
 
@@ -98,6 +102,9 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	anArg->setType(arguments.stripWhiteSpace().local8Bit());
 	method->addArgument( anArg );
 
+	method->setDeclaredInFile(fileName);
+	method->setDeclaredOnLine(lineNo);
+
 	method->setDefinedInFile(fileName);
 	method->setDefinedOnLine(lineNo);
 	if (lastClass && inClass) {
@@ -116,6 +123,8 @@ void PHPParser::parseLines(QStringList* lines,const QString& fileName){
 	if (lastClass && inClass) {
 	  ParsedAttribute* anAttr = new ParsedAttribute();
 	  anAttr->setName(varre.group(1));
+	  anAttr->setDeclaredInFile(fileName);
+	  anAttr->setDeclaredOnLine(lineNo);
 	  anAttr->setDefinedInFile(fileName);
 	  anAttr->setDefinedOnLine(lineNo);
 	  lastClass->addAttribute( anAttr );
