@@ -1144,7 +1144,9 @@ bool Parser::parseDeclarator( DeclaratorAST::Node& node )
 	lex->nextToken();
     } else {
 
-	if( parseDeclaratorId(declId) ){
+        if( lex->lookAhead(0) == ':' ){
+             // unnamed bitfield
+        } else if( parseDeclaratorId(declId) ){
 	    ast->setDeclaratorId( declId );
 	} else {
 	    lex->setIndex( start );
