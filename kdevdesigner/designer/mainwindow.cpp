@@ -334,7 +334,7 @@ void MainWindow::setupMDI()
     vbox->setMargin( 1 );
     vbox->setLineWidth( 1 );
     qworkspace = new QWorkspace( vbox );
-    qworkspace->setPaletteBackgroundPixmap( UserIcon( "designer_background.png" ) );
+    qworkspace->setPaletteBackgroundPixmap( UserIcon( "designer_background.png", KDevDesignerPartFactory::instance() ) );
     qworkspace->setScrollBarsEnabled( TRUE );
     connect( qworkspace, SIGNAL( windowActivated( QWidget * ) ),
 	     this, SLOT( activeWindowChanged( QWidget * ) ) );
