@@ -10,3 +10,6 @@ echo "running automoc..."
 perl automoc
 echo "running autoconf..."
 autoconf
+echo "running configure..."
+./configure
+

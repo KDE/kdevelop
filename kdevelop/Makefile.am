@@ -51,7 +51,7 @@ noinst_HEADERS = ckdevelop.h cnewfiledlg.h ceditwidget.h coutputwidget.h \
 		cdoctree.h cnewclassdlg.h cfilepropdlg.h caddexistingfiledlg.h \
 		cgrouppropertiesdlg.h cupdatekdedocdlg.h resource.h kdevelop.kdelnk \
 		ckappwizard.h ccreatedocdatabasedlg.h ctoolclass.h cdoctreepropdlg.h \
-		cprintdlg.h cfileprintdlg.h cconfigprintdlg.h
+		cprintdlg.h cfileprintdlg.h cconfigprintdlg.h debug.h
 
 EXTRA_DIST = kdevelop.kdelnk kdevelop.xpm mini-kdevelop.xpm kdeveloprc
 

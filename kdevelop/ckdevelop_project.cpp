@@ -18,6 +18,7 @@
 #include "ckdevelop.h"
 #include "ctoolclass.h"
 #include "ckappwizard.h"
+#include "debug.h"
 
 void CKDevelop::slotProjectNew(){
 	// Currently a project open ?
@@ -51,17 +52,17 @@ bool CKDevelop::slotProjectClose(){
   
   // check if header widget contains modified file
   if(header_widget->isModified()){
-    cerr << "header_widget modified file" << endl;
-    KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
-				       +i18n("\n\ncontains changed files. Save modified file\n\n")+header_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
-				       i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
+    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header_widget modified file");
+      KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
+					 +i18n("\n\ncontains changed files. Save modified file\n\n")+header_widget->getName()+" ?\n\n",KMsgBox::QUESTION,
+					 i18n("Yes"), i18n("No"), i18n("Save all"), i18n("Cancel"));
     // show the messagea and store result in result:
     project_close->show();
     int result=project_close->result();
     edit_widget=header_widget;
     
     // then show the messagebox
-    cerr << "header msgbox result"<<endl;
+    KDEBUG(KDEBUG_INFO,CKDEVELOP,"header msgbox result");
     // yes- save headerwidget
     if(result== 1){			 	
       if(edit_widget->getName() == "Untitled.h"){
@@ -76,18 +77,18 @@ bool CKDevelop::slotProjectClose(){
       mod=true;
     } 
     if(result==2){   // No - no save but close
-      cerr << "No- close header widget file" << endl;
+      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
       edit_widget->toggleModified(false);
       slotFileClose();
       mod=true;
     }
     if(result==3){  // Save all
-      cerr << "Save all" <<endl;
+      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
       slotFileSaveAll();
       mod=true;
     }
     if(result==4){ // Cancel
-      cerr << "Cancel project close" <<endl;
+      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
       mod=false;
       headerCancel=true;
     }
@@ -101,8 +102,8 @@ bool CKDevelop::slotProjectClose(){
     project_close->show();
     int result=project_close->result();
     
-    cerr <<"cpp_widget modified file"<<endl;
-    cerr << "cpp msgbox result"<<endl;
+    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp_widget modified file");
+    KDEBUG(KDEBUG_INFO,CKDEVELOP,"cpp msgbox result");
 		// yes- save cpp widget
     edit_widget=cpp_widget;
     if(result== 1){			 	
@@ -118,28 +119,28 @@ bool CKDevelop::slotProjectClose(){
       mod=true;
     }  
     if(result==2){   // No - no save but close
-      cerr << "No- close header widget file" << endl;
+      KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close header widget file");
       edit_widget->toggleModified(false);
       slotFileClose();
       mod=true;
     }
     if(result==3){  // Save all
-      cerr << "Save all" <<endl;
+      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
       slotFileSaveAll();
       mod=true;
     }
     if(result==4){ // Cancel
-			cerr << "Cancel project close" <<endl;
-			cppCancel=true;
-			mod=false;
-		}
+      KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
+      cppCancel=true;
+      mod=false;
+    }
     
   }  // end cppwidget close
   
   if(!headerCancel && !cppCancel){
     // for -loop for actual infos
     for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-      cerr << "check file:" << actual_info->filename << endl;
+      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
       if(actual_info->modified){
 	
 	KMsgBox *project_close=new KMsgBox(this,i18n("Save changed project files ?"),i18n("The project\n\n")+prj->getProjectName()
@@ -149,21 +150,21 @@ bool CKDevelop::slotProjectClose(){
 	project_close->show();
     	int result=project_close->result();
 	
-	cerr << "Msgbox" << endl;
+	KDEBUG(KDEBUG_INFO,CKDEVELOP,"Msgbox");
 	// create the save project messagebox
 	
 	// what to do
 	if(result==1){  // Yes- only save the actual file
 				// save file as if Untitled and close file
 	  if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
-	    cerr << "yes- untitled" << endl;
+	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- untitled");
 	    switchToFile(actual_info->filename);
 	    slotFileSaveAs();
 	    slotFileClose();
 	  }
 				// Save file and close it
 	  else{
-	    cerr << "yes- save" << endl;
+	    KDEBUG(KDEBUG_INFO,CKDEVELOP,"yes- save");
 	    switchToFile(actual_info->filename);
 	    slotFileSave();
 	    slotFileClose();
@@ -173,20 +174,20 @@ bool CKDevelop::slotProjectClose(){
 	} 
 	
 	if(result==2){   // No - no save but close
-	  cerr << "No- close file" << endl;
+	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"No- close file");
 	  actual_info->modified=false;
 	  slotFileClose();
 	  mod=true;
 	}
 	if(result==3){  // Save all
-	  cerr << "Save all" <<endl;
+	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Save all");
 	  slotFileSaveAll();
 	  mod=true;
 	  break;
 	}
 	if(result==4){ // Cancel
 	  mod=false;
-	  cerr << "Cancel project close" <<endl;
+	  KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel project close");
 	  break;
 	}
 	
@@ -204,9 +205,9 @@ bool CKDevelop::slotProjectClose(){
     real_file_tree->clear();
     menu_buffers->clear();
     messages_widget->clear();
-	stdin_stdout_widget->clear();
-	stderr_widget->clear();
-
+    stdin_stdout_widget->clear();
+    stderr_widget->clear();
+    
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_CLASS_CHOICE);
     toolBar(ID_BROWSER_TOOLBAR)->clearCombo(TOOLBAR_METHOD_CHOICE);
     
@@ -229,7 +230,6 @@ bool CKDevelop::slotProjectClose(){
     project=false;
     prj->valid = false;
     delete prj;
-
     
     switchToFile(header_widget->getName());
     
@@ -267,7 +267,9 @@ void CKDevelop::slotProjectAddNewFile(){
 
 void CKDevelop::slotProjectAddExistingFiles(){
   QString type;
+  bool new_subdir=false; // if a new subdir was added to the project, we must do a rebuildmakefiles
   CAddExistingFileDlg dlg(this,"test",prj);
+
   
   dlg.destination_edit->setText(prj->getProjectDir()+ prj->getSubDir());
   if(dlg.exec()){
@@ -282,9 +284,9 @@ void CKDevelop::slotProjectAddExistingFiles(){
       files.append(token);
     }
     QString dest = dlg.destination_edit->text();
-/*    if(dest.right(1) != '/'){
-      dest = dest + '/';
-    }*/
+    if(dest.right(1) != "/"){ // I hope it works now -Sandy
+      dest = dest + "/";
+    }
     QString source_name;
     QString dest_name ;
     QString file;
@@ -309,10 +311,22 @@ void CKDevelop::slotProjectAddExistingFiles(){
       process << dest;
       process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important  
       
-      addFileToProject(dest_name,type,false); // no refresh
+      new_subdir = addFileToProject(dest_name,type,false) || new_subdir; // no refresh
+      
     }
     switchToFile(dest_name);
     refreshTrees();
+  }
+  if(new_subdir){
+    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe must now regenerate all Makefiles."),KMsgBox::INFORMATION);
+    setToolMenuProcess(false);
+  slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+  messages_widget->clear();
+  QDir::setCurrent(prj->getProjectDir());
+  process.clearArguments();
+  QString path = kapp->kde_datadir()+"/kdevelop/tools/";
+  process << "sh" << path + "rebuildmakefiles";
+  process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   }
 }
 
@@ -349,17 +363,30 @@ void CKDevelop::newFile(bool add_to_project){
   if(filetype == "CPP"){
     type = "SOURCE";
   }
+  bool new_subdir=false;
   
   // add the file to the project if necessary
   if (dlg.addToProject() == true){
-    addFileToProject(complete_filename,type);
+    new_subdir = addFileToProject(complete_filename,type);
+  }
+  if(new_subdir){
+    KMsgBox::message(0,i18n("Information"),i18n("You have added a new subdir to the project.\nWe must now regenerate all Makefiles."),KMsgBox::INFORMATION);
+    setToolMenuProcess(false);
+    slotStatusMsg(i18n("Running automake/autoconf and configure..."));
+    messages_widget->clear();
+    QDir::setCurrent(prj->getProjectDir());
+    process.clearArguments();
+    QString path = kapp->kde_datadir()+"/kdevelop/tools/";
+    process << "sh" << path + "rebuildmakefiles";
+    process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
   }
   
 }
-void CKDevelop::addFileToProject(QString complete_filename,QString type,bool refresh){
+bool CKDevelop::addFileToProject(QString complete_filename,QString type,bool refresh){
+  bool new_subdir = false;
   QString rel_name = complete_filename;
   rel_name.replace(QRegExp(prj->getProjectDir()),"");
-  prj->addFileToProject(rel_name);
+  new_subdir = prj->addFileToProject(rel_name);
   TFileInfo info;
   info.rel_name = rel_name;
   info.type = type;
@@ -372,6 +399,7 @@ void CKDevelop::addFileToProject(QString complete_filename,QString type,bool ref
   if(refresh){
     refreshTrees();
   }
+  return new_subdir;
 }
 void CKDevelop::delFileFromProject(QString rel_filename){
 

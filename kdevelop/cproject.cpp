@@ -21,6 +21,7 @@
 #include <iostream.h>
 #include <qregexp.h>
 #include <kprocess.h>
+#include "debug.h"
 
 
 CProject::CProject(QString file){
@@ -267,7 +268,7 @@ void CProject::getFilters(QString group,QStrList& filters){
   config->setGroup("LFV Groups");
   config->readListEntry(group,filters);
 }
-void CProject::addFileToProject(QString rel_name){
+bool CProject::addFileToProject(QString rel_name){
 
   QStrList list_files;
   QString makefile_name;
@@ -332,7 +333,7 @@ void CProject::addFileToProject(QString rel_name){
     slash2_pos = makefile_name.findRev('/',slash_pos-1);
     if(slash2_pos != -1){
       subdir = makefile_name.mid(slash2_pos+1,slash_pos-slash2_pos-1);
-      cerr << endl << "SUBDIR" << subdir << endl;
+      KDEBUG1(KDEBUG_INFO,DIALOG,"SUBDIR %s",subdir.data());
       makefile_name.remove(slash2_pos,slash_pos-slash2_pos);
       config->setGroup(makefile_name);
       sub_dirs.clear();
@@ -365,6 +366,7 @@ void CProject::addFileToProject(QString rel_name){
   }
   setSourcesHeaders();
   //  createMakefilesAm(); // do some magic generation
+  return new_subdir;
 }
 void CProject::removeFileFromProject(QString rel_name){
   QStrList list_files;
@@ -623,6 +625,8 @@ void CProject::addMakefileAmToProject(QString rel_name){
 }
 bool CProject::isDirInProject(QString rel_name){
 
+  KDEBUG(KDEBUG_INFO,CPROJECT,"isDirInProject() Don't use this function,it's not implemented!");
+  return true;
   int pos = rel_name.findRev('/');
   QString dir_name;
    

@@ -19,6 +19,7 @@
 #include "ckdevelop.h"
 #include <iostream.h>
 #include <kmsgbox.h>
+#include "debug.h"
 
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
@@ -85,7 +86,7 @@ void CKDevelop::switchToFile(QString filename){
   }
   
   if(actual_info == 0){
-    cerr << "actual_info in switchtoFile() is NULL!!!!!";
+    KDEBUG(KDEBUG_FATAL,CKDEVELOP,"actual_info in switchtoFile() is NULL!!!!!");
   }
     // rescue the old file
   actual_info->text = edit_widget->text();
@@ -122,7 +123,7 @@ void CKDevelop::switchToFile(QString filename){
   info->cursor_col = 0;
 
   // update the widget
-  cerr << filename;
+  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"switchToFile: %s",filename.data());
   edit_widget->clear();
   edit_widget->loadFile(filename,1);
   edit_widget->setName(filename);
@@ -142,7 +143,9 @@ void CKDevelop::switchToFile(QString filename){
 void CKDevelop::setToolMenuProcess(bool enable){
 
   if (enable){
-    enableCommand(ID_BUILD_COMPILE_FILE);
+    if(s_tab_view->getCurrentTab() == CPP){
+      enableCommand(ID_BUILD_COMPILE_FILE);
+    }
     enableCommand(ID_BUILD_RUN);
     enableCommand(ID_BUILD_DEBUG);
     enableCommand(ID_BUILD_MAKE);

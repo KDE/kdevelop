@@ -25,6 +25,7 @@
 #include <qtextstream.h>
 #include <iostream.h>
 #include <qregexp.h>
+#include "debug.h"
 
 CClassView::CClassView(QWidget*parent,const char* name) : KTreeList(parent,name){
   streamed_files = new QList<TStreamedFile>;
@@ -141,7 +142,6 @@ void CClassView::refresh(CProject* prj){
   //cerr << "ITEM_PATH:" << saved_item_path << endl;
   
   pix_dir = KApplication::kde_datadir() + "/kdevelop/pics/mini/";
-  cerr << pix_dir;
   QPixmap class_pix(pix_dir + "CVclass.xpm");
   QPixmap struct_pix(pix_dir + "CVstruct.xpm");
   QPixmap public_var_pix(pix_dir + "CVpublic_var.xpm");
@@ -402,7 +402,7 @@ int CClassView::CVFindClassDecEnd(QString stream,int startpos){
   while (num !=0){
     act_pos++;
     if(act_pos == (int)stream.size()){
-      cerr << endl << "FIXME: Error by parsing,coundn't find a class-end definition";
+      KDEBUG(KDEBUG_ERROR,CCLASSVIEW,"FIXME: Error by parsing,coundn't find a class-end definition");
       return act_pos;
     }
     if (stream[act_pos] == '{') num++;

@@ -21,6 +21,7 @@
 #include "cfilepropdlg.h"
 #include <iostream.h>
 #include <qfileinfo.h>
+#include "debug.h"
 
 CFilePropDlg::CFilePropDlg(QWidget *parent, const char *name,CProject* prj ) : QDialog(parent,name,true) {
   this->prj = prj; // save the pointer
@@ -278,7 +279,7 @@ void CFilePropDlg::slotSingleSelected(int index){
     saved_info->dist = incdist_check->isChecked();
     saved_info->install = install_check->isChecked();
     saved_info->install_location = install_loc_edit->text();
-    cerr << "fileinfo  saved";
+    KDEBUG(KDEBUG_INFO,DIALOG,"fileinfo  saved");
   }
   // prepare the new 
   path = log_tree->itemPath(index);

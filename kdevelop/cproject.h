@@ -123,7 +123,8 @@ public:
   void setFilters(QString group,QStrList& filters);
   void writeFileInfo(TFileInfo info);
   void writeMakefileAmInfo(TMakefileAmInfo info);
-  void addFileToProject(QString rel_name);
+  /** return true if a new subdir was added to the project*/
+  bool addFileToProject(QString rel_name);
   void removeFileFromProject(QString rel_name);
   void setKDevelopWriteArea(QString makefile);
   void addMakefileAmToProject(QString rel_name);

@@ -23,6 +23,7 @@
 #include <qregexp.h>
 #include <kprocess.h>
 #include "cgrouppropertiesdlg.h"
+#include "debug.h"
 
 CLogFileView::CLogFileView(QWidget*parent,const char* name) : KTreeList(parent,name){
  
@@ -263,7 +264,7 @@ void CLogFileView::split(QString str,QStrList& filters){
     if(next != -1){
       str2 = str.mid(pos,next-pos);
       filters.append(str2);
-      cerr << str2 << "\n";
+      KDEBUG1(KDEBUG_INFO,CLOGFILEVIEW,"%s",str2.data());
     }
     pos = next+1;
   }

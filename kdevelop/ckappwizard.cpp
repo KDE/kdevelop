@@ -22,6 +22,7 @@
 #endif
 
 #include "ckappwizard.h"
+#include "debug.h"
 
 CKAppWizard::CKAppWizard(QWidget* parent,const char* name) : KWizard(parent,name,true){
   
@@ -793,18 +794,18 @@ void CKAppWizard::slotProcessExited() {
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
-  cerr << makeAmInfo.rel_name;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
-  cerr << makeAmInfo.type;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
   makeAmInfo.sub_dirs = sub_dir_list;
   project->writeMakefileAmInfo (makeAmInfo);
   project->addMakefileAmToProject (makeAmInfo.rel_name);
 
   makeAmInfo.rel_name =  namelow + "/Makefile.am";
-  cerr << makeAmInfo.rel_name;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "prog_main";
-  cerr << makeAmInfo.type;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   if (userdoc->isChecked()) {
     //    sub_dir_list.append("docs");
@@ -814,9 +815,9 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name);
   
   makeAmInfo.rel_name =  namelow + "/docs/Makefile.am";
-  cerr << makeAmInfo.rel_name;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
-  cerr << makeAmInfo.type;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
@@ -824,9 +825,9 @@ void CKAppWizard::slotProcessExited() {
   project->addMakefileAmToProject (makeAmInfo.rel_name);
 
   makeAmInfo.rel_name =  namelow + "/docs/en/Makefile.am";
-  cerr << makeAmInfo.rel_name;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
-  cerr << makeAmInfo.type;
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.clear();
   makeAmInfo.sub_dirs = sub_dir_list;
   project->writeMakefileAmInfo (makeAmInfo);

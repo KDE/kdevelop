@@ -36,6 +36,7 @@
 #include "ccreatedocdatabasedlg.h"
 #include "ctoolclass.h"
 #include "cprintdlg.h"
+#include "debug.h"
 
 
 void CKDevelop::slotFileNew(){
@@ -112,18 +113,19 @@ void CKDevelop::slotFileSaveAll(){
   }
   
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
-    cerr << "check:" << actual_info->filename << endl;
+    KDEBUG1(KDEBUG_INFO,CKDEVELOP,"check file: %s",actual_info->filename.data());
+    
     if(actual_info->modified){
       if((actual_info->filename == "Untitled.cpp") || (actual_info->filename == "Untitled.h")){
 	switchToFile(actual_info->filename);
 	slotFileSaveAs();
-	cerr << actual_info->filename << "UNTITLED";
+	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s UNTITLED",actual_info->filename.data());
 	mod = true;
       }
       else{
 	switchToFile(actual_info->filename);
 	edit_widget->doSave();
-	cerr << actual_info->filename;
+	KDEBUG1(KDEBUG_INFO,CKDEVELOP,"file: %s ",actual_info->filename.data());
 	mod = true;
       }
     }
@@ -144,7 +146,7 @@ void CKDevelop::slotFileSaveAs(){
     name = KFileDialog::getSaveFileName(0,0,this,edit_widget->getName());
   }
   if (name.isNull()){
-    cerr << "CANCEL\n";
+    KDEBUG(KDEBUG_INFO,CKDEVELOP,"Cancel");
     return;
   }
   else {
@@ -197,10 +199,10 @@ void CKDevelop::slotFileClose(){
   //search the actual edit_info and remove it
   for(actual_info=edit_infos.first();actual_info != 0;actual_info=edit_infos.next()){
     if (actual_info->filename == edit_widget->getName()){ // found
-      cerr << "remove edit_info begin\n";
+      KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info begin\n");
       menu_buffers->removeItem(actual_info->id);
       if(edit_infos.removeRef(actual_info)){
-	cerr << "remove edit_info end\n";
+	KDEBUG(KDEBUG_INFO,CKDEVELOP,"remove edit_info end\n");
       }
     }
   }
@@ -211,7 +213,7 @@ void CKDevelop::slotFileClose(){
       edit_widget->toggleModified(actual_info->modified);
       edit_widget->setName(actual_info->filename);
       setCaption(actual_info->filename);
-      cerr << "FOUND A NEXT" << actual_info->filename;
+      KDEBUG1(KDEBUG_INFO,CKDEVELOP,"FOUND A NEXT %s",actual_info->filename.data());
       slotStatusMsg(IDS_DEFAULT); 
       return;
     }
@@ -240,6 +242,7 @@ void CKDevelop::slotFileCloseAll(){
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotFilePrint(){
+  
   CPrintDlg* printerdlg = new CPrintDlg(this, "suzus");
   printerdlg->resize(600,480);
   printerdlg->exec(); 
@@ -284,12 +287,10 @@ void CKDevelop::closeEvent(QCloseEvent* e){
     }
   }
   e->accept();
-  cerr << "QUIT5";
   swallow_widget->sWClose(false);
   
-  cerr << "QUIT3";
   config->sync();
-  cerr << "QUIT2";
+  KDEBUG(KDEBUG_INFO,CKDEVELOP,"KTMainWindow::closeEvent()");
   KTMainWindow::closeEvent(e);
 }
 
@@ -413,6 +414,30 @@ void CKDevelop::slotViewTOutputView(){
   view->resize(rMainGeom.width()-1,rMainGeom.height());
   view->resize(rMainGeom.width()+1,rMainGeom.height());
 }
+void CKDevelop::showOutputView(bool show){
+  if(show){
+    if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+      return; // it's already visible
+    }
+    else{
+      view->setSeparatorPos(output_view_pos);
+      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
+    }
+  }
+  else{
+    if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
+      return; //it's already unvisible
+    }
+    else{
+      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
+      output_view_pos=view->separatorPos();
+      view->setSeparatorPos(100);
+    }
+  }
+  QRect rMainGeom= view->geometry();
+  view->resize(rMainGeom.width()-1,rMainGeom.height());
+  view->resize(rMainGeom.width()+1,rMainGeom.height());
+}
 
 void CKDevelop::slotViewRefresh(){
   refreshTrees();
@@ -526,7 +551,7 @@ void CKDevelop::slotDocBack(){
   else{
     history_list.next();
   }
-  cerr << endl << "COUNT HISTORYLIST:" << history_list.count();;
+  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"COUNT HISTORYLIST: %d",history_list.count());
   slotStatusMsg(IDS_DEFAULT); 
 }
 void CKDevelop::slotDocForward(){
@@ -621,7 +646,6 @@ QString CKDevelop::searchToolGetURL(QString str){
 int CKDevelop::searchToolGetNumber(QString str){
   int pos =str.findRev(':');
   QString sub = str.right((str.length()-pos-2));
-  cerr << sub << endl;
   return sub.toInt();
 }
 void CKDevelop::slotCreateSearchDatabase(){
@@ -722,13 +746,8 @@ void CKDevelop::slotBuildCompileFile(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+ 
+  showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
   slotStatusMsg(i18n("Compiling "+edit_widget->getName()));
@@ -737,7 +756,8 @@ void CKDevelop::slotBuildCompileFile(){
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir()); 
   // get the filename of the implementation file to compile and change extension for make
   QFileInfo fileinfo(cpp_widget->getName());
-  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
+  KDEBUG1(KDEBUG_INFO,CKDEVELOP,"ObjectFile= %s",QString(fileinfo.baseName()+".o").data());
+  //  cerr << "ObjectFile= " << fileinfo.baseName()+".o";
   process << make_cmd <<fileinfo.baseName()+".o";
   process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
 
@@ -756,15 +776,8 @@ void CKDevelop::slotBuildDebug(){
   if(!prj->getBinPROGRAM()){
     slotBuildMake();
   }
+  showOutputView(false);
   
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
   slotStatusMsg(i18n("Running  "+prj->getBinPROGRAM()+"  in KDbg"));
 
   s_tab_view->setCurrentTab(TOOLS);
@@ -780,14 +793,7 @@ void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
+  showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make..."));
@@ -808,13 +814,7 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
+  showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make clean-command "));
@@ -831,14 +831,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
+  showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
   messages_widget->clear();
@@ -855,14 +848,7 @@ void CKDevelop::slotBuildDistClean(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
+  showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running make distclean..."));
@@ -877,14 +863,7 @@ void CKDevelop::slotBuildAutoconf(){
   if(!CToolClass::searchProgram("automake")){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-  
+  showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Running autoconf suite..."));
@@ -899,13 +878,7 @@ void CKDevelop::slotBuildAutoconf(){
 
 void CKDevelop::slotBuildConfigure(){
   slotStatusMsg(i18n("Running ./configure..."));
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+  showOutputView(true);
   setToolMenuProcess(false);
   slotFileSave();
   messages_widget->clear();
@@ -920,19 +893,14 @@ void CKDevelop::slotBuildStop(){
   setToolMenuProcess(true);
   process.kill();
   shell_process.kill();
+  appl_process.kill();
   slotStatusMsg(IDS_DEFAULT);
 }
 void CKDevelop::slotBuildAPI(){
   if(!CToolClass::searchProgram("kdoc")){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+  showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
   slotStatusMsg(i18n("Creating project API-Documentation..."));
@@ -951,14 +919,7 @@ void CKDevelop::slotBuildManual(){
   if(!CToolClass::searchProgram("sgml2html")){
     return;
   }
-  if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view->setSeparatorPos(output_view_pos);
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,true);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
+  showOutputView(true);
   setToolMenuProcess(false);
   //  slotFileSaveAll();
   slotStatusMsg(i18n("Creating project Manual..."));
@@ -978,14 +939,7 @@ void CKDevelop::slotBookmarksEdit(){
 }
 
 void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+  showOutputView(false);
   s_tab_view->setCurrentTab(BROWSER);
   browser_widget->setFocus();
   QString url_str = url;
@@ -1016,6 +970,7 @@ void CKDevelop::slotURLSelected(KHTMLView* ,const char* url,int,const char*){
 
 void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){ 
   int x,y;
+  showOutputView(true);
   messages_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
@@ -1023,6 +978,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){  
   int x,y;
+  showOutputView(true);
   messages_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
@@ -1030,12 +986,14 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){ 
   int x,y;
+  showOutputView(true);
   stdin_stdout_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
   stdin_stdout_widget->insertAt(str,x,y);
 }
 void CKDevelop::slotApplReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
+  showOutputView(true);
   stderr_widget->cursorPosition(&x,&y);
   QString str(buffer,buflen+1);
   stderr_widget->insertAt(str,x,y);
@@ -1118,20 +1076,13 @@ void CKDevelop::slotProcessExited(KProcess* proc){
     }
   } 
   else {
-    cerr << "process exited with error(s)..." << endl;
+    KDEBUG(KDEBUG_ERROR,CKDEVELOP,"process exited with error(s)...");
   }
 }
 void CKDevelop::slotTTabSelected(int item){
   if(item == DOC){
     // disable the outputview
-    if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-      view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-      output_view_pos=view->separatorPos();
-      view->setSeparatorPos(100);
-      QRect rMainGeom= view->geometry();
-      view->resize(rMainGeom.width()-1,rMainGeom.height());
-      view->resize(rMainGeom.width()+1,rMainGeom.height());
-    }
+    showOutputView(false);
   }
 }
 void CKDevelop::slotSTabSelected(int item){
@@ -1180,7 +1131,7 @@ void CKDevelop::slotMenuBuffersSelected(int id){
 
 void CKDevelop::slotLogFileTreeSelected(int index){
   // no action on Project or Group click with left button
-  cerr << "SELECTED\n";
+  //  cerr << "SELECTED\n";
   if (log_file_tree->itemAt(index)->hasChild() == true) return; // no action on child
   if(!(log_file_tree->isFile(index))) return; // it is not file
 
@@ -1190,7 +1141,7 @@ void CKDevelop::slotLogFileTreeSelected(int index){
   path = log_file_tree->itemPath(index);
   str = path->pop();
   switchToFile(prj->getProjectDir() + *str);
-  cerr << "SELECTED2\n";
+  //  cerr << "SELECTED2\n";
 }
 
 void CKDevelop::slotRealFileTreeSelected(int index){
@@ -1303,16 +1254,7 @@ void CKDevelop::slotToolsKIconEdit(){
   if(!CToolClass::searchProgram("kiconedit")){
     return;
   }
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
+  showOutputView(false);
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("kiconedit");
@@ -1325,17 +1267,7 @@ void CKDevelop::slotToolsKDbg(){
   if(!CToolClass::searchProgram("kdbg")){
     return;
   }
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-
+  showOutputView(false);
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("kdbg");
@@ -1348,18 +1280,7 @@ void CKDevelop::slotToolsKTranslator(){
   if(!CToolClass::searchProgram("ktranslator")){
     return;
   }
-  
-  if(view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
-    view_menu->setItemChecked(ID_VIEW_OUTPUTVIEW,false);
-    output_view_pos=view->separatorPos();
-    view->setSeparatorPos(100);
-//    resize (width()-1,height()); // a little bit dirty, but I don't know an other solution
-//    resize (width()+1,height());
-    QRect rMainGeom= view->geometry();
-    view->resize(rMainGeom.width()-1,rMainGeom.height());
-    view->resize(rMainGeom.width()+1,rMainGeom.height());
-  }
-  
+  showOutputView(false);
   s_tab_view->setCurrentTab(TOOLS);
   swallow_widget->sWClose(false);
   swallow_widget->setExeString("ktranslator");

@@ -92,8 +92,10 @@ public:
   void newFile(bool add_to_project);
   /** read the projectfile from the disk*/
   bool readProjectFile(QString file);
-  /**@param type HEADER,SOURCE,SCRIPT,DATA*/
-  void addFileToProject(QString complete_filename,QString type,bool refreshTrees=true);
+  /**@param type HEADER,SOURCE,SCRIPT,DATA
+   * return true if a new subdir was added to the project
+   */
+  bool addFileToProject(QString complete_filename,QString type,bool refreshTrees=true);
   void delFileFromProject(QString rel_filename);
   /**@param filename the absolute filename*/
   void switchToFile(QString filename); // filename = abs
@@ -144,7 +146,7 @@ public:
 
   void slotViewTTreeView();
   void slotViewTOutputView();
-
+  void showOutputView(bool show=true);
   void slotViewTStdToolbar();
   void slotViewTBrowserToolbar();
   void slotViewTStatusbar();
@@ -160,6 +162,7 @@ public:
   /** close the current project,return false if  canceled*/
   bool slotProjectClose();
   void slotProjectAddNewFile();
+  
   void slotProjectAddExistingFiles();
   void slotProjectRemoveFile();
   void slotProjectNewClass();
@@ -288,7 +291,7 @@ private:
   QPopupMenu* tools_menu;
   QPopupMenu* menu_buffers;
   QPopupMenu* menu_help;
-	QWhatsThis* whats_this;
+  QWhatsThis* whats_this;
   
   KNewPanner* view;
   KNewPanner* top_panner;
@@ -297,7 +300,8 @@ private:
   KIconLoader icon_loader;
   KProcess process; // for tools,compiler,make,kodc
   KProcess appl_process; //only for selfmade appl
-  KShellProcess shell_process;
+  KShellProcess shell_process; // for kdoc,sgmltools ...
+  KShellProcess search_process; // search with glimpse
   CProject* prj; // at the moment only one project at the same time
 
   KAccel *accel;
@@ -345,7 +349,7 @@ private:
   bool  prev_was_search_result;
 
   //some vars for the searchengine
-  KShellProcess search_process;
+  
   QString search_output;
   QString doc_search_text;
   // for more then one job in proc;checked in slotProcessExited(KProcess* proc);

@@ -19,6 +19,7 @@
 #include "cprjoptionsdlg.h"
 #include <iostream.h>
 #include <qstrlist.h>
+#include "debug.h"
 
 // OPTIONS DIALOG
 CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj )
@@ -643,10 +644,10 @@ CPrjOptionsDlg::CPrjOptionsDlg( QWidget *parent, const char *name,CProject* prj 
   QWidget *w4= new QWidget(this,"Linker");
   KQuickHelp::add(w4, i18n("Set the Linker options and choose the\n"
 			"libraries to add to your project."));
-ldflags = " " + ldflags + " ";
-ldadd = " " + ldadd + " ";
-  cerr << ldflags;
-  cerr << ldadd;
+  ldflags = " " + ldflags + " ";
+  ldadd = " " + ldadd + " ";
+  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldflags.data());
+  KDEBUG1(KDEBUG_INFO,DIALOG,"%s",ldadd.data());
   QGroupBox* ldflags_group;
   ldflags_group=new QGroupBox(w4,"ldflags_group");
   ldflags_group->setGeometry(10,10,490,100);
@@ -802,7 +803,7 @@ ldadd = " " + ldadd + " ";
     l_kfile->setChecked(true);
     pos=ldadd.find(" -lkfile");
     ldadd.remove(pos,8);
-    cerr << "-lkfile OK" << endl;
+    //    cerr << "-lkfile OK" << endl;
   } else {
     l_kfile->setChecked(false);
   }

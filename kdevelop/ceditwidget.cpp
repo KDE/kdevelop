@@ -81,7 +81,7 @@ void CEditWidget::setFocus(){
 }
 void CEditWidget::gotoPos(int pos,QString text_str){
   
-  cerr << endl << "POS: " << pos;
+  //  cerr << endl << "POS: " << pos;
   // calculate the line
   QString last_textpart = text_str.right(text_str.size()-pos); // the second part of the next,after the pos
    int line = text_str.contains("\n") - last_textpart.contains("\n");

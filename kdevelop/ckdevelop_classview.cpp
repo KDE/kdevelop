@@ -22,6 +22,7 @@
 #include <qtextstream.h>
 #include <iostream.h>
 #include <qregexp.h>
+#include "debug.h"
 
 
 void CKDevelop::slotClassTreeSelected(int index){
@@ -237,7 +238,7 @@ void CKDevelop::slotClassChoiceCombo(int index){
   KCombo* method_combo = toolBar(1)->getCombo(TOOLBAR_METHOD_CHOICE);
   
   QString classname = class_combo->text(index);
-  cerr << ":" << classname << ":";
+  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",classname.data());
   if (classname == "Classes") return; 
   TClassInfo* class_info=0,*info_found=0;
   TMethodInfo* method_info;

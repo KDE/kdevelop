@@ -127,7 +127,7 @@ void CDocTree::refresh(CProject* prj){
 }
 void CDocTree::slotSingleSelected(int index){
   if(right_button){
-    cerr << itemAt(index)->getText();
+    //cerr << itemAt(index)->getText();
     if(QString(itemAt(index)->getText()) == "Others" ){
       others_pop->popup(this->mapToGlobal(mouse_pos));
      
