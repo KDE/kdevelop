@@ -23,16 +23,11 @@
 #include <klocale.h>
 #include <kcmdlineargs.h>
 
-#include "kstartuplogo.h"
-#include "ckdevinstall.h"
-#include "ckdevelop.h"
-#include "kwrite/kwview.h"
-
 #include "kdevelop.h"
 #include "kdevelopfactory.h"
 
 
-KGuiCmdManager cmdMngr; //manager for user -> gui commands
+//KGuiCmdManager cmdMngr; //manager for user -> gui commands
 
 //static const char *description=I18N_NOOP("The KDE Integrated Development Environment");
 //static const char *version="2.0pre";

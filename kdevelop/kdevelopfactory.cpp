@@ -26,8 +26,11 @@ KAboutData *KDevelopFactory::kdev_aboutData = 0;
 
 KDevelopFactory::KDevelopFactory(){
 }
+
+
 KDevelopFactory::~KDevelopFactory(){
 }
+
 
 const KAboutData *KDevelopFactory::aboutData()
 {
@@ -38,13 +41,13 @@ const KAboutData *KDevelopFactory::aboutData()
                         KAboutData::License_GPL,
                         "(c) 1998-2000, The KDevelop Team" );
     kdev_aboutData->addAuthor("Sandy Meier",I18N_NOOP("Maintainer"), "smeier@rz.uni-potsdam.de");
-    kdev_aboutData->addAuthor("Stefab Heidrich",I18N_NOOP("KAppWizard, Printing"), "sheidric@rz.uni-potsdam.de");
+    kdev_aboutData->addAuthor("Stefan Heidrich",I18N_NOOP("KAppWizard, Printing"), "sheidric@rz.uni-potsdam.de");
     kdev_aboutData->addAuthor("Ralf Nolden",I18N_NOOP("KDevelop<->Dialogeditor Interface, Configuration Functionality, Online Help"), "");
     kdev_aboutData->addAuthor("Jonas Nordin",I18N_NOOP("Classviewer and Classparser"), "jonas.nordin@syncom.se");
     kdev_aboutData->addAuthor("Pascal Krahmer",I18N_NOOP("Dialogeditor"), "pascal@beast.de");
     kdev_aboutData->addAuthor("Jörgen Olsson",I18N_NOOP("Graphical Classviewer"), "jorgen@trej.net");
     kdev_aboutData->addAuthor("Stefan Bartel",I18N_NOOP("Real-File-Viewer, Project Options"), "bartel@rz.uni-potsdam.de");
-    kdev_aboutData->addAuthor("Bernd Gehrmann",I18N_NOOP("CVS Support"), "bernd@physik.hu-berlin.de");
+    kdev_aboutData->addAuthor("Bernd Gehrmann",I18N_NOOP("Documentation Tree"), "bernd@physik.hu-berlin.de");
     kdev_aboutData->addAuthor("Walter Tasin",I18N_NOOP("Many, Many Bugfixes, General Enhancements"), "tasin@e-technik.fh-muenchen.de");
     kdev_aboutData->addAuthor("John Birch",I18N_NOOP("Internal Debugger"), "jbb@ihug.co.nz");
   }

@@ -14,6 +14,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstdaction.h>
@@ -29,9 +31,9 @@ KDevelop::KDevelop(const char *name) : KParts::DockMainWindow( name )
 {
   initActions();
   initHelp();
-  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
+  //  setXMLFile( "/mnt/rnolden/Development/kdevelop/kdevelop/kdevelopui.rc" );
 
-//  setXMLFile( "kdevelopui.rc" );
+  setXMLFile( "kdevelopui.rc" );
   createGUI( 0L );
 }
 
@@ -301,10 +303,13 @@ void KDevelop::initActions(){
 
 }
 
+
 /** reimplemented from KParts::MainWindow
  */
 void KDevelop::slotSetStatusBarText( const QString &text){
 }
+
+
 /** initializes the help messages (whats this and
 statusbar help) on the KActions */
 void KDevelop::initHelp(){

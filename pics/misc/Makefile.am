@@ -5,5 +5,3 @@ picsdir = $(kde_datadir)/kdevelop/pics/
 
 EXTRA_DIST = $(pics_DATA)
 
-SUBDIRS = mini 
-

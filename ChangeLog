@@ -1,3 +1,8 @@
+2000-06-21  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* Moved icons into their own directory structure directly
+	  under the toplevel dir
+	* Minimized Makefile.am
+
 2000-06-20 Falk Brettschneider <gigafalk@yahoo.com>
   * added MDI view title abbreviation feature
   * more bugfixes in QextMDI (MDI tool view related)
@@ -60,7 +65,7 @@
 	* debugger views can be shown/hidden using a submenu View->DebuggerViews
 
 2000-05-13  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
-	* 4th iteration of the DocTreeView, to get ride of KListView
+	* 4th iteration of the DocTreeView, to get rid of KListView
 	* Walter's cvs fixes from the 1.x branch
 
 2000-05-07 Falk Brettschneider <gigafalk@yahoo.com>
