@@ -169,7 +169,7 @@ public:
    /**
    * Constructor.
    */
-   QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel);
+   QextMdiMainFrm( QWidget* parentWidget, const char* name = "", WFlags flags = WType_TopLevel | WDestructiveClose);
    /**
    * Destructor.
    */
