@@ -1177,81 +1177,38 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 
     if( klass )
     {
-	QValueList<ParsedMethod*> l = klass->getSortedSignalList();
-	QValueList<ParsedMethod*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    ParsedMethod* meth = *it;
-	    ++it;
-
-	    if( meth->name() == name )
-		return meth->type();
-	}
-    }
-    
-    // methods
-    {
-	QValueList<ParsedMethod*> l = container->getSortedMethodList();
-	QValueList<ParsedMethod*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    ParsedMethod* meth = *it;
-	    ++it;
-
-	    if( meth->name() == name )
-		return meth->type();
-	}
+	QValueList<ParsedMethod*> l = klass->getMethodByName( name );
+        if( l.size() )
+            return l.front()->type();
     }
 
     // attributes
     {
-	QValueList<ParsedAttribute*> l = container->getSortedAttributeList();
-	QValueList<ParsedAttribute*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    ParsedAttribute* attr = *it;
-	    ++it;
-
-	    if( attr->name() == name )
-		return attr->type();
-	}
+	ParsedAttribute* attr = container->getAttributeByName( name );
+	if( attr )
+	    return attr->type();
     }
 
     // namespaces
     if( scope )
     {
-	QValueList<ParsedScopeContainer*> l = scope->getSortedScopeList();
-	QValueList<ParsedScopeContainer*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    ParsedScopeContainer* sc = *it;
-	    ++it;
-
-	    if( sc->path() == name )
-		return name;
-	}
+	ParsedScopeContainer* sc = scope->getScopeByName( name );
+	if( sc )
+	    return sc->name();
     }
 
     // inner classes
     {
-	QValueList<ParsedClass*> l = container->getSortedClassList();
-	QValueList<ParsedClass*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    ParsedClass* cl = *it;
-	    ++it;
-
-	    if( cl->path() == name )
-		return name;
-	}
+	ParsedClass* cl = container->getClassByName( name );
+	if( cl )
+	    return cl->name();
     }
 
     // inner structs
     {
-	QValueList<ParsedClass*> l = container->getSortedStructList();
-	QValueList<ParsedClass*>::Iterator it = l.begin();
-	while( it != l.end() ){
-	    ParsedClass* cl = *it;
-	    ++it;
-
-	    if( cl->path() == name )
-		return name;
-	}
+	ParsedClass* cl = container->getStructByName( name );
+	if( cl )
+	    return cl->name();
     }
 
 
@@ -1266,7 +1223,7 @@ QString CppCodeCompletion::typeOf( const QString& name, ParsedClassContainer* co
 
 	    ParsedClassContainer* c = findContainer( p->name() );
 	    if( c != 0 ){
-		type = typeOf( p->name(), c );
+		type = typeOf( name, c );
 		if( type )
 		    return type;
 	    }
