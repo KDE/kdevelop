@@ -20,6 +20,7 @@
 
 #include "kdevviewhandler.h"
 
+#include <qguardedptr.h>
 
 class MdiFrame;
 
@@ -47,7 +48,7 @@ protected:
   virtual void projectClosed();
 
 private:
-  MdiFrame *m_mainframe;
+  QGuardedPtr<MdiFrame> m_mainframe;
   friend class MdiFrame;
 
   QList<KAction>   m_viewList;

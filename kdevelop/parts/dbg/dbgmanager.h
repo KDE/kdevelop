@@ -3,6 +3,8 @@
 
 #include "kdevcomponent.h"
 
+#include <qguardedptr.h>
+
 class BreakpointManager;
 
 class DbgManager : public KDevComponent
@@ -36,7 +38,7 @@ private slots:
   void slotDebugStop();
 
 private:
-  BreakpointManager* m_BPManager;
+  QGuardedPtr<BreakpointManager> m_BPManager;
 };
 
 #endif

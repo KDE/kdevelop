@@ -6,33 +6,37 @@
 #include "kdevcomponent.h"
 
 #include "kaction.h"
+#include "kdebug.h"
 #include "klocale.h"
 
 DbgManager::DbgManager(QObject *parent, const char *name ) :
-  KDevComponent(parent, name)
+    KDevComponent(parent, name),
+    m_BPManager(0)
 {
-  setInstance(DbgFactory::instance());
-  setXMLFile("kdevelopdbgui.rc" );
+    setInstance(DbgFactory::instance());
+    setXMLFile("kdevelopdbgui.rc" );
 }
 
 DbgManager::~DbgManager()
 {
+    delete m_BPManager;
 }
 
 void DbgManager::setupGUI()
 {
-  m_BPManager = new BreakpointManager(0, "Breakpoint Manager", 0);
-  emit embedWidget(m_BPManager, OutputView, i18n("breakpoints"), i18n("breakpoint manager"));
+    kdDebug(9001) << "Building GrepWidget" << endl;
+    m_BPManager = new BreakpointManager(0, "Breakpoint Manager", 0);
+    emit embedWidget(m_BPManager, OutputView, i18n("breakpoints"), i18n("breakpoint manager"));
 
-  KAction *action;
+    KAction *action;
 
-  action = new KAction( i18n("&Start"), 0, this, SLOT( slotDebugStart() ), actionCollection(),"debug_start" );
-  //action->setStatusText( i18n("") );
-  //action->setWhatsThis( i18n("") );
+    action = new KAction( i18n("&Start"), 0, this, SLOT( slotDebugStart() ), actionCollection(),"debug_start" );
+    //action->setStatusText( i18n("") );
+    //action->setWhatsThis( i18n("") );
 
   // Debug "Start (other)..." submenu
-  action = new KAction( i18n("Examine core file"), "debugger", 0, this, SLOT( slotDebugExamineCore() ),
-          actionCollection(),"debug_examine_core" );
+    action = new KAction( i18n("Examine core file"), "debugger", 0, this, SLOT( slotDebugExamineCore() ),
+             actionCollection(),"debug_examine_core" );
   action = new KAction( i18n("Debug another executable"), "debugger", 0, this, SLOT( slotDebugNamedFile() ),
           actionCollection(), "debug_debug_other_exe");
   action = new KAction( i18n("Attach to process"), "debugger", 0, this, SLOT( slotDebugAttach() ),
