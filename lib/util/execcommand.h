@@ -25,6 +25,7 @@ class KProgressDialog;
  * If there was an error or the user pressed cancel, finished will emit a QString::null,
  * otherwise QStrings containing the stdout/stderr.
  * The object will delete itself after the finished signal has been emitted.
+ * Additional environment can be set in the QStringList env via QStrings with the format "foo=blah"
  */
 
 class ExecCommand : public QObject
@@ -32,7 +33,8 @@ class ExecCommand : public QObject
     Q_OBJECT
 public:
     ExecCommand( const QString& executable, const QStringList& args,
-		 const QString& workingDir = QString::null, QObject* parent = 0, const char* name = 0 );
+		 const QString& workingDir = QString::null,
+                 const QStringList& env = QStringList(), QObject* parent = 0, const char* name = 0 );
     ~ExecCommand();
 
 signals:

@@ -50,7 +50,7 @@ ClassStore* KDevPlugin::ccClassStore( )
     return m_api->ccClassStore();
 }
 
-QDomDocument *KDevPlugin::projectDom()
+QDomDocument *KDevPlugin::projectDom() const
 {
     return m_api->projectDom();
 }

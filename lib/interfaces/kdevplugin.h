@@ -103,7 +103,7 @@ public:
      * Gives a reference to the DOM tree that represents
      * the project file.
      */
-    QDomDocument *projectDom();
+    QDomDocument *projectDom() const;
 
     /**
      * Returns a reference to the part controller.

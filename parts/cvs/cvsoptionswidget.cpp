@@ -24,6 +24,7 @@ void CvsOptionsWidget::readConfig() {
     remove_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/removeoptions",m_part->default_remove));
     diff_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/diffoptions",m_part->default_diff));
     log_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/logoptions",m_part->default_log));
+    rsh_edit->setText(DomUtil::readEntry(dom,"/kdevcvs/rshoptions",m_part->default_rsh));
 
 }
 
@@ -38,6 +39,7 @@ void CvsOptionsWidget::storeConfig() {
     DomUtil::writeEntry(dom, "/kdevcvs/removeoptions", remove_edit->text());
     DomUtil::writeEntry(dom, "/kdevcvs/diffoptions", diff_edit->text());
     DomUtil::writeEntry(dom, "/kdevcvs/logoptions", log_edit->text());
+    DomUtil::writeEntry(dom, "/kdevcvs/rshoptions", rsh_edit->text());
 }
 
 

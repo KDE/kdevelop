@@ -182,7 +182,7 @@ void PerforcePart::slotDiff()
 
     args << "diff";
     args << name;
-    ExecCommand* cmv = new ExecCommand( "p4", args, QString::null, this );
+    ExecCommand* cmv = new ExecCommand( "p4", args, QString::null, QStringList(), this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
              this, SLOT(slotDiffFinished( const QString&, const QString& )) );
 }

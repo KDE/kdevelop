@@ -16,7 +16,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-ExecCommand::ExecCommand( const QString& executable, const QStringList& args, const QString& workingDir, QObject* parent, const char* name ): 
+ExecCommand::ExecCommand( const QString& executable, const QStringList& args, 
+                          const QString& workingDir, const QStringList& env,
+                          QObject* parent, const char* name ): 
 	QObject( parent, name ), out( "" ) /* make sure out is not QString::null since that would mean "error" */
 
 {
@@ -24,6 +26,8 @@ ExecCommand::ExecCommand( const QString& executable, const QStringList& args, co
 
   proc = new KProcess();
   proc->setWorkingDirectory( workingDir );
+  for ( QStringList::ConstIterator it = env.begin(); it != env.end(); ++it )
+    proc->setEnvironment( (*it).section( '=', 0, 0 ), (*it).section( '=', 1, 1 ) );
   *proc << executable;
   *proc << args;
 

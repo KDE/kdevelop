@@ -35,6 +35,7 @@ public:
     const QString default_remove;
     const QString default_diff;
     const QString default_log;
+    const QString default_rsh;
 
 private slots:
     void contextMenu(QPopupMenu *popup, const Context *context);
@@ -49,6 +50,8 @@ private slots:
     void projectConfigWidget(KDialogBase *dlg);
 
 private:
+    QString cvs_rsh() const;
+
     QString popupfile;
     QGuardedPtr<CvsWidget> m_widget;
 };

@@ -37,7 +37,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcvs, CvsFactory( "kdevcvs" ) );
 
 CvsPart::CvsPart( QObject *parent, const char *name, const QStringList & ) : KDevPlugin( parent, name ? name : "CvsPart" ),
         default_cvs("-f"),default_commit(""),default_update("-dP"),default_add(""),
-default_remove("-f"),default_diff("-u3 -p"),default_log("") {
+default_remove("-f"),default_diff("-u3 -p"),default_log(""),default_rsh("") {
     setInstance(CvsFactory::instance());
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
@@ -83,6 +83,14 @@ void CvsPart::contextMenu(QPopupMenu *popup, const Context *context) {
     }
 }
 
+QString CvsPart::cvs_rsh() const
+{
+    QDomDocument &dom = *this->projectDom();
+    QString env = DomUtil::readEntry(dom,"/kdevcvs/rshoptions",default_rsh);
+    if ( !env.isEmpty() )
+      return QString("CVS_RSH=") + KShellProcess::quote(env);
+    return QString::null;
+}
 
 void CvsPart::slotCommit() {
     QString dir, name;
@@ -107,7 +115,9 @@ void CvsPart::slotCommit() {
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
-    command += " && cvs ";
+    command += " && ";
+    command += cvs_rsh(); // yes, it is already quoted
+    command += " cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " commit ";
     command += DomUtil::readEntry(dom,"/kdevcvs/commitoptions",default_commit);
@@ -136,7 +146,7 @@ void CvsPart::slotUpdate() {
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
-    command += " && cvs ";
+    command += " && " + cvs_rsh() + " cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " update ";
     command += DomUtil::readEntry(dom,"/kdevcvs/updateoptions",default_update);
@@ -157,7 +167,7 @@ void CvsPart::slotAdd() {
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
-    command += " && cvs ";
+    command += " && " + cvs_rsh() + " cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " add ";
     command += DomUtil::readEntry(dom,"/kdevcvs/addoptions",default_add);
@@ -178,7 +188,7 @@ void CvsPart::slotRemove() {
 
     QString command("cd ");
     command += KShellProcess::quote(dir);
-    command += " && cvs ";
+    command += " && " + cvs_rsh() + " cvs ";
     command += DomUtil::readEntry(dom,"/kdevcvs/cvsoptions",default_cvs);
     command += " remove ";
     command += DomUtil::readEntry(dom,"/kdevcvs/removeoptions",default_remove);
@@ -200,6 +210,7 @@ void CvsPart::slotDiff() {
     QString dir = fi.dirPath();
     QString name = fi.fileName();
     QStringList args;
+    QStringList env;
     QString str;
 
     QDomDocument &dom = *this->projectDom();
@@ -210,15 +221,19 @@ void CvsPart::slotDiff() {
 	QStringList list = QStringList::split(' ',str);
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) args << *it; 
     }
-    args << "diff"; // cannot use "-u3 -p" since it will clash with ~/.cvsrc
+    args << "diff";
     str = DomUtil::readEntry(dom,"/kdevcvs/diffoptions",default_diff);
     if (str.length()) {
 	QStringList list = QStringList::split(' ',str);
 	for(QStringList::Iterator it = list.begin(); it != list.end(); ++it) args << *it; 
     }
     args << name;
-    
-    ExecCommand* cmv = new ExecCommand( "cvs", args, dir, this );
+
+    QString crsh = DomUtil::readEntry(dom,"/kdevcvs/rshoptions",default_rsh);    
+    if ( !crsh.isEmpty() )
+      env << "CVS_RSH=" + crsh;
+
+    ExecCommand* cmv = new ExecCommand( "cvs", args, dir, env, this );
     connect( cmv, SIGNAL(finished( const QString&, const QString& )),
              this, SLOT(slotDiffFinished( const QString&, const QString& )) );
 }

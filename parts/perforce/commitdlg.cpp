@@ -94,7 +94,7 @@ void CommitDialog::setDepotFiles( const QStringList& lst )
         args << (*it);
     }
 
-    ExecCommand* cmd = new ExecCommand( "p4", args, QString::null, this );
+    ExecCommand* cmd = new ExecCommand( "p4", args, QString::null, QStringList(), this );
     connect( cmd, SIGNAL(finished( const QString&, const QString& )),
 	     this, SLOT(getFilesFinished( const QString&, const QString& )) );
 }
