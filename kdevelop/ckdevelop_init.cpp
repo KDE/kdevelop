@@ -618,8 +618,8 @@ void CKDevelop::initMenuBar(){
 	edit_menu->insertItem(SmallIconSet("indent"),i18n("In&dent"), this,SLOT(slotEditIndent()),0,ID_EDIT_INDENT);
 	edit_menu->insertItem(SmallIconSet("unindent"),i18n("Uninden&t"), this, SLOT(slotEditUnindent()),0,ID_EDIT_UNINDENT);
   edit_menu->insertSeparator();
-	edit_menu->insertItem(SmallIconSet("comment"),i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
-	edit_menu->insertItem(SmallIconSet("uncomment"),i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
+	edit_menu->insertItem(i18n("C&omment"), this,SLOT(slotEditComment()),0,ID_EDIT_COMMENT);
+	edit_menu->insertItem(i18n("Unco&mment"), this, SLOT(slotEditUncomment()),0,ID_EDIT_UNCOMMENT);
 
   edit_menu->insertSeparator();
   edit_menu->insertItem(i18n("&Insert File..."),this, SLOT(slotEditInsertFile()),0,ID_EDIT_INSERT_FILE);

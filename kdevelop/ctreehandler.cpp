@@ -284,7 +284,7 @@ void CTreeHandler::readIcons()
   icons[ THFOLDER ]           = new QPixmap( SmallIcon( "folder"));
   icons[ THFOLDER_OPEN ]      = new QPixmap( SmallIcon( "folder_open"));
   icons[ THCLASS ]            = new QPixmap( SmallIcon( "CVclass"));
-  icons[ THPROJECT ]          = new QPixmap( SmallIcon( "kwm"));
+  icons[ THPROJECT ]          = new QPixmap( SmallIcon( "folder"));
   icons[ THBOOK ]             = new QPixmap( SmallIcon( "mini-book1"));
   icons[ THBOOK_OPEN ]        = new QPixmap( SmallIcon( "mini-book2"));
   icons[ THDOC ]              = new QPixmap( SmallIcon( "mini-doc"));

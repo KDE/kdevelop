@@ -9,7 +9,7 @@ EXTRA_DIST = classwiz.png compfile.png debugger.png file_properties.png \
         tree_win.png \
         dbgbreak.png dbgmemview.png dbgnext.png \
         dbgnextinst.png dbgparam.png dbgrestart.png dbgrun.png dbgrunto.png dbgstep.png \
-        dbgstepinst.png dbgstepout.png dbgstop.png dbgvar.png dbgwatchvar.png \
+        dbgstepinst.png dbgstepout.png dbgstop.png dbgvar.png dbgwatchvar.png
 
 ####### kdevelop will overwrite this part!!! (end)############
 
