@@ -1237,7 +1237,7 @@ void CppCodeCompletion::completeText( bool invokedOnDemand /*= false*/ )
 			QValueList<KTextEditor::CompletionEntry>::Iterator it;
 			for ( it = entryList.begin(); it != entryList.end(); ++it )
 			{
-				if ( (*it).text.startsWith( word :) )
+				if ( (*it).text.startsWith( word ) )
 				{
 					trueMatches << (*it).text;
 
