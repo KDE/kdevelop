@@ -138,7 +138,6 @@ void DocTreeGlobalConfigWidget::storeConfig()
         }
     }
     DocTreeViewTool::setBookmarks(bookmarksTitle, bookmarksURL);
-
 }
 
 
@@ -212,8 +211,8 @@ void DocTreeGlobalConfigWidget::extEnable()
         DomUtil::writeListEntry(*m_part->projectDom(), "/kdevdoctreeview/ignoretocs", "toc", m_ignoreTocs );
         item->setText(1, "true");
     }
-
 }
+
 void DocTreeGlobalConfigWidget::extDisable()
 {
     //kdDebug(9002) << "disable" << endl;

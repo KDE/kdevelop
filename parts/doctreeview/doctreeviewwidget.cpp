@@ -22,7 +22,6 @@
 #include <qtooltip.h>
 #include <qlistview.h>
 
-#include <kaction.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
 #include <kcombobox.h>
@@ -811,29 +810,25 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
     : QVBox(0, "doc tree widget"), folder_qt( 0L ), folder_kdelibs( 0L ), m_activeTreeItem ( 0L )
 {
     /* initializing the documentation toolbar */
-    KActionCollection* actions = new KActionCollection(this);
-
     searchToolbar = new QHBox ( this, "search toolbar" );
     searchToolbar->setMargin ( 2 );
     searchToolbar->setSpacing ( 2 );
 
-    docConfigButton = new QToolButton ( searchToolbar, "configure button" );
-    docConfigButton->setPixmap ( SmallIcon ( "configure" ) );
-    docConfigButton->setEnabled ( false );
-    QToolTip::add ( docConfigButton, i18n ( "Customize the selected documentation tree..." ) );
-
     completionCombo = new KHistoryCombo ( true, searchToolbar, "completion combo box" );
-
+    
     startButton = new QToolButton ( searchToolbar, "start searching" );
+    startButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, ( QSizePolicy::SizeType)0, 0, 0, startButton->sizePolicy().hasHeightForWidth()) );
     startButton->setPixmap ( SmallIcon ( "key_enter" ) );
     QToolTip::add ( startButton, i18n ( "Start searching" ) );
 
     nextButton = new QToolButton ( searchToolbar, "next match button" );
+    nextButton->setSizePolicy ( QSizePolicy ( ( QSizePolicy::SizeType )0, ( QSizePolicy::SizeType) 0, 0, 0, nextButton->sizePolicy().hasHeightForWidth()) );
     nextButton->setPixmap ( SmallIcon ( "next" ) );
     QToolTip::add ( nextButton, i18n ( "Jump to next matching entry" ) );
     nextButton->setEnabled( false );
 
     prevButton = new QToolButton ( searchToolbar, "previous match button" );
+    prevButton->setSizePolicy ( QSizePolicy ( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, prevButton->sizePolicy().hasHeightForWidth()) );
     prevButton->setPixmap ( SmallIcon ( "previous" ) );
     QToolTip::add ( prevButton, i18n ( "Jump to last matching entry" ) );
     prevButton->setEnabled( false );
@@ -892,25 +887,21 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
             }
         }
     }
-	else
-	{
-		folder_qt = 0L;
-	}
+    else
+    {
+        folder_qt = 0L;
+    }
 
-	docConfigAction = new KAction(i18n("Customize..."), "configure", 0,
-		this, SLOT(slotConfigure()), actions, "documentation options");
-
-	connect ( docConfigButton, SIGNAL ( clicked() ), this, SLOT ( slotConfigure() ) );
-	connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
-	connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
-	connect ( startButton, SIGNAL ( clicked() ), this, SLOT ( slotStartSearching() ) );
-	connect ( completionCombo, SIGNAL ( returnPressed ( const QString& ) ), this, SLOT ( slotHistoryReturnPressed ( const QString& ) ) );
+    connect ( nextButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToNextMatch() ) );
+    connect ( prevButton, SIGNAL ( clicked() ), this, SLOT ( slotJumpToPrevMatch() ) );
+    connect ( startButton, SIGNAL ( clicked() ), this, SLOT ( slotStartSearching() ) );
+    connect ( completionCombo, SIGNAL ( returnPressed ( const QString& ) ), this, SLOT ( slotHistoryReturnPressed ( const QString& ) ) );
 
     connect( docView, SIGNAL(executed(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
     connect( docView, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
              this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
-	connect ( docView, SIGNAL ( selectionChanged ( QListViewItem* ) ), this, SLOT ( slotSelectionChanged ( QListViewItem* ) ) );
+    connect ( docView, SIGNAL ( selectionChanged ( QListViewItem* ) ), this, SLOT ( slotSelectionChanged ( QListViewItem* ) ) );
 
     m_part = part;
 }
@@ -1008,7 +999,6 @@ void DocTreeViewWidget::slotHistoryReturnPressed ( const QString& currentText )
 
 void DocTreeViewWidget::slotSelectionChanged ( QListViewItem* item )
 {
-	docConfigButton->setEnabled ( true );
 	contextItem = item;
 
 	if( !item->parent() )
@@ -1114,8 +1104,8 @@ void DocTreeViewWidget::slotConfigureProject()
       QVBox *vbox2 = dlg.addVBoxPage(i18n("Documentation Tree: Project"));
       w2 = new DocTreeProjectConfigWidget(this, vbox2, m_part->project(),"doctreeview project config widget");
       connect(&dlg, SIGNAL(okClicked()), w2, SLOT(accept()));
+      dlg.exec();
     }
-    dlg.exec();
     if(w2)
       delete w2;
 }
@@ -1162,6 +1152,11 @@ void DocTreeViewWidget::refresh()
 
 void DocTreeViewWidget::projectChanged(KDevProject *project)
 {
+    if(!project) {
+        kdDebug(9002) << "No Project...." << endl;
+        return;
+    }
+
     folder_project->setProject(project);
     folder_project->refresh();
 

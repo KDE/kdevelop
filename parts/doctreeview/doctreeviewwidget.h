@@ -34,7 +34,6 @@ class KDevProject;
 class CustomizeDialog;
 class QToolButton;
 class KListView;
-class KAction;
 class KHistoryCombo;
 
 
@@ -86,14 +85,11 @@ private:
 
     QHBox* searchToolbar;
 
-    QToolButton* docConfigButton;
     QToolButton* prevButton;
     QToolButton* nextButton;
     QToolButton* startButton;
     KHistoryCombo* completionCombo;
     
     DocTreeItem* m_activeTreeItem;
-    
-    KAction* docConfigAction;
 };
 #endif
