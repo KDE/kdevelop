@@ -1,231 +1,203 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
-<html>
-<head>
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-   <meta name="GENERATOR" content="Mozilla/4.5 [en] (X11; I; Linux 2.0.36 i586) [Netscape]">
-   <title>The KDevelop Handbook: Another Section</title>
-</head>
-<body text="#000000" bgcolor="#FFFFFF" link="#0000EF" vlink="#51188E" alink="#FF0000">
-<a href="index-3.html">Previous</a><a href="index-5.html">Next</a><a href="index.html#toc4">Table
-of Contents</a>
-<hr>
-<h2>
-<a NAME="s4"></a>4. Usage</h2>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<TITLE>The Complete User's Guide to the KDevelop IDE: Usage </TITLE>
+<META HTTP-EQUIV="content-type" CONTENT="text/html; charset=iso-8859-1">
+<META NAME="keywords" CONTENT="unix kde qt C++ ide development">
+<META NAME="description" CONTENT="KDevelop is an Integrated Development Environment for Unix systems">
+</HEAD>
+<BODY BGCOLOR="#ffffff" LINK="#aa0000" TEXT="#000000" > 
+<FONT FACE="Helvetica">
+<A HREF="http://www.kde.org/"><IMG SRC="logotp3.gif" BORDER="0" ALT="The K Desktop Environment"></A>
+<HR WIDTH="100%" SIZE=2 ALIGN="CENTER" NOSHADE>
 
-<blockquote>&nbsp;&nbsp;&nbsp; After you've followed section 3, <a href="index-3.html">Configuration,</a>
-<br>&nbsp;KDevelop is set up for development.&nbsp; It is sufficient to
-read the usage description to get most of the IDE's capabilities and to
-know how to use the most needed functions available for creating applications
-and extending them.
-<h2>
-<a NAME="ss4.1"></a>4.1&nbsp; General Usage</h2>
-&nbsp;&nbsp;&nbsp; In Picture 4.1 you see the KDevelop main view with all
-window elements enabled.&nbsp; Those are:
-<p><b>- Menubar:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-gives access to all functions available
-<p><b>- Standard toolbar:&nbsp;</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-invokes most needed functions for editing and development creation.
-<p><b>- Statusbar:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-displays the status of processes running as well as a quickhelp function
-for menuenties while those are highlighted.&nbsp; Also it shows the status
-of the insert / overwrite mode for the editor and the position of the cursor
-in the active editing window by line and column.
-<p><b>- Treeview:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-contains four tabulators for different treeview functions.&nbsp; Those
-are: CV for the classviewer; displaying the project (KTest), the project's
-classes (KTesApp) and class members (e.g. KTestApp()).&nbsp; LFV stands
-for "logical file viewer"; showing the project files in groups and giving
-easier access to files by grouptype.&nbsp; The RFV ("real file viewer")
-shows the project directory tree as it is in the system's directory tree.&nbsp;
-The most right tabulator, DOC, gives access to the documentation tree,
-making documentations available for the Documentation-Browser window.
-<p>-<b> Editview:&nbsp;</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-displays the working windows for development. Sourcefiles will be opened
-in the "C/C++ Files" window, all other project-related files including
-the headerfiles are connected to the "Header/Resource Files" window.&nbsp;
-The Documentation-Browser window is intended to show this manual, tutorials,
-library documentation and an index entries page after a search. Finally,
-the "Tools" window allows embedding third-party programs like KDbg, KIconeditor
-and KTranslator.
-<p><b>- Outputview:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-contains three windows for cormpiler output,
-<br>&nbsp;
-<br>&nbsp;
-<br>&nbsp;</blockquote>
+ 
+<P ALIGN="RIGHT">
 
-<br>&nbsp;
-<h2>
-<a NAME="ss4.2"></a>4.2&nbsp; Keyboard Shortcuts</h2>
-All keyboard shortcuts can be configured in the keybindings dialog which
-is located in the KDevelop Setup, accessed by the options menu.&nbsp;&nbsp;
-Note that standard key accelerators for e.g.&nbsp; "New" or "Print" are
-configured by the KDE-Controll-Center, Configure Standard Keys.&nbsp;&nbsp;
-The "Default" button will reset all changes and individual keybinding configuration
-to the default settings.
-<br>&nbsp;
-<h2>
-<a NAME="ss4.3"></a>4.3&nbsp; New projects with KAppWizard</h2>
-&nbsp;
-<p>&nbsp;
-<p>The KDevelop Application Wizard allows the creation of four different
-types of projects, constructing a framework for each.&nbsp; All projects
-are FSF-compliant and use the GNU standard development tools as described
-in the requirements section of this handbook.
-<p>For KDE applications, the wizard offers two different frameworks, the
-KDE-Application, providing a complete application with base classes for
-document type, view and application. This includes the creation of a menubar,
-toolbar and statusbar, the mainwindow inherits theKTMainWindow class.
-<br>The KDE-Mini-Application only gives a view which is empty. This type
-of project can be used for the creation of small desktop tools or other
-simple applications without too much change on the existing code provided
-by the framework.
-<p>A Qt-Application offers the creation of a Qt-only program if you wish
-no dependencies towards the KDE-libraries for end-users. (NOTE: The configure
-script still checks for the KDE-libraries.&nbsp; This will be fixed in
-the next version of KDevelop) .&nbsp;&nbsp; The Qt-Application also is
-created by using tree base classes like the KDE-standard-Application and
-provides a menubar, toolbar and statusbar.
-<p>The C++ -Application type offers a framework for creating commandline
-applications.&nbsp; It is ready to run and by default displays "Hello World"
-as the only action.&nbsp; This may be useful for C++ learners who would
-like to program applications without using a GUI first or for those working
-on commandline programs written in C++ or C.
-<p>The wizard asks for your project name, version and the location where
-the project directory will be build.&nbsp; Furher, your Name and Email
-adress are asked for inserting them in header and cpp templates on top
-of your source files as well as for entries in the *.lsm file.
-<br>&nbsp;
-<br>&nbsp;
-<h2>
-<a NAME="ss4.4"></a>4.4&nbsp; Porting existing projects to KDevelop</h2>
-Existing projects can be converted to KDevelop projects by selecting "New"
-from the project menu.&nbsp; The following dialog creates an empty project
-file with your project name, version and type information as well as your
-name and email adress.&nbsp; Then copy all your compilation and construction
-files to the new project directory and choose "Add Files" from the project
-menu.&nbsp; The files selected will be copied into your project directory
-and the makefile.am's are updated.&nbsp;&nbsp; Please change all Makefile.am
-entries existing before the conversion towards the now created entries
-done by KDevelop in the KDevelop area.&nbsp; Test, if your program can
-still be compiled and installed after the conversion to ensure the project's
-consistancy.
-<h2>
-<a NAME="ss4.5"></a>4.5&nbsp; Compiler options and compiling projects</h2>
-The Project Options dialog , accessed by the project menu, lets you specify
-all needed parameters for your project. Those will be updated in the makefile.am's
-and the configure.in script (e.g. version number change or compiler warnings
-).&nbsp; After changing the project options, you should invoke "make clean"
-or "rebuild all" to compile your project with the new options.&nbsp; Please
-mind that debugging is only available if the project options are set to
-create debugging information, the amount can be set with the debug level
-(0-3).&nbsp;&nbsp; If you add functions that belong to a library that is
-not included in the linker flags, your program will not link correctly
-if those are not updated, so keep track of your library linking.
-<h2>
-<a NAME="ss4.6"></a>4.6&nbsp; The Output window</h2>
-The output window has three different sub-tabs, which is "Messages" displaying
-the compiler output.&nbsp; If errors occur, you can click on the message
-and KDevelop will open the according file and place the cursor to the line
-the error occured.
-<br>"Stdin/Stdout" allows interaction with command-line programs, their
-output is shown there as well as the input prompts.&nbsp; For running command-line
-programs, this view will be opened automatically.
-<br>"Stderr" shows all error messages that your program gives out, e.g.
-for cerr &lt;&lt; (message)&nbsp; calls.
-<h2>
-<a NAME="ss4.7"></a>4.7&nbsp; The Classviewer and Fileviewers</h2>
-The classviewer shows the classes of your project under the project item
-as well as structs.&nbsp; Opening the tree will show all member functions
-and members with symbols for private, protected and public, so you can
-see the accessiblility of the member visually without switching to the
-header file.&nbsp; Selecting the class name will open the according headerfile
-containing the class and set the cursor to the class declaration beginning.
-<br>Selecting member functions will open the implementation file and place
-the cursor at the function header.&nbsp;&nbsp; For elements, KDevelop will
-look for the header file and place the cursor at the line the element is
-declarated.
-<br>Mind that inline-functions are not supported by the classviewer.
-<p>The Logical File Viewer (LFV) allows specifying filegroups to which
-files can be filtered, e.g.&nbsp; a folder "pixmaps" or "headers".&nbsp;
-Individual groups can be added by the properties entry of the project menu
-or by a right click on the tree items.&nbsp; Selecting a file will open
-it in the editing window, which is important e.g. to access the main()
-function as it isn't a class and so not displayed in the classviewer.&nbsp;&nbsp;
-Pixmaps will be opened automatically in the Tools-view by KIconedit if
-it is installed.&nbsp;&nbsp;&nbsp; The right button menu of the LFV allows
-configuring the file tree as well as adding, deleting or removing files
-from the project.&nbsp; The project file and the Makefile.am's are updated
-automatically in that case.
-<h2>
-<a NAME="ss4.8"></a>4.8&nbsp; Using the Documentation Browser</h2>
-The documentation browser allows quick and easy access to all manuals and
-documentations, including a search utility that is also present in the
-editors.
-<p>Accessing Help functionality:
-<p>-in the editor, select the text you want to have help on or place the
-cursor in the word that you want to look for.&nbsp; Then press the right
-mouse button and select look up: &lt;expression> .This can also be done
-by selectin "Search Marked Text" from the help menu, the shorcut key F3
-or by selecting the Search icon from the toolbar.
-<p>-in the Documentation browser select the text you want to look up and
-press the right mouse button, select look up:&lt;expression> or select
+<A HREF="index-5.html">Next</A>
+<A HREF="index-3.html">Previous</A>
+<A HREF="index.html#toc4">Table of Contents</A>
+</P>
+<H3><A NAME="s4">4. Usage </A></H3>
+
+<P>After you've followed section 3, Configuration, KDevelop is set up for development.  It is sufficient to read the usage description
+to get most of the IDE's capabilities and to know how to use the most needed functions available for creating applications and extending them.
+<P>
+<H3><A NAME="ss4.1">4.1 General Usage</A>
+</H3>
+
+<P>In Picture 4.1 you see the KDevelop main view with all window elements enabled.  Those are:
+<P>- Menubar:                                                   gives access to all functions available
+<P>- Standard toolbar:                  invokes most needed functions for editing and development creation.
+<P>- Statusbar:                 displays the status of processes running as well as a quickhelp function for menuenties while those are highlighted.
+Also it shows the status of the insert / overwrite mode for the editor and the position of the cursor in the active editing window by line and column.
+<P>- Treeview:                  contains four tabulators for different treeview functions.  Those are: CV for the classviewer; displaying the project (KTest),
+the project's classes (KTesApp) and class members (e.g. KTestApp()).  LFV stands for "logical file viewer"; showing the project files in groups and
+giving easier access to files by grouptype.  The RFV ("real file viewer") shows the project directory tree as it is in the system's directory tree.
+The most right tabulator, DOC, gives access to the documentation tree, making documentations available for the Documentation-Browser window.
+<P>- Editview:                  displays the working windows for development. Sourcefiles will be opened in the "C/C++ Files" window, all other project-related
+files including the headerfiles are connected to the "Header/Resource Files" window.  The Documentation-Browser window is intended to show this manual,
+tutorials, library documentation and an index entries page after a search. Finally, the "Tools" window allows embedding third-party programs like KDbg,
+KIconeditor and KTranslator.
+<P>- Outputview:                contains three windows for cormpiler output,
+<H3><A NAME="ss4.2">4.2 The Menubar</A>
+</H3>
+
+<P>
+<H3><A NAME="ss4.3">4.3 The Standard Toolbar</A>
+</H3>
+
+<P>
+<H3><A NAME="ss4.4">4.4 The Browser Toolbar</A>
+</H3>
+
+<P>
+<H3><A NAME="ss4.5">4.5 The Statusbar</A>
+</H3>
+
+<P>
+<H3><A NAME="ss4.6">4.6 Keyboard Shortcuts</A>
+</H3>
+
+<P>All keyboard shortcuts can be configured in the keybindings dialog which is located in the KDevelop Setup, accessed by the options menu.
+Note that standard key accelerators for e.g.  "New" or "Print" are configured by the KDE-Controll-Center, Configure Standard Keys.
+The "Default" button will reset all changes and individual keybinding configuration to the default settings.
+<P>
+<H3><A NAME="ss4.7">4.7 New Projects with KAppWizard</A>
+</H3>
+
+<P>
+<P>The KDevelop Application Wizard allows the creation of four different types of projects, constructing a framework for each.
+All projects are FSF-compliant and use the GNU standard development tools as described in the requirements section of this handbook.
+<P>For KDE applications, the wizard offers two different frameworks, the KDE-Application, providing a complete application with base classes
+for document type, view and application. This includes the creation of a menubar, toolbar and statusbar, the mainwindow inherits the
+KTMainWindow class. The KDE-Mini-Application only gives a view which is empty. This type of project can be used for the creation of small
+desktop tools or other simple applications without too much change on the existing code provided by the framework.
+<P>A Qt-Application offers the creation of a Qt-only program if you wish no dependencies towards the KDE-libraries for end-users.
+(NOTE: The configure script still checks for the KDE-libraries.  This will be fixed in the next version of KDevelop).   
+The Qt-Application also is created by using tree base classes like the KDE-standard-Application and provides a menubar, toolbar and statusbar.
+<P>The C++ -Application type offers a framework for creating commandline applications.  It is ready to run and by default displays
+"Hello World" as the only action.  This may be useful for C++ learners who would like to program applications without using a GUI
+first or for those working on commandline programs written in C++ or C.
+<P>The wizard asks for your project name, version and the location where the project directory will be build.  Furher, your Name
+and Email adress are asked for inserting them in header and cpp templates on top of your source files as well as for entries in the *.lsm file.
+<P>
+<H3><A NAME="ss4.8">4.8 Porting existing projects</A>
+</H3>
+
+<P>
+<P>Existing projects can be converted to KDevelop projects by selecting "New" from the project menu.  The following dialog creates an
+empty project file with your project name, version and type information as well as your name and email adress.  Then copy all your
+compilation and construction files to the new project directory and choose "Add Files" from the project menu.  The files selected
+will be copied into your project directory and the makefile.am's are updated.   Please change all Makefile.am entries existing before
+the conversion towards the now created entries done by KDevelop in the KDevelop area.  Test, if your program can still be compiled and
+installed after the conversion to ensure the project's consistancy.
+<P>
+<H3><A NAME="ss4.9">4.9 Compiler and Linker Options</A>
+</H3>
+
+<P>
+<P>The Project Options dialog , accessed by the project menu, lets you specify all needed parameters for your project. Those will be
+updated in the makefile.am's and the configure.in script (e.g. version number change or compiler warnings ).  After changing the
+project options, you should invoke "make clean" or "rebuild all" to compile your project with the new options.  Please mind that
+debugging is only available if the project options are set to create debugging information, the amount can be set with the debug level (0-3).
+If you add functions that belong to a library that is not included in the linker flags, your program will not link correctly if those are not
+updated, so keep track of your library linking.
+<P>
+<P>
+<H3><A NAME="ss4.10">4.10 The Output Window</A>
+</H3>
+
+<P>The output window has three different sub-tabs, which is "Messages" displaying the compiler output.  If errors occur, you can click
+on the message and KDevelop will open the according file and place the cursor to the line the error occured. "Stdin/Stdout" allows
+interaction with command-line programs, their output is shown there as well as the input prompts.  For running command-line programs,
+this view will be opened automatically. "Stderr" shows all error messages that your program gives out, e.g. for cerr &lt;&lt; (message)  calls.
+<P>
+<H3><A NAME="ss4.11">4.11 The Classviewer and Fileviewers</A>
+</H3>
+
+<P>The classviewer shows the classes of your project under the project item as well as structs.  Opening the tree will show all member
+functions and members with symbols for private, protected and public, so you can see the accessiblility of the member visually without
+switching to the header file.  Selecting the class name will open the according headerfile containing the class and set the cursor to
+the class declaration beginning. Selecting member functions will open the implementation file and place the cursor at the function header.      
+For elements, KDevelop will look for the header file and place the cursor at the line the element is declarated.        Mind that inline-functions
+are not supported by the classviewer.
+<P>The Logical File Viewer (LFV) allows specifying filegroups to which files can be filtered, e.g.  a folder "pixmaps" or "headers".
+Individual groups can be added by the properties entry of the project menu or by a right click on the tree items.  Selecting a file
+will open it in the editing window, which is important e.g. to access the main() function as it isn't a class and so not displayed
+in the classviewer.   Pixmaps will be opened automatically in the Tools-view by KIconedit if it is installed.    The right button menu
+of the LFV allows configuring the file tree as well as adding, deleting or removing files from the project.  The project file and the
+Makefile.am's are updated automatically in that case.
+<P>
+<H3><A NAME="ss4.12">4.12 Using the Documentation Browser</A>
+</H3>
+
+<P>
+<P>The documentation browser allows quick and easy access to all manuals and documentations, including a search utility that is also
+present in the editors.
+<P>Accessing Help functionality:
+<P>-in the editor, select the text you want to have help on or place the cursor in the word that you want to look for.  Then press the right
+mouse button and select look up: "expression" .This can also be done by selectin "Search Marked Text" from the help menu, the shorcut key
+F3 or by selecting the Search icon from the toolbar.
+<P>-in the Documentation browser select the text you want to look up and press the right mouse button, select look up:"expression" or select
 "Search Marked Text" or the search icon as above.
-<p>-if you want to search for a specific keyword, select "Search for Help
-on..." in the help menu or select the "Search for Help on..." icon from
-the toolbar, opening a search dialog where you can enter the expression
-you search for.
-<p>Direct access to specific documentation is given by selecting the according
-icon in the "DOC" -tree-view or by the help menu entries.
-<h2>
-<a NAME="ss4.9"></a>4.9&nbsp; Creating a new class with the Class Generator</h2>
-New classes can be added to your project by selecting "New Class" from
-the project menu.&nbsp; The following dialog lets you enter all information
-needed to construct a new class.&nbsp; First, you should enter the classname
-which will also preset the filenames for the header and implementation
-files.&nbsp; The Baseclass is the class the new class will inherit.&nbsp;
-For Qt or KDE classes requiring QWidget as a baseclass, you can also check
-the QWidget option.&nbsp; Further the inheritance from the baseclass can
-be selected by public, protected and private.
-<br>The "Documentation" field offers a place for a short description for
-your class; this will be inserted into the header file for documentation
-purposes and is placed there for KDoc to read.
-<br>The affected Makefile.am will be updated with the new files created
-and you can rebuild your project now containing your new class.
-<h2>
-<a NAME="ss4.10"></a>4.10 Adding new or existing files</h2>
-Adding a new file is often used when you think that you should separate
-your class implementation file into several ones.&nbsp; Then you need to
-create an new file which will get the part of the class implementation
-you want to move.&nbsp; You can specify which type the new file will be,
-including a template for pixmap files often needed to create new toolbar
-icons.&nbsp;&nbsp; The new file will be added to the project and all affected
-project files like Makefile.am etc will be updated.
-<h2>
-<a NAME="ss4.11"></a>4.11 File Properties</h2>
-The file properties dialog can be accessed via the project menu or within
-the LFV by a right mouseclick.&nbsp; It shows the project files in groups
-as they are sorted in the LFV and displays the file properties like file
-size, file type and if the file is included in the project as well as the
-installation path if the file is going to be installed by the end-user's
-make install command.&nbsp; It is important for documentation files as
-well as pixmaps to specify the location where the files should go when
-the project is build and installed by end users, so you have to set up
-those locations.&nbsp;&nbsp; For standard KDE location macros you should
-look in your Makefile.am where the location macros are specified.
-<h2>
-<a NAME="ss4.12"></a>4.12&nbsp; Accessable Tools</h2>
-The tools-menu allows direct access to external tools.&nbsp; Those are
-KDbg, KIconedit and KTranslator.&nbsp; If a tool is started, it will be
-working in the "Tools" window and is closed automatically when you leave
-KDevelop.
-<br>Another way of starting KDbg is that you choose "Debug" from the "Build"
-menu or the debug icon from the toolbar, starting KDbg with the project
-binary.&nbsp; If the binary does not exist, you have to create it first
-with invoking make or rebuild all.
-<p>KIconedit can also be started by a click on the pixmap file in the LFV
-you want to edit, loading the pixmap automatically.
-<p>
-<hr><a href="index-3.html">Previous</a> <a href="index-5.html">Next</a><a href="index.html#toc4">Table
-of Contents</a>
-</body>
-</html>
+<P>-if you want to search for a specific keyword, select "Search for Help on..." in the help menu or select the "Search for Help on..."
+icon from the toolbar, opening a search dialog where you can enter the expression you search for.
+<P>Direct access to specific documentation is given by selecting the according icon in the "DOC" -tree-view or by the help menu entries.
+<P>
+<H3><A NAME="ss4.13">4.13 Creating a new class with the Classgenerator</A>
+</H3>
+
+<P>
+<P>New classes can be added to your project by selecting "New Class" from the project menu.  The following dialog lets you enter all
+information needed to construct a new class.  First, you should enter the classname which will also preset the filenames for the header
+and implementation files.  The Baseclass is the class the new class will inherit.  For Qt or KDE classes requiring QWidget as a baseclass,
+you can also check the QWidget option.  Further the inheritance from the baseclass can be selected by public, protected and private.
+The "Documentation" field offers a place for a short description for your class; this will be inserted into the header file for documentation
+purposes and is placed there for KDoc to read. The affected Makefile.am will be updated with the new files created and you can rebuild your
+project now containing your new class.
+<P>
+<H3><A NAME="ss4.14">4.14 Adding new or existing files</A>
+</H3>
+
+<P>
+<P>Adding a new file is often used when you think that you should separate your class implementation file into several ones.
+Then you need to create an new file which will get the part of the class implementation you want to move.  You can specify which
+type the new file will be, including a template for pixmap files often needed to create new toolbar icons.   The new file will be
+added to the project and all affected project files like Makefile.am etc will be updated.
+<P>
+<H3><A NAME="ss4.15">4.15 File Properties</A>
+</H3>
+
+<P>The file properties dialog can be accessed via the project menu or within the LFV by a right mouseclick.  It shows the project files
+in groups as they are sorted in the LFV and displays the file properties like file size, file type and if the file is included in the
+project as well as the installation path if the file is going to be installed by the end-user's make install command.  It is important
+for documentation files as well as pixmaps to specify the location where the files should go when the project is build and installed by
+end users, so you have to set up those locations.   For standard KDE location macros you should look in your Makefile.am where the
+location macros are specified.
+<P>
+<H3><A NAME="ss4.16">4.16 Acsessable Tools</A>
+</H3>
+
+<P>
+<P>The tools-menu allows direct access to external tools.  Those are KDbg, KIconedit and KTranslator.  If a tool is started, it will be
+working in the "Tools" window and is closed automatically when you leave KDevelop. Another way of starting KDbg is that you choose
+"Debug" from the "Build" menu or the debug icon from the toolbar, starting KDbg with the project binary.  If the binary does not exist,
+you have to create it first with invoking make or rebuild all.
+<P>KIconedit can also be started by a click on the pixmap file in the LFV you want to edit, loading the pixmap automatically.
+<P>
+<P>
+<P ALIGN="RIGHT">
+
+<A HREF="index-5.html">Next</A>
+<A HREF="index-3.html">Previous</A>
+<A HREF="index.html#toc4">Table of Contents</A>
+</P>
+<CENTER>
+<HR WIDTH="100%" SIZE=3 ALIGN=CENTER NOSHADE>
+</CENTER>    
+</FONT>
+
+ 
+</BODY>
+</HTML>

@@ -758,9 +758,10 @@ void CKDevelop::slotBuildAPI(){
   messages_widget->clear();
   config->setGroup("Doc_Location");
   QString doc_kde=config->readEntry("doc_kde");
-  QString ref_file=doc_kde+"kdoc-reference/qt.kdoc";
+  QString qt_ref_file=doc_kde+"kdoc-reference/qt.kdoc";
+  QString kde_ref_file=doc_kde+"kdoc-reference/kdecore.kdoc";
 
-  if(doc_kde.isEmpty() || !QFileInfo(ref_file).exists()){
+  if(doc_kde.isEmpty() || !QFileInfo(kde_ref_file).exists()){
     KMsgBox::message(this,i18n("Warning"),i18n("The KDE-library documentation is not installed.\n"
                                                 "Please update your documentation with the options\n"
                                                 "given in the KDevelop Setup dialog, Documentation tab.\n\n"
@@ -771,8 +772,20 @@ void CKDevelop::slotBuildAPI(){
     shell_process.clearArguments();
     shell_process << "kdoc";
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
-    shell_process << prj->getProjectName();
+    shell_process << "-n"+prj->getProjectName();
     shell_process << "*.h";
+    shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
+  }
+  else if(!QFileInfo(qt_ref_file).exists()){
+    QDir::setCurrent(prj->getProjectDir() + prj->getSubDir());
+    shell_process.clearArguments();
+    shell_process << "kdoc";
+    shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
+    shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
+    shell_process << "-L" + doc_kde + "kdoc-reference";
+    shell_process << "-n"+prj->getProjectName();
+    shell_process << "*.h";
+    shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
     shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
   else{
@@ -782,17 +795,24 @@ void CKDevelop::slotBuildAPI(){
     shell_process << "-p -d" + prj->getProjectDir() + prj->getSubDir() +  "api";
     shell_process << "-ufile:" + prj->getProjectDir() + prj->getSubDir() +  "api"+"/";
     shell_process << "-L" + doc_kde + "kdoc-reference";
-    shell_process << prj->getProjectName();
+    shell_process << "-n"+prj->getProjectName();
     shell_process << "*.h";
-    shell_process << "-lqt -lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
+    shell_process << "-lkdecore -lkdeui -lkfile -lkfmlib -lkhtmlw -ljscript -lkab -lkspell";
     shell_process.start(KShellProcess::NotifyOnExit,KShellProcess::AllOutput);
   }
 }
 
 void CKDevelop::slotBuildManual(){
+	bool ksgml=true;
   if(!CToolClass::searchProgram("sgml2html")){
     return;
   }
+  if(!CToolClass::searchProgram("ksgml2html")){
+		ksgml=false;
+		KMsgBox::message(this,i18n("The program ksgml2html wasn't found, therefore your documentation won't have
+		the usual KDE logo and look. The manual will be build using sgml2html."));
+  }
+
   showOutputView(true);
   error_parser->toogleOff();
   setToolMenuProcess(false);
@@ -800,11 +820,19 @@ void CKDevelop::slotBuildManual(){
   slotStatusMsg(i18n("Creating project Manual..."));
   messages_widget->clear();
   QDir::setCurrent(prj->getProjectDir() + prj->getSubDir() + "/docs/en/");
-  process.clearArguments();
-  process << "sgml2html";
-  process << prj->getSGMLFile();
-  process.start(KProcess::NotifyOnExit,KProcess::AllOutput); 
-
+	if(ksgml==false){
+	  process.clearArguments();
+		process << "sgml2html";
+  	process << prj->getSGMLFile();
+  	process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	}
+	else{
+	  process.clearArguments();
+		process << "ksgml2html";
+  	process << prj->getSGMLFile();
+  	process << "en";
+  	process.start(KProcess::NotifyOnExit,KProcess::AllOutput);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -1,3 +1,11 @@
+1999-04-14  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
+	* changed build user manual to use ksglm2html if present, otherwise sgml2html is used
+	* changed build API-doc to use kdoc2
+	
+1999-04-13  Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>	
+	* started tutorial and wrote all documentation into the sgml file
+	* changed the documentation update to use kdoc2 commandline options
+	
 1999-04-13 Jonas Nordin <jonas.nordin@cenacle.se>
 	* fixed parsing problem(preprocessor commands not ending with \n).
 	* added delete icons to the popupmenus in the treeviews.
