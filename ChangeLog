@@ -1,3 +1,8 @@
+2K-02-07 Falk Brettschneider <gigafalk@yahoo.com>
+	* Switch: ´Toplevel mode´ <--> ´Childframe mode´ possible now 
+	  (first version)
+	* QextMdiMainFrm improved
+
 2000-02-05 Sandy Meier <smeier@rz.uni-potsdam.de>
 	* removed kdlgedit and kswallowwidget
 	* finished framework for new dlgedit
