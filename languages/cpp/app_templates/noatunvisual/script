@@ -10,7 +10,7 @@ installGNU();
 installDocbook();
 
 print "Installing project file\n";
-installHTML( "${src}/template-noatunvisual/plugin.kdevelop",        "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-noatunvisual/plugin.kdevelop",        "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );

@@ -9,7 +9,7 @@ installIncAdmin();
 installGNU();
 
 print "Installing project file\n";
-installHTML( "${src}/template-chello/app.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-chello/app.kdevelop",    "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );

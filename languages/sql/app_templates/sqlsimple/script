@@ -5,7 +5,7 @@ use kdevelop;
 initKDevelop();
 
 print "Installing project file\n";
-installHTML( "${src}/template-sqlsimple/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-sqlsimple/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application sources\n";
 install( "${src}/template-sqlsimple/app.sql",       "${dest}/${APPNAMELC}.sql" );

@@ -430,7 +430,7 @@ void AppWizardDialog::accept()
     m_cmdline = "perl ";
     m_cmdline += script;
     m_cmdline += " --author=";
-    m_cmdline += KShellProcess::quote(author_edit->text());
+    m_cmdline += KShellProcess::quote(QString::fromLocal8Bit(author_edit->text().utf8()));
     m_cmdline += " --email=";
     m_cmdline +=  KShellProcess::quote(email_edit->text());
     m_cmdline += " --version=";

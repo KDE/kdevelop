@@ -6,7 +6,7 @@ initKDevelop();
 installLicense();
 
 print "Installing project file\n";
-installHTML( "${src}/template-kpartapp/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-kpartapp/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application sources\n";
 install( "${src}/template-kdevpart/src-Makefile.am", "${dest}/Makefile.am" );

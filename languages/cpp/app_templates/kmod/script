@@ -8,7 +8,7 @@ installLicense();
 installGNU();
 
 print "Installing project file\n";
-installHTML( "${src}/template-kmod/kmod.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-kmod/kmod.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
 install( "${src}/template-kmod/src-Makefile",  "${dest}/Makefile" );

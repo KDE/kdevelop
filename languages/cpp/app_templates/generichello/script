@@ -8,11 +8,11 @@ installLicense();
 installGNU();
 
 print "Installing project file\n";
-installHTML( "${src}/template-cppgenerichello/app.kdevelop",     "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-cppgenerichello/app.kdevelop",     "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application framework\n";
 mkdir( "${dest}/src", 0777 );
-installHTML( "${src}/template-cppgenerichello/app.prj",         "${dest}/${APPNAMELC}.prj" );
+install( "${src}/template-cppgenerichello/app.prj",         "${dest}/${APPNAMELC}.prj" );
 
 
 print "Installing application sources\n";

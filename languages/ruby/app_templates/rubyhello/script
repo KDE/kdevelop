@@ -5,7 +5,7 @@ use kdevelop;
 initKDevelop();
 
 print "Installing project file\n";
-installHTML( "${src}/template-rubyhello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-rubyhello/app.kdevelop", "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application sources\n";
 install( "${src}/template-rubyhello/app.rb",       "${dest}/${APPNAMELC}.rb" );

@@ -11,7 +11,7 @@ installDocbook();
 
 print "Installing project file\n";
 # install the kdevelop project file
-installHTML( "${src}/template-khello/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
+install( "${src}/template-khello/app.kdevelop",      "${dest}/${APPNAMELC}.kdevelop" );
 
 print "Installing application\n";
 # set permissions
