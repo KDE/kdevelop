@@ -1,3 +1,7 @@
+2001-11-03  jbb <jbb@kdevelop.org>
+    * bugfix: kde3: docBrowser wouldn't show url when clicking on the url
+              in the browser window.
+
 2001-11-02  Walter Tasin <tasin@kdevelop.org>
     * solving the autoconf problem
       now c/c++ templates are tested with new autoconf 2.52 version
