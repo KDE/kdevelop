@@ -1,5 +1,6 @@
 #include <klineedit.h>
 #include <qlistview.h>
+#include <kcompletionbox.h>
 
 #include "kcomboview.h"
 
@@ -11,6 +12,7 @@ KComboView::KComboView( bool rw, QWidget* parent, const char* name )
         KLineEdit *ed = new KLineEdit(this, "combo edit");
         ed->setCompletionMode(KGlobalSettings::CompletionPopup);
         ed->setCompletionObject(&m_comp);
+        ed->completionBox()->setAutoBottomScrollBar(true);
         setLineEdit(ed);
     }
 }
