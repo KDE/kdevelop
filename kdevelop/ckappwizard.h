@@ -65,6 +65,10 @@
 
 class CKAppWizard : public KWizard {
   Q_OBJECT
+
+protected:
+  void removeSources(const QString &);
+
 public:
   CKAppWizard(QWidget* parent=0,const char* name=0,QString author_name="",QString author_email="");
   ~CKAppWizard();
