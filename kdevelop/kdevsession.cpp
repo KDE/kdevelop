@@ -455,6 +455,7 @@ void KDevSession::loadViewGeometry( QWidget* pView, QDomElement viewEl)
 bool KDevSession::restoreFromFile(const QString& sessionFileName)
 {
 //  QDomDocument pInFile( "KDevPrjSession");
+  bool bFileOpenOK = true;
 
   // Write it out to a tmp file
   QFile f(sessionFileName);
@@ -465,8 +466,12 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
       KMessageBox::sorry(0L,
                          i18n("The file %1 does not contain valid XML.\n"
                          "The loading of the session failed.").arg(sessionFileName));
+      initXMLTree(); // because it was now broken after failed setContent()
       return false;
-    }                  
+    }
+  }
+  else {
+    bFileOpenOK = false;
   }
 
   // Check for proper document type.
@@ -480,7 +485,9 @@ bool KDevSession::restoreFromFile(const QString& sessionFileName)
   QDomElement session = domdoc.documentElement();
 
   // read the information about the mainframe widget
-        recreateDocs(session);
+  if (bFileOpenOK) {
+    recreateDocs(session);
+  }
   return true;
 }
 //------------------------------------------------------------------------------
