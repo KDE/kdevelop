@@ -125,6 +125,7 @@ class ConfigList : public ConfigOption
       t << "\n";
     }
     void substEnvVars();
+    void init() { m_value.clear(); }
   private:
     QStrList m_value;
     WidgetType m_widgetType;
@@ -281,6 +282,7 @@ class ConfigBool : public ConfigOption
     bool *valueRef() { return &m_value; }
     void convertStrToVal();
     void substEnvVars();
+    void setValueString(const QCString &v) { m_valueString = v; };
     void writeTemplate(QTextStream &t,bool sl,bool upd)
     {
       if (!sl)

@@ -1,6 +1,7 @@
 2002-06-23 Matthias Hölzer-Klüpfel <mhk@kde.org>
 
 	* Made doxygen config widget "human readable"
+	* Preset doxygen configuration so it works out of the box
 
 2002-06-23  Bernd Gehrmann  <bernd@mail.berlios.de>
 

@@ -1,3 +1,7 @@
 Note: In order to update to a newer doxygen version, copy over the files
 config.* from the addon/doxywizard directory in the doxygen sources. 
+
+Note: The ConfigList class was missing an "init" implementation, so maybe
+you have to add it again when importing newer doxygen sources.
+
 Everything else we can customize for our look & feel.

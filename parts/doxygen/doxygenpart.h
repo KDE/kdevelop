@@ -32,6 +32,9 @@ private slots:
     void slotDoxygen();
     
 private:
+
+    void adjustDoxyfile();
+
     DoxygenDialog *m_dialog;
 };
 

@@ -16,6 +16,8 @@
 #include <qscrollview.h>
 #include <qvbox.h>
 #include <qwhatsthis.h>
+#include <qtextstream.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -228,16 +230,10 @@ void DoxygenConfigWidget::loadFile()
     Config::instance()->init();
 
     QFile f(m_fileName);
-    if (!f.open(IO_ReadOnly)) {
-      // I think it confuse the user,if this message pop up on Project->options
-      //KMessageBox::information(0, i18n("Doxyfile does not exist. Starting with default values."));
-    } else {
-        int fsize = f.size();
-        QCString contents(fsize+1);
-        f.readBlock(contents.data(),fsize);
-        contents[fsize]='\0';
-        
-        Config::instance()->parse(contents, m_fileName.latin1());
+    if (f.open(IO_ReadOnly)) {
+        QTextStream is(&f);
+	
+        Config::instance()->parse(is.read().latin1(), QFile::encodeName(m_fileName));
         Config::instance()->convertStrToVal();
 
         f.close();
