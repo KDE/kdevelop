@@ -146,7 +146,7 @@ class KWActionGroup {
     KWAction *action;
 };
 
-class KWriteDoc : QObject {
+class KWriteDoc : public QObject {
     Q_OBJECT
     friend KWriteView;
     friend KWrite;
@@ -174,6 +174,11 @@ class KWriteDoc : QObject {
 
 		int getTextLineCount() { return contents.count(); }
 
+    void loadFile(QIODevice &);
+    void writeFile(QIODevice &);
+    void updateViews(KWriteView *exclude = 0L);
+    QString fileName();
+
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);
 //  }
@@ -185,8 +190,8 @@ class KWriteDoc : QObject {
 
     void insert(KWriteView *, VConfig &, const char *);
     void insertFile(KWriteView *, VConfig &, QIODevice &);
-    void loadFile(QIODevice &);
-    void writeFile(QIODevice &);
+//public now    void loadFile(QIODevice &);
+//public now    void writeFile(QIODevice &);
 
     void insertChar(KWriteView *, VConfig &, char);
 #ifdef QT_I18N
@@ -213,7 +218,7 @@ class KWriteDoc : QObject {
     void setTabWidth(int);
     void updateLines(int startLine = 0, int endLine = 0xffffff, int flags = 0);
     void updateMaxLength(TextLine *);
-    void updateViews(KWriteView *exclude = 0L);
+//public now    void updateViews(KWriteView *exclude = 0L);
 
     int textWidth(TextLine *, int cursorX);
     int textWidth(PointStruc &cursor);
@@ -250,7 +255,6 @@ class KWriteDoc : QObject {
     bool isLastView(int numViews);
 
     bool hasFileName();
-    QString fileName();
     void setFileName(const QString&);
     void clearFileName();
 

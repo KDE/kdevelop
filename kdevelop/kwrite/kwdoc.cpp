@@ -764,7 +764,8 @@ void KWriteDoc::loadFile(QIODevice &dev) {
       len--;
     }
   } while (s != buf);
-  highlight->doPreHighlight( contents );
+  if (highlight)
+    highlight->doPreHighlight( contents );
 #endif
 
 //  updateLines();

@@ -244,8 +244,10 @@ void KIconBorder::paintEvent(QPaintEvent* e)
 
 	h = kWriteDoc->getFontHeight();
 	yPos = kWriteView->getYPos();
-	lineStart = (yPos + updateR.y()) / h;
-	lineEnd = (yPos + updateR.y() + updateR.height()) / h;
+	if (h) {
+  	lineStart = (yPos + updateR.y()) / h;
+	  lineEnd = (yPos + updateR.y() + updateR.height()) / h;
+	}
 
 	for(int line = lineStart; line <= lineEnd; line++)
 	{
@@ -869,8 +871,10 @@ void KWriteView::updateView(int flags, int newXPos, int newYPos) {
     yScroll->show();
   } else yScroll->hide();
 
-  startLine = yPos / fontHeight;
-  endLine = (yPos + h -1) / fontHeight;
+  if (fontHeight) {
+    startLine = yPos / fontHeight;
+    endLine = (yPos + h -1) / fontHeight;
+  }
 
   if (w != width() || h != height()) {
     resize(w,h);
@@ -1358,7 +1362,9 @@ void KWriteView::paintEvent(QPaintEvent *e) {
   xEnd = xStart + updateR.width();
 
   h = kWriteDoc->fontHeight;
-  line = (yPos + updateR.y()) / h;
+  if (h) {
+    line = (yPos + updateR.y()) / h;
+  }
   y = line*h - yPos;
   yEnd = updateR.y() + updateR.height();
 
@@ -1373,7 +1379,8 @@ void KWriteView::paintEvent(QPaintEvent *e) {
         ctxNum = kWriteDoc->textLine(line - 1)->getContext();
       if ( CTX_UNDEF == ctxNum )
         ctxNum = 0;
-      ctxNum = kWriteDoc->highlight->doHighlight(ctxNum,textLine);
+      if (kWriteDoc->highlight)
+        ctxNum = kWriteDoc->highlight->doHighlight(ctxNum,textLine);
       textLine->setContext(ctxNum);
     }
 
@@ -1385,6 +1392,8 @@ void KWriteView::paintEvent(QPaintEvent *e) {
 
     line++;
     y += h;
+    if (!h)
+      break;  // otherwise there's an infinite loop ;(
   }
   paint.end();
   if (cursorOn) paintCursor();
