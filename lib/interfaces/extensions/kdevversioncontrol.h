@@ -88,7 +88,6 @@ struct VCSFileInfo
 
 };
 
-/**
 /**@class FileDom
 Info for a bunch of files that got modified.
 This is a type definition: @code QMap<QString,VCSFileInfo> VCSFileInfoMap; @endcode
