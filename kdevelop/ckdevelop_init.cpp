@@ -80,8 +80,6 @@ CKDevelop::CKDevelop(bool witharg)
   initConnections();
   initKDlg();    // create the KDialogEditor
 
-  initWhatsThis();
-	
   readOptions();
   initDebugger();
 
@@ -89,6 +87,8 @@ CKDevelop::CKDevelop(bool witharg)
   setToolmenuEntries();
 	
   error_parser = new CErrorMessageParser;
+
+  initWhatsThis();
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }
 
