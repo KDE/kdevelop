@@ -284,6 +284,11 @@ void AppWizardDialog::licenseChanged()
             text.replace(QRegExp("/\\**\n \\*"), "{\n  ");
             text.replace(QRegExp("\\*\n \\*"), " \n  ");
             text.replace(QRegExp(" *\\**/\n"), "}\n");
+        } else if (style == "AdaStyle") {
+            text = str;
+            text.replace(QRegExp("/\\*"), "--");
+            text.replace(QRegExp(" \\*"), "--");
+            text.replace(QRegExp("\\*/"), "*");
         } else if (style == "ShellStyle") {
             text = str;
             text.replace(QRegExp("\\*|/"), "#");
