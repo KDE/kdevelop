@@ -400,14 +400,14 @@ void DbgToolBar::slotKdevFocus()
     if (winModule_->activeWindow() != topLevelWidget()->winId())
         activeWindow_ = winModule_->activeWindow();
 
-    KWin::setActiveWindow(topLevelWidget()->winId());
+    KWin::activateWindow(topLevelWidget()->winId());
 }
 
 // **************************************************************************
 
 void DbgToolBar::slotPrevFocus()
 {
-    KWin::setActiveWindow(activeWindow_);
+    KWin::activateWindow(activeWindow_);
 }
 
 // **************************************************************************
@@ -480,7 +480,7 @@ void DbgToolBar::slotActivateAndUndock()
     if (!docked_)
         return;
 
-    KWin::setActiveWindow(topLevelWidget()->winId());
+    KWin::activateWindow(topLevelWidget()->winId());
     slotUndock();
 }
 
