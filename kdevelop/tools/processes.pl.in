@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 require ("flush.pl");
 use File::Copy;
 use Cwd;
