@@ -8,6 +8,8 @@
 #include <qbttngrp.h>
 #include <qpushbt.h>
 #include <qobjcoll.h>
+#include <qlayout.h>
+
 #include <kapp.h>
 
 #include "kwdialog.h"
@@ -16,48 +18,69 @@
 SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   int flags, QWidget *parent, const char *name)
   : QDialog(parent,name,true) {
+  
+  QVBoxLayout *mainLayout = new QVBoxLayout( this, 8 );
 
-  QButtonGroup *group;
-  QLabel *label;
-  QPushButton *button;
-  QRect r, br;
-  int y;
-
-  setFocusPolicy(QWidget::StrongFocus);
-
+  QLabel *label1, *label2;
+  QPushButton *button1, *button2;;
+  
   search = new QComboBox(true, this);
   search->insertStrList(searchFor);
   search->setFocus();
   //workaround for missing QComboBox::selectAll()
   ((QLineEdit *) (search->children()->getFirst()))->selectAll();
 //  search->dumpObjectTree();
+  search->setFixedHeight( search->sizeHint().height() );
+  search->setMinimumWidth( search->sizeHint().width() );
 //  search->selectAll();
-  label = new QLabel(search,i18n("&Text To Find:"),this);
-
-  r.setRect(10,0,300,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  search->setGeometry(r);
+  label1 = new QLabel(search,i18n("&Text To Find:"),this);
+  label1->setFixedSize( label1->sizeHint() );
+  mainLayout->addWidget( label1, 0, AlignLeft );
+  mainLayout->addWidget( search, 0, AlignLeft );
 
   if (flags & sfReplace) {
     replace = new QComboBox(true, this);
     replace->insertStrList(replaceWith);
-    label = new QLabel(replace,i18n("&Replace With:"),this);
-
-    r.moveBy(0,25);
-    label->setGeometry(r);
-    r.moveBy(0,25);
-    replace->setGeometry(r);
+    replace->setFixedHeight( replace->sizeHint().height() );
+    replace->setMinimumWidth( replace->sizeHint().width() );
+    label2 = new QLabel(replace,i18n("&Replace With:"),this);
+    label2->setFixedSize( label2->sizeHint() );
+    mainLayout->addWidget( label2, 0, AlignLeft );
+    mainLayout->addWidget( replace, 0, AlignLeft );
   } else replace = 0;
 
-  y = r.bottom() + 10;
+  QGroupBox *group = new QGroupBox(i18n("Options"),this);
+  mainLayout->addWidget( group );
 
-  group = new QButtonGroup(i18n("Options"),this);
+  QHBoxLayout *vbl1 = new QHBoxLayout( group, 10, 4 );
+  QVBoxLayout *vbl2 = new QVBoxLayout();
+  vbl1->addLayout(vbl2);
+  vbl2->addSpacing( 10 );
   opt1 = new QCheckBox(i18n("&Case Sensitive"),group);
+  opt1->setFixedSize( opt1->sizeHint() );
+  vbl2->addWidget( opt1, 0, AlignLeft );
+  int max2=opt1->sizeHint().width();
   opt2 = new QCheckBox(i18n("&Whole Words Only"),group);
+  opt2->setFixedSize( opt2->sizeHint() );
+  vbl2->addWidget( opt2, 0, AlignLeft );
+  if(opt2->sizeHint().width()>max2) max2 = opt2->sizeHint().width();
   opt3 = new QCheckBox(i18n("&From Cursor"),group);
+  opt3->setFixedSize( opt3->sizeHint() );
+  vbl2->addWidget( opt3, 0, AlignLeft );
+  if(opt3->sizeHint().width()>max2) max2 = opt3->sizeHint().width();
+
+
+  QVBoxLayout *vbl3 = new QVBoxLayout();
+  vbl1->addLayout(vbl3);
+  vbl3->addSpacing( 10 );
   opt4 = new QCheckBox(i18n("Find &Backwards"),group);
+  opt4->setFixedSize( opt4->sizeHint() );
+  vbl3->addWidget( opt4, 0, AlignLeft );
+  int max3=opt4->sizeHint().width();
   opt5 = new QCheckBox(i18n("&Selected Text"),group);
+  opt5->setFixedSize( opt5->sizeHint() );
+  vbl3->addWidget( opt5, 0, AlignLeft );
+  if(opt5->sizeHint().width()>max3) max3 = opt5->sizeHint().width();
 
   opt1->setChecked(flags & sfCaseSensitive);
   opt2->setChecked(flags & sfWholeWords);
@@ -65,44 +88,42 @@ SearchDialog::SearchDialog(QStrList *searchFor, QStrList *replaceWith,
   opt4->setChecked(flags & sfBackward);
   opt5->setChecked(flags & sfSelected);
 
-  r.setTop(y);
-  r.setHeight(95);
-  group->setGeometry(r);
-
-  br.setRect(10,15,r.width()/2 - 20,20);
-  opt1->setGeometry(br);
-  br.moveBy(0,25);
-  opt2->setGeometry(br);
-  br.moveBy(0,25);
-  opt3->setGeometry(br);
-
-  br.setRect(r.width()/2 + 10,15,r.width()/2 - 20,20);
-  opt4->setGeometry(br);
-  br.moveBy(0,25);
-  opt5->setGeometry(br);
-
   if (replace) {
     opt6 = new QCheckBox(i18n("&Prompt On Replace"),group);
     opt6->setChecked(flags & sfPrompt);
-    br.moveBy(0,25);
-    opt6->setGeometry(br);
+    opt6->setFixedSize( opt6->sizeHint() );
+    vbl3->addWidget( opt6, 0, AlignLeft );
+    if(opt6->sizeHint().width()>max3) max3 = opt6->sizeHint().width();
   }
 
-  y = r.bottom() + 15;
+  group->setMinimumHeight(10+10+10+2*4+3*(opt1->sizeHint().height()));
+  group->setMinimumWidth(max2+max3+10+10+10+10+4+5);
 
-  button = new QPushButton(i18n("&OK"),this);
-  button->setDefault(true);
-  br.setRect(r.x(),y,60,25);
-  button->setGeometry(br);
-  connect(button,SIGNAL(clicked()),this,SLOT(okSlot()));
+  search->setMinimumWidth(group->width());
+  if( replace )
+    replace->setMinimumWidth(group->width());
 
-  button = new QPushButton(i18n("Cancel"),this);
-  br.moveBy(r.width() - 60,0);
-  button->setGeometry(br);
-  connect(button,SIGNAL(clicked()),this,SLOT(reject()));//SIGNAL(doneSearch()));
+  mainLayout->addSpacing(10);
+  mainLayout->addStretch( 1 );
 
-  setFixedSize(r.x()*2 + r.width(),br.bottom() + 5);
+  QHBoxLayout *hbl2 = new QHBoxLayout();
+  mainLayout->addLayout( hbl2 );
 
+  hbl2->addStretch( 1 );
+  button1 = new QPushButton(i18n("&OK"),this);
+  button1->setFixedSize( button1->sizeHint() );
+  button1->setDefault(true);
+  hbl2->addWidget( button1 );
+  connect(button1,SIGNAL(clicked()),this,SLOT(okSlot()));
+
+  button2 = new QPushButton(i18n("Cancel"),this);
+  button2->setFixedSize( button2->sizeHint() );
+  hbl2->addWidget( button2 );
+  connect(button2,SIGNAL(clicked()),this,SLOT(reject()));//SIGNAL(doneSearch()));
+
+  mainLayout->activate();
+  resize(minimumSize());
+  
   search->setFocus();
 }
 
@@ -140,48 +161,56 @@ void SearchDialog::okSlot() {
 ReplacePrompt::ReplacePrompt(QWidget *parent, const char *name)
   : QDialog(0L,name,false) {
 
+  QVBoxLayout *mainLayout = new QVBoxLayout(this, 10);
+  
   QLabel *label;
-  QPushButton *button;
-  QRect r;
+  QPushButton *button1, *button2, *button3, *button4;
 
   label = new QLabel(i18n("Replace this occurence?"),this);
+  label->setFixedSize( label->sizeHint() );
+  mainLayout->addWidget(label, 0, AlignLeft);
 
-  r.setRect(10,0,200,25);
-  label->setGeometry(r);
+  QHBoxLayout *hbl = new QHBoxLayout();
+  mainLayout->addLayout(hbl);
+  hbl->addStretch();
+  button1 = new QPushButton(i18n("&Yes"),this);
+  button1->setFixedSize( button1->sizeHint() );
+  button1->setDefault(true);
+  button1->setAutoDefault(true);
+  hbl->addWidget(button1);
+  hbl->addStretch();
+  connect(button1,SIGNAL(clicked()),this,SLOT(accept()));
 
-  button = new QPushButton(i18n("&Yes"),this);
-  r.setRect(10,35,50,25);
-  button->setGeometry(r);
-  button->setDefault(true);
-  button->setAutoDefault(true);
-  connect(button,SIGNAL(clicked()),this,SLOT(accept()));
+  button2 = new QPushButton(i18n("&No"),this);
+  button2->setFixedSize( button2->sizeHint() );
+  hbl->addWidget(button2);
+  hbl->addStretch();
+  connect(button2,SIGNAL(clicked()),this,SLOT(no()));
 
-  button = new QPushButton(i18n("&No"),this);
-  r.moveBy(60,0);
-  button->setGeometry(r);
-  connect(button,SIGNAL(clicked()),this,SLOT(no()));
+  button3 = new QPushButton(i18n("&All"),this);
+  button3->setFixedSize( button3->sizeHint() );
+  hbl->addWidget(button3);
+  hbl->addStretch();
+  connect(button3,SIGNAL(clicked()),this,SLOT(all()));
 
-  button = new QPushButton(i18n("&All"),this);
-  r.moveBy(60,0);
-  button->setGeometry(r);
-  connect(button,SIGNAL(clicked()),this,SLOT(all()));
+  button4 = new QPushButton(i18n("&Close"),this);
+  button4->setFixedSize( button4->sizeHint() );
+  hbl->addWidget(button4);
+  hbl->addStretch();
+  connect(button4,SIGNAL(clicked()),this,SLOT(reject()));
 
-  button = new QPushButton(i18n("&Close"),this);
-  r.moveBy(60,0);
-  button->setGeometry(r);
-  connect(button,SIGNAL(clicked()),this,SLOT(reject()));
+  mainLayout->activate();
+  resize(minimumSize());
 
-  setFixedSize(r.right() + 10,r.bottom() + 10);
-
-  if (parent) {
-    QWidget *w;
-    QPoint p(0,0);
-
-    w = parent;//->topLevelWidget();
-    p = w->mapToGlobal(p);
-    move(p.x() + (w->width() - width())/2,
-         p.y() + w->height() - height() - 48);
-  }
+//  if (parent) {
+//    QWidget *w;
+//    QPoint p(0,0);
+//
+//    w = parent;//->topLevelWidget();
+//    p = w->mapToGlobal(p);
+//    move(p.x() + (w->width() - width())/2,
+//         p.y() + w->height() - height() - 48);
+//  }
 
 }
 
@@ -211,34 +240,42 @@ GotoLineDialog::GotoLineDialog(int line, QWidget *parent, const char *name)
   : QDialog(parent,name,true) {
 
   char buf[8];
-  QRect r, br;
   QLabel *label;
-  QPushButton *button;
+  QPushButton *button1, *button2;
+
+  QVBoxLayout *mainLayout = new QVBoxLayout(this, 10);
 
   e1 = new QLineEdit(this);
   sprintf(buf,"%d",line);
   e1->setText(buf);
   e1->selectAll();
+  e1->setFixedHeight( e1->sizeHint().height() );
   label = new QLabel(e1,i18n("&Goto Line:"),this);
+  label->setFixedSize( label->sizeHint() );
+  mainLayout->addWidget(label, 0, AlignLeft);
+  mainLayout->addWidget(e1, 0, AlignLeft);
 
-  r.setRect(10,0,150,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  e1->setGeometry(r);
+  QHBoxLayout *hbl = new QHBoxLayout();
+  mainLayout->addSpacing(10);
+  mainLayout->addLayout(hbl);
+  hbl->addStretch(1);
 
-  button = new QPushButton(i18n("&OK"),this);
-  button->setDefault(true);
-  br.setRect(r.x(),r.bottom() + 10,60,25);
-  button->setGeometry(br);
-  connect(button,SIGNAL(clicked()),this,SLOT(accept()));
+  button1 = new QPushButton(i18n("&OK"),this);
+  button1->setDefault(true);
+  button1->setFixedSize( button1->sizeHint() );
+  hbl->addWidget(button1);
+  connect(button1,SIGNAL(clicked()),this,SLOT(accept()));
 
-  button = new QPushButton(i18n("Cancel"),this);
-  br.moveBy(r.right() - br.right(),0);
-  button->setGeometry(br);
-  connect(button,SIGNAL(clicked()),this,SLOT(reject()));
+  button2 = new QPushButton(i18n("Cancel"),this);
+  connect(button2,SIGNAL(clicked()),this,SLOT(reject()));
+  button2->setFixedSize( button2->sizeHint() );
+  hbl->addWidget(button2);
 
-  setFixedSize(r.x()*2 + r.width(),br.bottom() + 5);
+  e1->setMinimumWidth(minimumSize().width());
 
+  mainLayout->activate();
+  resize(minimumSize());
+  
   e1->setFocus();
 }
 
@@ -251,20 +288,29 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   QWidget *parent, const char *name)
   : QDialog(parent,name,true) {
 
-  QButtonGroup *group;
-  QLabel *label;
-  QPushButton *button;
-  QRect r, br;
+  QLabel *label1;
+  QLabel *label2;
+  QLabel *label3;
+  QPushButton *button1, *button2;
   char buf[8];
 
-  group = new QButtonGroup(i18n("Edit Options"),this);
-  opt1 = new QCheckBox(i18n("Auto &Indent"),group);
-  opt2 = new QCheckBox(i18n("&Backspace Indent"),group);
-  opt3 = new QCheckBox(i18n("&Word Wrap"),group);
-  opt4 = new QCheckBox(i18n("&Replace Tabs"),group);
-  opt5 = new QCheckBox(i18n("Remove Trailing &Spaces"),group);
-  opt6 = new QCheckBox(i18n("Wrap &Cursor"),group);
-  opt7 = new QCheckBox(i18n("&Auto Brackets"),group);
+  QGroupBox *g1 = new QGroupBox(i18n("Edit Options"),this);
+  opt1 = new QCheckBox(i18n("Auto &Indent"),g1);
+  opt1->setFixedSize(opt1->sizeHint());
+  opt2 = new QCheckBox(i18n("&Backspace Indent"),g1);
+  opt2->setFixedSize(opt2->sizeHint());
+  opt3 = new QCheckBox(i18n("&Word Wrap"),g1);
+  opt3->setFixedSize(opt3->sizeHint());
+  opt4 = new QCheckBox(i18n("&Replace Tabs"),g1);
+  opt4->setFixedSize(opt4->sizeHint());
+  opt5 = new QCheckBox(i18n("Remove Trailing &Spaces"),g1);
+  opt5->setFixedSize(opt5->sizeHint());
+  opt6 = new QCheckBox(i18n("Wrap &Cursor"),g1);
+  opt6->setFixedSize(opt6->sizeHint());
+  opt7 = new QCheckBox(i18n("&Auto Brackets"),g1);
+  opt7->setFixedSize(opt7->sizeHint());
+
+  g1->setMinimumHeight(8+8+8+6*4+7*(opt1->sizeHint().height()));
 
   opt1->setChecked(flags & cfAutoIndent);
   opt2->setChecked(flags & cfBackspaceIndent);
@@ -274,31 +320,22 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt6->setChecked(flags & cfWrapCursor);
   opt7->setChecked(flags & cfAutoBrackets);
 
-  br.setRect(10,15,160,20);
-  opt1->setGeometry(br);
-  br.moveBy(0,25);
-  opt2->setGeometry(br);
-  br.moveBy(0,25);
-  opt3->setGeometry(br);
-  br.moveBy(0,25);
-  opt4->setGeometry(br);
-  br.moveBy(0,25);
-  opt5->setGeometry(br);
-  br.moveBy(0,25);
-  opt6->setGeometry(br);
-  br.moveBy(0,25);
-  opt7->setGeometry(br);
 
-  r.setRect(10,10,br.width() + 20, br.bottom() + 10);
-  group->setGeometry(r);
+  QGroupBox *g2 = new QGroupBox(i18n("Select Options"),this);
+  opt8 = new QCheckBox(i18n("&Persistent Selections"),g2);
+  opt8->setFixedSize( opt8->sizeHint() );
+  opt9 = new QCheckBox(i18n("&Multiple Selections"),g2);
+  opt9->setFixedSize( opt9->sizeHint() );
+  opt10 = new QCheckBox(i18n("&Vertical Selections"),g2);
+  opt10->setFixedSize( opt10->sizeHint() );
+  opt11 = new QCheckBox(i18n("&Delete On Input"),g2);
+  opt11->setFixedSize( opt11->sizeHint() );
+  opt12 = new QCheckBox(i18n("&Toggle Old"),g2);
+  opt12->setFixedSize( opt12->sizeHint() );
+  opt13 = new QCheckBox(i18n("A&uto Copy"),g2);
+  opt13->setFixedSize( opt13->sizeHint() );
 
-  group = new QButtonGroup(i18n("Select Options"),this);
-  opt8 = new QCheckBox(i18n("&Persistent Selections"),group);
-  opt9 = new QCheckBox(i18n("&Multiple Selections"),group);
-  opt10 = new QCheckBox(i18n("&Vertical Selections"),group);
-  opt11 = new QCheckBox(i18n("&Delete On Input"),group);
-  opt12 = new QCheckBox(i18n("&Toggle Old"),group);
-  opt13 = new QCheckBox(i18n("A&uto Copy"),group);
+  g2->setMinimumHeight(8+8+8+4*4+6*(opt8->sizeHint().height()));
 
   opt8->setChecked(flags & cfPersistent);
   opt9->setChecked(flags & cfKeepSelection);
@@ -307,66 +344,103 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt12->setChecked(flags & cfXorSelect);
   opt13->setChecked(flags & cfAutoCopy);
 
-  br.moveBy(0,15 - br.y());
-  opt8->setGeometry(br);
-  br.moveBy(0,25);
-  opt9->setGeometry(br);
-  br.moveBy(0,25);
-  opt10->setGeometry(br);
-  br.moveBy(0,25);
-  opt11->setGeometry(br);
-  br.moveBy(0,25);
-  opt12->setGeometry(br);
-  br.moveBy(0,25);
-  opt13->setGeometry(br);
-
-  r.setRect(r.x(),r.bottom() + 10,br.width() + 20, br.bottom() + 10);
-  group->setGeometry(r);
-
-  br.setRect(r.x(),r.bottom() + 10,60,25); //for first button
 
   e1 = new QLineEdit(this);
   sprintf(buf,"%d",wrapAt);
   e1->setText(buf);
-  label = new QLabel(e1,i18n("Wrap Words At:"),this);
-
-  r.setRect(r.right() + 20,10,100,25);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  e1->setGeometry(r);
+  label1 = new QLabel(e1,i18n("Wrap Words At:"),this);
+  int max = label1->sizeHint().width();
 
   e2 = new QLineEdit(this);
   sprintf(buf,"%d",tabWidth);
   e2->setText(buf);
-  label = new QLabel(e2,i18n("Tab Width:"),this);
-
-  r.moveBy(0,30);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  e2->setGeometry(r);
+  label2 = new QLabel(e2,i18n("Tab Width:"),this);
+  if (label2->sizeHint().width()>max)
+    max = label2->sizeHint().width();
 
   e3 = new QLineEdit(this);
   sprintf(buf,"%d",undoSteps);
   e3->setText(buf);
-  label = new QLabel(e3,i18n("Undo steps:"),this);
+  label3 = new QLabel(e3,i18n("Undo steps:"),this);
+  if (label3->sizeHint().width()>max)
+    max = label3->sizeHint().width();
 
-  r.moveBy(0,30);
-  label->setGeometry(r);
-  r.moveBy(0,25);
-  e3->setGeometry(r);
+  label1->setFixedSize( max, label1->sizeHint().height() );
+  label2->setFixedSize( max, label2->sizeHint().height() );
+  label3->setFixedSize( max, label3->sizeHint().height() );
+
+  e1->setFixedSize( max, e1->sizeHint().height() );
+  e2->setFixedSize( max, e2->sizeHint().height() );
+  e3->setFixedSize( max, e3->sizeHint().height() );
+  
+  button1 = new QPushButton(i18n("&OK"),this);
+  button1->setFixedSize(button1->sizeHint());
+  button1->setDefault(true);
+  connect(button1,SIGNAL(clicked()),this,SLOT(accept()));
+
+  button2 = new QPushButton(i18n("Cancel"),this);
+  button2->setFixedSize(button2->sizeHint());
+  connect(button2,SIGNAL(clicked()),this,SLOT(reject()));
 
 
-  button = new QPushButton(i18n("&OK"),this);
-  button->setDefault(true);
-  button->setGeometry(br);
-  connect(button,SIGNAL(clicked()),this,SLOT(accept()));
+  QVBoxLayout *mainLayout = new QVBoxLayout(this, 8, 4);
 
-  button = new QPushButton(i18n("Cancel"),this);
-  br.moveBy(r.right() - br.right(),0);
-  button->setGeometry(br);
-  connect(button,SIGNAL(clicked()),this,SLOT(reject()));
+  
+  QHBoxLayout *vbl6 = new QHBoxLayout();
+  mainLayout->addLayout( vbl6 );
 
-  setFixedSize(br.right() + 10,br.bottom() + 5);
+  QVBoxLayout *vbl3 = new QVBoxLayout();
+  vbl6->addLayout( vbl3 );
+    
+  vbl3->addWidget( g1 );
+  vbl3->addSpacing( 10 );
+  vbl3->addWidget( g2 );
+  
+  QVBoxLayout *vbl1 = new QVBoxLayout(g1, 8, 4);
+  vbl1->addSpacing(8);
+  vbl1->addWidget( opt1,0,AlignLeft );
+  vbl1->addWidget( opt2,0,AlignLeft );
+  vbl1->addWidget( opt3,0,AlignLeft );
+  vbl1->addWidget( opt4,0,AlignLeft );
+  vbl1->addWidget( opt5,0,AlignLeft );
+  vbl1->addWidget( opt6,0,AlignLeft );
+  vbl1->addWidget( opt7,0,AlignLeft );
+
+ 
+  QVBoxLayout *vbl2 = new QVBoxLayout(g2, 8, 4);
+  vbl2->addSpacing(8);
+  vbl2->addWidget( opt8,0,AlignLeft );
+  vbl2->addWidget( opt9,0,AlignLeft );
+  vbl2->addWidget( opt10,0,AlignLeft );
+  vbl2->addWidget( opt11,0,AlignLeft );
+  vbl2->addWidget( opt12,0,AlignLeft );
+  vbl2->addWidget( opt13,0,AlignLeft );
+
+  vbl6->addSpacing( 10 );
+
+  QVBoxLayout *vbl5 = new QVBoxLayout();
+  vbl6->addLayout( vbl5 );
+
+  vbl5->addWidget( label1,0,AlignLeft );
+  vbl5->addWidget( e1,0,AlignLeft );
+  vbl5->addSpacing( 20 );
+  vbl5->addWidget( label2,0,AlignLeft );
+  vbl5->addWidget( e2,0,AlignLeft );
+  vbl5->addSpacing( 20 );
+  vbl5->addWidget( label3,0,AlignLeft );
+  vbl5->addWidget( e3,0,AlignLeft );
+
+  mainLayout->addSpacing( 10 );
+  mainLayout->addStretch( 1 );
+
+  QHBoxLayout *vbl4 = new QHBoxLayout();
+  mainLayout->addLayout( vbl4 );
+  vbl4->addStretch( 1 );
+  vbl4->addWidget(button1);
+  vbl4->addWidget(button2);
+
+  mainLayout->activate();
+  resize(minimumSize());
 }
 
 int SettingsDialog::getFlags() {
@@ -404,55 +478,68 @@ int SettingsDialog::getUndoSteps() {
 
 ColorDialog::ColorDialog(QColor *colors, QWidget *parent, const char *name)
   : QDialog(parent,name,true) {
+  
+  QVBoxLayout *mainLayout = new QVBoxLayout(this, 10);
+  
   QLabel *label;
   QPushButton *button;
-  QRect r, r2;
-
+  
   back = new KColorButton(colors[4],this);
   label = new QLabel(back,i18n("Background:"),this);
-  r.setRect(10,10,140,25);
-  label->setGeometry(r);
-  r2.setRect(10,r.y() + 25,80,25);
-  back->setGeometry(r2);
+  label->setFixedSize( label->sizeHint() );
+  back->setFixedSize( back->sizeHint() );
+  mainLayout->addWidget(label, 0, AlignLeft);
+  mainLayout->addWidget(back, 0, AlignLeft);
+  mainLayout->addSpacing(5);
 
   textBack = new KColorButton(colors[0],this);
   label = new QLabel(textBack,i18n("Text Background:"),this);
-  r.moveBy(0,50);
-  label->setGeometry(r);
-  r2.moveBy(0,50);
-  textBack->setGeometry(r2);
+  label->setFixedSize( label->sizeHint() );
+  textBack->setFixedSize( textBack->sizeHint() );
+  mainLayout->addWidget(label, 0, AlignLeft);
+  mainLayout->addWidget(textBack, 0, AlignLeft);
+  mainLayout->addSpacing(5);
 
   selected = new KColorButton(colors[1],this);
   label = new QLabel(selected,i18n("Selected:"),this);
-  r.moveBy(0,50);
-  label->setGeometry(r);
-  r2.moveBy(0,50);
-  selected->setGeometry(r2);
+  label->setFixedSize( label->sizeHint() );
+  selected->setFixedSize( selected->sizeHint() );
+  mainLayout->addWidget(label, 0, AlignLeft);
+  mainLayout->addWidget(selected, 0, AlignLeft);
+  mainLayout->addSpacing(5);
 
   found = new KColorButton(colors[2],this);
   label = new QLabel(found,i18n("Found:"),this);
-  r.moveBy(0,50);
-  label->setGeometry(r);
-  r2.moveBy(0,50);
-  found->setGeometry(r2);
+  label->setFixedSize( label->sizeHint() );
+  found->setFixedSize( found->sizeHint() );
+  mainLayout->addWidget(label, 0, AlignLeft);
+  mainLayout->addWidget(found, 0, AlignLeft);
+  mainLayout->addSpacing(5);
 
   selFound = new KColorButton(colors[3],this);
   label = new QLabel(selFound,i18n("Selected + Found:"),this);
-  r.moveBy(0,50);
-  label->setGeometry(r);
-  r2.moveBy(0,50);
-  selFound->setGeometry(r2);
+  label->setFixedSize( label->sizeHint() );
+  selFound->setFixedSize( selFound->sizeHint() );
+  mainLayout->addWidget(label, 0, AlignLeft);
+  mainLayout->addWidget(selFound, 0, AlignLeft);
+  mainLayout->addSpacing(5);
 
-  r.setRect(r.x(),r2.bottom() + 10,60,25);
+  QHBoxLayout *hbl = new QHBoxLayout();
+  mainLayout->addLayout(hbl);
+  hbl->addStretch(1);
   button = new QPushButton(i18n("&OK"),this);
   button->setDefault(true);
-  button->setGeometry(r);
+  button->setFixedSize( button->sizeHint() );
+  hbl->addWidget( button );
   connect(button,SIGNAL(clicked()),this,SLOT(accept()));
 
   button = new QPushButton(i18n("Cancel"),this);
-  r.moveBy(100,0);
-  button->setGeometry(r);
+  button->setFixedSize( button->sizeHint() );
+  hbl->addWidget( button );
   connect(button,SIGNAL(clicked()),this,SLOT(reject()));
+
+  mainLayout->activate();
+  resize(minimumSize());
 }
 
 void ColorDialog::getColors(QColor *colors) {

@@ -1,3 +1,8 @@
+2000-03-05  Ralf Nolden <rnolden@kdevelop.de>
+	* "cleaned" slotProjectAPI to read all kdoc index files
+	  for cross-referencing the project API
+	* added layout management to the KWrite dialogs from the KWrite CVS of KDE 1.1.2
+
 2000-03-05  Ralf Funken <rfunken@kdevelop.de>
 
 	* Added documentation for build options and general settings in German and English manuals
@@ -13,14 +18,10 @@
           german tutorial completed :-)
 
 2000-03-04  Ralf Nolden <rnolden@kdevelop.de>
-
-	* fixed another i18n bug...the about dialog ;-) 
-	
+	* fixed another i18n bug...the about dialog ;-)
 	* fixed the qt/kde mdi templates to match recent API changes in 
           QWorkspace, fixed handbooks for version infos (1.0 -> 1.1) and updated
           the tutorial sourcecode to match the Qt changes
-
-
 	* added kdoc2 support for initializing the doctree according to 
           the kdoc-reference .kdoc files - this uses all created libs ;-)
         * added support to update project API/Manual by rmb menu
