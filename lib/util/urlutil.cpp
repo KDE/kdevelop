@@ -18,7 +18,7 @@ QString URLUtil::filename(const QString & name) {
 
 QString URLUtil::directory(const QString & name) {
   int slashPos = name.findRev("/");
-  return slashPos<0 ? "" : name.left(slashPos);
+  return slashPos<0 ? QString::null : name.left(slashPos);
 }
 
 QString URLUtil::relativePath(const KURL & parent, const KURL & child, bool slashPrefix, bool slashSuffix) {
