@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 #ifndef _TOPLEVEL_SDI_H_
 #define _TOPLEVEL_SDI_H_
 
@@ -63,10 +55,6 @@ public slots:
 private slots:
 
   void slotQuit();
-  void slotOpenProject();
-  void slotOpenRecentProject(const KURL &url);
-  void slotCloseProject();
-  void slotProjectOptions();
   void slotSettings();
 
 
@@ -82,9 +70,6 @@ private:
 
   QTabWidget *m_tabWidget;
   KTabZoomWidget *m_leftBar, *m_bottomBar;
-
-  KAction *m_closeProjectAction, *m_projectOptionsAction;
-  KRecentFilesAction *m_openRecentProjectAction;
 
   bool m_closing;
 

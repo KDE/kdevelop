@@ -3,6 +3,7 @@
 #include <qdom.h>
 #include <qstringlist.h>
 #include <qptrlist.h>
+#include <qvbox.h>
 
 class QDomDocument;
 
@@ -15,6 +16,9 @@ class QDomDocument;
 #include <kfiledialog.h>
 #include <kmainwindow.h>
 #include <kparts/componentfactory.h>
+#include <kaction.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
 
 #include "kdevproject.h"
 #include "kdevlanguagesupport.h"
@@ -27,6 +31,7 @@ class QDomDocument;
 #include "plugincontroller.h"
 #include "partcontroller.h"
 #include "classstore.h"
+#include "partselectwidget.h"
 
 
 #include "projectmanager.h"
@@ -74,9 +79,98 @@ ProjectManager *ProjectManager::getInstance()
   return s_instance;
 }
 
-
-void ProjectManager::loadProject(const QString &fileName)
+void ProjectManager::createActions( KActionCollection* ac )
 {
+  KAction *action;
+
+  action = new KAction(i18n("&Open Project..."), "project_open", 0,
+                       this, SLOT(slotOpenProject()),
+                       ac, "project_open");
+  action->setStatusText( i18n("Opens a project"));
+
+  m_openRecentProjectAction =
+    new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
+                          this, SLOT(loadProject(const KURL &)),
+                          ac, "project_open_recent");
+  m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
+
+  m_closeProjectAction =
+    new KAction(i18n("C&lose Project"), "fileclose",0,
+                this, SLOT(closeProject()),
+                ac, "project_close");
+  m_closeProjectAction->setEnabled(false);
+  m_closeProjectAction->setStatusText(i18n("Closes the current project"));
+
+  m_projectOptionsAction = new KAction(i18n("Project &Options..."), "configure", 0,
+                this, SLOT(slotProjectOptions()),
+                ac, "project_options" );
+  m_projectOptionsAction->setEnabled(false);
+}
+
+
+void ProjectManager::slotOpenProject()
+{
+  KURL url = KFileDialog::getOpenURL(QString::null, "*.kdevelop", TopLevel::getInstance()->main(), i18n("Open Project"));
+  if (url.isMalformed())
+    return;
+
+  loadProject(url);
+}
+
+void ProjectManager::slotProjectOptions()
+{
+  KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
+                  KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, TopLevel::getInstance()->main(),
+                  "project options dialog");
+
+  QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
+  PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
+  connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
+
+  Core::getInstance()->doEmitProjectConfigWidget(&dlg);
+  dlg.exec();
+}
+
+void ProjectManager::loadSettings()
+{
+  KConfig *config = kapp->config();
+  m_openRecentProjectAction->loadEntries(config, "RecentProjects");
+}
+
+void ProjectManager::saveSettings()
+{
+  KConfig *config = kapp->config();
+
+  if (projectLoaded())
+  {
+    config->setGroup("General Options");
+    config->writeEntry("Last Project", ProjectManager::getInstance()->projectFile());
+  }
+
+  m_openRecentProjectAction->saveEntries(config, "RecentProjects");
+}
+
+void ProjectManager::loadDefaultProject()
+{
+  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+  if( args->count() > 0 ) {
+    loadProject( args->url(0) );
+  } else {
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    QString project = config->readEntry("Last Project", "");
+    bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
+    if (!project.isEmpty() && readProject)
+    {
+      loadProject(KURL(project));
+    }
+  }
+}
+
+void ProjectManager::loadProject(const KURL &url)
+{
+  QString fileName = url.path();
+  
   closeProject();
 
   m_info = new ProjectInfo;
@@ -97,6 +191,10 @@ void ProjectManager::loadProject(const QString &fileName)
   loadLocalParts();
 
   initializeProjectSupport();
+
+  m_openRecentProjectAction->addURL(KURL(projectFile()));
+  m_closeProjectAction->setEnabled(true);
+  m_projectOptionsAction->setEnabled(true);
 }
 
 
@@ -331,6 +429,9 @@ void ProjectManager::closeProject()
 
   delete m_info;
   m_info = 0;
+  
+  m_closeProjectAction->setEnabled(projectLoaded());
+  m_projectOptionsAction->setEnabled(projectLoaded());
 }
 
 

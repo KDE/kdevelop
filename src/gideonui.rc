@@ -77,7 +77,7 @@
   </Menu>
 </MenuBar>
 
-<ToolBar name="mainToolBar" position="Top" iconText="IconOnly" noMerge="1" fullWidth="false" newline="true" >
+<ToolBar name="mainToolBar" position="Top" noMerge="1" fullWidth="false" >
   <Action name="project_open" />
   <Separator/>
   <Merge/>

@@ -1,3 +1,8 @@
+2002-05-25  John Firebaugh <jfirebaugh@kde.org>
+	* Move project actions to ProjectManager. Removes much code
+	  code duplication in toplevel_*.cpp.
+	* Allow opening project via command line/konqueror.
+
 2002-05-25  Roberto Raggi <raggi@cli.di.unipi.it>
 	* qeditor: Added code folding support
 	* qeditor: Added emacs-style indent mode	

@@ -61,10 +61,6 @@ protected:
 private slots:
 
   void slotQuit();
-  void slotOpenProject();
-  void slotOpenRecentProject(const KURL &url);
-  void slotCloseProject();
-  void slotProjectOptions();
   void slotSettings();
 
 
@@ -81,10 +77,7 @@ private:
   void saveSettings();
   void saveMDISettings();
   void loadMDISettings();
-
-  KAction *m_closeProjectAction, *m_projectOptionsAction;
-  KRecentFilesAction *m_openRecentProjectAction;
-
+  
   QMap<QWidget*,QextMdiChildView*> m_widgetMap;
   QMap<QextMdiChildView*,QWidget*> m_childViewMap;
 

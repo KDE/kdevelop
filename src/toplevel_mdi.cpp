@@ -10,8 +10,8 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kconfig.h>
-#include <kfiledialog.h>
 #include <kstatusbar.h>
+#include <kdialogbase.h>
 
 
 #include "projectmanager.h"
@@ -93,32 +93,11 @@ void TopLevelMDI::createFramework()
 
 void TopLevelMDI::createActions()
 {
+  ProjectManager::getInstance()->createActions( actionCollection() );
+  
   KStdAction::quit(this, SLOT(slotQuit()), actionCollection());
 
   KAction *action;
-
-  action = new KAction(i18n("&Open Project..."), "project_open", 0,
-                       this, SLOT(slotOpenProject()),
-                       actionCollection(), "project_open");
-  action->setStatusText( i18n("Opens a project"));
-
-  m_openRecentProjectAction =
-    new KRecentFilesAction(i18n("Open &Recent Project..."), 0,
-                          this, SLOT(slotOpenRecentProject(const KURL &)),
-                          actionCollection(), "project_open_recent");
-  m_openRecentProjectAction->setStatusText(i18n("Opens a recent project"));
-
-  m_closeProjectAction =
-    new KAction(i18n("C&lose Project"), "fileclose",0,
-                this, SLOT(slotCloseProject()),
-                actionCollection(), "project_close");
-  m_closeProjectAction->setEnabled(false);
-  m_closeProjectAction->setStatusText(i18n("Closes the current project"));
-
-  m_projectOptionsAction = new KAction(i18n("Project &Options..."), 0,
-                this, SLOT(slotProjectOptions()),
-                actionCollection(), "project_options" );
-  m_projectOptionsAction->setEnabled(false);
 
   action = KStdAction::preferences(this, SLOT(slotSettings()),
                 actionCollection(), "settings_configure" );
@@ -270,22 +249,9 @@ void TopLevelMDI::createGUI(KParts::Part *part)
 
 void TopLevelMDI::loadSettings()
 {
+  ProjectManager::getInstance()->loadSettings();
   loadMDISettings();
-
-  KConfig *config = kapp->config();
-  config->setGroup("General Options");
-  QString project = config->readEntry("Last Project", "");
-  bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
-  if (!project.isEmpty() && readProject)
-  {
-    ProjectManager::getInstance()->loadProject(project);
-    m_closeProjectAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
-    m_projectOptionsAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
-  }
-
-  m_openRecentProjectAction->loadEntries(config, "RecentProjects");
-
-  applyMainWindowSettings(config, "Mainwindow");
+  applyMainWindowSettings(kapp->config(), "Mainwindow");
 }
 
 
@@ -328,19 +294,8 @@ void TopLevelMDI::loadMDISettings()
 
 void TopLevelMDI::saveSettings()
 {
-  KConfig *config = kapp->config();
-
-  if (ProjectManager::getInstance()->projectLoaded())
-  {
-    config->setGroup("General Options");
-    config->writeEntry("Last Project", ProjectManager::getInstance()->projectFile());
-  }
-
-  m_openRecentProjectAction->saveEntries(config, "RecentProjects");
-
-  saveMDISettings();
-
-  saveMainWindowSettings(config, "Mainwindow");
+  ProjectManager::getInstance()->saveSettings();
+  saveMainWindowSettings(kapp->config(), "Mainwindow");
 }
 
 
@@ -351,63 +306,6 @@ void TopLevelMDI::saveMDISettings()
 
   config->writeEntry("MDI mode", mdiMode());
 }
-
-
-void TopLevelMDI::slotOpenProject()
-{
-  QString fileName = KFileDialog::getOpenFileName(QString::null, "*.kdevelop", this, i18n("Open Project"));
-  if (fileName.isNull())
-    return;
-
-  ProjectManager::getInstance()->loadProject(fileName);
-
-  QString pf = ProjectManager::getInstance()->projectFile();
-  if (ProjectManager::getInstance()->projectLoaded())
-  {
-    m_openRecentProjectAction->addURL(KURL(pf));
-    m_closeProjectAction->setEnabled(true);
-    m_projectOptionsAction->setEnabled(true);
-  }
-}
-
-
-void TopLevelMDI::slotOpenRecentProject(const KURL &url)
-{
-  ProjectManager::getInstance()->loadProject(url.path());
-
-  QString pf = ProjectManager::getInstance()->projectFile();
-  if (ProjectManager::getInstance()->projectLoaded())
-  {
-    m_openRecentProjectAction->addURL(KURL(pf));
-    m_closeProjectAction->setEnabled(true);
-    m_projectOptionsAction->setEnabled(true);
-  }
-
-}
-
-
-void TopLevelMDI::slotCloseProject()
-{
-  ProjectManager::getInstance()->closeProject();
-  m_closeProjectAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
-  m_projectOptionsAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
-}
-
-
-void TopLevelMDI::slotProjectOptions()
-{
-  KDialogBase dlg(KDialogBase::TreeList, i18n("Project Options"),
-                  KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, this,
-                  "project options dialog");
-
-  QVBox *vbox = dlg.addVBoxPage(i18n("Plugins"));
-  PartSelectWidget *w = new PartSelectWidget(*API::getInstance()->projectDom(), vbox, "part selection widget");
-  connect(&dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
-
-  Core::getInstance()->doEmitProjectConfigWidget(&dlg);
-  dlg.exec();
-}
-
 
 void TopLevelMDI::slotSettings()
 {

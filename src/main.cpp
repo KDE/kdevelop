@@ -14,7 +14,13 @@
 #include "partcontroller.h"
 #include "core.h"
 #include "splashscreen.h"
+#include "projectmanager.h"
 
+static KCmdLineOptions options[] =
+{
+    { "+file",          I18N_NOOP("Project to open"), 0 },
+    { 0,0,0 }
+};
 
 int main(int argc, char *argv[])
 {
@@ -43,7 +49,8 @@ int main(int argc, char *argv[])
   aboutData.addAuthor("Hugo Varotto", "Fileselector part", "hugo@varotto-usa.com");
   aboutData.addAuthor("Matt Newell", "Fileselector part", "newellm@proaxis.com");
   KCmdLineArgs::init(argc, argv, &aboutData);
-
+  KCmdLineArgs::addCmdLineOptions( options );
+  
   KApplication app;
 
   SplashScreen *splash = new SplashScreen;
@@ -57,9 +64,10 @@ int main(int argc, char *argv[])
 
   TopLevel::getInstance()->loadSettings();
   TopLevel::getInstance()->main()->show();
+  ProjectManager::getInstance()->loadDefaultProject();
 
   Core::getInstance()->doEmitCoreInitialized();
-
+  
   delete splash;
 
   kapp->dcopClient()->registerAs("gideon");

@@ -23,13 +23,25 @@ public:
 
   static ProjectManager *getInstance();
 
-  void loadProject(const QString &fileName);
-  void closeProject();
+  void loadSettings();
+  void saveSettings();
+  void loadDefaultProject();
 
   bool projectLoaded() const;
 
   QString projectFile() const;
 
+  void createActions( KActionCollection* ac );
+
+public slots:
+
+  void loadProject( const KURL& url );
+  void closeProject();
+
+private slots:
+
+  void slotOpenProject();
+  void slotProjectOptions();
 
 private:
 
@@ -58,6 +70,9 @@ private:
   void removePart(KXMLGUIClient *part);
 
   ProjectInfo *m_info;
+
+  class KAction *m_closeProjectAction, *m_projectOptionsAction;
+  class KRecentFilesAction *m_openRecentProjectAction;
 
   static ProjectManager *s_instance;
 
