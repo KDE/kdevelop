@@ -29,7 +29,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>&lt;p&gt;This is just an &lt;i&gt;%{APPNAMELC}&lt;/i&gt;. It doesn't do anything interesting at all.</string>
+                <string>&lt;p&gt;This is just an &lt;i&gt;%{APPNAMELC}&lt;/i&gt;; it does not do anything interesting at all.</string>
             </property>
         </widget>
         <widget>

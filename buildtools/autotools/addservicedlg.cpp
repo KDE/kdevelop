@@ -19,7 +19,7 @@
 #include <qtextstream.h>
 #include <kdebug.h>
 #include <kicondialog.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kservicetype.h>
@@ -137,7 +137,7 @@ void AddServiceDialog::propertyExecuted(QListViewItem *item)
     QString prop = item->text(0);
     QString value = item->text(1);
     bool ok;
-    value = KLineEditDlg::getText(i18n("Property %1:").arg(prop), value, &ok, this);
+    value = KInputDialog::getText(i18n("Enter value"), i18n("Property %1:").arg(prop), value, &ok, this);
     if (!ok)
         return;
 

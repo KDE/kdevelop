@@ -29,7 +29,7 @@
 #include <kpopupmenu.h>
 #include <klistview.h>
 #include <klocale.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kfiledialog.h>
@@ -231,7 +231,7 @@ void GenericProjectWidget::slotItemSelected( QListViewItem * item )
 {
     GenericGroupListViewItem* groupItem = dynamic_cast<GenericGroupListViewItem*>( item );
     GenericTargetListViewItem* targetItem = dynamic_cast<GenericTargetListViewItem*>( item );
-    GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
+//  GenericFileListViewItem* fileItem = dynamic_cast<GenericFileListViewItem*>( item );
 
     if( groupItem && groupItem->groupItem() )
         emit groupSelected( groupItem->groupItem() );
@@ -340,7 +340,7 @@ BuildTargetItem * GenericProjectWidget::activeTarget( )
     return m_activeTarget;
 }
 
-void GenericProjectWidget::showTargetDetails( BuildTargetItem * targetItem )
+void GenericProjectWidget::showTargetDetails( BuildTargetItem * /*targetItem*/ )
 {
 }
 
@@ -450,8 +450,8 @@ void GenericProjectWidget::showGroupContextMenu( KListView * l, QListViewItem * 
     if (( !l ) || (!i) )
         return ;
 
-    KPopupMenu popup( i18n( "Group: %1" ).arg( i->text( 0 ) ), this );
-
+    KPopupMenu popup( this );
+    popup.insertTitle(i18n( "Group: %1" ).arg( i->text( 0 ) ));
     configureGroupAction->plug(&popup);
     popup.insertSeparator();
     newGroupAction->plug(&popup);
@@ -476,7 +476,8 @@ void GenericProjectWidget::showDetailContextMenu( KListView * l, QListViewItem *
 
     if (t)
     {
-        KPopupMenu popup( i18n( "Target: %1" ).arg( t->text( 0 ) ), this );
+        KPopupMenu popup( this );
+	popup.insertTitle(i18n( "Target: %1" ).arg( t->text( 0 ) ));
 
         configureTargetAction->plug(&popup);
         popup.insertSeparator();
@@ -493,7 +494,8 @@ void GenericProjectWidget::showDetailContextMenu( KListView * l, QListViewItem *
     }
     if (f)
     {
-        KPopupMenu popup( i18n( "File: %1" ).arg( f->text( 0 ) ), this );
+        KPopupMenu popup( this );
+	popup.insertTitle(i18n( "File: %1" ).arg( f->text( 0 ) ));
 
         configureFileAction->plug(&popup);
         popup.insertSeparator();
@@ -515,7 +517,7 @@ void GenericProjectWidget::slotNewGroup( )
     if (!git)
         return;
     bool ok;
-    QString groupName = KLineEditDlg::getText(i18n("Group Name"), i18n("Enter the group name:"), "", &ok, this );
+    QString groupName = KInputDialog::getText(i18n("Group Name"), i18n("Enter the group name:"), "", &ok, this );
     if (!ok)
         return;
     QDir dir;
@@ -533,7 +535,7 @@ void GenericProjectWidget::slotNewTarget( )
     if (!git)
         return;
     bool ok;
-    QString targetName = KLineEditDlg::getText(i18n("Target Name"), i18n("Enter the target name:"), "", &ok, this );
+    QString targetName = KInputDialog::getText(i18n("Target Name"), i18n("Enter the target name:"), "", &ok, this );
     if (!ok)
         return;
     BuildTargetItem *tit = new BuildTargetItem(targetName, git->groupItem());
@@ -720,7 +722,7 @@ void GenericProjectWidget::slotDeleteFile( )
         if (dia.removeFromDisk())
         {
             kdDebug() << "GenericProjectWidget::slotDeleteFile " << fit->fileItem()->url().url() << endl;
-            KIO::NetAccess::del(fit->fileItem()->url());
+            KIO::NetAccess::del(fit->fileItem()->url(), (QWidget*)0);
         }
         takeFile(fit);
     }

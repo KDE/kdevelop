@@ -21,7 +21,7 @@
 #include <kfiledialog.h>
 #include <knotifyclient.h>
 #include <klineedit.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
 #include <kdebug.h>
@@ -976,7 +976,7 @@ void ProjectConfigurationDlg::outsideLibMoveDownClicked()
 void ProjectConfigurationDlg::outsideLibAddClicked()
 {
     bool ok;
-    QString dir = KLineEditDlg::getText(i18n("Add library to link:"), "-l", &ok, 0);
+    QString dir = KInputDialog::getText(i18n("Add Library"), i18n("Add library to link:"), "-l", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-I")
         new QListViewItem(outsidelib_listview, dir);
 }
@@ -1056,7 +1056,7 @@ void ProjectConfigurationDlg::outsideLibEditClicked()
     if(item==NULL)return;
     QString text=item->text(0);
 
-    QString dir = KLineEditDlg::getText(i18n("Change library to link:"), text, &ok, 0);
+    QString dir = KInputDialog::getText(i18n("Change Library"), i18n("Change library to link:"), text, &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-l")
         item->setText(0,dir);
 

@@ -19,7 +19,7 @@
 #include <qregexp.h>
 #include <kbuttonbox.h>
 #include <kdialog.h>
-#include <klineeditdlg.h>
+#include <kinputdialog.h>
 #include <klocale.h>
 #include <knotifyclient.h>
 
@@ -267,7 +267,7 @@ void TargetOptionsDialog::outsideMoveDownClicked()
 void TargetOptionsDialog::outsideAddClicked()
 {
     bool ok;
-    QString dir = KLineEditDlg::getText(i18n("Add library:"), "-l", &ok, 0);
+    QString dir = KInputDialog::getText(i18n("Add Library"), i18n("Add library:"), "-l", &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-l")
         new QListViewItem(outsidelib_listview, dir);
 }
@@ -278,7 +278,7 @@ void TargetOptionsDialog::outsideEditClicked()
     if ( (outsidelib_listview->childCount()==0) || (outsidelib_listview->currentItem() == 0) )
         return;
     bool ok;
-    QString dir = KLineEditDlg::getText(i18n("Edit external library:"),
+    QString dir = KInputDialog::getText(i18n("Edit External Library"), i18n("Edit external library:"),
             outsidelib_listview->currentItem()-> text(0), &ok, 0);
     if (ok && !dir.isEmpty())
         outsidelib_listview->currentItem()-> setText(0, dir);
