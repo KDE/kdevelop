@@ -156,28 +156,35 @@ void CKDevelop::initView(){
   ////////////////////////
   // Treeviews
   ////////////////////////
+  KIconLoader *il = KGlobal::iconLoader();
 
-  dockbase_class_tree = createDockWidget(i18n("CV"), BarIcon("filenew"));
+  dockbase_class_tree = createDockWidget(i18n("CV"), QPixmap(locate("appdata", "pics/mini/CVclass.png")) );
+  dockbase_class_tree->setCaption("");
   class_tree = new CClassView(0L,"cv");
   dockbase_class_tree->setWidget(class_tree);
 
-  dockbase_log_file_tree = createDockWidget(i18n("LFV"), BarIcon("filenew"));
+  dockbase_log_file_tree = createDockWidget(i18n("LFV"), BarIcon("kdevelop.xpm"));
+  dockbase_log_file_tree->setCaption("");
   log_file_tree = new CLogFileView(0L,"lfv",config->readBoolEntry("lfv_show_path",false));
   dockbase_log_file_tree->setWidget(log_file_tree);
 
-  dockbase_real_file_tree = createDockWidget(i18n("RFV"), BarIcon("filenew"));
+  dockbase_real_file_tree = createDockWidget(i18n("RFV"), QPixmap( il->loadIcon( "folder.png", KIcon::Small )) );
+  dockbase_real_file_tree->setCaption("");
   real_file_tree = new CRealFileView(0L,"RFV");
   dockbase_real_file_tree->setWidget(real_file_tree);
 
-	dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("filenew"));
+	dockbase_var_viewer = createDockWidget(i18n("VAR"), BarIcon("debugger.xpm"));
+	dockbase_var_viewer->setCaption("");
   var_viewer    = new VarViewer(0L,"VARTab");
   dockbase_var_viewer->setWidget(var_viewer);
 
-  dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("filenew"));
+  dockbase_doc_tree = createDockWidget(i18n("DOC"), BarIcon("mini-book1"));
+  dockbase_doc_tree->setCaption("");
   doc_tree = new DocTreeView(0L,"DOC");
   dockbase_doc_tree->setWidget(doc_tree);
 
-  dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("filenew"));
+  dockbase_widprop_split_view = createDockWidget(i18n("DLG"), BarIcon("newwidget.xpm"));
+  dockbase_widprop_split_view->setCaption("");
   widprop_split_view = new WidgetsPropSplitView(0L,"DLG");
   dockbase_widprop_split_view->setWidget(widprop_split_view);
 
@@ -243,8 +250,10 @@ void CKDevelop::initView(){
   readDockConfig( config, "Dock Settings");
 	// recover broken pointers after the read of the configuration
   dockbase_o_tab_view = dockManager->getDockWidgetFromName( nameOfOutputSuperDock);
+  dockbase_o_tab_view->setCaption(i18n("Output views"));
   QObject::connect(dockbase_o_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTOutputView()));
   dockbase_t_tab_view = dockManager->getDockWidgetFromName( nameOfTreeSuperDock);
+  dockbase_t_tab_view->setCaption(i18n("Tree views"));
   QObject::connect(dockbase_t_tab_view, SIGNAL(headerCloseButtonClicked()), this, SLOT(slotViewTTreeView()));
 
 	// disable docking for all trees and output views
