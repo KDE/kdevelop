@@ -53,7 +53,6 @@ int main(int argc, char* argv[])
                                     "http://www.kdevelop.org"  );
 
   aboutData.addAuthor("Sandy Meier",I18N_NOOP("Maintainer"), "smeier@kdevelop.org");
-  aboutData.addAuthor("John Birch",I18N_NOOP("Internal Debugger, port of KDevelop 1.3 to KDE 2.1"), "jbb@kdevelop.org");
   aboutData.addAuthor("Ralf Nolden",I18N_NOOP("Configuration Functionality,"
                           "Online Help, Popups, port of KDevelop 1.3 to KDE 2.1"),"nolden@kde.org");
   aboutData.addAuthor("Walter Tasin",I18N_NOOP("Many, Many Bugfixes, General Enhancements"), "tasin@kdevelop.org");
@@ -62,6 +61,7 @@ int main(int argc, char* argv[])
   aboutData.addAuthor("Jörgen Olsson",I18N_NOOP("Graphical Classviewer"),"jorgen@trej.net");
   aboutData.addAuthor("Stefan Heidrich",I18N_NOOP("KAppWizard, Printing"), "sheidric@rz.uni-potsdam.de");
   aboutData.addAuthor("Stefan Bartel",I18N_NOOP("Real-File-Viewer, Project Options"), "bartel@rz.uni-potsdam.de");
+  aboutData.addAuthor("John Birch",I18N_NOOP("Internal Debugger, port of KDevelop 1.3 to KDE 2.1"), "jbb@kdevelop.org");
 
   KCmdLineArgs::init( argc, argv, &aboutData );
   KCmdLineArgs::addCmdLineOptions( options );
