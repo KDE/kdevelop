@@ -24,7 +24,6 @@
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
 
-#include <kdirwatch.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -47,8 +46,6 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
 {
     m_projectModel = new ProjectModel();
     m_dirty = false;
-    
-    m_dirWatch = new KDirWatch(this);
     
     setInstance(KDevProjectManagerFactory::instance());
     setXMLFile("kdevpart_kdevprojectmanager.rc");
@@ -76,10 +73,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
         } else {
             kdDebug(9000) << "error:" << error << endl;
         }
-    }
-    
-    connect(m_dirWatch, SIGNAL(dirty(const QString&)),
-        this, SLOT(fileDirty(const QString&)));
+    }    
 }
 
 KDevProjectManagerPart::~KDevProjectManagerPart()
@@ -108,15 +102,9 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
         ProjectItemDom projectDom = importer->import(m_workspace->toFolder(), projectDirectory());
         if (ProjectFolderDom folder = projectDom->toFolder()) {
             m_workspace->addFolder(folder);
-            QStringList makefileList = importer->findMakefiles(folder);
-            for (QStringList::Iterator it = makefileList.begin(); it != makefileList.end(); ++it) {
-                m_dirWatch->addDir(QFileInfo(*it).dirPath(true));
-                m_dirWatch->addFile(*it);
-            }
         }
     }
-    
-    
+        
     QStringList newFileList = allFiles();
 
     bool hasChanges = computeChanges(oldFileList, newFileList);
@@ -127,8 +115,6 @@ void KDevProjectManagerPart::import(RefreshPolicy policy)
 
 void KDevProjectManagerPart::closeProject()
 {
-    delete m_dirWatch;
-    m_dirWatch = 0;
 }
 
 KDevProjectManagerPart::Options KDevProjectManagerPart::options() const
@@ -291,23 +277,17 @@ QStringList KDevProjectManagerPart::fileList(ProjectItemDom item)
 
 void KDevProjectManagerPart::fileDirty(const QString &fileName)
 {
-    QFileInfo fileInfo(fileName);
-    if (fileInfo.extension() == "am")
-        import();
+    Q_UNUSED(fileName);
 }
 
 void KDevProjectManagerPart::fileDeleted(const QString &fileName)
 {
-    QFileInfo fileInfo(fileName);
-    if (fileInfo.extension() == "am")
-        import();
+    Q_UNUSED(fileName);
 }
 
 void KDevProjectManagerPart::fileCreated(const QString &fileName)
 {
-    QFileInfo fileInfo(fileName);
-    if (fileInfo.extension() == "am")
-        import();
+    Q_UNUSED(fileName);
 }
 
 bool KDevProjectManagerPart::computeChanges(const QStringList &oldFileList, const QStringList &newFileList)

@@ -15,12 +15,13 @@ libkdevprojectmanager_la_LIBADD = \
 
 libkdevprojectmanager_la_SOURCES = \
     kdevprojectmanager_part.cpp \
-    kdevprojectmanager_widget.cpp 
-
+    kdevprojectmanager_widget.cpp
+    
 METASOURCES = AUTO
 
 servicedir = $(kde_servicesdir)
 service_DATA = kdevprojectmanager.desktop
 
 rcdir = $(kde_datadir)/kdevprojectmanager
-rc_DATA = kdevprojectmanager.rc
+rc_DATA = kdevprojectmanager.rc 
+

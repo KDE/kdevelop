@@ -27,7 +27,6 @@
 class KDevProjectManagerWidget;
 class KDevProjectImporter;
 class ProjectModel;
-class KDirWatch;
 
 /*
  Please read the README.dox file for more info about this part
@@ -100,7 +99,6 @@ private:
     
     QString m_projectDirectory;
     QString m_projectName;
-    KDirWatch *m_dirWatch;
     
     bool m_dirty;
 };
