@@ -41,6 +41,8 @@
 #define _CLASSTORE_H_INCLUDED
 
 #include "ParsedClass.h"
+#include "PersistantClassStore.h"
+#include "ParsedStruct.h"
 
 class CClassStore
 {
@@ -50,6 +52,9 @@ public: // Constructor & Destructor
   ~CClassStore();
 
 private: // Private attributes
+
+  /** Store for global pre-parsed classes(like Qt and KDE). */
+  CPersistantClassStore globalStore;
 
   /** All parsed classes. */
   QDict<CParsedClass> classes;
@@ -63,6 +68,9 @@ private: // Private attributes
   /** All global functions. */
   QList<CParsedMethod> globalFunctions;
 
+  /** All global structures. */
+  QDict<CParsedStruct> globalStructures;
+
 public: // Public attributes
 
   /** Iterator for the classes */
@@ -74,6 +82,9 @@ public: // Public attributes
   /** Iterator for the global functions ordered by name and arg. */
   QDictIterator<CParsedMethod> gfIterator;
     
+  /** Iterator for the global structures. */
+  QDictIterator<CParsedStruct> gsIterator;
+
 public: // Public queries
 
   /** Tells if a class exists in the store. */
@@ -94,6 +105,9 @@ public: // Public queries
   /** Fetches a global variable from the store by using its' name. */
   CParsedAttribute *getGlobalVarByName( const char *aName );
 
+  /** Get a global structure from the store by using its' name. */
+  CParsedStruct *getGlobalStructByName( const char *aName );
+
   /** Fetches all classes with the named parent. */
   QList<CParsedClass> *getClassesByParent( const char *aName );
 
@@ -105,6 +119,12 @@ public: // Public queries
 
   /** Get all classes in sorted order. */
   QList<CParsedClass> *getSortedClasslist();
+
+  /** Get all global variables in a sorted list. */
+  QList<CParsedAttribute> *getSortedGlobalVarList();
+
+  /** Get all global structures in a sorted list. */
+  QList<CParsedStruct> *getSortedGlobalStructList();
 
 public: // Public Methods
 
@@ -119,6 +139,12 @@ public: // Public Methods
 
   /** Add a global function. */
   void addGlobalFunction( CParsedMethod *aFunc );
+
+  /** Add a global structure. */
+  void addGlobalStruct( CParsedStruct *aStruct );
+
+  /** Store all parsed classes as a database. */
+  void storeAll( const char *aFilename );
 
   /** Output this object as text on stdout */
   void out();

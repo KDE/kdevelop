@@ -51,11 +51,13 @@
 CClassStore::CClassStore() 
   : classIterator( classes ),
     gvIterator( globalVariables ),
-    gfIterator( gfNameAndArg )
+    gfIterator( gfNameAndArg ),
+    gsIterator( globalStructures )
 {
   classes.setAutoDelete( true );
   globalVariables.setAutoDelete( true );
   globalFunctions.setAutoDelete( true );
+  globalStructures.setAutoDelete( true );
 }
 
 /*---------------------------------------- CClassStore::~CClassStore()
@@ -132,6 +134,48 @@ void CClassStore::addGlobalFunction( CParsedMethod *aFunc )
   gfNameAndArg.insert( str, aFunc );
 }
 
+/*------------------------------------ CClassStore::addGlobalStruct()
+ * addGlobalStruct()
+ *   Add a global structure.
+ *
+ * Parameters:
+ *   aStruct       The structure to add.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::addGlobalStruct( CParsedStruct *aStruct )
+{
+  assert( aStruct != NULL );
+  
+  globalStructures.insert( aStruct->name, aStruct );
+}
+
+/*------------------------------------------- CClassStore::storeAll()
+ * storeAll()
+ *   Store all parsed classes as a database.
+ *
+ * Parameters:
+ *   aClass        The class to add.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::storeAll( const char *aFilename )
+{
+  QString str;
+  for( classIterator.toFirst();
+       classIterator.current();
+       ++classIterator )
+  {
+    classIterator.current()->asPersistantString( str );
+    debug( "Storing:" );
+    debug( "----------" );
+    debug( str );
+    debug( "----------" );
+  }
+}
+
 /*------------------------------------------- CClassStore::addClass()
  * addClass()
  *   Add a class to the store.
@@ -180,6 +224,12 @@ void CClassStore::out()
        gvIterator.current();
        ++gvIterator )
     gvIterator.current()->out();
+
+  cout << "  Structures:\n";
+  for( gsIterator.toFirst();
+       gsIterator.current();
+       ++gsIterator )
+    gsIterator.current()->out();
 }
 
 /*********************************************************************
@@ -275,6 +325,22 @@ CParsedMethod *CClassStore::getGlobalFunctionByNameAndArg( const char *aName )
 CParsedAttribute *CClassStore::getGlobalVarByName( const char *aName )
 {
   return globalVariables.find( aName );
+}
+
+/*--------------------------------- CClassStore::getGlobalStructByName()
+ * getGlobalStructByName()
+ *   Get a global structure from the store by using its' name.
+ *
+ * Parameters:
+ *   aName             Name of the variable to fetch.
+ *
+ * Returns:
+ *   CParsedStruct*    The structure we looked for.
+ *   NULL              Otherwise.
+ *-----------------------------------------------------------------*/
+CParsedStruct *CClassStore::getGlobalStructByName( const char *aName )
+{
+  return globalStructures.find( aName );
 }
 
 /*--------------------------------- CClassStore::getClassesByParent()
@@ -429,6 +495,76 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
        str = srted.next() )
   {
     retVal->append( getClassByName( str ) );
+  }
+
+  return retVal;
+}
+
+/*------------------------------ CClassStore::getSortedGlobalVarList()
+ * getSortedGlobalVarList()
+ *   Get all global variables in a sorted list.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedAttribute> * The variables.
+ *-----------------------------------------------------------------*/
+QList<CParsedAttribute> *CClassStore::getSortedGlobalVarList()
+{
+  QList<CParsedAttribute> *retVal = new QList<CParsedAttribute>();
+  QStrList srted;
+  char *str;
+
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( gvIterator.toFirst();
+       gvIterator.current();
+       ++gvIterator )
+  {
+    srted.inSort( gvIterator.current()->name );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getGlobalVarByName( str ) );
+  }
+
+  return retVal;
+}
+
+/*------------------------------ CClassStore::getSortedGlobalStructList()
+ * getSortedGlobalStructList()
+ *   Get all global structures in a sorted list.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QList<CParsedAttribute> * The variables.
+ *-----------------------------------------------------------------*/
+QList<CParsedStruct> *CClassStore::getSortedGlobalStructList()
+{
+  QList<CParsedStruct> *retVal = new QList<CParsedStruct>();
+  QStrList srted;
+  char *str;
+
+  retVal->setAutoDelete( false );
+
+  // Ok... This sucks. But I'm lazy.
+  for( gsIterator.toFirst();
+       gsIterator.current();
+       ++gsIterator )
+  {
+    srted.inSort( gsIterator.current()->name );
+  }
+
+  for( str = srted.first();
+       str != NULL;
+       str = srted.next() )
+  {
+    retVal->append( getGlobalStructByName( str ) );
   }
 
   return retVal;
