@@ -1894,8 +1894,17 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
 
         if (r == idSetInstObjPath)
         {
-          titem->install_path = (KFileDialog::getExistingDirectory());
-          updateProjectFile(titem->owner);
+	  bool ok = FALSE;
+          QString tmp_install_path = KLineEditDlg::getText(
+                              i18n( "Choose Install Path" ),
+                              i18n( "Please enter a path "
+                                    "(example /usr/local/share/... ):" ),
+                              titem->install_path, &ok, this );
+          if ( ok )
+          {
+            titem->install_path = tmp_install_path;
+            updateProjectFile(titem->owner);
+          }
         }
 
         if (r == idInsNewFilepatternItem)
