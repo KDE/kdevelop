@@ -47,6 +47,7 @@
 
 class DLL_IMP_EXP_QEXTMDICLASS QextMdiChildView : public QWidget
 {
+   friend class QextMdiMainFrm;
    friend class QextMdiChildFrm;
    Q_OBJECT
 
@@ -172,6 +173,8 @@ public:     // Methods
      * It extends it base clase method in a way that the maximum size of
      * its childframe (if there is one) will be set, additionally. */
    virtual void setMaximumSize ( int maxw, int maxh );
+   /** Returns if this is added as MDI tool-view */
+   bool isToolView() { return m_bToolView; };
 
 public slots:
    /**
@@ -217,6 +220,9 @@ protected:
    virtual void focusInEvent(QFocusEvent *e);
    virtual void resizeEvent(QResizeEvent *e);
 
+private:
+   bool  m_bToolView;
+
 signals:
    void attachWindow( QextMdiChildView*,bool);
    void detachWindow( QextMdiChildView*,bool);
@@ -243,10 +249,11 @@ signals:
    void isRestoredNow();
 };
 
-inline bool QextMdiChildView::isAttached(){ return (parent() != 0); }
-/** Return the caption of the child window (this is differnet from the caption on the button on the taskbar) */
+/** Returns true if the MDI view is a child window within the MDI mainframe widget; or false if the MDI view is in toplevel mode */
+inline bool QextMdiChildView::isAttached(){ return (mdiParent() != 0L); }
+/** Returns the caption of the child window (this is differnet from the caption on the button on the taskbar) */
 inline const QString& QextMdiChildView::caption(){ return m_szCaption; }
-/** Return the caption of the button on hte task bar */
+/** Returns the caption of the button on hte task bar */
 inline const QString& QextMdiChildView::tabCaption(){ return m_sTabCaption; }
 inline QextMdiChildFrm *QextMdiChildView::mdiParent()
 {

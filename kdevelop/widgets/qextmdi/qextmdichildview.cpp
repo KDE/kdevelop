@@ -42,6 +42,7 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
   ,m_firstFocusableChildWidget(0L)
   ,m_lastFocusableChildWidget(0L)
   ,m_stateChanged(true)
+  ,m_bToolView(false)
 {
    setGeometry( 0, 0, 0, 0);  // reset
    if( caption) 
