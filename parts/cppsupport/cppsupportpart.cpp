@@ -204,11 +204,15 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
 CppSupportPart::~CppSupportPart()
 {
-//    while( m_backgroundParser->filesInQueue() > 0 )
-//       m_backgroundParser->isEmpty().wait();
-    //m_backgroundParser->reparse();
-    m_backgroundParser->close();
-    m_backgroundParser->wait();
+    if( m_backgroundParser ){
+	//    while( m_backgroundParser->filesInQueue() > 0 )
+	//       m_backgroundParser->isEmpty().wait();
+	//m_backgroundParser->reparse();
+	m_backgroundParser->close();
+	m_backgroundParser->wait();
+	delete m_backgroundParser;
+	m_backgroundParser = 0;
+    }
 
     QPtrListIterator<Catalog> it( m_catalogList );
     while( Catalog* catalog = it.current() ){
@@ -221,7 +225,6 @@ CppSupportPart::~CppSupportPart()
     mainWindow()->removeView( m_structureView );
 #endif
 
-    delete m_backgroundParser;
     delete m_pCompletion;
 #ifdef ENABLE_FILE_STRUCTURE
     delete m_structureView;
@@ -366,8 +369,10 @@ CppSupportPart::projectOpened( )
 void
 CppSupportPart::projectClosed( )
 {
-    m_backgroundParser->removeAllFiles();
     kdDebug( 9007 ) << "projectClosed( )" << endl;
+    
+    if( m_backgroundParser )
+	m_backgroundParser->removeAllFiles();
 
     delete m_pCompletion;
     m_pCompletion = 0;
