@@ -19,7 +19,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Kpackage 1.0 Beta 4.1\n"
-"POT-Creation-Date: 1999-11-15 23:16+0100\n"
+"POT-Creation-Date: 1999-12-31 21:05+0100\n"
 "PO-Revision-Date: 1999-11-01 14:19+0200\n"
 "Last-Translator: Salvador Gimeno Zanón <salgiza@eui.upv.es>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -150,7 +150,7 @@ msgstr ""
 "se copiaran los nuevos ficheros fuente."
 
 msgid "insert header/cpp-templates to added files"
-msgstr "insertar plantillas de cabecera/cpp a los ficheros añadidos"
+msgstr "Insertar plantillas de cabecera/cpp a los ficheros añadidos"
 
 msgid "Check this if you want to insert your template to the added files."
 msgstr "Marque esto si desea insertar sus plantillas a los ficheros añadidos."
@@ -227,8 +227,8 @@ msgstr ""
 "\n"
 "1. Introduzca el comando para ejecutar sendmail en el recuadro de\n"
 "   texto inferior. Será guardado en su fichero local kdeveloprc,\n"
-"   por lo que no tendrá que hacer esto todas las veces. (Esperamos\n"
-"   que no tenga que informar de errores constantemente.) :)\n"
+"   por lo que no tendrá que hacer esto todas las veces (esperamos\n"
+"   que no tenga que informar de errores constantemente :) ).\n"
 "   Asegúrese de que introduce el camino absoluto, ya que es posible\n"
 "   que el sendmail no esté en su camino de búsqueda.\n"
 "        Ejemplo: /usr/sbin/sendmail\n"
@@ -259,7 +259,7 @@ msgstr ""
 "   Visite  <http://bugs.kde.org>."
 
 msgid "sendmail command :"
-msgstr "comando sendmail :"
+msgstr "Comando sendmail :"
 
 msgid "Attention"
 msgstr "Atención"
@@ -290,22 +290,22 @@ msgid "Error Class :"
 msgstr "Tipo de error:"
 
 msgid "low"
-msgstr "baja"
+msgstr "Baja"
 
 msgid "medium"
-msgstr "media"
+msgstr "Media"
 
 msgid "high"
-msgstr "alta"
+msgstr "Alta"
 
 msgid "normal"
-msgstr "normal"
+msgstr "Normal"
 
 msgid "grave"
-msgstr "grave"
+msgstr "Grave"
 
 msgid "critical"
-msgstr "crítico"
+msgstr "Crítica"
 
 msgid "Error Location :"
 msgstr "Localización :"
@@ -326,7 +326,7 @@ msgid "QT version :"
 msgstr "Versión de QT :"
 
 msgid "OS / distribution :"
-msgstr "SO / distribución :"
+msgstr "S.O. / distribución :"
 
 msgid "Compiler :"
 msgstr "Compilador :"
@@ -506,6 +506,10 @@ msgstr "Directorio"
 msgid "Delete Folder..."
 msgstr "Borrar directorio..."
 
+#, fuzzy
+msgid "Namespaces"
+msgstr "Mensajes"
+
 msgid "Structures"
 msgstr "Estructuras"
 
@@ -581,10 +585,10 @@ msgid "additional directories to index"
 msgstr "Directorios adicionales a indexar"
 
 msgid "add"
-msgstr "añadir"
+msgstr "Añadir"
 
 msgid "remove"
-msgstr "eliminar"
+msgstr "Eliminar"
 
 #, c-format
 msgid ""
@@ -632,7 +636,7 @@ msgid "Forward"
 msgstr "Avanzar"
 
 msgid "Add Bookmark"
-msgstr "Añadir Marcador"
+msgstr "Añadir marcador"
 
 msgid "View in new window"
 msgstr "Ver en nueva ventana"
@@ -702,11 +706,72 @@ msgstr ""
 "Desde aquí puede navegar por el disco en busca del\n"
 "fichero que se usará para la entrada."
 
+msgid "Watch: "
+msgstr "Inspeccionar: "
+
 msgid "Arguments: "
 msgstr "Argumentos:"
 
 msgid "Clear Arguments"
 msgstr "Vaciar argumentos"
+
+msgid "Filename: %s at line: %d"
+msgstr "Fichero: %s Línea: %d"
+
+msgid "Breakpoint"
+msgstr "Punto de interrupción"
+
+msgid "&Conditional"
+msgstr "&Condicional"
+
+#, fuzzy
+msgid "&Ignore count"
+msgstr "&Ignorar"
+
+msgid "&Enable"
+msgstr "&Habilitado"
+
+msgid "Remove breakpoint"
+msgstr "Eliminar punto de interrupción"
+
+msgid "Edit breakpoint"
+msgstr "Editar punto de interrupción"
+
+msgid "Clear all breakpoints"
+msgstr "Eliminar todos los puntos de interrupción"
+
+msgid "Display source code"
+msgstr "Mostrar el código fuente"
+
+msgid "Start:"
+msgstr "Inicio:"
+
+msgid "Amount/End address (memory/disassemble):"
+msgstr "Cantidad/Dirección final (memoria/desensamblar):"
+
+msgid "MemoryView:"
+msgstr "Visor de memoria"
+
+msgid "Memory"
+msgstr "Memoria"
+
+msgid "Disassemble"
+msgstr "Desensamblar"
+
+msgid "Registers"
+msgstr "Registros"
+
+msgid "Libraries"
+msgstr "Bibliotecas"
+
+msgid "Delete watch variable"
+msgstr "Eliminar inspección"
+
+msgid "Toggle watchpoint"
+msgstr "Alternar inspección"
+
+msgid "Watch"
+msgstr "Inspecciones"
 
 msgid "File Properties"
 msgstr "Propiedades de fichero"
@@ -724,20 +789,20 @@ msgid "Size:"
 msgstr "Tamaño:"
 
 msgid "include in distribution"
-msgstr "incluir en la distribución"
+msgstr "Incluir en la distribución"
 
 msgid "install"
-msgstr "instalar"
+msgstr "Instalar"
 
 msgid "Installdir + Filename:"
-msgstr "Dir. de instalación + Nombre del fichero:"
+msgstr "Dir. de instalación + nombre del fichero:"
 
 msgid ""
 "This option sets if the actual file\n"
 "will be included in the final distri-\n"
 "bution."
 msgstr ""
-"Esta opción decide se el fichero\n"
+"Esta opción decide si el fichero\n"
 "será incluido en la distribución\n"
 "final."
 
@@ -752,6 +817,17 @@ msgid ""
 "$(kde_appsdir)/filename\n"
 "Other values can be found in the Makefile"
 msgstr ""
+"Esta opción determina si el fichero actual\n"
+"será instalado en la plataforma durante el\n"
+"proceso de instalación \"make install\".\n"
+"Si se decide instalar este fichero, debe\n"
+"elegir el directorio de instalación y el\n"
+"nombre con que se instalará el fichero.\n"
+"Algunos valores posibles son:\n"
+"$(kde_icondir)/fichero\n"
+"$(kde_appsdir)/fichero\n"
+"Otros valores posibles pueden encontrarse\n"
+"en el fichero Makefile"
 
 msgid "Search for Help on..."
 msgstr "Buscar ayuda sobre..."
@@ -788,6 +864,12 @@ msgstr "Aplicaciones"
 
 msgid "Label:"
 msgstr "Etiqueta:"
+
+msgid "Others"
+msgstr "Otros"
+
+msgid "custom project"
+msgstr "Personalizado"
 
 msgid "Terminal"
 msgstr "Terminal"
@@ -830,7 +912,7 @@ msgid "Email:"
 msgstr "Email:"
 
 msgid "generate sources and headers"
-msgstr "generar fuentes y cabeceras"
+msgstr "Generar fuentes y cabeceras"
 
 msgid "GNU-Standard-Files (INSTALL,README,COPYING...)"
 msgstr "Ficheros GNU estándar (INSTALL,README,COPYING...)"
@@ -851,7 +933,7 @@ msgid "Program-Icon"
 msgstr "Icono del prog."
 
 msgid "Mini-Icon"
-msgstr "Mini Icono"
+msgstr "Icono pequeño"
 
 msgid ""
 "Insert your project name here. This is\n"
@@ -977,13 +1059,13 @@ msgid "Version Control System Support"
 msgstr "Soporte para Sistema de Control de Versiones"
 
 msgid "vcs support"
-msgstr "tipo de soporte"
+msgstr "Tipo de soporte"
 
 msgid "vcs location"
-msgstr "localización del cvs:"
+msgstr "Localización del cvs:"
 
 msgid "repository in vcs"
-msgstr "repositorio en cvs"
+msgstr "Repositorio en el cvs"
 
 msgid "vendor tag"
 msgstr ""
@@ -1028,6 +1110,9 @@ msgid ""
 "At the moment we only support local vs. And be sure, you\n"
 "have read and write access in the location."
 msgstr ""
+"Aquí puede elegir donde está situada la raiz del cvs.\n"
+"Actualmente sólo puede ser local. Recuerde que necesita\n"
+"tener permiso de lectura y escritorio en el directorio."
 
 msgid ""
 "Here you can see the repository of your project in the\n"
@@ -1044,7 +1129,7 @@ msgid "Headertemplate for .h-files"
 msgstr "Plantilla de cabecera para ficheros .h"
 
 msgid "headertemplate for .h-files"
-msgstr "usar plantilla de cabecera"
+msgstr "Usar plantilla de cabecera"
 
 msgid "Load..."
 msgstr "Cargar..."
@@ -1076,7 +1161,7 @@ msgid "Headertemplate for .cpp-files"
 msgstr "Plantilla de cabecera para ficheros .cpp"
 
 msgid "headertemplate for .cpp-files"
-msgstr "usar plantilla de cabecera"
+msgstr "Usar plantilla de cabecera"
 
 msgid ""
 "Use a standard\n"
@@ -1151,7 +1236,7 @@ msgid "Headertemplate for .c-files"
 msgstr "Plantilla de cabecera para ficheros .c"
 
 msgid "headertemplate for .c-files"
-msgstr "usar plantilla de cabecera"
+msgstr "Usar plantilla de cabecera"
 
 msgid ""
 "Create a C application. The program will run in a terminal and doesn't "
@@ -1199,9 +1284,6 @@ msgstr ""
 
 msgid "Contains all individual project types."
 msgstr "Contiene todos los tipos individuales de proyecto."
-
-msgid "Others"
-msgstr "Otros"
 
 msgid "Translations"
 msgstr "Traducciones"
@@ -1254,7 +1336,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"contiene ficheros modificados. Guardar el fichero modificado\n"
+"contiene ficheros modificados. ¿Guardar el fichero modificado\n"
 "\n"
 
 msgid "Save all"
@@ -1332,11 +1414,13 @@ msgstr "Ejecutando "
 msgid "Execute with Arguments"
 msgstr "Ejecutar con argumentos"
 
-msgid "Running  "
-msgstr "Ejecutando "
+#, c-format
+msgid "Running %s in internal debugger"
+msgstr "Ejecutando %s en el depurador interno"
 
-msgid "  in KDbg"
-msgstr " en el KDbg"
+#, c-format
+msgid "Running %s in %s"
+msgstr "Ejecutando %s en %s"
 
 msgid "Running make..."
 msgstr "Ejecutando make..."
@@ -1574,6 +1658,17 @@ msgstr ""
 "Abre el diálogo de buscar en ficheros para buscar expresiones en varios "
 "ficheros"
 
+msgid "Run program to this cursor position"
+msgstr "Ejecuta el programa hasta la línea en que está el cursor"
+
+msgid "Run the program until this function/method ends"
+msgstr "Ejecutar el programa hasta que acabe está función o método"
+
+msgid ""
+"Try to display this variable whenever the application execution is paused"
+msgstr ""
+"Intentar mostrar esta variable cuando la aplicación esté pausada"
+
 msgid "Moves the selection to the right"
 msgstr "Mueve la selección hacia la derecha"
 
@@ -1651,10 +1746,10 @@ msgstr ""
 "Llama al make para crear el fichero de mensajes a partir de las macros i18n()"
 
 msgid "Creates the Project's API with KDoc"
-msgstr "Crea la API del Proyecto con KDoc"
+msgstr "Crea la API del proyecto con KDoc"
 
 msgid "Creates the Project's User Manual with the sgml-file"
-msgstr "Crea el Manual de Usuario del proyecto con el fichero sgml"
+msgstr "Crea el manual de usuario del proyecto con el fichero sgml"
 
 msgid "Creates distribution packages from the current project"
 msgstr "Crea paquetes de distribución del proyecto actual"
@@ -1688,8 +1783,8 @@ msgstr ""
 "Le permite elegir argumentos de ejecución para el binario y llama al comando "
 "de make"
 
-msgid "Invokes make and KDbg debugging the binary"
-msgstr "Ejecuta el make y el KDbg para depurar el binario"
+msgid "Invokes make and starts debugging the binary"
+msgstr "Llama al make y comienza la depuración del binario"
 
 msgid "Invokes make distclean and deletes all compiled files"
 msgstr "Ejecuta make distclean y borra todos los ficheros compilados"
@@ -1898,9 +1993,10 @@ msgstr "Listo"
 msgid "Are you sure you want to delete this method?"
 msgstr "¿Seguro que desea eliminar este método?"
 
-#, fuzzy
+# ¿Dónde demonios aparece esta frase en el programa?
+# ¿Qué es "Del"? - Salva
 msgid "//Del by KDevelop: "
-msgstr "¡ Bienvenido a KDevelop !"
+msgstr ""
 
 msgid "Method missing"
 msgstr "Falta el método"
@@ -1918,13 +2014,13 @@ msgid "Welcome to KDevelop!"
 msgstr "¡ Bienvenido a KDevelop !"
 
 msgid "messages"
-msgstr "mensajes"
+msgstr "Mensajes"
 
 msgid "stdout"
-msgstr "stdout"
+msgstr "Salida estandar (stdout)"
 
 msgid "stderr"
-msgstr "stderr"
+msgstr "Salida de errores (stderr)"
 
 msgid "CV"
 msgstr "VC"
@@ -1951,7 +2047,7 @@ msgid "Tool&s"
 msgstr "Herramienta&s"
 
 msgid "Save All"
-msgstr "Guardar &Todo"
+msgstr "Guardar todo"
 
 msgid "Indent"
 msgstr "Indentar"
@@ -2038,7 +2134,7 @@ msgid "Make messages and merge"
 msgstr "Crear mensajes y mezclar"
 
 msgid "Make API-Doc"
-msgstr "Crear doc. del &API"
+msgstr "Crear doc. del API"
 
 msgid "Make User-Manual..."
 msgstr "Crear manual de usuario..."
@@ -2179,7 +2275,7 @@ msgid "&New Class..."
 msgstr "&Nueva clase..."
 
 msgid "&Add existing File(s)..."
-msgstr "&Añadir fichero(s) existente(s)..."
+msgstr "A&ñadir fichero(s) existente(s)..."
 
 msgid "Add new &Translation File..."
 msgstr "Añadir nueva traducción..."
@@ -2199,11 +2295,11 @@ msgstr "Crear manual de &usuario..."
 msgid "&Source-tgz"
 msgstr "&Fuente-tgz"
 
-msgid "Make D&istribution"
-msgstr "Crear d&istribución"
+msgid "Make &Distribution"
+msgstr "Crear &distribución"
 
-msgid "&Options..."
-msgstr "&Opciones..."
+msgid "O&ptions..."
+msgstr "O&pciones..."
 
 msgid "&Project"
 msgstr "&Proyecto"
@@ -2247,9 +2343,6 @@ msgstr "Cons&truir"
 msgid "&Tools"
 msgstr "&Herramientas"
 
-msgid "&A2ps..."
-msgstr "&A2ps..."
-
 msgid "&Enscript..."
 msgstr "&Enscript..."
 
@@ -2283,8 +2376,9 @@ msgstr "&Ventana"
 msgid "&Set Bookmark..."
 msgstr "&Configurar marcador..."
 
+# Sólo se pone ... cuando se muestra un diálogo/ventana
 msgid "&Add Bookmark..."
-msgstr "&Añadir marcador..."
+msgstr "&Añadir marcador"
 
 msgid "&Clear Bookmarks"
 msgstr "&Vaciar marcadores"
@@ -2422,6 +2516,24 @@ msgstr ""
 "Inicializando el último proyecto...\n"
 "Por favor espere...\n"
 
+msgid "frame stack"
+msgstr "Marco de la pila"
+
+msgid "breakpoint"
+msgstr "Punto de interrupción"
+
+msgid "VAR"
+msgstr "VAR"
+
+msgid "debugger"
+msgstr "Depurador"
+
+msgid "FrameStack"
+msgstr "Marco de la pila"
+
+msgid "BPManager"
+msgstr "Gestor de puntos de interrupción"
+
 msgid "Widgets"
 msgstr "Controles"
 
@@ -2429,7 +2541,7 @@ msgid "Items"
 msgstr "Elementos"
 
 msgid "Widget Editor"
-msgstr "Editor de Controles"
+msgstr "Editor de controles"
 
 msgid "Widget Properties"
 msgstr "Propiedades del control"
@@ -2457,6 +2569,12 @@ msgstr "Crear doc. de la &API"
 
 msgid "Make &User-Manual"
 msgstr "Crear manual de &usuario"
+
+msgid "Make D&istribution"
+msgstr "Crear d&istribución"
+
+msgid "&Options..."
+msgstr "&Opciones..."
 
 msgid "&Generate Sources..."
 msgstr "&Generar fuentes..."
@@ -2798,19 +2916,13 @@ msgstr ""
 "al probar el menú de ayuda puede aparecer un mensaje informando de queel "
 "fichero index.html no ha sido encontrado."
 
-# El KDbg abre los fuentes el solito ¿? - Salva
 msgid ""
 "Debug program\n"
 "\n"
-"Opens KDbg in the tools window with your actualprogram and allows you to "
-"execute it step by stepby setting breakpoints in the sourcecode.Note that "
-"you have to open your sourcecodes in KDbgto access it."
+"Runs your program in the debugger you have chosen(by default the internal "
+"debugger is used)All debuggers should allow you to execute your programstep "
+"by step by setting breakpoints in the sourcecode."
 msgstr ""
-"Depurar programa\n"
-"\n"
-"Abre el KDbg en la ventana de herramientas, con su programa actual, y le "
-"permite ejecutarlo paso a paso, introduciendo puntos de ruptura en el código "
-"fuente."
 
 msgid ""
 "Stop\n"
@@ -2993,7 +3105,7 @@ msgid ""
 "The documentation tree gives access to library documentation and the "
 "KDevelop manuals. Can be configured individually by right-button menu."
 msgstr ""
-"Árbol de Documentación\n"
+"Árbol de documentación\n"
 "\n"
 "El árbol de documentación de acceso la documentación de las bibliotecas y a "
 "los manuales de KDevelop. Puede ser configurado desde su menú contextual."
@@ -3137,7 +3249,7 @@ msgstr ""
 "Esperemos que disfrute de KDevelop y que le sirva de ayuda\n"
 "para crear nuevo software.\n"
 "\n"
-"El equipo de KDevelop"
+"El equipo de KDevelop."
 
 msgid ""
 "Now KDevelop will perform the last step\n"
@@ -3147,7 +3259,7 @@ msgid ""
 "you need."
 msgstr ""
 "Ahora KDevelop realizará el último paso del proceso\n"
-"de instalación, indexando la documentación. Esto le\n"
+"de instalación, indexando la documentación. Ésto le\n"
 "permitirá tener una ayuda avanzada, que le dará la\n"
 "información que necesite."
 
@@ -3308,7 +3420,7 @@ msgstr ""
 " "
 
 msgid "Qt Documentation found"
-msgstr "Encontrada la Documentación de QT"
+msgstr "Encontrada la documentación de las Qt"
 
 msgid ""
 "\n"
@@ -3316,7 +3428,7 @@ msgid ""
 "\n"
 msgstr ""
 "\n"
-"La Documentación de las QT se encontró en:\n"
+"La documentación de las Qt se encontró en:\n"
 
 msgid ""
 "\n"
@@ -3392,7 +3504,7 @@ msgid ""
 " "
 msgstr ""
 "\n"
-"Ahora KDevelop creará una nueva documentación de la\n"
+"Ahora KDevelop creará una nueva documentación para la\n"
 "biblioteca KDE. Para ello, necesita el paquete kdelibs\n"
 "y el paquete con sus fuentes. Le recomendamos que los\n"
 "obtenga de www.kde.org. Compruebe que la versión de las\n"
@@ -3692,11 +3804,90 @@ msgstr ""
 msgid "Directories"
 msgstr "Directorios"
 
+msgid "Use external debugger"
+msgstr "Utilizar un depurador externo"
+
+msgid ""
+"Select internal or external debugger\n"
+"\n"
+"Choose whether to use an external debugger\n"
+"or the internal debugger within kdevelop\n"
+"The internal debugger is a frontend to gdb"
+msgstr ""
+"Selecciona el depurador externo\n"
+"\n"
+"Marque está opción si desea utilizar un\n"
+"depurador externo, en lugar del interno\n"
+"del KDevelop. El interno es una interfaz\n"
+"al gdb."
+
+msgid "External"
+msgstr "Externo"
+
+msgid "Select debug command:"
+msgstr "Seleccione el depurador:"
+
+msgid ""
+"Identify the external debugger\n"
+"\n"
+"Enter the program name you wish to run\n"
+"as your debugger"
+msgstr ""
+"Identifique el depurador externo\n"
+"\n"
+"Introduzca el nombre del programa que\n"
+"desea utilizar como depurador."
+
+msgid "Internal"
+msgstr "Interno"
+
+msgid "Display static members"
+msgstr "Mostrar miembros estáticos"
+
+msgid ""
+"Display static members\n"
+"\n"
+"Displaying static members makes gdb slower in\n"
+"producing data within kde and qt.\n"
+"It may change the \"signature\" of the data\n"
+"which QString and friends rely on.\n"
+"But if you need to debug into these values then\n"
+"check this option"
+msgstr ""
+"Mostrar miembros estáticos\n"
+"\n"
+"Mostrar los miembros estáticos hace que el gdb\n"
+"sea más lento al producir los datos dentro del\n"
+"KDE y las Qt. Puede cambiar la \"firma\" de los\n"
+"datos en las que QString y compañía dependen.\n"
+"Pero si necesita depurar estos valores, marque\n"
+"esta opción."
+
+msgid "Display mangled names"
+msgstr "Mostrar nombres mutilados"
+
+msgid ""
+"Display mangled names\n"
+"\n"
+"When displaying the disassembled code you\n"
+"can elect to see the methods mangled names\n"
+"However, non-mangled names are easier to read."
+msgstr ""
+"Mostrar nombres mutilados\n"
+"\n"
+"Cuando se desensamble el código, puede elegir\n"
+"entre ver los nombres mutilados de los métodos.\n"
+"En cualquier caso, los nombres sin mutilar son\n"
+"más faciles de leer."
+
 msgid "Keys"
 msgstr "Teclas"
 
 msgid "Documentation"
 msgstr "Documentación"
+
+msgid "Debugger"
+msgstr "Depurador"
 
 msgid ""
 "The chosen path does not lead to the\n"
@@ -3736,17 +3927,35 @@ msgstr ""
 "el camino correcto o seleccione 'Actualizar'\n"
 "para crear una nueva documentación."
 
+msgid "ClassWizard Tool"
+msgstr "Asistente de Clases"
+
+msgid "Virtual functions"
+msgstr "Funciones virtuales"
+
+msgid "Available:"
+msgstr "Disponibles:"
+
+msgid "Used:"
+msgstr "Usadas:"
+
+msgid "Added method"
+msgstr "Método añadido"
+
+msgid "The virtual method implementation has been added."
+msgstr "La implementación del método virtual ha sido añadida."
+
 msgid "Project/LFV"
 msgstr "Proyecto/LFV"
 
 msgid "New File..."
-msgstr "Nuevo Fichero..."
+msgstr "Nuevo fichero..."
 
 msgid "New Class..."
-msgstr "Nueva Clase..."
+msgstr "Nueva clase..."
 
 msgid "New Group..."
-msgstr "Nuevo Grupo..."
+msgstr "Nuevo grupo..."
 
 msgid "Show relative path"
 msgstr "Mostrar camino relativo"
@@ -3889,22 +4098,22 @@ msgid "Inheritence"
 msgstr "Herencia"
 
 msgid "public"
-msgstr "pública"
+msgstr "Pública"
 
 msgid "protected"
-msgstr "protegida"
+msgstr "Protegida"
 
 msgid "private"
-msgstr "privada"
+msgstr "Privada"
 
 msgid "Additional Options"
 msgstr "Opciones adicionales"
 
 msgid "use header/cpp-templates"
-msgstr "plantillas de cabecera/cpp"
+msgstr "Plantillas de cabecera/cpp"
 
 msgid "generate a QWidget-Childclass"
-msgstr "generar clase hija de QWidget"
+msgstr "Generar clase hija de QWidget"
 
 msgid ""
 "This offers additional options to your new class.\n"
@@ -3945,7 +4154,7 @@ msgid ""
 "implementation files."
 msgstr ""
 "Lo sentimos, pero el KDevelop no puede añadir clases a ficheros de cabecera "
-"o de implementación ya existentes." 
+"o de implementación ya existentes."
 
 msgid "lsm File - Linux Software Map"
 msgstr "Fichero lsm - Linux Software Map"
@@ -3990,16 +4199,16 @@ msgid "Enter a name for your new file here."
 msgstr "Introduzca aquí un nombre para su nuevo fichero."
 
 msgid "use Template"
-msgstr "usar plantilla"
+msgstr "Usar plantilla"
 
 msgid "Check this if you want to use a template."
 msgstr "Marque esta opción si desea utilizar una plantilla."
 
 msgid "Project Options"
-msgstr "Opciones del Proyecto"
+msgstr "Opciones del proyecto"
 
 msgid "add to Project"
-msgstr "añadir al proyecto"
+msgstr "Añadir al proyecto"
 
 msgid "Check this if you want to add the new file to your project."
 msgstr "Marque esta opción si desea añadir el nuevo fichero al proyecto."
@@ -4148,7 +4357,7 @@ msgid ""
 msgstr ""
 
 msgid "only syntax check"
-msgstr "comprobar solo la sintaxis"
+msgstr "Comprobar solo la sintaxis"
 
 msgid ""
 "This option sets the compiler\n"
@@ -4163,7 +4372,7 @@ msgstr ""
 "código, pero nada más."
 
 msgid "optimize"
-msgstr "optimizar"
+msgstr "Optimizar"
 
 msgid "Optimization-level"
 msgstr "Nivel de optimización"
@@ -4188,7 +4397,7 @@ msgid "Set your debugging options here."
 msgstr "Configure las opciones de depuración aquí."
 
 msgid "generate debugging information"
-msgstr "generar información de depurado"
+msgstr "Generar información de depurado"
 
 msgid ""
 "Checking this turns on the -g flag\n"
@@ -4212,7 +4421,7 @@ msgstr ""
 "pilador gcc."
 
 msgid "generate extra information for gprof"
-msgstr "generar información para gprof"
+msgstr "Generar información para gprof"
 
 msgid ""
 "Generate extra code to write profile\n"
@@ -4224,7 +4433,7 @@ msgstr ""
 "análisis <i>gprof</i>."
 
 msgid "store temporary intermediate files"
-msgstr "guardar los ficheros temporales"
+msgstr "Guardar los ficheros temporales"
 
 msgid ""
 "Store the usually temporary intermediate\n"
@@ -4238,7 +4447,7 @@ msgstr ""
 "<i>foo.o, foo.i</i> y<i>foo.s"
 
 msgid "additional options:"
-msgstr "opciones adicionales:"
+msgstr "Opciones adicionales:"
 
 msgid ""
 "Insert other GCC-options here\n"
@@ -4454,7 +4663,7 @@ msgstr ""
 "g++ no coincide con el de cfront."
 
 msgid "make all Warnings into errors"
-msgstr "convertir todos los avisos en errores"
+msgstr "Convertir todos los avisos en errores"
 
 msgid "Make all warnings into errors."
 msgstr "Convierte todos los avisos en errores."
@@ -4470,14 +4679,14 @@ msgstr ""
 "las bibliotecas a añadir al proyecto."
 
 msgid "library flags"
-msgstr "parámetros de biblioteca"
+msgstr "Parámetros de la biblioteca"
 
 msgid "Set your library flags here."
 msgstr "Configure aquí los parámetros de biblioteca."
 
 msgid "remove all symbol table and relocation information from the executable"
 msgstr ""
-"borrar la tabla de símbolos y la información de reubicación del ejecutable"
+"Borrar la tabla de símbolos y la información de reubicación del ejecutable"
 
 msgid ""
 "If you want to use a debugger, you\n"
@@ -4491,7 +4700,7 @@ msgstr ""
 "con esta opción."
 
 msgid "prevent using shared libraries"
-msgstr "evitar utilizar bibliotecas compartidas"
+msgstr "Evitar utilizar bibliotecas compartidas"
 
 msgid ""
 "On systems that support dynamic linking,\n"
@@ -4503,7 +4712,7 @@ msgstr ""
 "Esta opción no hace nada en otros sistemas."
 
 msgid "additional flags:"
-msgstr "parámetros:"
+msgstr "Parámetros:"
 
 msgid ""
 "Insert other linker options here\n"
@@ -4514,22 +4723,22 @@ msgstr ""
 "Se utilizará la variable de entorno LDFLAGS."
 
 msgid "libraries"
-msgstr "bibliotecas"
+msgstr "Bibliotecas"
 
 msgid "Choose your libraries here."
 msgstr "Elija sus bibliotecas aquí."
 
 msgid "X11 basics\n"
-msgstr "básicas de X11\n"
+msgstr "Las básicas del X11\n"
 
 msgid "X11 extensions\n"
-msgstr "extensiones de X11\n"
+msgstr "Extensiones del X11\n"
 
 msgid "KDE basics"
-msgstr "Básicas de KDE"
+msgstr "Las básicas del KDE"
 
 msgid "KDE user interface"
-msgstr "Interfaz de usuario de KDE"
+msgstr "Interfaz de usuario del KDE"
 
 msgid ""
 "KDE HTML widget :\n"
@@ -4537,7 +4746,7 @@ msgid ""
 "-ltiff, -lpng, -lm, -ljscript."
 msgstr ""
 "Control HTML del KDE :\n"
-"esto incluye -lkhtmlw, -lkimgio, -ljpeg,\n"
+"incluye -lkhtmlw, -lkimgio, -ljpeg,\n"
 "-ltiff, -lpng, -lm, -ljscript."
 
 msgid "KDE kfm functionality"
@@ -4556,7 +4765,7 @@ msgid "Math library"
 msgstr "Biblioteca matemática"
 
 msgid "additional libraries:"
-msgstr "bibl. adicionales:"
+msgstr "Bibl. adicionales:"
 
 msgid "Add additional libraries here."
 msgstr "Añada bibliotecas adicionales aquí."
@@ -4584,7 +4793,7 @@ msgid "Environment variables"
 msgstr "Variables de entorno"
 
 msgid "No built-in rules"
-msgstr ""
+msgstr "Sin reglas implícitas"
 
 msgid "Touch files"
 msgstr "Tocar ficheros"
@@ -4599,13 +4808,13 @@ msgid "Print working directory"
 msgstr "Mostrar dir. de trabajo"
 
 msgid "job number"
-msgstr "nº de trabajos"
+msgstr "Nº de trabajos"
 
 msgid "set modified"
 msgstr ""
 
 msgid "additional options"
-msgstr "otras opciones"
+msgstr "Otras opciones"
 
 msgid "Make Options"
 msgstr "Make"
@@ -4749,7 +4958,7 @@ msgid "Add File to Project..."
 msgstr "Añadir fichero al proyecto..."
 
 msgid "Remove from Repository (and disk)"
-msgstr "Eliminar del Repositorio (y del disco)"
+msgstr "Eliminar del repositorio (y del disco)"
 
 #, c-format
 msgid ""
@@ -4854,7 +5063,7 @@ msgstr ""
 "elegido en el menú de herramientas"
 
 msgid "KDE Library Documentation Update..."
-msgstr "Actualización de la doc. de la biblioteca KDE..."
+msgstr "Actualización de la documentación de la biblioteca KDE..."
 
 msgid "Choose installation mode:"
 msgstr "Elija el modo de instalación:"
@@ -4863,7 +5072,7 @@ msgid "new KDE Libs sources path:"
 msgstr "Situación de los fuentes de kdelibs:"
 
 msgid "Delete old Documentation and install to recent Documentation path"
-msgstr "Borrar la documentación vieja e instalar en la localización actual"
+msgstr "Borrar la documentación vieja e instalar en la localización actual."
 
 msgid ""
 "Checking this will delete the current documentation\n"
@@ -4875,7 +5084,7 @@ msgstr ""
 "la misma localización."
 
 msgid "Delete old Documentation and install to new Documentation path"
-msgstr "Borrar la documentación vieja e instalar en una nueva localización"
+msgstr "Borrar la documentación vieja e instalar en una nueva localización."
 
 msgid ""
 "Checking this will delete the current documentation\n"
@@ -4887,7 +5096,7 @@ msgstr ""
 "abajo, donde se instalará la nueva documentación generada."
 
 msgid "Leave old Documention untouched and install to new Documention path"
-msgstr "Cambiar la localización de la documentación sin borrar la vieja"
+msgstr "Cambiar la localización de la documentación sin borrar la vieja."
 
 msgid ""
 "This doesn't delete your current documentation and leaves it\n"
@@ -4996,6 +5205,15 @@ msgstr "Nuevo Directorio de Documentación KDE..."
 msgid "KDE Libs Directory..."
 msgstr "Directorio de las bibliotecas KDE..."
 
+msgid "Print subtree"
+msgstr "Imprimir subarbol"
+
+msgid "Fold all"
+msgstr "Plegar"
+
+msgid "Unfold all"
+msgstr "Desplegar"
+
 msgid "KDevelop"
 msgstr "KDevelop"
 
@@ -5051,157 +5269,10 @@ msgid "Current Project"
 msgstr "Proyecto actual"
 
 msgid "API documentation"
-msgstr "Documentación API"
+msgstr "Documentación de la API"
 
 msgid "User manual"
 msgstr "Manual de usuario"
-
-msgid "Search in Files..."
-msgstr "Buscar en ficheros..."
-
-msgid "&Pattern:"
-msgstr "&Patrón:"
-
-msgid "&Template:"
-msgstr "P&lantilla:"
-
-msgid "&Files:"
-msgstr "&Ficheros:"
-
-msgid "&Directory:"
-msgstr "&Directorio:"
-
-msgid "&Recursive"
-msgstr "&Recursivo"
-
-msgid "9999 matches"
-msgstr "9999 coincidencias"
-
-msgid "Done"
-msgstr "Hecho"
-
-msgid ""
-"Enter the regular expression you want to search for here.\n"
-"Possible meta characters are:\n"
-"<bold>.</bold> - Matches any character\n"
-"<bold>^</bold> - Matches the beginning of a line\n"
-"<bold>$</bold> - Matches the end of a line\n"
-"<bold>\\\\\\<</bold> - Matches the beginning of a word\n"
-"<bold>\\\\\\></bold> - Matches the end of a word\n"
-"\n"
-"The following repetition operators exist:\n"
-"<bold>?</bold> - The preceding item is matches at most once\n"
-"<bold>*</bold> - The preceding item is matched zero or more times\n"
-"<bold>+</bold> - The preceding item is matched once or more times\n"
-"<bold>{<i>n</i>}</bold> - The preceding item is matched exactly <i>n</i> "
-"times\n"
-"<bold>{<i>n</i>,}</bold> - The preceding item is matched <i>n</i> or more "
-"times\n"
-"<bold>{,<i>n</i>}</bold> - The preceding item is matched at most <i>n</i> "
-"times\n"
-"<bold>{<i>n</i>,<i>m</i>}</bold> - The preceding item is matched at least "
-"<i>n</i>,\n"
-"   but at most <i>m</i> times.\n"
-"\n"
-"Furthermore, backreferences to bracketed subexpressions are\n"
-"available via the notation \\\\<i>n</i>."
-msgstr ""
-"Introduzca aquí las expresiones regulares que desea buscar.\n"
-"Los caracteres especiales que puede introducir son:\n"
-"<bold>.</bold> - Equivale a cualquier caracter\n"
-"<bold>^</bold> - Equivale a un comienzo de línea\n"
-"<bold>$</bold> - Equivale a un fin de línea\n"
-"<bold>\\\\\\<</bold> - Equivale a un principio de palabra\n"
-"<bold>\\\\\\></bold> - Equivale a un fin de palabra\n"
-"\n"
-"Se pueden utilizar los siguientes operadores de repetición:\n"
-"<bold>?</bold> - El elemento que lo preceda se encuentra una vez como mucho\n"
-"<bold>*</bold> - El elemento que lo preceda se encuentra cero o más veces\n"
-"<bold>+</bold> - El elemento que lo preceda se encuentra una o más veces\n"
-"<bold>{<i>n</i>}</bold> - El elemento que lo preceda se encuentra "
-"exactamente <i>n</i>veces\n"
-"<bold>{<i>n</i>,}</bold> - El elemento que lo preceda se encuentra <i>n</i>o "
-"más veces\n"
-"<bold>{,<i>n</i>}</bold> - El elemento que lo preceda se encuentra "
-"<i>n</i>veces como mucho\n"
-"<bold>{<i>n</i>,<i>m</i>}</bold> - El elemento que lo preceda se encuentra "
-"al menos <i>n</i>veces\n"
-" pero <i>m</i>veces como mucho\n"
-"\n"
-"Además, se pueden usar referencias a subexpresiones entre corchetes\n"
-"mediante la notación \\\\<i>n</i>."
-
-msgid ""
-"Enter the file name pattern of the files to search here.\n"
-"You may give several patterns separated by commas"
-msgstr ""
-"Introduzca aquí el patrón de los ficheros a buscar.\n"
-"Puede dar varios patrones separados por comas."
-
-#, c-format
-msgid ""
-"You can choose a template for the pattern from the combo box\n"
-"and edit it here. The string %s in the template is replaced\n"
-"by the pattern input field, resulting in the regular expression\n"
-"to search for."
-msgstr ""
-
-msgid ""
-"The results of the grep run are listed here. Select a\n"
-"filename/line number combination and press Enter or doubleclick\n"
-"on the item to show the respective line in the editor."
-msgstr ""
-
-msgid " matches"
-msgstr " coincidencias"
-
-msgid "Canceled"
-msgstr "Cancelado"
-
-msgid "No matches found"
-msgstr "¡No se encontraron coincidencias!"
-
-msgid "Syntax error in pattern"
-msgstr "Error de sintaxis en el patrón"
-
-msgid "Did you know...?"
-msgstr "¿Sabía que...?"
-
-msgid "show Tip of the day on next start"
-msgstr "mostrar sugerencias al inicio"
-
-msgid "Next Tip"
-msgstr "Siguiente sugerencia"
-
-msgid "Tipdatabase not found ! Please check your installation."
-msgstr "¡No se encontro la BD de sugerencias! Compruebe su instalación"
-
-msgid "ClassWizard Tool"
-msgstr "Asistente de Clases"
-
-msgid "Virtual functions"
-msgstr "Funciones virtuales"
-
-msgid "Available:"
-msgstr "Disponibles:"
-
-msgid "Used:"
-msgstr "Usadas:"
-
-msgid "Added method"
-msgstr "Método añadido"
-
-msgid "The virtual method implementation has been added."
-msgstr "La implementación del método virtual ha sido añadida."
-
-msgid "Print subtree"
-msgstr "Imprimir subarbol"
-
-msgid "Fold all"
-msgstr "Plegar"
-
-msgid "Unfold all"
-msgstr "Desplegar"
 
 msgid "Could not add item"
 msgstr "No se pudo añadir el elemento"
@@ -5437,7 +5508,7 @@ msgid "Main Widget"
 msgstr "Control Principal"
 
 msgid "Dialog Class"
-msgstr "Clase del Diálogo"
+msgstr "Clase del diálogo"
 
 msgid "Custom"
 msgstr "Personalizada"
@@ -5470,7 +5541,7 @@ msgid "Directory:"
 msgstr "Directorio:"
 
 msgid "Generate Dialog... (C++ Sourcecode)"
-msgstr "Generar Diálogo... (Código C++)"
+msgstr "Generar diálogo... (Código C++)"
 
 msgid "You must enter a name for the data-file!"
 msgstr "¡Debe introducir un nombre para el fichero de datos!"
@@ -5882,7 +5953,7 @@ msgstr ""
 "<i>Clase : Cualquiera</i>\n"
 "\n"
 "Especifica el fichero que se debe utilizar como mapa de bits de fondo. "
-"Considere que no todos los controles funcionan correctamente con imágenes de "
+"Piense que no todos los controles funcionan correctamente con imágenes de "
 "fondo. (Ej. el QLineEdit)"
 
 msgid ""
@@ -6549,6 +6620,136 @@ msgstr "Controles QT"
 msgid "KDE-Widgets"
 msgstr "Controles KDE"
 
+msgid "CVS Commit"
+msgstr "Entregar al CVS"
+
+#, fuzzy
+msgid "Enter log message:"
+msgstr "Entra en la Página de KDevelop"
+
+msgid "Adding file to repository"
+msgstr "Añadiendo el fichero del repositorio"
+
+msgid "Removing file from repository"
+msgstr "Eliminando el fichero del repositorio"
+
+msgid "Updating"
+msgstr "Actualizando"
+
+msgid "Commiting file"
+msgstr "Entregando fichero"
+
+msgid "CVS"
+msgstr "CVS"
+
+msgid "Search in Files..."
+msgstr "Buscar en ficheros..."
+
+msgid "&Pattern:"
+msgstr "&Patrón:"
+
+msgid "&Template:"
+msgstr "P&lantilla:"
+
+msgid "&Files:"
+msgstr "&Ficheros:"
+
+msgid "&Directory:"
+msgstr "&Directorio:"
+
+msgid "&Recursive"
+msgstr "&Recursivo"
+
+msgid "9999 matches"
+msgstr "9999 coincidencias"
+
+msgid "Done"
+msgstr "Hecho"
+
+msgid ""
+"Enter the regular expression you want to search for here.\n"
+"Possible meta characters are:\n"
+"<bold>.</bold> - Matches any character\n"
+"<bold>^</bold> - Matches the beginning of a line\n"
+"<bold>$</bold> - Matches the end of a line\n"
+"<bold>\\\\\\<</bold> - Matches the beginning of a word\n"
+"<bold>\\\\\\></bold> - Matches the end of a word\n"
+"\n"
+"The following repetition operators exist:\n"
+"<bold>?</bold> - The preceding item is matches at most once\n"
+"<bold>*</bold> - The preceding item is matched zero or more times\n"
+"<bold>+</bold> - The preceding item is matched once or more times\n"
+"<bold>{<i>n</i>}</bold> - The preceding item is matched exactly <i>n</i> "
+"times\n"
+"<bold>{<i>n</i>,}</bold> - The preceding item is matched <i>n</i> or more "
+"times\n"
+"<bold>{,<i>n</i>}</bold> - The preceding item is matched at most <i>n</i> "
+"times\n"
+"<bold>{<i>n</i>,<i>m</i>}</bold> - The preceding item is matched at least "
+"<i>n</i>,\n"
+"   but at most <i>m</i> times.\n"
+"\n"
+"Furthermore, backreferences to bracketed subexpressions are\n"
+"available via the notation \\\\<i>n</i>."
+msgstr ""
+"Introduzca aquí las expresiones regulares que desea buscar.\n"
+"Los caracteres especiales que puede introducir son:\n"
+"<bold>.</bold> - Equivale a cualquier caracter\n"
+"<bold>^</bold> - Equivale a un comienzo de línea\n"
+"<bold>$</bold> - Equivale a un fin de línea\n"
+"<bold>\\\\\\<</bold> - Equivale a un principio de palabra\n"
+"<bold>\\\\\\></bold> - Equivale a un fin de palabra\n"
+"\n"
+"Se pueden utilizar los siguientes operadores de repetición:\n"
+"<bold>?</bold> - El elemento que lo preceda se encuentra una vez como mucho\n"
+"<bold>*</bold> - El elemento que lo preceda se encuentra cero o más veces\n"
+"<bold>+</bold> - El elemento que lo preceda se encuentra una o más veces\n"
+"<bold>{<i>n</i>}</bold> - El elemento que lo preceda se encuentra "
+"exactamente <i>n</i>veces\n"
+"<bold>{<i>n</i>,}</bold> - El elemento que lo preceda se encuentra <i>n</i>o "
+"más veces\n"
+"<bold>{,<i>n</i>}</bold> - El elemento que lo preceda se encuentra "
+"<i>n</i>veces como mucho\n"
+"<bold>{<i>n</i>,<i>m</i>}</bold> - El elemento que lo preceda se encuentra "
+"al menos <i>n</i>veces\n"
+" pero <i>m</i>veces como mucho\n"
+"\n"
+"Además, se pueden usar referencias a subexpresiones entre corchetes\n"
+"mediante la notación \\\\<i>n</i>."
+
+msgid ""
+"Enter the file name pattern of the files to search here.\n"
+"You may give several patterns separated by commas"
+msgstr ""
+"Introduzca aquí el patrón de los ficheros a buscar.\n"
+"Puede dar varios patrones separados por comas."
+
+#, c-format
+msgid ""
+"You can choose a template for the pattern from the combo box\n"
+"and edit it here. The string %s in the template is replaced\n"
+"by the pattern input field, resulting in the regular expression\n"
+"to search for."
+msgstr ""
+
+msgid ""
+"The results of the grep run are listed here. Select a\n"
+"filename/line number combination and press Enter or doubleclick\n"
+"on the item to show the respective line in the editor."
+msgstr ""
+
+msgid " matches"
+msgstr " coincidencias"
+
+msgid "Canceled"
+msgstr "Cancelado"
+
+msgid "No matches found"
+msgstr "¡No se encontraron coincidencias!"
+
+msgid "Syntax error in pattern"
+msgstr "Error de sintaxis en el patrón"
+
 msgid "Normal:"
 msgstr "Normal:"
 
@@ -6607,7 +6808,7 @@ msgid "&From Cursor"
 msgstr "&Desde el cursor"
 
 msgid "Find &Backwards"
-msgstr "Hacia atrás"
+msgstr "&Hacia atrás"
 
 msgid "&Selected Text"
 msgstr "Texto &seleccionado"
@@ -6631,7 +6832,7 @@ msgid "&Goto Line:"
 msgstr "&Ir a la línea:"
 
 msgid "Edit Options"
-msgstr "Opciones de Edición"
+msgstr "Opciones de edición"
 
 msgid "Auto &Indent"
 msgstr "Auto&indentado"
@@ -6640,13 +6841,13 @@ msgid "&Backspace Indent"
 msgstr "Indentar al &borrar"
 
 msgid "&Word Wrap"
-msgstr ""
+msgstr "A&justar ancho de página"
 
 msgid "Replace &Tabs"
-msgstr "Reemplazar &Tabs"
+msgstr "Reemplazar &tabuladores"
 
 msgid "Remove Trailing &Spaces"
-msgstr ""
+msgstr "Borrar e&spacios posteriores"
 
 msgid "Wrap &Cursor"
 msgstr ""
@@ -6655,7 +6856,7 @@ msgid "&Auto Brackets"
 msgstr "&Auto corchetes"
 
 msgid "Select Options"
-msgstr "Opciones de Selección"
+msgstr "Opciones de selección"
 
 msgid "&Persistent Selections"
 msgstr "Selecciones &persistentes"
@@ -6672,8 +6873,11 @@ msgstr "B&orrar al escribir"
 msgid "&Toggle Old"
 msgstr ""
 
+msgid "&Auto Copy"
+msgstr "Copiar &automáticamente"
+
 msgid "Wrap Words At:"
-msgstr ""
+msgstr "Caracteres/línea:"
 
 msgid "Tab Width:"
 msgstr "Ancho del tab.:"
@@ -6692,6 +6896,21 @@ msgstr "Encontrado:"
 
 msgid "Selected + Found:"
 msgstr "Selec. + Encontrado:"
+
+msgid "Toggle bookmark"
+msgstr "Alternar marcador"
+
+msgid "Clear all bookmarks"
+msgstr "Eliminar todos los marcadores"
+
+msgid "Toggle breakpoint"
+msgstr "Alternar punto de interrupción"
+
+msgid "LMB sets breakpoints"
+msgstr "Pulsar alterna puntos de interrupción"
+
+msgid "LMB sets bookmarks"
+msgstr "Pulsar alterna marcadores"
 
 msgid "Vertical Selections On"
 msgstr "Selecciones verticales activadas"
@@ -6794,11 +7013,23 @@ msgstr "reemplazo(s) realizado(s)"
 msgid "Line"
 msgstr "Línea"
 
+msgid "Did you know...?"
+msgstr "¿Sabía que...?"
+
+msgid "show Tip of the day on next start"
+msgstr "Mostrar sugerencias al inicio"
+
+msgid "Next Tip"
+msgstr "Siguiente sugerencia"
+
+msgid "Tipdatabase not found ! Please check your installation."
+msgstr "¡No se encontro la BD de sugerencias! Compruebe su instalación"
+
 msgid "Numbering"
 msgstr "Numeración"
 
 msgid "Lines per page"
-msgstr "Líneas por pág."
+msgstr "Líneas por página"
 
 msgid "Printing"
 msgstr "Impresión"
@@ -6807,56 +7038,55 @@ msgid "Textprinting"
 msgstr "Impresión de texto"
 
 msgid "bold font"
-msgstr "negrita"
+msgstr "Negrita"
 
 msgid "align files"
-msgstr ""
+msgstr "Alinear ficheros"
 
 msgid "print non ascii character as ISO Latin 1"
-msgstr "imprimir caracteres que no sean ASCII como ISO Latin 1"
+msgstr "Caracteres no ASCII como ISO Latin 1"
 
 msgid "interpret TAB, BS and FF"
-msgstr "interpretar TAB, BS y FF"
+msgstr "Interpretar TAB, BS y FF"
 
 msgid "Date & Time"
-msgstr "Fecha y Hora"
+msgstr "Fecha y hora"
 
 msgid "Headertext"
 msgstr "Texto de cabecera"
 
 msgid "headertext"
-msgstr "texto de cabecera"
+msgstr "Texto de cabecera"
 
 msgid "text"
-msgstr "texto"
+msgstr "Texto"
 
 msgid "login"
-msgstr "usuario"
+msgstr "Usuario"
 
 msgid "filename"
-msgstr "nombre del fichero"
+msgstr "Imp. nombre"
 
 msgid "header"
-msgstr "cabecera"
+msgstr "Cabecera"
 
 msgid "replace non-printing character by space"
-msgstr "espacios por caracteres no imprimibles"
+msgstr "Espacios por caracteres no imprimibles"
 
 msgid "cut lines"
-msgstr "cortar líneas"
+msgstr "Cortar líneas"
 
 msgid "set TAB size"
-msgstr "tamaño tabulador"
+msgstr "Tamaño tabulador"
 
-#, fuzzy
 msgid "fontsize"
-msgstr "fuente"
+msgstr "Tamaño"
 
 msgid "numbering lines"
-msgstr "numerar líneas"
+msgstr "Numerar líneas"
 
 msgid "borders"
-msgstr "bordes"
+msgstr "Bordes"
 
 #, fuzzy
 msgid "file single"
@@ -6866,10 +7096,10 @@ msgid "file together"
 msgstr ""
 
 msgid "lines per page"
-msgstr "líneas x página"
+msgstr "Líneas por pág."
 
 msgid "numbering pages"
-msgstr "numerar páginas"
+msgstr "Numerar páginas"
 
 msgid "Preview"
 msgstr "Previsualizar"
@@ -6878,10 +7108,10 @@ msgid "Defaults"
 msgstr "Por defecto"
 
 msgid "use fontsize"
-msgstr "usar el tamaño"
+msgstr "Elegir tamaño"
 
 msgid "uses lines per page"
-msgstr "usa líneas por página"
+msgstr "Especificar núm. de líneas"
 
 msgid "Print using bold font."
 msgstr "Imprimir en negrita."
@@ -6992,7 +7222,7 @@ msgid ""
 "ignored if TAB is not interpreted."
 msgstr ""
 "Elige el tamaño del tabulador. Esta opción\n"
-"es ignorada si el tabulador no es interpretado."
+"se ignora si el tabulador no es interpretado."
 
 msgid "Changes font size to this value."
 msgstr "Cambia el tamaño de la fuente a este valor."
@@ -7014,8 +7244,8 @@ msgid ""
 "logical pages, of which there are usually two per\n"
 "physical page."
 msgstr ""
-"Reiniciar la numeración de las hojas para cada fichero\n"
-"La numeración es utilizada para numerar las página físicas\n"
+"Reiniciar la numeración de las hojas para cada fichero.\n"
+"La numeración se utiliza para numerar las página físicas\n"
 "(hojas) mientras son imprimidas. La numeración de las\n"
 "páginas utiliza la numeración de las páginas lógicas,\n"
 "de las cuales suele haber dos por cada página física."
@@ -7055,13 +7285,13 @@ msgid "Underlay"
 msgstr "Marca de agua"
 
 msgid "Header settings"
-msgstr "Configuración de cabecera de página"
+msgstr "Configuración de la cabecera de página"
 
 msgid "Fancy header"
 msgstr "Cabecera adornada"
 
 msgid "fancy header"
-msgstr "cabecera adornada"
+msgstr "Cabecera adornada"
 
 msgid "Login"
 msgstr "Usuario"
@@ -7076,13 +7306,13 @@ msgid "right"
 msgstr "derecha"
 
 msgid "position"
-msgstr "posición"
+msgstr "Posición"
 
 msgid "Filename"
 msgstr "Nombre del fichero"
 
 msgid "size of filename"
-msgstr "longitud"
+msgstr "Longitud"
 
 msgid "short"
 msgstr "corto"
@@ -7091,13 +7321,13 @@ msgid "full"
 msgstr "completo"
 
 msgid "Hostname"
-msgstr "Nombre del Host"
+msgstr "Nombre del host"
 
 msgid "hostname"
-msgstr "nombre del host"
+msgstr "Nombre del host"
 
 msgid "size of hostname"
-msgstr "formato"
+msgstr "Formato"
 
 msgid "If you wish to have a page header, then check it."
 msgstr "Si desea tener una cabecera de página, márquelo."
@@ -7109,7 +7339,7 @@ msgid "If you wish to have a headertext, then check it."
 msgstr "Si desea tener una cabecera de texto, márquelo."
 
 msgid "If you wish to print a userlogin, then check it."
-msgstr ""
+msgstr "Márquelo si desea imprimir el identificador del usuario (login)."
 
 msgid "If you will a fancy header, then check it."
 msgstr "Si desea una cabecera adornada, márquelo."
@@ -7159,16 +7389,16 @@ msgid "AM/PM"
 msgstr "AM/PM"
 
 msgid "current date"
-msgstr "fecha actual"
+msgstr "Fecha actual"
 
 msgid "modification date"
-msgstr "fecha de modificación"
+msgstr "Fecha de modificación"
 
 msgid "current time"
-msgstr "hora actual"
+msgstr "Hora actual"
 
 msgid "modification time"
-msgstr "hora de modific."
+msgstr "Hora de modific."
 
 msgid "If you wish to print the current time, then check it."
 msgstr "Si desea imprimir la hora actual, márquelo."
@@ -7193,7 +7423,7 @@ msgstr ""
 "am/pm o en formato 24 horas."
 
 msgid "Font and TAB"
-msgstr "Fuente y Tabulación"
+msgstr "Fuente y tabulación"
 
 msgid "Other options"
 msgstr "Otras opciones"
@@ -7205,28 +7435,28 @@ msgid "cycle of change"
 msgstr "ciclo de cambio"
 
 msgid "Wrapped line"
-msgstr "Wrapped line"
+msgstr "Líneas ajustadas al ancho de página"
 
 msgid "Numbering & border"
 msgstr "Numeración y bordes"
 
 msgid "table of contents"
-msgstr "tabla de contenidos"
+msgstr "Tabla de contenidos"
 
 msgid "marked wrapped lines"
-msgstr "marked wrapped lines"
+msgstr "Resaltar las líneas ajustadas"
 
 msgid "value for wrapped line"
-msgstr "value for wrapped line"
+msgstr "Forma de resaltar"
 
 msgid "highlight bars"
-msgstr "resaltar barras"
+msgstr "Resaltar barras"
 
 msgid "font for header"
-msgstr "fuente de cabecera"
+msgstr "Fuente de cabecera"
 
 msgid "font for body"
-msgstr "fuente de cuerpo"
+msgstr "Fuente de cuerpo"
 
 msgid "yes"
 msgstr "sí"
@@ -7242,6 +7472,8 @@ msgstr "Si el botón está marcado, se imprime un sumario al final."
 
 msgid "If button is checked, wrapped lines are marked in the output."
 msgstr ""
+"Si se marca el botón, se resaltarán las líneas que hayan\n"
+"sido ajustadas al ancho de la página."
 
 msgid "If button is checked, the sides are numbered."
 msgstr "Si se marca el botón, las caras se numeran."
@@ -7259,6 +7491,8 @@ msgstr ""
 
 msgid "Set the style of the wrap value."
 msgstr ""
+"Elije como se marcarán las líneas\n"
+"ajustadas al ancho de página"
 
 msgid "Specify  how high highlight bars are in lines."
 msgstr ""
@@ -7324,22 +7558,22 @@ msgid "X-Position"
 msgstr "Posición X"
 
 msgid "underlay"
-msgstr "marca de agua"
+msgstr "Marca de agua"
 
 msgid "underlaystyle"
-msgstr "seleccione estilo"
+msgstr "Seleccione estilo"
 
 msgid "angle"
-msgstr "ángulo"
+msgstr "Ángulo"
 
 msgid "font"
-msgstr "fuente"
+msgstr "Fuente"
 
 msgid "underlaygray (x(1/10))"
-msgstr "tono de gris (x(1/10))"
+msgstr "Tono de gris (x(1/10))"
 
 msgid "default"
-msgstr "por defecto"
+msgstr "Por defecto"
 
 msgid "outline"
 msgstr "bordes"
@@ -7348,10 +7582,10 @@ msgid "filled"
 msgstr "relleno"
 
 msgid "underlaytext"
-msgstr "texto"
+msgstr "Texto"
 
 msgid "If you wish to print underlayed text, then check it."
-msgstr "Si quieres imprimir texto como fondo de la hoja, márquelo."
+msgstr "Márquelo si desea imprimir texto como fondo de la hoja."
 
 msgid "Here you can set the angle of the underlayed text."
 msgstr "Aquí puedes elegir el ángulo del texto."
@@ -7396,25 +7630,25 @@ msgid "File selection"
 msgstr "Selección de ficheros"
 
 msgid "current"
-msgstr "el actual"
+msgstr "El actual"
 
 msgid "all in project"
-msgstr "todo el proyecto"
+msgstr "Todo el proyecto"
 
 msgid "self choosen files"
-msgstr "ficheros seleccionados"
+msgstr "Ficheros seleccionados"
 
 msgid "file"
-msgstr "fich."
+msgstr "Fich."
 
 msgid "all headers"
-msgstr "todas las cabeceras"
+msgstr "Todas las cabeceras"
 
 msgid "all cpp files"
-msgstr "todos los fich. cpp"
+msgstr "Todos los fich. cpp"
 
 msgid "changed files"
-msgstr "ficheros modificados"
+msgstr "Ficheros modificados"
 
 msgid "Changed files"
 msgstr "Ficheros modificados"
@@ -7423,25 +7657,25 @@ msgid "Between"
 msgstr "Entre"
 
 msgid "date"
-msgstr "fecha"
+msgstr "Fecha"
 
 msgid "time"
-msgstr "hora"
+msgstr "Hora"
 
 msgid "o´clock"
 msgstr "en punto"
 
 msgid "And"
-msgstr "y"
+msgstr "Y"
 
 msgid "Self choosen files"
 msgstr "Ficheros seleccionados"
 
 msgid "delete"
-msgstr "eliminar"
+msgstr "Eliminar"
 
 msgid "clear"
-msgstr "vaciar"
+msgstr "Vaciar"
 
 msgid ""
 "Here are the files which will be printed, if 'self\n"
@@ -7549,7 +7783,7 @@ msgstr ""
 "de la ventana de edición visible."
 
 msgid "BeginDate"
-msgstr "Fecha de Inicio"
+msgstr "Fecha de inicio"
 
 msgid "EndDate"
 msgstr "Fecha de fin"
@@ -7578,7 +7812,7 @@ msgid "Outputlocation"
 msgstr "Fichero de salida"
 
 msgid "print to file"
-msgstr "imprimir hacia fichero"
+msgstr "Imprimir hacia fichero"
 
 msgid "Paper format"
 msgstr "Formato de papel"
@@ -7599,7 +7833,7 @@ msgid "Default printsettings"
 msgstr "Configuración de impresión"
 
 msgid "settings"
-msgstr "configurada"
+msgstr "configurada por el usuario"
 
 msgid "Files..."
 msgstr "Ficheros..."
@@ -7620,7 +7854,7 @@ msgid "Pages"
 msgstr "Páginas"
 
 msgid "all"
-msgstr "todo"
+msgstr "todas"
 
 msgid "odd"
 msgstr "impares"
@@ -7632,10 +7866,10 @@ msgid "Pretty-print"
 msgstr "Impresión adornada"
 
 msgid "pretty-print"
-msgstr "impr. adornada"
+msgstr "Impr. adornada"
 
 msgid "color"
-msgstr "color"
+msgstr "Color"
 
 msgid "Pretty-print mode"
 msgstr "Tipo de coloreado"
@@ -7663,7 +7897,7 @@ msgid ""
 "default printer ($PRINTER) is choosen."
 msgstr ""
 "En esta línea puede especificar la impresora con que\n"
-"se imprimirá. Si se escribe \"default\" (Por defecto),\n"
+"se imprimirá. Si se escribe \"default\" (por defecto),\n"
 "la impresora por defecto ($PRINTER) será elegida."
 
 msgid "Here you can change the paper direction."
@@ -7687,9 +7921,9 @@ msgid ""
 "You can also specify an interval like:\n"
 "5-    :print from side 5 to end\n"
 "5-10 :print from side 5 to side 10\n"
-"-5    :print from side 1 to side 10"
+"-10   :print from side 1 to side 10"
 msgstr ""
-"Aquí puede elegir lasa caras que desea imprimir.\n"
+"Aquí puede elegir las caras que desea imprimir.\n"
 "También puede elegir un intervalo del tipo:\n"
 "5-    : imprimir desde la cara 5 hasta el final\n"
 "5-10 : imprimir desde la cara 5 hasta la 10\n"
@@ -7731,30 +7965,44 @@ msgstr "impresora en línea"
 msgid "enscript default"
 msgstr "por defecto de enscript"
 
-msgid "CVS Commit"
-msgstr "Entregar al CVS"
+msgid "Interrupt"
+msgstr "Pausar"
 
-#, fuzzy
-msgid "Enter log message:"
-msgstr "Entra en la Página de KDevelop"
+msgid "Step"
+msgstr "Siguiente"
 
-msgid "Adding file to repository"
-msgstr "Añadiendo el fichero del repositorio"
+msgid "Step in"
+msgstr ""
 
-msgid "Removing file from repository"
-msgstr "Eliminando el fichero del repositorio"
+msgid "Step out"
+msgstr ""
 
-msgid "Updating"
-msgstr "Actualizando"
+msgid "Continue with app execution. May start the app"
+msgstr "Continuar (o empezar) la ejecución de la aplicación"
 
-msgid "Commiting file"
-msgstr "Entregando fichero"
+msgid "Interrupt the app execution"
+msgstr "Interrumpir la ejecución de la aplicación"
 
-msgid "CVS"
-msgstr "CVS"
+msgid "Execute one line of code, but run through functions"
+msgstr "Ejecutar una línea de código, sin entrar en las funciones"
 
-#~ msgid "custom project"
-#~ msgstr "Personalizado"
+msgid "Execute one line of code, stepping into fn if appropriate"
+msgstr "Ejecutar una línea de código, entrando en la función si es necesario"
+
+msgid "Execute to end of current stack frame"
+msgstr "Ejecuta hasta el final del marco actual de la pila"
+
+msgid "Memory, dissemble, registers, library viewer"
+msgstr "Visor de la memoria, registros, desamblador y bibliotecas."
+
+msgid "Stop the debugger"
+msgstr "Parar el depurador"
+
+msgid "Set focus on KDevelop"
+msgstr "Devuelve el foco al KDevelop"
+
+msgid "Set focus on window that had focus when \"kdev\" was pressed"
+msgstr "Devuelve el foco a la ventana que lo tenía cuando se pulsó \"kdev\""
 
 # Estas tres traducciones me tocó insertarlas a mano - Salva
 msgid "&OK"
