@@ -1258,9 +1258,9 @@ void CKDevelop::initProject(bool witharg){
     if (!lastShutdownOK)
     {
       KMsgBox msg;
-  	  if ( 2 == msg.yesNo(this,i18n("Information"),
+  	  if ( 2 == msg.yesNo(this,i18n("KDevelop failed to shutdown correctly previously"),
   	                            i18n( "KDevelop failed to shutdown correctly previously\n"\
-  	                                  "Would you like to try and load the current project?")
+  	                                  "Would you like to start with the last loaded project?")
   				  													,KMsgBox::QUESTION,i18n("Yes"),i18n("No")) )
       {
   	    bLastProject = false;
