@@ -196,8 +196,8 @@ KDevFileSelector::KDevFileSelector( KDevMainWindow *mainWindow,
             this, SLOT(dirFinishedLoading()) );
 
     // enable dir sync button if current doc has a valid URL
-    connect ( partController, SIGNAL(activePartChanged() ),
-              this, SLOT(ViewChanged() ) );
+    connect ( partController, SIGNAL(activePartChanged(KParts::Part*) ),
+              this, SLOT(viewChanged() ) );
 
 #if defined(BOOKMARK_HANDLER)
 
