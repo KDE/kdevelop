@@ -1,3 +1,7 @@
+2002-06-10  Bernd Gehrmann  <bernd@linux.local>
+
+	* Made class display (flat list vs. directory hierarchy) configurable
+
 2002-06-09  John Firebaugh <jfirebaugh@kde.org>
         * debugging breakpoints now work much more sensibly
         * can use kate icon-border menu to enable/disable
