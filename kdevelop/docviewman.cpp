@@ -648,4 +648,59 @@ int DocViewMan::findDoc( const QString& strFileName) const
     return pDocViewNode->docId;
 }
 
+void DocViewMan::installBMPopup(QPopupMenu *p)
+{
+  debug("DocViewMan::installBMPopup");
+
+  connect(p,SIGNAL(aboutToShow()),SLOT(updateBMPopup()));
+  connect(p,SIGNAL(activated(int)),SLOT(gotoBookmark(int)));
+}
+
+void DocViewMan::updateBMPopup()
+{
+  debug("DocViewMan::installBMPopup");
+
+  QPopupMenu* popup = (QPopupMenu *) sender();
+
+  // Remove all menu items
+  popup->clear();
+
+  // Insert separator
+  popup->insertSeparator();
+
+  // Update bookmarks for each document
+  QList<int> allDocs = docs(DocViewMan::Header | DocViewMan::Source);
+  QListIterator<int> docIter(allDocs);
+  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+    int curDocId = *(docIter.current());
+
+    KWriteDoc* pDoc = (KWriteDoc*) docPointer(curDocId);
+    pDoc->updateBMPopup(popup);
+  }
+}
+
+void DocViewMan::gotoBookmark(int n) {
+
+  debug("DocViewMan::gotoBookmark : %d !\n", n);
+
+  QPopupMenu* popup = (QPopupMenu *) sender();
+
+  QString text = popup->text(n);
+
+  // Find the KWriteDoc for this bookmark
+  QList<int> allDocs = docs(DocViewMan::Header | DocViewMan::Source);
+  QListIterator<int> docIter(allDocs);
+  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+    int curDocId = *(docIter.current());
+
+    KWriteDoc* pDoc = (KWriteDoc*) docPointer(curDocId);
+    if(text.startsWith(pDoc->fileName())) {
+      m_pParent->switchToFile(pDoc->fileName());
+      pDoc->gotoBookmark(text);
+      return;
+    }
+  }
+}
+
+
 #include "docviewman.moc"

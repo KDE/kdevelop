@@ -876,16 +876,18 @@ void CKDevelop::initMenuBar(){
   bookmarks_menu->insertItem(i18n("&Clear Bookmarks"),this,SLOT(slotBookmarksClear()),0,ID_BOOKMARKS_CLEAR);
   bookmarks_menu->insertSeparator();
 
-  QPopupMenu* header_bookmarks = new QPopupMenu();
-//FB  header_widget->installBMPopup(header_bookmarks);
-  QPopupMenu* cpp_bookmarks = new QPopupMenu();
-//FB  cpp_widget->installBMPopup(cpp_bookmarks);
+  // Changed by Christian
+  QPopupMenu* code_bookmarks = new QPopupMenu();
+  m_docViewManager->installBMPopup(code_bookmarks);
+  //   QPopupMenu* cpp_bookmarks = new QPopupMenu();
+  //  cpp_widget->installBMPopup(cpp_bookmarks);
 	
+  bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("Code &Window"),code_bookmarks,31000);
+  // bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("C/C++ &Window"),cpp_bookmarks,31010);
+
   doc_bookmarks = new QPopupMenu();
 
-  bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("&Header Window"),header_bookmarks,31000);
-  bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("C/C++ &Window"),cpp_bookmarks,31010);
-  bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("&Browser Window"), doc_bookmarks,31020);
+  bookmarks_menu->insertItem(SmallIconSet("bookmark_folder"),i18n("&Browser Window"), doc_bookmarks,31010);
 	
   menuBar()->insertItem(i18n("Book&marks"),bookmarks_menu);
 

@@ -40,13 +40,13 @@
 
 #include <X11/Xlib.h> //used to have XSetTransientForHint()
 
-int keys[] = {Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6,Qt::Key_7,Qt::Key_8,Qt::Key_9};
-
 struct BufferInfo {
   void *user;
   int w;
   int h;
 };
+
+static int kw_bookmark_keys[] = {Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6,Qt::Key_7,Qt::Key_8,Qt::Key_9};
 
 QList<BufferInfo> bufferInfoList;
 QPixmap *buffer = 0;
@@ -2497,16 +2497,16 @@ void KWrite::installRBPopup(QPopupMenu *p) {
 }
 */
 
-void KWrite::installBMPopup(QPopupMenu *p/*KWBookPopup *p*/) {
+void KWrite::installBMPopup(QPopupMenu *p/*KWBookPopup *p*/)
+{
+  debug("KWrite::installBMPopup");
 
-//  bookPopup = p;
   connect(p,SIGNAL(aboutToShow()),SLOT(updateBMPopup()));
   connect(p,SIGNAL(activated(int)),SLOT(gotoBookmark(int)));
-//  bmEntries = p->count();
 }
 
-void KWrite::toggleBookmark() {
-
+void KWrite::toggleBookmark()
+{
 	toggleBookmark(kWriteView->cursor.y);
 }
 
@@ -2632,7 +2632,7 @@ void KWrite::updateBMPopup() {
         sprintf(buf,"%s %d",i18n("Line").data(), line + 1);
 				int z = popup->count();
         popup->insertItem(buf,z);
-        if (z < 9) popup->setAccel(ALT+keys[z],z);       	
+        if (z < 9) popup->setAccel(ALT+kw_bookmark_keys[z],z);       	
 			}
 	}
 
@@ -2654,7 +2654,7 @@ void KWrite::updateBMPopup() {
 //      if ((int) p->count() == bmEntries) p->insertSeparator();
 //      sprintf(buf,"%s %d",i18n("Line"),b->cursor.y +1);
 //      p->insertItem(buf,z);
-//      if (z < 9) p->setAccel(ALT+keys[z],z);
+//      if (z < 9) p->setAccel(ALT+kw_bookmark_keys[z],z);
 //    }
 //  }
 }
@@ -2905,7 +2905,7 @@ void KWrite::keyPressEvent(QKeyEvent *e) {
 
   if (e->state() & AltButton) {
     for (z = 0; z < 9; z++) {
-      if (keys[z] == e->key()) gotoBookmark(z);
+      if (kw_bookmark_keys[z] == e->key()) gotoBookmark(z);
     }
   }
 }

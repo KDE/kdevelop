@@ -7,8 +7,11 @@
 #include <qfont.h>
 #include <qpainter.h>
 #include <qdatetime.h>
+#include <qkeycode.h>
+#include <qevent.h>
 
 #include <kcharsets.h>
+#include <klocale.h>
 
 //#ifdef QT_I18N
 #include <kapp.h>
@@ -23,6 +26,8 @@ const int taFound = 0x80;
 const int taSelectMask = taSelected | taFound;
 const int taAttrMask = ~taSelectMask & 0xFF;
 const int taShift = 6;
+
+static int kw_bookmark_keys[] = {Qt::Key_1,Qt::Key_2,Qt::Key_3,Qt::Key_4,Qt::Key_5,Qt::Key_6,Qt::Key_7,Qt::Key_8,Qt::Key_9};
 
 TextLine::TextLine(int attribute, int context)
   : len(0), size(0), text(0L), attribs(0L), attr(attribute), ctx(context),
@@ -3208,18 +3213,61 @@ void KWriteDoc::unIndent(KWriteView *view, VConfig &c) {
 
 void KWriteDoc::clearBookmarks() {
 
-	for(int line = 0; line < getTextLineCount(); line++)
-	{
-		TextLine* textline = textLine(line);
-		if(textline != NULL)
-			if(textline->isBookmarked())
-			{
-				textline->toggleBookmark();	
-  			tagLines(line, line);
-			}
-	}
+  for(int line = 0; line < getTextLineCount(); line++)
+    {
+      TextLine* textline = textLine(line);
+      if(textline != NULL)
+	if(textline->isBookmarked())
+	  {
+	    textline->toggleBookmark();	
+	    tagLines(line, line);
+	  }
+    }
 	
   updateViews();
+}
+
+void KWriteDoc::updateBMPopup(QPopupMenu* popup)
+{
+
+  for(int line = 0; line < getTextLineCount(); line++)
+    {
+      TextLine* curTextline = textLine(line);
+      if(curTextline != NULL && curTextline->isBookmarked()) 
+        {
+          QString buf;
+          buf.sprintf("%s; %s : %d ",fName.data(), i18n("Line").data(), line + 1);
+          int z = popup->count();
+          popup->insertItem(buf,z);
+          if (z < 9)
+            {
+              popup->setAccel(ALT+kw_bookmark_keys[z],z);
+            }
+        }
+    }
+}
+
+void KWriteDoc::gotoBookmark(QString &text) {
+
+  debug("text : '%s' !\n", text.data());
+
+  int start = text.findRev(':') + 1;
+  int len = text.findRev(' ') - start;
+
+  QString strLine = text.mid(start, len);
+
+  debug("KWrite::gotoBookmark line : '%s' !\n", strLine.data());
+
+  int line = strLine.stripWhiteSpace().toInt() - 1;
+
+  debug("KWrite::gotoBookmark line : '%d' !\n", line);
+
+  if(line >= 0) {
+    KWriteView * view = views.first();
+    if(view) {
+      view->kWrite->gotoPos(0, line);
+    }
+  }
 }
 
 #include "kwdoc.moc"

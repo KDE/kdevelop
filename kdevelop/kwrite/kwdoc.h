@@ -103,8 +103,6 @@ class TextLine {
 		bool bookmarked;
 };
 
-
-
 const int nAttribs = 32;
 
 class Attribute {
@@ -151,7 +149,7 @@ class KWriteDoc : public QObject {
     friend KWriteView;
     friend KWrite;
     friend HlManager;
-		friend KIconBorder;
+    friend KIconBorder;
     
   public:
     KWriteDoc(HlManager *, const char *path = 0L);
@@ -167,12 +165,12 @@ class KWriteDoc : public QObject {
     void readSessionConfig(KConfig *);
     void writeSessionConfig(KConfig *);
 
-		void readFileConfig();
-		void writeFileConfig();
-		void readBookmarkConfig(KConfig *config);
-		void writeBookmarkConfig(KConfig *config);
-
-		int getTextLineCount() { return contents.count(); }
+    void readFileConfig();
+    void writeFileConfig();
+    void readBookmarkConfig(KConfig *config);
+    void writeBookmarkConfig(KConfig *config);
+    
+    int getTextLineCount() { return contents.count(); }
 
     void loadFile(QIODevice &);
     void writeFile(QIODevice &);
@@ -183,6 +181,8 @@ class KWriteDoc : public QObject {
     void setText(const char *);
     bool isModified();
     void clearBookmarks();
+    void updateBMPopup(QPopupMenu* popup);
+    void gotoBookmark(QString &text);
 
 //  void inheritFileName(KWriteDoc *doc) {
 //    fName = QString(doc->fName, doc->fName.findRev('/') +1);

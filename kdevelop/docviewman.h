@@ -110,10 +110,15 @@ public:
   /** Get the type of the currently (because of its view) focused document */
   int currentDocType() { return m_currentDocType; };
 
+  /** Install the new bookmark popup */
+  void installBMPopup(QPopupMenu *p);
+
 public slots:
   /** */
   void slot_gotFocus(QextMdiChildView* pMDICover);
-
+  void updateBMPopup();
+  void gotoBookmark(int n);
+  
 signals:
   /** Is emitted when a view handled by the doc view manager receives focus. */
   void sig_viewGotFocus(QWidget* pView, int docType);
