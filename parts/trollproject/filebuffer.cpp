@@ -44,7 +44,10 @@ Caret FileBuffer::findInBuffer(const QString &subString,const Caret& startPos, b
   for (; i<=m_buffer.count(); i++)
   {
     int idxSeek = line.find(subString);
-    if (line.find(subString)!=-1)
+    if ((line.find(subString)!=-1)
+        //adymo: do not match substrings if the next character is not a letter or number
+        //this is supposed to fix handling of similar words like TARGET and TARGETDEPS
+        && ( ! line[idxSeek+subString.length()].isLetterOrNumber() ) )
     {
       if (startPos.m_row == (int) i-1)
         // first line in search so start idx should be added to result idx

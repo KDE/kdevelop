@@ -146,29 +146,40 @@ public:
     QString getDownDirs();
     QString getLibAddPath(QString downDirs);
     QString getLibAddObject(QString downDirs);
+    QString getSharedLibAddObject(QString downDirs);
+    QString getApplicationObject(QString downDirs);
     QString getIncAddPath(QString downDirs);
 
 private:
     void init();
 };
 
+class ProjectConfigurationDlg;
+
 class InsideCheckListItem:public QCheckListItem
 {
 public:
-  InsideCheckListItem(QListView *parent,SubprojectItem *item):QCheckListItem(parent,item->text(0),QCheckListItem::CheckBox)
+  InsideCheckListItem(QListView *parent,SubprojectItem *item, ProjectConfigurationDlg *config):
+    QCheckListItem(parent, item->relpath.right(item->relpath.length()-1), QCheckListItem::CheckBox)
   {
     prjItem=item;
+    m_config = config;
   }
-  InsideCheckListItem(QListView *parent,QListViewItem *after,SubprojectItem *item):
+  InsideCheckListItem(QListView *parent,QListViewItem *after,SubprojectItem *item, ProjectConfigurationDlg *config):
       QCheckListItem(parent,
 #if KDE_VERSION > 305
 		     after,
 #endif
-		     item->text(0),QCheckListItem::CheckBox)
+		     item->relpath.right(item->relpath.length()-1),QCheckListItem::CheckBox)
   {
     prjItem=item;
+    m_config = config;
   }
   SubprojectItem *prjItem;
+  ProjectConfigurationDlg *m_config;
+
+protected:
+    virtual void stateChange ( bool state );
 };
 
 

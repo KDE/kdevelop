@@ -114,6 +114,50 @@ QString SubprojectItem::getDownDirs()
   if(this->parent()==NULL) return("./");
   else return(((SubprojectItem*)this->parent())->getDownDirs()+"../");
 }
+QString SubprojectItem::getSharedLibAddObject(QString downDirs)
+{
+  if(configuration.m_requirements & QD_SHARED)
+  {
+    QString tmpPath;
+    if(configuration.m_destdir!="")
+    {
+      tmpPath=downDirs+this->subdir+configuration.m_destdir;
+    }else{
+      tmpPath=downDirs+this->getRelativPath()+"/";
+    }
+
+    tmpPath=QDir::cleanDirPath(tmpPath);
+
+    QString libString;
+    if(configuration.m_target!="")
+    {
+      libString = tmpPath+"/lib"+this->configuration.m_target+".so";
+
+    }else{
+      libString = tmpPath+"/lib"+this->configuration.m_subdirName+".so";
+
+    }
+    return(libString);
+  }
+  return "";
+}
+QString SubprojectItem::getApplicationObject( QString downDirs )
+{
+  QString tmpPath;
+  if(configuration.m_destdir!="")
+  {
+    tmpPath=downDirs+this->subdir+configuration.m_destdir;
+  }else{
+    tmpPath=downDirs+this->getRelativPath()+"/";
+  }
+
+  tmpPath=QDir::cleanDirPath(tmpPath);
+
+  if (configuration.m_target.isEmpty())
+    return tmpPath + "/" + configuration.m_subdirName;
+  else
+    return tmpPath + "/" + configuration.m_target;
+}
 QString SubprojectItem::getLibAddObject(QString downDirs)
 {
   if(configuration.m_requirements & QD_SHARED)
@@ -140,10 +184,10 @@ QString SubprojectItem::getLibAddObject(QString downDirs)
     if(configuration.m_target!="")
     {
       libString = tmpPath+"/lib"+this->configuration.m_target+".a";
-      
+
     }else{
       libString = tmpPath+"/lib"+this->configuration.m_subdirName+".a";
-      
+
     }
     return(libString);
   }
@@ -165,7 +209,7 @@ QString SubprojectItem::getLibAddPath(QString downDirs)
     }
 
     tmpPath=QDir::cleanDirPath(tmpPath);
-    
+
   return(tmpPath);
 
 }
@@ -741,9 +785,11 @@ void TrollProjectWidget::slotConfigureProject()
 //  d->exec();
 
   ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(m_shownSubproject,overview);
-  dlg->exec();
-  updateProjectConfiguration(m_shownSubproject);
-  setupContext();
+  if (dlg->exec() == QDialog::Accepted)
+  {
+    updateProjectConfiguration(m_shownSubproject);
+    setupContext();
+  }
 }
 
 void TrollProjectWidget::slotExecuteTarget()
@@ -1056,8 +1102,8 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
     else if (r == idProjectConfiguration)
     {
       ProjectConfigurationDlg *dlg = new ProjectConfigurationDlg(spitem,overview);
-      dlg->exec();
-      updateProjectConfiguration(spitem);
+      if (dlg->exec() == QDialog::Accepted)
+        updateProjectConfiguration(spitem);
     }
 }
 
@@ -1194,8 +1240,8 @@ void TrollProjectWidget::updateProjectConfiguration(SubprojectItem *item)
     Buffer->setValues("LIBS",item->configuration.m_libadd,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
   Buffer->removeValues("TARGETDEPS");
-  if (item->configuration.m_libadd.count()>0)
-    Buffer->setValues("TARGETDEPS",item->configuration.m_prjdeps,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
+//  if (item->configuration.m_libadd.count()>0)
+  Buffer->setValues("TARGETDEPS",item->configuration.m_prjdeps,FileBuffer::VSM_APPEND,VALUES_PER_ROW);
 
   updateInstallObjects(item,Buffer);
 
@@ -2449,15 +2495,20 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     item->m_FileBuffer.getValues("DESTDIR",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_destdir = lst[0];
-    item->m_FileBuffer.getValues("TARGET",lst,minusListDummy);
-    if (lst.count())
-      item->configuration.m_target = lst[0];
     item->m_FileBuffer.getValues("INCLUDEPATH",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_incadd = lst;
     item->m_FileBuffer.getValues("LIBS",lst,minusListDummy);
     if (lst.count())
       item->configuration.m_libadd = lst;
+
+    item->m_FileBuffer.getValues("TARGET",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_target = lst[0];
+
+    item->m_FileBuffer.getValues("TARGETDEPS",lst,minusListDummy);
+    if (lst.count())
+      item->configuration.m_prjdeps = lst;
     item->m_FileBuffer.getValues("DEFINES",lst,minusListDummy);
     item->configuration.m_defines = lst;
     item->m_FileBuffer.getValues("QMAKE_CXXFLAGS_DEBUG",lst,minusListDummy);
@@ -2826,6 +2877,21 @@ void TrollProjectWidget::findSubprojectForFile( QPtrList<SubprojectItem> &list, 
     }*/
 }
 
+//check or uncheck dependency to currently checked or unchecked library
+void InsideCheckListItem::stateChange( bool state )
+{
+    if (listView() == m_config->insidelib_listview)
+    {
+        QListViewItemIterator it( m_config->intDeps_view );
+        while ( it.current() ) {
+            InsideCheckListItem *chi = dynamic_cast<InsideCheckListItem*>(it.current());
+            if (chi)
+                if ( chi->prjItem == prjItem )
+                    chi->setOn(state);
+            ++it;
+        }
+    }
+}
 
 
 #include "trollprojectwidget.moc"

@@ -74,13 +74,22 @@ virtual void outsideLibDirEditClicked();
 virtual void slotStaticLibClicked(int);
 virtual void slotInstallTargetClicked();
 
+virtual void extAdd_button_clicked();
+virtual void extEdit_button_clicked();
+virtual void extMoveDown_button_clicked();
+virtual void extMoveUp_button_clicked();
+virtual void extRemove_button_clicked();
+virtual void intMoveDown_button_clicked();
+virtual void intMoveUp_button_clicked();
+
 void updateIncludeControl();
 void updateLibaddControl();
 void updateLibDirAddControl();
 void updateBuildOrderControl();
+void updateDependenciesControl();
 
 
-  
+
 protected:
   QListView *prjList;
   SubprojectItem *myProjectItem;

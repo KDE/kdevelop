@@ -22,7 +22,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Qmake Subproject Configuration</string>
+        <string>QMake Subproject Configuration</string>
     </property>
     <grid>
         <property name="name">
@@ -90,7 +90,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QRadioButton">
                                 <property name="name">
                                     <cstring>radioApplication</cstring>
@@ -137,7 +136,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>TextLabel1_2</cstring>
@@ -334,7 +332,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QCheckBox" row="1" column="1">
                                 <property name="name">
                                     <cstring>checkX11</cstring>
@@ -419,7 +416,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QRadioButton">
                                 <property name="name">
                                     <cstring>radioDebugMode</cstring>
@@ -518,7 +514,6 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-
                             <spacer>
                                 <property name="name">
                                     <cstring>Spacer2_3</cstring>
@@ -717,23 +712,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <spacer row="2" column="0">
-                        <property name="name">
-                            <cstring>Spacer9</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Fixed</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>16</height>
-                            </size>
-                        </property>
-                    </spacer>
                     <widget class="QListView" row="4" column="0">
                         <column>
                             <property name="text">
@@ -775,7 +753,6 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-
                             <spacer>
                                 <property name="name">
                                     <cstring>Spacer5_2_2</cstring>
@@ -1076,13 +1053,226 @@
                     <cstring>tab</cstring>
                 </property>
                 <attribute name="title">
+                    <string>Dependencies</string>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QListView" row="1" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>intDeps_view</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="1" column="1">
+                        <property name="name">
+                            <cstring>Layout9_3_2</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer5_2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>intMoveUp_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Up</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>intMoveDown_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move &amp;Down</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer6_2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                    <widget class="QLabel" row="0" column="0">
+                        <property name="name">
+                            <cstring>textLabel1_3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Targets in project:</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel" row="2" column="0">
+                        <property name="name">
+                            <cstring>textLabel1_3_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>Miscellaneous targets:</string>
+                        </property>
+                    </widget>
+                    <widget class="QListView" row="3" column="0">
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>extDeps_view</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>LastColumn</enum>
+                        </property>
+                    </widget>
+                    <widget class="QLayoutWidget" row="3" column="1">
+                        <property name="name">
+                            <cstring>layout9_2</cstring>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer7_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>extAdd_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Add...</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>extRemove_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Remove</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>extEdit_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Edit</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>extMoveUp_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move U&amp;p</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>extMoveDown_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Move Dow&amp;n</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>Spacer8_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>64</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                </grid>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
                     <string>&amp;Compiler</string>
                 </attribute>
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-
                     <widget class="QGroupBox">
                         <property name="name">
                             <cstring>GroupBox3</cstring>
@@ -1094,7 +1284,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>TextLabel1</cstring>
@@ -1121,7 +1310,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-
                             <widget class="QLabel" row="1" column="0">
                                 <property name="name">
                                     <cstring>TextLabel2_2_2</cstring>
@@ -1191,7 +1379,6 @@
                             <property name="margin">
                                 <number>0</number>
                             </property>
-
                             <spacer>
                                 <property name="name">
                                     <cstring>Spacer2_3_2</cstring>
@@ -1357,68 +1544,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QGroupBox" row="0" column="0">
-                        <property name="name">
-                            <cstring>idlGroup</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Target</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <property name="margin">
-                                <number>11</number>
-                            </property>
-
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel1_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>IDL compiler:</string>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="1" column="0">
-                                <property name="name">
-                                    <cstring>TextLabel2_3</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Compiler options:</string>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="0" column="1">
-                                <property name="name">
-                                    <cstring>idlCmdEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="KLineEdit" row="1" column="1" rowspan="1" colspan="2">
-                                <property name="name">
-                                    <cstring>idlCmdOptionsEdit</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="2">
-                                <property name="name">
-                                    <cstring>idlBrowseBtn</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>1</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>Browse...</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Browse</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
                     <spacer row="1" column="0">
                         <property name="name">
                             <cstring>spacer18</cstring>
@@ -1436,6 +1561,48 @@
                             </size>
                         </property>
                     </spacer>
+                    <widget class="QGroupBox" row="0" column="0">
+                        <property name="name">
+                            <cstring>idlGroup</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Target</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>11</number>
+                            </property>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel2_3</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Compiler options:</string>
+                                </property>
+                            </widget>
+                            <widget class="KLineEdit" row="1" column="1">
+                                <property name="name">
+                                    <cstring>idlCmdOptionsEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="KURLRequester" row="0" column="1">
+                                <property name="name">
+                                    <cstring>idlCmdEdit</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="0">
+                                <property name="name">
+                                    <cstring>TextLabel1_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>IDL compiler:</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
                 </grid>
             </widget>
         </widget>
@@ -1598,6 +1765,48 @@
         <receiver>ProjectConfigurationDlgBase</receiver>
         <slot>slotInstallTargetClicked()</slot>
     </connection>
+    <connection>
+        <sender>intMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>intMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>intMoveDown_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extAdd_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extAdd_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extRemove_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extRemove_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extEdit_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extEdit_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveUp_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveUp_button_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>extMoveDown_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ProjectConfigurationDlgBase</receiver>
+        <slot>extMoveDown_button_clicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>radioApplication</tabstop>
@@ -1660,12 +1869,11 @@
     <tabstop>mocdir_url</tabstop>
     <tabstop>uidir_url</tabstop>
     <tabstop>objdir_url</tabstop>
-    <tabstop>idlCmdEdit</tabstop>
     <tabstop>idlCmdOptionsEdit</tabstop>
-    <tabstop>idlBrowseBtn</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">klineedit.h</include>
+    <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
 <slots>
     <slot>browseTargetPath()</slot>
@@ -1697,10 +1905,14 @@
     <slot>prjDepsMoveDownClicked()</slot>
     <slot>slotStaticLibClicked(int)</slot>
     <slot>slotInstallTargetClicked()</slot>
+    <slot>intMoveUp_button_clicked()</slot>
+    <slot>intMoveDown_button_clicked()</slot>
+    <slot>extAdd_button_clicked()</slot>
+    <slot>extRemove_button_clicked()</slot>
+    <slot>extEdit_button_clicked()</slot>
+    <slot>extMoveUp_button_clicked()</slot>
+    <slot>extMoveDown_button_clicked()</slot>
 </slots>
-<includes>
-    <include location="global" impldecl="in implementation">kdialog.h</include>
-</includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
@@ -1723,6 +1935,8 @@
     <includehint>klineedit.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kurlrequester.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>kpushbutton.h</includehint>
 </includehints>
 </UI>

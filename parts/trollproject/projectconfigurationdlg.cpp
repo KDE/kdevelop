@@ -22,9 +22,11 @@
 #include <knotifyclient.h>
 #include <klineedit.h>
 #include <klineeditdlg.h>
+#include <kurlrequesterdlg.h>
 #include <kurlrequester.h>
 #include <kdebug.h>
 
+#include <qdialog.h>
 #include <qpushbutton.h>
 #include <qbuttongroup.h>
 #include <qlistview.h>
@@ -198,8 +200,8 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
     outsideItem=(QCheckListItem*)outsideItem->itemBelow();
   }
 
-  //inside libs to link    
-  myProjectItem->configuration.m_prjdeps.clear();
+  //inside libs to link
+//  myProjectItem->configuration.m_prjdeps.clear();
   insideItem=(InsideCheckListItem *)insidelib_listview->firstChild();
   while(insideItem)
   {
@@ -215,15 +217,44 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
         if(tmpPath!=""){
           myProjectItem->configuration.m_librarypath.append(/*"-L"+*/tmpPath);
         }
-      }else if(insideItem->prjItem->configuration.m_requirements & QD_STATIC)
-      {
-        //deps if static libs are linked
-        myProjectItem->configuration.m_prjdeps.append(tmpLib);
       }
       myProjectItem->configuration.m_libadd.append(tmpLib);
-           
+
     }
     insideItem=(InsideCheckListItem*)insideItem->itemBelow();
+  }
+
+  //external project dependencies
+  myProjectItem->configuration.m_prjdeps.clear();
+  QListViewItem *depItem=extDeps_view->firstChild();
+  while(depItem)
+  {
+    myProjectItem->configuration.m_prjdeps.append(depItem->text(0));
+    depItem=depItem->itemBelow();
+  }
+  //internal project dependencies
+  insideItem=dynamic_cast<InsideCheckListItem *>(intDeps_view->firstChild());
+  while(insideItem)
+  {
+      if (insideItem->isOn())
+      {
+        if(insideItem->prjItem->configuration.m_requirements & QD_STATIC)
+        {
+            QString tmpLib=insideItem->prjItem->getLibAddObject(myProjectItem->getDownDirs());
+            myProjectItem->configuration.m_prjdeps.append(tmpLib);
+        }
+        else if(insideItem->prjItem->configuration.m_requirements & QD_SHARED)
+        {
+            QString tmpLib=insideItem->prjItem->getSharedLibAddObject(myProjectItem->getDownDirs());
+            myProjectItem->configuration.m_prjdeps.append(tmpLib);
+        }
+        else
+        {
+            QString tmpApp=insideItem->prjItem->getApplicationObject(myProjectItem->getDownDirs());
+            myProjectItem->configuration.m_prjdeps.append(tmpApp);
+        }
+      }
+      insideItem=dynamic_cast<InsideCheckListItem *>(insideItem->itemBelow());
   }
 
   //extra lib paths
@@ -249,11 +280,11 @@ void ProjectConfigurationDlg::updateProjectConfiguration()
   myProjectItem->configuration.m_mocpath = mocdir_url->url();
 
   //CORBA
-  myProjectItem->configuration.idl_compiler=idlCmdEdit->text();
+  myProjectItem->configuration.idl_compiler=idlCmdEdit->url();
   myProjectItem->configuration.idl_options=idlCmdOptionsEdit->text();
 
   QDialog::accept();
-  
+
 }
 
 
@@ -275,12 +306,14 @@ void ProjectConfigurationDlg::UpdateControls()
       staticRadio->setChecked(true); //default
       if (myProjectItem->configuration.m_requirements & QD_STATIC){
         staticRadio->setChecked(true);
-        libAddTab->setEnabled(false);
-        libPathTab->setEnabled(false);
+/*        libAddTab->setEnabled(false);
+        libPathTab->setEnabled(false);*/
+        libAddTab->setEnabled(true);
+        libPathTab->setEnabled(true);
       }else{
         libAddTab->setEnabled(true);
         libPathTab->setEnabled(true);
-      }        
+      }
       if (myProjectItem->configuration.m_requirements & QD_SHARED){
         sharedRadio->setChecked(true);
         m_targetLibraryVersion->setText(myProjectItem->configuration.m_libraryversion);
@@ -358,7 +391,7 @@ void ProjectConfigurationDlg::UpdateControls()
     m_InstallTargetPath->setEnabled(false);
   }
   m_InstallTargetPath->setText(myProjectItem->configuration.m_target_install_path);
-  
+
   
   
   m_targetOutputFile->setText(myProjectItem->configuration.m_target);
@@ -378,6 +411,7 @@ void ProjectConfigurationDlg::UpdateControls()
   updateLibaddControl();
   updateLibDirAddControl();
   updateBuildOrderControl();  
+  updateDependenciesControl();
 
   objdir_url->setURL(myProjectItem->configuration.m_objectpath);
   uidir_url->setURL(myProjectItem->configuration.m_uipath);
@@ -435,7 +469,7 @@ void ProjectConfigurationDlg::updateIncludeControl()
          {
               QString tmpInc=sItem->getIncAddPath(myProjectItem->getDownDirs());
               tmpInc=QDir::cleanDirPath(tmpInc);
-              InsideCheckListItem *newItem=new InsideCheckListItem(insideinc_listview,insideinc_listview->lastItem(),sItem);
+              InsideCheckListItem *newItem=new InsideCheckListItem(insideinc_listview,insideinc_listview->lastItem(),sItem, this);
               QStringList::Iterator it=incList.begin();
               
           for(;it!=incList.end();++it)
@@ -459,7 +493,7 @@ void ProjectConfigurationDlg::updateIncludeControl()
   {
       new QListViewItem(outsideinc_listview,outsideinc_listview->lastItem(),(*it1));
   }
-  
+
 }
 void ProjectConfigurationDlg::updateLibaddControl()
 {
@@ -484,7 +518,7 @@ void ProjectConfigurationDlg::updateLibaddControl()
             //librarys
             if( ((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY ){
               SubprojectItem *sItem=(SubprojectItem*)item;
-              
+
 
               if(sItem!=myProjectItem)
               {
@@ -492,7 +526,7 @@ void ProjectConfigurationDlg::updateLibaddControl()
                   QString tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
                   if(sItem->configuration.m_requirements & QD_SHARED) tmpLib=/*"-l"+*/tmpLib;
                   if(tmpLib==(*it)){
-                    InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem);
+                    InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem, this);
                     libList.remove(it);
                     it=libList.begin();
                     newItem->setOn(true);
@@ -508,7 +542,7 @@ void ProjectConfigurationDlg::updateLibaddControl()
     }
 
   kdDebug()<< "itemlist count =" << itemList.count()<<endl;
-    
+
   //add all other prj in itemList unchecked
   ProjectItem *item=itemList.first();
   while(item)
@@ -523,23 +557,14 @@ void ProjectConfigurationDlg::updateLibaddControl()
           // create lib string
           QString tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
           if(sItem->configuration.m_requirements & QD_SHARED) tmpLib=/*"-l"+*/tmpLib;
-          InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem);
+          InsideCheckListItem *newItem=new InsideCheckListItem(insidelib_listview,insidelib_listview->lastItem(),sItem,this);
           newItem->setOn(false);
         }
       }
     }
     item=itemList.next();
   }
-  
 
-
-
-
-
-
-
-                  
-  
   //all other in libList are outside libs
   QStringList::Iterator it1=libList.begin();
   for(;it1!=libList.end();++it1)
@@ -547,6 +572,87 @@ void ProjectConfigurationDlg::updateLibaddControl()
       new QListViewItem(outsidelib_listview,outsidelib_listview->lastItem(),(*it1));
   }
 }
+
+void ProjectConfigurationDlg::updateDependenciesControl( )
+{
+  QPtrList <ProjectItem> itemList=getAllProjects();
+
+  intDeps_view->setSorting(-1,false);
+  extDeps_view->setSorting(-1,false);
+
+  QStringList depsList=myProjectItem->configuration.m_prjdeps;
+
+  QStringList::Iterator it=depsList.begin();
+  for(;it!=depsList.end();++it){
+        ProjectItem *item=itemList.first();
+        while(item){
+          if(item->type()==ProjectItem::Subproject)
+          {
+            if( (((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
+                || (((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
+              SubprojectItem *sItem=(SubprojectItem*)item;
+
+              if(sItem!=myProjectItem)
+              {
+                  QString tmpLib;
+                  if(sItem->configuration.m_requirements & QD_SHARED)
+                    tmpLib = sItem->getSharedLibAddObject(myProjectItem->getDownDirs());
+                  else if(sItem->configuration.m_requirements & QD_STATIC)
+                    tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
+                  else
+                    tmpLib=sItem->getApplicationObject(myProjectItem->getDownDirs());
+                  if(tmpLib==(*it)){
+                    InsideCheckListItem *newItem=new InsideCheckListItem(intDeps_view,intDeps_view->lastItem(),sItem,this);
+                    depsList.remove(it);
+                    it=depsList.begin();
+                    newItem->setOn(true);
+                    itemList.remove(item);
+                    item=itemList.first();
+                  }
+
+              }
+            }
+          }
+          item=itemList.next();
+        }
+    }
+
+  kdDebug()<< "itemlist count =" << itemList.count()<<endl;
+
+  //add all other prj in itemList unchecked
+  ProjectItem *item=itemList.first();
+  while(item)
+  {
+    if(item->type()==ProjectItem::Subproject)
+    {
+      if( (((SubprojectItem*)item)->configuration.m_template==QTMP_LIBRARY )
+        || (((SubprojectItem*)item)->configuration.m_template==QTMP_APPLICATION ) ){
+        SubprojectItem *sItem=(SubprojectItem*)item;
+        if(sItem!=myProjectItem)
+        {
+          QString tmpLib;
+          if(sItem->configuration.m_requirements & QD_SHARED)
+            tmpLib = sItem->getSharedLibAddObject(myProjectItem->getDownDirs());
+          else if(sItem->configuration.m_requirements & QD_STATIC)
+            tmpLib=sItem->getLibAddObject(myProjectItem->getDownDirs());
+          else
+            tmpLib=sItem->getApplicationObject(myProjectItem->getDownDirs());
+          InsideCheckListItem *newItem=new InsideCheckListItem(intDeps_view,intDeps_view->lastItem(),sItem,this);
+          newItem->setOn(false);
+        }
+      }
+    }
+    item=itemList.next();
+  }
+
+  QStringList::Iterator it1=depsList.begin();
+  for(;it1!=depsList.end();++it1)
+  {
+      new QListViewItem(extDeps_view,extDeps_view->lastItem(),(*it1));
+  }
+}
+
+
 void ProjectConfigurationDlg::updateBuildOrderControl()
 {
   //sort build order only if subdirs
@@ -646,14 +752,16 @@ void ProjectConfigurationDlg::updateLibDirAddControl()
 
 void ProjectConfigurationDlg::slotStaticLibClicked(int)
 {
-  if (staticRadio->isChecked())
+/*  dymo: static libs can be linked with other libs too
+    so please don't uncomment following*/
+/*if (staticRadio->isChecked())
   {
     libAddTab->setEnabled(false);
     libPathTab->setEnabled(false);
   } else {
     libAddTab->setEnabled(true);
     libPathTab->setEnabled(true);
-  }
+  }*/
 }
 
 
@@ -677,7 +785,7 @@ void ProjectConfigurationDlg::clickSubdirsTemplate()
     buildOrderTab->setEnabled(true);
     corbaTab->setEnabled(false);
   }
-  else   
+  else
   {
     m_targetPath->setEnabled(true);
     m_targetOutputFile->setEnabled(true);
@@ -775,9 +883,12 @@ void ProjectConfigurationDlg::outsideIncMoveDownClicked()
 
 void ProjectConfigurationDlg::outsideIncAddClicked()
 {
-    bool ok;
-    QString dir = KLineEditDlg::getText(i18n("Add include directory:"), "", &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-I")
+    KURLRequesterDlg dialog("", i18n("Add include directory:"), 0, 0);
+    dialog.urlRequester()->setMode(KFile::Directory);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    QString dir = dialog.urlRequester()->url();
+    if (!dir.isEmpty())
         new QListViewItem(outsideinc_listview, dir);
 }
 
@@ -893,9 +1004,12 @@ void ProjectConfigurationDlg::outsideLibDirMoveDownClicked()
 
 void ProjectConfigurationDlg::outsideLibDirAddClicked()
 {
-    bool ok;
-    QString dir = KLineEditDlg::getText(i18n("Add library directory:"), "", &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-I")
+    KURLRequesterDlg dialog("", i18n("Add library directory:"), 0, 0);
+    dialog.urlRequester()->setMode(KFile::Directory);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    QString dir = dialog.urlRequester()->url();
+    if (!dir.isEmpty())
         new QListViewItem(outsidelibdir_listview, dir);
 }
 
@@ -907,14 +1021,17 @@ void ProjectConfigurationDlg::outsideLibDirRemoveClicked()
 
 void ProjectConfigurationDlg::outsideIncEditClicked()
 {
-    bool ok;
     QListViewItem *item=outsideinc_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
-    QString dir = KLineEditDlg::getText(i18n("Change include directory:"), text, &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-I")
+
+    KURLRequesterDlg dialog(text, i18n("Change include directory:"), 0, 0);
+    dialog.urlRequester()->setMode(KFile::Directory);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    QString dir = dialog.urlRequester()->url();
+    if (!dir.isEmpty())
         item->setText(0,dir);
-  
 }
 
 void ProjectConfigurationDlg::outsideLibEditClicked()
@@ -923,22 +1040,26 @@ void ProjectConfigurationDlg::outsideLibEditClicked()
     QListViewItem *item=outsidelib_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
+
     QString dir = KLineEditDlg::getText(i18n("Change library to link:"), text, &ok, 0);
     if (ok && !dir.isEmpty() && dir != "-l")
         item->setText(0,dir);
-  
+
 }
 
 void ProjectConfigurationDlg::outsideLibDirEditClicked()
 {
-    bool ok;
     QListViewItem *item=outsidelibdir_listview->currentItem();
     if(item==NULL)return;
     QString text=item->text(0);
-    QString dir = KLineEditDlg::getText(i18n("Change library directory:"), text, &ok, 0);
-    if (ok && !dir.isEmpty() && dir != "-l")
+
+    KURLRequesterDlg dialog(text, i18n("Change library directory:"), 0, 0);
+    dialog.urlRequester()->setMode(KFile::Directory);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    QString dir = dialog.urlRequester()->url();
+    if (!dir.isEmpty())
         item->setText(0,dir);
-  
 }
 
 void ProjectConfigurationDlg::slotInstallTargetClicked()
@@ -948,3 +1069,82 @@ void ProjectConfigurationDlg::slotInstallTargetClicked()
   else
     m_InstallTargetPath->setEnabled(false);
 }
+
+
+void ProjectConfigurationDlg::extAdd_button_clicked( )
+{
+    KURLRequesterDlg dialog("", i18n("Add target:"), 0, 0);
+    dialog.urlRequester()->setMode(KFile::File);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    QString path = dialog.urlRequester()->url();
+    if (!path.isEmpty())
+        new QListViewItem(extDeps_view, path);
+}
+
+void ProjectConfigurationDlg::extEdit_button_clicked( )
+{
+    QListViewItem *item=extDeps_view->currentItem();
+    if(item==NULL)return;
+    QString text=item->text(0);
+
+    KURLRequesterDlg dialog(text, i18n("Change target:"), 0, 0);
+    dialog.urlRequester()->setMode(KFile::File);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+    QString path = dialog.urlRequester()->url();
+    if (!path.isEmpty())
+        item->setText(0, path);
+}
+
+void ProjectConfigurationDlg::extMoveDown_button_clicked( )
+{
+   if (extDeps_view->currentItem() == 0 || extDeps_view->currentItem()->nextSibling() == 0) {
+        KNotifyClient::beep();
+        return;
+   }
+
+   extDeps_view->currentItem()->moveItem(extDeps_view->currentItem()->nextSibling());
+}
+
+void ProjectConfigurationDlg::extMoveUp_button_clicked( )
+{
+    if (extDeps_view->currentItem() == extDeps_view->firstChild()) {
+        KNotifyClient::beep();
+        return;
+    }
+
+    QListViewItem *item = extDeps_view->firstChild();
+    while (item->nextSibling() != extDeps_view->currentItem())
+        item = item->nextSibling();
+    item->moveItem(extDeps_view->currentItem());
+}
+
+void ProjectConfigurationDlg::extRemove_button_clicked( )
+{
+    delete extDeps_view->currentItem();
+}
+
+void ProjectConfigurationDlg::intMoveDown_button_clicked( )
+{
+   if (intDeps_view->currentItem() == 0 || intDeps_view->currentItem()->nextSibling() == 0) {
+        KNotifyClient::beep();
+        return;
+   }
+
+   intDeps_view->currentItem()->moveItem(intDeps_view->currentItem()->nextSibling());
+}
+
+void ProjectConfigurationDlg::intMoveUp_button_clicked( )
+{
+    if (intDeps_view->currentItem() == intDeps_view->firstChild()) {
+        KNotifyClient::beep();
+        return;
+    }
+
+    QListViewItem *item = intDeps_view->firstChild();
+    while (item->nextSibling() != intDeps_view->currentItem())
+        item = item->nextSibling();
+    item->moveItem(intDeps_view->currentItem());
+}
+
