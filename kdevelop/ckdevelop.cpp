@@ -1837,7 +1837,8 @@ void CKDevelop::slotHelpAbout(){
                         "Stefan Bartel <bartel@rz.uni-potsdam.de>\n"
 			"Jörgen Olsson<jorgen@cenacle.net>\n"
                         "Martin Piskernig <martin.piskernig@stuwo.at>\n"
-			"Walter Tasin <tasin@e-technik.fh-muenchen.de>\n\n"
+			"Walter Tasin <tasin@e-technik.fh-muenchen.de>\n"
+			"John Birch <jbb@ihug.co.nz>>\n\n"
                         "See The KDevelop User Manual, Chapter Authors\n"
                         "for further information.\n\n"
                         "This program is free software; you can\n"
@@ -1845,12 +1846,7 @@ void CKDevelop::slotHelpAbout(){
                         "the terms of the GNU General Public License\n"
                         "as published by the Free Software Foundation;\n"
                         "either version 2 of the License, or (at your\n"
-                        "option) any later version.\n\n"
-												"This program is distributed in the hope that\n"
-												"it will be useful, but WITHOUT ANY WARRANTY; \n"
-												"without even the implied warranty of\n"
-												"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
-												"See the GNU General Public License for more details."));
+                        "option) any later version.\n\n"));
 
   QPixmap pm;
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/about_logo.bmp");

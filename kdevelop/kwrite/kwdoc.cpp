@@ -515,6 +515,10 @@ void KWriteDoc::insert(KWriteView *view, VConfig &c, const char *s) {
 
   if (!s || !*s) return;
   recordStart(c.cursor);
+
+  if (c.flags & cfDelOnInput)
+    delMarkedText(view,c);
+
   pos = 0;
   if (!(c.flags & cfVerticalSelect)) {
     while (*s != 0) {

@@ -298,12 +298,14 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt10 = new QCheckBox(i18n("&Vertical Selections"),group);
   opt11 = new QCheckBox(i18n("&Delete On Input"),group);
   opt12 = new QCheckBox(i18n("&Toggle Old"),group);
+  opt13 = new QCheckBox(i18n("&Auto Copy"),group);
 
   opt8->setChecked(flags & cfPersistent);
   opt9->setChecked(flags & cfKeepSelection);
   opt10->setChecked(flags & cfVerticalSelect);
   opt11->setChecked(flags & cfDelOnInput);
   opt12->setChecked(flags & cfXorSelect);
+  opt13->setChecked(flags & cfAutoCopy);
 
   br.moveBy(0,15 - br.y());
   opt8->setGeometry(br);
@@ -315,6 +317,8 @@ SettingsDialog::SettingsDialog(int flags, int wrapAt, int tabWidth, int undoStep
   opt11->setGeometry(br);
   br.moveBy(0,25);
   opt12->setGeometry(br);
+  br.moveBy(0,25);
+  opt13->setGeometry(br);
 
   r.setRect(r.x(),r.bottom() + 10,br.width() + 20, br.bottom() + 10);
   group->setGeometry(r);
@@ -382,6 +386,7 @@ int SettingsDialog::getFlags() {
   if (opt10->isChecked()) flags |= cfVerticalSelect;
   if (opt11->isChecked()) flags |= cfDelOnInput;
   if (opt12->isChecked()) flags |= cfXorSelect;
+  if (opt13->isChecked()) flags |= cfAutoCopy;
   return flags;
 }
 

@@ -1172,7 +1172,12 @@ void KWriteView::mouseDoubleClickEvent(QMouseEvent *e) {
 void KWriteView::mouseReleaseEvent(QMouseEvent *e) {
 
   if (e->button() == LeftButton) {
-    kWrite->copy();
+    VConfig c;
+    getVConfig(c);
+
+    if (c.flags & cfAutoCopy) {
+      kWrite->copy();
+    }
     killTimer(scrollTimer);
     scrollTimer = 0;
   }
@@ -2645,6 +2650,7 @@ void KWrite::hlDef() {
   }
   delete dlg;
 }
+
 
 void KWrite::hlDlg() {
   HighlightDialog *dlg;
