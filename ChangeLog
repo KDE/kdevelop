@@ -1,9 +1,14 @@
-2002-02-29  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-04-01  Matthias Hölzer-Klüpfel <mhk@kde.org>
+	* added qextmdi to gideon
+	* made UI model configurable
+	* smaller refactorings in lib/interfaces
+
+2002-03-29  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* migrated all parts to KTextEditor
 	* removed all traces of KEditor
 	* reenabled Tip-of-the-day
 
-2002-02-26  Matthias Hölzer-Klüpfel <mhk@kde.org>
+2002-03-26  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* refactored the core source completely
 	* sneaked in a new UI concept
           (which Harald probably will replace with QextMDI soon)
