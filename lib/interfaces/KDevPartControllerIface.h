@@ -47,9 +47,9 @@ k_dcop:
 
 private slots:
 	
-  void forwardLoadedFile(const QString &fileName);
-  void forwardSavedFile(const QString &fileName);
-    
+  void forwardLoadedFile(const KURL &fileName);
+  void forwardSavedFile(const KURL &fileName);
+  void forwardClosedFile(const KURL &fileName);  
 
 private:
   

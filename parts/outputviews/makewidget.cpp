@@ -211,8 +211,8 @@ MakeWidget::MakeWidget(MakeViewPart *part)
 	connect( horizontalScrollBar(), SIGNAL(sliderReleased()),
 	         this, SLOT(horizScrollingOff()) );
 
-	connect( m_part->partController(), SIGNAL(loadedFile(const QString&)),
-	         this, SLOT(slotDocumentOpened(const QString&)) );
+	connect( m_part->partController(), SIGNAL(loadedFile(const KURL&)),
+	         this, SLOT(slotDocumentOpened(const KURL&)) );
 }
 
 MakeWidget::~MakeWidget()
@@ -631,9 +631,9 @@ void MakeWidget::insertItem( MakeItem* new_item )
   }
 }
 
-void MakeWidget::slotDocumentOpened( const QString & filename )
+void MakeWidget::slotDocumentOpened( const KURL & filename )
 {
-	KParts::Part* part = m_part->partController()->partForURL(KURL( filename ));
+	KParts::Part* part = m_part->partController()->partForURL(filename);
 	KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part);
 
 	if (!doc) {
@@ -648,7 +648,7 @@ void MakeWidget::slotDocumentOpened( const QString & filename )
 
 		if (!e || e->m_cursor) continue;
 
-		if (filename.endsWith(e->fileName))
+		if (filename.path().endsWith(e->fileName))
 			createCursor(e, doc);
 	}
 }

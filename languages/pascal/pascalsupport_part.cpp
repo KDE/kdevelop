@@ -59,8 +59,8 @@ PascalSupportPart::PascalSupportPart(QObject *parent, const char *name, const QS
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( partController(), SIGNAL(savedFile(const QString&)),
-             this, SLOT(savedFile(const QString&)) );
+    connect( partController(), SIGNAL(savedFile(const KURL&)),
+             this, SLOT(savedFile(const KURL&)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
@@ -126,9 +126,9 @@ void PascalSupportPart::contextMenu(QPopupMenu *popup, const Context *context)
     return;
 }
 
-void PascalSupportPart::savedFile(const QString &fileName)
+void PascalSupportPart::savedFile(const KURL &fileName)
 {
-    maybeParse(fileName);
+    maybeParse(fileName.path());
     emit updatedSourceInfo();
 }
 

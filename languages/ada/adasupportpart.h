@@ -34,7 +34,7 @@ private slots:
     void changedFilesInProject( const QStringList &fileList );
 
     void initialParse ();
-    void savedFile (const QString&);
+    void savedFile (const KURL&);
 
 private:
     void maybeParse (const QString &fileName);

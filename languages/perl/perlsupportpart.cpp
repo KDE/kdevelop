@@ -56,8 +56,8 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
 
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( partController(), SIGNAL(savedFile(const QString&)),
-             this, SLOT(savedFile(const QString&)) );
+    connect( partController(), SIGNAL(savedFile(const KURL&)),
+             this, SLOT(savedFile(const KURL&)) );
 
     KAction *action;
 
@@ -159,9 +159,9 @@ void PerlSupportPart::removedFilesFromProject(const QStringList &fileList)
 }
 
 
-void PerlSupportPart::savedFile(const QString &fileName)
+void PerlSupportPart::savedFile(const KURL &fileName)
 {
-    Q_UNUSED( fileName );
+    Q_UNUSED( fileName.path() );
 #if 0  // not needed anymore
     kdDebug(9016) << "savedFile()" << endl;
 

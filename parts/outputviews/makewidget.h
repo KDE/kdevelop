@@ -30,6 +30,8 @@ class MakeViewPart;
 class MakeItem;
 class KProcess;
 class ProcessLineMaker;
+class KURL;
+
 namespace KTextEditor { class Document; }
 
 class MakeWidget : public QTextEdit
@@ -72,7 +74,7 @@ private slots:
     void slotEnteredDirectory( EnteringDirectoryItem* );
     void slotExitedDirectory( ExitingDirectoryItem* );
     void insertItem( MakeItem* );
-    void slotDocumentOpened(const QString& filename);
+    void slotDocumentOpened(const KURL& filename);
     void slotDocumentClosed(QObject* doc);
 
 private:

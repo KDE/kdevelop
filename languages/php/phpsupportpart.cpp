@@ -69,8 +69,8 @@ PHPSupportPart::PHPSupportPart(QObject *parent, const char *name, const QStringL
 
   connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
   connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-  connect( partController(), SIGNAL(savedFile(const QString&)),
-             this, SLOT(savedFile(const QString&)) );
+  connect( partController(), SIGNAL(savedFile(const KURL&)),
+             this, SLOT(savedFile(const KURL&)) );
   connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
 	   this, SLOT(projectConfigWidget(KDialogBase*)) );
 
@@ -459,13 +459,13 @@ void PHPSupportPart::removedFilesFromProject(const QStringList &fileList)
 }
 
 
-void PHPSupportPart::savedFile(const QString &fileName)
+void PHPSupportPart::savedFile(const KURL &fileName)
 {
     kdDebug(9018) << "savedFile()" << endl;
 
-    if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
-        maybeParse(fileName);
-        emit addedSourceInfo( fileName );
+    if (project()->allFiles().contains(fileName.path().mid ( project()->projectDirectory().length() + 1 ))) {
+        maybeParse(fileName.path());
+        emit addedSourceInfo( fileName.path() );
     }
 }
 

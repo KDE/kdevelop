@@ -53,7 +53,7 @@ BashSupportPart::BashSupportPart(QObject *parent, const char *name, const QStrin
 		this, SLOT(projectConfigWidget(KDialogBase*)) );
 	connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
 	connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-	connect( partController(), SIGNAL(savedFile(const QString&)), this, SLOT(savedFile(const QString&)) );
+	connect( partController(), SIGNAL(savedFile(const KURL&)), this, SLOT(savedFile(const KURL&)) );
  	connect(partController(), SIGNAL(activePartChanged(KParts::Part*)),
 		this, SLOT(slotActivePartChanged(KParts::Part *)));
 
@@ -168,14 +168,14 @@ void BashSupportPart::removedFilesFromProject(const QStringList &fileList)
 	//emit updatedSourceInfo();
 }
 
-void BashSupportPart::savedFile(const QString &fileName)
+void BashSupportPart::savedFile(const KURL &fileName)
 {
 	kdDebug(9014) << "savedFile()" << endl;
 
-	if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 )))
+	if (project()->allFiles().contains(fileName.path().mid ( project()->projectDirectory().length() + 1 )))
 	{
-		parse(fileName);
-		emit addedSourceInfo( fileName );
+		parse(fileName.path());
+		emit addedSourceInfo( fileName.path() );
 	}
 }
 

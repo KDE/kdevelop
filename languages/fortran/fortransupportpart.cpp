@@ -58,8 +58,8 @@ FortranSupportPart::FortranSupportPart(QObject *parent, const char *name, const 
              this, SLOT(projectConfigWidget(KDialogBase*)) );
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
-    connect( partController(), SIGNAL(savedFile(const QString&)),
-             this, SLOT(savedFile(const QString&)) );
+    connect( partController(), SIGNAL(savedFile(const KURL&)),
+             this, SLOT(savedFile(const KURL&)) );
 
     KAction *action;
 
@@ -261,13 +261,13 @@ void FortranSupportPart::removedFilesFromProject(const QStringList &fileList)
 }
 
 
-void FortranSupportPart::savedFile(const QString &fileName)
+void FortranSupportPart::savedFile(const KURL &fileName)
 {
     kdDebug(9019) << "savedFile()" << endl;
 
-    if (project()->allFiles().contains(fileName.mid ( project()->projectDirectory().length() + 1 ))) {
-        maybeParse(fileName);
-        emit addedSourceInfo( fileName );
+    if (project()->allFiles().contains(fileName.path().mid ( project()->projectDirectory().length() + 1 ))) {
+        maybeParse(fileName.path());
+        emit addedSourceInfo( fileName.path() );
     }
 }
 

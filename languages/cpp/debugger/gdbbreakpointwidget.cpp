@@ -23,6 +23,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <kurl.h>
 
 #include <qvbuttongroup.h>
 #include <qfileinfo.h>
@@ -292,7 +293,7 @@ void GDBBreakpointWidget::reset()
 
 // When a file is loaded then we need to tell the editor (display window)
 // which lines contain a breakpoint.
-void GDBBreakpointWidget::slotRefreshBP(const QString &filename)
+void GDBBreakpointWidget::slotRefreshBP(const KURL &filename)
 {
     for ( int row = 0; row < m_table->numRows(); row++ )
     {
@@ -300,7 +301,7 @@ void GDBBreakpointWidget::slotRefreshBP(const QString &filename)
         if (btr)
         {
             FilePosBreakpoint* bp = dynamic_cast<FilePosBreakpoint*>(btr->breakpoint());
-            if (bp && (bp->fileName() == filename))
+            if (bp && (bp->fileName() == filename.path()))
                 emit refreshBPState(*bp);
         }
     }

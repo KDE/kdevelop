@@ -35,7 +35,7 @@ protected:
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void projectOpened();
-    void savedFile(const QString &fileName);
+    void savedFile(const KURL &fileName);
     void addedFilesToProject(const QStringList &fileList);
     void removedFilesFromProject(const QStringList &fileList);
     void slotRun();

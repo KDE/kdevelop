@@ -170,8 +170,8 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(languageChanged()), this, SLOT(projectOpened()) );
-    connect( partController(), SIGNAL(savedFile(const QString&)),
-             this, SLOT(savedFile(const QString&)) );
+    connect( partController(), SIGNAL(savedFile(const KURL&)),
+             this, SLOT(savedFile(const KURL&)) );
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
     connect( partController(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -735,9 +735,9 @@ void CppSupportPart::changedFilesInProject( const QStringList & fileList )
     }
 }
 
-void CppSupportPart::savedFile(const QString &fileName)
+void CppSupportPart::savedFile(const KURL &fileName)
 {
-    Q_UNUSED( fileName );
+    Q_UNUSED( fileName.path() );
 
 #if 0  // not needed anymore
     kdDebug(9007) << "savedFile(): " << fileName.mid ( m_projectDirectory.length() + 1 ) << endl;

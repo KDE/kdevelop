@@ -52,7 +52,7 @@ SQLSupportPart::SQLSupportPart( QObject *parent, const char *name, const QString
     connect( core(), SIGNAL(projectOpened()), this, SLOT(projectOpened()) );
     connect( core(), SIGNAL(projectClosed()), this, SLOT(projectClosed()) );
     connect( core(), SIGNAL(languageChanged()), this, SLOT(projectOpened()) );
-    connect( partController(), SIGNAL( savedFile( const QString& ) ), this, SLOT( savedFile( const QString& ) ) );
+    connect( partController(), SIGNAL( savedFile( const KURL& ) ), this, SLOT( savedFile( const KURL& ) ) );
 
     m_widget = new SqlOutputWidget();
     mainWindow()->embedOutputView( m_widget, "SQL", "Output of SQL commands" );
@@ -258,9 +258,9 @@ void SQLSupportPart::removedFilesFromProject( const QStringList &fileList )
     emit updatedSourceInfo();
 }
 
-void SQLSupportPart::savedFile( const QString &fileName )
+void SQLSupportPart::savedFile( const KURL &fileName )
 {
-    if ( project() ->allFiles().contains( fileName.mid ( project() ->projectDirectory().length() + 1 ) ) ) {
+    if ( project() ->allFiles().contains( fileName.path().mid ( project() ->projectDirectory().length() + 1 ) ) ) {
 //        parse( fileName );
 //        emit updatedSourceInfo();
     }

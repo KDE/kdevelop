@@ -42,7 +42,7 @@ public:
 private slots:
 	void projectOpened();
 	void projectClosed();
-  	void savedFile(const QString &fileName);
+  	void savedFile(const KURL &fileName);
   	void configWidget(KDialogBase *dlg);
 	void projectConfigWidget(KDialogBase *dlg);
   	void contextMenu(QPopupMenu *popup, const Context *context);

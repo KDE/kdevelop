@@ -291,8 +291,8 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
 
-    connect( partController(), SIGNAL(loadedFile(const QString &)),
-             gdbBreakpointWidget, SLOT(slotRefreshBP(const QString &)) );
+    connect( partController(), SIGNAL(loadedFile(const KURL &)),
+             gdbBreakpointWidget, SLOT(slotRefreshBP(const KURL &)) );
     connect( debugger(), SIGNAL(toggledBreakpoint(const QString &, int)),
              gdbBreakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
     connect( debugger(), SIGNAL(editedBreakpoint(const QString &, int)),

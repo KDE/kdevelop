@@ -68,8 +68,8 @@ AdaSupportPart::AdaSupportPart (QObject *parent, const char *name, const QString
     connect (core (), SIGNAL (projectOpened ()), this, SLOT (projectOpened ()));
     connect (core (), SIGNAL (projectClosed ()), this, SLOT (projectClosed ()));
 
-    connect (partController (), SIGNAL (savedFile (const QString&)),
-             this, SLOT (savedFile (const QString&)));
+    connect (partController (), SIGNAL (savedFile (const KURL&)),
+             this, SLOT (savedFile (const KURL&)));
 
     connect (core (), SIGNAL (configWidget (KDialogBase*)), this, SLOT (configWidget (KDialogBase*)));
     connect( core(), SIGNAL(configWidget(KDialogBase*)),
@@ -293,12 +293,12 @@ void AdaSupportPart::parseContents (const QString& contents, const QString& file
 
 
 
-void AdaSupportPart::savedFile (const QString& fileName)
+void AdaSupportPart::savedFile (const KURL& fileName)
 {
     kdDebug () << "AdaSupportPart::savedFile ()" << endl;
 
-    if (project ()->allFiles ().contains (fileName.mid (project ()->projectDirectory ().length () + 1))) {
-        maybeParse (fileName);
+    if (project ()->allFiles ().contains (fileName.path().mid (project ()->projectDirectory ().length () + 1))) {
+        maybeParse (fileName.path());
         emit updatedSourceInfo();
     }
 }

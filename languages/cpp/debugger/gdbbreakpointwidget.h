@@ -20,6 +20,7 @@
 
 class QDomElement;
 class QToolButton;
+class KURL;
 
 /***************************************************************************/
 /***************************************************************************/
@@ -59,7 +60,7 @@ public slots:
     void slotParseGDBBrkptList(char *str);
     void slotParseGDBBreakpointSet(char *str, int BPKey);
 
-    void slotRefreshBP(const QString &filename);
+    void slotRefreshBP(const KURL &filename);
     
 protected:
     virtual void focusInEvent(QFocusEvent *e);

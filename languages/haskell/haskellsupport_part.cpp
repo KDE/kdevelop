@@ -48,8 +48,8 @@ HaskellSupportPart::HaskellSupportPart(QObject *parent, const char *name, const 
   			 this, SLOT( projectOpened() ) );
   	connect( core(), SIGNAL( projectClosed() ),
   			 this, SLOT( projectClosed() ) );
-  	connect( partController(), SIGNAL( savedFile( const QString& ) ),
- 			 this, SLOT( savedFile( const QString& ) ) );
+  	connect( partController(), SIGNAL( savedFile( const KURL& ) ),
+ 			 this, SLOT( savedFile( const KURL& ) ) );
   	connect( core(), SIGNAL( contextMenu( QPopupenu*, const Context* ) ),
   			 this, SLOT( contextMenu( QPopupenu *, const Context* ) ) );
 	connect( core(), SIGNAL( configWidget( KDialogBase* ) ),
@@ -109,9 +109,9 @@ void HaskellSupportPart::contextMenu( QPopupMenu *popup, const Context *context 
 	return;
 }
 
-void HaskellSupportPart::savedFile( const QString &fileName )
+void HaskellSupportPart::savedFile( const KURL &fileName )
 {
-	Q_UNUSED( fileName );
+	Q_UNUSED( fileName.path() );
 	return;
 }
 

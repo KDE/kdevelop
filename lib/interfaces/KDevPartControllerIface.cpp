@@ -28,8 +28,9 @@
 KDevPartControllerIface::KDevPartControllerIface(KDevPartController *pc)
   : QObject(pc), DCOPObject("KDevPartController"), m_controller(pc)
 {
-  connect(pc, SIGNAL(loadedFile(const QString &)), this, SLOT(forwardLoadedFile(const QString &)));
-  connect(pc, SIGNAL(savedFile(const QString &)), this, SLOT(forwardSavedFile(const QString &)));
+  connect(pc, SIGNAL(loadedFile(const KURL &)), this, SLOT(forwardLoadedFile(const KURL &)));
+  connect(pc, SIGNAL(savedFile(const KURL &)), this, SLOT(forwardSavedFile(const KURL &)));
+  connect(pc, SIGNAL(closedFile(const KURL &)), this, SLOT(forwardClosedFile(const KURL &)));  
 }
 
 
@@ -62,18 +63,23 @@ void KDevPartControllerIface::revertAllFiles()
 }
 
 
-void KDevPartControllerIface::forwardLoadedFile(const QString &fileName)
+void KDevPartControllerIface::forwardLoadedFile(const KURL &fileName)
 {
   kdDebug(9000) << "dcop emitting loadedFile " << fileName << endl;
   emitDCOPSignal("projectOpened()", QByteArray());
 }
 
 
-void KDevPartControllerIface::forwardSavedFile(const QString &fileName)
+void KDevPartControllerIface::forwardSavedFile(const KURL &fileName)
 {
   kdDebug(9000) << "dcop emitting savedFile " << fileName << endl;
   emitDCOPSignal("projectClosed()", QByteArray());
 }
 
+void KDevPartControllerIface::forwardClosedFile(const KURL &fileName)
+{
+  kdDebug(9000) << "dcop emitting closedFile " << fileName << endl;
+  emitDCOPSignal("projectClosed()", QByteArray());
+}
 
 #include "KDevPartControllerIface.moc"
