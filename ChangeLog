@@ -1,3 +1,6 @@
+2001-04-19  F@lk Brettschneider <falk@kdevelop.org>
+    * improved Options->KDevelop->User_interface page
+
 2001-04-18  jbb <jbb@kdevelop.org>
     * Horizontal scroll bar patch from Jens Zurheide <jens.zurheide@gmx.de>
     * null pointer test in closeWindow()

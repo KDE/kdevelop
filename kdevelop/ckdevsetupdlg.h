@@ -29,6 +29,7 @@ class QLineEdit;
 class QButtonGroup;
 class QLabel;
 class QFrame;
+class QButtonGroup;
 
 #include <kdialogbase.h>
 #include <kaccel.h>
@@ -67,7 +68,6 @@ private:
 // --- added by Olaf Hartig (olaf@punkbands.de) 22.Feb.2000
 	void slotPPathClicked();
 // ---
-  void slotUserInterfaceChosen(int chosenUIMode);
 
 private:
   bool wantsTreeRefresh;
@@ -116,6 +116,9 @@ private:
   QCheckBox* dbgLibCheck;
   QCheckBox* dbgFloatCheck;
   QCheckBox* dbgTerminalCheck;
+
+  // user interface mode
+  QButtonGroup* bg;
 };
 
 #endif

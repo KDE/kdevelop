@@ -3852,6 +3852,7 @@ void CKDevelop::fillWindowMenu()
 {
   QextMdiMainFrm::fillWindowMenu();
   windowMenu()->insertItem(i18n("New &Window"), this, SLOT(slotCreateNewViewWindow()), 0, -1, 0);
+  windowMenu()->removeItemAt(6);
   windowMenu()->removeItemAt(5);
 }
 

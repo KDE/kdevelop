@@ -686,7 +686,7 @@ void CKDevSetupDlg::addQT2Tab()
 //
 void CKDevSetupDlg::addUserInterfaceTab()
 {
-  QFrame* UserInterfacePage = addPage(i18n("user interface"),i18n("User interface"),
+  QFrame* UserInterfacePage = addPage(i18n("User interface"),i18n("Type of user interface"),
   KGlobal::instance()->iconLoader()->loadIcon( "window_list", KIcon::NoGroup, KIcon::SizeMedium ));
 
   config->setGroup("General Options");
@@ -696,11 +696,32 @@ void CKDevSetupDlg::addUserInterfaceTab()
   QLabel* label = new QLabel(i18n("What kind of user interface do you want?"),UserInterfacePage);
   grid->addWidget(label,0,0);
 
-  QVButtonGroup* bg = new QVButtonGroup(UserInterfacePage);
+  bg = new QButtonGroup(UserInterfacePage);
   grid->addWidget(bg,1,0);
+  QGridLayout* innerGrid = new QGridLayout(bg,3,2,15,7);
+  QPixmap pm;
+
   QRadioButton* childframe = new QRadioButton( i18n("Childframe Mode"), bg );
+  innerGrid->addWidget(childframe,0,0);
+  QLabel* pictureLabelCF = new QLabel(bg);
+  pm.load(locate("appdata", "pics/childfrm.png"));
+  pictureLabelCF->setPixmap(pm);
+  innerGrid->addWidget(pictureLabelCF,0,1);
+
   QRadioButton* toplevel = new QRadioButton( i18n("Toplevel Mode"), bg );
+  innerGrid->addWidget(toplevel,1,0);
+  QLabel* pictureLabelTL = new QLabel(bg);
+  pm.load(locate("appdata", "pics/toplevel.png"));
+  pictureLabelTL->setPixmap(pm);
+  innerGrid->addWidget(pictureLabelTL,1,1);
+
   QRadioButton* tabpage = new QRadioButton( i18n("Tab Page Mode"), bg );
+  innerGrid->addWidget(tabpage,2,0);
+  QLabel* pictureLabelTP = new QLabel(bg);
+  pm.load(locate("appdata", "pics/tabpage.png"));
+  pictureLabelTP->setPixmap(pm);
+  innerGrid->addWidget(pictureLabelTP,2,1);
+
   childframe->setChecked(false);
   toplevel->setChecked(false);
   tabpage->setChecked(false);
@@ -722,7 +743,6 @@ void CKDevSetupDlg::addUserInterfaceTab()
   bg->setFrameStyle(QFrame::Raised|QFrame::Box);
   bg->setMargin(8);
   bg->setFixedHeight(bg->sizeHint().height());
-  connect(bg, SIGNAL(clicked(int)), SLOT(slotUserInterfaceChosen(int)));
 
   grid->setRowStretch(2,1);
 
@@ -867,6 +887,22 @@ void CKDevSetupDlg::slotOkClicked(){
   config->writeEntry("ProjectDefaultDir", ppath_edit->text());	
 // ---
 
+  // user interface
+  config->setGroup("General Options");
+  switch (bg->id(bg->selected())) {
+  case 0:
+    config->writeEntry("MDI mode", QextMdi::ChildframeMode);
+    break;
+  case 1:
+    config->writeEntry("MDI mode", QextMdi::ToplevelMode);
+    break;
+  case 2:
+    config->writeEntry("MDI mode", QextMdi::TabPageMode);
+    break;
+  default:
+    break;
+  }
+
   m_accel->setKeyDict(keyMap);
   m_accel->writeSettings(config);
   config->sync();
@@ -985,24 +1021,5 @@ void CKDevSetupDlg::slotPPathClicked(){
   }
 }
 // ---
-
-void CKDevSetupDlg::slotUserInterfaceChosen(int chosenUIMode)
-{
-  config->setGroup("General Options");
-
-  switch (chosenUIMode) {
-  case 0:
-    config->writeEntry("MDI mode", QextMdi::ChildframeMode);
-    break;
-  case 1:
-    config->writeEntry("MDI mode", QextMdi::ToplevelMode);
-    break;
-  case 2:
-    config->writeEntry("MDI mode", QextMdi::TabPageMode);
-    break;
-  default:
-    break;
-  }
-}
 
 #include "ckdevsetupdlg.moc"
