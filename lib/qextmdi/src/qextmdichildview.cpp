@@ -11,6 +11,7 @@
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
 //                           02/2001       by Eva Brucherseifer (eva@rt.e-technik.tu-darmstadt.de)
+//                           01/2003       by Jens Zurheide (jens.zurheide@gmx.de)
 //
 //    copyright            : (C) 1999-2001 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
@@ -60,6 +61,9 @@ QextMdiChildView::QextMdiChildView( const QString& caption, QWidget* parentWidge
    setFocusPolicy(ClickFocus);
 
    installEventFilter(this);
+
+   // store the current time
+   updateTimeStamp();
 }
 
 //============ QextMdiChildView ============//
@@ -82,6 +86,9 @@ QextMdiChildView::QextMdiChildView( QWidget* parentWidget, const char* name, WFl
    setFocusPolicy(ClickFocus);
 
    installEventFilter(this);
+   
+   // store the current time
+   updateTimeStamp();
 }
 
 //============ ~QextMdiChildView ============//
@@ -505,9 +512,18 @@ void QextMdiChildView::slot_childDestroyed()
 }
 
 //============= eventFilter ===============//
-
 bool QextMdiChildView::eventFilter(QObject *obj, QEvent *e )
 {
+#if !(KDE_VERSION > 310)
+   if ( obj != this && e->type() == QEvent::KeyRelease )
+     //  somethings eats the KeyRelease events and the main frame does not receive
+     //  the event. So manually forward the event the the eventFilter() functions
+     //  (but only if the sending object is not this object; avoid deadlock).
+     //  The main frame is one of the filtering objects for this one.
+     //  However this does not work for toplevel windows, but they don't distribute 
+     //  any events anyway (like Alt+F,... )
+     qApp->sendEvent( this, e ); 
+#endif     
    if(e->type() == QEvent::KeyPress && isAttached()) {
       QKeyEvent* ke = (QKeyEvent*) e;
       if(ke->key() == Qt::Key_Tab) {
@@ -662,6 +678,7 @@ void QextMdiChildView::setWindowMenuID( int id)
 /** called if someone click on the "Window" menu item for this child frame window */
 void QextMdiChildView::slot_clickedInWindowMenu()
 {
+   updateTimeStamp();
    emit clickedInWindowMenu( m_windowMenuID);
 }
 

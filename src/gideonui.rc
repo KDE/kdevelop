@@ -38,6 +38,8 @@
     <text>&amp;View</text>
     <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
+    <Action name="view_first_window"/>
+    <Action name="view_last_window"/>
     <Separator/>
     <Action name="view_tree_tool_views"/>
     <Action name="view_output_tool_views"/>

@@ -727,6 +727,7 @@ void DocTreeQtFolder::refresh()
     QFile f(filename);
     if (!f.open(IO_ReadOnly)) {
         kdDebug(9002) << "Could not read qt.xml" << endl;
+        kdDebug(9002) << "  Filename was: " << filename << endl;
         return;
     }
     QDomDocument doc;

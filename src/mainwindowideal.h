@@ -23,6 +23,9 @@
 
 #include <kparts/mainwindow.h>
 
+#include <qdatetime.h>
+#include <qmap.h>
+
 
 class KTabZoomWidget;
 class MainWindowShare;
@@ -61,6 +64,10 @@ public:
   void prepareToCloseViews();
   void realClose();
 
+  bool eventFilter( QObject *watched, QEvent *e );
+  bool switching(void) const { return m_bSwitching; }
+  void setSwitching( const bool switching ) { m_bSwitching = switching; }
+
 signals:
 
   void wantsToQuit();
@@ -75,7 +82,9 @@ public slots:
 
   void createGUI(KParts::Part *part);
   void gotoNextWindow();
+  void gotoFirstWindow();
   void gotoPreviousWindow();
+  void gotoLastWindow();
 
   void raiseLeftTabbar();
   void raiseRightTabbar();
@@ -85,6 +94,8 @@ public slots:
 private slots:
   void slotQuit();
   void slotBufferSelected();      // One entry of the Windows menu has been selected
+  void slotStatusChange(KParts::Part*);
+  void slotTabSelected(QWidget*);
   void slotFillWindowMenu();
   void slotPartAdded(KParts::Part*);
   void slotTextChanged();
@@ -115,6 +126,9 @@ private:
   bool m_closing;
 
   MainWindowShare*   m_pMainWindowShare;
+  
+  QMap<QWidget*, QDateTime> m_timeStamps;
+  bool m_bSwitching;
 };
 
 

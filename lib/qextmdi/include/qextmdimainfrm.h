@@ -10,6 +10,7 @@
 //                                         classes and a Qt-based library
 //                         : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //    patches              : */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
+//                         : 01/2003       by Jens Zurheide (jens.zurheide@gmx.de)
 //
 //    copyright            : (C) 1999-2000 by Falk Brettschneider
 //                                         and
@@ -246,6 +247,9 @@ protected:
    bool                    m_bClearingOfWindowMenuBlocked;
 
    QTimer*                 m_pDragEndTimer;
+   
+   bool                    m_bSwitching;
+
 // methods
 public:
    /**
@@ -403,6 +407,9 @@ public:
    */
    void findRootDockWidgets(QPtrList<KDockWidget>* pRootDockWidgetList, QValueList<QRect>* pPositionList);
 
+   void setSwitching( const bool switching ) { m_bSwitching = switching; }
+   bool switching(void) const { return m_bSwitching; }
+   
 public slots:
    /** addWindow demands a QextMdiChildView. This method wraps every QWidget in such an object and
        this way you can every widget put under MDI control.
@@ -549,6 +556,14 @@ public slots:
    * Activates the previous open view
    */
    virtual void activatePrevWin();
+   /**
+   * Activates the view first viewed concerning to the access time.
+   */
+   virtual void activateFirstWin();
+   /**
+   * Activates the view last viewed concerning to the access time.
+   */
+   virtual void activateLastWin();
    /**
    * Activates the view with the tab page index (TabPage mode only)
    */

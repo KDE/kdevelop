@@ -34,6 +34,12 @@ public:
 
   void createActions();
 
+signals:
+  void gotoNextWindow();
+  void gotoPreviousWindow();
+  void gotoFirstWindow();
+  void gotoLastWindow();
+  
 private slots:
   void slotKeyBindings();
   void slotConfigureToolbars();

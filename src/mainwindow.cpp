@@ -20,7 +20,7 @@
 #include <qmultilineedit.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
-
+#include <qvaluelist.h>
 
 #include <kdeversion.h>
 #include <kapplication.h>
@@ -36,7 +36,6 @@
 #include <kmenubar.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
-
 
 #include "projectmanager.h"
 #include "partcontroller.h"
@@ -336,9 +335,6 @@ void MainWindow::createFramework()
  */
 void MainWindow::createActions()
 {
-  KAction *action;
-
-
   // Create actions for the view menu
   ViewMenuActionPrivateData ViewActionData;   // ViewActionData holds the parameter for the action
   ViewActionData.eView       = OutputView;    // The new action will be for the output tool window
@@ -359,13 +355,6 @@ void MainWindow::createActions()
 
   connect(manager(), SIGNAL(change()),this, SLOT(updateActionState()));
 
-  action = new KAction( i18n("&Next Window"), ALT+Key_Right, this, SLOT(gotoNextWindow()),actionCollection(), "view_next_window");
-  action->setStatusText( i18n("Switches to the next window") );
-
-  action = new KAction( i18n("&Previous Window"), ALT+Key_Left, this, SLOT(gotoPreviousWindow()),actionCollection(), "view_previous_window");
-  action->setStatusText( i18n("Switches to the previous window") );
-
-
   m_pOutputToolViewsMenu = new KActionMenu( i18n("Output Tool Views"), 0, "view_output_tool_views");
   connect(m_pOutputToolViewsMenu->popupMenu(),SIGNAL(aboutToShow()),this,SLOT(fillOutputToolViewsMenu()));
   actionCollection()->insert(m_pOutputToolViewsMenu);
@@ -375,6 +364,10 @@ void MainWindow::createActions()
   actionCollection()->insert(m_pTreeToolViewsMenu);
 
   m_pMainWindowShare->createActions();
+  connect(m_pMainWindowShare, SIGNAL(gotoNextWindow()), this, SLOT(gotoNextWindow()));
+  connect(m_pMainWindowShare, SIGNAL(gotoPreviousWindow()), this, SLOT(gotoPreviousWindow()));
+  connect(m_pMainWindowShare, SIGNAL(gotoFirstWindow()), this, SLOT(gotoFirstWindow()));
+  connect(m_pMainWindowShare, SIGNAL(gotoLastWindow()), this, SLOT(gotoLastWindow()));
   
   m_toggleViewbar = KStdAction::showToolbar(this, SLOT(slotToggleViewbar()),actionCollection(), "settings_viewbar");
   m_toggleViewbar->setText(i18n("Show &Viewbar"));
@@ -693,7 +686,18 @@ void MainWindow::gotoPreviousWindow()
   activatePrevWin();
 }
 
+void MainWindow::gotoFirstWindow()
+{
+  activateFirstWin();
+}
+
+void MainWindow::gotoLastWindow()
+{
+  activateLastWin();
+}
+
 //=============== fillWindowMenu ===============//
+// This is more or less a verbatim copy from what is implemented in QextMdiMainFrm
 void MainWindow::fillWindowMenu()
 {
    bool bTabPageMode = FALSE;
@@ -751,18 +755,21 @@ void MainWindow::fillWindowMenu()
    int i=100;
    QextMdiChildView* pView = 0L;
    QPtrListIterator<QextMdiChildView> it(*m_pWinList);
-   for( ; it.current(); ++it) {
+   QValueList<QDateTime> timeStamps;
+   for (; it.current(); ++it) {
 
       pView = it.current();
-      if( pView->isToolView())
+      if (pView->isToolView()) {
          continue;
+      }
+      QDateTime timeStamp( pView->getTimeStamp() );
 
       KParts::ReadOnlyPart * ro_part = getPartFromWidget(m_childViewMap[pView]);
 
-      QString name = (ro_part==0L)?pView->caption():ro_part->url().url();
+      QString name = (ro_part==0L)?pView->caption():ro_part->url().prettyURL();
       QString item;
       // set titles of minimized windows in brackets
-      if( pView->isMinimized()) {
+      if (pView->isMinimized()) {
          item += "(";
          item += name;
          item += ")";
@@ -775,11 +782,32 @@ void MainWindow::fillWindowMenu()
       // insert the window entry sorted in alphabetical order
       unsigned int indx;
       unsigned int windowItemCount = m_pWindowMenu->count() - entryCount;
-      bool inserted = FALSE;
+//      bool inserted = FALSE;
       QString tmpString;
-      for (indx = 0; indx <= windowItemCount; indx++) {
-         tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+entryCount));
-         if (tmpString.right( tmpString.length()-2) > item.right( item.length()-2)) {
+      
+      QValueList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
+      for (indx = 0; indx < windowItemCount; indx++, ++timeStampIterator) {
+        bool putHere = false;
+        if ((*timeStampIterator) < timeStamp) {
+          putHere = true;
+        }
+        if ( putHere ) {
+//          timeStamps.insert( timeStampIterator, timeStamp );
+//          m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, indx+entryCount);
+//           if (pView == m_pCurrentWindow)
+//             m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+entryCount), TRUE);
+//           pView->setWindowMenuID( i);
+//           if (!bTabPageMode) {
+//             m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, indx);
+//             if (pView->isAttached())
+//                 m_pDockMenu->setItemChecked( m_pDockMenu->idAt( indx), TRUE);
+//           }
+//           inserted = TRUE;
+          break;
+        }
+      }
+//      if (!inserted) {  // append it
+         timeStamps.insert( timeStampIterator, timeStamp );
             m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, indx+entryCount);
             if (pView == m_pCurrentWindow)
                m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+entryCount), TRUE);
@@ -789,21 +817,7 @@ void MainWindow::fillWindowMenu()
                if (pView->isAttached())
                   m_pDockMenu->setItemChecked( m_pDockMenu->idAt( indx), TRUE);
             }
-            inserted = TRUE;
-            indx = windowItemCount+1;  // break the loop
-         }
-      }
-      if (!inserted) {  // append it
-         m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, windowItemCount+entryCount);
-         if (pView == m_pCurrentWindow)
-            m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt(windowItemCount+entryCount), TRUE);
-         pView->setWindowMenuID( i);
-         if (!bTabPageMode) {
-            m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, windowItemCount);
-            if (pView->isAttached())
-               m_pDockMenu->setItemChecked( m_pDockMenu->idAt(windowItemCount), TRUE);
-         }
-      }
+//      }
       i++;
    }
 }

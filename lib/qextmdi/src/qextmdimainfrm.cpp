@@ -10,6 +10,7 @@
 //                                         classes and a Qt-based library
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
+//                           01/2003       by Jens Zurheide (jens.zurheide@gmx.de)
 //
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
@@ -32,11 +33,16 @@
 #ifndef NO_KDE
 #include <kmenubar.h>
 #include <kapplication.h>
+#include <kdebug.h>
 #include <qtabwidget.h>
 #endif
 #include <qtoolbutton.h>
 #include <qlayout.h>
 #include <qtimer.h>
+#include <qtextstream.h>
+#include <qstring.h>
+#include <qmap.h>
+#include <qvaluelist.h>
 
 #include "qextmdimainfrm.h"
 #include "qextmditaskbar.h"
@@ -65,6 +71,16 @@
 #ifndef NO_KDE
 #include <X11/X.h>
 #include <X11/Xlib.h>
+#endif
+
+#ifdef KeyRelease
+/* I hate the defines in the X11 header files. Get rid of one of them */
+#undef KeyRelease
+#endif
+
+#ifdef KeyPress
+/* I hate the defines in the X11 header files. Get rid of one of them */
+#undef KeyPress
 #endif
 
 using namespace KParts;
@@ -109,6 +125,7 @@ QextMdi::MdiMode QextMdiMainFrm::m_mdiMode = QextMdi::ChildframeMode;
    ,m_pTempDockSession(0L)
    ,m_bClearingOfWindowMenuBlocked(FALSE)
    ,m_pDragEndTimer(0L)
+   ,m_bSwitching(FALSE)
 {
    // Create the local list of windows
    m_pWinList = new QPtrList<QextMdiChildView>;
@@ -203,6 +220,9 @@ void QextMdiMainFrm::createMdiManager()
    QObject::connect( m_pMdi, SIGNAL(sysButtonConnectionsMustChange(QextMdiChildFrm*,QextMdiChildFrm*)), this, SLOT(updateSysButtonConnections(QextMdiChildFrm*,QextMdiChildFrm*)) );
    QObject::connect( m_pMdi, SIGNAL(popupWindowMenu(QPoint)), this, SLOT(popupWindowMenu(QPoint)) );
    QObject::connect( m_pMdi, SIGNAL(lastChildFrmClosed()), this, SIGNAL(lastChildFrmClosed()) );
+#if !(KDE_VERSION > 310)
+   m_pMdi->installEventFilter( this );
+#endif   
 }
 
 //============ createTaskBar ==============//
@@ -276,6 +296,10 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
       return;
    }
 
+#if !(KDE_VERSION > 310)
+   pWnd->installEventFilter( this );
+#endif
+
    // common connections used when under MDI control
    QObject::connect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(windowMenuItemActivated(int)) );
    QObject::connect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
@@ -335,7 +359,9 @@ void QextMdiMainFrm::addWindow( QextMdiChildView* pWnd, int flags)
       }
       if (!m_bSDIApplication || (flags & QextMdi::Detach)) {
          if (flags & QextMdi::Minimize)
+         {
             pWnd->minimize();
+          }
          if (!(flags & QextMdi::Hide)) {
             if (pWnd->isAttached()) {
                pWnd->mdiParent()->show();
@@ -413,12 +439,12 @@ void QextMdiMainFrm::addToolWindow( QWidget* pWnd, KDockWidget::DockPosition pos
       pCover->setToolTipString( tabToolTip);
       KDockWidget* pTargetDock = 0L;
         // Should we dock to ourself?
-      bool DockToOurself = false;
+      bool DockToOurself = FALSE;
       if(m_pDockbaseAreaOfDocumentViews)
       {
-        if (pTargetWnd == m_pDockbaseAreaOfDocumentViews->getWidget()) DockToOurself = true;
+        if (pTargetWnd == m_pDockbaseAreaOfDocumentViews->getWidget()) DockToOurself = TRUE;
       }
-      if (pTargetWnd == this) DockToOurself = true;
+      if (pTargetWnd == this) DockToOurself = TRUE;
       if (DockToOurself) pTargetDock = m_pDockbaseAreaOfDocumentViews;
       else if(pTargetWnd != 0L) {
          pTargetDock = dockManager->findWidgetParentDock( pTargetWnd);
@@ -839,13 +865,13 @@ bool QextMdiMainFrm::event( QEvent* e)
             QApplication::sendEvent(pView, &dragBeginEvent);
          }
       }
-      m_pDragEndTimer->start(200, true); // single shot after 200 ms
+      m_pDragEndTimer->start(200, TRUE); // single shot after 200 ms
    }
 
    return DockMainWindow::event( e);
 }
 
-bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
+bool QextMdiMainFrm::eventFilter(QObject * /*obj*/, QEvent *e )
 {
    if( e->type() == QEvent::FocusIn) {
       QFocusEvent* pFE = (QFocusEvent*) e;
@@ -863,8 +889,45 @@ bool QextMdiMainFrm::eventFilter(QObject *obj, QEvent *e )
          }
       }
    }
-   
-   return DockMainWindow::eventFilter( obj, e);
+   else if (e->type() == QEvent::KeyRelease) {
+      if (switching()) {
+#ifndef NO_KDE        
+        KAction *a = actionCollection()->action( "view_last_window" ) ;
+        if (a) {
+              const KShortcut cut( a->shortcut() );
+              const KKeySequence& seq = cut.seq( 0 );
+              const KKey& key = seq.key(0);
+              int modFlags = key.modFlags();
+              int state = ((QKeyEvent *)e)->state();
+              KKey key2( (QKeyEvent *)e ); 
+
+              /** these are quite some assumptions:
+              *   The key combination uses exactly one modifier key
+              *   The WIN button in KDE is the meta button in Qt
+              **/
+              if (state != ((QKeyEvent *)e)->stateAfter()                              &&
+                   ((modFlags & KKey::CTRL) > 0) == ((state & Qt::ControlButton) > 0 ) &&
+                   ((modFlags & KKey::ALT) > 0)  == ((state & Qt::AltButton) > 0)      &&
+                   ((modFlags & KKey::WIN) > 0)  == ((state & Qt::MetaButton) > 0) )
+              {
+                activeWindow()->updateTimeStamp();
+                setSwitching(FALSE);
+              }
+              return TRUE;
+#else
+    // TODO implement me for Qt-only!
+#endif
+        }
+        else {
+#ifdef NO_KDE
+          qDebug( "### KAction( \"view_next_window\") __not__ found.\n" );
+#else
+          kdDebug(9000) << "KAction( \"view_next_window\") not found." << endl;
+#endif          
+        }
+      }    
+   }
+   return FALSE;  // standard event processing
 }
 
 /**
@@ -1396,45 +1459,90 @@ void QextMdiMainFrm::setSysButtonsAtMenuPosition()
 /** Activates the next open view */
 void QextMdiMainFrm::activateNextWin()
 {
-  QextMdiChildView* aWin = activeWindow();
-
-  QextMdiIterator<QextMdiChildView*>* it = createIterator();
-
-  for(it->first(); !it->isDone(); it->next()) {
-    if (it->currentItem() == aWin) {
-      it->next();
-      if (!it->currentItem()) {
-        it->first();
+   QextMdiIterator<QextMdiChildView*>* it = createIterator();
+   QextMdiChildView* aWin = activeWindow();
+   for (it->first(); !it->isDone(); it->next()) {
+      if (it->currentItem() == aWin) {
+         it->next();
+         if (!it->currentItem()) {
+            it->first();
+         }
+         if (it->currentItem()) {
+            activateView(it->currentItem());
+         }
+         break;
       }
-      if (it->currentItem()) {
-        activateView(it->currentItem());
-      }
-      break;
-    }
-  }
-  delete it;
+   }
+   delete it;
 }
 
 /** Activates the previous open view */
 void QextMdiMainFrm::activatePrevWin()
 {
-  QextMdiChildView* aWin = activeWindow();
-
-  QextMdiIterator<QextMdiChildView*>* it = createIterator();
-
-  for(it->first(); !it->isDone(); it->next()) {
-    if (it->currentItem() == aWin) {
-      it->prev();
-      if (!it->currentItem()) {
-        it->last();
+   QextMdiIterator<QextMdiChildView*>* it = createIterator();
+   QextMdiChildView* aWin = activeWindow();
+   for (it->first(); !it->isDone(); it->next()) {
+      if (it->currentItem() == aWin) {
+         it->prev();
+         if (!it->currentItem()) {
+            it->last();
+         }
+         if (it->currentItem()) {
+            activateView(it->currentItem());
+         }
+         break;
       }
-      if (it->currentItem()) {
-        activateView(it->currentItem());
-      }
-      break;
-    }
-  }
-  delete it;
+   }
+   delete it;
+}
+
+/** Activates the view we accessed the most time ago */
+void QextMdiMainFrm::activateFirstWin()
+{
+   QextMdiIterator<QextMdiChildView*>* it = createIterator();
+   QMap<QDateTime,QextMdiChildView*> m;
+   for (it->first(); !it->isDone(); it->next()) {
+      m.insert(it->currentItem()->getTimeStamp(), it->currentItem());
+   }
+
+   QDateTime current = activeWindow()->getTimeStamp();
+   QMap<QDateTime,QextMdiChildView*>::iterator pos(m.find(current));
+   QMap<QDateTime,QextMdiChildView*>::iterator newPos = pos;
+   if (pos != m.end()) {
+      ++newPos;
+   }
+   if (newPos != m.end()) { // look ahead
+      ++pos;
+   }
+   else {
+      pos = m.begin();
+   }
+   activateView(pos.data());
+   m_bSwitching= TRUE; // flag that we are currently switching between windows
+   delete it;
+}
+
+/** Activates the previously accessed view before this one was activated */
+void QextMdiMainFrm::activateLastWin()
+{
+   QextMdiIterator<QextMdiChildView*>* it = createIterator();
+   QMap<QDateTime,QextMdiChildView*> m;
+   for (it->first(); !it->isDone(); it->next()) {
+      m.insert(it->currentItem()->getTimeStamp(), it->currentItem());
+   }
+
+   QDateTime current = activeWindow()->getTimeStamp();
+   QMap<QDateTime,QextMdiChildView*>::iterator pos(m.find(current));
+   if (pos != m.begin()) {
+      --pos;
+   }
+   else {
+      pos = m.end();
+      --pos;
+   }
+   activateView(pos.data());
+   m_bSwitching= TRUE; // flag that we are currently switching between windows
+   delete it;
 }
 
 /** Activates the view with a certain index (TabPage mode only) */
@@ -1650,15 +1758,18 @@ void QextMdiMainFrm::fillWindowMenu()
    int i=100;
    QextMdiChildView* pView = 0L;
    QPtrListIterator<QextMdiChildView> it(*m_pWinList);
-   for( ; it.current(); ++it) {
-
+   QValueList<QDateTime> timeStamps;
+   for (; it.current(); ++it) {
       pView = it.current();
-      if( pView->isToolView())
+      QDateTime timeStamp( pView->getTimeStamp() );
+
+      if (pView->isToolView()) {
          continue;
+      }
 
       QString item;
       // set titles of minimized windows in brackets
-      if( pView->isMinimized()) {
+      if (pView->isMinimized()) {
          item += "(";
          item += pView->caption();
          item += ")";
@@ -1668,36 +1779,46 @@ void QextMdiMainFrm::fillWindowMenu()
          item += pView->caption();
        }
 
-      // insert the window entry sorted in alphabetical order
+      // insert the window entry sorted by access time
       unsigned int indx;
       unsigned int windowItemCount = m_pWindowMenu->count() - entryCount;
       bool inserted = FALSE;
       QString tmpString;
-      for (indx = 0; indx <= windowItemCount; indx++) {
-         tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+entryCount));
-         if (tmpString.right( tmpString.length()-2) > item.right( item.length()-2)) {
+      QValueList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
+      for (indx = 0; indx <= windowItemCount; indx++, ++timeStampIterator) {
+        bool putHere = FALSE;
+        if ((*timeStampIterator) < timeStamp) {
+          putHere = TRUE;
+          timeStamps.insert(timeStampIterator, timeStamp);
+        }
+        if (putHere) {
             m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, indx+entryCount);
-            if (pView == m_pCurrentWindow)
+            if (pView == m_pCurrentWindow) {
                m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+entryCount), TRUE);
-            pView->setWindowMenuID( i);
+            }
+            pView->setWindowMenuID(i);
             if (!bTabPageMode) {
                m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, indx);
-               if (pView->isAttached())
+               if (pView->isAttached()) {
                   m_pDockMenu->setItemChecked( m_pDockMenu->idAt( indx), TRUE);
+               }
             }
             inserted = TRUE;
+            break;
             indx = windowItemCount+1;  // break the loop
          }
       }
       if (!inserted) {  // append it
          m_pWindowMenu->insertItem( item, pView, SLOT(slot_clickedInWindowMenu()), 0, -1, windowItemCount+entryCount);
-         if (pView == m_pCurrentWindow)
+         if (pView == m_pCurrentWindow) {
             m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt(windowItemCount+entryCount), TRUE);
+         }
          pView->setWindowMenuID( i);
          if (!bTabPageMode) {
             m_pDockMenu->insertItem( item, pView, SLOT(slot_clickedInDockMenu()), 0, -1, windowItemCount);
-            if (pView->isAttached())
+            if (pView->isAttached()) {
                m_pDockMenu->setItemChecked( m_pDockMenu->idAt(windowItemCount), TRUE);
+            }
          }
       }
       i++;

@@ -11,6 +11,7 @@
 //    patches              : 02/2000       by Massimo Morin (mmorin@schedsys.com)
 //                           */2000        by Lars Beikirch (Lars.Beikirch@gmx.net)
 //                           02/2001       by Eva Brucherseifer (eva@rt.e-technik.tu-darmstadt.de)
+//                           01/2003       by Jens Zurheide (jens.zurheide@gmx.de)
 //
 //    copyright            : (C) 1999-2001 by Falk Brettschneider
 //                                         and
@@ -33,6 +34,7 @@
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qapplication.h>
+#include <qdatetime.h>
 
 #include "qextmdichildfrm.h"
 
@@ -137,6 +139,11 @@ protected:
    * For example it could be that a 'maximize' is pending, if this variable is TRUE.
    */
    bool        m_stateChanged;
+
+   /** 
+   * Holds the time when this view was activated (not only displayed) for the last time.
+   */
+   QDateTime   m_time;
 
 private:
    /**
@@ -302,7 +309,18 @@ public:
    /** 
    * Returns if this is added as MDI tool-view 
    */
-   bool isToolView() const { return m_bToolView; };
+   inline bool isToolView() const { return m_bToolView; };
+   /**
+   * Remember the current time
+   */
+   inline void updateTimeStamp() {
+      m_time.setDate( QDate::currentDate() );
+      m_time.setTime( QTime::currentTime() );
+   }
+   /**
+   * Recall a previously remembered time, i.e. the value of m_time
+   */
+   inline const QDateTime& getTimeStamp() const { return m_time; }
 
 public slots:
    /**

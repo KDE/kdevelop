@@ -88,6 +88,8 @@ public slots:
   void createGUI(KParts::Part *part);
   void gotoNextWindow();
   void gotoPreviousWindow();
+  void gotoFirstWindow();
+  void gotoLastWindow();
 
   /** Reimplemented from QextMdiMainFrm*/
   virtual void fillWindowMenu();

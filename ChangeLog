@@ -1,3 +1,10 @@
+2003-02-11 F@lk Brettschneider <falk@kdevelop.org>
+	* took the patch of Jens Zurheide (Thanks jens.zurheide@gmx.de!) and modified it a bit.
+	  Additionally to the already existing ALT+Left/Right switching (which switches the views
+	  in the order of they were opened), now there is also ALT+Up for switching between views
+	  in the order of how they were last accessed, and ALT+Down for the opposite. Hold ALT
+	  pressed and repeat Up or Down to cycle through the views.
+      
 2003-02-11 Alexander Dymo <cloudtemple@mksat.net>
 	* parts/filecreate:
 	 - GUI for both global and project level configuration added.

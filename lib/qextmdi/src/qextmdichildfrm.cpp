@@ -8,6 +8,8 @@
 //    changes              : 09/1999       by Falk Brettschneider to create an
 //                           - 06/2000     stand-alone Qt extension set of
 //                                         classes and a Qt-based library
+//                         : 01/2003       by Jens Zurheide to allow switching
+//                                         between views based on timestamps
 //
 //    copyright            : (C) 1999-2000 by Szymon Stefanek (stefanek@tin.it)
 //                                         and
@@ -945,7 +947,7 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
    case QEvent::Enter:
       {
          // check if the receiver is really a child of this frame
-         bool bIsChild = false;
+         bool bIsChild = FALSE;
          QObject*    pObj = obj;
          while ( (pObj != 0L) && !bIsChild) {
             bIsChild = (pObj == this);
@@ -969,6 +971,7 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
                QFocusEvent* pFE = new QFocusEvent(QFocusEvent::FocusIn);
                QApplication::sendEvent(qApp->mainWidget(), pFE);
                if (m_pClient) {
+                  m_pClient->updateTimeStamp();
                   m_pClient->activate();
                }
                QWidget* w = (QWidget*) obj;
@@ -1049,7 +1052,8 @@ bool QextMdiChildFrm::eventFilter( QObject *obj, QEvent *e )
 	 default:
 			break;
    }
-   return QWidget::eventFilter( obj, e);  // standard event processing
+   // return QWidget::eventFilter( obj, e);  // standard event processing
+   return FALSE;                  // standard event processing (see Qt documentation)
 }
 
 //============= raiseAndActivate ===============//

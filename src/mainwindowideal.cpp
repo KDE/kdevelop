@@ -18,6 +18,7 @@
 #include <qmultilineedit.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
+#include <qvaluelist.h>
 
 #include <kdeversion.h>
 #include <kapplication.h>
@@ -38,7 +39,6 @@
 
 #include <kedittoolbar.h>
 
-
 #include "widgets/ktabzoomwidget.h"
 #include "widgets/ktabwidget.h"
 #include "kdevplugin.h"
@@ -47,6 +47,7 @@
 #include "projectmanager.h"
 #include "plugincontroller.h"
 #include "partcontroller.h"
+#include "kdevcore.h"
 #include "kdevpartcontroller.h"
 #include "partselectwidget.h"
 #include "api.h"
@@ -61,25 +62,18 @@
 #include "mainwindowshare.h"
 #include "mainwindowideal.h"
 
+#ifdef KeyRelease
+#undef KeyRelease
+#endif
+
 
 MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
  : KParts::MainWindow(parent, name)
  ,m_pWindowMenu(0L)
  ,m_closing(false)
+ ,m_bSwitching(false)
 {
     m_pMainWindowShare = new MainWindowShare(this);
-
-    KAction * action;
-
-    action = new KAction( i18n("&Next Window"), ALT+Key_PageDown,
-                          this, SLOT(gotoNextWindow()),
-                          actionCollection(), "view_next_window");
-    action->setStatusText( i18n("Switches to the next window") );
-
-    action = new KAction( i18n("&Previous Window"), ALT+Key_PageUp,
-                          this, SLOT(gotoPreviousWindow()),
-                          actionCollection(), "view_previous_window");
-    action->setStatusText( i18n("Switches to the previous window") );
 
     m_raiseLeftBar = new KAction( i18n("Switch &Left Tabbar"), ALT+Key_L,
                                   this, SLOT(raiseLeftTabbar()),
@@ -100,6 +94,8 @@ MainWindowIDEAl::MainWindowIDEAl(QWidget *parent, const char *name)
     m_raiseLeftBar->setEnabled( false );
     m_raiseRightBar->setEnabled( false );
     m_raiseBottomBar->setEnabled( false );
+
+    m_timeStamps.clear();
 }
 
 
@@ -198,6 +194,7 @@ void MainWindowIDEAl::createFramework() {
 
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)),
             PartController::getInstance(), SLOT(slotCurrentChanged(QWidget*)));
+    connect(m_tabWidget, SIGNAL(currentChanged(QWidget*)), SLOT(slotTabSelected(QWidget*)));
     connect(m_tabWidget, SIGNAL(closeWindow(const QWidget *)), PartController::getInstance(),SLOT(slotClosePartForWidget(const QWidget *)));
     connect(m_tabWidget, SIGNAL(closeOthers(QWidget *)), PartController::getInstance(), SLOT(slotCloseAllButPartForWidget(QWidget *)));
 
@@ -209,23 +206,33 @@ void MainWindowIDEAl::createFramework() {
     connect( m_bottomBar, SIGNAL(tabsChanged()), this, SLOT(slotBottomTabsChanged()) );
 
     connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotPartAdded(KParts::Part*)));
-    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-    connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
-    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+    connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
+//    connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
+//    connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotStatusChange(KParts::Part*)));
     connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags()));
+//     connect(PartController::getInstance(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+//     connect(PartController::getInstance(), SIGNAL(partRemoved(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+//     connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)), this, SLOT(slotFillWindowMenu()));
+//     connect(PartController::getInstance(), SIGNAL(savedFile(const QString&)), this, SLOT(slotUpdateModifiedFlags()));
 }
 
 
 
 void MainWindowIDEAl::createActions() {
     m_pMainWindowShare->createActions();
+    connect(m_pMainWindowShare, SIGNAL(gotoNextWindow()), this, SLOT(gotoNextWindow()));
+    connect(m_pMainWindowShare, SIGNAL(gotoPreviousWindow()), this, SLOT(gotoPreviousWindow()));
+    connect(m_pMainWindowShare, SIGNAL(gotoFirstWindow()), this, SLOT(gotoFirstWindow()));
+    connect(m_pMainWindowShare, SIGNAL(gotoLastWindow()), this, SLOT(gotoLastWindow()));
 }
 
 
 void MainWindowIDEAl::embedPartView(QWidget *view, const QString &name, const QString& toolTip) {
+    m_timeStamps[view]= QDateTime::currentDateTime();
     m_tabWidget->addTab(view, name);
     m_tabWidget->setTabToolTip(view, toolTip);
     m_tabWidget->showPage(view);
+    view->installEventFilter( this );
 }
 
 
@@ -242,7 +249,12 @@ void MainWindowIDEAl::embedOutputView(QWidget *view, const QString &name, const 
 }
 
 
-void MainWindowIDEAl::removeView(QWidget *) {}
+void MainWindowIDEAl::removeView(QWidget *view) 
+{
+    QMap<QWidget*, QDateTime>::iterator it( m_timeStamps.find( view ) );
+    if ( it != m_timeStamps.end() )
+      m_timeStamps.erase( it );
+}
 
 void MainWindowIDEAl::setViewAvailable(QWidget * /*pView*/, bool /*bEnabled*/) {
     // TODO: implement me
@@ -267,7 +279,6 @@ void MainWindowIDEAl::lowerAllViews() {
 }
 
 void MainWindowIDEAl::moveRelativeTab(int n) {
-
     KTabZoomWidget * bar = 0;
     if (m_leftBar->hasFocus()) bar = m_leftBar;
     if (m_rightBar->hasFocus()) bar = m_rightBar;
@@ -297,8 +308,66 @@ void MainWindowIDEAl::gotoNextWindow() {
     moveRelativeTab(1);
 }
 
+void MainWindowIDEAl::gotoFirstWindow() {
+    if (m_tabWidget->count() == 0) {
+        return;
+    }
+    
+    //Activates the view we accessed the most time ago
+    QWidget * view = m_tabWidget->currentPage();
+    QMap<QWidget*, QDateTime>::iterator it( m_timeStamps.find( view ) );
+    QMap<QDateTime,QWidget*> m;
+
+    for (it = m_timeStamps.begin(); it != m_timeStamps.end(); ++it) {
+        m.insert(it.data(), it.key());
+    }
+    QDateTime current = m_timeStamps[view];
+    QMap<QDateTime,QWidget*>::iterator pos( m.find(current) );
+    QMap<QDateTime,QWidget*>::iterator newPos = pos;
+    if (pos != m.end()) {
+        ++newPos;
+    }
+    if (newPos != m.end()) { // look ahead
+        ++pos;
+    }
+    else {
+        pos = m.begin();
+    }
+    m_bSwitching= true; // flag that we are currently switching between windows
+    m_tabWidget->showPage(pos.data());
+    m_tabWidget->currentPage()->setFocus();
+}
+
 void MainWindowIDEAl::gotoPreviousWindow() {
     moveRelativeTab(-1);
+}
+
+void MainWindowIDEAl::gotoLastWindow() {
+    if (m_tabWidget->count() == 0) {
+        return;
+    }
+    
+    //Activates the previously accessed view before this one was activated
+    QWidget * view = m_tabWidget->currentPage();
+    QMap<QWidget*, QDateTime>::iterator it( m_timeStamps.find( view ) );
+    QMap<QDateTime,QWidget*> m;
+
+    for ( it = m_timeStamps.begin(); it != m_timeStamps.end(); ++it) {
+        m.insert(it.data(), it.key());
+    }
+
+    QDateTime current = m_timeStamps[view];
+    QMap<QDateTime,QWidget*>::iterator pos( m.find(current) );
+    if ( pos != m.begin() ) {
+        --pos;
+    }
+    else {
+        pos = m.end();
+        --pos;
+    }
+    m_bSwitching= true; // flag that we are currently switching between windows
+    m_tabWidget->showPage(pos.data());
+    m_tabWidget->currentPage()->setFocus();
 }
 
 void MainWindowIDEAl::createGUI(KParts::Part *part) {
@@ -320,7 +389,6 @@ void MainWindowIDEAl::loadSettings() {
     config->setGroup("BottomBar");
     m_bottomBar->loadSettings(config);
 }
-
 
 void MainWindowIDEAl::saveSettings() {
     KConfig *config = kapp->config();
@@ -347,6 +415,9 @@ void MainWindowIDEAl::slotFillWindowMenu() {
     int closeAllOtherId = m_pWindowMenu->insertItem(i18n("Close All &Others"), PartController::getInstance(), SLOT(slotCloseOtherWindows()));
     m_pWindowMenu->insertSeparator();
 
+    int entryCount = m_pWindowMenu->count();
+    
+    QValueList<QDateTime> timeStamps;
     // Loop over all parts and add them to the window menu
     QPtrListIterator<KParts::Part> it(*(PartController::getInstance()->parts()));
     for ( ; it.current(); ++it) {
@@ -354,11 +425,29 @@ void MainWindowIDEAl::slotFillWindowMenu() {
         if (!ro_part)
             continue;
         // We fond a KPart to add
-        QString name = ro_part->url().url();
+      QString name = ro_part->url().prettyURL();
+
+      unsigned int windowItemCount = m_pWindowMenu->count(); //  - entryCount;
+      QString tmpString;
+
+      // sort entries by name or last viewed time
+      QDateTime timeStamp( m_timeStamps[ro_part->widget()] );
+      QValueList<QDateTime>::iterator timeStampIterator = timeStamps.begin();
+      unsigned int indx;
+      for (indx = entryCount; indx < windowItemCount; indx++, ++timeStampIterator) {
+        bool putHere = false;
+        if ( (*timeStampIterator) < timeStamp )
+        {
+          putHere = true;
+          timeStamps.insert( timeStampIterator, timeStamp );
+        }
+        if ( putHere )
+          break;
+    }
         KToggleAction *action = new KToggleAction(name, 0, 0, name.latin1());
         action->setChecked(ro_part == PartController::getInstance()->activePart());
         connect(action, SIGNAL(activated()), this, SLOT(slotBufferSelected()));
-        action->plug(m_pWindowMenu);
+    action->plug(m_pWindowMenu, indx);
         bNoViewOpened = false;   // Now we know that at least one view exists.
     }
 
@@ -369,9 +458,20 @@ void MainWindowIDEAl::slotFillWindowMenu() {
     }
 }
 
+void MainWindowIDEAl::slotStatusChange(KParts::Part *p)
+{
+  m_timeStamps[p->widget()] = QDateTime::currentDateTime();
+}
+
+void MainWindowIDEAl::slotTabSelected(QWidget *view)
+{
+  if ( !switching() ) {
+    m_timeStamps[view] = QDateTime::currentDateTime();
+  }
+}
+
 //=============== slotBufferSelected ===============//
 void MainWindowIDEAl::slotBufferSelected() {
-
     // Get the URL of the sender
     QString SenderName = sender()->name();
     KURL SenderUrl(SenderName);
@@ -388,12 +488,12 @@ void MainWindowIDEAl::slotBufferSelected() {
                 if (ro_part->widget()) {
                     raiseView(ro_part->widget());
                     ro_part->widget()->setFocus();
+                    m_timeStamps[ro_part->widget()] = QDateTime::currentDateTime();
                 }
                 break;
             }
         }
     }
-    slotFillWindowMenu();  // To check the correct entry
 }
 
 void MainWindowIDEAl::slotPartAdded(KParts::Part* part) {
@@ -489,9 +589,51 @@ void MainWindowIDEAl::slotLeftTabsChanged() {
     m_raiseLeftBar->setEnabled( !m_leftBar->isEmpty() );
 }
 
-void MainWindowIDEAl::slotQuit()
-{
+void MainWindowIDEAl::slotQuit() {
     (void) queryClose();
+}
+
+bool MainWindowIDEAl::eventFilter( QObject * /*obj*/, QEvent *e )
+{
+  if ( e->type() == QEvent::KeyRelease )
+  {
+      if ( switching() )
+      {
+        KAction *a = actionCollection()->action( "view_next_window" ) ;
+        if ( a ) 
+        {
+            const KShortcut cut( a->shortcut() );
+            const KKeySequence& seq = cut.seq( 0 );
+            const KKey& key = seq.key(0);
+            int modFlags = key.modFlags();
+            int state = ((QKeyEvent *)e)->state();
+            KKey key2( (QKeyEvent *)e ); 
+
+            /** these are quite some assumptions:
+            *   The key combination uses exactly one modifier key
+            *   The WIN button in KDE is the meta button in Qt
+            **/
+            if ( state != ((QKeyEvent *)e)->stateAfter()                             && 
+                ((modFlags & KKey::CTRL) > 0) == ((state & Qt::ControlButton) > 0 ) &&
+                ((modFlags & KKey::ALT) > 0)  == ((state & Qt::AltButton) > 0)      && 
+                ((modFlags & KKey::WIN) > 0)  == ((state & Qt::MetaButton) > 0) )
+            {
+              if ( m_tabWidget->count() ) {
+                // int index = m_tabWidget->currentPageIndex();
+                QWidget * view = (m_tabWidget->currentPage());
+                m_timeStamps[view] = QDateTime::currentDateTime();
+              }
+
+              // activeWindow()->updateTimeStamp();
+              setSwitching( false );
+            }
+            return true;
+        }
+        else
+          kdDebug(9000) <<  "KAction( \"view_next_window\") __not__ found.in MainWindowIDEAl\n" << endl;;
+      }    
+  }
+  return FALSE;  // standard event processing
 }
 
 #include "mainwindowideal.moc"

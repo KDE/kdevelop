@@ -116,6 +116,19 @@ void MainWindowShare::createActions()
   m_toggleStatusbar = KStdAction::showToolbar(this, SLOT(slotToggleStatusbar()),m_pMainWnd->actionCollection(), "settings_statusbar");
   m_toggleStatusbar->setText(i18n("Show &Statusbar"));
   m_toggleStatusbar->setStatusText( i18n("Hides or shows the statusbar") );
+
+  action = new KAction( i18n("&Next Window"), ALT+Key_Right, this, SIGNAL(gotoNextWindow()),m_pMainWnd->actionCollection(), "view_next_window");
+  action->setStatusText( i18n("Switches to the next window") );
+
+  action = new KAction( i18n("&Previous Window"), ALT+Key_Left, this, SIGNAL(gotoPreviousWindow()),m_pMainWnd->actionCollection(), "view_previous_window");
+  action->setStatusText( i18n("Switches to the previous window") );
+
+  action = new KAction( i18n("&Last Accessed Window"), ALT+Key_Up, this, SIGNAL(gotoLastWindow()), m_pMainWnd->actionCollection(), "view_last_window");
+  action->setStatusText( i18n("Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key") );
+
+  action = new KAction( i18n("&First Accessed Window"), ALT+Key_Down, this, SIGNAL(gotoFirstWindow()), m_pMainWnd->actionCollection(), "view_first_window");
+  action->setStatusText( i18n("Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key") );
+
 }
 
 void MainWindowShare::slotToggleMainToolbar()
