@@ -17,6 +17,7 @@
 #include <kfiledialog.h>
 #include <klineedit.h>
 #include <qpushbutton.h>
+#include <domutil.h>
 
 NewWidgetDlg::NewWidgetDlg(QStringList &newFileNames,QWidget* parent, const char* name, bool modal, WFlags fl)
 : NewWidgetDlgBase(parent,name,modal,fl),
@@ -46,10 +47,62 @@ void NewWidgetDlg::templateSelChanged()
 }
 
 
+bool NewWidgetDlg::openXMLFile(QDomDocument &doc, QString filename)
+//=================================================================
+{
+  QFile file( filename );
+  if ( !file.open( IO_ReadOnly ) )
+    return false;
+  if ( !doc.setContent( &file ) ) {
+    file.close();
+    return false;
+  }
+  file.close();
+  return true;
+}
+
+bool NewWidgetDlg::saveXMLFile(QDomDocument &doc, QString filename)
+//=================================================================
+{
+  QFile file( filename );
+  if ( !file.open( IO_ReadWrite | IO_Truncate ) )
+    return false;
+  QTextStream t( &file );
+  t << doc.toString();
+  file.close();
+  return true;
+}
+
+void NewWidgetDlg::removeTextNodes(QDomDocument doc,QString pathExt)
+//==================================================================
+{
+  QDomElement elem = DomUtil::elementByPathExt(doc,pathExt);
+  QDomNodeList children = elem.childNodes();
+  for (unsigned int i=0;i<children.count();i++)
+    if (children.item(i).isText())
+      elem.removeChild(children.item(i));
+}
+
+
+void NewWidgetDlg::appendTextNode(QDomDocument doc, QString pathExt, QString text)
+//================================================================================
+{
+  QDomElement elem = DomUtil::elementByPathExt(doc,pathExt);
+  elem.appendChild(doc.createTextNode(text));
+}
+
+
+
 void NewWidgetDlg::accept()
 //=========================
 {
-  m_newFileNames = QStringList::split(';',"file1.cpp;file2.cpp;file3.cpp;file4.cpp");
+  QDomDocument doc;
+  openXMLFile(doc,"/home/jsgaarde/programming/kdevelop/domapp/clean_dialog.ui");
+  removeTextNodes(doc,"class");
+  appendTextNode(doc,"class","TestClass");
+  removeTextNodes(doc,"widget/property|name=caption/string");
+  appendTextNode(doc,"widget/property|name=caption/string","Test Dialog");
+  saveXMLFile(doc,"/home/jsgaarde/programming/kdevelop/domapp/clean_dialog2.ui");
   NewWidgetDlgBase::accept();
 }
 

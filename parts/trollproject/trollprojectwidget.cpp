@@ -1154,7 +1154,6 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
           dlg->exec();
           for (int i=0;i<newFileNames.count();i++)
             QMessageBox::information(0,"File",newFileNames[i]);
-
         }
 
 

@@ -16,21 +16,26 @@
 #include "trollprojectwidget.h"
 
 class QStringList;
+class QDomDocument;
 
 class NewWidgetDlg : public NewWidgetDlgBase
 {
 public:
-                         NewWidgetDlg(QStringList &newFileNames,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-                         ~NewWidgetDlg();
+                        NewWidgetDlg(QStringList &newFileNames,QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+                        ~NewWidgetDlg();
+void                    appendTextNode(QDomDocument doc, QString pathExt, QString text);
+void                    removeTextNodes(QDomDocument doc,QString pathExt);
+bool                    openXMLFile(QDomDocument &doc, QString filename);
+bool                    saveXMLFile(QDomDocument &doc, QString filename);
+
 
 public slots:
-  virtual void           subclassingPressed();
-  virtual void           templateSelChanged();
-  virtual void           accept();
+  virtual void          subclassingPressed();
+  virtual void          templateSelChanged();
+  virtual void          accept();
 
 protected:
-  QStringList            &m_newFileNames;
-
+  QStringList           &m_newFileNames;
 };
 
 #endif
