@@ -121,6 +121,8 @@ void EditorPart::gotoDocument(TextEditorDocument *doc, int lineNum)
         layout->addWidget(view, 1);
         layout->addWidget(statusbox, 0);
         layout->activate();
+
+	emit wentToSourceFile(doc->fileName());
     }
     updateUndoAvailable(false);
     updateRedoAvailable(false);

@@ -43,6 +43,10 @@ protected:
     virtual void running(KDevPart *which, bool runs);
     virtual void message(const QString &str);
 
+signals:
+
+    void wentToSourceFile(const QString &fileName);
+    
 private slots:
     void docPartDestroyed();
     void docContextMenu(QPopupMenu *popup, const QString &url, const QString &selection);
@@ -51,6 +55,7 @@ private slots:
     void wantsToQuit();
     void openFileInteractionFinished(const QString &fileName);
     void saveFileInteractionFinished(const QString &fileName);
+    void slotWentToSourceFile(const QString &fileName);
 
     void slotOpenFile();
     void slotSaveFile();

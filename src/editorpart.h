@@ -37,7 +37,8 @@ public:
 
 signals:
     void contextMenu(QPopupMenu *popup, const QString &linestr, int col);
-    
+    void wentToSourceFile(const QString &fileName);
+
 private slots:
     void updateUndoAvailable(bool yes);
     void updateRedoAvailable(bool yes);

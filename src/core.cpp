@@ -238,6 +238,9 @@ EditorPart *Core::createEditorPart()
              this, SLOT(editorContextMenu(QPopupMenu *, const QString &, int)) );
     connect( part, SIGNAL(setStatusBarText(const QString&)),
              win->statusBar(), SLOT(message(const QString&)) );
+    connect( part, SIGNAL(wentToSourceFile(const QString &)),
+             this, SLOT(slotWentToSourceFile(const QString &)));
+
     return part;
 }
 
@@ -694,4 +697,12 @@ void Core::slotStop()
     // Hmm, not much to do ;-)
     emit stopButtonClicked();
 }
+
+
+void Core::slotWentToSourceFile(const QString &fileName)
+{
+    emit wentToSourceFile(fileName);
+}
+
+
 #include "core.moc"
