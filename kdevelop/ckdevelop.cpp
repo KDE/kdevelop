@@ -828,16 +828,18 @@ void CKDevelop::slotBuildRun()
   bool isDirty=isProjectDirty();
   int qYesNoCancel=QMessageBox::Yes;
 
-  if (!prj->isCustomProject() && isDirty)
+  if (prj->getRebuildType()==CProject::REBUILD_ON_MODIFIED_WITH_WARN && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
-                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+                    QMessageBox::Default | QMessageBox::Yes, QMessageBox::No,
+                    QMessageBox::Cancel);
 
   if (qYesNoCancel!=QMessageBox::Cancel)
   {
     beep=false;
     prj->writeProject();
-    if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
+    if (prj->getRebuildType()==CProject::REBUILD_ALWAYS ||
+         (isDirty && qYesNoCancel==QMessageBox::Yes))
     {
       next_job = "run";
       slotBuildMake();
@@ -852,16 +854,17 @@ void CKDevelop::slotBuildRunWithArgs()
   bool isDirty=isProjectDirty();
   int qYesNoCancel=QMessageBox::Yes;
 
-  if (!prj->isCustomProject() && isDirty)
+  if (prj->getRebuildType()==CProject::REBUILD_ON_MODIFIED_WITH_WARN && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the application?"),
-                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+                    QMessageBox::Default | QMessageBox::Yes, QMessageBox::No,
+                    QMessageBox::Cancel);
 
   if (qYesNoCancel!=QMessageBox::Cancel)
   {
     beep=false;
     prj->writeProject();
-    if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
+    if (prj->getRebuildType()==CProject::REBUILD_ALWAYS || (isDirty && qYesNoCancel==QMessageBox::Yes))
     {
       next_job = "run_with_args";
       slotBuildMake();
@@ -1294,10 +1297,11 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
   bool isDirty=isProjectDirty();
   int qYesNoCancel=QMessageBox::Yes;
 
-  if (!prj->isCustomProject() && isDirty)
+  if (prj->getRebuildType()==CProject::REBUILD_ON_MODIFIED_WITH_WARN && isDirty)
     qYesNoCancel=QMessageBox::warning(this,i18n("Project sources has been modified"),
                     i18n("Should the project be rebuild before starting the debug session?"),
-                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+                    QMessageBox::Default | QMessageBox::Yes, QMessageBox::No,
+                    QMessageBox::Cancel);
 
   if (qYesNoCancel!=QMessageBox::Cancel)
   {
@@ -1306,7 +1310,7 @@ void CKDevelop::slotBuildDebug(bool bWithArgs)
 
     beep=false;
     prj->writeProject();
-    if (prj->isCustomProject() || (isDirty && qYesNoCancel==QMessageBox::Yes))
+    if (prj->getRebuildType()==CProject::REBUILD_ALWAYS || (isDirty && qYesNoCancel==QMessageBox::Yes))
     {
       if (bWithArgs)
         next_job="debug_with_args";
