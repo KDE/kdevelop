@@ -2336,7 +2336,14 @@ void CKDevelop::slotToolbarClicked(int item){
     kdlgedit->slotBuildGenerate();
     break;
   case ID_CLASSBROWSER_WIZARD:
-    slotClassbrowserViewDeclaration();
+		if(cv_decl_or_impl){
+	    slotClassbrowserViewDeclaration();
+			cv_decl_or_impl=false;
+		}
+		else{
+	    slotClassbrowserViewDefinition();
+			cv_decl_or_impl=true;
+		}		
     break;
   }
 }
@@ -2471,6 +2478,11 @@ void CKDevelop::statusCallback(int id_){
   ON_STATUS_MSG(ID_HELP_DLGNOTES,                 			  i18n("Some information about the dialog editor..."))
   ON_STATUS_MSG(ID_HELP_ABOUT,                    			  i18n("Programmer's Hall of Fame..."))
 
+  ON_STATUS_MSG(ID_CLASSBROWSER_WIZARD,										i18n("Switchs to declaration/implementation"))
+  ON_STATUS_MSG(ID_CV_VIEW_DECLARATION,										i18n("Switchs to the method's declaration"))
+  ON_STATUS_MSG(ID_CV_VIEW_DEFINITION,										i18n("Switchs to the method's definition"))
+  ON_STATUS_MSG(ID_CV_NEW_METHOD,													i18n("Opens the New Method dialog"))
+  ON_STATUS_MSG(ID_CV_NEW_ATTRIBUTE,											i18n("Opens the New Attribute dialog"))
 	
 	ON_STATUS_MSG(ID_KDLG_FILE_CLOSE,												i18n("Closes the current dialog"))
 	ON_STATUS_MSG(ID_KDLG_FILE_SAVE,												i18n("Saves the current dialog"))
@@ -2486,6 +2498,9 @@ void CKDevelop::statusCallback(int id_){
 	default: slotStatusMsg(i18n("Ready"));
 	}
 }
+
+
+
 
 
 

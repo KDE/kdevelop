@@ -19,8 +19,7 @@
 #include "kstartuplogo.h"
 #include <kapp.h>
 
-KStartupLogo::KStartupLogo(QWidget *parent, const char *name) : QWidget(0,name,WStyle_NoBorder | WStyle_Customize) {
-	
+KStartupLogo::KStartupLogo(QWidget *parent, const char *name) : QWidget(0,name,WStyle_NoBorder | WStyle_Customize) { 	
 
   QPixmap pm;
   pm.load(KApplication::kde_datadir() + "/kdevelop/pics/startlogo.bmp");
@@ -31,6 +30,8 @@ KStartupLogo::KStartupLogo(QWidget *parent, const char *name) : QWidget(0,name,W
 }
 KStartupLogo::~KStartupLogo(){
 }
+
+
 
 
 

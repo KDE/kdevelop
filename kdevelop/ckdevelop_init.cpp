@@ -41,6 +41,7 @@ CKDevelop::CKDevelop(){
   version = VERSION;
   project=false;// no project
   beep=false; // no beep
+	cv_decl_or_impl=true;
   file_open_list.setAutoDelete(TRUE);
 
   config = kapp->getConfig();
@@ -617,16 +618,16 @@ void CKDevelop::initMenuBar(){
 
   classbrowser_popup = new QPopupMenu();
   classbrowser_popup->insertItem( i18n("View declaration"), this,
-                                  SLOT(slotClassbrowserViewDeclaration()) );
+                                  SLOT(slotClassbrowserViewDeclaration()),0, ID_CV_VIEW_DECLARATION );
   classbrowser_popup->insertItem( i18n("View definition"), this,
-                                  SLOT(slotClassbrowserViewDefinition()) );
+                                  SLOT(slotClassbrowserViewDefinition()), 0, ID_CV_VIEW_DEFINITION );
   classbrowser_popup->insertSeparator();
   classbrowser_popup->insertItem( i18n("New class..."), this,
-                                  SLOT(slotProjectNewClass()) );
+                                  SLOT(slotProjectNewClass()), 0, ID_PROJECT_NEW_CLASS);
   classbrowser_popup->insertItem( i18n("Add member function..."), this,
-                                  SLOT(slotClassbrowserNewMethod()) );
+                                  SLOT(slotClassbrowserNewMethod()), 0, ID_CV_NEW_METHOD);
   classbrowser_popup->insertItem( i18n("Add member variable..."), this,
-                                  SLOT(slotClassbrowserNewAttribute()) );
+                                  SLOT(slotClassbrowserNewAttribute()), 0, ID_CV_NEW_ATTRIBUTE );
 
 
 ///////////////////////////////////////////////////////////////////
@@ -642,6 +643,8 @@ void CKDevelop::initMenuBar(){
   connect(options_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(bookmarks_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
   connect(help_menu,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+  connect(classbrowser_popup,SIGNAL(highlighted(int)), SLOT(statusCallback(int)));
+
 }
 
 /*------------------------------------------ CKDevelop::initToolBar()
@@ -1132,3 +1135,8 @@ void CKDevelop::setToolmenuEntries(){
 	connect(kdlg_tools_menu,SIGNAL(activated(int)),SLOT(slotToolsTool(int)));
 
 }
+
+
+
+
+

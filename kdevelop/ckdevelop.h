@@ -578,6 +578,7 @@ private:
   QPopupMenu* file_open_popup;
   /** Popup menu for the classbrowser wizard button. */
   QPopupMenu* classbrowser_popup;
+	bool cv_decl_or_impl;
 
   QStrList file_open_list;	
   // the menus for the dialogeditor- specific. other menus inserted as the standard above
