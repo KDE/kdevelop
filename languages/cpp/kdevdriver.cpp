@@ -67,7 +67,7 @@ void KDevDriver::setup()
 	if ( qmakespec == "linux-g++" ) {
 	addIncludePath( "/include" );
 	addIncludePath( "/usr/include" );
-	addIncludePath( "/ust/local/include" );
+	addIncludePath( "/usr/local/include" );
 #if KDE_VERSION <= 305
 	return; // FIXME: Roberto, please review! ;-)
 	// If the QProcess from below is executed,
