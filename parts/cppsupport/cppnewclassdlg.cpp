@@ -1042,6 +1042,8 @@ void CppNewClassDialog::ClassGenerator::common_text()
   }
 
   namespaceStr = dlg.namespace_edit->text();
+  namespaces = QStringList::split(QString("::"), namespaceStr);
+
   childClass = dlg.childclass_box->isChecked();
   objc = dlg.objc_box->isChecked();
   qobject = dlg.qobject_box->isChecked();
@@ -1070,8 +1072,14 @@ void CppNewClassDialog::ClassGenerator::common_text()
   }
 
   if (!namespaceStr.isEmpty()) {
-    namespaceBeg = "namespace " + namespaceStr + " {";
-    namespaceEnd = "};";
+    for ( QStringList::Iterator it = namespaces.begin(); it != namespaces.end(); ++it ) {
+        if (!namespaceBeg.isEmpty())
+            namespaceBeg += "\n\n";
+        if (!namespaceEnd.isEmpty())
+            namespaceEnd += "\n\n";
+        namespaceBeg += "namespace " + (*it) + " {";
+        namespaceEnd += "};";
+    }
   }
 
   //advanced constructor creation
@@ -1393,6 +1401,7 @@ void CppNewClassDialog::ClassGenerator::gen_interface()
         break;
   }
   headerGuard.replace(QRegExp("\\."),"_");
+  headerGuard.replace(QRegExp("::"),"_");
   QString includeBaseHeader;
   if (childClass) // TODO: do this only if this is a Qt class
   {

@@ -144,7 +144,7 @@ protected:
     virtual void updateClassStore();
     virtual void gtk_box_stateChanged(int val);
     virtual void qobject_box_stateChanged(int val);
-                    
+
     void reloadAdvancedInheritance(bool clean = false);
     void parseClass(QString clName, QString inheritance);
     void addToConstructorsList(QCheckListItem *myClass, ParsedMethod *method);
@@ -226,6 +226,7 @@ private:
       bool objc;
       bool qobject;
       bool gtk;
+      QStringList namespaces;
       QString namespaceBeg, namespaceEnd;
       QString args;
       

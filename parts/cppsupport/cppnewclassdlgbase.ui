@@ -26,7 +26,7 @@
             <number>6</number>
         </property>
         <property name="spacing">
-            <number>0</number>
+            <number>3</number>
         </property>
         <widget class="QTabWidget">
             <property name="name">
@@ -227,11 +227,9 @@ a class for the KDE libraries.</string>
                                     <cstring>namespace_edit</cstring>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Insert your new classname here.
-Please try to keep some standards
-like using an upper 'K' as the first
-letter for your new class, if it is
-a class for the KDE libraries.</string>
+                                    <string>Insert a name of the namespace here.
+You can define nested namespaces by specifying
+Namespace1::Namespace2::...::NamespaceN</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -499,7 +497,7 @@ a class for the KDE libraries.</string>
                                     <enum>StrongFocus</enum>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Insert the base class which your new class will be derived from. If you have checked 'Generate QWidget child class' the new class will be derived from QWidget. If no base class is named, the new class will not have a parent class.</string>
+                                    <string></string>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="3">

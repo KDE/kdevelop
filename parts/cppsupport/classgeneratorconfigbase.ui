@@ -27,7 +27,7 @@
                 <cstring>groupBox7_2</cstring>
             </property>
             <property name="title">
-                <string>File Templates</string>
+                <string>Class Templates</string>
             </property>
             <grid>
                 <property name="name">
