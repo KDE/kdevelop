@@ -68,7 +68,49 @@ void CKDevAccel::setEnableByMenuItems(const QMenuData *menu)
 
 }
 
-void CKDevAccel::connectItem(const QString& action,
+void CKDevAccel::connectItem(const char *action,
+                             const QObject *receiver, const char *member,
+                             bool activate)
+{
+  if (!action)
+    return;
+    KKeyEntry *pEntry = aKeyDict[ action ];
+
+	if ( !pEntry ) {
+		QString str;
+		str.sprintf( "KAccel : Cannot connect action %s ", action );
+		str.append( "which is not in the object dictionary" );
+		warning(str);
+		return;
+	}
+	
+	pEntry->receiver = receiver;
+	pEntry->member = member;
+	pEntry->aAccelId = aAvailableId;
+	aAvailableId++;
+
+  if (pEntry->aCurrentKeyCode)
+    {
+       pAccel->insertItem( pEntry->aCurrentKeyCode, pEntry->aAccelId );
+       pAccel->connectItem( pEntry->aAccelId, receiver, member );
+	  }
+	if ( !activate )
+		setItemEnabled( action, FALSE );
+}
+
+
+void CKDevAccel::connectItem(StdAccel accel,
+                             const QObject* receiver, const char* member,
+                             bool activate=true)
+{
+    if (stdAction(accel) && !aKeyDict[ stdAction(accel) ]){
+        insertStdItem(accel);
+    }
+    connectItem(stdAction(accel), receiver, member, activate);
+}
+
+
+void CKDevAccel::connectItem(const char *action,
 	const QObject* receiver, const char *member, bool activate, uint uMenuId)
 {
 
@@ -79,7 +121,7 @@ void CKDevAccel::connectItem(const QString& action,
    m_Assoc.insert( uMenuId, new SActionInfo(action, activate) );
   }
 
-  KAccel::connectItem(action, receiver, member, activate);
+  connectItem(action, receiver, member, activate);
 }
 
 void CKDevAccel::connectItem(KAccel::StdAccel accel,
@@ -92,10 +134,10 @@ void CKDevAccel::connectItem(KAccel::StdAccel accel,
    m_Assoc.insert( uMenuId, new SActionInfo(KAccel::stdAction(accel), activate) );
   }
 
-  KAccel::connectItem(accel, receiver, member, activate);
+  connectItem(accel, receiver, member, activate);
 }
 
-void CKDevAccel::disconnectItem(const QString& action,
+void CKDevAccel::disconnectItem(const char *action,
 	const QObject* receiver, const char *member)
 {
   int uMenuId=getMenuID(action);
@@ -105,7 +147,7 @@ void CKDevAccel::disconnectItem(const QString& action,
   KAccel::disconnectItem(action, receiver, member);
 }
 
-void CKDevAccel::reconnectItem(const QString& action,
+void CKDevAccel::reconnectItem(const char *action,
 	const QObject* receiver, const char *member)
 {
   uint uMenuId=getMenuID(action);
@@ -114,7 +156,7 @@ void CKDevAccel::reconnectItem(const QString& action,
   if (uMenuId!=0)
     activate=m_Assoc[uMenuId]->m_bEnabled;
 
-  KAccel::connectItem(action, receiver, member, activate);
+  connectItem(action, receiver, member, activate);
 }
 
 void CKDevAccel::reconnectItem(KAccel::StdAccel accel,
@@ -126,7 +168,7 @@ void CKDevAccel::reconnectItem(KAccel::StdAccel accel,
   if (uMenuId!=0)
     activate=m_Assoc[uMenuId]->m_bEnabled;
 
-  KAccel::connectItem(accel, receiver, member, activate);
+  connectItem(accel, receiver, member, activate);
 }
 
 bool CKDevAccel::reconnectItemByID(uint uMenuId,
@@ -138,7 +180,7 @@ bool CKDevAccel::reconnectItemByID(uint uMenuId,
        bool activated=m_Assoc[uMenuId]->m_bEnabled;
        QString action=m_Assoc[uMenuId]->m_sAction;
 
-       KAccel::connectItem(action, receiver, member, activated);
+       connectItem(action, receiver, member, activated);
        bFound=true;
   }
   return bFound;
@@ -182,7 +224,7 @@ bool CKDevAccel::setItemEnabled( uint uMenuId, bool activate )
   return bRetVal;
 }
 
-void CKDevAccel::setItemEnabled( const QString &action, bool activate )
+void CKDevAccel::setItemEnabled( const char *action, bool activate )
 {
     uint uMenuId=getMenuID(action);
     if (uMenuId != 0)

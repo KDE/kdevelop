@@ -67,23 +67,29 @@ public:
   void setEnableByMenuItems(const QMenuData *menu);
 
   // reimplementation of KAccel methods
-  //  these methods allow you to bind an accelerator with
+  void connectItem(const char *action,
+                   const QObject *receiver, const char *member,
+                   bool activate=true);
+  void connectItem(StdAccel accel,
+                   const QObject *receiver, const char *member,
+                   bool activate=true);
+  void disconnectItem(const char *action,
+    const QObject* receiver, const char *member);
+      
+    //  these methods allow you to bind an accelerator with
   //  a resource ID
-  void connectItem(const QString& action,
+  void connectItem(const char *action,
     const QObject* receiver, const char *member,
-    bool activate = true, uint uMenuId=0);
+    bool activate, uint uMenuId);
 
   void connectItem(KAccel::StdAccel accel,
     const QObject* receiver, const char *member,
-    bool activate = true, uint uMenuId=0);
-
-  void disconnectItem(const QString& action,
-    const QObject* receiver, const char *member);
+    bool activate, uint uMenuId);
 
   // reconnect does the same as connect
   //   only the enable state of the accelerator will
   //   be untouched.
-  void reconnectItem(const QString& action,
+  void reconnectItem(const char *action,
     const QObject* receiver, const char *member);
 
   void reconnectItem(KAccel::StdAccel accel,
@@ -94,18 +100,17 @@ public:
   bool reconnectItemByID(uint uMenuId,
     const QObject* receiver, const char *member);
 
-  // reimplementation of KAccel::readSettings
+  // replacement for KAccel::readSettings
   // the additional parameter sets the enable structure of
   //   each item in CKDevAccel to the saved value
   void readSettings (KConfig* config = 0, bool setEnableStruct=true);
 
   // reimplementation of KAccel::setItemEnabled
+  void setItemEnabled( const char *action, bool activate );
   //   enables or disables a certain accelerator key
   //   by using either the resource ID or the action string
   bool setItemEnabled( uint uMenuId, bool activate );
-  void setItemEnabled( const QString& action, bool activate );
 
 };
 
 #endif
-
