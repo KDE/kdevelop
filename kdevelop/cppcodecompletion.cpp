@@ -4,18 +4,16 @@
 #include "cppcodecompletion.h"
 #include "ceditwidget.h"
 #include "kdevregexp.h"
+#include "codecompletion_arghint.h"
 #include "classparser/ClassStore.h"
 
-#include <kdebug.h>
 #include <qsizegrip.h>
 #include <qapplication.h>
 #include <qregexp.h>
-#include <qasciidict.h>
+#include <qmap.h>
+
+#include <kdebug.h>
 #include <kregexp.h>
-
-#include "codecompletion_arghint.h"
-
-#include <iostream.h>
 
 
 class CompletionItem : public QListBoxText
@@ -33,6 +31,25 @@ public:
     }
     CompletionEntry m_entry;
 };
+
+static QValueList<CompletionEntry> unique( const QValueList<CompletionEntry>& entryList )
+{
+    QValueList<CompletionEntry> l;
+    QMap<QString, bool> map;
+    QValueList<CompletionEntry>::ConstIterator it=entryList.begin();
+    while( it != entryList.end() ){
+        CompletionEntry e = *it++;
+        QString key = e.type + " " +
+                      e.text + " " +
+                      e.prefix + " " +
+                      e.postfix + " ";
+        if( map.find(key) == map.end() ){
+            map[ key ] = TRUE;
+            l << e;
+        }
+    }
+    return l;
+}
 
 static QString purify( const QString& decl )
 {
@@ -154,9 +171,13 @@ bool CppCodeCompletion::eventFilter( QObject *o, QEvent *e ){
             } else if ( ke->key() == Key_Period ||
                         (ke->key() == Key_Greater &&
                          col > 0 && m_edit->textLine( line )[ col-1 ] == '-') ) {
-                kdDebug() << "---------------------------> complete (enabled by robe :-)" << endl;
                 m_edit->insertText( ke->text() );
-                completeText();
+                TextLine* l = m_edit->doc()->textLine( line );
+                int attr = l->getAttr( col );
+                if( attr == 13 ){
+                    kdDebug() << "---------------------------> complete (enabled by robe :-)" << endl;
+                    completeText();
+                }
                 return TRUE;
             }
         }
@@ -882,7 +903,7 @@ void CppCodeCompletion::completeText()
         showArgHint( functionList, "()", "," );
     } else {
         QValueList<CompletionEntry> entries;
-        entries = getEntryListForExpr( expr, variableList );
+        entries = unique( getEntryListForExpr( expr, variableList ) );
         if( entries.count() ){
             showCompletionBox( entries, word.length() );
         }

@@ -76,8 +76,6 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
 
     QRegExp ws( "[ \t]+" );
     QRegExp qt( "Q_[A-Z]+" );
-    QRegExp comment( "//[^\n]*" );
-    QRegExp preproc( "^[ \t]*#[^\n]*$" );
     QRegExp rx( "[\n|&|\\*]" );
     QRegExp strconst( "\"[^\"]*\"" );
     QRegExp chrconst( "'[^']*'" );
@@ -92,6 +90,7 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
         .replace( rx, "" )
         .replace( strconst, "" )
         .replace( chrconst, "" )
+        .replace( QRegExp("static"), "" )
         .replace( QRegExp("\\{"), "{;" )
         .replace( QRegExp("\\}"), ";};" )
         ;
@@ -111,6 +110,8 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
         QString simplifyLine = remove( line, '(', ')' );
         simplifyLine.replace( assign, "" );
 
+        kdDebug() << "line = |" << line << "|" << endl;
+
         if( line.find("{") != -1 ){
             ++lev;
         } else if( line.find("}") != -1 ){
@@ -125,22 +126,21 @@ QValueList<SimpleVariable> SimpleParser::localVariables( QString contents ){
             QString type = QString::fromLatin1( decl_rx.cap( 1 ) );
             QString rest = simplifyLine.mid( decl_rx.pos(2) )
                            .replace( ws, "" );
-            if( keywords.findIndex(type) != -1 ){
-                break;
-            }
+            if( keywords.findIndex(type) == -1 ){
 
-            QStringList vlist = QStringList::split( ",", rest);
-            for( QStringList::Iterator it=vlist.begin(); it!=vlist.end(); ++it ){
-                SimpleVariable var;
-                var.scope = lev;
-                var.type = type;
-                var.name = *it;
-                vars.append( var );
+                QStringList vlist = QStringList::split( ",", rest);
+                for( QStringList::Iterator it=vlist.begin(); it!=vlist.end(); ++it ){
+                    SimpleVariable var;
+                    var.scope = lev;
+                    var.type = type;
+                    var.name = *it;
+                    vars.append( var );
+                }
+//                qDebug( "lev = %d - type = %s - vars = %s",
+//                        lev,
+//                        type.latin1(),
+//                        vlist.join(", ").latin1() );
             }
-            qDebug( "lev = %d - type = %s - vars = %s",
-                    lev,
-                    type.latin1(),
-                    vlist.join(", ").latin1() );
         }
     }
     return vars;

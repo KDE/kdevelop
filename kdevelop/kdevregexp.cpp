@@ -31,7 +31,7 @@ struct KDevRegExpData{
       {}
 
   ~KDevRegExpData()
-    { if( rx ) delete( rx ); }
+    { delete( rx ); rx=0;}
 };
 
 KDevRegExp::KDevRegExp()
@@ -68,13 +68,12 @@ KDevRegExp& KDevRegExp::operator = ( const KDevRegExp& source )
 KDevRegExp::~KDevRegExp()
 {
   delete( d );
+  d=0;
 }
 
 void KDevRegExp::init()
 {
-  if( d->rx ){
-    delete( d->rx );
-  }
+  delete( d->rx );
   d->rx = new KRegExp( pattern(), caseSensitive() ? "" : "i" );
 }
 
@@ -126,7 +125,7 @@ QString KDevRegExp::cap( int grp ) const
 {
   const char* s = d->rx->group( grp );
   if( s ){
-    return QString::fromLatin1( s, ::strlen(s) );
+    return QString::fromLatin1( s );
   }
   return QString::null;
 }
