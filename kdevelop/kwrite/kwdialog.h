@@ -18,6 +18,7 @@ class SearchDialog : public QDialog {
   public:
     SearchDialog(QStrList *searchFor, QStrList *replaceWith,
       int flags, QWidget *parent, const char *name = 0L);
+    void setSearchText( const QString &searchstr );
     const char *getSearchFor();
     const char *getReplaceWith();
     int getFlags();
