@@ -892,8 +892,8 @@ void CKDevelop::initMenuBar(){
   help_menu->insertItem(BarIcon("mini-book1"),i18n("C/C++-Reference"),this,SLOT(slotHelpReference()),0,ID_HELP_REFERENCE);
   help_menu->insertSeparator();	
 	help_menu->insertItem(BarIcon("idea"),i18n("Tip of the Day"), this, SLOT(slotHelpTipOfDay()), 0, ID_HELP_TIP_OF_DAY);
-  help_menu->insertItem(BarIcon(""), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
-  help_menu->insertItem(BarIcon("filemail"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
+  help_menu->insertItem(BarIcon("www"), i18n("KDevelop Homepage"),this, SLOT(slotHelpHomepage()),0,ID_HELP_HOMEPAGE);
+  help_menu->insertItem(BarIcon("mail_generic"),i18n("Bug Report..."),this, SLOT(slotHelpBugReport()),0,ID_HELP_BUG_REPORT);
   help_menu->insertSeparator();
   help_menu->insertItem(i18n("Project &API-Doc"),this,
                         SLOT(slotHelpAPI()),0,ID_HELP_PROJECT_API);
