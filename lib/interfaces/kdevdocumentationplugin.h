@@ -34,8 +34,9 @@ public:
     enum Type { Collection, Catalog, Book, Document };
 
     DocumentationItem(Type type, KListView *parent, const QString &name);
-    DocumentationItem(Type type, KListView *parent, DocumentationItem *after, const QString &name);
-    DocumentationItem(Type type, DocumentationItem *parent, const QString &name);
+    DocumentationItem(Type type, KListView *parent, KListViewItem *after, const QString &name);
+    DocumentationItem(Type type, KListViewItem *parent, const QString &name);
+    DocumentationItem(Type type, KListViewItem *parent, KListViewItem *after, const QString &name);
 
     virtual void setURL(const KURL &url) { m_url = url; }
     virtual KURL url() const { return m_url; }

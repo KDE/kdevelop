@@ -38,7 +38,7 @@ DocumentationItem::DocumentationItem(DocumentationItem::Type type, KListView *pa
     init();
 }
 
-DocumentationItem::DocumentationItem(DocumentationItem::Type type, DocumentationItem *parent,
+DocumentationItem::DocumentationItem(DocumentationItem::Type type, KListViewItem *parent,
     const QString &name)
     :KListViewItem(parent, name), m_type(type)
 {
@@ -46,11 +46,19 @@ DocumentationItem::DocumentationItem(DocumentationItem::Type type, Documentation
 }
 
 DocumentationItem::DocumentationItem(DocumentationItem::Type type, KListView *parent, 
-    DocumentationItem *after, const QString &name)
+    KListViewItem *after, const QString &name)
     :KListViewItem(parent, after, name), m_type(type)
 {
     init();
 }
+
+DocumentationItem::DocumentationItem(DocumentationItem::Type type, KListViewItem * parent,
+    KListViewItem * after, const QString & name )
+    :KListViewItem(parent, after, name), m_type(type)
+{
+    init();
+}
+
 
 void DocumentationItem::init( )
 {
