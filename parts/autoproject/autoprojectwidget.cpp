@@ -162,20 +162,16 @@ AutoProjectWidget::AutoProjectWidget(AutoProjectPart *part, bool kde)
     QSplitter *splitter = new QSplitter(Vertical, this);
 
     overview = new KListView(splitter, "project overview widget");
-    overview->setFrameStyle(Panel | Sunken);
-    overview->setLineWidth(2); 
     overview->setResizeMode(QListView::LastColumn);
     overview->setSorting(-1);
     overview->header()->hide();
-    overview->addColumn("");
+    overview->addColumn(QString::null);
     details = new KListView(splitter, "project details widget");
     details->setRootIsDecorated(true);
-    details->setFrameStyle(Panel | Sunken);
-    details->setLineWidth(2); 
     details->setResizeMode(QListView::LastColumn);
     details->setSorting(-1);
     details->header()->hide();
-    details->addColumn("");
+    details->addColumn(QString::null);
 
     connect( overview, SIGNAL(clicked(QListViewItem*)),
              this, SLOT(slotItemExecuted(QListViewItem*)) );
@@ -331,6 +327,10 @@ void AutoProjectWidget::setActiveTarget(const QString &targetPath)
         QString path = spitem->path;
         QListIterator<TargetItem> tit(spitem->targets);
         for (; tit.current(); ++tit) {
+            QString primary = (*tit)->primary;
+            if (primary != "PROGRAMS" && primary != "LIBRARIES"
+                && primary != "LTLIBRARIES")
+                continue;
             QString currentTargetPath = (path + "/" + QString((*tit)->name)).mid(prefixlen);
             bool hasTarget = (targetPath == currentTargetPath);
             kdDebug(9020) << "Compare " << targetPath
