@@ -200,7 +200,11 @@ void TopLevelSDI::loadSettings()
   QString project = config->readEntry("Last Project", "");
   bool readProject = config->readBoolEntry("Read Last Project On Startup", true);
   if (!project.isEmpty() && readProject)
+  {
     ProjectManager::getInstance()->loadProject(project);
+    m_closeProjectAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
+    m_projectOptionsAction->setEnabled(ProjectManager::getInstance()->projectLoaded());
+  }
 
   m_openRecentProjectAction->loadEntries(config, "RecentProjects");
 
