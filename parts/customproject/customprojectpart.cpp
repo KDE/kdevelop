@@ -52,6 +52,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcustomproject, CustomProjectFactory( "kdevcus
 
 CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QStringList &)
     : KDevProject("CustomProject", "customproject", parent, name ? name : "CustomProjectPart")
+	, m_lastCompilationFailed(false)
 {
     setInstance(CustomProjectFactory::instance());
     setXMLFile("kdevcustomproject.rc");
@@ -90,7 +91,9 @@ CustomProjectPart::CustomProjectPart(QObject *parent, const char *name, const QS
              this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 
     connect( makeFrontend(), SIGNAL(commandFinished(const QString&)),
-	     this, SLOT(slotCommandFinished(const QString&)) );
+             this, SLOT(slotCommandFinished(const QString&)) );
+    connect( makeFrontend(), SIGNAL(commandFailed(const QString&)),
+             this, SLOT(slotCommandFailed(const QString&)) );
 }
 
 
@@ -376,6 +379,7 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
 
 void CustomProjectPart::slotBuild()
 {
+    m_lastCompilationFailed = false;
     startMakeCommand(buildDirectory(), QString::fromLatin1(""));
 }
 
@@ -415,7 +419,7 @@ void CustomProjectPart::slotExecute()
 {
     partController()->saveAllFiles();
 
-    if( !m_executeAfterBuild && DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/autocompile", true) && isDirty() ){
+    if( DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/autocompile", true) && isDirty() ){
         m_executeAfterBuild = true;
         slotBuild();
         return;
@@ -535,8 +539,6 @@ void CustomProjectPart::slotCommandFinished( const QString& command )
 {
     kdDebug(9020) << "CustomProjectPart::slotProcessFinished()" << endl;
 
-    Q_UNUSED( command );
-
     if( m_buildCommand != command )
         return;
 
@@ -560,8 +562,17 @@ void CustomProjectPart::slotCommandFinished( const QString& command )
     }
 }
 
+void CustomProjectPart::slotCommandFailed( const QString& /*command*/ )
+{
+    kdDebug(9020) << k_funcinfo << endl;
+
+    m_lastCompilationFailed = true;
+}
+
 bool CustomProjectPart::isDirty()
 {
+    if (m_lastCompilationFailed) return true;
+
     QStringList fileList = allFiles();
     QStringList::Iterator it = fileList.begin();
     while( it != fileList.end() ){

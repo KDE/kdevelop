@@ -36,7 +36,7 @@ public:
     ~CustomProjectPart();
 
     bool isDirty();
-    
+
 protected:
     virtual void openProject(const QString &dirName, const QString &projectName);
     virtual void closeProject();
@@ -50,8 +50,8 @@ protected:
     virtual void addFiles ( const QStringList& fileList );
     virtual void removeFile(const QString &fileName);
     virtual void removeFiles ( const QStringList &fileList );
-    virtual QString buildDirectory();	
-    
+    virtual QString buildDirectory();
+
 private slots:
     void projectConfigWidget(KDialogBase *dlg);
     void contextMenu(QPopupMenu *popup, const Context *context);
@@ -64,21 +64,23 @@ private slots:
     void updateTargetMenu();
     void targetMenuActivated(int id);
     void slotCommandFinished( const QString& command );
+    void slotCommandFailed( const QString& command );
 
 private:
     void populateProject();
     void startMakeCommand(const QString &dir, const QString &target);
-    
+
     QString m_projectDirectory;
     QString m_projectName;
     QStringList m_sourceFiles;
     QPopupMenu *m_targetMenu;
     QStringList m_targets;
     QString m_contextFileName;
-    
+
     QMap<QString, QDateTime> m_timestamp;
     bool m_executeAfterBuild;
-    QString m_buildCommand;    
+    QString m_buildCommand;
+	bool m_lastCompilationFailed;
 };
 
 #endif
