@@ -29,7 +29,6 @@ public:
     ~GrepViewPart();
 
 private slots:
-    void slotRaiseWidget();
     void stopButtonClicked();
     void projectOpened();
     void projectClosed();

@@ -71,12 +71,6 @@ GrepViewPart::~GrepViewPart()
 }
 
 
-void GrepViewPart::slotRaiseWidget()
-{
-    topLevel()->raiseView(m_widget);
-}
-
-
 void GrepViewPart::stopButtonClicked()
 {
     kdDebug(9001) << "GrepViewPart::stopButtonClicked()" << endl;
