@@ -38,12 +38,15 @@ MakeActionFilter::MakeActionFilter( OutputFilter& next )
 #endif
 }
 
+//NOTE: whenever you discover a case that is not correctly recognized by the filter, please add it as a test
+//item and be sure that your modifications don't break the already existing test cases.
+
 // returns an array of ActionFormat
 MakeActionFilter::ActionFormat* MakeActionFilter::actionFormats()
 {
 	static ActionFormat formats[] = {
 		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
-		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
+		ActionFormat( i18n("compiling"), "g++", "g\\+\\+\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
 		ActionFormat( i18n("compiling"), "gcc", "g\\c\\c\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)", 1 ),
 		ActionFormat( i18n("compiling"), "distcc", "distcc (?:\\S* )*-c (?:\\S* )*`[^`]*`(?:[^/\\s;]*/)*([^/\\s;]+)", 1 ),
@@ -96,8 +99,10 @@ ActionItem* MakeActionFilter::matchLine( const QString& line )
 		QRegExp& regExp = format->expression;
 		if ( regExp.search( line ) != -1 )
 		{
-                   return new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
-		} 
+                   ActionItem *actionItem = new ActionItem( format->action, regExp.cap( format->fileGroup ), format->tool, line );
+	     	   kdDebug( 9004 ) << "Found: " << actionItem->m_action << " " << actionItem->m_file << "(" << actionItem->m_tool << ")" << endl;
+		   return actionItem;
+		}
 #ifdef DEBUG
 		if ( t.elapsed() > 100 )
 			kdDebug(9004) << "MakeActionFilter::processLine: SLOW regexp matching: " << t.elapsed() << " ms \n";
@@ -193,7 +198,7 @@ void MakeActionFilter::test()
 		"-module -no-undefined  -L/usr/X11R6/lib -L/usr/lib/qt3/lib -L/opt/kde3/lib  -version-info 1:0:0 kfilereplacepart.lo "
 		"kfilereplacedoc.lo kfilereplaceview.lo kaboutkfilereplace.lo kaddstringdlg.lo kconfirmdlg.lo kernel.lo kexpression.lo "
 		"kfilereplacepref.lo klistviewstring.lo knewprojectdlg.lo koptionsdlg.lo kresultview.lo filelib.lo knewprojectdlgs.lo -lkio -lkparts -lkhtml",
-		"linking", "libtool", "libkfilereplacepart.la")						
+		"linking", "libtool", "libkfilereplacepart.la")
 	<< TestItem( //automake, builddir!=srcdir, libtool=no, compiling
 		" g++ -DHAVE_CONFIG_H -I. -I/home/andris/cvs-developement/head/quanta/quanta/project "
 		"-I../.. -I/home/andris/cvs-developement/head/quanta/quanta/dialogs -I/opt/kde3/include -I/usr/lib/qt3/include -I/usr/X11R6/include  "
@@ -210,12 +215,26 @@ void MakeActionFilter::test()
 	<< TestItem(
 		"/usr/local/kde/bin/dcopidl2cpp --c++-suffix cpp --no-signals --no-stub KDevAppFrontendIface.kidl",
 		"compiling", "dcopidl2cpp", "KDevAppFrontendIface.kidl" )
-	<< TestItem( //install 
+	<< TestItem( //install
 		"/usr/bin/install -c -p -m 644 /home/andris/development/quanta/quanta/kommander/editor/kmdr-editor.desktop "
 		"/opt/kde3/share/applnk/Editors/kmdr-editor.desktop", "installing", "", "/opt/kde3/share/applnk/Editors/kmdr-editor.desktop")
-	<< TestItem( //libtool install 
+	<< TestItem( //libtool install
 		"/bin/sh ../../libtool --silent --mode=install /usr/bin/install -c -p libkommanderwidgets.la "
 		"/opt/kde3/lib/libkommanderwidgets.la", "installing", "", "/opt/kde3/lib/libkommanderwidgets.la")
+	<< TestItem( //libtool, automake 1.8
+	"if g++ -DHAVE_CONFIG_H -I. -I/home/andris/  "
+	"-DBUILD_KAFKAPART  -MT quanta_init.o -MD -MP -MF \".deps/quanta_init.Tpo\" -c -o quanta_init.o "
+	"quanta_init.cpp; "
+	"then mv -f \".deps/quanta_init.Tpo\" \".deps/quanta_init.Po\"; else rm -f \".deps/quanta_init.Tpo\"; "
+	"exit 1; fi",
+	"compiling", "g++", "quanta_init.cpp")
+	<< TestItem( //libtool, automake 1.8, file with full path
+	"if g++ -DHAVE_CONFIG_H -I. -I/home/andris/  "
+	"-DBUILD_KAFKAPART  -MT quanta_init.o -MD -MP -MF \".deps/quanta_init.Tpo\" -c -o quanta_init.o "
+	"/home/andris/quanta_init.cpp; "
+	"then mv -f \".deps/quanta_init.Tpo\" \".deps/quanta_init.Po\"; else rm -f \".deps/quanta_init.Tpo\"; "
+	"exit 1; fi",
+	"compiling", "g++", "quanta_init.cpp")
 	;
 
 	QValueList<TestItem>::const_iterator it = testItems.begin();
@@ -245,7 +264,7 @@ void MakeActionFilter::test()
 			                << (*it).file << ", got " << actionItem->m_file << endl;
 			kdError( 9004 ) << (*it).line << endl;
 		} else
-		kdDebug( 9004 ) << "Test passed, " << actionItem->m_file << " (" << actionItem->m_action << ": " << actionItem->m_tool << ") found." << endl;
+		kdDebug( 9004 ) << "Test passed, " << actionItem->m_action << " " << actionItem->m_file << " (" << actionItem->m_tool << ") found." << endl;
 		if ( actionItem != NULL )
 			delete actionItem;
 	}
