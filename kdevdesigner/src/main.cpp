@@ -17,12 +17,14 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include <qsplashscreen.h>
 
 #include "kdevdesigner.h"
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
 
 static const char description[] =
     I18N_NOOP("KDE GUI Designer");
@@ -40,7 +42,7 @@ int main(int argc, char **argv)
     KAboutData about("kdevdesigner", I18N_NOOP("KDevDesigner"), version, description,
                      KAboutData::License_GPL, "KDevDesigner Copyright: (C) 2004 Alexander Dymo\nQt Designer Copyright: (C) 2000-2003 Trolltech AS All Rights Reserved", 0, 0);
     about.addAuthor( "Trolltech AS", "Qt Designer code (Free Edition)" );
-    about.addAuthor( "Alexander Dymo", "Port to KDE, partification", "adymo@mksat.net" );
+    about.addAuthor( "Alexander Dymo", "Port to KDE, partification", "adymo@kdevelop.org" );
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions( options );
     KApplication app;
@@ -53,6 +55,13 @@ int main(int argc, char **argv)
     else
     {
         // no session.. just start up normally
+        QPixmap pm;
+        pm.load(locate("data", "kdevelop/pics/kdevdesigner-splash.png"));
+        QSplashScreen * splash = new QSplashScreen( pm );
+        splash->show();
+
+        app.processEvents();
+
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
         if ( args->count() == 0 )
@@ -71,6 +80,7 @@ int main(int argc, char **argv)
             }
         }
         args->clear();
+        delete splash;
     }
 
     return app.exec();

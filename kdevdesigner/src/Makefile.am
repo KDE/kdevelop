@@ -10,7 +10,6 @@ METASOURCES = AUTO
 messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/kdevdesigner.pot
 
-KDE_ICON = kdevdesigner
 
 # this Makefile creates both a KPart application and a KPart
 #########################################################################
