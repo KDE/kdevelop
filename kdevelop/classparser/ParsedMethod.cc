@@ -260,12 +260,15 @@ void CParsedMethod::asCppCode( QString &str )
 void CParsedMethod::asPersistantString( QString &dataStr )
 {
   QString str;
+  QString intStr;
   CParsedArgument *arg;
 
   CParsedAttribute::asPersistantString( dataStr );
 
   // Add arguments.
-  dataStr += arguments.count() + "\n";
+
+  intStr.sprintf( "%d", arguments.count() );
+  dataStr += intStr + "\n";
   for( arg = arguments.first(); arg != NULL; arg = arguments.next() )
   {
     arg->asPersistantString( str );
@@ -274,7 +277,8 @@ void CParsedMethod::asPersistantString( QString &dataStr )
 
   dataStr += ( isVirtual ?  "true" : "false" );
   dataStr += "\n";
-  dataStr += declaredOnLine + "\n";
+  intStr.sprintf( "%d", declaredOnLine );
+  dataStr += intStr + "\n";
   dataStr += declaredInFile + "\n";
 }
 

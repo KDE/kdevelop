@@ -353,6 +353,7 @@ bool CParsedAttribute::isEqual( CParsedAttribute &attr )
 void CParsedAttribute::asPersistantString( QString &dataStr )
 {
   QString str;
+  QString intStr;
 
   dataStr = "";
 
@@ -360,14 +361,16 @@ void CParsedAttribute::asPersistantString( QString &dataStr )
   dataStr += type + "\n";
   dataStr += definedInFile + "\n";
   dataStr += declaredInClass + "\n";
-  dataStr += definedOnLine + "\n";
+  intStr.sprintf( "%d", definedOnLine );
+  dataStr += intStr + "\n";
   dataStr += ( isInHFile ? "true" : "false" );
   dataStr += "\n";
   dataStr += ( isStatic ? "true" : "false" );
   dataStr += "\n";
   dataStr += ( isConst ? "true" : "false" );
   dataStr += "\n";
-  dataStr += export + "\n";
+  intStr.sprintf( "%d", export );
+  dataStr += intStr + "\n";
   dataStr += comment.find( "\n", false ) + "\n";
   dataStr += comment +"\n";
 }

@@ -650,13 +650,16 @@ void CParsedClass::asPersistantString( QString &dataStr )
   CParsedParent *aParent;
   CParsedMethod *aMethod;
   QString str;
+  QString intStr;
 
   dataStr = "";
   dataStr += name + "\n";
-  dataStr += definedOnLine + "\n";
+  intStr.sprintf( "%d", definedOnLine );
+  dataStr += intStr + "\n";
   
   // Add parents.
-  dataStr += parents.count() + "\n";
+  intStr.sprintf( "%d", parents.count() );
+  dataStr += intStr + "\n";
   for( aParent = parents.first(); aParent != NULL; aParent = parents.next() )
   {
     aParent->asPersistantString( str );
@@ -664,11 +667,14 @@ void CParsedClass::asPersistantString( QString &dataStr )
   }
   
   // Add friends.
-  dataStr += friends.count() + "\n";
+  intStr.sprintf( "%d", friends.count() );
+  dataStr += intStr + "\n";
   for( str = friends.first(); str != NULL; str = friends.next() )
     dataStr += str + "\n";
 
-  // Add methods.
+  // Add methods. 
+  intStr.sprintf( "%d", methods.count() );
+  dataStr += intStr + "\n";
   for( aMethod = methods.first(); aMethod != NULL; aMethod = methods.next() )
   {
     aMethod->asPersistantString( str );
@@ -676,7 +682,8 @@ void CParsedClass::asPersistantString( QString &dataStr )
   }
 
   // Add attributes.
-  dataStr += attributeIterator.count() + "\n";
+  intStr.sprintf( "%d", attributeIterator.count() );
+  dataStr += intStr + "\n";
   for( attributeIterator.toFirst(); 
        attributeIterator.current();
        ++attributeIterator)
@@ -686,6 +693,8 @@ void CParsedClass::asPersistantString( QString &dataStr )
   }
 
   // Add signals.
+  intStr.sprintf( "%d", signalList.count() );
+  dataStr += intStr + "\n";
   for( aMethod = signalList.first(); 
        aMethod != NULL; 
        aMethod = signalList.next() )
@@ -695,6 +704,8 @@ void CParsedClass::asPersistantString( QString &dataStr )
   }
 
   // Add slots.
+  intStr.sprintf( "%d", slotList.count() );
+  dataStr += intStr + "\n";
   for( aMethod = slotList.first(); aMethod != NULL; aMethod = slotList.next() )
   {
     aMethod->asPersistantString( str );
