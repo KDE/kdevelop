@@ -311,12 +311,5 @@
     <tabstop>buttonOk</tabstop>
     <tabstop>buttonCancel</tabstop>
 </tabstops>
-<includes>
-    <include location="local" impldecl="in declaration">configdefinitions.h</include>
-</includes>
-<variables>
-    <variable>BuildMode *buildMode</variable>
-    <variable></variable>
-</variables>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

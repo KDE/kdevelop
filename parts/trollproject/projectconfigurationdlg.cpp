@@ -22,5 +22,5 @@ ProjectConfigurationDlg::ProjectConfigurationDlg(TrollProjectWidget *caller,QWid
 QMakeBuildMode ProjectConfigurationDlg::getBuildMode()
 //====================================================
 {
-
+  return QBM_DEBUG;
 }
