@@ -28,6 +28,7 @@ CGenerateNewFile::CGenerateNewFile(){
 }
 CGenerateNewFile::~CGenerateNewFile(){
 }
+
 QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj, QString file_name){
   QString name;
   if ( file_name=="") { name  = QFileInfo(abs_name).fileName(); }
@@ -35,7 +36,7 @@ QString  CGenerateNewFile::genCPPFile(QString abs_name,CProject* prj, QString fi
    // local cpp_template
   QString cpp_header = prj->getProjectDir() + prj->getSubDir() +"/templates/cpp_template";
   if(!QFile::exists(cpp_header)){
-    cpp_header = locate("appdata","/templates/cpp_template");
+    cpp_header = locate("kdev_template","cpp_template");
   }
 
   QStrList list;
@@ -69,7 +70,7 @@ QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj, QString
   // local header_template
   QString template_header = prj->getProjectDir() + prj->getSubDir() +"/templates/header_template";
   if(!QFile::exists(template_header)){
-    template_header = locate("appdata", "/templates/header_template");
+    template_header = locate("kdev_template", "header_template");
   }
 
   QStrList list;
@@ -97,7 +98,7 @@ QString  CGenerateNewFile::genHeaderFile(QString abs_name,CProject* prj, QString
 
 QString  CGenerateNewFile::genLEXICALFile(QString abs_name,CProject* prj){
   QString name  = QFileInfo(abs_name).fileName();
-  QString lexical_header = locate("appdata", "/templates/lexical_template");
+  QString lexical_header = locate("kdev_template", "lexical_template");
 
   QStrList list;
   QString str;
@@ -123,7 +124,7 @@ QString  CGenerateNewFile::genLEXICALFile(QString abs_name,CProject* prj){
 
 QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   
-  QString template_handbook = locate("appdata","/templates/handbook_en_template");
+  QString template_handbook = locate("kdev_template","handbook_en_template");
 
   QStrList list;
   QString str;
@@ -147,7 +148,7 @@ QString  CGenerateNewFile::genEngHandbook(QString abs_name,CProject* prj){
   return file.name();
 }
 QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){  
-  QString template_kdelnk = locate("appdata", "/templates/kdelnk_template");
+  QString template_kdelnk = locate("kdev_template", "kdelnk_template");
   QString project_name = prj->getProjectName().lower();
   QString str;
   QStrList list;
@@ -173,7 +174,7 @@ QString  CGenerateNewFile::genKDELnkFile(QString abs_name,CProject* prj){
   
 }
 QString  CGenerateNewFile::genLSMFile(QString abs_name,CProject* prj){
-  QString template_lsm = locate("appdata", "/templates/lsm_template");
+  QString template_lsm = locate("kdev_template", "lsm_template");
 
 
   QStrList list;
@@ -201,7 +202,7 @@ QString  CGenerateNewFile::genLSMFile(QString abs_name,CProject* prj){
 QString CGenerateNewFile::genIcon(QString abs_name){
   QStrList list;
   QString str;
-  QString icon_template = locate("appdata", "/templates/icon_template");
+  QString icon_template = locate("kdev_template", "icon_template");
   QFile file(icon_template);
   QTextStream stream(&file);
 
@@ -220,9 +221,10 @@ QString CGenerateNewFile::genIcon(QString abs_name){
   file.close();  
   return file.name();
 }
+
 QString CGenerateNewFile::genNifFile(QString abs_name){
     KShellProcess process;
-    QString nif_template = locate("appdata", "/templates/nif_template");
+    QString nif_template = locate("kdev_template", "nif_template");
 
     process.clearArguments();
     process << "cp"; // copy is your friend :-)

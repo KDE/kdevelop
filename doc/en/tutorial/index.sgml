@@ -91,7 +91,7 @@ build the project. If the button is not available, start at the first page again
 information.
 
 If everything went OK, the project has been build and the messages window in the application wizard will have "READY" at it's last
-line.  Select "Close" to finish the wizard.
+line.  Select "Exit" to finish the wizard.
 
 When looking at the treeview on the left, you will see that the project alreay includes a class "MyWidget"- this is because we chose
 this to be the application name. Further, when opening "Functions" in the classviewer's "Globals" folder, you will see that the

@@ -435,7 +435,7 @@ you will need to do the following:
 <item> run <idx/autoconf/
 </enum>
 
-Then the main work is done. Automake creates the <idx/Makefile.in/'s, <idx/autoconf/ processes the configure.in and <idx/Makefile.in/'s and
+Then the main work is done. Automake creates the <idx/Makefile.in/'s, <idx/autoconf/ processes the configure.in and
 generates an executable shell script called <tt/configure/. All you then have to do is to execute it with  <tt/./configure/ and
 the script will run the checks of your choice. Finally <idx/Makefile/s will be generated that allow a final execution of make (or gmake)
 that will process all <idx/Makefile/s and then you're done.
@@ -541,7 +541,7 @@ one or the other way.
 <sect2>The Programming Environment
 <p>
 The Programming Environment is the user interface that KDevelop provides for creating and maintaining projects, implicitly using
-many other tools by simplifying their use. It's build-in Editor and <idx/Helpbrowser/ as well as the Class Browser reduce the amount of
+many other tools by simplifying their use. It's built-in Editor and <idx/Helpbrowser/ as well as the Class Browser reduce the amount of
 work that development processes usually burden on the programmer. The ease of use make writing applications for Unix an enjoyment
 on it's own and will probably result in shorter release cycles and better development improvements. From here, you're managing
 your project throughout all its details, keep the overview over your <idx/classes/ and don't have to use additional consoles for your
@@ -550,7 +550,7 @@ don't have to watch for several ones spread all over your desktop.
 
 <sect2>The Dialog Editor
 <p>
-KDevelop's build-in <idx/dialog editor/ offers a simple way of designing user interfaces with the Qt and <idx/KDE/ libraries. It's
+KDevelop's built-in <idx/dialog editor/ offers a simple way of designing user interfaces with the Qt and <idx/KDE/ libraries. Its
 simple way to do almost everything with the mouse allows a rapid construction of dialogs and main views for applications and their
 direct transformation into C++ code, which is directly added to the project. As the <idx/dialog editor/ is embedded into the rest of
 KDevelop's user interface, you have the same commands available than working in Programming mode. This allows e.g. construction of a

@@ -1712,8 +1712,7 @@ void CKDevelop::slotHelpAbout(){
 												"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n"
 												"See the GNU General Public License for more details."));
 
-  QPixmap pm;
-  pm.load(locate("appdata","pics/about_logo.bmp"));
+  QPixmap pm(locate("kdev_pic","about_logo.bmp"));
   aboutmsg.setIconPixmap(pm);
   aboutmsg.show();
 }

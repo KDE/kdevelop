@@ -47,8 +47,7 @@ KTipofDay::KTipofDay( QWidget *parent, const char *name ) : QDialog(parent,name,
 	bmp_frame->setMaximumSize( 32767, 32767 );
 
 	{
-		QPixmap pixmap;
-		pixmap.load(locate("appdata", "/pics/tipday.bmp"));
+		QPixmap pixmap(locate("kdev_pic", "tipday.bmp"));
 		bmp_frame->setBackgroundPixmap( pixmap );
 	}
 	bmp_frame->setFocusPolicy( QWidget::NoFocus );

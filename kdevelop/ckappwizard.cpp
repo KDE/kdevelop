@@ -99,8 +99,7 @@ void CKAppWizard::initPages(){
   
   QPixmap iconpm;    
   QPixmap minipm;
-  QPixmap pm;
-  pm.load(locate("appdata", "/pics/kAppWizard.bmp"));
+  QPixmap pm(locate("kdev_pic", "kAppWizard.bmp"));
   
   // create a widget and paint a picture on it
   widget1a = new QWidget( widget0, "widget1a" );
@@ -1209,30 +1208,20 @@ void CKAppWizard::okPermited() {
  	}
  	
  	p.clearArguments();
-  if (kdeminiitem->isSelected()) { 
-    copysrc = locate("appdata",  "/templates/mini.tar.gz");
-    p << "cp " + copysrc + (QString) " " + copydes;
-    p.start(KProcess::Block,KProcess::AllOutput);
+  if (kdeminiitem->isSelected()) {
+    copyFile(locate("kdev_template", "mini.tar.gz"), copydes);
   }  
   else if (kdenormalitem->isSelected()) {
-    copysrc = locate("appdata", "/kdevelop/templates/normal.tar.gz");
-    p << "cp " + copysrc + (QString) " " + copydes;
-    p.start(KProcess::Block,KProcess::AllOutput);
+    copyFile( locate("kdev_template", "normal.tar.gz"), copydes);
   } 
   else if (qtnormalitem->isSelected()) {
-    copysrc = locate("appdata","/kdevelop/templates/qt.tar.gz");
-    p << "cp " + copysrc + (QString) " " + copydes;
-    p.start(KProcess::Block,KProcess::AllOutput);
+    copyFile(locate("kdev_template", "qt.tar.gz"), copydes);
   } 
   else if (cppitem->isSelected()) {
-    copysrc = locate("appdata", "/kdevelop/templates/cpp.tar.gz");
-    p << "cp " + copysrc + (QString) " " + copydes;
-    p.start(KProcess::Block,KProcess::AllOutput);
+    copyFile(locate("kdev_template", "cpp.tar.gz"), copydes);
   } 
   else if (citem->isSelected()) {
-    copysrc = locate("appdata", "/kdevelop/templates/c.tar.gz");
-    p << "cp " + copysrc + (QString) " " + copydes;
-    p.start(KProcess::Block,KProcess::AllOutput);
+    copyFile(locate("kdev_template", "c.tar.gz"), copydes);
   }
 
   dir.setCurrent("/");
@@ -1243,7 +1232,7 @@ void CKAppWizard::okPermited() {
 	  this,SLOT(slotPerlOut(KProcess *, char *, int)));
   connect(q,SIGNAL(receivedStderr(KProcess *, char *, int)),
 	  this,SLOT(slotPerlErr(KProcess *, char *, int)));
-  QString path = locate("appdata","/tools/processes.pl");
+  QString path = locate("appdata","tools/processes.pl");
   *q << "perl" << path ;
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   setFinishEnabled(widget4, false);
@@ -1408,7 +1397,7 @@ void CKAppWizard::slotPerlErr(KProcess*,char* buffer,int buflen) {
 
 void CKAppWizard::slotApplicationClicked() {
   if (kdenormalitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("appdata","/pics/normalApp.bmp"));
+    pm.load(locate("kdev_pic", "normalApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(true);
     apidoc->setChecked(true);
@@ -1433,7 +1422,7 @@ void CKAppWizard::slotApplicationClicked() {
     												"document-view codeframe model."));
   }
   else if (kdeminiitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("appdata",  "/pics/miniApp.bmp"));
+    pm.load(locate("kdev_pic",  "miniApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(true);
     apidoc->setChecked(true);
@@ -1456,7 +1445,7 @@ void CKAppWizard::slotApplicationClicked() {
 */    apphelp->setText (i18n("Create a KDE-application with an empty main widget."));
   }
   else if (qtnormalitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("appdata", "/pics/qtApp.bmp"));
+    pm.load(locate("kdev_pic", "qtApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(false);
     apidoc->setChecked(false);
@@ -1482,7 +1471,7 @@ void CKAppWizard::slotApplicationClicked() {
   }
   else if ((citem->isSelected() || cppitem->isSelected())
             && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("appdata", "/kdevelop/pics/terminalApp.bmp"));
+    pm.load(locate("kdev_pic", "terminalApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     if (citem->isSelected())
     {
@@ -1532,7 +1521,7 @@ void CKAppWizard::slotApplicationClicked() {
 			   "and mainmenus"));
       }*/
   else if (customprojitem->isSelected() && (cancelButton()->text() != i18n("Exit"))) {
-    pm.load(locate("appdata", "/kdevelop/pics/customApp.bmp"));
+    pm.load(locate("kdev_pic", "customApp.bmp"));
     widget1b->setBackgroundPixmap(pm);
     apidoc->setEnabled(false);
     apidoc->setChecked(false);
@@ -1610,7 +1599,7 @@ void CKAppWizard::slotApplicationClicked() {
 
 // connection of this
 void CKAppWizard::slotDefaultClicked(int page) {
-  pm.load(locate("appdata", "/kdevelop/pics/normalApp.bmp"));
+  pm.load(locate("kdev_pic", "normalApp.bmp"));
 
 # warning seems to be obsolete, ´cause QWizard doesn´t support DEFAULT-Button
 // this should work instead
@@ -1641,8 +1630,8 @@ void CKAppWizard::slotDefaultClicked(int page) {
 //  finishButton()->setEnabled(false);
   miniload->setPixmap(BarIcon("application_settings"));
   iconload->setPixmap(BarIcon("edit.xpm"));
-  cppedit->loadFile(locate("appdata", "templates/cpp_template"),cppedit->OPEN_READWRITE);
-  hedit->loadFile(locate("appdata", "/templates/header_template"),hedit->OPEN_READWRITE);
+  cppedit->loadFile(locate("kdev_template", "cpp_template"),cppedit->OPEN_READWRITE);
+  hedit->loadFile(locate("kdev_template", "header_template"),hedit->OPEN_READWRITE);
   authorline->setText(m_author_name);
   emailline->setText(m_author_email);
   versionline->setText("0.1");
@@ -2256,13 +2245,9 @@ void CKAppWizard::slotProcessExited() {
   connect(q,SIGNAL(processExited(KProcess *)),this,SLOT(slotMakeEnd()));
 
   if (CToolClass::searchInstProgram("ksgml2html")) {
-    KShellProcess process;
-    QString nif_template = locate("appdata", "/templates/nif_template");
-    process.clearArguments();
-    process << "cp"; // copy is your friend :-)
-    process << nif_template;
-    process << QString(directoryline->text()) +"/" + QString(nameline->text()).lower() + "/docs/en/index.nif";
-    process.start(KProcess::Block,KProcess::AllOutput); // blocked because it is important
+    copyFile(locate("kdev_template", "nif_template"),
+             directoryline->text() +"/" + nameline->text().lower() + "/docs/en/index.nif");
+    // blocked because it is important
   }
   
   KShellProcess p;
@@ -2301,7 +2286,7 @@ void CKAppWizard::slotProcessExited() {
     p.start(KProcess::Block, KProcess::AllOutput);
   }
 
-  QString path1 = locate("appdata", "/tools/processesend.pl");
+  QString path1 = locate("appdata", "tools/processesend.pl");
   q->clearArguments();
   *q << "perl" << path1;
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
@@ -2409,5 +2394,11 @@ void CKAppWizard::slotVendorEntry() {
 }
 
 
-
-
+void CKAppWizard::copyFile(QString source, QString dest)
+{
+    KShellProcess p;
+    p << "cp";
+    p << source;
+    p << dest;
+    p.start(KProcess::Block, KProcess::AllOutput);
+}

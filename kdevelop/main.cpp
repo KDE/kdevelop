@@ -15,6 +15,10 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
+
+#include <kstddirs.h>
+#include <kglobal.h>
 #include "kstartuplogo.h"
 #include "ckdevinstall.h"
 #include "ckdevelop.h"
@@ -41,6 +45,12 @@ int main(int argc, char* argv[]) {
   cmdMngr.makeDefault();
   cmdMngr.readConfig(a.getConfig());
 
+  // Resource types
+  KGlobal::dirs()->addResourceType("kdev_template", KStandardDirs::kde_default("data")
+                                   + kapp->name() + "/templates/");
+  KGlobal::dirs()->addResourceType("kdev_pic", KStandardDirs::kde_default("data")
+                                   + kapp->name() + "/pics/");
+  
 
   a.getConfig()->setGroup("General Options");
   bool bStartLogo= a.getConfig()->readBoolEntry("Logo",true);

@@ -92,6 +92,7 @@ protected slots:
 
 private:
 
+  void copyFile(QString source, QString dest);
   QString m_author_email;
   QString  m_author_name;
   bool  gen_prj, modifyDirectory,modifyVendor;
