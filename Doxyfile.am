@@ -60,7 +60,6 @@ apidox-am-yes:
 		fi ;\
 		echo "EXAMPLE_PATH           = $(DOXYGEN_EXAMPLE_PATH)" >> Doxyfile; \
 		echo "IMAGE_PATH             = $(top_srcdir)/doc/api" >> Doxyfile ;\
-		echo "SOURCE_BROWSER         = NO" >> Doxyfile ;\
 		echo "VERBATIM_HEADERS       = NO" >> Doxyfile ;\
 		echo "IGNORE_PREFIX          = K" >> Doxyfile ;\
 		echo "GENERATE_HTML          = $(GENERATE_FLAG)" >> Doxyfile ;\
