@@ -981,6 +981,12 @@ CppCodeCompletion::expandText( )
     if( !m_pCursorIface || !m_pEditIface )
         return;
 
+    if( !m_pCompletionIface ){
+        kdDebug( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
+        return;
+    }
+
+
     int parag, index;
     m_pCursorIface->getCursorPosition( parag, index );
     QString textLine = m_pEditIface->line( parag );
@@ -992,7 +998,6 @@ CppCodeCompletion::expandText( )
         ++pos;
 
     QString prefix = textLine.mid( pos, index - pos + 1 );
-    kdDebug() << "prefix = " << prefix << endl;
     if( !prefix.isEmpty() ){
         QValueList<KEditor::CompletionEntry> entries;
         entries = getAllWords( m_pEditIface->text(), prefix );
