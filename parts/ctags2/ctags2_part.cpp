@@ -47,7 +47,7 @@ CTags2Part::CTags2Part(QObject *parent, const char *name, const QStringList& )
   : KDevPlugin("ctags2", "ctags2", parent, name ? name : "ctags2Part" )
 {
 	setInstance(CTags2Factory::instance());
-	setXMLFile("kdevpart_ctags2.rc");
+	//setXMLFile("kdevpart_ctags2.rc");
   
 	Tags::setTagsFile( project()->projectDirectory() + "/tags" );
 	
