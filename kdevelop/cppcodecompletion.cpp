@@ -70,16 +70,6 @@ static QValueList<CompletionEntry> unique( const QValueList<CompletionEntry>& en
     return l;
 }
 
-static QString purify( const QString& decl )
-{
-    QString s = decl;
-
-    QRegExp rx1( "\\*" );
-    QRegExp rx2( "&" );
-    s = s.replace( rx1, "" ).replace( rx2, "" ).simplifyWhiteSpace();
-    return s;
-}
-
 static QString remove( QString text, const QChar& l, const QChar& r )
 {
     QString s;
@@ -144,6 +134,21 @@ static QString remove_comment( QString text ){
     }
     return s;
 }
+
+static QString purify( const QString& decl )
+{
+    QString s = decl;
+
+    QRegExp rx1( "\\*" );
+    QRegExp rx2( "&" );
+    s = s.replace( rx1, "" ).replace( rx2, "" );
+    s = remove_keywords( s );
+    s = remove( s, '[', ']' );
+    s = s.simplifyWhiteSpace();
+
+    return s;
+}
+
 
 CppCodeCompletion::CppCodeCompletion( CEditWidget *edit, CClassStore* pStore, CKDevelop* dev )
     : m_edit(edit), m_pStore( pStore ), m_pDevelop( dev )
@@ -555,7 +560,7 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
                     type = evaluateExpression( subexpr, ctx, sigma );
                 } else {
                     // e1 is cast
-                    kdDebug() << "maybe a cast = " << e1 << endl;
+                    //kdDebug() << "maybe a cast = " << e1 << endl;
                     KDevRegExp cast_rx( "^\\([ \t]*([a-zA-Z_][a-zA-Z0-9_]*)[^)]*)" );
                     if( cast_rx.search(e1) == 0 ){
                         type = cast_rx.cap( 1 );
@@ -566,7 +571,13 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
                 }
             } else {
                 e1 = e1.left( first_paren_index ).stripWhiteSpace();
-                type = getTypeOfMethod( pThis, e1 );
+                if( pThis ){
+                    type = getTypeOfMethod( pThis, e1 );
+                }
+                if( type.isEmpty() ){
+                    type = getTypeOfMethod( &m_pStore->globalContainer,
+                                            e1 );
+                }
             }
         } else {
             SimpleVariable v = ctx->findVariable( e1 );
@@ -575,7 +586,13 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
                 type = v.type;
             } else {
                 // e1 is an attribute
-                type = getTypeOfAttribute( pThis, e1 );
+                if( pThis ){
+                    type = getTypeOfAttribute( pThis, e1 );
+                }
+                if( type.isEmpty() ){
+                    type = getTypeOfAttribute( &m_pStore->globalContainer,
+                                               e1 );
+                }
             }
         }
     }
@@ -621,6 +638,9 @@ QString CppCodeCompletion::evaluateExpression( const QString& expr,
 
 QString CppCodeCompletion::getTypeOfMethod( CParsedContainer* pContainer, const QString& name )
 {
+    kdDebug() << "CppCodeCompletion::getTypeOfMethod()"
+              << " - " << pContainer
+              << " - " << name << endl;
     if( !pContainer || !m_pStore ){
         return QString::null;
     }
@@ -1038,7 +1058,6 @@ void CppCodeCompletion::completeText()
     v.name = "this";
     v.type = className;
     variableList.append( v );
-
     ctx->add( v );
 
     QString word;
@@ -1072,7 +1091,7 @@ void CppCodeCompletion::completeText()
 
             functionList = getMethodListForClass( type, word );
 
-            if( functionList.count() == 0 && className.isEmpty() ){
+            if( functionList.count() == 0 ){
                 functionList = getFunctionList( word );
             }
 

@@ -1,3 +1,6 @@
+2002-03-11  Roberto Raggi <raggi@cli.di.unipi.it>
+    * bugfix: code completion for global variables and functions
+	
 2002-03-09  August Hörandl  <august.hoerandl@gmx.at>
     * bugfix: strange effects when switching on single views and output windows
 
