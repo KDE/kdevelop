@@ -144,3 +144,6 @@ QString ScriptProjectWidget::projectDirectory()
 {
     return m_projectDirectory;
 }
+
+#include "scriptprojectwidget.moc"
+
