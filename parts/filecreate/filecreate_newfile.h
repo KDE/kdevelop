@@ -42,6 +42,7 @@ namespace FileCreate {
       void slotFileNameChanged(const QString &);
   protected:
     void addType(const FileType * filetype);
+	void accept();
 
     QGridLayout *m_grid;
     KURLRequester *m_urlreq;
