@@ -1117,9 +1117,15 @@ bool CClassParser::parseClassLexem( CParsedClass *aClass )
         {
           aMethod = parseMethodDeclaration();
           if( aMethod && methodType == QTSIGNAL)
+          {
+            aMethod->setIsSignal( true );
             aClass->addSignal( aMethod );
+          }
           if( aMethod && methodType == QTSLOT)
+          {
+            aMethod->setIsSlot( true );
             aClass->addSlot( aMethod );
+          }
         }
         else
           parseMethodAttributes( aClass );
