@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Editor Selection
+Name=KDevEditorChooser
+Icon=kdevelop
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdeveditorchooser
+X-KDevelop-Scope=Global
