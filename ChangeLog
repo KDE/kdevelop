@@ -1,6 +1,11 @@
 2003-09-22 Alexander Dymo <cloudtemple@mksat.net>
     * Finished GUI for enabling and disabling documentation topics in a project configuration
       dialog. Thanks to Amilcar Lucas for original idea and implementation.
+    * Added popup menu for the documentation viewer. It contains "Open in New Window", "Reload",
+      "Stop" and "Set Encoding" actions.
+    * Created mimetypes directory in KDevelop source tree. Here we can put all mimetypes necessary
+      for KDevelop that are not available in kdelibs.
+    * Added x-fortran, x-pascal and chm (HTML Help) mime types.
 
 2003-09-10 Alexander Dymo <cloudtemple@mksat.net>
     * Added the GUI to create custom code completion databases
