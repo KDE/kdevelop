@@ -26,4 +26,10 @@
    <type ext="h"/>
   </useglobaltypes>
  </kdevfilecreate>
+ <kdevfileview>
+    <groups>
+      <group pattern="*.h" name="Header files" />
+      <group pattern="*.cpp" name="Source files" />
+    </groups>
+ </kdevfileview>
 </kdevelop>
