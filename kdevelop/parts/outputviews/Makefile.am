@@ -1,7 +1,7 @@
 # Here reside the output view and make view parts.
 
-INCLUDES = -I$(top_srcdir)/kdevelop/lib/projectmanagement -I$(top_srcdir)/kdevelop/lib/general \
-					 -I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
+INCLUDES = -I$(top_srcdir)/kdevelop/lib/projectmanagement \
+					 -I$(top_srcdir)/kdevelop/lib/general \
 					 -I$(top_srcdir)/kdevelop/lib/ComponentManager \
 					 -I$(top_srcdir)/kdevelop/lib/ComponentManager/Components \
 					 -I$(top_srcdir)/kdevelop/lib/Interfaces \

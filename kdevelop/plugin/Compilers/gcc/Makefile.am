@@ -1,7 +1,7 @@
 # Here resides the Gcc compiler plugin.
 
 INCLUDES = 	$(all_includes) \
-					-I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
+					-I$(top_srcdir)/kdevelop/lib/Build/KDevCompiler \
 					-I$(top_srcdir)/kdevelop/lib/ComponentManager
 
 lib_LTLIBRARIES = libKDevCompilerGcc.la

@@ -1,6 +1,9 @@
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general -I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
-					-I$(top_srcdir)/kdevelop/lib/ComponentManager -I$(top_srcdir)/kdevelop/lib/ComponentManager/Components
+INCLUDES= $(all_includes) -I$(top_srcdir)/kdevelop/lib/general \
+					-I$(top_srcdir)/kdevelop/lib/Build/KDevCompiler \
+					-I$(top_srcdir)/kdevelop/lib/Build/KDevLinker \
+					-I$(top_srcdir)/kdevelop/lib/ComponentManager \
+					-I$(top_srcdir)/kdevelop/lib/ComponentManager/Components
 
 noinst_LTLIBRARIES = libkdevprojectmanagement.la
 
@@ -9,8 +12,7 @@ libkdevprojectmanagement_la_SOURCES =  addtreedlgbase.ui appwizard.cpp  automake
 		appwizardbase.ui filepropspagebase.ui addexistingfilesbase.ui \
 		addexistingfilesdlg.cpp flatdirtreeview.cpp  addtreedlg.cpp renamefiledlg.ui
 
-libkdevprojectmanagement_la_LIBADD = $(top_builddir)/kdevelop/lib/projectmanagement/ProjectOptions/libKDevProjectOptions.la \
-	$(top_builddir)/kdevelop/lib/projectmanagement/KDevCompiler/libKDevCompiler.la
+libkdevprojectmanagement_la_LIBADD = $(top_builddir)/kdevelop/lib/projectmanagement/ProjectOptions/libKDevProjectOptions.la
 
 noinst_HEADERS = addtreedlgbase.h appwizard.h  automakeprojectspace.h  cppbinaryprojectplugin.h \
 				pmc.h project.h projectspace.h \
@@ -18,7 +20,7 @@ noinst_HEADERS = addtreedlgbase.h appwizard.h  automakeprojectspace.h  cppbinary
 				appwizardbase.h filepropspagebase.h addexistingfilesdlg.h\
 				flatdirtreeview.h  addtreedlg.h
 
-SUBDIRS = ProjectOptions KDevCompiler
+SUBDIRS = ProjectOptions
 				
 METASOURCES = AUTO
 
@@ -30,16 +32,16 @@ servicetype_DATA = kdevelopprojectspace.desktop kdevelopappwizard.desktop kdevel
 #noinst_PROGRAMS = testprj
 
 #testprj_SOURCES = testprj.cpp
-# the library search path. 
+# the library search path.
 #testprj_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
 
-#testprj_LDADD = $(top_builddir)/kdevelop/lib/libkdevelop.la \
-#		$(LIB_KFILE) $(LIB_KPARTS)
+#testprj_LDADD = $(top_builddir)/kdevelop/lib/projectmanagement/ProjectOptions/libKDevProjectOptions.la \
+#								$(LIB_KFILE) $(LIB_KPARTS)
 
-projectspace.cpp: addexistingfilesbase.h renamefiledlg.h
+#projectspace.cpp: addexistingfilesbase.h renamefiledlg.h
 
-addexistingfilesdlg.cpp: addtreedlgbase.h
+#addexistingfilesdlg.cpp: addtreedlgbase.h
 
 

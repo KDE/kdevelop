@@ -1,6 +1,5 @@
 
 INCLUDES = 	-I$(top_srcdir)/kdevelop/lib/projectmanagement \
-						-I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
 						-I$(top_srcdir)/kdevelop/lib/general \
 						$(all_includes)
 

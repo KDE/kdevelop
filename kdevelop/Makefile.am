@@ -5,13 +5,11 @@ INCLUDES = -I$(top_srcdir)/kdevelop/lib/general \
 	   -I$(top_srcdir)/kdevelop/lib/ComponentManager/Components \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement \
 	   -I$(top_srcdir)/kdevelop/lib/projectmanagement/ProjectOptions \
-	   -I$(top_srcdir)/kdevelop/lib/projectmanagement/KDevCompiler \
 	   -I$(top_srcdir)/kdevelop/widgets/qextmdi/include \
 	   $(all_includes)
 
 #####-I$(top_builddir)/kdevelop/lib/projectmanagement \
 #####-I$(top_builddir)/kdevelop/lib/projectmanagement/ProjectOptions \
-#####-I$(top_builddir)/kdevelop/lib/projectmanagement/KDevCompiler \
 
 LFLAGS = -+
 
