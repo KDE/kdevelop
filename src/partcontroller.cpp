@@ -37,6 +37,7 @@
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <kuserprofile.h>
+#include <kencodingfiledialog.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -1044,12 +1045,14 @@ void PartController::slotCurrentChanged(QWidget *)
 
 void PartController::slotOpenFile()
 {
-  KURL::List fileNames = KFileDialog::getOpenURLs(QString::null, QString::null, TopLevel::getInstance()->main(), QString::null);
-
-  for ( KURL::List::Iterator it = fileNames.begin(); it != fileNames.end(); ++it )
-  {
-    editDocument( *it );
-  }
+	KEncodingFileDialog::Result result = KEncodingFileDialog::getOpenURLsAndEncoding(QString::null, QString::null, 
+		QString::null, TopLevel::getInstance()->main(), QString::null);
+	
+	for ( KURL::List::Iterator it = result.URLs.begin(); it != result.URLs.end(); ++it )
+	{
+		m_presetEncoding = result.encoding;
+		editDocument( *it );
+	}
 }
 
 void PartController::slotOpenRecent( const KURL& url )
@@ -1246,6 +1249,7 @@ void PartController::revertFiles( const KURL::List &  )
 
 /////////////////////////////////////////////////////////////////////////////
 
+//BEGIN History methods
 
 PartController::HistoryEntry::HistoryEntry( const KURL & u, int l, int c) 
 	: url(u), line(l), col(c)
@@ -1375,6 +1379,8 @@ void PartController::addHistoryEntry(const KURL & url, int line, int col )
 	
 	updateMenuItems();
 }
+
+//END History methods
 
 void PartController::slotWaitForFactoryHack( )
 {
