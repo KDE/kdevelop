@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -386,8 +386,8 @@ CTagsDialog::CTagsDialog(KDevPlugin *part)
     
     KButtonBox *actionbox = new KButtonBox(this, Qt::Vertical);
     actionbox->addStretch();
-    QPushButton *search_button = actionbox->addButton(i18n("&Search"));
-    search_button->setDefault(true);
+    QPushButton *regenerate_button = actionbox->addButton(i18n("&Regenerate"));
+    regenerate_button->setDefault(true);
     QPushButton *cancel_button = actionbox->addButton(i18n("Close"));
     actionbox->addStretch();
     actionbox->layout();
@@ -406,13 +406,27 @@ CTagsDialog::CTagsDialog(KDevPlugin *part)
     layout->addMultiCellWidget(actionbox, 0, 2, 2, 2);
     layout->addMultiCellWidget(results_listbox, 4, 4, 0, 2);
 
-    connect( search_button, SIGNAL(clicked()), this, SLOT(slotSearch()) );
-    connect( cancel_button, SIGNAL(clicked()), this, SLOT(reject()) );
-    connect( results_listbox, SIGNAL(executed(QListBoxItem*)), this, SLOT(slotExecuted(QListBoxItem*)) );
-    connect( results_listbox, SIGNAL(returnPressed(QListBoxItem*)), this, SLOT(slotExecuted(QListBoxItem*)) );
+    connect( tag_edit, SIGNAL(textChanged(const QString&)),
+             this, SLOT(slotSearch()) );
+    connect( kinds_listview, SIGNAL(clicked(QListViewItem*)),
+             this, SLOT(slotSearch()) );
+    connect( kinds_listview, SIGNAL(returnPressed(QListViewItem*)),
+             this, SLOT(slotSearch()) );
+    connect( regexp_box, SIGNAL(toggled(bool)),
+             this, SLOT(slotSearch()) );
+    connect( regenerate_button, SIGNAL(clicked()),
+             this, SLOT(slotRegenerate()) );
+    connect( cancel_button, SIGNAL(clicked()),
+             this, SLOT(reject()) );
+    connect( results_listbox, SIGNAL(clicked(QListBoxItem*)),
+             this, SLOT(slotResultClicked(QListBoxItem*)) );
+    connect( results_listbox, SIGNAL(returnPressed(QListBoxItem*)),
+             this, SLOT(slotResultClicked(QListBoxItem*)) );
 
-    connect( part->core(), SIGNAL(projectOpened()), this, SLOT(projectChanged()) );
-    connect( part->core(), SIGNAL(projectClosed()), this, SLOT(projectChanged()) );
+    connect( part->core(), SIGNAL(projectOpened()),
+             this, SLOT(projectChanged()) );
+    connect( part->core(), SIGNAL(projectClosed()),
+             this, SLOT(projectChanged()) );
     
     m_part = part;
     m_tags = 0;
@@ -474,17 +488,38 @@ void CTagsDialog::insertResult(CTagsTagInfoList *result, const QStringList &kind
     // kinds, and insert them in the result box
     CTagsTagInfoListIterator it;
     for (it = result->begin(); it != result->end(); ++it) {
-        QString kindString;
-        int pos = (*it).fileName.findRev('.');
-        if (pos > 0)
-            kindString = findKind((*it).kind, (*it).fileName.mid(pos+1));
-        if (kindStringList.contains(kindString))
-            new CTagsResultItem(results_listbox, (*it).fileName, (*it).pattern, kindString);
+        QString extension;
+        if ((*it).fileName.right(9) == "/Makefile")
+            extension = "mak";
+        else {
+            int pos = (*it).fileName.findRev('.');
+            if (pos > 0)
+                extension = (*it).fileName.mid(pos+1);
+        }
+        if (extension.isNull())
+            continue;
+        QString kindString = findKind((*it).kind, extension);
+        if (!kindStringList.contains(kindString))
+            continue;
+        
+        new CTagsResultItem(results_listbox, (*it).fileName, (*it).pattern, kindString);
     }
 }
 
 
-void CTagsDialog::slotExecuted(QListBoxItem *item)
+void CTagsDialog::slotRegenerate()
+{
+    QString tagsFileName = m_part->project()->projectDirectory() + "/tags";
+    QFileInfo fi(tagsFileName);
+    if (!createTagsFile()) {
+        KMessageBox::sorry(this, i18n("Could not create tags file"));
+        return;
+    }
+    loadTagsFile(tagsFileName);
+}
+
+
+void CTagsDialog::slotResultClicked(QListBoxItem *item)
 {
     if (!item)
         return;
@@ -571,39 +606,53 @@ void CTagsDialog::loadTagsFile(const QString &fileName)
     while (!stream.atEnd()) {
         line = stream.readLine();
         //        kdDebug() << "Line: " << line << endl;
-        if (re.match(line)) {
-            QString tag = re.group(1);
-            QString file = re.group(2);
-            QString pattern = re.group(3);
-            QString extfield = re.group(4);
-            //            kdDebug() <<"Tag " << tag << ", file " << file << ", pattern "
-            //                      << pattern << ", extfield " << extfield << endl;
-            CTagsTagInfoList *tilist = m_tags->find(tag);
-            if (!tilist) {
-                tilist = new CTagsTagInfoList;
-                m_tags->insert(tag, tilist);
-            }
-            CTagsTagInfo ti;
-            ti.fileName = re.group(2);
-            ti.pattern = re.group(3);
-            ti.kind = re.group(4)[0];
-            tilist->append(ti);
+        if (!re.match(line))
+            continue;
 
-            // Put kind in kind list view if not already there
+        
+        QString tag = re.group(1);
+        QString file = re.group(2);
+        QString pattern = re.group(3);
+        QString extfield = re.group(4);
+        //        kdDebug() <<"Tag " << tag << ", file " << file << ", pattern "
+        //                  << pattern << ", extfield " << extfield << endl;
+        CTagsTagInfoList *tilist = m_tags->find(tag);
+        if (!tilist) {
+            tilist = new CTagsTagInfoList;
+            m_tags->insert(tag, tilist);
+        }
+        CTagsTagInfo ti;
+        ti.fileName = re.group(2);
+        ti.pattern = re.group(3);
+        ti.kind = re.group(4)[0];
+        tilist->append(ti);
+        
+        // Put kind in kind list view if not already there
+        QString extension;
+        if (ti.fileName.right(9) == "/Makefile")
+            extension = "mak";
+        else {
             int pos = ti.fileName.findRev('.');
-            if (pos > 0) {
-                QString kindString = findKind(ti.kind, ti.fileName.mid(pos+1));
-                QCheckListItem *clitem = static_cast<QCheckListItem*>(kinds_listview->firstChild());
-                while (clitem && clitem->text(0) != kindString)
-                    clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
-                if (!clitem) {
-                    QCheckListItem *item = new QCheckListItem(kinds_listview, kindString, QCheckListItem::CheckBox);
-                    item->setOn(true);
-                }
-            }
+            if (pos > 0)
+                extension = ti.fileName.mid(pos+1);
+        }
+        if (extension.isNull())
+            continue;
+        
+        QString kindString = findKind(ti.kind, extension);
+        if (kindString.isNull())
+            continue;
+        
+        QCheckListItem *clitem = static_cast<QCheckListItem*>(kinds_listview->firstChild());
+        while (clitem && clitem->text(0) != kindString)
+            clitem = static_cast<QCheckListItem*>(clitem->nextSibling());
+        if (!clitem) {
+            kdDebug() << "New kind " << kindString << " with extension " << extension << endl;
+            QCheckListItem *item = new QCheckListItem(kinds_listview, kindString, QCheckListItem::CheckBox);
+            item->setOn(true);
         }
     }
-
+    
     f.close();
 
 #if 0

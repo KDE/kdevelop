@@ -6,6 +6,10 @@
 	  currently
 	* Add File dialog in auto project uses the
 	  FileTemplate class now
+	* Fixed displayed symbol kinds in ctags
+	  dialog when file name extension is unknown
+	* ctags result list is now updated when
+	  any of the selected criteria is changed
 
 2002-04-17  Matthias Hölzer-Klüpfel <mhk@kde.org>
 
