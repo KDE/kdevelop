@@ -17,46 +17,40 @@
 #ifndef _CHOOSETARGETDIALOG_H_
 #define _CHOOSETARGETDIALOG_H_
 
-#include "choosetargetdlgbase.h"
+#include <kdialogbase.h>
 
 class AutoProjectWidget;
 class AutoProjectPart;
 class SubprojectItem;
 class TargetItem;
-
 class QStringList;
+class QWidget;
 
-class ChooseTargetDialog : public ChooseTargetDlgBase
+class ChooseTargetDialog : public KDialogBase
 {
-
+Q_OBJECT
 public:
 	ChooseTargetDialog( AutoProjectWidget* widget, AutoProjectPart* part,
 	                    QStringList fileList, QWidget* parent = 0,
 	                    const char* name = 0 );
 	~ChooseTargetDialog();
 
-private:
-	AutoProjectWidget* m_widget;
-	AutoProjectPart* m_part;
-	QStringList m_fileList;
-	QPtrList <SubprojectItem> m_subprojectList;
-	SubprojectItem* m_choosenSubproject;
-	TargetItem* m_choosenTarget;
-
 public:
-	TargetItem* choosenTarget();
-	SubprojectItem* choosenSubproject();
+	TargetItem* chosenTarget();
+	SubprojectItem* chosenSubproject();
+	
+	bool alwaysUseActiveTarget() const;
 
-private slots:
-	void slotActiveTargetToggled( bool );
-	void slotChooseTargetToggled( bool );
+public slots:
 	void slotSubprojectChanged ( const QString& );
 	void slotTargetChanged ( const QString& );
-	void slotSubprojectTextChanged ( const QString& );
-	void slotTargetTextChanged ( const QString& );
 
 protected:
-	virtual void accept ();
+	virtual void slotOk();
+	
+private:
+	class Private;
+	ChooseTargetDialog::Private* d;
 };
 
 #endif 

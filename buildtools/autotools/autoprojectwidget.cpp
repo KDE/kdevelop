@@ -449,7 +449,7 @@ void AutoProjectWidget::addFiles( const QStringList &list )
 			
 		        //chooseTargetDlg = new ChooseTargetDialog ( this, this, "choose target dialog" );
 			
-			if ( chooseTargetDlg.exec() && chooseTargetDlg.neverAskAgainCheckBox->isChecked() )
+			if ( chooseTargetDlg.exec() && chooseTargetDlg.alwaysUseActiveTarget() )
 				DomUtil::writeBoolEntry( dom, "/kdevautoproject/general/useactivetarget", true );
 		}
 	}

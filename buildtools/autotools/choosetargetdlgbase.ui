@@ -1,6 +1,6 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ChooseTargetDlgBase</class>
-<widget class="QDialog">
+<widget class="QWidget">
     <property name="name">
         <cstring>ChooseTargetDlgBase</cstring>
     </property>
@@ -8,9 +8,15 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>556</width>
-            <height>529</height>
+            <width>444</width>
+            <height>306</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>444</width>
+            <height>306</height>
+        </size>
     </property>
     <property name="caption">
         <string>Automake Manager - Choose Target</string>
@@ -19,62 +25,59 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QRadioButton">
+        <widget class="QButtonGroup">
             <property name="name">
-                <cstring>activeTargetRadioButton</cstring>
-            </property>
-            <property name="text">
-                <string>Add new &amp;files to my active target</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QFrame">
-            <property name="name">
-                <cstring>frame5</cstring>
+                <cstring>buttonGroup1</cstring>
             </property>
             <property name="frameShape">
-                <enum>HLine</enum>
+                <enum>NoFrame</enum>
             </property>
             <property name="frameShadow">
-                <enum>Sunken</enum>
+                <enum>Plain</enum>
             </property>
             <property name="lineWidth">
                 <number>1</number>
             </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <property name="flat">
+                <bool>false</bool>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>activeTargetRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Add new files to m&amp;y active target</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton">
+                    <property name="name">
+                        <cstring>chooseTargetRadioButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Choose &amp;another target</string>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>chooseTargetRadioButton</cstring>
-            </property>
-            <property name="text">
-                <string>Choose &amp;another target</string>
-            </property>
-        </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer2_2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>choosenTargetGroupBox</cstring>
+                <cstring>chosenTargetGroupBox</cstring>
             </property>
             <property name="enabled">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
             <property name="title">
                 <string>Choose &amp;Target</string>
@@ -83,42 +86,6 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>targetStaticLabel</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="font">
-                        <font>
-                        </font>
-                    </property>
-                    <property name="text">
-                        <string>Target:</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="1">
-                    <property name="name">
-                        <cstring>choosenTargetLabel</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>[TARGET]</string>
-                    </property>
-                </widget>
                 <widget class="KHistoryCombo" row="0" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>subprojectComboBox</cstring>
@@ -135,6 +102,34 @@
                         <bool>true</bool>
                     </property>
                 </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>targetStaticLabel</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Target:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="1">
+                    <property name="name">
+                        <cstring>chosenTargetLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>[TARGET]</string>
+                    </property>
+                </widget>
             </grid>
         </widget>
         <widget class="QGroupBox">
@@ -148,109 +143,55 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="KListBox">
+                <widget class="KListView">
                     <property name="name">
-                        <cstring>newFilesListBox</cstring>
+                        <cstring>newFileList</cstring>
                     </property>
-                    <property name="selectionMode">
-                        <enum>NoSelection</enum>
+                    <property name="allColumnsShowFocus">
+                        <bool>true</bool>
                     </property>
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1</cstring>
+                        <cstring>cancelNoticeLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;b&gt;Note:&lt;/b&gt; If you abort your files will be created &lt;b&gt;but will not&lt;/b&gt; be added to the project.</string>
+                        <string>&lt;qt&gt;&lt;b&gt;Note:&lt;/b&gt; If you cancel, your files will be created but will &lt;b&gt;not&lt;/b&gt; be added to the project.&lt;/qt&gt;</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
                     </property>
                 </widget>
             </vbox>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>neverAskAgainCheckBox</cstring>
+                <cstring>neverAskAgainCheckbox</cstring>
             </property>
             <property name="text">
-                <string>&amp;Do not ask me again and use always my active target</string>
+                <string>Do &amp;not ask me again and use always my active target</string>
             </property>
-        </widget>
-        <spacer>
-            <property name="name">
-                <cstring>Spacer2</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>buttonLayout</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>0</number>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>buttonSpacer</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>30</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>removeButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>cancelButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                </widget>
-            </hbox>
         </widget>
     </vbox>
 </widget>
 <connections>
     <connection>
-        <sender>cancelButton</sender>
-        <signal>clicked()</signal>
-        <receiver>ChooseTargetDlgBase</receiver>
-        <slot>reject()</slot>
+        <sender>activeTargetRadioButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>chosenTargetGroupBox</receiver>
+        <slot>setDisabled(bool)</slot>
     </connection>
     <connection>
-        <sender>removeButton</sender>
-        <signal>clicked()</signal>
-        <receiver>ChooseTargetDlgBase</receiver>
-        <slot>accept()</slot>
+        <sender>activeTargetRadioButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>subprojectComboBox</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>activeTargetRadioButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>targetComboBox</receiver>
+        <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>
@@ -258,10 +199,8 @@
     <tabstop>chooseTargetRadioButton</tabstop>
     <tabstop>subprojectComboBox</tabstop>
     <tabstop>targetComboBox</tabstop>
-    <tabstop>newFilesListBox</tabstop>
-    <tabstop>neverAskAgainCheckBox</tabstop>
-    <tabstop>removeButton</tabstop>
-    <tabstop>cancelButton</tabstop>
+    <tabstop>newFileList</tabstop>
+    <tabstop>neverAskAgainCheckbox</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
@@ -273,12 +212,11 @@
     <slot access="private">slotTargetChanged(const QString&amp;)</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>klistbox.h</includehint>
+    <includehint>klistview.h</includehint>
 </includehints>
 </UI>
