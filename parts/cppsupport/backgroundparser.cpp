@@ -17,6 +17,7 @@
 #include "ast_utils.h"
 
 #include <kdevmutex.h>
+#include <kdevdeepcopy.h>
 
 #include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
@@ -163,7 +164,14 @@ public:
 
     virtual QString contents( const QString& fileName )
     {
-	//kapp->lock();
+        //kdDebug(9007) << "-------> kapp is locked = " << kapp->locked() << endl;
+        bool needToLock = kapp->locked() == false;
+
+        if( needToLock )
+	    kapp->lock();
+
+        //kdDebug(9007) << "-------> kapp locked" << endl;
+
 	QPtrList<KParts::Part> parts( *m_cppSupport->partController()->parts() );
 	QPtrListIterator<KParts::Part> it( parts );
 	while( it.current() ){
@@ -174,10 +182,19 @@ public:
 	    if( !doc || !editIface || doc->url().path() != fileName )
 		continue;
 
-	    QString contents = editIface->text();
-	    return QString( contents.unicode(), contents.length() );
+	    QString contents = QDeepCopy<QString>( editIface->text() );
+
+            if( needToLock )
+                kapp->unlock();
+
+            //kdDebug(9007) << "-------> kapp unlocked" << endl;
+
+	    return contents;
 	}
-	//kapp->unlock();
+
+        if( needToLock )
+	    kapp->unlock();
+        //kdDebug(9007) << "-------> kapp unlocked" << endl;
 
 	QFile f( fileName );
 	QTextStream stream( &f );
