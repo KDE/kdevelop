@@ -109,7 +109,7 @@ void showMemUsage()
 #endif
 
 enum { KDEV_DB_VERSION = 4 };
-enum { KDEV_PCS_VERSION = 3 };
+enum { KDEV_PCS_VERSION = 4 };
 
 class CppDriver: public KDevDriver
 {
