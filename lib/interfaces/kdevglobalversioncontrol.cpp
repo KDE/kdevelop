@@ -35,3 +35,4 @@ KDevGlobalVersionControl::GlobalVcsMap KDevGlobalVersionControl::vcsMap()
 {
     return vcs_map;
 }
+#include "kdevglobalversioncontrol.moc"
