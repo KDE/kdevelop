@@ -51,8 +51,6 @@ public:
 
     bool isValid() const { return m_valid; }
 
-    Catalog* projectCatalog() { return m_projectCatalog; }
-
     ProblemReporter* problemReporter() { return m_problemReporter; }
     BackgroundParser* backgroundParser() { return m_backgroundParser; }
     CppCodeCompletion* codeCompletion() { return m_pCompletion; }
@@ -159,7 +157,6 @@ private:
     bool m_valid;
 
     QPtrList<Catalog> m_catalogList;
-    Catalog* m_projectCatalog;
     Driver* m_driver;
     QString m_projectDirectory;
 

@@ -204,8 +204,7 @@ bool operator < ( const KTextEditor::CompletionEntry& e1, const KTextEditor::Com
     return e1.text < e2.text;
 }
 
-static QValueList<KTextEditor::CompletionEntry>
-unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
+static QValueList<KTextEditor::CompletionEntry> unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
 {
 
     QValueList< KTextEditor::CompletionEntry > l;
@@ -225,8 +224,7 @@ unique( const QValueList<KTextEditor::CompletionEntry>& entryList )
     return l;
 }
 
-static QStringList
-unique( const QStringList& entryList )
+static QStringList unique( const QStringList& entryList )
 {
 
     QStringList l;
@@ -1646,12 +1644,13 @@ QString CppCodeCompletion::findClass( const QString & className )
 
 ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom container, bool includeImports )
 {
+    kdDebug(9007) << "-----------> findContainer name: " << name << " " << (container ? container->name() : QString("")) << endl;
+
     if( name.isEmpty() )
 	return model_cast<ClassDom>( container );
 
-    if( !container ){
+    if( !container )
 	return findContainer( name, m_pSupport->codeModel()->globalNamespace(), includeImports );
-    }
 
     QStringList path = QStringList::split( "::", name );
     QStringList::Iterator it = path.begin();
@@ -1659,6 +1658,7 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
         QString s = *it;
         ++it;
 
+	kdDebug(9007) << "has namespace " << s << ": " << container->hasNamespace( s ) << endl;
 	if( !container->hasNamespace(s) )
 	    break;
 
@@ -1669,9 +1669,10 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
     }
 
     if( path.size() == 0 )
-        return model_cast<ClassDom>( container );
+	return model_cast<ClassDom>( container );
 
     QString className = path.join( "::" );
+    kdDebug(9007) << "find class: " << className << " in namespace " << container->name() << endl;
 
     ClassDom c = model_cast<ClassDom>( container );
     while( c && path.size() ){
@@ -1689,7 +1690,9 @@ ClassDom CppCodeCompletion::findContainer( const QString& name, NamespaceDom con
 	    if( QFileInfo( (*cit)->fileName() ).dirPath(true) == QFileInfo( m_activeFileName ).dirPath(true) )
 		c = *cit;
 	}
-   }
+    }
+
+    kdDebug(9007) << "found class: " << (c ? c->name() : QString("<anon>")) << endl;
 
 #if 0
     if( !c && includeImports ){

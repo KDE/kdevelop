@@ -1,0 +1,20 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>SetupQtPageBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SetupQtPageBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>526</width>
+            <height>281</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Setup Qt</string>
+    </property>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

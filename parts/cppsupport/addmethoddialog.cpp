@@ -128,14 +128,16 @@ AddMethodDialog::AddMethodDialog(CppSupportPart* cppSupport, ClassDom klass,
     m_cppSupport->partController()->editDocument( fileName );
 
     // setup sourceFile combo
-    FunctionList l = m_klass->functionList();
     QMap<QString, bool> m;
+#if 0 /// FIXME: ROBE
+    FunctionList l = m_klass->functionList();
     {
 	for( FunctionList::Iterator it = l.begin(); it != l.end(); ++it ){
 	    if( (*it)->hasImplementation() )
 	        m.insert( (*it)->implementedInFile(), true );
 	}
     }
+#endif
 
     {
         QStringList headers = QStringList::split( ",", "h,H,hh,hxx,hpp,inl,tlh,diff,ui.h" );

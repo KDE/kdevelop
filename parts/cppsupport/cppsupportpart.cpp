@@ -30,6 +30,8 @@
 #include "cppcodecompletionconfig.h"
 #include "tag_creator.h"
 #include "cppsupport_utils.h"
+#include "classgeneratorconfig.h"
+#include "setupqtpage.h"
 
 // wizards
 #include "cppnewclassdlg.h"
@@ -103,7 +105,8 @@ void showMemUsage()
 {}
 #endif
 
-enum { PCS_VERSION = 3 };
+enum { KDEV_DB_VERSION = 3 };
+enum { KDEV_PCS_VERSION = 1 };
 
 class CppDriver: public KDevDriver
 {
@@ -134,7 +137,6 @@ public:
 	if( cppSupport()->codeModel()->hasFile(fileName) ){
 	    FileDom file = cppSupport()->codeModel()->fileByName( fileName );
 	    cppSupport()->removeWithReferences( fileName );
-	    walker.buildImplementationMap( file );
 	}
 
 	walker.parseTranslationUnit( ast.get() );
@@ -156,7 +158,6 @@ CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringL
 
     setXMLFile( "kdevcppsupport.rc" );
 
-    m_projectCatalog = 0;
     m_catalogList.setAutoDelete( true );
     setupCatalog();
 
@@ -243,7 +244,6 @@ CppSupportPart::~CppSupportPart()
     }
 
     codeRepository()->setMainCatalog( 0 );
-    delete( m_projectCatalog );
 
     QPtrListIterator<Catalog> it( m_catalogList );
     while( Catalog* catalog = it.current() ){
@@ -255,6 +255,9 @@ CppSupportPart::~CppSupportPart()
 
     delete m_pCompletion;
     delete m_problemReporter;
+
+    m_pCompletion = 0;
+    m_problemReporter = 0;
 }
 
 void CppSupportPart::customEvent( QCustomEvent* ev )
@@ -264,8 +267,6 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
     if( ev->type() == int(Event_FileParsed) ){
 	FileParsedEvent* event = (FileParsedEvent*) ev;
 	QString fileName = event->fileName();
-
-	//kdDebug(9007) << "----------> file " << fileName << " parsed" << endl;
 
         if( m_problemReporter ){
 	    m_problemReporter->removeAllProblems( fileName );
@@ -281,7 +282,6 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 	        m_problemReporter->reportProblem( fileName, p );
 	    }
 
-#if 1
 	    m_backgroundParser->lock();
 	    if( TranslationUnitAST* ast = m_backgroundParser->translationUnit(fileName) ){
 
@@ -291,34 +291,35 @@ void CppSupportPart::customEvent( QCustomEvent* ev )
 		    if( codeModel()->hasFile(fileName) ){
 			FileDom file = codeModel()->fileByName( fileName );
 			removeWithReferences( fileName );
-			walker.buildImplementationMap( file );
 		    }
 		    walker.parseTranslationUnit( ast );
 		    emit addedSourceInfo( fileName );
 		}
 	    }
 	    m_backgroundParser->unlock();
-#endif
 	}
 	emit fileParsed( fileName );
     }
 }
 
-// daniel
 void CppSupportPart::projectConfigWidget( KDialogBase* dlg )
 {
-    QVBox* vbox = dlg->addVBoxPage( i18n( "C++ Specific" ) );
+    QVBox* vbox = 0;
+
+    vbox = dlg->addVBoxPage( i18n( "C++ Specific" ) );
     CCConfigWidget* w = new CCConfigWidget( this, vbox );
     connect( dlg, SIGNAL( okClicked( ) ), w, SLOT( accept( ) ) );
+
+    vbox = dlg->addVBoxPage( i18n("Qt") );
+    SetupQtPage* qtPage = new SetupQtPage( this, vbox );
+    connect( qtPage, SIGNAL(okClicked()), qtPage, SLOT(accept()) );
 }
 
 void CppSupportPart::configWidget(KDialogBase *dlg)
 {
-#if 0
   QVBox *vbox = dlg->addVBoxPage(i18n("C++ New Class Generator"));
   ClassGeneratorConfig *w = new ClassGeneratorConfig(vbox, "classgenerator config widget");
   connect(dlg, SIGNAL(okClicked()), w, SLOT(storeConfig()));
-#endif
 }
 
 void CppSupportPart::activePartChanged(KParts::Part *part)
@@ -342,9 +343,9 @@ void CppSupportPart::activePartChanged(KParts::Part *part)
             enabled = true;
     }
 
-    actionCollection()->action("edit_switchheader")->setEnabled(enabled);
-    actionCollection()->action("edit_complete_text")->setEnabled(enabled);
-    actionCollection()->action("edit_make_member")->setEnabled(enabled);
+    actionCollection()->action( "edit_switchheader" )->setEnabled( enabled );
+    actionCollection()->action( "edit_complete_text" )->setEnabled( enabled );
+    actionCollection()->action( "edit_make_member" )->setEnabled( enabled );
 
     if( !part )
 	return;
@@ -369,17 +370,6 @@ void CppSupportPart::projectOpened( )
     kdDebug( 9007 ) << "projectOpened( )" << endl;
 
     m_projectDirectory = QDir( project()->projectDirectory() ).canonicalPath();
-
-    m_projectCatalog = new Catalog();
-#if 0
-    m_projectCatalog->open( m_projectDirectory + "/project.db" );
-
-    QStringList indexList = QStringList() << "kind" << "name" << "scope" << "fileName";
-    for( QStringList::Iterator idxIt=indexList.begin(); idxIt!=indexList.end(); ++idxIt )
-	m_projectCatalog->addIndex( (*idxIt).utf8() );
-
-    codeRepository()->setMainCatalog( m_projectCatalog );
-#endif
 
     connect( project( ), SIGNAL( addedFilesToProject( const QStringList & ) ),
              this, SLOT( addedFilesToProject( const QStringList & ) ) );
@@ -627,16 +617,12 @@ KDevLanguageSupport::Features CppSupportPart::features()
 
 QString CppSupportPart::formatClassName(const QString &name)
 {
-    QString res = name;
-    res.replace(QRegExp("\\."), "::");
-    return res;
+    return name;
 }
 
 QString CppSupportPart::unformatClassName(const QString &name)
 {
-    QString res = name;
-    res.replace(QRegExp("::"), ".");
-    return res;
+    return name;
 }
 
 QStringList CppSupportPart::fileExtensions() const
@@ -661,7 +647,7 @@ void CppSupportPart::addMethod( ClassDom klass )
     }
 
     AddMethodDialog dlg( this, klass, mainWindow()->main() );
-    dlg.exec();    /// @todo ROBE implement me
+    dlg.exec();
 }
 
 void CppSupportPart::addAttribute( ClassDom klass )
@@ -683,8 +669,7 @@ void CppSupportPart::slotCompleteText()
 /**
  * parsing stuff for project persistant classstore and code completion
  */
-void
-CppSupportPart::initialParse( )
+void CppSupportPart::initialParse( )
 {
     // For debugging
     if( !project( ) ){
@@ -747,16 +732,23 @@ CppSupportPart::parseProject( )
     QFile f( project()->projectDirectory() + "/" + project()->projectName() + ".pcs" );
     if( f.open(IO_ReadOnly) ){
 	stream.setDevice( &f );
-	int numFiles = 0;
-	stream >> numFiles;
 
-	for( int i=0; i<numFiles; ++i ){
-	    QString fn;
-	    uint ts;
-	    Q_LONG offset;
+	QString sig;
+	int pcs_version = 0;
+	stream >> sig >> pcs_version;
+	if( sig == "PCS" && pcs_version == KDEV_PCS_VERSION ){
 
-	    stream >> fn >> ts >> offset;
-	    pcs[ fn ] = qMakePair( ts, offset );
+	    int numFiles = 0;
+	    stream >> numFiles;
+
+	    for( int i=0; i<numFiles; ++i ){
+		QString fn;
+		uint ts;
+		Q_LONG offset;
+
+		stream >> fn >> ts >> offset;
+		pcs[ fn ] = qMakePair( ts, offset );
+	    }
 	}
     }
 
@@ -767,6 +759,7 @@ CppSupportPart::parseProject( )
 
         if( fileInfo.exists() && fileInfo.isFile() && fileInfo.isReadable() ){
             QString absFilePath = QDir( fileInfo.absFilePath() ).canonicalPath();
+	    kdDebug(9007) << "parse file: " << absFilePath << endl;
 
 	    if( (n%5) == 0 ){
 	        kapp->processEvents();
@@ -820,8 +813,7 @@ CppSupportPart::parseProject( )
     return true;
 }
 
-void
-CppSupportPart::maybeParse( const QString& fileName )
+void CppSupportPart::maybeParse( const QString& fileName )
 {
     if( !isValidSource(fileName) )
         return;
@@ -1061,7 +1053,7 @@ void CppSupportPart::setupCatalog( )
     QStringList pcsList = dirs->findAllResources( "pcs", "*.db", false, true );
     QStringList pcsIdxList = dirs->findAllResources( "pcs", "*.idx", false, true );
 
-    if( pcsList.size() && pcsVersion() < PCS_VERSION ){
+    if( pcsList.size() && pcsVersion() < KDEV_DB_VERSION ){
         QStringList l = pcsList + pcsIdxList;
         int rtn = KMessageBox::questionYesNoList( 0, i18n("Persistant class store will be disabled!! You have a wrong version of pcs installed.\nRemove old pcs files?"), l, i18n("C++ Support") );
         if( rtn == KMessageBox::Yes ){
@@ -1090,7 +1082,7 @@ void CppSupportPart::setupCatalog( )
         codeRepository()->registerCatalog( catalog );
     }
 
-    setPcsVersion( PCS_VERSION );
+    setPcsVersion( KDEV_DB_VERSION );
 }
 
 KMimeType::List CppSupportPart::mimeTypes( )
@@ -1170,9 +1162,7 @@ void CppSupportPart::codeCompletionConfigStored( )
 
 void CppSupportPart::removeWithReferences( const QString & fileName )
 {
-    //kdDebug(9007) << "------> remove with references: " << fileName << endl;
-    //kdDebug(9007) << "-------> file is stored: " << codeModel()->hasFile(fileName) << endl;
-
+    kdDebug(9007) << "remove with references: " << fileName << endl;
     m_timestamp.remove( fileName );
     if( !codeModel()->hasFile(fileName) )
         return;
@@ -1180,13 +1170,6 @@ void CppSupportPart::removeWithReferences( const QString & fileName )
     emit aboutToRemoveSourceInfo( fileName );
 
     codeModel()->removeFile( codeModel()->fileByName(fileName) );
-
-#if 0
-    classStore()->removeWithReferences( fileName );
-    QValueList<Catalog::QueryArgument> args;
-    args << Catalog::QueryArgument( "fileName", fileName );
-    m_projectCatalog->removeItems( args );
-#endif
 }
 
 bool CppSupportPart::isValidSource( const QString& fileName ) const
@@ -1199,9 +1182,7 @@ QString CppSupportPart::formatModelItem( const CodeModelItem *item, bool shortDe
 {
     if (item->isFunction())
     {
-        const FunctionModel *model = dynamic_cast<const FunctionModel*>(item);
-        if (!model)
-            return "";
+        const FunctionModel *model = static_cast<const FunctionModel*>(item);
         QString function;
         QString args;
         ArgumentList argumentList = model->argumentList();
@@ -1220,16 +1201,14 @@ QString CppSupportPart::formatModelItem( const CodeModelItem *item, bool shortDe
     }
     else if (item->isVariable())
     {
-        const VariableModel *model = dynamic_cast<const VariableModel*>(item);
-        if (!model)
-            return "";
-	else if( shortDescription )
+        const VariableModel *model = static_cast<const VariableModel*>(item);
+	if( shortDescription )
 	    return model->name();
         return model->type() + " " + model->name();
     }
     else if (item->isArgument())
     {
-        const ArgumentModel *model = dynamic_cast<const ArgumentModel*>(item);
+        const ArgumentModel *model = static_cast<const ArgumentModel*>(item);
 	QString arg;
 	if( !shortDescription )
 	    arg += model->type() + " ";
@@ -1239,7 +1218,7 @@ QString CppSupportPart::formatModelItem( const CodeModelItem *item, bool shortDe
 	return arg.stripWhiteSpace();
     }
     else
-        return KDevLanguageSupport::formatModelItem(item, shortDescription);
+        return KDevLanguageSupport::formatModelItem( item, shortDescription );
 }
 
 void CppSupportPart::addClass( )
@@ -1260,6 +1239,9 @@ void CppSupportPart::saveProjectSourceInfo( )
 
     QDataStream stream( &f );
     QMap<QString, Q_ULONG> offsets;
+
+    QString pcs( "PCS" );
+    stream << pcs << KDEV_PCS_VERSION;
 
     stream << int( fileList.size() );
     for( FileList::ConstIterator it=fileList.begin(); it!=fileList.end(); ++it ){

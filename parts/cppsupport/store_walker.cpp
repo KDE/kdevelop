@@ -184,20 +184,13 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
     QString id = d->declaratorId()->unqualifiedName()->text().stripWhiteSpace();
 
-    QString scopeStr = scopeOfDeclarator( d );
-    ClassDom klass = findContainer( scopeStr, 0, true );
+    QStringList scope = scopeOfDeclarator( d, m_currentScope );
 
-    FunctionDom method = m_store->create<FunctionModel>();
+    FunctionDefinitionDom method = m_store->create<FunctionDefinitionModel>();
+    method->setScope( scope );
     method->setName( id );
 
-    parseFunctionArguments( d, method );
-
-    if( klass || m_currentClass.top() ){
-	method->setConstant( d->constant() != 0 );
-	method->setAccess( m_currentAccess );
-	method->setStatic( isStatic );
-	method->setVirtual( isVirtual );
-    }
+    parseFunctionArguments( d, model_cast<FunctionDom>(method) );
 
     QString text = typeOfDeclaration( typeSpec, d );
     if( !text.isEmpty() )
@@ -207,37 +200,27 @@ void StoreWalker::parseFunctionDefinition( FunctionDefinitionAST* ast )
     method->setStartPosition( startLine, startColumn );
     method->setEndPosition( endLine, endColumn );
 
-    method->setImplementedInFile( m_fileName );
-    method->setImplementationStartPosition( startLine, startColumn );
-    method->setImplementationEndPosition( endLine, endColumn );
-
     if( m_inSignals )
         method->setSignal( true );
 
     if( m_inSlots )
         method->setSlot( true );
 
-    if( m_currentClass.top() )
-	m_currentClass.top()->addFunction( method );
-    else if( klass ){
-	FunctionList lst;
-	findFunctions( toString(method), klass, lst );
-	if( lst.size() ){
-	    FunctionDom f = lst[ 0 ];
-	    f->setImplementedInFile( m_fileName );
-	    f->setImplementationStartPosition( startLine, startColumn );
-	    f->setImplementationEndPosition( endLine, endColumn );
-	}
-    } else if( scopeStr.isEmpty() )
-	m_file->addFunction( method );
+    if( m_currentClass.top() ){
+	method->setConstant( d->constant() != 0 );
+	method->setAccess( m_currentAccess );
+	method->setStatic( isStatic );
+	method->setVirtual( isVirtual );
 
-    /// FIXME: add function definition
-#if 0
+	m_currentClass.top()->addFunction( model_cast<FunctionDom>(method) );
+    }
+
+    if( m_currentClass.top() )
+	m_currentClass.top()->addFunctionDefinition( method );
     else if( m_currentNamespace.top() )
-	m_currentNamespace.top()->addFunction( method );
+	m_currentNamespace.top()->addFunctionDefinition( method );
     else
-	m_file->addFunction( method );
-#endif
+	m_file->addFunctionDefinition( method );
 }
 
 void StoreWalker::parseLinkageBody( LinkageBodyAST* ast )
@@ -278,8 +261,10 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 	className = ast->name()->unqualifiedName()->text().stripWhiteSpace();
     }
 
-    QString scopeStr = scopeOfName( ast->name() );
-    ClassDom cl = findContainer( scopeStr, 0, true );
+    if( !scopeOfName( ast->name(), QStringList() ).isEmpty() ){
+        kdDebug(9007) << "skip private class declarations" << endl;
+        return;
+    }
 
     ClassDom klass = m_store->create<ClassModel>();
     klass->setStartPosition( startLine, startColumn );
@@ -288,9 +273,9 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 
     klass->setName( className );
 
-    if( cl )
-	cl->addClass( klass );
-    else if( m_currentClass.top() )
+    klass->setScope( m_currentScope );
+
+    if( m_currentClass.top() )
 	m_currentClass.top()->addClass( klass );
     else if( m_currentNamespace.top() )
 	m_currentNamespace.top()->addClass( klass );
@@ -319,30 +304,33 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
 
 void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 {
-#if 0
     QPtrList<EnumeratorAST> l = ast->enumeratorList();
     QPtrListIterator<EnumeratorAST> it( l );
     while( it.current() ){
-	VariableDom attr = findOrInsertAttribute( it.current(), m_currentContainer, it.current()->id()->text() );
+        VariableDom attr = m_store->create<VariableModel>();
+	attr->setName( it.current()->id()->text() );
+	attr->setFileName( m_fileName );
 	attr->setAccess( m_currentAccess );
 	attr->setType( "int" );
-	attr->setIsStatic( true );
+	attr->setStatic( true );
 
 	int startLine, startColumn;
 	int endLine, endColumn;
 	it.current()->getStartPosition( &startLine, &startColumn );
-	it.current()->getEndPosition( &endLine, &endColumn );
+	attr->setStartPosition( startLine, startColumn );
 
-	attr->setDeclaredOnLine( startLine );
-	attr->setDefinedOnLine( startLine );
-	attr->setDeclaredInFile( m_fileName );
-	attr->setDefinedInFile( m_fileName );
-	attr->setDeclarationEndsOnLine( endLine );
-        attr->setDefinitionEndsOnLine( endLine );
+	it.current()->getEndPosition( &endLine, &endColumn );
+	attr->setEndPosition( endLine, endColumn );
+
+	if( m_currentClass.top() )
+	    m_currentClass.top()->addVariable( attr );
+	else if( m_currentNamespace.top() )
+	    m_currentNamespace.top()->addVariable( attr );
+	else
+	    m_file->addVariable( attr );
 
 	++it;
     }
-#endif
 }
 
 void StoreWalker::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* ast )
@@ -373,8 +361,10 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
     if( t && t->declaratorId() && t->declaratorId()->unqualifiedName() )
 	id = t->declaratorId()->unqualifiedName()->text();
 
-    QString scopeStr = scopeOfDeclarator( d );
-    ClassDom cl = findContainer( scopeStr, 0, true ); 	//FIXME: ROBE!!
+    if( !scopeOfDeclarator(d, QStringList()).isEmpty() ){
+        kdDebug(9007) << "skip declaration" << endl;
+	return;
+    }
 
     VariableDom attr = m_store->create<VariableModel>();
     attr->setName( id );
@@ -382,8 +372,6 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 
     if( m_currentClass.top() )
 	m_currentClass.top()->addVariable( attr );
-    else if( cl && !scopeStr.isEmpty() )        // FIXME: ROBE!!!
-	cl->addVariable( attr );
     else if( m_currentNamespace.top() )
 	m_currentNamespace.top()->addVariable( attr );
     else
@@ -444,7 +432,7 @@ void StoreWalker::parseAccessDeclaration( AccessDeclarationAST * access )
 
 NamespaceDom StoreWalker::findOrInsertNamespace( NamespaceAST* ast, const QString & name )
 {
-    //kdDebug(9007) << "-----------------> findOrInsert" << name << " found!!" << endl;
+    kdDebug(9007) << "-----------------> findOrInsert" << name << " found!!" << endl;
 
     if( m_currentNamespace.top() && m_currentNamespace.top()->hasNamespace(name) )
 	return m_currentNamespace.top()->namespaceByName( name );
@@ -458,9 +446,12 @@ NamespaceDom StoreWalker::findOrInsertNamespace( NamespaceAST* ast, const QStrin
     ast->getEndPosition( &endLine, &endColumn );
 
     NamespaceDom ns = m_store->create<NamespaceModel>();
+    ns->setFileName( m_fileName );
     ns->setName( name );
     ns->setStartPosition( startLine, startColumn );
     ns->setEndPosition( endLine, endColumn );
+
+    ns->setScope( m_currentScope );
 
     if( m_currentNamespace.top() )
 	m_currentNamespace.top()->addNamespace( ns );
@@ -468,30 +459,6 @@ NamespaceDom StoreWalker::findOrInsertNamespace( NamespaceAST* ast, const QStrin
 	m_file->addNamespace( ns );
 
     return ns;
-}
-
-VariableDom StoreWalker::findOrInsertAttribute( AST* ast, ClassDom scope, const QString & name )
-{
-    if( !scope->hasVariable(name) ){
-	VariableDom attr = m_store->create<VariableModel>();
-	attr->setName( name );
-	attr->setAccess( m_currentAccess );
-
-	int startLine, startColumn;
-	int endLine, endColumn;
-
-	ast->getStartPosition( &startLine, &startColumn );
-	ast->getEndPosition( &endLine, &endColumn );
-
-	attr->setStartPosition( startLine, startColumn );
-	attr->setEndPosition( endLine, endColumn );
-	attr->setFileName( m_fileName );
-
-	scope->addVariable( attr );
-	return attr;
-    }
-
-    return scope->variableByName( name );
 }
 
 void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storageSpec,
@@ -551,28 +518,12 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     if( m_inSlots )
         method->setSlot( true );
 
-    if( m_currentClass.top() ){
+    QString text = typeOfDeclaration( typeSpec, d );
+    if( !text.isEmpty() )
+        method->setResultType( text );
 
-	QString text = typeOfDeclaration( typeSpec, d );
-	if( !text.isEmpty() )
-	    method->setResultType( text );
-    } else {
-	QString text = typeOfDeclaration( typeSpec, d );
-	if( !text.isEmpty() )
-	    method->setResultType( text );
-    }
     method->setConstant( d->constant() != 0 );
-
-    QString key = m_currentScope.join(".") + " " + toString( method );
-    if( m_implementationMap.contains(key) ){
-	//kdDebug(9007) << "---------> found an implementation for: " << key << endl;
-	ImplementationInfo impl = m_implementationMap[ key ];
-	method->setImplementedInFile( impl.fileName );
-	method->setImplementationStartPosition( impl.startLine, impl.startColumn );
-	method->setImplementationEndPosition( impl.endLine, impl.endColumn );
-    } else {
-	//kdDebug(9007) << "---------> no implementation for: " << key << endl;
-    }
+    method->setScope( scopeOfDeclarator(d, m_currentScope) );
 
     if( m_currentClass.top() )
 	m_currentClass.top()->addFunction( method );
@@ -645,77 +596,9 @@ void StoreWalker::parseBaseClause( BaseClauseAST * baseClause, ClassDom klass )
     }
 }
 
-ClassDom StoreWalker::findContainer( const QString& name, NamespaceDom container, bool includeImports )
+QStringList StoreWalker::scopeOfName( NameAST* id, const QStringList& startScope )
 {
-    if( name.isEmpty() )
-	return model_cast<ClassDom>( container );
-
-    if( !container ){
-	return findContainer( name, m_store->globalNamespace(), includeImports );
-    }
-
-    QStringList path = QStringList::split( ".", name );
-    QStringList::Iterator it = path.begin();
-    while( it != path.end() ){
-        QString s = *it;
-        ++it;
-
-	if( !container->hasNamespace(s) )
-	    break;
-
-        NamespaceDom scope = container->namespaceByName( s );
-
-        path.remove( s );
-        container = scope;
-    }
-
-    if( path.size() == 0 )
-        return model_cast<ClassDom>( container );
-
-    QString className = path.join( "." );
-
-    ClassDom c = model_cast<ClassDom>( container );
-    while( c && path.size() ){
-	QString s = path.front();
-	path.pop_front();
-
-	if( !c->hasClass(s) ){
-	    c = 0;
-	    break;
-	}
-
-	ClassList classList = c->classByName( s );
-	c = classList[ 0 ];
-	for( ClassList::Iterator cit=classList.begin(); cit!=classList.end(); ++cit ){
-	    if( QFileInfo( (*cit)->fileName() ).dirPath(true) == QFileInfo( m_fileName ).dirPath(true) )
-		c = *cit;
-	}
-   }
-
-    if( !c && includeImports ){
-
-        QStringList imports;
-        QValueList<QStringList>::Iterator lIt = m_imports.begin();
-        while( lIt != m_imports.end() ){
-           imports += (*lIt );
-           ++lIt;
-        }
-
-        QStringList::Iterator impIt = imports.begin();
-        while( impIt != imports.end() ){
-            ClassDom kl = findContainer( (*impIt) + "." + name, container, false );
-            if( kl )
-                return kl;
-            ++impIt;
-        }
-    }
-
-    return c;
-}
-
-QString StoreWalker::scopeOfName( NameAST* id )
-{
-    QStringList scope = m_currentScope;
+    QStringList scope = startScope;
     if( id && id->classOrNamespaceNameList().count() ){
         if( id->isGlobal() )
 	    scope.clear();
@@ -729,154 +612,10 @@ QString StoreWalker::scopeOfName( NameAST* id )
 	}
     }
 
-    return scope.join( "." );
+    return scope;
 }
 
-QString StoreWalker::scopeOfDeclarator( DeclaratorAST* d )
+QStringList StoreWalker::scopeOfDeclarator( DeclaratorAST* d, const QStringList& startScope )
 {
-    return scopeOfName( d->declaratorId() );
-}
-
-QString StoreWalker::toString( const FunctionDom& fun )
-{
-    QString text = fun->name();
-    text += "(";
-    const ArgumentList args = fun->argumentList();
-    ArgumentList::ConstIterator it = args.begin();
-    while( it != args.end() ){
-	const ArgumentDom& arg = *it;
-	++it;
-
-	text += arg->type();
-
-	if( it != args.end() )
-	    text += ",";
-    }
-    text += ")";
-    if( fun->isConstant() )
-	text += " const";
-    if( fun->isAbstract() )
-	text += "=0";
-
-    return text;
-}
-
-void StoreWalker::findFunctions( const QString & proto, const NamespaceDom& ns, FunctionList & lst )
-{
-    //findFunctions( proto, ns->namespaceList(), lst );
-    //findFunctions( proto, ns->classList(), lst );
-    findFunctions( proto, ns->functionList(), lst );
-}
-
-void StoreWalker::findFunctions( const QString & proto, const NamespaceList& namespaceList, FunctionList & lst )
-{
-    for( NamespaceList::ConstIterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
-	findFunctions( proto, *it, lst );
-}
-
-void StoreWalker::findFunctions( const QString & proto, const ClassList& classList, FunctionList & lst )
-{
-    for( ClassList::ConstIterator it=classList.begin(); it!=classList.end(); ++it )
-	findFunctions( proto, *it, lst );
-}
-
-void StoreWalker::findFunctions( const QString & proto, const FunctionList& functionList, FunctionList & lst )
-{
-    for( FunctionList::ConstIterator it=functionList.begin(); it!=functionList.end(); ++it )
-	findFunctions( proto, *it, lst );
-}
-
-void StoreWalker::findFunctions( const QString & proto, const ClassDom& klass, FunctionList & lst )
-{
-    findFunctions( proto, klass->classList(), lst );
-    findFunctions( proto, klass->functionList(), lst );
-}
-
-void StoreWalker::findFunctions( const QString & proto, const FunctionDom& fun, FunctionList & lst )
-{
-    if( toString(fun) == proto )
-	lst << fun;
-}
-
-void StoreWalker::findFunctions( const QString & proto, FunctionList & lst )
-{
-    FileList fileList = m_store->fileList();
-    for( FileList::Iterator it=fileList.begin(); it!=fileList.end(); ++it )
-	findFunctions( proto, model_cast<NamespaceDom>(*it), lst );
-}
-
-void StoreWalker::buildImplementationMap( FileDom file, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-    buildImplementationMap( file->namespaceList(), scope, map );
-    buildImplementationMap( file->classList(), scope, map );
-    buildImplementationMap( file->functionList(), scope, map );
-    buildImplementationMap( file->variableList(), scope, map );
-}
-
-void StoreWalker::buildImplementationMap( NamespaceDom ns, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-    scope.push_back( ns->name() );
-
-    buildImplementationMap( ns->namespaceList(), scope, map );
-    buildImplementationMap( ns->classList(), scope, map );
-    buildImplementationMap( ns->functionList(), scope, map );
-    buildImplementationMap( ns->variableList(), scope, map );
-
-    scope.pop_back();
-}
-
-void StoreWalker::buildImplementationMap( ClassDom klass, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-    scope.push_back( klass->name() );
-
-    buildImplementationMap( klass->classList(), scope, map );
-    buildImplementationMap( klass->functionList(), scope, map );
-    buildImplementationMap( klass->variableList(), scope, map );
-
-    scope.pop_back();
-}
-
-void StoreWalker::buildImplementationMap( FunctionDom fun, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-    if( fun->hasImplementation() && fun->implementedInFile() != m_fileName ){
-	ImplementationInfo impl;
-	impl.fileName = fun->implementedInFile();
-	fun->getImplementationStartPosition( &impl.startLine, &impl.startColumn );
-	fun->getImplementationEndPosition( &impl.endLine, &impl.endColumn );
-	map.insert( scope.join(".") + " " + toString(fun), impl );
-    }
-}
-
-void StoreWalker::buildImplementationMap( VariableDom var, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-}
-
-void StoreWalker::buildImplementationMap( const NamespaceList & namespaceList, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-    for( NamespaceList::ConstIterator it=namespaceList.begin(); it!=namespaceList.end(); ++it )
-	buildImplementationMap( *it, scope, map );
-}
-
-void StoreWalker::buildImplementationMap( const ClassList & classList, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-    for( ClassList::ConstIterator it=classList.begin(); it!=classList.end(); ++it )
-	buildImplementationMap( *it, scope, map );
-}
-
-void StoreWalker::buildImplementationMap( const FunctionList & functionList, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-    for( FunctionList::ConstIterator it=functionList.begin(); it!=functionList.end(); ++it )
-	buildImplementationMap( *it, scope, map );
-}
-
-void StoreWalker::buildImplementationMap( const VariableList & variableList, QStringList& scope, QMap< QString, ImplementationInfo > & map )
-{
-}
-
-void StoreWalker::buildImplementationMap( FileDom file )
-{
-    //kdDebug(9007) << "------------> StoreWalker::buildImplementationMap()" << endl;
-    QStringList scope;
-    m_implementationMap.clear();
-    buildImplementationMap( file, scope, m_implementationMap );
+    return scopeOfName( d->declaratorId(), startScope );
 }

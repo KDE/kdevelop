@@ -16,8 +16,7 @@
  <Menu name="project">
   <Action name="project_newclass"/>
  </Menu>
-</MenuBar>
-
+ 
 <ToolBar name="browserToolBar" position="Top" iconText="IconOnly" >
   <text>Browser Toolbar</text>
   <Action name="project_newclass"/>
