@@ -181,18 +181,20 @@ void GrepViewWidget::searchActivated()
     filepattern += files;
     filepattern += " \\) -print";
 
-#ifdef IGNORE_SCM_DIRS
     QString command = filepattern + " " ;
     if (grepdlg->ignoreSCMDirsFlag()) {
         command += "| grep -v \"SCCS/\" ";
         command += "| grep -v \"CVS/\" ";
     }
     command += "| xargs " ;
-#else
-    QString command = filepattern + " | xargs " ;
-#endif
 
+#ifndef USE_SOLARIS
     command += "egrep -H -n -e ";
+#else
+    // -H reported as not being available on Solaris,
+    // but we're buggy without it on Linux.
+    command += "egrep -n -e ";
+#endif
     command += KShellProcess::quote(pattern);
     startJob("", command);
 
