@@ -304,8 +304,8 @@ void ChooseTargetDialog::accept ()
 			KShellProcess proc("/bin/sh");
 
 			proc << "mv";
-			proc << m_widget->projectDirectory() + "/" + directory + "/" + fileName;
-			proc << m_choosenSubproject->path + "/" + fileName;
+			proc << KShellProcess::quote( m_widget->projectDirectory() + "/" + directory + "/" + fileName );
+			proc << KShellProcess::quote( m_choosenSubproject->path + "/" + fileName );
 			proc.start(KProcess::DontCare);
 			
 			kdDebug ( 9000 ) << "Moved file " << fileName << " from " << m_widget->projectDirectory() << " to " << m_choosenSubproject->path << endl;
