@@ -68,6 +68,8 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
+  props->addProp("isEdit",       "",                  "General",        ALLOWED_BOOL);
+  props->addProp("Text",         "",                  "General",        ALLOWED_STRING);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
@@ -82,4 +84,5 @@ void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)
   #define strIsDef(s) (!Prop2Str(s).isNull())
   #define intIsDef(s) (!Prop2Str(s).isEmpty())
 
+  itm->setText(Prop2Str("Text"));
 }

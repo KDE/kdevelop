@@ -72,7 +72,7 @@ class AdvListView : public QListView
   Q_OBJECT
   public:
     AdvListView( CKDevelop* parCKD, QWidget * parent = 0, const char * name = 0 );
-    virtual ~AdvListView() {}
+    virtual ~AdvListView();
 
     virtual void hideAll();
     virtual void saveOpenStats();

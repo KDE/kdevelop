@@ -67,11 +67,11 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoUpdate",   "true",             "General",        ALLOWED_BOOL);
-  props->addProp("isReadOnly",   "false",             "General",        ALLOWED_BOOL);
-  props->addProp("isOverWriteMode",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoUpdate",   "",             "General",        ALLOWED_BOOL);
+  props->addProp("isReadOnly",   "",                  "General",        ALLOWED_BOOL);
+  props->addProp("isOverWriteMode",   "",                  "General",        ALLOWED_BOOL);
   props->addProp("Text",           "",       "General",        ALLOWED_MULTISTRING);
-  props->addProp("isTextSelected", "false",  "General",        ALLOWED_BOOL);
+  props->addProp("isTextSelected", "",       "General",        ALLOWED_BOOL);
   props->addProp("setFixedVisibleLines",   "",             "Geometry",        ALLOWED_INT);
 }
 

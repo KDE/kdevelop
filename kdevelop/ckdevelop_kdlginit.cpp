@@ -116,6 +116,8 @@ void CKDevelop::initKDlgMenuBar(){
   kdlg_view_menu->insertItem(Icon("reload.xpm"),i18n("&Refresh"),kdlgedit,
 			   SLOT(slotViewRefresh()),0,ID_KDLG_VIEW_REFRESH);
   kdlg_view_menu->insertSeparator();
+  kdlg_view_menu->insertItem(i18n("&Preview dialog"),kdlgedit,
+			   SLOT(slotViewPreview()),0,0);
   kdlg_view_menu->insertItem(i18n("&Grid..."),kdlgedit,
 			   SLOT(slotViewGrid()),0,ID_KDLG_VIEW_GRID);
 
@@ -430,6 +432,7 @@ void CKDevelop::slotHelpDlgNotes()
   KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);
   readmedlg->exec();
 
+  config->setGroup("KDlgEdit");
   if (!readmedlg->isShowAgain())
     config->writeEntry("KDlgEdit_ShowReadme","false");
   else

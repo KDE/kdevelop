@@ -69,16 +69,14 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
   props->addProp("Text",           "Button",       "General",        ALLOWED_STRING);
-  props->addProp("isDefault",      "false",        "General",        ALLOWED_BOOL);
-  props->addProp("isAutoDefault" , "false",        "General",        ALLOWED_BOOL);
-  props->addProp("isToggleButton", "false",        "General",        ALLOWED_BOOL);
-  props->addProp("isToggledOn",    "false",        "General",        ALLOWED_BOOL);
-  props->addProp("isMenuButton",   "false",        "General",        ALLOWED_BOOL);
-  props->addProp("isAutoResize",   "false",        "General",        ALLOWED_BOOL);
-  props->addProp("isAutoRepeat",   "false",        "General",        ALLOWED_BOOL);
-  props->addProp("DisplayedColor", "",        "General",        ALLOWED_COLOR);
-
-  props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
+  props->addProp("isDefault",      "",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoDefault" , "",             "General",        ALLOWED_BOOL);
+  props->addProp("isToggleButton", "",             "General",        ALLOWED_BOOL);
+  props->addProp("isToggledOn",    "",             "General",        ALLOWED_BOOL);
+  props->addProp("isMenuButton",   "",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoRepeat",   "",             "General",        ALLOWED_BOOL);
+  props->addProp("DisplayedColor", "",             "General",        ALLOWED_COLOR);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

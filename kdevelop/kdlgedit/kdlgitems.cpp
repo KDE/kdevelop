@@ -39,13 +39,13 @@ KDlgItems::KDlgItems(CKDevelop *CKPar, QWidget *parent, const char *name ) : QWi
   treelist->header()->hide();
   connect( treelist, SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &, int)),
                        SLOT(rightButtonPressed(QListViewItem *, const QPoint &, int)));
+  connect ( treelist, SIGNAL(selectionChanged ()), SLOT(itemSelected()));
 
   KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
 
   folder_pix = icon_loader->loadMiniIcon("folder.xpm");
   entry_pix = icon_loader->loadMiniIcon("mini-default.xpm");
 
-  connect ( treelist, SIGNAL(selectionChanged ()), SLOT(itemSelected()));
 }
 
 KDlgItems::~KDlgItems()
@@ -53,15 +53,19 @@ KDlgItems::~KDlgItems()
   delete treelist;
 }
 
-void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int)
+void KDlgItems::rightButtonPressed ( QListViewItem *it, const QPoint &p, int d)
 {
   #define mkQPixTb(fn) QPixmap(KApplication::kde_toolbardir() + QString("/") +fn)
   #define mkQPixDd(fn) QPixmap(KApplication::kde_datadir() + QString("/kdevelop/toolbar/") + fn)
 
   KDlgEditWidget *edwid = pCKDevel->kdlg_get_edit_widget();
+  if (!edwid)
+    return;
+
   if (((MyTreeListItem*)it)->getItem())
     {
-      edwid->selectWidget( ((MyTreeListItem*)it)->getItem() );
+      if ( ((MyTreeListItem*)it)->getItem() != edwid->selectedWidget() )
+        edwid->selectWidget( ((MyTreeListItem*)it)->getItem() );
 //      treelist->setSelected(it,true);
     }
   else
@@ -145,8 +149,10 @@ void KDlgItems::addWidgetChilds(KDlgItem_Widget *wd, MyTreeListItem *itm)
   if (!itm)
     {
       s.sprintf("%s [%s]", (const char*)i18n("Main Widget"), (const char*)wd->getProps()->getProp("Name")->value);
-      treelist->setUpdatesEnabled( FALSE );
+      if (treelist->firstChild())
+        delete treelist->firstChild();
       treelist->clear();
+      treelist->setUpdatesEnabled( FALSE );
       item=new MyTreeListItem(treelist, wd, QString(s),&folder_pix);
       item->setOpen(true);
     }

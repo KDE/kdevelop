@@ -258,14 +258,14 @@ void KDlgPropertyBase::setProp_Allowed(QString n, int allowed)
 void KDlgPropertyBase::fillWithStandardEntrys()
 {
   addProp("Name",               "NoName",       "General",        ALLOWED_STRING);
-  addProp("IsHidden",           "FALSE",        "General",        ALLOWED_BOOL);
-  addProp("IsEnabled",          "TRUE",         "General",        ALLOWED_BOOL);
+  addProp("IsHidden",           "",             "General",        ALLOWED_BOOL);
+  addProp("IsEnabled",          "",             "General",        ALLOWED_BOOL);
 
   addProp("VarName",            "",             "C++ Code",       ALLOWED_VARNAME);
   addProp("Connections",        "",             "C++ Code",       ALLOWED_CONNECTIONS);
-  addProp("ResizeToParent",     "FALSE",        "C++ Code",       ALLOWED_BOOL);
-  addProp("AcceptsDrops",       "FALSE",        "C++ Code",       ALLOWED_BOOL);
-  addProp("HasFocus",           "TRUE",         "C++ Code",       ALLOWED_BOOL);
+  addProp("ResizeToParent",     "",             "C++ Code",       ALLOWED_BOOL);
+  addProp("AcceptsDrops",       "",             "C++ Code",       ALLOWED_BOOL);
+  addProp("HasFocus",           "",             "C++ Code",       ALLOWED_BOOL);
   addProp("FocusProxy",         "",             "C++ Code",       ALLOWED_STRING);
 
   addProp("X",                  "10",           "Geometry",       ALLOWED_INT);
@@ -276,7 +276,7 @@ void KDlgPropertyBase::fillWithStandardEntrys()
   addProp("MinHeight",          "0",            "Geometry",       ALLOWED_INT);
   addProp("MaxWidth",           "",             "Geometry",       ALLOWED_INT);
   addProp("MaxHeight",          "",             "Geometry",       ALLOWED_INT);
-  addProp("IsFixedSize",        "FALSE",        "Geometry",       ALLOWED_BOOL);
+  addProp("IsFixedSize",        "",             "Geometry",       ALLOWED_BOOL);
   addProp("SizeIncX",           "",             "Geometry",       ALLOWED_INT);
   addProp("SizeIncY",           "",             "Geometry",       ALLOWED_INT);
 
@@ -450,7 +450,7 @@ int KDlgItemsIsValueTrue(QString val)
 {
   QString v(val.upper());
 
-  if (v=="FALSE" || v=="0" || v=="NO" || v=="NULL")
+  if (v=="FALSE" || v=="0" || v=="NO")
     return 0;
   if (v=="TRUE" || v=="1" || v=="YES")
     return 1;

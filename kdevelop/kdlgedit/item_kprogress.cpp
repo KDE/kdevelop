@@ -68,6 +68,14 @@ void ITEMCLASS_NAME::addMyPropEntrys()
   if (!props)
     return;
 
+  props->addProp("Value",        "0",          "Appearance",        ALLOWED_INT );
+  props->addProp("minValue",     "0",          "Appearance",        ALLOWED_INT );
+  props->addProp("maxValue",     "100",        "Appearance",        ALLOWED_INT );
+  props->addProp("BarStyle",     "Blocked",    "Appearance",        ALLOWED_COMBOLIST,  "Solid\nBlocked"  );
+  props->addProp("Orientation",  "Horizontal", "Appearance",        ALLOWED_ORIENTATION );
+  props->addProp("BarColor",     "",           "Appearance",        ALLOWED_COLOR );
+  props->addProp("BarPixmap",    "",           "Appearance",        ALLOWED_FILE );
+  props->addProp("isTextEnable", "",           "Appearance",        ALLOWED_BOOL );
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

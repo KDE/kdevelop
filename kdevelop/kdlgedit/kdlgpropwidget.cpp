@@ -110,35 +110,34 @@ void fillHelps()
   setPropHelp(nr++, "QLineEdit",       "MaxLength",       i18n("<i>Class : QLineEdit</i>\n\nSets the maximum length of the text in the editor.") );
   setPropHelp(nr++, "QLineEdit",       "CursorPositon",   i18n("<i>Class : QLineEdit</i>\n\nSet the cursor position for this line edit.") );
   setPropHelp(nr++, "QLineEdit",       "isTextSelected",  i18n("<i>Class : QLineEdit</i>\n\nWhen enabled the text is initially selected.") );
-  setPropHelp(nr++, "QGroupBox",       "Title",  i18n("<i>Class : QGroupBox</i>\n\nSets the groupbox title that is displayed in the box frame
-.") );
-  setPropHelp(nr++, "QProgressBar",       "TotalSteps",  i18n("<i>Class : QProgressBar</i>\n\nSets the total steps of the progressbar. During the iteration of your action to display the progress, you have to call setProgress(int) to advance the progress step displayed to (int)
-") );
-  setPropHelp(nr++, "",       "setFixedVisibleLines",  i18n("<i>Class QMultiLineEdit,QListBox: </i>\n\nSets a fixed height for the widget so that the given number of textlines are displayed using the current font.") );
-  setPropHelp(nr++, "QMultiLineEdit",       "Text",  i18n("<i>Class QMultiLineEdit: </i>\n\nSets the text of the widget.") );
-  setPropHelp(nr++, "",       "isAutoUpdate",  i18n("<i>Class QMultiLineEdit, QListBox</i>\n\nUsed to avoid flicker during large changes; the view is not updated if disabled.") );
-  setPropHelp(nr++, "QMultiLineEdit",       "isReadOnly",  i18n("<i>Class QMultiLineEdit: </i>\n\nSets the widget text to read only; disables text input.") );
-  setPropHelp(nr++, "QMultiLineEdit",       "isOverWriteMode",  i18n("<i>Class QMultiLineEdit: </i>\n\nSets overwrite enabled or disabled.") );
-  setPropHelp(nr++, "QMultiLineEdit",       "isTextSelected",  i18n("<i>Class QMultiLineEdit: </i>\n\nMarks the whole text selected
-.") );
-   setPropHelp(nr++, "QScrollBar",       "MaxValue",  i18n("<i>Class QScrollBar: </i>\n\nSets the maximum slider value; used in constructor") );
-   setPropHelp(nr++, "QScrollBar",       "MinValue",  i18n("<i>Class QScrollBar: </i>\n\nSets the minimum slider value; used in constructor") );
-   setPropHelp(nr++, "QScrollBar",       "Orientation",  i18n("<i>Class QScrollBar: </i>\n\nSets the orientation of the scrollbar to horizontal or vertical") );
-   setPropHelp(nr++, "QScrollBar",       "Value",  i18n("<i>Class QScrollBar: </i>\n\nSets the initial value of the scrollbar in the constructor") );
-   setPropHelp(nr++, "QScrollBar",       "isTracking",  i18n("<i>Class QScrollBar: </i>\n\nIf enabled, the scrollbar emits valueChanged() whenever the bar is dragged; otherwise only on mouse release.") );
+  setPropHelp(nr++, "QGroupBox",       "Title",           i18n("<i>Class : QGroupBox</i>\n\nSets the groupbox title that is displayed in the box frame.") );
+  setPropHelp(nr++, "QProgressBar",    "TotalSteps",      i18n("<i>Class : QProgressBar</i>\n\nSets the total steps of the progressbar. During the iteration of your action to display the progress, you have to call setProgress(int) to advance the progress step displayed to (int)") );
+  setPropHelp(nr++, "QMultiLineEdit",  "setFixedVisibleLines",  i18n("<i>Class : QMultiLineEdit</i>\n\nSets a fixed height for the widget so that the given number of textlines are displayed using the current font.") );
+  setPropHelp(nr++, "QMultiLineEdit",  "Text",            i18n("<i>Class : QMultiLineEdit</i>\n\nSets the text of the widget.") );
+  setPropHelp(nr++, "QMultiLineEdit",  "isAutoUpdate",    i18n("<i>Class : QMultiLineEdit</i>\n\nUsed to avoid flicker during large changes; the view is not updated if disabled.") );
+  setPropHelp(nr++, "QMultiLineEdit",  "isReadOnly",      i18n("<i>Class : QMultiLineEdit</i>\n\nSets the widget text to read only; disables text input.") );
+  setPropHelp(nr++, "QMultiLineEdit",  "isOverWriteMode", i18n("<i>Class : QMultiLineEdit</i>\n\nSets overwrite enabled or disabled.") );
+  setPropHelp(nr++, "QMultiLineEdit",  "isTextSelected",  i18n("<i>Class : QMultiLineEdit</i>\n\nMarks the whole text selected.") );
+   setPropHelp(nr++, "QScrollBar",     "MaxValue",        i18n("<i>Class : QScrollBar</i>\n\nSets the maximum slider value; used in constructor") );
+   setPropHelp(nr++, "QScrollBar",     "MinValue",        i18n("<i>Class : QScrollBar</i>\n\nSets the minimum slider value; used in constructor") );
+   setPropHelp(nr++, "QScrollBar",     "Orientation",     i18n("<i>Class : QScrollBar</i>\n\nSets the orientation of the scrollbar to horizontal or vertical") );
+   setPropHelp(nr++, "QScrollBar",     "Value",           i18n("<i>Class : QScrollBar</i>\n\nSets the initial value of the scrollbar in the constructor") );
+   setPropHelp(nr++, "QScrollBar",     "isTracking",      i18n("<i>Class : QScrollBar</i>\n\nIf enabled, the scrollbar emits valueChanged() whenever the bar is dragged; otherwise only on mouse release.") );
 
-    setPropHelp(nr++, "QSlider",       "MaxValue",  i18n("<i>Class QSlider: </i>\n\nsets the maximum slider value; used in constructor") );
-   setPropHelp(nr++, "QSlider",       "MinValue",  i18n("<i>Class QSlider: </i>\n\nsets the minimum slider value; used in constructor") );
-   setPropHelp(nr++, "QSlider",       "Orientation",  i18n("<i>Class QSlider: </i>\n\nsets the orientation of the slider to horizontal or vertical") );
-   setPropHelp(nr++, "QSlider",       "Value",  i18n("<i>Class QSlider: </i>\n\nuses QRangeControl::setValue() to set the value") );
-   setPropHelp(nr++, "QSlider",       "isTracking",  i18n("<i>Class QSlider: </i>\n\nif enabled, the slider emits valueChanged() whenever the bar is dragged; otherwise only on mouse release.") );
-   setPropHelp(nr++, "QListBox",       "isAutoScroll",  i18n("<i>Class QListBox: </i>\n\nIf auto-scrolling is enabled, the list box will scroll its contents when the user drags the mouse outside (below or above) the list box.") );
-   setPropHelp(nr++, "QListBox",       "isAutoBottomScrollBar",  i18n("<i>Class QListBox: </i>\n\nIf it is enabled, then the list box will get\na bottom scroll bar if the maximum list box item\nwidth exceeds the list box width.") );
-   setPropHelp(nr++, "QListBox",       "isAutoScrollBar",  i18n("<i>Class QListBox: </i>\n\nEnables an automatic (vertical) scroll bar.") );
-   setPropHelp(nr++, "QListBox",       "isBottomScrollBar",  i18n("<i>Class QListBox: </i>\n\nEnables a bottom scroll bar.") );
-   setPropHelp(nr++, "QListBox",       "isDragSelect",  i18n("<i>Class QListBox: </i>\n\nIf drag-selection is enabled, the list box will highlight\nnew items when the user drags the mouse inside the list box. ") );
-   setPropHelp(nr++, "QListBox",       "isSmoothScrolling",  i18n("<i>Class QListBox: </i>\n\nEnables smooth list box scrolling.") );
-   
+   setPropHelp(nr++, "QSlider",        "MaxValue",        i18n("<i>Class : QSlider</i>\n\nsets the maximum slider value; used in constructor") );
+   setPropHelp(nr++, "QSlider",        "MinValue",        i18n("<i>Class : QSlider</i>\n\nsets the minimum slider value; used in constructor") );
+   setPropHelp(nr++, "QSlider",        "Orientation",     i18n("<i>Class : QSlider</i>\n\nsets the orientation of the slider to horizontal or vertical") );
+   setPropHelp(nr++, "QSlider",        "Value",           i18n("<i>Class : QSlider</i>\n\nuses QRangeControl::setValue() to set the value") );
+   setPropHelp(nr++, "QSlider",        "isTracking",      i18n("<i>Class : QSlider</i>\n\nif enabled, the slider emits valueChanged() whenever the bar is dragged; otherwise only on mouse release.") );
+   setPropHelp(nr++, "QListBox",       "isAutoScroll",    i18n("<i>Class : QListBox</i>\n\nIf auto-scrolling is enabled, the list box will scroll its contents when the user drags the mouse outside (below or above) the list box.") );
+   setPropHelp(nr++, "QListBox",       "isAutoBottomScrollBar",  i18n("<i>Class : QListBox</i>\n\nIf it is enabled, then the list box will get\na bottom scroll bar if the maximum list box item\nwidth exceeds the list box width.") );
+   setPropHelp(nr++, "QListBox",       "isAutoScrollBar", i18n("<i>Class : QListBox</i>\n\nEnables an automatic (vertical) scroll bar.") );
+   setPropHelp(nr++, "QListBox",       "isBottomScrollBar", i18n("<i>Class : QListBox</i>\n\nEnables a bottom scroll bar.") );
+   setPropHelp(nr++, "QListBox",       "isDragSelect",    i18n("<i>Class : QListBox</i>\n\nIf drag-selection is enabled, the list box will highlight\nnew items when the user drags the mouse inside the list box. ") );
+   setPropHelp(nr++, "QListBox",       "isSmoothScrolling", i18n("<i>Class : QListBox</i>\n\nEnables smooth list box scrolling.") );
+   setPropHelp(nr++, "QListBox",       "setFixedVisibleLines",  i18n("<i>Class : QListBox</i>\n\nSets a fixed height for the widget so that the given number of textlines are displayed using the current font.") );
+   setPropHelp(nr++, "QListBox",       "isAutoUpdate",    i18n("<i>Class : QListbox</i>\n\nUsed to avoid flicker during large changes; the view is not updated if disabled.") );
+
     
    
   setPropHelp(nr, QString(),QString(),QString());
@@ -165,6 +164,53 @@ AdvListView::AdvListView( CKDevelop* parCKD, QWidget * parent , const char * nam
   int i;
   for (i=0; i<MAX_MAIN_ENTRYS; i++)
     openStats[i] = "";
+
+  KConfig *config = kapp->getConfig();
+  config->setGroup("KDlgEdit");
+  QString stats = config->readEntry("PropOpenStats");
+
+  if (stats.length()>0)
+    {
+      QString stat;
+      int cnt = 0;
+      while ( !(stat = getLineOutOfString(stats, cnt, ",")).isNull() )
+        {
+          openStats[cnt] = stat;
+          cnt++;
+        }
+
+
+    }
+
+}
+
+AdvListView::~AdvListView()
+{
+  saveOpenStats();
+
+
+  QString stats = "";
+
+  int n;
+  for (n=0; n<MAX_MAIN_ENTRYS; n++)
+    {
+      if (!openStats[n].isEmpty())
+        stats = stats + openStats[n] + ",";
+    }
+
+  stats = stats.left(stats.length()-1);
+
+  KConfig *config = kapp->getConfig();
+  config->setGroup("KDlgEdit");
+  config->writeEntry("PropOpenStats",stats);
+
+
+  AdvListViewItem* i = (AdvListViewItem*)firstChild();
+
+  while (i) {
+    delete i;
+    i = (AdvListViewItem*)i->nextSibling();
+  }
 }
 
 void AdvListView::viewportMousePressEvent ( QMouseEvent *e )
@@ -695,6 +741,7 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
   AdvListViewItem *grpLvis[32];
   int grpsCnt = 0;
   int numGrp;
+  AdvLvi_Base *adv = 0;
 
   KIconLoader *icon_loader = KApplication::getKApplication()->getIconLoader();
 
@@ -727,49 +774,70 @@ void KDlgPropWidget::refillList(KDlgItem_Base* source)
             continue;
         }
 
-      AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,prop->value);
+      adv = 0;
+      QString val = prop->value;
       switch (prop->allowed)
         {
           case ALLOWED_STRING:
-            lvi->setColumnWidget(1, new AdvLvi_String( lv, pCKDevel, prop ));
+            adv = new AdvLvi_String( lv, pCKDevel, prop );
             break;
           case ALLOWED_BOOL:
-            lvi->setColumnWidget(1, new AdvLvi_Bool( lv, pCKDevel, prop ));
+            adv = new AdvLvi_Bool( lv, pCKDevel, prop );
+            val = val.lower();
             break;
-	case ALLOWED_ORIENTATION:
-	  lvi->setColumnWidget(1, new AdvLvi_Orientation( lv, pCKDevel, prop ));
-	  break;
+          case ALLOWED_ORIENTATION:
+            adv = new AdvLvi_Orientation( lv, pCKDevel, prop );
+            break;
           case ALLOWED_INT:
-            lvi->setColumnWidget(1, new AdvLvi_Int( lv, pCKDevel, prop ));
+            adv = new AdvLvi_Int( lv, pCKDevel, prop );
             break;
           case ALLOWED_FILE:
-            lvi->setColumnWidget(1, new AdvLvi_Filename( lv, pCKDevel, prop ));
+            adv = new AdvLvi_Filename( lv, pCKDevel, prop );
             break;
           case ALLOWED_COLOR:
-            lvi->setColumnWidget(1, new AdvLvi_ColorEdit( lv, pCKDevel, prop ));
+            adv = new AdvLvi_ColorEdit( lv, pCKDevel, prop );
             break;
           case ALLOWED_FONT:
-            lvi->setColumnWidget(1, new AdvLvi_Font( lv, pCKDevel, prop ));
+            adv = new AdvLvi_Font( lv, pCKDevel, prop );
             break;
           case ALLOWED_CONNECTIONS:
-    //        lvi->setColumnWidget(1, new AdvLvi_Connections( lv, pCKDevel, prop ));
+    //        adv = new AdvLvi_Connections( lv, pCKDevel, prop );
             break;
           case ALLOWED_CURSOR:
-            lvi->setColumnWidget(1, new AdvLvi_Cursor( lv, pCKDevel, prop ));
+            adv = new AdvLvi_Cursor( lv, pCKDevel, prop );
             break;
-//          case ALLOWED_BGMODE:
-  //          lvi->setColumnWidget(1, new AdvLvi_BgMode( lv, pCKDevel, prop ));
-    //        break;
           case ALLOWED_VARNAME:
-            lvi->setColumnWidget(1, new AdvLvi_Varname( lv, pCKDevel, prop ));
+            adv = new AdvLvi_Varname( lv, pCKDevel, prop );
             break;
           case ALLOWED_COMBOLIST:
-            lvi->setColumnWidget(1, new AdvLvi_ComboList( lv, pCKDevel, prop ));
+            adv = new AdvLvi_ComboList( lv, pCKDevel, prop );
             break;
           case ALLOWED_MULTISTRING:
-            lvi->setColumnWidget(1, new AdvLvi_MultiString( lv, pCKDevel, prop ));
+            adv = new AdvLvi_MultiString( lv, pCKDevel, prop );
+            val = "[QStrings...]";
             break;
-       }
+        }
+
+/*        QString val = prop->value;
+
+        if (adv)
+          {
+            val = adv->getText();
+            if (val.isNull())
+              val = "";
+          }
+
+
+        if (prop->allowed == ALLOWED_MULTISTRING)
+          val = "[QStrings...]";
+
+        AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,val);
+        if (adv)
+          lvi->setColumnWidget(1, adv);*/
+
+        AdvListViewItem *lvi = new AdvListViewItem(grpLvis[numGrp],prop->name,val);
+        if (adv)
+          lvi->setColumnWidget(1, adv);
 
     }
 
@@ -1003,14 +1071,25 @@ AdvLvi_Bool::AdvLvi_Bool(QWidget *parent, CKDevelop *parCKD, KDlgPropertyEntry *
   : AdvLvi_Base( parent, parCKD, dpe, name )
 {
   setGeometry(0,0,0,0);
-//  cbBool = new QComboBox( FALSE, this );
-//  cbBool->insertItem(i18n("TRUE"));
-//  cbBool->insertItem(i18n("FALSE"));
-//  cbBool->setCurrentItem(isValueTrue(dpe->value) ? 0 : 1);
-  cbBool = new QCheckBox(isValueTrue(dpe->value) ? QString(i18n("true")) : QString(i18n("false")), this);
-  cbBool->setChecked(isValueTrue(dpe->value));
-  cbBool->setBackgroundMode( PaletteLight );
-  connect(cbBool, SIGNAL(clicked()), SLOT(btnPressed()));
+  cbBool = new QComboBox( this );
+  cbBool->insertItem(i18n("(not defined)"));
+  cbBool->insertItem("true");
+  cbBool->insertItem("false");
+
+  cbBool->setCurrentItem(0);
+
+  if (!dpe->value.isEmpty())
+    {
+      if (KDlgItemsIsValueTrue(dpe->value)==0)
+          cbBool->setCurrentItem(2);
+      else if (KDlgItemsIsValueTrue(dpe->value)==1)
+          cbBool->setCurrentItem(1);
+    }
+//  cbBool = new QCheckBox(isValueTrue(dpe->value) ? QString(i18n("true")) : QString(i18n("false")), this);
+//  cbBool->setChecked(isValueTrue(dpe->value));
+//  cbBool->setBackgroundMode( PaletteLight );
+//  connect(cbBool, SIGNAL(clicked()), SLOT(btnPressed()));
+  connect(cbBool, SIGNAL(activated(const char*)), SLOT(activated(const char*)));
 }
 
 void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
@@ -1018,22 +1097,27 @@ void AdvLvi_Bool::resizeEvent ( QResizeEvent *e )
   AdvLvi_Base::resizeEvent( e );
 
   if (cbBool)
-    cbBool->setGeometry(5,0,width()-5,height()+1);
+    cbBool->setGeometry(0,0,width(),height()+1);
 }
 
 QString AdvLvi_Bool::getText()
 {
   if (cbBool)
-    return cbBool->text();
+    {
+      if (cbBool->currentItem()>0)
+        return cbBool->currentText();
+      else return QString("");
+    }
   else
     return QString();
 }
 
-void AdvLvi_Bool::btnPressed()
-//void AdvLvi_Bool::activated( const char* s )
+//void AdvLvi_Bool::btnPressed()
+void AdvLvi_Bool::activated( const char* s )
 {
-  cbBool->setText(cbBool->isChecked() ? "true" : "false");
-  propEntry->value = cbBool->text();
+  propEntry->value = getText();
+//  cbBool->setText(cbBool->isChecked() ? "true" : "false");
+//  propEntry->value = cbBool->text();
   refreshItem();
 }
 

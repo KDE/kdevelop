@@ -132,12 +132,11 @@ class AdvLvi_Bool : public AdvLvi_Base
   protected:
     virtual void resizeEvent ( QResizeEvent * );
 
-//    QComboBox *cbBool;
-    QCheckBox *cbBool;
-
+    QComboBox *cbBool;
+//    QCheckBox *cbBool;
   public slots:
-    void btnPressed();
-//  void activated( const char* );
+//    void btnPressed();
+  void activated( const char* );
 };
 class AdvLvi_Orientation : public AdvLvi_Base
 {

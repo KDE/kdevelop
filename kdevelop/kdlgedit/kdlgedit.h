@@ -65,7 +65,9 @@ void slotFileNew();
   void slotViewRefresh();
   /** pops up a dialog allowing the user to change the grid sizes */
   void slotViewGrid();
-  
+  /** uses kdlgloader to provide a wysiwyg preview. */
+  void slotViewPreview();
+
   /** generates the sources for the current edited widget */
   void slotBuildGenerate();
   void generateWidget(KDlgItem_Widget *wid, QTextStream *stream,QString parent);

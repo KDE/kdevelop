@@ -353,6 +353,7 @@ void CKDevelop::switchToKDevelop(){
 void CKDevelop::switchToKDlgEdit(){
 //   KConfig *config = kapp->getConfig();
 
+  config->setGroup("KDlgEdit");
   if (config->readEntry("KDlgEdit_ShowReadme").lower() != "false")
     {
       KDlgReadmeDlg *readmedlg = new KDlgReadmeDlg(this);

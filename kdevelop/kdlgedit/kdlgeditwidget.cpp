@@ -190,8 +190,8 @@ void KDlgEditWidget::slot_deleteSelected()
     return;
 
   KDlgItem_Widget *dummy = (KDlgItem_Widget*)selected_widget;
-  selected_widget = 0;
   deselectWidget();
+  selected_widget = 0;
 
   if (dummy->parentWidgetItem)
     {

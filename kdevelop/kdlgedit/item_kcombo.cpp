@@ -68,7 +68,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoResize",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "",                  "General",        ALLOWED_BOOL);
   props->addProp("Text",           "",             "General",        ALLOWED_STRING);
   props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
 }

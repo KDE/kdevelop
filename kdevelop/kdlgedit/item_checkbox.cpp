@@ -69,9 +69,9 @@ void ITEMCLASS_NAME::addMyPropEntrys()
     return;
 
   props->addProp("Text",           "CheckBox",       "General",        ALLOWED_STRING);
-  props->addProp("isChecked",      "false",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoResize",   "false",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoRepeat",   "false",             "General",        ALLOWED_BOOL);
+  props->addProp("isChecked",      "",               "General",        ALLOWED_BOOL);
+  props->addProp("isAutoResize",   "",               "General",        ALLOWED_BOOL);
+  props->addProp("isAutoRepeat",   "",               "General",        ALLOWED_BOOL);
 
   props->addProp("Pixmap",         "",             "Appearance",     ALLOWED_FILE);
 }

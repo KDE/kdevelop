@@ -66,8 +66,16 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoResize",   "false",             "General",        ALLOWED_BOOL);
-  props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
+  props->addProp("isAutoResize",   "",                  "General",        ALLOWED_BOOL);
+  props->addProp("Entries",        "",                  "General",        ALLOWED_MULTISTRING);
+  props->addProp("CurrentItem",    "",                  "General",        ALLOWED_INT);
+  props->addProp("SizeLimit",      "",                  "General",        ALLOWED_INT);
+  props->addProp("MaxCount",       "",                  "General",        ALLOWED_INT);
+  props->addProp("InsertionPolicy","AtTop",             "General",        ALLOWED_COMBOLIST,
+                            "NoInsertion\nAtTop\nAtCurrent\nAtBottom\nAfterCurrent\nBeforeCurrent");
+  props->addProp("isAutoCompletion",  "",               "General",        ALLOWED_BOOL);
+  props->addProp("EditText",       "",                  "General",        ALLOWED_STRING);
+
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

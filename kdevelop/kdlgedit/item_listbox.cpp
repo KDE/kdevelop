@@ -67,13 +67,13 @@ void ITEMCLASS_NAME::addMyPropEntrys()
 {
   if (!props)
     return;
-  props->addProp("isAutoUpdate",   "true",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoScroll",   "true",             "General",        ALLOWED_BOOL);
-  props->addProp("isAutoScrollBar",   "true",          "General",        ALLOWED_BOOL);
-  props->addProp("isAutoBottomScrollBar",   "true",          "General",        ALLOWED_BOOL);
-  props->addProp("isBottomScrollBar",   "false",          "General",        ALLOWED_BOOL);
-  props->addProp("isDragSelect",   "true",             "General",        ALLOWED_BOOL);
-  props->addProp("isSmoothScrolling",   "true",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoUpdate",   "",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoScroll",   "",             "General",        ALLOWED_BOOL);
+  props->addProp("isAutoScrollBar",   "",          "General",        ALLOWED_BOOL);
+  props->addProp("isAutoBottomScrollBar",   "",          "General",        ALLOWED_BOOL);
+  props->addProp("isBottomScrollBar",   "",          "General",        ALLOWED_BOOL);
+  props->addProp("isDragSelect",   "",             "General",        ALLOWED_BOOL);
+  props->addProp("isSmoothScrolling",   "",             "General",        ALLOWED_BOOL);
   props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
 
   props->addProp("setFixedVisibleLines",   "",             "Geometry",        ALLOWED_INT);

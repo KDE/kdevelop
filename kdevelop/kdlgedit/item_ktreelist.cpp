@@ -70,14 +70,13 @@ void ITEMCLASS_NAME::addMyPropEntrys()
     return;
 
   props->addProp("Entries",            "",              "General",        ALLOWED_MULTISTRING);
-  props->addProp("isAutoUpdate",       "true",          "General",        ALLOWED_BOOL);
+  props->addProp("isAutoUpdate",       "",              "General",        ALLOWED_BOOL);
 
-  props->addProp("isBottomScrollbar",  "true",          "Appearance",     ALLOWED_BOOL);
-  props->addProp("isScrollBar",        "true",          "Appearance",     ALLOWED_BOOL);
-  props->addProp("isTreeDrawing",      "true",          "Appearance",     ALLOWED_BOOL);
-  props->addProp("isShowItemText",     "true",          "Appearance",     ALLOWED_BOOL);
-  props->addProp("isSmoothScrolling",  "false",         "Appearance",     ALLOWED_BOOL);
-  props->addProp("isTreeDrawing",      "true",          "Appearance",     ALLOWED_BOOL);
+  props->addProp("isBottomScrollbar",  "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isScrollBar",        "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isTreeDrawing",      "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isShowItemText",     "",              "Appearance",     ALLOWED_BOOL);
+  props->addProp("isSmoothScrolling",  "",              "Appearance",     ALLOWED_BOOL);
   props->addProp("TreeListBgColor",    "",              "Appearance",     ALLOWED_COLOR);
   props->addProp("TreeListPalette",    "",              "Appearance",     ALLOWED_COLOR);
 }

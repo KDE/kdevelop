@@ -69,6 +69,7 @@ void ITEMCLASS_NAME::addMyPropEntrys()
     return;
 
   props->addProp("FontSize",   "",             "Appearance",        ALLOWED_INT);
+  props->addProp("SetDate",    "",             "General",           ALLOWED_STRING);
 }
 
 void ITEMCLASS_NAME::repaintItem(ITEMCLASS_TYPE *it)

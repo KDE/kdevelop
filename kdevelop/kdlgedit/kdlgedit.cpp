@@ -34,6 +34,9 @@
 #define INC_WIDGET
 #include "items.h"
 #include <kconfig.h>
+#include "kdlgloader.h"
+#include <qdialog.h>
+#include <qmessagebox.h>
 
 KDlgEdit::KDlgEdit(QObject *parentz, const char *name) : QObject(parentz,name)
 {
@@ -1217,4 +1220,52 @@ void KDlgEdit::generateQWidget(KDlgItem_Widget *wid, QTextStream *stream,QString
 }
 
 
+class PreviewDlg : public QDialog
+{
+  public:
+    PreviewDlg::PreviewDlg(QWidget*parent=0,const char* name="Preview_Dialog")
+      : QDialog(parent,name, TRUE)
+     {
+        ldr = new KDlgLoader(this);
+        if (!ldr)
+          return;
+        if (!ldr->isLibLoaded())
+          {
+            QMessageBox::warning(this,i18n("Dialog editor (WYSIWYG Preview)"),
+                                 i18n("Error loading kdlgloader library (libkdlgloader.so).\n\n"
+                                 "Normally it is supposed to be installed together\n"
+                                 "with kdevelop (if you are running a release version).\n"
+                                 "If so and no library was installed please send a bug\n"
+                                 "report though the Help|Bug Report menu. However,\n"
+                                 "you can also get the library on the KDevelop website." ));
+            return;
+          }
+        ldr->openDialog("/tmp/~~previewdlg~~.kdevdlg");
+     }
 
+    ~PreviewDlg()
+      {
+        delete ldr;
+      }
+
+  protected:
+    KDlgLoader *ldr;
+};
+
+
+
+void KDlgEdit::slotViewPreview()
+{
+  if (!((CKDevelop*)parent())->kdlg_get_edit_widget())
+    return;
+
+  if (!((CKDevelop*)parent())->kdlg_get_edit_widget()->saveToFile("/tmp/~~previewdlg~~.kdevdlg"))
+    {
+      QMessageBox::warning(((CKDevelop*)parent())->kdlg_get_edit_widget(),i18n("Dialog editor (WYSIWYG Preview)"),
+                           i18n("Error saving temporary dialog file."));
+      return;
+    }
+
+  PreviewDlg dlg;
+  dlg.exec();
+}
