@@ -89,7 +89,7 @@ protected:
   void resetModifiedTime();
 
   /// Should the file be saved?
-  bool shouldBeSaved();
+  virtual bool shouldBeSaved();
  
   
 protected slots:
