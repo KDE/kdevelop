@@ -195,6 +195,8 @@ void GDBController::configure()
 
     int old_outputRadix  = config_outputRadix_;
     config_outputRadix_   = DomUtil::readIntEntry(dom, "/kdevdebugger/display/outputradix", 10);
+    varTree_->setRadix(config_outputRadix_);
+    
 
     if (( old_displayStatic             != config_displayStaticMembers_   ||
             old_asmDemangle             != config_asmDemangle_            ||
@@ -241,6 +243,12 @@ void GDBController::configure()
         {
             queueCmd(new GDBCommand(QCString().sprintf("set output-radix %d",
                                 config_outputRadix_), NOTRUNCMD, NOTINFOCMD));
+
+            //rgruber: after changing the output radix, the watch- and the
+            //local-variables need to be refreshed
+            varTree_->findWatch()->requestWatchVars();
+            queueCmd(new GDBCommand("info args", NOTRUNCMD, INFOCMD, ARGS));
+            queueCmd(new GDBCommand("info local", NOTRUNCMD, INFOCMD, LOCALS));
         }
         
         if (!config_configGdbScript_.isEmpty())
@@ -1774,7 +1782,10 @@ void GDBController::slotVarItemConstructed(VarItem *item)
 
     // jw - name and value come from "info local", for the type we
     // send a "whatis <varName>" here.
-    queueCmd(new GDBItemCommand(item, QCString("whatis ") + item->fullName().latin1(),
+    QString strName = item->fullName();
+    if ( strName.left(3) == "/x " || strName.left(3) == "/d ")
+      strName = strName.right(strName.length()-3);
+    queueCmd(new GDBItemCommand(item, QCString("whatis ") + strName.latin1(),
                                 false, WHATIS));
 }
 

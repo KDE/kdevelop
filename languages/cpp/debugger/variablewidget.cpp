@@ -15,6 +15,7 @@
 
 #include "variablewidget.h"
 #include "gdbparser.h"
+#include "gdbcommand.h"
 
 #include <kdebug.h>
 #include <kpopupmenu.h>
@@ -396,10 +397,24 @@ void VariableTree::slotToggleRadix(QListViewItem * item)
   VarItem *pNewItem = NULL;
 
   QString strName = pOldItem->text(VarNameCol);
-  if (strName.left(3) == "/x ")   //are we already in hex-view ???
-    strName = strName.right(strName.length()-3);  //stripe the hex-formater
-  else
-    strName = QString("/x ")+strName;  //add the hex-formater
+
+  QString strTmp = strName.left(3).lower();
+  if (iOutRadix == 10) {
+      if (strTmp == "/d ")   //is there a wrong format modifier...
+          strName = "/x "+strName.right(strName.length()-3);  //...replace the modifier
+      else if (strTmp == "/x ")
+          strName = strName.right(strName.length()-3);  //stripe the modifier
+      else
+          strName = QString("/x ")+strName;  //add the hex-formater
+  } else
+  if (iOutRadix == 16) {
+      if (strTmp == "/x ")   //is there a wrong format modifier...
+          strName = "/d "+strName.right(strName.length()-3);  //...replace the modifier
+      else if (strTmp == "/d ")   //is there a format modifier?
+          strName = strName.right(strName.length()-3);  //stripe the modifier
+      else
+          strName = QString("/d ")+strName;  //add the dec-formater
+  }
 
   pNewItem = new VarItem((TrimmableItem *) item->parent(), strName, typeUnknown);
   emit expandItem(pNewItem);
@@ -490,17 +505,21 @@ TrimmableItem *TrimmableItem::findMatch(const QString &match, DataType type) con
 			//format-modified local item with non-mofified ones. So with every
 			//run we need to newly modify the outcome of the debugger
 
+    int iOutRad = ((VariableTree*)listView())->iOutRadix; //local copy of the output radix
+
     // Check the siblings on this branch
     while (child) {
         QString strMatch = child->text(VarNameCol);
         bRenew=false;
-	if (strMatch.left(3) == "/x ") {  //is the current item format modified?
+	if (strMatch.left(3) == "/x " || strMatch.left(3) == "/d ") {  //is the current item format modified?
 	    strMatch = strMatch.right(strMatch.length()-3);
 	    bRenew=true;
 	}
 	if (strMatch == match) {
             if (TrimmableItem *item = dynamic_cast<TrimmableItem*> (child))
-                if (item->getDataType() == type) {
+                if ( item->getDataType() == type ||
+		     ( iOutRad==16 && item->getDataType() == typeValue ) ||
+		     ( iOutRad==10 && item->getDataType() == typePointer ) ) {
 		    if (bRenew && dynamic_cast<VarItem*>(item)) { //do we need to replace?
 			VarItem* pNewItem = new VarItem((TrimmableItem *) item->parent(),
 				 child->text(VarNameCol), typeUnknown);
@@ -658,15 +677,6 @@ void VarItem::setText(int column, const QString &data)
         QString oldValue(text(column));
         if (!oldValue.isEmpty())                   // Don't highlight new items
             highlight_ = (oldValue != QString(data));
-
-/*
-        QString strTyp = text(2);
-	if (strTyp == QString("int")) {
-	  int iVal=0;
-	  sscanf(strData.ascii(), "%d", &iVal);
-	  strData = QString("0x%1").arg(iVal, 0, 16);
-	}
-*/
     }
 
     QListViewItem::setText(column, strData);
@@ -683,6 +693,14 @@ void VarItem::updateValue(char *buf)
     if ((strncmp(buf, "There is no member named len.", 29) == 0) ||
         (strncmp(buf, "There is no member or method named len.", 39) == 0))
         return;
+
+    if (strncmp(buf, "Cannot access memory at address", 31) == 0 &&
+        dataType_ == typePointer &&  //only if it is a pointer...
+        ((VariableTree*)listView())->iOutRadix == 16) { //...and only do if outputradix is set to hex
+	dataType_ = typeValue;
+	((VariableTree*)listView())->expandItem(this);
+	return;
+    }
 
     if (*buf == '$') {
         if (char *end = strchr(buf, '='))
@@ -984,5 +1002,4 @@ void WatchRoot::requestWatchVars()
 
 
 #include "variablewidget.moc"
-
 

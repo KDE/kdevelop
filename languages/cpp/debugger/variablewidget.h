@@ -16,6 +16,8 @@
 #ifndef _VARIABLEWIDGET_H_
 #define _VARIABLEWIDGET_H_
 
+#include "gdbcontroller.h"
+
 #include <klistview.h>
 #include <kcombobox.h>
 #include <qwidget.h>
@@ -81,6 +83,7 @@ public:
 
     int activeFlag() const                { return activeFlag_; }
     void setActiveFlag()                  { activeFlag_++; }
+    void setRadix(int r)                  { iOutRadix=r; }
 
     QListViewItem *findRoot(QListViewItem *item) const;
     VarFrameRoot *findFrame(int frameNo, int threadNo) const;
@@ -110,7 +113,9 @@ signals:
     void toggleRadix(QListViewItem *item);
 public slots:
     void slotAddWatchVariable(const QString& watchVar);
-    void slotToggleRadix(QListViewItem * item);
+
+    //rgr
+    void slotToggleRadix(QListViewItem *item);
 
 private slots:
     void slotContextMenu(KListView *, QListViewItem *item);
@@ -121,6 +126,7 @@ private slots:
 private:
     int activeFlag_;
     int currentThread_;
+    int iOutRadix;
     //DbgController *controller;
 
     friend class VarFrameRoot;
