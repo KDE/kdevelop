@@ -37,10 +37,7 @@
  *   -
  *-----------------------------------------------------------------*/
 CClassStore::CClassStore() 
-  : classIterator( classes )
 {
-  classes.setAutoDelete( true );
-
   // Initialize the persistant class store.
   //  globalStore.setPath( "/tmp"  );
   globalStore.setFilename( "classes.db" );
@@ -79,7 +76,6 @@ CClassStore::~CClassStore()
  *-----------------------------------------------------------------*/
 void CClassStore::wipeout()
 {
-  classes.clear();
   globalContainer.clear();
 }
 
@@ -99,11 +95,11 @@ void CClassStore::removeWithReferences( const char *aFile )
   CParsedClass *aClass;
 
   // Remove all classes with reference to this file.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
+  for( globalContainer.classIterator.toFirst();
+       globalContainer.classIterator.current();
+       ++globalContainer.classIterator )
   {
-    aClass = classIterator.current();
+    aClass = globalContainer.classIterator.current();
 
     // Remove the class if any of the files are the supplied one.
     if( aClass->declaredInFile == aFile ||
@@ -128,15 +124,19 @@ void CClassStore::removeWithReferences( const char *aFile )
 void CClassStore::storeAll()
 {
   QString str;
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
+  CParsedClass *aClass;
+
+  for( globalContainer.classIterator.toFirst();
+       globalContainer.classIterator.current();
+       ++globalContainer.classIterator )
   {
-    classIterator.current()->asPersistantString( str );
+    aClass = globalContainer.classIterator.current();
+    aClass->asPersistantString( str );
+
     debug( "Storing:" );
     debug( "----------" );
     debug( str );
-    globalStore.storeClass( classIterator.current() );
+    globalStore.storeClass( aClass );
     debug( "----------" );
   }
 }
@@ -157,7 +157,10 @@ void CClassStore::addClass( CParsedClass *aClass )
   assert( !aClass->name.isEmpty() );
   assert( !hasClass( aClass->name ) );
 
-  classes.insert( aClass->name, aClass );
+  globalContainer.addClass( aClass );
+
+  if( globalStore.isOpen )
+    globalStore.storeClass( aClass );
 }
 
 /*---------------------------------------- CClassStore::removeClass()
@@ -176,7 +179,10 @@ void CClassStore::removeClass( const char *aName )
   assert( strlen( aName ) > 0 );
   assert( hasClass( aName ) );
 
-  classes.remove( aName );
+  globalContainer.removeClass( aName );
+
+  if( globalStore.isOpen )
+    globalStore.removeClass( aName );
 }
 
 /*------------------------------------------------- CClassStore::out()
@@ -193,15 +199,21 @@ void CClassStore::out()
   QList<CParsedMethod> *globalMethods;
   QList<CParsedAttribute> *globalAttributes;
   QList<CParsedStruct> *globalStructs;
+  QList<CParsedClass> *classes;
+  CParsedClass *aClass;
   CParsedMethod *aMethod;
   CParsedAttribute *aAttr;
   CParsedStruct *aStruct;
 
   // Output all classes.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
-    classIterator.current()->out();
+  classes = globalContainer.getSortedClassList();
+  for( aClass = classes->first();
+       aClass != NULL;
+       aClass = classes->next() )
+  {
+    aClass->out();
+  }
+  delete classes;
 
   // Global methods
   cout << "Global functions\n";
@@ -263,11 +275,11 @@ QList<CClassTreeNode> *CClassStore::asForest()
   QList<CClassTreeNode> *retVal = new QList<CClassTreeNode>;
 
   // Iterate over all parsed classes.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
+  for( globalContainer.classIterator.toFirst();
+       globalContainer.classIterator.current();
+       ++globalContainer.classIterator )
   {
-    aClass = classIterator.current();
+    aClass = globalContainer.classIterator.current();
 
     // Check if we have added the child.
     childNode = ctDict.find( aClass->name );
@@ -333,7 +345,7 @@ QList<CClassTreeNode> *CClassStore::asForest()
  *-----------------------------------------------------------------*/
 bool CClassStore::hasClass( const char *aName )
 {
-  return classes.find( aName ) != NULL || 
+  return globalContainer.hasClass( aName ) || 
     ( globalStore.isOpen && globalStore.hasClass( aName ) );
   //return classes.find( aName ) != NULL;
 }
@@ -358,7 +370,7 @@ CParsedClass *CClassStore::getClassByName( const char *aName )
   if( globalStore.isOpen && globalStore.hasClass( aName ) )
     aClass = globalStore.getClassByName( aName );
   else
-    aClass = classes.find( aName );
+    aClass = globalContainer.getClassByName( aName );
 
   return aClass;
 }
@@ -376,14 +388,16 @@ CParsedClass *CClassStore::getClassByName( const char *aName )
 QList<CParsedClass> *CClassStore::getClassesByParent( const char *aName )
 {
   QList<CParsedClass> *retVal = new QList<CParsedClass>();
+  CParsedClass *aClass;
 
   retVal->setAutoDelete( false );
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
+  for( globalContainer.classIterator.toFirst();
+       globalContainer.classIterator.current();
+       ++globalContainer.classIterator )
   {
-    if( classIterator.current()->hasParent( aName ) )
-      retVal->append( classIterator.current() );
+    aClass = globalContainer.classIterator.current();
+    if( aClass->hasParent( aName ) )
+      retVal->append( aClass );
   }
 
   return retVal;
@@ -409,11 +423,11 @@ QList<CParsedClass> *CClassStore::getClassClients( const char *aName )
   QList<CParsedClass> *retVal = new QList<CParsedClass>();
 
   retVal->setAutoDelete( false );
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
+  for( globalContainer.classIterator.toFirst();
+       globalContainer.classIterator.current();
+       ++globalContainer.classIterator )
   {
-    aClass = classIterator.current();
+    aClass = globalContainer.classIterator.current();
     if( aClass->name != aName )
     {
       exit = false;
@@ -485,8 +499,8 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
   return retVal;
 }
 
-/*------------------------------------ CClassStore::getSortedClasslist()
- * getSortedClasslist()
+/*------------------------------------ CClassStore::getSortedClassList()
+ * getSortedClassList()
  *   Get all classes in sorted order.
  *
  * Parameters:
@@ -494,32 +508,9 @@ QList<CParsedClass> *CClassStore::getClassSuppliers( const char *aName )
  * Returns:
  *   QList<CParsedClass> * The classes.
  *-----------------------------------------------------------------*/
-QList<CParsedClass> *CClassStore::getSortedClasslist()
+QList<CParsedClass> *CClassStore::getSortedClassList()
 {
-  QList<CParsedClass> *retVal = new QList<CParsedClass>();
-  QStrList srted;
-  char *str;
-
-  retVal->setAutoDelete( false );
-
-  // Ok... This sucks. But I'm lazy.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
-  {
-    // Only add non-subclasses.
-    if( !classIterator.current()->isSubClass() )
-      srted.inSort( classIterator.current()->name );
-  }
-
-  for( str = srted.first();
-       str != NULL;
-       str = srted.next() )
-  {
-    retVal->append( getClassByName( str ) );
-  }
-
-  return retVal;
+  return globalContainer.getSortedClassList();
 }
 
 /*---------------------------- CClassStore::getSortedClassNameList()
@@ -533,19 +524,7 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
  *-----------------------------------------------------------------*/
 QStrList *CClassStore::getSortedClassNameList()
 {
-  QStrList * retVal = new QStrList();
-  
-  // Iterate over all classes in the store.
-  for( classIterator.toFirst();
-       classIterator.current();
-       ++classIterator )
-  {
-    // Only add non-subclasses.
-    if( !classIterator.current()->isSubClass() )
-      retVal->inSort( classIterator.current()->name );
-  }
-
-  return retVal;
+  return globalContainer.getSortedClassNameList();
 }
 
 /*-------------------------- CClassStore::getVirtualMethodsForClass()

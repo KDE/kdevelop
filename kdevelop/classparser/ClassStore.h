@@ -18,9 +18,8 @@
 #ifndef _CLASSTORE_H_INCLUDED
 #define _CLASSTORE_H_INCLUDED
 
-#include "ParsedClass.h"
+#include "ParsedClassContainer.h"
 #include "PersistantClassStore.h"
-#include "ParsedStruct.h"
 #include "ClassTreeNode.h"
 
 /** This class has the ability to store and fetch parsed items. 
@@ -38,26 +37,12 @@ private: // Private attributes
   /** Store for global pre-parsed classes(like Qt and KDE). */
   CPersistantClassStore globalStore;
 
-  /** All parsed classes. */
-  QDict<CParsedClass> classes;
-
-  /** Maps a filename to a number of classnames. **/
-  QDict<QStrList> filenameMap;
-
 public: // Public attributes
 
-  /** Iterator for the classes */
-  QDictIterator<CParsedClass> classIterator;
-
   /** Container that holds all functions, variables and structures. */
-  CParsedContainer globalContainer;
+  CParsedClassContainer globalContainer;
 
 public: // Public queries
-
-  /** Return the store as a forest(collection of trees). 
-   * @return List of trees with the top parents as root-nodes.
-   */
-  QList<CClassTreeNode> *asForest();
 
   /** Tells if a class exists in the store. 
    * @param aName Classname to check if it exists.
@@ -69,6 +54,11 @@ public: // Public queries
    *  NULL if the class wasn't found.
    */
   CParsedClass *getClassByName( const char *aName );
+
+  /** Return the store as a forest(collection of trees). 
+   * @return List of trees with the top parents as root-nodes.
+   */
+  QList<CClassTreeNode> *asForest();
 
   /** Fetches all classes with the named parent. 
    * @return List of all classes with the named parent.
@@ -88,7 +78,7 @@ public: // Public queries
   /** Get all classes in sorted order. 
    * @return A list of all classes in alpabetical order. 
    */
-  QList<CParsedClass> *getSortedClasslist();
+  QList<CParsedClass> *getSortedClassList();
 
   /** Get all classnames in sorted order.
    * @return A list of all classnames in sorted order.
