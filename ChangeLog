@@ -2,6 +2,7 @@
     * bugfix: menu entries for code completion now shows keyboard accelerator
     * bugfix: argshint is showed when "automatic arguments hint" is activated
     * bugfix: argshint is closed when parenthesis are balanced
+    * bugfix: CppCodeCompletion::getMethodBody now works with functions too
 	
 2002-03-07  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: kthml view saving/loading to/from session works again (seems it was a KHTML API change)

@@ -939,9 +939,10 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 {
     kdDebug() << "CppCodeCompletion::getMethodBody()" << endl;
 
-    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+?)[ \t]*(::)?[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*(:[^{]*)?\\{" );
+    // TODO: add support for function pointer arguments
+    KDevRegExp regMethod( "[ \t]*([a-zA-Z0-9_]+[ \t]*::)?[ \t]*[~a-zA-Z0-9_][a-zA-Z0-9_]*[ \t]*\\(([^)]*)\\)[ \t]*(:[^{]*)?\\{" );
 
-    QRegExp qt_rx( "Q_[A-Z]+" );
+    //QRegExp qt_rx( "Q_[A-Z]+" );
     QRegExp strconst_rx( "\"[^\"]*\"" );
     QRegExp chrconst_rx( "'[^']*'" );
     QRegExp newline_rx( "\n" );
@@ -958,7 +959,7 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
 
             QString contents = text;
 
-            kdDebug() << ".... 2 " << endl;
+            //kdDebug() << ".... 2 " << endl;
 
             contents = contents
                        // .replace( qt_rx, "" )
@@ -972,27 +973,32 @@ QString CppCodeCompletion::getMethodBody( int iLine, int iCol, QString* classnam
             contents = remove_keywords( contents );
             contents = remove( contents, '[', ']' );
 
-            kdDebug() << ".... 3 " << endl;
+            //kdDebug() << ".... 3 " << endl;
 
             QValueList<KDevRegExpCap> methods = regMethod.findAll( contents );
             if( methods.count() != 0 ){
 
-                kdDebug() << ".... 4 " << endl;
+                //kdDebug() << ".... 4 " << endl;
 
                 KDevRegExpCap m = methods.last();
 
                 contents = contents.mid( m.start() );
                 regMethod.search( m.text() );
-                contents.prepend( regMethod.cap( 3 ).replace( QRegExp(","), ";" ) + ";\n" );
-                kdDebug() << "-----> text = " << m.text() << endl;
+                contents.prepend( regMethod.cap( 2 ).replace( QRegExp(","), ";" ) + ";\n" );
+                //kdDebug() << "-----> text = " << m.text() << endl;
                 if( classname ){
-                    *classname = regMethod.cap( 1 );
+                    QString s = regMethod.cap( 1 ).stripWhiteSpace();
+                    if( s.length() ){
+                        // remove "::"
+                        s = s.left( s.length() - 2 ).stripWhiteSpace();
+                    }
+                    *classname = s;
                 }
 
                 return contents;
             }
 
-            kdDebug() << ".... 5 " << endl;
+            //kdDebug() << ".... 5 " << endl;
 
         }
 
