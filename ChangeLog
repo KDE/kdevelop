@@ -1,3 +1,10 @@
+2003-11-20 F@lk Brettschneider <falkbr@kdevelop.org>
+   * latest sync with KMdi of kdelibs-cvsHead (fixes some crashes)
+   * enabled kmdiguiclient.h/cpp for KDE less version 3.2 too
+   (-> this introduces KDE-accels Ctrl+Shift+Alt+L/R/B/T for IDEAl-docks and Ctrl+Alt+CursorLeft/CursorRight for cycling IDEAl-toolviews)
+   * bugfix: proper names of View menu
+   * now save the docking state to another section of kdeveloprc (to let people (who tried KMdi alpha versions) escape a vicious cycle)
+
 2003-11-16 Mario Scalas <marioscalas@agilemovement.it>
     * Version control color feedback for the file view (currently implemented 
       by vcs/cvsservice plugin only).
