@@ -34,6 +34,8 @@ Currently it supports:
   - Phyton
   - PHP
   - Ruby
+  - Pascal
+  - ADA
   .
 
 For more info goto: http://www.kdevelop.org
