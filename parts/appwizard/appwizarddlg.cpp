@@ -457,8 +457,11 @@ void AppWizardDialog::destButtonClicked()
 {
     QString dir = KFileDialog::getExistingDirectory ( dest_edit->text(),this,
                                                       i18n("Project Location") );
-    if(!dir.isEmpty())
+    if(!dir.isEmpty()) {
+        if ( !dir.endsWith( "/" ) )
+            dir += "/";
         dest_edit->setText(dir);
+    }
 }
 
 
