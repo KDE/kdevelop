@@ -23,12 +23,11 @@
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 : QWidget(parent,name,WStyle_Customize | WStyle_NoBorder  ) { 	
   QPixmap pm;
-  pm.load(locate("appdata", "pics/startlogo.bmp"));
+  pm.load(locate("appdata", "pics/startlogo.png"));
   setBackgroundPixmap(pm);
-
   setGeometry(QApplication::desktop()->width()/2-218, QApplication::desktop()->height()/2-158, 437,317);
-
 }
+
 KStartupLogo::~KStartupLogo(){
 }
  

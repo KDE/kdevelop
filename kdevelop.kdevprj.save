@@ -736,7 +736,7 @@ install_location=
 dist=true
 install=false
 type=DATA
-[kdevelop/pics/misc/startlogo.bmp]
+[kdevelop/pics/misc/startlogo.png]
 install_location=
 dist=true
 install=false
@@ -790,7 +790,7 @@ Sources=*.cpp,*.c,*.cc,*.C,*.cxx,*.ec,*.ecpp,*.lxx,*.l++,*.ll,*.l,
 User Interface=*.kdevdlg,*.ui,*.rc,
 Headers=*.h,*.hh,*.hxx,*.hpp,*.H,
 [kdevelop/pics/misc/Makefile.am]
-files=kdevelop/pics/misc/about_logo.bmp,kdevelop/pics/misc/customApp.bmp,kdevelop/pics/misc/dlg_firstrun.bmp,kdevelop/pics/misc/gnomeApp.bmp,kdevelop/pics/misc/kAppWizard.bmp,kdevelop/pics/misc/kdemdi.bmp,kdevelop/pics/misc/miniApp.bmp,kdevelop/pics/misc/normalApp.bmp,kdevelop/pics/misc/normalOglApp.bmp,kdevelop/pics/misc/qextmdi.bmp,kdevelop/pics/misc/qtApp.bmp,kdevelop/pics/misc/qtmdi.bmp,kdevelop/pics/misc/startlogo.bmp,kdevelop/pics/misc/terminalApp.bmp,kdevelop/pics/misc/tipday.bmp,
+files=kdevelop/pics/misc/about_logo.bmp,kdevelop/pics/misc/customApp.bmp,kdevelop/pics/misc/dlg_firstrun.bmp,kdevelop/pics/misc/gnomeApp.bmp,kdevelop/pics/misc/kAppWizard.bmp,kdevelop/pics/misc/kdemdi.bmp,kdevelop/pics/misc/miniApp.bmp,kdevelop/pics/misc/normalApp.bmp,kdevelop/pics/misc/normalOglApp.bmp,kdevelop/pics/misc/qextmdi.bmp,kdevelop/pics/misc/qtApp.bmp,kdevelop/pics/misc/qtmdi.bmp,kdevelop/pics/misc/startlogo.png,kdevelop/pics/misc/terminalApp.bmp,kdevelop/pics/misc/tipday.bmp,
 type=normal
 sub_dirs=
 [kdevelop/pics/mini/kdlg_QRadioButton.png]
