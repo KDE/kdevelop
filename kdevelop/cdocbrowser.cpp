@@ -75,6 +75,7 @@ CDocBrowser::CDocBrowser(QWidget*parent,const char* name) : KHTMLView(parent,nam
 
 CDocBrowser::~CDocBrowser(){
    delete doc_pop;
+   doc_pop=0l;
 }
 
 
@@ -131,6 +132,7 @@ void CDocBrowser::showURL(QString url,bool reload){
       QString content;
 
       begin( url);
+      parse();
 
       while ( !dstream.eof() )
       {
@@ -140,7 +142,6 @@ void CDocBrowser::showURL(QString url,bool reload){
       }
 
       end();
-      parse();
       show();
       KFM::removeTempFile(str);
       file.close();
@@ -254,9 +255,19 @@ void CDocBrowser::slotDocColorsChanged( const QColor &bg, const QColor &text,
 }
 
 void CDocBrowser::slotPopupMenu( KHTMLView *view, const char *url, const QPoint & pnt){
+  QString text;
+  int pos;
   if(this->isTextSelected()){
-    QString text;
+
     getSelectedText(text);
+    text.replace(QRegExp("^\n"), "");
+    pos=text.find("\n");
+    if (pos>-1)
+     text=text.left(pos);
+  }
+
+  if (!text.isEmpty())
+  {
     doc_pop->setItemEnabled(ID_EDIT_COPY,true);
     doc_pop->setItemEnabled(ID_HELP_SEARCH_TEXT,true);
     doc_pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES,true);

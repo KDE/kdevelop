@@ -101,6 +101,15 @@ public:
    */
   void removeFileFromEditlist(const char *filename);
 
+  /** Change a text string for search in a way,
+   *  which makes it useable for a regular expression search.
+   *  This means converting reg. exp. special chars like $, [, !, ecc.
+   *  to \$, \[, \!
+   *  @param szOldString   the string, you want to convert.
+   *  @param bForGrep      special handling for using resultstring with grep
+   */
+  QString realSearchText2regExp(const char *szOldString, bool bForGrep=false);
+
   void refreshTrees();
   void refreshTrees(TFileInfo *info);
 
@@ -719,7 +728,7 @@ private:
   QProgressBar* statProg;
   //some vars for the searchengine
   QString search_output;
-  QString doc_search_text;
+  QString doc_search_display_text, doc_search_text;
   // for more then one job in proc;checked in slotProcessExited(KProcess* proc);
   // values are "run","make" "refresh";
   QString next_job;

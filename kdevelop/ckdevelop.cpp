@@ -421,12 +421,21 @@ void CKDevelop::slotEditSearchInFiles(){
 }
 
 void CKDevelop::slotEditSearchInFiles(QString search){
+  int pos;
   slotStatusMsg(i18n("Searching in Files..."));
+
   if(project){
     grep_dlg->setDirName(prj->getProjectDir());
   }
   grep_dlg->show();
-	grep_dlg->slotSearchFor(search);
+
+  search.replace(QRegExp("^\n"), "");
+  pos=search.find("\n");
+  if (pos>-1)
+   search=search.left(pos);
+
+  search=realSearchText2regExp(search, true);
+  grep_dlg->slotSearchFor(search);
   slotStatusMsg(i18n("Ready."));
 	}
 
@@ -1225,16 +1234,34 @@ void CKDevelop::slotHelpBrowserReload(){
 }
 
 void CKDevelop::slotHelpSearchText(QString text){
+  int pos;
+
   if(!CToolClass::searchProgram("glimpse")){
     return;
   }
-  if(text == "" || text.isNull()){
+
+  /// stripping error causing \n's
+  if(!text.isEmpty())
+  {
+   text.replace(QRegExp("^\n"), "");
+   pos=text.find("\n");
+   if (pos>-1)
+    text=text.left(pos);
+
+   text.replace(QRegExp("'"), "'\\''"); // handle ' in a right way
+  }
+
+  if(text.isEmpty()){
     KMsgBox::message(this,i18n("Error..."),i18n("You must select a text for searching the documentation!"));
     return;
   }
   //  cerr << ":" << text << ":" << endl;
+
+  doc_search_display_text = text.copy(); // save the text
+  text=realSearchText2regExp(text);  // change the text for using with regexp
+  doc_search_text = text.copy();
+
   slotStatusMsg(i18n("Searching selected text in documentation..."));
-  doc_search_text = text.copy(); // save the text
   if(!QFile::exists(KApplication::localkdedir()+"/share/apps" + "/kdevelop/.glimpse_index")){
     if(KMsgBox::yesNo(this,i18n("Error..."),i18n("KDevelop couldn't find the search database.\n Do you want to generate it now?")) == 1){
       slotOptionsCreateSearchDatabase();
@@ -1258,7 +1285,7 @@ void CKDevelop::slotHelpSearchText(){
       text = edit_widget->currentWord();
     }
   }
-  text.replace(QRegExp("\n$"), ""); // strip last \n
+
   slotHelpSearchText(text);
 }
 
@@ -1689,8 +1716,10 @@ void CKDevelop::slotDocumentDone( KHTMLView *_view ){
    url_wo_ref = actualURL.left(pos);
 
   // insert into the history-list
-  if(actualURL.left(7) != "http://" || url_wo_ref.right(4).find("htm", FALSE)==-1){
-   // http aren't added to the history list
+  // the following if-statement isn't necessary, because
+  //   slotDocumentDone isn't called in the other cases [use of KFMclient for non file://....htm(l)]
+  if(actualURL.left(7) != "http://" && url_wo_ref.right(4).find("htm", FALSE)>-1){
+   // http aren't added to the history list ...
 
    if (found == -1)
    {
@@ -1876,7 +1905,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
   }
   if (list.isEmpty()){
 
-     KMsgBox::message(0,i18n("Not found!"),"\"" + doc_search_text + i18n("\" not found in documentation!"),KMsgBox::INFORMATION);
+     KMsgBox::message(0,i18n("Not found!"),"\"" + doc_search_display_text + i18n("\" not found in documentation!"),KMsgBox::INFORMATION);
     return;
   }
 
@@ -1903,7 +1932,7 @@ void CKDevelop::slotSearchProcessExited(KProcess*){
    file.open(IO_WriteOnly);
 
    stream << "<HTML>";
-   stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_text;
+   stream << "<HEAD><TITLE> - " << i18n("Search for: ") << doc_search_display_text;
    stream << "</TITLE></HEAD><BODY BGCOLOR=\"#ffffff\"><BR> <TABLE><TR><TH>";
    stream << i18n("Title") << "<TH>" << i18n("Hits") << "\n";
    QString numstr;

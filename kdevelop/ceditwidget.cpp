@@ -21,6 +21,7 @@
 #include "./kwrite/highlight.h"
 #include <qpopupmenu.h>
 #include <qclipboard.h>
+#include <qregexp.h>
 #include <assert.h>
 #include <kapp.h>
 #include <kiconloader.h>
@@ -210,6 +211,7 @@ uint CEditWidget::lines()
 void CEditWidget::enterEvent ( QEvent * e){
   setFocus();
 }
+
 void CEditWidget::mousePressEvent(QMouseEvent* event){
   if(event->button() == RightButton){
     
@@ -219,6 +221,7 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     }
     
     int state;
+    int pos;
     state = undoState();
     //undo
     if(state & 1){
@@ -256,13 +259,22 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
     if(str == ""){
       str = word(event->x(),event->y());
     }
+
     searchtext = str;
+    str.replace(QRegExp("^\n"), "");
+    pos=str.find("\n");
+    if (pos>-1)
+     str=str.left(pos);
+
     if(str.length() > 20 ){
       str = str.left(20) + "...";
     }
+
+    pop->setItemEnabled(ID_HELP_SEARCH_TEXT, !str.isEmpty());
+    pop->setItemEnabled(ID_EDIT_SEARCH_IN_FILES, !str.isEmpty());
+
     pop->changeItem(Icon("grep.xpm"),i18n("grep: ") + str,ID_EDIT_SEARCH_IN_FILES); // the grep entry
     pop->changeItem(Icon("lookup.xpm"),i18n("look up: ") + str,ID_HELP_SEARCH_TEXT); // the lookup entry
-
 
     pop->popup(this->mapToGlobal(event->pos()));
   }

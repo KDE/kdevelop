@@ -321,7 +321,7 @@ void GrepDialog::slotSearch()
 
     QString pattern = template_edit->text();
     pattern.replace(QRegExp("%s"), pattern_edit->text());
-    pattern.replace(QRegExp("'"), "\\'");
+    pattern.replace(QRegExp("'"), "'\\''");
     QString filepattern;
     if (recursive_box->isChecked())
 	{

@@ -124,6 +124,45 @@ void CKDevelop::removeFileFromEditlist(const char *filename){
 
 }
 
+/*---------------------------------------- CKDevelop::realSearchText2regExp()
+ * realSearchText2regExp()
+ *    converts a string to a regular expression.
+ *    you will need the function if you want to search even this text.
+ *    chars which are special chars in a regular expression are escaped with '\\'
+ *
+ * Parameters:
+ *   szOldText   the search text you want to convert
+ *   bForGrep    set this true if you will change the special chars from grep
+ *
+ * Returns:
+ *   a string object with the escaped string
+ *-----------------------------------------------------------------*/
+QString CKDevelop::realSearchText2regExp(const char *szOldText, bool bForGrep)
+{
+  QString sRegExpString="";
+  char ch;
+  int i;
+  bool bFound;
+  char *szChangingChars= (bForGrep) ? "^{}[]\\^$" : "$^*[]|()\\;,#<>-.~{}" ;
+
+  while ((ch=*szOldText++)!='\0')
+  {
+    bFound=false;
+    for (i=0; !bFound && szChangingChars[i]!='\0';)
+    {
+       if (szChangingChars[i]==ch)
+           bFound=true;
+       else
+           i++;
+    }
+    if (bFound)
+        sRegExpString+='\\';
+    sRegExpString+=ch;
+  }
+
+  return sRegExpString;
+}
+
 void CKDevelop::refreshTrees(){
   doc_tree->refresh(prj);
   if (!project){
