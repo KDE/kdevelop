@@ -76,14 +76,10 @@ EXTRA_DIST = kdeveloprc \
 	.directory kdevelop.desktop x-kdevelop-project.desktop kdevelop-setup.desktop \
 	los-app-development_package.png lom-app-kdevelop.png los-app-kdevelop.png lom-app-kdevelop_project.png  	
 
-# if you "make distclean", this files get removed. If you want to remove
-# them while "make clean", use CLEANFILES
-DISTCLEANFILES = $(kdevelop_METASOURCES)
-
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
 messages:
-	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc`  && mv messages.po ../po/kdevelop.pot 
+	$(XGETTEXT) -C -ki18n -x $(includedir)/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` && mv messages.po $(podir)/kdevelop.pot 
 
 appsdir   = $(kde_appsdir)/Applications/Development
 KDE_ICON  = kdevelop kdevelop_project development_package
