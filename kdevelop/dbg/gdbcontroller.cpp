@@ -226,7 +226,7 @@ void GDBController::slotStart(const QString& application, const QString& args)
             this,         SLOT(slotDbgStdout(KProcess *, char *, int)));
 
   connect(  dbgProcess_,  SIGNAL(receivedStderr(KProcess *, char *, int)),
-            this,         SLOT(slotDbgStderr(KProcess *, char *, int)));
+            this,         SLOT(slotDbgStdout(KProcess *, char *, int)));
 
   connect(  dbgProcess_,  SIGNAL(wroteStdin(KProcess *)),
             this,         SLOT(slotDbgWroteStdin(KProcess *)));
@@ -394,7 +394,7 @@ void GDBController::removeInfoRequests()
 // **********************************************************************
 
 // Pausing an app removes any pending run commands so that the app doesn't
-// start again. If we want to be silent then we remove and pending info
+// start again. If we want to be silent then we remove any pending info
 // commands as well.
 void GDBController::pauseApp()
 {
@@ -507,8 +507,33 @@ void GDBController::parseLine(char* buf)
 
       // All "Program" strings cause a refresh of the program state
       actOnProgramPause(QString(buf));
-      DBG_DISPLAY("Unparsed <" + QString(buf) + ">");
+      DBG_DISPLAY("Unparsed (START_Prog)<" + QString(buf) + ">");
       break;
+    }
+
+    case START_Cann:
+    {
+      // If you end the app and then restart when you have breakpoints set
+      // in a dynamically loaded library, gdb will halt because the set
+      // breakpoint is trying to access memory no longer used. The breakpoint
+      // must first be deleted, however, we want to retain the breakpoint for
+      // when the library gets loaded again.
+      // TODO  programHasExited_ isn't always set correctly,
+      // but it's (almost) doesn't matter.
+      char* found=0;
+      if (programHasExited_ && (found = strstr(buf, "Cannot insert breakpoint")))
+      {
+        setStateOff(s_appBusy);
+        int BPNo = atoi(found+25);
+        if (BPNo)
+        {
+          emit unableToSetBPNow(BPNo);
+          queueCmd(new GDBCommand(QString().sprintf("delete %d", BPNo), NOTRUNCMD, NOTINFOCMD));
+          queueCmd(new GDBCommand("info breakpoints", NOTRUNCMD, NOTINFOCMD, BPLIST));
+          queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+        }
+        break;
+      }
     }
 
     case START_warn:
@@ -525,7 +550,7 @@ void GDBController::parseLine(char* buf)
       actOnProgramPause(QString(buf));
 //      setStateOff(s_appBusy);
 //      emit dbgStatus (QString(buf), state_);
-      DBG_DISPLAY("Unparsed <" + QString(buf) + ">");
+      DBG_DISPLAY("Unparsed (START_warn)<" + QString(buf) + ">");
       break;
     }
 
@@ -549,7 +574,7 @@ void GDBController::parseLine(char* buf)
         break;
       }
       actOnProgramPause(QString(buf));
-      DBG_DISPLAY("Unparsed <" + QString(buf) + ">");
+      DBG_DISPLAY("Unparsed (START_Watc)<" + QString(buf) + ">");
       break;
     }
 
@@ -569,7 +594,7 @@ void GDBController::parseLine(char* buf)
       // A stop line means we've stopped. We're not really expecting one
       // of these unless it's a library event so just call actOnPause
       actOnProgramPause(QString(buf));
-      DBG_DISPLAY("Unparsed <" + QString(buf) + ">");
+      DBG_DISPLAY("Unparsed (START_Stop)<" + QString(buf) + ">");
       break;
     }
 
@@ -584,7 +609,7 @@ void GDBController::parseLine(char* buf)
 //        break;
 //      }
 
-      DBG_DISPLAY("Unparsed <" + QString(buf) + ">");
+      DBG_DISPLAY("Unparsed (START_curr)<" + QString(buf) + ">");
       actOnProgramPause(QString(buf));
       break;
     }
@@ -602,37 +627,31 @@ void GDBController::parseLine(char* buf)
 
     default:
     {
-      // Good grief. The first "step into" into a source file that is missing
+      if (strstr(buf, "No symbol table is loaded"))
+      {
+        actOnProgramPause(buf);
+        break;
+      }
+
+      // The first "step into" into a source file that is missing
       // prints on stderr with a message that there's no source. Subsequent
       // "step into"s just print line number at filename. Both start with a
       // numeric char.
       if (isdigit(*buf))
       {
-        if (stateIsOn(s_silentBreakInto))
-        {
-          setStateOff(s_appBusy);
-          break;
-        }
-//        {
-          // It's a breakpoint stoppage, The breakpoint is in the queue
-          // All we need to do is set the state and add the continue command
-          // and the world will be a better place.
-//          DBG_DISPLAY("Parsed (Starts with digit - BP forced) <" + QString(buf) + ">");
-//          setStateOff(s_appBusy|s_silentBreakInto);
-//          queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
-//          break;
-//        }
-
-        if (strstr(buf, " at "))
-        {
-          DBG_DISPLAY("Parsed (starts with digit) <" + QString(buf) + ">");
-          actOnProgramPause("No source: "+QString(buf));
-          emit showStepInSource("", -1);
-          break;
-        }
+        DBG_DISPLAY("Parsed (digit)<" + QString(buf) + ">");
+        parseProgramLocation(buf);
+        break;
       }
 
-      DBG_DISPLAY("Unparsed <" + QString(buf) + ">");
+      if (strstr(buf, "not meaningful in the outermost frame."))
+      {
+        DBG_DISPLAY("Parsed <" + QString(buf) + ">");
+        actOnProgramPause(buf);
+        break;
+      }
+
+      DBG_DISPLAY("Unparsed (default)<" + QString(buf) + ">");
       break;
     }
   }
@@ -652,19 +671,24 @@ void GDBController::parseProgramLocation(char* buf)
     // is to reset the state so that queue'd items can be sent to gdb
     DBG_DISPLAY("Program location (but silentBreakInto) <" + QString(buf) + ">");
     setStateOff(s_appBusy);
-//    queueCmd(new GDBCommand("continue", RUNCMD, NOTINFOCMD));
+    return;
   }
-  else
+
+  char* bp_colon = strchr(buf, ':');
+  if (bp_colon && strchr(bp_colon+2, ':'))    // make sure we avoid "::" problems
   {
-    actOnProgramPause(QString());
-    char* bp_colon = strchr(buf, ':');
-    if (bp_colon && strchr(bp_colon+1, ':'))
+    QString filename(buf, (bp_colon-buf)+1);
+    int lineno = atoi(bp_colon+1);
+    if (lineno)
     {
-      QString filename(buf, (bp_colon-buf)+1);
-      int lineno = atoi(bp_colon+1);
+      actOnProgramPause(QString());
       emit showStepInSource(filename, lineno);
+      return;
     }
   }
+
+  actOnProgramPause("No source: "+QString(buf));
+  emit showStepInSource("", -1);
 }
 
 // **************************************************************************
@@ -1281,7 +1305,7 @@ void GDBController::slotDbgStdout(KProcess *proc, char *buf, int buflen)
 
 // **************************************************************************
 
-void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
+/*void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 {
   QString bufData(buf, buflen+1);
   GDB_DISPLAY(QString("[gdb] STDERR: ")+bufData);
@@ -1312,7 +1336,7 @@ void GDBController::slotDbgStderr(KProcess *proc, char *buf, int buflen)
 
   parse(bufData.data());
 }
-
+*/
 // **************************************************************************
 
 void GDBController::slotDbgWroteStdin(KProcess *proc)

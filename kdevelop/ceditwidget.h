@@ -193,8 +193,6 @@ protected slots:
 private slots:
 	/** user wants run to the cursor position */
 	void slotRunToCursor();
-	/** user wants run to run until a return is encountered */
-	void slotStepOutOff();
 	/** user wants add the search text to the watch variable list */
 	void slotAddWatchVariable();
 

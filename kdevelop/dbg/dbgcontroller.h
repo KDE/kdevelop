@@ -87,12 +87,12 @@ public slots:
 	
 protected slots:
   virtual void slotDbgStdout(KProcess* proc, char* buf, int buflen)       = 0;
-  virtual void slotDbgStderr(KProcess* proc, char* buf, int buflen)       = 0;
+  virtual void slotDbgStderr(KProcess* proc, char* buf, int buflen) {} ;
   virtual void slotDbgWroteStdin(KProcess *proc)                          = 0;
   virtual void slotDbgProcessExited(KProcess* proc)                       = 0;
 
 signals:
-  void rawData(const char* rawData);
+  void rawData              (const char* rawData);
 	void gotoSourcePosition   (const QString& filename, int lineno);
   void rawGDBBreakpointList (char* buf);
   void rawGDBBreakpointSet  (char* buf, int key);

@@ -44,7 +44,7 @@ class GDBController : public DbgController
 public:
   GDBController(VarTree* varTree, FrameStack* frameStack);
   ~GDBController();
-  virtual void reConfig();
+  void reConfig();
 
 protected:
   void queueCmd(DbgCommand* cmd, bool executeNext=false);
@@ -102,16 +102,14 @@ public slots:
 
 protected slots:
   void slotDbgStdout(KProcess* proc, char* buf, int buflen);
-  void slotDbgStderr(KProcess* proc, char* buf, int buflen);
+/*  void slotDbgStderr(KProcess* proc, char* buf, int buflen); */
   void slotDbgWroteStdin(KProcess *proc);
   void slotDbgProcessExited(KProcess* proc);
-
-  // Debugging slot - cannot ifdef out due to moc problems
   void slotStepInSource(const QString& filename, int lineNo);
   void slotDbgStatus(const QString& status, int state);
 
 signals:
-  void rawData(const char* rawData);
+  void rawData              (const char* rawData);
 	void showStepInSource     (const QString& filename, int lineno);
   void rawGDBBreakpointList (char* buf);
   void rawGDBBreakpointSet  (char* buf, int key);
