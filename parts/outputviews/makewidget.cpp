@@ -629,6 +629,13 @@ void MakeWidget::insertLine1(const QString &line, Type type)
         text = QString(errorJadeRx.group(errorJadeTextGroup));
     }
     
+    if( hasmatch ) {
+      // Add hacks for error strings you want excluded here
+      if( text.find( QString::fromLatin1("(Each undeclared identifier is reported only once") ) >= 0
+       || text.find( QString::fromLatin1("for each function it appears in.)") ) >= 0 )
+       hasmatch = false;
+    }
+    
     if (hasmatch) {
         kdDebug(9004) << "Error in " << fn << " " << row << ": " << text << endl;
         if (dirstack.top())
