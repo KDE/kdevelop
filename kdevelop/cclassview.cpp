@@ -333,12 +333,13 @@ void CClassView::refresh( CProject *proj )
   }
 	
   // Parse sourcefiles.
-  for( str = src.first(); str != NULL; str = src.next() )
+  QString cur;
+  for( cur = src.first(); cur != NULL; cur = src.next() )
   {
-		if (src.contains(".ui"))
+		if (cur.contains(".ui"))
 			continue;
-    kdDebug() << "  parsing:[" << str << "]" << endl;
-    cp->parse( str );
+    kdDebug() << "  parsing:[" << cur << "]" << endl;
+    cp->parse(static_cast<const char*>(cur));
     emit setStatusbarProgress( ++currentCount );
   }
 
@@ -1553,3 +1554,4 @@ void CClassView::slotSigSlotMapImplement ( CParsedClass* aClass, const QString& 
 }
 
 #include "cclassview.moc"
+
