@@ -1,4 +1,7 @@
 #include "kdevpart.h"
+#include "kdevpartcontroller.h"
+
+
 #include "kdevapi.h"
 
 
@@ -57,6 +60,12 @@ KDevAppFrontend *KDevPart::appFrontend()
 {
     return m_api->appFrontend;
 }
+
+KDevPartController *KDevPart::partController()
+{
+    return m_api->getPartController();
+}
+
 
 void KDevPart::setWidget(QWidget*)
 {

@@ -29,6 +29,8 @@ class KDevMakeFrontend;
 class KDevAppFrontend;
 class ClassStore;
 class KDevApi;
+class KDevPartController;
+
 
 // 2002-02-08 added ccClassStore( ) - daniel
 
@@ -91,6 +93,11 @@ public:
      * the project file.
      */
     QDomDocument *projectDom();
+
+    /**
+     * Returns a reference to the part controller.
+     */
+    KDevPartController *partController(); 
 
 private:
     // These methods are not meaningful and are therefore forbidden
