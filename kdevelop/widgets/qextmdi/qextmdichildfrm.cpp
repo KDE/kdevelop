@@ -106,7 +106,11 @@ QextMdiChildFrm::QextMdiChildFrm(QextMdiChildArea *parent)
 #endif
 
 #if QT_VERSION > 209
+#ifndef _OS_WIN32_
    m_pIcon->setAutoRaise(TRUE);
+#endif
+#endif
+#if QT_VERSION > 209
    m_pMinimize->setAutoRaise(TRUE);
    m_pMaximize->setAutoRaise(TRUE);
    m_pClose->setAutoRaise(TRUE);
