@@ -19,7 +19,7 @@
 
 #include "ckappwizard.h"
 
-#include "ceditwidget.h"
+//#include "ceditwidget.h"
 #include <cproject.h>
 #include "ctoolclass.h"
 #include "debug.h"
@@ -36,6 +36,8 @@
 #include <kseparator.h>
 #include <kstddirs.h>
 
+#include <qlineedit.h>
+#include <qcheckbox.h>
 #include <qbuttongroup.h>
 #include <qcombobox.h>
 #include <qdir.h>
