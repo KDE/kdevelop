@@ -726,7 +726,7 @@ CppCodeCompletion::completeText( )
         }
 
     } else if( AST* node = findNodeAt(ast, line, column) ){
-
+	
         kdDebug(9007) << "------------------- AST FOUND --------------------" << endl;
 
         if( FunctionDefinitionAST* def = functionDefinition(node) ){
@@ -1401,21 +1401,25 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, IfStatementAST* ast
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, ForStatementAST* ast, int line, int col )
 {
+    computeContext( ctx, ast->condition(), line, col );
     computeContext( ctx, ast->statement(), line, col );
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, DoStatementAST* ast, int line, int col )
 {
+    //computeContext( ctx, ast->condition(), line, col );
     computeContext( ctx, ast->statement(), line, col );
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, WhileStatementAST* ast, int line, int col )
 {
+    computeContext( ctx, ast->condition(), line, col );
     computeContext( ctx, ast->statement(), line, col );
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, SwitchStatementAST* ast, int line, int col )
 {
+    computeContext( ctx, ast->condition(), line, col );
     computeContext( ctx, ast->statement(), line, col );
 }
 
@@ -1454,6 +1458,27 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
             kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
         }
    }
+}
+
+void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, int line, int col )
+{
+    if( !ast->typeSpec() || !ast->declarator() || !ast->declarator()->declaratorId() )
+	return;
+    
+    int startLine, startColumn;
+    int endLine, endColumn;
+    ast->getStartPosition( &startLine, &startColumn );
+    ast->getEndPosition( &endLine, &endColumn );
+        
+    if( line < startLine || (line == startLine && col <= startColumn) )
+	return;
+    
+    QString type = typeName( ast->typeSpec()->text() );
+    SimpleVariable var;
+    var.type = type;
+    var.name = toSimpleName( ast->declarator()->declaratorId() );
+    ctx->add( var );
+    kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;    
 }
 
 FunctionDefinitionAST * CppCodeCompletion::functionDefinition( AST* node )
@@ -1496,8 +1521,7 @@ void CppCodeCompletion::computeRecoveryPoints( )
     TranslationUnitAST* unit = m_pSupport->backgroundParser()->translationUnit( m_activeFileName );
     if( !unit )
         return;
-
-
+    
     class ComputeRecoveryPoints: public TreeParser
     {
     public:
@@ -1523,7 +1547,7 @@ void CppCodeCompletion::computeRecoveryPoints( )
         virtual void parseSimpleDeclaration( SimpleDeclarationAST* ast )
         {
             TypeSpecifierAST* typeSpec = ast->typeSpec();
-            InitDeclaratorListAST* declarators = ast->initDeclaratorList();
+            //InitDeclaratorListAST* declarators = ast->initDeclaratorList();
 
             if( typeSpec )
                 parseTypeSpecifier( typeSpec );

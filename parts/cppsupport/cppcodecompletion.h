@@ -90,6 +90,7 @@ private:
     void computeContext( SimpleContext*& ctx, WhileStatementAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, SwitchStatementAST* ast, int line, int col );
     void computeContext( SimpleContext*& ctx, DeclarationStatementAST* ast, int line, int col );
+    void computeContext( SimpleContext*& ctx, ConditionAST* ast, int line, int col );
     
     QString getText( int startLine, int startColumn, int endLine, int endColumn );
 
