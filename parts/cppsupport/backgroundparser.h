@@ -62,7 +62,6 @@ public:
     QValueList<Problem> problems( const QString& fileName );
 
     void close();
-    void reparse();
 
     virtual void run();
 

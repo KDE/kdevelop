@@ -16,8 +16,9 @@
 #include "driver.h"
 #include "ast_utils.h"
 
-#include <kparts/part.h>
+#include <kdevmutex.h>
 
+#include <kparts/part.h>
 #include <ktexteditor/editinterface.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -221,14 +222,13 @@ BackgroundParser::~BackgroundParser()
 
 void BackgroundParser::addFile( const QString& fileName )
 {
-    m_mutex.lock();
+    QMutexLocker locker( &m_mutex );
     QString fn( fileName.unicode(), fileName.length() );
     bool added = false;
     if( m_fileList.find(fn) == m_fileList.end() ){
         m_fileList.push_back( fn );
 	added = true;
     }
-    m_mutex.unlock();
 
     if( added )
         m_canParse.wakeAll();
@@ -237,7 +237,7 @@ void BackgroundParser::addFile( const QString& fileName )
 void BackgroundParser::removeAllFiles()
 {
     kdDebug(9007) << "BackgroundParser::removeAllFiles()" << endl;
-    m_mutex.lock();
+    QMutexLocker locker( &m_mutex );
 
     QMap<QString, Unit*>::Iterator it = m_unitDict.begin();
     while( it != m_unitDict.end() ){
@@ -249,14 +249,12 @@ void BackgroundParser::removeAllFiles()
     m_driver->reset();
     m_fileList.clear();
 
-    m_mutex.unlock();
-
     m_isEmpty.wakeAll();
 }
 
 void BackgroundParser::removeFile( const QString& fileName )
 {
-    m_mutex.lock();
+    QMutexLocker locker( &m_mutex );
     Unit* unit = findUnit( fileName );
     m_unitDict.remove( fileName );
     if( unit ){
@@ -264,7 +262,6 @@ void BackgroundParser::removeFile( const QString& fileName )
 	unit = 0;
     }
     m_driver->remove( fileName );
-    m_mutex.unlock();
 
     if( m_fileList.isEmpty() )
         m_isEmpty.wakeAll();
@@ -288,7 +285,6 @@ Unit* BackgroundParser::parseFile( const QString& fileName )
 
 Unit* BackgroundParser::findOrCreateUnit( const QString& fileName, bool force )
 {
-    m_mutex.lock();
     QMap<QString, Unit*>::Iterator it = m_unitDict.find( fileName );
     Unit* unit = it != m_unitDict.end() ? *it : 0;
 
@@ -297,12 +293,9 @@ Unit* BackgroundParser::findOrCreateUnit( const QString& fileName, bool force )
 	delete( unit );
 	unit = 0;
     }
-    m_mutex.unlock();
 
     if( !unit && 0 != (unit = parseFile(fileName)) ){
-        m_mutex.lock();
 	m_unitDict.insert( fileName, unit );
-        m_mutex.unlock();
     }
 
     return unit;
@@ -326,10 +319,6 @@ QValueList<Problem> BackgroundParser::problems( const QString& fileName )
     return u ? u->problems : QValueList<Problem>();
 }
 
-void BackgroundParser::reparse()
-{
-}
-
 void BackgroundParser::close()
 {
     m_close = true;
@@ -337,9 +326,8 @@ void BackgroundParser::close()
 
 bool BackgroundParser::filesInQueue()
 {
-    m_mutex.lock();
+    QMutexLocker locker( &m_mutex );
     int n = m_fileList.count();
-    m_mutex.unlock();
     return n;
 }
 
@@ -359,32 +347,35 @@ void BackgroundParser::run()
 	if( m_close )
 	    break;
 
-	m_mutex.lock();
-	QString fileName = m_fileList.front();
-	fileName = QString( fileName.unicode(), fileName.length() );
-	m_fileList.pop_front();
-	m_mutex.unlock();
-
-	Unit* unit = findOrCreateUnit( fileName, true );
-
-	m_mutex.lock();
-	if( unit ){
-	    m_unitDict.insert( fileName, unit );
-            KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
-	    KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
-	    if( m_consumed )
-	        m_consumed->wait();
-
-	} else {
-	    m_unitDict.remove( fileName );
+        QString fileName;
+        {
+            QMutexLocker locker( &m_mutex );
+ 	    fileName = m_fileList.front();
+	    fileName = QString( fileName.unicode(), fileName.length() );
+	    m_fileList.pop_front();
 	}
 
-	m_mutex.unlock();
+        {
+            QMutexLocker locker( &m_mutex );
+	    Unit* unit = findOrCreateUnit( fileName, true );
 
-	//kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED " << fileName << "!!!!!!!!!!!!!!!!!!" << endl;
+	    if( unit ){
+	        m_unitDict.insert( fileName, unit );
+                KApplication::postEvent( m_cppSupport, new FileParsedEvent(fileName) );
+	        KApplication::postEvent( m_cppSupport, new FoundProblemsEvent(fileName, unit->problems) );
+	        if( m_consumed )
+	            m_consumed->wait();
 
-	if( m_fileList.isEmpty() )
-	    m_isEmpty.wakeAll();
+	    } else {
+	        m_unitDict.remove( fileName );
+	    }
+
+	    //kdDebug(9007) << "!!!!!!!!!!!!!!! PARSED " << fileName << "!!!!!!!!!!!!!!!!!!" << endl;
+
+	    if( m_fileList.isEmpty() )
+	        m_isEmpty.wakeAll();
+        }
+
     }
 
     kdDebug(9007) << "!!!!!!!!!!!!!!!!!! BG PARSER DESTROYED !!!!!!!!!!!!" << endl;
