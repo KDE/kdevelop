@@ -1077,7 +1077,7 @@ The thus displayed <link linkend="configure-doctree-general">configuration page<
   <member><link linkend="setup-docu-DevHelp">DevHelp Documentation</link></member>
 </simplelist>
 <para>
-Additionally you have the option to select what the documentatione tree should display as
+Additionally you have the option to select what the documentation tree should display as
 </para>
 <simplelist>
   <member><link linkend="setup-docu-project">Project Documentation</link></member>
@@ -1641,8 +1641,41 @@ To remove an entry from the <guilabel>DevHelp Documentation</guilabel> tab first
 <title>Displaying Selected Documentation in a Project</title>
 
 <para>
-(... to be written ...)
+When working on a project one usually does not need all of the documentation &kdevelop; provides. Thus for any project you may configure the documentation tree to display only those documents you really want to work with.
 </para>
+<para>
+You need to have your project loaded already. Then select <menuchoice> <guimenu>Project</guimenu> <guimenuitem>Project Options...</guimenuitem></menuchoice>. This will display the <guilabel>Project Options</guilabel> dialog, structured similar to the standard &kdevelop; configuration dialog. Select <guilabel>Project Documentation</guilabel> from the tree at the left hand side to display this <guilabel>Project Documentation</guilabel> configuration dialog page:
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="configure-project-doc.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Configuring the project documentation
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
+<para>
+In the <guilabel>Displayed documents in the documentation browser</guilabel> list mark those documents you want to refer to when working on your project. Remove the tick marks from all other check boxes.
+</para>
+<para>
+&kdevelop; will save these settings together with the other project options when you pressed the <guibutton>OK</guibutton> button. From then on the documentation tree will present your reduced list only any time this project was loaded as the following example shows.
+</para>
+
+<screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="doctree-reduced.png" format="PNG"/>
+    </imageobject>
+    <caption><para>
+    Displaying selected documentation only in a given project
+    </para></caption>
+  </mediaobject>
+</screenshot>
+
 </sect2> <!-- setup-docu-project -->
 
 <sect2 id="setup-docu-bookmark">
