@@ -18,6 +18,7 @@
 
 #include "ckdevelop.h"
 #include "kstartuplogo.h"
+#include "ktipofday.h"
 #include <kwmmapp.h>
 
 
@@ -43,14 +44,29 @@ int main(int argc, char* argv[]) {
 	    a.getConfig()->setGroup("General Options");
     	kdevelop->slotSCurrentTab(a.getConfig()->readNumEntry("LastActiveTab",BROWSER));
       kdevelop->slotTCurrentTab(a.getConfig()->readNumEntry("LastActiveTree",DOC));
+      a.getConfig()->setGroup("TipOfTheDay");
+      bool showTip=a.getConfig()->readBoolEntry("show_tod",true);
+      if(showTip){
+        KTipofDay* tipdlg=new KTipofDay;
+        tipdlg->exec();
+      }
     }
     if(bStartLogo){
       start_logo->close();
     }
     delete start_logo;
     int rc = a.exec();
+
+
     return rc;
 }
+
+
+
+
+
+
+
 
 
 

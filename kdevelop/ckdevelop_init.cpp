@@ -27,7 +27,7 @@
 #include "ctoolclass.h"	
 #include "kswallow.h"
 #include "ctabctl.h"
-		
+
 CKDevelop::CKDevelop(){
   QString filename;
   version = VERSION;
@@ -905,6 +905,10 @@ void CKDevelop::initProject(){
   }
 
 }
+
+
+
+
 
 
 

@@ -169,7 +169,7 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
   bool lastprj=config->readBoolEntry("LastProject",true);
 						       						
   logoCheck = new QCheckBox( w1, "logoCheck" );
-	logoCheck->setGeometry( 20, 280, 220, 25 );
+	logoCheck->setGeometry( 20, 275, 190, 25 );
 	logoCheck->setText(i18n("Startup Logo"));
 	logoCheck->setAutoRepeat( FALSE );
 	logoCheck->setAutoResize( FALSE );
@@ -179,8 +179,24 @@ CKDevSetupDlg::CKDevSetupDlg( QWidget *parent, const char *name,KAccel* accel_pa
 	                  "If Startup Logo is enabled, KDevelop will show the\n"
 	                  "logo picture while it is starting."));
 	
+	config->setGroup("TipOfTheDay");
+  bool tip=config->readBoolEntry("show_tod",true);
+
+	
+	tipDayCheck = new QCheckBox( w1, "tipDayCheck" );
+	tipDayCheck->setGeometry( 220, 275, 150, 25 );
+	tipDayCheck->setText(i18n("Tip of the Day"));
+	tipDayCheck->setAutoRepeat( FALSE );
+	tipDayCheck->setAutoResize( FALSE );
+	tipDayCheck->setChecked( tip );
+
+	KQuickHelp::add(tipDayCheck, i18n("Tip of the Day\n\n"
+	                  "If Tip of the Day is enabled, KDevelop will show the\n"
+	                  "Tip of the Day every time it starts."));
+	
+	
 	lastProjectCheck = new QCheckBox( w1, "lastProjectCheck" );
-	lastProjectCheck->setGeometry( 20, 300, 220, 25 );
+	lastProjectCheck->setGeometry( 20, 295, 190, 25 );
 	lastProjectCheck->setText(i18n("Load last project"));
 	lastProjectCheck->setAutoRepeat( FALSE );
 	lastProjectCheck->setAutoResize( FALSE );
@@ -392,6 +408,9 @@ void CKDevSetupDlg::ok(){
 
   bool lastprj=lastProjectCheck->isChecked();
   config->writeEntry("LastProject",lastprj);
+	
+	config->setGroup("TipOfTheDay");
+  config->writeEntry("show_tod",tipDayCheck->isChecked());
 
   QString text;
   config->setGroup("Doc_Location");
@@ -424,6 +443,7 @@ void CKDevSetupDlg::slotKDEClicked(){
     config->writeEntry("doc_kde",dir);
   }
 }
+
 
 
 

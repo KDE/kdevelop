@@ -1,0 +1,13 @@
+If you want to create a new project, choose "Project"->"Application Wizard" from the menubar.
+If you don't have a KDE-library documentation, create it by choosing "Update" from the Documentation tab in the KDevelop Setup dialog.
+If you changed your applications's classes, you should update your API documentation by selecting "Make API-Doc" from the Build-menu.
+You can save time if you select "Compile File" from the build menu or the toolbar to only compile your current implementation file.
+If you're searching for information on classes or classmembers, select "Search for Help on..." from the Help-menu.
+If you want to have info about something in the KDevelop window, select the "What's this ?" button in the toolbar and click on the item you don't know about.
+Hint: You can search the documentation for a keyword by marking the word and select "look up" in the right button popup menu.
+The KDevelop Team wishes you a nice day !
+If you've found a bug in KDevelop, please let us know. Contact adresses are in the KDevelop Handbook.
+If you want to add your own documentations to the documentation tree, click with the right mouse button on the "Others" entry in the tree. Then configure the path and entry name.
+Happy coding !!
+Again, the KDevelop Team wishes you a nice day...;-)
+To open a project, select "Open" from the Project-menu.
