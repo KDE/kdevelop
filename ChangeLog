@@ -1,3 +1,6 @@
+2001-10-15  Harald Fernengel <harry@bnro.de>
+    * (hopefully) fixed the disappearing cursor bug
+
 2001-10-15  jbb <jbb@kdevelop.org>
     * kde3 compiling fixes.
     
