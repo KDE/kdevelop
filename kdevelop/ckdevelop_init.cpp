@@ -26,6 +26,7 @@
 #include <qsplitter.h>
 #include <qwhatsthis.h>
 #include <qmessagebox.h>
+#include <dcopclient.h>
 //#include <kaccel.h>
 #include <kcursor.h>
 #include <klocale.h>
@@ -56,6 +57,7 @@
 #include "mdiframe.h"
 #include "editorview.h"
 #include "docbrowserview.h"
+#include "kdevelopifaceimpl.h"
 
 
 #ifdef HAVE_CONFIG_H
@@ -86,7 +88,12 @@ CKDevelop::CKDevelop()
 	
   initProject();
   setToolmenuEntries();
-	
+
+  DCOPClient *client = kapp->dcopClient();
+  client->attach();
+  client->registerAs("KDevelop");
+  (void) new KDevelopIfaceImpl(this);
+  
 //  error_parser = new CErrorMessageParser;
   slotStatusMsg(i18n("Welcome to KDevelop!"));
 }

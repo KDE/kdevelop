@@ -41,7 +41,8 @@ kdevelop_SOURCES = klistview.cpp ckdevelop.cpp main.cpp cnewfiledlg.cpp \
 	ccvaddfolderdlg.cpp klangcombo.cpp caddnewtranslationdlg.cpp \
 	ctoolsconfigdlg.cpp  cclasstooltreeview.cpp component.cpp processview.cpp \
 	cmakemanualdlg.cpp cmakemanualdlgdata.cpp misc.cpp cbugreportdlg.cpp kdevplugin.cpp \
-	grepview.cpp makeview.cpp grepdlg.cpp outputview.cpp ckdevaccel.cpp editorview.cpp docbrowserview.cpp
+	grepview.cpp makeview.cpp grepdlg.cpp outputview.cpp ckdevaccel.cpp editorview.cpp docbrowserview.cpp \
+	kdevelopifaceimpl.cpp KDevelopIface.skel
 
 kdevelop_METASOURCES = AUTO
 # the library search path. 

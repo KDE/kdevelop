@@ -1,3 +1,7 @@
+1999-11-19  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+	* DCOP interface for Cervisia (and other
+	  tools)
+
 1999-11-18  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 	* Removed DocTreeConfDlg; a thin wrapper around
 	  DocTreeViewWidget is used instead
