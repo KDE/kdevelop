@@ -26,39 +26,12 @@ KWritePart::~KWritePart()
 
 KEditor::Document *KWritePart::document(const KURL &url)
 {
-  DocumentImpl *impl = 0;
-  return impl;
-
-  // impl = KEditor::Editor::getDocument(filename)
- 
-  // look for an existing document with that name
-  /* TODO: Use part manager, put into base class
-  if (!filename.isEmpty())
-  {
-    QListIterator<DocumentImpl> it(_documents);
-    for ( ; it.current(); ++it)
-    {
-      kdDebug() << "Iterator: " << it.current() << endl;
-      kdDebug() << "it.current()->fileName: " << it.current()->fileName() << endl;
-
-      if (it.current()->fileName() == filename)
- 	{
-	  impl = it.current();
-	  break;
-	}
-    }
-  }
-*/
-  // if there was none, create a new one
-  if (!impl)
-  {
-    impl = new DocumentImpl(this);
-
-    if (!url.isEmpty())
-	impl->openURL(url);
-  }
-
-  return impl;
+  QListIterator<DocumentImpl> it(_documents);
+  for ( ; it.current(); ++it)
+	if (it.current()->url() == url)
+	  return it.current();
+  
+  return 0;
 }
 
 
@@ -67,7 +40,17 @@ KEditor::Document *KWritePart::createDocument(const KURL &url)
   DocumentImpl *impl = new DocumentImpl(this);
   if (!url.isEmpty())
     impl->openURL(url);
+
+  _documents.append(impl);
+  connect(impl, SIGNAL(destroyed()), this, SLOT(documentDestroyed()));
+  
   return impl;
+}
+
+
+void KWritePart::documentDestroyed()
+{
+  _documents.remove(static_cast<const DocumentImpl*>(sender()));
 }
 
 

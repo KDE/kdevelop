@@ -28,6 +28,16 @@ public:
   virtual KEditor::Document *createDocument(const KURL &url="");
   virtual KEditor::Document *currentDocument();
 
+
+private slots:
+
+  void documentDestroyed();
+
+
+private:
+
+  QList<DocumentImpl> _documents;
+  
 };
 
 
