@@ -16,17 +16,13 @@
  ***************************************************************************/
 
 
-#if 0
-#include <kapp.h>
-#include "items.h"
-#include <qwidget.h>
-#include <qpalette.h>
-#endif
-
 #include <qpixmap.h>
 #include <qbitmap.h>
+#include <kapp.h>
+#include <kpopmenu.h>
 #include "kdlgitembase.h"
 #include "kdlgpropertybase.h"
+#include "kdlgeditwidget.h"
 #include "itemsglobal.h"
 
 
@@ -222,4 +218,41 @@ void KDlgItem_Base::repaintItem(QWidget *it)
       itm->setFont(wid.font());
     }
 
+}
+
+
+void KDlgItem_Base::execContextMenu(bool ismain)
+{
+    QString pixmapdir = KApplication::kde_toolbardir() + "/";
+    QString kdevpixmapdir = KApplication::kde_datadir() + QString("/kdevelop/toolbar/");
+    
+#define mkQPixTb(fn) QPixmap(pixmapdir + fn)
+#define mkQPixDd(fn) QPixmap(kdevpixmapdir + fn)
+
+    KPopupMenu phelp;
+    phelp.setTitle( itemClass() );
+    if (!ismain)
+        {
+          phelp.insertItem( mkQPixTb("prev.xpm"), i18n("&Raise"),
+			    getEditWidget(), SLOT(slot_raiseSelected()) );
+          phelp.insertItem( mkQPixTb("next.xpm"), i18n("&Lower"),
+			    getEditWidget(), SLOT(slot_lowerSelected()) );
+          phelp.insertItem( mkQPixTb("top.xpm"), i18n("Raise to &top"),
+			    getEditWidget(), SLOT(slot_raiseTopSelected()) );
+          phelp.insertItem( mkQPixTb("bottom.xpm"), i18n("Lower to &bottom"),
+			    getEditWidget(), SLOT(slot_lowerBottomSelected()) );
+          phelp.insertSeparator();
+          phelp.insertItem( mkQPixDd("cut.xpm"), i18n("C&ut"),
+			    getEditWidget(), SLOT(slot_cutSelected()) );
+          phelp.insertItem( mkQPixTb("delete.xpm"), i18n("&Delete"),
+			    getEditWidget(), SLOT(slot_deleteSelected()) );
+          phelp.insertItem( mkQPixDd("copy.xpm"), i18n("&Copy"),
+			    getEditWidget(), SLOT(slot_copySelected()) );
+        }
+    phelp.insertItem( mkQPixDd("paste.xpm"), i18n("&Paste"),
+		      getEditWidget(), SLOT(slot_pasteSelected()) );
+    phelp.insertSeparator();
+    phelp.insertItem( mkQPixTb("help.xpm"), i18n("&Help"),
+		      getEditWidget(), SLOT(slot_helpSelected()) );
+    phelp.exec(QCursor::pos());
 }

@@ -66,27 +66,7 @@ void CALLER_ITEMCLASS_NAME::MyWidget::mousePressEvent ( QMouseEvent *e )
 
   if (e->button() == RightButton)
     {
-      #define mkQPixTb(fn) QPixmap(KApplication::kde_toolbardir() + QString("/") +fn)
-      #define mkQPixDd(fn) QPixmap(KApplication::kde_datadir() + QString("/kdevelop/toolbar/") + fn)
-
-
-      KPopupMenu phelp;
-      phelp.setTitle( parentObject->itemClass() );
-      if (!isMainwidget)
-        {
-          phelp.insertItem( mkQPixTb("prev.xpm"), i18n("&Raise"), parentObject->getEditWidget(), SLOT(slot_raiseSelected()) );
-          phelp.insertItem( mkQPixTb("next.xpm"), i18n("&Lower"), parentObject->getEditWidget(), SLOT(slot_lowerSelected()) );
-          phelp.insertItem( mkQPixTb("top.xpm"), i18n("Raise to &top"),    parentObject->getEditWidget(), SLOT(slot_raiseTopSelected()) );
-          phelp.insertItem( mkQPixTb("bottom.xpm"), i18n("Lower to &bottom"), parentObject->getEditWidget(), SLOT(slot_lowerBottomSelected()) );
-          phelp.insertSeparator();
-          phelp.insertItem( mkQPixDd("cut.xpm"), i18n("C&ut"),   parentObject->getEditWidget(), SLOT(slot_cutSelected()) );
-          phelp.insertItem( mkQPixTb("delete.xpm"), i18n("&Delete"),parentObject->getEditWidget(), SLOT(slot_deleteSelected()) );
-          phelp.insertItem( mkQPixDd("copy.xpm"), i18n("&Copy"),  parentObject->getEditWidget(), SLOT(slot_copySelected()) );
-        }
-      phelp.insertItem( mkQPixDd("paste.xpm"), i18n("&Paste"), parentObject->getEditWidget(), SLOT(slot_pasteSelected()) );
-      phelp.insertSeparator();
-      phelp.insertItem( mkQPixTb("help.xpm"), i18n("&Help"),  parentObject->getEditWidget(), SLOT(slot_helpSelected()) );
-      phelp.exec(QCursor::pos());
+      parentObject->execContextMenu(isMainwidget);
     }
 
 }

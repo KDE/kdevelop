@@ -114,6 +114,7 @@ public:
     */
     void deleteMyself();
 
+    void execContextMenu(bool ismain);
     bool isMainWidget;
   protected:
     int Prop2Bool(QString name);
