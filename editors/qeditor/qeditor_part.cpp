@@ -607,6 +607,7 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
                               const QString &text, unsigned int *foundAtLine, unsigned int *foundAtCol,
                               unsigned int *matchLen, bool casesensitive, bool backwards )
 {
+	/*
     Q_UNUSED( startLine );
     Q_UNUSED( startCol );
     Q_UNUSED( text );
@@ -615,10 +616,66 @@ bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
     Q_UNUSED( matchLen );
     Q_UNUSED( casesensitive );
     Q_UNUSED( backwards );
+	*/
+	if( text.isEmpty() ){
+		return false;
+	}
 
-#warning "TODO: QEditorPart::searchText()"
-    kdDebug(9032) << "TODO: QEditorPart::searchText()" << endl;
-    return false;
+	unsigned int tmpline = startLine;
+	int foundCol;
+	QString oneline;
+	bool firstTestedLine=true;
+
+	if( !backwards ){
+		while( tmpline <= numLines() ){
+			//int oneLineLen = lineLength( tmpline-1 );
+			oneline = textLine( tmpline );
+			kdDebug()<<oneline<<endl;
+
+			// test one line by one line
+			if( firstTestedLine ){
+				int index = (int)startCol;
+				foundCol = oneline.find( text, index, casesensitive );
+				firstTestedLine = false;
+			}else{
+				foundCol = oneline.find( text, 0, casesensitive );
+			}
+			//case of found..
+			if( foundCol != -1 ){
+				(*foundAtLine) = tmpline;
+				(*foundAtCol) = foundCol;
+				(*matchLen) = text.length();
+				return true;
+			}
+			//case of not found..
+			tmpline++;
+		}
+
+		return false;
+
+	}else{
+		while( tmpline != 0 ){
+			oneline = textLine( tmpline );
+			kdDebug()<<oneline<<endl;
+			if( firstTestedLine ){
+				int index = (int)startCol;
+				foundCol = oneline.findRev( text, index, casesensitive );
+				firstTestedLine = false;
+			}else{
+				foundCol = oneline.findRev( text, -1, casesensitive );
+			}
+
+			// case of found..
+			if( foundCol != -1 ){
+				(*foundAtLine) = tmpline;
+				(*foundAtCol) = foundCol;
+				(*matchLen) = text.length();
+				return true;
+			}
+			tmpline--;
+		}
+		return false;
+	}
 }
 
 bool QEditorPart::searchText (unsigned int startLine, unsigned int startCol,
