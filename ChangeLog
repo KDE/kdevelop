@@ -1,3 +1,7 @@
+1999-07-05  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
+        * New documentation tree
+        * Decreased dependencies on config.h and cproject.h 
+
 1999-07-04  Sandy Meier  <smeier@rz.uni-potsdam.de>
 	* fixed bug in RFV, when deleting a file from disc
 
