@@ -74,6 +74,9 @@ KDevelop::KDevelop( QWidget* pParent, const char *name, WFlags f)
     // TODO: read from KConfig
     moveToolBar( m_pTaskBar, QMainWindow::Bottom);
     m_pTaskBar->show();
+
+    // set reasonable default size
+    resize(700, 500);
 }
 
 
@@ -90,7 +93,7 @@ void KDevelop::initActions(){
   KAction *pAction;
   pAction = KStdAction::configureToolbars (this,SLOT(slotOptionsEditToolbars()),actionCollection());
   pAction = KStdAction::quit(this, SLOT(close()), actionCollection());
-  
+
 }
 
 
@@ -120,7 +123,7 @@ bool KDevelop::queryClose(){
   kdDebug(9000) << "KDevelop::queryClose" << endl;
   m_pCore->closeProjectSpace();
   return true;
-  
+
 }
 
 
@@ -132,13 +135,13 @@ bool KDevelop::queryExit(){
     // do we? doesn't kparts take care of deleting views?
     // as of 2/20/2001 the following snipped of code crashes when there
     // is an open document view in the mdi window
-    // More specifically the pEmbeddedView pointer points to a QTimer and 
+    // More specifically the pEmbeddedView pointer points to a QTimer and
     // crashes when trying to delete it.
     // Why there is a QTimer in the list, I have no fscking idea.
     // Having an editor window open does do double deletion
-    // Does DocumentView and editorView behave different? 
-#warning FIXME This will crash with an open document view  
-    
+    // Does DocumentView and editorView behave different?
+#warning FIXME This will crash with an open document view
+
     QListIterator<QextMdiChildView> it(m_MDICoverList);
     for ( ; it.current(); ++it ) {
         QextMdiChildView* pMdiCover = it.current();
@@ -288,14 +291,14 @@ void KDevelop::initHelp(){
 
   m_paViewTreeView->setStatusText( i18n("Enables / disables the treeview") );
   m_paViewTreeView->setWhatsThis( i18n("Tree-View\n\n"
-            											"Enables/ disables the tree window. The "																
+            											"Enables/ disables the tree window. The "
             											"state of the window is displayed by the "
             											"toggle button: if the button is pressed, "
             											"the window is open, otherwise closed.") );
 
   m_paViewOutputView->setStatusText( i18n("Enables / disables the outputview") );
   m_paViewOutputView->setWhatsThis( i18n("Output-View\n\n"
-             											"Enables/ disables the output window. The "																
+             											"Enables/ disables the output window. The "
              											"state of the window is displayed by the "
              											"toggle button: if the button is pressed, "
              											"the window is open, otherwise closed.") );
