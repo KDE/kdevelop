@@ -1,0 +1,21 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Exec=blubb
+Name=KDevVCSManager
+GenericName=VCSManager
+Comment=Version Control System Manager 
+Icon=kdevelop
+ServiceTypes=KDevelop/Plugin
+
+X-KDevelop-Plugin-Version=1
+X-KDevelop-Plugin-Homepage=
+X-KDevelop-Plugin-BugsEmailAddress=jens.dagerbo@swipnet.se
+X-KDevelop-Plugin-Copyright=(C) by Jens Dagerbo
+
+X-KDevelop-Args=
+
+X-KDevelop-Scope=Core
+X-KDE-Library=libkdevvcsmanager
+X-KDevelop-Version=3
+X-KDevelop-Properties=VCS
