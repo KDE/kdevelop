@@ -2,15 +2,15 @@
 #define _KDEVPROJECT_H_
 
 #include <qstringlist.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 
 
-class KDevProject : public KDevPart
+class KDevProject : public KDevPlugin
 {
     Q_OBJECT
     
 public:
-    KDevProject( KDevApi *api, QObject *parent=0, const char *name=0 );
+    KDevProject( QObject *parent=0, const char *name=0 );
     ~KDevProject();
 
     virtual void openProject(const QString &dirName) = 0;

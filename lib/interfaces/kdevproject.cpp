@@ -1,8 +1,8 @@
 #include "kdevproject.h"
 
 
-KDevProject::KDevProject(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+KDevProject::KDevProject(QObject *parent, const char *name)
+    : KDevPlugin(parent, name)
 {
 }
 
