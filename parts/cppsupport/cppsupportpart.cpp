@@ -40,6 +40,7 @@
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
+#include <kconfig.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editinterface.h>
@@ -733,13 +734,35 @@ QString CppSupportPart::asHeaderCode(ParsedMethod *pm)
 {
     QString str;
 
-    if( !pm->comment().isEmpty() ) {
-        str += "\t/**\n\t";
-        str += pm->comment().replace( QRegExp("\n"), "\n\t" );
-        str += "\n\t*/\n";
-    }
+    KConfig *config = kapp->config ();
+    config->setGroup ("AStyle");
+    QString fill = config->readEntry ("Fill", "Tabs");
+    QString fillSpaces = config->readEntry ("FillSpaces", "2");
+    QString style = config->readEntry ("Style", "UserDefined");
 
-    str += "\t";
+    // set the default indent : space
+    QString indent = " ";
+   
+    if (style == "UserDefined")
+    { 
+      bool ok = true; 
+      // set indention according to the configuration 
+      indent = ((fill == "Tabs") ? QString ("\t") : indent.fill (' ', fillSpaces.toInt (&ok)));
+      // if the fillSpaces property is not a number -> reset indention to 2 spaces
+      indent = (ok ? indent : QString ("  "));
+    }
+    else
+    {
+      indent = "\t";
+    } 
+ 
+    if( !pm->comment().isEmpty() ) {
+        str += indent + "/**\n" + indent;
+        str += pm->comment().replace( QRegExp("\n"), "\n" + indent );
+        str += "\n" + indent + "*/\n";
+    }
+ 
+    str += indent;
 
     if (pm->isVirtual())
         str += "virtual ";
