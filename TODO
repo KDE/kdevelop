@@ -13,7 +13,6 @@ High priority tasks!
   - CTRL-C doesn't work, typing ../ does weird things
 
 * automake part:
-  - [FIXED - VR] Add files dialog: DND doesn't work!
   - Should be able to DND files from other targets / file list / konq
     to add to targets.
   - Doesn't always get lib path relative to $top_buildir correct.
