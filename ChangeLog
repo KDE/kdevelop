@@ -1,3 +1,6 @@
+2003-05-14 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
+  * Trollproject target.path reimplementation
+
 2003-05-14 Mario Scalas <mario.scalas@libero.it>
 	* (lib/interface) Merged KDevGlobalVersionControl in KDevGlobalVersionControl
 	* (lib/interface) removed KDevGlobalVersion
@@ -372,7 +375,7 @@
 	* parts/filecreate:
 	 - GUI for both global and project level configuration added.
 
-2003-02-09 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2003-02-09 Jakob Simon-Gaarde <jsgaarde@simon-gaarde.dk>
   * trollprojectpart: The dialog for subclassing widgets based on ui-files now works
     iteratively, so you can update your subclasses according to the changes made in
     the ui-files.
@@ -484,7 +487,7 @@
 	* lib/util:
 	  - added urlutil, general URL manipulation utilities
 
-2003-01-07  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2003-01-07  Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * Append to libpath in subproject configuration dialog
 
 2003-01-07  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
@@ -515,7 +518,7 @@
 	* accept perl scripts for the loading in the text editor
 	* problem reporter accepts import/export macro in class declaration (patch by Roberto Raggi)
 
-2003-01-04 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2003-01-04 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
 	* UI-subclassing finnished in qmake manager.
     (activate by rightclicking on a ui-file)
 
@@ -581,7 +584,7 @@
 	* Minor improvments on Automake Manager
 		-> More to come
 
-2002-12-17 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-12-17 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
 	* Still working on extended DOM path/automatic subclassing from ui-templates in qmake-projects
 
 2002-12-17 F@lk Brettschneider <falk@kdevelop.org>
@@ -606,7 +609,7 @@
 2002-12-13 F@lk Brettschneider <falk@kdevelop.org>
     * added breakpoint support in QEditor (not yet finished)
 
-2002-12-12 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-12-12 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
     * Added a new extended path ability to DomUtil so that the path can be qualified on attributes
       and multiple matches can be addressed with a zero-based index
 
@@ -614,10 +617,10 @@
     * compiles/runs on KDE-3.0 as well again
     * backported KWidgetAction and KTextEditor::MarkInterfaceExtension from KDE-3.1 to KDE-3.0-compiled Gideon
 
-2002-12-07 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-12-07 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
     * getActivedir() corrected in trollproject
 
-2002-12-07 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-12-07 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
     * Altered the Appname/location confusion in appwizard
 
 2002-12-05 F@lk Brettschneider <falk@kdevelop.org>
@@ -781,11 +784,11 @@
 	* Added notification configuration dialog and notifications
 	  for finished processes (off by default)
 
-2002-08-31 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-31 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
      * Connected the last toolbar buttons
      * I hereby declare trollprojectpart ready for alpha release :)
 
-2002-08-31 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-31 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
      * trollproject - added compiler/linker flags, includepath
 
 2002-08-30 John Firebaugh <jfirebaugh@kde.org>
@@ -795,11 +798,11 @@
        Might want to eventually refactor plugin loading code in
        projectmanager to plugincontroller.
 
-2002-08-30 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-30 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
      * removed trollproject runoptionwidget using common lib/project/runoptionswidget
      * added browse button to common runoptionwidget
 
-2002-08-29 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-29 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * Trollproject Part
      * added new project run options widget
 
@@ -828,7 +831,7 @@
 2002-08-25 Mickael Marchand <marchand@kde.org>
 	* Imported first version of Subversion kpart
 
-2002-08-24 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-24 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
 	* Applied first simple QMake based project template in appwizard
 
 2002-08-22 Harald Fernengel <harry@kdevelop.org>
@@ -838,14 +841,14 @@
 	* Since there is no right pane in MDI modes, add select views to the left
 	  (Automake Manager and Documentation Browser are now available again in MDI mode)
 
-2002-08-19 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-19 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollproject:
         * File exclusion on qmake-scope-level now working
 
 2002-08-18 Victor Rder <victor_roeder@gmx.de>
 	* Applied Yann Hodique's cvspart patch
 
-2002-08-09  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-09  Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollproject:
 	* Added toolbar to file tree
 
@@ -855,7 +858,7 @@
 2002-08-11 Victor Rder <victor_roeder@gmx.de>
 	* Applied Sebastian Kratzert's search-extension-diff<2>
 
-2002-08-09  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-09  Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollproject:
 	* Done implementing projectconfiguration dialog
 	* Added toolbarbuttons in the project tree
@@ -869,7 +872,7 @@
 2002-08-04 Christian Couder <christian@kdevelop.org>
 	* Fix a few appwizard bugs.
 
-2002-08-03  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-08-03  Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollproject:
 	* Projectconfiguration dialog has been added
 	* Fileproperty dialog added for excluding files in subscopes
@@ -908,7 +911,7 @@
 		-> but not really efficient :-(
 		-> TODO: Toy with a few ideas...
 
-2002-07-15 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-07-15 Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollproject:
     * trollprojectwidget:
       * The projectmanager now supports qmake scopes
@@ -924,7 +927,7 @@
 	* adapted the the look of all Automake dialogs
 	* add blue bullet to the make output view
 
-2002-07-01  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-07-01  Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollprojectpart:
     * trollprojectwidget:
       * Can now insert files and subdirs (.pro files are altered dynamically)
@@ -940,7 +943,7 @@
 	* added new bullets to the make outputview
 	* everything needs a little bit code clean-up, so don't worry :-)
 
-2002-06-29  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-06-29  Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollprojectpart:
     * FileBuffer:
       * added FileBuffer::removeValues() removes all values for a variable
@@ -949,7 +952,7 @@
         This enables files and subdirs to be added and removed.
       * added FileBuffer::saveBuffer() save buffer to file.
 
-2002-06-28  Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
+2002-06-28  Jakob Simon-Gaarde <jakob@simon-gaarde.dk>
   * trollprojectpart:
     * filebufferclass added to buffer .pro files
       (+filebuffer.cpp, +filebuffer.h)
