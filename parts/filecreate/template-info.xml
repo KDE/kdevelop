@@ -111,6 +111,18 @@
       <type ext="dpr" name="Delphi project" create="template" icon="source_p">
         <descr>A new Delphi project.</descr>
       </type>
+      <type ext="l" name="flex C source" create="template" icon="source_l">
+        <descr>A new empty flex C source source file.</descr>
+      </type>
+      <type ext="ll" name="flex C++ source" create="template" icon="source_l">
+        <descr>A new empty flex C++ source source file.</descr>
+      </type>
+      <type ext="y" name="bison C source" create="template" icon="source_y">
+        <descr>A new empty bison C source source file.</descr>
+      </type>
+      <type ext="yy" name="bison C++ source" create="template" icon="source_y">
+        <descr>A new empty bison C++ source source file.</descr>
+      </type>
     </filetypes>
   </kdevfilecreate>
 </kdevelop>
