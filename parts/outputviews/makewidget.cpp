@@ -441,15 +441,14 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     // pathological case
     if ( ! m_part->project() ) return fName;
 
-    QString name = fName;
+    QString name;
     QString dir = directory( parag );
 
     if ( fName.startsWith( "/" ) )
     {
         // absolute path given
         name = fName;
-    } else
-    if ( ( fName.contains( "/" ) ) && ( !dir.isEmpty() ) )
+    } else if ( ( fName.contains( "/" ) ) && ( !dir.isEmpty() ) )
     {
         name = dir + fName;
     }
@@ -457,6 +456,7 @@ QString MakeWidget::guessFileName( const QString& fName, int parag ) const
     {
         // now it gets tricky - no directory navigation messages,
         // no absolute path - let's guess.
+        name = fName;
         if ( !checkFileExists( m_part->project()->projectDirectory() + "/" + fName, name ) &&
 	     !checkFileExists( m_part->project()->projectDirectory() + "/" + m_part->project()->activeDirectory() + "/" + fName, name ) )
             checkFileExists( m_part->project()->buildDirectory() + "/" + fName, name );
