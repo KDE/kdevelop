@@ -116,7 +116,7 @@ KMdiDockContainer::~KMdiDockContainer()
   for (QMap<KMdiDockWidget*,int>::iterator it=m_map.begin();it!=m_map.end();++it) {
 	KMdiDockWidget *w=it.key();
 	  if (m_overlapButtons.contains(w)) {
-	    (static_cast<KDockWidgetHeader*>(w->getHeader()->qt_cast("KDockWidgetHeader")))->removeButton(m_overlapButtons[w]);
+	    (static_cast<KDockWidgetHeader*>(w->getHeader()->qt_cast("KDockWidget_Compat::KDockWidgetHeader")))->removeButton(m_overlapButtons[w]);
 	    m_overlapButtons.remove(w);
 	  }
   }
@@ -166,12 +166,12 @@ void KMdiDockContainer::insertWidget (KDockWidget *dwdg, QPixmap pixmap, const Q
     if (((KDockWidget*)parentWidget())->mayBeShow())
       ((KDockWidget*)parentWidget())->dockBack();
 
-    if (w->getHeader()->qt_cast("KDockWidgetHeader"))
+    if (w->getHeader()->qt_cast("KDockWidget_Compat::KDockWidgetHeader"))
     {
       kdDebug()<<"*** KDockWidgetHeader has been found"<<endl;
 
       KDockWidgetHeader *hdr=static_cast<KDockWidgetHeader*>(w->getHeader()->
-        qt_cast("KDockWidgetHeader"));
+        qt_cast("KDockWidget_Compat::KDockWidgetHeader"));
 
       KDockButton_Private *btn = new KDockButton_Private( hdr, "OverlapButton" );
 
@@ -260,7 +260,7 @@ void KMdiDockContainer::removeWidget(KDockWidget* dwdg)
   m_map.remove(w);
   m_revMap.remove(id);
   if (m_overlapButtons.contains(w)) {
-    (static_cast<KDockWidgetHeader*>(w->getHeader()->qt_cast("KDockWidgetHeader")))->removeButton(m_overlapButtons[w]);
+    (static_cast<KDockWidgetHeader*>(w->getHeader()->qt_cast("KDockWidget_Compat::KDockWidgetHeader")))->removeButton(m_overlapButtons[w]);
     m_overlapButtons.remove(w);
   }
   KDockContainer::removeWidget(w);
@@ -304,7 +304,7 @@ void KMdiDockContainer::tabClicked(int t)
     }
     m_ws->raiseWidget(t);
     if (m_ws->widget(t)) {
-      KDockWidget *tmpDw=static_cast<KDockWidget*>(m_ws->widget(t)->qt_cast("KDockWidget"));
+      KDockWidget *tmpDw=static_cast<KDockWidget*>(m_ws->widget(t)->qt_cast("KDockWidget_Compat::KDockWidget"));
       if (tmpDw) {
         if (tmpDw->getWidget()) tmpDw->getWidget()->setFocus();
       } else kdDebug()<<"Something really weird is going on"<<endl;

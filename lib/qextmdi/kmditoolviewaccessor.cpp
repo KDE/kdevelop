@@ -37,7 +37,7 @@ KMdiToolViewAccessor::KMdiToolViewAccessor( KMdiMainFrm *parent, QWidget *widget
 {
 	mdiMainFrm=parent;
 	d=new KMdiToolViewAccessorPrivate();
-	if (widgetToWrap->inherits("KDockWidget")) {
+	if (widgetToWrap->inherits("KDockWidget_Compat::KDockWidget")) {
 		d->widgetContainer=dynamic_cast<KDockWidget*>(widgetToWrap);
 		d->widget=d->widgetContainer->getWidget();
 	} else {
@@ -90,7 +90,7 @@ QWidget *KMdiToolViewAccessor::wrappedWidget() {
 void KMdiToolViewAccessor::setWidgetToWrap(QWidget *widgetToWrap, const QString& tabToolTip, const QString& tabCaption)
 {
 	Q_ASSERT(!(d->widget));
-	Q_ASSERT(!widgetToWrap->inherits("KDockWidget"));
+	Q_ASSERT(!widgetToWrap->inherits("KDockWidget_Compat::KDockWidget"));
 	disconnect(d->widgetContainer,SIGNAL(widgetSet(QWidget*)),this,SLOT(setWidgetToWrap(QWidget*)));
 	delete d->widget;
     d->widget=widgetToWrap;

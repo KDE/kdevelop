@@ -1619,7 +1619,7 @@ void KMdiMainFrm::switchToIDEAlMode()
    if (m_pDocumentViews->count() > 0) {
       m_pClose->show();
    }
-   //qDebug("TabPageMode on");
+   //qDebug("IDEAlMode on");
 
    mdiModeHasBeenChangedTo(KMdi::IDEAlMode);
 }
