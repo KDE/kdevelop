@@ -10,4 +10,4 @@ Terminal=0
 Name=KDevelop 3.0
 Comment=IDE for C++/Qt/KDE
 X-DCOP-ServiceType=Multi
-Categories=QT;KDE;Development
+Categories=Qt;KDE;Development
