@@ -29,9 +29,12 @@ class QPushButton;
 class KConfig;
 class QMultiLineEdit;
 class CPrjCompOpts;
+class CPrjAddOpts;
 class KDevSession;
 
 #include <kdialogbase.h>
+#include "cprjconfchange.h"
+
 //#include <qtabdialog.h>
 
 /** the setup-dialog for a project
@@ -48,6 +51,7 @@ public:
 
 private:
   void addGeneralPage();
+  void addAdditionalOptionsPage();
   void addCompilerOptionsPage();
   void addCompilerWarningsPage();
   void addLinkerPage();
@@ -56,6 +60,7 @@ private:
 
 protected:
 	CPrjCompOpts* compdlg;
+	CPrjAddOpts *addOptsDlg;
   /** local projectinfo object*/
   CProject* prj_info; 
   // TAB General
@@ -121,6 +126,7 @@ private:
   QLineEdit* binary_edit;
   QLineEdit* libtool_edit;
 
+  CPrjConfChange configureIn;
 	
 protected slots:
    /** is called, if the ok-button were clicked*/

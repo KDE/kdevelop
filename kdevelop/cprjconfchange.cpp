@@ -28,9 +28,9 @@
 #include <iostream.h>
 
 #define COMMENT				"^dnl[\\s]+"
-#define COMMENTKDEV		".*[\\s]+dnl[\\s]+__kdev"
+#define COMMENTKDEV		".*[\\s]+dnl[\\s]+__kdevelop"
 #define ENDREGEXP			"__[\\s]*$"
-#define OPTIONSUFFIX	" dnl __kdev"
+#define OPTIONSUFFIX	" dnl __kdevelop"
 #define ENDSUFFIX	"__"
 #define COMMENTPREFIX	"dnl "
 
@@ -183,8 +183,8 @@ bool CPrjConfChange::isOptionAvailable(const QString &option, const QString &suf
   
   if (!suffix.isEmpty())
   {
-    disabledOption+=suffix; 
-    enabledOption+=suffix; 
+    disabledOption+="\\["+suffix+"\\]"; 
+    enabledOption+="\\["+suffix+"\\]"; 
   }
   disabledOption+=QString(ENDREGEXP);
   enabledOption+=QString(ENDREGEXP);
@@ -215,8 +215,8 @@ bool CPrjConfChange::enableOption(const QString &option, const QString &value, c
   
   if (!suffix.isEmpty())
   {
-    disabledOption+=suffix; 
-    enabledOption+=suffix; 
+    disabledOption+="\\["+suffix+"\\]"; 
+    enabledOption+="\\["+suffix+"\\]"; 
   }
   disabledOption+=QString(ENDREGEXP);
   enabledOption+=QString(ENDREGEXP);
@@ -231,8 +231,12 @@ bool CPrjConfChange::enableOption(const QString &option, const QString &value, c
     
     if (bFound)
     {
+      QString csuffix("");
+      if (!suffix.isEmpty())
+        csuffix=QString("[")+suffix+"]";
+         
       (*it)=option+((value.isNull()) ? QString("") : value)+OPTIONSUFFIX+
-        ((suffix.isNull()) ? QString("") : suffix)+ENDSUFFIX;  
+        csuffix+ENDSUFFIX;  
       bChanged=true;
     }
   }  
@@ -252,8 +256,8 @@ bool CPrjConfChange::disableOption(const QString &option, const QString &value, 
   enabledOption+=QString(COMMENTKDEV);
   if (!suffix.isEmpty())
   {
-    disabledOption+=suffix; 
-    enabledOption+=suffix; 
+    disabledOption+="\\["+suffix+"\\]"; 
+    enabledOption+="\\["+suffix+"\\]"; 
   }
   disabledOption+=QString(ENDREGEXP);
   enabledOption+=QString(ENDREGEXP);
@@ -269,9 +273,12 @@ bool CPrjConfChange::disableOption(const QString &option, const QString &value, 
     
     if (bFound)
     {
+      QString csuffix("");
+      if (!suffix.isEmpty())
+        csuffix=QString("[")+suffix+"]";
+         
       (*it)=QString(COMMENTPREFIX)+option+((value.isNull()) ? QString("") : value)+
-        OPTIONSUFFIX+
-        ((suffix.isNull()) ? QString("") : suffix)+ENDSUFFIX;
+        OPTIONSUFFIX+csuffix+ENDSUFFIX;
       bChanged=true;
     }
   }  
@@ -291,7 +298,7 @@ bool CPrjConfChange::isOptionEnabled(const QString &option, const QString &suffi
   enabledOption+=option+QString(COMMENTKDEV);
   if (!suffix.isEmpty())
   {
-    enabledOption+=suffix; 
+    enabledOption+="\\["+suffix+"\\]"; 
   }
   enabledOption+=QString(ENDREGEXP);
   

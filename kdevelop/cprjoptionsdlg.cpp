@@ -18,6 +18,7 @@
 
 #include "cprjoptionsdlg.h"
 #include "cprjcompopts.h"
+#include "cprjaddopts.h"
 
 #include "cproject.h"
 #include "ctoolclass.h"
@@ -68,7 +69,14 @@ CPrjOptionsDlg::CPrjOptionsDlg(CProject* prj,KDevSession* session,const QString&
   prj_info = prj;
 	sess=session;
 	currentcfg=curr;
+  
+  configureIn.setConfDir(prj->getProjectDir());
+  need_configure_in_update = false;
+  need_makefile_generation = false;
+
+  
   addGeneralPage();
+  addAdditionalOptionsPage();
   addCompilerOptionsPage();
 //  addCompilerWarningsPage();
   addLinkerPage();
@@ -160,7 +168,7 @@ void CPrjOptionsDlg::addGeneralPage()
   info_label=new QLabel(generalPage,"info_label");
   grid->addWidget(info_label,0,3);
   info_label->setText(i18n("Short Information:"));
-
+  
   info_edit=new QMultiLineEdit(generalPage,"info_edit");
   grid->addMultiCellWidget(info_edit,1,8,3,5);
   QStrList short_info=prj_info->getShortInfo();
@@ -179,13 +187,22 @@ void CPrjOptionsDlg::addGeneralPage()
 }
 
 //
+//****************** the additional options page ********************
+//
+void CPrjOptionsDlg::addAdditionalOptionsPage()
+{
+  QFrame* additionalPage = addPage(i18n("Additionals"),i18n("Additional Project Options"),
+  KGlobal::instance()->iconLoader()->loadIcon( "configure", KIcon::NoGroup, KIcon::SizeMedium ));
+  QGridLayout *grid = new QGridLayout(additionalPage);
+  QWhatsThis::add(additionalPage, i18n("Set some additional options of your project here."));
+  addOptsDlg = new CPrjAddOpts(&configureIn, additionalPage);
+  grid->addWidget(addOptsDlg,0,0);
+}
+//
 // *************** Compiler options *********************
 //
 void CPrjOptionsDlg::addCompilerOptionsPage()
 {
-
-  need_configure_in_update = false;
-  need_makefile_generation = false;
 
   QFrame* compilerOptions = addPage(i18n("Compiler Options"),i18n("Compiler Options and"
 	" Compiler Environment Configuration"),KGlobal::instance()->iconLoader()->loadIcon( "pipe", KIcon::NoGroup, KIcon::SizeMedium ));
@@ -1023,6 +1040,13 @@ void CPrjOptionsDlg::ok()
   prj_info->writeProject();
   if (version_edit->text() != old_version || prjname_edit->text() != old_name)
     need_configure_in_update = true;
+    
+  // check now for modifications inside configure.in(.in)
+  if (addOptsDlg && addOptsDlg->changed())
+  {
+    addOptsDlg->modifyConfigureIn();
+    need_configure_in_update = true;
+  }
 }
 
 // connection to set_modify_dir

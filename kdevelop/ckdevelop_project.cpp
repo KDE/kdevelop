@@ -379,7 +379,7 @@ void CKDevelop::slotProjectOptions(){
     if (prjdlg.needConfigureInUpdate()){
 			cfgure=true;
       prj->updateConfigureIn();
-      KMessageBox::information(0,i18n("You have modified the projectversion.\nWe will regenerate all Makefiles now."));
+      KMessageBox::information(0,i18n("You have modified certain project information.\nWe will regenerate configure now."));
       setToolMenuProcess(false);
       slotStatusMsg(i18n("Running automake/autoconf and configure..."));
       messages_widget->start();
