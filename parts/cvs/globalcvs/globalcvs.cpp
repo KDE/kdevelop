@@ -13,6 +13,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <kgenericfactory.h>
+#include <kprocess.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
@@ -49,9 +50,14 @@ void GlobalCvs::createNewProject(const QString& dir) {
         return;
     QString init("");
     if (form->init_check->isChecked())
-    	init = "cvs -d " + form->root_edit->text() + " init && ";
-    QString command = init + "cd "+ dir +" && cvs -d " + form->root_edit->text() + " import -m '" + form->message_edit->text() + "' "
-                      + form->repository_edit->text() + " " + form->vendor_edit->text() + " " + form->release_edit->text();
+    	init = "cvs -d " + 
+               KShellProcess::quote(form->root_edit->text()) + " init && ";
+    QString command = init + "cd " + KShellProcess::quote(dir) +
+                      " && cvs -d " + KShellProcess::quote(form->root_edit->text()) + 
+                      " import -m '" + KShellProcess::quote(form->message_edit->text()) + "' " +
+                      KShellProcess::quote(form->repository_edit->text()) + " " + 
+                      KShellProcess::quote(form->vendor_edit->text()) + " " + 
+                      KShellProcess::quote(form->release_edit->text());
     makeFrontend()->queueCommand(dir,command);
 }
 #include "globalcvs.moc"
