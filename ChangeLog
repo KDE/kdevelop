@@ -2,6 +2,7 @@
 
 	* Support for multiple file templates in app wizard
 	* More work on new class dialog
+	* Extended DomUtil to lists and pair lists
 
 2992-94-14  Matthias Hölzer-Klüpfel <mhk@kde.org>
 	* Added a new part that provides a "Open with" file menu entry

@@ -28,23 +28,18 @@ RunOptionsWidget::RunOptionsWidget(AutoProjectPart *part, QWidget *parent, const
     mainprogram_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, "/kdevautoproject/run/programargs"));
 
-    QDomElement docEl = dom.documentElement();
-    QDomElement autoprojectEl = docEl.namedItem("kdevautoproject").toElement();
-    QDomElement envvarsEl = autoprojectEl.namedItem("envvars").toElement();
-
-    QListViewItem *lastItem = 0;
-    QDomElement envvarEl = envvarsEl.firstChild().toElement();
-    while (!envvarEl.isNull()) {
-        if (envvarEl.tagName() == "envvar") {
-            QListViewItem *newItem =
-                new QListViewItem(listview, envvarEl.attribute("name"), envvarEl.attribute("value"));
-            if (lastItem)
-                newItem->moveItem(lastItem);
-            lastItem = newItem;
-        }
-        envvarEl = envvarEl.nextSibling().toElement();
-    }
+    DomUtil::PairList list = DomUtil::readPairListEntry(dom, "/kdevautoproject/envvars", "envvar",
+                                                        "name", "value");
     
+    QListViewItem *lastItem = 0;
+
+    DomUtil::PairList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        QListViewItem *newItem = new QListViewItem(listview, (*it).first, (*it).second);
+        if (lastItem)
+            newItem->moveItem(lastItem);
+        lastItem = newItem;
+    }
 }
 
 
@@ -59,31 +54,15 @@ void RunOptionsWidget::accept()
     DomUtil::writeEntry(dom, "/kdevautoproject/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(dom, "/kdevautoproject/run/programargs", progargs_edit->text());
 
-    QDomElement docEl = dom.documentElement();
-    QDomElement autoprojectEl = docEl.namedItem("kdevautoproject").toElement();
-    if (autoprojectEl.isNull()) {
-        autoprojectEl = dom.createElement("kdevautoproject");
-        docEl.appendChild(autoprojectEl);
-    }
-    QDomElement envvarsEl = autoprojectEl.namedItem("envvars").toElement();
-    if (envvarsEl.isNull()) {
-        envvarsEl = dom.createElement("envvars");
-        autoprojectEl.appendChild(envvarsEl);
-    }
-
-    // Clear old entries
-    while (!envvarsEl.firstChild().isNull())
-        envvarsEl.removeChild(envvarsEl.firstChild());
-
+    DomUtil::PairList list;
     QListViewItem *item = listview->firstChild();
     while (item) {
-        QDomElement envvarEl = dom.createElement("envvar");
-        envvarEl.setAttribute("name", item->text(0));
-        envvarEl.setAttribute("value", item->text(1));
-        envvarsEl.appendChild(envvarEl);
+        list << DomUtil::Pair(item->text(0), item->text(1));
         item = item->nextSibling();
     }
-   
+
+    DomUtil::writePairListEntry(dom, "/kdevcustomproject/envvars", "envvar",
+                                "name", "value", list);
 }
 
 

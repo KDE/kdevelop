@@ -20,6 +20,7 @@
 #include <klocale.h>
 #include <kservice.h>
 #include <ktrader.h>
+#include "domutil.h"
 
 #include "partselectwidget.h"
 #include "plugincontroller.h"
@@ -100,19 +101,7 @@ void PartSelectWidget::saveGlobalConfig()
 
 void PartSelectWidget::readProjectConfig()
 {
-    // This code is duplicated from core.cpp, maybe this
-    // could be refactored later
-    QDomElement docEl = m_projectDom.documentElement();
-    QDomElement generalEl = docEl.namedItem("general").toElement();
-    
-    QStringList ignoreparts;
-    QDomElement ignorepartsEl = generalEl.namedItem("ignoreparts").toElement();
-    QDomElement partEl = ignorepartsEl.firstChild().toElement();
-    while (!partEl.isNull()) {
-        if (partEl.tagName() == "part")
-            ignoreparts << partEl.firstChild().toText().data();
-        partEl = partEl.nextSibling().toElement();
-    }
+    QStringList ignoreparts = DomUtil::readListEntry(m_projectDom, "/general/ignoreparts", "part");
 
     KTrader::OfferList localOffers = PluginController::pluginServices( "Project" );
     for (KTrader::OfferList::ConstIterator it = localOffers.begin(); it != localOffers.end(); ++it) {

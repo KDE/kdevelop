@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,23 +28,18 @@ RunOptionsWidget::RunOptionsWidget(CustomProjectPart *part, QWidget *parent, con
     mainprogram_edit->setText(DomUtil::readEntry(dom, "/kdevcustomproject/run/mainprogram"));
     progargs_edit->setText(DomUtil::readEntry(dom, "/kdevcustomproject/run/programargs"));
 
-    QDomElement docEl = dom.documentElement();
-    QDomElement customprojectEl = docEl.namedItem("kdevcustomproject").toElement();
-    QDomElement envvarsEl = customprojectEl.namedItem("envvars").toElement();
-
-    QListViewItem *lastItem = 0;
-    QDomElement envvarEl = envvarsEl.firstChild().toElement();
-    while (!envvarEl.isNull()) {
-        if (envvarEl.tagName() == "envvar") {
-            QListViewItem *newItem =
-                new QListViewItem(listview, envvarEl.attribute("name"), envvarEl.attribute("value"));
-            if (lastItem)
-                newItem->moveItem(lastItem);
-            lastItem = newItem;
-        }
-        envvarEl = envvarEl.nextSibling().toElement();
-    }
+    DomUtil::PairList list = DomUtil::readPairListEntry(dom, "/kdevcustomproject/envvars", "envvar",
+                                                        "name", "value");
     
+    QListViewItem *lastItem = 0;
+
+    DomUtil::PairList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        QListViewItem *newItem = new QListViewItem(listview, (*it).first, (*it).second);
+        if (lastItem)
+            newItem->moveItem(lastItem);
+        lastItem = newItem;
+    }
 }
 
 
@@ -59,31 +54,15 @@ void RunOptionsWidget::accept()
     DomUtil::writeEntry(dom, "/kdevcustomproject/run/mainprogram", mainprogram_edit->text());
     DomUtil::writeEntry(dom, "/kdevcustomproject/run/programargs", progargs_edit->text());
 
-    QDomElement docEl = dom.documentElement();
-    QDomElement customprojectEl = docEl.namedItem("kdevcustomproject").toElement();
-    if (customprojectEl.isNull()) {
-        customprojectEl = dom.createElement("kdevcustomproject");
-        docEl.appendChild(customprojectEl);
-    }
-    QDomElement envvarsEl = customprojectEl.namedItem("envvars").toElement();
-    if (envvarsEl.isNull()) {
-        envvarsEl = dom.createElement("envvars");
-        customprojectEl.appendChild(envvarsEl);
-    }
-
-    // Clear old entries
-    while (!envvarsEl.firstChild().isNull())
-        envvarsEl.removeChild(envvarsEl.firstChild());
-
+    DomUtil::PairList list;
     QListViewItem *item = listview->firstChild();
     while (item) {
-        QDomElement envvarEl = dom.createElement("envvar");
-        envvarEl.setAttribute("name", item->text(0));
-        envvarEl.setAttribute("value", item->text(1));
-        envvarsEl.appendChild(envvarEl);
+        list << DomUtil::Pair(item->text(0), item->text(1));
         item = item->nextSibling();
     }
-   
+
+    DomUtil::writePairListEntry(dom, "/kdevautoproject/envvars", "envvar",
+                                "name", "value", list);
 }
 
 

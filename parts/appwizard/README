@@ -13,6 +13,13 @@ ShowFileAfterGeneration:
 DefaultDestinatonDir:
            changes the default destination dir for the project (~) 
            to your value, HOMEDIR is a keyword
+FileTemplates:
+           a list of pairs of strings, where the first element is the
+           name a file template to be created, and the second element
+           is either CStyle, ShellStyle, or None. With CStyle, the
+           application wizard proposes a file header in C comment style.
+           With ShellStyle, the application wizard creates a header
+           in shell comment style.
 
 an example for a php template:
 
@@ -23,6 +30,7 @@ Comment=This generates a simplistic 'Hello world' program in PHP (http://www.php
 Icon= php.png
 ShowFileAfterGeneration=README.devel
 DefaultDestinatonDir=HOMEDIR/public_html
+FileTemplates=php,ShellStyle
 
 The template project files (*.kdevelop) defines which parts are
 loaded for the project and how they are configured. The set of

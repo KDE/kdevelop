@@ -13,18 +13,94 @@
 #define _DOMUTIL_H_
 
 #include <qdom.h>
+#include <qpair.h>
+#include <qstringlist.h>
+#include <qvaluelist.h>
 
 
+/**
+ * Utility class for conveniently accessing data in a DOM tree.
+ */
 class DomUtil
 {
 public:
+    typedef QPair<QString, QString> Pair;
+    typedef QValueList<Pair> PairList;
+    
+    /**
+     * Reads a string entry.
+     */
     static QString readEntry(const QDomDocument &doc, const QString &path);
+    /**
+     * Reads a number entry.
+     */
     static int readIntEntry(const QDomDocument &doc, const QString &path);
+    /**
+     * Reads a boolean entry. The strings "true" and "TRUE" are interpreted
+     * as true, all other as false.
+     */
     static bool readBoolEntry(const QDomDocument &doc, const QString &path);
+    /**
+     * Reads a list entry. See writeListEntry().
+     */
+    static QStringList readListEntry(const QDomDocument &doc, const QString &path, const QString &tag);
+    /**
+     * Reads a list of string pairs. See writePairListEntry().
+     */
+    static PairList readPairListEntry(const QDomDocument &doc, const QString &path, const QString &tag,
+                                      const QString &firstAttr, const QString &secondAttr);
+    /**
+     * Writes a string entry. For example,
+     * <code>
+     *   writeEntry(doc, "/general/special", "foo");
+     * </code>
+     * creates the DOM fragment
+     * <code>
+     *   <general><special>foo</special></general>
+     * </code>
+     */
     static void writeEntry(QDomDocument &doc, const QString &path, const QString &value);
+    /**
+     * Writes a number entry.
+     */
     static void writeIntEntry(QDomDocument &doc, const QString &path, int value);
+    /**
+     * Writes a boolean entry. Booleans are stored as "true", "false" resp.
+     */
     static void writeBoolEntry(QDomDocument &doc, const QString &path, bool value);
+    /**
+     * Writes a string list element. The list elements are separated by tag. For example,
+     * <code>
+     *   QStringList l; l << "one" << "two";
+     *   writeEntry(doc, "/general/special", "el", l);
+     * </code>
+     * creates the DOM fragment
+     * <code>
+     *   <general><special><el>one</el><el>two</el></special></general>
+     * </code>
+     */
+    static void writeListEntry(QDomDocument &doc, const QString &path, const QString &tag,
+                               const QStringList &value);
+    /**
+     * Writes a list of string pairs. The list elements are stored in the attributes
+     * firstAttr and secondAttr of elements named tag. For example,
+     * <code>
+     *   DomUtil::StringPairList l;
+     *   l << DomUtil::StringPair("one", "1");
+     *   l << DomUtil::StringPair("two", "2");
+     *   writeEntry(doc, "/general/special", "el", "first", "second", l);
+     * </code>
+     * creates the DOM fragment
+     * <code>
+     *   <general><special>
+     *     <el first="one" second="1"/>
+     *     <el first="two" second="2"/>
+     *   </special></general>
+     * </code>
+     */
+    static void writePairListEntry(QDomDocument &doc, const QString &path, const QString &tag,
+                                   const QString &firstAttr, const QString &secondAttr,
+                                   const PairList &value);
 };
 
 #endif
-    

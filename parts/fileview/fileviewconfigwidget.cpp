@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -9,10 +9,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qdom.h>
 #include <qlistview.h>
 #include <knotifyclient.h>
 
+#include "domutil.h"
 #include "addfilegroupdlg.h"
 #include "fileviewpart.h"
 #include "fileviewconfigwidget.h"
@@ -36,53 +36,34 @@ FileViewConfigWidget::~FileViewConfigWidget()
 
 void FileViewConfigWidget::readConfig()
 {
-    QDomDocument dom = *m_part->projectDom();
-    QDomElement docEl = dom.documentElement();
-    QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
-    QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
+    QDomDocument &dom = *m_part->projectDom();
+    DomUtil::PairList list = DomUtil::readPairListEntry(dom, "/kdevfileview/groups", "group",
+                                                        "name", "pattern");
 
     QListViewItem *lastItem = 0;
-    QDomElement groupEl = groupsEl.firstChild().toElement();
-    while (!groupEl.isNull()) {
-        if (groupEl.tagName() == "group") {
-            QListViewItem *newItem =
-                new QListViewItem(listview, groupEl.attribute("name"), groupEl.attribute("pattern"));
-            if (lastItem)
-                newItem->moveItem(lastItem);
-            lastItem = newItem;
-        }
-        groupEl = groupEl.nextSibling().toElement();
+
+    DomUtil::PairList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        QListViewItem *newItem = new QListViewItem(listview, (*it).first, (*it).second);
+        if (lastItem)
+            newItem->moveItem(lastItem);
+        lastItem = newItem;
     }
 }
 
 
 void FileViewConfigWidget::storeConfig()
 {
-    QDomDocument dom = *m_part->projectDom();
-    QDomElement docEl = dom.documentElement();
-    QDomElement fileviewEl = docEl.namedItem("kdevfileview").toElement();
-    if (fileviewEl.isNull()) {
-        fileviewEl = dom.createElement("kdevfileview");
-        docEl.appendChild(fileviewEl);
-    }
-    QDomElement groupsEl = fileviewEl.namedItem("groups").toElement();
-    if (groupsEl.isNull()) {
-        groupsEl = dom.createElement("groups");
-        fileviewEl.appendChild(groupsEl);
-    }
-
-    // Clear old entries
-    while (!groupsEl.firstChild().isNull())
-        groupsEl.removeChild(groupsEl.firstChild());
-
+    DomUtil::PairList list;
+    
     QListViewItem *item = listview->firstChild();
     while (item) {
-        QDomElement groupEl = dom.createElement("group");
-        groupEl.setAttribute("name", item->text(0));
-        groupEl.setAttribute("pattern", item->text(1));
-        groupsEl.appendChild(groupEl);
+        list << DomUtil::Pair(item->text(0), item->text(1));
         item = item->nextSibling();
     }
+
+    DomUtil::writePairListEntry(*m_part->projectDom(), "/kdevfileview/groups",
+                                "group", "name", "pattern", list);
 }
 
 
