@@ -25,15 +25,15 @@
 #include "classstore.h"
 
 #include "classviewpart.h"
-#include "classviewfactory.h"
 #include "classviewwidget.h"
 #include "classactions.h"
 #include "classtooldlg.h"
 #include "hierarchydlg.h"
 
+K_EXPORT_COMPONENT_FACTORY( libkdevclassview, ClassViewFactory( "kdevclassview" ) );
 
-ClassViewPart::ClassViewPart(KDevApi *api, QObject *parent, const char *name)
-    : KDevPart(api, parent, name)
+ClassViewPart::ClassViewPart( QObject *parent, const char *name, const QStringList & )
+    : KDevPlugin(parent, name)
 {
     setInstance(ClassViewFactory::instance());
     setXMLFile("kdevclassview.rc");

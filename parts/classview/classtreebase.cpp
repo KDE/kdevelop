@@ -27,7 +27,7 @@
 #include "kdevpartcontroller.h"
 #include "classstore.h"
 
-#include "classviewfactory.h"
+#include "classviewpart.h"
 #include "classviewpart.h"
 #include "classtooldlg.h"
 #include "classtreebase.h"

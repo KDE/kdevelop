@@ -22,7 +22,7 @@
 
 #include "classstore.h"
 #include "classtooldlg.h"
-#include "classviewfactory.h"
+#include "classviewpart.h"
 #include "classviewwidget.h"
 
 

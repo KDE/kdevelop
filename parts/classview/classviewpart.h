@@ -15,9 +15,10 @@
 #define _CLASSVIEWPART_H_
 
 #include <qguardedptr.h>
-#include "kdevpart.h"
+#include "kdevplugin.h"
 #include "kdevlanguagesupport.h"
 
+#include <kgenericfactory.h>
 
 class ClassTreeWidget;
 class ClassToolDialog;
@@ -29,12 +30,12 @@ class DelayedPopupAction;
 class ParsedClass;
 
 
-class ClassViewPart : public KDevPart
+class ClassViewPart : public KDevPlugin
 {
     Q_OBJECT
 
 public:
-    ClassViewPart( KDevApi *api, QObject *parent=0, const char *name=0 );
+    ClassViewPart( QObject *parent, const char *name, const QStringList & );
     ~ClassViewPart();
 
     enum ItemType { Scope, Class, Struct,
@@ -87,5 +88,7 @@ private:
     DelayedPopupAction *popup_action;
     bool m_decl_or_impl;
 };
+
+typedef KGenericFactory<ClassViewPart> ClassViewFactory;
 
 #endif

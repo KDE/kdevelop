@@ -6,8 +6,7 @@ kde_module_LTLIBRARIES = libkdevclassview.la
 libkdevclassview_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkdevclassview_la_LIBADD = $(top_builddir)/lib/libkdevelop.la
 
-libkdevclassview_la_SOURCES = classviewfactory.cpp \
-			      classviewpart.cpp \
+libkdevclassview_la_SOURCES = classviewpart.cpp \
 			      classviewwidget.cpp \
 			      classactions.cpp \
 			      classtreebase.cpp \

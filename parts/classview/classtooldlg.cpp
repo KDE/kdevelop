@@ -22,7 +22,7 @@
 #include "kdevlanguagesupport.h"
 #include "classstore.h"
 #include "parsedclass.h"
-#include "classviewfactory.h"
+#include "classviewpart.h"
 #include "classtooldlg.h"
 
 
