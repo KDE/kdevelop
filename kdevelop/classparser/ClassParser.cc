@@ -271,6 +271,11 @@ void CClassParser::parseFunctionArgs( CParsedMethod *method )
     {
       parseType( &type );
 
+      // Skip defaultvalues.
+      if( lexem == '=' )
+        while( lexem != ',' && lexem != ')' )
+          getNextLexem();
+      
       arg = new CParsedArgument();
       // If the argument has a name, we set it
       if( lexem != ')' && lexem != ',' )
