@@ -50,6 +50,11 @@ public:
      */
     virtual QStringList fileFilters();
 
+    /**
+       the very first parse, after a ProjectSpace was opened
+     */
+    virtual void doInitialParsing();
+
 signals:
     /**
      * Emitted when the content of the classtore has been

@@ -84,4 +84,7 @@ void ProjectView::removedFileFromProject(KDevFileNode* pNode){
 void ProjectView::addedProject(KDevNode*){
   m_pProjectTree->refresh();
 }
+void ProjectView::fileClicked(QString absFileName){
+  emit gotoSourceFile(absFileName,0);
+}
 #include "projectview.moc"

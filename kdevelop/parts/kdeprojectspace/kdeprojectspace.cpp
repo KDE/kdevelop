@@ -65,6 +65,7 @@ KDEProjectSpace::~KDEProjectSpace(){
 }
 
 void KDEProjectSpace::setupGUI(){
+
   AutomakeProjectSpace::setupGUI(); // set actions for "set active project"
   cerr << "Building KDEProjectSpace GUI" << endl;
   KAction *pAction;
@@ -73,6 +74,88 @@ void KDEProjectSpace::setupGUI(){
 			 actionCollection(), "project_add_translation");
   pAction->setEnabled(true);
   pAction->setStatusText( i18n("Adds a new language for internationalization to the project") );
+
+  //++++++++++++++++++++++++++
+  pAction = new KAction( i18n("&Make"), "make", 0, 
+			 this, SLOT( slotBuildMake()),
+			 actionCollection(), "build_make");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Invokes make-command") );
+  pAction->setWhatsThis( i18n("Make\n\n"
+			      "Invokes the make-command set in the "
+			      "options-menu for the current project "
+			      "after saving all files. "
+			      "This will compile all changed sources "
+			      "since the last compilation was invoked.\n"
+			      "The output window opens to show compiler "
+			      "messages. If errors occur, clicking on the "
+			      "error line will open the file where the "
+			      "error was found and sets the cursor to the "
+			      "error line.") );
+  
+  //+++++++++++++++++++++++++++
+  pAction = new KAction( i18n("&Rebuild all"), "rebuild", 0, 
+			 this, SLOT( slotBuildRebuildAll()),
+			 actionCollection(), "build_rebuild_all");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Rebuilds the project") );
+  pAction->setWhatsThis( i18n("Rebuild all\n\n"
+					  "After saving all files, rebuild all "
+					  "invokes the make-command set with the "
+					  "clean-option to remove all object files. "
+					  "Then, configure creates new Makefiles and "
+					  "the make-command will rebuild the project.") );
+  
+  //+++++++++++++++++++++++++++
+  pAction = new KAction( i18n("&Clean/Rebuild all"), 0, 
+			 this, SLOT( slotBuildCleanRebuildAll()),
+			 actionCollection(), "build_clean_rebuild_all");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Invokes make clean and rebuild all") );
+
+  //+++++++++++++++++++++++++++
+  pAction = new KAction( i18n("&Execute"),"run", 0, 
+			 this, SLOT( slotBuildExecute()),
+			 actionCollection(), "build_execute");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Invokes make-command and runs the program") );
+  pAction->setWhatsThis( i18n("Execute\n\n"
+			      "After saving all files,the make-command is "
+			      "called to build the project. Then the binary "
+			      "is executed out of the project directory.\n"
+			      "Be aware that this function is only valid for "
+			      "programs and that references to e.g. pixmaps "
+			      "or html help files that are supposed to be "
+			      "installed will cause some strange behavoir "
+			      "like testing the helpmenu will open an error "
+			      "message that the index.html file is not found.") );
+  //++++++++++++++++++++++++++++
+  pAction = new KAction( i18n("Execute &with Arguments..."),"run", 0, 
+			 this, SLOT( slotBuildExecuteWithArgs()),
+			 actionCollection(), "build_execute_with_args");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Lets you set run-arguments to the binary and invokes the make-command") );
+
+  //+++++++++++++++++++++++++++
+  pAction = new KAction( i18n("DistC&lean"), 0, 
+			 this, SLOT( slotBuildDistClean()),
+			 actionCollection(), "build_dist_clean");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Invokes make distclean and deletes all compiled files") );
+  //+++++++++++++++++++++++++++
+  pAction = new KAction( i18n("&Autoconf and automake"), 0, 
+			 this, SLOT( slotBuildAutoconf()),
+			 actionCollection(), "build_autoconf");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Invokes automake and co.") );
+  
+  
+  //+++++++++++++++++++++++++++
+  pAction = new KAction( i18n("C&onfigure..."), 0, 
+			 this, SLOT( slotBuildConfigure()),
+			 actionCollection(), "build_configure");
+  pAction->setEnabled(true);
+  pAction->setStatusText( i18n("Invokes ./configure") );
 }
 
 // slots
@@ -157,6 +240,28 @@ QList<FileGroup> KDEProjectSpace::defaultFileGroups(){
   list.append(pGroup);
 
   return list;
+}
+void KDEProjectSpace::updateMakefilesAm(){
+}
+void KDEProjectSpace::slotBuildMake(){
+    emit executeMakeCommand("make");
+}
+void KDEProjectSpace::slotBuildRebuildAll(){
+}
+void KDEProjectSpace::slotBuildCleanRebuildAll(){
+  emit executeMakeCommand("make clean");
+}
+void KDEProjectSpace::slotBuildExecute(){
+}
+void KDEProjectSpace::slotBuildExecuteWithArgs(){
+}
+void KDEProjectSpace::slotBuildDistClean(){
+  emit executeMakeCommand("make distclean");
+}
+void KDEProjectSpace::slotBuildAutoconf(){
+}
+void KDEProjectSpace::slotBuildConfigure(){
+  emit executeAppCommand("./configure");
 }
 
 #include "kdeprojectspace.moc"

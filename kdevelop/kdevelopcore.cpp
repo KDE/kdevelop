@@ -397,13 +397,10 @@ bool KDevelopCore::loadProjectSpace(const QString &fileName){
       
       
     */
-    
-#if 1
-    // Hack to test the class viewer
-    QListIterator<KDevComponent> it5(m_components);
-    for (; it5.current(); ++it5)
-      (*it5)->savedFile("parts/classview/test.cpp");
-#endif
+    if(m_pLanguageSupport){
+      // the very first parsing, after a projectspace was opened
+      m_pLanguageSupport->doInitialParsing();
+    }
   }
   else {
     KMessageBox::sorry(m_pKDevelopGUI,
@@ -586,6 +583,10 @@ void KDevelopCore::gotoSourceFile(const QString &fileName, int lineNo)
   kdDebug(9000) << "KDevelopCore::gotoSourceFile File:" << fileName 
 		<< " Line: " << QString::number(lineNo) 
 		<< endl;
+  QListIterator<KDevComponent> it(m_components);
+  for (; it.current(); ++it){ // every component
+    (*it)->gotoFile(KURL(fileName),lineNo);
+  }
 }
 
 

@@ -61,11 +61,12 @@ QString AutomakeProjectSpace::configureArgs(){
   return m_configureArgs;
 }
 
-  /** add the data to the psElement (Projectspace)*/
+/** add the data to the psElement (Projectspace)*/
 bool AutomakeProjectSpace::writeGlobalConfig(QDomDocument& doc,QDomElement& psElement){
   ProjectSpace::writeGlobalConfig(doc,psElement);
   return true;
 }
+
 bool AutomakeProjectSpace::writeUserConfig(QDomDocument& doc,QDomElement& psElement){
   ProjectSpace::writeUserConfig(doc,psElement);
   return true;
@@ -75,10 +76,13 @@ bool AutomakeProjectSpace::readGlobalConfig(QDomDocument& doc,QDomElement& psEle
   ProjectSpace::readGlobalConfig(doc,psElement);
   return true;
 }
+
 bool AutomakeProjectSpace::readUserConfig(QDomDocument& doc,QDomElement& psElement){
   ProjectSpace::readUserConfig(doc,psElement);
   return true;
 }
 
+void AutomakeProjectSpace::updateMakefilesAm(){
+}
 
 #include "automakeprojectspace.moc"

@@ -73,6 +73,8 @@ public:
   /** saves the document under filename and format.*/	
   bool saveDocument(const KURL& url);
 
+  void gotoFile(const KURL& url, int lineNum);
+
 public slots:	
   /** add a opened file to the recent file list and update recent file menu*/
 //    void addRecentFile(const QString &file);
@@ -113,7 +115,6 @@ protected:
 	
 private:
 
-  void gotoFile(const KURL& url, int lineNum);
 
   KTextEditor::Document* findOpenDocument(const KURL& url);
 

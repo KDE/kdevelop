@@ -22,7 +22,7 @@ class ParsedAttribute;
 class ClassStore;
 class CClassParser;
 class KDevFileNode;
-
+class ProjectSpace;
 
 class CppSupport : public KDevLanguageSupport
 {
@@ -46,6 +46,7 @@ protected:
     virtual void addMethodRequested(const QString &className);
     virtual void addAttributeRequested(const QString &className);
     virtual QStringList fileFilters();
+    virtual void doInitialParsing();
 
 private:
     QString asHeaderCode(ParsedMethod *pm);
@@ -54,6 +55,7 @@ private:
 
     ClassStore *m_store;
     CClassParser *m_parser;
+    ProjectSpace *m_pProjectSpace;
 };
 
 #endif

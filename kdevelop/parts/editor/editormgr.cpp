@@ -156,6 +156,7 @@ void EditorManager::gotoFile(const KURL& url, int lineNum)
     for ( ; it.current(); ++it )
     {
       KTextEditor::View* view = it.current();
+      kdDebug(9005) << "goto line: " << lineNum << endl;
       view->setCursorPosition (lineNum, 0);
     }
   }

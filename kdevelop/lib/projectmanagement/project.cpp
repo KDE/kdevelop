@@ -157,6 +157,9 @@ bool Project::readUserConfig(QDomDocument& /*doc*/,QDomElement& projectElement){
   }
   return true;
 }
+void Project::updateMakefileEntries(QTextStream& stream){
+  stream << "testtarget:";
+}
 
 
 

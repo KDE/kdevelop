@@ -76,7 +76,8 @@ void KDevComponent::removedFileFromProject(KDevFileNode*)
 void KDevComponent::savedFile(const QString&)
 {
 }
-
+void KDevComponent::gotoFile(const KURL& url, int lineNum){
+}
 
 void KDevComponent::setWidget(QWidget*)
 {

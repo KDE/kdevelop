@@ -42,8 +42,18 @@ public:
 	virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
 	virtual KAboutData* aboutPlugin();
 	QList<FileGroup> defaultFileGroups();
+
 	protected slots:
   void slotProjectAddNewTranslationFile();
+	virtual void updateMakefilesAm();
+	virtual void slotBuildMake();
+	virtual void slotBuildRebuildAll();
+	virtual void slotBuildCleanRebuildAll();
+	virtual void slotBuildExecute();
+	virtual void slotBuildExecuteWithArgs();
+	virtual void slotBuildDistClean();
+	virtual void slotBuildAutoconf();
+	virtual void slotBuildConfigure();
 
 
  protected:

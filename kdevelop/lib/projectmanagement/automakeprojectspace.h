@@ -44,8 +44,12 @@ Q_OBJECT
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& psElement);
   virtual bool readUserConfig(QDomDocument& doc,QDomElement& psElement);
 
+  protected slots:
+  virtual void updateMakefilesAm();
+
  protected:
   QString  m_configureArgs;
+
 };
 
 #endif

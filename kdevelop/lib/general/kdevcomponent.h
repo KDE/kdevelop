@@ -110,9 +110,11 @@ public:
      * A file has been removed from the project. 
      */
     virtual void removedFileFromProject(KDevFileNode* pNode);
+
+    virtual void gotoFile(const KURL& url, int lineNum);
     /**
      * A file has been saved. The filename is
-     * given relative to the project dir.
+     * given relative to the project dir.(obsolete)
      */
     virtual void savedFile(const QString&);
 

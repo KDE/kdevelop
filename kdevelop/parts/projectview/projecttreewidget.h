@@ -54,8 +54,9 @@ public:
     
     
     protected slots:
-      void slotRightButtonPressed( QListViewItem* item, const QPoint&,int);
+      void slotRightButtonPressed( QListViewItem* pItem, const QPoint&,int);
     void    slotOpenFile();
+    void slotClicked(QListViewItem* pItem);
     
  protected:
     void createDefaultFileGroups();

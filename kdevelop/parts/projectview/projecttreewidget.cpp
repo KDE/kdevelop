@@ -35,19 +35,31 @@ ProjectTreeWidget::ProjectTreeWidget(ProjectView *pPart)
   header()->hide();
   m_projectFileGroups.clear();
   connect(this,SIGNAL(rightButtonPressed( QListViewItem*, const QPoint&,int)),this,SLOT(slotRightButtonPressed( QListViewItem*, const QPoint&,int)));
+  connect(this,SIGNAL(clicked(QListViewItem*)),this,SLOT(slotClicked(QListViewItem*)));
 }
 
 ProjectTreeWidget::~ProjectTreeWidget()
 {}
 
 void ProjectTreeWidget::slotRightButtonPressed( QListViewItem* pItem, const QPoint& p,int){
-   cerr << "kdevelop (projectview): ProjectTreeWidget::slotRightButtonPressed" << endl;
+  cerr << "kdevelop (projectview): ProjectTreeWidget::slotRightButtonPressed" << endl;
   ProjectTreeItem* pPItem = static_cast<ProjectTreeItem*> (pItem);
   QPopupMenu* pPopUp = createPopup(pPItem);
   if(pPopUp){
     pPopUp->exec(p);
   }
   delete pPopUp;
+}
+void ProjectTreeWidget::slotClicked(QListViewItem* pItem){
+  cerr << "kdevelop (projectview): ProjectTreeWidget::slotDoubleClicked" << endl;
+  if(pItem == 0) return;
+
+  ProjectTreeItem* pPItem = static_cast<ProjectTreeItem*> (pItem);
+  if(pPItem->className() == QString("FileItem") ){
+    FileItem* pFileItem = static_cast<FileItem*>(pItem);
+    // inform the part
+    m_pProjectView->fileClicked(pFileItem->absFileName());
+  }
 }
 
 void ProjectTreeWidget::setProjectSpace(ProjectSpace* pProjectSpace){

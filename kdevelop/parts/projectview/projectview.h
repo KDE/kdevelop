@@ -39,6 +39,8 @@ public:
     virtual void addedFileToProject(KDevFileNode* pNode);
     virtual void removedFileFromProject(KDevFileNode* pNode);
     virtual void addedProject(KDevNode* pNode);
+
+    void fileClicked(QString absFileName);
     
 
    

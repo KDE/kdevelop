@@ -31,4 +31,6 @@ QStringList KDevLanguageSupport::fileFilters(){
   list << "*";
   return list;
 }
+void KDevLanguageSupport::doInitialParsing(){
+}
 #include "kdevlanguagesupport.moc"

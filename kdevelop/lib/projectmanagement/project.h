@@ -25,6 +25,8 @@
 #include <ksimpleconfig.h>
 #include <qdom.h>
 #include <qobject.h>
+#include <qtextstream.h>
+
 class KAboutData;
 
 /**-base class for all project plugins, contains  special config widgets for
@@ -74,6 +76,9 @@ class Project : public QObject {
   virtual bool writeUserConfig(QDomDocument& doc,QDomElement& projectElement);
   virtual bool readGlobalConfig(QDomDocument& doc,QDomElement& projectElement);
   virtual bool readUserConfig(QDomDocument& doc,QDomElement& projectElement);
+
+  /** generates the Makefile entry for the main target (lib,binary) */
+  virtual void updateMakefileEntries(QTextStream& stream);
 
   /* */
   virtual void showAllFiles();

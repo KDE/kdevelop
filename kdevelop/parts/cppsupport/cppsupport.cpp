@@ -24,6 +24,8 @@
 #include "caddclassattributedlg.h"
 #include "main.h"
 #include "kdevnodes.h"
+#include "projectspace.h"
+#include <qstringlist.h>
 
 
 CppSupport::CppSupport(QObject *parent, const char *name)
@@ -33,6 +35,7 @@ CppSupport::CppSupport(QObject *parent, const char *name)
 
     m_store = 0;
     m_parser = 0;
+    m_pProjectSpace=0;
 }
 
 
@@ -40,15 +43,17 @@ CppSupport::~CppSupport()
 {}
 
 
-void CppSupport::projectSpaceOpened(ProjectSpace *)
+void CppSupport::projectSpaceOpened(ProjectSpace *pProjectSpace)
 {
     kdDebug(9007) << "CppSupport::projectSpaceOpened()" << endl;
+    m_pProjectSpace = pProjectSpace;
 }
 
 
 void CppSupport::projectSpaceClosed()
 {
     kdDebug(9007) << "CppSupport::projectSpaceClosed()" << endl;
+    m_pProjectSpace=0;
 }
 
 
@@ -66,6 +71,19 @@ void CppSupport::classStoreClosed()
     m_parser = 0;
 }
 
+void CppSupport::doInitialParsing(){
+  // quick hack
+  Project* pProject = m_pProjectSpace->currentProject();
+  QStringList files;
+  if(pProject!=0){
+    files = pProject->allAbsoluteFileNames();
+    for(QStringList::Iterator it = files.begin(); it != files.end() ;++it){
+      m_parser->parse(*it);
+    }
+
+    emit updateSourceInfo();
+  }
+}
 
 void CppSupport::addedFileToProject(KDevFileNode* pNode)
 {
@@ -82,7 +100,6 @@ void CppSupport::removedFileFromProject(KDevFileNode* pNode)
     kdDebug(9007) << "CppSupport::removedFileFromProject()" << endl;
     QString fileName = pNode->absoluteFileName();
     m_parser->removeWithReferences(fileName);
-
     emit updateSourceInfo();
 }
 
@@ -92,7 +109,6 @@ void CppSupport::savedFile(const QString &fileName)
     kdDebug(9007) << "CppSupport::savedFile()" << endl;
 
     m_parser->parse(fileName);
-
     emit updateSourceInfo();
 }
 

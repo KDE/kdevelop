@@ -37,19 +37,7 @@
   </Menu>
   <Menu name="build" >
    <text>&amp;Build</text>
-   <Action name="build_compile_file" />
-   <Action name="build_build" />
-   <Action name="build_rebuild" />
-   <Action name="build_clean_rebuild_all" />
-   <Separator/>
-   <Action name="build_stop" />
-   <Separator/>
-   <Action name="build_execute" />
-   <Action name="build_execute_with_arguments" />
-   <Separator/>
-   <Action name="build_distclean" />
-   <Action name="build_autoconf_automake" />
-   <Action name="build_configure" />
+   <Merge/>	
   </Menu>
   <Menu name="debug" >
    <text>&amp;Debug</text>
@@ -87,15 +75,9 @@
   <Action name="edit_copy" />
   <Action name="edit_paste" />
   <Separator/>
-  <Action name="build_compile_file" />
-  <Action name="build_build" />
-  <Action name="build_rebuild_all" />
-  <Action name="build_debug_delay" />
-  <Action name="build_run" />
+  <Merge/>
   <Action name="stop_everything" />
   <Separator/>
-  <Action name="view_treeview" />
-  <Action name="view_output_view" />
  </ToolBar>
  <ToolBar name="browserToolBar" fullWidth="false" >
   <Merge/>
