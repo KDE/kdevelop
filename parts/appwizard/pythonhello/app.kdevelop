@@ -3,6 +3,7 @@
  <general>
   <author>$AUTHOR$</author>
   <email>$EMAIL$</email>
+  <version>$VERSION$</version>
   <projectmanagement>KDevScriptProject</projectmanagement>
   <primarylanguage>Python</primarylanguage>
   <keywords>

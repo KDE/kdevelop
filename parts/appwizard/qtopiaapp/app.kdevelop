@@ -8,7 +8,7 @@
     <keywords>
       <keyword>Qt</keyword>
     </keywords>
-    <version></version>
+    <version>$VERSION$</version>
     <description></description>
     <ignoreparts/>
   </general>
