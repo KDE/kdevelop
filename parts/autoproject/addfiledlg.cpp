@@ -88,7 +88,7 @@ void AddFileDialog::accept()
 			KMessageBox::sorry(this, i18n("<b>A file with this name already exists!</b><br><br>Please use the \"Add existing file\" dialog!"));
 			return;
 		}
-		if( !FileTemplate::copy(m_part, URLUtil::getExtension(name), destpath) )
+		if( !FileTemplate::copy(m_part, QFileInfo(name).extension(), destpath) )
 		    kdDebug(9020) << "cannot create file " << destpath << endl;
 	} else {
 		// create an empty file
