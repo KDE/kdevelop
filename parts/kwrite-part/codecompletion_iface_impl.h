@@ -19,7 +19,7 @@ class CodeCompletionIfaceImpl : public KEditor::CodeCompletionDocumentIface {
   bool eventFilter( QObject *o, QEvent *e );
   
 private:
-  void updateBox();
+  void updateBox(bool newCoordinate=false);
   KWrite *m_edit;
   QVBox *m_completionPopup;
   QListBox *m_completionListBox;

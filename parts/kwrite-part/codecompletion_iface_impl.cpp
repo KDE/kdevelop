@@ -1,5 +1,6 @@
 // basic idea from qtdesigner by TrollTech
 #include "kwrite/kwview.h"
+#include "kwrite/kwdoc.h"
 #include <qsizegrip.h>
 #include <qapp.h>
 
@@ -12,9 +13,14 @@ class CompletionItem : public QListBoxText
 public:
   CompletionItem( QListBox *lb,KEditor::CompletionEntry entry )
     : QListBoxText( lb ) { 
-    setText( entry.prefix + " " + entry.text + " " + entry.postfix); 
+    if(entry.postfix=="()"){ // should be configurable
+      setText( entry.prefix + " " + entry.text + entry.postfix); 
+    }
+    else{
+      setText( entry.prefix + " " + entry.text + " " + entry.postfix); 
+    }
     m_entry = entry;
-  }
+    }
   KEditor::CompletionEntry m_entry;
 };
 
@@ -28,12 +34,12 @@ CodeCompletionIfaceImpl::CodeCompletionIfaceImpl(KWrite *edit, KEditor::Document
   m_completionListBox = new QListBox( m_completionPopup );
   m_completionListBox->setFrameStyle( QFrame::NoFrame );
   m_completionListBox->installEventFilter( this );
-  //  m_completionListBox->setHScrollBarMode( QScrollView::AlwaysOn );
-  //  m_completionListBox->setVScrollBarMode( QScrollView::AlwaysOn );
-  //  m_completionListBox->setCornerWidget( new QSizeGrip( m_completionListBox ) );
+
   m_completionPopup->installEventFilter( this );
   m_completionPopup->setFocusProxy( m_completionListBox );
-  //  _widget->installEventFilter( this);
+
+  QFont font = m_edit->doc()->getTextFont(0,0);
+  m_completionListBox->setFont(QFont(font.family(),font.pointSize()));
 }
 
 void CodeCompletionIfaceImpl::showCompletionBox(QValueList<KEditor::CompletionEntry> complList,int offset){
@@ -42,7 +48,7 @@ void CodeCompletionIfaceImpl::showCompletionBox(QValueList<KEditor::CompletionEn
   m_offset = offset;
   m_edit->getCursorPosition(&m_lineCursor, &m_colCursor);
   m_colCursor = m_colCursor - offset; // calculate the real start of the code completion text
-  updateBox();
+  updateBox(true);
 
 }
 
@@ -106,7 +112,7 @@ bool CodeCompletionIfaceImpl::eventFilter( QObject *o, QEvent *e ){
   return FALSE;
 }
 
-void CodeCompletionIfaceImpl::updateBox(){
+void CodeCompletionIfaceImpl::updateBox(bool newCoordinate){
   m_completionListBox->clear();
   QString currentLine = m_edit->currentTextLine();
   cerr << endl << "Column:" << m_colCursor;
@@ -130,14 +136,16 @@ void CodeCompletionIfaceImpl::updateBox(){
     emit completionAborted();
     return;
   }
+  m_completionListBox->setCurrentItem( 0 );
+  m_completionListBox->setSelected( 0,true );
+  m_completionListBox->setFocus();  
+  if(newCoordinate){
   m_completionPopup->resize( m_completionListBox->sizeHint() +
 			     QSize( m_completionListBox->verticalScrollBar()->width() + 4,
 				    m_completionListBox->horizontalScrollBar()->height() + 4 ) );
-  m_completionListBox->setCurrentItem( 0 );
-  m_completionListBox->setSelected( 0,true );
-  m_completionListBox->setFocus();
-  //PointStruc point = m_edit->view()->getCursorPosition();
-  m_completionPopup->move(QPoint(100,400));  // fix it
+  m_edit->view()->paintCursor();
+  m_completionPopup->move(m_edit->view()->mapToGlobal(m_edit->view()->getCursorCoordinates()));
+  }
   m_completionPopup->show();
 }
 

@@ -130,6 +130,7 @@ class KWriteView : public QWidget {
     friend class KWrite;
     friend class KWIconBorder;
     friend class TextEditorView;
+    friend class CodeCompletionIfaceImpl;
   public:
     // a drop-aware container should set HandleOwnURIDrops = false and handle all URI drops
     // KWriteView will otherwise handle URI drops, but is slightly limited
@@ -162,6 +163,10 @@ class KWriteView : public QWidget {
     void bottom_end(VConfig &c);
     PointStruc getCursorPosition(){
       return cursor;
+    }
+    // get the real CursorCoodinates
+    QPoint getCursorCoordinates(){
+      return QPoint(xCoord,yCoord);
     }
 
   protected slots:
@@ -218,6 +223,8 @@ class KWriteView : public QWidget {
     QScrollBar *xScroll;
     QScrollBar *yScroll;
     KWIconBorder *leftBorder;
+    int xCoord;
+    int yCoord;
 
     int xPos;
     int yPos;

@@ -1063,6 +1063,10 @@ void KWriteView::paintCursor() {
     setMicroFocusHint(cx, cy, 0, ch - 2);
   }
 
+  cerr << endl << "POINTx:" <<  x << ":y" << y << ":h" << h;
+  xCoord = x;
+  yCoord = y+h;
+
   QPainter paint;
   if (cursorOn) {
     paint.begin(this);
