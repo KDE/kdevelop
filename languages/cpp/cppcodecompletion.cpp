@@ -1380,8 +1380,7 @@ SimpleContext* CppCodeCompletion::computeContext( FunctionDefinitionAST * ast, i
 
 					if ( !var.type.isEmpty() )
 					{
-						ctx->add
-						( var );
+						ctx->add( var );
 						//kdDebug(9007) << "add argument " << var.name << " with type " << var.type << endl;
 					}
 				}
@@ -1449,12 +1448,14 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, StatementListAST* a
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, IfStatementAST* ast, int line, int col )
 {
+	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 	computeContext( ctx, ast->elseStatement(), line, col );
 }
 
 void CppCodeCompletion::computeContext( SimpleContext*& ctx, ForStatementAST* ast, int line, int col )
 {
+	computeContext( ctx, ast->initStatement(), line, col );
 	computeContext( ctx, ast->condition(), line, col );
 	computeContext( ctx, ast->statement(), line, col );
 }
@@ -1510,8 +1511,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, DeclarationStatemen
 			SimpleVariable var;
 			var.type = type;
 			var.name = toSimpleName( d->declaratorId() );
-			ctx->add
-			( var );
+			ctx->add( var );
 			//kdDebug(9007) << "add variable " << var.name << " with type " << var.type << endl;
 		}
 	}
@@ -1534,8 +1534,7 @@ void CppCodeCompletion::computeContext( SimpleContext*& ctx, ConditionAST* ast, 
 	SimpleVariable var;
 	var.type = type;
 	var.name = toSimpleName( ast->declarator() ->declaratorId() );
-	ctx->add
-	( var );
+	ctx->add( var );
 }
 
 FunctionDefinitionAST * CppCodeCompletion::functionDefinition( AST* node )
