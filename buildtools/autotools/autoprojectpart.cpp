@@ -667,6 +667,13 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
     QDomDocument &dom = *projectDom();
 
     QString cmdline = DomUtil::readEntry(dom, "/kdevautoproject/make/makebin");
+    int prio = DomUtil::readIntEntry(dom, "/kdevautoproject/make/prio");
+    QString nice;
+    kdDebug(9020) << "constructMakeCommandLine() nice = " << prio<< endl;
+    if (prio != 0) {
+        nice = QString("nice -n%1 ").arg(prio);
+    }
+
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
     if (!DomUtil::readBoolEntry(dom, "/kdevautoproject/make/abortonerror"))
@@ -681,6 +688,7 @@ QString AutoProjectPart::constructMakeCommandLine(const QString &dir, const QStr
 
     cmdline += " ";
     cmdline += target;
+    cmdline.prepend(nice);
     cmdline.prepend(makeEnvironment());
 
     QString dircmd = "cd ";
@@ -944,6 +952,13 @@ QString AutoProjectPart::makefileCvsCommand() const
     if (cmdline.isEmpty())
         cmdline = MAKE_COMMAND;
 
+    int prio = DomUtil::readIntEntry(*projectDom(), "/kdevautoproject/make/prio");
+    QString nice;
+    kdDebug(9020) << "makefileCvsCommand() nice = " << prio<< endl;
+    if (prio != 0) {
+        nice = QString("nice -n%1 ").arg(prio);
+    }
+
     if (QFile::exists(topsourceDirectory() + "/Makefile.cvs"))
         cmdline += " -f Makefile.cvs";
     else if (QFile::exists(topsourceDirectory() + "/Makefile.dist"))
@@ -956,6 +971,7 @@ QString AutoProjectPart::makefileCvsCommand() const
         return QString::null;
     }
 
+    cmdline.prepend(nice);
     cmdline.prepend(makeEnvironment());
 
     QString dircmd = "cd ";

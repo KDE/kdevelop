@@ -40,6 +40,7 @@ MakeOptionsWidget::MakeOptionsWidget(QDomDocument &dom, const QString &configGro
     jobs_box->setValue(DomUtil::readIntEntry(dom, configGroup + "/make/numberofjobs"));
     dontact_box->setChecked(DomUtil::readBoolEntry(dom, configGroup + "/make/dontact"));
     makebin_edit->setText(DomUtil::readEntry(dom, configGroup + "/make/makebin"));
+    prio_box->setValue(DomUtil::readIntEntry(dom, configGroup + "/make/prio"));
 }
 
 
@@ -53,6 +54,7 @@ void MakeOptionsWidget::accept()
     DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/numberofjobs", jobs_box->value());
     DomUtil::writeBoolEntry(m_dom, m_configGroup + "/make/dontact", dontact_box->isChecked());
     DomUtil::writeEntry(m_dom, m_configGroup + "/make/makebin", makebin_edit->text());
+    DomUtil::writeIntEntry(m_dom, m_configGroup + "/make/prio", prio_box->value());
 
     m_environmentVariablesWidget->accept();
 }

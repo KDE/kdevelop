@@ -582,6 +582,13 @@ void CustomProjectPart::startMakeCommand(const QString &dir, const QString &targ
     dircmd += KProcess::quote(dir);
     dircmd += " && ";
 
+    int prio = DomUtil::readIntEntry(dom, "/kdevcustomproject/make/prio");
+    QString nice;
+    if (prio != 0) {
+        nice = QString("nice -n%1 ").arg(prio);
+    }
+
+    cmdline.prepend(nice);
     cmdline.prepend(makeEnvironment());
     m_buildCommand = dircmd + cmdline;
     makeFrontend()->queueCommand(dir, dircmd + cmdline);
