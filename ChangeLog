@@ -1,6 +1,8 @@
 2003-02-21 Alexander Dymo <cloudtemple@mksat.net>
 	* Subclassing widgets based on ui-files is now available in automake project manager too.
+	* Iterative subclassing for existing subclasses is available too.
 	* Subclassing is moved to cppsupport.
+
 2003-02-20 Roberto Raggi <roberto@kdevelop.org>
 	* Added Make-member feature to c++ support.
 	* Added Realtime class browser
