@@ -202,6 +202,7 @@ CppSupportPart::~CppSupportPart()
     delete m_backgroundParser;
     delete m_pParser;
     delete m_pCompletion;
+    delete m_astView;
 
     delete m_pCCParser;
     delete m_pCHWidget;
