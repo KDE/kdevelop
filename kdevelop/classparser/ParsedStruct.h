@@ -33,6 +33,7 @@ public: // Constructor & Destructor
 
   CParsedStruct();
   ~CParsedStruct();
+  CParsedStruct( CParsedStruct& ); // --- added by Daniel
 
 public: // Implementation of virtual methods
 

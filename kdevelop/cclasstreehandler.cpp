@@ -357,7 +357,9 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
 {
   QListViewItem *root;
   CParsedAttribute *anAttr;
+  CParsedMethod* anMethod; // --- Daniel
   QList<CParsedAttribute> *list;
+  QList<CParsedMethod>* method; // --- Daniel
   QList<CParsedStruct> *structList;
   CParsedStruct *childStruct;
 
@@ -384,6 +386,17 @@ void CClassTreeHandler::addStruct( CParsedStruct *aStruct,
   }
 
   delete list;
+
+  // --- added by Daniel
+  method = aStruct->getSortedMethodList( );
+  for( anMethod = method->first( );
+       anMethod != NULL;
+       anMethod = method->next( ) )
+    {
+      addMethod( anMethod, root );
+    }
+
+  delete method;
 }
 
 /*-------------------------- CClassTreeHandler::addMethodsFromClass()

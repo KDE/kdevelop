@@ -1,3 +1,8 @@
+2001-03-29  jbb <jbb@kdevelop.org>
+    * Improved struct handling in class parser from
+    *               Daniel Engelschalt <s2687@htw-dresden.de>
+    * use $(LIB_QT) $(LIB_KDECORE) etc where appropriate
+
 2001-03-25  F@lk Brettschneider <falk@kdevelop.org>
     * bugfix: repaired design mistake in rewritten DocViewMan: KWrite docs can have several views, consider that at closing
     * that's why I added 2 methods KWriteDoc::viewCount() and KWriteDoc::viewList()
@@ -16,7 +21,7 @@
     * Fixed: Disabled unused undo button in Classproperties dialog
              - No code yet for it...
 
- 2001-03-21  jbb <jbb@kdevelop.org>
+2001-03-21  jbb <jbb@kdevelop.org>
     * Fixed: Crash when right click on empty space in watch window.
 
 2001-03-20  F@lk Brettschneider <falk@kdevelop.org>

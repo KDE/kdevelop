@@ -51,9 +51,6 @@
 #include <qlayout.h>
 #include <qgrid.h>
 
-//#include <iostream.h>
-
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -77,15 +74,11 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
   m_finishButton = finishButton();
   m_finishButton->setText(i18n("Create"));
   QToolTip::add( m_finishButton,i18n("creating the project"));
-//  connect(m_finishButton,SIGNAL(clicked()),this,SLOT(slotOkClicked()));
 
   m_defaultButton = helpButton();
   m_defaultButton->setText(i18n("Default"));
   QToolTip::add(m_defaultButton, i18n("set all changes back"));
   connect(m_defaultButton,SIGNAL(clicked()),this,SLOT(slotDefaultClicked()));
-
-// No arrows in qwizard :(
-//  setEnableArrowButtons(true);
 
   initPages();
   project=0l;
@@ -97,7 +90,7 @@ CKAppWizard::CKAppWizard(QWidget* parent,const char* name,QString author_name,QS
 CKAppWizard::~CKAppWizard ()
 {
   delete q;
-//  delete project;
+  delete project;
 }
 
 void CKAppWizard::initPages()
@@ -2300,27 +2293,25 @@ void CKAppWizard::slotProcessExited() {
   project->setCXXFLAGS ("-O0 -g3 -Wall");   // default value is to use debugging
 
   if ( kickeritem->isSelected()) {
-   project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11");
+   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI)");
   }
   if ( kpartitem->isSelected()) {
-   project->setLDADD( " -lkdeui -lkdecore $(LIB_QT) -lXext -lX11 $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
-//   project->setLDFLAGS("${all_libraries}");
+   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KPARTS) $(LIB_KHTML)");
   }
   if ( kioslaveitem->isSelected()) {
-   project->setLDADD( " -lkdeui -lkdecore -lqt -lXext -lX11 -lkio");
-//   project->setLDFLAGS("${all_libraries} ${KDE_RPATH}");
+   project->setLDADD( " -lXext -lX11 $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KIO)");
   }
   if ( kde2miniitem->isSelected()) {
-    project->setLDADD (" -lkdeui -lkdecore $(LIB_QT)");
+    project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) ");
   }
   else if (kde2normalitem->isSelected() || kde2mdiitem->isSelected()) {
-    project->setLDADD (" -lkfile -lkdeui -lkdecore $(LIB_QT)");
+    project->setLDADD (" $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KFILE) ");
   }
   else if (qt2normalitem->isSelected() || qt2mdiitem->isSelected()) {
-    project->setLDADD (" -lqt -lXext -lX11");
+    project->setLDADD (" -lXext -lX11 $(LIB_QT)");
   }
   else if (qextmdiitem->isSelected()) {
-    project->setLDADD (" -lqt -lXext -lX11 -lqextmdi");
+    project->setLDADD (" -lXext -lX11 $(LIB_QT) -lqextmdi");
   }
   else if (gnomenormalitem->isSelected()) {
     project->setLDADD (" $(GNOMEUI_LIBS) $(GNOME_LIBDIR)");
@@ -2339,24 +2330,26 @@ void CKAppWizard::slotProcessExited() {
     {
       if(qtpath.right(1) == "/")
         qtpath=qtpath.remove(qtpath.length()-1,1);
+
       if(qt2normalitem->isSelected() || qt2mdiitem->isSelected() )
         project->setConfigureArgs("--with-qt-dir="+qtpath);
-      else if( qextmdiitem->isSelected())
-        project->setConfigureArgs("--with-qt-dir="+qtpath+" --enable-kde=no");
-      else{
-        QString kde2path=config->readEntry("kde2dir");
-        if(kde2path.right(1) == "/")
-          kde2path=kde2path.remove(kde2path.length()-1,1);
-        project->setConfigureArgs("--with-qt-dir="+qtpath+" --prefix="+kde2path);
+      else
+      {
+        if( qextmdiitem->isSelected())
+          project->setConfigureArgs("--with-qt-dir="+qtpath+" --enable-kde=no");
+        else{
+          QString kde2path=config->readEntry("kde2dir");
+          if(kde2path.right(1) == "/")
+            kde2path=kde2path.remove(kde2path.length()-1,1);
+          project->setConfigureArgs("--with-qt-dir="+qtpath+" --prefix="+kde2path);
+        }
       }
     }
   }
   QStrList sub_dir_list;
   TMakefileAmInfo makeAmInfo;
   makeAmInfo.rel_name = "Makefile.am";
-//  KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.rel_name.data());
   makeAmInfo.type = "normal";
- // KDEBUG1(KDEBUG_INFO,CKAPPWIZARD,"%s",makeAmInfo.type.data());
   sub_dir_list.append(namelow);
   // Added 'kdenormaloglitem...' by Robert Wheat, 01-22-2000, OpenGL(tm) support
   if (kde2normalitem->isSelected() || kde2miniitem->isSelected()  ||
@@ -2379,9 +2372,7 @@ void CKAppWizard::slotProcessExited() {
   else {
    makeAmInfo.type = "prog_main";
   }
-//   if (userdoc->isChecked()) {
-//     //    sub_dir_list.append("docs");
-//   }
+
   makeAmInfo.sub_dirs = sub_dir_list;
   project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
 
@@ -2392,7 +2383,6 @@ void CKAppWizard::slotProcessExited() {
 
   makeAmInfo.type = "normal";
   sub_dir_list.clear();
-  //  sub_dir_list.append("en");
   makeAmInfo.sub_dirs = sub_dir_list;
   if(!gnomenormalitem->isSelected()){
     project->addMakefileAmToProject (makeAmInfo.rel_name,makeAmInfo);
@@ -2913,7 +2903,6 @@ void CKAppWizard::slotProcessExited() {
     *q << entriesfname;
 
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
-
 }
 
 // enable m_cancelbutton if everything is done
@@ -2975,7 +2964,7 @@ QString CKAppWizard::getProjectFile() {
   return directorytext;
 }
 
-// return TRUE if a poject is generated
+// return TRUE if a project is generated
 bool CKAppWizard::generatedProject(){
   return gen_prj;
 }
@@ -2988,36 +2977,20 @@ void CKAppWizard::slotLocationButtonClicked()
 }
 
 
-void CKAppWizard::slotVSBoxChanged(int item) {
-  if (item == 0)
-  {
-    messageline->setEnabled(false);
-    logMessage->setEnabled(false);
-    vendorline->setEnabled(false);
-    vendorTag->setEnabled(false);
-    releaseline->setEnabled(false);
-    releaseTag->setEnabled(false);
-    vsInstall->setEnabled(false);
-    projectVSLocation->setEnabled(false);
-    vsLocation->setEnabled(false);
-    locationbutton->setEnabled(false);
-    qtarch_ButtonGroup_1->setEnabled(false);
-
-  }
-  else
-  {
-    messageline->setEnabled(true);
-    logMessage->setEnabled(true);
-    vendorline->setEnabled(true);
-    vendorTag->setEnabled(true);
-    releaseline->setEnabled(true);
-    releaseTag->setEnabled(true);
-    vsInstall->setEnabled(true);
-    projectVSLocation->setEnabled(true);
-    vsLocation->setEnabled(true);
-    locationbutton->setEnabled(true);
-    qtarch_ButtonGroup_1->setEnabled(true);
-  }
+void CKAppWizard::slotVSBoxChanged(int item)
+{
+  bool disable = (item == 0);
+  messageline->setEnabled(disable);
+  logMessage->setEnabled(disable);
+  vendorline->setEnabled(disable);
+  vendorTag->setEnabled(disable);
+  releaseline->setEnabled(disable);
+  releaseTag->setEnabled(disable);
+  vsInstall->setEnabled(disable);
+  projectVSLocation->setEnabled(disable);
+  vsLocation->setEnabled(disable);
+  locationbutton->setEnabled(disable);
+  qtarch_ButtonGroup_1->setEnabled(disable);
 }
 
 void CKAppWizard::slotVendorEntry(const QString&)

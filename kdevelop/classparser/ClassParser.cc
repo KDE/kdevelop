@@ -151,36 +151,56 @@ void CClassParser::parseStructDeclarations( CParsedStruct *aStruct)
 {
   REQUIRE( "Valid struct", aStruct != NULL );
 
-  PIExport oldScope=declaredScope;
+  PIExport oldScope = declaredScope;
 
-  declaredScope=PIE_PUBLIC;
+  declaredScope = PIE_PUBLIC;
+  bool bID, bUnion;
 
-  while( lexem != '}' && lexem != 0 )
-  {
-    if( lexem != '}' )
-    {
+  while( lexem != '}' && lexem != 0 ) {
+    bID = bUnion = false;
+    if( lexem != '}' ) {
       declStart = getLineno();
-      switch( lexem )
-      {
-        case ID:
-          parseMethodAttributes( aStruct );
-          break;
-        case CPENUM:
-          parseEnum();
-          break;
-        case CPUNION:
-          parseUnion();
-          break;
-        case CPSTRUCT:
-          parseStruct( aStruct );
-          break;
-        default:
-          kdDebug() << "Found unknown struct declaration." << endl;
+      switch( lexem ) {
+      case ID:
+	parseMethodAttributes( aStruct );
+	bID = true;
+	break;
+      case CPENUM:    // enums are completely parsed by parseEnum( )
+	parseEnum();
+	break;
+      case CPUNION:   // unions are NOT completely parsed by parseUnion( )
+	parseUnion(); // e.g.: union { } var = 97
+	bUnion = true;
+	break;
+      case CPSTRUCT:  // structs are completely parsed by parseStruct( )
+	parseStruct( aStruct );
+	break;
+      default:
+	kdDebug( ) << "--- parseStructDeclarations: case default" << endl;
+	kdDebug( ) << "lexem: " << lexem << " & " << char( lexem ) << endl;
+	kdDebug( ) << "@line: " << getLineno( ) << endl;
+	kdDebug( ) << "Found unknown struct declaration." << endl;
       }
-
-      if( lexem != '}' )
-        getNextLexem();
     }
+    if( bUnion == true ){ // were just skipping the union stuff
+      while( lexem != ';' && lexem != 0 ){
+	getNextLexem( );
+      }
+      if( lexem == ';' )
+	getNextLexem( );
+      continue;
+    }
+
+    if( lexem == '}' && bID == false && bUnion == false )
+      break;              // found a '}' which doesn't come from a method- / union end
+
+    if( lexem == '}' && bID == true ){ // found a "}" from a method
+      getNextLexem( );                
+      if( lexem == ';' )               // there should / could be a ';'
+	getNextLexem( );               // if not, go ahead
+    }
+    else
+      getNextLexem( );
   }
   declaredScope=oldScope;
 }
@@ -200,6 +220,7 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
   REQUIRE( "Valid container", aContainer != NULL );
   REQUIRE( "Valid lexem", lexem == '{' );
 
+  cout << endl << "/// fillInParsedStruct" << endl;
   CParsedStruct *aStruct = new CParsedStruct();
 
   // Set some info about the struct.
@@ -220,29 +241,48 @@ void CClassParser::fillInParsedStruct( CParsedContainer *aContainer )
   // Jump to first declaration or to '}'.
   getNextLexem();
 
+  // ends if } was found
   parseStructDeclarations( aStruct );
 
   // Skip '}'
-  getNextLexem();
+  // --- ERROR: structs end with <name> <name...> ';'
+  CParsedStruct* nStruct;
+  QStringList ps;
+ 
+  getNextLexem( );
+  while( lexem == ID || lexem == ',' ){  // here we're parsing <name> <name...>
+    if( lexem == ID )
+      ps.append( getText( ) );
+    getNextLexem( );
+  }
+
+  if( ps.isEmpty( ) )
+    ps.append( aStruct->name );
+
+  aStruct->setName( ps.first( ) );
 
   // Set the point where the struct ends.
   aStruct->setDeclarationEndsOnLine( getLineno() );
 
   // If we find a name here we use the typedef name as the struct name.
-  if( lexem == ID )
-    aStruct->setName( getText() );
+  //  if( lexem == ID )                --- commented out by Daniel
+  //  aStruct->setName( getText() );   --- commented out by Daniel
   
   if( commentInRange( aStruct ) )
     aStruct->setComment( comment );
 
   if( aStruct != NULL && !aStruct->name.isEmpty() )
   {
-    aContainer->addStruct( aStruct );
+    for( uint i = 0; i < ps.count( ); i++ ){
+      nStruct = new CParsedStruct( *aStruct );
+      nStruct->setName( ps[ i ] );
 
-    // Always add structs to the global container.
-    if( aContainer != &store.globalContainer )
-      store.globalContainer.addStruct( aStruct );
+      aContainer->addStruct( nStruct );
 
+      // Always add structs to the global container.
+      if( aContainer != &store.globalContainer )
+	store.globalContainer.addStruct( nStruct );
+    }
   }
 }
 

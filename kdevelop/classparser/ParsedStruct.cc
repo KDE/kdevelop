@@ -38,17 +38,31 @@ CParsedStruct::CParsedStruct()
   setItemType( PIT_STRUCT );
 }
 
-/*------------------------------------- CClassParser::~CClassParser()
- * ~CClassParser()
+/*------------------------------------- CParsedStruct::~CParsedStruct()
+ * ~CParsedStruct()
  *   Destructor.
  *
- * Parameters:
+ * Parameters: 
  *   -
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
 CParsedStruct::~CParsedStruct()
 {
+}
+
+/*-------------------------------------- CParsedStruct::CParsedStruct( &cps )
+ * CParsedStruct( &cps )
+ *   Copy - Constructor.
+ *
+ * Parameters:
+ *   CParsedStruct
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+CParsedStruct::CParsedStruct( CParsedStruct& cpm ) : CParsedContainer( cpm )
+{
+  setItemType( PIT_STRUCT );
 }
 
 /*********************************************************************
