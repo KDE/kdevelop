@@ -731,7 +731,7 @@ void RDBController::slotStart(const QString& ruby_interpreter, const QString& ch
 	*dbgProcess_ << "-r" << debuggee_path;
 	*dbgProcess_ << application;
 	
-	if (! run_arguments.isNull()) {
+	if (!run_arguments.isNull() && !run_arguments.isEmpty()) {
 		*dbgProcess_ << run_arguments;
 	}
 
