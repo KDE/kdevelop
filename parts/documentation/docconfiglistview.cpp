@@ -26,7 +26,7 @@
 DocConfigListView::DocConfigListView(QWidget *parent, const char *name)
      :KListView(parent, name)
 {
-    setSorting(-1);
+//    setSorting(-1);
     addColumn(i18n("TOC"));
     addColumn(i18n("Index"));
     addColumn(i18n("Search"));
