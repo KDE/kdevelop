@@ -1,3 +1,8 @@
+1999-03-31  Sandy Meier  <smeier@rz.uni-potsdam.de>
+	* the new error-message-"parser" works now,supports also files in subdirs
+ 	* added new menuentrys "view->next-error", "view->previous-error"
+	  TODO: enable/disable entrys in the menu,select current errormessage in the message windget
+
 1999-03-31 Pascal Krahmer <pascal@beast.de>
         * fixed problem of the "widgets" tab. Now it works fine but I don´t have the pixmaps yet :)
         * hided the headers of the qlistview of the "items" tab so it looks like the rest of kdevelop now.
@@ -238,7 +243,6 @@
 	  without an extra refresh from the menubar.
 	
 1999-03-06    Sandy Meier <smeier@rz.uni-potsdam.de>
-
 	* some bugfixes
 	* the installation process waits now for doc-generation and indexing
 
@@ -248,7 +252,6 @@
     is started before the shellprocess for kdoc is finished !!
 
 1999-03-05  Sandy Meier  <smeier@rz.uni-potsdam.de>
-
 	* implemented nextSearch (F3) to the docbrowser
 	* added a QProgressBarDialog to addExistingFiles
 	* fixed the projectversion-bug in the projectoptionsdlg
@@ -287,7 +290,6 @@
   * updated "What's this ?" to new icons
 
 1999-03-03    Sandy Meier <smeier@rz.uni-potsdam.de>
-
 	* commented out the workspace-feature
 	* added a Qt base-application (qt.tar.gz) . TODO  update KAppWizard to create this application
 	* minor changes on startuplogo (no titlebar)

@@ -72,6 +72,8 @@
 #define ID_VIEW_BOOKMARK_ADD        12012
 #define ID_VIEW_BOOKMARKS_CLEAR     12013
 
+#define ID_VIEW_NEXT_ERROR          12015
+#define ID_VIEW_PREVIOUS_ERROR      12017
 #define ID_VIEW_TREEVIEW            12020
 #define ID_VIEW_OUTPUTVIEW          12030
 
@@ -289,6 +291,8 @@
 ///////////////////////////////////////////////////////////////////
 // View-menu entries
 #define IDK_VIEW_GOTO_LINE	    			CTRL+Key_L
+#define IDK_VIEW_NEXT_ERROR                             Key_F4
+#define IDK_VIEW_PREVIOUS_ERROR                             SHIFT+Key_F4
 #define IDK_VIEW_TREEVIEW	    				CTRL+Key_T
 #define IDK_VIEW_OUTPUTVIEW	    			CTRL+Key_G
 #define IDK_VIEW_STATUSBAR          	CTRL+Key_B			

@@ -370,6 +370,29 @@ void CKDevelop::slotViewGotoLine(){
   edit_widget->gotoLine();
   slotStatusMsg(IDS_DEFAULT); 
 }
+/** jump to the next error, based on the make output*/
+void CKDevelop::slotViewNextError(){
+  TErrorMessageInfo info = error_parser->getNext();
+  if(info.filename != ""){
+    messages_widget->setCursorPosition(info.makeoutputline,0);
+    switchToFile(info.filename,info.errorline-1);
+  }
+  else{
+    XBell(kapp->getDisplay(),100); // not a next found, beep
+  }
+}
+/** jump to the previews error, based on the make output*/
+void CKDevelop::slotViewPreviousError(){
+  TErrorMessageInfo info = error_parser->getPrev();
+  if(info.filename != ""){
+    messages_widget->setCursorPosition(info.makeoutputline,0);
+    switchToFile(info.filename,info.errorline-1);
+  }
+  else{
+    XBell(kapp->getDisplay(),100); // not a previous found, beep
+  }
+}
+
 void CKDevelop::slotViewTTreeView(){
   if(view_menu->isItemChecked(ID_VIEW_TREEVIEW)){
     view_menu->setItemChecked(ID_VIEW_TREEVIEW,false);
@@ -450,7 +473,7 @@ void CKDevelop::slotBuildCompileFile(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
-
+  error_parser->reset();
   showOutputView(true);
   slotFileSave();
   setToolMenuProcess(false);
@@ -507,6 +530,7 @@ void CKDevelop::slotBuildMake(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+  error_parser->reset();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -557,6 +581,7 @@ void CKDevelop::slotBuildRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+  error_parser->reset();
   if(!view_menu->isItemChecked(ID_VIEW_OUTPUTVIEW)){
     view->setSeparatorPos(output_view_pos);
     QRect rMainGeom= view->geometry();
@@ -581,6 +606,7 @@ void CKDevelop::slotBuildCleanRebuildAll(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+  error_parser->reset();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -598,6 +624,7 @@ void CKDevelop::slotBuildDistClean(){
   if(!CToolClass::searchProgram(make_cmd)){
     return;
   }
+  error_parser->reset();
   showOutputView(true);
   setToolMenuProcess(false);
   slotFileSaveAll();
@@ -1328,6 +1355,7 @@ void CKDevelop::slotReceivedStdout(KProcess*,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
+  error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
 }
 void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   int x,y;
@@ -1335,6 +1363,7 @@ void CKDevelop::slotReceivedStderr(KProcess*,char* buffer,int buflen){
   QString str(buffer,buflen+1);
   messages_widget->insertAt(str,x,y);
   o_tab_view->setCurrentTab(MESSAGES);
+  error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
 }
 void CKDevelop::slotApplReceivedStdout(KProcess*,char* buffer,int buflen){
   int x,y;
@@ -1434,47 +1463,57 @@ void CKDevelop::slotKeyPressedOnStdinStdoutWidget(int key){
   appl_process.writeStdin(&a,1);
 }
 void CKDevelop::slotClickedOnMessagesWidget(){
+  TErrorMessageInfo info;
   int x,y;
-  int error_line;
-  QString text;
-  QString error_line_str;
-  QString error_filename;
-  int pos1,pos2; // positions in the string
-  QRegExp reg(":[0-9]*:"); // is it an error line?, I hope it works
 
   messages_widget->cursorPosition(&x,&y);
-  text = messages_widget->textLine(x);
-  if((pos1=reg.match(text)) == -1) return; // not an error line
-
-  // extract the error-line
-  pos2 = text.find(':',pos1+1);
-  error_line_str = text.mid(pos1+1,pos2-pos1-1);
-  error_line = error_line_str.toInt();
-
-  // extract the filename
-  pos2 = text.findRev(' ',pos1);
-  if (pos2 == -1) {
-    pos2 = 0; // the filename is at the begining of the string
-  }
-  else { pos2++; }
-
-  error_filename = text.mid(pos2,pos1-pos2);
-
-  // switch to the file
-  if (error_filename.find('/') == -1){ // it is a file outer the projectdir ?
-    error_filename = prj->getProjectDir() + prj->getSubDir() + error_filename;
-  }
-  if (QFile::exists(error_filename)){
+  info = error_parser->getInfo(x+1);
+  if(info.filename != ""){
     if(!bKDevelop)
       switchToKDevelop();
-
-    switchToFile(error_filename);
-    edit_widget->setCursorPosition(error_line-1,0);
-    edit_widget->setFocus();
+    messages_widget->setCursorPosition(info.makeoutputline,0);
+    switchToFile(info.filename,info.errorline-1);
   }
+  else{
+     XBell(kapp->getDisplay(),100); // not a next found, beep
+  }
+    // switchToFile(error_filename);
+//     edit_widget->setCursorPosition(error_line-1,0);
+//     edit_widget->setFocus();
+  // int x,y;
+//   int error_line;
+//   QString text;
+//   QString error_line_str;
+//   QString error_filename;
+//   int pos1,pos2; // positions in the string
+//   QRegExp reg(":[0-9]*:"); // is it an error line?, I hope it works
 
-  error_parser->parse(messages_widget->text(),prj->getProjectDir() + prj->getSubDir());
-  //  error_parser->out();
+  
+ //  text = messages_widget->textLine(x);
+//   if((pos1=reg.match(text)) == -1) return; // not an error line
+
+//   // extract the error-line
+//   pos2 = text.find(':',pos1+1);
+//   error_line_str = text.mid(pos1+1,pos2-pos1-1);
+//   error_line = error_line_str.toInt();
+
+//   // extract the filename
+//   pos2 = text.findRev(' ',pos1);
+//   if (pos2 == -1) {
+//     pos2 = 0; // the filename is at the begining of the string
+//   }
+//   else { pos2++; }
+
+//   error_filename = text.mid(pos2,pos1-pos2);
+
+//   // switch to the file
+//   if (error_filename.find('/') == -1){ // it is a file outer the projectdir ?
+//     error_filename = prj->getProjectDir() + prj->getSubDir() + error_filename;
+//   }
+//   if (QFile::exists(error_filename)){
+    
+    //  }
+
 
 }
 void CKDevelop::slotProcessExited(KProcess* proc){

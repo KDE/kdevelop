@@ -24,6 +24,7 @@
 
 CErrorMessageParser::CErrorMessageParser(){
   m_info_list.setAutoDelete(true);
+  current = -1;
 }
 CErrorMessageParser::~CErrorMessageParser(){
 }
@@ -35,7 +36,6 @@ void CErrorMessageParser::parse(QString makeoutput,QString startdir){
   int pos =0;
   TErrorMessageInfo* error_info;
 
-  cerr << "PARSER";
   m_info_list.clear();
   
   // fill the outputlist
@@ -117,10 +117,47 @@ void CErrorMessageParser::parse(QString makeoutput,QString startdir){
 }
 
 TErrorMessageInfo CErrorMessageParser::getInfo(int makeoutputline){
+  TErrorMessageInfo * info;
+  TErrorMessageInfo temp_info;
+  temp_info.filename = "";
+  for(info = m_info_list.first();info != 0;info = m_info_list.next()){
+    if (info->makeoutputline == makeoutputline ){
+      temp_info = *info;
+    }
+  }
+  return temp_info;
 }
+
 TErrorMessageInfo CErrorMessageParser::getNext(){
+  TErrorMessageInfo * info;
+  TErrorMessageInfo temp_info;
+  current++;
+  
+  
+  if(int(m_info_list.count()) > current){ // if a next exists  
+    info = m_info_list.at(current);
+    return *info;
+  }
+  else{
+    current--;
+    temp_info.filename = "";
+    return temp_info;
+  }
 }
 TErrorMessageInfo CErrorMessageParser::getPrev(){
+  TErrorMessageInfo * info;
+  TErrorMessageInfo temp_info;
+  current--;
+  
+  if(int(m_info_list.count()) > current && current > -1){ // if a prev exists  
+    info = m_info_list.at(current);
+    return *info;
+  }
+  else{
+    current++;
+    temp_info.filename = "";
+    return temp_info;
+  }
 }
 void CErrorMessageParser::out(){
   TErrorMessageInfo* info;
@@ -130,4 +167,8 @@ void CErrorMessageParser::out(){
     cerr << endl << "Errorline:" << info->errorline;
     cerr << endl << "Makeoutputline:" << info->makeoutputline << endl;
   }
+}
+void CErrorMessageParser::reset(){
+  current = -1;
+  m_info_list.clear();
 }

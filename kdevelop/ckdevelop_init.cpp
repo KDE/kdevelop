@@ -341,6 +341,12 @@ void CKDevelop::initKeyAccel(){
   accel->insertItem( i18n("Goto Line"), "GotoLine",IDK_VIEW_GOTO_LINE);
   accel->connectItem( "GotoLine", this, SLOT( slotViewGotoLine()) );
 
+  accel->insertItem( i18n("Next Error"), "NextError",IDK_VIEW_NEXT_ERROR);
+  accel->connectItem( "NextError", this, SLOT( slotViewNextError()) );
+  
+  accel->insertItem( i18n("Previous Error"), "PreviousError",IDK_VIEW_PREVIOUS_ERROR);
+  accel->connectItem( "PreviousError", this, SLOT( slotViewPreviousError()) );
+
   accel->insertItem( i18n("Toogle Tree-View"), "Tree-View",IDK_VIEW_TREEVIEW);
   accel->connectItem( "Tree-View", this, SLOT(slotViewTTreeView()) );
   
@@ -489,6 +495,11 @@ void CKDevelop::initMenu(){
   view_menu->insertItem(i18n("&Line..."), this,
 			SLOT(slotViewGotoLine()),0,ID_VIEW_GOTO_LINE);
 
+  view_menu->insertSeparator();
+  view_menu->insertItem(i18n("&Next Error"),this,
+			SLOT(slotViewNextError()),0,ID_VIEW_NEXT_ERROR);
+  view_menu->insertItem(i18n("&Previous Error"),this,
+			SLOT(slotViewPreviousError()),0,ID_VIEW_PREVIOUS_ERROR);
   view_menu->insertSeparator();
   view_menu->insertItem(i18n("&Tree-View"),this,
 			SLOT(slotViewTTreeView()),0,ID_VIEW_TREEVIEW);
@@ -1007,6 +1018,8 @@ if(bKDevelop){
     accel->changeMenuAccel(edit_menu, ID_EDIT_UNINDENT,"Unindent" );
 
     accel->changeMenuAccel(view_menu,ID_VIEW_GOTO_LINE ,"GotoLine" );
+    accel->changeMenuAccel(view_menu,ID_VIEW_NEXT_ERROR ,"NextError" );
+    accel->changeMenuAccel(view_menu,ID_VIEW_PREVIOUS_ERROR ,"PreviousError" );
     accel->changeMenuAccel(view_menu,ID_VIEW_TREEVIEW ,"Tree-View" );
     accel->changeMenuAccel(view_menu,ID_VIEW_OUTPUTVIEW,"Output-View" );
     accel->changeMenuAccel(view_menu,ID_VIEW_STATUSBAR,"Statusbar");

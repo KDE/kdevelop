@@ -192,6 +192,10 @@ public:
   ///////////////////////
   /** opens the goto line dialog */
   void slotViewGotoLine();
+  /** jump to the next error, based on the make output*/
+  void slotViewNextError();
+  /** jump to the previews error, based on the make output*/
+  void slotViewPreviousError();
   /** dis-/enables the treeview */
   void slotViewTTreeView();
   void showTreeView(bool show=true);

@@ -1,5 +1,5 @@
 /***************************************************************************
-                          cerrormessageparser.h  -  description                              
+             cerrormessageparser.h  -  a small "parser" for the makeoutput                 
                              -------------------                                         
     begin                : Tue Mar 30 1999                                           
     copyright            : (C) 1999 by Sandy Meier
@@ -36,7 +36,8 @@ class CErrorMessageParser {
 public: 
   CErrorMessageParser();
   ~CErrorMessageParser();
-  
+  /** set the counter to -1, called if "make" was started and the outputwidget was cleared*/
+  void reset();
   void parse(QString makeoutput,QString startdir);
 
   /** get the error info for a specific line from the parse "makeoutput")*/
@@ -47,9 +48,10 @@ public:
 
   /** get the previous error/warning*/
   TErrorMessageInfo getPrev();
-  /** print out the parsed informtions*/
+  /** print out the parsed informations*/
   void out();
-  
+protected:
+  int current; // used to store infos for getNext() ...
   QList<TErrorMessageInfo> m_info_list;
 };
 
