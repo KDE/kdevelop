@@ -50,7 +50,7 @@
 %}
 
 WS           [[:blank:]\r]+
-LETTER       [A-Za-z_~]
+LETTER       [A-Za-z_~$\xc0-\xd6\xd8-\xf6\xf8-\xff]
 DIGIT        [0-9]
 NUM          {DIGIT}+
 ID           {LETTER}+({LETTER}|{DIGIT})*
