@@ -1,3 +1,7 @@
+2001-11-29  Sandy Meier  <smeier@kdevelop.org>
+	* added Gameboy Advance support including a "Hello World" template and
+	an emulator frontend
+
 2001-11-21  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
   * Started lib/structure which will feature tree,
     trie and graph structures
