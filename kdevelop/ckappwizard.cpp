@@ -1246,6 +1246,7 @@ void CKAppWizard::okPermited() {
   *q << "perl" << path ;
   q->start(KProcess::NotifyOnExit, KProcess::AllOutput);
   setFinishEnabled(widget4, false);
+  setBackEnabled(widget4, false);
 //  finishButton()->setEnable(false);
 
   showPage(widget4);
