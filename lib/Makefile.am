@@ -15,5 +15,6 @@ libkdevelop_la_LIBADD = $(top_builddir)/lib/interfaces/libkdevinterfaces.la \
 libkdevelop_la_SOURCES = dummy.cpp
 
 
-SUBDIRS = interfaces sourceinfo util $(QT3STUFFSUBDIR)
+SUBDIRS = interfaces sourceinfo util structure $(QT3STUFFSUBDIR)
+
 

@@ -1,0 +1,21 @@
+structure library
+------------------
+
+This library will feature QT-like (although not necessarily following all conventions of it) data structures.
+
+I plan to invest some effort in a proper tree and graph data structure, but others are considered.
+(for instance a trie code which I already have).
+
+These data structures will be accompanied with certain higher order functions to use them
+(such as traversals, etc.)
+
+Following that, there will be visualization modules for interacting with these structures. I have not made
+an exact design of that part, but I'm hoping it will be available some time in the future. This would have
+to provide for automatic construction of a control widget from user supplied widgets.
+
+Eray Ozkural aka exa <erayo@cs.bilkent.edu.tr>
+
+NOTES:
+
+* As geiseri suggests, QDOM already gives us a tree, but that's not what I intend to write
+* I'm aware of the graph code in classview

@@ -1,3 +1,9 @@
+2001-11-21  Eray Ozkural (exa) <erayo@cs.bilkent.edu.tr>
+  * Started lib/structure which will feature tree,
+    trie and graph structures
+  * Started a part called sourcebrowser which will facilitate
+    multiple UI's to browse source code
+
 2001-10-23  Bernd Gehrmann  <bernd@physik.hu-berlin.de>
 
 	* Made sourceinfo serializing more modular by adding

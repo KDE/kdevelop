@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=SourceBrowser
+Name=KDevSourceBrowser
+Icon=kdevelop
+ServiceTypes=KDevelop/Part
+X-KDE-Library=libkdevsourcebrowser
