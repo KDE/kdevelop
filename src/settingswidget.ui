@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>SettingsWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -18,6 +18,12 @@
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>11</number>
+        </property>
+        <property name="spacing">
+            <number>6</number>
         </property>
         <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
@@ -48,6 +54,12 @@
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
                 </property>
                 <widget class="QPushButton" row="1" column="0">
                     <property name="name">
@@ -103,7 +115,7 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>20</width>
+                    <width>0</width>
                     <height>130</height>
                 </size>
             </property>
@@ -131,12 +143,16 @@
     <include location="local" impldecl="in implementation">settingswidget.ui.h</include>
 </includes>
 <variables>
-    <variable access="public">QFont messageFont;</variable>
-    <variable access="public">QFont applicationFont;</variable>
+    <variable>QFont _messageFont;</variable>
+    <variable>QFont _applicationFont;</variable>
 </variables>
 <slots>
     <slot>changeMessageFontSlot()</slot>
     <slot>changeApplicationFontSlot()</slot>
+    <slot returnType="QFont">applicationFont()</slot>
+    <slot returnType="QFont">messageFont()</slot>
+    <slot>setMessageFont( const QFont &amp; fnt )</slot>
+    <slot>setApplicationFont( const QFont &amp; fnt )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

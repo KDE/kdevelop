@@ -202,19 +202,19 @@ void MainWindowShare::slotSettings()
     KConfig* config = kapp->config();
     config->setGroup("General Options");
     gsw->lastProjectCheckbox->setChecked(config->readBoolEntry("Read Last Project On Startup",true));
-    gsw->messageFont = config->readFontEntry("Messages Font");
-    gsw->applicationFont = config->readFontEntry("Application Font");
-    gsw->changeMessageFontButton->setText(gsw->messageFont.family());
-    gsw->changeMessageFontButton->setFont(gsw->messageFont);
-    gsw->changeApplicationFontButton->setText(gsw->applicationFont.family());
-    gsw->changeApplicationFontButton->setFont(gsw->applicationFont);
+    gsw->setMessageFont(config->readFontEntry("Messages Font"));
+    gsw->setApplicationFont(config->readFontEntry("Application Font"));
+    gsw->changeMessageFontButton->setText(gsw->messageFont().family());
+    gsw->changeMessageFontButton->setFont(gsw->messageFont());
+    gsw->changeApplicationFontButton->setText(gsw->applicationFont().family());
+    gsw->changeApplicationFontButton->setFont(gsw->applicationFont());
     Core::getInstance()->doEmitConfigWidget(&dlg);
     dlg.exec();
 
     config->setGroup("General Options");
     config->writeEntry("Read Last Project On Startup",gsw->lastProjectCheckbox->isChecked());
-    config->writeEntry("Messages Font",gsw->messageFont);
-    config->writeEntry("Application Font", gsw->applicationFont);
+    config->writeEntry("Messages Font",gsw->messageFont());
+    config->writeEntry("Application Font", gsw->applicationFont());
 }
 
 // called when OK ar Apply is clicked in the EditToolbar Dialog
