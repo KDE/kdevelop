@@ -207,8 +207,8 @@ void QextMdiChildArea::resizeEvent(QResizeEvent* e)
             clientw = lpC->m_pClient->width();
             clienth = lpC->m_pClient->height();
          }
-         lpC->resize( width() + lpC->width() - clientw,
-                      height() + lpC->height() - clienth);
+         lpC->resize( width() + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER,
+                      height() + lpC->m_pCaption->heightHint() + QEXTMDI_MDI_CHILDFRM_SEPARATOR + QEXTMDI_MDI_CHILDFRM_DOUBLE_BORDER);
       }
    }
    layoutMinimizedChildren();
