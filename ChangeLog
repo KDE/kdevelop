@@ -1,3 +1,6 @@
+2002-12-04 Caleb Tennis <caleb@aei-tech.com>
+    * Added ability to open ui.h files easily in QMake Manager with right click popupmenu.
+
 2002-12-03 F@lk Brettschneider <falk@kdevelop.org>
     * now session saves/loads cursor position;
       and view geometries in Childframe UI mode
