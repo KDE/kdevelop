@@ -1,3 +1,6 @@
+2002-01-26  F@lk Brettschneider <falk@kdevelop.org>
+    * made it compile again with KDE-2 (KAccel)
+
 2002-01-26  Walter Tasin <tasin@kdevelop.org>
     * applied patch from Klas Kalass <klas.kalass@gmx.de>
       makes addcxxflags working

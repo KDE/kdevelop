@@ -196,7 +196,11 @@ void CKDevAccel::disconnectItem(const QString& action,
 //  return bFound;
 //}
 
+#if QT_VERSION < 300
+void CKDevAccel::readSettings(KConfig* config, bool setEnableStruct)
+#else
 void CKDevAccel::readSettings(KConfigBase* config, bool setEnableStruct)
+#endif
 {
    KAccel::readSettings(config);
    if (setEnableStruct)

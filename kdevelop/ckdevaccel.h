@@ -106,7 +106,11 @@ public:
   // replacement for KAccel::readSettings
   // the additional parameter sets the enable structure of
   //   each item in CKDevAccel to the saved value
+#if QT_VERSION < 300
+  void readSettings (KConfig* config = 0, bool setEnableStruct=true);
+#else
   void readSettings (KConfigBase* config = 0, bool setEnableStruct=true);
+#endif
 
   // reimplementation of KAccel::setItemEnabled
   void setItemEnabled( const QString& action, bool activate );
