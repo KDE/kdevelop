@@ -89,7 +89,7 @@ QCString PerldocProtocol::errorMessage()
 }
 
 
-void PerldocProtocol::stat(const KURL &url)
+void PerldocProtocol::stat(const KURL &/*url*/)
 {
     UDSAtom uds_atom;
     uds_atom.m_uds = KIO::UDS_FILE_TYPE;
