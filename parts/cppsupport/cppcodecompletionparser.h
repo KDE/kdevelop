@@ -1,14 +1,27 @@
+/*
+ * file     : cppcodecompletionparser.h
+ * begin    : 2001
+ * copyright: (c) by daniel engelschalt
+ * email    : daniel.engelschalt@htw-dresden.de
+ * license  : gpl version >= 2
+ *
+ */
+
+#ifndef _CPPCCPARSER_H
+#define _CPPCCPARSER_H
+
 #include <qstring.h>
 #include <qlist.h>
 #include <qstack.h>
 #include <FlexLexer.h>
 #include <fstream.h>
-#include "tokenizer-cc.h"
+#include <strstream.h>
 
-#include "ParsedVariable.h"
+#include "tokenizer-cc.h"
+#include "parsedvariable.h"
 
 /***
- * CppCCParser : class that parses a .cpp file and stores
+ * CppParser : class that parses a .cpp file and stores
  *             all found variables in a QList
  */
 class CppCCParser {
@@ -31,9 +44,17 @@ public:
 
     /**
     * parse: the file we'll have to parse
-    * @param file file to parse
+    * @param file to parse
+    * @param line until to parse
     */
-    bool parse( const QString &file = QString::null, int _iCCLine = 999999 );
+    bool parse( const QString& file = QString::null, int iCCLine_ = 9999999 );
+
+    /**
+    * parse: the string we'll have to parse
+    * @param string to parse
+    * @param line until to parse
+    */
+    bool parse( const QString* file = 0, int iCCLine_ = 9999999 );
 
 public:
     // public variables
@@ -91,7 +112,7 @@ private:
     /**
     * wrapper method called from public parse
     */
-    void parseFile( ifstream& file );
+    void parseObject( istream& object );
 
     /**
     * top level parsing
@@ -158,3 +179,5 @@ private:
     int getLineNo( ){ return lexer->lineno( ) - 1; };
 
 };
+
+#endif

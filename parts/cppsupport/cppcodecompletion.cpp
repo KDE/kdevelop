@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#define CodeCompletion 0
+#define CodeCompletion 1
 
 #include "cppcodecompletion.h"
 //#include "ParsedVariable.h"
@@ -113,42 +113,9 @@ void CppCodeCompletion::slotTextChanged( KEditor::Document *pDoc, int nLine, int
 		return;
 	}
 
-	kdDebug ( 9007 ) << "CppCodeCompletion::slotTextChanged()@" << nLine << ":" << nCol << endl;
-
-
 	QString strCurLine = m_pEditIface->line ( nLine );
 
-	kdDebug ( 9007 ) << "strCurLine => " << strCurLine << endl;
-}
-
-
-void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol )
-{
-	kdDebug ( 9007 ) << "CppCodeCompletion::slotCursorPositionChanged (nLine=" << nLine << ", nCol=" << nCol << ")" << endl;
-
-	m_pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
-	if ( !m_pEditIface )
-	{
-		kdDebug ( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
-		return;
-	}
-
-	m_pCompletionIface = KEditor::CodeCompletionDocumentIface::interface ( pDoc );
-	if ( !m_pCompletionIface )
-	{
-		kdDebug ( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
-		return;
-	}
-
-	disconnect ( m_pCompletionIface, 0, this, 0);
-	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
-	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
-
-	QString strCurLine = m_pEditIface->line ( nLine );
-
-	if ( !m_pParser ) m_pParser = new CppCCParser ();
-
+	//kdDebug ( 9007 ) << "CppCodeCompletion::slotTextChanged()@" << nLine << ":" << nCol << endl;
 
 	// CC for "Namespace::" for example
 	if ( strCurLine.right ( 2 ) == "::" )
@@ -189,6 +156,82 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 		}
 	}
 
+	if ( strCurLine.right ( 1 ) == "." )
+	{
+		int nNodePos = getNodePos ( nLine, nCol );
+
+		if ( nNodePos )
+		{
+			QString strNodeText = getNodeText ( nNodePos, nLine );
+
+			if ( m_pTmpFile ) delete m_pTmpFile;
+			m_pTmpFile = NULL;
+			if ( !m_pTmpFile ) m_pTmpFile = new KTempFile();
+			if ( m_pTmpFile->status() != 0 ) return;
+
+			QString strFileName = createTmpFileForParser ( nLine );
+
+			if ( m_pParser ) m_pParser->parse ( strFileName );
+
+			m_pTmpFile->unlink();
+			if ( m_pTmpFile->status() != 0 ) return;
+
+			for ( CParsedVariable* pVar = m_pParser->varList.first(); pVar != 0; pVar = m_pParser->varList.next() )
+			{
+				if ( pVar->sVariableName == strNodeText )
+				{
+					kdDebug ( 9007 ) << "Type of variable: " << pVar->sVariableType << endl;
+					QValueList<KEditor::CompletionEntry> completionList = getEntryListForClass ( pVar->sVariableType );
+
+					if ( completionList.count() > 0 )
+					{
+						m_pCompletionIface->showCompletionBox ( completionList );
+						break;
+					}
+
+					break;
+				}
+
+			}
+			// remove the parsed variables of the CppCCParser!
+			m_pParser->varList.clear();
+		}
+	}
+
+
+}
+
+
+void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int nLine, int nCol )
+{
+	kdDebug ( 9007 ) << "CppCodeCompletion::slotCursorPositionChanged (nLine=" << nLine << ", nCol=" << nCol << ")" << endl;
+
+	m_pEditIface = KEditor::EditDocumentIface::interface ( pDoc );
+	if ( !m_pEditIface )
+	{
+		kdDebug ( 9007 ) << "Editor doesn't support the EditDocumentIface" << endl;
+		return;
+	}
+
+	m_pCompletionIface = KEditor::CodeCompletionDocumentIface::interface ( pDoc );
+	if ( !m_pCompletionIface )
+	{
+		kdDebug ( 9007 ) << "Editor doesn't support the CodeCompletionDocumentIface";
+		return;
+	}
+
+	disconnect ( m_pCompletionIface, 0, this, 0);
+	connect ( m_pCompletionIface, SIGNAL ( argHintHided() ), this, SLOT ( slotArgHintHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionAborted() ), this, SLOT ( slotCompletionBoxHided() ) );
+	connect ( m_pCompletionIface, SIGNAL ( completionDone() ), this, SLOT ( slotCompletionBoxHided() ) );
+
+	QString strCurLine = m_pEditIface->line ( nLine );
+
+	if ( !m_pParser ) m_pParser = new CppCCParser ();
+
+
+
+
 //	QValueList<KEditor::CompletionEntry> completionList = m_pParser->getReturnTypeOfMethod ( "hallo()" );
 //	pCompletionIface->showCompletionBox ( completionList );
 
@@ -213,7 +256,7 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 	
 	int nNode = getNodePos ( nLine, nCol );
 	
-	if ( nNode )
+/*	if ( nNode )
 	{
 		QString strNText = getNodeText ( nNode, nLine );
 		QString strDelimiter = getNodeDelimiter ( nNode, nLine );
@@ -258,49 +301,65 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 			m_pParser->varList.clear();
 			
 		}
+	}*/
+
+	if ( strCurLine.right ( 1 ) == "x" )
+	{
+		QFile f( "xxx.txt" );
+
+		if( f.open( IO_WriteOnly ) )
+		{
+			QDataStream s( &f );
+
+/*			ParsedScopeContainer* pScopeCon;
+			QStringList* pList = m_pStore->getSortedScopeNameList();
+			for ( int i = 0; i < pList->count(); i++ )
+			{
+				pScopeCon = m_pStore->getClassByName ( ( *pList->at ( i ) ) );
+				s << ( *pScopeCon );
+			}*/
+
+/*			ParsedClass* c;
+			QStringList* l = m_pStore->getSortedClassNameList( );
+			for( int i = 0; i < l->count( ); i++ ){
+				c = m_pStore->getClassByName( (*l->at( i )) );
+				s << *c;
+			}
+
+
+			f.close();
+
+			f.open ( IO_ReadOnly );
+			QDataStream t ( &f);
+
+			for ( int i = l->count(); i > 0; i-- )
+			{
+				t >> *c;
+				kdDebug ( 9007 ) << "Names of serialized classes: " << c->name() << endl;
+
+				ParsedParent* parent;
+				for ( parent = c->parents.first(); parent != 0; parent = c->parents.next() )
+				{
+					kdDebug ( 9007 ) << "Names of parents: " << parent->name() << endl;
+				}
+			}
+*/
+		f.close( );
+
+		}
 	}
 
-/*	if ( strCurLine.right ( 1 ) == "." )
+/*	if ( strCurLine.right ( 1 ) == "y" )
 	{
-		int nNodePos = getNodePos ( nLine, nCol );
+		QFile f ("xxx.txt");
 
-		if ( nNodePos )
+		if ( f.open ( IO_ReadOnly ) )
 		{
-			QString strNodeText = getNodeText ( nNodePos, nLine );
+			QDataStream s ( &f);
+			ParsedClass* c;
+*/
 
-			if ( m_pTmpFile ) delete m_pTmpFile;
-			m_pTmpFile = NULL;
-			if ( !m_pTmpFile ) m_pTmpFile = new KTempFile();
-			if ( m_pTmpFile->status() != 0 ) return;
 
-			QString strFileName = createTmpFileForParser ( nLine );
-			
-			if ( m_pParser ) m_pParser->parse ( strFileName );
-
-			m_pTmpFile->unlink();
-			if ( m_pTmpFile->status() != 0 ) return;
-
-			for ( CParsedVariable* pVar = m_pParser->varList.first(); pVar != 0; pVar = m_pParser->varList.next() )
-			{
-				if ( pVar->sVariableName == strNodeText )
-				{
-					kdDebug ( 9007 ) << "Type of variable: " << pVar->sVariableType << endl;
-					QValueList<KEditor::CompletionEntry> completionList = getEntryListForClass ( pVar->sVariableType );
-
-					if ( completionList.count() > 0 )
-					{
-						m_pCompletionIface->showCompletionBox ( completionList );
-						break;
-					}
-
-					break;
-				}
-				
-			}
-			// remove the parsed variables of the CppCCParser!
-			m_pParser->varList.clear();
-		}
-	}*/
 
 
 
@@ -349,7 +408,7 @@ void CppCodeCompletion::slotCursorPositionChanged ( KEditor::Document* pDoc, int
 
 		entryList.append ( entry );
 
-		m_pCompletionIface->showCompletionBox ( entryList, 0 );
+		//m_pCompletionIface->showCompletionBox ( entryList, 0 );
 
 		QStringList functionList;
 		QString strFunction = "int setCurrentEditor ( KWrite* e, WFlags fl )";

@@ -1,5 +1,17 @@
+/*
+ * file     : codecompletionparser.cpp
+ * begin    : 2001
+ * copyright: (c) by daniel engelschalt
+ * email    : daniel.engelschalt@htw-dresden.de
+ * license  : gpl version >= 2
+ *
+ */
+
+#define ENABLEMESSAGEOUTPUT
+#define ENABLEDEBUGOUTPUT
+#include "dbg.h"
+
 #include "cppcodecompletionparser.h"
-#include <iostream.h>
 
 #define PUSH_LEXEM( ) lexemStack.push( new CParsedLexem( lexem, getText( ) ) )
 
@@ -12,27 +24,45 @@ CppCCParser::~CppCCParser( )
 }
 
 bool
-CppCCParser::parse( const QString &file, const int _iCCLine )
+CppCCParser::parse( const QString& file, const int iCCLine_ )
 {
-    ifstream f( file.latin1() );
+    ifstream f( file.latin1( ) );
     if( f.is_open( ) ){
-        iCCLine = _iCCLine;
+        iCCLine = iCCLine_;
         currentFile = file;
-        parseFile( f );
+        parseObject( f );
         return true;
     }
     else {
-        cerr << "EE: CppCCParser::parse file '" << file.latin1() << "' couldn't opened" << endl;
+        errln( "EE: CppCCParser::parse file '" << file.latin1( ) << "' couldn't opened" );
     }
 
     return false;
 }
 
+bool
+CppCCParser::parse( const QString* string, const int iCCLine_ )
+{
+    if( string ){
+        istrstream s( string->latin1( ) );
+        iCCLine = iCCLine_;
+        currentFile = QString::null;
+        parseObject( s );
+        return true;
+    }
+    else {
+        errln( "EE: CppCCParser::parse string = 0" );
+    }
+
+    return false;
+}
+
+
 void
-CppCCParser::parseFile( ifstream& file )
+CppCCParser::parseObject( istream& object )
 {
     lexem = -1;
-    lexer = new yyFlexLexer( &file );
+    lexer = new yyFlexLexer( &object );
     parseTopLevel( );
     delete lexer;
 }
@@ -40,12 +70,11 @@ CppCCParser::parseFile( ifstream& file )
 void
 CppCCParser::parseTopLevel( )
 {
-    // depending on what cc will (have to) provide we could check for global variables
-    // first (i.e. pushing the arguments until we find the keyword 'static' or a '('
-    // i don't care about that at the moment
+    // according to Victor and Daniel we will only provide one-method-parsing
+    // so that the object only contains one method
 
-    // parsing the function header
-    //parseFunctionHead( );
+	// parsing the function header
+    parseFunctionHead( );
 
     // parsing the function body
     parseFunctionBody( );
@@ -55,7 +84,7 @@ CppCCParser::parseTopLevel( )
 void
 CppCCParser::parseFunctionHead( )
 {
-    cout << "Parsing function head starting" << endl;
+    outln( "Parsing function head starting" );
 
     // here we store what we found
     CParsedVariable* pVar = 0;
@@ -63,71 +92,78 @@ CppCCParser::parseFunctionHead( )
     // current Scope - always 1 for "within function scope" ;)
     CScope currentScope( 1 );
 
-    // string for the function name
-    QString fName = "";
-
-    // getting first '(' and then looping until the header ends
+    // skipping up to the arguments
     skipToLexem( '(' );
 
-    getNextLexem( );
-    while( lexem != ';' && lexem != '{' && lexem != 0 ){
-        // create new variable-data holder and setting defaults
+    // header ends with '{' || ';' || EOF
+    while( lexem != '{' && lexem != ';' && lexem != 0 ){
+        getNextLexem( );
+        // create new variable-data holder and setting current ( = standard ) scope
         if( !pVar ){
             pVar = new CParsedVariable;
             pVar->scope = currentScope;
         }
 
+        // check what we found
         switch( lexem ){
-            // checking standard return values first
-            case CPVOID : cout << " + VOID"  << endl;
-                pVar->iVariableValue = CPVOID;
-                pVar->iLine = getLineNo( );
-                break;
-
-            case CPINT  : cout << " + INT"   << endl;
+            // standard values first
+            case CPINT  : outln( " + INT" );
                 pVar->iVariableValue = CPINT;
                 pVar->iLine = getLineNo( );
                 break;
 
-            case CPFLOAT: cout << " + FLOAT" << endl;
+            case CPFLOAT: outln( " + FLOAT" );
                 pVar->iVariableValue = CPFLOAT;
                 pVar->iLine = getLineNo( );
                 break;
 
-            case CPCHAR : cout << " + CHAR"  << endl;
+            case CPCHAR : outln( " + CHAR" );
                 pVar->iVariableValue = CPCHAR;
                 pVar->iLine = getLineNo( );
                 break;
 
-            case CPBOOL : cout << " + BOOL"  << endl;
+            case CPBOOL : outln( " + BOOL" );
                 pVar->iVariableValue = CPBOOL;
                 pVar->iLine = getLineNo( );
                 break;
 
+            case CPVOID : outln( " + VOID" );
+                pVar->iVariableValue = CPVOID;
+                pVar->iLine = getLineNo( );
+                break;
+		
+	    case CPSTRUCT  : outln( " + STRUCT" );
+		pVar->iVariableValue = CPSTRUCT;
+		pVar->iLine = getLineNo( );
+		break;
+
             case CPCONST   :
             case CPVOLATILE:
-            case CPUNION   :
-            case CPSTATIC  : cout << "const, volatile, union, static found - skipping" << endl; break;
+            case CPUNION   : outln( "const, volatile, union found - skipping" ); break;
+            
+	    // shouldn't happen
+	    case CPSTATIC  : errln( "CPSTATIC found - skipping" );
 
-            case '*'    : cout << " + POINTER"   << endl; pVar->iVariableType = CPPOINTER  ; break;
-            case '&'    : cout << " + REFERENCE" << endl; pVar->iVariableType = CPREFERENCE; break;
+            case '*'    : outln( " + POINTER"   ); pVar->iVariableType = CPPOINTER  ; break;
+            case '&'    : outln( " + REFERENCE" ); pVar->iVariableType = CPREFERENCE; break;
 
             case '('    :
-		cerr << "EE: ( found - shouldn't be, or ?" << endl;
+		errln( "EE: ( found - shouldn't be, or ?" );
 		break;
 
             // these are the signs for a variable's end
             case ')'    :
-		cout << "Ending function head found: ')'" << endl;
+		outln(  "Ending function head found: ')'" );
 		if( pVar->sVariableName == "" ){
 		    pVar->setDefault( );
-		    cout << "something like ( const QString& ) has been found" << endl;
+		    outln( "something like ( const QString& ) has been found" );
 		    break;
 		}
                 // anything about baseclasses, throws doesn't matter
+                // !!! something like foo( ); isn't handled !!! --- editor part ?
                 skipToLexem( '{' );
+		// falling through to case ','
 
-            // falling through from ')'
             case ','    :
                 if( !pVar->isDefault( ) ){
                     varList.append( pVar );
@@ -135,49 +171,47 @@ CppCCParser::parseFunctionHead( )
                     break;
                 }
                 else {
-                    cerr << "WW: unexpected else in ," << endl;
+                    errln( "WW: unexpected else in ," );
                 }
                 break;
 
-            // base class found - shouldn't happen
             case ':'    :
-                cerr << "EE: found, skipping" << endl;
-                skipCommand( );
+                // full qualifier found - not handled yet
+                errln( "EE: : found, skipping to '{'" );
+                skipToLexem( '{' );
                 break;
 
             default     :
-                // here we collect unknown types and stuff
-                cout << " + default '" << getText( ) << "'" << endl;
+                // here we collect unknown types (classes) and stuff
+                outln( " + default '" << getText( ) << "'" );
 		if( pVar->isDefault( ) ){
 		    pVar->sVariableType = getText( );
                     pVar->iLine = getLineNo( );
                     break;
 		}
 		else {
-		    cout << "default else" << endl;
+		    outln( "default else" );
                     pVar->sVariableName = getText( );
 		}
         } // end switch
-        getNextLexem( );
     } // end while
 
     // show what we found
 //    debugPrint( );
     if( pVar )
         delete pVar;
-    cout << "Parsing function head ending" << endl;
+    outln( "Parsing function head ending" );
 }
 
 void
 CppCCParser::parseFunctionBody( )
 {
-    // btw: we could stop parsing until a given line has been analyzed
-    cout << "Parsing funtion body starting" << endl;
+    outln( "Parsing funtion body starting" );
 
-    // scope++ at '{'; parseFunctionHead parses until '{'
+    // scope++ at '{'; parseFunctionHead parsed until lexem = '{'
     int iScope = 1;
 
-    // testscope
+    // scope that countes
     CScope currentScope( iScope );
 
     // here we store what we found
@@ -190,174 +224,175 @@ CppCCParser::parseFunctionBody( )
     while( lexem != 0 && iScope != 0 && ( getLineNo( ) <= iCCLine ) ){
         getNextLexem( );
 
-        // create new variable-data holder and setting defaults
+        // create new variable-data holder
         if( !pVar )
             pVar = new CParsedVariable;
 
         switch( lexem ){
             // checking standard values first
-            case CPBOOL : cout << " + BOOL" << endl;
+	    // typedefs ????
+            case CPBOOL : outln( " + BOOL" );
                 pVar->iVariableValue = CPBOOL;
                 pVar->iLine = getLineNo( );
                 bWithinVariable = true;
                 break;
 
-            case CPVOID : cout << " + VOID"  << endl;
-                pVar->iVariableValue = CPVOID;
-                pVar->iLine = getLineNo( );
-                bWithinVariable = true;
-                break;
-
-            case CPINT  : cout << " + INT"   << endl;
+            case CPINT  : outln( " + INT"   );
                 pVar->iVariableValue = CPINT;
                 pVar->iLine = getLineNo( );
                 bWithinVariable = true;
                 break;
 
-            case CPFLOAT: cout << " + FLOAT" << endl;
+            case CPFLOAT: outln( " + FLOAT" );
                 pVar->iVariableValue = CPFLOAT;
                 pVar->iLine = getLineNo( );
                 bWithinVariable = true;
                 break;
 
-            case CPCHAR : cout << " + CHAR"  << endl;
+            case CPCHAR : outln( " + CHAR" );
                 pVar->iVariableValue = CPCHAR;
+                pVar->iLine = getLineNo( );
+                bWithinVariable = true;
+                break;
+
+            case CPVOID : outln( " + VOID" );
+                pVar->iVariableValue = CPVOID;
                 pVar->iLine = getLineNo( );
                 bWithinVariable = true;
                 break;
 
             case CPCONST   :
             case CPVOLATILE:
-            case CPSTATIC  : cout << "const, volatile, static found - skipping" << endl; break;
+            case CPSTATIC  : outln( "const, volatile, static found - skipping" ); break;
 
-            case CPSTRUCT  :
+            case CPSTRUCT  : // to handle: struct m x;
             case CPUNION   :
-                cerr << "### struct / union found +++ not handled yet - ignoring" << endl;
-                cerr << "### place structs / unions in header-file !" << endl;
-                skipBlock( );
+                errln( "### struct / union found +++ not handled yet - ignoring" );
+                errln( "### place structs / unions in header-file !" );
+                skipBlock( ); // currently skips to fileend if: struct m x;
                 skipToLexem( ';' );
                 break;
 
-            case '*'    : cout << " + POINTER"   << endl; pVar->iVariableType = CPPOINTER  ; break;
-            case '&'    : cout << " + REFERENCE" << endl; pVar->iVariableType = CPREFERENCE; break;
+            case '*'    : outln( " + POINTER"   ); pVar->iVariableType = CPPOINTER  ; break;
+            case '&'    : outln( " + REFERENCE" ); pVar->iVariableType = CPREFERENCE; break;
 
-            case CPWHILE: cout << "+ while found" << endl; skipCommand( ); break;
-            case CPFOR  : cout << "+ for found"   << endl; skipCommand( ); break;
+            case CPWHILE: outln( "+ while found" ); skipCommand( ); break;
+            case CPFOR  : outln( "+ for found"   ); skipCommand( ); break;
 
             case '?'    :
-                cout << "? found" << endl;
+                outln( "? found" );
                 if( !pVar->isDefault( ) ){
-                    cout << "?, var defaulted" << endl;
+                    outln( "?, var defaulted" );
                     pVar->setDefault( );
                     skipCommand( );
                 }
                 break;
 
             case CPDCAST:
-                cout << "dynamic cast found" << endl;
+                outln( "dynamic cast found" );
                 skipCommand( );
                 break;
 
             case CPSCAST:
-                cout << "static cast found" << endl;
+                outln( "static cast found" );
                 skipCommand( );
                 break;
 
-            case CPIF   : cout << "+ if found" << endl; skipCommand( ); break;
-            case CPELSE : cout << "+ else found" << endl; skipCommand( ); break;
-            case CPDO   : cout << "+ do found" << endl; skipCommand( ); break;
+            case CPIF   : outln( "+ if found"   ); skipCommand( ); break;
+            case CPELSE : outln( "+ else found" ); skipCommand( ); break;
+            case CPDO   : outln( "+ do found"   ); skipCommand( ); break;
 
             case CPSWITCH :
-                cout << "+ switch found" << endl;
+                outln( "+ switch found" );
                 skipCommand( );
                 break;
 
             case CPDEFAULT:
-                cout << "default found" << endl;
-                getNextLexem( ); // = :
+                outln( "default found" );
+                getNextLexem( ); // = ':'
                 break;
 
             case CPCASE   :
-                cout << "case found" << endl;
+                outln( "case found" );
                 skipToLexem( ':' );
                 break;
 
             case CPBREAK  :
-                cout << "break found" << endl;
-                getNextLexem( ); // = ;
+                outln( "break found" );
+                getNextLexem( ); // = ';'
                 break;
 
             case CPPIPE :
-                cout << "operator << or >> found" << endl;
+                outln( "operator << or >> found" );
                 skipToSemicolon( );
                 break;
 
-            case CPEMIT : cout << "+ emit found" << endl; skipToSemicolon( ); break;
+            // qt-specific ! how to handle that ?
+            case CPEMIT   : outln( "+ emit found"   ); skipToSemicolon( ); break;
 
-            case CPRETURN :
-                cout << "+ return found";
-                skipToSemicolon( );
-                break;
+            case CPRETURN : outln( "+ return found" ); skipToSemicolon( ); break;
 
             case CLCL   :
-                cout << ":: found" << endl;
+                outln( ":: found" );
                 if( bWithinVariable == false ){
                     pVar->setDefault( );
-                    cout << "-:: var defaulted" << endl;
+                    outln( "-:: var defaulted" );
                     skipCommand( );
                 }
                 else {
-                    cerr << "WW: unexpected else in CLCL" << endl;
+                    errln( "WW: unexpected else in CLCL" );
                 }
                 break;
 
 	    case '['    :
-		cout << "[ found" << endl;
+		outln( "[ found" );
 		if( bWithinVariable == true ){
                     skipToLexem( '[' );
                     break;
 		}
 		else {
 		    pVar->setDefault( );
-		    cout << "-[ var defaulted" << endl;
+		    outln( "-[ var defaulted" );
 		    skipToSemicolon( );
                     break;
 		}
 
             case ','    :
-                cout << ", found" << endl;
+                outln( ", found" );
                 if( bWithinVariable == true ){
                     pVar->scope = currentScope;
                     varList.append( pVar );
                     pVar = new CParsedVariable( *pVar );
+                    outln( "--> , appended '" << pVar->sVariableName << "' <--" );
                     break;
                 }
                 else {
-                    cerr << "WW: unexpected else in ," << endl;
+                    errln( "WW: unexpected else in ," );
                 }
-
                 break;
 
             case ';'    :
-                cout << "; found" << endl;
+                outln( "; found" );
                 if( bWithinVariable == true ){
                     pVar->scope = currentScope;
                     varList.append( pVar );
+                    outln( "--> ; appended '" << pVar->sVariableName << "' <--" );
                     pVar = 0;
                     bWithinVariable = false;
                     break;
                 }
                 else {
-                    cerr << "WW: unexpected else in ;" << endl;
+                    errln( "WW: unexpected else in ;" );
                 }
                 break;
 
             case '='    :
-                cout << "= found" << endl;
+                outln( "= found" );
                 skipToSemicolon( );
                 if( bWithinVariable == true ){
                     pVar->scope = currentScope;
                     varList.append( pVar );
+                    outln( "--> = appended '" << pVar->sVariableName << "' <--" );
                     pVar = 0;
                     bWithinVariable = false;
                     break;
@@ -365,16 +400,16 @@ CppCCParser::parseFunctionBody( )
                 else {
                     // normale zuweisung ;)
                     pVar->setDefault( );
-                    cout << "=, var defaulted" << endl;
+                    outln( "=, var defaulted" );
                     break;
                 }
 
             case '('    :
-                cout << "( found" << endl;
+                outln( "( found" );
                 if( bWithinVariable == false ){
                     // function name = unknown, stored in default
                     pVar->setDefault( );
-                    cout << "(, var defaulted" << endl;
+                    outln( "(, var defaulted" );
                     skipToSemicolon( );
 		    break;
                 }
@@ -385,44 +420,44 @@ CppCCParser::parseFunctionBody( )
 		}
 
             case '-'    :
-                cout << "- found" << endl;
+                outln( "- found" );
                 if( bWithinVariable == false ){
                     pVar->setDefault( );
-                    cout << "-, var defaulted" << endl;
+                    outln( "-, var defaulted" );
                     skipToSemicolon( );
                     break;
                 }
                 else {
-                    cerr << "WW: unexpected else in -" << endl;
+                    errln( "WW: unexpected else in -" );
                 }
                 break;
 
             case '{'    :
-                cout << "{ found" << endl;
+                outln( "{ found" );
                 currentScope.increase( ++iScope );
-                currentScope.debugOutput( ); cerr << endl;
+//                currentScope.debugOutput( );
                 break;
 
             case '}'    :
-                cout << "} found" << endl;
+                outln( "} found" );
                 iScope--;
                 break;
 
             case '.'    :
-                cout << ". found" << endl;
+                outln( ". found" );
                 if( bWithinVariable == false ){
                     pVar->setDefault( );
-                    cout << "-. var defaulted" << endl;
+                    outln( "-. var defaulted" );
                     skipToSemicolon( );
                     break;
                 }
                 else {
-                    cerr << "WW: unexpected else in ." << endl;
+                    errln( "WW: unexpected else in ." );
                 }
                 break;
 
             default     :
-                cout << "unknow lexem found '" << getText( ) << "'" << endl;
+                outln( "unknow lexem found '" << getText( ) << "'" );
 
                 // if variable type = default this is our variable type
                 if( pVar->isDefault( ) ){
@@ -431,7 +466,7 @@ CppCCParser::parseFunctionBody( )
                     break;
                 }
                 else {
-                    cerr << "  parseFunctionBody default value, else" << endl;
+                    errln( "  parseFunctionBody default value, else" );
                     pVar->sVariableName = getText( );
                     bWithinVariable = true;
                 }
@@ -440,49 +475,50 @@ CppCCParser::parseFunctionBody( )
 
     if( pVar )
         delete pVar;
+
     // show what we found
     debugPrint( );
 
-    cout << "Parsing funtion body ending" << endl;
+    outln( "Parsing funtion body ending" );
 }
 
 void
 CppCCParser::debugPrint( )
 {
-    cerr << "-- debugPrint start --" << endl;
+    errln( "-- debugPrint start --" );
 
-    cerr << "Number of variables (" << varList.count( ) << ")" << endl;
+    errln( "Number of variables (" << varList.count( ) << ")" );
     for( int i = 0; i < varList.count( ); i++ ){
-        cerr << "Variable found @line: " << varList.at( i )->iLine << endl;
-        cerr << "  Variable name          : " << varList.at( i )->sVariableName.latin1() << endl;
-        cerr << "  Variable value         : " <<  varList.at( i )->iVariableValue;
+        errln( "Variable found @line: "      << varList.at( i )->iLine );
+        errln( "  Variable name          : " << varList.at( i )->sVariableName );
+        err  ( "  Variable value         : " << varList.at( i )->iVariableValue );
         switch( varList.at( i )->iVariableValue ){
-            case CPBOOL   : cerr << " ( bool )"  << endl; break;
-            case CPVOID   : cerr << " ( void )"  << endl; break;
-            case CPINT    : cerr << " ( int )"   << endl; break;
-            case CPFLOAT  : cerr << " ( float )" << endl; break;
-            case CPCHAR   : cerr << " ( char )"  << endl; break;
-            case CPNONE   : cerr << " ( none )"  << endl; break;
-            case CPUNKNOWN: cerr << " ( unknown )" << endl; break;
-            default       : cerr << " *** iReturnValue default" << endl;
+            case CPBOOL   : errln( " ( bool )"  ); break;
+            case CPVOID   : errln( " ( void )"  ); break;
+            case CPINT    : errln( " ( int )"   ); break;
+            case CPFLOAT  : errln( " ( float )" ); break;
+            case CPCHAR   : errln( " ( char )"  ); break;
+            case CPNONE   : errln( " ( none )"  ); break;
+            case CPUNKNOWN: errln( " ( unknown )" ); break;
+            default       : errln( " *** iReturnValue default" );
         }
 
-        cerr << "  Variable integer type  : " <<  varList.at( i )->iVariableType;
+        err( "  Variable integer type  : " << varList.at( i )->iVariableType );
         switch( varList.at( i )->iVariableType ){
-            case CPPOINTER  : cerr << " ( pointer )"   << endl; break;
-            case CPREFERENCE: cerr << " ( reference )" << endl; break;
-            case CPNONE     : cerr << " ( none )"      << endl; break;
-            default         : cerr << " *** iType default" << endl;
+            case CPPOINTER  : errln( " ( pointer )"   ); break;
+            case CPREFERENCE: errln( " ( reference )" ); break;
+            case CPNONE     : errln( " ( none )"      ); break;
+            default         : errln( " *** iType default" );
         }
-        cerr << "  Variable string  type  : ";
+        err( "  Variable string  type  : " );
         if( varList.at( i )->sVariableType == "" )
-            cerr << "( standard type )" << endl;
+            errln( "( standard type )" );
         else
-            cerr << varList.at( i )->sVariableType.latin1() << endl;
-        cerr << "  Scope                  : "; varList.at( i )->scope.debugOutput( ); cerr << endl;
+            errln( varList.at( i )->sVariableType );
+        err( "  Scope                  : " ); varList.at( i )->scope.debugOutput( ); errln ( "" );
     }
 
-    cerr << "-- debugPrint end --" << endl;
+    errln( "-- debugPrint end --" );
 }
 
 void
@@ -514,7 +550,7 @@ void
 CppCCParser::skipToSemicolon( )
 {
     while( lexem != ';' && lexem != 0 ){
-        cout << " - skipping: " << getText( ) << endl;
+        outln( " - skipping: " << getText( ) );
         getNextLexem( );
     }
 }
@@ -522,14 +558,14 @@ CppCCParser::skipToSemicolon( )
 void
 CppCCParser::skipCommand( )
 {
-    cout << " + skipCommand start" << endl;
+    outln( " + skipCommand start" );
     int  iDepth;
     ( lexem == '(' ) ? iDepth = 1 : iDepth = 0;
     bool bExit  = false;
 
     while( !bExit ){
 	getNextLexem( );
-        cout << " - skipping: " << getText( ) << endl;
+        outln( " - skipping: " << getText( ) );
 
 	if( lexem == '(' )
 	    iDepth++;
@@ -552,7 +588,7 @@ CppCCParser::skipCommand( )
 	bExit = bExit || ( lexem == 0 );
     }
 
-    cout << " + skipCommand end" << endl;
+    outln( " + skipCommand end" );
 }
 
 void
