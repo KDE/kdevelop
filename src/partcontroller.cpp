@@ -214,7 +214,7 @@ KURL PartController::findURLInProject(const KURL& url)
   for (QStringList::Iterator it = fileList.begin(); it != fileList.end(); ++it) {
     if ((*it).endsWith(filename)) {
       // Match! The first one is as good as any one, I guess...
-      return API::getInstance()->project()->projectDirectory() + "/" + *it;
+      return KURL( API::getInstance()->project()->projectDirectory() + "/" + *it );
     }
   }
 

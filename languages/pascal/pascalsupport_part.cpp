@@ -187,7 +187,7 @@ void PascalSupportPart::maybeParse( const QString & fileName )
 {
     kdDebug(9013) << "Maybe parse: " << fileName << endl;
 
-    KMimeType::Ptr mime = KMimeType::findByURL( fileName );
+    KMimeType::Ptr mime = KMimeType::findByURL( KURL( fileName ) );
     if( !mime || mime->name() != "text/x-pascal" )
 	return;
 

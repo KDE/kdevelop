@@ -152,7 +152,7 @@ void subversionPart::projectConfigWidget( KDialogBase *dlg ) {
 void subversionPart::createNewProject( const QString& dirname ) {
 	if ( !m_projWidget ) return;
 
-	m_impl->createNewProject( dirname, m_projWidget->importURL->url(), m_projWidget->yes->isChecked() );
+	m_impl->createNewProject( dirname, KURL( m_projWidget->importURL->url() ), m_projWidget->yes->isChecked() );
 
 }
 

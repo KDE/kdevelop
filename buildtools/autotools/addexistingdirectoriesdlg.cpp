@@ -362,15 +362,15 @@ void AddExistingDirectoriesDialog::slotDropped ( QDropEvent* ev )
             relPath = relPath.left(relPath.length()-1);
         if ( (relPath.isEmpty()) || ( ! m_widget->allSubprojects().contains( relPath )) )
  		{
-			type = KMimeType::findByURL ( ( *it ).url() );
+			type = KMimeType::findByURL ( ( *it ) );
 
 			if ( type->name() != KMimeType::defaultMimeType() )
 			{
-				item = new KFileItem ( ( *it ).url() , type->name(), 0 );
+				item = new KFileItem ( ( *it ) , type->name(), 0 );
 			}
 			else
 			{
-				item = new KFileItem ( ( *it ).url(), "inode/directory", 0 );
+				item = new KFileItem ( ( *it ), "inode/directory", 0 );
 			}
 
 			m_importList.append ( item );

@@ -238,7 +238,7 @@ void GrepViewWidget::slotExecuted(QListBoxItem* item)
         return;
 
     GrepListBoxItem *gi = static_cast<GrepListBoxItem*>(i);
-    m_part->partController()->editDocument( gi->filename(), gi->linenumber()-1 );
+    m_part->partController()->editDocument( KURL( gi->filename() ), gi->linenumber()-1 );
     m_part->mainWindow()->lowerView(this);
 }
 

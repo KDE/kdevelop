@@ -472,7 +472,7 @@ bool QEditorView::find_real( QTextParagraph* firstParagraph, int firstIndex,
 
 void QEditorView::doFind()
 {
-    m_findDialog->m_find->setEditURL(m_editor->selectedText());
+    m_findDialog->m_find->setEditURL(KURL( m_editor->selectedText() ));
 
     if( m_findDialog->exec() ){
         m_options = m_findDialog->options();
@@ -492,7 +492,7 @@ void QEditorView::doFind()
 
 void QEditorView::doReplace()
 {
-    m_replaceDialog->m_find->setEditURL(m_editor->selectedText());
+    m_replaceDialog->m_find->setEditURL(KURL( m_editor->selectedText() ));
 
     if( m_replaceDialog->exec() ){
         m_options = m_replaceDialog->options();

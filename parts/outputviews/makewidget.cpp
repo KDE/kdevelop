@@ -477,9 +477,9 @@ void MakeWidget::searchItem(int parag)
 			uint line, col;
 			item->m_cursor->position(&line, &col);
 			kdDebug() << "Cursor new position: " << col << endl;
-			m_part->partController()->editDocument(guessFileName(item->fileName, parag), line, col);
+			m_part->partController()->editDocument(KURL( guessFileName(item->fileName, parag) ), line, col);
 		} else {
-			m_part->partController()->editDocument(guessFileName(item->fileName, parag), item->lineNum);
+			m_part->partController()->editDocument(KURL( guessFileName(item->fileName, parag) ), item->lineNum);
 		}
 		m_part->mainWindow()->statusBar()->message( item->m_error, 10000 );
 		m_part->mainWindow()->lowerView(this);
@@ -609,7 +609,7 @@ void MakeWidget::insertItem( MakeItem* item )
 
 void MakeWidget::slotDocumentOpened( const QString & filename )
 {
-	KParts::Part* part = m_part->partController()->findOpenDocument(filename);
+	KParts::Part* part = m_part->partController()->findOpenDocument(KURL( filename ));
 	KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part);
 
 	if (!doc) {
@@ -637,7 +637,7 @@ void MakeWidget::createCursor(ErrorItem* e, KTextEditor::Document* doc)
 	// try to get a KTextEditor::Cursor, so that we can retain position in
 	// a document even when it is edited
 	if (!doc)
-		doc = dynamic_cast<KTextEditor::Document*>(m_part->partController()->findOpenDocument(guessFileName(e->fileName, m_paragraphs + 1)));
+		doc = dynamic_cast<KTextEditor::Document*>(m_part->partController()->findOpenDocument(KURL( guessFileName(e->fileName, m_paragraphs + 1 ))));
 
 	if (doc) {
 		KTextEditor::EditInterface* edit = dynamic_cast<KTextEditor::EditInterface*>(doc);

@@ -79,7 +79,7 @@ void AddAttributeDialog::reject()
 
 void AddAttributeDialog::accept()
 {
-    m_cppSupport->partController()->editDocument( m_klass->fileName() );
+    m_cppSupport->partController()->editDocument( KURL( m_klass->fileName() ) );
     KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
     if( !editIface ){
 	/// @todo show messagebox

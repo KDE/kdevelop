@@ -102,7 +102,7 @@ FileSelectorWidget::FileSelectorWidget(AutoProjectPart* part, KFile::Mode mode, 
 	cmbPath->setCompletionObject( cmpl );
 	lo->addWidget(cmbPath);
 
-	dir = new KDnDDirOperator(QString::null, this, "operator");
+	dir = new KDnDDirOperator(KURL(), this, "operator");
 	dir->setView(KFile::Simple);
     dir->setMode(mode);
 

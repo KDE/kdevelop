@@ -189,7 +189,8 @@ void DistpartDialog::slotuploadSubmitPushButtonPressed() {
         kdDebug() << "Implement ftp.kde.org & apps.kde.com ftp transfer" << endl;
     else {
         for(unsigned int i=0; i< uploadFileListBox->count(); i++)
-	    KIO::NetAccess::copy("file:"+  uploadFileListBox->text(i),getuploadURLLineEditText() +  uploadFileListBox->text(i).replace(QRegExp("[^/]*/"),""));
+	    KIO::NetAccess::copy(KURL::fromPathOrURL( uploadFileListBox->text(i) ),
+                    KURL::fromPathOrURL( getuploadURLLineEditText() +  uploadFileListBox->text(i).replace(QRegExp("[^/]*/"),"") ));
     }
 }
 

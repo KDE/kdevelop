@@ -86,7 +86,7 @@ void Core::fillContextMenu(QPopupMenu *popup, const Context *context)
 
 void Core::openProject(const QString& projectFileName)
 {
-  ProjectManager::getInstance()->loadProject(projectFileName);
+  ProjectManager::getInstance()->loadProject(KURL( projectFileName ));
 }
 
 namespace MainWindowUtils{

@@ -430,16 +430,16 @@ void AddExistingFilesDialog::slotDropped ( QDropEvent* ev )
     {
  		if ( ( *it ).isLocalFile() ) // maybe unnecessary
  		{
-			type = KMimeType::findByURL ( ( *it ).url() );
+			type = KMimeType::findByURL ( ( *it ) );
 
 			if ( type->name() != KMimeType::defaultMimeType() )
 			{
-				item = new KFileItem ( ( *it ).url() , type->name(), 0 );
+				item = new KFileItem ( ( *it ) , type->name(), 0 );
 			}
 			else
 			{
 				// take a text-file-icon instead of the ugly question-mark-icon
-				item = new KFileItem ( ( *it ).url(), "text/plain", 0 );
+				item = new KFileItem ( ( *it ), "text/plain", 0 );
 			}
 
 			m_importList.append ( item );

@@ -247,7 +247,7 @@ void QEditorPart::fileOpen()
     QString file_name = KFileDialog::getOpenFileName();
 
     if (file_name.isEmpty() == false)
-        openURL(file_name);
+        openURL(KURL::fromPathOrURL( file_name ));
 }
 
 void QEditorPart::fileSaveAs()
@@ -255,7 +255,7 @@ void QEditorPart::fileSaveAs()
     // this slot is called whenever the File->Save As menu is selected,
     QString file_name = KFileDialog::getSaveFileName();
     if (file_name.isEmpty() == false)
-        saveAs(file_name);
+        saveAs(KURL::fromPathOrURL( file_name ));
 }
 
 // -- EditInterface Implementation -- START -------------------------------------------------------------

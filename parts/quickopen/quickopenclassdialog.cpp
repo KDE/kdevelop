@@ -72,7 +72,7 @@ void QuickOpenClassDialog::accept()
         {
             int startLine, startColumn;
             klass->getStartPosition( &startLine, &startColumn );
-            m_part->partController()->editDocument( klass->fileName(), startLine );
+            m_part->partController()->editDocument( KURL( klass->fileName() ), startLine );
         }
     }
 

@@ -885,7 +885,7 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
     if ( ! fileName.isEmpty() )
     {
         // Debugger counts lines from 1
-        debugger()->gotoExecutionPoint(fileName, lineNum-1);
+        debugger()->gotoExecutionPoint(KURL( fileName ), lineNum-1);
     }
 }
 
@@ -893,7 +893,7 @@ void DebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 void DebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
     if ( ! fileName.isEmpty() )
-        partController()->editDocument(fileName, lineNum);
+        partController()->editDocument(KURL( fileName ), lineNum);
 }
 
 

@@ -721,13 +721,13 @@ QString CppSupportPart::sourceOrHeaderCandidate()
 
 void CppSupportPart::slotSwitchHeader()
 {
-    partController()->editDocument(sourceOrHeaderCandidate());
+    partController()->editDocument(KURL( sourceOrHeaderCandidate() ));
 }
 
 void CppSupportPart::slotGotoIncludeFile()
 {
     if (!m_contextFileName.isEmpty())
-        partController()->editDocument(m_contextFileName, 0);
+        partController()->editDocument(KURL( m_contextFileName ), 0);
 
 }
 
@@ -1057,7 +1057,7 @@ void CppSupportPart::slotMakeMember()
 	QString implFile = findSourceFile();
 
 	if( !text.isEmpty() && !implFile.isEmpty() ){
-	    partController()->editDocument( implFile );
+	    partController()->editDocument( KURL( implFile ) );
 	    kapp->processEvents( 500 );
 	}
 

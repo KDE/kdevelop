@@ -141,7 +141,7 @@ KDevFileSelector::KDevFileSelector( FileSelectorPart *part, KDevMainWindow *main
     lo->addWidget(cmbPath);
     cmbPath->listBox()->installEventFilter( this );
 
-    dir = new KDevDirOperator(m_part, QString::null, this, "operator");
+    dir = new KDevDirOperator(m_part, KURL(), this, "operator");
     dir->setView(KFile::/*Simple*/Detail);
 
     KActionCollection *coll = dir->actionCollection();

@@ -487,13 +487,13 @@ void JavaDebuggerPart::slotStatus(const QString &msg, int state)
 void JavaDebuggerPart::slotShowStep(const QString &fileName, int lineNum)
 {
     // Debugger counts lines from 1
-    debugger()->gotoExecutionPoint(fileName, lineNum-1);
+    debugger()->gotoExecutionPoint(KURL( fileName ), lineNum-1);
 }
 
 
 void JavaDebuggerPart::slotGotoSource(const QString &fileName, int lineNum)
 {
-    partController()->editDocument(fileName, lineNum);
+    partController()->editDocument(KURL( fileName ), lineNum);
 }
 
 }

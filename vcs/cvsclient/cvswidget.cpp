@@ -80,7 +80,7 @@ void CvsWidget::lineHighlighted(int line) {
     if (i->isCustomItem()) {
         CvsListBoxItem *ci = static_cast<CvsListBoxItem*>(i);
     if (ci->containsFileName()) {
-        m_part->partController()->editDocument(dir + "/" + ci->fileName());
+        m_part->partController()->editDocument(KURL::fromPathOrURL( dir + "/" + ci->fileName() ));
         m_part->mainWindow()->lowerView(this);
     }
     }

@@ -139,7 +139,7 @@ QString AddMethodDialog::accessID( FunctionDom fun ) const
 
 void AddMethodDialog::accept()
 {
-    m_cppSupport->partController()->editDocument( m_klass->fileName() );
+    m_cppSupport->partController()->editDocument( KURL( m_klass->fileName() ) );
     KTextEditor::EditInterface* editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
     if( !editIface ){
 	/// @todo show messagebox
@@ -226,7 +226,7 @@ void AddMethodDialog::accept()
             m_cppSupport->createFileSupport()->createNewFile( fileInfo.extension(), fileInfo.dirPath(true), fileInfo.baseName() );
         }
 
-        m_cppSupport->partController()->editDocument( implementationFile );
+        m_cppSupport->partController()->editDocument( KURL( implementationFile ) );
         editIface = dynamic_cast<KTextEditor::EditInterface*>( m_cppSupport->partController()->activePart() );
         if( !editIface )
             continue;

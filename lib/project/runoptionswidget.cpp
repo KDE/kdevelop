@@ -191,12 +191,12 @@ void RunOptionsWidget::browseMainProgram()
             dir = path.left(pos);
 
         // Store it all in a KURL
-        KURL target = dir;
+        KURL target ( dir );
         target.addPath(path.mid(pos + 1));
         target.cleanPath();
 
         // pass it to the dialog
-        dlg->setURL(target.directory(false, false));
+        dlg->setURL(KURL::fromPathOrURL( target.directory(false, false) ));
         dlg->setSelection(target.filename());
     }
 

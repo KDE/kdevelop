@@ -194,7 +194,7 @@ void PHPSupportPart::slotConfigStored(){
 
 void PHPSupportPart::slotErrorMessageSelected(const QString& filename,int line){
   kdDebug(9018) << endl << "slotWebResult()" << filename.latin1() << line;
-  partController()->editDocument(filename,line);
+  partController()->editDocument(KURL( filename ),line);
 }
 void PHPSupportPart::projectConfigWidget(KDialogBase *dlg){
   QVBox *vbox = dlg->addVBoxPage(i18n("PHP Settings"));

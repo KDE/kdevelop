@@ -541,7 +541,7 @@ void ProjectManager::loadLocalParts()
 KURL ProjectManager::projectFile() const
 {
   if (!m_info)
-    return QString::null;
+    return KURL();
   return m_info->m_projectURL;
 }
 

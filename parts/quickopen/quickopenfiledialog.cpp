@@ -59,7 +59,7 @@ QuickOpenFileDialog::~QuickOpenFileDialog()
 
 void QuickOpenFileDialog::slotExecuted( QListBoxItem* item )
 {
-    m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + item->text() );
+    m_part->partController()->editDocument( KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + item->text() ) );
     accept();
 }
 
@@ -70,7 +70,7 @@ void QuickOpenFileDialog::slotReturnPressed( )
         accept();
     }*/
     if( itemList->currentItem() != -1 ) {
-        m_part->partController()->editDocument( m_part->project()->projectDirectory() + "/" + itemList->currentText() );
+        m_part->partController()->editDocument( KURL::fromPathOrURL( m_part->project()->projectDirectory() + "/" + itemList->currentText() ) );
         accept();
     }
 }
