@@ -16,7 +16,7 @@
 
 
 DocumentationPart::DocumentationPart()
-  : KHTMLPart(0L, 0L, 0L, "DocumentationPart")
+  : KHTMLPart(0L, 0L, 0L, "DocumentationPart", BrowserViewGUI )
 {
   connect(browserExtension(), SIGNAL(openURLRequestDelayed(const KURL &,const KParts::URLArgs &)),
           this, SLOT(openURLRequest(const KURL &)) );
@@ -51,6 +51,15 @@ void DocumentationPart::popup( const QString & url, const QPoint & p )
   {
     backAction->plug(m_popup);
     forwardAction->plug(m_popup);
+    m_popup->insertSeparator();
+  }
+  
+  KAction * incFontAction = this->action("incFontSizes");
+  KAction * decFontAction = this->action("decFontSizes");
+  if ( incFontAction && decFontAction )
+  {
+    incFontAction->plug( m_popup );
+    decFontAction->plug( m_popup );
     m_popup->insertSeparator();
   }
   
