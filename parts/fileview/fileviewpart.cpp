@@ -148,7 +148,7 @@ void FileViewPart::insertConfigWidget( const KDialogBase* dlg, QWidget * page, u
 
 KDevVersionControl *FileViewPart::versionControl()
 {
-    return extension<KDevVersionControl>("KDevelop/VersionControl");
+   return extension<KDevVersionControl>("KDevelop/VersionControl");
 }
 
 #include "fileviewpart.moc"

@@ -171,7 +171,7 @@ void ToolsPart::startCommand(QString cmdline, bool captured, QString fileName)
     cmdline.replace(QRegExp("%W"), word);
 
     if (captured)
-        if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
+       if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
             appFrontend->startAppCommand(QString::QString(), cmdline, false);
     else {
         KShellProcess proc;

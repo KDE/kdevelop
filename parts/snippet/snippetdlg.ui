@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>344</width>
-            <height>285</height>
+            <height>289</height>
         </rect>
     </property>
     <property name="caption">
@@ -50,6 +50,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Add</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                 </widget>
                 <widget class="KPushButton">
@@ -167,7 +170,7 @@
 </widget>
 <images>
     <image name="image0">
-        <data format="PNG" length="450">89504e470d0a1a0a0000000d4948445200000010000000120806000000523b5e6a0000018949444154789cb592314b03411085bf0b5bac60113b2d2d531f86131bb1b3106c2278b595824542fc0536a276263669a3a0a0767616c29e21b29d709da5a43216420e3c588b33e7dd5e62e7c0b2c5bc37f3e6cd38baaf2106044471c44abd6be0032893fb7b178c4307da19e31d1528a4903fe496a9acef11be8470bd9312a875e06b08774db2a1fbda41f7352a50b0da30bb57af86ed8e01f2cff3cdf291366c1e17f2a5288e90428280c17004973b14a277c1d3ed2995a535180d73a9921432f1e0734438f880ed4e5126805c607e169899cb1788e20804d06b13deb7920eb5df226ed535499111200b0a7e3db0e7b63c68dcbc196a67c59c0ad4df453cdf1c3fbe4f36174cea81141215282727cff3691c9cd03cbf9968ae0a9493bb83ecefee9f9aca4683f0f9a1b0ff31590a996c215de58f92288e8072b21dcbf52c9918a62ba8baa6c0cc90c7b892dd39bd8b2961e3d33bc82a40249df07cf0fc94acfbdab1f1533d58a977cd6efd1016d7d2026ed535365ed8b3a7c95e9bf656bb30828dfb670fac98e4c137fbdd27869f43ed560000000049454e44ae426082</data>
+        <data format="XPM.GZ" length="720">789c85d0c94ec3301006e07b9ec24a6e15729bb5b12a1e01c4110971182f6dbaa43b07847877f27bec1424a43a87f8fb331edb994ec4ebcb93984c93cb95ae6b234c476731b11f7dfff9f6fef895a47923f25614b9c8d3872495c288e7c3de61ae877936f3032466d9d60466918de79e59cd98cbc879096e022ba663d6b35683a7c05a55a01d69c02e50310d58a8363735781969c15d60cd5c83a56a15b307ab5c85e243a4f5adb6605d28c55c810d1159ff378ee0bc24e71af00cb6da14ce7f95c3c8088fd67a98878c8c1d6c9d46cad972d541b4767873b6d96a3f68e7c62c33f82ef5b2bfd56972e827f7875b9d0e4b8f273d661cd2d9ef1433e9ab388ae7c311fd9e38f42dcb2e9dfe738fd812d19d4c1271f4bb9fbff3fdb5fff68b914cbf17c90f9b96abef</data>
     </image>
 </images>
 <connections>

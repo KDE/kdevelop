@@ -507,7 +507,7 @@ QString RubySupportPart::characterCoding() {
 
 void RubySupportPart::startApplication(const QString &program) {
 	bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevrubysupport/run/terminal");
-    if (KDevAppFrontend *appFrontend = (KDevAppFrontend*)(extension("KDevelop/AppFrontend")))
+    if (KDevAppFrontend *appFrontend = extension<KDevAppFrontend>("KDevelop/AppFrontend"))
         appFrontend->startAppCommand(QString::QString(), program, inTerminal);
 }
 

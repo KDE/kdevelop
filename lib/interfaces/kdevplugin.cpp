@@ -118,7 +118,7 @@ KDevCodeRepository * KDevPlugin::codeRepository() const
     return m_api->codeRepository();
 }
 
-KDevPlugin * KDevPlugin::extension(const QString &serviceType, const QString &constraint)
+KDevPlugin * KDevPlugin::extension_internal(const QString &serviceType, const QString &constraint)
 {
     return m_api->pluginController()->extension(serviceType, constraint);
 }

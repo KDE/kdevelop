@@ -760,8 +760,7 @@ void RubyDebuggerPart::savePartialProjectSession(QDomElement* el)
 
 KDevAppFrontend * RDBDebugger::RubyDebuggerPart::appFrontend( )
 {
-//	return extension<KDevAppFrontend>("KDevelop/AppFrontend");
-    return static_cast<KDevAppFrontend*>(extension("KDevelop/AppFrontend"));
+   return extension<KDevAppFrontend>("KDevelop/AppFrontend");
 }
 
 KDevDebugger * RDBDebugger::RubyDebuggerPart::debugger()

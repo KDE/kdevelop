@@ -160,24 +160,9 @@ public:
     template <class Extension>
     Extension *extension(const QString &serviceType, const QString &constraint = "")
     {
-        KDevPlugin *plugin = extension(serviceType, constraint);
-        if (plugin)
-            return static_cast<Extension*>(plugin);
-        else
-            return 0;
+       return static_cast<Extension*>(extension_internal(serviceType, constraint));
     }
 
-    /**@anchor extension
-    Queries for the plugin which supports given service type.
-    All already loaded plugins will be queried and the first one to support the service type
-    will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
-    required in .desktop file for that plugin.
-    @param serviceType The service type of an extension (like "KDevelop/SourceFormatter").
-    @param constraint The constraint which is applied when quering for the service. This
-    constraint is a usual KTrader constraint statement (like "[X-KDevelop-Foo]=='MyFoo'").
-    @return A KDevelop extension plugin for given service type or 0 if no plugin supports it*/
-    KDevPlugin *extension(const QString &serviceType, const QString &constraint = "");
-    
     /**Override this base class method to restore any settings which differs from project to project.
     Data can be read from a certain subtree of the project session file.
     During project loading, respectively project session (.kdevses) loading,
@@ -196,6 +181,18 @@ public:
     virtual void savePartialProjectSession(QDomElement* el);
 
 private:
+    /**@anchor extension
+    Queries for the plugin which supports given service type.
+    All already loaded plugins will be queried and the first one to support the service type
+    will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
+    required in .desktop file for that plugin.
+    @param serviceType The service type of an extension (like "KDevelop/SourceFormatter").
+    @param constraint The constraint which is applied when quering for the service. This
+    constraint is a usual KTrader constraint statement (like "[X-KDevelop-Foo]=='MyFoo'").
+    @return A KDevelop extension plugin for given service type or 0 if no plugin supports it*/
+    KDevPlugin *extension_internal(const QString &serviceType, const QString &constraint = "");
+
+    
     KDevApi *m_api;
     class Private;
     Private *d;
