@@ -20,20 +20,21 @@ CommandContinuationFilter::CommandContinuationFilter( OutputFilter& next )
 
 void CommandContinuationFilter::processLine( const QString& line )
 {
-  bool foundLineCont = false;
-  QString s = line.stripWhiteSpace();
-  if (s.endsWith("\\"))
-  {
-    m_text += s.left(s.length() - 1);
-    foundLineCont = true;
-  } else
-  {
-    m_text += line;
-  }
+   int index=line.length()-1;
+   while (index>=0)
+   {
+      if (line[index]=='\\')
+      {
+         m_text += line.left(index);
+         return;
+      }
 
-	if ( !foundLineCont )
-	{
-		OutputFilter::processLine( m_text );
-		m_text = "";
-	}
+      if (!line[index].isSpace())
+         break;
+      index--;
+   }
+
+   m_text+=line;
+   OutputFilter::processLine( m_text );
+   m_text = "";
 }
