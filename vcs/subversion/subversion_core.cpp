@@ -30,6 +30,7 @@
 #include <kio/job.h>
 #include <kdebug.h>
 #include <kdebugclasses.h>
+#include <kmainwindow.h>
 
 using namespace KIO;
 
@@ -65,6 +66,7 @@ void subversionCore::update( const KURL::List& list ) {
 		int rev = -1;
 		s << cmd << *it << rev << QString( "HEAD" );
 		SimpleJob * job = KIO::special(servURL, parms, true);
+		job->setWindow( m_part->mainWindow()->main() );
 		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 	}
 }
@@ -83,6 +85,7 @@ void subversionCore::commit( const KURL::List& list ) {
 		int cmd = 3;
 		s << cmd << *it;
 		SimpleJob * job = KIO::special(servURL, parms, true);
+		job->setWindow( m_part->mainWindow()->main() );
 		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotResult( KIO::Job * ) ) );
 	}
 }
@@ -101,13 +104,14 @@ void subversionCore::checkout() {
 		s << cmd << servURL << KURL( wcPath ) << rev << QString( "HEAD" );
 		servURL.setProtocol( "svn+" + servURL.protocol() ); //make sure it starts with "svn"
 		SimpleJob * job = KIO::special(servURL,parms, true);
+		job->setWindow( m_part->mainWindow()->main() );
 		connect( job, SIGNAL( result( KIO::Job * ) ), this, SLOT( slotEndCheckout( KIO::Job * ) ) );
 	}
 }
 
 void subversionCore::slotEndCheckout( KIO::Job * job ) {
 		if ( job->error() ) {
-			job->showErrorDialog( 0L );
+			job->showErrorDialog( m_part->mainWindow()->main() );
 			emit checkoutFinished( QString::null );
 		} else 
 			emit checkoutFinished(wcPath);
@@ -115,7 +119,7 @@ void subversionCore::slotEndCheckout( KIO::Job * job ) {
 
 void subversionCore::slotResult( KIO::Job * job ) {
 		if ( job->error() )
-			job->showErrorDialog( 0L );
+			job->showErrorDialog( m_part->mainWindow()->main() );
 }
 
 void subversionCore::createNewProject( const QString& dirName, const KURL& importURL, bool init ) {
