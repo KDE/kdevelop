@@ -36,6 +36,7 @@ kdevelop/parts/classview/Makefile \
 kdevelop/parts/outputviews/Makefile \
 kdevelop/parts/cvs/Makefile \
 kdevelop/parts/cppsupport/Makefile \
+kdevelop/parts/javasupport/Makefile \
 kdevelop/parts/kdeprojectspace/Makefile \
 kdevelop/parts/kdeprojectspace/res/Makefile \
 kdevelop/parts/projectview/Makefile \
