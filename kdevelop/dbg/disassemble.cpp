@@ -97,8 +97,8 @@ void Disassemble::slotDisassemble(char* buf)
 
     if (numLines())
     {
-      lower_ = textLine(0).toLong();
-      upper_ = textLine(numLines()-1).toLong();
+      lower_ = strtol(textLine(0).latin1(), 0, 0);
+      upper_ = strtol(textLine(numLines()-1).latin1(), 0, 0);
       displayCurrent();
     }
     else
@@ -127,7 +127,8 @@ void Disassemble::slotShowStepInSource(const QString&, int,
                                         const QString& currentAddress)
 {
   currentAddress_ = currentAddress;
-  address_ = currentAddress_.toLong();
+  const char* t = currentAddress_.latin1();
+  address_ = strtol(t, 0, 0);
   if (!active_)
     return;
 
