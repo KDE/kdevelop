@@ -1,3 +1,7 @@
+2003-01-14 Mickael Marchand <marchand@kde.org>
+  * repaired subversion part
+  * added svn diff support (trough the diff viewer)
+
 2003-01-14 Harald Fernengel <harry@kdevelop.org>
 	* added KDE simple application template (khello)
 	* the copyright year for auto-generated files is now the current
