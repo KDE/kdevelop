@@ -49,7 +49,12 @@ public:
         : m_prev( prev ) {}
 
     virtual ~SimpleContext()
-        {}
+        {
+            if( m_prev ){
+                delete( m_prev );
+                m_prev = 0;
+            }
+        }
 
     SimpleContext* prev() const
         { return m_prev; }
