@@ -278,7 +278,7 @@ void DocTreeKDELibsFolder::refresh()
     //}
 
     sortChildItems(0, true);
-    
+
     //TODO: merge in default libraries and hidden options
 
     // Read in possible items for the Libraries tree
@@ -1110,7 +1110,7 @@ DocTreeViewWidget::~DocTreeViewWidget()
 void DocTreeViewWidget::searchForItem ( const QString& currentText )
 {
 	completionCombo->addToHistory( currentText );
-	QListViewItem* current = docView->currentItem();
+	QListViewItem* current = docView->firstChild();
 	if( current->firstChild() )
 	{  //only allow items with childs to be searched in
 		QListViewItemIterator  docViewIterator( current );
