@@ -51,10 +51,9 @@
 CRealFileView::CRealFileView(QWidget*parent,const char* name)
   : CTreeView(parent,name)
 {
-	addColumn(i18n("Project"));
-	addColumn(i18n("VCS"));
-	setColumnText(0,i18n("Files"));
-	header()->show();
+	addColumn("");
+	addColumn("");
+	header()->hide();
 	header()->setClickEnabled(false);
 
   // Create the popupmenus.
@@ -92,6 +91,22 @@ void CRealFileView::refresh(CProject* prj)
 {
   assert( prj );
   project=prj;
+
+	if (showNonPrjFiles) {
+		setColumnWidthMode(0,Maximum);
+		setColumnWidthMode(1,Maximum);
+		setColumnWidthMode(2,Maximum);
+		setColumnWidth(0,0);
+		setColumnWidth(1,0);
+		setColumnWidth(2,0);
+	} else {
+		setColumnWidthMode(0,Maximum);
+		setColumnWidthMode(1,Manual);
+		setColumnWidthMode(2,Manual);
+		setColumnWidth(0,0);
+		setColumnWidth(1,0);
+		setColumnWidth(2,0);
+	}
 
   QString projectdir=project->getProjectDir();
   if(projectdir.right(1)=="/") {
@@ -137,27 +152,30 @@ void CRealFileView::addFilesFromDir( const QString& directory, QListViewItem* pa
 				f.append(fl.current());
         f.remove(0,1);
 				if( isInstalledFile(f) ) {
-						item = treeH->addItem( fl.current(), THC_FILE, parent,i18n("yes"));
-						vc=project->getVersionControl();
-						if (vc!=0) {
-								reg=vc->registeredState(directory+'/'+fl.current());
-								if (reg & VersionControl::canBeCommited) {
-										item->setText(2,i18n("yes"));
-								} else {
-										item->setText(2,i18n("no"));
+						item = treeH->addItem( fl.current(), THC_FILE, parent);
+						if (showNonPrjFiles) {
+								item->setText(1,i18n("registered"));
+								vc=project->getVersionControl();
+								if (vc!=0) {
+										reg=vc->registeredState(directory+'/'+fl.current());
+										if (reg & VersionControl::canBeCommited) {
+												item->setText(2,i18n("VCS"));
+										} else {
+												item->setText(2,i18n("local"));
+										}
 								}
 						}
 						// item->setPixmap( file_col, *treeH->getIcon( THINSTALLED_FILE ) );
 				} else {
 						if (showNonPrjFiles) {
-								item = treeH->addItem( fl.current(), THC_FILE, parent,i18n("no") );
+								item = treeH->addItem( fl.current(), THC_FILE, parent,i18n("registered") );
 								vc=project->getVersionControl();
 								if (vc!=0) {
 										reg=vc->registeredState(directory+'/'+fl.current());
 										if (reg & VersionControl::canBeCommited) {
-												item->setText(2,i18n("yes"));
+												item->setText(2,i18n("VCS"));
 										} else {
-												item->setText(2,i18n("no"));
+												item->setText(2,i18n("local"));
 										}
 								}
 						}
@@ -422,6 +440,7 @@ void CRealFileView::slotShowNonPrjFiles() {
 	showNonPrjFiles=!showNonPrjFiles;
 	refresh(project);
 }
+
 
 
 
