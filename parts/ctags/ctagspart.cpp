@@ -139,11 +139,12 @@ void CTagsPart::slotGotoDefinition()
 void CTagsPart::slotSearchTags()
 {
     if (!m_dialog) {
-        ensureTagsLoaded();
-        m_dialog = new CTagsDialog(this);
+        if( ensureTagsLoaded() )
+            m_dialog = new CTagsDialog(this);
     }
     
-    m_dialog->show();
+    if (m_dialog)
+        m_dialog->show();
 }
 
 
