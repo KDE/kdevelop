@@ -115,8 +115,11 @@ private slots:
   void slotOpenRecent(const KURL&);
 
   void slotBack();
+  void slotForward();
   void slotBackAboutToShow();
-  void slotPopupActivated( int id );
+  void slotForwardAboutToShow();
+  void slotBackPopupActivated( int id );
+  void slotForwardPopupActivated( int id );
 
   void slotSwitchTo();
   
@@ -188,9 +191,11 @@ private:
 	};
 
 	void addHistoryEntry();
+	HistoryEntry createHistoryEntry();
 	void jumpTo( const HistoryEntry & );
 		
-	QValueList<HistoryEntry> m_simpleHistory;
+	QValueList<HistoryEntry> m_backHistory;
+	QValueList<HistoryEntry> m_forwardHistory;
 	bool m_isJumping;  
 };
 

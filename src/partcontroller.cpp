@@ -166,8 +166,16 @@ void PartController::setupActions()
   m_backAction->setToolTip(i18n("Back"));
   m_backAction->setWhatsThis(i18n("<b>Back</b><p>Moves backwards one step in the navigation history."));
   connect(m_backAction->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotBackAboutToShow()));
-  connect(m_backAction->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotPopupActivated(int)));
- }
+  connect(m_backAction->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotBackPopupActivated(int)));
+ 
+  m_forwardAction = new KToolBarPopupAction(i18n("Forward"), "forward", 0, this, SLOT(slotForward()), ac, "history_forward");
+  m_forwardAction->setEnabled( false );
+  m_forwardAction->setToolTip(i18n("Forward"));
+  m_forwardAction->setWhatsThis(i18n("<b>Forward</b><p>Moves forward one step in the navigation history."));
+  connect(m_forwardAction->popupMenu(), SIGNAL(aboutToShow()), this, SLOT(slotForwardAboutToShow()));
+  connect(m_forwardAction->popupMenu(), SIGNAL(activated(int)), this, SLOT(slotForwardPopupActivated(int)));
+ 
+}
 
 void PartController::setEncoding(const QString &encoding)
 {
@@ -810,7 +818,7 @@ void PartController::updateMenuItems()
   m_closeAllWindowsAction->setEnabled(hasReadOnlyParts);
   m_closeOtherWindowsAction->setEnabled(hasReadOnlyParts);
 
-  m_backAction->setEnabled( !m_simpleHistory.isEmpty() );
+  m_backAction->setEnabled( !m_backHistory.isEmpty() );
 }
 
 void PartController::slotRevertAllFiles()
@@ -1372,10 +1380,34 @@ PartController::HistoryEntry::HistoryEntry( const KURL & u, int l, int c)
 
 void PartController::slotBack()
 {
-	HistoryEntry entry = m_simpleHistory.front();
-	m_simpleHistory.pop_front();
-	m_backAction->setEnabled( !m_simpleHistory.isEmpty() );
-	jumpTo( entry );
+	HistoryEntry thatEntry = m_backHistory.front();
+	m_backHistory.pop_front();
+	m_backAction->setEnabled( !m_backHistory.isEmpty() );
+	
+	HistoryEntry thisEntry = createHistoryEntry();
+	if ( !thisEntry.url.isEmpty() )
+	{
+		m_forwardHistory.push_front( thisEntry );
+		m_forwardAction->setEnabled( true );
+	}
+	
+	jumpTo( thatEntry );
+}
+
+void PartController::slotForward()
+{
+	HistoryEntry thatEntry = m_forwardHistory.front();
+	m_forwardHistory.pop_front();
+	m_forwardAction->setEnabled( !m_forwardHistory.isEmpty() );
+	
+	HistoryEntry thisEntry = createHistoryEntry();
+	if ( !thisEntry.url.isEmpty() )
+	{
+		m_backHistory.push_front( thisEntry );
+		m_backAction->setEnabled( true );
+	}
+	
+	jumpTo( thatEntry );
 }
 
 void PartController::slotBackAboutToShow()
@@ -1383,12 +1415,11 @@ void PartController::slotBackAboutToShow()
 	KPopupMenu *popup = m_backAction->popupMenu();
 	popup->clear();
 
-	if ( m_simpleHistory.isEmpty()) return;
-
-	QValueList<HistoryEntry>::ConstIterator it = m_simpleHistory.begin();
+	if ( m_backHistory.isEmpty()) return;
 	
 	int i = 0;
-	while( i < 10 && it != m_simpleHistory.end() )
+	QValueList<HistoryEntry>::ConstIterator it = m_backHistory.begin();
+	while( i < 10 && it != m_backHistory.end() )
 	{
 		popup->insertItem( (*it).url.fileName() + QString(" (%1)").arg( (*it).line +1), (*it).id );
 		++i;
@@ -1396,15 +1427,66 @@ void PartController::slotBackAboutToShow()
 	} 
 }
 
-void PartController::slotPopupActivated( int id )
+void PartController::slotForwardAboutToShow( )
 {
-	QValueList<HistoryEntry>::Iterator it = m_simpleHistory.begin();
-	while( it != m_simpleHistory.end() )
+	KPopupMenu * popup = m_forwardAction->popupMenu();
+	popup->clear();
+	
+	if ( m_forwardHistory.isEmpty() ) return;
+
+	int i = 0;
+	QValueList<HistoryEntry>::ConstIterator it = m_forwardHistory.begin();
+	while( i < 10 && it != m_forwardHistory.end() )
+	{
+		popup->insertItem( (*it).url.fileName() + QString(" (%1)").arg( (*it).line +1), (*it).id );
+		++i;
+		++it;
+	}
+}
+
+void PartController::slotBackPopupActivated( int id )
+{
+	QValueList<HistoryEntry>::Iterator it = m_backHistory.begin();
+	while( it != m_backHistory.end() )
 	{
 		if ( (*it).id == id )
 		{
 			HistoryEntry entry = *it;
-			m_simpleHistory.erase( m_simpleHistory.begin(), it );
+			m_backHistory.erase( m_backHistory.begin(), ++it );
+			m_backAction->setEnabled( !m_backHistory.isEmpty() );
+			
+			HistoryEntry thisEntry = createHistoryEntry();
+			if ( !thisEntry.url.isEmpty() )
+			{
+				m_forwardHistory.push_front( thisEntry );
+				m_forwardAction->setEnabled( true );
+			}
+			
+			jumpTo( entry );
+			return;
+		}
+		++it;
+	}
+}
+
+void PartController::slotForwardPopupActivated( int id )
+{
+	QValueList<HistoryEntry>::Iterator it = m_forwardHistory.begin();
+	while( it != m_forwardHistory.end() )
+	{
+		if ( (*it).id == id )
+		{
+			HistoryEntry entry = *it;
+			m_forwardHistory.erase( m_forwardHistory.begin(), ++it );
+			m_forwardAction->setEnabled( !m_forwardHistory.isEmpty() );
+			
+			HistoryEntry thisEntry = createHistoryEntry();
+			if ( !thisEntry.url.isEmpty() )
+			{
+				m_backHistory.push_front( thisEntry );
+				m_backAction->setEnabled( true );
+			}
+			
 			jumpTo( entry );
 			return;
 		}
@@ -1419,23 +1501,32 @@ void PartController::jumpTo( const HistoryEntry & entry )
 	m_isJumping = false;
 }
 
+PartController::HistoryEntry PartController::createHistoryEntry()
+{
+	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
+	if ( !ro_part ) return HistoryEntry();
+
+	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
+	if ( !cursorIface ) return HistoryEntry();
+
+	uint line = 0;
+	uint col = 0;
+	cursorIface->cursorPositionReal( &line, &col );
+	
+	return HistoryEntry( ro_part->url(), line, col );
+}
+
 // this should be called _before_ a jump is made
 void PartController::addHistoryEntry()
 {
 	if ( m_isJumping ) return;
 
-	KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>( activePart() );
-	if ( !ro_part ) return;
-
-	KTextEditor::ViewCursorInterface * cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>( ro_part->widget() );
-	if ( !cursorIface ) return;
-
-	uint line = 0;
-	uint col = 0;
-	cursorIface->cursorPositionReal( &line, &col );
-
-	m_simpleHistory.push_front( HistoryEntry( ro_part->url(), line, col ) );
-	m_backAction->setEnabled( true );
+	HistoryEntry thisEntry = createHistoryEntry();
+	if ( !thisEntry.url.isEmpty() )
+	{
+		m_backHistory.push_front( thisEntry );
+		m_backAction->setEnabled( true );
+	}
 }
 
 //END History methods
@@ -1470,6 +1561,5 @@ KParts::ReadOnlyPart *PartController::qtDesignerPart()
 	}
 	return 0;
 }
-
 
 #include "partcontroller.moc"
