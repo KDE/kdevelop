@@ -1,3 +1,8 @@
+2000-10-10 Ralf Nolden <nolden@kde.org>
+	* updated qt2 sdi application: removed kunload error in am_edit,
+	rewrote template to make use of QAction stuff - resource.h is now
+	obsolete and has to be removed from the kdevelop perl script...
+
 2000-09-07  Ralf Funken <RFunken@kdevelop.de>
 	* Updated de.po and kdevelop.pot 
 
