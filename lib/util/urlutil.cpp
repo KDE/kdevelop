@@ -192,7 +192,7 @@ void URLUtil::dump( const KURL::List &urls, const QString &aMessage )
   for (size_t i = 0; i<urls.count(); ++i)
   {
     KURL url = urls[ i ];
-    kdDebug(9000) << " * Element = "  << url.path() << endl;
+//    kdDebug(9000) << " * Element = "  << url.path() << endl;
   }
 }
 
