@@ -24,10 +24,11 @@ QString Locate::relativeName(const QString file)
 {
   // file is a URL
   QDir dir(file);
+  return QString::null;
 }
 
 QString Locate::source(const QString file)
 {
-  
+  return QString::null;
 }
 
