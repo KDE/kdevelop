@@ -250,3 +250,15 @@ Profile *ProfileEngine::findProfile(const QString & profileName)
     getProfileWithListing(listing, &profile, profileName);
     return profile;
 }
+
+void ProfileEngine::addResource(const QString &profileName, const KURL &url)
+{
+    ProfileListing listing;
+    Profile *profile = 0;
+    getProfileWithListing(listing, &profile, profileName);
+
+    if (!profile)
+        return;
+    
+    profile->addResource(url);
+}

@@ -183,3 +183,9 @@ KURL::List Profile::resources(const QString &nameFilter)
     
     return KURL::List(resources);
 }
+
+void Profile::addResource(const KURL &url)
+{
+    QString saveLocation = KGlobal::dirs()->saveLocation("data", "kdevelop/profiles"+dirName(), true);
+    KIO::NetAccess::file_copy(url, KURL::fromPathOrURL(saveLocation), -1, true);
+}

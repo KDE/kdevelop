@@ -67,6 +67,7 @@ public:
     bool hasInEntryList(EntryList &list, QString value);
     
     KURL::List resources(const QString &nameFilter);
+    void addResource(const KURL &url);
     
     void detachFromParent();
     

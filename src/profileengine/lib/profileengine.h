@@ -118,6 +118,12 @@ public:
     for name filters syntax.*/
     KURL::List resourcesRecursive(const QString &profileName, const QString &nameFilter);
     
+    /**Adds a resource for the profile. Resource will be copied to the user profile directory
+    (like $HOME/.kde/share/apps/kdevelop/profiles/...).
+    @param profileName A name of the profile.
+    @param url The url to a file to copy as a profile resource.*/
+    void addResource(const QString &profileName, const KURL &url);
+    
     /**Gets the difference between @p profile1 and @p profile2.
     Difference is calculated as two lists of plugins to be unloaded and loaded
     in order to switch from @p profile1 to @p profile2.
