@@ -64,7 +64,7 @@ DocTreeConfigWidget::DocTreeConfigWidget(DocTreeViewWidget *widget,
 #endif
     addTab(librariesTab=createLibrariesTab(), i18n("&Qt/KDE libraries"));
     addTab(bookmarksTab=createBookmarksTab(), i18n("&Bookmarks"));
-    addTab(indexTab=createIndexTab(), i18n("Search &index"));
+    addTab(indexTab=createIndexTab(), i18n("Search &Index"));
     
     readConfig();
 }
