@@ -38,6 +38,7 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
     classLbl( this, "classLbl" ),
     classCombo( false, this, "classCombo" ),
+    topLayout( this, 5 ),
     parentsBtn( this, "parentsBtn" ),
     childrenBtn( this, "childrenBtn" ),
     clientsBtn( this, "clientsBtn" ),
@@ -73,8 +74,8 @@ CClassToolDlg::CClassToolDlg( QWidget *parent, const char *name )
 void CClassToolDlg::setWidgetValues()
 {
   classLbl.setGeometry( 10, 10, 40, 30 );
-  classLbl.setMinimumSize( 0, 0 );
-  classLbl.setMaximumSize( 32767, 32767 );
+  classLbl.setMinimumSize( 40, 30 );
+  classLbl.setMaximumSize( 40, 30 );
   classLbl.setFocusPolicy( QWidget::NoFocus );
   classLbl.setBackgroundMode( QWidget::PaletteBackground );
   classLbl.setFontPropagation( QWidget::NoChildren );
@@ -84,8 +85,8 @@ void CClassToolDlg::setWidgetValues()
   classLbl.setMargin( -1 );
 
   classCombo.setGeometry( 50, 10, 260, 30 );
-  classCombo.setMinimumSize( 0, 0 );
-  classCombo.setMaximumSize( 32767, 32767 );
+  classCombo.setMinimumSize( 260, 30 );
+  classCombo.setMaximumSize( 260, 30 );
   classCombo.setFocusPolicy( QWidget::StrongFocus );
   classCombo.setBackgroundMode( QWidget::PaletteBackground );
   classCombo.setFontPropagation( QWidget::AllChildren );
@@ -94,8 +95,8 @@ void CClassToolDlg::setWidgetValues()
   classCombo.setAutoResize( FALSE );
 
   parentsBtn.setGeometry( 10, 50, 30, 30 );
-  parentsBtn.setMinimumSize( 0, 0 );
-  parentsBtn.setMaximumSize( 32767, 32767 );
+  parentsBtn.setMinimumSize( 30, 30 );
+  parentsBtn.setMaximumSize( 30, 30 );
   parentsBtn.setFocusPolicy( QWidget::TabFocus );
   parentsBtn.setBackgroundMode( QWidget::PaletteBackground );
   parentsBtn.setFontPropagation( QWidget::NoChildren );
@@ -104,8 +105,8 @@ void CClassToolDlg::setWidgetValues()
   parentsBtn.setAutoResize( FALSE );
 
   childrenBtn.setGeometry( 50, 50, 30, 30 );
-  childrenBtn.setMinimumSize( 0, 0 );
-  childrenBtn.setMaximumSize( 32767, 32767 );
+  childrenBtn.setMinimumSize( 30, 30 );
+  childrenBtn.setMaximumSize( 30, 30 );
   childrenBtn.setFocusPolicy( QWidget::TabFocus );
   childrenBtn.setBackgroundMode( QWidget::PaletteBackground );
   childrenBtn.setFontPropagation( QWidget::NoChildren );
@@ -115,8 +116,8 @@ void CClassToolDlg::setWidgetValues()
   childrenBtn.setAutoResize( FALSE );
 
   clientsBtn.setGeometry( 90, 50, 30, 30 );
-  clientsBtn.setMinimumSize( 0, 0 );
-  clientsBtn.setMaximumSize( 32767, 32767 );
+  clientsBtn.setMinimumSize( 30, 30 );
+  clientsBtn.setMaximumSize( 30, 30 );
   clientsBtn.setFocusPolicy( QWidget::TabFocus );
   clientsBtn.setBackgroundMode( QWidget::PaletteBackground );
   clientsBtn.setFontPropagation( QWidget::NoChildren );
@@ -126,8 +127,8 @@ void CClassToolDlg::setWidgetValues()
   clientsBtn.setAutoResize( FALSE );
 
   suppliersBtn.setGeometry( 130, 50, 30, 30 );
-  suppliersBtn.setMinimumSize( 0, 0 );
-  suppliersBtn.setMaximumSize( 32767, 32767 );
+  suppliersBtn.setMinimumSize( 30, 30 );
+  suppliersBtn.setMaximumSize( 30, 30 );
   suppliersBtn.setFocusPolicy( QWidget::TabFocus );
   suppliersBtn.setBackgroundMode( QWidget::PaletteBackground );
   suppliersBtn.setFontPropagation( QWidget::NoChildren );
@@ -137,8 +138,8 @@ void CClassToolDlg::setWidgetValues()
   suppliersBtn.setAutoResize( FALSE );
 
   attributesBtn.setGeometry( 190, 50, 30, 30 );
-  attributesBtn.setMinimumSize( 0, 0 );
-  attributesBtn.setMaximumSize( 32767, 32767 );
+  attributesBtn.setMinimumSize( 30, 30 );
+  attributesBtn.setMaximumSize( 30, 30 );
   attributesBtn.setFocusPolicy( QWidget::TabFocus );
   attributesBtn.setBackgroundMode( QWidget::PaletteBackground );
   attributesBtn.setFontPropagation( QWidget::NoChildren );
@@ -148,8 +149,8 @@ void CClassToolDlg::setWidgetValues()
   attributesBtn.setAutoResize( FALSE );
 
   methodsBtn.setGeometry( 230, 50, 30, 30 );
-  methodsBtn.setMinimumSize( 0, 0 );
-  methodsBtn.setMaximumSize( 32767, 32767 );
+  methodsBtn.setMinimumSize( 30, 30 );
+  methodsBtn.setMaximumSize( 30, 30 );
   methodsBtn.setFocusPolicy( QWidget::TabFocus );
   methodsBtn.setBackgroundMode( QWidget::PaletteBackground );
   methodsBtn.setFontPropagation( QWidget::NoChildren );
@@ -159,8 +160,8 @@ void CClassToolDlg::setWidgetValues()
   methodsBtn.setAutoResize( FALSE );
 
   virtualsBtn.setGeometry( 270, 50, 30, 30 );
-  virtualsBtn.setMinimumSize( 0, 0 );
-  virtualsBtn.setMaximumSize( 32767, 32767 );
+  virtualsBtn.setMinimumSize( 30, 30 );
+  virtualsBtn.setMaximumSize( 30, 30 );
   virtualsBtn.setFocusPolicy( QWidget::TabFocus );
   virtualsBtn.setBackgroundMode( QWidget::PaletteBackground );
   virtualsBtn.setFontPropagation( QWidget::NoChildren );
@@ -170,8 +171,8 @@ void CClassToolDlg::setWidgetValues()
   virtualsBtn.setAutoResize( FALSE );
 
   exportCombo.setGeometry( 310, 50, 100, 30 );
-  exportCombo.setMinimumSize( 0, 0 );
-  exportCombo.setMaximumSize( 32767, 32767 );
+  exportCombo.setMinimumSize( 100, 30 );
+  exportCombo.setMaximumSize( 100, 30 );
   exportCombo.setFocusPolicy( QWidget::StrongFocus );
   exportCombo.setBackgroundMode( QWidget::PaletteBackground );
   exportCombo.setFontPropagation( QWidget::AllChildren );
@@ -189,6 +190,26 @@ void CClassToolDlg::setWidgetValues()
   classTree.addColumn( "classes" );
   classTree.header()->hide();
   classTree.setSorting(-1,false);
+  classTree.setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
+
+  // Set layout of all widgets.
+  topLayout.addLayout( &comboLayout );
+  comboLayout.addWidget( &classLbl );
+  comboLayout.addWidget( &classCombo );
+  comboLayout.addStretch( 10 );
+
+  topLayout.addLayout( &btnLayout );
+  btnLayout.addWidget( &parentsBtn );
+  btnLayout.addWidget( &childrenBtn );
+  btnLayout.addWidget( &clientsBtn );
+  btnLayout.addWidget( &suppliersBtn );
+  btnLayout.addWidget( &attributesBtn );
+  btnLayout.addWidget( &methodsBtn );
+  btnLayout.addWidget( &virtualsBtn );
+  btnLayout.addWidget( &exportCombo );
+  btnLayout.addStretch( 10 );
+
+  topLayout.addWidget( &classTree, 10);
 }
 
 void CClassToolDlg::readIcons()

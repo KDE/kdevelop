@@ -27,6 +27,7 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
+#include <qlayout.h> 
 #include "./classparser/ClassStore.h"
 #include "cclasstreehandler.h"
 
@@ -74,6 +75,10 @@ protected: // Private widgets
  QLabel classLbl;
  QComboBox classCombo;
 
+ QVBoxLayout topLayout;
+ QHBoxLayout comboLayout;
+ QHBoxLayout btnLayout;
+
  QPushButton parentsBtn;
  QPushButton childrenBtn;
  QPushButton clientsBtn;
@@ -83,6 +88,7 @@ protected: // Private widgets
  QPushButton methodsBtn;
  QPushButton virtualsBtn;
  QComboBox exportCombo;
+
  QListView classTree;
 
  protected slots:
