@@ -41,6 +41,7 @@ static const char *const error_xpm[] = {
 "a c #6261cd",
 "b c #c50000",
 "c c #ff8583",
+"...........",
 "...####....",
 ".a#bbbb#a..",
 ".#ccbbbb#..",
@@ -50,8 +51,7 @@ static const char *const error_xpm[] = {
 "#bbbbbccb#.",
 ".#bbbccb#..",
 ".a#bbbb#a..",
-"...####....",
-"..........."
+"...####...."
 };
 
 
@@ -62,6 +62,7 @@ static const char *const warning_xpm[] = {
 "a c #6261cd",
 "b c #c5c600",
 "c c #ffff41",
+"...........",
 "...####....",
 ".a#bbbb#a..",
 ".#ccbbbb#..",
@@ -71,8 +72,7 @@ static const char *const warning_xpm[] = {
 "#bbbbbccb#.",
 ".#bbbccb#..",
 ".a#bbbb#a..",
-"...####....",
-"..........."
+"...####...."
 };
 
 
@@ -83,6 +83,7 @@ static const char *const message_xpm[] = {
 "# c #313062",
 "c c #41ff41",
 "a c #6265cd",
+"...........",
 "...####....",
 ".a#bbbb#a..",
 ".#ccbbbb#..",
@@ -92,8 +93,7 @@ static const char *const message_xpm[] = {
 "#bbbbbccb#.",
 ".#bbbccb#..",
 ".a#bbbb#a..",
-"...####....",
-"..........."
+"...####...."
 };
 
 
