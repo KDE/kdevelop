@@ -148,6 +148,12 @@ sco*)	   CC=${CC-"cc -belf"}
 solaris*)  CPPFLAGS="-D_REENTRANT $CPPFLAGS";;
 esac
 
+case "$host" in
+amd64*freebsd*|x86_64*freebsd*)
+	CFLAGS="-fPIC -DPIC $CFLAGS"
+	;;
+esac
+
 dnl Set CFLAGS/CXXFLAGS.  We MUST set the flags before we call autoconf
 dnl compiler configuration macros, because if we don't, they set CFLAGS
 dnl to no optimization and -g, which isn't what we want.
