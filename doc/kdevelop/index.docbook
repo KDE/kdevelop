@@ -8,11 +8,11 @@
   <!ENTITY automanag "Automake Manager">
   <!ENTITY ctags "<command>ctags</command>">
   <!ENTITY CVS "<application>CVS</application>">
-  <!ENTITY cvs "<acronym>CVS</acronym>">
+  <!ENTITY cvs "CVS">
   <!ENTITY doxygen "<application>doxygen</application>">
   <!ENTITY doxywizard "<application>doxywizard</application>">
   <!ENTITY egrep "<command>egrep</command>">
-  <!ENTITY gnu "<acronym>GNU</acronym>">
+  <!ENTITY gnu "GNU">
   <!ENTITY grep "<command>grep</command>">
   <!ENTITY libtool "<command>libtool</command>">
   <!ENTITY Mac "<application>Mac</application>">
@@ -20,7 +20,7 @@
   <!ENTITY python "<application>Python</application>">
   <!ENTITY perl "<application>Perl</application>">
   <!ENTITY php "<application>PHP</application>">
-  <!ENTITY qt "<acronym>Qt</acronym>">
+  <!ENTITY qt "Qt">
   <!ENTITY qte "<application>Qt/embedded</application>">
   <!ENTITY ssh "<application>ssh</application>">
   <!ENTITY Windows "<application>Windows</application>">
@@ -39,7 +39,7 @@ Entries which require special treatment are marked with comments starting with '
 <bookinfo>
   <title>&kdevelop; User Manual</title>
 
-  <date>2003-09-28</date>
+  <date>2003-10-02</date>
   <releaseinfo>3.0.0a7</releaseinfo>
 
   <authorgroup>
@@ -104,69 +104,69 @@ Entries which require special treatment are marked with comments starting with '
 <title>About this manual</title>
 
 <para>
-This user manual is intended to describe the contents and use of the &kdevelop; Integrated Development Environment (<acronym>IDE</acronym>) from a user's point of view. It is no programming manual nor does it describe the development process in detail. It's only aim is to guide you in the handling of the <acronym>IDE</acronym>.
+This user manual is intended to describe the contents and use of the &kdevelop; Integrated Development Environment (IDE) from a user's point of view. It is no programming manual nor does it describe the development process in detail. It's only aim is to guide you in the handling of the IDE.
 </para>
 <para>
 You will here find information on the following topics:
 </para>
 <itemizedlist>
   <listitem><para>
-  <link linkend="nutshell">In a nutshell</link> - a quick reference of the most used commands and actions.
+  <link linkend="nutshell">In a nutshell</link> &mdash; a quick reference of the most used commands and actions.
   </para></listitem>
   <listitem><para>
-  <link linkend="unixdev">Development on UNIX</link> - a historical overall view of UNIX program development, the main tools necessary and why you need an <acronym>IDE</acronym>.
+  <link linkend="unixdev">Development on UNIX</link> &mdash; a historical overall view of UNIX program development, the main tools necessary and why you need an IDE.
   </para></listitem>
   <listitem><para>
-  <link linkend="kdevelopinstall">Installing &kdevelop;</link> - tells you where to obtain &kdevelop; and how to get it up and running.
+  <link linkend="kdevelopinstall">Installing &kdevelop;</link> &mdash; tells you where to obtain &kdevelop; and how to get it up and running.
   </para></listitem>
   <listitem><para>
-  <link linkend="kdevelopoverview">Overview: &kdevelop;'s features</link> - is some kind of a warm-up, giving a short overview of what is built-in into &kdevelop; and makes you acquainted with the look and feel of this <acronym>IDE</acronym>.
+  <link linkend="kdevelopoverview">Overview: &kdevelop;'s features</link> &mdash; is some kind of a warm-up, giving a short overview of what is built-in into &kdevelop; and makes you acquainted with the look and feel of this IDE.
   </para></listitem>
   <listitem><para>
-  <link linkend="app-menus">Menues and toolbars overview</link> - (in the appendix) provides you with a short overview over the menue and toolbar selections available.
+  <link linkend="app-menus">Menues and toolbars overview</link> &mdash; (in the appendix) provides you with a short overview over the menue and toolbar selections available.
   </para></listitem>
   <listitem><para>
-  <link linkend="initialsetup">Configuring &kdevelop;</link> - shows how you can taylor the <acronym>IDE</acronym> to suit your needs.
+  <link linkend="initialsetup">Configuring &kdevelop;</link> &mdash; shows how you can taylor the IDE to suit your needs.
   </para></listitem>
   <listitem><para>
-  <link linkend="appwizard">Getting started: the &appwizard;</link> - describes the basics on how to set up a new project in &kdevelop; using the built-in &appwizard;.
+  <link linkend="appwizard">Getting started: the &appwizard;</link> &mdash; describes the basics on how to set up a new project in &kdevelop; using the built-in &appwizard;.
   </para></listitem>
   <listitem><para>
-  <link linkend="editing">Editing tools</link> - all you need to write your source files: using the editor, searching for text both locally and project-wide, up to integrating new files and classes into the project.
+  <link linkend="editing">Editing tools</link> &mdash; all you need to write your source files: using the editor, searching for text both locally and project-wide, up to integrating new files and classes into the project.
   </para></listitem>
   <listitem><para>
-  <link linkend="filebrowsers">The file browsers</link> - demonstrates various tools to look at the structure of your project and how to access the files you want to work with.
+  <link linkend="filebrowsers">The file browsers</link> &mdash; demonstrates various tools to look at the structure of your project and how to access the files you want to work with.
   </para></listitem>
   <listitem><para>
-  <link linkend="classbrowser">The class browsers</link> - describes one of the most powerful tools of &kdevelop; which lets you navigate through class dependencies and allows to easily create and access the classes and methods you need.
+  <link linkend="classbrowser">The class browsers</link> &mdash; describes one of the most powerful tools of &kdevelop; which lets you navigate through class dependencies and allows to easily create and access the classes and methods you need.
   </para></listitem>
   <listitem><para>
-  <link linkend="documentation">Documentation</link> - shows how to access the rich built-in documentation &kdevelop; provides and tells you how to create documentation of your project, concise and powerful API documentation providing you an overview over all your project sources as well as docbook-based user documentation.
+  <link linkend="documentation">Documentation</link> &mdash; shows how to access the rich built-in documentation &kdevelop; provides and tells you how to create documentation of your project, concise and powerful API documentation providing you an overview over all your project sources as well as docbook-based user documentation.
   </para></listitem>
   <listitem><para>
-  <link linkend="projectmanagement">Building and project management</link> - deals with the creating and management of your project, describing the basics of autoconf and automake as well as how to set up custom make files and how to use compiler or make options to taylor your application to suit your needs.
+  <link linkend="projectmanagement">Building and project management</link> &mdash; deals with the creating and management of your project, describing the basics of autoconf and automake as well as how to set up custom make files and how to use compiler or make options to taylor your application to suit your needs.
   </para></listitem>
   <listitem><para>
-  <link linkend="advancedautoproject">Advanced autoproject usage</link> - looks at ways to keep multiple build configurations, to cross-compile for diverse platforms, or to make an embedded system using the <application>Qt/embedded</application> library.
+  <link linkend="advancedautoproject">Advanced autoproject usage</link> &mdash; looks at ways to keep multiple build configurations, to cross-compile for diverse platforms, or to make an embedded system using the <application>Qt/embedded</application> library.
   </para></listitem>
   <listitem><para>
-  <link linkend="debugger">The debugger interface</link> - describes how to use the integrated <application>gdb</application> debugger interface so you can hunt down bugs without leaving &kdevelop; so to always maintain easy acess to the program sources in question.
+  <link linkend="debugger">The debugger interface</link> &mdash; describes how to use the integrated <application>gdb</application> debugger interface so you can hunt down bugs without leaving &kdevelop; so to always maintain easy acess to the program sources in question.
   </para></listitem>
 <!-- ### Currently disabled. Probably too specialized. Check later again.
   <listitem><para>
-  <link linkend="python">Python</link> - an overview on how to create Python-based applications in &kdevelop;.
+  <link linkend="python">Python</link> &mdash; an overview on how to create Python-based applications in &kdevelop;.
   </para></listitem>
   <listitem><para>
-  <link linkend="php">PHP</link> -  an overview on how to create PHP-based HTML applications in &kdevelop;.
+  <link linkend="php">PHP</link> &mdash;  an overview on how to create PHP-based HTML applications in &kdevelop;.
   </para></listitem>//-->
   <listitem><para>
-  <link linkend="cvs">Using CVS</link> - tells you how you can maintain your project using the CVS versioning system, a must especially if many developers work at the same project.
+  <link linkend="cvs">Using CVS</link> &mdash; tells you how you can maintain your project using the CVS versioning system, a must especially if many developers work at the same project.
   </para></listitem>
   <listitem><para>
-  <link linkend="externalprogs">Leveraging external programs</link> - shows how to access ecternal programs and tools from within &kdevelop; thus greatly extending its capabilities.
+  <link linkend="externalprogs">Leveraging external programs</link> &mdash; shows how to access ecternal programs and tools from within &kdevelop; thus greatly extending its capabilities.
   </para></listitem>
   <listitem><para>
-  <link linkend="plugintools">Plugin tools</link> - provides you an overview on the parts which make up &kdevelop; and how you can taylor it to suit your needs by loading the necessary parts only, both <acronym>IDE</acronym> and project-wide.
+  <link linkend="plugintools">Plugin tools</link> &mdash; provides you an overview on the parts which make up &kdevelop; and how you can taylor it to suit your needs by loading the necessary parts only, both IDE and project-wide.
   </para></listitem>
 </itemizedlist>
 </chapter>
@@ -179,24 +179,32 @@ You will here find information on the following topics:
 <title>In a nutshell</title>
 
 <para>
-The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept.
+The information in this chapter is meant as a quick reference for a head start or if you (momentarily) forgot about some basic concept. If you want more information on a topic just follow the link in the title starting that advice.
 </para>
 
 <itemizedlist>
   <title>Projects</title>
   <listitem>
     <formalpara id="nutshell-new-project">
-    <title>Create new project</title>
-
+    <title><link linkend="newprojects">Create new project</link></title>
     <para>
-    <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project...</guimenuitem></menuchoice> will start the <link linkend="appwizard">&appwizard;</link>
+    <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project...</guimenuitem></menuchoice> will start the <link linkend="appwizard">&appwizard;</link>.
+    </para>
+    </formalpara>
+  </listitem>
+
+  <listitem>
+    <formalpara id="nutshell-project-options">
+    <title><link linkend="project-options-short">Use project options early</link></title>
+    <para>
+    Whenever you start a new project do not forget to set the <menuchoice><guimenu>Project</guimenu> <guimenuitem>Project Opions...</guimenuitem></menuchoice> to your needs.
     </para>
     </formalpara>
   </listitem>
 </itemizedlist>
 
 <itemizedlist>
-  <title>&automanag;</title>
+  <title><link linkend="automakemanager">&automanag;</link></title>
     <listitem>
       <formalpara id="nutshell-new-project-file">
       <title>Create new files in a project</title>
@@ -324,10 +332,10 @@ The information in this chapter is meant as a quick reference for a head start o
 From the beginning, UNIX has maintained two very different development paradigms. One is the world of <emphasis>system and application programming languages</emphasis>, where some source code is translated to machine code by a. translation program, usually a <emphasis>compiler</emphasis> or an <emphasis>interpreter</emphasis>. The programming language C is an example. UNIX was the first operating system kernel to be written in such a high level language instead of tightly machine-oriented assembler which was common before that time. (In fact, the C language once even was invented to write the UNIX kernel and associated programs on a DEC PDP-11 computer.)
 </para>
 <para>
-The other paradigm is the world of <emphasis>scripting languages</emphasis>. This world evolved with the invention of the UNIX shell which was the user's interface to the operating system - and at the same time a very high level programming language. A shell script is built from a set of small utility programs like e.g. <command>grep</command>, <command>sed</command>, or <command>find</command>. Each such utility is designed for some tightly defined job. The trick is that any such utility can be connected to another one via a simple transport mechanism, called a <emphasis>pipe</emphasis>, which directs the output of the foregoing utility into the input of the next processed one. This makes up for a very powerful and highly flexible programming tool.
+The other paradigm is the world of <emphasis>scripting languages</emphasis>. This world evolved with the invention of the UNIX shell which was the user's interface to the operating system &mdash; and at the same time a very high level programming language. A shell script is built from a set of small utility programs like e.g. <command>grep</command>, <command>sed</command>, or <command>find</command>. Each such utility is designed for some tightly defined job. The trick is that any such utility can be connected to another one via a simple transport mechanism, called a <emphasis>pipe</emphasis>, which directs the output of the foregoing utility into the input of the next processed one. This makes up for a very powerful and highly flexible programming tool.
 </para>
 <para>
-As time has gone by, both worlds have evolved. While C is still used mainly as a system programming language, C++ as a variant of C enriched by object-oriented and genericity extensions has found its place for the development of complex applications in the 1990's. There are numerous other programming languages, even older ones keep their place - FORTRAN77 and Ada e.g. still have their stronghold in numerical applications.
+As time has gone by, both worlds have evolved. While C is still used mainly as a system programming language, C++ as a variant of C enriched by object-oriented and genericity extensions has found its place for the development of complex applications in the 1990's. There are numerous other programming languages, even older ones keep their place &mdash; FORTRAN77 and Ada e.g. still have their stronghold in numerical applications.
 </para>
 </sect1> <!-- history -->
 
@@ -432,7 +440,7 @@ To accomplish this, the basic tools you need are
   a <emphasis>linker</emphasis> which binds several object files and libraries together into one executable,
   </para></listitem>
   <listitem><para>
-  a <emphasis>make system</emphasis> which provides some means to manage all this stuff and - not to forget
+  a <emphasis>make system</emphasis> which provides some means to manage all this stuff and &mdash; not to forget
   </para></listitem>
   <listitem><para>
   a <emphasis>debugger</emphasis> to (hopefully) find all errors in the program and possibly some other diagnosis tools to get everything running smootly.
@@ -488,14 +496,7 @@ There are several additional possibilities to control such a make process, and a
 For more &kdevelop; specific detail see the <link  linkend="projectmanagement">Building and Project Management</link> chapter of this manual.
 </para>
 <para>
-There are some tutorials available:
-<itemizedlist>
-  <listitem><para>A short <ulink url="http://www.kdevelop.org/index.html?filename=tutorial_autoconf.html">autoconf tutorial</ulink> written by Christopher W. Curtis available on the KDevelop home page. It concentrates on some basic steps to modify a <filename>Makefile</filename>.
-  </para></listitem>
-  <listitem><para>
-  A more detailed tutorial can be found at <ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual_toc.html"></ulink>. This is part of a greater set of tutorials on <citetitle>Developing software with GNU</citetitle>.
-  </para></listitem>
-</itemizedlist>
+There are several tutorials available, see the <link linkend="automake-references">references</link> in the Building and project management chapter.
 </para>
 </sect2> <!-- unixdev-buildsystems-make -->
 
@@ -543,7 +544,7 @@ For &kde; GUI development there is a style guide available. It is found in the <
   <secondary>IDE</secondary></indexterm>
 
 <para>
-There are separate tools available for almost any step in the programming process - planning, editing, managing files and compilation processes, debugging, documentation and the like. But once the projects grow the programming process will most likely become quite cumbersome.
+There are separate tools available for almost any step in the programming process &mdash; planning, editing, managing files and compilation processes, debugging, documentation and the like. But once the projects grow the programming process will most likely become quite cumbersome.
 </para>
 <para>
 Much repetitive work has to be done when designing, compiling, and debugging a program. A lot of work can be saved through the use of templates and scripts. And another lot by simple keeping the tools easily available and able to communicate with each other under a common GUI. E.g. it really does come in handy if a debugger were able to open the source file in question in an editor and place the cursor directly at the position of the bug just found.
@@ -638,20 +639,20 @@ For the &kde; platform &kdevelop; is such an IDE. It provides a wide range of to
   <primary>installation</primary></indexterm>
 
 <para>
-You will find here all the steps necessary to compile and install the &kdevelop; <acronym>IDE</acronym> as there are:
+You will find here all the steps necessary to compile and install the &kdevelop; IDE as there are:
 
 <itemizedlist>
   <listitem><para>
   <link linkend="kdevelopinstall-howto">How to obtain &kdevelop;</link> mainly concentrates on downloading the most recent &kdevelop; sources from CVS.
   </para></listitem>
   <listitem><para>
-  <link linkend="requirements">&kdevelop; requirements</link> lists the programs and libraries which you need installed to successfully compile the <acronym>IDE</acronym>.
+  <link linkend="requirements">&kdevelop; requirements</link> lists the programs and libraries which you need installed to successfully compile the IDE.
   </para></listitem>
   <listitem><para>
   <link linkend="compileandinstall">&kdevelop; compilation and installation</link> leads you trough all steps of compilation and installing the application.
   </para></listitem>
   <listitem><para>
-  <link linkend="make-api">How to obtain a &kdevelop; API documentation</link> tells what an <acronym>API</acronym> is and how you get such a useful tool for navigating the &kdevelop; sources.
+  <link linkend="make-api">How to obtain a &kdevelop; API documentation</link> tells what an API is and how you get such a useful tool for navigating the &kdevelop; sources.
   </para></listitem>
 </itemizedlist>
 </para>
@@ -666,7 +667,7 @@ You will find here all the steps necessary to compile and install the &kdevelop;
   <secondary>obtain</secondary></indexterm>
 
 <para>
-&kdevelop; is available in binary form from many differnt &Linux; distributions such as &SuSE;, &RedHat; and others. These binaries are packed in some convenient format, mostly <acronym>RPM</acronym>, for easy installation. To install, follow the standard instructions given in your distribution.
+&kdevelop; is available in binary form from many different &Linux; distributions such as <!--&SuSE;, &RedHat;//--> SuSE, RedHat and others. These binaries are packed in some convenient format, mostly RPM, for easy installation. To install, follow the standard instructions given in your distribution.
 </para>
 <para>
 You may as well obtain the &kdevelop; sources, compile and install them by yourself. These sources can be found via the project home page at <ulink url="http://www.kdevelop.org"> http://www.kdevelop.org</ulink> or via the <ulink url="http://download.kde.org">&kde; ftp site</ulink>.
@@ -850,7 +851,7 @@ In order to successfully compile and use &kdevelop;, you need the following prog
 	  <secondary>requirements</secondary></indexterm>
   </para></listitem>
   <listitem><para>
-  Any other compiler and/or tool in case you want to develop for another language/platform than <acronym>C++</acronym>/&kde; or use some special facility.
+  Any other compiler and/or tool in case you want to develop for another language/platform than C++/&kde; or use some special facility.
   </para></listitem>
 </itemizedlist>
 
@@ -1080,7 +1081,7 @@ and entering the root password. Then install the application:
   <userinput>make install</userinput>
 </para>
 <para>
-That was all. If you installed &kdevelop; in the default &kde; directory you can now run the <acronym>IDE</acronym>. Otherwise some additional steps will be necessary as shown in the <link linkend="compileandinstall-options-dir">Non-default installation directory</link> section below.
+That was all. If you installed &kdevelop; in the default &kde; directory you can now run the IDE. Otherwise some additional steps will be necessary as shown in the <link linkend="compileandinstall-options-dir">Non-default installation directory</link> section below.
 </para>
 
 </sect3> <!-- compileandinstall-make-basic -->
@@ -1100,7 +1101,7 @@ That was all. If you installed &kdevelop; in the default &kde; directory you can
   <primary>BSD</primary></indexterm>
 
 <para>
-If you want compile and install &kdevelop; on a <acronym>FreeBSD</acronym> system follow the normal instructions but after
+If you want compile and install &kdevelop; on a FreeBSD system follow the normal instructions but after
 </para>
 <para>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
@@ -1157,7 +1158,7 @@ As <command>make -f Makefile.cvs</command> rebuilds the <filename>configure</fil
 </para></note>
 
 <para>
-The <acronym>FreeBSD</acronym> guys renamed <filename>libdb.so</filename> to <filename>libdbxx.so</filename>. So replace
+The FreeBSD guys renamed <filename>libdb.so</filename> to <filename>libdbxx.so</filename>. So replace
 </para>
 <para>
 <option>libkdevcatalog_la_LIBADD = -ldb</option>
@@ -1196,7 +1197,7 @@ Then you can continue with the normal <command>configure</command> and <command>
   <primary>kbuildsycoca</primary></indexterm>
 
 <para>
-By default <command>configure</command> prepares the <acronym>IDE</acronym> to be installed in the default &kde; directory. This is necessary because &kdevelop; assumes direct access to some tools and parts which reside there. If want to use your own installation directory, you must tell <command>configure</command> this by the <option>--prefix</option> option:
+By default <command>configure</command> prepares the IDE to be installed in the default &kde; directory. This is necessary because &kdevelop; assumes direct access to some tools and parts which reside there. If want to use your own installation directory, you must tell <command>configure</command> this by the <option>--prefix</option> option:
 </para>
 <para>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
@@ -1226,7 +1227,7 @@ In a tcsh shell you must set the environment variables using:
     <userinput>setenv KDEDIRS /usr/local/kde:/opt/kde3</userinput>
 </para>
 <para>
-The <command>kbuildsycoca</command> command (<quote>build system control cache</quote>) looks around for libraries and caches their location and version, so that &kdevelop; can find them. The caveat is that it takes noticeable time - and it has to be run any time you call up the shell to start &kdevelop; from a non-default directory. You may want to put the above commands into a shell script to reduce the typing effort.
+The <command>kbuildsycoca</command> command (<quote>build system control cache</quote>) looks around for libraries and caches their location and version, so that &kdevelop; can find them. The caveat is that it takes noticeable time &mdash; and it has to be run any time you call up the shell to start &kdevelop; from a non-default directory. You may want to put the above commands into a shell script to reduce the typing effort.
 </para>
 <para>
 (You could as well put the lines in your <filename>.bashrc</filename> or <filename>.cshrc</filename> file, but this is not advisable as <command>kbuildsycoca</command> will then be run any time you call up the shell.)
@@ -1252,7 +1253,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
 <title>How to obtain a &kdevelop; API documentation</title>
 
 <para>
-<acronym>API</acronym> is the short form of <quote>Application Program Interface</quote>. Actually such an application program interface is a series of descriptions (i.e. calling conventions) by which an application program accesses operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
+API is the short form of <quote>Application Program Interface</quote>. Actually such an application program interface is a series of descriptions (i.e. calling conventions) by which an application program accesses operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
 </para>
 <para>
 There is a version of the most current API available at the <ulink url="http://developer.kde.org/documentation/library/cvs-api/kdevelop/html/index.html">KDevelop-Home website</ulink>. It will be automaticaly updated every 24 hours so you can keep up.
@@ -1266,28 +1267,28 @@ Alas, this version is best used read-only over the internet. Yet you may as well
   </userinput>
 </para>
 <para>
-(<command>make</command> will replace the <varname>$KDEDIR</varname> with your actual &kde; directory). Then issue a <command>make</command> command <link linkend="compileandinstall-make-basic">as usual</link>. After the &kdevelop; <acronym>IDE</acronym> has been built you have the option to buid the <acronym>API</acronym> as well. For this you must issue
+(<command>make</command> will replace the <varname>$KDEDIR</varname> with your actual &kde; directory). Then issue a <command>make</command> command <link linkend="compileandinstall-make-basic">as usual</link>. After the &kdevelop; IDE has been built you have the option to buid the API as well. For this you must issue
 </para>
 <para>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>make apidocs</userinput>
 </para>
 <para>
-This will build a <filename>Doxyfile</filename> in your &kdevelop; base directory which in turn will be processed by the <application>doxygen</application> application to build quite a lot of <filename>.html</filename> <acronym>API</acronym> files. When the a rather lenghty <acronym>API</acronym> building process finally comes to an end, you must install the <acronym>API</acronym> just like you have to install the &kdevelop; <acronym>IDE</acronym> itself. Obtain superuser rights if necessary by
+This will build a <filename>Doxyfile</filename> in your &kdevelop; base directory which in turn will be processed by the <application>doxygen</application> application to build quite a lot of <filename>.html</filename> API files. When the a rather lenghty API building process finally comes to an end, you must install the API just like you have to install the &kdevelop; IDE itself. Obtain superuser rights if necessary by
 </para>
 <para>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>su</userinput>
 </para>
 <para>
-and entering the root password. Then install the <acronym>API</acronym> files:
+and entering the root password. Then install the API files:
 </para>
 <para>
   <prompt>~/kde3src/kdevelop&gt; </prompt>
   <userinput>make install-apidox</userinput>
 </para>
 <para>
-Once this is done, <command>make</command> will inform you about the directory where you can finally look at the <acronym>API</acronym> documentation's contents. Note this address, you can use it from the &konqueror; as well as from inside &kdevelop;, in case you have set up the &kdevelop; sources themselves as a project to work on.
+Once this is done, <command>make</command> will inform you about the directory where you can finally look at the API documentation's contents. Note this address, you can use it from the &konqueror; as well as from inside &kdevelop;, in case you have set up the &kdevelop; sources themselves as a project to work on.
 </para>
 
 </sect1> <!-- make-api -->
@@ -1443,7 +1444,7 @@ Select the radio button of the user interface mode you want to switch to, then p
   If you switch to or from the (non-windowed) IDEAl mode, you'll have to restart &kdevelop;.
   </para></listitem>
   <listitem><para>
-  Currently there are two IDEAl modes provided - a <quote>windowed</quote> IDEAl mode and a <quote>standard</quote> IDEAl mode (bottom row of the radio buttons). The window mode fits with the other mdi modes, but is still experimental. You don't need to restart &kdevelop; if you select this one from one of the other three mdi modes. Yet it is recommended to use the standard IDEAl mode in everyday work for now.
+  Currently there are two IDEAl modes provided &mdash; a <quote>windowed</quote> IDEAl mode and a <quote>standard</quote> IDEAl mode (bottom row of the radio buttons). The window mode fits with the other mdi modes, but is still experimental. You don't need to restart &kdevelop; if you select this one from one of the other three mdi modes. Yet it is recommended to use the standard IDEAl mode in everyday work for now.
   </para></listitem>
 </orderedlist>
 </note>
@@ -1654,7 +1655,7 @@ which at least for C++ applications is most often the case. But you can as well 
 In either way, the end-user of your product does not need &kdevelop; installed.
 </para>
 <para>
-For giving away your sources, we advise to include the <emphasis>project file</emphasis> of &kdevelop; as well. This makes it very easy for other developers - if they use &kdevelop; - to work with your sources.
+For giving away your sources, we advise to include the <emphasis>project file</emphasis> of &kdevelop; as well. This makes it very easy for other developers &mdash; if they use &kdevelop; &mdash; to work with your sources.
 </para>
 <para>
 For projects where s<emphasis>everal developers</emphasis>, maybe working on different places, are involved, this should be the case anyway. So you can ensure consistency of the <filename>Makefiles</filename> to not run into trouble.
@@ -1719,7 +1720,7 @@ Organizing all development work in projects allows you to easily switch between 
 Whenever you want to initiate a new programming project quite a lot of formal setup procedures need to be done. An initial directory structure has to be set up, initial header and source files must be provided, the make system has to be initialized, etc.
 </para>
 <para>
-&kdevelop; provides an easy way to initiate a new programming project - the <emphasis>&appwizard;</emphasis>. You will find the &appwizard; at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
+&kdevelop; provides an easy way to initiate a new programming project &mdash; the <emphasis>&appwizard;</emphasis>. You will find the &appwizard; at menu entry <menuchoice><guimenu>Project</guimenu> <guimenuitem>New Project</guimenuitem></menuchoice>.
 </para>
 <para>
 Only a short series of steps is necessary to start a new programming project, using the &appwizard;:
@@ -1742,7 +1743,7 @@ Only a short series of steps is necessary to start a new programming project, us
   </para></listitem>
 </orderedlist>
 <para>
-Voil&agrave; - that's all. &appwizard; will have provided you with a primary functional set of programming files, where you can readily start working.
+Voil&agrave; &mdash; that's all. &appwizard; will have provided you with a primary functional set of programming files, where you can readily start working.
 </para>
 <para>
 Let's look at all this in more detail now ...
@@ -2134,7 +2135,7 @@ As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initi
 </para></note>
 
 <para>
-<emphasis>Remote &cvs; root.</emphasis> There are occasions where the &cvs; database is to be kept on a remote server, especially when several developers work at the same project. Then you must enter the &cvs; root <acronym>URL</acronym> of this server in the <guilabel>CVS root</guilabel> field. For example, if you want access to the &kde; &cvs; server:
+<emphasis>Remote &cvs; root.</emphasis> There are occasions where the &cvs; database is to be kept on a remote server, especially when several developers work at the same project. Then you must enter the &cvs; root URL of this server in the <guilabel>CVS root</guilabel> field. For example, if you want access to the &kde; &cvs; server:
 </para>
 <para>
 <userinput><filename class="directory">:pserver:mylogin@cvs.kde.org:/home/kde</filename></userinput> (where <filename>mylogin</filename> denotes the login name set up in your &kde; &cvs; account)
@@ -2159,7 +2160,7 @@ As said, &kdevelop; only <emphasis>commands</emphasis> the &CVS; system to initi
 <formalpara id="newprojects-start-cvs-remote">
 <title>Remote &cvs; server types</title>
 <para>
-Basically there are two widely used remote &cvs; server types, the <emphasis>pserver</emphasis> which uses a password-secured non-encrypted protocol, and the <emphasis>ext</emphasis> server which uses an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted data transfer. They are distinguished by the <acronym>URL</acronym> prefix they use:
+Basically there are two widely used remote &cvs; server types, the <emphasis>pserver</emphasis> which uses a password-secured non-encrypted protocol, and the <emphasis>ext</emphasis> server which uses an rsh or ssh encrypted data transfer. They are distinguished by the URL prefix they use:
 </para>
 </formalpara>
 <para>
@@ -2172,7 +2173,7 @@ for the <quote>password protected server</quote> non-encrypted type, and
 <filename>:ext:</filename>
 </para>
 <para>
-for an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted server type. For example
+for an rsh or ssh encrypted server type. For example
 </para>
 <para>
 <userinput><filename class="directory">:ext:mylogin@cvs.cervisia.sourceforge.net:/cvsroot/cervisia</filename></userinput>
@@ -2181,7 +2182,7 @@ for an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted server type. F
 accesses the &cvs; root of the widely used <application>Cervisia</application> &cvs; management tool on the SourceForge server.
 </para>
 <para>
-If you want to use an <acronym>rsh</acronym> or <acronym>ssh</acronym> encrypted server for &cvs; access you must tell &kdevelop; the encryption protocol to be used. Just enter <userinput>rsh</userinput> or <userinput>ssh</userinput> in the <guilabel>CVS_RSH</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page.
+If you want to use an rsh or ssh encrypted server for &cvs; access you must tell &kdevelop; the encryption protocol to be used. Just enter <userinput>rsh</userinput> or <userinput>ssh</userinput> in the <guilabel>CVS_RSH</guilabel> field of the <guilabel>Create New Project</guilabel> <guilabel>Version Control System</guilabel> page.
 </para>
 
 <note><para>
@@ -2361,13 +2362,13 @@ The &appwizard; will replace the <computeroutput>$LICENSEFILE$</computeroutput> 
 //   See COPYING for the full license text.
 </literal></computeroutput></screen>
 <para>
-for the <acronym>GPL</acronym> license, or
+for the GPL license, or
 </para>
 <screen><computeroutput><literal>
 //   See LICENSE.BSD for the full license text.
 </literal></computeroutput></screen>
 <para>
-if you decided to put your application under the <acronym>BSD</acronym> license.
+if you decided to put your application under the BSD license.
 </para>
 <para>
 Thee are of course more variables &kdevelop; knows of. See the <link linkend="newfiles-edittemplates">Editing the templates</link> section in the <link linkend="editing">Editing tools</link> chapter for what is possible.
@@ -2395,7 +2396,7 @@ The templates you define here will come in effect only after the &appwizard; has
 Almost everything is done now. On the last templates page the <guibutton>Next &gt;</guibutton> button will have changed to read <guibutton>Finish</guibutton> now.
 </para>
 <para>
-<emphasis>Think twice before you click on it!</emphasis> You still have the option to revise everything by repeatedly using the <guibutton>&lt; Back</guibutton> button. As the &appwizard; remembers all information you did input so far, it may be advisable for you to take the time and look back once again. In case you use local CVS, do not forget to double-check the <emphasis>CVS repository</emphasis> name (there should be no subdirectory with that name in the CVS root directory already - if it does, try another repository name).
+<emphasis>Think twice before you click on it!</emphasis> You still have the option to revise everything by repeatedly using the <guibutton>&lt; Back</guibutton> button. As the &appwizard; remembers all information you did input so far, it may be advisable for you to take the time and look back once again. In case you use local CVS, do not forget to double-check the <emphasis>CVS repository</emphasis> name (there should be no subdirectory with that name in the CVS root directory already &mdash; if it does, try another repository name).
 </para>
 <para>
 If ever you don't want the new project be built, abort the <guilabel>Create New Project</guilabel> dialog by the <guibutton>Cancel</guibutton> button. Oterwise click <guibutton>Finish</guibutton> and watch in the <guilabel>Messages</guilabel> window how the &appwizard; initiates the project.
@@ -2462,7 +2463,7 @@ It is always advisable to look at the messages output and try to understand what
 
 <tip>
 <para>
-If your project was set up for local &CVS; you will have got two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we caught both series in separate runs - set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
+If your project was set up for local &CVS; you will have got two series of messages of which the first set most probably was gone before you could thoroughly read, as &CVS; used the <guilabel>Messages</guilabel> window for its own purposes. So we caught both series in separate runs &mdash; set up the application twice, one time without &CVS;, then removed the directory and started over, this time setting the application up with &CVS;.
 </para>
 <para>
 You may want to follow this same procedure if anything weird happened and you just could not catch the messages of the first setup step.
@@ -2558,7 +2559,7 @@ When the &perl; script is run, you get a series of messages of what is <emphasis
 <formalpara id="appwizard-behind-app-templates">
 <title>The file templates</title>
 <para>
-In the next step the file templates you set up in the <guilabel>Create New Project</guilabel> dialog will be copied to the <filename class="directory">templates</filename> subdirectory of this destination directory. As you can see from the <computeroutput>--filetemplates</computeroutput> parameter, the templates are submitted in pairs - the suffixes they are used for first, followed by the name of a temporary file in which the &appwizard; has copied the contents of the templates dialog pages. These suffixes will be taken as the filenames of where to store the template texts.
+In the next step the file templates you set up in the <guilabel>Create New Project</guilabel> dialog will be copied to the <filename class="directory">templates</filename> subdirectory of this destination directory. As you can see from the <computeroutput>--filetemplates</computeroutput> parameter, the templates are submitted in pairs &mdash; the suffixes they are used for first, followed by the name of a temporary file in which the &appwizard; has copied the contents of the templates dialog pages. These suffixes will be taken as the filenames of where to store the template texts.
 </para>
 </formalpara>
 <para>
@@ -2617,19 +2618,19 @@ After this step you will find the following files in your application base direc
     <filename>AUTHORS</filename>, initially containing information from the <computeroutput>--author</computeroutput> and <computeroutput>--email</computeroutput> parameters.
   </para></listitem>
   <listitem><para>
-    <filename>COPYING</filename>, this is the general &gnu; license, which all &gnu; conforming applications must contain - even if you decided to put your application under another license.
+    <filename>COPYING</filename>, this is the general &gnu; license, which all &gnu; conforming applications must contain &mdash; even if you decided to put your application under another license.
   </para></listitem>
   <listitem><para>
-    <filename>ChangeLog</filename>, initially empty - you should protocol all major changes here.
+    <filename>ChangeLog</filename>, initially empty &mdash; you should protocol all major changes here.
   </para></listitem>
   <listitem><para>
-    <filename>INSTALL</filename> contains generic installation instructions - modify this if special precautions and/or procedures are needed to install your application.
+    <filename>INSTALL</filename> contains generic installation instructions &mdash; modify this if special precautions and/or procedures are needed to install your application.
   </para></listitem>
   <listitem><para>
-    <filename>README</filename>, initially empty - put any information here the user should know before installing your application.
+    <filename>README</filename>, initially empty &mdash; put any information here the user should know before installing your application.
   </para></listitem>
   <listitem><para>
-    <filename>TODO</filename>, initially empty - put information here about what has to be done to further develop your application. You can use this as a notebook for your own purposes, but it is all the well really helpful once you have put your application in public domain.
+    <filename>TODO</filename>, initially empty &mdash; put information here about what has to be done to further develop your application. You can use this as a notebook for your own purposes, but it is all the well really helpful once you have put your application in public domain.
   </para></listitem>
 </itemizedlist>
 </para>
@@ -2770,22 +2771,22 @@ In the second command line part the &CVS; application will be called to <emphasi
 </formalpara>
 <itemizedlist>
   <listitem><para>
-    <computeroutput>-d '/home/devel/cvsroot'</computeroutput> - the <computeroutput>-d</computeroutput> option tells &CVS; which root directory is to be used. In our case this is the <emphasis>local &cvs; root</emphasis> located in <filename class="directory">/home/devel/cvsroot</filename>.
+    <computeroutput>-d '/home/devel/cvsroot'</computeroutput> &mdash; the <computeroutput>-d</computeroutput> option tells &CVS; which root directory is to be used. In our case this is the <emphasis>local &cvs; root</emphasis> located in <filename class="directory">/home/devel/cvsroot</filename>.
   </para></listitem>
   <listitem><para>
-    <computeroutput>import</computeroutput> - tells the &CVS; application which operation to perform in this root. We want to <emphasis>import</emphasis> files into the &cvs; database. To accomplish this, the <computeroutput>import</computeroutput> command needs some arguments of its own:
+    <computeroutput>import</computeroutput> &mdash; tells the &CVS; application which operation to perform in this root. We want to <emphasis>import</emphasis> files into the &cvs; database. To accomplish this, the <computeroutput>import</computeroutput> command needs some arguments of its own:
     <itemizedlist>
       <listitem><para>
-        <computeroutput>-m 'new project'</computeroutput> - the <computeroutput>-m</computeroutput> option provides import some <emphasis>message text</emphasis> for this action. It will be stored in the database and can later be recalled to identify the data which was kept in this step. In our case <quote><computeroutput>new project</computeroutput></quote> denotes the storage of our first files in the database.
+        <computeroutput>-m 'new project'</computeroutput> &mdash; the <computeroutput>-m</computeroutput> option provides import some <emphasis>message text</emphasis> for this action. It will be stored in the database and can later be recalled to identify the data which was kept in this step. In our case <quote><computeroutput>new project</computeroutput></quote> denotes the storage of our first files in the database.
       </para></listitem>
       <listitem><para>
-        <computeroutput>'YourNewApplication'</computeroutput> - the second argument tells &CVS; which <emphasis>repository</emphasis> to use. If it does not exist, it will be created prior to the file import actions. In this case the <filename>YourNewApplication</filename> repository will be created.
+        <computeroutput>'YourNewApplication'</computeroutput> &mdash; the second argument tells &CVS; which <emphasis>repository</emphasis> to use. If it does not exist, it will be created prior to the file import actions. In this case the <filename>YourNewApplication</filename> repository will be created.
       </para></listitem>
       <listitem><para>
-        <computeroutput>'vendor'</computeroutput> - this following argument is a <emphasis>tag</emphasis>, a symbolic name which marks a series of files in the directory. There are several different meanings such a tag can have (see <link linkend="cvs">Using CVS</link> for more information), this one in principle marks the whole bunch of files which subsequently will ever be stored in this repository. It is of no particular use to us, so <quote><computeroutput>vendor</computeroutput></quote> is as good a name as any other.
+        <computeroutput>'vendor'</computeroutput> &mdash; this following argument is a <emphasis>tag</emphasis>, a symbolic name which marks a series of files in the directory. There are several different meanings such a tag can have (see <link linkend="cvs">Using CVS</link> for more information), this one in principle marks the whole bunch of files which subsequently will ever be stored in this repository. It is of no particular use to us, so <quote><computeroutput>vendor</computeroutput></quote> is as good a name as any other.
       </para></listitem>
       <listitem><para>
-        <computeroutput>'start'</computeroutput> - is another tag. It marks the <emphasis>release</emphasis>, in easy words a series of subsequently saved files which belong together. We used <quote><computeroutput>start</computeroutput></quote> here, a meaningful description of the use of this initial series.
+        <computeroutput>'start'</computeroutput> &mdash; is another tag. It marks the <emphasis>release</emphasis>, in easy words a series of subsequently saved files which belong together. We used <quote><computeroutput>start</computeroutput></quote> here, a meaningful description of the use of this initial series.
       </para></listitem>
     </itemizedlist>
   </para></listitem>
@@ -2794,7 +2795,7 @@ In the second command line part the &CVS; application will be called to <emphasi
 <formalpara>
 <title>The imported files</title>
 <para>
-The &CVS; application will create the repository and then start to import all files from our <filename class="directory">/home/devel/yournewapplication</filename> directory. It subsequently reports any file which is loaded - this is the contents of the whole bunch of <quote><computeroutput>N</computeroutput></quote> lines following in the <guilabel>Messages</guilabel> window. The <computeroutput>N</computeroutput> denotes that this file was newly imported into the repository.
+The &CVS; application will create the repository and then start to import all files from our <filename class="directory">/home/devel/yournewapplication</filename> directory. It subsequently reports any file which is loaded &mdash; this is the contents of the whole bunch of <quote><computeroutput>N</computeroutput></quote> lines following in the <guilabel>Messages</guilabel> window. The <computeroutput>N</computeroutput> denotes that this file was newly imported into the repository.
 </para>
 </formalpara>
 <para>
@@ -2835,7 +2836,7 @@ The <filename>buildcvs.sh</filename> script mainly will put a <filename class="d
     <filename>Repository</filename> serves the same purpose. &CVS; keeps the name of the repository to use herein, <filename>YourNewApplication</filename> in our case.
   </para></listitem>
   <listitem><para>
-    <filename>Entries</filename> holds the names and some other data about the files &CVS; will care of in this directory. This is because &CVS; does not necessarily keep every application file in the repository. You can tell it which files to store and which to ignore - this information is kept in the <filename>Entries</filename> file.
+    <filename>Entries</filename> holds the names and some other data about the files &CVS; will care of in this directory. This is because &CVS; does not necessarily keep every application file in the repository. You can tell it which files to store and which to ignore &mdash; this information is kept in the <filename>Entries</filename> file.
   </para>
   </listitem>
 </itemizedlist>
@@ -2883,6 +2884,17 @@ from the <guimenu>Project</guimenu> menu.  You should see the Import Directory W
 </sect2> <!-- convertingold -->
 
 </sect1> <!-- oldprojects -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+<sect1 id="project-options-short">
+<title>A short look at project options</title>
+
+<para>
+(... to be written ...)
+</para>
+
+</sect1> <!-- project-options-short -->
 
 </chapter> <!-- appwizard -->
 
@@ -3532,6 +3544,24 @@ which can be used for projects for which you maintain your own
 using <command>qmake</command>.
 </para>
 
+<formalpara id="automake-references">
+<title>Tutorials on Autoconf/Automake</title>
+<para>
+There are several tutorials available on Automake and Autoconf tools of which the &automanag; makes use.
+<itemizedlist>
+  <listitem><para>A short <ulink url="http://www.kdevelop.org/index.html?filename=tutorial_autoconf.html">autoconf tutorial</ulink> written by Christopher W. Curtis available on the KDevelop home page. It concentrates on some basic steps to modify a <filename>Makefile</filename>.
+  </para></listitem>
+  <listitem><para>
+  A more detailed tutorial can be found at <ulink url="http://www.amath.washington.edu/~lf/tutorials/autoconf/toolsmanual_toc.html"></ulink>. This is part of a greater set of tutorials on <citetitle>Developing software with GNU</citetitle>.
+  </para></listitem>
+  <listitem><para>
+  And there is the famous <quote>Goat Book</quote>, titled <citetitle>Autoconf, Automake, and Libtool</citetitle>, to be found at <ulink url="http://sources.redhat.com/autobook"></ulink>. This is an easily readable, yet concise, introduction in all main aspects of the &GNU; Autotools.
+  </para></listitem>
+</itemizedlist>
+</para>
+
+</formalpara>
+
 <sect1 id="buildconfigurations">
 <title>Build configurations</title>
 
@@ -4030,7 +4060,7 @@ breakpoints.
 
 <para>
 &CVS; is the revision control system which many open source projects -
-including &kde; - are using. It stores all sources codes in a central place,
+including &kde; &mdash; are using. It stores all sources codes in a central place,
 called the <emphasis>repository</emphasis>.  From the repository, developers 
 can check out a current version of the project or snapshots of it at arbitrary
 points of time. In contrast to some other revision control systems, it is not 
@@ -4405,7 +4435,7 @@ the content of the matched subgroups will be shown in a list box.
 </para>
 
 <para>
-Some of the parts are considered <link linkend="table-global-parts">global</link> - that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
+Some of the parts are considered <link linkend="table-global-parts">global</link> &mdash; that is, they effect the entire operation of &kdevelop;. For example, the uimode part allows a developer to select which user interface they wish to use.
 </para>
 
 <para>
@@ -4656,7 +4686,7 @@ Click <link linkend="uimodes-overview">here</link> to return to the modes overvi
 <para>
 <itemizedlist>
 <listitem><para>
-2003-01-03 - Started this Changelog
+2003-01-03 &mdash; Started this Changelog
 </para></listitem>
 </itemizedlist>
 </para>
