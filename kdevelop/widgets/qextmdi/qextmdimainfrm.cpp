@@ -52,14 +52,15 @@
 
 QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags flags)
 : QMainWindow( parentWidget, name, flags)
-	,m_pMdi(0)
-   ,m_pWindowMenu(0)
-   ,m_pTaskBar(0)
-	,m_pWinList(0)
-	,m_pCurrentWindow(0)
-   ,m_pWindowPopup(0)
-   ,m_pTaskBarPopup(0)
-   ,m_pMainMenuBar(0)
+	,m_pMdi(0L)
+   ,m_pTaskBar(0L)
+	,m_pWinList(0L)
+	,m_pCurrentWindow(0L)
+   ,m_pWindowPopup(0L)
+   ,m_pTaskBarPopup(0L)
+   ,m_pWindowMenu(0L)
+   ,m_pDockMenu(0L)
+   ,m_pMainMenuBar(0L)
 {
    setRightJustification( TRUE);
 
@@ -81,6 +82,8 @@ QextMdiMainFrm::QextMdiMainFrm(QWidget* parentWidget, const char* name, WFlags f
 
 	m_pWindowMenu = new QPopupMenu();
 	m_pWindowMenu->setCheckable( TRUE);
+   m_pDockMenu = new QPopupMenu();
+   m_pDockMenu->setCheckable( TRUE);
 	fillWindowMenu();
 }
 
@@ -134,6 +137,7 @@ QextMdiMainFrm::~QextMdiMainFrm()
    delete m_pTaskBarPopup;
    delete m_pWindowPopup;
 	delete m_pWindowMenu;
+   delete m_pDockMenu;
 }
 
 //============ closeEvent ============//
@@ -150,7 +154,8 @@ void QextMdiMainFrm::addWindow(QextMdiChildView *pWnd,bool bShow,bool bAttach)
    QObject::connect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
    QObject::connect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
    QObject::connect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
-	QObject::connect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(menuActivated(int)) );
+	QObject::connect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(windowMenuItemActivated(int)) );
+	QObject::connect( pWnd, SIGNAL(clickedInDockMenu(int)), this, SLOT(dockMenuItemActivated(int)) );
 
    //The window can be added only once :)
    m_pWinList->append(pWnd);
@@ -216,7 +221,7 @@ void QextMdiMainFrm::detachWindow(QextMdiChildView *pWnd, bool bShow)
     // this one is taking care of te
     lpC->unsetClient( m_undockPositioningOffset);
 
-    m_pMdi->destroyChild(lpC,FALSE); //Do not focus the new top child , we loose focus...
+    m_pMdi->destroyChildButNotItsView(lpC,FALSE); //Do not focus the new top child , we loose focus...
   }
 
   // there should be an equivalent of manageChild... here
@@ -238,7 +243,8 @@ void QextMdiMainFrm::removeWindowFromMdi(QextMdiChildView *pWnd)
 	QObject::disconnect( pWnd, SIGNAL(detachWindow(QextMdiChildView*,bool)), this, SLOT(detachWindow(QextMdiChildView*,bool)) );
 	QObject::disconnect( pWnd, SIGNAL(focusInEventOccurs(QextMdiChildView*)), this, SLOT(activateView(QextMdiChildView*)) );
 	QObject::disconnect( pWnd, SIGNAL(childWindowCloseRequest(QextMdiChildView*)), this, SLOT(childWindowCloseRequest(QextMdiChildView*)) );
-	QObject::disconnect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(menuActivated(int)) );
+	QObject::disconnect( pWnd, SIGNAL(clickedInWindowMenu(int)), this, SLOT(windowMenuItemActivated(int)) );
+	QObject::disconnect( pWnd, SIGNAL(clickedInDockMenu(int)), this, SLOT(dockMenuItemActivated(int)) );
 	
 	//Closes a child window. sends no close event : simply deletes it
 	m_pWinList->removeRef(pWnd);
@@ -342,7 +348,6 @@ void QextMdiMainFrm::switchWindows(bool bRight)
 
 void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
 {
-   // these showld go first
    m_pCurrentWindow = pWnd;
    m_pTaskBar->setActiveButton(pWnd);
 
@@ -350,7 +355,7 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
       if( !(pWnd->hasFocus()) ) {
          // this should go out of here
          // (mmorin)
-         if( m_pCurrentWindow->isMaximized()) {
+         if( m_pMdi->topChild()->state() == QextMdiChildFrm::Maximized) {
             updateSysButtonConnections( m_pMdi->topChild(), pWnd->mdiParent());
          }
       }
@@ -360,8 +365,8 @@ void QextMdiMainFrm::activateView(QextMdiChildView *pWnd)
       // see here you are not doing anything if it is maximize...
       if(!pWnd->hasFocus() || !pWnd->isActiveWindow()) {
          pWnd->show();
-         pWnd->raise();
          pWnd->setActiveWindow();
+         pWnd->raise();
       }
    }	
    fillWindowMenu();
@@ -436,11 +441,13 @@ void QextMdiMainFrm::closeActiveView()
  */
 void QextMdiMainFrm::switchToToplevelMode()
 {
-   for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
-      if( w->isAttached()) {
-         if( w->isMaximized())
-            w->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
-         detachWindow(w, TRUE);
+   QListIterator<QextMdiChildView> it( *m_pWinList);
+   for( ; it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
+      if( pView->isAttached()) {
+         if( pView->isMaximized())
+            pView->mdiParent()->setGeometry( 0, 0, m_pMdi->width(), m_pMdi->height());
+         detachWindow( pView, TRUE);
       }
    }
 }
@@ -450,9 +457,11 @@ void QextMdiMainFrm::switchToToplevelMode()
  */
 void QextMdiMainFrm::switchToChildframeMode()
 {
-	for(QextMdiChildView *w = m_pWinList->first();w;w= m_pWinList->next()){
-		if( !w->isAttached())
-			attachWindow(w, TRUE);
+   QListIterator<QextMdiChildView> it( *m_pWinList);
+   for( ; it.current(); ++it) {
+      QextMdiChildView* pView = it.current();
+		if( !pView->isAttached())
+			attachWindow( pView, TRUE);
 	}
 }
 
@@ -623,11 +632,15 @@ void QextMdiMainFrm::fillWindowMenu()
 	m_pWindowMenu->insertItem(tr("&Pragma's tile"), m_pMdi,SLOT(tilePragma()));
 	m_pWindowMenu->insertItem(tr("Tile v&ertically"), m_pMdi,SLOT(tileVertically()));
 	m_pWindowMenu->insertSeparator();
-	m_pWindowMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
-	m_pWindowMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
+   m_pWindowMenu->insertItem(tr("&Dock/Undock..."), m_pDockMenu);
 	m_pWindowMenu->insertSeparator();
 
-	// for all child frame windows: give an ID to every window and connect them in the end with menuActivated()
+   m_pDockMenu->clear();
+	m_pDockMenu->insertItem(tr("&Toplevel mode"), this, SLOT(switchToToplevelMode()));
+	m_pDockMenu->insertItem(tr("C&hildframe mode"), this, SLOT(switchToChildframeMode()));
+   m_pDockMenu->insertSeparator();
+
+	// for all child frame windows: give an ID to every window and connect them in the end with windowMenuItemActivated()
 	int i=100;
 	for(QextMdiChildView *pView=m_pWinList->first();pView;pView=m_pWinList->next())
 	{
@@ -645,33 +658,39 @@ void QextMdiMainFrm::fillWindowMenu()
 
       // insert the window entry sorted in alphabetical order
       unsigned int indx;
-      unsigned int windowItemCount = m_pWindowMenu->count() - 15;
+      unsigned int windowItemCount = m_pWindowMenu->count() - 14;
       bool inserted = FALSE;
       QString tmpString;
       for( indx = 0; indx <= windowItemCount; indx++) {
-         tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+15));
+         tmpString = m_pWindowMenu->text( m_pWindowMenu->idAt( indx+14));
          if( tmpString.right( tmpString.length()-2) > item.right( item.length()-2)) {
-            m_pWindowMenu->insertItem( item, pView, SLOT( slot_clickedInWindowMenu()), 0, -1, indx+15);
+            m_pWindowMenu->insertItem( item, pView, SLOT( slot_clickedInWindowMenu()), 0, -1, indx+14);
+            m_pDockMenu->insertItem( item, pView, SLOT( slot_clickedInDockMenu()), 0, -1, indx+3);
             if( pView == m_pCurrentWindow)
-               m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+15), TRUE);
+               m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( indx+14), TRUE);
             pView->setWindowMenuID( i);
+            if( pView->isAttached())
+               m_pDockMenu->setItemChecked( m_pDockMenu->idAt( indx+3), TRUE);
             inserted = TRUE;
             indx = windowItemCount+1;	// break the loop
          }
       }
       if( !inserted) {	// append it
-         m_pWindowMenu->insertItem( item, pView, SLOT( slot_clickedInWindowMenu()), 0, -1, windowItemCount+15);
+         m_pWindowMenu->insertItem( item, pView, SLOT( slot_clickedInWindowMenu()), 0, -1, windowItemCount+14);
      	   if( pView == m_pCurrentWindow)
-            m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+15), TRUE);
+            m_pWindowMenu->setItemChecked( m_pWindowMenu->idAt( windowItemCount+14), TRUE);
          pView->setWindowMenuID( i);
+         m_pDockMenu->insertItem( item, pView, SLOT( slot_clickedInDockMenu()), 0, -1, windowItemCount+3);
+         if( pView->isAttached())
+            m_pDockMenu->setItemChecked( m_pDockMenu->idAt( windowItemCount+3), TRUE);
       }
       i++;
    }
 }
 
-//================ menuActivated ===============//
+//================ windowMenuItemActivated ===============//
 
-void QextMdiMainFrm::menuActivated(int id)
+void QextMdiMainFrm::windowMenuItemActivated(int id)
 {
 	if( id < 100) return;
 	id -= 100;
@@ -680,6 +699,24 @@ void QextMdiMainFrm::menuActivated(int id)
 	if( pView->isMinimized()) pView->minimize();
 	if( (pView == m_pWinList->last()) && pView->isAttached()) return;
 	activateView( pView);
+}
+
+//================ dockMenuItemActivated ===============//
+
+void QextMdiMainFrm::dockMenuItemActivated(int id)
+{
+	if( id < 100) return;
+	id -= 100;
+	QextMdiChildView *pView = m_pWinList->at( id);
+	if( !pView) return;
+	if( pView->isMinimized()) pView->minimize();
+	if( pView->isAttached()) {
+      detachWindow( pView, TRUE);
+   }
+   else {   // is detached
+      attachWindow( pView, TRUE);
+   }
+   fillWindowMenu();
 }
 
 void QextMdiMainFrm::popupWindowMenu(QPoint p)
