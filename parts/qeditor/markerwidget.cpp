@@ -53,6 +53,7 @@ using namespace std;
 MarkerWidget::MarkerWidget( QEditor* editor, QWidget* parent, const char* name )
     : QWidget( parent, name, WRepaintNoErase | WStaticContents | WResizeNoErase ),
       m_editor( editor )
+      ,m_clickChangesBPs(true)
 {
     bookmarkPixmap = SmallIcon( "attach" );
     breakpointPixmap = SmallIcon( "stop" );
@@ -151,7 +152,9 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
 
     int toggleBreakPoint = 0;
     int toggleBookmark = 0;
-
+    int lmbClickChangesBPs = 0;
+    int lmbClickChangesBookmarks = 0;
+    
     QTextParagraph *p = m_editor->document()->firstParagraph();
     int yOffset = m_editor->contentsY();
     while ( p ) {
@@ -169,6 +172,12 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
             else
                 toggleBookmark = m.insertItem( tr( "Set Bookmark" ) );
 
+            m.insertSeparator();
+            lmbClickChangesBPs = m.insertItem( tr( "Left mouse button click sets breakpoints" ) );
+            lmbClickChangesBookmarks = m.insertItem( tr( "Left mouse button click sets bookmarks" ) );
+            m.setItemChecked(lmbClickChangesBPs, m_clickChangesBPs);
+            m.setItemChecked(lmbClickChangesBookmarks, !m_clickChangesBPs);
+                            
             //m.insertSeparator();
             break;
         }
@@ -181,19 +190,82 @@ void MarkerWidget::contextMenuEvent( QContextMenuEvent* e )
 
     ParagData* data = (ParagData*) p->extraData();
 
+    KTextEditor::Mark mark;
+    mark.line = p->paragId();
+    
     if ( res == toggleBookmark ) {
-        if ( data->mark() & 0x01 )
+        mark.type = 0x01;
+        if ( data->mark() & 0x01 ) {
             data->setMark( 0 );
-        else
+            emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
+        }
+        else {
             data->setMark( 0x01 );
+            emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
+        }
     } else if ( res == toggleBreakPoint ) {
-        if ( data->mark() & 0x02 )
+        mark.type = 0x02;
+        if ( data->mark() & 0x02 ) {
             data->setMark( 0 );
-        else
+            emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
+        }
+        else {
             data->setMark( 0x02 );
+            emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
+        }
+    } else if ( res == lmbClickChangesBPs ) {
+        m_clickChangesBPs = !m.isItemChecked(lmbClickChangesBPs);
+    } else if ( res == lmbClickChangesBookmarks ) {
+        m_clickChangesBPs = m.isItemChecked(lmbClickChangesBookmarks);
     }
 
     doRepaint();
     // emit markersChanged();
 }
+
+void MarkerWidget::mousePressEvent( QMouseEvent * e )
+{
+  QTextParagraph *p = m_editor->document()->firstParagraph();
+  int yOffset = m_editor->contentsY();
+  ParagData* data = 0L;
+  while ( p ) {
+    if ( e->y() >= p->rect().y() - yOffset && e->y() <= p->rect().y() + p->rect().height() - yOffset ) {
+      data = (ParagData*) p->extraData();
+      break;
+    }
+    p = p->next();
+  }
+
+  if (e->button() == Qt::LeftButton) {
+    if (!data) return;
+
+    KTextEditor::Mark mark;
+    mark.line = p->paragId();
+    if (m_clickChangesBPs) {
+      mark.type = 0x02;
+      if (data->mark() & 0x02) {
+        data->setMark(0);
+        emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
+      }
+      else {
+        data->setMark(0x02);
+        emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
+      }
+    }
+    else {
+      mark.type = 0x01;
+      if (data->mark() & 0x01) {
+        data->setMark(0);
+        emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkRemoved);
+      }
+      else {
+        data->setMark(0x01);
+        emit markChanged(mark, KTextEditor::MarkInterfaceExtension::MarkAdded);
+      }
+    }
+  }
+
+  doRepaint();
+}
+
 #include "markerwidget.moc"

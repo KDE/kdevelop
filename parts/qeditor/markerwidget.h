@@ -45,6 +45,13 @@
 #include <qwidget.h>
 #include <qpixmap.h>
 
+#include <kdeversion.h>
+#if (KDE_VERSION > 305)
+# include <ktexteditor/markinterfaceextension.h>
+#else
+# include "kde30x_markinterfaceextension.h"
+#endif
+
 class QEditor;
 
 class MarkerWidget: public QWidget
@@ -53,7 +60,7 @@ class MarkerWidget: public QWidget
 public:
     MarkerWidget( QEditor*, QWidget* =0, const char* =0 );
     virtual ~MarkerWidget();
-
+    
 public slots:
     void doRepaint() { repaint( FALSE ); }
 
@@ -61,7 +68,11 @@ protected:
     virtual void resizeEvent( QResizeEvent* );
     virtual void paintEvent( QPaintEvent* );
     virtual void contextMenuEvent( QContextMenuEvent* );
-
+    virtual void mousePressEvent ( QMouseEvent * e );
+    
+signals:
+    virtual void markChanged( KTextEditor::Mark mark,
+                              KTextEditor::MarkInterfaceExtension::MarkChangeAction action );
 private:
     QEditor* m_editor;
     QPixmap buffer;
@@ -70,6 +81,8 @@ private:
     QPixmap execPixmap;
     QPixmap problemPixmap;
     QPixmap funStartPixmap;
+
+    bool          m_clickChangesBPs;
 };
 
 #endif // __markerwidget_h

@@ -75,7 +75,9 @@ QEditorView::QEditorView( QEditorPart* document, QWidget* parent, const char* na
     m_markerWidget = new MarkerWidget( m_editor, this );
     connect( document, SIGNAL(marksChanged()),
              m_markerWidget, SLOT(doRepaint()) );
-
+    connect( m_markerWidget, SIGNAL(markChanged(KTextEditor::Mark,KTextEditor::MarkInterfaceExtension::MarkChangeAction)),
+             document, SIGNAL(markChanged(KTextEditor::Mark,KTextEditor::MarkInterfaceExtension::MarkChangeAction)) );
+    
     m_levelWidget = new LevelWidget( m_editor, this );
     connect( m_levelWidget, SIGNAL(expandBlock(QTextParagraph*)),
 	     this, SLOT(expandBlock(QTextParagraph*)) );
