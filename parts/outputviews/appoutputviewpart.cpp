@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 1999-2001 by Bernd Gehrmann                             *
+ *   Copyright (C) 1999-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,9 +52,20 @@ AppOutputViewPart::~AppOutputViewPart()
 }
 
 
-void AppOutputViewPart::startAppCommand(const QString &command)
+void AppOutputViewPart::startAppCommand(const QString &program, bool inTerminal)
 {
-    m_widget->startJob(QDir::homeDirPath(), command);
+    QString cmd;
+    if (inTerminal) {
+        cmd = "konsole -e /bin/sh -c '";
+        cmd += program;
+        cmd += "; echo \"\n";
+        cmd += i18n("Press Enter to continue!");
+        cmd += "\";read'";
+    } else {
+        cmd = program;
+    }
+
+    m_widget->startJob(QDir::homeDirPath(), cmd);
     topLevel()->raiseView(m_widget);
 }
 

@@ -9,30 +9,30 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "pythonconfigwidget.h"
+#include "perlconfigwidget.h"
 
 #include <qcheckbox.h>
 #include <qlineedit.h>
 #include "domutil.h"
 
 
-PythonConfigWidget::PythonConfigWidget(QDomDocument &projectDom,
+PerlConfigWidget::PerlConfigWidget(QDomDocument &projectDom,
                                        QWidget *parent, const char *name)
-    : PythonConfigWidgetBase(parent, name), dom(projectDom)
+    : PerlConfigWidgetBase(parent, name), dom(projectDom)
 {
-    interpreter_edit->setText(DomUtil::readEntry(dom, "/kdevpythonsupport/run/interpreter"));
-    terminal_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevpythonsupport/run/terminal"));
+    interpreter_edit->setText(DomUtil::readEntry(dom, "/kdevperlsupport/run/interpreter"));
+    terminal_box->setChecked(DomUtil::readBoolEntry(dom, "/kdevperlsupport/run/terminal"));
 }
 
 
-PythonConfigWidget::~PythonConfigWidget()
+PerlConfigWidget::~PerlConfigWidget()
 {}
 
 
-void PythonConfigWidget::accept()
+void PerlConfigWidget::accept()
 {
-    DomUtil::writeEntry(dom, "/kdevpythonsupport/run/interpreter", interpreter_edit->text());
-    DomUtil::writeBoolEntry(dom, "/kdevpythonsupport/run/terminal", terminal_box->isChecked());
+    DomUtil::writeEntry(dom, "/kdevperlsupport/run/interpreter", interpreter_edit->text());
+    DomUtil::writeBoolEntry(dom, "/kdevperlsupport/run/terminal", terminal_box->isChecked());
 }
 
-#include "pythonconfigwidget.moc"
+#include "perlconfigwidget.moc"

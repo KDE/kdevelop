@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -17,14 +17,14 @@
 #include <qtextstream.h>
 #include <qtimer.h>
 #include <qvbox.h>
+#include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kdialogbase.h>
+#include <kgenericfactory.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
-#include <kgenericfactory.h>
-#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
@@ -267,18 +267,8 @@ QString PythonSupportPart::interpreter()
 
 void PythonSupportPart::startApplication(const QString &program)
 {
-    QString cmd;
-    if (DomUtil::readBoolEntry(*projectDom(), "/kdevpythonsupport/run/terminal")) {
-        cmd = "konsole -e /bin/sh -c '";
-        cmd += program;
-        cmd += "; echo \"\n";
-        cmd += i18n("Press Enter to continue!");
-        cmd += "\";read'";
-    } else {
-        cmd = program;
-    }
-
-    appFrontend()->startAppCommand(cmd);
+    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevpythonsupport/run/terminal");
+    appFrontend()->startAppCommand(program, inTerminal);
 }
 
 

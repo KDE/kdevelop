@@ -348,15 +348,6 @@ void CustomProjectPart::slotExecute()
 {
     QString program = projectDirectory() + "/" + project()->mainProgram();
     
-    if (DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/terminal")) {
-        QString terminal = "konsole -e /bin/sh -c '";
-        terminal += program;
-        terminal += "; echo \"\n";
-        terminal += i18n("Press Enter to continue!");
-        terminal += "\";read'";
-        program = terminal;
-    }
-    
     DomUtil::PairList envvars = 
         DomUtil::readPairListEntry(*projectDom(), "/kdevcustomproject/envvars", "envvar", "name", "value");
 
@@ -370,7 +361,8 @@ void CustomProjectPart::slotExecute()
     }
     program.prepend(environstr);
 
-    appFrontend()->startAppCommand(program);
+    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevcustomproject/run/terminal");
+    appFrontend()->startAppCommand(program, inTerminal);
 }
 
 

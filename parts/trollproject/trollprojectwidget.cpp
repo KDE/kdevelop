@@ -333,7 +333,7 @@ void TrollProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
         int idRemoveFile = popup.insertItem(i18n("Remove File..."));
 
-        FileContext context(m_shownSubproject->path + "/" + fitem->name);
+        FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
         
         int r = popup.exec(p);

@@ -223,7 +223,7 @@ void AbbrevPart::insertChars(KTextEditor::EditInterface *editiface,
     }
 
     QStringList l = QStringList::split( "\n", chars, true );
-    for( int i=0; i<l.count(); ++i ){
+    for( int i=0; i<(int)l.count(); ++i ){
         QString s = l[ i ];
         int idx = s.find( '|' );
         if( idx != -1 ){

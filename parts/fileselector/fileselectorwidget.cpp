@@ -139,7 +139,7 @@ void FileSelectorWidget::popupAboutToShow()
   KFileItem *item = const_cast<KFileItemList*>(dir->selectedItems())->first();
   if (item)
   {
-    FileContext context(item->url().path());
+    FileContext context(item->url().path(), item->isDir());
     m_part->core()->fillContextMenu(m_popup, &context);
   }
 }

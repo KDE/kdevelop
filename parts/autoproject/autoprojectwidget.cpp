@@ -820,7 +820,7 @@ void AutoProjectWidget::slotDetailsContextMenu(KListView *, QListViewItem *item,
         KPopupMenu popup(i18n("File: %1").arg(fitem->name), this);
 
         removeFileAction->plug(&popup);
-        FileContext context(m_shownSubproject->path + "/" + fitem->name);
+        FileContext context(m_shownSubproject->path + "/" + fitem->name, false);
         m_part->core()->fillContextMenu(&popup, &context);
 
         popup.exec(p);

@@ -432,15 +432,6 @@ void AutoProjectPart::slotExecute()
 {
     QString program = buildDirectory() + "/" + mainProgram();
     
-    if (DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal")) {
-        QString terminal = "konsole -e /bin/sh -c '";
-        terminal += program;
-        terminal += "; echo \"\n";
-        terminal += i18n("Press Enter to continue!");
-        terminal += "\";read'";
-        program = terminal;
-    }
-
     DomUtil::PairList envvars = 
         DomUtil::readPairListEntry(*projectDom(), "/kdevautoproject/envvars", "envvar", "name", "value");
 
@@ -454,7 +445,8 @@ void AutoProjectPart::slotExecute()
     }
     program.prepend(environstr);
 
-    appFrontend()->startAppCommand(program);
+    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevautoproject/run/terminal");
+    appFrontend()->startAppCommand(program, inTerminal);
 }
 
 

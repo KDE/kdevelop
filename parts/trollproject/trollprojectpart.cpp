@@ -210,15 +210,6 @@ void TrollProjectPart::slotExecute()
 {
     QString program = m_widget->projectDirectory() + "/" + project()->mainProgram();
     
-    if (DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal")) {
-        QString terminal = "konsole -e /bin/sh -c '";
-        terminal += program;
-        terminal += "; echo \"\n";
-        terminal += i18n("Press Enter to continue!");
-        terminal += "\";read'";
-        program = terminal;
-    }
-    
     QDomElement docEl = projectDom()->documentElement();
     QDomElement trollprojectEl = docEl.namedItem("kdevtrollproject").toElement();
     QDomElement envvarsEl = trollprojectEl.namedItem("envvars").toElement();
@@ -236,7 +227,8 @@ void TrollProjectPart::slotExecute()
     }
     program.prepend(environstr);
 
-    appFrontend()->startAppCommand(program);
+    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevtrollproject/run/terminal");
+    appFrontend()->startAppCommand(program, inTerminal);
 }
 
 #include "trollprojectpart.moc"

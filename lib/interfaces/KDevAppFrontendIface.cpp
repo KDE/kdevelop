@@ -13,7 +13,7 @@ KDevAppFrontendIface::~KDevAppFrontendIface()
 {}
 
 
-void KDevAppFrontendIface::startAppCommand(const QString &command) 
+void KDevAppFrontendIface::startAppCommand(const QString &command, bool inTerminal) 
 {
-    m_appFrontend->startAppCommand(command);
+    m_appFrontend->startAppCommand(command, inTerminal);
 }

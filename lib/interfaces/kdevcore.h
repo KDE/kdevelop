@@ -89,7 +89,7 @@ private:
 class FileContext : public Context
 {
 public:
-    FileContext(const QString &fileName, bool isDirectory=false)
+    FileContext(const QString &fileName, bool isDirectory)
         : Context("file"),
           m_fileName(fileName),
           m_isDirectory(isDirectory) {}

@@ -114,7 +114,7 @@ void EditorProxy::popupAboutToShow()
     return;
 
   // fill the menu in the file context
-  FileContext context(ro_part->url().path());
+  FileContext context(ro_part->url().path(), false);
   Core::getInstance()->fillContextMenu(popup, &context);
   
   // fill the menu in the editor context
@@ -176,7 +176,7 @@ void EditorProxy::removeBreakpoint(KParts::Part *part, int lineNum)
 
   for (Mark *mark = iface->marks().first(); mark != 0; mark = iface->marks().next())
   {
-    if (mark->line == lineNum)
+    if (mark->line == (uint)lineNum)
     {
       switch (mark->type)
       {

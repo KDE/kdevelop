@@ -1,6 +1,9 @@
 2002-05-03  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Structure view for HTML, Docbook and LaTeX
+	* Perl part can exec programs and code snippets now
+	* Moved duplicated code for executing programs in
+	  an external konsole into the app output part
 
 2002-05-01  Bernd Gehrmann  <bernd@mail.berlios.de>
 

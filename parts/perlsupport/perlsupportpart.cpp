@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2001 by Bernd Gehrmann                                  *
+ *   Copyright (C) 2001-2002 by Bernd Gehrmann                             *
  *   bernd@kdevelop.org                                                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -16,20 +16,22 @@
 #include <qstringlist.h>
 #include <qtextstream.h>
 #include <qtimer.h>
+#include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kgenericfactory.h>
 #include <klineeditdlg.h>
 #include <klocale.h>
 #include <kregexp.h>
-#include <kgenericfactory.h>
-#include <kaction.h>
 
 #include "kdevcore.h"
 #include "kdevproject.h"
 #include "kdevpartcontroller.h"
+#include "kdevappfrontend.h"
 #include "classstore.h"
 #include "parsedclass.h"
 #include "parsedmethod.h"
+#include "domutil.h"
 
 
 typedef KGenericFactory<PerlSupportPart> PerlSupportFactory;
@@ -48,6 +50,22 @@ PerlSupportPart::PerlSupportPart(QObject *parent, const char *name, const QStrin
              this, SLOT(savedFile(const QString&)) );
 
     KAction *action;
+
+    action = new KAction( i18n("Execute Program"), "exec", 0,
+                          this, SLOT(slotExecute()),
+                          actionCollection(), "build_exec" );
+    action->setStatusText( i18n("Runs the Perl program") );
+
+    action = new KAction( i18n("Execute String..."), "exec", 0,
+                          this, SLOT(slotExecuteString()),
+                          actionCollection(), "build_execstring" );
+    action->setStatusText( i18n("Executes a string as Perl code") );
+
+    action = new KAction( i18n("Start Perl Interpreter"), "exec", 0,
+                          this, SLOT(slotStartInterpreter()),
+                          actionCollection(), "build_runinterpreter" );
+    action->setStatusText( i18n("Starts the Perl interpreter without a program") );
+
     action = new KAction( i18n("Find Perl function documentation..."), 0,
                           this, SLOT(slotPerldocFunction()),
                           actionCollection(), "help_perldocfunction" );
@@ -183,6 +201,49 @@ void PerlSupportPart::parse(const QString &fileName)
     }
     
     f.close();
+}
+
+
+QString PerlSupportPart::interpreter()
+{
+    QString prog = DomUtil::readEntry(*projectDom(), "/kdevperlsupport/run/interpreter");
+    if (prog.isEmpty())
+        prog = "perl";
+
+    return prog;
+}
+
+
+void PerlSupportPart::startApplication(const QString &program)
+{
+    bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevperlsupport/run/terminal");
+    appFrontend()->startAppCommand(program, inTerminal);
+}
+
+
+void PerlSupportPart::slotExecute()
+{
+    QString program = project()->projectDirectory() + "/" + project()->mainProgram();
+    QString cmd = interpreter() + " " + program;
+    startApplication(cmd);
+}
+
+
+void PerlSupportPart::slotStartInterpreter()
+{
+    startApplication(interpreter());
+}
+
+
+void PerlSupportPart::slotExecuteString()
+{
+    bool ok;
+    QString cmd = KLineEditDlg::getText(i18n("String to execute"), QString::null, &ok, 0);
+    if (ok) {
+        cmd.prepend("'");
+        cmd.append("'");
+        startApplication(cmd);
+    }
 }
 
 

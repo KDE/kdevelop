@@ -60,15 +60,7 @@ void VisualBoyAdvancePart::slotExecute(){
 
   program += prj->projectDirectory() + "/" + binary;
 
-  if(terminal){
-    QString terminal = "konsole -e /bin/sh -c '";
-    terminal += program;
-    terminal += "; echo \"\n";
-    terminal += i18n("Press Enter to continue!");
-    terminal += "\";read'";
-    program = terminal;
-  }
-  appFrontend()->startAppCommand(program);
+  appFrontend()->startAppCommand(program, terminal);
 }
 
 void VisualBoyAdvancePart::projectConfigWidget(KDialogBase *dlg){
