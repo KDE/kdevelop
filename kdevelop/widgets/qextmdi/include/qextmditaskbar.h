@@ -192,6 +192,7 @@ protected:
    * A stretchable widget used as 'space' at the end of a half filled taskbar 
    */
    QLabel*                       m_pStretchSpace;
+   bool                          m_layoutIsPending;
 };
 
 #endif //_QEXTMDITASKBAR_H_

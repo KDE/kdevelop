@@ -135,6 +135,7 @@ QextMdiTaskBar::QextMdiTaskBar(QextMdiMainFrm *parent,QMainWindow::ToolBarDock d
 :  KToolBar( parent, "QextMdiTaskBar", /*honor_style*/ FALSE, /*readConfig*/ TRUE)
    ,m_pCurrentFocusedWindow(0)
    ,m_pStretchSpace(0)
+   ,m_layoutIsPending(FALSE)
 {
    m_pFrm = parent;
    m_pButtonList = new QList<QextMdiTaskBarButton>;
@@ -245,6 +246,9 @@ void QextMdiTaskBar::setActiveButton(QextMdiChildView *win_ptr)
 
 void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 {
+   if (m_layoutIsPending) return;
+   m_layoutIsPending = TRUE;
+
    if( !taskBarWidth)
       // no width is given
       taskBarWidth = width();
@@ -270,18 +274,21 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
 
    // if there's enough space, use actual width
    int buttonCount = m_pButtonList->count();
-   if( ((allButtonsWidthHint + 15) <= taskBarWidth) || (width() < parentWidget()->width())) {
+   int buttonAreaWidth = taskBarWidth - style().toolBarHandleExtend() - style().defaultFrameWidth() - 5;
+   if( ((allButtonsWidthHint) <= buttonAreaWidth) || (width() < parentWidget()->width())) {
       for(b=m_pButtonList->first();b;b=m_pButtonList->next()){
          b->setText( b->actualText());
          b->setFixedWidth( b->sizeHint().width());
          b->show();
       }
+      if (b)
+         qDebug("button width: %d", b->sizeHint().width());
    }
    else {
       // too many buttons for actual width
       int newButtonWidth;
       if( buttonCount != 0)
-         newButtonWidth = (taskBarWidth - 15) / buttonCount;
+         newButtonWidth = buttonAreaWidth / buttonCount;
       else
          newButtonWidth = 0;
 #if QT_VERSION > 209
@@ -295,11 +302,14 @@ void QextMdiTaskBar::layoutTaskBar( int taskBarWidth)
             b->show();
          }
    }
+   m_layoutIsPending = FALSE;
 }
 
 void QextMdiTaskBar::resizeEvent( QResizeEvent* rse)
 {
-   layoutTaskBar( rse->size().width());
+   if (!m_layoutIsPending) {
+      layoutTaskBar( rse->size().width());
+   }
 }
 
 #ifndef NO_INCLUDE_MOCFILES
