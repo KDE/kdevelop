@@ -360,7 +360,7 @@ public:
   void slotProjectAPI();
   void slotProjectManual();
   void slotProjectMakeDistSourceTgz();
-  void slotProjectMakeRPM();
+  void slotProjectMakeDistRPM();
   ////////////////////////
   // BUILD-Menu entries
   ///////////////////////

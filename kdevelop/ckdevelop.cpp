@@ -4108,6 +4108,7 @@ void CKDevelop::statusCallback(int id_){
     ON_STATUS_MSG(ID_PROJECT_MAKE_USER_MANUAL,              i18n("Creates the Project's User Manual with the sgml-file"))
     ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION,             i18n("Creates distribution packages from the current project"))
     ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ,  i18n("Creates a tar.gz file from the current project sources"))
+    ON_STATUS_MSG(ID_PROJECT_MAKE_DISTRIBUTION_RPM,         i18n("Creates an RPM package from the current project sources"))
 
     ON_STATUS_MSG(ID_BUILD_COMPILE_FILE,                    i18n("Compiles the current sourcefile"))
     ON_STATUS_MSG(ID_BUILD_MAKE,                            i18n("Invokes make-command"))

@@ -753,6 +753,7 @@ void CKDevelop::initMenuBar(){
 
   QPopupMenu*  p2 = new QPopupMenu;
   p2->insertItem(SmallIconSet("tgz"),i18n("&Source-tgz"), this, SLOT(slotProjectMakeDistSourceTgz()),0,ID_PROJECT_MAKE_DISTRIBUTION_SOURCE_TGZ);
+  p2->insertItem(SmallIconSet("rpm"),i18n("&RPM Package"), this, SLOT(slotProjectMakeDistRPM()),0,ID_PROJECT_MAKE_DISTRIBUTION_RPM);
   project_menu->insertItem(i18n("Make &Distribution"),p2,ID_PROJECT_MAKE_DISTRIBUTION);
   project_menu->insertSeparator();
 

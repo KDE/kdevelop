@@ -37,7 +37,7 @@
 #include "ctoolclass.h"
 #include "ctabctl.h"
 #include "debug.h"
-
+#include <iostream.h>
 #include <kcursor.h>
 #include <kbuttonbox.h>
 #include <kdialog.h>
@@ -1136,8 +1136,8 @@ void CKDevelop::slotProjectMakeDistSourceTgz(){
   beep = true;
 }
 
-void CKDevelop::slotProjectMakeRPM(){
-
+void CKDevelop::slotProjectMakeDistRPM(){
+ cerr << "Lets build and RPM!!!" << endl;
 }
 
 /*********************************************************************
