@@ -1,3 +1,7 @@
+2003-02-11 Alexander Dymo <cloudtemple@mksat.net>
+	* parts/filecreate:
+	 - GUI for both global and project level configuration added.
+
 2003-02-09 Jakob Simon-Gaarde <jsgaarde@tdcspace.dk>
   * trollprojectpart: The dialog for subclassing widgets based on ui-files now works
     iteratively, so you can update your subclasses according to the changes made in
