@@ -28,6 +28,7 @@
 #include "adddocitemdlg.h"
 #include "misc.h"
 #include "domutil.h"
+#include "urlutil.h"
 #include "librarydocdlg.h"
 #include <qfileinfo.h>
 #include <kapplication.h>
@@ -302,12 +303,15 @@ void DocTreeGlobalConfigWidget::storeConfig()
     }
     DocTreeViewTool::setBookmarks(bookmarksTitle, bookmarksURL);
 
-    config->setGroup("DevHelp");
+    if (!dhURL->url().isEmpty())
+    {
+        config->setGroup("DevHelp");
 #if defined(_KDE_3_1_3_)
-    config->writePathEntry("DevHelpDir", dhURL->url());
+        config->writePathEntry("DevHelpDir", dhURL->url());
 #else
-    config->writeEntry("DevHelpDir", dhURL->url());
+        config->writeEntry("DevHelpDir", dhURL->url());
 #endif
+    }
     config->sync();
 }
 
@@ -567,7 +571,10 @@ void DocTreeGlobalConfigWidget::dhAddButton_clicked( )
         dhListView->currentItem()->setText(0, fi.baseName(false));
 //        dhListView->currentItem()->setText(1, "true");
         dhListView->currentItem()->setText(1, inf.title);
-        dhListView->currentItem()->setText(2, inf.defaultLocation);
+        if (!inf.defaultLocation.isEmpty())
+            dhListView->currentItem()->setText(2, inf.defaultLocation);
+        else
+            dhListView->currentItem()->setText(2, URLUtil::directory(fi.absFilePath()));
         dhListView->currentItem()->setText(3, inf.author);
 
 //        QString localURL = locateLocal("data", QString("kdevdoctreeview/tocs/") + dialog->title());
@@ -668,14 +675,15 @@ void DocTreeGlobalConfigWidget::readDevHelpConfig()
         QFileInfo fi(*tit);
 
         BookInfo inf = DocTreeViewTool::devhelpInfo(*tit);
-        if( m_ignoreDevHelp.contains( fi.baseName() ) )
+/*        if( m_ignoreDevHelp.contains( fi.baseName() ) )
             item = new KListViewItem( dhListView, "", "false");
         else
-            item = new KListViewItem( dhListView, "", "true");
+            item = new KListViewItem( dhListView, "", "true");*/
+        item = new KListViewItem(dhListView);
         item->setText(0, fi.baseName(false));
-        item->setText(2, inf.title);
-        item->setText(3, DocTreeViewTool::devhelpLocation(fi.baseName() , inf.defaultLocation));
-        item->setText(4, inf.author);
+        item->setText(1, inf.title);
+        item->setText(2, DocTreeViewTool::devhelpLocation(fi.baseName() , inf.defaultLocation));
+        item->setText(3, inf.author);
     }
 }
 

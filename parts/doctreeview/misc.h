@@ -41,14 +41,17 @@ public:
     static void setBookmarks(const QStringList &itemNames, const QStringList &fileNames);
     static void addBookmark(const QString& itemName, const QString & fileName);
     static void removeBookmark( int index );
-        
+
     static QString tocDocDefaultLocation(const QString& fileName);
     static QString tocLocation(const QString& fileName);
     static QString tocTitle(const QString& fileName);
-    
+
     // Scans for devhelp installation in path and copies all .devhelp files found into $kde_datadir/kdevdoctreeview/devhelp/
     // If the path is not provided, use setting from instance config in DevHelp/DevHelpDir
     static void scanDevHelpDirs(const QString path = QString::null);
+    static void scanDevHelpOldWay(const QString path);
+    static void scanDevHelpNewWay();
+    static void scanDevHelpNewWay(const QString &path);
     static BookInfo devhelpInfo(const QString& fileName);
     static QString devhelpLocation(const QString& fileName);
     static QString devhelpLocation(const QString& docName, const QString &defaultLocation);

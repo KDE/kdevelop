@@ -22,8 +22,10 @@
 #include <kio/netaccess.h>
 #include <kapplication.h>
 #include <qdom.h>
+#include <qvaluestack.h>
 
 #include "domutil.h"
+#include "urlutil.h"
 //#ifndef INDEXER
 #include "doctreeviewfactory.h"
 //#endif
@@ -236,6 +238,37 @@ QString DocTreeViewTool::devhelpLocation(const QString& fileName)
 
 void DocTreeViewTool::scanDevHelpDirs( const QString path )
 {
+//    scanDevHelpOldWay(path);
+    scanDevHelpNewWay();
+}
+
+BookInfo DocTreeViewTool::devhelpInfo(const QString& fileName)
+{
+    BookInfo inf;
+
+    QFileInfo fi(fileName);
+    if (!fi.exists())
+        return inf;
+    QFile f(fileName);
+    if (!f.open(IO_ReadOnly)) {
+        return inf;
+    }
+    QDomDocument doc;
+    if (!doc.setContent(&f)) {
+        return inf;
+    }
+    f.close();
+    QDomElement docEl = doc.documentElement();
+    inf.name = docEl.attribute("name", QString::null);
+    inf.title = docEl.attribute("title", QString::null);
+    inf.author = docEl.attribute("author", QString::null);
+    inf.defaultLocation = docEl.attribute("base", QString::null);
+
+    return inf;
+}
+
+void DocTreeViewTool::scanDevHelpOldWay( const QString path )
+{
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
 
     QString devhelpDir;
@@ -243,16 +276,17 @@ void DocTreeViewTool::scanDevHelpDirs( const QString path )
     {
         KConfig *config = instanceConfig();
         config->setGroup("DevHelp");
-        devhelpDir = config->readPathEntry("DevHelpDir");
+        devhelpDir = config->readPathEntry("DevHelpDir", "~/.devhelp");
     }
     else
         devhelpDir = path;
-        
+
 
     if (devhelpDir.isEmpty())
         return;
-    
-    if (devhelpDir[devhelpDir.length()-1] == QChar('/')) 
+
+
+    if (devhelpDir[devhelpDir.length()-1] == QChar('/'))
         devhelpDir.remove(devhelpDir.length()-1, 1);
     QDir d(devhelpDir + QString("/specs/"));
     if (! d.exists())
@@ -296,34 +330,106 @@ void DocTreeViewTool::scanDevHelpDirs( const QString path )
 #endif
                 }
             }
-                        
+
             KIO::NetAccess::copy(src, dest);
         }
         ++it;
     }
 }
 
-BookInfo DocTreeViewTool::devhelpInfo(const QString& fileName)
+void DocTreeViewTool::scanDevHelpNewWay( )
 {
-    BookInfo inf;
-    
-    QFileInfo fi(fileName);
-    if (!fi.exists())
-        return inf;
-    QFile f(fileName);
-    if (!f.open(IO_ReadOnly)) {
-        return inf;
+    QValueStack<QString> scanStack;
+//    scanStack << URLUtil::envExpand("$DEVHELP_SEARCH_PATH");
+    scanStack << "/usr/share/devhelp/books/"
+             << "/usr/local/share/devhelp/books"
+             << "/opt/gnome/share/devhelp/books"
+             << "/opt/gnome2/share/devhelp/books"
+             << "/usr/share/gtk-doc/html"
+             << "/usr/local/share/gtk-doc/html"
+             << "/opt/gnome/share/gtk-doc/html"
+             << "/opt/gnome2/share/gtk-doc/html";
+
+    KConfig *config = instanceConfig();
+    config->setGroup("DevHelp");
+    QString confDir = config->readPathEntry("DevHelpDir", URLUtil::envExpand("$HOME/.devhelp"));
+    if ((!confDir.isEmpty()) && (!scanStack.contains(confDir)))
+        scanStack << confDir;
+
+    QStringList scanList;
+
+    QDir dir;
+    do {
+        dir.setPath(scanStack.pop());
+        if (!dir.exists())
+            continue;
+        scanList << dir.path();
+
+        const QFileInfoList *dirEntries = dir.entryInfoList();
+        QPtrListIterator<QFileInfo> it(*dirEntries);
+        for (; it.current(); ++it) {
+            QString fileName = it.current()->fileName();
+            if (fileName == "." || fileName == "..")
+                continue;
+            QString path = it.current()->absFilePath();
+            if (it.current()->isDir()) {
+                scanStack.push(path);
+            }
+        }
+    } while (!scanStack.isEmpty());
+
+    for (QStringList::const_iterator it = scanList.begin(); it != scanList.end(); ++it)
+    {
+        scanDevHelpNewWay(*it);
     }
-    QDomDocument doc;
-    if (!doc.setContent(&f)) {
-        return inf;
+}
+
+void DocTreeViewTool::scanDevHelpNewWay( const QString & path )
+{
+    KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
+
+    QDir d(path);
+    if (! d.exists())
+    {
+        return;
     }
-    f.close();
-    QDomElement docEl = doc.documentElement();
-    inf.name = docEl.attribute("name", QString::null);
-    inf.title = docEl.attribute("title", QString::null);
-    inf.author = docEl.attribute("author", QString::null);
-    inf.defaultLocation = docEl.attribute("base", QString::null);
-    
-    return inf;
+    d.setFilter( QDir::Files );
+    //scan for *.devhelp files in spec directory
+    const QFileInfoList *list = d.entryInfoList();
+    QFileInfoListIterator it( *list );
+    QFileInfo *fi;
+    while ( (fi = it.current()) != 0 ) {
+        if (fi->extension() == "devhelp")
+        {
+            //extract document information and store into $docdevhelp$ resource dir
+
+            KURL src;
+            src.setPath(fi->absFilePath());
+            KURL dest;
+            dest.setPath(dirs->saveLocation("docdevhelp") + fi->baseName() + ".devhelp");
+
+            QString contentDirURL = QDir::cleanDirPath(path) + "/";
+            QDir contentDir(contentDirURL);
+            if (contentDir.exists())
+            {
+                KConfig *config = DocTreeViewFactory::instance()->config();
+                config->setGroup("TocDevHelp");
+#if defined(KDE_IS_VERSION)
+# if KDE_IS_VERSION(3,1,3)
+#  ifndef _KDE_3_1_3_
+#   define _KDE_3_1_3_
+#  endif
+# endif
+#endif
+#if defined(_KDE_3_1_3_)
+                config->writePathEntry( fi->baseName(), contentDirURL);
+#else
+                config->writeEntry( fi->baseName(), contentDirURL);
+#endif
+            }
+
+            KIO::NetAccess::copy(src, dest);
+        }
+        ++it;
+    }
 }

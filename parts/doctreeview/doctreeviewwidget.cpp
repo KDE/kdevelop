@@ -1105,6 +1105,18 @@ DocTreeViewWidget::DocTreeViewWidget(DocTreeViewPart *part)
 #endif
 
     // devhelp docs
+    KConfig *configdh = DocTreeViewFactory::instance()->config();
+    if (configdh)
+    {
+        configdh->setGroup("DevHelp");
+        QString firstScan = configdh->readEntry("FirstScan");
+        if (firstScan.isEmpty())
+        {
+            DocTreeViewTool::scanDevHelpDirs();
+            configdh->writeEntry("FirstScan", "no");
+        }
+    }
+
     KStandardDirs *dirs = DocTreeViewFactory::instance()->dirs();
     QStringList dhtocs = dirs->findAllResources("docdevhelp", QString::null, false, true);
     for (QStringList::Iterator tit = dhtocs.begin(); tit != dhtocs.end(); ++tit)
