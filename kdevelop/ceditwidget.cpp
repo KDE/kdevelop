@@ -15,6 +15,7 @@
  *   (at your option) any later version.                                   * 
  *                                                                         *
  ***************************************************************************/
+
 #include "ceditwidget.h"
 #include <iostream.h>
 #include "./kwrite/kwdoc.h"
@@ -30,9 +31,25 @@
 
 HlManager hlManager; //highlight manager
 
+/*********************************************************************
+ *                                                                   *
+ *                     CREATION RELATED METHODS                      *
+ *                                                                   *
+ ********************************************************************/
+
+/*------------------------------------------- CEditWidget::CEditWidget()
+ * CEditWidget()
+ *   Constructor.
+ *
+ * Parameters:
+ *   parent         Parent widget.
+ *   name           The name of this widget.
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
-  : KWrite(new KWriteDoc(&hlManager),parent,name) {
-  
+  : KWrite(new KWriteDoc(&hlManager),parent,name) 
+{  
   setFocusProxy (kWriteView); 
   pop = new QPopupMenu();
   //  pop->insertItem(i18n("Open: "),this,SLOT(open()),0,6);
@@ -53,46 +70,82 @@ CEditWidget::CEditWidget(KApplication*,QWidget* parent,char* name)
 
 }
 
+/*-------------------------------------- CEditWidget::~CEditWidget()
+ * ~CEditWidget()
+ *   Destructor.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 CEditWidget::~CEditWidget() {
   delete doc();
 }
 
-void CEditWidget::setName(QString filename){
-  // this->filename = filename;
-  KWrite::setFileName(filename);
-}
+/*********************************************************************
+ *                                                                   *
+ *                          PUBLIC METHODS                           *
+ *                                                                   *
+ ********************************************************************/
+
+/*--------------------------------------------- CEditWidget::getName()
+ * getName()
+ *   Get the current filename.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   QString      The current filename.
+ *-----------------------------------------------------------------*/
 QString CEditWidget::getName(){
   //return filename;
   QString s(KWrite::fileName());
   if (s.isNull()) s = "";
   return s;//QString(KWrite::fileName());
 }
-QString CEditWidget::text(){
-  return KWrite::text();
-}
-void CEditWidget::setText(QString &text){
-  KWrite::setText((text.isNull()) ? "" : (const char *) text);
-}
-QString CEditWidget::markedText(){
-  return KWrite::markedText();
-}
+
+/*--------------------------------------------- CEditWidget::loadFile()
+ * loadFile()
+ *   Loads the file given in name into the editor.
+ *
+ * Parameters:
+ *   filename     Name of the file to load.
+ *   mode         Current not used.
+ *
+ * Returns:
+ *   int          The line at which the file got loaded.
+ *-----------------------------------------------------------------*/
 int CEditWidget::loadFile(QString filename, int mode) {
   KWrite::loadFile(filename);
   return 0;
 }
-void CEditWidget::doSave() {
-  KWrite::save();
-}
-void CEditWidget::doSave(QString filename){
-  KWrite::writeFile(filename);
-}
-void CEditWidget::copyText() {
-  KWrite::copy();
-}
+
+/*------------------------------------------- CEditWidget::setFocus()
+ * setFocus()
+ *   Make the edit view get the input focus.
+ *
+ * Parameters:
+ *   -
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CEditWidget::setFocus(){
   KWrite::setFocus();
   kWriteView->setFocus();
 }
+
+/*--------------------------------------------- CEditWidget::gotoPos()
+ * gotoPos()
+ *   Goto the start of the line that contains the specified position.
+ *
+ * Parameters:
+ *   pos          Position to go to
+ *   text         The editwidget text.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CEditWidget::gotoPos(int pos,QString text_str){
   
   //  cerr << endl << "POS: " << pos;
@@ -103,34 +156,6 @@ void CEditWidget::gotoPos(int pos,QString text_str){
   setCursorPosition(line,0);
   setFocus();
 }
-void CEditWidget::toggleModified(bool mod){
-  KWrite::setModified(mod);
-}
-void CEditWidget::search(){
-  KWrite::search();
-}
-void CEditWidget::searchAgain(){
-  KWrite::searchAgain();
-}
-void CEditWidget::replace(){
-  KWrite::replace();
-}
-void CEditWidget::gotoLine(){
-  KWrite::gotoLine();
-}
-void CEditWidget::indent(){
-  KWrite::indent();
-}
-void CEditWidget::unIndent(){
-  KWrite::unIndent();
-}
-void CEditWidget::invertSelection(){
-  KWrite::invertSelection();
-}
-void CEditWidget::deselectAll(){
-  KWrite::deselectAll();
-}
-
 
 void CEditWidget::spellcheck(){
    kspell= new KSpell (this, "KDevelop: Spellcheck", this,
@@ -168,30 +193,91 @@ void CEditWidget::spellcheck2(KSpell *){
       }*/
 }
 
-/** Insert the string at the supplied line. */
+/*------------------------------------- CEditWidget::deleteInterval()
+ * deleteInterval()
+ *   Delete an interval of lines.
+ *
+ * Parameters:
+ *   startAt       Line to start deleting at.
+ *   endAt         Line to end deleting at.
+ *  
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CEditWidget::deleteInterval( uint startAt, uint endAt )
+{
+  assert( startAt >= endAt );
+
+  int startPos=0;
+  int endPos=0;
+  QString txt;
+  
+  // Fetch the text.
+  txt = text();
+
+  // Find start position.
+  startPos = getLinePos( txt, startAt );
+
+  // We find the end of the line by increasing the linecounter and 
+  // subtracting by one to make pos point at the last \n character.
+  endPos = getLinePos( txt, endAt + 1 );
+  endPos--;
+
+  // Remove the interval.
+  txt.remove( startPos, endPos - startPos );
+
+  // Update the editwidget with the new text.
+  setText( txt );
+
+  // Set the buffer as modified.
+  toggleModified( true );
+}
+
+/*------------------------------------- CEditWidget::deleteInterval()
+ * deleteInterval()
+ *   Insert the string at the given line.
+ *
+ * Parameters:
+ *   toInsert      Text to insert.
+ *   atLine        Line to start inserting the text.
+ *  
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CEditWidget::insertAtLine( const char *toInsert, uint atLine )
 {
   assert( toInsert != NULL );
   assert( atLine >= 0 );
   
-  uint line=0;
   int pos=0;
   QString txt;
   
+  // Fetch the text.
   txt = text();
-  while( line < atLine )
-    {
-    pos++;
-    if( txt[ pos ] == '\n' )
-      line++;
-    }
+
+  // Find the position to insert at.
+  pos = getLinePos( txt, atLine );
   
-  // Insert the text after the last return.
-  txt.insert( pos + 1, toInsert );
+  // Insert the new text.
+  txt.insert( pos, toInsert );
+
+  // Update the editwidget with the new text.
   setText( txt );
+
+  // Set the buffer as modified.
+  toggleModified( true );
 }
 
-/** Append a text at the end of the file. */
+/*---------------------------------------------- CEditWidget::append()
+ * append()
+ *   Append a text at the end of the file.
+ *
+ * Parameters:
+ *   toAdd         Text to append.
+ *  
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
 void CEditWidget::append( const char *toAdd )
 {
   QString txt;
@@ -201,12 +287,38 @@ void CEditWidget::append( const char *toAdd )
   setText( txt );
 }
 
-/** Returns the number of lines in the text. */
-uint CEditWidget::lines()
-{
-  return (uint)(text().contains('\n', false));
-}
+/*********************************************************************
+ *                                                                   *
+ *                          PROTECTED METHODS                        *
+ *                                                                   *
+ ********************************************************************/
 
+/*------------------------------------------ CEditWidget::getLinePos()
+ * getLinePos()
+ *   Get the startposition in the buffer of a line
+ *
+ * Parameters:
+ *   buf        Buffer to search in.
+ *   aLine      Linenumber to find position to.
+ *
+ * Returns:
+ *   int        The 0-based bufferposition or -1 if not found.
+ *-----------------------------------------------------------------*/
+int CEditWidget::getLinePos( const char *buf, uint aLine )
+{
+  uint line=0;
+  int pos=0;
+
+  while( line < aLine )
+  {
+    pos++;
+    if( buf[ pos ] == '\n' )
+      line++;
+  }
+  
+  // Pos currently points at the last \n, that's why we add 1.
+  return pos + 1;
+}
 
 void CEditWidget::enterEvent ( QEvent * e){
   setFocus();
@@ -280,16 +392,15 @@ void CEditWidget::mousePressEvent(QMouseEvent* event){
   }
 }
 
+/*********************************************************************
+ *                                                                   *
+ *                              SLOTS                                *
+ *                                                                   *
+ ********************************************************************/
+
 void CEditWidget::slotLookUp(){
     emit lookUp(searchtext);
 }
 void CEditWidget::slotGrepText(){
     emit grepText(searchtext);
 }
-
-
-
-
-
-
-
