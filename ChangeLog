@@ -1,7 +1,61 @@
+2001-02-20 Omid Givi <omid@givi.nl>
+	* Added KDevComponentManager which is responsible for the
+	  creations of every component (through klibloader of
+	  course). Component Manager is also responsible for the
+	  core<->component communications.  KDevComponentManager is
+	  resided in lib/ComponentManager. This class provides also
+	  query-methods for the aliens to get to the (other) components as
+	  well.
+	* Changed the the core<->component communications to qt
+	  signal-slot communications. KDevComponentManager gets the
+	  signals from the core and distributes it between the components
+	  it knows.
+	* Moved the kdevcomponent to the new residance of the
+	  KDevComponentManager.
+	* Deleted the functionalities in kdevcomponent which is a
+	  responsibility of the componentmanager and redefined these in
+	  new style in the KDevComponentManager.
+	* Added superclass for the new KDevComponent 'KDevClassStore'
+	* Replaced superclasses of kdevcomponents from lib/general into
+	  lib/ComponentManager/Components. The defintions of source types
+	  also happens here.
+	* Changed the 'sourceinfo' to a KDevComponent, which it really
+	  is.
+	* Moved the lib/sourceinfo from lib to parts/SourceInfo and added
+	  routines to be loaded with klibloader and as a
+	  KDevComponent. This can be now loaded dynamically by the
+	  KDevComponentManager.
+	* Changed some components to communicatate with the
+	  KDevComponentManager instead of the core directly.
+	* Changed almost all the components to communicate with the
+	  KDevComponentManager to get to other components.
+	* Changed the KDevelopCore to load the components via
+	  KDevComponentManager.
+	* Changed the KDevelopCore to communicate with the components
+	  through KDevComponentManager and via qt signals. Recalling the
+	  components goes now also KDevComponentManager.
+	* Deleted extra unused header inclusions in kdevelopcore.cpp
+	* Changed KDevelopCore: Let the NewProjectDlg close the
+	  ProjectSpace through the core.
+	* Deleted KDevApi as it was just a pointer selection to some
+	  components and which was not needed
+	  anymore. (KDevComponentManager does it all for us ;-))
+	* Commented: projectChanged procedure in buglist. Ivan: please
+	  take a look. There is a tiny bug!
+	* Changed NewProjectDlg so that it 
+	* Fixed: Bug 'TheCore()' caused, doing all the above! ;-) There
+	  was some kind of a race condition. Now there is a protocol to
+	  communicate correctly, it'll not happen any more.
+	
+2001-02-12 Omid Givi <omid@givi.nl>
+	* Added Project Options are shown if there is a project space
+	  already open. If not: sorry message.
+
 2001-02-11 Omid Givi <omid@givi.nl>
-	* Fixed bug: dealing with null pointers in NewProjectDlg::slotProjectSpaceSelected
-	  It happenned for example if you click on the area arround the
-	  items in the ListView and not exactly on the items.
+	* Fixed bug: dealing with null pointers in
+	  NewProjectDlg::slotProjectSpaceSelected It happenned for example
+	  if you click on the area arround the items in the ListView and
+	  not exactly on the items.
 
 2001-02-09 Omid Givi <omid@givi.nl>
 	* Created KDevCompiler. This represent a compiler Entity which
