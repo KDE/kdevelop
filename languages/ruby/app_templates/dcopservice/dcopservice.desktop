@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Name=%{APPNAME}
+Exec=%{APPNAMELC}
+X-DCOP-ServiceType=Unique
+X-KDE-StartupNotify=false
+Comment=Template for dcop services
+

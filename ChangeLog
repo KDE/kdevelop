@@ -1,3 +1,17 @@
+2004-10-25  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
+
+ * Added a ruby DCOP service project template
+ * Improved the kapp Korundum application framework. It configures, builds and installs
+   a C++ top level stub, that starts the ruby app. The ruby scripts are located via the
+   KStandardDirs/KInstance mechanism, in directory ..share/apps/<appname>
+ * k_dcop and k_dcop_signals declarations are shown as slot and signal declarations in
+   the class parser.
+ * =begin to =end comments are ignored
+ * Added icons for Ruby configure and run options. The Run button now starts the main program
+   with the ruby '-C' option to switch to the main program's directory.
+ * Added missing scope attribute to the class parser methods
+ 
+
 2004-10-23  Richard Dale  <Richard_Dale@tipitina.demon.co.uk>
 
  * Implemented ruby slots/signals declaration navigation in the class browser

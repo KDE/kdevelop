@@ -59,19 +59,19 @@ class %{APPNAME} < KDE::MainWindow
         # example when, we want the url to our own.  you probably
         # want to use this code instead for your app
     
-        #if 0
+        if false
         # download the contents
-        if KIO::NetAccess.download(url, target)
+        if KIO::NetAccess.download(url, target, self)
             # set our caption
-            setCaption(url)
+            setCaption(url.url)
     
             # load in the file (target is always local)
-            loadFile(target)
+            @view.openURL(KDE::URL.new(target))
     
             # and remove the temp file
             KIO::NetAccess.removeTempFile(target)
         end
-        #endif
+        end
     
         setCaption(url.prettyURL())
         @view.openURL(url)

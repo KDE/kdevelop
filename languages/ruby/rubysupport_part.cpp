@@ -40,6 +40,7 @@ RubySupportPart::RubySupportPart(QObject *parent, const char *name, const QStrin
   action = new KAction( i18n("&Run"), "exec",Key_F9,this, SLOT(slotRun()),actionCollection(), "build_execute" );
   action->setToolTip(i18n("Run"));
   action->setWhatsThis(i18n("<b>Run</b><p>Starts an application."));
+  action->setIcon("ruby_run.png");
 
   kdDebug() << "Creating RubySupportPart" << endl;
 
@@ -55,8 +56,9 @@ RubySupportPart::~RubySupportPart() {
 }
 
 
-void RubySupportPart::projectConfigWidget(KDialogBase *dlg) {
-    QVBox *vbox = dlg->addVBoxPage(i18n("Ruby"));
+void RubySupportPart::projectConfigWidget(KDialogBase *dlg) 
+{
+    QVBox *vbox = dlg->addVBoxPage(i18n("Ruby"), i18n("Ruby"), BarIcon("ruby_config.png", KIcon::SizeMedium, KIcon::DefaultState, RubySupportPart::instance()));
     RubyConfigWidget *w = new RubyConfigWidget(*projectDom(), (QWidget *)vbox, "ruby config widget");
     connect( dlg, SIGNAL(okClicked()), w, SLOT(accept()) );
 }
@@ -69,7 +71,7 @@ void RubySupportPart::projectOpened()
   	this, SLOT(addedFilesToProject(const QStringList &)) );
   connect( project(), SIGNAL(removedFilesFromProject(const QStringList &)),
   	this, SLOT(removedFilesFromProject(const QStringList &)) );
-
+  
   // We want to parse only after all components have been
   // properly initialized
   QTimer::singleShot(0, this, SLOT(initialParse()));
@@ -167,8 +169,10 @@ void RubySupportPart::parse(const QString &fileName)
   QRegExp attr_accessorre("^\\s*(attr_accessor|attr_reader|attr_writer)\\s*((:([A-Za-z0-9_]+),?\\s*)*)$");
   QRegExp symbolre(":([^,]+),?");
   QRegExp line_contre(",\\s*$");
-  QRegExp slot_signalre("^\\s*(slots|signals)\\s*(('([A-Za-z0-9_]+)[^)]+\\)',?\\s*)*)$");
-  QRegExp memberre("'([A-Za-z0-9_]+)[^)]+\\)',?");
+  QRegExp slot_signalre("^\\s*(slots|signals|k_dcop|k_dcop_signals)\\s*(('[^)]+\\)',?\\s*)*)$");
+  QRegExp memberre("'([A-Za-z0-9_ &*]+\\s)?([A-Za-z0-9_]+)\\([^)]*\\)',?");
+  QRegExp begin_commentre("^*=begin");
+  QRegExp end_commentre("^*=end");
  
   FileDom m_file = codeModel()->create<FileModel>();
   m_file->setName(fileName);
@@ -208,6 +212,7 @@ void RubySupportPart::parse(const QString &fileName)
           kdDebug() << "Add class " << lastClass->name() << endl;
           m_file->addClass( lastClass );
       }
+	  lastAccess = CodeModelItem::Public;
     } else if (methodre.search(line) != -1) {
       FunctionDom methodDecl;
       if ( lastClass != 0 && lastClass->hasFunction( methodre.cap(2) ) ) {
@@ -235,8 +240,11 @@ void RubySupportPart::parse(const QString &fileName)
 	  	methodDecl->setStatic( true );
 	  }
 
-      if (lastClass && rawline.left(3) != "def") {
-        if( !lastClass->hasFunction(method->name()) ) {
+      if (lastClass != 0 && rawline.left(3) != "def") {
+		QStringList scope( lastClass->name() );
+		method->setScope( scope );
+		methodDecl->setScope( scope );
+        if( !lastClass->hasFunction(methodDecl->name()) ) {
           lastClass->addFunction( methodDecl );
 		}
         if( !lastClass->hasFunctionDefinition(method->name()) ) {
@@ -247,7 +255,7 @@ void RubySupportPart::parse(const QString &fileName)
         m_file->addFunctionDefinition( method );
         lastClass = 0;
       }
-    } else if (accessre.search(line) != -1) {
+    } else if (accessre.search(line) != -1 && lastClass != 0) {
 	  int currentAccess = lastAccess;
 	  if (accessre.cap(1) == "public") {
 	    currentAccess = CodeModelItem::Public;
@@ -261,7 +269,6 @@ void RubySupportPart::parse(const QString &fileName)
 	  	lastAccess = currentAccess;
 	  } else {
 		QString symbolList( accessre.cap(2) );
-		FunctionDefinitionDom method;
         int pos = 0;
 		
         while ( pos >= 0 ) {
@@ -285,9 +292,8 @@ void RubySupportPart::parse(const QString &fileName)
           }
         }
 	  }	  
-    } else if (slot_signalre.search(line) != -1) {
+    } else if (slot_signalre.search(line) != -1 && lastClass != 0) {
       QString memberList( slot_signalre.cap(2) );
-	  FunctionDom method;
       int pos = 0;
 		
       while ( pos >= 0 ) {
@@ -304,28 +310,30 @@ void RubySupportPart::parse(const QString &fileName)
 		  }
 		} else {
           FunctionDom method;
-          if (lastClass != 0 && lastClass->hasFunction( memberre.cap(1) ) ) {
-            FunctionList methods = lastClass->functionByName( memberre.cap(1) );
+          if ( lastClass->hasFunction( memberre.cap(2) ) ) {
+            FunctionList methods = lastClass->functionByName( memberre.cap(2) );
 	        method = methods[0];
 	      } else {
             method = codeModel()->create<FunctionModel>();
 		  }
-          method->setName(memberre.cap(1));
+		  QStringList scope( lastClass->name() );
+		  method->setScope( scope );
+          method->setName(memberre.cap(2));
           method->setFileName( fileName );
           method->setStartPosition( lineNo, 0 );
 			 
-		  if (slot_signalre.cap(1) == "slots") {
+		  if (slot_signalre.cap(1) == "slots" || slot_signalre.cap(1) == "k_dcop") {
 		    method->setSlot( true );
 		  } else {
 		    method->setSignal( true );
 		  }
-          if ( lastClass != 0 && !lastClass->hasFunction(method->name()) ) {
+          if ( !lastClass->hasFunction(method->name()) ) {
             lastClass->addFunction( method );
 		  }
           pos += memberre.matchedLength();
         }
 	  }
-	} else if (attr_accessorre.search(line) != -1) {
+	} else if (attr_accessorre.search(line) != -1 && lastClass != 0) {
 	  QString attr( attr_accessorre.cap(1) );
 	  QString symbolList( attr_accessorre.cap(2) );
       int pos = 0;
@@ -344,31 +352,26 @@ void RubySupportPart::parse(const QString &fileName)
 		  }
 		} else {
           if ( !lastClass->hasFunction(symbolre.cap(1)) ) { 
+		    QStringList scope( lastClass->name() );
 			if (attr == "attr_accessor" || attr == "attr_reader") {
-              FunctionDom methodDecl = codeModel()->create<FunctionModel>();
               FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
-              methodDecl->setName(symbolre.cap(1));
               method->setName(symbolre.cap(1));
               kdDebug() << "Add method: " << method->name() << endl;
-              methodDecl->setFileName( fileName );
-              methodDecl->setStartPosition( lineNo, 0 );
               method->setFileName( fileName );
               method->setStartPosition( lineNo, 0 );
-              lastClass->addFunction( methodDecl );
+			  method->setScope(scope);
+              lastClass->addFunction( model_cast<FunctionDom>(method) );
               lastClass->addFunctionDefinition( method );
 			}
 			
 			if (attr == "attr_accessor" || attr == "attr_writer") {
-              FunctionDom methodDecl = codeModel()->create<FunctionModel>();
               FunctionDefinitionDom method = codeModel()->create<FunctionDefinitionModel>();
-              methodDecl->setName(symbolre.cap(1) + "=");
               method->setName(symbolre.cap(1) + "=");
               kdDebug() << "Add method: " << method->name() << endl;
-              methodDecl->setFileName( fileName );
-              methodDecl->setStartPosition( lineNo, 0 );
               method->setFileName( fileName );
               method->setStartPosition( lineNo, 0 );
-              lastClass->addFunction( methodDecl );
+			  method->setScope(scope);
+              lastClass->addFunction( model_cast<FunctionDom>(method) );
               lastClass->addFunctionDefinition( method );
 			}
 			
@@ -376,7 +379,14 @@ void RubySupportPart::parse(const QString &fileName)
 		  }
         }
 	  }	  
+   } else if (begin_commentre.search(line) != -1) {
+     while (!stream.atEnd() && end_commentre.search(line) == -1) {
+       rawline = stream.readLine();
+       line = rawline.stripWhiteSpace().local8Bit();
+       ++lineNo;
+	 }
    }
+
     ++lineNo;
   }
 
@@ -387,13 +397,9 @@ void RubySupportPart::parse(const QString &fileName)
 
 
 void RubySupportPart::slotRun () {
-  QString file;
-KParts::ReadOnlyPart *ro_part = dynamic_cast<KParts::ReadOnlyPart*>(partController()->activePart());
-  if(ro_part) file = ro_part->url().path();
-//	file = project()->mainProgram();
-
-  QString cmd = interpreter() + " " + file;
-  startApplication(cmd);
+	QFileInfo program(project()->mainProgram());
+    QString cmd = QString("%1 -C%2 %3").arg(interpreter()).arg(program.dirPath()).arg(program.fileName());
+    startApplication(cmd);
 }
 
 QString RubySupportPart::interpreter() {
@@ -404,8 +410,8 @@ QString RubySupportPart::interpreter() {
 
 
 void RubySupportPart::startApplication(const QString &program) {
-		bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevrubysupport/run/terminal");
-    appFrontend()->startAppCommand(project()->projectDirectory(), program, inTerminal);
+	bool inTerminal = DomUtil::readBoolEntry(*projectDom(), "/kdevrubysupport/run/terminal");
+    appFrontend()->startAppCommand(QString::QString(), program, inTerminal);
 }
 
 

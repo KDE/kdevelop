@@ -7,7 +7,7 @@ bin_PROGRAMS = %{APPNAMELC}
 
 METASOURCES = AUTO
 
-rubysrc_DATA = main.rb %{APPNAMELC}.rb %{APPNAMELC}_client.rb  %{APPNAMELC}iface.rb  %{APPNAMELC}view.rb  pref.rb
+rubysrc_DATA = main.rb %{APPNAMELC}.rb
 rubysrcdir = $(kde_datadir)/%{APPNAMELC}
 
 service_DATA = %{APPNAMELC}.desktop

@@ -23,7 +23,7 @@
 			<activedir/>
 		</general>
 		<run>
-			<mainprogram>./main.rb</mainprogram>
+			<mainprogram>src/main.rb</mainprogram>
 		</run>
 	</kdevautoproject>
 	<kdevfileview>

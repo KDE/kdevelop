@@ -17,3 +17,6 @@ service_DATA = kdevrubysupport.desktop
 
 rcdir = $(kde_datadir)/kdevrubysupport
 rc_DATA = kdevrubysupport.rc
+
+picsdirdir = $(kde_datadir)/kdevrubysupport/pics
+picsdir_DATA = ruby_config.png ruby_run.png
