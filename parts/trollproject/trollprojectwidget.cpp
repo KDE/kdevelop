@@ -124,7 +124,10 @@ QString SubprojectItem::getSharedLibAddObject(QString downDirs)
     QString tmpPath;
     if(configuration.m_destdir!="")
     {
-      tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+	  if (QDir::isRelativePath(configuration.m_destdir))
+        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+	  else
+	    tmpPath=configuration.m_destdir;
     }else{
       tmpPath=downDirs+this->getRelativPath()+"/";
     }
@@ -149,7 +152,10 @@ QString SubprojectItem::getApplicationObject( QString downDirs )
   QString tmpPath;
   if(configuration.m_destdir!="")
   {
-    tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+  	  if (QDir::isRelativePath(configuration.m_destdir))
+        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+	  else
+	    tmpPath=configuration.m_destdir;
   }else{
     tmpPath=downDirs+this->getRelativPath()+"/";
   }
@@ -176,7 +182,10 @@ QString SubprojectItem::getLibAddObject(QString downDirs)
     QString tmpPath;
     if(configuration.m_destdir!="")
     {
-      tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+ 	  if (QDir::isRelativePath(configuration.m_destdir))
+        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+	  else
+	    tmpPath=configuration.m_destdir;
     }else{
       tmpPath=downDirs+this->getRelativPath()+"/";
     }
@@ -206,7 +215,10 @@ QString SubprojectItem::getLibAddPath(QString downDirs)
     QString tmpPath;
     if(configuration.m_destdir!="")
     {
-      tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+	  if (QDir::isRelativePath(configuration.m_destdir))
+        tmpPath=downDirs+this->getRelativPath()+"/"+configuration.m_destdir;
+	  else
+	    tmpPath=configuration.m_destdir;
     }else{
       tmpPath=downDirs+this->getRelativPath()+"/";
     }
