@@ -15,7 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
- 
+
+#include <ktoolbarbutton.h>
 #include "ckdevelop.h"
 #include "cclassview.h"
 #include "clogfileview.h"

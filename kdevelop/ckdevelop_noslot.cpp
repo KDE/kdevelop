@@ -1313,10 +1313,8 @@ void CKDevelop::saveProperties(KConfig* sess_config){
     TEditInfo* info;
     for(info=edit_infos.first();info != 0;info=edit_infos.next()){
       if(info->modified){
-
-	// uncommented 25.09.99
-	//	setUnsavedData ( true );
-
+#warning FIXME: Port to new session management
+          //	setUnsavedData ( true );
 	break;
       }
     }
