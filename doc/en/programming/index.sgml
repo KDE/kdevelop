@@ -3512,9 +3512,12 @@ the same applies to the name of the application set in the Name lines.<footnote>
 <p>
 
 Close to the end of this handbook, I want to summarize several issues that programmers should watch out while coding. These are mostly
-C++ programming tips that relate to KDE and Qt programming especially and are taken from the KDE Developer's Center which can be found
-on the Internet at <url url="http://www.kde.org">.
+C++ programming tips that relate to KDE and Qt programming especially and are partly taken from the KDE 
+Developer's Center which can be found on the Internet at <url url="http://www.kde.org">, some have been added 
+by my own experience.
 
+<sect>General Rules
+<p>
 <descrip>
 <tag/Filenames/ First of all, when creating sourcefiles, you should always use lowercase filenames. KDevelop supports
 this guideline already if you stick to its filename aut-suggestion. This makes it easier for other developers to remember what source
@@ -3658,9 +3661,68 @@ setColor( &amp;(QColor(black)) );
 QColor color(black);
 setColor( &amp;color );
 </verb></tscreen>
+</descrip> 
 
+<sect>Operating System Dependencies
+<p>
+As KDevelop projects use the GNU tools to create projects, it is ensured that your application will run on 
+almost every Unix system. However, you may encounter problems when actually compiling your application under 
+another Unix, because header files are located somewhere different or you need another implementation 
+especially when it comes to using OS-specific low-level functions which can differ from system to system.
 
+When programming with C++ and Qt/KDE you should also notice that the Qt collection classes have a rich set of 
+functionality that is already compiler/OS independend and makes things much easier, starting with strings 
+(QString) to file reading/writing (QFile); so using Qt will make using OS defines almost obsolete in most 
+cases.
+
+Anyway, when using Qt and you still have to use &num;defines for your application, you should include 
+<tt>qglobal.h</tt> and make use of the already predefined defines for various Operating Systems and compilers 
+which preselects the below defines already.
+   
+Instead of letting the packagers of OS-Vendors applying any patches to your application (like most do where 
+necessary e.g. for building rpm´s or packages/ports), you should use defines for those sections that are 
+operating-system specific (but you don´t have to use -D for compiling, the Operating System defines are 
+handled automatically). The following lists the available systems and their defines (additional defines in 
+brackets): 
+
+<descrip>
+<tag/AIX:/ &num;ifdef _AIX
+
+<tag/BSDI Unix:/&num;if defined(bsdi) || defined(__bsdi__)
+
+<tag/Dec Ultrix:/&num;if defined (ultrix) || defined(__ultrix) || defined(__ultrix__)
+
+<tag/DG Unix:/&num;if defined(DGUX)
+
+<tag/FreeBSD:/&num;ifdef __FreeBSD__
+
+<tag/GNU Hurd:/&num;if defined(__GNU__)
+
+<tag/HP-UX:/&num;if defined (hpux) || defined (__hpux) || defined (__hpux__)
+
+<tag/Linux:/&num;if defined(linux) || defined(__linux) || defined(__linux__)
+
+<tag/NetBSD:/&num;ifdef __NetBSD__
+
+<tag/OpenBSD:/&num;ifdef __OpenBSD__
+
+<tag/OSF Unix:/&num;if defined(__osf__)
+
+<tag/QNX:/&num;if defined(__QNX__)
+
+<tag/SCO UnixWare:/&num;if defined(_UNIXWARE)
+
+<tag/SCO UnixWare 7:/&num;if defined(sco) || defined(_UNIXWARE7)
+
+<tag/SCO:/&num;if defined(_SCO_DS) || defined(M_UNIX) || defined(M_XENIX)
+
+<tag/SGI Irix:/&num;if defined(sgi) || defined(__sgi)
+
+<tag/SunOS:/&num;if defined (sun) || defined (__sun) || defined (__sun__)
+
+<tag/Sun Solaris:/&num;if defined  (_OS_SUN_) || defined (__SVR4)
 </descrip>
+
 
 <chapt>Licensing
 <p>
