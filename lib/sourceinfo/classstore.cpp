@@ -62,20 +62,6 @@ ClassStore::~ClassStore()
     delete m_globalScope;
 }
 
-bool ClassStore::hasScope(const QString &name)
-{
-    return m_allScopes.contains(name);
-}
-
-
-ParsedScopeContainer *ClassStore::getScopeByName(const QString &name)
-{
-    QMap<QString, ParsedScopeContainer*>::ConstIterator it;
-    it = m_allScopes.find(name);
-    return (it != m_allScopes.end())? (*it) : 0;
-}
-
-
 bool ClassStore::hasClass(const QString &name)
 {
     return m_allClasses.contains(name);
@@ -90,6 +76,34 @@ ParsedClass *ClassStore::getClassByName(const QString &name)
 }
 
 
+QStringList ClassStore::getSortedClassNameList()
+{
+    QStringList list;
+
+    QMap<QString, ParsedClass*>::ConstIterator it;
+    for (it = m_allClasses.begin(); it != m_allClasses.end(); ++it)
+        list.append(it.key());
+    
+    list.sort();
+    return list;
+}
+
+
+QValueList<ParsedClass*> ClassStore::getSortedClassList()
+{
+    QValueList<ParsedClass*> retVal;
+
+    QStringList list = getSortedClassNameList();
+    
+    // Now collect the list of parsed classes
+    QStringList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        retVal.append(m_allClasses[*it]);
+
+    return retVal;
+}
+
+
 bool ClassStore::hasStruct(const QString &name)
 {
     return m_allStructs.contains(name);
@@ -101,6 +115,76 @@ ParsedStruct *ClassStore::getStructByName(const QString &name)
     QMap<QString, ParsedStruct*>::ConstIterator it;
     it = m_allStructs.find(name);
     return (it != m_allStructs.end())? (*it) : 0;
+}
+
+
+QStringList ClassStore::getSortedStructNameList()
+{
+    QStringList list;
+
+    QMap<QString, ParsedStruct*>::ConstIterator it;
+    for (it = m_allStructs.begin(); it != m_allStructs.end(); ++it)
+        list.append(it.key());
+    
+    list.sort();
+    return list;
+}
+
+
+QValueList<ParsedStruct*> ClassStore::getSortedStructList()
+{
+    QValueList<ParsedStruct*> retVal;
+
+    QStringList list = getSortedStructNameList();
+    
+    // Now collect the list of parsed structs
+    QStringList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        retVal.append(m_allStructs[*it]);
+
+    return retVal;
+}
+
+
+bool ClassStore::hasScope(const QString &name)
+{
+    return m_allScopes.contains(name);
+}
+
+
+ParsedScopeContainer *ClassStore::getScopeByName(const QString &name)
+{
+    QMap<QString, ParsedScopeContainer*>::ConstIterator it;
+    it = m_allScopes.find(name);
+    return (it != m_allScopes.end())? (*it) : 0;
+}
+
+
+QStringList ClassStore::getSortedScopeNameList()
+{
+    QStringList list;
+
+    QMap<QString, ParsedScopeContainer*>::ConstIterator it;
+    for (it = m_allScopes.begin(); it != m_allScopes.end(); ++it)
+        list.append(it.key());
+    
+    list.sort();
+    return list;
+}
+
+
+QValueList<ParsedScopeContainer*> ClassStore::getSortedScopeList()
+{
+    QValueList<ParsedScopeContainer*> retVal;
+
+    QStringList list = getSortedScopeNameList();
+    
+    // Now collect the list of parsed scopes
+    QStringList::ConstIterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+        retVal.append(m_allScopes[*it]);
+
+    return retVal;
 }
 
 
@@ -308,42 +392,6 @@ QValueList<ParsedClass*> ClassStore::getClassSuppliers(const QString &name)
     }
     
     return retVal;
-}
-
-
-/**
- * Returns a list of all classes in all namespaces,
- * in sorted order.
- */
-QValueList<ParsedClass*> ClassStore::getSortedClassList()
-{
-    QValueList<ParsedClass*> retVal;
-
-    QStringList list = getSortedClassNameList();
-    
-    // Now collect the list of parsed classes
-    QStringList::ConstIterator it;
-    for (it = list.begin(); it != list.end(); ++it)
-        retVal.append(m_allClasses[*it]);
-
-    return retVal;
-}
-
-
-/**
- * Returns a list of all scoped class names in all namespaces,
- * in sorted order
- */
-QStringList ClassStore::getSortedClassNameList()
-{
-    QStringList list;
-
-    QMap<QString, ParsedClass*>::ConstIterator it;
-    for (it = m_allClasses.begin(); it != m_allClasses.end(); ++it)
-        list.append(it.key());
-    
-    list.sort();
-    return list;
 }
 
 

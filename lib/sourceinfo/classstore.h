@@ -49,6 +49,7 @@ public:
      */
     ParsedScopeContainer *globalScope()
         { return m_globalScope; }
+
     /**
      * Tells if a class exists in the store. The name
      * argument must specify the full scoped name in
@@ -66,6 +67,15 @@ public:
      */
     ParsedClass *getClassByName(const QString &name);
     /**
+     * Returns all class names in alphabetically sorted order.
+     * Includes global and namespaced classes.
+     */
+    QStringList getSortedClassNameList();
+    /**
+     * Returns all classes in alphabetically sorted order. 
+     */
+    QValueList<ParsedClass*> getSortedClassList();
+    /**
      * Tells if a struct exists in the store. See hasClass().
      */
     bool hasStruct(const QString &name);
@@ -74,6 +84,15 @@ public:
      * name. See getClassByName().
      */
     ParsedStruct *getStructByName(const QString &name);
+    /**
+     * Returns all structs names in alphabetically sorted order.
+     * Includes global and namespaced structs.
+     */
+    QStringList getSortedStructNameList();
+    /**
+     * Returns all structs in alphabetically sorted order. 
+     */
+    QValueList<ParsedStruct*> getSortedStructList();
     /**
      * Checks if a scope exists in the store. The name
      * argument must specify the full scoped name in
@@ -90,17 +109,16 @@ public:
      * Returns 0 if the class is not in the store.
      */
     ParsedScopeContainer *getScopeByName(const QString &name);
+    /**
+     * Returns all scope names in alphabetically sorted order.
+     * Includes global and nested namespaces.
+     */
+    QStringList getSortedScopeNameList();
+    /**
+     * Returns all namespaces in alphabetically sorted order. 
+     */
+    QValueList<ParsedScopeContainer*> getSortedScopeList();
     
-    /**
-     * Get all classnames in sorted order.
-     * @return A list of all classnames in sorted order.
-     */
-    QStringList getSortedClassNameList();
-    /**
-     * Get all classes in sorted order. 
-     * @return A list of all classes in alpabetical order. 
-     */
-    QValueList<ParsedClass*> getSortedClassList();
     /**
      * Returns a list of all classes with the named parent. 
      */

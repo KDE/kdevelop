@@ -1,3 +1,8 @@
+2002-05-27  Bernd Gehrmann  <bernd@mail.berlios.de>
+
+	* Show namespaced classes and structs in category mode
+	  of the class view
+
 2002-05-26  Bernd Gehrmann  <bernd@mail.berlios.de>
 
 	* Implemented Goto ctags declaration and Goto ctags definition
