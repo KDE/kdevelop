@@ -27,6 +27,7 @@
 class KAction;
 class KActionCollection;
 class KScriptInterface;
+class QTimer;
 
 
 
@@ -69,6 +70,7 @@ signals:
 
 private slots:
     void activate();
+    void cleanup();
 
 private:
     KAction *m_action;
@@ -78,6 +80,7 @@ private:
     QString m_scriptMethod;
     KScriptInterface *m_interface;
     bool m_isValid;
+    QTimer *m_timeout;
 };
 
 /**

@@ -31,6 +31,8 @@
 #include <scriptinterface.h>
 #include <kaction.h>
 #include <qfileinfo.h>
+#include <qtimer.h>
+
 
 static QString _scriptRunner = "KScriptRunner/KScriptRunner";
 KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *parent, KActionCollection *ac )
@@ -54,6 +56,8 @@ KScriptAction::KScriptAction( const QString &scriptDesktopFile, QObject *parent,
         {
                 m_action = new KAction(m_scriptName, KShortcut(), this, SLOT(activate()), ac, "script");
                 m_isValid = true;
+		m_timeout = new QTimer(this);
+		connect( m_timeout, SIGNAL(timeout()), SLOT(cleanup()) );
         }
     }
 }
@@ -133,6 +137,19 @@ void KScriptAction::activate( )
         }
     }
     m_interface->run(parent(), QVariant());
+    m_timeout->start(60000, FALSE ); // after 1 minute go away
+}
+
+bool KScriptAction::isValid( ) const
+{
+  return m_isValid;
+}
+
+void KScriptAction::cleanup()
+{
+  if(m_interface)
+    delete m_interface;
+  m_interface = 0L;
 }
 
 KScriptActionManager::KScriptActionManager( KActionCollection * ac ) : m_ac(ac)
@@ -173,11 +190,6 @@ QPtrList< KAction > KScriptActionManager::scripts( QObject * interface , const Q
           delete script;
     }
     return actions;
-}
-
-bool KScriptAction::isValid( ) const
-{
-  return m_isValid;
 }
 
 #include "kscriptactionmanager.moc"
