@@ -163,9 +163,9 @@ int main( int argc, char* argv[] )
         std::cerr << "*error* " << datadir + "/kdevcppsupport/pcs/" << " doesn't exists!!" << std::endl << std::endl;
         return -1;
     }
-
+    
     QString dbFileName = datadir + "/kdevcppsupport/pcs/" + argv[ 1 ] + ".db";
-    std::cout << "dbFileName = " << dbFileName << std::endl;
+    // std::cout << "dbFileName = " << dbFileName << std::endl;
     if( QFile::exists(dbFileName) ){
         std::cerr << "*error* " << "database " << dbFileName << " already exists!" << std::endl << std::endl;
         return -1;
@@ -196,7 +196,8 @@ int main( int argc, char* argv[] )
     catalog.addIndex( "scope" );
     catalog.addIndex( "fileName" );
 
-    std::cout << "generating the DB..." << std::endl;
+    std::cout << "generating the pcs database" << std::endl;
+    
     QMap<QString, TranslationUnitAST*> units = driver.parsedUnits();
     QMap<QString, TranslationUnitAST*>::Iterator unitIt = units.begin();
     while( unitIt != units.end() ){
@@ -205,9 +206,13 @@ int main( int argc, char* argv[] )
 
         TranslationUnitAST::Node node = driver.takeTranslationUnit( unitIt.key() );
         node.reset();
+	
+	std::cout << ".";
+	std::flush( std::cout );
 
         ++unitIt;
     }
+    std::cout << std::endl;
 
     return 0;
 }

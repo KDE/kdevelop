@@ -40,16 +40,6 @@ void TagCreator::parseTranslationUnit( TranslationUnitAST* ast )
     m_imports.pop_back();
 }
 
-void TagCreator::parseDeclaration( DeclarationAST* ast )
-{
-    TreeParser::parseDeclaration( ast );
-}
-
-void TagCreator::parseLinkageSpecification( LinkageSpecificationAST* ast )
-{
-    TreeParser::parseLinkageSpecification( ast );
-}
-
 void TagCreator::parseNamespace( NamespaceAST* ast )
 {
     QString nsName;
@@ -77,16 +67,6 @@ void TagCreator::parseNamespace( NamespaceAST* ast )
     m_currentScope.push_back( nsName );
     TreeParser::parseNamespace( ast );
     m_currentScope.pop_back();
-}
-
-void TagCreator::parseNamespaceAlias( NamespaceAliasAST* ast )
-{
-    TreeParser::parseNamespaceAlias( ast );
-}
-
-void TagCreator::parseUsing( UsingAST* ast )
-{
-    TreeParser::parseUsing( ast );
 }
 
 void TagCreator::parseUsingDirective( UsingDirectiveAST* ast )
@@ -190,7 +170,7 @@ void TagCreator::parseSimpleDeclaration( SimpleDeclarationAST* ast )
 
 	QPtrListIterator<InitDeclaratorAST> it( l );
 	while( it.current() ){
-	    parseDeclaration(  ast->functionSpecifier(), ast->storageSpecifier(), typeSpec, it.current() );
+	    parseMyDeclaration(  ast->functionSpecifier(), ast->storageSpecifier(), typeSpec, it.current() );
 	    ++it;
 	}
     }
@@ -284,12 +264,13 @@ void TagCreator::parseFunctionDefinition( FunctionDefinitionAST* ast )
 
 void TagCreator::parseLinkageBody( LinkageBodyAST* ast )
 {
+    QPtrList<DeclarationAST> l = ast->declarationList();
+    QPtrListIterator<DeclarationAST> it( l );
+    while( it.current() ){
+	parseDeclaration( it.current() );
+	++it;
+    }
     TreeParser::parseLinkageBody( ast );
-}
-
-void TagCreator::parseTypeSpecifier( TypeSpecifierAST* ast )
-{
-    TreeParser::parseTypeSpecifier( ast );
 }
 
 void TagCreator::parseClassSpecifier( ClassSpecifierAST* ast )
@@ -399,17 +380,7 @@ void TagCreator::parseEnumSpecifier( EnumSpecifierAST* ast )
     TreeParser::parseEnumSpecifier( ast );
 }
 
-void TagCreator::parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* ast )
-{
-    TreeParser::parseElaboratedTypeSpecifier( ast );
-}
-
-void TagCreator::parseTypeDeclaratation( TypeSpecifierAST* typeSpec )
-{
-    parseTypeSpecifier( typeSpec );
-}
-
-void TagCreator::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl )
+void TagCreator::parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl )
 {
     DeclaratorAST* d = decl->declarator();
 

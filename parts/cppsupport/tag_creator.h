@@ -29,11 +29,7 @@ public:
     virtual void parseTranslationUnit( TranslationUnitAST* );
 
     // declarations
-    virtual void parseDeclaration( DeclarationAST* );
-    virtual void parseLinkageSpecification( LinkageSpecificationAST* );
     virtual void parseNamespace( NamespaceAST* );
-    virtual void parseNamespaceAlias( NamespaceAliasAST* );
-    virtual void parseUsing( UsingAST* );
     virtual void parseUsingDirective( UsingDirectiveAST* );
     virtual void parseTypedef( TypedefAST* );
     virtual void parseTemplateDeclaration( TemplateDeclarationAST* );
@@ -43,13 +39,10 @@ public:
     virtual void parseAccessDeclaration( AccessDeclarationAST* );
 
     // type-specifier
-    virtual void parseTypeSpecifier( TypeSpecifierAST* );
     virtual void parseClassSpecifier( ClassSpecifierAST* );
     virtual void parseEnumSpecifier( EnumSpecifierAST* );
-    virtual void parseElaboratedTypeSpecifier( ElaboratedTypeSpecifierAST* );
 
-    virtual void parseTypeDeclaratation( TypeSpecifierAST* typeSpec );
-    virtual void parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
+    virtual void parseMyDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
     virtual void parseFunctionDeclaration( GroupAST* funSpec, GroupAST* storageSpec, TypeSpecifierAST* typeSpec, InitDeclaratorAST* decl );
     virtual void parseFunctionArguments( Tag& tag, DeclaratorAST* declarator );
     virtual void parseBaseClause( const QString& className, BaseClauseAST* baseClause );
