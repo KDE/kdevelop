@@ -19,6 +19,7 @@
 #include "kdevprojectmanager_widget.h"
 #include "kdevprojectmanager_part.h"
 #include "kdevprojectimporter.h"
+#include "kdevprojecteditor.h"
 
 #include <kdevcore.h>
 #include <kdevmainwindow.h>
@@ -32,6 +33,7 @@
 
 #include <kparts/componentfactory.h>
 
+#include <qdir.h>
 #include <qwhatsthis.h>
 #include <qfileinfo.h>
 #include <qtimer.h>
@@ -44,7 +46,7 @@ KDevProjectManagerPart::KDevProjectManagerPart(QObject *parent, const char *name
     : KDevProject("KDevProjectManagerPart", "kdevprojectmanager", parent, name ? name : "KDevProjectManagerPart")
 {
     m_projectModel = new ProjectModel();
-
+    m_dirty = false;
     
     m_dirWatch = new KDirWatch(this);
     
@@ -93,39 +95,33 @@ void KDevProjectManagerPart::openProject(const QString &dirName, const QString &
     m_projectDirectory = dirName;
     m_projectName = projectName;    
 
-    import();
+    import(ForceRefresh);
     
     KDevProject::openProject(dirName, projectName);    
 }
 
-void KDevProjectManagerPart::import()
+void KDevProjectManagerPart::import(RefreshPolicy policy)
 {
     QStringList oldFileList = allFiles();
     
-    QDomDocument &dom = *projectDom();
-    QString kind = DomUtil::readEntry(dom, "/general/importer");
-    Q_ASSERT(!kind.isEmpty());
-    
-    if (!m_importers.contains(kind)) {
-        kdDebug(9000) << "error: importer not found!" << endl;
-        return;
-    }
-    
-    ProjectItemDom projectDom = m_importers[kind]->import(m_workspace->toFolder(), projectDirectory());
-    if (ProjectFolderDom folder = projectDom->toFolder()) {
-        m_workspace->addFolder(folder);
-        QStringList makefileList = m_importers[kind]->findMakefiles(folder);
-        for (QStringList::Iterator it = makefileList.begin(); it != makefileList.end(); ++it) {
-            kdDebug(9000) << "watch file: " << *it << endl;
-            m_dirWatch->addDir(QFileInfo(*it).dirPath(true));
-            m_dirWatch->addFile(*it);
+    if (KDevProjectImporter *importer = defaultImporter()) {    
+        ProjectItemDom projectDom = importer->import(m_workspace->toFolder(), projectDirectory());
+        if (ProjectFolderDom folder = projectDom->toFolder()) {
+            m_workspace->addFolder(folder);
+            QStringList makefileList = importer->findMakefiles(folder);
+            for (QStringList::Iterator it = makefileList.begin(); it != makefileList.end(); ++it) {
+                m_dirWatch->addDir(QFileInfo(*it).dirPath(true));
+                m_dirWatch->addFile(*it);
+            }
         }
     }
     
     
     QStringList newFileList = allFiles();
 
-    if (computeChanged(oldFileList, newFileList))
+    bool hasChanges = computeChanges(oldFileList, newFileList);
+    
+    if ((hasChanges && policy == Refresh) || policy == ForceRefresh)
         emit refresh();
 }
 
@@ -176,18 +172,24 @@ QString KDevProjectManagerPart::activeDirectory() const
 
 QString KDevProjectManagerPart::buildDirectory() const
 {
+    // ### atm we can handle only srcdir == builddir :(
     return m_projectDirectory;
 }
 
 QStringList KDevProjectManagerPart::allFiles() const
 {
+    if (!(isDirty() || m_cachedFileList.isEmpty()))
+        return m_cachedFileList;
+    
     return const_cast<KDevProjectManagerPart*>(this)->allFiles();
 }
 
 QStringList KDevProjectManagerPart::allFiles()
 {
     ProjectItemDom dom = m_workspace->toItem();
-    return fileList(dom);
+    m_cachedFileList = fileList(dom);
+    
+    return m_cachedFileList;
 }
 
 QStringList KDevProjectManagerPart::distFiles() const
@@ -195,24 +197,60 @@ QStringList KDevProjectManagerPart::distFiles() const
     return allFiles();
 }
 
+KDevProjectImporter *KDevProjectManagerPart::defaultImporter() const
+{
+    QDomDocument &dom = *projectDom();
+    QString kind = DomUtil::readEntry(dom, "/general/importer");
+    Q_ASSERT(!kind.isEmpty());
+    
+    if (m_importers.contains(kind))
+        return m_importers[kind];
+        
+    kdDebug(9000) << "error: no default importer!" << endl;
+    return 0;
+}
+
 void KDevProjectManagerPart::addFiles(const QStringList &fileList)
 {
     kdDebug(9000) << "KDevProjectManagerPart::addFiles:" << fileList << endl;
+    if (!defaultImporter())
+        return;
+
+    // ### block the signals.. i really don't want to add the method ::addFiles() to the KDevProjectEditor    
+    if (KDevProjectEditor *editor = defaultImporter()->editor()) {
+        for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it) {
+            // ### i'm not 100% sure to use the workspace as default folder
+            editor->addFile(m_workspace->toFolder(), *it);
+        }
+    }
 }
 
 void KDevProjectManagerPart::addFile(const QString &fileName)
 {
     kdDebug(9000) << "KDevProjectManagerPart::addFile:" << fileName << endl;
+    
+    addFiles(QStringList() << fileName);
 }
 
 void KDevProjectManagerPart::removeFiles(const QStringList &fileList)
 {
     kdDebug(9000) << "KDevProjectManagerPart::removeFiles" << fileList << endl;
+    
+    // ### block the signals.. i really don't want to add the method ::addFiles() to the KDevProjectEditor    
+    if (KDevProjectEditor *editor = defaultImporter()->editor()) {
+        for (QStringList::ConstIterator it = fileList.begin(); it != fileList.end(); ++it) {
+            // ### i'm not 100% sure to use the workspace as default folder
+            bool removed = editor->removeFile(*it);
+            Q_UNUSED(removed); // ### check the result
+        }
+    }
 }
 
 void KDevProjectManagerPart::removeFile(const QString &fileName)
 {
     kdDebug(9000) << "KDevProjectManagerPart::removeFile" << fileName << endl;
+    
+    removeFiles(QStringList() << fileName);
 }
 
 QStringList KDevProjectManagerPart::fileList(ProjectItemDom item)
@@ -273,7 +311,7 @@ void KDevProjectManagerPart::fileCreated(const QString &fileName)
         import();
 }
 
-bool KDevProjectManagerPart::computeChanged(const QStringList &oldFileList, const QStringList &newFileList)
+bool KDevProjectManagerPart::computeChanges(const QStringList &oldFileList, const QStringList &newFileList)
 {
     QMap<QString, bool> oldFiles, newFiles;
     
@@ -297,8 +335,9 @@ bool KDevProjectManagerPart::computeChanged(const QStringList &oldFileList, cons
         
     if (!oldFiles.isEmpty())
         emit removedFilesFromProject(oldFiles.keys());       
-    
-    return !(newFiles.isEmpty() && oldFiles.isEmpty());
+
+    m_dirty = !(newFiles.isEmpty() && oldFiles.isEmpty());
+    return m_dirty;
 }
 
 #include "kdevprojectmanager_part.moc"

@@ -30,15 +30,18 @@ class KDevProjectEditor: public KDevProjectImporter
 public:
     KDevProjectEditor(QObject *parent = 0, const char *name = 0);
     virtual ~KDevProjectEditor();
+
+    virtual KDevProjectEditor *editor() const
+    { return const_cast<KDevProjectEditor*>(this); }
     
     virtual ProjectFolderDom addFolder(ProjectFolderDom folder, const QString &name) = 0;
     virtual ProjectTargetDom addTarget(ProjectFolderDom folder, const QString &name) = 0;
     virtual ProjectFileDom addFile(ProjectFolderDom target, const QString &name) = 0;
     virtual ProjectFileDom addFile(ProjectTargetDom target, const QString &name) = 0;
     
-    virtual void removeFolder(ProjectFolderDom folder) = 0;
-    virtual void removeTarget(ProjectTargetDom target) = 0;
-    virtual void removeFile(ProjectFileDom file) = 0;
+    virtual bool removeFolder(const QString &name) = 0;
+    virtual bool removeTarget(const QString &name) = 0;
+    virtual bool removeFile(const QString &name) = 0;
 };
 
 #endif

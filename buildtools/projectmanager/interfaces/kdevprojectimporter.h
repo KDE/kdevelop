@@ -24,6 +24,8 @@
 #include <qobject.h>
 #include <qmap.h>
 
+class KDevProjectEditor;
+
 /**
 @author Roberto Raggi
 */
@@ -34,6 +36,9 @@ public:
     KDevProjectImporter(QObject *parent = 0, const char *name = 0);
     virtual ~KDevProjectImporter();
    
+    virtual KDevProjectEditor *editor() const
+    { return 0; }
+    
     virtual ProjectItemDom import(ProjectFolderDom dom, const QString &fileName) = 0;
     virtual QStringList findMakefiles(ProjectFolderDom dom) const = 0;
 };

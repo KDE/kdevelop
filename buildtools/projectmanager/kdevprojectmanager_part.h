@@ -36,13 +36,22 @@ class KDevProjectManagerPart: public KDevProject
 {
     Q_OBJECT
 public:
+    enum RefreshPolicy
+    {
+        Refresh,
+        NoRefresh,
+        ForceRefresh
+    };
+    
+public:
     KDevProjectManagerPart(QObject *parent, const char *name, const QStringList &);
     virtual ~KDevProjectManagerPart();
 
     inline ProjectModel *projectModel() const
     { return m_projectModel; }  
-
-    bool computeChanged(const QStringList &oldFileList, const QStringList &newFileList);
+    
+    inline bool isDirty() const
+    { return m_dirty; }
     
 //
 // KDevProject interface
@@ -74,21 +83,26 @@ private slots:
     void fileDirty(const QString &fileName);
     void fileCreated(const QString &fileName);
     void fileDeleted(const QString &fileName);
-    void import();
+    void import(RefreshPolicy policy = Refresh);
     
 protected:
+    bool computeChanges(const QStringList &oldFileList, const QStringList &newFileList);
     QStringList fileList(ProjectItemDom item);
     QStringList allFiles();
+    KDevProjectImporter *defaultImporter() const;
     
 private:
     ProjectModel *m_projectModel;
     ProjectWorkspaceDom m_workspace;
     QGuardedPtr<KDevProjectManagerWidget> m_widget;
     QMap<QString, KDevProjectImporter*> m_importers;
+    QStringList m_cachedFileList;
     
     QString m_projectDirectory;
     QString m_projectName;
     KDirWatch *m_dirWatch;
+    
+    bool m_dirty;
 };
 
 #endif
