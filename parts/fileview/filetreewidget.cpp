@@ -119,7 +119,7 @@ void FileTreeItem::setOpen(bool o)
                 if (fi->fileName() == "." || fi->fileName() == "..")
                     continue;
                 if (fi->isDir())
-                    ( new FileTreeItem(this, Dir, fi->fileName()) )->setOpen(true);
+                    (void) new FileTreeItem(this, Dir, fi->fileName());
                 else
                     (void) new FileTreeItem(this, File, fi->fileName());
             }
@@ -172,7 +172,11 @@ FileTreeWidget::FileTreeWidget(FileViewPart *part, QWidget *parent, const char *
 
 
 FileTreeWidget::~FileTreeWidget()
-{}
+{
+    QDomDocument &dom = *m_part->projectDom();
+    DomUtil::writeBoolEntry( dom, "/kdevfileview/tree/hidenonprojectfiles", !m_showNonProjectFiles );
+    DomUtil::writeEntry( dom, "/kdevfileview/tree/hidepatterns", m_hidePatterns.join(",") );
+}
 
 
 void FileTreeWidget::watchDir(const QString &dirName)
@@ -255,25 +259,20 @@ void FileTreeWidget::slotItemExecuted(QListViewItem *item)
 }
 
 
-void FileTreeWidget::slotContextMenu(KListView *, QListViewItem *item, const QPoint &p)
+void FileTreeWidget::slotContextMenu(KListView* listView, QListViewItem* item, const QPoint &p)
 {
-    if (!item)
-        return;
-
-    // Root item
-    if (item == firstChild()) {
-        KPopupMenu popup(i18n("File tree"), this);
-        int id = popup.insertItem( i18n("Show non-project files"),
-                                   this, SLOT(slotToggleShowNonProjectFiles()) );
-        popup.setItemChecked(id, m_showNonProjectFiles);
-        popup.exec(p);
-        return;
-    }
-        
-    FileTreeItem *ftitem = static_cast<FileTreeItem*>(item);
     KPopupMenu popup(i18n("File Tree"), this);
-    FileContext context(ftitem->path(), ftitem->type() == FileTreeItem::Dir);
-    m_part->core()->fillContextMenu(&popup, &context);
+    
+    int id = popup.insertItem( i18n("Show Non-Project Files"),
+                               this, SLOT(slotToggleShowNonProjectFiles()) );
+    popup.setItemChecked(id, m_showNonProjectFiles);
+    
+    if( item != 0 ) {
+      FileTreeItem *ftitem = static_cast<FileTreeItem*>(item);
+      FileContext context(ftitem->path(), ftitem->type() == FileTreeItem::Dir);
+      m_part->core()->fillContextMenu(&popup, &context);
+    }
+    
     popup.exec(p);
 }
 
