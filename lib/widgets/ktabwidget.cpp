@@ -11,7 +11,7 @@ KTabWidget::KTabWidget(QWidget *parent, const char *name) : QTabWidget(parent,na
   m_pTabBar = new KTabBar(this, "tabbar");
   setTabBar(m_pTabBar);
   connect(m_pTabBar, SIGNAL(closeWindow(const QWidget*)), this, SIGNAL(closeWindow(const QWidget*)));
-  connect(m_pTabBar, SIGNAL(closeOthers(const QWidget*)), this, SIGNAL(closeOthers(const QWidget*)));
+  connect(m_pTabBar, SIGNAL(closeOthers(QWidget*)), this, SIGNAL(closeOthers(QWidget*)));
 }
 
 KTabWidget::~KTabWidget()
