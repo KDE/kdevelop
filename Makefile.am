@@ -122,28 +122,12 @@ DOXYGEN_EXCLUDE = parts/appwizard/adahello/ \
                   lib/antlr
 include Doxyfile.am
 
-apidox-am-yes: apidox-am-kdevelop
+install-data-local: install-gideon-kdevelop
 
-apidox-am-kdevelop: $(top_builddir)/apidocs/qt/qt.tag
-
-$(top_builddir)/apidocs/qt/qt.tag:
-	@echo "*** Creating a tag file for the Qt library:"; \
-	$(mkinstalldirs) $(top_builddir)/apidocs/qt; \
-	doxytag -t $(top_builddir)/apidocs/qt/qt.tag $(QTDOCDIR)
-
-install-data-local: install-apidox-kdevelop
-
-## install the tag file for the Qt documentation
-install-apidox-kdevelop:
-	if test -f $(top_builddir)/apidocs/qt/qt.tag; then \
-		$(mkinstalldirs) $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt ;\
-		echo $(INSTALL_DATA) $(top_builddir)/apidocs/qt/qt.tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt; \
-		$(INSTALL_DATA) $(top_builddir)/apidocs/qt/qt.tag $(DESTDIR)$(kde_htmldir)/en/$(PACKAGE)-apidocs/qt; \
-	fi; \
-## We need this until we change the application name from gideon back to kdevelop \
-## install-am-kdevelop: \
-	if test -d $(DESTDIR)$(kde_htmldir)/en/gideon; then \
-		@echo "*** Creating a softlink from kdevelop to gidon to make the menu item Help -> Gideon Handbook work:"; \
-		echo $(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon; \
-		$(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon; \
+## We need this until we change the application name from gideon back to kdevelop
+install-gideon-kdevelop:
+	if test ! -d $(DESTDIR)$(kde_htmldir)/en/gideon; then \
+		echo "*** Creating a softlink from kdevelop to gidon to make the menu item Help -> Gideon Handbook work:";\
+		echo $(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon;\
+		$(LN_S) $(DESTDIR)$(kde_htmldir)/en/kdevelop $(DESTDIR)$(kde_htmldir)/en/gideon;\
 	fi
