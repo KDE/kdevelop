@@ -1,10 +1,14 @@
-2001-06-08  rokrau@yahoo.com
-   * Bugfix: File->Close didnt check for saved documents, just closed 
-     the file. 
+2001-06-09  F@lk Brettschneider <falk@kdevelop.org>
+   * bugfix: restore geometry on project session loading
+   * bugfix: crash if switching to TabPage mode with special case of having exactly 1 view
 
 2001-06-08  rokrau@yahoo.com
-   * disabled tip.h and related code if USE_KDE_2_1_1 is set, allow cut and 
-     paste for Fortran sources and added an assert for a suspected SIGSEV 
+   * Bugfix: File->Close didnt check for saved documents, just closed
+     the file.
+
+2001-06-08  rokrau@yahoo.com
+   * disabled tip.h and related code if USE_KDE_2_1_1 is set, allow cut and
+     paste for Fortran sources and added an assert for a suspected SIGSEV
      crash
 
 2001-06-06  Ralf Nolden <nolden@kde.org>
@@ -16,7 +20,7 @@
 
 2001-06-06  Christian Couder <christian@kdevelop.org>
     * Moved some slots from the CKDevelop class to DocViewMan.
-    * New signal in DocViewMan to change the status message. 
+    * New signal in DocViewMan to change the status message.
 
 2001-06-05  F@lk Brettschneider <falk@kdevelop.org>
     * initially added new setup wizard (as shared library),
