@@ -66,10 +66,15 @@ SubprojectItem::SubprojectItem(QListView *parent, const QString &text, const QSt
 }
 
 
-SubprojectItem::SubprojectItem(SubprojectItem *parent, const QString &text)
+SubprojectItem::SubprojectItem(SubprojectItem *parent, const QString &text,const QString &scopeString)
     : ProjectItem(Subproject, parent, text)
 {
+    this->scopeString=scopeString;
     init();
+}
+
+SubprojectItem::~SubprojectItem()
+{
 }
 
 
@@ -148,6 +153,7 @@ void TrollProjectWidget::openProject(const QString &dirName)
     SubprojectItem *item = new SubprojectItem(overview, "/","");
     item->subdir = dirName.right(dirName.length()-dirName.findRev('/'));
     item->path = dirName;
+    item->m_RootBuffer = &(item->m_FileBuffer);
     parse(item);
     item->setOpen(true);
     overview->setSelected(item, true);
@@ -222,26 +228,38 @@ QString TrollProjectWidget::subprojectDirectory()
 }
 
 
+
 void TrollProjectWidget::slotOverviewSelectionChanged(QListViewItem *item)
 {
     if (!item)
         return;
-
-    if (m_shownSubproject) {
-        // Remove all GroupItems and all of their children from the view
-        QListIterator<GroupItem> it1(m_shownSubproject->groups);
-        for (; it1.current(); ++it1) {
-            // After AddTargetDialog, it can happen that an
-            // item is not yet in the list view, so better check...
-            if (it1.current()->parent())
-                while ((*it1)->firstChild())
-                    (*it1)->takeItem((*it1)->firstChild());
-            details->takeItem(*it1);
-        }
-    }
-
+    cleanDetailView(m_shownSubproject);
     m_shownSubproject = static_cast<SubprojectItem*>(item);
     buildProjectDetailTree(m_shownSubproject,details);
+}
+
+void TrollProjectWidget::cleanDetailView(SubprojectItem *item)
+{
+  if (item)
+  {
+    // Remove all GroupItems and all of their children from the view
+//    QListIterator<SubprojectItem> it(item->scopes);
+//    for (; it.current(); ++it)
+//    {
+//      cleanDetailView(*it);
+//      details->takeItem(*it);
+//    }
+    QListIterator<GroupItem> it1(item->groups);
+    for (; it1.current(); ++it1) {
+      // After AddTargetDialog, it can happen that an
+      // item is not yet in the list view, so better check...
+      if (it1.current()->parent())
+      while ((*it1)->firstChild())
+        (*it1)->takeItem((*it1)->firstChild());
+      details->takeItem(*it1);
+    }
+  }
+
 }
 
 void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *listviewControl)
@@ -249,12 +267,12 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
   // Insert all GroupItems and all of their children into the view
   if (listviewControl)
   {
-    QListIterator<SubprojectItem> it1(item->scopes);
-    for (; it1.current(); ++it1)
-    {
-      listviewControl->insertItem(*it1);
-      buildProjectDetailTree(*it1,NULL);
-    }
+//    QListIterator<SubprojectItem> it1(item->scopes);
+//    for (; it1.current(); ++it1)
+//    {
+//      listviewControl->insertItem(*it1);
+//      buildProjectDetailTree(*it1,NULL);
+//    }
     QListIterator<GroupItem> it2(item->groups);
     for (; it2.current(); ++it2)
     {
@@ -267,12 +285,12 @@ void TrollProjectWidget::buildProjectDetailTree(SubprojectItem *item,KListView *
   }
   else
   {
-    QListIterator<SubprojectItem> it1(item->scopes);
-    for (; it1.current(); ++it1)
-    {
-      item->insertItem(*it1);
-      buildProjectDetailTree(*it1,NULL);
-    }
+//    QListIterator<SubprojectItem> it1(item->scopes);
+//    for (; it1.current(); ++it1)
+//    {
+//      item->insertItem(*it1);
+//      buildProjectDetailTree(*it1,NULL);
+//    }
     QListIterator<GroupItem> it2(item->groups);
     for (; it2.current(); ++it2)
     {
@@ -337,7 +355,7 @@ void TrollProjectWidget::slotOverviewContextMenu(KListView *, QListViewItem *ite
         }
         spitem->subdirs.append(subdirname);
         updateProjectFile(spitem);
-        SubprojectItem *newitem = new SubprojectItem(spitem, subdirname);
+        SubprojectItem *newitem = new SubprojectItem(spitem, subdirname,"");
         newitem->subdir = subdirname;
         newitem->path = spitem->path + "/" + subdirname;
 
@@ -361,7 +379,7 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
 {
   SubprojectItem *spitem = static_cast<SubprojectItem*>(item);
   QString relpath = m_shownSubproject->path.mid(projectDirectory().length());
-  FileBuffer *subBuffer=m_shownSubproject->m_FileBuffer.getSubBuffer(spitem->scopeString);
+  FileBuffer *subBuffer=m_shownSubproject->m_RootBuffer->getSubBuffer(spitem->scopeString);
   subBuffer->removeValues("SUBDIRS");
   subBuffer->setValues("SUBDIRS",spitem->subdirs,4);
   subBuffer->removeValues("SOURCES");
@@ -372,7 +390,7 @@ void TrollProjectWidget::updateProjectFile(QListViewItem *item)
   subBuffer->setValues("FORMS",spitem->forms,4);
   subBuffer->removeValues("INTERFACES");
   subBuffer->setValues("INTERFACES",spitem->interfaces,4);
-  m_shownSubproject->m_FileBuffer.saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
+  m_shownSubproject->m_RootBuffer->saveBuffer(projectDirectory()+relpath+"/"+m_shownSubproject->subdir+".pro");
 }
 
 void TrollProjectWidget::addFileToCurrentSubProject(GroupItem *titem,QString &filename)
@@ -564,8 +582,11 @@ void TrollProjectWidget::parseScope(SubprojectItem *item, QString scopeString, F
     if (scopeString!="")
     {
       QStringList scopeNames = QStringList::split(':',scopeString);
-      SubprojectItem *sitem = new SubprojectItem(overview, scopeNames[scopeNames.count()-1],scopeString);
+      SubprojectItem *sitem;
+      sitem = new SubprojectItem(item, scopeNames[scopeNames.count()-1],scopeString);
       sitem->path = item->path;
+      sitem->m_RootBuffer = buffer;
+      sitem->subdir = item->subdir;
       item->scopes.append(sitem);
       item=sitem;
     }
@@ -645,7 +666,6 @@ void TrollProjectWidget::parse(SubprojectItem *item)
     kdDebug(9024) << "Parsing " << proname << endl;
 
 
-
     item->m_FileBuffer.bufferFile(proname);
     item->m_FileBuffer.handleScopes();
 
@@ -658,8 +678,9 @@ void TrollProjectWidget::parse(SubprojectItem *item)
         item->subdirs = lst;
         QStringList::Iterator it;
         for (it = lst.begin(); it != lst.end(); ++it) {
-            SubprojectItem *newitem = new SubprojectItem(item, (*it));
+            SubprojectItem *newitem = new SubprojectItem(item, (*it),"");
             newitem->subdir = *it;
+            newitem->m_RootBuffer = &(newitem->m_FileBuffer);
             newitem->path = item->path + "/" + (*it);
             parse(newitem);
         }

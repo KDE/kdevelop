@@ -57,7 +57,8 @@ class SubprojectItem : public ProjectItem
 {
 public:
     SubprojectItem(QListView *parent, const QString &text,const QString &scopeString);
-    SubprojectItem(SubprojectItem *parent, const QString &text);
+    SubprojectItem(SubprojectItem *parent, const QString &text, const QString &scopeString);
+    ~SubprojectItem();
 
     QString subdir;
     QString path;
@@ -71,6 +72,7 @@ public:
     QStringList interfaces;
 
     FileBuffer m_FileBuffer;
+    FileBuffer *m_RootBuffer;
 
 private:
     void init();
@@ -147,6 +149,7 @@ private slots:
     void slotDetailsContextMenu(KListView *, QListViewItem *item, const QPoint &p);
 
 private:
+    void cleanDetailView(SubprojectItem *item);
     void buildProjectDetailTree(SubprojectItem *item, KListView *listviewControl);
     void removeFile(SubprojectItem *spitem, FileItem *fitem);
     void parseScope(SubprojectItem *item,QString scopeString, FileBuffer *buffer);
