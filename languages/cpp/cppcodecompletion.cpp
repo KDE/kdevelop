@@ -788,7 +788,13 @@ CppCodeCompletion::completeText( )
 		    QString scope = recoveryPoint->scope.join( "::" );
 
 		    QStringList nested;
-		    QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
+			
+		    QPtrList<ClassOrNamespaceNameAST> l;
+			if ( name )
+			{
+				l = name->classOrNamespaceNameList();
+			}
+//		    QPtrList<ClassOrNamespaceNameAST> l = name->classOrNamespaceNameList();
 		    QPtrListIterator<ClassOrNamespaceNameAST> nameIt( l );
 		    while( nameIt.current() ){
 			if( nameIt.current()->name() ){
