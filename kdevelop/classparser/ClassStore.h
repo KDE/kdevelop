@@ -59,6 +59,9 @@ private: // Private attributes
   /** All parsed classes. */
   QDict<CParsedClass> classes;
 
+  /** All classes declared in other classes. */
+  QStrList subClasses;
+
   /** All global variables. */
   QDict<CParsedAttribute> globalVariables;
 
@@ -134,6 +137,9 @@ public: // Public Methods
   /** Add a classdefintion. */
   void addClass( CParsedClass *aClass );
 
+  /** Add a subclass definition. */
+  void addSubClass( CParsedClass *aClass );
+  
   /** Add a global variable. */
   void addGlobalVar( CParsedAttribute *aAttr );
 

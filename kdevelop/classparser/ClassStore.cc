@@ -193,6 +193,24 @@ void CClassStore::addClass( CParsedClass *aClass )
   classes.insert( aClass->name, aClass );
 }
 
+/*------------------------------------------- CClassStore::addSubClass()
+ * addSubClass()
+ *   Add a subclass to the store.
+ *
+ * Parameters:
+ *   aClass        The class to add.
+ *
+ * Returns:
+ *   -
+ *-----------------------------------------------------------------*/
+void CClassStore::addSubClass( CParsedClass *aClass )
+{
+  assert( aClass != NULL && !aClass->name.isEmpty() && !hasClass( aClass->name ) );
+
+  addClass( aClass );
+  subClasses.append( aClass->name );
+}
+
 /*------------------------------------------------- CClassStore::out()
  * out()
  *   Output this object to stdout.
@@ -487,7 +505,9 @@ QList<CParsedClass> *CClassStore::getSortedClasslist()
        classIterator.current();
        ++classIterator )
   {
-    srted.inSort( classIterator.current()->name );
+    // Only add non-subclasses.
+    if( subClasses.find( classIterator.current()->name ) == -1 )
+      srted.inSort( classIterator.current()->name );
   }
 
   for( str = srted.first();
