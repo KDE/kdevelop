@@ -74,7 +74,7 @@ void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString,QStr
         return;
     QTextStream stream(&f);
     
-    QRegExp re("^([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
+    QRegExp re("^(#kdevelop:[ \t]*)?([A-Za-z][A-Za-z0-9_]*)[ \t]*:?=[ \t]*(.*)$");
 
     while (!stream.atEnd()) {
         QString line;
@@ -87,9 +87,9 @@ void AutoProjectTool::parseMakefileam(const QString &fileName, QMap<QString,QStr
         line += s;
         
         if (re.exactMatch(line)) {
-            QString lhs = re.cap(1);
+            QString lhs = re.cap(2);
             // The need for stripWhitespace seems to be a Qt bug.
-            QString rhs = re.cap(2).stripWhiteSpace();
+            QString rhs = re.cap(3).stripWhiteSpace();
             variables->insert(lhs, rhs);
         }
     }

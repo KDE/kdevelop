@@ -1075,8 +1075,8 @@ void AutoProjectWidget::parseSUBDIRS(SubprojectItem *item,
                                      const QString &/*lhs*/, const QString &rhs)
 {
     // Parse a line SUBDIRS = bla bla
-
     QString subdirs = rhs;
+    kdDebug(9020) << "subdirs are " << subdirs << endl;        
     
     // Take care of KDE hacks:
     // TOPSUBDIRS is an alias for all directories
@@ -1102,11 +1102,29 @@ void AutoProjectWidget::parseSUBDIRS(SubprojectItem *item,
         dirs.remove("CVS");
         subdirs.replace(QRegExp("\\$\\(AUTODIRS\\)"), dirs.join(" "));
     }
-    
-    // Do something smarter here
-    subdirs.replace(QRegExp("\\$\\(COMPILE_FIRST\\)"), "");
-    subdirs.replace(QRegExp("\\$\\(COMPILE_LAST\\)"), "");
-    
+
+    // If there are any variables in the subdirs line then search
+    // the Makefile(.am?) for its definition. Unfortunately, it may be
+    // defined outside this file in which case those dirs won't be added.
+    QRegExp varre("\\$\\(\\s*(.*)\\s*\\)");
+    varre.setMinimal(true);
+    while (varre.search(subdirs) != -1) {
+        QString varname = varre.cap(1);
+        QString varvalue;
+
+        // Search the whole Makefile(.am?)
+        // Note that if the variable isn't found it just disappears
+        // (Perhaps we should add it back in this case?)
+        QMap<QString, QString>::ConstIterator varit = item->variables.find(varname);
+        if (varit != item->variables.end()) {
+            kdDebug(9020) << "Found Makefile var " << varname << ", adding dirs <" << varit.data() << ">" << endl;
+            varvalue = varit.data();
+        } else {
+            kdDebug(9020) << "Not found Makefile var " << varname << endl;
+        }
+        subdirs.replace(QRegExp("\\$\\(\\s*" + varname + "\\s*\\)"), varvalue);
+    }
+
     QStringList l = QStringList::split(QRegExp("[ \t]"), subdirs);
     l.sort();
     QStringList::Iterator it;
