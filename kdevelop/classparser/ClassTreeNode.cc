@@ -34,10 +34,11 @@
  * Returns:
  *   -
  *-----------------------------------------------------------------*/
-CClassTreeNode::CClassTreeNode()
+CClassTreeNode::CClassTreeNode() :
+  theClass(0),
+  isInSystem(false)
 {
   children.setAutoDelete( false );
-  isInSystem = false;
 }
 
 /*---------------------------------- CClassTreeNode::~CClassTreeNode()
