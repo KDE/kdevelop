@@ -1,7 +1,11 @@
+2003-04-01 Alexander Dymo <cloudtemple@mksat.net>
+    * C/C++ "New class" dialog improvements:
+    - Nested namespace support
+
 2003-03-30 Julian Rockey <linux@jrockey.com>
 	* parts/appwizard
 	- added proposed replacement for highly broken dcopservice template
-	
+
 2003-03-29 Alexander Dymo <cloudtemple@mksat.net>
     * C/C++ "New class" dialog improvements:
     - Editor for base class file names
