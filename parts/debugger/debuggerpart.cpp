@@ -251,15 +251,15 @@ DebuggerPart::DebuggerPart( QObject *parent, const char *name, const QStringList
     
     connect( core(), SIGNAL(projectConfigWidget(KDialogBase*)),
              this, SLOT(projectConfigWidget(KDialogBase*)) );
-    connect( core(), SIGNAL(toggledBreakpoint(const QString &, int)),
+    connect( debugger(), SIGNAL(toggledBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpoint(const QString &, int)) );
-    connect( core(), SIGNAL(editedBreakpoint(const QString &, int)),
+    connect( debugger(), SIGNAL(editedBreakpoint(const QString &, int)),
              breakpointWidget, SLOT(slotEditBreakpoint(const QString &, int)) );
-    connect( core(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
+    connect( debugger(), SIGNAL(toggledBreakpointEnabled(const QString &, int)),
              breakpointWidget, SLOT(slotToggleBreakpointEnabled(const QString &, int)) );
 
     connect( core(), SIGNAL(contextMenu(QPopupMenu *, const Context *)),
-	     this, SLOT(contextMenu(QPopupMenu *, const Context *)));
+             this, SLOT(contextMenu(QPopupMenu *, const Context *)) );
 }
 
 
