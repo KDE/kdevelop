@@ -99,7 +99,7 @@ void CParsedParent::setName( const char *aName )
  *-----------------------------------------------------------------*/
 void CParsedParent::setExport( int aExport )
 {
-  assert( aExport == PUBLIC || aExport == PRIVATE || aExport == PROTECTED );
+  assert( aExport == CPPUBLIC || aExport == CPPRIVATE || aExport == CPPROTECTED );
 
   exportattr = aExport;
 }
@@ -125,13 +125,13 @@ void CParsedParent::out()
 
   switch(exportattr)
   {
-    case PUBLIC:
+    case CPPUBLIC:
       cout << "public";
       break;
-    case PROTECTED:
+    case CPPROTECTED:
       cout << "protected";
       break;
-    case PRIVATE:
+    case CPPRIVATE:
       cout << "private";
       break;
   }
@@ -154,13 +154,13 @@ void CParsedParent::asPersistantString( QString &dataStr )
 
   switch(exportattr)
   {
-    case PUBLIC:
+    case CPPUBLIC:
       dataStr += "public";
       break;
-    case PROTECTED:
+    case CPPROTECTED:
       dataStr += "protected";
       break;
-    case PRIVATE:
+    case CPPRIVATE:
       dataStr += "private";
       break;
   }
