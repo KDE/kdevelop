@@ -79,7 +79,7 @@ void IntegratorDlg::init_clicked()
         *proc << "-d" << url << "init";
         proc->start(KProcess::Block);
         if (!proc->normalExit())
-            KMessageBox::error(this, i18n("cvs init did not exit normally. Please check if cvs is instaled and works correcly."), i18n("Init CVS Repository"));
+            KMessageBox::error(this, i18n("cvs init did not exit normally. Please check if cvs is installed and works correctly."), i18n("Init CVS Repository"));
         else if (proc->exitStatus() != 0)
             KMessageBox::error(this, i18n("cvs init exited with status %1. Please check if the cvs location is correct.").arg(proc->exitStatus()), i18n("Init CVS Repository"));
         else
@@ -126,7 +126,7 @@ void IntegratorDlg::accept()
         << vendorTag->text() << releaseTag->text();
     proc->start(KProcess::Block);
     if (!proc->normalExit())
-        KMessageBox::error(this, i18n("cvs import did not exit normally. Please check if cvs is instaled and works correcly."), i18n("Init CVS Repository"));
+        KMessageBox::error(this, i18n("cvs import did not exit normally. Please check if cvs is installed and works correctly."), i18n("Init CVS Repository"));
     else if (proc->exitStatus() != 0)
         KMessageBox::error(this, i18n("cvs import exited with status %1. Please check if the cvs location is correct.").arg(proc->exitStatus()), i18n("Init CVS Repository"));    
     else

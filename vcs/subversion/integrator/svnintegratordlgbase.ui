@@ -53,7 +53,7 @@
                     <cstring>doNothing</cstring>
                 </property>
                 <property name="text">
-                    <string>Don't do anything</string>
+                    <string>Do not do anything</string>
                 </property>
                 <property name="checked">
                     <bool>true</bool>
