@@ -262,8 +262,8 @@ void PHPSupportPart::executeOnWebserver(){
 }
 
 void PHPSupportPart::slotWebJobStarted(KIO::Job* job){
-  kdDebug(9018) << endl << "job started" << job->progressId();
-  if (job->className() == QString("KIO::TransferJob")){
+  if (job && job->className() == QString("KIO::TransferJob")){
+    kdDebug(9018) << endl << "job started" << job->progressId();
     KIO::TransferJob *tjob = static_cast<KIO::TransferJob*>(job);
     connect(tjob,  SIGNAL(data(KIO::Job*, const QByteArray&)),
 	    this, SLOT(slotWebData(KIO::Job*, const QByteArray&)));
