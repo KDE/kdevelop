@@ -135,7 +135,8 @@ bool DocSearchDialog::performSearch()
         .arg("builtin-short")
         .arg(sort_combo->currentItem()==2? "date" : sort_combo->currentItem()==1? "title" : "score");
 
-    kdDebug() << "starting kprocess" << endl;
+    kdDebug(9002) << "starting kprocess" << endl;
+    kdDebug(9002) << "htdig line:" << exe << " -c " << (indexdir + "/htdig.conf ") << query <<  endl;
     KProcess *proc = new KProcess;
     *proc << exe << "-c" << (indexdir + "/htdig.conf") << query;
 

@@ -120,7 +120,7 @@ void ProgressDialog::setState(int n)
 
 void ProgressDialog::addDir(const QString &dir)
 {
-    kdDebug() << "Add dir : " << dir << endl;
+    kdDebug(9002) << "Add dir : " << dir << endl;
     QDir d(dir, "*.html", QDir::Name|QDir::IgnoreCase, QDir::Files | QDir::Readable);
     QStringList list = d.entryList();
 
@@ -169,7 +169,7 @@ void ProgressDialog::addTocFile(QDomDocument &doc)
             QString url = childEl.attribute("url");
             if (!url.isEmpty()) {
                 url.prepend(base);
-                kdDebug() << "candidate: " << url << endl;
+                kdDebug(9002) << "candidate: " << url << endl;
                 candidates.append(url);
             }
             /// @todo Generalize to arbitrary number of levels
@@ -179,7 +179,7 @@ void ProgressDialog::addTocFile(QDomDocument &doc)
                     QString url = grandchildEl.attribute("url");
                     if (!url.isEmpty()) {
                         url.prepend(base);
-                        kdDebug() << "candidate: " << url << endl;
+                        kdDebug(9002) << "candidate: " << url << endl;
                         candidates.append(url);
                     }
                 }
@@ -202,7 +202,7 @@ void ProgressDialog::addTocFile(QDomDocument &doc)
         if ((url.startsWith("/") || url.startsWith("file://"))
             && !files.contains(url)) {
             files.append(url);
-            kdDebug() << "tocurl: " << url << endl;
+            kdDebug(9002) << "tocurl: " << url << endl;
             setFilesScanned(++filesScanned);
         }
     }
@@ -300,12 +300,12 @@ void ProgressDialog::scanDirectories()
         for (it4 = tocs.begin(); it4 != tocs.end(); ++it4) {
             QFile f(*it4);
             if (!f.open(IO_ReadOnly)) {
-                kdDebug() << "Could not read doc toc: " << (*it4) << endl;
+                kdDebug(9002) << "Could not read doc toc: " << (*it4) << endl;
                 continue;
             }
             QDomDocument doc;
             if (!doc.setContent(&f) || doc.doctype().name() != "kdeveloptoc") {
-                kdDebug() << "Not a valid kdeveloptoc file: " << (*it4) << endl;
+                kdDebug(9002) << "Not a valid kdeveloptoc file: " << (*it4) << endl;
                 continue;
             }
             f.close();
@@ -353,8 +353,8 @@ bool ProgressDialog::createConfig()
 
         ts << "database_dir:\t\t" << indexdir << endl;
         ts << "start_url:\t\t`" << indexdir << "/files`" << endl;
-//        ts << "local_urls:\t\thttp://localhost/=/" << endl;
-        ts << "local_urls:\t\tfile://=" << endl;
+        ts << "local_urls:\t\thttp://localhost/=/" << endl;
+//        ts << "local_urls:\t\tfile://=" << endl;
         ts << "local_urls_only:\ttrue" << endl;
 	ts << "limit_urls_to:\t\tfile://" << endl;
         ts << "maximum_pages:\t\t1" << endl;
@@ -413,7 +413,7 @@ bool ProgressDialog::generateIndex()
             initial = false;
         }
 
-        kdDebug() << "Running htdig" << endl;
+        kdDebug(9002) << "Running htdig" << endl;
 
         //      connect(_proc, SIGNAL(receivedStdout(KProcess *,char*,int)),
         //	      this, SLOT(htdigStdout(KProcess *,char*,int)));
@@ -425,7 +425,7 @@ bool ProgressDialog::generateIndex()
         // write out file
         QFile f(indexdir+"/files");
         if (!f.open(IO_WriteOnly)) {
-            kdDebug() << "Could not open `files` for writing" << endl;
+            kdDebug(9002) << "Could not open `files` for writing" << endl;
             return false;
 	}
 
@@ -435,7 +435,8 @@ bool ProgressDialog::generateIndex()
                 done = true;
                 break;
             }
-            ts << "file://localhost/" + files[count] << endl;
+//            ts << "file://localhost/" + files[count] << endl;
+            ts << "http://localhost/" + files[count] << endl;
         }
         f.close();
 
@@ -472,7 +473,7 @@ bool ProgressDialog::generateIndex()
     proc = new KProcess();
     *proc << exe << "-c" << (indexdir + "/htdig.conf");
 
-    kdDebug() << "Running htmerge" << endl;
+    kdDebug(9002) << "Running htmerge" << endl;
 
     connect(proc, SIGNAL(processExited(KProcess *)),
             this, SLOT(htmergeExited(KProcess *)));
@@ -526,14 +527,14 @@ void ProgressDialog::htdigStdout(KProcess *, char *buffer, int len)
 
 void ProgressDialog::htdigExited(KProcess *)
 {
-    kdDebug() << "htdig terminated" << endl;
+    kdDebug(9002) << "htdig terminated" << endl;
     htdigRunning = false;
 }
 
 
 void ProgressDialog::htmergeExited(KProcess *)
 {
-    kdDebug() << "htmerge terminated" << endl;
+    kdDebug(9002) << "htmerge terminated" << endl;
     htmergeRunning = false;
 }
 
@@ -541,7 +542,7 @@ void ProgressDialog::cancelClicked()
 {
 	if ((htdigRunning || htmergeRunning) && proc && proc->isRunning())
 	{
-		kdDebug() << "Killing " << (htdigRunning ? "htdig" : "htmerge") << "daemon with Sig. 9" << endl;
+		kdDebug(9002) << "Killing " << (htdigRunning ? "htdig" : "htmerge") << "daemon with Sig. 9" << endl;
 		proc->kill(9);
 		KMessageBox::error(0, i18n("The %1 process was killed!").arg(htdigRunning ? "htdig" : "htmerge"));
 		htdigRunning = htmergeRunning = false;

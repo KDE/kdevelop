@@ -156,6 +156,7 @@ void DocTreeViewPart::contextMenu(QPopupMenu *popup, const Context *context)
 
 void DocTreeViewPart::slotSearchDocumentation()
 {
+    kdDebug(9002) << "Full text search requested" << endl;
     DocSearchDialog dlg(m_widget, "doc search dialog");
     if (dlg.exec()) {
         QString indexdir = kapp->dirs()->saveLocation("data", "kdevdoctreeview/helpindex");
