@@ -1846,7 +1846,7 @@ void CKDevelop::slotBuildMake()
 {
   debug("slotBuildMake\n");
   slotStatusMsg(i18n("Running make..."));
-  RunMake(CMakefile::toplevel,"all");
+  RunMake(CMakefile::toplevel,"");
 }
 void CKDevelop::slotBuildMakeClean()
 {
@@ -1873,7 +1873,7 @@ void CKDevelop::slotBuildAutoconf()
   if(!CToolClass::searchProgram("autoconf")){
     return;
   }
-  RunMake(CMakefile::cvs,"all");
+  RunMake(CMakefile::cvs,"");
 }
 void CKDevelop::slotBuildCleanRebuildAll()
 {
@@ -1987,7 +1987,7 @@ void CKDevelop::slotToolsTool(int tool)
 //  (void) KRun::runCommand (process_call);
 
   // We need to create a KShellProcess otherwise the STDOUT / STDERR couldn't be catched
-  // The pointer will be deleted when it emits processExited (KProcess)
+  // The pointer will be deleted when it emitsprocessExited (KProcess)
   KShellProcess* proc = new KShellProcess();
 
   *proc << process_call;
@@ -3459,7 +3459,7 @@ void CKDevelop::slotProcessExited(KProcess* proc)
       next_job = "";
     }
     else if (next_job == "all") {
-		  RunMake(CMakefile::toplevel,"all");
+		  RunMake(CMakefile::toplevel,"");
       next_job = "";
     }
 	  else if (next_job == "autoconf+configure+make") {
