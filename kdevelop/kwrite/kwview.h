@@ -636,7 +636,6 @@ public slots:
     KWriteDoc *kWriteDoc;
 
     int stepLine;
-
 };
 
 

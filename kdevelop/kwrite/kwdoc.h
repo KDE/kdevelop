@@ -158,6 +158,11 @@ class KWriteDoc : QObject {
     void readSessionConfig(KConfig *);
     void writeSessionConfig(KConfig *);
 
+		void readFileConfig();
+		void writeFileConfig();
+		void readBookmarkConfig(KConfig *config);
+		void writeBookmarkConfig(KConfig *config);
+
 		int getTextLineCount() { return contents.count(); }
 
 //  void inheritFileName(KWriteDoc *doc) {
@@ -277,6 +282,8 @@ class KWriteDoc : QObject {
     Highlight *highlight;
     Attribute attribs[nAttribs];
 
+		KConfig* kWriteConfig;
+
     int eolMode;
 
     int tabChars;
@@ -298,6 +305,8 @@ class KWriteDoc : QObject {
     bool modified;
     bool oldMarkState;
     QString fName;
+
+		KConfig* fileConfig;
 
     int foundLine;
 
