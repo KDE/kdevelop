@@ -2274,9 +2274,12 @@ void CKDevelop::slotOptionsDocBrowser(){
    CDocBrowserOptionsDlg browserOptions;
    CDocBrowser* pDocBr = m_docViewManager->currentBrowserDoc();
 
-   connect( browserOptions.fontOptions, SIGNAL(configChanged()),
+   if ( pDocBr ) {
+     connect( browserOptions.fontOptions, SIGNAL(configChanged()),
      pDocBr, SLOT(slotDocBrowserOptions()) );
-
+     connect( browserOptions.colorOptions, SIGNAL(configChanged()),
+     pDocBr, SLOT(slotDocBrowserOptions()) );
+   }
    browserOptions.exec();
    slotStatusMsg(i18n("Ready."));
 }
