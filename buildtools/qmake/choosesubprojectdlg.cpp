@@ -40,6 +40,7 @@ void ChooseSubprojectDlg::accept()
         return;
     if (item->subproject()->configuration.m_template == QTMP_SUBDIRS)
         return;
+
     QDialog::accept();
 }
 

@@ -277,7 +277,7 @@ public:
     void updateInstallObjects(SubqmakeprojectItem* item, FileBuffer *subBuffer);
     void addFileToCurrentSubProject(GroupItem *titem,const QString &filename);
     void addFileToCurrentSubProject(GroupItem::GroupType gtype,const QString &filename);
-    void addFile(const QString &fileName, bool noPathTruncate = false);
+    void addFiles( QStringList &files, bool noPathTruncate = false);
     void emitAddedFile(const QString &name);
     void emitRemovedFile(const QString &name);
 
