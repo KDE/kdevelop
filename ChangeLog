@@ -1,3 +1,6 @@
+2001-12-13  Roland Krause  <rokrau@klondike.dyndns.org>
+    * remove kwrite files and directory from this branch 
+
 2001-12-12  Roland Krause  <rokrau@klondike.dyndns.org>
     * fixed the kate part as a replacement for the internal editor on branch
       KDEVELOP_2_BRANCH to work with KDE-3 and the KTextEditor
