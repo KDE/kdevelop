@@ -91,7 +91,7 @@ void TextToolsWidget::slotItemPressed(int button, QListViewItem *item)
     TextStructItem *tsitem = static_cast<TextStructItem*>(item);
     int searchedPos = tsitem->pos;
     int searchedEndpos = tsitem->endpos;
-    kdDebug() << "Searched pos " << searchedPos << ", " << searchedEndpos << endl;
+    kdDebug(9030) << "Searched pos " << searchedPos << ", " << searchedEndpos << endl;
     
     int endline = 0;
     int endcol = 0;
@@ -123,7 +123,7 @@ void TextToolsWidget::slotItemPressed(int button, QListViewItem *item)
     KTextEditor::ViewCursorInterface *cursorIface
         = dynamic_cast<KTextEditor::ViewCursorInterface*>(rwpart->widget());
     if (cursorIface) {
-        kdDebug() << "set cursor " << line << ", " << col << endl;
+        kdDebug(9030) << "set cursor " << line << ", " << col << endl;
         cursorIface->setCursorPosition(line, col);
     }
     
@@ -131,7 +131,7 @@ void TextToolsWidget::slotItemPressed(int button, QListViewItem *item)
         KTextEditor::SelectionInterface *selectionIface
             = dynamic_cast<KTextEditor::SelectionInterface*>(rwpart);
         if (selectionIface) {
-            kdDebug() << "set selection " << line << ", " << col
+            kdDebug(9030) << "set selection " << line << ", " << col
                       << ", " << endline << ", " << endcol << endl;
             selectionIface->setSelection((int)line, (int)col, (int)endline, (int)endcol+1);
         }
@@ -202,14 +202,14 @@ void TextToolsWidget::setMode(Mode mode, KParts::Part *part)
 
 void TextToolsWidget::startTimer()
 {
-    kdDebug() << "Starting parse timer" << endl;
+    kdDebug(9030) << "Starting parse timer" << endl;
     m_timer->start(1000, true);
 }
 
 
 void TextToolsWidget::parseXML()
 {
-    kdDebug() << "Starting to parse XML" << endl;
+    kdDebug(9030) << "Starting to parse XML" << endl;
     clear();
     QString text = m_editIface->text();
     m_cachedText = text;
@@ -302,7 +302,7 @@ void TextToolsWidget::parseXML()
                 closingItem->endpos = endpos;
                 currentItem = closingItem->parentStructItem();
             } else {
-                kdDebug() << "found no opening tag " << tag << "." << endl;
+                kdDebug(9030) << "found no opening tag " << tag << "." << endl;
             }
             
             pos = endpos;
@@ -354,7 +354,7 @@ void TextToolsWidget::parseXML()
 
 void TextToolsWidget::parseLaTeX()
 {
-    kdDebug() << "Starting to parse LaTeX" << endl;
+    kdDebug(9030) << "Starting to parse LaTeX" << endl;
     clear();
     QString text = m_editIface->text();
     m_cachedText = text;
@@ -374,7 +374,7 @@ void TextToolsWidget::parseLaTeX()
             break;
         QString tag = re.cap(1);
         QString title = re.cap(2);
-        kdDebug() << "Match with " << tag << " and title " << title << endl;
+        kdDebug(9030) << "Match with " << tag << " and title " << title << endl;
         int level = hierarchyLevels.find(tag);
         while (currentItem->parent() && level <= hierarchyLevels.find(currentItem->tag))
             currentItem = currentItem->parentStructItem();

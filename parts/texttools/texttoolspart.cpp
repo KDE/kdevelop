@@ -77,13 +77,13 @@ void TextToolsPart::activePartChanged(KParts::Part *part)
     createWidget();
     
     if (url.endsWith(".html")) {
-        kdDebug() << "set mode html" << endl;
+        kdDebug(9030) << "set mode html" << endl;
         m_widget->setMode(TextToolsWidget::HTML, rwpart);
     } else if (url.endsWith(".docbook")) {
-        kdDebug() << "set mode Docbook" << endl;
+        kdDebug(9030) << "set mode Docbook" << endl;
         m_widget->setMode(TextToolsWidget::Docbook, rwpart);
     } else if (url.endsWith(".tex")) {
-        kdDebug() << "set mode LaTeX" << endl;
+        kdDebug(9030) << "set mode LaTeX" << endl;
         m_widget->setMode(TextToolsWidget::LaTeX, rwpart);
     }
 }
