@@ -67,7 +67,6 @@ void StoreWalker::parseNamespace( NamespaceAST* ast )
     ParsedScopeContainer* ns = findOrInsertScopeContainer( m_currentScopeContainer, nsName );
     ns->setDeclaredOnLine( startLine );
     ns->setDeclaredInFile( m_fileName );
-    ns->setDefinedInFile( m_fileName );
     ns->setDeclarationEndsOnLine( endLine );
     
     ParsedScopeContainer* old_scope = m_currentScopeContainer;
@@ -176,7 +175,6 @@ void StoreWalker::parseClassSpecifier( ClassSpecifierAST* ast )
     
     ParsedClass* klass = new ParsedClass();
     klass->setDeclaredOnLine( startLine );
-    klass->setDefinedInFile( m_fileName );
     klass->setDeclaredInFile( m_fileName );
     klass->setName( className );
     klass->setDeclaredInScope( m_currentScope.join(".") );
@@ -227,6 +225,7 @@ void StoreWalker::parseEnumSpecifier( EnumSpecifierAST* ast )
 	ast->getEndPosition( &endLine, &endColumn );
     
 	attr->setDeclaredOnLine( startLine );
+	attr->setDefinedOnLine( startLine );
 	attr->setDeclaredInFile( m_fileName );
 	attr->setDefinedInFile( m_fileName );
 	attr->setDeclarationEndsOnLine( endLine );
@@ -274,7 +273,6 @@ void StoreWalker::parseDeclaration( GroupAST* funSpec, GroupAST* storageSpec, Ty
 
     attr->setDeclaredOnLine( startLine );
     attr->setDeclaredInFile( m_fileName );
-    attr->setDefinedInFile( m_fileName );
     attr->setDeclarationEndsOnLine( endLine );
 }
 
@@ -331,7 +329,6 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     bool isVirtual = false;
     bool isStatic = false;
     bool isInline = false;
-    bool isOperator = false;
     bool isPure = decl->initializer() != 0;
 
     if( funSpec ){
@@ -367,8 +364,9 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     ParsedMethod* method = new ParsedMethod();
     method->setName( id );
 
-    method->setDeclaredOnLine( startLine );
+    method->setDefinedOnLine( startLine );
     method->setDefinedInFile( m_fileName );
+    method->setDeclaredOnLine( startLine );
     method->setDeclaredInFile( m_fileName );
     method->setAccess( m_currentAccess );
     method->setIsStatic( isStatic );
@@ -378,6 +376,16 @@ void StoreWalker::parseFunctionDeclaration(  GroupAST* funSpec, GroupAST* storag
     if( m_currentClass ){
 	method->setIsDestructor( id.startsWith("~") );
 	method->setIsConstructor( typeSpec == 0 && id == m_currentClass->name() );
+    }
+    method->setIsConst( d->constant() != 0 );
+ 
+    ParsedClassContainer* c = m_currentClass ? (ParsedClassContainer*) m_currentClass : (ParsedClassContainer*) m_currentScopeContainer;
+    ParsedMethod* m = c->getMethod( method );
+    if( m != 0 ){
+	method->setDefinedInFile( m->definedInFile() );
+	method->setDefinedOnLine( m->definedOnLine() );
+	method->setDefinitionEndsOnLine( m->definitionEndsOnLine() );
+	c->removeMethod( m );	
     }
     
     parseFunctionArguments( d, method );
