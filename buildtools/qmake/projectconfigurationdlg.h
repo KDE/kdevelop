@@ -27,9 +27,9 @@ enum QMakeDepends      {QD_QT=		1<<0,
 			QD_PLUGIN=	1<<6,
 			QD_EXCEPTIONS=	1<<8,
 			QD_STL=		1<<9,
-			QD_RTTI=	1<<10, 
-			QD_ORDERED=	1<<11, 
-			QD_LIBTOOL=	1<<12, 
+			QD_RTTI=	1<<10,
+			QD_ORDERED=	1<<11,
+			QD_LIBTOOL=	1<<12,
 			QD_PKGCONF=	1<<13,
 			QD_DLL=		1<<14,
 			QD_CONSOLE=	1<<15
@@ -57,7 +57,7 @@ public slots:
   virtual void           clickSubdirsTemplate();
   virtual void           templateLibraryClicked(int);
 
-  
+
 virtual void buildorderMoveUpClicked();
 virtual void buildorderMoveDownClicked();
 
@@ -94,6 +94,13 @@ virtual void extRemove_button_clicked();
 virtual void intMoveDown_button_clicked();
 virtual void intMoveUp_button_clicked();
 
+virtual void addCustomValueClicked();
+virtual void removeCustomValueClicked();
+virtual void editCustomValueClicked();
+virtual void upCustomValueClicked();
+virtual void downCustomValueClicked();
+
+
 void updateIncludeControl();
 void updateLibaddControl();
 void updateLibDirAddControl();
@@ -107,7 +114,7 @@ protected:
   SubqmakeprojectItem *myProjectItem;
   QPtrList <qProjectItem> getAllProjects();
   void getAllSubProjects(qProjectItem *item,QPtrList <qProjectItem> *itemList);
-  
+
 
 };
 

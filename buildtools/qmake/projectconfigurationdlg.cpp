@@ -37,11 +37,112 @@
 #include <qvalidator.h>
 #include <qtabwidget.h>
 #include <pathutil.h>
+#include <kpushbutton.h>
+#include <kstdguiitem.h>
+#include <klocale.h>
+
+// in kde 3.4 KStdGuiItem::browse()
+KGuiItem browse()
+{
+	KGuiItem returnItem;
+	returnItem.setText(i18n("Browse"));
+	returnItem.setIconName("browse");
+	returnItem.setToolTip(i18n("Open browser"));
+	returnItem.setWhatsThis(i18n("Opens a file browser for seletion of files or directories"));
+	return returnItem;
+}
+
+// in kde 3.4 KStdGuiItem::up()
+KGuiItem up()
+{
+	KGuiItem returnItem;
+	returnItem.setText(i18n("Up"));
+	returnItem.setIconName("up");
+	returnItem.setToolTip(i18n("Move up"));
+	return returnItem;
+}
+// in kde 3.4 KStdGuiItem::down()
+KGuiItem down()
+{
+KGuiItem returnItem;
+	returnItem.setText(i18n("Down"));
+	returnItem.setIconName("down");
+	returnItem.setToolTip(i18n("Move down"));
+	return returnItem;
+}
+// in kde 3.4 KStdGuiItem::edit()
+KGuiItem edit()
+{
+	KGuiItem returnItem;
+	returnItem.setText(i18n("Edit"));
+	returnItem.setIconName("edit");
+	returnItem.setToolTip(i18n("Edit value"));
+	return returnItem;
+}
+
+// in kde 3.4 KStdGuiItem::remove()
+KGuiItem add()
+{
+	KGuiItem returnItem;
+	returnItem.setText(i18n("Remove"));
+	returnItem.setIconName("remove");
+	returnItem.setToolTip(i18n("Remove value"));
+	return returnItem;
+}
+
+// in kde 3.4 KStdGuiItem::add()
+KGuiItem remove()
+{
+	KGuiItem returnItem;
+	returnItem.setText(i18n("Add"));
+	returnItem.setIconName("add");
+	returnItem.setToolTip(i18n("Remove value"));
+	return returnItem;
+}
 
 ProjectConfigurationDlg::ProjectConfigurationDlg(SubqmakeprojectItem *_item,QListView *_prjList,QWidget* parent, const char* name, bool modal, WFlags fl)
 : ProjectConfigurationDlgBase(parent,name,modal,fl)
 //=================================================
 {
+// Remove when we can depend on KDE 3.4
+  buttonOk->setGuiItem(KStdGuiItem::ok());
+  buttonCancel->setGuiItem(KStdGuiItem::cancel());
+  Browse->setGuiItem(browse());
+  insideIncMoveUpBtn->setGuiItem(up());
+  insideIncMoveDownBtn->setGuiItem(down());
+  outsideIncAddBtn->setGuiItem(add());
+  outsideIncRemoveBtn->setGuiItem(remove());
+  outsideIncEditBtn->setGuiItem(edit());
+  outsideIncMoveUpBtn->setGuiItem(up());
+  outsideIncMoveDownBtn->setGuiItem(down());
+  insideLibMoveUpBtn->setGuiItem(up());
+  insideLibMoveDownBtn->setGuiItem(down());
+  outsideLibAddBtn->setGuiItem(add());
+  outsideLibRemoveBtn->setGuiItem(remove());
+  outsideLibEditBtn->setGuiItem(edit());
+  outsideLibMoveUpBtn->setGuiItem(up());
+  outsideLibMoveDownBtn->setGuiItem(down());
+  outsideLibDirAddBtn->setGuiItem(add());
+  outsideLibDirRemoveBtn->setGuiItem(remove());
+  outsideLibDirEditBtn->setGuiItem(edit());
+  outsideLibDirMoveUpBtn->setGuiItem(up());
+  outsideLibDirMoveDownBtn->setGuiItem(down());
+  intMoveUp_button->setGuiItem(up());
+  intMoveDown_button->setGuiItem(down());
+  extAdd_button->setGuiItem(add());
+  extRemove_button->setGuiItem(remove());
+  extEdit_button->setGuiItem(edit());
+  extMoveUp_button->setGuiItem(up());
+  extMoveDown_button->setGuiItem(down());
+  buildmoveup_button->setGuiItem(up());
+  buildmovedown_button->setGuiItem(down());
+  varAdd_button->setGuiItem(add());
+  varRemove_button->setGuiItem(remove());
+  varEdit_button->setGuiItem(edit());
+  varMoveUp_button->setGuiItem(up());
+  varMoveDown_button->setGuiItem(down());
+// End remove in kde 3.4
+
   myProjectItem=_item;
   prjList=_prjList;
 //  m_projectConfiguration = conf;
@@ -1201,3 +1302,23 @@ void ProjectConfigurationDlg::intMoveUp_button_clicked( )
     item->moveItem(intDeps_view->currentItem());
 }
 
+ void ProjectConfigurationDlg::addCustomValueClicked()
+{
+
+}
+ void ProjectConfigurationDlg::removeCustomValueClicked()
+{
+
+}
+ void ProjectConfigurationDlg::editCustomValueClicked()
+{
+
+}
+ void ProjectConfigurationDlg::upCustomValueClicked()
+{
+
+}
+ void ProjectConfigurationDlg::downCustomValueClicked()
+{
+
+}
