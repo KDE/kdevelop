@@ -1,6 +1,6 @@
 # Here resides the C/C++ support part.
 
-SUBDIRS = templates subclassing_template newclass_templates file_templates
+SUBDIRS = templates subclassing_template newclass_templates file_templates app_templates
 
 INCLUDES = -I$(top_srcdir)/lib/interfaces -I$(top_srcdir)/lib/compat -I$(top_srcdir)/lib/util -I$(top_srcdir)/lib/catalog -I$(top_srcdir)/lib/cppparser $(all_includes)
 

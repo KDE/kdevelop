@@ -14,7 +14,10 @@ and if you want play with the c++ parser go to lib/cppparser/, the best is to st
 \maintainer <a href="mailto:roberto AT kdevelop.org">Roberto Raggi</a>
 
 \feature supports C/C++ language
-\feature Feature Nr. 2
+\feature can do code completion
+\feature has presistent class store
+\feature code highligth
+
 
 \bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=cppsupport&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">Bugzilla database</a>
 \bug Bug number 2
@@ -25,7 +28,7 @@ Add notes here
 Put verbatin code here if you need
 \endverbatim
 
-\faq <b>How does this work</b> I have no clue. Ask roberto! :)
-\faq <b>How does r++ work</b> I have no clue. Ask roberto! :)
+\faq <b>How does this work ?</b> I have no clue. Ask roberto! :)
+\faq <b>How does r++ work ?</b> I have no clue. Ask roberto! :)
 
 */
