@@ -190,6 +190,7 @@ private:
     KListView* m_structureView;
 
     QWaitCondition m_eventConsumed;
+    bool m_projectClosed;
 };
 
 #endif

@@ -101,7 +101,7 @@ K_EXPORT_COMPONENT_FACTORY( libkdevcppsupport, CppSupportFactory( "kdevcppsuppor
 
 CppSupportPart::CppSupportPart(QObject *parent, const char *name, const QStringList &args)
     : KDevLanguageSupport(parent, name ? name : "CppSupportPart"), m_activeSelection( 0 ), m_activeEditor( 0 ),
-      m_activeViewCursor( 0 )
+      m_activeViewCursor( 0 ), m_projectClosed( true )
 {
     setInstance(CppSupportFactory::instance());
 
@@ -441,7 +441,7 @@ CppSupportPart::projectOpened( )
 
     // code completion working class
     m_pCompletion = new CppCodeCompletion( this, classStore( ), ccClassStore( ) );
-
+    m_projectClosed = false;
     QTimer::singleShot( 0, this, SLOT( initialParse( ) ) );
 }
 
@@ -464,6 +464,7 @@ CppSupportPart::projectClosed( )
 
     delete m_pCompletion;
     m_pCompletion = 0;
+    m_projectClosed = true;
 }
 
 
@@ -1096,14 +1097,20 @@ CppSupportPart::parseProject( )
     bar->show( );
 
     int n = 0;
-	QString filePath;
+    QString filePath;
     for( QStringList::Iterator it = files.begin( ); it != files.end( ); ++it ) {
         bar->setProgress( n++ );
-        kapp->processEvents( );
-		filePath = project()->projectDirectory() + "/" + ( *it );
+	filePath = project()->projectDirectory() + "/" + ( *it );
 	label->setText( i18n( "Currently parsing: '%1'" )
-	                .arg( filePath ) );
+			.arg( filePath ) );
         maybeParse( filePath, classStore() );
+
+        kapp->processEvents( );
+
+	if( m_projectClosed ){
+	    kdDebug(9007) << "ABORT" << endl;
+	    return false;
+	}
     }
 
     kdDebug( 9007 ) << "updating sourceinfo" << endl;
