@@ -1,3 +1,10 @@
+1999-09-30 Walter Tasin  <tasin@e-technik.fh-muenchen.de>
+	* autoconfified doc pathes included in KDevelop autoinstall
+	  process
+	* "Proceed >>" button of autoinstall disabled in certain 
+	  situations
+	* fixing segfault on changing QT doc path by "KDevelop Setup..."
+
 1999-09-30 Ralf Nolden <Ralf.Nolden@post.rwth-aachen.de>
 	* fixed bug in the normal template save/readProperties(KConfig* config)
 
