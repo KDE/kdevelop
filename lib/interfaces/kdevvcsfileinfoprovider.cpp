@@ -25,6 +25,13 @@ QString VCSFileInfo::toString() const
 
 QString VCSFileInfo::state2String() const
 {
+    return vcsState2String( state );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+QString VCSFileInfo::vcsState2String( FileState state )
+{
     switch (state)
     {
         case Added: return "added";

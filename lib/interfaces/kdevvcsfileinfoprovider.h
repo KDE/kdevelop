@@ -40,6 +40,8 @@ struct VCSFileInfo
 
     QString toString() const;
     QString state2String() const;
+
+    static QString vcsState2String( FileState state );
 };
 
 /**
