@@ -6,3 +6,4 @@
   - indent open paren/close paren
   - indent << 
   - indent public:, ...
+  - fix: leftmost { doesn't autoindent
