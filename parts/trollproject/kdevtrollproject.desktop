@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=Tmake project
+Name=KDevTrollProject
+ServiceTypes=KDevelop/Project
+X-KDE-Library=libkdevtrollproject
+X-KDevelop-Args=

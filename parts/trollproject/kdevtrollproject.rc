@@ -1,0 +1,13 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevTrollProject" version="1">
+<MenuBar>
+  <Menu name="build" >
+    <Action name="build_build" />
+    <Action name="build_clean" />
+    <Action name="build_qmake" />
+    <Separator/>
+    <Action name="build_execute" />
+  </Menu>
+</MenuBar>
+</kpartgui>
+
