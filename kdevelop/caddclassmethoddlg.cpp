@@ -21,10 +21,11 @@
 
 
 #include "caddclassmethoddlg.h"
-#include <qmessagebox.h>
+#include <kmsgbox.h>
 #include <kapp.h>
 #include <kquickhelp.h>
 #include <klocale.h>
+#include <iostream.h>
 
 CAddClassMethodDlg::CAddClassMethodDlg( QWidget *parent, const char *name )
   : QDialog( parent, name, true ),
@@ -326,11 +327,16 @@ void CAddClassMethodDlg::slotVirtualClicked()
 void CAddClassMethodDlg::OK()
 {
   if( strlen( typeEdit.text() ) == 0 )
-    QMessageBox::information( this, i18n("No type"),
+    KMsgBox::message( this, i18n("No type"),
                       i18n("You have to specify a function type.") );
   else if( strlen( declEdit.text() ) == 0 )
-    QMessageBox::information( this, i18n("No name"),
+    KMsgBox::message( this, i18n("No name"),
                       i18n("You have to specify a function name.") );
   else
     accept();
+}
+
+void CAddClassMethodDlg::enterEvent(QEvent* event){
+    QDialog::enterEvent(event);
+    typeEdit.setFocus();
 }

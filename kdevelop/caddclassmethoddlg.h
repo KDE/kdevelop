@@ -47,7 +47,8 @@ public: // Constructor & Destructor
 public: // Public queries
 
   CParsedMethod *asSystemObj();
-
+ protected:
+  void enterEvent(QEvent* event);
 protected: // Private widgets
 
   ///////////////////////////////
