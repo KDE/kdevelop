@@ -112,13 +112,13 @@ void ListViewFolderItem::setOpen(bool o)
 
 void ListViewFolderItem::refresh()
 {
-    QListViewItem *child = firstChild();
-    while (child)
-        {
-            QListViewItem *old = child;
-            child = child->nextSibling();
-            delete old;
-        }
+//    QListViewItem *child = firstChild();
+//    while (child)
+//        {
+//            QListViewItem *old = child;
+//            child = child->nextSibling();
+//            delete old;
+//        }
 }
 
 
@@ -417,7 +417,7 @@ void DocTreeKDELibsFolder::refresh()
     list.append(new DocTreeKDELibsBook(this, i18n("KDE HTMLW Library"),  "khtmlw"));
     list.append(new DocTreeKDELibsBook(this, i18n("KDE KAB Library"),    "kab"));
     list.append(new DocTreeKDELibsBook(this, i18n("KDE KSpell Library"), "kspell"));
-    setOpen(false);
+//    setOpen(false);
 }
 
 
@@ -625,8 +625,8 @@ DocTreeView::DocTreeView(QWidget *parent, const char *name)
     folder_others   = new DocTreeOthersFolder(this);
     folder_project  = new DocTreeProjectFolder(this);
 
- //   folder_kdevelop->setOpen(true);
- //   folder_kdelibs->setOpen(true);
+    folder_kdevelop->setOpen(true);
+    folder_kdelibs->setOpen(true);
     
     connect( this,
              SIGNAL(rightButtonPressed(QListViewItem*,const QPoint&,int)),
@@ -652,12 +652,24 @@ QString DocTreeView::selectedText()
 
 void DocTreeView::refresh(CProject *prj)
 {
+    clear();
+
+    folder_kdevelop = new DocTreeKDevelopFolder(this);
+    folder_kdelibs  = new DocTreeKDELibsFolder(this);
+#ifdef WITH_DOCBASE
+    folder_docbase  = new DocTreeDocbaseFolder(this);
+#endif
+    folder_others   = new DocTreeOthersFolder(this);
+    folder_project  = new DocTreeProjectFolder(this);
+
+    folder_kdevelop->setOpen(true);
+    folder_kdelibs->setOpen(true);
+
     folder_project->setProject(prj);
     folder_kdevelop->refresh();
     folder_kdelibs->refresh();
     folder_others->refresh();
     folder_project->refresh();
-
 }
 
 void DocTreeView::changePathes()

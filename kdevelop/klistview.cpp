@@ -23,7 +23,7 @@
 
 
 KListView::KListView(QWidget *parent, const char *name)
-    : QListView(parent, name), last(0)
+    : QListView(parent, name)
 {}
 
 
@@ -33,39 +33,39 @@ KListView::~KListView()
 
 void KListView::insertItem(QListViewItem *item)
 {
-    last = item;
     QListView::insertItem(item);
 }
 
-
-void KListView::clear()
-{
-    last = 0;
-    QListView::clear();
-}
 
 void KListView::mousePressEvent(QMouseEvent * event)
 {
     QListViewItem* item;
     item = itemAt(event->pos());
     if (isSelected(item) && event->button() != RightButton){
-	emit selectionChanged (item);
+      emit selectionChanged (item);
     }
     
     QListView::mousePressEvent( event );
 }
 
+QListViewItem* KListView::lastChild() const
+{
+  QListViewItem* child = firstChild();
+  if (child)
+    while (QListViewItem* nextChild = child->nextSibling())
+      child = nextChild;
 
-
+  return child;
+}
 
 
 KListViewItem::KListViewItem(KListView *parent, const char *text, const char *id)
-    : QListViewItem(parent, parent->lastChild(), text), last(0), idnt(id)
+    : QListViewItem(parent, parent->lastChild(), text), idnt(id)
 {}
 
 
 KListViewItem::KListViewItem(KListViewItem *parent, const char *text, const char *id)
-    : QListViewItem(parent, parent->lastChild(), text), last(0), idnt(id)
+    : QListViewItem(parent, parent->lastChild(), text), idnt(id)
 {}
 
 
@@ -75,7 +75,16 @@ KListViewItem::~KListViewItem()
 
 void KListViewItem::insertItem(QListViewItem *item)
 {
-    last = item;
     QListViewItem::insertItem(item);
 }
 
+
+QListViewItem* KListViewItem::lastChild() const
+{
+  QListViewItem* child = firstChild();
+  if (child)
+    while (QListViewItem* nextChild = child->nextSibling())
+      child = nextChild;
+
+  return child;
+}

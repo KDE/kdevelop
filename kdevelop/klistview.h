@@ -36,16 +36,11 @@ class KListView : public QListView
     Q_OBJECT
 public:
     KListView( QWidget *parent=0, const char *name=0 );
-    ~KListView();
+    virtual ~KListView();
     virtual void insertItem(QListViewItem *item);
-    virtual void clear();
-    QListViewItem *lastChild() const
-	{ return last; }
+    QListViewItem *lastChild() const;
  protected:
     virtual void mousePressEvent(QMouseEvent * event);
-    
-private:
-    QListViewItem *last;
 };
 
 
@@ -68,15 +63,13 @@ public:
     KListViewItem( KListViewItem *parent, const char *text, const char *id );
     virtual ~KListViewItem();
     virtual void insertItem(QListViewItem *item);
-    QListViewItem *lastChild() const
-	{ return last; }
+    QListViewItem *lastChild() const;
     QString ident() const
 	{ return idnt; }
     void setIdent(const QString &id)
 	{ idnt=id; }
 
 private:
-    QListViewItem *last;
     QString idnt;
 };
 
