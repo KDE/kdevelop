@@ -68,12 +68,14 @@ int DocViewMan::createDoc( int contentsType, const QString& strFileName)
   case DocViewMan::Header:
   case DocViewMan::Source:
     pDoc = new KWriteDoc( &m_highlightManager, strFileName);
+    debug("creating KWriteDoc ");
     if (pDoc == 0L) {
       return -1;  // creation failed
     }
     break;
   case DocViewMan::HTML:
     pDoc = new CDocBrowser(0L, "browser");
+    debug("creating CDocBrowser ");
     break;
   }
 
@@ -90,6 +92,8 @@ int DocViewMan::createDoc( int contentsType, const QString& strFileName)
     pNewInfo->docType = contentsType;
     m_docsAndViews.append(pNewInfo);
   }
+
+  debug(" with id : %d !\n", pNewInfo->docId);
 
   // return id of new document
   return pNewInfo->docId; //pDoc->id();
@@ -243,6 +247,7 @@ QObject* DocViewMan::docPointer(int docId) const
   // find document info
   QListIterator<DocViewNode>  itDoc(m_docsAndViews);
   for (; (itDoc.current() != 0) && (itDoc.current()->docId != docId); ++itDoc) {}
+
   if (itDoc.current() != 0) {
     return itDoc.current()->pDoc;
   }

@@ -86,6 +86,7 @@ CEditWidget::CEditWidget(QWidget* parent, const char* name, KWriteDoc* doc, int 
  *   -
  *-----------------------------------------------------------------*/
 CEditWidget::~CEditWidget() {
+  debug("CEditWidget destructor !\n");
 }
 
 /*********************************************************************

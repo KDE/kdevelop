@@ -217,14 +217,8 @@ void CKDevelop::slotFileCloseAll()
   QStrList handledNames;
   bool cont=true;
 
-  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-  QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
-  QListIterator<int> docIter(allDocs);
-  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
-    int curDocId = *(docIter.current());
-    KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
-    setInfoModified(pDoc->fileName(), pDoc->isModified());
-  }
+  // Added by Christian
+  synchronizeDocAndInfo();
 
   for(actual_info=edit_infos.first();cont && actual_info != 0;)
   {
@@ -402,116 +396,151 @@ void CKDevelop::slotFileSaveAs(){
 }
 
 #include <iostream.h>
-void CKDevelop::slotFileSaveAll()
-{
-    QStrList handledNames;
-    TEditInfo* actual_info; //FB?, *cpp_info, *header_info;
+
+// Added by Christian
+void CKDevelop::saveModifiedFiles() {
+
+  QStrList iFileList(false);
+  bool mod=false;
+  {
     CEditWidget blind_widget(0L,0,0,0);//FB
-    QStrList iFileList(false);
-    bool mod=false;
-
-    int visibleTab=s_tab_view->getCurrentTab();
-
-    // ok,its a dirty implementation  :-)
-    if(!bAutosave || !saveTimer->isActive())
-      slotStatusMsg(i18n("Saving all changed files..."));
-    else
-      slotStatusMsg(i18n("Autosaving..."));
-
-//    mainSplitter->setUpdatesEnabled(false);
-
-    // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
-    QList<int> allDocs = m_docViewManager->docs(DocViewMan::Header | DocViewMan::Source);
-    QListIterator<int> docIter(allDocs);
-    for ( ; docIter.current(); ++docIter) { // for all kwrite documents
-      int curDocId = *(docIter.current());
-      KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
-      setInfoModified(pDoc->fileName(), pDoc->isModified());
-    }
-
-//FB?    header_info=getInfoFromFilename(header_widget->getName());
-//FB?    if (header_info)
-//FB?      header_info->text=header_widget->text();
-//FB?    cpp_info=getInfoFromFilename(cpp_widget->getName());
-//FB?    if (cpp_info)
-//FB?      cpp_info->text=cpp_widget->text();
-
-    statProg->setTotalSteps(edit_infos.count());
-    statProg->show();
-
-    for(actual_info=edit_infos.first();actual_info != 0;)
     {
-      int i=0;
-      TEditInfo *next_info=edit_infos.next();
-      statProg->setProgress(++i);
-
-//      kdDebug() << "checking: " << actual_info->filename << "\n";
-//      kdDebug() << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
-
-      if(!isUntitled(actual_info->filename) && actual_info->modified &&
-        handledNames.contains(actual_info->filename)<1)
-      {
-        int qYesNo=KMessageBox::Yes;
-        handledNames.append(actual_info->filename);
-        QFileInfo file_info(actual_info->filename);
-        if (file_info.lastModified() != actual_info->last_modified)
-        {
-          qYesNo = KMessageBox::questionYesNo(this,
-                                i18n("The file %1 was modified outside\nthis editor. Save anyway?").arg(actual_info->filename),
-                                i18n("File modified"));
-        }
-
-        if (qYesNo==KMessageBox::Yes)
-        {
-          QFileInfo file_info(actual_info->filename);
-          bool isModified;
-          blind_widget.setName(actual_info->filename);
-          blind_widget.setText(actual_info->text);
-          blind_widget.toggleModified(true);
-          blind_widget.doSave();
-          isModified=blind_widget.isModified();
-//
-//      kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
-//
-
-//FB?          if (actual_info==cpp_info)
-//FB?             cpp_widget->setModified(isModified);
-//FB?          if (actual_info==header_info)
-//FB?             header_widget->setModified(isModified);
-
-          actual_info->modified = isModified;
-          if (!isModified)
-          {
+      QStrList handledNames;
+      TEditInfo* actual_info; //FB?, *cpp_info, *header_info;
+      for(actual_info=edit_infos.first();actual_info != 0;) {
+	int i=0;
+	TEditInfo *next_info=edit_infos.next();
+	statProg->setProgress(++i);
+	
+	kdDebug() << "checking: " << actual_info->filename << "\n";
+	kdDebug() << " " << ((actual_info->modified) ? "modified" : "not modified") << "\n";
+	
+	if(!isUntitled(actual_info->filename) && actual_info->modified &&
+	   handledNames.contains(actual_info->filename)<1)
+	  {
+	    int qYesNo=KMessageBox::Yes;
+	    handledNames.append(actual_info->filename);
+	    QFileInfo file_info(actual_info->filename);
+	    if (file_info.lastModified() != actual_info->last_modified)
+	      {
+		qYesNo = KMessageBox::questionYesNo(this,
+						    i18n("The file %1 was modified outside\nthis editor. Save anyway?").arg(actual_info->filename),
+						    i18n("File modified"));
+	      }
+	    
+	    if (qYesNo==KMessageBox::Yes)
+	      {
+		QFileInfo file_info(actual_info->filename);
+		bool isModified;
+		blind_widget.setName(actual_info->filename);
+		blind_widget.setText(actual_info->text);
+		blind_widget.toggleModified(true);
+		blind_widget.doSave();
+		isModified=blind_widget.isModified();
+		
+		kdDebug() << "doing save " << ((!isModified) ? "success" : "failed") << "\n";
+		
+		
+		//FB?          if (actual_info==cpp_info)
+		//FB?             cpp_widget->setModified(isModified);
+		//FB?          if (actual_info==header_info)
+		//FB?             header_widget->setModified(isModified);
+		
+		actual_info->modified = isModified;
+		if (!isModified)
+		  {
 #ifdef WITH_CPP_REPARSE
-              mod=true;
+		    mod=true;
 #else
-              mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx");
+		    mod|=(actual_info->filename.right(2)==".h" || actual_info->filename.right(4)==".hxx");
 #endif
-              iFileList.append(actual_info->filename);
-              actual_info->last_modified = file_info.lastModified();
-        }
+		    iFileList.append(actual_info->filename);
+		    actual_info->last_modified = file_info.lastModified();
+		  }
+	      }
+	  }
+	actual_info=next_info;
       }
+      debug("end handledNames !\n");
     }
-    actual_info=next_info;
+    debug("end edit widget !\n");
   }
-
-//  statProg->hide();
+  debug("stat prog ! \n");
+  //  statProg->hide();
   statProg->reset();
-
+  
+  debug("refreshClassViewByFileList ! \n");
   if (project && !iFileList.isEmpty() && mod)
     refreshClassViewByFileList(&iFileList);
+}
 
+
+void CKDevelop::synchronizeDocAndInfo()
+{
+  debug("synchronize ! \n");
+  // synchronize the "modified"-information of the KWriteDocs with the TEditInfo list
+  QList<int> allDocs = m_docViewManager->docs();
+  QListIterator<int> docIter(allDocs);
+  for ( ; docIter.current(); ++docIter) { // for all kwrite documents
+    int curDocId = *(docIter.current());
+
+    // The doc object can be a CDocBrowser or a KWriteDoc
+    KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (m_docViewManager->docPointer( curDocId));
+    if(pDoc)
+      setInfoModified(pDoc->fileName(), pDoc->isModified());
+  }
+}
+
+void CKDevelop::slotFileSaveAll()
+{
+  debug("slotFileSaveAll !\n");
+
+  debug("get currenttab ! \n");
+  int visibleTab=s_tab_view->getCurrentTab();
+
+  // ok,its a dirty implementation  :-)
+  if(!bAutosave || !saveTimer->isActive())
+    slotStatusMsg(i18n("Saving all changed files..."));
+  else
+    slotStatusMsg(i18n("Autosaving..."));
+
+  //    mainSplitter->setUpdatesEnabled(false);
+
+  //Added by Christian
+  synchronizeDocAndInfo();
+
+  //FB?    header_info=getInfoFromFilename(header_widget->getName());
+  //FB?    if (header_info)
+  //FB?      header_info->text=header_widget->text();
+  //FB?    cpp_info=getInfoFromFilename(cpp_widget->getName());
+  //FB?    if (cpp_info)
+  //FB?      cpp_info->text=cpp_widget->text();
+
+  debug("set total steps ! \n");
+  statProg->setTotalSteps(edit_infos.count());
+  statProg->show();
+
+  // Added by Christian
+  saveModifiedFiles();
+
+  debug("setMainCaption ! \n");
   setMainCaption(visibleTab);
   if (visibleTab == CPP || visibleTab == HEADER)
-  {
-    m_docViewManager->currentEditView()->setFocus();
-  }
+    {
+      debug("currentEditView ! \n");
+      m_docViewManager->currentEditView()->setFocus();
+    }
   if (visibleTab == BROWSER)
-  {
-    browser_widget->view()->setFocus();
-  }
-//  mainSplitter->setUpdatesEnabled(true);
+    {
+      debug("view ! \n");
+      browser_widget->view()->setFocus();
+    }
+
+  debug("slotStatusMsg ! \n");
+  //  mainSplitter->setUpdatesEnabled(true);
   slotStatusMsg(i18n("Ready."));
+
+  debug("end slotFileSaveAll ! \n");
 }
 
 
@@ -1688,8 +1717,10 @@ void CKDevelop::setupInternalDebugger()
  */
 bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 {
+   debug("RunMake with target : %s !\n", target.data());
 	// first, lets set the make command
 	if(!CToolClass::searchProgram(make_cmd)){
+      debug("Setting the make command !\n");
 		QMessageBox::warning(this,i18n("Running Make"),
 		                     i18n("Make command not found"));
 		return false;
@@ -1698,6 +1729,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 	QString flags;
 	if ((prj->getProjectType()!="normal_empty") && (type!=CMakefile::cvs))
 	{
+	   debug("flags !\n");
 		// compiler flags
 		if ((!prj->getCXXFLAGS().isEmpty()) ||
 		    (!prj->getAdditCXXFLAGS().isEmpty())) {
@@ -1717,6 +1749,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 		}
 		// linker flags
 		if (!prj->getLDFLAGS().isEmpty())
+		   debug("linker flags !\n");
 			flags = flags + "LDFLAGS=\""
 			      + prj->getLDFLAGS().simplifyWhiteSpace()
 			      + "\"";
@@ -1729,21 +1762,30 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 	else {
 		makefile=prj->getTopMakefile();
 	}
+	debug("makefile : %s !\n", makefile.data());
 	// set the path where make will run
 	QString makefileDir=QFileInfo(makefile).dirPath(TRUE);
 	QDir::setCurrent(makefileDir);
+	debug("kill debuger !\n");
 	// Kill the debugger if it's running
 	if (dbgController)
 		slotDebugStop();
+	debug("save/generate dialog !\n");
 	// save/generate dialog if needed
 	error_parser->setStartDir(makefileDir);
 	error_parser->reset();
 	error_parser->toogleOn();
+	
+	debug("show output view !\n");
 	showOutputView(true);
+	debug("setToolMenuProcess !\n");
 	setToolMenuProcess(false);
+	debug("slotFileSaveAll !\n");
 	slotFileSaveAll();
+	debug("messages_widget-> clean() ! \n");
 	messages_widget->clear();
 	
+   debug("set make args !\n");
 	// set the make arguments
 	process.clearArguments();
 	process << flags;
@@ -1752,6 +1794,8 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 	
 	// why is this beeping business necessary? shouldn't there be a switch?
 	beep = true;
+	
+	debug("after a beep !\n");
 
 	if (next_job.isEmpty())
 		next_job="make_end";
@@ -1762,6 +1806,7 @@ bool CKDevelop::RunMake(const CMakefile::Type type, const QString& target)
 }
 void CKDevelop::slotBuildMake()
 {
+   debug("slotBuildMake\n");
 	slotStatusMsg(i18n("Running make..."));
 	RunMake(CMakefile::toplevel,"all");
 }
@@ -2184,8 +2229,11 @@ void CKDevelop::slotBookmarksClear(){
     QListIterator<int> docIter(allDocs);
     for ( ; docIter.current(); ++docIter) { // for all kwrite documents
       int curDocId = *(docIter.current());
-      KWriteDoc* pDoc = (KWriteDoc*) m_docViewManager->docPointer( curDocId);
-      pDoc->clearBookmarks();
+
+      // The doc object can be a CDocBrowser or a KWriteDoc
+      KWriteDoc* pDoc = dynamic_cast<KWriteDoc*> (m_docViewManager->docPointer( curDocId));
+      if(pDoc)
+	pDoc->clearBookmarks();
     }
   }
 }

@@ -146,6 +146,16 @@ public:
   bool isProjectDirty();
 
   /*
+    synchronize the "modified"-information of the KWriteDocs 
+    with the TEditInfo list
+   */
+  void synchronizeDocAndInfo();
+  /*
+    get the modified files and ask if they should be saved
+   */
+  void saveModifiedFiles();
+
+  /*
      parses only the files listed in the stringlist
   */
   void refreshClassViewByFileList(QStrList * iFileList);

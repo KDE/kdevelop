@@ -405,7 +405,13 @@ KWriteView::KWriteView(KWrite *write, KWriteDoc *doc) : QWidget(write) {
 }
 
 KWriteView::~KWriteView() {
-  kWriteDoc->removeView(this);
+  debug("KWriteView destructor !\n");
+
+  if(kWriteDoc) {
+    kWriteDoc->removeView(this);
+  }
+
+  debug("KWriteView release buffer !\n");
   releaseBuffer(this);
 }
 
@@ -1488,6 +1494,8 @@ KWrite::KWrite(KWriteDoc *doc, QWidget *parent, const char *name)
 }
 
 KWrite::~KWrite() {
+  debug("KWrite destructor !\n");
+
   delete kWriteView;
 //  delete popup; //right mouse button popup
 }
