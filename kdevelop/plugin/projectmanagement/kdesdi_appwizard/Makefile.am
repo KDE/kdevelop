@@ -1,9 +1,8 @@
 SUBDIRS = res
 
+lib_LTLIBRARIES = libkdevkdesdiappwizard.la
 INCLUDES = -I$(top_srcdir)/kdevelop/lib/general/ -I$(top_srcdir)/kdevelop/lib/projectmanagement/ \
 		$(all_includes)
-
-lib_LTLIBRARIES = libkdevkdesdiappwizard.la
 libkdevkdesdiappwizard_la_LDFLAGS = $(all_libraries) -version-info 1:0 $(KDE_PLUGIN)
 libkdevkdesdiappwizard_la_LIBADD = $(top_builddir)/kdevelop/lib/libkdevelop.la
 
